@@ -2,70 +2,83 @@
 #include <gtk/gtk.h>
 
 typedef struct _ProgressData {
-    GtkWidget *window;
-    GtkWidget *pbar;
-    int timer;
+  GtkWidget *window;
+  GtkWidget *pbar;
+  int timer;
+  gboolean activity_mode;
 } ProgressData;
 
 /* Update the value of the progress bar so that we get
  * some movement */
 gint progress_timeout( gpointer data )
 {
-    gfloat new_val;
-    GtkAdjustment *adj;
-
-    /* Calculate the value of the progress bar using the
-     * value range set in the adjustment object */
-
-    new_val = gtk_progress_get_value (GTK_PROGRESS (data)) + 1;
-
-    adj = GTK_PROGRESS (data)->adjustment;
-    if (new_val > adj->upper)
-      new_val = adj->lower;
-
-    /* Set the new value */
-    gtk_progress_set_value (GTK_PROGRESS (data), new_val);
-
-    /* As this is a timeout function, return TRUE so that it
-     * continues to get called */
-    return TRUE;
+  ProgressData *pdata = (ProgressData *)data;
+  gdouble new_val;
+  
+  if (pdata->activity_mode) 
+    gtk_progress_bar_pulse (GTK_PROGRESS_BAR (pdata->pbar));
+  else 
+    {
+      /* Calculate the value of the progress bar using the
+       * value range set in the adjustment object */
+      
+      new_val = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR (pdata->pbar)) + 0.01;
+      
+      if (new_val > 1.0)
+	new_val = 0.0;
+      
+      /* Set the new value */
+      gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (pdata->pbar), new_val);
+    }
+  
+  /* As this is a timeout function, return TRUE so that it
+   * continues to get called */
+  return TRUE;
 } 
 
-/* Callback that toggles the text display within the progress
- * bar trough */
+/* Callback that toggles the text display within the progress bar trough */
 void toggle_show_text( GtkWidget    *widget,
 		       ProgressData *pdata )
 {
-    gtk_progress_set_show_text (GTK_PROGRESS (pdata->pbar),
-                                GTK_TOGGLE_BUTTON (widget)->active);
+  const gchar *text;
+  
+  text = gtk_progress_bar_get_text (GTK_PROGRESS_BAR (pdata->pbar));
+  if (text && *text)
+    gtk_progress_bar_set_text (GTK_PROGRESS_BAR (pdata->pbar), "");
+  else 
+    gtk_progress_bar_set_text (GTK_PROGRESS_BAR (pdata->pbar), "some text");
 }
 
-/* Callback that toggles the activity mode of the progress
- * bar */
+/* Callback that toggles the activity mode of the progress bar */
 void toggle_activity_mode( GtkWidget    *widget,
 			   ProgressData *pdata )
 {
-    gtk_progress_set_activity_mode (GTK_PROGRESS (pdata->pbar),
-                                    GTK_TOGGLE_BUTTON (widget)->active);
+  pdata->activity_mode = !pdata->activity_mode;
+  if (pdata->activity_mode) 
+      gtk_progress_bar_pulse (GTK_PROGRESS_BAR (pdata->pbar));
+  else
+      gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (pdata->pbar), 0.0);
 }
 
-/* Callback that toggles the continuous mode of the progress
- * bar */
-void set_continuous_mode( GtkWidget    *widget,
-			  ProgressData *pdata )
+ 
+/* Callback that toggles the orientation of the progress bar */
+void toggle_orientation( GtkWidget    *widget,
+			 ProgressData *pdata )
 {
-    gtk_progress_bar_set_bar_style (GTK_PROGRESS_BAR (pdata->pbar),
-                                    GTK_PROGRESS_CONTINUOUS);
+  switch (gtk_progress_bar_get_orientation (GTK_PROGRESS_BAR (pdata->pbar))) {
+  case GTK_PROGRESS_LEFT_TO_RIGHT:
+    gtk_progress_bar_set_orientation (GTK_PROGRESS_BAR (pdata->pbar), 
+				      GTK_PROGRESS_RIGHT_TO_LEFT);
+    break;
+  case GTK_PROGRESS_RIGHT_TO_LEFT:
+    gtk_progress_bar_set_orientation (GTK_PROGRESS_BAR (pdata->pbar), 
+				      GTK_PROGRESS_LEFT_TO_RIGHT);
+    break;
+  default:
+    // do nothing	
+  }
 }
 
-/* Callback that toggles the discrete mode of the progress
- * bar */
-void set_discrete_mode( GtkWidget    *widget,
-			ProgressData *pdata )
-{
-    gtk_progress_bar_set_bar_style (GTK_PROGRESS_BAR (pdata->pbar),
-                                    GTK_PROGRESS_DISCRETE);
-}
  
 /* Clean up allocated memory and remove the timer */
 void destroy_progress( GtkWidget     *widget,
@@ -85,7 +98,6 @@ int main( int   argc,
     GtkWidget *align;
     GtkWidget *separator;
     GtkWidget *table;
-    GtkAdjustment *adj;
     GtkWidget *button;
     GtkWidget *check;
     GtkWidget *vbox;
@@ -114,33 +126,21 @@ int main( int   argc,
     gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 5);
     gtk_widget_show (align);
 
-    /* Create a Adjusment object to hold the range of the
-     * progress bar */
-    adj = (GtkAdjustment *) gtk_adjustment_new (0, 1, 150, 0, 0, 0);
+    /* Create the GtkProgressBar */
+    pdata->pbar = gtk_progress_bar_new ();
 
-    /* Create the GtkProgressBar using the adjustment */
-    pdata->pbar = gtk_progress_bar_new_with_adjustment (adj);
-
-    /* Set the format of the string that can be displayed in the
-     * trough of the progress bar:
-     * %p - percentage
-     * %v - value
-     * %l - lower range value
-     * %u - upper range value */
-    gtk_progress_set_format_string (GTK_PROGRESS (pdata->pbar),
-	                            "%v from [%l-%u] (=%p%%)");
     gtk_container_add (GTK_CONTAINER (align), pdata->pbar);
     gtk_widget_show (pdata->pbar);
 
     /* Add a timer callback to update the value of the progress bar */
-    pdata->timer = gtk_timeout_add (100, progress_timeout, pdata->pbar);
+    pdata->timer = gtk_timeout_add (100, progress_timeout, pdata);
 
     separator = gtk_hseparator_new ();
     gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, FALSE, 0);
     gtk_widget_show (separator);
 
     /* rows, columns, homogeneous */
-    table = gtk_table_new (2, 3, FALSE);
+    table = gtk_table_new (2, 2, FALSE);
     gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, TRUE, 0);
     gtk_widget_show (table);
 
@@ -148,7 +148,7 @@ int main( int   argc,
     check = gtk_check_button_new_with_label ("Show text");
     gtk_table_attach (GTK_TABLE (table), check, 0, 1, 0, 1,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-                      5, 5);
+		      5, 5);
     g_signal_connect (G_OBJECT (check), "clicked",
                       G_CALLBACK (toggle_show_text),
                       pdata);
@@ -164,37 +164,15 @@ int main( int   argc,
                       pdata);
     gtk_widget_show (check);
 
-    separator = gtk_vseparator_new ();
-    gtk_table_attach (GTK_TABLE (table), separator, 1, 2, 0, 2,
+    /* Add a check button to toggle orientation */
+    check = gtk_check_button_new_with_label ("Right to Left");
+    gtk_table_attach (GTK_TABLE (table), check, 0, 1, 2, 3,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
                       5, 5);
-    gtk_widget_show (separator);
-
-    /* Add a radio button to select continuous display mode */
-    button = gtk_radio_button_new_with_label (NULL, "Continuous");
-    gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
-                      GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-                      5, 5);
-    g_signal_connect (G_OBJECT (button), "clicked",
-                      G_CALLBACK (set_continuous_mode),
+    g_signal_connect (G_OBJECT (check), "clicked",
+                      G_CALLBACK (toggle_orientation),
                       pdata);
-    gtk_widget_show (button);
-
-    /* Add a radio button to select discrete display mode */
-    button = gtk_radio_button_new_with_label(
-               gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
-               "Discrete");
-    gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
-                      GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-                      5, 5);
-    g_signal_connect (G_OBJECT (button), "clicked",
-                      G_CALLBACK (set_discrete_mode),
-                      pdata);
-    gtk_widget_show (button);
-
-    separator = gtk_hseparator_new ();
-    gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, FALSE, 0);
-    gtk_widget_show (separator);
+    gtk_widget_show (check);
 
     /* Add a button to exit the program */
     button = gtk_button_new_with_label ("close");

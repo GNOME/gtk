@@ -1,3 +1,12 @@
+2002-02-20  Matthias Clasen  <maclas@gmx.de>
+
+	* docs/tutorial/gtk-tut.sgml: Fold back Svens g_signal fixes from
+	the examples.  
+
+	* docs/tutorial/gtk-tut.sgml, examples/progressbar/progressbar.c,
+	examples/progressbar/Makefile: Make the progressbar example 
+	deprecation-clean.
+
 Tue Feb 19 22:10:59 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_mnemonic_activate): new

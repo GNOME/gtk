@@ -294,14 +294,14 @@ int main( int   argc,
      * titlebar), we ask it to call the delete_event () function
      * as defined above. The data passed to the callback
      * function is NULL and is ignored in the callback function. */
-    g_signal_connect (GTK_OBJECT (window), "delete_event",
-		      GTK_SIGNAL_FUNC (delete_event), NULL);
+    g_signal_connect (G_OBJECT (window), "delete_event",
+		      G_CALLBACK (delete_event), NULL);
     
     /* Here we connect the "destroy" event to a signal handler.  
      * This event occurs when we call gtk_widget_destroy() on the window,
      * or if we return FALSE in the "delete_event" callback. */
-    g_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (destroy), NULL);
+    g_signal_connect (G_OBJECT (window), "destroy",
+		      G_CALLBACK (destroy), NULL);
     
     /* Sets the border width of the window. */
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -312,15 +312,15 @@ int main( int   argc,
     /* When the button receives the "clicked" signal, it will call the
      * function hello() passing it NULL as its argument.  The hello()
      * function is defined above. */
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-		      GTK_SIGNAL_FUNC (hello), NULL);
+    g_signal_connect (G_OBJECT (button), "clicked",
+		      G_CALLBACK (hello), NULL);
     
     /* This will cause the window to be destroyed by calling
      * gtk_widget_destroy(window) when "clicked".  Again, the destroy
      * signal could come from here, or the window manager. */
-    g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-			      GTK_SIGNAL_FUNC (gtk_widget_destroy),
-			      GTK_OBJECT (window));
+    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+			      G_CALLBACK (gtk_widget_destroy),
+                              window);
     
     /* This packs the button into the window (a gtk container). */
     gtk_container_add (GTK_CONTAINER (window), button);
@@ -962,7 +962,7 @@ topic, packing widgets.</para>
 void callback( GtkWidget *widget,
                gpointer   data )
 {
-    g_print ("Hello again - %s was pressed\n", (char *) data);
+    g_print ("Hello again - %s was pressed\n", (gchar *) data);
 }
 
 /* another callback */
@@ -995,8 +995,8 @@ int main( int   argc,
 
     /* Here we just set a handler for delete_event that immediately
      * exits GTK. */
-    g_signal_connect (GTK_OBJECT (window), "delete_event",
-		      GTK_SIGNAL_FUNC (delete_event), NULL);
+    g_signal_connect (G_OBJECT (window), "delete_event",
+		      G_CALLBACK (delete_event), NULL);
 
     /* Sets the border width of the window. */
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -1014,8 +1014,8 @@ int main( int   argc,
     
     /* Now when the button is clicked, we call the "callback" function
      * with a pointer to "button 1" as its argument */
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-		      GTK_SIGNAL_FUNC (callback), (gpointer) "button 1");
+    g_signal_connect (G_OBJECT (button), "clicked",
+		      G_CALLBACK (callback), "button 1");
 
     /* Instead of gtk_container_add, we pack this button into the invisible
      * box, which has been packed into the window. */
@@ -1030,8 +1030,8 @@ int main( int   argc,
 
     /* Call the same callback function with a different argument,
      * passing a pointer to "button 2" instead. */
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-		      GTK_SIGNAL_FUNC (callback), (gpointer) "button 2");
+    g_signal_connect (G_OBJECT (button), "clicked",
+		      G_CALLBACK (callback), "button 2");
 
     gtk_box_pack_start(GTK_BOX (box1), button, TRUE, TRUE, 0);
 
@@ -1297,8 +1297,8 @@ int main( int   argc,
     /* You should always remember to connect the delete_event signal
      * to the main window. This is very important for proper intuitive
      * behavior */
-    g_signal_connect (GTK_OBJECT (window), "delete_event",
-		      GTK_SIGNAL_FUNC (delete_event), NULL);
+    g_signal_connect (G_OBJECT (window), "delete_event",
+		      G_CALLBACK (delete_event), NULL);
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     
     /* We create a vertical box (vbox) to pack the horizontal boxes into.
@@ -1461,9 +1461,9 @@ int main( int   argc,
     button = gtk_button_new_with_label ("Quit");
     
     /* Setup the signal to terminate the program when the button is clicked */
-    g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-			      GTK_SIGNAL_FUNC (gtk_main_quit),
-			      GTK_OBJECT (window));
+    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+			      G_CALLBACK (gtk_main_quit),
+			      window);
     /* Pack the button into the quitbox.
      * The last 3 arguments to gtk_box_pack_start are:
      * expand, fill, padding. */
@@ -1704,8 +1704,8 @@ int main( int   argc,
 
     /* Set a handler for delete_event that immediately
      * exits GTK. */
-    g_signal_connect (GTK_OBJECT (window), "delete_event",
-                      GTK_SIGNAL_FUNC (delete_event), NULL);
+    g_signal_connect (G_OBJECT (window), "delete_event",
+                      G_CALLBACK (delete_event), NULL);
 
     /* Sets the border width of the window. */
     gtk_container_set_border_width (GTK_CONTAINER (window), 20);
@@ -1721,8 +1721,8 @@ int main( int   argc,
 
     /* When the button is clicked, we call the "callback" function
      * with a pointer to "button 1" as its argument */
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-	              GTK_SIGNAL_FUNC (callback), (gpointer) "button 1");
+    g_signal_connect (G_OBJECT (button), "clicked",
+	              G_CALLBACK (callback), (gpointer) "button 1");
 
 
     /* Insert button 1 into the upper left quadrant of the table */
@@ -1736,8 +1736,8 @@ int main( int   argc,
 
     /* When the button is clicked, we call the "callback" function
      * with a pointer to "button 2" as its argument */
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-                      GTK_SIGNAL_FUNC (callback), (gpointer) "button 2");
+    g_signal_connect (G_OBJECT (button), "clicked",
+                      G_CALLBACK (callback), (gpointer) "button 2");
     /* Insert button 2 into the upper right quadrant of the table */
     gtk_table_attach_defaults (GTK_TABLE (table), button, 1, 2, 0, 1);
 
@@ -1748,8 +1748,8 @@ int main( int   argc,
 
     /* When the button is clicked, we call the "delete_event" function
      * and the program exits */
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-                      GTK_SIGNAL_FUNC (delete_event), NULL);
+    g_signal_connect (G_OBJECT (button), "clicked",
+                      G_CALLBACK (delete_event), NULL);
 
     /* Insert the quit button into the both 
      * lower quadrants of the table */
@@ -2085,14 +2085,12 @@ int main( int   argc,
 
     gtk_window_set_title (GTK_WINDOW (window), "Pixmap'd Buttons!");
 
-#if 1
     /* It's a good idea to do this for all windows. */
-    g_signal_connect (GTK_OBJECT (window), "destroy",
-	              GTK_SIGNAL_FUNC (exit), NULL);
+    g_signal_connect (G_OBJECT (window), "destroy",
+	              G_CALLBACK (gtk_main_quit), NULL);
 
-    g_signal_connect (GTK_OBJECT (window), "delete_event",
-	 	      GTK_SIGNAL_FUNC (exit), NULL);
-#endif
+    g_signal_connect (G_OBJECT (window), "delete_event",
+	 	      G_CALLBACK (gtk_main_quit), NULL);
 
     /* Sets the border width of the window. */
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -2102,8 +2100,8 @@ int main( int   argc,
     button = gtk_button_new ();
 
     /* Connect the "clicked" signal of the button to our callback */
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-		      GTK_SIGNAL_FUNC (callback), (gpointer) "cool button");
+    g_signal_connect (G_OBJECT (button), "clicked",
+		      G_CALLBACK (callback), (gpointer) "cool button");
 
     /* This calls our box creating function */
     box1 = xpm_label_box(window, "info.xpm", "cool button");
@@ -2356,12 +2354,12 @@ int main( int   argc,
     GtkWidget *separator;
     GSList *group;
   
-    gtk_init (&amp;argc,&amp;argv);    
+    gtk_init (&amp;argc, &amp;argv);    
       
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   
-    g_signal_connect (GTK_OBJECT (window), "delete_event",
-		      GTK_SIGNAL_FUNC (close_application),
+    g_signal_connect (G_OBJECT (window), "delete_event",
+		      G_CALLBACK (close_application),
                       NULL);
 
     gtk_window_set_title (GTK_WINDOW (window), "radio buttons");
@@ -2402,9 +2400,9 @@ int main( int   argc,
     gtk_widget_show (box2);
 
     button = gtk_button_new_with_label ("close");
-    g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-                              GTK_SIGNAL_FUNC (close_application),
-                              GTK_OBJECT (window));
+    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+                              G_CALLBACK (close_application),
+                              window);
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
     GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
     gtk_widget_grab_default (button);
@@ -2997,13 +2995,11 @@ void cb_page_size( GtkAdjustment *get,
     set->page_size = get->value;
     set->page_increment = get->value;
 
+    /* This sets the adjustment and makes it emit the "changed" signal to 
+       reconfigure all the widgets that are attached to this signal.  */
     gtk_adjustment_set_value (set, CLAMP (set->value,
 					  set->lower,
 					  (set->upper - set->page_size)));
-
-    /* Now emit the "changed" signal to reconfigure all the widgets that
-     * are attached to this adjustment */
-    g_signal_emit_by_name (GTK_OBJECT (set), "changed");
 }
 
 void cb_draw_value( GtkToggleButton *button )
@@ -3016,14 +3012,14 @@ void cb_draw_value( GtkToggleButton *button )
 
 /* Convenience functions */
 
-GtkWidget *make_menu_item( gchar         *name,
-                           GtkSignalFunc  callback,
-			   gpointer       data )
+GtkWidget *make_menu_item (gchar     *name,
+                           GCallback  callback,
+			   gpointer   data)
 {
     GtkWidget *item;
   
     item = gtk_menu_item_new_with_label (name);
-    g_signal_connect (GTK_OBJECT (item), "activate",
+    g_signal_connect (G_OBJECT (item), "activate",
 	              callback, data);
     gtk_widget_show (item);
 
@@ -3055,8 +3051,8 @@ void create_range_controls( void )
 
     /* Standard window-creating stuff */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    g_signal_connect (GTK_OBJECT (window), "destroy",
-                      GTK_SIGNAL_FUNC (gtk_main_quit),
+    g_signal_connect (G_OBJECT (window), "destroy",
+                      G_CALLBACK (gtk_main_quit),
                       NULL);
     gtk_window_set_title (GTK_WINDOW (window), "range controls");
 
@@ -3108,8 +3104,8 @@ void create_range_controls( void )
     /* A checkbutton to control whether the value is displayed or not */
     button = gtk_check_button_new_with_label("Display value on scale widgets");
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-    g_signal_connect (GTK_OBJECT (button), "toggled",
-                      GTK_SIGNAL_FUNC (cb_draw_value), NULL);
+    g_signal_connect (G_OBJECT (button), "toggled",
+                      G_CALLBACK (cb_draw_value), NULL);
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
     gtk_widget_show (button);
   
@@ -3125,19 +3121,19 @@ void create_range_controls( void )
     menu = gtk_menu_new ();
 
     item = make_menu_item ("Top",
-                           GTK_SIGNAL_FUNC (cb_pos_menu_select),
+                           G_CALLBACK (cb_pos_menu_select),
                            GINT_TO_POINTER (GTK_POS_TOP));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   
-    item = make_menu_item ("Bottom", GTK_SIGNAL_FUNC (cb_pos_menu_select), 
+    item = make_menu_item ("Bottom", G_CALLBACK (cb_pos_menu_select), 
                            GINT_TO_POINTER (GTK_POS_BOTTOM));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   
-    item = make_menu_item ("Left", GTK_SIGNAL_FUNC (cb_pos_menu_select),
+    item = make_menu_item ("Left", G_CALLBACK (cb_pos_menu_select),
                            GINT_TO_POINTER (GTK_POS_LEFT));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   
-    item = make_menu_item ("Right", GTK_SIGNAL_FUNC (cb_pos_menu_select),
+    item = make_menu_item ("Right", G_CALLBACK (cb_pos_menu_select),
                            GINT_TO_POINTER (GTK_POS_RIGHT));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   
@@ -3161,17 +3157,17 @@ void create_range_controls( void )
     menu = gtk_menu_new ();
   
     item = make_menu_item ("Continuous",
-                           GTK_SIGNAL_FUNC (cb_update_menu_select),
+                           G_CALLBACK (cb_update_menu_select),
                            GINT_TO_POINTER (GTK_UPDATE_CONTINUOUS));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   
     item = make_menu_item ("Discontinuous",
-                           GTK_SIGNAL_FUNC (cb_update_menu_select),
+                           G_CALLBACK (cb_update_menu_select),
                            GINT_TO_POINTER (GTK_UPDATE_DISCONTINUOUS));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   
     item = make_menu_item ("Delayed",
-                           GTK_SIGNAL_FUNC (cb_update_menu_select),
+                           G_CALLBACK (cb_update_menu_select),
                            GINT_TO_POINTER (GTK_UPDATE_DELAYED));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   
@@ -3192,8 +3188,8 @@ void create_range_controls( void )
     gtk_widget_show (label);
 
     adj2 = gtk_adjustment_new (1.0, 0.0, 5.0, 1.0, 1.0, 0.0);
-    g_signal_connect (GTK_OBJECT (adj2), "value_changed",
-                      GTK_SIGNAL_FUNC (cb_digits_scale), NULL);
+    g_signal_connect (G_OBJECT (adj2), "value_changed",
+                      G_CALLBACK (cb_digits_scale), NULL);
     scale = gtk_hscale_new (GTK_ADJUSTMENT (adj2));
     gtk_scale_set_digits (GTK_SCALE (scale), 0);
     gtk_box_pack_start (GTK_BOX (box2), scale, TRUE, TRUE, 0);
@@ -3212,8 +3208,8 @@ void create_range_controls( void )
     gtk_widget_show (label);
 
     adj2 = gtk_adjustment_new (1.0, 1.0, 101.0, 1.0, 1.0, 0.0);
-    g_signal_connect (GTK_OBJECT (adj2), "value_changed",
-                      GTK_SIGNAL_FUNC (cb_page_size), adj1);
+    g_signal_connect (G_OBJECT (adj2), "value_changed",
+                      G_CALLBACK (cb_page_size), adj1);
     scale = gtk_hscale_new (GTK_ADJUSTMENT (adj2));
     gtk_scale_set_digits (GTK_SCALE (scale), 0);
     gtk_box_pack_start (GTK_BOX (box2), scale, TRUE, TRUE, 0);
@@ -3232,8 +3228,8 @@ void create_range_controls( void )
     gtk_widget_show (box2);
 
     button = gtk_button_new_with_label ("Quit");
-    g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-                              GTK_SIGNAL_FUNC (gtk_main_quit),
+    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+                              G_CALLBACK (gtk_main_quit),
                               NULL);
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
     GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
@@ -3374,8 +3370,8 @@ int main( int   argc,
   gtk_init (&amp;argc, &amp;argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  g_signal_connect (GTK_OBJECT (window), "destroy",
-		    GTK_SIGNAL_FUNC (gtk_main_quit),
+  g_signal_connect (G_OBJECT (window), "destroy",
+		    G_CALLBACK (gtk_main_quit),
 		    NULL);
 
   gtk_window_set_title (GTK_WINDOW (window), "Label");
@@ -3548,8 +3544,8 @@ int main( int   argc,
   gtk_window_set_title (GTK_WINDOW (window), "Arrow Buttons");
 
   /* It's a good idea to do this for all windows. */
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+  g_signal_connect (G_OBJECT (window), "destroy",
+                    G_CALLBACK (gtk_main_quit), NULL);
 
   /* Sets the border width of the window. */
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -3900,78 +3896,91 @@ code also shows you how to reset the Progress Bar.</para>
 #include &lt;gtk/gtk.h&gt;
 
 typedef struct _ProgressData {
-    GtkWidget *window;
-    GtkWidget *pbar;
-    int timer;
+  GtkWidget *window;
+  GtkWidget *pbar;
+  int timer;
+  gboolean activity_mode;
 } ProgressData;
 
 /* Update the value of the progress bar so that we get
  * some movement */
 gint progress_timeout( gpointer data )
 {
-    gfloat new_val;
-    GtkAdjustment *adj;
-
-    /* Calculate the value of the progress bar using the
-     * value range set in the adjustment object */
-
-    new_val = gtk_progress_get_value (GTK_PROGRESS (data)) + 1;
-
-    adj = GTK_PROGRESS (data)->adjustment;
-    if (new_val > adj->upper)
-      new_val = adj->lower;
-
-    /* Set the new value */
-    gtk_progress_set_value (GTK_PROGRESS (data), new_val);
-
-    /* As this is a timeout function, return TRUE so that it
-     * continues to get called */
-    return TRUE;
+  ProgressData *pdata = (ProgressData *)data;
+  gdouble new_val;
+  
+  if (pdata-&gt;activity_mode) 
+    gtk_progress_bar_pulse (GTK_PROGRESS_BAR (pdata-&gt;pbar));
+  else 
+    {
+      /* Calculate the value of the progress bar using the
+       * value range set in the adjustment object */
+      
+      new_val = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR (pdata-&gt;pbar)) + 0.01;
+      
+      if (new_val &gt; 1.0)
+	new_val = 0.0;
+      
+      /* Set the new value */
+      gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (pdata-&gt;pbar), new_val);
+    }
+  
+  /* As this is a timeout function, return TRUE so that it
+   * continues to get called */
+  return TRUE;
 } 
 
-/* Callback that toggles the text display within the progress
- * bar trough */
+/* Callback that toggles the text display within the progress bar trough */
 void toggle_show_text( GtkWidget    *widget,
 		       ProgressData *pdata )
 {
-    gtk_progress_set_show_text (GTK_PROGRESS (pdata->pbar),
-                                GTK_TOGGLE_BUTTON (widget)->active);
+  const gchar *text;
+  
+  text = gtk_progress_bar_get_text (GTK_PROGRESS_BAR (pdata-&gt;pbar));
+  if (text &amp;&amp; *text)
+    gtk_progress_bar_set_text (GTK_PROGRESS_BAR (pdata-&gt;pbar), "");
+  else 
+    gtk_progress_bar_set_text (GTK_PROGRESS_BAR (pdata-&gt;pbar), "some text");
 }
 
-/* Callback that toggles the activity mode of the progress
- * bar */
+/* Callback that toggles the activity mode of the progress bar */
 void toggle_activity_mode( GtkWidget    *widget,
 			   ProgressData *pdata )
 {
-    gtk_progress_set_activity_mode (GTK_PROGRESS (pdata->pbar),
-                                    GTK_TOGGLE_BUTTON (widget)->active);
+  pdata-&gt;activity_mode = !pdata-&gt;activity_mode;
+  if (pdata-&gt;activity_mode) 
+      gtk_progress_bar_pulse (GTK_PROGRESS_BAR (pdata-&gt;pbar));
+  else
+      gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (pdata-&gt;pbar), 0.0);
 }
 
-/* Callback that toggles the continuous mode of the progress
- * bar */
-void set_continuous_mode( GtkWidget    *widget,
-			  ProgressData *pdata )
+ 
+/* Callback that toggles the orientation of the progress bar */
+void toggle_orientation( GtkWidget    *widget,
+			 ProgressData *pdata )
 {
-    gtk_progress_bar_set_bar_style (GTK_PROGRESS_BAR (pdata->pbar),
-                                    GTK_PROGRESS_CONTINUOUS);
+  switch (gtk_progress_bar_get_orientation (GTK_PROGRESS_BAR (pdata-&gt;pbar))) {
+  case GTK_PROGRESS_LEFT_TO_RIGHT:
+    gtk_progress_bar_set_orientation (GTK_PROGRESS_BAR (pdata-&gt;pbar), 
+				      GTK_PROGRESS_RIGHT_TO_LEFT);
+    break;
+  case GTK_PROGRESS_RIGHT_TO_LEFT:
+    gtk_progress_bar_set_orientation (GTK_PROGRESS_BAR (pdata-&gt;pbar), 
+				      GTK_PROGRESS_LEFT_TO_RIGHT);
+    break;
+  default:
+    // do nothing	
+  }
 }
 
-/* Callback that toggles the discrete mode of the progress
- * bar */
-void set_discrete_mode( GtkWidget    *widget,
-			ProgressData *pdata )
-{
-    gtk_progress_bar_set_bar_style (GTK_PROGRESS_BAR (pdata->pbar),
-                                    GTK_PROGRESS_DISCRETE);
-}
  
 /* Clean up allocated memory and remove the timer */
 void destroy_progress( GtkWidget     *widget,
 		       ProgressData *pdata)
 {
-    gtk_timeout_remove (pdata->timer);
-    pdata->timer = 0;
-    pdata->window = NULL;
+    gtk_timeout_remove (pdata-&gt;timer);
+    pdata-&gt;timer = 0;
+    pdata-&gt;window = NULL;
     g_free (pdata);
     gtk_main_quit ();
 }
@@ -3983,7 +3992,6 @@ int main( int   argc,
     GtkWidget *align;
     GtkWidget *separator;
     GtkWidget *table;
-    GtkAdjustment *adj;
     GtkWidget *button;
     GtkWidget *check;
     GtkWidget *vbox;
@@ -3993,18 +4001,18 @@ int main( int   argc,
     /* Allocate memory for the data that is passed to the callbacks */
     pdata = g_malloc (sizeof (ProgressData));
   
-    pdata->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_resizable (GTK_WINDOW (pdata->window), TRUE);
+    pdata-&gt;window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_resizable (GTK_WINDOW (pdata-&gt;window), TRUE);
 
-    g_signal_connect (GTK_OBJECT (pdata->window), "destroy",
-	              GTK_SIGNAL_FUNC (destroy_progress),
+    g_signal_connect (G_OBJECT (pdata-&gt;window), "destroy",
+	              G_CALLBACK (destroy_progress),
                       pdata);
-    gtk_window_set_title (GTK_WINDOW (pdata->window), "GtkProgressBar");
-    gtk_container_set_border_width (GTK_CONTAINER (pdata->window), 0);
+    gtk_window_set_title (GTK_WINDOW (pdata-&gt;window), "GtkProgressBar");
+    gtk_container_set_border_width (GTK_CONTAINER (pdata-&gt;window), 0);
 
     vbox = gtk_vbox_new (FALSE, 5);
     gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
-    gtk_container_add (GTK_CONTAINER (pdata->window), vbox);
+    gtk_container_add (GTK_CONTAINER (pdata-&gt;window), vbox);
     gtk_widget_show (vbox);
   
     /* Create a centering alignment object */
@@ -4012,33 +4020,21 @@ int main( int   argc,
     gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 5);
     gtk_widget_show (align);
 
-    /* Create a Adjusment object to hold the range of the
-     * progress bar */
-    adj = (GtkAdjustment *) gtk_adjustment_new (0, 1, 150, 0, 0, 0);
+    /* Create the GtkProgressBar */
+    pdata-&gt;pbar = gtk_progress_bar_new ();
 
-    /* Create the GtkProgressBar using the adjustment */
-    pdata->pbar = gtk_progress_bar_new_with_adjustment (adj);
-
-    /* Set the format of the string that can be displayed in the
-     * trough of the progress bar:
-     * %p - percentage
-     * %v - value
-     * %l - lower range value
-     * %u - upper range value */
-    gtk_progress_set_format_string (GTK_PROGRESS (pdata->pbar),
-	                            "%v from [%l-%u] (=%p%%)");
-    gtk_container_add (GTK_CONTAINER (align), pdata->pbar);
-    gtk_widget_show (pdata->pbar);
+    gtk_container_add (GTK_CONTAINER (align), pdata-&gt;pbar);
+    gtk_widget_show (pdata-&gt;pbar);
 
     /* Add a timer callback to update the value of the progress bar */
-    pdata->timer = gtk_timeout_add (100, progress_timeout, pdata->pbar);
+    pdata-&gt;timer = gtk_timeout_add (100, progress_timeout, pdata);
 
     separator = gtk_hseparator_new ();
     gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, FALSE, 0);
     gtk_widget_show (separator);
 
     /* rows, columns, homogeneous */
-    table = gtk_table_new (2, 3, FALSE);
+    table = gtk_table_new (2, 2, FALSE);
     gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, TRUE, 0);
     gtk_widget_show (table);
 
@@ -4046,9 +4042,9 @@ int main( int   argc,
     check = gtk_check_button_new_with_label ("Show text");
     gtk_table_attach (GTK_TABLE (table), check, 0, 1, 0, 1,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-                      5, 5);
-    g_signal_connect (GTK_OBJECT (check), "clicked",
-                      GTK_SIGNAL_FUNC (toggle_show_text),
+		      5, 5);
+    g_signal_connect (G_OBJECT (check), "clicked",
+                      G_CALLBACK (toggle_show_text),
                       pdata);
     gtk_widget_show (check);
 
@@ -4057,48 +4053,26 @@ int main( int   argc,
     gtk_table_attach (GTK_TABLE (table), check, 0, 1, 1, 2,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
                       5, 5);
-    g_signal_connect (GTK_OBJECT (check), "clicked",
-                      GTK_SIGNAL_FUNC (toggle_activity_mode),
+    g_signal_connect (G_OBJECT (check), "clicked",
+                      G_CALLBACK (toggle_activity_mode),
                       pdata);
     gtk_widget_show (check);
 
-    separator = gtk_vseparator_new ();
-    gtk_table_attach (GTK_TABLE (table), separator, 1, 2, 0, 2,
+    /* Add a check button to toggle orientation */
+    check = gtk_check_button_new_with_label ("Right to Left");
+    gtk_table_attach (GTK_TABLE (table), check, 0, 1, 2, 3,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
                       5, 5);
-    gtk_widget_show (separator);
-
-    /* Add a radio button to select continuous display mode */
-    button = gtk_radio_button_new_with_label (NULL, "Continuous");
-    gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
-                      GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-                      5, 5);
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-                      GTK_SIGNAL_FUNC (set_continuous_mode),
+    g_signal_connect (G_OBJECT (check), "clicked",
+                      G_CALLBACK (toggle_orientation),
                       pdata);
-    gtk_widget_show (button);
-
-    /* Add a radio button to select discrete display mode */
-    button = gtk_radio_button_new_with_label(
-               gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
-               "Discrete");
-    gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
-                      GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-                      5, 5);
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-                      GTK_SIGNAL_FUNC (set_discrete_mode),
-                      pdata);
-    gtk_widget_show (button);
-
-    separator = gtk_hseparator_new ();
-    gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, FALSE, 0);
-    gtk_widget_show (separator);
+    gtk_widget_show (check);
 
     /* Add a button to exit the program */
     button = gtk_button_new_with_label ("close");
-    g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-                              GTK_SIGNAL_FUNC (gtk_widget_destroy),
-                              GTK_OBJECT (pdata->window));
+    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+                              G_CALLBACK (gtk_widget_destroy),
+                              pdata-&gt;window);
     gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
     /* This makes it so the button is the default. */
@@ -4109,7 +4083,7 @@ int main( int   argc,
     gtk_widget_grab_default (button);
     gtk_widget_show (button);
 
-    gtk_widget_show (pdata->window);
+    gtk_widget_show (pdata-&gt;window);
 
     gtk_main ();
     
@@ -4395,8 +4369,8 @@ int main( int   argc,
        the application */
     gtk_init (&amp;argc, &amp;argv);
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-                        GTK_SIGNAL_FUNC (close_application), NULL);
+    g_signal_connect (G_OBJECT (window), "delete_event",
+                      G_CALLBACK (close_application), NULL);
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     gtk_widget_show (window);
 
@@ -4416,8 +4390,8 @@ int main( int   argc,
     gtk_container_add (GTK_CONTAINER (window), button);
     gtk_widget_show (button);
 
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-                      GTK_SIGNAL_FUNC (button_clicked), NULL);
+    g_signal_connect (G_OBJECT (button), "clicked",
+                      G_CALLBACK (button_clicked), NULL);
 
     /* show the window */
     gtk_main ();
@@ -4476,9 +4450,9 @@ static char * WheelbarrowFull_xpm[] = {
 "-      c #596510401040",
 ";      c #C71B30C230C2",
 ":      c #C71B9A699658",
-">      c #618561856185",
+"&gt;      c #618561856185",
 ",      c #20811C712081",
-"<      c #104000000000",
+"&lt;      c #104000000000",
 "1      c #861720812081",
 "2      c #DF7D4D344103",
 "3      c #79E769A671C6",
@@ -4528,16 +4502,16 @@ static char * WheelbarrowFull_xpm[] = {
 "          .XoO                                  ",
 "         +@#$%o&amp;                                ",
 "         *=-;#::o+                              ",
-"           >,&lt;12#:34                            ",
+"           &gt;,&lt;12#:34                            ",
 "             45671#:X3                          ",
 "               +89&lt;02qwo                        ",
-"e*                >,67;ro                       ",
-"ty>                 459@>+&amp;&amp;                    ",
-"$2u+                  >&lt;ipas8*                  ",
-"%$;=*                *3:.Xa.dfg>                ",
+"e*                &gt;,67;ro                       ",
+"ty&gt;                 459@&gt;+&amp;&amp;                    ",
+"$2u+                  &gt;&lt;ipas8*                  ",
+"%$;=*                *3:.Xa.dfg&gt;                ",
 "Oh$;ya             *3d.a8j,Xe.d3g8+             ",
 " Oh$;ka          *3d$a8lz,,xxc:.e3g54           ",
-"  Oh$;kO       *pd$%svbzz,sxxxxfX..&amp;wn>         ",
+"  Oh$;kO       *pd$%svbzz,sxxxxfX..&amp;wn&gt;         ",
 "   Oh$@mO    *3dthwlsslszjzxxxxxxx3:td8M4       ",
 "    Oh$@g&amp; *3d$XNlvvvlllm,mNwxxxxxxxfa.:,B*     ",
 "     Oh$@,Od.czlllllzlmmqV@V#V@fxxxxxxxf:%j5&amp;   ",
@@ -4547,7 +4521,7 @@ static char * WheelbarrowFull_xpm[] = {
 "        :,q-6MN.dfmZZrrSS:#riirDSAX@Af5xxxxxfevo",
 "         +A26jguXtAZZZC7iDiCCrVVii7Cmmmxxxxxx%3g",
 "          *#16jszN..3DZZZZrCVSA2rZrV7Dmmwxxxx&amp;en",
-"           p2yFvzssXe:fCZZCiiD7iiZDiDSSZwwxx8e*>",
+"           p2yFvzssXe:fCZZCiiD7iiZDiDSSZwwxx8e*&gt;",
 "           OA1&lt;jzxwwc:$d%NDZZZZCCCZCCZZCmxxfd.B ",
 "            3206Bwxxszx%et.eaAp77m77mmmf3&amp;eeeg* ",
 "             @26MvzxNzvlbwfpdettttttttttt.c,n&amp;  ",
@@ -4556,18 +4530,18 @@ static char * WheelbarrowFull_xpm[] = {
 "              OS0y6FBlvvvzvzss,u=Blllj=54       ",
 "               c1-699Blvlllllu7k96MMMg4         ",
 "               *10y8n6FjvllllB&lt;166668           ",
-"                S-kg+>666&lt;M&lt;996-y6n&lt;8*          ",
+"                S-kg+&gt;666&lt;M&lt;996-y6n&lt;8*          ",
 "                p71=4 m69996kD8Z-66698&amp;&amp;        ",
 "                &amp;i0ycm6n4 ogk17,0&lt;6666g         ",
-"                 N-k-&lt;>     >=01-kuu666>        ",
+"                 N-k-&lt;&gt;     &gt;=01-kuu666&gt;        ",
 "                 ,6ky&amp;      &amp;46-10ul,66,        ",
-"                 Ou0&lt;>       o66y&lt;ulw&lt;66&amp;       ",
-"                  *kk5       >66By7=xu664       ",
+"                 Ou0&lt;&gt;       o66y&lt;ulw&lt;66&amp;       ",
+"                  *kk5       &gt;66By7=xu664       ",
 "                   &lt;&lt;M4      466lj&lt;Mxu66o       ",
-"                   *>>       +66uv,zN666*       ",
+"                   *&gt;&gt;       +66uv,zN666*       ",
 "                              566,xxj669        ",
-"                              4666FF666>        ",
-"                               >966666M         ",
+"                              4666FF666&gt;        ",
+"                               &gt;966666M         ",
 "                                oM6668+         ",
 "                                  *4            ",
 "                                                ",
@@ -4598,15 +4572,15 @@ int main (int argc,
      * since we're making it a popup. */
     gtk_init (&amp;argc, &amp;argv);
     window = gtk_window_new (GTK_WINDOW_POPUP);
-    g_signal_connect (GTK_OBJECT (window), "delete_event",
-                      GTK_SIGNAL_FUNC (close_application), NULL);
+    g_signal_connect (G_OBJECT (window), "delete_event",
+                      G_CALLBACK (close_application), NULL);
     gtk_widget_show (window);
 
     /* Now for the pixmap and the pixmap widget */
     style = gtk_widget_get_default_style();
-    gc = style->black_gc;
-    gdk_pixmap = gdk_pixmap_create_from_xpm_d (window->window, &amp;mask,
-                                               &amp;style->bg[GTK_STATE_NORMAL],
+    gc = style-&gt;black_gc;
+    gdk_pixmap = gdk_pixmap_create_from_xpm_d (window-&gt;window, &amp;mask,
+                                               &amp;style-&gt;bg[GTK_STATE_NORMAL],
                                                WheelbarrowFull_xpm);
     pixmap = gtk_image_new_from_pixmap (gdk_pixmap, mask);
     gtk_widget_show (pixmap);
@@ -4737,7 +4711,7 @@ Placement of the drawing area and the rulers is done using a table.</para>
 
 #include &lt;gtk/gtk.h&gt;
 
-#define EVENT_METHOD(i, x) GTK_WIDGET_GET_CLASS(i)->x
+#define EVENT_METHOD(i, x) GTK_WIDGET_GET_CLASS(i)-&gt;x
 
 #define XSIZE  600
 #define YSIZE  400
@@ -4760,8 +4734,8 @@ int main( int   argc,
     gtk_init (&amp;argc, &amp;argv);
 
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    g_signal_connect (GTK_OBJECT (window), "delete_event",
-                      GTK_SIGNAL_FUNC (close_application), NULL);
+    g_signal_connect (G_OBJECT (window), "delete_event",
+                      G_CALLBACK (close_application), NULL);
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
     /* Create a table for placing the ruler and the drawing area */
@@ -4781,9 +4755,9 @@ int main( int   argc,
     hrule = gtk_hruler_new ();
     gtk_ruler_set_metric (GTK_RULER (hrule), GTK_PIXELS);
     gtk_ruler_set_range (GTK_RULER (hrule), 7, 13, 0, 20);
-    g_signal_connect_swapped (GTK_OBJECT (area), "motion_notify_event",
-                              GTK_SIGNAL_FUNC (EVENT_METHOD (hrule, motion_notify_event)),
-                              GTK_OBJECT (hrule));
+    g_signal_connect_swapped (G_OBJECT (area), "motion_notify_event",
+                              G_CALLBACK (EVENT_METHOD (hrule, motion_notify_event)),
+                              hrule);
     gtk_table_attach (GTK_TABLE (table), hrule, 1, 2, 0, 1,
                       GTK_EXPAND|GTK_SHRINK|GTK_FILL, GTK_FILL, 0, 0);
     
@@ -4793,9 +4767,9 @@ int main( int   argc,
     vrule = gtk_vruler_new ();
     gtk_ruler_set_metric (GTK_RULER (vrule), GTK_PIXELS);
     gtk_ruler_set_range (GTK_RULER (vrule), 0, YSIZE, 10, YSIZE );
-    g_signal_connect_swapped (GTK_OBJECT (area), "motion_notify_event",
-                              GTK_SIGNAL_FUNC (EVENT_METHOD (vrule, motion_notify_event)),
-                              GTK_OBJECT (vrule));
+    g_signal_connect_swapped (G_OBJECT (area), "motion_notify_event",
+                              G_CALLBACK (EVENT_METHOD (vrule, motion_notify_event)),
+                              vrule);
     gtk_table_attach (GTK_TABLE (table), vrule, 0, 1, 1, 2,
                       GTK_FILL, GTK_EXPAND|GTK_SHRINK|GTK_FILL, 0, 0);
 
@@ -4914,8 +4888,8 @@ int main( int   argc,
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_widget_set_size_request (GTK_WIDGET (window), 200, 100);
     gtk_window_set_title (GTK_WINDOW (window), "GTK Statusbar Example");
-    g_signal_connect (GTK_OBJECT (window), "delete_event",
-                      GTK_SIGNAL_FUNC (exit), NULL);
+    g_signal_connect (G_OBJECT (window), "delete_event",
+                      G_CALLBACK (exit), NULL);
  
     vbox = gtk_vbox_new (FALSE, 1);
     gtk_container_add (GTK_CONTAINER (window), vbox);
@@ -4929,14 +4903,14 @@ int main( int   argc,
                           GTK_STATUSBAR (status_bar), "Statusbar example");
 
     button = gtk_button_new_with_label ("push item");
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-                      GTK_SIGNAL_FUNC (push_item), GINT_TO_POINTER (context_id));
+    g_signal_connect (G_OBJECT (button), "clicked",
+                      G_CALLBACK (push_item), GINT_TO_POINTER (context_id));
     gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 2);
     gtk_widget_show (button);              
 
     button = gtk_button_new_with_label ("pop last item");
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-                      GTK_SIGNAL_FUNC (pop_item), GINT_TO_POINTER (context_id));
+    g_signal_connect (G_OBJECT (button), "clicked",
+                      G_CALLBACK (pop_item), GINT_TO_POINTER (context_id));
     gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 2);
     gtk_widget_show (button);
 
@@ -5066,14 +5040,14 @@ void entry_toggle_editable( GtkWidget *checkbutton,
                             GtkWidget *entry )
 {
   gtk_editable_set_editable (GTK_EDITABLE (entry),
-                             GTK_TOGGLE_BUTTON (checkbutton)->active);
+                             GTK_TOGGLE_BUTTON (checkbutton)-&gt;active);
 }
 
 void entry_toggle_visibility( GtkWidget *checkbutton,
                               GtkWidget *entry )
 {
   gtk_entry_set_visibility (GTK_ENTRY (entry),
-			    GTK_TOGGLE_BUTTON (checkbutton)->active);
+			    GTK_TOGGLE_BUTTON (checkbutton)-&gt;active);
 }
 
 int main( int   argc,
@@ -5093,8 +5067,11 @@ int main( int   argc,
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_widget_set_size_request (GTK_WIDGET (window), 200, 100);
     gtk_window_set_title (GTK_WINDOW (window), "GTK Entry");
-    g_signal_connect (GTK_OBJECT (window), "delete_event",
-                      GTK_SIGNAL_FUNC (exit), NULL);
+    g_signal_connect (G_OBJECT (window), "destroy",
+                      G_CALLBACK (gtk_main_quit), NULL);
+    g_signal_connect_swapped (G_OBJECT (window), "delete_event",
+                              G_CALLBACK (gtk_widget_destroy), 
+                              window);
 
     vbox = gtk_vbox_new (FALSE, 0);
     gtk_container_add (GTK_CONTAINER (window), vbox);
@@ -5102,14 +5079,14 @@ int main( int   argc,
 
     entry = gtk_entry_new ();
     gtk_entry_set_max_length (GTK_ENTRY (entry), 50);
-    g_signal_connect (GTK_OBJECT (entry), "activate",
-		      GTK_SIGNAL_FUNC (enter_callback),
+    g_signal_connect (G_OBJECT (entry), "activate",
+		      G_CALLBACK (enter_callback),
 		      entry);
     gtk_entry_set_text (GTK_ENTRY (entry), "hello");
-    tmp_pos = GTK_ENTRY (entry)->text_length;
+    tmp_pos = GTK_ENTRY (entry)-&gt;text_length;
     gtk_editable_insert_text (GTK_EDITABLE (entry), " world", -1, &amp;tmp_pos);
     gtk_editable_select_region (GTK_EDITABLE (entry),
-			        0, GTK_ENTRY (entry)->text_length);
+			        0, GTK_ENTRY (entry)-&gt;text_length);
     gtk_box_pack_start (GTK_BOX (vbox), entry, TRUE, TRUE, 0);
     gtk_widget_show (entry);
 
@@ -5119,22 +5096,22 @@ int main( int   argc,
                                   
     check = gtk_check_button_new_with_label ("Editable");
     gtk_box_pack_start (GTK_BOX (hbox), check, TRUE, TRUE, 0);
-    g_signal_connect (GTK_OBJECT (check), "toggled",
-	              GTK_SIGNAL_FUNC (entry_toggle_editable), entry);
+    g_signal_connect (G_OBJECT (check), "toggled",
+	              G_CALLBACK (entry_toggle_editable), entry);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
     gtk_widget_show (check);
     
     check = gtk_check_button_new_with_label ("Visible");
     gtk_box_pack_start (GTK_BOX (hbox), check, TRUE, TRUE, 0);
-    g_signal_connect (GTK_OBJECT (check), "toggled",
-	              GTK_SIGNAL_FUNC (entry_toggle_visibility), entry);
+    g_signal_connect (G_OBJECT (check), "toggled",
+	              G_CALLBACK (entry_toggle_visibility), entry);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
     gtk_widget_show (check);
                                    
-    button = gtk_button_new_with_label ("Close");
-    g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-			      GTK_SIGNAL_FUNC (exit),
-			      GTK_OBJECT (window));
+    button = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
+    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+			      G_CALLBACK (gtk_widget_destroy),
+			      window);
     gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
     GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
     gtk_widget_grab_default (button);
@@ -5401,13 +5378,13 @@ static GtkWidget *spinner1;
 void toggle_snap( GtkWidget     *widget,
 		  GtkSpinButton *spin )
 {
-  gtk_spin_button_set_snap_to_ticks (spin, GTK_TOGGLE_BUTTON (widget)->active);
+  gtk_spin_button_set_snap_to_ticks (spin, GTK_TOGGLE_BUTTON (widget)-&gt;active);
 }
 
 void toggle_numeric( GtkWidget *widget,
 		     GtkSpinButton *spin )
 {
-  gtk_spin_button_set_numeric (spin, GTK_TOGGLE_BUTTON (widget)->active);
+  gtk_spin_button_set_numeric (spin, GTK_TOGGLE_BUTTON (widget)-&gt;active);
 }
 
 void change_digits( GtkWidget *widget,
@@ -5429,7 +5406,7 @@ void get_value( GtkWidget *widget,
   if (GPOINTER_TO_INT (data) == 1)
     sprintf (buf, "%d", gtk_spin_button_get_value_as_int (spin));
   else
-    sprintf (buf, "%0.*f", spin->digits,
+    sprintf (buf, "%0.*f", spin-&gt;digits,
              gtk_spin_button_get_value (spin));
   gtk_label_set_text (label, buf);
 }
@@ -5456,8 +5433,8 @@ int main( int   argc,
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-  g_signal_connect (GTK_OBJECT (window), "destroy",
-		    GTK_SIGNAL_FUNC (gtk_main_quit),
+  g_signal_connect (G_OBJECT (window), "destroy",
+		    G_CALLBACK (gtk_main_quit),
 		    NULL);
 
   gtk_window_set_title (GTK_WINDOW (window), "Spin Button");
@@ -5552,24 +5529,24 @@ int main( int   argc,
   adj = (GtkAdjustment *) gtk_adjustment_new (2, 1, 5, 1, 1, 0);
   spinner2 = gtk_spin_button_new (adj, 0.0, 0);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner2), TRUE);
-  g_signal_connect (GTK_OBJECT (adj), "value_changed",
-		    GTK_SIGNAL_FUNC (change_digits),
-		    (gpointer) spinner2);
+  g_signal_connect (G_OBJECT (adj), "value_changed",
+		    G_CALLBACK (change_digits),
+		    spinner2);
   gtk_box_pack_start (GTK_BOX (vbox2), spinner2, FALSE, TRUE, 0);
   
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
   
   button = gtk_check_button_new_with_label ("Snap to 0.5-ticks");
-  g_signal_connect (GTK_OBJECT (button), "clicked",
-		    GTK_SIGNAL_FUNC (toggle_snap),
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (toggle_snap),
 		    spinner1);
   gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
   
   button = gtk_check_button_new_with_label ("Numeric only input mode");
-  g_signal_connect (GTK_OBJECT (button), "clicked",
-		    GTK_SIGNAL_FUNC (toggle_numeric),
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (toggle_numeric),
 		    spinner1);
   gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
@@ -5580,15 +5557,15 @@ int main( int   argc,
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
   button = gtk_button_new_with_label ("Value as Int");
   g_object_set_data (G_OBJECT (button), "user_data", val_label);
-  g_signal_connect (GTK_OBJECT (button), "clicked",
-		    GTK_SIGNAL_FUNC (get_value),
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (get_value),
 		    GINT_TO_POINTER (1));
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
   
   button = gtk_button_new_with_label ("Value as Float");
   g_object_set_data (G_OBJECT (button), "user_data", val_label);
-  g_signal_connect (GTK_OBJECT (button), "clicked",
-		    GTK_SIGNAL_FUNC (get_value),
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (get_value),
 		    GINT_TO_POINTER (2));
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
   
@@ -5599,9 +5576,9 @@ int main( int   argc,
   gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, TRUE, 0);
   
   button = gtk_button_new_with_label ("Close");
-  g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-			     GTK_SIGNAL_FUNC (gtk_widget_destroy),
-			     GTK_OBJECT (window));
+  g_signal_connect_swapped (G_OBJECT (button), "clicked",
+                            G_CALLBACK (gtk_widget_destroy),
+			    window);
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
 
   gtk_widget_show_all (window);
@@ -5611,6 +5588,7 @@ int main( int   argc,
     
   return 0;
 }
+
 <!-- example-end -->
 </programlisting>
 
@@ -6012,7 +5990,7 @@ void calendar_date_to_string( CalendarData *data,
   time_t time;
 
   memset (&amp;tm, 0, sizeof (tm));
-  gtk_calendar_get_date (GTK_CALENDAR (data->window),
+  gtk_calendar_get_date (GTK_CALENDAR (data-&gt;window),
 			 &amp;tm.tm_year, &amp;tm.tm_mon, &amp;tm.tm_mday);
   tm.tm_year -= TM_YEAR_BASE;
   time = mktime (&amp;tm);
@@ -6024,12 +6002,12 @@ void calendar_set_signal_strings( char         *sig_str,
 {
   const gchar *prev_sig;
 
-  prev_sig = gtk_label_get_text (GTK_LABEL (data->prev_sig));
-  gtk_label_set_text (GTK_LABEL (data->prev2_sig), prev_sig);
+  prev_sig = gtk_label_get_text (GTK_LABEL (data-&gt;prev_sig));
+  gtk_label_set_text (GTK_LABEL (data-&gt;prev2_sig), prev_sig);
 
-  prev_sig = gtk_label_get_text (GTK_LABEL (data->last_sig));
-  gtk_label_set_text (GTK_LABEL (data->prev_sig), prev_sig);
-  gtk_label_set_text (GTK_LABEL (data->last_sig), sig_str);
+  prev_sig = gtk_label_get_text (GTK_LABEL (data-&gt;last_sig));
+  gtk_label_set_text (GTK_LABEL (data-&gt;prev_sig), prev_sig);
+  gtk_label_set_text (GTK_LABEL (data-&gt;last_sig), sig_str);
 }
 
 void calendar_month_changed( GtkWidget    *widget,
@@ -6060,17 +6038,17 @@ void calendar_day_selected_double_click( GtkWidget    *widget,
   calendar_set_signal_strings (buffer, data);
 
   memset (&amp;tm, 0, sizeof (tm));
-  gtk_calendar_get_date (GTK_CALENDAR (data->window),
+  gtk_calendar_get_date (GTK_CALENDAR (data-&gt;window),
 			 &amp;tm.tm_year, &amp;tm.tm_mon, &amp;tm.tm_mday);
   tm.tm_year -= TM_YEAR_BASE;
 
-  if (GTK_CALENDAR (data->window)->marked_date[tm.tm_mday-1] == 0) 
+  if (GTK_CALENDAR (data-&gt;window)-&gt;marked_date[tm.tm_mday-1] == 0) 
     {
-      gtk_calendar_mark_day (GTK_CALENDAR (data->window), tm.tm_mday);
+      gtk_calendar_mark_day (GTK_CALENDAR (data-&gt;window), tm.tm_mday);
     } 
   else 
     { 
-      gtk_calendar_unmark_day (GTK_CALENDAR (data->window), tm.tm_mday);
+      gtk_calendar_unmark_day (GTK_CALENDAR (data-&gt;window), tm.tm_mday);
     }
 }
 
@@ -6115,13 +6093,13 @@ void calendar_set_flags( CalendarData *calendar )
 {
   gint i;
   gint options = 0;
-  for (i = 0; i < 5; i++) 
+  for (i = 0; i &lt; 5; i++) 
     if (calendar-&gt;settings[i])
       {
 	options=options + (1&lt;&lt;i);
       }
   if (calendar-&gt;window)
-    gtk_calendar_display_options (GTK_CALENDAR (calendar->window), options);
+    gtk_calendar_display_options (GTK_CALENDAR (calendar-&gt;window), options);
 }
 
 void calendar_toggle_flag( GtkWidget    *toggle,
@@ -6130,11 +6108,11 @@ void calendar_toggle_flag( GtkWidget    *toggle,
   gint i;
   gint j;
   j = 0;
-  for (i = 0; i < 5; i++)
-    if (calendar->flag_checkboxes[i] == toggle)
+  for (i = 0; i &lt; 5; i++)
+    if (calendar-&gt;flag_checkboxes[i] == toggle)
       j = i;
 
-  calendar->settings[j] = !calendar->settings[j];
+  calendar-&gt;settings[j] = !calendar-&gt;settings[j];
   calendar_set_flags (calendar);
   
 }
@@ -6145,16 +6123,16 @@ void calendar_font_selection_ok( GtkWidget    *button,
   GtkStyle *style;
   PangoFontDescription *font_desc;
 
-  calendar->font = gtk_font_selection_dialog_get_font_name (
-			GTK_FONT_SELECTION_DIALOG (calendar->font_dialog));
-  if (calendar->window)
+  calendar-&gt;font = gtk_font_selection_dialog_get_font_name (
+			GTK_FONT_SELECTION_DIALOG (calendar-&gt;font_dialog));
+  if (calendar-&gt;window)
     {
-      font_desc = pango_font_description_from_string (calendar->font);
+      font_desc = pango_font_description_from_string (calendar-&gt;font);
       if (font_desc) 
 	{
-	  style = gtk_style_copy (gtk_widget_get_style (calendar->window));
-	  style->font_desc = font_desc;
-	  gtk_widget_set_style (calendar->window, style);
+	  style = gtk_style_copy (gtk_widget_get_style (calendar-&gt;window));
+	  style-&gt;font_desc = font_desc;
+	  gtk_widget_set_style (calendar-&gt;window, style);
 	}
     }
 }
@@ -6164,26 +6142,26 @@ void calendar_select_font( GtkWidget    *button,
 {
   GtkWidget *window;
 
-  if (!calendar->font_dialog) {
+  if (!calendar-&gt;font_dialog) {
     window = gtk_font_selection_dialog_new ("Font Selection Dialog");
     g_return_if_fail (GTK_IS_FONT_SELECTION_DIALOG (window));
-    calendar->font_dialog = window;
+    calendar-&gt;font_dialog = window;
     
     gtk_window_set_position (GTK_WINDOW (window), GTK_WIN_POS_MOUSE);
     
-    g_signal_connect (GTK_OBJECT (window), "destroy",
-	              GTK_SIGNAL_FUNC (gtk_widget_destroyed),
-		      &amp;calendar->font_dialog);
+    g_signal_connect (G_OBJECT (window), "destroy",
+	              G_CALLBACK (gtk_widget_destroyed),
+		      &amp;calendar-&gt;font_dialog);
     
-    g_signal_connect (GTK_OBJECT (GTK_FONT_SELECTION_DIALOG (window)->ok_button),
-		      "clicked", GTK_SIGNAL_FUNC (calendar_font_selection_ok),
+    g_signal_connect (G_OBJECT (GTK_FONT_SELECTION_DIALOG (window)-&gt;ok_button),
+		      "clicked", G_CALLBACK (calendar_font_selection_ok),
 		      calendar);
-    g_signal_connect_swapped (GTK_OBJECT (GTK_FONT_SELECTION_DIALOG (window)->cancel_button),
+    g_signal_connect_swapped (G_OBJECT (GTK_FONT_SELECTION_DIALOG (window)-&gt;cancel_button),
 			      "clicked",
-			      GTK_SIGNAL_FUNC (gtk_widget_destroy), 
-			      GTK_OBJECT (calendar->font_dialog));
+			      G_CALLBACK (gtk_widget_destroy), 
+			      calendar-&gt;font_dialog);
   }
-  window=calendar->font_dialog;
+  window=calendar-&gt;font_dialog;
   if (!GTK_WIDGET_VISIBLE (window))
     gtk_widget_show (window);
   else
@@ -6223,18 +6201,18 @@ void create_calendar()
   calendar_data.font = NULL;
   calendar_data.font_dialog = NULL;
 
-  for (i = 0; i < 5; i++) {
+  for (i = 0; i &lt; 5; i++) {
     calendar_data.settings[i] = 0;
   }
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "GtkCalendar Example");
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
-  g_signal_connect (GTK_OBJECT (window), "destroy",
-		    GTK_SIGNAL_FUNC (gtk_main_quit),
+  g_signal_connect (G_OBJECT (window), "destroy",
+		    G_CALLBACK (gtk_main_quit),
 		    NULL);
-  g_signal_connect (GTK_OBJECT (window), "delete-event",
-		    GTK_SIGNAL_FUNC (gtk_false),
+  g_signal_connect (G_OBJECT (window), "delete-event",
+		    G_CALLBACK (gtk_false),
 		    NULL);
 
   gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
@@ -6261,26 +6239,26 @@ void create_calendar()
   calendar_set_flags (&amp;calendar_data);
   gtk_calendar_mark_day (GTK_CALENDAR (calendar), 19);	
   gtk_container_add( GTK_CONTAINER (frame), calendar);
-  g_signal_connect (GTK_OBJECT (calendar), "month_changed", 
-                    GTK_SIGNAL_FUNC (calendar_month_changed),
+  g_signal_connect (G_OBJECT (calendar), "month_changed", 
+                    G_CALLBACK (calendar_month_changed),
 		    &amp;calendar_data);
-  g_signal_connect (GTK_OBJECT (calendar), "day_selected", 
-                    GTK_SIGNAL_FUNC (calendar_day_selected),
+  g_signal_connect (G_OBJECT (calendar), "day_selected", 
+                    G_CALLBACK (calendar_day_selected),
 		    &amp;calendar_data);
-  g_signal_connect (GTK_OBJECT (calendar), "day_selected_double_click", 
-                    GTK_SIGNAL_FUNC (calendar_day_selected_double_click),
+  g_signal_connect (G_OBJECT (calendar), "day_selected_double_click", 
+                    G_CALLBACK (calendar_day_selected_double_click),
 	            &amp;calendar_data);
-  g_signal_connect (GTK_OBJECT (calendar), "prev_month", 
-                    GTK_SIGNAL_FUNC (calendar_prev_month),
+  g_signal_connect (G_OBJECT (calendar), "prev_month", 
+                    G_CALLBACK (calendar_prev_month),
 		    &amp;calendar_data);
-  g_signal_connect (GTK_OBJECT (calendar), "next_month", 
-                    GTK_SIGNAL_FUNC (calendar_next_month),
+  g_signal_connect (G_OBJECT (calendar), "next_month", 
+                    G_CALLBACK (calendar_next_month),
 		    &amp;calendar_data);
-  g_signal_connect (GTK_OBJECT (calendar), "prev_year", 
-                    GTK_SIGNAL_FUNC (calendar_prev_year),
+  g_signal_connect (G_OBJECT (calendar), "prev_year", 
+                    G_CALLBACK (calendar_prev_year),
 		    &amp;calendar_data);
-  g_signal_connect (GTK_OBJECT (calendar), "next_year", 
-                    GTK_SIGNAL_FUNC (calendar_next_year),
+  g_signal_connect (G_OBJECT (calendar), "next_year", 
+                    G_CALLBACK (calendar_next_year),
 		    &amp;calendar_data);
 
 
@@ -6297,21 +6275,21 @@ void create_calendar()
   vbox3 = gtk_vbox_new (TRUE, DEF_PAD_SMALL);
   gtk_container_add (GTK_CONTAINER (frame), vbox3);
 
-  for (i = 0; i < 5; i++)
+  for (i = 0; i &lt; 5; i++)
     {
       toggle = gtk_check_button_new_with_label (flags[i].label);
-      g_signal_connect (GTK_OBJECT (toggle),
+      g_signal_connect (G_OBJECT (toggle),
 			"toggled",
-			GTK_SIGNAL_FUNC (calendar_toggle_flag),
+			G_CALLBACK (calendar_toggle_flag),
 			&amp;calendar_data);
       gtk_box_pack_start (GTK_BOX (vbox3), toggle, TRUE, TRUE, 0);
       calendar_data.flag_checkboxes[i] = toggle;
     }
   /* Build the right font-button */ 
   button = gtk_button_new_with_label ("Font...");
-  g_signal_connect (GTK_OBJECT (button),
+  g_signal_connect (G_OBJECT (button),
 		    "clicked",
-		    GTK_SIGNAL_FUNC (calendar_select_font),
+		    G_CALLBACK (calendar_select_font),
 		    &amp;calendar_data);
   gtk_box_pack_start (GTK_BOX (vbox2), button, FALSE, FALSE, 0);
 
@@ -6351,8 +6329,8 @@ void create_calendar()
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_END);
 
   button = gtk_button_new_with_label ("Close");
-  g_signal_connect (GTK_OBJECT (button), "clicked", 
-		    GTK_SIGNAL_FUNC (gtk_main_quit), 
+  g_signal_connect (G_OBJECT (button), "clicked", 
+		    G_CALLBACK (gtk_main_quit), 
 		    NULL);
   gtk_container_add (GTK_CONTAINER (bbox), button);
   GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
@@ -6506,7 +6484,7 @@ void color_changed_cb( GtkWidget         *widget,
 
   /* Get drawingarea colormap */
 
-  colormap = gdk_window_get_colormap (drawingarea->window);
+  colormap = gdk_window_get_colormap (drawingarea-&gt;window);
 
   /* Get current color */
 
@@ -6525,11 +6503,11 @@ void color_changed_cb( GtkWidget         *widget,
 
   /* Set window background color */
 
-  gdk_window_set_background (drawingarea->window, &amp;gdk_color);
+  gdk_window_set_background (drawingarea-&gt;window, &amp;gdk_color);
 
   /* Clear window */
 
-  gdk_window_clear (drawingarea->window);
+  gdk_window_clear (drawingarea-&gt;window);
 }
 
 /* Drawingarea event handler */
@@ -6543,7 +6521,7 @@ gint area_event( GtkWidget *widget,
 
   /* Check if we've received a button pressed event */
 
-  if (event->type == GDK_BUTTON_PRESS &amp;&amp; colorseldlg == NULL)
+  if (event-&gt;type == GDK_BUTTON_PRESS &amp;&amp; colorseldlg == NULL)
     {
       /* Yes, we have an event and there's no colorseldlg yet! */
 
@@ -6555,7 +6533,7 @@ gint area_event( GtkWidget *widget,
 
       /* Get the ColorSelection widget */
 
-      colorsel = GTK_COLOR_SELECTION_DIALOG (colorseldlg)->colorsel;
+      colorsel = GTK_COLOR_SELECTION_DIALOG (colorseldlg)-&gt;colorsel;
 
       /* Connect to the "color_changed" signal, set the client-data
        * to the colorsel widget */
@@ -6590,7 +6568,7 @@ gint main( gint   argc,
 
   /* Initialize the toolkit, remove gtk-related commandline stuff */
 
-  gtk_init (&amp;argc,&amp;argv);
+  gtk_init (&amp;argc, &amp;argv);
 
   /* Create toplevel window, set title and policies */
 
@@ -6697,12 +6675,6 @@ void file_ok_sel( GtkWidget        *w,
     g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
 }
 
-void destroy( GtkWidget *widget,
-              gpointer   data )
-{
-    gtk_main_quit ();
-}
-
 int main( int   argc,
           char *argv[] )
 {
@@ -6713,16 +6685,17 @@ int main( int   argc,
     /* Create a new file selection widget */
     filew = gtk_file_selection_new ("File selection");
     
-    g_signal_connect (GTK_OBJECT (filew), "destroy",
-	              GTK_SIGNAL_FUNC (destroy), &amp;filew);
+    g_signal_connect (G_OBJECT (filew), "destroy",
+	              G_CALLBACK (gtk_main_quit), NULL);
     /* Connect the ok_button to file_ok_sel function */
-    g_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (filew)->ok_button),
-		      "clicked", GTK_SIGNAL_FUNC (file_ok_sel), filew );
+    g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (filew)-&gt;ok_button),
+		      "clicked", 
+                      G_CALLBACK (file_ok_sel), filew);
     
     /* Connect the cancel_button to destroy the widget */
-    g_signal_connect_swapped (GTK_OBJECT (GTK_FILE_SELECTION (filew)->cancel_button),
-	                      "clicked", GTK_SIGNAL_FUNC (gtk_widget_destroy),
-			      GTK_OBJECT (filew));
+    g_signal_connect_swapped (G_OBJECT (GTK_FILE_SELECTION (filew)-&gt;cancel_button),
+	                      "clicked", 
+                              G_CALLBACK (gtk_widget_destroy), filew);
     
     /* Lets set the filename, as if this were a save dialog, and we are giving
      a default filename */
@@ -6800,8 +6773,8 @@ int main( int argc,
     
     gtk_window_set_title (GTK_WINDOW (window), "Event Box");
     
-    g_signal_connect (GTK_OBJECT (window), "destroy",
-	              GTK_SIGNAL_FUNC (exit), NULL);
+    g_signal_connect (G_OBJECT (window), "destroy",
+	              G_CALLBACK (exit), NULL);
     
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     
@@ -6822,13 +6795,13 @@ int main( int argc,
     
     /* And bind an action to it */
     gtk_widget_set_events (event_box, GDK_BUTTON_PRESS_MASK);
-    g_signal_connect (GTK_OBJECT (event_box), "button_press_event",
-	              GTK_SIGNAL_FUNC (exit), NULL);
+    g_signal_connect (G_OBJECT (event_box), "button_press_event",
+	              G_CALLBACK (exit), NULL);
     
     /* Yet one more thing you need an X window for ... */
     
     gtk_widget_realize (event_box);
-    gdk_window_set_cursor (event_box->window, gdk_cursor_new (GDK_HAND1));
+    gdk_window_set_cursor (event_box-&gt;window, gdk_cursor_new (GDK_HAND1));
     
     gtk_widget_show (window);
     
@@ -6959,8 +6932,8 @@ int main( int   argc,
   gtk_window_set_title (GTK_WINDOW (window), "Fixed Container");
 
   /* Here we connect the "destroy" event to a signal handler */ 
-  g_signal_connect (GTK_OBJECT (window), "destroy",
-		    GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+  g_signal_connect (G_OBJECT (window), "destroy",
+		    G_CALLBACK (gtk_main_quit), NULL);
  
   /* Sets the border width of the window. */
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -6970,15 +6943,15 @@ int main( int   argc,
   gtk_container_add (GTK_CONTAINER (window), fixed);
   gtk_widget_show (fixed);
   
-  for (i = 1 ; i <= 3 ; i++) {
+  for (i = 1 ; i &lt;= 3 ; i++) {
     /* Creates a new button with the label "Press me" */
     button = gtk_button_new_with_label ("Press me");
   
     /* When the button receives the "clicked" signal, it will call the
      * function move_button() passing it the Fixed Container as its
      * argument. */
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-		      GTK_SIGNAL_FUNC (move_button), fixed);
+    g_signal_connect (G_OBJECT (button), "clicked",
+		      G_CALLBACK (move_button), fixed);
   
     /* This packs the button into the fixed containers window. */
     gtk_fixed_put (GTK_FIXED (fixed), button, i*50, i*50);
@@ -7154,8 +7127,8 @@ int main( int   argc,
   gtk_window_set_title (GTK_WINDOW (window), "Frame Example");
 
   /* Here we connect the "destroy" event to a signal handler */ 
-  g_signal_connect (GTK_OBJECT (window), "destroy",
-		    GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+  g_signal_connect (G_OBJECT (window), "destroy",
+		    G_CALLBACK (gtk_main_quit), NULL);
 
   gtk_widget_set_size_request (window, 300, 300);
   /* Sets the border width of the window. */
@@ -7186,7 +7159,6 @@ int main( int   argc,
 }
 <!-- example-end -->
 </programlisting>
-
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->   
@@ -7245,8 +7217,8 @@ int main( int argc,
    
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title (GTK_WINDOW (window), "Aspect Frame");
-    g_signal_connect (GTK_OBJECT (window), "destroy",
-	              GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+    g_signal_connect (G_OBJECT (window), "destroy",
+	              G_CALLBACK (gtk_main_quit), NULL);
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
    
     /* Create an aspect_frame and add it to our toplevel window */
@@ -7357,11 +7329,11 @@ GtkWidget *create_list( void )
     gtk_widget_show (tree_view);
    
     /* Add some messages to the window */
-    for (i = 0; i < 10; i++) {
+    for (i = 0; i &lt; 10; i++) {
         gchar *msg = g_strdup_printf ("Message #%d", i);
-        gtk_list_store_append (GTK_LIST_STORE (model), &iter);
+        gtk_list_store_append (GTK_LIST_STORE (model), &amp;iter);
         gtk_list_store_set (GTK_LIST_STORE (model), 
-	                    &iter,
+	                    &amp;iter,
                             0, msg,
 	                    -1);
 	g_free (msg);
@@ -7389,9 +7361,9 @@ void insert_text (GtkTextBuffer *buffer)
 {
    GtkTextIter iter;
  
-   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
+   gtk_text_buffer_get_iter_at_offset (buffer, &amp;iter, 0);
 
-   gtk_text_buffer_insert (buffer, &iter,   
+   gtk_text_buffer_insert (buffer, &amp;iter,   
     "From: pathfinder@nasa.gov\n"
     "To: mom@nasa.gov\n"
     "Subject: Made it!\n"
@@ -7437,8 +7409,8 @@ int main( int   argc,
    
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title (GTK_WINDOW (window), "Paned Windows");
-    g_signal_connect (GTK_OBJECT (window), "destroy",
-	              GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+    g_signal_connect (G_OBJECT (window), "destroy",
+	              G_CALLBACK (gtk_main_quit), NULL);
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     gtk_widget_set_size_request (GTK_WIDGET (window), 450, 400);
 
@@ -7601,8 +7573,8 @@ int main( int   argc,
     /* Create a new dialog window for the scrolled window to be
      * packed into.  */
     window = gtk_dialog_new ();
-    g_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (destroy), NULL);
+    g_signal_connect (G_OBJECT (window), "destroy",
+		      G_CALLBACK (destroy), NULL);
     gtk_window_set_title (GTK_WINDOW (window), "GtkScrolledWindow example");
     gtk_container_set_border_width (GTK_CONTAINER (window), 0);
     gtk_widget_set_size_request (window, 300, 300);
@@ -7620,7 +7592,7 @@ int main( int   argc,
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
                                     GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
     /* The dialog window is created with a vbox packed into it. */								
-    gtk_box_pack_start (GTK_BOX (GTK_DIALOG(window)->vbox), scrolled_window, 
+    gtk_box_pack_start (GTK_BOX (GTK_DIALOG(window)-&gt;vbox), scrolled_window, 
 			TRUE, TRUE, 0);
     gtk_widget_show (scrolled_window);
     
@@ -7638,8 +7610,8 @@ int main( int   argc,
     
     /* this simply creates a grid of toggle buttons on the table
      * to demonstrate the scrolled window. */
-    for (i = 0; i < 10; i++)
-       for (j = 0; j < 10; j++) {
+    for (i = 0; i &lt; 10; i++)
+       for (j = 0; j &lt; 10; j++) {
           sprintf (buffer, "button (%d,%d)\n", i, j);
 	  button = gtk_toggle_button_new_with_label (buffer);
 	  gtk_table_attach_defaults (GTK_TABLE (table), button,
@@ -7649,14 +7621,14 @@ int main( int   argc,
     
     /* Add a "close" button to the bottom of the dialog */
     button = gtk_button_new_with_label ("close");
-    g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-			      GTK_SIGNAL_FUNC (gtk_widget_destroy),
-			      GTK_OBJECT (window));
+    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+			      G_CALLBACK (gtk_widget_destroy),
+			      window);
     
     /* this makes it so the button is the default. */
     
     GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), button, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)-&gt;action_area), button, TRUE, TRUE, 0);
     
     /* This grabs this button to be the default button. Simply hitting
      * the "Enter" key will cause this button to activate. */
@@ -7778,13 +7750,13 @@ GtkWidget *create_bbox( gint  horizontal,
   gtk_box_set_spacing (GTK_BOX (bbox), spacing);
   /*gtk_button_box_set_child_size (GTK_BUTTON_BOX (bbox), child_w, child_h);*/
 
-  button = gtk_button_new_with_label ("OK");
+  button = gtk_button_new_from_stock (GTK_STOCK_OK);
   gtk_container_add (GTK_CONTAINER (bbox), button);
 
-  button = gtk_button_new_with_label ("Cancel");
+  button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
   gtk_container_add (GTK_CONTAINER (bbox), button);
 
-  button = gtk_button_new_with_label ("Help");
+  button = gtk_button_new_from_stock (GTK_STOCK_HELP);
   gtk_container_add (GTK_CONTAINER (bbox), button);
 
   return frame;
@@ -7806,8 +7778,8 @@ int main( int   argc,
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Button Boxes");
 
-  g_signal_connect (GTK_OBJECT (window), "destroy",
-		    GTK_SIGNAL_FUNC (gtk_main_quit),
+  g_signal_connect (G_OBJECT (window), "destroy",
+		    G_CALLBACK (gtk_main_quit),
 		    NULL);
 
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -8472,7 +8444,7 @@ backward manner, and exit the program.</para>
 void rotate_book( GtkButton   *button,
                   GtkNotebook *notebook )
 {
-    gtk_notebook_set_tab_pos (notebook, (notebook->tab_pos + 1) % 4);
+    gtk_notebook_set_tab_pos (notebook, (notebook-&gt;tab_pos + 1) % 4);
 }
 
 /* Add/Remove the page tabs and the borders */
@@ -8481,9 +8453,9 @@ void tabsborder_book( GtkButton   *button,
 {
     gint tval = FALSE;
     gint bval = FALSE;
-    if (notebook->show_tabs == 0)
+    if (notebook-&gt;show_tabs == 0)
 	    tval = TRUE; 
-    if (notebook->show_border == 0)
+    if (notebook-&gt;show_border == 0)
 	    bval = TRUE;
     
     gtk_notebook_set_show_tabs (notebook, tval);
@@ -8529,8 +8501,8 @@ int main( int argc,
     
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     
-    g_signal_connect (GTK_OBJECT (window), "delete_event",
-	              GTK_SIGNAL_FUNC (delete), NULL);
+    g_signal_connect (G_OBJECT (window), "delete_event",
+	              G_CALLBACK (delete), NULL);
     
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
@@ -8544,7 +8516,7 @@ int main( int argc,
     gtk_widget_show (notebook);
     
     /* Let's append a bunch of pages to the notebook */
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i &lt; 5; i++) {
 	sprintf(bufferf, "Append Frame %d", i + 1);
 	sprintf(bufferl, "Page %d", i + 1);
 	
@@ -8570,7 +8542,7 @@ int main( int argc,
     gtk_notebook_insert_page (GTK_NOTEBOOK (notebook), checkbutton, label, 2);
     
     /* Now finally let's prepend pages to the notebook */
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i &lt; 5; i++) {
 	sprintf (bufferf, "Prepend Frame %d", i + 1);
 	sprintf (bufferl, "PPage %d", i + 1);
 	
@@ -8592,43 +8564,43 @@ int main( int argc,
 
     /* Create a bunch of buttons */
     button = gtk_button_new_with_label ("close");
-    g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-			      GTK_SIGNAL_FUNC (delete), NULL);
+    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+			      G_CALLBACK (delete), NULL);
     gtk_table_attach_defaults (GTK_TABLE (table), button, 0, 1, 1, 2);
     gtk_widget_show (button);
     
     button = gtk_button_new_with_label ("next page");
-    g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-			      GTK_SIGNAL_FUNC (gtk_notebook_next_page),
-			      GTK_OBJECT (notebook));
+    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+			      G_CALLBACK (gtk_notebook_next_page),
+			      notebook);
     gtk_table_attach_defaults (GTK_TABLE (table), button, 1, 2, 1, 2);
     gtk_widget_show (button);
     
     button = gtk_button_new_with_label ("prev page");
-    g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-			      GTK_SIGNAL_FUNC (gtk_notebook_prev_page),
-			      GTK_OBJECT (notebook));
+    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+			      G_CALLBACK (gtk_notebook_prev_page),
+			      notebook);
     gtk_table_attach_defaults (GTK_TABLE (table), button, 2, 3, 1, 2);
     gtk_widget_show (button);
     
     button = gtk_button_new_with_label ("tab position");
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-                      GTK_SIGNAL_FUNC (rotate_book),
-	              GTK_OBJECT(notebook));
+    g_signal_connect (G_OBJECT (button), "clicked",
+                      G_CALLBACK (rotate_book),
+	              notebook);
     gtk_table_attach_defaults (GTK_TABLE (table), button, 3, 4, 1, 2);
     gtk_widget_show (button);
     
     button = gtk_button_new_with_label ("tabs/border on/off");
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-                      GTK_SIGNAL_FUNC (tabsborder_book),
-                      GTK_OBJECT (notebook));
+    g_signal_connect (G_OBJECT (button), "clicked",
+                      G_CALLBACK (tabsborder_book),
+                      notebook);
     gtk_table_attach_defaults (GTK_TABLE (table), button, 4, 5, 1, 2);
     gtk_widget_show (button);
     
     button = gtk_button_new_with_label ("remove page");
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-                      GTK_SIGNAL_FUNC (remove_book),
-                      GTK_OBJECT (notebook));
+    g_signal_connect (G_OBJECT (button), "clicked",
+                      G_CALLBACK (remove_book),
+                      notebook);
     gtk_table_attach_defaults (GTK_TABLE (table), button, 5, 6, 1, 2);
     gtk_widget_show (button);
     
@@ -9241,7 +9213,7 @@ void button_add_clicked( gpointer data )
     /* Here we do the actual adding of the text. It's done once for
      * each row.
      */
-    for (indx = 0; indx < 4; indx++)
+    for (indx = 0; indx &lt; 4; indx++)
 	gtk_clist_append ((GtkCList *)data, drink[indx]);
 
     return;
@@ -9318,10 +9290,9 @@ int main( int    argc,
     gtk_widget_set_size_request (GTK_WIDGET (window), 300, 150);
 
     gtk_window_set_title (GTK_WINDOW (window), "GtkCList Example");
-    gtk_signal_connect (GTK_OBJECT (window),
-		        "destroy",
-		        GTK_SIGNAL_FUNC (gtk_main_quit),
-		        NULL);
+    g_signal_connect (G_OBJECT (window), "destroy",
+                      G_CALLBACK (gtk_main_quit),
+                      NULL);
     
     vbox=gtk_vbox_new (FALSE, 5);
     gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
@@ -9341,9 +9312,9 @@ int main( int    argc,
 
     /* When a selection is made, we want to know about it. The callback
      * used is selection_made, and its code can be found further down */
-    gtk_signal_connect(GTK_OBJECT (clist), "select_row",
-		       GTK_SIGNAL_FUNC (selection_made),
-		       NULL);
+    g_signal_connect (G_OBJECT (clist), "select_row",
+                      G_CALLBACK (selection_made),
+                      NULL);
 
     /* It isn't necessary to shadow the border, but it looks nice :) */
     gtk_clist_set_shadow_type (GTK_CLIST (clist), GTK_SHADOW_OUT);
@@ -9374,15 +9345,15 @@ int main( int    argc,
     gtk_box_pack_start (GTK_BOX (hbox), button_hide_show, TRUE, TRUE, 0);
 
     /* Connect our callbacks to the three buttons */
-    gtk_signal_connect_object (GTK_OBJECT (button_add), "clicked",
-			       GTK_SIGNAL_FUNC (button_add_clicked),
-			       (gpointer) clist);
-    gtk_signal_connect_object (GTK_OBJECT (button_clear), "clicked",
-			       GTK_SIGNAL_FUNC (button_clear_clicked),
-			       (gpointer) clist);
-    gtk_signal_connect_object (GTK_OBJECT (button_hide_show), "clicked",
-			       GTK_SIGNAL_FUNC (button_hide_show_clicked),
-			       (gpointer) clist);
+    g_signal_connect_swapped (G_OBJECT (button_add), "clicked",
+                              G_CALLBACK (button_add_clicked),
+			      clist);
+    g_signal_connect_swapped (G_OBJECT (button_clear), "clicked",
+                              G_CALLBACK (button_clear_clicked),
+                              clist);
+    g_signal_connect_swapped (G_OBJECT (button_hide_show), "clicked",
+                              G_CALLBACK (button_hide_show_clicked),
+                              clist);
 
     gtk_widget_show (button_add);
     gtk_widget_show (button_clear);
@@ -10322,12 +10293,12 @@ static void cb_itemsignal( GtkWidget *item,
 
   /* It's a Bin, so it has one child, which we know to be a
      label, so get that */
-  label = GTK_LABEL (GTK_BIN (item)->child);
+  label = GTK_LABEL (GTK_BIN (item)-&gt;child);
   /* Get the text of the label */
   gtk_label_get (label, &amp;name);
   /* Get the level of the tree which the item is in */
-  g_print ("%s called for item %s->%p, level %d\n", signame, name,
-	   item, GTK_TREE (item->parent)->level);
+  g_print ("%s called for item %s-&gt;%p, level %d\n", signame, name,
+	   item, GTK_TREE (item-&gt;parent)-&gt;level);
 }
 
 /* Note that this is never called */
@@ -10362,12 +10333,12 @@ static void cb_selection_changed( GtkWidget *tree )
     GtkWidget *item;
 
     /* Get a GtkWidget pointer from the list node */
-    item = GTK_WIDGET (i->data);
-    label = GTK_LABEL (GTK_BIN (item)->child);
+    item = GTK_WIDGET (i-&gt;data);
+    label = GTK_LABEL (GTK_BIN (item)-&gt;child);
     gtk_label_get (label, &amp;name);
     g_print ("\t%s on level %d\n", name, GTK_TREE
-	     (item->parent)->level);
-    i = i->next;
+	     (item-&gt;parent)-&gt;level);
+    i = i-&gt;next;
   }
 }
 
@@ -10383,8 +10354,8 @@ int main( int   argc,
 
   /* a generic toplevel window */
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-		      GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+  g_signal_connect (G_OBJECT (window), "delete_event",
+                    G_CALLBACK (gtk_main_quit), NULL);
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
 
   /* A generic scrolled window */
@@ -10400,12 +10371,12 @@ int main( int   argc,
   tree = gtk_tree_new ();
   g_print ("root tree is %p\n", tree);
   /* connect all GtkTree:: signals */
-  gtk_signal_connect (GTK_OBJECT (tree), "select_child",
-		      GTK_SIGNAL_FUNC (cb_select_child), tree);
-  gtk_signal_connect (GTK_OBJECT (tree), "unselect_child",
-		      GTK_SIGNAL_FUNC (cb_unselect_child), tree);
-  gtk_signal_connect (GTK_OBJECT(tree), "selection_changed",
-		      GTK_SIGNAL_FUNC(cb_selection_changed), tree);
+  g_signal_connect (G_OBJECT (tree), "select_child",
+                    G_CALLBACK (cb_select_child), tree);
+  g_signal_connect (G_OBJECT (tree), "unselect_child",
+                    G_CALLBACK (cb_unselect_child), tree);
+  g_signal_connect (G_OBJECT(tree), "selection_changed",
+                    G_CALLBACK(cb_selection_changed), tree);
   /* Add it to the scrolled window */
   gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_win),
                                          tree);
@@ -10415,39 +10386,39 @@ int main( int   argc,
   /* Show it */
   gtk_widget_show (tree);
 
-  for (i = 0; i < 5; i++){
+  for (i = 0; i &lt; 5; i++){
     GtkWidget *subtree, *item;
     gint j;
 
     /* Create a tree item */
     item = gtk_tree_item_new_with_label (itemnames[i]);
     /* Connect all GtkItem:: and GtkTreeItem:: signals */
-    gtk_signal_connect (GTK_OBJECT (item), "select",
-			GTK_SIGNAL_FUNC (cb_itemsignal), "select");
-    gtk_signal_connect (GTK_OBJECT (item), "deselect",
-			GTK_SIGNAL_FUNC (cb_itemsignal), "deselect");
-    gtk_signal_connect (GTK_OBJECT (item), "toggle",
-			GTK_SIGNAL_FUNC (cb_itemsignal), "toggle");
-    gtk_signal_connect (GTK_OBJECT (item), "expand",
-			GTK_SIGNAL_FUNC (cb_itemsignal), "expand");
-    gtk_signal_connect (GTK_OBJECT (item), "collapse",
-			GTK_SIGNAL_FUNC (cb_itemsignal), "collapse");
+    g_signal_connect (G_OBJECT (item), "select",
+                      G_CALLBACK (cb_itemsignal), "select");
+    g_signal_connect (G_OBJECT (item), "deselect",
+                      G_CALLBACK (cb_itemsignal), "deselect");
+    g_signal_connect (G_OBJECT (item), "toggle",
+                      G_CALLBACK (cb_itemsignal), "toggle");
+    g_signal_connect (G_OBJECT (item), "expand",
+                      G_CALLBACK (cb_itemsignal), "expand");
+    g_signal_connect (G_OBJECT (item), "collapse",
+                      G_CALLBACK (cb_itemsignal), "collapse");
     /* Add it to the parent tree */
     gtk_tree_append (GTK_TREE (tree), item);
     /* Show it - this can be done at any time */
     gtk_widget_show (item);
     /* Create this item's subtree */
     subtree = gtk_tree_new ();
-    g_print ("-> item %s->%p, subtree %p\n", itemnames[i], item,
+    g_print ("-&gt; item %s-&gt;%p, subtree %p\n", itemnames[i], item,
 	     subtree);
 
     /* This is still necessary if you want these signals to be called
        for the subtree's children.  Note that selection_change will be 
        signalled for the root tree regardless. */
-    gtk_signal_connect (GTK_OBJECT (subtree), "select_child",
-			GTK_SIGNAL_FUNC (cb_select_child), subtree);
-    gtk_signal_connect (GTK_OBJECT (subtree), "unselect_child",
-			GTK_SIGNAL_FUNC (cb_unselect_child), subtree);
+    g_signal_connect (G_OBJECT (subtree), "select_child",
+			G_CALLBACK (cb_select_child), subtree);
+    g_signal_connect (G_OBJECT (subtree), "unselect_child",
+			G_CALLBACK (cb_unselect_child), subtree);
     /* This has absolutely no effect, because it is completely ignored 
        in subtrees */
     gtk_tree_set_selection_mode (GTK_TREE (subtree),
@@ -10461,23 +10432,23 @@ int main( int   argc,
        AFTER the item has been added to its parent tree! */
     gtk_tree_item_set_subtree (GTK_TREE_ITEM (item), subtree);
 
-    for (j = 0; j < 5; j++){
+    for (j = 0; j &lt; 5; j++){
       GtkWidget *subitem;
 
       /* Create a subtree item, in much the same way */
       subitem = gtk_tree_item_new_with_label (itemnames[j]);
       /* Connect all GtkItem:: and GtkTreeItem:: signals */
-      gtk_signal_connect (GTK_OBJECT (subitem), "select",
-			  GTK_SIGNAL_FUNC (cb_itemsignal), "select");
-      gtk_signal_connect (GTK_OBJECT (subitem), "deselect",
-			  GTK_SIGNAL_FUNC (cb_itemsignal), "deselect");
-      gtk_signal_connect (GTK_OBJECT (subitem), "toggle",
-			  GTK_SIGNAL_FUNC (cb_itemsignal), "toggle");
-      gtk_signal_connect (GTK_OBJECT (subitem), "expand",
-			  GTK_SIGNAL_FUNC (cb_itemsignal), "expand");
-      gtk_signal_connect (GTK_OBJECT (subitem), "collapse",
-			  GTK_SIGNAL_FUNC (cb_itemsignal), "collapse");
-      g_print ("-> -> item %s->%p\n", itemnames[j], subitem);
+      g_signal_connect (G_OBJECT (subitem), "select",
+			  G_CALLBACK (cb_itemsignal), "select");
+      g_signal_connect (G_OBJECT (subitem), "deselect",
+			  G_CALLBACK (cb_itemsignal), "deselect");
+      g_signal_connect (G_OBJECT (subitem), "toggle",
+			  G_CALLBACK (cb_itemsignal), "toggle");
+      g_signal_connect (G_OBJECT (subitem), "expand",
+			  G_CALLBACK (cb_itemsignal), "expand");
+      g_signal_connect (G_OBJECT (subitem), "collapse",
+			  G_CALLBACK (cb_itemsignal), "collapse");
+      g_print ("-&gt; -&gt; item %s-&gt;%p\n", itemnames[j], subitem);
       /* Add it to its parent tree */
       gtk_tree_append (GTK_TREE (subtree), subitem);
       /* Show it */
@@ -10772,8 +10743,8 @@ int main( int   argc,
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_widget_set_size_request (GTK_WIDGET (window), 200, 100);
     gtk_window_set_title (GTK_WINDOW (window), "GTK Menu Test");
-    g_signal_connect (GTK_OBJECT (window), "delete_event",
-                      GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+    g_signal_connect (G_OBJECT (window), "delete_event",
+                      G_CALLBACK (gtk_main_quit), NULL);
 
     /* Init the menu-widget, and remember -- never
      * gtk_show_widget() the menu widget!! 
@@ -10787,7 +10758,7 @@ int main( int   argc,
      * signal on each of the menu items and setup a callback for it,
      * but it's omitted here to save space. */
 
-    for (i = 0; i < 3; i++)
+    for (i = 0; i &lt; 3; i++)
         {
             /* Copy the names to the buf. */
             sprintf (buf, "Test-undermenu - %d", i);
@@ -10799,9 +10770,9 @@ int main( int   argc,
             gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_items);
 
 	    /* Do something interesting when the menuitem is selected */
-	    g_signal_connect_swapped (GTK_OBJECT (menu_items), "activate",
-		                      GTK_SIGNAL_FUNC (menuitem_response), 
-                                      (gpointer) g_strdup (buf));
+	    g_signal_connect_swapped (G_OBJECT (menu_items), "activate",
+		                      G_CALLBACK (menuitem_response), 
+                                      g_strdup (buf));
 
             /* Show the widget */
             gtk_widget_show (menu_items);
@@ -10830,9 +10801,9 @@ int main( int   argc,
 
     /* Create a button to which to attach menu as a popup */
     button = gtk_button_new_with_label ("press me");
-    g_signal_connect_swapped (GTK_OBJECT (button), "event",
-	                      GTK_SIGNAL_FUNC (button_press), 
-                              GTK_OBJECT (menu));
+    g_signal_connect_swapped (G_OBJECT (button), "event",
+	                      G_CALLBACK (button_press), 
+                              menu);
     gtk_box_pack_end (GTK_BOX (vbox), button, TRUE, TRUE, 2);
     gtk_widget_show (button);
 
@@ -10859,10 +10830,10 @@ static gint button_press( GtkWidget *widget,
                           GdkEvent *event )
 {
 
-    if (event->type == GDK_BUTTON_PRESS) {
+    if (event-&gt;type == GDK_BUTTON_PRESS) {
         GdkEventButton *bevent = (GdkEventButton *) event; 
         gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL,
-                        bevent->button, bevent->time);
+                        bevent-&gt;button, bevent-&gt;time);
         /* Tell calling code that we have handled this event; the buck
          * stops here. */
         return TRUE;
@@ -10925,30 +10896,30 @@ static void print_hello( GtkWidget *w,
    Item 5: The item type, used to define what kind of an item it is.
            Here are the possible values:
 
-           NULL               -> "&lt;Item>"
-           ""                 -> "&lt;Item>"
-           "&lt;Title>"          -> create a title item
-           "&lt;Item>"           -> create a simple item
-           "&lt;CheckItem>"      -> create a check item
-           "&lt;ToggleItem>"     -> create a toggle item
-           "&lt;RadioItem>"      -> create a radio item
-           &lt;path>             -> path of a radio item to link against
-           "&lt;Separator>"      -> create a separator
-           "&lt;Branch>"         -> create an item to hold sub items (optional)
-           "&lt;LastBranch>"     -> create a right justified branch 
+           NULL               -&gt; "&lt;Item&gt;"
+           ""                 -&gt; "&lt;Item&gt;"
+           "&lt;Title&gt;"          -&gt; create a title item
+           "&lt;Item&gt;"           -&gt; create a simple item
+           "&lt;CheckItem&gt;"      -&gt; create a check item
+           "&lt;ToggleItem&gt;"     -&gt; create a toggle item
+           "&lt;RadioItem&gt;"      -&gt; create a radio item
+           &lt;path&gt;             -&gt; path of a radio item to link against
+           "&lt;Separator&gt;"      -&gt; create a separator
+           "&lt;Branch&gt;"         -&gt; create an item to hold sub items (optional)
+           "&lt;LastBranch&gt;"     -&gt; create a right justified branch 
 */
 
 static GtkItemFactoryEntry menu_items[] = {
-  { "/_File",         NULL,         NULL, 0, "&lt;Branch>" },
-  { "/File/_New",     "&lt;control>N", print_hello, 0, NULL },
-  { "/File/_Open",    "&lt;control>O", print_hello, 0, NULL },
-  { "/File/_Save",    "&lt;control>S", print_hello, 0, NULL },
+  { "/_File",         NULL,         NULL, 0, "&lt;Branch&gt;" },
+  { "/File/_New",     "&lt;control&gt;N", print_hello, 0, NULL },
+  { "/File/_Open",    "&lt;control&gt;O", print_hello, 0, NULL },
+  { "/File/_Save",    "&lt;control&gt;S", print_hello, 0, NULL },
   { "/File/Save _As", NULL,         NULL, 0, NULL },
-  { "/File/sep1",     NULL,         NULL, 0, "&lt;Separator>" },
-  { "/File/Quit",     "&lt;control>Q", gtk_main_quit, 0, NULL },
-  { "/_Options",      NULL,         NULL, 0, "&lt;Branch>" },
+  { "/File/sep1",     NULL,         NULL, 0, "&lt;Separator&gt;" },
+  { "/File/Quit",     "&lt;control&gt;Q", gtk_main_quit, 0, NULL },
+  { "/_Options",      NULL,         NULL, 0, "&lt;Branch&gt;" },
   { "/Options/Test",  NULL,         NULL, 0, NULL },
-  { "/_Help",         NULL,         NULL, 0, "&lt;LastBranch>" },
+  { "/_Help",         NULL,         NULL, 0, "&lt;LastBranch&gt;" },
   { "/_Help/About",   NULL,         NULL, 0, NULL },
 };
 
@@ -10970,7 +10941,7 @@ void get_main_menu( GtkWidget  *window,
               the accelerator table while generating menus.
   */
 
-  item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "&lt;main>", 
+  item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "&lt;main&gt;", 
 				       accel_group);
 
   /* This function generates the menu items. Pass the item factory,
@@ -10983,7 +10954,7 @@ void get_main_menu( GtkWidget  *window,
 
   if (menubar)
     /* Finally, return the actual menu bar created by the item factory. */ 
-    *menubar = gtk_item_factory_get_widget (item_factory, "&lt;main>");
+    *menubar = gtk_item_factory_get_widget (item_factory, "&lt;main&gt;");
 }
 
 int main( int argc,
@@ -10996,9 +10967,9 @@ int main( int argc,
   gtk_init (&amp;argc, &amp;argv);
   
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  g_signal_connect (GTK_OBJECT (window), "destroy", 
-		    GTK_SIGNAL_FUNC (gtk_main_quit), 
-		    "WM destroy");
+  g_signal_connect (G_OBJECT (window), "destroy", 
+		    G_CALLBACK (gtk_main_quit), 
+		    NULL);
   gtk_window_set_title (GTK_WINDOW (window), "Item Factory");
   gtk_widget_set_size_request (GTK_WIDGET (window), 300, 200);
   
@@ -11301,8 +11272,6 @@ extend the selection.</para>
 <programlisting role="C">
 <!-- example-start text text.c -->
 
-/* text.c */
-
 #define GTK_ENABLE_BROKEN
 #include &lt;stdio.h&gt;
 #include &lt;gtk/gtk.h&gt;
@@ -11311,14 +11280,14 @@ void text_toggle_editable (GtkWidget *checkbutton,
 			   GtkWidget *text)
 {
   gtk_text_set_editable (GTK_TEXT (text),
-			 GTK_TOGGLE_BUTTON (checkbutton)->active);
+			 GTK_TOGGLE_BUTTON (checkbutton)-&gt;active);
 }
 
 void text_toggle_word_wrap (GtkWidget *checkbutton,
 			    GtkWidget *text)
 {
   gtk_text_set_word_wrap (GTK_TEXT (text),
-			  GTK_TOGGLE_BUTTON (checkbutton)->active);
+			  GTK_TOGGLE_BUTTON (checkbutton)-&gt;active);
 }
 
 void close_application( GtkWidget *widget,
@@ -11351,9 +11320,9 @@ int main( int argc,
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_size_request (window, 600, 500);
   gtk_window_set_policy (GTK_WINDOW (window), TRUE, TRUE, FALSE);  
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (close_application),
-		      NULL);
+  g_signal_connect (G_OBJECT (window), "destroy",
+                    G_CALLBACK (close_application),
+                    NULL);
   gtk_window_set_title (GTK_WINDOW (window), "Text Widget Example");
   gtk_container_set_border_width (GTK_CONTAINER (window), 0);
   
@@ -11384,7 +11353,7 @@ int main( int argc,
   gtk_widget_show (text);
 
   /* Add a vertical scrollbar to the GtkText widget */
-  vscrollbar = gtk_vscrollbar_new (GTK_TEXT (text)->vadj);
+  vscrollbar = gtk_vscrollbar_new (GTK_TEXT (text)-&gt;vadj);
   gtk_table_attach (GTK_TABLE (table), vscrollbar, 1, 2, 0, 1,
 		    GTK_FILL, GTK_EXPAND | GTK_SHRINK | GTK_FILL, 0, 0);
   gtk_widget_show (vscrollbar);
@@ -11409,13 +11378,13 @@ int main( int argc,
   gtk_text_freeze (GTK_TEXT (text));
   
   /* Insert some colored text */
-  gtk_text_insert (GTK_TEXT (text), NULL, &amp;text->style->black, NULL,
+  gtk_text_insert (GTK_TEXT (text), NULL, &amp;text-&gt;style-&gt;black, NULL,
 		   "Supports ", -1);
   gtk_text_insert (GTK_TEXT (text), NULL, &amp;color, NULL,
 		   "colored ", -1);
-  gtk_text_insert (GTK_TEXT (text), NULL, &amp;text->style->black, NULL,
+  gtk_text_insert (GTK_TEXT (text), NULL, &amp;text-&gt;style-&gt;black, NULL,
 		   "text and different ", -1);
-  gtk_text_insert (GTK_TEXT (text), fixed_font, &amp;text->style->black, NULL,
+  gtk_text_insert (GTK_TEXT (text), fixed_font, &amp;text-&gt;style-&gt;black, NULL,
 		   "fonts\n\n", -1);
   
   /* Load the file text.c into the text window */
@@ -11432,7 +11401,7 @@ int main( int argc,
 	gtk_text_insert (GTK_TEXT (text), fixed_font, NULL,
 			 NULL, buffer, nchars);
 	
-	if (nchars < 1024)
+	if (nchars &lt; 1024)
 	  break;
       }
     
@@ -11448,14 +11417,14 @@ int main( int argc,
 
   check = gtk_check_button_new_with_label ("Editable");
   gtk_box_pack_start (GTK_BOX (hbox), check, FALSE, FALSE, 0);
-  gtk_signal_connect (GTK_OBJECT (check), "toggled",
-		      GTK_SIGNAL_FUNC (text_toggle_editable), text);
+  g_signal_connect (G_OBJECT (check), "toggled",
+                    G_CALLBACK (text_toggle_editable), text);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
   gtk_widget_show (check);
   check = gtk_check_button_new_with_label ("Wrap Words");
   gtk_box_pack_start (GTK_BOX (hbox), check, FALSE, TRUE, 0);
-  gtk_signal_connect (GTK_OBJECT (check), "toggled",
-		      GTK_SIGNAL_FUNC (text_toggle_word_wrap), text);
+  g_signal_connect (G_OBJECT (check), "toggled",
+                    G_CALLBACK (text_toggle_word_wrap), text);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), FALSE);
   gtk_widget_show (check);
 
@@ -11469,8 +11438,8 @@ int main( int argc,
   gtk_widget_show (box2);
   
   button = gtk_button_new_with_label ("close");
-  g_signal_connect (GTK_OBJECT (button), "clicked",
-	            GTK_SIGNAL_FUNC (close_application),
+  g_signal_connect (G_OBJECT (button), "clicked",
+	            G_CALLBACK (close_application),
 	            NULL);
   gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
   GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
@@ -12511,23 +12480,23 @@ void selection_received( GtkWidget        *widget,
   int i;
 
   /* **** IMPORTANT **** Check to see if retrieval succeeded  */
-  if (selection_data->length < 0)
+  if (selection_data-&gt;length &lt; 0)
     {
       g_print ("Selection retrieval failed\n");
       return;
     }
   /* Make sure we got the data in the expected form */
-  if (selection_data->type != GDK_SELECTION_TYPE_ATOM)
+  if (selection_data-&gt;type != GDK_SELECTION_TYPE_ATOM)
     {
       g_print ("Selection \"TARGETS\" was not returned as atoms!\n");
       return;
     }
   
   /* Print out the atoms we received */
-  atoms = (GdkAtom *)selection_data->data;
+  atoms = (GdkAtom *)selection_data-&gt;data;
 
   item_list = NULL;
-  for (i = 0; i &lt; selection_data->length / sizeof(GdkAtom); i++)
+  for (i = 0; i &lt; selection_data-&gt;length / sizeof(GdkAtom); i++)
     {
       char *name;
       name = gdk_atom_name (atoms[i]);
@@ -12554,18 +12523,18 @@ int main( int   argc,
   gtk_window_set_title (GTK_WINDOW (window), "Event Box");
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
-  g_signal_connect (GTK_OBJECT (window), "destroy",
-	            GTK_SIGNAL_FUNC (exit), NULL);
+  g_signal_connect (G_OBJECT (window), "destroy",
+	            G_CALLBACK (exit), NULL);
 
   /* Create a button the user can click to get targets */
 
   button = gtk_button_new_with_label ("Get Targets");
   gtk_container_add (GTK_CONTAINER (window), button);
 
-  g_signal_connect (GTK_OBJECT(button), "clicked",
-		    GTK_SIGNAL_FUNC (get_targets), NULL);
-  g_signal_connect (GTK_OBJECT(button), "selection_received",
-		    GTK_SIGNAL_FUNC (selection_received), NULL);
+  g_signal_connect (G_OBJECT(button), "clicked",
+		    G_CALLBACK (get_targets), NULL);
+  g_signal_connect (G_OBJECT(button), "selection_received",
+		    G_CALLBACK (selection_received), NULL);
 
   gtk_widget_show (button);
   gtk_widget_show (window);
@@ -12657,7 +12626,7 @@ string representation of the time is returned.</para>
 void selection_toggled( GtkWidget *widget,
                         gint      *have_selection )
 {
-  if (GTK_TOGGLE_BUTTON (widget)->active)
+  if (GTK_TOGGLE_BUTTON (widget)-&gt;active)
     {
       *have_selection = gtk_selection_owner_set (widget,
 						 GDK_SELECTION_PRIMARY,
@@ -12673,7 +12642,7 @@ void selection_toggled( GtkWidget *widget,
 	{
 	  /* Before clearing the selection by setting the owner to NULL,
 	     we check if we are the actual owner */
-	  if (gdk_selection_owner_get (GDK_SELECTION_PRIMARY) == widget->window)
+	  if (gdk_selection_owner_get (GDK_SELECTION_PRIMARY) == widget-&gt;window)
 	    gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY,
 				     GDK_CURRENT_TIME);
 	  *have_selection = FALSE;
@@ -12727,8 +12696,8 @@ int main( int   argc,
   gtk_window_set_title (GTK_WINDOW (window), "Event Box");
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
-  g_signal_connect (GTK_OBJECT (window), "destroy",
-		    GTK_SIGNAL_FUNC (exit), NULL);
+  g_signal_connect (G_OBJECT (window), "destroy",
+		    G_CALLBACK (exit), NULL);
 
   /* Create a toggle button to act as the selection */
 
@@ -12736,17 +12705,17 @@ int main( int   argc,
   gtk_container_add (GTK_CONTAINER (window), selection_button);
   gtk_widget_show (selection_button);
 
-  g_signal_connect (GTK_OBJECT (selection_button), "toggled",
-		    GTK_SIGNAL_FUNC (selection_toggled), &amp;have_selection);
-  g_signal_connect (GTK_OBJECT (selection_button), "selection_clear_event",
-		    GTK_SIGNAL_FUNC (selection_clear), &amp;have_selection);
+  g_signal_connect (G_OBJECT (selection_button), "toggled",
+		    G_CALLBACK (selection_toggled), &amp;have_selection);
+  g_signal_connect (G_OBJECT (selection_button), "selection_clear_event",
+		    G_CALLBACK (selection_clear), &amp;have_selection);
 
   gtk_selection_add_target (selection_button,
 			    GDK_SELECTION_PRIMARY,
 			    GDK_SELECTION_TYPE_STRING,
 		            1);
-  g_signal_connect (GTK_OBJECT (selection_button), "selection_get",
-		    GTK_SIGNAL_FUNC (selection_handle), &amp;have_selection);
+  g_signal_connect (G_OBJECT (selection_button), "selection_get",
+		    G_CALLBACK (selection_handle), &amp;have_selection);
 
   gtk_widget_show (selection_button);
   gtk_widget_show (window);
@@ -13959,11 +13928,31 @@ if an object is a Tictactoe widget respectively.</para>
 <programlisting role="C">
 <!-- example-start tictactoe tictactoe.h -->
 
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
 #ifndef __TICTACTOE_H__
 #define __TICTACTOE_H__
 
+
 #include &lt;gdk/gdk.h&gt;
 #include &lt;gtk/gtkvbox.h&gt;
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -13991,7 +13980,7 @@ struct _TictactoeClass
   void (* tictactoe) (Tictactoe *ttt);
 };
 
-GType          tictactoe_get_type        (void);
+GtkType        tictactoe_get_type        (void);
 GtkWidget*     tictactoe_new             (void);
 void	       tictactoe_clear           (Tictactoe *ttt);
 
@@ -14000,6 +13989,7 @@ void	       tictactoe_clear           (Tictactoe *ttt);
 #endif /* __cplusplus */
 
 #endif /* __TICTACTOE_H__ */
+
 <!-- example-end -->
 </programlisting>
 
@@ -17656,7 +17646,7 @@ tictactoe_class_init (TictactoeClass *class)
                                          G_TYPE_NONE, 0, NULL);
 
 
-  class->tictactoe = NULL;
+  class-&gt;tictactoe = NULL;
 }
 
 static void
@@ -17669,16 +17659,16 @@ tictactoe_init (Tictactoe *ttt)
   gtk_container_add (GTK_CONTAINER (ttt), table);
   gtk_widget_show (table);
 
-  for (i = 0; i < 3; i++)
-    for (j = 0; j < 3; j++)
+  for (i = 0; i &lt; 3; i++)
+    for (j = 0; j &lt; 3; j++)
       {
-	ttt->buttons[i][j] = gtk_toggle_button_new ();
-	gtk_table_attach_defaults (GTK_TABLE (table), ttt->buttons[i][j], 
+	ttt-&gt;buttons[i][j] = gtk_toggle_button_new ();
+	gtk_table_attach_defaults (GTK_TABLE (table), ttt-&gt;buttons[i][j], 
 				   i, i+1, j, j+1);
-	g_signal_connect (GTK_OBJECT (ttt->buttons[i][j]), "toggled",
-			  GTK_SIGNAL_FUNC (tictactoe_toggle), ttt);
-	gtk_widget_set_size_request (ttt->buttons[i][j], 20, 20);
-	gtk_widget_show (ttt->buttons[i][j]);
+	g_signal_connect (G_OBJECT (ttt-&gt;buttons[i][j]), "toggled",
+			  G_CALLBACK (tictactoe_toggle), ttt);
+	gtk_widget_set_size_request (ttt-&gt;buttons[i][j], 20, 20);
+	gtk_widget_show (ttt-&gt;buttons[i][j]);
       }
 }
 
@@ -17693,13 +17683,15 @@ tictactoe_clear (Tictactoe *ttt)
 {
   int i,j;
 
-  for (i = 0; i < 3; i++)
-    for (j = 0; j < 3; j++)
+  for (i = 0; i &lt; 3; i++)
+    for (j = 0; j &lt; 3; j++)
       {
-	g_signal_handlers_block_by_func (GTK_OBJECT (ttt->buttons[i][j]), NULL, ttt);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ttt->buttons[i][j]),
+	g_signal_handlers_block_by_func (G_OBJECT (ttt-&gt;buttons[i][j]), 
+                                         NULL, ttt);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ttt-&gt;buttons[i][j]),
 				      FALSE);
-	g_signal_handlers_unblock_by_func (GTK_OBJECT (ttt->buttons[i][j]), NULL, ttt);
+	g_signal_handlers_unblock_by_func (G_OBJECT (ttt-&gt;buttons[i][j]), 
+                                           NULL, ttt);
       }
 }
 
@@ -17717,22 +17709,22 @@ tictactoe_toggle (GtkWidget *widget, Tictactoe *ttt)
 
   int success, found;
 
-  for (k = 0; k < 8; k++)
+  for (k = 0; k &lt; 8; k++)
     {
       success = TRUE;
       found = FALSE;
 
-      for (i = 0; i < 3; i++)
+      for (i = 0; i &lt; 3; i++)
 	{
 	  success = success &amp;&amp; 
-	    GTK_TOGGLE_BUTTON (ttt->buttons[rwins[k][i]][cwins[k][i]])->active;
+	    GTK_TOGGLE_BUTTON (ttt-&gt;buttons[rwins[k][i]][cwins[k][i]])-&gt;active;
 	  found = found ||
-	    ttt->buttons[rwins[k][i]][cwins[k][i]] == widget;
+	    ttt-&gt;buttons[rwins[k][i]][cwins[k][i]] == widget;
 	}
       
       if (success &amp;&amp; found)
 	{
-	  g_signal_emit (GTK_OBJECT (ttt), 
+	  g_signal_emit (G_OBJECT (ttt), 
 	                 tictactoe_signals[TICTACTOE_SIGNAL], 0);
 	  break;
 	}
@@ -17774,8 +17766,8 @@ int main( int   argc,
   
   gtk_window_set_title (GTK_WINDOW (window), "Aspect Frame");
   
-  g_signal_connect (GTK_OBJECT (window), "destroy",
-		    GTK_SIGNAL_FUNC (exit), NULL);
+  g_signal_connect (G_OBJECT (window), "destroy",
+		    G_CALLBACK (exit), NULL);
   
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
@@ -17784,8 +17776,8 @@ int main( int   argc,
   gtk_container_add (GTK_CONTAINER (window), ttt);
   gtk_widget_show (ttt);
 
-  g_signal_connect (GTK_OBJECT (ttt), "tictactoe",
-		    GTK_SIGNAL_FUNC (win), NULL);
+  g_signal_connect (G_OBJECT (ttt), "tictactoe",
+		    G_CALLBACK (win), NULL);
 
   gtk_widget_show (window);
   
@@ -18009,30 +18001,30 @@ gtk_dial_class_init (GtkDialClass *class)
 
   parent_class = gtk_type_class (gtk_widget_get_type ());
 
-  object_class->destroy = gtk_dial_destroy;
+  object_class-&gt;destroy = gtk_dial_destroy;
 
-  widget_class->realize = gtk_dial_realize;
-  widget_class->expose_event = gtk_dial_expose;
-  widget_class->size_request = gtk_dial_size_request;
-  widget_class->size_allocate = gtk_dial_size_allocate;
-  widget_class->button_press_event = gtk_dial_button_press;
-  widget_class->button_release_event = gtk_dial_button_release;
-  widget_class->motion_notify_event = gtk_dial_motion_notify;
+  widget_class-&gt;realize = gtk_dial_realize;
+  widget_class-&gt;expose_event = gtk_dial_expose;
+  widget_class-&gt;size_request = gtk_dial_size_request;
+  widget_class-&gt;size_allocate = gtk_dial_size_allocate;
+  widget_class-&gt;button_press_event = gtk_dial_button_press;
+  widget_class-&gt;button_release_event = gtk_dial_button_release;
+  widget_class-&gt;motion_notify_event = gtk_dial_motion_notify;
 }
 
 static void
 gtk_dial_init (GtkDial *dial)
 {
-  dial->button = 0;
-  dial->policy = GTK_UPDATE_CONTINUOUS;
-  dial->timer = 0;
-  dial->radius = 0;
-  dial->pointer_width = 0;
-  dial->angle = 0.0;
-  dial->old_value = 0.0;
-  dial->old_lower = 0.0;
-  dial->old_upper = 0.0;
-  dial->adjustment = NULL;
+  dial-&gt;button = 0;
+  dial-&gt;policy = GTK_UPDATE_CONTINUOUS;
+  dial-&gt;timer = 0;
+  dial-&gt;radius = 0;
+  dial-&gt;pointer_width = 0;
+  dial-&gt;angle = 0.0;
+  dial-&gt;old_value = 0.0;
+  dial-&gt;old_lower = 0.0;
+  dial-&gt;old_upper = 0.0;
+  dial-&gt;adjustment = NULL;
 }
 
 GtkWidget*
@@ -18060,11 +18052,11 @@ gtk_dial_destroy (GtkObject *object)
 
   dial = GTK_DIAL (object);
 
-  if (dial->adjustment)
-    g_object_unref (GTK_OBJECT (dial->adjustment));
+  if (dial-&gt;adjustment)
+    g_object_unref (GTK_OBJECT (dial-&gt;adjustment));
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  if (GTK_OBJECT_CLASS (parent_class)-&gt;destroy)
+    (* GTK_OBJECT_CLASS (parent_class)-&gt;destroy) (object);
 }
 
 GtkAdjustment*
@@ -18073,7 +18065,7 @@ gtk_dial_get_adjustment (GtkDial *dial)
   g_return_val_if_fail (dial != NULL, NULL);
   g_return_val_if_fail (GTK_IS_DIAL (dial), NULL);
 
-  return dial->adjustment;
+  return dial-&gt;adjustment;
 }
 
 void
@@ -18083,7 +18075,7 @@ gtk_dial_set_update_policy (GtkDial      *dial,
   g_return_if_fail (dial != NULL);
   g_return_if_fail (GTK_IS_DIAL (dial));
 
-  dial->policy = policy;
+  dial-&gt;policy = policy;
 }
 
 void
@@ -18093,14 +18085,14 @@ gtk_dial_set_adjustment (GtkDial      *dial,
   g_return_if_fail (dial != NULL);
   g_return_if_fail (GTK_IS_DIAL (dial));
 
-  if (dial->adjustment)
+  if (dial-&gt;adjustment)
     {
-      g_signal_handlers_disconnect_by_func (GTK_OBJECT (dial->adjustment), NULL, (gpointer) dial);
-      g_object_unref (GTK_OBJECT (dial->adjustment));
+      g_signal_handlers_disconnect_by_func (GTK_OBJECT (dial-&gt;adjustment), NULL, (gpointer) dial);
+      g_object_unref (GTK_OBJECT (dial-&gt;adjustment));
     }
 
-  dial->adjustment = adjustment;
-  g_object_ref (GTK_OBJECT (dial->adjustment));
+  dial-&gt;adjustment = adjustment;
+  g_object_ref (GTK_OBJECT (dial-&gt;adjustment));
 
   g_signal_connect (GTK_OBJECT (adjustment), "changed",
 		    GTK_SIGNAL_FUNC (gtk_dial_adjustment_changed),
@@ -18109,9 +18101,9 @@ gtk_dial_set_adjustment (GtkDial      *dial,
 		    GTK_SIGNAL_FUNC (gtk_dial_adjustment_value_changed),
 		    (gpointer) dial);
 
-  dial->old_value = adjustment->value;
-  dial->old_lower = adjustment->lower;
-  dial->old_upper = adjustment->upper;
+  dial-&gt;old_value = adjustment-&gt;value;
+  dial-&gt;old_lower = adjustment-&gt;lower;
+  dial-&gt;old_upper = adjustment-&gt;upper;
 
   gtk_dial_update (dial);
 }
@@ -18129,10 +18121,10 @@ gtk_dial_realize (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
   dial = GTK_DIAL (widget);
 
-  attributes.x = widget->allocation.x;
-  attributes.y = widget->allocation.y;
-  attributes.width = widget->allocation.width;
-  attributes.height = widget->allocation.height;
+  attributes.x = widget-&gt;allocation.x;
+  attributes.y = widget-&gt;allocation.y;
+  attributes.width = widget-&gt;allocation.width;
+  attributes.height = widget-&gt;allocation.height;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.event_mask = gtk_widget_get_events (widget) | 
@@ -18143,21 +18135,21 @@ gtk_dial_realize (GtkWidget *widget)
   attributes.colormap = gtk_widget_get_colormap (widget);
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-  widget->window = gdk_window_new (widget->parent->window, &amp;attributes, attributes_mask);
+  widget-&gt;window = gdk_window_new (widget-&gt;parent-&gt;window, &amp;attributes, attributes_mask);
 
-  widget->style = gtk_style_attach (widget->style, widget->window);
+  widget-&gt;style = gtk_style_attach (widget-&gt;style, widget-&gt;window);
 
-  gdk_window_set_user_data (widget->window, widget);
+  gdk_window_set_user_data (widget-&gt;window, widget);
 
-  gtk_style_set_background (widget->style, widget->window, GTK_STATE_ACTIVE);
+  gtk_style_set_background (widget-&gt;style, widget-&gt;window, GTK_STATE_ACTIVE);
 }
 
 static void 
 gtk_dial_size_request (GtkWidget      *widget,
 		       GtkRequisition *requisition)
 {
-  requisition->width = DIAL_DEFAULT_SIZE;
-  requisition->height = DIAL_DEFAULT_SIZE;
+  requisition-&gt;width = DIAL_DEFAULT_SIZE;
+  requisition-&gt;height = DIAL_DEFAULT_SIZE;
 }
 
 static void
@@ -18170,19 +18162,19 @@ gtk_dial_size_allocate (GtkWidget     *widget,
   g_return_if_fail (GTK_IS_DIAL (widget));
   g_return_if_fail (allocation != NULL);
 
-  widget->allocation = *allocation;
+  widget-&gt;allocation = *allocation;
   dial = GTK_DIAL (widget);
 
   if (GTK_WIDGET_REALIZED (widget))
     {
 
-      gdk_window_move_resize (widget->window,
-			      allocation->x, allocation->y,
-			      allocation->width, allocation->height);
+      gdk_window_move_resize (widget-&gt;window,
+			      allocation-&gt;x, allocation-&gt;y,
+			      allocation-&gt;width, allocation-&gt;height);
 
     }
-  dial->radius = MIN (allocation->width, allocation->height) * 0.45;
-  dial->pointer_width = dial->radius / 5;
+  dial-&gt;radius = MIN (allocation-&gt;width, allocation-&gt;height) * 0.45;
+  dial-&gt;pointer_width = dial-&gt;radius / 5;
 }
 
 static gint
@@ -18203,51 +18195,51 @@ gtk_dial_expose (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_DIAL (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  if (event->count > 0)
+  if (event-&gt;count &gt; 0)
     return FALSE;
   
   dial = GTK_DIAL (widget);
 
-/*  gdk_window_clear_area (widget->window,
+/*  gdk_window_clear_area (widget-&gt;window,
 			 0, 0,
-			 widget->allocation.width,
-			 widget->allocation.height);
+			 widget-&gt;allocation.width,
+			 widget-&gt;allocation.height);
 */
-  xc = widget->allocation.width / 2;
-  yc = widget->allocation.height / 2;
+  xc = widget-&gt;allocation.width / 2;
+  yc = widget-&gt;allocation.height / 2;
 
-  upper = dial->adjustment->upper;
-  lower = dial->adjustment->lower;
+  upper = dial-&gt;adjustment-&gt;upper;
+  lower = dial-&gt;adjustment-&gt;lower;
 
   /* Erase old pointer */
 
-  s = sin (dial->last_angle);
-  c = cos (dial->last_angle);
-  dial->last_angle = dial->angle;
+  s = sin (dial-&gt;last_angle);
+  c = cos (dial-&gt;last_angle);
+  dial-&gt;last_angle = dial-&gt;angle;
 
-  points[0].x = xc + s*dial->pointer_width/2;
-  points[0].y = yc + c*dial->pointer_width/2;
-  points[1].x = xc + c*dial->radius;
-  points[1].y = yc - s*dial->radius;
-  points[2].x = xc - s*dial->pointer_width/2;
-  points[2].y = yc - c*dial->pointer_width/2;
-  points[3].x = xc - c*dial->radius/10;
-  points[3].y = yc + s*dial->radius/10;
+  points[0].x = xc + s*dial-&gt;pointer_width/2;
+  points[0].y = yc + c*dial-&gt;pointer_width/2;
+  points[1].x = xc + c*dial-&gt;radius;
+  points[1].y = yc - s*dial-&gt;radius;
+  points[2].x = xc - s*dial-&gt;pointer_width/2;
+  points[2].y = yc - c*dial-&gt;pointer_width/2;
+  points[3].x = xc - c*dial-&gt;radius/10;
+  points[3].y = yc + s*dial-&gt;radius/10;
   points[4].x = points[0].x;
   points[4].y = points[0].y;
 
   blankstyle = gtk_style_new ();
-  blankstyle->bg_gc[GTK_STATE_NORMAL] =
-                widget->style->bg_gc[GTK_STATE_NORMAL];
-  blankstyle->dark_gc[GTK_STATE_NORMAL] =
-                widget->style->bg_gc[GTK_STATE_NORMAL];
-  blankstyle->light_gc[GTK_STATE_NORMAL] =
-                widget->style->bg_gc[GTK_STATE_NORMAL];
-  blankstyle->black_gc =
-                widget->style->bg_gc[GTK_STATE_NORMAL];
+  blankstyle-&gt;bg_gc[GTK_STATE_NORMAL] =
+                widget-&gt;style-&gt;bg_gc[GTK_STATE_NORMAL];
+  blankstyle-&gt;dark_gc[GTK_STATE_NORMAL] =
+                widget-&gt;style-&gt;bg_gc[GTK_STATE_NORMAL];
+  blankstyle-&gt;light_gc[GTK_STATE_NORMAL] =
+                widget-&gt;style-&gt;bg_gc[GTK_STATE_NORMAL];
+  blankstyle-&gt;black_gc =
+                widget-&gt;style-&gt;bg_gc[GTK_STATE_NORMAL];
 
   gtk_paint_polygon (blankstyle,
-                    widget->window,
+                    widget-&gt;window,
                     GTK_STATE_NORMAL,
                     GTK_SHADOW_OUT,
 	            NULL,
@@ -18264,55 +18256,55 @@ gtk_dial_expose (GtkWidget      *widget,
   if ((upper - lower) == 0)
     return FALSE;
 
-  increment = (100*M_PI) / (dial->radius*dial->radius);
+  increment = (100*M_PI) / (dial-&gt;radius*dial-&gt;radius);
 
   inc = (upper - lower);
 
-  while (inc < 100) inc *= 10;
-  while (inc >= 1000) inc /= 10;
+  while (inc &lt; 100) inc *= 10;
+  while (inc &gt;= 1000) inc /= 10;
   last = -1;
 
-  for (i = 0; i <= inc; i++)
+  for (i = 0; i &lt;= inc; i++)
     {
       theta = ((gfloat)i*M_PI / (18*inc/24.) - M_PI/6.);
 
-      if ((theta - last) < (increment))
+      if ((theta - last) &lt; (increment))
 	continue;     
       last = theta;
 
       s = sin (theta);
       c = cos (theta);
 
-      tick_length = (i%(inc/10) == 0) ? dial->pointer_width : dial->pointer_width / 2;
+      tick_length = (i%(inc/10) == 0) ? dial-&gt;pointer_width : dial-&gt;pointer_width / 2;
 
-      gdk_draw_line (widget->window,
-                     widget->style->fg_gc[widget->state],
-                     xc + c*(dial->radius - tick_length),
-                     yc - s*(dial->radius - tick_length),
-                     xc + c*dial->radius,
-                     yc - s*dial->radius);
+      gdk_draw_line (widget-&gt;window,
+                     widget-&gt;style-&gt;fg_gc[widget-&gt;state],
+                     xc + c*(dial-&gt;radius - tick_length),
+                     yc - s*(dial-&gt;radius - tick_length),
+                     xc + c*dial-&gt;radius,
+                     yc - s*dial-&gt;radius);
     }
 
   /* Draw pointer */
 
-  s = sin (dial->angle);
-  c = cos (dial->angle);
-  dial->last_angle = dial->angle;
+  s = sin (dial-&gt;angle);
+  c = cos (dial-&gt;angle);
+  dial-&gt;last_angle = dial-&gt;angle;
 
-  points[0].x = xc + s*dial->pointer_width/2;
-  points[0].y = yc + c*dial->pointer_width/2;
-  points[1].x = xc + c*dial->radius;
-  points[1].y = yc - s*dial->radius;
-  points[2].x = xc - s*dial->pointer_width/2;
-  points[2].y = yc - c*dial->pointer_width/2;
-  points[3].x = xc - c*dial->radius/10;
-  points[3].y = yc + s*dial->radius/10;
+  points[0].x = xc + s*dial-&gt;pointer_width/2;
+  points[0].y = yc + c*dial-&gt;pointer_width/2;
+  points[1].x = xc + c*dial-&gt;radius;
+  points[1].y = yc - s*dial-&gt;radius;
+  points[2].x = xc - s*dial-&gt;pointer_width/2;
+  points[2].y = yc - c*dial-&gt;pointer_width/2;
+  points[3].x = xc - c*dial-&gt;radius/10;
+  points[3].y = yc + s*dial-&gt;radius/10;
   points[4].x = points[0].x;
   points[4].y = points[0].y;
 
 
-  gtk_paint_polygon (widget->style,
-		    widget->window,
+  gtk_paint_polygon (widget-&gt;style,
+		    widget-&gt;window,
 		    GTK_STATE_NORMAL,
 		    GTK_SHADOW_OUT,
 	            NULL,
@@ -18345,24 +18337,24 @@ gtk_dial_button_press (GtkWidget      *widget,
      the point where the mouse was pressed from the line passing through
      the pointer */
   
-  dx = event->x - widget->allocation.width / 2;
-  dy = widget->allocation.height / 2 - event->y;
+  dx = event-&gt;x - widget-&gt;allocation.width / 2;
+  dy = widget-&gt;allocation.height / 2 - event-&gt;y;
   
-  s = sin (dial->angle);
-  c = cos (dial->angle);
+  s = sin (dial-&gt;angle);
+  c = cos (dial-&gt;angle);
   
   d_parallel = s*dy + c*dx;
   d_perpendicular = fabs (s*dx - c*dy);
   
-  if (!dial->button &amp;&amp;
-      (d_perpendicular < dial->pointer_width/2) &amp;&amp;
-      (d_parallel > - dial->pointer_width))
+  if (!dial-&gt;button &amp;&amp;
+      (d_perpendicular &lt; dial-&gt;pointer_width/2) &amp;&amp;
+      (d_parallel &gt; - dial-&gt;pointer_width))
     {
       gtk_grab_add (widget);
 
-      dial->button = event->button;
+      dial-&gt;button = event-&gt;button;
 
-      gtk_dial_update_mouse (dial, event->x, event->y);
+      gtk_dial_update_mouse (dial, event-&gt;x, event-&gt;y);
     }
 
   return FALSE;
@@ -18380,18 +18372,18 @@ gtk_dial_button_release (GtkWidget      *widget,
 
   dial = GTK_DIAL (widget);
 
-  if (dial->button == event->button)
+  if (dial-&gt;button == event-&gt;button)
     {
       gtk_grab_remove (widget);
 
-      dial->button = 0;
+      dial-&gt;button = 0;
 
-      if (dial->policy == GTK_UPDATE_DELAYED)
-	gtk_timeout_remove (dial->timer);
+      if (dial-&gt;policy == GTK_UPDATE_DELAYED)
+	gtk_timeout_remove (dial-&gt;timer);
       
-      if ((dial->policy != GTK_UPDATE_CONTINUOUS) &amp;&amp;
-	  (dial->old_value != dial->adjustment->value))
-	g_signal_emit_by_name (GTK_OBJECT (dial->adjustment), "value_changed");
+      if ((dial-&gt;policy != GTK_UPDATE_CONTINUOUS) &amp;&amp;
+	  (dial-&gt;old_value != dial-&gt;adjustment-&gt;value))
+	g_signal_emit_by_name (GTK_OBJECT (dial-&gt;adjustment), "value_changed");
     }
 
   return FALSE;
@@ -18411,15 +18403,15 @@ gtk_dial_motion_notify (GtkWidget      *widget,
 
   dial = GTK_DIAL (widget);
 
-  if (dial->button != 0)
+  if (dial-&gt;button != 0)
     {
-      x = event->x;
-      y = event->y;
+      x = event-&gt;x;
+      y = event-&gt;y;
 
-      if (event->is_hint || (event->window != widget->window))
-	gdk_window_get_pointer (widget->window, &amp;x, &amp;y, &amp;mods);
+      if (event-&gt;is_hint || (event-&gt;window != widget-&gt;window))
+	gdk_window_get_pointer (widget-&gt;window, &amp;x, &amp;y, &amp;mods);
 
-      switch (dial->button)
+      switch (dial-&gt;button)
 	{
 	case 1:
 	  mask = GDK_BUTTON1_MASK;
@@ -18448,8 +18440,8 @@ gtk_dial_timer (GtkDial *dial)
   g_return_val_if_fail (dial != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_DIAL (dial), FALSE);
 
-  if (dial->policy == GTK_UPDATE_DELAYED)
-    g_signal_emit_by_name (GTK_OBJECT (dial->adjustment), "value_changed");
+  if (dial-&gt;policy == GTK_UPDATE_DELAYED)
+    g_signal_emit_by_name (GTK_OBJECT (dial-&gt;adjustment), "value_changed");
 
   return FALSE;
 }
@@ -18463,40 +18455,40 @@ gtk_dial_update_mouse (GtkDial *dial, gint x, gint y)
   g_return_if_fail (dial != NULL);
   g_return_if_fail (GTK_IS_DIAL (dial));
 
-  xc = GTK_WIDGET(dial)->allocation.width / 2;
-  yc = GTK_WIDGET(dial)->allocation.height / 2;
+  xc = GTK_WIDGET(dial)-&gt;allocation.width / 2;
+  yc = GTK_WIDGET(dial)-&gt;allocation.height / 2;
 
-  old_value = dial->adjustment->value;
-  dial->angle = atan2(yc-y, x-xc);
+  old_value = dial-&gt;adjustment-&gt;value;
+  dial-&gt;angle = atan2(yc-y, x-xc);
 
-  if (dial->angle < -M_PI/2.)
-    dial->angle += 2*M_PI;
+  if (dial-&gt;angle &lt; -M_PI/2.)
+    dial-&gt;angle += 2*M_PI;
 
-  if (dial->angle < -M_PI/6)
-    dial->angle = -M_PI/6;
+  if (dial-&gt;angle &lt; -M_PI/6)
+    dial-&gt;angle = -M_PI/6;
 
-  if (dial->angle > 7.*M_PI/6.)
-    dial->angle = 7.*M_PI/6.;
+  if (dial-&gt;angle &gt; 7.*M_PI/6.)
+    dial-&gt;angle = 7.*M_PI/6.;
 
-  dial->adjustment->value = dial->adjustment->lower + (7.*M_PI/6 - dial->angle) *
-    (dial->adjustment->upper - dial->adjustment->lower) / (4.*M_PI/3.);
+  dial-&gt;adjustment-&gt;value = dial-&gt;adjustment-&gt;lower + (7.*M_PI/6 - dial-&gt;angle) *
+    (dial-&gt;adjustment-&gt;upper - dial-&gt;adjustment-&gt;lower) / (4.*M_PI/3.);
 
-  if (dial->adjustment->value != old_value)
+  if (dial-&gt;adjustment-&gt;value != old_value)
     {
-      if (dial->policy == GTK_UPDATE_CONTINUOUS)
+      if (dial-&gt;policy == GTK_UPDATE_CONTINUOUS)
 	{
-	  g_signal_emit_by_name (GTK_OBJECT (dial->adjustment), "value_changed");
+	  g_signal_emit_by_name (GTK_OBJECT (dial-&gt;adjustment), "value_changed");
 	}
       else
 	{
 	  gtk_widget_queue_draw (GTK_WIDGET (dial));
 
-	  if (dial->policy == GTK_UPDATE_DELAYED)
+	  if (dial-&gt;policy == GTK_UPDATE_DELAYED)
 	    {
-	      if (dial->timer)
-		gtk_timeout_remove (dial->timer);
+	      if (dial-&gt;timer)
+		gtk_timeout_remove (dial-&gt;timer);
 
-	      dial->timer = gtk_timeout_add (SCROLL_DELAY_LENGTH,
+	      dial-&gt;timer = gtk_timeout_add (SCROLL_DELAY_LENGTH,
 					     (GtkFunction) gtk_dial_timer,
 					     (gpointer) dial);
 	    }
@@ -18512,22 +18504,22 @@ gtk_dial_update (GtkDial *dial)
   g_return_if_fail (dial != NULL);
   g_return_if_fail (GTK_IS_DIAL (dial));
 
-  new_value = dial->adjustment->value;
+  new_value = dial-&gt;adjustment-&gt;value;
   
-  if (new_value < dial->adjustment->lower)
-    new_value = dial->adjustment->lower;
+  if (new_value &lt; dial-&gt;adjustment-&gt;lower)
+    new_value = dial-&gt;adjustment-&gt;lower;
 
-  if (new_value > dial->adjustment->upper)
-    new_value = dial->adjustment->upper;
+  if (new_value &gt; dial-&gt;adjustment-&gt;upper)
+    new_value = dial-&gt;adjustment-&gt;upper;
 
-  if (new_value != dial->adjustment->value)
+  if (new_value != dial-&gt;adjustment-&gt;value)
     {
-      dial->adjustment->value = new_value;
-      g_signal_emit_by_name (GTK_OBJECT (dial->adjustment), "value_changed");
+      dial-&gt;adjustment-&gt;value = new_value;
+      g_signal_emit_by_name (GTK_OBJECT (dial-&gt;adjustment), "value_changed");
     }
 
-  dial->angle = 7.*M_PI/6. - (new_value - dial->adjustment->lower) * 4.*M_PI/3. /
-    (dial->adjustment->upper - dial->adjustment->lower);
+  dial-&gt;angle = 7.*M_PI/6. - (new_value - dial-&gt;adjustment-&gt;lower) * 4.*M_PI/3. /
+    (dial-&gt;adjustment-&gt;upper - dial-&gt;adjustment-&gt;lower);
 
   gtk_widget_queue_draw (GTK_WIDGET (dial));
 }
@@ -18543,15 +18535,15 @@ gtk_dial_adjustment_changed (GtkAdjustment *adjustment,
 
   dial = GTK_DIAL (data);
 
-  if ((dial->old_value != adjustment->value) ||
-      (dial->old_lower != adjustment->lower) ||
-      (dial->old_upper != adjustment->upper))
+  if ((dial-&gt;old_value != adjustment-&gt;value) ||
+      (dial-&gt;old_lower != adjustment-&gt;lower) ||
+      (dial-&gt;old_upper != adjustment-&gt;upper))
     {
       gtk_dial_update (dial);
 
-      dial->old_value = adjustment->value;
-      dial->old_lower = adjustment->lower;
-      dial->old_upper = adjustment->upper;
+      dial-&gt;old_value = adjustment-&gt;value;
+      dial-&gt;old_lower = adjustment-&gt;lower;
+      dial-&gt;old_upper = adjustment-&gt;upper;
     }
 }
 
@@ -18566,11 +18558,11 @@ gtk_dial_adjustment_value_changed (GtkAdjustment *adjustment,
 
   dial = GTK_DIAL (data);
 
-  if (dial->old_value != adjustment->value)
+  if (dial-&gt;old_value != adjustment-&gt;value)
     {
       gtk_dial_update (dial);
 
-      dial->old_value = adjustment->value;
+      dial-&gt;old_value = adjustment-&gt;value;
     }
 }
 <!-- example-end -->
@@ -18584,6 +18576,7 @@ gtk_dial_adjustment_value_changed (GtkAdjustment *adjustment,
 
 <programlisting role="C">
 <!-- example-start gtkdial dial_test.c -->
+
 #include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;gtk/gtk.h&gt;
@@ -18594,7 +18587,7 @@ void value_changed( GtkAdjustment *adjustment,
 {
   char buffer[16];
 
-  sprintf(buffer,"%4.2f",adjustment->value);
+  sprintf(buffer,"%4.2f",adjustment-&gt;value);
   gtk_label_set_text (GTK_LABEL (label), buffer);
 }
 
@@ -18614,8 +18607,8 @@ int main( int   argc,
   
   gtk_window_set_title (GTK_WINDOW (window), "Dial");
   
-  g_signal_connect (GTK_OBJECT (window), "destroy",
-		    GTK_SIGNAL_FUNC (exit), NULL);
+  g_signal_connect (G_OBJECT (window), "destroy",
+		    G_CALLBACK (exit), NULL);
   
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
@@ -18641,8 +18634,8 @@ int main( int   argc,
   gtk_box_pack_end (GTK_BOX (vbox), label, 0, 0, 0);
   gtk_widget_show (label);
 
-  g_signal_connect (GTK_OBJECT (adjustment), "value_changed",
-		    GTK_SIGNAL_FUNC (value_changed), label);
+  g_signal_connect (G_OBJECT (adjustment), "value_changed",
+		    G_CALLBACK (value_changed), label);
   
   gtk_widget_show (window);
   
@@ -18698,16 +18691,16 @@ static gint configure_event( GtkWidget         *widget,
   if (pixmap)
     g_object_unref (pixmap);
 
-  pixmap = gdk_pixmap_new (widget->window,
-			   widget->allocation.width,
-			   widget->allocation.height,
+  pixmap = gdk_pixmap_new (widget-&gt;window,
+			   widget-&gt;allocation.width,
+			   widget-&gt;allocation.height,
 			   -1);
   gdk_draw_rectangle (pixmap,
-		      widget->style->white_gc,
+		      widget-&gt;style-&gt;white_gc,
 		      TRUE,
 		      0, 0,
-		      widget->allocation.width,
-		      widget->allocation.height);
+		      widget-&gt;allocation.width,
+		      widget-&gt;allocation.height);
 
   return TRUE;
 }
@@ -18716,12 +18709,12 @@ static gint configure_event( GtkWidget         *widget,
 static gint expose_event( GtkWidget      *widget,
                           GdkEventExpose *event )
 {
-  gdk_draw_drawable (widget->window,
-		     widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+  gdk_draw_drawable (widget-&gt;window,
+		     widget-&gt;style-&gt;fg_gc[GTK_WIDGET_STATE (widget)],
 		     pixmap,
-		     event->area.x, event->area.y,
-		     event->area.x, event->area.y,
-		     event->area.width, event->area.height);
+		     event-&gt;area.x, event-&gt;area.y,
+		     event-&gt;area.x, event-&gt;area.y,
+		     event-&gt;area.width, event-&gt;area.height);
 
   return FALSE;
 }
@@ -18738,7 +18731,7 @@ static void draw_brush( GtkWidget *widget,
   update_rect.width = 10;
   update_rect.height = 10;
   gdk_draw_rectangle (pixmap,
-		      widget->style->black_gc,
+		      widget-&gt;style-&gt;black_gc,
 		      TRUE,
 		      update_rect.x, update_rect.y,
 		      update_rect.width, update_rect.height);
@@ -18750,8 +18743,8 @@ static void draw_brush( GtkWidget *widget,
 static gint button_press_event( GtkWidget      *widget,
                                 GdkEventButton *event )
 {
-  if (event->button == 1 &amp;&amp; pixmap != NULL)
-    draw_brush (widget, event->x, event->y);
+  if (event-&gt;button == 1 &amp;&amp; pixmap != NULL)
+    draw_brush (widget, event-&gt;x, event-&gt;y);
 
   return TRUE;
 }
@@ -18762,13 +18755,13 @@ static gint motion_notify_event( GtkWidget *widget,
   int x, y;
   GdkModifierType state;
 
-  if (event->is_hint)
-    gdk_window_get_pointer (event->window, &amp;x, &amp;y, &amp;state);
+  if (event-&gt;is_hint)
+    gdk_window_get_pointer (event-&gt;window, &amp;x, &amp;y, &amp;state);
   else
     {
-      x = event->x;
-      y = event->y;
-      state = event->state;
+      x = event-&gt;x;
+      y = event-&gt;y;
+      state = event-&gt;state;
     }
     
   if (state &amp; GDK_BUTTON1_MASK &amp;&amp; pixmap != NULL)
@@ -18800,8 +18793,8 @@ int main( int   argc,
   gtk_container_add (GTK_CONTAINER (window), vbox);
   gtk_widget_show (vbox);
 
-  g_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (quit), NULL);
+  g_signal_connect (G_OBJECT (window), "destroy",
+                    G_CALLBACK (quit), NULL);
 
   /* Create the drawing area */
 
@@ -18813,17 +18806,17 @@ int main( int   argc,
 
   /* Signals used to handle backing pixmap */
 
-  g_signal_connect (GTK_OBJECT (drawing_area), "expose_event",
-		    GTK_SIGNAL_FUNC (expose_event), NULL);
-  g_signal_connect (GTK_OBJECT (drawing_area),"configure_event",
-		    GTK_SIGNAL_FUNC (configure_event), NULL);
+  g_signal_connect (G_OBJECT (drawing_area), "expose_event",
+		    G_CALLBACK (expose_event), NULL);
+  g_signal_connect (G_OBJECT (drawing_area),"configure_event",
+		    G_CALLBACK (configure_event), NULL);
 
   /* Event signals */
 
-  g_signal_connect (GTK_OBJECT (drawing_area), "motion_notify_event",
-		    GTK_SIGNAL_FUNC (motion_notify_event), NULL);
-  g_signal_connect (GTK_OBJECT (drawing_area), "button_press_event",
-		    GTK_SIGNAL_FUNC (button_press_event), NULL);
+  g_signal_connect (G_OBJECT (drawing_area), "motion_notify_event",
+		    G_CALLBACK (motion_notify_event), NULL);
+  g_signal_connect (G_OBJECT (drawing_area), "button_press_event",
+		    G_CALLBACK (button_press_event), NULL);
 
   gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK
 			 | GDK_LEAVE_NOTIFY_MASK
@@ -18835,9 +18828,9 @@ int main( int   argc,
   button = gtk_button_new_with_label ("Quit");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
-  g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-			    GTK_SIGNAL_FUNC (gtk_widget_destroy),
-			    GTK_OBJECT (window));
+  g_signal_connect_swapped (G_OBJECT (button), "clicked",
+			    G_CALLBACK (gtk_widget_destroy),
+			    window);
   gtk_widget_show (button);
 
   gtk_widget_show (window);
@@ -18889,16 +18882,16 @@ configure_event (GtkWidget *widget, GdkEventConfigure *event)
   if (pixmap)
      g_object_unref (pixmap);
 
-  pixmap = gdk_pixmap_new (widget->window,
-                           widget->allocation.width,
-                           widget->allocation.height,
+  pixmap = gdk_pixmap_new (widget-&gt;window,
+                           widget-&gt;allocation.width,
+                           widget-&gt;allocation.height,
                            -1);
   gdk_draw_rectangle (pixmap,
-                      widget->style->white_gc,
+                      widget-&gt;style-&gt;white_gc,
                       TRUE,
                       0, 0,
-                      widget->allocation.width,
-                      widget->allocation.height);
+                      widget-&gt;allocation.width,
+                      widget-&gt;allocation.height);
 
   return TRUE;
 }
@@ -18907,12 +18900,12 @@ configure_event (GtkWidget *widget, GdkEventConfigure *event)
 static gint
 expose_event (GtkWidget *widget, GdkEventExpose *event)
 {
-  gdk_draw_drawable (widget->window,
-                     widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+  gdk_draw_drawable (widget-&gt;window,
+                     widget-&gt;style-&gt;fg_gc[GTK_WIDGET_STATE (widget)],
                      pixmap,
-                     event->area.x, event->area.y,
-                     event->area.x, event->area.y,
-                     event->area.width, event->area.height);
+                     event-&gt;area.x, event-&gt;area.y,
+                     event-&gt;area.x, event-&gt;area.y,
+                     event-&gt;area.width, event-&gt;area.height);
 
   return FALSE;
 }
@@ -18929,16 +18922,16 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
   switch (source)
     {
     case GDK_SOURCE_MOUSE:
-      gc = widget->style->dark_gc[GTK_WIDGET_STATE (widget)];
+      gc = widget-&gt;style-&gt;dark_gc[GTK_WIDGET_STATE (widget)];
       break;
     case GDK_SOURCE_PEN:
-      gc = widget->style->black_gc;
+      gc = widget-&gt;style-&gt;black_gc;
       break;
     case GDK_SOURCE_ERASER:
-      gc = widget->style->white_gc;
+      gc = widget-&gt;style-&gt;white_gc;
       break;
     default:
-      gc = widget->style->light_gc[GTK_WIDGET_STATE (widget)];
+      gc = widget-&gt;style-&gt;light_gc[GTK_WIDGET_STATE (widget)];
     }
 
   update_rect.x = x - 10 * pressure;
@@ -18956,18 +18949,18 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
 static void
 print_button_press (GdkDevice *device)
 {
-  g_print ("Button press on device '%s'\n", device->name);
+  g_print ("Button press on device '%s'\n", device-&gt;name);
 }
 
 static gint
 button_press_event (GtkWidget *widget, GdkEventButton *event)
 {
-  print_button_press (event->device);
+  print_button_press (event-&gt;device);
   
-  if (event->button == 1 &amp;&amp; pixmap != NULL) {
+  if (event-&gt;button == 1 &amp;&amp; pixmap != NULL) {
     gdouble pressure;
     gdk_event_get_axis ((GdkEvent *)event, GDK_AXIS_PRESSURE, &amp;pressure);
-    draw_brush (widget, event->device->source, event->x, event->y, pressure);
+    draw_brush (widget, event-&gt;device-&gt;source, event-&gt;x, event-&gt;y, pressure);
   }
 
   return TRUE;
@@ -18980,23 +18973,23 @@ motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
   gdouble pressure;
   GdkModifierType state;
 
-  if (event->is_hint) 
+  if (event-&gt;is_hint) 
     {
-      gdk_device_get_state (event->device, event->window, NULL, &amp;state);
+      gdk_device_get_state (event-&gt;device, event-&gt;window, NULL, &amp;state);
       gdk_event_get_axis ((GdkEvent *)event, GDK_AXIS_X, &amp;x);
       gdk_event_get_axis ((GdkEvent *)event, GDK_AXIS_Y, &amp;y);
       gdk_event_get_axis ((GdkEvent *)event, GDK_AXIS_PRESSURE, &amp;pressure);
     }
   else
     {
-      x = event->x;
-      y = event->y;
+      x = event-&gt;x;
+      y = event-&gt;y;
       gdk_event_get_axis ((GdkEvent *)event, GDK_AXIS_PRESSURE, &amp;pressure);
-      state = event->state;
+      state = event-&gt;state;
     }
     
   if (state &amp; GDK_BUTTON1_MASK &amp;&amp; pixmap != NULL)
-    draw_brush (widget, event->device->source, x, y, pressure);
+    draw_brush (widget, event-&gt;device-&gt;source, x, y, pressure);
   
   return TRUE;
 }
@@ -19016,13 +19009,13 @@ create_input_dialog ()
     {
       inputd = gtk_input_dialog_new();
 
-      g_signal_connect (GTK_OBJECT (inputd), "destroy",
-                        GTK_SIGNAL_FUNC (input_dialog_destroy), &amp;inputd);
-      g_signal_connect_swapped (GTK_OBJECT (GTK_INPUT_DIALOG (inputd)->close_button),
+      g_signal_connect (G_OBJECT (inputd), "destroy",
+                        G_CALLBACK (input_dialog_destroy), &amp;inputd);
+      g_signal_connect_swapped (G_OBJECT (GTK_INPUT_DIALOG (inputd)-&gt;close_button),
                                 "clicked",
-                                GTK_SIGNAL_FUNC (gtk_widget_hide),
-                                GTK_OBJECT (inputd));
-      gtk_widget_hide (GTK_INPUT_DIALOG (inputd)->save_button);
+                                G_CALLBACK (gtk_widget_hide),
+                                inputd);
+      gtk_widget_hide (GTK_INPUT_DIALOG (inputd)-&gt;save_button);
 
       gtk_widget_show (inputd);
     }
@@ -19031,7 +19024,7 @@ create_input_dialog ()
       if (!GTK_WIDGET_MAPPED (inputd))
         gtk_widget_show (inputd);
       else
-        gdk_window_raise (inputd->window);
+        gdk_window_raise (inputd-&gt;window);
     }
 }
 
@@ -19059,8 +19052,8 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (window), vbox);
   gtk_widget_show (vbox);
 
-  g_signal_connect (GTK_OBJECT (window), "destroy",
-                    GTK_SIGNAL_FUNC (quit), NULL);
+  g_signal_connect (G_OBJECT (window), "destroy",
+                    G_CALLBACK (quit), NULL);
 
   /* Create the drawing area */
 
@@ -19072,17 +19065,17 @@ main (int argc, char *argv[])
 
   /* Signals used to handle backing pixmap */
 
-  g_signal_connect (GTK_OBJECT (drawing_area), "expose_event",
-                    GTK_SIGNAL_FUNC (expose_event), NULL);
-  g_signal_connect (GTK_OBJECT(drawing_area),"configure_event",
-                    GTK_SIGNAL_FUNC (configure_event), NULL);
+  g_signal_connect (G_OBJECT (drawing_area), "expose_event",
+                    G_CALLBACK (expose_event), NULL);
+  g_signal_connect (G_OBJECT(drawing_area),"configure_event",
+                    G_CALLBACK (configure_event), NULL);
 
   /* Event signals */
 
-  g_signal_connect (GTK_OBJECT (drawing_area), "motion_notify_event",
-                    GTK_SIGNAL_FUNC (motion_notify_event), NULL);
-  g_signal_connect (GTK_OBJECT (drawing_area), "button_press_event",
-                    GTK_SIGNAL_FUNC (button_press_event), NULL);
+  g_signal_connect (G_OBJECT (drawing_area), "motion_notify_event",
+                    G_CALLBACK (motion_notify_event), NULL);
+  g_signal_connect (G_OBJECT (drawing_area), "button_press_event",
+                    G_CALLBACK (button_press_event), NULL);
 
   gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK
                          | GDK_LEAVE_NOTIFY_MASK
@@ -19098,16 +19091,16 @@ main (int argc, char *argv[])
   button = gtk_button_new_with_label ("Input Dialog");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
-  g_signal_connect (GTK_OBJECT (button), "clicked",
-                      GTK_SIGNAL_FUNC (create_input_dialog), NULL);
+  g_signal_connect (G_OBJECT (button), "clicked",
+                    G_CALLBACK (create_input_dialog), NULL);
   gtk_widget_show (button);
 
   button = gtk_button_new_with_label ("Quit");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
-  g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-                            GTK_SIGNAL_FUNC (gtk_widget_destroy),
-                            GTK_OBJECT (window));
+  g_signal_connect_swapped (G_OBJECT (button), "clicked",
+                            G_CALLBACK (gtk_widget_destroy),
+                            window);
   gtk_widget_show (button);
 
   gtk_widget_show (window);
@@ -19370,9 +19363,6 @@ by selecting them with the rightmost mouse button.</para>
 <programlisting role="C">
 <!-- example-start list list.c -->
 
-/* Include the GTK header files
- * Include stdio.h, we need that for the printf() function
- */
 #include &lt;gtk/gtk.h&gt;
 #include &lt;stdio.h&gt;
 
@@ -19422,9 +19412,8 @@ gint main( int    argc,
      */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title (GTK_WINDOW (window), "GtkList Example");
-    g_signal_connect (GTK_OBJECT (window),
-		      "destroy",
-		      GTK_SIGNAL_FUNC (gtk_main_quit),
+    g_signal_connect (G_OBJECT (window), "destroy",
+		      G_CALLBACK (gtk_main_quit),
 		      NULL);
     
     
@@ -19450,10 +19439,9 @@ gint main( int    argc,
     gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_window),
                                            gtklist);
     gtk_widget_show (gtklist);
-    gtk_signal_connect (GTK_OBJECT (gtklist),
-		        "selection_changed",
-		        GTK_SIGNAL_FUNC (sigh_print_selection),
-		        NULL);
+    g_signal_connect (G_OBJECT (gtklist), "selection_changed",
+                      G_CALLBACK (sigh_print_selection),
+                      NULL);
     
     /* We create a "Prison" to put a list item in ;) */
     frame=gtk_frame_new ("Prison");
@@ -19466,10 +19454,9 @@ gint main( int    argc,
     /* Connect the sigh_button_event() signal handler to the List
      * which will handle the "arresting" of list items
      */
-    gtk_signal_connect (GTK_OBJECT (gtklist),
-		        "button_release_event",
-		        GTK_SIGNAL_FUNC (sigh_button_event),
-		        frame);
+    g_signal_connect (G_OBJECT (gtklist), "button_release_event",
+                      G_CALLBACK (sigh_button_event),
+                      frame);
     
     /* Create a separator */
     separator=gtk_hseparator_new ();
@@ -19481,10 +19468,9 @@ gint main( int    argc,
     button=gtk_button_new_with_label ("Close");
     gtk_container_add (GTK_CONTAINER (vbox), button);
     gtk_widget_show (button);
-    gtk_signal_connect_object (GTK_OBJECT (button),
-			       "clicked",
-			       GTK_SIGNAL_FUNC (gtk_widget_destroy),
-			       GTK_OBJECT (window));
+    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+                              G_CALLBACK (gtk_widget_destroy),
+                              window);
     
     
     /* Now we create 5 list items, each having its own
@@ -19492,7 +19478,7 @@ gint main( int    argc,
      * Also we query the text string from the label and
      * associate it with the list_item_data_key for each list item
      */
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i &lt; 5; i++) {
 	GtkWidget       *label;
 	gchar           *string;
 	
@@ -19504,9 +19490,7 @@ gint main( int    argc,
 	gtk_container_add (GTK_CONTAINER (gtklist), list_item);
 	gtk_widget_show (list_item);
 	gtk_label_get (GTK_LABEL (label), &amp;string);
-	gtk_object_set_data (GTK_OBJECT (list_item),
-			     list_item_data_key,
-			     string);
+	g_object_set_data (G_OBJECT (list_item), list_item_data_key, string);
     }
     /* Here, we are creating another 5 labels, this time
      * we use gtk_list_item_new_with_label() for the creation
@@ -19522,14 +19506,14 @@ gint main( int    argc,
      * of ascending when using g_list_append())
      */
     dlist = NULL;
-    for (; i < 10; i++) {
+    for (; i &lt; 10; i++) {
 	sprintf(buffer, "List Item with Label %d", i);
 	list_item = gtk_list_item_new_with_label (buffer);
 	dlist = g_list_prepend (dlist, list_item);
 	gtk_widget_show (list_item);
-	gtk_object_set_data (GTK_OBJECT (list_item),
-			     list_item_data_key,
-			     "ListItem with integrated Label");
+	g_object_set_data (G_OBJECT (list_item),
+                           list_item_data_key,
+                           "ListItem with integrated Label");
     }
     gtk_list_append_items (GTK_LIST (gtklist), dlist);
     
@@ -19555,17 +19539,17 @@ void sigh_button_event( GtkWidget      *gtklist,
     /* We only do something if the third (rightmost mouse button
      * was released
      */
-    if (event->type == GDK_BUTTON_RELEASE &amp;&amp;
-	event->button == 3) {
+    if (event-&gt;type == GDK_BUTTON_RELEASE &amp;&amp;
+	event-&gt;button == 3) {
 	GList           *dlist, *free_list;
 	GtkWidget       *new_prisoner;
 	
 	/* Fetch the currently selected list item which
 	 * will be our next prisoner ;)
 	 */
-	dlist = GTK_LIST (gtklist)->selection;
+	dlist = GTK_LIST (gtklist)-&gt;selection;
 	if (dlist)
-		new_prisoner = GTK_WIDGET (dlist->data);
+		new_prisoner = GTK_WIDGET (dlist-&gt;data);
 	else
 		new_prisoner = NULL;
 	
@@ -19579,11 +19563,11 @@ void sigh_button_event( GtkWidget      *gtklist,
 	while (dlist) {
 	    GtkWidget       *list_item;
 	    
-	    list_item = dlist->data;
+	    list_item = dlist-&gt;data;
 	    
 	    gtk_widget_reparent (list_item, gtklist);
 	    
-	    dlist = dlist->next;
+	    dlist = dlist-&gt;next;
 	}
 	g_list_free (free_list);
 	
@@ -19616,7 +19600,7 @@ void sigh_print_selection( GtkWidget *gtklist,
     /* Fetch the doubly linked list of selected items
      * of the List, remember to treat this as read-only!
      */
-    dlist = GTK_LIST (gtklist)->selection;
+    dlist = GTK_LIST (gtklist)-&gt;selection;
     
     /* If there are no selected items there is nothing more
      * to do than just telling the user so
@@ -19633,15 +19617,13 @@ void sigh_print_selection( GtkWidget *gtklist,
      * and then query the data associated with list_item_data_key.
      * We then just print it */
     while (dlist) {
-	GtkObject       *list_item;
-	gchar           *item_data_string;
+	const gchar *item_data_string;
 	
-	list_item = GTK_OBJECT (dlist->data);
-	item_data_string = g_object_get_data (G_OBJECT (list_item),
+	item_data_string = g_object_get_data (G_OBJECT (dlist-&gt;data),
 	 				      list_item_data_key);
 	g_print("%s ", item_data_string);
  	
-	dlist = dlist->next;
+	dlist = dlist-&gt;next;
     }
     g_print ("\n");
 }
