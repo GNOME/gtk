@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-01 12:33+0100\n"
-"PO-Revision-Date: 2005-01-01 16:00+0100\n"
+"POT-Creation-Date: 2005-01-05 20:24+0100\n"
+"PO-Revision-Date: 2005-01-05 21:04+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -194,20 +194,24 @@ msgstr "Misvormd brokje in animatie"
 msgid "The ANI image format"
 msgstr "Het ANI-bestandsformaat"
 
-#: gdk-pixbuf/io-bmp.c:225 gdk-pixbuf/io-bmp.c:374
+#: gdk-pixbuf/io-bmp.c:227 gdk-pixbuf/io-bmp.c:383
 msgid "Not enough memory to load bitmap image"
 msgstr "Onvoldoende geheugen voor het laden van de bitmap-afbeelding"
 
-#: gdk-pixbuf/io-bmp.c:267
+#: gdk-pixbuf/io-bmp.c:269
 msgid "BMP image has unsupported header size"
 msgstr "BMP-afbeelding heeft een niet-ondersteunde headergrootte"
 
-#: gdk-pixbuf/io-bmp.c:286 gdk-pixbuf/io-bmp.c:311 gdk-pixbuf/io-bmp.c:334
-#: gdk-pixbuf/io-bmp.c:405
+#: gdk-pixbuf/io-bmp.c:288 gdk-pixbuf/io-bmp.c:320 gdk-pixbuf/io-bmp.c:343
+#: gdk-pixbuf/io-bmp.c:424
 msgid "BMP image has bogus header data"
 msgstr "BMP-afbeelding bevat onzinnige headerdata"
 
-#: gdk-pixbuf/io-bmp.c:1132
+#: gdk-pixbuf/io-bmp.c:307
+msgid "Topdown BMP images cannot be compressed"
+msgstr "Topdown BMP-afbeeldingen kunnen niet worden gecomprimeerd"
+
+#: gdk-pixbuf/io-bmp.c:1154
 msgid "The BMP image format"
 msgstr "Het BMP-bestandsformaat"
 
@@ -1110,28 +1114,28 @@ msgstr "Ongeldige bestandsnaam: %s"
 # Dit is de titel van de persoonlijke map in de bestandkiezer
 # eigen map
 # persoonlijke map
-#: gtk/gtkfilechooserbutton.c:62 gtk/gtkfilechooserdefault.c:1227
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1246
 #: gtk/gtkpathbar.c:982
 msgid "Home"
 msgstr "Persoonlijk"
 
 # Werkblad
-#: gtk/gtkfilechooserbutton.c:63 gtk/gtkfilechooserdefault.c:1250
+#: gtk/gtkfilechooserbutton.c:66 gtk/gtkfilechooserdefault.c:1273
 #: gtk/gtkpathbar.c:984
 msgid "Desktop"
 msgstr "Bureaublad"
 
-#: gtk/gtkfilechooserbutton.c:64
+#: gtk/gtkfilechooserbutton.c:67
 msgid "(None)"
 msgstr "(Geen)"
 
-#: gtk/gtkfilechooserbutton.c:349
+#: gtk/gtkfilechooserbutton.c:352
 msgid "Select a File"
 msgstr "Een bestand selecteren"
 
 # dit is het label op de knop waarmee je naar andere mappen zoekt
 # (andere mappen dan de favoriete)
-#: gtk/gtkfilechooserbutton.c:1503
+#: gtk/gtkfilechooserbutton.c:1514
 msgid "Other..."
 msgstr "Andere..."
 
@@ -1160,71 +1164,77 @@ msgstr "Ongeldige bestandsnaam"
 msgid "The folder contents could not be displayed"
 msgstr "De mapinhoud kon niet worden weergegeven"
 
-#: gtk/gtkfilechooserdefault.c:2087
+#: gtk/gtkfilechooserdefault.c:1118
+#, c-format
+msgid "Could not get information about '%s': %s"
+msgstr "Kon geen informatie verkrijgen over '%s': %s"
+
+#: gtk/gtkfilechooserdefault.c:2110
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "De map '%s' toevoegen aan favorieten"
 
-#: gtk/gtkfilechooserdefault.c:2128
+#: gtk/gtkfilechooserdefault.c:2151
 msgid "Add the current folder to the bookmarks"
 msgstr "De huidige map toevoegen aan de favorieten"
 
-#: gtk/gtkfilechooserdefault.c:2130
+#: gtk/gtkfilechooserdefault.c:2153
 msgid "Add the selected folders to the bookmarks"
 msgstr "De geselecteerde mappen toevoegen aan de favorieten"
 
-#: gtk/gtkfilechooserdefault.c:2170
+#: gtk/gtkfilechooserdefault.c:2193
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "'%s' als favoriet verwijderen"
 
-#: gtk/gtkfilechooserdefault.c:2583
+#: gtk/gtkfilechooserdefault.c:2606
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
-msgstr "Kon geen favoriet toevoegen voor '%s' omdat het een ongeldige pad-naam is."
+msgstr ""
+"Kon geen favoriet toevoegen voor '%s' omdat het een ongeldige pad-naam is."
 
-#: gtk/gtkfilechooserdefault.c:2761
+#: gtk/gtkfilechooserdefault.c:2784
 msgid "Shortcuts"
 msgstr "Sneltoetsen"
 
-#: gtk/gtkfilechooserdefault.c:2815
+#: gtk/gtkfilechooserdefault.c:2838
 msgid "Folder"
 msgstr "Map"
 
-#: gtk/gtkfilechooserdefault.c:2867 gtk/gtkstock.c:295
+#: gtk/gtkfilechooserdefault.c:2890 gtk/gtkstock.c:295
 msgid "_Add"
 msgstr "_Toevoegen"
 
-#: gtk/gtkfilechooserdefault.c:2874
+#: gtk/gtkfilechooserdefault.c:2897
 msgid "Add the selected folder to the bookmarks"
 msgstr "De geselecteerde map toevoegen aan de favorieten"
 
-#: gtk/gtkfilechooserdefault.c:2879 gtk/gtkstock.c:352
+#: gtk/gtkfilechooserdefault.c:2902 gtk/gtkstock.c:352
 msgid "_Remove"
 msgstr "_Verwijderen"
 
-#: gtk/gtkfilechooserdefault.c:2886
+#: gtk/gtkfilechooserdefault.c:2909
 msgid "Remove the selected bookmark"
 msgstr "De geselecteerde favoriet verwijderen"
 
-#: gtk/gtkfilechooserdefault.c:2981
+#: gtk/gtkfilechooserdefault.c:3004
 msgid "_Add to Shortcuts"
 msgstr "_Aan snelkoppelingen toevoegen"
 
 # _b zou conflicteren met: _Bladeren naar andere mappen
-#: gtk/gtkfilechooserdefault.c:2995
+#: gtk/gtkfilechooserdefault.c:3018
 msgid "Show _Hidden Files"
 msgstr "Verbo_rgen bestanden tonen"
 
-#: gtk/gtkfilechooserdefault.c:3119 gtk/gtkfilesel.c:767
+#: gtk/gtkfilechooserdefault.c:3142 gtk/gtkfilesel.c:767
 msgid "Files"
 msgstr "Bestanden"
 
-#: gtk/gtkfilechooserdefault.c:3150
+#: gtk/gtkfilechooserdefault.c:3173
 msgid "Name"
 msgstr "Naam"
 
-#: gtk/gtkfilechooserdefault.c:3175
+#: gtk/gtkfilechooserdefault.c:3198
 msgid "Size"
 msgstr "Afmeting"
 
@@ -1233,7 +1243,7 @@ msgstr "Afmeting"
 # veranderd in Wijzigingsdatum.
 # 'Gewijzigd' zou ook kunnen (is korter) maar dan moet Nautilus ook aangepast
 # worden.
-#: gtk/gtkfilechooserdefault.c:3188
+#: gtk/gtkfilechooserdefault.c:3211
 msgid "Modified"
 msgstr "Wijzigingsdatum"
 
@@ -1242,21 +1252,21 @@ msgstr "Wijzigingsdatum"
 #                             wordt weergegeven
 #                   bestand  
 #             type
-#: gtk/gtkfilechooserdefault.c:3220
+#: gtk/gtkfilechooserdefault.c:3243
 msgid "Select which types of files are shown"
 msgstr "Kiezen welke typen bestanden getoond worden"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3256
+#: gtk/gtkfilechooserdefault.c:3279
 msgid "Create Fo_lder"
 msgstr "_Map aanmaken"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3374
+#: gtk/gtkfilechooserdefault.c:3397
 msgid "_Name:"
 msgstr "_Naam:"
 
-#: gtk/gtkfilechooserdefault.c:3414
+#: gtk/gtkfilechooserdefault.c:3437
 msgid "_Browse for other folders"
 msgstr "_Bladeren naar andere mappen"
 
@@ -1271,92 +1281,92 @@ msgstr "_Bladeren naar andere mappen"
 # wat lelijk is.
 # Vandaar dat we kiezen om Create in _folder te vertalen met
 # Aanma_ken in map
-#: gtk/gtkfilechooserdefault.c:3664
+#: gtk/gtkfilechooserdefault.c:3687
 msgid "Save in _folder:"
 msgstr "_Opslaan in map:"
 
-#: gtk/gtkfilechooserdefault.c:3666
+#: gtk/gtkfilechooserdefault.c:3689
 msgid "Create in _folder:"
 msgstr "Aanma_ken in map:"
 
-#: gtk/gtkfilechooserdefault.c:4490
+#: gtk/gtkfilechooserdefault.c:4513
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan niet naar de map gaan omdat deze niet lokaal is"
 
-#: gtk/gtkfilechooserdefault.c:5015
+#: gtk/gtkfilechooserdefault.c:5038
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Snelkoppeling %s bestaat niet"
 
-#: gtk/gtkfilechooserdefault.c:5475
+#: gtk/gtkfilechooserdefault.c:5498
 #, c-format
 msgid "Could not mount %s"
 msgstr "Kon %s niet aankoppelen"
 
-#: gtk/gtkfilechooserdefault.c:5768
+#: gtk/gtkfilechooserdefault.c:5791
 msgid "Type name of new folder"
 msgstr "Geef de naam van de nieuwe map"
 
-#: gtk/gtkfilechooserdefault.c:5810
+#: gtk/gtkfilechooserdefault.c:5833
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: gtk/gtkfilechooserdefault.c:5812
+#: gtk/gtkfilechooserdefault.c:5835
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5814
+#: gtk/gtkfilechooserdefault.c:5837
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5816
+#: gtk/gtkfilechooserdefault.c:5839
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5868
+#: gtk/gtkfilechooserdefault.c:5891
 msgid "Today"
 msgstr "Vandaag"
 
-#: gtk/gtkfilechooserdefault.c:5870
+#: gtk/gtkfilechooserdefault.c:5893
 msgid "Yesterday"
 msgstr "Gisteren"
 
-#: gtk/gtkfilechooserdefault.c:5881
+#: gtk/gtkfilechooserdefault.c:5904
 msgid "Unknown"
 msgstr "Onbekend"
 
-#: gtk/gtkfilechooserdefault.c:5951
+#: gtk/gtkfilechooserdefault.c:5974
 msgid "Cannot change folder"
 msgstr "Kan map niet wijzigen"
 
-#: gtk/gtkfilechooserdefault.c:5952
+#: gtk/gtkfilechooserdefault.c:5975
 msgid "The folder you specified is an invalid path."
 msgstr "De door u opgegeven map is een ongeldig pad."
 
-#: gtk/gtkfilechooserdefault.c:5991
+#: gtk/gtkfilechooserdefault.c:6014
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Kon geen bestandnaam maken van '%s' en '%s'"
 
-#: gtk/gtkfilechooserdefault.c:6027
+#: gtk/gtkfilechooserdefault.c:6050
 msgid "Could not select item"
 msgstr "Kon item niet selecteren"
 
-#: gtk/gtkfilechooserdefault.c:6067
+#: gtk/gtkfilechooserdefault.c:6090
 msgid "Open Location"
 msgstr "Locatie openen"
 
-#: gtk/gtkfilechooserdefault.c:6074
+#: gtk/gtkfilechooserdefault.c:6097
 msgid "Save in Location"
 msgstr "Opslaan in locatie"
 
-#: gtk/gtkfilechooserdefault.c:6098
+#: gtk/gtkfilechooserdefault.c:6121
 msgid "_Location:"
 msgstr "_Locatie:"
 
@@ -1554,17 +1564,18 @@ msgid "(Empty)"
 msgstr "(Leeg)"
 
 #: gtk/gtkfilesystemunix.c:415 gtk/gtkfilesystemunix.c:429
-#: gtk/gtkfilesystemunix.c:626
+#: gtk/gtkfilesystemunix.c:626 gtk/gtkfilesystemwin32.c:482
+#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1530
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Fout bij verkrijgen van informatie over '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:495
+#: gtk/gtkfilesystemunix.c:495 gtk/gtkfilesystemwin32.c:537
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "Fout bij aanmaken van map '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:575 gtk/gtkfilesystemwin32.c:515
+#: gtk/gtkfilesystemunix.c:575 gtk/gtkfilesystemwin32.c:597
 msgid "This file system does not support mounting"
 msgstr "Dit bestandsysteem ondersteunt geen aankoppelen"
 
@@ -1587,7 +1598,7 @@ msgstr ""
 "De naam \"%s\" is ongeldig omdat deze het teken \"%s\" bevat. Gebruik een "
 "andere naam."
 
-#: gtk/gtkfilesystemunix.c:1443
+#: gtk/gtkfilesystemunix.c:1443 gtk/gtkfilesystemwin32.c:1004
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Opslaan favorieten mislukt %s"
@@ -1606,30 +1617,6 @@ msgstr "'%s' staat niet in de lijst met favorieten"
 #, c-format
 msgid "Error getting information for '%s'"
 msgstr "Fout bij verkrijgen van informatie over '%s'"
-
-#: gtk/gtkfilesystemwin32.c:407
-#, c-format
-msgid "%s: %s"
-msgstr "%s: %s"
-
-#: gtk/gtkfilesystemwin32.c:414 gtk/gtkfilesystemwin32.c:1384
-#, c-format
-msgid "error getting information for '%s': %s"
-msgstr "fout bij verkrijgen van informatie over '%s': %s"
-
-#: gtk/gtkfilesystemwin32.c:455
-#, c-format
-msgid "error creating directory '%s': %s"
-msgstr "fout bij aanmaken van map '%s': %s"
-
-#: gtk/gtkfilesystemwin32.c:928
-#, c-format
-msgid "Bookmark saving failed (%s)"
-msgstr "Opslaan favorieten mislukt (%s)"
-
-#: gtk/gtkfilesystemwin32.c:1131
-msgid "This file system does not support icons for everything"
-msgstr "Dit bestandsysteem ondersteunt geen pictogrammen voor alles"
 
 #: gtk/gtkfontbutton.c:178 gtk/gtkfontbutton.c:295
 msgid "Pick a Font"
@@ -1687,7 +1674,7 @@ msgstr "_Gammawaarde"
 msgid "Error loading icon: %s"
 msgstr "Fout bij laden van pictogram: %s"
 
-#: gtk/gtkicontheme.c:1262
+#: gtk/gtkicontheme.c:1263
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1700,7 +1687,7 @@ msgstr ""
 "U kunt een kopie verkrijgen bij:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1327
+#: gtk/gtkicontheme.c:1328
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Pictogram '%s' niet beschikbaar in dit thema"
@@ -2306,6 +2293,21 @@ msgstr "X Invoer-Methode"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Kon geen informatie verkrijgen over bestand '%s': %s"
+
+#~ msgid "%s: %s"
+#~ msgstr "%s: %s"
+
+#~ msgid "error getting information for '%s': %s"
+#~ msgstr "fout bij verkrijgen van informatie over '%s': %s"
+
+#~ msgid "error creating directory '%s': %s"
+#~ msgstr "fout bij aanmaken van map '%s': %s"
+
+#~ msgid "Bookmark saving failed (%s)"
+#~ msgstr "Opslaan favorieten mislukt (%s)"
+
+#~ msgid "This file system does not support icons for everything"
+#~ msgstr "Dit bestandsysteem ondersteunt geen pictogrammen voor alles"
 
 # Kon de huidige map niet veranderen in %s:
 # Could not set the current folder to %s:
