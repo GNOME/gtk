@@ -192,14 +192,23 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
 static void gtk_handle_box_paint(GtkWidget *widget,
 				 GdkRectangle *area)
 {
+  gint startx, endx, x;
+  gint line_y2;
   g_print("painting %dx%d+%d+%d\n",
 	  area->x, area->y, area->width, area->height);
-  gtk_draw_diamond(widget->style, widget->window,
-				     GTK_STATE_NORMAL,
-				     GTK_SHADOW_ETCHED_IN,
-				     1, 1,
-				     DRAG_HANDLE_SIZE,
-				     DRAG_HANDLE_SIZE);
+
+  
+  startx = 1; endx = DRAG_HANDLE_SIZE;
+  if(area->x > startx)
+    startx = area->x;
+  if((area->x + area->width) < endx)
+    endx = area->x + area->width;
+  line_y2 = area->y + area->height;
+  for(x = startx; x < DRAG_HANDLE_SIZE; x += 3)
+    gtk_draw_vline(widget->style, widget->window,
+		   GTK_WIDGET_STATE(widget),
+		   area->y, line_y2,
+		   x);
 }
 
 static void
@@ -252,10 +261,13 @@ gtk_handle_box_expose (GtkWidget      *widget,
   return FALSE;
 }
 
+static gint dragoff_x, dragoff_y;
+
 static gint gtk_handle_box_button_changed(GtkWidget *widget,
 					  GdkEventButton *event)
 {
   GtkHandleBox *hb;
+  gint rootx, rooty;
   g_return_val_if_fail(widget != NULL, FALSE);
   g_return_val_if_fail(GTK_IS_HANDLE_BOX(widget), FALSE);
   g_return_val_if_fail(event != NULL, FALSE);
@@ -263,18 +275,21 @@ static gint gtk_handle_box_button_changed(GtkWidget *widget,
   hb = GTK_HANDLE_BOX(widget);
   if(event->button == 1)
     {
-      if(event->type == GDK_BUTTON_PRESS)
+      if(event->type == GDK_BUTTON_PRESS
+	 && event->x < DRAG_HANDLE_SIZE)
 	{
 	  hb->is_being_dragged = TRUE;
+	  dragoff_x = event->x;
+	  dragoff_y = event->y;
 	  if(!hb->real_parent) {
 	    hb->real_parent = widget->parent;
 	    gdk_window_set_override_redirect(widget->window, TRUE);
+	    rootx = event->x_root - event->x;
+	    rooty = event->y_root - event->y;
 	    gdk_window_reparent(widget->window, GDK_ROOT_PARENT(),
-				event->x_root - event->x,
-				event->y_root - event->y);
-	    g_print("Reparenting with event %f (%f) x %f (%f)\n",
-		    event->x_root, event->x,
-		    event->y_root, event->y);
+				rootx, rooty);
+	    g_print("Reparenting to %dx%d (%dx%d)\n", rootx, rooty,
+		    (gint)event->x_root, (gint)event->y_root);
 	  } else
 	    gdk_window_raise(widget->window);
 	}
@@ -298,8 +313,8 @@ static gint gtk_handle_box_motion        (GtkWidget *widget,
 
   hb = GTK_HANDLE_BOX(widget);
   if(hb->is_being_dragged) {
-    newx = event->x_root - DRAG_HANDLE_SIZE;
-    newy = event->y_root - DRAG_HANDLE_SIZE;
+    newx = event->x_root - dragoff_x;
+    newy = event->y_root - dragoff_y;
     if(newx < 0) newx = 0;
     if(newy < 0) newy = 0;
     gdk_window_move(widget->window, newx,
