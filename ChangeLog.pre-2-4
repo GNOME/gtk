@@ -1,4 +1,5 @@
 2000-05-21  Nils Barth  <nils_barth@post.harvard.edu>
+
 	* gtkmenu.c:
 	* gtkmenu.h:
 	* gtktypeutils.h: Spelling/grammar fixes in comments.
