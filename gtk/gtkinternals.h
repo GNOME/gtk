@@ -35,6 +35,7 @@ G_BEGIN_DECLS
 
 GType gtk_im_module_get_type (void);
 GType gtk_file_system_module_get_type (void);
+GType shortcuts_model_filter_get_type (void);
 
 G_END_DECLS
 

@@ -1,3 +1,10 @@
+Wed Aug 11 20:56:00 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkinternals.h: 
+	* gtk/gtk.symbols: Add shortcuts_model_filter_get_type.
+
+	* gtk/abicheck.sh: Check all symbols.
+
 Wed Aug 11 19:20:34 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeview.c (gtk_tree_view_maybe_begin_dragging_row): 

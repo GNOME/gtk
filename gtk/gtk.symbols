@@ -2840,3 +2840,6 @@ gtk_window_unfullscreen
 gtk_window_unmaximize
 gtk_window_unstick
 gtk_wrap_mode_get_type
+#ifdef INCLUDE_INTERNAL_SYMBOLS
+shortcuts_model_filter_get_type
+#endif
