@@ -695,12 +695,12 @@ static void
 print_unicode_subranges (FONTSIGNATURE *fsp)
 {
   int i;
-  gboolean checked[sizeof (utab) / sizeof (utab[0])];
+  gboolean checked[G_N_ELEMENTS (utab)];
   gboolean need_comma = FALSE;
 
   memset (checked, 0, sizeof (checked));
 
-  for (i = 0; i < sizeof (utab) / sizeof (utab[0]); i++)
+  for (i = 0; i < G_N_ELEMENTS (utab); i++)
     if (!checked[i]
 	&& (fsp->fsUsb[utab[i].bit/32] & (1 << (utab[i].bit % 32))))
       {
@@ -1770,7 +1770,7 @@ static int
 unicode_classify (wchar_t wc)
 {
   int min = 0;
-  int max = sizeof (utab) / sizeof (utab[0]) - 1;
+  int max = G_N_ELEMENTS (utab) - 1;
   int mid;
 
   while (max >= min)
@@ -1783,10 +1783,13 @@ unicode_classify (wchar_t wc)
       else if (utab[mid].low <= wc && wc <= utab[mid].high)
 	return utab[mid].bit;
       else
-	return -1;
+	break;
     }
-  /* NOTREACHED */
-  return -1;
+  /* Fallback... returning -1 might cause problems. Returning
+   * U_BASIC_LATIN won't help handling strange characters, but won't
+   * do harm either.
+   */
+  return U_BASIC_LATIN;
 }
 
 void
