@@ -1593,7 +1593,7 @@ msgstr "Ga e kgone go hwetša go akaretša faele: \"%s\""
 #: gtk/gtkrc.c:3030 gtk/gtkrc.c:3033
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Ga e kgone go hwetša faele ya seswantšho tsejaneng ya pixmap_: \"%s\""
+msgstr "Ga e kgone go hwetša faele ya seswantšho go pixmap_path: \"%s\""
 
 #: gtk/gtkrc.c:3468
 #, c-format
@@ -2013,3 +2013,4 @@ msgstr "E be e ka se hwetše tshedimošo bakeng sa faele ya '%s': %s"
 
 #~ msgid "%d bytes"
 #~ msgstr "dipaete tša %d"
+
