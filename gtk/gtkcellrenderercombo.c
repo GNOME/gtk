@@ -32,6 +32,7 @@
 
 static void gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass);
 static void gtk_cell_renderer_combo_init       (GtkCellRendererCombo      *self);
+static void gtk_cell_renderer_combo_finalize     (GObject      *object);
 static void gtk_cell_renderer_combo_get_property (GObject      *object,
 						  guint         prop_id,
 						  GValue       *value,
@@ -57,37 +58,9 @@ enum {
   PROP_HAS_ENTRY
 };
 
-static GObjectClass *parent_class = NULL;
-
 #define GTK_CELL_RENDERER_COMBO_PATH "gtk-cell-renderer-combo-path"
 
-GType
-gtk_cell_renderer_combo_get_type (void)
-{
-  static GType gtk_cell_renderer_combo_type = 0;
-
-  if (!gtk_cell_renderer_combo_type)
-    {
-      static const GTypeInfo gtk_cell_renderer_combo_info = 
-	{
-	  sizeof (GtkCellRendererComboClass),
-	  (GBaseInitFunc)     NULL,
-	  (GBaseFinalizeFunc) NULL,
-	  (GClassInitFunc)    gtk_cell_renderer_combo_class_init,
-	  NULL,
-	  NULL,
-	  sizeof (GtkCellRendererCombo),
-	  0,
-	  (GInstanceInitFunc) gtk_cell_renderer_combo_init
-	};
-      gtk_cell_renderer_combo_type =
-	g_type_register_static (GTK_TYPE_CELL_RENDERER_TEXT,
-				"GtkCellRendererCombo",
-				&gtk_cell_renderer_combo_info,
-				0);
-    }
-  return gtk_cell_renderer_combo_type;
-}
+G_DEFINE_TYPE (GtkCellRendererCombo, gtk_cell_renderer_combo, GTK_TYPE_CELL_RENDERER_TEXT);
 
 static void
 gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
@@ -95,8 +68,7 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
-
+  object_class->finalize = gtk_cell_renderer_combo_finalize;
   object_class->get_property = gtk_cell_renderer_combo_get_property;
   object_class->set_property = gtk_cell_renderer_combo_set_property;
 
@@ -143,7 +115,7 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
   /** 
    * GtkCellRendererCombo:has_entry:
    *
-   * If the :has_entry property is %TRUe, the cell renderer will 
+   * If the :has_entry property is %TRUE, the cell renderer will 
    * include an entry and allow to enter values other than the ones 
    * in the popup list. 
    *
@@ -164,6 +136,7 @@ gtk_cell_renderer_combo_init (GtkCellRendererCombo *self)
 {
   self->model = NULL;
   self->text_column = -1;
+  self->has_entry = TRUE;
   self->focus_out_id = 0;
 }
 
@@ -186,6 +159,20 @@ GtkCellRenderer *
 gtk_cell_renderer_combo_new (void)
 {
   return g_object_new (GTK_TYPE_CELL_RENDERER_COMBO, NULL); 
+}
+
+static void
+gtk_cell_renderer_combo_finalize (GObject *object)
+{
+  GtkCellRendererCombo *cell = GTK_CELL_RENDERER_COMBO (object);
+  
+  if (cell->model)
+    {
+      g_object_unref (cell->model);
+      cell->model = NULL;
+    }
+  
+  G_OBJECT_CLASS (gtk_cell_renderer_combo_parent_class)->finalize (object);
 }
 
 static void
@@ -231,8 +218,21 @@ gtk_cell_renderer_combo_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_MODEL:
-      cell->model = g_value_get_object (value);
-      break;
+      {
+	GObject *object;
+
+	object = g_value_get_object (value);
+	g_return_if_fail (GTK_IS_TREE_MODEL (object));
+	g_object_ref (object);
+
+	if (cell->model)
+	  {
+	    g_object_unref (cell->model);
+	    cell->model = NULL;
+	  }
+	cell->model = GTK_TREE_MODEL (object);
+	break;
+      }
     case PROP_TEXT_COLUMN:
       cell->text_column = g_value_get_int (value);
       break;
