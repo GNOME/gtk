@@ -2014,9 +2014,9 @@ gdk_window_focus (GdkWindow *window,
       xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display,
 									"_NET_ACTIVE_WINDOW");
       xev.xclient.format = 32;
-      xev.xclient.data.l[0] = 0;
-      xev.xclient.data.l[1] = 0;
-      xev.xclient.data.l[2] = 0;
+      xev.xclient.data.l[0] = 1; /* requestor type; we're an app */
+      xev.xclient.data.l[1] = timestamp;
+      xev.xclient.data.l[2] = None; /* currently active window */
       xev.xclient.data.l[3] = 0;
       xev.xclient.data.l[4] = 0;
       
