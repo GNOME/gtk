@@ -35,7 +35,7 @@ window_closed_cb (GtkWidget *window, gpointer data)
   gboolean italic;
 
   gtk_tree_model_get_iter (cbdata->model, &iter, cbdata->path);
-  gtk_tree_store_get (GTK_TREE_STORE (cbdata->model), &iter,
+  gtk_tree_model_get (GTK_TREE_MODEL (cbdata->model), &iter,
 		      ITALIC_COLUMN, &italic,
 		      -1);
   if (italic)
@@ -262,7 +262,7 @@ button_press_event_cb (GtkTreeView    *tree_view,
 	  GtkWidget *window;
 
 	  gtk_tree_model_get_iter (model, &iter, path);
-	  gtk_tree_store_get (GTK_TREE_STORE (model),
+	  gtk_tree_model_get (GTK_TREE_MODEL (model),
 			      &iter,
 			      FUNC_COLUMN, &func,
 			      ITALIC_COLUMN, &italic,

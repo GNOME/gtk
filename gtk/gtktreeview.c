@@ -821,6 +821,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 			      (gfloat) MAX (tree_view->priv->height - allocation->height, 0));
 
   gtk_signal_emit_by_name (GTK_OBJECT (tree_view->priv->vadjustment), "changed");
+
 }
 
 static void
@@ -989,7 +990,8 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   gint bin_window_width;
   GtkTreePath *cursor_path;
   GtkTreePath *drag_dest_path;
-  
+  GList *last_column;
+
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE_VIEW (widget), FALSE);
 
@@ -1043,7 +1045,14 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 
   gdk_drawable_get_size (tree_view->priv->bin_window,
                          &bin_window_width, NULL);
-  
+
+  for (last_column = g_list_last (tree_view->priv->columns);
+       last_column &&
+	 !(GTK_TREE_VIEW_COLUMN (last_column->data)->visible) &&
+	 GTK_WIDGET_CAN_FOCUS (GTK_TREE_VIEW_COLUMN (last_column->data)->button);
+       last_column = last_column->prev)
+    ;
+
   /* Actually process the expose event.  To do this, we want to
    * start at the first node of the event, and walk the tree in
    * order, drawing each successive node.
@@ -1096,7 +1105,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 
 	  background_area.x = cell_offset;
 	  background_area.width = TREE_VIEW_COLUMN_WIDTH (column);
-          
+
           cell_area = background_area;
           cell_area.y += TREE_VIEW_VERTICAL_SEPARATOR / 2;
           cell_area.height -= TREE_VIEW_VERTICAL_SEPARATOR;

@@ -87,12 +87,6 @@ void          gtk_tree_store_set             (GtkTreeStore *tree_store,
 void          gtk_tree_store_set_valist      (GtkTreeStore *tree_store,
 					      GtkTreeIter  *iter,
 					      va_list       var_args);
-void          gtk_tree_store_get             (GtkTreeStore *tree_store,
-					      GtkTreeIter  *iter,
-					      ...);
-void          gtk_tree_store_get_valist      (GtkTreeStore *tree_store,
-					      GtkTreeIter  *iter,
-					      va_list       var_args);
 void          gtk_tree_store_remove          (GtkTreeStore *tree_store,
 					      GtkTreeIter  *iter);
 void          gtk_tree_store_insert          (GtkTreeStore *tree_store,

@@ -1,3 +1,22 @@
+Fri Feb 16 17:49:59 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreestore.[hc], gtk/gtkliststore.[ch]: removed
+	gtk_*_store_get, and moved to GtkTreeModel.
+
+	* gtk/gtktreemodel.h (gtk_tree_model_set{v,}): Added
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_finalize): added.
+
+	* gtk/Makefile.am: remove gtktreemodelmapping.[ch]
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_func): let you
+	set the func.
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_cell_data):
+	freeze/thaw notify between setting all the properties for a cell.
+
+	* gtk/gtk.h: remove gtktreemodelsimple.h, and gtktreemodelmapping.h
+
 2001-02-15  Havoc Pennington  <hp@redhat.com>
 
 	* gdk/gdkpango.c (gdk_pango_layout_line_get_clip_region): convert
@@ -41,7 +60,7 @@ Fri Feb 16 14:22:05 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/Makefile.am: Removed gtktreemodelsimple.[ch]
 
-	* gtk/gtktreemodelsimple.[ch]: removes
+	* gtk/gtktreemodelsimple.[ch]: removed.
 
 2001-02-16  Alexander Larsson  <alexl@redhat.com>
 

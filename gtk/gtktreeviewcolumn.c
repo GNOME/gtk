@@ -57,17 +57,17 @@ static void gtk_tree_view_column_class_init      (GtkTreeViewColumnClass *klass)
 static void gtk_tree_view_column_set_attributesv (GtkTreeViewColumn      *tree_column,
 						  va_list                 args);
 static void gtk_real_tree_column_clicked         (GtkTreeViewColumn      *tree_column);
-static void gtk_tree_view_column_set_property    (GObject         *object,
-                                                  guint            prop_id,
-                                                  const GValue    *value,
-                                                  GParamSpec      *pspec,
-                                                  const gchar     *trailer);
-static void gtk_tree_view_column_get_property    (GObject         *object,
-                                                  guint            prop_id,
-                                                  GValue          *value,
-                                                  GParamSpec      *pspec,
-                                                  const gchar     *trailer);
-
+static void gtk_tree_view_column_set_property    (GObject                *object,
+						  guint                   prop_id,
+						  const GValue           *value,
+						  GParamSpec             *pspec,
+						  const gchar            *trailer);
+static void gtk_tree_view_column_get_property    (GObject                *object,
+						  guint                   prop_id,
+						  GValue                 *value,
+						  GParamSpec             *pspec,
+						  const gchar            *trailer);
+static void gtk_tree_view_column_finalize        (GObject                *object);
 
 
 static GtkObjectClass *parent_class = NULL;
@@ -111,6 +111,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
 
   class->clicked = gtk_real_tree_column_clicked;
 
+  object_class->finalize = gtk_tree_view_column_finalize;
   object_class->set_property = gtk_tree_view_column_set_property;
   object_class->get_property = gtk_tree_view_column_get_property;
   
@@ -413,6 +414,18 @@ gtk_tree_view_column_get_property (GObject         *object,
     }
 }
 
+static void
+gtk_tree_view_column_finalize (GObject *object)
+{
+  GtkTreeViewColumn *tree_column = (GtkTreeViewColumn *) object;
+
+  if (tree_column->func_data && tree_column->destroy)
+    (tree_column->destroy) (tree_column->func_data);
+
+  g_slist_free (tree_column->attributes);
+  g_free (tree_column->title);
+}
+
 /* used to make the buttons 'unclickable' */
 
 static gint
@@ -477,7 +490,7 @@ gtk_tree_view_column_new (void)
  * Return value: A newly created #GtkTreeViewColumn.
  **/
 GtkTreeViewColumn *
-gtk_tree_view_column_new_with_attributes (gchar           *title,
+gtk_tree_view_column_new_with_attributes (const gchar     *title,
 					  GtkCellRenderer *cell,
 					  ...)
 {
@@ -553,7 +566,7 @@ gtk_tree_view_column_get_cell_renderer (GtkTreeViewColumn *tree_column)
  **/
 void
 gtk_tree_view_column_add_attribute (GtkTreeViewColumn *tree_column,
-				    gchar             *attribute,
+				    const gchar       *attribute,
 				    gint               column)
 {
   g_return_if_fail (tree_column != NULL);
@@ -615,6 +628,37 @@ gtk_tree_view_column_set_attributes (GtkTreeViewColumn *tree_column,
   va_end (args);
 }
 
+
+/**
+ * gtk_tree_view_column_set_func:
+ * @tree_column: A #GtkTreeViewColumn
+ * @func: The #GtkTreeViewColumnFunc to use. 
+ * @func_data: The user data for @func.
+ * @destroy: The destroy notification for @func_data
+ * 
+ * Sets the #GtkTreeViewColumnFunc to use for the column.  This function is used
+ * instead of the standard attributes mapping for setting the column value, and
+ * should set the value of @tree_column 's cell renderer as appropriate.  @func
+ * may be NULL to remove an older one.
+ **/
+void
+gtk_tree_view_column_set_func (GtkTreeViewColumn     *tree_column,
+			       GtkTreeViewColumnFunc *func,
+			       gpointer               func_data,
+			       GtkDestroyNotify       destroy)
+{
+  g_return_if_fail (tree_column != NULL);
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+
+  if (tree_column->func_data && tree_column->destroy)
+    (tree_column->destroy) (tree_column->func_data);
+
+  tree_column->func = func;
+  tree_column->func_data = func_data;
+  tree_column->destroy = destroy;
+}
+
+
 /**
  * gtk_tree_view_column_clear_attributes:
  * @tree_column: a #GtkTreeViewColumn
@@ -667,14 +711,16 @@ gtk_tree_view_column_set_cell_data (GtkTreeViewColumn *tree_column,
   if (tree_model == NULL)
     return;
 
-  if (tree_column->func && (* tree_column->func) (tree_column,
-						  tree_model,
-						  iter,
-						  tree_column->func_data))
-    return;
+  if (tree_column->func)
+    {
+      (* tree_column->func) (tree_column, tree_model, iter, tree_column->func_data);
+      return;
+    }
 
   cell = (GObject *) tree_column->cell;
   list = tree_column->attributes;
+
+  g_object_freeze_notify (cell);
 
   while (list && list->next)
     {
@@ -684,7 +730,9 @@ gtk_tree_view_column_set_cell_data (GtkTreeViewColumn *tree_column,
       g_object_set_property (cell, (gchar *) list->data, &value);
       g_value_unset (&value);
       list = list->next->next;
+
     }
+  g_object_thaw_notify (cell);
 }
 
 /* Options for manipulating the columns */

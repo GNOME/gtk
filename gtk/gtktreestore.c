@@ -626,6 +626,16 @@ gtk_tree_store_set_cell (GtkTreeStore *tree_store,
 			   NULL, iter);
 }
 
+/**
+ * gtk_tree_store_set_valist:
+ * @tree_store: a #GtkTreeStore
+ * @iter: row to set data for
+ * @var_args: va_list of column/value pairs
+ *
+ * See gtk_tree_store_set(); this version takes a va_list for
+ * use by language bindings.
+ * 
+ **/
 void
 gtk_tree_store_set_valist (GtkTreeStore *tree_store,
                            GtkTreeIter  *iter,
@@ -696,62 +706,6 @@ gtk_tree_store_set (GtkTreeStore *tree_store,
 
   va_start (var_args, iter);
   gtk_tree_store_set_valist (tree_store, iter, var_args);
-  va_end (var_args);
-}
-
-void
-gtk_tree_store_get_valist (GtkTreeStore *tree_store,
-                           GtkTreeIter  *iter,
-                           va_list	var_args)
-{
-  gint column;
-
-  g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
-
-  column = va_arg (var_args, gint);
-
-  while (column != -1)
-    {
-      GValue value = { 0, };
-      gchar *error = NULL;
-
-      if (column >= tree_store->n_columns)
-	{
-	  g_warning ("%s: Invalid column number %d accessed (remember to end your list of columns with a -1)", G_STRLOC, column);
-	  break;
-	}
-
-      gtk_tree_store_get_value (GTK_TREE_MODEL (tree_store), iter, column, &value);
-
-      G_VALUE_LCOPY (&value, var_args, &error);
-      if (error)
-	{
-	  g_warning ("%s: %s", G_STRLOC, error);
-	  g_free (error);
-
- 	  /* we purposely leak the value here, it might not be
-	   * in a sane state if an error condition occoured
-	   */
-	  break;
-	}
-
-      g_value_unset (&value);
-
-      column = va_arg (var_args, gint);
-    }
-}
-
-void
-gtk_tree_store_get (GtkTreeStore *tree_store,
-		    GtkTreeIter  *iter,
-		    ...)
-{
-  va_list var_args;
-
-  g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
-
-  va_start (var_args, iter);
-  gtk_tree_store_get_valist (tree_store, iter, var_args);
   va_end (var_args);
 }
 

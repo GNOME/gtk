@@ -20,6 +20,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <glib.h>
+#include <gobject/gvaluecollector.h>
+
 #include "gtktreemodel.h"
 
 struct _GtkTreePath
@@ -174,8 +177,6 @@ void
 gtk_tree_path_append_index (GtkTreePath *path,
 			    gint         index)
 {
-  gint *new_indices;
-
   g_return_if_fail (path != NULL);
   g_return_if_fail (index >= 0);
 
@@ -598,16 +599,6 @@ deleted_callback (GtkTreeModel *tree_model,
 }
 
 static void
-reordered_callback (GtkTreeModel *tree_model,
-                    GtkTreePath  *path,
-                    gint         *new_order,
-                    gpointer      data)
-{
-
-  /* FIXME */
-}
-
-static void
 connect_ref_callbacks (GtkTreeModel *model,
                        RowRefList   *refs)
 {
@@ -631,7 +622,7 @@ connect_ref_callbacks (GtkTreeModel *model,
   /* FIXME */
   g_signal_connect_data (G_OBJECT (model),
                          "reordered",
-                         (GCallback) reordered_callback,
+                         (GCallback) reorderedc_allback,
                          refs,
                          NULL,
                          FALSE,
@@ -1142,4 +1133,86 @@ gtk_tree_model_unref_iter (GtkTreeModel *tree_model,
 
   if (GTK_TREE_MODEL_GET_IFACE (tree_model)->unref_iter)
     (* GTK_TREE_MODEL_GET_IFACE (tree_model)->unref_iter) (tree_model, iter);
+}
+
+/**
+ * gtk_tree_model_get:
+ * @tree_model: a #GtkTreeModel
+ * @iter: a row in @tree_model
+ * @Varargs: pairs of column number and value return locations, terminated by -1
+ *
+ * Gets the value of one or more cells in the row referenced by @iter.
+ * The variable argument list should contain integer column numbers,
+ * each column number followed by a place to store the value being
+ * retrieved.  The list is terminated by a -1. For example, to get a
+ * value from column 0 with type %G_TYPE_STRING, you would
+ * write: gtk_tree_model_set (model, iter, 0, &place_string_here, -1),
+ * where place_string_here is a gchar* to be filled with the string.
+ * If appropriate, the returned values have to be freed or unreferenced.
+ * 
+ **/
+void
+gtk_tree_model_get (GtkTreeModel *tree_model,
+		    GtkTreeIter  *iter,
+		    ...)
+{
+  va_list var_args;
+
+  g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
+
+  va_start (var_args, iter);
+  gtk_tree_model_get_valist (tree_model, iter, var_args);
+  va_end (var_args);
+}
+
+/**
+ * gtk_tree_model_get_valist:
+ * @tree_model: a #GtkTreeModel
+ * @iter: a row in @tree_model
+ * @var_args: va_list of column/return location pairs
+ *
+ * See gtk_tree_model_get(), this version takes a va_list for
+ * language bindings to use.
+ * 
+ **/
+void
+gtk_tree_model_get_valist (GtkTreeModel *tree_model,
+                           GtkTreeIter  *iter,
+                           va_list	var_args)
+{
+  gint column;
+
+  g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
+
+  column = va_arg (var_args, gint);
+
+  while (column != -1)
+    {
+      GValue value = { 0, };
+      gchar *error = NULL;
+
+      if (column >= gtk_tree_model_get_n_columns (tree_model))
+	{
+	  g_warning ("%s: Invalid column number %d accessed (remember to end your list of columns with a -1)", G_STRLOC, column);
+	  break;
+	}
+
+      gtk_tree_model_get_value (GTK_TREE_MODEL (tree_model), iter, column, &value);
+
+      G_VALUE_LCOPY (&value, var_args, &error);
+      if (error)
+	{
+	  g_warning ("%s: %s", G_STRLOC, error);
+	  g_free (error);
+
+ 	  /* we purposely leak the value here, it might not be
+	   * in a sane state if an error condition occoured
+	   */
+	  break;
+	}
+
+      g_value_unset (&value);
+
+      column = va_arg (var_args, gint);
+    }
 }

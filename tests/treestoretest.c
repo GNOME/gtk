@@ -259,30 +259,6 @@ make_window (gint view_type)
 	tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (sort_model));
       }
       break;
-    case 2:
-      {
-	GtkTreeModel *map_model;
-	
-	map_model = gtk_tree_model_mapping_new_with_model (GTK_TREE_MODEL (base_model));
-
-	gtk_tree_model_mapping_set_n_columns (GTK_TREE_MODEL_MAPPING (map_model), 2);
-	gtk_tree_model_mapping_set_column_mapping (GTK_TREE_MODEL_MAPPING (map_model),
-						   0,
-						   1,
-						   G_TYPE_STRING,
-						   uppercase_value,
-						   NULL);
-	gtk_tree_model_mapping_set_column_mapping (GTK_TREE_MODEL_MAPPING (map_model),
-						   1,
-						   0,
-						   G_TYPE_STRING,
-						   uppercase_value,
-						   NULL);
-	
-	tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (map_model));
-	
-      }
-      break;
     }
 
   selection = GTK_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)));

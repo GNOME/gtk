@@ -165,37 +165,46 @@ GType        gtk_tree_model_get_column_type (GtkTreeModel      *tree_model,
 
 
 /* Iterator movement */
-gboolean     gtk_tree_model_get_iter        (GtkTreeModel      *tree_model,
-					     GtkTreeIter       *iter,
-					     GtkTreePath       *path);
-gboolean     gtk_tree_model_get_first       (GtkTreeModel      *tree_model,
-                                             GtkTreeIter       *iter);
-GtkTreePath *gtk_tree_model_get_path        (GtkTreeModel      *tree_model,
-					     GtkTreeIter       *iter);
-void         gtk_tree_model_get_value       (GtkTreeModel      *tree_model,
-					     GtkTreeIter       *iter,
-					     gint               column,
-					     GValue            *value);
-gboolean     gtk_tree_model_iter_next       (GtkTreeModel      *tree_model,
-					     GtkTreeIter       *iter);
-gboolean     gtk_tree_model_iter_children   (GtkTreeModel      *tree_model,
-					     GtkTreeIter       *iter,
-					     GtkTreeIter       *parent);
-gboolean     gtk_tree_model_iter_has_child  (GtkTreeModel      *tree_model,
-					     GtkTreeIter       *iter);
-gint         gtk_tree_model_iter_n_children (GtkTreeModel      *tree_model,
-					     GtkTreeIter       *iter);
-gboolean     gtk_tree_model_iter_nth_child  (GtkTreeModel      *tree_model,
-					     GtkTreeIter       *iter,
-					     GtkTreeIter       *parent,
-					     gint               n);
-gboolean     gtk_tree_model_iter_parent     (GtkTreeModel      *tree_model,
-					     GtkTreeIter       *iter,
-					     GtkTreeIter       *child);
-void         gtk_tree_model_ref_iter        (GtkTreeModel      *tree_model,
-					     GtkTreeIter       *iter);
-void         gtk_tree_model_unref_iter      (GtkTreeModel      *tree_model,
-                                             GtkTreeIter       *iter);
+gboolean     gtk_tree_model_get_iter        (GtkTreeModel *tree_model,
+					     GtkTreeIter  *iter,
+					     GtkTreePath  *path);
+gboolean     gtk_tree_model_get_first       (GtkTreeModel *tree_model,
+					     GtkTreeIter  *iter);
+GtkTreePath *gtk_tree_model_get_path        (GtkTreeModel *tree_model,
+					     GtkTreeIter  *iter);
+void         gtk_tree_model_get_value       (GtkTreeModel *tree_model,
+					     GtkTreeIter  *iter,
+					     gint          column,
+					     GValue       *value);
+gboolean     gtk_tree_model_iter_next       (GtkTreeModel *tree_model,
+					     GtkTreeIter  *iter);
+gboolean     gtk_tree_model_iter_children   (GtkTreeModel *tree_model,
+					     GtkTreeIter  *iter,
+					     GtkTreeIter  *parent);
+gboolean     gtk_tree_model_iter_has_child  (GtkTreeModel *tree_model,
+					     GtkTreeIter  *iter);
+gint         gtk_tree_model_iter_n_children (GtkTreeModel *tree_model,
+					     GtkTreeIter  *iter);
+gboolean     gtk_tree_model_iter_nth_child  (GtkTreeModel *tree_model,
+					     GtkTreeIter  *iter,
+					     GtkTreeIter  *parent,
+					     gint          n);
+gboolean     gtk_tree_model_iter_parent     (GtkTreeModel *tree_model,
+					     GtkTreeIter  *iter,
+					     GtkTreeIter  *child);
+void         gtk_tree_model_ref_iter        (GtkTreeModel *tree_model,
+					     GtkTreeIter  *iter);
+void         gtk_tree_model_unref_iter      (GtkTreeModel *tree_model,
+					     GtkTreeIter  *iter);
+
+void         gtk_tree_model_get             (GtkTreeModel *tree_model,
+					     GtkTreeIter  *iter,
+					     ...);
+void         gtk_tree_model_get_valist      (GtkTreeModel *tree_model,
+					     GtkTreeIter  *iter,
+					     va_list       var_args);
+
+
 
 #ifdef __cplusplus
 }

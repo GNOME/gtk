@@ -45,11 +45,12 @@ typedef enum
 typedef struct _GtkTreeViewColumn      GtkTreeViewColumn;
 typedef struct _GtkTreeViewColumnClass GtkTreeViewColumnClass;
 
-typedef gboolean (* GtkTreeViewColumnFunc) (GtkTreeViewColumn *tree_column,
-					    GtkTreeModel      *tree_model,
-					    GtkTreeIter       *iter,
-					    gpointer           data);
+typedef void (* GtkTreeViewColumnFunc) (GtkTreeViewColumn *tree_column,
+					GtkTreeModel      *tree_model,
+					GtkTreeIter       *iter,
+					gpointer           data);
 
+  
 struct _GtkTreeViewColumn
 {
   GtkObject parent;
@@ -70,6 +71,7 @@ struct _GtkTreeViewColumn
 
   GtkTreeViewColumnFunc func;
   gpointer func_data;
+  GtkDestroyNotify destroy;
   gchar *title;
   GtkCellRenderer *cell;
   GSList *attributes;
@@ -91,17 +93,21 @@ struct _GtkTreeViewColumnClass
 
 GtkType            gtk_tree_view_column_get_type            (void);
 GtkTreeViewColumn *gtk_tree_view_column_new                 (void);
-GtkTreeViewColumn *gtk_tree_view_column_new_with_attributes (gchar                 *title,
+GtkTreeViewColumn *gtk_tree_view_column_new_with_attributes (const gchar           *title,
 							     GtkCellRenderer       *cell,
 							     ...);
 void               gtk_tree_view_column_set_cell_renderer   (GtkTreeViewColumn     *tree_column,
 							     GtkCellRenderer       *cell);
 GtkCellRenderer   *gtk_tree_view_column_get_cell_renderer   (GtkTreeViewColumn     *tree_column);
 void               gtk_tree_view_column_add_attribute       (GtkTreeViewColumn     *tree_column,
-							     gchar                 *attribute,
+							     const gchar           *attribute,
 							     gint                   column);
 void               gtk_tree_view_column_set_attributes      (GtkTreeViewColumn     *tree_column,
 							     ...);
+void               gtk_tree_view_column_set_func            (GtkTreeViewColumn     *tree_column,
+							     GtkTreeViewColumnFunc *func,
+							     gpointer               func_data,
+							     GtkDestroyNotify       destroy);
 void               gtk_tree_view_column_clear_attributes    (GtkTreeViewColumn     *tree_column);
 void               gtk_tree_view_column_set_cell_data       (GtkTreeViewColumn     *tree_column,
 							     GtkTreeModel          *tree_model,
