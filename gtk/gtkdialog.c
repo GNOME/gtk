@@ -770,6 +770,7 @@ typedef struct
   GtkDialog *dialog;
   gint response_id;
   GMainLoop *loop;
+  gboolean destroyed;
 } RunInfo;
 
 static void
@@ -811,6 +812,16 @@ run_delete_handler (GtkDialog *dialog,
   shutdown_loop (ri);
   
   return TRUE; /* Do not destroy */
+}
+
+static void
+run_destroy_handler (GtkDialog *dialog, gpointer data)
+{
+  RunInfo *ri = data;
+
+  /* shutdown_loop will be called by run_unmap_handler */
+  
+  ri->destroyed = TRUE;
 }
 
 /**
@@ -861,6 +872,7 @@ gtk_dialog_run (GtkDialog *dialog)
   RunInfo ri = { NULL, GTK_RESPONSE_NONE, NULL };
   gboolean was_modal;
   guint response_handler;
+  guint unmap_handler;
   guint destroy_handler;
   guint delete_handler;
   
@@ -881,7 +893,7 @@ gtk_dialog_run (GtkDialog *dialog)
                         GTK_SIGNAL_FUNC (run_response_handler),
                         &ri);
   
-  destroy_handler =
+  unmap_handler =
     gtk_signal_connect (GTK_OBJECT (dialog),
                         "unmap",
                         GTK_SIGNAL_FUNC (run_unmap_handler),
@@ -893,6 +905,12 @@ gtk_dialog_run (GtkDialog *dialog)
                         GTK_SIGNAL_FUNC (run_delete_handler),
                         &ri);
   
+  destroy_handler =
+    gtk_signal_connect (GTK_OBJECT (dialog),
+                        "destroy",
+                        GTK_SIGNAL_FUNC (run_destroy_handler),
+                        &ri);
+  
   ri.loop = g_main_new (FALSE);
 
   GDK_THREADS_LEAVE ();  
@@ -902,22 +920,20 @@ gtk_dialog_run (GtkDialog *dialog)
   g_main_loop_unref (ri.loop);
 
   ri.loop = NULL;
+  ri.destroyed = FALSE;
   
-  if (!GTK_OBJECT_DESTROYED (dialog))
+  if (!ri.destroyed)
     {
       if (!was_modal)
         gtk_window_set_modal (GTK_WINDOW(dialog), FALSE);
       
-      gtk_signal_disconnect (GTK_OBJECT (dialog), destroy_handler);
       gtk_signal_disconnect (GTK_OBJECT (dialog), response_handler);
+      gtk_signal_disconnect (GTK_OBJECT (dialog), unmap_handler);
       gtk_signal_disconnect (GTK_OBJECT (dialog), delete_handler);
+      gtk_signal_disconnect (GTK_OBJECT (dialog), destroy_handler);
     }
 
   gtk_object_unref (GTK_OBJECT (dialog));
 
   return ri.response_id;
 }
-
-
-
-

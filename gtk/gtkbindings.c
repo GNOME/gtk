@@ -414,7 +414,7 @@ gtk_binding_entry_activate (GtkBindingEntry	*entry,
       gtk_signal_emitv (object, signal_id, params);
       g_free (params);
       
-      if (GTK_OBJECT_DESTROYED (object) || entry->destroyed)
+      if (entry->destroyed)
 	break;
     }
   
@@ -504,15 +504,12 @@ gtk_binding_set_activate (GtkBindingSet	 *binding_set,
   keyval = gdk_keyval_to_lower (keyval);
   modifiers = modifiers & BINDING_MOD_MASK ();
   
-  if (!GTK_OBJECT_DESTROYED (object))
+  entry = binding_ht_lookup_entry (binding_set, keyval, modifiers);
+  if (entry)
     {
-      entry = binding_ht_lookup_entry (binding_set, keyval, modifiers);
-      if (entry)
-	{
-	  gtk_binding_entry_activate (entry, object);
-	  
-	  return TRUE;
-	}
+      gtk_binding_entry_activate (entry, object);
+      
+      return TRUE;
     }
   
   return FALSE;
@@ -887,7 +884,7 @@ gtk_bindings_activate (GtkObject      *object,
   g_return_val_if_fail (object != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_OBJECT (object), FALSE);
 
-  if (!GTK_IS_WIDGET (object) || GTK_OBJECT_DESTROYED (object))
+  if (!GTK_IS_WIDGET (object))
     return FALSE;
 
   widget = GTK_WIDGET (object);

@@ -1,3 +1,16 @@
+Sun Nov 18 19:47:29 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkobject.h docs/Changes-2.0.txt: Rename the
+	GTK_DESTROYED flag to GTK_IN_DESTRUCTION, remove the
+	GTK_OBJECT_DESTROYED() check macro.
+
+	* gtk/gtkbindings.c (gtk_bindings_activate): Remove
+	instances of GTK_OBJECT_DESTROYED() that weren't
+	needed any more.
+
+	* gtk/gtkdialog.c: Exchange use of GTK_OBJECT_DESTROYED
+	for a connection to ::destroy.
+
 Sun Nov 18 18:18:11 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfixed.c: Make a NO_WINDOW widget, as it should

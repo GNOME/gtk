@@ -354,8 +354,8 @@ gtk_object_destroy (GtkObject *object)
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
   
-  if (!GTK_OBJECT_DESTROYED (object))
-      g_object_run_dispose (G_OBJECT (object));
+  if (!(GTK_OBJECT_FLAGS (object) & GTK_IN_DESTRUCTION))
+    g_object_run_dispose (G_OBJECT (object));
 }
 
 static void
@@ -366,13 +366,13 @@ gtk_object_dispose (GObject *gobject)
   /* guard against reinvocations during
    * destruction with the GTK_DESTROYED flag.
    */
-  if (!GTK_OBJECT_DESTROYED (object))
+  if (!(GTK_OBJECT_FLAGS (object) & GTK_IN_DESTRUCTION))
     {
-      GTK_OBJECT_SET_FLAGS (object, GTK_DESTROYED);
+      GTK_OBJECT_SET_FLAGS (object, GTK_IN_DESTRUCTION);
       
       gtk_signal_emit (object, object_signals[DESTROY]);
       
-      GTK_OBJECT_UNSET_FLAGS (object, GTK_DESTROYED);
+      GTK_OBJECT_UNSET_FLAGS (object, GTK_IN_DESTRUCTION);
     }
 
   G_OBJECT_CLASS (parent_class)->dispose (gobject);

@@ -116,6 +116,12 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
     have to be moved into the ::destroy implementations. The reason for doing
     this is that all object reference cycles should be broken at destruction 
     time.
+
+    Because the ::destroy signal can be emitted multiple times, it no longer
+    makes sense to check if a widget has been destroyed using the 
+    GTK_OBJECT_DESTROYED() macro, and this macro has been removed. If 
+    catching destruction is still needed, it can be done with a signal
+    connection to ::destroy.
     
 * Signal system changes:
   The Gtk 2.0 signal merly proxies the GSignal system now.
