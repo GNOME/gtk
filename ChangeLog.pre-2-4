@@ -1,8 +1,13 @@
+Wed Jan 31 17:16:13 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcombo.c (gtk_combo_window_key_press): Make Return
+	key pop down window. (#12074, Jon K Hellan)
+
 Wed Jan 31 16:21:42 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklist.c (gtk_list_signal_item_toggle): Don't allow
-	toggling of rows off in BROWSE or EXTENDED mode. (#12072, Greg
-	Hudson.) The solution here isn't perfect - you get an extraneous
+	toggling of rows off in BROWSE or EXTENDED mode. (#12072, Jon K Hellan) 
+	The solution here isn't perfect - you get an extraneous
 	emission of "toggle", which could conceivably confuse an app,
 	but better than the current situation. LXR search seems to
 	indicate that no apps in GNOME CVS connect to "toggle".
