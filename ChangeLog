@@ -1,3 +1,25 @@
+Sat Jul  5 10:34:00 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkmenu.c: add vertical_padding style property.
+	
+	* gtk/gtkmenuitem.c: add style properties toggle_spacing,
+	arrow_spacing and horizontal_padding. Also center separators and
+	make them a bit taller.
+
+	* gtk/*menuitem.c: use new style properties.
+	
+	* docs/widget_geometry.txt: Add note about GtkMenuItem
+
+	* gtk/gtkstyle.c 
+	(gtk_default_draw_vline, gtk_default_draw_hline):
+	fix +/-1 errors. 
+
+	(gtk_default_draw_shadow): draw a black border around menus.
+
+	* gtk/gtkvseparator, gtk/gtkhseparator.c, gtk/gtkmenuitem.c: fix
+	calls to gtk_paint_hline() and gtk_paint_vline() (they take x1,
+	x2 and y1, y2 respectively, not x, width and y, height).
+
 Sat Jul  5 09:55:38 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdnd-x11.c (precache_target_list): Lookup

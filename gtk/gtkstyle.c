@@ -35,6 +35,7 @@
 #include "gtkthemes.h"
 #include "gtkiconfactory.h"
 #include "gtksettings.h"	/* _gtk_settings_parse_convert() */
+#include "gtkhandlebox.h"
 
 #define LIGHTNESS_MULT  1.3
 #define DARKNESS_MULT   0.7
@@ -2264,15 +2265,15 @@ gtk_default_draw_hline (GtkStyle     *style,
     {
       for (i = 0; i < thickness_dark; i++)
         {
-          gdk_draw_line (window, style->light_gc[state_type], x2 - i - 1, y + i, x2, y + i);
           gdk_draw_line (window, style->dark_gc[state_type], x1, y + i, x2 - i - 1, y + i);
+          gdk_draw_line (window, style->light_gc[state_type], x2 - i, y + i, x2, y + i);
         }
       
       y += thickness_dark;
       for (i = 0; i < thickness_light; i++)
         {
           gdk_draw_line (window, style->dark_gc[state_type], x1, y + i, x1 + thickness_light - i - 1, y + i);
-          gdk_draw_line (window, style->light_gc[state_type], x1 + thickness_light - i - 1, y + i, x2, y + i);
+          gdk_draw_line (window, style->light_gc[state_type], x1 + thickness_light - i, y + i, x2, y + i);
         }
     }
   
@@ -2311,15 +2312,15 @@ gtk_default_draw_vline (GtkStyle     *style,
       gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
     }
   for (i = 0; i < thickness_dark; i++)
-    {
-      gdk_draw_line (window, style->light_gc[state_type], x + i, y2 - i - 1, x + i, y2);
+    { 
       gdk_draw_line (window, style->dark_gc[state_type], x + i, y1, x + i, y2 - i - 1);
+      gdk_draw_line (window, style->light_gc[state_type], x + i, y2 - i, x + i, y2);
     }
   
   x += thickness_dark;
   for (i = 0; i < thickness_light; i++)
     {
-      gdk_draw_line (window, style->dark_gc[state_type], x + i, y1, x + i, y1 + thickness_light - i);
+      gdk_draw_line (window, style->dark_gc[state_type], x + i, y1, x + i, y1 + thickness_light - i - 1);
       gdk_draw_line (window, style->light_gc[state_type], x + i, y1 + thickness_light - i, x + i, y2);
     }
   if (area)
@@ -2328,7 +2329,6 @@ gtk_default_draw_vline (GtkStyle     *style,
       gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
     }
 }
-
 
 static void
 draw_thin_shadow (GtkStyle      *style,
@@ -2436,6 +2436,66 @@ draw_spinbutton_shadow (GtkStyle        *style,
 }
 
 static void
+draw_menu_shadow (GtkStyle        *style,
+		  GdkWindow       *window,
+		  GtkStateType     state,
+		  GdkRectangle    *area,
+		  gint             x,
+		  gint             y,
+		  gint             width,
+		  gint             height)
+{
+  if (style->ythickness > 0)
+    {
+      if (style->ythickness > 1)
+	{
+	  gdk_draw_line (window, style->dark_gc[state],
+			 x + 1, y + height - 2, x + width - 2, y + height - 2);
+	  gdk_draw_line (window, style->black_gc,
+			 x, y + height - 1, x + width - 1, y + height - 1);
+	}
+      else
+	{
+	  gdk_draw_line (window, style->dark_gc[state],
+			 x + 1, y + height - 1, x + width - 1, y + height - 1);
+	}
+    }
+  
+  if (style->xthickness > 0)
+    {
+      if (style->xthickness > 1)
+	{
+	  gdk_draw_line (window, style->dark_gc[state],
+			 x + width - 2, y + 1, x + width - 2, y + height - 2);
+	  
+	  gdk_draw_line (window, style->black_gc,
+			 x + width - 1, y, x + width - 1, y + height - 1);
+	}
+      else
+	{
+	  gdk_draw_line (window, style->dark_gc[state],
+			 x + width - 1, y + 1, x + width - 1, y + height - 1);
+	}
+    }
+  
+  /* Light around top and left */
+  
+  if (style->ythickness > 0)
+    gdk_draw_line (window, style->black_gc,
+		   x, y, x + width - 2, y);
+  if (style->xthickness > 0)
+    gdk_draw_line (window, style->black_gc,
+		   x, y, x, y + height - 2);
+  
+  if (style->ythickness > 1)
+    gdk_draw_line (window, style->light_gc[state],
+		   x + 1, y + 1, x + width - 3, y + 1);
+  if (style->xthickness > 1)
+    gdk_draw_line (window, style->light_gc[state],
+		   x + 1, y + 1, x + 1, y + height - 3);
+}
+
+static void
 gtk_default_draw_shadow (GtkStyle      *style,
                          GdkWindow     *window,
                          GtkStateType   state_type,
@@ -2482,6 +2542,12 @@ gtk_default_draw_shadow (GtkStyle      *style,
 	  
 	  return;
 	}
+    }
+
+  if (shadow_type == GTK_SHADOW_OUT && detail && strcmp (detail, "menu") == 0)
+    {
+      draw_menu_shadow (style, window, state_type, area, x, y, width, height);
+      return;
     }
   
   sanitize_size (window, &width, &height);
@@ -3033,6 +3099,9 @@ gtk_default_draw_arrow (GtkStyle      *style,
   if (detail && strcmp (detail, "menuitem") == 0
       && gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
     x = original_x + original_width - width;
+
+  if (detail && strcmp (detail, "menu_scroll_arrow_up") == 0)
+    y++;
 
   if (state == GTK_STATE_INSENSITIVE)
     draw_arrow (window, style->white_gc, area, arrow_type,
@@ -6472,7 +6541,7 @@ style_unrealize_cursor_gcs (GtkStyle *style)
 static GdkGC *
 make_cursor_gc (GtkWidget   *widget,
 		const gchar *property_name,
-		GdkColor    *fallback)
+		const GdkColor *fallback)
 {
   GdkGCValues gc_values;
   GdkGCValuesMask gc_values_mask;

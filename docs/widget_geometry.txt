@@ -2,6 +2,38 @@ This file is some notes about how different widgets are drawn.
 
 =============
 
+GtkMenuItem
+
+=============
+
+arrowspacing
+togglespacing
+horizontal_padding
+
+               B 
+     ------------------
+   A               C           D               E      G         A
++----+----------+-----+----------------------+----+-----------+----+
+|    |          |     |               ^      |    |           |    |
+|    |          |     |               |      |    |           |    |
+|    |          |     |               |      |    |           |    |
+|    |          |     |               |      |    |           |    |
+|    |  icon    |     |    child      | G    |    |           |    |
+|    |          |     |               |      |    |           |    |
+|    |          |     |               |      |    |           |    |
+|    |          |     |               |      |    |           |    |
+|    |          |     |               v      |    |           |    |
++----+----------+-----+----------------------+----+-----------+----+
+
+A: horizontal_padding
+B: width of icon or indicator + toggle_spacing
+C: toggle_spacing
+D: child's requested size
+E: arrow spacing (if the item has a submenu
+G: child's requested height (also used for width of arrow field
+
+=============
+
 GtkOptionMenu:
 
 =============

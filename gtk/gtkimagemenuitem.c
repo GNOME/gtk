@@ -185,7 +185,15 @@ gtk_image_menu_item_toggle_size_request (GtkMenuItem *menu_item,
   GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (menu_item);
 
   if (image_menu_item->image)
-    *requisition = image_menu_item->image->requisition.width;
+    {
+      guint toggle_spacing;
+
+      gtk_widget_style_get (GTK_WIDGET (menu_item),
+			    "toggle_spacing", &toggle_spacing,
+			    NULL);
+      
+      *requisition = image_menu_item->image->requisition.width + toggle_spacing;
+    }
   else
     *requisition = 0;
 }
@@ -237,6 +245,12 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
     {
       gint width, height, x, y, offset;
       GtkAllocation child_allocation;
+      guint horizontal_padding, toggle_spacing;
+
+      gtk_widget_style_get (widget,
+			    "horizontal_padding", &horizontal_padding,
+			    "toggle_spacing", &toggle_spacing,
+			    NULL);
       
       /* Man this is lame hardcoding action, but I can't
        * come up with a solution that's really better.
@@ -245,14 +259,22 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
       width = image_menu_item->image->requisition.width;
       height = image_menu_item->image->requisition.height;
       offset = GTK_CONTAINER (image_menu_item)->border_width +
-	widget->style->xthickness; 
+	widget->style->xthickness;
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
-	  x = offset + (GTK_MENU_ITEM (image_menu_item)->toggle_size - width) / 2;
-	else
-	x = widget->allocation.width - 
-	  GTK_MENU_ITEM (image_menu_item)->toggle_size - offset +
-	  (GTK_MENU_ITEM (image_menu_item)->toggle_size - width) / 2;
+	{
+	  x = offset + horizontal_padding +
+	      (GTK_MENU_ITEM (image_menu_item)->toggle_size -
+	       toggle_spacing - width) / 2;
+	}
+      else
+	{
+	  x = widget->allocation.width - offset - horizontal_padding -
+	      GTK_MENU_ITEM (image_menu_item)->toggle_size + toggle_spacing +
+	      (GTK_MENU_ITEM (image_menu_item)->toggle_size -
+	       toggle_spacing - width) / 2;
+	}
+
       y = (widget->allocation.height - height) / 2;
 
       child_allocation.width = width;

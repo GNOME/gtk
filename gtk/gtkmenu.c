@@ -265,6 +265,15 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                         "",
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
 
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("vertical-padding",
+							     _("Vertical Padding"),
+							     _("Extra space at the top and bottom of the menu"),
+							     0,
+							     G_MAXINT,
+							     1,
+							     G_PARAM_READABLE));
+
   object_class->destroy = gtk_menu_destroy;
   
   widget_class->realize = gtk_menu_realize;
@@ -1489,7 +1498,8 @@ gtk_menu_realize (GtkWidget *widget)
   GtkMenu *menu;
   GtkWidget *child;
   GList *children;
-
+  guint vertical_padding;
+  
   g_return_if_fail (GTK_IS_MENU (widget));
 
   menu = GTK_MENU (widget);
@@ -1514,9 +1524,13 @@ gtk_menu_realize (GtkWidget *widget)
   gdk_window_set_user_data (widget->window, widget);
   
   border_width = GTK_CONTAINER (widget)->border_width;
+
+  gtk_widget_style_get (GTK_WIDGET (menu),
+			"vertical-padding", &vertical_padding,
+			NULL);
   
   attributes.x = border_width + widget->style->xthickness;
-  attributes.y = border_width + widget->style->ythickness;
+  attributes.y = border_width + widget->style->ythickness + vertical_padding;
   attributes.width = MAX (1, widget->allocation.width - attributes.x * 2);
   attributes.height = MAX (1, widget->allocation.height - attributes.y * 2);
 
@@ -1533,7 +1547,7 @@ gtk_menu_realize (GtkWidget *widget)
 
   attributes.x = 0;
   attributes.y = 0;
-  attributes.height = MAX (1, widget->requisition.height - (border_width + widget->style->ythickness) * 2);
+  attributes.height = MAX (1, widget->requisition.height - (border_width + widget->style->ythickness + vertical_padding) * 2);
   
   menu->bin_window = gdk_window_new (menu->view_window, &attributes, attributes_mask);
   gdk_window_set_user_data (menu->bin_window, menu);
@@ -1648,6 +1662,7 @@ gtk_menu_size_request (GtkWidget      *widget,
   GList *children;
   guint max_toggle_size;
   guint max_accel_width;
+  guint vertical_padding;
   GtkRequisition child_requisition;
   
   g_return_if_fail (GTK_IS_MENU (widget));
@@ -1689,11 +1704,15 @@ gtk_menu_size_request (GtkWidget      *widget,
 	  max_accel_width = MAX (max_accel_width, GTK_MENU_ITEM (child)->accelerator_width);
 	}
     }
-  
+
   requisition->width += max_toggle_size + max_accel_width;
   requisition->width += (GTK_CONTAINER (menu)->border_width +
 			 widget->style->xthickness) * 2;
-  requisition->height += (GTK_CONTAINER (menu)->border_width +
+
+  gtk_widget_style_get (GTK_WIDGET (menu),
+			"vertical-padding", &vertical_padding,
+			NULL);
+  requisition->height += (GTK_CONTAINER (menu)->border_width + vertical_padding +
 			  widget->style->ythickness) * 2;
   
   menu->toggle_size = max_toggle_size;
@@ -1715,6 +1734,7 @@ gtk_menu_size_allocate (GtkWidget     *widget,
   GList *children;
   gint x, y;
   gint width, height;
+  guint vertical_padding;
 
   g_return_if_fail (GTK_IS_MENU (widget));
   g_return_if_fail (allocation != NULL);
@@ -1724,9 +1744,13 @@ gtk_menu_size_allocate (GtkWidget     *widget,
 
   widget->allocation = *allocation;
 
-  x = GTK_CONTAINER (menu)->border_width + widget->style->xthickness;
-  y = GTK_CONTAINER (menu)->border_width + widget->style->ythickness;
+  gtk_widget_style_get (GTK_WIDGET (menu),
+			"vertical-padding", &vertical_padding,
+			NULL);
   
+  x = GTK_CONTAINER (menu)->border_width + widget->style->xthickness;
+  y = GTK_CONTAINER (menu)->border_width + widget->style->ythickness + vertical_padding;
+
   width = MAX (1, allocation->width - x * 2);
   height = MAX (1, allocation->height - y * 2);
 
@@ -1776,6 +1800,7 @@ gtk_menu_size_allocate (GtkWidget     *widget,
 
 	      gtk_menu_item_toggle_size_allocate (GTK_MENU_ITEM (child),
 						  menu->toggle_size);
+
 	      gtk_widget_size_allocate (child, &child_allocation);
 	      gtk_widget_queue_draw (child);
 	      
@@ -1838,17 +1863,25 @@ gtk_menu_paint (GtkWidget      *widget,
   GtkMenu *menu;
   gint width, height;
   gint border_x, border_y;
+  guint vertical_padding;
   
   g_return_if_fail (GTK_IS_MENU (widget));
 
   menu = GTK_MENU (widget);
+
+  gtk_widget_style_get (GTK_WIDGET (menu),
+			"vertical-padding", &vertical_padding,
+			NULL);
   
   border_x = GTK_CONTAINER (widget)->border_width + widget->style->xthickness;
-  border_y = GTK_CONTAINER (widget)->border_width + widget->style->ythickness;
+  border_y = GTK_CONTAINER (widget)->border_width + widget->style->ythickness + vertical_padding;
   gdk_drawable_get_size (widget->window, &width, &height);
 
   if (event->window == widget->window)
     {
+      gint arrow_space = MENU_SCROLL_ARROW_HEIGHT - 2 * widget->style->ythickness;
+      gint arrow_size = 0.7 * arrow_space;
+	
       gtk_paint_box (widget->style,
 		     widget->window,
 		     GTK_STATE_NORMAL,
@@ -1865,7 +1898,7 @@ gtk_menu_paint (GtkWidget      *widget,
 			 NULL, widget, "menu",
 			 border_x,
 			 border_y,
-			 width - 2*border_x,
+			 width - 2 * border_x,
 			 MENU_SCROLL_ARROW_HEIGHT);
 	  
 	  gtk_paint_arrow (widget->style,
@@ -1873,13 +1906,12 @@ gtk_menu_paint (GtkWidget      *widget,
 			   menu->upper_arrow_prelight ?
 			   GTK_STATE_PRELIGHT : GTK_STATE_NORMAL,
 			   GTK_SHADOW_OUT,
-			   NULL, widget, "menu",
+			   NULL, widget, "menu_scroll_arrow_up",
 			   GTK_ARROW_UP,
 			   TRUE,
-			   width / 2 - MENU_SCROLL_ARROW_HEIGHT / 2 + 1,
-			   2 * border_y + 1,
-			   MENU_SCROLL_ARROW_HEIGHT - 2 * border_y - 2,
-			   MENU_SCROLL_ARROW_HEIGHT - 2 * border_y - 2);
+			   (width - arrow_size ) / 2,
+			   border_y + widget->style->ythickness + (arrow_space - arrow_size)/2,
+			   arrow_size, arrow_size);
 	}
   
       if (menu->lower_arrow_visible && !menu->tearoff_active)
@@ -1891,7 +1923,7 @@ gtk_menu_paint (GtkWidget      *widget,
 			 GTK_SHADOW_OUT,
 			 NULL, widget, "menu",
 			 border_x,
-			 height - border_y - MENU_SCROLL_ARROW_HEIGHT + 1,
+			 height - border_y - MENU_SCROLL_ARROW_HEIGHT,
 			 width - 2*border_x,
 			 MENU_SCROLL_ARROW_HEIGHT);
 	  
@@ -1900,13 +1932,13 @@ gtk_menu_paint (GtkWidget      *widget,
 			   menu->lower_arrow_prelight ?
 			   GTK_STATE_PRELIGHT : GTK_STATE_NORMAL,
 			   GTK_SHADOW_OUT,
-			   NULL, widget, "menu",
+			   NULL, widget, "menu_scroll_arrow_down",
 			   GTK_ARROW_DOWN,
 			   TRUE,
-			   width / 2 - MENU_SCROLL_ARROW_HEIGHT / 2 + 1,
-			   height - MENU_SCROLL_ARROW_HEIGHT + 1,
-			   MENU_SCROLL_ARROW_HEIGHT - 2 * border_y - 2,
-			   MENU_SCROLL_ARROW_HEIGHT - 2 * border_y - 2);
+			   (width - arrow_size) / 2,
+			   height - border_y - MENU_SCROLL_ARROW_HEIGHT +
+			      widget->style->ythickness + (arrow_space - arrow_size)/2,
+			   arrow_size, arrow_size);
 	}
     }
 }
@@ -2242,13 +2274,19 @@ gtk_menu_handle_scrolling (GtkMenu *menu, gboolean enter)
   GdkRectangle rect;
   gboolean in_arrow;
   gboolean scroll_fast = FALSE;
+  guint vertical_padding;
 
   menu_shell = GTK_MENU_SHELL (menu);
 
   gdk_window_get_pointer (GTK_WIDGET (menu)->window, &x, &y, NULL);
   gdk_drawable_get_size (GTK_WIDGET (menu)->window, &width, &height);
 
-  border = GTK_CONTAINER (menu)->border_width + GTK_WIDGET (menu)->style->ythickness;
+  gtk_widget_style_get (GTK_WIDGET (menu),
+			"vertical-padding", &vertical_padding,
+			NULL);
+  
+  border = GTK_CONTAINER (menu)->border_width +
+    GTK_WIDGET (menu)->style->ythickness + vertical_padding;
 
   if (menu->upper_arrow_visible && !menu->tearoff_active)
     {
@@ -2783,6 +2821,7 @@ gtk_menu_scroll_to (GtkMenu *menu,
   gint border_width;
   gboolean last_visible;
   gint menu_height;
+  guint vertical_padding;
 
   widget = GTK_WIDGET (menu);
 
@@ -2800,13 +2839,18 @@ gtk_menu_scroll_to (GtkMenu *menu,
   view_width = widget->allocation.width;
   view_height = widget->allocation.height;
 
+  gtk_widget_style_get (GTK_WIDGET (menu),
+ 			"vertical-padding", &vertical_padding,
+ 			NULL);
+  
   border_width = GTK_CONTAINER (menu)->border_width;
   view_width -= (border_width + widget->style->xthickness) * 2;
-  view_height -= (border_width + widget->style->ythickness) * 2;
-  menu_height = widget->requisition.height - (border_width + widget->style->ythickness) * 2;
+  view_height -= (border_width + widget->style->ythickness + vertical_padding) * 2;
+  menu_height = widget->requisition.height -
+      (border_width + widget->style->ythickness + vertical_padding) * 2;
 
   x = border_width + widget->style->xthickness;
-  y = border_width + widget->style->ythickness;
+  y = border_width + widget->style->ythickness + vertical_padding;
 
   if (!menu->tearoff_active)
     {
@@ -2823,7 +2867,10 @@ gtk_menu_scroll_to (GtkMenu *menu,
 	  
 	  /* If we hid the upper arrow, possibly remove timeout */
 	  if (menu->scroll_step < 0)
-	    gtk_menu_stop_scrolling (menu);
+	    {
+	      gtk_menu_stop_scrolling (menu);
+	      gtk_widget_queue_draw (GTK_WIDGET (menu));
+	    }
 	}
 
       last_visible = menu->lower_arrow_visible;
@@ -2839,7 +2886,10 @@ gtk_menu_scroll_to (GtkMenu *menu,
 	  
 	  /* If we hid the lower arrow, possibly remove timeout */
 	  if (menu->scroll_step > 0)
-	    gtk_menu_stop_scrolling (menu);
+	    {
+	      gtk_menu_stop_scrolling (menu);
+	      gtk_widget_queue_draw (GTK_WIDGET (menu));
+	    }
 	}
       
       if (menu->upper_arrow_visible)
@@ -2926,10 +2976,16 @@ gtk_menu_scroll_item_visible (GtkMenuShell    *menu_shell,
   if (compute_child_offset (menu, menu_item,
 			    &child_offset, &child_height, &last_child))
     {
+      guint vertical_padding;
+      
       y = menu->scroll_offset;
       gdk_drawable_get_size (GTK_WIDGET (menu)->window, &width, &height);
 
-      height -= 2*GTK_CONTAINER (menu)->border_width + 2*GTK_WIDGET (menu)->style->ythickness;
+      gtk_widget_style_get (GTK_WIDGET (menu),
+			    "vertical-padding", &vertical_padding,
+			    NULL);
+			    
+      height -= 2*GTK_CONTAINER (menu)->border_width + 2*GTK_WIDGET (menu)->style->ythickness + 2*vertical_padding;
       
       if (child_offset < y)
 	{

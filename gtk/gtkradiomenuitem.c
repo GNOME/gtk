@@ -312,16 +312,35 @@ gtk_radio_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 
   if (GTK_WIDGET_DRAWABLE (check_menu_item))
     {
+      guint horizontal_padding;
+      guint toggle_spacing;
+      guint toggle_size;
+      
       widget = GTK_WIDGET (check_menu_item);
+
+      gtk_widget_style_get (GTK_WIDGET (check_menu_item),
+ 			    "toggle_spacing", &toggle_spacing,
+ 			    "horizontal_padding", &horizontal_padding,
+ 			    NULL);
 
       width = 8;
       height = 8;
+      toggle_size = GTK_MENU_ITEM (check_menu_item)->toggle_size;
       offset = GTK_CONTAINER (check_menu_item)->border_width +
 	widget->style->xthickness + 2;
+
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
-	x = widget->allocation.x + offset;
+	{
+	  x = widget->allocation.x + offset + horizontal_padding +
+	    (toggle_size - toggle_spacing - width) / 2;
+	}
       else 
-	x = widget->allocation.x + widget->allocation.width - width - offset;
+	{
+	  x = widget->allocation.x + widget->allocation.width -
+	    offset - horizontal_padding - toggle_size + toggle_spacing +
+	    (toggle_size - toggle_spacing - width) / 2;
+	}
+
       y = widget->allocation.y + (widget->allocation.height - height) / 2;
 
       if (check_menu_item->active ||
