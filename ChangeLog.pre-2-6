@@ -1,3 +1,8 @@
+2000-11-14  Alexander Larsson  <alexl@redhat.com>
+
+	* modules/linux-fb/basic.c:
+	Use the glib iconv wrappers.
+
 2000-11-13  Havoc Pennington  <hp@pobox.com>
 
 	* demos/gtk-demo/textview.c: spiff up the demo a bit; reveals
