@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-08-01 01:25-0400\n"
-"PO-Revision-Date: 2004-04-15 20:50+0200\n"
+"PO-Revision-Date: 2004-08-23 12:58+0200\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -34,8 +34,7 @@ msgstr "'%s' irudi-fitxategiak ez du daturik"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:839
 #: gdk-pixbuf/gdk-pixbuf-io.c:977 tests/testfilechooser.c:237
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Ezin izan da '%s' irudia kargatu: arrazoia ez dakigu, beharbada hondatutako "
 "irudi-fitxategia izango da"
@@ -90,8 +89,7 @@ msgstr "Errorea irudi-fitxategia idaztean: %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:1210 gdk-pixbuf/gdk-pixbuf-io.c:1326
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"gdk-pixbuf-en bertsio honek ez du irudi-formatu hau gordetzea onartzen: %s"
+msgstr "gdk-pixbuf-en bertsio honek ez du irudi-formatu hau gordetzea onartzen: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1239
 msgid "Insufficient memory to save image to callback"
@@ -205,8 +203,7 @@ msgstr "Ezin izan da GIF irakurri: %s"
 
 #: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1442 gdk-pixbuf/io-gif.c:1603
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"GIF fitxategian datu batzuk falta dira (agian nolabait trunkatuta zegoen?)"
+msgstr "GIF fitxategian datu batzuk falta dira (agian nolabait trunkatuta zegoen?)"
 
 #: gdk-pixbuf/io-gif.c:501
 #, c-format
@@ -218,7 +215,6 @@ msgid "Stack overflow"
 msgstr "Pila-gainezkatzea"
 
 #: gdk-pixbuf/io-gif.c:635
-#, fuzzy
 msgid "GIF image loader cannot understand this image."
 msgstr "GIF irudi-kargatzaileak ezin du irudi hau ulertu."
 
@@ -344,8 +340,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:908
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "JPEG kalitatearen balioak 0 eta 100 artean egon behar du; '%d' balioa ez da "
 "onartzen."
@@ -417,8 +412,7 @@ msgstr "Bihurtutako PNG ez da RGB edo RGBA."
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"Bihurtutako PNGk duen kanal-kopurua ez da onartzen; 3 edo 4 izan behar ditu."
+msgstr "Bihurtutako PNGk duen kanal-kopurua ez da onartzen; 3 edo 4 izan behar ditu."
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -448,8 +442,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Errore larria PNG irudi-fitxategia irakurtzean: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "PNGren testu-zatiek gutxienez karaktere 1 eta gehienez 79 eduki behar "
 "dituzte."
@@ -459,9 +452,11 @@ msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNGren testu-zatien gakoek ASCII karaktereak izan behar dute."
 
 #: gdk-pixbuf/io-png.c:854
-#, fuzzy, c-format
+#, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "PNGren %s testu-zatiaren balioa ezin da ISO-8859-1 kodeketara bihurtu."
+msgstr ""
+"PNGren %s testu-zatiaren balioa ezin da ISO-8859-1 kodeketara "
+"bihurtu."
 
 #: gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
@@ -496,11 +491,10 @@ msgid "Maximum color value in PNM file is too large"
 msgstr "PNM fitxategiko kolorearen gehienezko balioa handiegia da"
 
 #: gdk-pixbuf/io-pnm.c:396
-#, fuzzy
 msgid "Cannot handle PNM files with maximum color values greater than 255"
 msgstr ""
-"ezin dira gehienezko kolore-balioa 255 baino handiagoa duten PNM fitxategiak "
-"kudeatu"
+"Ezin dira gehienezko kolore-balioa 255 baino handiagoa duten "
+"PNM fitxategiak kudeatu"
 
 #: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
 msgid "Raw PNM image type is invalid"
@@ -520,11 +514,9 @@ msgstr "Fitxategiaren amaiera uste baino lehen aurkitu da"
 
 #: gdk-pixbuf/io-pnm.c:743 gdk-pixbuf/io-pnm.c:974
 msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
-"PNM formatu gordinek zuriune bat behar dute lagin-informazioaren aurretik"
+msgstr "PNM formatu gordinek zuriune bat behar dute lagin-informazioaren aurretik"
 
 #: gdk-pixbuf/io-pnm.c:770
-#, fuzzy
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "Ezin da PNM irudia kargatzeko memoria esleitu"
 
@@ -565,37 +557,30 @@ msgid "The Sun raster image format"
 msgstr "Sun bilbe-irudiaren formatua"
 
 #: gdk-pixbuf/io-tga.c:159
-#, fuzzy
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "Ezin zaio IOBuffer-en egiturari memoria esleitu"
 
 #: gdk-pixbuf/io-tga.c:178
-#, fuzzy
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "Ezin zaie IOBuffer-en datuei memoria esleitu"
 
 #: gdk-pixbuf/io-tga.c:189
-#, fuzzy
 msgid "Cannot realloc IOBuffer data"
 msgstr "Ezin dira IOBuffer-en datuak berriro esleitu"
 
 #: gdk-pixbuf/io-tga.c:219
-#, fuzzy
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "Ezin dira IOBuffer-en aldi baterako datuak esleitu"
 
 #: gdk-pixbuf/io-tga.c:353
-#, fuzzy
 msgid "Cannot allocate new pixbuf"
 msgstr "Ezin da pixbuf berria esleitu"
 
 #: gdk-pixbuf/io-tga.c:692
-#, fuzzy
 msgid "Cannot allocate colormap structure"
 msgstr "Ezin da kolore-maparen egitura esleitu"
 
 #: gdk-pixbuf/io-tga.c:699
-#, fuzzy
 msgid "Cannot allocate colormap entries"
 msgstr "Ezin dira kolore-maparen sarrerak esleitu"
 
@@ -604,7 +589,6 @@ msgid "Unexpected bitdepth for colormap entries"
 msgstr "Kolore-maparen sarreren ustekabeko bit-sakonera"
 
 #: gdk-pixbuf/io-tga.c:739
-#, fuzzy
 msgid "Cannot allocate TGA header memory"
 msgstr "Ezin da TGAren goiburu-memoria esleitu"
 
@@ -618,7 +602,6 @@ msgid "TGA image type not supported"
 msgstr "TGA irudi-mota ez da onartzen"
 
 #: gdk-pixbuf/io-tga.c:861
-#, fuzzy
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Ezin da TGAren testuinguru-egiturarako memoria esleitu"
 
@@ -728,12 +711,10 @@ msgid "XPM has invalid number of chars per pixel"
 msgstr "XPMk pixel bakoitzeko karaktere-kopuru baliogabea du"
 
 #: gdk-pixbuf/io-xpm.c:1279
-#, fuzzy
 msgid "Cannot read XPM colormap"
 msgstr "Ezin da XPMren kolore-mapa irakurri"
 
 #: gdk-pixbuf/io-xpm.c:1317
-#, fuzzy
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "Ezin da XPM irudia kargatzeko memoria esleitu"
 
@@ -747,47 +728,46 @@ msgstr "XPM irudi-formatua"
 
 #: gtk/gtkaboutdialog.c:209 gtk/gtkaboutdialog.c:1717
 msgid "License"
-msgstr ""
+msgstr "Lizentzia"
 
 #: gtk/gtkaboutdialog.c:210
-#, fuzzy
 msgid "The license of the program"
-msgstr "Sarreraren edukia"
+msgstr "Programaren lizentzia"
 
 #. Add the credits button
 #: gtk/gtkaboutdialog.c:351
 msgid "_Credits"
-msgstr ""
+msgstr "_Kredituak"
 
 #. Add the license button
 #: gtk/gtkaboutdialog.c:360
 msgid "_License"
-msgstr ""
+msgstr "_Lizentzia"
 
 #: gtk/gtkaboutdialog.c:534
 #, c-format
 msgid "About %s"
-msgstr ""
+msgstr "%s buruz"
 
 #: gtk/gtkaboutdialog.c:1655
 msgid "Credits"
-msgstr ""
+msgstr "Kredituak"
 
 #: gtk/gtkaboutdialog.c:1680
 msgid "Written by"
-msgstr ""
+msgstr "Garapena"
 
 #: gtk/gtkaboutdialog.c:1683
 msgid "Documented by"
-msgstr ""
+msgstr "Dokumentazioa"
 
 #: gtk/gtkaboutdialog.c:1694
 msgid "Translated by"
-msgstr ""
+msgstr "Itzulpena"
 
 #: gtk/gtkaboutdialog.c:1698
 msgid "Artwork by"
-msgstr ""
+msgstr "Marrazki lanak"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1042,12 +1022,11 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:2438
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
-msgstr ""
-"Ezin izan da %s-ren laster-markarik gehitu, bide-izena baliogabea delako."
+msgstr "Ezin izan da %s-ren laster-markarik gehitu, bide-izena baliogabea delako."
 
 #: gtk/gtkfilechooserdefault.c:2570
 msgid "Shortcuts"
-msgstr ""
+msgstr "Lasterbideak"
 
 #
 #: gtk/gtkfilechooserdefault.c:2624
@@ -1065,7 +1044,7 @@ msgstr "_Kendu"
 
 #: gtk/gtkfilechooserdefault.c:2771
 msgid "_Add to Shortcuts"
-msgstr ""
+msgstr "_Gehitu lasterbideei"
 
 #: gtk/gtkfilechooserdefault.c:2785
 msgid "Show _Hidden Files"
@@ -1114,7 +1093,6 @@ msgid "Create in _folder:"
 msgstr "Sortu _karpetan:"
 
 #: gtk/gtkfilechooserdefault.c:4096
-#, fuzzy
 msgid "Cannot change to folder because it is not local"
 msgstr "Ezin aldatu karpetara, lokala ez delako."
 
@@ -1238,10 +1216,8 @@ msgstr "_Aldatu fitxategi-izena"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"\"%s\" izeneko karpetak fitxategi-izenetan onartzen ez diren ikurrak ditu"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr "\"%s\" izeneko karpetak fitxategi-izenetan onartzen ez diren ikurrak ditu"
 
 #: gtk/gtkfilesel.c:1441
 #, c-format
@@ -1278,8 +1254,7 @@ msgstr "S_ortu"
 #: gtk/gtkfilesel.c:1566
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"\"%s\" fitxategi-izenak fitxategi-izenetan onartzen ez diren ikurrak ditu"
+msgstr "\"%s\" fitxategi-izenak fitxategi-izenetan onartzen ez diren ikurrak ditu"
 
 #: gtk/gtkfilesel.c:1569
 #, c-format
@@ -1311,8 +1286,7 @@ msgstr "Ezabatu fitxategia"
 #: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"\"%s\" fitxategi-izenak fitxategi-izenetan onartzen ez diren ikurrak ditu"
+msgstr "\"%s\" fitxategi-izenak fitxategi-izenetan onartzen ez diren ikurrak ditu"
 
 #: gtk/gtkfilesel.c:1676
 #, c-format
@@ -1357,13 +1331,13 @@ msgid "_Selection: "
 msgstr "_Hautapena: "
 
 #: gtk/gtkfilesel.c:3139
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
 msgstr ""
 "\"%s\" fitxategi-izena ezin izan da UTF-8 bihurtu (saiatu "
-"G_BROKEN_FILENAMES) ingurune-aldagaia ezartzen: %s"
+"G_FILENAME_ENCODING ingurune-aldagaia ezartzen): %s"
 
 #: gtk/gtkfilesel.c:3142
 msgid "Invalid UTF-8"
@@ -1406,9 +1380,9 @@ msgid "Filesystem"
 msgstr "Fitxategi-sistema"
 
 #: gtk/gtkfilesystemunix.c:731
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "Ezin izan da %s fitxaegirako informaziorik lortu: %s"
+msgstr "Ezin izan da kotizazioaren ikonoa lortu: %s"
 
 #: gtk/gtkfilesystemunix.c:826
 #, c-format
@@ -1644,8 +1618,7 @@ msgstr "Ezin izan da irudi-fitxategia pixmap_path-en aurkitu: \"%s\""
 #: gtk/gtkrc.c:3468
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr ""
-"Pixmap bide-izeneko \"%s\" elementuak absolutua izan behar du, %s, %d lerroa"
+msgstr "Pixmap bide-izeneko \"%s\" elementuak absolutua izan behar du, %s, %d lerroa"
 
 #
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
@@ -1670,7 +1643,7 @@ msgstr "Galdera"
 #.
 #: gtk/gtkstock.c:293
 msgid "_About"
-msgstr ""
+msgstr "_Honi buruz"
 
 #
 #: gtk/gtkstock.c:295
@@ -1725,9 +1698,8 @@ msgstr "_Exekutatu"
 
 #
 #: gtk/gtkstock.c:306
-#, fuzzy
 msgid "_Edit"
-msgstr "Editagarria"
+msgstr "_Editatu"
 
 #: gtk/gtkstock.c:307
 msgid "_Find"
@@ -1829,33 +1801,29 @@ msgid "_Right"
 msgstr "E_skuinera"
 
 #: gtk/gtkstock.c:331
-#, fuzzy
 msgid "_Next"
-msgstr "_Berria"
+msgstr "_Hurrengoa"
 
 #: gtk/gtkstock.c:332
-#, fuzzy
 msgid "P_ause"
-msgstr "I_tsatsi"
+msgstr "P_ausarazi"
 
 #: gtk/gtkstock.c:333
 msgid "_Play"
-msgstr ""
+msgstr "_Erreproduzitu"
 
 #: gtk/gtkstock.c:334
 msgid "Pre_vious"
-msgstr ""
+msgstr "_Aurrekoa"
 
 #
 #: gtk/gtkstock.c:335
-#, fuzzy
 msgid "_Record"
-msgstr "_Gorria:"
+msgstr "_Grabatu"
 
 #: gtk/gtkstock.c:336
-#, fuzzy
 msgid "R_ewind"
-msgstr "Bila_tu"
+msgstr "_Birbobinatu"
 
 #: gtk/gtkstock.c:337 gtk/gtkstock.c:360
 msgid "_Stop"
@@ -5078,3 +5046,4 @@ msgstr "Ezin izan da %s fitxaegirako informaziorik lortu: %s"
 
 #~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
 #~ msgstr "MAX_FONTS gehiegizkoa. Zenbait Font galduta daitezke."
+
