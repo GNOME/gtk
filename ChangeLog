@@ -1,3 +1,8 @@
+Thu Jul  4 19:49:08 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkliststore.c (gtk_list_store_sort): also update ->tail after
+	sorting.
+
 Tue Jul  2 00:33:26 2002  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtktreeview.c (validate_visible_area): only validate the
