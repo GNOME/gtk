@@ -883,7 +883,7 @@ gtk_tree_model_sort_get_iter (GtkTreeModel *tree_model,
   for (i = 0; i < depth - 1; i++)
     {
       if ((level == NULL) ||
-	  (level->array->len < indices[i]))
+	  (indices[i] >= level->array->len))
 	return FALSE;
 
       if (g_array_index (level->array, SortElt, indices[i]).children == NULL)
