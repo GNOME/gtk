@@ -1,3 +1,8 @@
+2002-06-18  Yanko Kaneti <yaneti@declera.com>
+
+	* bg.po (added): Bulgarian translation by
+	Borislav Aleksandrov <B.Aleksandrov@cnsys.bg>.
+
 2002-06-13  Christian Rose  <menthos@menthos.com>
 
 	* desk.pl, update.pl, update.sh, README.tools: Removed. These are
