@@ -1132,7 +1132,7 @@ get_ic_real (GtkIMContextXIM *context_xim)
        * stroke if both key pressed and released events are filtered.
        * (bugzilla #81759)
        */
-      gulong mask = 0;
+      guint32 mask = 0;
       XGetICValues (xic,
 		    XNFilterEvents, &mask,
 		    NULL);
