@@ -41,6 +41,7 @@ static void gtk_fixed_remove        (GtkContainer     *container,
 static void gtk_fixed_foreach       (GtkContainer     *container,
 				     GtkCallback      callback,
 				     gpointer         callback_data);
+static GtkType gtk_fixed_child_type (GtkContainer     *container);
 
 
 static GtkContainerClass *parent_class = NULL;
@@ -94,6 +95,13 @@ gtk_fixed_class_init (GtkFixedClass *class)
   container_class->add = gtk_fixed_add;
   container_class->remove = gtk_fixed_remove;
   container_class->foreach = gtk_fixed_foreach;
+  container_class->child_type = gtk_fixed_child_type;
+}
+
+static GtkType
+gtk_fixed_child_type (GtkContainer     *container)
+{
+  return GTK_TYPE_WIDGET;
 }
 
 static void

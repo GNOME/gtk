@@ -26,14 +26,18 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_TREE_ITEM(obj)          GTK_CHECK_CAST (obj, gtk_tree_item_get_type (), GtkTreeItem)
-#define GTK_TREE_ITEM_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_tree_item_get_type (), GtkTreeItemClass)
-#define GTK_IS_TREE_ITEM(obj)       GTK_CHECK_TYPE (obj, gtk_tree_item_get_type ())
+#define GTK_TYPE_TREE_ITEM              (gtk_tree_item_get_type ())
+#define GTK_TREE_ITEM(obj)              (GTK_CHECK_CAST ((obj), GTK_TYPE_TREE_ITEM, GtkTreeItem))
+#define GTK_TREE_ITEM_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE_ITEM, GtkTreeItemClass))
+#define GTK_IS_TREE_ITEM(obj)           (GTK_CHECK_TYPE ((obj), GTK_TYPE_TREE_ITEM))
+#define GTK_IS_TREE_ITEM_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE_ITEM))
 
-#define GTK_TREE_ITEM_SUBTREE(obj)  GTK_TREE_ITEM(obj)->subtree
+#define GTK_TREE_ITEM_SUBTREE(obj)      (GTK_TREE_ITEM(obj)->subtree)
+
 
 typedef struct _GtkTreeItem       GtkTreeItem;
 typedef struct _GtkTreeItemClass  GtkTreeItemClass;
@@ -60,7 +64,7 @@ struct _GtkTreeItemClass
 };
 
 
-guint      gtk_tree_item_get_type       (void);
+GtkType    gtk_tree_item_get_type       (void);
 GtkWidget* gtk_tree_item_new            (void);
 GtkWidget* gtk_tree_item_new_with_label (gchar       *label);
 void       gtk_tree_item_set_subtree    (GtkTreeItem *tree_item,

@@ -126,7 +126,9 @@ typedef enum
   GTK_ARG_READABLE	= 1 << 0,
   GTK_ARG_WRITABLE	= 1 << 1,
   GTK_ARG_CONSTRUCT	= 1 << 2,
-  GTK_ARG_MASK          = 0x03,
+  GTK_ARG_CHILD_ARG	= 1 << 3,
+  GTK_ARG_MASK          = 0x0f,
+
   /* aliases
    */
   GTK_ARG_READWRITE	= GTK_ARG_READABLE | GTK_ARG_WRITABLE
@@ -295,7 +297,7 @@ void	gtk_object_setv		(GtkObject	*object,
  * (*arg_flags) will be set to point to a newly allocated
  * guint array that holds the flags of the args.
  * It is the callers response to do a
- * g_free (returned_args); g_free (*acess_masks).
+ * g_free (returned_args); g_free (*arg_flags).
  */
 GtkArg* gtk_object_query_args	(GtkType	class_type,
 				 guint32	**arg_flags,

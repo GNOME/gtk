@@ -119,7 +119,6 @@ gtk_accel_label_set_arg (GtkAccelLabel	*accel_label,
       gtk_accel_label_set_accel_widget (accel_label, (GtkWidget*) GTK_VALUE_OBJECT (*arg));
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
       break;
     }
 }

@@ -101,7 +101,7 @@ gtk_check_menu_item_set_state (GtkCheckMenuItem *check_menu_item,
   g_return_if_fail (check_menu_item != NULL);
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item));
 
-  if (check_menu_item->active != state)
+  if (check_menu_item->active != (state != 0))
     gtk_menu_item_activate (GTK_MENU_ITEM (check_menu_item));
 }
 

@@ -92,10 +92,10 @@ static GtkItemClass *parent_class = NULL;
 static GtkContainerClass *container_class = NULL;
 static guint tree_item_signals[LAST_SIGNAL] = { 0 };
 
-guint
+GtkType
 gtk_tree_item_get_type (void)
 {
-  static guint tree_item_type = 0;
+  static GtkType tree_item_type = 0;
 
   if (!tree_item_type)
     {

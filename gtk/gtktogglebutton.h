@@ -29,9 +29,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_TOGGLE_BUTTON(obj)          GTK_CHECK_CAST (obj, gtk_toggle_button_get_type (), GtkToggleButton)
-#define GTK_TOGGLE_BUTTON_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_toggle_button_get_type (), GtkToggleButtonClass)
-#define GTK_IS_TOGGLE_BUTTON(obj)       GTK_CHECK_TYPE (obj, gtk_toggle_button_get_type ())
+#define GTK_TYPE_TOGGLE_BUTTON                  (gtk_toggle_button_get_type ())
+#define GTK_TOGGLE_BUTTON(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_TOGGLE_BUTTON, GtkToggleButton))
+#define GTK_TOGGLE_BUTTON_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TOGGLE_BUTTON, GtkToggleButtonClass))
+#define GTK_IS_TOGGLE_BUTTON(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_TOGGLE_BUTTON))
+#define GTK_IS_TOGGLE_BUTTON_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TOGGLE_BUTTON))
 
 
 typedef struct _GtkToggleButton       GtkToggleButton;
@@ -53,7 +55,7 @@ struct _GtkToggleButtonClass
 };
 
 
-guint      gtk_toggle_button_get_type       (void);
+GtkType    gtk_toggle_button_get_type       (void);
 GtkWidget* gtk_toggle_button_new            (void);
 GtkWidget* gtk_toggle_button_new_with_label (const gchar     *label);
 void       gtk_toggle_button_set_mode       (GtkToggleButton *toggle_button,

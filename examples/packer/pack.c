@@ -395,10 +395,10 @@ toggle_options (GtkWidget *widget, gpointer data)
                         pchild->anchor,
                         fillx | filly | expand, 
                         pchild->border_width, 
-                        pchild->padX, 
-                        pchild->padY, 
-                        pchild->iPadX, 
-                        pchild->iPadY);
+                        pchild->pad_x, 
+                        pchild->pad_y, 
+                        pchild->i_pad_x, 
+                        pchild->i_pad_y);
 }
 
 void 
@@ -425,10 +425,10 @@ toggle_anchor (GtkWidget *widget, gpointer data)
                            anchor,
                            pchild->options, 
                            pchild->border_width, 
-                           pchild->padX, 
-                           pchild->padY, 
-                           pchild->iPadX, 
-                           pchild->iPadY);
+                           pchild->pad_x, 
+                           pchild->pad_y, 
+                           pchild->i_pad_x, 
+                           pchild->i_pad_y);
 
        if (info->button_n != widget) {
            gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(info->button_n),0);
@@ -495,10 +495,10 @@ toggle_side (GtkWidget *widget, gpointer data)
                            pchild->anchor,
                            pchild->options, 
                            pchild->border_width, 
-                           pchild->padX, 
-                           pchild->padY, 
-                           pchild->iPadX, 
-                           pchild->iPadY);
+                           pchild->pad_x, 
+                           pchild->pad_y, 
+                           pchild->i_pad_x, 
+                           pchild->i_pad_y);
 
        if (info->button_top != widget) {
            gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(info->button_top),0);

@@ -27,10 +27,10 @@ static void gtk_radio_menu_item_draw_indicator (GtkCheckMenuItem      *check_men
 						GdkRectangle          *area);
 
 
-guint
+GtkType
 gtk_radio_menu_item_get_type (void)
 {
-  static guint radio_menu_item_type = 0;
+  static GtkType radio_menu_item_type = 0;
 
   if (!radio_menu_item_type)
     {

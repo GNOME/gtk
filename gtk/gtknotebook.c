@@ -141,15 +141,16 @@ static void gtk_notebook_menu_label_unparent (GtkWidget        *widget,
 static void gtk_notebook_menu_item_create    (GtkNotebook      *notebook, 
 					      GtkNotebookPage  *page,
 					      gint              position);
+static GtkType gtk_notebook_child_type       (GtkContainer     *container);
 
 
 static GtkContainerClass *parent_class = NULL;
 static guint notebook_signals[LAST_SIGNAL] = { 0 };
 
-guint
+GtkType
 gtk_notebook_get_type (void)
 {
-  static guint notebook_type = 0;
+  static GtkType notebook_type = 0;
 
   if (!notebook_type)
     {
@@ -219,8 +220,15 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   container_class->foreach = gtk_notebook_foreach;
   container_class->focus = gtk_notebook_focus;
   container_class->set_focus_child = gtk_notebook_set_focus_child;
+  container_class->child_type = gtk_notebook_child_type;
 
   class->switch_page = gtk_real_notebook_switch_page;
+}
+
+static GtkType
+gtk_notebook_child_type (GtkContainer     *container)
+{
+  return GTK_TYPE_WIDGET;
 }
 
 static void

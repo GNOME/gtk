@@ -249,6 +249,7 @@ static GtkEnumValue _gtk_arg_flags_values[] = {
   { GTK_ARG_READABLE, "GTK_ARG_READABLE", "readable" },
   { GTK_ARG_WRITABLE, "GTK_ARG_WRITABLE", "writable" },
   { GTK_ARG_CONSTRUCT, "GTK_ARG_CONSTRUCT", "construct" },
+  { GTK_ARG_CHILD_ARG, "GTK_ARG_CHILD_ARG", "child-arg" },
   { GTK_ARG_MASK, "GTK_ARG_MASK", "mask" },
   { GTK_ARG_READWRITE, "GTK_ARG_READWRITE", "readwrite" },
   { 0, NULL, NULL }
@@ -268,6 +269,14 @@ static GtkEnumValue _gtk_side_type_values[] = {
 };
 static GtkEnumValue _gtk_anchor_type_values[] = {
   { GTK_ANCHOR_CENTER, "GTK_ANCHOR_CENTER", "center" },
+  { GTK_ANCHOR_NORTH, "GTK_ANCHOR_NORTH", "north" },
+  { GTK_ANCHOR_NORTH_WEST, "GTK_ANCHOR_NORTH_WEST", "north-west" },
+  { GTK_ANCHOR_NORTH_EAST, "GTK_ANCHOR_NORTH_EAST", "north-east" },
+  { GTK_ANCHOR_SOUTH, "GTK_ANCHOR_SOUTH", "south" },
+  { GTK_ANCHOR_SOUTH_WEST, "GTK_ANCHOR_SOUTH_WEST", "south-west" },
+  { GTK_ANCHOR_SOUTH_EAST, "GTK_ANCHOR_SOUTH_EAST", "south-east" },
+  { GTK_ANCHOR_WEST, "GTK_ANCHOR_WEST", "west" },
+  { GTK_ANCHOR_EAST, "GTK_ANCHOR_EAST", "east" },
   { GTK_ANCHOR_N, "GTK_ANCHOR_N", "n" },
   { GTK_ANCHOR_NW, "GTK_ANCHOR_NW", "nw" },
   { GTK_ANCHOR_NE, "GTK_ANCHOR_NE", "ne" },

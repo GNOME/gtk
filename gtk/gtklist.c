@@ -73,6 +73,7 @@ static void gtk_list_marshal_signal (GtkObject	    *object,
 				     GtkSignalFunc   func,
 				     gpointer	     func_data,
 				     GtkArg	    *args);
+static GtkType gtk_list_child_type  (GtkContainer   *container);
 
 
 static GtkContainerClass *parent_class = NULL;
@@ -159,10 +160,17 @@ gtk_list_class_init (GtkListClass *class)
   container_class->add = gtk_list_add;
   container_class->remove = gtk_list_remove;
   container_class->foreach = gtk_list_foreach;
+  container_class->child_type = gtk_list_child_type;
 
   class->selection_changed = NULL;
   class->select_child = gtk_real_list_select_child;
   class->unselect_child = gtk_real_list_unselect_child;
+}
+
+static GtkType
+gtk_list_child_type (GtkContainer     *container)
+{
+  return GTK_TYPE_LIST_ITEM;
 }
 
 static void

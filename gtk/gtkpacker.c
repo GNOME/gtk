@@ -108,6 +108,7 @@ static void gtk_packer_remove        (GtkContainer   *container,
 static void gtk_packer_foreach       (GtkContainer   *container,
                                       GtkCallback     callback,
                                       gpointer        callback_data);
+static GtkType gtk_packer_child_type (GtkContainer   *container);
 
 
 static GtkPackerClass *parent_class;
@@ -156,10 +157,15 @@ gtk_packer_class_init (GtkPackerClass *klass)
   
   container_class->add = gtk_packer_container_add;
   container_class->remove = gtk_packer_remove;
-  container_class->foreach = gtk_packer_foreach; 
-  
+  container_class->foreach = gtk_packer_foreach;
+  container_class->child_type = gtk_packer_child_type;
 }
 
+static GtkType
+gtk_packer_child_type (GtkContainer   *container)
+{
+  return GTK_TYPE_WIDGET;
+}
 
 static void
 gtk_packer_init (GtkPacker *packer)
@@ -204,10 +210,10 @@ redo_defaults_children (GtkPacker *packer)
       if (child->use_default) 
 	{
 	  child->border_width = packer->default_border_width;
-	  child->padX = packer->default_padX;
-	  child->padY = packer->default_padY;
-	  child->iPadX = packer->default_iPadX;
-	  child->iPadY = packer->default_iPadY;
+	  child->pad_x = packer->default_pad_x;
+	  child->pad_y = packer->default_pad_y;
+	  child->i_pad_x = packer->default_i_pad_x;
+	  child->i_pad_y = packer->default_i_pad_y;
 	  gtk_widget_queue_resize(GTK_WIDGET(packer));
 	}
       list = g_list_next(list);
@@ -228,32 +234,36 @@ gtk_packer_set_default_border_width (GtkPacker *packer,
     }
 }
 void
-gtk_packer_set_default_pad(GtkPacker *packer, gint padX ,gint padY)
+gtk_packer_set_default_pad(GtkPacker *packer,
+			   guint      pad_x,
+			   guint      pad_y)
 {
   g_return_if_fail (packer != NULL);
   g_return_if_fail (GTK_IS_PACKER (packer));
   
-  if (packer->default_padX != padX ||
-      packer->default_padY != padY) 
+  if (packer->default_pad_x != pad_x ||
+      packer->default_pad_y != pad_y) 
     {
-      packer->default_padX = padX;;
-      packer->default_padY = padY;;
-      redo_defaults_children(packer);
+      packer->default_pad_x = pad_x;
+      packer->default_pad_y = pad_y;
+      redo_defaults_children (packer);
     }
 }
 
 void
-gtk_packer_set_default_ipad(GtkPacker *packer, gint iPadX ,gint iPadY)
+gtk_packer_set_default_ipad(GtkPacker *packer,
+			    guint      i_pad_x,
+			    guint      i_pad_y)
 {
   g_return_if_fail (packer != NULL);
   g_return_if_fail (GTK_IS_PACKER (packer));
   
-  if (packer->default_iPadX != iPadX ||
-      packer->default_iPadY != iPadY) {
+  if (packer->default_i_pad_x != i_pad_x ||
+      packer->default_i_pad_y != i_pad_y) {
     
-    packer->default_iPadX = iPadX;;
-    packer->default_iPadY = iPadY;;
-    redo_defaults_children(packer);
+    packer->default_i_pad_x = i_pad_x;
+    packer->default_i_pad_y = i_pad_y;
+    redo_defaults_children (packer);
   }
 }
 
@@ -276,6 +286,7 @@ gtk_packer_add_defaults (GtkPacker       *packer,
   g_return_if_fail (packer != NULL);
   g_return_if_fail (GTK_IS_PACKER (packer));
   g_return_if_fail (child != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (child));
   
   pchild = (GtkPackerChild*) g_malloc(sizeof(GtkPackerChild));
   
@@ -287,10 +298,10 @@ gtk_packer_add_defaults (GtkPacker       *packer,
   pchild->use_default = 1;
   
   pchild->border_width = packer->default_border_width;
-  pchild->padX = packer->default_padX;
-  pchild->padY = packer->default_padY;
-  pchild->iPadX = packer->default_iPadX;
-  pchild->iPadY = packer->default_iPadY;
+  pchild->pad_x = packer->default_pad_x;
+  pchild->pad_y = packer->default_pad_y;
+  pchild->i_pad_x = packer->default_i_pad_x;
+  pchild->i_pad_y = packer->default_i_pad_y;
   
   packer->children = g_list_append(packer->children, (gpointer) pchild);
   
@@ -319,10 +330,10 @@ gtk_packer_add (GtkPacker       *packer,
                 GtkAnchorType    anchor,
                 GtkPackerOptions options,
                 guint            border_width,
-                gint             padX,
-                gint             padY,
-                gint             iPadX,
-                gint             iPadY)
+                guint            pad_x,
+                guint            pad_y,
+                guint            i_pad_x,
+                guint            i_pad_y)
 {
   GtkPackerChild *pchild;
   
@@ -341,10 +352,10 @@ gtk_packer_add (GtkPacker       *packer,
   pchild->use_default = 0;
   
   pchild->border_width = border_width;
-  pchild->padX = padX;
-  pchild->padY = padY;
-  pchild->iPadX = iPadX;
-  pchild->iPadY = iPadY;
+  pchild->pad_x = pad_x;
+  pchild->pad_y = pad_y;
+  pchild->i_pad_x = i_pad_x;
+  pchild->i_pad_y = i_pad_y;
   
   packer->children = g_list_append(packer->children, (gpointer) pchild);
   
@@ -373,10 +384,10 @@ gtk_packer_configure (GtkPacker       *packer,
                       GtkAnchorType    anchor,
                       GtkPackerOptions options,
                       guint            border_width,
-                      gint             padX,
-                      gint             padY,
-                      gint             ipadX,
-                      gint             ipadY)
+                      guint            pad_x,
+                      guint            pad_y,
+                      guint            i_pad_x,
+                      guint            i_pad_y)
 {
   GList *list;
   GtkPackerChild *pchild;
@@ -398,10 +409,10 @@ gtk_packer_configure (GtkPacker       *packer,
 	  pchild->use_default = 0;
 	  
 	  pchild->border_width = border_width;
-	  pchild->padX = padX;
-	  pchild->padY = padY;
-	  pchild->iPadX = ipadX;
-	  pchild->iPadY = ipadY;
+	  pchild->pad_x = pad_x;
+	  pchild->pad_y = pad_y;
+	  pchild->i_pad_x = i_pad_x;
+	  pchild->i_pad_y = i_pad_y;
 	  
 	  if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (packer))
 	    gtk_widget_queue_resize (child);
@@ -599,22 +610,22 @@ gtk_packer_size_request (GtkWidget *widget, GtkRequisition *requisition)
 	      maxWidth = MAX (maxWidth,
 			      (child->widget->requisition.width +
 			       2 * child->border_width +
-			       child->padX + child->iPadX +
+			       child->pad_x + child->i_pad_x +
 			       width));
 	      height += (child->widget->requisition.height +
 			 2 * child->border_width +
-			 child->padY + child->iPadY);
+			 child->pad_y + child->i_pad_y);
             } 
 	  else 
 	    {
 	      maxHeight = MAX (maxHeight,
 			       (child->widget->requisition.height +
 				2 * child->border_width +
-				child->padY + child->iPadY +
+				child->pad_y + child->i_pad_y +
 				height));
 	      width += (child->widget->requisition.width +
 			2 * child->border_width +
-			child->padX + child->iPadX);
+			child->pad_x + child->i_pad_x);
             }
         }
 
@@ -643,8 +654,8 @@ YExpansion (GList *children, gint cavityHeight)
       widget = child->widget;
       childHeight = (widget->requisition.height +
 		     2 * child->border_width +
-		     child->iPadY +
-		     child->padY);
+		     child->i_pad_y +
+		     child->pad_y);
       if ((child->side == GTK_SIDE_LEFT) || (child->side == GTK_SIDE_RIGHT)) 
 	{
 	  curExpand = (cavityHeight - childHeight)/numExpand;
@@ -683,8 +694,8 @@ XExpansion (GList *children, gint cavityWidth)
       widget = child->widget;
       childWidth = (widget->requisition.width +
 		    2 * child->border_width +
-		    child->iPadX +
-		    child->padX);
+		    child->i_pad_x +
+		    child->pad_x);
 
       if ((child->side == GTK_SIDE_TOP) || (child->side == GTK_SIDE_BOTTOM)) 
 	{
@@ -741,8 +752,8 @@ gtk_packer_size_allocate (GtkWidget *widget, GtkAllocation  *allocation)
 	  frameWidth = cavityWidth;
 	  frameHeight = (child->widget->requisition.height +
 			 2 * child->border_width +
-			 child->padY +
-			 child->iPadY);
+			 child->pad_y +
+			 child->i_pad_y);
 	  if (child->options & GTK_PACK_EXPAND)
 	    frameHeight += YExpansion(list, cavityHeight);
 	  cavityHeight -= frameHeight;
@@ -767,8 +778,8 @@ gtk_packer_size_allocate (GtkWidget *widget, GtkAllocation  *allocation)
 	  frameHeight = cavityHeight;
 	  frameWidth = (child->widget->requisition.width +
 			2 * child->border_width +
-			child->padX +
-			child->iPadX);
+			child->pad_x +
+			child->i_pad_x);
 	  if (child->options & GTK_PACK_EXPAND)
 	    frameWidth += XExpansion(list, cavityWidth);
 	  cavityWidth -= frameWidth;
@@ -788,18 +799,18 @@ gtk_packer_size_allocate (GtkWidget *widget, GtkAllocation  *allocation)
             }
         }
       
-      borderX = child->padX + 2 * child->border_width;
-      borderY = child->padY + 2 * child->border_width;
+      borderX = child->pad_x + 2 * child->border_width;
+      borderY = child->pad_y + 2 * child->border_width;
       
       width = (child->widget->requisition.width +
 	       2 * child->border_width +
-	       child->iPadX);
+	       child->i_pad_x);
       if ((child->options & GTK_FILL_X) || (width > (frameWidth - borderX)))
 	width = frameWidth - borderX;
 
       height = (child->widget->requisition.height +
 		2 * child->border_width +
-		child->iPadY);
+		child->i_pad_y);
       if ((child->options & GTK_FILL_Y) || (height > (frameHeight - borderY)))
 	height = frameHeight - borderY;
       

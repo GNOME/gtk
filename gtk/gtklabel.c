@@ -110,7 +110,6 @@ gtk_label_set_arg (GtkLabel	  *label,
       gtk_label_set_justify (label, GTK_VALUE_ENUM (*arg));
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
       break;
     }
 }

@@ -26,12 +26,15 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_PANED(obj)          GTK_CHECK_CAST (obj, gtk_paned_get_type (), GtkPaned)
-#define GTK_PANED_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_paned_get_type (), GtkPanedClass)
-#define GTK_IS_PANED(obj)       GTK_CHECK_TYPE (obj, gtk_paned_get_type ())
+#define GTK_TYPE_PANED                  (gtk_paned_get_type ())
+#define GTK_PANED(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_PANED, GtkPaned))
+#define GTK_PANED_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_PANED, GtkPanedClass))
+#define GTK_IS_PANED(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_PANED))
+#define GTK_IS_PANED_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PANED))
 
 
 typedef struct _GtkPaned       GtkPaned;
@@ -40,22 +43,22 @@ typedef struct _GtkPanedClass  GtkPanedClass;
 struct _GtkPaned
 {
   GtkContainer container;
-
+  
   GtkWidget *child1;
   GtkWidget *child2;
-
+  
   GdkWindow *handle;
   GdkCursor *cursor;
   GdkRectangle groove_rectangle;
   GdkGC *xor_gc;
-
+  
   guint16 handle_size;
   guint16 gutter_size;
   
   gint child1_size;
   guint position_set : 1;
   guint in_drag : 1;
-
+  
   gint16 handle_xpos;
   gint16 handle_ypos;
 };
@@ -66,11 +69,15 @@ struct _GtkPanedClass
 };
 
 
-guint gtk_paned_get_type   (void);
-void gtk_paned_add1 (GtkPaned *paned, GtkWidget *child);
-void gtk_paned_add2 (GtkPaned *paned, GtkWidget *child);
-void gtk_paned_handle_size (GtkPaned *paned, guint16 size);
-void gtk_paned_gutter_size (GtkPaned *paned, guint16 size);
+GtkType gtk_paned_get_type    (void);
+void    gtk_paned_add1        (GtkPaned  *paned,
+			       GtkWidget *child);
+void    gtk_paned_add2        (GtkPaned  *paned,
+			       GtkWidget *child);
+void    gtk_paned_handle_size (GtkPaned *paned,
+			       guint16   size);
+void    gtk_paned_gutter_size (GtkPaned *paned,
+			       guint16   size);
 
 #ifdef __cplusplus
 }

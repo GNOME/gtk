@@ -46,10 +46,10 @@ static void gtk_real_check_button_draw_indicator (GtkCheckButton      *check_but
 static GtkToggleButtonClass *parent_class = NULL;
 
 
-guint
+GtkType
 gtk_check_button_get_type (void)
 {
-  static guint check_button_type = 0;
+  static GtkType check_button_type = 0;
 
   if (!check_button_type)
     {

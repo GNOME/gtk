@@ -261,7 +261,6 @@ gtk_window_set_arg (GtkWindow  *window,
       gtk_window_position (window, GTK_VALUE_ENUM (*arg));
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
       break;
     }
 }

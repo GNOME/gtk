@@ -26,12 +26,15 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_LIST_ITEM(obj)          GTK_CHECK_CAST (obj, gtk_list_item_get_type (), GtkListItem)
-#define GTK_LIST_ITEM_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_list_item_get_type (), GtkListItemClass)
-#define GTK_IS_LIST_ITEM(obj)       GTK_CHECK_TYPE (obj, gtk_list_item_get_type ())
+#define GTK_TYPE_LIST_ITEM              (gtk_list_item_get_type ())
+#define GTK_LIST_ITEM(obj)              (GTK_CHECK_CAST ((obj), GTK_TYPE_LIST_ITEM, GtkListItem))
+#define GTK_LIST_ITEM_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_LIST_ITEM, GtkListItemClass))
+#define GTK_IS_LIST_ITEM(obj)           (GTK_CHECK_TYPE ((obj), GTK_TYPE_LIST_ITEM))
+#define GTK_IS_LIST_ITEM_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LIST_ITEM))
 
 
 typedef struct _GtkListItem       GtkListItem;
@@ -48,7 +51,7 @@ struct _GtkListItemClass
 };
 
 
-guint      gtk_list_item_get_type       (void);
+GtkType    gtk_list_item_get_type       (void);
 GtkWidget* gtk_list_item_new            (void);
 GtkWidget* gtk_list_item_new_with_label (const gchar      *label);
 void       gtk_list_item_select         (GtkListItem      *list_item);

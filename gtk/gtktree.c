@@ -69,14 +69,15 @@ static void gtk_tree_marshal_signal (GtkObject      *object,
 				     GtkSignalFunc   func,
 				     gpointer        func_data,
 				     GtkArg         *args);
+static GtkType gtk_tree_child_type  (GtkContainer   *container);
 
 static GtkContainerClass *parent_class = NULL;
 static guint tree_signals[LAST_SIGNAL] = { 0 };
 
-guint
+GtkType
 gtk_tree_get_type (void)
 {
-  static guint tree_type = 0;
+  static GtkType tree_type = 0;
 
   if (!tree_type)
     {
@@ -153,10 +154,17 @@ gtk_tree_class_init (GtkTreeClass *class)
   container_class->remove = 
              (void (*)(GtkContainer *, GtkWidget *)) gtk_tree_remove_item;
   container_class->foreach = gtk_tree_foreach;
+  container_class->child_type = gtk_tree_child_type;
 
   class->selection_changed = NULL;
   class->select_child = gtk_real_tree_select_child;
   class->unselect_child = gtk_real_tree_unselect_child;
+}
+
+static GtkType
+gtk_tree_child_type (GtkContainer     *container)
+{
+  return GTK_TYPE_TREE_ITEM;
 }
 
 static void

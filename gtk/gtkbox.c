@@ -24,6 +24,15 @@ enum {
   ARG_HOMOGENEOUS
 };
 
+enum {
+  CHILD_ARG_0,
+  CHILD_ARG_EXPAND,
+  CHILD_ARG_FILL,
+  CHILD_ARG_PADDING,
+  CHILD_ARG_PACK_TYPE,
+  CHILD_ARG_POSITION
+};
+
 static void gtk_box_class_init (GtkBoxClass    *klass);
 static void gtk_box_init       (GtkBox         *box);
 static void gtk_box_get_arg    (GtkBox         *box,
@@ -45,7 +54,16 @@ static void gtk_box_remove     (GtkContainer   *container,
 static void gtk_box_foreach    (GtkContainer   *container,
 			        GtkCallback     callback,
 			        gpointer        callback_data);
-
+static void gtk_box_set_child_arg (GtkContainer   *container,
+				   GtkWidget      *child,
+				   GtkArg         *arg,
+				   guint           arg_id);
+static void gtk_box_get_child_arg (GtkContainer   *container,
+				   GtkWidget      *child,
+				   GtkArg         *arg,
+				   guint           arg_id);
+static GtkType gtk_box_child_type (GtkContainer   *container);
+     
 
 static GtkContainerClass *parent_class = NULL;
 
@@ -89,6 +107,11 @@ gtk_box_class_init (GtkBoxClass *class)
 
   gtk_object_add_arg_type ("GtkBox::spacing", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_SPACING);
   gtk_object_add_arg_type ("GtkBox::homogeneous", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HOMOGENEOUS);
+  gtk_container_add_child_arg_type ("GtkBox::expand", GTK_TYPE_BOOL, GTK_ARG_READWRITE, CHILD_ARG_EXPAND);
+  gtk_container_add_child_arg_type ("GtkBox::fill", GTK_TYPE_BOOL, GTK_ARG_READWRITE, CHILD_ARG_FILL);
+  gtk_container_add_child_arg_type ("GtkBox::padding", GTK_TYPE_ULONG, GTK_ARG_READWRITE, CHILD_ARG_PADDING);
+  gtk_container_add_child_arg_type ("GtkBox::pack_type", GTK_TYPE_PACK_TYPE, GTK_ARG_READWRITE, CHILD_ARG_PACK_TYPE);
+  gtk_container_add_child_arg_type ("GtkBox::position", GTK_TYPE_LONG, GTK_ARG_READWRITE, CHILD_ARG_POSITION);
 
   widget_class->map = gtk_box_map;
   widget_class->unmap = gtk_box_unmap;
@@ -98,6 +121,9 @@ gtk_box_class_init (GtkBoxClass *class)
   container_class->add = gtk_box_add;
   container_class->remove = gtk_box_remove;
   container_class->foreach = gtk_box_foreach;
+  container_class->child_type = gtk_box_child_type;
+  container_class->set_child_arg = gtk_box_set_child_arg;
+  container_class->get_child_arg = gtk_box_get_child_arg;
 }
 
 static void
@@ -124,7 +150,6 @@ gtk_box_set_arg (GtkBox       *box,
       gtk_box_set_homogeneous (box, GTK_VALUE_BOOL (*arg));
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
       break;
     }
 }
@@ -148,12 +173,135 @@ gtk_box_get_arg (GtkBox       *box,
     }
 }
 
+static GtkType
+gtk_box_child_type	(GtkContainer   *container)
+{
+  return GTK_TYPE_WIDGET;
+}
+
+static void
+gtk_box_set_child_arg (GtkContainer   *container,
+		       GtkWidget      *child,
+		       GtkArg         *arg,
+		       guint           arg_id)
+{
+  gboolean expand = 0;
+  gboolean fill = 0;
+  guint padding = 0;
+  GtkPackType pack_type = 0;
+
+  if (arg_id != CHILD_ARG_POSITION)
+    gtk_box_query_child_packing (GTK_BOX (container),
+				 child,
+				 &expand,
+				 &fill,
+				 &padding,
+				 &pack_type);
+  
+  switch (arg_id)
+    {
+    case CHILD_ARG_EXPAND:
+      gtk_box_set_child_packing (GTK_BOX (container),
+				 child,
+				 GTK_VALUE_BOOL (*arg),
+				 fill,
+				 padding,
+				 pack_type);
+      break;
+    case CHILD_ARG_FILL:
+      gtk_box_set_child_packing (GTK_BOX (container),
+				 child,
+				 expand,
+				 GTK_VALUE_BOOL (*arg),
+				 padding,
+				 pack_type);
+      break;
+    case CHILD_ARG_PADDING:
+      gtk_box_set_child_packing (GTK_BOX (container),
+				 child,
+				 expand,
+				 fill,
+				 GTK_VALUE_ULONG (*arg),
+				 pack_type);
+      break;
+    case CHILD_ARG_PACK_TYPE:
+      gtk_box_set_child_packing (GTK_BOX (container),
+				 child,
+				 expand,
+				 fill,
+				 padding,
+				 GTK_VALUE_ENUM (*arg));
+      break;
+    case CHILD_ARG_POSITION:
+      gtk_box_reorder_child (GTK_BOX (container),
+			     child,
+			     GTK_VALUE_LONG (*arg));
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+gtk_box_get_child_arg (GtkContainer   *container,
+		       GtkWidget      *child,
+		       GtkArg         *arg,
+		       guint           arg_id)
+{
+  gboolean expand = 0;
+  gboolean fill = 0;
+  guint padding = 0;
+  GtkPackType pack_type = 0;
+  GList *list;
+
+  if (arg_id != CHILD_ARG_POSITION)
+    gtk_box_query_child_packing (GTK_BOX (container),
+				 child,
+				 &expand,
+				 &fill,
+				 &padding,
+				 &pack_type);
+  
+  switch (arg_id)
+    {
+    case CHILD_ARG_EXPAND:
+      GTK_VALUE_BOOL (*arg) = expand;
+      break;
+    case CHILD_ARG_FILL:
+      GTK_VALUE_BOOL (*arg) = fill;
+      break;
+    case CHILD_ARG_PADDING:
+      GTK_VALUE_ULONG (*arg) = padding;
+      break;
+    case CHILD_ARG_PACK_TYPE:
+      GTK_VALUE_ENUM (*arg) = pack_type;
+      break;
+    case CHILD_ARG_POSITION:
+      GTK_VALUE_LONG (*arg) = 0;
+      for (list = GTK_BOX (container)->children; list; list = list->next)
+	{
+	  GtkBoxChild *child_entry;
+
+	  child_entry = list->data;
+	  if (child_entry->widget == child)
+	    break;
+	  GTK_VALUE_LONG (*arg)++;
+	}
+      if (!list)
+	GTK_VALUE_LONG (*arg) = -1;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
+}
+
 void
 gtk_box_pack_start (GtkBox    *box,
 		    GtkWidget *child,
-		    gint       expand,
-		    gint       fill,
-		    gint       padding)
+		    gboolean   expand,
+		    gboolean   fill,
+		    guint      padding)
 {
   GtkBoxChild *child_info;
 
@@ -191,9 +339,9 @@ gtk_box_pack_start (GtkBox    *box,
 void
 gtk_box_pack_end (GtkBox    *box,
 		  GtkWidget *child,
-		  gint       expand,
-		  gint       fill,
-		  gint       padding)
+		  gboolean   expand,
+		  gboolean   fill,
+		  guint      padding)
 {
   GtkBoxChild *child_info;
 
@@ -251,8 +399,8 @@ gtk_box_pack_end_defaults (GtkBox    *box,
 }
 
 void
-gtk_box_set_homogeneous (GtkBox *box,
-			 gint    homogeneous)
+gtk_box_set_homogeneous (GtkBox  *box,
+			 gboolean homogeneous)
 {
   g_return_if_fail (box != NULL);
   g_return_if_fail (GTK_IS_BOX (box));
@@ -281,7 +429,7 @@ gtk_box_set_spacing (GtkBox *box,
 void
 gtk_box_reorder_child (GtkBox                   *box,
 		       GtkWidget                *child,
-		       guint                    pos)
+		       gint                      position)
 {
   GList *list;
 
@@ -313,13 +461,13 @@ gtk_box_reorder_child (GtkBox                   *box,
 	box->children = list->next;
 
       tmp_list = box->children;
-      while (pos && tmp_list->next)
+      while (position && tmp_list->next)
 	{
-	  pos--;
+	  position--;
 	  tmp_list = tmp_list->next;
 	}
 
-      if (pos)
+      if (position)
 	{
 	  tmp_list->next = list;
 	  list->prev = tmp_list;
@@ -344,9 +492,9 @@ gtk_box_reorder_child (GtkBox                   *box,
 void
 gtk_box_query_child_packing (GtkBox             *box,
 			     GtkWidget          *child,
-			     gint               *expand,
-			     gint               *fill,
-			     gint               *padding,
+			     gboolean           *expand,
+			     gboolean           *fill,
+			     guint              *padding,
 			     GtkPackType        *pack_type)
 {
   GList *list;
@@ -382,10 +530,10 @@ gtk_box_query_child_packing (GtkBox             *box,
 void
 gtk_box_set_child_packing (GtkBox               *box,
 			   GtkWidget            *child,
-			   gint                 expand,
-			   gint                 fill,
-			   gint                 padding,
-			   GtkPackType          pack_type)
+			   gboolean              expand,
+			   gboolean              fill,
+			   guint                 padding,
+			   GtkPackType           pack_type)
 {
   GList *list;
   GtkBoxChild *child_info;
@@ -415,7 +563,7 @@ gtk_box_set_child_packing (GtkBox               *box,
 	child_info->pack = GTK_PACK_START;
 
       if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (box))
-	gtk_widget_queue_resize (child);
+	gtk_widget_queue_resize (GTK_WIDGET (box));
     }
 }
 

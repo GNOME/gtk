@@ -1,3 +1,87 @@
+Tue Jun 16 06:29:57 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcheckmenuitem.c (gtk_check_menu_item_set_state): check for
+	!= 0 on the argument.
+
+	* gtk/gtktable.h: 
+	* gtk/gtktable.c: new function gtk_table_resize() which allowes
+ 	shrinking and expanding of tables. implementation of widget arguments
+	and child arguments. many signedness corrections.
+
+Mon Jun 15 04:15:03 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkbox.c (gtk_box_set_child_packing): queue the resize for the box
+	not only the child, otherwise we might end up taking away other
+ 	childrens space after the resize.
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_parse_menu_path): if we parse
+	an unknown menu path from any source, that path must always be flagged
+ 	as "modified", since we don't really know whether it has its default
+	value or not.
+
+	* gtk/gtktree.c:
+	* gtk/gtkpacker.c:
+	* gtk/gtknotebook.c:
+	* gtk/gtkmenushell.c:
+	* gtk/gtklist.c:
+	* gtk/gtkpaned.c:
+	* gtk/gtkfixed.c: 
+	* gtk/gtkbutton.c: implement gtk_*_child_type functions.
+
+	* gtk/gtkbox.h: 
+	* gtk/gtkbox.c: type corrections for expand, fill, padding and pack_type
+	arguments. implemented child arguments.
+
+	* more GtkType and macro fixups.
+
+Sun Jun 14 16:30:02 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcheckbutton.h: GtkType and macro fixups.
+
+	* gtk/gtkclist.h: exported the prototypes for gtk_clist_get_vadjustment
+	and gtk_clist_get_hadjustment.
+
+	* gtk/gtkcontainer.c:
+ 	implementation of children arguments, new class member functions
+	(child_type), (get_child_arg) and (set_child_arg) plus a new field
+	n_child_args.
+	(gtk_container_child_type): new function which returns the type of a
+ 	child that the container expects for its next addition.
+	(gtk_container_add_child_arg_type): new function to introduce a new
+ 	child argument at class creation time.
+	(gtk_container_query_child_args): new function to query all child
+ 	arguments that are supported by a container class.
+	(gtk_container_child_arg_getv): new fucntion to retrive the value of a
+ 	child argument.
+	(gtk_container_child_arg_setv): new function to set a child argument for
+	a certain container and child combination.
+	(gtk_container_add_with_args):
+	(gtk_container_add_with_argv): new functions to feature addition of a
+ 	new child in combination with the setting of certain child arguments.
+
+	* gtk/gtktypeuitils.c (gtk_type_class_init): feature initialization of
+ 	GtkContainerClass.n_child_args, similar to the GtkObjectClass members.
+	this should really be done through class cretion hooks some day.
+
+	* gtk/gtkcontainer.c: changed type of border_width from gint16 to
+ 	guint : 16.
+
+	* gtk/gtkpacker.h:
+	* gtk/gtkpacker.c: renamed all PadX and PadY to pad_x and pad_y to
+ 	follow the gtk convention for lower case variable names (important
+	for language wrappers and widget arguments), and made them guint : 16.
+
+	* examples/packer/pack.c: adaptions for the case converted GtkPacker
+ 	fields.
+
+Fri Jun 12 16:33:23 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_parse_rc_scanner): do not
+	change the character pair for single line comments.
+	(gtk_item_factory_parse_rc): use the cpair_comment_signle specified in
+	GtkItemFactoryClass.
+	(gtk_item_factory_parse_rc_string): likewise.
+
 Mon Jun 15 23:39:44 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkfontsel.c (gtk_font_selection_dialog_init): Moved font

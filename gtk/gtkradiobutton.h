@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -26,21 +26,24 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_RADIO_BUTTON(obj)          GTK_CHECK_CAST (obj, gtk_radio_button_get_type (), GtkRadioButton)
-#define GTK_RADIO_BUTTON_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_radio_button_get_type (), GtkRadioButtonClass)
-#define GTK_IS_RADIO_BUTTON(obj)       GTK_CHECK_TYPE (obj, gtk_radio_button_get_type ())
+#define GTK_TYPE_RADIO_BUTTON		       (gtk_radio_button_get_type ())
+#define GTK_RADIO_BUTTON(obj)		       (GTK_CHECK_CAST ((obj), GTK_TYPE_RADIO_BUTTON, GtkRadioButton))
+#define GTK_RADIO_BUTTON_CLASS(klass)	       (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_RADIO_BUTTON, GtkRadioButtonClass))
+#define GTK_IS_RADIO_BUTTON(obj)	       (GTK_CHECK_TYPE ((obj), GTK_TYPE_RADIO_BUTTON))
+#define GTK_IS_RADIO_BUTTON_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_RADIO_BUTTON))
 
 
-typedef struct _GtkRadioButton       GtkRadioButton;
+typedef struct _GtkRadioButton	     GtkRadioButton;
 typedef struct _GtkRadioButtonClass  GtkRadioButtonClass;
 
 struct _GtkRadioButton
 {
   GtkCheckButton check_button;
-
+  
   GSList *group;
 };
 
@@ -50,16 +53,16 @@ struct _GtkRadioButtonClass
 };
 
 
-guint       gtk_radio_button_get_type        (void);
-GtkWidget*  gtk_radio_button_new             (GSList         *group);
+GtkType	    gtk_radio_button_get_type	     (void);
+GtkWidget*  gtk_radio_button_new	     (GSList	     *group);
 GtkWidget*  gtk_radio_button_new_from_widget (GtkRadioButton *group);
-GtkWidget*  gtk_radio_button_new_with_label  (GSList         *group,
+GtkWidget*  gtk_radio_button_new_with_label  (GSList	     *group,
 					      const gchar    *label);
 GtkWidget*  gtk_radio_button_new_with_label_from_widget (GtkRadioButton *group,
-							 const gchar    *label);
-GSList*     gtk_radio_button_group           (GtkRadioButton *radio_button);
-void        gtk_radio_button_set_group       (GtkRadioButton *radio_button,
-					      GSList         *group);
+							 const gchar	*label);
+GSList*	    gtk_radio_button_group	     (GtkRadioButton *radio_button);
+void	    gtk_radio_button_set_group	     (GtkRadioButton *radio_button,
+					      GSList	     *group);
 
 
 #ifdef __cplusplus

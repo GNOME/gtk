@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -26,12 +26,15 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_RADIO_MENU_ITEM(obj)          GTK_CHECK_CAST (obj, gtk_radio_menu_item_get_type (), GtkRadioMenuItem)
-#define GTK_RADIO_MENU_ITEM_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_radio_menu_item_get_type (), GtkRadioMenuItemClass)
-#define GTK_IS_RADIO_MENU_ITEM(obj)       GTK_CHECK_TYPE (obj, gtk_radio_menu_item_get_type ())
+#define GTK_TYPE_RADIO_MENU_ITEM	      (gtk_radio_menu_item_get_type ())
+#define GTK_RADIO_MENU_ITEM(obj)	      (GTK_CHECK_CAST ((obj), GTK_TYPE_RADIO_MENU_ITEM, GtkRadioMenuItem))
+#define GTK_RADIO_MENU_ITEM_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_RADIO_MENU_ITEM, GtkRadioMenuItemClass))
+#define GTK_IS_RADIO_MENU_ITEM(obj)	      (GTK_CHECK_TYPE ((obj), GTK_TYPE_RADIO_MENU_ITEM))
+#define GTK_IS_RADIO_MENU_ITEM_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_RADIO_MENU_ITEM))
 
 
 typedef struct _GtkRadioMenuItem       GtkRadioMenuItem;
@@ -40,7 +43,7 @@ typedef struct _GtkRadioMenuItemClass  GtkRadioMenuItemClass;
 struct _GtkRadioMenuItem
 {
   GtkCheckMenuItem check_menu_item;
-
+  
   GSList *group;
 };
 
@@ -50,13 +53,13 @@ struct _GtkRadioMenuItemClass
 };
 
 
-guint      gtk_radio_menu_item_get_type       (void);
-GtkWidget* gtk_radio_menu_item_new            (GSList           *group);
-GtkWidget* gtk_radio_menu_item_new_with_label (GSList           *group,
-					       const gchar      *label);
-GSList*    gtk_radio_menu_item_group          (GtkRadioMenuItem *radio_menu_item);
-void       gtk_radio_menu_item_set_group      (GtkRadioMenuItem *radio_menu_item,
-					       GSList           *group);
+GtkType    gtk_radio_menu_item_get_type	      (void);
+GtkWidget* gtk_radio_menu_item_new	      (GSList		*group);
+GtkWidget* gtk_radio_menu_item_new_with_label (GSList		*group,
+					       const gchar	*label);
+GSList*	   gtk_radio_menu_item_group	      (GtkRadioMenuItem *radio_menu_item);
+void	   gtk_radio_menu_item_set_group      (GtkRadioMenuItem *radio_menu_item,
+					       GSList		*group);
 
 
 #ifdef __cplusplus

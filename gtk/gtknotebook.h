@@ -26,12 +26,15 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_NOTEBOOK(obj)          GTK_CHECK_CAST (obj, gtk_notebook_get_type (), GtkNotebook)
-#define GTK_NOTEBOOK_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_notebook_get_type (), GtkNotebookClass)
-#define GTK_IS_NOTEBOOK(obj)       GTK_CHECK_TYPE (obj, gtk_notebook_get_type ())
+#define GTK_TYPE_NOTEBOOK                  (gtk_notebook_get_type ())
+#define GTK_NOTEBOOK(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_NOTEBOOK, GtkNotebook))
+#define GTK_NOTEBOOK_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_NOTEBOOK, GtkNotebookClass))
+#define GTK_IS_NOTEBOOK(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_NOTEBOOK))
+#define GTK_IS_NOTEBOOK_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_NOTEBOOK))
 
 
 typedef struct _GtkNotebook       GtkNotebook;
@@ -41,19 +44,19 @@ typedef struct _GtkNotebookPage   GtkNotebookPage;
 struct _GtkNotebook
 {
   GtkContainer container;
-
+  
   GtkNotebookPage *cur_page;
   GList *children;
   GList *first_tab;
   GList *focus_tab;
-
+  
   GtkWidget *menu;
   GdkWindow *panel;
-
+  
   guint32 timer;
-
+  
   gint16 tab_border;
-
+  
   guint show_tabs : 1;
   guint show_border : 1;
   guint tab_pos : 2;
@@ -68,7 +71,7 @@ struct _GtkNotebook
 struct _GtkNotebookClass
 {
   GtkContainerClass parent_class;
-
+  
   void (* switch_page)       (GtkNotebook *notebook,
                               GtkNotebookPage *page,
 			      gint page_num);
@@ -86,7 +89,7 @@ struct _GtkNotebookPage
 };
 
 
-guint      gtk_notebook_get_type        (void);
+GtkType    gtk_notebook_get_type        (void);
 GtkWidget* gtk_notebook_new             (void);
 void       gtk_notebook_append_page       (GtkNotebook      *notebook,
 				           GtkWidget        *child,

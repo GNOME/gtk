@@ -831,7 +831,6 @@ gtk_widget_set_arg (GtkWidget	*widget,
       gtk_widget_set_extension_events (widget, GTK_VALUE_FLAGS (*arg));
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
       break;
     }
 }

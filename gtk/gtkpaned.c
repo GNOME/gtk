@@ -34,6 +34,7 @@ static void gtk_paned_remove     (GtkContainer   *container,
 static void gtk_paned_foreach    (GtkContainer   *container,
 			        GtkCallback     callback,
 			        gpointer        callback_data);
+static GtkType gtk_paned_child_type (GtkContainer *container);
 
 
 static GtkContainerClass *parent_class = NULL;
@@ -85,6 +86,16 @@ gtk_paned_class_init (GtkPanedClass *class)
   container_class->add = gtk_paned_add;
   container_class->remove = gtk_paned_remove;
   container_class->foreach = gtk_paned_foreach;
+  container_class->child_type = gtk_paned_child_type;
+}
+
+static GtkType
+gtk_paned_child_type (GtkContainer *container)
+{
+  if (!GTK_PANED (container)->child1 || !GTK_PANED (container)->child2)
+    return GTK_TYPE_WIDGET;
+  else
+    return GTK_TYPE_NONE;
 }
 
 static void

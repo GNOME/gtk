@@ -238,7 +238,6 @@ gtk_tips_query_set_arg (GtkTipsQuery           *tips_query,
       gtk_tips_query_set_labels (tips_query, tips_query->label_inactive, GTK_VALUE_STRING (*arg));
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
       break;
     }
 }

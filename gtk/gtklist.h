@@ -27,12 +27,15 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_LIST(obj)	       (GTK_CHECK_CAST (obj, gtk_list_get_type (), GtkList))
-#define GTK_LIST_CLASS(klass)  (GTK_CHECK_CLASS_CAST (klass, gtk_list_get_type (), GtkListClass))
-#define GTK_IS_LIST(obj)       (GTK_CHECK_TYPE (obj, gtk_list_get_type ()))
+#define GTK_TYPE_LIST                  (gtk_list_get_type ())
+#define GTK_LIST(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_LIST, GtkList))
+#define GTK_LIST_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_LIST, GtkListClass))
+#define GTK_IS_LIST(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_LIST))
+#define GTK_IS_LIST_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LIST))
 
 
 typedef struct _GtkList	      GtkList;

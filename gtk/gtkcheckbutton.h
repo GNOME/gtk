@@ -29,9 +29,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_CHECK_BUTTON(obj)          GTK_CHECK_CAST (obj, gtk_check_button_get_type (), GtkCheckButton)
-#define GTK_CHECK_BUTTON_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_check_button_get_type (), GtkCheckButtonClass)
-#define GTK_IS_CHECK_BUTTON(obj)       GTK_CHECK_TYPE (obj, gtk_check_button_get_type ())
+#define GTK_TYPE_CHECK_BUTTON                  (gtk_check_button_get_type ())
+#define GTK_CHECK_BUTTON(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_CHECK_BUTTON, GtkCheckButton))
+#define GTK_CHECK_BUTTON_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CHECK_BUTTON, GtkCheckButtonClass))
+#define GTK_IS_CHECK_BUTTON(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_CHECK_BUTTON))
+#define GTK_IS_CHECK_BUTTON_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CHECK_BUTTON))
 
 
 typedef struct _GtkCheckButton       GtkCheckButton;
@@ -54,7 +56,7 @@ struct _GtkCheckButtonClass
 };
 
 
-guint      gtk_check_button_get_type       (void);
+GtkType    gtk_check_button_get_type       (void);
 GtkWidget* gtk_check_button_new            (void);
 GtkWidget* gtk_check_button_new_with_label (const gchar *label);
 

@@ -28,12 +28,15 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_TREE(obj)          GTK_CHECK_CAST (obj, gtk_tree_get_type (), GtkTree)
-#define GTK_TREE_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_tree_get_type (), GtkTreeClass)
-#define GTK_IS_TREE(obj)       GTK_CHECK_TYPE (obj, gtk_tree_get_type ())
+#define GTK_TYPE_TREE                  (gtk_tree_get_type ())
+#define GTK_TREE(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_TREE, GtkTree))
+#define GTK_TREE_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE, GtkTreeClass))
+#define GTK_IS_TREE(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_TREE))
+#define GTK_IS_TREE_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE))
 
 #define GTK_IS_ROOT_TREE(obj)   ((GtkObject*) GTK_TREE(obj)->root_tree == (GtkObject*)obj)
 #define GTK_TREE_ROOT_TREE(obj) (GTK_TREE(obj)->root_tree ? GTK_TREE(obj)->root_tree : GTK_TREE(obj))
@@ -51,7 +54,7 @@ typedef struct _GtkTreeClass  GtkTreeClass;
 struct _GtkTree
 {
   GtkContainer container;
-
+  
   GList *children;
   
   GtkTree* root_tree; /* owner of selection list */
@@ -68,7 +71,7 @@ struct _GtkTree
 struct _GtkTreeClass
 {
   GtkContainerClass parent_class;
-
+  
   void (* selection_changed) (GtkTree   *tree);
   void (* select_child)      (GtkTree   *tree,
 			      GtkWidget *child);
@@ -77,7 +80,7 @@ struct _GtkTreeClass
 };
 
 
-guint      gtk_tree_get_type           (void);
+GtkType    gtk_tree_get_type           (void);
 GtkWidget* gtk_tree_new                (void);
 void       gtk_tree_append             (GtkTree          *tree,
 				        GtkWidget        *tree_item);

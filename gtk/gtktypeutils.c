@@ -524,7 +524,7 @@ gtk_arg_copy (GtkArg         *src_arg,
   dest_arg->d = src_arg->d;
 
   if (src_arg->type == GTK_TYPE_STRING)
-    dest_arg->d.pointer_data = g_strdup (src_arg->d.pointer_data);
+    dest_arg->d.string_data = g_strdup (src_arg->d.string_data);
 
   return dest_arg;
 }

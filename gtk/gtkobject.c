@@ -52,7 +52,7 @@ struct _GtkObjectData
 
 struct _GtkArgInfo
 {
-  char *name;
+  gchar *name;
   GtkType type;
   GtkType class_type;
   guint arg_flags;
@@ -61,6 +61,7 @@ struct _GtkArgInfo
 };
 
 
+void		      gtk_object_init_type     (void);
 static void           gtk_object_class_init    (GtkObjectClass *klass);
 static void           gtk_object_init          (GtkObject      *object);
 static void           gtk_object_set_arg       (GtkObject      *object,
@@ -285,7 +286,6 @@ gtk_object_set_arg (GtkObject *object,
       if ((arg->name[9 + 2 + 6] != ':') || (arg->name[9 + 2 + 7] != ':'))
 	{
 	  g_warning ("invalid signal argument: \"%s\"\n", arg->name);
-	  arg->type = GTK_TYPE_INVALID;
 	  return;
 	}
       gtk_signal_connect (object, arg->name + 9 + 2 + 6 + 2,
@@ -296,7 +296,6 @@ gtk_object_set_arg (GtkObject *object,
       if ((arg->name[9 + 2 + 13] != ':') || (arg->name[9 + 2 + 14] != ':'))
 	{
 	  g_warning ("invalid signal argument: \"%s\"\n", arg->name);
-	  arg->type = GTK_TYPE_INVALID;
 	  return;
 	}
       gtk_signal_connect_object (object, arg->name + 9 + 2 + 13 + 2,
@@ -304,7 +303,6 @@ gtk_object_set_arg (GtkObject *object,
 				 (GtkObject*) GTK_VALUE_SIGNAL (*arg).d);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
       break;
     }
 }
@@ -697,21 +695,24 @@ gtk_object_getv (GtkObject           *object,
       
       if (!info)
 	{
-	  g_warning ("invalid arg name: \"%s\"\n", lookup_name);
+	  g_warning ("gtk_object_getv(): invalid arg name: \"%s\"\n",
+		     lookup_name);
 	  args[i].type = GTK_TYPE_INVALID;
 	  g_free (lookup_name);
 	  continue;
 	}
       else if (!gtk_type_is_a (object->klass->type, info->class_type))
 	{
-	  g_warning ("invalid arg for %s: \"%s\"\n", gtk_type_name (object->klass->type), lookup_name);
+	  g_warning ("gtk_object_getv(): invalid arg for %s: \"%s\"\n",
+		     gtk_type_name (object->klass->type), lookup_name);
 	  args[i].type = GTK_TYPE_INVALID;
 	  g_free (lookup_name);
 	  continue;
 	}
       else if (! (info->arg_flags & GTK_ARG_READABLE))
 	{
-	  g_warning ("arg is not supplied for read-access: \"%s\"\n", lookup_name);
+	  g_warning ("gtk_object_getv(): arg is not supplied for read-access: \"%s\"\n",
+		     lookup_name);
 	  args[i].type = GTK_TYPE_INVALID;
 	  g_free (lookup_name);
 	  continue;
@@ -766,7 +767,7 @@ gtk_object_query_args (GtkType	class_type,
     *arg_flags = NULL;
   g_return_val_if_fail (nargs != NULL, NULL);
   *nargs = 0;
-  g_return_val_if_fail (gtk_type_is_a (class_type, gtk_object_get_type ()), NULL);
+  g_return_val_if_fail (gtk_type_is_a (class_type, GTK_TYPE_OBJECT), NULL);
 
   if (!arg_info_ht)
     return NULL;
@@ -898,22 +899,26 @@ gtk_object_setv (GtkObject *object,
       
       if (!info)
 	{
-	  g_warning ("invalid arg name: \"%s\"\n", lookup_name);
+	  g_warning ("gtk_object_setv(): invalid arg name: \"%s\"\n",
+		     lookup_name);
 	  arg_ok = FALSE;
 	}
       else if (info->type != args[i].type)
 	{
-	  g_warning ("invalid arg type for: \"%s\"\n", lookup_name);
+	  g_warning ("gtk_object_setv(): invalid arg type for: \"%s\"\n",
+		     lookup_name);
 	  arg_ok = FALSE;
 	}
       else if (!gtk_type_is_a (object->klass->type, info->class_type))
 	{
-	  g_warning ("invalid arg for %s: \"%s\"\n", gtk_type_name (object->klass->type), lookup_name);
+	  g_warning ("gtk_object_setv(): invalid arg for %s: \"%s\"\n",
+		     gtk_type_name (object->klass->type), lookup_name);
 	  arg_ok = FALSE;
 	}
       else if (! (info->arg_flags & GTK_ARG_WRITABLE))
 	{
-	  g_warning ("arg is not supplied for write-access: \"%s\"\n", lookup_name);
+	  g_warning ("gtk_object_setv(): arg is not supplied for write-access: \"%s\"\n",
+		     lookup_name);
 	  arg_ok = FALSE;
 	}
       
@@ -949,7 +954,10 @@ gtk_object_add_arg_type (const char *arg_name,
   g_return_if_fail (arg_type > GTK_TYPE_NONE);
   g_return_if_fail (arg_id > 0);
   g_return_if_fail ((arg_flags & GTK_ARG_READWRITE) != 0);
+  g_return_if_fail ((arg_flags & GTK_ARG_CHILD_ARG) == 0);
   
+  arg_flags &= GTK_ARG_MASK;
+
   arg_part = strchr (arg_name, ':');
   if (!arg_part || (arg_part[0] != ':') || (arg_part[1] != ':'))
     {
@@ -963,7 +971,7 @@ gtk_object_add_arg_type (const char *arg_name,
   class_type = gtk_type_from_name (class_part);
   if (!class_type)
     {
-      g_warning ("invalid class name in arg: \"%s\"\n", arg_name);
+      g_warning ("gtk_object_add_arg_type(): invalid class name in arg: \"%s\"\n", arg_name);
       return;
     }
 
@@ -971,7 +979,7 @@ gtk_object_add_arg_type (const char *arg_name,
   info->name = g_strdup (arg_name);
   info->type = arg_type;
   info->class_type = class_type;
-  info->arg_flags = arg_flags & (GTK_ARG_READABLE | GTK_ARG_WRITABLE);
+  info->arg_flags = arg_flags;
   info->arg_id = arg_id;
   info->seq_id = ++((GtkObjectClass*) gtk_type_class (class_type))->n_args;
 
@@ -1386,7 +1394,7 @@ gtk_object_collect_args (guint   *nargs,
       switch (GTK_FUNDAMENTAL_TYPE (type))
 	{
 	case GTK_TYPE_INVALID:
-	  g_warning ("invalid arg name: \"%s\" %x\n", name, type);
+	  g_warning ("GTK: invalid arg name: \"%s\" %x\n", name, type);
 	  (void) va_arg (args1, long);
 	  continue;
 	case GTK_TYPE_NONE:

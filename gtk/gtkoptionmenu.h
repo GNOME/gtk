@@ -26,12 +26,15 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_OPTION_MENU(obj)          GTK_CHECK_CAST (obj, gtk_option_menu_get_type (), GtkOptionMenu)
-#define GTK_OPTION_MENU_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_option_menu_get_type (), GtkOptionMenuClass)
-#define GTK_IS_OPTION_MENU(obj)       GTK_CHECK_TYPE (obj, gtk_option_menu_get_type ())
+#define GTK_TYPE_OPTION_MENU              (gtk_option_menu_get_type ())
+#define GTK_OPTION_MENU(obj)              (GTK_CHECK_CAST ((obj), GTK_TYPE_OPTION_MENU, GtkOptionMenu))
+#define GTK_OPTION_MENU_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_OPTION_MENU, GtkOptionMenuClass))
+#define GTK_IS_OPTION_MENU(obj)           (GTK_CHECK_TYPE ((obj), GTK_TYPE_OPTION_MENU))
+#define GTK_IS_OPTION_MENU_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_OPTION_MENU))
 
 
 typedef struct _GtkOptionMenu       GtkOptionMenu;
@@ -40,10 +43,10 @@ typedef struct _GtkOptionMenuClass  GtkOptionMenuClass;
 struct _GtkOptionMenu
 {
   GtkButton button;
-
+  
   GtkWidget *menu;
   GtkWidget *menu_item;
-
+  
   guint16 width;
   guint16 height;
 };
@@ -54,7 +57,7 @@ struct _GtkOptionMenuClass
 };
 
 
-guint      gtk_option_menu_get_type    (void);
+GtkType    gtk_option_menu_get_type    (void);
 GtkWidget* gtk_option_menu_new         (void);
 GtkWidget* gtk_option_menu_get_menu    (GtkOptionMenu *option_menu);
 void       gtk_option_menu_set_menu    (GtkOptionMenu *option_menu,

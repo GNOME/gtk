@@ -46,10 +46,10 @@ static void gtk_real_list_item_toggle   (GtkItem          *item);
 static GtkItemClass *parent_class = NULL;
 
 
-guint
+GtkType
 gtk_list_item_get_type (void)
 {
-  static guint list_item_type = 0;
+  static GtkType list_item_type = 0;
 
   if (!list_item_type)
     {

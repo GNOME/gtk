@@ -166,7 +166,7 @@ gtk_item_factory_get_type (void)
 	(GtkArgGetFunc) NULL,
       };
       
-      item_factory_type = gtk_type_unique (gtk_object_get_type (), &item_factory_info);
+      item_factory_type = gtk_type_unique (GTK_TYPE_OBJECT, &item_factory_info);
     }
   
   return item_factory_type;
@@ -179,7 +179,7 @@ gtk_item_factory_class_init (GtkItemFactoryClass  *class)
 
   gtk_item_factory_class = class;
 
-  parent_class = gtk_type_class (gtk_object_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_OBJECT);
 
   object_class = (GtkObjectClass*) class;
 
@@ -552,8 +552,8 @@ gtk_item_factory_construct (GtkItemFactory	*ifactory,
   g_return_if_fail (GTK_IS_ITEM_FACTORY (ifactory));
   g_return_if_fail (ifactory->accel_group == NULL);
   g_return_if_fail (path != NULL);
-  if (!gtk_type_is_a (container_type, gtk_option_menu_get_type ()))
-    g_return_if_fail (gtk_type_is_a (container_type, gtk_menu_shell_get_type ()));
+  if (!gtk_type_is_a (container_type, GTK_TYPE_OPTION_MENU))
+    g_return_if_fail (gtk_type_is_a (container_type, GTK_TYPE_MENU_SHELL));
 
   len = strlen (path);
 
@@ -913,21 +913,21 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 
   radio_group = NULL;
   if (type_id == key_id_type_item)
-    type = gtk_menu_item_get_type ();
+    type = GTK_TYPE_MENU_ITEM;
   else if (type_id == key_id_type_title)
-    type = gtk_menu_item_get_type ();
+    type = GTK_TYPE_MENU_ITEM;
   else if (type_id == key_id_type_radio_item)
-    type = gtk_radio_menu_item_get_type ();
+    type = GTK_TYPE_RADIO_MENU_ITEM;
   else if (type_id == key_id_type_check_item)
-    type = gtk_check_menu_item_get_type ();
+    type = GTK_TYPE_CHECK_MENU_ITEM;
   else if (type_id == key_id_type_toggle_item)
-    type = gtk_check_menu_item_get_type ();
+    type = GTK_TYPE_CHECK_MENU_ITEM;
   else if (type_id == key_id_type_separator_item)
-    type = gtk_menu_item_get_type ();
+    type = GTK_TYPE_MENU_ITEM;
   else if (type_id == key_id_type_branch)
-    type = gtk_menu_item_get_type ();
+    type = GTK_TYPE_MENU_ITEM;
   else if (type_id == key_id_type_last_branch)
-    type = gtk_menu_item_get_type ();
+    type = GTK_TYPE_MENU_ITEM;
   else
     {
       GtkWidget *radio_link;
@@ -935,7 +935,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
       radio_link = gtk_item_factory_get_widget (ifactory, item_type_path);
       if (radio_link && GTK_IS_RADIO_MENU_ITEM (radio_link))
 	{
-	  type = gtk_radio_menu_item_get_type ();
+	  type = GTK_TYPE_RADIO_MENU_ITEM;
 	  radio_group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (radio_link));
 	}
       else
@@ -985,7 +985,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 			   "GtkWidget::parent", parent,
 			   NULL);
 
-  if (type == gtk_radio_menu_item_get_type ())
+  if (type == GTK_TYPE_RADIO_MENU_ITEM)
     gtk_radio_menu_item_set_group (GTK_RADIO_MENU_ITEM (widget), radio_group);
   if (GTK_IS_CHECK_MENU_ITEM (widget))
     gtk_check_menu_item_set_show_toggle (GTK_CHECK_MENU_ITEM (widget), TRUE);
@@ -1011,7 +1011,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 	
       parent = widget;
       widget =
-	gtk_widget_new (gtk_menu_get_type (),
+	gtk_widget_new (GTK_TYPE_MENU,
 			NULL);
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (parent), widget);
     }	   
@@ -1351,7 +1351,7 @@ gtk_item_factory_parse_menu_path (GScanner            *scanner,
       item->path = g_strdup (scanner->value.v_string);
       item->accelerator_key = 0;
       item->accelerator_mods = 0;
-      item->modified = FALSE;
+      item->modified = TRUE;
       item->in_propagation = FALSE;
       item->item_type = NULL;
       item->widgets = NULL;
@@ -1440,6 +1440,7 @@ gtk_item_factory_parse_rc_string (const gchar	 *rc_string)
 
   g_return_if_fail (rc_string != NULL);
 
+  ifactory_scanner_config.cpair_comment_single = gtk_item_factory_class->cpair_comment_single;
   scanner = g_scanner_new (&ifactory_scanner_config);
 
   g_scanner_input_text (scanner, rc_string, strlen (rc_string));
@@ -1452,7 +1453,6 @@ gtk_item_factory_parse_rc_string (const gchar	 *rc_string)
 void
 gtk_item_factory_parse_rc_scanner (GScanner *scanner)
 {
-  gchar *orig_cpair_comment_single;
   gpointer saved_symbol;
 
   g_return_if_fail (scanner != NULL);
@@ -1464,9 +1464,6 @@ gtk_item_factory_parse_rc_scanner (GScanner *scanner)
   g_scanner_remove_symbol (scanner, "menu-path");
   g_scanner_add_symbol (scanner, "menu-path", gtk_item_factory_parse_menu_path);
 
-  orig_cpair_comment_single = scanner->config->cpair_comment_single;
-  scanner->config->cpair_comment_single = gtk_item_factory_class->cpair_comment_single;
-
   g_scanner_peek_next_token (scanner);
 
   while (scanner->next_token == '(')
@@ -1477,8 +1474,6 @@ gtk_item_factory_parse_rc_scanner (GScanner *scanner)
 
       g_scanner_peek_next_token (scanner);
     }
-
-  scanner->config->cpair_comment_single = orig_cpair_comment_single;
 
   g_scanner_remove_symbol (scanner, "menu-path");
   g_scanner_add_symbol (scanner, "menu-path", saved_symbol);
@@ -1499,6 +1494,7 @@ gtk_item_factory_parse_rc (const gchar	  *file_name)
   if (fd < 0)
     return;
 
+  ifactory_scanner_config.cpair_comment_single = gtk_item_factory_class->cpair_comment_single;
   scanner = g_scanner_new (&ifactory_scanner_config);
 
   g_scanner_input_file (scanner, fd);

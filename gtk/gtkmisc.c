@@ -109,7 +109,6 @@ gtk_misc_set_arg (GtkMisc        *misc,
       gtk_misc_set_alignment (misc, misc->xpad, GTK_VALUE_INT (*arg));
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
       break;
     }
 }

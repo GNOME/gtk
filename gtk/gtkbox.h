@@ -65,36 +65,36 @@ struct _GtkBoxChild
 guint      gtk_box_get_type            (void);
 void       gtk_box_pack_start          (GtkBox       *box,
 					GtkWidget    *child,
-					gint          expand,
-					gint          fill,
-					gint          padding);
+					gboolean      expand,
+					gboolean      fill,
+					guint         padding);
 void       gtk_box_pack_end            (GtkBox       *box,
 					GtkWidget    *child,
-					gint          expand,
-					gint          fill,
-					gint          padding);
+					gboolean      expand,
+					gboolean      fill,
+					guint         padding);
 void       gtk_box_pack_start_defaults (GtkBox       *box,
 					GtkWidget    *widget);
 void       gtk_box_pack_end_defaults   (GtkBox       *box,
 					GtkWidget    *widget);
 void       gtk_box_set_homogeneous     (GtkBox       *box,
-					gint          homogeneous);
+					gboolean      homogeneous);
 void       gtk_box_set_spacing         (GtkBox       *box,
 					gint          spacing);
 void	   gtk_box_reorder_child       (GtkBox       *box,
 					GtkWidget    *child,
-					guint         pos);
+					gint          position);
 void       gtk_box_query_child_packing (GtkBox       *box,
 					GtkWidget    *child,
-					gint         *expand,
-					gint         *fill,
-					gint         *padding,
+					gboolean     *expand,
+					gboolean     *fill,
+					guint        *padding,
 					GtkPackType  *pack_type);
 void       gtk_box_set_child_packing   (GtkBox       *box,
 					GtkWidget    *child,
-					gint          expand,
-					gint          fill,
-					gint          padding,
+					gboolean      expand,
+					gboolean      fill,
+					guint         padding,
 					GtkPackType   pack_type);
 
 

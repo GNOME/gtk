@@ -57,6 +57,7 @@ static gint gtk_menu_shell_is_item           (GtkMenuShell      *menu_shell,
 					      GtkWidget         *child);
 static GtkWidget *gtk_menu_shell_get_item    (GtkMenuShell      *menu_shell,
 					      GdkEvent          *event);
+static GtkType gtk_menu_shell_child_type     (GtkContainer      *container);
 
 
 static GtkContainerClass *parent_class = NULL;
@@ -126,10 +127,17 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
   container_class->add = gtk_menu_shell_add;
   container_class->remove = gtk_menu_shell_remove;
   container_class->foreach = gtk_menu_shell_foreach;
+  container_class->child_type = gtk_menu_shell_child_type;
 
   klass->submenu_placement = GTK_TOP_BOTTOM;
   klass->deactivate = gtk_real_menu_shell_deactivate;
   klass->selection_done = NULL;
+}
+
+static GtkType
+gtk_menu_shell_child_type (GtkContainer     *container)
+{
+  return GTK_TYPE_MENU_ITEM;
 }
 
 static void

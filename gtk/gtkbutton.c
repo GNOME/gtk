@@ -49,6 +49,9 @@ static void gtk_button_init           (GtkButton        *button);
 static void gtk_button_set_arg        (GtkButton        *button,
 				       GtkArg           *arg,
 				       guint		 arg_id);
+static void gtk_button_get_arg        (GtkButton        *button,
+				       GtkArg           *arg,
+				       guint		 arg_id);
 static void gtk_button_map            (GtkWidget        *widget);
 static void gtk_button_unmap          (GtkWidget        *widget);
 static void gtk_button_realize        (GtkWidget        *widget);
@@ -87,6 +90,7 @@ static void gtk_real_button_pressed   (GtkButton        *button);
 static void gtk_real_button_released  (GtkButton        *button);
 static void gtk_real_button_enter     (GtkButton        *button);
 static void gtk_real_button_leave     (GtkButton        *button);
+static GtkType gtk_button_child_type  (GtkContainer     *container);
 
 
 static GtkContainerClass *parent_class;
@@ -108,7 +112,7 @@ gtk_button_get_type (void)
 	(GtkClassInitFunc) gtk_button_class_init,
 	(GtkObjectInitFunc) gtk_button_init,
 	(GtkArgSetFunc) gtk_button_set_arg,
-	(GtkArgGetFunc) NULL,
+	(GtkArgGetFunc) gtk_button_get_arg,
       };
 
       button_type = gtk_type_unique (gtk_container_get_type (), &button_info);
@@ -131,7 +135,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   parent_class = gtk_type_class (gtk_container_get_type ());
 
-  gtk_object_add_arg_type ("GtkButton::label", GTK_TYPE_STRING, GTK_ARG_WRITABLE, ARG_LABEL);
+  gtk_object_add_arg_type ("GtkButton::label", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL);
 
   button_signals[PRESSED] =
     gtk_signal_new ("pressed",
@@ -191,6 +195,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   container_class->add = gtk_button_add;
   container_class->remove = gtk_button_remove;
   container_class->foreach = gtk_button_foreach;
+  container_class->child_type = gtk_button_child_type;
 
   klass->pressed = gtk_real_button_pressed;
   klass->released = gtk_real_button_released;
@@ -208,6 +213,15 @@ gtk_button_init (GtkButton *button)
   button->in_button = FALSE;
   button->button_down = FALSE;
   button->relief = GTK_RELIEF_NORMAL;
+}
+
+static GtkType
+gtk_button_child_type  (GtkContainer     *container)
+{
+  if (!GTK_BUTTON (container)->child)
+    return GTK_TYPE_WIDGET;
+  else
+    return GTK_TYPE_NONE;
 }
 
 static void
@@ -228,11 +242,29 @@ gtk_button_set_arg (GtkButton *button,
 	  button->child = NULL;
 	}
 
-      label = gtk_label_new (GTK_VALUE_STRING(*arg));
+      label = gtk_label_new (GTK_VALUE_STRING(*arg) ? GTK_VALUE_STRING(*arg) : "");
       gtk_widget_show (label);
 
       gtk_container_add (GTK_CONTAINER (button), label);
       gtk_container_enable_resize (GTK_CONTAINER (button));
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+gtk_button_get_arg (GtkButton *button,
+		    GtkArg    *arg,
+		    guint      arg_id)
+{
+  switch (arg_id)
+    {
+    case ARG_LABEL:
+      if (button->child && GTK_IS_LABEL (button->child))
+	GTK_VALUE_STRING (*arg) = g_strdup (GTK_LABEL (button->child)->label);
+      else
+	GTK_VALUE_STRING (*arg) = NULL;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;

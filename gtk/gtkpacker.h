@@ -43,29 +43,40 @@ typedef struct _GtkPacker           GtkPacker;
 typedef struct _GtkPackerClass      GtkPackerClass;
 typedef struct _GtkPackerChild      GtkPackerChild;
 
-typedef enum {
+typedef enum
+{
     GTK_PACK_EXPAND   = 1 << 0,	/*< nick=expand >*/
     GTK_FILL_X        = 1 << 1,
     GTK_FILL_Y        = 1 << 2
 } GtkPackerOptions;
 
-typedef enum {
+typedef enum
+{
     GTK_SIDE_TOP,
     GTK_SIDE_BOTTOM,
     GTK_SIDE_LEFT,
     GTK_SIDE_RIGHT
 } GtkSideType;
 
-typedef enum {
-    GTK_ANCHOR_CENTER,
-    GTK_ANCHOR_N,
-    GTK_ANCHOR_NW,
-    GTK_ANCHOR_NE,
-    GTK_ANCHOR_S,
-    GTK_ANCHOR_SW,
-    GTK_ANCHOR_SE,
-    GTK_ANCHOR_W,
-    GTK_ANCHOR_E
+typedef enum
+{
+  GTK_ANCHOR_CENTER,
+  GTK_ANCHOR_NORTH,
+  GTK_ANCHOR_NORTH_WEST,
+  GTK_ANCHOR_NORTH_EAST,
+  GTK_ANCHOR_SOUTH,
+  GTK_ANCHOR_SOUTH_WEST,
+  GTK_ANCHOR_SOUTH_EAST,
+  GTK_ANCHOR_WEST,
+  GTK_ANCHOR_EAST,
+  GTK_ANCHOR_N	=	GTK_ANCHOR_NORTH,
+  GTK_ANCHOR_NW	=	GTK_ANCHOR_NORTH_WEST,
+  GTK_ANCHOR_NE	=	GTK_ANCHOR_NORTH_EAST,
+  GTK_ANCHOR_S	=	GTK_ANCHOR_SOUTH,
+  GTK_ANCHOR_SW	=	GTK_ANCHOR_SOUTH_WEST,
+  GTK_ANCHOR_SE	=	GTK_ANCHOR_SOUTH_EAST,
+  GTK_ANCHOR_W	=	GTK_ANCHOR_WEST,
+  GTK_ANCHOR_E	=	GTK_ANCHOR_EAST
 } GtkAnchorType;
 
 struct _GtkPackerChild
@@ -78,11 +89,11 @@ struct _GtkPackerChild
   
   guint use_default : 1;
   
-  guint border_width;
-  gint  padX;
-  gint  padY;
-  gint  iPadX;
-  gint  iPadY;
+  guint border_width : 16;
+  guint pad_x : 16;
+  guint pad_y : 16;
+  guint i_pad_x : 16;
+  guint i_pad_y : 16;
 };
 
 struct _GtkPacker
@@ -93,11 +104,11 @@ struct _GtkPacker
   
   guint spacing;
   
-  guint default_border_width;
-  gint  default_padX;
-  gint  default_padY;
-  gint  default_iPadX;
-  gint  default_iPadY;
+  guint default_border_width : 16;
+  guint default_pad_x : 16;
+  guint default_pad_y : 16;
+  guint default_i_pad_x : 16;
+  guint default_i_pad_y : 16;
 };
 
 struct _GtkPackerClass
@@ -119,30 +130,30 @@ void       gtk_packer_add		       (GtkPacker       *packer,
 						GtkAnchorType    anchor,
 						GtkPackerOptions options,
 						guint		 border_width, 
-						gint		 padX, 
-						gint		 padY,
-						gint		 ipadX,
-						gint		 ipadY);
+						guint		 pad_x, 
+						guint		 pad_y,
+						guint		 i_pad_x,
+						guint		 i_pad_y);
 void       gtk_packer_configure		       (GtkPacker	*packer, 
 						GtkWidget       *child,
 						GtkSideType      side,
 						GtkAnchorType    anchor,
 						GtkPackerOptions options,
 						guint		 border_width, 
-						gint		 padX, 
-						gint		 padY,
-						gint		 ipadX,
-						gint		 ipadY);
+						guint		 pad_x, 
+						guint		 pad_y,
+						guint		 i_pad_x,
+						guint		 i_pad_y);
 void       gtk_packer_set_spacing	       (GtkPacker	*packer,
 						guint		 spacing);
 void       gtk_packer_set_default_border_width (GtkPacker	*packer,
 						guint		 border);
 void       gtk_packer_set_default_pad	       (GtkPacker	*packer,
-						gint             padX,
-						gint             padY);
+						guint             pad_x,
+						guint             pad_y);
 void       gtk_packer_set_default_ipad	       (GtkPacker	*packer,
-						gint             iPadX,
-						gint             iPadY);
+						guint            i_pad_x,
+						guint            i_pad_y);
 
 
 #ifdef __cplusplus

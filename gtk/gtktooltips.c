@@ -105,7 +105,7 @@ gtk_tooltips_new (void)
   return gtk_type_new (gtk_tooltips_get_type ());
 }
 
-void
+static void
 gtk_tooltips_free_string (gpointer data, gpointer user_data)
 {
   if (data)

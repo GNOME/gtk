@@ -45,10 +45,10 @@ static void gtk_toggle_button_leave      (GtkButton            *button);
 static guint toggle_button_signals[LAST_SIGNAL] = { 0 };
 
 
-guint
+GtkType
 gtk_toggle_button_get_type (void)
 {
-  static guint toggle_button_type = 0;
+  static GtkType toggle_button_type = 0;
 
   if (!toggle_button_type)
     {

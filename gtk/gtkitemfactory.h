@@ -114,8 +114,8 @@ struct _GtkItemFactoryItem
 
 GtkType		gtk_item_factory_get_type	    (void);
 
-/* `container_type' must be of gtk_menu_bar_get_type (), gtk_menu_get_type (),
- * or gtk_option_menu_get_type ().
+/* `container_type' must be of GTK_TYPE_MENU_BAR, GTK_TYPE_MENU,
+ * or GTK_TYPE_OPTION_MENU.
  */
 GtkItemFactory*	gtk_item_factory_new	   (GtkType		 container_type,
 					    const gchar		*path,

@@ -1657,7 +1657,7 @@ gtk_clist_row_is_visible (GtkCList * clist,
   return GTK_VISIBILITY_FULL;
 }
 
-GtkAdjustment *
+GtkAdjustment*
 gtk_clist_get_vadjustment (GtkCList * clist)
 {
   g_return_val_if_fail (clist != NULL, NULL);
@@ -1666,7 +1666,7 @@ gtk_clist_get_vadjustment (GtkCList * clist)
   return gtk_range_get_adjustment (GTK_RANGE (clist->vscrollbar));
 }
 
-GtkAdjustment *
+GtkAdjustment*
 gtk_clist_get_hadjustment (GtkCList * clist)
 {
   g_return_val_if_fail (clist != NULL, NULL);

@@ -136,7 +136,6 @@ gtk_frame_set_arg (GtkFrame       *frame,
       gtk_frame_set_shadow_type (frame, GTK_VALUE_ENUM (*arg));
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
       break;
     }
 }

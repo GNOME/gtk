@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -26,23 +26,26 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_TABLE(obj)          GTK_CHECK_CAST (obj, gtk_table_get_type (), GtkTable)
-#define GTK_TABLE_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_table_get_type (), GtkTableClass)
-#define GTK_IS_TABLE(obj)       GTK_CHECK_TYPE (obj, gtk_table_get_type ())
+#define GTK_TYPE_TABLE			(gtk_table_get_type ())
+#define GTK_TABLE(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_TABLE, GtkTable))
+#define GTK_TABLE_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TABLE, GtkTableClass))
+#define GTK_IS_TABLE(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_TABLE))
+#define GTK_IS_TABLE_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TABLE))
 
 
-typedef struct _GtkTable        GtkTable;
-typedef struct _GtkTableClass   GtkTableClass;
-typedef struct _GtkTableChild   GtkTableChild;
-typedef struct _GtkTableRowCol  GtkTableRowCol;
+typedef struct _GtkTable	GtkTable;
+typedef struct _GtkTableClass	GtkTableClass;
+typedef struct _GtkTableChild	GtkTableChild;
+typedef struct _GtkTableRowCol	GtkTableRowCol;
 
 struct _GtkTable
 {
   GtkContainer container;
-
+  
   GList *children;
   GtkTableRowCol *rows;
   GtkTableRowCol *cols;
@@ -87,39 +90,41 @@ struct _GtkTableRowCol
 };
 
 
-guint      gtk_table_get_type         (void);
-GtkWidget* gtk_table_new              (gint           rows,
-				       gint           columns,
-				       gint           homogeneous);
-
-void       gtk_table_attach           (GtkTable      *table,
-				       GtkWidget     *child,
-				       gint           left_attach,
-				       gint           right_attach,
-				       gint           top_attach,
-				       gint           bottom_attach,
-				       gint           xoptions,
-				       gint           yoptions,
-				       gint           xpadding,
-				       gint           ypadding);
-void       gtk_table_attach_defaults  (GtkTable      *table,
-				       GtkWidget     *widget,
-				       gint           left_attach,
-				       gint           right_attach,
-				       gint           top_attach,
-				       gint           bottom_attach);
-void       gtk_table_set_row_spacing  (GtkTable      *table,
-				       gint           row,
-				       gint           spacing);
-void       gtk_table_set_col_spacing  (GtkTable      *table,
-				       gint           column,
-				       gint           spacing);
-void       gtk_table_set_row_spacings (GtkTable      *table,
-				       gint           spacing);
-void       gtk_table_set_col_spacings (GtkTable      *table,
-				       gint           spacing);
-void       gtk_table_set_homogeneous  (GtkTable      *table,
-				       gint           homogeneous);
+GtkType	   gtk_table_get_type	      (void);
+GtkWidget* gtk_table_new	      (guint		rows,
+				       guint		columns,
+				       gboolean		homogeneous);
+void	   gtk_table_resize	      (GtkTable	       *table,
+				       guint            rows,
+				       guint            columns);
+void	   gtk_table_attach	      (GtkTable	       *table,
+				       GtkWidget       *child,
+				       guint		left_attach,
+				       guint		right_attach,
+				       guint		top_attach,
+				       guint		bottom_attach,
+				       GtkAttachOptions xoptions,
+				       GtkAttachOptions yoptions,
+				       guint		xpadding,
+				       guint		ypadding);
+void	   gtk_table_attach_defaults  (GtkTable	       *table,
+				       GtkWidget       *widget,
+				       guint		left_attach,
+				       guint		right_attach,
+				       guint		top_attach,
+				       guint		bottom_attach);
+void	   gtk_table_set_row_spacing  (GtkTable	       *table,
+				       guint		row,
+				       guint		spacing);
+void	   gtk_table_set_col_spacing  (GtkTable	       *table,
+				       guint		column,
+				       guint		spacing);
+void	   gtk_table_set_row_spacings (GtkTable	       *table,
+				       guint		spacing);
+void	   gtk_table_set_col_spacings (GtkTable	       *table,
+				       guint		spacing);
+void	   gtk_table_set_homogeneous  (GtkTable	       *table,
+				       gboolean		homogeneous);
 
 
 #ifdef __cplusplus

@@ -57,15 +57,16 @@ static void gtk_option_menu_position        (GtkMenu            *menu,
 					     gpointer            user_data);
 static void gtk_option_menu_show_all        (GtkWidget          *widget);
 static void gtk_option_menu_hide_all        (GtkWidget          *widget);
+static GtkType gtk_option_menu_child_type   (GtkContainer       *container);
 
 
 static GtkButtonClass *parent_class = NULL;
 
 
-guint
+GtkType
 gtk_option_menu_get_type (void)
 {
-  static guint option_menu_type = 0;
+  static GtkType option_menu_type = 0;
 
   if (!option_menu_type)
     {
@@ -92,10 +93,12 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkButtonClass *button_class;
+  GtkContainerClass *container_class;
 
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   button_class = (GtkButtonClass*) class;
+  container_class = (GtkContainerClass*) class;
 
   parent_class = gtk_type_class (gtk_button_get_type ());
 
@@ -109,6 +112,14 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
   widget_class->button_press_event = gtk_option_menu_button_press;
   widget_class->show_all = gtk_option_menu_show_all;
   widget_class->hide_all = gtk_option_menu_hide_all;
+
+  container_class->child_type = gtk_option_menu_child_type;
+}
+
+static GtkType
+gtk_option_menu_child_type (GtkContainer       *container)
+{
+  return GTK_TYPE_NONE;
 }
 
 static void
@@ -414,6 +425,7 @@ gtk_option_menu_expose (GtkWidget      *widget,
       if (remove_child)
 	gtk_option_menu_remove_contents (GTK_OPTION_MENU (widget));
 #else
+      remove_child = FALSE;
       child = GTK_BUTTON (widget)->child;
       child_event = *event;
       if (child && GTK_WIDGET_NO_WINDOW (child) &&
