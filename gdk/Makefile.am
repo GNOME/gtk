@@ -182,7 +182,7 @@ gdk.def: gdk.symbols
 gdkalias.h: gdk.symbols
 	 $(PERL) $(srcdir)/makegdkalias.pl < $(srcdir)/gdk.symbols > gdkalias.h
 
-if OS_UNIX
+if OS_LINUX
 TESTS = abicheck.sh
 endif
 
