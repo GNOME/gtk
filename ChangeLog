@@ -1,5 +1,8 @@
 2004-11-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserbutton.c (update_idler): Remove debugging
+	printfs. 
+
 	* gtk/gtkicontheme.[ch]: Improve the docs.  (#157785,
 	Torsten Schoenfeld)
 

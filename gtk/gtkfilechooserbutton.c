@@ -1683,7 +1683,6 @@ update_idler (gpointer user_data)
   if (!gtk_editable_get_selection_bounds (GTK_EDITABLE (priv->entry),
 					  &start, &end))
     {
-      g_print ("updating dialog\n");
       g_signal_handler_block (priv->dialog,
 			      priv->dialog_selection_changed_id);
       update_dialog (user_data);
@@ -1695,10 +1694,7 @@ update_idler (gpointer user_data)
       retval = FALSE;
     }
   else
-    {
-      g_print ("start %d end %d\n", start, end);
-      retval = TRUE;
-    }
+    retval = TRUE;
   
   GDK_THREADS_LEAVE ();
 
