@@ -535,7 +535,7 @@ gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel)
       gtk_widget_show (filesel->fileop_ren_file);
     }
 
-  gtk_widget_queue_resize(filesel);
+  gtk_widget_queue_resize(GTK_WIDGET(filesel));
 }
 
 void       

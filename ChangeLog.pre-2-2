@@ -1,3 +1,9 @@
+Mon Mar 23 12:03:03 CST 1998 Shawn T. Amundson <amundson@gtk.org>
+
+        * examples/: added this directory with stuff from
+          the tutorial, updated to compile and work with recent
+          changes
+
 Mon Mar 23 01:04:51 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtktext.[ch] testgtk.c: Added optional word wrap, controlled
