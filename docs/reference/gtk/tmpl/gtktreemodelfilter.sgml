@@ -55,8 +55,9 @@ The GtkTreeModelFilter struct contains only private fields.
 A function which decides whether the row indicated by @iter is visible.
 </para>
 
-@model: the #GtkTreeModelFilter
-@iter: a #GtkTreeIter pointing to the row whose visibility is determined
+@model: the child model of the #GtkTreeModelFilter
+@iter: a #GtkTreeIter pointing to the row in @model whose visibility 
+   is determined
 @data: user data given to gtk_tree_model_filter_set_visible_func()
 @Returns: Whether the row indicated by @iter is visible.
 

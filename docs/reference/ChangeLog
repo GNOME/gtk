@@ -1,3 +1,8 @@
+Fri Jun 18 21:20:42 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtktreemodelfilter.sgml: Fix the docs for
+	GtkTreeModelFilterVisibleFunc (#144583, Olivier Andrieu)
+
 Mon May 31 00:16:36 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtktable.sgml: Document the default attach
