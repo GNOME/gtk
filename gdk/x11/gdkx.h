@@ -128,7 +128,7 @@ GdkColormap* gdkx_colormap_get (Colormap xcolormap);
 #endif
 
 GdkColormap *gdk_x11_colormap_foreign_new (GdkVisual *visual,
-					   Colormap   xcolormap)
+					   Colormap   xcolormap);
 
      /* Return the Gdk* for a particular XID */
 gpointer      gdk_xid_table_lookup_for_display (GdkDisplay *display,

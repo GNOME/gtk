@@ -1,3 +1,7 @@
+2002-09-24  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkx.h: Add a missing ; to make things compile.
+
 Tue Sep 24 16:40:14 2002  Owen Taylor  <otaylor@redhat.com>
 
 	Make icon sizes configurable (#70648, slightly based
