@@ -1087,6 +1087,10 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
     {
       GtkAccelGroup *menu_group;
 
+      if (entry->callback)
+	g_warning ("gtk_item_factory_create_item(): Can't specify a callback on a branch: \"%s\"",
+		   entry->path);
+	
       menu_group = gtk_accel_group_new ();
       
       if (type_id == quark_type_last_branch)
@@ -1103,7 +1107,9 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   
   gtk_item_factory_add_item (ifactory,
 			     path, entry->accelerator,
-			     entry->callback, entry->callback_action, callback_data,
+			     (type_id == quark_type_branch ||
+			      type_id == quark_type_last_branch) ? NULL : entry->callback,
+			     entry->callback_action, callback_data,
 			     callback_type,
 			     item_type_path,
 			     widget);

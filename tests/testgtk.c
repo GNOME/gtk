@@ -2245,7 +2245,7 @@ gtk_ifactory_cb (gpointer             callback_data,
 
 static GtkItemFactoryEntry menu_items[] =
 {
-  { "/_File",            NULL,         gtk_ifactory_cb,       0, "<Branch>" },
+  { "/_File",            NULL,         0,                     0, "<Branch>" },
   { "/File/tearoff1",    NULL,         gtk_ifactory_cb,       0, "<Tearoff>" },
   { "/File/_New",        "<control>N", gtk_ifactory_cb,       0 },
   { "/File/_Open",       "<control>O", gtk_ifactory_cb,       0 },
@@ -2254,17 +2254,17 @@ static GtkItemFactoryEntry menu_items[] =
   { "/File/sep1",        NULL,         gtk_ifactory_cb,       0, "<Separator>" },
   { "/File/_Quit",       "<control>Q", gtk_ifactory_cb,       0 },
 
-  { "/_Preferences",     		NULL, gtk_ifactory_cb, 0, "<Branch>" },
-  { "/_Preferences/_Color", 		NULL, gtk_ifactory_cb, 0, "<Branch>" },
+  { "/_Preferences",     		NULL, 0,               0, "<Branch>" },
+  { "/_Preferences/_Color", 		NULL, 0,               0, "<Branch>" },
   { "/_Preferences/Color/_Red",      	NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
   { "/_Preferences/Color/_Green",   	NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
   { "/_Preferences/Color/_Blue",        NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
-  { "/_Preferences/_Shape", 		NULL, gtk_ifactory_cb, 0, "<Branch>" },
+  { "/_Preferences/_Shape", 		NULL, 0,               0, "<Branch>" },
   { "/_Preferences/Shape/_Square",      NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
   { "/_Preferences/Shape/_Rectangle",   NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
   { "/_Preferences/Shape/_Oval",        NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
 
-  { "/_Help",            NULL,         gtk_ifactory_cb,       0, "<LastBranch>" },
+  { "/_Help",            NULL,         0,                     0, "<LastBranch>" },
   { "/Help/_About",      NULL,         gtk_ifactory_cb,       0 },
 };
 
