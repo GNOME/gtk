@@ -1,3 +1,10 @@
+2004-11-10  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (_gdk_win32_get_next_tick): 
+	Event timestamps don't have to be unique. As long as they are
+	nondecreasing we should be fine. Solves problems with for instance
+	long menus not staying up on first click. (#152035, Robert Ögren)
+
 2004-11-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkstatusbar.c (gtk_statusbar_size_allocate): Only
