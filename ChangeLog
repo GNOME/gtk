@@ -1,3 +1,8 @@
+Fri Feb 13 01:06:08 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* demos/gtk-demo/main.c (read_line): Protect getc_unlocked() by 
+	HAVE_FLOCKFILE in all cases.  (#134205, Julio M. Merino Vidal)
+
 Fri Feb 13 00:54:59 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Fix for #104811, Padraig O'Briain:
