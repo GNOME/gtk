@@ -1675,7 +1675,7 @@ gtk_calendar_paint_week_numbers (GtkWidget *widget)
 {
   GtkCalendar *calendar;
   GdkGC *gc;
-  gint row, week, year;
+  gint row, week = 0, year;
   gint x_loc;
   char buffer[3];
   gint y_baseline, day_height;

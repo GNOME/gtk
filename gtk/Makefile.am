@@ -263,35 +263,35 @@ stamp-d: @REBUILD@ makeenums.pl gtk-boxed.defs $(source_headers) $(gdk_headers)
 	&& echo timestamp > stamp-d
 
 # generate type identifier header (GTK_TYPE_WIDGET_FLAGS)
-gtktypebuiltins.h: @REBUILD@ gtk.defs maketypes.awk
+gtktypebuiltins.h: #@REBUILD@ gtk.defs maketypes.awk
 	cd $(srcdir) \
 	&& $(AWK) -f maketypes.awk gtk.defs macros > s-gtb \
 	&& mv s-gtb gtktypebuiltins.h
 
 # generate type identifier variables (GTK_TYPE_WIDGET_FLAGS)
-gtktypebuiltins_vars.c: @REBUILD@ gtk.defs maketypes.awk
+$(srcdir)/gtktypebuiltins_vars.c: @REBUILD@ $(srcdir)/gtk.defs $(srcdir)/maketypes.awk
 	cd $(srcdir) \
 	&& $(AWK) -f maketypes.awk gtk.defs variables > s-gtbv \
 	&& mv s-gtbv gtktypebuiltins_vars.c
 
 # generate type entries for type-id registration
-gtktypebuiltins_ids.c: @REBUILD@ gtk.defs maketypes.awk
+$(srcdir)/gtktypebuiltins_ids.c: @REBUILD@ $(srcdir)/gtk.defs $(srcdir)/maketypes.awk
 	cd $(srcdir) \
 	&& $(AWK) -f maketypes.awk gtk.defs entries > s-gtbi \
 	&& mv s-gtbi gtktypebuiltins_ids.c 
 
 # generate enum value arrays
-gtktypebuiltins_evals.c: @REBUILD@ makeenums.pl gtk.defs
+$(srcdir)/gtktypebuiltins_evals.c: @REBUILD@ $(srcdir)/makeenums.pl $(srcdir)/gtk.defs
 	cd $(srcdir) \
 	&& $(PERL) makeenums.pl arrays $(source_headers) $(gdk_headers) > \
 	s-gtbe \
 	&& mv s-gtbe gtktypebuiltins_evals.c
 
-#gtkmarshal.c gtkmarshal.h: @REBUILD@ stamp-m
-#	@:
+$(srcdir)/gtkmarshal.c $(srcdir)/gtkmarshal.h: @REBUILD@ stamp-m
+	@:
 
-stamp-m: @REBUILD@ gtkmarshal.list genmarshal.pl
-	(cd $(srcdir); srcdir=$(srcdir) INDENT=$(INDENT) $(PERL) $(srcdir)/genmarshal.pl \
+stamp-m: @REBUILD@ $(srcdir)/gtkmarshal.list $(srcdir)/genmarshal.pl
+	(srcdir=$(srcdir) INDENT=$(INDENT) $(PERL) $(srcdir)/genmarshal.pl \
 	&& (cmp -s s-gmc gtkmarshal.c || mv s-gmc gtkmarshal.c) && rm -f s-gmc \
 	&& (cmp -s s-gmh gtkmarshal.h || mv s-gmh gtkmarshal.h) && rm -f s-gmh) \
 	&& echo timestamp > stamp-m
