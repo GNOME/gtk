@@ -844,7 +844,8 @@ gtk_tree_store_real_set_value (GtkTreeStore *tree_store,
     _gtk_tree_data_list_value_to_node (list, &real_value);
   else
     _gtk_tree_data_list_value_to_node (list, value);
-
+  
+  retval = TRUE;
   gtk_tree_path_free (path);
   if (converted)
     g_value_unset (&real_value);

@@ -1,3 +1,8 @@
+Sun Nov 18 22:01:36  Kristian Rietveld  <kristian@planet.nl>
+
+	* gtk/gtktreestore.c: return TRUE when value changed, so
+	row_changed is being emitted
+
 2001-11-18  Hans Breuer  <hans@breuer.org>
 
 	* gtk/gdkaccelmap.c : make it compile with msvc: !HAVE_UNISTD_H;
