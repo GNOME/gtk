@@ -1,3 +1,8 @@
+1998-12-15  Joel Becker  <jlbec@ocala.cs.miami.edu>
+
+	* autogen.sh: reordered gettextize and aclocal, because
+	gettextize was messing up aclocal.m4.
+
 Tue Dec 15 19:50:41 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkctree.c gtk/gtkclist.c gtk/testgtk.c: Use 
