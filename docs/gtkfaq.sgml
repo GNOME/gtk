@@ -5,10 +5,10 @@
 <!-- Title information -->
 
 <title>GTK+ FAQ
-<author>Nathan Froyd, <tt/maestrox@geocities.com/&gt;,
-Tony Gale, &lt;<tt/trogsta@geocities.com/&gt;, 
-Shawn T. Amundson, <tt/amundson@gimp.org/
-<date>January 27th 1998
+
+<!-- NOTE: Use only one author tag, otherwise sgml2txt barfs - TRG --> 
+<author>Nathan Froyd, Tony Gale, Shawn T. Amundson.
+<date>February 20th 1998
 <abstract>
 This document is intended to answer questions that are likely to be 
 frequently asked by programmers using GTK+ or people who are just
@@ -94,13 +94,22 @@ are already converted to HTML format.
 <!-- ----------------------------------------------------------------- -->
 <sect1>Is there a mailing list (or mailing list archive) for GTK+?
 <p>
-A mailing list is located at gtk-list@redhat.com . To subscribe send an
+There are two mailing lists:
+<itemize>
+<item>A mailing list for discussion of development of GTK based applications
+is hosted at gtk-app-devel-list@redhat.com. To subscribe send an
+email message to <htmlurl url="mailto:gtk-app-devel-list-request@redhat.com"
+name="gtk-app-devel-list-request@redhat.com">
+with <em>subscribe</em> in the <bf>subject</bf>.
+<p>
+<item>A mailing list for discussion of development of GTK is hosted 
+at gtk-list@redhat.com. To subscribe send an
 email message to <htmlurl url="mailto:gtk-list-request@redhat.com" 
 name="gtk-list-request@redhat.com">
 with <em>subscribe</em> in the <bf>subject</bf>.
-
+<p>
 A searchable archive of the mailing list can be found at <htmlurl url="http://www.redhat.com/linux-info/gtk/gtk-list/index.html" name="http://www.redhat.com/linux-info/gtk/gtk-list/index.html">
-
+</itemize>
 <!-- ----------------------------------------------------------------- -->
 <sect1>The gtk-list hasn't had any traffic for days, is it dead?
 <p>
@@ -123,17 +132,35 @@ Bug reports should be sent to the GTK+ mailing list.
 <p>
 Some applications which use GTK+ are:
 <itemize>
-<item>GIMP (<url url="http://www.XCF.Berkeley.EDU/~gimp/"> ), 
+<item>GIMP (<htmlurl url="http://www.XCF.Berkeley.EDU/~gimp/" name="http://www.XCF.Berkeley.EDU/~gimp/"> ), 
       an image manipulation program
-<item>Gsumi (<url url="http://student-www.uchicago.edu/users/otaylor/gsumi/gsumi.html">),
+<item>Gsumi (<htmlurl url="http://student-www.uchicago.edu/users/otaylor/gsumi/gsumi.html" 
+                  name="http://student-www.uchicago.edu/users/otaylor/gsumi/gsumi.html">),
       a port of xink
-<item>GUBI (<url url="http://www.SoftHome.net/pub/users/timj/gubi/index.htm"> ),
+<item>GUBI (<htmlurl url="http://www.SoftHome.net/pub/users/timj/gubi/index.htm"
+            name="http://www.SoftHome.net/pub/users/timj/gubi/index.htm">),
       a user interface builder
-<item>Gzilla (<url url="http://www.levien.com/gzilla/"> ),
+<item>Gzilla (<htmlurl url="http://www.levien.com/gzilla/" name="http://www.levien.com/gzilla/">),
       a web browser
-<item>SANE (<url url="http://www.azstarnet.com/~axplinux/sane/"> ),
+<item>SANE (<htmlurl url="http://www.azstarnet.com/~axplinux/sane/" name="http://www.azstarnet.com/~axplinux/sane/"> ),
       a universal scanner interface
+<item>XQF (<htmlurl url="http://www.botik.ru/~roma/quake/" name="http://www.botik.ru/~roma/quake/">),
+      a QuakeWorld/Quake2 server browser and launcher
+<item>ElectricEyes (<htmlurl url="http://www.labs.redhat.com/ee.shtml" name="http://www.labs.redhat.com/ee.shtml">),
+      an image viewer that aims to be a free replacement for xv
+<item>GPK - the General Proxy Kit (<htmlurl url="http://www.humanfactor.com/gpk/" name="http://www.humanfactor.com/gpk/">),
+      an add-on library to permit thread-safe access to GTK+
+<item>GCK - the General Convenience Kit (<htmlurl url="http://www.ii.uib.no/~tomb/gck.html" name="http://www.ii.uib.no/~tomb/gck.html">),
+      miscellaneous functions intended to ease color handling, UI construction,
+      vector operations, and math functions
+<item>GDK Imlib (<htmlurl url="http://www.labs.redhat.com/imlib/" name="http://www.labs.redhat.com/imlib/">),
+      a fast image loading and manipulation library for GDK      
 </itemize>
+<p>
+In addition to the above, the GNOME project (<htmlurl url="http://www.gnome.org"
+name="http://www.gnome.org">)
+is using GTK+ to build a free desktop for Linux. Many more programs can be found
+there.
 
 <!-- ***************************************************************** -->
 <sect>How to find, configure, install, and troubleshoot GTK+
@@ -272,7 +299,7 @@ gladly be included.
 <!-- ----------------------------------------------------------------- -->
 <sect1>Is anyone working on bindings for languages other than C?
 <p>
-Yes, there is 
+Yes. There is 
 <itemize>
 <item>a C++ wrapper for GTK+ called gtk--. You can find the home page at:
 <verb>
@@ -299,9 +326,125 @@ The basics of the system, including callbacks, work fine.
 The current development is in
 http://www.ens-lyon.fr/~dmonniau/arcs/
 </quote>
+
+<item>
+Several python-gtk interfaces have been done. python-gtk is at:
+<verb>
+http://www.acs.ucalgary.cs/~nashceme/python-gtk/
+</verb>
+If you try python-gtk and don't like it, there's also pygtk located at:
+<verb>
+ftp://ftp.gimp.org/pub/gtk/python/
+
+<item>
+If you're a perl fanatic, you might enjoy using the perl-gtk interface at:
+<verb>
+ftp://ftp.gimp.org/pub/gtk/perl/
+</verb>
+
+<item>
+There's a OpenGL/Mesa widget available for GTK+. Grab it at:
+<verb>
+http://www.sakuranet.or.jp/~aozasa/shige/doc/comp/gtk/gtkGL/files-en.html
+</verb>
+
 </itemize>
+
 <!-- ***************************************************************** -->
-<sect>Widgets
+<sect>Development with GTK+
+<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I get started?
+<p>
+So, after you have installed GTK+ there are a couple of things that can
+ease you into developing applications with it. There is the
+GTK+ Tutorial <htmlurl url="http://www.levien.com/~slow/gtk/tutorial" 
+name="&lt;http://www.levien.com/~slow/gtk/tutorial&gt;">, which is undergoing development. This will introduce you
+to writing applications using C.
+
+The Tutorial doesn't (yet) contain information on all of the widgets
+that are in GTK+. For example code on how to use the basics of all the
+GTK+ widgets you should look at the file gtk/testgtk.c (and associated
+source files) within the GTK+ distribution. Looking at these exmaples will
+give you a good grounding on what the widgets can do.
+
+<sect1>What widgets are in GTK?
+<p>
+The GTK+ Tutorial lists the following widgets:
+<verb>
+         GtkObject
+         +-- GtkData
+         |   \-- GtkAdjustment
+         |
+         \-- GtkWidget
+             +-- GtkContainer
+             |   +-- GtkBin
+             |   |   +-- GtkAlignment
+             |   |   +-- GtkFrame
+             |   |   |   *-- GtkAspectFrame
+             |   |   |
+             |   |   +-- GtkItem
+             |   |   |   +-- GtkListItem
+             |   |   |   +-- GtkMenuItem
+             |   |   |   |   +-- GtkCheckMenuItem
+             |   |   |   |       *-- GtkRadioMenuItem
+             |   |   |   |
+             |   |   |   *-- GtkTreeItem
+             |   |   |
+             |   |   +-- GtkViewport
+             |   |   \-- GtkWindow
+             |   |       +-- GtkDialog
+             |   |       \-- GtkFileSelection
+             |   |
+             |   +-- GtkBox
+             |   |   +-- GtkHBox
+             |   |   \-- GtkVBox
+             |   |       +-- GtkColorSelection
+             |   |       \-- GtkCurve
+             |   |
+             |   +-- GtkButton
+             |   |   +-- GtkOptionMenu
+             |   |   \-- GtkToggleButton
+             |   |       \-- GtkCheckButton
+             |   |           \-- GtkRadioButton
+             |   |
+             |   +-- GtkList
+             |   +-- GtkMenuShell
+             |   |   +-- GtkMenu
+             |   |   \-- GtkMenuBar
+             |   |
+             |   +-- GtkNotebook
+             |   +-- GtkScrolledWindow
+             |   +-- GtkTable
+             |   \-- GtkTree
+             |
+             +-- GtkDrawingArea
+             +-- GtkEntry
+             +-- GtkMisc
+             |   +-- GtkArrow
+             |   +-- GtkImage
+             |   +-- GtkLabel
+             |   \-- GtkPixmap
+             |
+             +-- GtkPreview
+             +-- GtkProgressBar
+             +-- GtkRange
+             |   +-- GtkScale
+             |   |   +-- GtkHScale
+             |   |   \-- GtkVScale
+             |   |
+             |   \-- GtkScrollbar
+             |       +-- GtkHScrollbar
+             |       \-- GtkVScrollbar
+             |
+             +-- GtkRuler
+             |   +-- GtkHRuler
+             |   \-- GtkVRuler
+             |
+             \-- GtkSeparator
+                 +-- GtkHSeparator
+                 \-- GtkVSeparator
+</verb>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>How can I prevent redrawing and resizing while I change multiple widgets?
@@ -310,6 +453,51 @@ Use gtk_container_disable_resize and gtk_container_enable_resize around the
 code where you are changing a lot of stuff. This will result in much faster 
 speed since it will prevent resizing of the entire widget hierarchy. 
 
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I catach a double click event in a list widget?
+<p>
+Tim Janik wrote to gtk-list (slightly modified):
+
+Define a signal handler:
+
+<tscreen><verb>
+gint
+signal_handler_event(GtkWiget *widget, GdkEvenButton *event, gpointer func_data)
+{
+  if (GTK_IS_LIST_ITEM(widget) &&
+       (event->type==GDK_2BUTTON_PRESS ||
+        event->type==GDK_3BUTTON_PRESS) ) {
+    printf("I feel %s clicked on button %d\",
+           event->type==GDK_2BUTTON_PRESS ? "double" : "triple",
+           event->button);
+  }
+
+  return FALSE;
+}
+</verb></tscreen>
+
+And connect the handler to your object:        
+
+<tscreen><verb>
+{
+  /* list, list item init stuff */
+
+  gtk_signal_connect(GTK_OBJECT(list_item),
+                     "button_press_event",
+                     GTK_SIGNAL_FUNC(signal_handler_event),
+                     NULL);
+
+  /* and/or */
+
+  gtk_signal_connect(GTK_OBJECT(list_item),
+                     "button_release_event",
+                     GTK_SIGNAL_FUNC(signal_handler_event),
+                     NULL);
+
+  /* something else */
+}
+</verb></tscreen>
+         
 <!-- ----------------------------------------------------------------- -->
 <sect1>How do I find out about the selection of a GtkList?
 <p>
@@ -555,8 +743,24 @@ gtk_menu_append(GTK_MENU(menu), menuitem);
 gtk_widget_show(menuitem);
 </verb></tscreen>
 
+<!-- ***************************************************************** -->
+<sect>About gdk
+<!-- ***************************************************************** -->
+
 <!-- ----------------------------------------------------------------- -->
+<sect1>What is gdk?
+<p>
+gdk is basically a wrapper around the standard Xlib functions calls. If you are
+at all familiar with Xlib, a lot of the functions in gdk will require little or no
+getting used to. All functions are written to provide an easy way to access Xlib
+functions in an easier an slightly more intuitive manner. In addition, since gdk
+uses glib (see below), it will be more portable and safer to use on multiple platforms.
+
+<!-- Examples, anybody? I've been mulling some over. NF -->
+   
+<!-- ***************************************************************** -->
 <sect>About glib
+<!-- ***************************************************************** -->
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>What is glib?
@@ -574,6 +778,8 @@ It also provides routines for handling:
 <item>A Lexical Scanner
 <item>Error Functions
 </itemize>
+
+<!-- Some Examples might be useful here! NF -->         
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Why use g_print, g_malloc, g_strdup and fellow glib functions ?  
@@ -601,20 +807,38 @@ showing the messages inside of a gtk window with your own handler
 </quote>
 
 <!-- ***************************************************************** -->
-<sect>GTK+ FAQ Contributions and Maintainer 
+<sect>GTK+ FAQ Contributions, Maintainers and Copyright
 <p>
 If you would like to make a contribution to the FAQ, send either one of us
 an e-mail message with the exact text you think should be included (question and
 answer).  With your help, this document can grow and become more useful!
 
-This document is maintained by Nathan Froyd <htmlurl url="mailto:maestrox@geocities.com" 
-name="&lt;maestrox@geocities.com&gt;">
-and Tony Gale <htmlurl url="mailto:trogsta@geocities.com" name="&lt;trogsta@geocities.com&gt;">. 
-Previously, Shawn T. Amundson, took care of it.
+This document is maintained by Nathan Froyd 
+<htmlurl url="mailto:maestrox@geocities.com" name="&lt;maestrox@geocities.com&gt;">
+and Tony Gale <htmlurl url="mailto:gale@gimp.org" name="&lt;gale@gimp.org&gt;">. 
+This FAQ was created by Shawn T. Amundson <htmlurl url="mailto:amundson@gimp.org" 
+name="&lt;amundson@gimp.org&gt;">who continues to provide support.
+
+The GTK+ FAQ is Copyright (C) 1997,1998 by Shawn T. Amundson, Nathan Froyd and Tony Gale.
+
+Permission is granted to make and distribute verbatim copies of this manual provided the 
+copyright notice and this permission notice are preserved on all copies.
+
+Permission is granted to copy and distribute modified versions of this document under the conditions 
+for verbatim copying, provided that this copyright notice is included exactly as in the original, 
+and that the entire resulting derived work is distributed under the terms of a permission 
+notice identical to this one.
+
+Permission is granted to copy and distribute translations of this document into another language, 
+under the above conditions for modified versions.
+
+If you are intending to incorporate this document into a published work, please contact one of
+the maintainers, and we will make an effort to ensure that you have the most up to date 
+information available.
 
 There is no guarentee that this document lives up to its intended
 purpose.  This is simply provided as a free resource.  As such,
-the authors and maintainer of the information provided within can 
+the authors and maintainers of the information provided within can 
 not make any guarentee that the information is even accurate.
 
 </article>
