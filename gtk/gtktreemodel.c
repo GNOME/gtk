@@ -705,7 +705,7 @@ gtk_tree_model_get_iter_first (GtkTreeModel *tree_model,
   g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
 
-  path = gtk_tree_path_new_root ();
+  path = gtk_tree_path_new_first ();
   retval = gtk_tree_model_get_iter (tree_model, iter, path);
   gtk_tree_path_free (path);
 
@@ -1189,7 +1189,7 @@ gtk_tree_model_foreach (GtkTreeModel            *model,
   g_return_if_fail (GTK_IS_TREE_MODEL (model));
   g_return_if_fail (func != NULL);
 
-  path = gtk_tree_path_new_root ();
+  path = gtk_tree_path_new_first ();
   if (gtk_tree_model_get_iter (model, &iter, path) == FALSE)
     {
       gtk_tree_path_free (path);

@@ -782,7 +782,7 @@ gtk_font_selection_select_best_style (GtkFontSelection *fontsel,
 
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (fontsel->face_list));
 
-  if (gtk_tree_model_get_iter_root (model, &iter))
+  if (gtk_tree_model_get_iter_first (model, &iter))
     {
       set_cursor_to_iter (GTK_TREE_VIEW (fontsel->face_list), &iter);
       scroll_to_selection (GTK_TREE_VIEW (fontsel->face_list));
@@ -850,7 +850,7 @@ gtk_font_selection_show_available_sizes (GtkFontSelection *fontsel,
       GtkTreeIter iter;
       gboolean found = FALSE;
       
-      gtk_tree_model_get_iter_root (GTK_TREE_MODEL (model), &iter);
+      gtk_tree_model_get_iter_first (GTK_TREE_MODEL (model), &iter);
       for (i = 0; i < G_N_ELEMENTS (font_sizes) && !found; i++)
 	{
 	  if (font_sizes[i] * PANGO_SCALE == fontsel->size)
@@ -1057,7 +1057,7 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
   /* Check to make sure that this is in the list of allowed fonts */
 
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (fontsel->family_list));
-  for (valid = gtk_tree_model_get_iter_root (model, &iter);
+  for (valid = gtk_tree_model_get_iter_first (model, &iter);
        valid;
        valid = gtk_tree_model_iter_next (model, &iter))
     {
@@ -1083,7 +1083,7 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
   gtk_font_selection_show_available_styles (fontsel);
 
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (fontsel->face_list));
-  for (valid = gtk_tree_model_get_iter_root (model, &iter);
+  for (valid = gtk_tree_model_get_iter_first (model, &iter);
        valid;
        valid = gtk_tree_model_iter_next (model, &iter))
     {

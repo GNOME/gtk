@@ -3724,7 +3724,7 @@ validate_visible_area (GtkTreeView *tree_view)
       if (node == NULL)
 	{
 	  /* In this case, nothing has been validated */
-	  path = gtk_tree_path_new_root ();
+	  path = gtk_tree_path_new_first ();
 	  _gtk_tree_view_find_node (tree_view, path, &tree, &node);
 	}
       else
@@ -6742,7 +6742,7 @@ gtk_tree_view_focus_to_cursor (GtkTreeView *tree_view)
 
   if (cursor_path == NULL)
     {
-      cursor_path = gtk_tree_path_new_root ();
+      cursor_path = gtk_tree_path_new_first ();
       gtk_tree_row_reference_free (tree_view->priv->cursor);
       tree_view->priv->cursor = NULL;
 
@@ -7442,7 +7442,7 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 			G_CALLBACK (gtk_tree_view_rows_reordered),
 			tree_view);
 
-      path = gtk_tree_path_new_root ();
+      path = gtk_tree_path_new_first ();
       if (gtk_tree_model_get_iter (tree_view->priv->model, &iter, path))
 	{
 	  tree_view->priv->tree = _gtk_rbtree_new ();
@@ -8812,7 +8812,7 @@ gtk_tree_view_map_expanded_rows (GtkTreeView            *tree_view,
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (func != NULL);
 
-  path = gtk_tree_path_new_root ();
+  path = gtk_tree_path_new_first ();
 
   gtk_tree_view_map_expanded_rows_helper (tree_view,
 					  tree_view->priv->tree,
@@ -10111,7 +10111,7 @@ gtk_tree_view_search_move (GtkWidget   *window,
 
   /* search */
   gtk_tree_selection_unselect_all (selection);
-  gtk_tree_model_get_iter_root (model, &iter);
+  gtk_tree_model_get_iter_first (model, &iter);
 
   ret = gtk_tree_view_search_iter (model, selection, &iter, text,
 				   &count, up?((*selected_iter) - 1):((*selected_iter + 1)));
@@ -10125,7 +10125,7 @@ gtk_tree_view_search_move (GtkWidget   *window,
     {
       /* return to old iter */
       count = 0;
-      gtk_tree_model_get_iter_root (model, &iter);
+      gtk_tree_model_get_iter_first (model, &iter);
       gtk_tree_view_search_iter (model, selection,
 				 &iter, text,
 				 &count, *selected_iter);
@@ -10313,7 +10313,7 @@ gtk_tree_view_search_init (GtkWidget   *entry,
   if (len < 1)
     return;
 
-  gtk_tree_model_get_iter_root (model, &iter);
+  gtk_tree_model_get_iter_first (model, &iter);
 
   ret = gtk_tree_view_search_iter (model, selection,
 				   &iter, text,

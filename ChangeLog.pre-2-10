@@ -1,3 +1,23 @@
+Sat Feb 23 23:00:48 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.h: add () to function macros as per owen's
+	request.
+
+	* gtk/gtkfontsel.c: (gtk_font_selection_select_best_style),
+	(gtk_font_selection_show_available_sizes),
+	(gtk_font_selection_set_font_name):
+	* gtk/gtktreemodel.c: (gtk_tree_model_get_iter_first),
+	(gtk_tree_model_foreach):
+	* gtk/gtktreemodelsort.c: (gtk_tree_model_sort_sort_level),
+	(gtk_tree_model_sort_build_level):
+	* gtk/gtktreeselection.c: (gtk_tree_selection_selected_foreach):
+	* gtk/gtktreeview.c: (validate_visible_area),
+	(gtk_tree_view_focus_to_cursor), (gtk_tree_view_set_model),
+	(gtk_tree_view_map_expanded_rows), (gtk_tree_view_search_move),
+	(gtk_tree_view_search_init):
+	* tests/testtreeview.c: (run_automated_tests): change iter_root
+	to iter_first
+
 Sat Feb 23 22:10:52 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.c (gtk_tree_path_new_first): change new_root to
