@@ -6784,7 +6784,7 @@ gtk_tree_view_put (GtkTreeView *tree_view,
 		   gint         height)
 {
   GtkTreeViewChild *child;
-
+  
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (GTK_IS_WIDGET (child_widget));
 
@@ -6800,7 +6800,7 @@ gtk_tree_view_put (GtkTreeView *tree_view,
 
   if (GTK_WIDGET_REALIZED (tree_view))
     gtk_widget_set_parent_window (child->widget, tree_view->priv->bin_window);
-
+  
   gtk_widget_set_parent (child_widget, GTK_WIDGET (tree_view));
 }
 
@@ -12355,7 +12355,9 @@ gtk_tree_view_remove_widget (GtkCellEditable *cell_editable,
     gtk_widget_grab_focus (GTK_WIDGET (tree_view));
 
   gtk_container_remove (GTK_CONTAINER (tree_view),
-			GTK_WIDGET (cell_editable));
+			GTK_WIDGET (cell_editable));  
+  /* FIXME should only redraw a single node */
+  gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 }
 
 static gboolean

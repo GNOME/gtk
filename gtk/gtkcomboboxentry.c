@@ -54,6 +54,9 @@ static void gtk_combo_box_entry_contents_changed (GtkEntry              *entry,
                                                   gpointer               user_data);
 static gboolean gtk_combo_box_entry_mnemonic_activate (GtkWidget        *entry,
 						       gboolean          group_cycling);
+static void has_frame_changed                    (GtkComboBoxEntry      *entry_box,
+						  GParamSpec            *pspec,
+						  gpointer               data);
 
 enum
 {
@@ -125,6 +128,9 @@ gtk_combo_box_entry_init (GtkComboBoxEntry *entry_box)
   entry_box->priv->text_column = -1;
 
   entry_box->priv->entry = gtk_entry_new ();
+  /* this flag is a hack to tell the entry to fill its allocation.
+   */
+  GTK_ENTRY (entry_box->priv->entry)->is_cell_renderer = TRUE;
   gtk_container_add (GTK_CONTAINER (entry_box), entry_box->priv->entry);
   gtk_widget_show (entry_box->priv->entry);
 
@@ -139,6 +145,8 @@ gtk_combo_box_entry_init (GtkComboBoxEntry *entry_box)
                     entry_box);
   g_signal_connect (entry_box, "changed",
                     G_CALLBACK (gtk_combo_box_entry_active_changed), NULL);
+  has_frame_changed (entry_box, NULL, NULL);
+  g_signal_connect (entry_box, "notify::has-frame", G_CALLBACK (has_frame_changed), NULL);
 }
 
 static void
@@ -215,6 +223,18 @@ gtk_combo_box_entry_active_changed (GtkComboBox *combo_box,
   g_signal_handlers_unblock_by_func (entry_box->priv->entry,
                                      gtk_combo_box_entry_contents_changed,
                                      combo_box);
+}
+
+static void 
+has_frame_changed (GtkComboBoxEntry *entry_box,
+		   GParamSpec       *pspec,
+		   gpointer          data)
+{
+  gboolean has_frame;
+  
+  g_object_get (entry_box, "has_frame", &has_frame, NULL);
+
+  gtk_entry_set_has_frame (GTK_ENTRY (entry_box->priv->entry), has_frame);
 }
 
 static void

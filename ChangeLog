@@ -1,5 +1,30 @@
 2004-07-16  Matthias Clasen  <mclasen@redhat.com>
 
+	Add a combo box cell renderer (#139347, Lorenzo Gil Sanchez)
+	
+	* gtk/gtkcellrenderercombo.[hc]: New Files.
+
+	* gtk/gtk.h: 
+	* gtk/Makefile.am (gtk_public_h_sources, gtk_c_sources): 
+	Add the new files.
+
+	* gtk/gtkcombobox.[hc]: Implement GtkCellEditable, add a 
+	:has-frame property for suppressing the frame around 
+	the child and redo the size allocation logic to take 
+	focus width into account.
+
+	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_init): 
+	Acknowledge the GtkComboBox:has-frame property and make
+	the entry fill its allocation vertically.
+
+	* gtk/gtkmarshalers.list: Add BOOLEAN:STRING.
+		
+	* gtk/gtktreeview.c (gtk_tree_view_remove_widget): Queue
+	a draw here to keep non-widget windows from leaving 
+	shadows behind.
+
+2004-07-16  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkcombobox.c (gtk_combo_box_forall): Don't iterate
 	multiple times over some of the children. 
 
