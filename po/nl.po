@@ -200,7 +200,7 @@ msgstr "Allocatie van geheugen voor JPEG-bestand is mislukt"
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
-msgstr "JPEG-kwaliteit moet een waarde tussen 0 en 100 zijn: waarde '%s' kan niet geïnterpreteerd worden"
+msgstr "JPEG-kwaliteit moet een waarde tussen 0 en 100 zijn: waarde '%s' kan niet geÃ¯nterpreteerd worden"
 
 #: gdk-pixbuf/io-jpeg.c:679
 #, c-format
