@@ -170,7 +170,7 @@ g_string_chunk_insert_const (GStringChunk *fchunk,
   if (!chunk->const_table)
     chunk->const_table = g_hash_table_new (g_str_hash, g_str_equal);
 
-  lookup = (char*) g_hash_table_lookup (chunk->const_table, string);
+  lookup = (char*) g_hash_table_lookup (chunk->const_table, (gchar *)string);
 
   if (!lookup)
     {
