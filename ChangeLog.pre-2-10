@@ -1,3 +1,12 @@
+2005-01-27  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from gtk-2-6:
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_select_path): Oops, don't assert that we
+	can't reach the end of the function; this happens if we are still
+	loading but don't need a path change.  Fixes #165213.
+
 2005-01-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaboutdialog.c: Some visual tweaks to the about dialog,

@@ -4848,8 +4848,7 @@ gtk_file_chooser_default_select_path (GtkFileChooser    *chooser,
       return result;
     }
 
-  g_assert_not_reached ();
-  return FALSE;
+  return TRUE;
 }
 
 static void
