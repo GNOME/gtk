@@ -1,3 +1,13 @@
+Fri Jun 14 10:00:29 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_update_idle): Add
+	missing GDK_THREADS_ENTER()/GDK_THREADS_LEAVE().
+	(Report of non-thread-safety from Nicholas Allen)
+
+	* gtk/gtkmain.c (rewrite_events_translate): Fix sign
+	problem with coordinate translation. (Fix from
+	Robin Lu, #85229)
+
 Thu Jun 13 19:41:56 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkiconfactory.c gtk/gtkselection.c gtk/gtkstyle.c
