@@ -1,3 +1,9 @@
+Sun Jul  6 17:21:23 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* docs/widget_geometry.txt: better drawing of GtkMenuItem
+	* docs/widget_geometry.txt: add notes about GtkMenu
+	* gtk/gtkstyle.c: remove leftover "#include "gtkhandlebox.h""
+
 Sat Jul  5 10:34:00 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkmenu.c: add vertical_padding style property.

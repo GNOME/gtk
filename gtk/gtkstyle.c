@@ -35,7 +35,6 @@
 #include "gtkthemes.h"
 #include "gtkiconfactory.h"
 #include "gtksettings.h"	/* _gtk_settings_parse_convert() */
-#include "gtkhandlebox.h"
 
 #define LIGHTNESS_MULT  1.3
 #define DARKNESS_MULT   0.7
