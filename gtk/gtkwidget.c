@@ -4526,7 +4526,7 @@ gtk_widget_set_child_visible (GtkWidget *widget,
     GTK_PRIVATE_SET_FLAG (widget, GTK_CHILD_VISIBLE);
   else
     GTK_PRIVATE_UNSET_FLAG (widget, GTK_CHILD_VISIBLE);
-  if (GTK_WIDGET_REALIZED (widget->parent))
+  if (widget->parent && GTK_WIDGET_REALIZED (widget->parent))
     {
       if (GTK_WIDGET_MAPPED (widget->parent) &&
 	  GTK_WIDGET_CHILD_VISIBLE (widget) &&

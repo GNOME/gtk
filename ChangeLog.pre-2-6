@@ -1,3 +1,9 @@
+Wed Mar 20 12:06:30 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_set_child_visible):
+	Fix segfault when widget->parent is NULL. 
+	(#75615, Alexey A. Malyshev) 
+
 Wed Mar 20 11:32:07 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c: Improve test to prevent infinite
