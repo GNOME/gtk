@@ -376,9 +376,11 @@ gtk_accel_group_add (GtkAccelGroup	*accel_group,
 		 "cannot be used as accelerator signal",
 		 accel_signal,
 		 gtk_type_name (GTK_OBJECT_TYPE (object)));
+      if (query)
+	g_free (query);
+
       return;
     }
-  
   g_free (query);
 
   /* prematurely abort if the group/entry is already locked

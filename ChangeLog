@@ -1,3 +1,8 @@
+Thu Sep  3 04:45:57 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkaccelgroup.c (gtk_accel_group_add): plug another small
+	GtkSIgnalQuery leak.
+
 Thu Sep  3 04:22:20 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmenushell.c (gtk_real_menu_shell_move_current):
