@@ -2471,6 +2471,10 @@ gtk_text_iter_equal
 gtk_text_iter_compare
 gtk_text_iter_in_range
 gtk_text_iter_order
+<SUBSECTION Standard>
+GTK_TYPE_TEXT_ITER
+<SUBSECTION Private>
+gtk_text_iter_get_type
 </SECTION>
 
 <SECTION>
@@ -2517,8 +2521,10 @@ GTK_TYPE_TEXT_TAG
 GTK_TEXT_TAG_CLASS
 GTK_IS_TEXT_TAG_CLASS
 GTK_TEXT_TAG_GET_CLASS
+GTK_TYPE_TEXT_ATTRIBUTES
 <SUBSECTION Private>
 gtk_text_tag_get_type
+gtk_text_attributes_get_type
 </SECTION>
 
 <SECTION>
@@ -2868,8 +2874,12 @@ GTK_TREE_MODEL
 GTK_IS_TREE_MODEL
 GTK_TYPE_TREE_MODEL
 GTK_TREE_MODEL_GET_IFACE
+GTK_TYPE_TREE_ITER
+GTK_TYPE_TREE_PATH
 <SUBSECTION Private>
 gtk_tree_model_get_type
+gtk_tree_iter_get_type
+gtk_tree_path_get_type
 </SECTION>
 
 <SECTION>
@@ -3603,8 +3613,10 @@ GTK_TYPE_WIDGET
 GTK_WIDGET_CLASS
 GTK_IS_WIDGET_CLASS
 GTK_WIDGET_GET_CLASS
+GTK_TYPE_REQUISITION
 <SUBSECTION Private>
 gtk_widget_get_type
+gtk_requisition_get_type
 </SECTION>
 
 <SECTION>
@@ -3793,7 +3805,6 @@ gtk_init_abi_check
 gtk_init_check_abi_check
 gtk_win32_get_installation_directory
 GTKMAIN_C_VAR
-GTKTYPEUTILS_VAR
 </SECTION>
 
 
@@ -3902,8 +3913,10 @@ GTK_TYPE_STYLE
 GTK_STYLE_CLASS
 GTK_IS_STYLE_CLASS
 GTK_STYLE_GET_CLASS
+GTK_TYPE_BORDER
 <SUBSECTION Private>
 gtk_style_get_type
+gtk_border_get_type
 </SECTION>
 
 <SECTION>
@@ -3991,12 +4004,16 @@ gtk_selection_data_targets_include_text
 gtk_selection_remove_all
 gtk_selection_data_copy
 gtk_selection_data_free
+<SUBSECTION Standard>
+GTK_TYPE_SELECTION_DATA
 <SUBSECTION Private>
 gtk_selection_clear
 gtk_selection_incr_event
 gtk_selection_notify
 gtk_selection_property_notify
 gtk_selection_request
+gtk_selection_data_copy
+gtk_selection_data_get_type
 </SECTION>
 
 <SECTION>
@@ -4169,6 +4186,7 @@ gtk_type_enum_find_value
 gtk_type_flags_find_value
 <SUBSECTION Private>
 GTK_TYPE_IDENTIFIER
+gtk_identifier_get_type
 </SECTION>
 
 <SECTION>
@@ -4375,7 +4393,11 @@ GTK_IS_ICON_FACTORY
 GTK_ICON_FACTORY_CLASS
 GTK_ICON_FACTORY_GET_CLASS
 GTK_IS_ICON_FACTORY_CLASS
+GTK_TYPE_ICON_SET
+GTK_TYPE_ICON_SOURCE
 <SUBSECTION Private>
 gtk_icon_factory_get_type
+gtk_icon_set_get_type
+gtk_icon_source_get_type
 </SECTION>
 

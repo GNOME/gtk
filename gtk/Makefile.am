@@ -421,13 +421,11 @@ gtk_built_public_sources = @STRIP_BEGIN@ \
 @STRIP_END@
 # built sources that don't get installed
 gtk_built_sources = @STRIP_BEGIN@ \
-	stamp-gtk.defs		\
-	stamp-gtktypebuiltins.h	\
-	stamp-gtkmarshalers.h	\
 	gtktypebuiltins.c	\
 	gtkmarshalers.c		\
 	gtkmarshalers.h		\
 	gtkmarshal.c		\
+	gtkmarshal.h		\
 	gtk.defs		\
 	${gtk_built_public_sources} \
 @STRIP_END@
@@ -466,7 +464,7 @@ $(libgtk_x11_1_3_la_OBJECTS) $(libgtk_linux_fb_1_3_la_OBJECTS) $(libgtk_win32_1_
 # versions in the build dir. thus a development setup requires
 # srcdir to be writable, passing --disable-rebuilds to
 # ../configure will supress all autogeneration rules.
-$(srcdir)/gtk.defs: @REBUILD@ gtk.defs gtk-boxed.defs $(gtk_public_h_sources)	\
+$(srcdir)/gtk.defs: @REBUILD@ gtk-boxed.defs $(gtk_public_h_sources) Makefile
 	case @GLIB_MKENUMS@ in							\
 	   .*) glib_mkenums=`pwd`/@GLIB_MKENUMS@ ;;				\
 	   *) glib_mkenums=@GLIB_MKENUMS@ ;;					\
@@ -479,7 +477,7 @@ $(srcdir)/gtk.defs: @REBUILD@ gtk.defs gtk-boxed.defs $(gtk_public_h_sources)	\
 	                --vtail ")"						\
 	                $(gtk_public_h_sources) > xgen-gdef			\
 	&& cat gtk-boxed.defs >> xgen-gdef					\
-	&& gtk.defs || cp xgen-gdef gtk.defs					\
+	&& cp xgen-gdef gtk.defs						\
 	&& rm -f xgen-gdef
 
 all-local: @REBUILD@ gtk.defs
@@ -611,7 +609,6 @@ files:
 	done
 
 EXTRA_DIST += @STRIP_BEGIN@ 	\
-	oldest-source-stamp	\
 	line-arrow.xbm 		\
 	line-wrap.xbm 		\
 	tree_plus.xbm		\

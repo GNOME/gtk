@@ -45,9 +45,8 @@ html:
 pdf:
 	(cd $(srcdir); db2pdf gtk-tut.sgml)
 
-dist-hook: html pdf
+dist-hook: html
 	cp -Rp $(srcdir)/html $(distdir)
-	cp -p $(srcdir)/gtk-tut.pdf $(distdir)
 else
 html:
 	echo "***"
