@@ -1,3 +1,8 @@
+Fri Nov  2 10:21:03 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* examples/**/Makefile.am: Convert to use pkg-config
+	rather than gtk-config. (#53375, Skip Montanaro)
+
 2001-11-02  Matt Wilson  <msw@redhat.com>
 
 	* gtk/gtkdialog.c (find_child_by_response_id): remove totally

@@ -2,7 +2,7 @@
 CC = gcc
 
 table: table.c 
-	$(CC) `gtk-config --cflags`  table.c -o table `gtk-config --libs`
+	$(CC) `pkg-config --cflags gtk+-2.0`  table.c -o table `pkg-config --libs gtk+-2.0`
 
 clean: 
 	rm -f *.o table

@@ -2,7 +2,7 @@
 CC = gcc
 
 radiobuttons: radiobuttons.c 
-	$(CC) `gtk-config --cflags`  radiobuttons.c -o radiobuttons `gtk-config --libs`
+	$(CC) `pkg-config --cflags gtk+-2.0`  radiobuttons.c -o radiobuttons `pkg-config --libs gtk+-2.0`
 
 clean: 
 	rm -f *.o radiobuttons

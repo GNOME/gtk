@@ -2,7 +2,7 @@
 CC = gcc
 
 packbox: packbox.c 
-	$(CC) `gtk-config --cflags`  packbox.c -o packbox `gtk-config --libs`
+	$(CC) `pkg-config --cflags gtk+-2.0`  packbox.c -o packbox `pkg-config --libs gtk+-2.0`
 
 clean: 
 	rm -f *.o packbox

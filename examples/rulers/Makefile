@@ -2,7 +2,7 @@
 CC = gcc
 
 rulers: rulers.c 
-	$(CC) `gtk-config --cflags`  rulers.c -o rulers `gtk-config --libs`
+	$(CC) `pkg-config --cflags gtk+-2.0`  rulers.c -o rulers `pkg-config --libs gtk+-2.0`
 
 clean: 
 	rm -f *.o rulers

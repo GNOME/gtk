@@ -2,7 +2,7 @@
 CC = gcc
 
 clist: clist.c 
-	$(CC) `gtk-config --cflags`  clist.c -o clist `gtk-config --libs`
+	$(CC) `pkg-config --cflags gtk+-2.0`  clist.c -o clist `pkg-config --libs gtk+-2.0`
 
 clean: 
 	rm -f *.o clist

@@ -2,7 +2,7 @@
 CC = gcc
 
 text: text.c 
-	$(CC) `gtk-config --cflags`  text.c -o text `gtk-config --libs`
+	$(CC) `pkg-config --cflags gtk+-2.0`  text.c -o text `pkg-config --libs gtk+-2.0`
 
 clean: 
 	rm -f *.o text
