@@ -40,7 +40,10 @@ enum {
 
 static void gtk_toggle_button_class_init (GtkToggleButtonClass *klass);
 static void gtk_toggle_button_init       (GtkToggleButton      *toggle_button);
-static void gtk_toggle_button_draw_focus (GtkWidget            *widget);
+static void gtk_toggle_button_paint      (GtkWidget            *widget,
+					  GdkRectangle         *area);
+static void gtk_toggle_button_draw       (GtkWidget            *widget,
+					  GdkRectangle         *area);
 static void gtk_toggle_button_pressed    (GtkButton            *button);
 static void gtk_toggle_button_released   (GtkButton            *button);
 static void gtk_toggle_button_clicked    (GtkButton            *button);
@@ -115,7 +118,7 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   object_class->set_arg = gtk_toggle_button_set_arg;
   object_class->get_arg = gtk_toggle_button_get_arg;
 
-  widget_class->draw_focus = gtk_toggle_button_draw_focus;
+  widget_class->draw = gtk_toggle_button_draw;
   widget_class->realize = gtk_toggle_button_realize;
   widget_class->unrealize = gtk_toggle_button_unrealize;
 
@@ -248,16 +251,14 @@ gtk_toggle_button_toggled (GtkToggleButton *toggle_button)
 
 
 static void
-gtk_toggle_button_draw_focus (GtkWidget *widget)
+gtk_toggle_button_paint (GtkWidget    *widget,
+			 GdkRectangle *area)
 {
   GtkButton *button;
   GtkToggleButton *toggle_button;
   GtkShadowType shadow_type;
   gint width, height;
   gint x, y;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_TOGGLE_BUTTON (widget));
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
@@ -268,6 +269,18 @@ gtk_toggle_button_draw_focus (GtkWidget *widget)
       y = 0;
       width = widget->allocation.width - GTK_CONTAINER (widget)->border_width * 2;
       height = widget->allocation.height - GTK_CONTAINER (widget)->border_width * 2;
+
+      gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+      gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
+
+      if (GTK_WIDGET_HAS_DEFAULT (widget) &&
+          GTK_BUTTON (widget)->relief == GTK_RELIEF_NORMAL)
+        {
+          gtk_paint_box (widget->style, widget->window,
+                         GTK_STATE_NORMAL, GTK_SHADOW_IN,
+                         area, widget, "togglebuttondefault",
+                         x, y, width, height);
+        }
 
       if (GTK_WIDGET_CAN_DEFAULT (widget))
         {
@@ -287,15 +300,19 @@ gtk_toggle_button_draw_focus (GtkWidget *widget)
 	  height -= 2;
 	}
 
-      if (toggle_button->active)
+      if ((GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE) ||
+	  toggle_button->active)
 	shadow_type = GTK_SHADOW_IN;
       else
 	shadow_type = GTK_SHADOW_OUT;
 
-       gtk_paint_box (widget->style, widget->window,
-		      GTK_WIDGET_STATE (widget), shadow_type,
-		      NULL, widget, "togglebutton",
-		      x, y, width, height);
+      if ((button->relief != GTK_RELIEF_NONE) ||
+	  ((GTK_WIDGET_STATE(widget) != GTK_STATE_NORMAL) &&
+	   (GTK_WIDGET_STATE(widget) != GTK_STATE_INSENSITIVE)))
+	gtk_paint_box (widget->style, widget->window,
+		       GTK_WIDGET_STATE (widget),
+		       shadow_type, area, widget, "togglebutton",
+		       x, y, width, height);
 
       if (GTK_WIDGET_HAS_FOCUS (widget))
 	{
@@ -305,10 +322,36 @@ gtk_toggle_button_draw_focus (GtkWidget *widget)
 	  height += 2;
 
 	  gtk_paint_focus (widget->style, widget->window,
-			   NULL, widget, "togglebutton",
+			   area, widget, "togglebutton",
 			   x, y, width - 1, height - 1);
 	}
-       gtk_widget_draw (GTK_BIN (widget)->child, NULL);
+    }
+}
+
+static void
+gtk_toggle_button_draw (GtkWidget    *widget,
+			GdkRectangle *area)
+{
+  GtkButton *button;
+  GdkRectangle child_area;
+  GdkRectangle tmp_area;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_TOGGLE_BUTTON (widget));
+  g_return_if_fail (area != NULL);
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      button = GTK_BUTTON (widget);
+
+      tmp_area = *area;
+      tmp_area.x -= GTK_CONTAINER (button)->border_width;
+      tmp_area.y -= GTK_CONTAINER (button)->border_width;
+
+      gtk_toggle_button_paint (widget, &tmp_area);
+
+      if (GTK_BIN (button)->child && gtk_widget_intersect (GTK_BIN (button)->child, &tmp_area, &child_area))
+	gtk_widget_draw (GTK_BIN (button)->child, &child_area);
     }
 }
 

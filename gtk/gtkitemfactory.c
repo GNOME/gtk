@@ -1108,7 +1108,8 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   gtk_item_factory_add_item (ifactory,
 			     path, entry->accelerator,
 			     (type_id == quark_type_branch ||
-			      type_id == quark_type_last_branch) ? NULL : entry->callback,
+			      type_id == quark_type_last_branch) ?
+			      (GtkItemFactoryCallback) NULL : entry->callback,
 			     entry->callback_action, callback_data,
 			     callback_type,
 			     item_type_path,

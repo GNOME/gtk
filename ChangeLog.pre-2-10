@@ -1,3 +1,13 @@
+Thu Nov 12 15:33:54 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkitemfactory.c: cast NULL to GtkItemFactoryCallback to
+	ensure proper type (SunPro cc complains)
+
+	* gtk/gtklist.c: removed bogus '*' from "*GTK_CONTAINER_CLASS"
+
+	* gtk/gtktogglebutton.c: use our own draw method so we get proper
+	redraws on active state
+
 Thu Nov 12 00:26:13 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkstyle.c (gtk_default_draw_box_gap): use GtkPositionType
