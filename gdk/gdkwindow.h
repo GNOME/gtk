@@ -491,7 +491,6 @@ void	      gdk_window_set_functions	 (GdkWindow	  *window,
 					  GdkWMFunction	   functions);
 #ifndef GDK_MULTIHEAD_SAFE
 GList *       gdk_window_get_toplevels   (void);
-void          gdk_set_sm_client_id       (const gchar *sm_client_id);
 #endif
 
 void          gdk_window_iconify         (GdkWindow       *window);

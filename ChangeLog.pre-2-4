@@ -1,3 +1,8 @@
+Mon Sep 30 15:38:53 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.h: Remove a duplicate definition
+	of gdk_set_sm_client_id().
+
 Mon Sep 30 15:31:57 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdisplay.c gdk/x11/gdkdisplay-x11.c 
