@@ -1,3 +1,14 @@
+Wed Jun  5 23:29:41 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Related bugs: #76252, #76396, #80866.
+
+	* gtk/gtktreeselection.[ch]: added
+	gtk_tree_selection_get_selected_rows(),
+	added gtk_tree_selection_count_selected_rows(),
+	renamed gtk_tree_selection_real_select_range() to
+	gtk_tree_selection_real_modify_range(), and added mode parameter,
+	added gtk_tree_selection_unselect_range().
+	
 Tue Jun  4 17:39:34 2002  Owen Taylor  <otaylor@redhat.com>
 
  	* configure.in: If we have xft .pc file, use that
