@@ -1,3 +1,26 @@
+2005-03-15  Anders Carlsson  <andersca@imendio.com>
+
+	* docs/iconcache.txt:
+	Update spec.
+	
+	* gtk/gtkiconcache.c: (find_image_offset),
+	(_gtk_icon_cache_get_icon_flags), (_gtk_icon_cache_add_icons),
+	(_gtk_icon_cache_get_icon), (_gtk_icon_cache_get_icon_data):
+	* gtk/gtkiconcache.h:
+	Update to be able to fetch pixbuf data and icon metadata.
+	
+	* gtk/gtkicontheme.c: (theme_lookup_icon), (gtk_icon_info_free),
+	(icon_info_ensure_scale_and_pixbuf):
+	Use new cache functions.
+	
+	* gtk/updateiconcache.c: (foreach_remove_func), (load_icon_data),
+	(maybe_cache_image_data), (scan_directory), (write_pixdata),
+	(get_image_meta_data_size), (get_image_pixel_data_size),
+	(get_image_data_size), (get_single_node_size), (get_bucket_size),
+	(write_bucket), (main):
+	Update to write pixbuf data as well as information from .icon
+	files.
+	
 2005-03-15  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkmain-win32.c (_gdk_win32_key_to_string): New

@@ -21,6 +21,7 @@
 #include "gtkdebug.h"
 #include "gtkiconcache.h"
 #include <glib/gstdio.h>
+#include <gdk-pixbuf/gdk-pixdata.h>
 
 #ifdef HAVE_MMAP
 #include <sys/mman.h>
@@ -233,9 +234,9 @@ icon_name_hash (gconstpointer key)
 }
 
 gint
-_gtk_icon_cache_get_icon_flags (GtkIconCache *cache,
-				const gchar  *icon_name,
-				const gchar  *directory)
+find_image_offset (GtkIconCache *cache,
+		   const gchar  *icon_name,
+		   const gchar  *directory)
 {
   guint32 hash_offset;
   guint32 n_buckets;
@@ -265,8 +266,9 @@ _gtk_icon_cache_get_icon_flags (GtkIconCache *cache,
       chain_offset = GET_UINT32 (cache->buffer, chain_offset);
     }
 
-  if (!found)
+  if (!found) {
     return 0;
+  }
 
   /* We've found an icon list, now check if we have the right icon in it */
   directory_index = get_directory_index (cache, directory);
@@ -276,11 +278,26 @@ _gtk_icon_cache_get_icon_flags (GtkIconCache *cache,
   for (i = 0; i < n_images; i++)
     {
       if (GET_UINT16 (cache->buffer, image_list_offset + 4 + 8 * i) ==
-	  directory_index)
-	return GET_UINT16 (cache->buffer, image_list_offset + 4 + 8 * i + 2);
+	  directory_index) 
+	return image_list_offset + 4 + 8 * i;
     }
-  
+
   return 0;
+}
+
+gint
+_gtk_icon_cache_get_icon_flags (GtkIconCache *cache,
+				const gchar  *icon_name,
+				const gchar  *directory)
+{
+  guint32 image_offset;
+
+  image_offset = find_image_offset (cache, icon_name, directory);
+
+  if (!image_offset)
+    return 0;
+
+  return GET_UINT16 (cache->buffer, image_offset + 2);
 }
 
 void
@@ -301,7 +318,7 @@ _gtk_icon_cache_add_icons (GtkIconCache *cache,
   
   hash_offset = GET_UINT32 (cache->buffer, 4);
   n_buckets = GET_UINT32 (cache->buffer, hash_offset);
-  
+
   for (i = 0; i < n_buckets; i++)
     {
       chain_offset = GET_UINT32 (cache->buffer, hash_offset + 4 + 4 * i);
@@ -354,4 +371,140 @@ _gtk_icon_cache_has_icon (GtkIconCache *cache,
   return FALSE;
 }
 			  
+GdkPixbuf *
+_gtk_icon_cache_get_icon (GtkIconCache *cache,
+			  const gchar  *icon_name,
+			  const gchar  *directory)
+{
+  guint32 offset, image_data_offset, pixel_data_offset;
+  guint32 length, type;
+  GdkPixbuf *pixbuf;
+  GdkPixdata pixdata;
+  GError *error = NULL;
+
+  offset = find_image_offset (cache, icon_name, directory);
+  
+  image_data_offset = GET_UINT32 (cache->buffer, offset + 4);
+  
+  if (!image_data_offset)
+    return NULL;
+
+  pixel_data_offset = GET_UINT32 (cache->buffer, image_data_offset);
+
+  type = GET_UINT32 (cache->buffer, pixel_data_offset);
+
+  if (type != 0)
+    {
+      GTK_NOTE (ICONTHEME,
+		g_print ("invalid pixel data type %d\n", type));
+      return NULL;
+    }
+
+  length = GET_UINT32 (cache->buffer, pixel_data_offset + 4);
+  
+  if (!gdk_pixdata_deserialize (&pixdata, length, 
+				cache->buffer + pixel_data_offset + 8,
+				&error))
+    {
+      GTK_NOTE (ICONTHEME,
+		g_print ("could not deserialize data: %s\n", error->message));
+      g_error_free (error);
+
+      return NULL;
+    }
+
+  pixbuf = gdk_pixbuf_from_pixdata (&pixdata, FALSE, &error);
+
+  if (!pixbuf)
+    {
+      GTK_NOTE (ICONTHEME,
+		g_print ("could not convert pixdata to pixbuf: %s\n", error->message));
+      g_error_free (error);
+
+      return NULL;
+    }
+
+  return pixbuf;
+}
+
+GtkIconData  *
+_gtk_icon_cache_get_icon_data  (GtkIconCache *cache,
+				const gchar  *icon_name,
+				const gchar  *directory)
+{
+  guint32 offset, image_data_offset, meta_data_offset;
+  GtkIconData *data;
+  int i;
+
+  offset = find_image_offset (cache, icon_name, directory);
+  if (!offset)
+    return NULL;
+
+  image_data_offset = GET_UINT32 (cache->buffer, offset + 4);
+  if (!image_data_offset)
+    return NULL;
+
+  meta_data_offset = GET_UINT32 (cache->buffer, image_data_offset + 4);
+  
+  if (!meta_data_offset)
+    return NULL;
+
+  data = g_new0 (GtkIconData, 1);
+
+  offset = GET_UINT32 (cache->buffer, meta_data_offset);
+  if (offset)
+    {
+      data->has_embedded_rect = TRUE;
+      data->x0 = GET_UINT16 (cache->buffer, offset);
+      data->y0 = GET_UINT16 (cache->buffer, offset + 2);
+      data->x1 = GET_UINT16 (cache->buffer, offset + 4);
+      data->y1 = GET_UINT16 (cache->buffer, offset + 6);
+    }
+
+  offset = GET_UINT32 (cache->buffer, meta_data_offset + 4);
+  if (offset)
+    {
+      data->n_attach_points = GET_UINT32 (cache->buffer, offset);
+      data->attach_points = g_new (GdkPoint, data->n_attach_points);
+      for (i = 0; i < data->n_attach_points; i++)
+	{
+	  data->attach_points[i].x = GET_UINT16 (cache->buffer, offset + 4 + 4 * i); 
+	  data->attach_points[i].y = GET_UINT16 (cache->buffer, offset + 4 + 4 * i + 2); 
+	}
+    }
+
+  offset = GET_UINT32 (cache->buffer, meta_data_offset + 8);
+  if (offset)
+    {
+      gint n_names;
+      gchar *lang, *name;
+      gchar **langs;
+      GHashTable *table = g_hash_table_new (g_str_hash, g_str_equal);
+
+      n_names = GET_UINT32 (cache->buffer, offset);
+      
+      for (i = 0; i < n_names; i++)
+	{
+	  lang = cache->buffer + GET_UINT32 (cache->buffer, offset + 4 + 8 * i);
+	  name = cache->buffer + GET_UINT32 (cache->buffer, offset + 4 + 8 * i + 4);
+	  
+	  g_hash_table_insert (table, lang, name);
+	}
+      
+      langs = (gchar **)g_get_language_names ();
+      for (i = 0; langs[i]; i++)
+	{
+	  name = g_hash_table_lookup (table, langs[i]);
+	  if (name)
+	    {
+	      data->display_name = g_strdup (name);
+	      break;
+	    }
+	}
+
+      g_hash_table_destroy (table);
+    }
+
+  return data;
+}
 

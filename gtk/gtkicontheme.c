@@ -47,8 +47,6 @@
 
 #define DEFAULT_THEME_NAME "hicolor"
 
-typedef struct _GtkIconData GtkIconData;
-
 typedef enum
 {
   ICON_THEME_DIR_FIXED,  
@@ -113,6 +111,9 @@ struct _GtkIconInfo
 #endif
   GdkPixbuf *builtin_pixbuf;
 
+  /* Cache pixbuf (if there is any) */
+  GdkPixbuf *cache_pixbuf;
+
   GtkIconData *data;
   
   /* Information about the directory where
@@ -150,17 +151,6 @@ typedef struct
   /* In search order */
   GList *dirs;
 } IconTheme;
-
-struct _GtkIconData
-{
-  gboolean has_embedded_rect;
-  gint x0, y0, x1, y1;
-  
-  GdkPoint *attach_points;
-  gint n_attach_points;
-
-  gchar *display_name;
-};
 
 typedef struct
 {
@@ -1901,7 +1891,9 @@ theme_lookup_icon (IconTheme          *theme,
       
       if (min_dir->icon_data != NULL)
 	icon_info->data = g_hash_table_lookup (min_dir->icon_data, icon_name);
-      
+      else
+	icon_info->data = _gtk_icon_cache_get_icon_data (min_dir->cache, icon_name, min_dir->subdir);
+
       if (icon_info->data == NULL &&
 	  min_dir->cache && has_icon_file)
 	{
@@ -1921,6 +1913,12 @@ theme_lookup_icon (IconTheme          *theme,
 	    }
 	  g_free (icon_file_name);
 	  g_free (icon_file_path);
+	}
+
+      if (min_dir->cache)
+	{
+	  icon_info->cache_pixbuf = _gtk_icon_cache_get_icon (min_dir->cache, icon_name,
+							      min_dir->subdir);
 	}
 
       icon_info->dir_type = min_dir->type;
@@ -2334,6 +2332,8 @@ gtk_icon_info_free (GtkIconInfo *icon_info)
     g_object_unref (icon_info->builtin_pixbuf);
   if (icon_info->pixbuf)
     g_object_unref (icon_info->pixbuf);
+  if (icon_info->cache_pixbuf)
+    g_object_unref (icon_info->cache_pixbuf);
   
   g_free (icon_info);
 }
@@ -2519,8 +2519,11 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info,
    */
   if (icon_info->builtin_pixbuf)
     source_pixbuf = g_object_ref (icon_info->builtin_pixbuf);
+  else if (icon_info->cache_pixbuf)
+    source_pixbuf = g_object_ref (icon_info->cache_pixbuf);
   else
     {
+
       source_pixbuf = gdk_pixbuf_new_from_file (icon_info->filename,
 						&icon_info->load_error);
       if (!source_pixbuf)
