@@ -1,3 +1,14 @@
+Fri Dec  3 14:09:50 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkoptionmenu.[ch] (gtk_option_menu_get_history):
+	New function, long needed.
+
+Wed Dec  1 22:35:43 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkproperty.h x11/gdkproperty.c: Change 
+	only_if_exists argument of gdk_atom_intern to
+	bool.
+
 1999-11-25  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdkgc.c (gdk_gc_set_ts_origin, gdk_gc_set_clip_origin): 
@@ -25,16 +36,6 @@
 Fri Nov 19 10:34:41 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkgamma.h: Adapt cast macros to standard.
-
-Wed Nov 17 18:36:05 1999  Owen Taylor  <otaylor@redhat.com>
-
-	* gdk/gdkrectangle.c (gdk_rectangle_union gdk_rectangle_intersect):
-	Fixes so that it is safe to have dest the same as
-	src1 or src2.
-
-Wed Nov 17 15:58:44 1999  Owen Taylor  <otaylor@redhat.com>
-
-	* gdk/x11/gdkregion-x11.c (gdk_region_get_clipbox): Indentation fix.
 
 [ Merges from 1.2 ]
 
