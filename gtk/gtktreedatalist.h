@@ -67,10 +67,10 @@ GtkTreeDataList *_gtk_tree_data_list_node_copy      (GtkTreeDataList *list,
                                                      GType            type);
 
 /* Header code */
-gint                   gtk_tree_data_list_compare_func (GtkTreeModel *model,
-							GtkTreeIter  *a,
-							GtkTreeIter  *b,
-							gpointer      user_data);
+gint                   _gtk_tree_data_list_compare_func (GtkTreeModel *model,
+							 GtkTreeIter  *a,
+							 GtkTreeIter  *b,
+							 gpointer      user_data);
 GList *                _gtk_tree_data_list_header_new  (gint          n_columns,
 							GType        *types);
 void                   _gtk_tree_data_list_header_free (GList        *header_list);

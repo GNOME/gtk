@@ -966,7 +966,7 @@ gtk_tree_store_set_valist (GtkTreeStore *tree_store,
 	}
     }
 
-  if (func != gtk_tree_data_list_compare_func)
+  if (func != _gtk_tree_data_list_compare_func)
     maybe_need_sort = TRUE;
 
   while (column != -1)
@@ -999,7 +999,7 @@ gtk_tree_store_set_valist (GtkTreeStore *tree_store,
 						   &value,
 						   FALSE) || emit_signal;
 
-      if (func == gtk_tree_data_list_compare_func &&
+      if (func == _gtk_tree_data_list_compare_func &&
 	  column == tree_store->sort_column_id)
 	maybe_need_sort = TRUE;
 
@@ -2673,7 +2673,7 @@ gtk_tree_store_sort_iter_changed (GtkTreeStore *tree_store,
     }
 
   /* If it's the built in function, we don't sort. */
-  if (func == gtk_tree_data_list_compare_func &&
+  if (func == _gtk_tree_data_list_compare_func &&
       tree_store->sort_column_id != column)
     return;
 

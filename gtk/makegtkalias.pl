@@ -38,7 +38,6 @@ print <<EOF;
 #include "gtktextlayout.h"
 #include "gtktextsegment.h"
 #include "gtktexttypes.h"
-#include "gtktreedatalist.h"
 #include "gtkthemes.h"
 #include "gtkwindow-decorate.h"
 

@@ -298,10 +298,10 @@ _gtk_tree_data_list_node_copy (GtkTreeDataList *list,
 }
 
 gint
-gtk_tree_data_list_compare_func (GtkTreeModel *model,
-				 GtkTreeIter  *a,
-				 GtkTreeIter  *b,
-				 gpointer      user_data)
+_gtk_tree_data_list_compare_func (GtkTreeModel *model,
+				  GtkTreeIter  *a,
+				  GtkTreeIter  *b,
+				  gpointer      user_data)
 {
   gint column = GPOINTER_TO_INT (user_data);
   GType type = gtk_tree_model_get_column_type (model, column);
@@ -460,7 +460,7 @@ _gtk_tree_data_list_header_new (gint   n_columns,
 
       retval = g_list_prepend (retval, header);
       header->sort_column_id = i;
-      header->func = gtk_tree_data_list_compare_func;
+      header->func = _gtk_tree_data_list_compare_func;
       header->destroy = NULL;
       header->data = GINT_TO_POINTER (i);
     }

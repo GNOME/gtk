@@ -1,3 +1,13 @@
+2004-08-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreedatalist.[hc]: 
+	* gtk/gtkliststore.c:
+	* gtk/gtktreestore.c: Underscore-prefix gtk_tree_data_list_compare_func. 
+
+	* gtk/gtk.symbols: Remove gtk_tree_data_list_compare_func.
+
+	* gtk/makegtkalias.pl: No need to include gtktreedatalist.h any more.
+
 2004-08-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/Makefile.am: 

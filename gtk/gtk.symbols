@@ -2268,7 +2268,6 @@ gtk_tooltips_set_tip
 gtk_tree_append
 gtk_tree_child_position
 gtk_tree_clear_items
-gtk_tree_data_list_compare_func
 gtk_tree_drag_dest_drag_data_received
 gtk_tree_drag_dest_get_type
 gtk_tree_drag_dest_row_drop_possible
