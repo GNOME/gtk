@@ -245,16 +245,25 @@ gtk_statusbar_pop (GtkStatusbar *statusbar,
   if (statusbar->messages)
     {
       GSList *list;
-      GtkStatusbarClass *class;
 
-      list = statusbar->messages;
-      msg = list->data;
-      class = GTK_STATUSBAR_CLASS (GTK_OBJECT (statusbar)->klass);
-      
-      statusbar->messages = g_slist_remove_link (statusbar->messages, list);
-      g_free (msg->text);
-      g_mem_chunk_free (class->messages_mem_chunk, msg);
-      g_slist_free_1 (list);
+      for (list = statusbar->messages; list; list = list->next)
+	{
+	  msg = list->data;
+
+	  if (msg->context_id == context_id)
+	    {
+	      GtkStatusbarClass *class;
+
+	      class = GTK_STATUSBAR_CLASS (GTK_OBJECT (statusbar)->klass);
+
+	      statusbar->messages = g_slist_remove_link (statusbar->messages,
+							 list);
+	      g_free (msg->text);
+	      g_mem_chunk_free (class->messages_mem_chunk, msg);
+	      g_slist_free_1 (list);
+	      break;
+	    }
+	}
     }
 
   msg = statusbar->messages ? statusbar->messages->data : NULL;
@@ -335,6 +344,11 @@ gtk_statusbar_destroy (GtkObject *object)
   g_slist_free (statusbar->messages);
   statusbar->messages = NULL;
 
+  for (list = statusbar->keys; list; list = list->next)
+    g_free (list->data);
+  g_slist_free (statusbar->keys);
+  statusbar->keys = NULL;
+
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
@@ -342,17 +356,11 @@ static void
 gtk_statusbar_finalize (GtkObject *object)
 {
   GtkStatusbar *statusbar;
-  GSList *list;
 
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_STATUSBAR (object));
 
   statusbar = GTK_STATUSBAR (object);
-
-  for (list = statusbar->keys; list; list = list->next)
-    g_free (list->data);
-  g_slist_free (statusbar->messages);
-  statusbar->keys = NULL;
 
   GTK_OBJECT_CLASS (parent_class)->finalize (object);
 }

@@ -32,6 +32,7 @@
 #include "gtkentry.h"
 #include "gtkfilesel.h"
 #include "gtkhbox.h"
+#include "gtkhbbox.h"
 #include "gtklabel.h"
 #include "gtklist.h"
 #include "gtklistitem.h"
@@ -92,6 +93,7 @@ struct _CompletionDirSent
 {
   ino_t inode;
   time_t mtime;
+  dev_t device;
 
   gint entry_count;
   gchar *name_buffer; /* memory segment containing names of all entries */
@@ -370,7 +372,9 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_widget_show (filesel->main_vbox);
 
   /* The horizontal box containing create, rename etc. buttons */
-  filesel->button_area = gtk_hbox_new (TRUE, 0);
+  filesel->button_area = gtk_hbutton_box_new ();
+  gtk_button_box_set_layout(GTK_BUTTON_BOX(filesel->button_area), GTK_BUTTONBOX_START);
+  gtk_button_box_set_spacing(GTK_BUTTON_BOX(filesel->button_area), 0);
   gtk_box_pack_start (GTK_BOX (filesel->main_vbox), filesel->button_area, 
 		      FALSE, FALSE, 0);
   gtk_widget_show (filesel->button_area);
@@ -424,7 +428,9 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_widget_show (filesel->action_area);
   
   /*  The OK/Cancel button area */
-  confirm_area = gtk_hbox_new (TRUE, 10);
+  confirm_area = gtk_hbutton_box_new ();
+  gtk_button_box_set_layout(GTK_BUTTON_BOX(confirm_area), GTK_BUTTONBOX_END);
+  gtk_button_box_set_spacing(GTK_BUTTON_BOX(confirm_area), 5);
   gtk_box_pack_end (GTK_BOX (filesel->main_vbox), confirm_area, FALSE, FALSE, 0);
   gtk_widget_show (confirm_area);
 
@@ -529,6 +535,8 @@ gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel)
 			  filesel->fileop_ren_file, TRUE, TRUE, 0);
       gtk_widget_show (filesel->fileop_ren_file);
     }
+
+  gtk_widget_queue_resize(GTK_WIDGET(filesel));
 }
 
 void       
@@ -634,6 +642,7 @@ gtk_file_selection_destroy (GtkObject *object)
 	{
 	  callback_arg = list->data;
 	  g_free (callback_arg->directory);
+	  g_free (callback_arg);
 	  list = list->next;
 	}
       g_list_free (filesel->history_list);
@@ -1065,7 +1074,6 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
   GtkWidget *menu_item;
   GList *list;
   gchar *current_dir;
-  gchar *directory;
   gint dir_len;
   gint i;
   
@@ -1080,6 +1088,7 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
       while (list) {
 	callback_arg = list->data;
 	g_free (callback_arg->directory);
+	g_free (callback_arg);
 	list = list->next;
       }
       g_list_free (fs->history_list);
@@ -1104,7 +1113,6 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
 	  if (i != dir_len) 
 		  current_dir[i + 1] = '\0';
 	  menu_item = gtk_menu_item_new_with_label (current_dir);
-	  directory = g_strdup (current_dir);
 	  
 	  callback_arg = g_new (HistoryCallbackArg, 1);
 	  callback_arg->menu_item = menu_item;
@@ -1115,7 +1123,7 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
 	  if (dir_len == i) {
 	    callback_arg->directory = g_strdup ("");
 	  } else {
-	    callback_arg->directory = directory;
+	    callback_arg->directory = g_strdup (current_dir);
 	  }
 	  
 	  fs->history_list = g_list_append (fs->history_list, callback_arg);
@@ -1141,16 +1149,17 @@ gtk_file_selection_file_button (GtkWidget *widget,
 			       gpointer user_data)
 {
   GtkFileSelection *fs = NULL;
-  gchar *filename;
+  gchar *filename, *temp = NULL;
   
   g_return_if_fail (GTK_IS_CLIST (widget));
 
   fs = user_data;
   g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
-
-  filename = gtk_clist_get_row_data (GTK_CLIST (fs->file_list), row);
   
+  gtk_clist_get_text (GTK_CLIST (fs->file_list), row, 0, &temp);
+  filename = g_strdup (temp);
+
   if (bevent && filename)
     {
       switch (bevent->type)
@@ -1167,6 +1176,9 @@ gtk_file_selection_file_button (GtkWidget *widget,
 	  break;
 	}
     }
+
+  if (filename)
+    g_free (filename);
 }
 
 static void
@@ -1177,32 +1189,36 @@ gtk_file_selection_dir_button (GtkWidget *widget,
 			       gpointer user_data)
 {
   GtkFileSelection *fs = NULL;
-  gchar *filename;
-  
+  gchar *filename, *temp = NULL;
+
   g_return_if_fail (GTK_IS_CLIST (widget));
 
   fs = GTK_FILE_SELECTION (user_data);
   g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
 
-  filename = gtk_clist_get_row_data (GTK_CLIST (fs->dir_list), row);
+  gtk_clist_get_text (GTK_CLIST (fs->dir_list), row, 0, &temp);
+  filename = g_strdup (temp);
+
+  if (bevent && filename)
+    {
+      switch (bevent->type)
+	{
+	case GDK_BUTTON_PRESS:
+	  gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
+	  break;
+	  
+	case GDK_2BUTTON_PRESS:
+	  gtk_file_selection_populate (fs, filename, FALSE);
+	  break;
+	  
+	default:
+	  break;
+	}
+    }
   
-  if (bevent && filename) {
-  
-    switch (bevent->type)
-      {
-      case GDK_BUTTON_PRESS:
-	gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
-	break;
-      
-      case GDK_2BUTTON_PRESS:
-	gtk_file_selection_populate (fs, filename, FALSE);
-	break;
-	
-      default:
-	break;
-      }
-  }
+  if (filename)
+    g_free (filename);
 }
 
 static void
@@ -1220,6 +1236,8 @@ gtk_file_selection_populate (GtkFileSelection *fs,
   gint did_recurse = FALSE;
   gint possible_count = 0;
   gint selection_index = -1;
+  gint file_list_width;
+  gint dir_list_width;
   
   g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
@@ -1245,11 +1263,15 @@ gtk_file_selection_populate (GtkFileSelection *fs,
   text[1] = NULL;
   text[0] = "./";
   row = gtk_clist_append (GTK_CLIST (fs->dir_list), text);
-  gtk_clist_set_row_data (GTK_CLIST (fs->dir_list), row, "./");
 
   text[0] = "../";
   row = gtk_clist_append (GTK_CLIST (fs->dir_list), text);
-  gtk_clist_set_row_data (GTK_CLIST (fs->dir_list), row, "../");
+
+  /*reset the max widths of the lists*/
+  dir_list_width = gdk_string_width(fs->dir_list->style->font,"../");
+  gtk_clist_set_column_width(GTK_CLIST(fs->dir_list),0,dir_list_width);
+  file_list_width = 1;
+  gtk_clist_set_column_width(GTK_CLIST(fs->file_list),0,file_list_width);
 
   while (poss)
     {
@@ -1257,7 +1279,7 @@ gtk_file_selection_populate (GtkFileSelection *fs,
         {
           possible_count += 1;
 
-          filename = g_strdup (cmpl_this_completion (poss));
+          filename = cmpl_this_completion (poss);
 
 	  text[0] = filename;
 	  
@@ -1266,16 +1288,28 @@ gtk_file_selection_populate (GtkFileSelection *fs,
               if (strcmp (filename, "./") != 0 &&
                   strcmp (filename, "../") != 0)
 		{
+		  int width = gdk_string_width(fs->dir_list->style->font,
+					       filename);
 		  row = gtk_clist_append (GTK_CLIST (fs->dir_list), text);
-		  gtk_clist_set_row_data_full (GTK_CLIST (fs->dir_list), row,
-					       filename, (GtkDestroyNotify) g_free);
+		  if(width > dir_list_width)
+		    {
+		      dir_list_width = width;
+		      gtk_clist_set_column_width(GTK_CLIST(fs->dir_list),0,
+						 width);
+		    }
  		}
 	    }
           else
 	    {
+	      int width = gdk_string_width(fs->file_list->style->font,
+				           filename);
 	      row = gtk_clist_append (GTK_CLIST (fs->file_list), text);
-	      gtk_clist_set_row_data_full (GTK_CLIST (fs->file_list), row,
-					   filename ,(GtkDestroyNotify) g_free);
+	      if(width > file_list_width)
+	        {
+	          file_list_width = width;
+	          gtk_clist_set_column_width(GTK_CLIST(fs->file_list),0,
+					     width);
+	        }
             }
 	}
 
@@ -1471,7 +1505,14 @@ cmpl_init_state (void)
 
   new_state = g_new (CompletionState, 1);
 
+  /* We don't use getcwd() on SUNOS, because, it does a popen("pwd")
+   * and, if that wasn't bad enough, hangs in doing so.
+   */
+#if defined(sun) && !defined(__SVR4)
+  if (!getwd (getcwd_buf))
+#else    
   if (!getcwd (getcwd_buf, MAXPATHLEN))
+#endif    
     {
       cmpl_errno = errno;
       return NULL;
@@ -1539,6 +1580,8 @@ cmpl_free_state (CompletionState* cmpl_state)
 
   if (cmpl_state->user_dir_name_buffer)
     g_free (cmpl_state->user_dir_name_buffer);
+  if (cmpl_state->user_home_dir)
+    g_free (cmpl_state->user_home_dir);
   if (cmpl_state->user_directories)
     g_free (cmpl_state->user_directories);
   if (cmpl_state->the_completion.text)
@@ -1821,6 +1864,7 @@ open_new_dir(gchar* dir_name, struct stat* sbuf)
   sent = g_new(CompletionDirSent, 1);
   sent->mtime = sbuf->st_mtime;
   sent->inode = sbuf->st_ino;
+  sent->device = sbuf->st_dev;
 
   path_buf_len = strlen(dir_name);
 
@@ -1918,7 +1962,8 @@ open_dir(gchar* dir_name, CompletionState* cmpl_state)
       sent = cdsl->data;
 
       if(sent->inode == sbuf.st_ino &&
-	 sent->mtime == sbuf.st_mtime)
+	 sent->mtime == sbuf.st_mtime &&
+	 sent->device == sbuf.st_dev)
 	return attach_dir(sent, dir_name, cmpl_state);
 
       cdsl = cdsl->next;
@@ -2073,7 +2118,11 @@ find_parent_dir_fullname(gchar* dirname)
   gchar buffer[MAXPATHLEN];
   gchar buffer2[MAXPATHLEN];
 
+#if defined(sun) && !defined(__SVR4)
+  if(!getwd(buffer))
+#else
   if(!getcwd(buffer, MAXPATHLEN))
+#endif    
     {
       cmpl_errno = errno;
       return NULL;
@@ -2085,7 +2134,11 @@ find_parent_dir_fullname(gchar* dirname)
       return NULL;
     }
 
+#if defined(sun) && !defined(__SVR4)
+  if(!getwd(buffer2))
+#else
   if(!getcwd(buffer2, MAXPATHLEN))
+#endif
     {
       chdir(buffer);
       cmpl_errno = errno;
@@ -2452,7 +2505,7 @@ static gint
 get_pwdb(CompletionState* cmpl_state)
 {
   struct passwd *pwd_ptr;
-  gchar* buf_ptr, *home_dir = NULL;
+  gchar* buf_ptr;
   gint len = 0, i, count = 0;
 
   if(cmpl_state->user_dir_name_buffer)
@@ -2478,10 +2531,8 @@ get_pwdb(CompletionState* cmpl_state)
 	  cmpl_errno = errno;
 	  goto error;
 	}
-      home_dir = pwd_ptr->pw_dir;
-
-      len += strlen(home_dir);
-      len += 1;
+      /* Allocate this separately, since it might be filled in elsewhere */
+      cmpl_state->user_home_dir = g_strdup (pwd_ptr->pw_dir);
     }
 
   setpwent ();
@@ -2491,14 +2542,6 @@ get_pwdb(CompletionState* cmpl_state)
   cmpl_state->user_directories_len = count;
 
   buf_ptr = cmpl_state->user_dir_name_buffer;
-
-  if (!cmpl_state->user_home_dir)
-    {
-      strcpy(buf_ptr, home_dir);
-      cmpl_state->user_home_dir = buf_ptr;
-      buf_ptr += strlen(buf_ptr);
-      buf_ptr += 1;
-    }
 
   for(i = 0; i < count; i += 1)
     {

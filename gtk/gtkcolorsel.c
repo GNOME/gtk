@@ -17,12 +17,17 @@
  */
 #include <math.h>
 #include "gtkcolorsel.h"
+#include "gtkhbbox.h"
 
 /*
  * If you change the way the color values are stored,
  * please make sure to update the drag & drop support so it sends
  * across all the color info (currently RGBA). - Elliot
  */
+
+#ifndef M_PI
+#define M_PI    3.14159265358979323846
+#endif /* M_PI */
 
 #define DEGTORAD(a) (2.0*M_PI*a/360.0)
 #define SQR(a) (a*a)
@@ -109,6 +114,7 @@ static void gtk_color_selection_rgb_updater       (GtkWidget         *widget,
 static void gtk_color_selection_opacity_updater   (GtkWidget         *widget,
                                                    gpointer           data);
 static void gtk_color_selection_realize           (GtkWidget         *widget);
+static void gtk_color_selection_unrealize         (GtkWidget         *widget);
 static void gtk_color_selection_finalize          (GtkObject         *object);
 static void gtk_color_selection_color_changed     (GtkColorSelection *colorsel);
 static void gtk_color_selection_update_input      (GtkWidget         *scale,
@@ -232,6 +238,7 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
   object_class->finalize = gtk_color_selection_finalize;
 
   widget_class->realize = gtk_color_selection_realize;
+  widget_class->unrealize = gtk_color_selection_unrealize;
 }
 
 static void
@@ -512,6 +519,35 @@ gtk_color_selection_realize (GtkWidget         *widget)
 			    "drag_request_event",
 			    GTK_SIGNAL_FUNC (gtk_color_selection_drag_handle),
 			    colorsel);
+}
+
+static void
+gtk_color_selection_unrealize (GtkWidget      *widget)
+{
+  GtkColorSelection *colorsel;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_COLOR_SELECTION (widget));
+
+  colorsel = GTK_COLOR_SELECTION (widget);
+
+  if (colorsel->value_gc != NULL)
+    {
+      gdk_gc_unref (colorsel->value_gc);
+      colorsel->value_gc = NULL;
+    }
+  if (colorsel->wheel_gc != NULL)
+    {
+      gdk_gc_unref (colorsel->wheel_gc);
+      colorsel->wheel_gc = NULL;
+    }
+  if (colorsel->sample_gc != NULL)
+    {
+      gdk_gc_unref (colorsel->sample_gc);
+      colorsel->sample_gc = NULL;
+    }
+
+  (* GTK_WIDGET_CLASS (color_selection_parent_class)->unrealize) (widget);
 }
 
 static void
@@ -1443,7 +1479,9 @@ gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
   gtk_container_add (GTK_CONTAINER (frame), colorseldiag->colorsel);
   gtk_widget_show (colorseldiag->colorsel);
 
-  action_area = gtk_hbox_new (TRUE, 10);
+  action_area = gtk_hbutton_box_new ();
+  gtk_button_box_set_layout(GTK_BUTTON_BOX(action_area), GTK_BUTTONBOX_END);
+  gtk_button_box_set_spacing(GTK_BUTTON_BOX(action_area), 5);
   gtk_box_pack_end (GTK_BOX (colorseldiag->main_vbox), action_area, FALSE, FALSE, 0);
   gtk_widget_show (action_area);
 

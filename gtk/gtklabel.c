@@ -38,6 +38,11 @@ static void gtk_label_size_request (GtkWidget      *widget,
 				    GtkRequisition *requisition);
 static gint gtk_label_expose       (GtkWidget      *widget,
 				    GdkEventExpose *event);
+static void gtk_label_state_changed (GtkWidget      *widget,
+				     guint	     previous_state);
+static void gtk_label_style_set	    (GtkWidget      *widget,
+				     GtkStyle       *previous_style);
+
 
 
 static GtkMiscClass *parent_class = NULL;
@@ -85,6 +90,8 @@ gtk_label_class_init (GtkLabelClass *class)
 
   widget_class->size_request = gtk_label_size_request;
   widget_class->expose_event = gtk_label_expose;
+  widget_class->style_set    = gtk_label_style_set;
+  widget_class->state_changed = gtk_label_state_changed;
 }
 
 static void
@@ -257,8 +264,9 @@ gtk_label_size_request (GtkWidget      *widget,
     {
       if (row->next)
   	  width = MAX (width,
-                       gdk_text_width (GTK_WIDGET (label)->style->font, row->data,
-                                       (gchar*) row->next->data - (gchar*) row->data));
+                       gdk_text_width (GTK_WIDGET (label)->style->font,
+				       row->data,
+                                       (gchar*) row->next->data - (gchar*) row->data) - 1);
       else
         width = MAX (width, gdk_string_width (GTK_WIDGET (label)->style->font, row->data));
       row = row->next;
@@ -315,7 +323,7 @@ gtk_label_expose (GtkWidget      *widget,
       row = label->row;
       while (row && row->next)
 	{
-	  len = (gchar*) row->next->data - (gchar*) row->data;
+	  len = (gchar*) row->next->data - (gchar*) row->data - 1;
 	  offset = 0;
 
 	  if (label->jtype == GTK_JUSTIFY_CENTER)
@@ -365,7 +373,29 @@ gtk_label_expose (GtkWidget      *widget,
   return TRUE;
 }
 
+static void 
+gtk_label_state_changed (GtkWidget      *widget,
+			 guint	         previous_state)
+{
+  if (GTK_WIDGET_NO_WINDOW (widget) &&
+      GTK_WIDGET_DRAWABLE (widget))
+    gdk_window_clear_area (widget->window,
+			   widget->allocation.x,
+			   widget->allocation.y,
+			   widget->allocation.width,
+			   widget->allocation.height);
+}
 
-
-
+static void 
+gtk_label_style_set	(GtkWidget      *widget,
+			 GtkStyle       *previous_style)
+{
+  if (GTK_WIDGET_NO_WINDOW (widget) &&
+      GTK_WIDGET_DRAWABLE (widget))
+    gdk_window_clear_area (widget->window,
+			   widget->allocation.x,
+			   widget->allocation.y,
+			   widget->allocation.width,
+			   widget->allocation.height);
+}
 

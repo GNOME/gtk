@@ -53,6 +53,8 @@ static void gtk_menu_shell_foreach           (GtkContainer      *container,
 static void gtk_real_menu_shell_deactivate   (GtkMenuShell      *menu_shell);
 static gint gtk_menu_shell_is_item           (GtkMenuShell      *menu_shell,
 					      GtkWidget         *child);
+static GtkWidget *gtk_menu_shell_get_item    (GtkMenuShell      *menu_shell,
+					      GdkEvent          *event);
 
 
 static GtkContainerClass *parent_class = NULL;
@@ -299,12 +301,14 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
 	{
 	  gtk_grab_add (GTK_WIDGET (widget));
 	  menu_shell->have_grab = TRUE;
+	  menu_shell->active = TRUE;
 	}
-      menu_shell->active = TRUE;
+      menu_shell->button = event->button;
 
-      menu_item = gtk_get_event_widget ((GdkEvent*) event);
-      if (menu_item && GTK_IS_MENU_ITEM (menu_item) &&
-	  gtk_menu_shell_is_item (menu_shell, menu_item))
+      menu_item = gtk_menu_shell_get_item (menu_shell, (GdkEvent *)event);
+
+      if (menu_item &&
+	  GTK_WIDGET_IS_SENSITIVE (menu_item))
 	{
 	  if ((menu_item->parent == widget) &&
 	      (menu_item != menu_shell->active_menu_item))
@@ -318,13 +322,6 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
 	      gtk_menu_item_select (GTK_MENU_ITEM (menu_shell->active_menu_item));
 	    }
 	}
-      else if (!menu_shell->button)
-	{
-	  gtk_menu_shell_deactivate (menu_shell);
-	}
-      
-      if (menu_shell->active)
-	menu_shell->button = event->button;
     }
   else
     {
@@ -358,14 +355,15 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
 	    gtk_widget_event (menu_shell->parent_menu_shell, (GdkEvent*) event);
 	  return TRUE;
 	}
-
+      
       menu_shell->button = 0;
-      menu_item = gtk_get_event_widget ((GdkEvent*) event);
+      menu_item = gtk_menu_shell_get_item (menu_shell, (GdkEvent*) event);
+
       deactivate = TRUE;
 
       if ((event->time - menu_shell->activate_time) > MENU_SHELL_TIMEOUT)
 	{
-	  if (menu_shell->active_menu_item == menu_item)
+	  if (menu_item && (menu_shell->active_menu_item == menu_item))
 	    {
 	      if (GTK_MENU_ITEM (menu_item)->submenu == NULL)
 		{
@@ -383,15 +381,14 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
 	}
       else
 	deactivate = FALSE;
-
-      if ((!deactivate || (menu_shell->active_menu_item == menu_item)) &&
-	  (gdk_pointer_grab (widget->window, TRUE,
-			     GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-			     GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK,
-			     NULL, NULL, event->time) == 0))
+      
+      /* If the button click was very fast, or we ended up on a submenu,
+       * leave the menu up
+       */
+      if (!deactivate || 
+	  (menu_item && (menu_shell->active_menu_item == menu_item)))
 	{
 	  deactivate = FALSE;
-	  menu_shell->have_xgrab = TRUE;
 	  menu_shell->ignore_leave = TRUE;
 	}
       else
@@ -437,6 +434,8 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
 	      gtk_menu_item_set_placement (GTK_MENU_ITEM (menu_shell->active_menu_item),
 					   MENU_SHELL_CLASS (menu_shell)->submenu_placement);
 	      gtk_menu_item_select (GTK_MENU_ITEM (menu_shell->active_menu_item));
+	      if (GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu)
+		gtk_widget_activate (menu_shell->active_menu_item);
 	    }
 	}
       else if (menu_shell->parent_menu_shell)
@@ -587,19 +586,37 @@ static gint
 gtk_menu_shell_is_item (GtkMenuShell *menu_shell,
 			GtkWidget    *child)
 {
-  GtkMenuShell *parent;
+  GtkWidget *parent;
 
   g_return_val_if_fail (menu_shell != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU_SHELL (menu_shell), FALSE);
   g_return_val_if_fail (child != NULL, FALSE);
 
-  parent = GTK_MENU_SHELL (child->parent);
+  parent = child->parent;
   while (parent && GTK_IS_MENU_SHELL (parent))
     {
-      if (parent == menu_shell)
+      if (parent == (GtkWidget*) menu_shell)
 	return TRUE;
-      parent = GTK_MENU_SHELL (parent->parent_menu_shell);
+      parent = GTK_MENU_SHELL (parent)->parent_menu_shell;
     }
 
   return FALSE;
 }
+
+static GtkWidget *
+gtk_menu_shell_get_item (GtkMenuShell *menu_shell,
+			 GdkEvent     *event)
+{
+  GtkWidget *menu_item;
+
+  menu_item = gtk_get_event_widget ((GdkEvent*) event);
+  
+  while (menu_item && !GTK_IS_MENU_ITEM (menu_item))
+    menu_item = menu_item->parent;
+
+  if (menu_item && gtk_menu_shell_is_item (menu_shell, menu_item))
+    return menu_item;
+  else
+    return NULL;
+}
+

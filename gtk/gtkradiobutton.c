@@ -84,17 +84,29 @@ gtk_radio_button_init (GtkRadioButton *radio_button)
   radio_button->group = NULL;
 }
 
-GtkWidget*
-gtk_radio_button_new (GSList *group)
+void
+gtk_radio_button_set_group (GtkRadioButton *radio_button,
+			    GSList *group)
 {
-  GtkRadioButton *radio_button;
-  GtkRadioButton *tmp_button;
   GSList *tmp_list;
+  GtkRadioButton *tmp_button;
 
-  radio_button = gtk_type_new (gtk_radio_button_get_type ());
+  if (radio_button->group)
+    {
+      radio_button->group = g_slist_remove (radio_button->group, radio_button);
+      
+      tmp_list = radio_button->group;
+      while (tmp_list)
+	{
+	  tmp_button = tmp_list->data;
+	  tmp_list = tmp_list->next;
+	  
+	  tmp_button->group = radio_button->group;
+	}
+    }
 
-  tmp_list = group;
   radio_button->group = g_slist_prepend (group, radio_button);
+  tmp_list = group;
 
   if (tmp_list)
     {
@@ -111,6 +123,16 @@ gtk_radio_button_new (GSList *group)
       GTK_TOGGLE_BUTTON (radio_button)->active = TRUE;
       gtk_widget_set_state (GTK_WIDGET (radio_button), GTK_STATE_ACTIVE);
     }
+}
+
+GtkWidget*
+gtk_radio_button_new (GSList *group)
+{
+  GtkRadioButton *radio_button;
+
+  radio_button = gtk_type_new (gtk_radio_button_get_type ());
+
+  gtk_radio_button_set_group (radio_button, group);
 
   return GTK_WIDGET (radio_button);
 }
@@ -307,9 +329,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
       width = CHECK_BUTTON_CLASS (widget)->indicator_size;
       height = CHECK_BUTTON_CLASS (widget)->indicator_size;
 
-      if (GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE)
-	shadow_type = GTK_SHADOW_IN;
-      else if ((GTK_WIDGET_STATE (widget) == GTK_STATE_PRELIGHT) && toggle_button->active)
+      if (GTK_TOGGLE_BUTTON (widget)->active)
 	shadow_type = GTK_SHADOW_IN;
       else
 	shadow_type = GTK_SHADOW_OUT;
@@ -331,3 +351,4 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 			x, y, width, height);
     }
 }
+

@@ -1,48 +1,4 @@
-/* GTK - The GIMP Toolkit
- * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the Free
- * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include "gtkthemes.h"
-#include "gtkprivate.h"
-#include "gtkbutton.h"
-#include "gtklabel.h"
-#include "gtkmain.h"
-#include "gtksignal.h"
-#include <gdk_imlib.h>
-#include "theme_btn1.xpm"
-#include "theme_btn2.xpm"
-#include "theme_btn3.xpm"
-#include "theme_led_off1.xpm"
-#include "theme_led_off2.xpm"
-#include "theme_led_on1.xpm"
-#include "theme_led_on2.xpm"
-
-struct _imgs
-{
-   GdkImlibImage *im1;
-   GdkImlibImage *im2;
-   GdkImlibImage *im3;
-   GdkImlibImage *im4;
-   GdkImlibImage *im5;
-   GdkImlibImage *im6;
-   GdkImlibImage *im7;
-};
+#include "theme2.h"
 
 /* Theme functions to export */
 void theme_init               (int     *argc,
@@ -52,34 +8,125 @@ void theme_exit               (void);
 /* internals */
 
 void 
+theme_read_config        ()
+{
+   ThemeConfig *cf;
+   char *h,s[2048],ss[2048];
+   FILE *f;
+   int a,b;
+   int i,j,k,l;
+   
+   h=getenv("HOME");
+   snprintf(s,2048,"%s/themes/config",h);
+   f=fopen(s,"r");
+   cf=(ThemeConfig *)th_dat.data;
+   cf->button_padding.left=1;
+   cf->button_padding.right=1;
+   cf->button_padding.top=1;
+   cf->button_padding.bottom=1;
+   for(i=0;i<3;i++)
+     {
+	for(j=0;j<5;j++)
+	  {
+	     cf->buttonconfig[i][j].border.filename=NULL;
+	     cf->buttonconfig[i][j].border.image=NULL;
+	     cf->buttonconfig[i][j].background.filename=NULL;
+	     cf->buttonconfig[i][j].background.image=NULL;
+	     cf->buttonconfig[i][j].number_of_decorations=0;
+	     cf->buttonconfig[i][j].decoration=NULL;
+	  }
+     }
+   if (!f)
+     {
+	fprintf(stderr,"THEME ERROR: No config file found. Looked for %s\n",s);
+	exit(1);
+     }
+   while(fgets(s,2048,f))
+     {
+	if (s[0]!='#')
+	  {
+	     ss[0]=0;
+	     sscanf(s,"%s",ss);
+	     if (!strcmp(ss,"button"))
+	       {
+		  sscanf(s,"%*s %s",ss);
+		  if (!strcmp(ss,"padding"))
+		    {
+		       sscanf(s,"%*s %*s %i %i %i %i",&i,&j,&k,&l);
+		       cf->button_padding.left=i;
+		       cf->button_padding.right=j;
+		       cf->button_padding.top=k;
+		       cf->button_padding.bottom=l;
+		    }
+		  else
+		    {
+		       sscanf(s,"%*s %i %i %s",&a,&b,ss);
+		       if (!strcmp(ss,"background"))
+			 {
+			    sscanf(s,"%*s %*i %*i %*s %s",ss);
+			    if (!strcmp(ss,"image"))
+			      {
+				 sscanf(s,"%*s %*i %*i %*s %*s %s",ss);
+				 snprintf(s,2048,"%s/themes/%s",h,ss);
+				 cf->buttonconfig[a][b].background.filename=strdup(s);
+				 cf->buttonconfig[a][b].background.image=
+				   gdk_imlib_load_image(cf->buttonconfig[a][b].background.filename);
+				 if (!cf->buttonconfig[a][b].background.image)
+				   {
+				      fprintf(stderr,"ERROR: Cannot load %s\n",cf->buttonconfig[a][b].background.filename);
+				      exit(1);
+				   }
+			      }
+			    else if (!strcmp(ss,"color"))
+			      {
+				 sscanf(s,"%*s %*i %*i %*s %*s %i %i %i",&i,&j,&k);
+				 cf->buttonconfig[a][b].background.color.r=i;
+				 cf->buttonconfig[a][b].background.color.g=j;
+				 cf->buttonconfig[a][b].background.color.b=k;
+				 cf->buttonconfig[a][b].background.color.pixel=
+				   gdk_imlib_best_color_match(&i,&j,&k);
+			      }
+			    else if (!strcmp(ss,"border"))
+			      {
+				 sscanf(s,"%*s %*i %*i %*s %*s %i %i %i %i",&i,&j,&k,&l);
+				 cf->buttonconfig[a][b].background.border.left=i;
+				 cf->buttonconfig[a][b].background.border.right=j;
+				 cf->buttonconfig[a][b].background.border.top=k;
+				 cf->buttonconfig[a][b].background.border.bottom=l;
+			      }
+			    else if (!strcmp(ss,"scale"))
+			      {
+				 sscanf(s,"%*s %*i %*i %*s %*s %i",&i);
+				 cf->buttonconfig[a][b].background.scale_to_fit=i;
+			      }
+			    else if (!strcmp(ss,"parent_tile"))
+			      {
+				 sscanf(s,"%*s %*i %*i %*s %*s %i",&i);
+				 cf->buttonconfig[a][b].background.tile_relative_to_parent=i;
+			      }
+			 }
+		    }
+	       }
+	  }
+     }
+   fclose(f);
+}
+
+/* external theme functions called */
+
+void 
 theme_init               (int     *argc,
 			  char ***argv)
 {
-   struct _imgs *imgs;
-   GdkImlibBorder bd;
-   
    printf("Theme2 Init\n");
-   imgs=th_dat.data=malloc(sizeof(struct _imgs));
+   th_dat.data=malloc(sizeof(ThemeConfig));
    gdk_imlib_init();
-   bd.left=4;
-   bd.right=4;
-   bd.top=4;
-   bd.bottom=4;
-   imgs->im1=gdk_imlib_create_image_from_xpm_data(theme_btn1_xpm);
-   gdk_imlib_set_image_border(imgs->im1,&bd);
-   imgs->im2=gdk_imlib_create_image_from_xpm_data(theme_btn2_xpm);
-   gdk_imlib_set_image_border(imgs->im2,&bd);
-   imgs->im3=gdk_imlib_create_image_from_xpm_data(theme_btn3_xpm);
-   gdk_imlib_set_image_border(imgs->im3,&bd);
-   imgs->im4=gdk_imlib_create_image_from_xpm_data(theme_led_off1_xpm);
-   imgs->im5=gdk_imlib_create_image_from_xpm_data(theme_led_off2_xpm);
-   imgs->im6=gdk_imlib_create_image_from_xpm_data(theme_led_on1_xpm);
-   imgs->im7=gdk_imlib_create_image_from_xpm_data(theme_led_on2_xpm);
+   theme_read_config();
 }
 
 void 
 theme_exit               (void)
 {
-   printf("Theme2 Exit\n");
+   printf("Theme2 Exit\n* Need to add memory deallocation code here *\n");
 }
 

@@ -23,7 +23,8 @@ extern "C" {
 #endif /* __cplusplus */
 
 typedef enum {
-  GTK_DEBUG_OBJECTS = 1<<0
+  GTK_DEBUG_OBJECTS = 1<<0,
+  GTK_DEBUG_MISC = 1<<1
 } GtkDebugFlag;
 
 #ifdef G_ENABLE_DEBUG
@@ -34,7 +35,7 @@ typedef enum {
 
 #else /* !G_ENABLE_DEBUG */
 
-#define GTK_NOTE
+#define GTK_NOTE(type, action)
       
 #endif /* G_ENABLE_DEBUG */
 

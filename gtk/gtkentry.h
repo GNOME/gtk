@@ -48,10 +48,21 @@ struct _GtkEntry
   guint16 text_size;
   guint16 text_length;
   guint16 text_max_length;
-  gint16  scroll_offset;
+  gint    scroll_offset;
   guint   visible : 1;
   guint32 timer;
   guint   button;
+
+  /* The total number of characters (not bytes) in the entry */
+  guint nchars;
+
+  /* The byte offset of each character 
+   *  (including the last insertion position) */
+  guint16 *char_pos;
+
+  /* The x-offset of each character (including the last insertion position)
+   * only valid when the widget is realized */
+  gint *char_offset;
 };
 
 struct _GtkEntryClass
@@ -78,12 +89,9 @@ void       gtk_entry_set_visibility (GtkEntry      *entry,
 				     gboolean       visible);
 void       gtk_entry_set_editable   (GtkEntry      *entry,
 				     gboolean       editable);
-
-/* If entry->text is already > max it's up to you to change it */
+/* text is truncated if needed */
 void       gtk_entry_set_max_length (GtkEntry      *entry,
-                                     guint16        max);
-
-
+				     guint16        max);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -279,6 +279,9 @@ gtk_menu_popup (GtkMenu             *menu,
 		guint                button,
 		guint32              activate_time)
 {
+  GtkWidget *xgrab_shell;
+  GtkWidget *parent;
+
   g_return_if_fail (menu != NULL);
   g_return_if_fail (GTK_IS_MENU (menu));
 
@@ -292,6 +295,44 @@ gtk_menu_popup (GtkMenu             *menu,
   GTK_MENU_SHELL (menu)->activate_time = activate_time;
 
   gtk_widget_show (GTK_WIDGET (menu));
+
+  /* Find the last viewable ancestor, and make an X grab on it
+   */
+  parent = GTK_WIDGET (menu);
+  xgrab_shell = NULL;
+  while (parent)
+    {
+      gboolean viewable = TRUE;
+      GtkWidget *tmp = parent;
+      
+      while (tmp)
+	{
+	  if (!GTK_WIDGET_MAPPED (tmp))
+	    {
+	      viewable = FALSE;
+	      break;
+	    }
+	  tmp = tmp->parent;
+	}
+
+      if (viewable)
+	xgrab_shell = parent;
+
+      parent = GTK_MENU_SHELL (parent)->parent_menu_shell;
+    }
+
+  if (xgrab_shell && (!GTK_MENU_SHELL (xgrab_shell)->have_xgrab))
+    {
+      GdkCursor *cursor = gdk_cursor_new (GDK_ARROW);
+      
+      GTK_MENU_SHELL (xgrab_shell)->have_xgrab = 
+	(gdk_pointer_grab (xgrab_shell->window, TRUE,
+			   GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+			   GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK,
+			   NULL, cursor, activate_time) == 0);
+      gdk_cursor_destroy (cursor);
+    }
+
   gtk_grab_add (GTK_WIDGET (menu));
 }
 
@@ -315,7 +356,11 @@ gtk_menu_popdown (GtkMenu *menu)
       menu_shell->active_menu_item = NULL;
     }
 
+  /* The X Grab, if present, will automatically be removed when we hide
+   * the window */
   gtk_widget_hide (GTK_WIDGET (menu));
+  menu_shell->have_xgrab = FALSE;
+
   gtk_grab_remove (GTK_WIDGET (menu));
 }
 
@@ -596,7 +641,7 @@ gtk_menu_size_allocate (GtkWidget     *widget,
 			    widget->style->klass->xthickness);
       child_allocation.y = (GTK_CONTAINER (menu)->border_width +
 			    widget->style->klass->ythickness);
-      child_allocation.width = allocation->width - child_allocation.x * 2;
+      child_allocation.width = MAX (1, allocation->width - child_allocation.x * 2);
 
       children = menu_shell->children;
       while (children)
@@ -736,8 +781,6 @@ gtk_menu_key_press (GtkWidget   *widget,
 {
   GtkAllocation allocation;
   GtkAcceleratorTable *table;
-  GtkMenuShell *menu_shell;
-  GtkMenuItem *menu_item;
   gchar *signame;
   int delete;
 
@@ -750,11 +793,16 @@ gtk_menu_key_press (GtkWidget   *widget,
 
   if (delete || ((event->keyval >= 0x20) && (event->keyval <= 0xFF)))
     {
-      menu_shell = GTK_MENU_SHELL (widget);
-      menu_item = GTK_MENU_ITEM (menu_shell->active_menu_item);
+      GtkMenuShell *menu_shell;
 
-      if (menu_item && GTK_BIN (menu_item)->child)
+      menu_shell = GTK_MENU_SHELL (widget);
+
+      if (menu_shell->active_menu_item && GTK_BIN (menu_shell->active_menu_item)->child)
 	{
+	  GtkMenuItem *menu_item;
+
+	  menu_item = GTK_MENU_ITEM (menu_shell->active_menu_item);
+	  
 	  /* block resizes */
 	  gtk_container_block_resize (GTK_CONTAINER (widget));
 

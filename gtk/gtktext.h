@@ -103,6 +103,7 @@ struct _GtkText
   guint line_wrap : 1;
   /* Frozen, don't do updates. @@@ fixme */
   guint freeze : 1;
+  guint word_wrap : 1;
 
 			/* TEXT PROPERTIES */
 
@@ -161,6 +162,8 @@ GtkWidget* gtk_text_new             (GtkAdjustment *hadj,
 				     GtkAdjustment *vadj);
 void       gtk_text_set_editable    (GtkText       *text,
 				     gint           editable);
+void       gtk_text_set_word_wrap   (GtkText       *text,
+				     gint           word_wrap);
 void       gtk_text_set_adjustments (GtkText       *text,
 				     GtkAdjustment *hadj,
 				     GtkAdjustment *vadj);

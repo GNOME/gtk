@@ -51,6 +51,8 @@ struct _GtkCombo {
 	guint case_sensitive:1;
 	guint use_arrows:1;
 	guint use_arrows_always:1;
+
+	guint activate_id;
 };
 
 struct _GtkComboClass {
@@ -81,6 +83,8 @@ void       gtk_combo_set_item_string       (GtkCombo*    combo,
 /* simple interface */
 void       gtk_combo_set_popdown_strings   (GtkCombo*    combo, 
                                             GList        *strings);
+
+void       gtk_combo_disable_activate      (GtkCombo*    combo);
 
 #ifdef __cplusplus
 }

@@ -15,8 +15,10 @@
  * License along with this library; if not, write to the Free
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+#include <X11/Xlocale.h>	/* so we get the right setlocale */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "gtkbutton.h"
 #include "gtkhscrollbar.h"
 #include "gtkhseparator.h"
@@ -32,17 +34,19 @@
 #include "gtkwidget.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
+#include "gdk/gdki18n.h"
 #include "../config.h"
+#include "gtkdebug.h"
 
 
 /* Private type definitions
  */
-typedef struct _GtkInitFunction	         GtkInitFunction;
-typedef struct _GtkQuitFunction	         GtkQuitFunction;
-typedef struct _GtkTimeoutFunction       GtkTimeoutFunction;
-typedef struct _GtkIdleFunction	         GtkIdleFunction;
-typedef struct _GtkInputFunction         GtkInputFunction;
-typedef struct _GtkKeySnooperData        GtkKeySnooperData;
+typedef struct _GtkInitFunction		 GtkInitFunction;
+typedef struct _GtkQuitFunction		 GtkQuitFunction;
+typedef struct _GtkTimeoutFunction	 GtkTimeoutFunction;
+typedef struct _GtkIdleFunction		 GtkIdleFunction;
+typedef struct _GtkInputFunction	 GtkInputFunction;
+typedef struct _GtkKeySnooperData	 GtkKeySnooperData;
 
 struct _GtkInitFunction
 {
@@ -52,7 +56,7 @@ struct _GtkInitFunction
 
 struct _GtkQuitFunction
 {
-  gint tag;
+  guint id;
   guint main_level;
   GtkCallbackMarshal marshal;
   GtkFunction function;
@@ -62,7 +66,7 @@ struct _GtkQuitFunction
 
 struct _GtkTimeoutFunction
 {
-  gint tag;
+  guint tag;
   guint32 start;
   guint32 interval;
   guint32 originterval;
@@ -74,7 +78,7 @@ struct _GtkTimeoutFunction
 
 struct _GtkIdleFunction
 {
-  gint tag;
+  guint tag;
   gint priority;
   GtkCallbackMarshal marshal;
   GtkFunction function;
@@ -93,17 +97,17 @@ struct _GtkKeySnooperData
 {
   GtkKeySnoopFunc func;
   gpointer func_data;
-  gint id;
+  guint id;
 };
 
 static void  gtk_exit_func		 (void);
-static gint  gtk_quit_invoke_function    (GtkQuitFunction    *quitf);
-static void  gtk_quit_destroy            (GtkQuitFunction    *quitf);
+static gint  gtk_quit_invoke_function	 (GtkQuitFunction    *quitf);
+static void  gtk_quit_destroy		 (GtkQuitFunction    *quitf);
 static void  gtk_timeout_insert		 (GtkTimeoutFunction *timeoutf);
 static void  gtk_handle_current_timeouts (guint32	      the_time);
 static void  gtk_handle_current_idles	 (void);
-static gint  gtk_invoke_key_snoopers     (GtkWidget          *grab_widget,
-					  GdkEvent           *event);
+static gint  gtk_invoke_key_snoopers	 (GtkWidget	     *grab_widget,
+					  GdkEvent	     *event);
 static void  gtk_handle_timeouts	 (void);
 static void  gtk_handle_idle		 (void);
 static void  gtk_handle_timer		 (void);
@@ -114,11 +118,19 @@ static void  gtk_warning		 (gchar		     *str);
 static void  gtk_message		 (gchar		     *str);
 static void  gtk_print			 (gchar		     *str);
 
-static gint  gtk_idle_compare            (gpointer            a, 
-					  gpointer            b);
+static gint  gtk_idle_remove_from_list    (GList               **list, 
+					   guint                 tag, 
+					   gpointer              data, 
+					   gint                  remove_link);
+static gint  gtk_timeout_remove_from_list (GList               **list, 
+					   guint                 tag, 
+					   gint                  remove_link);
 
-static gint  gtk_timeout_compare         (gpointer            a, 
-					  gpointer            b);
+static gint  gtk_idle_compare		 (gpointer	      a, 
+					  gpointer	      b);
+
+static gint  gtk_timeout_compare	 (gpointer	      a, 
+					  gpointer	      b);
 
 const guint gtk_major_version = GTK_MAJOR_VERSION;
 const guint gtk_minor_version = GTK_MINOR_VERSION;
@@ -137,18 +149,54 @@ static GList *init_functions = NULL;	   /* A list of init functions.
 					    */
 static GList *quit_functions = NULL;	   /* A list of quit functions.
 					    */
+
+
+/* When handling timeouts, the algorithm is to move all of the expired
+ * timeouts from timeout_functions to current_timeouts then process
+ * them as a batch. If one of the timeouts recursively calls the main
+ * loop, then the remainder of the timeouts in current_timeouts will
+ * be processed before anything else happens.
+ * 
+ * Each timeout is procesed as follows:
+ *
+ * - The timeout is removed from current_timeouts
+ * - The timeout is pushed on the running_timeouts stack
+ * - The timeout is executed
+ * - The timeout stack is popped
+ * - If the timeout function wasn't removed from the stack while executing,
+ *   and it returned TRUE, it is added back to timeout_functions, otherwise
+ *   it is destroyed if necessary.
+ *
+ * gtk_timeout_remove() works by checking for the timeout in
+ * timeout_functions current_timeouts and running_timeouts. If it is
+ * found in one of the first two, it is removed and destroyed. If it
+ * is found in running_timeouts, it is destroyed and ->data is set to
+ * NULL for the stack entry.
+ *
+ * Idle functions work pretty much identically.  
+ */
+
 static GList *timeout_functions = NULL;	   /* A list of timeout functions sorted by
 					    *  when the length of the time interval
 					    *  remaining. Therefore, the first timeout
 					    *  function to expire is at the head of
 					    *  the list and the last to expire is at
-					    *  the tail of the list.
-					    */
+					    *  the tail of the list.  */
 static GList *idle_functions = NULL;	   /* A list of idle functions.
 					    */
 
+/* The idle functions / timeouts that are currently being processed 
+ *  by gtk_handle_current_(timeouts/idles) 
+ */
 static GList *current_idles = NULL;
 static GList *current_timeouts = NULL;
+
+/* A stack of idle functions / timeouts that are currently being
+ * being executed
+ */
+static GList *running_idles = NULL;
+static GList *running_timeouts = NULL;
+
 static GMemChunk *timeout_mem_chunk = NULL;
 static GMemChunk *idle_mem_chunk = NULL;
 static GMemChunk *quit_mem_chunk = NULL;
@@ -166,20 +214,22 @@ guint gtk_debug_flags = 0;		   /* Global GTK debug flag */
 
 #ifdef G_ENABLE_DEBUG
 static GDebugKey gtk_debug_keys[] = {
-  {"objects", GTK_DEBUG_OBJECTS}
+  {"objects", GTK_DEBUG_OBJECTS},
+  {"misc", GTK_DEBUG_MISC}
 };
 
 static const guint gtk_ndebug_keys = sizeof (gtk_debug_keys) / sizeof (GDebugKey);
 
 #endif /* G_ENABLE_DEBUG */
 
-
-
+gint gtk_use_mb = -1;
 
 void
 gtk_init (int	 *argc,
 	  char ***argv)
 {
+  gchar *current_locale;
+
   if (0)
     {
       g_set_error_handler (gtk_error);
@@ -204,47 +254,95 @@ gtk_init (int	 *argc,
 
   if (argc && argv)
     {
-      gint i;
+      gint i, j, k;
       
       for (i = 1; i < *argc;)
 	{
-	  if ((*argv)[i] == NULL)
+	  if ((strcmp ("--gtk-debug", (*argv)[i]) == 0) ||
+	      (strncmp ("--gtk-debug=", (*argv)[i], 12) == 0))
 	    {
-	      i += 1;
-	      continue;
-	    }
+	      gchar *equal_pos = strchr ((*argv)[i], '=');
 
-	  if (strcmp ("--gtk-debug", (*argv)[i]) == 0)
-	    {
-	      (*argv)[i] = NULL;
-
-	      if ((i + 1) < *argc && (*argv)[i + 1])
+	      if (equal_pos != NULL)
+		{
+		  gtk_debug_flags |= g_parse_debug_string (equal_pos+1,
+							   gtk_debug_keys,
+							   gtk_ndebug_keys);
+		}
+	      else if ((i + 1) < *argc && (*argv)[i + 1])
 		{
 		  gtk_debug_flags |= g_parse_debug_string ((*argv)[i+1],
 							   gtk_debug_keys,
 							   gtk_ndebug_keys);
-		  (*argv)[i + 1] = NULL;
+		  (*argv)[i] = NULL;
 		  i += 1;
 		}
-	    }
-	  else if (strcmp ("--gtk-no-debug", (*argv)[i]) == 0)
-	    {
 	      (*argv)[i] = NULL;
+	    }
+	  else if ((strcmp ("--gtk-no-debug", (*argv)[i]) == 0) ||
+		   (strncmp ("--gtk-no-debug=", (*argv)[i], 15) == 0))
+	    {
+	      gchar *equal_pos = strchr ((*argv)[i], '=');
 
-	      if ((i + 1) < *argc && (*argv)[i + 1])
+	      if (equal_pos != NULL)
+		{
+		  gtk_debug_flags &= ~g_parse_debug_string (equal_pos+1,
+							    gtk_debug_keys,
+							    gtk_ndebug_keys);
+		}
+	      else if ((i + 1) < *argc && (*argv)[i + 1])
 		{
 		  gtk_debug_flags &= ~g_parse_debug_string ((*argv)[i+1],
 							    gtk_debug_keys,
 							    gtk_ndebug_keys);
-		  (*argv)[i + 1] = NULL;
+		  (*argv)[i] = NULL;
 		  i += 1;
 		}
+	      (*argv)[i] = NULL;
 	    }
 	  i += 1;
+	}
+
+      for (i = 1; i < *argc; i++)
+	{
+	  for (k = i; k < *argc; k++)
+	    if ((*argv)[k] != NULL)
+	      break;
+	  
+	  if (k > i)
+	    {
+	      k -= i;
+	      for (j = i + k; j < *argc; j++)
+		(*argv)[j-k] = (*argv)[j];
+	      *argc -= k;
+	    }
 	}
     }
 
 #endif /* G_ENABLE_DEBUG */
+
+  /* Check if there is a good chance the mb functions will handle things
+   * correctly - set if either mblen("\xc0", MB_CUR_MAX) == 1 in the
+   * C locale, or were using X's mb functions. (-DX_LOCALE && locale != C)
+   */
+
+  current_locale = g_strdup(setlocale (LC_CTYPE, NULL));
+
+#ifdef X_LOCALE
+  if ((strcmp (current_locale, "C")) && (strcmp (current_locale, "POSIX")))
+    gtk_use_mb = TRUE;
+  else
+#endif
+    {
+      setlocale (LC_CTYPE, "C");
+      gtk_use_mb = (mblen ("\xc0", MB_CUR_MAX) == 1);
+      setlocale (LC_CTYPE, current_locale);
+    }
+
+  g_free (current_locale);
+
+  GTK_NOTE(MISC, g_print("%s multi-byte string functions.\n", 
+			  gtk_use_mb ? "Using" : "Not using"));
 
   /* Initialize the default visual and colormap to be
    *  used in creating widgets. (We want to use the system
@@ -264,9 +362,7 @@ gtk_init (int	 *argc,
   /* Set the 'initialized' flag.
    */
   initialized = TRUE;
-   
    gtk_themes_init (argc,argv);
-     
 }
 
 void
@@ -277,8 +373,6 @@ gtk_exit (int errorcode)
   /* de-initialisation is done by the gtk_exit_funct(),
    * no need to do this here (Alex J.)
    */
-   gtk_themes_exit(errorcode);
-   
   gdk_exit(errorcode);
 }
 
@@ -327,16 +421,15 @@ gtk_main ()
 
 	  quit_functions = g_list_remove_link (quit_functions, quit_functions);
 
-	  if ((quitf->main_level &&
-	       quitf->main_level != main_level) ||
-	      gtk_quit_invoke_function (quitf) == FALSE)
+	  if ((quitf->main_level && quitf->main_level != main_level) ||
+	      gtk_quit_invoke_function (quitf))
 	    {
-	      g_list_free (tmp_list);
-	      gtk_quit_destroy (quitf);
+	      reinvoke_list = g_list_prepend (reinvoke_list, quitf);
 	    }
 	  else
 	    {
-	      reinvoke_list = g_list_prepend (reinvoke_list, quitf);
+	      g_list_free (tmp_list);
+	      gtk_quit_destroy (quitf);
 	    }
 	}
       if (reinvoke_list)
@@ -369,13 +462,38 @@ gtk_main_quit ()
 gint
 gtk_events_pending (void)
 {
-  gint result = gdk_events_pending() + ((next_event != NULL) ? 1 : 0);
+  gint result = 0;
+  
+  /* if this function is called from a timeout which will only return
+   * if gtk needs processor time, we need to take iteration_done==TRUE
+   * into account as well.
+   */
+  result = iteration_done;
+  result += next_event != NULL;
+  result += gdk_events_pending();
 
-  if (idle_functions &&
-      (((GtkIdleFunction *)idle_functions->data)->priority >=
-       GTK_PRIORITY_INTERNAL))
-    result += 1;
+  result += current_idles != NULL;
+  result += current_timeouts != NULL;
 
+  if (!result)
+    {
+      result += (idle_functions &&
+		 (((GtkIdleFunction *)idle_functions->data)->priority <=
+		  GTK_PRIORITY_INTERNAL));
+    }
+  
+  if (!result && timeout_functions)
+    {
+      guint32 the_time;
+      GtkTimeoutFunction *timeoutf;
+      
+      the_time = gdk_time_get ();
+      
+      timeoutf = timeout_functions->data;
+      
+      result += timeoutf->interval <= (the_time - timeoutf->start);
+    }
+  
   return result;
 }
 
@@ -402,11 +520,19 @@ gtk_main_iteration_do (gboolean blocking)
   if (current_timeouts)
     {
       gtk_handle_current_timeouts( gdk_time_get());
+
+      if (iteration_done)
+	gdk_flush ();
+
       return iteration_done;
     }
   if (current_idles)
     {
-      gtk_handle_current_idles();
+      gtk_handle_current_idles ();
+
+      if (iteration_done)
+	gdk_flush ();
+
       return iteration_done;
     }
   
@@ -507,7 +633,8 @@ gtk_main_iteration_do (gboolean blocking)
 	   *  then we send the event to the original event widget.
 	   *  This is the key to implementing modality.
 	   */
-	  if (gtk_widget_is_ancestor (event_widget, grab_widget))
+	  if (GTK_WIDGET_IS_SENSITIVE (event_widget) &&
+	      gtk_widget_is_ancestor (event_widget, grab_widget))
 	    grab_widget = event_widget;
 	}
       else
@@ -528,17 +655,19 @@ gtk_main_iteration_do (gboolean blocking)
 	  break;
 	  
 	case GDK_DELETE:
- 	  gtk_widget_ref (event_widget);
-	  if (gtk_widget_event (event_widget, event))
+	  gtk_widget_ref (event_widget);
+	  if (!gtk_widget_event (event_widget, event) &&
+	      !GTK_OBJECT_DESTROYED (event_widget))
 	    gtk_widget_destroy (event_widget);
- 	  gtk_widget_unref (event_widget);
+	  gtk_widget_unref (event_widget);
 	  break;
 	  
 	case GDK_DESTROY:
- 	  gtk_widget_ref (event_widget);
+	  gtk_widget_ref (event_widget);
 	  gtk_widget_event (event_widget, event);
-	  gtk_widget_destroy (event_widget);
- 	  gtk_widget_unref (event_widget);
+	  if (!GTK_OBJECT_DESTROYED (event_widget))
+	    gtk_widget_destroy (event_widget);
+	  gtk_widget_unref (event_widget);
 	  break;
 	  
 	case GDK_PROPERTY_NOTIFY:
@@ -618,6 +747,9 @@ event_handling_done:
    */
   gtk_handle_timeouts ();
   
+  if (iteration_done)
+    gdk_flush ();
+  
   return iteration_done;
 }
 
@@ -682,9 +814,9 @@ gtk_init_add (GtkFunction function,
   init_functions = g_list_prepend (init_functions, init);
 }
 
-gint
+guint
 gtk_key_snooper_install (GtkKeySnoopFunc snooper,
-			 gpointer        func_data)
+			 gpointer	 func_data)
 {
   GtkKeySnooperData *data;
   static guint snooper_id = 1;
@@ -701,7 +833,7 @@ gtk_key_snooper_install (GtkKeySnoopFunc snooper,
 }
 
 void
-gtk_key_snooper_remove (gint            snooper_id)
+gtk_key_snooper_remove (guint		 snooper_id)
 {
   GtkKeySnooperData *data = NULL;
   GSList *slist;
@@ -740,14 +872,14 @@ gtk_invoke_key_snoopers (GtkWidget *grab_widget,
   return return_val;
 }
 
-gint
-gtk_timeout_add_full (guint32            interval,
-		      GtkFunction        function,
+guint
+gtk_timeout_add_full (guint32		 interval,
+		      GtkFunction	 function,
 		      GtkCallbackMarshal marshal,
-		      gpointer           data,
-		      GtkDestroyNotify   destroy)
+		      gpointer		 data,
+		      GtkDestroyNotify	 destroy)
 {
-  static gint timeout_tag = 1;
+  static guint timeout_tag = 1;
   GtkTimeoutFunction *timeoutf;
   
   g_return_val_if_fail ((function != NULL) || (marshal != NULL), 0);
@@ -783,7 +915,7 @@ gtk_timeout_destroy (GtkTimeoutFunction *timeoutf)
   g_mem_chunk_free (timeout_mem_chunk, timeoutf);
 }
 
-gint
+guint
 gtk_timeout_add (guint32     interval,
 		 GtkFunction function,
 		 gpointer    data)
@@ -791,7 +923,7 @@ gtk_timeout_add (guint32     interval,
   return gtk_timeout_add_full (interval, function, FALSE, data, NULL);
 }
 
-gint
+guint
 gtk_timeout_add_interp (guint32		   interval,
 			GtkCallbackMarshal function,
 			gpointer	   data,
@@ -800,49 +932,56 @@ gtk_timeout_add_interp (guint32		   interval,
   return gtk_timeout_add_full (interval, NULL, function, data, destroy);
 }
 
-void
-gtk_timeout_remove (gint tag)
+/* Search for the specified tag in a list of timeouts. If it
+ * is found, destroy the timeout, and either remove the link
+ * or set link->data to NULL depending on remove_link
+ */
+static gint
+gtk_timeout_remove_from_list (GList **list, guint tag, gint remove_link)
 {
-  GtkTimeoutFunction *timeoutf;
   GList *tmp_list;
+  GtkTimeoutFunction *timeoutf;
+
+  tmp_list = *list;
+  while (tmp_list)
+    {
+      timeoutf = tmp_list->data;
+      
+      if (timeoutf->tag == tag)
+	{
+	  if (remove_link)
+	    {
+	      *list = g_list_remove_link (*list, tmp_list);
+	      g_list_free (tmp_list);
+	    }
+	  else
+	    tmp_list->data = NULL;
+
+	  gtk_timeout_destroy (timeoutf);
+	  
+	  return TRUE;
+	}
+      
+      tmp_list = tmp_list->next;
+    }
+  return FALSE;
+}
+
+void
+gtk_timeout_remove (guint tag)
+{
   
   /* Remove a timeout function.
    * (Which, basically, involves searching the
    *  list for the tag).
    */
-  tmp_list = timeout_functions;
-  while (tmp_list)
-    {
-      timeoutf = tmp_list->data;
-      
-      if (timeoutf->tag == tag)
-	{
-	  timeout_functions = g_list_remove_link (timeout_functions, tmp_list);
-	  g_list_free (tmp_list);
-	  gtk_timeout_destroy (timeoutf);
-	  
-	  return;
-	}
-      
-      tmp_list = tmp_list->next;
-    }
-  
-  tmp_list = current_timeouts;
-  while (tmp_list)
-    {
-      timeoutf = tmp_list->data;
-      
-      if (timeoutf->tag == tag)
-	{
-	  current_timeouts = g_list_remove_link (current_timeouts, tmp_list);
-	  g_list_free (tmp_list);
-	  gtk_timeout_destroy (timeoutf);
-	  
-	  return;
-	}
-      
-      tmp_list = tmp_list->next;
-    }
+
+  if (gtk_timeout_remove_from_list (&timeout_functions, tag, TRUE))
+    return;
+  if (gtk_timeout_remove_from_list (&current_timeouts, tag, TRUE))
+    return;
+  if (gtk_timeout_remove_from_list (&running_timeouts, tag, FALSE))
+    return;
 }
 
 /* We rely on some knowledge of how g_list_insert_sorted works to make
@@ -855,14 +994,14 @@ gtk_idle_compare (gpointer a, gpointer b)
     ? -1 : 1;
 }
 
-gint
+guint
 gtk_quit_add_full (guint		main_level,
-		   GtkFunction	        function,
+		   GtkFunction		function,
 		   GtkCallbackMarshal	marshal,
 		   gpointer		data,
-		   GtkDestroyNotify     destroy)
+		   GtkDestroyNotify	destroy)
 {
-  static gint quit_tag = 1;
+  static guint quit_id = 1;
   GtkQuitFunction *quitf;
   
   g_return_val_if_fail ((function != NULL) || (marshal != NULL), 0);
@@ -873,7 +1012,7 @@ gtk_quit_add_full (guint		main_level,
   
   quitf = g_chunk_new (GtkQuitFunction, quit_mem_chunk);
   
-  quitf->tag = quit_tag++;
+  quitf->id = quit_id++;
   quitf->main_level = main_level;
   quitf->function = function;
   quitf->marshal = marshal;
@@ -882,17 +1021,17 @@ gtk_quit_add_full (guint		main_level,
 
   quit_functions = g_list_prepend (quit_functions, quitf);
   
-  return quitf->tag;
+  return quitf->id;
 }
 
-gint
-gtk_idle_add_full (gint		        priority,
-		   GtkFunction	        function,
+guint
+gtk_idle_add_full (gint			priority,
+		   GtkFunction		function,
 		   GtkCallbackMarshal	marshal,
 		   gpointer		data,
-		   GtkDestroyNotify     destroy)
+		   GtkDestroyNotify	destroy)
 {
-  static gint idle_tag = 1;
+  static guint idle_tag = 1;
   GtkIdleFunction *idlef;
   
   g_return_val_if_fail ((function != NULL) || (marshal != NULL), 0);
@@ -915,10 +1054,10 @@ gtk_idle_add_full (gint		        priority,
   return idlef->tag;
 }
 
-gint
+guint
 gtk_idle_add_interp  (GtkCallbackMarshal   marshal,
 		      gpointer		   data,
-		      GtkDestroyNotify     destroy)
+		      GtkDestroyNotify	   destroy)
 {
   return gtk_idle_add_full (GTK_PRIORITY_DEFAULT, NULL, marshal, data, destroy);
 }
@@ -939,7 +1078,36 @@ gtk_quit_destroy (GtkQuitFunction *quitf)
   g_mem_chunk_free (quit_mem_chunk, quitf);
 }
 
-gint
+static gint
+gtk_quit_destructor (GtkObject **object_p)
+{
+  if (*object_p)
+    gtk_object_destroy (*object_p);
+  g_free (object_p);
+
+  return FALSE;
+}
+
+void
+gtk_quit_add_destroy (guint              main_level,
+		      GtkObject         *object)
+{
+  GtkObject **object_p;
+
+  g_return_if_fail (main_level > 0);
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_OBJECT (object));
+
+  object_p = g_new (GtkObject*, 1);
+  *object_p = object;
+  gtk_signal_connect (object,
+		      "destroy",
+		      GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+		      object_p);
+  gtk_quit_add (main_level, (GtkFunction) gtk_quit_destructor, object_p);
+}
+
+guint
 gtk_quit_add (guint	  main_level,
 	      GtkFunction function,
 	      gpointer	  data)
@@ -947,23 +1115,23 @@ gtk_quit_add (guint	  main_level,
   return gtk_quit_add_full (main_level, function, NULL, data, NULL);
 }
 
-gint
+guint
 gtk_idle_add (GtkFunction function,
 	      gpointer	  data)
 {
   return gtk_idle_add_full (GTK_PRIORITY_DEFAULT, function, NULL, data, NULL);
 }
 
-gint       
-gtk_idle_add_priority   (gint               priority,
-			 GtkFunction        function,
-			 gpointer           data)
+guint	    
+gtk_idle_add_priority	(gint		    priority,
+			 GtkFunction	    function,
+			 gpointer	    data)
 {
   return gtk_idle_add_full (priority, function, NULL, data, NULL);
 }
 
 void
-gtk_quit_remove (gint tag)
+gtk_quit_remove (guint id)
 {
   GtkQuitFunction *quitf;
   GList *tmp_list;
@@ -973,7 +1141,7 @@ gtk_quit_remove (gint tag)
     {
       quitf = tmp_list->data;
       
-      if (quitf->tag == tag)
+      if (quitf->id == id)
 	{
 	  quit_functions = g_list_remove_link (quit_functions, tmp_list);
 	  g_list_free (tmp_list);
@@ -1010,86 +1178,70 @@ gtk_quit_remove_by_data (gpointer data)
     }
 }
 
-void
-gtk_idle_remove (gint tag)
+/* Search for the specified tag in a list of idles. If it
+ * is found, destroy the idle, and either remove the link
+ * or set link->data to NULL depending on remove_link
+ *
+ * If tag != 0, match tag against idlef->tag, otherwise, match
+ * data against idlef->data
+ */
+static gint
+gtk_idle_remove_from_list (GList  **list, 
+			   guint    tag, 
+			   gpointer data, 
+			   gint     remove_link)
 {
   GtkIdleFunction *idlef;
   GList *tmp_list;
   
-  tmp_list = idle_functions;
+  tmp_list = *list;
   while (tmp_list)
     {
       idlef = tmp_list->data;
       
-      if (idlef->tag == tag)
+      if (((tag != 0) && (idlef->tag == tag)) ||
+	  ((tag == 0) && (idlef->data == data)))
 	{
-	  idle_functions = g_list_remove_link (idle_functions, tmp_list);
-	  g_list_free (tmp_list);
+	  if (remove_link)
+	    {
+	      *list = g_list_remove_link (*list, tmp_list);
+	      g_list_free (tmp_list);
+	    }
+	  else
+	    tmp_list->data = NULL;
+
 	  gtk_idle_destroy (idlef);
 	  
-	  return;
+	  return TRUE;
 	}
       
       tmp_list = tmp_list->next;
     }
+  return FALSE;
+}
+
+void
+gtk_idle_remove (guint tag)
+{
+  g_return_if_fail (tag != 0);
   
-  tmp_list = current_idles;
-  while (tmp_list)
-    {
-      idlef = tmp_list->data;
-      
-      if (idlef->tag == tag)
-	{
-	  current_idles = g_list_remove_link (current_idles, tmp_list);
-	  g_list_free (tmp_list);
-	  gtk_idle_destroy (idlef);
-	  
-	  return;
-	}
-      
-      tmp_list = tmp_list->next;
-    }
+  if (gtk_idle_remove_from_list (&idle_functions, tag, NULL, TRUE))
+    return;
+  if (gtk_idle_remove_from_list (&current_idles, tag, NULL, TRUE))
+    return;
+  if (gtk_idle_remove_from_list (&running_idles, tag, NULL, FALSE))
+    return;
 }
 
 void
 gtk_idle_remove_by_data (gpointer data)
 {
-  GtkIdleFunction *idlef;
-  GList *tmp_list;
-  
-  tmp_list = idle_functions;
-  while (tmp_list)
-    {
-      idlef = tmp_list->data;
-      
-      if (idlef->data == data)
-	{
-	  idle_functions = g_list_remove_link (idle_functions, tmp_list);
-	  g_list_free (tmp_list);
-	  gtk_idle_destroy (idlef);
-	  
-	  return;
-	}
-      
-      tmp_list = tmp_list->next;
-    }
-  
-  tmp_list = current_idles;
-  while (tmp_list)
-    {
-      idlef = tmp_list->data;
-      
-      if (idlef->data == data)
-	{
-	  current_idles = g_list_remove_link (current_idles, tmp_list);
-	  g_list_free (tmp_list);
-	  gtk_idle_destroy (idlef);
-	  
-	  return;
-	}
-      
-      tmp_list = tmp_list->next;
-    }
+  if (gtk_idle_remove_from_list (&idle_functions, 0, data, TRUE))
+    return;
+  if (gtk_idle_remove_from_list (&current_idles, 0, data, TRUE))
+    return;
+  if (gtk_idle_remove_from_list (&running_idles, 0, data, FALSE))
+    return;
 }
 
 static void
@@ -1118,7 +1270,7 @@ gtk_destroy_input_function (GtkInputFunction *input)
   g_free (input);
 }
 
-gint
+guint
 gtk_input_add_full (gint source,
 		    GdkInputCondition condition,
 		    GdkInputFunction function,
@@ -1128,7 +1280,9 @@ gtk_input_add_full (gint source,
 {
   if (marshal)
     {
-      GtkInputFunction *input = g_new (GtkInputFunction, 1);
+      GtkInputFunction *input;
+
+      input = g_new (GtkInputFunction, 1);
       input->callback = marshal;
       input->data = data;
       input->destroy = destroy;
@@ -1143,7 +1297,7 @@ gtk_input_add_full (gint source,
     return gdk_input_add_full (source, condition, function, data, destroy);
 }
 
-gint
+guint
 gtk_input_add_interp (gint source,
 		      GdkInputCondition condition,
 		      GtkCallbackMarshal callback,
@@ -1154,7 +1308,7 @@ gtk_input_add_interp (gint source,
 }
 
 void
-gtk_input_remove (gint tag)
+gtk_input_remove (guint tag)
 {
   gdk_input_remove (tag);
 }
@@ -1174,7 +1328,7 @@ gtk_get_event_widget (GdkEvent *event)
   GtkWidget *widget;
 
   widget = NULL;
-  if (event->any.window)
+  if (event && event->any.window)
     gdk_window_get_user_data (event->any.window, (void**) &widget);
   
   return widget;
@@ -1189,6 +1343,7 @@ gtk_exit_func ()
       gtk_preview_uninit ();
     }
    gtk_themes_exit(0);
+   
 }
 
 
@@ -1228,9 +1383,7 @@ gtk_invoke_timeout_function (GtkTimeoutFunction *timeoutf)
       args[0].name = NULL;
       args[0].type = GTK_TYPE_BOOL;
       args[0].d.pointer_data = &ret_val;
-      ((GtkCallbackMarshal)timeoutf->function) (NULL,
-						timeoutf->data,
-						0, args);
+      timeoutf->marshal (NULL, timeoutf->data,  0, args);
       return ret_val;
     }
 }
@@ -1238,6 +1391,7 @@ gtk_invoke_timeout_function (GtkTimeoutFunction *timeoutf)
 static void
 gtk_handle_current_timeouts (guint32 the_time)
 {
+  gint result;
   GList *tmp_list;
   GtkTimeoutFunction *timeoutf;
   
@@ -1247,17 +1401,27 @@ gtk_handle_current_timeouts (guint32 the_time)
       timeoutf = tmp_list->data;
       
       current_timeouts = g_list_remove_link (current_timeouts, tmp_list);
-      g_list_free (tmp_list);
+      running_timeouts = g_list_prepend (running_timeouts, tmp_list);
       
-      if (gtk_invoke_timeout_function (timeoutf) == FALSE)
+      result = gtk_invoke_timeout_function (timeoutf);
+
+      running_timeouts = g_list_remove_link (running_timeouts, tmp_list);
+      timeoutf = tmp_list->data;
+      
+      g_list_free_1 (tmp_list);
+
+      if (timeoutf)
 	{
-	  gtk_timeout_destroy (timeoutf);
-	}
-      else
-	{
-	  timeoutf->interval = timeoutf->originterval;
-	  timeoutf->start = the_time;
-	  gtk_timeout_insert (timeoutf);
+	  if (!result)
+	    {
+	      gtk_timeout_destroy (timeoutf);
+	    }
+	  else
+	    {
+	      timeoutf->interval = timeoutf->originterval;
+	      timeoutf->start = the_time;
+	      gtk_timeout_insert (timeoutf);
+	    }
 	}
     }
 }
@@ -1300,7 +1464,7 @@ gtk_handle_timeouts ()
 	}
       
       if (current_timeouts)
-	gtk_handle_current_timeouts(the_time);
+	gtk_handle_current_timeouts (the_time);
     }
 }
 
@@ -1350,6 +1514,7 @@ gtk_handle_current_idles ()
   GList *tmp_list;
   GList *tmp_list2;
   GtkIdleFunction *idlef;
+  gint result;
   
   while (current_idles)
     {
@@ -1357,11 +1522,18 @@ gtk_handle_current_idles ()
       idlef = tmp_list->data;
       
       current_idles = g_list_remove_link (current_idles, tmp_list);
+      running_idles = g_list_prepend (running_idles, tmp_list);
+
+      result = gtk_idle_invoke_function (idlef);
       
-      if (gtk_idle_invoke_function (idlef) == FALSE)
+      running_idles = g_list_remove_link (running_idles, tmp_list);
+      idlef = tmp_list->data;
+      
+      if (!idlef || !result)
 	{
 	  g_list_free (tmp_list);
-	  gtk_idle_destroy (idlef);
+	  if (idlef)
+	    gtk_idle_destroy (idlef);
 	}
       else
 	{
@@ -1454,46 +1626,47 @@ static void
 gtk_propagate_event (GtkWidget *widget,
 		     GdkEvent  *event)
 {
-  GtkWidget *parent;
-  GtkWidget *tmp;
   gint handled_event;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (event != NULL);
   
   handled_event = FALSE;
-  gtk_widget_ref (widget);
 
   if ((event->type == GDK_KEY_PRESS) ||
       (event->type == GDK_KEY_RELEASE))
     {
-
-      /* Only send key events to window widgets.
-       *  The window widget will in turn pass the
+      /* Only send key events within Window widgets to the Window
+       *  The Window widget will in turn pass the
        *  key event on to the currently focused widget
        *  for that window.
        */
-      parent = gtk_widget_get_ancestor (widget, gtk_window_get_type ());
-      handled_event = (parent &&
-		       GTK_WIDGET_IS_SENSITIVE (parent) &&
-		       gtk_widget_event (parent, event));
+      GtkWidget *window;
+
+      window = gtk_widget_get_ancestor (widget, gtk_window_get_type ());
+      if (window)
+        {
+	  if (GTK_WIDGET_IS_SENSITIVE (window))
+	    gtk_widget_event (window, event);
+
+          handled_event = TRUE; /* don't send to widget */
+        }
     }
   
   /* Other events get propagated up the widget tree
    *  so that parents can see the button and motion
    *  events of the children.
    */
-  tmp = widget;
-  while (!handled_event && tmp)
+  while (!handled_event && widget)
     {
-      gtk_widget_ref (tmp);
-      handled_event = !GTK_WIDGET_IS_SENSITIVE (tmp) || gtk_widget_event (tmp, event);
-      parent = tmp->parent;
-      gtk_widget_unref (tmp);
-      tmp = parent;
-    }
+      GtkWidget *tmp;
 
-  gtk_widget_unref (widget);
+      gtk_widget_ref (widget);
+      handled_event = !GTK_WIDGET_IS_SENSITIVE (widget) || gtk_widget_event (widget, event);
+      tmp = widget->parent;
+      gtk_widget_unref (widget);
+      widget  = tmp;
+    }
 }
 
 
@@ -1607,3 +1780,4 @@ gtk_print (gchar *str)
   if (!GTK_WIDGET_VISIBLE (window))
     gtk_widget_show (window);
 }
+

@@ -76,7 +76,7 @@ libgtk_la_SOURCES = \
 	gtkstatusbar.c		\
 	gtktable.c		\
 	gtktext.c		\
-	gtkthemes.c		\
+        gtkthemes.c             \
 	gtktipsquery.c		\
 	gtktogglebutton.c	\
 	gtktoolbar.c		\
@@ -173,7 +173,7 @@ gtkinclude_HEADERS = \
 	gtkstatusbar.h		\
 	gtktable.h		\
 	gtktext.h		\
-	gtkthemes.h		\
+        gtkthemes.h             \
 	gtktipsquery.h		\
 	gtktogglebutton.h	\
 	gtktoolbar.h		\
@@ -193,13 +193,13 @@ gtkinclude_HEADERS = \
 	gtkwindow.h             \
 	gtktypebuiltins.h
 
-../gtk/gtktypebuiltins.h: gtk.defs gentypeinfo.el
+$(srcdir)/gtktypebuiltins.h: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/gentypeinfo.el
 	$(SHELL) $(srcdir)/runelisp $(srcdir)/gentypeinfo.el idmac $< $@
 
-gtktypebuiltins.c: gtk.defs gentypeinfo.el
+$(srcdir)/gtktypebuiltins.c: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/gentypeinfo.el
 	$(SHELL) $(srcdir)/runelisp $(srcdir)/gentypeinfo.el id $< $@
 
-libgtk_la_LDFLAGS = -ldl -version-info 1:0:0
+libgtk_la_LDFLAGS = -lgdk_imlib -ldl -ljpeg -ltiff -lgif -lpng -lz -lm -version-info 1:0:0
 
 EXTRA_DIST = \
 	line-arrow.xbm 		\
@@ -220,7 +220,7 @@ EXTRA_DIST = \
 	tree_minus.xbm          \
         circles.xbm
 
-INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/glib -I../glib @x_cflags@ 
+INCLUDES = -I$(top_srcdir) -I../glib -I$(top_srcdir)/glib @x_cflags@ 
 
 noinst_PROGRAMS = testgtk testinput testselection simple 
 testgtk_LDADD = \
@@ -256,7 +256,7 @@ simple_LDADD = \
 	-lm
 
 DEPS = \
-	$(top_builddir)/gtk/libgtk.la		\
+	libgtk.la		                \
 	$(top_builddir)/gdk/libgdk.la		\
 	$(top_builddir)/glib/libglib.la
 
@@ -265,7 +265,7 @@ testinput_DEPENDENCIES = $(DEPS)
 testselection_DEPENDENCIES = $(DEPS)
 simple_DEPENDENCIES = $(DEPS)
 
-.PHONY: files
+.PHONY: files test test-debug
 
 files:
 	@files=`ls $(DISTFILES) 2> /dev/null `; for p in $$files; do \
@@ -273,7 +273,11 @@ files:
 	done
 
 test: testgtk
-	( CWD=`pwd` ; cd $(srcdir) ; $$CWD/testgtk )
+	builddir=`pwd`; cd $(top_builddir); top_builddir=`pwd`; \
+	cd $$builddir; cd $(srcdir); \
+	$(SHELL) $$top_builddir/libtool --mode=execute $$builddir/testgtk
 
 test-debug: testgtk
-	( CWD=`pwd` ; cd $(srcdir) ; gdb $$CWD/testgtk )
+	builddir=`pwd`; cd $(top_builddir); top_builddir=`pwd`; \
+	cd $$builddir; cd $(srcdir); \
+	$(SHELL) $$top_builddir/libtool --mode=execute gdb $$builddir/testgtk

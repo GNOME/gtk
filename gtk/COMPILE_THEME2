@@ -7,7 +7,7 @@ gcc -c theme2_main.c -o theme2_main.lo \
 
 /bin/sh ../libtool --mode=link gcc -g -O2 -DGTK_NO_CHECK_CASTS -Wall \
 -lgdk_imlib -ljpeg -lpng -ltiff -lm -lz -lgif -lgdk -lX11 -lXext \
--L/usr/X11/lib \
+-L/usr/X11R6/lib \
 -DUSE_XIM  -o libtheme2.la -rpath /usr/local/lib -version-info 1:0:0 \
 theme2_button.lo \
 theme2_main.lo

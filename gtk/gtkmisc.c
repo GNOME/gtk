@@ -19,9 +19,23 @@
 #include "gtkmisc.h"
 
 
+enum {
+  ARG_0,
+  ARG_XALIGN,
+  ARG_YALIGN,
+  ARG_XPAD,
+  ARG_YPAD
+};
+
 static void gtk_misc_class_init (GtkMiscClass *klass);
 static void gtk_misc_init       (GtkMisc      *misc);
 static void gtk_misc_realize    (GtkWidget    *widget);
+static void gtk_misc_set_arg    (GtkMisc      *misc,
+				 GtkArg       *arg,
+				 guint         arg_id);
+static void gtk_misc_get_arg    (GtkMisc      *misc,
+				 GtkArg       *arg,
+				 guint         arg_id);
 
 
 guint
@@ -38,8 +52,8 @@ gtk_misc_get_type ()
 	sizeof (GtkMiscClass),
 	(GtkClassInitFunc) gtk_misc_class_init,
 	(GtkObjectInitFunc) gtk_misc_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	(GtkArgSetFunc) gtk_misc_set_arg,
+        (GtkArgGetFunc) gtk_misc_get_arg,
       };
 
       misc_type = gtk_type_unique (gtk_widget_get_type (), &misc_info);
@@ -55,6 +69,11 @@ gtk_misc_class_init (GtkMiscClass *class)
 
   widget_class = (GtkWidgetClass*) class;
 
+  gtk_object_add_arg_type ("GtkMisc::xalign", GTK_TYPE_DOUBLE, GTK_ARG_READWRITE, ARG_XALIGN);
+  gtk_object_add_arg_type ("GtkMisc::yalign", GTK_TYPE_DOUBLE, GTK_ARG_READWRITE, ARG_YALIGN);
+  gtk_object_add_arg_type ("GtkMisc::xpad", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_XPAD);
+  gtk_object_add_arg_type ("GtkMisc::ypad", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_YPAD);
+  
   widget_class->realize = gtk_misc_realize;
 }
 
@@ -67,6 +86,56 @@ gtk_misc_init (GtkMisc *misc)
   misc->yalign = 0.5;
   misc->xpad = 0;
   misc->ypad = 0;
+}
+
+static void
+gtk_misc_set_arg (GtkMisc        *misc,
+		  GtkArg         *arg,
+		  guint           arg_id)
+{
+  switch (arg_id)
+    {
+    case ARG_XALIGN:
+      gtk_misc_set_alignment (misc, GTK_VALUE_DOUBLE (*arg), misc->yalign);
+      break;
+    case ARG_YALIGN:
+      gtk_misc_set_alignment (misc, misc->xalign, GTK_VALUE_DOUBLE (*arg));
+      break;
+    case ARG_XPAD:
+      gtk_misc_set_alignment (misc, GTK_VALUE_INT (*arg), misc->ypad);
+      break;
+    case ARG_YPAD:
+      gtk_misc_set_alignment (misc, misc->xpad, GTK_VALUE_INT (*arg));
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
+}
+
+static void
+gtk_misc_get_arg (GtkMisc        *misc,
+		  GtkArg         *arg,
+		  guint           arg_id)
+{
+  switch (arg_id)
+    {
+    case ARG_XALIGN:
+      GTK_VALUE_DOUBLE (*arg) = misc->xalign;
+      break;
+    case ARG_YALIGN:
+      GTK_VALUE_DOUBLE (*arg) = misc->yalign;
+      break;
+    case ARG_XPAD:
+      GTK_VALUE_INT (*arg) = misc->xpad;
+      break;
+    case ARG_YPAD:
+      GTK_VALUE_INT (*arg) = misc->ypad;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 void
@@ -91,22 +160,21 @@ gtk_misc_set_alignment (GtkMisc *misc,
     {
       misc->xalign = xalign;
       misc->yalign = yalign;
-
+      
       /* clear the area that was allocated before the change
-      */
-      if (GTK_WIDGET_VISIBLE (misc))
+       */
+      if (GTK_WIDGET_DRAWABLE (misc))
         {
           GtkWidget *widget;
-
+	  
           widget = GTK_WIDGET (misc);
           gdk_window_clear_area (widget->window,
                                  widget->allocation.x,
                                  widget->allocation.y,
                                  widget->allocation.width,
                                  widget->allocation.height);
+	  gtk_widget_queue_draw (GTK_WIDGET (misc));
         }
-
-      gtk_widget_queue_draw (GTK_WIDGET (misc));
     }
 }
 
@@ -116,28 +184,28 @@ gtk_misc_set_padding (GtkMisc *misc,
 		      gint     ypad)
 {
   GtkRequisition *requisition;
-
+  
   g_return_if_fail (misc != NULL);
   g_return_if_fail (GTK_IS_MISC (misc));
-
+  
   if (xpad < 0)
     xpad = 0;
   if (ypad < 0)
     ypad = 0;
-
+  
   if ((xpad != misc->xpad) || (ypad != misc->ypad))
     {
       requisition = &(GTK_WIDGET (misc)->requisition);
       requisition->width -= misc->xpad * 2;
       requisition->height -= misc->ypad * 2;
-
+      
       misc->xpad = xpad;
       misc->ypad = ypad;
-
+      
       requisition->width += misc->xpad * 2;
       requisition->height += misc->ypad * 2;
-
-      if (GTK_WIDGET (misc)->parent && GTK_WIDGET_VISIBLE (misc))
+      
+      if (GTK_WIDGET_DRAWABLE (misc))
 	gtk_widget_queue_resize (GTK_WIDGET (misc));
     }
 }

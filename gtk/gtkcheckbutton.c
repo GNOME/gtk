@@ -249,9 +249,9 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
 				CHECK_BUTTON_CLASS (widget)->indicator_size +
 				CHECK_BUTTON_CLASS (widget)->indicator_spacing * 3 + 1);
 	  child_allocation.y = GTK_CONTAINER (widget)->border_width + 1;
-	  child_allocation.width = (allocation->width - child_allocation.x  -
+	  child_allocation.width = MAX (1, allocation->width - child_allocation.x  -
 				    GTK_CONTAINER (widget)->border_width - 1);
-	  child_allocation.height = allocation->height - child_allocation.y * 2;
+	  child_allocation.height = MAX (1, allocation->height - child_allocation.y * 2);
 
 	  gtk_widget_size_allocate (button->child, &child_allocation);
 	}
@@ -362,9 +362,7 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
       width = CHECK_BUTTON_CLASS (widget)->indicator_size;
       height = CHECK_BUTTON_CLASS (widget)->indicator_size;
 
-      if (GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE)
-	shadow_type = GTK_SHADOW_IN;
-      else if ((GTK_WIDGET_STATE (widget) == GTK_STATE_PRELIGHT) && toggle_button->active)
+      if (GTK_TOGGLE_BUTTON (widget)->active)
 	shadow_type = GTK_SHADOW_IN;
       else
 	shadow_type = GTK_SHADOW_OUT;

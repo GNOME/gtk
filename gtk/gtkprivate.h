@@ -25,7 +25,6 @@
 
 extern GtkThemesData th_dat;
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -48,13 +47,13 @@ enum
 /* Macros for extracting a widgets private_flags from GtkWidget.
  */
 #define GTK_PRIVATE_FLAGS(wid)            (GTK_WIDGET (wid)->private_flags)
-#define GTK_WIDGET_USER_STYLE(obj)	  (GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_USER_STYLE)
-#define GTK_WIDGET_REDRAW_PENDING(obj)	  (GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_REDRAW_PENDING)
-#define GTK_CONTAINER_RESIZE_PENDING(obj) (GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_RESIZE_PENDING)
-#define GTK_WIDGET_RESIZE_NEEDED(obj)	  (GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_RESIZE_NEEDED)
-#define GTK_WIDGET_LEAVE_PENDING(obj)	  (GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_LEAVE_PENDING)
-#define GTK_WIDGET_HAS_SHAPE_MASK(obj)	  (GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_HAS_SHAPE_MASK)
-#define GTK_WIDGET_IN_REPARENT(obj)	  (GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_IN_REPARENT)
+#define GTK_WIDGET_USER_STYLE(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_USER_STYLE) != 0)
+#define GTK_WIDGET_REDRAW_PENDING(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_REDRAW_PENDING) != 0)
+#define GTK_CONTAINER_RESIZE_PENDING(obj) ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_RESIZE_PENDING) != 0)
+#define GTK_WIDGET_RESIZE_NEEDED(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_RESIZE_NEEDED) != 0)
+#define GTK_WIDGET_LEAVE_PENDING(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_LEAVE_PENDING) != 0)
+#define GTK_WIDGET_HAS_SHAPE_MASK(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_HAS_SHAPE_MASK) != 0)
+#define GTK_WIDGET_IN_REPARENT(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_IN_REPARENT) != 0)
 
 /* Macros for setting and clearing private widget flags.
  * we use a preprocessor string concatenation here for a clear
@@ -63,7 +62,11 @@ enum
 #define GTK_PRIVATE_SET_FLAG(wid,flag)    G_STMT_START{ (GTK_PRIVATE_FLAGS (wid) |= (PRIVATE_ ## flag)); }G_STMT_END
 #define GTK_PRIVATE_UNSET_FLAG(wid,flag)  G_STMT_START{ (GTK_PRIVATE_FLAGS (wid) &= ~(PRIVATE_ ## flag)); }G_STMT_END
 
-
+/* True if there is a good chance the mb functions will handle things
+ * correctly - set if either mblen("\xc0", MB_CUR_MAX) == 1 in the
+ * C locale, or were using X's mb functions. (-DX_LOCALE && locale != C)
+ */
+extern gint gtk_use_mb;
 
 #ifdef __cplusplus
 }

@@ -630,7 +630,7 @@ gtk_selection_clear (GtkWidget *widget,
     }
     
   if (tmp_list == NULL || selection_info->time > event->time)
-    return TRUE;
+    return FALSE;
 
   current_selections = g_list_remove_link (current_selections, tmp_list);
   g_list_free (tmp_list);

@@ -117,6 +117,8 @@ void       gtk_table_set_row_spacings (GtkTable      *table,
 				       gint           spacing);
 void       gtk_table_set_col_spacings (GtkTable      *table,
 				       gint           spacing);
+void       gtk_table_set_homogeneous  (GtkTable      *table,
+				       gint           homogeneous);
 
 
 #ifdef __cplusplus

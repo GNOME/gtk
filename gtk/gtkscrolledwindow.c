@@ -118,9 +118,23 @@ GtkWidget*
 gtk_scrolled_window_new (GtkAdjustment *hadjustment,
 			 GtkAdjustment *vadjustment)
 {
-  GtkScrolledWindow *scrolled_window;
+  GtkWidget *scrolled_window;
 
   scrolled_window = gtk_type_new (gtk_scrolled_window_get_type ());
+
+  gtk_scrolled_window_construct (GTK_SCROLLED_WINDOW (scrolled_window), hadjustment, vadjustment);
+  
+  return scrolled_window;
+}
+
+void
+gtk_scrolled_window_construct (GtkScrolledWindow *scrolled_window,
+			       GtkAdjustment     *hadjustment,
+			       GtkAdjustment     *vadjustment)
+{
+  g_return_if_fail (scrolled_window != NULL);
+  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
+  g_return_if_fail (scrolled_window->viewport == NULL);
 
   scrolled_window->viewport = gtk_viewport_new (hadjustment, vadjustment);
   hadjustment = gtk_viewport_get_hadjustment (GTK_VIEWPORT (scrolled_window->viewport));
@@ -147,8 +161,6 @@ gtk_scrolled_window_new (GtkAdjustment *hadjustment,
   gtk_widget_ref (scrolled_window->viewport);
   gtk_widget_ref (scrolled_window->hscrollbar);
   gtk_widget_ref (scrolled_window->vscrollbar);
-  
-  return GTK_WIDGET (scrolled_window);
 }
 
 GtkAdjustment*
@@ -216,6 +228,8 @@ gtk_scrolled_window_finalize (GtkObject *object)
   gtk_widget_unref (scrolled_window->viewport);
   gtk_widget_unref (scrolled_window->hscrollbar);
   gtk_widget_unref (scrolled_window->vscrollbar);
+
+  GTK_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
@@ -479,13 +493,15 @@ gtk_scrolled_window_viewport_allocate (GtkWidget     *widget,
 
   allocation->x = GTK_CONTAINER (widget)->border_width;
   allocation->y = GTK_CONTAINER (widget)->border_width;
-  allocation->width = widget->allocation.width - allocation->x * 2;
-  allocation->height = widget->allocation.height - allocation->y * 2;
+  allocation->width = MAX (1, widget->allocation.width - allocation->x * 2);
+  allocation->height = MAX (1, widget->allocation.height - allocation->y * 2);
 
   if (GTK_WIDGET_VISIBLE (scrolled_window->vscrollbar))
-    allocation->width -= scrolled_window->vscrollbar->requisition.width + SCROLLBAR_SPACING (scrolled_window);
+    allocation->width = MAX (1,
+      allocation->width - (scrolled_window->vscrollbar->requisition.width + SCROLLBAR_SPACING (scrolled_window)));
   if (GTK_WIDGET_VISIBLE (scrolled_window->hscrollbar))
-    allocation->height -= scrolled_window->hscrollbar->requisition.height + SCROLLBAR_SPACING (scrolled_window);
+    allocation->height = MAX (1, 
+      allocation->height - (scrolled_window->hscrollbar->requisition.height + SCROLLBAR_SPACING (scrolled_window)));
 }
 
 static void

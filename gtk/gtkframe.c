@@ -493,7 +493,7 @@ gtk_frame_size_allocate (GtkWidget     *widget,
 
       child_allocation.y = (GTK_CONTAINER (frame)->border_width +
 			    MAX (frame->label_height, GTK_WIDGET (frame)->style->klass->ythickness));
-      child_allocation.height = MAX (0, (allocation->height - child_allocation.y -
+      child_allocation.height = MAX (1, (allocation->height - child_allocation.y -
 					 GTK_CONTAINER (frame)->border_width -
 					 GTK_WIDGET (frame)->style->klass->ythickness));
 

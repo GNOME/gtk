@@ -169,8 +169,8 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
     {
       x = GTK_CONTAINER (alignment)->border_width;
       y = GTK_CONTAINER (alignment)->border_width;
-      width = allocation->width - 2 * x;
-      height = allocation->height - 2 * y;
+      width = MAX (allocation->width - 2 * x, 0);
+      height = MAX (allocation->height - 2 * y, 0);
 
       if (width > bin->child->requisition.width)
 	child_allocation.width = (bin->child->requisition.width *

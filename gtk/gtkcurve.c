@@ -26,7 +26,6 @@
 #include "gtksignal.h"
 #include "gtktable.h"
 
-#define BOUNDS(a,x,y)	(((a) < (x)) ? (x) : (((a) > (y)) ? (y) : (a)))
 #define RADIUS		3	/* radius of the control points */
 #define MIN_DISTANCE	8	/* min distance between control points */
 
@@ -43,10 +42,13 @@ static guint curve_type_changed_signal = 0;
 
 
 /* forward declarations: */
-static void gtk_curve_class_init (GtkCurveClass *class);
-static void gtk_curve_init (GtkCurve *curve);
-static void gtk_curve_finalize (GtkObject *object);
-
+static void gtk_curve_class_init   (GtkCurveClass *class);
+static void gtk_curve_init         (GtkCurve      *curve);
+static void gtk_curve_finalize     (GtkObject     *object);
+static gint gtk_curve_graph_events (GtkWidget     *widget, 
+				    GdkEvent      *event, 
+				    GtkCurve      *c);
+static void gtk_curve_size_graph   (GtkCurve      *curve);
 
 guint
 gtk_curve_get_type (void)
@@ -92,6 +94,8 @@ gtk_curve_class_init (GtkCurveClass *class)
 static void
 gtk_curve_init (GtkCurve *curve)
 {
+  gint old_mask;
+
   curve->cursor_type = GDK_TOP_LEFT_ARROW;
   curve->pixmap = NULL;
   curve->curve_type = GTK_CURVE_TYPE_SPLINE;
@@ -103,6 +107,17 @@ gtk_curve_init (GtkCurve *curve)
 
   curve->num_ctlpoints = 0;
   curve->ctlpoint = NULL;
+
+  curve->min_x = 0.0;
+  curve->max_x = 1.0;
+  curve->min_y = 0.0;
+  curve->max_y = 1.0;
+
+  old_mask = gtk_widget_get_events (GTK_WIDGET (curve));
+  gtk_widget_set_events (GTK_WIDGET (curve), old_mask | GRAPH_MASK);
+  gtk_signal_connect (GTK_OBJECT (curve), "event",
+		      (GtkSignalFunc) gtk_curve_graph_events, curve);
+  gtk_curve_size_graph (curve);
 }
 
 static int
@@ -198,6 +213,8 @@ gtk_curve_interpolate (GtkCurve *c, gint width, gint height)
       c->point[i].y = RADIUS + height
 	- project (vector[i], c->min_y, c->max_y, height);
     }
+
+  g_free (vector);
 }
 
 static void
@@ -278,8 +295,8 @@ gtk_curve_graph_events (GtkWidget *widget, GdkEvent *event, GtkCurve *c)
 
   /*  get the pointer position  */
   gdk_window_get_pointer (w->window, &tx, &ty, NULL);
-  x = BOUNDS ((tx - RADIUS), 0, width);
-  y = BOUNDS ((ty - RADIUS), 0, height);
+  x = CLAMP ((tx - RADIUS), 0, width-1);
+  y = CLAMP ((ty - RADIUS), 0, height-1);
 
   min_x = c->min_x;
 
@@ -393,11 +410,7 @@ gtk_curve_graph_events (GtkWidget *widget, GdkEvent *event, GtkCurve *c)
 
     case GDK_MOTION_NOTIFY:
       mevent = (GdkEventMotion *) event;
-      if (mevent->is_hint)
-	{
-	  mevent->x = tx;
-	  mevent->y = ty;
-	}
+
       switch (c->curve_type)
 	{
 	case GTK_CURVE_TYPE_LINEAR:
@@ -823,22 +836,7 @@ gtk_curve_get_vector (GtkCurve *c, int veclen, gfloat vector[])
 GtkWidget*
 gtk_curve_new (void)
 {
-  GtkCurve *curve;
-  gint old_mask;
-
-  curve = gtk_type_new (gtk_curve_get_type ());
-  curve->min_x = 0.0;
-  curve->max_x = 1.0;
-  curve->min_y = 0.0;
-  curve->max_y = 1.0;
-
-  old_mask = gtk_widget_get_events (GTK_WIDGET (curve));
-  gtk_widget_set_events (GTK_WIDGET (curve), old_mask | GRAPH_MASK);
-  gtk_signal_connect (GTK_OBJECT (curve), "event",
-		      (GtkSignalFunc) gtk_curve_graph_events, curve);
-  gtk_curve_size_graph (curve);
-
-  return GTK_WIDGET (curve);
+  return gtk_type_new (gtk_curve_get_type ());
 }
 
 static void

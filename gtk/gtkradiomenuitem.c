@@ -244,3 +244,4 @@ gtk_radio_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 	}
     }
 }
+

@@ -30,7 +30,7 @@ extern "C" {
 
 
 #define GTK_CONTAINER(obj)          (GTK_CHECK_CAST ((obj), gtk_container_get_type (), GtkContainer))
-#define GTK_CONTAINER_CLASS(klass)  (GTK_CHECK_CLASS_CAST ((klass), gtk_container_get_type, GtkContainerClass))
+#define GTK_CONTAINER_CLASS(klass)  (GTK_CHECK_CLASS_CAST ((klass), gtk_container_get_type (), GtkContainerClass))
 #define GTK_IS_CONTAINER(obj)       (GTK_CHECK_TYPE ((obj), gtk_container_get_type ()))
 
 #define GTK_TYPE_CONTAINER          (gtk_container_get_type ())
@@ -40,23 +40,23 @@ typedef struct _GtkContainerClass  GtkContainerClass;
 
 struct _GtkContainer
 {
-  GtkWidget widget;
+   GtkWidget widget;
+   
+   GtkWidget *focus_child;
 
-  GtkWidget *focus_child;
+   gint16 border_width;
+   gint16 internal_border_left;
+   gint16 internal_border_right;
+   gint16 internal_border_top;
+   gint16 internal_border_bottom;
+   guint auto_resize : 1;
+   guint need_resize : 1;
+   guint block_resize : 1;
+   
 
-  gint16 border_width;
-  gint16 internal_border_left;
-  gint16 internal_border_right;
-  gint16 internal_border_top;
-  gint16 internal_border_bottom;
-  guint auto_resize : 1;
-  guint need_resize : 1;
-  guint block_resize : 1;
-
-
-  /* The list of children that requested a resize
-   */
-  GSList *resize_widgets;
+   /* The list of children that requested a resize
+    */
+   GSList *resize_widgets;
 };
 
 struct _GtkContainerClass

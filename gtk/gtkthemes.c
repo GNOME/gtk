@@ -81,19 +81,24 @@ gtk_themes_init (int	 *argc,
 	     
 	  }
      }
-/* default theme name */   
-   if (!th_dat.theme_name)
-     {
-	snprintf(ss,1024,"%s/themes/libtheme2.so",getenv("HOME"),s);
-	th_dat.theme_name=strdup(ss);
-     }
-   printf("%s\n",th_dat.theme_name);
 /* load the lib */
-   th_dat.theme_lib=dlopen(th_dat.theme_name,RTLD_NOW);
+   th_dat.theme_lib=NULL;
+   if (th_dat.theme_name)
+     {
+	printf("Loading Theme %s\n",th_dat.theme_name);
+	th_dat.theme_lib=dlopen(th_dat.theme_name,RTLD_NOW);
+	if (!th_dat.theme_lib) 
+	  fputs(dlerror(),stderr);
+     }
    if (!th_dat.theme_lib) 
      {
-	fputs(dlerror(),stderr);
-	exit(1);
+	th_dat.init=NULL;
+	th_dat.exit=NULL;
+	th_dat.functions.button.border=NULL;
+	th_dat.functions.button.init=NULL;
+	th_dat.functions.button.draw=NULL;
+	th_dat.functions.button.exit=NULL;
+	return;
      }
 /* extract symbols from the lib */   
    th_dat.init=dlsym(th_dat.theme_lib,"theme_init");
@@ -110,6 +115,7 @@ gtk_themes_init (int	 *argc,
 void
 gtk_themes_exit (int errorcode)
 {
+   if (th_dat.exit);
    th_dat.exit();
 /* free the theme library name and unload the lib */
    if (th_dat.theme_name) free(th_dat.theme_name);

@@ -398,8 +398,8 @@ gtk_list_clear_items (GtkList *list,
   GList *start_list;
   GList *end_list;
   GList *tmp_list;
-  gint nchildren;
-  gint selection_changed;
+  guint nchildren;
+  gboolean selection_changed;
 
   g_return_if_fail (list != NULL);
   g_return_if_fail (GTK_IS_LIST (list));
@@ -596,7 +596,7 @@ gtk_list_realize (GtkWidget *widget)
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.colormap = gtk_widget_get_colormap (widget);
-  attributes.event_mask = GDK_EXPOSURE_MASK;
+  attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
@@ -679,7 +679,7 @@ gtk_list_motion_notify (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_LIST (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  g_print ("gtk_list_motion_notify\n");
+  /* g_print ("gtk_list_motion_notify\n"); */
 
   return FALSE;
 }
@@ -698,12 +698,12 @@ gtk_list_button_press (GtkWidget      *widget,
   list = GTK_LIST (widget);
   item = gtk_get_event_widget ((GdkEvent*) event);
   
-  if (!item)
-    return FALSE;
-  
-  while (!gtk_type_is_a (GTK_WIDGET_TYPE (item), gtk_list_item_get_type ()))
+  while (item && !GTK_IS_LIST_ITEM (item))
     item = item->parent;
 
+  if (!item || (item->parent != widget))
+    return FALSE;
+  
   gtk_list_select_child (list, item);
 
   return FALSE;
@@ -789,7 +789,7 @@ gtk_list_size_allocate (GtkWidget     *widget,
     {
       child_allocation.x = GTK_CONTAINER (list)->border_width;
       child_allocation.y = GTK_CONTAINER (list)->border_width;
-      child_allocation.width = allocation->width - child_allocation.x * 2;
+      child_allocation.width = MAX (1, allocation->width - child_allocation.x * 2);
 
       children = list->children;
 
@@ -819,6 +819,7 @@ gtk_list_add (GtkContainer *container,
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_LIST (container));
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_LIST_ITEM (widget));
 
   list = GTK_LIST (container);
 

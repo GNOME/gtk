@@ -42,7 +42,7 @@ typedef void (*GtkContainerSignal1) (GtkObject *object,
 				     gpointer   arg1,
 				     gpointer   data);
 typedef void (*GtkContainerSignal2) (GtkObject *object,
-				     gpointer   arg1,
+				     GtkFunction arg1,
 				     gpointer   arg2,
 				     gpointer   data);
 typedef gint (*GtkContainerSignal3) (GtkObject *object,
@@ -79,6 +79,10 @@ static void gtk_container_get_arg           (GtkContainer      *container,
 static void gtk_container_set_arg           (GtkContainer      *container,
 					     GtkArg            *arg,
 					     guint		arg_id);
+static void gtk_container_add_unimplemented (GtkContainer      *container,
+					     GtkWidget         *widget);
+static void gtk_container_remove_unimplemented (GtkContainer   *container,
+						GtkWidget      *widget);
 static gint gtk_real_container_need_resize  (GtkContainer      *container);
 static gint gtk_real_container_focus        (GtkContainer      *container,
 					     GtkDirectionType   direction);
@@ -166,8 +170,7 @@ gtk_container_class_init (GtkContainerClass *class)
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkContainerClass, need_resize),
                     gtk_container_marshal_signal_4,
-		    GTK_TYPE_BOOL, 0,
-                    GTK_TYPE_WIDGET);
+		    GTK_TYPE_BOOL, 0);
   container_signals[FOREACH] =
     gtk_signal_new ("foreach",
                     GTK_RUN_FIRST,
@@ -194,10 +197,27 @@ gtk_container_class_init (GtkContainerClass *class)
    * accessable through gtk_container_foreach.
   */
   widget_class->show_all = gtk_container_show_all;
-  widget_class->hide_all = gtk_container_hide_all;  
-  
+  widget_class->hide_all = gtk_container_hide_all;
+
+  class->add = gtk_container_add_unimplemented;
+  class->remove = gtk_container_remove_unimplemented;
   class->need_resize = gtk_real_container_need_resize;
+  class->foreach = NULL;
   class->focus = gtk_real_container_focus;
+}
+
+static void
+gtk_container_add_unimplemented (GtkContainer     *container,
+				 GtkWidget        *widget)
+{
+  g_warning ("GtkContainerClass::add not implemented for `%s'", gtk_type_name (GTK_OBJECT_TYPE (container)));
+}
+
+static void
+gtk_container_remove_unimplemented (GtkContainer     *container,
+				    GtkWidget        *widget)
+{
+  g_warning ("GtkContainerClass::remove not implemented for `%s'", gtk_type_name (GTK_OBJECT_TYPE (container)));
 }
 
 static void
@@ -300,8 +320,8 @@ gtk_container_border_width (GtkContainer *container,
     {
       container->border_width = border_width;
 
-      if (container->widget.parent && GTK_WIDGET_VISIBLE (container))
-	gtk_container_need_resize (GTK_CONTAINER (container->widget.parent));
+      if (GTK_WIDGET_REALIZED (container))
+	gtk_widget_queue_resize (GTK_WIDGET (container));
     }
 }
 
@@ -309,6 +329,12 @@ void
 gtk_container_add (GtkContainer *container,
 		   GtkWidget    *widget)
 {
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (widget->parent == NULL);
+
   gtk_signal_emit (GTK_OBJECT (container), container_signals[ADD], widget);
 }
 
@@ -318,11 +344,14 @@ gtk_container_remove (GtkContainer *container,
 {
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (widget->parent == GTK_WIDGET (container));
+  
+  gtk_signal_emit (GTK_OBJECT (container), container_signals[REMOVE], widget);
 
   if (container->focus_child == widget)
     container->focus_child = NULL;
-
-  gtk_signal_emit (GTK_OBJECT (container), container_signals[REMOVE], widget);
 }
 
 void
@@ -691,7 +720,7 @@ gtk_container_focus_tab (GtkContainer     *container,
 	{
 	  child2 = tmp_list->prev->data;
 	  if ((child->allocation.x < child2->allocation.x) &&
-	      (child->allocation.y >= child2->allocation.y))
+	      (child->allocation.y == child2->allocation.y))
 	    {
 	      tmp_list->data = tmp_list->prev->data;
 	      tmp_list = tmp_list->prev;

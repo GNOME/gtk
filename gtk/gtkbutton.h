@@ -28,9 +28,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_BUTTON(obj)          GTK_CHECK_CAST (obj, gtk_button_get_type (), GtkButton)
-#define GTK_BUTTON_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_button_get_type (), GtkButtonClass)
-#define GTK_IS_BUTTON(obj)       GTK_CHECK_TYPE (obj, gtk_button_get_type ())
+#define GTK_BUTTON(obj)          (GTK_CHECK_CAST ((obj), gtk_button_get_type (), GtkButton))
+#define GTK_BUTTON_CLASS(klass)  (GTK_CHECK_CLASS_CAST ((klass), gtk_button_get_type (), GtkButtonClass))
+#define GTK_IS_BUTTON(obj)       (GTK_CHECK_TYPE ((obj), gtk_button_get_type ()))
 
 
 typedef struct _GtkButton       GtkButton;
@@ -44,6 +44,11 @@ struct _GtkButton
 
   guint in_button : 1;
   guint button_down : 1;
+
+  void (* init)    (GtkWidget *button);
+  void (* border)  (GtkWidget *button);
+  void (* draw)    (GtkWidget *button, GdkRectangle *area);
+  void (* exit)    (GtkWidget *button);
 };
 
 struct _GtkButtonClass
@@ -66,7 +71,12 @@ void       gtk_button_released       (GtkButton *button);
 void       gtk_button_clicked        (GtkButton *button);
 void       gtk_button_enter          (GtkButton *button);
 void       gtk_button_leave          (GtkButton *button);
-
+void       gtk_button_set_theme      (GtkButton *button,
+				      void (* init)    (GtkWidget *button),
+				      void (* border)  (GtkWidget *button),
+				      void (* draw)    (GtkWidget *button, GdkRectangle *area),
+				      void (* exit)    (GtkWidget *button));
+   
 
 #ifdef __cplusplus
 }
