@@ -927,9 +927,19 @@ gtk_range_expose (GtkWidget      *widget,
   GtkStateType state;
   GdkRectangle expose_area;	/* Relative to widget->allocation */
   GdkRectangle area;
+  gint focus_line_width = 0;
+  gint focus_padding = 0;
 
   range = GTK_RANGE (widget);
 
+  if (GTK_WIDGET_CAN_FOCUS (range))
+    {
+      gtk_widget_style_get (GTK_WIDGET (range),
+			    "focus-line-width", &focus_line_width,
+			    "focus-padding", &focus_padding,
+			    NULL);
+    }
+  
   expose_area = event->area;
   expose_area.x -= widget->allocation.x;
   expose_area.y -= widget->allocation.y;
@@ -956,10 +966,10 @@ gtk_range_expose (GtkWidget      *widget,
                      sensitive ? GTK_STATE_ACTIVE : GTK_STATE_INSENSITIVE,
                      GTK_SHADOW_IN,
                      &area, GTK_WIDGET(range), "trough",
-                     widget->allocation.x + range->range_rect.x,
-                     widget->allocation.y + range->range_rect.y,
-                     range->range_rect.width,
-                     range->range_rect.height);
+                     widget->allocation.x + range->range_rect.x + focus_line_width + focus_padding,
+                     widget->allocation.y + range->range_rect.y + focus_line_width + focus_padding,
+                     range->range_rect.width - 2 * (focus_line_width + focus_padding),
+                     range->range_rect.height - 2 * (focus_line_width + focus_padding));
       
                  
       if (sensitive &&
@@ -1630,6 +1640,19 @@ gtk_range_get_props (GtkRange  *range,
 			"arrow_displacement_y", &tmp_arrow_displacement_y,
                         NULL);
   
+  if (GTK_WIDGET_CAN_FOCUS (range))
+    {
+      gint focus_line_width;
+      gint focus_padding;
+      
+      gtk_widget_style_get (GTK_WIDGET (range),
+			    "focus-line-width", &focus_line_width,
+			    "focus-padding", &focus_padding,
+			    NULL);
+      
+      tmp_trough_border += focus_line_width + focus_padding;
+    }
+  
   if (slider_width)
     *slider_width = tmp_slider_width;
 
@@ -1800,7 +1823,7 @@ gtk_range_calc_request (GtkRange      *range,
 {
   gint slider_length;
   gint n_steppers;
-  
+
   border->left = 0;
   border->right = 0;
   border->top = 0;

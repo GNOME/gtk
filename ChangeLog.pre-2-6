@@ -1,3 +1,9 @@
+Wed Feb 27 17:32:09 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrange.c (gtk_range_get_props): if CAN_FOCUS
+	reserve focus_line_width + focus_line_pad extra
+	space and draw the focus in that space. #72027.
+
 Wed Feb 27 23:02:55 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkhandlebox.c (gtk_handle_box_realize): minor code cleanup
