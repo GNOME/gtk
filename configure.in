@@ -1150,6 +1150,26 @@ if test "x$gdktarget" = "xx11"; then
 
   CPPFLAGS="$gtk_save_cppflags"
 
+  # Check for xReply
+
+  gtk_save_cppflags="$CPPFLAGS"
+  CPPFLAGS="$CPPFLAGS $X_CFLAGS"
+
+  AC_MSG_CHECKING([if <X11/extensions/XIproto.h> is needed for xReply])
+  AC_TRY_COMPILE([#include <X11/Xlibint.h>],
+      [xReply *rep;],
+      [AC_MSG_RESULT([no])],
+      [AC_TRY_COMPILE([#include <X11/extensions/XIproto.h>
+#include <X11/Xlibint.h>],
+           [xReply *rep;],
+           [AC_MSG_RESULT([yes])
+            AC_DEFINE([NEED_XIPROTO_H_FOR_XREPLY], 1,
+                [Define if <X11/extensions/XIproto.h> needed for xReply])],
+           [AC_MSG_RESULT([unknown])
+            AC_MSG_ERROR([xReply type unavailable. X11 is too old])])])
+
+  CPPFLAGS="$gtk_save_cppflags"
+
   # Check for shaped window extension
 
   AC_CHECK_LIB(Xext, XShapeCombineMask,
@@ -1165,10 +1185,18 @@ if test "x$gdktarget" = "xx11"; then
       ,
       $x_libs_for_checks)
 
+  # Check for XInternAtoms (X11R6 specific)
+
+  AC_CHECK_LIB(X11, XInternAtoms,
+      AC_DEFINE([HAVE_XINTERNATOMS], 1,
+          [Define to 1 if you have the `XInternAtoms' function.]),
+      ,
+      $x_libs_for_checks)
+
   # Generic X11R6 check needed for XIM support; we could
   # probably use this to replace the above, but we'll
-  # leave the separate XConvertCase check for clarity
-
+  # leave the separate checks for XConvertCase and XInternAtoms 
+  # for clarity
   have_x11r6=false
   AC_CHECK_LIB(X11, XAddConnectionWatch,
       have_x11r6=true,

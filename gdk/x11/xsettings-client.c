@@ -480,7 +480,13 @@ xsettings_client_new (Display             *display,
   atom_names[1] = "_XSETTINGS_SETTINGS";
   atom_names[2] = "MANAGER";
 
+#ifdef HAVE_XINTERNATOMS
   XInternAtoms (display, atom_names, 3, False, atoms);
+#else
+  atoms[0] = XInternAtom (display, atom_names[0], False);
+  atoms[1] = XInternAtom (display, atom_names[1], False);
+  atoms[2] = XInternAtom (display, atom_names[2], False);
+#endif
   
   client->selection_atom = atoms[0];
   client->xsettings_atom = atoms[1];

@@ -1,5 +1,16 @@
 2004-11-12  Matthias Clasen  <mclasen@redhat.com>
 
+	Make GDK+ compile with X11R5 (#148032)
+	
+	* gdk/x11/xsettings-client.c (xsettings_client_new): 
+	* gdk/x11/gdkproperty-x11.c (_gdk_x11_precache_atoms): Only
+	use XInternAtoms if it is available.
+
+	* gdk/x11/gdkasync.c: Include XIproto.h if necessary.
+
+	* configure.in: Check for XInternAtoms and X headers needed for
+	xReply.
+	
 	* configure.in: Bump version.
 
 	* === Released 2.5.5 ===

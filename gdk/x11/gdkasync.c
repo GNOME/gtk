@@ -44,6 +44,9 @@ in this Software without prior written authorization from The Open Group.
 
 */
 #include <config.h>
+#ifdef NEED_XIPROTO_H_FOR_XREPLY
+#include <X11/extensions/XIproto.h>
+#endif
 #include <X11/Xlibint.h>
 #include "gdkalias.h"
 #include "gdkasync.h"
