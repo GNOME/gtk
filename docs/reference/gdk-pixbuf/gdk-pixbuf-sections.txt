@@ -147,6 +147,7 @@ gdk_interp_type_get_type
 <SECTION>
 <FILE>gdk-pixbuf-loader</FILE>
 <TITLE>GdkPixbufLoader</TITLE>
+GdkPixbufLoader
 gdk_pixbuf_loader_new
 gdk_pixbuf_loader_new_with_type
 gdk_pixbuf_loader_get_format
@@ -163,7 +164,6 @@ GDK_IS_PIXBUF_LOADER
 GDK_PIXBUF_LOADER_CLASS
 GDK_IS_PIXBUF_LOADER_CLASS
 <SUBSECTION Private>
-GdkPixbufLoader
 gdk_pixbuf_loader_get_type
 </SECTION>
 

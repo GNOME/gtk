@@ -1,3 +1,8 @@
+2002-11-07  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf/gdk-pixbuf-sections.txt: Don't mark GdkPixbufLoader
+	as private, since that prevents its signals from being documented.
+
 Sun Nov  3 13:23:51 2002  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/tmpl/gtkcellrenderer.sgml: more docs.
