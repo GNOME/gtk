@@ -148,8 +148,10 @@ struct _GtkFileChooserDefault
   guint settings_signal_id;
   int icon_size;
 
+#if 0
   GdkDragContext *shortcuts_drag_context;
   GSource *shortcuts_drag_outside_idle;
+#endif
 
   /* Flags */
 
@@ -162,7 +164,10 @@ struct _GtkFileChooserDefault
   guint changing_folder : 1;
   guint shortcuts_current_folder_active : 1;
   guint shortcuts_current_folder_is_volume : 1;
+
+#if 0
   guint shortcuts_drag_outside : 1;
+#endif
 };
 
 /* Signal IDs */
@@ -1844,9 +1849,12 @@ shortcuts_drag_begin_cb (GtkWidget             *widget,
 			 GdkDragContext        *context,
 			 GtkFileChooserDefault *impl)
 {
+#if 0
   impl->shortcuts_drag_context = g_object_ref (context);
+#endif
 }
 
+#if 0
 /* Removes the idle handler for outside drags */
 static void
 shortcuts_cancel_drag_outside_idle (GtkFileChooserDefault *impl)
@@ -1857,6 +1865,7 @@ shortcuts_cancel_drag_outside_idle (GtkFileChooserDefault *impl)
   g_source_destroy (impl->shortcuts_drag_outside_idle);
   impl->shortcuts_drag_outside_idle = NULL;
 }
+#endif
 
 /* GtkWidget::drag-end handler for the shortcuts list. */
 static void
@@ -1864,6 +1873,7 @@ shortcuts_drag_end_cb (GtkWidget             *widget,
 		       GdkDragContext        *context,
 		       GtkFileChooserDefault *impl)
 {
+#if 0
   g_object_unref (impl->shortcuts_drag_context);
 
   shortcuts_cancel_drag_outside_idle (impl);
@@ -1874,6 +1884,7 @@ shortcuts_drag_end_cb (GtkWidget             *widget,
   gtk_button_clicked (GTK_BUTTON (impl->browse_shortcuts_remove_button));
 
   impl->shortcuts_drag_outside = FALSE;
+#endif
 }
 
 /* GtkWidget::drag-data-delete handler for the shortcuts list. */
@@ -1885,6 +1896,7 @@ shortcuts_drag_data_delete_cb (GtkWidget             *widget,
   g_signal_stop_emission_by_name (widget, "drag-data-delete");
 }
 
+#if 0
 /* Creates a suitable drag cursor to indicate that the selected bookmark will be
  * deleted or not.
  */
@@ -2043,6 +2055,7 @@ shortcuts_drag_outside_idle_cb (GtkFileChooserDefault *impl)
   shortcuts_cancel_drag_outside_idle (impl);
   return FALSE;
 }
+#endif
 
 /* GtkWidget::drag-leave handler for the shortcuts list.  We unhighlight the
  * drop position.
@@ -2053,6 +2066,7 @@ shortcuts_drag_leave_cb (GtkWidget             *widget,
 			 guint                  time_,
 			 GtkFileChooserDefault *impl)
 {
+#if 0
   if (gtk_drag_get_source_widget (context) == widget && !impl->shortcuts_drag_outside_idle)
     {
       impl->shortcuts_drag_outside_idle = g_idle_source_new ();
@@ -2061,6 +2075,7 @@ shortcuts_drag_leave_cb (GtkWidget             *widget,
 						   G_OBJECT (impl)));
       g_source_attach (impl->shortcuts_drag_outside_idle, NULL);
     }
+#endif
 
   gtk_tree_view_set_drag_dest_row (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view),
 				   NULL,
@@ -2143,6 +2158,7 @@ shortcuts_drag_motion_cb (GtkWidget             *widget,
   GtkTreeViewDropPosition pos;
   GdkDragAction action;
 
+#if 0
   if (gtk_drag_get_source_widget (context) == widget)
     {
       shortcuts_cancel_drag_outside_idle (impl);
@@ -2153,6 +2169,7 @@ shortcuts_drag_motion_cb (GtkWidget             *widget,
 	  impl->shortcuts_drag_outside = FALSE;
 	}
     }
+#endif
 
   if (context->suggested_action == GDK_ACTION_COPY || (context->actions & GDK_ACTION_COPY) != 0)
     action = GDK_ACTION_COPY;
@@ -2190,7 +2207,9 @@ shortcuts_drag_drop_cb (GtkWidget             *widget,
 			guint                  time_,
 			GtkFileChooserDefault *impl)
 {
+#if 0
   shortcuts_cancel_drag_outside_idle (impl);
+#endif
 
   g_signal_stop_emission_by_name (widget, "drag-drop");
   return TRUE;

@@ -1,3 +1,9 @@
+2004-03-15  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c: Surround the
+	drag-outside-to-remove-bookmarks code with "#if 0" blocks; it's
+	too unstable right now.
+
 Sun Mar 14 23:36:15 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c: Implement local_only by
