@@ -1,12 +1,12 @@
 # gtk+ ko.po
-# Copyright (C) 1998 Free Software Foundation, Inc.
-# Sung-Hyun Nam <namsh@lgic.co.kr>, 1998
+# Copyright (C) 1998, 1999 Free Software Foundation, Inc.
+# Sung-Hyun Nam <namsh@lgic.co.kr>, 1998, 1999
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.2.2\n"
-"POT-Creation-Date: 1999-09-23 19:59-0500\n"
-"PO-Revision-Date: 1999-04-24 23:03+0900\n"
-"Last-Translator: Changwoo Ryu <cwryu@adam.kaist.ac.kr>\n"
+"Project-Id-Version: gtk+ 1.2.5\n"
+"POT-Creation-Date: 1999-09-17 19:52+0900\n"
+"PO-Revision-Date: 1999-10-04 18:27:43+0900\n"
+"Last-Translator: Sung-Hyun Nam <namsh@kldp.org>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=euc-kr\n"
