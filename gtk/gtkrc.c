@@ -29,6 +29,7 @@
 #include "gtkrc.h"
 #include "gtkbindings.h"
 #include "gtkthemes.h"
+#include "gtkintl.h"
 
 typedef struct _GtkRcSet    GtkRcSet;
 typedef struct _GtkRcNode   GtkRcNode;
@@ -1529,10 +1530,10 @@ gtk_rc_find_pixmap_in_path (GScanner *scanner,
     }
 
   if (scanner)
-    g_warning ("Unable to locate image file in pixmap_path: \"%s\" line %d",
+    g_warning (_("Unable to locate image file in pixmap_path: \"%s\" line %d"),
 	       pixmap_file, scanner->line);
   else
-    g_warning ("Unable to locate image file in pixmap_path: \"%s\"",
+    g_warning (_("Unable to locate image file in pixmap_path: \"%s\""),
 	       pixmap_file);
     
   return NULL;

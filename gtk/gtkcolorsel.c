@@ -23,6 +23,7 @@
 #include "gtkcolorsel.h"
 #include "gtkwindow.h"
 #include "gtkhbbox.h"
+#include "gtkintl.h"
 #include "gtkdnd.h"
 #include "gtkselection.h"
 
@@ -198,13 +199,13 @@ static const gchar	*value_index_key = "gtk-value-index";
 
 static const scale_val_type scale_vals[NUM_CHANNELS] =
 {
-  {"Hue:",        0.0, 360.0, 1.00, 10.00, (SF) gtk_color_selection_hsv_updater},
-  {"Saturation:", 0.0,   1.0, 0.01,  0.01, (SF) gtk_color_selection_hsv_updater},
-  {"Value:",      0.0,   1.0, 0.01,  0.01, (SF) gtk_color_selection_hsv_updater},
-  {"Red:",        0.0,   1.0, 0.01,  0.01, (SF) gtk_color_selection_rgb_updater},
-  {"Green:",      0.0,   1.0, 0.01,  0.01, (SF) gtk_color_selection_rgb_updater},
-  {"Blue:",       0.0,   1.0, 0.01,  0.01, (SF) gtk_color_selection_rgb_updater},
-  {"Opacity:",    0.0,   1.0, 0.01,  0.01, (SF) gtk_color_selection_opacity_updater}
+  {N_("Hue:"),        0.0, 360.0, 1.00, 10.00, (SF) gtk_color_selection_hsv_updater},
+  {N_("Saturation:"), 0.0,   1.0, 0.01,  0.01, (SF) gtk_color_selection_hsv_updater},
+  {N_("Value:"),      0.0,   1.0, 0.01,  0.01, (SF) gtk_color_selection_hsv_updater},
+  {N_("Red:"),        0.0,   1.0, 0.01,  0.01, (SF) gtk_color_selection_rgb_updater},
+  {N_("Green:"),      0.0,   1.0, 0.01,  0.01, (SF) gtk_color_selection_rgb_updater},
+  {N_("Blue:"),       0.0,   1.0, 0.01,  0.01, (SF) gtk_color_selection_rgb_updater},
+  {N_("Opacity:"),    0.0,   1.0, 0.01,  0.01, (SF) gtk_color_selection_opacity_updater}
 };
 
 guint
@@ -388,7 +389,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
 
   for (n = HUE; n <= OPACITY; n++)
     {
-      label = gtk_label_new (scale_vals[n].label);
+      label = gtk_label_new (gettext(scale_vals[n].label));
       gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
       gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, n, n + 1);
 
@@ -1633,18 +1634,18 @@ gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
   gtk_box_pack_end (GTK_BOX (colorseldiag->main_vbox), action_area, FALSE, FALSE, 0);
   gtk_widget_show (action_area);
 
-  colorseldiag->ok_button = gtk_button_new_with_label ("OK");
+  colorseldiag->ok_button = gtk_button_new_with_label (_("OK"));
   GTK_WIDGET_SET_FLAGS (colorseldiag->ok_button, GTK_CAN_DEFAULT);
   gtk_box_pack_start (GTK_BOX (action_area), colorseldiag->ok_button, TRUE, TRUE, 0);
   gtk_widget_grab_default (colorseldiag->ok_button);
   gtk_widget_show (colorseldiag->ok_button);
 
-  colorseldiag->cancel_button = gtk_button_new_with_label ("Cancel");
+  colorseldiag->cancel_button = gtk_button_new_with_label (_("Cancel"));
   GTK_WIDGET_SET_FLAGS (colorseldiag->cancel_button, GTK_CAN_DEFAULT);
   gtk_box_pack_start (GTK_BOX (action_area), colorseldiag->cancel_button, TRUE, TRUE, 0);
   gtk_widget_show (colorseldiag->cancel_button);
 
-  colorseldiag->help_button = gtk_button_new_with_label ("Help");
+  colorseldiag->help_button = gtk_button_new_with_label (_("Help"));
   GTK_WIDGET_SET_FLAGS (colorseldiag->help_button, GTK_CAN_DEFAULT);
   gtk_box_pack_start (GTK_BOX (action_area), colorseldiag->help_button, TRUE, TRUE, 0);
   gtk_widget_show (colorseldiag->help_button);

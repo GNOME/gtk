@@ -1,0 +1,89 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <pauls@euronet.nl>, 1998.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1998-12-18 01:13+0100\n"
+"PO-Revision-Date: 1998-12-18 01:13+0100\n"
+"Last-Translator: Paul Siegmann <pauls@euronet.nl>\n"
+"Language-Team: LANGUAGE <nl@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+#: gtk/gtkfilesel.c:419
+msgid "Directories"
+msgstr "Directories"
+
+#. The files clist
+#: gtk/gtkfilesel.c:430
+msgid "Files"
+msgstr "Bestanden"
+
+#. The OK button
+#: gtk/gtkfilesel.c:462
+msgid "OK"
+msgstr "OK"
+
+#. The Cancel button
+#: gtk/gtkfilesel.c:469 gtk/gtkfilesel.c:844 gtk/gtkfilesel.c:944
+#: gtk/gtkfilesel.c:1059
+msgid "Cancel"
+msgstr "Annuleren"
+
+#: gtk/gtkfilesel.c:500 gtk/gtkfilesel.c:1455
+#, c-format
+msgid "Directory unreadable: %s"
+msgstr "Directory onleesbaar: %s"
+
+#: gtk/gtkfilesel.c:532
+msgid "Create Dir"
+msgstr "Maak Dir"
+
+#: gtk/gtkfilesel.c:543 gtk/gtkfilesel.c:913
+msgid "Delete File"
+msgstr "Verwijder Bestand"
+
+#: gtk/gtkfilesel.c:554 gtk/gtkfilesel.c:1017
+msgid "Rename File"
+msgstr "Wijzig Bestandsnaam"
+
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
+#: gtk/gtkfilesel.c:715
+msgid "Error"
+msgstr "Fout"
+
+#. close button
+#: gtk/gtkfilesel.c:733
+msgid "Close"
+msgstr "Sluiten"
+
+#: gtk/gtkfilesel.c:808
+msgid "Create Directory"
+msgstr "Maak Directory"
+
+#: gtk/gtkfilesel.c:822
+msgid "Directory name:"
+msgstr "Directory naam:"
+
+#. buttons
+#: gtk/gtkfilesel.c:835
+msgid "Create"
+msgstr "Maak"
+
+#. buttons
+#: gtk/gtkfilesel.c:935
+msgid "Delete"
+msgstr "Verwijder"
+
+#. buttons
+#: gtk/gtkfilesel.c:1050
+msgid "Rename"
+msgstr "Hernoem"

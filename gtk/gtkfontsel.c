@@ -82,6 +82,7 @@
 #include "gtktable.h"
 #include "gtkvbox.h"
 #include "gtkscrolledwindow.h"
+#include "gtkintl.h"
 
 /* The maximum number of fontnames requested with XListFonts(). */
 #define MAX_FONTS 32767
@@ -199,19 +200,19 @@ typedef enum
 
 /* These are the names of the fields, used on the info & filter page. */
 static const gchar* xlfd_field_names[GTK_XLFD_NUM_FIELDS] = {
-  "Foundry:",
-  "Family:",
-  "Weight:",
-  "Slant:",
-  "Set Width:",
-  "Add Style:",
-  "Pixel Size:",
-  "Point Size:",
-  "Resolution X:",
-  "Resolution Y:",
-  "Spacing:",
-  "Average Width:",
-  "Charset:",
+  N_("Foundry:"),
+  N_("Family:"),
+  N_("Weight:"),
+  N_("Slant:"),
+  N_("Set Width:"),
+  N_("Add Style:"),
+  N_("Pixel Size:"),
+  N_("Point Size:"),
+  N_("Resolution X:"),
+  N_("Resolution Y:"),
+  N_("Spacing:"),
+  N_("Average Width:"),
+  N_("Charset:"),
 };
 
 /* These are the array indices of the font properties used in several arrays,
@@ -438,11 +439,11 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   GtkWidget *text_box, *frame;
   GtkWidget *table, *label, *hbox, *hbox2, *clist, *button, *vbox, *alignment;
   gint i, prop, row;
-  gchar *titles[] = { "Font Property", "Requested Value", "Actual Value" };
+  gchar *titles[] = { _("Font Property"), _("Requested Value"), _("Actual Value") };
   gchar buffer[128];
   gchar *size;
   gint size_to_match;
-  const gchar *row_text[3];
+  gchar *row_text[3];
   gchar *property, *text;
   gboolean inserted;
   
@@ -477,7 +478,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   fontsel->main_vbox = gtk_vbox_new (FALSE, 4);
   gtk_widget_show (fontsel->main_vbox);
   gtk_container_set_border_width (GTK_CONTAINER (fontsel->main_vbox), 6);
-  label = gtk_label_new("Font");
+  label = gtk_label_new(_("Font"));
   gtk_notebook_append_page (GTK_NOTEBOOK (fontsel),
 			    fontsel->main_vbox, label);
   
@@ -487,17 +488,17 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gtk_table_set_col_spacings(GTK_TABLE(table), 8);
   gtk_box_pack_start (GTK_BOX (fontsel->main_vbox), table, TRUE, TRUE, 0);
   
-  fontsel->font_label = gtk_label_new("Font:");
+  fontsel->font_label = gtk_label_new(_("Font:"));
   gtk_misc_set_alignment (GTK_MISC (fontsel->font_label), 0.0, 0.5);
   gtk_widget_show (fontsel->font_label);
   gtk_table_attach (GTK_TABLE (table), fontsel->font_label, 0, 1, 0, 1,
 		    GTK_FILL, 0, 0, 0);
-  label = gtk_label_new("Font Style:");
+  label = gtk_label_new(_("Font Style:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
 		    GTK_FILL, 0, 0, 0);
-  label = gtk_label_new("Size:");
+  label = gtk_label_new(_("Size:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
@@ -629,7 +630,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gtk_widget_show (hbox);
   gtk_box_pack_start (GTK_BOX (fontsel->main_vbox), hbox, FALSE, TRUE, 0);
   
-  fontsel->filter_button = gtk_button_new_with_label("Reset Filter");
+  fontsel->filter_button = gtk_button_new_with_label(_("Reset Filter"));
   gtk_misc_set_padding (GTK_MISC (GTK_BIN (fontsel->filter_button)->child),
 			16, 0);
   gtk_widget_show(fontsel->filter_button);
@@ -643,18 +644,18 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gtk_widget_show (hbox2);
   gtk_box_pack_end (GTK_BOX (hbox), hbox2, FALSE, FALSE, 0);
   
-  label = gtk_label_new("Metric:");
+  label = gtk_label_new(_("Metric:"));
   gtk_widget_show (label);
   gtk_box_pack_start (GTK_BOX (hbox2), label, FALSE, TRUE, 8);
   
-  fontsel->points_button = gtk_radio_button_new_with_label(NULL, "Points");
+  fontsel->points_button = gtk_radio_button_new_with_label(NULL, _("Points"));
   gtk_widget_show (fontsel->points_button);
   gtk_box_pack_start (GTK_BOX (hbox2), fontsel->points_button, FALSE, TRUE, 0);
   if (INITIAL_METRIC == GTK_FONT_METRIC_POINTS)
     gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(fontsel->points_button),
 				TRUE);
   
-  fontsel->pixels_button = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(fontsel->points_button), "Pixels");
+  fontsel->pixels_button = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(fontsel->points_button), _("Pixels"));
   gtk_widget_show (fontsel->pixels_button);
   gtk_box_pack_start (GTK_BOX (hbox2), fontsel->pixels_button, FALSE, TRUE, 0);
   if (INITIAL_METRIC == GTK_FONT_METRIC_PIXELS)
@@ -670,7 +671,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   
   
   /* create the text entry widget */
-  text_frame = gtk_frame_new ("Preview:");
+  text_frame = gtk_frame_new (_("Preview:"));
   gtk_widget_show (text_frame);
   gtk_frame_set_shadow_type(GTK_FRAME(text_frame), GTK_SHADOW_ETCHED_IN);
   gtk_box_pack_start (GTK_BOX (fontsel->main_vbox), text_frame,
@@ -699,7 +700,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   fontsel->info_vbox = gtk_vbox_new (FALSE, 4);
   gtk_widget_show (fontsel->info_vbox);
   gtk_container_set_border_width (GTK_CONTAINER (fontsel->info_vbox), 2);
-  label = gtk_label_new("Font Information");
+  label = gtk_label_new(_("Font Information"));
   gtk_notebook_append_page (GTK_NOTEBOOK (fontsel),
 			    fontsel->info_vbox, label);
   
@@ -724,7 +725,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   row_text[2] = "";
   for (i = 0; i < GTK_XLFD_NUM_FIELDS; i++)
     {
-      row_text[0] = xlfd_field_names[i];
+      row_text[0] = gettext(xlfd_field_names[i]);
       gtk_clist_append(GTK_CLIST(fontsel->info_clist), row_text);
       gtk_clist_set_shift(GTK_CLIST(fontsel->info_clist), i, 0, 0, 4);
       gtk_clist_set_shift(GTK_CLIST(fontsel->info_clist), i, 1, 0, 4);
@@ -732,7 +733,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
     }
   gtk_clist_thaw (GTK_CLIST(fontsel->info_clist));
   
-  label = gtk_label_new("Requested Font Name:");
+  label = gtk_label_new(_("Requested Font Name:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_box_pack_start (GTK_BOX (fontsel->info_vbox), label, FALSE, TRUE, 0);
@@ -743,7 +744,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gtk_box_pack_start (GTK_BOX (fontsel->info_vbox),
 		      fontsel->requested_font_name, FALSE, TRUE, 0);
   
-  label = gtk_label_new("Actual Font Name:");
+  label = gtk_label_new(_("Actual Font Name:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
   gtk_box_pack_start (GTK_BOX (fontsel->info_vbox), label, FALSE, TRUE, 0);
@@ -754,7 +755,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gtk_box_pack_start (GTK_BOX (fontsel->info_vbox),
 		      fontsel->actual_font_name, FALSE, TRUE, 0);
   
-  sprintf(buffer, "%i fonts available with a total of %i styles.",
+  sprintf(buffer, _("%i fonts available with a total of %i styles."),
 	  fontsel_info->nfonts, fontsel_info->nstyles);
   label = gtk_label_new(buffer);
   gtk_widget_show (label);
@@ -769,7 +770,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   fontsel->filter_vbox = gtk_vbox_new (FALSE, 4);
   gtk_widget_show (fontsel->filter_vbox);
   gtk_container_set_border_width (GTK_CONTAINER (fontsel->filter_vbox), 2);
-  label = gtk_label_new("Filter");
+  label = gtk_label_new(_("Filter"));
   gtk_notebook_append_page (GTK_NOTEBOOK (fontsel),
 			    fontsel->filter_vbox, label);
   
@@ -782,7 +783,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gtk_widget_show (hbox);
   gtk_container_add (GTK_CONTAINER (frame), hbox);
 
-  label = gtk_label_new("Font Types:");
+  label = gtk_label_new(_("Font Types:"));
   gtk_widget_show (label);
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 10);
 
@@ -790,19 +791,19 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gtk_widget_show (hbox2);
   gtk_box_pack_start (GTK_BOX (hbox), hbox2, FALSE, TRUE, 0);
 
-  fontsel->type_bitmaps_button = gtk_check_button_new_with_label ("Bitmap");
+  fontsel->type_bitmaps_button = gtk_check_button_new_with_label (_("Bitmap"));
   gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (fontsel->type_bitmaps_button), TRUE);
   gtk_widget_show (fontsel->type_bitmaps_button);
   gtk_box_pack_start (GTK_BOX (hbox2), fontsel->type_bitmaps_button,
 		      FALSE, TRUE, 0);
 
-  fontsel->type_scalable_button = gtk_check_button_new_with_label ("Scalable");
+  fontsel->type_scalable_button = gtk_check_button_new_with_label (_("Scalable"));
   gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (fontsel->type_scalable_button), TRUE);
   gtk_widget_show (fontsel->type_scalable_button);
   gtk_box_pack_start (GTK_BOX (hbox2), fontsel->type_scalable_button,
 		      FALSE, TRUE, 0);
 
-  fontsel->type_scaled_bitmaps_button = gtk_check_button_new_with_label ("Scaled Bitmap");
+  fontsel->type_scaled_bitmaps_button = gtk_check_button_new_with_label (_("Scaled Bitmap"));
   gtk_widget_show (fontsel->type_scaled_bitmaps_button);
   gtk_box_pack_start (GTK_BOX (hbox2), fontsel->type_scaled_bitmaps_button,
 		      FALSE, TRUE, 0);
@@ -817,7 +818,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
       gint left = filter_positions[prop][0];
       gint top = filter_positions[prop][1];
       
-      label = gtk_label_new(xlfd_field_names[xlfd_index[prop]]);
+      label = gtk_label_new(gettext(xlfd_field_names[xlfd_index[prop]]));
       gtk_misc_set_alignment (GTK_MISC (label), 0.0, 1.0);
       gtk_misc_set_padding (GTK_MISC (label), 0, 2);
       gtk_widget_show(label);
@@ -851,7 +852,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
 	  gtk_widget_show(alignment);
 	  gtk_box_pack_start (GTK_BOX (vbox), alignment, FALSE, TRUE, 4);
 	  
-	  button = gtk_button_new_with_label("Reset Filter");
+	  button = gtk_button_new_with_label(_("Reset Filter"));
 	  gtk_widget_show(button);
 	  gtk_container_add(GTK_CONTAINER(alignment), button);
 	  gtk_signal_connect (GTK_OBJECT (button), "clicked",
@@ -1198,24 +1199,24 @@ gtk_font_selection_show_available_styles (GtkFontSelection *fontsel)
 	  spacing   = fontsel_info->properties[SPACING]  [spacing_index];
 	  
 	  /* Convert '(nil)' weights to 'regular', since it looks nicer. */
-	  if      (!g_strcasecmp(weight, "(nil)"))	weight = "regular";
+	  if      (!g_strcasecmp(weight, "(nil)"))	weight = _("regular");
 	  
 	  /* We don't show default values or (nil) in the other properties. */
 	  if      (!g_strcasecmp(slant, "r"))        slant = NULL;
 	  else if (!g_strcasecmp(slant, "(nil)"))    slant = NULL;
-	  else if (!g_strcasecmp(slant, "i"))        slant = "italic";
-	  else if (!g_strcasecmp(slant, "o"))        slant = "oblique";
-	  else if (!g_strcasecmp(slant, "ri"))       slant = "reverse italic";
-	  else if (!g_strcasecmp(slant, "ro"))       slant = "reverse oblique";
-	  else if (!g_strcasecmp(slant, "ot"))       slant = "other";
+	  else if (!g_strcasecmp(slant, "i"))        slant = _("italic");
+	  else if (!g_strcasecmp(slant, "o"))        slant = _("oblique");
+	  else if (!g_strcasecmp(slant, "ri"))       slant = _("reverse italic");
+	  else if (!g_strcasecmp(slant, "ro"))       slant = _("reverse oblique");
+	  else if (!g_strcasecmp(slant, "ot"))       slant = _("other");
 	  
 	  if      (!g_strcasecmp(set_width, "normal")) set_width = NULL;
 	  else if (!g_strcasecmp(set_width, "(nil)"))  set_width = NULL;
 	  
 	  if      (!g_strcasecmp(spacing, "p"))        spacing = NULL;
 	  else if (!g_strcasecmp(spacing, "(nil)"))    spacing = NULL;
-	  else if (!g_strcasecmp(spacing, "m"))        spacing = "[M]";
-	  else if (!g_strcasecmp(spacing, "c"))        spacing = "[C]";
+	  else if (!g_strcasecmp(spacing, "m"))        spacing = _("[M]");
+	  else if (!g_strcasecmp(spacing, "c"))        spacing = _("[C]");
 	  
 	  /* Add the strings together, making sure there is 1 space between
 	     them */
@@ -1759,13 +1760,13 @@ gtk_font_selection_load_font (GtkFontSelection *fontsel)
       else 
 	{
 	  gtk_label_set_text(GTK_LABEL(fontsel->message_label),
-			"The selected font is not available.");
+			     _("The selected font is not available."));
 	}
     }
   else
     {
       gtk_label_set_text(GTK_LABEL(fontsel->message_label),
-		    "The selected font is not a valid font.");
+			 _("The selected font is not a valid font."));
     }
   
   return FALSE;
@@ -1823,7 +1824,7 @@ gtk_font_selection_update_preview (GtkFontSelection *fontsel)
   xfs = GDK_FONT_XFONT(fontsel->font);
   if (xfs->min_byte1 != 0 || xfs->max_byte1 != 0)
     gtk_label_set_text(GTK_LABEL(fontsel->message_label),
-		  "This is a 2-byte font and may not be displayed correctly.");
+		       _("This is a 2-byte font and may not be displayed correctly."));
 }
 
 
@@ -1915,7 +1916,7 @@ gtk_font_selection_show_font_info (GtkFontSelection *fontsel)
       for (i = 0; i < GTK_XLFD_NUM_FIELDS; i++)
 	{
 	  gtk_clist_set_text(GTK_CLIST(fontsel->info_clist), i, 2,
-			     fontname ? "(unknown)" : "");
+			     fontname ? _("(unknown)") : "");
 	}
     }
   gtk_clist_thaw (GTK_CLIST(fontsel->info_clist));
@@ -1926,21 +1927,21 @@ gtk_font_selection_show_font_info (GtkFontSelection *fontsel)
 static gchar*
 gtk_font_selection_expand_slant_code(gchar *slant)
 {
-  if      (!g_strcasecmp(slant, "r"))   return("roman");
-  else if (!g_strcasecmp(slant, "i"))   return("italic");
-  else if (!g_strcasecmp(slant, "o"))   return("oblique");
-  else if (!g_strcasecmp(slant, "ri"))  return("reverse italic");
-  else if (!g_strcasecmp(slant, "ro"))  return("reverse oblique");
-  else if (!g_strcasecmp(slant, "ot"))  return("other");
+  if      (!g_strcasecmp(slant, "r"))   return(_("roman"));
+  else if (!g_strcasecmp(slant, "i"))   return(_("italic"));
+  else if (!g_strcasecmp(slant, "o"))   return(_("oblique"));
+  else if (!g_strcasecmp(slant, "ri"))  return(_("reverse italic"));
+  else if (!g_strcasecmp(slant, "ro"))  return(_("reverse oblique"));
+  else if (!g_strcasecmp(slant, "ot"))  return(_("other"));
   return slant;
 }
 
 static gchar*
 gtk_font_selection_expand_spacing_code(gchar *spacing)
 {
-  if      (!g_strcasecmp(spacing, "p")) return("proportional");
-  else if (!g_strcasecmp(spacing, "m")) return("monospaced");
-  else if (!g_strcasecmp(spacing, "c")) return("char cell");
+  if      (!g_strcasecmp(spacing, "p")) return(_("proportional"));
+  else if (!g_strcasecmp(spacing, "m")) return(_("monospaced"));
+  else if (!g_strcasecmp(spacing, "c")) return(_("char cell"));
   return spacing;
 }
 
@@ -2135,12 +2136,12 @@ gtk_font_selection_update_filter     (GtkFontSelection *fontsel)
   if (default_filter)
     {
       gtk_widget_set_sensitive(fontsel->filter_button, FALSE);
-      gtk_label_set_text(GTK_LABEL(fontsel->font_label), "Font:");
+      gtk_label_set_text(GTK_LABEL(fontsel->font_label), _("Font:"));
     }
   else
     {
       gtk_widget_set_sensitive(fontsel->filter_button, TRUE);
-      gtk_label_set_text(GTK_LABEL(fontsel->font_label), "Font: (Filter Applied)");
+      gtk_label_set_text(GTK_LABEL(fontsel->font_label), _("Font: (Filter Applied)"));
     }
   gtk_font_selection_show_available_fonts(fontsel);
 }  
@@ -2365,7 +2366,7 @@ gtk_font_selection_clear_filter     (GtkFontSelection *fontsel)
   
   /* Update the main notebook page. */
   gtk_widget_set_sensitive(fontsel->filter_button, FALSE);
-  gtk_label_set_text(GTK_LABEL(fontsel->font_label), "Font:");
+  gtk_label_set_text(GTK_LABEL(fontsel->font_label), _("Font:"));
   
   gtk_font_selection_show_available_fonts(fontsel);
 }
@@ -2616,7 +2617,7 @@ gtk_font_selection_get_fonts (void)
   xfontnames = XListFonts (GDK_DISPLAY(), "-*", MAX_FONTS, &num_fonts);
   /* Output a warning if we actually get MAX_FONTS fonts. */
   if (num_fonts == MAX_FONTS)
-    g_warning("MAX_FONTS exceeded. Some fonts may be missing.");
+    g_warning(_("MAX_FONTS exceeded. Some fonts may be missing."));
   
   /* The maximum size of all these tables is the number of font names
      returned. We realloc them later when we know exactly how many
@@ -3454,20 +3455,20 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
 		      fontseldiag->action_area, FALSE, FALSE, 0);
   gtk_widget_show (fontseldiag->action_area);
   
-  fontseldiag->ok_button = gtk_button_new_with_label("OK");
+  fontseldiag->ok_button = gtk_button_new_with_label(_("OK"));
   GTK_WIDGET_SET_FLAGS (fontseldiag->ok_button, GTK_CAN_DEFAULT);
   gtk_widget_show(fontseldiag->ok_button);
   gtk_box_pack_start (GTK_BOX (fontseldiag->action_area),
 		      fontseldiag->ok_button, TRUE, TRUE, 0);
   gtk_widget_grab_default (fontseldiag->ok_button);
   
-  fontseldiag->apply_button = gtk_button_new_with_label("Apply");
+  fontseldiag->apply_button = gtk_button_new_with_label(_("Apply"));
   GTK_WIDGET_SET_FLAGS (fontseldiag->apply_button, GTK_CAN_DEFAULT);
   /*gtk_widget_show(fontseldiag->apply_button);*/
   gtk_box_pack_start (GTK_BOX(fontseldiag->action_area),
 		      fontseldiag->apply_button, TRUE, TRUE, 0);
   
-  fontseldiag->cancel_button = gtk_button_new_with_label("Cancel");
+  fontseldiag->cancel_button = gtk_button_new_with_label(_("Cancel"));
   GTK_WIDGET_SET_FLAGS (fontseldiag->cancel_button, GTK_CAN_DEFAULT);
   gtk_widget_show(fontseldiag->cancel_button);
   gtk_box_pack_start (GTK_BOX(fontseldiag->action_area),
@@ -3483,7 +3484,7 @@ gtk_font_selection_dialog_new	(const gchar	  *title)
   
   fontseldiag = gtk_type_new (GTK_TYPE_FONT_SELECTION_DIALOG);
   gtk_window_set_title (GTK_WINDOW (fontseldiag),
-			title ? title : "Font Selection");
+			title ? title : _("Font Selection"));
   
   return GTK_WIDGET (fontseldiag);
 }

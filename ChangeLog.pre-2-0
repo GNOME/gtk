@@ -1,3 +1,26 @@
+Thu Dec 17 20:33:28 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk-config.in: Add @INTLLIBS@. 
+	gtk-scier-981116-0.patch  Sean Cier <scier@PostHorizon.com>) ]
+
+	* gtk/gtkcolorsel.c gtk/gtkfilesel.c gtk/gtkfontsel.c
+	  gtk/gtkgamma.c gtk/gtkinputdialog.c 
+	  gtk/gtknotebook.c gtk/gtkrc.c gtk/gtkthemes.c
+	  gtk/gtktipsquery.c: 
+	
+	Applied parts of gtk-egger-981215-1 [ Daniel Egger
+	<Daniel.Egger@t-online.de> ] marking additional strings for
+	internationalization.
+	
+	* po/nl.po: Added Dutch translation from 
+	Paul Siegmann <pauls@euronet.nl>.
+	
+Thu Dec 17 18:25:52 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_drop_finished): Remove the
+	info tag from the context so if the source unexpectedly
+	responds in the future, we do nothing properly.
+
 Thu Dec 17 18:24:41 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk[hv]paned.c (gtk_[hv]paned_size_allocate): Handle

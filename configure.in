@@ -130,7 +130,7 @@ fi
 AC_SUBST(REBUILD)
 
 # i18n stuff
-ALL_LINGUAS="de pt"
+ALL_LINGUAS="de nl pt"
 AM_GTK_GNU_GETTEXT
 AC_CHECK_FUNC(gettext,
 	,

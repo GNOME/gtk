@@ -27,6 +27,7 @@
 #include "gtksignal.h"
 #include "gtkwidget.h"
 #include "config.h"
+#include "gtkintl.h"
 
 typedef struct _GtkThemeEnginePrivate GtkThemeEnginePrivate;
 
@@ -67,15 +68,15 @@ gtk_theme_engine_get (gchar *name)
 
        if (!engine_path)
 	 {
-	   g_warning ("Unable to locate loadable module in module_path: \"%s\",",
+	   g_warning (_("Unable to locate loadable module in module_path: \"%s\","),
 		      fullname);
 	   
 	   return NULL;
 	 }
        
        /* load the lib */
-       
-       printf ("Loading Theme %s\n", engine_path);
+
+       GTK_NOTE (MISC, g_message ("Loading Theme %s\n", engine_path));
        
        library = g_module_open (engine_path, 0);
        g_free(engine_path);

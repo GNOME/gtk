@@ -64,7 +64,7 @@ while test $# -gt 0; do
           fi
         fi
       done
-      echo $libdirs @x_ldflags@ -lgtk -lgdk $my_glib_libs @x_libs@ @GDK_WLIBS@ -lm
+      echo $libdirs @x_ldflags@ -lgtk -lgdk $my_glib_libs @INTLLIBS@ @x_libs@ @GDK_WLIBS@ -lm
       ;;
     *)
       echo "${usage}" 1>&2

@@ -23,6 +23,7 @@
 #include	"gtksignal.h"
 #include	"gtktooltips.h"
 #include	"gtkmain.h"
+#include	"gtkintl.h"
 
 
 
@@ -168,7 +169,7 @@ gtk_tips_query_init (GtkTipsQuery *tips_query)
   tips_query->emit_always = FALSE;
   tips_query->in_query = FALSE;
   tips_query->label_inactive = g_strdup ("");
-  tips_query->label_no_tip = g_strdup ("--- No Tip ---");
+  tips_query->label_no_tip = g_strdup (_("--- No Tip ---"));
   tips_query->caller = NULL;
   tips_query->last_crossed = NULL;
   tips_query->query_cursor = NULL;
