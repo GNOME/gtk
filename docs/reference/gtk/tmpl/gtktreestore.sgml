@@ -209,6 +209,10 @@ drop</link> interfaces.
 @b: 
 
 
+<<<<<<< gtktreestore.sgml
+=======
+
+
 <!-- ##### FUNCTION gtk_tree_store_move_before ##### -->
 <para>
 
@@ -227,5 +231,8 @@ drop</link> interfaces.
 @tree_store: 
 @iter: 
 @position: 
+
+
+>>>>>>> 1.16
 
 

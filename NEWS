@@ -1,3 +1,64 @@
+Overview of Changes in GTK+ 2.1.3
+=================================
+
+GDK:
+* Win32 [Tor Lillqvist]
+  - fixes to multihead API stubs 
+  - Comprehensively implement tiles and stipples
+  - Handle tracking minimized/maximized [Arnaud Charlet]
+* linux-fb fixes [Eric Warmenhoven]
+* Use g_get_application_name() for default window titles and
+  for the title of the client leader window [Owen, Havoc Pennington]
+* Complete resize-grippy support, move-resize emulation 
+  [Anders Carlsson, Matthias Clasen]
+
+GTK+ Core:
+* On screen change, recreate the widget's Pango context [Owen]
+* Fix problems with focus ending up on unmapped widgets [Owen]
+* Make g_object_set (gtk_settings_get_default (), ...) to override
+  settings from XSETTINGS and ~/.gtkrc [Jonathan Blandford]
+* Make GtkInputDialog multihead aware [Owen]
+* Add a ::screen-changed signal to GtkWidget [Owen Taylor]
+
+Widget improvements:
+* Draw/check menu items insensitive [Soeren, Tim Evans]
+* Fix color usage for radio/check menu item indicators [Soeren]
+* Add ::snap-edge-set-property to GtkHandleBox [Owen, Matthias]
+* RTL flipping improvements for GtkHandleBox, GtkMenuItem, GtkOptionMenu,
+  GtkCheckMenuItem [Matthias Clasen]
+* GtkCombo improvements [Owen]
+  - Don't leave it behind when switching desktops [Matthias Clasen]
+  - Fix longstanding bug with unwanted moving of selection [Mike Fulbright]
+  - Don't change entry contents until window is popped back up
+  - Keynav fixes
+* Menu scrolling behavioral improvements [Owen, Ettore Perazzoli]
+* GtkNotebook keynav improvements [Owen]
+* Handle painting text on dark-colored progressbars [Soeren]
+* GtkTreeView  [Kristian Rietveld]
+  - Privatize gtk_tree_store_move(), add gtk_tree_store_move_before/after()
+  - Add GTK_CELL_RENDERER_FOCUSED flag
+  - Keynav fixes, including adding boolean return values for keybinding
+    signals (API breakage for API that noone should have been using)
+    [Narayana Pattipati]
+  - Add gtk_tree_view_column_cell_get_position()
+  - Add an inconsistent state for GtkCellRendererToggle
+  - Various bug fixes [Murray Cumming, Daniel Elstner, Vitaly Tishkov,  
+    Morten Welinder, Robert Kinsella, Soeren]
+
+Input Methods:
+* Sort the input method list in the right click popup [Abigail Brady]
+* GtkIMContextXIM bug fixes [HideToshi Tajima]
+
+General:
+* Make sure that parameters don't shadow system functions [Soeren Sandmann]
+* Deprecation cleanups [Manish Singh]
+* Don't grab the focus to the default button in a GtkDialog [Daniel Elstner]
+* Doc improvements, including adding Since: for 2.2. additions 
+  [Matthias Clasen]
+* Bug fixes, cleanups [Anders Carlsson, Daniel, Vitaly Tishkov, Matthias, 
+  Iain Holmes, Gregory Merchan, Havoc Pennington, Soeren, Morten Welinder]
+* Build fixes [Owen, Jeff Waugh, Dan Mills]
+
 Overview of Changes in GTK+ 2.1.2
 =================================
 
@@ -132,6 +193,65 @@ General:
 * Misc fixes [Olexiy Avramchenko, Jacob Berkman, Anders Carlsson, David L. Cooper II, Robin Lu, 
   Eric Mader, Mark McLoughlin, Padraig O'Briain, Laszlo Peter, Hidetoshi, Vitaly Tishkov, 
   Shivaram Upadhyayula]
+
+Overview of Changes in GTK+ 2.0.9
+=================================
+* Fix colormap refcounting, which caused frequent metacity crashes
+  [Christopher James Lahey]
+* Lots of work on the Win32 backend [Tor Lillqvist]
+ - Scrolling fixes
+ - GdkGC clipping fixes and improvements
+ - Started implementing all fill styles
+* GtkTreeView bug fixes [Kristian Rietveld]
+ - Make TreeView reordering work on FreeBSD/Solaris [Heiner Eichmann]
+* Various bug fixes
+
+Other contributors: Matthias Clasen, Arnaud Charlet, Vitaly Tishkov,
+   Josh Parsons, Peter Bloomfield
+
+Overview of Changes in GTK+ 2.0.8
+=================================
+* Fix typo in io-gif.c that broke loading GIFS [Akira Tagoh]
+* Improve redraws when scrolling on Win32 [Tor Lillqvist]
+* Fix problem with RENDER and XFree86-4.1 [Owen Taylor, Jamie Zawinski]
+* Fix problem with GtkImage placement [Owen, Sven Neumann, Soeren Sandmann]
+* Updated translation (el)
+
+Overview of Changes in GTK+ 2.0.7
+=================================
+* Fix some memory leaks in gdk-pixbuf [Sven Neumann]
+* Pixbuf loader fixes  [Federico Mena Quintero, Elliot Lee]
+* Support depth 8 StaticColor in GdkRGB [Matthias Clasen]
+* Win32 fixes and improvements [Tor Lillqvist]
+ - Keyboard handling fixes [Florian Dugent]
+ - Fixes for building and running on Cygwin [Masahiro Sakai]
+ - Fix gdk_window_scroll(), other GdkWindow fixes
+ - Misc bug and build fixes [Soren Andersen, Florent, Tim Evans,
+   J. Ali Harlow, Andreas Holzmann, Iwasa Kazmi]
+* Improve tracking of toplevel focus state [Owen]
+* XIM input method fixes [Takuro Ashie, HideToshi Tajima]
+* Fix the longstanding problem with <,> keys and XIM [Owen Taylor]
+* Fix GtkIMContextSimple for us-intl keyboards [Alexandre Oliva]
+* GtkIMContextSimple updates for Eastern Europe [Stanislav Brabec]
+* Fix the "key bindings randomly stop working" problem [Sebastian Ritau]
+* GtkTextView fixes [Gustavo Giraldez, Padraig O'Briain, Shivaram Upadhyayula]
+* GtkTreeView bugfixes [Jonathan Blandford, Kristian Rietveld]
+  - Various memleak, ref counting fixes [Jonathan, Jorn Baayen, Daniel 
+    Elstner, Morten Welinder]
+  - gtk_tree_selection_selected_foreach now immediately returns if 
+    the model is being changed [Havoc Pennington]
+  - Fix evil bug with insertions to GtkTreeModelSort [Hans Petter Jansson]
+* GtkCombo fixes [Marco Pesenti Gritti, Zimler Attila, Matthias, Owen]
+* Fix 64-bit problem with GtkFundamentalType [Ross Alexander, Manish Singh] 
+* New and updated translations (am,be,bg,ca,cs,da,de,el,es,el,fa,fr,hi,hu,
+  ja,ko,lv,ms,nl,no,pl,pt,pt_BR,ru,sk,sv,vi,zh_TW)
+* Many miscellaneous bug fixes
+
+Other contributors: Jacob Berkman, Alvert Chin, Chema Celorio,
+   David L. Cooper II, Brent Fox, Tim Janik, Marco Pesenti Gritti, 
+   Alex Larsson, Zenith Lau, Thomas Leonard, Gaute Lindkvist, 
+   Paolo Maggi, Andy Wingo, Jami Pekannen, Joshua N Pritikin, 
+   Soeren Sandmann, Vitaly Tishkov, Morten Welinder
 
 Overview of Changes in GTK+ 2.0.6
 =================================

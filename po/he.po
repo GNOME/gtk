@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
-"POT-Creation-Date: 2002-11-30 06:02+0100\n"
+"POT-Creation-Date: 2002-12-02 20:45-0500\n"
 "PO-Revision-Date: 2002-11-30 22:24+0200\n"
 "Last-Translator: Gil 'Dolfin' Osher <dolfin@rpg.org.il>\n"
 "Language-Team: Hebrew <he@li.org>\n"
@@ -38,7 +38,8 @@ msgstr "התמונה '%s' לא מכילה מידע"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:197 gdk-pixbuf/gdk-pixbuf-io.c:747
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "נכשל בפתיחת התמונה '%s': הסיבה איננה ידועה, כנראה קובץ תמונה פגום"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:225
@@ -46,9 +47,7 @@ msgstr "נכשל בפתיחת התמונה '%s': הסיבה איננה ידוע�
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr ""
-"נכשל בפתיחת ההנפשה '%s': הסיבה איננה ידועה, כנראה קובץ "
-"הנפשה פגום"
+msgstr "נכשל בפתיחת ההנפשה '%s': הסיבה איננה ידועה, כנראה קובץ הנפשה פגום"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:377
 #, c-format
@@ -109,8 +108,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
-"שגיאה פנימית: מודול טעינת התמונה '%s' נכשל בתחילת טעינת תמונה, "
-"אך לא נתן סיבה לכשלון זה"
+"שגיאה פנימית: מודול טעינת התמונה '%s' נכשל בתחילת טעינת תמונה, אך לא נתן "
+"סיבה לכשלון זה"
 
 #: gdk-pixbuf/gdk-pixdata.c:145
 msgid "Image header corrupt"
@@ -287,8 +286,7 @@ msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
-"אין מספיק זיכרון לטעינת התמונה, נסה לסגור מספר יישומים כדי לפנות "
-"זיכרון"
+"אין מספיק זיכרון לטעינת התמונה, נסה לסגור מספר יישומים כדי לפנות זיכרון"
 
 #: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:744
 #, c-format
@@ -305,12 +303,12 @@ msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
-"איכות קובץ JPEG חייבת להיות בין 0 ל 100, הערך '%s' לא יכול להיות "
-"מפורש."
+"איכות קובץ JPEG חייבת להיות בין 0 ל 100, הערך '%s' לא יכול להיות מפורש."
 
 #: gdk-pixbuf/io-jpeg.c:827
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "איכות קובץ JPEG חייבת להיות בין 0 ל 100, הערך '%d' אינו מורשה."
 
 #: gdk-pixbuf/io-jpeg.c:940
@@ -352,8 +350,8 @@ msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
-"אין מספיק זיכרון לשמירת %ld על-ידי תמונת %ld; נסה לצאת ממספר "
-"יישומים כדי להקטין את השימוש בזיכרון"
+"אין מספיק זיכרון לשמירת %ld על-ידי תמונת %ld; נסה לצאת ממספר יישומים כדי "
+"להקטין את השימוש בזיכרון"
 
 #: gdk-pixbuf/io-png.c:656
 msgid "Fatal error reading PNG image file"
@@ -365,7 +363,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "שגיאה חמורה בקריאת קובץ PNG: %s"
 
 #: gdk-pixbuf/io-png.c:771
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:779
@@ -374,7 +373,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-png.c:812
 #, c-format
-msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid ""
+"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:919
@@ -757,9 +757,7 @@ msgstr "יישור אופקי"
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
-msgstr ""
-"מיקום אופקי של ילד במרחב הזמין. 0.0 זה ישור לשמאל, 1.0 זה "
-"ישור לימין"
+msgstr "מיקום אופקי של ילד במרחב הזמין. 0.0 זה ישור לשמאל, 1.0 זה ישור לימין"
 
 #: gtk/gtkalignment.c:112
 msgid "Vertical alignment"
@@ -769,9 +767,7 @@ msgstr "יישור אנכי"
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
-msgstr ""
-"מיקום אנכי של ילד במרחב הזמין. 0.0 זה ישור למעלה, 1.0 זה "
-"ישור למטה"
+msgstr "מיקום אנכי של ילד במרחב הזמין. 0.0 זה ישור למעלה, 1.0 זה ישור למטה"
 
 #: gtk/gtkalignment.c:121
 msgid "Horizontal scale"
@@ -782,8 +778,8 @@ msgid ""
 "If available horizontal space is bigger than needed for the child, how much "
 "of it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
-"אם זמין מרחב אופקי הגדול מהנדרש לילד, כמה "
-"ממנו יהיה בשימוש לילד. 0-0 פירושו כלום, 1.0 פירושו הכל"
+"אם זמין מרחב אופקי הגדול מהנדרש לילד, כמה ממנו יהיה בשימוש לילד. 0-0 פירושו "
+"כלום, 1.0 פירושו הכל"
 
 #: gtk/gtkalignment.c:130
 msgid "Vertical scale"
@@ -794,8 +790,8 @@ msgid ""
 "If available vertical space is bigger than needed for the child, how much of "
 "it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
-"אם זמין מרחב אנכי הגדול מהנדרש לילד, כמה "
-"ממנו יהיה בשימוש לילד. 0-0 פירושו כלום, 1.0 פירושו הכל"
+"אם זמין מרחב אנכי הגדול מהנדרש לילד, כמה ממנו יהיה בשימוש לילד. 0-0 פירושו "
+"כלום, 1.0 פירושו הכל"
 
 #: gtk/gtkarrow.c:98
 msgid "Arrow direction"
@@ -886,8 +882,8 @@ msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
 msgstr ""
-"איך לפרוס את הכפתורים בתיבה. ערכים אפשריים הם ברירת מחדל, שרוע, "
-"קצה, התחלה וסוף"
+"איך לפרוס את הכפתורים בתיבה. ערכים אפשריים הם ברירת מחדל, שרוע, קצה, התחלה "
+"וסוף"
 
 #: gtk/gtkbbox.c:164
 msgid "Secondary"
@@ -897,9 +893,7 @@ msgstr "משני"
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
-msgstr ""
-"אם חיובי, הילד מופיע בקבוצה משני של ילדים, מתאים לדוגמה "
-"לכפתורי עזרה"
+msgstr "אם חיובי, הילד מופיע בקבוצה משני של ילדים, מתאים לדוגמה לכפתורי עזרה"
 
 #: gtk/gtkbox.c:128
 msgid "Spacing"
@@ -951,9 +945,7 @@ msgstr "סוג קבוצה"
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
-msgstr ""
-"GtkPackType המורה האם הילד מקובץ עם הפניה "
-"להתחלה או לסוף של ההורה"
+msgstr "GtkPackType המורה האם הילד מקובץ עם הפניה להתחלה או לסוף של ההורה"
 
 #: gtk/gtkbox.c:174 gtk/gtknotebook.c:465 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:138
@@ -972,9 +964,7 @@ msgstr "תוית"
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
-msgstr ""
-"מלל פריט התוית בתוך הכפתור, אם הכפתור מכיל פריט "
-"תוית"
+msgstr "מלל פריט התוית בתוך הכפתור, אם הכפתור מכיל פריט תוית"
 
 #: gtk/gtkbutton.c:197 gtk/gtklabel.c:311
 msgid "Use underline"
@@ -984,16 +974,15 @@ msgstr "השתמש בקו תחתי"
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
-msgstr ""
-"אם נקבע, קו תחתי במלל יציין שהתו הבא ישמש "
-"למקשי מאיצי הזיכרון"
+msgstr "אם נקבע, קו תחתי במלל יציין שהתו הבא ישמש למקשי מאיצי הזיכרון"
 
 #: gtk/gtkbutton.c:205
 msgid "Use stock"
 msgstr "השתמש במחסנית"
 
 #: gtk/gtkbutton.c:206
-msgid "If set, the label is used to pick a stock item instead of being displayed"
+msgid ""
+"If set, the label is used to pick a stock item instead of being displayed"
 msgstr "אם נקבע, התוית תשמש לבחירת פריט מחסנית במקום להיות מוצגת"
 
 #: gtk/gtkbutton.c:213
@@ -1020,16 +1009,15 @@ msgstr "מרווח חיצוני ברירת מחדל"
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
-msgstr ""
-"מרווח חיצוני להוספה לכפתורי CAN_DEFAULT שתמיש יצוייר מחוץ "
-"לגבולות"
+msgstr "מרווח חיצוני להוספה לכפתורי CAN_DEFAULT שתמיש יצוייר מחוץ לגבולות"
 
 #: gtk/gtkbutton.c:284
 msgid "Child X Displacement"
 msgstr "העברת ילד X"
 
 #: gtk/gtkbutton.c:285
-msgid "How far in the x direction to move the child when the button is depressed"
+msgid ""
+"How far in the x direction to move the child when the button is depressed"
 msgstr "כמה רחוק בכיוון ה X להזיז את הילד כאשר הכפתור נלחץ"
 
 #: gtk/gtkbutton.c:292
@@ -1037,7 +1025,8 @@ msgid "Child Y Displacement"
 msgstr "העברת ילד Y"
 
 #: gtk/gtkbutton.c:293
-msgid "How far in the y direction to move the child when the button is depressed"
+msgid ""
+"How far in the y direction to move the child when the button is depressed"
 msgstr "כמה רחוק בכיוון ה Y להזיז את הילד כאשר הכפתור נלחץ"
 
 #: gtk/gtkcellrenderer.c:116
@@ -1324,7 +1313,8 @@ msgid "Rise"
 msgstr "שיפוע"
 
 #: gtk/gtkcellrenderertext.c:333
-msgid "Offset of text above the baseline (below the baseline if rise is negative)"
+msgid ""
+"Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr "הטיית המלל מעל הקו הבסיסי (מתחת לקו הבסיסי השיפוע הוא שלילי)"
 
 #: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:463
@@ -1517,17 +1507,15 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
-"הצבע הקודם שבחרת, להשוואה עם הצבע שאתה בוחר "
-"עכשיו. אתה יכול לגרור צבע זה לערך פלטה, או לבחור צבע זה "
-"כנוכחי על-ידי גרירתו לפיסת הצבע השניה לצידו."
+"הצבע הקודם שבחרת, להשוואה עם הצבע שאתה בוחר עכשיו. אתה יכול לגרור צבע זה "
+"לערך פלטה, או לבחור צבע זה כנוכחי על-ידי גרירתו לפיסת הצבע השניה לצידו."
 
 #: gtk/gtkcolorsel.c:564
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
-"הצבע שבחרת. אתה יכול לגרור צבע זה לערך פלטה כדי לשמור "
-"אותו לשימוש בעתיד."
+"הצבע שבחרת. אתה יכול לגרור צבע זה לערך פלטה כדי לשמור אותו לשימוש בעתיד."
 
 #: gtk/gtkcolorsel.c:926
 msgid "_Save color here"
@@ -1538,8 +1526,8 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"לחץ על ערך הפלטה כדי לעשותו הצבע הנוכחי. כדי לשנות ערך זה, "
-"גרור פיסת צבע לכאן או לחץ לחיצה ימינית ובחר \"שמור צבע כאן\"."
+"לחץ על ערך הפלטה כדי לעשותו הצבע הנוכחי. כדי לשנות ערך זה, גרור פיסת צבע "
+"לכאן או לחץ לחיצה ימינית ובחר \"שמור צבע כאן\"."
 
 #: gtk/gtkcolorsel.c:1743
 msgid "Has Opacity Control"
@@ -1586,16 +1574,14 @@ msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
-"בחר את הצבע שאתה רוצה מהטבעת החיצונית. בחר את הכהות או "
-"הבהירות של הצבע הזה בעזרת המשולש הפנימי."
+"בחר את הצבע שאתה רוצה מהטבעת החיצונית. בחר את הכהות או הבהירות של הצבע הזה "
+"בעזרת המשולש הפנימי."
 
 #: gtk/gtkcolorsel.c:1846
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
-msgstr ""
-"לחץ על הטפטפת, אז לחץ על צבע כלשהו במסך לבחירת "
-"אותו צבע."
+msgstr "לחץ על הטפטפת, אז לחץ על צבע כלשהו במסך לבחירת אותו צבע."
 
 #: gtk/gtkcolorsel.c:1855
 msgid "_Hue:"
@@ -1662,8 +1648,8 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
-"אתה יכול להזין ערך צבע הקסדצימלי בסגנון HTML, או פשוט לכתוב שם צבע "
-"באנגלית כמו 'orange' בערך זה."
+"אתה יכול להזין ערך צבע הקסדצימלי בסגנון HTML, או פשוט לכתוב שם צבע באנגלית "
+"כמו 'orange' בערך זה."
 
 #: gtk/gtkcolorsel.c:1923
 msgid "_Palette"
@@ -1818,7 +1804,8 @@ msgid "Selection Bound"
 msgstr ""
 
 #: gtk/gtkentry.c:447 gtk/gtklabel.c:379
-msgid "The position of the opposite end of the selection from the cursor in chars"
+msgid ""
+"The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 
 #: gtk/gtkentry.c:457
@@ -1841,9 +1828,7 @@ msgstr "נראה"
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
-msgstr ""
-"שלישי מציג את \"התו הבלתי נראה\" במקום המלל האמיתי (מצב "
-"סיסמה)"
+msgstr "שלישי מציג את \"התו הבלתי נראה\" במקום המלל האמיתי (מצב סיסמה)"
 
 #: gtk/gtkentry.c:481
 msgid "Has Frame"
@@ -1971,9 +1956,8 @@ msgid ""
 "available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
-"הקובץ \"%s\" תלוי במכונה אחרת (הנקראת %s) וייתכן כי "
-"לא תיהיה זמינה לתוכנית זו. "
-"האם אתה בטוח שברצונך לבחור אותו?"
+"הקובץ \"%s\" תלוי במכונה אחרת (הנקראת %s) וייתכן כי לא תיהיה זמינה לתוכנית "
+"זו. האם אתה בטוח שברצונך לבחור אותו?"
 
 #: gtk/gtkfilesel.c:1072
 msgid "_New Folder"
@@ -1989,7 +1973,8 @@ msgstr "_שנה שם קובץ"
 
 #: gtk/gtkfilesel.c:1390
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "התיקייה בשם \"%s\" מכילה סמלים שאינם מותרים בשמות קבצים"
 
 #: gtk/gtkfilesel.c:1392
@@ -2105,8 +2090,8 @@ msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
-"הקובץ \"%s\" לא יכול להיות מומר ל UTF-8 (נסה לשנות "
-"את משתנה הסביבה G_BROKEN_FILENAMES): %s"
+"הקובץ \"%s\" לא יכול להיות מומר ל UTF-8 (נסה לשנות את משתנה הסביבה "
+"G_BROKEN_FILENAMES): %s"
 
 #: gtk/gtkfilesel.c:3078
 msgid "Invalid Utf-8"
@@ -2564,7 +2549,8 @@ msgid "Can change accelerators"
 msgstr "יכול לשנות מאיצים"
 
 #: gtk/gtkmenu.c:320
-msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
+msgid ""
+"Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 
 #: gtk/gtkmenu.c:325
@@ -2572,7 +2558,8 @@ msgid "Delay before submenus appear"
 msgstr "השהייה לפני שתת-תפריטים מופיעים"
 
 #: gtk/gtkmenu.c:326
-msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
+msgid ""
+"Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 
 #: gtk/gtkmenu.c:333
@@ -2650,7 +2637,8 @@ msgid "X pad"
 msgstr ""
 
 #: gtk/gtkmisc.c:119
-msgid "The amount of space to add on the left and right of the widget, in pixels"
+msgid ""
+"The amount of space to add on the left and right of the widget, in pixels"
 msgstr ""
 
 #: gtk/gtkmisc.c:128
@@ -2658,7 +2646,8 @@ msgid "Y pad"
 msgstr ""
 
 #: gtk/gtkmisc.c:129
-msgid "The amount of space to add on the top and bottom of the widget, in pixels"
+msgid ""
+"The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr ""
 
 #: gtk/gtknotebook.c:371
@@ -2797,7 +2786,8 @@ msgid "Spacing around indicator"
 msgstr ""
 
 #: gtk/gtkpaned.c:219
-msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
+msgid ""
+"Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 
 #: gtk/gtkpaned.c:227
@@ -2817,7 +2807,8 @@ msgid "Width of handle"
 msgstr ""
 
 #: gtk/gtkpreview.c:133
-msgid "Whether the preview widget should take up the entire space it is allocated"
+msgid ""
+"Whether the preview widget should take up the entire space it is allocated"
 msgstr ""
 
 #: gtk/gtkprogress.c:127
@@ -2996,7 +2987,8 @@ msgid "Arrow X Displacement"
 msgstr ""
 
 #: gtk/gtkrange.c:332
-msgid "How far in the x direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 
 #: gtk/gtkrange.c:339
@@ -3004,7 +2996,8 @@ msgid "Arrow Y Displacement"
 msgstr ""
 
 #: gtk/gtkrange.c:340
-msgid "How far in the y direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 
 #: gtk/gtkrc.c:2354
@@ -3127,7 +3120,8 @@ msgid "Secondary backward stepper"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:114
-msgid "Display a second backward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:121
@@ -3135,7 +3129,8 @@ msgid "Secondary forward stepper"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:122
-msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:525
@@ -3195,8 +3190,7 @@ msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
 msgstr ""
-"זמן מקסימלי המורשה בין שתי לחיצות כדי שהם יחשבו כלחיצה "
-"כפולה (במילי שניות)"
+"זמן מקסימלי המורשה בין שתי לחיצות כדי שהם יחשבו כלחיצה כפולה (במילי שניות)"
 
 #: gtk/gtksettings.c:175
 msgid "Cursor Blink"
@@ -3222,9 +3216,7 @@ msgstr "פיצול סמן"
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
-msgstr ""
-"האם שני סמנים צריכים להיות מוצגים למלל מעורבב "
-"שמאל לימין וימין לשמאל"
+msgstr "האם שני סמנים צריכים להיות מוצגים למלל מעורבב שמאל לימין וימין לשמאל"
 
 #: gtk/gtksettings.c:199
 msgid "Theme Name"
@@ -3331,7 +3323,8 @@ msgid "Update Policy"
 msgstr "מדיניות עדכון"
 
 #: gtk/gtkspinbutton.c:293
-msgid "Whether the spin button should update always, or only when the value is legal"
+msgid ""
+"Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:301
@@ -3916,7 +3909,8 @@ msgid "Wrap mode"
 msgstr "מצב גלישה"
 
 #: gtk/gtktexttag.c:481 gtk/gtktextview.c:575
-msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgid ""
+"Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 
 #: gtk/gtktexttag.c:490 gtk/gtktextview.c:622
@@ -4193,7 +4187,8 @@ msgid "Toolbar style"
 msgstr ""
 
 #: gtk/gtktoolbar.c:290
-msgid "Whether default toolbars have text only, text and icons, icons only, etc."
+msgid ""
+"Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 
 #: gtk/gtktoolbar.c:296
@@ -4724,7 +4719,8 @@ msgid "Default Height"
 msgstr "גובה ברירת מחדל"
 
 #: gtk/gtkwindow.c:527
-msgid "The default height of the window, used when initially showing the window"
+msgid ""
+"The default height of the window, used when initially showing the window"
 msgstr ""
 
 #: gtk/gtkwindow.c:536
@@ -4886,4 +4882,3 @@ msgstr ""
 #, fuzzy
 #~ msgid "He_x Value:"
 #~ msgstr "ערך הקס':"
-
