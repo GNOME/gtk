@@ -749,7 +749,15 @@ gtk_cell_view_cell_layout_reorder (GtkCellLayout   *layout,
   gtk_widget_queue_draw (GTK_WIDGET (cellview));
 }
 
-/* public API */
+/**
+ * gtk_cell_view_new:
+ *
+ * Creates a new #GtkCellView widget.
+ *
+ * Return value: A newly created #GtkCellView widget.
+ *
+ * Since: 2.6
+ */
 GtkWidget *
 gtk_cell_view_new (void)
 {
@@ -760,6 +768,17 @@ gtk_cell_view_new (void)
   return GTK_WIDGET (cellview);
 }
 
+/**
+ * gtk_cell_view_new_with_text:
+ * @text: the text to display in the cell view
+ *
+ * Creates a new #GtkCellView widget, adds a #GtkCellRendererText 
+ * to it, and makes its show @text.
+ *
+ * Return value: A newly created #GtkCellView widget.
+ *
+ * Since: 2.6
+ */
 GtkWidget *
 gtk_cell_view_new_with_text (const gchar *text)
 {
@@ -781,6 +800,19 @@ gtk_cell_view_new_with_text (const gchar *text)
   return GTK_WIDGET (cellview);
 }
 
+/**
+ * gtk_cell_view_new_with_markup:
+ * @markup: the text to display in the cell view
+ *
+ * Creates a new #GtkCellView widget, adds a #GtkCellRendererText 
+ * to it, and makes its show @markup. The text can text can be
+ * marked up with the <link linkend="PangoMarkupFormat">Pango text 
+ * markup language</link>.
+ *
+ * Return value: A newly created #GtkCellView widget.
+ *
+ * Since: 2.6
+ */
 GtkWidget *
 gtk_cell_view_new_with_markup (const gchar *markup)
 {
@@ -802,6 +834,17 @@ gtk_cell_view_new_with_markup (const gchar *markup)
   return GTK_WIDGET (cellview);
 }
 
+/**
+ * gtk_cell_view_new_with_pixbuf:
+ * @pixbuf: the image to display in the cell view
+ *
+ * Creates a new #GtkCellView widget, adds a #GtkCellRendererPixbuf 
+ * to it, and makes its show @pixbuf. 
+ *
+ * Return value: A newly created #GtkCellView widget.
+ *
+ * Since: 2.6
+ */
 GtkWidget *
 gtk_cell_view_new_with_pixbuf (GdkPixbuf *pixbuf)
 {
@@ -823,6 +866,18 @@ gtk_cell_view_new_with_pixbuf (GdkPixbuf *pixbuf)
   return GTK_WIDGET (cellview);
 }
 
+/**
+ * gtk_cell_view_set_value:
+ * @cell_view: a #GtkCellView widget
+ * @renderer: one of the renderers of @cell_view
+ * @property: the name of the property of @renderer to set
+ * @value: the new value to set the property to
+ * 
+ * Sets a property of a cell renderer of @cell_view, and
+ * makes sure the display of @cell_view is updated.
+ *
+ * Since: 2.6
+ */
 void
 gtk_cell_view_set_value (GtkCellView     *cell_view,
                          GtkCellRenderer *renderer,
@@ -857,6 +912,18 @@ gtk_cell_view_set_valuesv (GtkCellView     *cell_view,
     }
 }
 
+/**
+ * gtk_cell_view_set_values:
+ * @cell_view: a #GtkCellView widget
+ * @renderer: one of the renderers of @cell_view
+ * @Varargs: a list of pairs of property names and #GValue<!-- -->s,
+ *   finished by %NULL
+ * 
+ * Sets multiple properties of a cell renderer of @cell_view, and
+ * makes sure the display of @cell_view is updated.
+ *
+ * Since: 2.6
+ */
 void
 gtk_cell_view_set_values (GtkCellView     *cell_view,
                           GtkCellRenderer *renderer,
@@ -873,6 +940,17 @@ gtk_cell_view_set_values (GtkCellView     *cell_view,
   va_end (args);
 }
 
+/**
+ * gtk_cell_view_set_model:
+ * @cell_view: a #GtkCellView
+ * @model: a #GtkTreeModel
+ *
+ * Sets the model for @cell_view.  If @cell_view already has a model
+ * set, it will remove it before setting the new model.  If @model is 
+ * %NULL, then it will unset the old model.
+ *
+ * Since: 2.6
+ */
 void
 gtk_cell_view_set_model (GtkCellView  *cell_view,
                          GtkTreeModel *model)
@@ -907,6 +985,8 @@ gtk_cell_view_set_model (GtkCellView  *cell_view,
  * this is not normally a desired result, but may be
  * a needed intermediate state if say, the model for
  * the #GtkCellView becomes temporarily empty.
+ *
+ * Since: 2.6
  **/
 void
 gtk_cell_view_set_displayed_row (GtkCellView *cell_view,
@@ -942,6 +1022,19 @@ gtk_cell_view_get_displayed_row (GtkCellView *cell_view)
   return gtk_tree_row_reference_get_path (cell_view->priv->displayed_row);
 }
 
+/**
+ * gtk_cell_view_get_size_of_row:
+ * @cell_view: a #GtkCellView
+ * @path: a #GtkTreePath 
+ * @requisition: return location for the size 
+ *
+ * Sets @requisition to the size needed by @cell_view to display 
+ * the model row pointed to by @path.
+ * 
+ * Return value: %TRUE
+ *
+ * Since: 2.6
+ */
 gboolean
 gtk_cell_view_get_size_of_row (GtkCellView    *cell_view,
                                GtkTreePath    *path,
@@ -965,6 +1058,15 @@ gtk_cell_view_get_size_of_row (GtkCellView    *cell_view,
   return TRUE;
 }
 
+/**
+ * gtk_cell_view_set_background_color:
+ * @view: a #GtkCellView
+ * @color: the new background color
+ *
+ * Sets the background color of @view.
+ *
+ * Since: 2.6
+ */
 void
 gtk_cell_view_set_background_color (GtkCellView    *view,
                                     const GdkColor *color)
@@ -991,6 +1093,18 @@ gtk_cell_view_set_background_color (GtkCellView    *view,
     }
 }
 
+/**
+ * gtk_cell_view_get_cell_renderers:
+ * @cell_view: a #GtkCellView
+ * 
+ * Returns the cell renderers which have been added to @cell_view.
+ *
+ * Return value: a list of cell renderers. The list, but not the
+ *   renderers has been newly allocated and should be freed with
+ *   g_list_free() when no longer needed.
+ * 
+ * Since: 2.6
+ */
 GList *
 gtk_cell_view_get_cell_renderers (GtkCellView *cell_view)
 {

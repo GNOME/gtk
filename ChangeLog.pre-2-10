@@ -1,5 +1,7 @@
 2004-10-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcellview.c: Add docs.
+
 	* gtk/gtkmenutoolbutton.c (gtk_menu_tool_button_get_menu): Fix
 	doc comment.
 
