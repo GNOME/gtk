@@ -39,6 +39,10 @@ static void     gtk_vscale_init             (GtkVScale      *vscale);
 static gboolean gtk_vscale_expose           (GtkWidget      *widget,
                                              GdkEventExpose *event);
 
+static void	gtk_vscale_get_layout_offsets (GtkScale		*scale,
+                                               gint		*x,
+                                               gint		*y);
+
 GType
 gtk_vscale_get_type (void)
 {
@@ -71,14 +75,18 @@ gtk_vscale_class_init (GtkVScaleClass *class)
 {
   GtkWidgetClass *widget_class;
   GtkRangeClass *range_class;
+  GtkScaleClass *scale_class;
   
   widget_class = GTK_WIDGET_CLASS (class);
   range_class = GTK_RANGE_CLASS (class); 
+  scale_class = GTK_SCALE_CLASS (class); 
 
   parent_class = g_type_class_peek_parent (class);
 
   range_class->slider_detail = "vscale";
   
+  scale_class->get_layout_offsets = gtk_vscale_get_layout_offsets;
+
   widget_class->expose_event = gtk_vscale_expose;
 }
 
@@ -147,13 +155,9 @@ static gboolean
 gtk_vscale_expose (GtkWidget      *widget,
                    GdkEventExpose *event)
 {
-  GtkRange *range;
-  GtkVScale *vscale;
   GtkScale *scale;
   
-  range = GTK_RANGE (widget);
   scale = GTK_SCALE (widget);
-  vscale = GTK_VSCALE (widget);
   
   /* We need to chain up _first_ so the various geometry members of
    * GtkRange struct are updated.
@@ -164,56 +168,12 @@ gtk_vscale_expose (GtkWidget      *widget,
   if (scale->draw_value)
     {
       PangoLayout *layout;
-      PangoRectangle logical_rect;
-      gchar *txt;
       gint x, y;
       GtkStateType state_type;
-      gint value_spacing;
 
-      gtk_widget_style_get (widget, "value_spacing", &value_spacing, NULL);
-      
-      txt = _gtk_scale_format_value (scale,
-                                     GTK_RANGE (scale)->adjustment->value);
-      
-      layout = gtk_widget_create_pango_layout (widget, txt);
-      g_free (txt);
-      
-      pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
-      
-      switch (scale->value_pos)
-        {
-        case GTK_POS_LEFT:
-          x = range->range_rect.x - logical_rect.width - value_spacing;
-          y = range->slider_start + (range->slider_end - range->slider_start - logical_rect.height) / 2;
-          y = CLAMP (y, 0, widget->allocation.height - logical_rect.height);
-          break;
-          
-        case GTK_POS_RIGHT:
-          x = range->range_rect.x + range->range_rect.width + value_spacing;
-          y = range->slider_start + (range->slider_end - range->slider_start - logical_rect.height) / 2;
-          y = CLAMP (y, 0, widget->allocation.height - logical_rect.height);
-          break;
-          
-        case GTK_POS_TOP:
-          x = range->range_rect.x + (range->range_rect.width - logical_rect.width) / 2;
-          y = range->range_rect.y - logical_rect.height - value_spacing;
-          break;
-          
-        case GTK_POS_BOTTOM:
-          x = range->range_rect.x + (range->range_rect.width - logical_rect.width) / 2;
-          y = range->range_rect.y + range->range_rect.height + value_spacing;
-          break;
+      layout = gtk_scale_get_layout (widget);
+      gtk_scale_get_layout_offsets (widget, &x, &y);
 
-        default:
-          g_return_val_if_reached (FALSE);
-          x = 0;
-          y = 0;
-          break;
-        }
-      
-      x += widget->allocation.x;
-      y += widget->allocation.y;
-      
       state_type = GTK_STATE_NORMAL;
       if (!GTK_WIDGET_IS_SENSITIVE (scale))
         state_type = GTK_STATE_INSENSITIVE;
@@ -227,9 +187,74 @@ gtk_vscale_expose (GtkWidget      *widget,
                         "vscale",
                         x, y,
                         layout);
-
-      g_object_unref (layout);
     }
   
   return FALSE;
+
 }
+
+static void
+gtk_vscale_get_layout_offsets (GtkScale *scale,
+                               gint     *x,
+                               gint     *y)
+{
+  GtkWidget *widget;
+  GtkRange *range;
+  GtkScale *scale;
+  PangoLayout *layout;
+  PangoRectangle logical_rect;
+  gint value_spacing;
+
+  widget = GTK_WIDGET (scale);
+  layout = gtk_scale_get_layout (scale);
+      
+  if (!layout)
+    {
+      *x = 0;
+      *y = 0;
+
+      return;
+    }
+
+  range = GTK_RANGE (widget);
+  scale = GTK_SCALE (widget);
+
+  gtk_widget_style_get (widget, "value_spacing", &value_spacing, NULL);
+      
+  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+    
+  switch (scale->value_pos)
+    {
+    case GTK_POS_LEFT:
+      *x = range->range_rect.x - logical_rect.width - value_spacing;
+      *y = range->slider_start + (range->slider_end - range->slider_start - logical_rect.height) / 2;
+      *y = CLAMP (*y, 0, widget->allocation.height - logical_rect.height);
+      break;
+      
+    case GTK_POS_RIGHT:
+      *x = range->range_rect.x + range->range_rect.width + value_spacing;
+      *y = range->slider_start + (range->slider_end - range->slider_start - logical_rect.height) / 2;
+      *y = CLAMP (*y, 0, widget->allocation.height - logical_rect.height);
+      break;
+          
+    case GTK_POS_TOP:
+      *x = range->range_rect.x + (range->range_rect.width - logical_rect.width) / 2;
+      *y = range->range_rect.y - logical_rect.height - value_spacing;
+      break;
+          
+    case GTK_POS_BOTTOM:
+      *x = range->range_rect.x + (range->range_rect.width - logical_rect.width) / 2;
+      *y = range->range_rect.y + range->range_rect.height + value_spacing;
+      break;
+
+    default:
+      g_return_val_if_reached (FALSE);
+      *x = 0;
+      *y = 0;
+      break;
+    }
+
+  *x += widget->allocation.x;
+  *y += widget->allocation.y;
+}
+

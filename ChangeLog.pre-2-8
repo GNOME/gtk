@@ -1,3 +1,16 @@
+Fri Feb 13 00:54:59 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Fix for #104811, Padraig O'Briain:
+
+	* gtk/gtkscale.h:
+	* gtk/gtkscale.c (_gtk_scale_clear_layout): 
+	* gtk/gtkscale.c (gtk_scale_get_layout_offsets): 
+	* gtk/gtkscale.c (gtk_scale_get_layout): New functions to determine the
+	text and its position from a GtkScale, to make it more accessible. 
+	* gtk/gtkhscale.c (gtk_hscale_get_layout_offsets):
+	* gtk/gtkvscale.c (gtk_vscale_get_layout_offsets): Implementations of the 
+	new GtkScale vfunc.
+
 Thu Feb 12 17:59:52 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkicontheme.c (gtk_icon_theme_get_search_path): 

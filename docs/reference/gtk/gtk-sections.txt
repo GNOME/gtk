@@ -2476,6 +2476,8 @@ gtk_scale_set_value_pos
 gtk_scale_get_digits
 gtk_scale_get_draw_value
 gtk_scale_get_value_pos
+gtk_scale_get_layout
+gtk_scale_get_layout_offsets
 <SUBSECTION Standard>
 GTK_SCALE
 GTK_IS_SCALE

@@ -39,6 +39,15 @@
 				 *    unrelated code portions otherwise
 				 */
 
+#define GTK_SCALE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_SCALE, GtkScalePrivate))
+
+typedef struct _GtkScalePrivate GtkScalePrivate;
+
+struct _GtkScalePrivate
+{
+  PangoLayout *layout;
+};
+
 enum {
   PROP_0,
   PROP_DIGITS,
@@ -68,6 +77,9 @@ static void gtk_scale_style_set        (GtkWidget     *widget,
                                         GtkStyle      *previous);
 static void gtk_scale_get_range_border (GtkRange      *range,
                                         GtkBorder     *border);
+static void gtk_scale_finalize         (GObject       *object);
+static void gtk_scale_screen_changed   (GtkWidget     *widget,
+                                        GdkScreen     *old_screen);
 
 GType
 gtk_scale_get_type (void)
@@ -135,8 +147,10 @@ gtk_scale_class_init (GtkScaleClass *class)
   
   gobject_class->set_property = gtk_scale_set_property;
   gobject_class->get_property = gtk_scale_get_property;
+  gobject_class->finalize = gtk_scale_finalize;
 
   widget_class->style_set = gtk_scale_style_set;
+  widget_class->screen_changed = gtk_scale_screen_changed;
 
   range_class->get_range_border = gtk_scale_get_range_border;
   
@@ -312,6 +326,8 @@ gtk_scale_class_init (GtkScaleClass *class)
 
   add_slider_binding (binding_set, GDK_KP_End, 0,
                       GTK_SCROLL_END);
+
+  g_type_class_add_private (gobject_class, sizeof (GtkScalePrivate));
 }
 
 static void
@@ -407,6 +423,7 @@ gtk_scale_set_digits (GtkScale *scale,
       if (scale->draw_value)
 	range->round_digits = digits;
       
+      _gtk_scale_clear_layout (scale);
       gtk_widget_queue_resize (GTK_WIDGET (scale));
 
       g_object_notify (G_OBJECT (scale), "digits");
@@ -437,6 +454,8 @@ gtk_scale_set_draw_value (GtkScale *scale,
       else
 	GTK_RANGE (scale)->round_digits = -1;
 
+      _gtk_scale_clear_layout (scale);
+
       gtk_widget_queue_resize (GTK_WIDGET (scale));
 
       g_object_notify (G_OBJECT (scale), "draw_value");
@@ -461,6 +480,7 @@ gtk_scale_set_value_pos (GtkScale        *scale,
     {
       scale->value_pos = pos;
 
+      _gtk_scale_clear_layout (scale);
       if (GTK_WIDGET_VISIBLE (scale) && GTK_WIDGET_MAPPED (scale))
 	gtk_widget_queue_resize (GTK_WIDGET (scale));
 
@@ -586,9 +606,17 @@ gtk_scale_style_set (GtkWidget *widget,
   
   range->min_slider_size = slider_length;
   
+  _gtk_scale_clear_layout (GTK_SCALE (widget));
+
   (* GTK_WIDGET_CLASS (parent_class)->style_set) (widget, previous);
 }
 
+static void
+gtk_scale_screen_changed (GtkWidget *widget,
+                          GdkScreen *old_screen)
+{
+  _gtk_scale_clear_layout (GTK_SCALE (widget));
+}
 
 /**
  * _gtk_scale_format_value:
@@ -618,3 +646,103 @@ _gtk_scale_format_value (GtkScale *scale,
     return g_strdup_printf ("%0.*f", scale->digits,
                             value);
 }
+
+static void
+gtk_scale_finalize (GObject *object)
+{
+  GtkScale *scale;
+
+  g_return_if_fail (GTK_IS_SCALE (object));
+
+  scale = GTK_SCALE (object);
+
+  _gtk_scale_clear_layout (scale);
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+/**
+ * gtk_scale_get_layout:
+ * @scale: A #GtkScale
+ *
+ * Gets the #PangoLayout used to display the scale. The returned object
+ * is owned by the scale so does not need to be freed by the caller. 
+ *
+ * Return value: the #PangoLayout for this scale, or %NULL if the draw_value property
+ *    is %FALSE.
+ *   
+ * Since: 2.4
+ **/
+PangoLayout *
+gtk_scale_get_layout (GtkScale *scale)
+{
+  GtkScalePrivate *priv = GTK_SCALE_GET_PRIVATE (scale);
+  gchar *txt;
+
+  g_return_val_if_fail (GTK_IS_SCALE (scale), NULL);
+
+  if (!priv->layout)
+    {
+      if (scale->draw_value)
+	priv->layout = gtk_widget_create_pango_layout (GTK_WIDGET (scale), NULL);
+    }
+
+  if (scale->draw_value) 
+    {
+      txt = _gtk_scale_format_value (scale,
+				     GTK_RANGE (scale)->adjustment->value);
+      pango_layout_set_text (priv->layout, txt, -1);
+      g_free (txt);
+    }
+
+  return priv->layout;
+}
+
+/**
+ * gtk_scale_get_layout_offsets:
+ * @scale: a #GtkScale
+ * @x: location to store X offset of layout, or %NULL
+ * @y: location to store Y offset of layout, or %NULL
+ *
+ * Obtains the coordinates where the scale will draw the #PangoLayout
+ * representing the text in the scale. Remember
+ * when using the #PangoLayout function you need to convert to
+ * and from pixels using PANGO_PIXELS() or #PANGO_SCALE. 
+ *
+ * If the draw_value property is %FALSE, the return values are 
+ * undefined.
+ *
+ * Since: 2.4
+ **/
+void 
+gtk_scale_get_layout_offsets (GtkScale *scale,
+                              gint     *x,
+                              gint     *y)
+{
+  gint local_x, local_y;
+
+  g_return_val_if_fail (GTK_IS_SCALE (scale), NULL);
+
+  if (GTK_SCALE_GET_CLASS (scale)->get_layout_offsets)
+    (GTK_SCALE_GET_CLASS (scale)->get_layout_offsets) (scale, &local_x, &local_y);
+
+  if (x)
+    *x = local_x;
+  
+  if (y)
+    *y = local_y;
+}
+
+void _gtk_scale_clear_layout (GtkScale *scale)
+{
+  GtkScalePrivate *priv = GTK_SCALE_GET_PRIVATE (scale);
+
+  g_return_if_fail (GTK_IS_SCALE (scale));
+
+  if (priv->layout)
+    {
+      g_object_unref (priv->layout);
+      priv->layout = NULL;
+    }
+}
+

@@ -66,8 +66,10 @@ struct _GtkScaleClass
   
   void (* draw_value) (GtkScale *scale);
 
+  void (* get_layout_offsets) (GtkScale *scale,
+                               gint     *x,
+                               gint     *y);
   /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
@@ -85,12 +87,18 @@ void            gtk_scale_set_value_pos  (GtkScale        *scale,
                                           GtkPositionType  pos);
 GtkPositionType gtk_scale_get_value_pos  (GtkScale        *scale);
 
+PangoLayout     *gtk_scale_get_layout        (GtkScale        *scale);
+void            gtk_scale_get_layout_offsets (GtkScale        *scale,
+					      gint            *x,
+					      gint            *y);
+void    _gtk_scale_clear_layout    (GtkScale        *scale);
 
 void    _gtk_scale_get_value_size  (GtkScale        *scale,
                                     gint            *width,
                                     gint            *height);
-gchar  *_gtk_scale_format_value   (GtkScale        *scale,
-                                   gdouble          value);
+gchar  *_gtk_scale_format_value    (GtkScale        *scale,
+                                    gdouble          value);
+
 
 #ifdef __cplusplus
 }
