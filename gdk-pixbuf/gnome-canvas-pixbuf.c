@@ -353,11 +353,9 @@ gnome_canvas_pixbuf_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 static void
 gnome_canvas_pixbuf_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 {
-	GnomeCanvasItem *item;
 	GnomeCanvasPixbuf *gcp;
 	PixbufPrivate *priv;
 
-	item = GNOME_CANVAS_ITEM (object);
 	gcp = GNOME_CANVAS_PIXBUF (object);
 	priv = gcp->priv;
 

@@ -1,3 +1,8 @@
+1999-12-06  Federico Mena Quintero  <federico@redhat.com>
+
+	* gdk-pixbuf/gdk-pixbuf-io.c (file_formats): Patch from Arjan to
+	fix an initializer.
+
 1999-12-05  Federico Mena Quintero  <federico@redhat.com>
 
 	* gdk-pixbuf/Makefile.am (testpixbuf_LDADD): Add back
@@ -28,6 +33,11 @@
 	* gdk-pixbuf/gdk-pixbuf-io.c: Added detection of .CUR files
 	(Windows Cursor files). These are identical to .ICO files, 
 	except for the signature and 2 extra fields for the hotspot.
+
+1999-12-03  Federico Mena Quintero  <federico@redhat.com>
+
+	* gdk-pixbuf/gnome-canvas-pixbuf.c (gnome_canvas_pixbuf_get_arg):
+	Removed unused variable `item'.
 
 1999-12-03  Jonathan Blandford  <jrb@redhat.com>
 
