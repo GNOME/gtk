@@ -1,3 +1,17 @@
+Sat Mar  6 23:31:18 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (struct _GtkFileChooserDefault):
+	remove unneeded elements.
+	(tree_selection_changed): removed
+	(tree_name_data_func): removed
+	(gtk_file_chooser_default_finalize): don't unref dir model
+	(create_folder_tree): removed
+	(get_selection): no longer need to abstract away the selection
+	function.
+	(create_file_list): We now create a tree for all actions.
+	(file_pane_create): Make one tree.
+	(update_appearance) We really change the mode only, now.
+
 Sun Mar  7 02:38:00 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_size_request): Do a 
