@@ -6,6 +6,9 @@
 # 1999, Pablo Saratxaga <pablo@mandrakesoft.com>
 #
 
+# IMPORTANT NOTE: The name of this file *MUST* be "gtkrc.zh_TW.big5"
+# the lowercasing of "big5" is done on purpose, if you change it it won't work
+
 style "gtk-default-zh-tw" {
 	fontset = "-adobe-helvetica-medium-r-normal--16-*-*-*-*-*-iso8859-1,\
 		  -taipei-*-medium-r-normal--*-*-*-*-*-*-big5-0,\
