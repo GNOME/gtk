@@ -1059,12 +1059,17 @@ gdk_event_translate (GdkEvent *event,
       GDK_NOTE (EVENTS,
 		g_message ("selection clear:\twindow: %ld",
 			   xevent->xproperty.window));
-      
-      event->selection.type = GDK_SELECTION_CLEAR;
-      event->selection.window = window;
-      event->selection.selection = xevent->xselectionclear.selection;
-      event->selection.time = xevent->xselectionclear.time;
-      
+
+      if (_gdk_selection_filter_clear_event (&xevent->xselectionclear))
+	{
+	  event->selection.type = GDK_SELECTION_CLEAR;
+	  event->selection.window = window;
+	  event->selection.selection = xevent->xselectionclear.selection;
+	  event->selection.time = xevent->xselectionclear.time;
+	}
+      else
+	return_val = FALSE;
+	  
       break;
       
     case SelectionRequest:
@@ -1494,4 +1499,57 @@ gdk_flush (void)
   XSync (gdk_display, False);
 }
 
+static GdkAtom timestamp_prop_atom = 0;
+
+static Bool
+timestamp_predicate (Display *display,
+		     XEvent  *xevent,
+		     XPointer arg)
+{
+  Window xwindow = GPOINTER_TO_UINT (arg);
+
+  if (xevent->type == PropertyNotify &&
+      xevent->xproperty.window == xwindow &&
+      xevent->xproperty.atom == timestamp_prop_atom)
+    return True;
+
+  return False;
+}
+
+/**
+ * gdk_x11_get_server_time:
+ * @window: a #GdkWindow, used for communication with the server.
+ *          The window must have GDK_PROPERTY_CHANGE_MASK in its
+ *          events mask or a hang will result.
+ * 
+ * Routine to get the current X server time stamp. 
+ * 
+ * Return value: the time stamp.
+ **/
+guint32
+gdk_x11_get_server_time (GdkWindow *window)
+{
+  Display *xdisplay;
+  Window   xwindow;
+  guchar c = 'a';
+  XEvent xevent;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+  g_return_val_if_fail (!GDK_WINDOW_DESTROYED (window), 0);
+
+  if (!timestamp_prop_atom)
+    timestamp_prop_atom = gdk_atom_intern ("GDK_TIMESTAMP_PROP", FALSE);
+
+  xdisplay = GDK_WINDOW_XDISPLAY (window);
+  xwindow = GDK_WINDOW_XWINDOW (window);
+  
+  XChangeProperty (xdisplay, xwindow,
+		   timestamp_prop_atom, timestamp_prop_atom,
+		   8, PropModeReplace, &c, 1);
+
+  XIfEvent (xdisplay, &xevent,
+	    timestamp_predicate, GUINT_TO_POINTER(xwindow));
+
+  return xevent.xproperty.time;
+}
 

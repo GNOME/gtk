@@ -245,6 +245,9 @@ gboolean gtk_text_layout_clamp_iter_to_vrange (GtkTextLayout     *layout,
 					       gint               top,
 					       gint               bottom);
 
+void gtk_text_layout_move_iter_to_line_end      (GtkTextLayout *layout,
+						 GtkTextIter   *iter,
+						 gint           direction);
 void gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
 						 GtkTextIter   *iter);
 void gtk_text_layout_move_iter_to_next_line     (GtkTextLayout *layout,
@@ -255,7 +258,6 @@ void gtk_text_layout_move_iter_to_x             (GtkTextLayout *layout,
 void gtk_text_layout_move_iter_visually         (GtkTextLayout *layout,
 						 GtkTextIter   *iter,
 						 gint           count);
-
 
 void gtk_text_layout_spew (GtkTextLayout *layout);
 

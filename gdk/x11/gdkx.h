@@ -178,6 +178,8 @@ GdkWindow    *gdk_window_foreign_new (GdkNativeWindow anid);
 /* Return the Gdk* for a particular XID */
 gpointer      gdk_xid_table_lookup     (XID              xid);
 
+guint32       gdk_x11_get_server_time  (GdkWindow       *window);
+
 #define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
 #define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
 #define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup (xid))

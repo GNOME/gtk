@@ -43,6 +43,19 @@ gint gdk_text_property_to_text_list (GdkAtom        encoding,
 				     const guchar  *text,
 				     gint           length,
 				     gchar       ***list);
+gint gdk_text_property_to_utf8_list (GdkAtom        encoding,
+				     gint           format,
+				     const guchar  *text,
+				     gint           length,
+				     gchar       ***list);
+  
+gchar   *gdk_utf8_to_string_target   (const gchar *str);
+gboolean gdk_utf8_to_compound_text (const gchar *str,
+				    GdkAtom     *encoding,
+				    gint        *format,
+				    guchar     **ctext,
+				    gint        *length);
+
 void gdk_free_text_list             (gchar        **list);
 gint gdk_string_to_compound_text    (const gchar   *str,
 				     GdkAtom       *encoding,

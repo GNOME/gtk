@@ -33,21 +33,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gmodule.h>
-#include "gtkbutton.h"
 #include "gtkdnd.h"
 #include "gtkcompat.h"
-#include "gtkhscrollbar.h"
-#include "gtkhseparator.h"
 #include "gtkmain.h"
-#include "gtkpreview.h"
 #include "gtkrc.h"
-#include "gtkscrolledwindow.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
-#include "gtktable.h"
-#include "gtktext.h"
-#include "gtkvbox.h"
-#include "gtkvscrollbar.h"
 #include "gtkwidget.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
@@ -1292,9 +1283,26 @@ GdkEvent*
 gtk_get_current_event (void)
 {
   if (current_events)
-    return gdk_event_copy ((GdkEvent *) current_events->data);
+    return gdk_event_copy (current_events->data);
   else
     return NULL;
+}
+
+/**
+ * gtk_get_current_event_time:
+ * 
+ * If there is a current event and it has a timestamp, return that
+ * timestamp, otherwise return %GDK_CURRENT_TIME.
+ * 
+ * Return value: the timestamp from the current event, or %GDK_CURRENT_TIME.
+ **/
+guint32
+gtk_get_current_event_time (void)
+{
+  if (current_events)
+    return gdk_event_get_time (current_events->data);
+  else
+    return GDK_CURRENT_TIME;
 }
 
 GtkWidget*
@@ -1315,7 +1323,6 @@ gtk_exit_func (void)
   if (gtk_initialized)
     {
       gtk_initialized = FALSE;
-      gtk_preview_uninit ();
     }
 }
 

@@ -102,7 +102,10 @@ gtk_invisible_destroy (GtkObject *object)
 GtkWidget*
 gtk_invisible_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (GTK_TYPE_INVISIBLE));
+  GtkWidget *result = GTK_WIDGET (gtk_type_new (GTK_TYPE_INVISIBLE));
+  gtk_widget_realize (result);
+
+  return result;
 }
 
 static void

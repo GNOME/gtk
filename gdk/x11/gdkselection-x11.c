@@ -33,6 +33,66 @@
 #include "gdkprivate.h"
 #include "gdkprivate-x11.h"
 
+typedef struct _OwnerInfo OwnerInfo;
+
+struct _OwnerInfo
+{
+  GdkAtom    selection;
+  GdkWindow *owner;
+  gulong     serial;
+};
+
+GSList *owner_list;
+
+/* When a window is destroyed we check if it is the owner
+ * of any selections. This is somewhat inefficient, but
+ * owner_list is typically short, and it is a low memory,
+ * low code solution
+ */
+void
+_gdk_selection_window_destroyed (GdkWindow *window)
+{
+  GSList *tmp_list = owner_list;
+  while (tmp_list)
+    {
+      OwnerInfo *info = tmp_list->data;
+      if (info->owner == window)
+	{
+	  owner_list = g_slist_remove (owner_list, info);
+	  g_free (info);
+	}
+      tmp_list = tmp_list->next;
+    }
+}
+
+/* We only pass through those SelectionClear events that actually
+ * reflect changes to the selection owner that we didn't make ourself.
+ */
+gboolean
+_gdk_selection_filter_clear_event (XSelectionClearEvent *event)
+{
+  GSList *tmp_list = owner_list;
+
+  while (tmp_list)
+    {
+      OwnerInfo *info = tmp_list->data;
+      if (info->selection == event->selection)
+	{
+	  if ((GDK_DRAWABLE_XID (info->owner) == event->window &&
+	       event->serial >= info->serial))
+	    {
+	      owner_list = g_slist_remove (owner_list, info);
+	      g_free (info);
+	      return TRUE;
+	    }
+	  else
+	    return FALSE;
+	}
+      tmp_list = tmp_list->next;
+    }
+
+  return FALSE;
+}
 
 gboolean
 gdk_selection_owner_set (GdkWindow *owner,
@@ -42,6 +102,8 @@ gdk_selection_owner_set (GdkWindow *owner,
 {
   Display *xdisplay;
   Window xwindow;
+  GSList *tmp_list;
+  OwnerInfo *info;
 
   if (owner)
     {
@@ -55,6 +117,29 @@ gdk_selection_owner_set (GdkWindow *owner,
     {
       xdisplay = gdk_display;
       xwindow = None;
+    }
+  
+  tmp_list = owner_list;
+  while (tmp_list)
+    {
+      info = tmp_list->data;
+      if (info->selection == selection)
+	{
+	  owner_list = g_slist_remove (owner_list, info);
+	  g_free (info);
+	  break;
+	}
+      tmp_list = tmp_list->next;
+    }
+
+  if (owner)
+    {
+      info = g_new (OwnerInfo, 1);
+      info->owner = owner;
+      info->serial = NextRequest (GDK_WINDOW_XDISPLAY (owner));
+      info->selection = selection;
+
+      owner_list = g_slist_prepend (owner_list, info);
     }
 
   XSetSelectionOwner (xdisplay, selection, xwindow, time);
@@ -221,6 +306,166 @@ gdk_free_text_list (gchar **list)
   XFreeStringList (list);
 }
 
+static gint
+make_list (const gchar  *text,
+	   gint          length,
+	   gboolean      latin1,
+	   gchar      ***list)
+{
+  GSList *strings = NULL;
+  gint n_strings = 0;
+  gint i;
+  const gchar *p = text;
+  const gchar *q;
+  GSList *tmp_list;
+  GError *error = NULL;
+
+  while (p < text + length)
+    {
+      gchar *str;
+      
+      q = p;
+      while (*q && q < text + length)
+	q++;
+
+      if (latin1)
+	{
+	  str = g_convert (p, q - p,
+			   "UTF-8", "ISO-8859-1",
+			   NULL, NULL, &error);
+
+	  if (!str)
+	    {
+	      g_warning ("Error converting selection from STRING: %s",
+			 error->message);
+	      g_error_free (error);
+	    }
+	}
+      else
+	str = g_strndup (p, q - p);
+
+      if (str)
+	{
+	  strings = g_slist_prepend (strings, str);
+	  n_strings++;
+	}
+
+      p = q + 1;
+    }
+
+  if (list)
+    *list = g_new (gchar *, n_strings + 1);
+
+  (*list)[n_strings] = NULL;
+  
+  i = n_strings;
+  tmp_list = strings;
+  while (tmp_list)
+    {
+      if (list)
+	(*list)[--i] = tmp_list->data;
+      else
+	g_free (tmp_list->data);
+
+      tmp_list = tmp_list->next;
+    }
+
+  g_slist_free (strings);
+
+  return n_strings;
+}
+
+/**
+ * gdk_text_property_to_utf8_list:
+ * @encoding: an atom representing the encoding of the text
+ * @format:   the format of the property
+ * @text:     the text to convert
+ * @length:   the length of @text, in bytes
+ * @list:     location to store the list of strings or %NULL. The
+ *            list should be freed with g_strfreev().
+ * 
+ * Convert a text property in the giving encoding to
+ * a list of UTF-8 strings. 
+ * 
+ * Return value: the number of strings in the resulting
+ *               list.
+ **/
+gint 
+gdk_text_property_to_utf8_list (GdkAtom        encoding,
+				gint           format,
+				const guchar  *text,
+				gint           length,
+				gchar       ***list)
+{
+  g_return_val_if_fail (text != NULL, 0);
+  g_return_val_if_fail (length >= 0, 0);
+  
+  if (encoding == GDK_TARGET_STRING)
+    {
+      return make_list ((gchar *)text, length, TRUE, list);
+    }
+  else if (encoding == gdk_atom_intern ("UTF8_STRING", FALSE))
+    {
+      return make_list ((gchar *)text, length, FALSE, list);
+    }
+  else
+    {
+      gchar **local_list;
+      gint local_count;
+      gint i;
+      gchar *charset = NULL;
+      gboolean need_conversion= g_get_charset (&charset);
+      gint count = 0;
+      GError *error = NULL;
+      
+      /* Probably COMPOUND text, we fall back to Xlib routines
+       */
+      local_count = gdk_text_property_to_text_list (encoding,
+						    format, 
+						    text,
+						    length,
+						    &local_list);
+      if (list)
+	*list = g_new (gchar *, local_count + 1);
+      
+      for (i=0; i<local_count; i++)
+	{
+	  /* list contains stuff in our default encoding
+	   */
+	  if (need_conversion)
+	    {
+	      gchar *utf = g_convert (local_list[i], -1,
+				      "UTF-8", charset,
+				      NULL, NULL, &error);
+	      if (utf)
+		{
+		  if (list)
+		    (*list)[count++] = utf;
+		  else
+		    g_free (utf);
+		}
+	      else
+		{
+		  g_warning ("Error converting to UTF-8 from '%s': %s",
+			     charset, error->message);
+		  g_error_free (error);
+		  error = NULL;
+		}
+	    }
+	  else
+	    {
+	      if (list)
+		(*list)[count++] = g_strdup (local_list[i]);
+	    }
+	}
+      
+      gdk_free_text_list (local_list);
+      (*list)[count] = NULL;
+
+      return count;
+    }
+}
+
 gint
 gdk_string_to_compound_text (const gchar *str,
 			     GdkAtom     *encoding,
@@ -252,6 +497,151 @@ gdk_string_to_compound_text (const gchar *str,
     *length = property.nitems;
 
   return res;
+}
+
+/* The specifications for COMPOUND_TEXT and STRING specify that C0 and
+ * C1 are not allowed except for \n and \t, however the X conversions
+ * routines for COMPOUND_TEXT only enforce this in one direction,
+ * causing cut-and-paste of \r and \r\n separated text to fail.
+ * This routine strips out all non-allowed C0 and C1 characters
+ * from the input string and also canonicalizes \r, \r\n, and \n\r to \n
+ */
+static gchar * 
+sanitize_utf8 (const gchar *src)
+{
+  gint len = strlen (src);
+  GString *result = g_string_sized_new (len);
+  const gchar *p = src;
+
+  while (*p)
+    {
+      if (*p == '\r' || *p == '\n')
+	{
+	  p++;
+	  if (*p == '\r' || *p == '\n')
+	    p++;
+
+	  g_string_append_c (result, '\n');
+	}
+      else
+	{
+	  gunichar ch = g_utf8_get_char (p);
+	  char buf[7];
+	  gint buflen;
+	  
+	  if (!((ch < 0x20 && ch != '\t') || (ch >= 0x7f && ch < 0xa0)))
+	    {
+	      buflen = g_unichar_to_utf8 (ch, buf);
+	      g_string_append_len (result, buf, buflen);
+	    }
+
+	  p = g_utf8_next_char (p);
+	}
+    }
+
+  return g_string_free (result, FALSE);
+}
+
+/**
+ * gdk_utf8_to_string_target:
+ * @str: a UTF-8 string
+ * 
+ * Convert an UTF-8 string into the best possible representation
+ * as a STRING. The representation of characters not in STRING
+ * is not specified; it may be as pseudo-escape sequences
+ * \x{ABCD}, or it may be in some other form of approximation.
+ * 
+ * Return value: the newly allocated string, or %NULL if the
+ *               conversion failed. (It should not fail for
+ *               any properly formed UTF-8 string.)
+ **/
+gchar *
+gdk_utf8_to_string_target (const gchar *str)
+{
+  GError *error = NULL;
+  
+  gchar *tmp_str = sanitize_utf8 (str);
+  gchar *result =  g_convert_with_fallback (tmp_str, -1,
+					    "ISO-8859-1", "UTF-8",
+					    NULL, NULL, NULL, &error);
+  if (!result)
+    {
+      g_warning ("Error converting from UTF-8 to STRING: %s",
+		 error->message);
+      g_error_free (error);
+    }
+  
+  g_free (tmp_str);
+  return result;
+}
+
+/**
+ * gdk_utf8_to_compound_text:
+ * @str:      a UTF-8 string
+ * @encoding: location to store resulting encoding
+ * @format:   location to store format of the result
+ * @ctext:    location to store the data of the result
+ * @length:   location to store the length of the data
+ *            stored in @ctext
+ * 
+ * Convert from UTF-8 to compound text. 
+ * 
+ * Return value: %TRUE if the conversion succeeded, otherwise
+ *               false.
+ **/
+gboolean
+gdk_utf8_to_compound_text (const gchar *str,
+			   GdkAtom     *encoding,
+			   gint        *format,
+			   guchar     **ctext,
+			   gint        *length)
+{
+  gboolean need_conversion;
+  gchar *charset;
+  gchar *locale_str, *tmp_str;
+  GError *error = NULL;
+  gboolean result;
+
+  g_return_val_if_fail (str != NULL, FALSE);
+
+  need_conversion = g_get_charset (&charset);
+
+  tmp_str = sanitize_utf8 (str);
+
+  if (need_conversion)
+    {
+      locale_str = g_convert_with_fallback (tmp_str, -1,
+					    charset, "UTF-8",
+					    NULL, NULL, NULL, &error);
+      g_free (tmp_str);
+
+      if (!locale_str)
+	{
+	  g_warning ("Error converting from UTF-8 to '%s': %s",
+		     charset, error->message);
+	  g_error_free (error);
+
+	  if (encoding)
+	    *encoding = None;
+	  if (format)
+	    *format = None;
+	  if (ctext)
+	    *ctext = NULL;
+	  if (length)
+	    *length = 0;
+
+	  return FALSE;
+	}
+    }
+  else
+    locale_str = tmp_str;
+    
+  result = gdk_string_to_compound_text (locale_str,
+					encoding, format, ctext, length);
+  
+  g_free (locale_str);
+
+  return result;
 }
 
 void gdk_free_compound_text (guchar *ctext)

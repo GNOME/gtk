@@ -83,28 +83,31 @@ gboolean       gtk_target_list_find      (GtkTargetList  *list,
 
 /* Public interface */
 
-gint gtk_selection_owner_set (GtkWidget 	  *widget,
-			      GdkAtom    	   selection,
-			      guint32    	   time);
-void gtk_selection_add_target (GtkWidget           *widget, 
-			       GdkAtom              selection,
-			       GdkAtom              target,
-			       guint                info);
-void gtk_selection_add_targets (GtkWidget            *widget, 
-				GdkAtom               selection,
-				const GtkTargetEntry *targets,
-				guint                 ntargets);
-gint gtk_selection_convert   (GtkWidget 	  *widget, 
-			      GdkAtom    	   selection, 
-			      GdkAtom    	   target,
-			      guint32    	   time);
-
-
-void gtk_selection_data_set (GtkSelectionData *selection_data,
-			     GdkAtom           type,
-			     gint              format,
-			     const guchar     *data,
-			     gint              length);
+gboolean gtk_selection_owner_set     (GtkWidget            *widget,
+				      GdkAtom               selection,
+				      guint32               time);
+void     gtk_selection_add_target    (GtkWidget            *widget,
+				      GdkAtom               selection,
+				      GdkAtom               target,
+				      guint                 info);
+void     gtk_selection_add_targets   (GtkWidget            *widget,
+				      GdkAtom               selection,
+				      const GtkTargetEntry *targets,
+				      guint                 ntargets);
+void     gtk_selection_clear_targets (GtkWidget            *widget,
+				      GdkAtom               selection);
+gint     gtk_selection_convert       (GtkWidget            *widget,
+				      GdkAtom               selection,
+				      GdkAtom               target,
+				      guint32               time);
+void     gtk_selection_data_set      (GtkSelectionData     *selection_data,
+				      GdkAtom               type,
+				      gint                  format,
+				      const guchar         *data,
+				      gint                  length);
+gboolean gtk_selection_data_set_text (GtkSelectionData     *selection_data,
+				      const guchar         *str);
+guchar * gtk_selection_data_get_text (GtkSelectionData     *selection_data);
 
 /* Called when a widget is destroyed */
 

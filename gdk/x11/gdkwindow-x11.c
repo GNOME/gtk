@@ -630,6 +630,8 @@ _gdk_windowing_window_destroy (GdkWindow *window,
   GdkWindowObject *private = (GdkWindowObject *)window;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
+
+  _gdk_selection_window_destroyed (window);
   
   if (private->extension_events != 0)
     gdk_input_window_destroy (window);

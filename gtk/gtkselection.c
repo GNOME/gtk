@@ -313,7 +313,7 @@ gtk_target_list_find (GtkTargetList *list,
  *   results:
  *************************************************************/
 
-gint
+gboolean
 gtk_selection_owner_set (GtkWidget *widget,
 			 GdkAtom    selection,
 			 guint32    time)
@@ -322,33 +322,25 @@ gtk_selection_owner_set (GtkWidget *widget,
   GtkWidget *old_owner;
   GtkSelectionInfo *selection_info = NULL;
   GdkWindow *window;
+
+  g_return_val_if_fail (widget == NULL || GTK_WIDGET_REALIZED (widget), FALSE);
   
   if (widget == NULL)
     window = NULL;
   else
-    {
-      if (!GTK_WIDGET_REALIZED (widget))
-	gtk_widget_realize (widget);
-      
-      window = widget->window;
-    }
-  
+    window = widget->window;
+
   tmp_list = current_selections;
   while (tmp_list)
     {
-      selection_info = (GtkSelectionInfo *)tmp_list->data;
-      
-      if (selection_info->selection == selection)
-	break;
+      if (((GtkSelectionInfo *)tmp_list->data)->selection == selection)
+	{
+	  selection_info = tmp_list->data;
+	  break;
+	}
       
       tmp_list = tmp_list->next;
     }
-  
-  if (tmp_list == NULL)
-    selection_info = NULL;
-  else
-    if (selection_info->widget == widget)
-      return TRUE;
   
   if (gdk_selection_owner_set (window, selection, time, TRUE))
     {
@@ -373,8 +365,8 @@ gtk_selection_owner_set (GtkWidget *widget,
 	      selection_info->selection = selection;
 	      selection_info->widget = widget;
 	      selection_info->time = time;
-	      current_selections = g_list_append (current_selections, 
-						  selection_info);
+	      current_selections = g_list_prepend (current_selections, 
+						   selection_info);
 	    }
 	  else
 	    {
@@ -384,9 +376,9 @@ gtk_selection_owner_set (GtkWidget *widget,
 	    }
 	}
       /* If another widget in the application lost the selection,
-       *  send it a GDK_SELECTION_CLEAR event, unless we're setting
-       *  the owner to None, in which case an event will be sent */
-      if (old_owner && (widget != NULL))
+       *  send it a GDK_SELECTION_CLEAR event.
+       */
+      if (old_owner && old_owner != widget)
 	{
 	  GdkEventSelection event;
 	  
@@ -476,6 +468,43 @@ gtk_selection_target_list_remove (GtkWidget    *widget)
   gtk_object_set_data (GTK_OBJECT (widget), gtk_selection_handler_key, NULL);
 }
 
+/**
+ * gtk_selection_clear_targets:
+ * @widget:    a #GtkWidget
+ * @selection: an atom representing a selection
+ *
+ * Remove all targets registered for the given selection for the
+ * widget.
+ **/
+void 
+gtk_selection_clear_targets (GtkWidget *widget,
+			     GdkAtom    selection)
+{
+  GtkSelectionTargetList *sellist;
+  GList *tmp_list;
+  GList *lists;
+
+  lists = gtk_object_get_data (GTK_OBJECT (widget), gtk_selection_handler_key);
+  
+  tmp_list = lists;
+  while (tmp_list)
+    {
+      sellist = tmp_list->data;
+      if (sellist->selection == selection)
+	{
+	  lists = g_list_delete_link (lists, tmp_list);
+	  gtk_target_list_unref (sellist->list);
+	  g_free (sellist);
+
+	  break;
+	}
+      
+      tmp_list = tmp_list->next;
+    }
+  
+  gtk_object_set_data (GTK_OBJECT (widget), gtk_selection_handler_key, lists);
+}
+
 void 
 gtk_selection_add_target (GtkWidget	    *widget, 
 			  GdkAtom	     selection,
@@ -504,6 +533,7 @@ gtk_selection_add_targets (GtkWidget            *widget,
   list = gtk_selection_target_list_get (widget, selection);
   gtk_target_list_add_table (list, targets, ntargets);
 }
+
 
 /*************************************************************
  * gtk_selection_remove_all:
@@ -728,6 +758,122 @@ gtk_selection_data_set (GtkSelectionData *selection_data,
   selection_data->length = length;
 }
 
+static GdkAtom utf8_atom;
+static GdkAtom text_atom;
+static GdkAtom ctext_atom;
+
+static void 
+init_atoms (void)
+{
+  if (!utf8_atom)
+    {
+      utf8_atom = gdk_atom_intern ("UTF8_STRING", FALSE);
+      text_atom = gdk_atom_intern ("TEXT", FALSE);
+      ctext_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
+    }
+}
+
+/**
+ * gtk_selection_data_set_text:
+ * @selection_data: a #GtkSelectionData
+ * @str: a UTF-8 string
+ * 
+ * Sets the contents of the selection from a UTF-8 encoded string.
+ * The string is converted to the form determined by
+ * @selection_data->target.
+ * 
+ * Return value: %TRUE if the selection was succesfully set,
+ *   otherwise %FALSE.
+ **/
+gboolean
+gtk_selection_data_set_text (GtkSelectionData     *selection_data,
+			     const guchar         *str)
+{
+  init_atoms ();
+
+  if (selection_data->target == utf8_atom)
+    {
+      gtk_selection_data_set (selection_data,
+			      utf8_atom,
+			      8, (guchar *)str, strlen (str));
+      return TRUE;
+    }
+  else if (selection_data->target == GDK_TARGET_STRING)
+    {
+      gchar *latin1 = gdk_utf8_to_string_target (str);
+
+      if (latin1)
+	{
+	  gtk_selection_data_set (selection_data,
+				  GDK_SELECTION_TYPE_STRING,
+				  8, latin1, strlen (latin1));
+	  g_free(latin1);
+	  
+	  return TRUE;
+	}
+
+    }
+  else if (selection_data->target == ctext_atom ||
+	   selection_data->target == text_atom)
+    {
+      guchar *text;
+      GdkAtom encoding;
+      gint format;
+      gint new_length;
+      
+      if (gdk_utf8_to_compound_text (str, &encoding, &format, &text, &new_length))
+	{
+	  gtk_selection_data_set (selection_data, encoding, format, text, new_length);
+	  gdk_free_compound_text (text);
+      
+	  return TRUE;
+	}
+    }
+  
+  return FALSE;
+}
+
+/**
+ * gtk_selection_data_get_text:
+ * @selection_data: a #GtkSelectionData
+ * 
+ * Gets the contents of the selection data as a UTF-8 string.
+ * 
+ * Return value: if the selection data contained a recognized
+ *   text type and it could be converted to UTF-8, a newly allocated
+ *   string containing the converted text, otherwise %NULL.
+ *   If the result is non-%NULL it must be freed with g_free().
+ **/
+guchar *
+gtk_selection_data_get_text (GtkSelectionData *selection_data)
+{
+  guchar *result = NULL;
+
+  init_atoms ();
+  
+  if (selection_data->length >= 0 &&
+      (selection_data->type == GDK_TARGET_STRING ||
+       selection_data->type == ctext_atom ||
+       selection_data->type == utf8_atom))
+    {
+      gchar **list;
+      gint i;
+      gint count = gdk_text_property_to_utf8_list (selection_data->type,
+						   selection_data->format, 
+						   selection_data->data,
+						   selection_data->length,
+						   &list);
+      if (count > 0)
+	result = list[0];
+
+      for (i = 1; i < count; i++)
+	g_free (list[i]);
+      g_free (list);
+    }
+
+  return result;
+}
+
 /*************************************************************
  * gtk_selection_init:
  *     Initialize local variables
@@ -755,16 +901,13 @@ gtk_selection_init (void)
  *************************************************************/
 
 gint
-gtk_selection_clear (GtkWidget *widget,
+gtk_selection_clear (GtkWidget         *widget,
 		     GdkEventSelection *event)
 {
-  /* FIXME: there can be a problem if we change the selection
-     via gtk_selection_owner_set after another client claims 
-     the selection, but before we get the notification event.
-     Tk filters based on serial #'s, which aren't retained by
-     GTK. Filtering based on time's will be inherently 
-     somewhat unreliable. */
-  
+  /* Note that we filter clear events in gdkselection-x11.c, so
+   * that we only will get here if the clear event actually
+   * represents a change that we didn't do ourself.
+   */
   GList *tmp_list;
   GtkSelectionInfo *selection_info = NULL;
   
@@ -782,16 +925,9 @@ gtk_selection_clear (GtkWidget *widget,
   
   if (tmp_list)
     {
-      if (selection_info->time > event->time)
-	return FALSE;		/* return FALSE to indicate that
-				 * the selection was out of date,
-				 * and this clear should be ignored */
-      else
-	{
-	  current_selections = g_list_remove_link (current_selections, tmp_list);
-	  g_list_free (tmp_list);
-	  g_free (selection_info);
-	}
+      current_selections = g_list_remove_link (current_selections, tmp_list);
+      g_list_free (tmp_list);
+      g_free (selection_info);
     }
   
   return TRUE;
@@ -1585,14 +1721,20 @@ gtk_selection_default_handler (GtkWidget	*widget,
 
 
 GtkSelectioData*
-gtk_selection_data_copy (GtkSelectionData *data)
+gtk_selection_data_copy (GtkSelectionData *selection_data)
 {
   GtkSelectionData *new_data;
   
-  g_return_val_if_fail (data != NULL, NULL);
+  g_return_val_if_fail (selection_data != NULL, NULL);
   
   new_data = g_new (GtkSelectionData, 1);
-  *new_data = *data;
+  *new_data = *selection_data;
+
+  if (selection_data->data)
+    {
+      new_data->data = g_malloc (selection_data->length + 1);
+      memcpy (new_data->data, selection_data->data, selection_data->length + 1);
+    }
   
   return new_data;
 }
@@ -1601,6 +1743,9 @@ void
 gtk_selection_data_free (GtkSelectionData *data)
 {
   g_return_if_fail (data != NULL);
+  
+  if (data->data)
+    g_free (data->data);
   
   g_free (data);
 }

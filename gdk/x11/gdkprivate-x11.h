@@ -73,13 +73,15 @@ void _gdk_window_process_expose    (GdkWindow     *window,
                                     gulong         serial,
                                     GdkRectangle  *area);
 
+void     _gdk_selection_window_destroyed   (GdkWindow            *window);
+gboolean _gdk_selection_filter_clear_event (XSelectionClearEvent *event);
+
 extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern gboolean	         gdk_use_xshm;
 extern Atom		 gdk_wm_delete_window;
 extern Atom		 gdk_wm_take_focus;
 extern Atom		 gdk_wm_protocols;
 extern Atom		 gdk_wm_window_protocols[];
-extern GdkWindow	*selection_owner[];
 extern gboolean          gdk_null_window_warnings;
 extern const int         gdk_nevent_masks;
 extern const int         gdk_event_mask_table[];
@@ -95,5 +97,3 @@ extern GdkWindow *gdk_xim_window;	        /* currently using Window */
 
 
 #endif /* __GDK_PRIVATE_X11_H__ */
-
-

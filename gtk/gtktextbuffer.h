@@ -32,18 +32,8 @@ struct _GtkTextBuffer {
   GtkTextTagTable *tag_table;
   GtkTextBTree *btree;
 
-  /* Text currently pasted to the clipboard */
-  gchar *clipboard_text;
-
   /* Whether the buffer has been modified since last save */
   gboolean modified;
-
-  /* We use this for selections */
-  GtkWidget *selection_widget;
-  gboolean have_selection;
-  gboolean selection_handlers_installed;
-  gboolean paste_interactive;
-  gboolean paste_default_editable;
 };
 
 struct _GtkTextBufferClass {
@@ -233,33 +223,22 @@ GSList         *gtk_text_buffer_get_tags (GtkTextBuffer     *buffer,
 gboolean        gtk_text_buffer_modified                (GtkTextBuffer *buffer);
 void            gtk_text_buffer_set_modified            (GtkTextBuffer *buffer,
                                                          gboolean       setting);
-void            gtk_text_buffer_set_clipboard_contents  (GtkTextBuffer *buffer,
-                                                         const gchar   *text);
-const gchar    *gtk_text_buffer_get_clipboard_contents  (GtkTextBuffer *buffer);
 
-
-void            gtk_text_buffer_paste_primary_selection (GtkTextBuffer *buffer,
+void            gtk_text_buffer_paste_primary           (GtkTextBuffer *buffer,
                                                          GtkTextIter   *override_location,
-                                                         guint32        time,
-                                                         gboolean       interactive,
                                                          gboolean       default_editable);
-gboolean        gtk_text_buffer_delete_selection        (GtkTextBuffer *buffer,
-                                                         gboolean       interactive,
+void            gtk_text_buffer_cut_clipboard           (GtkTextBuffer *buffer,
                                                          gboolean       default_editable);
-void            gtk_text_buffer_cut                     (GtkTextBuffer *buffer,
-                                                         guint32        time,
-                                                         gboolean       interactive,
-                                                         gboolean       default_editable);
-void            gtk_text_buffer_copy                    (GtkTextBuffer *buffer,
-                                                         guint32        time);
+void            gtk_text_buffer_copy_clipboard          (GtkTextBuffer *buffer);
 void            gtk_text_buffer_paste_clipboard         (GtkTextBuffer *buffer,
-                                                         guint32        time,
-                                                         gboolean       interactive,
                                                          gboolean       default_editable);
+
 gboolean        gtk_text_buffer_get_selection_bounds    (GtkTextBuffer *buffer,
                                                          GtkTextIter   *start,
                                                          GtkTextIter   *end);
-
+gboolean        gtk_text_buffer_delete_selection        (GtkTextBuffer *buffer,
+                                                         gboolean       interactive,
+                                                         gboolean       default_editable);
 
 /* This function is not implemented. */
 gboolean gtk_text_buffer_find_string(GtkTextBuffer *buffer,

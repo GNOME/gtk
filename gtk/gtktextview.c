@@ -63,13 +63,13 @@
 #include <string.h>
 
 enum {
-  MOVE_INSERT,
+  MOVE,
   SET_ANCHOR,
-  SCROLL_TEXT,
-  DELETE_TEXT,
-  CUT_TEXT,
-  COPY_TEXT,
-  PASTE_TEXT,
+  INSERT,
+  DELETE,
+  CUT_CLIPBOARD,
+  COPY_CLIPBOARD,
+  PASTE_CLIPBOARD,
   TOGGLE_OVERWRITE,
   SET_SCROLL_ADJUSTMENTS,
   LAST_SIGNAL
@@ -168,21 +168,22 @@ static void gtk_text_view_set_scroll_adjustments (GtkTextView   *text_view,
 						  GtkAdjustment *hadj,
 						  GtkAdjustment *vadj);
 
-static void gtk_text_view_move_insert      (GtkTextView             *text_view,
-					    GtkTextViewMovementStep  step,
-					    gint                     count,
-					    gboolean                 extend_selection);
-static void gtk_text_view_set_anchor       (GtkTextView             *text_view);
-static void gtk_text_view_scroll_text      (GtkTextView             *text_view,
-					    GtkTextViewScrollType    type);
-static void gtk_text_view_delete_text      (GtkTextView             *text_view,
-					    GtkTextViewDeleteType    type,
-					    gint                     count);
-static void gtk_text_view_cut_text         (GtkTextView             *text_view);
-static void gtk_text_view_copy_text        (GtkTextView             *text_view);
-static void gtk_text_view_paste_text       (GtkTextView             *text_view);
-static void gtk_text_view_toggle_overwrite (GtkTextView             *text_view);
-
+static void gtk_text_view_move             (GtkTextView           *text_view,
+					    GtkMovementStep        step,
+					    gint                   count,
+					    gboolean               extend_selection);
+static void gtk_text_view_set_anchor       (GtkTextView           *text_view);
+static void gtk_text_view_scroll_pages     (GtkTextView           *text_view,
+					    gint                   count);
+static void gtk_text_view_insert           (GtkTextView           *text_view,
+					    const gchar           *str);
+static void gtk_text_view_delete           (GtkTextView           *text_view,
+					    GtkDeleteType          type,
+					    gint                   count);
+static void gtk_text_view_cut_clipboard    (GtkTextView           *text_view);
+static void gtk_text_view_copy_clipboard   (GtkTextView           *text_view);
+static void gtk_text_view_paste_clipboard  (GtkTextView           *text_view);
+static void gtk_text_view_toggle_overwrite (GtkTextView           *text_view);
 
 static void     gtk_text_view_validate_onscreen     (GtkTextView        *text_view);
 static void     gtk_text_view_get_first_para_iter   (GtkTextView        *text_view,
@@ -231,12 +232,6 @@ enum {
   TARGET_UTF8_STRING
 };
 
-static GdkAtom clipboard_atom = GDK_NONE;
-static GdkAtom text_atom = GDK_NONE;
-static GdkAtom ctext_atom = GDK_NONE;
-static GdkAtom utf8_atom = GDK_NONE;
-
-
 static GtkTargetEntry target_table[] = {
   { "UTF8_STRING", 0, TARGET_UTF8_STRING },
   { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT },
@@ -244,8 +239,6 @@ static GtkTargetEntry target_table[] = {
   { "text/plain", 0, TARGET_STRING },
   { "STRING",     0, TARGET_STRING }
 };
-
-static guint n_targets = sizeof (target_table) / sizeof (target_table[0]);
 
 static GtkContainerClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -276,23 +269,23 @@ gtk_text_view_get_type (void)
 }
 
 static void
-add_move_insert_binding (GtkBindingSet *binding_set,
-			 guint keyval,
-			 guint modmask,
-			 GtkTextViewMovementStep step,
-			 gint count)
+add_move_binding (GtkBindingSet  *binding_set,
+		  guint           keyval,
+		  guint           modmask,
+		  GtkMovementStep step,
+		  gint            count)
 {
   g_return_if_fail ((modmask & GDK_SHIFT_MASK) == 0);
   
   gtk_binding_entry_add_signal (binding_set, keyval, modmask,
-				"move_insert", 3,
+				"move", 3,
 				GTK_TYPE_ENUM, step,
 				GTK_TYPE_INT, count,
                                 GTK_TYPE_BOOL, FALSE);
 
   /* Selection-extending version */
   gtk_binding_entry_add_signal (binding_set, keyval, modmask | GDK_SHIFT_MASK,
-				"move_insert", 3,
+				"move", 3,
 				GTK_TYPE_ENUM, step,
 				GTK_TYPE_INT, count,
                                 GTK_TYPE_BOOL, TRUE);
@@ -331,13 +324,13 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * Signals
    */
 
-  signals[MOVE_INSERT] = 
-      gtk_signal_new ("move_insert",
+  signals[MOVE] = 
+      gtk_signal_new ("move",
                       GTK_RUN_LAST | GTK_RUN_ACTION,
                       GTK_CLASS_TYPE (object_class),
-                      GTK_SIGNAL_OFFSET (GtkTextViewClass, move_insert),
+                      GTK_SIGNAL_OFFSET (GtkTextViewClass, move),
                       gtk_marshal_NONE__INT_INT_INT,
-                      GTK_TYPE_NONE, 3, GTK_TYPE_ENUM, GTK_TYPE_INT, GTK_TYPE_BOOL);
+                      GTK_TYPE_NONE, 3, GTK_TYPE_MOVEMENT_STEP, GTK_TYPE_INT, GTK_TYPE_BOOL);
 
   signals[SET_ANCHOR] = 
       gtk_signal_new ("set_anchor",
@@ -347,43 +340,43 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                       gtk_marshal_NONE__NONE,
                       GTK_TYPE_NONE, 0);
 
-  signals[SCROLL_TEXT] = 
-      gtk_signal_new ("scroll_text",
+  signals[INSERT] = 
+      gtk_signal_new ("insert",
                       GTK_RUN_LAST | GTK_RUN_ACTION,
                       GTK_CLASS_TYPE (object_class),
-                      GTK_SIGNAL_OFFSET (GtkTextViewClass, scroll_text),
-                      gtk_marshal_NONE__INT,
-                      GTK_TYPE_NONE, 1, GTK_TYPE_ENUM);
+                      GTK_SIGNAL_OFFSET (GtkTextViewClass, insert),
+                      gtk_marshal_NONE__STRING,
+                      GTK_TYPE_NONE, 1, GTK_TYPE_STRING);
 
-  signals[DELETE_TEXT] = 
-      gtk_signal_new ("delete_text",
+  signals[DELETE] = 
+      gtk_signal_new ("delete",
                       GTK_RUN_LAST | GTK_RUN_ACTION,
                       GTK_CLASS_TYPE (object_class),
-                      GTK_SIGNAL_OFFSET (GtkTextViewClass, delete_text),
+                      GTK_SIGNAL_OFFSET (GtkTextViewClass, delete),
                       gtk_marshal_NONE__INT_INT,
-                      GTK_TYPE_NONE, 2, GTK_TYPE_ENUM, GTK_TYPE_INT);
+                      GTK_TYPE_NONE, 2, GTK_TYPE_DELETE_TYPE, GTK_TYPE_INT);
 
-  signals[CUT_TEXT] =
-    gtk_signal_new ("cut_text",
+  signals[CUT_CLIPBOARD] =
+    gtk_signal_new ("cut_clipboard",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextViewClass, cut_text),
+                    GTK_SIGNAL_OFFSET (GtkTextViewClass, cut_clipboard),
                     gtk_marshal_NONE__NONE,
                     GTK_TYPE_NONE, 0);
 
-  signals[COPY_TEXT] =
-    gtk_signal_new ("copy_text",
+  signals[COPY_CLIPBOARD] =
+    gtk_signal_new ("copy_clipboard",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextViewClass, copy_text),
+                    GTK_SIGNAL_OFFSET (GtkTextViewClass, copy_clipboard),
                     gtk_marshal_NONE__NONE,
                     GTK_TYPE_NONE, 0);
 
-  signals[PASTE_TEXT] =
-    gtk_signal_new ("paste_text",
+  signals[PASTE_CLIPBOARD] =
+    gtk_signal_new ("paste_clipboard",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextViewClass, paste_text),
+                    GTK_SIGNAL_OFFSET (GtkTextViewClass, paste_clipboard),
                     gtk_marshal_NONE__NONE,
                     GTK_TYPE_NONE, 0);
 
@@ -412,123 +405,142 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   binding_set = gtk_binding_set_by_class (klass);
 
   /* Moving the insertion point */
-  add_move_insert_binding (binding_set, GDK_Right, 0,
-                          GTK_TEXT_MOVEMENT_POSITIONS, 1);
+  add_move_binding (binding_set, GDK_Right, 0,
+		    GTK_MOVEMENT_POSITIONS, 1);
   
-  add_move_insert_binding (binding_set, GDK_Left, 0,
-                          GTK_TEXT_MOVEMENT_POSITIONS, -1);
+  add_move_binding (binding_set, GDK_Left, 0,
+		    GTK_MOVEMENT_POSITIONS, -1);
 
-  add_move_insert_binding (binding_set, GDK_f, GDK_CONTROL_MASK,
-                          GTK_TEXT_MOVEMENT_CHAR, 1);
+  add_move_binding (binding_set, GDK_f, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_CHARS, 1);
   
-  add_move_insert_binding (binding_set, GDK_b, GDK_CONTROL_MASK,
-                          GTK_TEXT_MOVEMENT_CHAR, -1);
+  add_move_binding (binding_set, GDK_b, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_CHARS, -1);
   
-  add_move_insert_binding (binding_set, GDK_Right, GDK_CONTROL_MASK,
-                          GTK_TEXT_MOVEMENT_WORD, 1);
+  add_move_binding (binding_set, GDK_Right, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_WORDS, 1);
 
-  add_move_insert_binding (binding_set, GDK_Left, GDK_CONTROL_MASK,
-                          GTK_TEXT_MOVEMENT_WORD, -1);
+  add_move_binding (binding_set, GDK_Left, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_WORDS, -1);
   
   /* Eventually we want to move by display lines, not paragraphs */
-  add_move_insert_binding (binding_set, GDK_Up, 0,
-                          GTK_TEXT_MOVEMENT_WRAPPED_LINE, -1);
+  add_move_binding (binding_set, GDK_Up, 0,
+		    GTK_MOVEMENT_DISPLAY_LINES, -1);
   
-  add_move_insert_binding (binding_set, GDK_Down, 0,
-                          GTK_TEXT_MOVEMENT_WRAPPED_LINE, 1);
+  add_move_binding (binding_set, GDK_Down, 0,
+		    GTK_MOVEMENT_DISPLAY_LINES, 1);
 
-  add_move_insert_binding (binding_set, GDK_p, GDK_CONTROL_MASK,
-                          GTK_TEXT_MOVEMENT_WRAPPED_LINE, -1);
+  add_move_binding (binding_set, GDK_p, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_DISPLAY_LINES, -1);
   
-  add_move_insert_binding (binding_set, GDK_n, GDK_CONTROL_MASK,
-                          GTK_TEXT_MOVEMENT_WRAPPED_LINE, 1);
+  add_move_binding (binding_set, GDK_n, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_DISPLAY_LINES, 1);
   
-  add_move_insert_binding (binding_set, GDK_a, GDK_CONTROL_MASK,
-                          GTK_TEXT_MOVEMENT_LINE_ENDS, -1);
+  add_move_binding (binding_set, GDK_a, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_PARAGRAPH_ENDS, -1);
 
-  add_move_insert_binding (binding_set, GDK_e, GDK_CONTROL_MASK,
-                          GTK_TEXT_MOVEMENT_LINE_ENDS, 1);
+  add_move_binding (binding_set, GDK_e, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_PARAGRAPH_ENDS, 1);
 
-  add_move_insert_binding (binding_set, GDK_f, GDK_MOD1_MASK,
-                          GTK_TEXT_MOVEMENT_WORD, 1);
+  add_move_binding (binding_set, GDK_f, GDK_MOD1_MASK,
+		    GTK_MOVEMENT_WORDS, 1);
 
-  add_move_insert_binding (binding_set, GDK_b, GDK_MOD1_MASK,
-                          GTK_TEXT_MOVEMENT_WORD, -1);
+  add_move_binding (binding_set, GDK_b, GDK_MOD1_MASK,
+		    GTK_MOVEMENT_WORDS, -1);
 
-  add_move_insert_binding (binding_set, GDK_Home, 0,
-                          GTK_TEXT_MOVEMENT_BUFFER_ENDS, -1);
+  add_move_binding (binding_set, GDK_Home, 0,
+		    GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
 
-  add_move_insert_binding (binding_set, GDK_End, 0,
-                          GTK_TEXT_MOVEMENT_BUFFER_ENDS, 1);
+  add_move_binding (binding_set, GDK_End, 0,
+		    GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
+  
+  add_move_binding (binding_set, GDK_Home, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_BUFFER_ENDS, -1);
+
+  add_move_binding (binding_set, GDK_End, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_BUFFER_ENDS, 1);
+
+  add_move_binding (binding_set, GDK_Page_Up, 0,
+		    GTK_MOVEMENT_PAGES, -1);
+
+  add_move_binding (binding_set, GDK_Page_Down, 0,
+		    GTK_MOVEMENT_PAGES, 1);
+  
   
   /* Setting the cut/paste/copy anchor */
   gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_CONTROL_MASK,
 				"set_anchor", 0);
 
-  
-  /* Scrolling around */
-  gtk_binding_entry_add_signal (binding_set, GDK_Page_Up, 0,
-				"scroll_text", 1,
-				GTK_TYPE_ENUM, GTK_TEXT_SCROLL_PAGE_UP);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_Page_Down, 0,
-				"scroll_text", 1,
-				GTK_TYPE_ENUM, GTK_TEXT_SCROLL_PAGE_DOWN);
-
   /* Deleting text */
   gtk_binding_entry_add_signal (binding_set, GDK_Delete, 0,
-				"delete_text", 2,
-				GTK_TYPE_ENUM, GTK_TEXT_DELETE_CHAR,
+				"delete", 2,
+				GTK_TYPE_ENUM, GTK_DELETE_CHARS,
+				GTK_TYPE_INT, 1);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_d, GDK_CONTROL_MASK,
+				"delete", 2,
+				GTK_TYPE_ENUM, GTK_DELETE_CHARS,
 				GTK_TYPE_INT, 1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, 0,
-				"delete_text", 2,
-				GTK_TYPE_ENUM, GTK_TEXT_DELETE_CHAR,
+				"delete", 2,
+				GTK_TYPE_ENUM, GTK_DELETE_CHARS,
 				GTK_TYPE_INT, -1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_Delete, GDK_CONTROL_MASK,
-				"delete_text", 2,
-				GTK_TYPE_ENUM, GTK_TEXT_DELETE_HALF_WORD,
+				"delete", 2,
+				GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
+				GTK_TYPE_INT, 1);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_d, GDK_MOD1_MASK,
+				"delete", 2,
+				GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
 				GTK_TYPE_INT, 1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, GDK_CONTROL_MASK,
-				"delete_text", 2,
-				GTK_TYPE_ENUM, GTK_TEXT_DELETE_HALF_WORD,
+				"delete", 2,
+				GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
 				GTK_TYPE_INT, -1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_k, GDK_CONTROL_MASK,
-				"delete_text", 2,
-				GTK_TYPE_ENUM, GTK_TEXT_DELETE_HALF_LINE,
+				"delete", 2,
+				GTK_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
 				GTK_TYPE_INT, 1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_u, GDK_CONTROL_MASK,
-				"delete_text", 2,
-				GTK_TYPE_ENUM, GTK_TEXT_DELETE_WHOLE_LINE,
+				"delete", 2,
+				GTK_TYPE_ENUM, GTK_DELETE_PARAGRAPHS,
 				GTK_TYPE_INT, 1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_MOD1_MASK,
-				"delete_text", 2,
-				GTK_TYPE_ENUM, GTK_TEXT_DELETE_WHITESPACE_LEAVE_ONE,
+				"delete", 2,
+				GTK_TYPE_ENUM, GTK_DELETE_WHITESPACE,
 				GTK_TYPE_INT, 1);
+  gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_MOD1_MASK,
+				"insert", 1,
+				GTK_TYPE_STRING, " ");
 
   gtk_binding_entry_add_signal (binding_set, GDK_backslash, GDK_MOD1_MASK,
-				"delete_text", 2,
-				GTK_TYPE_ENUM, GTK_TEXT_DELETE_WHITESPACE,
+				"delete", 2,
+				GTK_TYPE_ENUM, GTK_DELETE_WHITESPACE,
 				GTK_TYPE_INT, 1);
   
   /* Cut/copy/paste */
 
   gtk_binding_entry_add_signal (binding_set, GDK_x, GDK_CONTROL_MASK,
-				"cut_text", 0);
+				"cut_clipboard", 0);
 
   gtk_binding_entry_add_signal (binding_set, GDK_w, GDK_CONTROL_MASK,
-				"cut_text", 0);
+				"cut_clipboard", 0);
   
   gtk_binding_entry_add_signal (binding_set, GDK_c, GDK_CONTROL_MASK,
-				"copy_text", 0);
+				"copy_clipboard", 0);
   
+  gtk_binding_entry_add_signal (binding_set, GDK_v, GDK_CONTROL_MASK,
+				"paste_clipboard", 0);
+
   gtk_binding_entry_add_signal (binding_set, GDK_y, GDK_CONTROL_MASK,
-				"paste_text", 0);
+				"paste_clipboard", 0);
 
   /* Overwrite */
   gtk_binding_entry_add_signal (binding_set, GDK_Insert, 0,
@@ -570,13 +582,13 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->drag_drop = gtk_text_view_drag_drop;
   widget_class->drag_data_received = gtk_text_view_drag_data_received;
 
-  klass->move_insert = gtk_text_view_move_insert;
+  klass->move = gtk_text_view_move;
   klass->set_anchor = gtk_text_view_set_anchor;
-  klass->scroll_text = gtk_text_view_scroll_text;
-  klass->delete_text = gtk_text_view_delete_text;
-  klass->cut_text = gtk_text_view_cut_text;
-  klass->copy_text = gtk_text_view_copy_text;
-  klass->paste_text = gtk_text_view_paste_text;
+  klass->insert = gtk_text_view_insert;
+  klass->delete = gtk_text_view_delete;
+  klass->cut_clipboard = gtk_text_view_cut_clipboard;
+  klass->copy_clipboard = gtk_text_view_copy_clipboard;
+  klass->paste_clipboard = gtk_text_view_paste_clipboard;
   klass->toggle_overwrite = gtk_text_view_toggle_overwrite;
   klass->set_scroll_adjustments = gtk_text_view_set_scroll_adjustments;
 }
@@ -592,21 +604,9 @@ gtk_text_view_init (GtkTextView *text_view)
 
   text_view->wrap_mode = GTK_WRAPMODE_NONE;
 
-  if (!clipboard_atom)
-    clipboard_atom = gdk_atom_intern ("CLIPBOARD", FALSE);
-
-  if (!text_atom)
-    text_atom = gdk_atom_intern ("TEXT", FALSE);
-
-  if (!ctext_atom)
-    ctext_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
-
-  if (!utf8_atom)
-    utf8_atom = gdk_atom_intern ("UTF8_STRING", FALSE);
-  
   gtk_drag_dest_set (widget,
                     GTK_DEST_DEFAULT_DROP | GTK_DEST_DEFAULT_MOTION,
-                    target_table, n_targets,
+                    target_table, G_N_ELEMENTS (target_table),
                     GDK_ACTION_COPY | GDK_ACTION_MOVE);
 
   text_view->virtual_cursor_x = -1;
@@ -1667,11 +1667,9 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
                                              event->x + text_view->xoffset,
                                              event->y + text_view->yoffset);
           
-          gtk_text_buffer_paste_primary_selection (text_view->buffer,
-                                                   &iter,
-                                                   event->time,
-                                                   TRUE,
-                                                   text_view->editable);
+          gtk_text_buffer_paste_primary (text_view->buffer,
+					 &iter,
+					 text_view->editable);
           return TRUE;
         }
       else if (event->button == 3)
@@ -1843,61 +1841,77 @@ gtk_text_view_move_iter_by_lines (GtkTextView *text_view,
 }
 
 static void
-gtk_text_view_move_insert (GtkTextView *text_view,
-			   GtkTextViewMovementStep step,
-			   gint count,
-			   gboolean extend_selection)
+gtk_text_view_move (GtkTextView     *text_view,
+		    GtkMovementStep  step,
+		    gint             count,
+		    gboolean         extend_selection)
 {
   GtkTextIter insert;
   GtkTextIter newplace;
   
   gint cursor_x_pos = 0;
 
+  if (step == GTK_MOVEMENT_PAGES)
+    {
+      gtk_text_view_scroll_pages (text_view, count);
+      return;
+    }
+  
   gtk_text_buffer_get_iter_at_mark (text_view->buffer, &insert,
                                     gtk_text_buffer_get_mark (text_view->buffer,
                                                               "insert"));
   newplace = insert;
 
-  if (step == GTK_TEXT_MOVEMENT_WRAPPED_LINE)
+  if (step == GTK_MOVEMENT_DISPLAY_LINES)
     gtk_text_view_get_virtual_cursor_pos (text_view, &cursor_x_pos, NULL);
 
   switch (step)
     {
-    case GTK_TEXT_MOVEMENT_CHAR:
+    case GTK_MOVEMENT_CHARS:
       gtk_text_iter_forward_chars (&newplace, count);
       break;
 
-    case GTK_TEXT_MOVEMENT_POSITIONS:
+    case GTK_MOVEMENT_POSITIONS:
       gtk_text_layout_move_iter_visually (text_view->layout,
 					  &newplace, count);
       break;
 
-    case GTK_TEXT_MOVEMENT_WORD:
+    case GTK_MOVEMENT_WORDS:
       if (count < 0)
 	gtk_text_iter_backward_word_starts (&newplace, -count);
       else if (count > 0)
 	gtk_text_iter_forward_word_ends (&newplace, count);
       break;
 
-    case GTK_TEXT_MOVEMENT_WRAPPED_LINE:
+    case GTK_MOVEMENT_DISPLAY_LINES:
       gtk_text_view_move_iter_by_lines (text_view, &newplace, count);
       gtk_text_layout_move_iter_to_x (text_view->layout, &newplace, cursor_x_pos);
       break;
       
-    case GTK_TEXT_MOVEMENT_LINE:
+    case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
+      if (count > 1)
+	gtk_text_view_move_iter_by_lines (text_view, &newplace, --count);
+      else if (count < -1)
+	gtk_text_view_move_iter_by_lines (text_view, &newplace, ++count);
+
+      if (count != 0)
+	gtk_text_layout_move_iter_to_line_end (text_view->layout, &newplace, count);
+      break;
+      
+    case GTK_MOVEMENT_PARAGRAPHS:
       /* This should almost certainly instead be doing the parallel thing to WORD */
       /*       gtk_text_iter_down_lines (&newplace, count); */
       /* FIXME */
       break;
       
-    case GTK_TEXT_MOVEMENT_LINE_ENDS:
+    case GTK_MOVEMENT_PARAGRAPH_ENDS:
       if (count > 0)
 	gtk_text_iter_forward_to_newline (&newplace);
       else if (count < 0)
 	gtk_text_iter_set_line_offset (&newplace, 0);
       break;
       
-    case GTK_TEXT_MOVEMENT_BUFFER_ENDS:
+    case GTK_MOVEMENT_BUFFER_ENDS:
       if (count > 0)
 	gtk_text_buffer_get_last_iter (text_view->buffer, &newplace);
       else if (count < 0)
@@ -1922,7 +1936,7 @@ gtk_text_view_move_insert (GtkTextView *text_view,
                                     gtk_text_buffer_get_mark (text_view->buffer,
                                                               "insert"), 0);
 
-      if (step == GTK_TEXT_MOVEMENT_WRAPPED_LINE)
+      if (step == GTK_MOVEMENT_DISPLAY_LINES)
 	{
 	  gtk_text_view_set_virtual_cursor_pos (text_view, cursor_x_pos, -1);
 	}
@@ -1942,8 +1956,8 @@ gtk_text_view_set_anchor (GtkTextView *text_view)
 }
 
 static void
-gtk_text_view_scroll_text (GtkTextView *text_view,
-			   GtkTextViewScrollType type)
+gtk_text_view_scroll_pages (GtkTextView *text_view,
+			    gint         count)
 {
   gfloat newval;
   GtkAdjustment *adj;
@@ -1958,60 +1972,26 @@ gtk_text_view_scroll_text (GtkTextView *text_view,
 
   /* Validate the region that will be brought into view by the cursor motion
    */
-  switch (type)
+  if (count < 0)
     {
-    default:
-    case GTK_TEXT_SCROLL_TO_TOP:
-      gtk_text_buffer_get_iter_at_offset (text_view->buffer, &anchor, 0);
-      y0 = 0;
-      y1 = adj->page_size;
-      break;
-
-    case GTK_TEXT_SCROLL_TO_BOTTOM:
-      gtk_text_buffer_get_last_iter (text_view->buffer, &anchor);
-      y0 = -adj->page_size;
-      y1 = adj->page_size;
-      break;
-
-    case GTK_TEXT_SCROLL_PAGE_DOWN:
       gtk_text_view_get_first_para_iter (text_view, &anchor);
       y0 = adj->page_size;
-      y1 = adj->page_size + adj->page_increment;
-      break;
-
-    case GTK_TEXT_SCROLL_PAGE_UP:
-      gtk_text_view_get_first_para_iter (text_view, &anchor);
-      y0 = - adj->page_increment + adj->page_size;
-      y1 = 0;
-      break;
+      y1 = adj->page_size + count * adj->page_increment;
     }
+  else
+    {
+      gtk_text_view_get_first_para_iter (text_view, &anchor);
+      y0 = count * adj->page_increment + adj->page_size;
+      y1 = 0;
+    }
+  
   gtk_text_layout_validate_yrange (text_view->layout, &anchor, y0, y1);
 
 
   gtk_text_view_get_virtual_cursor_pos (text_view, &cursor_x_pos, &cursor_y_pos);
 
   newval = adj->value;
-  switch (type)
-    {
-    case GTK_TEXT_SCROLL_TO_TOP:
-      newval = adj->lower;
-      break;
-
-    case GTK_TEXT_SCROLL_TO_BOTTOM:
-      newval = adj->upper;
-      break;
-
-    case GTK_TEXT_SCROLL_PAGE_DOWN:
-      newval += adj->page_increment;
-      break;
-
-    case GTK_TEXT_SCROLL_PAGE_UP:
-      newval -= adj->page_increment;
-      break;
-      
-    default:
-      break;
-    }
+  newval += count * adj->page_increment;
 
   cursor_y_pos += newval - adj->value;
   set_adjustment_clamped (adj, newval);
@@ -2059,16 +2039,24 @@ find_whitepace_region (const GtkTextIter *center,
 }
 
 static void
-gtk_text_view_delete_text (GtkTextView *text_view,
-                       GtkTextViewDeleteType type,
-                       gint count)
+gtk_text_view_insert (GtkTextView *text_view,
+		      const gchar *str)
+{
+  gtk_text_buffer_insert_interactive_at_cursor (text_view->buffer, str, -1,
+						text_view->editable);
+}
+
+static void
+gtk_text_view_delete (GtkTextView   *text_view,
+			   GtkDeleteType  type,
+			   gint           count)
 {
   GtkTextIter insert;
   GtkTextIter start;
   GtkTextIter end;
   gboolean leave_one = FALSE;
   
-  if (type == GTK_TEXT_DELETE_CHAR)
+  if (type == GTK_DELETE_CHARS)
     {
       /* Char delete deletes the selection, if one exists */
       if (gtk_text_buffer_delete_selection (text_view->buffer, TRUE,
@@ -2086,27 +2074,27 @@ gtk_text_view_delete_text (GtkTextView *text_view,
   
   switch (type)
     {
-    case GTK_TEXT_DELETE_CHAR:
+    case GTK_DELETE_CHARS:
       gtk_text_iter_forward_chars (&end, count);
       break;
       
-    case GTK_TEXT_DELETE_HALF_WORD:
+    case GTK_DELETE_WORD_ENDS:
       if (count > 0)
         gtk_text_iter_forward_word_ends (&end, count);
       else if (count < 0)
         gtk_text_iter_backward_word_starts (&start, 0 - count);
       break;
       
-    case GTK_TEXT_DELETE_WHOLE_WORD:
+    case GTK_DELETE_WORDS:
       break;
       
-    case GTK_TEXT_DELETE_HALF_WRAPPED_LINE:
+    case GTK_DELETE_DISPLAY_LINE_ENDS:
       break;
 
-    case GTK_TEXT_DELETE_WHOLE_WRAPPED_LINE:
+    case GTK_DELETE_DISPLAY_LINES:
       break;
 
-    case GTK_TEXT_DELETE_HALF_LINE:
+    case GTK_DELETE_PARAGRAPH_ENDS:
       while (count > 0)
         {
           if (!gtk_text_iter_forward_to_newline (&end))
@@ -2119,7 +2107,7 @@ gtk_text_view_delete_text (GtkTextView *text_view,
          and support that */
       break;
       
-    case GTK_TEXT_DELETE_WHOLE_LINE:
+    case GTK_DELETE_PARAGRAPHS:
       if (count > 0)
         {
           gtk_text_iter_set_line_offset (&start, 0);
@@ -2138,9 +2126,7 @@ gtk_text_view_delete_text (GtkTextView *text_view,
       
       break;
 
-    case GTK_TEXT_DELETE_WHITESPACE_LEAVE_ONE:
-      leave_one = TRUE; /* FALL THRU */
-    case GTK_TEXT_DELETE_WHITESPACE:
+    case GTK_DELETE_WHITESPACE:
       {
         find_whitepace_region (&insert, &start, &end);
       }
@@ -2168,9 +2154,9 @@ gtk_text_view_delete_text (GtkTextView *text_view,
 }
 
 static void
-gtk_text_view_cut_text (GtkTextView *text_view)
+gtk_text_view_cut_clipboard (GtkTextView *text_view)
 {
-  gtk_text_buffer_cut (text_view->buffer, GDK_CURRENT_TIME, TRUE, text_view->editable);
+  gtk_text_buffer_cut_clipboard (text_view->buffer, text_view->editable);
   gtk_text_view_scroll_to_mark (text_view,
                                 gtk_text_buffer_get_mark (text_view->buffer,
                                                           "insert"),
@@ -2178,9 +2164,9 @@ gtk_text_view_cut_text (GtkTextView *text_view)
 }
 
 static void
-gtk_text_view_copy_text (GtkTextView *text_view)
+gtk_text_view_copy_clipboard (GtkTextView *text_view)
 {
-  gtk_text_buffer_copy (text_view->buffer, GDK_CURRENT_TIME);
+  gtk_text_buffer_copy_clipboard (text_view->buffer);
   gtk_text_view_scroll_to_mark (text_view,
                                 gtk_text_buffer_get_mark (text_view->buffer,
                                                           "insert"),
@@ -2188,9 +2174,9 @@ gtk_text_view_copy_text (GtkTextView *text_view)
 }
 
 static void
-gtk_text_view_paste_text (GtkTextView *text_view)
+gtk_text_view_paste_clipboard (GtkTextView *text_view)
 {
-  gtk_text_buffer_paste_clipboard (text_view->buffer, GDK_CURRENT_TIME, TRUE, text_view->editable);
+  gtk_text_buffer_paste_clipboard (text_view->buffer, text_view->editable);
   gtk_text_view_scroll_to_mark (text_view,
                                 gtk_text_buffer_get_mark (text_view->buffer,
                                                           "insert"),
@@ -2567,15 +2553,13 @@ gtk_text_view_start_selection_dnd (GtkTextView *text_view,
   GdkDragContext *context;
   GtkTargetList *target_list;
   
-  /* FIXME we have to handle more formats for the selection,
-     and do the conversions to/from UTF8 */
-  
-  /* FIXME not sure how this is memory-managed. */
-  target_list = gtk_target_list_new (target_table, n_targets);
-  
+  target_list = gtk_target_list_new (target_table, G_N_ELEMENTS (target_table));
+
   context = gtk_drag_begin (GTK_WIDGET (text_view), target_list,
                            GDK_ACTION_COPY | GDK_ACTION_MOVE,
                            1, (GdkEvent*)event);
+
+  gtk_target_list_unref (target_list);
 
   gtk_drag_set_icon_default (context);
 
@@ -2631,46 +2615,7 @@ gtk_text_view_drag_data_get (GtkWidget        *widget,
 
   if (str)
     {
-      if (info == TARGET_UTF8_STRING)
-        {
-          /* Pass raw UTF8 */
-          gtk_selection_data_set (selection_data,
-                                  utf8_atom,
-                                  8*sizeof (gchar), (guchar *)str, length);
-
-        }
-      else if (info == TARGET_STRING ||
-               info == TARGET_TEXT)
-        {
-          gchar *latin1;
-
-          latin1 = gtk_text_utf_to_latin1(str, length);
-          
-          gtk_selection_data_set (selection_data,
-                                  GDK_SELECTION_TYPE_STRING,
-                                  8*sizeof (gchar), latin1, strlen (latin1));
-          g_free (latin1);
-        }
-      else if (info == TARGET_COMPOUND_TEXT)
-        {
-          /* FIXME convert UTF8 directly to current locale, not via
-             latin1 */
-          
-          guchar *text;
-          GdkAtom encoding;
-          gint format;
-          gint new_length;
-          gchar *latin1;
-
-          latin1 = gtk_text_utf_to_latin1(str, length);
-          
-          gdk_string_to_compound_text (latin1, &encoding, &format, &text, &new_length);
-          gtk_selection_data_set (selection_data, encoding, format, text, new_length);
-          gdk_free_compound_text (text);
-
-          g_free (latin1);
-        }
-
+      gtk_selection_data_set_text (selection_data, str);
       g_free (str);
     }
 }
@@ -2792,27 +2737,10 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
   GtkTextIter drop_point;
   GtkTextView *text_view;
   GtkTextMark *drag_target_mark;
+  gchar *str;
   
-  enum {INVALID, STRING, CTEXT, UTF8} type;
-
   text_view = GTK_TEXT_VIEW (widget);
   
-  if (selection_data->type == GDK_TARGET_STRING)
-    type = STRING;
-  else if (selection_data->type == ctext_atom)
-    type = CTEXT;
-  else if (selection_data->type == utf8_atom)
-    type = UTF8;
-  else
-    type = INVALID;
-
-  if (type == INVALID || selection_data->length < 0)
-    {
-      /* I think the DND code automatically tries asking
-         for the various formats. */
-      return;
-    }
-
   drag_target_mark = gtk_text_buffer_get_mark (text_view->buffer,
                                                "__drag_target");
   
@@ -2823,71 +2751,13 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
                                     &drop_point,
                                     drag_target_mark);
 
-  
-  switch (type)
+  str = gtk_selection_data_get_text (selection_data);
+  if (str)
     {
-    case STRING:
-      {
-        gchar *utf;
-
-        utf = gtk_text_latin1_to_utf ((const gchar*)selection_data->data,
-                                      selection_data->length);
-        gtk_text_buffer_insert_interactive (text_view->buffer, &drop_point,
-                                            utf, -1,
-                                            text_view->editable);
-        g_free (utf);
-      }
-      break;
-      
-    case UTF8:
-      gtk_text_buffer_insert_interactive (text_view->buffer, &drop_point,
-                                          (const gchar *)selection_data->data,
-                                          selection_data->length,
-                                          text_view->editable);
-      break;
-      
-    case CTEXT:
-      {
-	gchar **list;
-	gint count;
-	gint i;
-
-	count = gdk_text_property_to_text_list (selection_data->type,
-						selection_data->format, 
-	      					selection_data->data,
-						selection_data->length,
-						&list);
-	for (i=0; i<count; i++)
-          {
-            /* list contains stuff in our default encoding */
-            gboolean free_utf = FALSE;
-            gchar *utf = NULL;
-            gchar *charset = NULL;
-            
-            if (g_get_charset (&charset))
-              {
-                utf = g_convert (list[i], -1,
-                                 "UTF8", charset, NULL);
-                free_utf = TRUE;
-              }
-            else
-              utf = list[i];
-
-            gtk_text_buffer_insert_interactive (text_view->buffer,
-                                                &drop_point, utf, -1,
-                                                text_view->editable);
-
-            if (free_utf)
-              g_free(utf);
-          }
-
-	if (count > 0)
-	  gdk_free_text_list (list);
-      }
-      break;
-      
-    case INVALID:		/* quiet compiler */
-      break;
+      gtk_text_buffer_insert_interactive (text_view->buffer,
+					  &drop_point, str, -1,
+					  text_view->editable);
+      g_free (str);
     }
 }
 
@@ -3029,7 +2899,7 @@ gtk_text_view_commit_handler (GtkIMContext  *context,
   else
     {
       if (text_view->overwrite_mode)
-	gtk_text_view_delete_text (text_view, GTK_TEXT_DELETE_CHAR, 1);
+	gtk_text_view_delete (text_view, GTK_DELETE_CHARS, 1);
       gtk_text_buffer_insert_interactive_at_cursor (text_view->buffer, str, -1,
                                                     text_view->editable);
     }

@@ -9,37 +9,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-typedef enum {
-  GTK_TEXT_MOVEMENT_CHAR,       /* move by forw/back chars */
-  GTK_TEXT_MOVEMENT_POSITIONS,  /* move by left/right chars */
-  GTK_TEXT_MOVEMENT_WORD,       /* move by forward/back words */
-  GTK_TEXT_MOVEMENT_WRAPPED_LINE,       /* move up/down lines (wrapped lines) */
-  GTK_TEXT_MOVEMENT_LINE,  /* move up/down paragraphs (newline-ended lines) */
-  GTK_TEXT_MOVEMENT_LINE_ENDS,   /* move to either end of a paragraph */
-  GTK_TEXT_MOVEMENT_BUFFER_ENDS       /* move to ends of the buffer */
-} GtkTextViewMovementStep;
-
-typedef enum {
-  GTK_TEXT_SCROLL_TO_TOP,
-  GTK_TEXT_SCROLL_TO_BOTTOM,
-  GTK_TEXT_SCROLL_PAGE_DOWN,
-  GTK_TEXT_SCROLL_PAGE_UP
-} GtkTextViewScrollType;
-
-typedef enum {
-  GTK_TEXT_DELETE_CHAR,
-  GTK_TEXT_DELETE_HALF_WORD, /* delete only the portion of the word to the
-                                 left/right of cursor if we're in the middle
-                                 of a word */
-  GTK_TEXT_DELETE_WHOLE_WORD,
-  GTK_TEXT_DELETE_HALF_WRAPPED_LINE,
-  GTK_TEXT_DELETE_WHOLE_WRAPPED_LINE,
-  GTK_TEXT_DELETE_HALF_LINE,  /* like C-k in Emacs (or its reverse) */
-  GTK_TEXT_DELETE_WHOLE_LINE, /* C-k in pico, kill whole line */
-  GTK_TEXT_DELETE_WHITESPACE,      /* M-\ in Emacs */
-  GTK_TEXT_DELETE_WHITESPACE_LEAVE_ONE /* M-space in Emacs */
-} GtkTextViewDeleteType;
-
 #define GTK_TYPE_TEXT_VIEW             (gtk_text_view_get_type())
 #define GTK_TEXT_VIEW(obj)             (GTK_CHECK_CAST ((obj), GTK_TYPE_TEXT_VIEW, GtkTextView))
 #define GTK_TEXT_VIEW_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_VIEW, GtkTextViewClass))
@@ -107,17 +76,16 @@ struct _GtkTextViewClass {
   /* These are all RUN_ACTION signals for keybindings */
 
   /* move insertion point */
-  void (* move_insert) (GtkTextView *text_view, GtkTextViewMovementStep step, gint count, gboolean extend_selection);
+  void (* move)        (GtkTextView *text_view, GtkMovementStep step, gint count, gboolean extend_selection);
   /* move the "anchor" (what Emacs calls the mark) to the cursor position */
   void (* set_anchor)  (GtkTextView *text_view);
-  /* Scroll */
-  void (* scroll_text) (GtkTextView *text_view, GtkTextViewScrollType type);
   /* Deletions */
-  void (* delete_text) (GtkTextView *text_view, GtkTextViewDeleteType type, gint count);
+  void (* insert)      (GtkTextView *text_view, const gchar *str);
+  void (* delete)      (GtkTextView *text_view, GtkDeleteType type, gint count);
   /* cut copy paste */
-  void (* cut_text)    (GtkTextView *text_view);
-  void (* copy_text)    (GtkTextView *text_view);
-  void (* paste_text)    (GtkTextView *text_view);
+  void (* cut_clipboard)   (GtkTextView *text_view);
+  void (* copy_clipboard)  (GtkTextView *text_view);
+  void (* paste_clipboard) (GtkTextView *text_view);
   /* overwrite */
   void (* toggle_overwrite) (GtkTextView *text_view);
   void  (*set_scroll_adjustments)   (GtkTextView    *text_view,

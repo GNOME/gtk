@@ -179,7 +179,9 @@ guint	   gtk_key_snooper_install (GtkKeySnoopFunc snooper,
 				    gpointer	    func_data);
 void	   gtk_key_snooper_remove  (guint	    snooper_handler_id);
   
-GdkEvent*  gtk_get_current_event   (void);
+GdkEvent*  gtk_get_current_event      (void);
+guint32    gtk_get_current_event_time (void);
+
 GtkWidget* gtk_get_event_widget	   (GdkEvent	   *event);
 
 

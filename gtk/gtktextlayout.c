@@ -2062,6 +2062,60 @@ gtk_text_layout_move_iter_to_next_line (GtkTextLayout *layout,
 }
 
 /**
+ * gtk_text_layout_move_iter_to_line_end:
+ * @layout: a #GtkTextLayout
+ * @direction: if negative, move to beginning of line, otherwise
+               move to end of line.
+ * 
+ * Move to the beginning or end of a display line.
+ **/
+void
+gtk_text_layout_move_iter_to_line_end (GtkTextLayout *layout,
+				       GtkTextIter   *iter,
+				       gint           direction)
+{
+  GtkTextLine *line;
+  GtkTextLineDisplay *display;
+  gint line_byte;
+  gint byte_offset = 0;
+  GSList *tmp_list;
+  
+  g_return_if_fail (layout != NULL);
+  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
+  g_return_if_fail (iter != NULL);
+  
+  line = gtk_text_iter_get_text_line (iter);
+  line_byte = gtk_text_iter_get_line_index (iter);
+  
+  display = gtk_text_layout_get_line_display (layout, line, FALSE);
+
+  tmp_list = pango_layout_get_lines (display->layout);
+  while (tmp_list)
+    {
+      PangoLayoutLine *layout_line = tmp_list->data;
+
+      if (line_byte < byte_offset + layout_line->length || !tmp_list->next)
+	{
+	  gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
+					   iter, line,
+					   direction < 0 ? byte_offset : layout_line->length);
+
+	  /* FIXME: Move back one position to avoid going to next line
+	   */
+	  if (direction < 0 && layout_line->length > 0)
+	    gtk_text_iter_prev_char (iter);
+
+	  break;
+	}
+      
+      byte_offset += layout_line->length;
+      tmp_list = tmp_list->next;
+    }
+  
+  gtk_text_layout_free_line_display (layout, display);
+}
+
+/**
  * gtk_text_layout_move_iter_to_x:
  * @layout: a #GtkTextLayout
  * @iter:   a #GtkTextIter

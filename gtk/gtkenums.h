@@ -66,6 +66,19 @@ typedef enum
   GTK_CURVE_TYPE_FREE          /* free form curve */
 } GtkCurveType;
  
+typedef enum {
+  GTK_DELETE_CHARS,
+  GTK_DELETE_WORD_ENDS,           /* delete only the portion of the word to the
+                                   * left/right of cursor if we're in the middle
+                                   * of a word */
+  GTK_DELETE_WORDS,
+  GTK_DELETE_DISPLAY_LINES,
+  GTK_DELETE_DISPLAY_LINE_ENDS,
+  GTK_DELETE_PARAGRAPH_ENDS,      /* like C-k in Emacs (or its reverse) */
+  GTK_DELETE_PARAGRAPHS,          /* C-k in pico, kill whole line */
+  GTK_DELETE_WHITESPACE,          /* M-\ in Emacs */
+} GtkDeleteType;
+
 /* Focus movement types */
 typedef enum
 {
@@ -127,6 +140,18 @@ typedef enum
   GTK_INCHES,
   GTK_CENTIMETERS
 } GtkMetricType;
+
+typedef enum {
+  GTK_MOVEMENT_CHARS,             /* move by forw/back chars */
+  GTK_MOVEMENT_POSITIONS,         /* move by left/right chars */
+  GTK_MOVEMENT_WORDS,             /* move by forward/back words */
+  GTK_MOVEMENT_DISPLAY_LINES,     /* move up/down lines (wrapped lines) */
+  GTK_MOVEMENT_DISPLAY_LINE_ENDS, /* move up/down lines (wrapped lines) */
+  GTK_MOVEMENT_PARAGRAPHS,        /* move up/down paragraphs (newline-ended lines) */
+  GTK_MOVEMENT_PARAGRAPH_ENDS,    /* move to either end of a paragraph */
+  GTK_MOVEMENT_PAGES,	          /* move by pages */
+  GTK_MOVEMENT_BUFFER_ENDS        /* move to ends of the buffer */
+} GtkMovementStep;
 
 /* Orientation for toolbars, etc. */
 typedef enum
