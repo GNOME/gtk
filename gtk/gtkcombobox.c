@@ -4400,6 +4400,7 @@ gtk_combo_box_set_model (GtkComboBox  *combo_box,
       /* list mode */
       gtk_tree_view_set_model (GTK_TREE_VIEW (combo_box->priv->tree_view),
                                combo_box->priv->model);
+      gtk_combo_box_list_popup_resize (combo_box);
     }
   else
     {
