@@ -42,8 +42,7 @@ typedef enum {
   GDK_DEBUG_MISC          = 1 << 0,
   GDK_DEBUG_EVENTS        = 1 << 1,
   GDK_DEBUG_DND           = 1 << 2,
-  GDK_DEBUG_COLOR_CONTEXT = 1 << 3,
-  GDK_DEBUG_XIM           = 1 << 4
+  GDK_DEBUG_XIM           = 1 << 3
 } GdkDebugFlag;
 
 extern gint		 gdk_debug_level;

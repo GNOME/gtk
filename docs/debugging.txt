@@ -67,15 +67,9 @@ For instance:
 
 runs testgtk with the 'misc' and 'events' debugging options.
 
- GTK_DEBUG
- ---------
+See glib/docs/debugging.txt for information about debugging signal emission 
+and the object system.
 
- Application relevant options:
-
- 'objects' - Trace the creation and destruction of objects, print
-             out a summary at program termination
-
- Options only interesting to library maintainers:
 
  GDK_DEBUG
  ---------
@@ -88,9 +82,18 @@ runs testgtk with the 'misc' and 'events' debugging options.
 
  'misc'          - Miscellaneous information
  'dnd'           - Information about drag-and-drop
- 'color-context' - Information about the internal workings of 
-                   GdkColorContext
  'xim'           - Information about X Input Method support
+
+
+ GTK_DEBUG
+ ---------
+
+ Options only interesting to library maintainers:
+
+ 'misc'          - Miscellaneous information
+ 'text'          - Information about text widget internals
+ 'tree'          - Information about tree widget internals
+ 'updates'       - Visual feedback about window updates
 
 
                                     - Owen Taylor <owt1@cornell.edu>

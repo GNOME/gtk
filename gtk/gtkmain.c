@@ -144,7 +144,6 @@ guint gtk_debug_flags = 0;		   /* Global GTK debug flag */
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gtk_debug_keys[] = {
   {"misc", GTK_DEBUG_MISC},
-  {"dnd", GTK_DEBUG_DND},
   {"plugsocket", GTK_DEBUG_PLUGSOCKET},
   {"text", GTK_DEBUG_TEXT},
   {"tree", GTK_DEBUG_TREE},

@@ -1,10 +1,16 @@
+2001-08-13  Matthias Clasen  <matthiasc@waldgeist.poet.de>
+
+	* gtk/docs/debugging.txt, gdk/gdk.c, gdk/gdkinternals.h, 
+	gdk/x11/gdkmain-x11.c, gtk/gtkdebug.h, gtk/gtkmain.c: Update 
+	debugging info, remove unused debug flags. (#58330)
+
 Mon Aug 13 13:17:32 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeselection.c (gtk_tree_selection_select_all): 
 	(gtk_tree_selection_select_all): Remove strict checking for rows.
 
 2001-08-13  Matthias Clasen  <matthiasc@waldgeist.poet.de>
-
+	
 	* gtk/gtktooltips.c (gtk_tooltips_set_tip, gtk_tooltips_draw_tips): 
 	Don't remove the tooltip window when the tip text changes. (#15891)
 
