@@ -1,3 +1,6 @@
+2000-02-14  Elliot Lee  <sopwith@redhat.com>
+	* gdk-pixbuf/gdk-pixbuf.h, gdk-pixbuf/gdk-pixbuf-data.c: Make passed-in argument 'const'.
+
 2000-02-04  Michael Meeks  <mmeeks@gnu.org>
 
 	* gdk-pixbuf/io-gif.c (struct _GifContext): add x,y_offset.

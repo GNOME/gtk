@@ -111,7 +111,7 @@ GdkPixbuf *gdk_pixbuf_new (ArtPixFormat format, gboolean has_alpha, int bits_per
 
 GdkPixbuf *gdk_pixbuf_new_from_file (const char *filename);
 
-GdkPixbuf *gdk_pixbuf_new_from_data (guchar *data,
+GdkPixbuf *gdk_pixbuf_new_from_data (const guchar *data,
 				     ArtPixFormat format,
 				     gboolean has_alpha,
 				     int width, int height,

@@ -43,7 +43,7 @@
  * 1.
  **/
 GdkPixbuf *
-gdk_pixbuf_new_from_data (guchar *data, ArtPixFormat format, gboolean has_alpha,
+gdk_pixbuf_new_from_data (const guchar *data, ArtPixFormat format, gboolean has_alpha,
 			  int width, int height, int rowstride,
 			  ArtDestroyNotify dfunc, gpointer dfunc_data)
 {
@@ -57,10 +57,10 @@ gdk_pixbuf_new_from_data (guchar *data, ArtPixFormat format, gboolean has_alpha,
 	g_return_val_if_fail (height > 0, NULL);
 
 	if (has_alpha)
-		art_pixbuf = art_pixbuf_new_rgba_dnotify (data, width, height, rowstride,
+		art_pixbuf = art_pixbuf_new_rgba_dnotify ((art_u8 *)data, width, height, rowstride,
 							  dfunc_data, dfunc);
 	else
-		art_pixbuf = art_pixbuf_new_rgb_dnotify (data, width, height, rowstride,
+		art_pixbuf = art_pixbuf_new_rgb_dnotify ((art_u8 *)data, width, height, rowstride,
 							 dfunc_data, dfunc);
 
 	g_assert (art_pixbuf != NULL);
