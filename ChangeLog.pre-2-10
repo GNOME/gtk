@@ -1,3 +1,7 @@
+2001-12-04  Matt Wilson  <msw@redhat.com>
+
+	* gtk/gtktreestore.c (gtk_tree_store_insert): fixed docs
+
 Tue Dec  4 12:16:31 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksettings.c (gtk_settings_set_property_value):

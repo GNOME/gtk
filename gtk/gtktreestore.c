@@ -1047,7 +1047,7 @@ gtk_tree_store_remove (GtkTreeStore *tree_store,
 
 /**
  * gtk_tree_store_insert:
- * @tree_store: A #GtkListStore
+ * @tree_store: A #GtkTreeStore
  * @iter: An unset #GtkTreeIter to set to the new row
  * @parent: A valid #GtkTreeIter, or %NULL
  * @position: position to insert the new row
@@ -1057,8 +1057,8 @@ gtk_tree_store_remove (GtkTreeStore *tree_store,
  * If @position is larger than the number of rows at that level, then the new
  * row will be inserted to the end of the list.  @iter will be changed to point
  * to this new row.  The row will be empty before this function is called.  To
- * fill in values, you need to call gtk_list_store_set() or
- * gtk_list_store_set_value().
+ * fill in values, you need to call gtk_tree_store_set() or
+ * gtk_tree_store_set_value().
  *
  **/
 void
