@@ -793,6 +793,9 @@ gtk_handle_box_button_changed (GtkWidget      *widget,
 
   hb = GTK_HANDLE_BOX (widget);
 
+  if (event->window != hb->bin_window)
+    return FALSE;
+
   event_handled = FALSE;
   if (event->button == 1 &&
       event->type == GDK_BUTTON_PRESS)
@@ -876,6 +879,9 @@ gtk_handle_box_motion (GtkWidget      *widget,
 
   hb = GTK_HANDLE_BOX (widget);
   if (!hb->in_drag)
+    return FALSE;
+
+  if (event->window != hb->bin_window)
     return FALSE;
 
   ox = 0;

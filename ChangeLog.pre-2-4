@@ -1,3 +1,9 @@
+1998-08-20  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_button_changed): Do not do
+	anything if the event's window is not the bin window.
+	(gtk_handle_box_motion): Likewise.
+
 1998-08-19  Raph Levien  <raph@gimp.org>
 
 	* gtk/testgtk.c (create_color_preview): pushed the colormap and
