@@ -480,13 +480,9 @@ gtk_list_store_iter_next (GtkTreeModel  *tree_model,
   g_return_val_if_fail (GTK_IS_LIST_STORE (tree_model), FALSE);
   g_return_val_if_fail (GTK_LIST_STORE (tree_model)->stamp == iter->stamp, FALSE);
 
-  if (G_SLIST (iter->user_data)->next)
-    {
-      iter->user_data = G_SLIST (iter->user_data)->next;
-      return TRUE;
-    }
-  else
-    return FALSE;
+  iter->user_data = G_SLIST (iter->user_data)->next;
+
+  return (iter->user_data != NULL);
 }
 
 static gboolean

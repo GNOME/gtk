@@ -1,3 +1,22 @@
+Tue May 22 15:13:52 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkcellrenderertext.c
+	(gtk_cell_renderer_text_set_fixed_size): Evil function to deal
+	with very large (TM) amounts of text.  May be moved to
+	GtkCellRenderer in the future, though I'm not sure it wants to be
+	this accessible.
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_update_button):
+	More sanity brought to this class.  I like it.
+
+	* tests/testtreecolumns.c (ViewColumnModel): Amazingly scary test
+	case.  Kids, don't try this at home.
+
+	* gtk/gtktreemodel.c (gtk_tree_model_get_iter_root): new
+	convenience function.
+
+	* gtk/gtkwindow.c (gtk_window_set_geometry_hints): Fix typo in docs.
+
 2001-05-21  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkfontsel.c:

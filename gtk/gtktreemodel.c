@@ -653,10 +653,9 @@ gtk_tree_model_get_iter (GtkTreeModel *tree_model,
   gint *indices;
   gint depth, i;
 
-  g_return_val_if_fail (tree_model != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
 
   if (GTK_TREE_MODEL_GET_IFACE (tree_model)->get_iter != NULL)
     return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->get_iter) (tree_model, iter, path);
@@ -677,6 +676,33 @@ gtk_tree_model_get_iter (GtkTreeModel *tree_model,
     }
 
   return TRUE;
+}
+
+
+/**
+ * gtk_tree_model_get_iter_root:
+ * @tree_model: A #GtkTreeModel.
+ * @iter: The uninitialized #GtkTreeIter.
+ * 
+ * Gets the root iter, if it exists.
+ * 
+ * Return value: TRUE, if @iter was set.
+ **/
+gboolean
+gtk_tree_model_get_iter_root (GtkTreeModel *tree_model,
+			      GtkTreeIter  *iter)
+{
+  GtkTreePath *path;
+  gboolean retval;
+
+  g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  path = gtk_tree_path_new_root ();
+  retval = gtk_tree_model_get_iter (tree_model, iter, path);
+  gtk_tree_path_free (path);
+
+  return retval;
 }
 
 /**

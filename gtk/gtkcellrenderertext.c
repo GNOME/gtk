@@ -1087,6 +1087,16 @@ gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
   PangoRectangle rect;
   PangoLayout *layout;
 
+  if (celltext->fixed_size)
+    {
+      if (width)
+	*width = celltext->width;
+      if (height)
+	*height = celltext->height;
+
+      return;
+    }
+  
   layout = get_layout (celltext, widget, FALSE, 0);
   pango_layout_get_pixel_extents (layout, NULL, &rect);
 
@@ -1174,4 +1184,32 @@ gtk_cell_renderer_text_render (GtkCellRenderer    *cell,
                     layout);
 
   g_object_unref (G_OBJECT (layout));
+}
+
+/**
+ * gtk_cell_renderer_text_set_fixed_size:
+ * @renderer: A #GtkCellRendererText
+ * @fixed_size: TRUE if the renderer should be a fixed height.
+ * @width: The width of the cell
+ * @height: The height it of the cell, or -1
+ * 
+ * Sets the height of a renderer to explicitly be a certain size.  This
+ * function is unflexible, and should really only be used if calculating the
+ * size of a cell is too slow.
+ **/
+void
+gtk_cell_renderer_text_set_fixed_size (GtkCellRendererText *renderer,
+				       gboolean             fixed_size,
+				       gint                 width,
+				       gint                 height)
+{
+  g_return_if_fail (GTK_IS_CELL_RENDERER_TEXT (renderer));
+
+  if (renderer->fixed_size == (fixed_size)?TRUE:FALSE)
+    return;
+
+  renderer->fixed_size = (fixed_size)?TRUE:FALSE;
+  renderer->height = height;
+  renderer->width = width;
+    
 }

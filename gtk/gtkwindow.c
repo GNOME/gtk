@@ -1451,7 +1451,7 @@ gtk_window_get_geometry_info (GtkWindow *window,
 
 /**
  * gtk_window_set_geometry_hints:
- * @window: a #GdkWindow
+ * @window: a #GtkWindow
  * @geometry_widget: widget the geometry hints will be applied to
  * @geometry: struct containing geometry information
  * @geom_mask: mask indicating which struct fields should be paid attention to

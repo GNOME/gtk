@@ -10,6 +10,384 @@ GtkTreeModel *bottom_right_tree_model;
 GtkWidget *sample_tree_view_top;
 GtkWidget *sample_tree_view_bottom;
 
+#define column_data "my_column_data"
+
+
+
+/* Kids, don't try this at home.
+ */
+
+/* Small GtkTreeModel to model columns */
+typedef struct _ViewColumnModel ViewColumnModel;
+typedef struct _ViewColumnModelClass ViewColumnModelClass;
+
+struct _ViewColumnModel
+{
+  GObject parent;
+  GtkTreeView *view;
+  GList *columns;
+  gint stamp;
+};
+
+struct _ViewColumnModelClass
+{
+  GObjectClass parent_class;
+};
+
+static void view_column_model_class_init (ViewColumnModelClass *model)
+{
+}
+
+static void view_column_model_init (ViewColumnModel *model)
+{
+  model->stamp = g_random_int ();
+}
+
+static gint
+view_column_model_get_n_columns (GtkTreeModel *tree_model)
+{
+  return 2;
+}
+
+static GType
+view_column_model_get_column_type (GtkTreeModel *tree_model,
+				   gint          index)
+{
+  switch (index)
+    {
+    case 0:
+      return G_TYPE_STRING;
+    case 1:
+      return GTK_TYPE_TREE_VIEW_COLUMN;
+    default:
+      return G_TYPE_INVALID;
+    }
+}
+
+static gboolean
+view_column_model_get_iter (GtkTreeModel *tree_model,
+			    GtkTreeIter  *iter,
+			    GtkTreePath  *path)
+
+{
+  ViewColumnModel *view_model = (ViewColumnModel *)tree_model;
+  GList *list;
+  gint i;
+
+  g_return_val_if_fail (gtk_tree_path_get_depth (path) > 0, FALSE);
+
+  i = gtk_tree_path_get_indices (path)[0];
+  list = g_list_nth (view_model->columns, i);
+
+  if (list == NULL)
+    return FALSE;
+
+  iter->stamp = view_model->stamp;
+  iter->user_data = list;
+
+  return TRUE;
+}
+
+static GtkTreePath *
+view_column_model_get_path (GtkTreeModel *tree_model,
+			    GtkTreeIter  *iter)
+{
+  ViewColumnModel *view_model = (ViewColumnModel *)tree_model;
+  GtkTreePath *retval;
+  GList *list;
+  gint i = 0;
+
+  g_return_val_if_fail (iter->stamp == view_model->stamp, NULL);
+
+  for (list = view_model->columns; list; list = list->next)
+    {
+      if (list == (GList *)iter->user_data)
+	break;
+      i++;
+    }
+  if (list == NULL)
+    return NULL;
+
+  retval = gtk_tree_path_new ();
+  gtk_tree_path_append_index (retval, i);
+  return retval;
+}
+
+static void
+view_column_model_get_value (GtkTreeModel *tree_model,
+			     GtkTreeIter  *iter,
+			     gint          column,
+			     GValue       *value)
+{
+  ViewColumnModel *view_model = (ViewColumnModel *)tree_model;
+
+  g_return_if_fail (column < 2);
+  g_return_if_fail (view_model->stamp == iter->stamp);
+  g_return_if_fail (iter->user_data != NULL);
+
+  if (column == 0)
+    {
+      g_value_init (value, G_TYPE_STRING);
+      g_value_set_string (value, gtk_tree_view_column_get_title (GTK_TREE_VIEW_COLUMN (((GList *)iter->user_data)->data)));
+    }
+  else
+    {
+      g_value_init (value, GTK_TYPE_TREE_VIEW_COLUMN);
+      g_value_set_object (value, ((GList *)iter->user_data)->data);
+    }
+}
+
+static gboolean
+view_column_model_iter_next (GtkTreeModel  *tree_model,
+			     GtkTreeIter   *iter)
+{
+  ViewColumnModel *view_model = (ViewColumnModel *)tree_model;
+
+  g_return_val_if_fail (view_model->stamp == iter->stamp, FALSE);
+  g_return_val_if_fail (iter->user_data != NULL, FALSE);
+
+  iter->user_data = ((GList *)iter->user_data)->next;
+  return iter->user_data != NULL;
+}
+
+static gboolean
+view_column_model_iter_children (GtkTreeModel *tree_model,
+				 GtkTreeIter  *iter,
+				 GtkTreeIter  *parent)
+{
+  ViewColumnModel *view_model = (ViewColumnModel *)tree_model;
+
+  /* this is a list, nodes have no children */
+  if (parent)
+    return FALSE;
+
+  /* but if parent == NULL we return the list itself as children of the
+   * "root"
+   */
+
+  if (view_model->columns)
+    {
+      iter->stamp = view_model->stamp;
+      iter->user_data = view_model->columns;
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
+
+static gboolean
+view_column_model_iter_has_child (GtkTreeModel *tree_model,
+				  GtkTreeIter  *iter)
+{
+  return FALSE;
+}
+
+static gint
+view_column_model_iter_n_children (GtkTreeModel *tree_model,
+				   GtkTreeIter  *iter)
+{
+  return g_list_length (((ViewColumnModel *)tree_model)->columns);
+}
+
+static gint
+view_column_model_iter_nth_child (GtkTreeModel *tree_model,
+ 				  GtkTreeIter  *iter,
+				  GtkTreeIter  *parent,
+				  gint          n)
+{
+  ViewColumnModel *view_model = (ViewColumnModel *)tree_model;
+
+  if (parent)
+    return FALSE;
+
+  iter->stamp = view_model->stamp;
+  iter->user_data = g_list_nth ((GList *)view_model->columns, n);
+
+  return (iter->user_data != NULL);
+}
+
+static gboolean
+view_column_model_iter_parent (GtkTreeModel *tree_model,
+			       GtkTreeIter  *iter,
+			       GtkTreeIter  *child)
+{
+  return FALSE;
+}
+
+static void
+view_column_model_tree_model_init (GtkTreeModelIface *iface)
+{
+  iface->get_n_columns = view_column_model_get_n_columns;
+  iface->get_column_type = view_column_model_get_column_type;
+  iface->get_iter = view_column_model_get_iter;
+  iface->get_path = view_column_model_get_path;
+  iface->get_value = view_column_model_get_value;
+  iface->iter_next = view_column_model_iter_next;
+  iface->iter_children = view_column_model_iter_children;
+  iface->iter_has_child = view_column_model_iter_has_child;
+  iface->iter_n_children = view_column_model_iter_n_children;
+  iface->iter_nth_child = view_column_model_iter_nth_child;
+  iface->iter_parent = view_column_model_iter_parent;
+}
+
+
+GType
+view_column_model_get_type (void)
+{
+  static GType view_column_model_type = 0;
+
+  if (!view_column_model_type)
+    {
+      static const GTypeInfo view_column_model_info =
+      {
+	sizeof (GtkListStoreClass),
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+        (GClassInitFunc) view_column_model_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+        sizeof (GtkListStore),
+	0,
+        (GInstanceInitFunc) view_column_model_init,
+      };
+
+      static const GInterfaceInfo tree_model_info =
+      {
+	(GInterfaceInitFunc) view_column_model_tree_model_init,
+	NULL,
+	NULL
+      };
+
+      view_column_model_type = g_type_register_static (G_TYPE_OBJECT, "ViewModelColumn", &view_column_model_info, 0);
+      g_type_add_interface_static (view_column_model_type,
+				   GTK_TYPE_TREE_MODEL,
+				   &tree_model_info);
+    }
+
+  return view_column_model_type;
+}
+
+static void
+update_columns (GtkTreeView *view, ViewColumnModel *view_model)
+{
+  GList *old_columns = view_model->columns;
+  gint old_length, length;
+  GList *a, *b;
+
+  view_model->columns = gtk_tree_view_get_columns (view_model->view);
+
+  /* As the view tells us one change at a time, we can do this hack. */
+  length = g_list_length (view_model->columns);
+  old_length = g_list_length (old_columns);
+  if (length != old_length)
+    {
+      GtkTreePath *path;
+      gint i = 0;
+
+      /* where are they different */
+      for (a = old_columns, b = view_model->columns; a && b; a = a->next, b = b->next)
+	{
+	  if (a->data != b->data)
+	    break;
+	  i++;
+	}
+      path = gtk_tree_path_new ();
+      gtk_tree_path_append_index (path, i);
+      if (length < old_length)
+	{
+	  view_model->stamp++;
+	  gtk_tree_model_deleted (GTK_TREE_MODEL (view_model), path);
+	}
+      else
+	{
+	  GtkTreeIter iter;
+	  iter.stamp = view_model->stamp;
+	  iter.user_data = b;
+	  gtk_tree_model_inserted (GTK_TREE_MODEL (view_model), path, &iter);
+	}
+      gtk_tree_path_free (path);
+    }
+  else
+    {
+      gint i;
+      gint m = 0, n = 1;
+      gint *new_order;
+      GtkTreePath *path;
+
+      new_order = g_new (int, length);
+      a = old_columns; b = view_model->columns;
+
+      while (a->data == b->data)
+	{
+	  a = a->next;
+	  b = b->next;
+	  if (a == NULL)
+	    return;
+	  m++;
+	}
+
+      if (a->next->data == b->data)
+	{
+	  b = b->next;
+	  while (b->data != a->data)
+	    {
+	      b = b->next;
+	      n++;
+	    }
+	  for (i = 0; i < m; i++)
+	    new_order[i] = i;
+	  for (i = m; i < m+n; i++)
+	    new_order[i] = i+1;
+	  new_order[i] = m;
+	  for (i = m + n +1; i < length; i++)
+	    new_order[i] = i;
+	}
+      else
+	{
+	  a = a->next;
+	  while (a->data != b->data)
+	    {
+	      a = a->next;
+	      n++;
+	    }
+	  for (i = 0; i < m; i++)
+	    new_order[i] = i;
+	  new_order[m] = m+n;
+	  for (i = m+1; i < m + n+ 1; i++)
+	    new_order[i] = i - 1;
+	  for (i = m + n + 1; i < length; i++)
+	    new_order[i] = i;
+	}
+
+      path = gtk_tree_path_new ();
+      gtk_tree_model_reordered (GTK_TREE_MODEL (view_model),
+				path,
+				NULL,
+				new_order);
+      gtk_tree_path_free (path);
+      g_free (new_order);
+    }
+  if (old_columns)
+    g_list_free (old_columns);
+}
+
+static GtkTreeModel *
+view_column_model_new (GtkTreeView *view)
+{
+  GtkTreeModel *retval;
+
+  retval = GTK_TREE_MODEL (g_object_new (view_column_model_get_type (), NULL));
+  ((ViewColumnModel *)retval)->view = view;
+  ((ViewColumnModel *)retval)->columns = gtk_tree_view_get_columns (view);
+
+  gtk_signal_connect (GTK_OBJECT (view), "columns_changed", GTK_SIGNAL_FUNC (update_columns), retval);
+
+  return retval;
+}
+
+/* Back to sanity.
+ */
+
 static void
 add_clicked (GtkWidget *button, gpointer data)
 {
@@ -23,12 +401,11 @@ add_clicked (GtkWidget *button, gpointer data)
 
   cell = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (label, cell, "text", 0, NULL);
+  g_object_set_data_full (G_OBJECT (column), column_data, label, g_free);
   gtk_tree_view_column_set_reorderable (column, TRUE);
   gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_RESIZEABLE);
-  gtk_tree_view_column_set_clickable (column, FALSE);
   gtk_list_store_append (GTK_LIST_STORE (left_tree_model), &iter);
   gtk_list_store_set (GTK_LIST_STORE (left_tree_model), &iter, 0, label, 1, column, -1);
-  g_free (label);
   i++;
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (left_tree_view));
@@ -77,7 +454,8 @@ set_visible (GtkCellRendererToggle *cell,
 }
 
 static void
-add_left_clicked (GtkWidget *button, gpointer data)
+add_left_clicked (GtkWidget *button,
+		  gpointer data)
 {
   GtkTreeIter iter;
   gchar *label;
@@ -94,7 +472,7 @@ add_left_clicked (GtkWidget *button, gpointer data)
   else
     gtk_tree_view_remove_column (GTK_TREE_VIEW (sample_tree_view_bottom), column);
 
-  gtk_list_store_remove (GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (data))), &iter);
+  /*  gtk_list_store_remove (GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (data))), &iter);*/
 
   /* Put it back on the left */
   gtk_list_store_append (GTK_LIST_STORE (left_tree_model), &iter);
@@ -103,7 +481,6 @@ add_left_clicked (GtkWidget *button, gpointer data)
   gtk_tree_selection_select_iter (selection, &iter);
   g_free (label);
 }
-
 
 
 static void
@@ -120,12 +497,6 @@ add_right_clicked (GtkWidget *button, gpointer data)
 		      &iter, 0, &label, 1, &column, -1);
   gtk_list_store_remove (GTK_LIST_STORE (left_tree_model), &iter);
 
-  gtk_list_store_append (GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (data))), &iter);
-  gtk_list_store_set (GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (data))), &iter, 0, label, 1, column, -1);
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (data));
-  gtk_tree_selection_select_iter (selection, &iter);
-
   if (GTK_WIDGET (data) == top_right_tree_view)
     gtk_tree_view_append_column (GTK_TREE_VIEW (sample_tree_view_top), column);
   else
@@ -141,7 +512,6 @@ selection_changed (GtkTreeSelection *selection, GtkWidget *button)
   else
     gtk_widget_set_sensitive (button, FALSE);
 }
-
 
 static GtkTargetEntry row_targets[] = {
   { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_APP, 0}
@@ -164,11 +534,13 @@ main (int argc, char *argv[])
 
   /* First initialize all the models for signal purposes */
   left_tree_model = (GtkTreeModel *) gtk_list_store_new_with_types (2, G_TYPE_STRING, GTK_TYPE_POINTER);
-  top_right_tree_model = (GtkTreeModel *) gtk_list_store_new_with_types (2, G_TYPE_STRING, GTK_TYPE_POINTER);
-  bottom_right_tree_model = (GtkTreeModel *) gtk_list_store_new_with_types (2, G_TYPE_STRING, GTK_TYPE_POINTER);
+  sample_model = (GtkTreeModel *) gtk_list_store_new_with_types (1, G_TYPE_STRING);
+  sample_tree_view_top = gtk_tree_view_new_with_model (sample_model);
+  sample_tree_view_bottom = gtk_tree_view_new_with_model (sample_model);
+  top_right_tree_model = (GtkTreeModel *) view_column_model_new (GTK_TREE_VIEW (sample_tree_view_top));
+  bottom_right_tree_model = (GtkTreeModel *) view_column_model_new (GTK_TREE_VIEW (sample_tree_view_bottom));
   top_right_tree_view = gtk_tree_view_new_with_model (top_right_tree_model);
   bottom_right_tree_view = gtk_tree_view_new_with_model (bottom_right_tree_model);
-  sample_model = (GtkTreeModel *) gtk_list_store_new_with_types (1, G_TYPE_STRING);
 
   for (i = 0; i < 10; i++)
     {
@@ -181,17 +553,17 @@ main (int argc, char *argv[])
 
   /* Set up the test windows. */
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
   gtk_window_set_title (GTK_WINDOW (window), "Top Window");
   swindow = gtk_scrolled_window_new (NULL, NULL);
-  sample_tree_view_top = gtk_tree_view_new_with_model (sample_model);
   gtk_container_add (GTK_CONTAINER (window), swindow);
   gtk_container_add (GTK_CONTAINER (swindow), sample_tree_view_top);
   gtk_widget_show_all (window);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
   gtk_window_set_title (GTK_WINDOW (window), "Bottom Window");
   swindow = gtk_scrolled_window_new (NULL, NULL);
-  sample_tree_view_bottom = gtk_tree_view_new_with_model (sample_model);
   gtk_container_add (GTK_CONTAINER (window), swindow);
   gtk_container_add (GTK_CONTAINER (swindow), sample_tree_view_bottom);
   gtk_widget_show_all (window);
@@ -342,7 +714,7 @@ main (int argc, char *argv[])
 
   hbox = gtk_hbox_new (FALSE, 8);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
-  button = gtk_button_new_with_label ("Add new Column");
+  button = gtk_button_new_with_mnemonic ("_Add new Column");
   gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_clicked), left_tree_model);
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
 

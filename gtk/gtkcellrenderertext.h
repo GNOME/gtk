@@ -53,7 +53,10 @@ struct _GtkCellRendererText
   PangoUnderline underline_style;
 
   gint rise;
-  
+  gint width;
+  gint height;
+
+  guint fixed_size : 1;
   guint strikethrough : 1;
 
   /* editable feature doesn't work */
@@ -86,8 +89,14 @@ struct _GtkCellRendererTextClass
   GtkCellRendererClass parent_class;
 };
 
-GtkType          gtk_cell_renderer_text_get_type (void);
-GtkCellRenderer *gtk_cell_renderer_text_new      (void);
+GtkType          gtk_cell_renderer_text_get_type       (void);
+GtkCellRenderer *gtk_cell_renderer_text_new            (void);
+
+void             gtk_cell_renderer_text_set_fixed_size (GtkCellRendererText *renderer,
+							gboolean             fixed_size,
+							gint                 width,
+							gint                 height);
+
 
 #ifdef __cplusplus
 }
