@@ -67,6 +67,15 @@ main (int argc, char** argv)
   if (n != 0)
     g_error ("%d chars, expected 0", n);
 
+  /* empty first line contains 0 chars */
+  gtk_text_buffer_get_start_iter (buffer, &start);
+  n = gtk_text_iter_get_chars_in_line (&start);
+  if (n != 0)
+    g_error ("%d chars in first line, expected 0", n);
+  n = gtk_text_iter_get_bytes_in_line (&start);
+  if (n != 0)
+    g_error ("%d bytes in first line, expected 0", n);
+  
   /* Run gruesome alien test suite on buffer */
   run_tests (buffer);
 
@@ -77,6 +86,8 @@ main (int argc, char** argv)
   check_get_set_text (buffer, "Hello\r");
   check_get_set_text (buffer, "Hello\nBar\nFoo");
   check_get_set_text (buffer, "Hello\nBar\nFoo\n");
+
+  g_print ("get/set tests passed.\n");
   
   /* Put stuff in the buffer */
 
@@ -112,7 +123,7 @@ static void
 check_get_set_text (GtkTextBuffer *buffer,
                     const char    *str)
 {
-  GtkTextIter start, end;
+  GtkTextIter start, end, iter;
   char *text;
   int n;
   
@@ -127,6 +138,32 @@ check_get_set_text (GtkTextBuffer *buffer,
     g_error ("Got '%s' as buffer contents", text);
   g_free (text);
 
+  /* line char counts */
+  iter = start;
+  n = 0;
+  do
+    {
+      n += gtk_text_iter_get_chars_in_line (&iter);
+    }
+  while (gtk_text_iter_forward_line (&iter));
+
+  if (n != gtk_text_buffer_get_char_count (buffer))
+    g_error ("Sum of chars in lines is %d but buffer char count is %d",
+             n, gtk_text_buffer_get_char_count (buffer));
+
+  /* line byte counts */
+  iter = start;
+  n = 0;
+  do
+    {
+      n += gtk_text_iter_get_bytes_in_line (&iter);
+    }
+  while (gtk_text_iter_forward_line (&iter));
+
+  if (n != strlen (str))
+    g_error ("Sum of chars in lines is %d but buffer byte count is %d",
+             n, strlen (str));
+  
   gtk_text_buffer_set_text (buffer, "", -1);
 
   n = gtk_text_buffer_get_line_count (buffer);

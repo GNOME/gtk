@@ -1658,6 +1658,9 @@ gtk_text_iter_get_chars_in_line (const GtkTextIter   *iter)
       seg = seg->next;
     }
 
+  if (_gtk_text_line_contains_end_iter (real->line, real->tree))
+    count -= 1; /* Dump the newline that was in the last segment of the end iter line */
+  
   return count;
 }
 
@@ -1706,6 +1709,9 @@ gtk_text_iter_get_bytes_in_line (const GtkTextIter   *iter)
       seg = seg->next;
     }
 
+  if (_gtk_text_line_contains_end_iter (real->line, real->tree))
+    count -= 1; /* Dump the newline that was in the last segment of the end iter line */
+  
   return count;
 }
 
@@ -3486,7 +3492,7 @@ gtk_text_iter_set_line_offset (GtkTextIter *iter,
     iter_set_from_char_offset (real, real->line, char_on_line);
   else
     gtk_text_iter_forward_line (iter); /* set to start of next line */
-
+  
   check_invariants (iter);
 }
 
@@ -3735,6 +3741,30 @@ gtk_text_iter_forward_to_end  (GtkTextIter *iter)
   gtk_text_buffer_get_end_iter (buffer, iter);
 }
 
+/* FIXME this and gtk_text_iter_forward_to_line_end() could be cleaned up
+ * and made faster. Look at iter_ends_line() for inspiration, perhaps.
+ * If all else fails we could cache the para delimiter pos in the iter.
+ * I think forward_to_line_end() actually gets called fairly often.
+ */
+static int
+find_paragraph_delimiter_for_line (GtkTextIter *iter)
+{
+  GtkTextIter end;
+  end = *iter;
+
+  /* if we aren't on the last line, go forward to start of next line, then scan
+   * back for the delimiters on the previous line
+   */
+  if (gtk_text_iter_forward_line (&end))
+    {
+      gtk_text_iter_backward_char (&end);
+      while (!gtk_text_iter_ends_line (&end))
+        gtk_text_iter_backward_char (&end);
+    }
+
+  return gtk_text_iter_get_line_offset (&end);
+}
+
 /**
  * gtk_text_iter_forward_to_line_end:
  * @iter: a #GtkTextIter
@@ -3744,7 +3774,9 @@ gtk_text_iter_forward_to_end  (GtkTextIter *iter)
  * return/newline in sequence, or the Unicode paragraph separator
  * character. If the iterator is already at the paragraph delimiter
  * characters, moves to the paragraph delimiter characters for the
- * next line.
+ * next line. If @iter is on the last line in the buffer, which does
+ * not end in paragraph delimiters, moves to the end iterator (end of
+ * the last line), and returns %FALSE.
  * 
  * Return value: %TRUE if we moved and the new location is not the end iterator
  **/
@@ -3754,12 +3786,12 @@ gtk_text_iter_forward_to_line_end (GtkTextIter *iter)
   gint current_offset;
   gint new_offset;
 
+  
   g_return_val_if_fail (iter != NULL, FALSE);
 
   current_offset = gtk_text_iter_get_line_offset (iter);
-  /* FIXME assumption that line ends in a newline; broken */
-  new_offset = gtk_text_iter_get_chars_in_line (iter) - 1;
-
+  new_offset = find_paragraph_delimiter_for_line (iter);
+  
   if (current_offset < new_offset)
     {
       /* Move to end of this line. */

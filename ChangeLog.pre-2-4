@@ -1,5 +1,21 @@
 2001-10-22  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextbuffer.c (gtk_text_buffer_place_cursor): don't back
+	up a char from the end iterator, fixes #61859 ("can't put cursor
+	at the end of the buffer")
+
+	* gtk/gtktextiter.c (gtk_text_iter_forward_to_line_end): fix this
+	to work with delimiters other than newline.
+
+	* tests/testtextbuffer.c: add some tests for get_chars_in_line,
+	get_bytes_in_line
+
+	* gtk/gtktextiter.c (gtk_text_iter_get_chars_in_line): fix for the
+	last line, since the newline is no longer counted.
+	(gtk_text_iter_get_bytes_in_line): ditto
+
+2001-10-22  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextbtree.c (_gtk_text_btree_insert): add assertion that 
 	#58290 would trigger if it reappeared, I think
 

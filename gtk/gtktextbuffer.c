@@ -1866,9 +1866,6 @@ gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
 
   real = *where;
 
-  if (gtk_text_iter_is_end (&real))
-    gtk_text_iter_backward_char (&real);
-
   _gtk_text_btree_place_cursor (get_btree (buffer), &real);
   gtk_text_buffer_mark_set (buffer, &real,
                             gtk_text_buffer_get_mark (buffer,
