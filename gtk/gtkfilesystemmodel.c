@@ -256,8 +256,10 @@ gtk_file_system_model_get_column_type (GtkTreeModel *tree_model,
     case GTK_FILE_SYSTEM_MODEL_URI:
       return G_TYPE_STRING;
     case GTK_FILE_SYSTEM_MODEL_INFO:
-      return GTK_TYPE_FILE_INFO;
-    default:
+      return GTK_TYPE_FILE_INFO; 
+    case GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME:
+      return G_TYPE_STRING;
+   default:
       g_assert_not_reached ();
       return G_TYPE_NONE;
     }
@@ -337,10 +339,19 @@ gtk_file_system_model_get_value (GtkTreeModel *tree_model,
   switch (column)
     {
     case GTK_FILE_SYSTEM_MODEL_URI:
+      g_value_init (value, G_TYPE_STRING);
       g_value_set_string (value, node->uri);
       break;
     case GTK_FILE_SYSTEM_MODEL_INFO:
+      g_value_init (value, GTK_TYPE_FILE_INFO);
       g_value_set_boxed (value, file_model_node_get_info (model, node));
+      break;
+    case GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME:
+      {
+	const GtkFileInfo *info = file_model_node_get_info (model, node);
+	g_value_init (value, G_TYPE_STRING);
+	g_value_set_string (value, gtk_file_info_get_display_name (info));
+      }
       break;
     default:
       g_assert_not_reached ();

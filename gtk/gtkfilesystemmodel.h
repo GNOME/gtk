@@ -38,6 +38,7 @@ GType _gtk_file_system_model_get_type (void);
 enum {
   GTK_FILE_SYSTEM_MODEL_URI,
   GTK_FILE_SYSTEM_MODEL_INFO,
+  GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME,
   GTK_FILE_SYSTEM_MODEL_N_COLUMNS
 } GtkFileSystemModelColumns;
 

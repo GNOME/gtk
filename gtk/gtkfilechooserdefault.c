@@ -33,6 +33,8 @@
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtkvbox.h>
 
+#include <string.h>
+
 typedef struct _GtkFileChooserImplDefaultClass GtkFileChooserImplDefaultClass;
 
 #define GTK_FILE_CHOOSER_IMPL_DEFAULT_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FILE_CHOOSER_IMPL_DEFAULT, GtkFileChooserImplDefaultClass))
@@ -54,6 +56,8 @@ struct _GtkFileChooserImplDefault
   GtkTreeModelSort *sort_model;
 
   GtkFileChooserAction action;
+
+  gchar *current_folder;
 
   guint folder_mode : 1;
   guint local_only : 1;
@@ -278,8 +282,6 @@ gtk_file_chooser_impl_default_set_property (GObject         *object,
 	    gtk_tree_selection_set_mode (selection,
 					 (select_multiple ?
 					  GTK_SELECTION_MULTIPLE : GTK_SELECTION_BROWSE));
-					 
-	    
 	  }
       }
       break;
@@ -370,16 +372,8 @@ static char *
 gtk_file_chooser_impl_default_get_current_folder (GtkFileChooser *chooser)
 {
   GtkFileChooserImplDefault *impl = GTK_FILE_CHOOSER_IMPL_DEFAULT (chooser);
-  GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->tree));
-  GtkTreeIter iter;
 
-  if (gtk_tree_selection_get_selected (selection, NULL, &iter))
-    {
-      const gchar *uri = _gtk_file_system_model_get_uri (impl->tree_model, &iter);
-      return g_strdup (uri);
-    }
-  else
-    return NULL;
+  return g_strdup (impl->current_folder);
 }
 
 static void
@@ -495,15 +489,19 @@ static GSList *
 gtk_file_chooser_impl_default_get_uris (GtkFileChooser *chooser)
 {
   GtkFileChooserImplDefault *impl = GTK_FILE_CHOOSER_IMPL_DEFAULT (chooser);
-  GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
+  GtkTreeSelection *selection;
   
   struct {
     GSList *result;
     GtkFileChooserImplDefault *impl;
   } info = { NULL, };
+
+  if (!gtk_tree_view_get_model (GTK_TREE_VIEW (impl->list)))
+    return NULL;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
   
   info.impl = impl;
-
   gtk_tree_selection_selected_foreach (selection,
 				       get_uris_foreach, &info);
   return g_slist_reverse (info.result);
@@ -599,47 +597,56 @@ tree_selection_changed (GtkTreeSelection          *selection,
 			GtkFileChooserImplDefault *impl)
 {
   GtkTreeIter iter;
+  const gchar *uri;
+  GtkTreePath *path;
 
+  if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
+    return;
+
+  uri = _gtk_file_system_model_get_uri (impl->tree_model, &iter);
+  if (impl->current_folder && strcmp (uri, impl->current_folder) == 0)
+    return;
+  
+  if (impl->current_folder)
+    g_free (impl->current_folder);
+  impl->current_folder = g_strdup (uri);
+  
   if (impl->list_model)
     {
       g_object_unref (impl->list_model);
       impl->list_model = NULL;
-
+      
       g_object_unref (impl->sort_model);
       impl->sort_model = NULL;
     }
-
-  if (gtk_tree_selection_get_selected (selection, NULL, &iter))
-    {
-      GtkTreePath *path;
-      const gchar *uri;
-
-      /* Close the tree up to only the parents of the newly selected
-       * node and it's immediate children visible.
-       */
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->tree_model), &iter);
-      open_and_close (GTK_TREE_VIEW (impl->tree), path);
-      gtk_tree_path_free (path);
-      
-      /* Now update the list view to show the new row.
-       */
-      uri = _gtk_file_system_model_get_uri (impl->tree_model, &iter);
-
-      impl->list_model = _gtk_file_system_model_new (impl->file_system,
-						     uri, 0,
-						     GTK_FILE_INFO_DISPLAY_NAME |
-						     GTK_FILE_INFO_SIZE); 
-      _gtk_file_system_model_set_show_folders (impl->list_model, FALSE);
-      
-      impl->sort_model = (GtkTreeModelSort *)gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (impl->list_model));
-      gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), 0, name_sort_func, impl, NULL);
-      gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), 1, size_sort_func, impl, NULL);
-      gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (impl->sort_model),
-					       name_sort_func, impl, NULL);
-    }
-      
+  
+  /* Close the tree up to only the parents of the newly selected
+   * node and it's immediate children are visible.
+   */
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->tree_model), &iter);
+  open_and_close (GTK_TREE_VIEW (impl->tree), path);
+  gtk_tree_path_free (path);
+  
+  /* Now update the list view to show the new row.
+   */
+  uri = _gtk_file_system_model_get_uri (impl->tree_model, &iter);
+  
+  impl->list_model = _gtk_file_system_model_new (impl->file_system,
+						 uri, 0,
+						 GTK_FILE_INFO_DISPLAY_NAME |
+						 GTK_FILE_INFO_SIZE); 
+  _gtk_file_system_model_set_show_folders (impl->list_model, FALSE);
+  
+  impl->sort_model = (GtkTreeModelSort *)gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (impl->list_model));
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), 0, name_sort_func, impl, NULL);
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), 1, size_sort_func, impl, NULL);
+  gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (impl->sort_model),
+					   name_sort_func, impl, NULL);
+  
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->list),
 			   GTK_TREE_MODEL (impl->sort_model));
+  gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->list),
+				   GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME);
   
   g_signal_emit_by_name (impl, "current_folder_changed", 0);
   g_signal_emit_by_name (impl, "selection_changed", 0);
@@ -754,6 +761,8 @@ _gtk_file_chooser_impl_default_new (GtkFileSystem *file_system)
 					      "File name",
 					      gtk_cell_renderer_text_new (),
 					      tree_name_data_func, impl, NULL);
+  gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->tree),
+				   GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME);
 
   column = gtk_tree_view_column_new ();
   gtk_tree_view_column_set_title  (column, "File name");
