@@ -47,10 +47,16 @@
     <glossterm>column</glossterm>
     <glossdef>
       <para>
-	FIXME
+	GTK+ contains several widgets which display data in columns,
+        e.g. the <link linkend="GtkTreeView">GtkTreeView</link>. 
+        These <glossterm linkend="view-column">view columns</glossterm> in 
+        the tree view are represented by 
+        <link linkend="GtkTreeViewColumn">GtkTreeViewColumn</link>
+        objects inside GTK+. They should not be confused with 
+        <glossterm linkend="model-column">model columns</glossterm> which
+        are used to organize the data in tree models.
       </para>
-      <glossseealso>model column</glossseealso>
-      <glossseealso>view column</glossseealso>
+      <glossseealso>model-view widget</glossseealso>
     </glossdef>
   </glossentry>
 
@@ -146,7 +152,33 @@
     <glossterm>model column</glossterm>
     <glossdef>
       <para>
-	FIXME
+        A column in a tree model, holding data of a certain type. The types which
+        can be stored in the columns of a model have to be specified when the model
+        is constructed, see e.g, <link linkend="gtk-list-store-new">gtk_list_store_new()</link>.
+      </para>
+      <glossseealso>
+	<glossterm linkend="view-column">view column</glossterm>
+      </glossseealso>
+    </glossdef>
+  </glossentry>
+
+  <glossentry id="model-view">
+    <glossterm>model-view widget</glossterm>
+    <glossdef>
+      <para>
+        These widgets follow the well-known model-view pattern, which separates the
+        data (the model) to be displayed from the component which does the actual 
+        visualization (the view). Examples of this pattern in GTK+ are the 
+        <link linkend="GtkTreeView">GtkTreeView</link>/<link linkend="GtkTreeModel">GtkTreeModel</link>
+        and 
+        <link linkend="GtkTextView">GtkTextView</link>/<link linkend="GtkTextBuffer">GtkTextBuffer</link>
+      </para>
+      <para>
+        One important advantage of this pattern is that it is possible to display the
+        same model in multiple views; another one that the separation of the model 
+        allows a great deal of flexibility, as demonstrated by e.g. 
+        <link linkend="GtkTreeModelSort">GtkTreeModelSort</link> or 
+        <link linkend="GtkTreeModelFilter">GtkTreeModelFilter</link>.
       </para>
     </glossdef>
   </glossentry>
@@ -286,8 +318,12 @@
     <glossterm>view column</glossterm>
     <glossdef>
       <para>
-	FIXME
+        A displayed column in a tree view, represented by a
+        <link linkend="GtkTreeViewColumn">GtkTreeViewColumn</link> object.
       </para>
+      <glossseealso>
+	<glossterm linkend="model-column">model column</glossterm>
+      </glossseealso>
     </glossdef>
   </glossentry>
 
