@@ -406,7 +406,7 @@ gtk_rc_add_initial_default_files (void)
   gtk_rc_default_files[0] = NULL;
   init = TRUE;
 
-  var = g_getenv ("GTK_RC_FILES");
+  var = g_getenv ("GTK2_RC_FILES");
   if (var)
     {
       files = g_strsplit (var, G_SEARCHPATH_SEPARATOR_S, 128);
