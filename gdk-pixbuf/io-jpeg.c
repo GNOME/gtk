@@ -108,7 +108,9 @@ fatal_error_handler (j_common_ptr cinfo)
 	errmgr = (struct error_handler_data *) cinfo->err;
 	cinfo->err->output_message (cinfo);
 	siglongjmp (errmgr->setjmp_buffer, 1);
-	return;
+
+	/* incase the jmp buf isn't initted? */
+	exit(1);
 }
 
 /* Destroy notification function for the pixbuf */
@@ -300,6 +302,7 @@ gdk_pixbuf__jpeg_image_begin_load (ModulePreparedNotifyFunc prepared_func,
 	src = (my_src_ptr) context->cinfo.src;
 
 	context->cinfo.err = jpeg_std_error (&context->jerr.pub);
+	context->jerr.pub.error_exit = fatal_error_handler;
 
 	src = (my_src_ptr) context->cinfo.src;
 	src->pub.init_source = init_source;
@@ -328,8 +331,13 @@ gdk_pixbuf__jpeg_image_stop_load (gpointer data)
 	if (context->pixbuf)
 		gdk_pixbuf_unref (context->pixbuf);
 
-	jpeg_finish_decompress(&context->cinfo);
-	jpeg_destroy_decompress(&context->cinfo);
+	/* if we have an error? */
+	if (sigsetjmp (context->jerr.setjmp_buffer, 1)) {
+		jpeg_destroy_decompress (&context->cinfo);
+	} else {
+		jpeg_finish_decompress(&context->cinfo);
+		jpeg_destroy_decompress(&context->cinfo);
+	}
 
 	if (context->cinfo.src) {
 		my_src_ptr src = (my_src_ptr) context->cinfo.src;
@@ -373,6 +381,10 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size)
          *                    have a grasp of what the flow needs to be!
          */
 
+	/* check for fatal error */
+	if (sigsetjmp (context->jerr.setjmp_buffer, 1)) {
+		return FALSE;
+	}
 
 	/* skip over data if requested, handle unsigned int sizes cleanly */
 	/* only can happen if we've already called jpeg_get_header once   */

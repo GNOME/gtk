@@ -1,3 +1,14 @@
+2000-05-30  Not Zed  <NotZed@HelixCode.com>
+
+	* gdk-pixbuf/io-jpeg.c (gdk_pixbuf__jpeg_image_begin_load):
+	Initialise the error handler exit routine to our own.  Note this
+	means that every function that accesses the jpeg lib on this
+	object MUST do a setjmp.
+	(gdk_pixbuf__jpeg_image_stop_load): setjmp before accessing jpeg
+	lib for handling fatal error.
+	(gdk_pixbuf__jpeg_image_load_increment): And here too.  So now
+	your applications dont quit if there's a jpeg error!
+
 2000-05-30  Federico Mena Quintero  <federico@helixcode.com>
 
 	* gdk-pixbuf.spec.in: Include all the loader libraries.  Patch
