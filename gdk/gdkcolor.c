@@ -31,7 +31,7 @@
 
 /**
  * gdk_colormap_ref:
- * @image: a #GdkColormap
+ * @cmap: a #GdkColormap
  *
  * Deprecated function; use g_object_ref() instead.
  *
@@ -45,11 +45,9 @@ gdk_colormap_ref (GdkColormap *cmap)
 
 /**
  * gdk_colormap_unref:
- * @image: a #GdkColormap
+ * @cmap: a #GdkColormap
  *
  * Deprecated function; use g_object_ref() instead.
- *
- * Return value: the colormap
  **/
 void
 gdk_colormap_unref (GdkColormap *cmap)

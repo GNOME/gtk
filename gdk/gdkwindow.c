@@ -2157,7 +2157,7 @@ gdk_window_invalidate_rect   (GdkWindow    *window,
  * @region: a #GdkRegion
  * @child_func: function to use to decide if to recurse to a child,
  *              %NULL means never recurse.
- * @child_func_data: data passed to @child_func
+ * @user_data: data passed to @child_func
  *
  * Adds @region to the update area for @window. The update area is the
  * region that needs to be redrawn, or "dirty region." The call

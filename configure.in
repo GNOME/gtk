@@ -34,7 +34,7 @@ GLIB_AC_DIVERT_BEFORE_HELP([
 #
 GTK_MAJOR_VERSION=1
 GTK_MINOR_VERSION=3
-GTK_MICRO_VERSION=11
+GTK_MICRO_VERSION=12
 GTK_INTERFACE_AGE=0
 GTK_BINARY_AGE=0
 GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
@@ -80,9 +80,9 @@ AC_SUBST(GDK_PIXBUF_MICRO)
 AC_SUBST(GDK_PIXBUF_VERSION)
 
 ## Versions of dependencies
-GLIB_REQUIRED_VERSION=1.3.11
-PANGO_REQUIRED_VERSION=0.22
-ATK_REQUIRED_VERSION=0.7
+GLIB_REQUIRED_VERSION=1.3.12
+PANGO_REQUIRED_VERSION=0.23
+ATK_REQUIRED_VERSION=0.8
 
 # For automake.
 VERSION=$GTK_VERSION
@@ -573,7 +573,7 @@ fi
 dnl Now we check to see if our libtool supports shared lib deps
 dnl (in a rather ugly way even)
 if $dynworks; then
-   pixbuf_libtool_config="${CONFIG_SHELL-/bin/sh} libtool --config"
+   pixbuf_libtool_config="${CONFIG_SHELL-/bin/sh} ./libtool --config"
    pixbuf_deplibs_check=`$pixbuf_libtool_config | \
       grep '^[[a-z_]]*check[[a-z_]]*_method=[['\''"]]' | \
       sed 's/.*[['\''"]]\(.*\)[['\''"]]$/\1/'`

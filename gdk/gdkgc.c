@@ -141,8 +141,6 @@ gdk_gc_ref (GdkGC *gc)
  * @gc: a #GdkGC
  *
  * Deprecated function; use g_object_unref() instead.
- *
- * Return value: the gc.
  **/
 void
 gdk_gc_unref (GdkGC *gc)

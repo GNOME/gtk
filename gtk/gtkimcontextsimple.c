@@ -1116,9 +1116,20 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   int n_compose = 0;
   int i;
 
-  /* FIXME? 14755 says you have to commit the char on release of the shift/control
-   * keys. But instead we wait for the user to type another char, or to lose focus.
-   */
+  if (event->type == GDK_KEY_RELEASE)
+    {
+      if (context_simple->in_hex_sequence &&
+	  (event->keyval == GDK_Control_L || event->keyval == GDK_Control_R ||
+	   event->keyval == GDK_Shift_L || event->keyval == GDK_Shift_R))
+	{
+	  gtk_im_context_simple_commit_char (context, context_simple->tentative_match);
+	  context_simple->compose_buffer[0] = 0;
+
+	  return TRUE;
+	}
+      else
+	return FALSE;
+    }
   
   /* Ignore modifier key presses
    */

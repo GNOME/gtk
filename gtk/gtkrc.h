@@ -126,7 +126,7 @@ GtkStyle* gtk_rc_get_style_by_paths     (GtkSettings *settings,
 
 gboolean gtk_rc_reparse_all_for_settings (GtkSettings *settings,
 					  gboolean     force_load);
-gchar*   gtk_rc_find_pixmap_in_path (GtkSettings  *context,
+gchar*   gtk_rc_find_pixmap_in_path (GtkSettings  *settings,
 				     GScanner     *scanner,
 				     const gchar  *pixmap_file);
 

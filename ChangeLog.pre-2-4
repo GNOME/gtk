@@ -1,3 +1,34 @@
+Sat Dec 22 12:38:03 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: 1.3.12, interface, binary age 0.
+
+	* configure.in: Require new versions of Glib, Pango, ATK.
+
+	* NEWS: Updated.
+
+	* configure.in: Make explicit what libtool we are executing.
+	(Tomas Ogren)
+
+	* gdk/gdkcolor.c gdk/gdkgc.c gdk/gdkwindow.c: Doc fixes.
+
+	* gtk/gtkwidget.c (gtk_widget_[class]path) gtkrc.h : Fix 
+	parameter names for docs.
+
+Sat Dec 22 22:35:29 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_realize) 
+	  gtk/gtkplug.c (gtk_plug_realize): Include GDK_KEY_RELEASE_MASK.
+
+	* gtk/gtkentry.c (gtk_entry_key_release)
+	  gtk/gtktextview.c (gtk_text_view_key_release_event): Pass
+	key release events to the input method.
+
+	* gtk/gtkimcontextsimple.c (gtk_im_context_simple_filter_keypress): 
+	Handle release of Control/Shift to end hex sequence.
+
+	* modules/input/gtkimcontextxim.c (gtk_im_context_xim_filter_keypress): 
+	Handle key releases as well as presses.
+
 2001-12-21  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_insert_element): Trivial doc adjustment.

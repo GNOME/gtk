@@ -137,6 +137,8 @@ static gint   gtk_entry_motion_notify        (GtkWidget        *widget,
 					      GdkEventMotion   *event);
 static gint   gtk_entry_key_press            (GtkWidget        *widget,
 					      GdkEventKey      *event);
+static gint   gtk_entry_key_release          (GtkWidget        *widget,
+					      GdkEventKey      *event);
 static gint   gtk_entry_focus_in             (GtkWidget        *widget,
 					      GdkEventFocus    *event);
 static gint   gtk_entry_focus_out            (GtkWidget        *widget,
@@ -399,6 +401,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->button_release_event = gtk_entry_button_release;
   widget_class->motion_notify_event = gtk_entry_motion_notify;
   widget_class->key_press_event = gtk_entry_key_press;
+  widget_class->key_release_event = gtk_entry_key_release;
   widget_class->focus_in_event = gtk_entry_focus_in;
   widget_class->focus_out_event = gtk_entry_focus_out;
   widget_class->grab_focus = gtk_entry_grab_focus;
@@ -1565,6 +1568,24 @@ gtk_entry_key_press (GtkWidget   *widget,
     return TRUE;
 
   return FALSE;
+}
+
+static gint
+gtk_entry_key_release (GtkWidget   *widget,
+		       GdkEventKey *event)
+{
+  GtkEntry *entry = GTK_ENTRY (widget);
+
+  if (!entry->editable)
+    return FALSE;
+
+  if (gtk_im_context_filter_keypress (entry->im_context, event))
+    {
+      entry->need_im_reset = TRUE;
+      return TRUE;
+    }
+  else
+    return GTK_WIDGET_CLASS (parent_class)->key_release_event (widget, event);
 }
 
 static gint

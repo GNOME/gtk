@@ -6167,9 +6167,9 @@ gtk_widget_style_get (GtkWidget   *widget,
 /**
  * gtk_widget_path:
  * @widget: a #GtkWidget
- * @path_length_p: location to store length of the path, or %NULL
- * @path_p: location to store allocated path string, or %NULL 
- * @path_reversed_p: location to store allocated reverse path string, or %NULL
+ * @path_length: location to store length of the path, or %NULL
+ * @path: location to store allocated path string, or %NULL 
+ * @path_reversed: location to store allocated reverse path string, or %NULL
  *
  * Obtains the full path to @widget. The path is simply the name of a
  * widget and all its parents in the container hierarchy, separated by
@@ -6187,12 +6187,12 @@ gtk_widget_style_get (GtkWidget   *widget,
  **/
 void
 gtk_widget_path (GtkWidget *widget,
-		 guint     *path_length_p,
-		 gchar    **path_p,
-		 gchar    **path_reversed_p)
+		 guint     *path_length,
+		 gchar    **path,
+		 gchar    **path_reversed)
 {
   static gchar *rev_path = NULL;
-  static guint  path_len = 0;
+  static guint tmp_path_len = 0;
   guint len;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -6207,10 +6207,10 @@ gtk_widget_path (GtkWidget *widget,
       
       string = gtk_widget_get_name (widget);
       l = strlen (string);
-      while (path_len <= len + l + 1)
+      while (tmp_path_len <= len + l + 1)
 	{
-	  path_len += INIT_PATH_SIZE;
-	  rev_path = g_realloc (rev_path, path_len);
+	  tmp_path_len += INIT_PATH_SIZE;
+	  rev_path = g_realloc (rev_path, tmp_path_len);
 	}
       s = string + l - 1;
       d = rev_path + len;
@@ -6227,23 +6227,23 @@ gtk_widget_path (GtkWidget *widget,
     }
   while (widget);
   
-  if (path_length_p)
-    *path_length_p = len - 1;
-  if (path_reversed_p)
-    *path_reversed_p = g_strdup (rev_path);
-  if (path_p)
+  if (path_length)
+    *path_length = len - 1;
+  if (path_reversed)
+    *path_reversed = g_strdup (rev_path);
+  if (path)
     {
-      *path_p = g_strdup (rev_path);
-      g_strreverse (*path_p);
+      *path = g_strdup (rev_path);
+      g_strreverse (*path);
     }
 }
 
 /**
  * gtk_widget_class_path:
  * @widget: a #GtkWidget
- * @path_length_p: location to store the length of the class path, or %NULL
- * @path_p: location to store the class path as an allocated string, or %NULL
- * @path_reversed_p: location to store the reverse class path as an allocated string, or %NULL
+ * @path_length: location to store the length of the class path, or %NULL
+ * @path: location to store the class path as an allocated string, or %NULL
+ * @path_reversed: location to store the reverse class path as an allocated string, or %NULL
  *
  * Same as gtk_widget_path(), but always uses the name of a widget's type,
  * never uses a custom name set with gtk_widget_set_name().
@@ -6251,12 +6251,12 @@ gtk_widget_path (GtkWidget *widget,
  **/
 void
 gtk_widget_class_path (GtkWidget *widget,
-		       guint     *path_length_p,
-		       gchar    **path_p,
-		       gchar    **path_reversed_p)
+		       guint     *path_length,
+		       gchar    **path,
+		       gchar    **path_reversed)
 {
   static gchar *rev_path = NULL;
-  static guint  path_len = 0;
+  static guint tmp_path_len = 0;
   guint len;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -6271,10 +6271,10 @@ gtk_widget_class_path (GtkWidget *widget,
       
       string = gtk_type_name (GTK_WIDGET_TYPE (widget));
       l = strlen (string);
-      while (path_len <= len + l + 1)
+      while (tmp_path_len <= len + l + 1)
 	{
-	  path_len += INIT_PATH_SIZE;
-	  rev_path = g_realloc (rev_path, path_len);
+	  tmp_path_len += INIT_PATH_SIZE;
+	  rev_path = g_realloc (rev_path, tmp_path_len);
 	}
       s = string + l - 1;
       d = rev_path + len;
@@ -6291,14 +6291,14 @@ gtk_widget_class_path (GtkWidget *widget,
     }
   while (widget);
   
-  if (path_length_p)
-    *path_length_p = len - 1;
-  if (path_reversed_p)
-    *path_reversed_p = g_strdup (rev_path);
-  if (path_p)
+  if (path_length)
+    *path_length = len - 1;
+  if (path_reversed)
+    *path_reversed = g_strdup (rev_path);
+  if (path)
     {
-      *path_p = g_strdup (rev_path);
-      g_strreverse (*path_p);
+      *path = g_strdup (rev_path);
+      g_strreverse (*path);
     }
 }
 

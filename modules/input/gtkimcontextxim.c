@@ -339,7 +339,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   if (!ic)
     return FALSE;
 
-  xevent.type = KeyPress;
+  xevent.type = (event->type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
   xevent.serial = 0;		/* hope it doesn't matter */
   xevent.send_event = event->send_event;
   xevent.display = GDK_DRAWABLE_XDISPLAY (event->window);

@@ -3412,7 +3412,23 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
 static gint
 gtk_text_view_key_release_event (GtkWidget *widget, GdkEventKey *event)
 {
-  return FALSE;
+  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+  GtkTextMark *insert;
+  GtkTextIter iter;
+
+  if (text_view->layout == NULL || get_buffer (text_view) == NULL)
+    return FALSE;
+      
+  insert = gtk_text_buffer_get_insert (get_buffer (text_view));
+  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, insert);
+  if (gtk_text_iter_can_insert (&iter, text_view->editable) &&
+      gtk_im_context_filter_keypress (text_view->im_context, event))
+    {
+      text_view->need_im_reset = TRUE;
+      return TRUE;
+    }
+  else
+    return GTK_WIDGET_CLASS (parent_class)->key_release_event (widget, event);
 }
 
 static gint
