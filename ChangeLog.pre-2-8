@@ -1,3 +1,10 @@
+Tue Sep 18 23:51:49 2001  Tim Janik  <timj@gtk.org>
+
+	* configure.in: up version to 1.3.8, interface age 0,
+	binary age 0, depend on glib 1.3.8.
+
+	* NEWS: 1.3.8 updates.
+
 Tue Sep 18 18:46:54 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_start_editing): centralize all
@@ -1105,7 +1112,7 @@ Sun Aug 19 03:22:59 2001  Jonathan Blandford  <jrb@redhat.com>
 	* tests/treestoretest.c: inserted some casts to get rid of compiler
 	warnings.
 
-Sun Aug 19 01:44:44 2001  Jonathan Blandford  <jrb@redhat.com>>
+Sun Aug 19 01:44:44 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeviewcolumn.c
 	(gtk_tree_view_column_pack_{start,end}_cell_renderer): sink cell.
@@ -1216,7 +1223,6 @@ Wed Aug 15 12:36:55 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/demos/gtk-demo/*: Remove all uses of deprecated functions.
 
->>>>>>> 1.2276
 2001-08-17  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkstyle.c (create_expander_affine): Divide with floating

@@ -1,3 +1,17 @@
+Overview of Changes in GTK+ 1.3.8
+=================================
+
+* GtkTreeView and GtkTreeModel API cleanups/improvements [Jrb]
+* GtkOptionMenu scrollwheel support [Alex]
+* GtkModule search paths [Owen]
+* Documenatation updates [Havoc,Jrb]
+* Major Gdk cleanup [Owen]
+* Miscellaneous other fixes/cleanups
+
+Other Contributors:
+  Joshua N Pritikin, Padraig O'Briain, Jakub Steiner, Matthias Clasen,
+  Matt Wilson, James Henstridge
+
 Overview of Changes in GTK+ 1.3.7
 =================================
 
@@ -32,6 +46,14 @@ Overview of Changes in GTK+ 1.3.7
 * Win32 fixes and improvements [Hans Breuer]
 * Warning fixes [Darin Adler]
 * Miscellaneous bug and API fixes [Matthias et. al]
+
+Other Contributors:
+  Joshua N Pritikin, Hidetoshi Tajima, Manish Singh, ERDI Gergo, Jens Finke,
+  Chema Celorio, Lee Mallabone, Vitaly Tishkov, Sebastian Wilhelmi,
+  Nicola Girardi, Sven Neumann, Padraig O'Briain, Michael Natterer,
+  Suresh Chandrasekharan, Jonas Borgström, Jay Cox, Michael Meeks,
+  Mathias Hasselmann, Peter Williams, Thomas Broyer, Kjartan Maraas,
+  Joel Becker, Jeff Franks, Brian Cameron, Skip Montanaro
 
 Overview of Changes in GTK+ 1.3.6
 =================================
