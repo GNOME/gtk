@@ -29,7 +29,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2002-12-02 20:45-0500\n"
+"POT-Creation-Date: 2002-12-11 14:39-0500\n"
 "PO-Revision-Date: 2002-11-30 17:19+0100\n"
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -951,7 +951,7 @@ msgstr "Mellemrum"
 msgid "The amount of space between children"
 msgstr "Hvor meget mellemrum der er mellem børnene"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:443
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:444
 msgid "Homogeneous"
 msgstr "Homogen"
 
@@ -991,7 +991,7 @@ msgstr "Ekstra mellemrum mellem barnet og dets naboer, i skærmpunkter"
 msgid "Pack type"
 msgstr "Pakningstype"
 
-#: gtk/gtkbox.c:168 gtk/gtknotebook.c:487
+#: gtk/gtkbox.c:168 gtk/gtknotebook.c:488
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -999,12 +999,12 @@ msgstr ""
 "En GtkPackType der angiver om barnet skal pakkes med reference til "
 "begyndelsen eller slutningen af ophavet"
 
-#: gtk/gtkbox.c:174 gtk/gtknotebook.c:465 gtk/gtkpaned.c:218
+#: gtk/gtkbox.c:174 gtk/gtknotebook.c:466 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:138
 msgid "Position"
 msgstr "Position"
 
-#: gtk/gtkbox.c:175 gtk/gtknotebook.c:466
+#: gtk/gtkbox.c:175 gtk/gtknotebook.c:467
 msgid "The index of the child in the parent"
 msgstr "Indekset for barnet i ophavet"
 
@@ -1512,7 +1512,8 @@ msgid "Inconsistent state"
 msgstr "Inkonsistent tilstand"
 
 #: gtk/gtkcellrenderertoggle.c:142
-msgid "The inconsistent stae of the button"
+#, fuzzy
+msgid "The inconsistent state of the button"
 msgstr "Den inkonsistente tilstand for knappen"
 
 #: gtk/gtkcellrenderertoggle.c:150
@@ -1966,11 +1967,11 @@ msgstr "Markér ved fokus"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Om indholdet af indtastningsfeltet markeres når feltet modtager fokus"
 
-#: gtk/gtkentry.c:3950 gtk/gtklabel.c:3224
+#: gtk/gtkentry.c:3950 gtk/gtklabel.c:3222
 msgid "Select All"
 msgstr "Markér alt"
 
-#: gtk/gtkentry.c:3960 gtk/gtklabel.c:3234
+#: gtk/gtkentry.c:3960 gtk/gtklabel.c:3232
 msgid "Input Methods"
 msgstr "Indtastningsmetoder"
 
@@ -2748,78 +2749,78 @@ msgstr ""
 "Andelen af mellemrum der skal tilføjes over og under kontrollen, i "
 "skærmpunkter"
 
-#: gtk/gtknotebook.c:371
+#: gtk/gtknotebook.c:372
 msgid "Page"
 msgstr "Side"
 
-#: gtk/gtknotebook.c:372
+#: gtk/gtknotebook.c:373
 msgid "The index of the current page"
 msgstr "Indeks for den aktuelle side"
 
-#: gtk/gtknotebook.c:380
+#: gtk/gtknotebook.c:381
 msgid "Tab Position"
 msgstr "Faneplacering"
 
-#: gtk/gtknotebook.c:381
+#: gtk/gtknotebook.c:382
 msgid "Which side of the notebook holds the tabs"
 msgstr "Hvilken side af notesbogen der indeholder fanerne"
 
-#: gtk/gtknotebook.c:388
+#: gtk/gtknotebook.c:389
 msgid "Tab Border"
 msgstr "Fanekant"
 
-#: gtk/gtknotebook.c:389
+#: gtk/gtknotebook.c:390
 msgid "Width of the border around the tab labels"
 msgstr "Bredden af kanten omkring faneetiketterne"
 
-#: gtk/gtknotebook.c:397
+#: gtk/gtknotebook.c:398
 msgid "Horizontal Tab Border"
 msgstr "Vandret fanekant"
 
-#: gtk/gtknotebook.c:398
+#: gtk/gtknotebook.c:399
 msgid "Width of the horizontal border of tab labels"
 msgstr "Bredden af den vandrette kant på faneetiketterne"
 
-#: gtk/gtknotebook.c:406
+#: gtk/gtknotebook.c:407
 msgid "Vertical Tab Border"
 msgstr "Lodret fanekant"
 
-#: gtk/gtknotebook.c:407
+#: gtk/gtknotebook.c:408
 msgid "Width of the vertical border of tab labels"
 msgstr "Bredden af den lodrette kant på faneetiketterne"
 
-#: gtk/gtknotebook.c:415
+#: gtk/gtknotebook.c:416
 msgid "Show Tabs"
 msgstr "Vis faner"
 
-#: gtk/gtknotebook.c:416
+#: gtk/gtknotebook.c:417
 msgid "Whether tabs should be shown or not"
 msgstr "Om faner skal vises eller ej"
 
-#: gtk/gtknotebook.c:422
+#: gtk/gtknotebook.c:423
 msgid "Show Border"
 msgstr "Vis kant"
 
-#: gtk/gtknotebook.c:423
+#: gtk/gtknotebook.c:424
 msgid "Whether the border should be shown or not"
 msgstr "Om kanten skal vises eller ej"
 
-#: gtk/gtknotebook.c:429
+#: gtk/gtknotebook.c:430
 msgid "Scrollable"
 msgstr "Med rulning"
 
-#: gtk/gtknotebook.c:430
+#: gtk/gtknotebook.c:431
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Hvis sand bliver rulningspile tilføjet hvis der er for mange faner til at "
 "alle kan vises"
 
 # se næste tekst for forklaring
-#: gtk/gtknotebook.c:436
+#: gtk/gtknotebook.c:437
 msgid "Enable Popup"
 msgstr "Aktivér menu"
 
-#: gtk/gtknotebook.c:437
+#: gtk/gtknotebook.c:438
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -2827,47 +2828,47 @@ msgstr ""
 "Hvis TRUE vil højreklik på notesbogen starte en menu som kan bruges til at "
 "gå til en bestemt side"
 
-#: gtk/gtknotebook.c:444
+#: gtk/gtknotebook.c:445
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Om faner skal have samme størrelser"
 
-#: gtk/gtknotebook.c:451
+#: gtk/gtknotebook.c:452
 msgid "Tab label"
 msgstr "Faneetiket"
 
-#: gtk/gtknotebook.c:452
+#: gtk/gtknotebook.c:453
 msgid "The string displayed on the childs tab label"
 msgstr "Den streng der vises i barnets faneetiket"
 
-#: gtk/gtknotebook.c:458
+#: gtk/gtknotebook.c:459
 msgid "Menu label"
 msgstr "Menuetiket"
 
-#: gtk/gtknotebook.c:459
+#: gtk/gtknotebook.c:460
 msgid "The string displayed in the childs menu entry"
 msgstr "Den streng der vises i barnets menupunkt"
 
-#: gtk/gtknotebook.c:472
+#: gtk/gtknotebook.c:473
 msgid "Tab expand"
 msgstr "Faneudvidning"
 
-#: gtk/gtknotebook.c:473
+#: gtk/gtknotebook.c:474
 msgid "Whether to expand the childs tab or not"
 msgstr "Om barnets fane udvides"
 
-#: gtk/gtknotebook.c:479
+#: gtk/gtknotebook.c:480
 msgid "Tab fill"
 msgstr "Faneudfyldning"
 
-#: gtk/gtknotebook.c:480
+#: gtk/gtknotebook.c:481
 msgid "Wheather the childs tab should fill the allocated area or not"
 msgstr "Om barnets fane skal udfylde det allokerede område"
 
-#: gtk/gtknotebook.c:486
+#: gtk/gtknotebook.c:487
 msgid "Tab pack type"
 msgstr "Fanepakningstype"
 
-#: gtk/gtknotebook.c:2426 gtk/gtknotebook.c:4754
+#: gtk/gtknotebook.c:2438 gtk/gtknotebook.c:4766
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
@@ -3124,17 +3125,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Hvor lang i y-retningen pilen flyttes når knappen trykkes ned"
 
-#: gtk/gtkrc.c:2354
+#: gtk/gtkrc.c:2376
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Kun ikke finde inkluderingsfil: \"%s\""
 
-#: gtk/gtkrc.c:2996 gtk/gtkrc.c:2999
+#: gtk/gtkrc.c:3018 gtk/gtkrc.c:3021
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunne ikke finde billedfil i pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3434
+#: gtk/gtkrc.c:3456
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Element i billedsti: \"%s\" skal være absolut, %s, linje %d"

@@ -1,3 +1,33 @@
+Overview of Changes in GTK+ 2.1.4
+=================================
+* Improved default color scheme [Soeren Sandmann, with advise from
+  Tuomas Kuosmanen and Garrett LeSage]
+* Make pixmap creation functions take a GdkDrawable not a GdkWindow
+  [Kristian Rietveld]
+* Support move-resize emulation for all edges. [Matthias Clasen]
+* Many fixes for X11 gdk_colormap_alloc_colors [Naofumi Yasufuku, Owen]
+* Remove extra selections for ButtonRelease in XInput code 
+  [Garry Osgood, Owen]
+* Another attempt at fixing X focus tracking [Owen]
+* linux-fb VT switch improvements [Eric Warmenhoven]
+* Win32 [Tor Lillquist]
+  - Bug and win98 portability fixes for new tile/stipple code [Hans Breuer]
+  - Improve maximized/minimized tracking
+  - Bug fixes
+* Fix problem with gtk_combo_set_popdown_strings() not changing
+  the entry text [Owen]
+* Support RTL flipping for statusbars [Matthias]
+* GtkTreeView bug fixes [Kristen Rietveld, Juri Pakaste, Erik Simonsen,
+  Richard Hult, Carlos Garnacho Parro]
+* Use octal escapes rather than literal UTF-8 in strings [Owen]
+* Make a lot of read-only data const. [Matthias, Morten Welinder]
+* Misc bug fixes
+* New and updated translations (cs,es,el,he,hu,lv,no,ro)
+
+Other contributors: Anders Carlsson, Chris Blizzard, Stephen Brown, 
+   Erwann Chenede, John-Kare Hellan, John Finlay, Jarred Keuch, 
+   Kjartan Maraas, Christian Neumair
+
 Overview of Changes in GTK+ 2.1.3
 =================================
 

@@ -10,7 +10,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk20 1.3.0\n"
-"POT-Creation-Date: 2002-12-02 20:45-0500\n"
+"POT-Creation-Date: 2002-12-11 14:39-0500\n"
 "PO-Revision-Date: 1999-02-07 17:37+0100\n"
 "Last-Translator: Pablo Saratxaga <srtxg@chanae.alphanet.ch>\n"
 "Language-Team: walon <linux-wa@chanae.alphanet.ch>\n"
@@ -935,7 +935,7 @@ msgstr "Espaçmint:"
 msgid "The amount of space between children"
 msgstr ""
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:443
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:444
 msgid "Homogeneous"
 msgstr ""
 
@@ -978,19 +978,19 @@ msgstr ""
 msgid "Pack type"
 msgstr "Stîle do cåde"
 
-#: gtk/gtkbox.c:168 gtk/gtknotebook.c:487
+#: gtk/gtkbox.c:168 gtk/gtknotebook.c:488
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr ""
 
-#: gtk/gtkbox.c:174 gtk/gtknotebook.c:465 gtk/gtkpaned.c:218
+#: gtk/gtkbox.c:174 gtk/gtknotebook.c:466 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:138
 #, fuzzy
 msgid "Position"
 msgstr "Eplaeçmint do tecse"
 
-#: gtk/gtkbox.c:175 gtk/gtknotebook.c:466
+#: gtk/gtkbox.c:175 gtk/gtknotebook.c:467
 #, fuzzy
 msgid "The index of the child in the parent"
 msgstr "Difén li djeu do moumint"
@@ -1548,7 +1548,7 @@ msgstr "Eplaeçmint del imådjete"
 
 #: gtk/gtkcellrenderertoggle.c:142
 #, fuzzy
-msgid "The inconsistent stae of the button"
+msgid "The inconsistent state of the button"
 msgstr "Li djeu del vicåreye"
 
 #: gtk/gtkcellrenderertoggle.c:150
@@ -2012,14 +2012,14 @@ msgstr "Tchûze: "
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 
-#: gtk/gtkentry.c:3950 gtk/gtklabel.c:3224
+#: gtk/gtkentry.c:3950 gtk/gtklabel.c:3222
 #, fuzzy
 msgid "Select All"
 msgstr ""
 "Tchwezi\n"
 "totafwait"
 
-#: gtk/gtkentry.c:3960 gtk/gtklabel.c:3234
+#: gtk/gtkentry.c:3960 gtk/gtklabel.c:3232
 msgid "Input Methods"
 msgstr "Metôdes d' intréye"
 
@@ -2822,136 +2822,136 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr ""
 
-#: gtk/gtknotebook.c:371
+#: gtk/gtknotebook.c:372
 msgid "Page"
 msgstr "Pådje"
 
-#: gtk/gtknotebook.c:372
+#: gtk/gtknotebook.c:373
 #, fuzzy
 msgid "The index of the current page"
 msgstr "Difén li djeu do moumint"
 
-#: gtk/gtknotebook.c:380
+#: gtk/gtknotebook.c:381
 #, fuzzy
 msgid "Tab Position"
 msgstr "Eplaeçmint do tecse"
 
-#: gtk/gtknotebook.c:381
+#: gtk/gtknotebook.c:382
 msgid "Which side of the notebook holds the tabs"
 msgstr ""
 
-#: gtk/gtknotebook.c:388
+#: gtk/gtknotebook.c:389
 #, fuzzy
 msgid "Tab Border"
 msgstr "Boirds del tåve"
 
-#: gtk/gtknotebook.c:389
+#: gtk/gtknotebook.c:390
 #, fuzzy
 msgid "Width of the border around the tab labels"
 msgstr "Lårdjeu do tecse a håyner"
 
-#: gtk/gtknotebook.c:397
+#: gtk/gtknotebook.c:398
 #, fuzzy
 msgid "Horizontal Tab Border"
 msgstr "Adjinçmint di coûtchî"
 
-#: gtk/gtknotebook.c:398
+#: gtk/gtknotebook.c:399
 #, fuzzy
 msgid "Width of the horizontal border of tab labels"
 msgstr "Lårdjeu do tecse a håyner"
 
-#: gtk/gtknotebook.c:406
+#: gtk/gtknotebook.c:407
 #, fuzzy
 msgid "Vertical Tab Border"
 msgstr "Adjinçmint d' astampé"
 
-#: gtk/gtknotebook.c:407
+#: gtk/gtknotebook.c:408
 msgid "Width of the vertical border of tab labels"
 msgstr ""
 
-#: gtk/gtknotebook.c:415
+#: gtk/gtknotebook.c:416
 #, fuzzy
 msgid "Show Tabs"
 msgstr "_Mostrer etiketes"
 
-#: gtk/gtknotebook.c:416
+#: gtk/gtknotebook.c:417
 msgid "Whether tabs should be shown or not"
 msgstr ""
 
-#: gtk/gtknotebook.c:422
+#: gtk/gtknotebook.c:423
 #, fuzzy
 msgid "Show Border"
 msgstr "Ôrde po relire"
 
-#: gtk/gtknotebook.c:423
+#: gtk/gtknotebook.c:424
 msgid "Whether the border should be shown or not"
 msgstr ""
 
-#: gtk/gtknotebook.c:429
+#: gtk/gtknotebook.c:430
 #, fuzzy
 msgid "Scrollable"
 msgstr "Vectoriå"
 
-#: gtk/gtknotebook.c:430
+#: gtk/gtknotebook.c:431
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 
-#: gtk/gtknotebook.c:436
+#: gtk/gtknotebook.c:437
 #, fuzzy
 msgid "Enable Popup"
 msgstr "Mete èn alaedje les plugins"
 
-#: gtk/gtknotebook.c:437
+#: gtk/gtknotebook.c:438
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr ""
 
-#: gtk/gtknotebook.c:444
+#: gtk/gtknotebook.c:445
 msgid "Whether tabs should have homogeneous sizes"
 msgstr ""
 
-#: gtk/gtknotebook.c:451
+#: gtk/gtknotebook.c:452
 msgid "Tab label"
 msgstr ""
 
-#: gtk/gtknotebook.c:452
+#: gtk/gtknotebook.c:453
 msgid "The string displayed on the childs tab label"
 msgstr ""
 
-#: gtk/gtknotebook.c:458
+#: gtk/gtknotebook.c:459
 msgid "Menu label"
 msgstr ""
 
-#: gtk/gtknotebook.c:459
+#: gtk/gtknotebook.c:460
 msgid "The string displayed in the childs menu entry"
 msgstr ""
 
-#: gtk/gtknotebook.c:472
+#: gtk/gtknotebook.c:473
 #, fuzzy
 msgid "Tab expand"
 msgstr ""
 "Tot l'\n"
 "coxhlaedje"
 
-#: gtk/gtknotebook.c:473
+#: gtk/gtknotebook.c:474
 #, fuzzy
 msgid "Whether to expand the childs tab or not"
 msgstr "Li lårdjeu des colones"
 
-#: gtk/gtknotebook.c:479
+#: gtk/gtknotebook.c:480
 msgid "Tab fill"
 msgstr ""
 
-#: gtk/gtknotebook.c:480
+#: gtk/gtknotebook.c:481
 msgid "Wheather the childs tab should fill the allocated area or not"
 msgstr ""
 
-#: gtk/gtknotebook.c:486
+#: gtk/gtknotebook.c:487
 msgid "Tab pack type"
 msgstr ""
 
-#: gtk/gtknotebook.c:2426 gtk/gtknotebook.c:4754
+#: gtk/gtknotebook.c:2438 gtk/gtknotebook.c:4766
 #, c-format
 msgid "Page %u"
 msgstr "Pådje %u"
@@ -3211,17 +3211,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 
-#: gtk/gtkrc.c:2354
+#: gtk/gtkrc.c:2376
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr ""
 
-#: gtk/gtkrc.c:2996 gtk/gtkrc.c:2999
+#: gtk/gtkrc.c:3018 gtk/gtkrc.c:3021
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Dji n' pout nén trover on fitchî imådje è pixmap_path: «%s»"
 
-#: gtk/gtkrc.c:3434
+#: gtk/gtkrc.c:3456
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""

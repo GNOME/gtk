@@ -270,6 +270,7 @@ without a return value.
 @Returns: the signal id.
 @Deprecated: Use g_signal_new() instead.
 
+
 <!-- ##### FUNCTION gtk_signal_newv ##### -->
 <para>
 Creates a new signal type.  (This is usually done in a
@@ -322,6 +323,7 @@ Two different signals may have the same name, if they have differing types.
 @signal_id: the signal's identifying number.
 @Returns: the signal name, or %NULL if the signal number was invalid.
 @Deprecated: Use g_signal_name() instead.
+
 
 <!-- ##### FUNCTION gtk_signal_emit ##### -->
 <para>
@@ -513,6 +515,7 @@ really pass any gpointer as the #slot_object .)
 @Returns: the connection id.
 @Deprecated: Use g_signal_connect_swapped() instead.
 
+
 <!-- ##### MACRO gtk_signal_connect_object_after ##### -->
 <para>
 Attaches a signal hook to a signal, passing in an alternate
@@ -554,6 +557,7 @@ and #GTK_RUN_LAST).
 @Returns: the connection id.
 @Deprecated: Use g_signal_connect_data() instead.
 
+
 <!-- ##### FUNCTION gtk_signal_connect_while_alive ##### -->
 <para>
 Attaches a function pointer and another #GtkObject to a signal.
@@ -579,6 +583,7 @@ with an integer masquerading as a pointer (through GINT_TO_POINTER()).)
 @alive_object: object whose death should cause the handler connection
 to be destroyed.
 @Deprecated: Use g_signal_connect_object() instead.
+
 
 <!-- ##### FUNCTION gtk_signal_connect_object_while_alive ##### -->
 <para>
@@ -613,6 +618,7 @@ Destroys a user-defined handler connection.
 @object: the object which the handler pertains to.
 @handler_id: the connection id.
 @Deprecated: Use g_signal_handler_disconnect() instead.
+
 
 <!-- ##### MACRO gtk_signal_disconnect_by_func ##### -->
 <para>
@@ -748,7 +754,6 @@ handler.
 <para>
 A marshaller that returns void and takes no extra parameters.
 </para>
-
 
 
 

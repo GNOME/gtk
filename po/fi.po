@@ -19,7 +19,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.12\n"
-"POT-Creation-Date: 2002-12-11 21:33+0200\n"
+"POT-Creation-Date: 2002-12-11 14:39-0500\n"
 "PO-Revision-Date: 2002-12-11 23:30+0200\n"
 "Last-Translator: Pauli Virtanen <pauli.virtanen@hut.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
@@ -1012,7 +1012,9 @@ msgstr "Käytä perusvalikoimasta"
 #: gtk/gtkbutton.c:206
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
-msgstr "Jos asetettu, niin nimiötä käytetään perusvalikoiman kohteen valitsemiseen, sen sijaan että se näkyisi"
+msgstr ""
+"Jos asetettu, niin nimiötä käytetään perusvalikoiman kohteen valitsemiseen, "
+"sen sijaan että se näkyisi"
 
 #: gtk/gtkbutton.c:213
 msgid "Border relief"
@@ -3785,7 +3787,9 @@ msgstr "Vaakatäyte"
 msgid ""
 "Extra space to put between the child and its left and right neighbors, in "
 "pixels"
-msgstr "Lapsen ja sen vasemmalla ja oikealla puolella olevien naapureiden välille lisättävä väli kuvapisteinä."
+msgstr ""
+"Lapsen ja sen vasemmalla ja oikealla puolella olevien naapureiden välille "
+"lisättävä väli kuvapisteinä."
 
 #: gtk/gtktable.c:251
 msgid "Vertical padding"
@@ -3795,7 +3799,9 @@ msgstr "Pystytäyte"
 msgid ""
 "Extra space to put between the child and its upper and lower neighbors, in "
 "pixels"
-msgstr "Lapsen ja sen ylä- ja alapuolella olevien naapureiden välille lisättävä väli kuvapisteinä."
+msgstr ""
+"Lapsen ja sen ylä- ja alapuolella olevien naapureiden välille lisättävä väli "
+"kuvapisteinä."
 
 #: gtk/gtktext.c:602
 msgid "Horizontal adjustment for the text widget"
@@ -3896,13 +3902,16 @@ msgstr "Kirjasintyyli PangoStylenä. Esimerkiksi PANGO_STYLE_ITALIC"
 
 #: gtk/gtktexttag.c:316
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
-msgstr "Kirjasinvariantti PangoVarianttina. Esimerkiksi PANGO_VARIANT_SMALL_CAPS"
+msgstr ""
+"Kirjasinvariantti PangoVarianttina. Esimerkiksi PANGO_VARIANT_SMALL_CAPS"
 
 #: gtk/gtktexttag.c:325
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD"
-msgstr "Kirjasimen lihavuus kokonaislukuna; katso PangoWeightin määritellyt arvot. Esimerkiksi PANGO_WEIGHT_BOLD"
+msgstr ""
+"Kirjasimen lihavuus kokonaislukuna; katso PangoWeightin määritellyt arvot. "
+"Esimerkiksi PANGO_WEIGHT_BOLD"
 
 #: gtk/gtktexttag.c:336
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"

@@ -8,7 +8,6 @@ INCLUDES = @STRIP_BEGIN@ \
 	-I$(top_srcdir) 				\
 	-I$(top_srcdir)/gdk				\
 	-I$(top_builddir)/gdk				\
-	-DGTK_LOCALEDIR=\"$(gtklocaledir)\"		\
 	-DG_DISABLE_DEPRECATED	 			\
 	-DGDK_PIXBUF_DISABLE_DEPRECATED			\
 	-DGDK_DISABLE_DEPRECATED			\

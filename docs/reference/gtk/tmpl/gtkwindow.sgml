@@ -127,6 +127,7 @@ the child gets a larger allocation than it requests.
               if it's larger
 @Deprecated: Use gtk_window_set_resizable() instead.
 
+
 <!-- ##### FUNCTION gtk_window_set_resizable ##### -->
 <para>
 

@@ -132,6 +132,7 @@ Does the same as gtk_container_get_children().
 @Returns: 
 @Deprecated: Use gtk_container_get_children() instead.
 
+
 <!-- ##### FUNCTION gtk_container_get_children ##### -->
 <para>
 

@@ -136,6 +136,7 @@ Sets a new default size for the children of a given button box.
 @Deprecated: Use the style properties
 <literal>"child-min-width/-height"</literal> instead.
 
+
 <!-- ##### FUNCTION gtk_button_box_set_child_ipadding ##### -->
 <para>
 Changes the amount of internal padding used by all buttons in a given button
@@ -147,6 +148,7 @@ box.
 @ipad_y: the vertical padding that should be used by each button in @widget.
 @Deprecated: Use the style properties
 <literal>"child-internal-pad-x/-y"</literal> instead.
+
 
 <!-- ##### FUNCTION gtk_button_box_set_child_secondary ##### -->
 <para>
