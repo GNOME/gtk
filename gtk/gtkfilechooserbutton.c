@@ -308,6 +308,7 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
 {
   GtkFileChooserButtonPrivate *priv;
   GtkWidget *box, *image, *sep;
+  GtkTargetList *target_list;
 
   gtk_box_set_spacing (GTK_BOX (button), ENTRY_BUTTON_SPACING);
 
@@ -377,9 +378,11 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
                      (GTK_DEST_DEFAULT_ALL),
 		     NULL, 0,
 		     GDK_ACTION_COPY);
-  gtk_drag_dest_add_text_targets (GTK_WIDGET (button));
-  gtk_target_list_add_uri_targets (gtk_drag_dest_get_target_list (GTK_WIDGET (button)), 
-				   TEXT_URI_LIST);
+  target_list = gtk_target_list_new (NULL, 0);
+  gtk_target_list_add_uri_targets (target_list, TEXT_URI_LIST);
+  gtk_target_list_add_text_targets (target_list, TEXT_PLAIN);
+  gtk_drag_dest_set_target_list (GTK_WIDGET (button), target_list);
+  gtk_target_list_unref (target_list);
 }
 
 
@@ -677,7 +680,7 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
 	gboolean selected;
 
 	uris = gtk_selection_data_get_uris (data);
-
+	
 	if (uris == NULL)
 	  break;
 
@@ -1671,14 +1674,16 @@ update_idler (gpointer user_data)
 {
   GtkFileChooserButtonPrivate *priv;
   gboolean retval;
+  gint start, end;
 
   GDK_THREADS_ENTER ();
 
   priv = GTK_FILE_CHOOSER_BUTTON_GET_PRIVATE (user_data);
 
   if (!gtk_editable_get_selection_bounds (GTK_EDITABLE (priv->entry),
-					  NULL, NULL))
+					  &start, &end))
     {
+      g_print ("updating dialog\n");
       g_signal_handler_block (priv->dialog,
 			      priv->dialog_selection_changed_id);
       update_dialog (user_data);
@@ -1690,7 +1695,10 @@ update_idler (gpointer user_data)
       retval = FALSE;
     }
   else
-    retval = TRUE;
+    {
+      g_print ("start %d end %d\n", start, end);
+      retval = TRUE;
+    }
   
   GDK_THREADS_LEAVE ();
 

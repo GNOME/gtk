@@ -1,5 +1,9 @@
 2004-11-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_init): Add
+	uri targets before text targets, to make file dnd work 
+	better.  (#157651, Christian Persch)
+
 	* gtk/gtktreedatalist.c: Support columns whose declared type is
 	an interface better, by treating them like G_TYPE_OBJECT if
 	the interface types requires G_TYPE_OBJECT.
