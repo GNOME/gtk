@@ -24,6 +24,8 @@ struct _GdkCursor
 
 /* Cursors
  */
+GdkCursor* gdk_cursor_new_for_screen	 (GdkCursorType cursor_type,
+					  GdkScreen * screen);
 GdkCursor* gdk_cursor_new		 (GdkCursorType	   cursor_type);
 GdkCursor* gdk_cursor_new_from_pixmap	 (GdkPixmap	  *source,
 					  GdkPixmap	  *mask,
@@ -31,6 +33,8 @@ GdkCursor* gdk_cursor_new_from_pixmap	 (GdkPixmap	  *source,
 					  GdkColor	  *bg,
 					  gint		   x,
 					  gint		   y);
+
+
 GdkCursor* gdk_cursor_ref                (GdkCursor      *cursor);
 void       gdk_cursor_unref              (GdkCursor      *cursor);
 

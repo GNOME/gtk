@@ -63,6 +63,8 @@
 #include "gtkmain.h"
 #include "gtksettings.h"
 #include "gtkintl.h"
+#include "gdk/gdkdisplay.h"
+#include "gdk/gdkscreen.h"
 
 #include <string.h>
 
@@ -358,7 +360,9 @@ color_sample_drag_handle (GtkWidget        *widget,
   vals[3] = priv->has_opacity ? colsrc[COLORSEL_OPACITY] * 0xffff : 0xffff;
   
   gtk_selection_data_set (selection_data,
-			  gdk_atom_intern ("application/x-color", FALSE),
+			  gdk_atom_intern_for_display ("application/x-color",
+						       FALSE,
+						GTK_WIDGET_GET_DISPLAY(widget)),
 			  16, (guchar *)vals, 8);
 }
 
@@ -678,7 +682,9 @@ palette_drag_handle (GtkWidget        *widget,
   vals[3] = 0xffff;
   
   gtk_selection_data_set (selection_data,
-			  gdk_atom_intern ("application/x-color", FALSE),
+			  gdk_atom_intern_for_display ("application/x-color",
+							FALSE,
+					     GTK_WIDGET_GET_DISPLAY(widget)),
 			  16, (guchar *)vals, 8);
 }
 
@@ -822,8 +828,8 @@ popup_position_func (GtkMenu   *menu,
   *y = root_y + widget->allocation.height / 2;
 
   /* Ensure sanity */
-  *x = CLAMP (*x, 0, MAX (0, gdk_screen_width () - req.width));
-  *y = CLAMP (*y, 0, MAX (0, gdk_screen_height () - req.height));
+  *x = CLAMP (*x, 0, MAX (0, gdk_screen_width_for_screen (widget->screen) - req.width));
+  *y = CLAMP (*y, 0, MAX (0, gdk_screen_height_for_screen (widget->screen) - req.height));
 }
 
 static void
@@ -1039,21 +1045,23 @@ palette_new (GtkColorSelection *colorsel)
  */
 
 static void
-initialize_cursor (void)
+initialize_cursor (GdkScreen *screen)
 {
   GdkColor fg, bg;
   
   GdkPixmap *pixmap =
-    gdk_bitmap_create_from_data (NULL,
-				 dropper_bits,
-				 DROPPER_WIDTH, DROPPER_HEIGHT);
+    gdk_bitmap_create_from_data_for_screen (NULL,
+					    screen,
+					    dropper_bits,
+					    DROPPER_WIDTH, DROPPER_HEIGHT);
   GdkPixmap *mask =
-    gdk_bitmap_create_from_data (NULL,
-				 dropper_mask,
-				 DROPPER_WIDTH, DROPPER_HEIGHT);
+    gdk_bitmap_create_from_data_for_screen (NULL,
+					    screen,
+					    dropper_mask,
+					    DROPPER_WIDTH, DROPPER_HEIGHT);
   
-  gdk_color_white (gdk_colormap_get_system (), &bg);
-  gdk_color_black (gdk_colormap_get_system (), &fg);
+  gdk_color_white (gdk_colormap_get_system_for_screen (screen), &bg);
+  gdk_color_black (gdk_colormap_get_system_for_screen (screen), &fg);
   
   picker_cursor = gdk_cursor_new_from_pixmap (pixmap, mask, &fg, &bg, DROPPER_X_HOT ,DROPPER_Y_HOT);
   
@@ -1072,12 +1080,13 @@ grab_color_at_mouse (GtkWidget *invisible,
   guint32 pixel;
   GtkColorSelection *colorsel = data;
   ColorSelectionPrivate *priv;
-  GdkColormap *colormap = gdk_colormap_get_system ();
   GdkColor color;
+  GdkColormap *colormap = gdk_colormap_get_system_for_screen (invisible->screen);
+  GdkWindow *root_parent = gdk_screen_get_parent_root(invisible->screen);
   
   priv = colorsel->private_data;
   
-  image = gdk_image_get (GDK_ROOT_PARENT (), x_root, y_root, 1, 1);
+  image = gdk_image_get (root_parent, x_root, y_root, 1, 1);
   pixel = gdk_image_get_pixel (image, 0, 0);
   gdk_image_unref (image);
 
@@ -1106,8 +1115,10 @@ shutdown_eyedropper (GtkWidget *widget)
   colorsel = GTK_COLOR_SELECTION (widget);
   priv = colorsel->private_data;    
 
-  gdk_keyboard_ungrab (gtk_get_current_event_time ());
-  gdk_pointer_ungrab (gtk_get_current_event_time ());
+  gdk_keyboard_ungrab_for_display (gdk_window_get_display(widget->window),
+				   gtk_get_current_event_time ());
+  gdk_pointer_ungrab_for_display (gdk_window_get_display(widget->window),
+				  gtk_get_current_event_time ());
   gtk_grab_remove (priv->dropper_grab_widget);
 }
 
@@ -1210,7 +1221,7 @@ get_screen_color (GtkWidget *button)
   
   if (picker_cursor == NULL)
     {
-      initialize_cursor ();
+      initialize_cursor (button->screen);
     }
 
   if (priv->dropper_grab_widget == NULL)
@@ -1238,7 +1249,7 @@ get_screen_color (GtkWidget *button)
                         picker_cursor,
                         gtk_get_current_event_time ()) != GDK_GRAB_SUCCESS)
     {
-      gdk_keyboard_ungrab (GDK_CURRENT_TIME);
+      gdk_keyboard_ungrab_for_display(gdk_window_get_display(button->window),GDK_CURRENT_TIME);
       g_warning ("Failed to grab pointer to do eyedropper");
       return;
     }

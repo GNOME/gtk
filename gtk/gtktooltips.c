@@ -35,7 +35,7 @@
 #include "gtksignal.h"
 #include "gtkstyle.h"
 #include "gtktooltips.h"
-
+#include "gdk/gdkscreen.h"
 
 #define DEFAULT_DELAY 500           /* Default delay in ms */
 #define STICKY_DELAY 0              /* Delay before popping up next tip
@@ -329,8 +329,8 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   
   widget = tooltips->active_tips_data->widget;
 
-  scr_w = gdk_screen_width ();
-  scr_h = gdk_screen_height ();
+  scr_w = gdk_screen_width_for_screen (widget->screen);
+  scr_h = gdk_screen_height_for_screen (widget->screen);
 
   data = tooltips->active_tips_data;
 
@@ -340,7 +340,8 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   w = requisition.width;
   h = requisition.height;
 
-  gdk_window_get_pointer (NULL, &x, NULL, NULL);
+  gdk_window_get_pointer (gdk_screen_get_parent_root(widget->screen),
+			  &x, NULL, NULL);
   gdk_window_get_origin (widget->window, NULL, &y);
   if (GTK_WIDGET_NO_WINDOW (widget))
     y += widget->allocation.y;

@@ -1286,7 +1286,8 @@ gtk_window_transient_parent_unrealized (GtkWidget *parent,
 {
   if (GTK_WIDGET_REALIZED (window))
     gdk_property_delete (window->window, 
-			 gdk_atom_intern ("WM_TRANSIENT_FOR", FALSE));
+			 gdk_atom_intern_for_display ("WM_TRANSIENT_FOR", FALSE,
+					       GTK_WIDGET_GET_DISPLAY(parent)));
 }
 
 static void       
@@ -1880,7 +1881,11 @@ gtk_window_realize (GtkWidget *widget)
       
       attributes_mask = GDK_WA_VISUAL | GDK_WA_COLORMAP;
       
-      window->frame = gdk_window_new (NULL, &attributes, attributes_mask);
+      window->frame = gdk_window_new_for_screen (widget->screen, 
+      						 NULL,
+						 &attributes,
+						 attributes_mask);
+						 
       gdk_window_set_user_data (window->frame, widget);
       
       attributes.window_type = GDK_WINDOW_CHILD;
@@ -1910,7 +1915,10 @@ gtk_window_realize (GtkWidget *widget)
   attributes_mask |= GDK_WA_VISUAL | GDK_WA_COLORMAP;
   attributes_mask |= (window->title ? GDK_WA_TITLE : 0);
   attributes_mask |= (window->wmclass_name ? GDK_WA_WMCLASS : 0);
-  widget->window = gdk_window_new (parent_window, &attributes, attributes_mask);
+  widget->window = gdk_window_new_for_screen (widget->screen,
+					      parent_window,
+					      &attributes,
+					      attributes_mask);
   gdk_window_set_user_data (widget->window, window);
       
   widget->style = gtk_style_attach (widget->style, widget->window);
@@ -2359,7 +2367,8 @@ gtk_window_client_event (GtkWidget	*widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   if (!atom_rcfiles)
-    atom_rcfiles = gdk_atom_intern("_GTK_READ_RCFILES", FALSE);
+    atom_rcfiles = gdk_atom_intern_for_display("_GTK_READ_RCFILES", FALSE,
+					       GTK_WIDGET_GET_DISPLAY(widget));
 
   if(event->message_type == atom_rcfiles) 
     gtk_window_read_rcfiles (widget, event);    
@@ -2998,8 +3007,8 @@ gtk_window_compute_reposition (GtkWindow *window,
     case GTK_WIN_POS_CENTER_ALWAYS:
       if (window->use_uposition)
 	{
-	  gint screen_width = gdk_screen_width ();
-	  gint screen_height = gdk_screen_height ();
+	  gint screen_width = gdk_screen_width_for_screen (widget->screen);
+	  gint screen_height = gdk_screen_height_for_screen (widget->screen);
 	  
 	  *x = (screen_width - new_width) / 2;
 	  *y = (screen_height - new_height) / 2;
@@ -3023,10 +3032,10 @@ gtk_window_compute_reposition (GtkWindow *window,
     case GTK_WIN_POS_MOUSE:
       if (window->use_uposition)
 	{
-	  gint screen_width = gdk_screen_width ();
-	  gint screen_height = gdk_screen_height ();
+	  gint screen_width = gdk_screen_width_for_screen (widget->screen);
+	  gint screen_height = gdk_screen_height_for_screen (widget->screen);
 	  
-	  gdk_window_get_pointer (NULL, x, y, NULL);
+	  gdk_window_get_pointer (window, x, y, NULL);
 	  *x -= new_width / 2;
 	  *y -= new_height / 2;
 	  *x = CLAMP (*x, 0, screen_width - new_width);

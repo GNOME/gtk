@@ -45,6 +45,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkintl.h"
 #include "gtkaccessible.h"
+#include "gtkdebug.h"
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
 #define	INIT_PATH_SIZE	(512)
@@ -128,7 +129,8 @@ enum {
   PROP_COMPOSITE_CHILD,
   PROP_STYLE,
   PROP_EVENTS,
-  PROP_EXTENSION_EVENTS
+  PROP_EXTENSION_EVENTS,
+  PROP_SCREEN
 };
 
 typedef	struct	_GtkStateData	 GtkStateData;
@@ -179,7 +181,7 @@ static void gtk_widget_direction_changed	 (GtkWidget	    *widget,
 						  GtkTextDirection   previous_direction);
 static void gtk_widget_real_grab_focus           (GtkWidget         *focus_widget);
 
-static GdkColormap*  gtk_widget_peek_colormap      (void);
+static GdkColormap*  gtk_widget_peek_colormap      (GdkScreen *screen);
 static GtkStyle*     gtk_widget_peek_style         (void);
 static PangoContext *gtk_widget_peek_pango_context (GtkWidget *widget);
 
@@ -212,7 +214,6 @@ static gpointer         parent_class = NULL;
 static guint            widget_signals[LAST_SIGNAL] = { 0 };
 
 static GMemChunk       *aux_info_mem_chunk = NULL;
-static GdkColormap     *default_colormap = NULL;
 static GtkStyle        *gtk_default_style = NULL;
 static GSList          *colormap_stack = NULL;
 static GSList          *style_stack = NULL;
@@ -527,6 +528,12 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  						      GDK_TYPE_EXTENSION_MODE,
  						      GDK_EXTENSION_EVENTS_NONE,
  						      G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+				   PROP_SCREEN,
+				   g_param_spec_pointer ("screen",
+ 							_("Screen"),
+ 							_("The screen of the widget that decides which where to display the widget."),
+ 							G_PARAM_READWRITE));
 
 
   widget_signals[SHOW] =
@@ -1125,6 +1132,8 @@ gtk_widget_set_property (GObject         *object,
     case PROP_EXTENSION_EVENTS:
       gtk_widget_set_extension_events (widget, g_value_get_enum (value));
       break;
+    case PROP_SCREEN:
+      gtk_widget_set_screen(widget, g_value_get_pointer(value));
     default:
       break;
     }
@@ -1231,10 +1240,12 @@ gtk_widget_get_property (GObject         *object,
     case PROP_EXTENSION_EVENTS:
       modep = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_extension_event_mode);
       if (!modep)
- 	g_value_set_flags (value, 0);
+ 	g_value_set_enum (value, 0);
       else
- 	g_value_set_flags (value, (GdkExtensionMode) *modep);
+ 	g_value_set_enum (value, (GdkExtensionMode) *modep);
       break;
+    case PROP_SCREEN:
+      g_value_set_pointer(value, widget->screen);
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1266,7 +1277,7 @@ gtk_widget_init (GtkWidget *widget)
   widget->allocation.height = 1;
   widget->window = NULL;
   widget->parent = NULL;
-
+  widget->screen = DEFAULT_GDK_SCREEN;
   GTK_WIDGET_SET_FLAGS (widget,
 			GTK_SENSITIVE |
 			GTK_PARENT_SENSITIVE |
@@ -1276,9 +1287,12 @@ gtk_widget_init (GtkWidget *widget)
   widget->style = gtk_widget_peek_style ();
   gtk_style_ref (widget->style);
   
-  colormap = gtk_widget_peek_colormap ();
+  colormap = gtk_widget_peek_colormap (widget->screen);
+
+  if(colormap->screen != widget->screen)
+    g_error("colormap from stack different from widget's screen !");
   
-  if (colormap != gtk_widget_get_default_colormap ())
+  if (colormap != gdk_screen_get_default_colormap (widget->screen))
     gtk_widget_set_colormap (widget, colormap);
 }
 
@@ -2465,7 +2479,7 @@ gtk_widget_real_mnemonic_activate (GtkWidget *widget,
     {
       g_warning ("widget `%s' isn't suitable for mnemonic activation",
 		 G_OBJECT_TYPE_NAME (widget));
-      gdk_beep ();
+      gdk_beep_for_display (gdk_window_get_display(widget->window));
     }
   return TRUE;
 }
@@ -3345,6 +3359,22 @@ gtk_widget_set_parent (GtkWidget *widget,
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[PARENT_SET], NULL);
   gtk_widget_propagate_hierarchy_changed (widget, NULL);
   g_object_notify (G_OBJECT (widget), "parent");
+
+  if(widget->screen != parent->screen)
+  {
+    GdkColormap *colormap = gtk_widget_peek_colormap (parent->screen);
+    if(!colormap)
+    {
+      gtk_widget_set_colormap(widget,
+			      gdk_screen_get_default_colormap(parent->screen));
+    }else{
+	if(colormap->screen == parent->screen)
+	  gtk_widget_set_colormap(widget, colormap);
+    }
+  }
+  /* propagate the screen information */
+  gtk_widget_set_screen(widget,gtk_widget_get_screen(parent));
+  g_object_notify (G_OBJECT (widget), "screen");
 }
 
 /*****************************************
@@ -3980,7 +4010,7 @@ gtk_widget_create_pango_context (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  context = gdk_pango_context_get ();
+  context = gdk_pango_context_get_for_screen (widget->screen);
 
   gdk_pango_context_set_colormap (context, gtk_widget_get_colormap (widget));
   pango_context_set_base_dir (context,
@@ -4110,6 +4140,43 @@ gtk_widget_set_parent_window   (GtkWidget           *widget,
 	gdk_window_ref (parent_window);
     }
 }
+
+/*************************************************************
+ * gtk_widget_set_screen :
+ *     Set a non default screen for the widget
+ *
+ *   arguments: GdkScreen
+ *     widget:
+ *     
+ *     
+ *   results:
+ *************************************************************/
+
+void	   gtk_widget_set_screen	  (GtkWidget	       *widget,
+					   GdkScreen	       *screen)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  widget->screen = screen;
+}
+/*************************************************************
+ * gtk_widget_get_screen :
+ *     Set a non default screen for the widget
+ *
+ *   arguments: 
+ *     widget:
+ *     
+ *     
+ *   results: screen
+ *************************************************************/
+
+GdkScreen *gtk_widget_get_screen	  (GtkWidget	       *widget)
+{
+  g_return_val_if_fail (widget != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  return widget->screen;
+}
+
 
 /*************************************************************
  * gtk_widget_get_parent_window:
@@ -4481,7 +4548,7 @@ gtk_widget_get_colormap (GtkWidget *widget)
   if (colormap)
     return colormap;
 
-  return gtk_widget_get_default_colormap ();
+  return gdk_screen_get_default_colormap (widget->screen);
 }
 
 /**
@@ -4740,13 +4807,10 @@ gtk_widget_pop_colormap (void)
 void
 gtk_widget_set_default_colormap (GdkColormap *colormap)
 {
-  if (default_colormap != colormap)
+  if (gdk_screen_get_default_colormap (colormap->screen) 
+      != colormap)
     {
-      if (default_colormap)
-	gdk_colormap_unref (default_colormap);
-      default_colormap = colormap;
-      if (default_colormap)
-	gdk_colormap_ref (default_colormap);
+      gdk_screen_set_default_colormap (colormap->screen, colormap);
     }
 }
 
@@ -4760,10 +4824,9 @@ gtk_widget_set_default_colormap (GdkColormap *colormap)
 GdkColormap*
 gtk_widget_get_default_colormap (void)
 {
-  if (!default_colormap)
-    gtk_widget_set_default_colormap (gdk_colormap_get_system ());
-  
-  return default_colormap;
+  GTK_NOTE (MISC,
+	    g_message("don't use for multihead !!")); 
+  return gdk_screen_get_default_colormap(DEFAULT_GDK_SCREEN);
 }
 
 /**
@@ -4777,6 +4840,8 @@ gtk_widget_get_default_colormap (void)
 GdkVisual*
 gtk_widget_get_default_visual (void)
 {
+  GTK_NOTE (MISC,
+	    g_message("don't use for multihead !!")); 
   return gdk_colormap_get_visual (gtk_widget_get_default_colormap ());
 }
 
@@ -5151,11 +5216,14 @@ gtk_widget_real_size_request (GtkWidget         *widget,
  *****************************************/
 
 static GdkColormap*
-gtk_widget_peek_colormap (void)
+gtk_widget_peek_colormap (GdkScreen *screen)
 {
   if (colormap_stack)
-    return (GdkColormap*) colormap_stack->data;
-  return gtk_widget_get_default_colormap ();
+  {
+    if(((GdkColormap*) colormap_stack->data)->screen == screen)
+      return (GdkColormap*) colormap_stack->data;
+  }
+  return gdk_screen_get_default_colormap (screen);
 }
 
 static void

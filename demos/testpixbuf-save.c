@@ -96,7 +96,7 @@ int
 configure_cb (GtkWidget *drawing_area, GdkEventConfigure *evt, gpointer data)
 {
         GdkPixbuf *pixbuf;
-                           
+        GdkScreen *scr = gdk_window_get_screen(drawing_area->window);                   
         pixbuf = (GdkPixbuf *) gtk_object_get_data (GTK_OBJECT (drawing_area),   
                                                     "pixbuf");
     
@@ -105,7 +105,7 @@ configure_cb (GtkWidget *drawing_area, GdkEventConfigure *evt, gpointer data)
                 GdkWindow *root;
                 GdkPixbuf *new_pixbuf;
 
-                root = GDK_ROOT_PARENT ();
+                root =  GDK_SCREEN_GET_CLASS(scr)->get_parent_root(scr);
                 new_pixbuf = gdk_pixbuf_get_from_drawable (NULL, root, NULL,
                                                            0, 0, 0, 0, evt->width, evt->height);
                 gtk_object_set_data (GTK_OBJECT (drawing_area), "pixbuf", new_pixbuf);
@@ -128,7 +128,7 @@ main (int argc, char **argv)
 
         gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
 
-        root = GDK_ROOT_PARENT ();
+        root = GDK_SCREEN_GET_CLASS(DEFAULT_GDK_SCREEN)->get_parent_root(DEFAULT_GDK_SCREEN);
         pixbuf = gdk_pixbuf_get_from_drawable (NULL, root, NULL,
                                                0, 0, 0, 0, 150, 160);
    

@@ -41,6 +41,7 @@
 #include "gtkcombo.h"
 #include "gtkframe.h"
 #include "gtkintl.h"
+#include "gdk/gdkscreen.h"
 
 const gchar *gtk_combo_string_key = "gtk-combo-string-value";
 
@@ -268,7 +269,9 @@ gtk_combo_window_key_press (GtkWidget   *window,
 	  if (GTK_WIDGET_HAS_GRAB (combo->popwin))
 	    {
 	      gtk_grab_remove (combo->popwin);
-	      gdk_pointer_ungrab (event->time);
+	      gdk_pointer_ungrab_for_display (
+			gdk_window_get_display(window->window),
+			event->time);
 	    }
 	}
 
@@ -389,7 +392,7 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
   real_height = MIN (combo->entry->requisition.height, 
 		     combo->entry->allocation.height);
   *y += real_height;
-  avail_height = gdk_screen_height () - *y;
+  avail_height = gdk_screen_height_for_screen (widget->screen) - *y;
   
   gtk_widget_size_request (combo->list, &list_requisition);
   min_height = MIN (list_requisition.height, 
@@ -590,7 +593,8 @@ gtk_combo_button_press (GtkWidget * widget, GdkEvent * event, GtkCombo * combo)
 
   gtk_widget_hide (combo->popwin);
   gtk_grab_remove (combo->popwin);
-  gdk_pointer_ungrab (event->button.time);
+  gdk_pointer_ungrab_for_display (gdk_window_get_display(widget->window),
+				  event->button.time);
 
   return TRUE;
 }
@@ -658,7 +662,9 @@ gtk_combo_button_release (GtkWidget *widget,
       if (GTK_WIDGET_HAS_GRAB (combo->popwin))
 	{
 	  gtk_grab_remove (combo->popwin);
-	  gdk_pointer_ungrab (event->button.time);
+	  gdk_pointer_ungrab_for_display (
+		gdk_window_get_display(combo->button->window),
+		event->button.time);
 	}
     }
   
@@ -717,7 +723,8 @@ gtk_combo_list_key_press (GtkWidget * widget, GdkEventKey * event, GtkCombo * co
       if (GTK_WIDGET_HAS_GRAB (combo->popwin))
 	{
 	  gtk_grab_remove (combo->popwin);
-	  gdk_pointer_ungrab (GDK_CURRENT_TIME);
+	  gdk_pointer_ungrab_for_display (gdk_window_get_display(widget->window),
+					  GDK_CURRENT_TIME);
 	}
       else if (GTK_WIDGET_HAS_GRAB (combo->list))
 	gtk_list_end_drag_selection (GTK_LIST (combo->list));

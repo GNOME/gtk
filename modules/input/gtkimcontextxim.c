@@ -22,6 +22,8 @@
 
 #include "gtk/gtksignal.h"
 #include "gtkimcontextxim.h"
+#include <gdk/x11/gdkdisplaymgr-x11.h>
+#include <gdk/x11/gdkscreen-x11.h>
 
 struct _GtkXIMInfo
 {
@@ -184,7 +186,7 @@ get_im (const char *locale)
       if (!XSetLocaleModifiers (""))
 	g_warning ("can not set locale modifiers");
       
-      im = XOpenIM (GDK_DISPLAY(), NULL, NULL, NULL);
+      im = XOpenIM (GDK_DISPLAY_IMPL_X11(DEFAULT_GDK_DISPLAY)->xdisplay, NULL, NULL, NULL);
       
       if (im)
 	{
@@ -318,7 +320,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   xevent.send_event = event->send_event;
   xevent.display = GDK_DRAWABLE_XDISPLAY (event->window);
   xevent.window = GDK_DRAWABLE_XID (event->window);
-  xevent.root = GDK_ROOT_WINDOW();
+  xevent.root = GDK_DRAWABLE_XROOTWIN(event->window);
   xevent.subwindow = xevent.window;
   xevent.time = event->time;
   xevent.x = xevent.x_root = 0;

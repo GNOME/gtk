@@ -359,7 +359,8 @@ gtk_progress_create_pixmap (GtkProgress *progress)
       if (progress->offscreen_pixmap)
 	gdk_pixmap_unref (progress->offscreen_pixmap);
 
-      progress->offscreen_pixmap = gdk_pixmap_new (widget->window,
+      progress->offscreen_pixmap = gdk_pixmap_new_for_screen (widget->window,
+						   widget->screen,
 						   widget->allocation.width,
 						   widget->allocation.height,
 						   -1);

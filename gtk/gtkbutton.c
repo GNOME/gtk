@@ -1071,7 +1071,8 @@ gtk_button_finish_activate (GtkButton *button,
   g_source_remove (button->activate_timeout);
   button->activate_timeout = 0;
 
-  gdk_keyboard_ungrab (gtk_get_current_event_time ());
+  gdk_keyboard_ungrab_for_display(gdk_window_get_display(widget->window),
+				  gtk_get_current_event_time ());
   gtk_grab_remove (widget);
 
   button->button_down = FALSE;

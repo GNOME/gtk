@@ -31,11 +31,15 @@ struct _GdkFont
 
 GType    gdk_font_get_type  (void);
 
-GdkFont* gdk_font_load	    (const gchar    *font_name);
-GdkFont* gdk_fontset_load   (const gchar    *fontset_name);
-
+GdkFont *gdk_font_load_for_display (const gchar * font_name,
+				    GdkDisplay * display);
 GdkFont* gdk_font_load             (const gchar          *font_name);
+GdkFont *gdk_fontset_load_for_display (const gchar * fontset_name,
+				       GdkDisplay * display);
 GdkFont* gdk_fontset_load          (const gchar          *fontset_name);
+GdkFont *gdk_font_from_description_for_display (PangoFontDescription *
+						font_desc,
+						GdkDisplay * display);
 GdkFont* gdk_font_from_description (PangoFontDescription *font_desc);
 
 GdkFont* gdk_font_ref	    (GdkFont        *font);

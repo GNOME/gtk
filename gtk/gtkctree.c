@@ -34,6 +34,8 @@
 #include "gtkmain.h"
 #include "gtkdnd.h"
 #include <gdk/gdkkeysyms.h>
+#include <gdk/gdkscreen.h>
+#include <gdk/gdkdisplay.h>
 
 #define PM_SIZE                    8
 #define TAB_SIZE                   (PM_SIZE + 6)
@@ -2476,7 +2478,9 @@ change_focus_row_expansion (GtkCTree          *ctree,
 
   clist = GTK_CLIST (ctree);
 
-  if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (ctree))
+  if (gdk_pointer_is_grabbed_for_display (
+		gdk_window_get_display(GTK_WIDGET(ctree)->window)) && 
+      GTK_WIDGET_HAS_GRAB (ctree))
     return;
   
   if (!(node =
@@ -4810,10 +4814,14 @@ gtk_ctree_node_set_shift (GtkCTree     *ctree,
 static void
 remove_grab (GtkCList *clist)
 {
-  if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist))
+  if (gdk_pointer_is_grabbed_for_display (
+		gdk_window_get_display(GTK_WIDGET(clist)->window)) && 
+      GTK_WIDGET_HAS_GRAB (clist))
     {
       gtk_grab_remove (GTK_WIDGET (clist));
-      gdk_pointer_ungrab (GDK_CURRENT_TIME);
+      gdk_pointer_ungrab_for_display (
+		      gdk_window_get_display(GTK_WIDGET(clist)->window),
+		      GDK_CURRENT_TIME);
     }
 
   if (clist->htimer)
@@ -6033,7 +6041,9 @@ gtk_ctree_drag_motion (GtkWidget      *widget,
   if (GTK_CLIST_REORDERABLE (clist))
     {
       GList *list;
-      GdkAtom atom = gdk_atom_intern ("gtk-clist-drag-reorder", FALSE);
+      GdkAtom atom = gdk_atom_intern_for_display ("gtk-clist-drag-reorder", 
+						  FALSE,
+					    GTK_WIDGET_GET_DISPLAY(widget));
 
       list = context->targets;
       while (list)
@@ -6122,7 +6132,9 @@ gtk_ctree_drag_data_received (GtkWidget        *widget,
   if (GTK_CLIST_REORDERABLE (clist) &&
       gtk_drag_get_source_widget (context) == widget &&
       selection_data->target ==
-      gdk_atom_intern ("gtk-clist-drag-reorder", FALSE) &&
+      gdk_atom_intern_for_display ("gtk-clist-drag-reorder",
+				   FALSE,
+			    GTK_WIDGET_GET_DISPLAY(widget)) &&
       selection_data->format == GTK_TYPE_POINTER &&
       selection_data->length == sizeof (GtkCListCellInfo))
     {

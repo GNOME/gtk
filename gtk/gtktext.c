@@ -991,8 +991,8 @@ gtk_text_insert (GtkText    *text,
 	  memcpy (chars_nt, chars, length);
 	  chars_nt[length] = 0;
 	}
-      numwcs = gdk_mbstowcs (text->text.wc + text->gap_position, chars_nt,
- 			     length);
+      numwcs = gdk_mbstowcs(text->text.wc + text->gap_position, 
+			    chars_nt, length);
       if (chars_nt != chars)
 	g_free(chars_nt);
       if (numwcs < 0)
@@ -1156,9 +1156,8 @@ gtk_text_get_chars (GtkOldEditable *old_editable,
 		    gint            end_pos)
 {
   GtkText *text;
-
-  gchar *retval;
   
+  gchar *retval;
   g_return_val_if_fail (old_editable != NULL, NULL);
   g_return_val_if_fail (GTK_IS_TEXT (old_editable), NULL);
   text = GTK_TEXT (old_editable);
@@ -1179,7 +1178,7 @@ gtk_text_get_chars (GtkOldEditable *old_editable,
       GdkWChar ch;
       ch = text->text.wc[end_pos];
       text->text.wc[end_pos] = 0;
-      retval = gdk_wcstombs (text->text.wc + start_pos);
+      retval = gdk_wcstombs(text->text.wc + start_pos);
       text->text.wc[end_pos] = ch;
     }
   else
@@ -1328,15 +1327,17 @@ gtk_text_realize (GtkWidget *widget)
   if (widget->style->bg_pixmap[GTK_STATE_NORMAL])
     text->bg_gc = create_bg_gc (text);
   
-  text->line_wrap_bitmap = gdk_bitmap_create_from_data (text->text_area,
-							(gchar*) line_wrap_bits,
-							line_wrap_width,
-							line_wrap_height);
+  text->line_wrap_bitmap = gdk_bitmap_create_from_data_for_screen (text->text_area,
+								   widget->screen,
+								   (gchar*) line_wrap_bits,
+								   line_wrap_width,
+								   line_wrap_height);
   
-  text->line_arrow_bitmap = gdk_bitmap_create_from_data (text->text_area,
-							 (gchar*) line_arrow_bits,
-							 line_arrow_width,
-							 line_arrow_height);
+  text->line_arrow_bitmap = gdk_bitmap_create_from_data_for_screen (text->text_area,
+								    widget->screen,
+								    (gchar*) line_arrow_bits,
+								    line_arrow_width,
+								    line_arrow_height);
   
   text->gc = gdk_gc_new (text->text_area);
   gdk_gc_set_exposures (text->gc, TRUE);
@@ -1708,7 +1709,9 @@ gtk_text_button_press (GtkWidget      *widget,
 	    }
 	  
 	  gtk_selection_convert (widget, GDK_SELECTION_PRIMARY,
-				 gdk_atom_intern ("UTF8_STRING", FALSE),
+				 gdk_atom_intern_for_display ("UTF8_STRING", 
+							      FALSE,
+					     GTK_WIDGET_GET_DISPLAY(widget)),
 				 event->time);
 	}
       else
@@ -1724,8 +1727,13 @@ gtk_text_button_press (GtkWidget      *widget,
 				  text->cursor_mark.index);
 	  
 	  old_editable->has_selection = FALSE;
-	  if (gdk_selection_owner_get (GDK_SELECTION_PRIMARY) == widget->window)
-	    gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY, event->time);
+	  if (gdk_selection_owner_get_for_display (
+		GTK_WIDGET_GET_DISPLAY(widget),GDK_SELECTION_PRIMARY) == 
+	      widget->window)
+	    gtk_selection_owner_set_for_display (GTK_WIDGET_GET_DISPLAY(widget),
+						 NULL, 
+						 GDK_SELECTION_PRIMARY, 
+						 event->time);
 	}
     }
   
@@ -1767,9 +1775,10 @@ gtk_text_button_release (GtkWidget      *widget,
       old_editable->has_selection = FALSE;
       if (old_editable->selection_start_pos != old_editable->selection_end_pos)
 	{
-	  if (gtk_selection_owner_set (widget,
-				       GDK_SELECTION_PRIMARY,
-				       event->time))
+	  if (gtk_selection_owner_set_for_display (GTK_WIDGET_GET_DISPLAY(widget),
+						   widget,
+						   GDK_SELECTION_PRIMARY,
+						   event->time))
 	    old_editable->has_selection = TRUE;
 	  else
 	    gtk_text_update_text (old_editable, old_editable->selection_start_pos,
@@ -1777,8 +1786,12 @@ gtk_text_button_release (GtkWidget      *widget,
 	}
       else
 	{
-	  if (gdk_selection_owner_get (GDK_SELECTION_PRIMARY) == widget->window)
-	    gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY, event->time);
+	  if (gdk_selection_owner_get_for_display (
+		GTK_WIDGET_GET_DISPLAY(widget),GDK_SELECTION_PRIMARY) == 
+	      widget->window)
+	    gtk_selection_owner_set_for_display (GTK_WIDGET_GET_DISPLAY(widget), 
+						 NULL,
+					    GDK_SELECTION_PRIMARY, event->time);
 	}
     }
   else if (event->button == 3)

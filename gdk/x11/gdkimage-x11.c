@@ -51,6 +51,8 @@
 #include "gdkimage.h"
 #include "gdkprivate.h"
 #include "gdkprivate-x11.h"
+#include "gdkdisplay-x11.h"
+#include "gdkscreen-x11.h"
 
 static GList *image_list = NULL;
 static gpointer parent_class = NULL;
@@ -140,28 +142,29 @@ gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint w, gint h)
   GdkImage *image;
   GdkImagePrivateX11 *private;
   image = g_object_new (gdk_image_get_type (), NULL);
-  private = PRIVATE_DATA (image);
-  private->xdisplay = gdk_display;
+  private = GDK_IMAGE_PRIVATE_DATA (image);
+  private->screen = visual->screen;
   image->type = GDK_IMAGE_NORMAL;
   image->visual = visual;
   image->width = w;
   image->height = h;
   image->depth = 1;
   image->bits_per_pixel = 1;
-  xvisual = ((GdkVisualPrivate*) visual)->xvisual;
-  private->ximage = XCreateImage(private->xdisplay, xvisual, 1, XYBitmap,
-				 0, 0, w ,h, 8, 0);
+  xvisual = ((GdkVisualPrivate *) visual)->xvisual;
+  private->ximage =
+    XCreateImage (GDK_SCREEN_XDISPLAY (visual->screen), xvisual, 1, XYBitmap, 0, 0, w,
+		  h, 8, 0);
   private->ximage->data = data;
   private->ximage->bitmap_bit_order = MSBFirst;
   private->ximage->byte_order = MSBFirst;
   image->byte_order = MSBFirst;
-  image->mem =  private->ximage->data;
+  image->mem = private->ximage->data;
   image->bpl = private->ximage->bytes_per_line;
   image->bpp = 1;
-  return(image);
+  return (image);
 } /* gdk_image_new_bitmap() */
 
-static int
+int
 gdk_image_check_xshm(Display *display)
 /* 
  * Desc: query the server for support for the MIT_SHM extension
@@ -186,15 +189,13 @@ gdk_image_check_xshm(Display *display)
 }
 
 void
-_gdk_windowing_image_init (void)
+_gdk_windowing_image_init (GdkDisplay *display)
 {
-  if (gdk_use_xshm)
-    {
-      if (!gdk_image_check_xshm (gdk_display))
-	{
-	  gdk_use_xshm = False;
-	}
+  if (GDK_DISPLAY_IMPL_X11 (display)->gdk_use_xshm) {
+    if (!gdk_image_check_xshm (GDK_DISPLAY_XDISPLAY (display))) {
+      GDK_DISPLAY_IMPL_X11 (display)->gdk_use_xshm = False;
     }
+  }
 }
 
 GdkImage*
@@ -207,165 +208,169 @@ gdk_image_new (GdkImageType  type,
   GdkImagePrivateX11 *private;
 #ifdef USE_SHM
   XShmSegmentInfo *x_shm_info;
-#endif /* USE_SHM */
+#endif /* use_shm */
   Visual *xvisual;
+  GdkScreenImplX11 *scr_impl = GDK_SCREEN_IMPL_X11 (visual->screen);
 
-  switch (type)
-    {
-    case GDK_IMAGE_FASTEST:
-      image = gdk_image_new (GDK_IMAGE_SHARED, visual, width, height);
+  switch (type) {
+  case GDK_IMAGE_FASTEST:
+    image =
+      gdk_image_new (GDK_IMAGE_SHARED, visual, width, height);
 
-      if (!image)
-	image = gdk_image_new (GDK_IMAGE_NORMAL, visual, width, height);
+    if (!image)
+      image =
+	gdk_image_new (GDK_IMAGE_NORMAL, visual, width, height);
+    break;
+
+  default:
+    image = g_object_new (gdk_image_get_type (), NULL);
+
+    private = GDK_IMAGE_PRIVATE_DATA (image);
+
+    private->screen = visual->screen;
+
+    image->type = type;
+    image->visual = visual;
+    image->width = width;
+    image->height = height;
+    image->depth = visual->depth;
+
+    xvisual = ((GdkVisualPrivate *) visual)->xvisual;
+
+    switch (type) {
+    case GDK_IMAGE_SHARED:
+#ifdef USE_SHM
+      if (GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm) {
+	private->x_shm_info = g_new (XShmSegmentInfo, 1);
+	x_shm_info = private->x_shm_info;
+
+	private->ximage =
+	  XShmCreateImage (scr_impl->xdisplay, xvisual, visual->depth,
+			   ZPixmap, NULL, x_shm_info, width, height);
+	if (private->ximage == NULL) {
+	  g_warning ("XShmCreateImage failed");
+
+	  g_free (image);
+	  GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm = False;
+	  return NULL;
+	}
+
+	x_shm_info->shmid = shmget (IPC_PRIVATE,
+				    private->ximage->bytes_per_line *
+				    private->ximage->height,
+				    IPC_CREAT | 0600);
+
+	if (x_shm_info->shmid == -1) {
+	  /*
+	     EINVAL indicates, most likely, that the segment we asked for
+	     * is bigger than SHMMAX, so we don't treat it as a permanently
+	     * fatal error. ENOSPC and ENOMEM may also indicate this, but
+	     * more likely are permanent errors.
+	   */
+	  if (errno != EINVAL) {
+	    g_warning ("shmget failed: error %d (%s)", errno,
+		       g_strerror (errno));
+	    GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm = False;
+	  }
+
+	  XDestroyImage (private->ximage);
+	  g_free (private->x_shm_info);
+	  g_free (image);
+
+	  return NULL;
+	}
+
+	x_shm_info->readOnly = False;
+	x_shm_info->shmaddr = shmat (x_shm_info->shmid, 0, 0);
+	private->ximage->data = x_shm_info->shmaddr;
+
+	if (x_shm_info->shmaddr == (char *) -1) {
+	  g_warning ("shmat failed: error %d (%s)", errno,
+		     g_strerror (errno));
+
+	  XDestroyImage (private->ximage);
+	  shmctl (x_shm_info->shmid, IPC_RMID, 0);
+
+	  g_free (private->x_shm_info);
+	  g_free (image);
+
+	  /*
+	     Failure in shmat is almost certainly permanent. Most likely error is
+	     * EMFILE, which would mean that we've exceeded the per-process
+	     * Shm segment limit.
+	   */
+	  GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm = False;
+
+	  return NULL;
+	}
+
+	gdk_error_trap_push ();
+
+	XShmAttach (scr_impl->xdisplay, x_shm_info);
+	XSync (scr_impl->xdisplay, False);
+
+	if (gdk_error_trap_pop ()) {
+	  /*
+	     this is the common failure case so omit warning 
+	   */
+	  XDestroyImage (private->ximage);
+	  shmdt (x_shm_info->shmaddr);
+	  shmctl (x_shm_info->shmid, IPC_RMID, 0);
+
+	  g_free (private->x_shm_info);
+	  g_free (image);
+
+	  GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm = False;
+
+	  return NULL;
+	}
+
+	/*
+	   We mark the segment as destroyed so that when
+	   * the last process detaches, it will be deleted.
+	   * There is a small possibility of leaking if
+	   * we die in XShmAttach. In theory, a signal handler
+	   * could be set up.
+	 */
+	shmctl (x_shm_info->shmid, IPC_RMID, 0);
+
+	if (image)
+	  image_list = g_list_prepend (image_list, image);
+      }
+      else {
+	g_free (image);
+	return NULL;
+      }
+      break;
+#else /* USE_SHM */
+      g_free (image);
+      return NULL;
+#endif /* USE_SHM */
+    case GDK_IMAGE_NORMAL:
+      private->ximage =
+	XCreateImage (scr_impl->xdisplay, xvisual, visual->depth, ZPixmap, 0,
+		      0, width, height, 32, 0);
+
+      /*
+         Use malloc, not g_malloc here, because X will call free()
+         * on this data
+       */
+      private->ximage->data = malloc (private->ximage->bytes_per_line *
+				      private->ximage->height);
       break;
 
-    default:
-      image = g_object_new (gdk_image_get_type (), NULL);
-      
-      private = PRIVATE_DATA (image);
-
-      private->xdisplay = gdk_display;
-
-      image->type = type;
-      image->visual = visual;
-      image->width = width;
-      image->height = height;
-      image->depth = visual->depth;
-
-      xvisual = ((GdkVisualPrivate*) visual)->xvisual;
-
-      switch (type)
-	{
-	case GDK_IMAGE_SHARED:
-#ifdef USE_SHM
-	  if (gdk_use_xshm)
-	    {
-	      private->x_shm_info = g_new (XShmSegmentInfo, 1);
-	      x_shm_info = private->x_shm_info;
-
-	      private->ximage = XShmCreateImage (private->xdisplay, xvisual, visual->depth,
-						 ZPixmap, NULL, x_shm_info, width, height);
-	      if (private->ximage == NULL)
-		{
-		  g_warning ("XShmCreateImage failed");
-		  
-		  g_free (image);
-		  gdk_use_xshm = False;
-		  return NULL;
-		}
-
-	      x_shm_info->shmid = shmget (IPC_PRIVATE,
-					  private->ximage->bytes_per_line * private->ximage->height,
-					  IPC_CREAT | 0600);
-
-	      if (x_shm_info->shmid == -1)
-		{
-		  /* EINVAL indicates, most likely, that the segment we asked for
-		   * is bigger than SHMMAX, so we don't treat it as a permanent
-		   * error. ENOSPC and ENOMEM may also indicate this, but
-		   * more likely are permanent errors.
-		   */
-		  if (errno != EINVAL)
-		    {
-		      g_warning ("shmget failed: error %d (%s)", errno, g_strerror (errno));
-		      gdk_use_xshm = False;
-		    }
-
-		  XDestroyImage (private->ximage);
-		  g_free (private->x_shm_info);
-		  g_free (image);
-
-		  return NULL;
-		}
-
-	      x_shm_info->readOnly = False;
-	      x_shm_info->shmaddr = shmat (x_shm_info->shmid, 0, 0);
-	      private->ximage->data = x_shm_info->shmaddr;
-
-	      if (x_shm_info->shmaddr == (char*) -1)
-		{
-		  g_warning ("shmat failed: error %d (%s)", errno, g_strerror (errno));
-
-		  XDestroyImage (private->ximage);
-		  shmctl (x_shm_info->shmid, IPC_RMID, 0);
-		  
-		  g_free (private->x_shm_info);
-		  g_free (image);
-
-		  /* Failure in shmat is almost certainly permanent. Most likely error is
-		   * EMFILE, which would mean that we've exceeded the per-process
-		   * Shm segment limit.
-		   */
-		  gdk_use_xshm = False;
-		  
-		  return NULL;
-		}
-
-	      gdk_error_trap_push ();
-
-	      XShmAttach (private->xdisplay, x_shm_info);
-	      XSync (private->xdisplay, False);
-
-	      if (gdk_error_trap_pop ())
-		{
-		  /* this is the common failure case so omit warning */
-		  XDestroyImage (private->ximage);
-		  shmdt (x_shm_info->shmaddr);
-		  shmctl (x_shm_info->shmid, IPC_RMID, 0);
-                  
-		  g_free (private->x_shm_info);
-		  g_free (image);
-
-		  gdk_use_xshm = False;
-
-		  return NULL;
-		}
-	      
-	      /* We mark the segment as destroyed so that when
-	       * the last process detaches, it will be deleted.
-	       * There is a small possibility of leaking if
-	       * we die in XShmAttach. In theory, a signal handler
-	       * could be set up.
-	       */
-	      shmctl (x_shm_info->shmid, IPC_RMID, 0);		      
-
-	      if (image)
-		image_list = g_list_prepend (image_list, image);
-	    }
-	  else
-	    {
-	      g_free (image);
-	      return NULL;
-	    }
-	  break;
-#else /* USE_SHM */
-	  g_free (image);
-	  return NULL;
-#endif /* USE_SHM */
-	case GDK_IMAGE_NORMAL:
-	  private->ximage = XCreateImage (private->xdisplay, xvisual, visual->depth,
-					  ZPixmap, 0, 0, width, height, 32, 0);
-
-	  /* Use malloc, not g_malloc here, because X will call free()
-	   * on this data
-	   */
-	  private->ximage->data = malloc (private->ximage->bytes_per_line *
-					  private->ximage->height);
-	  break;
-
-	case GDK_IMAGE_FASTEST:
-	  g_assert_not_reached ();
-	}
-
-      if (image)
-	{
-	  image->byte_order = private->ximage->byte_order;
-	  image->mem = private->ximage->data;
-	  image->bpl = private->ximage->bytes_per_line;
-	  image->bpp = (private->ximage->bits_per_pixel + 7) / 8;
-	  image->bits_per_pixel = private->ximage->bits_per_pixel;
-	}
+    case GDK_IMAGE_FASTEST:
+      g_assert_not_reached ();
     }
+
+    if (image) {
+      image->byte_order = private->ximage->byte_order;
+      image->mem = private->ximage->data;
+      image->bpl = private->ximage->bytes_per_line;
+      image->bpp = (private->ximage->bits_per_pixel + 7) / 8;
+      image->bits_per_pixel = private->ximage->bits_per_pixel;
+    }
+  }
 
   return image;
 }
@@ -399,7 +404,7 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
   
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
   
-  ximage = XGetImage (impl->xdisplay,
+  ximage = XGetImage (GDK_SCREEN_XDISPLAY(impl->screen),
 		      impl->xid,
 		      x, y, width, height,
 		      AllPlanes, ZPixmap);
@@ -409,8 +414,7 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
 
   image = g_object_new (gdk_image_get_type (), NULL);
   private = PRIVATE_DATA (image);
-
-  private->xdisplay = gdk_display;
+  private->screen = impl->screen;
   private->ximage = ximage;
 
   image->type = GDK_IMAGE_NORMAL;
@@ -488,7 +492,7 @@ gdk_x11_image_destroy (GdkImage *image)
 #ifdef USE_SHM
       gdk_flush();
 
-      XShmDetach (private->xdisplay, private->x_shm_info);
+      XShmDetach (GDK_SCREEN_XDISPLAY(private->screen), private->x_shm_info);
       XDestroyImage (private->ximage);
 
       x_shm_info = private->x_shm_info;

@@ -344,7 +344,8 @@ gtk_hpaned_button_release (GtkWidget      *widget,
       gtk_hpaned_xor_line (paned);
       paned->in_drag = FALSE;
       paned->position_set = TRUE;
-      gdk_pointer_ungrab (event->time);
+      gdk_pointer_ungrab_for_display (gdk_window_get_display(widget->window),
+				      event->time);
       gtk_widget_queue_resize (GTK_WIDGET (paned));
       g_object_freeze_notify (object);
       g_object_notify (object, "position");

@@ -36,7 +36,6 @@
 
 enum {
   PROP_0,
-  PROP_ADJUSTMENT
 };
 
 static void     gtk_vscrollbar_class_init       (GtkVScrollbarClass *klass);
@@ -107,15 +106,6 @@ gtk_vscrollbar_class_init (GtkVScrollbarClass *class)
   range_class->slider_update = gtk_vscrollbar_slider_update;
   range_class->trough_click = _gtk_range_default_vtrough_click;
   range_class->motion = _gtk_range_default_vmotion;
-
-  g_object_class_install_property (gobject_class,
-                                   PROP_ADJUSTMENT,
-                                   g_param_spec_object ("adjustment",
-							_("Adjustment"),
-							_("The GtkAdjustment that determines the values to use for this scrollbar."),
-                                                        GTK_TYPE_ADJUSTMENT,
-                                                        G_PARAM_READWRITE));
-
 }
 
 static void
@@ -130,9 +120,6 @@ gtk_vscrollbar_set_property (GObject         *object,
   
   switch (prop_id)
     {
-    case PROP_ADJUSTMENT:
-      gtk_range_set_adjustment (GTK_RANGE (vscrollbar), g_value_get_object (value));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -151,9 +138,6 @@ gtk_vscrollbar_get_property (GObject         *object,
   
   switch (prop_id)
     {
-    case PROP_ADJUSTMENT:
-      g_value_set_object (value, G_OBJECT (vscrollbar));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;

@@ -40,7 +40,8 @@
 
 enum {
   PROP_0,
-  PROP_UPDATE_POLICY
+  PROP_UPDATE_POLICY,
+  PROP_ADJUSTMENT
 };
 
 enum {
@@ -197,6 +198,14 @@ gtk_range_class_init (GtkRangeClass *class)
 						      GTK_UPDATE_CONTINUOUS,
 						      G_PARAM_READWRITE));
   
+  g_object_class_install_property (gobject_class,
+                                   PROP_ADJUSTMENT,
+                                   g_param_spec_object ("adjustment",
+							_("Adjustment"),
+							_("The GtkAdjustment that contains the current value of this range object"),
+                                                        GTK_TYPE_ADJUSTMENT,
+                                                        G_PARAM_READWRITE));
+
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("slider_width",
 							     _("Slider Width"),
@@ -246,6 +255,9 @@ gtk_range_set_property (GObject      *object,
     case PROP_UPDATE_POLICY:
       gtk_range_set_update_policy (range, g_value_get_enum (value));
       break;
+    case PROP_ADJUSTMENT:
+      gtk_range_set_adjustment (range, g_value_get_object (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -266,6 +278,9 @@ gtk_range_get_property (GObject      *object,
     {
     case PROP_UPDATE_POLICY:
       g_value_set_enum (value, range->policy);
+      break;
+    case PROP_ADJUSTMENT:
+      g_value_set_object (value, G_OBJECT (range->adjustment));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -363,6 +378,7 @@ gtk_range_set_adjustment (GtkRange      *range,
       range->old_page_size = adjustment->page_size;
       
       gtk_range_adjustment_changed (adjustment, (gpointer) range);
+      g_object_notify (G_OBJECT (range), "adjustment");
     }
 }
 

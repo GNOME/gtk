@@ -35,6 +35,8 @@
 #include "gtkintl.h"
 #include "gtkmenuitem.h"
 #include "gtknotebook.h"
+#include "gdk/gdkscreen.h"
+#include "gdk/gdkdisplay.h"
 
 struct _GtkLabelSelectionInfo
 {
@@ -125,6 +127,8 @@ static void gtk_label_select_region_index (GtkLabel *label,
 
 static gboolean gtk_label_mnemonic_activate (GtkWidget *widget,
 					     gboolean   group_cycling);
+static void     gtk_label_setup_mnemonic    (GtkLabel  *label,
+					     guint      last_key);
 
 
 static GtkMiscClass *parent_class = NULL;
@@ -272,8 +276,10 @@ gtk_label_set_property (GObject      *object,
 			GParamSpec   *pspec)
 {
   GtkLabel *label;
-  
+  guint last_keyval;
+
   label = GTK_LABEL (object);
+  last_keyval = label->mnemonic_keyval;
   
   switch (prop_id)
     {
@@ -281,6 +287,8 @@ gtk_label_set_property (GObject      *object,
       gtk_label_set_label_internal (label,
 				    g_strdup (g_value_get_string (value)));
       gtk_label_recalculate (label);
+      if (last_keyval != label->mnemonic_keyval)
+	gtk_label_setup_mnemonic (label, last_keyval);
       break;
     case PROP_ATTRIBUTES:
       gtk_label_set_attributes (label, g_value_get_boxed (value));
@@ -292,6 +300,8 @@ gtk_label_set_property (GObject      *object,
     case PROP_USE_UNDERLINE:
       gtk_label_set_use_underline_internal (label, g_value_get_boolean (value));
       gtk_label_recalculate (label);
+      if (label->use_underline)
+	gtk_label_setup_mnemonic (label, last_keyval);
       break;
     case PROP_JUSTIFY:
       gtk_label_set_justify (label, g_value_get_enum (value));
@@ -455,7 +465,7 @@ gtk_label_mnemonic_activate (GtkWidget *widget,
 
   /* barf if there was nothing to activate */
   g_warning ("Couldn't find a target for a mnemonic activation.");
-  gdk_beep ();
+  gdk_beep_for_display (gdk_window_get_display(widget->window));
   
   return FALSE;
 }
@@ -1041,7 +1051,7 @@ gtk_label_ensure_layout (GtkLabel *label,
 		       PANGO_SCALE * gdk_string_width (GTK_WIDGET (label)->style->font,
 						"This long string gives a good enough length for any line to have."));
 	  width = MIN (width,
-		       PANGO_SCALE * (gdk_screen_width () + 1) / 2);
+		       PANGO_SCALE * (gdk_screen_width_for_screen (GTK_WIDGET(label)->screen) + 1) / 2);
 
 	  pango_layout_set_width (label->layout, width);
 	  pango_layout_get_extents (label->layout, NULL, &logical_rect);
@@ -1822,8 +1832,7 @@ get_text_callback (GtkClipboard     *clipboard,
       str = g_strndup (label->text + start,
                        end - start);
       
-      gtk_selection_data_set_text (selection_data, 
-                                   str);
+      gtk_selection_data_set_text(selection_data, str);
 
       g_free (str);
     }
@@ -1868,7 +1877,8 @@ gtk_label_select_region_index (GtkLabel *label,
       label->select_info->selection_anchor = anchor_index;
       label->select_info->selection_end = end_index;
 
-      clipboard = gtk_clipboard_get (GDK_SELECTION_PRIMARY);      
+      clipboard = gtk_clipboard_get_for_display (GDK_SELECTION_PRIMARY,
+					GTK_WIDGET_GET_DISPLAY(label));      
 
       gtk_clipboard_set_with_owner (clipboard,
                                     targets,

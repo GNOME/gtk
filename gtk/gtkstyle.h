@@ -112,6 +112,7 @@ struct _GtkStyle
   
   gint depth;
   GdkColormap *colormap;
+  GdkScreen   *screen;
   
   /* the RcStyle from which this style was created */
   GtkRcStyle	 *rc_style;

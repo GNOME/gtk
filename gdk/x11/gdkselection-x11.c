@@ -32,6 +32,9 @@
 #include "gdkselection.h"
 #include "gdkprivate.h"
 #include "gdkprivate-x11.h"
+#include "gdkinternals.h"
+#include "gdkdisplay-x11.h"
+#include "gdkscreen-x11.h"
 
 typedef struct _OwnerInfo OwnerInfo;
 
@@ -96,68 +99,80 @@ _gdk_selection_filter_clear_event (XSelectionClearEvent *event)
 }
 
 gboolean
-gdk_selection_owner_set (GdkWindow *owner,
-			 GdkAtom    selection,
-			 guint32    time,
-			 gboolean   send_event)
+gdk_selection_owner_set_for_display (GdkDisplay * display,
+				     GdkWindow * owner,
+				     GdkAtom selection,
+				     guint32 time, gboolean send_event)
 {
   Display *xdisplay;
   Window xwindow;
   GSList *tmp_list;
   OwnerInfo *info;
 
-  if (owner)
-    {
-      if (GDK_WINDOW_DESTROYED (owner))
-	return FALSE;
+  if (owner) {
+    if (GDK_WINDOW_DESTROYED (owner))
+      return FALSE;
 
-      xdisplay = GDK_WINDOW_XDISPLAY (owner);
-      xwindow = GDK_WINDOW_XID (owner);
-    }
-  else
-    {
-      xdisplay = gdk_display;
-      xwindow = None;
-    }
-  
+    xdisplay = GDK_WINDOW_XDISPLAY (owner);
+    xwindow = GDK_WINDOW_XID (owner);
+  }
+  else {
+    xdisplay = GDK_DISPLAY_XDISPLAY (display);
+    xwindow = None;
+  }
+
   tmp_list = owner_list;
-  while (tmp_list)
-    {
-      info = tmp_list->data;
-      if (info->selection == selection)
-	{
-	  owner_list = g_slist_remove (owner_list, info);
-	  g_free (info);
-	  break;
-	}
-      tmp_list = tmp_list->next;
+  while (tmp_list) {
+    info = tmp_list->data;
+    if (info->selection == selection) {
+      owner_list = g_slist_remove (owner_list, info);
+      g_free (info);
+      break;
     }
+    tmp_list = tmp_list->next;
+  }
 
-  if (owner)
-    {
-      info = g_new (OwnerInfo, 1);
-      info->owner = owner;
-      info->serial = NextRequest (GDK_WINDOW_XDISPLAY (owner));
-      info->selection = selection;
+  if (owner) {
+    info = g_new (OwnerInfo, 1);
+    info->owner = owner;
+    info->serial = NextRequest (GDK_WINDOW_XDISPLAY (owner));
+    info->selection = selection;
 
-      owner_list = g_slist_prepend (owner_list, info);
-    }
+    owner_list = g_slist_prepend (owner_list, info);
+  }
 
   XSetSelectionOwner (xdisplay, selection, xwindow, time);
 
   return (XGetSelectionOwner (xdisplay, selection) == xwindow);
 }
 
-GdkWindow*
-gdk_selection_owner_get (GdkAtom selection)
+gboolean
+gdk_selection_owner_set (GdkWindow *owner,
+			 GdkAtom    selection,
+			 guint32    time,
+			 gboolean   send_event)
+{
+ GDK_NOTE(MULTIHEAD,g_message("Use gdk_selection_owner_set_for_display instead\n"));
+ return gdk_selection_owner_set_for_display(DEFAULT_GDK_DISPLAY,owner,
+					    selection,time,send_event);
+}
+GdkWindow *
+gdk_selection_owner_get_for_display (GdkDisplay * display, GdkAtom selection)
 {
   Window xwindow;
 
-  xwindow = XGetSelectionOwner (gdk_display, selection);
+  xwindow = XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display), selection);
   if (xwindow == None)
     return NULL;
 
   return gdk_window_lookup (xwindow);
+}
+
+GdkWindow*
+gdk_selection_owner_get (GdkAtom selection)
+{
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_selection_owner_get_for_display instead\n"));
+  return gdk_selection_owner_get_for_display(DEFAULT_GDK_DISPLAY,selection);
 }
 
 void
@@ -166,11 +181,12 @@ gdk_selection_convert (GdkWindow *requestor,
 		       GdkAtom    target,
 		       guint32    time)
 {
+  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11(GDK_WINDOW_DISPLAY(requestor));
   if (GDK_WINDOW_DESTROYED (requestor))
     return;
 
-  XConvertSelection (GDK_WINDOW_XDISPLAY (requestor), selection, target,
-		     gdk_selection_property, GDK_WINDOW_XID (requestor), time);
+  XConvertSelection (GDK_WINDOW_XDISPLAY (requestor),selection,target,
+		    dpy->gdk_selection_property, GDK_WINDOW_XID (requestor), time);
 }
 
 gint
@@ -185,9 +201,11 @@ gdk_selection_property_get (GdkWindow  *requestor,
   GdkAtom prop_type;
   gint prop_format;
   guchar *t = NULL;
+  GdkDisplayImplX11 * dpy; 
 
   g_return_val_if_fail (requestor != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (requestor), 0);
+  dpy = GDK_DISPLAY_IMPL_X11(GDK_WINDOW_DISPLAY(requestor));
 
   /* If retrieved chunks are typically small, (and the ICCCM says the
      should be) it would be a win to try first with a buffer of
@@ -199,7 +217,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
   t = NULL;
   XGetWindowProperty (GDK_WINDOW_XDISPLAY (requestor),
 		      GDK_WINDOW_XID (requestor),
-		      gdk_selection_property, 0, 0, False,
+		      dpy->gdk_selection_property, 0, 0, False,
 		      AnyPropertyType, &prop_type, &prop_format,
 		      &nitems, &nbytes, &t);
 
@@ -230,7 +248,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
      Otherwise there's no guarantee we'll win the race ... */
   XGetWindowProperty (GDK_DRAWABLE_XDISPLAY (requestor),
 		      GDK_DRAWABLE_XID (requestor),
-		      gdk_selection_property, 0, (nbytes + 3) / 4, False,
+		      dpy->gdk_selection_property, 0, (nbytes + 3) / 4, False,
 		      AnyPropertyType, &prop_type, &prop_format,
 		      &nitems, &nbytes, &t);
 
@@ -249,6 +267,27 @@ gdk_selection_property_get (GdkWindow  *requestor,
     }
 }
 
+void
+gdk_selection_send_notify_for_display (GdkDisplay * display,
+				       guint32 requestor,
+				       GdkAtom selection,
+				       GdkAtom target,
+				       GdkAtom property, guint32 time)
+{
+  XSelectionEvent xevent;
+
+  xevent.type = SelectionNotify;
+  xevent.serial = 0;
+  xevent.send_event = True;
+  xevent.display = GDK_DISPLAY_XDISPLAY (display);
+  xevent.requestor = requestor;
+  xevent.selection = selection;
+  xevent.target = target;
+  xevent.property = property;
+  xevent.time = time;
+
+  gdk_send_xevent (requestor, False, NoEventMask, (XEvent *) & xevent);
+}
 
 void
 gdk_selection_send_notify (guint32  requestor,
@@ -257,19 +296,38 @@ gdk_selection_send_notify (guint32  requestor,
 			   GdkAtom  property,
 			   guint32  time)
 {
-  XSelectionEvent xevent;
+    GDK_NOTE(MULTIHEAD,
+	     g_message("Use gdk_selection_send_notify_for_display instead\n"));
+    gdk_selection_send_notify_for_display(DEFAULT_GDK_DISPLAY,requestor,
+					  selection,target,property,time);
+}
+gint
+gdk_text_property_to_text_list_for_display (GdkDisplay * display,
+					    GdkAtom encoding,
+					    gint format,
+					    const guchar * text,
+					    gint length, gchar *** list)
+{
+  XTextProperty property;
+  gint count = 0;
+  gint res;
 
-  xevent.type = SelectionNotify;
-  xevent.serial = 0;
-  xevent.send_event = True;
-  xevent.display = gdk_display;
-  xevent.requestor = requestor;
-  xevent.selection = selection;
-  xevent.target = target;
-  xevent.property = property;
-  xevent.time = time;
+  if (!list)
+    return 0;
 
-  gdk_send_xevent (requestor, False, NoEventMask, (XEvent*) &xevent);
+  property.value = (guchar *) text;
+  property.encoding = encoding;
+  property.format = format;
+  property.nitems = length;
+  res =
+    XmbTextPropertyToTextList (GDK_DISPLAY_XDISPLAY (display), &property,
+			       list, &count);
+
+  if (res == XNoMemory || res == XLocaleNotSupported ||
+      res == XConverterNotFound)
+    return 0;
+  else
+    return count;
 }
 
 gint
@@ -279,24 +337,9 @@ gdk_text_property_to_text_list (GdkAtom       encoding,
 				gint          length,
 				gchar      ***list)
 {
-  XTextProperty property;
-  gint count = 0;
-  gint res;
-
-  if (!list) 
-    return 0;
-
-  property.value = (guchar *)text;
-  property.encoding = encoding;
-  property.format = format;
-  property.nitems = length;
-  res = XmbTextPropertyToTextList (GDK_DISPLAY(), &property, list, &count);
-
-  if (res == XNoMemory || res == XLocaleNotSupported || 
-      res == XConverterNotFound)
-    return 0;
-  else
-    return count;
+  GDK_NOTE(MULTIHEAD, g_message(" Use gdk_text_property_to_text_list_for_display instead\n"));
+  return gdk_text_property_to_text_list_for_display(DEFAULT_GDK_DISPLAY,encoding,
+						    format,text,length,list);
 }
 
 void
@@ -375,6 +418,77 @@ make_list (const gchar  *text,
 
   return n_strings;
 }
+gint
+gdk_text_property_to_utf8_list_for_display (GdkDisplay *display,
+					    GdkAtom encoding,
+					    gint format,
+					    const guchar *text,
+					    gint length, gchar *** list)
+{
+  g_return_val_if_fail (text != NULL, 0);
+  g_return_val_if_fail (length >= 0, 0);
+
+  if (encoding == GDK_TARGET_STRING) {
+    return make_list ((gchar *) text, length, TRUE, list);
+  }
+  else if (encoding ==
+	   gdk_atom_intern_for_display ("UTF8_STRING", FALSE, display)) {
+    return make_list ((gchar *) text, length, FALSE, list);
+  }
+  else {
+    gchar **local_list;
+    gint local_count;
+    gint i;
+    gchar *charset = NULL;
+    gboolean need_conversion = !g_get_charset (&charset);
+    gint count = 0;
+    GError *error = NULL;
+
+    /*
+       Probably COMPOUND text, we fall back to Xlib routines
+     */
+    local_count = gdk_text_property_to_text_list_for_display (encoding,
+							      display,
+							      format,
+							      text,
+							      length,
+							      &local_list);
+    if (list)
+      *list = g_new (gchar *, local_count + 1);
+
+    for (i = 0; i < local_count; i++) {
+      /*
+         list contains stuff in our default encoding
+       */
+      if (need_conversion) {
+	gchar *utf = g_convert (local_list[i], -1,
+				"UTF-8", charset,
+				NULL, NULL, &error);
+	if (utf) {
+	  if (list)
+	    (*list)[count++] = utf;
+	  else
+	    g_free (utf);
+	}
+	else {
+	  g_warning ("Error converting to UTF-8 from '%s': %s",
+		     charset, error->message);
+	  g_error_free (error);
+	  error = NULL;
+	}
+      }
+      else {
+	if (list)
+	  (*list)[count++] = g_strdup (local_list[i]);
+      }
+    }
+
+    gdk_free_text_list (local_list);
+    (*list)[count] = NULL;
+
+    return count;
+  }
+}
 
 /**
  * gdk_text_property_to_utf8_list:
@@ -398,95 +512,31 @@ gdk_text_property_to_utf8_list (GdkAtom        encoding,
 				gint           length,
 				gchar       ***list)
 {
-  g_return_val_if_fail (text != NULL, 0);
-  g_return_val_if_fail (length >= 0, 0);
-  
-  if (encoding == GDK_TARGET_STRING)
-    {
-      return make_list ((gchar *)text, length, TRUE, list);
-    }
-  else if (encoding == gdk_atom_intern ("UTF8_STRING", FALSE))
-    {
-      return make_list ((gchar *)text, length, FALSE, list);
-    }
-  else
-    {
-      gchar **local_list;
-      gint local_count;
-      gint i;
-      gchar *charset = NULL;
-      gboolean need_conversion = !g_get_charset (&charset);
-      gint count = 0;
-      GError *error = NULL;
-      
-      /* Probably COMPOUND text, we fall back to Xlib routines
-       */
-      local_count = gdk_text_property_to_text_list (encoding,
-						    format, 
-						    text,
-						    length,
-						    &local_list);
-      if (list)
-	*list = g_new (gchar *, local_count + 1);
-      
-      for (i=0; i<local_count; i++)
-	{
-	  /* list contains stuff in our default encoding
-	   */
-	  if (need_conversion)
-	    {
-	      gchar *utf = g_convert (local_list[i], -1,
-				      "UTF-8", charset,
-				      NULL, NULL, &error);
-	      if (utf)
-		{
-		  if (list)
-		    (*list)[count++] = utf;
-		  else
-		    g_free (utf);
-		}
-	      else
-		{
-		  g_warning ("Error converting to UTF-8 from '%s': %s",
-			     charset, error->message);
-		  g_error_free (error);
-		  error = NULL;
-		}
-	    }
-	  else
-	    {
-	      if (list)
-		(*list)[count++] = g_strdup (local_list[i]);
-	    }
-	}
-      
-      gdk_free_text_list (local_list);
-      (*list)[count] = NULL;
-
-      return count;
-    }
+  GDK_NOTE(MULTIHEAD, 
+	   g_message("Use gdk_text_property_to_utf8_list_for_display instead\n"));
+  return gdk_text_property_to_utf8_list_for_display (DEFAULT_GDK_DISPLAY,encoding,
+						     format,text,length,list);
 }
 
 gint
-gdk_string_to_compound_text (const gchar *str,
-			     GdkAtom     *encoding,
-			     gint        *format,
-			     guchar     **ctext,
-			     gint        *length)
+gdk_string_to_compound_text_for_display (GdkDisplay * display,
+					 const gchar * str,
+					 GdkAtom * encoding,
+					 gint * format,
+					 guchar ** ctext, gint * length)
 {
   gint res;
   XTextProperty property;
 
-  res = XmbTextListToTextProperty (GDK_DISPLAY(), 
-				   (char **)&str, 1, XCompoundTextStyle,
-                               	   &property);
-  if (res != Success)
-    {
-      property.encoding = None;
-      property.format = None;
-      property.value = NULL;
-      property.nitems = 0;
-    }
+  res = XmbTextListToTextProperty (GDK_DISPLAY_XDISPLAY (display),
+				   (char **) &str, 1, XCompoundTextStyle,
+				   &property);
+  if (res != Success) {
+    property.encoding = None;
+    property.format = None;
+    property.value = NULL;
+    property.nitems = 0;
+  }
 
   if (encoding)
     *encoding = property.encoding;
@@ -498,6 +548,22 @@ gdk_string_to_compound_text (const gchar *str,
     *length = property.nitems;
 
   return res;
+}
+gint
+gdk_string_to_compound_text (const gchar *str,
+			     GdkAtom     *encoding,
+			     gint        *format,
+			     guchar     **ctext,
+			     gint        *length)
+{
+  GDK_NOTE(MULTIHEAD, 
+	   g_message("Use gdk_string_to_compound_text_for_display instead\n"));
+  return gdk_string_to_compound_text_for_display(DEFAULT_GDK_DISPLAY,
+						 str,
+						 encoding,
+						 format,
+						 ctext,
+						 length);
 }
 
 /* The specifications for COMPOUND_TEXT and STRING specify that C0 and
@@ -575,7 +641,6 @@ gdk_utf8_to_string_target (const gchar *str)
   g_free (tmp_str);
   return result;
 }
-
 /**
  * gdk_utf8_to_compound_text:
  * @str:      a UTF-8 string
@@ -638,6 +703,77 @@ gdk_utf8_to_compound_text (const gchar *str,
     locale_str = tmp_str;
     
   result = gdk_string_to_compound_text (locale_str,
+					encoding, format, ctext, length);
+  
+  g_free (locale_str);
+
+  return result;
+}
+
+/**
+ * gdk_utf8_to_compound_text_for_display:
+ * @display:  a #GdkDisplay
+ * @str:      a UTF-8 string
+ * @encoding: location to store resulting encoding
+ * @format:   location to store format of the result
+ * @ctext:    location to store the data of the result
+ * @length:   location to store the length of the data
+ *            stored in @ctext
+ * 
+ * Convert from UTF-8 to compound text. 
+ * 
+ * Return value: %TRUE if the conversion succeeded, otherwise
+ *               false.
+ **/
+gboolean
+gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,
+				       const gchar *str,
+				       GdkAtom     *encoding,
+				       gint        *format,
+				       guchar     **ctext,
+				       gint        *length)
+{
+  gboolean need_conversion;
+  gchar *charset;
+  gchar *locale_str, *tmp_str;
+  GError *error = NULL;
+  gboolean result;
+
+  g_return_val_if_fail (str != NULL, FALSE);
+
+  need_conversion = !g_get_charset (&charset);
+
+  tmp_str = sanitize_utf8 (str);
+
+  if (need_conversion)
+    {
+      locale_str = g_convert_with_fallback (tmp_str, -1,
+					    charset, "UTF-8",
+					    NULL, NULL, NULL, &error);
+      g_free (tmp_str);
+
+      if (!locale_str)
+	{
+	  g_warning ("Error converting from UTF-8 to '%s': %s",
+		     charset, error->message);
+	  g_error_free (error);
+
+	  if (encoding)
+	    *encoding = None;
+	  if (format)
+	    *format = None;
+	  if (ctext)
+	    *ctext = NULL;
+	  if (length)
+	    *length = 0;
+
+	  return FALSE;
+	}
+    }
+  else
+    locale_str = tmp_str;
+    
+  result = gdk_string_to_compound_text_for_display (display, locale_str,
 					encoding, format, ctext, length);
   
   g_free (locale_str);

@@ -37,142 +37,313 @@
 #include "gdkprivate-x11.h"
 #include "gdkinternals.h"
 #include "gdkkeysyms.h"
+#include "gdkscreen-x11.h"
+#include "gdkdisplay-x11.h"
 
 #include "config.h"
+#ifdef HAVE_XKB
+#include <X11/XKBlib.h>
+#endif /* HAVE_XKB */
 
-guint _gdk_keymap_serial = 0;
 
-static gint min_keycode = 0;
-static gint max_keycode = 0;
 
+/* not needed 
 static inline void
 update_keyrange (void)
 {
-  if (max_keycode == 0)
-    XDisplayKeycodes (gdk_display, &min_keycode, &max_keycode);
+    update_keyrange_for_display(DEFAULT_GDK_DISPLAY);
 }
-
-#ifdef HAVE_XKB
-#include <X11/XKBlib.h>
-
-gboolean _gdk_use_xkb = FALSE;
-static XkbDescPtr xkb_desc = NULL;
-
+*/
+/* not needed with multihead display 
 static XkbDescPtr
 get_xkb (void)
-{
-  static guint current_serial = 0;
-
-  update_keyrange ();
-  
-  if (xkb_desc == NULL)
-    {
-      xkb_desc = XkbGetMap (gdk_display, XkbKeySymsMask, XkbUseCoreKbd);
-      if (xkb_desc == NULL)
-        g_error ("Failed to get keymap");
-    }
-  else if (current_serial != _gdk_keymap_serial)
-    {
-      XkbGetUpdatedMap (gdk_display, XkbKeySymsMask, xkb_desc);
-    }
-
-  current_serial = _gdk_keymap_serial;
-
-  return xkb_desc;
+{	
+  return get_xkb_for_display(DEFAULT_GDK_DISPLAY);
 }
-#endif /* HAVE_XKB */
-
-/* Whether we were able to turn on detectable-autorepeat using
- * XkbSetDetectableAutorepeat. If FALSE, we'll fall back
- * to checking the next event with XPending().
- */
-gboolean _gdk_have_xkb_autorepeat = FALSE;
-
-static KeySym* keymap = NULL;
-static gint keysyms_per_keycode = 0;
-static XModifierKeymap* mod_keymap = NULL;
-static GdkModifierType group_switch_mask = 0;
-
+*/
+/*
 static void
 update_keymaps (void)
 {
-  static guint current_serial = 0;
-  
-#ifdef HAVE_XKB
-  g_assert (!_gdk_use_xkb);
-#endif
-  
-  if (keymap == NULL ||
-      current_serial != _gdk_keymap_serial)
-    {
-      gint i;
-      gint map_size;
-
-      update_keyrange ();
-      
-      if (keymap)
-        XFree (keymap);
-
-      if (mod_keymap)
-        XFreeModifiermap (mod_keymap);
-      
-      keymap = XGetKeyboardMapping (gdk_display, min_keycode,
-                                    max_keycode - min_keycode,
-                                    &keysyms_per_keycode);
-
-      mod_keymap = XGetModifierMapping (gdk_display);
-
-
-      group_switch_mask = 0;
-
-      /* there are 8 modifiers, and the first 3 are shift, shift lock,
-       * and control
-       */
-      map_size = 8 * mod_keymap->max_keypermod;
-      i = 3 * mod_keymap->max_keypermod;
-      while (i < map_size)
-        {
-          /* get the key code at this point in the map,
-           * see if its keysym is GDK_Mode_switch, if so
-           * we have the mode key
-           */
-          gint keycode = mod_keymap->modifiermap[i];
-      
-          if (keycode >= min_keycode &&
-              keycode <= max_keycode)
-            {
-              gint j = 0;
-              KeySym *syms = keymap + (keycode - min_keycode) * keysyms_per_keycode;
-              while (j < keysyms_per_keycode)
-                {
-                  if (syms[j] == GDK_Mode_switch)
-                    {
-                      /* This modifier swaps groups */
-
-                      /* GDK_MOD1_MASK is 1 << 3 for example, i.e. the
-                       * fourth modifier, i / keyspermod is the modifier
-                       * index
-                       */
-                  
-                      group_switch_mask |= (1 << ( i / mod_keymap->max_keypermod));
-                      break;
-                    }
-              
-                  ++j;
-                }
-            }
-      
-          ++i;
-        }
-    }
-}
-
+ }
 static const KeySym*
 get_keymap (void)
 {
   update_keymaps ();  
-  
   return keymap;
+}
+*/
+
+static void
+update_keyrange_for_display (GdkDisplay * display)
+{
+  if (GDK_DISPLAY_IMPL_X11 (display)->max_keycode == 0)
+    XDisplayKeycodes (GDK_DISPLAY_XDISPLAY (display),
+		      &GDK_DISPLAY_IMPL_X11 (display)->min_keycode,
+		      &GDK_DISPLAY_IMPL_X11 (display)->max_keycode);
+}
+
+static void
+update_keymaps_for_display (GdkDisplay * display)
+{
+  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
+#ifdef HAVE_XKB
+  g_assert (!dpy_impl->_gdk_use_xkb);
+#endif
+
+  if (dpy_impl->keymap == NULL ||
+      dpy_impl->keymap_current_serial != dpy_impl->_gdk_keymap_serial) {
+    gint i;
+    gint map_size;
+
+    update_keyrange_for_display (display);
+
+    if (dpy_impl->keymap)
+      XFree (dpy_impl->keymap);
+
+    if (dpy_impl->mod_keymap)
+      XFreeModifiermap (dpy_impl->mod_keymap);
+
+    dpy_impl->keymap = XGetKeyboardMapping (dpy_impl->xdisplay,
+					    dpy_impl->min_keycode,
+					    dpy_impl->max_keycode -
+					    dpy_impl->min_keycode,
+					    &dpy_impl->keysyms_per_keycode);
+
+    dpy_impl->mod_keymap = XGetModifierMapping (dpy_impl->xdisplay);
+
+
+    dpy_impl->group_switch_mask = 0;
+
+    /*
+       there are 8 modifiers, and the first 3 are shift, shift lock,
+       * and control
+     */
+    map_size = 8 * dpy_impl->mod_keymap->max_keypermod;
+    i = 3 * dpy_impl->mod_keymap->max_keypermod;
+    while (i < map_size) {
+      /*
+         get the key code at this point in the map,
+         * see if its keysym is GDK_Mode_switch, if so
+         * we have the mode key
+       */
+      gint keycode = dpy_impl->mod_keymap->modifiermap[i];
+
+      if (keycode >= dpy_impl->min_keycode &&
+	  keycode <= dpy_impl->max_keycode) {
+	gint j = 0;
+	KeySym *syms = dpy_impl->keymap +
+	  (keycode - dpy_impl->min_keycode) * dpy_impl->keysyms_per_keycode;
+	while (j < dpy_impl->keysyms_per_keycode) {
+	  if (syms[j] == GDK_Mode_switch) {
+	    /*
+	       This modifier swaps groups 
+	     */
+
+	    /*
+	       GDK_MOD1_MASK is 1 << 3 for example, i.e. the
+	       * fourth modifier, i / keyspermod is the modifier
+	       * index
+	     */
+
+	    dpy_impl->group_switch_mask |=
+	      (1 << (i / dpy_impl->mod_keymap->max_keypermod));
+	    break;
+	  }
+
+	  ++j;
+	}
+      }
+      ++i;
+    }
+  }
+}
+
+
+
+#ifdef HAVE_XKB
+
+static XkbDescPtr
+get_xkb_for_display (GdkDisplay * display)
+{
+
+  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
+
+  update_keyrange_for_display (display);
+
+  if (dpy_impl->xkb_desc == NULL) {
+    dpy_impl->xkb_desc =
+      XkbGetMap (dpy_impl->xdisplay, XkbKeySymsMask, XkbUseCoreKbd);
+    if (dpy_impl->xkb_desc == NULL)
+      g_error ("Failed to get keymap");
+  }
+  else if (dpy_impl->keymap_current_serial != dpy_impl->_gdk_keymap_serial) {
+    XkbGetUpdatedMap (dpy_impl->xdisplay, XkbKeySymsMask, dpy_impl->xkb_desc);
+  }
+
+  dpy_impl->keymap_current_serial = dpy_impl->_gdk_keymap_serial;
+
+  return dpy_impl->xkb_desc;
+}
+#endif
+
+static const KeySym *
+get_keymap_for_display (GdkDisplay * display)
+{
+  update_keymaps_for_display (display);
+  return GDK_DISPLAY_IMPL_X11 (display)->keymap;
+}
+
+
+/**
+ * gdk_keymap_get_entries_for_keyval_for_display:
+ * @keymap: a #GdkKeymap, or %NULL to use the default keymap
+ * @keyval: a keyval, such as %GDK_a, %GDK_Up, %GDK_Return, etc.
+ * @display: the display where to retrieve the #GdkKeymap
+ * @keys: return location for an array of #GdkKeymapKey
+ * @n_keys: return location for number of elements in returned array
+ * 
+ * Obtains a list of keycode/group/level combinations that will
+ * generate @keyval. Groups and levels are two kinds of keyboard mode;
+ * in general, the level determines whether the top or bottom symbol
+ * on a key is used, and the group determines whether the left or
+ * right symbol is used. On US keyboards, the shift key changes the
+ * keyboard level, and there are no groups. A group switch key might
+ * convert a keyboard between Hebrew to English modes, for example.
+ * #GdkEventKey contains a %group field that indicates the active
+ * keyboard group. The level is computed from the modifier mask.
+ * The returned array should be freed
+ * with g_free().
+ *
+ * Return value: %TRUE if keys were found and returned
+ **/
+
+gboolean
+gdk_keymap_get_entries_for_keyval_for_display (GdkKeymap * keymap,
+					       guint keyval,
+					       GdkDisplay * display,
+					       GdkKeymapKey ** keys,
+					       gint * n_keys)
+{
+  GArray *retval;
+  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
+
+  g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
+  g_return_val_if_fail (keys != NULL, FALSE);
+  g_return_val_if_fail (n_keys != NULL, FALSE);
+  g_return_val_if_fail (keyval != 0, FALSE);
+
+  retval = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
+
+#ifdef HAVE_XKB
+  if (dpy_impl->_gdk_use_xkb) {
+    /*
+       See sec 15.3.4 in XKB docs 
+     */
+
+    XkbDescRec *xkb = get_xkb_for_display (display);
+    gint keycode;
+
+    keycode = dpy_impl->min_keycode;
+
+    while (keycode <= dpy_impl->max_keycode) {
+      gint max_shift_levels = XkbKeyGroupsWidth (xkb, keycode);	/* "key width" */
+      gint group = 0;
+      gint level = 0;
+      gint total_syms = XkbKeyNumSyms (xkb, keycode);
+      gint i = 0;
+      KeySym *entry;
+
+      /*
+         entry is an array with all syms for group 0, all
+         * syms for group 1, etc. and for each group the
+         * shift level syms are in order
+       */
+      entry = XkbKeySymsPtr (xkb, keycode);
+
+      while (i < total_syms) {
+	/*
+	   check out our cool loop invariant 
+	 */
+	g_assert (i == (group * max_shift_levels + level));
+
+	if (entry[i] == keyval) {
+	  /*
+	     Found a match 
+	   */
+	  GdkKeymapKey key;
+
+	  key.keycode = keycode;
+	  key.group = group;
+	  key.level = level;
+
+	  g_array_append_val (retval, key);
+
+	  g_assert (XkbKeySymEntry (xkb, keycode, level, group) == keyval);
+	}
+
+	++level;
+
+	if (level == max_shift_levels) {
+	  level = 0;
+	  ++group;
+	}
+
+	++i;
+      }
+
+      ++keycode;
+    }
+  }
+  else
+#endif /*HAVE_XKB*/
+  {
+    const KeySym *map = get_keymap_for_display (display);
+    gint keycode;
+
+    keycode = dpy_impl->min_keycode;
+    while (keycode < dpy_impl->max_keycode) {
+      const KeySym *syms = map +
+	(keycode - dpy_impl->min_keycode) * dpy_impl->keysyms_per_keycode;
+      gint i = 0;
+
+      while (i < dpy_impl->keysyms_per_keycode) {
+	if (syms[i] == keyval) {
+	  /*
+	     found a match 
+	   */
+	  GdkKeymapKey key;
+
+	  key.keycode = keycode;
+
+	  /*
+	     The "classic" non-XKB keymap has 2 levels per group 
+	   */
+	  key.group = i / 2;
+	  key.level = i % 2;
+
+	  g_array_append_val (retval, key);
+	}
+
+	++i;
+      }
+
+      ++keycode;
+    }
+  }
+
+  if (retval->len > 0) {
+    *keys = (GdkKeymapKey *) retval->data;
+    *n_keys = retval->len;
+  }
+  else {
+    *keys = NULL;
+    *n_keys = 0;
+  }
+
+  g_array_free (retval, retval->len > 0 ? FALSE : TRUE);
+
+  return *n_keys > 0;
 }
 
 /**
@@ -202,122 +373,184 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
                                    GdkKeymapKey **keys,
                                    gint          *n_keys)
 {
-  GArray *retval;
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_keymap_get_entries_for_keyval_for_display instead\n"));
+  return gdk_keymap_get_entries_for_keyval_for_display(keymap,
+				    keyval,DEFAULT_GDK_DISPLAY,
+				    keys,n_keys);
+}
+
+/**
+ * gdk_keymap_get_entries_for_keycode_for_display:
+ * @keymap: a #GdkKeymap or %NULL to use the default keymap
+ * @hardware_keycode: a keycode
+ * @display : the display where to retrieve the #GdkKeymap
+ * @keys: return location for array of #GdkKeymapKey, or NULL
+ * @keyvals: return location for array of keyvals, or NULL
+ * @n_entries: length of @keys and @keyvals
+ *
+ * Returns the keyvals bound to @hardware_keycode.
+ * The Nth #GdkKeymapKey in @keys is bound to the Nth
+ * keyval in @keyvals. Free the returned arrays with g_free().
+ * When a keycode is pressed by the user, the keyval from
+ * this list of entries is selected by considering the effective
+ * keyboard group and level. See gdk_keymap_translate_keyboard_state().
+ *
+ * Returns: %TRUE if there were any entries
+ **/
+
+gboolean
+gdk_keymap_get_entries_for_keycode_for_display (GdkKeymap * keymap,
+						guint hardware_keycode,
+						GdkDisplay * display,
+						GdkKeymapKey ** keys,
+						guint ** keyvals,
+						gint * n_entries)
+{
+  GArray *key_array;
+  GArray *keyval_array;
+  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
 
   g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
-  g_return_val_if_fail (keys != NULL, FALSE);
-  g_return_val_if_fail (n_keys != NULL, FALSE);
-  g_return_val_if_fail (keyval != 0, FALSE);
-  
-  retval = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
+  g_return_val_if_fail (n_entries != NULL, FALSE);
+
+  update_keyrange_for_display (display);
+
+  if (hardware_keycode < dpy_impl->min_keycode ||
+      hardware_keycode > dpy_impl->max_keycode) {
+    if (keys)
+      *keys = NULL;
+    if (keyvals)
+      *keyvals = NULL;
+
+    *n_entries = 0;
+    return FALSE;
+  }
+
+  if (keys)
+    key_array = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
+  else
+    key_array = NULL;
+
+  if (keyvals)
+    keyval_array = g_array_new (FALSE, FALSE, sizeof (guint));
+  else
+    keyval_array = NULL;
 
 #ifdef HAVE_XKB
-  if (_gdk_use_xkb)
-    {
-      /* See sec 15.3.4 in XKB docs */
+  if (dpy_impl->_gdk_use_xkb) {
+    /*
+       See sec 15.3.4 in XKB docs 
+     */
 
-      XkbDescRec *xkb = get_xkb ();
-      gint keycode;
-      
-      keycode = min_keycode;
+    XkbDescRec *xkb = get_xkb_for_display (display);
+    gint max_shift_levels;
+    gint group = 0;
+    gint level = 0;
+    gint total_syms;
+    gint i = 0;
+    KeySym *entry;
 
-      while (keycode <= max_keycode)
-        {
-          gint max_shift_levels = XkbKeyGroupsWidth (xkb, keycode); /* "key width" */
-          gint group = 0;
-          gint level = 0;
-          gint total_syms = XkbKeyNumSyms (xkb, keycode);
-          gint i = 0;
-          KeySym *entry;
+    max_shift_levels = XkbKeyGroupsWidth (xkb, hardware_keycode);	/* "key width" */
+    total_syms = XkbKeyNumSyms (xkb, hardware_keycode);
 
-          /* entry is an array with all syms for group 0, all
-           * syms for group 1, etc. and for each group the
-           * shift level syms are in order
-           */
-          entry = XkbKeySymsPtr (xkb, keycode);
+    /*
+       entry is an array with all syms for group 0, all
+       * syms for group 1, etc. and for each group the
+       * shift level syms are in order
+     */
+    entry = XkbKeySymsPtr (xkb, hardware_keycode);
 
-          while (i < total_syms)
-            {
-              /* check out our cool loop invariant */
-              g_assert (i == (group * max_shift_levels + level));
+    while (i < total_syms) {
+      /*
+         check out our cool loop invariant 
+       */
+      g_assert (i == (group * max_shift_levels + level));
 
-              if (entry[i] == keyval)
-                {
-                  /* Found a match */
-                  GdkKeymapKey key;
+      if (key_array) {
+	GdkKeymapKey key;
 
-                  key.keycode = keycode;
-                  key.group = group;
-                  key.level = level;
+	key.keycode = hardware_keycode;
+	key.group = group;
+	key.level = level;
 
-                  g_array_append_val (retval, key);
+	g_array_append_val (key_array, key);
+      }
 
-                  g_assert (XkbKeySymEntry (xkb, keycode, level, group) == keyval);
-                }
+      if (keyval_array)
+	g_array_append_val (keyval_array, entry[i]);
 
-              ++level;
+      ++level;
 
-              if (level == max_shift_levels)
-                {
-                  level = 0;
-                  ++group;
-                }
+      if (level == max_shift_levels) {
+	level = 0;
+	++group;
+      }
 
-              ++i;
-            }
-
-          ++keycode;
-        }
+      ++i;
     }
+  }
   else
-#endif
-    {
-      const KeySym *map = get_keymap ();
-      gint keycode;
-      
-      keycode = min_keycode;
-      while (keycode < max_keycode)
-        {
-          const KeySym *syms = map + (keycode - min_keycode) * keysyms_per_keycode;
-          gint i = 0;
+#endif /*HAVE_XKB*/
+  {
+    const KeySym *map = get_keymap_for_display (display);
+    const KeySym *syms;
+    gint i = 0;
 
-          while (i < keysyms_per_keycode)
-            {
-              if (syms[i] == keyval)
-                {
-                  /* found a match */
-                  GdkKeymapKey key;
+    syms =
+      map + (hardware_keycode -
+	     dpy_impl->min_keycode) * dpy_impl->keysyms_per_keycode;
 
-                  key.keycode = keycode;
+    while (i < dpy_impl->keysyms_per_keycode) {
+      if (key_array) {
+	GdkKeymapKey key;
 
-                  /* The "classic" non-XKB keymap has 2 levels per group */
-                  key.group = i / 2;
-                  key.level = i % 2;
+	key.keycode = hardware_keycode;
 
-                  g_array_append_val (retval, key);
-                }
-              
-              ++i;
-            }
-          
-          ++keycode;
-        }
+	/*
+	   The "classic" non-XKB keymap has 2 levels per group 
+	 */
+	key.group = i / 2;
+	key.level = i % 2;
+
+	g_array_append_val (key_array, key);
+      }
+
+      if (keyval_array)
+	g_array_append_val (keyval_array, syms[i]);
+
+      ++i;
     }
+  }
 
-  if (retval->len > 0)
-    {
-      *keys = (GdkKeymapKey*) retval->data;
-      *n_keys = retval->len;
-    }
-  else
-    {
+  if ((key_array && key_array->len > 0) ||
+      (keyval_array && keyval_array->len > 0)) {
+    if (keys)
+      *keys = (GdkKeymapKey *) key_array->data;
+
+    if (keyvals)
+      *keyvals = (guint *) keyval_array->data;
+
+    if (key_array)
+      *n_entries = key_array->len;
+    else
+      *n_entries = keyval_array->len;
+  }
+  else {
+    if (keys)
       *keys = NULL;
-      *n_keys = 0;
-    }
-      
-  g_array_free (retval, retval->len > 0 ? FALSE : TRUE);
 
-  return *n_keys > 0;
+    if (keyvals)
+      *keyvals = NULL;
+
+    *n_entries = 0;
+  }
+
+  if (key_array)
+    g_array_free (key_array, key_array->len > 0 ? FALSE : TRUE);
+  if (keyval_array)
+    g_array_free (keyval_array, keyval_array->len > 0 ? FALSE : TRUE);
+
+  return *n_entries > 0;
 }
 
 /**
@@ -344,152 +577,39 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
                                     guint        **keyvals,
                                     gint          *n_entries)
 {
-  GArray *key_array;
-  GArray *keyval_array;
-
-  g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
-  g_return_val_if_fail (n_entries != NULL, FALSE);
-
-  update_keyrange ();
-
-  if (hardware_keycode < min_keycode ||
-      hardware_keycode > max_keycode)
-    {
-      if (keys)
-        *keys = NULL;
-      if (keyvals)
-        *keyvals = NULL;
-
-      *n_entries = 0;
-      return FALSE;
-    }
-  
-  if (keys)
-    key_array = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
-  else
-    key_array = NULL;
-  
-  if (keyvals)
-    keyval_array = g_array_new (FALSE, FALSE, sizeof (guint));
-  else
-    keyval_array = NULL;
-  
-#ifdef HAVE_XKB
-  if (_gdk_use_xkb)
-    {
-      /* See sec 15.3.4 in XKB docs */
-
-      XkbDescRec *xkb = get_xkb ();
-      gint max_shift_levels;
-      gint group = 0;
-      gint level = 0;
-      gint total_syms;
-      gint i = 0;
-      KeySym *entry;
-      
-      max_shift_levels = XkbKeyGroupsWidth (xkb, hardware_keycode); /* "key width" */
-      total_syms = XkbKeyNumSyms (xkb, hardware_keycode);
-
-      /* entry is an array with all syms for group 0, all
-       * syms for group 1, etc. and for each group the
-       * shift level syms are in order
-       */
-      entry = XkbKeySymsPtr (xkb, hardware_keycode);
-
-      while (i < total_syms)
-        {          
-          /* check out our cool loop invariant */          
-          g_assert (i == (group * max_shift_levels + level));
-
-          if (key_array)
-            {
-              GdkKeymapKey key;
-              
-              key.keycode = hardware_keycode;
-              key.group = group;
-              key.level = level;
-              
-              g_array_append_val (key_array, key);
-            }
-
-          if (keyval_array)
-            g_array_append_val (keyval_array, entry[i]);
-          
-          ++level;
-          
-          if (level == max_shift_levels)
-            {
-              level = 0;
-              ++group;
-            }
-          
-          ++i;
-        }
-    }
-  else
-#endif
-    {
-      const KeySym *map = get_keymap ();
-      const KeySym *syms;
-      gint i = 0;
-
-      syms = map + (hardware_keycode - min_keycode) * keysyms_per_keycode;
-
-      while (i < keysyms_per_keycode)
-        {
-          if (key_array)
-            {
-              GdkKeymapKey key;
-          
-              key.keycode = hardware_keycode;
-              
-              /* The "classic" non-XKB keymap has 2 levels per group */
-              key.group = i / 2;
-              key.level = i % 2;
-              
-              g_array_append_val (key_array, key);
-            }
-
-          if (keyval_array)
-            g_array_append_val (keyval_array, syms[i]);
-          
-          ++i;
-        }
-    }
-  
-  if ((key_array && key_array->len > 0) ||
-      (keyval_array && keyval_array->len > 0))
-    {
-      if (keys)
-        *keys = (GdkKeymapKey*) key_array->data;
-
-      if (keyvals)
-        *keyvals = (guint*) keyval_array->data;
-
-      if (key_array)
-        *n_entries = key_array->len;
-      else
-        *n_entries = keyval_array->len;
-    }
-  else
-    {
-      if (keys)
-        *keys = NULL;
-
-      if (keyvals)
-        *keyvals = NULL;
-      
-      *n_entries = 0;
-    }
-
-  if (key_array)
-    g_array_free (key_array, key_array->len > 0 ? FALSE : TRUE);
-  if (keyval_array)
-    g_array_free (keyval_array, keyval_array->len > 0 ? FALSE : TRUE);
-
-  return *n_entries > 0;
+  return gdk_keymap_get_entries_for_keycode_for_display(keymap,
+							hardware_keycode,
+							DEFAULT_GDK_DISPLAY,
+							keys,keyvals,
+							n_entries);
 }
+guint
+gdk_keymap_lookup_key_for_display (GdkKeymap * keymap,
+				   const GdkKeymapKey * key,
+				   GdkDisplay * display)
+{
 
+  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
+  g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), 0);
+  g_return_val_if_fail (key != NULL, 0);
+  g_return_val_if_fail (key->group < 4, 0);
+
+#ifdef HAVE_XKB
+  if (dpy_impl->_gdk_use_xkb) {
+    XkbDescRec *xkb = get_xkb_for_display (display);
+
+    return XkbKeySymEntry (xkb, key->keycode, key->level, key->group);
+  }
+  else
+#endif /*HAVE_XKB*/
+  {
+    update_keymaps_for_display (display);
+
+    return XKeycodeToKeysym (dpy_impl->xdisplay, key->keycode,
+			     key->group * dpy_impl->keysyms_per_keycode +
+			     key->level);
+  }
+}
 
 /**
  * gdk_keymap_lookup_key:
@@ -507,26 +627,9 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
 guint
 gdk_keymap_lookup_key (GdkKeymap          *keymap,
                        const GdkKeymapKey *key)
-{
-  g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), 0);
-  g_return_val_if_fail (key != NULL, 0);
-  g_return_val_if_fail (key->group < 4, 0);
-  
-#ifdef HAVE_XKB
-  if (_gdk_use_xkb)
-    {
-      XkbDescRec *xkb = get_xkb ();
-      
-      return XkbKeySymEntry (xkb, key->keycode, key->level, key->group);
-    }
-  else
-#endif
-    {
-      update_keymaps ();
-      
-      return XKeycodeToKeysym (gdk_display, key->keycode,
-                               key->group * keysyms_per_keycode + key->level);
-    }
+{ 
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_keymap_lookup_key_for_display instead\n"));
+  return gdk_keymap_lookup_key_for_display(keymap,key,DEFAULT_GDK_DISPLAY);
 }
 
 #ifdef HAVE_XKB
@@ -534,7 +637,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * add the group and level return. It's unchanged for ease of
  * diff against the Xlib sources; don't reformat it.
  */
-static Bool
+Bool
 MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
                               KeyCode                 key,
                               register unsigned int   mods,
@@ -639,6 +742,94 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
 }
 #endif /* HAVE_XKB */
 
+gboolean
+gdk_keymap_translate_keyboard_state_for_display (GdkKeymap * keymap,
+						 guint hardware_keycode,
+						 GdkDisplay * display,
+						 GdkModifierType state,
+						 gint group,
+						 guint * keyval,
+						 gint * effective_group,
+						 gint * level,
+						 GdkModifierType *
+						 unused_modifiers)
+{
+  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
+  KeySym tmp_keyval = NoSymbol;
+
+  g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
+  g_return_val_if_fail (group < 4, FALSE);
+
+  if (keyval)
+    *keyval = NoSymbol;
+  if (effective_group)
+    *effective_group = 0;
+  if (level)
+    *level = 0;
+  if (unused_modifiers)
+    *unused_modifiers = state;
+
+  update_keyrange_for_display (display);
+
+  if (hardware_keycode < dpy_impl->min_keycode ||
+      hardware_keycode > dpy_impl->max_keycode)
+    return FALSE;
+
+#ifdef HAVE_XKB
+  if (dpy_impl->_gdk_use_xkb) {
+    XkbDescRec *xkb = get_xkb_for_display (display);
+
+    /*
+       replace bits 13 and 14 with the provided group 
+     */
+    state &= ~(1 << 13 | 1 << 14);
+    state |= group << 13;
+
+    MyEnhancedXkbTranslateKeyCode (xkb,
+				   hardware_keycode,
+				   state,
+				   unused_modifiers,
+				   &tmp_keyval, effective_group, level);
+
+    if (keyval)
+      *keyval = tmp_keyval;
+  }
+  else
+#endif /*HAVE_XKB*/
+  {
+    gint shift_level;
+
+    update_keymaps_for_display (display);
+
+    if ((state & GDK_SHIFT_MASK) && (state & GDK_LOCK_MASK))
+      shift_level = 0;		/* shift disables shift lock */
+    else if ((state & GDK_SHIFT_MASK) || (state & GDK_LOCK_MASK))
+      shift_level = 1;
+    else
+      shift_level = 0;
+
+    tmp_keyval = XKeycodeToKeysym (dpy_impl->xdisplay, hardware_keycode,
+				   group * dpy_impl->keysyms_per_keycode +
+				   shift_level);
+
+    if (keyval)
+      *keyval = tmp_keyval;
+
+    if (unused_modifiers) {
+      *unused_modifiers = state;
+      *unused_modifiers &=
+	~(GDK_SHIFT_MASK | GDK_LOCK_MASK | dpy_impl->group_switch_mask);
+    }
+
+    if (effective_group)
+      *effective_group = (state & dpy_impl->group_switch_mask) ? 1 : 0;
+
+    if (level)
+      *level = shift_level;
+  }
+
+  return tmp_keyval != NoSymbol;
+}
 /**
  * gdk_keymap_translate_keyboard_state:
  * @keymap: a #GdkKeymap, or %NULL to use the default
@@ -673,82 +864,14 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
                                      gint            *level,
                                      GdkModifierType *unused_modifiers)
 {
-  KeySym tmp_keyval = NoSymbol;
-
-  g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
-  g_return_val_if_fail (group < 4, FALSE);
-  
-  if (keyval)
-    *keyval = NoSymbol;
-  if (effective_group)
-    *effective_group = 0;
-  if (level)
-    *level = 0;
-  if (unused_modifiers)
-    *unused_modifiers = state;
-
-  update_keyrange ();
-  
-  if (hardware_keycode < min_keycode ||
-      hardware_keycode > max_keycode)
-    return FALSE;
-  
-#ifdef HAVE_XKB
-  if (_gdk_use_xkb)
-    {
-      XkbDescRec *xkb = get_xkb ();
-
-      /* replace bits 13 and 14 with the provided group */
-      state &= ~(1 << 13 | 1 << 14);
-      state |= group << 13;
-      
-      MyEnhancedXkbTranslateKeyCode (xkb,
-                                     hardware_keycode,
-                                     state,
-                                     unused_modifiers,
-                                     &tmp_keyval,
-                                     effective_group,
-                                     level);
-
-      if (keyval)
-        *keyval = tmp_keyval;
-    }
-  else
-#endif
-    {
-      gint shift_level;
-      
-      update_keymaps ();
-
-      if ((state & GDK_SHIFT_MASK) &&
-          (state & GDK_LOCK_MASK))
-        shift_level = 0; /* shift disables shift lock */
-      else if ((state & GDK_SHIFT_MASK) ||
-               (state & GDK_LOCK_MASK))
-        shift_level = 1;
-      else
-        shift_level = 0;
-
-      tmp_keyval = XKeycodeToKeysym (gdk_display, hardware_keycode,
-                                     group * keysyms_per_keycode + shift_level);
-      
-      if (keyval)
-        *keyval = tmp_keyval;
-
-      if (unused_modifiers)
-        {
-          *unused_modifiers = state;
-          *unused_modifiers &= ~(GDK_SHIFT_MASK | GDK_LOCK_MASK | group_switch_mask);
-        }
-      
-      if (effective_group)
-        *effective_group = (state & group_switch_mask) ? 1 : 0;
-
-      if (level)
-        *level = shift_level;
-    }
-
-  return tmp_keyval != NoSymbol;
+  GDK_NOTE(MULTIHEAD, 
+	g_message("Use gdk_keymap_translate_keyboard_state_for_display instead\n"));
+  return gdk_keymap_translate_keyboard_state_for_display(keymap,hardware_keycode,
+							 DEFAULT_GDK_DISPLAY,
+							 state,group,keyval,
+							 effective_group,
+							 level,
+							 unused_modifiers);
 }
 
 

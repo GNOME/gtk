@@ -48,6 +48,8 @@
 #include <gdk/gdktypes.h>
 #include <gdk/gdkvisual.h>
 #include <gdk/gdkwindow.h>
+#include <gdk/gdkdisplay.h>
+#include <gdk/gdkscreen.h>
 
 #include <gdk/gdkcompat.h>
 
@@ -74,9 +76,10 @@ gchar*	  gdk_set_locale	   	(void);
 void      gdk_error_trap_push           (void);
 gint      gdk_error_trap_pop            (void);
 
-
+void	  gdk_set_use_xshm_for_display  (GdkDisplay * display, gboolean use_xshm);
 void	  gdk_set_use_xshm		(gboolean	 use_xshm);
 
+gboolean  gdk_get_use_xshm_for_display  (GdkDisplay * display);
 gboolean  gdk_get_use_xshm		(void);
 gchar*	  gdk_get_display		(void);
 
@@ -99,20 +102,30 @@ GdkGrabStatus gdk_pointer_grab       (GdkWindow    *window,
 				      GdkWindow    *confine_to,
 				      GdkCursor    *cursor,
 				      guint32       time);
+void	      gdk_pointer_ungrab_for_display (GdkDisplay * display, 
+					      guint32 time);
 void          gdk_pointer_ungrab     (guint32       time);
 GdkGrabStatus gdk_keyboard_grab      (GdkWindow    *window,
 				      gboolean      owner_events,
 				      guint32       time);
+void	      gdk_keyboard_ungrab_for_display (GdkDisplay * display, 
+					       guint32 time);
 void          gdk_keyboard_ungrab    (guint32       time);
+gboolean      gdk_pointer_is_grabbed_for_display (GdkDisplay * display);
 gboolean      gdk_pointer_is_grabbed (void);
 
+gint gdk_screen_width_for_screen (GdkScreen * screen);
 gint gdk_screen_width  (void) G_GNUC_CONST;
+gint gdk_screen_height_for_screen (GdkScreen * screen);
 gint gdk_screen_height (void) G_GNUC_CONST;
-
+gint gdk_screen_width_mm_for_screen (GdkScreen * screen);
 gint gdk_screen_width_mm  (void) G_GNUC_CONST;
+gint gdk_screen_height_mm_for_screen (GdkScreen * screen);
 gint gdk_screen_height_mm (void) G_GNUC_CONST;
 
 void gdk_flush (void);
+void gdk_beep_for_display (GdkDisplay * display);
+
 void gdk_beep (void);
 
 void gdk_set_double_click_time (guint msec);
@@ -128,7 +141,7 @@ void     gdk_rectangle_union     (GdkRectangle *src1,
 
 /* Conversion functions between wide char and multibyte strings. 
  */
-gchar     *gdk_wcstombs          (const GdkWChar   *src);
+gchar     *gdk_wcstombs             (const GdkWChar   *src);
 gint       gdk_mbstowcs          (GdkWChar         *dest,
 				  const gchar      *src,
 				  gint              dest_max);

@@ -28,6 +28,7 @@
 #define __GDK_DRAWABLE_X11_H__
 
 #include <gdk/gdkdrawable.h>
+#include <gdk/gdkscreen.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -53,9 +54,11 @@ struct _GdkDrawableImplX11
   GdkDrawable *wrapper;
   
   GdkColormap *colormap;
+
+  GdkScreen *screen;
   
   Window xid;
-  Display *xdisplay;
+/*  Display *xdisplay;*/
 };
  
 struct _GdkDrawableImplX11Class 

@@ -30,12 +30,13 @@
 #include "config.h"
 
 guint             gdk_debug_flags = 0;
-GdkWindow        *gdk_parent_root = NULL;
+/*GdkWindow        *gdk_parent_root = NULL;*/
 gint              gdk_error_code = 0;
 gint              gdk_error_warnings = TRUE;
 GList            *gdk_default_filters = NULL;
 GMutex           *gdk_threads_mutex = NULL;          /* Global GDK lock */
 GList            *gdk_queued_events = NULL;
 GList            *gdk_queued_tail = NULL;
+GdkDisplayManager *dpy_mgr = NULL;
 
 

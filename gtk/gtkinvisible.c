@@ -135,7 +135,11 @@ gtk_invisible_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
 
-  widget->window = gdk_window_new (NULL, &attributes, attributes_mask);
+  widget->window = gdk_window_new_for_screen (widget->screen,
+  					      NULL,
+					      &attributes,
+					      attributes_mask);
+					      
   gdk_window_set_user_data (widget->window, widget);
   
   widget->style = gtk_style_attach (widget->style, widget->window);

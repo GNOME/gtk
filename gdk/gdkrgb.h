@@ -47,6 +47,8 @@ struct _GdkRgbCmap {
 void gdk_rgb_init (void);
 
 gulong gdk_rgb_xpixel_from_rgb   (guint32      rgb) G_GNUC_CONST;
+gulong gdk_rgb_xpixel_from_rgb_for_screen   (GdkScreen *screen,
+					     guint32      rgb) G_GNUC_CONST;
 void   gdk_rgb_gc_set_foreground (GdkGC       *gc,
 				  guint32      rgb);
 void   gdk_rgb_gc_set_background (GdkGC       *gc,
@@ -129,6 +131,7 @@ void        gdk_rgb_cmap_free               (GdkRgbCmap   *cmap);
 /* Below are some functions which are primarily useful for debugging
    and experimentation. */
 gboolean gdk_rgb_ditherable  (void);
+gboolean gdk_rgb_ditherable_for_screen  (GdkScreen *screen);
 void     gdk_rgb_set_verbose (gboolean verbose);
 
 /* experimental colormap stuff */
@@ -136,7 +139,9 @@ void gdk_rgb_set_install    (gboolean install);
 void gdk_rgb_set_min_colors (gint     min_colors);
 
 GdkColormap *gdk_rgb_get_colormap (void);
+GdkColormap *gdk_rgb_get_colormap_for_screen (GdkScreen *screen);
 GdkVisual *  gdk_rgb_get_visual   (void);
+GdkVisual *  gdk_rgb_get_visual_for_screen   (GdkScreen *screen);
 
 #ifdef __cplusplus
 }

@@ -25,6 +25,7 @@
 #include "gtkinvisible.h"
 #include "gtkmain.h"
 #include "gtksignal.h"
+#include "gdk/gdkdisplaymgr.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -40,6 +41,7 @@ typedef struct _RequestTextInfo RequestTextInfo;
 struct _GtkClipboard 
 {
   GdkAtom selection;
+  GdkDisplay *display;
 
   GtkClipboardGetFunc get_func;
   GtkClipboardClearFunc clear_func;
@@ -101,14 +103,15 @@ static GQuark clipboards_owned_key_id = 0;
  *             be created. Once a clipboard object has
  *             been created, it is persistant for all time.
  **/
+
 GtkClipboard *
-gtk_clipboard_get (GdkAtom selection)
+gtk_clipboard_get_for_display (GdkAtom selection, GdkDisplay *display)
 {
   GtkClipboard *clipboard = NULL;
   GSList *tmp_list;
 
   if (selection == GDK_NONE)
-    selection = gdk_atom_intern ("CLIPBOARD", FALSE);
+    selection = gdk_atom_intern_for_display ("CLIPBOARD", FALSE, display);
 
   tmp_list = clipboards;
   while (tmp_list)
@@ -124,11 +127,19 @@ gtk_clipboard_get (GdkAtom selection)
     {
       clipboard = g_new0 (GtkClipboard, 1);
       clipboard->selection = selection;
+      clipboard->display = display;
       clipboards = g_slist_prepend (clipboards, clipboard);
     }
   
   return clipboard;
 }
+
+GtkClipboard *
+gtk_clipboard_get (GdkAtom selection)
+{
+  return gtk_clipboard_get_for_display(selection,DEFAULT_GDK_DISPLAY);
+}
+
 
 static void 
 selection_get_cb (GtkWidget          *widget,
@@ -304,8 +315,10 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
 {
   ensure_clipboard_widget ();
 
-  if (gtk_selection_owner_set (clipboard_widget, clipboard->selection,
-			       clipboard_get_timestamp (clipboard)))
+  if (gtk_selection_owner_set_for_display (clipboard_widget,
+					   clipboard->display,
+					   clipboard->selection,
+					   clipboard_get_timestamp (clipboard)))
     {
       clipboard->have_selection = TRUE;
 
@@ -488,8 +501,10 @@ gtk_clipboard_clear (GtkClipboard *clipboard)
   g_return_if_fail (clipboard != NULL);
 
   if (clipboard->have_selection)
-    gtk_selection_owner_set (NULL, clipboard->selection,
-			     clipboard_get_timestamp (clipboard));
+    gtk_selection_owner_set_for_display (NULL, 
+					 clipboard->display,
+					 clipboard->selection,
+					 clipboard_get_timestamp (clipboard));
 }
 
 static void 
@@ -498,7 +513,7 @@ text_get_func (GtkClipboard     *clipboard,
 	       guint             info,
 	       gpointer          data)
 {
-  gtk_selection_data_set_text (selection_data, data);
+  gtk_selection_data_set_text(selection_data, data);
 }
 
 static void 
@@ -637,7 +652,7 @@ request_text_received_func (GtkClipboard     *clipboard,
   RequestTextInfo *info = data;
   gchar *result = NULL;
 
-  result = gtk_selection_data_get_text (selection_data);
+  result = gtk_selection_data_get_text(selection_data);
 
   if (!result)
     {
@@ -645,14 +660,17 @@ request_text_received_func (GtkClipboard     *clipboard,
        * for text and didn't get it, try string.  If we asked for
        * anything else and didn't get it, give up.
        */
-      if (selection_data->target == gdk_atom_intern ("UTF8_STRING", FALSE))
+      if (selection_data->target == 
+	 gdk_atom_intern_for_display ("UTF8_STRING", FALSE, clipboard->display))
 	{
 	  gtk_clipboard_request_contents (clipboard,
-					  gdk_atom_intern ("TEXT", FALSE), 
+					  gdk_atom_intern_for_display ("TEXT", 
+						FALSE,clipboard->display), 
 					  request_text_received_func, info);
 	  return;
 	}
-      else if (selection_data->target == gdk_atom_intern ("TEXT", FALSE))
+      else if (selection_data->target == 
+	        gdk_atom_intern_for_display ("TEXT", FALSE, clipboard->display))
 	{
 	  gtk_clipboard_request_contents (clipboard,
 					  GDK_TARGET_STRING, 
@@ -697,7 +715,10 @@ gtk_clipboard_request_text (GtkClipboard                *clipboard,
   info->callback = callback;
   info->user_data = user_data;
 
-  gtk_clipboard_request_contents (clipboard, gdk_atom_intern ("UTF8_STRING", FALSE),
+  gtk_clipboard_request_contents (clipboard, 
+				  gdk_atom_intern_for_display ("UTF8_STRING",
+							       FALSE,
+							       clipboard->display),
 				  request_text_received_func,
 				  info);
 }
@@ -810,5 +831,11 @@ gtk_clipboard_wait_for_text (GtkClipboard *clipboard)
   g_main_destroy (results.loop);
 
   return results.data;
+}
+
+GdkDisplay *
+gtk_clipboard_get_display (GtkClipboard *clipboard)
+{
+    return clipboard->display;
 }
 

@@ -46,6 +46,7 @@ struct _GdkColormap
 
   /*< private >*/
   GdkVisual *visual;
+  GdkScreen *screen;
   
   gpointer windowing_data;
 };
@@ -60,12 +61,19 @@ GType        gdk_colormap_get_type (void) G_GNUC_CONST;
 
 GdkColormap* gdk_colormap_new	  (GdkVisual   *visual,
 				   gboolean	allocate);
+GdkColormap* gdk_colormap_new_for_screen (GdkVisual * visual,
+					  GdkScreen * screen,
+					  gboolean private_cmap);
+
 GdkColormap* gdk_colormap_ref	  (GdkColormap *cmap);
 void	     gdk_colormap_unref	  (GdkColormap *cmap);
+GdkColormap *gdk_colormap_get_system_for_screen (GdkScreen * screen);
+gint	     gdk_colormap_get_system_size_for_screen (GdkScreen * screen);
 
 GdkColormap* gdk_colormap_get_system	   (void);
 gint	     gdk_colormap_get_system_size  (void);
-
+GdkColormap* gdk_colormap_get_system_for_screen (GdkScreen * screen);
+gint	     gdk_colormap_get_system_size_for_screen (GdkScreen * screen);
 void gdk_colormap_change (GdkColormap	*colormap,
 			  gint		 ncolors);
 
@@ -91,6 +99,9 @@ GdkVisual *gdk_colormap_get_visual (GdkColormap *colormap);
      
 GdkColor *gdk_color_copy  (const GdkColor *color);
 void      gdk_color_free  (GdkColor       *color);
+gboolean  gdk_color_parse_for_screen (const gchar * spec, 
+				      GdkColor * color,
+				      GdkScreen * screen);
 gint      gdk_color_parse (const gchar    *spec,
 			   GdkColor       *color);
 guint     gdk_color_hash  (const GdkColor *colora);

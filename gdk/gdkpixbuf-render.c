@@ -24,8 +24,8 @@
 #include <gdk/gdk.h>
 #include "gdk-pixbuf-private.h"
 #include "gdkpixbuf.h"
+#include "gdkinternals.h"
 
-
 
 /**
  * gdk_pixbuf_render_threshold_alpha:
@@ -316,7 +316,9 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
     {
       if (alpha_mode == GDK_PIXBUF_ALPHA_BILEVEL)
         {
-          bitmap = gdk_pixmap_new (NULL, width, height, 1);
+          bitmap = gdk_pixmap_new_for_screen (NULL,
+			  gdk_drawable_get_screen(drawable),
+					      width, height, 1);
           gdk_pixbuf_render_threshold_alpha (pixbuf, bitmap,
                                              src_x, src_y,
                                              0, 0,
@@ -405,10 +407,11 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
  * to NULL.
  **/
 void
-gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf  *pixbuf,
-				   GdkPixmap **pixmap_return,
-				   GdkBitmap **mask_return,
-				   int         alpha_threshold)
+gdk_pixbuf_render_pixmap_and_mask_for_screen (GdkPixbuf  *pixbuf,
+					      GdkScreen  *screen,
+					      GdkPixmap **pixmap_return,
+					      GdkBitmap **mask_return,
+					      int         alpha_threshold)
 {
   g_return_if_fail (pixbuf != NULL);
   
@@ -416,7 +419,8 @@ gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf  *pixbuf,
     {
       GdkGC *gc;
       
-      *pixmap_return = gdk_pixmap_new (NULL, pixbuf->width, pixbuf->height,
+      *pixmap_return = gdk_pixmap_new_for_screen (NULL, screen,	
+				       pixbuf->width, pixbuf->height,
 				       gdk_rgb_get_visual ()->depth);
       gc = gdk_gc_new (*pixmap_return);
       gdk_pixbuf_render_to_drawable (pixbuf, *pixmap_return, gc,
@@ -431,7 +435,8 @@ gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf  *pixbuf,
     {
       if (pixbuf->has_alpha)
 	{
-	  *mask_return = gdk_pixmap_new (NULL, pixbuf->width, pixbuf->height, 1);
+	  *mask_return = gdk_pixmap_new_for_screen (NULL, screen,
+					pixbuf->width, pixbuf->height, 1);
 	  gdk_pixbuf_render_threshold_alpha (pixbuf, *mask_return,
 					     0, 0, 0, 0,
 					     pixbuf->width, pixbuf->height,
@@ -440,4 +445,18 @@ gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf  *pixbuf,
       else
 	*mask_return = NULL;
     }
+}
+
+void
+gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf  *pixbuf,
+				   GdkPixmap **pixmap_return,
+				   GdkBitmap **mask_return,
+				   int         alpha_threshold)
+{
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_pixbuf_render_pixmap_and_mask_for_screen instead\n"));
+  gdk_pixbuf_render_pixmap_and_mask_for_screen(pixbuf,
+					       DEFAULT_GDK_SCREEN,
+					       pixmap_return,
+					       mask_return,
+					       alpha_threshold);
 }

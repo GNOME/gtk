@@ -23,6 +23,7 @@
 #include "gtkaccelgroup.h"
 #include "gtksignal.h"
 #include "gtkimcontextsimple.h"
+#include <gdk/gdkdisplay.h>
 
 typedef struct _GtkComposeTable GtkComposeTable;
 
@@ -1033,7 +1034,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
       context_simple->compose_buffer[0] = 0;
       if (n_compose > 1)		/* Invalid sequence */
 	{
-	  gdk_beep();
+	  gdk_beep_for_display (gdk_window_get_display(event->window));
 	  return TRUE;
 	}
   
@@ -1071,9 +1072,11 @@ canonical_hex_keyval (GdkEventKey *event)
   /* See if this key would have generated a hex keyval in
    * any other state, and return that hex keyval if so
    */
-  gdk_keymap_get_entries_for_keycode (NULL,
-                                      event->hardware_keycode, NULL,
-                                      &keyvals, &n_vals);
+  gdk_keymap_get_entries_for_keycode_for_display (NULL,
+						  event->hardware_keycode,
+				    gdk_window_get_display(event->window),
+						  NULL,
+						  &keyvals, &n_vals);
 
   keyval = 0;
   i = 0;

@@ -35,26 +35,31 @@ endif
 
 libgdk_x11_la_SOURCES =    	\
 	MwmUtil.h	   	\
-	gdkcolor-x11.c	   	\
+	gdkglobals-x11.c   	\
+	gdkdisplaymgr-x11.c	\
+	gdkdisplay-x11.c	\
+	gdkscreen-x11.c		\
+	gdkdisplay-x11.h	\
+	gdkscreen-x11.h		\
 	gdkcursor-x11.c	   	\
-	gdkdnd-x11.c	   	\
+	gdkcolor-x11.c	   	\
+	gdkwindow-x11.c    	\
 	gdkdrawable-x11.c  	\
 	gdkevents-x11.c	   	\
 	gdkfont-x11.c	   	\
 	gdkgc-x11.c 	   	\
-	gdkgeometry-x11.c  	\
-	gdkglobals-x11.c   	\
-	gdkim-x11.c	   	\
+	gdkvisual-x11.c	   	\
+	gdkpixmap-x11.c	   	\
 	gdkimage-x11.c	   	\
+	gdkpango-x11.c		\
+	gdkgeometry-x11.c  	\
+	gdkim-x11.c	   	\
 	gdkinput.c	   	\
 	gdkkeys-x11.c		\
 	gdkmain-x11.c	   	\
-	gdkpango-x11.c		\
-	gdkpixmap-x11.c	   	\
 	gdkproperty-x11.c  	\
 	gdkselection-x11.c 	\
-	gdkvisual-x11.c	   	\
-	gdkwindow-x11.c    	\
+	gdkdnd-x11.c	   	\
 	gdkxid.c	   	\
 	gxid_lib.c	   	\
 	gxid_lib.h	   	\

@@ -1356,8 +1356,10 @@ gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
 
   allocation = tree_view->priv->drag_column->button->allocation;
   allocation.x = tree_view->priv->drag_column_x;
-  gdk_pointer_ungrab (GDK_CURRENT_TIME);
-  gdk_keyboard_ungrab (GDK_CURRENT_TIME);
+  gdk_pointer_ungrab_for_display (GTK_WIDGET_GET_DISPLAY(widget),
+				  GDK_CURRENT_TIME);
+  gdk_keyboard_ungrab_for_display (GTK_WIDGET_GET_DISPLAY(widget),
+				  GDK_CURRENT_TIME);
   gdk_window_reparent (tree_view->priv->drag_column->button->window,
 		       tree_view->priv->header_window,
 		       tree_view->priv->drag_column_x,
@@ -1411,7 +1413,8 @@ gtk_tree_view_button_release_column_resize (GtkWidget      *widget,
   GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_IN_COLUMN_RESIZE);
   gtk_widget_get_pointer (widget, &x, NULL);
   gtk_grab_remove (widget);
-  gdk_pointer_ungrab (event->time);
+  gdk_pointer_ungrab_for_display (gdk_window_get_display(event->window), 
+				  event->time);
 
   width = gtk_tree_view_new_column_width (GTK_TREE_VIEW (widget), i, &x);
   _gtk_tree_view_column_set_width (gtk_tree_view_get_column (GTK_TREE_VIEW (widget), i), width);
@@ -1694,7 +1697,8 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  gdk_window_move_resize (tree_view->priv->drag_highlight_window,
 				  tree_view->priv->drag_column_x, 0, width, height);
       
-	  mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
+	  mask = gdk_pixmap_new_for_screen (tree_view->priv->drag_highlight_window,
+					widget->screen,	width, height, 1);
 	  gc = gdk_gc_new (mask);
 	  col.pixel = 1;
 	  gdk_gc_set_foreground (gc, &col);
@@ -1752,10 +1756,11 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 	  attributes.width = width;
 	  attributes.height = height;
-	  tree_view->priv->drag_highlight_window = gdk_window_new (NULL, &attributes, attributes_mask);
+	  tree_view->priv->drag_highlight_window = gdk_window_new_for_screen (widget->screen, NULL, &attributes, attributes_mask);
 	  gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
 
-	  mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
+	  mask = gdk_pixmap_new_for_screen (tree_view->priv->drag_highlight_window, 
+					widget->screen, width, height, 1);
 	  gc = gdk_gc_new (mask);
 	  col.pixel = 1;
 	  gdk_gc_set_foreground (gc, &col);
@@ -1825,7 +1830,10 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 	  attributes.width = width;
 	  attributes.height = height;
-	  tree_view->priv->drag_highlight_window = gdk_window_new (NULL, &attributes, attributes_mask);
+	  tree_view->priv->drag_highlight_window = gdk_window_new_for_screen (GTK_WIDGET(tree_view)->screen,
+	  								      NULL,
+									      &attributes,
+									      attributes_mask);
 	  gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
 
 	  mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
@@ -3212,7 +3220,9 @@ gtk_tree_view_drag_data_get (GtkWidget        *widget,
     goto done;
 
   /* If drag_data_get does nothing, try providing row data. */
-  if (selection_data->target == gdk_atom_intern ("GTK_TREE_MODEL_ROW", FALSE))
+  if (selection_data->target == 
+      gdk_atom_intern_for_display ("GTK_TREE_MODEL_ROW", FALSE,
+				   GTK_WIDGET_GET_DISPLAY(widget)))
     {
       gtk_selection_data_set_tree_row (selection_data,
                                        model,
@@ -3313,7 +3323,8 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
             gtk_timeout_add (500, open_row_timeout, tree_view);
         }
 
-      if (target == gdk_atom_intern ("GTK_TREE_MODEL_ROW", FALSE))
+      if (target == gdk_atom_intern_for_display ("GTK_TREE_MODEL_ROW", FALSE,
+						 GTK_WIDGET_GET_DISPLAY(widget)))
         {
           /* Request data so we can use the source row when
            * determining whether to accept the drop
@@ -5240,6 +5251,8 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   GdkEvent send_event;
   GtkAllocation allocation;
   gint x, y, width, height;
+  GdkScreen *scr = GTK_WIDGET (tree_view)->screen;
+  GdkWindow *root_parent = GDK_SCREEN_GET_CLASS(scr)->get_parent_root(scr);
 
   g_return_if_fail (tree_view->priv->column_drag_info == NULL);
 
@@ -5266,8 +5279,10 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
       gdk_window_set_user_data (tree_view->priv->drag_window, GTK_WIDGET (tree_view));
     }
 
-  gdk_pointer_ungrab (GDK_CURRENT_TIME);
-  gdk_keyboard_ungrab (GDK_CURRENT_TIME);
+  gdk_pointer_ungrab_for_display (gdk_window_get_display(column->button->window), 
+				  GDK_CURRENT_TIME);
+  gdk_keyboard_ungrab_for_display (gdk_window_get_display(column->button->window),
+				   GDK_CURRENT_TIME);
 
   gtk_grab_remove (column->button);
 
@@ -5281,7 +5296,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   gtk_propagate_event (column->button, &send_event);
 
   send_event.button.type = GDK_BUTTON_RELEASE;
-  send_event.button.window = GDK_ROOT_PARENT ();
+  send_event.button.window = root_parent;
   send_event.button.send_event = TRUE;
   send_event.button.time = GDK_CURRENT_TIME;
   send_event.button.x = -1;
@@ -7180,7 +7195,9 @@ gtk_tree_view_set_rows_drag_source (GtkTreeView              *tree_view,
   clear_source_info (di);
 
   di->start_button_mask = start_button_mask;
-  di->source_target_list = gtk_target_list_new (targets, n_targets);
+  di->source_target_list = gtk_target_list_new_for_display (targets,
+							    n_targets,
+				    GTK_WIDGET_GET_DISPLAY(tree_view));
   di->source_actions = actions;
 
   if (row_draggable_func)
@@ -7216,7 +7233,9 @@ gtk_tree_view_set_rows_drag_dest (GtkTreeView              *tree_view,
   clear_dest_info (di);
 
   if (targets)
-    di->dest_target_list = gtk_target_list_new (targets, n_targets);
+    di->dest_target_list = gtk_target_list_new_for_display (targets, 
+							    n_targets,
+				    GTK_WIDGET_GET_DISPLAY(tree_view));
 
   if (location_droppable_func)
     {
@@ -7475,10 +7494,11 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   gdk_drawable_get_size (tree_view->priv->bin_window,
                          &bin_window_width, NULL);
 
-  drawable = gdk_pixmap_new (tree_view->priv->bin_window,
-                             bin_window_width + 2,
-                             background_area.height + 2,
-                             -1);
+  drawable = gdk_pixmap_new_for_screen (tree_view->priv->bin_window,
+					widget->screen,
+					bin_window_width + 2,
+					background_area.height + 2,
+					-1);
 
   gdk_draw_rectangle (drawable,
                       widget->style->base_gc[GTK_WIDGET_STATE (widget)],

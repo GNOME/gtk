@@ -100,6 +100,9 @@ GdkDragContext * gdk_drag_begin      (GdkWindow      *window,
 				      GList          *targets);
 guint32         gdk_drag_get_protocol (guint32          xid,
 				       GdkDragProtocol *protocol);
+guint32	        gdk_drag_get_protocol_for_display (guint32 xid,
+						   GdkDisplay *display,
+						   GdkDragProtocol *protocol);
 void             gdk_drag_find_window (GdkDragContext   *context,
 				       GdkWindow       *drag_window,
 			 	       gint             x_root,

@@ -23,25 +23,33 @@
 #include "gdkprivate-x11.h"
 #include "gdkpango.h"
 #include <pango/pangox.h>
+#include "gdkscreen-x11.h"
 #ifdef HAVE_XFT
 #include <pango/pangoxft.h>
 #endif
 
+
 PangoContext *
-gdk_pango_context_get (void)
+gdk_pango_context_get_for_screen (GdkScreen * screen)
 {
 #ifdef HAVE_XFT
   static gint use_xft = -1;
-  if (use_xft == -1)
-    {
-      char *val = g_getenv ("GDK_USE_XFT");
+  if (use_xft == -1) {
+    char *val = g_getenv ("GDK_USE_XFT");
 
-      use_xft = val && (atoi (val) != 0);
-    }
-  
+    use_xft = val && (atoi (val) != 0);
+  }
+
   if (use_xft)
-    return pango_xft_get_context (GDK_DISPLAY (), DefaultScreen (GDK_DISPLAY ()));
+    return pango_xft_get_context (GDK_SCREEN_XDISPLAY (screen),
+				  GDK_SCREEN_IMPL_X11 (screen)->scr_num);
   else
 #endif /* HAVE_XFT */
-    return pango_x_get_context (GDK_DISPLAY ());
+    return pango_x_get_context (GDK_SCREEN_XDISPLAY (screen));
+}
+
+PangoContext *
+gdk_pango_context_get (void)
+{
+    return gdk_pango_context_get_for_screen(DEFAULT_GDK_SCREEN);
 }

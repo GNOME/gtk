@@ -50,7 +50,8 @@ GdkGC *_gdk_x11_gc_new                  (GdkDrawable     *drawable,
 
 GdkColormap * gdk_colormap_lookup      (Colormap         xcolormap);
 GdkVisual *   gdk_visual_lookup        (Visual          *xvisual);
-
+GdkVisual *gdk_visual_lookup_for_screen (GdkScreen * scr,
+					 Visual * xvisual);
 void gdk_window_add_colormap_windows (GdkWindow *window);
 
 GdkImage* _gdk_x11_get_image (GdkDrawable    *drawable,
@@ -58,9 +59,14 @@ GdkImage* _gdk_x11_get_image (GdkDrawable    *drawable,
                               gint            y,
                               gint            width,
                               gint            height);
+ 
+int	    gdk_x_error			 (Display     *display, 
+						  XErrorEvent *error);
+int	    gdk_x_io_error		 (Display     *display);
 
 /* Please see gdkwindow.c for comments on how to use */ 
-Window gdk_window_xid_at        (Window    base,
+Window gdk_window_xid_at        (Display   *xdisplay,
+				 Window    base,
 				 gint      bx,
 				 gint      by,
 				 gint      x,
@@ -93,36 +99,18 @@ void     _gdk_region_get_xrectangles       (GdkRegion            *region,
                                             gint                 *n_rects);
 
 void     _gdk_moveresize_handle_event      (XEvent *event);
-void     _gdk_moveresize_configure_done    (void);
+
 
 extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern gboolean	         gdk_use_xshm;
-extern Atom		 gdk_wm_delete_window;
+/*extern Atom		 gdk_wm_delete_window;
 extern Atom		 gdk_wm_take_focus;
 extern Atom		 gdk_wm_protocols;
 extern Atom		 gdk_wm_window_protocols[];
+*/
 extern gboolean          gdk_null_window_warnings;
 extern const int         gdk_nevent_masks;
 extern const int         gdk_event_mask_table[];
-
-extern GdkWindowObject *gdk_xgrab_window;  /* Window that currently holds the
-					    * x pointer grab
-					    */
-
-/* Used to detect not-up-to-date keymap */
-extern guint _gdk_keymap_serial;
-
-#ifdef HAVE_XKB
-extern gboolean _gdk_use_xkb;
-extern gboolean _gdk_have_xkb_autorepeat;
-#endif
-
-/* Whether we were able to turn on detectable-autorepeat using
- * XkbSetDetectableAutorepeat. If FALSE, we'll fall back
- * to checking the next event with XPending().
- */
-extern gboolean _gdk_have_xkb_autorepeat;
-
-extern GdkWindow *_gdk_moveresize_window;
+extern gboolean		 gdk_synchronize;
 
 #endif /* __GDK_PRIVATE_X11_H__ */

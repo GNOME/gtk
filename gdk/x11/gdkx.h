@@ -35,6 +35,9 @@
 
 #include <gdk/x11/gdkwindow-x11.h>
 #include <gdk/x11/gdkpixmap-x11.h>
+#include <gdk/gdkdisplaymgr.h>
+#include <gdk/gdkdisplay.h>
+#include <gdk/gdkscreen.h>
 
 typedef struct _GdkColormapPrivateX11 GdkColormapPrivateX11;
 typedef struct _GdkCursorPrivate       GdkCursorPrivate;
@@ -46,7 +49,7 @@ struct _GdkCursorPrivate
 {
   GdkCursor cursor;
   Cursor xcursor;
-  Display *xdisplay;
+  GdkScreen *screen;
 };
 
 struct _GdkFontPrivateX
@@ -55,7 +58,7 @@ struct _GdkFontPrivateX
   /* XFontStruct *xfont; */
   /* generic pointer point to XFontStruct or XFontSet */
   gpointer xfont;
-  Display *xdisplay;
+  GdkDisplay *display;
 
   GSList *names;
 };
@@ -69,7 +72,6 @@ struct _GdkVisualPrivate
 struct _GdkColormapPrivateX11
 {
   Colormap xcolormap;
-  Display *xdisplay;
   gint private_val;
 
   GHashTable *hash;
@@ -80,7 +82,7 @@ struct _GdkColormapPrivateX11
 struct _GdkImagePrivateX11
 {
   XImage *ximage;
-  Display *xdisplay;
+  GdkScreen *screen;
   gpointer x_shm_info;
 };
 
@@ -100,7 +102,7 @@ struct _GdkGCX11
   GdkGC parent_instance;
   
   GC xgc;
-  Display *xdisplay;
+  GdkScreen *screen;
   GdkRegion *clip_region;
   guint dirty_mask;
 
@@ -119,18 +121,31 @@ struct _GdkGCX11Class
 
 GType gdk_gc_x11_get_type (void);
 
-#define GDK_ROOT_WINDOW()             gdk_root_window
+/*#define GDK_ROOT_WINDOW()             gdk_root_window
 #define GDK_ROOT_PARENT()             ((GdkWindow *)gdk_parent_root)
-#define GDK_DISPLAY()                 gdk_display
-#define GDK_WINDOW_XDISPLAY(win)      (GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->xdisplay)
+#define GDK_DISPLAY()                 gdk_display*/
+#define GDK_WINDOW_DISPLAY(win)       (GDK_SCREEN_IMPL_X11(GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->screen)->display)
+#define GDK_WINDOW_SCREEN(win)	      (GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->screen)
+#define GDK_WINDOW_XDISPLAY(win)      (GDK_SCREEN_IMPL_X11(GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->screen)->xdisplay)
+#define GDK_WINDOW_XROOTWIN(win)      (GDK_SCREEN_IMPL_X11(GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->screen)->root_window)
 #define GDK_WINDOW_XID(win)           (GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->xid)
-#define GDK_PIXMAP_XDISPLAY(win)      (GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)win)->impl)->xdisplay)
+
+#define GDK_PIXMAP_DISPLAY(win)       (GDK_SCREEN_IMPL_X11(GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)win)->impl)->screen)->display)
+#define GDK_PIXMAP_SCREEN(win)	      (GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)win)->impl)->screen)
+#define GDK_PIXMAP_XDISPLAY(win)      (GDK_SCREEN_IMPL_X11(GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)win)->impl)->screen)->xdisplay)
+#define GDK_PIXMAP_XROOTWIN(win)      (GDK_SCREEN_IMPL_X11(GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)win)->impl)->screen)->root_window)
 #define GDK_PIXMAP_XID(win)           (GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)win)->impl)->xid)
+
+#define GDK_DRAWABLE_DISPLAY(win)     (GDK_IS_WINDOW (win) ? GDK_WINDOW_DISPLAY (win) : GDK_PIXMAP_DISPLAY (win))
+#define GDK_DRAWABLE_SCREEN(win)      (GDK_IS_WINDOW (win) ? GDK_WINDOW_SCREEN (win) : GDK_PIXMAP_SCREEN (win))
 #define GDK_DRAWABLE_XDISPLAY(win)    (GDK_IS_WINDOW (win) ? GDK_WINDOW_XDISPLAY (win) : GDK_PIXMAP_XDISPLAY (win))
+#define GDK_DRAWABLE_XROOTWIN(win)    (GDK_IS_WINDOW (win) ? GDK_WINDOW_XROOTWIN (win) : GDK_PIXMAP_XROOTWIN (win))
 #define GDK_DRAWABLE_XID(win)         (GDK_IS_WINDOW (win) ? GDK_WINDOW_XID (win) : GDK_PIXMAP_XID (win))
+
 #define GDK_IMAGE_XDISPLAY(image)     (((GdkImagePrivateX11 *) GDK_IMAGE (image)->windowing_data)->xdisplay)
 #define GDK_IMAGE_XIMAGE(image)       (((GdkImagePrivateX11 *) GDK_IMAGE (image)->windowing_data)->ximage)
-#define GDK_GC_XDISPLAY(gc)           (GDK_GC_X11(gc)->xdisplay)
+#define GDK_IMAGE_PRIVATE_DATA(image) ((GdkImagePrivateX11 *) GDK_IMAGE (image)->windowing_data)
+#define GDK_GC_XDISPLAY(gc)           (GDK_SCREEN_XDISPLAY(GDK_GC_X11(gc)->screen))
 #define GDK_COLORMAP_XDISPLAY(cmap)   (((GdkColormapPrivateX11 *)GDK_COLORMAP (cmap)->windowing_data)->xdisplay)
 #define GDK_COLORMAP_XCOLORMAP(cmap)  (((GdkColormapPrivateX11 *)GDK_COLORMAP (cmap)->windowing_data)->xcolormap)
 #define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate *) vis)->xvisual)
@@ -141,16 +156,19 @@ GType gdk_gc_x11_get_type (void);
 #define GDK_GC_GET_XGC(gc)   (GDK_GC_X11(gc)->dirty_mask ? _gdk_x11_gc_flush (gc) : GDK_GC_XGC (gc))
 #define GDK_WINDOW_XWINDOW    GDK_DRAWABLE_XID
 
-extern Display		*gdk_display;
+/*extern Display		*gdk_display;
 extern Window		 gdk_root_window;
-extern gint		 gdk_screen;
+extern gint		 gdk_screen;*/
 extern gchar		*gdk_display_name;
-extern Window		 gdk_leader_window;
+/*extern Window		 gdk_leader_window;*/
+extern GdkDisplayManager *dpy_mgr;
 
 extern Atom		 gdk_selection_property;
 
 extern gchar		*gdk_progclass;
 
+GdkVisual*   gdkx_visual_get_for_screen (GdkScreen * scr,
+					 VisualID xvisualid);
 GdkVisual*   gdkx_visual_get   (VisualID xvisualid);
 /* XXX: Do not use this function until it is fixed. An X Colormap
  *      is useless unless we also have the visual. */
@@ -161,7 +179,12 @@ Window        gdk_get_client_window      (Display  *dpy,
                                           Window    win);
 
 /* Functions to create pixmaps and windows from their X equivalents */
+GdkPixmap   *gdk_pixmap_foreign_new_for_screen (GdkNativeWindow anid,
+						GdkScreen * screen);
+
 GdkPixmap    *gdk_pixmap_foreign_new (GdkNativeWindow anid);
+GdkWindow    *gdk_window_foreign_new_for_display (GdkDisplay * display,
+						  GdkNativeWindow anid);
 GdkWindow    *gdk_window_foreign_new (GdkNativeWindow anid);
 
 /* Return the Gdk* for a particular XID */
@@ -171,11 +194,15 @@ guint32       gdk_x11_get_server_time  (GdkWindow       *window);
 
 /* returns TRUE if we support the given WM spec feature */
 gboolean      gdk_net_wm_supports      (GdkAtom property);
+gboolean      gdk_net_wm_supports_for_screen (GdkAtom property,
+					      GdkScreen * screen);
 
 #define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
 #define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
 #define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup (xid))
 
 GC _gdk_x11_gc_flush (GdkGC *gc);
+
+GList *gdk_list_visuals_for_screen (GdkScreen * scr);
 
 #endif /* __GDK_X_H__ */

@@ -48,6 +48,10 @@
 #include "gdkinternals.h"
 #include "gdkregion-generic.h"
 #include "gdkinputprivate.h"
+#include "gdkscreen-x11.h"
+#include "gdkdisplay-x11.h"
+
+
 
 #include <pango/pangox.h>
 
@@ -77,9 +81,6 @@ static void	 gdkx_XConvertCase	(KeySym	       symbol,
 #define XConvertCase gdkx_XConvertCase
 #endif
 
-static int	    gdk_x_error			 (Display     *display, 
-						  XErrorEvent *error);
-static int	    gdk_x_io_error		 (Display     *display);
 
 /* Private variable declarations
  */
@@ -87,8 +88,8 @@ static int gdk_initialized = 0;			    /* 1 if the library is initialized,
 						     * 0 otherwise.
 						     */
 
-static gint autorepeat;
-static gboolean gdk_synchronize = FALSE;
+/*static gint autorepeat;*/
+gboolean gdk_synchronize = FALSE;
 
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gdk_debug_keys[] = {
@@ -96,7 +97,8 @@ static const GDebugKey gdk_debug_keys[] = {
   {"misc",	    GDK_DEBUG_MISC},
   {"dnd",	    GDK_DEBUG_DND},
   {"color-context", GDK_DEBUG_COLOR_CONTEXT},
-  {"xim",	    GDK_DEBUG_XIM}
+  {"xim",	    GDK_DEBUG_XIM},
+  {"multihead",	    GDK_DEBUG_MULTIHEAD}
 };
 
 static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);
@@ -113,105 +115,161 @@ GdkArgDesc _gdk_windowing_args[] = {
   { NULL }
 };
 
-gboolean
-_gdk_windowing_init_check (int argc, char **argv)
+GdkDisplay *
+_gdk_windowing_init_check_for_display (int argc, char **argv, char *display_name)
 {
   XKeyboardState keyboard_state;
   XClassHint *class_hint;
   guint pid;
-  
+  GdkDisplay *display;
+  GdkDisplayImplX11 *dpy_impl;
+
   XSetErrorHandler (gdk_x_error);
   XSetIOErrorHandler (gdk_x_io_error);
-  
-  gdk_display = XOpenDisplay (gdk_display_name);
-  if (!gdk_display)
-    return FALSE;
-  
+
+  if (!dpy_mgr) {
+    dpy_mgr = g_object_new (gdk_display_manager_type (), NULL);
+  }
+  display = GDK_DISPLAY_MGR_GET_CLASS (dpy_mgr)->open_display (dpy_mgr, display_name);
+  if(!display)
+    return NULL;
+  dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
+
   if (gdk_synchronize)
-    XSynchronize (gdk_display, True);
-  
-  gdk_screen = DefaultScreen (gdk_display);
-  gdk_root_window = RootWindow (gdk_display, gdk_screen);
-  
-  gdk_leader_window = XCreateSimpleWindow(gdk_display, gdk_root_window,
-					  10, 10, 10, 10, 0, 0 , 0);
-  class_hint = XAllocClassHint();
+    XSynchronize (dpy_impl->xdisplay, True);
+
+  class_hint = XAllocClassHint ();
   class_hint->res_name = g_get_prgname ();
-  if (gdk_progclass == NULL)
-    {
-      gdk_progclass = g_strdup (g_get_prgname ());
-      gdk_progclass[0] = toupper (gdk_progclass[0]);
-    }
+  if (gdk_progclass == NULL) {
+    gdk_progclass = g_strdup (g_get_prgname ());
+    gdk_progclass[0] = toupper (gdk_progclass[0]);
+  }
   class_hint->res_class = gdk_progclass;
-  XmbSetWMProperties (gdk_display, gdk_leader_window,
-                      NULL, NULL, argv, argc, 
-                      NULL, NULL, class_hint);
+  XmbSetWMProperties (dpy_impl->xdisplay,
+		      DEFAULT_GDK_SCREEN_IMPL_X11_FOR_DISPLAY (display)->
+		      leader_window, NULL, NULL, argv, argc, NULL, NULL,
+		      class_hint);
   XFree (class_hint);
 
-  pid = getpid();
-  XChangeProperty (gdk_display, gdk_leader_window,
-		   gdk_atom_intern ("_NET_WM_PID", FALSE),
-		   XA_CARDINAL, 32,
-		   PropModeReplace,
-		   (guchar *)&pid, 1);
-  
-  gdk_wm_delete_window = gdk_atom_intern ("WM_DELETE_WINDOW", FALSE);
-  gdk_wm_take_focus = gdk_atom_intern ("WM_TAKE_FOCUS", FALSE);
-  gdk_wm_protocols = gdk_atom_intern ("WM_PROTOCOLS", FALSE);
-  gdk_wm_window_protocols[0] = gdk_wm_delete_window;
-  gdk_wm_window_protocols[1] = gdk_wm_take_focus;
-  gdk_wm_window_protocols[2] = gdk_atom_intern ("_NET_WM_PING", FALSE);
-  gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
-  
-  XGetKeyboardControl (gdk_display, &keyboard_state);
-  autorepeat = keyboard_state.global_auto_repeat;
+  pid = getpid ();
+  XChangeProperty (dpy_impl->xdisplay,
+		   DEFAULT_GDK_SCREEN_IMPL_X11_FOR_DISPLAY (display)->
+		   leader_window, gdk_atom_intern_for_display ("_NET_WM_PID",
+							       FALSE,
+							       display),
+		   XA_CARDINAL, 32, PropModeReplace, (guchar *) & pid, 1);
+
+  dpy_impl->gdk_wm_delete_window =
+    gdk_atom_intern_for_display ("WM_DELETE_WINDOW", FALSE, display);
+  dpy_impl->gdk_wm_take_focus =
+    gdk_atom_intern_for_display ("WM_TAKE_FOCUS", FALSE, display);
+  dpy_impl->gdk_wm_protocols =
+    gdk_atom_intern_for_display ("WM_PROTOCOLS", FALSE, display);
+  dpy_impl->gdk_wm_window_protocols[0] = dpy_impl->gdk_wm_delete_window;
+  dpy_impl->gdk_wm_window_protocols[1] = dpy_impl->gdk_wm_take_focus;
+  dpy_impl->gdk_wm_window_protocols[2] =
+    gdk_atom_intern_for_display ("_NET_WM_PING", FALSE, display);
+  dpy_impl->gdk_selection_property =
+    gdk_atom_intern_for_display ("GDK_SELECTION", FALSE, display);
+  dpy_impl->wm_state_atom =
+    gdk_atom_intern_for_display ("_NET_WM_STATE", FALSE, display);
+  dpy_impl->wm_desktop_atom =
+    gdk_atom_intern_for_display ("_NET_WM_DESKTOP", FALSE, display);
+  dpy_impl->timestamp_prop_atom =
+    gdk_atom_intern_for_display ("GDK_TIMESTAMP_PROP", FALSE, display);
+  dpy_impl->wmspec_check_atom =
+    gdk_atom_intern_for_display ("_NET_SUPPORTING_WM_CHECK", FALSE, display);
+
+  dpy_impl->wmspec_supported_atom =
+    gdk_atom_intern_for_display ("_NET_SUPPORTED", FALSE, display);
+
+  XGetKeyboardControl (dpy_impl->xdisplay, &keyboard_state);
+  dpy_impl->autorepeat = keyboard_state.global_auto_repeat;
 
 #ifdef HAVE_XKB
   {
     gint xkb_major = XkbMajorVersion;
     gint xkb_minor = XkbMinorVersion;
-    if (XkbLibraryVersion (&xkb_major, &xkb_minor))
-      {
-        xkb_major = XkbMajorVersion;
-        xkb_minor = XkbMinorVersion;
-        if (XkbQueryExtension (gdk_display, NULL, NULL, NULL,
-                               &xkb_major, &xkb_minor))
-          {
-	    Bool detectable_autorepeat_supported;
-	    
-            _gdk_use_xkb = TRUE;
+    if (XkbLibraryVersion (&xkb_major, &xkb_minor)) {
+      xkb_major = XkbMajorVersion;
+      xkb_minor = XkbMinorVersion;
+      if (XkbQueryExtension (dpy_impl->xdisplay, NULL, NULL, NULL,
+			     &xkb_major, &xkb_minor)) {
+	Bool detectable_autorepeat_supported;
 
-            XkbSelectEvents (gdk_display,
-                             XkbUseCoreKbd,
-                             XkbMapNotifyMask,
-                             XkbMapNotifyMask);
+	dpy_impl->_gdk_use_xkb = TRUE;
 
-	    XkbSetDetectableAutoRepeat (gdk_display,
-					True,
-					&detectable_autorepeat_supported);
+	XkbSelectEvents (dpy_impl->xdisplay,
+			 XkbUseCoreKbd, XkbMapNotifyMask, XkbMapNotifyMask);
 
-	    GDK_NOTE (MISC, g_message ("Detectable autorepeat %s.",
-				       detectable_autorepeat_supported ? "supported" : "not supported"));
-	    
-	    _gdk_have_xkb_autorepeat = detectable_autorepeat_supported;
-          }
+	XkbSetDetectableAutoRepeat (dpy_impl->xdisplay,
+				    True, &detectable_autorepeat_supported);
+
+	GDK_NOTE (MISC, g_message ("Detectable autorepeat %s.",
+				   detectable_autorepeat_supported ?
+				   "supported" : "not supported"));
+
+	dpy_impl->_gdk_have_xkb_autorepeat = detectable_autorepeat_supported;
       }
+    }
   }
 #endif
-  
-  return TRUE;
+  return display;
 }
+
+/* This function is only used by gdk_init_check */
+
+GdkDisplay *
+_gdk_windowing_init_check (int argc, char **argv){
+  /* This wrapper function is needed because of gdk_display_name exists only
+   * in x11 implementation */
+  return _gdk_windowing_init_check_for_display(argc,argv,gdk_display_name);
+}
+
+
+GdkDisplay *
+gdk_display_init_new(int argc, char **argv, char *display_name){
+  GdkDisplay *dpy = NULL;
+  GdkScreen *scr = NULL;
+  
+  dpy = _gdk_windowing_init_check_for_display(argc,argv,display_name);
+    if (!dpy)
+      return NULL;
+  scr = GDK_DISPLAY_GET_CLASS(dpy)->get_default_screen(dpy);
+  
+  _gdk_visual_init (scr);
+  _gdk_windowing_window_init(scr);
+  _gdk_windowing_image_init (dpy);
+  gdk_events_init (dpy);
+  gdk_dnd_init (dpy);
+  return dpy;
+}
+
+void
+gdk_set_use_xshm_for_display (GdkDisplay * display, gboolean use_xshm)
+{
+  GDK_DISPLAY_IMPL_X11 (display)->gdk_use_xshm = use_xshm;
+}
+
+gboolean
+gdk_get_use_xshm_for_display (GdkDisplay * display)
+{
+  return GDK_DISPLAY_IMPL_X11 (display)->gdk_use_xshm;
+}
+
 
 void
 gdk_set_use_xshm (gboolean use_xshm)
 {
-  gdk_use_xshm = use_xshm;
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_set_use_xshm_for_display instead\n"));
+  gdk_set_use_xshm_for_display(DEFAULT_GDK_DISPLAY,use_xshm);
 }
 
 gboolean
 gdk_get_use_xshm (void)
 {
-  return gdk_use_xshm;
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_get_use_xshm_for_display instead\n"));
+  return gdk_get_use_xshm_for_display(DEFAULT_GDK_DISPLAY);
 }
 
 static GdkGrabStatus
@@ -323,9 +381,20 @@ gdk_pointer_grab (GdkWindow *	  window,
     }
   
   if (return_val == GrabSuccess)
-    gdk_xgrab_window = (GdkWindowObject *)window;
+    GDK_DISPLAY_IMPL_X11(GDK_WINDOW_DISPLAY(window))->gdk_xgrab_window = 
+						    (GdkWindowObject *)window;
 
   return gdk_x11_convert_grab_status (return_val);
+}
+
+void
+gdk_pointer_ungrab_for_display (GdkDisplay * display, guint32 time)
+{
+  _gdk_input_ungrab_pointer (time);
+
+
+  XUngrabPointer (GDK_DISPLAY_XDISPLAY (display), time);
+  GDK_DISPLAY_IMPL_X11 (display)->gdk_xgrab_window = NULL;
 }
 
 /*
@@ -346,10 +415,8 @@ gdk_pointer_grab (GdkWindow *	  window,
 void
 gdk_pointer_ungrab (guint32 time)
 {
-  _gdk_input_ungrab_pointer (time);
-  
-  XUngrabPointer (gdk_display, time);
-  gdk_xgrab_window = NULL;
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_pointer_ungrab_for_display instead\n"));
+  gdk_pointer_ungrab_for_display(DEFAULT_GDK_DISPLAY,time);
 }
 
 /*
@@ -370,8 +437,15 @@ gdk_pointer_ungrab (guint32 time)
 gboolean
 gdk_pointer_is_grabbed (void)
 {
-  return gdk_xgrab_window != NULL;
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_pointer_is_grabbed_for_display instead\n"));
+  return gdk_pointer_is_grabbed_for_display(DEFAULT_GDK_DISPLAY);
 }
+gboolean
+gdk_pointer_is_grabbed_for_display (GdkDisplay * display)
+{
+  return (GDK_DISPLAY_IMPL_X11 (display)->gdk_xgrab_window != NULL);
+}
+
 
 /*
  *--------------------------------------------------------------
@@ -415,6 +489,13 @@ gdk_keyboard_grab (GdkWindow *	   window,
   return gdk_x11_convert_grab_status (return_val);
 }
 
+void
+gdk_keyboard_ungrab_for_display (GdkDisplay * display, guint32 time)
+{
+  XUngrabKeyboard (GDK_DISPLAY_XDISPLAY (display), time);
+}
+
+
 /*
  *--------------------------------------------------------------
  * gdk_keyboard_ungrab
@@ -433,7 +514,8 @@ gdk_keyboard_grab (GdkWindow *	   window,
 void
 gdk_keyboard_ungrab (guint32 time)
 {
-  XUngrabKeyboard (gdk_display, time);
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_keyboard_ungrab_for_display instead\n"));	 
+  gdk_keyboard_ungrab_for_display(DEFAULT_GDK_DISPLAY,time);
 }
 
 /*
@@ -454,11 +536,13 @@ gdk_keyboard_ungrab (guint32 time)
 gint
 gdk_screen_width (void)
 {
-  gint return_val;
-  
-  return_val = DisplayWidth (gdk_display, gdk_screen);
-  
-  return return_val;
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_screen_width_for_screen instead\n"));  
+  return gdk_screen_width_for_screen (DEFAULT_GDK_SCREEN);
+}
+gint
+gdk_screen_width_for_screen (GdkScreen * screen)
+{
+  return GDK_SCREEN_GET_CLASS(screen)->get_width (screen);
 }
 
 /*
@@ -479,12 +563,16 @@ gdk_screen_width (void)
 gint
 gdk_screen_height (void)
 {
-  gint return_val;
-  
-  return_val = DisplayHeight (gdk_display, gdk_screen);
-  
-  return return_val;
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_screen_height_for_screen instead\n"));
+  return gdk_screen_height_for_screen (DEFAULT_GDK_SCREEN);
 }
+
+gint
+gdk_screen_height_for_screen (GdkScreen * screen)
+{
+  return GDK_SCREEN_GET_CLASS(screen)->get_height (screen);
+}
+
 
 /*
  *--------------------------------------------------------------
@@ -504,11 +592,13 @@ gdk_screen_height (void)
 gint
 gdk_screen_width_mm (void)
 {
-  gint return_val;
-  
-  return_val = DisplayWidthMM (gdk_display, gdk_screen);
-  
-  return return_val;
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_screen_width_mm_for_screen instead\n"));
+  return gdk_screen_width_mm_for_screen(DEFAULT_GDK_SCREEN);
+}
+gint
+gdk_screen_width_mm_for_screen (GdkScreen * screen)
+{
+  return GDK_SCREEN_GET_CLASS(screen)->get_width_mm (screen);
 }
 
 /*
@@ -529,11 +619,13 @@ gdk_screen_width_mm (void)
 gint
 gdk_screen_height_mm (void)
 {
-  gint return_val;
-  
-  return_val = DisplayHeightMM (gdk_display, gdk_screen);
-  
-  return return_val;
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_screen_height_mm_for_screen instead\n"));
+  return gdk_screen_height_mm_for_screen(DEFAULT_GDK_SCREEN);
+}
+gint
+gdk_screen_height_mm_for_screen (GdkScreen * screen)
+{
+  return GDK_SCREEN_GET_CLASS(screen)->get_height_mm (screen);
 }
 
 /*
@@ -561,30 +653,89 @@ gdk_screen_height_mm (void)
 void
 gdk_set_sm_client_id (const gchar* sm_client_id)
 {
-  if (sm_client_id && strcmp (sm_client_id, ""))
-    {
-      XChangeProperty (gdk_display, gdk_leader_window,
-	   	       gdk_atom_intern ("SM_CLIENT_ID", FALSE),
-		       XA_STRING, 8, PropModeReplace,
-		       sm_client_id, strlen(sm_client_id));
-    }
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_set_sm_client_id_for_screen instead\n"));
+  gdk_set_sm_client_id_for_screen(DEFAULT_GDK_SCREEN,sm_client_id);
+}
+
+void
+gdk_set_sm_client_id_for_screen (GdkScreen * screen,
+				 const gchar * sm_client_id)
+{
+
+  GdkScreenImplX11 *scr_impl = GDK_SCREEN_IMPL_X11 (screen);
+
+  if (sm_client_id && strcmp (sm_client_id, "")) {
+    XChangeProperty (scr_impl->xdisplay, scr_impl->leader_window,
+		     gdk_atom_intern_for_display ("SM_CLIENT_ID", FALSE,
+						  scr_impl->display),
+		     XA_STRING, 8, PropModeReplace, sm_client_id,
+		     strlen (sm_client_id));
+  }
   else
-     XDeleteProperty (gdk_display, gdk_leader_window,
-	   	      gdk_atom_intern ("SM_CLIENT_ID", FALSE));
+    XDeleteProperty (scr_impl->xdisplay, scr_impl->leader_window,
+		     gdk_atom_intern_for_display ("SM_CLIENT_ID", FALSE,
+						  scr_impl->display));
+}
+/*
+
+void
+gdk_key_repeat_disable_for_display (GdkDisplay * dpy)
+{
+  XAutoRepeatOff (GDK_DISPLAY_XDISPLAY (dpy));
+}
+
+void
+gdk_key_repeat_restore_for_display (GdkDisplay * dpy)
+{
+  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (dpy);
+
+  if (dpy_impl->autorepeat)
+    XAutoRepeatOn (dpy_impl->xdisplay);
+  else
+    XAutoRepeatOff (dpy_impl->xdisplay);
+}
+  
+void
+gdk_key_repeat_disable (void)
+{
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_key_repeat_disable_for_display instead\n"));
+  gdk_key_repeat_disable_for_display (DEFAULT_GDK_DISPLAY);
+}
+
+void
+gdk_key_repeat_restore (void)
+{
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_key_repeat_restore_for_display instead\n"));	
+  gdk_key_repeat_restore_for_display(DEFAULT_GDK_DISPLAY);
+}
+
+*/
+
+void
+gdk_beep_for_display (GdkDisplay * display)
+{
+  XBell (GDK_DISPLAY_XDISPLAY (display), 0);
 }
 
 void
 gdk_beep (void)
 {
-  XBell(gdk_display, 0);
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_beep_for_display instead\n"));
+  gdk_beep_for_display(DEFAULT_GDK_DISPLAY);
 }
+
+/* close all open display */
 
 void
 gdk_windowing_exit (void)
 {
-  pango_x_shutdown_display (gdk_display);
-  
-  XCloseDisplay (gdk_display);
+  GSList * tmp = dpy_mgr->open_displays;
+    
+  while(tmp != NULL){
+	  pango_x_shutdown_display(GDK_DISPLAY_XDISPLAY(tmp->data));
+	  XCloseDisplay (GDK_DISPLAY_XDISPLAY (tmp->data));
+	  tmp = tmp->next;
+  }
 }
 
 /*
@@ -609,7 +760,7 @@ gdk_windowing_exit (void)
  *--------------------------------------------------------------
  */
 
-static int
+int
 gdk_x_error (Display	 *display,
 	     XErrorEvent *error)
 {
@@ -664,7 +815,7 @@ gdk_x_error (Display	 *display,
  *--------------------------------------------------------------
  */
 
-static int
+int
 gdk_x_io_error (Display *display)
 {
   /* This is basically modelled after the code in XLib. We need
@@ -675,13 +826,12 @@ gdk_x_io_error (Display *display)
    */
   if (errno == EPIPE)
     {
-      fprintf (stderr, "Gdk-ERROR **: X connection to %s broken (explicit kill or server shutdown).\n", gdk_display ? DisplayString (gdk_display) : gdk_get_display());
+      fprintf (stderr, "Gdk-ERROR **: X connection to %s broken (explicit kill or server shutdown).\n", DisplayString (display));
     }
   else
     {
       fprintf (stderr, "Gdk-ERROR **: Fatal IO error %d (%s) on X server %s.\n",
-	       errno, g_strerror (errno),
-	       gdk_display ? DisplayString (gdk_display) : gdk_get_display());
+	       errno, g_strerror (errno), DisplayString (display));
     }
 
   /* Disable the atexit shutdown for GDK */
@@ -693,7 +843,8 @@ gdk_x_io_error (Display *display)
 gchar *
 gdk_get_display (void)
 {
-  return (gchar *)XDisplayName (gdk_display_name);
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_x11_display_impl_get_display_name instead\n"));
+  return gdk_x11_display_impl_get_display_name(DEFAULT_GDK_DISPLAY);
 }
 
 gint 
@@ -706,8 +857,8 @@ gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
   gdk_error_code = 0;
   
   gdk_error_warnings = 0;
-  result = XSendEvent (gdk_display, window, propagate, event_mask, event_send);
-  XSync (gdk_display, False);
+  result = XSendEvent (event_send->xany.display, window, propagate, event_mask, event_send);
+  XSync (event_send->xany.display, False);
   gdk_error_warnings = old_warnings;
   
   return result && !gdk_error_code;

@@ -4267,8 +4267,9 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
   text_view->drag_start_x = -1;
   text_view->drag_start_y = -1;
 
-  target_list = gtk_target_list_new (target_table,
-                                     G_N_ELEMENTS (target_table));
+  target_list = gtk_target_list_new_for_display (target_table,
+                                     G_N_ELEMENTS (target_table),
+				     GTK_WIDGET_GET_DISPLAY(text_view));
 
   context = gtk_drag_begin (GTK_WIDGET (text_view), target_list,
                             GDK_ACTION_COPY | GDK_ACTION_MOVE,
@@ -4306,12 +4307,17 @@ gtk_text_view_drag_data_get (GtkWidget        *widget,
 
   text_view = GTK_TEXT_VIEW (widget);
 
-  if (selection_data->target == gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE))
+  if (selection_data->target == 
+      gdk_atom_intern_for_display ("GTK_TEXT_BUFFER_CONTENTS", 
+				   FALSE,
+				   GTK_WIDGET_GET_DISPLAY(widget)))
     {
       GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
 
       gtk_selection_data_set (selection_data,
-                              gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE),
+                              gdk_atom_intern_for_display ("GTK_TEXT_BUFFER_CONTENTS", 
+							   FALSE,
+						      GTK_WIDGET_GET_DISPLAY(widget)),
                               8, /* bytes */
                               (void*)&buffer,
                               sizeof (buffer));
@@ -4535,7 +4541,10 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
                                     &drop_point,
                                     drag_target_mark);
 
-  if (selection_data->target == gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE))
+  if (selection_data->target == 
+      gdk_atom_intern_for_display ("GTK_TEXT_BUFFER_CONTENTS", 
+				   FALSE,
+				   GTK_WIDGET_GET_DISPLAY(widget)))
     {
       GtkTextBuffer *src_buffer = NULL;
       GtkTextIter start, end;
@@ -4934,11 +4943,14 @@ popup_position_func (GtkMenu   *menu,
   gint root_x, root_y;
   GtkTextIter iter;
   GtkRequisition req;      
-  
+  GdkScreen *scr;
+
   text_view = GTK_TEXT_VIEW (user_data);
   widget = GTK_WIDGET (text_view);
   
   g_return_if_fail (GTK_WIDGET_REALIZED (text_view));
+  
+  scr = widget->screen;
 
   gdk_window_get_origin (widget->window, &root_x, &root_y);
 
@@ -4979,8 +4991,8 @@ popup_position_func (GtkMenu   *menu,
   *x = CLAMP (*x, root_x, (root_x + widget->allocation.width));
   *y = CLAMP (*y, root_y, (root_y + widget->allocation.height));
 
-  *x = CLAMP (*x, 0, MAX (0, gdk_screen_width () - req.width));
-  *y = CLAMP (*y, 0, MAX (0, gdk_screen_height () - req.height));
+  *x = CLAMP (*x, 0, MAX (0, gdk_screen_width_for_screen (scr) - req.width));
+  *y = CLAMP (*y, 0, MAX (0, gdk_screen_height_for_screen (scr) - req.height));
 }
 
 static void

@@ -37,6 +37,7 @@
 #include "gtkhbox.h"
 #include "gtkvscrollbar.h"
 #include "gtksettings.h"
+#include "gdk/gdkscreen.h"
 
 
 #define MENU_ITEM_CLASS(w)   GTK_MENU_ITEM_GET_CLASS (w)
@@ -464,10 +465,11 @@ gtk_menu_tearoff_bg_copy (GtkMenu *menu)
       
       gdk_window_get_size (menu->tearoff_window->window, &width, &height);
       
-      pixmap = gdk_pixmap_new (menu->tearoff_window->window,
-			       width,
-			       height,
-			       -1);
+      pixmap = gdk_pixmap_new_for_screen (menu->tearoff_window->window,
+					  widget->screen,
+					  width,
+					  height,
+					 -1);
 
       gdk_draw_pixmap (pixmap, gc,
 		       menu->tearoff_window->window,
@@ -597,7 +599,8 @@ gtk_menu_popup (GtkMenu		    *menu,
                                  activate_time) == 0)
 	    GTK_MENU_SHELL (xgrab_shell)->have_xgrab = TRUE;
 	  else
-	    gdk_pointer_ungrab (activate_time);
+	    gdk_pointer_ungrab_for_display (
+		 gdk_window_get_display(xgrab_shell->window),activate_time);
 	}
     }
 
@@ -655,8 +658,12 @@ gtk_menu_popdown (GtkMenu *menu)
 	   */
 	  if (menu_shell->have_xgrab)
 	    {
-	      gdk_pointer_ungrab (GDK_CURRENT_TIME);
-	      gdk_keyboard_ungrab (GDK_CURRENT_TIME);
+	      gdk_pointer_ungrab_for_display (
+		     gdk_window_get_display(menu->tearoff_window->window),
+		     GDK_CURRENT_TIME);
+	      gdk_keyboard_ungrab_for_display (
+		     gdk_window_get_display(menu->tearoff_window->window),
+		     GDK_CURRENT_TIME);
 	    }
 	}
 
@@ -1940,10 +1947,11 @@ gtk_menu_position (GtkMenu *menu)
 
   widget = GTK_WIDGET (menu);
 
-  screen_width = gdk_screen_width ();
-  screen_height = gdk_screen_height ();
+  screen_width = gdk_screen_width_for_screen (widget->screen);
+  screen_height = gdk_screen_height_for_screen (widget->screen);
 
-  gdk_window_get_pointer (NULL, &x, &y, NULL);
+  gdk_window_get_pointer (gdk_screen_get_parent_root(widget->screen),
+  			  &x, &y, NULL);
 
   /* We need the requisition to figure out the right place to
    * popup the menu. In fact, we always need to ask here, since

@@ -53,6 +53,8 @@
 #include "config.h"
 #include "gtkdebug.h"
 #include "gtkintl.h"
+#include "gdk/gdkscreen.h"
+#include "gdk/gdkprivate.h"
 
 /* Private type definitions
  */
@@ -484,8 +486,8 @@ gtk_init_check (int	 *argc,
    *  used in creating widgets. (We want to use the system
    *  defaults so as to be nice to the colormap).
    */
-  gtk_visual = gdk_visual_get_system ();
-  gtk_colormap = gdk_colormap_get_system ();
+  gtk_visual = gdk_visual_get_system_for_screen (DEFAULT_GDK_SCREEN);
+  gtk_colormap = gdk_colormap_get_system_for_screen (DEFAULT_GDK_SCREEN);
 
   gtk_type_init (0);
   gtk_rc_init ();

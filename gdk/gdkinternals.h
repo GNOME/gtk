@@ -43,7 +43,8 @@ typedef enum {
   GDK_DEBUG_EVENTS        = 1 << 1,
   GDK_DEBUG_DND           = 1 << 2,
   GDK_DEBUG_COLOR_CONTEXT = 1 << 3,
-  GDK_DEBUG_XIM           = 1 << 4
+  GDK_DEBUG_XIM           = 1 << 4,
+  GDK_DEBUG_MULTIHEAD	  = 1 << 5
 } GdkDebugFlag;
 
 extern gint		 gdk_debug_level;
@@ -108,8 +109,8 @@ extern GList *gdk_queued_tail;
 
 GdkEvent* gdk_event_new (void);
 
-void      gdk_events_init   (void);
-void      gdk_events_queue  (void);
+void      gdk_events_init   (GdkDisplay * display);
+/*void      gdk_events_queue  (void);*/
 GdkEvent* gdk_event_unqueue (void);
 
 GList* gdk_event_queue_find_first  (void);
@@ -143,8 +144,9 @@ void _gdk_colormap_real_destroy (GdkColormap *colormap);
 void _gdk_cursor_destroy (GdkCursor *cursor);
 
 extern GdkArgDesc _gdk_windowing_args[];
-gboolean _gdk_windowing_init_check              (int         argc,
+GdkDisplay *   _gdk_windowing_init_check        (int         argc,
 						 char      **argv);
+void	 _gdk_windowing_screen_init	        (GdkScreen * scr);
 void     _gdk_windowing_window_get_offsets      (GdkWindow  *window,
 						 gint       *x_offset,
 						 gint       *y_offset);
@@ -195,11 +197,11 @@ GType _gdk_pixmap_impl_get_type (void) G_GNUC_CONST;
  * Initialization and exit routines *
  ************************************/
 
-void _gdk_windowing_window_init (void);
-void gdk_visual_init (void);
-void gdk_dnd_init    (void);
+void _gdk_windowing_window_init (GdkScreen *screen);
+void _gdk_visual_init (GdkScreen *screen);
+void gdk_dnd_init    (GdkDisplay *display);
 
-void _gdk_windowing_image_init  (void);
+void _gdk_windowing_image_init  (GdkDisplay *display);
 void gdk_image_exit  (void);
 
 void gdk_input_init  (void);

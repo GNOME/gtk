@@ -74,7 +74,8 @@ static const GDebugKey gdk_debug_keys[] = {
   {"misc",	    GDK_DEBUG_MISC},
   {"dnd",	    GDK_DEBUG_DND},
   {"color-context", GDK_DEBUG_COLOR_CONTEXT},
-  {"xim",	    GDK_DEBUG_XIM}
+  {"xim",	    GDK_DEBUG_XIM},
+  {"multihead",	    GDK_DEBUG_MULTIHEAD}
 };
 
 static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);
@@ -273,7 +274,8 @@ gdk_init_check (int    *argc,
   gchar **argv_orig = NULL;
   gint argc_orig = 0;
   GdkArgContext *arg_context;
-  gboolean result;
+  GdkDisplay *display;
+  GdkScreen *screen;
   int i;
   
   if (gdk_initialized)
@@ -323,22 +325,23 @@ gdk_init_check (int    *argc,
   GDK_NOTE (MISC, g_message ("progname: \"%s\"", g_get_prgname ()));
 
   g_type_init (0);
-  
-  result = _gdk_windowing_init_check (argc_orig, argv_orig);
+
+  display = _gdk_windowing_init_check (argc_orig, argv_orig);
 
   for (i = 0; i < argc_orig; i++)
     g_free(argv_orig[i]);
   g_free(argv_orig);
 
-  if (!result)
+  if (!display)
     return FALSE;
+  screen = GDK_DISPLAY_GET_CLASS(display)->get_default_screen(display);
   
-  gdk_visual_init ();
-  _gdk_windowing_window_init ();
-  _gdk_windowing_image_init ();
-  gdk_events_init ();
+  _gdk_visual_init (screen);
+  _gdk_windowing_window_init(screen);
+  _gdk_windowing_image_init (display);
+  gdk_events_init (display);
   gdk_input_init ();
-  gdk_dnd_init ();
+  gdk_dnd_init (display);
 
   gdk_initialized = 1;
 

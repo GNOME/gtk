@@ -370,10 +370,11 @@ gtk_ruler_make_pixmap (GtkRuler *ruler)
       gdk_pixmap_unref (ruler->backing_store);
     }
 
-  ruler->backing_store = gdk_pixmap_new (widget->window,
-					 widget->allocation.width,
-					 widget->allocation.height,
-					 -1);
+  ruler->backing_store = gdk_pixmap_new_for_screen (widget->window,
+						    widget->screen,
+						    widget->allocation.width,
+						    widget->allocation.height,
+					            -1);
 
   ruler->xsrc = 0;
   ruler->ysrc = 0;

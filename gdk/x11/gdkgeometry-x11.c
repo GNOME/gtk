@@ -29,6 +29,8 @@
 #include "gdkx.h"
 #include "gdkregion.h"
 #include "gdkinternals.h"
+#include "gdkscreen-x11.h"
+#include "gdkdisplay-x11.h"
 
 typedef struct _GdkWindowQueueItem GdkWindowQueueItem;
 typedef struct _GdkWindowParentPos GdkWindowParentPos;

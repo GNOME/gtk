@@ -30,6 +30,7 @@
 #include "gdkpixmap.h"
 #include "gdkdrawable.h"
 #include "gdkpixmap.h"
+#include "gdkscreen.h"
 
 #define USE_BACKING_STORE	/* Appears to work on Win32, too, now. */
 
@@ -131,6 +132,8 @@ static void   gdk_window_real_get_size  (GdkDrawable     *drawable,
 
 static GdkVisual*   gdk_window_real_get_visual   (GdkDrawable *drawable);
 static gint         gdk_window_real_get_depth    (GdkDrawable *drawable);
+static GdkScreen *  gdk_window_real_get_screen   (GdkDrawable *drawable);
+static GdkDisplay * gdk_window_real_get_display   (GdkDrawable *drawable);
 static void         gdk_window_real_set_colormap (GdkDrawable *drawable,
                                              GdkColormap *cmap);
 static GdkColormap* gdk_window_real_get_colormap (GdkDrawable *drawable);
@@ -216,6 +219,8 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->draw_glyphs = gdk_window_draw_glyphs;
   drawable_class->draw_image = gdk_window_draw_image;
   drawable_class->get_depth = gdk_window_real_get_depth;
+  drawable_class->get_screen = gdk_window_real_get_screen;
+  drawable_class->get_display = gdk_window_real_get_display;
   drawable_class->get_size = gdk_window_real_get_size;
   drawable_class->set_colormap = gdk_window_real_set_colormap;
   drawable_class->get_colormap = gdk_window_real_get_colormap;
@@ -546,12 +551,13 @@ gdk_window_remove_filter (GdkWindow     *window,
 }
 
 GList *
-gdk_window_get_toplevels (void)
+gdk_window_get_toplevels_for_screen (GdkScreen *screen)
 {
   GList *new_list = NULL;
   GList *tmp_list;
+  GdkWindow * parent_root = GDK_SCREEN_GET_CLASS(screen)->get_parent_root(screen);
   
-  tmp_list = ((GdkWindowObject *)gdk_parent_root)->children;
+  tmp_list = ((GdkWindowObject *)parent_root)->children;
   while (tmp_list)
     {
       new_list = g_list_prepend (new_list, tmp_list->data);
@@ -559,6 +565,12 @@ gdk_window_get_toplevels (void)
     }
   
   return new_list;
+}
+GList *
+gdk_window_get_toplevels (void)
+{
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_window_get_toplevels_for_screen instead\n"));
+  return gdk_window_get_toplevels_for_screen(DEFAULT_GDK_SCREEN);
 }
 
 /*************************************************************
@@ -594,12 +606,14 @@ gboolean
 gdk_window_is_viewable (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkScreen * scr = gdk_window_get_screen(window);
+  GdkWindow * parent_root = GDK_SCREEN_GET_CLASS(scr)->get_parent_root(scr);
   
   g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
   
   while (private && 
-	 (private != (GdkWindowObject *)gdk_parent_root) &&
+	 (private != (GdkWindowObject *)parent_root) &&
 	 (GDK_WINDOW_TYPE (private) != GDK_WINDOW_FOREIGN))
     {
       if (!GDK_WINDOW_IS_MAPPED (window))
@@ -796,7 +810,8 @@ gdk_window_begin_paint_region (GdkWindow *window,
 
       if (new_rect.width > old_rect.width || new_rect.height > old_rect.height)
 	{
-	  paint->pixmap = gdk_pixmap_new (window,
+	  paint->pixmap = gdk_pixmap_new_for_screen (window,
+					  gdk_window_get_screen(window),
                                           new_rect.width, new_rect.height, -1);
           tmp_gc = gdk_gc_new (paint->pixmap);
 	  gdk_draw_drawable (paint->pixmap, tmp_gc, tmp_paint->pixmap,
@@ -842,7 +857,9 @@ gdk_window_begin_paint_region (GdkWindow *window,
     {
       paint->x_offset = clip_box.x;
       paint->y_offset = clip_box.y;
-      paint->pixmap = gdk_pixmap_new (window, clip_box.width, clip_box.height, -1);
+      paint->pixmap = gdk_pixmap_new_for_screen (window,
+			    gdk_window_get_screen(window),  
+			    clip_box.width, clip_box.height, -1);
     }
 
   if (!gdk_region_empty (init_region))
@@ -1248,9 +1265,10 @@ gdk_window_get_composite_drawable (GdkDrawable *window,
       return GDK_DRAWABLE (g_object_ref (G_OBJECT (window)));
     }
   
-  tmp_pixmap = gdk_pixmap_new (window,
-                               width, height,
-                               -1);
+  tmp_pixmap = gdk_pixmap_new_for_screen (window,
+					  gdk_window_get_screen(window),
+					  width, height,
+					  -1);
 
   tmp_gc = gdk_gc_new (tmp_pixmap);
 
@@ -1670,6 +1688,21 @@ gdk_window_real_get_depth (GdkDrawable *drawable)
 
   return depth;
 }
+
+static GdkScreen*
+gdk_window_real_get_screen (GdkDrawable *drawable)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (drawable), 0);
+  return gdk_window_get_screen(GDK_WINDOW (drawable));
+}
+
+static GdkDisplay*
+gdk_window_real_get_display (GdkDrawable *drawable)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (drawable), 0);
+  return gdk_window_get_display(GDK_WINDOW (drawable));
+}
+	
 
 static void
 gdk_window_real_set_colormap (GdkDrawable *drawable,
@@ -2277,3 +2310,14 @@ gdk_window_constrain_size (GdkGeometry *geometry,
   *new_width = width;
   *new_height = height;
 }
+/**
+ * gdk_window_get_display:
+ * @window: a #GdkWindow
+ *
+ * retrieve the GdkDisplay associated with #GdkWindow
+ * 
+ * 
+ * Return value: the #GdkDisplay associated with @window
+ **/
+
+

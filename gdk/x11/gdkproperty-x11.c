@@ -31,64 +31,110 @@
 #include "gdkx.h"
 #include "gdkproperty.h"
 #include "gdkprivate.h"
+#include "gdkinternals.h"
+#include "gdkdisplay-x11.h"
+#include "gdkscreen-x11.h"
+
+typedef struct {
+  GdkDisplay *display;
+  GHashTable *hash_table;
+} GdkAtomHash;
+
+static GdkAtomHash * 
+gdk_atom_hash_get(GdkDisplay *display, GSList * atom_hash_list)
+{
+  GSList *tmp = atom_hash_list;
+
+  if(!atom_hash_list)
+     return NULL;
+
+  while(tmp)
+  {
+    if(((GdkAtomHash *)tmp->data)->display == display)
+      return ((GdkAtomHash *)tmp->data);
+
+    tmp = tmp->next;
+  }
+  return NULL;
+}
 
 GdkAtom
-gdk_atom_intern (const gchar *atom_name,
-		 gboolean     only_if_exists)
+gdk_atom_intern_for_display (const gchar * atom_name,
+			     gboolean only_if_exists, GdkDisplay * dpy)
 {
   GdkAtom retval;
-  static GHashTable *atom_hash = NULL;
-  
+  static GSList *atom_hash_list = NULL;
+  GdkAtomHash * atom_hash;
+
   g_return_val_if_fail (atom_name != NULL, GDK_NONE);
 
-  if (!atom_hash)
-    atom_hash = g_hash_table_new (g_str_hash, g_str_equal);
+  atom_hash = gdk_atom_hash_get(dpy, atom_hash_list);
+  if(!atom_hash)
+  {
+    /* list or hashtable doesn't exist for display */
+    atom_hash = g_new(GdkAtomHash, 1);
+    atom_hash->display = dpy;
+    atom_hash->hash_table = g_hash_table_new (g_str_hash, g_str_equal);
+    g_slist_append (atom_hash_list, atom_hash);
+  }
 
-  retval = GPOINTER_TO_UINT (g_hash_table_lookup (atom_hash, atom_name));
-  if (!retval)
-    {
-      retval = XInternAtom (gdk_display, atom_name, only_if_exists);
+  retval = GPOINTER_TO_UINT (g_hash_table_lookup (atom_hash->hash_table,
+						  atom_name));
+  if (!retval) {
+    retval =
+      XInternAtom (GDK_DISPLAY_XDISPLAY (dpy), atom_name, only_if_exists);
 
-      if (retval != None)
-	g_hash_table_insert (atom_hash, 
-			     g_strdup (atom_name), 
-			     GUINT_TO_POINTER (retval));
-    }
-
+    if (retval != None)
+      g_hash_table_insert (atom_hash->hash_table,
+			   g_strdup (atom_name), GUINT_TO_POINTER (retval));
+  }
   return retval;
 }
 
-gchar*
-gdk_atom_name (GdkAtom atom)
+GdkAtom
+gdk_atom_intern (const gchar *atom_name, gboolean only_if_exists)
+{
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_atom_intern_for_display instead\n"));
+  return gdk_atom_intern_for_display(atom_name,only_if_exists,DEFAULT_GDK_DISPLAY);
+}
+gchar *
+gdk_atom_name_for_display (GdkAtom atom, GdkDisplay * dpy)
 {
   gchar *t;
   gchar *name;
   gint old_error_warnings;
 
-  /* If this atom doesn't exist, we'll die with an X error unless
-     we take precautions */
+  /*
+     If this atom doesn't exist, we'll die with an X error unless
+     we take precautions 
+   */
 
   old_error_warnings = gdk_error_warnings;
   gdk_error_warnings = 0;
   gdk_error_code = 0;
-  t = XGetAtomName (gdk_display, atom);
+  t = XGetAtomName (GDK_DISPLAY_XDISPLAY (dpy), atom);
   gdk_error_warnings = old_error_warnings;
 
-  if (gdk_error_code)
-    {
-      if (t)
-	XFree (t);
+  if (gdk_error_code) {
+    if (t)
+      XFree (t);
 
-      return NULL;
-    }
-  else
-    {
-      name = g_strdup (t);
-      if (t)
-	XFree (t);
-      
-      return name;
-    }
+    return NULL;
+  }
+  else {
+    name = g_strdup (t);
+    if (t)
+      XFree (t);
+
+    return name;
+  }
+}
+
+gchar*
+gdk_atom_name (GdkAtom atom)
+{
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_atom_name_for_display instead\n"));
+  return gdk_atom_name_for_display(atom,DEFAULT_GDK_DISPLAY);	
 }
 
 gboolean
@@ -124,8 +170,8 @@ gdk_property_get (GdkWindow   *window,
     }
   else
     {
-      xdisplay = gdk_display;
-      xwindow = gdk_root_window;
+        g_warning("gdk_property_get no GdkWindow defined\n");
+	return FALSE;
     }
 
   ret_data = NULL;
@@ -149,8 +195,8 @@ gdk_property_get (GdkWindow   *window,
       gchar *rn, *pn;
 
       XFree (ret_data);
-      rn = gdk_atom_name(ret_prop_type);
-      pn = gdk_atom_name(type);
+      rn = gdk_atom_name_for_display(ret_prop_type,GDK_WINDOW_DISPLAY(window));
+      pn = gdk_atom_name_for_display(type,GDK_WINDOW_DISPLAY(window));
       g_warning("Couldn't match property type %s to %s\n", rn, pn);
       g_free(rn); g_free(pn);
       return FALSE;
@@ -212,8 +258,8 @@ gdk_property_change (GdkWindow    *window,
     }
   else
     {
-      xdisplay = gdk_display;
-      xwindow = gdk_root_window;
+      g_warning("gdk_property_change no GdkWindow defined\n");
+      return;
     }
 
   XChangeProperty (xdisplay, xwindow, property, type,
@@ -236,12 +282,16 @@ gdk_property_delete (GdkWindow *window,
 
       xdisplay = GDK_WINDOW_XDISPLAY (window);
       xwindow = GDK_WINDOW_XID (window);
+      XDeleteProperty (xdisplay, xwindow, property);
+
     }
-  else
+/*  removed for multihead support,
+ *  use root_window from a GdkScreen to delete a prop
+ *  from the specific root window.
+    else
     {
       xdisplay = gdk_display;
       xwindow = gdk_root_window;
     }
-
-  XDeleteProperty (xdisplay, xwindow, property);
-}
+*/
+ }

@@ -31,6 +31,9 @@
 #include "gdki18n.h"
 #include "gdkinternals.h"
 #include "gdkprivate-x11.h"
+#include "gdkinternals.h"
+#include "gdkscreen-x11.h"
+#include "gdkdisplay-x11.h"
 
 #if HAVE_CONFIG_H
 #  include <config.h>
@@ -44,7 +47,7 @@
  * avoid trying to use multibyte conversion functions and
  * assume everything is 1-byte per character
  */
-static gboolean gdk_use_mb;
+static  gboolean gdk_use_mb;
 
 /*
  *--------------------------------------------------------------
@@ -117,62 +120,60 @@ gdk_set_locale (void)
  * wide characters must be null-terminated. If the conversion is
  * failed, it returns NULL.
  */
+
 gchar *
 gdk_wcstombs (const GdkWChar *src)
 {
   gchar *mbstr;
+  GdkDisplay *display = DEFAULT_GDK_DISPLAY;
+  GDK_NOTE(MULTIHEAD, g_message("Don't use gdk_wcstombs for multihead\n"));
 
-  if (gdk_use_mb)
-    {
-      XTextProperty tpr;
+  if (gdk_use_mb) {
+    XTextProperty tpr;
 
-      if (sizeof(wchar_t) != sizeof(GdkWChar))
-	{
-	  gint i;
-	  wchar_t *src_alt;
-	  for (i=0; src[i]; i++);
-	  src_alt = g_new (wchar_t, i+1);
-	  for (; i>=0; i--)
-	    src_alt[i] = src[i];
-	  if (XwcTextListToTextProperty (gdk_display, &src_alt, 1, XTextStyle, &tpr)
-	      != Success)
-	    {
-	      g_free (src_alt);
-	      return NULL;
-	    }
-	  g_free (src_alt);
-	}
-      else
-	{
-	  if (XwcTextListToTextProperty (gdk_display, (wchar_t**)&src, 1,
-					 XTextStyle, &tpr) != Success)
-	    {
-	      return NULL;
-	    }
-	}
-      /*
-       * We must copy the string into an area allocated by glib, because
-       * the string 'tpr.value' must be freed by XFree().
-       */
-      mbstr = g_strdup(tpr.value);
-      XFree (tpr.value);
-    }
-  else
-    {
-      gint length = 0;
+    if (sizeof (wchar_t) != sizeof (GdkWChar)) {
       gint i;
-
-      while (src[length] != 0)
-	length++;
-      
-      mbstr = g_new (gchar, length + 1);
-
-      for (i=0; i<length+1; i++)
-	mbstr[i] = src[i];
+      wchar_t *src_alt;
+      for (i = 0; src[i]; i++);
+      src_alt = g_new (wchar_t, i + 1);
+      for (; i >= 0; i--)
+	src_alt[i] = src[i];
+      if (XwcTextListToTextProperty (GDK_DISPLAY_XDISPLAY (display),
+				     &src_alt, 1, XTextStyle,
+				     &tpr) != Success) {
+	g_free (src_alt);
+	return NULL;
+      }
+      g_free (src_alt);
     }
+    else {
+      if (XwcTextListToTextProperty
+	  (GDK_DISPLAY_XDISPLAY (display), (wchar_t **) & src, 1, XTextStyle,
+	   &tpr) != Success) {
+	return NULL;
+      }
+    }
+    /*
+     * We must copy the string into an area allocated by glib, because
+     * the string 'tpr.value' must be freed by XFree().
+     */
+    mbstr = g_strdup (tpr.value);
+    XFree (tpr.value);
+  }
+  else {
+    gint length = 0;
+    gint i;
 
+    while (src[length] != 0)
+      length++;
+
+    mbstr = g_new (gchar, length + 1);
+
+    for (i = 0; i < length + 1; i++)
+      mbstr[i] = src[i];
+  }
   return mbstr;
-}
+} 
   
 /*
  * gdk_mbstowcs
@@ -181,45 +182,49 @@ gdk_wcstombs (const GdkWChar *src)
  * number of wide characters written. The string 'src' must be
  * null-terminated. If the conversion is failed, it returns -1.
  */
+
 gint
 gdk_mbstowcs (GdkWChar *dest, const gchar *src, gint dest_max)
 {
-  if (gdk_use_mb)
-    {
-      XTextProperty tpr;
-      wchar_t **wstrs, *wstr_src;
-      gint num_wstrs;
-      gint len_cpy;
-      if (XmbTextListToTextProperty (gdk_display, (char **)&src, 1, XTextStyle,
-				     &tpr)
-	  != Success)
-	{
-	  /* NoMem or LocaleNotSupp */
-	  return -1;
-	}
-      if (XwcTextPropertyToTextList (gdk_display, &tpr, &wstrs, &num_wstrs)
-	  != Success)
-	{
-	  /* InvalidChar */
-	  XFree(tpr.value);
-	  return -1;
-	}
-      XFree(tpr.value);
-      if (num_wstrs == 0)
-	return 0;
-      wstr_src = wstrs[0];
-      for (len_cpy=0; len_cpy<dest_max && wstr_src[len_cpy]; len_cpy++)
-	dest[len_cpy] = wstr_src[len_cpy];
-      XwcFreeStringList (wstrs);
-      return len_cpy;
+  GdkDisplay *display = DEFAULT_GDK_DISPLAY;
+  GDK_NOTE(MULTIHEAD,g_message("Don't use gdk_mbstowcs for multihead\n"));
+  if (gdk_use_mb) {
+    XTextProperty tpr;
+    wchar_t **wstrs, *wstr_src;
+    gint num_wstrs;
+    gint len_cpy;
+    if (XmbTextListToTextProperty
+	(GDK_DISPLAY_XDISPLAY (display), (char **) &src, 1, XTextStyle, &tpr)
+	!= Success) {
+      /*
+         NoMem or LocaleNotSupp 
+       */
+      return -1;
     }
-  else
-    {
-      gint i;
-
-      for (i=0; i<dest_max && src[i]; i++)
-	dest[i] = src[i];
-
-      return i;
+    if (XwcTextPropertyToTextList
+	(GDK_DISPLAY_XDISPLAY (display), &tpr, &wstrs, &num_wstrs)
+	!= Success) {
+      /*
+         InvalidChar 
+       */
+      XFree (tpr.value);
+      return -1;
     }
+    XFree (tpr.value);
+    if (num_wstrs == 0)
+      return 0;
+    wstr_src = wstrs[0];
+    for (len_cpy = 0; len_cpy < dest_max && wstr_src[len_cpy]; len_cpy++)
+      dest[len_cpy] = wstr_src[len_cpy];
+    XwcFreeStringList (wstrs);
+    return len_cpy;
+  }
+  else {
+    gint i;
+
+    for (i = 0; i < dest_max && src[i]; i++)
+      dest[i] = src[i];
+
+    return i;
+  }
 }

@@ -58,11 +58,12 @@
 /* Compiling as a part of Gtk 1.1 or later */
 #include "config.h"
 #include "gdkprivate.h"
-
 #endif
 
 #include "gdk.h"		/* For gdk_flush() */
 #include "gdkrgb.h"
+#include "gdkscreen.h"
+#include "gdkinternals.h"
 
 typedef struct _GdkRgbInfo     GdkRgbInfo;
 typedef struct _GdkRgbCmapInfo GdkRgbCmapInfo;
@@ -286,7 +287,7 @@ gdk_rgb_try_colormap (GdkRgbInfo *image_info, gboolean force,
   if (image_info->cmap)
     cmap = image_info->cmap;
   else
-    cmap = gdk_colormap_get_system ();
+    cmap = gdk_colormap_get_system_for_screen(image_info->visual->screen);
 
   colors_needed = nr * ng * nb;
   for (i = 0; i < 256; i++)
@@ -296,7 +297,7 @@ gdk_rgb_try_colormap (GdkRgbInfo *image_info, gboolean force,
     }
 
 #ifndef GAMMA
-  if (cmap == gdk_colormap_get_system())
+  if (cmap == gdk_colormap_get_system_for_screen(image_info->visual->screen))
     /* find color cube colors that are already present */
     for (i = 0; i < MIN (256, cmap->size); i++)
       {
@@ -515,7 +516,7 @@ gdk_rgb_score_visual (GdkVisual *visual)
   if (quality == 0)
     return 0;
 
-  sys = (visual == gdk_visual_get_system ());
+  sys = (visual == gdk_visual_get_system_for_screen (visual->screen));
 
   pseudo = (visual->type == GDK_VISUAL_PSEUDO_COLOR || visual->type == GDK_VISUAL_TRUE_COLOR);
 
@@ -533,13 +534,13 @@ gdk_rgb_score_visual (GdkVisual *visual)
 }
 
 static GdkVisual *
-gdk_rgb_choose_visual (void)
+gdk_rgb_choose_visual (GdkScreen *screen)
 {
   GList *visuals, *tmp_list;
   guint32 score, best_score;
   GdkVisual *visual, *best_visual;
 
-  visuals = gdk_list_visuals ();
+  visuals = GDK_SCREEN_GET_CLASS(screen)->get_list_visuals(screen);
   tmp_list = visuals;
 
   best_visual = tmp_list->data;
@@ -714,21 +715,25 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
       image_info->visual->depth >= 3)
     {
       if (!image_info->cmap)
-	image_info->cmap = gdk_colormap_ref (gdk_colormap_get_system ());
+	image_info->cmap = gdk_colormap_ref (gdk_colormap_get_system_for_screen (visual->screen));
       
       gdk_rgb_colorcube_222 (image_info);
     }
   else if (image_info->visual->type == GDK_VISUAL_PSEUDO_COLOR)
     {
       if (!image_info->cmap &&
-	  (gdk_rgb_install_cmap || image_info->visual != gdk_visual_get_system ()))
+	  (gdk_rgb_install_cmap || image_info->visual != gdk_visual_get_system_for_screen (visual->screen)))
 	{
-	  image_info->cmap = gdk_colormap_new (image_info->visual, FALSE);
+	  image_info->cmap = gdk_colormap_new_for_screen (image_info->visual,
+							  visual->screen,
+							  FALSE);
 	  image_info->cmap_alloced = TRUE;
 	}
       if (!gdk_rgb_do_colormaps (image_info, image_info->cmap != NULL))
 	{
-	  image_info->cmap = gdk_colormap_new (image_info->visual, FALSE);
+	  image_info->cmap = gdk_colormap_new_for_screen (image_info->visual,
+							  visual->screen,
+							  FALSE);
 	  image_info->cmap_alloced = TRUE;
 	  gdk_rgb_do_colormaps (image_info, TRUE);
 	}
@@ -739,14 +744,16 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
 		 image_info->nblue_shades);
 
       if (!image_info->cmap)
-	image_info->cmap = gdk_colormap_ref (gdk_colormap_get_system ());
+	image_info->cmap = gdk_colormap_ref (gdk_colormap_get_system_for_screen (visual->screen));
     }
 #ifdef ENABLE_GRAYSCALE
   else if (image_info->visual->type == GDK_VISUAL_GRAYSCALE)
     {
       if (!image_info->cmap)
 	{
-	  image_info->cmap = gdk_colormap_new (image_info->visual, FALSE);
+	  image_info->cmap = gdk_colormap_new_for_screen (image_info->visual,
+							  visual->screen,
+							  FALSE);
 	  image_info->cmap_alloced = TRUE;
 	}
       
@@ -759,11 +766,13 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
 	{
 	  /* Always install colormap in direct color. */
 	  if (image_info->visual->type != GDK_VISUAL_DIRECT_COLOR &&
-	      image_info->visual == gdk_visual_get_system ())
-	    image_info->cmap = gdk_colormap_ref (gdk_colormap_get_system ());
+	      image_info->visual == gdk_visual_get_system_for_screen (visual->screen))
+	    image_info->cmap = gdk_colormap_ref (gdk_colormap_get_system_for_screen (visual->screen));
 	  else
 	    {
-	      image_info->cmap = gdk_colormap_new (image_info->visual, FALSE);
+	      image_info->cmap = gdk_colormap_new_for_screen(image_info->visual,
+							     visual->screen,
+							     FALSE);
 	      image_info->cmap_alloced = TRUE;
 	    }
 	}
@@ -889,14 +898,20 @@ gdk_rgb_xpixel_from_rgb_internal (GdkColormap *colormap,
 
 /* convert an rgb value into an X pixel code */
 gulong
-gdk_rgb_xpixel_from_rgb (guint32 rgb)
+gdk_rgb_xpixel_from_rgb_for_screen (GdkScreen *screen, guint32 rgb)
 {
   guint32 r = rgb & 0xff0000;
   guint32 g = rgb & 0xff00;
   guint32 b = rgb & 0xff;
 
-  return gdk_rgb_xpixel_from_rgb_internal (gdk_rgb_get_colormap(),
+  return gdk_rgb_xpixel_from_rgb_internal (gdk_rgb_get_colormap_for_screen(screen),
 					   (r >> 8) + (r >> 16), g + (g >> 8), b + (b << 8));
+}
+gulong
+gdk_rgb_xpixel_from_rgb (guint32 rgb)
+{
+  GDK_NOTE(MULTIHEAD,g_message(" Use gdk_rgb_xpixel_from_rgb_for_screen instead\n"));
+  return gdk_rgb_xpixel_from_rgb_for_screen(DEFAULT_GDK_SCREEN,rgb);
 }
 
 void
@@ -3243,6 +3258,7 @@ static GdkRgbInfo *
 gdk_rgb_get_info_from_drawable (GdkDrawable *drawable)
 {
   GdkColormap *cmap = gdk_drawable_get_colormap (drawable);
+  GdkScreen *scr = GDK_DRAWABLE_GET_CLASS(drawable)->get_screen(drawable);
 
   if (!cmap)
     {
@@ -3251,7 +3267,7 @@ gdk_rgb_get_info_from_drawable (GdkDrawable *drawable)
        */
 
       gint depth = gdk_drawable_get_depth (drawable);
-      GdkColormap *rgb_cmap = gdk_rgb_get_colormap();
+      GdkColormap *rgb_cmap = gdk_rgb_get_colormap_for_screen(scr);
       if (depth == gdk_colormap_get_visual (rgb_cmap)->depth)
 	cmap = rgb_cmap;
       else
@@ -3537,11 +3553,18 @@ gdk_rgb_colormap_ditherable (GdkColormap *cmap)
   return (image_info->conv != image_info->conv_d);
 }
 
+gboolean 
+gdk_rgb_ditherable_for_screen  (GdkScreen *screen)
+{
+  return gdk_rgb_colormap_ditherable(gdk_rgb_get_colormap_for_screen(screen));
+}
+
 gboolean
 gdk_rgb_ditherable (void)
 {
-  return gdk_rgb_colormap_ditherable (gdk_rgb_get_colormap ());
+  return gdk_rgb_colormap_ditherable(gdk_rgb_get_colormap);
 }
+
 
 /**
  * gdk_rgb_get_colormap:
@@ -3558,10 +3581,22 @@ GdkColormap *
 gdk_rgb_get_colormap (void)
 {
   static GdkColormap *cmap = NULL;
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_rgb_get_colormap_for_screen instead\n"));
+  if (!cmap)
+    {
+      GdkRgbInfo *image_info = gdk_rgb_create_info (gdk_rgb_choose_visual (DEFAULT_GDK_SCREEN), NULL);
+      cmap = image_info->cmap;
+    }
+
+  return cmap;
+}
+
+GdkColormap *gdk_rgb_get_colormap_for_screen (GdkScreen *screen){
+  static GdkColormap *cmap = NULL;
   
   if (!cmap)
     {
-      GdkRgbInfo *image_info = gdk_rgb_create_info (gdk_rgb_choose_visual (), NULL);
+      GdkRgbInfo *image_info = gdk_rgb_create_info (gdk_rgb_choose_visual (screen), NULL);
       cmap = image_info->cmap;
     }
 
@@ -3569,7 +3604,14 @@ gdk_rgb_get_colormap (void)
 }
 
 GdkVisual *
+gdk_rgb_get_visual_for_screen (GdkScreen *screen)
+{
+  return gdk_colormap_get_visual (gdk_rgb_get_colormap_for_screen (screen));
+}
+
+GdkVisual *
 gdk_rgb_get_visual (void)
 {
-  return gdk_colormap_get_visual (gdk_rgb_get_colormap ());
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_rgb_get_colormap_for_screen instead\n"));
+  return gdk_rgb_get_visual_for_screen(DEFAULT_GDK_SCREEN);
 }

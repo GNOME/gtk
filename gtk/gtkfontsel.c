@@ -736,7 +736,8 @@ GdkFont*
 gtk_font_selection_get_font (GtkFontSelection *fontsel)
 {
   if (!fontsel->font)
-    fontsel->font = gdk_font_from_description (fontsel->font_desc);
+    fontsel->font = gdk_font_from_description_for_display (fontsel->font_desc,
+		       gdk_window_get_display(fontsel->font_clist->window));
   
   return fontsel->font;
 }

@@ -30,6 +30,7 @@
 #include "gtkoptionmenu.h"
 #include "gtksignal.h"
 #include "gdk/gdkkeysyms.h"
+#include "gdk/gdkscreen.h"
 
 
 #define CHILD_LEFT_SPACING        5
@@ -858,7 +859,7 @@ gtk_option_menu_position (GtkMenu  *menu,
       children = children->next;
     }
 
-  screen_width = gdk_screen_width ();
+  screen_width = gdk_screen_width_for_screen (GTK_WIDGET (option_menu)->screen);
   
   if (menu_xpos < 0)
     menu_xpos = 0;

@@ -34,6 +34,7 @@
 #include "gtkthemes.h"
 #include "gtkiconfactory.h"
 #include "gtksettings.h"	/* _gtk_settings_parse_convert() */
+#include "gdk/gdkscreen.h"
 
 #define LIGHTNESS_MULT  1.3
 #define DARKNESS_MULT   0.7
@@ -3963,7 +3964,7 @@ range_new (guint start,
 }
 
 static PangoLayout*
-get_insensitive_layout (PangoLayout *layout)
+get_insensitive_layout (PangoLayout *layout, GdkScreen *screen)
 {
   GSList *embossed_ranges = NULL;
   GSList *stippled_ranges = NULL;
@@ -4066,9 +4067,11 @@ get_insensitive_layout (PangoLayout *layout)
             0x02, 0x01
           };
 
-          stipple = gdk_bitmap_create_from_data (NULL,
-                                                 gray50_bits, gray50_width,
-                                                 gray50_height);
+          stipple = gdk_bitmap_create_from_data_for_screen (NULL,
+							    screen,
+							    gray50_bits,
+							    gray50_width,
+							    gray50_height);
         }
       
       attr = gdk_pango_attr_stipple_new (stipple);
@@ -4117,7 +4120,7 @@ gtk_default_draw_layout (GtkStyle        *style,
     {
       PangoLayout *ins;
 
-      ins = get_insensitive_layout (layout);
+      ins = get_insensitive_layout (layout, gdk_window_get_screen(window));
       
       gdk_draw_layout (window, gc, x, y, ins);
 

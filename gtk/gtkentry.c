@@ -42,6 +42,8 @@
 #include "gtkselection.h"
 #include "gtksignal.h"
 #include "gtkwindow.h"
+#include "gdk/gdkscreen.h"
+#include "gdk/gdkdisplay.h"
 
 #define MIN_ENTRY_WIDTH  150
 #define DRAW_TIMEOUT     20
@@ -1462,7 +1464,9 @@ gtk_entry_motion_notify (GtkWidget      *widget,
 				    event->x + entry->scroll_offset, event->y))
 	{
 	  GdkDragContext *context;
-	  GtkTargetList *target_list = gtk_target_list_new (target_table, G_N_ELEMENTS (target_table));
+	  GtkTargetList *target_list = gtk_target_list_new_for_display (target_table,
+					    G_N_ELEMENTS (target_table),
+					    GTK_WIDGET_GET_DISPLAY(widget));
 	  
 	  context = gtk_drag_begin (widget, target_list, GDK_ACTION_COPY | GDK_ACTION_MOVE,
 			  entry->button, (GdkEvent *)event);
@@ -1750,7 +1754,7 @@ gtk_entry_real_insert_text (GtkEntry    *entry,
   n_chars = g_utf8_strlen (new_text, new_text_length);
   if (entry->text_max_length > 0 && n_chars + entry->text_length > entry->text_max_length)
     {
-      gdk_beep ();
+      gdk_beep_for_display (gdk_window_get_display(GTK_WIDGET(entry)->window));
       n_chars = entry->text_max_length - entry->text_length;
       new_text_length = g_utf8_offset_to_pointer (new_text, n_chars) - new_text;
     }
@@ -1974,7 +1978,9 @@ gtk_entry_copy_clipboard (GtkEntry *entry)
   if (gtk_editable_get_selection_bounds (editable, &start, &end))
     {
       gchar *str = gtk_entry_get_public_chars (entry, start, end);
-      gtk_clipboard_set_text (gtk_clipboard_get (GDK_NONE), str, -1);
+      gtk_clipboard_set_text (gtk_clipboard_get_for_display (GDK_NONE,
+				       GTK_WIDGET_GET_DISPLAY(entry)),
+		      str, -1);
       g_free (str);
     }
 }
@@ -2793,7 +2799,8 @@ gtk_entry_paste (GtkEntry *entry,
 		 GdkAtom   selection)
 {
   g_object_ref (G_OBJECT (entry));
-  gtk_clipboard_request_text (gtk_clipboard_get (selection),
+  gtk_clipboard_request_text (gtk_clipboard_get_for_display (selection,
+					GTK_WIDGET_GET_DISPLAY(entry)),
 			      paste_received, entry);
 }
 
@@ -2809,7 +2816,7 @@ primary_get_cb (GtkClipboard     *clipboard,
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
     {
       gchar *str = gtk_entry_get_public_chars (entry, start, end);
-      gtk_selection_data_set_text (selection_data, str);
+      gtk_selection_data_set_text(selection_data, str);
       g_free (str);
     }
 }
@@ -2833,7 +2840,8 @@ gtk_entry_update_primary_selection (GtkEntry *entry)
     { "COMPOUND_TEXT", 0, 0 }
   };
   
-  GtkClipboard *clipboard = gtk_clipboard_get (GDK_SELECTION_PRIMARY);
+  GtkClipboard *clipboard = gtk_clipboard_get_for_display (GDK_SELECTION_PRIMARY,
+						    GTK_WIDGET_GET_DISPLAY(entry));
   gint start, end;
   
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
@@ -3224,7 +3232,7 @@ popup_position_func (GtkMenu   *menu,
   widget = GTK_WIDGET (entry);
   
   g_return_if_fail (GTK_WIDGET_REALIZED (entry));
-
+  
   gdk_window_get_origin (widget->window, x, y);      
 
   gtk_widget_size_request (entry->popup_menu, &req);
@@ -3232,8 +3240,8 @@ popup_position_func (GtkMenu   *menu,
   *x += widget->allocation.width / 2;
   *y += widget->allocation.height;
 
-  *x = CLAMP (*x, 0, MAX (0, gdk_screen_width () - req.width));
-  *y = CLAMP (*y, 0, MAX (0, gdk_screen_height () - req.height));
+  *x = CLAMP (*x, 0, MAX (0, gdk_screen_width_for_screen (widget->screen) - req.width));
+  *y = CLAMP (*y, 0, MAX (0, gdk_screen_height_for_screen (widget->screen) - req.height));
 }
 
 static void

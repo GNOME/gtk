@@ -700,6 +700,7 @@ gtk_old_editable_selection_received  (GtkWidget         *widget,
 				      guint              time)
 {
   GtkOldEditable *old_editable = GTK_OLD_EDITABLE (widget);
+  GdkDisplay * display = GTK_WIDGET_GET_DISPLAY(widget);
 
   gchar *text = gtk_selection_data_get_text (selection_data);
 
@@ -709,14 +710,20 @@ gtk_old_editable_selection_received  (GtkWidget         *widget,
        * for text and didn't get it, try string.  If we asked for
        * anything else and didn't get it, give up.
        */
-      if (selection_data->target == gdk_atom_intern ("UTF8_STRING", FALSE))
+      if (selection_data->target == gdk_atom_intern_for_display ("UTF8_STRING", 
+								 FALSE,
+								 display))
 	{
 	  gtk_selection_convert (widget, GDK_SELECTION_PRIMARY,
-				 gdk_atom_intern ("TEXT", FALSE),
+				 gdk_atom_intern_for_display ("TEXT",
+							      FALSE,
+							      display),
 				 time);
 	  return;
 	}
-      else if (selection_data->target == gdk_atom_intern ("TEXT", FALSE))
+      else if (selection_data->target == gdk_atom_intern_for_display ("TEXT", 
+								      FALSE,
+								      display))
 	{
 	  gtk_selection_convert (widget, GDK_SELECTION_PRIMARY,
 				 GDK_TARGET_STRING,
@@ -756,13 +763,17 @@ gtk_old_editable_claim_selection (GtkOldEditable *old_editable,
   
   if (claim)
     {
-      if (gtk_selection_owner_set (GTK_WIDGET (old_editable), GDK_SELECTION_PRIMARY, time))
+      if (gtk_selection_owner_set_for_display (GTK_WIDGET (old_editable),
+					       GTK_WIDGET_GET_DISPLAY(old_editable),
+					       GDK_SELECTION_PRIMARY, time))
 	old_editable->has_selection = TRUE;
     }
   else
     {
-      if (gdk_selection_owner_get (GDK_SELECTION_PRIMARY) == GTK_WIDGET (old_editable)->window)
-	gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY, time);
+      if (gdk_selection_owner_get_for_display (GTK_WIDGET_GET_DISPLAY(old_editable),GDK_SELECTION_PRIMARY) == GTK_WIDGET (old_editable)->window)
+	gtk_selection_owner_set_for_display (NULL, 
+					     GTK_WIDGET_GET_DISPLAY(old_editable),
+					     GDK_SELECTION_PRIMARY, time);
     }
 }
 
@@ -829,7 +840,9 @@ gtk_old_editable_real_copy_clipboard (GtkOldEditable *old_editable)
 
       if (text)
 	{
-	  gtk_clipboard_set_text (gtk_clipboard_get (GDK_NONE), text, -1);
+	  gtk_clipboard_set_text (gtk_clipboard_get_for_display (GDK_NONE,
+				    GTK_WIDGET_GET_DISPLAY(old_editable)),
+				  text, -1);
 	  g_free (text);
 	}
     }
@@ -839,7 +852,8 @@ static void
 gtk_old_editable_real_paste_clipboard (GtkOldEditable *old_editable)
 {
   g_object_ref (G_OBJECT (old_editable));
-  gtk_clipboard_request_text (gtk_clipboard_get (GDK_NONE),
+  gtk_clipboard_request_text (gtk_clipboard_get_for_display (GDK_NONE,
+				GTK_WIDGET_GET_DISPLAY(old_editable)),
 			      old_editable_text_received_cb, old_editable);
 }
 

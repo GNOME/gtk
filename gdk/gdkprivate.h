@@ -35,6 +35,7 @@
 #include <gdk/gdkregion.h>
 #include <gdk/gdkvisual.h>
 #include <gdk/gdkwindow.h>
+#include <gdk/gdkdisplaymgr.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -80,9 +81,10 @@ struct _GdkClientFilter {
 
 void gdk_window_destroy_notify	     (GdkWindow *window);
 
-GDKVAR GdkWindow  	*gdk_parent_root;
+/*GDKVAR GdkWindow  	*gdk_parent_root;*/
 GDKVAR gint		 gdk_error_code;
 GDKVAR gint		 gdk_error_warnings;
+GDKVAR GdkDisplayManager *dpy_mgr;
 
 #ifdef __cplusplus
 }

@@ -321,7 +321,8 @@ render_layout_line (GdkDrawable        *drawable,
               
                   if (gdk_pixbuf_get_has_alpha (pixbuf))
                     {
-                      mask = gdk_pixmap_new (drawable,
+                      mask = gdk_pixmap_new_for_screen (drawable,
+					     gdk_drawable_get_screen(drawable),
                                              gdk_pixbuf_get_width (pixbuf),
                                              gdk_pixbuf_get_height (pixbuf),
                                              1);

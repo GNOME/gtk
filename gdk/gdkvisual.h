@@ -41,6 +41,7 @@ typedef enum
  */
 struct _GdkVisual
 {
+  GdkScreen *screen;
   GdkVisualType type;
   gint depth;
   GdkByteOrder byte_order;
@@ -60,23 +61,41 @@ struct _GdkVisual
   gint blue_prec;
 };
 
-GType         gdk_visual_get_type            (void);
-
-gint	      gdk_visual_get_best_depth	     (void);
-GdkVisualType gdk_visual_get_best_type	     (void);
-GdkVisual*    gdk_visual_get_system	     (void);
-GdkVisual*    gdk_visual_get_best	     (void);
+GType         gdk_visual_get_type		   (void);
+gint	      gdk_visual_get_best_depth_for_screen (GdkScreen * scr);
+gint	      gdk_visual_get_best_depth		   (void);
+GdkVisualType gdk_visual_get_best_type_for_screen  (GdkScreen * scr);
+GdkVisualType gdk_visual_get_best_type	           (void);
+GdkVisual*    gdk_visual_get_system	           (void);
+GdkVisual*    gdk_visual_get_best_for_screen	   (GdkScreen * scr);
+GdkVisual*    gdk_visual_get_best	           (void);
+GdkVisual*    gdk_visual_get_best_with_depth_for_screen (GdkScreen * scr,
+							 gint depth);
 GdkVisual*    gdk_visual_get_best_with_depth (gint	     depth);
+GdkVisual*    gdk_visual_get_best_with_type_for_screen (GdkScreen * scr,
+							GdkVisualType visual_type);
 GdkVisual*    gdk_visual_get_best_with_type  (GdkVisualType  visual_type);
+GdkVisual*    gdk_visual_get_best_with_both_for_screen (GdkScreen * scr,
+							gint depth,
+						        GdkVisualType visual_type);
 GdkVisual*    gdk_visual_get_best_with_both  (gint	     depth,
 					      GdkVisualType  visual_type);
+
+GdkVisual *   gdk_visual_get_system_for_screen (GdkScreen * scr);
 
 /* Actually, these are no-ops... */
 GdkVisual* gdk_visual_ref (GdkVisual *visual);
 void	   gdk_visual_unref (GdkVisual *visual);
 
+void gdk_query_depths_for_screen (GdkScreen * scr,
+				  gint ** depths,
+				  gint * count);
+
 void gdk_query_depths	    (gint	    **depths,
 			     gint	     *count);
+void gdk_query_visual_types_for_screen (GdkScreen * scr,
+					GdkVisualType ** visual_types,
+					gint * count);
 void gdk_query_visual_types (GdkVisualType  **visual_types,
 			     gint	     *count);
 

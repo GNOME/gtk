@@ -73,6 +73,25 @@ GdkPixmap* gdk_pixmap_colormap_create_from_xpm_d (GdkWindow    *window,
 						  GdkColor     *transparent_color,
 						  gchar       **data);
 
+GdkPixmap *gdk_pixmap_new_for_screen   (GdkWindow * window,
+					GdkScreen * screen,
+					gint width,
+					gint height,
+					gint depth);
+GdkPixmap* gdk_bitmap_create_from_data_for_screen (GdkWindow * window,
+						   GdkScreen * screen,
+						   const gchar * data,
+						   gint width, gint height);
+GdkPixmap *gdk_pixmap_create_from_data_for_screen (GdkWindow * window,
+						   GdkScreen * screen,
+						   const gchar * data,
+						   gint width,
+						   gint height,
+						   gint depth,
+						   GdkColor * fg,
+						   GdkColor * bg);
+GdkScreen *  gdk_pixmap_get_screen	(GdkDrawable *drawable);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

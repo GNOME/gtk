@@ -177,7 +177,37 @@ gdk_drawable_get_depth (GdkDrawable *drawable)
 
   return GDK_DRAWABLE_GET_CLASS (drawable)->get_depth (drawable);
 }
+/**
+ * gdk_drawable_get_screen:
+ * @drawable: a #GdkDrawable
+ * 
+ * Gets the #GdkScreen associated with the GdkDrawable
+ * 
+ * Return value: a pointer to a #GdkScreen object
+ **/
+GdkScreen*
+gdk_drawable_get_screen(GdkDrawable *drawable)
+{
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), 0);
 
+  return GDK_DRAWABLE_GET_CLASS (drawable)->get_screen (drawable);
+}
+
+/**
+ * gdk_drawable_get_display:
+ * @drawable: a #GdkDrawable
+ * 
+ * Gets the #GdkDisplay associated with the GdkDrawable
+ * 
+ * Return value: a pointer to a #GdkDisplay object
+ **/
+GdkDisplay*
+gdk_drawable_get_display(GdkDrawable *drawable)
+{
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), 0);
+  return GDK_DRAWABLE_GET_CLASS (drawable)->get_display (drawable);
+}
+	
 /**
  * gdk_drawable_set_colormap:
  * @drawable: a #GdkDrawable

@@ -123,6 +123,8 @@ typedef enum
 #define GTK_WIDGET_SET_FLAGS(wid,flag)	  G_STMT_START{ (GTK_WIDGET_FLAGS (wid) |= (flag)); }G_STMT_END
 #define GTK_WIDGET_UNSET_FLAGS(wid,flag)  G_STMT_START{ (GTK_WIDGET_FLAGS (wid) &= ~(flag)); }G_STMT_END
 
+/* Macro to easely access GdkDisplay from GtkWidget */
+#define GTK_WIDGET_GET_DISPLAY(wid)	  (gdk_screen_get_display(GTK_WIDGET(wid)->screen))
 
 /* forward declaration to avoid excessive includes (and concurrent includes)
  */
@@ -211,6 +213,11 @@ struct _GtkWidget
   /* The widgets parent.
    */
   GtkWidget *parent;
+
+  /* The widget screen.
+   */
+  GdkScreen *screen;
+  
 };
 
 struct _GtkWidgetClass
@@ -521,6 +528,9 @@ void	   gtk_widget_set_parent	  (GtkWidget	       *widget,
 void	   gtk_widget_set_parent_window	  (GtkWidget	       *widget,
 					   GdkWindow	       *parent_window);
 GdkWindow *gtk_widget_get_parent_window	  (GtkWidget	       *widget);
+void	   gtk_widget_set_screen	  (GtkWidget	       *widget,
+					   GdkScreen	       *screen);
+GdkScreen *gtk_widget_get_screen	  (GtkWidget	       *widget);
 void	   gtk_widget_set_uposition	  (GtkWidget	       *widget,
 					   gint			x,
 					   gint			y);

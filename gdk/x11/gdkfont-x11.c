@@ -31,11 +31,14 @@
 
 #include "gdkfont.h"
 #include "gdkprivate-x11.h"
+#include "gdkinternals.h"
+#include "gdkdisplay-x11.h"
+#include "gdkscreen-x11.h"
 
 static GHashTable *font_name_hash = NULL;
 static GHashTable *fontset_name_hash = NULL;
 
-static void
+void
 gdk_font_hash_insert (GdkFontType type, GdkFont *font, const gchar *font_name)
 {
   GdkFontPrivateX *private = (GdkFontPrivateX *)font;
@@ -70,7 +73,7 @@ gdk_font_hash_remove (GdkFontType type, GdkFont *font)
   private->names = NULL;
 }
 
-static GdkFont *
+GdkFont *
 gdk_font_hash_lookup (GdkFontType type, const gchar *font_name)
 {
   GdkFont *result;
@@ -89,54 +92,61 @@ gdk_font_hash_lookup (GdkFontType type, const gchar *font_name)
     }
 }
 
-GdkFont*
-gdk_font_load (const gchar *font_name)
+GdkFont *
+gdk_font_load_for_display (const gchar * font_name, GdkDisplay * display)
 {
   GdkFont *font;
   GdkFontPrivateX *private;
   XFontStruct *xfont;
+  GdkDisplayImplX11 *dpy_impl;
 
   g_return_val_if_fail (font_name != NULL, NULL);
+  dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
 
   font = gdk_font_hash_lookup (GDK_FONT_FONT, font_name);
   if (font)
     return font;
 
-  xfont = XLoadQueryFont (gdk_display, font_name);
+  xfont = XLoadQueryFont (dpy_impl->xdisplay, font_name);
   if (xfont == NULL)
     return NULL;
 
   font = gdk_font_lookup (xfont->fid);
-  if (font != NULL)
-    {
-      private = (GdkFontPrivateX *) font;
-      if (xfont != private->xfont)
-	XFreeFont (gdk_display, xfont);
+  if (font != NULL) {
+    private = (GdkFontPrivateX *) font;
+    if (xfont != private->xfont)
+      XFreeFont (dpy_impl->xdisplay, xfont);
 
-      gdk_font_ref (font);
-    }
-  else
-    {
-      private = g_new (GdkFontPrivateX, 1);
-      private->xdisplay = gdk_display;
-      private->xfont = xfont;
-      private->base.ref_count = 1;
-      private->names = NULL;
- 
-      font = (GdkFont*) private;
-      font->type = GDK_FONT_FONT;
-      font->ascent =  xfont->ascent;
-      font->descent = xfont->descent;
+    gdk_font_ref (font);
+  }
+  else {
+    private = g_new (GdkFontPrivateX, 1);
+    private->display = display;
+    private->xfont = xfont;
+    private->base.ref_count = 1;
+    private->names = NULL;
 
-      gdk_xid_table_insert (&xfont->fid, font);
-    }
+    font = (GdkFont *) private;
+    font->type = GDK_FONT_FONT;
+    font->ascent = xfont->ascent;
+    font->descent = xfont->descent;
+
+    gdk_xid_table_insert (&xfont->fid, font);
+  }
 
   gdk_font_hash_insert (GDK_FONT_FONT, font, font_name);
 
   return font;
 }
 
-static char *
+GdkFont*
+gdk_font_load (const gchar *font_name)
+{  
+   GDK_NOTE(MULTIHEAD,g_message("Use gdk_font_load_for_display instead\n"));
+   return gdk_font_load_for_display(font_name,DEFAULT_GDK_DISPLAY);
+}
+
+char *
 gdk_font_charset_for_locale ()
 {
   static char *charset_map[][2] = {
@@ -173,6 +183,45 @@ gdk_font_charset_for_locale ()
     return g_strdup ("iso8859-1");
 };
 
+GdkFont *
+gdk_font_from_description_for_display (PangoFontDescription * font_desc,
+				       GdkDisplay * display)
+{
+  PangoFontMap *font_map;
+  PangoFont *font;
+  GdkFont *result = NULL;
+
+  g_return_val_if_fail (font_desc != NULL, NULL);
+
+  font_map =
+    pango_x_font_map_for_display (GDK_DISPLAY_IMPL_X11 (display)->xdisplay);
+  font = pango_font_map_load_font (font_map, font_desc);
+
+  if (font) {
+    gchar *charset = gdk_font_charset_for_locale ();
+    gint n_subfonts;
+    PangoXSubfont *subfont_ids;
+    gint *subfont_charsets;
+
+    n_subfonts = pango_x_list_subfonts (font, &charset, 1,
+					&subfont_ids, &subfont_charsets);
+    if (n_subfonts > 0) {
+      gchar *xlfd = pango_x_font_subfont_xlfd (font, subfont_ids[0]);
+      result = gdk_font_load_for_display (xlfd, display);
+
+      g_free (xlfd);
+    }
+
+    g_free (subfont_ids);
+    g_free (subfont_charsets);
+
+    g_free (charset);
+    g_object_unref (G_OBJECT (font));
+  }
+
+  return result;
+}
+
 /**
  * gdk_font_from_description:
  * @font_desc: a #PangoFontDescription.
@@ -189,104 +238,79 @@ gdk_font_charset_for_locale ()
 GdkFont*
 gdk_font_from_description (PangoFontDescription *font_desc)
 {
-  PangoFontMap *font_map;
-  PangoFont *font;
-  GdkFont *result = NULL;
-
-  g_return_val_if_fail (font_desc != NULL, NULL);
-
-  font_map = pango_x_font_map_for_display (GDK_DISPLAY ());
-  font = pango_font_map_load_font (font_map, font_desc);
-
-  if (font)
-    {
-      gchar *charset = gdk_font_charset_for_locale ();
-      gint n_subfonts;
-      PangoXSubfont *subfont_ids;
-      gint *subfont_charsets;
-
-      n_subfonts = pango_x_list_subfonts (font, &charset, 1,
-					  &subfont_ids, &subfont_charsets);
-      if (n_subfonts > 0)
-	{
-	  gchar *xlfd = pango_x_font_subfont_xlfd (font, subfont_ids[0]);
-	  result = gdk_font_load (xlfd);
-
-	  g_free (xlfd);
-	}
-
-      g_free (subfont_ids);
-      g_free (subfont_charsets);
-
-      g_free (charset);
-      g_object_unref (G_OBJECT (font));
-    }
-
-  return result;
+  GDK_NOTE(MULTIHEAD, 
+    g_message("Use gdk_font_from_description_for_display or Pango ! instead\n"));
+  return gdk_font_from_description_for_display(font_desc,DEFAULT_GDK_DISPLAY);
 }
 
-GdkFont*
-gdk_fontset_load (const gchar *fontset_name)
+GdkFont *
+gdk_fontset_load_for_display (const gchar * fontset_name,
+			      GdkDisplay * display)
 {
   GdkFont *font;
   GdkFontPrivateX *private;
   XFontSet fontset;
-  gint  missing_charset_count;
+  gint missing_charset_count;
   gchar **missing_charset_list;
   gchar *def_string;
+  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
 
   font = gdk_font_hash_lookup (GDK_FONT_FONTSET, fontset_name);
   if (font)
     return font;
 
   private = g_new (GdkFontPrivateX, 1);
-  font = (GdkFont*) private;
+  font = (GdkFont *) private;
 
-  private->xdisplay = gdk_display;
-  fontset = XCreateFontSet (gdk_display, fontset_name,
+  private->display = display;
+  fontset = XCreateFontSet (dpy_impl->xdisplay, fontset_name,
 			    &missing_charset_list, &missing_charset_count,
 			    &def_string);
 
-  if (missing_charset_count)
-    {
-      gint i;
-      g_warning ("Missing charsets in FontSet creation\n");
-      for (i=0;i<missing_charset_count;i++)
-	g_warning ("    %s\n", missing_charset_list[i]);
-      XFreeStringList (missing_charset_list);
-    }
+  if (missing_charset_count) {
+    gint i;
+    g_warning ("Missing charsets in FontSet creation\n");
+    for (i = 0; i < missing_charset_count; i++)
+      g_warning ("    %s\n", missing_charset_list[i]);
+    XFreeStringList (missing_charset_list);
+  }
 
   private->base.ref_count = 1;
 
-  if (!fontset)
-    {
-      g_free (font);
-      return NULL;
-    }
-  else
-    {
-      gint num_fonts;
-      gint i;
-      XFontStruct **font_structs;
-      gchar **font_names;
-      
-      private->xfont = fontset;
-      font->type = GDK_FONT_FONTSET;
-      num_fonts = XFontsOfFontSet (fontset, &font_structs, &font_names);
+  if (!fontset) {
+    g_free (font);
+    return NULL;
+  }
+  else {
+    gint num_fonts;
+    gint i;
+    XFontStruct **font_structs;
+    gchar **font_names;
 
-      font->ascent = font->descent = 0;
-      
-      for (i = 0; i < num_fonts; i++)
-	{
-	  font->ascent = MAX (font->ascent, font_structs[i]->ascent);
-	  font->descent = MAX (font->descent, font_structs[i]->descent);
-	}
+    private->xfont = fontset;
+    font->type = GDK_FONT_FONTSET;
+    num_fonts = XFontsOfFontSet (fontset, &font_structs, &font_names);
 
-      private->names = NULL;
-      gdk_font_hash_insert (GDK_FONT_FONTSET, font, fontset_name);
-      
-      return font;
+    font->ascent = font->descent = 0;
+
+    for (i = 0; i < num_fonts; i++) {
+      font->ascent = MAX (font->ascent, font_structs[i]->ascent);
+      font->descent = MAX (font->descent, font_structs[i]->descent);
     }
+
+    private->names = NULL;
+    gdk_font_hash_insert (GDK_FONT_FONTSET, font, fontset_name);
+
+    return font;
+  }
+}
+
+
+GdkFont*
+gdk_fontset_load (const gchar *fontset_name)
+{
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_fontset_load_for_display instead\n"));
+  return gdk_fontset_load_for_display(fontset_name,DEFAULT_GDK_DISPLAY);
 }
 
 void
@@ -300,10 +324,12 @@ _gdk_font_destroy (GdkFont *font)
     {
     case GDK_FONT_FONT:
       gdk_xid_table_remove (((XFontStruct *) private->xfont)->fid);
-      XFreeFont (private->xdisplay, (XFontStruct *) private->xfont);
+      XFreeFont (GDK_DISPLAY_IMPL_X11(private->display)->xdisplay,
+		  (XFontStruct *) private->xfont);
       break;
     case GDK_FONT_FONTSET:
-      XFreeFontSet (private->xdisplay, (XFontSet) private->xfont);
+      XFreeFontSet (GDK_DISPLAY_IMPL_X11(private->display)->xdisplay,
+		    (XFontSet) private->xfont);
       break;
     default:
       g_error ("unknown font type.");

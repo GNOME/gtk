@@ -1,0 +1,72 @@
+#ifndef __GDK_SCREEN_X11_H__
+#define __GDK_SCREEN_X11_H__
+
+
+#include "gdkscreen.h"
+#include <X11/X.h>
+#include <X11/Xlib.h>
+#include "gdkx.h"
+#include "gdkdisplaymgr-x11.h"
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif				/* __cplusplus */
+
+  typedef struct _GdkScreenImplX11 GdkScreenImplX11;
+  typedef struct _GdkScreenImplX11Class GdkScreenImplX11Class;
+
+
+#define GDK_TYPE_SCREEN_IMPL_X11              (gdk_X11_screen_impl_get_type ())
+#define GDK_SCREEN_IMPL_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_SCREEN_IMPL_X11, GdkScreenImplX11))
+#define GDK_SCREEN_IMPL_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_SCREEN_IMPL_X11, GdkScreenImplX11Class))
+#define GDK_IS_SCREEN_IMPL_X11(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_SCREEN_IMPL_X11))
+#define GDK_IS_SCREEN_IMPL_X11_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_SCREEN_IMPL_X11))
+#define GDK_SCREEN_IMPL_X11_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SCREEN_IMPL_X11, GdkScreenImplX11Class))
+
+
+
+  struct _GdkScreenImplX11
+  {
+    GdkScreen parent_instance;
+    GdkDisplay *display;
+    Display *xdisplay;
+    Screen *xscreen;
+    gint scr_num;
+    Window root_window;
+    Window leader_window;
+    GdkWindow *parent_root;
+    Window wmspec_check_window;
+    /* Visual Part */
+    gboolean visual_initialised;
+    GdkVisualPrivate *system_visual;
+    GdkVisualPrivate *visuals;
+    gint nvisuals;
+    gint available_depths[7];
+    gint navailable_depths;
+    GdkVisualType available_types[6];
+    gint navailable_types;
+    GHashTable *visual_hash;
+    /* Colormap Part */
+    gboolean colormap_initialised;
+    GdkColormap *default_colormap;
+  };
+
+  struct _GdkScreenImplX11Class
+  {
+    GdkScreenClass parent_class;
+  };
+
+
+  GType gdk_X11_screen_impl_get_type ();
+
+
+#define DEFAULT_X_SCREEN    GDK_SCREEN_IMPL_X11(DEFAULT_GDK_SCREEN)->xscreen
+#define DEFAULT_GDK_SCREEN_IMPL_X11_FOR_DISPLAY(display)  GDK_SCREEN_IMPL_X11(GDK_DISPLAY_GET_CLASS(display)->get_default_screen(display))
+#define GDK_SCREEN_XDISPLAY(scr)  (GDK_SCREEN_IMPL_X11(scr)->xdisplay)
+#define GDK_SCREEN_XROOTWIN(scr)  (GDK_SCREEN_IMPL_X11(scr)->root_window)
+#ifdef __cplusplus
+}
+#endif				/* __cplusplus */
+
+#endif				/* _GDK_SCREEN_X11_H__ */

@@ -437,7 +437,10 @@ gtk_handle_box_realize (GtkWidget *widget)
 			   GDK_FOCUS_CHANGE_MASK |
 			   GDK_STRUCTURE_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-  hb->float_window = gdk_window_new (NULL, &attributes, attributes_mask);
+  hb->float_window = gdk_window_new_for_screen (widget->screen,
+  					 	NULL,
+						&attributes,
+						attributes_mask);
   gdk_window_set_user_data (hb->float_window, widget);
   gdk_window_set_decorations (hb->float_window, 0);
   gdk_window_set_type_hint (hb->float_window, GDK_WINDOW_TYPE_HINT_TOOLBAR);
@@ -996,7 +999,8 @@ gtk_handle_box_button_changed (GtkWidget      *widget,
       if (event->window != widget->window)
 	return FALSE;
       
-      gdk_pointer_ungrab (GDK_CURRENT_TIME);
+      gdk_pointer_ungrab_for_display (gdk_window_get_display(event->window),
+				      GDK_CURRENT_TIME);
       hb->in_drag = FALSE;
       event_handled = TRUE;
     }
@@ -1029,7 +1033,7 @@ gtk_handle_box_motion (GtkWidget      *widget,
    */
   new_x = 0;
   new_y = 0;
-  gdk_window_get_pointer (NULL, &new_x, &new_y, NULL);
+  gdk_window_get_pointer (widget->window, &new_x, &new_y, NULL);
   new_x += hb->float_allocation.x;
   new_y += hb->float_allocation.y;
 
@@ -1249,7 +1253,9 @@ gtk_handle_box_reattach (GtkHandleBox *hb)
     }
   if (hb->in_drag)
     {
-      gdk_pointer_ungrab (GDK_CURRENT_TIME);
+      gdk_pointer_ungrab_for_display (
+		      gdk_window_get_display(GTK_WIDGET(hb)->window),
+		      GDK_CURRENT_TIME);
       hb->in_drag = FALSE;
     }
 
