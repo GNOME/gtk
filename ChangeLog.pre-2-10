@@ -1,3 +1,9 @@
+Tue Oct 28 09:44:16 2003  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtkxembed.c (_gtk_xembed_send_focus_message): Silently
+ 	do nothing when recipient is NULL, as described in the
+ 	doc comment. (#123107, Thomas Leonard)
+ 
 2003-10-25  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdk.def: Add a missing entry.
