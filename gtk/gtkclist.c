@@ -5560,7 +5560,7 @@ abort_column_resize (GtkCList *clist)
     return;
 
   GTK_CLIST_UNSET_FLAG (clist, CLIST_IN_DRAG);
-  gtk_grab_remove (clist);
+  gtk_grab_remove (GTK_WIDGET (clist));
   gdk_pointer_ungrab (gdk_time_get());
 
   if (clist->x_drag >= 0 && clist->x_drag <= clist->clist_window_width - 1)

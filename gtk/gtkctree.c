@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include "gtkctree.h"
 #include "gtkbindings.h"
+#include "gtkmain.h"
 #include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
 
