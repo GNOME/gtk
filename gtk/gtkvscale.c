@@ -459,14 +459,14 @@ gtk_vscale_pos_background (GtkVScale *vscale,
       *w -= twidth;
       break;
     case GTK_POS_RIGHT:
-      *x = tx;
+      *x += twidth;
       *w -= twidth;
       break;
     case GTK_POS_TOP:
       *h -= theight;
       break;
     case GTK_POS_BOTTOM:
-      *y = ty;
+      *y += theight;
       *h -= theight;
       break;
     }

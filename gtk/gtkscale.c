@@ -23,9 +23,22 @@
 
 #define SCALE_CLASS(w)  GTK_SCALE_CLASS (GTK_OBJECT (w)->klass)
 
+enum {
+  ARG_0,
+  ARG_DIGITS,
+  ARG_DRAW_VALUE,
+  ARG_VALUE_POS
+};
+
 
 static void gtk_scale_class_init      (GtkScaleClass *klass);
 static void gtk_scale_init            (GtkScale      *scale);
+static void gtk_scale_set_arg         (GtkObject     *object,
+				       GtkArg        *arg,
+				       guint          arg_id);
+static void gtk_scale_get_arg         (GtkObject     *object,
+				       GtkArg        *arg,
+				       guint          arg_id);
 static void gtk_scale_map             (GtkWidget     *widget);
 static void gtk_scale_unmap           (GtkWidget     *widget);
 
@@ -70,17 +83,84 @@ gtk_scale_class_init (GtkScaleClass *class)
   object_class = (GtkObjectClass*) class;
   range_class = (GtkRangeClass*) class;
   widget_class = (GtkWidgetClass*) class;
-
+  
   parent_class = gtk_type_class (GTK_TYPE_RANGE);
+  
+  gtk_object_add_arg_type ("GtkScale::digits",
+			   GTK_TYPE_INT,
+			   GTK_ARG_READWRITE,
+			   ARG_DIGITS);
+  gtk_object_add_arg_type ("GtkScale::draw_value",
+			   GTK_TYPE_BOOL,
+			   GTK_ARG_READWRITE,
+			   ARG_DRAW_VALUE);
+  gtk_object_add_arg_type ("GtkScale::value_pos",
+			   GTK_TYPE_POSITION_TYPE,
+			   GTK_ARG_READWRITE,
+			   ARG_VALUE_POS);
+
+  object_class->set_arg = gtk_scale_set_arg;
+  object_class->get_arg = gtk_scale_get_arg;
 
   widget_class->map = gtk_scale_map;
   widget_class->unmap = gtk_scale_unmap;
-
+  
   range_class->draw_background = gtk_scale_draw_background;
 
   class->slider_length = 31;
   class->value_spacing = 2;
   class->draw_value = NULL;
+}
+
+static void
+gtk_scale_set_arg (GtkObject      *object,
+		   GtkArg         *arg,
+		   guint           arg_id)
+{
+  GtkScale *scale;
+
+  scale = GTK_SCALE (object);
+
+  switch (arg_id)
+    {
+    case ARG_DIGITS:
+      gtk_scale_set_digits (scale, GTK_VALUE_INT (*arg));
+      break;
+    case ARG_DRAW_VALUE:
+      gtk_scale_set_draw_value (scale, GTK_VALUE_BOOL (*arg));
+      break;
+    case ARG_VALUE_POS:
+      gtk_scale_set_value_pos (scale, GTK_VALUE_ENUM (*arg));
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+gtk_scale_get_arg (GtkObject      *object,
+		   GtkArg         *arg,
+		   guint           arg_id)
+{
+  GtkScale *scale;
+
+  scale = GTK_SCALE (object);
+
+  switch (arg_id)
+    {
+    case ARG_DIGITS:
+      GTK_VALUE_INT (*arg) = GTK_RANGE (scale)->digits;
+      break;
+    case ARG_DRAW_VALUE:
+      GTK_VALUE_BOOL (*arg) = scale->draw_value;
+      break;
+    case ARG_VALUE_POS:
+      GTK_VALUE_ENUM (*arg) = scale->value_pos;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 static void
@@ -131,28 +211,30 @@ gtk_scale_set_digits (GtkScale *scale,
   g_return_if_fail (scale != NULL);
   g_return_if_fail (GTK_IS_SCALE (scale));
 
+  digits = CLAMP (digits, -1, 16);
+
   if (GTK_RANGE (scale)->digits != digits)
     {
       GTK_RANGE (scale)->digits = digits;
 
-      if (GTK_WIDGET_VISIBLE (scale) && GTK_WIDGET_MAPPED (scale))
-	gtk_widget_queue_resize (GTK_WIDGET (scale));
+      gtk_widget_queue_resize (GTK_WIDGET (scale));
     }
 }
 
 void
 gtk_scale_set_draw_value (GtkScale *scale,
-			  gint      draw_value)
+			  gboolean  draw_value)
 {
   g_return_if_fail (scale != NULL);
   g_return_if_fail (GTK_IS_SCALE (scale));
 
+  draw_value = draw_value != FALSE;
+
   if (scale->draw_value != draw_value)
     {
-      scale->draw_value = (draw_value != 0);
+      scale->draw_value = draw_value;
 
-      if (GTK_WIDGET_VISIBLE (scale) && GTK_WIDGET_MAPPED (scale))
-	gtk_widget_queue_resize (GTK_WIDGET (scale));
+      gtk_widget_queue_resize (GTK_WIDGET (scale));
     }
 }
 

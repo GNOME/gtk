@@ -1,3 +1,19 @@
+Mon Jan 18 18:53:08 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkscale.c (gtk_scale_set_digits): CLAMP digits into a
+	meaningfull range (we need to stay below a certain limit anyways
+	to avoid string buffer overflows).
+
+	* gtk/gtkvscale.c (gtk_vscale_pos_background): fixed up background
+	area calculations for GTK_POS_RIGHT and GTK_POS_BOTTOM.
+	* gtk/gtkhscale.c (gtk_hscale_pos_background): likewise.
+	(gtk_hscale_draw_value): safety CLAMP the value's x position for
+	GTK_POS_TOP and GTK_POS_BOTTOM, so we don't paint strings outside of
+	our allocation.
+
+	* gtk/gtkscale.c: implemented GtkScale::digits, GtkScale::draw_value
+	and GtkScale::value_pos arguments.
+
 Mon Jan 18 14:26:17 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* docs/Changes-1.2.txt: Some editing, a little more

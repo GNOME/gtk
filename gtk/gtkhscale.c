@@ -455,14 +455,14 @@ gtk_hscale_pos_background (GtkHScale *hscale,
       *w -= twidth;
       break;
     case GTK_POS_RIGHT:
-      *x = tx;
+      *x += twidth;
       *w -= twidth;
       break;
     case GTK_POS_TOP:
       *h -= theight;
       break;
     case GTK_POS_BOTTOM:
-      *y = ty;
+      *y += theight;
       *h -= theight;
       break;
     }
@@ -541,6 +541,8 @@ gtk_hscale_draw_value (GtkScale *scale)
           gdk_window_get_size (GTK_RANGE (scale)->trough, NULL, &height);
           
           x += widget->allocation.x + (width - text_width) / 2;
+	  x = CLAMP (x, widget->allocation.x,
+		     widget->allocation.x + widget->allocation.width - text_width);
           y -= GTK_WIDGET (scale)->style->font->descent;
           break;
         case GTK_POS_BOTTOM:
@@ -550,6 +552,8 @@ gtk_hscale_draw_value (GtkScale *scale)
           gdk_window_get_size (GTK_RANGE (scale)->trough, NULL, &height);
           
           x += widget->allocation.x + (width - text_width) / 2;
+	  x = CLAMP (x, widget->allocation.x,
+		     widget->allocation.x + widget->allocation.width - text_width);
           y += height + GTK_WIDGET (scale)->style->font->ascent;
           break;
         }
