@@ -1,7 +1,16 @@
 SUBDIRS = pixops
 
+if CANVAS_PIXBUF
+CPLIB=libcanvas_pixbuf.la
+libcanvas_pixbuf_la_SOURCES=gnome-canvas-pixbuf.c
+CANVAS_HEADERFILES=gnome-canvas-pixbuf.h
+else
+CPLIB=
+CANVAS_HEADERFILES=
+endif
 lib_LTLIBRARIES = 		\
-	libgdk_pixbuf.la
+	libgdk_pixbuf.la	\
+	$(CPLIB)
 
 libexecdir = $(libdir)/gdk-pixbuf/loaders
 
@@ -50,6 +59,9 @@ INCLUDES = -I$(top_srcdir) -I$(top_builddir) \
 AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(libexecdir)\""
 
 LDADDS = libgdk_pixbuf.la $(LIBART_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
+
+if CANVAS_PIXBUF
+endif
 
 if INSIDE_GNOME_LIBS
 testpixbuf_LDADD = $(LDADDS) $(LIBART_LIBS) -lgmodule

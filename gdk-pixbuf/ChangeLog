@@ -1,5 +1,7 @@
 2000-01-10  Elliot Lee  <sopwith@redhat.com>
 
+	* configure.in, gdk-pixbuf/Makefile.am: Build a libcanvas_pixbuf.
+
 	* configure.in: Define version macros. Generate gdk-pixbuf/gdk-pixbuf-features.h. Always INSIDE_GNOME.
 	* gdk-pixbuf/Makefile.am: Add gdk-pixbuf-features.h
 	* gdk-pixbuf/gdk-pixbuf.c: Add definitions of gdk-pixbuf-features.h declarations, plus some initialization stubs.
