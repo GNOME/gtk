@@ -521,7 +521,7 @@ gdk_fb_display_new ()
 	  vt = strtol (s, &send, 10);
 	  if (s==send)
 	    {
-	      g_warning ("Cannot parse GDK_TTY");
+	      g_warning ("Cannot parse GDK_VT");
 	      vt = display->start_vt;
 	    }
 	}
@@ -1035,7 +1035,7 @@ gdk_get_display(void)
 
   s = getenv ("GDK_DISPLAY");
   if (s==0)
-    s = "/dev/fb";
+    s = "/dev/fb0";
   
   return g_strdup (s);
 }

@@ -1,3 +1,19 @@
+2000-12-08  Alexander Larsson  <alexl@redhat.com>
+
+	* docs/README.linux-fb:
+	* docs/Makefile.am:
+	Initial GtkFB docs.
+	
+	* gdk/linux-fb/Makefile.am:
+	Define GDK_DATA_PREFIX.
+
+	* gdk/linux-fb/gdkmain-fb.c:
+	Fix typo.
+	Change default display to /dev/fb0.
+
+	* gdk/linux-fb/gdkpango-fb.c:
+	Add $(prefix)/share/fonts/ to font path.
+	
 2000-12-08  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gdk/linux-fb/gdkkeyboard-fb.c:

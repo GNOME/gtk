@@ -408,6 +408,7 @@ pango_fb_font_map_init (PangoFBFontMap *fontmap)
     "/usr/share/fonts/default/Type1",
     "/usr/lib/X11/fonts/TrueType",
     "/usr/lib/X11/fonts/Type1",
+    GDK_DATA_PREFIX "/share/fonts",
     NULL
   };
   int i;

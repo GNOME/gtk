@@ -17,6 +17,7 @@ EXTRA_DIST += \
 	text_widget.txt 		\
 	widget_system.txt 		\
 	generation.txt			\
+        README.linux-fb  	        \
         gtk-config.txt  	        \
 	gtk-config.1.in			\
 	gtkdocs_fix

@@ -1,0 +1,123 @@
+About GtkFB:
+------------
+The linux-fb port of Gtk+, also known as GtkFB is an implementation of
+gdk (and therefor gtk) that runs on the linux framebuffer. It runs in
+a single process that doesn't need X. It should run most Gtk+ programs
+without any changes to the source.
+
+Build requirements:
+-------------------
+To run GtkFB programs you will need glib, pango and gtk from cvs
+HEAD. Make sure you update these at the same time, since changes to
+glib and pango often forces changes in gtk+. Pango optionally depends
+on libfribidi, but for normal GtkFB usage that can be ignored.
+
+You also need freetype 2, I recommend that you use freetype 2.0.1 or
+later, as there was some problems with freetype-config in 2.0.
+Freetype can be found at ftp://ftp.freetype.org
+
+Hardware requirements:
+----------------------
+You need a graphics card with an availible framebuffer driver that can
+run in 8, 16, 24 or 32 bpp. I use the matroxfb driver, but i.e. vesafb
+should work too. You also need a supported mouse. Currently supported
+is ps2 mouse, ms serial mouse and fidmour touchscreen.
+
+Building and installing:
+------------------------
+First build and install glib and pango as usual, in that order.
+
+Then configure Gtk by running configure (or autogen.sh if running from
+cvs) with --with-gdktarget=linux-fb.
+
+Make sure that pango and gtk+ are installed in the same prefix, as
+gtk+ installs a new pango module that pango must be able to find.
+
+Then compile as ususal: make; make install
+
+This installs a new pango module that pango must be instructed to
+find. This is done by running something like:
+pango-querymodules > /your_prefix/etc/pango/pango.modules
+(look at this file and make sure it contains a row with fb-basic.so.
+
+Fonts:
+------
+Since GtkFB uses freetype 2 to render fonts it can render truetype and
+postscript type 1 antialiased fonts. At startup it scans these
+directories looking for any fonts:
+/usr/share/fonts/default/TrueType
+/usr/share/fonts/default/Type1
+/usr/lib/X11/fonts/TrueType
+/usr/lib/X11/fonts/Type1
+$(prefix)/share/fonts
+
+It also has a hardcoded font alias handling. This is important because
+most program refers to the standard fonts by the names "Sans", "Serif"
+and "Monotype". The default aliases in GtkFB maps these to the
+M$ truetype fonts: Arial, Times New Roman, and Courier New (you need
+to own a copy of Windows to use these) and the type1 fonts URW Gothic,
+URW Bookman and Courier. You will need to have at least Arial or URW
+Gothic installed, because the "Sans" font is used as a last case font.
+
+Running:
+--------
+To run a program you should only need to start it, but there are some
+things that can cause problems, and some things that can be controlled
+by environment variables. Try testgtk distributed with gtk+ to test
+if things work.
+
+If you use a ps2 mouse, make sure that /dev/psaux is readable and
+writable.
+
+Make sure gpm is not running.
+
+If you don't specify anything GtkFB will start up in the current
+virtual console in the current resolution and bit-depth. This can be
+changed by specifying environment variables:
+
+GDK_VT:
+ unset means open on the current VT.
+ 0-9: open on the specified VT. Make sure you have read/write rights
+      there.
+ new: Allocate a new VT after the last currently used one.
+
+GDK_DISPLAY_MODE:
+ Specifies the name of a mode in /etc/fb.modes that you want to use.
+
+GDK_DISPLAY_DEPTH:
+ Specify the desired bit depth of the framebuffer.
+ 
+GDK_DISPLAY_WIDTH:
+ Specify the desired width of the framebuffer.
+ 
+GDK_DISPLAY_HEIGHT:
+ Specify the desired height of the framebuffer.
+
+GDK_DISPLAY:
+ Specify the framebuffer device to use. Default is /dev/fb0
+
+GDK_MOUSE_TYPE:
+ Specify mouse type. Currently supported is:
+  ps2 - PS/2 mouse
+  ms - Microsoft serial mouse
+  fidmour - touch screen
+ Default is ps2.
+
+GDK_KEYBOARD_TYPE:
+ Specify keyboard type. Currently suppored is
+  xlate - normal tty mode keyboard. Somewhat limited.
+  raw - read from the tty in RAW mode.
+      Warning, can cause problems if the GtkFB program crashes
+      and the mode is not restored. You must run as root to use
+      this.
+ Default is xlate.
+
+HACKING:
+--------
+To be written.
+
+
+   - Alexander Larsson <alexl@redhat.com>
+     2000/12/06
+
+   

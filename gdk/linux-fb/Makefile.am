@@ -5,6 +5,7 @@ libgdkfbincludedir = $(includedir)/gtk-2.0/gdk/linux-fb
 
 INCLUDES = @STRIP_BEGIN@ 	\
 	-DG_LOG_DOMAIN=\"Gdk\"	\
+	-DGDK_DATA_PREFIX=\"$(prefix)\"	\
 	-I$(top_srcdir)		\
 	-I$(top_srcdir)/gdk	\
 	-I$(top_builddir)/gdk	\
