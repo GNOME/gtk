@@ -68,12 +68,14 @@ _gdk_xid_table_remove (GdkDisplay *display,
 
 /** 
  * gdk_xid_table_lookup_for_display:
- * @display : the #GdkDisplay.
- * @xid : an X id.
+ * @display: the #GdkDisplay.
+ * @xid: an X id.
  *
- * Returns the Gdk object associated with the given X id.
+ * Returns the GDK object associated with the given X id.
  *
- * Returns: an GdkObject associated with the given X id.
+ * Returns: a GDK object associated with the given X id.
+ *
+ * Since: 2.2
  */
 gpointer
 gdk_xid_table_lookup_for_display (GdkDisplay  *display,

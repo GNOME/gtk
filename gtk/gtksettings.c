@@ -272,6 +272,8 @@ gtk_settings_finalize (GObject *object)
  * Gets the #GtkSettings object for @screen, creating it if necessary.
  *
  * Return value: a #GtkSettings object.
+ *
+ * Since: 2.2
  */
 GtkSettings*
 gtk_settings_get_for_screen (GdkScreen *screen)

@@ -3488,7 +3488,7 @@ gdk_rgb_get_colormap (void)
 
 /**
  * gdk_screen_get_rgb_colormap:
- * @screen : a #GdkScreen.
+ * @screen: a #GdkScreen.
  * 
  * Gets the preferred colormap for rendering image data on @screen.
  * Not a very useful function; historically, GDK could only render RGB
@@ -3497,6 +3497,8 @@ gdk_rgb_get_colormap (void)
  * call this function.
  * 
  * Return value: the preferred colormap
+ *
+ * Since: 2.2
  **/
 GdkColormap *
 gdk_screen_get_rgb_colormap (GdkScreen *screen)
@@ -3516,7 +3518,7 @@ gdk_screen_get_rgb_colormap (GdkScreen *screen)
 
 /**
  * gdk_screen_get_rgb_visual:
- * @screen : a #GdkScreen
+ * @screen: a #GdkScreen
  * 
  * Gets a "preferred visual" chosen by GdkRGB for rendering image data
  * on @screen. In previous versions of
@@ -3526,6 +3528,8 @@ gdk_screen_get_rgb_colormap (GdkScreen *screen)
  * drawables with any visual.
  * 
  * Return value: The #GdkVisual chosen by GdkRGB.
+ *
+ * Since: 2.2
  **/
 GdkVisual *
 gdk_screen_get_rgb_visual (GdkScreen *screen)

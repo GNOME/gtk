@@ -105,12 +105,14 @@ gdk_devices_list (void)
 
 /**
  * gdk_display_list_devices:
- * @display : a #GdkDisplay
+ * @display: a #GdkDisplay
  *
  * Returns the list of available input devices attached to @display.
  * The list is statically allocated and should not be freed.
  * 
  * Return value: a list of #GdkDevice
+ *
+ * Since: 2.2
  **/
 GList * 
 gdk_display_list_devices (GdkDisplay *display)

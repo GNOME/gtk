@@ -99,6 +99,8 @@ gdk_display_x11_class_init (GdkDisplayX11Class * class)
  *  could not be opened.
  *
  * Opens a display.
+ *
+ * Since: 2.2
  */
 GdkDisplay *
 gdk_display_open (const gchar *display_name)
@@ -302,6 +304,8 @@ gdk_internal_connection_watch (Display  *display,
  * 
  * Returns: a string representing the display name. This string is owned
  * by GDK and should not be modified or freed.
+ * 
+ * Since: 2.2
  */
 G_CONST_RETURN gchar *
 gdk_display_get_name (GdkDisplay * display)
@@ -318,6 +322,8 @@ gdk_display_get_name (GdkDisplay * display)
  * Gets the number of screen managed by the @display.
  * 
  * Returns: number of screens.
+ * 
+ * Since: 2.2
  */
 gint
 gdk_display_get_n_screens (GdkDisplay * display)
@@ -333,8 +339,10 @@ gdk_display_get_n_screens (GdkDisplay * display)
  * @screen_num: the screen number
  *
  * Returns a screen object for one of the screens of the display.
- * 
+ *
  * Returns: the #GdkScreen object
+ *
+ * Since: 2.2
  */
 GdkScreen *
 gdk_display_get_screen (GdkDisplay * display, gint screen_num)
@@ -352,6 +360,8 @@ gdk_display_get_screen (GdkDisplay * display, gint screen_num)
  * Get the default #GdkScreen for @display.
  * 
  * Returns: the default #GdkScreen object for @display
+ *
+ * Since: 2.2
  */
 GdkScreen *
 gdk_display_get_default_screen (GdkDisplay * display)
@@ -382,10 +392,12 @@ _gdk_x11_display_is_root_window (GdkDisplay *display,
 
 /**
  * gdk_display_pointer_ungrab:
- * @display : a #GdkDisplay.
+ * @display: a #GdkDisplay.
  * @time_: a timestap (e.g. GDK_CURRENT_TIME).
  *
  * Release any pointer grab.
+ *
+ * Since: 2.2
  */
 void
 gdk_display_pointer_ungrab (GdkDisplay *display,
@@ -399,12 +411,14 @@ gdk_display_pointer_ungrab (GdkDisplay *display,
 }
 
 /**
- * gdk_display_pointer_is_grabbed :
- * @display : a #GdkDisplay
+ * gdk_display_pointer_is_grabbed:
+ * @display: a #GdkDisplay
  *
  * Test if the pointer is grabbed.
  *
- * Returns : TRUE if an active X pointer grab is in effect
+ * Returns: %TRUE if an active X pointer grab is in effect
+ *
+ * Since: 2.2
  */
 gboolean
 gdk_display_pointer_is_grabbed (GdkDisplay * display)
@@ -416,10 +430,12 @@ gdk_display_pointer_is_grabbed (GdkDisplay * display)
 
 /**
  * gdk_display_keyboard_ungrab:
- * @display : a #GdkDisplay.
- * @time_ : a timestap (e.g #GDK_CURRENT_TIME).
+ * @display: a #GdkDisplay.
+ * @time_: a timestap (e.g #GDK_CURRENT_TIME).
  *
  * Release any keyboard grab
+ *
+ * Since: 2.2
  */
 void
 gdk_display_keyboard_ungrab (GdkDisplay *display,
@@ -437,6 +453,7 @@ gdk_display_keyboard_ungrab (GdkDisplay *display,
  *
  * Emits a short beep on @display
  *
+ * Since: 2.2
  */
 void
 gdk_display_beep (GdkDisplay * display)
@@ -447,17 +464,20 @@ gdk_display_beep (GdkDisplay * display)
 }
 
 /**
- * gdk_display_sync :
- * @display : a #GdkDisplay
+ * gdk_display_sync:
+ * @display: a #GdkDisplay
  *
  * Flushes any requests queued for the windowing system and waits until all
  * requests have been handled. This is often used for making sure that the
  * display is synchronized with the current state of the program. Calling
  * gdk_display_sync() before gdk_error_trap_pop() makes sure that any errors
- * generated from earlier requests are handled before the error trap is removed.
+ * generated from earlier requests are handled before the error trap is 
+ * removed.
  *
  * This is most useful for X11. On windowing systems where requests are
  * handled synchronously, this function will do nothing.
+ *
+ * Since: 2.2
  */
 void
 gdk_display_sync (GdkDisplay * display)
@@ -475,6 +495,8 @@ gdk_display_sync (GdkDisplay * display)
  * To ungrab the display again, use gdk_x11_display_ungrab(). 
  *
  * gdk_x11_display_grab()/gdk_x11_display_ungrab() calls can be nested.
+ *
+ * Since: 2.2
  **/
 void
 gdk_x11_display_grab (GdkDisplay * display)
@@ -496,6 +518,8 @@ gdk_x11_display_grab (GdkDisplay * display)
  * 
  * Ungrab @display after it has been grabbed with 
  * gdk_x11_display_grab(). 
+ *
+ * Since: 2.2
  **/
 void
 gdk_x11_display_ungrab (GdkDisplay * display)
@@ -582,6 +606,8 @@ gdk_display_x11_finalize (GObject *object)
  * Find the #GdkDisplay corresponding to @display, if any exists.
  * 
  * Return value: the #GdkDisplay, if found, otherwise %NULL.
+ *
+ * Since: 2.2
  **/
 GdkDisplay *
 gdk_x11_lookup_xdisplay (Display *xdisplay)
@@ -630,6 +656,8 @@ _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
  * @returns: an X display.
  *
  * Returns the X display of a #GdkDisplay.
+ *
+ * Since: 2.2
  */
 Display *
 gdk_x11_display_get_xdisplay (GdkDisplay  *display)
@@ -794,9 +822,10 @@ broadcast_xmessage   (GdkDisplay   *display,
  * windows.
  * 
  * GTK+ will call this function automatically after opening the first
- * #GtkWindow unless
- * gtk_window_set_auto_startup_notification() is called to disable
- * that feature.
+ * #GtkWindow unless gtk_window_set_auto_startup_notification() is called 
+ * to disable that feature.
+ *
+ * Since: 2.2
  **/
 void
 gdk_notify_startup_complete (void)

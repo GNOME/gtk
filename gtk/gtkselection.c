@@ -306,6 +306,8 @@ gtk_target_list_find (GtkTargetList *list,
  * if @widget is %NULL, release ownership of the selection.
  *
  * Return value: TRUE if the operation succeeded 
+ * 
+ * Since: 2.2
  */
 gboolean
 gtk_selection_owner_set_for_display (GdkDisplay   *display,
@@ -1024,6 +1026,8 @@ gtk_selection_init (void)
  * be deprecated in future versions of GTK+.
  * 
  * Return value: %TRUE if the event was handled, otherwise false
+ * 
+ * Since: 2.2
  **/
 gboolean
 gtk_selection_clear (GtkWidget         *widget,

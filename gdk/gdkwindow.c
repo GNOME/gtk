@@ -694,7 +694,7 @@ gdk_window_remove_filter (GdkWindow     *window,
 
 /**
  * gdk_screen_get_toplevel_windows:
- * @screen : The #GdkScreen where the toplevels are located.
+ * @screen: The #GdkScreen where the toplevels are located.
  * 
  * Obtains a list of all toplevel windows known to GDK on the screen @screen.
  * A toplevel window is a child of the root window (see
@@ -704,6 +704,8 @@ gdk_window_remove_filter (GdkWindow     *window,
  * its elements need not be freed.
  * 
  * Return value: list of toplevel windows, free with g_list_free()
+ *
+ * Since: 2.2
  **/
 GList *
 gdk_screen_get_toplevel_windows (GdkScreen *screen)

@@ -376,6 +376,8 @@ gdk_colormap_sync (GdkColormap *colormap,
  * Gets the system's default colormap for @screen
  *
  * Returns: the default colormap for @screen.
+ *
+ * Since: 2.2
  */
 GdkColormap *
 gdk_screen_get_system_colormap (GdkScreen *screen)
@@ -1263,6 +1265,8 @@ gdk_color_change (GdkColormap *colormap,
  *   with gdk_x11_colormap_foreign_new(), unref'ing the last
  *   reference to the object will only free the #GdkColoramp
  *   object and not call XFreeColormap()
+ *
+ * Since: 2.2
  **/
 GdkColormap *
 gdk_x11_colormap_foreign_new (GdkVisual *visual,
@@ -1499,6 +1503,8 @@ gdk_x11_colormap_get_xcolormap (GdkColormap *colormap)
  * Gets the screen for which this colormap was created.
  * 
  * Return value: the screen for which this colormap was created.
+ *
+ * Since: 2.2
  **/
 GdkScreen *
 gdk_colormap_get_screen (GdkColormap *cmap)

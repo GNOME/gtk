@@ -1,3 +1,11 @@
+2002-11-28  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf/gdk-pixbuf-io.c:
+	* gdk-pixbuf/gdk-pixbuf-loader.c:
+	* gdk-pixbuf/gdk-pixbuf.c: Document 2.2 API additions. I'm not
+	going to list all individual functions here; if you want to see
+	the list, grep for "Since: 2.2".
+
 Fri Nov  8 19:06:07 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am (gdk-pixbuf.loaders): Make gdk-pixbuf.loaders

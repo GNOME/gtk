@@ -46,6 +46,7 @@ probably has a selection colored background to render to.
 @GTK_CELL_RENDERER_PRELIT: The mouse is hovering over the cell.
 @GTK_CELL_RENDERER_INSENSITIVE: The cell is drawn in an insensitive manner
 @GTK_CELL_RENDERER_SORTED: The cell is in a sorted row
+@GTK_CELL_RENDERER_FOCUSED: 
 
 <!-- ##### ENUM GtkCellRendererMode ##### -->
 <para>

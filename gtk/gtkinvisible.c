@@ -156,6 +156,8 @@ gtk_invisible_destroy (GtkObject *object)
  * Creates a new #GtkInvisible object for a specified screen
  *
  * Return value: a newly created #GtkInvisible object
+ *
+ * Since: 2.2
  **/
 GtkWidget* 
 gtk_invisible_new_for_screen (GdkScreen *screen)
@@ -184,6 +186,8 @@ gtk_invisible_new (void)
  * @screen: a #GdkScreen.
  *
  * Sets the #GdkScreen where the #GtkInvisible object will be displayed.
+ *
+ * Since: 2.2
  **/ 
 void
 gtk_invisible_set_screen (GtkInvisible *invisible,
@@ -222,7 +226,9 @@ gtk_invisible_set_screen (GtkInvisible *invisible,
  *
  * Returns the #GdkScreen object associated with @invisible
  *
- * Return value : the associated #GdkScreen.
+ * Return value: the associated #GdkScreen.
+ *
+ * Since: 2.2
  **/
 GdkScreen *
 gtk_invisible_get_screen (GtkInvisible *invisible)

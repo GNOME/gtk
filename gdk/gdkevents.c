@@ -268,6 +268,8 @@ static GHashTable *event_hash = NULL;
  * 
  * Return value: a newly-allocated #GdkEvent. The returned #GdkEvent 
  * should be freed with gdk_event_free().
+ *
+ * Since: 2.2
  **/
 GdkEvent*
 gdk_event_new (GdkEventType type)
@@ -828,6 +830,8 @@ gdk_event_get_axis (GdkEvent   *event,
  * Sets the screen for @event to @screen. The event must
  * have been allocated by GTK+, for instance, by
  * gdk_event_copy().
+ *
+ * Since: 2.2
  **/
 void
 gdk_event_set_screen (GdkEvent  *event,
@@ -847,14 +851,16 @@ gdk_event_set_screen (GdkEvent  *event,
  * @event: a #GdkEvent
  * 
  * Returns the screen for the event. The screen is
- * typically the screen for event->any.window, but
+ * typically the screen for <literal>event->any.window</literal>, but
  * for events such as mouse events, it is the screen
  * where the the pointer was when the event occurs -
  * that is, the screen which has the root window 
- * to which event->motion.x_root and
- * event->motion.y_root are relative.
+ * to which <literal>event->motion.x_root</literal> and
+ * <literal>event->motion.y_root</literal> are relative.
  * 
  * Return value: the screen for the event
+ *
+ * Since: 2.2
  **/
 GdkScreen *
 gdk_event_get_screen (GdkEvent *event)
@@ -1105,6 +1111,8 @@ gdk_synthesize_window_state (GdkWindow     *window,
  * Sets the double click time (two clicks within this time interval
  * count as a double click and result in a #GDK_2BUTTON_PRESS event).
  * Applications should NOT set this, it is a global user-configured setting.
+ *
+ * Since: 2.2
  **/
 void
 gdk_display_set_double_click_time (GdkDisplay *display,

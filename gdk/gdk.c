@@ -279,6 +279,8 @@ _gdk_get_command_line_args (int    *argc,
  *
  * You shouldn't call this function explicitely if you are using
  * gtk_init(), gtk_init_check(), gdk_init(), or gdk_init_check().
+ *
+ * Since: 2.2
  **/
 void
 gdk_parse_args (int    *argc,
@@ -357,6 +359,8 @@ gdk_parse_args (int    *argc,
  *
  * Returns: the display name, if specified explicitely, otherwise %NULL
  *   this string is owned by GTK+ and must not be modified or freed.
+ *
+ * Since: 2.2
  */
 G_CONST_RETURN gchar *
 gdk_get_display_arg_name (void)

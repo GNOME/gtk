@@ -190,6 +190,8 @@ clipboard_display_closed (GdkDisplay   *display,
  *             be created. Once a clipboard object has
  *             been created, it is persistent for all time and
  *             cannot be freed.
+ *
+ * Since: 2.2
  **/
 GtkClipboard *
 gtk_clipboard_get_for_display (GdkDisplay *display, GdkAtom selection)
@@ -955,6 +957,8 @@ gtk_clipboard_wait_for_text (GtkClipboard *clipboard)
  * Gets the #GdkDisplay associated with @clipboard
  *
  * Return value: the #GdkDisplay associated with @clipboard
+ *
+ * Since: 2.2
  **/
 GdkDisplay *
 gtk_clipboard_get_display (GtkClipboard *clipboard)

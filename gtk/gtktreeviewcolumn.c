@@ -3122,6 +3122,8 @@ gtk_tree_view_column_cell_is_visible (GtkTreeViewColumn *tree_column)
  *
  * Sets the current keyboard focus to be at @cell, if the column contains
  * 2 or more editable and activatable cells.
+ *
+ * Since: 2.2
  **/
 void
 gtk_tree_view_column_focus_cell (GtkTreeViewColumn *tree_column,

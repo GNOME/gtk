@@ -1,3 +1,52 @@
+2002-11-28  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdkdisplay.c: 
+	* gdk/gdkdisplaymanager.c: 
+	* gdk/gdk.c: 
+	* gdk/gdkdraw.c:
+	* gdk/gdkevents.c:
+	* gdk/gdkrgb.c:
+	* gdk/gdkscreen.c:
+	* gdk/gdkwindow.c:
+	* gdk/x11/gdkcolor-x11.c:
+	* gdk/x11/gdkcursor-x11.c:
+	* gdk/x11/gdkdisplay-x11.c:
+	* gdk/x11/gdkdnd-x11.c:
+	* gdk/x11/gdkevents-x11.c:
+	* gdk/x11/gdkfont-x11.c:
+	* gdk/x11/gdkgc-x11.c:
+	* gdk/x11/gdkinput.c:
+	* gdk/x11/gdkkeys-x11.c:
+	* gdk/x11/gdkpango-x11.c:
+	* gdk/x11/gdkpixmap-x11.c:
+	* gdk/x11/gdkproperty-x11.c:
+	* gdk/x11/gdkscreen-x11.c:
+	* gdk/x11/gdkselection-x11.c:
+	* gdk/x11/gdkvisual-x11.c:
+	* gdk/x11/gdkwindow-x11.c:
+	* gdk/x11/gdkxid.c:
+	* gtk/gtkclipboard.c:
+	* gtk/gtkcolorsel.c:
+	* gtk/gtkiconfactory.c:
+	* gtk/gtkinvisible.c:
+	* gtk/gtkliststore.c:
+	* gtk/gtkmenu.c:
+	* gtk/gtkmenushell.c:
+	* gtk/gtknotebook.c:
+	* gtk/gtkplug.c:
+	* gtk/gtkselection.c:
+	* gtk/gtksettings.c:
+	* gtk/gtktreemodel.c:
+	* gtk/gtktreemodelsort.c:
+	* gtk/gtktreeselection.c:
+	* gtk/gtktreestore.c:
+	* gtk/gtktreeview.c:
+	* gtk/gtktreeviewcolumn.c:
+	* gtk/gtkwidget.c:
+	* gtk/gtkwindow.c: Document 2.2 API additions. I'm not
+	going to list all individual functions here; if you want to see
+	the list, grep for "Since: 2.2".	
+
 Tue Nov 26 13:07:56 2002  HideToshi Tajima  <hidetoshi.tajima@sun.com>
 
 	* modules/input/gtkimcontextxim.c
@@ -147,7 +196,7 @@ Mon Nov 25 16:58:27 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-11-25  Matthias Clasen  <maclas@gmx.de>
 
-	* docs/tutorial/gtk-tut.sgml: Fix the ftp download url.
+ 	* docs/tutorial/gtk-tut.sgml: Fix the ftp download url.
 	
 Mon Nov 25 19:10:54 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 

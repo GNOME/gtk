@@ -1373,6 +1373,8 @@ gtk_list_store_clear (GtkListStore *list_store)
  * Checks if the given iter is a valid iter for this #GtkListStore.
  *
  * Return value: %TRUE if the iter is valid, %FALSE if the iter is invalid.
+ *
+ * Since: 2.2
  **/
 gboolean
 gtk_list_store_iter_is_valid (GtkListStore *list_store,
@@ -1637,6 +1639,8 @@ gtk_list_store_reorder_func (gconstpointer a,
  *
  * Reorders @store to follow the order indicated by @new_order. Note that
  * this function only works with unsorted stores.
+ *
+ * Since: 2.2
  **/
 void
 gtk_list_store_reorder (GtkListStore *store,
@@ -1692,6 +1696,8 @@ gtk_list_store_reorder (GtkListStore *store,
  *
  * Swaps @a and @b in @store. Note that this function only works with
  * unsorted stores.
+ *
+ * Since: 2.2
  **/
 void
 gtk_list_store_swap (GtkListStore *store,
@@ -1952,6 +1958,8 @@ free_paths_and_out:
  * Moves @iter in @store to the position before @position. Note that this
  * function only works with unsorted stores. If @position is %NULL, @iter
  * will be moved to the end of the list.
+ *
+ * Since: 2.2
  **/
 void
 gtk_list_store_move_before (GtkListStore *store,
@@ -1965,11 +1973,13 @@ gtk_list_store_move_before (GtkListStore *store,
  * gtk_list_store_move_after:
  * @store: A #GtkListStore.
  * @iter: A #GtkTreeIter.
- * @position: A #GtkTreeIter, or %NULL.
+ * @position: A #GtkTreeIter or %NULL.
  *
  * Moves @iter in @store to the position after @position. Note that this
  * function only works with unsorted stores. If @position is %NULL, @iter
  * will be moved to the start of the list.
+ *
+ * Since: 2.2
  **/
 void
 gtk_list_store_move_after (GtkListStore *store,

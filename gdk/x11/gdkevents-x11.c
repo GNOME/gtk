@@ -315,6 +315,7 @@ gdk_event_apply_filters (XEvent *xevent,
  *
  * Adds a filter to be called when X ClientMessage events are received.
  *
+ * Since: 2.2
  **/ 
 void 
 gdk_display_add_client_message_filter (GdkDisplay   *display,
@@ -1978,17 +1979,19 @@ gdk_event_dispatch (GSource    *source,
 }
 
 /**
- * gdk_event_send_client_message_for_display :
- * @display : the #GdkDisplay for the window where the message is to be sent.
- * @event : the #GdkEvent to send, which should be a #GdkEventClient.
- * @winid : the window to send the X ClientMessage event to.
+ * gdk_event_send_client_message_for_display:
+ * @display: the #GdkDisplay for the window where the message is to be sent.
+ * @event: the #GdkEvent to send, which should be a #GdkEventClient.
+ * @winid: the window to send the X ClientMessage event to.
  *
  * Sends an X ClientMessage event to a given window.
  *
  * This could be used for communicating between different applications,
  * though the amount of data is limited to 20 bytes.
  *
- * Returns : non-zero on success.
+ * Returns: non-zero on success.
+ *
+ * Since: 2.2
  */
 gboolean
 gdk_event_send_client_message_for_display (GdkDisplay     *display,
@@ -2074,8 +2077,8 @@ gdk_event_send_client_message_to_all_recurse (GdkDisplay *display,
 
 /**
  * gdk_screen_broadcast_client_message:
- * @screen : the #GdkScreen where the event will be broadcasted.
- * @event : the #GdkEvent.
+ * @screen: the #GdkScreen where the event will be broadcasted.
+ * @event: the #GdkEvent.
  *
  * Sends an X ClientMessage event to all toplevel windows on @screen.
  *
@@ -2083,6 +2086,8 @@ gdk_event_send_client_message_to_all_recurse (GdkDisplay *display,
  * as described in the Inter-Client Communication Conventions Manual (ICCCM).
  * If no windows are found with the WM_STATE property set, the message is 
  * sent to all children of the root window.
+ *
+ * Since: 2.2
  */
 
 void
@@ -2253,6 +2258,8 @@ fetch_net_wm_check_window (GdkScreen *screen)
  * Return value: the name of the window manager screen @screen, or 
  * "unknown" if the window manager is unknown. The string is owned by GDK
  * and should not be freed.
+ *
+ * Since: 2.2
  **/
 const char*
 gdk_x11_screen_get_window_manager_name (GdkScreen *screen)
@@ -2318,13 +2325,14 @@ struct _NetWmSupportedAtoms
 
 /**
  * gdk_x11_screen_supports_net_wm_hint:
- * @screen : the relevant #GdkScreen.
+ * @screen: the relevant #GdkScreen.
  * @property: a property atom.
  * 
  * This function is specific to the X11 backend of GDK, and indicates
  * whether the window manager supports a certain hint from the
  * Extended Window Manager Hints Specification. You can find this
- * specification on http://www.freedesktop.org.
+ * specification on 
+ * <ulink url="http://www.freedesktop.org">http://www.freedesktop.org</ulink>.
  *
  * When using this function, keep in mind that the window manager
  * can change over time; so you shouldn't use this function in
@@ -2336,6 +2344,8 @@ struct _NetWmSupportedAtoms
  * a window manager change.
  * 
  * Return value: %TRUE if the window manager supports @property
+ *
+ * Since: 2.2
  **/
 gboolean
 gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
@@ -2518,8 +2528,10 @@ check_transform (const gchar *xsettings_name,
  * FIXME needs a list of valid settings here, or a link to 
  * more information.
  * 
- * Returns : %TRUE if the setting existed and a value was stored
+ * Returns: %TRUE if the setting existed and a value was stored
  *   in @value, %FALSE otherwise.
+ *
+ * Since: 2.2
  **/
 gboolean
 gdk_screen_get_setting (GdkScreen   *screen,

@@ -98,7 +98,9 @@ gdk_fontset_name_hash_get (GdkDisplay *display)
  *
  * Returns the #GdkDisplay for @font.
  *
- * Returns : the corresponding #GdkDisplay.
+ * Returns: the corresponding #GdkDisplay.
+ *
+ * Since: 2.2
  **/
 GdkDisplay* 
 gdk_font_get_display (GdkFont* font)
@@ -174,6 +176,8 @@ gdk_font_hash_lookup (GdkDisplay  *display,
  *
  * The font may be newly loaded or looked up the font in a cache. 
  * You should make no assumptions about the initial reference count.
+ *
+ * Since: 2.2
  */
 GdkFont *
 gdk_font_load_for_display (GdkDisplay  *display, 
@@ -274,6 +278,8 @@ gdk_font_charset_for_locale (void)
  * 
  * Return value: the newly loaded font, or %NULL if the font
  * cannot be loaded.
+ *
+ * Since: 2.2
  */
 GdkFont *
 gdk_font_from_description_for_display (GdkDisplay           *display,
@@ -328,6 +334,8 @@ gdk_font_from_description_for_display (GdkDisplay           *display,
  *
  * The fontset may be newly loaded or looked up in a cache. 
  * You should make no assumptions about the initial reference count.
+ *
+ * Since: 2.2
  */
 GdkFont *
 gdk_fontset_load_for_display (GdkDisplay  *display,

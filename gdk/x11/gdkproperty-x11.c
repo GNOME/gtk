@@ -151,6 +151,8 @@ insert_atom_pair (GdkDisplay *display,
  * with the same string value.
  * 
  * Return value: the X atom corresponding to @atom.
+ *
+ * Since: 2.2
  **/
 Atom
 gdk_x11_atom_to_xatom_for_display (GdkDisplay *display, 
@@ -211,6 +213,8 @@ gdk_x11_atom_to_xatom (GdkAtom atom)
  * #GdkAtom.
  * 
  * Return value: the corresponding #GdkAtom.
+ *
+ * Since: 2.2
  **/
 GdkAtom
 gdk_x11_xatom_to_atom_for_display (GdkDisplay *display,
@@ -338,9 +342,11 @@ gdk_atom_name (GdkAtom atom)
  * 
  * Returns the X atom for a #GdkDisplay corresponding to @atom_name.
  * This function caches the result, so if called repeatedly it is much
- * faster than XInternAtom, which is a round trip to the server each time.
+ * faster than XInternAtom(), which is a round trip to the server each time.
  * 
  * Return value: a X atom for a #GdkDisplay
+ *
+ * Since: 2.2
  **/
 Atom
 gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
@@ -371,7 +377,7 @@ gdk_x11_get_xatom_by_name (const gchar *atom_name)
 
 /**
  * gdk_x11_get_xatom_name_for_display:
- * @display : the #GdkDisplay where @xatom is defined
+ * @display: the #GdkDisplay where @xatom is defined
  * @xatom: an X atom 
  * 
  * Returns the name of an X atom for its display. This
@@ -379,8 +385,10 @@ gdk_x11_get_xatom_by_name (const gchar *atom_name)
  * XAtomName() and gdk_atom_name(), the result doesn't need to
  * be freed. 
  *
- * Return value: name of the X atom; this string is owned by GTK+,
+ * Return value: name of the X atom; this string is owned by GDK,
  *   so it shouldn't be modifed or freed. 
+ *
+ * Since: 2.2
  **/
 G_CONST_RETURN gchar *
 gdk_x11_get_xatom_name_for_display (GdkDisplay *display,

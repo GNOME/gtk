@@ -92,14 +92,16 @@ _gdk_screen_close (GdkScreen *screen)
 
 /**
  * gdk_screen_get_monitor_at_point:
- * @screen : a #GdkScreen.
- * @x : the x coordinate in the virtual screen.
- * @y : the y coordinate in the virtual screen.
+ * @screen: a #GdkScreen.
+ * @x: the x coordinate in the virtual screen.
+ * @y: the y coordinate in the virtual screen.
  *
  * Returns the monitor number in which the point (@x,@y) is located.
  *
  * Returns: the monitor number in which the point (@x,@y) belong, or
  *   -1 if the point is not in any monitor.
+ *
+ * Since: 2.2
  **/
 gint 
 gdk_screen_get_monitor_at_point (GdkScreen *screen,
@@ -134,8 +136,10 @@ gdk_screen_get_monitor_at_point (GdkScreen *screen,
  * @window: a #GdkWindow
  * @returns: the monitor number in which most of @window is located.
  *
- * Returns the number of the monitor in which the largest area of the bounding rectangle
- * of @window resides. 
+ * Returns the number of the monitor in which the largest area of the 
+ * bounding rectangle of @window resides. 
+ *
+ * Since: 2.2
  **/
 gint 
 gdk_screen_get_monitor_at_window (GdkScreen      *screen,
@@ -171,7 +175,7 @@ gdk_screen_get_monitor_at_window (GdkScreen      *screen,
  * 
  * Returns the width of the default screen in pixels.
  * 
- * Return value:  the width of the default screen in pixels.
+ * Return value: the width of the default screen in pixels.
  **/
 gint
 gdk_screen_width (void)

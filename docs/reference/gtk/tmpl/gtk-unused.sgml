@@ -2192,6 +2192,15 @@ Get the type of GtkIdentifier.
 @str: 
 @Returns: 
 
+<!-- ##### FUNCTION gtk_list_store_move ##### -->
+<para>
+
+</para>
+
+@store: 
+@iter: 
+@position: 
+
 <!-- ##### FUNCTION gtk_list_store_new_with_types ##### -->
 <para>
 
@@ -2967,6 +2976,15 @@ a gtk_object_unref().
 
 @tree_model: 
 @iter: 
+
+<!-- ##### FUNCTION gtk_tree_store_move ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@position: 
 
 <!-- ##### FUNCTION gtk_tree_store_new_with_types ##### -->
 <para>

@@ -2957,6 +2957,8 @@ gtk_menu_hide_all (GtkWidget *widget)
  *          determined by the widget the menu is attached to.
  *
  * Sets the #GdkScreen on which the menu will be displayed.
+ * 
+ * Since: 2.2
  **/
 void
 gtk_menu_set_screen (GtkMenu   *menu, 

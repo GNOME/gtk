@@ -422,6 +422,8 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
  * </programlisting></informalexample>
  *
  * Return value: A #GList containing a #GtkTreePath for each selected row.
+ *
+ * Since: 2.2
  **/
 GList *
 gtk_tree_selection_get_selected_rows (GtkTreeSelection   *selection,
@@ -543,6 +545,8 @@ gtk_tree_selection_count_selected_rows_helper (GtkRBTree *tree,
  * Returns the number of rows that have been selected in @tree.
  *
  * Return value: The number of rows selected.
+ * 
+ * Since: 2.2
  **/
 gint
 gtk_tree_selection_count_selected_rows (GtkTreeSelection *selection)
@@ -1257,6 +1261,8 @@ gtk_tree_selection_select_range (GtkTreeSelection *selection,
  *
  * Unselects a range of nodes, determined by @start_path and @end_path
  * inclusive.
+ *
+ * Since: 2.2
  **/
 void
 gtk_tree_selection_unselect_range (GtkTreeSelection *selection,

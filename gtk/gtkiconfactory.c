@@ -1212,6 +1212,8 @@ icon_size_lookup_intern (GtkSettings *settings,
  * the usual size.
  * 
  * Return value: %TRUE if @size was a valid size
+ *
+ * Since: 2.2
  **/
 gboolean
 gtk_icon_size_lookup_for_settings (GtkSettings *settings,

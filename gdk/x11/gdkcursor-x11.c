@@ -98,6 +98,8 @@
  * a cursor with no pixels in it.
  * 
  * Return value: a new #GdkCursor
+ *
+ * Since: 2.2
  **/
 GdkCursor*
 gdk_cursor_new_for_display (GdkDisplay    *display,
@@ -276,11 +278,13 @@ gdk_x11_cursor_get_xcursor (GdkCursor *cursor)
 
 /** 
  * gdk_cursor_get_display:
- * @cursor : a #GdkCursor.
+ * @cursor: a #GdkCursor.
  *
- * Returns the display on which the GdkCursor is defined
+ * Returns the display on which the #GdkCursor is defined.
  *
- * Returns : the #GdkDisplay associated to @cursor
+ * Returns: the #GdkDisplay associated to @cursor
+ *
+ * Since: 2.2
  */
 
 GdkDisplay *

@@ -101,20 +101,22 @@ _gdk_selection_filter_clear_event (XSelectionClearEvent *event)
 }
 /**
  * gdk_selection_owner_set_for_display:
- * @display : the #GdkDisplay.
- * @owner : a GdkWindow or NULL to indicate that the the owner for
- * the given should be unset.
- * @selection : an atom identifying a selection.
- * @time_ : timestamp to use when setting the selection. 
- * If this is older than the timestamp given last time the owner was 
- * set for the given selection, the request will be ignored.
- * @send_event : if TRUE, and the new owner is different from the current
- * owner, the current owner will be sent a SelectionClear event.
+ * @display: the #GdkDisplay.
+ * @owner: a #GdkWindow or %NULL to indicate that the the owner for
+ *         the given should be unset.
+ * @selection: an atom identifying a selection.
+ * @time_: timestamp to use when setting the selection. 
+ *         If this is older than the timestamp given last time the owner was 
+ *         set for the given selection, the request will be ignored.
+ * @send_event: if %TRUE, and the new owner is different from the current
+ *              owner, the current owner will be sent a SelectionClear event.
  *
  * Sets the #GdkWindow @owner as the current owner of the selection @selection.
  * 
- * Returns : TRUE if the selection owner was succesfully changed to owner,
- *	     otherwise FALSE. 
+ * Returns: %TRUE if the selection owner was successfully changed to owner,
+ *	    otherwise %FALSE. 
+ *
+ * Since: 2.2
  */
 gboolean
 gdk_selection_owner_set_for_display (GdkDisplay *display,
@@ -179,9 +181,9 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
 }
 
 /**
- * gdk_selection_owner_get_for_display :
- * @display : a #GdkDisplay.
- * @selection : an atom indentifying a selection.
+ * gdk_selection_owner_get_for_display:
+ * @display: a #GdkDisplay.
+ * @selection: an atom indentifying a selection.
  *
  * Determine the owner of the given selection.
  *
@@ -189,11 +191,12 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
  * process if a foreign window was previously created for that
  * window, but a new foreign window will never be created by this call. 
  *
- * Returns :if there is a selection owner for this window,
- * and it is a window known to the current process, the GdkWindow that owns 
- * the selection, otherwise NULL.
+ * Returns: if there is a selection owner for this window, and it is a 
+ *    window known to the current process, the #GdkWindow that owns the 
+ *    selection, otherwise %NULL.
+ *
+ * Since: 2.2
  */ 
-
 GdkWindow *
 gdk_selection_owner_get_for_display (GdkDisplay *display,
 				     GdkAtom     selection)
@@ -364,15 +367,17 @@ gdk_selection_property_get (GdkWindow  *requestor,
 
 /**
  * gdk_selection_send_notify_for_display:
- * @display : the #GdkDisplay where @requestor is realized
- * @requestor : window to which to deliver response.
- * @selection : selection that was requested.
- * @target : target that was selected.
- * @property : property in which the selection owner stored the data,
- * or GDK_NONE to indicate that the request was rejected.
- * @time_ : timestamp. 
+ * @display: the #GdkDisplay where @requestor is realized
+ * @requestor: window to which to deliver response.
+ * @selection: selection that was requested.
+ * @target: target that was selected.
+ * @property: property in which the selection owner stored the data,
+ *            or %GDK_NONE to indicate that the request was rejected.
+ * @time_: timestamp. 
  *
  * Send a response to SelectionRequest event.
+ *
+ * Since: 2.2
  **/
 void
 gdk_selection_send_notify_for_display (GdkDisplay *display,
@@ -402,22 +407,24 @@ gdk_selection_send_notify_for_display (GdkDisplay *display,
  * gdk_text_property_to_text_list_for_display:
  * @display: The #GdkDisplay where the encoding is defined.
  * @encoding: an atom representing the encoding. The most 
- * common values for this are STRING, or COMPOUND_TEXT. 
- * This is value used as the type for the property.
+ *    common values for this are STRING, or COMPOUND_TEXT. 
+ *    This is value used as the type for the property.
  * @format: the format of the property.
  * @text: The text data.
  * @length: The number of items to transform.
  * @list: location to store a terminated array of strings in 
- * the encoding of the current locale. This array should be 
- * freed using gdk_free_text_list().
+ *    the encoding of the current locale. This array should be 
+ *    freed using gdk_free_text_list().
  *
  * Convert a text string from the encoding as it is stored 
  * in a property into an array of strings in the encoding of
- * the current local. (The elements of the array represent the
- * null-separated elements of the original text string.)
+ * the current locale. (The elements of the array represent the
+ * nul-separated elements of the original text string.)
  *
- * Returns : the number of strings stored in list, or 0, 
+ * Returns: the number of strings stored in list, or 0, 
  * if the conversion failed. 
+ *
+ * Since: 2.2
  */
 gint
 gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
@@ -545,11 +552,13 @@ make_list (const gchar  *text,
  * @list:     location to store the list of strings or %NULL. The
  *            list should be freed with g_strfreev().
  * 
- * Converts a text property in the giving encoding to
+ * Converts a text property in the given encoding to
  * a list of UTF-8 strings. 
  * 
  * Return value: the number of strings in the resulting
  *               list.
+ *
+ * Since: 2.2
  **/
 gint 
 gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
@@ -634,8 +643,8 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
 
 /**
  * gdk_string_to_compound_text_for_display:
- * @display : the #GdkDisplay where the encoding is defined.
- * @str	    : a null-terminated string.
+ * @display:  the #GdkDisplay where the encoding is defined.
+ * @str:      a nul-terminated string.
  * @encoding: location to store the encoding atom 
  *	      (to be used as the type for the property).
  * @format:   location to store the format of the property
@@ -645,7 +654,9 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
  * Convert a string from the encoding of the current 
  * locale into a form suitable for storing in a window property.
  * 
- * Returns : 0 upon sucess, non-zero upon failure. 
+ * Returns: 0 upon sucess, non-zero upon failure. 
+ *
+ * Since: 2.2
  **/
 gint
 gdk_string_to_compound_text_for_display (GdkDisplay  *display,
@@ -777,6 +788,8 @@ gdk_utf8_to_string_target (const gchar *str)
  * 
  * Return value: %TRUE if the conversion succeeded, otherwise
  *               %FALSE.
+ *
+ * Since: 2.2
  **/
 gboolean
 gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,

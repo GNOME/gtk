@@ -774,6 +774,14 @@ Deprecated alias for gtk_window_set_position().
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_window_set_auto_startup_notification ##### -->
+<para>
+
+</para>
+
+@setting: 
+
+
 <!-- ##### FUNCTION gtk_decorated_window_init ##### -->
 <para>
 

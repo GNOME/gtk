@@ -201,6 +201,8 @@ gdk_pixbuf_loader_finalize (GObject *object)
  *
  * Attempts to set the desired image size  are ignored after the 
  * emission of the ::size_prepared signal.
+ *
+ * Since: 2.2
  */
 void 
 gdk_pixbuf_loader_set_size (GdkPixbufLoader *loader,
@@ -662,6 +664,8 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
  *
  * Returns: A #GdkPixbufFormat or %NULL. The return value is owned 
  * by GdkPixbuf and should not be freed.
+ * 
+ * Since: 2.2
  */
 GdkPixbufFormat *
 gdk_pixbuf_loader_get_format (GdkPixbufLoader *loader)

@@ -82,6 +82,11 @@ GtkCellRendererToggle
 
 </para>
 
+<!-- ##### ARG GtkCellRendererToggle:inconsistent ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkCellRendererToggle:radio ##### -->
 <para>
 

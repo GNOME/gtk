@@ -1894,6 +1894,7 @@ gtk_window_get_type_hint (GtkWindow *window)
  * Windows may set a hint asking the desktop environment not to display
  * the window in the task bar. This function toggles this hint.
  * 
+ * Since: 2.2
  **/
 void
 gtk_window_set_skip_taskbar_hint (GtkWindow *window,
@@ -1924,6 +1925,8 @@ gtk_window_set_skip_taskbar_hint (GtkWindow *window,
  * Gets the value set by gtk_window_set_skip_taskbar_hint()
  * 
  * Return value: %TRUE if window shouldn't be in taskbar
+ * 
+ * Since: 2.2
  **/
 gboolean
 gtk_window_get_skip_taskbar_hint (GtkWindow *window)
@@ -1948,6 +1951,7 @@ gtk_window_get_skip_taskbar_hint (GtkWindow *window)
  * switcher that displays a thumbnail representation of the windows
  * on the screen.)
  * 
+ * Since: 2.2
  **/
 void
 gtk_window_set_skip_pager_hint (GtkWindow *window,
@@ -1978,6 +1982,8 @@ gtk_window_set_skip_pager_hint (GtkWindow *window,
  * Gets the value set by gtk_window_set_skip_pager_hint().
  * 
  * Return value: %TRUE if window shouldn't be in pager
+ * 
+ * Since: 2.2
  **/
 gboolean
 gtk_window_get_skip_pager_hint (GtkWindow *window)
@@ -2649,6 +2655,8 @@ load_pixbuf_verbosely (const char *filename,
  * with a pixbuf created by loading the image from @filename.
  *
  * Returns: %TRUE if setting the icon succeeded.
+ *
+ * Since: 2.2
  **/
 gboolean
 gtk_window_set_icon_from_file (GtkWindow   *window,
@@ -2732,6 +2740,8 @@ gtk_window_set_default_icon_list (GList *list)
  * on disk. Warns on failure if @err is %NULL.
  *
  * Returns: %TRUE if setting the icon succeeded.
+ *
+ * Since: 2.2
  **/
 gboolean
 gtk_window_set_default_icon_from_file (const gchar *filename,
@@ -5743,6 +5753,7 @@ gtk_window_unmaximize (GtkWindow *window)
  * You can track the fullscreen state via the "window_state_event" signal
  * on #GtkWidget.
  * 
+ * Since: 2.2
  **/
 void
 gtk_window_fullscreen (GtkWindow *window)
@@ -5782,6 +5793,7 @@ gtk_window_fullscreen (GtkWindow *window)
  * You can track the fullscreen state via the "window_state_event" signal
  * on #GtkWidget.
  * 
+ * Since: 2.2
  **/
 void
 gtk_window_unfullscreen (GtkWindow *window)
@@ -6021,6 +6033,8 @@ gtk_window_begin_move_drag  (GtkWindow *window,
  * Sets the #GdkScreen where the @window is displayed; if
  * the window is already mapped, it will be unmapped, and
  * then remapped on the new screen.
+ *
+ * Since: 2.2
  */
 void
 gtk_window_set_screen (GtkWindow *window,
@@ -6077,6 +6091,8 @@ gtk_window_check_screen (GtkWindow *window)
  * Returns the #GdkScreen associated with @window.
  *
  * Return value: a #GdkScreen.
+ *
+ * Since: 2.2
  */
 GdkScreen*
 gtk_window_get_screen (GtkWindow *window)
@@ -6801,6 +6817,7 @@ _gtk_window_set_has_toplevel_focus (GtkWindow *window,
  * temporarily, show your splash screen, then re-enable it so that
  * showing the main window would automatically result in notification.
  * 
+ * Since: 2.2
  **/
 void
 gtk_window_set_auto_startup_notification (gboolean setting)

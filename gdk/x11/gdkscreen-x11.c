@@ -110,6 +110,8 @@ gdk_screen_x11_class_init (GdkScreenX11Class *klass)
  * Gets the display to which the @screen belongs.
  * 
  * Returns: the display to which @screen belongs
+ *
+ * Since: 2.2
  **/
 GdkDisplay *
 gdk_screen_get_display (GdkScreen *screen)
@@ -125,6 +127,8 @@ gdk_screen_get_display (GdkScreen *screen)
  * Gets the width of @screen in pixels
  * 
  * Returns: the width of @screen in pixels.
+ *
+ * Since: 2.2
  **/
 gint
 gdk_screen_get_width (GdkScreen *screen)
@@ -141,6 +145,8 @@ gdk_screen_get_width (GdkScreen *screen)
  * Gets the height of @screen in pixels
  * 
  * Returns: the height of @screen in pixels.
+ *
+ * Since: 2.2
  **/
 gint
 gdk_screen_get_height (GdkScreen *screen)
@@ -158,6 +164,8 @@ gdk_screen_get_height (GdkScreen *screen)
  * Note that on some X servers this value will not be correct.
  * 
  * Returns: the width of @screen in pixels.
+ *
+ * Since: 2.2
  **/
 gint
 gdk_screen_get_width_mm (GdkScreen *screen)
@@ -175,6 +183,8 @@ gdk_screen_get_width_mm (GdkScreen *screen)
  * Note that on some X servers this value will not be correct.
  * 
  * Returns: the heigth of @screen in pixels.
+ *
+ * Since: 2.2
  **/
 gint
 gdk_screen_get_height_mm (GdkScreen *screen)
@@ -192,6 +202,8 @@ gdk_screen_get_height_mm (GdkScreen *screen)
  * to which it belongs. (See gdk_screen_get_display())
  * 
  * Returns: the index
+ *
+ * Since: 2.2
  **/
 gint
 gdk_screen_get_number (GdkScreen *screen)
@@ -208,6 +220,8 @@ gdk_screen_get_number (GdkScreen *screen)
  * Gets the root window of @screen. 
  * 
  * Returns: the root window
+ *
+ * Since: 2.2
  **/
 GdkWindow *
 gdk_screen_get_root_window (GdkScreen *screen)
@@ -224,6 +238,8 @@ gdk_screen_get_root_window (GdkScreen *screen)
  * Gets the default colormap for @screen.
  * 
  * Returns: the default #GdkColormap.
+ *
+ * Since: 2.2
  **/
 GdkColormap *
 gdk_screen_get_default_colormap (GdkScreen *screen)
@@ -239,6 +255,8 @@ gdk_screen_get_default_colormap (GdkScreen *screen)
  * @colormap: a #GdkColormap
  *
  * Sets the default @colormap for @screen.
+ *
+ * Since: 2.2
  **/
 void
 gdk_screen_set_default_colormap (GdkScreen   *screen,
@@ -304,12 +322,14 @@ gdk_screen_x11_finalize (GObject *object)
 
 /**
  * gdk_screen_get_n_monitors:
- * @screen : a #GdkScreen.
+ * @screen: a #GdkScreen.
  *
  * Returns the number of monitors being part of the virtual screen
  *
  * Returns: number of monitors part of the virtual screen or
  *          0 if @screen is not in virtual screen mode.
+ *
+ * Since: 2.2
  **/
 gint 
 gdk_screen_get_n_monitors (GdkScreen *screen)
@@ -332,6 +352,7 @@ gdk_screen_get_n_monitors (GdkScreen *screen)
  * Note that the virtual screen coordinates can be retrieved via 
  * gdk_screen_get_width() and gdk_screen_get_height().
  *
+ * Since: 2.2
  **/
 void 
 gdk_screen_get_monitor_geometry (GdkScreen    *screen,
@@ -351,6 +372,8 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
  * @returns: an Xlib <type>Screen*</type>
  *
  * Returns the screen of a #GdkScreen.
+ *
+ * Since: 2.2
  */
 Screen *
 gdk_x11_screen_get_xscreen (GdkScreen *screen)
@@ -366,6 +389,8 @@ gdk_x11_screen_get_xscreen (GdkScreen *screen)
  *   its display.
  *
  * Returns the index of a #GdkScreen.
+ *
+ * Since: 2.2
  */
 int
 gdk_x11_screen_get_screen_number (GdkScreen *screen)
@@ -608,6 +633,8 @@ _gdk_windowing_substitute_screen_number (const gchar *display_name,
  * a #GdkDisplay with this screen as the default screen.
  * 
  * Return value: a newly allocated string, free with g_free()
+ *
+ * Since: 2.2
  **/
 gchar *
 gdk_screen_make_display_name (GdkScreen *screen)

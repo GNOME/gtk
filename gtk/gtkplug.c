@@ -351,6 +351,8 @@ gtk_plug_construct (GtkPlug         *plug,
  * Finish the initialization of @plug for a given #GtkSocket identified by
  * @socket_id which is currently displayed on @display.
  * This function will generally only be used by classes deriving from #GtkPlug.
+ *
+ * Since: 2.2
  **/
 void
 gtk_plug_construct_for_display (GtkPlug         *plug,
@@ -408,6 +410,8 @@ gtk_plug_new (GdkNativeWindow socket_id)
  * Create a new plug widget inside the #GtkSocket identified by socket_id.
  *
  * Return value: the new #GtkPlug widget.
+ *
+ * Since: 2.2
  */
 GtkWidget*
 gtk_plug_new_for_display (GdkDisplay	  *display,

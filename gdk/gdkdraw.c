@@ -211,6 +211,8 @@ gdk_drawable_get_depth (GdkDrawable *drawable)
  * Gets the #GdkScreen associated with a #GdkDrawable.
  * 
  * Return value: the #GdkScreen associated with @drawable
+ *
+ * Since: 2.2
  **/
 GdkScreen*
 gdk_drawable_get_screen(GdkDrawable *drawable)
@@ -227,6 +229,8 @@ gdk_drawable_get_screen(GdkDrawable *drawable)
  * Gets the #GdkDisplay associated with a #GdkDrawable.
  * 
  * Return value: the #GdkDisplay associated with @drawable
+ *
+ * Since: 2.2
  **/
 GdkDisplay*
 gdk_drawable_get_display (GdkDrawable *drawable)
@@ -723,17 +727,20 @@ gdk_draw_image (GdkDrawable *drawable,
  * @dest_y: Destination Y coordinate within drawable.
  * @width: Width of region to render, in pixels, or -1 to use pixbuf width.
  * @height: Height of region to render, in pixels, or -1 to use pixbuf height.
- * @dither: Dithering mode for GdkRGB.
+ * @dither: Dithering mode for #GdkRGB.
  * @x_dither: X offset for dither.
  * @y_dither: Y offset for dither.
  * 
  * Renders a rectangular portion of a pixbuf to a drawable.  The destination
  * drawable must have a colormap. All windows have a colormap, however, pixmaps
- * only have colormap by default if they were created with a non-NULL window argument.
- * Otherwise a colormap must be set on them with gdk_drawable_set_colormap.
+ * only have colormap by default if they were created with a non-%NULL window 
+ * argument. Otherwise a colormap must be set on them with 
+ * gdk_drawable_set_colormap().
  *
- * On older X servers, rendering pixbufs with an alpha channel involves round trips
- * to the X server, and may be somewhat slow.
+ * On older X servers, rendering pixbufs with an alpha channel involves round 
+ * trips to the X server, and may be somewhat slow.
+ *
+ * Since: 2.2
  **/
 void
 gdk_draw_pixbuf (GdkDrawable     *drawable,

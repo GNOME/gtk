@@ -742,6 +742,8 @@ gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
  * Gets the #GdkScreen for which @gc was created
  *
  * Returns: the #GdkScreen for @gc.
+ *
+ * Since: 2.2
  */
 GdkScreen *  
 gdk_gc_get_screen (GdkGC *gc)

@@ -271,13 +271,3 @@ particular row is needed often, it is worth keeping the iter around.
 @b: 
 
 
-<!-- ##### FUNCTION gtk_list_store_move ##### -->
-<para>
-
-</para>
-
-@store: 
-@iter: 
-@position: 
-
-

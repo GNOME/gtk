@@ -734,6 +734,8 @@ x_event_mask_to_gdk_event_mask (long mask)
  * 
  * Return value: the newly-created #GdkWindow wrapper for the 
  *    native window or %NULL if the window has been destroyed.
+ *
+ * Since: 2.2
  **/
 GdkWindow *
 gdk_window_foreign_new_for_display (GdkDisplay     *display,
@@ -820,6 +822,8 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
  *
  * Return value: the #GdkWindow wrapper for the native window, 
  *    or %NULL if there is none.
+ *
+ * Since: 2.2
  **/
 GdkWindow *
 gdk_window_lookup_for_display (GdkDisplay *display, GdkNativeWindow anid)
@@ -1761,6 +1765,8 @@ gdk_window_set_modal_hint (GdkWindow *window,
  * function should NOT be called in addition, instead you should allow
  * the window to be treated according to standard policy for its
  * semantic type.
+ *
+ * Since: 2.2
  **/
 void
 gdk_window_set_skip_taskbar_hint (GdkWindow *window,
@@ -1798,6 +1804,8 @@ gdk_window_set_skip_taskbar_hint (GdkWindow *window,
  * already fully describes the window, this function should NOT be
  * called in addition, instead you should allow the window to be
  * treated according to standard policy for its semantic type.
+ *
+ * Since: 2.2
  **/
 void
 gdk_window_set_skip_pager_hint (GdkWindow *window,
@@ -3595,6 +3603,7 @@ gdk_window_unmaximize (GdkWindow *window)
  * most standard window managers, and GDK makes a best effort to get
  * it to happen.
  *
+ * Since: 2.2
  **/
 void
 gdk_window_fullscreen (GdkWindow *window)
@@ -3628,8 +3637,9 @@ gdk_window_fullscreen (GdkWindow *window)
  * don't have a concept of "fullscreen"; so you can't rely on the
  * unfullscreenification actually happening. But it will happen with
  * most standard window managers, and GDK makes a best effort to get
- * it to happen.
- * 
+ * it to happen. 
+ *
+ * Since: 2.2
  **/
 void
 gdk_window_unfullscreen (GdkWindow *window)

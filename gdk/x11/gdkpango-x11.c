@@ -41,6 +41,8 @@
  * the widget you intend to render text onto.
  * 
  * Return value: a new #PangoContext for @screen
+ *
+ * Since: 2.2
  **/
 PangoContext *
 gdk_pango_context_get_for_screen (GdkScreen *screen)

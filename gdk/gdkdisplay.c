@@ -175,6 +175,8 @@ gdk_display_finalize (GObject *object)
  *
  * Closes the connection windowing system for the given display,
  * and cleans up associated resources.
+ *
+ * Since: 2.2
  */
 void
 gdk_display_close (GdkDisplay *display)
@@ -201,6 +203,8 @@ gdk_display_close (GdkDisplay *display)
  * 
  * Return value: the next #GdkEvent to be processed, or %NULL if no events
  * are pending. The returned #GdkEvent should be freed with gdk_event_free().
+ *
+ * Since: 2.2
  **/
 GdkEvent*
 gdk_display_get_event (GdkDisplay *display)
@@ -220,9 +224,11 @@ gdk_display_get_event (GdkDisplay *display)
  * not get more events from the windowing system.  It only checks the events
  * that have already been moved to the GDK event queue.)
  * 
- * Return value: a copy of the first #GdkEvent on the event queue, or %NULL if no
- * events are in the queue. The returned #GdkEvent should be freed with
+ * Return value: a copy of the first #GdkEvent on the event queue, or %NULL 
+ * if no events are in the queue. The returned #GdkEvent should be freed with
  * gdk_event_free().
+ *
+ * Since: 2.2
  **/
 GdkEvent*
 gdk_display_peek_event (GdkDisplay *display)
@@ -246,6 +252,8 @@ gdk_display_peek_event (GdkDisplay *display)
  *
  * Appends a copy of the given event onto the front of the event
  * queue for @display.
+ *
+ * Since: 2.2
  **/
 void
 gdk_display_put_event (GdkDisplay *display,
@@ -259,8 +267,8 @@ gdk_display_put_event (GdkDisplay *display,
 
 /**
  * gdk_pointer_ungrab:
- * @time_: a timestamp from a #GdkEvent, or %GDK_CURRENT_TIME if no timestamp is
- *        available.
+ * @time_: a timestamp from a #GdkEvent, or %GDK_CURRENT_TIME if no 
+ *  timestamp is available.
  *
  * Ungrabs the pointer, if it is grabbed by this application.
  **/
@@ -374,6 +382,8 @@ gdk_device_get_core_pointer (void)
  * 
  * Return value: the core pointer device; this is owned by the
  *   display and should not be freed.
+ *
+ * Since: 2.2
  **/
 GdkDevice *
 gdk_display_get_core_pointer (GdkDisplay *display)
@@ -435,6 +445,8 @@ _gdk_get_sm_client_id (void)
  * 
  * Gets the current location of the pointer and the current modifier
  * mask for a given display.
+ *
+ * Since: 2.2
  **/
 void
 gdk_display_get_pointer (GdkDisplay      *display,
@@ -473,6 +485,8 @@ gdk_display_get_pointer (GdkDisplay      *display,
  * another application).
  * 
  * Returns: the window under the mouse pointer, or %NULL
+ *
+ * Since: 2.2
  **/
 GdkWindow *
 gdk_display_get_window_at_pointer (GdkDisplay *display,
@@ -505,6 +519,8 @@ gdk_display_get_window_at_pointer (GdkDisplay *display,
  * reason to use this facility.
  *
  * Return value: the previous pointer hook table
+ *
+ * Since: 2.2
  **/
 GdkDisplayPointerHooks *
 gdk_display_set_pointer_hooks (GdkDisplay                   *display,

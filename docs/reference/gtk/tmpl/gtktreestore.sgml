@@ -209,7 +209,17 @@ drop</link> interfaces.
 @b: 
 
 
-<!-- ##### FUNCTION gtk_tree_store_move ##### -->
+<!-- ##### FUNCTION gtk_tree_store_move_before ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@position: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_move_after ##### -->
 <para>
 
 </para>

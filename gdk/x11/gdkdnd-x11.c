@@ -2794,6 +2794,8 @@ gdk_drag_begin (GdkWindow     *window,
  *     support Drag and Drop.
  *
  * Finds out the DND protocol supported by a window.
+ *
+ * Since: 2.2
  */ 
 guint32
 gdk_drag_get_protocol_for_display (GdkDisplay      *display,
@@ -2909,6 +2911,8 @@ drag_context_find_window_cache (GdkDragContext  *context,
  *
  * This function is called by the drag source to obtain the 
  * @dest_window and @protocol parameters for gdk_drag_motion().
+ *
+ * Since: 2.2
  **/
 void
 gdk_drag_find_window_for_screen (GdkDragContext  *context,

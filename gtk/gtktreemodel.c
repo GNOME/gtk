@@ -226,6 +226,8 @@ gtk_tree_path_new_from_string (const gchar *path)
  * Creates a new path with @first_index and @varargs as indices.
  *
  * Return value: A newly created GtkTreePath.
+ *
+ * Since: 2.2
  **/
 GtkTreePath *
 gtk_tree_path_new_from_indices (gint first_index,
@@ -787,6 +789,8 @@ gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
  * acceptable return value for this string.
  *
  * Return value: A newly-allocated string. Must be freed with g_free().
+ *
+ * Since: 2.2
  **/
 gchar *
 gtk_tree_model_get_string_from_iter (GtkTreeModel *tree_model,
@@ -1779,6 +1783,16 @@ gtk_tree_row_reference_valid (GtkTreeRowReference *reference)
 }
 
 
+/**
+ * gtk_tree_row_reference_copy:
+ * @reference: a #GtkTreeRowReference
+ * 
+ * Copies a #GtkTreeRowReference.
+ * 
+ * Return value: a copy of @reference.
+ *
+ * Since: 2.2
+ **/
 GtkTreeRowReference *
 gtk_tree_row_reference_copy (GtkTreeRowReference *reference)
 {

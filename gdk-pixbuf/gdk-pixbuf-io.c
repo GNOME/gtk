@@ -1002,6 +1002,8 @@ gdk_pixbuf_savev (GdkPixbuf  *pixbuf,
  * Returns the name of the format.
  * 
  * Return value: the name of the format. 
+ *
+ * Since: 2.2
  */
 gchar *
 gdk_pixbuf_format_get_name (GdkPixbufFormat *format)
@@ -1018,6 +1020,8 @@ gdk_pixbuf_format_get_name (GdkPixbufFormat *format)
  * Returns a description of the format.
  * 
  * Return value: a description of the format. 
+ *
+ * Since: 2.2
  */
 gchar *
 gdk_pixbuf_format_get_description (GdkPixbufFormat *format)
@@ -1042,6 +1046,8 @@ gdk_pixbuf_format_get_description (GdkPixbufFormat *format)
  * Returns the mime types supported by the format.
  * 
  * Return value: a %NULL-terminated array of mime types.
+ *
+ * Since: 2.2
  */
 gchar **
 gdk_pixbuf_format_get_mime_types (GdkPixbufFormat *format)
@@ -1055,9 +1061,12 @@ gdk_pixbuf_format_get_mime_types (GdkPixbufFormat *format)
  * gdk_pixbuf_format_get_extensions:
  * @format: a #GdkPixbufFormat
  *
- * Returns the filename extensions typically used for files in the given format.
+ * Returns the filename extensions typically used for files in the 
+ * given format.
  * 
  * Return value: a %NULL-terminated array of filename extensions.
+ *
+ * Since: 2.2
  */
 gchar **
 gdk_pixbuf_format_get_extensions (GdkPixbufFormat *format)
@@ -1074,6 +1083,8 @@ gdk_pixbuf_format_get_extensions (GdkPixbufFormat *format)
  * Returns whether pixbufs can be saved in the given format.
  * 
  * Return value: whether pixbufs can be saved in the given format.
+ *
+ * Since: 2.2
  */
 gboolean
 gdk_pixbuf_format_is_writable (GdkPixbufFormat *format)
@@ -1101,6 +1112,8 @@ _gdk_pixbuf_get_format (GdkPixbufModule *module)
  * image formats.  The list should be freed when it is no longer needed, 
  * but the structures themselves are owned by #GdkPixbuf and should not be 
  * freed.  
+ *
+ * Since: 2.2
  */
 GSList *
 gdk_pixbuf_get_formats (void)

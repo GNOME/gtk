@@ -8971,6 +8971,8 @@ gtk_tree_view_collapse_all (GtkTreeView *tree_view)
  *
  * Expands the row at @path. This will also expand all parent rows of
  * @path as necessary.
+ *
+ * Since: 2.2
  **/
 void
 gtk_tree_view_expand_to_path (GtkTreeView *tree_view,
@@ -9617,6 +9619,8 @@ gtk_tree_view_set_cursor (GtkTreeView       *tree_view,
  * @gtk_widget_grab_focus (@tree_view) in order to give keyboard focus to the
  * widget.  Please note that editing can only happen when the widget is
  * realized.
+ *
+ * Since: 2.2
  **/
 void
 gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,

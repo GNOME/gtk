@@ -4760,6 +4760,8 @@ gtk_widget_get_screen_unchecked (GtkWidget *widget)
  * free those resources when the widget is unrealized.
  * 
  * Return value: the #GdkScreen for the toplevel for this widget.
+ *
+ * Since: 2.2
  **/
 GdkScreen*
 gtk_widget_get_screen (GtkWidget *widget)
@@ -4796,6 +4798,8 @@ gtk_widget_get_screen (GtkWidget *widget)
  * 
  * Return value: %TRUE if there is a #GdkScreen associcated
  *   with the widget.
+ *
+ * Since: 2.2
  **/
 gboolean
 gtk_widget_has_screen (GtkWidget *widget)
@@ -4818,6 +4822,8 @@ gtk_widget_has_screen (GtkWidget *widget)
  * free those resources when the widget is unrealized.
  * 
  * Return value: the #GdkDisplay for the toplevel for this widget.
+ *
+ * Since: 2.2
  **/
 GdkDisplay*
 gtk_widget_get_display (GtkWidget *widget)
@@ -4841,6 +4847,8 @@ gtk_widget_get_display (GtkWidget *widget)
  * and you should free those resources when the widget is unrealized.
  * 
  * Return value: the #GdkWindow root window for the toplevel for this widget.
+ *
+ * Since: 2.2
  **/
 GdkWindow*
 gtk_widget_get_root_window (GtkWidget *widget)
@@ -6403,6 +6411,8 @@ gtk_widget_class_install_style_property (GtkWidgetClass *class,
  *   style property with that name.
  *
  * Finds a style property of a widget class by name.
+ *
+ * Since: 2.2
  */
 GParamSpec*
 gtk_widget_class_find_style_property (GtkWidgetClass *klass,
@@ -6423,6 +6433,8 @@ gtk_widget_class_find_style_property (GtkWidgetClass *klass,
  * @returns: an newly allocated array of #GParamSpec*. The array must be freed with g_free().
  *
  * Returns all style properties of a widget class.
+ *
+ * Since: 2.2
  */
 GParamSpec**
 gtk_widget_class_list_style_properties (GtkWidgetClass *klass,
@@ -6832,6 +6844,8 @@ gtk_widget_ref_accessible (AtkImplementor *implementor)
  *             clipboard already exists, a new one will
  *             be created. Once a clipboard object has
  *             been created, it is persistent for all time.
+ *
+ * Since: 2.2
  **/
 GtkClipboard *
 gtk_widget_get_clipboard (GtkWidget *widget, GdkAtom selection)

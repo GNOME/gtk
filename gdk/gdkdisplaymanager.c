@@ -160,6 +160,8 @@ gdk_display_manager_get_property (GObject      *object,
  *
  * Returns the global #GdkDisplayManager singleton; gdk_parse_pargs(),
  * gdk_init(), or gdk_init_check() must have been called first.
+ *
+ * Since: 2.2
  **/
 GdkDisplayManager*
 gdk_display_manager_get (void)
@@ -180,6 +182,8 @@ gdk_display_manager_get (void)
  * 
  * Returns: a #GdkDisplay, or %NULL if there is no default
  *   display.
+ *
+ * Since: 2.2
  */
 GdkDisplay *
 gdk_display_manager_get_default_display (GdkDisplayManager *display_manager)
@@ -198,6 +202,8 @@ gdk_display_manager_get_default_display (GdkDisplayManager *display_manager)
  * 
  * Returns: a #GdkDisplay, or %NULL if there is no default
  *   display.
+ *
+ * Since: 2.2
  */
 GdkDisplay *
 gdk_display_get_default (void)
@@ -212,6 +218,8 @@ gdk_display_get_default (void)
  * gdk_display_get_default ()).
  * 
  * Returns: a #GdkScreen, or %NULL if there is no default display.
+ *
+ * Since: 2.2
  */
 GdkScreen *
 gdk_screen_get_default (void)
@@ -228,6 +236,8 @@ gdk_screen_get_default (void)
  * @display: a #GdkDisplay
  * 
  * Sets @display as the default display.
+ *
+ * Since: 2.2
  **/
 void
 gdk_display_manager_set_default_display (GdkDisplayManager *display_manager,
@@ -248,6 +258,8 @@ gdk_display_manager_set_default_display (GdkDisplayManager *display_manager,
  * 
  * Return value: a newly allocated #GSList of #GdkDisplay objects.
  *  Free this list with g_slist_free() when you are done with it.
+ *
+ * Since: 2.2
  **/
 GSList *
 gdk_display_manager_list_displays (GdkDisplayManager *display_manager)

@@ -341,13 +341,15 @@ gdk_visual_get_best_type (void)
 
 /**
  * gdk_screen_get_system_visual:
- * @screen : a #GdkScreen.
+ * @screen: a #GdkScreen.
  * 
  * Get the system's default visual for @screen.
  * This is the visual for the root window of the display.
  * The return value should not be freed.
  * 
- * Return value: system visual
+ * Return value: the system visual
+ *
+ * Since: 2.2
  **/
 GdkVisual *
 gdk_screen_get_system_visual (GdkScreen * screen)
@@ -507,7 +509,7 @@ gdk_query_visual_types (GdkVisualType **visual_types,
 
 /**
  * gdk_screen_list_visuals:
- *  @screen : the relevant #GdkScreen.
+ * @screen: the relevant #GdkScreen.
  *  
  * Lists the available visuals for the specified @screen.
  * A visual describes a hardware image data format.
@@ -516,7 +518,10 @@ gdk_query_visual_types (GdkVisualType **visual_types,
  *
  * Call g_list_free() on the return value when you're finished with it.
  * 
- * Return value: a list of visuals; the list must be freed, but not its contents
+ * Return value: a list of visuals; the list must be freed, but not its 
+ * contents
+ *
+ * Since: 2.2
  **/
 GList *
 gdk_screen_list_visuals (GdkScreen *screen)
@@ -537,7 +542,7 @@ gdk_screen_list_visuals (GdkScreen *screen)
 }
 
 /**
- * gdk_x11_screen_lookup_visual
+ * gdk_x11_screen_lookup_visual:
  * @screen: a #GdkScreen.
  * @xvisualid: an X Visual ID.
  *
@@ -545,6 +550,8 @@ gdk_screen_list_visuals (GdkScreen *screen)
  *
  * Returns: the #GdkVisual (owned by the screen object), or %NULL
  *   if the visual ID wasn't found.
+ *
+ * Since: 2.2
  */
 GdkVisual *
 gdk_x11_screen_lookup_visual (GdkScreen *screen,
@@ -646,6 +653,8 @@ gdk_x11_visual_get_xvisual (GdkVisual *visual)
  * Gets the screen to which this visual belongs
  * 
  * Return value: the screen to which this visual belongs.
+ *
+ * Since: 2.2
  **/
 GdkScreen *
 gdk_visual_get_screen (GdkVisual *visual)

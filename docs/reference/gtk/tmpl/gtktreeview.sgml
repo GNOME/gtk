@@ -762,6 +762,7 @@ Function used for #gtk_tree_view_map_expanded_rows.
 @arg1: 
 @arg2: 
 @arg3: 
+@Returns: 
 
 <!-- ##### SIGNAL GtkTreeView::move-cursor ##### -->
 <para>
@@ -806,6 +807,7 @@ Function used for #gtk_tree_view_map_expanded_rows.
 </para>
 
 @treeview: the object which received the signal.
+@Returns: 
 
 <!-- ##### SIGNAL GtkTreeView::select-cursor-parent ##### -->
 <para>
@@ -813,6 +815,7 @@ Function used for #gtk_tree_view_map_expanded_rows.
 </para>
 
 @treeview: the object which received the signal.
+@Returns: 
 
 <!-- ##### SIGNAL GtkTreeView::select-cursor-row ##### -->
 <para>
@@ -821,6 +824,7 @@ Function used for #gtk_tree_view_map_expanded_rows.
 
 @treeview: the object which received the signal.
 @arg1: 
+@Returns: 
 
 <!-- ##### SIGNAL GtkTreeView::set-scroll-adjustments ##### -->
 <para>
@@ -837,6 +841,7 @@ Function used for #gtk_tree_view_map_expanded_rows.
 </para>
 
 @treeview: the object which received the signal.
+@Returns: 
 
 <!-- ##### SIGNAL GtkTreeView::test-collapse-row ##### -->
 <para>
@@ -864,6 +869,7 @@ Function used for #gtk_tree_view_map_expanded_rows.
 </para>
 
 @treeview: the object which received the signal.
+@Returns: 
 
 <!-- ##### SIGNAL GtkTreeView::unselect-all ##### -->
 <para>
@@ -871,6 +877,7 @@ Function used for #gtk_tree_view_map_expanded_rows.
 </para>
 
 @treeview: the object which received the signal.
+@Returns: 
 
 <!-- ##### ARG GtkTreeView:enable-search ##### -->
 <para>

@@ -1003,6 +1003,8 @@ gtk_menu_shell_move_selected (GtkMenuShell  *menu_shell,
  * Select the first visible or selectable child of the menu shell;
  * don't select tearoff items unless the only item is a tearoff
  * item.
+ *
+ * Since: 2.2
  **/
 void
 gtk_menu_shell_select_first (GtkMenuShell *menu_shell,

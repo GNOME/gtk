@@ -535,6 +535,8 @@ gdk_pixbuf_get_option (GdkPixbuf   *pixbuf,
  * ignored and %FALSE is returned.
  *
  * Return value: %TRUE on success.
+ *
+ * Since: 2.2
  **/
 gboolean
 gdk_pixbuf_set_option (GdkPixbuf   *pixbuf,

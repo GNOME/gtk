@@ -1542,6 +1542,8 @@ gtk_tree_store_iter_is_valid_helper (GtkTreeIter *iter,
  * Checks if the given iter is a valid iter for this #GtkTreeStore.
  *
  * Return value: %TRUE if the iter is valid, %FALSE if the iter is invalid.
+ *
+ * Since: 2.2
  **/
 gboolean
 gtk_tree_store_iter_is_valid (GtkTreeStore *tree_store,
@@ -1901,6 +1903,8 @@ gtk_tree_store_reorder_func (gconstpointer a,
  * Reorders the children of @parent in @tree_store to follow the order
  * indicated by @new_order. Note that this function only works with
  * unsorted stores.
+ *
+ * Since: 2.2
  **/
 void
 gtk_tree_store_reorder (GtkTreeStore *tree_store,
@@ -1981,6 +1985,8 @@ gtk_tree_store_reorder (GtkTreeStore *tree_store,
  *
  * Swaps @a and @b in the same level of @tree_store. Note that this function
  * only works with unsorted stores.
+ *
+ * Since: 2.2
  **/
 void
 gtk_tree_store_swap (GtkTreeStore *tree_store,
@@ -2418,6 +2424,8 @@ free_paths_and_out:
  * @position should be in the same level. Note that this function only
  * works with unsorted stores. If @position is %NULL, @iter will be
  * moved to the end of the level.
+ *
+ * Since: 2.2
  **/
 void
 gtk_tree_store_move_before (GtkTreeStore *tree_store,
@@ -2437,6 +2445,8 @@ gtk_tree_store_move_before (GtkTreeStore *tree_store,
  * @position should be in the same level. Note that this function only
  * works with unsorted stores. If @position is %NULL, @iter will be moved
  * to the start of the level.
+ *
+ * Since: 2.2
  **/
 void
 gtk_tree_store_move_after (GtkTreeStore *tree_store,

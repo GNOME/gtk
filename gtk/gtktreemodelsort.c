@@ -2348,6 +2348,8 @@ gtk_tree_model_sort_iter_is_valid_helper (GtkTreeIter *iter,
  * Checks if the given iter is a valid iter for this #GtkTreeModelSort.
  *
  * Return value: %TRUE if the iter is valid, %FALSE if the iter is invalid.
+ *
+ * Since: 2.2
  **/
 gboolean
 gtk_tree_model_sort_iter_is_valid (GtkTreeModelSort *tree_model_sort,
