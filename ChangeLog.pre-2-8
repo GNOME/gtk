@@ -1,3 +1,10 @@
+Wed Mar  6 00:20:59 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c
+	(gtk_tree_view_column_cell_process_action): move event handling to
+	the process_action function so we can have the event go to
+	individual cells.
+
 Tue Mar  5 22:16:58 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* GTK+-2.0.0 rc1
