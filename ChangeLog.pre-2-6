@@ -1,5 +1,9 @@
 2004-05-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_list_button_press): 
+	Set the entry in the default handler of the ::match-selected signal.
+	(#137226)
+
 	* gtk/gtkcombobox.c (gtk_combo_box_menu_position_below): If we don't
 	do the move-selected-item below pointer thingie, do the 
 	place-below-or-above one.

@@ -119,6 +119,9 @@ static void     gtk_entry_completion_action_data_func    (GtkTreeViewColumn     
                                                           GtkTreeIter             *iter,
                                                           gpointer                 data);
 
+static gboolean gtk_entry_completion_match_selected      (GtkEntryCompletion *completion,
+							  GtkTreeModel       *model,
+							  GtkTreeIter        *iter);
 
 static GObjectClass *parent_class = NULL;
 static guint entry_completion_signals[LAST_SIGNAL] = { 0 };
@@ -174,6 +177,8 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
   object_class->set_property = gtk_entry_completion_set_property;
   object_class->get_property = gtk_entry_completion_get_property;
   object_class->finalize = gtk_entry_completion_finalize;
+
+  klass->match_selected = gtk_entry_completion_match_selected;
 
   /**
    * GtkEntryCompletion::match-selected:
@@ -630,8 +635,8 @@ gtk_entry_completion_list_button_press (GtkWidget      *widget,
                                      event->x, event->y,
                                      &path, NULL, NULL, NULL))
     {
-      gboolean entry_set;
       GtkTreeIter iter;
+      gboolean entry_set;
 
       gtk_tree_model_get_iter (GTK_TREE_MODEL (completion->priv->filter_model),
                                &iter, path);
@@ -645,29 +650,8 @@ gtk_entry_completion_list_button_press (GtkWidget      *widget,
       g_signal_handler_unblock (completion->priv->entry,
 				completion->priv->changed_id);
 
-      if (!entry_set)
-        {
-          gchar *str = NULL;
-
-          gtk_tree_model_get (GTK_TREE_MODEL (completion->priv->filter_model),
-                              &iter,
-                              completion->priv->text_column, &str,
-                              -1);
-
-          g_signal_handler_block (completion->priv->entry,
-                                  completion->priv->changed_id);
-          gtk_entry_set_text (GTK_ENTRY (completion->priv->entry), str);
-          g_signal_handler_unblock (completion->priv->entry,
-                                    completion->priv->changed_id);
-
-          /* move cursor to the end */
-          gtk_editable_set_position (GTK_EDITABLE (completion->priv->entry),
-                                     -1);
-
-          g_free (str);
-        }
-
       _gtk_entry_completion_popdown (completion);
+
       return TRUE;
     }
 
@@ -1226,4 +1210,22 @@ _gtk_entry_completion_popdown (GtkEntryCompletion *completion)
   gtk_grab_remove (completion->priv->popup_window);
 
   gtk_widget_hide (completion->priv->popup_window);
+}
+
+static gboolean 
+gtk_entry_completion_match_selected (GtkEntryCompletion *completion,
+				     GtkTreeModel       *model,
+				     GtkTreeIter        *iter)
+{
+  gchar *str = NULL;
+
+  gtk_tree_model_get (model, iter, completion->priv->text_column, &str, -1);
+  gtk_entry_set_text (GTK_ENTRY (completion->priv->entry), str);
+  
+  /* move cursor to the end */
+  gtk_editable_set_position (GTK_EDITABLE (completion->priv->entry), -1);
+  
+  g_free (str);
+
+  return TRUE;
 }
