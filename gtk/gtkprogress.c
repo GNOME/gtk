@@ -570,8 +570,7 @@ gtk_progress_get_current_percentage (GtkProgress *progress)
   if (!progress->adjustment)
     gtk_progress_set_adjustment (progress, NULL);
 
-  return ((progress->adjustment->value - progress->adjustment->lower) /
-	  (progress->adjustment->upper - progress->adjustment->lower));
+  return gtk_progress_get_percentage_from_value (progress, progress->adjustment->value);
 }
 
 gdouble
@@ -583,7 +582,8 @@ gtk_progress_get_percentage_from_value (GtkProgress *progress,
   if (!progress->adjustment)
     gtk_progress_set_adjustment (progress, NULL);
 
-  if (value >= progress->adjustment->lower &&
+  if (progress->adjustment->lower < progress->adjustment->upper &&
+      value >= progress->adjustment->lower &&
       value <= progress->adjustment->upper)
     return (value - progress->adjustment->lower) /
       (progress->adjustment->upper - progress->adjustment->lower);

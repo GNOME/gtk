@@ -1,3 +1,10 @@
+2003-04-02  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkprogress.c (gtk_progress_get_percentage_from_value):
+	Return 0 if lower == upper.  (#109155)
+	(gtk_progress_get_current_percentage): Use
+	gtk_progress_get_percentage_from_value().
+
 2003-04-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkimcontext.c (gtk_im_context_focus_in): Fix docs.
