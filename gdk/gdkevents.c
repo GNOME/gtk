@@ -363,7 +363,6 @@ gdk_event_is_allocated (GdkEvent *event)
 GdkEvent*
 gdk_event_copy (GdkEvent *event)
 {
-  GdkEventPrivate *private;
   GdkEventPrivate *new_private;
   GdkEvent *new_event;
   
@@ -372,13 +371,16 @@ gdk_event_copy (GdkEvent *event)
   new_event = gdk_event_new (GDK_NOTHING);
   new_private = (GdkEventPrivate *)new_event;
 
-  private = (GdkEventPrivate *)event;
-
   *new_event = *event;
   if (new_event->any.window)
     g_object_ref (new_event->any.window);
 
-  new_private->screen = private->screen;
+  if (gdk_event_is_allocated (event))
+    {
+      GdkEventPrivate *private = (GdkEventPrivate *)event;
+
+      new_private->screen = private->screen;
+    }
   
   switch (event->any.type)
     {
