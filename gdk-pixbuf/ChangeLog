@@ -1,8 +1,15 @@
+Mon Dec 22 01:35:36 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* Makefile.am (gdk-pixbuf.loaders): Fix building with
+	--disable-modules --with-included-loaders, create an 
+	empty gdk-pixbuf.loaders file.  (#124496, Arno Charlet, fix 
+	proposed by Owen Taylor)
+
 Thu Dec 11 01:57:05 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_class_init): Move
 	the documentation for signals inline, to get proper parameter
-	documentation.  (#128977)
+	documentation.  (#128977) 	
 
 Sat Nov 15 00:26:19 2003  Matthias Clasen  <maclas@gmx.de>
 

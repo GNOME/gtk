@@ -451,6 +451,7 @@ else
 all-local: gdk-pixbuf.loaders
 endif
 
+if BUILD_DYNAMIC_MODULES
 gdk-pixbuf.loaders: $(loader_LTLIBRARIES) gdk-pixbuf-query-loaders
 	LOADERS=`echo libpixbufloader-*.la` ; \
 	if test "x$$LOADERS" != 'xlibpixbufloader-*.la' ; then \
@@ -460,4 +461,8 @@ gdk-pixbuf.loaders: $(loader_LTLIBRARIES) gdk-pixbuf-query-loaders
           echo "No dynamic modules found; will use only static modules for uninstalled example programs."; \
 	  touch gdk-pixbuf.loaders; \
 	fi
-
+else
+gdk-pixbuf.loaders: 
+	echo "No dynamic modules found; will use only static modules for uninstalled example programs."; \
+	touch gdk-pixbuf.loaders;
+endif
