@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.sq\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-31 18:26+0100\n"
-"PO-Revision-Date: 2004-01-31 18:24+0100\n"
+"POT-Creation-Date: 2004-02-02 01:40+0100\n"
+"PO-Revision-Date: 2004-02-02 01:45+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -32,8 +32,7 @@ msgstr "File imazh '%s' nuk përmban të dhëna"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:780
 #: gdk-pixbuf/gdk-pixbuf-io.c:906 tests/testfilechooser.c:237
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Dështova në ngarkimin e pamjes '%s': arsye e panjohur, ka mundësi që file "
 "imazh të jetë i dëmtuar"
@@ -88,8 +87,7 @@ msgstr "Gabim gjatë shkrimit tek file imazh: %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:1139 gdk-pixbuf/gdk-pixbuf-io.c:1255
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"Ky variant i gdk-pixbuf nuk suporton ruajtjen e imazhit në formatin: %s"
+msgstr "Ky variant i gdk-pixbuf nuk suporton ruajtjen e imazhit në formatin: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1168
 msgid "Insufficient memory to save image to callback"
@@ -339,10 +337,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:908
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%d' nuk lejohet."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr "Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%d' nuk lejohet."
 
 #: gdk-pixbuf/io-jpeg.c:1069
 msgid "The JPEG image format"
@@ -403,8 +399,7 @@ msgstr "Imazhi i transformuar në PNG ka gjerësi apo lartësi zero."
 
 #: gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr ""
-"Numri i bit-eve për kanal i imazhit të transformuar në PNG nuk është 8."
+msgstr "Numri i bit-eve për kanal i imazhit të transformuar në PNG nuk është 8."
 
 #: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
@@ -444,8 +439,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Gabim fatal gjatë leximit të file PNG: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Kyçet për segmentet e tekstit PNG duhet të kenë të paktën 1 dhe në maksimum "
 "79 karaktere."
@@ -456,8 +450,7 @@ msgstr "Kyçet për segmentet e tekstit PNG duhet të jenë karaktere ASCII."
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid ""
-"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
 "Vlera %s për segmentin e tekstit PNG nuk mund të konvertohet në kodimin ISO-"
 "8859-1."
@@ -691,8 +684,7 @@ msgstr "Kujtesë e pamjaftueshme për ngarkimin e e file pamje XBM"
 
 #: gdk-pixbuf/io-xbm.c:439
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr ""
-"Dështova në shkrimin e file së përkohshme gjatë ngarkimit të pamjes XBM"
+msgstr "Dështova në shkrimin e file së përkohshme gjatë ngarkimit të pamjes XBM"
 
 #: gdk-pixbuf/io-xbm.c:474
 msgid "The XBM image format"
@@ -728,8 +720,7 @@ msgstr "S'mund të siguroj kujtesë për ngarkimin e pamjes XPM"
 
 #: gdk-pixbuf/io-xpm.c:1508
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr ""
-"Dështova në shkrimin e file së përkohshme gjatë ngarkimit të pamjes XPM"
+msgstr "Dështova në shkrimin e file së përkohshme gjatë ngarkimit të pamjes XPM"
 
 #: gdk-pixbuf/io-xpm.c:1543
 msgid "The XPM image format"
@@ -1005,8 +996,7 @@ msgstr "Emri i file"
 #: gtk/gtkfilechooserdefault.c:1127
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
-msgstr ""
-"I pamundur shtimi i një libërshënuesi për %s pasi nuk është një kartelë."
+msgstr "I pamundur shtimi i një libërshënuesi për %s pasi nuk është një kartelë."
 
 #: gtk/gtkfilechooserdefault.c:1175
 #, c-format
@@ -1145,10 +1135,8 @@ msgstr "_Riemërto File"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Emri i kartelës \"%s\" përmban shenja të cilat nuk lejohen në emra files"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr "Emri i kartelës \"%s\" përmban shenja të cilat nuk lejohen në emra files"
 
 #: gtk/gtkfilesel.c:1441
 #, c-format
@@ -1183,8 +1171,7 @@ msgstr "_Krijo"
 #: gtk/gtkfilesel.c:1566
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Emri i file \"%s\" përmban shenja të cilat janë të palejuara në emra files"
+msgstr "Emri i file \"%s\" përmban shenja të cilat janë të palejuara në emra files"
 
 #: gtk/gtkfilesel.c:1569
 #, c-format
@@ -1490,6 +1477,14 @@ msgstr "default:LTR"
 msgid "Page %u"
 msgstr "Faqe %u"
 
+#: gtk/gtkradiotoolbutton.c:89
+msgid "Group"
+msgstr "Grupi"
+
+#: gtk/gtkradiotoolbutton.c:90
+msgid "The radio tool button whose group this button belongs to."
+msgstr "Pulsanti radio me grupin në të cilin bën pjesë ky buton."
+
 #: gtk/gtkrc.c:2380
 #, c-format
 msgid "Unable to find include file: \"%s\""
@@ -1503,8 +1498,7 @@ msgstr "E pamundur gjetja e file imazh në pixmap_path: \"%s\""
 #: gtk/gtkrc.c:3461
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr ""
-"Pozicioni i elementit pixmap: \"%s\" duhet të jetë absolut, %s, rreshti %d"
+msgstr "Pozicioni i elementit pixmap: \"%s\" duhet të jetë absolut, %s, rreshti %d"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:267
@@ -1917,5 +1911,3 @@ msgstr "Metodë Futjeje për X"
 msgid "Could not get information for file '%s': %s"
 msgstr "E pamundur marrja e informacione për file '%s': %s"
 
-#~ msgid "This file system does not support bookmarks"
-#~ msgstr "Ky file sistemi nuk suporton libërshënuesit"
