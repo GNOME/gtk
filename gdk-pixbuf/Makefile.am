@@ -263,7 +263,7 @@ libgdk_pixbuf_1_3_la_LDFLAGS = @STRIP_BEGIN@ \
 @STRIP_END@
 
 libgdk_pixbuf_1_3_la_LIBADD = pixops/libpixops.la $(builtin_objs) $(GDK_PIXBUF_DEP_LIBS)
-libgdk_pixbuf_1_3_la_DEPENDENCIES = $(builtin_objs) $(gdk_pixbuf_def)
+libgdk_pixbuf_1_3_la_DEPENDENCIES = pixops/libpixops.la $(builtin_objs) $(gdk_pixbuf_def)
 
 gdk_pixbuf_headers = 			\
 	gdk-pixbuf.h			\

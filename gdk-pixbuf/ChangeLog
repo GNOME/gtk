@@ -1,3 +1,11 @@
+Fri Feb  8 23:11:15 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* pixops/pixops.c: Force all weight arrays to sum exactly
+	to 65535. (Fixes #70971, reported by Federico Mena Quintero)
+
+	* Makefile.am (libgdk_pixbuf_1_3_la_DEPENDENCIES): Add
+	libpixops.la.
+
 2002-02-08  Federico Mena Quintero  <federico@ximian.com>
 
 	* pixops/pixops.h: Fix comment; PixopsInterpType -> GdkInterpType.
