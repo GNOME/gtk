@@ -5288,7 +5288,7 @@ gtk_clist_motion (GtkWidget      *widget,
 	return FALSE;
 
       clist->htimer = g_timeout_add
-	(SCROLL_TIME, (GtkFunction) horizontal_timeout, clist);
+	(SCROLL_TIME, (GSourceFunc) horizontal_timeout, clist);
 
       if (!((x < 0 && clist->hadjustment->value == 0) ||
 	    (x >= clist->clist_window_width &&
@@ -5320,7 +5320,7 @@ gtk_clist_motion (GtkWidget      *widget,
 	return FALSE;
 
       clist->vtimer = g_timeout_add (SCROLL_TIME,
-				     (GtkFunction) vertical_timeout, clist);
+				     (GSourceFunc) vertical_timeout, clist);
 
       if (clist->drag_button &&
 	  ((y < 0 && clist->focus_row == 0) ||

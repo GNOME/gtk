@@ -1,3 +1,12 @@
+Wed Dec 17 23:20:23 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkexpander.c (gtk_expander_animation_timeout): Add missing
+	GDK_THREADS_ENTER()/GDK_THREADS_LEAVE().
+	* gtk/gtkcalendar.c, gtk/gtkclist.c, gtk/gtkexpander.c, 
+	gtk/gtklist.c, gtk/gtknotebook.c, gtk/gtkselection.c, 
+	gtk/gtkspinbutton.c: Cast second argument to g_timeout_add() to
+	GSourceFunc instead of GtkFunction.  (#129525, Olexiy Avramchenko) 
+
 Wed Dec 17 23:16:45 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_button_press): fix compile warning.

@@ -2703,7 +2703,7 @@ calendar_timer (gpointer data)
 	{
 	  private_data->need_timer = FALSE;
 	  private_data->timer = g_timeout_add (CALENDAR_TIMER_DELAY, 
-					       (GtkFunction) calendar_timer, 
+					       (GSourceFunc) calendar_timer, 
 					       (gpointer) calendar);
 	}
       else 

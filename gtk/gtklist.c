@@ -553,7 +553,7 @@ gtk_list_motion_notify (GtkWidget      *widget,
       if (list->htimer == 0)
 	{
 	  list->htimer = g_timeout_add
-	    (SCROLL_TIME, (GtkFunction) gtk_list_horizontal_timeout, widget);
+	    (SCROLL_TIME, (GSourceFunc) gtk_list_horizontal_timeout, widget);
 	  
 	  if (!((x < adj->value && adj->value <= 0) ||
 		(x > adj->value + adj->page_size &&
@@ -601,7 +601,7 @@ gtk_list_motion_notify (GtkWidget      *widget,
   if (!((y < 0 && focus_row == 0) ||
 	(y > widget->allocation.height && focus_row >= length - 1)))
     list->vtimer = g_timeout_add (SCROLL_TIME,
-				  (GtkFunction) gtk_list_vertical_timeout,
+				  (GSourceFunc) gtk_list_vertical_timeout,
 				  list);
 
   if (row != focus_row)

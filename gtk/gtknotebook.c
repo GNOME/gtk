@@ -1711,7 +1711,7 @@ gtk_notebook_arrow_button_press (GtkNotebook      *notebook,
       if (!notebook->timer)
 	{
 	  notebook->timer = g_timeout_add (NOTEBOOK_INIT_SCROLL_DELAY, 
-					   (GtkFunction) gtk_notebook_timer, 
+					   (GSourceFunc) gtk_notebook_timer, 
 					   (gpointer) notebook);
 	  notebook->need_timer = TRUE;
 	}
@@ -2552,7 +2552,7 @@ gtk_notebook_timer (GtkNotebook *notebook)
 	{
 	  notebook->need_timer = FALSE;
 	  notebook->timer = g_timeout_add (NOTEBOOK_SCROLL_DELAY,
-					   (GtkFunction) gtk_notebook_timer, 
+					   (GSourceFunc) gtk_notebook_timer, 
 					   (gpointer) notebook);
 	}
       else

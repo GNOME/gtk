@@ -1039,7 +1039,7 @@ start_spinning (GtkSpinButton *spin,
       spin->timer_step = step;
       spin->need_timer = TRUE;
       spin->timer = g_timeout_add (SPIN_BUTTON_INITIAL_TIMER_DELAY, 
-				   (GtkFunction) gtk_spin_button_timer, 
+				   (GSourceFunc) gtk_spin_button_timer, 
 				   (gpointer) spin);
     }
 
@@ -1190,7 +1190,7 @@ gtk_spin_button_timer (GtkSpinButton *spin_button)
 	{
 	  spin_button->need_timer = FALSE;
 	  spin_button->timer = g_timeout_add (SPIN_BUTTON_TIMER_DELAY, 
-					      (GtkFunction) gtk_spin_button_timer, 
+					      (GSourceFunc) gtk_spin_button_timer, 
 					      (gpointer) spin_button);
 	}
       else 

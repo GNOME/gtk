@@ -1160,6 +1160,8 @@ gtk_expander_animation_timeout (GtkExpander *expander)
   GdkRectangle area;
   gboolean finish = FALSE;
 
+  GDK_THREADS_ENTER();
+
   if (GTK_WIDGET_REALIZED (expander))
     {
       get_expander_bounds (expander, &area);
@@ -1198,6 +1200,8 @@ gtk_expander_animation_timeout (GtkExpander *expander)
 	gtk_widget_set_child_visible (GTK_BIN (expander)->child, priv->expanded);
       gtk_widget_queue_resize (GTK_WIDGET (expander));
     }
+
+  GDK_THREADS_LEAVE();
 
   return !finish;
 }
