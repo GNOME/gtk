@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 00:22-0400\n"
+"POT-Creation-Date: 2004-07-28 03:59+0200\n"
 "PO-Revision-Date: 2004-03-03 10:48+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -854,7 +854,7 @@ msgstr "Hollësi"
 msgid "Render detail to pass to the theme engine"
 msgstr "Hollësi vizatimi për t'ju kaluar krijuesit të temave"
 
-#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:550 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:551 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "Teksti"
 
@@ -870,9 +870,10 @@ msgstr "Markues"
 msgid "Marked up text to render"
 msgstr "Teksti i markuar që duhet vizatuar"
 
+#. GRUT modified this item
 #: gtk/gtkcellrenderertext.c:209 gtk/gtklabel.c:299
 msgid "Attributes"
-msgstr "Pronësitë"
+msgstr "Veçoritë"
 
 #: gtk/gtkcellrenderertext.c:210
 msgid "A list of style attributes to apply to the text of the renderer"
@@ -918,7 +919,7 @@ msgstr "Ngjyra ballore"
 msgid "Foreground color as a GdkColor"
 msgstr "Ngjyra e përparme e shprehur si GdkColor"
 
-#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:482 gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:483 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:587
 msgid "Editable"
 msgstr "E ndryshueshme"
@@ -928,7 +929,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "Nëse teksti mund të ndryshohet nga përdoruesi"
 
 #: gtk/gtkcellrenderertext.c:267 gtk/gtkcellrenderertext.c:275
-#: gtk/gtkfontsel.c:218 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
+#: gtk/gtkfontsel.c:221 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
 msgid "Font"
 msgstr "Gërmat"
 
@@ -1008,9 +1009,10 @@ msgstr "Vizuar"
 msgid "Whether to strike through the text"
 msgstr "Tregon nëse teksti është i vizuar"
 
+#. GRUT modified this item
 #: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:472
 msgid "Underline"
-msgstr "Nënvizimi"
+msgstr "Nënvizuar"
 
 #: gtk/gtkcellrenderertext.c:379 gtk/gtktexttag.c:473
 msgid "Style of underline for this text"
@@ -1485,40 +1487,40 @@ msgstr "Korniza e zonës së veprimit"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Gjerësia e kornizës rreth zonës së butonit në fund të dialogut"
 
-#: gtk/gtkentry.c:462 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:463 gtk/gtklabel.c:370
 msgid "Cursor Position"
 msgstr "Pozicioni i kursorit"
 
-#: gtk/gtkentry.c:463 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:464 gtk/gtklabel.c:371
 msgid "The current position of the insertion cursor in chars"
 msgstr "Vendndodhja aktuale e kursorit shtues në gërma"
 
-#: gtk/gtkentry.c:472 gtk/gtklabel.c:380
+#: gtk/gtkentry.c:473 gtk/gtklabel.c:380
 msgid "Selection Bound"
 msgstr "Kufiri i zgjedhjes"
 
-#: gtk/gtkentry.c:473 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:474 gtk/gtklabel.c:381
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Pozicioni i fundit të pjesës së zgjedhur nga kursori në gërma"
 
-#: gtk/gtkentry.c:483
+#: gtk/gtkentry.c:484
 msgid "Whether the entry contents can be edited"
 msgstr "Nëse përmbajtja e dhënë mund të përpunohet"
 
-#: gtk/gtkentry.c:490
+#: gtk/gtkentry.c:491
 msgid "Maximum length"
 msgstr "Gjatësia më e madhe"
 
-#: gtk/gtkentry.c:491
+#: gtk/gtkentry.c:492
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Maksimumi i gërmave për këtë zë. Zero nëse nuk ka limit"
 
-#: gtk/gtkentry.c:499
+#: gtk/gtkentry.c:500
 msgid "Visibility"
 msgstr "Dukshmëria"
 
-#: gtk/gtkentry.c:500
+#: gtk/gtkentry.c:501
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1526,29 +1528,29 @@ msgstr ""
 "FALSE shfaq \"gërma të padukshme\" në vend të tekstit të vërtetë (mënyrë "
 "fjalëkalim)"
 
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:508
 msgid "Has Frame"
 msgstr "Ka Frame"
 
-#: gtk/gtkentry.c:508
+#: gtk/gtkentry.c:509
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE heq smuzimet e jashtme të fushës"
 
-#: gtk/gtkentry.c:515
+#: gtk/gtkentry.c:516
 msgid "Invisible character"
 msgstr "Gërmë e padukshme"
 
-#: gtk/gtkentry.c:516
+#: gtk/gtkentry.c:517
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Gërma që do përdoret kur maskohet përmbajtja e futur (në \"mënyrën fjalëkalim"
 "\")"
 
-#: gtk/gtkentry.c:523
+#: gtk/gtkentry.c:524
 msgid "Activates default"
 msgstr "Aktivo prezgjedhjen"
 
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:525
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -1556,31 +1558,31 @@ msgstr ""
 "Nëse duhet aktivuar instrumenti i prezgjedhur (si p.sh butoni prezgjedhur në "
 "një dialog) kur shtypet Enter"
 
-#: gtk/gtkentry.c:530
+#: gtk/gtkentry.c:531
 msgid "Width in chars"
 msgstr "Gjerësia në karaktere"
 
-#: gtk/gtkentry.c:531
+#: gtk/gtkentry.c:532
 msgid "Number of characters to leave space for in the entry"
 msgstr "Numri i simboleve që duhet lënë si hapësirë në futje"
 
-#: gtk/gtkentry.c:540
+#: gtk/gtkentry.c:541
 msgid "Scroll offset"
 msgstr "Madhësia e rrëshqitjes"
 
-#: gtk/gtkentry.c:541
+#: gtk/gtkentry.c:542
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Numeri i pixel të lënë jashtë në të majtë të fushës gjatë rrëshqitjes"
 
-#: gtk/gtkentry.c:551
+#: gtk/gtkentry.c:552
 msgid "The contents of the entry"
 msgstr "Përmbajtja e fushës"
 
-#: gtk/gtkentry.c:558 gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:559 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "Drejtimi X"
 
-#: gtk/gtkentry.c:559 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:560 gtk/gtkmisc.c:100
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
@@ -1588,11 +1590,11 @@ msgstr ""
 "Drejtimi horizontal, nga 0 (majtas) deri në 1 (djathtas). Në të kundërt për "
 "planimetritë DNM"
 
-#: gtk/gtkentry.c:792
+#: gtk/gtkentry.c:793
 msgid "Select on focus"
 msgstr "Zgjidh në fokus"
 
-#: gtk/gtkentry.c:793
+#: gtk/gtkentry.c:794
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Nëse të zgjidhen përmbajtjet e një zëri kur ky fokusohet"
 
@@ -1815,7 +1817,7 @@ msgstr "Pozicioni Y i widget bir"
 msgid "The title of the font selection dialog"
 msgstr "Titulli i dritares së dialogut për zgjedhjen e gërmave"
 
-#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:211
+#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:214
 msgid "Font name"
 msgstr "Emri i gërmave"
 
@@ -1851,27 +1853,28 @@ msgstr "Shfaq stilin"
 msgid "Whether the selected font style is shown in the label"
 msgstr "Nëse stili i zgjedhur i gërmave tregohet në etiketë"
 
+#. GRUT modified this item
 #: gtk/gtkfontbutton.c:256
 msgid "Show size"
-msgstr "Shfaq dimensionin"
+msgstr "Shfaq madhësinë"
 
 #: gtk/gtkfontbutton.c:257
 msgid "Whether selected font size is shown in the label"
 msgstr "Nëse madhësia e zgjedhur gërmave tregohet në etiketë"
 
-#: gtk/gtkfontsel.c:212
+#: gtk/gtkfontsel.c:215
 msgid "The X string that represents this font"
 msgstr "Vlera X që përfaqëson këto gërma"
 
-#: gtk/gtkfontsel.c:219
+#: gtk/gtkfontsel.c:222
 msgid "The GdkFont that is currently selected"
 msgstr "GdkFont që është aktualisht e zgjedhur"
 
-#: gtk/gtkfontsel.c:225
+#: gtk/gtkfontsel.c:228
 msgid "Preview text"
 msgstr "Pamja e parë e tekstit"
 
-#: gtk/gtkfontsel.c:226
+#: gtk/gtkfontsel.c:229
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "Teksti që do shfaqet për të treguar gërmat e zgjedhura"
 
@@ -4499,3 +4502,4 @@ msgstr "Gjendja e stilit IM"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Tregon si duhet shfaqur metod e input e panelit të gjendjes"
+

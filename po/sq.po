@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-15 04:55+0200\n"
+"POT-Creation-Date: 2004-07-28 03:59+0200\n"
 "PO-Revision-Date: 2004-07-15 16:28+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -32,7 +32,8 @@ msgstr "File '%s' nuk përmban të dhëna"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:831
 #: gdk-pixbuf/gdk-pixbuf-io.c:969 tests/testfilechooser.c:237
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Leximi i figurës '%s' dështoi: shkaku nuk njihet, ndoshta file është i "
 "dëmtuar"
@@ -87,7 +88,8 @@ msgstr "Gabim gjatë shkrimit tek file i figurës: %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:1202 gdk-pixbuf/gdk-pixbuf-io.c:1318
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "Ky variant i gdk-pixbuf nuk suporton ruajtjen e figurës në formatin: %s"
+msgstr ""
+"Ky variant i gdk-pixbuf nuk suporton ruajtjen e figurës në formatin: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1231
 msgid "Insufficient memory to save image to callback"
@@ -338,8 +340,10 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:908
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%d' nuk lejohet."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr ""
+"Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%d' nuk lejohet."
 
 #: gdk-pixbuf/io-jpeg.c:1069
 msgid "The JPEG image format"
@@ -400,7 +404,8 @@ msgstr "Figura e transformuar në PNG ka gjerësi apo lartësi zero."
 
 #: gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Numri i bit-eve për kanal të figurës së transformuar në PNG nuk është 8."
+msgstr ""
+"Numri i bit-eve për kanal të figurës së transformuar në PNG nuk është 8."
 
 #: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
@@ -440,7 +445,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Gabim fatal gjatë leximit të file PNG: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Kyçet për segmentet e tekstit PNG duhet të kenë të paktën 1 dhe në maksimum "
 "79 simbole."
@@ -451,7 +457,8 @@ msgstr "Kyçet për segmentet e tekstit PNG duhet të jenë simbole ASCII."
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid ""
+"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
 "Vlera %s për segmentin e tekstit PNG nuk mund të konvertohet në familjen ISO-"
 "8859-1."
@@ -682,7 +689,8 @@ msgstr "Kujtesë e pamjaftueshme për ngarkimin e file XBM"
 
 #: gdk-pixbuf/io-xbm.c:441
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XBM"
+msgstr ""
+"Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XBM"
 
 #: gdk-pixbuf/io-xbm.c:476
 msgid "The XBM image format"
@@ -718,7 +726,8 @@ msgstr "Nuk arrij të siguroj kujtesë për ngarkimin e figurës XPM"
 
 #: gdk-pixbuf/io-xpm.c:1508
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr "Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XPM"
+msgstr ""
+"Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XPM"
 
 #: gdk-pixbuf/io-xpm.c:1543
 msgid "The XPM image format"
@@ -981,7 +990,8 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:1717
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
-msgstr "I pamundur shtimi i një libërshënuesi për %s pasi nuk është një kartelë."
+msgstr ""
+"I pamundur shtimi i një libërshënuesi për %s pasi nuk është një kartelë."
 
 #: gtk/gtkfilechooserdefault.c:1795
 #, c-format
@@ -1014,9 +1024,10 @@ msgstr "Kartelë"
 msgid "_Add"
 msgstr "_Shto"
 
+#. GRUT modified this item
 #: gtk/gtkfilechooserdefault.c:2636 gtk/gtkstock.c:341
 msgid "_Remove"
-msgstr "_Hiqe"
+msgstr "_Hiq"
 
 #: gtk/gtkfilechooserdefault.c:2715
 msgid "Show _Hidden Files"
@@ -1180,7 +1191,8 @@ msgstr "_Riemërto File"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Emri i kartelës \"%s\" përmban simbole që nuk lejohen në emrat e files"
 
 #: gtk/gtkfilesel.c:1441
@@ -1382,28 +1394,28 @@ msgstr "Gërmat"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: gtk/gtkfontsel.c:69
+#: gtk/gtkfontsel.c:72
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdefghijk ABCDEFGHIJK"
 
-#: gtk/gtkfontsel.c:355
+#: gtk/gtkfontsel.c:359
 msgid "_Family:"
 msgstr "_Familja:"
 
-#: gtk/gtkfontsel.c:361
+#: gtk/gtkfontsel.c:365
 msgid "_Style:"
 msgstr "_Stili:"
 
-#: gtk/gtkfontsel.c:367
+#: gtk/gtkfontsel.c:371
 msgid "Si_ze:"
 msgstr "Madhë_sia:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:499
+#: gtk/gtkfontsel.c:547
 msgid "_Preview:"
 msgstr "_Pamja e parë:"
 
-#: gtk/gtkfontsel.c:1327
+#: gtk/gtkfontsel.c:1375
 msgid "Font Selection"
 msgstr "Zgjedhja e gërmave"
 
@@ -1491,9 +1503,10 @@ msgstr "X"
 msgid "Y"
 msgstr "Y"
 
+#. GRUT modified this item
 #: gtk/gtkinputdialog.c:563
 msgid "Pressure"
-msgstr "Trysni"
+msgstr "Trysnia"
 
 #: gtk/gtkinputdialog.c:564
 msgid "X Tilt"
@@ -1567,7 +1580,8 @@ msgstr "E pamundur gjetja e file së figurës në pixmap_path: \"%s\""
 #: gtk/gtkrc.c:3468
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Pozicioni i elementit pixmap: \"%s\" duhet të jetë absolut, %s, rreshti %d"
+msgstr ""
+"Pozicioni i elementit pixmap: \"%s\" duhet të jetë absolut, %s, rreshti %d"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:285
@@ -1606,9 +1620,10 @@ msgstr "_CD-Rom"
 msgid "_Clear"
 msgstr "_Pastro"
 
+#. GRUT modified this item
 #: gtk/gtkstock.c:299
 msgid "_Close"
-msgstr "_Mbylle"
+msgstr "_Mbyll"
 
 #: gtk/gtkstock.c:300
 msgid "_Convert"
@@ -1782,9 +1797,10 @@ msgstr "_Rikthe"
 msgid "_Save"
 msgstr "_Ruaj"
 
+#. GRUT modified this item
 #: gtk/gtkstock.c:344
 msgid "Save _As"
-msgstr "Ruaje _Si"
+msgstr "Ruaj _Si"
 
 #: gtk/gtkstock.c:345
 msgid "_Color"
@@ -1895,22 +1911,22 @@ msgstr "E pamundur gjetja e motorrit të temës tek module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "-- Asnjë Këshillë --"
 
-#: gtk/gtkuimanager.c:1095
+#: gtk/gtkuimanager.c:1099
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Vlerë e panjohur '%s' në rreshtin %d gërma %d"
 
-#: gtk/gtkuimanager.c:1313
+#: gtk/gtkuimanager.c:1317
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Tag hapës i papritur '%s' në rreshtin %d gërma %d"
 
-#: gtk/gtkuimanager.c:1398
+#: gtk/gtkuimanager.c:1402
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "E dhënë e papritur në rreshtin %d gërma %d"
 
-#: gtk/gtkuimanager.c:2175
+#: gtk/gtkuimanager.c:2188
 msgid "Empty"
 msgstr "Bosh"
 
