@@ -44,6 +44,11 @@
 #include "gdkinput-win32.h"
 #include "gdkkeysyms.h"
 
+#ifdef G_WITH_CYGWIN
+#include <fcntl.h>
+#include <errno.h>
+#endif
+
 #include <objbase.h>
 
 #if defined (__GNUC__) && defined (HAVE_DIMM_H)
@@ -303,7 +308,13 @@ _gdk_events_init (void)
   source = g_source_new (&event_funcs, sizeof (GSource));
   g_source_set_priority (source, GDK_PRIORITY_EVENTS);
 
+#ifdef G_WITH_CYGWIN
+  event_poll_fd.fd = open ("/dev/windows", O_RDONLY);
+  if (event_poll_fd.fd == -1)
+    g_error ("can't open \"/dev/windows\": %s", g_strerror (errno));
+#else
   event_poll_fd.fd = G_WIN32_MSG_HANDLE;
+#endif
   event_poll_fd.events = G_IO_IN;
   
   g_source_add_poll (source, &event_poll_fd);
