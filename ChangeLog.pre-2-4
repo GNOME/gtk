@@ -1,3 +1,8 @@
+Mon Oct 22 15:07:17 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreestore.c (gtk_tree_store_iter_depth): update docs to
+	reflect reality, #62810
+
 Mon Oct 22 14:08:26 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* demos/gtk-demo/appwindow.c: Remove handle_box from App demo.

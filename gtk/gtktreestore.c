@@ -1316,7 +1316,7 @@ gtk_tree_store_is_ancestor (GtkTreeStore *tree_store,
  * @tree_store: A #GtkTreeStore
  * @iter: A valid #GtkTreeIter
  * 
- * Returns the depth of @iter.  This will be 0 for anything on the root level, 1
+ * Returns the depth of @iter.  This will be 1 for anything on the root level, 2
  * for anything down a level, etc.
  * 
  * Return value: The depth of @iter
