@@ -8,10 +8,10 @@
 <title>GTK v1.2 Tutorial
 <author>
 Tony Gale <tt><htmlurl url="mailto:gale@gtk.org"
-			      name="&lt;gale@gtk.org&gt;"></tt>
+			      name="&lt;gale@gtk.org&gt;"></tt>,
 Ian Main <tt><htmlurl url="mailto:imain@gtk.org"
-			      name="&lt;imain@gtk.org&gt;"></tt>,
-<date>February 21st, 1999
+			      name="&lt;imain@gtk.org&gt;"></tt>
+<date>April 1st, 1999
 <abstract>
 This is a tutorial on how to use GTK (the GIMP Toolkit) through its C
 interface.
@@ -38,7 +38,8 @@ now been used in a large number of software projects, including the
 GNU Network Object Model Environment (GNOME) project. GTK is built on
 top of GDK (GIMP Drawing Kit) which is basically a wrapper around the
 low-level functions for accessing the underlying windowing functions
-(Xlib in the case of X windows). The primary authors of GTK are:
+(Xlib in the case of the X windows system). The primary authors of GTK
+are:
 
 <itemize>
 <item> Peter Mattis   <tt><htmlurl url="mailto:petm@xcf.berkeley.edu"
@@ -54,10 +55,10 @@ interface (API). Although written completely in C, it is implemented
 using the idea of classes and callback functions (pointers to
 functions).
 
-There is also a third component called glib which contains a few
+There is also a third component called GLib which contains a few
 replacements for some standard calls, as well as some additional
-functions for handling linked lists etc. The replacement functions are
-used to increase GTK's portability, as some of the functions
+functions for handling linked lists, etc. The replacement functions
+are used to increase GTK's portability, as some of the functions
 implemented here are not available or are nonstandard on other unixes
 such as g_strerror(). Some also contain enhancements to the libc
 versions, such as g_malloc that has enhanced debugging utilities.
@@ -94,14 +95,11 @@ understanding of C, and how to create C programs. It would be a great
 benefit for the reader to have previous X programming experience, but
 it shouldn't be necessary. If you are learning GTK as your first
 widget set, please comment on how you found this tutorial, and what
-you had trouble with. Note that there is also a C++ API for GTK
-(GTK--) in the works, so if you prefer to use C++, you should look
-into this instead. There are also Objective C, ADA, Guile and other
-language bindings available, but I don't follow these.
+you had trouble with. There are also C++, Objective C, ADA, Guile and
+other language bindings available, but I don't follow these.
 
-This document is a 'work in progress'. Please look for updates on
-http://www.gtk.org/ <htmlurl url="http://www.gtk.org/"
-name="http://www.gtk.org/">.
+This document is a "work in progress". Please look for updates on
+<htmlurl url="http://www.gtk.org/" name="http://www.gtk.org/">.
 
 I would very much like to hear of any problems you have learning GTK
 from this document, and would appreciate input as to how it may be
@@ -113,20 +111,20 @@ name="Contributing"> for further information.
 <!-- ***************************************************************** -->
 
 <p>
-The first thing to do of course, is download the GTK source and
+The first thing to do, of course, is download the GTK source and
 install it. You can always get the latest version from ftp.gtk.org in
 /pub/gtk. You can also view other sources of GTK information on
-http://www.gtk.org/ <htmlurl url="http://www.gtk.org/"
-name="http://www.gtk.org/">. GTK uses GNU autoconf for configuration.
-Once untar'd, type ./configure --help to see a list of options.
+<htmlurl url="http://www.gtk.org/" name="http://www.gtk.org/">. GTK
+uses GNU autoconf for configuration. Once untar'd, type ./configure
+--help to see a list of options.
 
-Th GTK source distribution also contains the complete source to all of
-the examples used in this tutorial, along with Makefiles to aid
+The GTK source distribution also contains the complete source to all
+of the examples used in this tutorial, along with Makefiles to aid
 compilation.
 
 To begin our introduction to GTK, we'll start with the simplest
 program possible. This program will create a 200x200 pixel window and
-has no way of exiting except to be killed using the shell.
+has no way of exiting except to be killed by using the shell.
 
 <tscreen><verb>
 /* example-start base base.c */
@@ -155,10 +153,11 @@ You can compile the above program with gcc using:
 gcc base.c -o base `gtk-config --cflags --libs`
 </verb></tscreen>
 
-The meaning of the unusual compilation options is explained below.
+The meaning of the unusual compilation options is explained below in
+<ref id="sec_compiling" name="Compiling Hello World">.
 
 All programs will of course include gtk/gtk.h which declares the
-variables, functions, structures etc. that will be used in your GTK
+variables, functions, structures, etc. that will be used in your GTK
 application.
 
 The next line:
@@ -200,10 +199,10 @@ The next two lines of code create and display a window.
   gtk_widget_show (window);
 </verb></tscreen>
 
-The GTK_WINDOW_TOPLEVEL argument specifies that we want the window to
-undergo window manager decoration and placement. Rather than create a
-window of 0x0 size, a window without children is set to 200x200 by
-default so you can still manipulate it.
+The <tt/GTK_WINDOW_TOPLEVEL/ argument specifies that we want the
+window to undergo window manager decoration and placement. Rather than
+create a window of 0x0 size, a window without children is set to
+200x200 by default so you can still manipulate it.
 
 The gtk_widget_show() function lets GTK know that we are done setting
 the attributes of this widget, and that it can display it.
@@ -217,7 +216,7 @@ The last line enters the GTK main processing loop.
 gtk_main() is another call you will see in every GTK application.
 When control reaches this point, GTK will sleep waiting for X events
 (such as button or key presses), timeouts, or file IO notifications to
-occur. In our simple example however, events are ignored.
+occur. In our simple example, however, events are ignored.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Hello World in GTK
@@ -278,7 +277,7 @@ int main( int   argc,
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     
     /* When the window is given the "delete_event" signal (this is given
-     * by the window manager, usually by the 'close' option, or on the
+     * by the window manager, usually by the "close" option, or on the
      * titlebar), we ask it to call the delete_event () function
      * as defined above. The data passed to the callback
      * function is NULL and is ignored in the callback function. */
@@ -287,7 +286,7 @@ int main( int   argc,
     
     /* Here we connect the "destroy" event to a signal handler.  
      * This event occurs when we call gtk_widget_destroy() on the window,
-     * or if we return 'FALSE' in the "delete_event" callback. */
+     * or if we return FALSE in the "delete_event" callback. */
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			GTK_SIGNAL_FUNC (destroy), NULL);
     
@@ -330,7 +329,7 @@ int main( int   argc,
 </verb></tscreen>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>Compiling Hello World
+<sect1>Compiling Hello World <label id="sec_compiling">
 <p>
 To compile use:
 
@@ -339,14 +338,14 @@ gcc -Wall -g helloworld.c -o helloworld `gtk-config --cflags` \
     `gtk-config --libs`
 </verb></tscreen>
 
-This uses the program <tt>gtk-config</>, which comes with gtk. This
-program 'knows' what compiler switches are needed to compile programs
-that use gtk. <tt>gtk-config --cflags</> will output a list of include
+This uses the program <tt/gtk-config/, which comes with GTK. This
+program "knows" what compiler switches are needed to compile programs
+that use GTK. <tt/gtk-config --cflags/ will output a list of include
 directories for the compiler to look in, and <tt>gtk-config --libs</>
 will output the list of libraries for the compiler to link with and
 the directories to find them in. In the aboce example they could have
 been combined into a single instance, such as
-`gtk-config --cflags --libs`.
+<tt/`gtk-config --cflags --libs`/.
 
 Note that the type of single quote used in the compile command above
 is significant.
@@ -357,10 +356,10 @@ The libraries that are usually linked in are:
 <item>The GDK library (-lgdk), the Xlib wrapper.
 <item>The gmodule library (-lgmodule), which is used to load run time
 extensions.
-<item>The glib library (-lglib), containing miscellaneous functions, only
-g_print() is used in this particular example. GTK is built on top
-of glib so you will always require this library. See the section on 
-<ref id="sec_glib" name="glib"> for details.
+<item>The GLib library (-lglib), containing miscellaneous functions;
+only g_print() is used in this particular example. GTK is built on top
+of glib so you will always require this library. See the section on
+<ref id="sec_glib" name="GLib"> for details.
 <item>The Xlib library (-lX11) which is used by GDK.
 <item>The Xext library (-lXext). This contains code for shared memory
 pixmaps and other X extensions.
@@ -375,12 +374,15 @@ and callbacks. GTK is an event driven toolkit, which means it will
 sleep in gtk_main until an event occurs and control is passed to the
 appropriate function.
 
-This passing of control is done using the idea of "signals". When an
-event occurs, such as the press of a mouse button, the appropriate
-signal will be "emitted" by the widget that was pressed.  This is how
-GTK does most of its useful work. There are a set of signals that all
-widgets inherit, such as "destroy", and there are signals that are
-widget specific, such as "toggled" on a toggle button.
+This passing of control is done using the idea of "signals". (Note
+that these signals are not the same as the Unix system signals, and
+are not implemented using them, although the terminology is almost
+identical.) When an event occurs, such as the press of a mouse button,
+the appropriate signal will be "emitted" by the widget that was
+pressed.  This is how GTK does most of its useful work. There are
+signals that all widgets inherit, such as "destroy", and there are
+signals that are widget specific, such as "toggled" on a toggle
+button.
 
 To make a button perform an action, we set up a signal handler to
 catch these signals and call the appropriate function. This is done by
@@ -393,26 +395,26 @@ gint gtk_signal_connect( GtkObject     *object,
                          gpointer       func_data );
 </verb></tscreen>
 
-Where the first argument is the widget which will be emitting the
-signal, and the second, the name of the signal you wish to catch. The
+where the first argument is the widget which will be emitting the
+signal, and the second the name of the signal you wish to catch. The
 third is the function you wish to be called when it is caught, and the
 fourth, the data you wish to have passed to this function.
 
 The function specified in the third argument is called a "callback
-function", and should generally be of the form:
+function", and should generally be of the form
 
 <tscreen><verb>
 void callback_func( GtkWidget *widget,
                     gpointer   callback_data );
 </verb></tscreen>
 
-Where the first argument will be a pointer to the widget that emitted
-the signal, and the second, a pointer to the data given as the last
+where the first argument will be a pointer to the widget that emitted
+the signal, and the second a pointer to the data given as the last
 argument to the gtk_signal_connect() function as shown above.
 
 Note that the above form for a signal callback function declaration is
 only a general guide, as some widget specific signals generate
-different calling parameters. For example, the GtkCList "select_row"
+different calling parameters. For example, the CList "select_row"
 signal provides both row and column parameters.
 
 Another call used in the <em>helloworld</em> example, is:
@@ -427,13 +429,13 @@ gint gtk_signal_connect_object( GtkObject     *object,
 gtk_signal_connect_object() is the same as gtk_signal_connect() except
 that the callback function only uses one argument, a pointer to a GTK
 object. So when using this function to connect signals, the callback
-should be of the form:
+should be of the form
 
 <tscreen><verb>
 void callback_func( GtkObject *object );
 </verb></tscreen>
 
-Where the object is usually a widget. We usually don't setup callbacks
+where the object is usually a widget. We usually don't setup callbacks
 for gtk_signal_connect_object however. They are usually used to call a
 GTK function that accepts a single widget or object as an argument, as
 is the case in our <em>helloworld</em> example.
@@ -448,7 +450,7 @@ data supplied to the callbacks.
 <!-- ----------------------------------------------------------------- -->
 <sect1>Events
 <p>
-In addition to the signal mechanism described above, there are a set
+In addition to the signal mechanism described above, there is a set
 of <em>events</em> that reflect the X event mechanism. Callbacks may
 also be attached to these events. These events are:
 
@@ -544,18 +546,18 @@ something like:
 <tscreen><verb>
 gtk_signal_connect( GTK_OBJECT(button), "button_press_event",
                     GTK_SIGNAL_FUNC(button_press_callback), 
-		        NULL);
+		    NULL);
 </verb></tscreen>
 
-This assumes that <tt/button/ is a GtkButton widget. Now, when the
+This assumes that <tt/button/ is a Button widget. Now, when the
 mouse is over the button and a mouse button is pressed, the function
 <tt/button_press_callback/ will be called. This function may be
 declared as:
 
 <tscreen><verb>
-static gint button_press_event (GtkWidget      *widget, 
-                                GdkEventButton *event,
-                                gpointer        data);
+static gint button_press_callback( GtkWidget      *widget, 
+                                   GdkEventButton *event,
+                                   gpointer        data );
 </verb></tscreen>
 
 Note that we can declare the second argument as type
@@ -577,8 +579,8 @@ For details on the GdkEvent data types, see the appendix entitled
 <!-- ----------------------------------------------------------------- -->
 <sect1>Stepping Through Hello World
 <p>
-Now that we know the theory behind this, lets clarify by walking through 
-the example <em>helloworld</em> program.
+Now that we know the theory behind this, let's clarify by walking
+through the example <em>helloworld</em> program.
 
 Here is the callback function that will be called when the button is
 "clicked". We ignore both the widget and the data in this example, but
@@ -601,7 +603,7 @@ some sort of response, or simply quit the application.
 The value you return in this callback lets GTK know what action to
 take.  By returning TRUE, we let it know that we don't want to have
 the "destroy" signal emitted, keeping our application running. By
-returning FALSE, we ask that "destroy" is emitted, which in turn will
+returning FALSE, we ask that "destroy" be emitted, which in turn will
 call our "destroy" signal handler.
 
 <tscreen><verb>
@@ -636,7 +638,7 @@ int main( int   argc,
 {
 </verb></tscreen>
 
-This next part, declares a pointer to a structure of type
+This next part declares pointers to a structure of type
 GtkWidget. These are used below to create a window and a button.
 
 <tscreen><verb>
@@ -654,7 +656,7 @@ allowing your application to parse the remaining arguments.
     gtk_init (&amp;argc, &amp;argv);
 </verb></tscreen>
 
-Create a new window. This is fairly straight forward. Memory is
+Create a new window. This is fairly straightforward. Memory is
 allocated for the GtkWidget *window structure so it now points to a
 valid structure. It sets up a new window, but it is not displayed
 until we call gtk_widget_show(window) near the end of our program.
@@ -663,20 +665,20 @@ until we call gtk_widget_show(window) near the end of our program.
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 </verb></tscreen>
 
-Here is an example of connecting a signal handler to an object, in
-this case, the window. Here, the "destroy" signal is caught. This is
-emitted when we use the window manager to kill the window (and we
-return FALSE in the "delete_event" handler), or when we use the
-gtk_widget_destroy() call passing in the window widget as the object
-to destroy. By setting this up, we handle both cases with a single
-call. Here, it just calls the destroy() function defined above with a
-NULL argument, which quits GTK for us.
-
-The GTK_OBJECT and GTK_SIGNAL_FUNC are macros that perform type
-casting and checking for us, as well as aid the readability of the
-code.
+Here are two examples of connecting a signal handler to an object, in
+this case, the window. Here, the "delete_event" and "destroy" signals
+are caught. The first is emitted when we use the window manager to
+kill the window, or when we use the gtk_widget_destroy() call passing
+in the window widget as the object to destroy. The second is emitted
+when, in the "delete_event" handler, we return FALSE.
+ 
+The <tt/GTK_OBJECT/ and <tt/GTK_SIGNAL_FUNC/ are macros that perform
+type casting and checking for us, as well as aid the readability of
+the code.
 
 <tscreen><verb>
+    gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+                        GTK_SIGNAL_FUNC (delete_event), NULL);
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
                         GTK_SIGNAL_FUNC (destroy), NULL);
 </verb></tscreen>
@@ -687,7 +689,7 @@ it 10 pixels wide where no widgets will go. There are other similar
 functions which we will look at in the section on
 <ref id="sec_setting_widget_attributes" name="Setting Widget Attributes">
 
-And again, GTK_CONTAINER is a macro to perform type casting.
+And again, <tt/GTK_CONTAINER/ is a macro to perform type casting.
 
 <tscreen><verb>
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -730,12 +732,13 @@ gtk_signal_connect().
                                GTK_OBJECT (window));
 </verb></tscreen>
 
-This is a packing call, which will be explained in depth later on. But
-it is fairly easy to understand. It simply tells GTK that the button
-is to be placed in the window where it will be displayed. Note that a
-GTK container can only contain one widget. There are other widgets,
-that are described later, which are designed to layout multiple
-widgets in various ways.
+This is a packing call, which will be explained in depth later on in
+<ref id="sec_packing_widgets" name="Packing Widgets">. But it is
+fairly easy to understand. It simply tells GTK that the button is to
+be placed in the window where it will be displayed. Note that a GTK
+container can only contain one widget. There are other widgets, that
+are described later, which are designed to layout multiple widgets in
+various ways.
  
 <tscreen><verb>
     gtk_container_add (GTK_CONTAINER (window), button);
@@ -765,7 +768,7 @@ events come.
 And the final return. Control returns here after gtk_quit() is called.
 
 <tscreen><verb>
-    return 0;
+    return (0;
 </verb></tscreen>
 
 Now, when we click the mouse button on a GTK button, the widget emits
@@ -779,16 +782,12 @@ as its argument, destroying the window widget. This causes the window
 to emit the "destroy" signal, which is caught, and calls our destroy()
 callback function, which simply exits GTK.
 
-Another course of events, is to use the window manager to kill the
-window. This will cause the "delete_event" to be emitted. This will
+Another course of events is to use the window manager to kill the
+window, which will cause the "delete_event" to be emitted. This will
 call our "delete_event" handler. If we return TRUE here, the window
 will be left as is and nothing will happen. Returning FALSE will cause
-GTK to emit the "destroy" signal which of course, calls the "destroy"
+GTK to emit the "destroy" signal which of course calls the "destroy"
 callback, exiting GTK.
-
-Note that these signals are not the same as the Unix system signals,
-and are not implemented using them, although the terminology is almost
-identical.
 
 <!-- ***************************************************************** -->
 <sect>Moving On
@@ -798,17 +797,18 @@ identical.
 <sect1>Data Types
 <p>
 There are a few things you probably noticed in the previous examples
-that need explaining. The gint, gchar etc. that you see are typedefs
-to int and char respectively. This is done to get around that nasty
-dependency on the size of simple data types when doing calculations.
+that need explaining. The gint, gchar, etc. that you see are typedefs
+to int and char, respectively, that are part of the GLlib system. This
+is done to get around that nasty dependency on the size of simple data
+types when doing calculations.
 
 A good example is "gint32" which will be typedef'd to a 32 bit integer
 for any given platform, whether it be the 64 bit alpha, or the 32 bit
-i386. The typedefs are very straight forward and intuitive. They are
+i386. The typedefs are very straightforward and intuitive. They are
 all defined in glib/glib.h (which gets included from gtk.h).
 
-You'll also notice the ability to use GtkWidget when the function
-calls for a GtkObject. GTK is an object oriented design, and a widget
+You'll also notice GTK's ability to use GtkWidget when the function
+calls for an Object. GTK is an object oriented design, and a widget
 is an object.
 
 <!-- ----------------------------------------------------------------- -->
@@ -892,7 +892,7 @@ int main( int   argc,
     /* Create a new window */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-    /* This is a new call, this just sets the title of our
+    /* This is a new call, which just sets the title of our
      * new window to "Hello Buttons!" */
     gtk_window_set_title (GTK_WINDOW (window), "Hello Buttons!");
 
@@ -963,11 +963,12 @@ options to gtk_box_pack_start() while reading the next section.  Try
 resizing the window, and observe the behavior.
 
 Just as a side note, there is another useful define for
-gtk_window_new() - GTK_WINDOW_DIALOG. This interacts with the window
-manager a little differently and should be used for transient windows.
+gtk_window_new() - <tt/GTK_WINDOW_DIALOG/. This interacts with the
+window manager a little differently and should be used for transient
+windows.
 
 <!-- ***************************************************************** -->
-<sect>Packing Widgets
+<sect>Packing Widgets <label id="sec_packing_widgets">
 <!-- ***************************************************************** -->
 <p>
 When creating an application, you'll want to put more than one widget
@@ -990,12 +991,12 @@ versa. You may use any combination of boxes inside or beside other
 boxes to create the desired effect.
 
 To create a new horizontal box, we use a call to gtk_hbox_new(), and
-for vertical boxes, gtk_vbox_new().The gtk_box_pack_start() and
+for vertical boxes, gtk_vbox_new(). The gtk_box_pack_start() and
 gtk_box_pack_end() functions are used to place objects inside of these
 containers. The gtk_box_pack_start() function will start at the top
 and work its way down in a vbox, and pack left to right in an hbox.
 gtk_box_pack_end() will do the opposite, packing from bottom to top in
-a vbox, and right to left in an hbox. Using these functions allow us
+a vbox, and right to left in an hbox. Using these functions allows us
 to right justify or left justify our widgets and may be mixed in any
 way to achieve the desired effect. We will use gtk_box_pack_start() in
 most of our examples. An object may be another container or a
@@ -1003,9 +1004,9 @@ widget. In fact, many widgets are actually containers themselves,
 including the button, but we usually only use a label inside a button.
 
 By using these calls, GTK knows where you want to place your widgets
-so it can do automatic resizing and other nifty things. There's also a
-number of options as to how your widgets should be packed. As you can
-imagine, this method gives us a quite a bit of flexibility when
+so it can do automatic resizing and other nifty things. There are also
+a number of options as to how your widgets should be packed. As you
+can imagine, this method gives us a quite a bit of flexibility when
 placing and creating widgets.
 
 <!-- ----------------------------------------------------------------- -->
@@ -1013,7 +1014,7 @@ placing and creating widgets.
 <p>
 Because of this flexibility, packing boxes in GTK can be confusing at
 first. There are a lot of options, and it's not immediately obvious how
-they all fit together. In the end however, there are basically five
+they all fit together. In the end, however, there are basically five
 different styles.
 
 <? <CENTER> >
@@ -1026,7 +1027,7 @@ HEIGHT="235" ALT="Box Packing Example Image">
 Each line contains one horizontal box (hbox) with several buttons. The
 call to gtk_box_pack is shorthand for the call to pack each of the
 buttons into the hbox. Each of the buttons is packed into the hbox the
-same way (i.e. same arguments to the gtk_box_pack_start() function).
+same way (i.e., same arguments to the gtk_box_pack_start() function).
 
 This is the declaration of the gtk_box_pack_start function.
 
@@ -1045,7 +1046,7 @@ we'll be packing buttons into boxes.
 The expand argument to gtk_box_pack_start() and gtk_box_pack_end()
 controls whether the widgets are laid out in the box to fill in all
 the extra space in the box so the box is expanded to fill the area
-alloted to it (TRUE).  Or the box is shrunk to just fit the widgets
+allotted to it (TRUE); or the box is shrunk to just fit the widgets
 (FALSE). Setting expand to FALSE will allow you to do right and left
 justification of your widgets.  Otherwise, they will all expand to fit
 into the box, and the same effect could be achieved by using only one
@@ -1065,9 +1066,9 @@ GtkWidget *gtk_hbox_new (gint homogeneous,
 
 The homogeneous argument to gtk_hbox_new (and the same for
 gtk_vbox_new) controls whether each object in the box has the same
-size (i.e. the same width in an hbox, or the same height in a
-vbox). If it is set, the expand argument to the gtk_box_pack routines
-is always turned on.
+size (i.e., the same width in an hbox, or the same height in a
+vbox). If it is set, the gtk_box_pack routines function essentially
+as if the <tt/expand/ argument was always turned on.
 
 What's the difference between spacing (set when the box is created)
 and padding (set when elements are packed)? Spacing is added between
@@ -1083,7 +1084,7 @@ ALT="Box Packing Example Image">
 <? </CENTER> >
 
 Here is the code used to create the above images. I've commented it
-fairly heavily so hopefully you won't have any problems following
+fairly heavily so I hope you won't have any problems following
 it. Compile it yourself and play with it.
 
 <!-- ----------------------------------------------------------------- -->
@@ -1183,8 +1184,8 @@ int main( int   argc,
     /* Create our window */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-    /* You should always remember to connect the destroy signal to the
-     * main window. This is very important for proper intuitive
+    /* You should always remember to connect the delete_event signal
+     * to the main window. This is very important for proper intuitive
      * behavior */
     gtk_signal_connect (GTK_OBJECT (window), "delete_event",
 			GTK_SIGNAL_FUNC (delete_event), NULL);
@@ -1234,8 +1235,8 @@ int main( int   argc,
 	 * but they are quite simple. */
 	separator = gtk_hseparator_new ();
 	
-	/* Cack the separator into the vbox. Remember each of these
-	 * widgets are being packed into a vbox, so they'll be stacked
+        /* Pack the separator into the vbox. Remember each of these
+         * widgets is being packed into a vbox, so they'll be stacked
 	 * vertically. */
 	gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 5);
 	gtk_widget_show (separator);
@@ -1349,9 +1350,7 @@ int main( int   argc,
     /* Our quit button. */
     button = gtk_button_new_with_label ("Quit");
     
-    /* Setup the signal to destroy the window. Remember that this will send
-     * the "destroy" signal to the window which will be caught by our signal
-     * handler as defined above. */
+    /* Setup the signal to terminate the program when the button is clicked */
     gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			       GTK_SIGNAL_FUNC (gtk_main_quit),
 			       GTK_OBJECT (window));
@@ -1394,7 +1393,7 @@ extremely useful in certain situations.
 Using tables, we create a grid that we can place widgets in. The
 widgets may take up as many spaces as we specify.
 
-The first thing to look at of course, is the gtk_table_new function:
+The first thing to look at, of course, is the gtk_table_new function:
 
 <tscreen><verb>
 GtkWidget *gtk_table_new( gint rows,
@@ -1440,7 +1439,7 @@ void gtk_table_attach( GtkTable  *table,
                        gint       ypadding );
 </verb></tscreen>				       
 
-Where the first argument ("table") is the table you've created and the
+The first argument ("table") is the table you've created and the
 second ("child") the widget you wish to place in the table.
 
 The left and right attach arguments specify where to place the widget,
@@ -1458,18 +1457,18 @@ be bitwise OR'ed together to allow multiple options.
 
 These options are:
 <itemize>
-<item>GTK_FILL - If the table box is larger than the widget, and
-GTK_FILL is specified, the widget will expand to use all the room
+<item><tt/GTK_FILL/ - If the table box is larger than the widget, and
+<tt/GTK_FILL/ is specified, the widget will expand to use all the room
 available.
 
-<item>GTK_SHRINK - If the table widget was allocated less space then
-was requested (usually by the user resizing the window), then the
+<item><tt/GTK_SHRINK/ - If the table widget was allocated less space
+then was requested (usually by the user resizing the window), then the
 widgets would normally just be pushed off the bottom of the window and
-disappear. If GTK_SHRINK is specified, the widgets will shrink with
-the table.
+disappear. If <tt/GTK_SHRINK/ is specified, the widgets will shrink
+with the table.
 
-<item>GTK_EXPAND - This will cause the table to expand to use up any
-remaining space in the window.
+<item><tt/GTK_EXPAND/ - This will cause the table to expand to use up
+any remaining space in the window.
 </itemize>
 
 Padding is just like in boxes, creating a clear area around the widget
@@ -1486,12 +1485,12 @@ void gtk_table_attach_defaults( GtkTable  *table,
                                 gint       bottom_attach );
 </verb></tscreen>
 
-The X and Y options default to GTK_FILL | GTK_EXPAND, and X and Y
+The X and Y options default to <tt/GTK_FILL | GTK_EXPAND/, and X and Y
 padding are set to 0. The rest of the arguments are identical to the
 previous function.
 
 We also have gtk_table_set_row_spacing() and
-gtk_table_set_col_spacing().  This places spacing between the rows at
+gtk_table_set_col_spacing(). These places spacing between the rows at
 the specified row or column.
 
 <tscreen><verb>
@@ -1678,27 +1677,27 @@ until the window itself is shown using the gtk_widget_show() function.
 <!-- ----------------------------------------------------------------- -->
 <sect1> Casting
 <p>
-You'll notice as you go on, that GTK uses a type casting system. This
+You'll notice as you go on that GTK uses a type casting system. This
 is always done using macros that both test the ability to cast the
 given item, and perform the cast. Some common ones you will see are:
 
-<itemize>
-<item> GTK_WIDGET(widget)
-<item> GTK_OBJECT(object)
-<item> GTK_SIGNAL_FUNC(function)
-<item> GTK_CONTAINER(container)
-<item> GTK_WINDOW(window)
-<item> GTK_BOX(box)
-</itemize>
+<tscreen><verb>
+  GTK_WIDGET(widget)
+  GTK_OBJECT(object)
+  GTK_SIGNAL_FUNC(function)
+  GTK_CONTAINER(container)
+  GTK_WINDOW(window)
+  GTK_BOX(box)
+</verb></tscreen>
 
 These are all used to cast arguments in functions. You'll see them in the
 examples, and can usually tell when to use them simply by looking at the
 function's declaration.
 
 As you can see below in the class hierarchy, all GtkWidgets are
-derived from the GtkObject base class. This means you can use a widget
+derived from the Object base class. This means you can use a widget
 in any place the function asks for an object - simply use the
-GTK_OBJECT() macro.
+<tt/GTK_OBJECT()/ macro.
 
 For example:
 
@@ -1711,9 +1710,10 @@ This casts the button into an object, and provides a cast for the
 function pointer to the callback.
 
 Many widgets are also containers. If you look in the class hierarchy
-below, you'll notice that many widgets derive from the GtkContainer
-class. Any one of these widgets may be used with the GTK_CONTAINER
-macro to pass them to functions that ask for containers.
+below, you'll notice that many widgets derive from the Container
+class. Any one of these widgets may be used with the
+<tt/GTK_CONTAINER/ macro to pass them to functions that ask for
+containers.
 
 Unfortunately, these macros are not extensively covered in the
 tutorial, but I recommend taking a look through the GTK header
@@ -1825,7 +1825,7 @@ For your reference, here is the class hierarchy tree used to implement widgets.
 <sect1>Widgets Without Windows
 <p>
 The following widgets do not have an associated window. If you want to
-capture events, you'll have to use the GtkEventBox. See the section on
+capture events, you'll have to use the EventBox. See the section on
 the <ref id="sec_EventBox" name="EventBox"> widget.
 
 <tscreen><verb>
@@ -1989,14 +1989,35 @@ int main( int   argc,
 The xpm_label_box function could be used to pack xpm's and labels into
 any widget that can be a container.
 
+Notice in <tt/xpm_label_box/ how there is a call to
+<tt/gtk_widget_get_style/. Every widget has a "style", consisting of
+foreground and background colors for a variety of situations, font
+selection, and other graphics data relevant to a widget. These style
+values are defaulted in each widget, and are required by many GDK
+function calls, such as <tt/gdk_pixmap_create_from_xpm/, which here is
+given the "normal" background color. The style data of widgets may
+be customized, using <ref id="sec_gtkrc_files" name="GTK's rc files">.
+
+Also notice the call to <tt/gtk_widget_realize/ after setting the
+window's border width. This function uses GDK to create the X
+windows related to the widget. The function is automatically called
+when you invoke <tt/gtk_widget_show/ for a widget, and so has not been
+shown in earlier examples. But the call to
+<tt/gdk_pixmap_create_from_xpm/ requires that its <tt/window/ argument
+refer to a real X window, so it is necessary to realize the widget
+before this GDK call.
+
 The Button widget has the following signals:
 
 <itemize>
-<item> pressed
-<item> released
-<item> clicked
-<item> enter
-<item> leave
+<item><tt/pressed/ - emitted when pointer button is pressed within
+Button widget
+<item><tt/released/ - emitted when pointer button is released within
+Button widget
+<item><tt/clicked/ - emitted when pointer button is pressed and then
+released within Button widget
+<item><tt/enter/ - emitted when pointer enters Button widget
+<item><tt/leave/ - emitted when pointer leaves Button widget
 </itemize>
 
 <!-- ----------------------------------------------------------------- -->
@@ -2024,13 +2045,15 @@ calls. The first creates a blank toggle button, and the second, a
 button with a label widget already packed into it.
 
 To retrieve the state of the toggle widget, including radio and check
-buttons, we use a GTK macro as shown in our example below. This tests
-the state of the toggle in a callback. The signal of interest emitted
-to us by toggle buttons (the toggle button, check button, and radio
-button widgets), is the "toggled" signal. To check the state of these
-buttons, set up a signal handler to catch the toggled signal, and use
-the macro to determine its state. The callback will look something
-like:
+buttons, we use a construct as shown in our example below. This tests
+the state of the toggle, by accessing the <tt/active/ field of the
+toggle widget's structure, after first using the
+<tt/GTK_TOGGLE_BUTTON/ macro to cast the widget pointer into a toggle
+widget pointer. The signal of interest to us emitted by toggle
+buttons (the toggle button, check button, and radio button widgets) is
+the "toggled" signal. To check the state of these buttons, set up a
+signal handler to catch the toggled signal, and access the structure
+to determine its state. The callback will look something like:
 
 <tscreen><verb>
 void toggle_button_callback (GtkWidget *widget, gpointer data)
@@ -2045,6 +2068,9 @@ void toggle_button_callback (GtkWidget *widget, gpointer data)
     }
 }
 </verb></tscreen>
+
+To force the state of a toggle button, and its children, the radio and
+check buttons, use this function:
 
 <tscreen><verb>
 void gtk_toggle_button_set_active( GtkToggleButton *toggle_button,
@@ -2070,7 +2096,7 @@ This simply toggles the button, and emits the "toggled" signal.
 <!-- ----------------------------------------------------------------- -->
 <sect1> Check Buttons
 <p>
-Check buttons inherent many properties and functions from the the
+Check buttons inherit many properties and functions from the the
 toggle buttons above, but look a little different. Rather than being
 buttons with text inside them, they are small squares with the text to
 the right of them. These are often used for toggling options on and
@@ -2119,9 +2145,9 @@ GSList *gtk_radio_button_group( GtkRadioButton *radio_button );
 The important thing to remember is that gtk_radio_button_group must be
 called for each new button added to the group, with the previous
 button passed in as an argument. The result is then passed into the
-call to gtk_radio_button_new or gtk_radio_button_new_with_label. This
-allows a chain of buttons to be established. The example below should
-make this clear.
+next call to gtk_radio_button_new or
+gtk_radio_button_new_with_label. This allows a chain of buttons to be
+established. The example below should make this clear.
 
 You can shorten this slightly by using the following syntax, which
 removes the need for a variable to hold the list of buttons. This form
@@ -2142,7 +2168,11 @@ void gtk_toggle_button_set_active( GtkToggleButton *toggle_button,
 </verb></tscreen>
 
 This is described in the section on toggle buttons, and works in
-exactly the same way.
+exactly the same way.  Once the radio buttons are grouped together,
+only one of the group may be active at a time. If the user clicks on
+one radio button, and then on another, the first radio button will
+first emit a "toggled" signal (to report becoming inactive), and then
+the second will emit its "toggled" signal (to report becoming active).
 
 The following example creates a radio button group with three buttons.
 
@@ -2237,7 +2267,7 @@ int main( int   argc,
 <sect> Adjustments <label id="sec_Adjustment">
 <!-- ***************************************************************** -->
 <p>
-GTK+ has various widgets that can be visually adjusted by the user
+GTK has various widgets that can be visually adjusted by the user
 using the mouse or the keyboard, such as the range widgets, described
 in the <ref id="sec_Range_Widgets" name="Range Widgets">
 section. There are also a few widgets that display some adjustable
@@ -2258,20 +2288,28 @@ their own signal handlers to translate between the output of one
 widget's signal and the "input" of another's adjustment setting
 function.
 
-GTK+ solves this problem using the GtkAdjustment object, which is a
-way for widgets to store and pass adjustment information in an
-abstract and flexible form. The most obvious use of GtkAdjustment is
-to store the configuration parameters and values of range widgets,
-such as scrollbars and scale controls. However, since GtkAdjustments
-are derived from GtkObject, they have some special powers beyond those
-of normal data structures. Most importantly, they can emit signals,
-just like widgets, and these signals can be used not only to allow
-your program to react to user input on adjustable widgets, but also to
+GTK solves this problem using the Adjustment object, which is not a
+widget but a way for widgets to store and pass adjustment information
+in an abstract and flexible form. The most obvious use of Adjustment
+is to store the configuration parameters and values of range widgets,
+such as scrollbars and scale controls. However, since Adjustments are
+derived from Object, they have some special powers beyond those of
+normal data structures. Most importantly, they can emit signals, just
+like widgets, and these signals can be used not only to allow your
+program to react to user input on adjustable widgets, but also to
 propagate adjustment values transparently between adjustable widgets.
+
+You will see how adjustments fit in when you see the other widgets
+that incorporate them:
+<ref id="sec_ProgressBar" name="Progress Bars">,
+<ref id="sec_Viewports" name="Viewports">,
+<ref id="sec_ScrolledWindow" name="Scrolled Windows">, and others.
 
 <sect1> Creating an Adjustment
 <p>
-You create an adjustment using:
+Many of the widgets which use adjustment objects do so automatically,
+but some cases will be shown in later examples where you may need to
+create one yourself. You create an adjustment using:
 
 <tscreen><verb>
 GtkObject *gtk_adjustment_new( gfloat value,
@@ -2360,22 +2398,22 @@ struct _GtkAdjustment
 </verb></tscreen>
 
 The first thing you should know is that there aren't any handy-dandy
-macros or accessor functions for getting the <tt/value/ out of a
-GtkAdjustment, so you'll have to (horror of horrors) do it like a
+macros or accessor functions for getting the <tt/value/ out of an
+Adjustment, so you'll have to (horror of horrors) do it like a
 <em/real/ C programmer.  Don't worry - the <tt>GTK_ADJUSTMENT
-(Object)</tt> macro does run-time type checking (as do all the GTK+
+(Object)</tt> macro does run-time type checking (as do all the GTK
 type-casting macros, actually).
 
 Since, when you set the <tt/value/ of an adjustment, you generally
 want the change to be reflected by every widget that uses this
-adjustment, GTK+ provides this convenience function to do this:
+adjustment, GTK provides this convenience function to do this:
 
 <tscreen><verb>
 void gtk_adjustment_set_value( GtkAdjustment *adjustment,
                                gfloat         value );
 </verb></tscreen>
 
-As mentioned earlier, GtkAdjustment is a subclass of GtkObject just
+As mentioned earlier, Adjustment is a subclass of Object just
 like all the various widgets, and thus it is able to emit signals.
 This is, of course, why updates happen automagically when you share an
 adjustment object between a scrollbar and another adjustable widget;
@@ -2387,7 +2425,7 @@ of this signal in <tt/struct _GtkAdjustmentClass/:
   void (* value_changed) (GtkAdjustment *adjustment);
 </verb></tscreen>
 
-The various widgets that use the GtkAdjustment object will emit this
+The various widgets that use the Adjustment object will emit this
 signal on an adjustment whenever they change its value. This happens
 both when user input causes the slider to move on a range widget, as
 well as when the program explicitly changes the value with
@@ -2426,7 +2464,7 @@ adjustment.
 
 You probably won't ever need to attach a handler to this signal,
 unless you're writing a new type of range widget.  However, if you
-change any of the values in a GtkAdjustment directly, you should emit
+change any of the values in a Adjustment directly, you should emit
 this signal on it to reconfigure whatever widgets are using it, like
 this:
 
@@ -2483,7 +2521,7 @@ GtkWidget *gtk_vscrollbar_new( GtkAdjustment *adjustment );
 
 and that's about it (if you don't believe me, look in the header
 files!).  The <tt/adjustment/ argument can either be a pointer to an
-existing GtkAdjustment, or NULL, in which case one will be created for
+existing Adjustment, or NULL, in which case one will be created for
 you. Specifying NULL might actually be useful in this case, if you
 wish to pass the newly-created adjustment to the constructor function
 of some other widget which will configure it for you, such as a text
@@ -2496,7 +2534,7 @@ widget.
 Scale widgets are used to allow the user to visually select and
 manipulate a value within a specific range. You might want to use a
 scale widget, for example, to adjust the magnification level on a
-zoomed preview of a picture, or to control the brightness of a colour,
+zoomed preview of a picture, or to control the brightness of a color,
 or to specify the number of minutes of inactivity before a screensaver
 takes over the screen.
 
@@ -2505,7 +2543,7 @@ takes over the screen.
 <p>
 As with scrollbars, there are separate widget types for horizontal and
 vertical scale widgets. (Most programmers seem to favour horizontal
-scale widgets). Since they work essentially the same way, there's no
+scale widgets.) Since they work essentially the same way, there's no
 need to treat them separately here. The following functions, defined
 in <tt>&lt;gtk/gtkvscale.h&gt;</tt> and
 <tt>&lt;gtk/gtkhscale.h&gt;</tt>, create vertical and horizontal scale
@@ -2521,14 +2559,14 @@ GtkWidget *gtk_hscale_new( GtkAdjustment *adjustment );
 
 The <tt/adjustment/ argument can either be an adjustment which has
 already been created with <tt/gtk_adjustment_new()/, or <tt/NULL/, in
-which case, an anonymous GtkAdjustment is created with all of its
+which case, an anonymous Adjustment is created with all of its
 values set to <tt/0.0/ (which isn't very useful in this case). In
 order to avoid confusing yourself, you probably want to create your
 adjustment with a <tt/page_size/ of <tt/0.0/ so that its <tt/upper/
 value actually corresponds to the highest value the user can select.
 (If you're <em/already/ thoroughly confused, read the section on <ref
 id="sec_Adjustment" name="Adjustments"> again for an explanation of
-what exactly adjustments do and how to create and manipulate them).
+what exactly adjustments do and how to create and manipulate them.)
 
 <!-- ----------------------------------------------------------------- -->
 <sect2> Functions and Signals (well, functions, at least)
@@ -2574,26 +2612,30 @@ The argument <tt/pos/ is of type <tt>GtkPositionType</tt>, which is
 defined in <tt>&lt;gtk/gtkenums.h&gt;</tt>, and can take one of the
 following values:
 
-<itemize>
-<item> GTK_POS_LEFT
-<item> GTK_POS_RIGHT
-<item> GTK_POS_TOP
-<item> GTK_POS_BOTTOM
-</itemize>
+<tscreen><verb>
+  GTK_POS_LEFT
+  GTK_POS_RIGHT
+  GTK_POS_TOP
+  GTK_POS_BOTTOM
+</verb></tscreen>
 
-If you position the value on the "side" of the trough (e.g. on the top
-or bottom of a horizontal scale widget), then it will follow the
+If you position the value on the "side" of the trough (e.g., on the
+top or bottom of a horizontal scale widget), then it will follow the
 slider up and down the trough.
 
 All the preceding functions are defined in
-<tt>&lt;gtk/gtkscale.h&gt;</tt>.
+<tt>&lt;gtk/gtkscale.h&gt;</tt>. The header files for all GTK widgets
+are automatically included when you include
+<tt>&lt;gtk/gtk.h&gt;</tt>. But you should look over the header files
+of all widgets that interest you,
+
 </sect2>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1> Common Functions <label id="sec_Range_Functions">
+<sect1> Common Range Functions <label id="sec_Range_Functions">
 <p>
-The GtkRange widget class is fairly complicated internally, but, like
+The Range widget class is fairly complicated internally, but, like
 all the "base class" widgets, most of its complexity is only
 interesting if you want to hack on it. Also, almost all of the
 functions and signals it defines are only really used in writing
@@ -2606,21 +2648,21 @@ widgets.
 <p>
 The "update policy" of a range widget defines at what points during
 user interaction it will change the <tt/value/ field of its
-GtkAdjustment and emit the "value_changed" signal on this
-GtkAdjustment. The update policies, defined in
+Adjustment and emit the "value_changed" signal on this
+Adjustment. The update policies, defined in
 <tt>&lt;gtk/gtkenums.h&gt;</tt> as type <tt>enum GtkUpdateType</tt>,
 are:
 
 <itemize>
 <item>GTK_UPDATE_POLICY_CONTINUOUS - This is the default. The
-"value_changed" signal is emitted continuously, i.e. whenever the
+"value_changed" signal is emitted continuously, i.e., whenever the
 slider is moved by even the tiniest amount.
 </item>
 <item>GTK_UPDATE_POLICY_DISCONTINUOUS - The "value_changed" signal is
 only emitted once the slider has stopped moving and the user has
 released the mouse button.
 </item>
-<item>GTK_UPDATE_POLICY_DELAYED - The "value_change" signal is emitted
+<item>GTK_UPDATE_POLICY_DELAYED - The "value_changed" signal is emitted
 when the user releases the mouse button, or if the slider stops moving
 for a short period of time.
 </item>
@@ -2653,12 +2695,12 @@ which <tt/range/ is connected.
 <tt/gtk_range_set_adjustment()/ does absolutely nothing if you pass it
 the adjustment that <tt/range/ is already using, regardless of whether
 you changed any of its fields or not. If you pass it a new
-GtkAdjustment, it will unreference the old one if it exists (possibly
+Adjustment, it will unreference the old one if it exists (possibly
 destroying it), connect the appropriate signals to the new one, and
 call the private function <tt/gtk_range_adjustment_changed()/, which
 will (or at least, is supposed to...) recalculate the size and/or
 position of the slider and redraw if necessary. As mentioned in the
-section on adjustments, if you wish to reuse the same GtkAdjustment,
+section on adjustments, if you wish to reuse the same Adjustment,
 when you modify its values directly, you should emit the "changed"
 signal on it, like this:
 
@@ -2671,7 +2713,7 @@ gtk_signal_emit_by_name (GTK_OBJECT (adjustment), "changed");
 <!-- ----------------------------------------------------------------- -->
 <sect1> Key and Mouse bindings
 <p>
-All of the GTK+ range widgets react to mouse clicks in more or less
+All of the GTK range widgets react to mouse clicks in more or less
 the same way. Clicking button-1 in the trough will cause its
 adjustment's <tt/page_increment/ to be added or subtracted from its
 <tt/value/, and the slider to be moved accordingly. Clicking mouse
@@ -2680,9 +2722,10 @@ button was clicked. Clicking any button on a scrollbar's arrows will
 cause its adjustment's value to change <tt/step_increment/ at a time.
 
 It may take a little while to get used to, but by default, scrollbars
-as well as scale widgets can take the keyboard focus in GTK+. If you
+as well as scale widgets can take the keyboard focus in GTK. If you
 think your users will find this too confusing, you can always disable
-this by unsetting the GTK_CAN_FOCUS flag on the scrollbar, like this:
+this by unsetting the <tt/GTK_CAN_FOCUS/ flag on the scrollbar, like
+this:
 
 <tscreen><verb>
 GTK_WIDGET_UNSET_FLAGS (scrollbar, GTK_CAN_FOCUS);
@@ -2704,9 +2747,9 @@ arrows move the slider up and down by <tt/step_increment/, while
 <tt/Page Up/ and <tt/Page Down/ move it by <tt/page_increment/.
 
 The user can also move the slider all the way to one end or the other
-of the trough using the keyboard. With the GtkVScale widget, this is
+of the trough using the keyboard. With the VScale widget, this is
 done with the <tt/Home/ and <tt/End/ keys, whereas with the
-GtkVScrollbar widget, this is done by typing <tt>Control-Page Up</tt>
+VScrollbar widget, this is done by typing <tt>Control-Page Up</tt>
 and <tt>Control-Page Down</tt>.
 
 <!-- ----------------------------------------------------------------- -->
@@ -2715,9 +2758,9 @@ and <tt>Control-Page Down</tt>.
 The left and right arrow keys work as you might expect in these
 widgets, moving the slider back and forth by <tt/step_increment/. The
 <tt/Home/ and <tt/End/ keys move the slider to the ends of the trough.
-For the GtkHScale widget, moving the slider by <tt/page_increment/ is
+For the HScale widget, moving the slider by <tt/page_increment/ is
 accomplished with <tt>Control-Left</tt> and <tt>Control-Right</tt>,
-while for GtkHScrollbar, it's done with <tt>Control-Home</tt> and
+while for HScrollbar, it's done with <tt>Control-Home</tt> and
 <tt>Control-End</tt>.
 </sect2>
 </sect1>
@@ -2729,7 +2772,7 @@ This example is a somewhat modified version of the "range controls"
 test from <tt/testgtk.c/. It basically puts up a window with three
 range widgets all connected to the same adjustment, and a couple of
 controls for adjusting some of the parameters mentioned above and in
-the seciton on adjustments, so you can see how they affect the way
+the section on adjustments, so you can see how they affect the way
 these widgets work for the user.
 
 <tscreen><verb>
@@ -2837,7 +2880,7 @@ void create_range_controls( void )
     gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
     gtk_widget_show (box2);
 
-    /* calue, lower, upper, step_increment, page_increment, page_size */
+    /* value, lower, upper, step_increment, page_increment, page_size */
     /* Note that the page_size value only makes a difference for
      * scrollbar widgets, and the highest value you'll get is actually
      * (upper - page_size). */
@@ -2953,7 +2996,7 @@ void create_range_controls( void )
     box2 = gtk_hbox_new (FALSE, 10);
     gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
   
-    /* A GtkHScale widget for adjusting the number of digits on the
+    /* An HScale widget for adjusting the number of digits on the
      * sample scales. */
     label = gtk_label_new ("Scale Digits:");
     gtk_box_pack_start (GTK_BOX (box2), label, FALSE, FALSE, 0);
@@ -2973,7 +3016,7 @@ void create_range_controls( void )
     box2 = gtk_hbox_new (FALSE, 10);
     gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
   
-    /* And, one last GtkHScale widget for adjusting the page size of the
+    /* And, one last HScale widget for adjusting the page size of the
      * scrollbar. */
     label = gtk_label_new ("Scrollbar Page Size:");
     gtk_box_pack_start (GTK_BOX (box2), label, FALSE, FALSE, 0);
@@ -3025,6 +3068,13 @@ int main( int   argc,
 
 /* example-end */
 </verb></tscreen>
+
+You will notice that the program does not call <tt/gtk_signal_connect/
+for the "delete_event", but only for the "destroy" signal. This will
+still perform the desired function, because an unhandled
+"delete_event" will result in a "destroy" signal being given to the
+window.
+
 </sect1>
 </sect>
 
@@ -3037,8 +3087,8 @@ int main( int   argc,
 <p>
 Labels are used a lot in GTK, and are relatively simple. Labels emit
 no signals as they do not have an associated X window. If you need to
-catch signals, or do clipping, use the <ref id="sec_EventBox"
-name="EventBox"> widget.
+catch signals, or do clipping, place it inside a <ref id="sec_EventBox"
+name="EventBox"> widget or a Button widget.
 
 To create a new label, use:
 
@@ -3046,7 +3096,7 @@ To create a new label, use:
 GtkWidget *gtk_label_new( char *str );
 </verb></tscreen>
 
-Where the sole argument is the string you wish the label to display.
+The sole argument is the string you wish the label to display.
 
 To change the label's text after creation, use the function:
 
@@ -3055,8 +3105,8 @@ void gtk_label_set_text( GtkLabel *label,
                          char     *str );
 </verb></tscreen>
 
-Where the first argument is the label you created previously (cast
-using the GTK_LABEL() macro), and the second is the new string.
+The first argument is the label you created previously (cast
+using the <tt/GTK_LABEL()/ macro), and the second is the new string.
 
 The space needed for the new string will be automatically adjusted if
 needed. You can produce multi-line labels by putting line breaks in
@@ -3069,7 +3119,7 @@ void gtk_label_get( GtkLabel  *label,
                     char     **str );
 </verb></tscreen>
 
-Where the first argument is the label you've created, and the second,
+The first argument is the label you've created, and the second,
 the return for the string. Do not free the return string, as it is
 used internally by GTK.
 
@@ -3081,12 +3131,12 @@ void gtk_label_set_justify( GtkLabel         *label,
 </verb></tscreen>
 
 Values for <tt/jtype/ are:
-<itemize>
-<item> GTK_JUSTIFY_LEFT
-<item> GTK_JUSTIFY_RIGHT
-<item> GTK_JUSTIFY_CENTER (the default)
-<item> GTK_JUSTIFY_FILL
-</itemize>
+<tscreen><verb>
+  GTK_JUSTIFY_LEFT
+  GTK_JUSTIFY_RIGHT
+  GTK_JUSTIFY_CENTER (the default)
+  GTK_JUSTIFY_FILL
+</verb></tscreen>
 
 The label widget is also capable of line wrapping the text
 automatically. This can be activated using:
@@ -3096,7 +3146,7 @@ void gtk_label_set_line_wrap (GtkLabel *label,
                               gboolean  wrap);
 </verb></tscreen>
 
-The <//wrap/ argument takes a TRUE or FALSE value.
+The <tt/wrap/ argument takes a TRUE or FALSE value.
 
 If you want your label underlined, then you can set a pattern on the
 label:
@@ -3110,7 +3160,7 @@ The pattern argument indicates how the underlining should look. It
 consists of a string of underscore and space characters. An underscore
 indicates that the corresponding character in the label should be
 underlined. For example, the string <verb/"__     __"/ would underline the
-first two characters and eigth and ninth characters.
+first two characters and eight and ninth characters.
 
 Below is a short example to illustrate these functions. This example
 makes use of the Frame widget to better demonstrate the label
@@ -3192,7 +3242,7 @@ int main( int   argc,
   label = gtk_label_new ("This is an example of a line-wrapped, filled label.  " \
 			 "It should be taking "\
 			 "up the entire              width allocated to it.  " \
-			 "Here is a seneance to prove "\
+			 "Here is a sentence to prove "\
 			 "my point.  Here is another sentence. "\
 			 "Here comes the sun, do de do de do.\n"\
 			 "    This is a new paragraph.\n"\
@@ -3227,7 +3277,8 @@ int main( int   argc,
 <p>
 The Arrow widget draws an arrowhead, facing in a number of possible
 directions and having a number of possible styles. It can be very
-useful when placed on a button in many applications.
+useful when placed on a button in many applications. Like the Label
+widget, it emits no signals.
 
 There are only two functions for manipulating an Arrow widget:
 
@@ -3245,22 +3296,22 @@ appearance. The second allows these values to be altered
 retrospectively. The <tt/arrow_type/ argument may take one of the
 following values:
 
-<itemize>
-<item> GTK_ARROW_UP
-<item> GTK_ARROW_DOWN
-<item> GTK_ARROW_LEFT
-<item> GTK_ARROW_RIGHT
-</itemize>
+<tscreen><verb>
+  GTK_ARROW_UP
+  GTK_ARROW_DOWN
+  GTK_ARROW_LEFT
+  GTK_ARROW_RIGHT
+</verb></tscreen>
 
 These values obviously indicate the direction in which the arrow will
 point. The <tt/shadow_type/ argument may take one of these values:
 
-<itemize>
-<item> GTK_SHADOW_IN
-<item> GTK_SHADOW_OUT (the default)
-<item> GTK_SHADOW_ETCHED_IN
-<item> GTK_SHADOW_ETCHED_OUT
-</itemize>
+<tscreen><verb>
+  GTK_SHADOW_IN
+  GTK_SHADOW_OUT (the default)
+  GTK_SHADOW_ETCHED_IN
+  GTK_SHADOW_ETCHED_OUT
+</verb></tscreen>
 
 Here's a brief example to illustrate their use.
 
@@ -3342,7 +3393,7 @@ int main( int   argc,
 </verb></tscreen>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>The Tooltips Widget
+<sect1>The Tooltips Object
 <p>
 These are the little text strings that pop up when you leave your
 pointer over a button or other widget for a few seconds. They are easy
@@ -3350,11 +3401,11 @@ to use, so I will just explain them without giving an example. If you
 want to see some code, take a look at the testgtk.c program
 distributed with GTK.
 
-Widgets that do not receieve events (widgets that do not have their
+Widgets that do not receive events (widgets that do not have their
 own window) will not work with tooltips.
 
 The first call you will use creates a new tooltip. You only need to do
-this once for a set of tooltips as the <tt/GtkTooltip/ object this
+this once for a set of tooltips as the <tt/GtkTooltips/ object this
 function returns can be used to create multiple tooltips.
 
 <tscreen><verb>
@@ -3439,7 +3490,7 @@ pretty easy to use, as you will see with the code below. But first
 lets start out with the calls to create a new progress bar.
 
 There are two ways to create a progress bar, one simple that takes
-no arguments, and one that takes a GtkAdjustment object as an
+no arguments, and one that takes an Adjustment object as an
 argument. If the former is used, the progress bar creates its own
 adjustment object.
 
@@ -3467,7 +3518,7 @@ void gtk_progress_bar_update( GtkProgressBar *pbar,
 </verb></tscreen>
 
 The first argument is the progress bar you wish to operate on, and the
-second argument is the amount 'completed', meaning the amount the
+second argument is the amount "completed", meaning the amount the
 progress bar has been filled from 0-100%. This is passed to the
 function as a real number ranging from 0 to 1.
 
@@ -3483,18 +3534,18 @@ void gtk_progress_bar_set_orientation( GtkProgressBar *pbar,
                                        GtkProgressBarOrientation orientation );
 </verb></tscreen>
 
-Where the <tt/orientation/ argument may take one of the following
+The <tt/orientation/ argument may take one of the following
 values to indicate the direction in which the progress bar moves:
 
-<itemize>
-<item> GTK_PROGRESS_LEFT_TO_RIGHT
-<item> GTK_PROGRESS_RIGHT_TO_LEFT
-<item> GTK_PROGRESS_BOTTOM_TO_TOP
-<item> GTK_PROGRESS_TOP_TO_BOTTOM
-</itemize>
+<tscreen><verb>
+  GTK_PROGRESS_LEFT_TO_RIGHT
+  GTK_PROGRESS_RIGHT_TO_LEFT
+  GTK_PROGRESS_BOTTOM_TO_TOP
+  GTK_PROGRESS_TOP_TO_BOTTOM
+</verb></tscreen>
 
 When used as a measure of how far a process has progressed, the
-GtkProgressBar can be set to display its value in either a continuous
+ProgressBar can be set to display its value in either a continuous
 or discrete mode. In continuous mode, the progress bar is updated for
 each value. In discrete mode, the progress bar is updated in a number
 of discrete blocks. The number of blocks is also configurable.
@@ -3508,10 +3559,10 @@ void gtk_progress_bar_set_bar_style( GtkProgressBar      *pbar,
 
 The <tt/style/ parameter can take one of two values:
 
-<itemize>
-<item>GTK_PROGRESS_CONTINUOUS
-<item>GTK_PROGRESS_DISCRETE
-</itemize>
+<tscreen><verb>
+  GTK_PROGRESS_CONTINUOUS
+  GTK_PROGRESS_DISCRETE
+</verb></tscreen>
 
 The number of discrete blocks can be set by calling
 
@@ -3524,8 +3575,8 @@ As well as indicating the amount of progress that has occured, the
 progress bar may be set to just indicate that there is some
 activity. This can be useful in situations where progress cannot be
 measured against a value range. Activity mode is not effected by the
-bar style that is described above, and overrides it.This mode is
-selected by the following function.
+bar style that is described above, and overrides it. This mode is
+either TRUE or FALSE, and is selected by the following function.
 
 <tscreen><verb>
 void gtk_progress_set_activity_mode( GtkProgress *progress,
@@ -3579,8 +3630,8 @@ void gtk_progress_set_text_alignment( GtkProgress   *progress,
                                       gfloat         y_align );
 </verb></tscreen>
 
-The <tt/x_align/ and <tt/y_align/ arguments take a value between 0.0
-and 1.0. Their value indicates the position of the text string within
+The <tt/x_align/ and <tt/y_align/ arguments take values between 0.0
+and 1.0. Their values indicate the position of the text string within
 the trough. Values of 0.0 for both would place the string in the top
 left hand corner; values of 0.5 (the default) centres the text, and
 values of 1.0 places the text in the lower right hand corner.
@@ -3760,7 +3811,7 @@ int main( int   argc,
     gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 5);
     gtk_widget_show(align);
 
-    /* Create a GtkAdjusment object to hold the range of the
+    /* Create a Adjusment object to hold the range of the
      * progress bar */
     adj = (GtkAdjustment *) gtk_adjustment_new (0, 1, 150, 0, 0, 0);
 
@@ -3883,7 +3934,8 @@ struct GtkDialog
 </verb></tscreen>
 
 So you see, it simply creates a window, and then packs a vbox into the
-top, then a separator, and then an hbox for the "action_area".
+top, which contains a separator and then an hbox called the
+"action_area".
 
 The Dialog widget can be used for pop-up messages to the user, and
 other similar tasks. It is really basic, and there is only one
@@ -3901,7 +3953,7 @@ So to create a new dialog box, use,
 </verb></tscreen>
 
 This will create the dialog box, and it is now up to you to use it.
-you could pack a button in the action_area by doing something like this:
+You could pack a button in the action_area by doing something like this:
 
 <tscreen><verb>
     button = ...
@@ -3927,7 +3979,7 @@ you could attach a different signal to each of the buttons and perform
 the operation the user selects.
 
 If the simple functionality provided by the default vertical and
-horizontal boxes in the two areas does't give you enough control for
+horizontal boxes in the two areas doesn't give you enough control for
 your application, then you can simply pack another layout widget into
 the boxes provided. For example, you could pack a table into the
 vertical box.
@@ -3936,14 +3988,14 @@ vertical box.
 <sect1> Pixmaps <label id="sec_Pixmaps">
 <p>
 Pixmaps are data structures that contain pictures. These pictures can
-be used in various places, but most visibly as icons on the X-Windows
+be used in various places, but most commonly as icons on the X
 desktop, or as cursors.
 
 A pixmap which only has 2 colors is called a bitmap, and there are a
 few additional routines for handling this common special case.
 
-To understand pixmaps, it would help to understand how X-windows
-works. Under X-windows, applications do not need to be running on the
+To understand pixmaps, it would help to understand how X window
+system works. Under X, applications do not need to be running on the
 same computer that is interacting with the user. Instead, the various
 applications, called "clients", all communicate with a program which
 displays the graphics and handles the keyboard and mouse. This
@@ -3953,9 +4005,9 @@ a network, it's important to keep some information with the X server.
 Pixmaps, for example, are stored in the memory of the X server. This
 means that once pixmap values are set, they don't need to keep getting
 transmitted over the network; instead a command is sent to "display
-pixmap number XYZ here." Even if you aren't using X-windows with GTK
+pixmap number XYZ here." Even if you aren't using X with GTK
 currently, using constructs such as Pixmaps will make your programs
-work acceptably under X-windows.
+work acceptably under X.
 
 To use pixmaps in GTK, we must first build a GdkPixmap structure using
 routines from the GDK layer. Pixmaps can either be created from
@@ -3971,8 +4023,8 @@ GdkPixmap *gdk_bitmap_create_from_data( GdkWindow *window,
 
 This routine is used to create a single-plane pixmap (2 colors) from
 data in memory. Each bit of the data represents whether that pixel is
-off or on. Width and height are in pixels. The GdkWindow pointer is
-to the current window, since a pixmap resources are meaningful only in
+off or on. Width and height are in pixels. The GdkWindow pointer is to
+the current window, since a pixmap's resources are meaningful only in
 the context of the screen where it is to be displayed.
 
 <tscreen><verb>
@@ -4042,7 +4094,10 @@ static const char * xpm_data[] = {
 
 When we're done using a pixmap and not likely to reuse it again soon,
 it is a good idea to release the resource using
-gdk_pixmap_unref(). Pixmaps should be considered a precious resource.
+gdk_pixmap_unref(). Pixmaps should be considered a precious resource,
+because they take up memory in the end-user's X server process. Even
+though the X client you write may run on a powerful "server" computer,
+the user may be running the X server on a small personal computer.
 
 Once we've created a pixmap, we can display it as a GTK widget. We
 must create a GTK pixmap widget to contain the GDK pixmap. This is
@@ -4391,15 +4446,15 @@ GtkWidget *gtk_vruler_new( void );    /* vertical ruler   */
 </verb></tscreen>
 
 Once a ruler is created, we can define the unit of measurement. Units
-of measure for rulers can be GTK_PIXELS, GTK_INCHES or
-GTK_CENTIMETERS. This is set using
+of measure for rulers can be<tt/GTK_PIXELS/, <tt/GTK_INCHES/ or
+<tt/GTK_CENTIMETERS/. This is set using
 
 <tscreen><verb>
 void gtk_ruler_set_metric( GtkRuler      *ruler,
                            GtkMetricType  metric );
 </verb></tscreen>
 
-The default measure is GTK_PIXELS.
+The default measure is <tt/GTK_PIXELS/.
 
 <tscreen><verb>
     gtk_ruler_set_metric( GTK_RULER(ruler), GTK_PIXELS );
@@ -4545,7 +4600,7 @@ current message will re-display the previous text message.
 
 In order to allow different parts of an application to use the same
 statusbar to display messages, the statusbar widget issues Context
-Identifiers which are used to identify different 'users'. The message
+Identifiers which are used to identify different "users". The message
 on top of the stack is the one displayed, no matter what context it is
 in. Messages are stacked in last-in-first-out order, not context
 identifier order.
@@ -4756,7 +4811,7 @@ void gtk_entry_select_region( GtkEntry *entry,
 If we want to catch when the user has entered text, we can connect to
 the <tt/activate/ or <tt/changed/ signal. Activate is raised when the
 user hits the enter key within the Entry widget. Changed is raised
-when the text changes at all, e.g. for every character entered or
+when the text changes at all, e.g., for every character entered or
 removed.
 
 The following code is an example of using an Entry widget.
@@ -4861,13 +4916,13 @@ int main (int argc, char *argv[])
 The Spin Button widget is generally used to allow the user to select a
 value from a range of numeric values. It consists of a text
 entry box with up and down arrow buttons attached to the
-side. Selecting one of the buttons causes the value to 'spin' up and
+side. Selecting one of the buttons causes the value to "spin" up and
 down the range of possible values. The entry box may also be edited
 directly to enter a specific value.
 
 The Spin Button allows the value to have zero or a number of decimal
 places and to be incremented/decremented in configurable steps. The
-action of holding down one of the buttons optionally result in an
+action of holding down one of the buttons optionally results in an
 acceleration of change in the value according to how long it is
 depressed.
 
@@ -4974,43 +5029,43 @@ void gtk_spin_button_spin( GtkSpinButton *spin_button,
 
 The <tt/direction/ parameter can take one of the following values:
 
-<itemize>
-<item> GTK_SPIN_STEP_FORWARD
-<item> GTK_SPIN_STEP_BACKWARD
-<item> GTK_SPIN_PAGE_FORWARD
-<item> GTK_SPIN_PAGE_BACKWARD
-<item> GTK_SPIN_HOME
-<item> GTK_SPIN_END
-<item> GTK_SPIN_USER_DEFINED
-</itemize>
+<tscreen><verb>
+  GTK_SPIN_STEP_FORWARD
+  GTK_SPIN_STEP_BACKWARD
+  GTK_SPIN_PAGE_FORWARD
+  GTK_SPIN_PAGE_BACKWARD
+  GTK_SPIN_HOME
+  GTK_SPIN_END
+  GTK_SPIN_USER_DEFINED
+</verb></tscreen>
 
 This function packs in quite a bit of functionality, which I will
 attempt to clearly explain. Many of these settings use values from the
 Adjustment object that is associated with a Spin Button.
 
-GTK_SPIN_STEP_FORWARD and GTK_SPIN_STEP_BACKWARD change the value of
-the Spin Button by the amount specified by <tt/increment/, unless
-<tt/increment/ is equal to 0, in which case the value is changed by
-the value of <tt/step_increment/ in theAdjustment.
+<tt/GTK_SPIN_STEP_FORWARD/ and <tt/GTK_SPIN_STEP_BACKWARD/ change the
+value of the Spin Button by the amount specified by <tt/increment/,
+unless <tt/increment/ is equal to 0, in which case the value is
+changed by the value of <tt/step_increment/ in theAdjustment.
 
-GTK_SPIN_PAGE_FORWARD and GTK_SPIN_PAGE_BACKWARD simply alter the value of
-the Spin Button by <tt/increment/.
+<tt/GTK_SPIN_PAGE_FORWARD/ and <tt/GTK_SPIN_PAGE_BACKWARD/ simply
+alter the value of the Spin Button by <tt/increment/.
 
-GTK_SPIN_HOME sets the value of the Spin Button to the bottom of the
+<tt/GTK_SPIN_HOME/ sets the value of the Spin Button to the bottom of
+the Adjustments range.
+
+<tt/GTK_SPIN_END/ sets the value of the Spin Button to the top of the
 Adjustments range.
 
-GTK_SPIN_END sets the value of the Spin Button to the top of the
-Adjustments range.
-
-GTK_SPIN_USER_DEFINED simply alters the value of the Spin Button by
-the specified amount.
+<tt/GTK_SPIN_USER_DEFINED/ simply alters the value of the Spin Button
+by the specified amount.
 
 We move away from functions for setting and retreving the range attributes
 of the Spin Button now, and move onto functions that effect the
 appearance and behaviour of the Spin Button widget itself.
 
 The first of these functions is used to constrain the text box of the
-Spin Button such that it may only contain a numric value. This
+Spin Button such that it may only contain a numeric value. This
 prevents a user from typing anything other than numeric values into
 the text box of a Spin Button:
 
@@ -5047,20 +5102,21 @@ void gtk_spin_button_set_update_policy( GtkSpinButton  *spin_button,
 
 <!-- TODO: find out what this does - TRG -->
 
-The possible values of <tt/policy/ are either GTK_UPDATE_ALWAYS or
-GTK_UPDATE_IF_VALID.
+The possible values of <tt/policy/ are either <tt/GTK_UPDATE_ALWAYS/ or
+<tt/GTK_UPDATE_IF_VALID/.
+ 
 
 These policies affect the behavior of a Spin Button when parsing
-inserted text and syncing it's value with the values of the
+inserted text and syncing its value with the values of the
 Adjustment.
 
-In the case of GTK_UPDATE_IF_VALID the Spin Button only value gets
-changed if the text input is a numeric value that
-is within the range specified by the Adjustment. Otherwise
-the text is reset to the current value.
+In the case of <tt/GTK_UPDATE_IF_VALID/ the Spin Button only value
+gets changed if the text input is a numeric value that is within the
+range specified by the Adjustment. Otherwise the text is reset to the
+current value.
 
-In case of GTK_UPDATE_ALWAYS we ignore errors while converting text
-into a numeric value.
+In case of <tt/GTK_UPDATE_ALWAYS/ we ignore errors while converting
+text into a numeric value.
 
 The appearance of the buttons used in a Spin Button can be changed
 using the following function:
@@ -5072,12 +5128,12 @@ void gtk_spin_button_set_shadow_type( GtkSpinButton *spin_button,
 
 As usual, the <tt/shadow_type/ can be one of:
 
-<itemize>
-<item> GTK_SHADOW_IN
-<item> GTK_SHADOW_OUT
-<item> GTK_SHADOW_ETCHED_IN
-<item> GTK_SHADOW_ETCHED_OUT
-</itemize>
+<tscreen><verb>
+  GTK_SHADOW_IN
+  GTK_SHADOW_OUT
+  GTK_SHADOW_ETCHED_IN
+  GTK_SHADOW_ETCHED_OUT
+</verb></tscreen>
 
 Finally, you can explicitly request that a Spin Button update itself:
 
@@ -5320,7 +5376,7 @@ int main( int   argc,
 <sect1>Combo Box
 <p>
 The combo box is another fairly simple widget that is really just a
-collection of other widgets. From the users point of view, the widget
+collection of other widgets. From the user's point of view, the widget
 consists of a text entry box and a pull down menu from which the user
 can select one of a set of predefined entries. Alternatively, the user
 can type a different option directly into the text box.
@@ -5339,7 +5395,7 @@ struct _GtkCombo {
 	...  };
 </verb></tscreen>
 
-As you can see, the Combo Box has two principle parts that you really
+As you can see, the Combo Box has two principal parts that you really
 care about: an entry and a list.
 
 First off, to create a combo box, use:
@@ -5364,7 +5420,7 @@ void gtk_combo_set_popdown_strings( GtkCombo *combo,
 
 Before you can do this, you have to assemble a GList of the strings
 that you want. GList is a linked list implementation that is part of
-<ref id="sec_glib" name="glib">, a library supporing GTK. For the
+<ref id="sec_glib" name="GLib">, a library supporing GTK. For the
 moment, the quick and dirty explanation is that you need to set up a
 GList pointer, set it equal to NULL, then append strings to it with
 
@@ -5425,25 +5481,25 @@ list, except that it wraps around the values in the list, completely
 disabling the use of the up and down arrow keys for changing focus.
 
 <tt/gtk_combo_set_case_sensitive()/ toggles whether or not GTK
-searches for entries in a case sensitive manner. This is used when
-the Combo widget is asked to find a value from the list using the
-current entry in the text box. This completion can be performed in
-eother a case sensitive or insensitive manner, depending upon the use
-of this function. The Combo widget can also simply complete the
-current entry if the user presses the key combination MOD-1 and
-'Tab'. MOD-1 is often mapped to the 'Alt' key. Note, however that some
-Window managers also use this key combination, which will override
-it's use within GTK.
+searches for entries in a case sensitive manner. This is used when the
+Combo widget is asked to find a value from the list using the current
+entry in the text box. This completion can be performed in either a
+case sensitive or insensitive manner, depending upon the use of this
+function. The Combo widget can also simply complete the current entry
+if the user presses the key combination MOD-1 and "Tab". MOD-1 is
+often mapped to the "Alt" key, by the <tt/xmodmap/ utility. Note,
+however that some window managers also use this key combination, which
+will override its use within GTK.
 
 Now that we have a combo box, tailored to look and act how we want it,
 all that remains is being able to get data from the combo box. This is
-relatively straight forward. The majority of the time, all you are
+relatively straightforward. The majority of the time, all you are
 going to care about getting data from is the entry. The entry is
-accessed simply by GTK_ENTRY(GTK_COMBO(combo)->entry). The two
-principle things that you are going to want to do with it are attach
-to the activate signal, which indicates that the user has pressed the
-Return or Enter key,and read the text. The first is accomplished
-using something like:
+accessed simply by <tt>GTK_ENTRY(GTK_COMBO(combo)->entry)</tt>. The
+two principal things that you are going to want to do with it are
+attach to the activate signal, which indicates that the user has
+pressed the Return or Enter key, and read the text. The first is
+accomplished using something like:
 
 <tscreen><verb>
     gtk_signal_connect(GTK_OBJECT(GTK_COMB(combo)->entry), "activate",
@@ -5475,10 +5531,10 @@ that will disable the activate signal on the entry widget in the combo
 box. Personally, I can't think of why you'd want to use it, but it
 does exist.
 
-<!-- There are also a function to set the string on a particular item, void
+<!-- There is also a function to set the string on a particular item, void
 gtk_combo_set_item_string(GtkCombo *combo, GtkItem *item, const gchar
 *item_value), but this requires that you have a pointer to the
-appropriate GtkItem.  Frankly, I have no idea how to do that.
+appropriate Item. Frankly, I have no idea how to do that.
 -->
 
 <!-- ----------------------------------------------------------------- -->
@@ -5506,8 +5562,8 @@ GtkWidget *gtk_color_selection_new( void );
 </verb></tscreen>
 	
 You'll probably not be using this constructor directly. It creates an
-orphan GtkColorSelection widget which you'll have to parent
-yourself. The GtkColorSelection widget inherits from the GtkVBox
+orphan ColorSelection widget which you'll have to parent
+yourself. The ColorSelection widget inherits from the VBox
 widget.
 
 <tscreen><verb> 
@@ -5515,12 +5571,12 @@ GtkWidget *gtk_color_selection_dialog_new( const gchar *title );
 </verb></tscreen>
 
 This is the most common color selection constructor. It creates a
-GtkColorSelectionDialog, which inherits from a GtkDialog. It consists
-of a GtkFrame containing a GtkColorSelection widget, a GtkHSeparator
-and a GtkHBox with three buttons, "Ok", "Cancel" and "Help". You can
-reach these buttons by accessing the "ok_button", "cancel_button" and
-"help_button" widgets in the GtkColorSelectionDialog structure,
-(i.e. GTK_COLOR_SELECTION_DIALOG(colorseldialog)->ok_button).
+ColorSelectionDialog. It consists of a Frame containing a
+ColorSelection widget, an HSeparator and an HBox with three buttons,
+"Ok", "Cancel" and "Help". You can reach these buttons by accessing
+the "ok_button", "cancel_button" and "help_button" widgets in the
+ColorSelectionDialog structure,
+(i.e., <tt>GTK_COLOR_SELECTION_DIALOG(colorseldialog)->ok_button</tt>)).
 
 <tscreen><verb>
 void gtk_color_selection_set_update_policy( GtkColorSelection *colorsel, 
@@ -5528,11 +5584,11 @@ void gtk_color_selection_set_update_policy( GtkColorSelection *colorsel,
 </verb></tscreen>
 
 This function sets the update policy. The default policy is
-GTK_UPDATE_CONTINUOUS which means that the current color is updated
-continuously when the user drags the sliders or presses the mouse and
-drags in the hue-saturation wheel or value bar. If you experience
-performance problems, you may want to set the policy to
-GTK_UPDATE_DISCONTINUOUS or GTK_UPDATE_DELAYED.
+<tt/GTK_UPDATE_CONTINUOUS/ which means that the current color is
+updated continuously when the user drags the sliders or presses the
+mouse and drags in the hue-saturation wheel or value bar. If you
+experience performance problems, you may want to set the policy to
+<tt/GTK_UPDATE_DISCONTINUOUS/ or <tt/GTK_UPDATE_DELAYED/.
 
 <tscreen><verb>
 void gtk_color_selection_set_opacity( GtkColorSelection *colorsel,
@@ -5582,7 +5638,7 @@ is passed in the value at position 4.
 -->
 
 Here's a simple example demonstrating the use of the
-GtkColorSelectionDialog. The program displays a window containing a
+ColorSelectionDialog. The program displays a window containing a
 drawing area. Clicking on it opens a color selection dialog, and
 changing the color in the color selection dialog changes the
 background color.
@@ -5652,7 +5708,7 @@ gint area_event (GtkWidget *widget, GdkEvent *event, gpointer client_data)
 
       colorseldlg = gtk_color_selection_dialog_new("Select background color");
 
-      /* Get the GtkColorSelection widget */
+      /* Get the ColorSelection widget */
 
       colorsel = GTK_COLOR_SELECTION_DIALOG(colorseldlg)->colorsel;
 
@@ -5761,17 +5817,17 @@ gchar *gtk_file_selection_get_filename( GtkFileSelection *filesel );
 There are also pointers to the widgets contained within the file 
 selection widget. These are:
 
-<itemize>
-<item>dir_list
-<item>file_list
-<item>selection_entry
-<item>selection_text
-<item>main_vbox
-<item>ok_button
-<item>cancel_button
-<item>help_button
-</itemize>
-
+<tscreen><verb>
+  dir_list
+  file_list
+  selection_entry
+  selection_text
+  main_vbox
+  ok_button
+  cancel_button
+  help_button
+</verb></tscreen>
+ 
 Most likely you will want to use the ok_button, cancel_button, and
 help_button pointers in signaling their use.
 
@@ -5839,7 +5895,7 @@ int main (int argc, char *argv[])
 Some GTK widgets don't have associated X windows, so they just draw on
 their parents. Because of this, they cannot receive events and if they
 are incorrectly sized, they don't clip so you can get messy
-overwriting etc. If you require more from these widgets, the EventBox
+overwriting, etc. If you require more from these widgets, the EventBox
 is for you.
 
 At first glance, the EventBox widget might appear to be totally
@@ -6057,7 +6113,7 @@ int main( int   argc,
     button = gtk_button_new_with_label ("Press me");
   
     /* When the button receives the "clicked" signal, it will call the
-     * function move_button() passing it the Fixed Containter as its
+     * function move_button() passing it the Fixed Container as its
      * argument. */
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			GTK_SIGNAL_FUNC (move_button), fixed);
@@ -6085,11 +6141,11 @@ int main( int   argc,
 <p>
 The Layout container is similar to the Fixed container except that it
 implements an infinite (where infinity is less than 2^32) scrolling
-area. Xwindows has a limitation where windows can be at most 32767
-pixels wide or tall. The Layout container gets around this limitation
-by doing some exotic stuff using window and bit gravities, so that you
-can have smooth scrolling even when you have many child widgets in
-your scrolling area.
+area. The X window system has a limitation where windows can be at
+most 32767 pixels wide or tall. The Layout container gets around this
+limitation by doing some exotic stuff using window and bit gravities,
+so that you can have smooth scrolling even when you have many child
+widgets in your scrolling area.
 
 A Layout container is created using:
 
@@ -6099,7 +6155,7 @@ GtkWidget *gtk_layout_new( GtkAdjustment *hadjustment,
 </verb></tscreen>
 
 As you can see, you can optionally specify the Adjustment objects that
-the Layout widget will use for it's scrolling.
+the Layout widget will use for its scrolling.
 
 You can add and move widgets in the Layout container using the
 following two functions:
@@ -6200,13 +6256,13 @@ void gtk_frame_set_shadow_type( GtkFrame      *frame,
 </verb></tscreen>
 
 The <tt/type/ argument can take one of the following values:
-<itemize>
-<item> GTK_SHADOW_NONE
-<item> GTK_SHADOW_IN
-<item> GTK_SHADOW_OUT
-<item> GTK_SHADOW_ETCHED_IN (the default)
-<item> GTK_SHADOW_ETCHED_OUT
-</itemize>
+<tscreen><verb>
+  GTK_SHADOW_NONE
+  GTK_SHADOW_IN
+  GTK_SHADOW_OUT
+  GTK_SHADOW_ETCHED_IN (the default)
+  GTK_SHADOW_ETCHED_OUT
+</verb></tscreen>
 
 The following code example illustrates the use of the Frame widget.
 
@@ -6243,7 +6299,7 @@ int main( int   argc,
   frame = gtk_frame_new(NULL);
   gtk_container_add(GTK_CONTAINER(window), frame);
 
-  /* Set the frames label */
+  /* Set the frame's label */
   gtk_frame_set_label( GTK_FRAME(frame), "GTK Frame Widget" );
 
   /* Align the label at the right of the frame */
@@ -6562,7 +6618,7 @@ main (int argc, char *argv[])
 <p>
 It is unlikely that you will ever need to use the Viewport widget
 directly. You are much more likely to use the
-<ref id="sec_ScrolledWindows" name="Scrolled Windows"> widget which
+<ref id="sec_ScrolledWindow" name="Scrolled Window"> widget which
 itself uses the Viewport.
 
 A viewport widget allows you to place a larger widget within it such
@@ -6579,7 +6635,7 @@ GtkWidget *gtk_viewport_new( GtkAdjustment *hadjustment,
 
 As you can see you can specify the horizontal and vertical Adjustments
 that the widget is to use when you create the widget. It will create
-it's own if you pass NULL as the value of the arguments.
+its own if you pass NULL as the value of the arguments.
 
 You can get and set the adjustments after the widget has been created
 using the following four functions:
@@ -6604,20 +6660,21 @@ void gtk_viewport_set_shadow_type( GtkViewport   *viewport,
 </verb></tscreen>
 
 Possible values for the <tt/type/ parameter are:
-<itemize>
-<item> GTK_SHADOW_NONE,
-<item> GTK_SHADOW_IN,
-<item> GTK_SHADOW_OUT,
-<item> GTK_SHADOW_ETCHED_IN,
-<item> GTK_SHADOW_ETCHED_OUT
-</itemize>
-
+<tscreen><verb>
+  GTK_SHADOW_NONE,
+  GTK_SHADOW_IN,
+  GTK_SHADOW_OUT,
+  GTK_SHADOW_ETCHED_IN,
+  GTK_SHADOW_ETCHED_OUT
+</verb></tscreen>
+ 
 <!-- ----------------------------------------------------------------- -->
-<sect1>Scrolled Windows <label id="sec_ScrolledWindows">
+<sect1>Scrolled Windows <label id="sec_ScrolledWindow">
 <p>
-Scrolled windows are used to create a scrollable area inside a real
-window.  You may insert any type of widget into a scrolled window, and
-it will be accessible regardless of the size by using the scrollbars.
+Scrolled windows are used to create a scrollable area with another
+widget inside it. You may insert any type of widget into a scrolled
+window, and it will be accessible regardless of the size by using the
+scrollbars.
 
 The following function is used to create a new scrolled window.
 
@@ -6641,10 +6698,10 @@ The first argument is the scrolled window you wish to change. The second
 sets the policy for the horizontal scrollbar, and the third the policy for 
 the vertical scrollbar.
 
-The policy may be one of GTK_POLICY_AUTOMATIC, or GTK_POLICY_ALWAYS.
-GTK_POLICY_AUTOMATIC will automatically decide whether you need
-scrollbars, whereas GTK_POLICY_ALWAYS will always leave the scrollbars
-there.
+The policy may be one of <tt/GTK_POLICY_AUTOMATIC/ or
+<tt/GTK_POLICY_ALWAYS/. <tt/GTK_POLICY_AUTOMATIC/ will automatically
+decide whether you need scrollbars, whereas <tt/GTK_POLICY_ALWAYS/
+will always leave the scrollbars there.
 
 You can then place your object into the scrolled window using the
 following function.
@@ -6654,8 +6711,9 @@ void gtk_scrolled_window_add_with_viewport( GtkScrolledWindow *scrolled_window,
                                             GtkWidget         *child);
 </verb></tscreen>
 
-Here is a simple example that packs 100 toggle buttons into a scrolled
-window.  I've only commented on the parts that may be new to you.
+Here is a simple example that packs a table eith 100 toggle buttons
+into a scrolled window. I've only commented on the parts that may be
+new to you.
 
 <tscreen><verb>
 /* example-start scrolledwin scrolledwin.c */
@@ -6679,9 +6737,7 @@ int main (int argc, char *argv[])
     gtk_init (&amp;argc, &amp;argv);
     
     /* Create a new dialog window for the scrolled window to be
-     * packed into. A dialog is just like a normal window except it has a 
-     * vbox and a horizontal separator packed into it. It's just a shortcut
-     * for creating dialogs */
+     * packed into.  */
     window = gtk_dialog_new ();
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			(GtkSignalFunc) destroy, NULL);
@@ -6773,7 +6829,7 @@ GtkWidget *gtk_vbutton_box_new( void );
 </verb></tscreen>
 
 The only attributes pertaining to button boxes effect how the buttons
-are layed out. You can change the spacing between the buttons with:
+are laid out. You can change the spacing between the buttons with:
 
 <tscreen><verb>
 void gtk_hbutton_box_set_spacing_default( gint spacing );
@@ -6789,7 +6845,7 @@ gint gtk_hbutton_box_get_spacing_default( void );
 gint gtk_vbutton_box_get_spacing_default( void );
 </verb></tscreen>
 
-The second attribute that we can access effects the layour of the
+The second attribute that we can access effects the layout of the
 buttons within the box. It is set using one of:
 
 <tscreen><verb>
@@ -6800,13 +6856,13 @@ void gtk_vbutton_box_set_layout_default( GtkButtonBoxStyle layout );
 
 The <tt/layout/ argument can take one of the following values:
 
-<itemize>
-<item> GTK_BUTTONBOX_DEFAULT_STYLE
-<item> GTK_BUTTONBOX_SPREAD
-<item> GTK_BUTTONBOX_EDGE
-<item> GTK_BUTTONBOX_START
-<item> GTK_BUTTONBOX_END
-</itemize>
+<tscreen><verb>
+  GTK_BUTTONBOX_DEFAULT_STYLE
+  GTK_BUTTONBOX_SPREAD
+  GTK_BUTTONBOX_EDGE
+  GTK_BUTTONBOX_START
+  GTK_BUTTONBOX_END
+</verb></tscreen>
 
 The current layout setting can be retrieved using:
 
@@ -6958,7 +7014,7 @@ simplify customization of their look and layout. Typically a toolbar
 consists of buttons with icons, labels and tooltips, but any other
 widget can also be put inside a toolbar. Finally, items can be
 arranged horizontally or vertically and buttons can be displayed with
-icons, labels or both.
+icons, labels, or both.
 
 Creating a toolbar is (as one may already suspect) done with the
 following function:
@@ -6987,10 +7043,11 @@ The style applies to all the buttons created with the `item' functions
 (not to buttons inserted into toolbar as separate widgets).
 
 After creating a toolbar one can append, prepend and insert items
-(that means simple buttons) into the toolbar. To describe an item we
-need a label text, a tooltip text, a private tooltip text, an icon for
-the button and a callback function for it. For example, to append or
-prepend an item you may use the following functions:
+(that means simple text strings) or elements (that means any widget
+types) into the toolbar. To describe an item we need a label text, a
+tooltip text, a private tooltip text, an icon for the button and a
+callback function for it. For example, to append or prepend an item
+you may use the following functions:
 
 <tscreen><verb>
 GtkWidget *gtk_toolbar_append_item( GtkToolbar    *toolbar,
@@ -7047,7 +7104,7 @@ void gtk_toolbar_set_space_size( GtkToolbar *toolbar,
 </verb></tscreen>
 
 If it's required, the orientation of a toolbar and its style can be
-changed `on the fly' using the following functions:
+changed "on the fly" using the following functions:
 
 <tscreen><verb>
 void gtk_toolbar_set_orientation( GtkToolbar     *toolbar,
@@ -7060,10 +7117,11 @@ void gtk_toolbar_set_tooltips( GtkToolbar *toolbar,
                                gint        enable );
 </verb></tscreen>
 
-Where <tt/orientation/ is one of GTK_ORIENTATION_HORIZONTAL or
-GTK_ORIENTATION_VERTICAL. The <tt/style/ is used to set appearance of
-the toolbar items by using one of GTK_TOOLBAR_ICONS, GTK_TOOLBAR_TEXT
-or GTK_TOOLBAR_BOTH.
+Where <tt/orientation/ is one of <tt/GTK_ORIENTATION_HORIZONTAL/ or
+<tt/GTK_ORIENTATION_VERTICAL/. The <tt/style/ is used to set
+appearance of the toolbar items by using one of
+<tt/GTK_TOOLBAR_ICONS/, <tt/GTK_TOOLBAR_TEXT/, or
+<tt/GTK_TOOLBAR_BOTH/.
 
 To show some other things that can be done with a toolbar, let's take
 the following program (we'll interrupt the listing with some
@@ -7169,7 +7227,7 @@ int main (int argc, char *argv[])
 </verb></tscreen>
 
 The above should be similar to any other GTK application. Just
-initialization of GTK, creating the window etc.. There is only one
+initialization of GTK, creating the window, etc. There is only one
 thing that probably needs some explanation: a handle box. A handle box
 is just another box that can be used to pack widgets in to. The
 difference between it and typical boxes is that it can be detached
@@ -7195,7 +7253,7 @@ together quite often.
       &amp;dialog->style->white, gtk_xpm );
 </verb></tscreen>
 
-Well, what we do above is just a straight-forward initialization of
+Well, what we do above is just a straightforward initialization of
 the toolbar widget and creation of a GDK pixmap with its mask. If you
 want to know something more about using pixmaps, refer to GDK
 documentation or to the <ref id="sec_Pixmaps" name="Pixmaps"> section
@@ -7241,11 +7299,11 @@ widget, so that we can work with it in the normal way.
 
 Here we begin creating a radio buttons group. To do this we use
 gtk_toolbar_append_element.  In fact, using this function one can also
-add simple items or even spaces (type = GTK_TOOLBAR_CHILD_SPACE or
-GTK_TOOLBAR_CHILD_BUTTON). In the above case we start creating a radio
-group. In creating other radio buttons for this group a pointer to the
-previous button in the group is required, so that a list of buttons
-can be easily constructed (see the section on <ref
++add simple items or even spaces (type = <tt/GTK_TOOLBAR_CHILD_SPACE/
+or +<tt/GTK_TOOLBAR_CHILD_BUTTON/). In the above case we start
+creating a radio group. In creating other radio buttons for this group
+a pointer to the previous button in the group is required, so that a
+list of buttons can be easily constructed (see the section on <ref
 id="sec_Radio_Buttons" name="Radio Buttons"> earlier in this
 tutorial).
 
@@ -7279,8 +7337,9 @@ tutorial).
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(both_button),TRUE);
 </verb></tscreen>
 
-In the end we have set the state of one of the buttons manually (otherwise
-they all stay in active state, preventing us from switching between them).
+In the end we have to set the state of one of the buttons manually
+(otherwise they all stay in active state, preventing us from switching
+between them).
 
 <tscreen><verb>
   /* here we have just a simple toggle button */
@@ -7388,11 +7447,11 @@ static char * gtk_xpm[] = {
 <!-- ----------------------------------------------------------------- -->
 <sect1> Notebooks
 <p>
-The NoteBook Widget is a collection of 'pages' that overlap each
-other, each page contains different information. This widget has
-become more common lately in GUI programming, and it is a good way to
-show blocks of similar information that warrant separation in their
-display.
+The NoteBook Widget is a collection of "pages" that overlap each
+other, each page contains different information with only one page
+visible at a time. This widget has become more common lately in GUI
+programming, and it is a good way to show blocks of similar
+information that warrant separation in their display.
 
 The first function call you will need to know, as you can probably
 guess by now, is used to create a new notebook widget.
@@ -7405,7 +7464,7 @@ Once the notebook has been created, there are a number of functions
 that operate on the notebook widget. Let's look at them individually.
 
 The first one we will look at is how to position the page indicators.
-These page indicators or 'tabs' as they are referred to, can be
+These page indicators or "tabs" as they are referred to, can be
 positioned in four ways: top, bottom, left, or right.
 
 <tscreen><verb>
@@ -7413,16 +7472,16 @@ void gtk_notebook_set_tab_pos( GtkNotebook     *notebook,
                                GtkPositionType  pos );
 </verb></tscreen>
 
-GtkPostionType will be one of the following, which are pretty self
+GtkPositionType will be one of the following, which are pretty self
 explanatory:
-<itemize>
-<item> GTK_POS_LEFT
-<item> GTK_POS_RIGHT
-<item> GTK_POS_TOP
-<item> GTK_POS_BOTTOM
-</itemize>
+<tscreen><verb>
+  GTK_POS_LEFT
+  GTK_POS_RIGHT
+  GTK_POS_TOP
+  GTK_POS_BOTTOM
+</verb></tscreen>
 
-GTK_POS_TOP is the default.
+<tt/GTK_POS_TOP/ is the default.
 
 Next we will look at how to add pages to the notebook. There are three
 ways to add pages to the NoteBook. Let's look at the first two
@@ -7443,7 +7502,7 @@ back of the notebook (append), or the front of the notebook (prepend).
 <tt/child/ is the widget that is placed within the notebook page, and
 <tt/tab_label/ is the label for the page being added. The <tt/child/
 widget must be created separately, and is typically a set of options
-setout witin one of the other container widgets, such as a table.
+setup witin one of the other container widgets, such as a table.
 
 The final function for adding a page to the notebook contains all of
 the properties of the previous two, but it allows you to specify what
@@ -7458,7 +7517,8 @@ void gtk_notebook_insert_page( GtkNotebook *notebook,
 
 The parameters are the same as _append_ and _prepend_ except it
 contains an extra parameter, <tt/position/.  This parameter is used to
-specify what place this page will be inserted into.
+specify what place this page will be inserted into the first page
+having position zero.
 
 Now that we know how to add a page, lets see how we can remove a page
 from the notebook.
@@ -7479,7 +7539,7 @@ gint gtk_notebook_get_current_page( GtkNotebook *notebook );
 
 These next two functions are simple calls to move the notebook page
 forward or backward. Simply provide the respective function call with
-the notebook widget you wish to operate on. Note: when the NoteBook is
+the notebook widget you wish to operate on. Note: When the NoteBook is
 currently on the last page, and gtk_notebook_next_page is called, the
 notebook will wrap back to the first page. Likewise, if the NoteBook
 is on the first page, and gtk_notebook_prev_page is called, the
@@ -7491,7 +7551,7 @@ void gtk_notebook_next_page( GtkNoteBook *notebook );
 void gtk_notebook_prev_page( GtkNoteBook *notebook );
 </verb></tscreen>
 
-This next function sets the 'active' page. If you wish the notebook to
+This next function sets the "active" page. If you wish the notebook to
 be opened to page 5 for example, you would use this function.  Without
 using this function, the notebook defaults to the first page.
 
@@ -7523,7 +7583,7 @@ void gtk_notebook_set_scrollable( GtkNotebook *notebook,
 <tt/show_tabs/, <tt/show_border/ and <tt/scrollable/ can be either
 TRUE or FALSE.
 
-Now lets look at an example, it is expanded from the testgtk.c code
+Now let's look at an example, it is expanded from the testgtk.c code
 that comes with the GTK distribution. This small program creates a
 window with a notebook and six buttons. The notebook contains 11
 pages, added in three different ways, appended, inserted, and
@@ -7604,7 +7664,7 @@ int main (int argc, char *argv[])
     gtk_table_attach_defaults(GTK_TABLE(table), notebook, 0,6,0,1);
     gtk_widget_show(notebook);
     
-    /* Lets append a bunch of pages to the notebook */
+    /* Let's append a bunch of pages to the notebook */
     for (i=0; i < 5; i++) {
 	sprintf(bufferf, "Append Frame %d", i+1);
 	sprintf(bufferl, "Page %d", i+1);
@@ -7622,7 +7682,7 @@ int main (int argc, char *argv[])
 	gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
     }
       
-    /* Now lets add a page to a specific spot */
+    /* Now let's add a page to a specific spot */
     checkbutton = gtk_check_button_new_with_label ("Check me please!");
     gtk_widget_set_usize(checkbutton, 100, 75);
     gtk_widget_show (checkbutton);
@@ -7630,7 +7690,7 @@ int main (int argc, char *argv[])
     label = gtk_label_new ("Add page");
     gtk_notebook_insert_page (GTK_NOTEBOOK (notebook), checkbutton, label, 2);
     
-    /* Now finally lets prepend pages to the notebook */
+    /* Now finally let's prepend pages to the notebook */
     for (i=0; i < 5; i++) {
 	sprintf(bufferf, "Prepend Frame %d", i+1);
 	sprintf(bufferl, "PPage %d", i+1);
@@ -7703,7 +7763,7 @@ int main (int argc, char *argv[])
 /* example-end */
 </verb></tscreen>
 
-Hopefully this helps you on your way with creating notebooks for your
+I hope this helps you on your way with creating notebooks for your
 GTK applications.
 
 <!-- ***************************************************************** -->
@@ -7712,18 +7772,18 @@ GTK applications.
 
 <!-- ----------------------------------------------------------------- -->
 <p>
-The GtkCList widget has replaced the GtkList widget (which is still
+The CList widget has replaced the List widget (which is still
 available).
 
-The GtkCList widget is a multi-column list widget that is capable of
+The CList widget is a multi-column list widget that is capable of
 handling literally thousands of rows of information. Each column can
 optionally have a title, which itself is optionally active, allowing
 us to bind a function to its selection.
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>Creating a GtkCList widget
+<sect1>Creating a CList widget
 <p>
-Creating a GtkCList is quite straightforward, once you have learned
+Creating a CList is quite straightforward, once you have learned
 about widgets in general. It provides the almost standard two ways,
 that is the hard way, and the easy way. But before we create it, there
 is one thing we should figure out beforehand: how many columns should
@@ -7739,7 +7799,7 @@ GtkWidget *gtk_clist_new_with_titles( gint   columns,
                                       gchar *titles[] );
 </verb></tscreen>
 
-The first form is very straight forward, the second might require some
+The first form is very straightforward, the second might require some
 explanation. Each column can have a title associated with it, and this
 title can be a label or a button that reacts when we click on it. If
 we use the second form, we must provide pointers to the title texts,
@@ -7747,15 +7807,15 @@ and the number of pointers should equal the number of columns
 specified. Of course we can always use the first form, and manually
 add titles later.
 
-Note: the GtkCList widget does not have its own scrollbars and should
-be placed within a GtkScrolledWindow widget if your require this
+Note: The CList widget does not have its own scrollbars and should
+be placed within a ScrolledWindow widget if your require this
 functionality. This is a change from the GTK 1.0 implementation.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Modes of operation
 <p>
 There are several attributes that can be used to alter the behaviour of
-a GtkCList. First there is
+a CList. First there is
 
 <tscreen><verb>
 void gtk_clist_set_selection_mode( GtkCList         *clist,
@@ -7763,30 +7823,30 @@ void gtk_clist_set_selection_mode( GtkCList         *clist,
 </verb></tscreen>
 
 which, as the name implies, sets the selection mode of the
-GtkCList. The first argument is the GtkCList widget, and the second
+CList. The first argument is the CList widget, and the second
 specifies the cell selection mode (they are defined in gtkenums.h). At
 the time of this writing, the following modes are available to us:
 
 <itemize>
-<item> GTK_SELECTION_SINGLE - The selection is either NULL or contains
+<item> <tt/GTK_SELECTION_SINGLE/ - The selection is either NULL or contains
 a GList pointer for a single selected item.
 
-<item> GTK_SELECTION_BROWSE - The selection is NULL if the list
+<item> <tt/GTK_SELECTION_BROWSE/ - The selection is NULL if the list
 contains no widgets or insensitive ones only, otherwise it contains a
 GList pointer for one GList structure, and therefore exactly one list
 item.
 
-<item> GTK_SELECTION_MULTIPLE - The selection is NULL if no list items
+<item> <tt/GTK_SELECTION_MULTIPLE/ - The selection is NULL if no list items
 are selected or a GList pointer for the first selected item. That in
 turn points to a GList structure for the second selected item and so
-on. This is currently the <bf>default</bf> for the GtkCList widget.
+on. This is currently the <bf>default</bf> for the CList widget.
 
-<item> GTK_SELECTION_EXTENDED - The selection is always NULL.
+<item> <tt/GTK_SELECTION_EXTENDED/ - The selection is always NULL.
 </itemize>
 
 Others might be added in later revisions of GTK.
 
-We can also define what the border of the GtkCList widget should look
+We can also define what the border of the CList widget should look
 like. It is done through
 
 <tscreen><verb>
@@ -7794,24 +7854,20 @@ void gtk_clist_set_shadow_type( GtkCList      *clist,
                                 GtkShadowType  border );
 </verb></tscreen>
 
-And the possible values for the second argument are
+The possible values for the second argument are
 
-<itemize>
-<item> GTK_SHADOW_NONE
-
-<item> GTK_SHADOW_IN
-
-<item> GTK_SHADOW_OUT
-
-<item> GTK_SHADOW_ETCHED_IN
-
-<item> GTK_SHADOW_ETCHED_OUT
-</itemize>
+<tscreen><verb>
+  GTK_SHADOW_NONE
+  GTK_SHADOW_IN
+  GTK_SHADOW_OUT
+  GTK_SHADOW_ETCHED_IN
+  GTK_SHADOW_ETCHED_OUT
+</verb></tscreen>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Working with titles
 <p>
-When you create a GtkCList widget, you will also get a set of title
+When you create a CList widget, you will also get a set of title
 buttons automatically. They live in the top of the CList window, and
 can act either as normal buttons that respond to being pressed, or
 they can be passive, in which case they are nothing more than a
@@ -7856,10 +7912,10 @@ void gtk_clist_set_column_title( GtkCList *clist,
 
 Note that only the title of one column can be set at a time, so if all
 the titles are known from the beginning, then I really suggest using
-gtk_clist_new_with_titles (as described above) to set them. Saves you
-coding time, and makes your program smaller. There are some cases
+gtk_clist_new_with_titles (as described above) to set them. It saves
+you coding time, and makes your program smaller. There are some cases
 where getting the job done the manual way is better, and that's when
-not all titles will be text. GtkCList provides us with title buttons
+not all titles will be text. CList provides us with title buttons
 that can in fact incorporate whole widgets, for example a pixmap. It's
 all done through
 
@@ -7886,23 +7942,23 @@ void gtk_clist_set_column_justification( GtkCList         *clist,
 The GtkJustification type can take the following values:
 
 <itemize>
-<item>GTK_JUSTIFY_LEFT - The text in the column will begin from the
+<item><tt/GTK_JUSTIFY_LEFT/ - The text in the column will begin from the
 left edge.
 
-<item>GTK_JUSTIFY_RIGHT - The text in the column will begin from the
+<item><tt/GTK_JUSTIFY_RIGHT/ - The text in the column will begin from the
 right edge.
 
-<item>GTK_JUSTIFY_CENTER - The text is placed in the center of the
+<item><tt/GTK_JUSTIFY_CENTER/ - The text is placed in the center of the
 column.
 
-<item>GTK_JUSTIFY_FILL - The text will use up all available space in
+<item><tt/GTK_JUSTIFY_FILL/ - The text will use up all available space in
 the column. It is normally done by inserting extra blank spaces
 between words (or between individual letters if it's a single
 word). Much in the same way as any ordinary WYSIWYG text editor.
 </itemize>
 
 The next function is a very important one, and should be standard in
-the setup of all GtkCList widgets. When the list is created, the width
+the setup of all CList widgets. When the list is created, the width
 of the various columns are chosen to match their titles, and since
 this is seldom the right width we have to set it using
 
@@ -7955,20 +8011,18 @@ GtkVisibility gtk_clist_row_is_visible( GtkCList *clist,
 
 The return value is is one of the following:
 
-<itemize>
-<item>GTK_VISIBILITY_NONE
-
-<item>GTK_VISIBILITY_PARTIAL
-
-<item>GTK_VISIBILITY_FULL
-</itemize>
+<tscreen><verb>
+  GTK_VISIBILITY_NONE
+  GTK_VISIBILITY_PARTIAL
+  GTK_VISIBILITY_FULL
+</verb></tscreen>
 
 Note that it will only tell us if a row is visible. Currently there is
 no way to determine this for a column. We can get partial information
-though, because if the return is GTK_VISIBILITY_PARTIAL, then some of
-it is hidden, but we don't know if it is the row that is being cut by
-the lower edge of the listbox, or if the row has columns that are
-outside.
+though, because if the return is <tt/GTK_VISIBILITY_PARTIAL/, then
+some of it is hidden, but we don't know if it is the row that is being
+cut by the lower edge of the listbox, or if the row has columns that
+are outside.
 
 We can also change both the foreground and background colors of a
 particular row. This is useful for marking the row selected by the
@@ -8053,10 +8107,10 @@ A cell can contain a pixmap, text or both. To set them the following
 functions are used.
 
 <tscreen><verb>
-void gtk_clist_set_text( GtkCList *clist,
-                         gint      row,
-                         gint      column,
-                         gchar    *text );
+void gtk_clist_set_text( GtkCList    *clist,
+                         gint         row,
+                         gint         column,
+                         const gchar *text );
 
 void gtk_clist_set_pixmap( GtkCList  *clist,
                            gint       row,
@@ -8073,11 +8127,11 @@ void gtk_clist_set_pixtext( GtkCList  *clist,
                             GdkBitmap *mask );
 </verb></tscreen>
 
-It's quite straightforward. All the calls have the GtkCList as the
-first argument, followed by the row and column of the cell, followed
-by the data to be set. The <tt/spacing/ argument in
-gtk_clist_set_pixtext is the number of pixels between the pixmap and
-the beginning of the text.
+It's quite straightforward. All the calls have the CList as the first
+argument, followed by the row and column of the cell, followed by the
+data to be set. The <tt/spacing/ argument in gtk_clist_set_pixtext is
+the number of pixels between the pixmap and the beginning of the
+text. In all cases the data is copied into the widget.
 
 To read back the data, we instead use
 
@@ -8102,11 +8156,13 @@ gint gtk_clist_get_pixtext( GtkCList   *clist,
                             GdkBitmap **mask );
 </verb></tscreen>
 
-It isn't necessary to read it all back in case you aren't
-interested. Any of the pointers that are meant for return values (all
-except the clist) can be NULL. So if we want to read back only the
-text from a cell that is of type pixtext, then we would do the
-following, assuming that clist, row and column already exist:
+The returned pointers are all pointers to the data stored within the
+widget, so the referenced data should not be modified or released. It
+isn't necessary to read it all back in case you aren't interested. Any
+of the pointers that are meant for return values (all except the
+clist) can be NULL. So if we want to read back only the text from a
+cell that is of type pixtext, then we would do the following, assuming
+that clist, row and column already exist:
 
 <tscreen><verb>
 gchar *mytext;
@@ -8125,17 +8181,13 @@ GtkCellType gtk_clist_get_cell_type( GtkCList *clist,
 
 which returns the type of data in a cell. The return value is one of
 
-<itemize>
-<item>GTK_CELL_EMPTY
-
-<item>GTK_CELL_TEXT
-
-<item>GTK_CELL_PIXMAP
-
-<item>GTK_CELL_PIXTEXT
-
-<item>GTK_CELL_WIDGET
-</itemize>
+<tscreen><verb>
+  GTK_CELL_EMPTY
+  GTK_CELL_TEXT
+  GTK_CELL_PIXMAP
+  GTK_CELL_PIXTEXT
+  GTK_CELL_WIDGET
+</verb></tscreen>
 
 There is also a function that will let us set the indentation, both
 vertical and horizontal, of a cell. The indentation value is of type
@@ -8152,12 +8204,12 @@ void gtk_clist_set_shift( GtkCList *clist,
 <!-- ----------------------------------------------------------------- -->
 <sect1>Storing data pointers
 <p>
-With a GtkCList it is possible to set a data pointer for a row. This
+With a CList it is possible to set a data pointer for a row. This
 pointer will not be visible for the user, but is merely a convenience
 for the programmer to associate a row with a pointer to some
 additional data.
 
-The functions should be fairly self-explanatory by now
+The functions should be fairly self-explanatory by now.
 
 <tscreen><verb>
 void gtk_clist_set_row_data( GtkCList *clist,
@@ -8204,8 +8256,8 @@ gint gtk_clist_get_selection_info( GtkCList *clist,
                                    gint     *column );
 </verb></tscreen>
 
-When we detect something of interest, it might be movement of the
-pointer, a click somewhere in the list, we can read the pointer
+When we detect something of interest (it might be movement of the
+pointer, a click somewhere in the list) we can read the pointer
 coordinates and find out where in the list the pointer is. Cumbersome?
 Luckily, there is a simpler way...
 
@@ -8213,8 +8265,8 @@ Luckily, there is a simpler way...
 <sect1>The signals that bring it together
 <p>
 As with all other widgets, there are a few signals that can be used. The
-GtkCList widget is derived from the GtkContainer widget, and so has all the
-same signals, but also the adds following:
+CList widget is derived from the Container widget, and so has all the
+same signals, but also adds the following:
 
 <itemize>
 <item>select_row - This signal will send the following information, in
@@ -8247,7 +8299,7 @@ gtk_signal_connect(GTK_OBJECT( clist),
 </verb></tscreen>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>A GtkCList example
+<sect1>A CList example
 <p>
 
 <tscreen><verb>
@@ -8356,7 +8408,7 @@ int main( int    argc,
     gtk_container_add(GTK_CONTAINER(window), vbox);
     gtk_widget_show(vbox);
     
-    /* Create the GtkCList. For this example we use 2 columns */
+    /* Create the CList. For this example we use 2 columns */
     clist = gtk_clist_new_with_titles( 2, titles);
 
     /* When a selection is made, we want to know about it. The callback
@@ -8374,7 +8426,7 @@ int main( int    argc,
      */
     gtk_clist_set_column_width (GTK_CLIST(clist), 0, 150);
 
-    /* Add the GtkCList widget to the vertical box and show it. */
+    /* Add the CList widget to the vertical box and show it. */
     gtk_box_pack_start(GTK_BOX(vbox), clist, TRUE, TRUE, 0);
     gtk_widget_show(clist);
 
@@ -8424,36 +8476,37 @@ int main( int    argc,
 <!-- ***************************************************************** -->
 <p>
 The purpose of tree widgets is to display hierarchically-organized
-data. The GtkTree widget itself is a vertical container for widgets of
-type GtkTreeItem. GtkTree itself is not terribly different from
-GtkList - both are derived directly from GtkContainer, and the
-GtkContainer methods work in the same way on GtkTree widgets as on
-GtkList widgets. The difference is that GtkTree widgets can be nested
-within other GtkTree widgets. We'll see how to do this shortly.
+data. The Tree widget itself is a vertical container for widgets of
+type TreeItem. Tree itself is not terribly different from
+CList - both are derived directly from Container, and the
+Container methods work in the same way on Tree widgets as on
+CList widgets. The difference is that Tree widgets can be nested
+within other Tree widgets. We'll see how to do this shortly.
 
-The GtkTree widget has its own window, and defaults to a white
-background, as does GtkList. Also, most of the GtkTree methods work in
-the same way as the corresponding GtkList ones. However, GtkTree is
-not derived from GtkList, so you cannot use them interchangeably.
+The Tree widget has its own window, and defaults to a white
+background, as does CList. Also, most of the Tree methods work in
+the same way as the corresponding CList ones. However, Tree is
+not derived from CList, so you cannot use them interchangeably.
+
 
 <sect1> Creating a Tree
 <p>
-A GtkTree is created in the usual way, using:
+A Tree is created in the usual way, using:
 
 <tscreen><verb>
 GtkWidget *gtk_tree_new( void );
 </verb></tscreen>
 
-Like the GtkList widget, a GtkTree will simply keep growing as more
+Like the CList widget, a Tree will simply keep growing as more
 items are added to it, as well as when subtrees are expanded.  For
 this reason, they are almost always packed into a
-GtkScrolledWindow. You might want to use gtk_widget_set_usize() on the
+ScrolledWindow. You might want to use gtk_widget_set_usize() on the
 scrolled window to ensure that it is big enough to see the tree's
-items, as the default size for GtkScrolledWindow is quite small.
+items, as the default size for ScrolledWindow is quite small.
 
 Now that you have a tree, you'll probably want to add some items to
 it.  <ref id="sec_Tree_Item_Widget" name="The Tree Item Widget"> below
-explains the gory details of GtkTreeItem. For now, it'll suffice to
+explains the gory details of TreeItem. For now, it'll suffice to
 create one, using:
 
 <tscreen><verb>
@@ -8461,7 +8514,7 @@ GtkWidget *gtk_tree_item_new_with_label( gchar *label );
 </verb></tscreen>
 
 You can then add it to the tree using one of the following (see
-<ref id="sec_GtkTree_Functions" name="Functions and Macros">
+<ref id="sec_Tree_Functions" name="Functions and Macros">
 below for more options):
 
 <tscreen><verb>
@@ -8472,13 +8525,13 @@ void gtk_tree_prepend( GtkTree   *tree,
                        GtkWidget *tree_item );
 </verb></tscreen>
 
-Note that you must add items to a GtkTree one at a time - there is no
+Note that you must add items to a Tree one at a time - there is no
 equivalent to gtk_list_*_items().
 
 <!-- ----------------------------------------------------------------- -->
 <sect1> Adding a Subtree
 <p>
-A subtree is created like any other GtkTree widget. A subtree is added
+A subtree is created like any other Tree widget. A subtree is added
 to another tree beneath a tree item, using:
 
 <tscreen><verb>
@@ -8487,23 +8540,23 @@ void gtk_tree_item_set_subtree( GtkTreeItem *tree_item,
 </verb></tscreen>
 
 You do not need to call gtk_widget_show() on a subtree before or after
-adding it to a GtkTreeItem. However, you <em>must</em> have added the
-GtkTreeItem in question to a parent tree before calling
+adding it to a TreeItem. However, you <em>must</em> have added the
+TreeItem in question to a parent tree before calling
 gtk_tree_item_set_subtree(). This is because, technically, the parent
 of the subtree is <em>not</em> the GtkTreeItem which "owns" it, but
 rather the GtkTree which holds that GtkTreeItem.
 
-When you add a subtree to a GtkTreeItem, a plus or minus sign appears
+When you add a subtree to a TreeItem, a plus or minus sign appears
 beside it, which the user can click on to "expand" or "collapse" it,
-meaning, to show or hide its subtree. GtkTreeItems are collapsed by
-default. Note that when you collapse a GtkTreeItem, any selected
+meaning, to show or hide its subtree. TreeItems are collapsed by
+default. Note that when you collapse a TreeItem, any selected
 items in its subtree remain selected, which may not be what the user
 expects.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1> Handling the Selection List
 <p>
-As with GtkList, the GtkTree type has a <tt>selection</tt> field, and
+As with CList, the Tree type has a <tt>selection</tt> field, and
 it is possible to control the behaviour of the tree (somewhat) by
 setting the selection type using:
 
@@ -8513,29 +8566,29 @@ void gtk_tree_set_selection_mode( GtkTree          *tree,
 </verb></tscreen>
 
 The semantics associated with the various selection modes are
-described in the section on the GtkList widget. As with the GtkList
+described in the section on the CList widget. As with the CList
 widget, the "select_child", "unselect_child" (not really - see <ref
-id="sec_GtkTree_Signals" name="Signals"> below for an explanation),
+id="sec_Tree_Signals" name="Signals"> below for an explanation),
 and "selection_changed" signals are emitted when list items are
 selected or unselected. However, in order to take advantage of these
-signals, you need to know <em>which</em> GtkTree widget they will be
+signals, you need to know <em>which</em> Tree widget they will be
 emitted by, and where to find the list of selected items.
 
 This is a source of potential confusion. The best way to explain this
-is that though all GtkTree widgets are created equal, some are more
-equal than others. All GtkTree widgets have their own X window, and
-can therefore receive events such as mouse clicks (if their
-GtkTreeItems or their children don't catch them first!). However, to
-make GTK_SELECTION_SINGLE and GTK_SELECTION_BROWSE selection types
-behave in a sane manner, the list of selected items is specific to the
-topmost GtkTree widget in a hierarchy, known as the "root tree".
+is that though all Tree widgets are created equal, some are more equal
+than others. All Tree widgets have their own X window, and can
+therefore receive events such as mouse clicks (if their TreeItems or
+their children don't catch them first!). However, to make
+<tt/GTK_SELECTION_SINGLE/ and <tt/GTK_SELECTION_BROWSE/ selection
+types behave in a sane manner, the list of selected items is specific
+to the topmost Tree widget in a hierarchy, known as the "root tree".
 
-Thus, accessing the <tt>selection</tt>field directly in an arbitrary
-GtkTree widget is not a good idea unless you <em>know</em> it's the
-root tree.  Instead, use the GTK_TREE_SELECTION (Tree) macro, which
+Thus, accessing the <tt>selection</tt> field directly in an arbitrary
+Tree widget is not a good idea unless you <em>know</em> it's the root
+tree. Instead, use the <tt/GTK_TREE_SELECTION (Tree)/ macro, which
 gives the root tree's selection list as a GList pointer. Of course,
-this list can include items that are not in the subtree in question if 
-the selection type is GTK_SELECTION_MULTIPLE.
+this list can include items that are not in the subtree in question if
+the selection type is <tt/GTK_SELECTION_MULTIPLE/.
 
 Finally, the "select_child" (and "unselect_child", in theory) signals
 are emitted by all trees, but the "selection_changed" signal is only
@@ -8545,7 +8598,7 @@ to call gtk_signal_connect() for every subtree.
 
 <sect1> Tree Widget Internals
 <p>
-The GtkTree's struct definition looks like this:
+The Tree's struct definition looks like this:
 
 <tscreen><verb>
 struct _GtkTree
@@ -8569,18 +8622,18 @@ struct _GtkTree
 The perils associated with accessing the <tt>selection</tt> field
 directly have already been mentioned. The other important fields of
 the struct can also be accessed with handy macros or class functions.
-GTK_TREE_IS_ROOT_TREE (Tree) returns a boolean value which indicates
-whether a tree is the root tree in a GtkTree hierarchy, while
-GTK_TREE_ROOT_TREE (Tree) returns the root tree, an object of type
-GtkTree (so, remember to cast it using GTK_WIDGET (Tree) if you want
-to use one of the gtk_widget_*() functions on it).
+<tt/GTK_TREE_IS_ROOT_TREE (Tree)/ returns a boolean value which
+indicates whether a tree is the root tree in a Tree hierarchy, while
+<tt/GTK_TREE_ROOT_TREE (Tree)/ returns the root tree, an object of
+type GtkTree (so, remember to cast it using <tt/GTK_WIDGET (Tree)/ if
+you want to use one of the gtk_widget_*() functions on it).
 
-Instead of directly accessing the children field of a GtkTree widget,
-it's probably best to cast it using GTK_CONTAINER (Tree), and pass it
-to the gtk_container_children() function. This creates a duplicate of
-the original list, so it's advisable to free it up using g_list_free()
-after you're done with it, or to iterate on it destructively, like
-this:
+Instead of directly accessing the children field of a Tree widget,
+it's probably best to cast it using >tt/GTK_CONTAINER (Tree)/, and
+pass it to the gtk_container_children() function. This creates a
+duplicate of the original list, so it's advisable to free it up using
+g_list_free() after you're done with it, or to iterate on it
+destructively, like this:
 
 <tscreen><verb>
     children = gtk_container_children (GTK_CONTAINER (tree));
@@ -8591,20 +8644,20 @@ this:
 </verb></tscreen>
 
 The <tt>tree_owner</tt> field is defined only in subtrees, where it
-points to the GtkTreeItem widget which holds the tree in question.
+points to the TreeItem widget which holds the tree in question.
 The <tt>level</tt> field indicates how deeply nested a particular tree
 is; root trees have level 0, and each successive level of subtrees has
 a level one greater than the parent level. This field is set only
-after a GtkTree widget is actually mapped (i.e. drawn on the screen).
+after a Tree widget is actually mapped (i.e. drawn on the screen).
 
-<sect2> Signals<label id="sec_GtkTree_Signals">
+<sect2> Signals<label id="sec_Tree_Signals">
 <p>
 <tscreen><verb>
 void selection_changed( GtkTree *tree );
 </verb></tscreen>
 
 This signal will be emitted whenever the <tt>selection</tt> field of a
-GtkTree has changed. This happens when a child of the GtkTree is
+Tree has changed. This happens when a child of the Tree is
 selected or deselected.
 
 <tscreen><verb>
@@ -8612,52 +8665,52 @@ void select_child( GtkTree   *tree,
                    GtkWidget *child );
 </verb></tscreen>
 
-This signal is emitted when a child of the GtkTree is about to get
+This signal is emitted when a child of the Tree is about to get
 selected. This happens on calls to gtk_tree_select_item(),
 gtk_tree_select_child(), on <em>all</em> button presses and calls to
 gtk_tree_item_toggle() and gtk_item_toggle().  It may sometimes be
 indirectly triggered on other occasions where children get added to or
-removed from the GtkTree.
+removed from the Tree.
 
 <tscreen><verb>
 void unselect_child (GtkTree   *tree,
                      GtkWidget *child);
 </verb></tscreen>
 
-This signal is emitted when a child of the GtkTree is about to get
-deselected. As of GTK+ 1.0.4, this seems to only occur on calls to
+This signal is emitted when a child of the Tree is about to get
+deselected. As of GTK 1.0.4, this seems to only occur on calls to
 gtk_tree_unselect_item() or gtk_tree_unselect_child(), and perhaps on
 other occasions, but <em>not</em> when a button press deselects a
 child, nor on emission of the "toggle" signal by gtk_item_toggle().
 
-<sect2> Functions and Macros<label id="sec_GtkTree_Functions">
+<sect2> Functions and Macros<label id="sec_Tree_Functions">
 <p>
 <tscreen><verb>
 guint gtk_tree_get_type( void );
 </verb></tscreen>
 
-Returns the `GtkTree' type identifier.
+Returns the "GtkTree" type identifier.
 
 <tscreen><verb>
 GtkWidget* gtk_tree_new( void );
 </verb></tscreen>
 
-Create a new GtkTree object. The new widget is returned as a pointer
-to a GtkWidget object. NULL is returned on failure.
+Create a new Tree object. The new widget is returned as a pointer to a
+GtkWidget object. NULL is returned on failure.
 
 <tscreen><verb>
 void gtk_tree_append( GtkTree   *tree,
                       GtkWidget *tree_item );
 </verb></tscreen>
 
-Append a tree item to a GtkTree.
+Append a tree item to a Tree.
 
 <tscreen><verb>
 void gtk_tree_prepend( GtkTree   *tree,
                        GtkWidget *tree_item );
 </verb></tscreen>
 
-Prepend a tree item to a GtkTree.
+Prepend a tree item to a Tree.
 
 <tscreen><verb>
 void gtk_tree_insert( GtkTree   *tree,
@@ -8665,7 +8718,7 @@ void gtk_tree_insert( GtkTree   *tree,
                       gint       position );
 </verb></tscreen>
 
-Insert a tree item into a GtkTree at the position in the list
+Insert a tree item into a Tree at the position in the list
 specified by <tt>position.</tt>
 
 <tscreen><verb>
@@ -8673,10 +8726,10 @@ void gtk_tree_remove_items( GtkTree *tree,
                             GList   *items );
 </verb></tscreen>
 
-Remove a list of items (in the form of a GList *) from a GtkTree.
+Remove a list of items (in the form of a GList *) from a Tree.
 Note that removing an item from a tree dereferences (and thus usually)
 destroys it <em>and</em> its subtree, if it has one, <em>and</em> all
-subtrees in that subtree.  If you want to remove only one item, you
+subtrees in that subtree. If you want to remove only one item, you
 can use gtk_container_remove().
 
 <tscreen><verb>
@@ -8686,7 +8739,7 @@ void gtk_tree_clear_items( GtkTree *tree,
 </verb></tscreen>
 
 Remove the items from position <tt>start</tt> to position <tt>end</tt>
-from a GtkTree.  The same warning about dereferencing applies here, as
+from a Tree. The same warning about dereferencing applies here, as
 gtk_tree_clear_items() simply constructs a list and passes it to
 gtk_tree_remove_items().
 
@@ -8736,9 +8789,9 @@ void gtk_tree_set_selection_mode( GtkTree          *tree,
                                   GtkSelectionMode  mode );
 </verb></tscreen>
 
-Sets the selection mode, which can be one of GTK_SELECTION_SINGLE (the
-default), GTK_SELECTION_BROWSE, GTK_SELECTION_MULTIPLE, or
-GTK_SELECTION_EXTENDED. This is only defined for root trees, which
+Sets the selection mode, which can be one of <tt/GTK_SELECTION_SINGLE/ (the
+default), <tt/GTK_SELECTION_BROWSE/, <tt/GTK_SELECTION_MULTIPLE/, or
+<tt/GTK_SELECTION_EXTENDED/. This is only defined for root trees, which
 makes sense, since the root tree "owns" the selection. Setting it for
 subtrees has no effect at all; the value is simply ignored.
 
@@ -8747,16 +8800,16 @@ void gtk_tree_set_view_mode( GtkTree         *tree,
                              GtkTreeViewMode  mode ); 
 </verb></tscreen>
 
-Sets the "view mode", which can be either GTK_TREE_VIEW_LINE (the
-default) or GTK_TREE_VIEW_ITEM.  The view mode propagates from a tree
-to its subtrees, and can't be set exclusively to a subtree (this is
-not exactly true - see the example code comments).
+Sets the "view mode", which can be either <tt/GTK_TREE_VIEW_LINE/ (the
+default) or <tt/GTK_TREE_VIEW_ITEM/.  The view mode propagates from a
+tree to its subtrees, and can't be set exclusively to a subtree (this
+is not exactly true - see the example code comments).
 
 The term "view mode" is rather ambiguous - basically, it controls the
 way the highlight is drawn when one of a tree's children is selected.
-If it's GTK_TREE_VIEW_LINE, the entire GtkTreeItem widget is
-highlighted, while for GTK_TREE_VIEW_ITEM, only the child widget
-(i.e. usually the label) is highlighted.
+If it's <tt/GTK_TREE_VIEW_LINE/, the entire TreeItem widget is
+highlighted, while for <tt/GTK_TREE_VIEW_ITEM/, only the child widget
+(i.e., usually the label) is highlighted.
 
 <tscreen><verb>
 void gtk_tree_set_view_lines( GtkTree *tree,
@@ -8771,52 +8824,52 @@ which case they aren't.
 GtkTree *GTK_TREE (gpointer obj);
 </verb></tscreen>
 
-Cast a generic pointer to `GtkTree *'.
+Cast a generic pointer to "GtkTree *".
 
 <tscreen><verb>
 GtkTreeClass *GTK_TREE_CLASS (gpointer class);
 </verb></tscreen>
 
-Cast a generic pointer to `GtkTreeClass*'.
+Cast a generic pointer to "GtkTreeClass *".
 
 <tscreen><verb>
 gint GTK_IS_TREE (gpointer obj);
 </verb></tscreen>
 
-Determine if a generic pointer refers to a `GtkTree' object.
+Determine if a generic pointer refers to a "GtkTree" object.
 
 <tscreen><verb>
 gint GTK_IS_ROOT_TREE (gpointer obj)
 </verb></tscreen>
 
-Determine if a generic pointer refers to a `GtkTree' object
+Determine if a generic pointer refers to a "GtkTree" object
 <em>and</em> is a root tree. Though this will accept any pointer, the
-results of passing it a pointer that does not refer to a GtkTree are
+results of passing it a pointer that does not refer to a Tree are
 undefined and possibly harmful.
 
 <tscreen><verb>
 GtkTree *GTK_TREE_ROOT_TREE (gpointer obj)
 </verb></tscreen>
 
-Return the root tree of a pointer to a `GtkTree' object. The above
+Return the root tree of a pointer to a "GtkTree" object. The above
 warning applies.
 
 <tscreen><verb>
 GList *GTK_TREE_SELECTION( gpointer obj)
 </verb></tscreen>
 
-Return the selection list of the root tree of a `GtkTree' object. The
+Return the selection list of the root tree of a "GtkTree" object. The
 above warning applies here, too.
 
 <sect1> Tree Item Widget<label id="sec_Tree_Item_Widget">
 <p>
-The GtkTreeItem widget, like GtkListItem, is derived from GtkItem,
-which in turn is derived from GtkBin.  Therefore, the item itself is a
+The TreeItem widget, like CListItem, is derived from Item,
+which in turn is derived from Bin.  Therefore, the item itself is a
 generic container holding exactly one child widget, which can be of
-any type.  The GtkTreeItem widget has a number of extra fields, but
+any type. The TreeItem widget has a number of extra fields, but
 the only one we need be concerned with is the <tt>subtree</tt> field.
 
-The definition for the GtkTreeItem struct looks like this:
+The definition for the TreeItem struct looks like this:
 
 <tscreen><verb>
 struct _GtkTreeItem
@@ -8833,16 +8886,16 @@ struct _GtkTreeItem
 };
 </verb></tscreen>
 
-The <tt>pixmaps_box</tt> field is a GtkEventBox which catches clicks
-on the plus/minus symbol which controls expansion and collapsing.  The
-<tt>pixmaps</tt> field points to an internal data structure.  Since
-you can always obtain the subtree of a GtkTreeItem in a (relatively)
-type-safe manner with the GTK_TREE_ITEM_SUBTREE (Item) macro, it's
-probably advisable never to touch the insides of a GtkTreeItem unless
-you <em>really</em> know what you're doing.
+The <tt>pixmaps_box</tt> field is an EventBox which catches clicks on
+the plus/minus symbol which controls expansion and collapsing. The
+<tt>pixmaps</tt> field points to an internal data structure. Since
+you can always obtain the subtree of a TreeItem in a (relatively)
+type-safe manner with the <tt/GTK_TREE_ITEM_SUBTREE (Item)/ macro,
+it's probably advisable never to touch the insides of a TreeItem
+unless you <em>really</em> know what you're doing.
 
-Since it is directly derived from a GtkItem it can be treated as such
-by using the GTK_ITEM (TreeItem) macro. A GtkTreeItem usually holds a
+Since it is directly derived from an Item it can be treated as such by
+using the <tt/GTK_ITEM (TreeItem)/ macro. A TreeItem usually holds a
 label, so the convenience function gtk_list_item_new_with_label() is
 provided. The same effect can be achieved using code like the
 following, which is actually copied verbatim from
@@ -8857,13 +8910,13 @@ gtk_container_add (GTK_CONTAINER (tree_item), label_widget);
 gtk_widget_show (label_widget);
 </verb></tscreen>
 
-As one is not forced to add a GtkLabel to a GtkTreeItem, you could
-also add a GtkHBox or a GtkArrow, or even a GtkNotebook (though your
-app will likely be quite unpopular in this case) to the GtkTreeItem.
+As one is not forced to add a Label to a TreeItem, you could
+also add an HBox or an Arrow, or even a Notebook (though your
+app will likely be quite unpopular in this case) to the TreeItem.
 
 If you remove all the items from a subtree, it will be destroyed and
-unparented, unless you reference it beforehand, and the GtkTreeItem
-which owns it will be collapsed.  So, if you want it to stick around,
+unparented, unless you reference it beforehand, and the TreeItem
+which owns it will be collapsed. So, if you want it to stick around,
 do something like the following:
 
 <tscreen><verb>
@@ -8878,17 +8931,17 @@ else
   gtk_widget_unref (tree);
 </verb></tscreen>
 
-Finally, drag-n-drop <em>does</em> work with GtkTreeItems.  You just
-have to make sure that the GtkTreeItem you want to make into a drag
-item or a drop site has not only been added to a GtkTree, but that
+Finally, drag-n-drop <em>does</em> work with TreeItems. You just
+have to make sure that the TreeItem you want to make into a drag
+item or a drop site has not only been added to a Tree, but that
 each successive parent widget has a parent itself, all the way back to
 a toplevel or dialog window, when you call gtk_widget_dnd_drag_set()
 or gtk_widget_dnd_drop_set().  Otherwise, strange things will happen.
 
 <sect2> Signals
 <p>
-GtkTreeItem inherits the "select", "deselect", and "toggle" signals
-from GtkItem.  In addition, it adds two signals of its own, "expand"
+TreeItem inherits the "select", "deselect", and "toggle" signals
+from Item. In addition, it adds two signals of its own, "expand"
 and "collapse".
 
 <tscreen><verb>
@@ -8906,7 +8959,7 @@ void deselect( GtkItem *tree_item );
 This signal is emitted when an item is about to be unselected, either
 after it has been clicked on by the user, or when the program calls
 gtk_tree_item_deselect() or gtk_item_deselect(). In the case of
-GtkTreeItems, it is also emitted by gtk_tree_unselect_child(), and
+TreeItems, it is also emitted by gtk_tree_unselect_child(), and
 sometimes gtk_tree_select_child().
 
 <tscreen><verb>
@@ -8914,7 +8967,7 @@ void toggle( GtkItem *tree_item );
 </verb></tscreen>
 
 This signal is emitted when the program calls gtk_item_toggle().  The
-effect it has when emitted on a GtkTreeItem is to call
+effect it has when emitted on a TreeItem is to call
 gtk_tree_select_child() (and never gtk_tree_unselect_child()) on the
 item's parent tree, if the item has a parent tree.  If it doesn't,
 then the highlight is reversed on the item.
@@ -8941,20 +8994,20 @@ item, or when the program calls gtk_tree_item_collapse().
 guint gtk_tree_item_get_type( void );
 </verb></tscreen>
 
-Returns the `GtkTreeItem' type identifier.
+Returns the "GtkTreeItem" type identifier.
 
 <tscreen><verb>
 GtkWidget* gtk_tree_item_new( void );
 </verb></tscreen>
 
-Create a new GtkTreeItem object. The new widget is returned as a
+Create a new TreeItem object. The new widget is returned as a
 pointer to a GtkWidget object. NULL is returned on failure.
 
 <tscreen><verb>
 GtkWidget* gtk_tree_item_new_with_label (gchar       *label);
 </verb></tscreen>
 
-Create a new GtkTreeItem object, having a single GtkLabel as the sole
+Create a new TreeItem object, having a single GtkLabel as the sole
 child. The new widget is returned as a pointer to a GtkWidget
 object. NULL is returned on failure.
 
@@ -8962,8 +9015,9 @@ object. NULL is returned on failure.
 void gtk_tree_item_select( GtkTreeItem *tree_item );
 </verb></tscreen>
 
-This function is basically a wrapper around a call to gtk_item_select
-(GTK_ITEM (tree_item)) which will emit the select signal.
+This function is basically a wrapper around a call to
+<tt>gtk_item_select (GTK_ITEM (tree_item))</tt> which will emit the
+select signal.
 
 <tscreen><verb>
 void gtk_tree_item_deselect( GtkTreeItem *tree_item );
@@ -8978,7 +9032,7 @@ void gtk_tree_item_set_subtree( GtkTreeItem *tree_item,
                                 GtkWidget   *subtree );
 </verb></tscreen>
 
-This function adds subtree to tree_item, showing it if tree_item is
+This function adds a subtree to tree_item, showing it if tree_item is
 expanded, or hiding it if tree_item is collapsed. Again, remember that
 the tree_item must have already been added to a tree for this to work.
 
@@ -9006,26 +9060,26 @@ This emits the "collapse" signal on tree_item, which collapses it.
 GtkTreeItem *GTK_TREE_ITEM (gpointer obj)
 </verb></tscreen>
 
-Cast a generic pointer to `GtkTreeItem*'.
+Cast a generic pointer to "GtkTreeItem *".
 
 <tscreen><verb>
 GtkTreeItemClass *GTK_TREE_ITEM_CLASS (gpointer obj)
 </verb></tscreen>
 
-Cast a generic pointer to `GtkTreeItemClass'.
+Cast a generic pointer to "GtkTreeItemClass".
 
 <tscreen><verb>
 gint GTK_IS_TREE_ITEM (gpointer obj)
 </verb></tscreen>
 
-Determine if a generic pointer refers to a `GtkTreeItem' object.
+Determine if a generic pointer refers to a "GtkTreeItem" object.
  
 <tscreen><verb>
 GtkWidget GTK_TREE_ITEM_SUBTREE (gpointer obj)
 </verb></tscreen>
 
-Returns a tree item's subtree (obj should point to a `GtkTreeItem'
-object).
+Returns a tree item's subtree (<tt/obj/ should point to a
+"GtkTreeItem" object).
 
 <sect1> Tree Example
 <p>
@@ -9045,7 +9099,7 @@ static void cb_itemsignal (GtkWidget *item, gchar *signame)
   gchar *name;
   GtkLabel *label;
 
-  /* It's a GtkBin, so it has one child, which we know to be a
+  /* It's a Bin, so it has one child, which we know to be a
      label, so get that */
   label = GTK_LABEL (GTK_BIN (item)->child);
   /* Get the text of the label */
@@ -9220,17 +9274,17 @@ int main (int argc, char *argv[])
 <sect>Menu Widget
 <!-- ***************************************************************** -->
 <p>
-There are two ways to create menus, there's the easy way, and there's
+There are two ways to create menus: there's the easy way, and there's
 the hard way. Both have their uses, but you can usually use the
-itemfactory (the easy way). The "hard" way is to create all the menus
+Itemfactory (the easy way). The "hard" way is to create all the menus
 using the calls directly. The easy way is to use the gtk_item_factory
 calls. This is much simpler, but there are advantages and
 disadvantages to each approach.
 
-The itemfactory is much easier to use, and to add new menus to,
+The Itemfactory is much easier to use, and to add new menus to,
 although writing a few wrapper functions to create menus using the
 manual method could go a long way towards usability. With the
-itemfactory, it is not possible to add images or the character '/' to
+Itemfactory, it is not possible to add images or the character '/' to
 the menus.
 
 <!-- ----------------------------------------------------------------- -->
@@ -9241,7 +9295,8 @@ first. <tt>:)</>
 
 There are three widgets that go into making a menubar and submenus:
 <itemize>
-<item>a menu item, which is what the user wants to select, e.g. 'Save'
+<item>a menu item, which is what the user wants to select, e.g.,
+"Save"
 <item>a menu, which acts as a container for the menu items, and
 <item>a menubar, which is a container for each of the individual
 menus.
@@ -9269,9 +9324,9 @@ functions to pack it into a box - the same as buttons.
 GtkWidget *gtk_menu_new( void );
 </verb></tscreen>
 
-This function returns a pointer to a new menu, it is never actually
+This function returns a pointer to a new menu; it is never actually
 shown (with gtk_widget_show), it is just a container for the menu
-items. Hopefully this will become more clear when you look at the
+items. I hope this will become more clear when you look at the
 example below.
 
 The next two calls are used to create menu items that are packed into
@@ -9302,8 +9357,8 @@ Once you've created a menu item you have to put it into a menu. This
 is done using the function gtk_menu_append. In order to capture when
 the item is selected by the user, we need to connect to the
 <tt/activate/ signal in the usual way. So, if we wanted to create a
-standard <tt/File/ menu, with the options <tt/Open/, <tt/Save/ and
-<tt/Quit/ the code would look something like:
+standard <tt/File/ menu, with the options <tt/Open/, <tt/Save/, and
+<tt/Quit/, the code would look something like:
 
 <tscreen><verb>
     file_menu = gtk_menu_new ();    /* Don't need to show menus */
@@ -9406,7 +9461,7 @@ needs to be done once when creating a series of menus on one menu bar.
 </itemize>
 
 Creating a popup menu is nearly the same. The difference is that the
-menu is not posted `automatically' by a menubar, but explicitly by
+menu is not posted "automatically" by a menubar, but explicitly by
 calling the function gtk_menu_popup() from a button-press event, for
 example.  Take these steps:
 
@@ -9577,7 +9632,7 @@ You may also set a menu item to be insensitive and, using an accelerator
 table, bind keys to menu functions.
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>Using GtkItemFactory
+<sect1>Using ItemFactory
 <p>
 Now that we've shown you the hard way, here's how you do it using the
 gtk_item_factory calls.
@@ -9713,7 +9768,7 @@ will follow later.
 <!-- ***************************************************************** -->
 <p>
 The Text widget allows multiple lines of text to be displayed and
-edited.  It supports both multi-colored and multi-font text, allowing
+edited. It supports both multi-colored and multi-font text, allowing
 them to be mixed in any way we wish. It also has a wide set of key
 based text editing commands, which are compatible with Emacs.
 
@@ -9760,7 +9815,7 @@ The above code snippet creates a new vertical scrollbar, and attaches
 it to the vertical adjustment of the text widget, <tt/text/. It then
 packs it into a box in the normal way.
 
-Note, currently the GtkText widget does not support horizontal
+Note, currently the Text widget does not support horizontal
 scrollbars.
 
 There are two main ways in which a Text widget can be used: to allow
@@ -9822,7 +9877,7 @@ guint gtk_text_get_length( GtkText *text );
 
 which returns the current length of the Text widget. The length is the
 number of characters that are within the text block of the widget,
-including characters such as carriage-return, which marks the end of
+including characters such as newline, which marks the end of
 lines.
 
 In order to insert text at the current insertion point of a Text
@@ -9839,7 +9894,7 @@ void gtk_text_insert( GtkText    *text,
 </verb></tscreen>
 
 Passing a value of <tt/NULL/ in as the value for the foreground color,
-background colour or font will result in the values set within the
+background color or font will result in the values set within the
 widget style to be used. Using a value of <tt/-1/ for the length
 parameter will result in the whole of the text string given being
 inserted.
@@ -9981,7 +10036,7 @@ int main (int argc, char *argv[])
   GtkWidget *vscrollbar;
   GtkWidget *text;
   GdkColormap *cmap;
-  GdkColor colour;
+  GdkColor color;
   GdkFont *fixed_font;
 
   FILE *infile;
@@ -10029,13 +10084,13 @@ int main (int argc, char *argv[])
 		    GTK_FILL, GTK_EXPAND | GTK_SHRINK | GTK_FILL, 0, 0);
   gtk_widget_show (vscrollbar);
 
-  /* Get the system colour map and allocate the colour red */
+  /* Get the system color map and allocate the color red */
   cmap = gdk_colormap_get_system();
-  colour.red = 0xffff;
-  colour.green = 0;
-  colour.blue = 0;
-  if (!gdk_color_alloc(cmap, &amp;colour)) {
-    g_error("couldn't allocate colour");
+  color.red = 0xffff;
+  color.green = 0;
+  color.blue = 0;
+  if (!gdk_color_alloc(cmap, &amp;color)) {
+    g_error("couldn't allocate color");
   }
 
   /* Load a fixed font */
@@ -10048,10 +10103,10 @@ int main (int argc, char *argv[])
   /* Freeze the text widget, ready for multiple updates */
   gtk_text_freeze (GTK_TEXT (text));
   
-  /* Insert some coloured text */
+  /* Insert some colored text */
   gtk_text_insert (GTK_TEXT (text), NULL, &amp;text->style->black, NULL,
 		   "Supports ", -1);
-  gtk_text_insert (GTK_TEXT (text), NULL, &amp;colour, NULL,
+  gtk_text_insert (GTK_TEXT (text), NULL, &amp;color, NULL,
 		   "colored ", -1);
   gtk_text_insert (GTK_TEXT (text), NULL, &amp;text->style->black, NULL,
 		   "text and different ", -1);
@@ -10184,9 +10239,9 @@ from your time.
 <tscreen><verb>
 
 Previews serve a number of purposes in GIMP/GTK. The most important one is
-this. High quality images may take up to tens of megabytes of memory - easy!
+this. High quality images may take up to tens of megabytes of memory - easily!
 Any operation on an image that big is bound to take a long time. If it takes
-you 5-10 trial-and-errors (i.e. 10-20 steps, since you have to revert after
+you 5-10 trial-and-errors (i.e., 10-20 steps, since you have to revert after
 you make an error) to choose the desired modification, it make take you
 literally hours to make the right one - if you don't run out of memory
 first. People who have spent hours in color darkrooms know the feeling.
@@ -10201,7 +10256,7 @@ out for most people, while back-to-back is more like back-to-1001, 1002,
 ..., 1010-back! Previews to the rescue!
 
 But there's more. Previews allow for side-by-side pre-previews. In other
-words, you write a plug-in (e.g. the filterpack simulation) which would have
+words, you write a plug-in (e.g., the filterpack simulation) which would have
 a number of here's-what-it-would-look-like-if-you-were-to-do-this previews.
 An approach like this acts as a sort of a preview palette and is very
 effective for subtle changes. Let's go previews!
@@ -10221,7 +10276,7 @@ plug-ins and even for an image of yourself, The Author. Let's go previews!
 
 When Not to Use Previews
 
-Don't use previews for graphs, drawing etc. GDK is much faster for that. Use
+Don't use previews for graphs, drawing, etc. GDK is much faster for that. Use
 previews only for rendered images!
 
 Let's go previews!
@@ -10404,7 +10459,7 @@ ReducedImage *Reduce_The_Image(GDrawable *drawable,
                                gint Selection)
 {
   /* This function reduced the image down to the the selected preview size */
-  /* The preview size is determine by LongerSize, i.e. the greater of the  */
+  /* The preview size is determine by LongerSize, i.e., the greater of the  */
   /* two dimensions. Works for RGB images only!                            */
   gint RH, RW;          /* Reduced height and reduced width                */
   gint width, height;   /* Width and Height of the area being reduced      */
@@ -10626,8 +10681,8 @@ That's all, folks!
 <sect>Setting Widget Attributes<label id="sec_setting_widget_attributes">
 <!-- ***************************************************************** -->
 <p>
-This describes the functions used to operate on widgets.  These can be
-used to set style, padding, size etc.
+This describes the functions used to operate on widgets. These can be
+used to set style, padding, size, etc.
 
 (Maybe I should make a whole section on accelerators.)
 
@@ -10682,7 +10737,7 @@ void gtk_widget_hide( GtkWidget *widget );
 <sect1>Timeouts
 <p>
 You may be wondering how you make GTK do useful work when in gtk_main.
-Well, you have several options. Using the following functions you can
+Well, you have several options. Using the following function you can
 create a timeout function that will be called every "interval"
 milliseconds.
 
@@ -10705,7 +10760,7 @@ void gtk_timeout_remove( gint tag );
 You may also stop the timeout function by returning zero or FALSE from
 your callback function. Obviously this means if you want your function
 to continue to be called, it should return a non-zero value,
-i.e. TRUE.
+i.e., TRUE.
 
 The declaration of your callback should look something like this:
 
@@ -10733,11 +10788,11 @@ watched, and the second specifies what you want GDK to look for. This
 may be one of:
 
 <itemize>
-<item>GDK_INPUT_READ - Call your function when there is data ready for
-reading on your file descriptor.
+<item><tt/GDK_INPUT_READ/ - Call your function when there is data
+ready for reading on your file descriptor.
 
-<item>GDK_INPUT_WRITE - Call your function when the file descriptor is
-ready for writing.
+<item>><tt/GDK_INPUT_WRITE/ - Call your function when the file
+descriptor is ready for writing.
 </itemize>
 
 As I'm sure you've figured out already, the third argument is the
@@ -10765,8 +10820,8 @@ Where <tt/source/ and <tt/condition/ are as specified above.
 <sect1>Idle Functions
 <p>
 <!-- TODO: Need to check on idle priorities - TRG -->
-What if you have a function you want called when nothing else is
-happening ?
+What if you have a function which you want to be called when nothing
+else is happening ?
 
 <tscreen><verb>
 gint gtk_idle_add( GtkFunction function,
@@ -10914,15 +10969,15 @@ void gtk_signal_emit_stop_by_name( GtkObject   *object,
 <!-- ----------------------------------------------------------------- -->
 <sect1>Signal Emission and Propagation
 <p>
-Signal emission is the process wherby GTK runs all handlers for a
+Signal emission is the process whereby GTK runs all handlers for a
 specific object and signal.
 
 First, note that the return value from a signal emission is the return
 value of the <em>last</em> handler executed. Since event signals are
-all of type GTK_RUN_LAST, this will be the default (GTK supplied)
-default handler, unless you connect with gtk_signal_connect_after().
+all of type <tt/GTK_RUN_LAST/, this will be the default (GTK supplied)
+handler, unless you connect with gtk_signal_connect_after().
 
-The way an event (say GTK_BUTTON_PRESS) is handled, is:
+The way an event (say "button_press_event") is handled, is:
 <itemize>
 <item>Start with the widget where the event occured.
 
@@ -10932,9 +10987,10 @@ a value of TRUE, stop all processing.
 <item>Otherwise, emit a specific, "button_press_event" signal. If that
 returns TRUE, stop all processing.
 
-<item>Otherwise, go to the widget's parent, and repeat the above steps.
+<item>Otherwise, go to the widget's parent, and repeat the above two
+steps.
 
-<item>Contimue until some signal handler returns TRUE, or until the
+<item>Continue until some signal handler returns TRUE, or until the
 top-level widget is reached.
 </itemize>
 
@@ -10956,11 +11012,11 @@ the signal is propagated, not the current emission.
 <!-- ----------------------------------------------------------------- -->
 <sect1> Overview
 <p>
-One type of interprocess communication supported by GTK is
+One type of interprocess communication supported by X and GTK is
 <em>selections</em>. A selection identifies a chunk of data, for
 instance, a portion of text, selected by the user in some fashion, for
 instance, by dragging with the mouse. Only one application on a
-display, (the <em>owner</em>) can own a particular selection at one
+display (the <em>owner</em>) can own a particular selection at one
 time, so when a selection is claimed by one application, the previous
 owner must indicate to the user that selection has been
 relinquished. Other applications can request the contents of a
@@ -10972,7 +11028,7 @@ In most cases, it isn't necessary for a GTK application to deal with
 selections itself. The standard widgets, such as the Entry widget,
 already have the capability to claim the selection when appropriate
 (e.g., when the user drags over text), and to retrieve the contents of
-the selection owned by another widget, or another application (e.g.,
+the selection owned by another widget or another application (e.g.,
 when the user clicks the second mouse button). However, there may be
 cases in which you want to give other widgets the ability to supply
 the selection, or you wish to retrieve targets not supported by
@@ -11327,10 +11383,10 @@ main (int argc, char *argv[])
 
 
 <!-- ***************************************************************** -->
-<sect>glib<label id="sec_glib">
+<sect>GLib<label id="sec_glib">
 <!-- ***************************************************************** -->
 <p>
-glib is a lower-level library that provides many useful definitions
+GLib is a lower-level library that provides many useful definitions
 and functions available for use when creating GDK and GTK
 applications. These include definitions for basic types and their
 limits, standard macros, type conversions, byte order, memory
@@ -11346,11 +11402,11 @@ unique integer identifier), keyed data lists (lists of data elements
 accessible by a string or integer id), relations and tuples (tables of
 data which can be indexed on any number of fields), and caches.
 
-A summary of some of glib's capabilities follows; not every function,
+A summary of some of GLib's capabilities follows; not every function,
 data structure, or operation is covered here.  For more complete
-information about the glib routines, see the glib documentation. One
-source of glib documentation is http://www.gtk.org/ <htmlurl
-url="http://www.gtk.org/" name="http://www.gtk.org/">.
+information about the GLib routines, see the GLib documentation. One
+source of GLib documentation is <htmlurl url="http://www.gtk.org/"
+name="http://www.gtk.org/">.
 
 If you are using a language other than C, you should consult your
 language's binding documentation. In some cases your language may
@@ -11473,7 +11529,7 @@ This frees all of the memory used by a GList. If the list elements
 refer to dynamically-allocated memory, then they should be freed
 first.
 
-There are many other glib functions that support doubly linked lists;
+There are many other GLib functions that support doubly linked lists;
 see the glib documentation for more information.  Here are a few of
 the more useful functions' signatures:
 
@@ -11576,20 +11632,20 @@ Frees memory. Easy one. If <tt/mem/ is NULL it simply returns.
 void g_mem_profile( void );
 </verb></tscreen>
 
-Dumps a profile of used memory, but requires that you add #define
-MEM_PROFILE to the top of glib/gmem.c and re-make and make install.
+Dumps a profile of used memory, but requires that you add <tt>#define
+MEM_PROFILE</tt> to the top of glib/gmem.c and re-make and make install.
 
 <tscreen><verb>
 void g_mem_check( gpointer mem );
 </verb></tscreen>
 
-Checks that a memory location is valid.  Requires you add #define
-MEM_CHECK to the top of gmem.c and re-make and make install.
+Checks that a memory location is valid. Requires you add <tt>#define
+MEM_CHECK</tt> to the top of gmem.c and re-make and make install.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Timers
 <p>
-Timer functions can be used to time operations (e.g. to see how much
+Timer functions can be used to time operations (e.g., to see how much
 time has elapsed). First, you create a new timer with g_timer_new().
 You can then use g_timer_start() to start timing an operation,
 g_timer_stop() to stop timing an operation, and g_timer_elapsed() to
@@ -11613,7 +11669,7 @@ gdouble g_timer_elapsed( GTimer *timer,
 <!-- ----------------------------------------------------------------- -->
 <sect1>String Handling
 <p>
-glib defines a new type called a GString, which is similar to a
+GLib defines a new type called a GString, which is similar to a
 standard C string but one that grows automatically. Its string data
 is null-terminated. What this gives you is protection from buffer
 overflow programming errors within your program. This is a very
@@ -11754,7 +11810,7 @@ All of the above are more or less just stolen from glib.h.  If anyone cares
 to document any function, just send me an email!
 
 <!-- ***************************************************************** -->
-<sect>GTK's rc Files
+<sect>GTK's rc Files <label id="sec_gtkrc_files">
 <!-- ***************************************************************** -->
 <p>
 GTK has its own way of dealing with application defaults, by using rc
@@ -11812,7 +11868,7 @@ And then the style is defined in the rc file using:
 widget "main window.*GtkButton*" style "main_button"
 </verb></tscreen>
 
-Which sets all the GtkButton widgets in the "main window" to the
+Which sets all the Button widgets in the "main window" to the
 "main_buttons" style as defined in the rc file.
 
 As you can see, this is a fairly powerful and flexible system.  Use your
@@ -11823,7 +11879,7 @@ imagination as to how best to take advantage of this.
 <p>
 The format of the GTK file is illustrated in the example below. This is
 the testgtkrc file from the GTK distribution, but I've added a
-few comments and things. You may wish to include this explanation
+few comments and things. You may wish to include this explanation in
 your application to allow the user to fine tune his application.
 
 There are several directives to change the attributes of a widget.
@@ -11840,7 +11896,7 @@ can set different colors, pixmaps and fonts for each state. These states are:
 
 <itemize>
 <item>NORMAL - The normal state of a widget, without the mouse over top of
-it, and not being pressed etc.
+it, and not being pressed, etc.
 <item>PRELIGHT - When the mouse is over top of the widget, colors defined
 using this state will be in effect.
 <item>ACTIVE - When the widget is pressed or clicked it will be active, and
@@ -11857,7 +11913,7 @@ format is:
 fg[<STATE>] = { Red, Green, Blue }
 </verb></tscreen>
 
-Where STATE is one of the above states (PRELIGHT, ACTIVE etc), and the Red,
+Where STATE is one of the above states (PRELIGHT, ACTIVE, etc), and the Red,
 Green and Blue are values in the range of 0 - 1.0,  { 1.0, 1.0, 1.0 } being
 white. They must be in float form, or they will register as 0, so a straight 
 "1" will not work, it must be "1.0".  A straight "0" is fine because it 
@@ -11874,8 +11930,8 @@ The font directive is simply:
 font = "<font name>"
 </verb></tscreen>
 
-Where the only hard part is figuring out the font string. Using xfontsel or
-similar utility should help.
+The only hard part is figuring out the font string. Using xfontsel or
+a similar utility should help.
 
 The "widget_class" sets the style of a class of widgets. These classes are
 listed in the widget overview on the class hierarchy.
@@ -11931,7 +11987,7 @@ pixmap_path "/usr/include/X11R6/pixmaps:/home/imain/pixmaps"
 # certain widgets.
 #
 # NORMAL - The normal state of a widget, without the mouse over top of
-# it, and not being pressed etc.
+# it, and not being pressed, etc.
 #
 # PRELIGHT - When the mouse is over top of the widget, colors defined
 # using this state will be in effect.
@@ -12126,7 +12182,7 @@ struct _GtkButton
 
 Note that, similar to the class structure, the first field is the
 object structure of the parent class, so that this structure can be
-cast to the parent class's object structure as needed.
+cast to the parent class' object structure as needed.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1> Creating a Composite widget
@@ -12153,19 +12209,19 @@ The parent class for a composite widget is typically the container
 class that holds all of the elements of the composite widget. For
 example, the parent class of the FileSelection widget is the
 Dialog class. Since our buttons will be arranged in a table, it
-might seem natural to make our parent class the GtkTable
+might seem natural to make our parent class the Table
 class. Unfortunately, this turns out not to work. The creation of a
 widget is divided among two functions - a <tt/WIDGETNAME_new()/
 function that the user calls, and a <tt/WIDGETNAME_init()/ function
 which does the basic work of initializing the widget which is
 independent of the arguments passed to the <tt/_new()/
-function. Descendent widgets only call the <tt/_init/ function of
+function. Descendant widgets only call the <tt/_init/ function of
 their parent widget. But this division of labor doesn't work well for
-tables, which when created, need to know the number of rows and
+tables, which when created need to know the number of rows and
 columns in the table. Unless we want to duplicate most of the
 functionality of <tt/gtk_table_new()/ in our Tictactoe widget, we had
-best avoid deriving it from GtkTable. For that reason, we derive it
-from GtkVBox instead, and stick our table inside the VBox.
+best avoid deriving it from Table. For that reason, we derive it
+from VBox instead, and stick our table inside the VBox.
 
 <!-- ----------------------------------------------------------------- -->
 <sect2> The header file
@@ -12374,7 +12430,7 @@ Creates a new signal. The parameters are:
 user handlers. Usually this will be <tt/GTK_RUN_FIRST/, or <tt/GTK_RUN_LAST/,
 although there are other possibilities.
 <item> <tt/object_type/: The ID of the object that this signal applies
-to. (It will also apply to that objects descendents)
+to. (It will also apply to that objects descendants.)
 <item> <tt/function_offset/: The offset within the class structure of
 a pointer to the default handler.
 <item> <tt/marshaller/: A function that is used to invoke the signal
@@ -12431,7 +12487,7 @@ instead.
 After creating our signals, we need to tell GTK to associate our
 signals with the Tictactoe class. We do that by calling
 <tt/gtk_object_class_add_signals()/. We then set the pointer which
-points to the default handler for the `tictactoe' signal to NULL,
+points to the default handler for the "tictactoe" signal to NULL,
 indicating that there is no default action.
 
 <!-- ----------------------------------------------------------------- -->
@@ -12471,7 +12527,7 @@ tictactoe_init (Tictactoe *ttt)
 <sect2> And the rest...
 <p>
 There is one more function that every widget (except for base widget
-types like GtkBin that cannot be instantiated) needs to have - the
+types like Bin that cannot be instantiated) needs to have - the
 function that the user calls to create an object of that type. This is
 conventionally called <tt/WIDGETNAME_new()/. In some
 widgets, though not for the Tictactoe widgets, this function takes
@@ -12631,7 +12687,7 @@ widget. It makes the necessary calls to the drawing functions to draw
 the exposed portion on the screen. For container widgets, this
 function must generate expose events for its child widgets which don't
 have their own windows. (If they have their own windows, then X will
-generate the necessary expose events)
+generate the necessary expose events.)
 </itemize>
 
 You might notice that the last two functions are quite similar - each
@@ -12662,15 +12718,15 @@ an <tt/expose()/ function.
 <sect2> The origins of the Dial Widget
 <p>
 Just as all land animals are just variants on the first amphibian that
-crawled up out of the mud, Gtk widgets tend to start off as variants
-of some other, previously written widget.  Thus, although this section
-is entitled `Creating a Widget from Scratch', the Dial widget really
+crawled up out of the mud, GTK widgets tend to start off as variants
+of some other, previously written widget. Thus, although this section
+is entitled "Creating a Widget from Scratch", the Dial widget really
 began with the source code for the Range widget. This was picked as a
 starting point because it would be nice if our Dial had the same
-interface as the Scale widgets which are just specialized descendents
+interface as the Scale widgets which are just specialized descendants
 of the Range widget. So, though the source code is presented below in
-finished form, it should not be implied that it was written, <em>deus
-ex machina</em> in this fashion. Also, if you aren't yet familiar with
+finished form, it should not be implied that it was written, <em>ab
+initio</em> in this fashion. Also, if you aren't yet familiar with
 how scale widgets work from the application writer's point of view, it
 would be a good idea to look them over before continuing.
 
@@ -12771,11 +12827,11 @@ void           gtk_dial_set_adjustment         (GtkDial      *dial,
 #endif /* __GTK_DIAL_H__ */
 </verb></tscreen>
 
-Since there is quite a bit more going on in this widget, than the last
+Since there is quite a bit more going on in this widget than the last
 one, we have more fields in the data structure, but otherwise things
 are pretty similar.
 
-Next, after including header files, and declaring a few constants,
+Next, after including header files and declaring a few constants,
 we have some functions to provide information about the widget
 and initialize it:
 
@@ -12896,8 +12952,8 @@ Note that this <tt/init()/ function does less than for the Tictactoe
 widget, since this is not a composite widget, and the <tt/new()/
 function does more, since it now has an argument. Also, note that when
 we store a pointer to the Adjustment object, we increment its
-reference count, (and correspondingly decrement when we no longer use
-it) so that GTK can keep track of when it can be safely destroyed.
+reference count, (and correspondingly decrement it when we no longer
+use it) so that GTK can keep track of when it can be safely destroyed.
 
 <p>
 Also, there are a few function to manipulate the widget's options:
@@ -12963,7 +13019,7 @@ the GdkWindowAttr structure actually have data in them (the remaining
 fields will be given default values). Also worth noting is the way the
 event mask of the widget is created. We call
 <tt/gtk_widget_get_events()/ to retrieve the event mask that the user
-has specified for this widget (with <tt/gtk_widget_set_events()/, and
+has specified for this widget (with <tt/gtk_widget_set_events()/), and
 add the events that we are interested in ourselves.
 
 <p>
@@ -13016,7 +13072,7 @@ gtk_dial_realize (GtkWidget *widget)
 Before the first time that the window containing a widget is
 displayed, and whenever the layout of the window changes, GTK asks
 each child widget for its desired size. This request is handled by the
-function, <tt/gtk_dial_size_request()/. Since our widget isn't a
+function <tt/gtk_dial_size_request()/. Since our widget isn't a
 container widget, and has no real constraints on its size, we just
 return a reasonable default value.
 
@@ -13033,13 +13089,13 @@ gtk_dial_size_request (GtkWidget      *widget,
 <p>
 After all the widgets have requested an ideal size, the layout of the
 window is computed and each child widget is notified of its actual
-size. Usually, this will at least as large as the requested size, but
-if for instance, the user has resized the window, it may occasionally
-be smaller than the requested size. The size notification is handled
-by the function <tt/gtk_dial_size_allocate()/. Notice that as well as
-computing the sizes of some component pieces for future use, this
-routine also does the grunt work of moving the widgets X window into
-the new position and size.
+size. Usually, this will be at least as large as the requested size,
+but if for instance the user has resized the window, it may
+occasionally be smaller than the requested size. The size notification
+is handled by the function <tt/gtk_dial_size_allocate()/. Notice that
+as well as computing the sizes of some component pieces for future
+use, this routine also does the grunt work of moving the widget's X
+window into the new position and size.
 
 <tscreen><verb>
 static void
@@ -13160,7 +13216,7 @@ the value of the Adjustment object can change due to some external
 circumstance. 
 
 When the user clicks on the widget, we check to see if the click was
-appropriately near the pointer, and if so, store then button that the
+appropriately near the pointer, and if so, store the button that the
 user clicked with in the <tt/button/ field of the widget
 structure, and grab all mouse events with a call to
 <tt/gtk_grab_add()/. Subsequent motion of the mouse causes the
@@ -13354,7 +13410,7 @@ gtk_dial_update_mouse (GtkDial *dial, gint x, gint y)
 </verb></tscreen>
 
 Changes to the Adjustment by external means are communicated to our
-widget by the `changed' and `value_changed' signals. The handlers
+widget by the "changed" and "value_changed" signals. The handlers
 for these functions call <tt/gtk_dial_update()/ to validate the
 arguments, compute the new pointer angle, and redraw the widget (by
 calling <tt/gtk_widget_draw()/).
@@ -13456,7 +13512,7 @@ decrease the value in small or large steps. Although it would be
 possible to use embedded Button widgets for this, we would also like
 the buttons to auto-repeat when held down, as the arrows on a
 scrollbar do. Most of the code to implement this type of behavior can
-be found in the GtkRange widget.
+be found in the Range widget.
 
 <item> The Dial widget could be made into a container widget with a
 single child widget positioned at the bottom between the buttons
@@ -13472,8 +13528,8 @@ entry widget to display the current value of the dial.
 Only a small part of the many details involved in creating widgets
 could be described above. If you want to write your own widgets, the
 best source of examples is the GTK source itself. Ask yourself some
-questions about the widget you want to write: is it a Container
-widget? does it have its own window? is it a modification of an
+questions about the widget you want to write: IS it a Container
+widget? Does it have its own window? Is it a modification of an
 existing widget? Then find a similar widget, and start making changes.
 Good luck!
 
@@ -13501,7 +13557,7 @@ learn about lower-level occurrences, such as the mouse being moved, or
 a key being pressed. There are also GTK signals corresponding to these
 low-level <em>events</em>. The handlers for these signals have an
 extra parameter which is a pointer to a structure containing
-information about the event. For instance, motion events handlers are
+information about the event. For instance, motion event handlers are
 passed a pointer to a GdkEventMotion structure which looks (in part)
 like:
 
@@ -13521,10 +13577,10 @@ struct _GdkEventMotion
 
 <tt/type/ will be set to the event type, in this case
 <tt/GDK_MOTION_NOTIFY/, window is the window in which the event
-occurred. <tt/x/ and <tt/y/ give the coordinates of the event,
-and <tt/state/ specifies the modifier state when the event
+occurred. <tt/x/ and <tt/y/ give the coordinates of the event.
+<tt/state/ specifies the modifier state when the event
 occurred (that is, it specifies which modifier keys and mouse buttons
-were pressed.) It is the bitwise OR of some of the following:
+were pressed). It is the bitwise OR of some of the following:
 
 <tscreen><verb>
 GDK_SHIFT_MASK  
@@ -13668,7 +13724,7 @@ The code to set the events for our window then looks like:
 
 We'll save the "expose_event" and "configure_event" handlers for
 later. The "motion_notify_event" and "button_press_event" handlers
-pretty simple:
+are pretty simple:
 
 <tscreen><verb>
 static gint
@@ -13705,7 +13761,7 @@ motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
 <!-- ----------------------------------------------------------------- -->
 <sect1> The DrawingArea Widget, And Drawing
 <p>
-We know turn to the process of drawing on the screen. The 
+We now turn to the process of drawing on the screen. The 
 widget we use for this is the DrawingArea widget. A drawing area
 widget is essentially an X window and nothing more. It is a blank
 canvas in which we can draw whatever we like. A drawing area
@@ -13728,7 +13784,7 @@ by calling <tt>gtk_widget_set_usize()</tt>, and that, in turn, can
 be overridden if the user manually resizes the the window containing
 the drawing area.
 
-It should be noted that when we create a DrawingArea widget, we are,
+It should be noted that when we create a DrawingArea widget, we are
 <em>completely</em> responsible for drawing the contents. If our
 window is obscured then uncovered, we get an exposure event and must
 redraw what was previously hidden.
@@ -13869,7 +13925,7 @@ GTK_STATE_SELECTED,
 GTK_STATE_INSENSITIVE
 </verb></tscreen>
 
-For instance, the for <tt/GTK_STATE_SELECTED/ the default foreground
+For instance, for <tt/GTK_STATE_SELECTED/ the default foreground
 color is white and the default background color, dark blue.
 
 Our function <tt>draw_brush()</tt>, which does the actual drawing
@@ -13967,7 +14023,7 @@ struct _GdkEventMotion
 <tt/source/ and <tt/deviceid/ specify the device for which the
 event occurred in two different ways. <tt/source/ gives some simple
 information about the type of device. It can take the enumeration
-values.
+values:
 
 <tscreen><verb>
 GDK_SOURCE_MOUSE
@@ -14085,7 +14141,7 @@ will return reasonable values when extension events are not
 enabled. (In this case, <tt/event->deviceid/ will have the value
 <tt/GDK_CORE_POINTER/).
 
-So the basic structure of our button-press and motion event handlers,
+So the basic structure of our button-press and motion event handlers
 doesn't change much - we just need to add code to deal with the
 extended information.
 
@@ -14177,7 +14233,7 @@ press. To find out the name of a device, we call the function:
 GList *gdk_input_list_devices               (void);
 </verb></tscreen>
 
-which returns a GList (a linked list type from the glib library)
+which returns a GList (a linked list type from the GLib library)
 of GdkDeviceInfo structures. The GdkDeviceInfo structure is defined
 as:
 
@@ -14196,14 +14252,13 @@ struct _GdkDeviceInfo
 };
 </verb></tscreen>
 
-Most of these fields are configuration information that you
-can ignore unless you are implemented XInput configuration
-saving. The we are interested in here is <tt/name/ which is
-simply the name that X assigns to the device. The other field
-that isn't configuration information is <tt/has_cursor/. If
-<tt/has_cursor/ is false, then we we need to draw our own
-cursor. But since we've specified <tt/GDK_EXTENSION_EVENTS_CURSOR/,
-we don't have to worry about this.
+Most of these fields are configuration information that you can ignore
+unless you are implementing XInput configuration saving. The fieldwe
+are interested in here is <tt/name/ which is simply the name that X
+assigns to the device. The other field that isn't configuration
+information is <tt/has_cursor/. If <tt/has_cursor/ is false, then we
+we need to draw our own cursor. But since we've specified
+<tt/GDK_EXTENSION_EVENTS_CURSOR/, we don't have to worry about this.
 
 Our <tt/print_button_press()/ function simply iterates through
 the returned list until it finds a match, then prints out
@@ -14234,7 +14289,7 @@ print_button_press (guint32 deviceid)
 }
 </verb></tscreen>
 
-That completes the changes to `XInputize' our program. As with
+That completes the changes to "XInputize" our program. As with
 the first version, the complete source is available at the location
 from which you got this tutorial, or from:
 
@@ -14290,7 +14345,7 @@ device is touching the stylus, that is called "in proximity.")
 The first is done by searching the device list, as we did
 to find out the device name. The second is achieved by selecting
 "proximity_out" events. An example of drawing one's own cursor is
-found in the 'testinput' program found in the GTK distribution.
+found in the "testinput" program found in the GTK distribution.
 
 <!-- ***************************************************************** -->
 <sect>Tips For Writing GTK Applications
@@ -14298,7 +14353,7 @@ found in the 'testinput' program found in the GTK distribution.
 <p>
 This section is simply a gathering of wisdom, general style guidelines
 and hints to creating good GTK applications. Currently this section
-is very short, but hopefully it will get longer in future editions of
+is very short, but I hope it will get longer in future editions of
 this tutorial.
 
 Use GNU autoconf and automake! They are your friends :) Automake
@@ -14328,7 +14383,7 @@ If you do decide to contribute, please mail your text to Tony Gale,
 name="gale@gtk.org"></tt>. Also, be aware that the entirety of this
 document is free, and any addition by you provide must also be
 free. That is, people may use any portion of your examples in their
-programs, and copies of this document may be distributed at will etc.
+programs, and copies of this document may be distributed at will, etc.
 
 Thank you.
 
@@ -14336,7 +14391,7 @@ Thank you.
 <sect>Credits
 <!-- ***************************************************************** -->
 <p>
-I would like to thank the following for their contributions to this text.
+We would like to thank the following for their contributions to this text.
 
 <itemize>
 <item>Bawer Dagdeviren, <tt><htmlurl url="mailto:chamele0n@geocities.com"
@@ -14389,16 +14444,18 @@ name="bn711@freenet.carleton.ca"></tt> for the Range Widgets and Tree
 Widget sections.
 
 <item>Stefan Mars <tt><htmlurl url="mailto:mars@lysator.liu.se"
-name="mars@lysator.liu.se"></tt> for the GtkCList section.
+name="mars@lysator.liu.se"></tt> for the CList section.
 
 <item>David A. Wheeler <tt><htmlurl url="mailto:dwheeler@ida.org"
-name="dwheeler@ida.org"></tt> for portions of the text on glib
+name="dwheeler@ida.org"></tt> for portions of the text on GLib
 and various tutorial fixups and improvements.
-The glib text was in turn based on material developed by Damon Chaplin
+The GLib text was in turn based on material developed by Damon Chaplin
 <tt><htmlurl url="mailto:DAChaplin@msn.com" name="DAChaplin@msn.com"></tt>
+
+<item>David King for style checking this entire document.
 </itemize>
 
-And to all of you who commented and helped refine this document.
+And to all of you who commented on and helped refine this document.
 
 Thanks.
 
@@ -15111,7 +15168,7 @@ void GtkAdjustment::value-changed	(GtkAdjustment *,
 <sect> GDK Event Types<label id="sec_GDK_Event_Types">
 <!-- ***************************************************************** -->
 <p>
-The follwing data types are passed into event handlers by GTK+. For
+The following data types are passed into event handlers by GTK+. For
 each data type listed, the signals that use this data type are listed.
 
 <itemize>
@@ -16736,21 +16793,21 @@ main (int argc, char *argv[])
 <sect> List Widget
 <!-- ***************************************************************** -->
 <p>
-NOTE: The GtkList widget has been superseded by the GtkCList
-widget. It is detailed here just for completeness.
+NOTE: The List widget has been superseded by the CList widget. It is
+detailed here just for completeness.
 
-The GtkList widget is designed to act as a vertical container for
-widgets that should be of the type GtkListItem.
+The List widget is designed to act as a vertical container for
+widgets that should be of the type ListItem.
 
-A GtkList widget has its own window to receive events and its own
+A List widget has its own window to receive events and its own
 background color which is usually white. As it is directly derived
-from a GtkContainer it can be treated as such by using the
-GTK_CONTAINER(List) macro, see the GtkContainer widget for more on
+from a Container it can be treated as such by using the
+GTK_CONTAINER(List) macro, see the Container widget for more on
 this. One should already be familiar with the usage of a GList and
-its related functions g_list_*() to be able to use the GtkList widget
+its related functions g_list_*() to be able to use the List widget
 to it full extent.
 
-There is one field inside the structure definition of the GtkList
+There is one field inside the structure definition of the List
 widget that will be of greater interest to us, this is:
 
 <tscreen><verb>
@@ -16763,39 +16820,39 @@ struct _GtkList
 }; 
 </verb></tscreen>
 
-The selection field of a GtkList points to a linked list of all items
+The selection field of a List points to a linked list of all items
 that are currently selected, or NULL if the selection is empty.  So to
 learn about the current selection we read the GTK_LIST()->selection
 field, but do not modify it since the internal fields are maintained
 by the gtk_list_*() functions.
 
-The selection_mode of the GtkList determines the selection facilities
-of a GtkList and therefore the contents of the GTK_LIST()->selection
+The selection_mode of the List determines the selection facilities
+of a List and therefore the contents of the GTK_LIST()->selection
 field. The selection_mode may be one of the following:
 
 <itemize>
-<item> GTK_SELECTION_SINGLE - The selection is either NULL
+<item> <tt/GTK_SELECTION_SINGLE/ - The selection is either NULL
                         or contains a GList pointer
                         for a single selected item.
 
-<item> GTK_SELECTION_BROWSE -  The selection is NULL if the list
+<item> <tt/GTK_SELECTION_BROWSE/ -  The selection is NULL if the list
                         contains no widgets or insensitive
                         ones only, otherwise it contains
                         a GList pointer for one GList
                         structure, and therefore exactly
                         one list item.
 
-<item> GTK_SELECTION_MULTIPLE -  The selection is NULL if no list
+<item> <tt/GTK_SELECTION_MULTIPLE/ -  The selection is NULL if no list
                         items are selected or a GList pointer
                         for the first selected item. That
                         in turn points to a GList structure
                         for the second selected item and so
                         on.
 
-<item> GTK_SELECTION_EXTENDED - The selection is always NULL.
+<item> <tt/GTK_SELECTION_EXTENDED/ - The selection is always NULL.
 </itemize>
 
-The default is GTK_SELECTION_MULTIPLE.
+The default is <tt/GTK_SELECTION_MULTIPLE/.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1> Signals
@@ -16804,8 +16861,8 @@ The default is GTK_SELECTION_MULTIPLE.
 void selection_changed( GtkList *list );
 </verb></tscreen>
 
-This signal will be invoked whenever the selection field of a GtkList
-has changed. This happens when a child of the GtkList got selected or
+This signal will be invoked whenever the selection field of a List
+has changed. This happens when a child of thekList got selected or
 deselected.
 
 <tscreen><verb>
@@ -16813,22 +16870,22 @@ void select_child( GtkList   *list,
                    GtkWidget *child);
 </verb></tscreen>
 
-This signal is invoked when a child of the GtkList is about to get
+This signal is invoked when a child of the List is about to get
 selected. This happens mainly on calls to gtk_list_select_item(),
 gtk_list_select_child(), button presses and sometimes indirectly
 triggered on some else occasions where children get added to or
-removed from the GtkList.
+removed from the List.
 
 <tscreen><verb>
 void unselect_child( GtkList   *list,
                      GtkWidget *child );
 </verb></tscreen>
 
-This signal is invoked when a child of the GtkList is about to get
+This signal is invoked when a child of the List is about to get
 deselected. This happens mainly on calls to gtk_list_unselect_item(),
 gtk_list_unselect_child(), button presses and sometimes indirectly
 triggered on some else occasions where children get added to or
-removed from the GtkList.
+removed from the List.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1> Functions
@@ -16837,13 +16894,13 @@ removed from the GtkList.
 guint gtk_list_get_type( void );
 </verb></tscreen>
 
-Returns the `GtkList' type identifier.
+Returns the "GtkList" type identifier.
 
 <tscreen><verb>
 GtkWidget *gtk_list_new( void );
 </verb></tscreen>
 
-Create a new GtkList object. The new widget is returned as a pointer
+Create a new List object. The new widget is returned as a pointer
 to a GtkWidget object. NULL is returned on failure.
 
 <tscreen><verb>
@@ -16854,7 +16911,7 @@ void gtk_list_insert_items( GtkList *list,
 
 Insert list items into the list, starting at <tt/position/.
 <tt/items/ is a doubly linked list where each nodes data pointer is
-expected to point to a newly created GtkListItem.  The GList nodes of
+expected to point to a newly created ListItem. The GList nodes of
 <tt/items/ are taken over by the list.
 
 <tscreen><verb>
@@ -16946,34 +17003,31 @@ GTK_SELECTION_EXTENDED.
 GtkList *GTK_LIST( gpointer obj );
 </verb></tscreen>
 
-Cast a generic pointer to `GtkList *'. *Note Standard Macros::, for
-more info.
+Cast a generic pointer to "GtkList *".
 
 <tscreen><verb>
 GtkListClass *GTK_LIST_CLASS( gpointer class);
 </verb></tscreen>
 
-Cast a generic pointer to `GtkListClass*'. *Note Standard Macros::,
-for more info.
+Cast a generic pointer to "GtkListClass *". 
 
 <tscreen><verb>
 gint GTK_IS_LIST( gpointer obj);
 </verb></tscreen>
 
-Determine if a generic pointer refers to a `GtkList' object. *Note
-Standard Macros::, for more info.
+Determine if a generic pointer refers to a "GtkList" object.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1> Example
 <p>
 Following is an example program that will print out the changes of the
-selection of a GtkList, and lets you "arrest" list items into a prison
+selection of a List, and lets you "arrest" list items into a prison
 by selecting them with the rightmost mouse button.
 
 <tscreen><verb>
 /* example-start list list.c */
 
-/* Include the gtk+ header files
+/* Include the GTK header files
  * Include stdio.h, we need that for the printf() function
  */
 #include        <gtk/gtk.h>
@@ -16986,7 +17040,7 @@ const gchar *list_item_data_key="list_item_data";
 
 
 /* prototypes for signal handler that we are going to connect
- * to the GtkList widget
+ * to the List widget
  */
 static void  sigh_print_selection( GtkWidget *gtklist,
                                    gpointer   func_data);
@@ -17014,7 +17068,7 @@ gint main (int    argc,
     gchar buffer[64];
     
     
-    /* Initialize gtk+ (and subsequently gdk) */
+    /* Initialize GTK (and subsequently GDK) */
 
     gtk_init(&amp;argc, &amp;argv);
     
@@ -17038,15 +17092,15 @@ gint main (int    argc,
     gtk_container_add(GTK_CONTAINER(window), vbox);
     gtk_widget_show(vbox);
     
-    /* This is the scrolled window to put the GtkList widget inside */
+    /* This is the scrolled window to put the List widget inside */
     scrolled_window=gtk_scrolled_window_new(NULL, NULL);
     gtk_widget_set_usize(scrolled_window, 250, 150);
     gtk_container_add(GTK_CONTAINER(vbox), scrolled_window);
     gtk_widget_show(scrolled_window);
     
-    /* Create the GtkList widget.
+    /* Create thekList widget.
      * Connect the sigh_print_selection() signal handler
-     * function to the "selection_changed" signal of the GtkList
+     * function to the "selection_changed" signal of the List
      * to print out the selected items each time the selection
      * has changed */
     gtklist=gtk_list_new();
@@ -17066,7 +17120,7 @@ gint main (int    argc,
     gtk_container_add(GTK_CONTAINER(vbox), frame);
     gtk_widget_show(frame);
     
-    /* Connect the sigh_button_event() signal handler to the GtkList
+    /* Connect the sigh_button_event() signal handler to the List
      * which will handle the "arresting" of list items
      */
     gtk_signal_connect(GTK_OBJECT(gtklist),
@@ -17091,7 +17145,7 @@ gint main (int    argc,
     
     
     /* Now we create 5 list items, each having its own
-     * label and add them to the GtkList using gtk_container_add()
+     * label and add them to the List using gtk_container_add()
      * Also we query the text string from the label and
      * associate it with the list_item_data_key for each list item
      */
@@ -17149,7 +17203,7 @@ gint main (int    argc,
 }
 
 /* This is the signal handler that got connected to button
- * press/release events of the GtkList
+ * press/release events of the List
  */
 void sigh_button_event( GtkWidget      *gtklist,
                         GdkEventButton *event,
@@ -17191,7 +17245,7 @@ void sigh_button_event( GtkWidget      *gtklist,
 	g_list_free(free_list);
 	
 	/* If we have a new prisoner, remove him from the
-	 * GtkList and put him into the frame "Prison".
+	 * List and put him into the frame "Prison".
 	 * We need to unselect the item first.
 	 */
 	if (new_prisoner) {
@@ -17208,7 +17262,7 @@ void sigh_button_event( GtkWidget      *gtklist,
     }
 }
 
-/* This is the signal handler that gets called if GtkList
+/* This is the signal handler that gets called if List
  * emits the "selection_changed" signal
  */
 void sigh_print_selection( GtkWidget *gtklist,
@@ -17217,7 +17271,7 @@ void sigh_print_selection( GtkWidget *gtklist,
     GList   *dlist;
     
     /* Fetch the doubly linked list of selected items
-     * of the GtkList, remember to treat this as read-only!
+     * of the List, remember to treat this as read-only!
      */
     dlist=GTK_LIST(gtklist)->selection;
     
@@ -17254,21 +17308,21 @@ void sigh_print_selection( GtkWidget *gtklist,
 <!-- ----------------------------------------------------------------- -->
 <sect1> List Item Widget
 <p>
-The GtkListItem widget is designed to act as a container holding up to
+The ListItem widget is designed to act as a container holding up to
 one child, providing functions for selection/deselection just like the
-GtkList widget requires them for its children.
+List widget requires them for its children.
 
-A GtkListItem has its own window to receive events and has its own
+A ListItem has its own window to receive events and has its own
 background color which is usually white.
 
-As it is directly derived from a GtkItem it can be treated as such by
-using the GTK_ITEM(ListItem) macro, see the GtkItem widget for more on
-this. Usually a GtkListItem just holds a label to identify e.g. a
-filename within a GtkList -- therefore the convenience function
+As it is directly derived from an Item it can be treated as such by
+using the GTK_ITEM(ListItem) macro, see the Item widget for more on
+this. Usually a ListItem just holds a label to identify, e.g., a
+filename within a List -- therefore the convenience function
 gtk_list_item_new_with_label() is provided. The same effect can be
-achieved by creating a GtkLabel on its own, setting its alignment to
+achieved by creating a Label on its own, setting its alignment to
 xalign=0 and yalign=0.5 with a subsequent container addition to the
-GtkListItem.
+ListItem.
 
 As one is not forced to add a GtkLabel to a GtkListItem, you could
 also add a GtkVBox or a GtkArrow etc. to the GtkListItem.
@@ -17276,8 +17330,8 @@ also add a GtkVBox or a GtkArrow etc. to the GtkListItem.
 <!-- ----------------------------------------------------------------- -->
 <sect1> Signals
 <p>
-A GtkListItem does not create new signals on its own, but inherits
-the signals of a GtkItem. *Note GtkItem::, for more info.
+AkListItem does not create new signals on its own, but inherits
+the signals of a Item.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1> Functions
@@ -17286,20 +17340,20 @@ the signals of a GtkItem. *Note GtkItem::, for more info.
 guint gtk_list_item_get_type( void );
 </verb></tscreen>
 
-Returns the `GtkListItem' type identifier.
+Returns the "GtkListItem" type identifier.
 
 <tscreen><verb>
 GtkWidget *gtk_list_item_new( void );
 </verb></tscreen>
 
-Create a new GtkListItem object. The new widget is returned as a
+Create a new ListItem object. The new widget is returned as a
 pointer to a GtkWidget object. NULL is returned on failure.
 
 <tscreen><verb>
 GtkWidget *gtk_list_item_new_with_label( gchar *label );
 </verb></tscreen>
 
-Create a new GtkListItem object, having a single GtkLabel as the sole
+Create a new ListItem object, having a single GtkLabel as the sole
 child. The new widget is returned as a pointer to a GtkWidget
 object. NULL is returned on failure.
 
@@ -17323,8 +17377,7 @@ signal.  *Note GtkItem::, for more info.
 GtkListItem *GTK_LIST_ITEM( gpointer obj );
 </verb></tscreen>
 
-Cast a generic pointer to `GtkListItem*'. *Note Standard Macros::, for
-more info.
+Cast a generic pointer to "GtkListItem *".
 
 <tscreen><verb>
 GtkListItemClass *GTK_LIST_ITEM_CLASS( gpointer class );
@@ -17343,8 +17396,8 @@ Determine if a generic pointer refers to a `GtkListItem' object.
 <!-- ----------------------------------------------------------------- -->
 <sect1> Example
 <p>
-Please see the GtkList example on this, which covers the usage of a
-GtkListItem as well.
+Please see the List example on this, which covers the usage of a
+ListItem as well.
 
 
 </article>
