@@ -1746,7 +1746,7 @@ gtk_button_grab_notify (GtkWidget *widget,
  * @image: a widget to set as the image for the button
  *
  * Set the image of @button to the given widget. Note that
- * it depends on the show-button-images setting whether the
+ * it depends on the gtk-button-images setting whether the
  * image will be displayed or not.
  *
  * Since: 2.6
