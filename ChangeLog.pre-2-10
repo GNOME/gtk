@@ -1,3 +1,8 @@
+2004-07-01  J. Ali Harlow  <ali@juiblex.co.uk>
+
+	* gdk/win32/gdkinput-win32.c (_gdk_input_ungrab_pointer): Fix
+	win32 build problem w/o wintab.  Fixed #145242
+
 Sat Jun 26 01:15:40 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkwindow-x11.c (set_initial_hints): Handle

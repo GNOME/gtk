@@ -1184,8 +1184,8 @@ _gdk_input_ungrab_pointer (guint32 time)
 	  tmp_list = tmp_list->next;
 	}
     }
-#endif
   x_grab_window = NULL;
+#endif
 }
 
 gboolean
