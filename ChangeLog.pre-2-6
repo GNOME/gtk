@@ -1,3 +1,13 @@
+Fri Feb 13 19:08:51 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkclist.c (check_exposures): check for clist !REALIZED.
+	(draw_rows): bail out if the widget isn't drawable.
+	(hadjustment_value_changed): 
+	(vadjustment_value_changed): bail out if clist isn't drawable.
+
+	* gdk/gdk.c (graphics_expose_predicate): check for private != NULL.
+	(gdk_event_get_graphics_expose): check for window != NULL.
+
 Fri Feb 13 00:33:26 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/testgtk.c (shape_create_icon): Realize window before

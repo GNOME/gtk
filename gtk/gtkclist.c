@@ -3146,6 +3146,9 @@ check_exposures (GtkCList *clist)
 {
   GdkEvent *event;
 
+  if (!GTK_WIDGET_REALIZED (clist))
+    return;
+
   /* Make sure graphics expose events are processed before scrolling
    * again */
   while ((event = gdk_event_get_graphics_expose (clist->clist_window)) != NULL)
@@ -3173,6 +3176,9 @@ vadjustment_value_changed (GtkAdjustment * adjustment,
   g_return_if_fail (GTK_IS_CLIST (data));
 
   clist = GTK_CLIST (data);
+
+  if (!GTK_WIDGET_DRAWABLE (clist))
+    return;
 
   value = adjustment->value;
 
@@ -3257,6 +3263,9 @@ hadjustment_value_changed (GtkAdjustment * adjustment,
   g_return_if_fail (GTK_IS_CLIST (data));
 
   clist = GTK_CLIST (data);
+
+  if (!GTK_WIDGET_DRAWABLE (clist))
+    return;
 
   value = adjustment->value;
 

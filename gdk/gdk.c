@@ -642,6 +642,8 @@ graphics_expose_predicate  (Display  *display,
 			    XPointer  arg)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)arg;
+  
+  g_return_val_if_fail (private != NULL, False);
 
   if ((xevent->xany.window == private->xwindow) &&
       ((xevent->xany.type == GraphicsExpose) ||
@@ -656,6 +658,8 @@ gdk_event_get_graphics_expose (GdkWindow *window)
 {
   XEvent xevent;
   GdkEvent *event;
+  
+  g_return_val_if_fail (window != NULL, NULL);
 
   XIfEvent (gdk_display, &xevent, graphics_expose_predicate, (XPointer)window);
 
