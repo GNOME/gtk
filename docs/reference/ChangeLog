@@ -1,3 +1,7 @@
+Mon Mar 25 11:31:41 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/tree_widget.sgml: fix bugs in the code.
+
 2002-03-20  Cody Russell  <cody@jhu.edu>
 
 	* gtk/tree_widget.sgml: Much expanded overview of the tree.

@@ -102,11 +102,12 @@ gtk_tree_store_append (store, &iter, NULL);  /* Acquire an iterator */
 gtk_tree_store_set (store, &iter,
                     TITLE_COLUMN, "The Principle of Reason",
                     AUTHOR_COLUMN, "Martin Heidegger",
-                    CHECKED_COLUMN, FALSE);
+                    CHECKED_COLUMN, FALSE
+                    -1);
 ]]></programlisting></informalexample>
 
   <para>
-    Notice that the last argument is FALSE.  This is always done because
+    Notice that the last argument is -1.  This is always done because
     this is a variable-argument function and it needs to know when to stop
     processing arguments.  It can be used to set the data in any or all
     columns in a given row.
@@ -126,33 +127,35 @@ gtk_tree_store_set (store, &iter1,
                     TITLE_COLUMN, "The Art of Computer Programming",
                     AUTHOR_COLUMN, "Donald E. Knuth",
                     CHECKED_COLUMN, FALSE,
-                    NULL);
+                    -1);
 
 gtk_tree_store_append (store, &iter2, &iter1);  /* Acquire a child iterator */
 gtk_tree_store_set (store, &iter2,
                     TITLE_COLUMN, "Volume 1: Fundamental Algorithms",
-                    NULL);
+                    -1);
 
 gtk_tree_store_append (store, &iter2, &iter1);
 gtk_tree_store_set (store, &iter2,
                     TITLE_COLUMN, "Volume 2: Seminumerical Algorithms",
-                    NULL);
+                    -1);
 
 gtk_tree_store_append (store, &iter2, &iter1);
 gtk_tree_store_set (store, &iter2,
                     TITLE_COLUMN, "Volume 3: Sorting and Searching",
-                    NULL);
+                    -1);
 ]]></programlisting></informalexample>
   </refsect1>
 
   <refsect1>
     <title>Creating the view component</title>
     <para>
-      While there are two different models to choose from, there is only one
-      view widget to deal with.  It works with either the list or the tree store.
-      Setting up a <link linkend="GtkTreeView">GtkTreeView</link> is not a
-      difficult matter.  It needs a <link linkend="GtkTreeModel">GtkTreeModel</link>
-      to know where to retrieve its data from.
+      While there are several different models to choose from, there is
+      only one view widget to deal with.  It works with either the list
+      or the tree store.  Setting up a <link
+      linkend="GtkTreeView">GtkTreeView</link> is not a difficult
+      matter.  It needs a <link
+      linkend="GtkTreeModel">GtkTreeModel</link> to know where to
+      retrieve its data from.
     </para>
     <informalexample><programlisting><![CDATA[
 GtkWidget *tree;
@@ -163,9 +166,26 @@ tree = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
     <refsect2>
       <title>Columns and cell renderers</title>
       <para>
-        Cell renderers are used to draw the data in the tree model in a certain way.
-        There are three cell renderers to choose from with GTK+ 2.0, but the
-        adventuresome hacker may write more.
+	Once the <link linkend="GtkTreeView">GtkTreeView</link> widget
+	has a model, it will need to know how to display the model.  It
+	does this with columns and cell renderers.
+      </para>
+      <para>
+        Cell renderers are used to draw the data in the tree model in a
+        way.  There are three cell renderers that come with GTK+ 2.0.
+        They are the <link
+        linkend="GtkCellRendererText">GtkCellRendererText</link>, <link
+        linkend="GtkCellRendererPixbuf">GtkCellRendererPixbuf</link> and
+        the <link
+        linkend="GtkCellRendererToggle">GtkCellRendererToggle</link>.
+        It is relatively easy to write a custom renderer.
+      </para>
+      <para>
+        A <link linkend="GtkTreeViewColumn">GtkTreeViewColumn</link> is the
+        object that GtkTreeView uses to organize the vertical columns in
+        the tree view.  It needs to know the name of the column to label
+        for the user, what type of cell renderer to use, and which piece of
+        data to retrieve from the model for a given row.
       </para>
       <informalexample><programlisting><![CDATA[
 GtkCellRenderer *renderer;
@@ -178,13 +198,6 @@ column = gtk_tree_view_column_new_with_attributes ("Author",
                                                    NULL);
 gtk_tree_view_append_column (GTK_TREE_VIEW (tree), column);
 ]]></programlisting></informalexample>
-      <para>
-        A <link linkend="GtkTreeViewColumn">GtkTreeViewColumn</link> is the
-        object that GtkTreeView uses to organize the vertical columns in
-        the tree view.  It needs to know the name of the column to label
-        for the user, what type of cell renderer to use, and which piece of
-        data to retrieve from the model for a given row.
-      </para>
       <para>
        At this point, all the steps in creating a displayable tree have been
        covered.  The model is created, data is stored in it, a tree view is
@@ -283,12 +296,13 @@ setup_tree (void)
    /* Create a cell render and arbitrarily make it red for demonstration
     * purposes */
    renderer = gtk_cell_renderer_text_new ();
-   g_object_set (G_OBJECT (renderer), "foreground", "red", NULL);
+   g_object_set (G_OBJECT (renderer),
+                 "foreground", "red",
+                 NULL);
 
    /* Create a column, associating the "text" attribute of the
     * cell_renderer to the first column of the model */
-   column = gtk_tree_view_column_new_with_attributes ("Author",
-                                                      renderer,
+   column = gtk_tree_view_column_new_with_attributes ("Author", renderer,
                                                       "text", AUTHOR_COLUMN,
                                                       NULL);
 
