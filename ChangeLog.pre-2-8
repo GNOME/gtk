@@ -1,3 +1,14 @@
+Thu May  3 14:13:49 2001  Owen Taylor  <otaylor@redhat.com>
+
+        * INSTALL.in HACKING gtk/gtkaccessible.[ch] gtk/gtk.c: Add
+	dependency on Atk for accessibility support.
+
+	* configure.in **/Makefile.am: Major reworking of substituted
+	variables for CFLAGS/LIBS to make a lot more sane and 
+	keep the the compile/link lines a bit shorter.
+
+	* gdk/x11/gdkkeys-x11.c: Fix #endif with trailing stuff.
+
 Thu May  3 08:10:54 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktexttag.c (gtk_text_tag_class_init): Fix return

@@ -5,10 +5,7 @@ INCLUDES = @STRIP_BEGIN@ \
 	-I$(top_builddir)/gdk				\
 	-DGTK_DISABLE_COMPAT_H				\
 	@GTK_DEBUG_FLAGS@				\
-	@GTK_XIM_FLAGS@					\
-	@PANGO_CFLAGS@					\
-	@GLIB_CFLAGS@					\
-	@more_cflags@					\
+	@GTK_DEP_CFLAGS@				\
 @STRIP_END@
 
 DEPS = \
@@ -20,13 +17,6 @@ LDADDS = @STRIP_BEGIN@ 					\
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la	\
 	$(top_builddir)/gdk/@gdktargetlib@        	\
 	$(top_builddir)/gtk/@gtktargetlib@ 		\
-	@more_ldflags@					\
-	@more_libs@					\
-	@GDK_WLIBS@					\
-	@PANGO_LIBS@					\
-	@GLIB_LIBS@					\
-	@GTK_LIBS_EXTRA@				\
-	-lm						\
 @STRIP_END@
 
 if USE_X11

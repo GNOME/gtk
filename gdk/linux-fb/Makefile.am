@@ -9,17 +9,12 @@ INCLUDES = @STRIP_BEGIN@ 	\
 	-I$(top_srcdir)		\
 	-I$(top_srcdir)/gdk	\
 	-I$(top_builddir)/gdk	\
-	@FREETYPE_CFLAGS@	\
+	@GDK_DEP_CFLAGS@	\
 	@GTK_DEBUG_FLAGS@ 	\
-	@GTK_XIM_FLAGS@		\
-	@GLIB_CFLAGS@		\
-	@PANGO_CFLAGS@		\
 @STRIP_END@
 
 LDFLAGS = @STRIP_BEGIN@ \
-	@GLIB_LIBS@	\
-	@PANGO_LIBS@	\
-	@FREETYPE_LIBS@	\
+	@GDK_DEP_LIBS@	\
 	-lm		\
 @STRIP_END@
 

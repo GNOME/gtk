@@ -1,12 +1,15 @@
 # Process this file with autoconf to produce a configure script.
 AC_INIT(gdk/gdktypes.h)
 
-# In the following, there are a the following variants
-# of GLib cflags and libs variables
 #
-# GLIB_CFLAGS:  cflags for compiling libraries and example progs
-# GLIB_LIBS:    libraries for linking example programs
-# GLIB_DEPLIBS: libraries for linking libraries against
+# For each of the libraries we build, we define the following
+# substituted variables:
+#
+# foo_PACKAGES:     pkg-config packages this library requires
+# foo_EXTRA_LIBS:   Libraries this module requires not pulled in by pkg-config
+# foo_EXTRA_CFLAGS: cflags this module requires not pulled in by pkg-config
+# foo_DEP_LIBS:     All libraries this module requires
+# foo_DEP_CFLAGS:   All cflags this module requires
 
 
 ## We could have pkg-config uniquify the ldflags and cflags by calling
@@ -256,20 +259,16 @@ AC_TRY_RUN([#include <math.h>
 LIBS=$gtk_save_LIBS
 
 MATH_LIB=-lm
-GTK_LIBS_EXTRA=
 AC_MSG_CHECKING(for the BeOS)
 case $host in
   *-*-beos*)
     AC_MSG_RESULT(yes)
-    GTK_LIBS_EXTRA="-L\$(top_builddir_full)/gdk/.libs -lgdk"
     MATH_LIB=
   ;;
   *)
     AC_MSG_RESULT(no)
   ;;
 esac
-AC_SUBST(MATH_LIB)
-AC_SUBST(GTK_LIBS_EXTRA)
 
 dnl NeXTStep cc seems to need this
 AC_MSG_CHECKING([for extra flags for POSIX compliance])
@@ -296,15 +295,6 @@ AM_PATH_GLIB_2_0($GLIB_REQUIRED_VERSION, :,
 *** GLIB is always available from ftp://ftp.gtk.org/.]),
   gobject gmodule gthread)
 
-dnl Call pkg-config again since we don't want -lgthread here
-GLIB_LIBS=`$PKG_CONFIG --libs $GLIB_PACKAGES`
-GLIB_DEPLIBS=$GLIB_LIBS
-
-CFLAGS="$CFLAGS $GLIB_CFLAGS"
-AC_SUBST(GLIB_CFLAGS)
-AC_SUBST(GLIB_LIBS)
-AC_SUBST(GLIB_DEPLIBS)
-
 AC_CHECK_HEADERS(dirent.h, AC_DEFINE(HAVE_DIRENT_H))
 AC_CHECK_HEADERS(pwd.h, AC_DEFINE(HAVE_PWD_H))
 AC_CHECK_HEADERS(sys/time.h, AC_DEFINE(HAVE_SYS_TIME_H))
@@ -312,317 +302,6 @@ AC_CHECK_HEADERS(unistd.h, AC_DEFINE(HAVE_UNISTD_H))
 
 saved_cflags="$CFLAGS"
 saved_ldflags="$LDFLAGS"
-
-if test "x$gdktarget" = "xx11"; then
-  # Find the X11 include and library directories
-  AC_PATH_X
-  AC_PATH_XTRA
-
-  if test "x$x_includes" = "x"; then
-    x_includes="/usr/include"
-  fi
-
-  CFLAGS="$CFLAGS $X_CFLAGS"
-  LDFLAGS="$LDFLAGS $X_LDFLAGS $X_LIBS"
-
-  if test "x$no_x" = "xyes"; then 
-    AC_MSG_ERROR([
-*** X libraries or include files not found. Check 'config.log' for 
-*** more details.])
-  fi
-
-  # Checks for libraries.
-  # Check for the X11 library
-  AC_CHECK_LIB(X11, XOpenDisplay, x_libs="-lX11 $X_EXTRA_LIBS", 
-    AC_MSG_ERROR([*** libX11 not found. Check 'config.log' for more details.]),
-    $X_EXTRA_LIBS)
-
-  if test "x$enable_shm" = "xyes"; then
-    # Check for the Xext library (needed for XShm extention)
-    AC_CHECK_LIB(Xext, XShmAttach, 
-        x_libs="-lXext $x_libs", 
-        # On AIX, it is in XextSam instead, but we still need -lXext
-        AC_CHECK_LIB(XextSam, XShmAttach, 
-            x_libs="-lXextSam -lXext $x_libs", 
-            no_xext_lib=yes, $x_libs),
-        $x_libs)
-  fi
-
-  # Check for shaped window extension
-
-  AC_CHECK_LIB(Xext, XShapeCombineMask,
-      if test -z "`echo $x_libs | grep "\-lXext" 2> /dev/null`"; then
-           x_libs="-lXext $x_libs"
-      fi
-      AC_DEFINE(HAVE_SHAPE_EXT),
-      ,
-      $x_libs)
-
-  # Check for XConvertCase (X11R6 specific)
-
-  AC_CHECK_LIB(X11, XConvertCase,
-      AC_DEFINE(HAVE_XCONVERTCASE),
-      ,
-      $x_libs)
-
-  #
-  # Checks for FreeType
-  #
-  FREETYPE_LIBS=
-  FREETYPE_CFLAGS=
-  have_freetype=false
-  AC_PATH_PROG(FREETYPE_CONFIG, freetype-config, no)
-  if test "x$FREETYPE_CONFIG" != "xno" ; then
-    FREETYPE_CFLAGS=`freetype-config --cflags`
-    FREETYPE_LIBS=`freetype-config --libs`
-
-    AC_CHECK_LIB(freetype, FT_New_Face, have_freetype=true
-	         ,:,$FREETYPE_LIBS)
-  fi
-  AC_SUBST(FREETYPE_CFLAGS)
-
-  #
-  # Checks for Xft/XRender
-  #
-  have_xft=false
-  XFT_LIBS=""
-  XFT_CFLAGS=""
-  if test $have_freetype = true ; then
-    AC_CHECK_LIB(Xrender, XRenderFindFormat, 
-      AC_CHECK_LIB(Xft, XftFontOpen, have_xft=true, :, -lXrender -lXext $X_LIBS $FREETYPE_LIBS)
-    ,:,-lXext $X_LIBS)
-
-    ## be sure we also have Pango built with xft support
-    if ! $PKG_CONFIG --exists pangoxft ; then
-        have_xft=false
-        AC_MSG_WARN([X render extension found, but Pango lacks Xft support])        
-    fi
-
-    if $have_xft = 'true' ; then
-      X_LIBS="-lXft -lXrender -lXext $FREETYPE_LIBS $X_LIBS"
-      AC_DEFINE(HAVE_XFT)
-    fi
-  fi
-
-  AC_SUBST(XFT_LIBS)
-  AM_CONDITIONAL(HAVE_XFT, $have_xft)
-
-  # Check for XIM support.
-
-  AC_CHECK_LIB(X11, XUnregisterIMInstantiateCallback,
-	    : ,
-	    enable_xim_inst="no",
-	    $x_libs)
-
-  # On Solaris, calling XRegisterIMInstantiateCallback seems to
-  # cause an immediate segfault, so we disable it, unless
-  # the user specifically forces it to be on.
-
-  if test x$enable_xim_inst = xmaybe ; then
-    case host in
-	  *-*-solaris*)
-            enable_xim_inst="no"
-            ;;
-	  *)
-	    enable_xim_inst="yes"
-	    ;;
-    esac
-  fi
-
-  if test "x$enable_xim" = "xyes"; then
-    GTK_XIM_FLAGS="-DUSE_XIM"
-    if test "x$enable_xim_inst" = "xyes"; then
-      AC_DEFINE(USE_X11R6_XIM)
-    fi
-  fi
-
-  # Check for XKB support.
-
-  if test "x$enable_xkb" = "xyes"; then
-        AC_MSG_WARN(XKB support explicitly enabled)
-        AC_DEFINE(HAVE_XKB)
-  elif test "x$enable_xkb" = "xmaybe"; then
-        AC_CHECK_LIB(X11, XkbQueryExtension,
-                     AC_DEFINE(HAVE_XKB),
-	             ,
-	             $x_libs)
-  else
-        AC_MSG_WARN(XKB support explicitly disabled)
-  fi
-
-  x_cflags="$X_CFLAGS"
-  x_ldflags="$X_LDFLAGS $X_LIBS"
-
-  # set up things for XInput
-
-  if test "x$with_xinput" = "xgxi" || test "x$with_xinput" = "xyes"; then
-    AC_DEFINE(XINPUT_GXI)
-    xinput_progs=gxid
-    x_libs="-lXi $x_libs"
-  elif test "x$with_xinput" = "xxfree"; then
-    AC_DEFINE(XINPUT_XFREE)
-    x_libs="-lXi $x_libs"
-  else
-    AC_DEFINE(XINPUT_NONE)
-  fi
-
-  AM_CONDITIONAL(XINPUT_GXI, test x$with_xinput = xgxi)
-  AM_CONDITIONAL(XINPUT_XFREE, test x$with_xinput = xxfree)
-
-  if test "x$enable_shm" = "xyes"; then
-    # Check for shared memory
-    AC_CHECK_HEADER(sys/ipc.h, AC_DEFINE(HAVE_IPC_H), no_sys_ipc=yes)
-    AC_CHECK_HEADER(sys/shm.h, AC_DEFINE(HAVE_SHM_H), no_sys_shm=yes)
-
-    # Check for the X shared memory extension header file
-    AC_MSG_CHECKING(X11/extensions/XShm.h)
-    if test "x$no_xext_lib" = "xyes"; then
-      AC_MSG_RESULT(no)
-      no_xshm=yes
-    else
-      if test -f "$x_includes/X11/extensions/XShm.h"; then
-        AC_MSG_RESULT(yes)
-        AC_DEFINE(HAVE_XSHM_H)
-      else
-        AC_MSG_RESULT(no)
-        no_xshm=yes
-      fi
-    fi
-  fi
-
-  more_cflags="$x_cflags"
-  more_ldflags="$x_ldflags"
-  more_libs="$x_libs"
-  more_includes="$x_includes"
-
-  # these are already defined above
-  #gdktargetlib = "libgdk-x11-1.3.la"
-  #gtktargetlib = "libgtk-x11-1.3.la"
-
-  AM_CONDITIONAL(USE_X11, true)
-else
-  AM_CONDITIONAL(USE_X11, false)
-fi
-
-if test "x$gdktarget" = "xnanox"; then
-  AC_CHECK_LIB(nano-X, GrOpen,,AC_MSG_ERROR([nano-X libraries not found.]))
-  # nano-X may require additional libraries
-  more_cflags=
-  more_ldflags=
-  more_libs="-lnano-X"
-  more_includes=
-
-  gdktargetlib="libgdk-nanox-1.3.la"
-  gtktargetlib="libgtk-nanox-1.3.la"
-
-  with_xinput=no
-  AC_DEFINE(XINPUT_NONE)
-  x_cflags=
-  x_includes=
-  x_ldflags=
-  x_libs=
-  xinput_progs=
-  AM_CONDITIONAL(USE_NANOX, true)
-else
-  AM_CONDITIONAL(USE_NANOX, false)
-fi
-
-if test "x$gdktarget" = "xlinux-fb"; then
-  more_cflags=
-  more_ldflags=
-  more_libs=
-  more_includes=
-
-  gdktargetlib="libgdk-linux-fb-1.3.la"
-  gtktargetlib="libgtk-linux-fb-1.3.la"
-
-  with_xinput=no
-  AC_DEFINE(XINPUT_NONE)
-  x_cflags=
-  x_includes=
-  x_ldflags=
-  x_libs=
-  xinput_progs=
-
-  AC_PATH_PROG(FREETYPE_CONFIG, freetype-config, no)
-  if test x$FREETYPE_CONFIG = xno ; then
-    AC_MSG_ERROR([*** freetype-config not found])
-  fi
-
-  FREETYPE_CFLAGS="`$FREETYPE_CONFIG --cflags`"
-  FREETYPE_LIBS="`$FREETYPE_CONFIG --libs`"
-  CFLAGS="$CFLAGS $FREETYPE_CFLAGS"
-
-  if test x$enable_shadowfb = xyes ; then
-    AC_DEFINE(ENABLE_SHADOW_FB)
-  fi
-  
-  AM_CONDITIONAL(USE_LINUX_FB, true)
-else
-  AM_CONDITIONAL(USE_LINUX_FB, false)
-fi
-AC_SUBST(ENABLE_SHADOW_FB)	
-AC_SUBST(FREETYPE_LIBS)
-AC_SUBST(FREETYPE_CFLAGS)
-
-#
-# Pick correct Pango packages to use
-#
-
-if test "x$gdktarget" = "xx11"; then
-	if $have_xft = true ; then
-            PANGO_PACKAGES="pangox pangoxft"
-        else
-            PANGO_PACKAGES=pangox
-        fi
-elif test "x$gdktarget" = "xlinux-fb"; then
-        PANGO_PACKAGES=pangoft2
-else
-        PANGO_PACKAGES=pango
-fi
-
-AC_SUBST(PANGO_PACKAGES)
-
-# Check for Pango flags
-
-AC_MSG_CHECKING(Pango flags)
-if $PKG_CONFIG --exists $PANGO_PACKAGES ; then
-        PANGO_CFLAGS=`$PKG_CONFIG --cflags $PANGO_PACKAGES`
-        PANGO_LIBS=`$PKG_CONFIG --libs $PANGO_PACKAGES`
-
-        AC_MSG_RESULT($PANGO_CFLAGS $PANGO_LIBS)
-else
-        AC_MSG_ERROR([
-*** Pango not found. Pango is required to build GTK+.
-*** See http://www.pango.org for Pango information.
-*** For the framebuffer target, you will need to build 
-*** Pango with freetype support.
-])
-fi
-
-CFLAGS="$CFLAGS $PANGO_CFLAGS"
-AC_SUBST(PANGO_LIBS)
-AC_SUBST(PANGO_CFLAGS)
-
-AC_CHECK_LIB(pango, pango_context_new, :, AC_MSG_ERROR([
-*** Can't link to Pango. Pango is required to build
-*** GTK+. For more information see http://www.pango.org]), $PANGO_LIBS $x_ldflags $x_libs)
-
-CFLAGS="$saved_cflags"
-LDFLAGS="$saved_ldflags"
-
-AC_SUBST(x_cflags)
-AC_SUBST(x_includes)
-AC_SUBST(x_ldflags)
-AC_SUBST(x_libs)
-AC_SUBST(xinput_progs)
-
-AC_SUBST(more_cflags)
-AC_SUBST(more_includes)
-AC_SUBST(more_ldflags)
-AC_SUBST(more_libs)
-AC_SUBST(gdktargetlib)
-AC_SUBST(gtktargetlib)
 
 
 # Checks for header files.
@@ -702,9 +381,7 @@ fi
 AC_MSG_RESULT($gdk_working_wctype)
 AC_SUBST(GDK_WLIBS)
 
-AC_SUBST(GTK_DEBUG_FLAGS)
-AC_SUBST(GTK_XIM_FLAGS)
-AC_SUBST(GTK_LOCALE_FLAGS)
+
 
 ##################################################
 # Checks for gdk-pixbuf
@@ -835,8 +512,6 @@ dnl Test for libpng
     fi
   fi
 
-deps="$LIBTIFF $LIBJPEG $LIBPNG"
-
 AC_SUBST(LIBTIFF)
 AC_SUBST(LIBJPEG)
 AC_SUBST(LIBPNG)
@@ -866,7 +541,9 @@ INCLUDED_LOADER_DEFINE=
 
 IFS="${IFS= 	}"; gtk_save_ifs="$IFS"; IFS=","
 for loader in $included_loaders; do
- if ! echo "$all_loaders" | grep "\(^\|\,\)$loader\(\$\|\,\)" > /dev/null; then
+ if echo "$all_loaders" | grep "\(^\|\,\)$loader\(\$\|\,\)" > /dev/null; then
+   :
+ else
    AC_MSG_ERROR([the specified loader $loader does not exist])
  fi
 
@@ -877,7 +554,6 @@ IFS="$gtk_save_ifs"
 AC_SUBST(INCLUDED_LOADER_OBJ)
 AC_SUBST(INCLUDED_LOADER_DEFINE)
 
-AC_HEADER_STDC
 AC_HEADER_DIRENT
 AC_HEADER_SYS_WAIT
 
@@ -887,23 +563,20 @@ AM_CONDITIONAL(HAVE_TIFF, test "x$LIBTIFF" != x)
 AM_CONDITIONAL(HAVE_PNG, test "x$LIBPNG" != x)
 AM_CONDITIONAL(HAVE_JPEG, test "x$LIBJPEG" != x)
 
-GDK_PIXBUF_LIBDIR='-L${libdir}'
-GDK_PIXBUF_INCLUDEDIR="-I${includedir} $GTK_CFLAGS"
-GDK_PIXBUF_LIBS="$GLIB_LIBS -lgdk_pixbuf $deps $GTK_LIBS"
-AC_SUBST(STATIC_LIB_DEPS)
-STATIC_LIB_DEPS="$deps"
-
-AC_SUBST(GDK_PIXBUF_LIBDIR)
-AC_SUBST(GDK_PIXBUF_INCLUDEDIR)
-AC_SUBST(GDK_PIXBUF_LIBS)
-
-GDK_PIXBUF_XLIB_LIBDIR=$GDK_PIXBUF_LIBDIR
-GDK_PIXBUF_XLIB_INCLUDEDIR=$GDK_PIXBUF_INCLUDEDIR
-GDK_PIXBUF_XLIB_LIBS="$GLIB_LIBS -lgdk_pixbuf_xlib $deps $X11_LIBS"
-
-AC_SUBST(GDK_PIXBUF_XLIB_LIBDIR)
-AC_SUBST(GDK_PIXBUF_XLIB_INCLUDEDIR)
-AC_SUBST(GDK_PIXBUF_XLIB_LIBS)
+if test $dynworks = no ; then
+  STATIC_LIB_DEPS="$LIBTIFF $LIBJPEG $LIBPNG"
+else
+  STATIC_LIB_DEPS=
+  if echo "$included_loaders" | grep "\(^\|\,\)tiff\(\$\|\,\)" > /dev/null; then
+    STATIC_LIB_DEPS="STATIC_LIB_DEPS $LIBTIFF"
+  fi
+  if echo "$included_loaders" | grep "\(^\|\,\)jpeg\(\$\|\,\)" > /dev/null; then
+    STATIC_LIB_DEPS="STATIC_LIB_DEPS $LIBJPEG"
+  fi
+  if echo "$included_loaders" | grep "\(^\|\,\)png\(\$\|\,\)" > /dev/null; then
+    STATIC_LIB_DEPS="STATIC_LIB_DEPS $LIBPNG"
+  fi
+fi
 
 # Checks to see if we should compile in MMX support (there will be
 # a runtime test when the code is actually run to see if it should
@@ -946,6 +619,359 @@ fi
 AM_CONDITIONAL(USE_MMX, test x$use_mmx_asm = xyes)
 
 
+GDK_PIXBUF_PACKAGES=gmodule-2.0
+GDK_PIXBUF_EXTRA_LIBS="$STATIC_LIB_DEPS $MATH_LIB"
+GDK_PIXBUF_EXTRA_CFLAGS= 
+GDK_PIXBUF_DEP_LIBS="`pkg-config --libs $GDK_PIXBUF_PACKAGES` $GDK_PIXBUF_EXTRA_LIBS"
+GDK_PIXBUF_DEP_CFLAGS="`pkg-config --cflags $GDK_PIXBUF_PACKAGES` $GDK_PIXBUF_EXTRA_CFLAGS"
+
+AC_SUBST(GDK_PIXBUF_PACKAGES)
+AC_SUBST(GDK_PIXBUF_EXTRA_LIBS)
+AC_SUBST(GDK_PIXBUF_EXTRA_CFLAGS)
+AC_SUBST(GDK_PIXBUF_DEP_LIBS)
+AC_SUBST(GDK_PIXBUF_DEP_CFLAGS)
+
+
+########################################
+# Windowing system checks
+########################################
+
+GDK_EXTRA_LIBS=$GDK_WLIBS
+GDK_EXTRA_CFLAGS= 
+
+if test "x$gdktarget" = "xx11"; then
+  # Find the X11 include and library directories
+  AC_PATH_X
+  AC_PATH_XTRA
+
+  if test "x$x_includes" = "x"; then
+    x_includes="/usr/include"
+  fi
+
+  CFLAGS="$CFLAGS $X_CFLAGS"
+  LDFLAGS="$LDFLAGS $X_LDFLAGS $X_LIBS"
+
+  if test "x$no_x" = "xyes"; then 
+    AC_MSG_ERROR([
+*** X libraries or include files not found. Check 'config.log' for 
+*** more details.])
+  fi
+
+  # Checks for libraries.
+  # Check for the X11 library
+  AC_CHECK_LIB(X11, XOpenDisplay, x_libs="-lX11 $X_EXTRA_LIBS", 
+    AC_MSG_ERROR([*** libX11 not found. Check 'config.log' for more details.]),
+    $X_EXTRA_LIBS)
+
+  if test "x$enable_shm" = "xyes"; then
+    # Check for the Xext library (needed for XShm extention)
+    AC_CHECK_LIB(Xext, XShmAttach, 
+        x_libs="-lXext $x_libs", 
+        # On AIX, it is in XextSam instead, but we still need -lXext
+        AC_CHECK_LIB(XextSam, XShmAttach, 
+            x_libs="-lXextSam -lXext $x_libs", 
+            no_xext_lib=yes, $x_libs),
+        $x_libs)
+  fi
+
+  GDK_PIXBUF_XLIB_EXTRA_CFLAGS="$x_cflags"
+  GDK_PIXBUF_XLIB_EXTRA_LIBS="$x_ldflags $x_libs"
+
+  # Check for shaped window extension
+
+  AC_CHECK_LIB(Xext, XShapeCombineMask,
+      if test -z "`echo $x_libs | grep "\-lXext" 2> /dev/null`"; then
+           x_libs="-lXext $x_libs"
+      fi
+      AC_DEFINE(HAVE_SHAPE_EXT),
+      ,
+      $x_libs)
+
+  # Check for XConvertCase (X11R6 specific)
+
+  AC_CHECK_LIB(X11, XConvertCase,
+      AC_DEFINE(HAVE_XCONVERTCASE),
+      ,
+      $x_libs)
+
+  #
+  # Checks for FreeType
+  #
+  FREETYPE_LIBS=
+  FREETYPE_CFLAGS=
+  have_freetype=false
+  AC_PATH_PROG(FREETYPE_CONFIG, freetype-config, no)
+  if test "x$FREETYPE_CONFIG" != "xno" ; then
+    FREETYPE_CFLAGS=`freetype-config --cflags`
+    FREETYPE_LIBS=`freetype-config --libs`
+
+    AC_CHECK_LIB(freetype, FT_New_Face, have_freetype=true
+	         ,:,$FREETYPE_LIBS)
+  fi
+
+  #
+  # Checks for Xft/XRender
+  #
+  have_xft=false
+  if test $have_freetype = true ; then
+    AC_CHECK_LIB(Xrender, XRenderFindFormat, 
+      AC_CHECK_LIB(Xft, XftFontOpen, have_xft=true, :, -lXrender -lXext $X_LIBS $FREETYPE_LIBS)
+    ,:,-lXext $X_LIBS)
+
+    ## be sure we also have Pango built with xft support
+    if ! $PKG_CONFIG --exists pangoxft ; then
+        have_xft=false
+        AC_MSG_WARN([X render extension found, but Pango lacks Xft support])        
+    fi
+
+    if $have_xft = 'true' ; then
+      X_LIBS="-lXft -lXrender -lXext $FREETYPE_LIBS $X_LIBS"
+      AC_DEFINE(HAVE_XFT)
+    fi
+  fi
+
+  AM_CONDITIONAL(HAVE_XFT, $have_xft)
+
+  # Check for XIM support.
+
+  AC_CHECK_LIB(X11, XUnregisterIMInstantiateCallback,
+	    : ,
+	    enable_xim_inst="no",
+	    $x_libs)
+
+  # On Solaris, calling XRegisterIMInstantiateCallback seems to
+  # cause an immediate segfault, so we disable it, unless
+  # the user specifically forces it to be on.
+
+  if test x$enable_xim_inst = xmaybe ; then
+    case host in
+	  *-*-solaris*)
+            enable_xim_inst="no"
+            ;;
+	  *)
+	    enable_xim_inst="yes"
+	    ;;
+    esac
+  fi
+
+  if test "x$enable_xim" = "xyes"; then
+    GTK_XIM_FLAGS="-DUSE_XIM"
+    if test "x$enable_xim_inst" = "xyes"; then
+      AC_DEFINE(USE_X11R6_XIM)
+    fi
+  fi
+
+  # Check for XKB support.
+
+  if test "x$enable_xkb" = "xyes"; then
+        AC_MSG_WARN(XKB support explicitly enabled)
+        AC_DEFINE(HAVE_XKB)
+  elif test "x$enable_xkb" = "xmaybe"; then
+        AC_CHECK_LIB(X11, XkbQueryExtension,
+                     AC_DEFINE(HAVE_XKB),
+	             ,
+	             $x_libs)
+  else
+        AC_MSG_WARN(XKB support explicitly disabled)
+  fi
+
+  x_cflags="$X_CFLAGS"
+  x_ldflags="$X_LDFLAGS"
+
+  # set up things for XInput
+
+  if test "x$with_xinput" = "xgxi" || test "x$with_xinput" = "xyes"; then
+    AC_DEFINE(XINPUT_GXI)
+    xinput_progs=gxid
+    x_libs="-lXi $x_libs"
+  elif test "x$with_xinput" = "xxfree"; then
+    AC_DEFINE(XINPUT_XFREE)
+    x_libs="-lXi $x_libs"
+  else
+    AC_DEFINE(XINPUT_NONE)
+  fi
+
+  AM_CONDITIONAL(XINPUT_GXI, test x$with_xinput = xgxi)
+  AM_CONDITIONAL(XINPUT_XFREE, test x$with_xinput = xxfree)
+
+  if test "x$enable_shm" = "xyes"; then
+    # Check for shared memory
+    AC_CHECK_HEADER(sys/ipc.h, AC_DEFINE(HAVE_IPC_H), no_sys_ipc=yes)
+    AC_CHECK_HEADER(sys/shm.h, AC_DEFINE(HAVE_SHM_H), no_sys_shm=yes)
+
+    # Check for the X shared memory extension header file
+    AC_MSG_CHECKING(X11/extensions/XShm.h)
+    if test "x$no_xext_lib" = "xyes"; then
+      AC_MSG_RESULT(no)
+      no_xshm=yes
+    else
+      if test -f "$x_includes/X11/extensions/XShm.h"; then
+        AC_MSG_RESULT(yes)
+        AC_DEFINE(HAVE_XSHM_H)
+      else
+        AC_MSG_RESULT(no)
+        no_xshm=yes
+      fi
+    fi
+  fi
+
+  GDK_EXTRA_CFLAGS="$GDK_EXTRA_CFLAGS $x_cflags"
+  GDK_EXTRA_LIBS="$x_ldflags $x_libs $GDK_EXTRA_LIBS"
+
+  # these are already defined above
+  #gdktargetlib = "libgdk-x11-1.3.la"
+  #gtktargetlib = "libgtk-x11-1.3.la"
+
+  AM_CONDITIONAL(USE_X11, true)
+else
+  AM_CONDITIONAL(USE_X11, false)
+fi
+
+AC_SUBST(xinput_progs)
+
+GDK_PIXBUF_XLIB_PACKAGES=
+GDK_PIXBUF_XLIB_DEP_LIBS="`pkg-config --libs $GDK_PIXBUF_PACKAGES $GDK_PIXBUF_XLIB_PACKAGES` $GDK_PIXBUF_XLIB_EXTRA_LIBS $GDK_PIXBUF_EXTRA_LIBS"
+GDK_PIXBUF_XLIB_DEP_CFLAGS="`pkg-config --cflags  $GDK_PIXBUF_PACKAGES $GDK_PIXBUF_XLIB_PACKAGES` $GDK_PIXBUF_EXTRA_CFLAGS $GDK_PIXBUF_XLIB_EXTRA_CFLAGS"
+
+AC_SUBST(GDK_PIXBUF_XLIB_PACKAGES)
+AC_SUBST(GDK_PIXBUF_XLIB_EXTRA_LIBS)
+AC_SUBST(GDK_PIXBUF_XLIB_EXTRA_CFLAGS)
+AC_SUBST(GDK_PIXBUF_XLIB_DEP_LIBS)
+AC_SUBST(GDK_PIXBUF_XLIB_DEP_CFLAGS)
+
+if test "x$gdktarget" = "xnanox"; then
+  AC_CHECK_LIB(nano-X, GrOpen,,AC_MSG_ERROR([nano-X libraries not found.]))
+  # nano-X may require additional libraries
+  GDK_EXTRA_LIBS="-lnano-X $GDK_EXTRA_LIBS"
+
+  gdktargetlib="libgdk-nanox-1.3.la"
+  gtktargetlib="libgtk-nanox-1.3.la"
+
+  AM_CONDITIONAL(USE_NANOX, true)
+else
+  AM_CONDITIONAL(USE_NANOX, false)
+fi
+
+if test "x$gdktarget" = "xlinux-fb"; then
+  gdktargetlib="libgdk-linux-fb-1.3.la"
+  gtktargetlib="libgtk-linux-fb-1.3.la"
+
+  AC_PATH_PROG(FREETYPE_CONFIG, freetype-config, no)
+  if test x$FREETYPE_CONFIG = xno ; then
+    AC_MSG_ERROR([*** freetype-config not found])
+  fi
+
+  FREETYPE_CFLAGS="`$FREETYPE_CONFIG --cflags`"
+  FREETYPE_LIBS="`$FREETYPE_CONFIG --libs`"
+  CFLAGS="$CFLAGS $FREETYPE_CFLAGS"
+
+  if test x$enable_shadowfb = xyes ; then
+    AC_DEFINE(ENABLE_SHADOW_FB)
+  fi
+  
+  GDK_EXTRA_CFLAGS="$FREETYPE_CFLAGS"
+  GDK_EXTRA_LIBS="$FREETYPE_LIBS $GDK_EXTRA_LIBS"
+
+  AM_CONDITIONAL(USE_LINUX_FB, true)
+else
+  AM_CONDITIONAL(USE_LINUX_FB, false)
+fi
+
+AC_SUBST(gdktargetlib)
+AC_SUBST(gtktargetlib)
+
+#
+# Pick correct Pango packages to use
+#
+
+if test "x$gdktarget" = "xx11"; then
+	if $have_xft = true ; then
+            PANGO_PACKAGES="pangox pangoxft"
+        else
+            PANGO_PACKAGES=pangox
+        fi
+elif test "x$gdktarget" = "xlinux-fb"; then
+        PANGO_PACKAGES=pangoft2
+else
+        PANGO_PACKAGES=pango
+fi
+
+# Check for Pango flags
+
+AC_MSG_CHECKING(Pango flags)
+if $PKG_CONFIG --exists $PANGO_PACKAGES ; then
+        PANGO_CFLAGS=`$PKG_CONFIG --cflags $PANGO_PACKAGES`
+        PANGO_LIBS=`$PKG_CONFIG --libs $PANGO_PACKAGES`
+
+        AC_MSG_RESULT($PANGO_CFLAGS $PANGO_LIBS)
+else
+        AC_MSG_ERROR([
+*** Pango not found. Pango is required to build GTK+.
+*** See http://www.pango.org for Pango information.
+*** For the framebuffer target, you will need to build 
+*** Pango with freetype support.
+])
+fi
+
+CFLAGS="$CFLAGS $PANGO_CFLAGS"
+
+AC_CHECK_LIB(pango, pango_context_new, :, AC_MSG_ERROR([
+*** Can't link to Pango. Pango is required to build
+*** GTK+. For more information see http://www.pango.org]), $PANGO_LIBS $x_ldflags $x_libs)
+
+CFLAGS="$saved_cflags"
+LDFLAGS="$saved_ldflags"
+
+GDK_PACKAGES=$PANGO_PACKAGES
+GDK_DEP_LIBS="`pkg-config --libs $GDK_PIXBUF_PACKAGES $GDK_PACKAGES` $GDK_EXTRA_LIBS $GDK_PIXBUF_EXTRA_LIBS"
+GDK_DEP_CFLAGS="`pkg-config --cflags  $GDK_PIXBUF_PACKAGES $GDK_PACKAGES` $GDK_PIXBUF_EXTRA_CFLAGS $GDK_EXTRA_CFLAGS"
+
+AC_SUBST(GDK_PACKAGES)
+AC_SUBST(GDK_EXTRA_LIBS)
+AC_SUBST(GDK_EXTRA_CFLAGS)
+AC_SUBST(GDK_DEP_LIBS)
+AC_SUBST(GDK_DEP_CFLAGS)
+
+
+########################################
+# Check for Accessibility Toolkit flags
+########################################
+
+ATK_PACKAGES=atk
+AC_MSG_CHECKING(ATK flags)
+if $PKG_CONFIG --exists $ATK_PACKAGES ; then
+        ATK_CFLAGS=`$PKG_CONFIG --cflags $ATK_PACKAGES`
+        ATK_LIBS=`$PKG_CONFIG --libs $ATK_PACKAGES`
+
+        AC_MSG_RESULT($ATK_CFLAGS $ATK_LIBS)
+else
+        AC_MSG_ERROR([
+*** Accessibility Toolkit not found. Accessibility Toolkit is required
+*** to build GTK+.
+])
+fi
+
+AC_CHECK_LIB(atk, atk_object_get_type, : , AC_MSG_ERROR([
+*** Cannot link to Accessibility Toolkit. Accessibility Toolkit is required
+*** to build GTK+]), $ATK_LIBS $GLIB_LIBS)
+
+
+GTK_PACKAGES=atk
+GTK_EXTRA_LIBS=
+GTK_EXTRA_CFLAGS= 
+GTK_DEP_LIBS="`pkg-config --libs $GTK_PIXBUF_PACKAGES $GDK_PACKAGES $GTK_PACKAGES` $GTK_EXTRA_LIBS $GDK_EXTRA_LIBS $GDK_PIXBUF_EXTRA_LIBS"
+GTK_DEP_CFLAGS="`pkg-config --cflags  $GTK_PIXBUF_PACKAGES $GDK_PACKAGES $GTK_PACKAGES` $GDK_PIXBUF_EXTRA_CFLAGS $GDK_EXTRA_CFLAGS $GTK_EXTRA_CFLAGS"
+
+AC_SUBST(GTK_PACKAGES)
+AC_SUBST(GTK_EXTRA_LIBS)
+AC_SUBST(GTK_EXTRA_CFLAGS)
+AC_SUBST(GTK_DEP_LIBS)
+AC_SUBST(GTK_DEP_CFLAGS)
+
+
+AC_SUBST(GTK_DEBUG_FLAGS)
+AC_SUBST(GTK_XIM_FLAGS)
+
 ##################################################
 # Checks for gtk-doc and docbook-tools
 ##################################################
@@ -977,9 +1003,6 @@ EOF
    fi
 fi
 
-AM_CONDITIONAL(HAVE_GTK_DOC, $GTKDOC)
-AC_SUBST(HAVE_GTK_DOC)
-
 AC_CHECK_PROG(DB2HTML, db2html, true, false)
 AM_CONDITIONAL(HAVE_DOCBOOK, $DB2HTML)
 
@@ -997,9 +1020,6 @@ fi
 dnl NOTE: We need to use a separate automake conditional for this
 dnl       to make this work with the tarballs.
 AM_CONDITIONAL(ENABLE_GTK_DOC, test x$enable_gtk_doc = xyes)
-
-GDK_PIXBUF_DIR=`(cd $srcdir; pwd)`
-AC_SUBST(GDK_PIXBUF_DIR)
 
 
 ##################################################

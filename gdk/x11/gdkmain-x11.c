@@ -34,16 +34,9 @@
 #include <limits.h>
 #include <errno.h>
 
-#ifdef HAVE_SYS_SELECT_H
-#include <sys/select.h>
-#endif /* HAVE_SYS_SELECT_H_ */
-
-#define XLIB_ILLEGAL_ACCESS
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
-#include <X11/Xos.h>
 #include <X11/Xutil.h>
-#include <X11/cursorfont.h>
 
 #ifdef HAVE_XKB
 #include <X11/XKBlib.h>

@@ -17,10 +17,7 @@ common_includes = @STRIP_BEGIN@ 	\
 	-I$(top_builddir)/gdk		\
 	-I$(top_srcdir)/gdk-pixbuf 	\
 	@GTK_DEBUG_FLAGS@ 		\
-	@GTK_XIM_FLAGS@			\
-	@PANGO_CFLAGS@			\
-	@GLIB_CFLAGS@			\
-	@more_cflags@ 			\
+	@GDK_DEP_CFLAGS@		\
 @STRIP_END@
 
 INCLUDES = $(common_includes)
@@ -34,10 +31,7 @@ LDFLAGS = @STRIP_BEGIN@ 					\
 	-export-dynamic 					\
 	-rpath @prefix@/lib 					\
 	@LIBTOOL_EXPORT_OPTIONS@				\
-	@PANGO_LIBS@						\
-	@GLIB_DEPLIBS@						\
-	@more_ldflags@						\
-	@more_libs@						\
+	@GDK_DEP_LIBS@						\
 	-lm							\
 @STRIP_END@
 

@@ -13,8 +13,8 @@ These should be available by ftp from ftp.gnu.org or any of the
 fine GNU mirrors.  Beta software can be found at alpha.gnu.org.
 
 In order to get CVS gtk+ installed on your system, you need to have
-the most recent CVS version of glib installed as well.
-The installation process of glib is similar to that of gtk+, but
+the most recent CVS version of glib, pango, and atk installed as well.
+The installation process of these libraries is similar to that of gtk+, but
 needs to be fulfilled prior to installation of gtk+.
 
 To compile a CVS version of gtk+ on your system, you will need to take
@@ -45,6 +45,8 @@ gtk+ and glib.  You can do the following to get glib and gtk+ from cvs:
    $ cvs login
      (there is no password, just hit return)
    $ cvs -z3 checkout glib
+   $ cvs -z3 checkout pango
+   $ cvs -z3 checkout atk
    $ cvs -z3 checkout gtk+
 
 For information about submitting patches and commiting changes

@@ -16,11 +16,7 @@ INCLUDES = @STRIP_BEGIN@ \
 	-I$(top_srcdir) -I../gdk			\
 	-I$(top_srcdir)/gdk				\
 	-I$(top_srcdir)/gdk-pixbuf -I../gdk-pixbuf	\
-	@GTK_DEBUG_FLAGS@				\
-	@GTK_XIM_FLAGS@					\
-	@PANGO_CFLAGS@					\
-	@GLIB_CFLAGS@					\
-	@more_cflags@					\
+	@GTK_DEP_CFLAGS@				\
 @STRIP_END@
 
 gtarget=@gdktarget@
@@ -34,11 +30,7 @@ LDFLAGS = @STRIP_BEGIN@ \
 	-export-dynamic						\
 	-rpath @prefix@/lib					\
 	@LIBTOOL_EXPORT_OPTIONS@				\
-	@PANGO_LIBS@						\
-	@GLIB_DEPLIBS@ 						\
-	@more_ldflags@						\
-	@more_libs@ 						\
-	-lm							\
+	@GTK_DEP_LIBS@						\
 @STRIP_END@
 
 #
@@ -51,6 +43,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtk.h			\
 	gtkaccelgroup.h		\
 	gtkaccellabel.h		\
+	gtkaccessible.h		\
 	gtkadjustment.h		\
 	gtkalignment.h		\
 	gtkarg.h		\
@@ -209,6 +202,7 @@ gtk_private_h_sources = @STRIP_BEGIN@ \
 gtk_c_sources = @STRIP_BEGIN@   \
 	gtkaccelgroup.c		\
 	gtkaccellabel.c		\
+	gtkaccessible.c		\
 	gtkadjustment.c		\
 	gtkalignment.c		\
 	gtkarg.c		\
@@ -516,13 +510,6 @@ LDADDS = @STRIP_BEGIN@ \
 	@gtktargetlib@					\
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la	\
 	$(top_builddir)/gdk/@gdktargetlib@ 		\
-	@more_ldflags@					\
-	@more_libs@					\
-	@GDK_WLIBS@					\
-	@PANGO_LIBS@					\
-	@GLIB_LIBS@					\
-	@GTK_LIBS_EXTRA@				\
-	-lm						\
 @STRIP_END@
 
 #

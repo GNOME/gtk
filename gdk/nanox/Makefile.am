@@ -5,16 +5,11 @@ INCLUDES = @STRIP_BEGIN@ 	\
 	-I$(top_srcdir)		\
 	-I$(top_srcdir)/gdk	\
 	@GTK_DEBUG_FLAGS@ 	\
-	@GTK_XIM_FLAGS@		\
-	@GLIB_CFLAGS@		\
-	@more_cflags@ 		\
+	@GDK_DEP_CFLAGS@	\
 @STRIP_END@
 
-LDADDS = @STRIP_BEGIN@ 	\
-	@more_ldflags@	\
-	@more_libs@	\
-	@GLIB_LIBS@	\
-	-lm		\
+LDADDS = @STRIP_BEGIN@ 		\
+	@GDK_DEP_LIBS@		\
 @STRIP_END@
 
 noinst_LTLIBRARIES = libgdk-nanox.la

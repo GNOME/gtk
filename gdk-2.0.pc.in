@@ -7,6 +7,6 @@ target=@gdktarget@
 Name: GDK
 Description: GIMP Drawing Kit (${target} target)
 Version: @VERSION@
-Requires: gdk-pixbuf-2.0 @PANGO_PACKAGES@
-Libs: -L${libdir} @more_ldflags@ -lgdk-${target}-1.3 @more_libs@ @GDK_WLIBS@
-Cflags: -I${includedir}/gtk-2.0 -I${libdir}/gtk-2.0/include @more_cflags@
+Requires: gdk-pixbuf-2.0 @GDK_PACKAGES@
+Libs: -L${libdir} -lgdk-${target}-1.3 @GDK_EXTRA_LIBS@
+Cflags: -I${includedir}/gtk-2.0 -I${libdir}/gtk-2.0/include @GDK_EXTRA_CFLAGS@

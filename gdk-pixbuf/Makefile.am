@@ -154,22 +154,21 @@ noinst_LTLIBRARIES =  	\
 
 builtin_objs = @INCLUDED_LOADER_OBJ@
 
-static_libs = $(STATIC_LIB_DEPS)
-
 endif
 
 noinst_PROGRAMS = test-gdk-pixbuf
 TESTS = test-gdk-pixbuf
 
 DEPS = libgdk_pixbuf-1.3.la
-INCLUDES = -I$(top_srcdir) -I$(top_builddir) \
-	-I$(top_srcdir)/gdk-pixbuf \
-	-I$(top_builddir)/gdk-pixbuf \
-	@INCLUDED_LOADER_DEFINE@ \
-	@GLIB_CFLAGS@
+INCLUDES = -I$(top_srcdir) -I$(top_builddir) 	\
+	-I$(top_srcdir)/gdk-pixbuf 		\
+	-I$(top_builddir)/gdk-pixbuf 		\
+	@INCLUDED_LOADER_DEFINE@ 		\
+	@GTK_DEBUG_FLAGS@			\
+	@GDK_PIXBUF_DEP_CFLAGS@
 AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(loaderdir)\""
 
-LDADDS = libgdk_pixbuf-1.3.la $(GLIB_LIBS) $(STATIC_LIB_DEPS) $(MATH_LIB)
+LDADDS = libgdk_pixbuf-1.3.la
 
 test_gdk_pixbuf_LDADD = $(LDADDS)
 
@@ -178,8 +177,6 @@ bin_PROGRAMS=make-inline-pixbuf
 make_inline_pixbuf_SOURCES=make-inline-pixbuf.c
 
 make_inline_pixbuf_LDADD = $(LDADDS)
-
-GDK_PIXBUF_LIBS = $(GLIB_LIBS) $(INTLLIBS)
 
 #
 # The GdkPixBuf library
@@ -205,7 +202,7 @@ libgdk_pixbuf_1_3_la_LDFLAGS = 				        \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)    \
 	@LIBTOOL_EXPORT_OPTIONS@				\
 	$(GLIB_LIBS) 
-libgdk_pixbuf_1_3_la_LIBADD = pixops/libpixops.la $(builtin_objs) $(static_libs)
+libgdk_pixbuf_1_3_la_LIBADD = pixops/libpixops.la $(builtin_objs) $(GDK_PIXBUF_DEP_LIBS)
 libgdk_pixbuf_1_3_la_DEPENDENCIES = $(builtin_objs)
 
 libgdk_pixbufinclude_HEADERS =	\

@@ -3,15 +3,7 @@ Prerequisites
 
 GTK+ requires the following packages:
 
- - The GLIB library, available at the same location as GTK+
-
- - The Pango library, available from:
-
-      http://www.pango.org/download.shtml
-
-   Pango also requires the FriBidi library, available from:
-
-      http://imagic.weizmann.ac.il/~dov/freesw/FriBidi/
+ - The GLIB, Pango, and Atk libraries, available at the same location as GTK+
 
  - The TIFF, PNG, and JPEG image loading libraries. You most
    likely have these installed on your system already. If not

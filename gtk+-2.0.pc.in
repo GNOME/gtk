@@ -7,6 +7,6 @@ target=@gdktarget@
 Name: GTK+
 Description: GIMP Tool Kit (${target} target)
 Version: @VERSION@
-Requires: gdk-${target}-2.0
-Libs: -L${libdir} -lgtk-${target}-1.3
-Cflags: -I${includedir}/gtk-2.0
+Requires: gdk-${target}-2.0 @GTK_PACKAGES@
+Libs: -L${libdir} -lgtk-${target}-1.3 @GTK_EXTRA_LIBS@
+Cflags: -I${includedir}/gtk-2.0 @GTK_EXTRA_CFLAGS@

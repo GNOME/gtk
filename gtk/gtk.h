@@ -31,6 +31,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkaccellabel.h>
+#include <gtk/gtkaccessible.h>
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkalignment.h>
 #include <gtk/gtkarg.h>

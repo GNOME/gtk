@@ -32,7 +32,7 @@
 #include <gtk/gtkobject.h>
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkstyle.h>
-
+#include <atk/atkobject.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -235,7 +235,7 @@ struct _GtkWidgetClass
    * Implementation of this signal is optional.
    */
   guint set_scroll_adjustments_signal;
-  
+
   /* basics */
   void (* show)		       (GtkWidget        *widget);
   void (* show_all)            (GtkWidget        *widget);
@@ -381,6 +381,11 @@ struct _GtkWidgetClass
   /* Signals used only for keybindings */
   void (* popup_menu)              (GtkWidget          *widget);
   
+  
+  /* accessibility support 
+   */
+  AtkObject*   (* get_accessible)  (GtkWidget          *widget);
+
   /* Padding for future expansion */
   GtkFunction pad1;
   GtkFunction pad2;
@@ -535,6 +540,10 @@ GtkWidget*   gtk_widget_get_ancestor	(GtkWidget	*widget,
 					 GtkType	widget_type);
 GdkColormap* gtk_widget_get_colormap	(GtkWidget	*widget);
 GdkVisual*   gtk_widget_get_visual	(GtkWidget	*widget);
+
+
+/* Accessibility support */
+AtkObject*       gtk_widget_get_accessible               (GtkWidget          *widget);
 
 /* The following functions must not be called on an already
  * realized widget. Because it is possible that somebody

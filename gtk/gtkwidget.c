@@ -44,7 +44,7 @@
 #include "gobject/gvaluecollector.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkintl.h"
-
+#include "gtkaccessible.h"
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
 #define	INIT_PATH_SIZE	(512)
@@ -203,7 +203,11 @@ static gboolean gtk_widget_real_mnemonic_activate  (GtkWidget *widget,
 static void		 gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info);
 
 static void  gtk_widget_do_uposition (GtkWidget *widget);
-     
+
+static AtkObject*        gtk_widget_real_get_accessible   (GtkWidget *widget);
+static void              gtk_widget_accessible_interface_init (AtkImplementorIface *iface);
+static AtkObject *       gtk_widget_ref_accessible (AtkImplementor *implementor);
+
 static gpointer         parent_class = NULL;
 static guint            widget_signals[LAST_SIGNAL] = { 0 };
 
@@ -226,6 +230,7 @@ static GQuark quark_shape_info = 0;
 static GQuark quark_colormap = 0;
 static GQuark quark_pango_context = 0;
 static GQuark quark_rc_style = 0;
+static GQuark quark_accessible_object = 0;
 
 
 /*****************************************
@@ -255,7 +260,19 @@ gtk_widget_get_type (void)
 	(GtkClassInitFunc) NULL,
       };
       
+      static const GInterfaceInfo accessibility_info =
+      {
+        (GInterfaceInitFunc) gtk_widget_accessible_interface_init,
+        (GInterfaceFinalizeFunc) NULL,
+        NULL /* interface data */
+      };
+
+ 
       widget_type = gtk_type_unique (GTK_TYPE_OBJECT, &widget_info);
+
+      g_type_add_interface_static (widget_type, ATK_TYPE_IMPLEMENTOR,
+                                   &accessibility_info) ;
+
     }
   
   return widget_type;
@@ -337,6 +354,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->drag_drop = NULL;
   klass->drag_data_received = NULL;
 
+  /* Accessibility support */
+  klass->get_accessible = gtk_widget_real_get_accessible;
+
   klass->no_expose_event = NULL;
 
   quark_property_parser = g_quark_from_static_string ("gtk-rc-property-parser");
@@ -349,6 +369,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_colormap = g_quark_from_static_string ("gtk-colormap");
   quark_pango_context = g_quark_from_static_string ("gtk-pango-context");
   quark_rc_style = g_quark_from_static_string ("gtk-rc-style");
+  quark_accessible_object = g_quark_from_static_string ("gtk-accessible-object");
 
   style_property_spec_pool = g_param_spec_pool_new (FALSE);
 
@@ -4954,6 +4975,7 @@ gtk_widget_finalize (GObject *object)
   gint *events;
   GdkExtensionMode *mode;
   GtkStyle *saved_style;
+  GtkAccessible *accessible;
   
   gtk_grab_remove (widget);
   gtk_selection_remove_all (widget);
@@ -4982,6 +5004,10 @@ gtk_widget_finalize (GObject *object)
   mode = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_extension_event_mode);
   if (mode)
     g_free (mode);
+
+  accessible = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_accessible_object);
+  if (accessible)
+    g_object_unref (G_OBJECT (accessible));
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -5684,3 +5710,61 @@ gtk_requisition_free (GtkRequisition *requisition)
   g_free (requisition);
 }
 
+AtkObject* gtk_widget_get_accessible (GtkWidget *widget)
+{
+  GtkWidgetClass *klass;
+
+  g_return_val_if_fail (widget != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  klass = GTK_WIDGET_GET_CLASS (widget);
+
+  g_return_val_if_fail (klass->get_accessible != NULL, NULL);
+
+  return klass->get_accessible(widget);
+}
+
+AtkObject* gtk_widget_real_get_accessible (GtkWidget *widget)
+{
+  AtkObject* accessible;
+
+  accessible = g_object_get_qdata (G_OBJECT (widget), 
+                                   quark_accessible_object);
+  if (!accessible)
+  {
+    AtkObjectFactory *factory;
+    AtkRegistry *default_registry;
+
+    default_registry = atk_get_default_registry ();
+    factory = atk_registry_get_factory (default_registry, 
+                                        GTK_OBJECT_TYPE (widget));
+    accessible =
+      atk_object_factory_create_accessible (factory,
+                                               G_OBJECT(widget));
+    g_object_set_qdata (G_OBJECT (widget), 
+                        quark_accessible_object,
+                        accessible);
+  }
+  return accessible;
+}
+
+/*
+ * Initialize a AtkImplementorIface instance's virtual pointers as
+ * appropriate to this implementor's class (GtkWidget).
+ */
+static void
+gtk_widget_accessible_interface_init (AtkImplementorIface *iface)
+{
+  iface->ref_accessible = gtk_widget_ref_accessible;
+}
+
+static AtkObject*
+gtk_widget_ref_accessible(AtkImplementor *implementor)
+{
+  AtkObject *accessible;
+
+  accessible = gtk_widget_get_accessible (GTK_WIDGET (implementor));
+  if (accessible)
+    g_object_ref (G_OBJECT (accessible));
+  return accessible;
+}

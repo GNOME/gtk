@@ -785,4 +785,4 @@ gdk_keyval_convert_case (guint symbol,
   if (upper)
     *upper = xupper;
 }  
-#endif HAVE_XCONVERTCASE
+#endif /* HAVE_XCONVERTCASE */

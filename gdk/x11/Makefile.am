@@ -9,18 +9,11 @@ INCLUDES = @STRIP_BEGIN@ 	\
 	-I$(top_srcdir)/gdk	\
 	-I$(top_builddir)/gdk	\
 	@GTK_DEBUG_FLAGS@ 	\
-	@GTK_XIM_FLAGS@		\
-	@PANGO_CFLAGS@		\
-	@GLIB_CFLAGS@		\
-	@FREETYPE_CFLAGS@	\
-	@x_cflags@ 		\
+	@GDK_DEP_CFLAGS@	\
 @STRIP_END@
 
-LDADDS = @STRIP_BEGIN@ 	\
-	@x_ldflags@	\
-	@x_libs@	\
-	@GLIB_LIBS@	\
-	-lm		\
+LDADDS = @STRIP_BEGIN@ 		\
+	@GDK_DEP_LIBS@		\
 @STRIP_END@
 
 noinst_LTLIBRARIES = libgdk-x11.la
