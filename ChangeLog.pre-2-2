@@ -1,4 +1,9 @@
-Wed Jun  6 21:18:54 2001  Jonathan Blandford  <jrb@webwynk.net>
+Wed Jun  6 21:59:16 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): hook up arrow
+	buttons.  Fixes #55460 reported by matthiasc@poet.de.
+
+Wed Jun  6 21:18:54 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_real_collapse_row): centralize
 	expansion/collapsing so it only happens in one place.
