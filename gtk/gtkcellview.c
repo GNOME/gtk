@@ -391,7 +391,7 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
       if (!info->cell->visible)
         continue;
 
-      info->real_width = info->requested_width + (info->expand?extra_space:0);
+      info->real_width = info->requested_width + (info->expand ? extra_space : 0);
     }
 
   /* iterate list for PACK_END cells */
@@ -405,7 +405,7 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
       if (!info->cell->visible)
         continue;
 
-      info->real_width = info->requested_width + (info->expand?extra_space:0);
+      info->real_width = info->requested_width + (info->expand ? extra_space : 0);
     }
 }
 
@@ -543,7 +543,7 @@ gtk_cell_view_set_cell_data (GtkCellView *cellview)
   GtkTreePath *path;
 
   g_return_if_fail (cellview->priv->displayed_row != NULL);
-
+  
   path = gtk_tree_row_reference_get_path (cellview->priv->displayed_row);
   gtk_tree_model_get_iter (cellview->priv->model, &iter, path);
   gtk_tree_path_free (path);
@@ -946,6 +946,7 @@ gtk_cell_view_get_size_of_row (GtkCellView    *cell_view,
                                GtkRequisition *requisition)
 {
   GtkTreeRowReference *tmp;
+  GtkRequisition req;
 
   g_return_val_if_fail (GTK_IS_CELL_VIEW (cell_view), FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
@@ -959,6 +960,9 @@ gtk_cell_view_get_size_of_row (GtkCellView    *cell_view,
 
   gtk_tree_row_reference_free (cell_view->priv->displayed_row);
   cell_view->priv->displayed_row = tmp;
+
+  /* restore actual size info */
+  gtk_cell_view_size_request (GTK_WIDGET (cell_view), &req);
 
   return TRUE;
 }
