@@ -160,22 +160,21 @@ gtk_signal_compat_matched (GtkObject       *object,
 			   GSignalMatchType match,
 			   guint            action)
 {
-  guint id;
+  guint n_handlers;
   
   g_return_if_fail (GTK_IS_OBJECT (object));
+
+  switch (action)
+    {
+    case 0:  n_handlers = g_signal_handlers_disconnect_matched (object, match, 0, 0, NULL, func, data);	 break;
+    case 1:  n_handlers = g_signal_handlers_block_matched (object, match, 0, 0, NULL, func, data);	 break;
+    case 2:  n_handlers = g_signal_handlers_unblock_matched (object, match, 0, 0, NULL, func, data);	 break;
+    default: n_handlers = 0;										 break;
+    }
   
-  id = g_signal_handler_find (object, match, 0, 0, NULL, func, data);
-  
-  if (!id)
+  if (!n_handlers)
     g_warning ("unable to find signal handler for object(%p) with func(%p) and data(%p)",
 	       object, func, data);
-  else
-    switch (action)
-      {
-      case 0: g_signal_handler_disconnect (object, id); break;
-      case 1: g_signal_handler_block (object, id);	break;
-      case 2: g_signal_handler_unblock (object, id);	break;
-      }
 }
 
 static inline gboolean

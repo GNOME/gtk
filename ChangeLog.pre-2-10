@@ -1,3 +1,11 @@
+Wed Nov  1 03:43:42 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksignal.c (gtk_signal_compat_matched): make use of
+	g_signal_handlers_block_matched, g_signal_handlers_unblock_matched and
+	g_signal_handlers_disconnect_matched to block/unblock and disconnect
+	multiple handlers respectively, instead of only treating the
+	first handler found (bug reported by owen).
+
 Mon Oct 30 19:23:50 2000  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_expand_row): New function.
