@@ -1389,7 +1389,7 @@ gtk_item_factory_delete_entries (GtkItemFactory         *ifactory,
     g_return_if_fail (entries != NULL);
 
   for (i = 0; i < n_entries; i++)
-    gtk_item_factory_delete_item (ifactory, (entries + i)->path);
+    gtk_item_factory_delete_entry (ifactory, entries + i);
 }
 
 typedef struct

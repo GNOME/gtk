@@ -1,3 +1,8 @@
+Fri Mar  1 09:05:19 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_delete_entries):
+	Really make it work for paths with underline accelerators. (#69247)
+
 2002-02-28  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextview.c (gtk_text_view_finalize): free the tab array
