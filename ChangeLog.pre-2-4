@@ -1,3 +1,9 @@
+Tue May 21 15:33:32 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_show): Conditionalize
+	GTK_IS_PLUG() check on GDK_WINDOWING_X11. (Problem
+	reported by Sven Neumann)
+
 Mon May 20 15:02:21 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdisplay-x11.c: Patch from HideToshi Tajima
