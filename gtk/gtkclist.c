@@ -2521,6 +2521,7 @@ gtk_clist_draw (GtkWidget * widget,
 {
   GtkCList *clist;
   gint border_width;
+  GdkRectangle child_area;
   int i;
 
   g_return_if_fail (widget != NULL);
@@ -2552,7 +2553,8 @@ gtk_clist_draw (GtkWidget * widget,
 
       for (i = 0; i < clist->columns; i++)
 	{
-	  gtk_widget_queue_draw (clist->column[i].button);
+	  if (gtk_widget_intersect (clist->column[i].button, area, &child_area))
+	    gtk_widget_draw (clist->column[i].button, &child_area);
 	}
     }
 }
