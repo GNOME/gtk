@@ -1,3 +1,15 @@
+2004-05-26  Robert Ögren  <gtk@roboros.com>
+
+	* gdk/win32/gdkinput-win32.c (_gdk_input_other_event): Send key
+	modifiers (shift, ctrl etc) in button and motion events from the
+	tablet. (#143240)
+
+2004-05-26  Robert Ögren  <gtk@roboros.com>
+
+	* gdk/win32/gdkinput-win32.c (gdk_device_get_state): Simple
+	implementation for extended input devices using last known 
+	device state (#143237)
+
 Tue May 25 21:54:00 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkframe.c: Move docs inline, fixing them on the
