@@ -373,7 +373,7 @@ gtk_tree_path_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkTypeTreePath",
+    our_type = g_boxed_type_register_static ("GtkTreePath",
 					     (GBoxedCopyFunc) gtk_tree_path_copy,
 					     (GBoxedFreeFunc) gtk_tree_path_free);
 
@@ -597,7 +597,7 @@ gtk_tree_iter_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkTypeTreeIter",
+    our_type = g_boxed_type_register_static ("GtkTreeIter",
 					     (GBoxedCopyFunc) gtk_tree_iter_copy,
 					     (GBoxedFreeFunc) gtk_tree_iter_free);
 

@@ -6611,7 +6611,7 @@ gtk_requisition_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkTypeRequisition",
+    our_type = g_boxed_type_register_static ("GtkRequisition",
 					     (GBoxedCopyFunc) gtk_requisition_copy,
 					     (GBoxedFreeFunc) gtk_requisition_free);
 

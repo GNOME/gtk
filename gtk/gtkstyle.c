@@ -5591,7 +5591,7 @@ gtk_border_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkTypeBorder",
+    our_type = g_boxed_type_register_static ("GtkBorder",
 					     (GBoxedCopyFunc) gtk_border_copy,
 					     (GBoxedFreeFunc) gtk_border_free);
 

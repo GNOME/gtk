@@ -1,3 +1,13 @@
+Thu Jun 13 19:41:56 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkiconfactory.c gtk/gtkselection.c gtk/gtkstyle.c
+	gtk/gtktextiter.c gtk/gtktexttag.c gtk/gtktreemodel.c
+	gtk/gtkwidget.c: Fix type names for GtkIconSet,
+	GtkIconSource, GtkSelectionData, GtkBorder, GtkTextIter,
+	GtkTextAttributes, GtkTreePath, GtkTreeIter, 
+	GtkRequisition, which were all registered as GtkType*.
+	(#84634, James Henstridge; patch from Jonathan Blandford.)
+	
 Thu Jun 13 18:48:14 2002  Owen Taylor  <otaylor@redhat.com>
 
  	* gdk/x11/gdkcolor-x11.c: Make work

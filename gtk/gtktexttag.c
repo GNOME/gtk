@@ -1871,7 +1871,7 @@ gtk_text_attributes_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkTypeTextAttributes",
+    our_type = g_boxed_type_register_static ("GtkTextAttributes",
 					     (GBoxedCopyFunc) gtk_text_attributes_ref,
 					     (GBoxedFreeFunc) gtk_text_attributes_unref);
 
