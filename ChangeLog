@@ -1,3 +1,11 @@
+Sat Feb 21 19:09:55 2004  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtksettings.c (gtk_default_substitute): Guard the FC_HINT_STYLE
+	stuff with an #ifdef, so we still build with most fontconfig versions.
+
+	* configure.in: Bump the fontconfig version requirement down to 1.0.1,
+	to match pango (probably isn't needed at all, but doesn't hurt).
+
 Sun Feb 22 03:03:29 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkaction.c: (gtk_action_finalize):

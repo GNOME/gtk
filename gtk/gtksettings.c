@@ -153,7 +153,8 @@ gtk_default_substitute (FcPattern *pattern,
   if (hinting >= 0 &&
       FcPatternGet (pattern, FC_HINTING, 0, &v) == FcResultNoMatch)
     FcPatternAddBool (pattern, FC_HINTING, hinting != 0);
-  
+ 
+#ifdef FC_HINT_STYLE 
   if (hintstyle && FcPatternGet (pattern, FC_HINT_STYLE, 0, &v) == FcResultNoMatch)
     {
       int val = FC_HINT_FULL;	/* Quiet GCC */
@@ -173,6 +174,7 @@ gtk_default_substitute (FcPattern *pattern,
       if (found)
 	FcPatternAddInteger (pattern, FC_HINT_STYLE, val);
     }
+#endif /* FC_HINT_STYLE */
 
   if (rgba && FcPatternGet (pattern, FC_RGBA, 0, &v) == FcResultNoMatch)
     {
