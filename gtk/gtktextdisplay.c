@@ -197,7 +197,7 @@ render_layout_line (GdkDrawable        *drawable,
 	      fg_gc = render_state->fg_gc;
 	    }
 	  
-	  if (appearance->underline == PANGO_UNDERLINE_NONE && !appearance->overstrike)
+	  if (appearance->underline == PANGO_UNDERLINE_NONE && !appearance->strikethrough)
 	    pango_glyph_string_extents (run->glyphs, run->item->analysis.font,
 					NULL, &logical_rect);
 	  else
@@ -236,12 +236,12 @@ render_layout_line (GdkDrawable        *drawable,
 	      break;
 	    }
 
-	  if (appearance->overstrike)
+	  if (appearance->strikethrough)
 	    {
-	      gint overstrike_y = y + (0.3 * logical_rect.y) / PANGO_SCALE;
+	      gint strikethrough_y = y + (0.3 * logical_rect.y) / PANGO_SCALE;
 	      gdk_draw_line (drawable, fg_gc,
-			     x + (x_off + ink_rect.x) / PANGO_SCALE - 1, overstrike_y,
-			     x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, overstrike_y);
+			     x + (x_off + ink_rect.x) / PANGO_SCALE - 1, strikethrough_y,
+			     x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, strikethrough_y);
 	    }
 
 	  x_off += logical_rect.width;

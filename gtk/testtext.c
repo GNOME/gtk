@@ -461,12 +461,12 @@ fill_example_buffer (GtkTextBuffer *buffer)
 		 "font", "Sans 10",
 		 NULL);
 
-  tag = gtk_text_buffer_create_tag (buffer, "overstrike");
+  tag = gtk_text_buffer_create_tag (buffer, "strikethrough");
 
   setup_tag (tag);
       
   gtk_object_set (GTK_OBJECT (tag),
-		 "overstrike", TRUE,
+		 "strikethrough", TRUE,
 		 NULL);
 
 
@@ -548,7 +548,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 1, 14);
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter2, 1, 24);
 
-      gtk_text_buffer_apply_tag_by_name (buffer, "overstrike", &iter, &iter2);
+      gtk_text_buffer_apply_tag_by_name (buffer, "strikethrough", &iter, &iter2);
           
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, 9);
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter2, 0, 16);

@@ -68,7 +68,7 @@ struct _GtkTextTag {
   guint left_margin_set : 1;
   guint left_wrapped_line_margin_set : 1;
   guint offset_set : 1;
-  guint overstrike_set : 1;
+  guint strikethrough_set : 1;
   guint right_margin_set : 1;
   guint pixels_above_lines_set : 1;
   guint pixels_below_lines_set : 1;
@@ -118,7 +118,7 @@ struct _GtkTextAppearance
   GdkBitmap *fg_stipple;
 
   guint underline : 4;		/* PangoUnderline */
-  guint overstrike : 1;
+  guint strikethrough : 1;
 
   /* Whether to use background-related values; this is irrelevant for
    * the values struct when in a tag, but is used for the composite

@@ -1,3 +1,13 @@
+2000-09-08  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktextdisplay.c
+	* gtk/gtktextlayout.c
+	* gtk/gtktexttag.c
+	* gtk/gtktexttag.h
+	* gtk/testtext.c: Change the overstrike property to strikethrough,
+	to closer match pango.
+
+
 Fri Sep  8 14:28:00 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextview.c: Fix up visibility so that focus,

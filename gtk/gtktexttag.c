@@ -84,7 +84,7 @@ enum {
   ARG_DIRECTION,
   ARG_LEFT_MARGIN,
   ARG_LEFT_WRAPPED_LINE_MARGIN,
-  ARG_OVERSTRIKE,
+  ARG_STRIKETHROUGH,
   ARG_RIGHT_MARGIN,
   ARG_UNDERLINE,
   ARG_OFFSET,
@@ -107,7 +107,7 @@ enum {
   ARG_JUSTIFY_SET,
   ARG_LEFT_MARGIN_SET,
   ARG_LEFT_WRAPPED_LINE_MARGIN_SET,
-  ARG_OVERSTRIKE_SET,
+  ARG_STRIKETHROUGH_SET,
   ARG_RIGHT_MARGIN_SET,
   ARG_UNDERLINE_SET,
   ARG_OFFSET_SET,
@@ -204,8 +204,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_LEFT_WRAPPED_LINE_MARGIN);
   gtk_object_add_arg_type ("GtkTextTag::offset", GTK_TYPE_INT,
                            GTK_ARG_READWRITE, ARG_OFFSET);
-  gtk_object_add_arg_type ("GtkTextTag::overstrike", GTK_TYPE_BOOL,
-                           GTK_ARG_READWRITE, ARG_OVERSTRIKE);
   gtk_object_add_arg_type ("GtkTextTag::pixels_above_lines", GTK_TYPE_INT,
                            GTK_ARG_READWRITE, ARG_PIXELS_ABOVE_LINES);
   gtk_object_add_arg_type ("GtkTextTag::pixels_below_lines", GTK_TYPE_INT,
@@ -214,6 +212,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_PIXELS_INSIDE_WRAP);
   gtk_object_add_arg_type ("GtkTextTag::right_margin", GTK_TYPE_INT,
                            GTK_ARG_READWRITE, ARG_RIGHT_MARGIN);
+  gtk_object_add_arg_type ("GtkTextTag::strikethrough", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_STRIKETHROUGH);
   gtk_object_add_arg_type ("GtkTextTag::underline", GTK_TYPE_ENUM,
                            GTK_ARG_READWRITE, ARG_UNDERLINE);
   gtk_object_add_arg_type ("GtkTextTag::wrap_mode", GTK_TYPE_ENUM,
@@ -248,14 +248,14 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_LEFT_WRAPPED_LINE_MARGIN_SET);
   gtk_object_add_arg_type ("GtkTextTag::offset_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_OFFSET_SET);  
-  gtk_object_add_arg_type ("GtkTextTag::overstrike_set", GTK_TYPE_BOOL,
-                           GTK_ARG_READWRITE, ARG_OVERSTRIKE_SET);
   gtk_object_add_arg_type ("GtkTextTag::pixels_above_lines_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_PIXELS_ABOVE_LINES_SET);
   gtk_object_add_arg_type ("GtkTextTag::pixels_below_lines_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_PIXELS_BELOW_LINES_SET);
   gtk_object_add_arg_type ("GtkTextTag::pixels_inside_wrap_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_PIXELS_INSIDE_WRAP_SET);
+  gtk_object_add_arg_type ("GtkTextTag::strikethrough_set", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_STRIKETHROUGH_SET);
   gtk_object_add_arg_type ("GtkTextTag::right_margin_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_RIGHT_MARGIN_SET);
   gtk_object_add_arg_type ("GtkTextTag::underline_set", GTK_TYPE_ENUM,
@@ -549,9 +549,9 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       size_changed = TRUE;
       break;
 
-    case ARG_OVERSTRIKE:
-      tkxt_tag->overstrike_set = TRUE;
-      tkxt_tag->values->appearance.overstrike = GTK_VALUE_BOOL(*arg);
+    case ARG_STRIKETHROUGH:
+      tkxt_tag->strikethrough_set = TRUE;
+      tkxt_tag->values->appearance.strikethrough = GTK_VALUE_BOOL(*arg);
       break;
       
     case ARG_RIGHT_MARGIN:
@@ -645,8 +645,8 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       size_changed = TRUE;
       break;
 
-    case ARG_OVERSTRIKE_SET:
-      tkxt_tag->overstrike_set = GTK_VALUE_BOOL(*arg);
+    case ARG_STRIKETHROUGH_SET:
+      tkxt_tag->strikethrough_set = GTK_VALUE_BOOL(*arg);
       break;
 
     case ARG_RIGHT_MARGIN_SET:
@@ -777,8 +777,8 @@ gtk_text_tag_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       GTK_VALUE_INT(*arg) = tag->values->left_wrapped_line_margin;
       break;
 
-    case ARG_OVERSTRIKE:
-      GTK_VALUE_BOOL(*arg) = tag->values->appearance.overstrike;
+    case ARG_STRIKETHROUGH:
+      GTK_VALUE_BOOL(*arg) = tag->values->appearance.strikethrough;
       break;
       
     case ARG_RIGHT_MARGIN:
@@ -855,8 +855,8 @@ gtk_text_tag_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       GTK_VALUE_BOOL(*arg) = tag->left_wrapped_line_margin_set;
       break;
 
-    case ARG_OVERSTRIKE_SET:
-      GTK_VALUE_BOOL(*arg) = tag->overstrike_set;
+    case ARG_STRIKETHROUGH_SET:
+      GTK_VALUE_BOOL(*arg) = tag->strikethrough_set;
       break;
 
     case ARG_RIGHT_MARGIN_SET:
@@ -1274,8 +1274,8 @@ gtk_text_attributes_fill_from_tags(GtkTextAttributes *dest,
       if (tag->underline_set)
         dest->appearance.underline = vals->appearance.underline;
 
-      if (tag->overstrike_set)
-        dest->appearance.overstrike = vals->appearance.overstrike;
+      if (tag->strikethrough_set)
+        dest->appearance.strikethrough = vals->appearance.strikethrough;
 
       if (tag->invisible_set)
         dest->invisible = vals->invisible;

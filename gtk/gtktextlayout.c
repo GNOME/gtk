@@ -1095,7 +1095,7 @@ gtk_text_attr_appearance_compare (const PangoAttribute *attr1,
 	  appearance1->fg_stipple ==  appearance2->fg_stipple &&
 	  appearance1->bg_stipple ==  appearance2->bg_stipple &&
 	  appearance1->underline == appearance2->underline &&
-	  appearance1->overstrike == appearance2->overstrike &&
+	  appearance1->strikethrough == appearance2->strikethrough &&
 	  appearance1->draw_bg == appearance2->draw_bg);
 	  
 }
