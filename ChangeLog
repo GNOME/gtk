@@ -1,3 +1,8 @@
+Mon Jul 19 23:51:50 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreeview.c (gtk_tree_view_enter_notify): Don't
+	use uninitialized node pointer.  (#147911, Peter Zelezny)
+
 Thu Jul 15 22:19:40 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Fix #60128, #58307, #144706:
