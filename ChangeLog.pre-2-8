@@ -1,3 +1,9 @@
+Tue Aug 19 13:58:50 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkgeometry-x11.c (gdk_window_scroll): 
+	Don't use impl->position_info.clip_rect for toplevels.
+	(#107068, reported by Thomas Mirlacher)
+
 Mon Aug 18 11:48:51 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdrawable-x11.c (convert_to_format): 

@@ -402,7 +402,7 @@ gdk_window_scroll (GdkWindow *window,
   GdkRegion *invalidate_region;
   GdkWindowImplX11 *impl;
   GdkWindowObject *obj;
-  GdkRectangle dest_rect;
+  GdkRectangle src_rect, dest_rect;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -419,12 +419,23 @@ gdk_window_scroll (GdkWindow *window,
   if (obj->update_area)
     gdk_region_offset (obj->update_area, dx, dy);
   
-  invalidate_region = gdk_region_rectangle (&impl->position_info.clip_rect);
+  /* impl->position_info.clip_rect isn't meaningful for toplevels */
+  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
+    src_rect = impl->position_info.clip_rect;
+  else
+    {
+      src_rect.x = 0;
+      src_rect.y = 0;
+      src_rect.width = impl->width;
+      src_rect.height = impl->height;
+    }
   
-  dest_rect = impl->position_info.clip_rect;
+  invalidate_region = gdk_region_rectangle (&src_rect);
+
+  dest_rect = src_rect;
   dest_rect.x += dx;
   dest_rect.y += dy;
-  gdk_rectangle_intersect (&dest_rect, &impl->position_info.clip_rect, &dest_rect);
+  gdk_rectangle_intersect (&dest_rect, &src_rect, &dest_rect);
 
   if (dest_rect.width > 0 && dest_rect.height > 0)
     {
