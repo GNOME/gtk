@@ -66,3 +66,4 @@ gint		  _gdk_input_ignore_wintab = FALSE;
 gint		  _gdk_max_colors = 0;
 
 gboolean	  _sizemove_in_progress = FALSE;
+gboolean	  _ignore_destroy_clipboard = FALSE;

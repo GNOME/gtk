@@ -238,16 +238,15 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
   if (!API_CALL (OpenClipboard, (hwnd)))
     return FALSE;
 
+  _ignore_destroy_clipboard = TRUE;
   if (!API_CALL (EmptyClipboard, ()))
     {
+      _ignore_destroy_clipboard = FALSE;
       API_CALL (CloseClipboard, ());
       return FALSE;
     }
-#if 0
-  /* No delayed rendering */
-  if (hwnd != NULL)
-    SetClipboardData (CF_TEXT, NULL);
-#endif
+  _ignore_destroy_clipboard = FALSE;
+
   if (!API_CALL (CloseClipboard, ()))
     return FALSE;
 
@@ -729,32 +728,6 @@ gdk_selection_send_notify_for_display (GdkDisplay *display,
 	     g_free (sel_name),
 	     g_free (tgt_name),
 	     g_free (prop_name)));
-
-  /* Send ourselves a selection clear message so that gtk thinks we
-   * don't have the selection, and will claim it anew when needed, and
-   * we thus get a chance to store data in the Windows clipboard.
-   * Otherwise, if a gtkeditable does a copy to CLIPBOARD several
-   * times only the first one actually gets copied to the Windows
-   * clipboard, as only the first one causes a call to
-   * gdk_property_change().
-   *
-   * Hmm, there is something fishy with this. Cut and paste inside the
-   * same app didn't work, the gtkeditable immediately forgot the
-   * clipboard contents in gtk_editable_selection_clear() as a result
-   * of this message. OTOH, when I changed gdk_selection_owner_get to
-   * return NULL for CLIPBOARD, it works. Sigh.
-   */
-
-  tmp_event.selection.type = GDK_SELECTION_CLEAR;
-  tmp_event.selection.window = gdk_window_lookup (requestor);
-  tmp_event.selection.send_event = FALSE;
-  tmp_event.selection.selection = selection;
-  tmp_event.selection.target = 0;
-  tmp_event.selection.property = 0;
-  tmp_event.selection.requestor = 0;
-  tmp_event.selection.time = time;
-
-  gdk_event_put (&tmp_event);
 }
 
 /* It's hard to say whether implementing this actually is of any use
