@@ -1,3 +1,17 @@
+2001-11-14  Daniel Egger  <degger@fhm.edu>
+
+	* gdk-pixbuf/io-xpm.c: 
+	(xpm_skip_whitespaces): Remove unused static function.
+	(xpm_skip_string): Dito.	
+	(xpm_extract_color): Declare const variable const to avoid warnings. 
+
+	* gtk/gtkfixed.c: (gtk_fixed_map): Remove unused static function.
+	
+	* gtk/gtkplug.c: #if 0'ed prototype for #if 0'ed code.
+	
+	* gtk/gtksocket.c: Change type of mask to g_message to %ld for 
+	a long.
+
 Wed Nov 14 15:14:48 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcontainer.c (gtk_container_idle_sizer): Back

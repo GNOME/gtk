@@ -304,30 +304,6 @@ gtk_fixed_get_child_property (GtkContainer *container,
 }
 
 static void
-gtk_fixed_map (GtkWidget *widget)
-{
-  GtkFixed *fixed;
-  GtkFixedChild *child;
-  GList *children;
-
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
-  fixed = GTK_FIXED (widget);
-
-  children = fixed->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      if (GTK_WIDGET_VISIBLE (child->widget) &&
-	  !GTK_WIDGET_MAPPED (child->widget))
-	gtk_widget_map (child->widget);
-    }
-
-  gdk_window_show (widget->window);
-}
-
-static void
 gtk_fixed_realize (GtkWidget *widget)
 {
   GdkWindowAttr attributes;

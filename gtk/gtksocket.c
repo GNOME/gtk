@@ -1071,7 +1071,7 @@ send_xembed_message (GtkSocket *socket,
 		     guint32    time)
 {
   GTK_NOTE(PLUGSOCKET,
-	   g_message ("GtkSocket: Sending XEMBED message of type %d", message));
+	 g_message ("GtkSocket: Sending XEMBED message of type %ld", message));
   
   if (socket->plug_window)
     {

@@ -61,7 +61,9 @@ static GdkFilterReturn gtk_plug_filter_func           (GdkXEvent        *gdk_xev
 						       GdkEvent         *event,
 						       gpointer          data);
 
+#if 0
 static void gtk_plug_free_grabbed_keys (GHashTable    *key_table);
+#endif
 static void handle_modality_off        (GtkPlug       *plug);
 static void send_xembed_message        (GtkPlug       *plug,
 					glong          message,

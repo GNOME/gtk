@@ -1070,39 +1070,17 @@ xpm_read_string (FILE *infile, gchar **buffer, guint *buffer_size)
 	return ret;
 }
 
-static const gchar *
-xpm_skip_whitespaces (const gchar *buffer)
-{
-	gint32 index = 0;
-
-	while (buffer[index] != 0 && (buffer[index] == 0x20 || buffer[index] == 0x09))
-		index++;
-
-	return &buffer[index];
-}
-
-static const gchar *
-xpm_skip_string (const gchar *buffer)
-{
-	gint32 index = 0;
-
-	while (buffer[index] != 0 && buffer[index] != 0x20 && buffer[index] != 0x09)
-		index++;
-
-	return &buffer[index];
-}
-
 static gchar *
 xpm_extract_color (const gchar *buffer)
 {
+	const gchar *p = &buffer[0];
 	gint new_key = 0;
 	gint key = 0;
 	gint current_key = 1;
 	gint space = 128;
 	gchar word[128], color[128], current_color[128];
-	gchar *r, *p;
-
-	p = &buffer[0];
+	gchar *r; 
+	
 	word[0] = '\0';
 	color[0] = '\0';
 	current_color[0] = '\0';
