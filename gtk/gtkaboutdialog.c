@@ -396,9 +396,6 @@ gtk_about_dialog_finalize (GObject *object)
   g_strfreev (priv->documenters);
   g_strfreev (priv->artists);
 
-  g_free (priv);
-  about->private_data = NULL;
-
   G_OBJECT_CLASS (gtk_about_dialog_parent_class)->finalize (object);
 }
 
@@ -1166,11 +1163,11 @@ gtk_about_dialog_get_translator_credits (GtkAboutDialog *about)
  * Using gettext(), a simple way to achieve that is to mark the
  * string for translation:
  * <informalexample><programlisting>
- *  gtk_about_dialog_set_translator_credits (about, _("translator_credits"));
+ *  gtk_about_dialog_set_translator_credits (about, _("translator-credits"));
  * </programlisting></informalexample>
- * It is a good idea to use the customary msgid "translator_credits" for this
+ * It is a good idea to use the customary msgid "translator-credits" for this
  * purpose, since translators will already know the purpose of that msgid, and
- * since #GtkAboutDialog will detect if "translator_credits" is untranslated
+ * since #GtkAboutDialog will detect if "translator-credits" is untranslated
  * and hide the tab.
  *
  * Since: 2.6
@@ -1689,9 +1686,10 @@ display_credits_dialog (GtkWidget *button,
   if (priv->documenters != NULL)
     add_credits_page (about, notebook, _("Documented by"), priv->documenters);
     
+  /* Don't show an untranslated gettext msgid */
   if (priv->translator_credits != NULL &&
-      !strcmp (priv->translator_credits, "translator_credits") &&
-      !strcmp (priv->translator_credits, "translator-credits")) 
+      strcmp (priv->translator_credits, "translator_credits") &&
+      strcmp (priv->translator_credits, "translator-credits")) 
     {
       gchar *translators[2];
       

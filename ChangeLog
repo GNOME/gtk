@@ -1,3 +1,14 @@
+2004-09-16  Matthias Clasen  <mclasen@redhat.com>
+
+	Fix #152760, Christian Persch:
+	
+	* gtk/gtkaboutdialog.c (gtk_about_dialog_finalize): Don't free
+	private data.
+	(gtk_about_dialog_set_translator_credits): Recommend the msg
+	id translator-credits.
+	(display_credits_dialog): Show translator credits if they're
+	translated, not if they're untranslated.
+
 Thu Sep 16 02:07:56 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* docs/tools/widgets.c (create_icon_view): load images at normal
