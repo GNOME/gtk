@@ -1,3 +1,11 @@
+Thu Jun  3 21:17:29 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkentry.c (gtk_entry_completion_timeout): Calculate the
+	length of the entry contents in characters, not in bytes.
+
+	* gtk/gtkentry.c (paste_received): Don't pop up the completion
+	window on paste, noticed by Anders Carlsson.
+
 Thu Jun  3 20:56:19 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_class_init): Fix the allowed
