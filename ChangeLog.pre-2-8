@@ -1,5 +1,24 @@
 2004-07-19  Matthias Clasen  <mclasen@redhat.com>
 
+	Make GtkCellView public, since people seem to have uses for it, 
+	it is clean API and we were just conservative in not making it 
+	public initially. At the same time, get rid of GtkCellViewMenuItem,
+	which doesn't have any function which can't be served by a
+	GtkMenuItem with a GtkCellView child.
+
+	* gtk/gtk.h: Include gtkcellview.h
+
+	* gtk/Makefile.am (gtk_public_h_sources): 
+
+	* gtk/Makefile.am (gtk_private_h_sources): 
+	(gtk_c_sources): Remove gtkcellviewmenuitem.[hc]
+	* gtk/gtkcombobox.c: Replace all uses of GtkCellViewMenuItem by
+	GtkMenuItem with a GtkCellView child.
+
+	* gtk/gtkcellviewmenuitem.[hc]: Removed.
+
+2004-07-19  Matthias Clasen  <mclasen@redhat.com>
+
 	Support inline autocompletion in entries  (#135953)
 	
 	* gtk/gtkentryprivate.h: 

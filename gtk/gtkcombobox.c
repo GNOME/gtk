@@ -25,7 +25,6 @@
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcellview.h"
-#include "gtkcellviewmenuitem.h"
 #include "gtkeventbox.h"
 #include "gtkframe.h"
 #include "gtkhbox.h"
@@ -1239,7 +1238,7 @@ menu_row_is_sensitive (GtkComboBox *combo_box,
   GList *cells, *list;
   gboolean sensitive;
   
-  if (!GTK_IS_CELL_VIEW_MENU_ITEM (item))
+  if (!GTK_IS_CELL_VIEW (GTK_BIN (item)->child))
     return FALSE;
     
   cell_view = gtk_bin_get_child (GTK_BIN (item));
@@ -1372,7 +1371,7 @@ update_menu_sensitivity (GtkComboBox *combo_box)
       GtkWidget *item = GTK_WIDGET (child->data);
       gboolean sensitive;
 
-      if (!GTK_IS_CELL_VIEW_MENU_ITEM (item))
+      if (!GTK_IS_CELL_VIEW (GTK_BIN (item)->child))
 	continue;
 
       sensitive = menu_row_is_sensitive (combo_box, item);
@@ -2059,14 +2058,21 @@ gtk_combo_box_menu_fill (GtkComboBox *combo_box)
 	tmp = gtk_separator_menu_item_new ();
       else
 	{
-	  tmp = gtk_cell_view_menu_item_new_from_model (combo_box->priv->model,
-							path);
+	  GtkCellView *cell_view;
+
+	  cell_view = gtk_cell_view_new ();
+	  gtk_cell_view_set_model (cell_view, combo_box->priv->model);
+	  gtk_cell_view_set_displayed_row (cell_view, path);
+	  gtk_widget_show (GTK_WIDGET (cell_view));
+	  
+	  tmp = gtk_menu_item_new ();
+	  gtk_container_add (GTK_CONTAINER (tmp), cell_view);
+
 	  g_signal_connect (tmp, "activate",
 			    G_CALLBACK (gtk_combo_box_menu_item_activate),
 			    combo_box);
 	  
-	  cell_view_sync_cells (combo_box,
-				GTK_CELL_VIEW (GTK_BIN (tmp)->child));
+	  cell_view_sync_cells (combo_box, cell_view);
 	}
 
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), tmp);
@@ -2412,6 +2418,7 @@ gtk_combo_box_menu_row_inserted (GtkTreeModel *model,
   GtkWidget *menu;
   GtkWidget *item;
   GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
+  GtkCellView *cell_view;
 
   if (!combo_box->priv->popup_widget)
     return;
@@ -2419,12 +2426,19 @@ gtk_combo_box_menu_row_inserted (GtkTreeModel *model,
   menu = combo_box->priv->popup_widget;
   g_return_if_fail (GTK_IS_MENU (menu));
 
-  item = gtk_cell_view_menu_item_new_from_model (model, path);
+  cell_view = gtk_cell_view_new ();
+  gtk_cell_view_set_model (cell_view, model);
+  gtk_cell_view_set_displayed_row (cell_view, path);
+  gtk_widget_show (GTK_WIDGET (cell_view));
+  
+  item = gtk_menu_item_new ();
+  gtk_container_add (GTK_CONTAINER (item), cell_view);
+
   g_signal_connect (item, "activate",
                     G_CALLBACK (gtk_combo_box_menu_item_activate),
                     combo_box);
 
-  cell_view_sync_cells (combo_box, GTK_CELL_VIEW (GTK_BIN (item)->child));
+  cell_view_sync_cells (combo_box, cell_view);
 
   gtk_menu_shell_insert (GTK_MENU_SHELL (menu), item,
                          gtk_tree_path_get_indices (path)[0]);
@@ -2999,10 +3013,10 @@ gtk_combo_box_cell_layout_pack_start (GtkCellLayout   *layout,
           if (GTK_IS_TEAROFF_MENU_ITEM (i->data))
 	    continue;
 
-          if (GTK_IS_CELL_VIEW_MENU_ITEM (i->data))
-            view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
-          else
-            view = GTK_CELL_VIEW (i->data);
+          if (GTK_IS_CELL_VIEW (i->data))
+	    view = GTK_CELL_VIEW (i->data);
+	  else
+	    view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
 
           gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (view), cell, expand);
         }
@@ -3052,10 +3066,10 @@ gtk_combo_box_cell_layout_pack_end (GtkCellLayout   *layout,
           if (GTK_IS_TEAROFF_MENU_ITEM (i->data))
 	    continue;
 
-          if (GTK_IS_CELL_VIEW_MENU_ITEM (i->data))
-            view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
-          else
+          if (GTK_IS_CELL_VIEW (i->data))
             view = GTK_CELL_VIEW (i->data);
+          else
+            view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
 
           gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (view), cell, expand);
         }
@@ -3105,10 +3119,10 @@ gtk_combo_box_cell_layout_clear (GtkCellLayout *layout)
           if (GTK_IS_TEAROFF_MENU_ITEM (i->data))
 	    continue;
 
-          if (GTK_IS_CELL_VIEW_MENU_ITEM (i->data))
-            view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
-          else
+          if (GTK_IS_CELL_VIEW (i->data))
             view = GTK_CELL_VIEW (i->data);
+          else
+            view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
 
           gtk_cell_layout_clear (GTK_CELL_LAYOUT (view));
         }
@@ -3159,10 +3173,10 @@ gtk_combo_box_cell_layout_add_attribute (GtkCellLayout   *layout,
           if (GTK_IS_TEAROFF_MENU_ITEM (i->data))
 	    continue;
 
-          if (GTK_IS_CELL_VIEW_MENU_ITEM (i->data))
-            view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
-          else
+          if (GTK_IS_CELL_VIEW (i->data))
             view = GTK_CELL_VIEW (i->data);
+          else
+            view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
 
           gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (view), cell,
                                          attribute, column);
@@ -3222,10 +3236,10 @@ gtk_combo_box_cell_layout_set_cell_data_func (GtkCellLayout         *layout,
           if (GTK_IS_TEAROFF_MENU_ITEM (i->data))
 	    continue;
 
-          if (GTK_IS_CELL_VIEW_MENU_ITEM (i->data))
-            view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
-          else
+          if (GTK_IS_CELL_VIEW (i->data))
             view = GTK_CELL_VIEW (i->data);
+          else 
+	    view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
 
           gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (view), cell,
                                               func, func_data, NULL);
@@ -3281,10 +3295,10 @@ gtk_combo_box_cell_layout_clear_attributes (GtkCellLayout   *layout,
           if (GTK_IS_TEAROFF_MENU_ITEM (i->data))
 	    continue;
 
-          if (GTK_IS_CELL_VIEW_MENU_ITEM (i->data))
-            view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
-          else
+          if (GTK_IS_CELL_VIEW (i->data))
             view = GTK_CELL_VIEW (i->data);
+          else
+            view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
 
           gtk_cell_layout_clear_attributes (GTK_CELL_LAYOUT (view), cell);
         }
@@ -3343,10 +3357,10 @@ gtk_combo_box_cell_layout_reorder (GtkCellLayout   *layout,
           if (GTK_IS_TEAROFF_MENU_ITEM (i->data))
 	    continue;
 
-          if (GTK_IS_CELL_VIEW_MENU_ITEM (i->data))
-            view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
-          else
+          if (GTK_IS_CELL_VIEW (i->data))
             view = GTK_CELL_VIEW (i->data);
+          else
+            view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
 
           gtk_cell_layout_reorder (GTK_CELL_LAYOUT (view), cell, position);
         }
@@ -4059,7 +4073,8 @@ gtk_cell_editable_key_press (GtkWidget   *widget,
     }
   else if (event->keyval == GDK_Return)
     {
-      gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (combo_box));
+      if (GTK_IS_CELL_EDITABLE (combo_box))
+	gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (combo_box));
       if (GTK_IS_CELL_EDITABLE (combo_box))
 	gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (combo_box));
       

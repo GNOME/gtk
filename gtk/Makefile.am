@@ -123,6 +123,7 @@ gtk_public_h_sources =          \
 	gtkcellrendererprogress.h \
 	gtkcellrenderertext.h	\
 	gtkcellrenderertoggle.h	\
+	gtkcellview.h		\
 	gtkcheckbutton.h	\
 	gtkcheckmenuitem.h	\
 	gtkclipboard.h		\
@@ -276,8 +277,6 @@ gtk_semi_private_h_sources =    \
 # GTK+ header files that don't get installed
 gtk_private_h_sources =         \
 	gtkcellrendererseptext.h\
-	gtkcellview.h		\
-	gtkcellviewmenuitem.h	\
 	gtkentryprivate.h	\
 	gtkfilechooserembed.h	\
 	gtkfilechooserentry.h	\
@@ -332,7 +331,6 @@ gtk_c_sources =                 \
 	gtkcellrenderertext.c	\
 	gtkcellrenderertoggle.c	\
 	gtkcellview.c		\
-	gtkcellviewmenuitem.c	\
 	gtkcheckbutton.c	\
 	gtkcheckmenuitem.c	\
 	gtkclipboard.c		\
