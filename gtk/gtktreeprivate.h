@@ -310,7 +310,22 @@ GtkTreeSelection* _gtk_tree_selection_new_with_tree_view (GtkTreeView      *tree
 void              _gtk_tree_selection_set_tree_view      (GtkTreeSelection *selection,
                                                           GtkTreeView      *tree_view);
 
-
+void		  _gtk_tree_view_column_cell_render      (GtkTreeViewColumn *tree_column,
+							  GdkWindow         *window,
+							  GdkRectangle      *background_area,
+							  GdkRectangle      *cell_area,
+							  GdkRectangle      *expose_area,
+							  guint              flags);
+gboolean	  _gtk_tree_view_column_cell_focus       (GtkTreeViewColumn *tree_column,
+							  gint               direction);
+void		  _gtk_tree_view_column_cell_draw_focus  (GtkTreeViewColumn *tree_column,
+							  GdkWindow         *window,
+							  GdkRectangle      *background_area,
+							  GdkRectangle      *cell_area,
+							  GdkRectangle      *expose_area,
+							  guint              flags);
+void		  _gtk_tree_view_column_cell_set_dirty	 (GtkTreeViewColumn *tree_column,
+							  gboolean           install_handler);
 
 
 #ifdef __cplusplus

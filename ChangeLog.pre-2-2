@@ -1,3 +1,22 @@
+Tue Feb 19 17:36:31 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtktreeprivate.h, gtktreeviewcolumn.[ch], gtktreeview.c: change
+	gtk_tree_view_column_cell_render,
+	gtk_tree_view_column_cell_focus,
+	gtk_tree_view_column_cell_draw_focus and
+	gtk_tree_view_column_cell_set_dirty to be private functions.
+
+	* gtktreeviewcolumn.[ch]: add install_handler argument to
+	_cell_set_dirty to control if _mark_rows_col_dirty (which calls
+	install_presize_handler) gets called, set widths correctly so
+	autosizing works (#71870)
+
+	* gtktreeview.c (gtk_tree_view_column_autosize): new function,
+	(gtk_tree_view_button_press): make double click on column
+	separator resize the row (#71870)
+	(gtk_tree_view_get_dest_row_at_pos): change DnD threshold to 33%
+	(#71869, suggestion by Anders Carlsson)
+
 Mon Feb 18 23:16:16 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmain.[ch]: Add routines _gtk_find_module(),

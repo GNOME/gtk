@@ -210,23 +210,7 @@ void                    gtk_tree_view_column_cell_get_size       (GtkTreeViewCol
 								  gint                    *y_offset,
 								  gint                    *width,
 								  gint                    *height);
-void                    gtk_tree_view_column_cell_render         (GtkTreeViewColumn       *tree_column,
-								  GdkWindow               *window,
-								  GdkRectangle            *background_area,
-								  GdkRectangle            *cell_area,
-								  GdkRectangle            *expose_area,
-								  guint                    flags);
-gboolean                gtk_tree_view_column_cell_focus          (GtkTreeViewColumn       *tree_column,
-								  gint                     direction);
-void                    gtk_tree_view_column_cell_draw_focus     (GtkTreeViewColumn       *tree_column,
-								  GdkWindow               *window,
-								  GdkRectangle            *background_area,
-								  GdkRectangle            *cell_area,
-								  GdkRectangle            *expose_area,
-								  guint                    flags);
 gboolean                gtk_tree_view_column_cell_is_visible     (GtkTreeViewColumn       *tree_column);
-void                    gtk_tree_view_column_cell_set_dirty      (GtkTreeViewColumn       *tree_column);
-
 
 #ifdef __cplusplus
 }
