@@ -1,3 +1,10 @@
+Sat Jun 15 16:10:00 2002  James M. Cape <jcape@ignore-your.tv>
+
+	* gtk/gtktexttag.c (gtk_text_tag_set_property):
+	Notify about "background-full-height-set", not
+	"bg_full_height_set".
+			
+
 Fri Jun 14 15:41:50 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c: Fix bug #84268, where validate_rows sometimes
