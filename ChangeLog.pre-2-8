@@ -1,3 +1,9 @@
+Sat Jun 26 01:04:31 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkiconfactory.c (clear_cache): Prevent unwanted 
+	recursion by resetting icon_set->cache before freeing
+	the cache.  (#144947, Tim Janik)
+
 Sat Jun 26 00:40:02 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkiconfactory.c (render_icon_name_pixbuf): 

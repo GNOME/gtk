@@ -2656,10 +2656,14 @@ static void
 clear_cache (GtkIconSet *icon_set,
              gboolean    style_detach)
 {
-  GSList *tmp_list;
+  GSList *cache, *tmp_list;
   GtkStyle *last_style = NULL;
 
-  tmp_list = icon_set->cache;
+  cache = icon_set->cache;
+  icon_set->cache = NULL;
+  icon_set->cache_size = 0;
+  
+  tmp_list = cache;
   while (tmp_list != NULL)
     {
       CachedIcon *icon = tmp_list->data;
@@ -2683,9 +2687,7 @@ clear_cache (GtkIconSet *icon_set,
       tmp_list = g_slist_next (tmp_list);
     }
 
-  g_slist_free (icon_set->cache);
-  icon_set->cache = NULL;
-  icon_set->cache_size = 0;
+  g_slist_free (cache);
 }
 
 static GSList*
