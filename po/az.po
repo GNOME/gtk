@@ -5,34 +5,37 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk20 1.3.2\n"
-"POT-Creation-Date: 2001-04-17 19:08-0400\n"
-"PO-Revision-Date: 2000-12-07 20:25+0200\n"
-"Last-Translator: Vasif Ismailoglu MD <azerb_linux@hotmail.com>\n"
-"Language-Team: Azerbaijani turkish \n"
+"POT-Creation-Date: 2001-05-05 12:21+0200\n"
+"PO-Revision-Date: 2001-04-28 14:02GMT +0200\n"
+"Last-Translator: Vasif İsmayıloğlu MD <azerb_linux@hotmail.com>\n"
+"Language-Team: Azerbaijani Turkish <linuxaz@azerimail.net>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 0.8\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:125 gdk-pixbuf/gdk-pixbuf-io.c:516
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr ""
+msgstr "Fayl '%s' Açıla bilmədi: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:136 gdk-pixbuf/gdk-pixbuf-io.c:526
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr ""
+msgstr "Rəsm faylı '%s' heç mə'lumat daxil etmir."
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:165
 #, c-format
 msgid "Don't know how to load the animation in file '%s'"
-msgstr ""
+msgstr "'%s' animasiya faylını necə yükləyəcəyimi bilmirəm"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:187 gdk-pixbuf/gdk-pixbuf-io.c:571
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
+"'%s' rəsmi yüklənə bilmədi: səbəbini bilmirəm, bəlkə xəsərli "
+"fayldır"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:226
 #, c-format
@@ -40,25 +43,27 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
+"'%s' animasiyasini yükləyə bilmədim: səbəbini bilmirəm, bəlkə "
+"xəsərli fayldır"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:126
 msgid "Image data is partially missing"
-msgstr ""
+msgstr "Rəsm datası qismən əksikdir"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:139
 msgid ""
 "Image has an incorrect pixel rowstride, perhaps the data was corrupted "
 "somehow."
 msgstr ""
+"Rəsmdə xəsərli pətək sətiri vardır, dəyəsən data xərəslidir."
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:154
-#, fuzzy
 msgid "Image size is impossibly large, perhaps the data was corrupted somehow"
-msgstr "GIF faylı datası əksikdir (dəyəsən parçalanıb?)"
+msgstr "Rəsm çox böyükdür, dəyəsən data xəsərlidir."
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:167
 msgid "Image data is partially missing, probably it was corrupted somehow."
-msgstr ""
+msgstr "Rəsm datasi qismən əksikdir, dəyəsən data xəsərlidir."
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:183
 #, c-format
@@ -66,6 +71,8 @@ msgid ""
 "Image has an unknown colorspace code (%d), perhaps the image data was "
 "corrupted"
 msgstr ""
+"Rəsm namə'lum rəng sahəhəsi koduna (%d) malikdir, dəyəsən data "
+"xəsərlidir."
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:192
 #, c-format
@@ -73,6 +80,8 @@ msgid ""
 "Image has an improper number of bits per sample (%d), perhaps the image data "
 "was corrupted"
 msgstr ""
+"Rəsm nümunə başına düzgün gəlməyən (%d) bit miqdarına malikdir, "
+"dəyəsən data xəsərlidir."
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:201 gdk-pixbuf/gdk-pixbuf-data.c:210
 #, c-format
@@ -80,6 +89,8 @@ msgid ""
 "Image has an improper number of channels (%d), perhaps the image data was "
 "corrupted"
 msgstr ""
+"Rəsm düzgün gəlməyən kanal miqdarına (%d) malikdir, dəyəsən data "
+"xəsərlidir."
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:228
 #, c-format
@@ -87,24 +98,26 @@ msgid ""
 "Not enough memory to store a %d by %d image; try exiting some applications "
 "to free memory."
 msgstr ""
+"\"%d\"ni %d rəsm olaraq saxlamaq üçün lazımi yaddaş yoxdur; bə'zi "
+"proqramlardan çıxmağaçalışın."
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:298
 msgid "Image contained no data."
-msgstr ""
+msgstr "Rəsm dataya malik deyıldir."
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:308
 msgid "Image isn't in the correct format (inline GdkPixbuf format)"
-msgstr ""
+msgstr "Rəsm düzgün formatda deyildir (daxili GdkPixbuf şəkli)"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:324
 #, c-format
 msgid "This version of the software is unable to read images with type code %d"
-msgstr ""
+msgstr "Proqramın bu buraxılışı  %d növ kodlu rəsmləri oxuya bilmir"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:295
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr "Module_path dəki modulun yeri tapıla bilmir: \"%s\","
+msgstr "Rəsm yükləmə modulu tapıla bilmədi: %s: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:314
 #, c-format
@@ -112,40 +125,44 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
+"Rəsm yükləmə modulu %s düzgün ara üz idxal etmir; yoxsa bu, GTK "
+"buraxılışından fərqlidir?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:425 gdk-pixbuf/gdk-pixbuf-io.c:451
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr ""
+msgstr "Rəsm növü '%s' dəstəklənmir"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:473
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr ""
+msgstr "'%s' Faylının rəsm formatını başa düşmədim"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:479
 msgid "Unrecognized image file format"
-msgstr ""
+msgstr "Namə'lum rəsm növü"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:549
 #, c-format
 msgid "Don't know how to load the image in file '%s'"
-msgstr ""
+msgstr "'%s' faylındakı rəsmi necə yükləyəcəyimi bilmirəm"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:582
 #, c-format
 msgid "Failed to load image '%s': %s"
-msgstr ""
+msgstr "Rəsm '%s' yüklənə bilmədi: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:687
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
+"\"gdk-pixbuf\"un bu buraxılışı bu formatdakı rəsmləri qeyd etməni "
+"dəstəkləmir: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:790
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
-msgstr ""
+msgstr "'%s' yazmaq üçün açila bilinmədi: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:811
 #, c-format
@@ -153,11 +170,13 @@ msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: "
 "%s"
 msgstr ""
+"Rəsm yazılırkən '%s' qapadıla bilinmədi, bütün data qeyd edilməmiş "
+"ola bilər:%s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:348
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
-msgstr ""
+msgstr "'%s' rəsm növünün inkremental yüklənməsi dəstəklənmir"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:373 gdk-pixbuf/gdk-pixbuf-loader.c:474
 #, c-format
@@ -165,10 +184,12 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
+"Daxili xəta: Rəsm yükləmə modulu '%s' rəsmi yüklməyə başlaya "
+"bilmədi, amma iflası üçün də səbəb göstərmədi"
 
 #: gdk-pixbuf/io-bmp.c:309
 msgid "Not enough memory to load bitmap image"
-msgstr ""
+msgstr "Bitməp rəsm üçün lazımi yaddaş yoxdur"
 
 #: gdk-pixbuf/io-gif.c:426
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
@@ -199,17 +220,19 @@ msgstr "GIF animasiyasında xətalı böyüklükdə çərçivə var"
 #: gdk-pixbuf/io-jpeg.c:127
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr ""
+msgstr "JPEG rəsm faylı interperensiya xətası (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:236
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
+"Rəsm yükləmə üçün yaddaş çatmır, bə'zi proqramlardan yaddaş "
+"açmaq üçün çıxmağa çalışın"
 
 #: gdk-pixbuf/io-jpeg.c:533
 msgid "Couldn't allocate memory for loading JPEG file"
-msgstr ""
+msgstr "JPEG faylını yükləmə üçün yaddaş ayrıla bilmir"
 
 #: gdk-pixbuf/io-jpeg.c:658
 #, c-format
@@ -217,21 +240,25 @@ msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
+"JPEG keyfiyyət qiyməti 0 ilə 100 arasında olmalıdır; '%s' qiyməti "
+"alına bilməz."
 
 #: gdk-pixbuf/io-jpeg.c:673
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
+"JPEG keyfiyyət qiyməti 0 ilə 100 arasında olmalıdır; '%d' qiyməti "
+"qəbl edilməz."
 
 #: gdk-pixbuf/io-png.c:158
 #, c-format
 msgid "Fatal error in PNG image file: %s"
-msgstr ""
+msgstr "PNG rəsm faylında ağır xəta: '%s'"
 
 #: gdk-pixbuf/io-png.c:242
 msgid "Insufficient memory to load PNG file"
-msgstr ""
+msgstr "PNG faylını yükləmə üçün yaddaş ayrıla bilmir"
 
 #: gdk-pixbuf/io-png.c:534
 #, c-format
@@ -239,218 +266,218 @@ msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
+"\"%ld\"ni %ld rəsm olaraq yükləmək üçün yaddaş çatmır; bə'zi "
+"proqramlardan yaddaş açmaq üçün çıxmağa çalışın"
 
 #: gdk-pixbuf/io-png.c:608
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
-msgstr ""
+msgstr "PNG rəsm oxunmasında ağır xəta: %s"
 
 #: gdk-pixbuf/io-png.c:714
 msgid "Insufficient memory to save PNG file"
-msgstr ""
+msgstr "PNG faylını qeyd etmək üçün yaddaş ayrıla bilmir"
 
 #: gdk-pixbuf/io-pnm.c:249
 msgid "PNM loader expected to find an integer, but didn't"
-msgstr ""
+msgstr "PNM yükləyicisi inteqer tapmağı gözləyirdi, amma tapmadı"
 
 #: gdk-pixbuf/io-pnm.c:280
 msgid "PNM file has an incorrect initial byte"
-msgstr ""
+msgstr "PNM faylı xəsərli başlanğıc baytına malikdir"
 
 #: gdk-pixbuf/io-pnm.c:310
 msgid "PNM file is not in a recognized PNM subformat"
-msgstr ""
+msgstr "PNM faylı PNM alt formatında başa düşülmədi"
 
 #: gdk-pixbuf/io-pnm.c:335
 msgid "PNM file has an image width of 0"
-msgstr ""
+msgstr "PNM faylının genişliyi 0 olaraq verilib"
 
 #: gdk-pixbuf/io-pnm.c:356
 msgid "PNM file has an image height of 0"
-msgstr ""
+msgstr "PNG faylının hündürlüyü  0 olara verilib"
 
 #: gdk-pixbuf/io-pnm.c:379
 msgid "Maximum color value in PNM file is 0"
-msgstr ""
+msgstr "PNG faylının maksimal rəng qitməti 0 olaraq verilib"
 
 #: gdk-pixbuf/io-pnm.c:418 gdk-pixbuf/io-pnm.c:446 gdk-pixbuf/io-pnm.c:478
 msgid "Raw PNM image type is invalid"
-msgstr ""
+msgstr "Sətir PNM rəsm növü hökmlü deyildir"
 
 #: gdk-pixbuf/io-pnm.c:538 gdk-pixbuf/io-pnm.c:580
 msgid "PNM image format is invalid"
-msgstr ""
+msgstr "PNM rəsm formatı hökmsüzdür"
 
 #: gdk-pixbuf/io-pnm.c:639
 msgid "PNM image loader does not support this PNM subformat"
-msgstr ""
+msgstr "PNM rəsm yükləyicisi PNM alt formatını dəstəkləmir"
 
 #: gdk-pixbuf/io-pnm.c:815
 msgid "Unexpected end of PNM image data"
-msgstr ""
+msgstr "PNM rəsm datasının gözlənilməz bitişi"
 
 #: gdk-pixbuf/io-pnm.c:917
 msgid "Insufficient memory to load PNM file"
-msgstr ""
+msgstr "PNM faylını yükləmək üçün yaddaş çatmır"
 
 #: gdk-pixbuf/io-tiff.c:76
 msgid "Failed to open TIFF image"
-msgstr ""
+msgstr "TİFF rəsmi açılması bacarılmadı"
 
 #: gdk-pixbuf/io-tiff.c:89 gdk-pixbuf/io-tiff.c:104
 msgid "Insufficient memory to open TIFF file"
-msgstr ""
+msgstr "TİFF faylını açmaq üçün yaddaş çatmır"
 
 #: gdk-pixbuf/io-tiff.c:235
 msgid "Failed to write to temporary file when loading TIFF image"
-msgstr ""
+msgstr "TIFF rəsmini açmaq üçün müvəqqəti fayl yazıla bilmədi"
 
 #: gdk-pixbuf/io-xbm.c:284
 #, c-format
 msgid "Invalid XBM file: %s"
-msgstr ""
+msgstr "Hökmsüz XBM faylı: %s"
 
 #: gdk-pixbuf/io-xbm.c:295
 msgid "Insufficient memory to load XBM image file"
-msgstr ""
+msgstr "XBM faylını yükləmək üçün yaddaş çatmır"
 
 #: gdk-pixbuf/io-xbm.c:431
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr ""
+msgstr "XBM rəsmini açmaq üçün müvəqqəti fayl yazıla bilmədi"
 
 #: gdk-pixbuf/io-xpm.c:1257
 msgid "No XPM header found"
-msgstr ""
+msgstr "XPM başlığı tapılmadı"
 
 #: gdk-pixbuf/io-xpm.c:1265
 msgid "XPM has more than 31 chars per pixel"
-msgstr ""
+msgstr "XPM pətək başına 31 xarakterə malikdir"
 
 #: gdk-pixbuf/io-xpm.c:1283
 msgid "Can't read XPM colormap"
-msgstr ""
+msgstr "XPM rəng xəritəsə oxuna bilmədi"
 
 #: gdk-pixbuf/io-xpm.c:1321
 msgid "Can't allocate memory for loading XPM image"
-msgstr ""
+msgstr "XBM faylını yükləmək üçün yaddaş ayrıla bilir"
 
 #: gdk-pixbuf/io-xpm.c:1505
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr ""
+msgstr "XBM rəsmini yükləmək üçün müvəqqəti fayl yazıla bilmədi"
 
 #: gtk/gtkcellrenderer.c:101
 msgid "can_activate"
-msgstr ""
+msgstr "can_activate"
 
 #: gtk/gtkcellrenderer.c:102
 msgid "Cell can get activate events."
-msgstr ""
+msgstr "Hücrə fəallaşdırıla bilən hadisələrə malikdir."
 
 #: gtk/gtkcellrenderer.c:110
-#, fuzzy
 msgid "visible"
-msgstr "Passivləşdirilmiş"
+msgstr "görünə bilən"
 
 #: gtk/gtkcellrenderer.c:111
 msgid "Display the cell"
-msgstr ""
+msgstr "Hücrəni göstər"
 
 #: gtk/gtkcellrenderer.c:119
 msgid "xalign"
-msgstr ""
+msgstr "x tərəfləməsi"
 
 #: gtk/gtkcellrenderer.c:120
 msgid "The x-align."
-msgstr ""
+msgstr "x tərəfləməsi."
 
 #: gtk/gtkcellrenderer.c:130
 msgid "yalign"
-msgstr ""
+msgstr "y tərəfləməsi"
 
 #: gtk/gtkcellrenderer.c:131
 msgid "The y-align."
-msgstr ""
+msgstr "y tərəfləməsi."
 
 #: gtk/gtkcellrenderer.c:141
 msgid "xpad"
-msgstr ""
+msgstr "x səkməsi"
 
 #: gtk/gtkcellrenderer.c:142
 msgid "The xpad."
-msgstr ""
+msgstr "x səkməsi."
 
 #: gtk/gtkcellrenderer.c:152
 msgid "ypad"
-msgstr ""
+msgstr "y səkməsi"
 
 #: gtk/gtkcellrenderer.c:153
 msgid "The ypad."
-msgstr ""
+msgstr "y səkməsi."
 
 #: gtk/gtkcellrendererpixbuf.c:102 gtk/gtkcellrenderertextpixbuf.c:125
 msgid "Pixbuf Object"
-msgstr ""
+msgstr "\"Pixbuf\" cismi"
 
 #: gtk/gtkcellrendererpixbuf.c:103 gtk/gtkcellrenderertextpixbuf.c:126
 msgid "The pixbuf to render."
-msgstr ""
+msgstr "Render ediləcək piksbuf."
 
 #: gtk/gtkcellrenderertext.c:149
 msgid "Text"
-msgstr ""
+msgstr "Mətn"
 
 #: gtk/gtkcellrenderertext.c:150
 msgid "Text to render"
-msgstr ""
+msgstr "Render ediləcək mətn"
 
 #: gtk/gtkcellrenderertext.c:157
 msgid "Markup"
-msgstr ""
+msgstr "İşarət"
 
 #: gtk/gtkcellrenderertext.c:158
 msgid "Marked up text to render"
-msgstr ""
+msgstr "Render ediləcək işarət"
 
 #: gtk/gtkcellrenderertext.c:165 gtk/gtktexttag.c:206
 msgid "Background color name"
-msgstr ""
+msgstr "Arxa plan rəng adı"
 
 #: gtk/gtkcellrenderertext.c:166 gtk/gtktexttag.c:207
 msgid "Background color as a string"
-msgstr ""
+msgstr "Arxa plan rəngi mətni"
 
 #: gtk/gtkcellrenderertext.c:173 gtk/gtktexttag.c:214
 msgid "Background color"
-msgstr ""
+msgstr "Arxa plan rəngi"
 
 #: gtk/gtkcellrenderertext.c:174 gtk/gtktexttag.c:215
 msgid "Background color as a GdkColor"
-msgstr ""
+msgstr "Arxa plan rəngi GdkColor olaraq"
 
 #: gtk/gtkcellrenderertext.c:181 gtk/gtktexttag.c:240
 msgid "Foreground color name"
-msgstr ""
+msgstr "Ön plan rəng adı"
 
 #: gtk/gtkcellrenderertext.c:182 gtk/gtktexttag.c:241
 msgid "Foreground color as a string"
-msgstr ""
+msgstr "Ön plan rəngi kəlimə olaraq"
 
 #: gtk/gtkcellrenderertext.c:189 gtk/gtktexttag.c:248
 msgid "Foreground color"
-msgstr ""
+msgstr "Ön plan rəngi"
 
 #: gtk/gtkcellrenderertext.c:190 gtk/gtktexttag.c:249
 msgid "Foreground color as a GdkColor"
-msgstr ""
+msgstr "Ön plan rəng GdkColor olaraq"
 
 #: gtk/gtkcellrenderertext.c:198 gtk/gtkentry.c:382 gtk/gtktexttag.c:274
-#, fuzzy
 msgid "Editable"
-msgstr "(passivləşdirilmiş)"
+msgstr "Dəyişdirilə bilən"
 
 #: gtk/gtkcellrenderertext.c:199 gtk/gtktexttag.c:275
 msgid "Whether the text can be modified by the user"
-msgstr ""
+msgstr "Mətn harada istifadəçi tərəfindən dəyişdirilə bilər"
 
 #: gtk/gtkcellrenderertext.c:206 gtk/gtkcellrenderertext.c:214
 #: gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
@@ -459,545 +486,624 @@ msgstr "YazıTipi"
 
 #: gtk/gtkcellrenderertext.c:207 gtk/gtktexttag.c:283
 msgid "Font description as a string"
-msgstr ""
+msgstr "Yazı Növü izahat kəlimə olaraq"
 
 #: gtk/gtkcellrenderertext.c:215 gtk/gtktexttag.c:291
 msgid "Font description as a PangoFontDescription struct"
-msgstr ""
+msgstr "Yazı Növü izahatı PangoFontDescription olaraq"
 
 #: gtk/gtkcellrenderertext.c:223 gtk/gtktexttag.c:299
-#, fuzzy
 msgid "Font family"
-msgstr "Ailə:"
+msgstr "Yazı növü ailəsi"
 
 #: gtk/gtkcellrenderertext.c:224 gtk/gtktexttag.c:300
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
-msgstr ""
+msgstr "Yazı növü ailəsi adı, Helvetika, Tayms vs kimi"
 
 #: gtk/gtkcellrenderertext.c:231 gtk/gtkcellrenderertext.c:232
 #: gtk/gtktexttag.c:307 gtk/gtktexttag.c:308
-#, fuzzy
 msgid "Font style"
-msgstr "YazıTipi Tərzi:"
+msgstr "Yazı Növü tərzi"
 
 #: gtk/gtkcellrenderertext.c:240 gtk/gtkcellrenderertext.c:241
 #: gtk/gtktexttag.c:316 gtk/gtktexttag.c:317
 msgid "Font variant"
-msgstr ""
+msgstr "Yazı Növü variantı"
 
 #: gtk/gtkcellrenderertext.c:249 gtk/gtkcellrenderertext.c:250
 #: gtk/gtktexttag.c:325 gtk/gtktexttag.c:326
 msgid "Font weight"
-msgstr ""
+msgstr "Yazı Növü qalınlığı"
 
 #: gtk/gtkcellrenderertext.c:260 gtk/gtkcellrenderertext.c:261
 #: gtk/gtktexttag.c:336 gtk/gtktexttag.c:337
-#, fuzzy
 msgid "Font stretch"
-msgstr "YazıTipi Xüsusiyyətləri"
+msgstr "Yazı Növü genişliyi"
 
 #: gtk/gtkcellrenderertext.c:269 gtk/gtkcellrenderertext.c:270
 #: gtk/gtktexttag.c:345 gtk/gtktexttag.c:346
-#, fuzzy
 msgid "Font size"
-msgstr "Nöqtə Böyüklüyü:"
+msgstr "Yazı növü böyüklüyü"
 
 #: gtk/gtkcellrenderertext.c:279 gtk/gtktexttag.c:355
-#, fuzzy
 msgid "Font points"
-msgstr "YazıTipi Növləri:"
+msgstr "Yazı Növü nöqtələri"
 
 #: gtk/gtkcellrenderertext.c:280 gtk/gtktexttag.c:356
 msgid "Font size in points"
-msgstr ""
+msgstr "Yazı Növü böyüklüyü nöqtə olaraq"
 
 #: gtk/gtkcellrenderertext.c:289 gtk/gtktexttag.c:414
 msgid "Rise"
-msgstr ""
+msgstr "Yüksəlmə"
 
 #: gtk/gtkcellrenderertext.c:290 gtk/gtktexttag.c:415
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
+"Mətnin Offseti ana xəttin üstündə olsun (yüksəlmə mənfi isə "
+"altında olsun)"
 
 #: gtk/gtkcellrenderertext.c:300 gtk/gtktexttag.c:454
 msgid "Strikethrough"
-msgstr ""
+msgstr "Qaralanmış"
 
 #: gtk/gtkcellrenderertext.c:301 gtk/gtktexttag.c:455
 msgid "Whether to strike through the text"
-msgstr ""
+msgstr "Mətni harada qaralayacağıq"
 
 #: gtk/gtkcellrenderertext.c:308 gtk/gtktexttag.c:462
 msgid "Underline"
-msgstr ""
+msgstr "Alt cızıqlı"
 
 #: gtk/gtkcellrenderertext.c:309 gtk/gtktexttag.c:463
 msgid "Style of underline for this text"
-msgstr ""
+msgstr "Bu mətn üçün alt cızıq tərzi"
 
 #: gtk/gtkcellrenderertext.c:319 gtk/gtktexttag.c:499
 msgid "Background set"
-msgstr ""
+msgstr "Arxa plan dəstəsi"
 
 #: gtk/gtkcellrenderertext.c:320 gtk/gtktexttag.c:500
 msgid "Whether this tag affects the background color"
-msgstr ""
+msgstr "Bu təqin arxa plana harda tə'sir edəcəyi"
 
 #: gtk/gtkcellrenderertext.c:323 gtk/gtktexttag.c:511
 msgid "Foreground set"
-msgstr ""
+msgstr "Ön plan dəstəsi"
 
 #: gtk/gtkcellrenderertext.c:324 gtk/gtktexttag.c:512
 msgid "Whether this tag affects the foreground color"
-msgstr ""
+msgstr "Bu təqin ön plana harda tə'sir edəcəyi"
 
 #: gtk/gtkcellrenderertext.c:327 gtk/gtktexttag.c:519
 msgid "Editability set"
-msgstr ""
+msgstr "Düzəldilə bilən dəstə"
 
 #: gtk/gtkcellrenderertext.c:328 gtk/gtktexttag.c:520
 msgid "Whether this tag affects text editability"
-msgstr ""
+msgstr "Bu təqin mətnin harda düzəldilə biləcəyinə tə'sir edəcəyi"
 
 #: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:523
 msgid "Font family set"
-msgstr ""
+msgstr "Yazı Növü dəstəsi"
 
 #: gtk/gtkcellrenderertext.c:332 gtk/gtktexttag.c:524
 msgid "Whether this tag affects the font family"
-msgstr ""
+msgstr "Bu təqin yazı növü ailəsinə harda tə'sir edəcəyi"
 
 #: gtk/gtkcellrenderertext.c:335 gtk/gtktexttag.c:527
-#, fuzzy
 msgid "Font style set"
-msgstr "YazıTipi Tərzi:"
+msgstr "Yazı Növü dəstəsi"
 
 #: gtk/gtkcellrenderertext.c:336 gtk/gtktexttag.c:528
 msgid "Whether this tag affects the font style"
-msgstr ""
+msgstr "Bu təqin yazı növü tərzinə  harda tə'sir edəcəyi"
 
 #: gtk/gtkcellrenderertext.c:339 gtk/gtktexttag.c:531
 msgid "Font variant set"
-msgstr ""
+msgstr "Yazı Növü variantı dəstəsi"
 
 #: gtk/gtkcellrenderertext.c:340 gtk/gtktexttag.c:532
 msgid "Whether this tag affects the font variant"
-msgstr ""
+msgstr "Bu təqin yazı növü variantına harda tə'sir edəcəyi"
 
 #: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:535
 msgid "Font weight set"
-msgstr ""
+msgstr "Yazı Növü qalınlığı dəstəsi"
 
 #: gtk/gtkcellrenderertext.c:344 gtk/gtktexttag.c:536
 msgid "Whether this tag affects the font weight"
-msgstr ""
+msgstr "Bu təqin yazı növü qalınlığına harda tə'sir edəcəyi"
 
 #: gtk/gtkcellrenderertext.c:347 gtk/gtktexttag.c:539
 msgid "Font stretch set"
-msgstr ""
+msgstr "Yazı Növü genişliyi dəstəsi"
 
 #: gtk/gtkcellrenderertext.c:348 gtk/gtktexttag.c:540
 msgid "Whether this tag affects the font stretch"
-msgstr ""
+msgstr "Bu təqin yazı növü genişliyinə harda tə'sir edəcəyi"
 
 #: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:543
 msgid "Font size set"
-msgstr ""
+msgstr "Yazı Növü böyüklüyü dəstəsi"
 
 #: gtk/gtkcellrenderertext.c:352 gtk/gtktexttag.c:544
 msgid "Whether this tag affects the font size"
-msgstr ""
+msgstr "Bu təqin yazı növü böyüklüyünə harda tə'sir edəcəyi"
 
 #: gtk/gtkcellrenderertext.c:355 gtk/gtktexttag.c:563
 msgid "Rise set"
-msgstr ""
+msgstr "Yüksəklək dəstəsi"
 
 #: gtk/gtkcellrenderertext.c:356 gtk/gtktexttag.c:564
 msgid "Whether this tag affects the rise"
-msgstr ""
+msgstr "Bu təqin yüksəkliyə harda tə'sir edəcəyi"
 
 #: gtk/gtkcellrenderertext.c:359 gtk/gtktexttag.c:579
 msgid "Strikethrough set"
-msgstr ""
+msgstr "Qaralanmış dəstəsi"
 
 #: gtk/gtkcellrenderertext.c:360 gtk/gtktexttag.c:580
 msgid "Whether this tag affects strikethrough"
-msgstr ""
+msgstr "Bu təqin qaralanmağa harda tə'sir edəcəyi"
 
 #: gtk/gtkcellrenderertext.c:363 gtk/gtktexttag.c:587
 msgid "Underline set"
-msgstr ""
+msgstr "Altı cızıqlı dəstəsi"
 
 #: gtk/gtkcellrenderertext.c:364 gtk/gtktexttag.c:588
 msgid "Whether this tag affects underlining"
-msgstr ""
+msgstr "Bu təqin alt cızıqlara harda tə'sir edəcəyi"
 
 #: gtk/gtkcellrenderertextpixbuf.c:114
 msgid "Pixbuf location"
-msgstr ""
+msgstr "Piksbuf yeri"
 
 #: gtk/gtkcellrenderertextpixbuf.c:115
 msgid "The relative location of the pixbuf to the text."
-msgstr ""
+msgstr "Piksbufun mətnə görə nisbi yeri."
 
 #: gtk/gtkcellrenderertextpixbuf.c:134
 msgid "pixbuf xalign"
-msgstr ""
+msgstr "piksbuf x tərəfləməsi"
 
 #: gtk/gtkcellrenderertextpixbuf.c:135
 msgid "The x-align of the pixbuf."
-msgstr ""
+msgstr "Piksbufun x tərəfləməsi."
 
 #: gtk/gtkcellrenderertextpixbuf.c:145
 msgid "pixbuf yalign"
-msgstr ""
+msgstr "piksbuf y tərəfləməsi"
 
 #: gtk/gtkcellrenderertextpixbuf.c:146
 msgid "The y-align of the pixbuf."
-msgstr ""
+msgstr "Piksbuf y tərəfləməsi."
 
 #: gtk/gtkcellrenderertextpixbuf.c:156
 msgid "pixbuf xpad"
-msgstr ""
+msgstr "piksbuf x səkməsi"
 
 #: gtk/gtkcellrenderertextpixbuf.c:157
 msgid "The xpad of the pixbuf."
-msgstr ""
+msgstr "Piksbufun x səkməsi."
 
 #: gtk/gtkcellrenderertextpixbuf.c:167
 msgid "pixbuf ypad"
-msgstr ""
+msgstr "piksbuf y səkməsi"
 
 #: gtk/gtkcellrenderertextpixbuf.c:168
 msgid "The ypad of the pixbuf."
-msgstr ""
+msgstr "Piksbufun y səkməsi."
 
 #: gtk/gtkcellrenderertoggle.c:127
 msgid "Toggle state"
-msgstr ""
+msgstr "Açma/Qapama halı"
 
 #: gtk/gtkcellrenderertoggle.c:128
 msgid "The toggle state of the button"
-msgstr ""
+msgstr "Düymənin Açma/Qapama halı."
 
 #: gtk/gtkcellrenderertoggle.c:136
 msgid "Radio state"
-msgstr ""
+msgstr "Radio halı"
 
 #: gtk/gtkcellrenderertoggle.c:137
 msgid "Draw the toggle button as a radio button"
+msgstr "Açma/Qapama düyməsini radio düyməsi kimi göstər"
+
+#: gtk/gtkcolorsel.c:552
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now. You can drag this color to a palette entry, or select this color as "
+"current by dragging it to the other color swatch alongside."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1414
-#, fuzzy
-msgid "_Hue:"
-msgstr "Çöhrə:"
+#: gtk/gtkcolorsel.c:557
+msgid ""
+"The color you've chosen. You can drag this color to a palette entry to save "
+"it for use in the future."
+msgstr ""
 
-#: gtk/gtkcolorsel.c:1415
-#, fuzzy
-msgid "_Saturation:"
-msgstr "Doyqunluq:"
+#: gtk/gtkcolorsel.c:862
+msgid "_Save color here"
+msgstr ""
 
-#: gtk/gtkcolorsel.c:1416
-#, fuzzy
-msgid "_Value:"
-msgstr "Qiymət:"
+#: gtk/gtkcolorsel.c:1029
+msgid ""
+"Click this palette entry to make it the current color. To change this entry, "
+"drag a color swatch here or right-click it and select \"Save color here.\""
+msgstr ""
 
-#: gtk/gtkcolorsel.c:1417
+#: gtk/gtkcolorsel.c:1643
 #, fuzzy
-msgid "_Red:"
-msgstr "Qırmızı"
-
-#: gtk/gtkcolorsel.c:1418
-#, fuzzy
-msgid "_Green:"
-msgstr "Yaşıl:"
-
-#: gtk/gtkcolorsel.c:1419
-#, fuzzy
-msgid "_Blue:"
-msgstr "Göy:"
-
-#: gtk/gtkcolorsel.c:1422
-#, fuzzy
-msgid "_Opacity:"
-msgstr "Matlıq:"
-
-#: gtk/gtkcolorsel.c:1443
-#, fuzzy
-msgid "He_x Value:"
-msgstr "Heks Qiyməti:"
-
-#: gtk/gtkcolorsel.c:1469
-msgid "Custom Palette"
+msgid "Custom palette"
 msgstr "Hazırkı Palitra"
 
-#: gtk/gtkcolorsel.c:1475
+#: gtk/gtkcolorsel.c:1644
+msgid "Palette to use in the color selector"
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1693
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1721
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1730
+msgid "_Hue:"
+msgstr "_Rəng:"
+
+#: gtk/gtkcolorsel.c:1731
+msgid "Position on the color wheel."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1732
+msgid "_Saturation:"
+msgstr "_Doyğunluq:"
+
+#: gtk/gtkcolorsel.c:1733
+msgid "\"Deepness\" of the color."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1734
+msgid "_Value:"
+msgstr "_Qiymət:"
+
+#: gtk/gtkcolorsel.c:1735
+msgid "Brightness of the color."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1736
+msgid "_Red:"
+msgstr "_Qırmızı:"
+
+#: gtk/gtkcolorsel.c:1737
+msgid "Amount of red light in the color."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1738
+msgid "_Green:"
+msgstr "_Yaşıl:"
+
+#: gtk/gtkcolorsel.c:1739
+msgid "Amount of green light in the color."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1740
+msgid "_Blue:"
+msgstr "_Göy:"
+
+#: gtk/gtkcolorsel.c:1741
+msgid "Amount of blue light in the color."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1744
+msgid "_Opacity:"
+msgstr "_Şəffaflıq:"
+
+#: gtk/gtkcolorsel.c:1752
 #, fuzzy
-msgid "Set _Color"
-msgstr "Rəng Seç"
+msgid "Transparency of the currently-selected color."
+msgstr "Hazırda seçili fayl adı."
+
+#: gtk/gtkcolorsel.c:1767
+msgid "Color _Name:"
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1779
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as 'orange' in this entry."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1798
+#, fuzzy
+msgid "_Palette"
+msgstr "Hazırkı Palitra"
 
 #: gtk/gtkentry.c:372
 msgid "Text Position"
-msgstr ""
+msgstr "Mətn Yeri"
 
 #: gtk/gtkentry.c:373
 msgid "The current position of the insertion point"
-msgstr ""
+msgstr "Daxil etmə nöqtəsinin hazırkı yeri"
 
 #: gtk/gtkentry.c:383
 msgid "Whether the entry contents can be edited"
-msgstr ""
+msgstr "Daxəl edilən xülasənin harda düzəldilə biləcəyi"
 
 #: gtk/gtkentry.c:390
 msgid "Maximum length"
-msgstr ""
+msgstr "Maksimal uzunluq"
 
 #: gtk/gtkentry.c:391
 msgid "Maximum number of characters for this entry"
-msgstr ""
+msgstr "Bu vahid üçün hökmlü maksimal xarakter miqdarı"
 
 #: gtk/gtkentry.c:399
 msgid "Visibility"
-msgstr ""
+msgstr "Görünmə Qabiliyyəti"
 
 #: gtk/gtkentry.c:400
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
+"SƏHV \"görünməz xarakter\"i həqiqi mətn yerinə göstərər (parol "
+"modu)"
 
 #: gtk/gtkentry.c:406
 msgid "Invisible character"
-msgstr ""
+msgstr "Görünməz xarakter"
 
 #: gtk/gtkentry.c:407
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
+"Parol modunda giriləcək mətnin maskalanması üçün işlədiləcək "
+"xarakter"
 
 #: gtk/gtkentry.c:414
 msgid "Activates default"
-msgstr ""
+msgstr "Əsasları fəallaşdırar"
 
 #: gtk/gtkentry.c:415
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed."
 msgstr ""
+"Enter basıldığında əsasları pəncərəciyi harda fəallaşdıraq "
+"(dialoqdakı əsas düymə kimi)."
 
 #: gtk/gtkentry.c:421
 msgid "Width in chars"
-msgstr ""
+msgstr "Xarakter olaraq genişlik"
 
 #: gtk/gtkentry.c:422
 msgid "Number of characters to leave space for in the entry."
-msgstr ""
+msgstr "Girişdə hər vahid üçün neçə xarakter boşluq buraxaq."
 
 #: gtk/gtkentry.c:431
 msgid "Cursor color"
-msgstr ""
+msgstr "Ox rəngi"
 
 #: gtk/gtkentry.c:432
 msgid "Color with which to draw insertion cursor"
-msgstr ""
+msgstr "Daxil etmə oxunun rəngi"
 
-#: gtk/gtkentry.c:3270 gtk/gtktextview.c:4986
+#: gtk/gtkentry.c:3259 gtk/gtktextview.c:5013
 msgid "Cut"
-msgstr ""
+msgstr "Kəs"
 
-#: gtk/gtkentry.c:3272 gtk/gtktextview.c:4988
+#: gtk/gtkentry.c:3261 gtk/gtktextview.c:5015
 msgid "Copy"
-msgstr ""
+msgstr "Köçürt"
 
-#: gtk/gtkentry.c:3274 gtk/gtktextview.c:4990
+#: gtk/gtkentry.c:3263 gtk/gtktextview.c:5018
 msgid "Paste"
-msgstr ""
+msgstr "Yapışdır"
 
-#: gtk/gtkentry.c:3281 gtk/gtktextview.c:4997
+#: gtk/gtkentry.c:3270 gtk/gtktextview.c:5025
 msgid "Input Methods"
-msgstr ""
+msgstr "Giriş Metodları"
 
 #: gtk/gtkfilesel.c:502
-#, fuzzy
 msgid "Filename"
-msgstr "Təzədən Adlandır"
+msgstr "Fayl adı"
 
 #: gtk/gtkfilesel.c:503
 msgid "The currently selected filename."
-msgstr ""
+msgstr "Hazırda seçili fayl adı."
 
 #: gtk/gtkfilesel.c:509
 msgid "Show file operations"
-msgstr ""
+msgstr "Fayl əməliyyatlarını göstər."
 
 #: gtk/gtkfilesel.c:510
 msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr ""
+"Fayl yaradılması/manipulyasiyası üçün düymələri harda göstərək."
 
 #. The directories clist
-#: gtk/gtkfilesel.c:625
+#: gtk/gtkfilesel.c:631
 msgid "Directories"
 msgstr "Qovluqlar"
 
 #. The files clist
-#: gtk/gtkfilesel.c:645
+#: gtk/gtkfilesel.c:651
 msgid "Files"
 msgstr "Fayllar"
 
-#: gtk/gtkfilesel.c:713 gtk/gtkfilesel.c:1826
+#: gtk/gtkfilesel.c:719 gtk/gtkfilesel.c:1830
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Qovluq oxuna bilmir: %s"
 
-#: gtk/gtkfilesel.c:746
+#: gtk/gtkfilesel.c:752
 msgid "Create Dir"
 msgstr "Qovluq yarat"
 
-#: gtk/gtkfilesel.c:757 gtk/gtkfilesel.c:1180
+#: gtk/gtkfilesel.c:763 gtk/gtkfilesel.c:1186
 msgid "Delete File"
 msgstr "Faylı Sil"
 
-#: gtk/gtkfilesel.c:768 gtk/gtkfilesel.c:1324
+#: gtk/gtkfilesel.c:774 gtk/gtkfilesel.c:1330
 msgid "Rename File"
 msgstr "Fayl Adını Dəyişdir"
 
-#: gtk/gtkfilesel.c:1001
+#: gtk/gtkfilesel.c:1007
 #, c-format
 msgid ""
 "The directory name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
+"\"%s\" cərgəsi adı fayl adları üçün icazə verilməyən simvol daxil "
+"edir"
 
-#: gtk/gtkfilesel.c:1003
+#: gtk/gtkfilesel.c:1009
 #, c-format
 msgid ""
 "Error creating directory \"%s\": %s\n"
 "%s"
 msgstr ""
+"\"%s\" Cərgəsini yaratma xətası: %s\n"
+"%s"
 
-#: gtk/gtkfilesel.c:1004 gtk/gtkfilesel.c:1258
+#: gtk/gtkfilesel.c:1010 gtk/gtkfilesel.c:1264
 msgid "You probably used symbols not allowed in filenames."
-msgstr ""
+msgstr "Dəyəsən fayl adlarında icazə verilməyən simvol daxil etdiniz."
 
-#: gtk/gtkfilesel.c:1012
+#: gtk/gtkfilesel.c:1018
 #, c-format
 msgid "Error creating directory \"%s\": %s\n"
-msgstr ""
+msgstr "\"%s\" Cərgəsini yaratma xətası: %s\n"
 
-#: gtk/gtkfilesel.c:1047
+#: gtk/gtkfilesel.c:1053
 msgid "Create Directory"
 msgstr "Qovluq Yarat"
 
-#: gtk/gtkfilesel.c:1061
-#, fuzzy
+#: gtk/gtkfilesel.c:1067
 msgid "_Directory name:"
-msgstr "Qovluq Adı:"
+msgstr "_Cərgə adı:"
 
 #. buttons
-#: gtk/gtkfilesel.c:1075
+#: gtk/gtkfilesel.c:1081
 msgid "Create"
 msgstr "Yarat"
 
-#: gtk/gtkfilesel.c:1084 gtk/gtkfilesel.c:1211 gtk/gtkfilesel.c:1366
+#: gtk/gtkfilesel.c:1090 gtk/gtkfilesel.c:1217 gtk/gtkfilesel.c:1372
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Ləǧv et"
 
-#: gtk/gtkfilesel.c:1120
+#: gtk/gtkfilesel.c:1126
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
+"\"%s\" fayl adı fayl adları üçün icazə verilməyən simvol daxil edir"
 
-#: gtk/gtkfilesel.c:1123
+#: gtk/gtkfilesel.c:1129
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
 "%s"
 msgstr ""
+"\"%s\" faylı silmə xətası : %s\n"
+"%s"
 
-#: gtk/gtkfilesel.c:1125 gtk/gtkfilesel.c:1272
+#: gtk/gtkfilesel.c:1131 gtk/gtkfilesel.c:1278
 msgid "It probably contains symbols not allowed in filenames."
-msgstr ""
+msgstr "dəyəsən fayl adları üçün icazə verilməyən simvol daxil edir"
 
-#: gtk/gtkfilesel.c:1134
+#: gtk/gtkfilesel.c:1140
 #, c-format
 msgid "Error deleting file \"%s\": %s"
-msgstr ""
+msgstr "\"%s\" faylı silmə xətası : %s"
 
 #. buttons
-#: gtk/gtkfilesel.c:1202
+#: gtk/gtkfilesel.c:1208
 msgid "Delete"
 msgstr "Sil"
 
-#: gtk/gtkfilesel.c:1254 gtk/gtkfilesel.c:1268
+#: gtk/gtkfilesel.c:1260 gtk/gtkfilesel.c:1274
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
+"\"%s\" faylı fayl adları üçün icazə verilməyən simvol daxil edir"
 
-#: gtk/gtkfilesel.c:1256
+#: gtk/gtkfilesel.c:1262
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
 msgstr ""
+"\"%s\" faylına yenidən adlandırma xətası: %s\n"
+"%s"
 
-#: gtk/gtkfilesel.c:1270
+#: gtk/gtkfilesel.c:1276
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
 msgstr ""
+"\"%s\" faylının yenidən adlandırma xətası: %s\n"
+"%s"
 
-#: gtk/gtkfilesel.c:1280
+#: gtk/gtkfilesel.c:1286
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr ""
+msgstr "\"%s\" faylının \"%s\" olaraq yenidən adlandırma xətası: %s"
 
 #. buttons
-#: gtk/gtkfilesel.c:1357
+#: gtk/gtkfilesel.c:1363
 msgid "Rename"
 msgstr "Təzədən Adlandır"
 
-#: gtk/gtkfilesel.c:1805
+#: gtk/gtkfilesel.c:1809
 msgid "Selection: "
 msgstr "Seçki:"
 
-#: gtk/gtkfilesel.c:2417
+#: gtk/gtkfilesel.c:2421
 #, c-format
 msgid ""
 "The filename %s couldn't be converted to UTF-8. Try setting the environment "
 "variable G_BROKEN_FILENAMES."
 msgstr ""
+"%s fayl adı UTF-8 olaraq dəyişdirilə bilmir. Bə'zi "
+"parametrləriG_BROKEN_FAYLNAME olaraq dəyişdirməyə çalışın."
 
-#: gtk/gtkfilesel.c:3285
+#: gtk/gtkfilesel.c:3289
 msgid "Name too long"
-msgstr ""
+msgstr "Ad çox uzundur"
 
-#: gtk/gtkfilesel.c:3287
+#: gtk/gtkfilesel.c:3291
 msgid "Couldn't convert filename"
-msgstr ""
+msgstr "Fayl adını dönüşdürə bilmədim"
 
-#: gtk/gtkfontsel.c:213
-#, fuzzy
+#: gtk/gtkfontsel.c:205
 msgid "_Family:"
-msgstr "Ailə:"
+msgstr "_Ailə:"
 
-#: gtk/gtkfontsel.c:220
-#, fuzzy
+#: gtk/gtkfontsel.c:212
 msgid "_Style:"
-msgstr "Tərz:"
+msgstr "_Tərz:"
 
-#: gtk/gtkfontsel.c:227
-#, fuzzy
+#: gtk/gtkfontsel.c:219
 msgid "Si_ze:"
-msgstr "Böyüklük:"
+msgstr "_Böyüklük:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:317
+#: gtk/gtkfontsel.c:300
 msgid "Preview:"
 msgstr "İlk Baxış:"
 
-#: gtk/gtkfontsel.c:979
+#: gtk/gtkfontsel.c:902
 msgid "Font Selection"
 msgstr "Yazıtipi seçkisi"
 
@@ -1006,9 +1112,8 @@ msgid "Gamma"
 msgstr "Qamma"
 
 #: gtk/gtkgamma.c:402
-#, fuzzy
 msgid "_Gamma value"
-msgstr "Qamma qiyməti"
+msgstr "_Qamma qiyməti"
 
 #: gtk/gtkgamma.c:416
 msgid "OK"
@@ -1020,7 +1125,7 @@ msgstr "OLDU"
 #: gtk/gtkiconfactory.c:910
 #, c-format
 msgid "Error loading icon: %s"
-msgstr ""
+msgstr "Timsal yüklənərkən xəta oldu: %s"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:181
@@ -1032,9 +1137,8 @@ msgid "No input devices"
 msgstr "Giriş avadanlıqları yoxdur"
 
 #: gtk/gtkinputdialog.c:218
-#, fuzzy
 msgid "_Device:"
-msgstr "Avadanlıq:"
+msgstr "_Avadanlıq:"
 
 #: gtk/gtkinputdialog.c:235
 msgid "Disabled"
@@ -1049,21 +1153,18 @@ msgid "Window"
 msgstr "Pəncərə"
 
 #: gtk/gtkinputdialog.c:259
-#, fuzzy
 msgid "_Mode: "
-msgstr "Mod:"
+msgstr "_Mod: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:290
-#, fuzzy
 msgid "_Axes"
-msgstr "Oxlar"
+msgstr "_Oxlar"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:306
-#, fuzzy
 msgid "_Keys"
-msgstr "Düymələr"
+msgstr "_Düymələr"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
@@ -1121,22 +1222,22 @@ msgstr "təmizlə"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:476
+#: gtk/gtkmain.c:472
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtknotebook.c:2020 gtk/gtknotebook.c:4374
+#: gtk/gtknotebook.c:2078 gtk/gtknotebook.c:4432
 #, c-format
 msgid "Page %u"
 msgstr "Səhifə %u"
 
-#: gtk/gtkrc.c:2367
+#: gtk/gtkrc.c:2363
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
 "Pixmap_path dəki rəsm faylının yeri tapıla bilmir: \"%s\" xətt %d"
 
-#: gtk/gtkrc.c:2370
+#: gtk/gtkrc.c:2366
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Pixmap_path dəki rəsm faylının yeri tapıla bilmir:  \"%s\""
@@ -1163,14 +1264,12 @@ msgid "_Apply"
 msgstr "_Əlavə Et"
 
 #: gtk/gtkstock.c:234
-#, fuzzy
 msgid "_OK"
-msgstr "OLDU"
+msgstr "_Oldu"
 
 #: gtk/gtkstock.c:235
-#, fuzzy
 msgid "_Cancel"
-msgstr "Ləǧv et"
+msgstr "_Ləǧv et"
 
 #: gtk/gtkstock.c:236 gtk/gtkstock.c:240
 msgid "_Close"
@@ -1185,274 +1284,273 @@ msgid "_No"
 msgstr "_Xeyr"
 
 #: gtk/gtkstock.c:241
-#, fuzzy
 msgid "_Quit"
-msgstr "Çıx"
+msgstr "Çı_x"
 
 #: gtk/gtkstock.c:242
-#, fuzzy
 msgid "_Help"
-msgstr "Kömək"
+msgstr "_Yardım"
 
 #: gtk/gtkstock.c:243
-#, fuzzy
 msgid "_New"
-msgstr "Təzə"
+msgstr "_Yeni"
 
 #: gtk/gtkstock.c:244
-#, fuzzy
 msgid "_Open"
-msgstr "Aç"
+msgstr "_Aç"
 
 #: gtk/gtkstock.c:245
-#, fuzzy
 msgid "_Save"
-msgstr "Qeyd Et"
+msgstr "_Qeyd Et"
 
 #: gtk/gtktexttag.c:196
 msgid "Tag name"
-msgstr ""
+msgstr "Təq adi"
 
 #: gtk/gtktexttag.c:197
 msgid "Name used to refer to the text tag"
-msgstr ""
+msgstr "Ad mətn təqinə referens daxil edir"
 
 #: gtk/gtktexttag.c:222
 msgid "Background full height"
-msgstr ""
+msgstr "Arxa planın tam hündürlüyü"
 
 #: gtk/gtktexttag.c:223
 msgid ""
 "Whether the background color fills the entire line height or only the height "
 "of the tagged characters"
 msgstr ""
+"Arxa plan rəngi bütün hündürlüyü mü yoxsa müəyyənləşdirilmiş "
+"təqli xarakterlərini mi dolduracaq"
 
 #: gtk/gtktexttag.c:231
 msgid "Background stipple mask"
-msgstr ""
+msgstr "Arxa plan maskası"
 
 #: gtk/gtktexttag.c:232
 msgid "Bitmap to use as a mask when drawing the text background"
-msgstr ""
+msgstr "Arxa plan döşənərkən maskalama olaraq işlədiləcək bitməp"
 
 #: gtk/gtktexttag.c:257
 msgid "Foreground stipple mask"
-msgstr ""
+msgstr "Ön plan maskası"
 
 #: gtk/gtktexttag.c:258
 msgid "Bitmap to use as a mask when drawing the text foreground"
-msgstr ""
+msgstr "Ön plan döşənərkən maskalama olaraq işlədiləcək bitməp"
 
 #: gtk/gtktexttag.c:265
-#, fuzzy
 msgid "Text direction"
-msgstr "Qovluq Yarat"
+msgstr "Mətn yönü"
 
 #: gtk/gtktexttag.c:266
 msgid "Text direction, e.g. right-to-left or left-to-right"
-msgstr ""
+msgstr "Mətn yönü, sağdan sola ya da soldan sağa kimi"
 
 #: gtk/gtktexttag.c:365
 msgid "Justification"
-msgstr ""
+msgstr "Sütunlaşdırma"
 
 #: gtk/gtktexttag.c:366
 msgid "Left, right, or center justification"
-msgstr ""
+msgstr "Sol, sağ ya da ortaya sütunlaşdırma"
 
 #: gtk/gtktexttag.c:374
 msgid "Language"
-msgstr ""
+msgstr "Dil"
 
 #: gtk/gtktexttag.c:375
 msgid "Language engine code to use for rendering the text"
-msgstr ""
+msgstr "Mətn renderi dili"
 
 #: gtk/gtktexttag.c:382
 msgid "Left margin"
-msgstr ""
+msgstr "Sol kənar"
 
 #: gtk/gtktexttag.c:383
 msgid "Width of the left margin in pixels"
-msgstr ""
+msgstr "Piksel olaraq sol kənar"
 
 #: gtk/gtktexttag.c:392
 msgid "Right margin"
-msgstr ""
+msgstr "Sağ kənar"
 
 #: gtk/gtktexttag.c:393
 msgid "Width of the right margin in pixels"
-msgstr ""
+msgstr "Piksel olaraq sağ kənar"
 
 #: gtk/gtktexttag.c:403
 msgid "Indent"
-msgstr ""
+msgstr "İçəridən Başlama"
 
 #: gtk/gtktexttag.c:404
 msgid "Amount to indent the paragraph, in pixels"
-msgstr ""
+msgstr "Paraqrafın piksel olaraq içəridən başlama"
 
 #: gtk/gtktexttag.c:424
 msgid "Pixels above lines"
-msgstr ""
+msgstr "Sətirlərin üstündəki piksel"
 
 #: gtk/gtktexttag.c:425
 msgid "Pixels of blank space above paragraphs"
-msgstr ""
+msgstr "Parqraf üstündəki boşluğun pikseli"
 
 #: gtk/gtktexttag.c:434
 msgid "Pixels below lines"
-msgstr ""
+msgstr "Sətirlərin altındakı piksel"
 
 #: gtk/gtktexttag.c:435
 msgid "Pixels of blank space below paragraphs"
-msgstr ""
+msgstr "Parqraf altındakı boşluğun pikseli"
 
 #: gtk/gtktexttag.c:444
 msgid "Pixels inside wrap"
-msgstr ""
+msgstr "Qırma içindəki piksel"
 
 #: gtk/gtktexttag.c:445
 msgid "Pixels of blank space between wrapped lines in a paragraph"
-msgstr ""
+msgstr "Parqraf və sətir arasındakı boşluğun pikseli"
 
 #: gtk/gtktexttag.c:471
 msgid "Wrap mode"
-msgstr ""
+msgstr "Qırma modu"
 
 #: gtk/gtktexttag.c:472
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
+"Sətirlər kənarlarda mı, yoxsa xarakter kənarlarında mı qırılsın"
 
 #: gtk/gtktexttag.c:481
 msgid "Tabs"
-msgstr ""
+msgstr "Səkmələr"
 
 #: gtk/gtktexttag.c:482
 msgid "Custom tabs for this text"
-msgstr ""
+msgstr "Bu mətnə xüsuso səkmələr"
 
 #: gtk/gtktexttag.c:489
 msgid "Invisible"
-msgstr ""
+msgstr "Gizli"
 
 #: gtk/gtktexttag.c:490
 msgid "Whether this text is hidden"
-msgstr ""
+msgstr "Mətn gizlənməsi"
 
 #: gtk/gtktexttag.c:503
 msgid "Background full height set"
-msgstr ""
+msgstr "Arxa plan hündürlük dəstəsi"
 
 #: gtk/gtktexttag.c:504
 msgid "Whether this tag affects background height"
-msgstr ""
+msgstr "Bu təqin arxa plan hündürlüyünə harda tə'sir edəcəyi"
 
 #: gtk/gtktexttag.c:507
 msgid "Background stipple set"
-msgstr ""
+msgstr "Arxa plan dəstəsi"
 
 #: gtk/gtktexttag.c:508
 msgid "Whether this tag affects the background stipple"
-msgstr ""
+msgstr "Bu təqin arxa plana harda tə'sir edəcəyi"
 
 #: gtk/gtktexttag.c:515
 msgid "Foreground stipple set"
-msgstr ""
+msgstr "Ön plan dəstəsi"
 
 #: gtk/gtktexttag.c:516
 msgid "Whether this tag affects the foreground stipple"
-msgstr ""
+msgstr "Bu təqin ön plana harda tə'sir edəcəyi"
 
 #: gtk/gtktexttag.c:547
 msgid "Justification set"
-msgstr ""
+msgstr "Sütunlaşdırma dəstəsi"
 
 #: gtk/gtktexttag.c:548
 msgid "Whether this tag affects paragraph justification"
-msgstr ""
+msgstr "Bu təqin paraqraf sütunlaşdırmasına harda tə'sir edəcəyi"
 
 #: gtk/gtktexttag.c:551
 msgid "Language set"
-msgstr ""
+msgstr "Dil dəstəsi"
 
 #: gtk/gtktexttag.c:552
 msgid "Whether this tag affects the language the text is rendered as"
-msgstr ""
+msgstr "Bu təqin mətnin dilinə harda tə'sir edəcəyi"
 
 #: gtk/gtktexttag.c:555
 msgid "Left margin set"
-msgstr ""
+msgstr "Sol kənar dəstəsi"
 
 #: gtk/gtktexttag.c:556
 msgid "Whether this tag affects the left margin"
-msgstr ""
+msgstr "Bu təqin sol kənara harda tə'sir edəcəyi"
 
 #: gtk/gtktexttag.c:559
 msgid "Indent set"
-msgstr ""
+msgstr "İçəridən Başlama dəstəsi"
 
 #: gtk/gtktexttag.c:560
 msgid "Whether this tag affects indentation"
-msgstr ""
+msgstr "Bu təqin içəridən başlamağa harda tə'sir edəcəyi"
 
 #: gtk/gtktexttag.c:567
 msgid "Pixels above lines set"
-msgstr ""
+msgstr "Sətir üstündəki piksellər"
 
 #: gtk/gtktexttag.c:568 gtk/gtktexttag.c:572
 msgid "Whether this tag affects the number of pixels above lines"
-msgstr ""
+msgstr "Bu təqin sətir üstündəki piksellərə harda tə'sir edəcəyi"
 
 #: gtk/gtktexttag.c:571
 msgid "Pixels below lines set"
-msgstr ""
+msgstr "Sətir altındakı piksellər"
 
 #: gtk/gtktexttag.c:575
 msgid "Pixels inside wrap set"
-msgstr ""
+msgstr "Qırma dəstəsi içindəki piksellər"
 
 #: gtk/gtktexttag.c:576
 msgid "Whether this tag affects the number of pixels between wrapped lines"
 msgstr ""
+"Bu təqin qırılan sətirlər arasındakı piksellərə harda tə'sir "
+"edəcəyi"
 
 #: gtk/gtktexttag.c:583
 msgid "Right margin set"
-msgstr ""
+msgstr "Sağ kənar dəstəsi"
 
 #: gtk/gtktexttag.c:584
 msgid "Whether this tag affects the right margin"
-msgstr ""
+msgstr "Bu təqin sağ kənara harda tə'sir edəcəyi"
 
 #: gtk/gtktexttag.c:591
 msgid "Wrap mode set"
-msgstr ""
+msgstr "Qırma modu dəstəsi"
 
 #: gtk/gtktexttag.c:592
 msgid "Whether this tag affects line wrap mode"
-msgstr ""
+msgstr "Bu təqin qırma moduna harda tə'sir edəcəyi"
 
 #: gtk/gtktexttag.c:595
 msgid "Tabs set"
-msgstr ""
+msgstr "Səkmələr dəstəsi"
 
 #: gtk/gtktexttag.c:596
 msgid "Whether this tag affects tabs"
-msgstr ""
+msgstr "Bu təqin səkmələrə harda tə'sir edəcəyi"
 
 #: gtk/gtktexttag.c:599
 msgid "Invisible set"
-msgstr ""
+msgstr "Gizlətmə dəstəsi"
 
 #: gtk/gtktexttag.c:600
 msgid "Whether this tag affects text visibility"
-msgstr ""
+msgstr "Bu təqin mətn görünməzliyinə harda tə'sir edəcəyi"
 
 #: gtk/gtkthemes.c:71
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr "Module_path dəki modulun yeri tapıla bilmir: \"%s\","
+msgstr "örtü mühərrikini \"module_path\"da tapa bilmirəm: \"%s\","
 
 #: gtk/gtktipsquery.c:181
 msgid "--- No Tip ---"
@@ -1460,249 +1558,129 @@ msgstr "--- Qeyd Yoxdur ---"
 
 #: gtk/gtktreeviewcolumn.c:133
 msgid "Cell renderer"
-msgstr ""
+msgstr "Hücrə"
 
 #: gtk/gtktreeviewcolumn.c:134
 msgid "Cell renderer object to use for rendering the cell"
-msgstr ""
+msgstr "Hücrə renderi cismləri"
 
 #: gtk/gtktreeviewcolumn.c:141
-#, fuzzy
 msgid "Visible"
-msgstr "Passivləşdirilmiş"
+msgstr "Görünən"
 
 #: gtk/gtktreeviewcolumn.c:142
 msgid "Whether to display the colomn"
-msgstr ""
+msgstr "Sütunu harda göstərək"
 
 #: gtk/gtktreeviewcolumn.c:149
 msgid "Sizing"
-msgstr ""
+msgstr "Böyüklük"
 
 #: gtk/gtktreeviewcolumn.c:150
 msgid "Resize mode of the column"
-msgstr ""
+msgstr "Sütunların mod böyüklüyünü dəyişdir"
 
 #: gtk/gtktreeviewcolumn.c:158
-#, fuzzy
 msgid "Width"
-msgstr "Uzunluǧunu Göstər:"
+msgstr "En"
 
 #: gtk/gtktreeviewcolumn.c:159
 msgid "Current width of the column"
-msgstr ""
+msgstr "Sütunun hazırkı eni"
 
 #: gtk/gtktreeviewcolumn.c:168
 msgid "Minimum Width"
-msgstr ""
+msgstr "Minimal En"
 
 #: gtk/gtktreeviewcolumn.c:169
 msgid "Minimum allowed width of the column"
-msgstr ""
+msgstr "Sütunun qəbul edilmiş minimal eni"
 
 #: gtk/gtktreeviewcolumn.c:178
 msgid "Maximum Width"
-msgstr ""
+msgstr "Maksimal En"
 
 #: gtk/gtktreeviewcolumn.c:179
 msgid "Maximum allowed width of the column"
-msgstr ""
+msgstr "Sütunun qəbul edilmiş maksimal eni"
 
 #: gtk/gtktreeviewcolumn.c:188
-#, fuzzy
 msgid "Title"
-msgstr "Fayllar"
+msgstr "Başlıq"
 
 #: gtk/gtktreeviewcolumn.c:189
 msgid "Title to appear in column header"
-msgstr ""
+msgstr "Sütun başlığındakı bənd"
 
 #: gtk/gtktreeviewcolumn.c:196
 msgid "Clickable"
-msgstr ""
+msgstr "Tıqlana bilən"
 
 #: gtk/gtktreeviewcolumn.c:197
 msgid "Whether the header can be clicked"
-msgstr ""
+msgstr "Başlığın tıqlanma qabiliyyəti"
 
 #: gtk/gtktreeviewcolumn.c:205
-#, fuzzy
 msgid "Widget"
-msgstr "Uzunluq:"
+msgstr "Widget"
 
 #: gtk/gtktreeviewcolumn.c:206
 msgid "Widget to put in column header button instead of column title"
 msgstr ""
+"Sütun başlığı yerinə göstəriləcək sütun başlığı düyməsi "
+"pəncərəciyi"
 
 #: gtk/gtktreeviewcolumn.c:213
 msgid "Alignment"
-msgstr ""
+msgstr "USəviyyələmə"
 
 #: gtk/gtktreeviewcolumn.c:214
 msgid "Alignment of the column header text or widget"
-msgstr ""
+msgstr "Sütun başlığı ya da pəncərəciyinin səviyyələməsi"
 
 #: gtk/gtktreeviewcolumn.c:223
 msgid "Sort indicator"
-msgstr ""
+msgstr "Sıralama indikatoru"
 
 #: gtk/gtktreeviewcolumn.c:224
 msgid "Whether to show a sort indicator"
-msgstr ""
+msgstr "Sıralama indikatoru göstərilməsi"
 
 #: gtk/gtktreeviewcolumn.c:231
 msgid "Sort order"
-msgstr ""
+msgstr "Süzmə əmri"
 
 #: gtk/gtktreeviewcolumn.c:232
 msgid "Sort direction the sort indicator should indicate"
-msgstr ""
+msgstr "Sıralama indikatorundakı sıralama istiqaməti buranı göstərsin: "
 
 #. ID
 #: modules/input/imcyrillic-translit.c:216
 msgid "Cyrillic (Transliterated)"
-msgstr ""
+msgstr "Kiril (Translit)"
 
 #. ID
 #: modules/input/iminuktitut.c:126
 msgid "Inukitut (Transliterated)"
-msgstr ""
+msgstr "İnukitut (Translit)"
 
 #. ID
 #: modules/input/imthai-broken.c:177
 msgid "Thai (Broken)"
-msgstr ""
+msgstr "Tay (Qırıq)"
 
 #. ID
 #: modules/input/imviqr.c:243
 msgid "Vietnamese (VIQR)"
-msgstr ""
+msgstr "Vyetnamca (VIQR)"
 
 #. ID
 #: modules/input/imxim.c:27
 msgid "X Input Method"
-msgstr ""
+msgstr "X Giriş Metodu "
 
-#~ msgid "Foundry:"
-#~ msgstr "Sahibi:"
+#~ msgid "He_x Value:"
+#~ msgstr "He_ks Qiymətə:"
 
-#~ msgid "Slant:"
-#~ msgstr "Meyil:"
-
-#~ msgid "Pixel Size:"
-#~ msgstr "Piksel Böyüklüyü:"
-
-#~ msgid "Resolution X:"
-#~ msgstr "X Rezolyusiyası:"
-
-#~ msgid "Resolution Y:"
-#~ msgstr "Y Rezolyusiyası:"
-
-#~ msgid "Spacing:"
-#~ msgstr "Aralıq:"
-
-#~ msgid "Average Width:"
-#~ msgstr "Ortalama Uzunluq:"
-
-#~ msgid "Charset:"
-#~ msgstr "Kodlama:"
-
-#~ msgid "Requested Value"
-#~ msgstr "İstənilən Qiymət"
-
-#~ msgid "Actual Value"
-#~ msgstr "Həqiqi Qiymət"
-
-#~ msgid "Font:"
-#~ msgstr "YazıTipi:"
-
-#~ msgid "Reset Filter"
-#~ msgstr "Süzgəci Sıfırla"
-
-#~ msgid "Metric:"
-#~ msgstr "Metrik:"
-
-#~ msgid "Points"
-#~ msgstr "Nöqtəvi:"
-
-#~ msgid "Pixels"
-#~ msgstr "Piksel"
-
-#~ msgid "Requested Font Name:"
-#~ msgstr "İstənən YazıTipi Adı:"
-
-#~ msgid "Actual Font Name:"
-#~ msgstr "Həqiqi YazıTipi Adı:"
-
-#~ msgid "%i fonts available with a total of %i styles."
-#~ msgstr "%i tərzdə %i qədər yazıtipi vardır."
-
-#~ msgid "Filter"
-#~ msgstr "Süzgəc:"
-
-#~ msgid "Bitmap"
-#~ msgstr "Bitmap"
-
-#~ msgid "Scalable"
-#~ msgstr "Şkalalı"
-
-#~ msgid "Scaled Bitmap"
-#~ msgstr "Şkalalı Bitmap"
-
-#~ msgid "*"
-#~ msgstr "*"
-
-#~ msgid "(nil)"
-#~ msgstr "(nil)"
-
-#~ msgid "regular"
-#~ msgstr "sıravi"
-
-#~ msgid "italic"
-#~ msgstr "italik"
-
-#~ msgid "oblique"
-#~ msgstr "meylli"
-
-#~ msgid "reverse italic"
-#~ msgstr "tərs italik"
-
-#~ msgid "reverse oblique"
-#~ msgstr "tərs meylli"
-
-#~ msgid "other"
-#~ msgstr "başqa"
-
-#~ msgid "[M]"
-#~ msgstr "[M]"
-
-#~ msgid "[C]"
-#~ msgstr "[C]"
-
-#~ msgid "The selected font is not available."
-#~ msgstr "Seçilən yazıtipləri müsaid deyil."
-
-#~ msgid "The selected font is not a valid font."
-#~ msgstr "Seçilən yazıtipi keçərli yazıtipi deyildir."
-
-#~ msgid "This is a 2-byte font and may not be displayed correctly."
-#~ msgstr "Bu 2 baytlıq yazıtipidir ve düzgün nümayiş etdirilə bilməz."
-
-#~ msgid "roman"
-#~ msgstr "roman"
-
-#~ msgid "proportional"
-#~ msgstr "proporsiyonel"
-
-#~ msgid "monospaced"
-#~ msgstr "tək boşluqlu"
-
-#~ msgid "char cell"
-#~ msgstr "xarakter hüceyrəsi"
-
-#~ msgid "Font: (Filter Applied)"
-#~ msgstr "Yazıtipi: (Süzülmüş)"
-
-#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr ""
-#~ "MAX_FONTS tapılmadı. Bə'zi yazıtipləri dəyəsən mövcud deyillər."
+#~ msgid "Set _Color"
+#~ msgstr "_Rəngi Qur"
