@@ -267,37 +267,31 @@ gtk_private_h_sources =         \
 
 # GTK+ C sources to build the library from
 gtk_c_sources =                 \
+	fnmatch.c		\
 	gtkaccelgroup.c		\
-	gtkaccelmap.c		\
 	gtkaccellabel.c		\
+	gtkaccelmap.c		\
+	gtkaccessible.c		\
 	gtkaction.c		\
 	gtkactiongroup.c	\
-	gtkradiotoolbutton.c	\
-	gtktoggletoolbutton.c	\
-	gtktoolbar.c		\
-	gtktoolbutton.c		\
-	gtkseparatortoolitem.c	\
-	gtktoolitem.c		\
-	gtkaccessible.c		\
 	gtkadjustment.c		\
 	gtkalignment.c		\
 	gtkarrow.c		\
 	gtkaspectframe.c	\
+	gtkbbox.c		\
 	gtkbin.c		\
 	gtkbindings.c		\
-	gtkbbox.c		\
 	gtkbox.c		\
 	gtkbutton.c		\
 	gtkcalendar.c		\
+	gtkcelleditable.c	\
 	gtkcelllayout.c		\
 	gtkcellrenderer.c	\
-	gtkcelleditable.c	\
+	gtkcellrendererpixbuf.c	\
 	gtkcellrenderertext.c	\
 	gtkcellrenderertoggle.c	\
-	gtkcellrendererpixbuf.c	\
 	gtkcheckbutton.c	\
 	gtkcheckmenuitem.c	\
-	gtkseparatormenuitem.c	\
 	gtkclipboard.c		\
 	gtkclist.c		\
 	gtkcolorbutton.c	\
@@ -355,8 +349,8 @@ gtk_c_sources =                 \
 	gtklistitem.c		\
 	gtkliststore.c		\
 	gtkmain.c		\
-	gtkmarshalers.c		\
 	gtkmarshal.c		\
+	gtkmarshalers.c		\
 	gtkmenu.c		\
 	gtkmenubar.c		\
 	gtkmenuitem.c		\
@@ -375,6 +369,7 @@ gtk_c_sources =                 \
 	gtkradioaction.c	\
 	gtkradiobutton.c	\
 	gtkradiomenuitem.c	\
+	gtkradiotoolbutton.c	\
 	gtkrange.c		\
 	gtkrbtree.c 		\
 	gtkrc.c			\
@@ -384,13 +379,15 @@ gtk_c_sources =                 \
 	gtkscrolledwindow.c	\
 	gtkselection.c		\
 	gtkseparator.c		\
+	gtkseparatormenuitem.c	\
+	gtkseparatortoolitem.c	\
 	gtksettings.c		\
 	gtksignal.c		\
 	gtksizegroup.c		\
 	gtkspinbutton.c		\
+	gtkstatusbar.c		\
 	gtkstock.c		\
 	gtkstyle.c		\
-	gtkstatusbar.c		\
 	gtktable.c		\
 	gtktearoffmenuitem.c    \
 	gtktext.c		\
@@ -413,11 +410,15 @@ gtk_c_sources =                 \
 	gtktipsquery.c		\
 	gtktoggleaction.c	\
 	gtktogglebutton.c	\
+	gtktoggletoolbutton.c	\
+	gtktoolbar.c		\
+	gtktoolbutton.c		\
+	gtktoolitem.c		\
 	gtktooltips.c		\
 	gtktree.c		\
-	gtktreeitem.c		\
 	gtktreedatalist.c	\
 	gtktreednd.c		\
+	gtktreeitem.c		\
 	gtktreemodel.c		\
 	gtktreemodelfilter.c	\
 	gtktreemodelsort.c	\
@@ -438,9 +439,8 @@ gtk_c_sources =                 \
 	gtkvscrollbar.c		\
 	gtkvseparator.c		\
 	gtkwidget.c		\
-	gtkwindow.c		\
 	gtkwindow-decorate.c    \
-	fnmatch.c		\
+	gtkwindow.c		\
 	xembed.h
 
 gtk_plug_c_sources =            \

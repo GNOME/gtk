@@ -1,3 +1,7 @@
+Sun Sep 14 16:07:49 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/Makefile.am (gtk_c_sources): sort the list of files.
+
 Sun Sep 14 15:49:00 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c (toolbar_item_is_homogeneous): Unref the
