@@ -33,7 +33,8 @@ enum {
   ARG_0,
   ARG_LABEL,
   ARG_PATTERN,
-  ARG_JUSTIFY
+  ARG_JUSTIFY,
+  ARG_WRAP
 };
 
 typedef struct _GtkLabelULine GtkLabelULine;
@@ -133,6 +134,7 @@ gtk_label_class_init (GtkLabelClass *class)
   gtk_object_add_arg_type ("GtkLabel::label", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL);
   gtk_object_add_arg_type ("GtkLabel::pattern", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_PATTERN);
   gtk_object_add_arg_type ("GtkLabel::justify", GTK_TYPE_JUSTIFICATION, GTK_ARG_READWRITE, ARG_JUSTIFY);
+  gtk_object_add_arg_type ("GtkLabel::wrap", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_WRAP);
   
   object_class->set_arg = gtk_label_set_arg;
   object_class->get_arg = gtk_label_get_arg;
@@ -163,6 +165,9 @@ gtk_label_set_arg (GtkObject	  *object,
     case ARG_JUSTIFY:
       gtk_label_set_justify (label, GTK_VALUE_ENUM (*arg));
       break;
+    case ARG_WRAP:
+      gtk_label_set_line_wrap (label, GTK_VALUE_BOOL (*arg));
+      break;	  
     default:
       break;
     }
@@ -187,6 +192,9 @@ gtk_label_get_arg (GtkObject	  *object,
       break;
     case ARG_JUSTIFY:
       GTK_VALUE_ENUM (*arg) = label->jtype;
+      break;
+    case ARG_WRAP:
+      GTK_VALUE_BOOL (*arg) = label->wrap;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
@@ -230,17 +238,14 @@ gtk_label_set_text_internal (GtkLabel *label,
 			     gchar    *str,
 			     GdkWChar *str_wc)
 {
+  gtk_label_free_words (label);
+      
   g_free (label->label);
   g_free (label->label_wc);
   
   label->label = str;
   label->label_wc = str_wc;
   
-  gtk_label_free_words (label);
-  
-  if (GTK_WIDGET_DRAWABLE (label))
-    gtk_widget_queue_clear (GTK_WIDGET (label));
-      
   gtk_widget_queue_resize (GTK_WIDGET (label));
 }
 
@@ -278,11 +283,10 @@ gtk_label_set_pattern (GtkLabel	   *label,
 {
   g_return_if_fail (GTK_IS_LABEL (label));
   
+  gtk_label_free_words (label);
+  
   g_free (label->pattern);
   label->pattern = g_strdup (pattern);
-  
-  if (GTK_WIDGET_DRAWABLE (label))
-    gtk_widget_queue_clear (GTK_WIDGET (label));
 
   gtk_widget_queue_resize (GTK_WIDGET (label));
 }
@@ -296,14 +300,9 @@ gtk_label_set_justify (GtkLabel        *label,
   
   if ((GtkJustification) label->jtype != jtype)
     {
-      if (label->jtype == GTK_JUSTIFY_FILL ||
-	  jtype == GTK_JUSTIFY_FILL)
-	gtk_label_free_words (label);
+      gtk_label_free_words (label);
       
       label->jtype = jtype;
-      
-      if (GTK_WIDGET_DRAWABLE (label))
-	gtk_widget_queue_clear (GTK_WIDGET (label));
 
       gtk_widget_queue_resize (GTK_WIDGET (label));
     }
@@ -319,12 +318,11 @@ gtk_label_set_line_wrap (GtkLabel *label,
   
   if (label->wrap != wrap)
     {
-      if (GTK_WIDGET_DRAWABLE (label))
-	gtk_widget_queue_clear (GTK_WIDGET (label));
-      
-      gtk_widget_queue_resize (GTK_WIDGET (label));
-      
+      gtk_label_free_words (label);
+
       label->wrap = wrap;
+
+      gtk_widget_queue_resize (GTK_WIDGET (label));
     }
 }
 

@@ -1,3 +1,40 @@
+Wed Jun  9 15:13:16 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkaccelgroup.h: mark certain functions as internal.
+
+Wed Jun  9 13:48:28 1999  Tim Janik  <timj@gtk.org>
+
+        * gtk/gtkpreview.c (gtk_preview_set_expand): queue a resize if the
+        expand behaviour changed.
+
+        * gtk/gtklabel.c (gtk_label_set_pattern):
+        (gtk_label_set_justify):
+        (gtk_label_set_line_wrap):
+        don't bother invoking queue_clear, the reallocation does
+        that for us, always free_words so the upcoming resize will
+        relayout the label's contents.
+
+Wed Jun  9 12:50:48 1999  Tim Janik  <timj@gtk.org>
+
+        * applied argument implementation patches from Elena Devdariani
+        <elena@cogent.ca>.
+
+        * gtk/gtktoolbar.c: ::orientation, ::toolbar_style, ::space_size,
+        ::space_style, ::relief
+        * gtk/gtkruler.c: ::lower, ::upper, ::position, ::max_size
+        * gtk/gtkpreview.c: ::expand
+        * gtk/gtkpaned.c: ::handle_size, ::gutter_size
+        * gtk/gtknotebook.c: ::homogeneous
+        * gtk/gtklabel.c: ::wrap
+        * gtk/gtklist.c: ::selection_mode
+        * gtk/gtkhandlebox.c: ::handle_position, ::snap_edge
+        * gtk/gtkcurve.c: ::curve_type, ::min_x, ::max_x, ::min_y, ::max_y
+        * gtk/gtkcolorsel.c: ::policy, ::use_opacity
+        * gtk/gtkcolorsel.c: ::update_policy, ::use_opacity
+        * gtk/gtkclist.c: ::sort_type
+        * gtk/gtkcheckmenuitem.c: ::active, ::show_toggle
+        * gtk/gtkaspectframe.c: ::xalign, ::yalign, ::ratio, ::obey_child
+
 Fri Jun  4 00:08:59 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* TODO: Added entry about menu keyboard navigation, removed
@@ -17,7 +54,7 @@ Tue Jun  1 23:30:09 1999  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtkstyle.c: Documented the refcounting
 	peculularities of gtk_style_attach.
 
-1999-06-01    <timj@dhcpd7.redhat.com>
+1999-06-01  Tim Janik  <timj@dhcpd7.redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_new): added return if fail for invalid
 	window types.
@@ -25,7 +62,7 @@ Tue Jun  1 23:30:09 1999  Owen Taylor  <otaylor@redhat.com>
 	* examples/packer/pack.c (main): use GTK_WINDOW_TOPLEVEL instead
 	of GTK_TOPLEVEL for creating the window.
 
-1999-06-01    <timj@dhcpd7.redhat.com>
+1999-06-01  Tim Janik  <timj@dhcpd7.redhat.com>
 
 	* gtk/gtkmain.c (gtk_init_check): don't segfault when --gtk-module is
 	the last argument (reported by Per Winkvist).

@@ -26,9 +26,20 @@
 
 #include "gtkpaned.h"
 
+enum {
+  ARG_0,
+  ARG_HANDLE_SIZE,
+  ARG_GUTTER_SIZE
+};
 
 static void gtk_paned_class_init (GtkPanedClass    *klass);
 static void gtk_paned_init       (GtkPaned         *paned);
+static void gtk_paned_set_arg	 (GtkObject        *object,
+				  GtkArg           *arg,
+				  guint             arg_id);
+static void gtk_paned_get_arg	 (GtkObject        *object,
+				  GtkArg           *arg,
+				  guint             arg_id);
 static void gtk_paned_realize    (GtkWidget *widget);
 static void gtk_paned_map        (GtkWidget      *widget);
 static void gtk_paned_unmap      (GtkWidget      *widget);
@@ -87,6 +98,9 @@ gtk_paned_class_init (GtkPanedClass *class)
   
   parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
   
+  object_class->set_arg = gtk_paned_set_arg;
+  object_class->get_arg = gtk_paned_get_arg;
+
   widget_class->realize = gtk_paned_realize;
   widget_class->map = gtk_paned_map;
   widget_class->unmap = gtk_paned_unmap;
@@ -97,6 +111,11 @@ gtk_paned_class_init (GtkPanedClass *class)
   container_class->remove = gtk_paned_remove;
   container_class->forall = gtk_paned_forall;
   container_class->child_type = gtk_paned_child_type;
+
+  gtk_object_add_arg_type ("GtkPaned::handle_size", GTK_TYPE_UINT,
+			   GTK_ARG_READWRITE, ARG_HANDLE_SIZE);
+  gtk_object_add_arg_type ("GtkPaned::gutter_size", GTK_TYPE_UINT,
+			   GTK_ARG_READWRITE, ARG_GUTTER_SIZE);
 }
 
 static GtkType
@@ -128,6 +147,44 @@ gtk_paned_init (GtkPaned *paned)
   paned->handle_ypos = -1;
 }
 
+static void
+gtk_paned_set_arg (GtkObject *object,
+		   GtkArg    *arg,
+		   guint      arg_id)
+{
+  GtkPaned *paned = GTK_PANED (object);
+  
+  switch (arg_id)
+    {
+    case ARG_HANDLE_SIZE:
+      gtk_paned_set_handle_size (paned, GTK_VALUE_UINT (*arg));
+      break;
+    case ARG_GUTTER_SIZE:
+      gtk_paned_set_gutter_size (paned, GTK_VALUE_UINT (*arg));
+      break;
+    }
+}
+
+static void
+gtk_paned_get_arg (GtkObject *object,
+		   GtkArg    *arg,
+		   guint      arg_id)
+{
+  GtkPaned *paned = GTK_PANED (object);
+  
+  switch (arg_id)
+    {
+    case ARG_HANDLE_SIZE:
+      GTK_VALUE_UINT (*arg) = paned->handle_size;
+      break;
+    case ARG_GUTTER_SIZE:
+      GTK_VALUE_UINT (*arg) = paned->gutter_size;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
+}
 
 static void
 gtk_paned_realize (GtkWidget *widget)

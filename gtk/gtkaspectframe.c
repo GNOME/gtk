@@ -31,8 +31,22 @@
 
 #include "gtkaspectframe.h"
 
+enum {
+  ARG_0,
+  ARG_XALIGN,
+  ARG_YALIGN,
+  ARG_RATIO,
+  ARG_OBEY_CHILD
+};
+
 static void gtk_aspect_frame_class_init    (GtkAspectFrameClass *klass);
-static void gtk_aspect_frame_init          (GtkAspectFrame      *aspect_frame);
+static void gtk_aspect_frame_init          (GtkAspectFrame *aspect_frame);
+static void gtk_aspect_frame_set_arg       (GtkObject      *object,
+					    GtkArg         *arg,
+					    guint           arg_id);
+static void gtk_aspect_frame_get_arg       (GtkObject      *object,
+					    GtkArg         *arg,
+					    guint           arg_id);
 static void gtk_aspect_frame_draw          (GtkWidget      *widget,
 					    GdkRectangle   *area);
 static void gtk_aspect_frame_paint         (GtkWidget      *widget,
@@ -49,7 +63,7 @@ GtkType
 gtk_aspect_frame_get_type (void)
 {
   static GtkType aspect_frame_type = 0;
-
+  
   if (!aspect_frame_type)
     {
       static const GtkTypeInfo aspect_frame_info =
@@ -63,23 +77,37 @@ gtk_aspect_frame_get_type (void)
         /* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
-
-      aspect_frame_type = gtk_type_unique (gtk_frame_get_type (), &aspect_frame_info);
+      
+      aspect_frame_type = gtk_type_unique (GTK_TYPE_FRAME, &aspect_frame_info);
     }
-
+  
   return aspect_frame_type;
 }
 
 static void
 gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
 {
+  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
-
-  widget_class = (GtkWidgetClass*) class;
+  
+  object_class = GTK_OBJECT_CLASS (class);
+  widget_class = GTK_WIDGET_CLASS (class);
+  
+  object_class->set_arg = gtk_aspect_frame_set_arg;
+  object_class->get_arg = gtk_aspect_frame_get_arg;
 
   widget_class->draw = gtk_aspect_frame_draw;
   widget_class->expose_event = gtk_aspect_frame_expose;
   widget_class->size_allocate = gtk_aspect_frame_size_allocate;
+
+  gtk_object_add_arg_type ("GtkAspectFrame::xalign", GTK_TYPE_FLOAT,
+			   GTK_ARG_READWRITE, ARG_XALIGN);
+  gtk_object_add_arg_type ("GtkAspectFrame::yalign", GTK_TYPE_FLOAT,
+			   GTK_ARG_READWRITE, ARG_YALIGN);
+  gtk_object_add_arg_type ("GtkAspectFrame::ratio", GTK_TYPE_FLOAT,
+			   GTK_ARG_READWRITE, ARG_RATIO);
+  gtk_object_add_arg_type ("GtkAspectFrame::obey_child", GTK_TYPE_BOOL,
+			   GTK_ARG_READWRITE, ARG_OBEY_CHILD);  
 }
 
 static void
@@ -88,19 +116,86 @@ gtk_aspect_frame_init (GtkAspectFrame *aspect_frame)
   aspect_frame->xalign = 0.5;
   aspect_frame->yalign = 0.5;
   aspect_frame->ratio = 1.0;
-  aspect_frame->obey_child = 1;
+  aspect_frame->obey_child = TRUE;
   aspect_frame->center_allocation.x = -1;
   aspect_frame->center_allocation.y = -1;
   aspect_frame->center_allocation.width = 1;
   aspect_frame->center_allocation.height = 1;
 }
 
+static void
+gtk_aspect_frame_set_arg (GtkObject *object,
+			  GtkArg    *arg,
+			  guint      arg_id)
+{
+  GtkAspectFrame *aspect_frame = GTK_ASPECT_FRAME (object);
+  
+  switch (arg_id)
+    {
+    case ARG_XALIGN:
+      gtk_aspect_frame_set (aspect_frame,
+			    GTK_VALUE_FLOAT (*arg),
+			    aspect_frame->yalign,
+			    aspect_frame->ratio,
+			    aspect_frame->obey_child);
+      break;
+    case ARG_YALIGN:
+      gtk_aspect_frame_set (aspect_frame,
+			    aspect_frame->xalign,
+			    GTK_VALUE_FLOAT (*arg),
+			    aspect_frame->ratio,
+			    aspect_frame->obey_child);
+      break;
+    case ARG_RATIO:
+      gtk_aspect_frame_set (aspect_frame,
+			    aspect_frame->xalign,
+			    aspect_frame->yalign,
+			    GTK_VALUE_FLOAT (*arg),
+			    aspect_frame->obey_child);
+      break;
+    case ARG_OBEY_CHILD:
+      gtk_aspect_frame_set (aspect_frame,
+			    aspect_frame->xalign,
+			    aspect_frame->yalign,
+			    aspect_frame->ratio,
+			    GTK_VALUE_BOOL (*arg));
+      break;
+    }
+}
+
+static void
+gtk_aspect_frame_get_arg (GtkObject *object,
+			  GtkArg    *arg,
+			  guint      arg_id)
+{
+  GtkAspectFrame *aspect_frame = GTK_ASPECT_FRAME (object);
+  
+  switch (arg_id)
+    {
+    case ARG_XALIGN:
+      GTK_VALUE_FLOAT (*arg) = aspect_frame->xalign;
+      break;
+    case ARG_YALIGN:
+      GTK_VALUE_FLOAT (*arg) = aspect_frame->yalign;
+      break;
+    case ARG_RATIO:
+      GTK_VALUE_FLOAT (*arg) = aspect_frame->ratio;
+      break;
+    case ARG_OBEY_CHILD:
+      GTK_VALUE_BOOL (*arg) = aspect_frame->obey_child;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
+}
+
 GtkWidget*
 gtk_aspect_frame_new (const gchar *label,
-		      gfloat xalign,
-		      gfloat yalign,
-		      gfloat ratio,
-		      gint   obey_child)
+		      gfloat       xalign,
+		      gfloat       yalign,
+		      gfloat       ratio,
+		      gboolean     obey_child)
 {
   GtkAspectFrame *aspect_frame;
 
@@ -109,7 +204,7 @@ gtk_aspect_frame_new (const gchar *label,
   aspect_frame->xalign = CLAMP (xalign, 0.0, 1.0);
   aspect_frame->yalign = CLAMP (yalign, 0.0, 1.0);
   aspect_frame->ratio = CLAMP (ratio, MIN_RATIO, MAX_RATIO);
-  aspect_frame->obey_child = obey_child;
+  aspect_frame->obey_child = obey_child != FALSE;
 
   gtk_frame_set_label (GTK_FRAME(aspect_frame), label);
 
@@ -118,33 +213,34 @@ gtk_aspect_frame_new (const gchar *label,
 
 void
 gtk_aspect_frame_set (GtkAspectFrame *aspect_frame,
-		      gfloat        xalign,
-		      gfloat        yalign,
-		      gfloat        ratio,
-		      gint          obey_child)
+		      gfloat          xalign,
+		      gfloat          yalign,
+		      gfloat          ratio,
+		      gboolean        obey_child)
 {
   g_return_if_fail (aspect_frame != NULL);
   g_return_if_fail (GTK_IS_ASPECT_FRAME (aspect_frame));
-
+  
   xalign = CLAMP (xalign, 0.0, 1.0);
   yalign = CLAMP (yalign, 0.0, 1.0);
   ratio = CLAMP (ratio, MIN_RATIO, MAX_RATIO);
-
+  obey_child = obey_child != FALSE;
+  
   if ((aspect_frame->xalign != xalign) ||
       (aspect_frame->yalign != yalign) ||
       (aspect_frame->ratio != ratio) ||
       (aspect_frame->obey_child != obey_child))
     {
       GtkWidget *widget = GTK_WIDGET(aspect_frame);
-
+      
       aspect_frame->xalign = xalign;
       aspect_frame->yalign = yalign;
       aspect_frame->ratio = ratio;
       aspect_frame->obey_child = obey_child;
-
+      
       if (GTK_WIDGET_DRAWABLE(widget))
 	gtk_widget_queue_clear (widget);
-
+      
       gtk_widget_queue_resize (widget);
     }
 }
@@ -308,9 +404,10 @@ gtk_aspect_frame_size_allocate (GtkWidget     *widget,
 	  gtk_widget_get_child_requisition (bin->child, &child_requisition);
 	  if (child_requisition.height != 0)
 	    {
-	      ratio = (gdouble)child_requisition.width /
-		               child_requisition.height;
-	      if (ratio < MIN_RATIO) ratio = MIN_RATIO;
+	      ratio = ((gdouble) child_requisition.width /
+		       child_requisition.height);
+	      if (ratio < MIN_RATIO)
+		ratio = MIN_RATIO;
 	    }
 	  else if (child_requisition.width != 0)
 	    ratio = MAX_RATIO;
@@ -319,22 +416,22 @@ gtk_aspect_frame_size_allocate (GtkWidget     *widget,
 	}
       else
 	ratio = aspect_frame->ratio;
-
+      
       x = (GTK_CONTAINER (frame)->border_width +
 	   GTK_WIDGET (frame)->style->klass->xthickness);
       width = allocation->width - x * 2;
-
+      
       y = (GTK_CONTAINER (frame)->border_width +
-			    MAX (frame->label_height, GTK_WIDGET (frame)->style->klass->ythickness));
+	   MAX (frame->label_height, GTK_WIDGET (frame)->style->klass->ythickness));
       height = (allocation->height - y -
-				 GTK_CONTAINER (frame)->border_width -
-				 GTK_WIDGET (frame)->style->klass->ythickness);
-
+		GTK_CONTAINER (frame)->border_width -
+		GTK_WIDGET (frame)->style->klass->ythickness);
+      
       /* make sure we don't allocate a negative width or height,
        * since that will be cast to a (very big) guint16 */
       width = MAX (1, width);
       height = MAX (1, height);
-
+      
       if (ratio * height > width)
 	{
 	  child_allocation.width = width;
@@ -345,7 +442,7 @@ gtk_aspect_frame_size_allocate (GtkWidget     *widget,
 	  child_allocation.width = ratio*height + 0.5;
 	  child_allocation.height = height;
 	}
-
+      
       child_allocation.x = aspect_frame->xalign * (width - child_allocation.width) + allocation->x + x;
       child_allocation.y = aspect_frame->yalign * (height - child_allocation.height) + allocation->y + y;
 

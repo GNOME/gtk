@@ -37,9 +37,20 @@
 
 #define PREVIEW_CLASS(w)      GTK_PREVIEW_CLASS (GTK_OBJECT (w)->klass)
 
+enum {
+  ARG_0,
+  ARG_EXPAND
+};
+
 
 static void   gtk_preview_class_init    (GtkPreviewClass  *klass);
 static void   gtk_preview_init          (GtkPreview       *preview);
+static void   gtk_preview_set_arg	(GtkObject        *object,
+					 GtkArg           *arg,
+					 guint             arg_id);
+static void   gtk_preview_get_arg	(GtkObject        *object,
+					 GtkArg           *arg,
+					 guint             arg_id);
 static void   gtk_preview_finalize      (GtkObject        *object);
 static void   gtk_preview_realize       (GtkWidget        *widget);
 static void   gtk_preview_size_allocate (GtkWidget        *widget,
@@ -54,10 +65,10 @@ static GtkPreviewClass *preview_class = NULL;
 static gint install_cmap = FALSE;
 
 
-guint
+GtkType
 gtk_preview_get_type (void)
 {
-  static guint preview_type = 0;
+  static GtkType preview_type = 0;
 
   if (!preview_type)
     {
@@ -73,7 +84,7 @@ gtk_preview_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      preview_type = gtk_type_unique (gtk_widget_get_type (), &preview_info);
+      preview_type = gtk_type_unique (GTK_TYPE_WIDGET, &preview_info);
     }
 
   return preview_type;
@@ -88,9 +99,11 @@ gtk_preview_class_init (GtkPreviewClass *klass)
   object_class = (GtkObjectClass*) klass;
   widget_class = (GtkWidgetClass*) klass;
 
-  parent_class = gtk_type_class (gtk_widget_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_WIDGET);
   preview_class = klass;
 
+  object_class->set_arg = gtk_preview_set_arg;
+  object_class->get_arg = gtk_preview_get_arg;
   object_class->finalize = gtk_preview_finalize;
 
   widget_class->realize = gtk_preview_realize;
@@ -107,6 +120,46 @@ gtk_preview_class_init (GtkPreviewClass *klass)
   gdk_rgb_init ();
   klass->info.cmap = gdk_rgb_get_cmap ();
   klass->info.visual = gdk_rgb_get_visual ();
+
+  gtk_object_add_arg_type ("GtkPreview::expand",
+			   GTK_TYPE_BOOL,
+			   GTK_ARG_READWRITE,
+			   ARG_EXPAND);
+}
+
+static void
+gtk_preview_set_arg (GtkObject *object,
+		     GtkArg    *arg,
+		     guint      arg_id)
+{
+  GtkPreview *preview = GTK_PREVIEW (object);
+  
+  switch (arg_id)
+    {
+    case ARG_EXPAND:
+      gtk_preview_set_expand (preview, GTK_VALUE_BOOL (*arg));
+      break;
+    }
+}
+
+static void
+gtk_preview_get_arg (GtkObject *object,
+		     GtkArg    *arg,
+		     guint      arg_id)
+{
+  GtkPreview *preview;
+  
+  preview = GTK_PREVIEW (object);
+  
+  switch (arg_id)
+    {
+    case ARG_EXPAND:
+      GTK_VALUE_BOOL (*arg) = preview->expand;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 void
@@ -293,12 +346,18 @@ gtk_preview_draw_row (GtkPreview *preview,
 
 void
 gtk_preview_set_expand (GtkPreview *preview,
-			gint        expand)
+			gboolean    expand)
 {
   g_return_if_fail (preview != NULL);
   g_return_if_fail (GTK_IS_PREVIEW (preview));
 
-  preview->expand = (expand != FALSE);
+  expand = expand != FALSE;
+
+  if (preview->expand != expand)
+    {
+      preview->expand = expand;
+      gtk_widget_queue_resize (GTK_WIDGET (preview));
+    }
 }
 
 void

@@ -62,32 +62,34 @@
 #define SAMPLE_HEIGHT 28
 
 static void gtk_color_selection_class_init (GtkColorSelectionClass *klass);
+static void gtk_color_selection_set_arg    (GtkObject              *object,
+					    GtkArg                 *arg,
+					    guint                   arg_id);
+static void gtk_color_selection_get_arg    (GtkObject              *object,
+					    GtkArg                 *arg,
+					    guint                   arg_id);
 static void gtk_color_selection_init (GtkColorSelection *colorsel);
-static void gtk_color_selection_dialog_class_init(GtkColorSelectionDialogClass *klass);
-static void gtk_color_selection_dialog_init(GtkColorSelectionDialog *colorseldiag);
+static void gtk_color_selection_dialog_class_init (GtkColorSelectionDialogClass *klass);
+static void gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag);
 
-enum
-{
+enum {
   COLOR_CHANGED,
   LAST_SIGNAL
 };
 
-enum
-{
+enum {
   RGB_INPUTS     = 1 << 0,
   HSV_INPUTS     = 1 << 1,
   OPACITY_INPUTS = 1 << 2
 };
 
-enum
-{
+enum {
   SCALE,
   ENTRY,
   BOTH
 };
 
-enum
-{
+enum {
   HUE,
   SATURATION,
   VALUE,
@@ -96,6 +98,12 @@ enum
   BLUE,
   OPACITY,
   NUM_CHANNELS
+};
+
+enum {
+  ARG_0,
+  ARG_UPDATE_POLICY,
+  ARG_USE_OPACITY
 };
 
 typedef struct
@@ -219,10 +227,10 @@ static const scale_val_type scale_vals[NUM_CHANNELS] =
   {N_("Opacity:"),    0.0,   1.0, 0.01,  0.01, (SF) gtk_color_selection_opacity_updater}
 };
 
-guint
+GtkType
 gtk_color_selection_get_type (void)
 {
-  static guint color_selection_type = 0;
+  static GtkType color_selection_type = 0;
 
   if (!color_selection_type)
     {
@@ -238,7 +246,7 @@ gtk_color_selection_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      color_selection_type = gtk_type_unique (gtk_vbox_get_type (), &colorsel_info);
+      color_selection_type = gtk_type_unique (GTK_TYPE_VBOX, &colorsel_info);
     }
 
   return color_selection_type;
@@ -255,8 +263,13 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
   widget_class = (GtkWidgetClass*) klass;
   container_class = (GtkContainerClass*) klass;
 
-  color_selection_parent_class = gtk_type_class (gtk_vbox_get_type ());
-
+  color_selection_parent_class = gtk_type_class (GTK_TYPE_VBOX);
+  
+  gtk_object_add_arg_type ("GtkColorSelection::policy", GTK_TYPE_UPDATE_TYPE,
+			   GTK_ARG_READWRITE, ARG_UPDATE_POLICY);
+  gtk_object_add_arg_type ("GtkColorSelection::use_opacity", GTK_TYPE_BOOL,
+			   GTK_ARG_READWRITE, ARG_USE_OPACITY);
+  
   color_selection_signals[COLOR_CHANGED] =
      gtk_signal_new ("color_changed",
 	             GTK_RUN_FIRST,
@@ -266,6 +279,8 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
 
   gtk_object_class_add_signals (object_class, color_selection_signals, LAST_SIGNAL);
 
+  object_class->set_arg = gtk_color_selection_set_arg;
+  object_class->get_arg = gtk_color_selection_get_arg;
   object_class->finalize = gtk_color_selection_finalize;
 
   widget_class->realize = gtk_color_selection_realize;
@@ -440,17 +455,57 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
     }
 
   colorsel->opacity_label = label;
-
+  
   gtk_widget_show (table);
   gtk_widget_show (hbox);
 }
 
-GtkWidget *
+static void
+gtk_color_selection_set_arg (GtkObject *object,
+			     GtkArg    *arg,
+			     guint      arg_id)
+{
+  GtkColorSelection *color_selection = GTK_COLOR_SELECTION (object);
+  
+  switch (arg_id)
+    {
+    case ARG_UPDATE_POLICY:
+      gtk_color_selection_set_update_policy (color_selection, GTK_VALUE_ENUM (*arg));
+      break;
+    case ARG_USE_OPACITY:
+      gtk_color_selection_set_opacity (color_selection, GTK_VALUE_BOOL (*arg));
+      break;  
+    }
+}
+
+static void
+gtk_color_selection_get_arg (GtkObject *object,
+			     GtkArg    *arg,
+			     guint      arg_id)
+{
+  GtkColorSelection *color_selection;
+  
+  color_selection = GTK_COLOR_SELECTION (object);
+  
+  switch (arg_id)
+    {
+    case ARG_UPDATE_POLICY:
+      GTK_VALUE_ENUM (*arg) = color_selection->policy;
+      break;
+    case ARG_USE_OPACITY:
+      GTK_VALUE_BOOL (*arg) = color_selection->use_opacity;
+      break;
+    default:
+      break;
+    }
+}
+
+GtkWidget*
 gtk_color_selection_new (void)
 {
   GtkColorSelection *colorsel;
 
-  colorsel = gtk_type_new (gtk_color_selection_get_type ());
+  colorsel = gtk_type_new (GTK_TYPE_COLOR_SELECTION);
 
   return GTK_WIDGET (colorsel);
 }
@@ -1603,10 +1658,10 @@ gtk_color_selection_rgb_to_hsv (gdouble  r, gdouble  g, gdouble  b,
 /* GtkColorSelectionDialog */
 /***************************/
 
-guint
+GtkType
 gtk_color_selection_dialog_get_type (void)
 {
-  static guint color_selection_dialog_type = 0;
+  static GtkType color_selection_dialog_type = 0;
 
   if (!color_selection_dialog_type)
     {
@@ -1622,7 +1677,7 @@ gtk_color_selection_dialog_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      color_selection_dialog_type = gtk_type_unique (gtk_window_get_type (), &colorsel_diag_info);
+      color_selection_dialog_type = gtk_type_unique (GTK_TYPE_WINDOW, &colorsel_diag_info);
     }
 
   return color_selection_dialog_type;
@@ -1635,7 +1690,7 @@ gtk_color_selection_dialog_class_init (GtkColorSelectionDialogClass *klass)
 
   object_class = (GtkObjectClass*) klass;
 
-  color_selection_dialog_parent_class = gtk_type_class (gtk_window_get_type ());
+  color_selection_dialog_parent_class = gtk_type_class (GTK_TYPE_WINDOW);
 }
 
 static void
@@ -1689,12 +1744,12 @@ gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
   gtk_widget_pop_visual ();
 }
 
-GtkWidget *
+GtkWidget*
 gtk_color_selection_dialog_new (const gchar *title)
 {
   GtkColorSelectionDialog *colorseldiag;
 
-  colorseldiag = gtk_type_new (gtk_color_selection_dialog_get_type ());
+  colorseldiag = gtk_type_new (GTK_TYPE_COLOR_SELECTION_DIALOG);
   gtk_window_set_title (GTK_WINDOW (colorseldiag), title);
 
   return GTK_WIDGET (colorseldiag);

@@ -42,8 +42,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 /* clist flags */
-enum                    
-{
+enum {
   GTK_CLIST_IN_DRAG             = 1 <<  0,
   GTK_CLIST_ROW_HEIGHT_SET      = 1 <<  1,
   GTK_CLIST_SHOW_TITLES         = 1 <<  2,

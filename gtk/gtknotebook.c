@@ -64,7 +64,8 @@ enum {
   ARG_TAB_HBORDER,
   ARG_TAB_VBORDER,
   ARG_PAGE,
-  ARG_ENABLE_POPUP
+  ARG_ENABLE_POPUP,
+  ARG_HOMOGENEOUS
 };
 
 enum {
@@ -259,6 +260,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   gtk_object_add_arg_type ("GtkNotebook::show_border", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_SHOW_BORDER);
   gtk_object_add_arg_type ("GtkNotebook::scrollable", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_SCROLLABLE);
   gtk_object_add_arg_type ("GtkNotebook::enable_popup", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ENABLE_POPUP);
+  gtk_object_add_arg_type ("GtkNotebook::homogeneous", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HOMOGENEOUS);
 
   gtk_container_add_child_arg_type ("GtkNotebook::tab_label", GTK_TYPE_STRING, GTK_ARG_READWRITE, CHILD_ARG_TAB_LABEL);
   gtk_container_add_child_arg_type ("GtkNotebook::menu_label", GTK_TYPE_STRING, GTK_ARG_READWRITE, CHILD_ARG_MENU_LABEL);
@@ -395,6 +397,9 @@ gtk_notebook_set_arg (GtkObject *object,
       else
 	gtk_notebook_popup_disable (notebook);
       break;
+    case ARG_HOMOGENEOUS:
+      gtk_notebook_set_homogeneous_tabs (notebook, GTK_VALUE_BOOL (*arg));
+      break;  
     case ARG_PAGE:
       gtk_notebook_set_page (notebook, GTK_VALUE_INT (*arg));
       break;
@@ -437,6 +442,9 @@ gtk_notebook_get_arg (GtkObject *object,
       break;
     case ARG_ENABLE_POPUP:
       GTK_VALUE_BOOL (*arg) = notebook->menu != NULL;
+      break;
+    case ARG_HOMOGENEOUS:
+      GTK_VALUE_BOOL (*arg) = notebook->homogeneous;
       break;
     case ARG_PAGE:
       GTK_VALUE_INT (*arg) = gtk_notebook_get_current_page (notebook);
@@ -570,8 +578,6 @@ static void
 gtk_notebook_unrealize (GtkWidget *widget)
 {
   GtkNotebook *notebook;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (widget));

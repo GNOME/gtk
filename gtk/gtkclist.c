@@ -134,8 +134,7 @@ LIST_WIDTH (GtkCList * clist)
 
 
 /* Signals */
-enum
-{
+enum {
   SELECT_ROW,
   UNSELECT_ROW,
   ROW_MOVE,
@@ -155,8 +154,7 @@ enum
   LAST_SIGNAL
 };
 
-enum
-{
+enum {
   SYNC_REMOVE,
   SYNC_INSERT
 };
@@ -169,7 +167,8 @@ enum {
   ARG_ROW_HEIGHT,
   ARG_TITLES_ACTIVE,
   ARG_REORDERABLE,
-  ARG_USE_DRAG_ICONS
+  ARG_USE_DRAG_ICONS,
+  ARG_SORT_TYPE
 };
 
 /* GtkCList Methods */
@@ -525,7 +524,10 @@ gtk_clist_class_init (GtkCListClass *klass)
 			   GTK_TYPE_BOOL,
 			   GTK_ARG_READWRITE,
 			   ARG_USE_DRAG_ICONS);
-  
+  gtk_object_add_arg_type ("GtkCList::sort_type",
+			   GTK_TYPE_SORT_TYPE,
+			   GTK_ARG_READWRITE,
+			   ARG_SORT_TYPE);  
   object_class->set_arg = gtk_clist_set_arg;
   object_class->get_arg = gtk_clist_get_arg;
   object_class->destroy = gtk_clist_destroy;
@@ -854,7 +856,8 @@ gtk_clist_set_arg (GtkObject      *object,
     case ARG_USE_DRAG_ICONS:
       gtk_clist_set_use_drag_icons (clist, GTK_VALUE_BOOL (*arg));
       break;
-    default:
+    case ARG_SORT_TYPE:
+      gtk_clist_set_sort_type (clist, GTK_VALUE_ENUM (*arg));
       break;
     }
 }
@@ -899,6 +902,9 @@ gtk_clist_get_arg (GtkObject      *object,
       break;
     case ARG_USE_DRAG_ICONS:
       GTK_VALUE_BOOL (*arg) = GTK_CLIST_USE_DRAG_ICONS (clist);
+      break;
+    case ARG_SORT_TYPE:
+      GTK_VALUE_ENUM (*arg) = clist->sort_type;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
