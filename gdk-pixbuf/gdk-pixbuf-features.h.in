@@ -36,6 +36,6 @@
 GDK_PIXBUF_VAR const guint gdk_pixbuf_major_version;
 GDK_PIXBUF_VAR const guint gdk_pixbuf_minor_version;
 GDK_PIXBUF_VAR const guint gdk_pixbuf_micro_version;
-GDK_PIXBUF_VAR const char *gdk_pixbuf_version;
+GDK_PIXBUF_VAR const char gdk_pixbuf_version[];
 
 #endif
