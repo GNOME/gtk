@@ -1054,7 +1054,7 @@ if test "x$gdktarget" = "xx11"; then
 
   GDK_PIXBUF_XLIB_EXTRA_CFLAGS="$x_cflags"
   # Don't ever pull in the pangoxft libraries for gdk-pixbuf-x11
-  GDK_PIXBUF_XLIB_EXTRA_LIBS="$x_extra_libs `$PKG_CONFIG --libs pangox`"
+  GDK_PIXBUF_XLIB_EXTRA_LIBS="$x_extra_libs $x_libs"
 
   # Check for Xinerama extension (Solaris impl or Xfree impl)
 

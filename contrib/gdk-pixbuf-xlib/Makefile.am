@@ -7,13 +7,12 @@ INCLUDES = @STRIP_BEGIN@			\
 	@GDK_PIXBUF_XLIB_DEP_CFLAGS@		\
 @STRIP_END@
 
-LDADDS = @STRIP_BEGIN@ 				\
-	@GDK_PIXBUF_XLIB_DEP_LIBS@		\
-@STRIP_END@
-
 libgdk_pixbuf_xlib_2_0_la_LDFLAGS =         \
 	-export-dynamic						\
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
+
+libgdk_pixbuf_xlib_2_0_la_LIBADD = \
+	@GDK_PIXBUF_XLIB_DEP_LIBS@
 
 libgdk_pixbuf_xlib_2_0_la_SOURCES =         \
 	gdk-pixbuf-xlib-private.h	\

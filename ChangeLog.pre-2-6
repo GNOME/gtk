@@ -1,3 +1,7 @@
+2002-08-06  jacob berkman  <jacob@ximian.com>
+
+	* configure.in: link gdk-pixbuf-xlib against x libs (bug #83442)
+
 Mon Aug  5 17:20:45 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c: Patch from Soeren Sandmann
