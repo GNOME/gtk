@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 #include "gtk.h"
 #include "../gdk/gdk.h"
 #include "../gdk/gdkx.h"
@@ -3907,7 +3908,7 @@ void build_recursive (GtkCTree *ctree, gint cur_depth, gint depth,
   for (i = num_pages + num_books; i > num_books; i--)
     {
       pages++;
-      sprintf (buf1, "Page %02d", (gint) random() % 100);
+      sprintf (buf1, "Page %02d", (gint) rand() % 100);
       sprintf (buf2, "Item %d-%d", cur_depth, i);
       sibling = gtk_ctree_insert (ctree, parent, sibling, text, 5, pixmap3,
 				  mask3, NULL, NULL, TRUE, FALSE);
@@ -3922,7 +3923,7 @@ void build_recursive (GtkCTree *ctree, gint cur_depth, gint depth,
   for (i = num_books; i > 0; i--)
     {
       books++;
-      sprintf (buf1, "Book %02d", (gint) random() % 100);
+      sprintf (buf1, "Book %02d", (gint) rand() % 100);
       sprintf (buf2, "Item %d-%d", cur_depth, i);
       sibling = gtk_ctree_insert (ctree, parent, sibling, text, 5, pixmap1,
 				  mask1, pixmap2, mask2, FALSE, FALSE);
@@ -7026,6 +7027,8 @@ create_main_window (void)
 int
 main (int argc, char *argv[])
 {
+  srand (time (NULL));
+
   gtk_set_locale ();
 
   gtk_init (&argc, &argv);
