@@ -749,7 +749,7 @@ gtk_style_new (void)
 /**
  * gtk_style_attach:
  * @style: a #GtkStyle.
- * @window: a #GtkWindow.
+ * @window: a #GdkWindow.
  * @returns: Either @style, or a newly-created #GtkStyle.
  *   If the style is newly created, the style parameter
  *   will be dereferenced, and the new style will have
