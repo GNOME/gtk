@@ -1,3 +1,10 @@
+Mon Aug 27 15:28:56 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* tests/testtreefocus.c (main): Fix to use GtkSelectionMode.
+	* tests/treestoretest.c (make_window): ditto
+	* demos/gtk-demo/main.c (create_tree): ditto
+	* demos/gtk-demo/stock_browser.c (do_stock_browser): ditto.
+
 Mon Aug 27 15:18:14 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeselection.c (gtk_tree_selection_set_mode): Use the

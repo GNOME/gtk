@@ -70,7 +70,7 @@ main (int argc, char *argv[])
   g_print ("start model\n");
   tree_view = gtk_tree_view_new_with_model (model);
   gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
-			       GTK_TREE_SELECTION_MULTI);
+			       GTK_SELECTION_MULTIPLE);
   for (j = 0; j < 2; j++)
     for (i = 0; data[i].word_1 != NULL; i++)
       {
