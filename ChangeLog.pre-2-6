@@ -1,3 +1,10 @@
+2004-08-07  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (handle_configure_event,
+	gdk_event_translate:WM_WINDOWPOSCHANGED): Add _gdk_offset_{x,y} to
+	top-level window coordinates, not just in generated
+	events. (#148526, Robert Ögren)
+
 Sat Aug  7 01:26:08 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Make the column drag code a bit more robust (still scary, 

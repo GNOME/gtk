@@ -1723,8 +1723,12 @@ handle_configure_event (MSG       *msg,
   point.x = client_rect.left; /* always 0 */
   point.y = client_rect.top;
   /* top level windows need screen coords */
-  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL)
-    ClientToScreen (msg->hwnd, &point);
+  if (gdk_window_get_parent (window) == _gdk_parent_root)
+    {
+      ClientToScreen (msg->hwnd, &point);
+      point.x += _gdk_offset_x;
+      point.y += _gdk_offset_y;
+    }
 
   GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->width = client_rect.right - client_rect.left;
   GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->height = client_rect.bottom - client_rect.top;
@@ -1743,12 +1747,6 @@ handle_configure_event (MSG       *msg,
       
       event->configure.x = point.x;
       event->configure.y = point.y;
-
-      if (gdk_window_get_parent (window) == _gdk_parent_root)
-	{
-	  event->configure.x += _gdk_offset_x;
-	  event->configure.y += _gdk_offset_y;
-	}
 
       append_event (gdk_drawable_get_display (window), event);
     }
@@ -2994,15 +2992,19 @@ gdk_event_translate (GdkDisplay *display,
 	  point.x = client_rect.left; /* always 0 */
 	  point.y = client_rect.top;
 	  /* top level windows need screen coords */
-	  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL)
-	    ClientToScreen (msg->hwnd, &point);
+	  if (gdk_window_get_parent (window) == _gdk_parent_root)
+	    {
+	      ClientToScreen (msg->hwnd, &point);
+	      point.x += _gdk_offset_x;
+	      point.y += _gdk_offset_y;
+	    }
   
 	  GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->width = client_rect.right - client_rect.left;
 	  GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->height = client_rect.bottom - client_rect.top;
 	  
 	  ((GdkWindowObject *) window)->x = point.x;
 	  ((GdkWindowObject *) window)->y = point.y;
-	  
+
 	  if (((GdkWindowObject *) window)->event_mask & GDK_STRUCTURE_MASK)
 	    {
 	      GdkEvent *event = gdk_event_new (GDK_CONFIGURE);
@@ -3014,12 +3016,6 @@ gdk_event_translate (GdkDisplay *display,
 	      
 	      event->configure.x = point.x;
 	      event->configure.y = point.y;
-	      
-	      if (gdk_window_get_parent (window) == _gdk_parent_root)
-		{
-		  event->configure.x += _gdk_offset_x;
-		  event->configure.y += _gdk_offset_y;
-		}
 	      
 	      if (((GdkWindowObject *) window)->resize_count > 1)
 		((GdkWindowObject *) window)->resize_count -= 1;
