@@ -325,3 +325,4 @@ mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
 End:
 -->
+

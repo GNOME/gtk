@@ -1,13 +1,3 @@
-<FUNCTION>
-<NAME>gdk_pixbuf_rgb_from_drawable</NAME>
-<RETURNS>GdkPixbuf  *</RETURNS>
-GdkWindow *window, gint x, gint y, gint width, gint height
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_rgba_from_drawable</NAME>
-<RETURNS>GdkPixbuf  *</RETURNS>
-GdkWindow *window, gint x, gint y, gint width, gint height
-</FUNCTION>
 <USER_FUNCTION>
 <NAME>ModulePreparedNotifyFunc</NAME>
 <RETURNS>void </RETURNS>
@@ -221,6 +211,11 @@ GdkPixbuf *pixbuf,GdkDrawable *drawable, GdkGC *gc,int src_x, int src_y,int dest
 <NAME>gdk_pixbuf_render_to_drawable_alpha</NAME>
 <RETURNS>void  </RETURNS>
 GdkPixbuf *pixbuf, GdkDrawable *drawable,int src_x, int src_y,int dest_x, int dest_y,int width, int height,GdkPixbufAlphaMode alpha_mode,int alpha_threshold,GdkRgbDither dither,int x_dither, int y_dither
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_get_from_drawable</NAME>
+<RETURNS>GdkPixbuf  *</RETURNS>
+GdkPixbuf *dest,GdkDrawable *src, GdkColormap *cmap,int src_x, int src_y,int dest_x, int dest_y,int width, int height
 </FUNCTION>
 <MACRO>
 <NAME>GNOME_TYPE_CANVAS_PIXBUF</NAME>
