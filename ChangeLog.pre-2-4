@@ -1,3 +1,7 @@
+1999-02-04  Christopher Blizzard  <blizzard@redhat.com>
+
+	* gtk+.spec (Packager): Change my email address.
+
 Thu Feb  4 05:42:34 CST 1999 Shawn T. Amundson <amundson@gtk.org>
 
 	* INSTALL

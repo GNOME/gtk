@@ -12,7 +12,7 @@ Group: X11/Libraries
 Source: ftp://ftp.gimp.org/pub/gtk/v1.1/gtk+-%{ver}.tar.gz
 BuildRoot: /tmp/gtk-root
 Obsoletes: gtk
-Packager: Christopher Blizzard <blizzard@appliedtheory.com>
+Packager: Christopher Blizzard <blizzard@redhat.com>
 URL: http://www.gtk.org
 Prereq: /sbin/install-info
 Requires: glib
