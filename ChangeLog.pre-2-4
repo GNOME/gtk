@@ -1,3 +1,10 @@
+Wed Jan 27 17:05:40 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* Separate out GLIB_LIBS and GLIB_DEPLIBS. This
+	may fix the --with-glib option. GLIB_LIBS are
+	the libs to link example programs against, while
+	GLIB_DEPLIBS are dependency libraries.
+
 Wed Jan 20 11:19:00 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c: Use floor() instead of truncating

@@ -67,7 +67,7 @@ LDADDS = \
 
 libgdk_la_LDFLAGS = \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -release $(LT_RELEASE) \
-         @GLIB_LIBS@	\
+         @GLIB_DEPLIBS@	\
          @x_ldflags@	\
          @x_libs@	\
          -lm
