@@ -59,6 +59,9 @@ void gdk_pixbuf_unref (GdkPixbuf *pixbuf);
 
 GdkPixbuf *gdk_pixbuf_new_from_art_pixbuf (ArtPixBuf *art_pixbuf);
 
+/* Create a "blank" pixbuf with an optimal rowstride and a new buffer */
+GdkPixbuf *gdk_pixbuf_new (gboolean has_alpha, int width, int height);
+
 /* Simple loading */
 
 GdkPixbuf *gdk_pixbuf_new_from_file (const char *filename);

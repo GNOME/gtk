@@ -99,3 +99,64 @@ gdk_pixbuf_new_from_art_pixbuf (ArtPixBuf *art_pixbuf)
 
 	return pixbuf;
 }
+
+/**
+ * gdk_pixbuf_new:
+ * @art_pixbuf: A libart pixbuf.
+ *
+ * Creates a &GdkPixbuf; magically sets the ArtPixFormat, rowstride, and creates
+ * the buffer. Use gdk_pixbuf_new_from_data() to do things manually.
+ *
+ * Return value: A newly-created &GdkPixbuf structure with a reference count of
+ * 1. Somewhat oddly, returns NULL if it can't allocate the buffer; this unusual
+ * behavior is needed because images can be very large.
+ **/
+GdkPixbuf *
+gdk_pixbuf_new (gboolean has_alpha, int width, int height)
+{
+        GdkPixbuf *pixbuf;
+
+	g_return_val_if_fail (width > 0, NULL);
+        g_return_val_if_fail (height > 0, NULL);
+
+	pixbuf = g_new (GdkPixbuf, 1);
+	pixbuf->ref_count = 1;
+        
+        if (has_alpha) {
+                art_u8* pixels;
+                int rowstride;
+
+                /* FIXME, pick an optimal stride */                
+                rowstride = 4*width;
+
+                pixels = art_alloc(rowstride*height);
+
+                if (pixels == NULL) {
+                        g_free(pixbuf);
+                        return NULL;
+                }
+                
+                pixbuf->art_pixbuf = art_pixbuf_new_rgba(pixels, width, height, rowstride);
+        } else {
+                art_u8* pixels;
+                int rowstride;
+
+                /* FIXME, pick an optimal stride */
+                rowstride = 3*width;
+
+                pixels = art_alloc(rowstride*height);
+
+                if (pixels == NULL) {
+                        g_free(pixbuf);
+                        return NULL;
+                }
+
+                pixbuf->art_pixbuf = art_pixbuf_new_rgb(pixels, width, height, rowstride);
+        }
+                
+	return pixbuf;
+
+
+}
+
+

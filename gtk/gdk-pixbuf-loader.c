@@ -240,14 +240,19 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader, gchar *buf, gint count)
 			if (priv->image_module == NULL) {
 				return FALSE;
 			} else if ((priv->image_module->begin_load == NULL) ||
-				   (priv->image_module->begin_load == NULL) ||
-				   (priv->image_module->begin_load == NULL) ||
-				   (priv->image_module->begin_load == NULL)) {
+				   (priv->image_module->stop_load == NULL) ||
+				   (priv->image_module->load_increment == NULL)) {
 				g_warning ("module %s does not support incremental loading.\n", priv->image_module->module_name);
 				return FALSE;
 			} else {
 				g_print ("module loaded: name is %s\n", priv->image_module->module_name);
 				priv->context = (priv->image_module->begin_load) (gdk_pixbuf_loader_prepare, loader);
+
+                                if (priv->context == NULL) {
+                                        g_warning("Failed to begin progressive load");
+                                        return FALSE;
+                                }
+                                
 				retval = (priv->image_module->load_increment) (priv->context, priv->buf, 128);
 
 				/* if we had more then 128 bytes total, we want to send the rest of the buffer */
