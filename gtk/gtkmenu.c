@@ -73,7 +73,8 @@ static void gtk_menu_reparent       (GtkMenu           *menu,
 				     gboolean           unrealize);
 
 static GtkMenuShellClass *parent_class = NULL;
-static const gchar	*attach_data_key = "gtk-menu-attach-data";
+static const gchar	 *attach_data_key = "gtk-menu-attach-data";
+static GQuark             quark_uline_accel_group = 0;
 
 
 GtkType
@@ -155,6 +156,33 @@ gtk_menu_class_init (GtkMenuClass *class)
 				GTK_MENU_DIR_CHILD);
 }
 
+static gint
+gtk_menu_window_event (GtkWidget *window,
+		       GdkEvent  *event,
+		       GtkWidget *menu)
+{
+  gboolean handled = FALSE;
+
+  gtk_widget_ref (window);
+  gtk_widget_ref (menu);
+
+  switch (event->type)
+    {
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+      gtk_widget_event (menu, event);
+      handled = TRUE;
+      break;
+    default:
+      break;
+    }
+
+  gtk_widget_unref (window);
+  gtk_widget_unref (menu);
+
+  return handled;
+}
+
 static void
 gtk_menu_init (GtkMenu *menu)
 {
@@ -165,9 +193,10 @@ gtk_menu_init (GtkMenu *menu)
   menu->position_func_data = NULL;
 
   menu->toplevel = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_signal_connect_object (GTK_OBJECT (menu->toplevel),  "key_press_event",
-			     GTK_SIGNAL_FUNC (gtk_menu_key_press), 
-			     GTK_OBJECT (menu));
+  gtk_signal_connect (GTK_OBJECT (menu->toplevel),
+		      "event",
+		      GTK_SIGNAL_FUNC (gtk_menu_window_event), 
+		      GTK_OBJECT (menu));
   gtk_window_set_policy (GTK_WINDOW (menu->toplevel),
 			 FALSE, FALSE, TRUE);
 
@@ -202,6 +231,12 @@ gtk_menu_destroy (GtkObject	    *object)
     gtk_menu_detach (menu);
   
   gtk_menu_set_accel_group (menu, NULL);
+
+  if (menu->old_active_menu_item)
+    {
+      gtk_widget_unref (menu->old_active_menu_item);
+      menu->old_active_menu_item = NULL;
+    }
 
   /* Add back the reference count for being a child */
   gtk_object_ref (object);
@@ -327,6 +362,42 @@ gtk_menu_insert (GtkMenu   *menu,
   gtk_menu_shell_insert (GTK_MENU_SHELL (menu), child, position);
 }
 
+static void
+gtk_menu_tearoff_bg_copy (GtkMenu *menu)
+{
+  GtkWidget *widget;
+
+  widget = GTK_WIDGET (menu);
+
+  if (menu->torn_off)
+    {
+      GdkPixmap *pixmap;
+      GdkGC *gc;
+      GdkGCValues gc_values;
+      
+      gc_values.subwindow_mode = GDK_INCLUDE_INFERIORS;
+      gc = gdk_gc_new_with_values (widget->window,
+				   &gc_values, GDK_GC_SUBWINDOW);
+      
+      pixmap = gdk_pixmap_new (widget->window,
+			       widget->requisition.width,
+			       widget->requisition.height,
+			       -1);
+
+      gdk_draw_pixmap (pixmap, gc,
+		       widget->window,
+		       0, 0, 0, 0, -1, -1);
+      gdk_gc_unref (gc);
+      
+      gtk_widget_set_usize (menu->tearoff_window,
+			    widget->requisition.width,
+			    widget->requisition.height);
+      
+      gdk_window_set_back_pixmap (menu->tearoff_window->window, pixmap, FALSE);
+      gdk_pixmap_unref (pixmap);
+    }
+}
+
 void
 gtk_menu_popup (GtkMenu		    *menu,
 		GtkWidget	    *parent_menu_shell,
@@ -363,35 +434,12 @@ gtk_menu_popup (GtkMenu		    *menu,
       if ((current_event->type != GDK_BUTTON_PRESS) &&
 	  (current_event->type != GDK_ENTER_NOTIFY))
 	menu_shell->ignore_enter = TRUE;
-      gdk_event_free(current_event);
+      gdk_event_free (current_event);
     }
 
   if (menu->torn_off)
     {
-      GdkPixmap *pixmap;
-      GdkGC *gc;
-      GdkGCValues gc_values;
-      
-      gc_values.subwindow_mode = GDK_INCLUDE_INFERIORS;
-      gc = gdk_gc_new_with_values (widget->window,
-				   &gc_values, GDK_GC_SUBWINDOW);
-      
-      pixmap = gdk_pixmap_new (widget->window,
-			       widget->requisition.width,
-			       widget->requisition.height,
-			       -1);
-      
-      gdk_draw_pixmap (pixmap, gc,
-		       widget->window,
-		       0, 0, 0, 0, -1, -1);
-      gdk_gc_unref(gc);
-
-      gtk_widget_set_usize (menu->tearoff_window,
-			    widget->requisition.width,
-			    widget->requisition.height);
-		    
-      gdk_window_set_back_pixmap (menu->tearoff_window->window, pixmap, FALSE);
-      gdk_pixmap_unref (pixmap);
+      gtk_menu_tearoff_bg_copy (menu);
 
       /* We force an unrealize here so that we don't trigger redrawing/
        * clearing code - we just want to reveal our backing pixmap.
@@ -479,10 +527,13 @@ gtk_menu_popdown (GtkMenu *menu)
   
   if (menu_shell->active_menu_item)
     {
+      if (menu->old_active_menu_item)
+	gtk_widget_unref (menu->old_active_menu_item);
       menu->old_active_menu_item = menu_shell->active_menu_item;
-      gtk_menu_item_deselect (GTK_MENU_ITEM (menu_shell->active_menu_item));
-      menu_shell->active_menu_item = NULL;
+      gtk_widget_ref (menu->old_active_menu_item);
     }
+
+  gtk_menu_shell_deselect (menu_shell);
   
   /* The X Grab, if present, will automatically be removed when we hide
    * the window */
@@ -538,6 +589,8 @@ gtk_menu_get_active (GtkMenu *menu)
 	}
       
       menu->old_active_menu_item = child;
+      if (menu->old_active_menu_item)
+	gtk_widget_ref (menu->old_active_menu_item);
     }
   
   return menu->old_active_menu_item;
@@ -558,7 +611,12 @@ gtk_menu_set_active (GtkMenu *menu,
     {
       child = tmp_list->data;
       if (GTK_BIN (child)->child)
-	menu->old_active_menu_item = child;
+	{
+	  if (menu->old_active_menu_item)
+	    gtk_widget_unref (menu->old_active_menu_item);
+	  menu->old_active_menu_item = child;
+	  gtk_widget_ref (menu->old_active_menu_item);
+	}
     }
 }
 
@@ -566,7 +624,6 @@ void
 gtk_menu_set_accel_group (GtkMenu	*menu,
 			  GtkAccelGroup *accel_group)
 {
-  g_return_if_fail (menu != NULL);
   g_return_if_fail (GTK_IS_MENU (menu));
   
   if (menu->accel_group != accel_group)
@@ -579,6 +636,45 @@ gtk_menu_set_accel_group (GtkMenu	*menu,
     }
 }
 
+GtkAccelGroup*
+gtk_menu_get_accel_group (GtkMenu *menu)
+{
+  g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
+
+  return menu->accel_group;
+}
+
+GtkAccelGroup*
+gtk_menu_ensure_uline_accel_group (GtkMenu *menu)
+{
+  GtkAccelGroup *accel_group;
+
+  g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
+
+  if (!quark_uline_accel_group)
+    quark_uline_accel_group = g_quark_from_static_string ("GtkMenu-uline-accel-group");
+
+  accel_group = gtk_object_get_data_by_id (GTK_OBJECT (menu), quark_uline_accel_group);
+  if (!accel_group)
+    {
+      accel_group = gtk_accel_group_new ();
+      gtk_accel_group_attach (accel_group, GTK_OBJECT (menu));
+      gtk_object_set_data_by_id_full (GTK_OBJECT (menu),
+				      quark_uline_accel_group,
+				      accel_group,
+				      (GtkDestroyNotify) gtk_accel_group_unref);
+    }
+
+  return accel_group;
+}
+
+GtkAccelGroup*
+gtk_menu_get_uline_accel_group (GtkMenu *menu)
+{
+  g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
+
+  return gtk_object_get_data_by_id (GTK_OBJECT (menu), quark_uline_accel_group);
+}
 
 void
 gtk_menu_reposition (GtkMenu *menu)
@@ -614,10 +710,10 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	      
 	      menu->tearoff_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	      gtk_widget_set_app_paintable (menu->tearoff_window, TRUE);
-	      gtk_signal_connect_object (GTK_OBJECT (menu->tearoff_window),  
-					 "key_press_event",
-					 GTK_SIGNAL_FUNC (gtk_menu_key_press), 
-					 GTK_OBJECT (menu));
+	      gtk_signal_connect (GTK_OBJECT (menu->tearoff_window),  
+				  "event",
+				  GTK_SIGNAL_FUNC (gtk_menu_window_event), 
+				  GTK_OBJECT (menu));
 	      gtk_widget_realize (menu->tearoff_window);
 	      
 	      title = gtk_object_get_data (GTK_OBJECT (menu), "gtk-menu-title");
@@ -888,16 +984,19 @@ gtk_menu_expose (GtkWidget	*widget,
   GtkWidget *child;
   GdkEventExpose child_event;
   GList *children;
+  GtkMenu *menu;
   
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
+
+  menu_shell = GTK_MENU_SHELL (widget);
+  menu = GTK_MENU (widget);
   
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       gtk_menu_paint (widget);
       
-      menu_shell = GTK_MENU_SHELL (widget);
       child_event = *event;
       
       children = menu_shell->children;
@@ -943,59 +1042,62 @@ gtk_menu_key_press (GtkWidget	*widget,
     }
 
   /* Modify the accelerators */
-  if (delete || gtk_accelerator_valid (event->keyval, event->keyval))
+  if (menu_shell->active_menu_item &&
+      GTK_BIN (menu_shell->active_menu_item)->child &&
+      GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu == NULL &&
+      !gtk_widget_accelerators_locked (menu_shell->active_menu_item) &&
+      (delete ||
+       (gtk_accelerator_valid (event->keyval, event->state) &&
+	(event->state ||
+	 !gtk_menu_get_uline_accel_group (GTK_MENU (menu_shell)) ||
+	 (event->keyval >= GDK_F1 && event->keyval <= GDK_F35)))))
     {
-      if (menu_shell->active_menu_item &&
-	  GTK_BIN (menu_shell->active_menu_item)->child &&
-	  GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu == NULL)
+      GtkMenuItem *menu_item;
+      GtkAccelGroup *accel_group;
+      
+      menu_item = GTK_MENU_ITEM (menu_shell->active_menu_item);
+      
+      if (!GTK_MENU (widget)->accel_group)
+	accel_group = gtk_accel_group_get_default ();
+      else
+	accel_group = GTK_MENU (widget)->accel_group;
+      
+      gtk_widget_remove_accelerators (GTK_WIDGET (menu_item),
+				      gtk_signal_name (menu_item->accelerator_signal),
+				      TRUE);
+      
+      if (!delete &&
+	  0 == gtk_widget_accelerator_signal (GTK_WIDGET (menu_item),
+					      accel_group,
+					      event->keyval,
+					      event->state))
 	{
-	  GtkMenuItem *menu_item;
-	  GtkAccelGroup *accel_group;
+	  GSList *slist;
 	  
-	  menu_item = GTK_MENU_ITEM (menu_shell->active_menu_item);
-	  
-	  if (!GTK_MENU (widget)->accel_group)
-	    accel_group = gtk_accel_group_get_default ();
-	  else
-	    accel_group = GTK_MENU (widget)->accel_group;
-
-	  gtk_widget_remove_accelerators (GTK_WIDGET (menu_item),
-					  gtk_signal_name (menu_item->accelerator_signal),
-					  TRUE);
-	  
-	  if (!delete &&
-	      0 == gtk_widget_accelerator_signal (GTK_WIDGET (menu_item),
-						  accel_group,
-						  event->keyval,
-						  event->state))
+	  slist = gtk_accel_group_entries_from_object (GTK_OBJECT (menu_item));
+	  while (slist)
 	    {
-	      GSList *slist;
+	      GtkAccelEntry *ac_entry;
 	      
-	      slist = gtk_accel_group_entries_from_object (GTK_OBJECT (menu_item));
-	      while (slist)
-		{
-		  GtkAccelEntry *ac_entry;
-		  
-		  ac_entry = slist->data;
-		  
-		  if (ac_entry->signal_id == menu_item->accelerator_signal)
-		    break;
-		  
-		  slist = slist->next;
-		}
-
-	      if (!slist)
-		gtk_widget_add_accelerator (GTK_WIDGET (menu_item),
-					    gtk_signal_name (menu_item->accelerator_signal),
-					    accel_group,
-					    event->keyval,
-					    event->state,
-					    GTK_ACCEL_VISIBLE);
+	      ac_entry = slist->data;
+	      
+	      if (ac_entry->signal_id == menu_item->accelerator_signal)
+		break;
+	      
+	      slist = slist->next;
 	    }
+	  
+	  if (!slist)
+	    gtk_widget_add_accelerator (GTK_WIDGET (menu_item),
+					gtk_signal_name (menu_item->accelerator_signal),
+					accel_group,
+					event->keyval,
+					event->state,
+					GTK_ACCEL_VISIBLE);
 	}
     }
   
-  return FALSE;
+  return TRUE;
 }
 
 static gint 
@@ -1004,20 +1106,28 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
 {
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
-
+  
   if (GTK_MENU_SHELL (widget)->ignore_enter)
     GTK_MENU_SHELL (widget)->ignore_enter = FALSE;
-  else
+  else 
     {
-      GdkEvent send_event;
+      gint width, height;
 
-      send_event.crossing.type = GDK_ENTER_NOTIFY;
-      send_event.crossing.window = event->window;
-      send_event.crossing.time = event->time;
-
-      gtk_widget_event (widget, &send_event);
+      gdk_window_get_size (event->window, &width, &height);
+      if (event->x >= 0 && event->x < width &&
+	  event->y >= 0 && event->y < height)
+	{
+	  GdkEvent send_event;
+	  
+	  send_event.crossing.type = GDK_ENTER_NOTIFY;
+	  send_event.crossing.window = event->window;
+	  send_event.crossing.time = event->time;
+	  send_event.crossing.send_event = TRUE;
+	  
+	  gtk_widget_event (widget, &send_event);
+	}
     }
-      
+
   return FALSE;
 }
 
@@ -1111,6 +1221,7 @@ gtk_menu_reparent (GtkMenu      *menu,
     }
   else
     gtk_widget_reparent (GTK_WIDGET (menu), new_parent);
+  gtk_widget_set_usize (new_parent, -1, -1);
   
   if (was_floating)
     GTK_OBJECT_SET_FLAGS (object, GTK_FLOATING);

@@ -1015,7 +1015,7 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
 			      0,
 			      MAX ((gint)widget->allocation.height - dy, 0),
 			      widget->allocation.width,
-			      MIN (dy, widget->allocation.width));
+			      MIN (dy, widget->allocation.height));
     }
   else if (dy < 0)
     {
@@ -1037,8 +1037,8 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
       gtk_layout_expose_area (layout, 
 			      0,
 			      0,
-			      widget->allocation.height,
-			      MIN (-dy, (gint)widget->allocation.width));
+			      widget->allocation.width,
+			      MIN (-dy, (gint)widget->allocation.height));
     }
 
   gtk_layout_position_children (layout);

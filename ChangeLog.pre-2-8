@@ -1,3 +1,153 @@
+Wed Mar 17 01:46:28 1999  Tim Janik  <timj@gtk.org>
+
+	* merges from gtk-1-2:
+
+Tue Mar 16 17:43:33 1999  Tim Janik  <timj@gtk.org>
+
+        * gtk/gtkitemfactory.c (gtk_item_factory_parse_rc_string): ensure the
+        item factory class has been created.
+        (gtk_item_factory_parse_rc): likewise.
+
+        * gtk/gtkmenu.c:
+        keep proper references for old_active_menu_item.
+        (gtk_menu_reparent): unset the usize of the new parent,
+        so the menu can sanely be size requested and we don't get nasty screen
+        artefacts upon next reparentation.
+        (gtk_menu_motion_notify): set send_event to TRUE if we synthesize an
+        enter notify. only synthesize enter notifies if the pointer really is
+        inside the event window.
+        (gtk_menu_popdown): use gtk_menu_shell_deselect().
+        (gtk_menu_popup): move the background setting stuff into
+        gtk_menu_tearoff_bg_copy() so it can be called from other places as well.
+
+        * gtk/gtkmenushell.c (gtk_menu_shell_button_press): use
+        gtk_menu_shell_select_item() to select the new item.
+        (gtk_menu_shell_deselect): export this function, so gtkmenu.c can
+        do the right thing for deselection as well.
+
+Sat Mar 15 20:10:33 1999  Tim Janik  <timj@gtk.org>
+
+        * gtk/gtkwidget.[hc]:
+        (gtk_widget_accelerators_locked): return whether a widget's accelerators
+        are locked.
+
+        * gtk/gtkmenu.c (gtk_menu_key_press): don't remove or install new or
+        existing accelerators if the widget's accelerators are locked.
+
+Sat Mar 14 19:44:05 1999  Tim Janik  <timj@gtk.org>
+
+        * gtk/gtkitemfactory.[hc]: allow managing of foreign menu items.
+
+        * gtk/gtkmenu.c: truely forward key press and key release events to
+        the menu widget from the toplevel or tearoff window. we can't simply
+        connect to that, we need to stop further processing of the events as
+        well.
+
+Sat Mar 13 13:14:17 1999  Tim Janik  <timj@gtk.org>
+
+        * gtk/gtkmenu.c:
+        (gtk_menu_key_press): pass event->keyval, event->state to
+        gtk_accelerator_valid, instead of event->keyval twice.
+        refuse to install single letter accelerators for menus that use
+        single letter shortcuts.
+
+        * gtk/gtkitemfactory.c (gtk_item_factory_create_item): use
+        gtk_menu_ensure_uline_accel_group().
+
+        * gtk/gtkmenu.[hc]: added gtk_menu_ensure_uline_accel_group()
+        which will always return an uline accel group, made
+        gtk_menu_get_uline_accel_group() return NULL if the group isn't
+        yet created.
+
+Mon Mar 15 01:03:27 1999  Lars Hamann  <lars@gtk.org>
+
+        * gtk/gtkclist.h (struct _GtkCListColumn): added button_passive flag.
+
+        * gtk/gtkclist.c (gtk_clist_column_title_passive):
+        Leave button sensitive, trap  button_press, button_release,
+        motion_notify, enter_notify and leave_notify events instead.
+        (gtk_clist_column_title_active): disconnect event handler.
+        (gtk_clist_drag_data_get): fixed memory leak. Reported by
+        Guillaume Laurent <glaurent@worldnet.fr>
+
+Wed Mar 10 23:49:55 1999  Lars Hamann  <lars@gtk.org>
+
+        * gtk/gtklayout.c (gtk_layout_adjustment_changed): fixed a few
+        width/height mixups.
+
+        * gtk/gtkctree.c (tree_delete): emit an tree_unselect_row signal
+        if needed.
+
+Wed Mar 10 00:11:32 1999  Tim Janik  <timj@gtk.org>
+
+        * gtk/testgtk.c (create_item_factory): unref the item factory after
+        window's destruction.
+
+        * gtk/gtkmenushell.c (gtk_menu_shell_activate_item): keep a reference
+        count on the menu shell around the menu item's activation, since the
+        signal emission may cause menu shell destruction.
+
+        * gtk/gtkitemfactory.c:
+        the previous code leaked one accel group per menu. we use
+        gtk_menu_get_uline_accel_group() now to fix that, and with that
+        also create the underline accelerator group of the menus only if
+        required (i.e. an underline accelerator has been specified).
+        (gtk_item_factory_construct):
+        (gtk_item_factory_create_item): removed code that would create an
+        extra accel group for the menu (and leak references).
+        (gtk_item_factory_create_item): adapted the underline accelerator
+        installation code to properly feature gtk_menu_get_uline_accel_group().
+
+        * gtk/gtkmenu.[hc]: added gtk_menu_get_accel_group() to retrive
+        menu->accel_group, this may return NULL if the accelerator group
+        hasn't been set yet.
+        added gtk_menu_get_uline_accel_group() to retrive the underline
+        accelerator group of the menu, this will be created on demand
+        and proper care is taken about its reference count.
+
+        * gtk/gtkitemfactory.h:
+        * gtk/gtkitemfactory.c:
+        dumped the approach of keeping a widgets by action list on the
+        factory since the factory<->widget destroy negotiation didn't work
+        and would be hard to get going at all. instead we keep a list of
+        GtkItemFactoryItem items on the factory (GtkItemFactoryItems are
+        persistant throughout a program's life time).
+        also, i removed the static const gchar *key_* variables, and made
+        them inline strings (they weren't actually used anyways).
+        (gtk_item_factory_add_item): update ifactory->items.
+        (gtk_item_factory_destroy): destroy ifactory->items (and remove
+        the item factory pointer from the remaining ifactory widgets).
+        (gtk_item_factory_get_widget_by_action): walk the GtkItemFactoryItem
+        list to find the widget.
+        (gtk_item_factory_get_item): new function that works around
+        gtk_item_factory_get_widget() limitations, this function will only
+        return menu items, even for <Branch> entries.
+
+Tue Mar  9 01:01:28 1999  Tim Janik  <timj@gtk.org>
+
+        * gdk/gdkfont.c (gdk_font_load): first lookup the xfont ID in our
+        font hash table, if we have a GdkFontPrivate entry for this font
+        already, simply increment its reference count, provided by Olaf Dietsche
+        <olaf.dietsche+list.gtk@netcologne.de>.
+
+        * gtk/gtkstyle.c (gtk_style_copy): plug a GdkFont reference leak, fix
+        provided by Olaf Dietsche <olaf.dietsche+list.gtk@netcologne.de>.
+
+Sun Mar  7 06:13:29 1999  Tim Janik  <timj@gtk.org>
+
+        * gtk/gtkcontainer.c:
+        (gtk_container_add_with_args):
+        (gtk_container_addv):
+        (gtk_container_add): before adding a child to a conatiner, make sure
+        it is (default) constructed, this is neccessary because under certain
+        circumstances the child will get relized and mapped immediatedly, in
+        which case it has to be constructed already.
+
+Mon Mar  1 17:58:21 1999  Tim Janik  <timj@gtk.org>
+
+        * gtk/gtksignal.c (gtk_signal_connect_by_type): count object_signal
+        values > 1 as TRUE also.
+
 1999-03-16  Tor Lillqvist  <tml@iki.fi>
 
 	* README.win32: New file.

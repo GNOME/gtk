@@ -2418,8 +2418,12 @@ create_item_factory (void)
       
       accel_group = gtk_accel_group_new ();
       item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accel_group);
-      gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);
+      gtk_object_set_data_full (GTK_OBJECT (window),
+				"<main>",
+				item_factory,
+				(GtkDestroyNotify) gtk_object_unref);
       gtk_accel_group_attach (accel_group, GTK_OBJECT (window));
+      gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);
       gtk_window_set_title (GTK_WINDOW (window), "Item Factory");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
       

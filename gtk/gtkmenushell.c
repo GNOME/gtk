@@ -137,7 +137,6 @@ static GtkWidget *gtk_menu_shell_get_item    (GtkMenuShell      *menu_shell,
 					      GdkEvent          *event);
 static GtkType    gtk_menu_shell_child_type  (GtkContainer      *container);
 
-static void       gtk_menu_shell_deselect    (GtkMenuShell      *menu_shell);
 static void gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
 					      GtkMenuDirectionType direction);
 static void gtk_real_menu_shell_activate_current (GtkMenuShell      *menu_shell,
@@ -435,15 +434,7 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
 	{
 	  if ((menu_item->parent == widget) &&
 	      (menu_item != menu_shell->active_menu_item))
-	    {
-	      if (menu_shell->active_menu_item)
-		gtk_menu_item_deselect (GTK_MENU_ITEM (menu_shell->active_menu_item));
-	      
-	      menu_shell->active_menu_item = menu_item;
-	      gtk_menu_item_set_placement (GTK_MENU_ITEM (menu_shell->active_menu_item),
-					   MENU_SHELL_CLASS (menu_shell)->submenu_placement);
-	      gtk_menu_item_select (GTK_MENU_ITEM (menu_shell->active_menu_item));
-	    }
+	    gtk_menu_shell_select_item (menu_shell, menu_item);
 	}
     }
   else
@@ -755,7 +746,7 @@ gtk_menu_shell_is_item (GtkMenuShell *menu_shell,
   return FALSE;
 }
 
-static GtkWidget *
+static GtkWidget*
 gtk_menu_shell_get_item (GtkMenuShell *menu_shell,
 			 GdkEvent     *event)
 {
@@ -775,16 +766,15 @@ gtk_menu_shell_get_item (GtkMenuShell *menu_shell,
 /* Handlers for action signals */
 
 void
-gtk_menu_shell_select_item (GtkMenuShell      *menu_shell,
-			    GtkWidget         *menu_item)
+gtk_menu_shell_select_item (GtkMenuShell *menu_shell,
+			    GtkWidget    *menu_item)
 {
   g_return_if_fail (menu_shell != NULL);
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
   g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
-  if (menu_shell->active_menu_item)
-    gtk_menu_item_deselect (GTK_MENU_ITEM (menu_shell->active_menu_item));
+  gtk_menu_shell_deselect (menu_shell);
   
   menu_shell->active_menu_item = menu_item;
   gtk_menu_item_set_placement (GTK_MENU_ITEM (menu_shell->active_menu_item),
@@ -798,11 +788,16 @@ gtk_menu_shell_select_item (GtkMenuShell      *menu_shell,
     gtk_widget_activate (menu_shell->active_menu_item);
 }
 
-static void
-gtk_menu_shell_deselect (GtkMenuShell      *menu_shell)
+void
+gtk_menu_shell_deselect (GtkMenuShell *menu_shell)
 {
-  gtk_menu_item_deselect (GTK_MENU_ITEM (menu_shell->active_menu_item));
-  menu_shell->active_menu_item = NULL;
+  g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
+
+  if (menu_shell->active_menu_item)
+    {
+      gtk_menu_item_deselect (GTK_MENU_ITEM (menu_shell->active_menu_item));
+      menu_shell->active_menu_item = NULL;
+    }
 }
 
 void
@@ -831,10 +826,13 @@ gtk_menu_shell_activate_item (GtkMenuShell      *menu_shell,
        */
       gdk_flush ();
     }
+
+  gtk_widget_ref (GTK_WIDGET (menu_shell));
   gtk_widget_activate (menu_item);
 
   if (deactivate)
     gtk_signal_emit (GTK_OBJECT (menu_shell), menu_shell_signals[SELECTION_DONE]);
+  gtk_widget_unref (GTK_WIDGET (menu_shell));
 }
 
 /* Distance should be +/- 1 */

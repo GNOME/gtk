@@ -3065,24 +3065,7 @@ tree_delete (GtkCTree     *ctree,
 	     GtkCTreeNode *node, 
 	     gpointer      data)
 {
-  GtkCList *clist;
-  
-  clist = GTK_CLIST (ctree);
-  
-  if (GTK_CTREE_ROW (node)->row.state == GTK_STATE_SELECTED)
-    {
-      GList *work;
-
-      work = g_list_find (clist->selection, node);
-      if (work)
-	{
-	  if (clist->selection_end && clist->selection_end == work)
-	    clist->selection_end = clist->selection_end->prev;
-	  clist->selection = g_list_remove_link (clist->selection, work);
-	  g_list_free_1 (work);
-	}
-    }
-
+  tree_unselect (ctree,  node, NULL);
   row_delete (ctree, GTK_CTREE_ROW (node));
   g_list_free_1 ((GList *)node);
 }
