@@ -164,7 +164,7 @@ static gint     gtk_tree_view_focus_in             (GtkWidget        *widget,
 						    GdkEventFocus    *event);
 static gint     gtk_tree_view_focus_out            (GtkWidget        *widget,
 						    GdkEventFocus    *event);
-static gint     gtk_tree_view_focus                (GtkContainer     *container,
+static gint     gtk_tree_view_focus                (GtkWidget        *widget,
 						    GtkDirectionType  direction);
 
 /* container signals */
@@ -418,11 +418,11 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->drag_motion = gtk_tree_view_drag_motion;
   widget_class->drag_drop = gtk_tree_view_drag_drop;
   widget_class->drag_data_received = gtk_tree_view_drag_data_received;
-
+  widget_class->focus = gtk_tree_view_focus;
+  
   /* GtkContainer signals */
   container_class->remove = gtk_tree_view_remove;
   container_class->forall = gtk_tree_view_forall;
-  container_class->focus = gtk_tree_view_focus;
   container_class->set_focus_child = gtk_tree_view_set_focus_child;
 
   class->set_scroll_adjustments = gtk_tree_view_set_adjustments;
@@ -3784,7 +3784,7 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
 	  break;
 	}
 
-      if (gtk_container_focus (GTK_CONTAINER (focus_child), dir))
+      if (gtk_widget_child_focus (focus_child, dir))
 	{
 	  /* The focus moves inside the button. */
 	  /* This is probably a great example of bad UI */
@@ -3880,7 +3880,7 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
  * handling scrolling by keyboard, such that in cases.
  */
 static gint
-gtk_tree_view_focus (GtkContainer     *container,
+gtk_tree_view_focus (GtkWidget        *widget,
 		     GtkDirectionType  direction)
 {
   GtkTreeView *tree_view;
@@ -3889,11 +3889,13 @@ gtk_tree_view_focus (GtkContainer     *container,
   GtkRBTree *cursor_tree;
   GtkRBNode *cursor_node;
   GtkTreePath *cursor_path;
+  GtkContainer *container;
 
-  g_return_val_if_fail (GTK_IS_TREE_VIEW (container), FALSE);
-  g_return_val_if_fail (GTK_WIDGET_VISIBLE (container), FALSE);
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (widget), FALSE);
+  g_return_val_if_fail (GTK_WIDGET_VISIBLE (widget), FALSE);
 
-  tree_view = GTK_TREE_VIEW (container);
+  container = GTK_CONTAINER (widget);
+  tree_view = GTK_TREE_VIEW (widget);
 
   if (!GTK_WIDGET_IS_SENSITIVE (container))
     return FALSE;

@@ -1530,6 +1530,15 @@ GtkWidget
 @event: 
 @Returns: 
 
+<!-- ##### SIGNAL GtkWidget::focus ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
+@Returns: 
+
 <!-- ##### SIGNAL GtkWidget::focus-in-event ##### -->
 <para>
 

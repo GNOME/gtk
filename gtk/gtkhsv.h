@@ -50,8 +50,7 @@ typedef struct _GtkHSVClass GtkHSVClass;
 
 struct _GtkHSV
 {
-  /* we derive from container purely so we can have a _focus method */
-  GtkContainer parent_instance;
+  GtkWidget parent_instance;
   
   /* Private data */
   gpointer priv;

@@ -2210,7 +2210,7 @@ gtk_text_buffer_remove_all_tags (GtkTextBuffer     *buffer,
         }
     }
 
-  g_list_foreach (tags, (GFunc) g_object_ref, NULL);
+  g_slist_foreach (tags, (GFunc) g_object_ref, NULL);
   
   tmp_list = tags;
   while (tmp_list != NULL)
@@ -2222,7 +2222,7 @@ gtk_text_buffer_remove_all_tags (GtkTextBuffer     *buffer,
       tmp_list = tmp_list->next;
     }
 
-  g_list_foreach (tags, (GFunc) g_object_unref, NULL);
+  g_slist_foreach (tags, (GFunc) g_object_unref, NULL);
   
   g_slist_free (tags);
 }

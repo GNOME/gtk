@@ -69,6 +69,7 @@ enum {
   REMOVE_ACCELERATOR,
   ACTIVATE_MNEMONIC,
   GRAB_FOCUS,
+  FOCUS,
   EVENT,
   BUTTON_PRESS_EVENT,
   BUTTON_RELEASE_EVENT,
@@ -179,6 +180,8 @@ static void gtk_widget_style_set		 (GtkWidget	    *widget,
 static void gtk_widget_direction_changed	 (GtkWidget	    *widget,
 						  GtkTextDirection   previous_direction);
 static void gtk_widget_real_grab_focus           (GtkWidget         *focus_widget);
+static gboolean gtk_widget_real_focus            (GtkWidget         *widget,
+                                                  GtkDirectionType   direction);
 
 static GdkColormap*  gtk_widget_peek_colormap      (void);
 static GtkStyle*     gtk_widget_peek_style         (void);
@@ -323,6 +326,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->remove_accelerator = (void*) gtk_accel_group_handle_remove;
   klass->mnemonic_activate = gtk_widget_real_mnemonic_activate;
   klass->grab_focus = gtk_widget_real_grab_focus;
+  klass->focus = gtk_widget_real_focus;
   klass->event = NULL;
   klass->button_press_event = NULL;
   klass->button_release_event = NULL;
@@ -650,6 +654,15 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, grab_focus),
 		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
+  widget_signals[FOCUS] =
+    g_signal_newc ("focus",
+                   G_TYPE_FROM_CLASS (object_class),
+                   G_SIGNAL_RUN_LAST,
+                   G_STRUCT_OFFSET (GtkWidgetClass, focus),
+                   _gtk_boolean_handled_accumulator, NULL,
+                   gtk_marshal_BOOLEAN__ENUM,
+                   G_TYPE_BOOLEAN, 1,
+                   GTK_TYPE_DIRECTION_TYPE);
   widget_signals[EVENT] =
     g_signal_newc ("event",
 		   G_TYPE_FROM_CLASS(object_class),
@@ -3021,6 +3034,23 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
     }
 }
 
+static gboolean
+gtk_widget_real_focus (GtkWidget         *widget,
+                       GtkDirectionType   direction)
+{
+  if (!GTK_WIDGET_CAN_FOCUS (widget))
+    return FALSE;
+  
+  if (!GTK_WIDGET_HAS_FOCUS (widget))
+    {
+      gtk_widget_grab_focus (widget);
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
+
+
 /**
  * gtk_widget_is_focus:
  * @widget: a #GtkWidget
@@ -4118,6 +4148,66 @@ gtk_widget_get_parent_window   (GtkWidget           *widget)
 					     quark_parent_window);
 
   return (parent_window != NULL) ? parent_window : widget->parent->window;
+}
+
+/**
+ * gtk_widget_child_focus:
+ * @widget: a #GtkWidget
+ * @direction: direction of focus movement
+ *
+ * This function is used by custom widget implementations; if you're
+ * writing an app, you'd use gtk_widget_grab_focus() to move the focus
+ * to a particular widget, and gtk_container_set_focus_chain() to
+ * change the focus tab order. So you may want to investigate those
+ * functions instead.
+ * 
+ * gtk_widget_child_focus() is called by containers as the user moves
+ * around the window using keyboard shortcuts. @direction indicates
+ * what kind of motion is taking place (up, down, left, right, tab
+ * forward, tab backward).  gtk_widget_child_focus() invokes the
+ * "focus" signal on #GtkWidget; widgets override the default handler
+ * for this signal in order to implement appropriate focus behavior.
+ *
+ * The "focus" default handler for a widget should return %TRUE if
+ * moving in @direction left the focus on a focusable location inside
+ * that widget, and %FALSE if moving in @direction moved the focus
+ * outside the widget. If returning %TRUE, widgets normally
+ * call gtk_widget_grab_focus() to place the focus accordingly;
+ * if returning %FALSE, they don't modify the current focus location.
+ * 
+ * This function replaces gtk_container_focus() from GTK+ 1.2.  It was
+ * necessary to check that the child was visible, sensitive, and
+ * focusable before calling
+ * gtk_container_focus(). gtk_widget_child_focus() returns %FALSE if
+ * the widget is not currently in a focusable state, so there's no
+ * need for those checks.
+ * 
+ * Return value: %TRUE if focus ended up inside @widget
+ **/
+gboolean
+gtk_widget_child_focus (GtkWidget       *widget,
+                        GtkDirectionType direction)
+{
+  gboolean return_val;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  if (!GTK_WIDGET_VISIBLE (widget) ||
+      !GTK_WIDGET_IS_SENSITIVE (widget))
+    return FALSE;
+
+  /* child widgets must set CAN_FOCUS, containers
+   * don't have to though.
+   */
+  if (!GTK_IS_CONTAINER (widget) &&
+      !GTK_WIDGET_CAN_FOCUS (widget))
+    return FALSE;
+  
+  gtk_signal_emit (GTK_OBJECT (widget),
+                   widget_signals[FOCUS],
+                   direction, &return_val);
+
+  return return_val;
 }
 
 /* Update the position from aux_info. Used from gtk_widget_set_uposition

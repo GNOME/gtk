@@ -103,7 +103,7 @@ static gint gtk_hsv_motion         (GtkWidget      *widget,
 				    GdkEventMotion *event);
 static gint gtk_hsv_expose         (GtkWidget      *widget,
 				    GdkEventExpose *event);
-static gboolean gtk_hsv_focus      (GtkContainer    *container,
+static gboolean gtk_hsv_focus      (GtkWidget       *widget,
                                     GtkDirectionType direction);
 
 static void gtk_hsv_move           (GtkHSV          *hsv,
@@ -139,7 +139,7 @@ gtk_hsv_get_type (void)
       (GtkClassInitFunc) NULL
     };
     
-    hsv_type = gtk_type_unique (GTK_TYPE_CONTAINER, &hsv_info);
+    hsv_type = gtk_type_unique (GTK_TYPE_WIDGET, &hsv_info);
   }
   
   return hsv_type;
@@ -151,13 +151,11 @@ gtk_hsv_class_init (GtkHSVClass *class)
 {
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
-  GtkContainerClass *container_class;
   GtkHSVClass    *hsv_class;
   GtkBindingSet *binding_set;
   
   object_class = (GtkObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
-  container_class = GTK_CONTAINER_CLASS (class);
   hsv_class = GTK_HSV_CLASS (class);
   
   parent_class = gtk_type_class (GTK_TYPE_WIDGET);  
@@ -174,8 +172,7 @@ gtk_hsv_class_init (GtkHSVClass *class)
   widget_class->button_release_event = gtk_hsv_button_release;
   widget_class->motion_notify_event = gtk_hsv_motion;
   widget_class->expose_event = gtk_hsv_expose;
-
-  container_class->focus = gtk_hsv_focus;
+  widget_class->focus = gtk_hsv_focus;
   
   hsv_class->move = gtk_hsv_move;
   
@@ -1357,18 +1354,14 @@ gtk_hsv_expose (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_hsv_focus (GtkContainer    *container,
+gtk_hsv_focus (GtkWidget       *widget,
                GtkDirectionType dir)
 {
   GtkHSV *hsv;
   HSVPrivate *priv;
 
-  hsv = GTK_HSV (container);
+  hsv = GTK_HSV (widget);
   priv = hsv->priv;
-  
-  if (!GTK_WIDGET_DRAWABLE (container) ||
-      !GTK_WIDGET_IS_SENSITIVE (container))
-    return FALSE;
 
   if (!GTK_WIDGET_HAS_FOCUS (hsv))
     {

@@ -57,7 +57,7 @@ static void            gtk_socket_claim_focus          (GtkSocket        *socket
 static gboolean        gtk_socket_focus_out_event      (GtkWidget        *widget,
 							GdkEventFocus    *event);
 static void            gtk_socket_send_configure_event (GtkSocket        *socket);
-static gboolean        gtk_socket_focus                (GtkContainer     *container,
+static gboolean        gtk_socket_focus                (GtkWidget        *widget,
 							GtkDirectionType  direction);
 static GdkFilterReturn gtk_socket_filter_func          (GdkXEvent        *gdk_xevent,
 							GdkEvent         *event,
@@ -126,7 +126,7 @@ gtk_socket_class_init (GtkSocketClass *class)
   widget_class->focus_in_event = gtk_socket_focus_in_event;
   widget_class->focus_out_event = gtk_socket_focus_out_event;
 
-  container_class->focus = gtk_socket_focus;
+  widget_class->focus = gtk_socket_focus;
 }
 
 static void
@@ -702,16 +702,16 @@ gtk_socket_claim_focus (GtkSocket *socket)
 }
 
 static gboolean
-gtk_socket_focus (GtkContainer *container, GtkDirectionType direction)
+gtk_socket_focus (GtkWidget *widget, GtkDirectionType direction)
 {
   GtkSocket *socket;
   gint detail = -1;
 
-  g_return_val_if_fail (GTK_IS_SOCKET (container), FALSE);
+  g_return_val_if_fail (GTK_IS_SOCKET (widget), FALSE);
   
-  socket = GTK_SOCKET (container);
+  socket = GTK_SOCKET (widget);
 
-  if (!GTK_WIDGET_HAS_FOCUS (container))
+  if (!GTK_WIDGET_HAS_FOCUS (widget))
     {
       switch (direction)
 	{
@@ -730,8 +730,8 @@ gtk_socket_focus (GtkContainer *container, GtkDirectionType direction)
       send_xembed_message (socket, XEMBED_FOCUS_IN, detail, 0, 0,
 			   gtk_get_current_event_time ());
 
-      GTK_WIDGET_SET_FLAGS (container, GTK_HAS_FOCUS);
-      gtk_widget_grab_focus (GTK_WIDGET (container));
+      GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
+      gtk_widget_grab_focus (widget);
  
       return TRUE;
     }
@@ -935,11 +935,11 @@ handle_xembed_message (GtkSocket *socket,
     case XEMBED_FOCUS_PREV:
       {
 	GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
-	if (toplevel && GTK_IS_CONTAINER (toplevel))
+	if (toplevel)
 	  {
-	    gtk_container_focus (GTK_CONTAINER (toplevel),
-				 (message == XEMBED_FOCUS_NEXT ?
-				  GTK_DIR_TAB_FORWARD : GTK_DIR_TAB_BACKWARD));
+	    gtk_widget_child_focus (toplevel,
+                                    (message == XEMBED_FOCUS_NEXT ?
+                                     GTK_DIR_TAB_FORWARD : GTK_DIR_TAB_BACKWARD));
 	  }
 	break;
       }

@@ -83,9 +83,7 @@ struct _GtkContainerClass
   void (* forall)     		(GtkContainer	 *container,
 				 gboolean	  include_internals,
 				 GtkCallback	  callback,
-				 gpointer	  callbabck_data);
-  gboolean (* focus)   		(GtkContainer	 *container,
-				 GtkDirectionType  direction);
+				 gpointer	  callback_data);
   void (* set_focus_child)	(GtkContainer	 *container,
 				 GtkWidget	 *widget);
   GtkType (*child_type)		(GtkContainer	*container);
@@ -129,8 +127,6 @@ void     gtk_container_foreach_full (GtkContainer       *container,
 				     gpointer            callback_data,
 				     GtkDestroyNotify    notify);
 GList*   gtk_container_children     (GtkContainer       *container);
-gboolean gtk_container_focus        (GtkContainer       *container,
-				     GtkDirectionType    direction);
 void     gtk_container_propagate_expose (GtkContainer   *container,
 					 GtkWidget      *child,
 					 GdkEventExpose *event);
@@ -203,8 +199,7 @@ void    gtk_container_addv		   (GtkContainer      *container,
 void	gtk_container_child_set		   (GtkContainer      *container,
 					    GtkWidget         *child,
 					    const gchar	      *first_arg_name,
-					    ...);
-     
+					    ...);     
 
 /* Non-public methods */
 

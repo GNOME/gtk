@@ -75,6 +75,9 @@ static gint gtk_list_button_press    (GtkWidget      *widget,
 static gint gtk_list_button_release  (GtkWidget	     *widget,
 				      GdkEventButton *event);
 
+static gboolean gtk_list_focus       (GtkWidget        *widget,
+                                      GtkDirectionType  direction);
+
 /*** GtkContainer Methods ***/
 static void gtk_list_add	     (GtkContainer     *container,
 				      GtkWidget        *widget);
@@ -87,8 +90,6 @@ static void gtk_list_forall	     (GtkContainer     *container,
 static GtkType gtk_list_child_type   (GtkContainer     *container);
 static void gtk_list_set_focus_child (GtkContainer     *container,
 				      GtkWidget        *widget);
-static gint gtk_list_focus           (GtkContainer     *container,
-				      GtkDirectionType  direction);
 
 /*** GtkList Private Functions ***/
 static void gtk_list_move_focus_child      (GtkList       *list,
@@ -228,13 +229,13 @@ gtk_list_class_init (GtkListClass *class)
   widget_class->size_request = gtk_list_size_request;
   widget_class->size_allocate = gtk_list_size_allocate;
   widget_class->drag_begin = gtk_list_drag_begin;
-
+  widget_class->focus = gtk_list_focus;
+  
   container_class->add = gtk_list_add;
   container_class->remove = gtk_list_remove;
   container_class->forall = gtk_list_forall;
   container_class->child_type = gtk_list_child_type;
   container_class->set_focus_child = gtk_list_set_focus_child;
-  container_class->focus = gtk_list_focus;
 
   class->selection_changed = NULL;
   class->select_child = gtk_real_list_select_child;
@@ -973,15 +974,15 @@ gtk_list_set_focus_child (GtkContainer *container,
     }
 }
 
-static gint
-gtk_list_focus (GtkContainer     *container,
+static gboolean
+gtk_list_focus (GtkWidget        *widget,
 		GtkDirectionType  direction)
 {
   gint return_val = FALSE;
+  GtkContainer *container;
 
-  g_return_val_if_fail (container != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_LIST (container), FALSE);
-
+  container = GTK_CONTAINER (widget);
+  
   if (container->focus_child == NULL ||
       !GTK_WIDGET_HAS_FOCUS (container->focus_child))
     {
@@ -989,9 +990,9 @@ gtk_list_focus (GtkContainer     *container,
 	gtk_container_set_focus_child
 	  (container, GTK_LIST (container)->last_focus_child);
 
-      if (GTK_CONTAINER_CLASS (parent_class)->focus)
-	return_val = GTK_CONTAINER_CLASS (parent_class)->focus (container,
-								direction);
+      if (GTK_WIDGET_CLASS (parent_class)->focus)
+	return_val = GTK_WIDGET_CLASS (parent_class)->focus (widget,
+                                                             direction);
     }
 
   if (!return_val)

@@ -276,7 +276,9 @@ struct _GtkWidgetClass
 				  gboolean      group_cycling);
   
   /* explicit focus */
-  void (* grab_focus)          (GtkWidget      *widget);
+  void (* grab_focus)          (GtkWidget        *widget);
+  gboolean (* focus)           (GtkWidget        *widget,
+                                GtkDirectionType  direction);
   
   /* events */
   gboolean (* event)			(GtkWidget	     *widget,
@@ -523,6 +525,8 @@ void	   gtk_widget_set_parent	  (GtkWidget	       *widget,
 void	   gtk_widget_set_parent_window	  (GtkWidget	       *widget,
 					   GdkWindow	       *parent_window);
 GdkWindow *gtk_widget_get_parent_window	  (GtkWidget	       *widget);
+gboolean   gtk_widget_child_focus         (GtkWidget           *widget,
+                                           GtkDirectionType     direction);
 void	   gtk_widget_set_uposition	  (GtkWidget	       *widget,
 					   gint			x,
 					   gint			y);

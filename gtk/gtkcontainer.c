@@ -39,7 +39,6 @@ enum {
   ADD,
   REMOVE,
   CHECK_RESIZE,
-  FOCUS,
   SET_FOCUS_CHILD,
   LAST_SIGNAL
 };
@@ -79,7 +78,7 @@ static void     gtk_container_add_unimplemented    (GtkContainer      *container
 static void     gtk_container_remove_unimplemented (GtkContainer      *container,
 						    GtkWidget         *widget);
 static void     gtk_container_real_check_resize    (GtkContainer      *container);
-static gboolean gtk_container_real_focus           (GtkContainer      *container,
+static gboolean gtk_container_focus                (GtkWidget         *widget,
 						    GtkDirectionType   direction);
 static void     gtk_container_real_set_focus_child (GtkContainer      *container,
 						    GtkWidget         *widget);
@@ -205,12 +204,12 @@ gtk_container_class_init (GtkContainerClass *class)
   widget_class->show_all = gtk_container_show_all;
   widget_class->hide_all = gtk_container_hide_all;
   widget_class->expose_event = gtk_container_expose;
+  widget_class->focus = gtk_container_focus;
   
   class->add = gtk_container_add_unimplemented;
   class->remove = gtk_container_remove_unimplemented;
   class->check_resize = gtk_container_real_check_resize;
   class->forall = NULL;
-  class->focus = gtk_container_real_focus;
   class->set_focus_child = gtk_container_real_set_focus_child;
   class->child_type = NULL;
   class->composite_name = gtk_container_child_default_composite_name;
@@ -238,14 +237,6 @@ gtk_container_class_init (GtkContainerClass *class)
                     GTK_SIGNAL_OFFSET (GtkContainerClass, check_resize),
 		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
-  container_signals[FOCUS] =
-    gtk_signal_new ("focus",
-                    GTK_RUN_LAST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkContainerClass, focus),
-                    gtk_marshal_ENUM__ENUM,
-		    GTK_TYPE_DIRECTION_TYPE, 1,
-                    GTK_TYPE_DIRECTION_TYPE);
   container_signals[SET_FOCUS_CHILD] =
     gtk_signal_new ("set-focus-child",
                     GTK_RUN_FIRST,
@@ -1282,22 +1273,6 @@ gtk_container_foreach_full (GtkContainer       *container,
     notify (callback_data);
 }
 
-gboolean
-gtk_container_focus (GtkContainer     *container,
-		     GtkDirectionType  direction)
-{
-  gint return_val;
-
-  g_return_val_if_fail (container != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_CONTAINER (container), FALSE);
-  
-  gtk_signal_emit (GTK_OBJECT (container),
-                   container_signals[FOCUS],
-                   direction, &return_val);
-
-  return return_val;
-}
-
 void
 gtk_container_set_focus_child (GtkContainer *container,
 			       GtkWidget    *widget)
@@ -1480,20 +1455,16 @@ filter_unfocusable (GtkContainer *container,
 }
 
 static gboolean
-gtk_container_real_focus (GtkContainer     *container,
-			  GtkDirectionType  direction)
+gtk_container_focus (GtkWidget        *widget,
+                     GtkDirectionType  direction)
 {
   GList *children;
   gint return_val;
+  GtkContainer *container;
 
-  g_return_val_if_fail (container != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_CONTAINER (container), FALSE);
+  g_return_val_if_fail (GTK_IS_CONTAINER (widget), FALSE);
 
-  /* Fail if the container is inappropriate for focus movement
-   */
-  if (!GTK_WIDGET_DRAWABLE (container) ||
-      !GTK_WIDGET_IS_SENSITIVE (container))
-    return FALSE;
+  container = GTK_CONTAINER (widget);
 
   return_val = FALSE;
 
@@ -1936,25 +1907,15 @@ gtk_container_focus_move (GtkContainer     *container,
             {
               focus_child = NULL;
 
-              if (GTK_WIDGET_DRAWABLE (child) &&
-		  GTK_IS_CONTAINER (child))
-		if (gtk_container_focus (GTK_CONTAINER (child), direction))
+		if (gtk_widget_child_focus (child, direction))
 		  return TRUE;
             }
         }
       else if (GTK_WIDGET_DRAWABLE (child) &&
                gtk_widget_is_ancestor (child, GTK_WIDGET (container)))
         {
-	  if (GTK_IS_CONTAINER (child))
-            {
-              if (gtk_container_focus (GTK_CONTAINER (child), direction))
-                return TRUE;
-            }
-          else if (GTK_WIDGET_CAN_FOCUS (child))
-            {
-              gtk_widget_grab_focus (child);
-              return TRUE;
-            }
+          if (gtk_widget_child_focus (child, direction))
+            return TRUE;
         }
     }
 

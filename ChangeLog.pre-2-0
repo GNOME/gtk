@@ -1,3 +1,23 @@
+2001-06-08  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_remove_all_tags): geez,
+	don't call g_list funcs on GSList
+
+	* gtk/gtkwidget.c (gtk_widget_child_focus): replaces
+	gtk_container_focus(), since some widgets have focusable locations
+	which are not other widgets. These widgets should not have to be 
+	containers just to manage the focus. For example, GtkHSV is
+	currently a container for no good reason. Also, this cleans
+	up the "if (is_container && is_sensitive && is_drawable)
+	container_focus ()" mess in widget implementations.
+
+	* gtk/gtkcontainer.c (gtk_container_focus): deprecate this
+	function, and have it just call gtk_widget_child_focus().
+
+	* gtk/gtkhsv.c: derive from widget not container
+	
+	Throughout: fix to reflect GtkContainer::focus change
+	
 Fri Jun  8 12:38:49 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktable.c (gtk_table_resize): warn if row/cols are out of

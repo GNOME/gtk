@@ -43,7 +43,7 @@ static void            gtk_plug_forward_key_press     (GtkPlug          *plug,
 						       GdkEventKey      *event);
 static void            gtk_plug_set_focus             (GtkWindow        *window,
 						       GtkWidget        *focus);
-static gboolean        gtk_plug_focus                 (GtkContainer     *container,
+static gboolean        gtk_plug_focus                 (GtkWidget        *widget,
 						       GtkDirectionType  direction);
 static void            gtk_plug_accel_entries_changed (GtkWindow        *window);
 static GdkFilterReturn gtk_plug_filter_func           (GdkXEvent        *gdk_xevent,
@@ -94,7 +94,6 @@ static void
 gtk_plug_class_init (GtkPlugClass *class)
 {
   GtkWidgetClass *widget_class = (GtkWidgetClass *)class;
-  GtkContainerClass *container_class = (GtkContainerClass *)class;
   GtkWindowClass *window_class = (GtkWindowClass *)class;
 
   parent_class = gtk_type_class (GTK_TYPE_WINDOW);
@@ -103,7 +102,7 @@ gtk_plug_class_init (GtkPlugClass *class)
   widget_class->unrealize = gtk_plug_unrealize;
   widget_class->key_press_event = gtk_plug_key_press_event;
 
-  container_class->focus = gtk_plug_focus;
+ widget_class->focus = gtk_plug_focus;
 
   window_class->set_focus = gtk_plug_set_focus;
 #if 0  
@@ -441,12 +440,13 @@ gtk_plug_accel_entries_changed (GtkWindow *window)
 #endif
 
 static gboolean
-gtk_plug_focus (GtkContainer     *container,
+gtk_plug_focus (GtkWidget        *widget,
 		GtkDirectionType  direction)
 {
-  GtkBin *bin = GTK_BIN (container);
-  GtkPlug *plug = GTK_PLUG (container);
-  GtkWindow *window = GTK_WINDOW (container);
+  GtkBin *bin = GTK_BIN (widget);
+  GtkPlug *plug = GTK_PLUG (widget);
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkContainer *container = GTK_CONTAINER (widget);
   GtkWidget *old_focus_child = container->focus_child;
   GtkWidget *parent;
   
@@ -454,10 +454,7 @@ gtk_plug_focus (GtkContainer     *container,
    */
   if (old_focus_child)
     {
-      if (GTK_IS_CONTAINER (old_focus_child) &&
-	  GTK_WIDGET_DRAWABLE (old_focus_child) &&
-	  GTK_WIDGET_IS_SENSITIVE (old_focus_child) &&
-	  gtk_container_focus (GTK_CONTAINER (old_focus_child), direction))
+      if (gtk_widget_child_focus (old_focus_child, direction))
 	return TRUE;
 
       if (window->focus_widget)
@@ -513,20 +510,9 @@ gtk_plug_focus (GtkContainer     *container,
   else
     {
       /* Try to focus the first widget in the window */
-      if (GTK_WIDGET_DRAWABLE (bin->child) &&
-	  GTK_WIDGET_IS_SENSITIVE (bin->child))
-	{
-	  if (GTK_IS_CONTAINER (bin->child))
-	    {
-	      if (gtk_container_focus (GTK_CONTAINER (bin->child), direction))
-		return TRUE;
-	    }
-	  else if (GTK_WIDGET_CAN_FOCUS (bin->child))
-	    {
-	      gtk_widget_grab_focus (bin->child);
-	      return TRUE;
-	    }
-	}
+      
+      if (gtk_widget_child_focus (bin->child, direction))
+        return TRUE;
     }
 
   return FALSE;
@@ -582,7 +568,7 @@ focus_first_last (GtkPlug          *plug,
       gtk_window_set_focus (GTK_WINDOW (plug), NULL);
     }
 
-  gtk_container_focus (GTK_CONTAINER (plug), direction);
+  gtk_widget_child_focus (GTK_WIDGET (plug), direction);
 }
 
 static void

@@ -382,15 +382,6 @@ GtkContainer
 
 @container: the object which received the signal.
 
-<!-- ##### SIGNAL GtkContainer::focus ##### -->
-<para>
-
-</para>
-
-@container: the object which received the signal.
-@direction: 
-@Returns: 
-
 <!-- ##### SIGNAL GtkContainer::remove ##### -->
 <para>
 

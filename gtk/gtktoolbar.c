@@ -91,6 +91,8 @@ static void gtk_toolbar_size_allocate            (GtkWidget       *widget,
 				                  GtkAllocation   *allocation);
 static void gtk_toolbar_style_set                (GtkWidget       *widget,
                                                   GtkStyle        *prev_style);
+static gboolean gtk_toolbar_focus                (GtkWidget       *widget,
+                                                  GtkDirectionType dir);
 static void gtk_toolbar_show_all                 (GtkWidget       *widget);
 static void gtk_toolbar_add                      (GtkContainer    *container,
 				                  GtkWidget       *widget);
@@ -100,6 +102,7 @@ static void gtk_toolbar_forall                   (GtkContainer    *container,
 						  gboolean	   include_internals,
 				                  GtkCallback      callback,
 				                  gpointer         callback_data);
+
 static void gtk_real_toolbar_orientation_changed (GtkToolbar      *toolbar,
 						  GtkOrientation   orientation);
 static void gtk_real_toolbar_style_changed       (GtkToolbar      *toolbar,
@@ -192,11 +195,11 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
   widget_class->size_allocate = gtk_toolbar_size_allocate;
   widget_class->style_set = gtk_toolbar_style_set;
   widget_class->show_all = gtk_toolbar_show_all;
+  widget_class->focus = gtk_toolbar_focus;
   
   container_class->add = gtk_toolbar_add;
   container_class->remove = gtk_toolbar_remove;
   container_class->forall = gtk_toolbar_forall;
-  container_class->focus = NULL;
   
   class->orientation_changed = gtk_real_toolbar_orientation_changed;
   class->style_changed = gtk_real_toolbar_style_changed;
@@ -832,6 +835,15 @@ gtk_toolbar_style_set (GtkWidget  *widget,
 {
   if (prev_style)
     gtk_toolbar_update_button_relief (GTK_TOOLBAR (widget));
+}
+
+static gboolean
+gtk_toolbar_focus (GtkWidget       *widget,
+                   GtkDirectionType dir)
+{
+  /* Focus can't go in toolbars */
+  
+  return FALSE;
 }
 
 static void

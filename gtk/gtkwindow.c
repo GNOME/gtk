@@ -143,7 +143,7 @@ static gint gtk_window_focus_out_event    (GtkWidget         *widget,
 static gint gtk_window_client_event	  (GtkWidget	     *widget,
 					   GdkEventClient    *event);
 static void gtk_window_check_resize       (GtkContainer      *container);
-static gint gtk_window_focus              (GtkContainer     *container,
+static gint gtk_window_focus              (GtkWidget        *widget,
 				           GtkDirectionType  direction);
 static void gtk_window_real_set_focus     (GtkWindow         *window,
 					   GtkWidget         *focus);
@@ -301,11 +301,11 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->focus_in_event = gtk_window_focus_in_event;
   widget_class->focus_out_event = gtk_window_focus_out_event;
   widget_class->client_event = gtk_window_client_event;
+  widget_class->focus = gtk_window_focus;
   
   widget_class->expose_event = gtk_window_expose;
    
   container_class->check_resize = gtk_window_check_resize;
-  container_class->focus = gtk_window_focus;
 
   klass->set_focus = gtk_window_real_set_focus;
   klass->frame_event = gtk_window_frame_event;
@@ -2190,7 +2190,7 @@ static void
 gtk_window_move_focus (GtkWindow       *window,
                        GtkDirectionType dir)
 {
-  gtk_container_focus (GTK_CONTAINER (window), dir);
+  gtk_widget_child_focus (GTK_WIDGET (window), dir);
   
   if (!GTK_CONTAINER (window)->focus_child)
     gtk_window_set_focus (window, NULL);
@@ -2382,13 +2382,20 @@ gtk_window_check_resize (GtkContainer *container)
 }
 
 static gboolean
-gtk_window_focus (GtkContainer     *container,
+gtk_window_focus (GtkWidget        *widget,
 		  GtkDirectionType  direction)
 {
-  GtkBin *bin = GTK_BIN (container);
-  GtkWindow *window = GTK_WINDOW (container);
-  GtkWidget *old_focus_child = container->focus_child;
+  GtkBin *bin;
+  GtkWindow *window;
+  GtkContainer *container;
+  GtkWidget *old_focus_child;
   GtkWidget *parent;
+
+  container = GTK_CONTAINER (widget);
+  window = GTK_WINDOW (widget);
+  bin = GTK_BIN (widget);
+
+  old_focus_child = container->focus_child;
   
   /* We need a special implementation here to deal properly with wrapping
    * around in the tab chain without the danger of going into an
@@ -2396,10 +2403,7 @@ gtk_window_focus (GtkContainer     *container,
    */
   if (old_focus_child)
     {
-      if (GTK_IS_CONTAINER (old_focus_child) &&
-	  GTK_WIDGET_DRAWABLE (old_focus_child) &&
-	  GTK_WIDGET_IS_SENSITIVE (old_focus_child) &&
-	  gtk_container_focus (GTK_CONTAINER (old_focus_child), direction))
+      if (gtk_widget_child_focus (old_focus_child, direction))
 	return TRUE;
     }
 
@@ -2417,20 +2421,10 @@ gtk_window_focus (GtkContainer     *container,
     }
 
   /* Now try to focus the first widget in the window */
-  if (bin->child &&
-      GTK_WIDGET_DRAWABLE (bin->child) &&
-      GTK_WIDGET_IS_SENSITIVE (bin->child))
+  if (bin->child)
     {
-      if (GTK_IS_CONTAINER (bin->child))
-	{
-	  if (gtk_container_focus (GTK_CONTAINER (bin->child), direction))
-	    return TRUE;
-	}
-      else if (GTK_WIDGET_CAN_FOCUS (bin->child))
-	{
-	  gtk_widget_grab_focus (bin->child);
-	  return TRUE;
-	}
+      if (gtk_widget_child_focus (bin->child, direction))
+        return TRUE;
     }
 
   return FALSE;

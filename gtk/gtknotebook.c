@@ -156,6 +156,8 @@ static gint gtk_notebook_focus_in            (GtkWidget        *widget,
 static void gtk_notebook_draw_focus          (GtkWidget        *widget);
 static void gtk_notebook_style_set           (GtkWidget        *widget,
 					      GtkStyle         *previous_style);
+static gint gtk_notebook_focus               (GtkWidget        *widget,
+					      GtkDirectionType  direction);
 
 /*** GtkContainer Methods ***/
 static void gtk_notebook_set_child_arg	     (GtkContainer     *container,
@@ -170,8 +172,6 @@ static void gtk_notebook_add                 (GtkContainer     *container,
 					      GtkWidget        *widget);
 static void gtk_notebook_remove              (GtkContainer     *container,
 					      GtkWidget        *widget);
-static gint gtk_notebook_focus               (GtkContainer     *container,
-					      GtkDirectionType  direction);
 static void gtk_notebook_set_focus_child     (GtkContainer     *container,
 					      GtkWidget        *child);
 static GtkType gtk_notebook_child_type       (GtkContainer     *container);
@@ -310,11 +310,11 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->motion_notify_event = gtk_notebook_motion_notify;
   widget_class->focus_in_event = gtk_notebook_focus_in;
   widget_class->style_set = gtk_notebook_style_set;
-   
+  widget_class->focus = gtk_notebook_focus;
+  
   container_class->add = gtk_notebook_add;
   container_class->remove = gtk_notebook_remove;
   container_class->forall = gtk_notebook_forall;
-  container_class->focus = gtk_notebook_focus;
   container_class->set_focus_child = gtk_notebook_set_focus_child;
   container_class->get_child_arg = gtk_notebook_get_child_arg;
   container_class->set_child_arg = gtk_notebook_set_child_arg;
@@ -1190,7 +1190,7 @@ gtk_notebook_arrow_button_press (GtkNotebook    *notebook,
 	    dir = (arrow == GTK_ARROW_LEFT) ? GTK_DIR_UP : GTK_DIR_DOWN;
 	  else
 	    dir = (arrow == GTK_ARROW_LEFT) ? GTK_DIR_LEFT : GTK_DIR_RIGHT;
-	  gtk_container_focus (GTK_CONTAINER (notebook), dir);
+	  gtk_widget_child_focus (widget, dir);
 	}
       
       if (!notebook->timer)
@@ -1677,28 +1677,14 @@ static gboolean
 focus_child_in (GtkNotebook     *notebook,
 		GtkDirectionType direction)
 {
-  if (GTK_WIDGET_DRAWABLE (notebook->cur_page->child) &&
-      GTK_WIDGET_IS_SENSITIVE (notebook->cur_page->child))
-    {
-      if (GTK_IS_CONTAINER (notebook->cur_page->child))
-	{
-	  if (gtk_container_focus (GTK_CONTAINER (notebook->cur_page->child), direction))
-	    return TRUE;
-	}
-      else if (GTK_WIDGET_CAN_FOCUS (notebook->cur_page->child))
-	{
-	  gtk_widget_grab_focus (notebook->cur_page->child);
-	  return TRUE;
-	}
-    }
-  return FALSE;
+  return gtk_widget_child_focus (notebook->cur_page->child, direction);
 }
 
 /* Focus in the notebook can either be on the pages, or on
  * the tabs.
  */
 static gint
-gtk_notebook_focus (GtkContainer     *container,
+gtk_notebook_focus (GtkWidget        *widget,
 		    GtkDirectionType  direction)
 {
   GtkWidget *old_focus_child;
@@ -1720,26 +1706,23 @@ gtk_notebook_focus (GtkContainer     *container,
 #undef D  
 
   gboolean widget_is_focus;
+  GtkContainer *container;
 
-  g_return_val_if_fail (container != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_NOTEBOOK (container), FALSE);
+  g_return_val_if_fail (GTK_IS_NOTEBOOK (widget), FALSE);
 
+  container = GTK_CONTAINER (widget);
   notebook = GTK_NOTEBOOK (container);
 
-  widget_is_focus = gtk_widget_is_focus (GTK_WIDGET (container));
+  widget_is_focus = gtk_widget_is_focus (widget);
   old_focus_child = container->focus_child; 
 
   effective_direction = translate_direction[notebook->tab_pos][direction];
 
-  if (old_focus_child &&
-      GTK_IS_CONTAINER (old_focus_child) &&
-      GTK_WIDGET_DRAWABLE (old_focus_child) &&
-      GTK_WIDGET_IS_SENSITIVE (old_focus_child) &&
-      gtk_container_focus (GTK_CONTAINER (old_focus_child), direction))
-    return TRUE;
-
   if (old_focus_child)		/* Focus on page child */
     {
+      if (gtk_widget_child_focus (old_focus_child, direction))
+        return TRUE;
+      
       switch (effective_direction)
 	{
 	case GTK_DIR_TAB_BACKWARD:
@@ -2041,14 +2024,14 @@ gtk_notebook_timer (GtkNotebook *notebook)
 	  if (!notebook->focus_tab ||
 	      gtk_notebook_search_page (notebook, notebook->focus_tab,
 					STEP_PREV, TRUE))
-	    gtk_container_focus (GTK_CONTAINER (notebook), GTK_DIR_LEFT);
+	    gtk_widget_child_focus (GTK_WIDGET (notebook), GTK_DIR_LEFT);
 	}
       else if (notebook->click_child == GTK_ARROW_RIGHT)
 	{
 	  if (!notebook->focus_tab ||
 	      gtk_notebook_search_page (notebook, notebook->focus_tab,
 					STEP_NEXT, TRUE))
-	    gtk_container_focus (GTK_CONTAINER (notebook), GTK_DIR_RIGHT);
+	    gtk_widget_child_focus (GTK_WIDGET (notebook), GTK_DIR_RIGHT);
 	}
       if (notebook->need_timer) 
 	{
@@ -3491,21 +3474,9 @@ gtk_notebook_page_select (GtkNotebook *notebook,
 	  dir = GTK_DIR_LEFT;
 	  break;
 	}
-      
-      if (GTK_WIDGET_VISIBLE (page->child))
-	{
-	  if (GTK_IS_CONTAINER (page->child))
-	    {
-	      if (gtk_container_focus (GTK_CONTAINER (page->child), 
-				       dir))
-		return TRUE;
-	    }
-	  else if (GTK_WIDGET_CAN_FOCUS (page->child))
-	    {
-	      gtk_widget_grab_focus (page->child);
-	      return TRUE;
-	    }
-	}
+
+      if (gtk_widget_child_focus (page->child, dir))
+        return TRUE;
     }
   return FALSE;
 }

@@ -352,3 +352,16 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   these widgets will need a rewrite (though if you could figure out
   how to subclass the old version of GtkRange, you have our
   respect). Also, GtkTroughType is gone.
+
+* The GtkContainer::focus signal/virtualfunction and
+  gtk_container_focus() call were replaced by 
+  GtkWidget::focus and gtk_widget_child_focus(). 
+  The semantics are the same, so you should be able to just 
+  replace "container_class->focus = mywidget_focus" with 
+  "widget_class->focus = mywidget_focus" and replace 
+  gtk_container_focus() calls with gtk_widget_child_focus() calls.
+
+  The purpose of this change was to allow non-containers to have 
+  focusable elements.
+ 
+ 

@@ -361,6 +361,15 @@ Define a function pointer.  Deprecated.
 @arg: 
 @arg_id: 
 
+<!-- ##### SIGNAL GtkContainer::focus ##### -->
+<para>
+
+</para>
+
+@container: the object which received the signal.
+@direction: 
+@Returns: 
+
 <!-- ##### ARG GtkContainer:reallocate-redraws ##### -->
 <para>
 
