@@ -1,3 +1,7 @@
+2000-08-03  Elliot Lee  <sopwith@redhat.com>
+
+	* gdk/gdkpango.c (gdk_draw_layout_line): Don't runs with a PANGO_ATTR_SHAPE set.
+
 Thu Aug  3 09:17:06 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkrectangle.c (gdk_rectangle_intersect): Applied patch from

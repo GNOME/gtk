@@ -36,7 +36,8 @@ static void gdk_pango_get_item_properties (PangoItem      *item,
 					   PangoAttrColor *fg_color,
 					   gboolean       *fg_set,
 					   PangoAttrColor *bg_color,
-					   gboolean       *bg_set);
+					   gboolean       *bg_set,
+					   gboolean       *shape_set);
 
 static void
 gdk_pango_context_destroy (GdkPangoContextInfo *info)
@@ -168,17 +169,12 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
       PangoUnderline uline = PANGO_UNDERLINE_NONE;
       PangoLayoutRun *run = tmp_list->data;
       PangoAttrColor fg_color, bg_color;
-      gboolean fg_set, bg_set;
+      gboolean fg_set, bg_set, shape_set;
       GdkGC *fg_gc;
       
       tmp_list = tmp_list->next;
 
-      gdk_pango_get_item_properties (run->item, &uline, &fg_color, &fg_set, &bg_color, &bg_set);
-
-      if (fg_set)
-	fg_gc = gdk_pango_get_gc (context, &fg_color, gc);
-      else
-	fg_gc = gc;
+      gdk_pango_get_item_properties (run->item, &uline, &fg_color, &fg_set, &bg_color, &bg_set, &shape_set);
 
       if (uline == PANGO_UNDERLINE_NONE)
 	pango_glyph_string_extents (run->glyphs, run->item->analysis.font,
@@ -200,8 +196,16 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
 	  gdk_pango_free_gc (context, bg_gc);
 	}
 
+      if (shape_set)
+	continue;
+
+      if (fg_set)
+	fg_gc = gdk_pango_get_gc (context, &fg_color, gc);
+      else
+	fg_gc = gc;
+
       gdk_draw_glyphs (drawable, fg_gc, run->item->analysis.font,
-		      x + x_off / PANGO_SCALE, y, run->glyphs);
+		       x + x_off / PANGO_SCALE, y, run->glyphs);
 
       switch (uline)
 	{
@@ -323,7 +327,8 @@ gdk_pango_get_item_properties (PangoItem      *item,
 			       PangoAttrColor *fg_color,
 			       gboolean       *fg_set,
 			       PangoAttrColor *bg_color,
-			       gboolean       *bg_set)
+			       gboolean       *bg_set,
+			       gboolean       *shape_set)
 {
   GSList *tmp_list = item->extra_attrs;
 
@@ -332,6 +337,9 @@ gdk_pango_get_item_properties (PangoItem      *item,
   
   if (bg_set)
     *bg_set = FALSE;
+
+  if (shape_set)
+    *shape_set = FALSE;
   
   while (tmp_list)
     {
@@ -358,6 +366,11 @@ gdk_pango_get_item_properties (PangoItem      *item,
 	  if (bg_set)
 	    *bg_set = TRUE;
 	  
+	  break;
+
+	case PANGO_ATTR_SHAPE:
+	  if (shape_set)
+	    *shape_set = TRUE;
 	  break;
 	  
 	default:
