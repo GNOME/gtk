@@ -7,9 +7,9 @@ Overview of Changes in GTK+ 1.0.2:
 * Newly included file gtkfeatures.h which defines compatibility macros to
   test for certain API features upon program compilation.
 * Cleanups to give less warnings on 64-bit platforms.
-* Bugfixes, including fixing a segfault with selections on Solaris and IRIX
-  that was introduced in 1.0.1, and fixing an old segfault for all
-  keypresses on Linux/Alpha.
+* Many bugs fixed, including: 
+  - A segfault with selections on Solaris and IRIX.
+  - A segfault that occured for all keypresses on Linux/Alpha.
 
 Overview of Changes in GTK+ 1.0.1:
 

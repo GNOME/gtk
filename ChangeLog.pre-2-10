@@ -1,3 +1,7 @@
+Fri May 15 12:31:27 1998  rodo  <doulik@karlin.mff.cuni.cz>
+
+	* gdk/gdk.c: include gdkkeysyms.h always
+	
 Wed May 13 00:53:52 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtktypeutils.c gtk/gtksignal.c gdk/gdkdnd.c: A few more 
