@@ -41,11 +41,9 @@
 #include "gtkmessagedialog.h"
 #include "gtkprivate.h"
 #include "gtkscrolledwindow.h"
-#include "gtkseparatortoolitem.h"
 #include "gtksizegroup.h"
 #include "gtkstock.h"
 #include "gtktable.h"
-#include "gtktoolbutton.h"
 #include "gtktreeview.h"
 #include "gtktreemodelsort.h"
 #include "gtktreeselection.h"
@@ -98,6 +96,7 @@ struct _GtkFileChooserDefault
   GtkFilePath *preview_path;
 
   GtkWidget *up_button;
+  GtkWidget *new_folder_button;
 
   GtkWidget *preview_frame;
 
@@ -114,6 +113,9 @@ struct _GtkFileChooserDefault
   GtkWidget *entry;
   GtkWidget *preview_widget;
   GtkWidget *extra_widget;
+
+  GtkTreeViewColumn *list_name_column;
+  GtkCellRenderer *list_name_renderer;
 
   guint folder_mode : 1;
   guint local_only : 1;
@@ -438,6 +440,24 @@ error_could_not_add_bookmark_dialog (GtkFileChooserDefault *impl,
   error_dialog (impl,
 		_("Could not add a bookmark for %s:\n%s"),
 		path, error);
+}
+
+/* Shows an error dialog about not being able to compose a filename */
+static void
+error_building_filename_dialog (GtkFileChooserDefault *impl,
+				const GtkFilePath     *base_path,
+				const char            *file_part,
+				GError                *error)
+{
+  char *msg;
+
+  msg = g_strdup_printf (_("Could not build file name from '%s' and '%s':\n%s"),
+			 gtk_file_path_get_string (base_path),
+			 file_part,
+			 error->message);
+  error_message (impl, msg);
+  g_free (msg);
+  g_error_free (error);
 }
 
 static void
@@ -825,8 +845,8 @@ create_shortcuts_model (GtkFileChooserDefault *impl)
 
 /* Callback used when the "Up" toolbar button is clicked */
 static void
-up_button_cb (GtkToolButton         *button,
-	      GtkFileChooserDefault *impl)
+up_button_clicked_cb (GtkButton             *button,
+		      GtkFileChooserDefault *impl)
 {
   GtkFilePath *parent_path;
   GError *error;
@@ -847,6 +867,69 @@ up_button_cb (GtkToolButton         *button,
 		  error);
 }
 
+/* Callback used when the "New Folder" toolbar button is clicked */
+static void
+new_folder_button_clicked (GtkButton             *button,
+			   GtkFileChooserDefault *impl)
+{
+  GtkTreeIter iter;
+  GtkTreePath *path;
+
+  /* FIXME: this doesn't work for folder mode, just for file mode */
+
+  _gtk_file_system_model_add_editable (impl->list_model, &iter);
+  g_object_set (impl->list_name_renderer, "editable", TRUE, NULL);
+
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->list_model), &iter);
+  gtk_tree_view_set_cursor (GTK_TREE_VIEW (impl->list),
+			    path,
+			    impl->list_name_column,
+			    TRUE);
+}
+
+/* Callback used from the text cell renderer when the new folder is named */
+static void
+renderer_edited_cb (GtkCellRendererText   *cell_renderer_text,
+		    const gchar           *path,
+		    const gchar           *new_text,
+		    GtkFileChooserDefault *impl)
+{
+  GError *error;
+  GtkFilePath *file_path;
+
+  _gtk_file_system_model_remove_editable (impl->list_model);
+  g_object_set (impl->list_name_renderer, "editable", FALSE, NULL);
+
+  error = NULL;
+  file_path = gtk_file_system_make_path (impl->file_system, impl->current_folder, new_text, &error);
+  if (!file_path)
+    {
+      error_building_filename_dialog (impl, impl->current_folder, new_text, error);
+      return;
+    }
+
+  error = NULL;
+  if (!gtk_file_system_create_folder (impl->file_system, file_path, &error))
+    error_dialog (impl,
+		  _("Could not create folder %s:\n%s"),
+		  file_path, error);
+
+  gtk_file_path_free (file_path);
+
+  /* FIXME: scroll to the new folder and select it */
+}
+
+/* Callback used from the text cell renderer when the new folder edition gets
+ * canceled.
+ */
+static void
+renderer_editing_canceled_cb (GtkCellRendererText   *cell_renderer_text,
+			      GtkFileChooserDefault *impl)
+{
+  _gtk_file_system_model_remove_editable (impl->list_model);
+  g_object_set (impl->list_name_renderer, "editable", FALSE, NULL);
+}
+
 /* Creates the widgets for the filter combo box */
 static GtkWidget *
 filter_create (GtkFileChooserDefault *impl)
@@ -863,6 +946,7 @@ toolbar_button_new (GtkFileChooserDefault *impl,
 		    const char *text,
 		    const char *stock_id,
 		    gboolean    sensitive,
+		    gboolean    show,
 		    GCallback   callback)
 {
   GtkWidget *button;
@@ -883,6 +967,11 @@ toolbar_button_new (GtkFileChooserDefault *impl,
   gtk_widget_set_sensitive (button, sensitive);
   g_signal_connect (button, "clicked", callback, impl);
 
+  gtk_widget_show_all (hbox);
+
+  if (show)
+    gtk_widget_show (button);
+
   return button;
 }
 
@@ -893,6 +982,7 @@ toolbar_create (GtkFileChooserDefault *impl)
   GtkWidget *hbox;
 
   hbox = gtk_hbox_new (FALSE, 12);
+  gtk_widget_show (hbox);
 
   /* Add bookmark button */
 
@@ -900,6 +990,7 @@ toolbar_create (GtkFileChooserDefault *impl)
 						  _("Add"),
 						  GTK_STOCK_ADD,
 						  FALSE,
+						  TRUE,
 						  G_CALLBACK (add_bookmark_button_clicked_cb));
   gtk_box_pack_start (GTK_BOX (hbox), impl->add_bookmark_button, FALSE, FALSE, 0);
 
@@ -909,6 +1000,7 @@ toolbar_create (GtkFileChooserDefault *impl)
 						     _("Remove"),
 						     GTK_STOCK_REMOVE,
 						     FALSE,
+						     TRUE,
 						     G_CALLBACK (remove_bookmark_button_clicked_cb));
   gtk_box_pack_start (GTK_BOX (hbox), impl->remove_bookmark_button, FALSE, FALSE, 0);
 
@@ -918,7 +1010,8 @@ toolbar_create (GtkFileChooserDefault *impl)
 					_("Up"),
 					GTK_STOCK_GO_UP,
 					FALSE,
-					G_CALLBACK (up_button_cb));
+					TRUE,
+					G_CALLBACK (up_button_clicked_cb));
   gtk_box_pack_start (GTK_BOX (hbox), impl->up_button, FALSE, FALSE, 0);
 
   /* Current folder label */
@@ -926,8 +1019,17 @@ toolbar_create (GtkFileChooserDefault *impl)
   impl->folder_label = gtk_label_new (NULL);
   gtk_misc_set_alignment (GTK_MISC (impl->folder_label), 0.0, 0.5);
   gtk_box_pack_start (GTK_BOX (hbox), impl->folder_label, FALSE, FALSE, 0);
+  gtk_widget_show (impl->folder_label);
 
-  gtk_widget_show_all (hbox);
+  /* New folder button for save mode */
+
+  impl->new_folder_button = gtk_button_new_from_stock (GTK_STOCK_NEW);
+  g_signal_connect (impl->new_folder_button, "clicked",
+		    G_CALLBACK (new_folder_button_clicked), impl);
+  gtk_box_pack_end (GTK_BOX (hbox), impl->new_folder_button, FALSE, FALSE, 0);
+
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+    gtk_widget_show (impl->new_folder_button);
 
   return hbox;
 }
@@ -1339,21 +1441,25 @@ create_file_list (GtkFileChooserDefault *impl)
 
   /* Filename column */
 
-  column = gtk_tree_view_column_new ();
-  gtk_tree_view_column_set_title (column, _("File name"));
-  gtk_tree_view_column_set_sort_column_id (column, FILE_LIST_COL_NAME);
+  impl->list_name_column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_title (impl->list_name_column, _("File name"));
+  gtk_tree_view_column_set_sort_column_id (impl->list_name_column, FILE_LIST_COL_NAME);
 
   renderer = gtk_cell_renderer_pixbuf_new ();
-  gtk_tree_view_column_pack_start (column, renderer, TRUE);
-  gtk_tree_view_column_set_cell_data_func (column, renderer,
+  gtk_tree_view_column_pack_start (impl->list_name_column, renderer, TRUE);
+  gtk_tree_view_column_set_cell_data_func (impl->list_name_column, renderer,
 					   list_icon_data_func, impl, NULL);
 
-  renderer = gtk_cell_renderer_text_new ();
-  gtk_tree_view_column_pack_start (column, renderer, TRUE);
-  gtk_tree_view_column_set_cell_data_func (column, renderer,
+  impl->list_name_renderer = gtk_cell_renderer_text_new ();
+  g_signal_connect (impl->list_name_renderer, "edited",
+		    G_CALLBACK (renderer_edited_cb), impl);
+  g_signal_connect (impl->list_name_renderer, "editing-canceled",
+		    G_CALLBACK (renderer_editing_canceled_cb), impl);
+  gtk_tree_view_column_pack_start (impl->list_name_column, impl->list_name_renderer, TRUE);
+  gtk_tree_view_column_set_cell_data_func (impl->list_name_column, impl->list_name_renderer,
 					   list_name_data_func, impl, NULL);
 
-  gtk_tree_view_append_column (GTK_TREE_VIEW (impl->list), column);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (impl->list), impl->list_name_column);
 #if 0
   /* Size column */
 
@@ -1549,6 +1655,11 @@ gtk_file_chooser_default_set_property (GObject      *object,
     {
     case GTK_FILE_CHOOSER_PROP_ACTION:
       impl->action = g_value_get_enum (value);
+      if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+	gtk_widget_show (impl->new_folder_button);
+      else
+	gtk_widget_hide (impl->new_folder_button);
+
       break;
     case GTK_FILE_CHOOSER_PROP_FILE_SYSTEM:
       {
@@ -1785,14 +1896,23 @@ install_list_model_filter (GtkFileChooserDefault *impl)
 				       impl);
 }
 
-#define COMPARE_DIRECTORIES											\
-  GtkFileChooserDefault *impl = user_data;									\
-  const GtkFileInfo *info_a = _gtk_file_system_model_get_info (impl->tree_model, a);				\
-  const GtkFileInfo *info_b = _gtk_file_system_model_get_info (impl->tree_model, b);				\
-  gboolean dir_a = gtk_file_info_get_is_folder (info_a);							\
-  gboolean dir_b = gtk_file_info_get_is_folder (info_b);							\
-														\
-  if (dir_a != dir_b)												\
+#define COMPARE_DIRECTORIES										       \
+  GtkFileChooserDefault *impl = user_data;								       \
+  const GtkFileInfo *info_a = _gtk_file_system_model_get_info (impl->list_model, a);			       \
+  const GtkFileInfo *info_b = _gtk_file_system_model_get_info (impl->list_model, b);			       \
+  gboolean dir_a, dir_b;										       \
+													       \
+  if (info_a)												       \
+    dir_a = gtk_file_info_get_is_folder (info_a);							       \
+  else													       \
+    return impl->list_sort_ascending ? -1 : 1;								       \
+													       \
+  if (info_b)												       \
+    dir_b = gtk_file_info_get_is_folder (info_b);							       \
+  else													       \
+    return impl->list_sort_ascending ? 1 : -1;  							       \
+													       \
+  if (dir_a != dir_b)											       \
     return impl->list_sort_ascending ? (dir_a ? -1 : 1) : (dir_a ? 1 : -1) /* Directories *always* go first */
 
 /* Sort callback for the filename column */
@@ -2168,14 +2288,7 @@ gtk_file_chooser_default_get_paths (GtkFileChooser *chooser)
 
 	  if (!selected)
 	    {
-	      char *msg;
-
-	      msg = g_strdup_printf (_("Could not build file name from '%s' and '%s':\n%s"),
-				     gtk_file_path_get_string (folder_path),
-				     file_part,
-				     error->message);
-	      error_message (impl, msg);
-	      g_free (msg);
+	      error_building_filename_dialog (impl, folder_path, file_part, error);
 	      return NULL;
 	    }
 
@@ -2673,6 +2786,25 @@ static void
 list_selection_changed (GtkTreeSelection      *selection,
 			GtkFileChooserDefault *impl)
 {
+  if (!impl->select_multiple)
+    {
+      GtkTreeSelection *selection;
+      GtkTreeIter iter, child_iter;
+      const GtkFileInfo *info;
+
+      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
+      if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
+	return;
+
+      gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model,
+						      &child_iter,
+						      &iter);
+
+      info = _gtk_file_system_model_get_info (impl->list_model, &child_iter);
+      if (!info)
+	return; /* We are on the editable row for New Folder */
+    }
+
   update_chooser_entry (impl);
   check_preview_change (impl);
 
@@ -2804,7 +2936,7 @@ get_list_file_info (GtkFileChooserDefault *impl,
 						  &child_iter,
 						  iter);
 
-  return _gtk_file_system_model_get_info (impl->tree_model, &child_iter);
+  return _gtk_file_system_model_get_info (impl->list_model, &child_iter);
 }
 
 static void
@@ -2841,6 +2973,8 @@ list_icon_data_func (GtkTreeViewColumn *tree_column,
 						  &child_iter,
 						  iter);
   path = _gtk_file_system_model_get_path (impl->list_model, &child_iter);
+  if (!path)
+    return;
 
   /* FIXME: NULL GError */
   pixbuf = gtk_file_system_render_icon (impl->file_system, path, GTK_WIDGET (impl), ICON_SIZE, NULL);
@@ -2890,7 +3024,12 @@ list_name_data_func (GtkTreeViewColumn *tree_column,
   const GtkFileInfo *info = get_list_file_info (impl, iter);
 
   if (!info)
-    return;
+    {
+      g_object_set (cell,
+		    "text", _("Type name of new folder"),
+		    NULL);
+      return;
+    }
 
   set_cell_text_bold_if_folder (info, cell, gtk_file_info_get_display_name (info));
 }
@@ -2905,11 +3044,13 @@ list_size_data_func (GtkTreeViewColumn *tree_column,
 {
   GtkFileChooserDefault *impl = data;
   const GtkFileInfo *info = get_list_file_info (impl, iter);
-  gint64 size = gtk_file_info_get_size (info);
+  gint64 size;
   gchar *str;
 
   if (!info || gtk_file_info_get_is_folder (info))
     return;
+
+  size = gtk_file_info_get_size (info);
 
   if (size < (gint64)1024)
     str = g_strdup_printf (ngettext ("%d byte", "%d bytes", (gint)size), (gint)size);
@@ -2947,7 +3088,12 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
 
   info = get_list_file_info (impl, iter);
   if (!info)
-    return;
+    {
+      g_object_set (cell,
+		    "text", "",
+		    NULL);
+      return;
+    }
 
   time_mtime = gtk_file_info_get_modification_time (info);
   g_date_set_time (&mtime, (GTime) time_mtime);

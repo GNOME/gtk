@@ -1,3 +1,42 @@
+2004-01-16  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilesystemmodel.c (struct _GtkFileSystemModel): Added a
+	has_editable field.
+	(_gtk_file_system_model_add_editable): New function.
+	(_gtk_file_system_model_remove_editable): New function.
+	(gtk_file_system_model_get_value): Return appropriate values for
+	the temporary editable row.
+	(_gtk_file_system_model_get_info): Handle the editable row.
+	(_gtk_file_system_model_get_path): Likewise.
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_append_bookmarks):
+	Removed an unused variable.
+	(toolbar_button_new): Optionally show the button.
+	(up_button_clicked_cb): Renamed from up_button_cb(), fixed prototype.
+	(toolbar_create): Add a "New Folder" button for Save mode.
+	(error_building_filename_dialog): New helper function.
+	(gtk_file_chooser_default_get_paths): Use error_building_filename_dialog().
+	(create_file_list): Connect to the "edited" signal of the text
+	cell renderer.  Store the name column and text renderer in the
+	impl structure.
+	(renderer_edited_cb): New callback.
+	(gtk_file_chooser_default_set_property): Show/hide the "New
+	folder" button when the save action changes.
+	(COMPARE_DIRECTORIES): Allow the info values to be NULL.
+	(COMPARE_DIRECTORIES): Duh, use the list_model, not the
+	tree_model.
+	(get_list_file_info): Likewise!
+	(list_icon_data_func): Handle the path being NULL.
+	(new_folder_button_clicked): New callback.
+	(list_name_data_func): If we are on the editable row, set the text
+	to "Type name of new folder".
+	(list_selection_changed): Handle the editable row.
+	(list_mtime_data_func): Likewise.
+
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_make_path): Return
+	NULL, not FALSE.
+	(gtk_file_system_unix_create_folder): Test the result of mkdir() correctly.
+
 Fri Jan 16 23:59:01 2004  Matthias Clasen  <maclas@gmx.de>
 
 	The first part of the fix for #114351 (see also 

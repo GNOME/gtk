@@ -59,6 +59,7 @@ struct _GtkFileSystemModel
   guint show_folders : 1;
   guint show_files : 1;
   guint folders_only : 1;
+  guint has_editable : 1;
 };
 
 struct _FileModelNode
@@ -372,18 +373,31 @@ gtk_file_system_model_get_value (GtkTreeModel *tree_model,
 {
   GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (tree_model);
   FileModelNode *node = iter->user_data;
+  const GtkFileInfo *info;
   
   switch (column)
     {
     case GTK_FILE_SYSTEM_MODEL_INFO:
+      if (model->has_editable && node == model->roots)
+	info = NULL;
+      else
+	info = file_model_node_get_info (model, node);
+
       g_value_init (value, GTK_TYPE_FILE_INFO);
-      g_value_set_boxed (value, file_model_node_get_info (model, node));
+      g_value_set_boxed (value, info);
       break;
     case GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME:
       {
-	const GtkFileInfo *info = file_model_node_get_info (model, node);
 	g_value_init (value, G_TYPE_STRING);
-	g_value_set_string (value, gtk_file_info_get_display_name (info));
+
+	if (model->has_editable && node == model->roots)
+	  g_value_set_string (value, "");
+	else
+	  {
+	    const GtkFileInfo *info = file_model_node_get_info (model, node);
+
+	    g_value_set_string (value, gtk_file_info_get_display_name (info));
+	  }
       }
       break;
     default:
@@ -786,13 +800,22 @@ _gtk_file_system_model_set_show_files (GtkFileSystemModel *model,
  *   is owned by @model and must not be modified or freed.
  *   If you want to save the information for later use,
  *   you must make a copy, since the structure may be
- *   freed on later changes to the file system.
+ *   freed on later changes to the file system.  If you have
+ *   called _gtk_file_system_model_add_editable() and the @iter
+ *   corresponds to the row that this function returned, the
+ *   return value will be NULL.
  **/
 const GtkFileInfo *
 _gtk_file_system_model_get_info (GtkFileSystemModel *model,
 				 GtkTreeIter        *iter)
 {
-  return file_model_node_get_info (model, iter->user_data);
+  FileModelNode *node;
+
+  node = iter->user_data;
+  if (model->has_editable && node == model->roots)
+    return NULL;
+  else
+    return file_model_node_get_info (model, node);
 }
 
 /**
@@ -812,6 +835,9 @@ _gtk_file_system_model_get_path (GtkFileSystemModel *model,
 				 GtkTreeIter        *iter)
 {
   FileModelNode *node = iter->user_data;
+
+  if (model->has_editable && node == model->roots)
+    return NULL;
 
   if (node->is_dummy)
     return node->parent->path;
@@ -981,6 +1007,71 @@ _gtk_file_system_model_path_do (GtkFileSystemModel       *model,
   g_slist_free (cleanups);
 
   return node != NULL;
+}
+
+/**
+ * _gtk_file_system_model_add_editable:
+ * @model: a #GtkFileSystemModel
+ * @iter: Location to return the iter corresponding to the editable row
+ * 
+ * Adds an "empty" row at the beginning of the model.  This does not refer to
+ * any file, but is a temporary placeholder for a file name that the user will
+ * type when a corresponding cell is made editable.  When your code is done
+ * using this temporary row, call _gtk_file_system_model_remove_editable().
+ **/
+void
+_gtk_file_system_model_add_editable (GtkFileSystemModel *model, GtkTreeIter *iter)
+{
+  FileModelNode *node;
+  GtkTreePath *path;
+
+  g_return_if_fail (!model->has_editable);
+
+  model->has_editable = TRUE;
+
+  node = file_model_node_new (model, NULL);
+  node->is_visible = TRUE;
+
+  node->next = model->roots;
+  model->roots = node;
+
+  file_model_node_ref (node);
+
+  path = gtk_tree_path_new ();
+  gtk_tree_path_append_index (path, 0);
+  iter->user_data = node;
+
+  gtk_tree_model_row_inserted (GTK_TREE_MODEL (model), path, iter);
+
+  gtk_tree_path_free (path);
+}
+
+/**
+ * _gtk_file_system_model_remove_editable:
+ * @model: a #GtkFileSystemModel
+ * 
+ * Removes the "empty" row at the beginning of the model that was
+ * created with _gtk_file_system_model_add_editable().  You should call
+ * this function when your code is finished editing this temporary row.
+ **/
+void
+_gtk_file_system_model_remove_editable (GtkFileSystemModel *model)
+{
+  GtkTreePath *path;
+
+  g_return_if_fail (model->has_editable);
+
+  model->has_editable = FALSE;
+  file_model_node_unref (model, model->roots);
+
+  model->roots = model->roots->next;
+
+  path = gtk_tree_path_new ();
+  gtk_tree_path_append_index (path, 0);
+
+  gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
+
+  gtk_tree_path_free (path);
 }
 
 static FileModelNode *

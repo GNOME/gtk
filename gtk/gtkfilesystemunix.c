@@ -324,7 +324,7 @@ gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
   filename = filename_from_path (path);
   g_return_val_if_fail (filename != NULL, FALSE);
 
-  result = mkdir (filename, 0777) != 0;
+  result = mkdir (filename, 0777) == 0;
 
   if (!result)
     {
@@ -448,7 +448,7 @@ gtk_file_system_unix_make_path (GtkFileSystem    *file_system,
       g_error_free (tmp_error);
       g_free (base_filename);
 
-      return FALSE;
+      return NULL;
     }
 
   full_filename = g_build_filename (base_filename, filename, NULL);
