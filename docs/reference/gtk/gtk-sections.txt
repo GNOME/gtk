@@ -2737,20 +2737,6 @@ GTK_IS_CELL_RENDERER_TEXT_CLASS
 </SECTION>
 
 <SECTION>
-<FILE>gtkcellrenderertextpixbuf</FILE>
-<TITLE>GtkCellRendererTextPixbuf</TITLE>
-GtkCellRendererTextPixbuf
-gtk_cell_renderer_text_pixbuf_new
-<SUBSECTION Standard>
-GTK_CELL_RENDERER_TEXT_PIXBUF
-GTK_IS_CELL_RENDERER_TEXT_PIXBUF
-GTK_TYPE_CELL_RENDERER_TEXT_PIXBUF
-gtk_cell_renderer_text_pixbuf_get_type
-GTK_CELL_RENDERER_TEXT_PIXBUF_CLASS
-GTK_IS_CELL_RENDERER_TEXT_PIXBUF_CLASS
-</SECTION>
-
-<SECTION>
 <FILE>gtkcellrenderertoggle</FILE>
 <TITLE>GtkCellRendererToggle</TITLE>
 GtkCellRendererToggle
@@ -3393,17 +3379,21 @@ GTK_RC_STYLE_GET_CLASS
 <FILE>gtkaccelgroup</FILE>
 <TITLE>Keyboard Accelerators</TITLE>
 GtkAccelGroup
-GtkAccelEntry
 gtk_accel_group_new
 gtk_accel_group_get_default
 gtk_accel_group_ref
 gtk_accel_group_unref
 gtk_accel_group_activate
 gtk_accel_groups_activate
-gtk_accel_group_attach
-gtk_accel_group_detach
 gtk_accel_group_lock
 gtk_accel_group_unlock
+gtk_accelerator_valid
+gtk_accelerator_parse
+gtk_accelerator_name
+gtk_accelerator_set_default_mod_mask
+gtk_accelerator_get_default_mod_mask
+gtk_accel_group_attach
+gtk_accel_group_detach
 gtk_accel_group_get_entry
 gtk_accel_group_lock_entry
 gtk_accel_group_unlock_entry
@@ -3415,11 +3405,6 @@ gtk_accel_group_create_add
 gtk_accel_group_create_remove
 gtk_accel_groups_from_object
 gtk_accel_group_entries_from_object
-gtk_accelerator_valid
-gtk_accelerator_parse
-gtk_accelerator_name
-gtk_accelerator_set_default_mod_mask
-gtk_accelerator_get_default_mod_mask
 </SECTION>
 
 <SECTION>

@@ -14,18 +14,3 @@ GtkCellRendererTextPixbuf
 
 </para>
 
-<!-- ##### STRUCT GtkCellRendererTextPixbuf ##### -->
-<para>
-
-</para>
-
-@parent: 
-
-<!-- ##### FUNCTION gtk_cell_renderer_text_pixbuf_new ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-

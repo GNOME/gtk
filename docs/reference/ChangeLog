@@ -1,3 +1,32 @@
+2001-09-08  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtk-docs.sgml: remove CellRendererTextPixbuf
+
+	* gtk/resources.sgml: add section on mailing lists, bugzilla, etc.
+
+	* gtk/tmpl/gtkaccelgroup.sgml: add long description
+
+	* gtk/gtk-sections.txt: reorder accel group section; probably need
+	to delete most of it
+
+	* gtk/tmpl/gtkmain.sgml: Clean it up a little bit
+
+	* gtk/gtk-docs.sgml: rearrange the list of "core/misc" sections so
+	that useful things are near the top and stupid junk is near the
+	bottom.
+
+	* gtk/tmpl/gtkfeatures.sgml: fix/finish this section
+
+	* gtk/gtk-docs.sgml: create a separate section for
+	overview/tutorial material and special notes, and put the
+	reference docs for the "misc non-widget" stuff into its own
+	section.
+
+	* gtk/compiling.sgml: write this section
+
+	* gtk/gtk-docs.sgml: The intro section weirdly had two paragraphs
+	that said the same thing. Delete one of them.
+
 Tue Sep  4 01:33:51 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk-docs.sgml: Remove references to a couple

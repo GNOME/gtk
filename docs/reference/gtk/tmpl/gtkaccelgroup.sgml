@@ -3,34 +3,38 @@ Keyboard Accelerators
 
 <!-- ##### SECTION Short_Description ##### -->
 
+global keyboard accelerators (for an entire #GtkWindow)
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
+A #GtkAccelGroup represents a group of keyboard accelerators, attached
+to a toplevel #GtkWindow (with gtk_window_add_accel_group()). Usually
+you won't need to create a #GtkAccelGroup directly; instead, when
+using #GtkItemFactory, GTK+ automatically sets up the accelerators for
+your menus.
+</para>
 
+<para>
+Note that <firstterm>accelerators</firstterm> are different from
+<firstterm>mnemonics</firstterm>. Accelerators are shortcuts for
+activating a menu item; they appear alongside the menu item they're a
+shortcut for, for example "Ctrl+Q" might appear alongside the "Quit"
+menu item. Mnemonics are shortcuts for GUI elements such as text
+entries or buttons; they appear as underlined characters. See
+gtk_label_new_with_mnemonic(). Menu items can have both accelerators
+and mnemonics, of course.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+gtk_label_new_with_mnemonic(), gtk_window_add_accel_group()
 </para>
 
 <!-- ##### STRUCT GtkAccelGroup ##### -->
 <para>
-
+On opaque data type representing a group of accelerators.
 </para>
 
-
-<!-- ##### STRUCT GtkAccelEntry ##### -->
-<para>
-
-</para>
-
-@accel_group: 
-@accelerator_key: 
-@accelerator_mods: 
-@accel_flags: 
-@object: 
-@signal_id: 
 
 <!-- ##### FUNCTION gtk_accel_group_new ##### -->
 <para>
@@ -87,6 +91,68 @@ Keyboard Accelerators
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_accel_group_lock ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_unlock ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+
+
+<!-- ##### FUNCTION gtk_accelerator_valid ##### -->
+<para>
+
+</para>
+
+@keyval: 
+@modifiers: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accelerator_parse ##### -->
+<para>
+
+</para>
+
+@accelerator: 
+@accelerator_key: 
+@accelerator_mods: 
+
+
+<!-- ##### FUNCTION gtk_accelerator_name ##### -->
+<para>
+
+</para>
+
+@accelerator_key: 
+@accelerator_mods: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accelerator_set_default_mod_mask ##### -->
+<para>
+
+</para>
+
+@default_mod_mask: 
+
+
+<!-- ##### FUNCTION gtk_accelerator_get_default_mod_mask ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_accel_group_attach ##### -->
 <para>
 
@@ -103,22 +169,6 @@ Keyboard Accelerators
 
 @accel_group: 
 @object: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_lock ##### -->
-<para>
-
-</para>
-
-@accel_group: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_unlock ##### -->
-<para>
-
-</para>
-
-@accel_group: 
 
 
 <!-- ##### FUNCTION gtk_accel_group_get_entry ##### -->
@@ -237,52 +287,6 @@ Keyboard Accelerators
 </para>
 
 @object: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_accelerator_valid ##### -->
-<para>
-
-</para>
-
-@keyval: 
-@modifiers: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_accelerator_parse ##### -->
-<para>
-
-</para>
-
-@accelerator: 
-@accelerator_key: 
-@accelerator_mods: 
-
-
-<!-- ##### FUNCTION gtk_accelerator_name ##### -->
-<para>
-
-</para>
-
-@accelerator_key: 
-@accelerator_mods: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_accelerator_set_default_mod_mask ##### -->
-<para>
-
-</para>
-
-@default_mod_mask: 
-
-
-<!-- ##### FUNCTION gtk_accelerator_get_default_mod_mask ##### -->
-<para>
-
-</para>
-
 @Returns: 
 
 

@@ -580,6 +580,22 @@ gtk_exit (gint errorcode)
   gdk_exit (errorcode);
 }
 
+
+/**
+ * gtk_set_locale:
+ *
+ *
+ * Initializes internationalization support for GTK+.  You
+ * should call this function before gtk_init() if your application
+ * supports internationalization.
+ * 
+ *  (In gory detail - sets the current locale according to the
+ * program environment. This is the same as calling the libc function
+ * setlocale (LC_ALL, "") but also takes care of the locale specific
+ * setup of the windowing system used by GDK.)
+ * 
+ * Return value: a string corresponding to the locale set, as with the C library function setlocale()
+ **/
 gchar*
 gtk_set_locale (void)
 {
