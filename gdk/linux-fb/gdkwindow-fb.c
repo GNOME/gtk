@@ -105,7 +105,8 @@ _gdk_window_impl_get_type (void)
       
       object_type = g_type_register_static (gdk_drawable_impl_fb_get_type(),
                                             "GdkWindowFB",
-                                            &object_info);
+                                            &object_info,
+					    0);
     }
   
   return object_type;

@@ -494,7 +494,7 @@ libgtk_nanox_1_3_la_SOURCES = $(gtk_target_sources)
 endif
 if USE_LINUX_FB
 libgtk_linux_fb_includedir = $(includedir)/gtk-2.0/gtk
-libgtk_linux_fb_include_HEADERS = $gtk_target_headers)
+libgtk_linux_fb_include_HEADERS = $(gtk_target_headers)
 libgtk_linux_fb_1_3_la_SOURCES = $(gtk_target_sources)
 endif
 EXTRA_LTLIBRARIES = libgtk-x11-1.3.la libgtk-nanox-1.3.la libgtk-linux-fb-1.3.la

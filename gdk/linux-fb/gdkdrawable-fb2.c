@@ -127,6 +127,8 @@ gdk_drawable_impl_fb_class_init (GdkDrawableFBClass *klass)
   drawable_class->set_colormap = gdk_fb_set_colormap;
   drawable_class->get_colormap = gdk_fb_get_colormap;
   drawable_class->get_size = gdk_fb_get_size;
+  
+  drawable_class->get_image = _gdk_fb_get_image;
 }
 
 GType
@@ -151,7 +153,8 @@ gdk_drawable_impl_fb_get_type (void)
       
       object_type = g_type_register_static (GDK_TYPE_DRAWABLE,
                                             "GdkDrawableFB",
-                                            &object_info);
+                                            &object_info,
+					    0);
     }
   
   return object_type;

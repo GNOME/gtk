@@ -97,7 +97,8 @@ gdk_image_get_type (void)
       
       object_type = g_type_register_static (G_TYPE_OBJECT,
                                             "GdkImage",
-                                            &object_info);
+                                            &object_info,
+					    0);
     }
   
   return object_type;
@@ -150,11 +151,11 @@ gdk_image_new (GdkImageType  type,
 }
 
 GdkImage*
-gdk_image_get (GdkWindow *window,
-	       gint       x,
-	       gint       y,
-	       gint       width,
-	       gint       height)
+_gdk_fb_get_image (GdkWindow *window,
+		   gint       x,
+		   gint       y,
+		   gint       width,
+		   gint       height)
 {
   GdkImage *image;
   GdkImagePrivateFB *private;

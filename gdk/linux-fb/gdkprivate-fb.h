@@ -202,7 +202,13 @@ void gdk_window_invalidate_region_clear(GdkWindow *window, GdkRegion *region);
 void gdk_window_invalidate_rect_clear(GdkWindow *window, GdkRectangle *rect);
 GdkGC *_gdk_fb_gc_new(GdkDrawable *drawable, GdkGCValues *values, GdkGCValuesMask values_mask);
 
-void gdk_fb_drawable_clear(GdkDrawable *drawable);
+GdkImage*_gdk_fb_get_image (GdkWindow *window,
+			    gint       x,
+			    gint       y,
+			    gint       width,
+			    gint       height);
+  
+void gdk_fb_drawable_clear (GdkDrawable *drawable);
 void gdk_fb_draw_drawable  (GdkDrawable    *drawable,
 			    GdkGC          *gc,
 			    GdkPixmap      *src,

@@ -1,3 +1,31 @@
+2000-11-02  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkcolor-fb.c, gdk/linux-fb/gdkdnd-fb.c,
+	gdk/linux-fb/gdkgc-fb.c, gdk/linux-fb/gdkpango-fb.c,
+	gdk/linux-fb/gdkpixmap-fb.c, gdk/linux-fb/gdkwindow-fb.c:
+	Add last argument to t_type_register_static call.
+	
+	* gdk/linux-fb/gdkdrawable-fb2.c:
+	Add last argument to t_type_register_static call.
+	export the get_image drawable virtual function.
+
+	* gdk/linux-fb/gdkimage-fb.c:
+	Add last argument to t_type_register_static call.
+	rename gtk_image_get to _gdk_fb_get_image and
+	export it for use by gdkdrawable-fb2.
+
+	* gdk/linux-fb/gdkprivate-fb.h:
+	export _gdk_fb_get_image.
+
+	* gdk/linux-fb/gdkselection-fb.c:
+	Add new api call stubs.
+
+	* gtk/Makefile.am:
+	Missing ( in linux-fb part.
+
+	* modules/linux-fb/Makefile.am:
+	Must link with gdk_pixbuf or get unresolved symbol.
+
 2000-11-01  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextbuffer.c (gtk_text_buffer_class_init): Use 

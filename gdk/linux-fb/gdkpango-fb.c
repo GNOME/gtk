@@ -99,7 +99,8 @@ pango_fb_font_map_get_type(void)
       
       object_type = g_type_register_static (PANGO_TYPE_FONT_MAP,
                                             "PangoFBFontMap",
-                                            &object_info);
+                                            &object_info,
+					    0);
     }
   
   return object_type;
@@ -435,7 +436,8 @@ pango_fb_font_get_type (void)
       
       object_type = g_type_register_static (PANGO_TYPE_FONT,
                                             "PangoFBFont",
-                                            &object_info);
+                                            &object_info,
+					    0);
     }
   
   return object_type;
