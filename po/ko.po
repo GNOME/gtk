@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: $PACKAGE $VERSION, no-define\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-09-04 18:34+0200\n"
-"PO-Revision-Date: 2003-08-22 22:46+0900\n"
+"PO-Revision-Date: 2003-09-23 00:28+0900\n"
 "Last-Translator: Young-Ho, Cha <ganadist@chollian.net>\n"
 "Language-Team: GTP Korean <gnome-kr-translation@gnome.or.kr>\n"
 "MIME-Version: 1.0\n"
@@ -1844,8 +1844,7 @@ msgstr "보여주기"
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
-msgstr ""
-"거짓이면 실제 텍스트 대신에 \"보이지 않는 문자\"를 표시합니다 (비밀번호 모드)"
+msgstr "거짓이면 실제 텍스트 대신에 \"보이지 않는 문자\"를 표시합니다 (열쇠글 모드)"
 
 #: gtk/gtkentry.c:484
 msgid "Has Frame"
@@ -1861,7 +1860,7 @@ msgstr "보이지 않는 글자"
 
 #: gtk/gtkentry.c:493
 msgid "The character to use when masking entry contents (in \"password mode\")"
-msgstr "항목 내용 대신 표시하는 데 쓸 문자 (\"비밀번호 모드\"에서)"
+msgstr "항목 내용 대신 표시하는 데 쓸 문자 (\"열쇠글 모드\"에서)"
 
 #: gtk/gtkentry.c:500
 msgid "Activates default"
@@ -2615,7 +2614,7 @@ msgstr "드롭 다운 메뉴가 표시되기 전까지의 지연 시간"
 
 #: gtk/gtkmenubar.c:173
 msgid "Delay before the submenus of a menu bar appear"
-msgstr "메뉴 막대의 하위 메뉴가 표시되기 전까지의 지연 시간"
+msgstr "메뉴 모음의 하위 메뉴가 표시되기 전까지의 지연 시간"
 
 #: gtk/gtkmessagedialog.c:106
 msgid "Image/label border"
@@ -3208,11 +3207,11 @@ msgstr "내용 둘레의 경사 유형"
 
 #: gtk/gtkscrolledwindow.c:282
 msgid "Scrollbar spacing"
-msgstr "스크롤막대 간격"
+msgstr "스크롤 막대 간격"
 
 #: gtk/gtkscrolledwindow.c:283
 msgid "Number of pixels between the scrollbars and the scrolled window"
-msgstr "스크롤막대와 스크롤되는 창 사이의 픽셀 개수"
+msgstr "스크롤 막대와 스크롤되는 창 사이의 픽셀 개수"
 
 #: gtk/gtksettings.c:168
 msgid "Double Click Time"
@@ -3374,7 +3373,7 @@ msgstr "현재 값을 읽거나, 새로운 값을 지정합니다"
 
 #: gtk/gtkstatusbar.c:162
 msgid "Style of bevel around the statusbar text"
-msgstr "상태 막대 텍스트 주위의 경사 유형"
+msgstr "상태 표시줄 텍스트 주위의 경사 유형"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:267
@@ -4828,11 +4827,11 @@ msgstr ""
 
 #: gtk/gtkwindow.c:585
 msgid "Skip taskbar"
-msgstr "태스크막대 건너뜀"
+msgstr "작업 표시줄 건너 뛰기"
 
 #: gtk/gtkwindow.c:586
 msgid "TRUE if the window should not be in the task bar."
-msgstr "창이 태스크막대에서 보여지지 않아야 하는 경우 참."
+msgstr "창이 작업 표시줄에서 보여지지 않아야 하는 경우 참."
 
 #: gtk/gtkwindow.c:593
 msgid "Skip pager"
@@ -4906,4 +4905,4 @@ msgstr "IM 상태 유형"
 
 #: modules/input/gtkimcontextxim.c:331
 msgid "How to draw the input method statusbar"
-msgstr "입력 방법 상태막대를 그리는 방법"
+msgstr "입력 방법 상태 표시줄을 그리는 방법"
