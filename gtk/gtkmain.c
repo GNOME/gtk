@@ -742,8 +742,17 @@ gtk_main_do_event (GdkEvent *event)
 	}
       break;
       
-    case GDK_PROPERTY_NOTIFY:
     case GDK_EXPOSE:
+      if (event->any.window)
+	gdk_window_begin_paint_rect (event->any.window, &event->expose.area);
+
+      gtk_widget_event (event_widget, event);
+
+      if (event->any.window)
+	gdk_window_end_paint (event->any.window);
+      break;
+
+    case GDK_PROPERTY_NOTIFY:
     case GDK_NO_EXPOSE:
     case GDK_FOCUS_CHANGE:
     case GDK_CONFIGURE:

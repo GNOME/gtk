@@ -1,3 +1,179 @@
+Thu Feb 24 23:58:21 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkgeometry-x11.c: Don't worry about clipping of
+	toplevel windows and their immediate children by their parents,
+	since the size of toplevel windows is out of our immediate
+	control and we don't get any real benefit from trying to track
+	this size for clipping.
+
+	* gdk/gdkprivate.h (struct _GdkWindowPrivate) gdk/x11/gdkwindow-x11.c : Add a flag
+	for input_only windows.
+
+	* gdk/gdkwindow.c gdk/x11/gdkgeometry-x11.c: Use the above flag
+	to fix some hacks and make sure that we don't try to set the
+	background of input only windows.
+
+Thu Feb 24 18:11:46 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkinternals.h gdk/gdkprivate.h gdk/Makefile.am: Add a header file for
+	the _really_ internal stuff, and leave gdkprivate.h for the fake private
+	stuff that we've traditionally exposed.
+
+	* gdk/**.c: Use gdkinternals.h where appropriate.
+
+	* gdk/x11/gdkx.h gdk/x11/gdkprivate-x11.h gdk/x11/*.c: Make gdkx.h
+	not include gdkprivate-x11.h, move all stuff of conceivable public
+	interest into gdkx.h; keep all really private stuff in
+	uninstalled header gdkprivate-x11.h.
+
+	* gdk/gdkdraw.c gdk/gdkwindow.c gdk/gdkinternals: Redirect all calls to
+	image->image_put on windows through a new function _gdk_window_draw_image()
+	to allow us to do backing store for images. (Sort of ugly)
+
+	* gdk/gdkgc.c gdk/gdkprivate.h: Cache the ts and clip origins for graphics
+	contexts locally so that we can offset them properly when drawing 
+	onto backing pixmaps.
+
+	* gdk/gdkinput.h: Reindented
+
+	* gdk/gdkprivate.h gdk/x11/gdkwindow-x11.c: Store the background
+	pixmap or color for the window, so we can properly initialize
+	our double-buffer pixmaps, and also so that we temporarily set
+	a background of None while scrolling.
+
+	* gdk/gdkregion.h: Revise region boolean operators to have an
+	interface that is actually convenient - switch from creating new
+	regions	on every op, to "methods" that modify existing regions
+	(A = A OP B). 3 argument forms which allow dest == src, would also
+	be possible, but the current interfaces seem to map nicely
+	onto what needs to be done. (There is quite a lot of region
+	code in GDK now.)
+
+	* gdk/gdkregion.h: Add constructor from rectangle and a copy
+	operator.
+
+	* gdk/x11/{gdkregion-generic.[ch],gdkpolyreg-generic.c,
+	gdkpoly-generic.h: Copy region code from Xlib, switch it over
+	to 32 bit coordinates, modify it to be mostly GTK+ style
+	and to have interfaces that match gdkregion.h.
+
+	* gdk/gdkwindow.c gdk/gdkprivate.h: Add facility for
+	double-buffered	drawing. gdk_window_begin_paint_{rect,region}()
+	create a backing pixmap and redirect all drawing to
+	that backing pixmap until a matching gdk_window_end_paint().
+
+	* gdk/gdkwindow.[ch] gdk/gdkinternals.h gdk/x11/gdkdrawable-x11.c:
+	Create a special drawable class for GtkWindow's that 
+	redirects the drawing to the backing pixmap as necessary
+	and then calls the real operations in _gdk_windowing_window_class.
+
+	* gdk/gdkprivate.h gdk/gdkwindow.[ch] gdk/x11/gdkevents-x11.c:
+	Store invalid region for each window. Generate expose events for invalid
+	region in an idle. This replaces both the expose compression
+	and the redrawing queuing in GTK+. It is both more efficient and
+	simpler than either one individually and far more so then the
+	combination.
+
+	* gdk/x11/gdkgeometry.c gdk/x11/gdkwindow.c gdk/x11/gdkprivate-x11.h:
+	Emulate 32 bit coordinates for windows with 16 bit coordinates
+	by offsetting drawing, guffaw scrolling techniques and
+	mapping/unmapping child windows as necessary.
+
+	* gdk/gdkwindow.[ch] gdk/x11/gdkgeometry.c: Add anti-exposes,
+	where, when invalid regions are processed, the region is stored,
+	and if expose events come in that are detectably duplicate
+	the processed exposes (by comparison of event serial numbers),
+	the stored region is subtracted out of those exposes.
+
+	* gdk/x11/gdkgeometry.c: Temporarily unset backing pixmaps of
+	regions newly exposed when scrolling or resizing windows.
+	This, combined with forcing processesing of queued invalidated
+	regions, gives nice flicker-free scrolling.
+
+	* gtk/gtklayout.c gtk/gtkviewport.c: Force processing of
+	invalidated regions after every scroll.
+
+	* gtk/gtklayout.c: Vastly simplify using the new 32 bit coordinate
+	emulation in GDK. Its, for all practical purposes just a
+	GtkViewport/GtkFixed hybrid now.
+
+	* gdk/gdkdrawable-x11.c: Convert from GDK (32 bit) to X11
+	(16-bit) structures as necessary instead of just casting.
+
+	* gdk/x11/gdkgc-x11.c gdk/x11/gdkx.h: Replace XSetRegion with code
+	in terms of the structures from gdkregion-generic.c, using appropriate
+	offsets from GDK to X11 coordinates. Cache clip mask and
+	origin and ts origin locally and only flush to the server
+	when drawing, to avoid constantly setting and resetting these
+	values when offsetting GC's for scrolling and backing pixmaps.
+
+	* gdk/x11/gdkinput-x11.c: Fix leak of axes structures.
+
+	* gtk/gtkcontainer.c: Call process_all_updates at end
+	of resizing to reduce flicker. (Avoids having redraw
+	lag arbitrarily behind resize under some circumstances)
+
+	* gtk/gtkentry.c: Remove old backing store code, and simply take
+	advantage of the new backing store capabilities of GDK.
+
+	* gtk/gtkmain.c: Simple implementation of widget backing
+	store - simply push a paint while handling each expose.
+	(Should really be configurable widget for widget.)
+	
+	* gtk/gtkwidget.c: Remove all the old complicated redraw
+	code, and simply invalidate the GDK windows from
+	gdk_window_queue_clear(), etc. (Sigh, so much carefully
+	debugged complexity ... gone to the winds.)
+
+	Remove all the code for suppressing expose events while
+	resizes are pending; this isn't needed since the invalid
+	areas won't be processed until after the resizes are
+	processed, since they are in a lower priority idle.
+
+Thu Feb 24 15:37:41 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkrectangle.c (gdk_rectangle_intersect): Set width
+	and height of dest rectangle for non-intersecting rectangles.
+
+Sun Feb 20 16:47:31 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.h: Make GtkAllocation just a typedef
+	for GdkRectangle.
+
+Sun Feb 20 11:27:00 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk{events,image,private,types,window}.h
+	 gdk/x11/gdkinputprivate.h: Change all coordinates
+	 from int16 to int. Also, Change width and height from
+	 unsigned to signed to avoid all the stupid C 
+	 signedness bugs.
+
+Sat Feb 19 12:01:53 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdrawable-x11.c (gdk_x11_draw_drawable):
+	Use gdk_drawable_get_depth instead of gdk_drawable_get_visual.
+	Add some more detailed checking.
+
+	* gdk/gdkdraw.c gdk/gdkdrawable.h (gdk_drawable_get_depth):
+	New function to retrieve the depth of a drawable.
+
+	* gdk/gdkprivate.h (struct _GdkDrawablePrivate): Add a depth
+	field, reorder fields to save memory. 
+
+Mon Dec 13 14:06:03 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_draw_cursor_on_drawable): Draw a small portion
+	of the background image instead of scaling the background down to
+	a line.
+
+	* gtk/gtk[hv]scrollbar.c (gtk_hscrollbar_size_allocate): Removed mysterious
+	which temporarily set slider to wrong size.
+
+	* gtk/gtkaspectframe.c gtkbin.c: Remove unecessary calls to
+	queue_clear().
+
+Wed Nov 17 18:36:05 1999  Owen Taylor  <otaylor@redhat.com>
+
 2000-03-23  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkpaned.c (gtk_paned_get_position): add getter.

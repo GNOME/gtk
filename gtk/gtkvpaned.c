@@ -61,7 +61,7 @@ gtk_vpaned_get_type (void)
 	(GtkClassInitFunc) NULL,
       };
 
-      vpaned_type = gtk_type_unique(gtk_paned_get_type(), &vpaned_info);
+      vpaned_type = gtk_type_unique (GTK_TYPE_PANED, &vpaned_info);
     }
 
   return vpaned_type;

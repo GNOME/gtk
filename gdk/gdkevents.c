@@ -25,7 +25,7 @@
  */
 
 #include "gdk.h"
-#include "gdkprivate.h"
+#include "gdkinternals.h"
 
 typedef struct _GdkIOClosure GdkIOClosure;
 typedef struct _GdkEventPrivate GdkEventPrivate;

@@ -19,3 +19,5 @@ Incompatible Changes from GTK+-1.2 to GTK+-1.4:
   will have owner_events = FALSE, so all events are redirected to the
   grab window, even events that would normally go to  other windows of the
   window's owner.
+
+- The detail arguments in the GtkStyleClass structure are now 'const gchar *'.

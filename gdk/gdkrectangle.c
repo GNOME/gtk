@@ -31,14 +31,18 @@ gdk_rectangle_union (GdkRectangle *src1,
 		     GdkRectangle *src2,
 		     GdkRectangle *dest)
 {
+  gint dest_x, dest_y;
+  
   g_return_if_fail (src1 != NULL);
   g_return_if_fail (src2 != NULL);
   g_return_if_fail (dest != NULL);
 
-  dest->x = MIN (src1->x, src2->x);
-  dest->y = MIN (src1->y, src2->y);
-  dest->width = MAX (src1->x + src1->width, src2->x + src2->width) - dest->x;
-  dest->height = MAX (src1->y + src1->height, src2->y + src2->height) - dest->y;
+  dest_x = MIN (src1->x, src2->x);
+  dest_y = MIN (src1->y, src2->y);
+  dest->width = MAX (src1->x + src1->width, src2->x + src2->width) - dest_x;
+  dest->height = MAX (src1->y + src1->height, src2->y + src2->height) - dest_y;
+  dest->x = dest_x;
+  dest->y = dest_y;
 }
 
 gboolean
@@ -63,13 +67,13 @@ gdk_rectangle_intersect (GdkRectangle *src1,
       src1 = src2;
       src2 = temp;
     }
-  dest->x = src2->x;
-
   src1_x2 = src1->x + src1->width;
   src2_x2 = src2->x + src2->width;
 
   if (src2->x < src1_x2)
     {
+      dest->x = src2->x;
+
       if (src1_x2 < src2_x2)
 	dest->width = src1_x2 - dest->x;
       else
@@ -81,14 +85,14 @@ gdk_rectangle_intersect (GdkRectangle *src1,
 	  src1 = src2;
 	  src2 = temp;
 	}
-      dest->y = src2->y;
-
       src1_y2 = src1->y + src1->height;
       src2_y2 = src2->y + src2->height;
 
       if (src2->y < src1_y2)
 	{
 	  return_val = TRUE;
+
+	  dest->y = src2->y;
 
 	  if (src1_y2 < src2_y2)
 	    dest->height = src1_y2 - dest->y;
@@ -100,6 +104,12 @@ gdk_rectangle_intersect (GdkRectangle *src1,
 	  if (dest->width == 0)
 	    return_val = FALSE;
 	}
+    }
+
+  if (!return_val)
+    {
+      dest->width = 0;
+      dest->height = 0;
     }
 
   return return_val;

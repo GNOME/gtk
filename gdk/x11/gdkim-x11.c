@@ -29,9 +29,9 @@
 #include "gdk.h"		/* For gdk_flush() */
 #include "gdkim.h"
 #include "gdkpixmap.h"
-#include "gdkprivate.h"
 #include "gdki18n.h"
-#include "gdkx.h"
+#include "gdkinternals.h"
+#include "gdkprivate-x11.h"
 
 #if HAVE_CONFIG_H
 #  include <config.h>

@@ -288,6 +288,7 @@ gtk_built_sources = @STRIP_BEGIN@ \
 @STRIP_END@
 # built sources that get installed with the header files
 gtk_built_public_sources = @STRIP_BEGIN@ \
+	gtkcompat.h		\
 	gtkmarshal.h		\
 	gtktypebuiltins.h	\
 @STRIP_END@

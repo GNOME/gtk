@@ -34,8 +34,8 @@ struct _GdkImage
   GdkImageType	type;
   GdkVisual    *visual;	    /* visual used to create the image */
   GdkByteOrder	byte_order;
-  guint16	width;
-  guint16	height;
+  gint		width;
+  gint		height;
   guint16	depth;
   guint16	bpp;	    /* bytes per pixel */
   guint16	bpl;	    /* bytes per line */

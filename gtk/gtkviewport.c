@@ -822,9 +822,13 @@ gtk_viewport_adjustment_value_changed (GtkAdjustment *adjustment,
 	child_allocation.y = viewport->vadjustment->lower - viewport->vadjustment->value;
 
       if (GTK_WIDGET_REALIZED (viewport))
-	gdk_window_move (viewport->bin_window,
-			 child_allocation.x,
-			 child_allocation.y);
+	{
+	  gdk_window_move (viewport->bin_window,
+			   child_allocation.x,
+			   child_allocation.y);
+      
+	  gdk_window_process_updates (viewport->bin_window, TRUE);
+	}
     }
 }
 

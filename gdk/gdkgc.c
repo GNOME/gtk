@@ -38,6 +38,10 @@ gdk_gc_alloc (void)
   private->ref_count = 1;
   private->klass = NULL;
   private->klass_data = NULL;
+  private->clip_x_origin = 0;
+  private->clip_y_origin = 0;
+  private->ts_x_origin = 0;
+  private->ts_y_origin = 0;
 
   return (GdkGC *)private;
 }
@@ -58,14 +62,29 @@ gdk_gc_new_with_values (GdkDrawable	*drawable,
 			GdkGCValues	*values,
 			GdkGCValuesMask	 values_mask)
 {
+  GdkGC *gc;
+  GdkGCPrivate *private;
+
   g_return_val_if_fail (drawable != NULL, NULL);
 
   if (GDK_DRAWABLE_DESTROYED (drawable))
     return NULL;
 
-  return ((GdkDrawablePrivate *)drawable)->klass->create_gc (drawable,
-							     values,
-							     values_mask);
+  gc = ((GdkDrawablePrivate *)drawable)->klass->create_gc (drawable,
+							   values,
+							   values_mask);
+  private = (GdkGCPrivate *)gc;
+  
+  if (values_mask & GDK_GC_CLIP_X_ORIGIN)
+    private->clip_x_origin = values->clip_x_origin;
+  if (values_mask & GDK_GC_CLIP_Y_ORIGIN)
+    private->clip_y_origin = values->clip_y_origin;
+  if (values_mask & GDK_GC_TS_X_ORIGIN)
+    private->ts_x_origin = values->ts_x_origin;
+  if (values_mask & GDK_GC_TS_Y_ORIGIN)
+    private->ts_y_origin = values->ts_y_origin;
+
+  return gc;
 }
 
 GdkGC *
@@ -90,7 +109,10 @@ gdk_gc_unref (GdkGC *gc)
   private->ref_count--;
 
   if (private->ref_count == 0)
-    private->klass->destroy (gc);
+    {
+      private->klass->destroy (gc);
+      g_free (private);
+    }
 }
 
 void
@@ -108,10 +130,21 @@ gdk_gc_set_values (GdkGC           *gc,
 		   GdkGCValues	   *values,
 		   GdkGCValuesMask  values_mask)
 {
+  GdkGCPrivate *private = (GdkGCPrivate *)gc;
+  
   g_return_if_fail (gc != NULL);
   g_return_if_fail (values != NULL);
 
-  ((GdkGCPrivate *)gc)->klass->set_values (gc, values, values_mask);
+  if (values_mask & GDK_GC_CLIP_X_ORIGIN)
+    private->clip_x_origin = values->clip_x_origin;
+  if (values_mask & GDK_GC_CLIP_Y_ORIGIN)
+    private->clip_y_origin = values->clip_y_origin;
+  if (values_mask & GDK_GC_TS_X_ORIGIN)
+    private->ts_x_origin = values->ts_x_origin;
+  if (values_mask & GDK_GC_TS_Y_ORIGIN)
+    private->ts_y_origin = values->ts_y_origin;
+  
+  private->klass->set_values (gc, values, values_mask);
 }
 
 void

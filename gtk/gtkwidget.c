@@ -164,9 +164,6 @@ static void gtk_widget_style_set		 (GtkWidget	    *widget,
 						  GtkStyle          *previous_style);
 static void gtk_widget_real_grab_focus           (GtkWidget         *focus_widget);
 
-static void  gtk_widget_redraw_queue_remove       (GtkWidget         *widget);
-
-     
 static GdkColormap* gtk_widget_peek_colormap (void);
 static GdkVisual*   gtk_widget_peek_visual   (void);
 static GtkStyle*    gtk_widget_peek_style    (void);
@@ -199,7 +196,6 @@ static GSList *colormap_stack = NULL;
 static GSList *visual_stack = NULL;
 static GSList *style_stack = NULL;
 static guint   composite_child_stack = 0;
-static GSList *gtk_widget_redraw_queue = NULL;
 
 static const gchar *aux_info_key = "gtk-aux-info";
 static guint        aux_info_key_id = 0;
@@ -1297,9 +1293,6 @@ gtk_widget_unparent (GtkWidget *widget)
 	gtk_window_set_default (GTK_WINDOW (toplevel), NULL);
     }
 
-  if (GTK_WIDGET_REDRAW_PENDING (widget))
-    gtk_widget_redraw_queue_remove (widget);
-
   if (GTK_IS_RESIZE_CONTAINER (widget))
     gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
   
@@ -1697,9 +1690,6 @@ gtk_widget_unrealize (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (GTK_WIDGET_REDRAW_PENDING (widget))
-    gtk_widget_redraw_queue_remove (widget);
-  
   if (GTK_WIDGET_HAS_SHAPE_MASK (widget))
     gtk_widget_shape_combine_mask (widget, NULL, -1, -1);
 
@@ -1713,124 +1703,20 @@ gtk_widget_unrealize (GtkWidget *widget)
 }
 
 /*****************************************
- * gtk_widget_queue_draw:
- *
- *   arguments:
- *
- *   results:
+ * Draw queueing.
  *****************************************/
-
-typedef struct _GtkDrawData GtkDrawData;
-struct _GtkDrawData {
-  GdkRectangle rect;
-  GdkWindow *window;
-};
-
-static GMemChunk   *draw_data_mem_chunk = NULL;
-static GSList      *draw_data_free_list = NULL;
-static const gchar *draw_data_key  = "gtk-draw-data";
-static GQuark       draw_data_key_id = 0;
-static const gchar *draw_data_tmp_key  = "gtk-draw-data-tmp";
-static GQuark       draw_data_tmp_key_id = 0;
-
-static gint gtk_widget_idle_draw (gpointer data);
-
-static void
-gtk_widget_queue_draw_data (GtkWidget *widget,
-			    gint       x,
-			    gint       y,
-			    gint       width,
-			    gint       height,
-			    GdkWindow *window)
-{
-  GSList      *node;
-  GtkDrawData *data;
-  
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (!(width < 0 || height < 0) || window == NULL);
-
-  if ((width != 0) && (height != 0) && GTK_WIDGET_DRAWABLE (widget))
-    {
-      if (!draw_data_key_id)
-	draw_data_key_id = g_quark_from_static_string (draw_data_key);
-      
-      if (draw_data_free_list)
-	{
-	  node = draw_data_free_list;
-	  data = node->data;
-	  draw_data_free_list = draw_data_free_list->next;
-	}
-      else
-	{
-	  if (!draw_data_mem_chunk)
-	    draw_data_mem_chunk = g_mem_chunk_create (GtkDrawData, 64,
-						      G_ALLOC_ONLY);
-	  data = g_chunk_new (GtkDrawData, draw_data_mem_chunk);
-	  node = g_slist_alloc();
-	  node->data = data;
-	}
-
-      data->rect.x = x;
-      data->rect.y = y;
-
-      if ((width < 1 && height < 1) ||
-	  (width >= widget->allocation.width &&
-	   height >= widget->allocation.height))
-	GTK_PRIVATE_SET_FLAG (widget, GTK_FULLDRAW_PENDING);
-
-      if ((width < 0) || (height < 0))
-	{
-	  data->rect.width = 0;
-	  data->rect.height = 0;
-	}
-      else
-	{
-	  data->rect.width = width;
-	  data->rect.height = height;
-	}
-      data->window = window;
-      
-      if ((width < 0) || (height < 0))
-	{
-	  GSList *draw_data_list = 
-	    gtk_object_get_data_by_id (GTK_OBJECT (widget),
-				       draw_data_key_id);
-	  if (draw_data_list)
-	    draw_data_free_list = g_slist_concat (draw_data_list,
-						  draw_data_free_list);
-	  node->next = NULL;
-	}
-      else
-	node->next = gtk_object_get_data_by_id (GTK_OBJECT (widget),
-						draw_data_key_id);
-
-      if (!GTK_WIDGET_REDRAW_PENDING (widget))
-	{
-	  GTK_PRIVATE_SET_FLAG (widget, GTK_REDRAW_PENDING);
-	  if (gtk_widget_redraw_queue == NULL)
-	    gtk_idle_add_priority (GTK_PRIORITY_REDRAW,
-				   gtk_widget_idle_draw,
-				   NULL);
-	  gtk_widget_redraw_queue = g_slist_prepend (gtk_widget_redraw_queue, widget);
-	}
-
-      gtk_object_set_data_by_id (GTK_OBJECT (widget), draw_data_key_id, node);
-    }
-}
 
 void	   
 gtk_widget_queue_draw_area (GtkWidget *widget,
 			    gint       x,
 			    gint       y,
 			    gint       width,
-			    gint       height)
+ 			    gint       height)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (widget->window && gdk_window_is_viewable (widget->window) &&
-      !gtk_widget_is_offscreen (widget))
-    gtk_widget_queue_draw_data (widget, x, y, width, height, NULL);
+  gtk_widget_queue_clear_area (widget, x, y, width, height);
 }
 
 void	   
@@ -1839,11 +1725,12 @@ gtk_widget_queue_draw (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (widget->window && gdk_window_is_viewable (widget->window) &&
-      !gtk_widget_is_offscreen (widget))
-    gtk_widget_queue_draw_data (widget, 0, 0, -1, -1, NULL);
+  gtk_widget_queue_clear (widget);
 }
 
+/* Invalidates the given area (allocation-relative-coordinates)
+ * in all of the widget's windows
+ */
 void	   
 gtk_widget_queue_clear_area (GtkWidget *widget,
 			     gint       x,
@@ -1851,7 +1738,7 @@ gtk_widget_queue_clear_area (GtkWidget *widget,
 			     gint       width,
 			     gint       height)
 {
-  GtkWidget *parent;
+  GdkRectangle invalid_rect;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -1888,8 +1775,9 @@ gtk_widget_queue_clear_area (GtkWidget *widget,
     {
       if (widget->parent)
 	{
-	  gint wx, wy, wwidth, wheight;
 	  /* Translate widget relative to window-relative */
+
+	  gint wx, wy, wwidth, wheight;
 	  
 	  gdk_window_get_position (widget->window, &wx, &wy);
 	  x -= wx - widget->allocation.x;
@@ -1914,36 +1802,14 @@ gtk_widget_queue_clear_area (GtkWidget *widget,
 	  if (y + height > wheight)
 	    height = wheight - y;
 	}
-
-      gtk_widget_queue_draw_data (widget, x, y, width, height, widget->window);
-    }
-}
-
-static void
-gtk_widget_redraw_queue_remove (GtkWidget *widget)
-{
-  GSList *draw_data_list;
-  GSList *tmp_list;
-
-  g_return_if_fail (GTK_WIDGET_REDRAW_PENDING (widget));
-
-  gtk_widget_redraw_queue = g_slist_remove (gtk_widget_redraw_queue, widget);
-
-  draw_data_list = gtk_object_get_data_by_id (GTK_OBJECT (widget),
-					      draw_data_key_id);
-  tmp_list = g_slist_last (draw_data_list);
-  if (tmp_list)
-    {
-      tmp_list->next = draw_data_free_list;
-      draw_data_free_list = draw_data_list;
     }
 
-  gtk_object_set_data_by_id (GTK_OBJECT (widget),
-			     draw_data_key_id,
-			     NULL);
+  invalid_rect.x = x;
+  invalid_rect.y = y;
+  invalid_rect.width = width;
+  invalid_rect.height = height;
   
-  GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_PENDING);
-  GTK_PRIVATE_UNSET_FLAG (widget, GTK_FULLDRAW_PENDING);
+  gdk_window_invalidate_rect (widget->window, &invalid_rect, TRUE);
 }
 
 void	   
@@ -1964,324 +1830,6 @@ gtk_widget_queue_clear (GtkWidget *widget)
 				     widget->allocation.width, 
 				     widget->allocation.height);
     }
-}
-
-static gint
-gtk_widget_draw_data_combine (GtkDrawData *parent, GtkDrawData *child)
-{
-  gint parent_x2, parent_y2;
-  gint child_x2, child_y2;
-
-  /* Check for intersection */
-
-  parent_x2 = parent->rect.x + parent->rect.width;
-  child_x2 = child->rect.x + child->rect.width;
-  parent_y2 = parent->rect.y + parent->rect.height;
-  child_y2 = child->rect.y + child->rect.height;
-
-  if ((child->rect.x > parent_x2) || (parent->rect.x > child_x2) ||
-      (child->rect.y > parent_y2) || (parent->rect.y > child_y2))
-    return FALSE;
-  else
-    {
-      parent->rect.x = MIN (parent->rect.x, child->rect.x);
-      parent->rect.y = MIN (parent->rect.y, child->rect.y);
-      parent->rect.width = MAX (parent_x2, child_x2) - parent->rect.x;
-      parent->rect.height = MAX (parent_y2, child_y2) - parent->rect.y;
-    }
-
-  return TRUE;
-}
-
-/* Take a rectangle with respect to window, and translate it
- * to coordinates relative to widget's allocation, clipping through
- * intermediate windows. Returns whether translation failed. If the
- * translation failed, we have something like a handlebox, where
- * the child widget's GdkWindow is not a child of the parents GdkWindow.
- */
-static gboolean
-gtk_widget_clip_rect (GtkWidget *widget,
-		      GdkWindow *window,
-		      GdkRectangle *rect,
-		      gint      *x_offset,
-		      gint      *y_offset)
-{
-  gint x,y, width, height;
-
-  while (window && (window != widget->window))
-    {
-      gdk_window_get_position (window, &x, &y);
-      rect->x += x;
-      if (x_offset)
-	*x_offset += x;
-      rect->y += y;
-      if (y_offset)
-	*y_offset += y;
-      
-      window = gdk_window_get_parent (window);
-      if (!window)
-	return FALSE;
-
-      gdk_window_get_size (window, &width, &height);
-      
-      if (rect->x < 0)
-	{
-	  rect->width = (rect->width > -rect->x) ? rect->width + rect->x : 0;
-	  rect->x = 0;
-	}
-      if (rect->y < 0)
-	{
-	  rect->height = (rect->height > -rect->y) ? rect->width + rect->y : 0;
-	  rect->y = 0;
-	}
-      if (rect->x + rect->width > width)
-	rect->width = (width > rect->x) ? width - rect->x : 0;
-      if (rect->y + rect->height > height)
-	rect->height = (height > rect->y) ? height - rect->y : 0;
-    }
-
-  if (!window)
-    return FALSE;
-
-  if (!GTK_WIDGET_NO_WINDOW (widget))
-    {
-      if (gdk_window_get_toplevel (window) != window)
-	{
-	  gdk_window_get_position (window, &x, &y);
-	  rect->x += x - widget->allocation.x;
-	  if (x_offset)
-	    *x_offset += x - widget->allocation.x;
-	  rect->y += y - widget->allocation.y;
-	  if (y_offset)
-	    *y_offset += y - widget->allocation.y;
-	}
-    }
-
-  return TRUE;
-}
-
-static gint
-gtk_widget_idle_draw (gpointer cb_data)
-{
-  GSList *widget_list;
-  GSList *old_queue;
-  GSList *draw_data_list;
-  GtkWidget *widget;
-  
-  if (!draw_data_tmp_key_id)
-    draw_data_tmp_key_id = g_quark_from_static_string (draw_data_tmp_key);
-      
-  GDK_THREADS_ENTER ();
-
-  old_queue = gtk_widget_redraw_queue;
-  gtk_widget_redraw_queue = NULL;
-  
-  /* Translate all draw requests to be allocation-relative.
-   * At the same time, move all the data out of the way,
-   * so when we get down to the draw step, we can queue
-   * more information for "next time", if the application
-   * is that foolhardy.
-   */
-  widget_list = old_queue;
-  
-  while (widget_list)
-    {
-      widget = widget_list->data;
-      draw_data_list = gtk_object_get_data_by_id (GTK_OBJECT (widget),
-						  draw_data_key_id);
-      gtk_object_set_data_by_id (GTK_OBJECT (widget),
-				 draw_data_key_id,
-				 NULL);
-      gtk_object_set_data_by_id (GTK_OBJECT (widget),
-				 draw_data_tmp_key_id,
-				 draw_data_list);
-     
-      /* XXX: Since we are unsetting this flag here, further
-       * down the only way we can check if a redraw is queued
-       * on a given widget is by calling gtk_object_get_data.
-       * for speed purposes we might well want a private
-       * flag GTK_REDRAW_PROCESSING or something.
-       */
-      GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_PENDING);
-      GTK_PRIVATE_UNSET_FLAG (widget, GTK_FULLDRAW_PENDING);
-      
-      while (draw_data_list)
-	{
-	  gboolean full_allocation = FALSE;
-	  GtkDrawData *data = draw_data_list->data;
-
-	  if (data->window)
-	    {
-	      /* If the translation fails, we have a handlebox,
-	       * so redraw the whole widget. Could be done better?
-	       */
-	      full_allocation = !gtk_widget_clip_rect (widget, 
-						       data->window, 
-						       &data->rect,
-						       NULL, NULL);
-	      data->window = NULL;
-	    }
-	  else if ((data->rect.width == 0) && (data->rect.height == 0))
-	    full_allocation = TRUE;
-
-	  if (full_allocation)
-	    {
-	      if (GTK_WIDGET_NO_WINDOW (widget))
-		{
-		  data->rect.x = widget->allocation.x;
-		  data->rect.y = widget->allocation.y;
-		}
-	      else
-		{
-		  data->rect.x = 0;
-		  data->rect.y = 0;
-		}
-	      data->rect.width = widget->allocation.width;
-	      data->rect.height = widget->allocation.height;
-	    }
-
-	  draw_data_list = draw_data_list->next;
-	}
-
-      widget_list = widget_list->next;
-    }
-
-  /* Coalesce redraws.
-   */
-  widget_list = old_queue;
-  while (widget_list)
-    {
-      GSList *prev_node = NULL;
-      widget = widget_list->data;
-      draw_data_list = gtk_object_get_data_by_id (GTK_OBJECT (widget),
-						  draw_data_tmp_key_id);
-
-      while (draw_data_list)
-	{
-	  gint x_offset, y_offset;
-	  GtkDrawData *data = draw_data_list->data;
-	  GSList *parent_list = draw_data_list->next;
-	  GtkWidget *parent;
-	  GdkWindow *window;
-
-	  x_offset = 0;
-	  y_offset = 0;
-	  
-	  parent = widget;
-	  while (parent)
-	    {
-	      while (parent_list)
-		{
-		  if (gtk_widget_draw_data_combine (parent_list->data, data))
-		    {
-		      GSList *tmp;
-		      if (prev_node)
-			prev_node->next = draw_data_list->next;
-		      else
-			gtk_object_set_data_by_id (GTK_OBJECT (widget),
-						   draw_data_tmp_key_id,
-						   draw_data_list->next);
-
-		      tmp = draw_data_list->next;
-		      draw_data_list->next = draw_data_free_list;
-		      draw_data_free_list = draw_data_list;
-		      draw_data_list = tmp;
-
-		      goto next_rect;
-		    }
-		  
-		  parent_list = parent_list->next;
-		}
-
-	      window = parent->window;
-
-	      if (parent->parent && parent->parent->window != window)
-		{
-		  if (!GTK_WIDGET_NO_WINDOW (parent))
-		    {
-		      gint x, y;
-		      gdk_window_get_position (window, &x, &y);
-		      data->rect.x -= x - parent->allocation.x;
-		      x_offset -=  x - parent->allocation.x;
-		      data->rect.y -= y - parent->allocation.y;
-		      y_offset -=  y - parent->allocation.y;
-		    }
-		  /* If we can't translate the rectangle, stop trying to
-		   * merge. (This occurs for a handlebox)
-		   */
-		  if (!gtk_widget_clip_rect (parent->parent, window, &data->rect,
-					     &x_offset, &y_offset))
-		    parent = NULL;
-		}
-
-	      if (parent)
-		parent = parent->parent;
-
-	      if (parent)
-		parent_list = gtk_object_get_data_by_id (GTK_OBJECT (parent),
-							 draw_data_tmp_key_id);
-	      else
-		parent_list = NULL;
-	    }
-
-	  /* OK, this rectangle stays around. But take advantage
-	   * of the work we've done to clip it to the visible area -
-	   * rect.width/height have already been appropriately 
-	   * decreased
-	   */
-	  data->rect.x -= x_offset;
-	  data->rect.y -= y_offset;
-
-
-	  prev_node = draw_data_list;
-
-	  draw_data_list = draw_data_list->next;
-	next_rect:
-	  continue;
-	}
-      widget_list = widget_list->next;
-    }
-
-  /* Process the draws */
-  
-  widget_list = old_queue;
-
-  while (widget_list)
-    {
-      GSList *tmp_list;
-      
-      widget = widget_list->data;
-      draw_data_list = gtk_object_get_data_by_id (GTK_OBJECT (widget),
-						  draw_data_tmp_key_id);
-      gtk_object_set_data_by_id (GTK_OBJECT (widget),
-				 draw_data_tmp_key_id,
-				 NULL);
-
-      tmp_list = draw_data_list;
-      while (tmp_list)
-	{
-	  GtkDrawData *data = tmp_list->data;
-	  if ((data->rect.width != 0) && (data->rect.height != 0))
-	    gtk_widget_draw (widget, &data->rect);
-	  
-	  if (tmp_list->next)
-	    tmp_list = tmp_list->next;
-	  else
-	    {
-	      tmp_list->next = draw_data_free_list;
-	      draw_data_free_list = draw_data_list;
-	      break;
-	    }
-	}
-
-      widget_list = widget_list->next;
-    }
-
-  g_slist_free (old_queue);
-
-  GDK_THREADS_LEAVE ();
-  
-  return FALSE;
 }
 
 void
@@ -2338,7 +1886,25 @@ gtk_widget_draw (GtkWidget    *widget,
 	  area = &temp_area;
 	}
 
+      if (!GTK_WIDGET_NO_WINDOW (widget))
+	{
+	  GdkRectangle tmp_area = *area;
+	  gint x, y;
+
+	  if (!GTK_WIDGET_TOPLEVEL (widget))
+	    {
+	      gdk_window_get_position (widget->window, &x, &y);
+	      tmp_area.x -= x - widget->allocation.x;
+	      tmp_area.y -= y - widget->allocation.y;
+	    }
+
+	  gdk_window_begin_paint_rect (widget->window, &tmp_area);
+	}
+      
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[DRAW], area);
+
+      if (!GTK_WIDGET_NO_WINDOW (widget))
+	gdk_window_end_paint (widget->window);
     }
 }
 
@@ -2469,14 +2035,13 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   real_allocation.width = MAX (real_allocation.width, 1);
   real_allocation.height = MAX (real_allocation.height, 1);
 
-  if (real_allocation.width > 32767 ||
-      real_allocation.height > 32767)
+  if (real_allocation.width < 0 || real_allocation.height < 0)
     {
       g_warning ("gtk_widget_size_allocate(): attempt to allocate widget with width %d and height %d",
 		 real_allocation.width,
 		 real_allocation.height);
-      real_allocation.width = MIN (real_allocation.width, 32767);
-      real_allocation.height = MIN (real_allocation.height, 32767);
+      real_allocation.width = 1;
+      real_allocation.height = 1;
     }
   
   if (GTK_WIDGET_NO_WINDOW (widget))
@@ -2727,7 +2292,7 @@ gint
 gtk_widget_event (GtkWidget *widget,
 		  GdkEvent  *event)
 {
-  gint return_val;
+  gboolean return_val;
   gint signal_num;
 
   g_return_val_if_fail (widget != NULL, TRUE);
@@ -2738,14 +2303,10 @@ gtk_widget_event (GtkWidget *widget,
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[EVENT], event,
 		   &return_val);
   if (return_val || GTK_OBJECT_DESTROYED (widget))
-    {
-      gtk_widget_unref (widget);
-      return TRUE;
-    }
+    goto out;
 
   switch (event->type)
     {
-      GtkWidget *parent;
     case GDK_NOTHING:
       signal_num = -1;
       break;
@@ -2821,42 +2382,9 @@ gtk_widget_event (GtkWidget *widget,
       signal_num = CLIENT_EVENT;
       break;
     case GDK_EXPOSE:
-      /* there is no sense in providing a widget with bogus expose events.
-       * also we make the optimization to discard expose events for widgets
-       * that have a full redraw pending (given that the event is !send_event,
-       * otherwise we assume we can trust the event).
-       */
-      if (event->any.send_event)
-	parent = NULL;
-      else if (event->any.window)
-	{
-	  parent = widget;
-	  while (parent)
-	    {
-	      if (GTK_WIDGET_FULLDRAW_PENDING (parent))
-		break;
-	      parent = parent->parent;
-	    }
-	  /* <HACK> gnome-dock didn't propagate draws to torn off
-	   *        children. So don't consider those ancestors.
-	   */
-	  if (parent)
-	    {
-	      GdkWindow *parent_window = event->any.window;
+      if (!event->any.window)	/* Why is this necessary */
+	goto out;
 
-	      while (parent_window && parent_window != parent->window)
-		  parent_window = gdk_window_get_parent (parent_window);
-
-	      if (!parent_window)
-		parent = NULL;
-	    }
-	  /* </HACK> */
-	}
-      if (!event->any.window || parent)
-	{
-	  gtk_widget_unref (widget);
-	  return TRUE;
-	}
       signal_num = EXPOSE_EVENT;
       break;
     case GDK_VISIBILITY_NOTIFY:
@@ -2864,8 +2392,7 @@ gtk_widget_event (GtkWidget *widget,
       break;
     default:
       g_warning ("could not determine signal number for event: %d", event->type);
-      gtk_widget_unref (widget);
-      return TRUE;
+      goto out;
     }
   
   if (signal_num != -1)
@@ -2873,6 +2400,7 @@ gtk_widget_event (GtkWidget *widget,
 
   return_val |= GTK_OBJECT_DESTROYED (widget);
 
+ out:
   gtk_widget_unref (widget);
 
   return return_val;
@@ -3056,7 +2584,7 @@ gtk_widget_intersect (GtkWidget	   *widget,
   else
     dest = &tmp;
   
-  return_val = gdk_rectangle_intersect ((GdkRectangle*) &widget->allocation, area, dest);
+  return_val = gdk_rectangle_intersect (&widget->allocation, area, dest);
   
   if (return_val && intersection && !GTK_WIDGET_NO_WINDOW (widget))
     {

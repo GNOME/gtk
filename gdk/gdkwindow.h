@@ -91,9 +91,9 @@ struct _GdkWindowAttr
 {
   gchar *title;
   gint event_mask;
-  gint16 x, y;
-  gint16 width;
-  gint16 height;
+  gint x, y;
+  gint width;
+  gint height;
   GdkWindowClass wclass;
   GdkVisual *visual;
   GdkColormap *colormap;
@@ -230,6 +230,11 @@ void          gdk_window_set_geometry_hints (GdkWindow        *window,
 					     GdkWindowHints    flags);
 void          gdk_set_sm_client_id         (const gchar *sm_client_id);
 
+void	      gdk_window_begin_paint_rect   (GdkWindow    *window,
+					     GdkRectangle *rectangle);
+void	      gdk_window_begin_paint_region (GdkWindow    *window,
+					     GdkRegion    *region);
+void	      gdk_window_end_paint          (GdkWindow    *window);
 
 void	      gdk_window_set_title	   (GdkWindow	  *window,
 					    const gchar	  *title);
@@ -268,9 +273,10 @@ GdkWindow*    gdk_window_get_pointer	 (GdkWindow	  *window,
 					  gint		  *x,
 					  gint		  *y,
 					  GdkModifierType *mask);
-GdkWindow*    gdk_window_get_parent	 (GdkWindow	  *window);
-GdkWindow*    gdk_window_get_toplevel	 (GdkWindow	  *window);
-GList*	      gdk_window_get_children	 (GdkWindow	  *window);
+GdkWindow *   gdk_window_get_parent      (GdkWindow       *window);
+GdkWindow *   gdk_window_get_toplevel    (GdkWindow       *window);
+
+GList *	      gdk_window_get_children	 (GdkWindow	  *window);
 GdkEventMask  gdk_window_get_events	 (GdkWindow	  *window);
 void	      gdk_window_set_events	 (GdkWindow	  *window,
 					  GdkEventMask	   event_mask);
@@ -290,6 +296,24 @@ void	      gdk_window_set_functions	 (GdkWindow	  *window,
 GList *       gdk_window_get_toplevels   (void);
 
 void          gdk_window_register_dnd    (GdkWindow       *window);
+
+/* Interface for dirty-region queueing */
+void       gdk_window_invalidate_rect     (GdkWindow    *window,
+					   GdkRectangle *rect,
+					   gboolean      invalidate_children);
+void       gdk_window_invalidate_region   (GdkWindow    *window,
+					   GdkRegion    *region,
+					   gboolean      invalidate_children);
+GdkRegion *gdk_window_get_update_area     (GdkWindow    *window);
+
+void       gdk_window_freeze_updates      (GdkWindow    *window);
+void       gdk_window_thaw_updates        (GdkWindow    *window);
+
+void       gdk_window_process_all_updates (void);
+void       gdk_window_process_updates     (GdkWindow    *window,
+					   gboolean      update_children);
+
+
 
 #ifdef __cplusplus
 }

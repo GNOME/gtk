@@ -110,7 +110,7 @@ typedef enum
   
   
 typedef struct _GtkRequisition	  GtkRequisition;
-typedef struct _GtkAllocation	  GtkAllocation;
+typedef struct _GdkRectangle	  GtkAllocation;
 typedef struct _GtkSelectionData GtkSelectionData;
 typedef struct _GtkWidgetClass	  GtkWidgetClass;
 typedef struct _GtkWidgetAuxInfo  GtkWidgetAuxInfo;
@@ -124,20 +124,8 @@ typedef void (*GtkCallback) (GtkWidget *widget,
  */
 struct _GtkRequisition
 {
-  gint16 width;
-  gint16 height;
-};
-
-/* An allocation is a size and position. Where a widget
- *  can ask for a desired size, it is actually given
- *  this amount of space at the specified position.
- */
-struct _GtkAllocation
-{
-  gint16 x;
-  gint16 y;
-  guint16 width;
-  guint16 height;
+  gint width;
+  gint height;
 };
 
 /* The contents of a selection are returned in a GtkSelectionData

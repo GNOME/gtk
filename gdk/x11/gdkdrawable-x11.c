@@ -1,4 +1,30 @@
-#include "gdkx.h"
+/* GDK - The GIMP Drawing Kit
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+/*
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
+ * file for a list of people on the GTK+ Team.  See the ChangeLog
+ * files for a list of changes.  These files are distributed with
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ */
+
+#include "gdkprivate-x11.h"
 
 static void    gdk_x11_drawable_destroy   (GdkDrawable     *drawable);
 
@@ -159,10 +185,10 @@ gdk_x11_draw_rectangle (GdkDrawable *drawable,
 {
   if (filled)
     XFillRectangle (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
-		    GDK_GC_XGC (gc), x, y, width, height);
+		    GDK_GC_GET_XGC (gc), x, y, width, height);
   else
     XDrawRectangle (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
-		    GDK_GC_XGC (gc), x, y, width, height);
+		    GDK_GC_GET_XGC (gc), x, y, width, height);
 }
 
 static void
@@ -178,10 +204,10 @@ gdk_x11_draw_arc (GdkDrawable *drawable,
 {
   if (filled)
     XFillArc (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
-	      GDK_GC_XGC (gc), x, y, width, height, angle1, angle2);
+	      GDK_GC_GET_XGC (gc), x, y, width, height, angle1, angle2);
   else
     XDrawArc (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
-	      GDK_GC_XGC (gc), x, y, width, height, angle1, angle2);
+	      GDK_GC_GET_XGC (gc), x, y, width, height, angle1, angle2);
 }
 
 static void
@@ -191,36 +217,37 @@ gdk_x11_draw_polygon (GdkDrawable *drawable,
 		      GdkPoint    *points,
 		      gint         npoints)
 {
-  if (filled)
+  XPoint *tmp_points;
+  gint tmp_npoints, i;
+
+  if (!filled &&
+      (points[0].x != points[npoints-1].x || points[0].y != points[npoints-1].y))
     {
-      XFillPolygon (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
-		    GDK_GC_XGC (gc), (XPoint*) points, npoints, Complex, CoordModeOrigin);
+      tmp_npoints = npoints + 1;
+      tmp_points = g_new (XPoint, tmp_npoints);
+      tmp_points[npoints].x = points[0].x;
+      tmp_points[npoints].y = points[0].y;
     }
   else
     {
-      GdkPoint *local_points = points;
-      gint local_npoints = npoints;
-      gint local_alloc = 0;
-
-      if ((points[0].x != points[npoints-1].x) ||
-        (points[0].y != points[npoints-1].y)) 
-        {
-          local_alloc = 1;
-          ++local_npoints;
-          local_points = (GdkPoint*) g_malloc (local_npoints * sizeof(GdkPoint));
-          memcpy (local_points, points, npoints * sizeof(GdkPoint));
-          local_points[npoints].x = points[0].x;
-          local_points[npoints].y = points[0].y;
-      }
-
-      XDrawLines (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
-		  GDK_GC_XGC (gc),
-		  (XPoint*) local_points, local_npoints,
-		  CoordModeOrigin);
-  
-       if (local_alloc)
-       g_free (local_points);
+      tmp_npoints = npoints;
+      tmp_points = g_new (XPoint, tmp_npoints);
     }
+
+  for (i=0; i<npoints; i++)
+    {
+      tmp_points[i].x = points[i].x;
+      tmp_points[i].y = points[i].y;
+    }
+  
+  if (filled)
+    XFillPolygon (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
+		  GDK_GC_GET_XGC (gc), tmp_points, tmp_npoints, Complex, CoordModeOrigin);
+  else
+    XDrawLines (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
+		GDK_GC_GET_XGC (gc), tmp_points, tmp_npoints, CoordModeOrigin);
+
+  g_free (tmp_points);
 }
 
 /* gdk_x11_draw_text
@@ -241,23 +268,23 @@ gdk_x11_draw_text (GdkDrawable *drawable,
   if (font->type == GDK_FONT_FONT)
     {
       XFontStruct *xfont = (XFontStruct *) GDK_FONT_XFONT (font);
-      XSetFont(GDK_DRAWABLE_XDISPLAY (drawable), GDK_GC_XGC (gc), xfont->fid);
+      XSetFont(GDK_DRAWABLE_XDISPLAY (drawable), GDK_GC_GET_XGC (gc), xfont->fid);
       if ((xfont->min_byte1 == 0) && (xfont->max_byte1 == 0))
 	{
 	  XDrawString (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
-		       GDK_GC_XGC (gc), x, y, text, text_length);
+		       GDK_GC_GET_XGC (gc), x, y, text, text_length);
 	}
       else
 	{
 	  XDrawString16 (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
-			 GDK_GC_XGC (gc), x, y, (XChar2b *) text, text_length / 2);
+			 GDK_GC_GET_XGC (gc), x, y, (XChar2b *) text, text_length / 2);
 	}
     }
   else if (font->type == GDK_FONT_FONTSET)
     {
       XFontSet fontset = (XFontSet) GDK_FONT_XFONT (font);
       XmbDrawString (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
-		     fontset, GDK_GC_XGC (gc), x, y, text, text_length);
+		     fontset, GDK_GC_GET_XGC (gc), x, y, text, text_length);
     }
   else
     g_error("undefined font type\n");
@@ -277,11 +304,11 @@ gdk_x11_draw_text_wc (GdkDrawable    *drawable,
       XFontStruct *xfont = (XFontStruct *) GDK_FONT_XFONT (font);
       gchar *text_8bit;
       gint i;
-      XSetFont(GDK_DRAWABLE_XDISPLAY (drawable), GDK_GC_XGC (gc), xfont->fid);
+      XSetFont(GDK_DRAWABLE_XDISPLAY (drawable), GDK_GC_GET_XGC (gc), xfont->fid);
       text_8bit = g_new (gchar, text_length);
       for (i=0; i<text_length; i++) text_8bit[i] = text[i];
       XDrawString (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
-                   GDK_GC_XGC (gc), x, y, text_8bit, text_length);
+                   GDK_GC_GET_XGC (gc), x, y, text_8bit, text_length);
       g_free (text_8bit);
     }
   else if (font->type == GDK_FONT_FONTSET)
@@ -290,7 +317,7 @@ gdk_x11_draw_text_wc (GdkDrawable    *drawable,
 	{
 	  XwcDrawString (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
 			 (XFontSet) GDK_FONT_XFONT (font),
-			 GDK_GC_XGC (gc), x, y, (wchar_t *)text, text_length);
+			 GDK_GC_GET_XGC (gc), x, y, (wchar_t *)text, text_length);
 	}
       else
 	{
@@ -300,7 +327,7 @@ gdk_x11_draw_text_wc (GdkDrawable    *drawable,
 	  for (i=0; i<text_length; i++) text_wchar[i] = text[i];
 	  XwcDrawString (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
 			 (XFontSet) GDK_FONT_XFONT (font),
-			 GDK_GC_XGC (gc), x, y, text_wchar, text_length);
+			 GDK_GC_GET_XGC (gc), x, y, text_wchar, text_length);
 	  g_free (text_wchar);
 	}
     }
@@ -319,27 +346,31 @@ gdk_x11_draw_drawable (GdkDrawable *drawable,
 		       gint         width,
 		       gint         height)
 {
-  /* FIXME: this doesn't work because bitmaps don't have visuals */
-  if (gdk_drawable_get_visual (src)->depth == 1)
+  int src_depth = gdk_drawable_get_depth (src);
+  int dest_depth = gdk_drawable_get_depth (drawable);
+
+  if (src_depth == 1)
     {
       XCopyArea (GDK_DRAWABLE_XDISPLAY (drawable),
 		 GDK_DRAWABLE_XID (src),
 		 GDK_DRAWABLE_XID (drawable),
-		 GDK_GC_XGC (gc),
+		 GDK_GC_GET_XGC (gc),
+		 xsrc, ysrc,
+		 width, height,
+		 xdest, ydest);
+    }
+  else if (dest_depth != 0 && src_depth == dest_depth)
+    {
+      XCopyArea (GDK_DRAWABLE_XDISPLAY (drawable),
+		 GDK_DRAWABLE_XID (src),
+		 GDK_DRAWABLE_XID (drawable),
+		 GDK_GC_GET_XGC (gc),
 		 xsrc, ysrc,
 		 width, height,
 		 xdest, ydest);
     }
   else
-    {
-      XCopyArea (GDK_DRAWABLE_XDISPLAY (drawable),
-		 GDK_DRAWABLE_XID (src),
-		 GDK_DRAWABLE_XID (drawable),
-		 GDK_GC_XGC (gc),
-		 xsrc, ysrc,
-		 width, height,
-		 xdest, ydest);
-    }
+    g_warning ("Attempt to copy between drawables of mismatched depths!\n");
 }
 
 static void
@@ -355,17 +386,28 @@ gdk_x11_draw_points (GdkDrawable *drawable,
     {
       XDrawPoint (GDK_DRAWABLE_XDISPLAY (drawable),
 		  GDK_DRAWABLE_XID (drawable),
-		  GDK_GC_XGC (gc),
+		  GDK_GC_GET_XGC (gc),
 		  points[0].x, points[0].y);
     }
   else
     {
+      gint i;
+      XPoint *tmp_points = g_new (XPoint, npoints);
+
+      for (i=0; i<npoints; i++)
+	{
+	  tmp_points[i].x = points[i].x;
+	  tmp_points[i].y = points[i].y;
+	}
+      
       XDrawPoints (GDK_DRAWABLE_XDISPLAY (drawable),
 		   GDK_DRAWABLE_XID (drawable),
-		   GDK_GC_XGC (gc),
-		   (XPoint *) points,
+		   GDK_GC_GET_XGC (gc),
+		   tmp_points,
 		   npoints,
 		   CoordModeOrigin);
+
+      g_free (tmp_points);
     }
 }
 
@@ -381,16 +423,28 @@ gdk_x11_draw_segments (GdkDrawable *drawable,
   if (nsegs == 1)
     {
       XDrawLine (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
-		 GDK_GC_XGC (gc), segs[0].x1, segs[0].y1,
+		 GDK_GC_GET_XGC (gc), segs[0].x1, segs[0].y1,
 		 segs[0].x2, segs[0].y2);
     }
   else
     {
+      gint i;
+      XSegment *tmp_segs = g_new (XSegment, nsegs);
+
+      for (i=0; i<nsegs; i++)
+	{
+	  tmp_segs[i].x1 = segs[i].x1;
+	  tmp_segs[i].x2 = segs[i].x2;
+	  tmp_segs[i].y1 = segs[i].y1;
+	  tmp_segs[i].y2 = segs[i].y2;
+	}
+      
       XDrawSegments (GDK_DRAWABLE_XDISPLAY (drawable),
 		     GDK_DRAWABLE_XID (drawable),
-		     GDK_GC_XGC (gc),
-		     (XSegment *) segs,
-		     nsegs);
+		     GDK_GC_GET_XGC (gc),
+		     tmp_segs, nsegs);
+
+      g_free (tmp_segs);
     }
 }
 
@@ -400,10 +454,20 @@ gdk_x11_draw_lines (GdkDrawable *drawable,
 		    GdkPoint    *points,
 		    gint         npoints)
 {
+  gint i;
+  XPoint *tmp_points = g_new (XPoint, npoints);
+
+  for (i=0; i<npoints; i++)
+    {
+      tmp_points[i].x = points[i].x;
+      tmp_points[i].y = points[i].y;
+    }
+      
   XDrawLines (GDK_DRAWABLE_XDISPLAY (drawable),
 	      GDK_DRAWABLE_XID (drawable),
-	      GDK_GC_XGC (gc),
-	      (XPoint *) points,
-	      npoints,
+	      GDK_GC_GET_XGC (gc),
+	      tmp_points, npoints,
 	      CoordModeOrigin);
+
+  g_free (tmp_points);
 }

@@ -25,6 +25,7 @@
  */
 
 #include "gdkinputprivate.h"
+#include "gdkinternals.h"
 #include "gdkx.h"
 
 /* Forward declarations */
@@ -146,6 +147,7 @@ gdk_input_device_new(XDeviceInfo *device, gint include_core)
 
   gdkdev->info.num_axes = 0;
   gdkdev->info.num_keys = 0;
+  gdkdev->info.axes = NULL;
   gdkdev->info.keys = NULL;
   gdkdev->axes = 0;
   gdkdev->info.has_cursor = 0;
@@ -237,6 +239,8 @@ gdk_input_device_new(XDeviceInfo *device, gint include_core)
 	g_free(gdkdev->axes);
       if (gdkdev->info.keys)
 	g_free(gdkdev->info.keys);
+      if (gdkdev->info.axes)
+	g_free (gdkdev->info.axes);
       g_free(gdkdev);
       return NULL;
     }

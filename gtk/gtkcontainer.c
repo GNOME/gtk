@@ -847,8 +847,10 @@ gtk_container_idle_sizer (gpointer data)
       gtk_container_check_resize (GTK_CONTAINER (widget));
     }
 
+  gdk_window_process_all_updates ();
+
   GDK_THREADS_LEAVE ();
-  
+
   return FALSE;
 }
 

@@ -46,8 +46,8 @@
 
 #include "gdk.h"
 
-#include "gdkx.h"
-#include "gdkprivate.h"
+#include "gdkprivate-x11.h"
+#include "gdkinternals.h"
 #include "gdkinputprivate.h"
 
 typedef struct _GdkPredicate  GdkPredicate;

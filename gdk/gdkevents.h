@@ -317,9 +317,9 @@ struct _GdkEventConfigure
   GdkEventType type;
   GdkWindow *window;
   gint8 send_event;
-  gint16 x, y;
-  gint16 width;
-  gint16 height;
+  gint x, y;
+  gint width;
+  gint height;
 };
 
 struct _GdkEventProperty

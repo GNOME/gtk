@@ -47,6 +47,8 @@ gdk_drawable_alloc (void)
   private->width = 1;
   private->height = 1;
 
+  private->depth = 0;
+
   private->colormap = NULL;
 
   return drawable;
@@ -102,6 +104,15 @@ gdk_drawable_get_visual (GdkDrawable *drawable)
 
   colormap = gdk_drawable_get_colormap (drawable);
   return colormap ? gdk_colormap_get_visual (colormap) : NULL;
+}
+
+gint
+gdk_drawable_get_depth (GdkDrawable *drawable)
+{
+  GdkDrawablePrivate *private = (GdkDrawablePrivate *)drawable;
+  g_return_val_if_fail (drawable != NULL, 0);
+
+  return private->depth;
 }
 
 GdkDrawable*
@@ -365,8 +376,12 @@ gdk_draw_image (GdkDrawable *drawable,
     height = image->height;
 
 
-  image_private->klass->image_put (image, drawable, gc, xsrc, ysrc,
-				   xdest, ydest, width, height);
+  if (GDK_IS_WINDOW (drawable))
+    _gdk_window_draw_image (drawable, gc, image, xsrc, ysrc,
+			    xdest, ydest, width, height);
+  else
+    image_private->klass->image_put (image, drawable, gc, xsrc, ysrc,
+				     xdest, ydest, width, height);
 }
 
 void

@@ -33,8 +33,7 @@
 #include <X11/Xlib.h>
 
 #include "gdkpixmap.h"
-#include "gdkprivate.h"
-#include "gdkx.h"
+#include "gdkprivate-x11.h"
 
 typedef struct
 {
@@ -119,6 +118,7 @@ gdk_pixmap_new (GdkWindow *window,
 						     width, height, depth);
   private->width = width;
   private->height = height;
+  private->depth = depth;
 
   gdk_xid_table_insert (&GDK_DRAWABLE_XID (pixmap), pixmap);
 
@@ -149,6 +149,7 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
 
   private->width = width;
   private->height = height;
+  private->depth = 1;
 
   GDK_DRAWABLE_XDATA (private)->xdisplay = GDK_DRAWABLE_XDISPLAY (window);
   GDK_DRAWABLE_XDATA (private)->xid = XCreateBitmapFromData (GDK_DRAWABLE_XDISPLAY (window),
@@ -193,6 +194,7 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
 
   private->width = width;
   private->height = height;
+  private->depth = depth;
 
   GDK_DRAWABLE_XDATA (private)->xdisplay = GDK_DRAWABLE_XDISPLAY (window);
   GDK_DRAWABLE_XDATA (private)->xid = XCreatePixmapFromBitmapData (GDK_DRAWABLE_XDISPLAY (window),
@@ -804,6 +806,7 @@ gdk_pixmap_foreign_new (guint32 anid)
 
   private->width = w_ret;
   private->height = h_ret;
+  private->depth = depth_ret;
   
   gdk_xid_table_insert(&GDK_DRAWABLE_XID (pixmap), pixmap);
 
