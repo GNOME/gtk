@@ -482,7 +482,8 @@ gdk_window_new (GdkWindow     *parent,
       private->depth = 0;
       class = InputOnly;
       private->input_only = TRUE;
-      draw_impl->colormap = NULL;
+      draw_impl->colormap = gdk_colormap_get_system ();
+      gdk_colormap_ref (draw_impl->colormap);
     }
 
   draw_impl->xid = XCreateWindow (GDK_WINDOW_XDISPLAY (parent),

@@ -1,3 +1,9 @@
+2000-12-30  Havoc Pennington  <hp@pobox.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_new): Set the system
+	colormap on input only windows, to avoid special cases all over
+	the code for these windows.
+
 2000-12-22  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkkeyboard-fb.c (xlate_io):
