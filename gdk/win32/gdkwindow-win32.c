@@ -27,6 +27,7 @@
 
 #include <stdlib.h>
 
+#include "gdk.h" /* gdk_rectangle_intersect */
 #include "gdkevents.h"
 #include "gdkpixmap.h"
 #include "gdkwindow.h"

@@ -928,7 +928,8 @@ gdk_win32_draw_image (GdkDrawable     *drawable,
 
   hdc = gdk_win32_hdc_get (drawable, gc, 0);
 
-  if (colormap_private && colormap_private->xcolormap->rc_palette)
+  if (image->visual->type == GDK_VISUAL_PSEUDO_COLOR &&
+	  colormap_private && colormap_private->xcolormap->rc_palette)
     {
       if (!bmi_inited)
 	{
