@@ -96,6 +96,8 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   container_class->add = gtk_scrolled_window_add;
   container_class->remove = gtk_scrolled_window_remove;
   container_class->foreach = gtk_scrolled_window_foreach;
+
+  class->scrollbar_spacing = 5;
 }
 
 static void

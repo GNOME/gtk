@@ -1,3 +1,8 @@
+Sat Jan  3 11:09:51 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* gtk/gtkscrolledwindow.c: initialize scrollbar_spacing
+	  (gtk-fortier-980103-0)
+
 Sat Jan  3 10:15:08 1998  Scott Goehring  <scott@poverty.bloomington.in.us>
 
 	* configure.in: fixed a typo (no_xext_lib, not no_ext_lib).
