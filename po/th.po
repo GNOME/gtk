@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-03-02 17:21-0500\n"
-"PO-Revision-Date: 2004-03-12 23:39-0600\n"
+"PO-Revision-Date: 2004-03-15 19:30-0600\n"
 "Last-Translator: Paisa Seeluangsawat <paisa@users.sf.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
 "MIME-Version: 1.0\n"
@@ -806,7 +806,7 @@ msgstr "คลิกที่หลอดตา แล้วคลิกสี�
 
 #: gtk/gtkcolorsel.c:1873
 msgid "_Hue:"
-msgstr "_สี:"
+msgstr "ธาตุ_สี:"
 
 #: gtk/gtkcolorsel.c:1874
 msgid "Position on the color wheel."
@@ -814,11 +814,11 @@ msgstr "ตำแหน่งบนวงแหวนสี"
 
 #: gtk/gtkcolorsel.c:1876
 msgid "_Saturation:"
-msgstr "ความเข้_ม:"
+msgstr "ความส_ด:"
 
 #: gtk/gtkcolorsel.c:1877
 msgid "\"Deepness\" of the color."
-msgstr "สีจางหรืออิ่มตัว"
+msgstr "สีสดหรือจาง"
 
 #: gtk/gtkcolorsel.c:1878
 msgid "_Value:"
@@ -826,11 +826,11 @@ msgstr "ความสว่า_ง:"
 
 #: gtk/gtkcolorsel.c:1879
 msgid "Brightness of the color."
-msgstr "สว่างหรือมืด"
+msgstr "สีสว่างหรือมืด"
 
 #: gtk/gtkcolorsel.c:1880
 msgid "_Red:"
-msgstr "แ_ดง:"
+msgstr "_แดง:"
 
 #: gtk/gtkcolorsel.c:1881
 msgid "Amount of red light in the color."
