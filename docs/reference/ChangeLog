@@ -1,5 +1,7 @@
 2005-01-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-docs.sgml: Add an index for 2.8 symbols.
+
 	* gdk/gdk-docs.sgml: Add an index for 2.8 symbols.
 
 	* gdk/gdk-sections.txt: Add gdk_display_warp_pointer.
