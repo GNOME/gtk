@@ -105,10 +105,10 @@ gtk_signal_connect_object_while_alive (GtkObject    *object,
 {
   g_return_if_fail (GTK_IS_OBJECT (object));
   
-  g_signal_connect_closure (object,
-			    g_signal_lookup (signal, G_OBJECT_TYPE (object)), 0,
-			    g_cclosure_new_object_swap (func, alive_object),
-			    FALSE);
+  g_signal_connect_closure_by_id (object,
+				  g_signal_lookup (signal, G_OBJECT_TYPE (object)), 0,
+				  g_cclosure_new_object_swap (func, alive_object),
+				  FALSE);
 }
 
 void
@@ -124,10 +124,10 @@ gtk_signal_connect_while_alive (GtkObject    *object,
 
   closure = g_cclosure_new (func, func_data, NULL);
   g_object_watch_closure (G_OBJECT (alive_object), closure);
-  g_signal_connect_closure (object,
-			    g_signal_lookup (signal, G_OBJECT_TYPE (object)), 0,
-			    closure,
-			    FALSE);
+  g_signal_connect_closure_by_id (object,
+				  g_signal_lookup (signal, G_OBJECT_TYPE (object)), 0,
+				  closure,
+				  FALSE);
 }
 
 guint
@@ -143,14 +143,14 @@ gtk_signal_connect_full (GtkObject           *object,
   g_return_val_if_fail (GTK_IS_OBJECT (object), 0);
   g_return_val_if_fail (unsupported == NULL, 0);
   
-  return g_signal_connect_closure (object,
-				   g_signal_lookup (name, G_OBJECT_TYPE (object)), 0,
-				   (object_signal
-				    ? g_cclosure_new_swap
-				    : g_cclosure_new) (func,
-						       data,
-						       (GClosureNotify) destroy_func),
-				   after);
+  return g_signal_connect_closure_by_id (object,
+					 g_signal_lookup (name, G_OBJECT_TYPE (object)), 0,
+					 (object_signal
+					  ? g_cclosure_new_swap
+					  : g_cclosure_new) (func,
+							     data,
+							     (GClosureNotify) destroy_func),
+					 after);
 }
 
 void

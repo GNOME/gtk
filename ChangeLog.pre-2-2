@@ -1,3 +1,10 @@
+Fri Nov  3 08:58:38 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkobject.c: _g_signal_handlers_destroy() is prefixed with '_'
+	now.
+
+	* gtk/gtksignal.c: use g_signal_connect_closure_by_id() now.
+
 Thu Nov  2 14:10:51 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdnd-x11.c: Fix a bunch of functions that should have
