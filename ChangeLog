@@ -1,3 +1,12 @@
+Mon Mar 23 01:04:51 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktext.[ch] testgtk.c: Added optional word wrap, controlled
+	  by new function gtk_text_set_word_wrap; and a check button
+	  in the Text test.
+
+	* gtk/gtktext.c: First line wasn't getting updated
+	properly when selection was removed.
+
 Sun Mar 22 23:33:50 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkentry.c (gtk_entry_insert_text): Fixed some

@@ -3659,6 +3659,14 @@ text_toggle_editable (GtkWidget *checkbutton,
 			  GTK_TOGGLE_BUTTON(checkbutton)->active);
 }
 
+static void
+text_toggle_word_wrap (GtkWidget *checkbutton,
+		       GtkWidget *text)
+{
+   gtk_text_set_word_wrap(GTK_TEXT(text),
+			  GTK_TOGGLE_BUTTON(checkbutton)->active);
+}
+
 /*
  * GtkText
  */
@@ -3668,8 +3676,9 @@ create_text ()
   static GtkWidget *window = NULL;
   GtkWidget *box1;
   GtkWidget *box2;
+  GtkWidget *hbox;
   GtkWidget *button;
-  GtkWidget *editable_check;
+  GtkWidget *check;
   GtkWidget *separator;
   GtkWidget *table;
   GtkWidget *hscrollbar;
@@ -3760,12 +3769,23 @@ create_text ()
 
       gtk_text_thaw (GTK_TEXT (text));
 
-      editable_check = gtk_check_button_new_with_label("Editable");
-      gtk_box_pack_start (GTK_BOX (box2), editable_check, FALSE, TRUE, 0);
-      gtk_signal_connect (GTK_OBJECT(editable_check), "toggled",
+      hbox = gtk_hbutton_box_new ();
+      gtk_box_pack_start (GTK_BOX (box2), hbox, FALSE, FALSE, 0);
+      gtk_widget_show (hbox);
+
+      check = gtk_check_button_new_with_label("Editable");
+      gtk_box_pack_start (GTK_BOX (hbox), check, FALSE, FALSE, 0);
+      gtk_signal_connect (GTK_OBJECT(check), "toggled",
 			  GTK_SIGNAL_FUNC(text_toggle_editable), text);
-      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(editable_check), TRUE);
-      gtk_widget_show (editable_check);
+      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(check), TRUE);
+      gtk_widget_show (check);
+
+      check = gtk_check_button_new_with_label("Wrap Words");
+      gtk_box_pack_start (GTK_BOX (hbox), check, FALSE, TRUE, 0);
+      gtk_signal_connect (GTK_OBJECT(check), "toggled",
+			  GTK_SIGNAL_FUNC(text_toggle_word_wrap), text);
+      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(check), FALSE);
+      gtk_widget_show (check);
 
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);

@@ -518,6 +518,22 @@ gtk_text_new (GtkAdjustment *hadj,
 }
 
 void
+gtk_text_set_word_wrap (GtkText *text,
+			gint     word_wrap)
+{
+  g_return_if_fail (text != NULL);
+  g_return_if_fail (GTK_IS_TEXT (text));
+
+  text->word_wrap = (word_wrap != FALSE);
+  
+  if (GTK_WIDGET_DRAWABLE (text))
+    {
+      recompute_geometry (text);
+      gtk_widget_queue_draw (GTK_WIDGET (text));
+    }
+}
+
+void
 gtk_text_set_editable (GtkText *text,
 		       gint     editable)
 {
@@ -3940,8 +3956,33 @@ find_line_params (GtkText* text,
 		}
 	      else
 		{
-		  /* Don't include this character, it will wrap. */
-		  decrement_mark (&lp.end);
+		  if (text->word_wrap)
+		    {
+		      GtkPropertyMark saved_mark = lp.end;
+		      guint saved_characters = lp.displayable_chars;
+
+		      lp.displayable_chars += 1;
+		      
+		      while (!isspace (GTK_TEXT_INDEX (text, lp.end.index)) &&
+			     (lp.end.index > lp.start.index))
+			{
+			  decrement_mark (&lp.end);
+			  lp.displayable_chars -= 1;
+			}
+
+		      /* If whole line is one word, revert to char wrapping */
+		      if (lp.end.index == lp.start.index)
+			{
+			  lp.end = saved_mark;
+			  lp.displayable_chars = saved_characters;
+			  decrement_mark (&lp.end);
+			}
+		    }
+		  else
+		    {
+		      /* Don't include this character, it will wrap. */
+		      decrement_mark (&lp.end);
+		    }
 		}
 
 	      lp.tab_cont_next = *next_cont;
@@ -4502,7 +4543,7 @@ gtk_text_update_text    (GtkEditable       *editable,
 	  if (CACHE_DATA(cache).end.index >= start_pos)
 	    {
 	      if (area.y < 0)
-		area.y = pixels;
+		area.y = MAX(0,pixels);
 	      area.height = pixels + LINE_HEIGHT(CACHE_DATA(cache)) - area.y;
 	    }
 	}
