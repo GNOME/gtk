@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "POT-Creation-Date: 2002-12-04 15:15+0200\n"
-"PO-Revision-Date: 2002-12-04 05:43--500\n"
+"PO-Revision-Date: 2002-12-04 10:50--500\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -165,7 +165,7 @@ msgstr "Зображення формату BMP має неправильні д
 
 #: gdk-pixbuf/io-bmp.c:1076
 msgid "The BMP image format"
-msgstr ""
+msgstr "Графічний формат BMP"
 
 #: gdk-pixbuf/io-gif.c:219
 #, c-format
@@ -189,15 +189,15 @@ msgstr ""
 
 #: gdk-pixbuf/io-gif.c:634
 msgid "GIF image loader can't understand this image."
-msgstr ""
+msgstr "Завантажувач зображень у форматі GIF не може зрозуміти це зображення."
 
 #: gdk-pixbuf/io-gif.c:663
 msgid "Bad code encountered"
-msgstr ""
+msgstr "Виявлено неправильний код"
 
 #: gdk-pixbuf/io-gif.c:673
 msgid "Circular table entry in GIF file"
-msgstr ""
+msgstr "Циклічний табличний запис у файлі формату GIF"
 
 #: gdk-pixbuf/io-gif.c:806
 #: gdk-pixbuf/io-gif.c:1416
@@ -625,9 +625,8 @@ msgid "Failed to load RGB data from TIFF file"
 msgstr "Не вдалося відкрити зображення TIFF"
 
 #: gdk-pixbuf/io-tiff.c:266
-#, fuzzy
 msgid "Unsupported TIFF variant"
-msgstr "Непідтримуваний тип зображення TGA"
+msgstr "Непідтримуваний варіант зображення формату TIFF"
 
 #: gdk-pixbuf/io-tiff.c:336
 msgid "Failed to open TIFF image"
@@ -715,9 +714,8 @@ msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Не вдалося записати тимчасовий файл під час завантаження зображення XPM"
 
 #: gdk-pixbuf/io-xpm.c:1543
-#, fuzzy
 msgid "The XPM image format"
-msgstr "Формат зображення PNM не вірний"
+msgstr "Графічний формат XPM"
 
 #: gdk/gdkdisplaymanager.c:117
 #, fuzzy
