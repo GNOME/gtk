@@ -12576,8 +12576,8 @@ gtk_tree_view_search_iter (GtkTreeModel     *model,
             {
               gtk_tree_view_scroll_to_cell (tree_view, path, NULL,
 					    TRUE, 0.5, 0.0);
-              gtk_tree_selection_select_iter (selection, iter);
 	      gtk_tree_view_real_set_cursor (tree_view, path, FALSE, TRUE);
+              gtk_tree_selection_select_iter (selection, iter);
 
 	      if (path)
 		gtk_tree_path_free (path);

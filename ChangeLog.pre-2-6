@@ -1,5 +1,11 @@
 2004-10-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_search_iter): Set the cursor
+	before changing the selection to make the file chooser preview
+	update work better.  (#143826, Tommi Komulainen)
+
+2004-10-06  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkrange.c (gtk_range_real_change_value): Replace a really
 	gross way of rounding to a specified number of digits.  (#145232,
 	Peter Zelezny, patch by Soeren Sandmann)
