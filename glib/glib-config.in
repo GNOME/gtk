@@ -42,10 +42,10 @@ while test $# -gt 0; do
       if test @includedir@ != /usr/include ; then
         includes=-I@includedir@
       fi
-      echo -I@libdir@/glib/include $includes @x_cflags@
+      echo -I@libdir@/glib/include $includes
       ;;
     --libs)
-      echo -L@libdir@ -lglib
+      echo -L@libdir@ -lglib-@LT_RELEASE@
       ;;
     *)
       echo "${usage}" 1>&2
