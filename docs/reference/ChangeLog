@@ -1,3 +1,7 @@
+Mon Jun  4 15:08:21 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk-overrides.txt: Remove GtkArgSetFunc, GtkArgGetFunc.
+
 Wed May 30 16:56:07 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/tmpl/gtkrc.sgml (pattern): Correct typoe when
