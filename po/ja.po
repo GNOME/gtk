@@ -123,8 +123,8 @@ msgstr "削除"
 msgid "Rename"
 msgstr "名前変更"
 
+#. fuzzy
 #: gtk/gtkfilesel.c:1440
-#, fuzzy
 msgid "Selection: "
 msgstr "フォント選択"
 
