@@ -4,6 +4,10 @@
 	to let the mouse wheels select the month. Scrolling down
 	moves forward in time. (#53134, Abigail Brady) 
 
+	* gtk/gtkcalendar.c: Complete the RTL flipping support for GtkCalendar, make it
+	possible to flip the headings using the "magic translated string" technique. 
+	Translators, note the comment in gtk_calendar_init() explaining this.
+	
 2003-08-08  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdkregion-generic.c (gdk_region_spans_intersect_foreach): Fix 

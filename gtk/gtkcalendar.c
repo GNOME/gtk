@@ -43,6 +43,7 @@
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtkintl.h"
 #include "gdk/gdkkeysyms.h"
 
 /***************************************************************************/
@@ -268,6 +269,8 @@ struct _GtkCalendarPrivateData
   guint dirty_day_names : 1;
   guint dirty_main : 1;
   guint dirty_week : 1;
+
+  guint year_before : 1;
 
   guint need_timer  : 1;
 
@@ -580,6 +583,7 @@ gtk_calendar_init (GtkCalendar *calendar)
   time_t tmp_time;
   GtkWidget *widget;
   GtkCalendarPrivateData *private_data;
+  gchar *year_before;
   
   widget = GTK_WIDGET (calendar);
   GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
@@ -642,10 +646,27 @@ gtk_calendar_init (GtkCalendar *calendar)
   private_data->dirty_day_names = 0;
   private_data->dirty_week = 0;
   private_data->dirty_main = 0;
-
+  
   private_data->need_timer = 0;
   private_data->timer = 0;
   private_data->click_child = -1;
+
+  private_data->year_before = 0;
+
+  /* Translate to calendar:YM if you want years to be displayed
+   * before months; otherwise translate to calendar:MY.
+   * Do *not* translate it to anything else, if it
+   * it isn't calendar:YM or calendar:MY it will not work.
+   *
+   * Note that this flipping is in top the text direction flipping,
+   * so if you have a default text direction of RTL and YM, then
+   * the year will appear on the right.
+   */
+  year_before = _("calendar:MY");
+  if (strcmp (year_before, "calendar:YM") == 0)
+    private_data->year_before = 1;
+  else if (strcmp (year_before, "calendar:MY") != 0)
+    g_warning ("Whoever translated calendar:MY did so wrongly.\n");
 }
 
 GtkWidget*
@@ -999,12 +1020,18 @@ gtk_calendar_realize_arrows (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
   gint i;
+  gboolean year_left;
   
   g_return_if_fail (GTK_IS_CALENDAR (widget));
   
   calendar = GTK_CALENDAR (widget);
   private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
 
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
+    year_left = private_data->year_before;
+  else
+    year_left = !private_data->year_before;
+    
   /* Arrow windows ------------------------------------- */
   if (! (calendar->display_flags & GTK_CALENDAR_NO_MONTH_CHANGE)
       && (calendar->display_flags & GTK_CALENDAR_SHOW_HEADING))
@@ -1025,18 +1052,34 @@ gtk_calendar_realize_arrows (GtkWidget *widget)
 	  switch (i)
 	    {
 	    case ARROW_MONTH_LEFT:
+	      if (year_left) 
+		attributes.x = (widget->allocation.width - 2 * widget->style->xthickness
+				- (3 + 2*private_data->arrow_width 
+				   + private_data->max_month_width));
+	      else
 	      attributes.x = 3;
 	      break;
 	    case ARROW_MONTH_RIGHT:
+	      if (year_left) 
+		attributes.x = (widget->allocation.width - 2 * widget->style->xthickness 
+				- 3 - private_data->arrow_width);
+	      else
 	      attributes.x = (private_data->arrow_width 
 			      + private_data->max_month_width);
 	      break;
 	    case ARROW_YEAR_LEFT:
+	      if (year_left) 
+		attributes.x = 3;
+	      else
 	      attributes.x = (widget->allocation.width - 2 * widget->style->xthickness
 			      - (3 + 2*private_data->arrow_width 
 				 + private_data->max_year_width));
 	      break;
 	    case ARROW_YEAR_RIGHT:
+	      if (year_left) 
+		attributes.x = (private_data->arrow_width 
+				+ private_data->max_year_width);
+	      else
 	      attributes.x = (widget->allocation.width - 2 * widget->style->xthickness 
 			      - 3 - private_data->arrow_width);
 	      break;
@@ -1480,11 +1523,17 @@ gtk_calendar_size_allocate (GtkWidget	  *widget,
   GtkCalendarPrivateData *private_data;
   gint xthickness = widget->style->xthickness;
   gint ythickness = widget->style->xthickness;
+  gboolean year_left;
   
   widget->allocation = *allocation;
   
   calendar = GTK_CALENDAR (widget);
   private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
+
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
+    year_left = private_data->year_before;
+  else
+    year_left = !private_data->year_before;
   
   if (calendar->display_flags & GTK_CALENDAR_SHOW_WEEK_NUMBERS)
     {
@@ -1515,53 +1564,115 @@ gtk_calendar_size_allocate (GtkWidget	  *widget,
 				xthickness, ythickness,
 				allocation->width - 2 * xthickness, private_data->header_h);
       if (private_data->arrow_win[ARROW_MONTH_LEFT])
-	gdk_window_move_resize (private_data->arrow_win[ARROW_MONTH_LEFT],
-				3, 3,
-				private_data->arrow_width,
-				private_data->header_h - 7);
+	{
+	  if (year_left)
+	    gdk_window_move_resize (private_data->arrow_win[ARROW_MONTH_LEFT],
+				    (allocation->width - 2 * xthickness
+				     - (3 + 2*private_data->arrow_width 
+					+ private_data->max_month_width)),
+				    3,
+				    private_data->arrow_width,
+				    private_data->header_h - 7);
+	  else
+	    gdk_window_move_resize (private_data->arrow_win[ARROW_MONTH_LEFT],
+				    3, 3,
+				    private_data->arrow_width,
+				    private_data->header_h - 7);
+	}
       if (private_data->arrow_win[ARROW_MONTH_RIGHT])
-	gdk_window_move_resize (private_data->arrow_win[ARROW_MONTH_RIGHT],
-				(private_data->arrow_width 
-				 + private_data->max_month_width), 
-				3,
-				private_data->arrow_width,
-				private_data->header_h - 7);
+	{
+	  if (year_left)
+	    gdk_window_move_resize (private_data->arrow_win[ARROW_MONTH_RIGHT],
+				    (allocation->width - 2 * xthickness 
+				     - 3 - private_data->arrow_width), 
+				    3,
+				    private_data->arrow_width,
+				    private_data->header_h - 7);
+	  else
+	    gdk_window_move_resize (private_data->arrow_win[ARROW_MONTH_RIGHT],
+				    (private_data->arrow_width 
+				     + private_data->max_month_width), 
+				    3,
+				    private_data->arrow_width,
+				    private_data->header_h - 7);
+	}
       if (private_data->arrow_win[ARROW_YEAR_LEFT])
-	gdk_window_move_resize (private_data->arrow_win[ARROW_YEAR_LEFT],
-				(allocation->width - 2 * xthickness
-				 - (3 + 2*private_data->arrow_width 
-				    + private_data->max_year_width)),
-				3,
-				private_data->arrow_width,
-				private_data->header_h - 7);
+	{
+	  if (year_left)
+	    gdk_window_move_resize (private_data->arrow_win[ARROW_YEAR_LEFT],
+				    3, 3,
+				    private_data->arrow_width,
+				    private_data->header_h - 7);
+	  else
+	    gdk_window_move_resize (private_data->arrow_win[ARROW_YEAR_LEFT],
+				    (allocation->width - 2 * xthickness
+				     - (3 + 2*private_data->arrow_width 
+					+ private_data->max_year_width)),
+				    3,
+				    private_data->arrow_width,
+				    private_data->header_h - 7);
+	}
       if (private_data->arrow_win[ARROW_YEAR_RIGHT])
-	gdk_window_move_resize (private_data->arrow_win[ARROW_YEAR_RIGHT],
-				(allocation->width - 2 * xthickness 
-				 - 3 - private_data->arrow_width), 
-				3,
-				private_data->arrow_width,
-				private_data->header_h - 7);
+	{
+	  if (year_left)
+	    gdk_window_move_resize (private_data->arrow_win[ARROW_YEAR_RIGHT],
+				    (private_data->arrow_width 
+				     + private_data->max_year_width), 
+				    3,
+				    private_data->arrow_width,
+				    private_data->header_h - 7);
+	  else
+	    gdk_window_move_resize (private_data->arrow_win[ARROW_YEAR_RIGHT],
+				    (allocation->width - 2 * xthickness 
+				     - 3 - private_data->arrow_width), 
+				    3,
+				    private_data->arrow_width,
+				    private_data->header_h - 7);
+	}
       if (private_data->day_name_win)
 	gdk_window_move_resize (private_data->day_name_win,
 				xthickness + INNER_BORDER,
 				private_data->header_h + (widget->style->ythickness + INNER_BORDER),
 				allocation->width - (xthickness + INNER_BORDER) * 2,
 				private_data->day_name_h);
-      if (private_data->week_win)
-	gdk_window_move_resize (private_data->week_win,
-				(xthickness + INNER_BORDER),
-				private_data->header_h + private_data->day_name_h
-				+ (widget->style->ythickness + INNER_BORDER),
-				private_data->week_width,
-				private_data->main_h);
-      gdk_window_move_resize (private_data->main_win,
-			      private_data->week_width + (xthickness + INNER_BORDER),
-			      private_data->header_h + private_data->day_name_h
-			      + (widget->style->ythickness + INNER_BORDER),
-			      allocation->width 
-			      - private_data->week_width 
-			      - (xthickness + INNER_BORDER) * 2,
-			      private_data->main_h);
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
+	{
+	  if (private_data->week_win)
+	    gdk_window_move_resize (private_data->week_win,
+				    (xthickness + INNER_BORDER),
+				    private_data->header_h + private_data->day_name_h
+				    + (widget->style->ythickness + INNER_BORDER),
+				    private_data->week_width,
+				    private_data->main_h);
+	  gdk_window_move_resize (private_data->main_win,
+				  private_data->week_width + (xthickness + INNER_BORDER),
+				  private_data->header_h + private_data->day_name_h
+				  + (widget->style->ythickness + INNER_BORDER),
+				  allocation->width 
+				  - private_data->week_width 
+				  - (xthickness + INNER_BORDER) * 2,
+				  private_data->main_h);
+	}
+      else 
+	{
+	  gdk_window_move_resize (private_data->main_win,
+				  (xthickness + INNER_BORDER),
+				  private_data->header_h + private_data->day_name_h
+				  + (widget->style->ythickness + INNER_BORDER),
+				  allocation->width 
+				  - private_data->week_width 
+				  - (xthickness + INNER_BORDER) * 2,
+				  private_data->main_h);
+	  if (private_data->week_win)
+	    gdk_window_move_resize (private_data->week_win,
+				    allocation->width 
+				    - private_data->week_width 
+				    - (xthickness + INNER_BORDER),
+				    private_data->header_h + private_data->day_name_h
+				    + (widget->style->ythickness + INNER_BORDER),
+				    private_data->week_width,
+				    private_data->main_h);
+	}
     }
 }
 
@@ -1612,6 +1723,7 @@ gtk_calendar_paint_header (GtkWidget *widget)
   GtkCalendarPrivateData *private_data;
   PangoLayout *layout;
   PangoRectangle logical_rect;
+  gboolean year_left;
 
   calendar = GTK_CALENDAR (widget);
   private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
@@ -1621,6 +1733,12 @@ gtk_calendar_paint_header (GtkWidget *widget)
       private_data->dirty_header = 1;
       return;
     }
+
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
+    year_left = private_data->year_before;
+  else
+    year_left = !private_data->year_before;
+
   private_data->dirty_header = 0;
   gc = calendar->gc;
   
@@ -1650,12 +1768,18 @@ gtk_calendar_paint_header (GtkWidget *widget)
   /* Draw year and its arrows */
   
   if (calendar->display_flags & GTK_CALENDAR_NO_MONTH_CHANGE)
-    x = header_width - (3 + max_year_width
-			- (max_year_width - logical_rect.width)/2);
+    if (year_left)
+      x = 3 + (max_year_width - logical_rect.width)/2;
+    else
+      x = header_width - (3 + max_year_width
+			  - (max_year_width - logical_rect.width)/2);
   else
-    x = header_width - (3 + private_data->arrow_width + max_year_width
-			- (max_year_width - logical_rect.width)/2);
-    
+    if (year_left)
+      x = 3 + private_data->arrow_width + (max_year_width - logical_rect.width)/2;
+    else
+      x = header_width - (3 + private_data->arrow_width + max_year_width
+			  - (max_year_width - logical_rect.width)/2);
+  
   
   gdk_gc_set_foreground (gc, HEADER_FG_COLOR (GTK_WIDGET (calendar)));
   gdk_draw_layout (private_data->header_win, gc, x, y, layout);
@@ -1666,8 +1790,16 @@ gtk_calendar_paint_header (GtkWidget *widget)
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
   if (calendar->display_flags & GTK_CALENDAR_NO_MONTH_CHANGE)
+    if (year_left)
+      x = header_width - (3 + max_month_width
+			  - (max_month_width - logical_rect.width)/2);      
+    else
     x = 3 + (max_month_width - logical_rect.width) / 2;
   else
+    if (year_left)
+      x = header_width - (3 + private_data->arrow_width + max_month_width
+			  - (max_month_width - logical_rect.width)/2);
+    else
     x = 3 + private_data->arrow_width + (max_month_width - logical_rect.width)/2;
 
   gdk_draw_layout (private_data->header_win, gc, x, y, layout);
@@ -1768,8 +1900,9 @@ gtk_calendar_paint_day_names (GtkWidget *widget)
 
       gdk_draw_layout (private_data->day_name_win, gc, 
 		       (CALENDAR_MARGIN +
-			+ private_data->week_width
-			+ (private_data->week_width ? CALENDAR_XSEP : 0)
+			+ (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
+			   (private_data->week_width + (private_data->week_width ? CALENDAR_XSEP : 0))
+			   : 0)
 			+ day_wid_sep * i
 			+ (day_width - logical_rect.width)/2),
 		       CALENDAR_MARGIN + focus_width + focus_padding + logical_rect.y,
@@ -2922,6 +3055,35 @@ gtk_calendar_scroll (GtkWidget      *widget,
   return TRUE;
 }
 
+static void 
+move_focus (GtkCalendar *calendar, 
+	    gint direction)
+{
+  GtkTextDirection text_dir = gtk_widget_get_direction (GTK_WIDGET (calendar));
+
+  if ((text_dir == GTK_TEXT_DIR_LTR && direction == -1) ||
+      (text_dir == GTK_TEXT_DIR_RTL && direction == 1)) 
+    {
+      if (calendar->focus_col > 0)
+	  calendar->focus_col--;
+      else if (calendar->focus_row > 0)
+	{
+	  calendar->focus_col = 6;
+	  calendar->focus_row--;
+	}
+    }
+  else 
+    {
+      if (calendar->focus_col < 6)
+	calendar->focus_col++;
+      else if (calendar->focus_row < 5)
+	{
+	  calendar->focus_col = 0;
+	  calendar->focus_row++;
+	}
+    }
+}
+
 static gboolean
 gtk_calendar_key_press (GtkWidget   *widget,
 			GdkEventKey *event)
@@ -2944,20 +3106,10 @@ gtk_calendar_key_press (GtkWidget   *widget,
     case GDK_Left:
       return_val = TRUE;
       if (event->state & GDK_CONTROL_MASK)
-	{
-	  gtk_calendar_set_month_prev (calendar);
-	}
+	gtk_calendar_set_month_prev (calendar);
       else
 	{
-	  if (calendar->focus_col > 0)
-	    {
-	      calendar->focus_col--;
-	    }
-	  else if (calendar->focus_row > 0)
-	    {
-	      calendar->focus_col = 6;
-	      calendar->focus_row--;
-	    }
+	  move_focus (calendar, -1);
 	  gtk_calendar_paint_day (widget, old_focus_row, old_focus_col);
 	  gtk_calendar_paint_day (widget, calendar->focus_row,
 				  calendar->focus_col);
@@ -2967,20 +3119,10 @@ gtk_calendar_key_press (GtkWidget   *widget,
     case GDK_Right:
       return_val = TRUE;
       if (event->state & GDK_CONTROL_MASK)
-	{
 	gtk_calendar_set_month_next (calendar);
-	}
       else
 	{
-	  if (calendar->focus_col < 6)
-	    {
-	      calendar->focus_col++;
-	    }
-	  else if (calendar->focus_row < 5)
-	    {
-	      calendar->focus_col = 0;
-	      calendar->focus_row++;
-	    }
+	  move_focus (calendar, 1);
 	  gtk_calendar_paint_day (widget, old_focus_row, old_focus_col);
 	  gtk_calendar_paint_day (widget, calendar->focus_row,
 				  calendar->focus_col);
@@ -2990,15 +3132,11 @@ gtk_calendar_key_press (GtkWidget   *widget,
     case GDK_Up:
       return_val = TRUE;
       if (event->state & GDK_CONTROL_MASK)
-	{
-	  gtk_calendar_set_year_prev (calendar);
-	}
+	gtk_calendar_set_year_prev (calendar);
       else
 	{
 	  if (calendar->focus_row > 0)
-	    {
-	      calendar->focus_row--;
-	    }
+	    calendar->focus_row--;
 	  gtk_calendar_paint_day (widget, old_focus_row, old_focus_col);
 	  gtk_calendar_paint_day (widget, calendar->focus_row,
 				  calendar->focus_col);
@@ -3008,15 +3146,11 @@ gtk_calendar_key_press (GtkWidget   *widget,
     case GDK_Down:
       return_val = TRUE;
       if (event->state & GDK_CONTROL_MASK)
-	{
-	  gtk_calendar_set_year_next (calendar);
-	}
+	gtk_calendar_set_year_next (calendar);
       else
 	{
 	  if (calendar->focus_row < 5)
-	    {
-	      calendar->focus_row++;
-	    }
+	    calendar->focus_row++;
 	  gtk_calendar_paint_day (widget, old_focus_row, old_focus_col);
 	  gtk_calendar_paint_day (widget, calendar->focus_row,
 				  calendar->focus_col);
@@ -3034,13 +3168,9 @@ gtk_calendar_key_press (GtkWidget   *widget,
 	  gtk_calendar_freeze (calendar);	  
 
 	  if (calendar->day_month[row][col] == MONTH_PREV)
-	    {
-	      gtk_calendar_set_month_prev (calendar);
-	    }
+	    gtk_calendar_set_month_prev (calendar);
 	  else if (calendar->day_month[row][col] == MONTH_NEXT)
-	    {
-	      gtk_calendar_set_month_next (calendar);
-	    }
+	    gtk_calendar_set_month_next (calendar);
 
 	  gtk_calendar_select_and_focus_day (calendar, day);
 	  
