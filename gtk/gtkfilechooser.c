@@ -1443,7 +1443,10 @@ gtk_file_chooser_get_extra_widget (GtkFileChooser *chooser)
  * 
  * Adds @filter to the list of filters that the user can select between.
  * When a filter is selected, only files that are passed by that
- * filter are displayed.
+ * filter are displayed. 
+ * 
+ * Note that the @chooser takes ownership of the filter, so you have to 
+ * ref and sink it if you want to keep a reference.
  *
  * Since: 2.4
  **/
