@@ -104,7 +104,14 @@ Creates a new #GtkAdjustment.
 
 <!-- ##### FUNCTION gtk_adjustment_set_value ##### -->
 <para>
-Sets the #GtkAdjustment value.
+Sets the #GtkAdjustment value. The value is clamped to lie between
+<literal>adjustment-&gt;lower</literal> and
+<literal>adjustment-&gt;upper</literal>.
+</para>
+<para>
+Note that for adjustments which are used in a #GtkScrollbar, the effective
+range of allowed values goes from <literal>adjustment-&gt;lower</literal> to
+<literal>adjustment-&gt;upper - adjustment-&gt;page_size</literal>.
 </para>
 
 @adjustment: a #GtkAdjustment.

@@ -1,5 +1,8 @@
 2003-05-27  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/tmpl/gtkadjustment.sgml: Document allowed values for
+	adjustments which are used in scrollbars.  (#108448, Ernst Lippe)
+
 	* gtk/tmpl/gtkradiomenuitem.sgml: Fix example.  (#113604, 
 	Julien Moutte)
 
