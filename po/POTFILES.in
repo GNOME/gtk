@@ -1,9 +1,10 @@
-# Files from the Gtk ditribution which have already been
+# Files from the Gtk distribution which have already been
 # marked to allow runtime translation of messages
 gdk-pixbuf/gdk-pixbuf-animation.c
 gdk-pixbuf/gdk-pixbuf-data.c
 gdk-pixbuf/gdk-pixbuf-io.c
 gdk-pixbuf/gdk-pixbuf-loader.c
+gdk-pixbuf/gdk-pixbuf.c
 gdk-pixbuf/gdk-pixdata.c
 gdk-pixbuf/io-ani.c
 gdk-pixbuf/io-bmp.c

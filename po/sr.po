@@ -9,14 +9,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-02 16:06+0100\n"
-"PO-Revision-Date: 2004-01-02 16:07+0100\n"
+"POT-Creation-Date: 2004-01-05 22:14+0100\n"
+"PO-Revision-Date: 2004-01-05 22:18+0100\n"
 "Last-Translator: Данило Шеган <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3;    plural=n%10==1 && n%100!=11 ? 0 :    n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3;    plural=n%10==1 && n%100!=11 ? 0 :    n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:731
 #: gdk-pixbuf/gdk-pixbuf-io.c:864 tests/testfilechooser.c:198
@@ -113,6 +114,72 @@ msgid ""
 msgstr ""
 "Унутрашња грешка: Део за учитавање слика „%s“ није успео да почне учитавање "
 "слике, а није навео разлог неуспеха"
+
+#: gdk-pixbuf/gdk-pixbuf.c:100
+msgid "Number of Channels"
+msgstr "Број канала"
+
+# или можда пикселу?
+#: gdk-pixbuf/gdk-pixbuf.c:101
+msgid "The number of samples per pixel"
+msgstr "Број узорака по тачки"
+
+#: gdk-pixbuf/gdk-pixbuf.c:111
+msgid "Colorspace"
+msgstr "Простор боја"
+
+#: gdk-pixbuf/gdk-pixbuf.c:112
+msgid "The colorspace in which the samples are interpreted"
+msgstr "Простор боја у ком се посматрају узорци"
+
+#: gdk-pixbuf/gdk-pixbuf.c:122
+msgid "Has Alpha"
+msgstr "Користи провидност"
+
+#: gdk-pixbuf/gdk-pixbuf.c:123
+msgid "Whether the pixbuf has an alpha channel"
+msgstr "Да ли pixbuf користи провидност"
+
+#: gdk-pixbuf/gdk-pixbuf.c:131
+msgid "Bits per Sample"
+msgstr "Битова по узорку"
+
+#: gdk-pixbuf/gdk-pixbuf.c:132
+msgid "The number of bits per sample"
+msgstr "Број битова по узорку"
+
+#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:647 gtk/gtktreeviewcolumn.c:238
+msgid "Width"
+msgstr "Ширина"
+
+#: gdk-pixbuf/gdk-pixbuf.c:143
+msgid "The number of columns of the pixbuf"
+msgstr "Број колона у pixbuf-у"
+
+#: gdk-pixbuf/gdk-pixbuf.c:153 gtk/gtklayout.c:656
+msgid "Height"
+msgstr "Висина"
+
+#: gdk-pixbuf/gdk-pixbuf.c:154
+msgid "The number of rows of the pixbuf"
+msgstr "Број редова у pixbuf-у"
+
+#: gdk-pixbuf/gdk-pixbuf.c:164
+msgid "Rowstride"
+msgstr "Међуред"
+
+#: gdk-pixbuf/gdk-pixbuf.c:165
+msgid ""
+"The number of bytes between the start of a row and the start of the next row"
+msgstr "Број бајтова између почетка реда и почетка следећег реда"
+
+#: gdk-pixbuf/gdk-pixbuf.c:175
+msgid "Pixels"
+msgstr "Тачке"
+
+#: gdk-pixbuf/gdk-pixbuf.c:176
+msgid "A pointer to the pixel data of the pixbuf"
+msgstr "Показивач на садржај тачака pixbuf-а"
 
 #: gdk-pixbuf/gdk-pixdata.c:145
 msgid "Image header corrupt"
@@ -782,54 +849,74 @@ msgstr "Елемент за пречицу"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Елемент који треба пратити ради измена пречица"
 
-#: gtk/gtkaction.c:185 gtk/gtkactiongroup.c:118
+#: gtk/gtkaction.c:189 gtk/gtkactiongroup.c:118
 msgid "Name"
 msgstr "Име"
 
-#: gtk/gtkaction.c:186
+#: gtk/gtkaction.c:190
 msgid "A unique name for the action."
 msgstr "Јединствено име за акцију."
 
-#: gtk/gtkaction.c:193 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
+#: gtk/gtkaction.c:197 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
 #: gtk/gtkframe.c:125 gtk/gtklabel.c:290 gtk/gtktoolbutton.c:179
 msgid "Label"
 msgstr "Ознака"
 
-#: gtk/gtkaction.c:194
+#: gtk/gtkaction.c:198
 msgid "The label used for menu items and buttons that activate this action."
 msgstr ""
 "Ознака која се користи за ставке менија и дугмад који покрећу ову акцију."
 
-#: gtk/gtkaction.c:200
+#: gtk/gtkaction.c:204
 msgid "Short label"
 msgstr "Кратка ознака"
 
-#: gtk/gtkaction.c:201
+#: gtk/gtkaction.c:205
 msgid "A shorter label that may be used on toolbar buttons."
 msgstr "Краћа ознака која се може користити на думгадима алатки."
 
-#: gtk/gtkaction.c:207
+#: gtk/gtkaction.c:211
 msgid "Tooltip"
 msgstr "Облачић"
 
-#: gtk/gtkaction.c:208
+#: gtk/gtkaction.c:212
 msgid "A tooltip for this action."
 msgstr "Облачић за ову акцију."
 
-#: gtk/gtkaction.c:214
+#: gtk/gtkaction.c:218
 msgid "Stock Icon"
 msgstr "Испоручена икона"
 
-#: gtk/gtkaction.c:215
+#: gtk/gtkaction.c:219
 msgid "The stock icon displayed in widgets representing this action."
 msgstr ""
 "Испоручена икона која се приказује у елементима који представљају ову акцију."
 
-#: gtk/gtkaction.c:221 gtk/gtktoolitem.c:168
+#: gtk/gtkaction.c:225 gtk/gtktoolitem.c:154
+msgid "Visible when horizontal"
+msgstr "Видљиво када је водоравно"
+
+#: gtk/gtkaction.c:226 gtk/gtktoolitem.c:155
+msgid ""
+"Whether the toolbar item is visible when the toolbar is in a horizontal "
+"orientation."
+msgstr "Да ли се приказује ставка алатки када су постављене водоравно."
+
+#: gtk/gtkaction.c:232 gtk/gtktoolitem.c:161
+msgid "Visible when vertical"
+msgstr "Видљиво када је усправно"
+
+#: gtk/gtkaction.c:233 gtk/gtktoolitem.c:162
+msgid ""
+"Whether the toolbar item is visible when the toolbar is in a vertical "
+"orientation."
+msgstr "Да ли се приказује ставка алатки када су постављене усправно."
+
+#: gtk/gtkaction.c:239 gtk/gtktoolitem.c:168
 msgid "Is important"
 msgstr "Важно је"
 
-#: gtk/gtkaction.c:222
+#: gtk/gtkaction.c:240
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
@@ -837,29 +924,29 @@ msgstr ""
 "Да ли се акција сматра важном. Ако је постављено, посредници за ставке "
 "алатки ове акције приказују текст у режиму GTK_TOOLBAR_BOTH_HORIZ."
 
-#: gtk/gtkaction.c:228
+#: gtk/gtkaction.c:246
 msgid "Hide if empty"
 msgstr "Сакриј ако је празно"
 
-#: gtk/gtkaction.c:229
+#: gtk/gtkaction.c:247
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
 "Ако је постављено, празни посредници менија за ову акцију се сакривају."
 
-#: gtk/gtkaction.c:235 gtk/gtkwidget.c:446
+#: gtk/gtkaction.c:253 gtk/gtkwidget.c:446
 msgid "Sensitive"
 msgstr "Осетљив"
 
-#: gtk/gtkaction.c:236
+#: gtk/gtkaction.c:254
 msgid "Whether the action is enabled."
 msgstr "Да ли је акција укључена."
 
-#: gtk/gtkaction.c:242 gtk/gtktreeview.c:551 gtk/gtktreeviewcolumn.c:222
+#: gtk/gtkaction.c:260 gtk/gtktreeview.c:551 gtk/gtktreeviewcolumn.c:222
 #: gtk/gtkwidget.c:439
 msgid "Visible"
 msgstr "Видљив"
 
-#: gtk/gtkaction.c:243
+#: gtk/gtkaction.c:261
 msgid "Whether the action is visible."
 msgstr "Да ли је акција видљива."
 
@@ -2831,12 +2918,12 @@ msgstr "Не може претворити име датотеке"
 msgid "(Empty)"
 msgstr "(Празно)"
 
-#: gtk/gtkfilesystemunix.c:343 gtk/gtkfilesystemwin32.c:383
+#: gtk/gtkfilesystemunix.c:343 gtk/gtkfilesystemwin32.c:417
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "грешка при образовању директоријума „%s“: %s"
 
-#: gtk/gtkfilesystemunix.c:386
+#: gtk/gtkfilesystemunix.c:386 gtk/gtkfilesystemwin32.c:458
 msgid "This file system does not support mounting"
 msgstr "Овај систем датотека не подржава прикључивање"
 
@@ -2852,17 +2939,17 @@ msgstr "Овај систем датотека не подржава иконе"
 msgid "This file system does not support bookmarks"
 msgstr "Овај систем датотека не подржава обележиваче"
 
-#: gtk/gtkfilesystemunix.c:855 gtk/gtkfilesystemwin32.c:1069
+#: gtk/gtkfilesystemunix.c:855 gtk/gtkfilesystemwin32.c:1197
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "грешка при добављању података о „%s“: %s"
 
-#: gtk/gtkfilesystemwin32.c:692
+#: gtk/gtkfilesystemwin32.c:820
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Неуспешно снимање обележивача (%s)"
 
-#: gtk/gtkfilesystemwin32.c:848
+#: gtk/gtkfilesystemwin32.c:976
 msgid "This file system does not support icons for everything"
 msgstr "Овај систем датотека не подржава иконе за све"
 
@@ -3064,7 +3151,7 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1547
+#: gtk/gtkiconfactory.c:1551
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Грешка при учитавању иконице: %s"
@@ -3329,17 +3416,9 @@ msgstr "Усправна поправка"
 msgid "The GtkAdjustment for the vertical position"
 msgstr "GtkAdjustment за усправни положај"
 
-#: gtk/gtklayout.c:647 gtk/gtktreeviewcolumn.c:238
-msgid "Width"
-msgstr "Ширина"
-
 #: gtk/gtklayout.c:648
 msgid "The width of the layout"
 msgstr "Ширина приказа"
-
-#: gtk/gtklayout.c:656
-msgid "Height"
-msgstr "Висина"
 
 #: gtk/gtklayout.c:657
 msgid "The height of the layout"
@@ -4466,164 +4545,168 @@ msgid "_Up"
 msgstr "_Горе"
 
 #: gtk/gtkstock.c:298
+msgid "_Harddisk"
+msgstr "_Тврди диск"
+
+#: gtk/gtkstock.c:299
 msgid "_Help"
 msgstr "Помо_ћ"
 
 # ako je za "home directory", onda bi bilo dobro "licni direktorijum", ako je za "home page", onda za "licna stranica"
-#: gtk/gtkstock.c:299
+#: gtk/gtkstock.c:300
 msgid "_Home"
 msgstr "_Почетак"
 
-#: gtk/gtkstock.c:300
+#: gtk/gtkstock.c:301
 msgid "_Index"
 msgstr "_Индекс"
 
-#: gtk/gtkstock.c:301
+#: gtk/gtkstock.c:302
 msgid "_Italic"
 msgstr "_Курзив"
 
-#: gtk/gtkstock.c:302
+#: gtk/gtkstock.c:303
 msgid "_Jump to"
 msgstr "_Иди на"
 
-#: gtk/gtkstock.c:303
+#: gtk/gtkstock.c:304
 msgid "_Center"
 msgstr "_Центрирај"
 
-#: gtk/gtkstock.c:304
+#: gtk/gtkstock.c:305
 msgid "_Fill"
 msgstr "_Испуни"
 
-#: gtk/gtkstock.c:305
+#: gtk/gtkstock.c:306
 msgid "_Left"
 msgstr "_Лево"
 
-#: gtk/gtkstock.c:306
+#: gtk/gtkstock.c:307
 msgid "_Right"
 msgstr "_Десно"
 
-#: gtk/gtkstock.c:307
+#: gtk/gtkstock.c:308
 msgid "_New"
 msgstr "_Ново"
 
-#: gtk/gtkstock.c:308
+#: gtk/gtkstock.c:309
 msgid "_No"
 msgstr "_Не"
 
-#: gtk/gtkstock.c:309
+#: gtk/gtkstock.c:310
 msgid "_OK"
 msgstr "У _реду"
 
-#: gtk/gtkstock.c:310
+#: gtk/gtkstock.c:311
 msgid "_Open"
 msgstr "_Отвори"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:312
 msgid "_Paste"
 msgstr "Уб_аци"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:313
 msgid "_Preferences"
 msgstr "_Поставке"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:314
 msgid "_Print"
 msgstr "_Штампај"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:315
 msgid "Print Pre_view"
 msgstr "Пре_глед пред штампу"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:316
 msgid "_Properties"
 msgstr "_Особине"
 
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:317
 msgid "_Quit"
 msgstr "_Изађи"
 
-#: gtk/gtkstock.c:317
+#: gtk/gtkstock.c:318
 msgid "_Redo"
 msgstr "_Понови"
 
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:319
 msgid "_Refresh"
 msgstr "_Освежи"
 
-#: gtk/gtkstock.c:319
+#: gtk/gtkstock.c:320
 msgid "_Remove"
 msgstr "_Уклони"
 
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:321
 msgid "_Revert"
 msgstr "_Врати"
 
-#: gtk/gtkstock.c:321
+#: gtk/gtkstock.c:322
 msgid "_Save"
 msgstr "_Сачувај"
 
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:323
 msgid "Save _As"
 msgstr "Сачувај _као"
 
-#: gtk/gtkstock.c:323
+#: gtk/gtkstock.c:324
 msgid "_Color"
 msgstr "_Боја"
 
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:325
 msgid "_Font"
 msgstr "_Писмо"
 
-#: gtk/gtkstock.c:325
+#: gtk/gtkstock.c:326
 msgid "_Ascending"
 msgstr "_Растући"
 
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:327
 msgid "_Descending"
 msgstr "_Опадајући"
 
-#: gtk/gtkstock.c:327
+#: gtk/gtkstock.c:328
 msgid "_Spell Check"
 msgstr "_Провера правописа"
 
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:329
 msgid "_Stop"
 msgstr "_Заустави"
 
-#: gtk/gtkstock.c:329
+#: gtk/gtkstock.c:330
 msgid "_Strikethrough"
 msgstr "_Прецртај"
 
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:331
 msgid "_Undelete"
 msgstr "_Поврати"
 
-#: gtk/gtkstock.c:331
+#: gtk/gtkstock.c:332
 msgid "_Underline"
 msgstr "_Подвуци"
 
 # OVO NISTA NE VALJA!!!
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:333
 msgid "_Undo"
 msgstr "_Опозови"
 
-#: gtk/gtkstock.c:333
+#: gtk/gtkstock.c:334
 msgid "_Yes"
 msgstr "_Да"
 
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:335
 msgid "Zoom _100%"
 msgstr "Увећање _100%"
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:336
 msgid "Zoom to _Fit"
 msgstr "Увећај да _пасује"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:337
 msgid "Zoom _In"
 msgstr "У_већај"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:338
 msgid "Zoom _Out"
 msgstr "У_мањи"
 
@@ -5280,26 +5363,6 @@ msgstr "Елемент иконе"
 #: gtk/gtktoolbutton.c:208
 msgid "Icon widget to display in the item"
 msgstr "Елемент иконе који се приказује уз ставку"
-
-#: gtk/gtktoolitem.c:154
-msgid "Visible when horizontal"
-msgstr "Видљиво када је водоравно"
-
-#: gtk/gtktoolitem.c:155
-msgid ""
-"Whether the toolbar item is visible when the toolbar is in a horizontal "
-"orientation."
-msgstr "Да ли се приказује ставка алатки када су постављене водоравно."
-
-#: gtk/gtktoolitem.c:161
-msgid "Visible when vertical"
-msgstr "Видљиво када је усправно"
-
-#: gtk/gtktoolitem.c:162
-msgid ""
-"Whether the toolbar item is visible when the toolbar is in a vertical "
-"orientation."
-msgstr "Да ли се приказује ставка алатки када су постављене усправно."
 
 #: gtk/gtktoolitem.c:169
 msgid ""

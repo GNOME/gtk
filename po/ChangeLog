@@ -1,3 +1,9 @@
+2004-01-05  Danilo Šegan  <dsegan@gmx.net>
+
+	* sr.po, sr@Latn.po: Updated Serbian translation.
+
+	* POTFILES.in: Added gdk-pixbuf/gdk-pixbuf.c.
+
 2004-01-04  Vincent van Adrighem  <adrighem@gnome.org>
 
 	* nl.po: Translation updated by Tino Meinen.
