@@ -1907,6 +1907,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       GtkCellRenderer *focus_cell = NULL;
       gint column_handled_click = FALSE;
       gboolean row_double_click = FALSE;
+      GtkWidget *grab_widget;
 
       /* are we in an arrow? */
       if (tree_view->priv->prelight_node &&
@@ -2100,7 +2101,9 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 
       /* Save press to possibly begin a drag
        */
-      if (!column_handled_click &&
+      grab_widget = gtk_grab_get_current ();
+      if ((grab_widget == NULL || grab_widget == tree_view) &&
+          !column_handled_click &&
 	  tree_view->priv->pressed_button < 0)
         {
           tree_view->priv->pressed_button = event->button;

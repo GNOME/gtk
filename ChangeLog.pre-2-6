@@ -1,3 +1,10 @@
+Fri Sep 12 16:32:53 2003  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): only save the
+	pressed button (used to determine if we want to initiate a drag later
+	on) if the current grab widget is either NULL or tree_view (Reported
+	by Jeroen Zwartepoorte).
+
 2003-09-05  Tor Lillqvist  <tml@iki.fi>
 
 	* configure.in: Remove spurious 'a' at start of comment line.
