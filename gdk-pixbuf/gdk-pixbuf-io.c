@@ -647,34 +647,53 @@ _gdk_pixbuf_generic_image_load (GdkPixbufModule *module,
 	guchar buffer[4096];
 	size_t length;
 	GdkPixbuf *pixbuf = NULL;
+	GdkPixbufAnimation *animation = NULL;
 	gpointer context;
 
 	if (module->load != NULL)
 		return (* module->load) (f, error);
 	
-	context = module->begin_load (NULL, prepared_notify, NULL, &pixbuf, error);
+	if (module->begin_load != NULL) {
+		
+		context = module->begin_load (NULL, prepared_notify, NULL, &pixbuf, error);
 	
-	if (!context)
-		return NULL;
+		if (!context)
+			return NULL;
+		
+		while (!feof (f)) {
+			length = fread (buffer, 1, sizeof (buffer), f);
+			if (length > 0)
+				if (!module->load_increment (context, buffer, length, error)) {
+					module->stop_load (context, NULL);
+					if (pixbuf != NULL)
+						g_object_unref (pixbuf);
+					return NULL;
+				}
+		}
+		
+		if (!module->stop_load (context, error)) {
+			if (pixbuf != NULL)
+				g_object_unref (pixbuf);
+			return NULL;
+		}
+		
+		return pixbuf;
+	}
 	
-	while (!feof (f)) {
-		length = fread (buffer, 1, sizeof (buffer), f);
-		if (length > 0)
-			if (!module->load_increment (context, buffer, length, error)) {
-				module->stop_load (context, NULL);
-				if (pixbuf != NULL)
-					g_object_unref (pixbuf);
-				return NULL;
-			}
+	if (module->load_animation != NULL) {
+		animation = (* module->load_animation) (f, error);
+		if (animation != NULL) {
+			pixbuf = gdk_pixbuf_animation_get_static_image (animation);
+
+			g_object_ref (pixbuf);
+
+			g_object_unref (animation);
+			
+			return pixbuf;
+		}
 	}
 
-	if (!module->stop_load (context, error)) {
-		if (pixbuf != NULL)
-			g_object_unref (pixbuf);
-		return NULL;
-	}
-	
-	return pixbuf;
+	return NULL;
 }
 
 /**

@@ -1,3 +1,10 @@
+Sun Nov  9 23:07:05 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf-io.c (_gdk_pixbuf_generic_image_load): If neither
+	load nor begin_load are available fall back to load_animation 
+	and use gdk_pixbuf_animation_get_static_image() to obtain a 
+	pixbuf. Inefficient, but at least doesn't crash.
+
 Sun Nov  9 21:56:20 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* queryloaders.c (write_loader_info): New function to write 
