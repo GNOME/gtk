@@ -1,3 +1,11 @@
+Fri Oct 10 22:50:05 2003  Matthias Clasen  <maclas@gmx.de>
+
+	Fixes for (#124212, Marco Pesenti Gritti):
+	
+	* gtk/gtkuimanager.c (update_smart_separators): Don't spit 
+	warnings for popups.
+	(_gtk_menu_is_empty): Return FALSE for non-menus.
+
 Fri Oct 10 19:10:12 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkcombo.h: Deprecate.
