@@ -1,0 +1,231 @@
+<chapter id="gtk-migrating-GtkComboBox">
+  <chapterinfo>
+    <author>
+      <firstname>Matthias</firstname>
+      <surname>Clasen</surname>
+      <affiliation>
+	<address>
+	  <email>maclas@gmx.de</email>
+	</address>
+      </affiliation>
+    </author>
+  </chapterinfo>
+
+  <title>Migrating from GtkOptionMenu and GtkCombo to GtkComboBox and GtkComboBoxEntry</title>
+
+  <para>
+    Prior to 2.4, GTK+ offered two widgets for the task of selecting one
+    item from a list of options. 
+    <link linkend="GtkOptionMenu">GtkOptionMenu</link> presents the list of 
+    options as a menu while <link linkend="GtkCombo">GtkCombo</link> presents 
+    them in a Windows-style list popup. The only difference between the two 
+    is that a <link linkend="GtkCombo">GtkCombo</link> allows to manually
+    edit the selected value, while the 
+    <link linkend="GtkOptionMenu">GtkOptionMenu</link> does not.
+  </para> 
+  <para>
+    In GTK+ 2.4, a unified API for list selection was introduced, with 
+    <link linkend="GtkComboBox">GtkComboBox</link> for the non-editable case 
+    and <link linkend="GtkComboBoxEntry">GtkComboBoxEntry</link> for the 
+    editable case. 
+    The selection of the display style &mdash; menu or list &mdash;
+    is no longer done at the API level, but has been made themeable via
+    the style property 
+    <link linkend="GtkComboBox--appearance">GtkComboBox::appearance</link>.
+  </para>
+
+  <section id="migrating-GtkOptionMenu">
+    <title>Migrating from GtkOptionMenu to GtkComboBox</title>
+    
+    <para>
+      Here is an example of a simple, but typical use of 
+      <link linkend="GtkOptionMenu">GtkOptionMenu</link>:
+      <informalexample><programlisting>
+GtkWidget *option_menu, *menu, *menu_item;
+
+option_menu = gtk_option_menu_new ();      
+menu = gtk_menu_new ();
+
+menu_item = gtk_menu_item_new_with_label ("First Item");
+gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+gtk_widget_show (menu_item);
+menu_item = gtk_menu_item_new_with_label ("Second Item");
+gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+gtk_widget_show (menu_item);
+menu_item = gtk_menu_item_new_with_label ("Third Item");
+gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+gtk_widget_show (menu_item);
+
+gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu), menu);
+      </programlisting></informalexample>
+      In order to react to the user's selection, connect to the "changed"
+      signal on the option menu and use <link linkend="gtk-option-menu-get-history"><function>gtk_option_menu_get_history()</function></link>
+      to retrieve the index of the selected item.
+    </para>
+    <para>
+      And here is how it would be done with a 
+      <link linkend="GtkComboBox">GtkComboBox</link>:
+      <informalexample><programlisting>
+GtkWidget *combo_box;
+
+combo_box = gtk_combo_box_new_text ();
+
+gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "First Item");
+gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "Second Item");
+gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "Third Item");
+      </programlisting></informalexample>
+      In order to react to the user's selection, connect to the "changed"
+      signal on the combo box and use <link linkend="gtk-combo-box-get-active"><function>gtk_combo_box_get_active()</function></link>
+      to retrieve the index of the selected item.
+    </para>
+
+    <para>
+      A slightly more complex example involving images:
+      <informalexample><programlisting>
+GtkWidget *option_menu, *menu, *menu_item;
+
+option_menu = gtk_option_menu_new ();      
+menu = gtk_menu_new ();
+
+menu_item = gtk_image_menu_item_new_with_label ("First Item");
+gtk_image_menu_item_set_image (gtk_image_new_from_pixbuf (pixbuf1));
+gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+gtk_widget_show (menu_item);
+menu_item = gtk_image_menu_item_new_with_label ("Second Item");
+gtk_image_menu_item_set_image (gtk_image_new_from_pixbuf (pixbuf2));
+gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+gtk_widget_show (menu_item);
+menu_item = gtk_image_menu_item_new_with_label ("Third Item");
+gtk_image_menu_item_set_image (gtk_image_new_from_pixbuf (pixbuf3));
+gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+gtk_widget_show (menu_item);
+
+gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu), menu);
+      </programlisting></informalexample>
+    </para>
+    <para>
+      can be done using a <link linkend="GtkComboBox">GtkComboBox</link>
+      as follows:
+      <informalexample><programlisting>
+GtkListStore *store;
+GtkTreeIter iter;
+GtkCellRenderer *renderer;
+GtkWidget *combo_box;
+
+store = gtk_list_store_new (2, GDK_TYPE_PIXBUF, G_TYPE_STRING);
+
+gtk_list_store_append (store, &amp;iter);
+gtk_list_store_set (store, &amp;iter, 0, pixbuf1, 1, "First Item", -1);
+gtk_list_store_append (store, &amp;iter);
+gtk_list_store_set (store, &amp;iter, 0, pixbuf2, 1, "Second Item", -1);
+gtk_list_store_append (store, &amp;iter);
+gtk_list_store_set (store, &amp;iter, 0, pixbuf3, 1, "Third Item", -1);
+
+combo_box = gtk_combo_box_new_with_model (GTK_TREE_MODEL (store));
+
+renderer = gtk_cell_renderer_pixbuf_new ();
+gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), renderer, FALSE);
+gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), renderer,
+                                "pixbuf", 0,
+                                NULL);
+
+renderer = gtk_cell_renderer_text_new ();
+gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), renderer, TRUE);
+gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), renderer,
+                                "text", 1,
+                                NULL);
+      </programlisting></informalexample>
+    </para>
+  </section>
+
+  <section id="migrating-GtkCombo">
+    <title>Migrating from GtkCombo to GtkComboBoxEntry</title>
+
+    <para>
+      Here is an example of a simple, but typical use of a
+      <link linkend="GtkCombo">GtkCombo</link>:
+      <informalexample><programlisting>
+GtkWidget *combo;
+GList *items = NULL;
+
+items = g_list_append (items, "First Item");
+items = g_list_append (items, "Second Item");
+items = g_list_append (items, "Third Item");
+
+combo = gtk_combo_new ();
+gtk_combo_set_popdown_strings (GTK_COMBO (combo), items);
+      </programlisting></informalexample>
+      In order to react to the user's selection, connect to the "changed"
+      signal on the combo and use 
+      <literal>gtk_entry_get_text (GTK_ENTRY (combo->entry))</literal>
+      to retrieve the selected text.
+    </para>
+    <para>
+      And here is how it would be done using <link linkend="GtkComboBoxEntry">GtkComboBoxEntry</link>:
+      <informalexample><programlisting>
+combo_box = gtk_combo_box_entry_new_text ();
+
+gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "First Item");
+gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "Second Item");
+gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "Third Item");
+      </programlisting></informalexample>
+      In order to react to the user's selection, connect to the "changed"
+      signal on the combo and use 
+      <literal>gtk_entry_get_text (GTK_ENTRY (GTK_BIN (combo_box)->child))</literal>
+      to retrieve the selected text.
+    </para>
+  </section>
+
+  <section id="new-features-GtkComboBox">
+    <title>New features</title>
+
+    <para>
+      The new widgets have more to offer than a mere combination of the
+      features of <link linkend="GtkOptionMenu">GtkOptionMenu</link> and 
+      <link linkend="GtkCombo">GtkCombo</link>. Notable new features 
+      include:
+      <variablelist>
+        <varlistentry>
+          <term>Grid mode</term>
+          <listitem><para>Sometimes it is preferable to display the available
+            options not in a linear list, but in a grid. A typical example 
+            would be a "color combo" where the individual items are small 
+	    square color swatches. The new widgets support gridded display 
+            with the functions 
+            <link linkend="gtk-combo-box-set-wrap-width"><function>gtk_combo_box_set_wrap_width()</function></link>, 
+            <link linkend="gtk-combo-box-set-row-span-column"><function>gtk_combo_box_set_row_span_column()</function></link> and 
+            <link linkend ="gtk-combo-box-set-column-span-column"><function>gtk_combo_box_set_column_span_column()</function></link>.
+          </para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Display of icons</term>
+          <listitem><para>An often-heard complaint about 
+          <link linkend="GtkOptionMenu">GtkOptionMenu</link> is that the
+          icons which appear in the image menu items in its menu are not
+	  displayed in the button showing the selected item. This limitation
+          has been removed in <link linkend="GtkComboBox">GtkComboBox</link>;
+          the selected item appears in the same way as the options in 
+          the popup.
+          </para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Full tree model power</term>
+          <listitem><para>
+            Since the new widgets are built around the same models that are
+            used for <link linkend="GtkTreeView">GtkTreeView</link>, all of
+            the powerful machinery of tree models and cell renderers can be 
+            used.
+          </para></listitem>
+        </varlistentry>
+      </variablelist>
+    </para>
+  </section>
+
+</chapter>
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("gtk-docs.sgml" "book" "part" "chapter")
+End:
+-->

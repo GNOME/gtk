@@ -1,3 +1,15 @@
+Sat Feb 28 01:11:53 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-docs.sgml: Include migrating-GtkComboBox.sgml.
+
+Sat Feb 28 01:11:34 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/Makefile.am (content_files): Add migrating-GtkComboBox.sgml.
+
+Fri Feb 27 22:54:01 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-docs.sgml: Sort deprecated widgets alphabetically.
+
 2004-02-27  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/migrating-GtkAction.sgml: Put explicit <link> elements

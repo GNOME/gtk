@@ -44,10 +44,11 @@ IGNORE_HFILES=				\
 	gtkintl.h			\
 	gtkkeyhash.h			\
 	gtkmarshal.h			\
+	gtkpathbar.h			\
 	gtkprivate.h			\
-	gtktreeprivate.h		\
 	gtkrbtree.h			\
 	gtktreedatalist.h		\
+	gtktreeprivate.h		\
 	gtktextbtree.h			\
 	gtktextdisplay.h		\
 	gtktextiterprivate.h		\
@@ -93,6 +94,7 @@ content_files =					\
 	framebuffer.sgml			\
 	migrating-checklist.sgml		\
 	migrating-GtkAction.sgml		\
+	migrating-GtkComboBox.sgml		\
 	migrating-GtkFileChooser.sgml		\
 	objects_grouped.sgml			\
 	question_index.sgml			\
