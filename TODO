@@ -7,8 +7,6 @@ Bugs:
 
  * MappingNotify events produce warnings.
 
- * gtk_widget_set_uposition can't handle negative x,y coordinates!
- 
  * the type system (gtktypeutils.c) has to handle creations of fundamental
    types seperatedly from derived types, so we don't screw foreign
    fundamental types with an already extensively increased seqno.
@@ -19,10 +17,6 @@ Bugs:
 Additions:
  * focus handling for GtkOptionMenu (needs the previous)
 
- * GScanner: it might be good to ues stdio and getch() instead of 1-character
-   reads. so one can take advantage of buffering. Currently each read() takes
-   a separate syscall.
-   
  * implement gtk_default_draw_oval and other missing things in gtkstyle.c.
  
  * Lists should scroll to center the recently selected item if it isn't
@@ -30,17 +24,10 @@ Additions:
 
  * enforce invariants on *_RESIZE* and *_REDRAW* flags.
 
- * asure that child widgets are really get gtk_widget_destroy()ed in their
-   parents destroy handler, and not just unparented or somesuch.
-
  * GtkToolTips:
    allocate GtkTooltipsData from memchunks
    look into incorporation of outdated/gtk-dairiki-971208-[01].patch.gz
                           
- * Change gtk_widget_propagate_default_style() mechanism to
-   void gtk_rc_string_export (const gchar *rc_additions,
-                              gboolean     override_rc_styles);
-
  * Make all widget attributes configurable after the widget is created (timj).
  
  * Widgets dervied from GtkButton need to be able to override
@@ -50,17 +37,9 @@ Additions:
  
  * Radio buttons need to display CAN/HAS_DEFAULT correctly.
 
- * GtkCList improvements. (Jay Painter)
-
  * Seperate GtkObject, type and signaling system from Gdk dependancies,
    by moving them into a seperate libgtkobj.
  * move *_input_add (wrappers for select(2)) mechanism into glib.
-
- * Make sure a widget added to a list is a list item and a widget added
-   to a menu is a menu item, etc. GTK_BASIC was a first attempt at this,
-   but it fails with subsequent container_add()s. maybe have another
-   GTK_PARENT_BASIC (similar to GTK_PARENT_SENSITIVE) flag, to prevent
-   tree iterations upon every container addition.
 
  * gdk_expose_compress: ala-Xt, this would really help for opaque moves and
    such
@@ -73,14 +52,6 @@ Additions:
 
  * More dialogs: Print, GtkFontSelector, maybe others...
 
- * Multiple document interface (MDI)?
-
- * Support another widget style? Should be possible using GtkStyle's, but
-   there may be some work needed to remove any style dependencies in widget
-   code. Maybe GtkStyle's should have 'draw_push_button', 'draw_check_button',
-   etc, functions to draw the various widgets.
-   This will be covered by upcoming themability, raster is working on it.
- 
  * make the gtk_main callbacks consistent in their add/remove behaviour.
  
  * More work on Documentation
@@ -135,7 +106,6 @@ Additions:
     gtk_toolbar_insert_element
     gtk_widget_dnd_data_set (should be guchar * with a copy?
                              shouldn't be there at all...)
-    ??? GtkDrawingarea.draw_data
  
  * gtk_rc_add_[name/class]_style are broken for bg pixmaps, because
    styles are broken for bg pixmaps, and RC styles only hack around
@@ -145,9 +115,6 @@ Additions:
    windows??? This would mean keeping track of our window heirarchy
    ourselves, for one thing, and will never be safe, because of
    race conditions.
-
- * --g-fatal-warnings flag that does 
-        g_set_warning_handler ((GWarningHandler)g_error);
 
  * If a window spontaneously resizes itself N times before any
    ConfigureNotify events are received, then due to the interaction
@@ -172,9 +139,6 @@ Additions:
  * Should all the default handlers really return FALSE? This can
    cause confusing presses to be sent to containers that actually
    want to get events on themselves.
-
- * New signals to handle accelerators: accel_before and accel_after (or
-   somesuch) to pre and post process accelerator calls. [Yosh]
 
 Text/Edit widget:
 
