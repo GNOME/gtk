@@ -64,6 +64,8 @@ static void
 gtk_drawing_area_init (GtkDrawingArea *darea)
 {
   GTK_WIDGET_SET_FLAGS (darea, GTK_BASIC);
+
+  darea->draw_data = NULL;
 }
 
 

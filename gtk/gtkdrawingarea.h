@@ -39,6 +39,8 @@ typedef struct _GtkDrawingAreaClass  GtkDrawingAreaClass;
 struct _GtkDrawingArea
 {
   GtkWidget widget;
+
+  gpointer draw_data;
 };
 
 struct _GtkDrawingAreaClass

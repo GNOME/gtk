@@ -2406,7 +2406,7 @@ gtk_widget_set_rc_style (GtkWidget *widget)
 	{
 	  g_assert (initial_emission == TRUE); /* FIXME: remove this line */
 
-	  gtk_widget_set_style_internal (widget, new_style, TRUE);
+	  gtk_widget_set_style_internal (widget, widget->style, TRUE);
 	}
     }
 }
