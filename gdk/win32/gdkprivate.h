@@ -296,11 +296,10 @@ struct _GdkVisualPrivate
 struct _GdkFontPrivate
 {
   GdkFont font;
-  /* XFontStruct *xfont; */
-  /* generic pointer point to XFontStruct or XFontSet */
-  /* in Win32 a HFONT */ 
-  gpointer xfont;
+  HFONT xfont;
   guint ref_count;
+
+  GSList *names;
 };
 
 struct _GdkCursorPrivate

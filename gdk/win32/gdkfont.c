@@ -32,11 +32,69 @@
 #include "gdkfont.h"
 #include "gdkprivate.h"
 
+static GHashTable *font_name_hash = NULL;
+static GHashTable *fontset_name_hash = NULL;
+
+static void
+gdk_font_hash_insert (GdkFontType type, GdkFont *font, const gchar *font_name)
+{
+  GdkFontPrivate *private = (GdkFontPrivate *)font;
+  GHashTable **hashp = (type == GDK_FONT_FONT) ?
+    &font_name_hash : &fontset_name_hash;
+
+  if (!*hashp)
+    *hashp = g_hash_table_new (g_str_hash, g_str_equal);
+
+  private->names = g_slist_prepend (private->names, g_strdup (font_name));
+  g_hash_table_insert (*hashp, private->names->data, font);
+}
+
+static void
+gdk_font_hash_remove (GdkFontType type, GdkFont *font)
+{
+  GdkFontPrivate *private = (GdkFontPrivate *)font;
+  GSList *tmp_list;
+  GHashTable *hash = (type == GDK_FONT_FONT) ?
+    font_name_hash : fontset_name_hash;
+
+  tmp_list = private->names;
+  while (tmp_list)
+    {
+      g_hash_table_remove (hash, tmp_list->data);
+      g_free (tmp_list->data);
+      
+      tmp_list = tmp_list->next;
+    }
+
+  g_slist_free (private->names);
+  private->names = NULL;
+}
+
+static GdkFont *
+gdk_font_hash_lookup (GdkFontType type, const gchar *font_name)
+{
+  GdkFont *result;
+  GHashTable *hash = (type == GDK_FONT_FONT) ?
+    font_name_hash : fontset_name_hash;
+
+  if (!hash)
+    return NULL;
+  else
+    {
+      result = g_hash_table_lookup (hash, font_name);
+      if (result)
+	gdk_font_ref (result);
+      
+      return result;
+    }
+}
+
 GdkFont*
 gdk_font_load (const gchar *font_name)
 {
   GdkFont *font;
   GdkFontPrivate *private;
+  HFONT hfont;
   LOGFONT logfont;
   HGDIOBJ oldfont;
   TEXTMETRIC textmetric;
@@ -56,8 +114,11 @@ gdk_font_load (const gchar *font_name)
 
   g_return_val_if_fail (font_name != NULL, NULL);
 
-  private = g_new (GdkFontPrivate, 1);
-  font = (GdkFont*) private;
+  GDK_NOTE (MISC, g_print ("gdk_font_load: %s\n", font_name));
+
+  font = gdk_font_hash_lookup (GDK_FONT_FONT, font_name);
+  if (font)
+    return font;
 
   numfields = sscanf (font_name,
 		      "-%30[^-]-%100[^-]-%30[^-]-%30[^-]-%30[^-]-%n",
@@ -152,9 +213,13 @@ gdk_font_load (const gchar *font_name)
 	fnWeight = FW_THIN;
       else if (g_strcasecmp (weight, "extralight") == 0)
 	fnWeight = FW_EXTRALIGHT;
-#ifdef FW_ULTRALIGHT
       else if (g_strcasecmp (weight, "ultralight") == 0)
+#ifdef FW_ULTRALIGHT
 	fnWeight = FW_ULTRALIGHT;
+#else
+	fnWeight = FW_EXTRALIGHT; /* In fact, FW_ULTRALIGHT really is 
+				   * defined as FW_EXTRALIGHT anyway.
+				   */
 #endif
       else if (g_strcasecmp (weight, "light") == 0)
 	fnWeight = FW_LIGHT;
@@ -166,23 +231,29 @@ gdk_font_load (const gchar *font_name)
 	fnWeight = FW_MEDIUM;
       else if (g_strcasecmp (weight, "semibold") == 0)
 	fnWeight = FW_SEMIBOLD;
-#ifdef FW_DEMIBOLD
       else if (g_strcasecmp (weight, "demibold") == 0)
+#ifdef FW_DEMIBOLD
 	fnWeight = FW_DEMIBOLD;
+#else
+	fnWeight = FW_SEMIBOLD;	/* As above */
 #endif
       else if (g_strcasecmp (weight, "bold") == 0)
 	fnWeight = FW_BOLD;
       else if (g_strcasecmp (weight, "extrabold") == 0)
 	fnWeight = FW_EXTRABOLD;
-#ifdef FW_ULTRABOLD
       else if (g_strcasecmp (weight, "ultrabold") == 0)
+#ifdef FW_ULTRABOLD
 	fnWeight = FW_ULTRABOLD;
+#else
+	fnWeight = FW_EXTRABOLD; /* As above */
 #endif
       else if (g_strcasecmp (weight, "heavy") == 0)
 	fnWeight = FW_HEAVY;
-#ifdef FW_BLACK
       else if (g_strcasecmp (weight, "black") == 0)
+#ifdef FW_BLACK
 	fnWeight = FW_BLACK;
+#else
+	fnWeight = FW_HEAVY;	/* As above */
 #endif
       else
 	fnWeight = FW_DONTCARE;
@@ -250,12 +321,15 @@ gdk_font_load (const gchar *font_name)
 
   for (tries = 0; ; tries++)
     {
-      GDK_NOTE (MISC, g_print ("gdk_font_load: trying CreateFont(%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%#.02x,\"%s\")\n",
+      GDK_NOTE (MISC, g_print ("...trying CreateFont(%d,%d,%d,%d,"
+			       "%d,%d,%d,%d,"
+			       "%d,%d,%d,"
+			       "%d,%#.02x,\"%s\")\n",
 			       nHeight, nWidth, nEscapement, nOrientation,
 			       fnWeight, fdwItalic, fdwUnderline, fdwStrikeOut,
 			       fdwCharSet, fdwOutputPrecision, fdwClipPrecision,
 			       fdwQuality, fdwPitchAndFamily, lpszFace));
-      if ((private->xfont =
+      if ((hfont =
 	   CreateFont (nHeight, nWidth, nEscapement, nOrientation,
 		       fnWeight, fdwItalic, fdwUnderline, fdwStrikeOut,
 		       fdwCharSet, fdwOutputPrecision, fdwClipPrecision,
@@ -308,14 +382,15 @@ gdk_font_load (const gchar *font_name)
       tries++;
     }
   
-  if (!private->xfont)
-    {
-      g_warning ("gdk_font_load: font %s not found", font_name);
-      g_free (font);
-      return NULL;
-    }
+  if (!hfont)
+    return NULL;
       
+  private = g_new (GdkFontPrivate, 1);
+  font = (GdkFont*) private;
+
+  private->xfont = hfont;
   private->ref_count = 1;
+  private->names = NULL;
   font->type = GDK_FONT_FONT;
   GetObject (private->xfont, sizeof (logfont), &logfont);
   oldfont = SelectObject (gdk_DC, private->xfont);
@@ -324,14 +399,15 @@ gdk_font_load (const gchar *font_name)
   font->ascent = textmetric.tmAscent;
   font->descent = textmetric.tmDescent;
 
-  GDK_NOTE (MISC, g_print ("gdk_font_load: %s = %#x asc %d desc %d\n",
-			   font_name, private->xfont,
-			   font->ascent, font->descent));
+  GDK_NOTE (MISC, g_print ("... = %#x asc %d desc %d\n",
+			   private->xfont, font->ascent, font->descent));
 
   /* This memory is leaked, so shoot me. */
   f = g_new (HANDLE, 1);
   *f = (HANDLE) ((guint) private->xfont + HFONT_DITHER);
   gdk_xid_table_insert (f, font);
+
+  gdk_font_hash_insert (GDK_FONT_FONT, font, font_name);
 
   return font;
 }
@@ -340,6 +416,7 @@ GdkFont*
 gdk_fontset_load (gchar *fontset_name)
 {
   g_warning ("gdk_fontset_load: Not implemented");
+
   return NULL;
 }
 
@@ -359,14 +436,16 @@ void
 gdk_font_unref (GdkFont *font)
 {
   GdkFontPrivate *private;
+  private = (GdkFontPrivate*) font;
 
   g_return_if_fail (font != NULL);
-
-  private = (GdkFontPrivate*) font;
+  g_return_if_fail (private->ref_count > 0);
 
   private->ref_count -= 1;
   if (private->ref_count == 0)
     {
+      gdk_font_hash_remove (font->type, font);
+      
       switch (font->type)
 	{
 	case GDK_FONT_FONT:
@@ -465,6 +544,7 @@ gdk_text_width_wc (GdkFont	  *font,
   HGDIOBJ oldfont;
   SIZE size;
   wchar_t *wcstr;
+  guchar *str;
   gint i, width;
 
   g_return_val_if_fail (font != NULL, -1);
@@ -475,12 +555,22 @@ gdk_text_width_wc (GdkFont	  *font,
   switch (font->type)
     {
     case GDK_FONT_FONT:
+      oldfont = SelectObject (gdk_DC, private->xfont);
+#if 0 /* No. Don't assume Unicode here either.
+       * (Read the comments in gdk_draw_text_wc.)
+       */
       wcstr = g_new (wchar_t, text_length);
       for (i = 0; i < text_length; i++)
 	wcstr[i] = text[i];
-      oldfont = SelectObject (gdk_DC, private->xfont);
       GetTextExtentPoint32W (gdk_DC, wcstr, text_length, &size);
       g_free (wcstr);
+#else
+      str = g_new (guchar, text_length);
+      for (i=0; i<text_length; i++)
+	str[i] = text[i];
+      GetTextExtentPoint32A (gdk_DC, str, text_length, &size);
+      g_free (str);
+#endif
       SelectObject (gdk_DC, oldfont);
       width = size.cx;
       break;
@@ -654,8 +744,6 @@ gint
 gdk_char_measure (GdkFont *font,
                   gchar    character)
 {
-  g_return_val_if_fail (font != NULL, -1);
-
   return gdk_text_measure (font, &character, 1);
 }
 
@@ -703,7 +791,5 @@ gint
 gdk_char_height (GdkFont *font,
 		 gchar    character)
 {
-  g_return_val_if_fail (font != NULL, -1);
-
   return gdk_text_height (font, &character, 1);
 }

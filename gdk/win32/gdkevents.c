@@ -2898,7 +2898,8 @@ gdk_events_queue (void)
   while (!gdk_event_queue_find_first()
 	 && PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
     {
-      GDK_NOTE (EVENTS, g_print ("gdk_events_queue: got event\n"));
+      GDK_NOTE (EVENTS, g_print ("gdk_events_queue:  PeekMessage: %#x\n",
+				 msg.message));
       TranslateMessage (&msg);
 
       event = gdk_event_new ();

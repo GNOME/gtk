@@ -339,9 +339,14 @@ gtkmarshal.h gtkmarshal.c : gtkmarshal.list genmarshal.pl
 gtk-$(GTK_VER).dll : generated $(gtk_OBJECTS) gtk.def
 	$(GLIB)/build-dll gtk $(GTK_VER) gtk.def $(gtk_OBJECTS) -L $(GDKSYSDEP) -lgdk-$(GTK_VER) -L$(INTL) -lgnu-intl -L $(GLIB) -lglib-$(GLIB_VER) -lgmodule-$(GLIB_VER) -lgdi32 -luser32
 
+.SUFFIXES: .c .o .i
+
 # General rule for compiling the objects into the DLL
 .c.o :
 	$(CC) $(CFLAGS) -c -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" $<
+
+.c.i :
+	$(CC) $(CFLAGS) -E -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\" $< >$@
 
 #
 # Test programs:

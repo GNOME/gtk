@@ -438,8 +438,6 @@ gdk_draw_string (GdkDrawable *drawable,
 
 /* gdk_draw_text
  *
- * Modified by Li-Da Lho to draw 16 bits and Multibyte strings
- *
  * Interface changed: add "GdkFont *font" to specify font or fontset explicitely
  */
 void
@@ -507,6 +505,7 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
   GdkGCPrivate *gc_private;
   gint i;
   wchar_t *wcstr;
+  guchar *str;
 
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (font != NULL);
@@ -537,12 +536,26 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
       
       if ((oldfont = SelectObject (hdc, xfont)) == NULL)
 	g_warning ("gdk_draw_text: SelectObject failed");
+#if 0 /* No. Don't use TextOutW. Compare to the X11 version,
+       * it uses plain XDrawString for GDK_FONT_FONT fonts, too.
+       * TextOutW by definition interprets the string as Unicode.
+       * We don't have that, but either chars from some single-byte codepage
+       * or from a DBCS.
+       */
       wcstr = g_new (wchar_t, text_length);
       for (i = 0; i < text_length; i++)
 	wcstr[i] = text[i];
       if (!TextOutW (hdc, x, y, wcstr, text_length))
 	g_warning ("gdk_draw_text: TextOutW failed");
       g_free (wcstr);
+#else
+      str = g_new (guchar, text_length);
+      for (i=0; i<text_length; i++)
+	str[i] = text[i];
+      if (!TextOutA (hdc, x, y, str, text_length))
+	g_warning ("gdk_draw_text: TextOutA failed");
+      g_free (str);
+#endif
       SelectObject (hdc, oldfont);
       gdk_gc_postdraw (drawable_private, gc_private);
     }

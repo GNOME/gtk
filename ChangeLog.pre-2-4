@@ -1,3 +1,27 @@
+1999-10-14  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdraw.c (gdk_draw_text_wc): Don't use TextOutW for
+	GDK_FONT_FONT fonts (which is all we have for now, we don't
+	emulate fontsets). The X11 version uses plain XDrawString in that
+	case, too. The string passed to gdk_draw_text_wc seems to be in
+	fact (at least, when used by gtkentry and gtktext) either in a
+	single-byte charset, or a DBCS. Not Unicode.
+
+	This fixes the problem in gtkfontsel, where even if you had
+	selected a font with a non-Latin1 charset (windows-greek, for
+	instance), the preview still used Latin-1 glyphs.
+
+	* gdk/win32/gdkfont.c (gdk_text_width_wc): Similar change. Don't
+	use GetTextExtentPoint32W, use GetTextExtentPoint32A.
+	(gdk_font_load): Recognize the demibold etc weights, even if we
+	don't have the corresponding constants in the headers.
+	(gdk_font_hash_insert): Use same hash mechanism as in the X11
+	version. Should save font resources a bit, when we don't have
+	multiple HFONTs for the same font.
+
+	* gdk/win32/gdkprivate.h: Add the names field as in the X11
+	version.
+
 1999-10-11  ERDI Gergo  <cactus@cactus.rulez.org>
 
 	* gdk/gdk.c (gdk_beep): Modified the XBell call to use the default
