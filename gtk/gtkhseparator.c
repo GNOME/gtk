@@ -25,10 +25,10 @@ static gint gtk_hseparator_expose     (GtkWidget          *widget,
 				       GdkEventExpose     *event);
 
 
-guint
+GtkType
 gtk_hseparator_get_type (void)
 {
-  static guint hseparator_type = 0;
+  static GtkType hseparator_type = 0;
 
   if (!hseparator_type)
     {
@@ -44,7 +44,7 @@ gtk_hseparator_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      hseparator_type = gtk_type_unique (gtk_separator_get_type (), &hseparator_info);
+      hseparator_type = gtk_type_unique (GTK_TYPE_SEPARATOR, &hseparator_info);
     }
 
   return hseparator_type;
@@ -70,7 +70,7 @@ gtk_hseparator_init (GtkHSeparator *hseparator)
 GtkWidget*
 gtk_hseparator_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (gtk_hseparator_get_type ()));
+  return GTK_WIDGET (gtk_type_new (GTK_TYPE_HSEPARATOR));
 }
 
 

@@ -27,10 +27,10 @@ static void gtk_dialog_class_init (GtkDialogClass *klass);
 static void gtk_dialog_init       (GtkDialog      *dialog);
 
 
-guint
+GtkType
 gtk_dialog_get_type (void)
 {
-  static guint dialog_type = 0;
+  static GtkType dialog_type = 0;
 
   if (!dialog_type)
     {
@@ -46,7 +46,7 @@ gtk_dialog_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      dialog_type = gtk_type_unique (gtk_window_get_type (), &dialog_info);
+      dialog_type = gtk_type_unique (GTK_TYPE_WINDOW, &dialog_info);
     }
 
   return dialog_type;
@@ -79,5 +79,5 @@ gtk_dialog_init (GtkDialog *dialog)
 GtkWidget*
 gtk_dialog_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (gtk_dialog_get_type ()));
+  return GTK_WIDGET (gtk_type_new (GTK_TYPE_DIALOG));
 }

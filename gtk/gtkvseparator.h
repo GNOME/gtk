@@ -24,9 +24,17 @@
 #include <gtk/gtkseparator.h>
 
 
-#define GTK_VSEPARATOR(obj)          GTK_CHECK_CAST (obj, gtk_vseparator_get_type (), GtkVSeparator)
-#define GTK_VSEPARATOR_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_vseparator_get_type (), GtkVSeparatorClass)
-#define GTK_IS_VSEPARATOR(obj)       GTK_CHECK_TYPE (obj, gtk_vseparator_get_type ())
+#ifdef __cplusplus
+extern "C" {
+#pragma }
+#endif /* __cplusplus */
+
+
+#define GTK_TYPE_VSEPARATOR                  (gtk_vseparator_get_type ())
+#define GTK_VSEPARATOR(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_VSEPARATOR, GtkVSeparator))
+#define GTK_VSEPARATOR_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_VSEPARATOR, GtkVSeparatorClass))
+#define GTK_IS_VSEPARATOR(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_VSEPARATOR))
+#define GTK_IS_VSEPARATOR_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VSEPARATOR))
 
 
 typedef struct _GtkVSeparator       GtkVSeparator;
@@ -43,18 +51,13 @@ struct _GtkVSeparatorClass
 };
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-
-guint      gtk_vseparator_get_type (void);
+GtkType    gtk_vseparator_get_type (void);
 GtkWidget* gtk_vseparator_new      (void);
+
 
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-
 
 #endif /* __GTK_SEPARATOR_H__ */

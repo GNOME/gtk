@@ -1,3 +1,10 @@
+Tue Jul 14 11:41:38 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkdialog.h: 
+	* gtk/gtkseparator.h: 
+	* gtk/gtkhseparator.h: 
+	* gtk/gtkvseparator.h: macro and GtkType fixups.
+
 Tue Jul 14 06:25:46 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/testgtk.c (create_cursors): display the current cursor name.

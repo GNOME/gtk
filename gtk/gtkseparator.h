@@ -26,12 +26,15 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_SEPARATOR(obj)          GTK_CHECK_CAST (obj, gtk_separator_get_type (), GtkSeparator)
-#define GTK_SEPARATOR_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_separator_get_type (), GtkSeparatorClass)
-#define GTK_IS_SEPARATOR(obj)       GTK_CHECK_TYPE (obj, gtk_separator_get_type ())
+#define GTK_TYPE_SEPARATOR                  (gtk_separator_get_type ())
+#define GTK_SEPARATOR(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_SEPARATOR, GtkSeparator))
+#define GTK_SEPARATOR_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_SEPARATOR, GtkSeparatorClass))
+#define GTK_IS_SEPARATOR(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_SEPARATOR))
+#define GTK_IS_SEPARATOR_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SEPARATOR))
 
 
 typedef struct _GtkSeparator       GtkSeparator;
@@ -48,12 +51,11 @@ struct _GtkSeparatorClass
 };
 
 
-guint  gtk_separator_get_type (void);
+GtkType  gtk_separator_get_type (void);
 
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-
 
 #endif /* __GTK_SEPARATOR_H__ */

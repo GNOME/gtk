@@ -23,10 +23,10 @@ static void gtk_separator_class_init (GtkSeparatorClass *klass);
 static void gtk_separator_init       (GtkSeparator      *separator);
 
 
-guint
+GtkType
 gtk_separator_get_type (void)
 {
-  static guint separator_type = 0;
+  static GtkType separator_type = 0;
 
   if (!separator_type)
     {
@@ -42,7 +42,7 @@ gtk_separator_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      separator_type = gtk_type_unique (gtk_widget_get_type (), &separator_info);
+      separator_type = gtk_type_unique (GTK_TYPE_WIDGET, &separator_info);
     }
 
   return separator_type;

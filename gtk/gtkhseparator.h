@@ -26,12 +26,15 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_HSEPARATOR(obj)          GTK_CHECK_CAST (obj, gtk_hseparator_get_type (), GtkHSeparator)
-#define GTK_HSEPARATOR_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_hseparator_get_type (), GtkHSeparatorClass)
-#define GTK_IS_HSEPARATOR(obj)       GTK_CHECK_TYPE (obj, gtk_hseparator_get_type ())
+#define GTK_TYPE_HSEPARATOR                  (gtk_hseparator_get_type ())
+#define GTK_HSEPARATOR(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_HSEPARATOR, GtkHSeparator))
+#define GTK_HSEPARATOR_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_HSEPARATOR, GtkHSeparatorClass))
+#define GTK_IS_HSEPARATOR(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_HSEPARATOR))
+#define GTK_IS_HSEPARATOR_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HSEPARATOR))
 
 
 typedef struct _GtkHSeparator       GtkHSeparator;
@@ -48,13 +51,13 @@ struct _GtkHSeparatorClass
 };
 
 
-guint      gtk_hseparator_get_type (void);
+GtkType    gtk_hseparator_get_type (void);
 GtkWidget* gtk_hseparator_new      (void);
+
 
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-
 
 #endif /* __GTK_HSEPARATOR_H__ */
