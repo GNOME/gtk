@@ -744,7 +744,7 @@ gtk_window_get_geometry_info (GtkWindow *window,
 
   if (!info && create)
     {
-      info = g_new (GtkWindowGeometryInfo, 1);
+      info = g_new0 (GtkWindowGeometryInfo, 1);
 
       info->width = 0;
       info->height = 0;
@@ -1750,118 +1750,96 @@ gtk_window_constrain_size (GtkWindow   *window,
 			   gint        *new_width,
 			   gint        *new_height)
 {
-#define makemult(a,b) ((b==1) ? (a) : (((int)((a)/(b))) * (b)) )
-    int minWidth, minHeight, maxWidth, maxHeight, xinc, yinc, delta;
-    int baseWidth, baseHeight;
+  gint min_width = 0, min_height = 0, base_width = 0, base_height = 0;
+  gint xinc = 1, yinc = 1, max_width, max_height;
+  
+#define FLOOR(value, base)	( ((gint) ((value) / (base))) * (base) )
 
-    int dwidth = width;
-    int dheight = height;
+  if ((flags & GDK_HINT_BASE_SIZE) && (flags & GDK_HINT_MIN_SIZE))
+    {
+      base_width = geometry->base_width;
+      base_height = geometry->base_height;
+      min_width = geometry->min_width;
+      min_height = geometry->min_height;
+    }
+  else if (flags & GDK_HINT_BASE_SIZE)
+    {
+      base_width = geometry->base_width;
+      base_height = geometry->base_height;
+      min_width = geometry->base_width;
+      min_height = geometry->base_height;
+    }
+  else if (flags & GDK_HINT_MIN_SIZE)
+    {
+      base_width = geometry->min_width;
+      base_height = geometry->min_height;
+      min_width = geometry->min_width;
+      min_height = geometry->min_height;
+    }
+  
+  max_width = (flags & GDK_HINT_MAX_SIZE) ? geometry->max_width : 32767;
+  max_height = (flags & GDK_HINT_MAX_SIZE) ? geometry->max_height : 32767;
 
-    if (!(flags & GDK_HINT_BASE_SIZE))
-      {
-	if (flags & GDK_HINT_MIN_SIZE)
-	  {
-	    baseWidth = geometry->min_width;
-	    baseHeight = geometry->min_height;
-	  }
-	else
-	  {
-	    baseWidth = 0;
-	    baseHeight = 0;
-	  }
-      }
-    else
-      {
-      	baseWidth = geometry->min_width;
-	baseHeight = geometry->min_height;
-      }
+  if (flags & GDK_HINT_RESIZE_INC)
+    {
+      xinc = MAX (xinc, geometry->width_inc);
+      yinc = MAX (yinc, geometry->height_inc);
+    }
+  
+  /* clamp width and height to min and max values
+   */
+  width = CLAMP (width, min_width, max_width);
+  height = CLAMP (height, min_height, max_height);
+  
+  /* shrink to base + N * inc
+   */
+  width = base_width + FLOOR (width - base_width, xinc);
+  height = base_height + FLOOR (height - base_height, yinc);
 
-    if (!(flags & GDK_HINT_MIN_SIZE))
-      {
-	if (flags & GDK_HINT_BASE_SIZE)
-	  {
-	    minWidth = geometry->base_width;
-	    minHeight = geometry->base_height;
-	  }
-	else
-	  {
-	    minWidth = 0;
-	    minHeight = 0;
-	  }
-      }
-    else
-      {
-      	minWidth = geometry->min_width;
-	minHeight = geometry->min_height;
-      }
-    
-    maxWidth = (flags & GDK_HINT_MAX_SIZE) ? geometry->max_width : G_MAXINT;
-    maxHeight =  (flags & GDK_HINT_MAX_SIZE) ? geometry->max_height : G_MAXINT;
+  /* constrain aspect ratio, according to:
+   *
+   *                width     
+   * min_aspect <= -------- <= max_aspect
+   *                height    
+   */
+  
+  if (flags & GDK_HINT_ASPECT &&
+      geometry->min_aspect > 0 &&
+      geometry->max_aspect > 0)
+    {
+      gint delta;
 
-    xinc = (flags & GDK_HINT_RESIZE_INC && geometry->width_inc > 0) ?
-      geometry->width_inc : 1;
-    yinc = (flags & GDK_HINT_RESIZE_INC && geometry->height_inc > 0) ?
-      geometry->height_inc : 1;
-    
-    /*
-     * First, clamp to min and max values
-     */
-    dwidth = MAX (dwidth, minWidth);
-    dheight = MAX (dheight, minHeight);
-    dwidth = MIN (dwidth, maxWidth);
-    dheight = MIN (dheight, maxHeight);
-    
-    /*
-     * Second, fit to base + N * inc
-     */
-    dwidth = ((dwidth - baseWidth) / xinc * xinc) + baseWidth;
-    dheight = ((dheight - baseHeight) / yinc * yinc) + baseHeight;
-    
-    /*
-     * The math looks like this:
-     *
-     *               dwidth     
-     * min_aspect <= -------- <= max_aspect
-     *               dheight    
-     */
-    
-    if (flags & GDK_HINT_ASPECT &&
-	geometry->min_aspect > 0 &&
-	geometry->max_aspect > 0)
-      {
-        if (geometry->min_aspect * dheight > dwidth)
-          {
-            delta = makemult(dheight - dwidth * geometry->min_aspect,
-			     yinc);
-            if (dheight - delta >= minHeight)
-              dheight -= delta;
-            else
-              { 
-                delta = makemult(dheight * geometry->min_aspect - dwidth,
-                                 xinc);
-                if (dwidth + delta <= maxWidth) 
-                  dwidth += delta;
-              }
-          }
-        
-        if (geometry->max_aspect * dheight < dwidth)
-          {
-            delta = makemult(dwidth - dheight * geometry->max_aspect,
-                             xinc);
-            if (dwidth - delta >= minWidth) 
-                dwidth -= delta;
-            else
-              {
-                delta = makemult(dwidth / geometry->max_aspect - dheight,
-                                 yinc);
-                if (dheight + delta <= maxHeight)
-                  dheight += delta;
-              }
-          }
-      }
-    
-    *new_width = dwidth;
-    *new_height = dheight;
+      if (geometry->min_aspect * height > width)
+	{
+	  delta = FLOOR (height - width * geometry->min_aspect, yinc);
+	  if (height - delta >= min_height)
+	    height -= delta;
+	  else
+	    { 
+	      delta = FLOOR (height * geometry->min_aspect - width, xinc);
+	      if (width + delta <= max_width) 
+		width += delta;
+	    }
+	}
+      
+      if (geometry->max_aspect * height < width)
+	{
+	  delta = FLOOR (width - height * geometry->max_aspect, xinc);
+	  if (width - delta >= min_width) 
+	    width -= delta;
+	  else
+	    {
+	      delta = FLOOR (width / geometry->max_aspect - height, yinc);
+	      if (height + delta <= max_height)
+		height += delta;
+	    }
+	}
+    }
+
+#undef FLOOR
+  
+  *new_width = width;
+  *new_height = height;
 }
 
 /* Compute the set of geometry hints and flags for a window
@@ -1879,85 +1857,78 @@ gtk_window_compute_hints (GtkWindow   *window,
   gint ux, uy;
   gint extra_width = 0;
   gint extra_height = 0;
+  GtkWindowGeometryInfo *geometry_info;
+  GtkRequisition requisition;
 
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (GTK_WIDGET_REALIZED (window));
 
   widget = GTK_WIDGET (window);
+  
+  gtk_widget_get_child_requisition (widget, &requisition);
+  geometry_info = gtk_window_get_geometry_info (GTK_WINDOW (widget), FALSE);
 
-  if (GTK_WIDGET_REALIZED (window))
+  g_return_if_fail (geometry_info != NULL);
+  
+  *new_flags = geometry_info->mask;
+  *new_geometry = geometry_info->geometry;
+  
+  if (geometry_info->widget)
     {
-      GtkWindowGeometryInfo *geometry_info;
-      GtkRequisition requisition;
-
-      gtk_widget_get_child_requisition (widget, &requisition);
-      geometry_info = gtk_window_get_geometry_info (GTK_WINDOW (widget), FALSE);
-
-      if (geometry_info)
-	{
-	  *new_flags = geometry_info->mask;
-	  *new_geometry = geometry_info->geometry;
-
-	  if (geometry_info->widget)
-	    {
-	      extra_width = widget->requisition.width - geometry_info->widget->requisition.width;
-	      extra_height = widget->requisition.height - geometry_info->widget->requisition.height;
-	    }
-	}
-      else
-	*new_flags = 0;
+      extra_width = widget->requisition.width - geometry_info->widget->requisition.width;
+      extra_height = widget->requisition.height - geometry_info->widget->requisition.height;
+    }
+  
+  ux = 0;
+  uy = 0;
+  
+  aux_info = gtk_object_get_data (GTK_OBJECT (widget), "gtk-aux-info");
+  if (aux_info && (aux_info->x != -1) && (aux_info->y != -1))
+    {
+      ux = aux_info->x;
+      uy = aux_info->y;
+      *new_flags |= GDK_HINT_POS;
+    }
+  
+  if (*new_flags & GDK_HINT_BASE_SIZE)
+    {
+      new_geometry->base_width += extra_width;
+      new_geometry->base_height += extra_height;
+    }
+  else if (!(*new_flags & GDK_HINT_MIN_SIZE) &&
+	   (*new_flags & GDK_HINT_RESIZE_INC) &&
+	   ((extra_width != 0) || (extra_height != 0)))
+    {
+      *new_flags |= GDK_HINT_BASE_SIZE;
       
-      ux = 0;
-      uy = 0;
-
-      aux_info = gtk_object_get_data (GTK_OBJECT (widget), "gtk-aux-info");
-      if (aux_info && (aux_info->x != -1) && (aux_info->y != -1))
-	{
-	  ux = aux_info->x;
-	  uy = aux_info->y;
-	  *new_flags |= GDK_HINT_POS;
-	}
+      new_geometry->base_width = extra_width;
+      new_geometry->base_height = extra_height;
+    }
+  
+  if (*new_flags & GDK_HINT_MIN_SIZE)
+    {
+      new_geometry->min_width += extra_width;
+      new_geometry->min_height += extra_height;
+    }
+  else if (!window->allow_shrink)
+    {
+      *new_flags |= GDK_HINT_MIN_SIZE;
       
-      if (*new_flags & GDK_HINT_BASE_SIZE)
-	{
-	  new_geometry->base_width += extra_width;
-	  new_geometry->base_height += extra_height;
-	}
-      else if (!(*new_flags & GDK_HINT_MIN_SIZE) &&
-	       (*new_flags & GDK_HINT_RESIZE_INC) &&
-	       ((extra_width != 0) || (extra_height != 0)))
-	{
-	  *new_flags |= GDK_HINT_BASE_SIZE;
-
-	  new_geometry->base_width = extra_width;
-	  new_geometry->base_height = extra_height;
-	}
-
-      if (*new_flags & GDK_HINT_MIN_SIZE)
-	{
-	  new_geometry->min_width += extra_width;
-	  new_geometry->min_height += extra_height;
-	}
-      else if (!window->allow_shrink)
-	{
-	  *new_flags |= GDK_HINT_MIN_SIZE;
-
-	  new_geometry->min_width = requisition.width;
-	  new_geometry->min_height = requisition.height;
-	}
-
-      if (*new_flags & GDK_HINT_MAX_SIZE)
-	{
-	  new_geometry->max_width += extra_width;
-	  new_geometry->max_height += extra_height;
-	}
-      else if (!window->allow_grow)
-	{
-	  *new_flags |= GDK_HINT_MAX_SIZE;
-
-	  new_geometry->max_width = requisition.width;
-	  new_geometry->max_height = requisition.height;
-	}
+      new_geometry->min_width = requisition.width;
+      new_geometry->min_height = requisition.height;
+    }
+  
+  if (*new_flags & GDK_HINT_MAX_SIZE)
+    {
+      new_geometry->max_width += extra_width;
+      new_geometry->max_height += extra_height;
+    }
+  else if (!window->allow_grow)
+    {
+      *new_flags |= GDK_HINT_MAX_SIZE;
+      
+      new_geometry->max_width = requisition.width;
+      new_geometry->max_height = requisition.height;
     }
 }
 

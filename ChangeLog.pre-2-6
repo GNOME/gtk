@@ -1,3 +1,15 @@
+Wed Sep  1 06:54:59 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwindow.c (gtk_window_get_geometry_info): zero initialize
+	new GtkWindowGeometryInfo, so fields like GdkGeometry geometry
+	contain uncluttered values.
+	(gtk_window_compute_hints): simply assert that window is realized
+	and that geometry_info is valid, since we rely on this anyways.
+	(gtk_window_constrain_size): major cleanups to the code.
+	if (flags & GDK_HINT_BASE_SIZE) use geometry's base width and height
+	for the base size, instead of the minimums. use 32767 as max width
+	and height (like in gtkwindow.c) instead of G_MAXINT.
+
 Wed Sep  1 04:41:25 1999  Tim Janik  <timj@gtk.org>
 
 	* cleaned up the GtkContainer.need_resize flag handling mess, we
