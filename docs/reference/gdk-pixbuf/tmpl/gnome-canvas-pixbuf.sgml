@@ -8,7 +8,7 @@ Canvas item to display #GdkPixbuf images.
   <para>
     This canvas item displays #GdkPixbuf images.  It handles full
     affine transformations in both GDK and antialiased modes, and also
-    supports <ulink
+    supports the <ulink url="http://www.w3.org">W3C</ulink>'s <ulink
     url="http://www.w3.org/Graphics/SVG/">SVG</ulink>-like scaling and
     translation semantics for absolute pixel values.
   </para>
@@ -18,6 +18,123 @@ Canvas item to display #GdkPixbuf images.
     items; the pixbuf item uses #GdkPixbuf's reference counting
     functions for this.
   </para>
+
+  <refsect2>
+    <title>Custom Scaling and Translation</title>
+
+    <para>
+      In addition to the normal affine transformations supported by
+      canvas items, the #GnomeCanvasPixbuf item supports independent
+      object arguments for scaling and translation.  This is useful
+      for explicitly setting a size to which the pixbuf's image will
+      be scaled, and for specifying translation offsets that take
+      place in the item's local coordinate system.
+    </para>
+
+    <para>
+      By default, the pixbuf canvas item will attain the size in units
+      of the #GdkPixbuf it contains.  If a #GnomeCanvasPixbuf is
+      configured to use a #GdkPixbuf that has a size of 300 by 200
+      pixels, then the pixbuf item will automatically obtain a size of
+      300 by 200 units in the item's local coordinate system.  If the
+      item is transformed with a scaling transformation of (0.5, 2.0),
+      then the final image size will be of 150 by 400 pixels.
+    </para>
+
+    <para>
+      To set custom width and height values, you must set the <link
+      linkend="GnomeCanvasPixbuf--width-set">width_set</link> or <link
+      linkend="GnomeCanvasPixbuf--height-set">height_set</link>
+      arguments to %TRUE, and then set the <link
+      linkend="GnomeCanvasPixbuf--width">width</link> or <link
+      linkend="GnomeCanvasPixbuf--height">height</link> arguments to
+      the desired values.  The former two arguments control whether
+      the latter two are used when computing the final image's size;
+      they are both %FALSE by default so that the pixbuf item will
+      attain a size in units equal to the size in pixels of the
+      #GdkPixbuf that the item contains.
+    </para>
+
+    <para>
+      The custom translation values are analogously controlled by the
+      <link linkend="GnomeCanvasPixbuf--x-set">x_set</link>, <link
+      linkend="GnomeCanvasPixbuf--y-set">y_set</link>, <link
+      linkend="GnomeCanvasPixbuf--x">x</link>, and <link
+      linkend="GnomeCanvasPixbuf--y">y</link> arguments.  The former
+      two control whether the custom translation offsets are used and
+      they are %FALSE by default, and the latter two control the
+      offsets themselves.  If a custom translation offset is not used,
+      it is taken to be 0.0 by default.  Otherwise, the logical
+      upper-left vertex of the image will be translated by the
+      specified distance, aligned with the item's local coordinate
+      system.
+    </para>
+  </refsect2>
+
+  <refsect2>
+    <title>Absolute Pixel Scaling and Translation</title>
+
+    <para>
+      The <ulink url="http://www.w3.org/Graphics/SVG/">Scalable Vector
+      Graphics</ulink> specification (SVG) of the <ulink
+      url="http://www.w3.org">World Wide Web Consortium</ulink> also
+      allows images to be translated and scaled by absolute pixel
+      values that are independent of an item's normal affine
+      transformation.
+    </para>
+
+    <para>
+      Normally, the pixbuf item's translation and scaling arguments
+      are interpreted in units, so they will be modified by the item's
+      affine transformation.  The <link
+      linkend="GnomeCanvasPixbuf--width-pixels">width_pixels</link>,
+      <link
+      linkend="GnomeCanvasPixbuf--height-pixels">height_pixels</link>,
+      <link linkend="GnomeCanvasPixbuf--x-pixels">x_pixels</link>, and
+      <link linkend="GnomeCanvasPixbuf--y-pixels">y_pixels</link>
+      object arguments can be used to modify this behavior.  If one of
+      these arguments is %TRUE, then the corresponding scaling or
+      translation value will not be affected lengthwise by the pixbuf
+      item's affine transformation.
+    </para>
+
+    <para>
+      For example, consider a pixbuf item whose size is (300, 200).
+      If the item is modified with a scaling transformation of (0.5,
+      2.0) but the <link
+      linkend="GnomeCanvasPixbuf--width-pixels">width_pixels</link> is
+      set to %TRUE, then the item will appear to be (300, 400) pixels
+      in size.  This means that in this case the item's affine
+      transformation only applies to the height value, while the
+      width value is kept in absolute pixels.
+    </para>
+
+    <para>
+      Likewise, consider a pixbuf item whose (<link
+      linkend="GnomeCanvasPixbuf--x">x</link>, <link
+      linkend="GnomeCanvasPixbuf--y">y</link>) arguments are set to
+      (30, 40)<footnote>
+	<para>
+	  This of course assumes that the <link
+	  linkend="GnomeCanvasPixbuf--x-set">x_set</link> and <link
+	  linkend="GnomeCanvasPixbuf--y-set">y_set</link> arguments
+	  are set to %TRUE for the translation offsets to take effect.
+	</para>
+      </footnote>.  If the item is then modified by the same scaling
+      transformation of (0.5, 2.0) but the <link
+      linkend="GnomeCanvasPixbuf--y-pixels">y_pixels</link> argument
+      is set to %TRUE, then the image's upper-left corner will appear
+      to be at position (15, 40).  In this case, the affine
+      transformation is applied only to the x offset, while the y
+      offset is kept in absolute pixels.
+    </para>
+
+    <para>
+      In short, these arguments control whether a particular dimension
+      of a pixbuf item is scaled or not in the normal way by the
+      item's affine transformation.
+    </para>
+  </refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
   <para>
@@ -124,9 +241,9 @@ Canvas item to display #GdkPixbuf images.
   <para>
     Indicates the horizontal translation offset of the pixbuf item's
     image.  This argument will only be used if the <link
-    linkend="GnomeCanvasPixbuf--x-set">x_set</link> argument is
-    %TRUE.  This &lsquo;horizontal&rsquo; offset will actually be
-    modified by the item's affine transformation.
+    linkend="GnomeCanvasPixbuf--x-set">x_set</link> argument is %TRUE.
+    This offset may not actually appear horizontal, since it will be
+    affected by the item's affine transformation.
   </para>
 
 <!-- ##### ARG GnomeCanvasPixbuf:y_set ##### -->

@@ -1,3 +1,8 @@
+1999-11-07  Federico Mena Quintero  <federico@redhat.com>
+
+	* doc/tmpl/gnome-canvas-pixbuf.sgml: Finished detailed explanation
+	of the width, height, x, and y setting and pixels arguments.
+
 1999-11-05  Federico Mena Quintero  <federico@redhat.com>
 
 	* doc/gdk-pixbuf-sections.txt: Removed gdk-pixbuf-io, since it is
