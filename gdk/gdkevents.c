@@ -969,6 +969,16 @@ gdk_add_client_message_filter (GdkAtom       message_type,
   client_filters = g_list_prepend (client_filters, filter);
 }
 
+/* Hack because GDK_RELEASE_MASK (a mistake in and of itself) was
+ * accidentally given a value that overlaps with real bits in the
+ * state field.
+ */
+static inline guint
+translate_state (guint xstate)
+{
+  return xstate & ~GDK_RELEASE_MASK;
+}
+
 static gint
 gdk_event_translate (GdkEvent *event,
 		     XEvent   *xevent)
@@ -1152,7 +1162,7 @@ gdk_event_translate (GdkEvent *event,
       event->key.type = GDK_KEY_PRESS;
       event->key.window = window;
       event->key.time = xevent->xkey.time;
-      event->key.state = (GdkModifierType) xevent->xkey.state;
+      event->key.state = translate_state (xevent->xkey.state);
       event->key.string = g_strdup (buf);
       event->key.length = charcount;
       
@@ -1184,7 +1194,7 @@ gdk_event_translate (GdkEvent *event,
       event->key.type = GDK_KEY_RELEASE;
       event->key.window = window;
       event->key.time = xevent->xkey.time;
-      event->key.state = (GdkModifierType) xevent->xkey.state;
+      event->key.state = translate_state (xevent->xkey.state);
       event->key.length = 0;
       event->key.string = NULL;
       
@@ -1217,7 +1227,7 @@ gdk_event_translate (GdkEvent *event,
       event->button.pressure = 0.5;
       event->button.xtilt = 0;
       event->button.ytilt = 0;
-      event->button.state = (GdkModifierType) xevent->xbutton.state;
+      event->button.state = translate_state (xevent->xbutton.state);
       event->button.button = xevent->xbutton.button;
       event->button.source = GDK_SOURCE_MOUSE;
       event->button.deviceid = GDK_CORE_POINTER;
@@ -1287,7 +1297,7 @@ gdk_event_translate (GdkEvent *event,
       event->button.pressure = 0.5;
       event->button.xtilt = 0;
       event->button.ytilt = 0;
-      event->button.state = (GdkModifierType) xevent->xbutton.state;
+      event->button.state = translate_state (xevent->xbutton.state);
       event->button.button = xevent->xbutton.button;
       event->button.source = GDK_SOURCE_MOUSE;
       event->button.deviceid = GDK_CORE_POINTER;
@@ -1321,7 +1331,7 @@ gdk_event_translate (GdkEvent *event,
       event->motion.pressure = 0.5;
       event->motion.xtilt = 0;
       event->motion.ytilt = 0;
-      event->motion.state = (GdkModifierType) xevent->xmotion.state;
+      event->motion.state = translate_state (xevent->xmotion.state);
       event->motion.is_hint = xevent->xmotion.is_hint;
       event->motion.source = GDK_SOURCE_MOUSE;
       event->motion.deviceid = GDK_CORE_POINTER;
@@ -1401,7 +1411,7 @@ gdk_event_translate (GdkEvent *event,
 	}
       
       event->crossing.focus = xevent->xcrossing.focus;
-      event->crossing.state = xevent->xcrossing.state;
+      event->crossing.state = translate_state (xevent->xcrossing.state);
   
       break;
       
@@ -1470,7 +1480,7 @@ gdk_event_translate (GdkEvent *event,
 	}
       
       event->crossing.focus = xevent->xcrossing.focus;
-      event->crossing.state = xevent->xcrossing.state;
+      event->crossing.state = translate_state (xevent->xcrossing.state);
       
       break;
       
