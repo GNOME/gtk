@@ -77,7 +77,6 @@ LDFLAGS = @STRIP_BEGIN@ 						\
 	@LIBTOOL_EXPORT_OPTIONS@					\
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(gdk_win32_symbols)						\
-	@GDK_DEP_LIBS@							\
 @STRIP_END@
 
 #
@@ -167,10 +166,11 @@ libgdk_x11_2_0_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c gdkmarshalers.h # gd
 libgdk_linux_fb_2_0_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c gdkmarshalers.h # gdkmarshalers.c
 libgdk_win32_2_0_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c # gdkmarshalers.c
 
-libgdk_x11_2_0_la_LIBADD = x11/libgdk-x11.la	
-libgdk_linux_fb_2_0_la_LIBADD = linux-fb/libgdk-linux-fb.la	
+libgdk_x11_2_0_la_LIBADD = x11/libgdk-x11.la @GDK_DEP_LIBS@
+libgdk_linux_fb_2_0_la_LIBADD = linux-fb/libgdk-linux-fb.la @GDK_DEP_LIBS@
 libgdk_win32_2_0_la_LIBADD = \
-	win32/libgdk-win32.la $(wintab_lib) $(ie55uuid_lib)
+	win32/libgdk-win32.la $(wintab_lib) $(ie55uuid_lib) \
+	@GDK_DEP_LIBS@
 
 lib_LTLIBRARIES = $(gdktargetlib)
 
