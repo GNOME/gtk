@@ -1,3 +1,24 @@
+2000-05-07  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Fix typo. I
+	had deleted a ! operator by mistake, which caused
+	GDK_SELECTION_CLEAR events never to be generated, which caused
+	only the first copy to the clipboard from an gtkeditable to
+	actually cause a copy to the Windows clipboard.
+
+2000-05-06  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdnd-win32.c: Enable shortcut resolution for gcc
+	compilation, too. Current mingw gcc distributions include the
+	necessary headers. Also the necessary IIDs are now in mingw
+	headers/libraries, and own definitions unnecessary.
+
+	More hacking on OLE2 DND, still doesn't work though, and thus
+	ifdeffed out.
+
+	* gdk/win32/gdkwindow-win32.c: Remove gdk_window_clear() from
+	here, too.
+
 Sat,  6 May 2000 13:31:34 +0200 Paolo Molaro <lupus@linuxcare.com>
 
 	* gdk/nanox/*: nano-X port work in progress.

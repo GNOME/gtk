@@ -3066,7 +3066,7 @@ gdk_event_translate (GdkEvent *event,
       event->selection.selection = xevent->wParam;
       event->selection.time = xevent->time;
 
-      return_val = GDK_DRAWABLE_DESTROYED (window);
+      return_val = !GDK_DRAWABLE_DESTROYED (window);
 
       /* Once again, we will pass through switch below without match */
     }
