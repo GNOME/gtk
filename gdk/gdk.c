@@ -408,9 +408,9 @@ gdk_init_check (int	 *argc,
     g_free(argv_orig[i]);
   g_free(argv_orig);
   
-  gdk_wm_delete_window = XInternAtom (gdk_display, "WM_DELETE_WINDOW", True);
-  gdk_wm_take_focus = XInternAtom (gdk_display, "WM_TAKE_FOCUS", True);
-  gdk_wm_protocols = XInternAtom (gdk_display, "WM_PROTOCOLS", True);
+  gdk_wm_delete_window = XInternAtom (gdk_display, "WM_DELETE_WINDOW", False);
+  gdk_wm_take_focus = XInternAtom (gdk_display, "WM_TAKE_FOCUS", False);
+  gdk_wm_protocols = XInternAtom (gdk_display, "WM_PROTOCOLS", False);
   gdk_wm_window_protocols[0] = gdk_wm_delete_window;
   gdk_wm_window_protocols[1] = gdk_wm_take_focus;
   gdk_selection_property = XInternAtom (gdk_display, "GDK_SELECTION", False);

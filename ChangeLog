@@ -1,3 +1,8 @@
+1999-03-31  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gdk/gdk.c (gdk_init_check): Use False as the last argument to
+	XInternAtom() here.  This is a particularly Old And Nasty(tm) bug.
+
 Sat Mar 27 23:32:13 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkarg.[hc]: added functions from GLE, gtk_arg_reset() to free
