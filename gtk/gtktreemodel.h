@@ -22,6 +22,9 @@
 
 #include <glib-object.h>
 
+/* Not needed, retained for compatibility -Yosh */
+#include <gtk/gtkobject.h>
+
 G_BEGIN_DECLS
 
 #define GTK_TYPE_TREE_MODEL            (gtk_tree_model_get_type ())
