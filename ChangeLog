@@ -1,5 +1,8 @@
 2004-10-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_new): Make
+	the code clearer.  (#155239, Murray Cumming)
+
 	* gtk/gtkicontheme.c: Small fixes.
 
 	* gtk/gtkrc.c: Include gtkmodules.h.  (#155885, Kazuki IWAMOTO)

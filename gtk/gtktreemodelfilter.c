@@ -2417,11 +2417,10 @@ gtk_tree_model_filter_new (GtkTreeModel *child_model,
 
   g_return_val_if_fail (GTK_IS_TREE_MODEL (child_model), NULL);
 
-  retval = GTK_TREE_MODEL (g_object_new (gtk_tree_model_filter_get_type (), NULL));
-
-  gtk_tree_model_filter_set_model (GTK_TREE_MODEL_FILTER (retval),
-                                   child_model);
-  gtk_tree_model_filter_set_root (GTK_TREE_MODEL_FILTER (retval), root);
+  retval = GTK_TREE_MODEL (g_object_new (GTK_TYPE_TREE_MODEL_FILTER, 
+					 "child_model", child_model,
+					 "virtual_root", root,
+					 NULL));
 
   return retval;
 }
