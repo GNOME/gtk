@@ -1,3 +1,8 @@
+Tue Jun 15 01:10:32 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c: Make GtkComboBox work without model.  
+	(#144198, Mariano Suárez-Alvarez)
+
 2004-06-11  Federico Mena Quintero  <federico@ximian.com>
 
 	Merge from HEAD:
