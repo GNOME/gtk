@@ -3048,7 +3048,11 @@ gtk_window_compute_reposition (GtkWindow *window,
 	  gint screen_width = gdk_screen_get_width (gtk_widget_get_screen (widget));
 	  gint screen_height = gdk_screen_get_height (gtk_widget_get_screen (widget));
 	  
-	  gdk_window_get_pointer (window, x, y, NULL);
+	  gdk_window_get_pointer (
+		gdk_screen_get_root_window (gtk_widget_get_screen(widget)), 
+				  x, 
+				  y, 
+				  NULL);
 	  *x -= new_width / 2;
 	  *y -= new_height / 2;
 	  *x = CLAMP (*x, 0, screen_width - new_width);

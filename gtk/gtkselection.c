@@ -75,7 +75,7 @@
 #include "gdkdisplay.h"
 #include "gdkscreen.h"
 
-#define DEBUG_SELECTION 
+/*#define DEBUG_SELECTION */
 
 /* Maximum size of a sent chunk, in bytes. Also the default size of
    our buffers */

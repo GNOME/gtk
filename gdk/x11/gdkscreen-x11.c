@@ -119,6 +119,7 @@ static GdkWindow *
 gdk_X11_screen_get_root_window (GdkScreen * screen)
 {
   GdkScreenImplX11 *scr_impl = GDK_SCREEN_IMPL_X11 (screen);
+  gdk_drawable_ref(GDK_DRAWABLE(scr_impl->root_window));
   return scr_impl->root_window;
 }
 

@@ -2798,7 +2798,7 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
 {
   GdkEvent send_event;
   GtkWidget *source_widget = info->widget;
-  GdkWindow *root_window = gdk_screen_get_root_window (source_widget);
+  GdkWindow *root_window = gdk_screen_get_root_window (gtk_widget_get_screen (source_widget));
 
   gdk_display_pointer_ungrab (gtk_widget_get_display (source_widget),
 			      time);

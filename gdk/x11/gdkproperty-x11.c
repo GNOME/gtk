@@ -34,217 +34,209 @@
 #include "gdkinternals.h"
 #include "gdkdisplay-x11.h"
 #include "gdkscreen-x11.h"
-#include "gdkselection.h" /* only from predefined atom */
+#include "gdkselection.h"	/* only from predefined atom */
 
 typedef struct
 {
-   GdkDisplay *display;
-   GSList     *atom_list;
+  GdkDisplay *display;
+  GSList *atom_list;
 }
 GdkAtomDisplayList;
 
 typedef struct
 {
-    GdkAtom virtual_atom;
-    GdkAtom x_atom;
+  GdkAtom virtual_atom;
+  GdkAtom x_atom;
 }
 GdkAtomMap;
 
 static GSList *display_atom_lists = NULL;
 
-typedef struct {
-  GQuark virtual_atom;
-  Atom	 x_atom;
-} PredefinedAtoms;
-
-typedef struct {
-  PredefinedAtoms list[67];
-  GQuark	  min;
-  GQuark	  max;
-} PredefinedAtomsCache; 
-
-static PredefinedAtomsCache pac;
+static GdkAtom min_predef_virtual_atom;
+static GdkAtom max_predef_virtual_atom;
 static gboolean predefined_atom_cache_initialised = FALSE;
 
-gchar *XAtomsStrings [] = { 
-"PRIMARY",
-"SECONDARY",
-"ARC",
-"ATOM",
-"BITMAP",
-"CARDINAL",
-"COLORMAP",
-"CURSOR",
-"CUT_BUFFER0",
-"CUT_BUFFER1",
-"CUT_BUFFER2",
-"CUT_BUFFER3",
-"CUT_BUFFER4",
-"CUT_BUFFER5",
-"CUT_BUFFER6",
-"CUT_BUFFER7",
-"DRAWABLE",
-"FONT",
-"INTEGER",
-"PIXMAP",
-"POINT",
-"RECTANGLE",
-"RESOURCE_MANAGER",
-"RGB_COLOR_MAP",
-"RGB_BEST_MAP",
-"RGB_BLUE_MAP",
-"RGB_DEFAULT_MAP",
-"RGB_GRAY_MAP",
-"RGB_GREEN_MAP",
-"RGB_RED_MAP",
-"STRING",
-"VISUALID",
-"WINDOW",
-"WM_COMMAND",
-"WM_HINTS",
-"WM_CLIENT_MACHINE",
-"WM_ICON_NAME",
-"WM_ICON_SIZE",
-"WM_NAME",
-"WM_NORMAL_HINTS",
-"WM_SIZE_HINTS",
-"WM_ZOOM_HINTS",
-"MIN_SPACE",
-"NORM_SPACE",
-"MAX_SPACE",
-"END_SPACE",
-"SUPERSCRIPT_X",
-"SUPERSCRIPT_Y",
-"SUBSCRIPT_X",
-"SUBSCRIPT_Y",
-"UNDERLINE_POSITION",
-"UNDERLINE_THICKNESS",
-"STRIKEOUT_ASCENT",
-"STRIKEOUT_DESCENT",
-"ITALIC_ANGLE",
-"X_HEIGHT",
-"QUAD_WIDTH",
-"WEIGHT",
-"POINT_SIZE",
-"RESOLUTION",
-"COPYRIGHT",
-"NOTICE",
-"FONT_NAME",
-"FAMILY_NAME",
-"FULL_NAME",
-"CAP_HEIGHT",
-"WM_CLASS",
-"WM_TRANSIENT_FOR"
+G_LOCK_DEFINE_STATIC (gdk_atom_predefined);
+
+gchar *XAtomsStrings[] = {
+  "PRIMARY",
+  "SECONDARY",
+  "ARC",
+  "ATOM",
+  "BITMAP",
+  "CARDINAL",
+  "COLORMAP",
+  "CURSOR",
+  "CUT_BUFFER0",
+  "CUT_BUFFER1",
+  "CUT_BUFFER2",
+  "CUT_BUFFER3",
+  "CUT_BUFFER4",
+  "CUT_BUFFER5",
+  "CUT_BUFFER6",
+  "CUT_BUFFER7",
+  "DRAWABLE",
+  "FONT",
+  "INTEGER",
+  "PIXMAP",
+  "POINT",
+  "RECTANGLE",
+  "RESOURCE_MANAGER",
+  "RGB_COLOR_MAP",
+  "RGB_BEST_MAP",
+  "RGB_BLUE_MAP",
+  "RGB_DEFAULT_MAP",
+  "RGB_GRAY_MAP",
+  "RGB_GREEN_MAP",
+  "RGB_RED_MAP",
+  "STRING",
+  "VISUALID",
+  "WINDOW",
+  "WM_COMMAND",
+  "WM_HINTS",
+  "WM_CLIENT_MACHINE",
+  "WM_ICON_NAME",
+  "WM_ICON_SIZE",
+  "WM_NAME",
+  "WM_NORMAL_HINTS",
+  "WM_SIZE_HINTS",
+  "WM_ZOOM_HINTS",
+  "MIN_SPACE",
+  "NORM_SPACE",
+  "MAX_SPACE",
+  "END_SPACE",
+  "SUPERSCRIPT_X",
+  "SUPERSCRIPT_Y",
+  "SUBSCRIPT_X",
+  "SUBSCRIPT_Y",
+  "UNDERLINE_POSITION",
+  "UNDERLINE_THICKNESS",
+  "STRIKEOUT_ASCENT",
+  "STRIKEOUT_DESCENT",
+  "ITALIC_ANGLE",
+  "X_HEIGHT",
+  "QUAD_WIDTH",
+  "WEIGHT",
+  "POINT_SIZE",
+  "RESOLUTION",
+  "COPYRIGHT",
+  "NOTICE",
+  "FONT_NAME",
+  "FAMILY_NAME",
+  "FULL_NAME",
+  "CAP_HEIGHT",
+  "WM_CLASS",
+  "WM_TRANSIENT_FOR"
 };
 
 static gboolean
 check_if_predefined_atom (atom)
 {
- /* if the atom is a protocol atom then don't do
-  * the real - virtual or virtual real convertion */
- if (atom < XA_LAST_PREDEFINED)
-   return TRUE;
- return FALSE;
+  /* if the atom is a protocol atom then don't do
+   * the real - virtual or virtual real convertion */
+  if (atom < XA_LAST_PREDEFINED)
+    return TRUE;
+  return FALSE;
 }
 
 
-GdkAtom 
-gdk_x11_get_real_atom (GdkDisplay *display, GdkAtom virtual_atom, gboolean only_if_exists)
+GdkAtom
+gdk_x11_get_real_atom (GdkDisplay * display, GdkAtom virtual_atom,
+		       gboolean only_if_exists)
 {
   GdkAtomMap *atom_map;
   GdkAtomDisplayList *atom_display_list;
   GSList *tmp_atom_display_list;
   GSList *tmp_atom_map_list;
   gboolean found = FALSE;
-  
+
   if (check_if_predefined_atom (virtual_atom))
-  {
-    /*g_print ("We got a predefined atom %ld\n", virtual_atom);*/
-    return virtual_atom;
-  }
-  
-  if (display_atom_lists == NULL)
-  {
-    atom_map = g_new0 (GdkAtomMap, 1);
-    atom_map->virtual_atom = virtual_atom;
-    atom_map->x_atom = XInternAtom (GDK_DISPLAY_XDISPLAY (display),
-				    g_quark_to_string (virtual_atom), 
-				    only_if_exists);
-    if (!atom_map->x_atom)
     {
-      g_free (atom_map);
-/*      g_print ("Fail XInternAtom\n");*/
-      return 0;
+      return virtual_atom;
     }
-    atom_display_list = g_new0 (GdkAtomDisplayList, 1);
-    atom_display_list->display = display;
-    atom_display_list->atom_list = g_slist_append (atom_display_list->atom_list,
-					           atom_map);
-    display_atom_lists = g_slist_append (display_atom_lists, atom_display_list);
-/*    g_print ("first Get REAL(%d) (%s) return X Atom is %d\n", virtual_atom, g_quark_to_string (virtual_atom), atom_map->x_atom);*/
-    return atom_map->x_atom;
-  }
+
+  if (display_atom_lists == NULL)
+    {
+      atom_map = g_new0 (GdkAtomMap, 1);
+      atom_map->virtual_atom = virtual_atom;
+      atom_map->x_atom = XInternAtom (GDK_DISPLAY_XDISPLAY (display),
+				      g_quark_to_string (virtual_atom),
+				      only_if_exists);
+      if (!atom_map->x_atom)
+	{
+	  g_free (atom_map);
+	  return 0;
+	}
+      atom_display_list = g_new0 (GdkAtomDisplayList, 1);
+      atom_display_list->display = display;
+      atom_display_list->atom_list =
+	g_slist_append (atom_display_list->atom_list, atom_map);
+      display_atom_lists =
+	g_slist_append (display_atom_lists, atom_display_list);
+      return atom_map->x_atom;
+    }
   /* find atom map list for display */
   tmp_atom_display_list = display_atom_lists;
   while (tmp_atom_display_list && !found)
-  {
-    if (((GdkAtomDisplayList*)tmp_atom_display_list->data)->display == display)
-      found = TRUE;
-    else
-      tmp_atom_display_list = tmp_atom_display_list->next;
-  }
-  if (found) 
-  {
-    /* check is atom is already cached */
-    tmp_atom_map_list = ((GdkAtomDisplayList *)tmp_atom_display_list->data)->atom_list;
-    atom_display_list = ((GdkAtomDisplayList *)tmp_atom_display_list->data);
-    while (tmp_atom_map_list)
     {
-      if (((GdkAtomMap *)tmp_atom_map_list->data)->virtual_atom == virtual_atom)
-      {
-        return ((GdkAtomMap *)tmp_atom_map_list->data)->x_atom;
-      }
-      tmp_atom_map_list = tmp_atom_map_list->next;
+      if (((GdkAtomDisplayList *) tmp_atom_display_list->data)->display ==
+	  display)
+	found = TRUE;
+      else
+	tmp_atom_display_list = tmp_atom_display_list->next;
     }
-    /* not found get and add mapping */
-    atom_map = g_new0 (GdkAtomMap, 1);
-    atom_map->virtual_atom = virtual_atom;
-    atom_map->x_atom = XInternAtom (GDK_DISPLAY_XDISPLAY (display),
-				    g_quark_to_string (virtual_atom), 
-				    only_if_exists);
-    if (!atom_map->x_atom)
+  if (found)
     {
-      g_free (atom_map);
-      return None;
+      /* check is atom is already cached */
+      tmp_atom_map_list =
+	((GdkAtomDisplayList *) tmp_atom_display_list->data)->atom_list;
+      atom_display_list =
+	((GdkAtomDisplayList *) tmp_atom_display_list->data);
+      while (tmp_atom_map_list)
+	{
+	  if (((GdkAtomMap *) tmp_atom_map_list->data)->virtual_atom ==
+	      virtual_atom)
+	    {
+	      return ((GdkAtomMap *) tmp_atom_map_list->data)->x_atom;
+	    }
+	  tmp_atom_map_list = tmp_atom_map_list->next;
+	}
+      /* not found get and add mapping */
+      atom_map = g_new0 (GdkAtomMap, 1);
+      atom_map->virtual_atom = virtual_atom;
+      atom_map->x_atom = XInternAtom (GDK_DISPLAY_XDISPLAY (display),
+				      g_quark_to_string (virtual_atom),
+				      only_if_exists);
+      if (!atom_map->x_atom)
+	{
+	  g_free (atom_map);
+	  return None;
+	}
+      atom_display_list->atom_list =
+	g_slist_append (atom_display_list->atom_list, atom_map);
+      return atom_map->x_atom;
     }
-    atom_display_list->atom_list = g_slist_append (atom_display_list->atom_list,
-					           atom_map);    
-
-/*    g_print ("Get REAL(%d) (%s) return X Atom is %d\n", virtual_atom, g_quark_to_string (virtual_atom), atom_map->x_atom);*/
-    return atom_map->x_atom;
-  }
-    /* new display list and new atom */
+  /* new display list and new atom */
   atom_map = g_new0 (GdkAtomMap, 1);
   atom_map->virtual_atom = virtual_atom;
   atom_map->x_atom = XInternAtom (GDK_DISPLAY_XDISPLAY (display),
-      			    g_quark_to_string (virtual_atom), 
-      			    only_if_exists);
+				  g_quark_to_string (virtual_atom),
+				  only_if_exists);
   if (!atom_map->x_atom)
     {
       g_free (atom_map);
       return 0;
-  }
+    }
   atom_display_list = g_new0 (GdkAtomDisplayList, 1);
   atom_display_list->display = display;
   atom_display_list->atom_list = g_slist_append (atom_display_list->atom_list,
-      				           atom_map);
+						 atom_map);
   display_atom_lists = g_slist_append (display_atom_lists, atom_display_list);
-/*  g_print ("!New Display! Get REAL(%d) (%s) return X Atom is %d\n", virtual_atom, g_quark_to_string (virtual_atom), atom_map->x_atom);*/
-  return atom_map->x_atom;    
+  return atom_map->x_atom;
 }
 
 GdkAtom
-gdk_x11_get_virtual_atom (GdkDisplay *display, GdkAtom xatom)
+gdk_x11_get_virtual_atom (GdkDisplay * display, GdkAtom xatom)
 {
   GdkAtomMap *atom_map;
   GdkAtomDisplayList *atom_display_list;
@@ -254,82 +246,83 @@ gdk_x11_get_virtual_atom (GdkDisplay *display, GdkAtom xatom)
   gboolean found = FALSE;
 
   if (check_if_predefined_atom (xatom))
-  {
-    /*g_print ("We got a predefined atom %ld\n", xatom);*/
-    return xatom;
-  }
+    {
+      return xatom;
+    }
 
   if (display_atom_lists == NULL)
-  {
-    atom_map = g_new0 (GdkAtomMap, 1);
-    atom_map->x_atom = xatom;
-    xatom_string = XGetAtomName (GDK_DISPLAY_XDISPLAY (display), xatom);
-    atom_map->virtual_atom = gdk_atom_intern (xatom_string, FALSE);
-    XFree (xatom_string);
-    atom_display_list = g_new0 (GdkAtomDisplayList, 1);
-    atom_display_list->display = display;
-    atom_display_list->atom_list = g_slist_append (atom_display_list->atom_list,
-					           atom_map);
-    display_atom_lists = g_slist_append (display_atom_lists, atom_display_list);
-    return atom_map->virtual_atom;
-  }
+    {
+      atom_map = g_new0 (GdkAtomMap, 1);
+      atom_map->x_atom = xatom;
+      xatom_string = XGetAtomName (GDK_DISPLAY_XDISPLAY (display), xatom);
+      atom_map->virtual_atom = gdk_atom_intern (xatom_string, FALSE);
+      XFree (xatom_string);
+      atom_display_list = g_new0 (GdkAtomDisplayList, 1);
+      atom_display_list->display = display;
+      atom_display_list->atom_list =
+	g_slist_append (atom_display_list->atom_list, atom_map);
+      display_atom_lists =
+	g_slist_append (display_atom_lists, atom_display_list);
+      return atom_map->virtual_atom;
+    }
   /* find atom map list for display */
   tmp_atom_display_list = display_atom_lists;
   while (tmp_atom_display_list && !found)
-  {
-    if (((GdkAtomDisplayList*)tmp_atom_display_list->data)->display == display)
-      found = TRUE;
-    else
-      tmp_atom_display_list = tmp_atom_display_list->next;
-  }
-  if (found) 
-  {
-    /* check is atom is already cached */
-    tmp_atom_map_list = ((GdkAtomDisplayList *)tmp_atom_display_list->data)->atom_list;
-    atom_display_list = ((GdkAtomDisplayList *)tmp_atom_display_list->data);
-    while (tmp_atom_map_list)
     {
-      if (((GdkAtomMap *)tmp_atom_map_list->data)->x_atom == xatom)
-      {
-        return ((GdkAtomMap *)tmp_atom_map_list->data)->virtual_atom;
-      }
-      tmp_atom_map_list = tmp_atom_map_list->next;
+      if (((GdkAtomDisplayList *) tmp_atom_display_list->data)->display ==
+	  display)
+	found = TRUE;
+      else
+	tmp_atom_display_list = tmp_atom_display_list->next;
     }
-    /* not found get and add mapping */
-    atom_map = g_new0 (GdkAtomMap, 1);
-    atom_map->x_atom = xatom;
-    xatom_string = XGetAtomName (GDK_DISPLAY_XDISPLAY (display), xatom);
-    atom_map->virtual_atom = gdk_atom_intern (xatom_string, FALSE);
-/*    g_print ("\nGet VIRTUAL (%d) string (%s) return virtual = %d\n", xatom, xatom_string, atom_map->virtual_atom);*/
-    XFree (xatom_string);
-    atom_display_list->atom_list = g_slist_append (atom_display_list->atom_list,
-					           atom_map);    
-    return atom_map->virtual_atom;
-  }
-    /* new display list and new atom */
+  if (found)
+    {
+      /* check is atom is already cached */
+      tmp_atom_map_list =
+	((GdkAtomDisplayList *) tmp_atom_display_list->data)->atom_list;
+      atom_display_list =
+	((GdkAtomDisplayList *) tmp_atom_display_list->data);
+      while (tmp_atom_map_list)
+	{
+	  if (((GdkAtomMap *) tmp_atom_map_list->data)->x_atom == xatom)
+	    {
+	      return ((GdkAtomMap *) tmp_atom_map_list->data)->virtual_atom;
+	    }
+	  tmp_atom_map_list = tmp_atom_map_list->next;
+	}
+      /* not found get and add mapping */
+      atom_map = g_new0 (GdkAtomMap, 1);
+      atom_map->x_atom = xatom;
+      xatom_string = XGetAtomName (GDK_DISPLAY_XDISPLAY (display), xatom);
+      atom_map->virtual_atom = gdk_atom_intern (xatom_string, FALSE);
+      XFree (xatom_string);
+      atom_display_list->atom_list =
+	g_slist_append (atom_display_list->atom_list, atom_map);
+      return atom_map->virtual_atom;
+    }
+  /* new display list and new atom */
   atom_map = g_new0 (GdkAtomMap, 1);
   atom_map->x_atom = xatom;
   xatom_string = XGetAtomName (GDK_DISPLAY_XDISPLAY (display), xatom);
   atom_map->virtual_atom = gdk_atom_intern (xatom_string, FALSE);
-/*g_print ("\n!New Display! Get VIRTUAL (%d) string (%s) return virtual = %d\n", xatom, xatom_string, atom_map->virtual_atom);*/
-  XFree (xatom_string);  
+  XFree (xatom_string);
   atom_display_list = g_new0 (GdkAtomDisplayList, 1);
   atom_display_list->display = display;
   atom_display_list->atom_list = g_slist_append (atom_display_list->atom_list,
-      				           atom_map);
+						 atom_map);
   display_atom_lists = g_slist_append (display_atom_lists, atom_display_list);
-  return atom_map->virtual_atom;    
+  return atom_map->virtual_atom;
 }
 
 GdkAtom
-gdk_x11_get_real_atom_by_name (GdkDisplay *display, const gchar *atom_name)
+gdk_x11_get_real_atom_by_name (GdkDisplay * display, const gchar * atom_name)
 {
-/*  g_print("Get Real Atom by Name %s\n",atom_name);*/
-  return  gdk_x11_get_real_atom (display, gdk_atom_intern (atom_name, FALSE), FALSE);
+  return gdk_x11_get_real_atom (display, gdk_atom_intern (atom_name, FALSE),
+				FALSE);
 }
 
-gchar*
-gdk_x11_get_real_atom_name (GdkDisplay *display, GdkAtom xatom)
+gchar *
+gdk_x11_get_real_atom_name (GdkDisplay * display, GdkAtom xatom)
 {
   gchar *name, *tmp;
   tmp = XGetAtomName (GDK_DISPLAY_XDISPLAY (display), xatom);
@@ -340,63 +333,61 @@ gdk_x11_get_real_atom_name (GdkDisplay *display, GdkAtom xatom)
 }
 
 GdkAtom
-gdk_atom_intern (const gchar *atom_name, gboolean only_if_exists)
+gdk_atom_intern (const gchar * atom_name, gboolean only_if_exists)
 {
   GdkAtom virtual_atom;
   g_return_val_if_fail (atom_name != NULL, GDK_NONE);
   if (!predefined_atom_cache_initialised)
-  {
-    int i;
-    for (i=0;i<68;i++)
     {
-      pac.list[i].virtual_atom = g_quark_from_string (XAtomsStrings[i]);
-      pac.list[i].x_atom = i+1;
-      /*g_print ("i (%d), virtual (%ld), xatom (%ld), Name (%s)\n",
-	     i,pac.list[i].virtual_atom, pac.list[i].x_atom,
-	     XAtomsStrings[i]);*/
+      int i;
+      /* Mark such the predefined quarks are consecutives */
+      G_LOCK (gdk_atom_predefined);
+
+      for (i = 0; i < 68; i++)
+	{
+	  GdkAtom virtual_tmp = g_quark_from_string (XAtomsStrings[i]);
+	  if (i == 0)
+	    min_predef_virtual_atom = virtual_tmp;
+	  if (i == 67)
+	    max_predef_virtual_atom = virtual_tmp;
+	}
+      predefined_atom_cache_initialised = TRUE;
+      G_UNLOCK (gdk_atom_predefined);
     }
-    pac.max = pac.list[67].virtual_atom;
-    pac.min = pac.list[0].virtual_atom;
-    /*g_print ("min is (%ld), max is (%ld)\n",
-	     pac.min,
-	     pac.max);*/
-    predefined_atom_cache_initialised = TRUE;
-  }
+
   virtual_atom = g_quark_from_string (atom_name);
-  if (virtual_atom < pac.max && virtual_atom > pac.min)
-  {
-    /*g_print ("predefined atom (%s) virtual %ld, X %ld\n",
-	     atom_name,
-	     virtual_atom,
-	     pac.list[virtual_atom - pac.min].x_atom);*/
-    /* I assume the quarks in pac.list are consecutives */
-    virtual_atom = pac.list[virtual_atom - pac.min].x_atom;
-    return virtual_atom;
-  }
+  if (virtual_atom < max_predef_virtual_atom &&
+      virtual_atom > min_predef_virtual_atom)
+    {
+      /* predefined atom numbers go from 1 to 67 so to get them
+       * first predefined virtual - current virtual gives the
+       * offset*/
+      virtual_atom = (virtual_atom - min_predef_virtual_atom) + 1;
+      return virtual_atom;
+    }
   return virtual_atom;
 }
 
-gchar*
+gchar *
 gdk_atom_name (GdkAtom atom)
 {
   if (check_if_predefined_atom (atom))
-  { 
-    return gdk_x11_get_real_atom_name (gdk_get_default_display (), atom);
-  }
+    {
+      return gdk_x11_get_real_atom_name (gdk_get_default_display (), atom);
+    }
   return g_strdup (g_quark_to_string (atom));
 }
 
 gboolean
-gdk_property_get (GdkWindow   *window,
-		  GdkAtom      property,
-		  GdkAtom      type,
-		  gulong       offset,
-		  gulong       length,
-		  gint         pdelete,
-		  GdkAtom     *actual_property_type,
-		  gint        *actual_format_type,
-		  gint        *actual_length,
-		  guchar     **data)
+gdk_property_get (GdkWindow * window,
+		  GdkAtom property,
+		  GdkAtom type,
+		  gulong offset,
+		  gulong length,
+		  gint pdelete,
+		  GdkAtom * actual_property_type,
+		  gint * actual_format_type,
+		  gint * actual_length, guchar ** data)
 {
   GdkDisplay *display;
   Display *xdisplay;
@@ -409,7 +400,7 @@ gdk_property_get (GdkWindow   *window,
   guchar *ret_data;
   Atom xproperty;
   Atom xtype;
-  
+
 
   g_return_val_if_fail (!window || GDK_IS_WINDOW (window), FALSE);
 
@@ -423,8 +414,8 @@ gdk_property_get (GdkWindow   *window,
     }
   else
     {
-        g_warning("gdk_property_get no GdkWindow defined\n");
-	return FALSE;
+      g_warning ("gdk_property_get no GdkWindow defined\n");
+      return FALSE;
     }
 
   ret_data = NULL;
@@ -434,12 +425,12 @@ gdk_property_get (GdkWindow   *window,
   XGetWindowProperty (xdisplay, xwindow, xproperty,
 		      offset, (length + 3) / 4, pdelete,
 		      xtype, &ret_prop_type, &ret_format,
-		      &ret_nitems, &ret_bytes_after,
-		      &ret_data);
+		      &ret_nitems, &ret_bytes_after, &ret_data);
 
-  if ((ret_prop_type == None) && (ret_format == 0)) {
-    return FALSE;
-  }
+  if ((ret_prop_type == None) && (ret_format == 0))
+    {
+      return FALSE;
+    }
 
   if (actual_property_type)
     *actual_property_type = gdk_x11_get_virtual_atom (display, ret_prop_type);
@@ -451,12 +442,15 @@ gdk_property_get (GdkWindow   *window,
       gchar *rn, *pn;
 
       XFree (ret_data);
-      rn = gdk_x11_get_real_atom_name (GDK_WINDOW_DISPLAY(window), ret_prop_type);
+      rn =
+	gdk_x11_get_real_atom_name (GDK_WINDOW_DISPLAY (window),
+				    ret_prop_type);
 
-      pn = gdk_x11_get_real_atom_name (GDK_WINDOW_DISPLAY(window), type);
+      pn = gdk_x11_get_real_atom_name (GDK_WINDOW_DISPLAY (window), type);
 
       g_warning ("Couldn't match property type %s to %s\n", rn, pn);
-      g_free (rn); g_free (pn);
+      g_free (rn);
+      g_free (pn);
       return FALSE;
     }
 
@@ -470,10 +464,10 @@ gdk_property_get (GdkWindow   *window,
 	  ret_length = ret_nitems;
 	  break;
 	case 16:
-	  ret_length = sizeof(short) * ret_nitems;
+	  ret_length = sizeof (short) * ret_nitems;
 	  break;
 	case 32:
-	  ret_length = sizeof(long) * ret_nitems;
+	  ret_length = sizeof (long) * ret_nitems;
 	  break;
 	default:
 	  g_warning ("unknown property return format: %d", ret_format);
@@ -493,13 +487,11 @@ gdk_property_get (GdkWindow   *window,
 }
 
 void
-gdk_property_change (GdkWindow    *window,
-		     GdkAtom       property,
-		     GdkAtom       type,
-		     gint          format,
-		     GdkPropMode   mode,
-		     const guchar *data,
-		     gint          nelements)
+gdk_property_change (GdkWindow * window,
+		     GdkAtom property,
+		     GdkAtom type,
+		     gint format,
+		     GdkPropMode mode, const guchar * data, gint nelements)
 {
   GdkDisplay *display;
   Display *xdisplay;
@@ -519,19 +511,18 @@ gdk_property_change (GdkWindow    *window,
     }
   else
     {
-      g_warning("gdk_property_change no GdkWindow defined\n");
+      g_warning ("gdk_property_change no GdkWindow defined\n");
       return;
     }
   display = GDK_WINDOW_DISPLAY (window);
   xproperty = gdk_x11_get_real_atom (display, property, FALSE);
   xtype = gdk_x11_get_real_atom (display, type, FALSE);
   XChangeProperty (xdisplay, xwindow, xproperty, xtype,
-		   format, mode, (guchar *)data, nelements);
+		   format, mode, (guchar *) data, nelements);
 }
 
 void
-gdk_property_delete (GdkWindow *window,
-		     GdkAtom    property)
+gdk_property_delete (GdkWindow * window, GdkAtom property)
 {
   Display *xdisplay;
   Window xwindow;
@@ -545,11 +536,10 @@ gdk_property_delete (GdkWindow *window,
 
       xdisplay = GDK_WINDOW_XDISPLAY (window);
       xwindow = GDK_WINDOW_XID (window);
-      XDeleteProperty (xdisplay, 
+      XDeleteProperty (xdisplay,
 		       xwindow,
-		       gdk_x11_get_real_atom (GDK_WINDOW_DISPLAY (window), 
-					      property,
-					      FALSE));
+		       gdk_x11_get_real_atom (GDK_WINDOW_DISPLAY (window),
+					      property, FALSE));
 
     }
 }
