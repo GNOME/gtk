@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.0\n"
-"POT-Creation-Date: 2002-09-29 05:04+0200\n"
-"PO-Revision-Date: 2002-09-29 12:49GMT\n"
+"POT-Creation-Date: 2002-10-25 05:13+0200\n"
+"PO-Revision-Date: 2002-10-25 10:59GMT\n"
 "Last-Translator: Michal Bukovjan <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -153,7 +153,7 @@ msgstr "Obrázek formátu BMP má neplatná data v hlavičce"
 msgid "Failure reading GIF: %s"
 msgstr "Chyba při čtení formátu GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1392 gdk-pixbuf/io-gif.c:1552
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 "V souboru formátu GIF chybí některá data (možná byl nějakým způsobem "
@@ -164,51 +164,55 @@ msgstr ""
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Interní chyba modulu pro formát GIF (%s)"
 
-#: gdk-pixbuf/io-gif.c:592
+#: gdk-pixbuf/io-gif.c:541
+msgid "Stack overflow"
+msgstr "Přetečení zásobníku"
+
+#: gdk-pixbuf/io-gif.c:600
 msgid "GIF image loader can't understand this image."
 msgstr "Modul pro nahrávání obrázků ve formátu GIF nerozpoznal tento obrázek."
 
-#: gdk-pixbuf/io-gif.c:621
+#: gdk-pixbuf/io-gif.c:629
 msgid "Bad code encountered"
 msgstr "Nalezen chybný kód"
 
-#: gdk-pixbuf/io-gif.c:630
+#: gdk-pixbuf/io-gif.c:639
 msgid "Circular table entry in GIF file"
 msgstr "Cyklická položka v tabulce v souboru formátu GIF"
 
-#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
-#: gdk-pixbuf/io-gif.c:1530
+#: gdk-pixbuf/io-gif.c:772 gdk-pixbuf/io-gif.c:1380 gdk-pixbuf/io-gif.c:1425
+#: gdk-pixbuf/io-gif.c:1540
 msgid "Not enough memory to load GIF file"
 msgstr "Nedostatek paměti pro načtení obrázku ve formátu GIF"
 
-#: gdk-pixbuf/io-gif.c:1009
+#: gdk-pixbuf/io-gif.c:1019
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Obrázek ve formátu GIF je poškozený (chybná komprese LZW)"
 
-#: gdk-pixbuf/io-gif.c:1059
+#: gdk-pixbuf/io-gif.c:1069
 msgid "File does not appear to be a GIF file"
 msgstr "Soubor nevypadá jako soubor formátu GIF"
 
-#: gdk-pixbuf/io-gif.c:1071
+#: gdk-pixbuf/io-gif.c:1081
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Verze %s formátu GIF není podporovaná"
 
-#: gdk-pixbuf/io-gif.c:1144
+#: gdk-pixbuf/io-gif.c:1154
 msgid "GIF image contained a frame with height or width 0."
 msgstr "Obrázek ve formátu GIF obsahuje rámec s výškou nebo šířkou 0."
 
-#: gdk-pixbuf/io-gif.c:1157
+#: gdk-pixbuf/io-gif.c:1167
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr "Obrázek ve formátu GIF obsahuje rámec zobrazený mimo okraje obrázku."
 
-#: gdk-pixbuf/io-gif.c:1173
+#: gdk-pixbuf/io-gif.c:1183
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 "První rámec obrázku ve formátu GIF obsahuje jako svůj režim pro použití "
 "příkaz 'vrátit se k předchozímu'."
 
-#: gdk-pixbuf/io-gif.c:1208
+#: gdk-pixbuf/io-gif.c:1218
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -216,7 +220,7 @@ msgstr ""
 "Obrázek ve formátu GIF neobsahuje globální barevnou mapu a rámec v něm "
 "neobsahuje žádnou mapu lokální."
 
-#: gdk-pixbuf/io-gif.c:1437
+#: gdk-pixbuf/io-gif.c:1447
 msgid "GIF image was truncated or incomplete."
 msgstr "Obrázek ve formátu GIF byl zkrácen nebo není úplný."
 
@@ -1746,15 +1750,15 @@ msgstr "Vybrat při fokusu"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Zda se má obsah položky vybrat, pokud získá fokus."
 
-#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3179
+#: gtk/gtkentry.c:3902 gtk/gtklabel.c:3179
 msgid "Select All"
 msgstr "Vybrat vše"
 
-#: gtk/gtkentry.c:3887 gtk/gtklabel.c:3189
+#: gtk/gtkentry.c:3912 gtk/gtklabel.c:3189
 msgid "Input Methods"
 msgstr "Metody vstupu"
 
-#: gtk/gtkentry.c:3897 gtk/gtktextview.c:6426
+#: gtk/gtkentry.c:3922 gtk/gtktextview.c:6426
 msgid "_Insert Unicode control character"
 msgstr "_Vložit řídící znak Unicode"
 
@@ -2351,7 +2355,7 @@ msgstr "Prvek aktivovaný při stisku klávesové zkratky popisu."
 msgid "Horizontal adjustment"
 msgstr "Horizontální zarovnání"
 
-#: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:237
+#: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:233
 msgid "The GtkAdjustment for the horizontal position."
 msgstr "Hodnota GtkAdjustment pro horizontální pozici."
 
@@ -2359,7 +2363,7 @@ msgstr "Hodnota GtkAdjustment pro horizontální pozici."
 msgid "Vertical adjustment"
 msgstr "Vertikální zarovnání"
 
-#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:244
+#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:240
 msgid "The GtkAdjustment for the vertical position."
 msgstr "Hodnota GtkAdjustment pro vertikální pozici."
 
@@ -2928,43 +2932,43 @@ msgstr "Druhotná šipka pro krok dopředu"
 msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Zobrazit tlačítko s druhou šipkou pro krok dopředu na opačném konci posuvníku"
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:523
+#: gtk/gtkscrolledwindow.c:232 gtk/gtktext.c:598 gtk/gtktreeview.c:523
 msgid "Horizontal Adjustment"
 msgstr "Horizontální zarovnání"
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:531
+#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:531
 msgid "Vertical Adjustment"
 msgstr "Vertikální zarovnání"
 
-#: gtk/gtkscrolledwindow.c:250
+#: gtk/gtkscrolledwindow.c:246
 msgid "Horizontal Scrollbar Policy"
 msgstr "Politika pro horizontální posuvník"
 
-#: gtk/gtkscrolledwindow.c:251
+#: gtk/gtkscrolledwindow.c:247
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Kdy se zobrazuje horizontální posuvník"
 
-#: gtk/gtkscrolledwindow.c:258
+#: gtk/gtkscrolledwindow.c:254
 msgid "Vertical Scrollbar Policy"
 msgstr "Politika pro vertikální posuvník"
 
-#: gtk/gtkscrolledwindow.c:259
+#: gtk/gtkscrolledwindow.c:255
 msgid "When the vertical scrollbar is displayed"
 msgstr "Kdy se zobrazuje vertikální posuvník"
 
-#: gtk/gtkscrolledwindow.c:267
+#: gtk/gtkscrolledwindow.c:263
 msgid "Window Placement"
 msgstr "Umístění okna"
 
-#: gtk/gtkscrolledwindow.c:268
+#: gtk/gtkscrolledwindow.c:264
 msgid "Where the contents are located with respect to the scrollbars"
 msgstr "Kde je umístěn obsah vzhledem k posuvníku"
 
-#: gtk/gtkscrolledwindow.c:275
+#: gtk/gtkscrolledwindow.c:271
 msgid "Shadow Type"
 msgstr "Typ stínu"
 
-#: gtk/gtkscrolledwindow.c:276
+#: gtk/gtkscrolledwindow.c:272
 msgid "Style of bevel around the contents"
 msgstr "Styl rámu okolo obsahu"
 
