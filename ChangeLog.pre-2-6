@@ -1,3 +1,40 @@
+2000-11-03  Havoc Pennington  <hp@redhat.com>
+
+        Get widgets working on the btree/buffer side. Display of them 
+	still doesn't work.
+	
+	* gtk/gtktextview.c: start implementing child widget stuff
+
+	* gtk/gtktextiter.c (gtk_text_iter_get_child_anchor): new function
+
+	* gtk/gtktextlayout.c: handle embedded widgets
+
+	* gtk/gtktextdisplay.c: handle embedded widgets
+
+	* gtk/gtktextchild.c: Implement all the child anchor goo
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_create_child_anchor): New
+	function
+
+	* gtk/gtktextbtree.c: Add child anchor table to the btree struct
+	(insert_pixbuf_or_widget_segment): abstract out common portions of 
+	creating a child anchor or a pixbuf segment.
+	(gtk_text_btree_create_child_anchor): new function
+	(gtk_text_btree_unregister_child_anchor): new function
+
+	* gtk/gtkmarshal.list: added VOID:OBJECT,INT,INT for the
+	allocate_child signal on GtkTextLayout
+
+	* gtk/gtktextiter.c (gtk_text_iter_get_pixbuf): fix bogus return
+	values
+	(gtk_text_iter_get_child_anchor): new function
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_real_changed): Add a
+	default handler for the changed signal, which calls
+	gtk_text_buffer_set_modified(), instead of just always emitting
+	changed then calling set_modified() manually. I guess this is
+	maybe more flexible. It seems logical.
+
 Fri Nov  3 08:58:38 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkobject.c: _g_signal_handlers_destroy() is prefixed with '_'

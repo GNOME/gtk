@@ -849,19 +849,49 @@ gtk_text_iter_get_pixbuf (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
 
-  g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (iter != NULL, NULL);
 
   real = gtk_text_iter_make_real (iter);
 
   if (real == NULL)
-    return FALSE;
+    return NULL;
 
   check_invariants (iter);
 
   if (real->segment->type != &gtk_text_pixbuf_type)
-    return FALSE;
+    return NULL;
   else
     return real->segment->body.pixbuf.pixbuf;
+}
+
+/**
+ * gtk_text_iter_get_child_anchor:
+ * @iter: an iterator
+ *
+ * If the location pointed to by @iter contains a child anchor, the
+ * anchor is returned (with no new reference count added). Otherwise,
+ * NULL is returned.
+ *
+ * Return value: the anchor at @iter
+ **/
+GtkTextChildAnchor*
+gtk_text_iter_get_child_anchor (const GtkTextIter *iter)
+{
+  GtkTextRealIter *real;
+
+  g_return_val_if_fail (iter != NULL, NULL);
+
+  real = gtk_text_iter_make_real (iter);
+
+  if (real == NULL)
+    return NULL;
+
+  check_invariants (iter);
+
+  if (real->segment->type != &gtk_text_child_type)
+    return NULL;
+  else
+    return real->segment->body.child.obj;
 }
 
 /**
@@ -3730,6 +3760,25 @@ gtk_text_btree_get_iter_at_mark (GtkTextBTree *tree,
   iter_init_from_segment (iter, tree,
                           seg->body.mark.line, seg);
   g_assert (seg->body.mark.line == gtk_text_iter_get_text_line (iter));
+  check_invariants (iter);
+}
+
+void
+gtk_text_btree_get_iter_at_child_anchor (GtkTextBTree       *tree,
+                                         GtkTextIter        *iter,
+                                         GtkTextChildAnchor *anchor)
+{
+  GtkTextLineSegment *seg;
+
+  g_return_if_fail (iter != NULL);
+  g_return_if_fail (tree != NULL);
+  g_return_if_fail (GTK_IS_TEXT_CHILD_ANCHOR (anchor));
+
+  seg = anchor->segment;
+  
+  iter_init_from_segment (iter, tree,
+                          seg->body.child.line, seg);
+  g_assert (seg->body.child.line == gtk_text_iter_get_text_line (iter));
   check_invariants (iter);
 }
 

@@ -185,7 +185,7 @@ static void
 render_layout_line (GdkDrawable        *drawable,
                     GtkTextRenderState *render_state,
                     PangoLayoutLine    *line,
-                    GSList            **pixbuf_pointer,
+                    GSList            **shaped_pointer,
                     int                 x,
                     int                 y,
                     gboolean            selected)
@@ -272,68 +272,99 @@ render_layout_line (GdkDrawable        *drawable,
 
           x_off += logical_rect.width;
         }
-      else                      /* Pixbuf segment */
+      else                      /* Pixbuf or widget segment */
         {
-          GtkTextPixbuf *pixbuf = (*pixbuf_pointer)->data;
-          gint width, height;
-          GdkRectangle pixbuf_rect, draw_rect;
-          GdkBitmap *mask = NULL;
+          GObject *shaped = (*shaped_pointer)->data;
 
-          *pixbuf_pointer = (*pixbuf_pointer)->next;
-
-          width = gdk_pixbuf_get_width (pixbuf->pixbuf);
-          height = gdk_pixbuf_get_height (pixbuf->pixbuf);
-
-          pixbuf_rect.x = x + x_off / PANGO_SCALE;
-          pixbuf_rect.y = y - height;
-          pixbuf_rect.width = width;
-          pixbuf_rect.height = height;
-
-          if (gdk_rectangle_intersect (&pixbuf_rect, &render_state->clip_rect,
-                                       &draw_rect))
+          *shaped_pointer = (*shaped_pointer)->next;
+          
+          if (GDK_IS_PIXBUF (shaped))
             {
-              if (gdk_pixbuf_get_has_alpha (pixbuf->pixbuf))
+              gint width, height;
+              GdkRectangle pixbuf_rect, draw_rect;
+              GdkPixbuf *pixbuf;
+
+              pixbuf = GDK_PIXBUF (shaped);
+              
+              width = gdk_pixbuf_get_width (pixbuf);
+              height = gdk_pixbuf_get_height (pixbuf);
+
+              pixbuf_rect.x = x + x_off / PANGO_SCALE;
+              pixbuf_rect.y = y - height;
+              pixbuf_rect.width = width;
+              pixbuf_rect.height = height;
+
+              if (gdk_rectangle_intersect (&pixbuf_rect, &render_state->clip_rect,
+                                           &draw_rect))
                 {
-                  mask = gdk_pixmap_new (drawable,
-                                         gdk_pixbuf_get_width (pixbuf->pixbuf),
-                                         gdk_pixbuf_get_height (pixbuf->pixbuf),
-                                         1);
+                  GdkBitmap *mask = NULL;
+              
+                  if (gdk_pixbuf_get_has_alpha (pixbuf))
+                    {
+                      mask = gdk_pixmap_new (drawable,
+                                             gdk_pixbuf_get_width (pixbuf),
+                                             gdk_pixbuf_get_height (pixbuf),
+                                             1);
 
-                  gdk_pixbuf_render_threshold_alpha (pixbuf->pixbuf, mask,
-                                                     0, 0, 0, 0,
-                                                     gdk_pixbuf_get_width (pixbuf->pixbuf),
-                                                     gdk_pixbuf_get_height (pixbuf->pixbuf),
-                                                     128);
+                      gdk_pixbuf_render_threshold_alpha (pixbuf, mask,
+                                                         0, 0, 0, 0,
+                                                         gdk_pixbuf_get_width (pixbuf),
+                                                         gdk_pixbuf_get_height (pixbuf),
+                                                         128);
 
+                    }
+
+                  if (mask)
+                    {
+                      gdk_gc_set_clip_mask (render_state->fg_gc, mask);
+                      gdk_gc_set_clip_origin (render_state->fg_gc,
+                                              pixbuf_rect.x, pixbuf_rect.y);
+                    }
+
+                  gdk_pixbuf_render_to_drawable (pixbuf,
+                                                 drawable,
+                                                 render_state->fg_gc,
+                                                 draw_rect.x - pixbuf_rect.x,
+                                                 draw_rect.y - pixbuf_rect.y,
+                                                 draw_rect.x, draw_rect.y,
+                                                 draw_rect.width,
+                                                 draw_rect.height,
+                                                 GDK_RGB_DITHER_NORMAL,
+                                                 0, 0);
+
+                  if (mask)
+                    {
+                      gdk_gc_set_clip_rectangle (render_state->fg_gc,
+                                                 &render_state->clip_rect);
+                      g_object_unref (G_OBJECT (mask));
+                    }
                 }
 
-              if (mask)
-                {
-                  gdk_gc_set_clip_mask (render_state->fg_gc, mask);
-                  gdk_gc_set_clip_origin (render_state->fg_gc,
-                                          pixbuf_rect.x, pixbuf_rect.y);
-                }
-
-              gdk_pixbuf_render_to_drawable (pixbuf->pixbuf,
-                                             drawable,
-                                             render_state->fg_gc,
-                                             draw_rect.x - pixbuf_rect.x,
-                                             draw_rect.y - pixbuf_rect.y,
-                                             draw_rect.x, draw_rect.y,
-                                             draw_rect.width,
-                                             draw_rect.height,
-                                             GDK_RGB_DITHER_NORMAL,
-                                             0, 0);
-
-              if (mask)
-                {
-                  gdk_gc_set_clip_rectangle (render_state->fg_gc,
-                                             &render_state->clip_rect);
-                  g_object_unref (G_OBJECT (mask));
-                }
+              x_off += width * PANGO_SCALE;
             }
+          else if (GTK_IS_WIDGET (shaped))
+            {
+              gint width, height;
+              GdkRectangle draw_rect;
+              GtkWidget *widget;
 
-          x_off += width * PANGO_SCALE;
+              widget = GTK_WIDGET (shaped);
+              
+              width = widget->allocation.width;
+              height = widget->allocation.height;
+
+              if (GTK_WIDGET_DRAWABLE (widget) &&
+                  gtk_widget_intersect (widget,
+                                        &render_state->clip_rect,
+                                        &draw_rect))
+                {
+                  gtk_widget_draw (widget, &draw_rect);
+                }
+
+              x_off += width * PANGO_SCALE;
+            }
+          else
+            g_assert_not_reached (); /* not a pixbuf or widget */
         }
     }
 }
@@ -348,7 +379,7 @@ render_para (GdkDrawable        *drawable,
              int                 selection_end_index)
 {
   PangoRectangle logical_rect;
-  GSList *pixbuf_pointer = line_display->pixbufs;
+  GSList *shaped_pointer = line_display->shaped_objects;
   GSList *tmp_list;
   PangoAlignment align;
   PangoLayout *layout = line_display->layout;
@@ -431,15 +462,15 @@ render_para (GdkDrawable        *drawable,
                               TRUE,
                               x + line_display->left_margin, selection_y,
                               total_width / PANGO_SCALE, selection_height);
-          render_layout_line (drawable, render_state, line, &pixbuf_pointer,
+          render_layout_line (drawable, render_state, line, &shaped_pointer,
                               x + x_offset / PANGO_SCALE, y + (y_offset - logical_rect.y) / PANGO_SCALE,
                               TRUE);
         }
       else
         {
-          GSList *pixbuf_pointer_tmp = pixbuf_pointer;
+          GSList *shaped_pointer_tmp = shaped_pointer;
 
-          render_layout_line (drawable, render_state, line, &pixbuf_pointer,
+          render_layout_line (drawable, render_state, line, &shaped_pointer,
                               x + x_offset / PANGO_SCALE, y + (y_offset - logical_rect.y) / PANGO_SCALE,
                               FALSE);
 
@@ -461,7 +492,7 @@ render_para (GdkDrawable        *drawable,
                                   logical_rect.width / PANGO_SCALE,
                                   selection_height);
 
-              render_layout_line (drawable, render_state, line, &pixbuf_pointer_tmp,
+              render_layout_line (drawable, render_state, line, &shaped_pointer_tmp,
                                   x + x_offset / PANGO_SCALE, y + (y_offset - logical_rect.y) / PANGO_SCALE,
                                   TRUE);
 

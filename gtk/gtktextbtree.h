@@ -34,7 +34,9 @@ void gtk_text_btree_insert        (GtkTextIter *iter,
 void gtk_text_btree_insert_pixbuf (GtkTextIter *iter,
                                    GdkPixbuf   *pixbuf);
 
+GtkTextChildAnchor* gtk_text_btree_create_child_anchor (GtkTextIter *iter);
 
+void gtk_text_btree_unregister_child_anchor (GtkTextChildAnchor *anchor);
 
 /* View stuff */
 GtkTextLine *gtk_text_btree_find_line_by_y    (GtkTextBTree      *tree,
@@ -128,6 +130,11 @@ gboolean gtk_text_btree_get_iter_at_first_toggle (GtkTextBTree       *tree,
 gboolean gtk_text_btree_get_iter_at_last_toggle  (GtkTextBTree       *tree,
                                                   GtkTextIter        *iter,
                                                   GtkTextTag         *tag);
+
+void     gtk_text_btree_get_iter_at_child_anchor  (GtkTextBTree       *tree,
+                                                   GtkTextIter        *iter,
+                                                   GtkTextChildAnchor *anchor);
+
 
 
 /* Manipulate marks */

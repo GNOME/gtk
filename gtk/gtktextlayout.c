@@ -115,6 +115,7 @@ static PangoAttribute *gtk_text_attr_appearance_new (const GtkTextAppearance *ap
 enum {
   INVALIDATED,
   CHANGED,
+  ALLOCATE_CHILD,
   LAST_SIGNAL
 };
 
@@ -188,6 +189,18 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                     GTK_TYPE_INT,
                     GTK_TYPE_INT);
 
+  signals[ALLOCATE_CHILD] =
+    gtk_signal_new ("allocate_child",
+                    GTK_RUN_LAST,
+                    GTK_CLASS_TYPE (object_class),
+                    GTK_SIGNAL_OFFSET (GtkTextLayoutClass, allocate_child),
+                    gtk_marshal_VOID__OBJECT_INT_INT,
+                    GTK_TYPE_NONE,
+                    3,
+                    GTK_TYPE_OBJECT,
+                    GTK_TYPE_INT,
+                    GTK_TYPE_INT);
+  
   gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
 
   object_class->destroy = gtk_text_layout_destroy;
@@ -1195,7 +1208,7 @@ add_text_attrs (GtkTextLayout      *layout,
 static void
 add_pixbuf_attrs (GtkTextLayout      *layout,
                   GtkTextLineDisplay *display,
-                  GtkTextAttributes *style,
+                  GtkTextAttributes  *style,
                   GtkTextLineSegment *seg,
                   PangoAttrList      *attrs,
                   gint                start)
@@ -1218,7 +1231,70 @@ add_pixbuf_attrs (GtkTextLayout      *layout,
   attr->end_index = start + seg->byte_count;
   pango_attr_list_insert (attrs, attr);
 
-  display->pixbufs = g_slist_append (display->pixbufs, pixbuf);
+  display->shaped_objects =
+    g_slist_append (display->shaped_objects, pixbuf->pixbuf);
+}
+
+static void
+add_child_attrs (GtkTextLayout      *layout,
+                 GtkTextLineDisplay *display,
+                 GtkTextAttributes  *style,
+                 GtkTextLineSegment *seg,
+                 PangoAttrList      *attrs,
+                 gint                start)
+{
+  PangoAttribute *attr;
+  PangoRectangle logical_rect;
+  GtkTextChildAnchor *anchor;
+  gint width, height;
+  GSList *tmp_list;
+
+  width = 1;
+  height = 1;
+  
+  anchor = seg->body.child.obj;
+
+  tmp_list = seg->body.child.widgets;
+  while (tmp_list != NULL)
+    {
+      GtkWidget *child = tmp_list->data;
+
+      if (_gtk_anchored_child_get_layout (child) == layout)
+        {
+          /* Found it */
+          GtkRequisition req;
+
+          gtk_widget_get_child_requisition (child, &req);
+          
+          width = req.width;
+          height = req.height;
+
+          display->shaped_objects =
+            g_slist_append (display->shaped_objects, child);                           
+          break;
+        }
+      
+      tmp_list = g_slist_next (tmp_list);
+    }
+
+  if (tmp_list == NULL)
+    {
+      /* No widget at this anchor in this display;
+       * not an error.
+       */
+
+      return;
+    }
+  
+  logical_rect.x = 0;
+  logical_rect.y = -height * PANGO_SCALE;
+  logical_rect.width = width * PANGO_SCALE;
+  logical_rect.height = height * PANGO_SCALE;
+
+  attr = pango_attr_shape_new (&logical_rect, &logical_rect);
+  attr->start_index = start;
+  attr->end_index = start + seg->byte_count;
+  pango_attr_list_insert (attrs, attr);
 }
 
 static void
@@ -1264,6 +1340,19 @@ add_cursor (GtkTextLayout      *layout,
       cursor->is_weak = TRUE;
       display->cursors = g_slist_prepend (display->cursors, cursor);
     }
+}
+
+static void
+allocate_child_widgets (GtkTextLayout      *layout,
+                        GtkTextLineDisplay *display)
+{
+  
+#if 0
+  gtk_signal_emit (GTK_OBJECT (layout),
+                   signals[ALLOCATE_CHILD],
+                   child,
+                   x, y);
+#endif
 }
 
 GtkTextLineDisplay *
@@ -1329,7 +1418,8 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
     {
       /* Displayable segments */
       if (seg->type == &gtk_text_char_type ||
-          seg->type == &gtk_text_pixbuf_type)
+          seg->type == &gtk_text_pixbuf_type ||
+          seg->type == &gtk_text_child_type)
         {
           gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
                                            &iter, line,
@@ -1391,13 +1481,25 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
                   add_text_attrs (layout, style, byte_count, attrs,
                                   byte_offset - byte_count, size_only);
                 }
-              else
+              else if (seg->type == &gtk_text_pixbuf_type)
                 {
                   add_pixbuf_attrs (layout, display, style,
                                     seg, attrs, byte_offset);
                   memcpy (text + byte_offset, gtk_text_unknown_char_utf8,
                           seg->byte_count);
                   byte_offset += seg->byte_count;
+                }
+              else if (seg->type == &gtk_text_child_type)
+                {
+                  add_child_attrs (layout, display, style,
+                                   seg, attrs, byte_offset);
+                  memcpy (text + byte_offset, gtk_text_unknown_char_utf8,
+                          seg->byte_count);
+                  byte_offset += seg->byte_count;
+                }
+              else
+                {
+                  g_assert_not_reached ();
                 }
             }
 
@@ -1476,6 +1578,8 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 
   layout->one_display_cache = display;
 
+  allocate_child_widgets (layout, display);
+  
   return display;
 }
 
@@ -1491,7 +1595,7 @@ gtk_text_layout_free_line_display (GtkTextLayout      *layout,
         {
           g_slist_foreach (display->cursors, (GFunc)g_free, NULL);
           g_slist_free (display->cursors);
-          g_slist_free (display->pixbufs);
+          g_slist_free (display->shaped_objects);
         }
 
       g_free (display);

@@ -195,6 +195,8 @@ struct _GtkTextBTree {
   GtkTextLine *end_iter_line;
 
   guint end_iter_line_stamp;
+
+  GHashTable *child_anchor_table;
 };
 
 
@@ -417,7 +419,8 @@ gtk_text_btree_new (GtkTextTagTable *table,
                                                   tree);
 
   tree->mark_table = g_hash_table_new (g_str_hash, g_str_equal);
-
+  tree->child_anchor_table = NULL;
+  
   /* We don't ref the buffer, since the buffer owns us;
    * we'd have some circularity issues. The buffer always
    * lasts longer than the BTree
@@ -1053,11 +1056,11 @@ gtk_text_btree_insert (GtkTextIter *iter,
   }
 }
 
-void
-gtk_text_btree_insert_pixbuf (GtkTextIter *iter,
-                              GdkPixbuf   *pixbuf)
+static void
+insert_pixbuf_or_widget_segment (GtkTextIter        *iter,
+                                 GtkTextLineSegment *seg)
+
 {
-  GtkTextLineSegment *seg;
   GtkTextIter start;
   GtkTextLineSegment *prevPtr;
   GtkTextLine *line;
@@ -1067,8 +1070,6 @@ gtk_text_btree_insert_pixbuf (GtkTextIter *iter,
   line = gtk_text_iter_get_text_line (iter);
   tree = gtk_text_iter_get_btree (iter);
   start_byte_offset = gtk_text_iter_get_line_index (iter);
-
-  seg = _gtk_pixbuf_segment_new (pixbuf);
 
   prevPtr = gtk_text_line_segment_split (iter);
   if (prevPtr == NULL)
@@ -1092,11 +1093,54 @@ gtk_text_btree_insert_pixbuf (GtkTextIter *iter,
   gtk_text_btree_get_iter_at_line (tree, &start, line, start_byte_offset);
 
   *iter = start;
-  gtk_text_iter_next_char (iter); /* skip forward past the pixmap */
+  gtk_text_iter_next_char (iter); /* skip forward past the segment */
 
   gtk_text_btree_invalidate_region (tree, &start, iter);
 }
+     
+void
+gtk_text_btree_insert_pixbuf (GtkTextIter *iter,
+                              GdkPixbuf   *pixbuf)
+{
+  GtkTextLineSegment *seg;
+  
+  seg = _gtk_pixbuf_segment_new (pixbuf);
 
+  insert_pixbuf_or_widget_segment (iter, seg);
+}
+
+GtkTextChildAnchor*
+gtk_text_btree_create_child_anchor (GtkTextIter *iter)
+{
+  GtkTextLineSegment *seg;
+  GtkTextBTree *tree;
+  
+  seg = _gtk_widget_segment_new ();
+
+  insert_pixbuf_or_widget_segment (iter, seg);
+
+  tree = seg->body.child.tree;
+
+  if (tree->child_anchor_table == NULL)
+    tree->child_anchor_table = g_hash_table_new (NULL, NULL);
+
+  g_hash_table_insert (tree->child_anchor_table,
+                       seg->body.child.obj,
+                       seg->body.child.obj);
+  
+  return seg->body.child.obj;
+}
+
+void
+gtk_text_btree_unregister_child_anchor (GtkTextChildAnchor *anchor)
+{
+  GtkTextLineSegment *seg;
+
+  seg = anchor->segment;
+  
+  g_hash_table_remove (seg->body.child.tree->child_anchor_table,
+                       anchor);
+}
 
 /*
  * View stuff
@@ -2069,7 +2113,8 @@ copy_segment (GString *string,
 
       /* printf ("  :%s\n", string->str); */
     }
-  else if (seg->type == &gtk_text_pixbuf_type)
+  else if (seg->type == &gtk_text_pixbuf_type ||
+           seg->type == &gtk_text_child_type)
     {
       gboolean copy = TRUE;
 

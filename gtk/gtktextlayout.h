@@ -153,7 +153,7 @@ struct _GtkTextLayout
 
   /* Whether we are allowed to wrap right now */
   gint wrap_loop_count;
-
+  
   /* Whether to show the insertion cursor */
   guint cursor_visible : 1;
 };
@@ -185,7 +185,13 @@ struct _GtkTextLayoutClass
   void  (*free_line_data)       (GtkTextLayout     *layout,
                                  GtkTextLine       *line,
                                  GtkTextLineData   *line_data);
+
+  void (*allocate_child)        (GtkTextLayout     *layout,
+                                 GtkWidget         *child,
+                                 gint               x,
+                                 gint               y);
 };
+
 struct _GtkTextAttrAppearance
 {
   PangoAttribute attr;
@@ -203,8 +209,8 @@ struct _GtkTextLineDisplay
 {
   PangoLayout *layout;
   GSList *cursors;
-  GSList *pixbufs;
-
+  GSList *shaped_objects;
+  
   GtkTextDirection direction;
 
   gint width;                   /* Width of layout */
@@ -334,9 +340,22 @@ void gtk_text_layout_move_iter_visually         (GtkTextLayout *layout,
                                                  GtkTextIter   *iter,
                                                  gint           count);
 
+
+/* Don't use these. Use gtk_text_view_add_child_at_anchor().
+ * These functions are defined in gtktextchild.c, but here
+ * since they are semi-public and require GtkTextLayout to
+ * be declared.
+ */
+void gtk_text_child_anchor_register_child   (GtkTextChildAnchor *anchor,
+                                             GtkWidget          *child,
+                                             GtkTextLayout      *layout);
+void gtk_text_child_anchor_unregister_child (GtkTextChildAnchor *anchor,
+                                             GtkWidget          *child);
+
+void gtk_text_child_anchor_queue_resize     (GtkTextChildAnchor *anchor,
+                                             GtkTextLayout      *layout);
+
 void gtk_text_layout_spew (GtkTextLayout *layout);
-
-
 
 #ifdef __cplusplus
 }

@@ -28,6 +28,7 @@
 #define GTK_TEXT_ITER_H
 
 #include <gtk/gtktexttag.h>
+#include <gtk/gtktextchild.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -99,6 +100,8 @@ gchar   *gtk_text_iter_get_visible_text  (const GtkTextIter  *start,
 
 GdkPixbuf* gtk_text_iter_get_pixbuf (const GtkTextIter *iter);
 GSList  *  gtk_text_iter_get_marks  (const GtkTextIter *iter);
+
+GtkTextChildAnchor* gtk_text_iter_get_child_anchor (const GtkTextIter *iter);
 
 /* Return list of tags toggled at this point (toggled_on determines
    whether the list is of on-toggles or off-toggles) */

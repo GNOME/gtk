@@ -27,7 +27,7 @@
 #ifndef GTK_TEXT_CHILD_H
 #define GTK_TEXT_CHILD_H
 
-#include <glib.h>
+#include <glib-object.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -39,10 +39,31 @@ extern "C" {
  * views.
  */
 
-typedef struct _GtkTextChildAnchor GtkTextChildAnchor;
+typedef struct _GtkTextChildAnchor      GtkTextChildAnchor;
+typedef struct _GtkTextChildAnchorClass GtkTextChildAnchorClass;
 
-void     gtk_text_child_anchor_ref         (GtkTextChildAnchor *anchor);
-void     gtk_text_child_anchor_unref       (GtkTextChildAnchor *anchor);
+#define GTK_TYPE_TEXT_CHILD_ANCHOR              (gtk_text_child_anchor_get_type ())
+#define GTK_TEXT_CHILD_ANCHOR(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_TEXT_CHILD_ANCHOR, GtkTextChildAnchor))
+#define GTK_TEXT_CHILD_ANCHOR_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_CHILD_ANCHOR, GtkTextChildAnchorClass))
+#define GTK_IS_TEXT_CHILD_ANCHOR(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GTK_TYPE_TEXT_CHILD_ANCHOR))
+#define GTK_IS_TEXT_CHILD_ANCHOR_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT_CHILD_ANCHOR))
+#define GTK_TEXT_CHILD_ANCHOR_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TEXT_CHILD_ANCHOR, GtkTextChildAnchorClass))
+
+struct _GtkTextChildAnchor
+{
+  GObject parent_instance;
+
+  gpointer segment;
+};
+
+struct _GtkTextChildAnchorClass
+{
+  GObjectClass parent_class;
+
+};
+
+GType gtk_text_child_anchor_get_type (void) G_GNUC_CONST;
+
 GList*   gtk_text_child_anchor_get_widgets (GtkTextChildAnchor *anchor);
 gboolean gtk_text_child_anchor_get_deleted (GtkTextChildAnchor *anchor);
 

@@ -35,7 +35,6 @@
 #include "gtktextview.h"
 #include "gtkimmulticontext.h"
 #include "gdk/gdkkeysyms.h"
-#include "gtktexttypes.h"
 #include <string.h>
 
 #define FOCUS_EDGE_WIDTH 1
@@ -235,7 +234,8 @@ struct _GtkTextViewChild
 };
 
 static GtkTextViewChild* text_view_child_new_anchored (GtkWidget          *child,
-                                                       GtkTextChildAnchor *anchor);
+                                                       GtkTextChildAnchor *anchor,
+                                                       GtkTextLayout      *layout);
 static GtkTextViewChild* text_view_child_new_window   (GtkWidget          *child,
                                                        GtkTextWindowType   type,
                                                        gint                x,
@@ -244,7 +244,6 @@ static void              text_view_child_free         (GtkTextViewChild   *child
 
 static void              text_view_child_realize      (GtkTextView      *text_view,
                                                        GtkTextViewChild *child);
-static void              text_view_child_unrealize    (GtkTextViewChild *child);
 
 struct _GtkTextWindow
 {
@@ -278,7 +277,8 @@ static void           text_window_get_allocation  (GtkTextWindow     *win,
                                                    GdkRectangle      *rect);
 
 
-enum {
+enum
+{
   TARGET_STRING,
   TARGET_TEXT,
   TARGET_COMPOUND_TEXT,
@@ -708,7 +708,7 @@ gtk_text_view_new_with_buffer (GtkTextBuffer *buffer)
 }
 
 void
-gtk_text_view_set_buffer (GtkTextView *text_view,
+gtk_text_view_set_buffer (GtkTextView   *text_view,
                           GtkTextBuffer *buffer)
 {
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
@@ -719,6 +719,27 @@ gtk_text_view_set_buffer (GtkTextView *text_view,
 
   if (text_view->buffer != NULL)
     {
+      /* Destroy all anchored children */
+      GSList *tmp_list;
+      GSList *copy;
+      
+      copy = g_slist_copy (text_view->children);
+      tmp_list = copy;
+      while (tmp_list != NULL)
+        {
+          GtkTextViewChild *vc = tmp_list->data;
+
+          if (vc->anchor)
+            {
+              gtk_widget_destroy (vc->widget);
+              /* vc may now be invalid! */
+            }
+            
+          tmp_list = g_slist_next (tmp_list);
+        }
+
+      g_slist_free (copy);
+      
       gtk_signal_disconnect_by_func (GTK_OBJECT (text_view->buffer),
                                      gtk_text_view_mark_set_handler, text_view);
       gtk_object_unref (GTK_OBJECT (text_view->buffer));
@@ -1251,7 +1272,8 @@ gtk_text_view_size_request (GtkWidget      *widget,
                             GtkRequisition *requisition)
 {
   GtkTextView *text_view;
-
+  GSList *tmp_list;
+  
   text_view = GTK_TEXT_VIEW (widget);
 
   requisition->width = text_view->text_window->requisition.width + FOCUS_EDGE_WIDTH * 2;
@@ -1268,6 +1290,69 @@ gtk_text_view_size_request (GtkWidget      *widget,
 
   if (text_view->bottom_window)
     requisition->height += text_view->bottom_window->requisition.height;
+
+  tmp_list = text_view->children;
+  while (tmp_list != NULL)
+    {
+      GtkTextViewChild *child = tmp_list->data;
+
+      if (child->anchor)
+        {
+          GtkRequisition child_req;
+          GtkRequisition old_req;
+          
+          old_req = child->widget->requisition;
+
+          gtk_widget_size_request (child->widget, &child_req); 
+          
+          if (text_view->layout &&
+              (old_req.width != child_req.width ||
+               old_req.height != child_req.height))
+            gtk_text_child_anchor_queue_resize (child->anchor,
+                                                text_view->layout);
+        }
+      else
+        {
+
+        }
+          
+      tmp_list = g_slist_next (tmp_list);
+    }
+}
+
+static void
+gtk_text_view_allocate_children (GtkTextView *text_view)
+{
+  GSList *tmp_list;
+
+  return;
+  
+  tmp_list = text_view->children;
+  while (tmp_list != NULL)
+    {
+      GtkTextViewChild *child = tmp_list->data;
+
+      if (child->anchor)
+        {
+          /* We need to force-validate the regions containing
+           * children.
+           */
+          GtkTextIter child_loc;
+          gtk_text_buffer_get_iter_at_child_anchor (text_view->buffer,
+                                                    &child_loc,
+                                                    child->anchor);
+
+          gtk_text_layout_validate_yrange (text_view->layout,
+                                           &child_loc,
+                                           0, 1);
+        }
+      else
+        {
+          
+        }
+          
+      tmp_list = g_slist_next (tmp_list);
+    }
 }
 
 static void
@@ -1285,7 +1370,8 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   GdkRectangle right_rect;
   GdkRectangle top_rect;
   GdkRectangle bottom_rect;
-
+  GSList *tmp_list;
+  
   text_view = GTK_TEXT_VIEW (widget);
 
   widget->allocation = *allocation;
@@ -1383,6 +1469,8 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   gtk_text_layout_set_screen_width (text_view->layout,
                                     SCREEN_WIDTH (text_view));
 
+  gtk_text_view_allocate_children (text_view);
+  
   gtk_text_view_validate_onscreen (text_view);
   gtk_text_view_scroll_calc_now (text_view);
 
@@ -1603,7 +1691,7 @@ static void
 gtk_text_view_unrealize (GtkWidget *widget)
 {
   GtkTextView *text_view;
-
+  
   text_view = GTK_TEXT_VIEW (widget);
 
   if (text_view->first_validate_idle)
@@ -1617,7 +1705,7 @@ gtk_text_view_unrealize (GtkWidget *widget)
       g_source_remove (text_view->incremental_validate_idle);
       text_view->incremental_validate_idle = 0;
     }
-
+  
   text_window_unrealize (text_view->text_window);
 
   if (text_view->left_window)
@@ -2242,7 +2330,7 @@ gtk_text_view_remove (GtkContainer *container,
     }
 
   g_assert (iter != NULL); /* be sure we had the child in the list */
-
+  
   text_view->children = g_slist_remove (text_view->children, vc);
 
   gtk_widget_unparent (vc->widget);
@@ -4187,22 +4275,25 @@ gtk_text_view_set_text_window_size (GtkTextView *text_view,
 
 static GtkTextViewChild*
 text_view_child_new_anchored (GtkWidget          *child,
-                              GtkTextChildAnchor *anchor)
+                              GtkTextChildAnchor *anchor,
+                              GtkTextLayout      *layout)
 {
   GtkTextViewChild *vc;
-
+  
   vc = g_new (GtkTextViewChild, 1);
 
   vc->widget = child;
   vc->anchor = anchor;
 
   g_object_ref (G_OBJECT (vc->widget));
-  gtk_text_child_anchor_ref (vc->anchor);
+  g_object_ref (G_OBJECT (vc->anchor));
 
   gtk_object_set_data (GTK_OBJECT (child),
                        "gtk-text-view-child",
                        vc);
 
+  gtk_text_child_anchor_register_child (anchor, child, layout);
+  
   return vc;
 }
 
@@ -4235,9 +4326,15 @@ text_view_child_free (GtkTextViewChild *child)
   gtk_object_remove_data (GTK_OBJECT (child->widget),
                           "gtk-text-view-child");
 
-  g_object_unref (G_OBJECT (child->widget));
-  gtk_text_child_anchor_unref (child->anchor);
+  if (child->anchor)
+    {
+      gtk_text_child_anchor_unregister_child (child->anchor,
+                                              child->widget);
+      g_object_unref (G_OBJECT (child->anchor));
+    }
 
+  g_object_unref (G_OBJECT (child->widget));
+  
   g_free (child);
 }
 
@@ -4257,12 +4354,6 @@ text_view_child_realize (GtkTextView      *text_view,
     }
 
   gtk_widget_realize (vc->widget);
-}
-
-static void
-text_view_child_unrealize (GtkTextViewChild *vc)
-{
-  gtk_widget_unrealize (vc->widget);
 }
 
 static void
@@ -4295,10 +4386,13 @@ gtk_text_view_add_child_at_anchor (GtkTextView          *text_view,
 
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (anchor != NULL);
+  g_return_if_fail (GTK_IS_TEXT_CHILD_ANCHOR (anchor));
   g_return_if_fail (child->parent == NULL);
 
-  vc = text_view_child_new_anchored (child, anchor);
+  gtk_text_view_ensure_layout (text_view);
+  
+  vc = text_view_child_new_anchored (child, anchor,
+                                     text_view->layout);
 
   add_child (text_view, vc);
 }

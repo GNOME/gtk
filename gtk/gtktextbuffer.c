@@ -93,6 +93,7 @@ static void gtk_text_buffer_real_remove_tag            (GtkTextBuffer     *buffe
                                                         GtkTextTag        *tag,
                                                         const GtkTextIter *start_char,
                                                         const GtkTextIter *end_char);
+static void gtk_text_buffer_real_changed               (GtkTextBuffer     *buffer);
 
 static GtkTextBTree* get_btree (GtkTextBuffer *buffer);
 
@@ -230,6 +231,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   klass->delete_text = gtk_text_buffer_real_delete_text;
   klass->apply_tag = gtk_text_buffer_real_apply_tag;
   klass->remove_tag = gtk_text_buffer_real_remove_tag;
+  klass->changed = gtk_text_buffer_real_changed;
 }
 
 void
@@ -401,8 +403,6 @@ gtk_text_buffer_real_insert_text (GtkTextBuffer *buffer,
   gtk_text_btree_insert (iter, text, len);
 
   gtk_signal_emit (GTK_OBJECT (buffer), signals[CHANGED]);
-
-  gtk_text_buffer_set_modified (buffer, TRUE);
 }
 
 static void
@@ -738,8 +738,6 @@ gtk_text_buffer_real_delete_text (GtkTextBuffer *buffer,
   gtk_text_buffer_update_primary_selection (buffer);
 
   gtk_signal_emit (GTK_OBJECT (buffer), signals[CHANGED]);
-
-  gtk_text_buffer_set_modified (buffer, TRUE);
 }
 
 static void
@@ -1021,9 +1019,30 @@ gtk_text_buffer_insert_pixbuf         (GtkTextBuffer      *buffer,
   /* FIXME pixbuf-specific signal like insert_text */
 
   gtk_signal_emit (GTK_OBJECT (buffer), signals[CHANGED]);
-
-  gtk_text_buffer_set_modified (buffer, TRUE);
 }
+
+/*
+ * Child anchor
+ */
+
+GtkTextChildAnchor*
+gtk_text_buffer_create_child_anchor (GtkTextBuffer *buffer,
+                                     GtkTextIter   *iter)
+{
+  GtkTextChildAnchor *anchor;
+  
+  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
+  g_return_val_if_fail (iter != NULL, NULL);
+
+  anchor = gtk_text_btree_create_child_anchor (iter);
+
+  /* FIXME child-anchor-specific signal */
+  
+  gtk_signal_emit (GTK_OBJECT (buffer), signals[CHANGED]);
+
+  return anchor;
+}
+
 
 /*
  * Mark manipulation
@@ -1350,41 +1369,19 @@ gtk_text_buffer_get_selection_bound (GtkTextBuffer *buffer)
   return gtk_text_buffer_get_mark (buffer, "selection_bound");
 }
 
-
-GtkTextChildAnchor*
-gtk_text_buffer_create_child_anchor (GtkTextBuffer      *buffer,
-                                     const GtkTextIter  *where)
-{
-  /* FIXME: Implement? */
-
-  return NULL;
-}
-
-void
-gtk_text_buffer_move_child_anchor (GtkTextBuffer      *buffer,
-                                   GtkTextChildAnchor *anchor,
-                                   GtkTextIter        *where)
-{
-
-
-}
-
-void
-gtk_text_buffer_delete_child_anchor (GtkTextBuffer      *buffer,
-                                     GtkTextChildAnchor *anchor)
-{
-
-
-
-}
-
 void
 gtk_text_buffer_get_iter_at_child_anchor (GtkTextBuffer      *buffer,
                                           GtkTextIter        *iter,
                                           GtkTextChildAnchor *anchor)
 {
-
-
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+  g_return_if_fail (iter != NULL);
+  g_return_if_fail (GTK_IS_TEXT_CHILD_ANCHOR (anchor));
+  g_return_if_fail (!gtk_text_child_anchor_get_deleted (anchor));
+  
+  gtk_text_btree_get_iter_at_child_anchor (get_btree (buffer),
+                                           iter,
+                                           anchor);
 }
 
 /**
@@ -1473,6 +1470,11 @@ gtk_text_buffer_real_remove_tag (GtkTextBuffer *buffer,
   gtk_text_btree_tag (start, end, tag, FALSE);
 }
 
+static void
+gtk_text_buffer_real_changed (GtkTextBuffer *buffer)
+{
+  gtk_text_buffer_set_modified (buffer, TRUE);
+}
 
 static void
 gtk_text_buffer_emit_tag (GtkTextBuffer *buffer,

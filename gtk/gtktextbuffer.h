@@ -78,8 +78,9 @@ struct _GtkTextBufferClass {
                             GtkTextIter *end,
                             gboolean interactive);
 
-  /* Only for text changed, marks/tags don't cause this
-     to be emitted */
+  /* Only for text/widgets/pixbuf changed, marks/tags don't cause this
+   * to be emitted
+   */
   void (* changed)         (GtkTextBuffer *buffer);
 
 
@@ -193,6 +194,10 @@ void gtk_text_buffer_insert_pixbuf         (GtkTextBuffer *buffer,
                                             GtkTextIter   *iter,
                                             GdkPixbuf     *pixbuf);
 
+/* Create a child anchor */
+GtkTextChildAnchor *gtk_text_buffer_create_child_anchor (GtkTextBuffer *buffer,
+                                                         GtkTextIter   *iter);
+
 /* Mark manipulation */
 GtkTextMark   *gtk_text_buffer_create_mark (GtkTextBuffer     *buffer,
                                             const gchar       *mark_name,
@@ -214,17 +219,6 @@ void gtk_text_buffer_delete_mark_by_name (GtkTextBuffer     *buffer,
 
 GtkTextMark* gtk_text_buffer_get_insert          (GtkTextBuffer *buffer);
 GtkTextMark* gtk_text_buffer_get_selection_bound (GtkTextBuffer *buffer);
-
-/* Child widget anchors */
-
-GtkTextChildAnchor* gtk_text_buffer_create_child_anchor (GtkTextBuffer      *buffer,
-                                                         const GtkTextIter  *where);
-void                gtk_text_buffer_move_child_anchor   (GtkTextBuffer      *buffer,
-                                                         GtkTextChildAnchor *anchor,
-                                                         GtkTextIter        *where);
-void                gtk_text_buffer_delete_child_anchor (GtkTextBuffer      *buffer,
-                                                         GtkTextChildAnchor *anchor);
-
 
 /* efficiently move insert and selection_bound to same location */
 void gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,

@@ -69,19 +69,21 @@ typedef struct _GtkTextChildBody GtkTextChildBody;
 
 struct _GtkTextChildBody
 {
-  guint ref_count;
+  GtkTextChildAnchor *obj;
   GSList *widgets;
   GtkTextBTree *tree;
   GtkTextLine *line;
 };
 
-GtkTextLineSegment *_gtk_widget_segment_new    (void);
-void                _gtk_widget_segment_add    (GtkTextLineSegment *widget_segment,
-                                                GtkWidget          *child);
-void                _gtk_widget_segment_remove (GtkTextLineSegment *widget_segment,
-                                                GtkWidget          *child);
-void                _gtk_widget_segment_ref    (GtkTextLineSegment *widget_segment);
-void                _gtk_widget_segment_unref  (GtkTextLineSegment *widget_segment);
+GtkTextLineSegment *_gtk_widget_segment_new      (void);
+void                _gtk_widget_segment_add      (GtkTextLineSegment *widget_segment,
+                                                  GtkWidget          *child);
+void                _gtk_widget_segment_remove   (GtkTextLineSegment *widget_segment,
+                                                  GtkWidget          *child);
+void                _gtk_widget_segment_ref      (GtkTextLineSegment *widget_segment);
+void                _gtk_widget_segment_unref    (GtkTextLineSegment *widget_segment);
+
+GtkTextLayout*      _gtk_anchored_child_get_layout (GtkWidget *child);
 
 #ifdef __cplusplus
 }
