@@ -496,7 +496,7 @@ install-data-local:
 	  done ; \
 	rm -f gtkrc.lt gtkrc.lv gtkrc.cy gtkrc.ga gtkrc.et gtkrc.ka \
 	     gtkrc.vi_VN.viscii111 gtkrc.vi_VN.tcvn5712 gtkrc.vi \
-	     gtkrc.be gtkrc.bg ; \ 
+	     gtkrc.be gtkrc.bg ; \
 	ln -s gtkrc.iso-8859-13 gtkrc.lt ; \
 	ln -s gtkrc.iso-8859-13 gtkrc.lv ; \
 	ln -s gtkrc.iso-8859-14 gtkrc.cy ; \
