@@ -55,6 +55,7 @@ typedef struct {
 typedef struct {
 	GdkPixbufModuleUpdatedFunc updated_func;
 	GdkPixbufModulePreparedFunc prepared_func;
+	GdkPixbufModuleSizeFunc size_func;
 	gpointer user_data;
 	
 	GdkPixbuf *pixbuf;
@@ -820,6 +821,7 @@ gdk_pixbuf__pnm_image_begin_load (GdkPixbufModuleSizeFunc size_func,
 		return NULL;
 	}
 	memset (context, 0, sizeof (PnmLoaderContext));
+	context->size_func = size_func;
 	context->prepared_func = prepared_func;
 	context->updated_func  = updated_func;
 	context->user_data = user_data;
@@ -944,6 +946,16 @@ gdk_pixbuf__pnm_image_load_increment (gpointer data,
 			
 			context->got_header = TRUE;
 		}
+
+		if (context->size_func) {
+			gint w = context->width;
+			gint h = context->height;
+			(*context->size_func) (&w, &h, context->user_data);
+			
+			if (w == 0 || h == 0) 
+				return FALSE;
+		}
+		
 		
 		/* scan until we hit image data */
 		if (!context->did_prescan) {

@@ -1,3 +1,28 @@
+Wed Jan  7 01:17:36 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_size_func): 
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_set_size): 
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_init): Make it possible
+	to call gdk_pixbuf_loader_set_size (loader, 0, 0) by changing
+	the initial values of priv->width/height to -1.
+	
+	* io-tiff.c (tiff_image_parse): 
+	* io-ras.c (RAS2State): 
+	* io-pnm.c (gdk_pixbuf__pnm_image_load_increment): 
+	* io-pcx.c (gdk_pixbuf__pcx_load_increment): 
+	* io-jpeg.c (gdk_pixbuf__jpeg_image_load_increment): 
+	* io-png.c (png_info_callback): 
+	* io-ico.c (DecodeHeader): 
+	* io-bmp.c (DecodeHeader): Call size_func once the size is known,
+	even if the module can't make use of the scaling information. If
+	size_func returns 0, don't allocate a pixbuf and return, if 
+	necessary with an error.
+
+	* gdk-pixbuf.h: 
+	* gdk-pixbuf-io.c (gdk_pixbuf_get_file_info): A new function 
+	to determine the type and size of an image file without loading
+	it completely.  (#53725)
+
 Sun Jan  4 00:44:57 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf.c (gdk_pixbuf_class_init): Turn the pixbuf 

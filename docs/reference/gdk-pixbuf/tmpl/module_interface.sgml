@@ -220,6 +220,12 @@ way to achieve the desired scaling during the loading of the image, it may
 either ignore the size request, or only approximate it -- &gdk-pixbuf; will
 then perform the required scaling on the completely loaded image. 
 </para>
+<para>
+If the function sets @width or @height to zero, the module should interpret
+this as a hint that it will be closed soon and shouldn't allocate further 
+resources. This convention is used to implement gdk_pixbuf_get_file_info()
+efficiently.
+</para>
 
 @width: pointer to a location containing the current image width
 @height: pointer to a location containing the current image height

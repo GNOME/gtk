@@ -606,8 +606,12 @@ gdk_pixbuf__pcx_load_increment(gpointer data, const guchar *buf, guint size,
 				g_set_error(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_CORRUPT_IMAGE, _("Image has invalid width and/or height"));
 				return FALSE;
 			}
-			if(context->size_func)
-				context->size_func(&width, &height, context->user_data);
+			if (context->size_func)
+			  {
+			    (*context->size_func) (&width, &height, context->user_data);
+			    if (width == 0 || height == 0)
+			      return TRUE;
+			  }
 
 			switch(context->bpp) {
 				default:

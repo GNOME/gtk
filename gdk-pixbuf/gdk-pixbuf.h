@@ -302,6 +302,10 @@ gchar    **gdk_pixbuf_format_get_mime_types  (GdkPixbufFormat *format);
 gchar    **gdk_pixbuf_format_get_extensions  (GdkPixbufFormat *format);
 gboolean   gdk_pixbuf_format_is_writable     (GdkPixbufFormat *format);
 
+GdkPixbufFormat *gdk_pixbuf_get_file_info (const gchar  *filename,
+					   gint         *width, 
+					   gint         *height);
+
 G_END_DECLS
 
 #include <gdk-pixbuf/gdk-pixbuf-loader.h>

@@ -126,6 +126,7 @@ struct headerpair {
 };
 
 struct ico_progressive_state {
+	GdkPixbufModuleSizeFunc size_func;
 	GdkPixbufModulePreparedFunc prepared_func;
 	GdkPixbufModuleUpdatedFunc updated_func;
 	gpointer user_data;
@@ -400,6 +401,19 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 
 
 	if (State->pixbuf == NULL) {
+#if 1
+		if (State->size_func) {
+			gint width = State->Header.width;
+			gint height = State->Header.height;
+
+			(*State->size_func) (&width, &height, State->user_data);
+			if (width == 0 || height == 0) {
+				State->LineWidth = 0;
+				return;
+			}
+		}
+#endif
+
 		State->pixbuf =
 		    gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8,
 				   State->Header.width,
@@ -445,6 +459,7 @@ gdk_pixbuf__ico_image_begin_load(GdkPixbufModuleSizeFunc size_func,
 	struct ico_progressive_state *context;
 
 	context = g_new0(struct ico_progressive_state, 1);
+	context->size_func = size_func;
 	context->prepared_func = prepared_func;
 	context->updated_func = updated_func;
 	context->user_data = user_data;
@@ -828,6 +843,9 @@ gdk_pixbuf__ico_image_load_increment(gpointer data,
 			GError *decode_err = NULL;
 			DecodeHeader(context->HeaderBuf,
 				     context->HeaderDone, context, &decode_err);
+			if (context->LineBuf != NULL && context->LineWidth == 0)
+				return TRUE;
+
 			if (decode_err) {
 				g_propagate_error (error, decode_err);
 				return FALSE;

@@ -910,6 +910,93 @@ gdk_pixbuf_new_from_file_at_size (const char *filename,
 	return pixbuf;
 }
 
+static void
+info_cb (GdkPixbufLoader *loader, 
+	 int              width,
+	 int              height,
+	 gpointer         data)
+{
+	struct {
+		GdkPixbufFormat *format;
+		int width;
+		int height;
+	} *info = data;
+
+	g_return_if_fail (width > 0 && height > 0);
+
+	info->format = gdk_pixbuf_loader_get_format (loader);
+	info->width = width;
+	info->height = height;
+
+	gdk_pixbuf_loader_set_size (loader, 0, 0);
+}
+
+/**
+ * gdk_pixbuf_get_file_info:
+ * @filename: The name of the file to identify.
+ * @width: Return location for the width of the image, or %NULL
+ * @height: Return location for the height of the image, or %NULL
+ * 
+ * Parses an image file far enough to determine its format and size.
+ * 
+ * Returns: A #GdkPixbufFormat describing the image format of the file 
+ *    or %NULL if the image format wasn't recognized. The return value 
+ *    is owned by GdkPixbuf and should not be freed.
+ *
+ * Since: 2.4
+ **/
+GdkPixbufFormat *
+gdk_pixbuf_get_file_info (const gchar  *filename,
+			  gint         *width, 
+			  gint         *height)
+{
+	GdkPixbufLoader *loader;
+	GError *temp = NULL;
+	guchar buffer [4096];
+	int length;
+	FILE *f;
+	struct {
+		GdkPixbufFormat *format;
+		gint width;
+		gint height;
+	} info;
+
+	g_return_val_if_fail (filename != NULL, NULL);
+
+	f = fopen (filename, "rb");
+	if (!f)
+		return NULL;
+
+	loader = gdk_pixbuf_loader_new ();
+
+	info.format = NULL;
+	info.width = -1;
+	info.height = -1;
+		
+	g_signal_connect (loader, "size-prepared", G_CALLBACK (info_cb), &info);
+
+	while (!feof (f)) {
+		length = fread (buffer, 1, sizeof (buffer), f);
+		if (length > 0) {
+			if (!gdk_pixbuf_loader_write (loader, buffer, length, NULL))
+				break;
+		}
+		if (info.format != NULL)
+			break;
+	}
+
+	fclose (f);
+	gdk_pixbuf_loader_close (loader, NULL);
+	g_object_unref (G_OBJECT (loader));
+
+	if (width) 
+		*width = info.width;
+	if (height) 
+		*height = info.height;
+
+	return info.format;
+}
+
 /**
  * gdk_pixbuf_new_from_xpm_data:
  * @data: Pointer to inline XPM data.

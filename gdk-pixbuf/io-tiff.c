@@ -47,6 +47,7 @@
 typedef struct _TiffContext TiffContext;
 struct _TiffContext
 {
+	GdkPixbufModuleSizeFunc size_func;
 	GdkPixbufModulePreparedFunc prepare_func;
 	GdkPixbufModuleUpdatedFunc update_func;
 	gpointer user_data;
@@ -225,6 +226,15 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
                 return NULL;                
         }
 
+	if (context && context->size_func) {
+                gint w = width;
+                gint h = height;
+		(* context->size_func) (&w, &h, context->user_data);
+                
+                if (w == 0 || h == 0)
+                    return NULL;
+        }
+
         pixels = g_try_malloc (bytes);
 
         if (!pixels) {
@@ -370,6 +380,7 @@ gdk_pixbuf__tiff_image_begin_load (GdkPixbufModuleSizeFunc size_func,
 	TiffContext *context;
         
 	context = g_new0 (TiffContext, 1);
+	context->size_func = size_func;
 	context->prepare_func = prepare_func;
 	context->update_func = update_func;
 	context->user_data = user_data;

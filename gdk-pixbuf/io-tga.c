@@ -137,6 +137,7 @@ struct _TGAContext {
 	gboolean prepared;
 	gboolean done;
 
+	GdkPixbufModuleSizeFunc sfunc;
 	GdkPixbufModulePreparedFunc pfunc;
 	GdkPixbufModuleUpdatedFunc ufunc;
 	gpointer udata;
@@ -333,6 +334,16 @@ static gboolean fill_in_context(TGAContext *ctx, GError **err)
 
 	w = LE16(ctx->hdr->width);
 	h = LE16(ctx->hdr->height);
+
+	if (ctx->sfunc) {
+		gint wi = w;
+		gint hi = h;
+		
+		(*ctx->sfunc) (&wi, &hi, ctx->udata);
+		
+		if (wi == 0 || hi == 0) 
+			return FALSE;
+	}
 
 	ctx->pbuf = get_contiguous_pixbuf (w, h, alpha);
 
@@ -872,6 +883,7 @@ static gpointer gdk_pixbuf__tga_begin_load(GdkPixbufModuleSizeFunc f0,
 	ctx->prepared = FALSE;
 	ctx->done = FALSE;
 
+	ctx->sfunc = f0;
 	ctx->pfunc = f1;
 	ctx->ufunc = f2;
 	ctx->udata = udata;

@@ -650,7 +650,12 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
 			
 			width = cinfo->image_width;
 			height = cinfo->image_height;
-			(* context->size_func) (&width, &height, context->user_data);
+			if (context->size_func) {
+				(* context->size_func) (&width, &height, context->user_data);
+				if (width == 0 || height == 0)
+					return FALSE;
+			}
+			
 			for (cinfo->scale_denom = 2; cinfo->scale_denom <= 8; cinfo->scale_denom *= 2) {
 				jpeg_calc_output_dimensions (cinfo);
 				if (cinfo->output_width < width || cinfo->output_height < height) {

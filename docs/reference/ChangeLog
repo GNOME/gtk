@@ -1,3 +1,12 @@
+Wed Jan  7 01:27:23 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf/tmpl/module_interface.sgml: Document expected
+	module behaviour if the size_func returns 0.
+
+Wed Jan  7 01:26:07 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add gdk_pixbuf_get_file_info.
+
 Mon Dec 29 01:40:20 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_accel_map_{un,}lock_path.

@@ -57,6 +57,7 @@ GdkPixbufDestroyNotify
 <FILE>file-loading</FILE>
 gdk_pixbuf_new_from_file
 gdk_pixbuf_new_from_file_at_size
+gdk_pixbuf_get_file_info
 </SECTION>
 
 <SECTION>

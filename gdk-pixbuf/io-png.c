@@ -358,6 +358,7 @@ struct _LoadContext {
         png_structp png_read_ptr;
         png_infop   png_info_ptr;
 
+        GdkPixbufModuleSizeFunc size_func;
         GdkPixbufModulePreparedFunc prepare_func;
         GdkPixbufModuleUpdatedFunc update_func;
         gpointer notify_user_data;
@@ -398,6 +399,7 @@ gdk_pixbuf__png_image_begin_load (GdkPixbufModuleSizeFunc size_func,
         
         lc->fatal_error_occurred = FALSE;
 
+        lc->size_func = size_func;
         lc->prepare_func = prepare_func;
         lc->update_func = update_func;
         lc->notify_user_data = user_data;
@@ -593,7 +595,18 @@ png_info_callback   (png_structp png_read_ptr,
         if (color_type & PNG_COLOR_MASK_ALPHA)
                 have_alpha = TRUE;
         
-        lc->pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, have_alpha, 8, width, height);
+        if (lc->size_func) {
+                gint w = width;
+                gint h = height;
+                (* lc->size_func) (&w, &h, lc->notify_user_data);
+                
+                if (w == 0 || h == 0) {
+                        lc->fatal_error_occurred = TRUE;
+                        return;
+                }
+        }
+
+        lc->pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, have_alpha, 8, width, height);
 
         if (lc->pixbuf == NULL) {
                 /* Failed to allocate memory */

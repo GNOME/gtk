@@ -144,6 +144,7 @@ struct bmp_compression_state {
 /* Progressive loading */
 
 struct bmp_progressive_state {
+	GdkPixbufModuleSizeFunc size_func;
 	GdkPixbufModulePreparedFunc prepared_func;
 	GdkPixbufModuleUpdatedFunc updated_func;
 	gpointer user_data;
@@ -319,41 +320,52 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 		State->LineWidth = (State->LineWidth / 4) * 4 + 4;
 
 	if (State->pixbuf == NULL) {
+		if (State->size_func) {
+			gint width = State->Header.width;
+			gint height = State->Header.height;
+
+			(*State->size_func) (&width, &height, State->user_data);
+			if (width == 0 || height == 0) {
+				State->read_state = READ_STATE_DONE;
+				State->BufferSize = 0;
+				return TRUE;
+			}
+		}
+
 		if (State->Type == 32 || 
 		    State->Compressed == BI_RLE4 || 
 		    State->Compressed == BI_RLE8)
 			State->pixbuf =
-			    gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8,
-					   (gint) State->Header.width,
-					   (gint) State->Header.height);
+				gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8,
+					       (gint) State->Header.width,
+					       (gint) State->Header.height);
 		else
 			State->pixbuf =
-			    gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8,
-					   (gint) State->Header.width,
-					   (gint) State->Header.height);
-
-                if (State->pixbuf == NULL) {
-                        g_set_error (error,
-                                     GDK_PIXBUF_ERROR,
-                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-                                     _("Not enough memory to load bitmap image"));
+				gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8,
+					       (gint) State->Header.width,
+					       (gint) State->Header.height);
+		
+		if (State->pixbuf == NULL) {
+			g_set_error (error,
+				     GDK_PIXBUF_ERROR,
+				     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+				     _("Not enough memory to load bitmap image"));
 			State->read_state = READ_STATE_ERROR;
-                        return FALSE;
-                }
-
+			return FALSE;
+			}
+		
 		if (State->prepared_func != NULL)
 			/* Notify the client that we are ready to go */
 			(*State->prepared_func) (State->pixbuf, NULL, State->user_data);
-
+		
+		/* make all pixels initially transparent */
+		if (State->Compressed == BI_RLE4 || State->Compressed == BI_RLE8) {
+			memset (State->pixbuf->pixels, 0, State->pixbuf->rowstride * State->Header.height);
+			State->compr.p = State->pixbuf->pixels 
+				+ State->pixbuf->rowstride * (State->Header.height- 1);
+		}
 	}
 	
-	/* make all pixels initially transparent */
-	if (State->Compressed == BI_RLE4 || State->Compressed == BI_RLE8) {
-		memset (State->pixbuf->pixels, 0, State->pixbuf->rowstride * State->Header.height);
-		State->compr.p = State->pixbuf->pixels 
-			+ State->pixbuf->rowstride * (State->Header.height- 1);
-	}
-
 	State->BufferDone = 0;
 	if (State->Type <= 8) {
 		State->read_state = READ_STATE_PALETTE;
@@ -485,6 +497,7 @@ gdk_pixbuf__bmp_image_begin_load(GdkPixbufModuleSizeFunc size_func,
 	struct bmp_progressive_state *context;
 
 	context = g_new0(struct bmp_progressive_state, 1);
+	context->size_func = size_func;
 	context->prepared_func = prepared_func;
 	context->updated_func = updated_func;
 	context->user_data = user_data;
@@ -1035,6 +1048,9 @@ gdk_pixbuf__bmp_image_load_increment(gpointer data,
 			else if (!DoCompressed (context, error))
 				return FALSE;
 
+			break;
+		case READ_STATE_DONE:
+			return TRUE;
 			break;
 
 		default:

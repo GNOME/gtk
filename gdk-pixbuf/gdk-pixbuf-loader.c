@@ -208,6 +208,9 @@ gdk_pixbuf_loader_init (GdkPixbufLoader *loader)
         GdkPixbufLoaderPrivate *priv;
   
         priv = g_new0 (GdkPixbufLoaderPrivate, 1);
+        priv->width = -1;
+        priv->height = -1;
+
         loader->priv = priv;
 }
 
@@ -253,7 +256,7 @@ gdk_pixbuf_loader_set_size (GdkPixbufLoader *loader,
 			    gint             height)
 {
         GdkPixbufLoaderPrivate *priv = GDK_PIXBUF_LOADER (loader)->priv;
-        g_return_if_fail (width > 0 && height > 0);
+        g_return_if_fail (width >= 0 && height >= 0);
 
         if (!priv->size_fixed) 
                 {
@@ -268,7 +271,7 @@ gdk_pixbuf_loader_size_func (gint *width, gint *height, gpointer loader)
         GdkPixbufLoaderPrivate *priv = GDK_PIXBUF_LOADER (loader)->priv;
 
         /* allow calling gdk_pixbuf_loader_set_size() before the signal */
-        if (priv->width == 0 && priv->height == 0) 
+        if (priv->width == -1 && priv->height == -1) 
                 {
                         priv->width = *width;
                         priv->height = *height;
