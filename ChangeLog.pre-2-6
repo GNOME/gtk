@@ -1,3 +1,8 @@
+Wed Sep  1 00:55:56 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkimage.c (gtk_image_clear): Don't leak the iter
+	of a running animation.  (#151542)
+
 Tue Aug 31 23:24:49 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcalendar.c (gtk_calendar_main_button): Only start  
