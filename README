@@ -26,13 +26,23 @@ See the file 'INSTALL'
 How to report bugs
 ==================
 
-To report a bug, send mail either to gtk-list, as mentioned
-above, or to gtk-bugs@gtk.org. If you send mail to gtk-list, you
-must be subscribed yourself.
+Bugs should be reported to the GNOME bug tracking
+system. (http://bugs.gnome.org). To report a problem
+about GTK+, send mail to submit@bugs.gnome.org.
 
-In the mail include:
+The subject of the mail should describe your problem.
+In the body of the mail, you should first include
+a "pseudo-header" that gives the package and 
+version number. This should be separated by a blank
+line from the actual headers.
 
-* The version of GTK
+ Package: gtk+
+ Version: 1.2.0
+
+[ Please substitute 1.2.0 with the version of GTK+ that
+  you have installed ]
+
+Then describe the bug. Include:
 
 * Information about your system. For instance:
 
@@ -63,6 +73,22 @@ In the mail include:
   is an X error, it will be more useful if the stacktrace
   is produced running the test program with the --sync command
   line option.
+
+An example of a bug report:
+
+====
+To: submit@bugs.gnome.org
+From: yourname@your.address.org
+Subject: handlebox test in testgtk is misnamed.
+
+Package: gtk+
+Version: 1.2.0
+
+When I run gtk/testgtk, the button "handle box"
+is misnamed. There are multiple handle boxes in
+the demo, so it should be "handle boxes", to
+be like "buttons" or "check buttons".
+===
 
 Patches
 =======
