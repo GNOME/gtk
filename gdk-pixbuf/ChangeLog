@@ -1,18 +1,18 @@
 2003-08-03  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf.c (gdk_pixbuf_get_rowstride): 
-	* gdk-pixbuf-data.c (gdk_pixbuf_new_from_data): Clarify misleading explanation of 
-	rowstride.  (#119000)
+	* gdk-pixbuf-data.c (gdk_pixbuf_new_from_data): Clarify misleading
+	explanation of rowstride.  (#119000)
 
 2003-07-24  Matthias Clasen  <maclas@gmx.de>
 
-	* gdk-pixbuf-io.c (gdk_pixbuf_new_from_file_at_size): Preserve the aspect ratio.  (#118145, 
-	Owen Taylor) 
+	* gdk-pixbuf-io.c (gdk_pixbuf_new_from_file_at_size): Preserve the
+	aspect ratio.  (#118145, Owen Taylor) 
 
 2003-07-23  Matthias Clasen  <maclas@gmx.de>
 
-	* gdk-pixbuf-io.c (gdk_pixbuf_new_from_file_at_size): Close loader before unref'ing 
-	it.  (#118146, Owen Taylor)
+	* gdk-pixbuf-io.c (gdk_pixbuf_new_from_file_at_size): Close loader
+	before unref'ing it.  (#118146, Owen Taylor)
 
 2003-03-01  Hans Breuer  <hans@breuer.org>
 
@@ -22,39 +22,46 @@
 
 2003-07-18  Matthias Clasen  <maclas@gmx.de>
 
-	* pixops/pixops.c (correct_total): Split correction into multiple pieces if no single weight is large
-	enough to apply the unsplit correction.  (#117431, problem reported by Tomas Ögren)
+	* pixops/pixops.c (correct_total): Split correction into multiple
+	pieces if no single weight is large enough to apply the unsplit
+	correction.  (#117431, problem reported by Tomas Ögren) 
 
 2003-07-13  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf.h: 
-	* gdk-pixbuf-io.c (gdk_pixbuf_new_from_file_at_size): New function to load an image from a file at a 
-	specified size.  (#105326, Dom Lachowicz)
+	* gdk-pixbuf-io.c (gdk_pixbuf_new_from_file_at_size): New function
+	to load an image from a file at a  specified size.  (#105326, Dom
+	Lachowicz) 
 
 2003-07-11  Matthias Clasen  <maclas@gmx.de>
 
-	* queryloaders.c (query_module): Handle absolute filenames properly. (#117170, Jens Elkner)
+	* queryloaders.c (query_module): Handle absolute filenames
+	properly. (#117170, Jens Elkner) 
 
 	* gdk-pixbuf-io.c: Mention that NULL-terminated arrays returned by 
-	gdk_pixbuf_format_get_mime_types() and gdk_pixbuf_format_get_extensions() must be 
-	freed with g_strfreev().
+	gdk_pixbuf_format_get_mime_types() and
+	gdk_pixbuf_format_get_extensions() must be freed with g_strfreev().
 
 2003-07-04  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-io.c: Document ICO save parameters.
 
-	* io-ico.c: Support saving of ICOs and CURs. Currently, only single-image ICOs are produced,
-	but the code for multi-image ICOs is already in place. The saver understands the options
-	"depth" (can be "32", "24" or "16") and "x_hot"/"y_hot" for hotspot coordinates of CURs.
+	* io-ico.c: Support saving of ICOs and CURs. Currently, only
+	single-image ICOs are produced, but the code for multi-image ICOs
+	is already in place. The saver understands the options "depth"
+	(can be "32", "24" or "16") and "x_hot"/"y_hot" for hotspot
+	coordinates of CURs. 
 
 2003-06-28  Matthias Clasen  <maclas@gmx.de>
 
-	* io-ico.c (DecodeHeader): Stop discriminating against 32bpp ICOs a): Use the byte 
-	size of the image as a heuristic when selecting the bitmap  to load - this lets us 
-	select 32bpp bitmaps which come after a 8bpp bitmap.
-	(OneLineTransp): Stop discriminating against 32bpp ICOs b): Don't overwrite the 
-	alpha channel of 32bpp ICOs. 
-	(gdk_pixbuf__ico_image_load_increment): Stop decoding the header unnecessarily.
+	* io-ico.c (DecodeHeader): Stop discriminating against 32bpp ICOs
+	a): Use the byte size of the image as a heuristic when selecting
+	the bitmap  to load - this lets us select 32bpp bitmaps which come
+	after a 8bpp bitmap. 
+	(OneLineTransp): Stop discriminating against 32bpp ICOs b): Don't
+	overwrite the alpha channel of 32bpp ICOs. 
+	(gdk_pixbuf__ico_image_load_increment): Stop decoding the header
+	unnecessarily. 
 
 Fri Jun 27 03:56:59 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
@@ -63,33 +70,42 @@ Fri Jun 27 03:56:59 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 2003-06-23  Matthias Clasen  <maclas@gmx.de>
 
-	* io-gif.c (gif_get_frame_info): Remove the pointless refusal to load images with dubious 
-	disposal mode on the first frame. Just ignore it, as everybody else does.
+	* io-gif.c (gif_get_frame_info): Remove the pointless refusal to
+	load images with dubious disposal mode on the first frame. Just
+	ignore it, as everybody else does. 
 
 2003-06-22  Matthias Clasen  <maclas@gmx.de>
 
-	* gdk-pixbuf-loader.[hc] (gdk_pixbuf_loader_new_with_mime_type): New function to obtain a loader for a specific mime 
-	type.  (#105324, Dom Lachowicz)
+	* gdk-pixbuf-loader.[hc] (gdk_pixbuf_loader_new_with_mime_type):
+	New function to obtain a loader for a specific mime type.
+	(#105324, Dom Lachowicz) 
 
-	* io-gif.c (gif_get_extension): Reset block_count to 0 for all application extensions, otherwise the data blocks 
-	of unknown extensions are not propertly skipped. 
+	* io-gif.c (gif_get_extension): Reset block_count to 0 for all
+	application extensions, otherwise the data blocks of unknown
+	extensions are not propertly skipped.  
 
-	Second half of the fix for #106962, handle frames extending beyond the logical screen:
+	Second half of the fix for #106962, handle frames extending beyond
+	the logical screen: 
 	
-	* io-gif.c (clip_frame): New helper function to clip a rectangle to the logical screen size of the gif.
-	(maybe_update): New helper function to call update_func only if the rectangle is not completely off-bounds.
-	(gif_get_lzw): Read frames extending outside the logical screen size, but be careful clip to the logical screen size
+	* io-gif.c (clip_frame): New helper function to clip a rectangle
+	to the logical screen size of the gif. 
+	(maybe_update): New helper function to call update_func only if
+	the rectangle is not completely off-bounds. 
+	(gif_get_lzw): Read frames extending outside the logical screen
+	size, but be careful clip to the logical screen size 
 	when operating on the composite pixbuf and when calling update_func.
 	(gif_init): Set the animation size to the logical screen size.
-	(gif_get_frame_info): Don't refuse to load images with frames extending beyond the logical screen size.
+	(gif_get_frame_info): Don't refuse to load images with frames
+	extending beyond the logical screen size. 
 
-	* io-gif-animation.c (gdk_pixbuf_gif_anim_frame_composite): Be careful to clip all rectangles to the logical screen 
-	size, also handle the fact that frames may be completely off-bounds.
+	* io-gif-animation.c (gdk_pixbuf_gif_anim_frame_composite): Be
+	careful to clip all rectangles to the logical screen size, also
+	handle the fact that frames may be completely off-bounds. 
 
 2003-06-21  Matthias Clasen  <maclas@gmx.de>
 
-	* io-gif.c: Merge from 2.2: Fix update_func() arguments and accept empty 
- 	frames.  (#106962)
+	* io-gif.c: Merge from 2.2: Fix update_func() arguments and accept
+	empty frames.  (#106962)
 
 2003-06-17  Matthias Clasen  <maclas@gmx.de>
 
@@ -112,7 +128,8 @@ Fri Jun 27 03:56:59 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 	unspecified signedness.  (#112919, Morten Welinder)gdk-p
 
 	* gdk-pixdata.c (gdk_pixdata_to_csource): Replace all occurances
-	of g_string_new ("") by g_string_new (NULL). (#106975, Morten Welinder)
+	of g_string_new ("") by g_string_new (NULL). (#106975, Morten
+	Welinder) 
 
 2003-05-21  Matthias Clasen  <maclas@gmx.de>
 
@@ -179,17 +196,19 @@ Tue Apr  1 15:33:51 2003  Owen Taylor  <otaylor@redhat.com>
 	Bug #107664 continued: 
 	
 	* io-xpm.c (find_color): Fix 0/FALSE confusion
-	* gdk-pixbuf.c (gdk_pixbuf_get_has_alpha): Fix -1/gboolean confusion.
+	* gdk-pixbuf.c (gdk_pixbuf_get_has_alpha): Fix -1/gboolean
+	confusion. 
 
 2003-03-06  Matthias Clasen  <maclas@gmx.de>
 
-	* io-gif.c (gif_read): Fix 0/FALSE confusion (#107664, Morten Welinder)
+	* io-gif.c (gif_read): Fix 0/FALSE confusion (#107664, Morten
+	Welinder) 
 
 2003-02-20  Matthias Clasen  <maclas@gmx.de>
 
 	* io-gif-animation.c (gdk_pixbuf_gif_anim_frame_composite): 
 	Always clear the initial frame and "disposed" areas with
-	transparent pixels, no matter whether the frame has transparency
+	transparent pixels, no matter whether the frame has transparency 
 	or not.  (#55502)
 
 2003-02-18  Matthias Clasen  <maclas@gmx.de>
@@ -1134,9 +1153,10 @@ Wed Sep 26 18:08:19 2001  Owen Taylor  <otaylor@redhat.com>
 Thu Sep 20 17:22:48 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* io-tiff.c (gdk_pixbuf__tiff_image_load): On OSF, apparently fseek()
-	works in some on-demand way, so the fseek gdk_pixbuf_new_from_file() doesn't 
-	work here since we are using the raw file descriptor. So, we call lseek()
-	on the fileno(f) before using it. (#60840).
+	works in some on-demand way, so the fseek
+	gdk_pixbuf_new_from_file() doesn't work here since we are using
+	the raw file descriptor. So, we call lseek() on the fileno(f)
+	before using it. (#60840). 
 
 2001-09-20  James Henstridge  <james@daa.com.au>
 
@@ -2478,8 +2498,8 @@ Fri May  5 12:16:32 2000  Owen Taylor  <otaylor@redhat.com>
 
 2000-02-14  Mark Crichton  <crichton@gimp.org>
 
-	* gdk-pixbuf/io-xpm.c (xpm_extract_color): Added check for "g" color type.
-	Imlib/libXpm handle this, but we didn't.
+	* gdk-pixbuf/io-xpm.c (xpm_extract_color): Added check for "g"
+	color type. Imlib/libXpm handle this, but we didn't.
 
 2000-02-14  Darin Adler  <darin@eazel.com>
 
@@ -2487,7 +2507,8 @@ Fri May  5 12:16:32 2000  Owen Taylor  <otaylor@redhat.com>
 	* .cvsignore: gdk-pixbuf/.cvsignore: More to ignore.
 
 2000-02-14  Elliot Lee  <sopwith@redhat.com>
-	* gdk-pixbuf/gdk-pixbuf.h, gdk-pixbuf/gdk-pixbuf-data.c: Make passed-in argument 'const'.
+	* gdk-pixbuf/gdk-pixbuf.h, gdk-pixbuf/gdk-pixbuf-data.c: Make
+	passed-in argument 'const'.
 
 2000-02-04  Michael Meeks  <mmeeks@gnu.org>
 
@@ -2686,10 +2707,11 @@ Mon Jan 31 12:38:50 2000  Owen Taylor  <otaylor@redhat.com>
 
 2000-01-05  Owen Taylor  <otaylor@redhat.com>
 
-	* gdk-pixbuf/pixops/pixops.c (pixops_process): Fix computation of end of run indices.
+	* gdk-pixbuf/pixops/pixops.c (pixops_process): Fix computation of
+	end of run indices. 
 
-	* gdk-pixbuf/pixops/pixops.c: Fix double increments when dest_channels == 4.
-	  (Pointed out by Tomas Ogren)
+	* gdk-pixbuf/pixops/pixops.c: Fix double increments when
+	  dest_channels == 4.  (Pointed out by Tomas Ogren)
 
 2000-01-05  Mark Crichton  <crichton@gimp.org>
 
@@ -3449,8 +3471,8 @@ Mon Nov 15 17:18:28 1999  George Lebl <jirka@5z.com>
 	will look into next.
 
 1999-11-03    <sopwith@redhat.com>
-	* src/testpixbuf.c: A GtkFunction needs to return a value for deterministic behaviour.
-	  Also put dot printing back in.
+	* src/testpixbuf.c: A GtkFunction needs to return a value for
+	  deterministic behaviour. Also put dot printing back in.
 
 1999-11-03    <jrb@redhat.com>
 
@@ -3477,8 +3499,8 @@ Mon Nov 15 17:18:28 1999  George Lebl <jirka@5z.com>
 	It's a little slow though. )-:
 
 1999-11-02 Elliot Lee <sopwith@redhat.com>
-	* src/gdk-pixbuf-loader.[ch], src/gdk-pixbuf-io.h: Make the arguments to the
-	write/load_increment operations const-correct.
+	* src/gdk-pixbuf-loader.[ch], src/gdk-pixbuf-io.h: Make the
+	arguments to the write/load_increment operations const-correct.
 
 1999-11-02  Federico Mena Quintero  <federico@redhat.com>
 
@@ -3489,8 +3511,8 @@ Mon Nov 15 17:18:28 1999  George Lebl <jirka@5z.com>
 
 1999-11-02 Elliot Lee <sopwith@redhat.com>
 
-	* src/testpixbuf.c: Allow using $TBF_READLEN to specify the size of the chunks
-	that are read from the input file.
+	* src/testpixbuf.c: Allow using $TBF_READLEN to specify the size
+	of the chunks that are read from the input file.
 
 1999-11-02  Larry Ewing  <lewing@gimp.org>
 
@@ -3634,7 +3656,8 @@ Mon Nov 15 17:18:28 1999  George Lebl <jirka@5z.com>
 	(file_formats): This array initializer was seriously on crack,
 	was assigning a function pointer to a GModule*
 
-	* src/testpixbuf.c (main): Change type of pixbuf_loader to GdkPixbufLoader*
+	* src/testpixbuf.c (main): Change type of pixbuf_loader to
+	GdkPixbufLoader* 
 
 1999-10-27  Havoc Pennington  <hp@pobox.com>
 

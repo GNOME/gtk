@@ -1,23 +1,28 @@
 2003-08-11  Matthias Clasen  <maclas@gmx.de>
+ 
+	* gdk/gdk-sections.txt: Add gdk_window_set_keep_above and
+	gdk_window_set_keep_below.  
 
-	* gdk/gdk-sections.txt: Add gdk_window_set_keep_above and gdk_window_set_keep_below.
-
-	* gtk/gtk-sections.txt: Add gtk_window_set_keep_above and gtk_window_set_keep_below.
+	* gtk/gtk-sections.txt: Add gtk_window_set_keep_above and
+	gtk_window_set_keep_below. 
 
 	* gdk/tmpl/event_structs.sgml: Document GDK_WINDOW_STATE_FULLSCREEN, 
 	GDK_WINDOW_STATE_ABOVE and GDK_WINDOW_STATE_BELOW.
 
 2003-08-10  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/tmpl/gtkwidget.sgml: Document public GtkWidget members.  (#119463)
+	* gtk/tmpl/gtkwidget.sgml: Document public GtkWidget members.
+	(#119463) 
 
 2003-08-09  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/tmpl/gtkcalendar.sgml: Deprecate GTK_CALENDAR_WEEK_START_MONDAY. (#87977)
+	* gtk/tmpl/gtkcalendar.sgml: Deprecate
+	GTK_CALENDAR_WEEK_START_MONDAY. (#87977) 
 
 2003-08-03  Matthias Clasen  <maclas@gmx.de>
 
-	* gdk-pixbuf/tmpl/gdk-pixbuf.sgml: Clarify misleading explanation of rowstride. (#119000)
+	* gdk-pixbuf/tmpl/gdk-pixbuf.sgml: Clarify misleading explanation
+	of rowstride. (#119000) 
 
 Tue Jul 29 14:21:48 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
@@ -30,8 +35,8 @@ Tue Jul 29 14:21:48 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 2003-07-21  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/tmpl/gtkdnd.sgml: It is GTK_DEST_DEFAULT_DROP, not GTK_DRAG_DEFAULT_DROP. (#117917, 
-	Tim-Philipp Müller)
+	* gtk/tmpl/gtkdnd.sgml: It is GTK_DEST_DEFAULT_DROP, not
+	GTK_DRAG_DEFAULT_DROP. (#117917, Tim-Philipp Müller)
 
 2003-07-19  Matthias Clasen  <maclas@gmx.de>
 
@@ -43,7 +48,8 @@ Tue Jul 29 14:21:48 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 2003-07-18  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtk-sections.txt: Add gtk_message_dialog_new_with_markup() and gtk_window_set_default_icon().
+	* gtk/gtk-sections.txt: Add gtk_message_dialog_new_with_markup()
+	and gtk_window_set_default_icon(). 
 
 2003-07-15  Matthias Clasen  <maclas@gmx.de>
 
@@ -51,31 +57,35 @@ Tue Jul 29 14:21:48 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 	* gtk/tmpl/gtkradiotoolbutton.sgml: 
 	* gtk/tmpl/gtktoggletoolbutton.sgml: New templates.
 
-	* gtk/gtk-docs.sgml: Include gtkseparatortoolitem.xml, gtkradiotoolbutton.xml and 
-	gtktoggletoolbutton.xml.
+	* gtk/gtk-docs.sgml: Include gtkseparatortoolitem.xml,
+	gtkradiotoolbutton.xml and gtktoggletoolbutton.xml.
 
-	* gtk/gtk.types: Add gtk_separator_tool_item_get_type, gtk_radio_tool_button_get_type and 
-	gtk_toggle_tool_button_get_type.
+	* gtk/gtk.types: Add gtk_separator_tool_item_get_type,
+	gtk_radio_tool_button_get_type and gtk_toggle_tool_button_get_type.
 
-	* gtk/gtk-sections.txt: Add GtkSeparatorToolItem, GtkRadioToolButton and GtkToggleToolButton 
-	sections.
+	* gtk/gtk-sections.txt: Add GtkSeparatorToolItem,
+	GtkRadioToolButton and GtkToggleToolButton sections.
 
-	* gdk/tmpl/input_devices.sgml: Remove docs for gdk_device_get_history() which are now inline.
+	* gdk/tmpl/input_devices.sgml: Remove docs for
+	gdk_device_get_history() which are now inline. 
 
 	* gdk/gdk-sections.txt: Add gdk_display_flush.
 
 2003-07-13  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtk.types: Add gtk_tool_button_get_type and gtk_tool_item_get_type.
+	* gtk/gtk.types: Add gtk_tool_button_get_type and
+	gtk_tool_item_get_type. 
 	
 	* gtk/tmpl/gtktoolbutton.sgml:
 	* gtk/tmpl/gtktoolitem.sgml:
 	* gtk/gtk-docs.sgml: 
 	* gtk/gtk-sections.txt: Add new toolbar api.
 
-	* gtk/tmpl/gtkdnd.sgml: Remove docs for gtk_drag_begin(), which are now inline.
+	* gtk/tmpl/gtkdnd.sgml: Remove docs for gtk_drag_begin(), which
+	are now inline. 
 
-	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add gdk_pixbuf_new_from_file_at_size.
+	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add
+	gdk_pixbuf_new_from_file_at_size. 
 
 2003-07-08  Matthias Clasen  <maclas@gmx.de>
 
@@ -96,28 +106,34 @@ Wed Jul  2 18:15:21 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/tmpl/gtkcolorbutton.sgml: 
 	* gtk/tmpl/gtkfontbutton.sgml: 
-	* gtk/tmpl/gtkexpander.sgml: New files. Templates for GtkExpander, GtkFontButton and GtkColorButton.
+	* gtk/tmpl/gtkexpander.sgml: New files. Templates for GtkExpander,
+	GtkFontButton and GtkColorButton. 
 
-	* gtk/gtk-sections.txt: Add a sections for GtkExpander, GtkColorButton and GtkFontButton.
+	* gtk/gtk-sections.txt: Add a sections for GtkExpander,
+	GtkColorButton and GtkFontButton. 
 
-	* gtk/gtk-docs.sgml: Add an entities for GtkExpander, GtkColorButton and GtkFontButton.
+	* gtk/gtk-docs.sgml: Add an entities for GtkExpander,
+	GtkColorButton and GtkFontButton. 
 	
-	* gtk/gtk.types: Add gtk_expander_get_type, gtk_color_button_get_type() and gtk_font_button_get_type().
+	* gtk/gtk.types: Add gtk_expander_get_type,
+	gtk_color_button_get_type() and gtk_font_button_get_type(). 
 
 	* gdk/gdk-sections.txt: Add
 	gdk_cursor_new_from_pixbuf(), gdk_display_supports_cursor_alpha(), 
-	gdk_display_supports_cursor_color(), gdk_display_get_default_cursor_size() and
+	gdk_display_supports_cursor_color(),
+	gdk_display_get_default_cursor_size() and 
 	gdk_display_get_maximal_cursor_size(). 
 
 2003-06-30  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/tmpl/gtkcontainer.sgml: Write a bit about size negotiation.
+	* gtk/tmpl/gtkcontainer.sgml: Write a bit about size negotiation. 
 
 	* gtk/tmpl/gtkwidget.sgml: Some additions.
 
 2003-06-24  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtk-docs.sgml: Move GtkIMContext to "Abstract Base Classes", since its abstract.
+	* gtk/gtk-docs.sgml: Move GtkIMContext to "Abstract Base Classes",
+	since its abstract. 
 
 	* gtk/tmpl/gtkaccessible.sgml: 
 	* gtk/tmpl/gtkimmulticontext.sgml: 
@@ -141,7 +157,8 @@ Wed Jul  2 18:15:21 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixbuf/tmpl/gdk-pixbuf.sgml: Typo fix.
 
-	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add gdk_pixbuf_loader_new_with_mime_type.
+	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add
+	gdk_pixbuf_loader_new_with_mime_type. 
 
 2003-06-19  Matthias Clasen  <maclas@gmx.de>
 
@@ -730,8 +747,9 @@ Tue Jun 18 17:02:48 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-05-05  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtk-sections.txt: Add gtk_widget_class_find_style_property,
-	gtk_widget_class_list_style_properties and gtk_style_get_font_for_display.
+	* gtk/gtk-sections.txt: Add gtk_widget_class_find_style_property, 
+	gtk_widget_class_list_style_properties and
+	gtk_style_get_font_for_display. 
 
 2002-05-03  Matthias Clasen  <maclas@gmx.de>
 
@@ -752,14 +770,15 @@ Tue Jun 18 17:02:48 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-05-01  Matthias Clasen  <maclas@gmx.de>
 
-	* gdk/gdk-sections.txt: Move GdkScreen struct to the GdkScreen section.
+	* gdk/gdk-sections.txt: Move GdkScreen struct to the GdkScreen
+	section. 
 
 	* gdk/tmpl/gdkscreen.sgml: 
 	* gdk/tmpl/gdkdisplay.sgml: Typo and markup fixes.
 
 	* gdk/gdk-docs.sgml: Reorder display and screen sections.
 
-	* gdk/multihead.sgml: Remove references to GdkDisplayManager, typo
+	* gdk/multihead.sgml: Remove references to GdkDisplayManager, typo 
 	and markup fixes.
 
 Tue Apr 30 14:16:12 2002  Owen Taylor  <otaylor@redhat.com>
@@ -892,9 +911,9 @@ Fri Mar  8 15:14:32 2002  Owen Taylor  <otaylor@redhat.com>
 2002-03-07  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf/tmpl/animation.sgml, gdk-pixbuf/tmpl/gdk-pixbuf.sgml,
-	gtk/tmpl/gtkrc.sgml, gtk/tmpl/gtktextview.sgml, gtk/tmpl/gtkiconfactory.sgml,
-	gtk/tmpl/gtkaccelgroup.sgml: Add some ids which are referenced
-	from the object hierarchy.
+	gtk/tmpl/gtkrc.sgml, gtk/tmpl/gtktextview.sgml,
+	gtk/tmpl/gtkiconfactory.sgml, gtk/tmpl/gtkaccelgroup.sgml: Add
+	some ids which are referenced from the object hierarchy.
 
 	* gtk/gtk-docs.sgml: Use parts as top-level division (#61575),
 	include gtkaccessible docs.
@@ -1361,7 +1380,8 @@ Sat Dec 22 18:18:07 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/tmpl/gtklist.sgml: Markup fixes.
 
-	* gdk/tmpl/selections.sgml, gtk/tmpl/gtksocket.sgml: s/succesful/successful/g.
+	* gdk/tmpl/selections.sgml, gtk/tmpl/gtksocket.sgml:
+	s/succesful/successful/g. 
 
 	* gtk/gtk-sections.txt, gtk/tmpl/gtkstyle.sgml: Remove
 	GTK_STYLE_NUM_STYLECOLORS. (#66467)
