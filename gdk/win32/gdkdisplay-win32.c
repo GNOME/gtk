@@ -26,7 +26,7 @@
 
 #if defined(_MSC_VER) && (WINVER < 0x500) && (WINVER > 0x0400)
 #include <multimon.h>
-#elif (WINVER <= 0x0400)
+#elif defined(_MSC_VER) && (WINVER <= 0x0400)
 #undef HAVE_MONITOR_INFO
 #endif
 

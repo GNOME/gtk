@@ -906,6 +906,7 @@ draw_polygon (GdkGCWin32 *gcwin32,
 {
   gboolean filled;
   POINT *pts;
+  HPEN old_pen;
   gint npoints;
   gint i;
 
@@ -921,7 +922,14 @@ draw_polygon (GdkGCWin32 *gcwin32,
       }
 
   if (filled)
-    GDI_CALL (Polygon, (hdc, pts, npoints));
+    {
+      old_pen = SelectObject (hdc, GetStockObject (NULL_PEN));
+      if (old_pen == NULL)
+	WIN32_GDI_FAILED ("SelectObject");
+      GDI_CALL (Polygon, (hdc, pts, npoints));
+      if (old_pen != NULL)
+	GDI_CALL (SelectObject, (hdc, old_pen));
+    }
   else
     GDI_CALL (Polyline, (hdc, pts, npoints));
 }

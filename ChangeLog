@@ -1,3 +1,15 @@
+2004-03-13  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdisplay-win32.c: Don't undefine HAVE_MONITOR_INFO
+	when compiling with gcc. Mingw's headers do have the required
+	definitions.
+
+	* gdk/win32/gdkdrawable-win32.c (draw_polygon): When drawing
+	filled polygons, don't draw the outline, similarily as
+	draw_rectangle(). Apparently GTK and GIMP don't use
+	gdk_draw_polygon() much (or always draw the outline, too), as this
+	has gone undetected for so long. Thanks to Bruce Hochstetler.
+
 Sat Mar 13 15:19:17 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_destroy): Remove
