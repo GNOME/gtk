@@ -37,6 +37,7 @@
 #include <string.h>
 #include <sys/vt.h>
 #include <sys/kd.h>
+#include <errno.h>
 
 #include "gdk.h"
 
@@ -498,7 +499,7 @@ gdk_fb_display_new ()
   display->console_fd = open ("/dev/console", O_RDWR);
   if (display->console_fd < 0)
     {
-      g_warning ("Can't open /dev/console: %s", strerror (display->console_fd));
+      g_warning ("Can't open /dev/console: %s", strerror (errno));
       g_free (display);
       return NULL;
     }
@@ -542,7 +543,7 @@ gdk_fb_display_new ()
   display->tty_fd = open (buf, O_RDWR|O_NONBLOCK);
   if (display->tty_fd < 0)
     {
-      g_warning ("Can't open %s: %s", buf, strerror (display->tty_fd));
+      g_warning ("Can't open %s: %s", buf, strerror (errno));
       close (display->console_fd);
       g_free (display);
       return NULL;
@@ -556,7 +557,7 @@ gdk_fb_display_new ()
   display->fb_fd = open (fb_filename, O_RDWR);
   if (display->fb_fd < 0)
     {
-      g_warning ("Can't open %s: %s", fb_filename, strerror (display->fb_fd));
+      g_warning ("Can't open %s: %s", fb_filename, strerror (errno));
       g_free (fb_filename);
       close (display->tty_fd);
       close (display->console_fd);
