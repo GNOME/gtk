@@ -1,3 +1,16 @@
+Sun Dec  8 21:29:10 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkcolor-x11.c (gdk_colormap_alloc1): Fix
+	a lost refcount in the case where we get a duplicate
+	back from the X server.
+
+	* gdk/x11/gdkcolor-x11.c (gdk_colormap_alloc_colors_writeable):
+	Set success[] for all colors when allocation of colors
+	cells via XAllocColorCells succeeds.
+
+	* gdk/x11/gdkcolor-x11.c (gdk_colormap_alloc_colors_private):
+	Don't match against colors cells allocated writeable.
+
 Sun Dec  8 21:22:46 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkcolor-x11.c (gdk_colormap_alloc_colors_private): 

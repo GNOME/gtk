@@ -659,6 +659,26 @@ get_real_window (XEvent *event)
     }
 }
 
+#ifdef G_ENABLE_DEBUG
+static const char notify_modes[][18] = {
+  "NotifyNormal",
+  "NotifyGrab",
+  "NotifyUngrab",
+  "NotifyWhileGrabbed"
+};
+
+static const char notify_details[][22] = {
+  "NotifyAncestor",
+  "NotifyVirtual",
+  "NotifyInferior",
+  "NotifyNonlinear",
+  "NotifyNonlinearVirtual",
+  "NotifyPointer",
+  "NotifyPointerRoot",
+  "NotifyDetailNone"
+};
+#endif
+
 static gboolean
 gdk_event_translate (GdkDisplay *display,
 		     GdkEvent   *event,
@@ -1034,10 +1054,10 @@ gdk_event_translate (GdkDisplay *display,
       if (window &&
 	  GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
 	  xevent->xcrossing.detail != NotifyInferior &&
-	  xevent->xcrossing.focus && !window_impl->has_focus)
+	  xevent->xcrossing.focus && !window_impl->has_focus_window)
 	{
 	  gboolean had_focus = HAS_FOCUS (window_impl);
-	  
+
 	  window_impl->has_pointer_focus = TRUE;
 
 	  if (HAS_FOCUS (window_impl) != had_focus)
@@ -1129,12 +1149,12 @@ gdk_event_translate (GdkDisplay *display,
       if (window &&
 	  GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
 	  xevent->xcrossing.detail != NotifyInferior &&
-	  xevent->xcrossing.focus && !window_impl->has_focus)
+	  xevent->xcrossing.focus && !window_impl->has_focus_window)
 	{
 	  gboolean had_focus = HAS_FOCUS (window_impl);
 	  
 	  window_impl->has_pointer_focus = FALSE;
-
+	  
 	  if (HAS_FOCUS (window_impl) != had_focus)
 	    generate_focus_event (window, FALSE);
 	}
@@ -1207,7 +1227,10 @@ gdk_event_translate (GdkDisplay *display,
        */
     case FocusIn:
       GDK_NOTE (EVENTS,
-		g_message ("focus in:\t\twindow: %ld", xevent->xfocus.window));
+		g_message ("focus in:\t\twindow: %ld, detail: %s, mode: %s",
+			   xevent->xfocus.window,
+			   notify_details[xevent->xfocus.detail],
+			   notify_modes[xevent->xfocus.mode]));
       
       if (window && GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
 	{
@@ -1223,6 +1246,7 @@ gdk_event_translate (GdkDisplay *display,
 	       * window, so we pay attention to NotifyGrab
 	       * NotifyUngrab, and ignore NotifyWhileGrabbed
 	       */
+	      window_impl->has_focus_window = TRUE;
 	      if (xevent->xfocus.mode != NotifyWhileGrabbed)
 		window_impl->has_focus = TRUE;
 	      break;
@@ -1246,8 +1270,11 @@ gdk_event_translate (GdkDisplay *display,
       break;
     case FocusOut:
       GDK_NOTE (EVENTS,
-		g_message ("focus out:\t\twindow: %ld", xevent->xfocus.window));
-
+		g_message ("focus out:\t\twindow: %ld, detail: %s, mode: %s",
+			   xevent->xfocus.window,
+			   notify_details[xevent->xfocus.detail],
+			   notify_modes[xevent->xfocus.mode]));
+      
       if (window && GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
 	{
 	  gboolean had_focus = HAS_FOCUS (window_impl);
@@ -1258,6 +1285,7 @@ gdk_event_translate (GdkDisplay *display,
 	    case NotifyNonlinear:
 	    case NotifyVirtual:
 	    case NotifyNonlinearVirtual:
+	      window_impl->has_focus_window = FALSE;
 	      if (xevent->xfocus.mode != NotifyWhileGrabbed)
 		window_impl->has_focus = FALSE;
 	      break;

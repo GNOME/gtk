@@ -758,6 +758,7 @@ gdk_colormap_alloc1 (GdkColormap *colormap,
 	    {
 	      XFreeColors (GDK_SCREEN_XDISPLAY (private->screen), private->xcolormap,
 			   &xcolor.pixel, 1, 0);
+	      private->info[ret->pixel].ref_count++;
 	    }
 	  else
 	    {
@@ -825,6 +826,7 @@ gdk_colormap_alloc_colors_writeable (GdkColormap *colormap,
 	  for (i=0; i<ncolors; i++)
 	    {
 	      colors[i].pixel = pixels[i];
+	      success[i] = TRUE;
 	      private->info[pixels[i]].ref_count++;
 	      private->info[pixels[i]].flags |= GDK_COLOR_WRITEABLE;
 	    }
@@ -896,7 +898,7 @@ gdk_colormap_alloc_colors_private (GdkColormap *colormap,
 
       gchar *available = g_new (gchar, colormap->size);
       for (i = 0; i < colormap->size; i++)
-	available[i] = TRUE;
+	available[i] = !(private->info[i].flags & GDK_COLOR_WRITEABLE);
 
       for (i=0; i<ncolors; i++)
 	{
