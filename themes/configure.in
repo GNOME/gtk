@@ -1,0 +1,63 @@
+# Process this file with autoconf to produce a configure script.
+AC_INIT(pixmap_theme.h)
+
+# Save this value here, since automake will set cflags later
+
+# For automake.
+VERSION=0.1
+PACKAGE=themes
+
+# Save this value here, since automake will set cflags later
+cflags_set=${CFLAGS+set}
+AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
+
+dnl Initialize libtool
+AM_PROG_LIBTOOL
+
+dnl Initialize maintainer mode
+AM_MAINTAINER_MODE
+
+AC_CANONICAL_HOST
+
+# Checks for programs.
+AC_PROG_CC
+AM_PROG_CC_STDC
+AC_PROG_INSTALL
+AC_PROG_MAKE_SET
+
+AM_PATH_GTK(1.1.0, , 
+	AC_MSG_ERROR([*** GTK 1.1 not installed - please install first ***]))
+
+GLIB_CFLAGS=$glib_cflags
+GLIB_LIBS=$glib_libs
+GTK_CFLAGS=$glib_cflags
+GTK_LIBS=$glib_libs
+
+AC_SUBST(GLIB_CFLAGS)
+AC_SUBST(GLIB_LIBS)
+AC_SUBST(GTK_CFLAGS)
+AC_SUBST(GTK_LIBS)
+
+# Find the X11 include and library directories
+AC_PATH_X
+AC_PATH_XTRA
+
+CFLAGS="$CFLAGS $X_CFLAGS"
+LDFLAGS="$LDFLAGS $X_LDFLAGS $X_LIBS"
+
+# Checks for header files.
+AC_HEADER_STDC
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+
+# Checks for endianness (needed by GdkRgb).
+AC_C_BIGENDIAN
+
+# Checks for library functions.
+AC_TYPE_SIGNAL
+AC_FUNC_MMAP
+
+AC_OUTPUT([
+Makefile
+])

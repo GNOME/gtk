@@ -1,4 +1,4 @@
-#include "th.h"
+#include "motif_theme.h"
 
 extern GtkStyleClass th_default_class;
 extern GdkFont *default_font;
