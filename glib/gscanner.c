@@ -641,6 +641,8 @@ g_scanner_get_token_ll	(GScanner	*scanner,
   
   do
     {
+      register gboolean		dotted_float = FALSE;
+      
       ch = g_scanner_get_char (scanner, line_p, position_p);
       
       value.v_int = 0;
@@ -796,6 +798,7 @@ g_scanner_get_token_ll	(GScanner	*scanner,
 	  if (!config->scan_float)
 	    goto default_case;
 	  token = G_TOKEN_FLOAT;
+	  dotted_float = TRUE;
 	  ch = g_scanner_get_char (scanner, line_p, position_p);
 	  goto number_parsing;
 	  
@@ -868,7 +871,7 @@ g_scanner_get_token_ll	(GScanner	*scanner,
 	if (token == G_TOKEN_NONE)
 	  token = G_TOKEN_INT;
 	
-	gstring = g_string_new ("");
+	gstring = g_string_new (dotted_float ? "0." : "");
 	gstring = g_string_append_c (gstring, ch);
 	in_number = TRUE;
 	while (in_number)

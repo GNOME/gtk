@@ -1,3 +1,8 @@
+Mon Apr  6 18:43:25 1998  Tim Janik  <timj@gtk.org>
+
+	* gscanner.c (g_scanner_get_token_ll): fixed a bug that caused floats
+	of the format ".xxx" to be parsed as "xxx".
+
 Fri Apr  3 20:36:35 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gutils.c (g_parse_debug_string): Make debug string
