@@ -14,11 +14,11 @@ gint delete_event( GtkWidget *widget,
 /* Make a new hbox filled with button-labels. Arguments for the 
  * variables we're interested are passed in to this function. 
  * We do not show the box, but do show everything inside. */
-GtkWidget *make_box( gint homogeneous,
-                     gint spacing,
-		     gint expand,
-		     gint fill,
-		     gint padding ) 
+GtkWidget *make_box( gboolean homogeneous,
+                     gint     spacing,
+		     gboolean expand,
+		     gboolean fill,
+		     guint    padding ) 
 {
     GtkWidget *box;
     GtkWidget *button;
@@ -285,7 +285,7 @@ int main( int   argc,
     gtk_main ();
 
     /* Control returns here when gtk_main_quit() is called, but not when 
-     * gtk_exit is used. */
+     * exit() is used. */
     
     return 0;
 }

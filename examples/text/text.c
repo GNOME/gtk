@@ -1,6 +1,4 @@
 
-/* text.c */
-
 #define GTK_ENABLE_BROKEN
 #include <stdio.h>
 #include <gtk/gtk.h>

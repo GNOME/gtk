@@ -5,44 +5,31 @@
 /* Create a new hbox with an image and a label packed into it
  * and return the box. */
 
-GtkWidget *xpm_label_box( GtkWidget *parent,
-                          gchar     *xpm_filename,
+GtkWidget *xpm_label_box( gchar     *xpm_filename,
                           gchar     *label_text )
 {
-    GtkWidget *box1;
+    GtkWidget *box;
     GtkWidget *label;
-    GtkWidget *pixmapwid;
-    GdkPixmap *pixmap;
-    GdkBitmap *mask;
-    GtkStyle *style;
+    GtkWidget *image;
 
-    /* Create box for xpm and label */
-    box1 = gtk_hbox_new (FALSE, 0);
-    gtk_container_set_border_width (GTK_CONTAINER (box1), 2);
+    /* Create box for image and label */
+    box = gtk_hbox_new (FALSE, 0);
+    gtk_container_set_border_width (GTK_CONTAINER (box), 2);
 
-    /* Get the style of the button to get the
-     * background color. */
-    style = gtk_widget_get_style (parent);
-
-    /* Now on to the xpm stuff */
-    pixmap = gdk_pixmap_create_from_xpm (parent->window, &mask,
-					 &style->bg[GTK_STATE_NORMAL],
-					 xpm_filename);
-    pixmapwid = gtk_image_new_from_file (xpm_filename);
+    /* Now on to the image stuff */
+    image = gtk_image_new_from_file (xpm_filename);
 
     /* Create a label for the button */
     label = gtk_label_new (label_text);
 
-    /* Pack the pixmap and label into the box */
-    gtk_box_pack_start (GTK_BOX (box1),
-			pixmapwid, FALSE, FALSE, 3);
+    /* Pack the image and label into the box */
+    gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 3);
+    gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 3);
 
-    gtk_box_pack_start (GTK_BOX (box1), label, FALSE, FALSE, 3);
-
-    gtk_widget_show (pixmapwid);
+    gtk_widget_show (image);
     gtk_widget_show (label);
 
-    return box1;
+    return box;
 }
 
 /* Our usual callback function */
@@ -58,7 +45,7 @@ int main( int   argc,
     /* GtkWidget is the storage type for widgets */
     GtkWidget *window;
     GtkWidget *button;
-    GtkWidget *box1;
+    GtkWidget *box;
 
     gtk_init (&argc, &argv);
 
@@ -76,7 +63,6 @@ int main( int   argc,
 
     /* Sets the border width of the window. */
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
-    gtk_widget_realize (window);
 
     /* Create a new button */
     button = gtk_button_new ();
@@ -86,12 +72,12 @@ int main( int   argc,
 		      G_CALLBACK (callback), (gpointer) "cool button");
 
     /* This calls our box creating function */
-    box1 = xpm_label_box(window, "info.xpm", "cool button");
+    box = xpm_label_box ("info.xpm", "cool button");
 
     /* Pack and show all our widgets */
-    gtk_widget_show (box1);
+    gtk_widget_show (box);
 
-    gtk_container_add (GTK_CONTAINER (button), box1);
+    gtk_container_add (GTK_CONTAINER (button), box);
 
     gtk_widget_show (button);
 

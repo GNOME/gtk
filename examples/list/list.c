@@ -1,7 +1,4 @@
 
-/* Include the GTK header files
- * Include stdio.h, we need that for the printf() function
- */
 #include <gtk/gtk.h>
 #include <stdio.h>
 

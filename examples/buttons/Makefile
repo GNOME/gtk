@@ -1,7 +1,7 @@
 
 CC = gcc
 
-CFLAGS = -Wall			 	\
+CFLAGS = -Wall -Wunused		 	\
 	-DG_DISABLE_DEPRECATED 	 	\
 	-DGDK_DISABLE_DEPRECATED 	\
 	-DGDK_PIXBUF_DISABLE_DEPRECATED \

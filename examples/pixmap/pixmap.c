@@ -57,8 +57,8 @@ int main( int   argc,
        the application */
     gtk_init (&argc, &argv);
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_signal_connect (G_OBJECT (window), "delete_event",
-                        G_CALLBACK (close_application), NULL);
+    g_signal_connect (G_OBJECT (window), "delete_event",
+                      G_CALLBACK (close_application), NULL);
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     gtk_widget_show (window);
 
