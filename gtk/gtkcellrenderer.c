@@ -67,6 +67,7 @@ enum {
 /* Signal IDs */
 enum {
   EDITING_CANCELED,
+  EDITING_STARTED,
   LAST_SIGNAL
 };
 
@@ -134,13 +135,12 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
    *
    * This signal gets emitted when the user cancels the process of editing a
    * cell.  For example, an editable cell renderer could be written to cancel
-   * editing when the user presses Escape.
+   * editing when the user presses Escape. 
    *
    * See also: gtk_cell_renderer_editing_canceled()
    *
    * Since: 2.4
    */
-
   cell_renderer_signals[EDITING_CANCELED] =
     g_signal_new ("editing-canceled",
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -149,6 +149,53 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkCellRenderer::editing-started:
+   * @renderer: the object which received the signal
+   * @editable: the #GtkCellEditable
+   * @path: the path identifying the edited cell
+   *
+   * This signal gets emitted when a cell starts to be edited.
+   * The indended use of this signal is to do special setup
+   * on @editable, e.g. adding a #GtkEntryCompletion or setting
+   * up additional columns in a #GtkComboBox.
+   *
+   * Note that GTK+ doesn't guarantee that cell renderers will
+   * continue to use the same kind of widget for editing in future
+   * releases, therefore you should check the type of @editable
+   * before doing any specific setup, as in the following example:
+   *
+   * <informalexample><programlisting>
+   * static void
+   * text_editing_started (GtkCellRenderer *cell,
+   *                       GtkCellEditable *editable,
+   *                       const gchar     *path,
+   *                       gpointer         data)
+   * {
+   *   if (GTK_IS_ENTRY (editable)) 
+   *     {
+   *       GtkEntry *entry = GTK_ENTRY (editable);
+   *       
+   *       /* ... create a GtkEntryCompletion *<!-- -->/
+   *
+   *       gtk_entry_set_completion (entry, completion);
+   *     }
+   * }
+   * </programlisting></informalexample>
+   *
+   * Since: 2.6
+   */
+  cell_renderer_signals[EDITING_STARTED] =
+    g_signal_new ("editing-started",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkCellRendererClass, editing_started),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT_STRING,
+		  G_TYPE_NONE, 2,
+		  GTK_TYPE_CELL_EDITABLE,
+		  G_TYPE_STRING);
 
   g_object_class_install_property (object_class,
 				   PROP_MODE,
@@ -629,6 +676,8 @@ gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
 				 GtkCellRendererState  flags)
 
 {
+  GtkCellEditable *editable;
+
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), NULL);
 
   if (cell->mode != GTK_CELL_RENDERER_MODE_EDITABLE)
@@ -638,13 +687,19 @@ gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
     return NULL;
 
   
-  return GTK_CELL_RENDERER_GET_CLASS (cell)->start_editing (cell,
-							    event,
-							    widget,
-							    path,
-							    background_area,
-							    cell_area,
-							    flags);
+  editable = GTK_CELL_RENDERER_GET_CLASS (cell)->start_editing (cell,
+								event,
+								widget,
+								path,
+								background_area,
+								cell_area,
+								flags);
+
+  g_signal_emit (cell, 
+		 cell_renderer_signals[EDITING_STARTED], 0,
+		 editable, path);
+
+  return editable;
 }
 
 /**

@@ -110,11 +110,13 @@ struct _GtkCellRendererClass
 
   /* Signals */
   void (* editing_canceled) (GtkCellRenderer *cell);
+  void (* editing_started)  (GtkCellRenderer *cell,
+			     GtkCellEditable *editable,
+			     const gchar     *path);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
 };
 
 GType            gtk_cell_renderer_get_type       (void) G_GNUC_CONST;

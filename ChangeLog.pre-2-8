@@ -1,3 +1,13 @@
+2004-07-20  Matthias Clasen  <mclasen@redhat.com>
+
+	Allow custom initialization of cell editables.  (#147221)
+	
+	* gtk/gtkcellrenderer.h (struct _GtkCellRendererClass): 
+	* gtk/gtkcellrenderer.c (gtk_cell_renderer_class_init): Add a 
+	::editing-started signal as a hook for setting up the 
+	GtkCellEditable.
+	(gtk_cell_renderer_start_editing): ...and emit it here.
+
 Mon Jul 19 23:51:50 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeview.c (gtk_tree_view_button_press): Set drag_pos
