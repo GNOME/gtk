@@ -32,8 +32,7 @@ typedef enum
   GTK_RBNODE_IS_PARENT = 1 << 2,
   GTK_RBNODE_IS_SELECTED = 1 << 3,
   GTK_RBNODE_IS_PRELIT = 1 << 4,
-  GTK_RBNODE_IS_VIEW = 1 << 5,
-  GTK_RBNODE_NON_COLORS = GTK_RBNODE_IS_PARENT | GTK_RBNODE_IS_SELECTED | GTK_RBNODE_IS_PRELIT | GTK_RBNODE_IS_VIEW,
+  GTK_RBNODE_NON_COLORS = GTK_RBNODE_IS_PARENT | GTK_RBNODE_IS_SELECTED | GTK_RBNODE_IS_PRELIT,
 } GtkRBNodeColor;
 
 typedef struct _GtkRBTree GtkRBTree;
@@ -110,6 +109,9 @@ GtkRBNode *_gtk_rbtree_insert_after     (GtkRBTree              *tree,
 					 gint                    height);
 void       _gtk_rbtree_remove_node      (GtkRBTree              *tree,
 					 GtkRBNode              *node);
+void       _gtk_rbtree_reorder          (GtkRBTree              *tree,
+					 gint                   *new_order,
+					 gint                    length);
 GtkRBNode *_gtk_rbtree_find_count       (GtkRBTree              *tree,
 					 gint                    count);
 void       _gtk_rbtree_node_set_height  (GtkRBTree              *tree,

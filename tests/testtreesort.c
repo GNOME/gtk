@@ -16,7 +16,7 @@ static ListSort data[] =
   { "Oranges", "Wicker", "Adamantine", "Convivial" },
   { "Bovine Spongiform Encephilopathy", "Sleazebucket", "Mountaineer", "Pander" },
   { "Foot and Mouth", "Lampshade", "Skim Milk Full Milk", "Viewless" },
-  { "Blood, sweat, tears", "The Man", "Horses", "Muckety-Muck" },
+  { "Blood,\nsweat,\ntears", "The Man", "Horses", "Muckety-Muck" },
   { "Rare Steak", "Siam", "Watchdog", "Xantippe" },
   { "SIGINT", "Rabbit Breath", "Alligator", "Bloodstained" },
   { "Google", "Chrysanthemums", "Hobnob", "Leapfrog"},

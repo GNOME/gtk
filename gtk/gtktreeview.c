@@ -3016,7 +3016,8 @@ gtk_tree_view_reordered (GtkTreeModel *model,
 			 gpointer      data)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (data);
-  GArray *array;
+  GtkRBTree *tree;
+  GtkRBNode *node;
   gint len;
 
   len = gtk_tree_model_iter_n_children (model, iter);
@@ -3024,7 +3025,25 @@ gtk_tree_view_reordered (GtkTreeModel *model,
   if (len < 2)
     return;
 
-  gtk_widget_queue_draw (GTK_WIDGET (data));
+  if (_gtk_tree_view_find_node (tree_view,
+				parent,
+				&tree,
+				&node))
+    return;
+
+  /* We need to special case the parent path */
+  if (tree == NULL)
+    tree = tree_view->priv->tree;
+  else
+    tree = node->children;
+
+  if (tree == NULL)
+    return;
+
+  /* FIXME: we need to unprelight our tree, if it's prelit. */
+  _gtk_rbtree_reorder (tree, new_order, len);
+
+  gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 }
 
 /* Internal tree functions */
@@ -3474,9 +3493,7 @@ _gtk_tree_view_find_path (GtkTreeView *tree_view,
   return path;
 }
 
-/* Returns TRUE if we ran out of tree before finding the node,
- * so the returned node is the last node we saw and the returned
- * tree is NULL
+/* Returns TRUE if we ran out of tree before finding the path.
  */
 gboolean
 _gtk_tree_view_find_node (GtkTreeView  *tree_view,
@@ -3493,6 +3510,8 @@ _gtk_tree_view_find_node (GtkTreeView  *tree_view,
   *node = NULL;
   *tree = NULL;
 
+  if (depth == 0)
+    return FALSE;
   do
     {
       if (tmptree == NULL)

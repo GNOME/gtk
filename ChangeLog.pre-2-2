@@ -1,3 +1,12 @@
+Wed Mar 28 17:27:12 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkrbtree.c (_gtk_rbtree_reorder): new function to
+	handle reordering of trees.  Seems to mostly work w/ the exception
+	of the parity flag.
+
+	* gtk/gtktreeview.c (gtk_tree_view_reordered): handle "reordered"
+	signal.
+
 Wed Mar 28 21:12:37 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.h: c++ fixes.
