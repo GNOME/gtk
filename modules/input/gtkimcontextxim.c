@@ -560,6 +560,8 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   if (status == XBufferOverflow)
     {
       buffer_size = num_bytes;
+      if (buffer != static_buffer) 
+	g_free (buffer);
       buffer = g_malloc (num_bytes + 1);
       goto again;
     }
@@ -589,6 +591,9 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
 	  g_free (result_utf8);
 	}
     }
+
+  if (buffer != static_buffer) 
+    g_free (buffer);
 
   return result;
 }
