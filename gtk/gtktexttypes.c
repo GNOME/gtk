@@ -47,8 +47,6 @@ gtk_text_view_tab_array_unref(GtkTextTabArray *tab_array)
  * API, eventually should just use libunicode/Pango directly)
  */
 
-#include <unicode.h>
-
 #if 0
 static void
 trigger_efence(const gchar *str, gint len)
@@ -73,7 +71,7 @@ gint
 gtk_text_view_num_utf_chars(const gchar *str, gint len)
 {
   trigger_efence(str, len);
-  return unicode_strlen(str, len);
+  return g_utf8_strlen(str, len);
 }
 
 /* FIXME we need a version of this function with error handling, so we
@@ -82,19 +80,18 @@ gtk_text_view_num_utf_chars(const gchar *str, gint len)
 gint
 gtk_text_utf_to_unichar(const gchar *str, GtkTextUniChar *chPtr)
 {
-  unicode_char_t ch;
-  gchar *end;
+  gunichar ch;
 
-  end = unicode_get_utf8(str, &ch);
+  ch = g_utf8_get_char (str);
 
-  if (end == NULL)
+  if (ch == (gunichar)-1)
     g_error("Bad UTF8, need to add some error checking so this doesn't crash the program");
 
   *chPtr = ch;
 
   trigger_efence(str, end - str);
   
-  return end - str;
+  return g_utf8_next_char (str) - str;
 }
 
 gchar*
@@ -104,7 +101,7 @@ gtk_text_utf_prev(const gchar *str, const gchar *start)
 
   trigger_efence(start, str - start);
   
-  retval = unicode_previous_utf8(start, str);
+  retval = g_utf8_find_prev_char (start, str);
 
   return retval;
 }

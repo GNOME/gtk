@@ -29,12 +29,6 @@
 
 #if defined (GDK_WINDOWING_X11)
 #include "x11/gdkx.h"
-#elif defined (GDK_WINDOWING_WIN32)
-#include "win32/gdkwin32.h"
-#elif defined (GDK_WINDOWING_NANOX)
-#include "nanox/gdkprivate-nanox.h"
-#elif defined (GDK_WINDOWING_FB)
-#include "linux-fb/gdkprivate-fb.h"
 #endif
 #include "gdk/gdkkeysyms.h"
 #include "gtkcolorsel.h"

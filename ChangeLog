@@ -1,3 +1,29 @@
+Wed Jun 21 11:41:43 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c gtk/gtkimcontextsimple.c gtk/gtklabel.c
+	gtk/gtktexttypes.c gtk/testtext.c modules/linux-fb/basic.c:
+	Remove use of libunicode in favor of new GLib functions.
+
+	* gtk/gtkcolorsel.c: Remove conditional includes for FB, win32,
+	nano-x, framebuffer. The X11 include is just a hack until we get
+	the necessary functions in gdkcolor.h, so there is no reason to
+	add other includes of platforms.
+
+	* gtk/gtkwindow.c (gtk_window_compute_default_size): Revert 
+	window bigger than the screen change.
+
+        * gtk/testgtk.c: Revert some random changes from Elliot
+	that had no particular point and were causing testgtkrc
+	not to function correctly.
+	
+	* gdk/gdkregion-generic.h: Revert change from Elliot. Just
+	because GdkSegment and GdkRegionBox have the same fields,
+	it doesn't mean that 'typedef GdkSegment GdkRegionBox'
+	results in clearer code.
+
+	* gdk/x11/gdkinput-x11.c (gdk_input_common_select_events,
+	gdk_input_translate_coordinates): Fix missed GdkObjectification
+
 2000-06-18  Elliot Lee  <sopwith@redhat.com>
 
 	* gdk/Makefile.am, gdk/*/Makefile.am: Fix conditionality to work the "right" way.

@@ -8510,7 +8510,7 @@ do_exit (GtkWidget *widget, GtkWidget *window)
   gtk_main_quit ();
 }
 
-GtkWidget *
+void
 create_main_window (void)
 {
   struct {
@@ -8627,7 +8627,6 @@ create_main_window (void)
   for (i = 0; i < nbuttons; i++)
     {
       button = gtk_button_new_with_label (buttons[i].label);
-      gtk_widget_set_name(button, buttons[i].label);
       if (buttons[i].func)
         gtk_signal_connect (GTK_OBJECT (button), 
 			    "clicked", 
@@ -8654,8 +8653,6 @@ create_main_window (void)
   gtk_widget_grab_default (button);
 
   gtk_widget_show_all (window);
-
-  return window;
 }
 
 int
@@ -8685,7 +8682,9 @@ main (int argc, char *argv[])
 				"debug_msg",
 				1,
 				GTK_TYPE_STRING, "GtkWidgetClass <ctrl><release>9 test");
+
   create_main_window ();
+
   gtk_main ();
 
   return 0;

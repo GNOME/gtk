@@ -45,9 +45,12 @@ SOFTWARE.
 #ifndef __GDK_REGION_GENERIC_H__
 #define __GDK_REGION_GENERIC_H__
 
-#include "gdktypes.h"
+typedef struct _GdkRegionBox GdkRegionBox;
 
-typedef GdkSegment GdkRegionBox;
+struct _GdkRegionBox
+{
+  int x1, x2, y1, y2;
+};
 
 /* 
  *   clip region

@@ -29,7 +29,6 @@
 #include "gdk/gdkkeysyms.h"
 #include "gdk/gdki18n.h"
 #include <pango/pango.h>
-#include <unicode.h>
 
 
 enum {
@@ -333,13 +332,13 @@ gtk_label_pattern_to_attrs (GtkLabel *label)
 	{
 	  while (*p && *q && *q != '_')
 	    {
-	      p = unicode_next_utf8 (p);
+	      p = g_utf8_next_char (p);
 	      q++;
 	    }
 	  start = p;
 	  while (*p && *q && *q == '_')
 	    {
-	      p = unicode_next_utf8 (p);
+	      p = g_utf8_next_char (p);
 	      q++;
 	    }
 
@@ -647,7 +646,7 @@ gtk_label_parse_uline (GtkLabel    *label,
   /* Convert text to wide characters */
 
   new_str = g_new (gchar, strlen (str) + 1);
-  pattern = g_new (gchar, unicode_strlen (str, -1) + 1);
+  pattern = g_new (gchar, g_utf8_strlen (str, -1) + 1);
   
   underscore = FALSE;
 
@@ -657,17 +656,18 @@ gtk_label_parse_uline (GtkLabel    *label,
   
   while (*src)
     {
-      unicode_char_t c;
+      gunichar c;
       gchar *next_src;
-    
-      next_src = unicode_get_utf8 (src, &c);
-      if (!next_src)
+
+      c = g_utf8_get_char (src);
+      if (c == (gunichar)-1)
 	{
 	  g_warning ("Invalid input string");
 	  g_free (new_str);
 	  g_free (pattern);
 	  return GDK_VoidSymbol;
 	}
+      next_src = g_utf8_next_char (src);
       
       if (underscore)
 	{

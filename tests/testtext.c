@@ -3,7 +3,6 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unicode.h>
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
@@ -608,7 +607,6 @@ fill_file_buffer (GtkTextBuffer *buffer, const char *filename)
     {
       gint count;
       char *leftover, *next;
-      unicode_char_t wc;
       int to_read = 2047  - remaining;
       
       count = fread (buf + remaining, 1, to_read, f);
@@ -621,7 +619,7 @@ fill_file_buffer (GtkTextBuffer *buffer, const char *filename)
 	  if (!*leftover)
 	    break;
 	  
-	  next = unicode_get_utf8 (next, &wc);
+	  next = g_utf8_next_char (next);
 	}
 
       gtk_text_buffer_insert (buffer, &iter, buf, leftover - buf);

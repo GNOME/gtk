@@ -395,7 +395,7 @@ gdk_input_common_select_events(GdkWindow *window,
     gdk_input_common_find_events(window, gdkdev, 0, classes, &num_classes);
   else
     gdk_input_common_find_events(window, gdkdev, 
-				 ((GdkWindowPrivate *)window)->extension_events,
+				 ((GdkWindowObject *)window)->extension_events,
 				 classes, &num_classes);
   
   XSelectExtensionEvent (gdk_display,
@@ -453,14 +453,14 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
 				 gdouble *x, gdouble *y, gdouble *pressure,
 				 gdouble *xtilt, gdouble *ytilt)
 {
-  GdkDrawablePrivate *drawable_priv;
+  GdkWindowImplX11 *impl;
 
   int x_axis, y_axis, pressure_axis, xtilt_axis, ytilt_axis;
 
   double device_width, device_height;
   double x_offset, y_offset, x_scale, y_scale;
 
-  drawable_priv = (GdkDrawablePrivate *) input_window->window;
+  impl = GDK_WINDOW_IMPL_X11 (((GdkWindowObject *) input_window->window)->impl);
 
   x_axis = gdkdev->axis_for_use[GDK_AXIS_X];
   y_axis = gdkdev->axis_for_use[GDK_AXIS_Y];
@@ -486,26 +486,26 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
       double device_aspect = (device_height*gdkdev->axes[y_axis].resolution) /
 	(device_width*gdkdev->axes[x_axis].resolution);
 
-      if (device_aspect * drawable_priv->width >= drawable_priv->height)
+      if (device_aspect * impl->width >= impl->height)
 	{
 	  /* device taller than window */
-	  x_scale = drawable_priv->width / device_width;
+	  x_scale = impl->width / device_width;
 	  y_scale = (x_scale * gdkdev->axes[x_axis].resolution)
 	    / gdkdev->axes[y_axis].resolution;
 
 	  x_offset = 0;
 	  y_offset = -(device_height * y_scale - 
-			       drawable_priv->height)/2;
+			       impl->height)/2;
 	}
       else
 	{
 	  /* window taller than device */
-	  y_scale = drawable_priv->height / device_height;
+	  y_scale = impl->height / device_height;
 	  x_scale = (y_scale * gdkdev->axes[y_axis].resolution)
 	    / gdkdev->axes[x_axis].resolution;
 
 	  y_offset = 0;
-	  x_offset = - (device_width * x_scale - drawable_priv->width)/2;
+	  x_offset = - (device_width * x_scale - impl->width)/2;
 	}
     }
   

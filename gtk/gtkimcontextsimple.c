@@ -17,7 +17,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <unicode.h>
 #include <gdk/gdkkeysyms.h>
 #include "gtksignal.h"
 #include "gtkimcontextsimple.h"
@@ -781,71 +780,14 @@ gtk_im_context_simple_new (void)
   return GTK_IM_CONTEXT (gtk_type_new (GTK_TYPE_IM_CONTEXT_SIMPLE));
 }
 
-/**
- * unicode_guchar4_to_utf8:
- * @ch: a ISO10646 character code
- * @out: output buffer, must have at least 6 bytes of space.
- * 
- * Convert a single character to utf8
- * 
- * Return value: number of bytes written
- **/
-static int
-ucs4_to_utf8 (unicode_char_t c, char *outbuf)
-{
-  size_t len = 0;
-  int first;
-  int i;
-
-  if (c < 0x80)
-    {
-      first = 0;
-      len = 1;
-    }
-  else if (c < 0x800)
-    {
-      first = 0xc0;
-      len = 2;
-    }
-  else if (c < 0x10000)
-    {
-      first = 0xe0;
-      len = 3;
-    }
-   else if (c < 0x200000)
-    {
-      first = 0xf0;
-      len = 4;
-    }
-  else if (c < 0x4000000)
-    {
-      first = 0xf8;
-      len = 5;
-    }
-  else
-    {
-      first = 0xfc;
-      len = 6;
-    }
-
-  for (i = len - 1; i > 0; --i)
-    {
-      outbuf[i] = (c & 0x3f) | 0x80;
-      c >>= 6;
-    }
-  outbuf[0] = c | first;
-
-  return len;
-}
-
 static void
 gtk_im_context_simple_commit_char (GtkIMContext *context,
-				   unicode_char_t ch)
+				   gunichar ch)
 {
-  gchar buf[7];
+  gchar buf[10];
   gint len;
       
-  len = ucs4_to_utf8 (ch, buf);
+  len = g_unichar_to_utf8 (ch, buf);
   buf[len] = '\0';
 
   gtk_signal_emit_by_name (GTK_OBJECT (context), "commit", &buf);
@@ -878,7 +820,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
   GtkComposeSeq *seq;
   
-  unicode_char_t ch;
+  gunichar ch;
   int n_compose = 0;
   int i;
 

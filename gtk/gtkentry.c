@@ -36,7 +36,6 @@
 #include "gtkstyle.h"
 
 #include <pango/pango.h>
-#include <unicode.h>
 #include <glib-object.h>
 
 #define MIN_ENTRY_WIDTH  150
@@ -1172,8 +1171,6 @@ gtk_entry_ensure_layout (GtkEntry *entry)
 {
   GtkWidget *widget = GTK_WIDGET (entry);
   
-  PangoAttrList *attrs;
-
   if (!entry->layout)
     {
       entry->layout = gtk_widget_create_pango_layout (widget);
@@ -1216,10 +1213,10 @@ gtk_entry_draw_text (GtkEntry *entry)
 	{
 	  gint *ranges;
 	  gint n_ranges, i;
-	  gint start_index = unicode_offset_to_index (entry->text,
-						      MIN (editable->selection_start_pos, editable->selection_end_pos));
-	  gint end_index = unicode_offset_to_index (entry->text,
-						    MAX (editable->selection_start_pos, editable->selection_end_pos));
+	  gint start_index = g_utf8_offset_to_pointer (entry->text,
+						       MIN (editable->selection_start_pos, editable->selection_end_pos)) - entry->text;
+	  gint end_index = g_utf8_offset_to_pointer (entry->text,
+						     MAX (editable->selection_start_pos, editable->selection_end_pos)) - entry->text;
 	  GtkStateType selected_state = editable->has_selection ? GTK_STATE_SELECTED : GTK_STATE_ACTIVE;
 	  GdkRegion *clip_region = gdk_region_new ();
 
@@ -1335,7 +1332,7 @@ gtk_entry_find_position (GtkEntry *entry,
   pango_layout_line_x_to_index (line, x * PANGO_SCALE, &index, &trailing);
 
   if (trailing)
-    index = unicode_next_utf8 (entry->text + index) - entry->text;
+    index = g_utf8_next_char (entry->text + index) - entry->text;
 
   return index;
 }
@@ -1352,7 +1349,7 @@ gtk_entry_get_cursor_locations (GtkEntry *entry,
 
   gtk_entry_ensure_layout (entry);
   
-  index = unicode_offset_to_index (entry->text, editable->current_pos);
+  index = g_utf8_offset_to_pointer (entry->text, editable->current_pos) - entry->text;
   pango_layout_get_cursor_pos (entry->layout, index, &strong_pos, &weak_pos);
 
   if (strong_x)
@@ -1467,7 +1464,7 @@ gtk_entry_insert_text (GtkEditable *editable,
   if (new_text_length < 0)
     new_text_length = strlen (new_text);
 
-  n_chars = unicode_strlen (new_text, new_text_length);
+  n_chars = g_utf8_strlen (new_text, new_text_length);
   if (entry->text_max_length > 0 && n_chars + entry->text_length > entry->text_max_length)
     {
       gdk_beep ();
@@ -1497,7 +1494,7 @@ gtk_entry_insert_text (GtkEditable *editable,
       entry->text = g_realloc (entry->text, entry->text_size);
     }
 
-  index = unicode_offset_to_index (entry->text, *position);
+  index = g_utf8_offset_to_pointer (entry->text, *position) - entry->text;
 
   g_memmove (entry->text + index + new_text_length, entry->text + index, entry->n_bytes - index);
   memcpy (entry->text + index, new_text, new_text_length);
@@ -1544,8 +1541,8 @@ gtk_entry_delete_text (GtkEditable *editable,
       (start_pos >= 0) &&
       (end_pos <= entry->text_length))
     {
-      gint start_index = unicode_offset_to_index (entry->text, start_pos);
-      gint end_index = unicode_offset_to_index (entry->text, end_pos);
+      gint start_index = g_utf8_offset_to_pointer (entry->text, start_pos) - entry->text;
+      gint end_index = g_utf8_offset_to_pointer (entry->text, end_pos) - entry->text;
 
       g_memmove (entry->text + start_index, entry->text + end_index, entry->n_bytes - end_index);
       entry->text_length -= (end_pos - start_pos);
@@ -1597,8 +1594,8 @@ gtk_entry_get_chars      (GtkEditable   *editable,
   start_pos = MIN (entry->text_length, start_pos);
   end_pos = MIN (entry->text_length, end_pos);
 
-  start_index = unicode_offset_to_index (entry->text, start_pos);
-  end_index = unicode_offset_to_index (entry->text, end_pos);
+  start_index = g_utf8_offset_to_pointer (entry->text, start_pos) - entry->text;
+  end_index = g_utf8_offset_to_pointer (entry->text, end_pos) - entry->text;
 
   return g_strndup (entry->text + start_index, end_index - start_index);
 }
@@ -1613,7 +1610,7 @@ gtk_entry_move_cursor (GtkEditable *editable,
 
   entry = GTK_ENTRY (editable);
 
-  index  = unicode_offset_to_index (entry->text, editable->current_pos);
+  index = g_utf8_offset_to_pointer (entry->text, editable->current_pos) - entry->text;
   
   /* Horizontal motion */
 
@@ -1636,7 +1633,7 @@ gtk_entry_move_cursor_visually (GtkEditable *editable,
 
   entry = GTK_ENTRY (editable);
 
-  index  = unicode_offset_to_index (entry->text, editable->current_pos);
+  index = g_utf8_offset_to_pointer (entry->text, editable->current_pos) - entry->text;
   
   gtk_entry_ensure_layout (entry);
 
@@ -1659,12 +1656,12 @@ gtk_entry_move_cursor_visually (GtkEditable *editable,
 	break;
       
       if (new_trailing)
-	index = unicode_next_utf8 (entry->text + new_index) - entry->text;
+	index = g_utf8_next_char (entry->text + new_index) - entry->text;
       else
 	index = new_index;
     }
 
-  editable->current_pos = unicode_index_to_offset (entry->text, index);
+  editable->current_pos = g_utf8_pointer_to_offset (entry->text, entry->text + index);
 }
 
 static void

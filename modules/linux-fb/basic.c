@@ -24,7 +24,6 @@
 #include <glib.h>
 #include <pango/pango.h>
 #include "gdkprivate-fb.h"
-#include <unicode.h>
 #include <fribidi/fribidi.h>
 
 PangoGlyph
@@ -84,22 +83,6 @@ static PangoGlyph conv_euc (CharCache  *cache,
 static PangoGlyph conv_ucs4 (CharCache  *cache,
 			     Charset    *charset,
 			     const char *input);
-
-/* From pango/utils.h */
-typedef guint16 GUChar2;
-typedef guint32 GUChar4;
-
-gboolean _pango_utf8_iterate    (const char  *cur,
-				 const char **next,
-				 GUChar4     *wc_out);
-GUChar2 *_pango_utf8_to_ucs2    (const char  *str,
-				 gint         len);
-GUChar4 *_pango_utf8_to_ucs4    (const char  *str,
-			         int          len);
-int      _pango_guchar4_to_utf8 (GUChar4      c,
-				 char        *outbuf);
-int      _pango_utf8_len        (const char  *str,
-				 gint         limit);
 
 #include "tables-big.i"
 
@@ -189,7 +172,7 @@ char_cache_free (CharCache *cache)
 }
 
 PangoGlyph 
-find_char (CharCache *cache, PangoFont *font, GUChar4 wc, const char *input)
+find_char (CharCache *cache, PangoFont *font, gunichar wc, const char *input)
 {
   return FT_Get_Char_Index(PANGO_FB_FONT(font)->ftf, wc);
 }
@@ -231,15 +214,13 @@ conv_8bit (CharCache  *cache,
 {
   iconv_t cd;
   char outbuf;
-  const char *p;
   
   const char *inptr = input;
   size_t inbytesleft;
   char *outptr = &outbuf;
   size_t outbytesleft = 1;
 
-  _pango_utf8_iterate (input, &p, NULL);
-  inbytesleft = p - input;
+  inbytesleft = g_utf8_next_char (input) - input;
   
   cd = find_converter (cache, charset);
 
@@ -255,15 +236,13 @@ conv_euc (CharCache  *cache,
 {
   iconv_t cd;
   char outbuf[2];
-  const char *p;
 
   const char *inptr = input;
   size_t inbytesleft;
   char *outptr = outbuf;
   size_t outbytesleft = 2;
 
-  _pango_utf8_iterate (input, &p, NULL);
-  inbytesleft = p - input;
+  inbytesleft = g_utf8_next_char (input) - input;
   
   cd = find_converter (cache, charset);
 
@@ -280,10 +259,7 @@ conv_ucs4 (CharCache  *cache,
 	   Charset     *charset,
 	   const char *input)
 {
-  GUChar4 wc;
-  
-  unicode_get_utf8 (input, &wc);
-  return wc;
+  return g_utf8_get_char (input);
 }
 
 static void
@@ -332,7 +308,6 @@ basic_engine_shape (PangoFont        *font,
   int n_chars;
   int i;
   const char *p;
-  const char *next;
 
   CharCache *cache;
 
@@ -343,19 +318,19 @@ basic_engine_shape (PangoFont        *font,
 
   cache = get_char_cache (font);
 
-  n_chars = unicode_strlen (text, length);
+  n_chars = g_utf8_strlen (text, length);
   pango_glyph_string_set_size (glyphs, n_chars);
 
   p = text;
   for (i=0; i < n_chars; i++)
     {
-      GUChar4 wc;
+      gunichar wc;
       FriBidiChar mirrored_ch;
       PangoGlyph index;
       char buf[6];
       const char *input;
 
-      _pango_utf8_iterate (p, &next, &wc);
+      wc = g_utf8_get_char (p);
 
       input = p;
       if (analysis->level % 2)
@@ -363,7 +338,7 @@ basic_engine_shape (PangoFont        *font,
 	  {
 	    wc = mirrored_ch;
 	    
-	    _pango_guchar4_to_utf8 (wc, buf);
+	    g_unichar_to_utf8 (wc, buf);
 	    input = buf;
 	  }
 
@@ -378,7 +353,7 @@ basic_engine_shape (PangoFont        *font,
 	    {
 	      set_glyph (font, glyphs, i, p - text, index);
 	      
-	      if (unicode_type (wc) == UNICODE_NON_SPACING_MARK)
+	      if (g_unichar_type (wc) == G_UNICODE_NON_SPACING_MARK)
 		{
 		  if (i > 0)
 		    {
@@ -402,7 +377,7 @@ basic_engine_shape (PangoFont        *font,
 	    set_glyph (font, glyphs, i, p - text, pango_fb_get_unknown_glyph (font));
 	}
       
-      p = next;
+      p = g_utf8_next_char (p);
     }
 
   /* Simple bidi support... may have separate modules later */
@@ -434,13 +409,13 @@ basic_engine_get_coverage (PangoFont  *font,
 {
   CharCache *cache = get_char_cache (font);
   PangoCoverage *result = pango_coverage_new ();
-  GUChar4 wc;
+  gunichar wc;
 
   for (wc = 0; wc < 65536; wc++)
     {
       char buf[6];
 
-      _pango_guchar4_to_utf8 (wc, buf);
+      g_unichar_to_utf8 (wc, buf);
       if (find_char (cache, font, wc, buf))
 	pango_coverage_set (result, wc, PANGO_COVERAGE_EXACT);
     }
