@@ -25,7 +25,7 @@ do
 done
 
 echo -n "INSTALL..."
-if [ "x`grep $VERSION gtk+-$VERSION/INSTALL | wc -l | awk -F' ' '{print $1}'`" == "x2" ]; then 
+if [ "x`grep $VERSION gtk+-$VERSION/INSTALL | wc -l | awk -F' ' '{print $1}'`" == "x3" ]; then 
 	echo "ok" 
 else
 	echo "failed."

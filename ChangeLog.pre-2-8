@@ -1,3 +1,14 @@
+Sat Nov 21 18:41:13 CST 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* configure.in:
+	  INSTALL:
+	  NEWS:
+	  README:
+	  gtk+.spec:
+	  docs/gtk-config.1: Version incremented to 1.1.5
+
+	* Released GTK+ 1.1.5
+
 Sat Nov 21 18:53:13 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.c (gdk_window_get_deskrelative_origin): 
