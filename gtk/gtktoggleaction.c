@@ -151,6 +151,39 @@ gtk_toggle_action_init (GtkToggleAction *action)
   action->private_data->draw_as_radio = FALSE;
 }
 
+/**
+ * gtk_toggle_action_new:
+ * @name: A unique name for the action
+ * @label: The label displayed in menu items and on buttons
+ * @tooltip: A tooltip for the action
+ * @stock_id: The stock icon to display in widgets representing the action
+ *
+ * Creates a new #GtkToggleAction object. To add the action to
+ * a #GtkActionGroup and set the accelerator for the action,
+ * call gtk_action_group_add_action_with_accel().
+ *
+ * Return value: a new #GtkToggleAction
+ *
+ * Since: 2.4
+ */
+GtkToggleAction *
+gtk_toggle_action_new (const gchar *name,
+		       const gchar *label,
+		       const gchar *tooltip,
+		       const gchar *stock_id)
+{
+  GtkToggleAction *action;
+
+  action = g_object_new (GTK_TYPE_TOGGLE_ACTION,
+			 "name", name,
+			 "label", label,
+			 "tooltip", tooltip,
+			 "stock_id", stock_id,
+			 NULL);
+
+  return action;
+}
+
 static void
 get_property (GObject     *object,
 	      guint        prop_id,
@@ -169,7 +202,6 @@ get_property (GObject     *object,
       break;
     }
 }
-
 
 static void
 set_property (GObject      *object,

@@ -1,3 +1,18 @@
+Wed Jan  7 22:20:20 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkaction.h: 
+	* gtk/gtkaction.c (gtk_action_new):  
+	* gtk/gtktoggleaction.h: 
+	* gtk/gtktoggleaction.c (gtk_toggle_action_new): 
+	* gtk/gtkradioaction.h: 
+	* gtk/gtkradioaction.c (gtk_radio_action_new): Add creation 
+	functions for actions.
+
+	* gtk/gtkactiongroup.c (gtk_action_group_add_actions_full): 
+	(gtk_action_group_add_toggle_actions_full): 
+	(gtk_action_group_add_radio_actions_full): and use the
+	new functions here.  (#125322, Patch by Jeff Frank)
+
 Wed Jan  7 21:42:49 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkaccelmap.c (gtk_accel_map_lock_path): Fix grammar of 

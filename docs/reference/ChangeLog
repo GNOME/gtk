@@ -1,3 +1,8 @@
+Wed Jan  7 22:25:45 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_action_new, gtk_toggle_action_new,
+	gtk_radio_action_new, gtk_action_group_add_action_with_accel.
+
 Wed Jan  7 01:56:33 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf/tmpl/file-saving.sgml: Document GdkPixbufSaveFunc.

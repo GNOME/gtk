@@ -359,6 +359,39 @@ gtk_action_init (GtkAction *action)
   action->private_data->proxies = NULL;
 }
 
+/**
+ * gtk_action_new:
+ * @name: A unique name for the action
+ * @label: the label displayed in menu items and on buttons
+ * @tooltip: a tooltip for the action
+ * @stock_id: the stock icon to display in widgets representing the action
+ *
+ * Creates a new #GtkAction object. To add the action to a
+ * #GtkActionGroup and set the accelerator for the action,
+ * call gtk_action_group_add_action_with_accel().
+ *
+ * Return value: a new #GtkAction
+ *
+ * Since: 2.4
+ */
+GtkAction *
+gtk_action_new (const gchar *name,
+		const gchar *label,
+		const gchar *tooltip,
+		const gchar *stock_id)
+{
+  GtkAction *action;
+
+  action = g_object_new (GTK_TYPE_ACTION,
+			 "name", name,
+			 "label", label,
+			 "tooltip", tooltip,
+			 "stock_id", stock_id,
+			 NULL);
+
+  return action;
+}
+
 static void
 gtk_action_finalize (GObject *object)
 {

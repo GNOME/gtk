@@ -296,19 +296,20 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
 /**
  * gtk_action_group_add_action_with_accel:
  * @action_group: the action group (#GtkActionGroup)
- * @action : the action to add (#GtkAction)
- * @name :
- * @accelerator :
- * @stock_id :
+ * @action: the action to add (#GtkAction)
+ * @name: the name of the action to add
+ * @accelerator: the accelerator for the action, in
+ *   the format understood by gtk_accelerator_parse().
+ * @stock_id: the stock icon to display
  *
  * Adds an action object to the action group and sets up the accelerator.
  *
- * If @accelerator is NULL, attempt to use the accelerator associated with
+ * If @accelerator is %NULL, attempt to use the accelerator associated with
  * @stock_id.
  *
- * accel paths are set to 
- * <literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>.  
- * 
+ * Accel paths are set to
+ * <literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>.
+ *
  * Since: 2.4
  */
 void
@@ -476,12 +477,10 @@ gtk_action_group_add_actions_full (GtkActionGroup *action_group,
 	  tooltip = entries[i].tooltip;
 	}
 
-      action = g_object_new (GTK_TYPE_ACTION,
-			     "name", entries[i].name,
-			     "label", label,
-			     "tooltip", tooltip,
-			     "stock_id", entries[i].stock_id,
-			     NULL);
+      action = gtk_action_new (entries[i].name,
+			       label,
+			       tooltip,
+			       entries[i].stock_id);
 
       if (entries[i].callback)
 	g_signal_connect_data (action, "activate",
@@ -558,7 +557,7 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup       *action_group,
 
   for (i = 0; i < n_entries; i++)
     {
-      GtkAction *action;
+      GtkToggleAction *action;
       const gchar *label;
       const gchar *tooltip;
 
@@ -573,22 +572,20 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup       *action_group,
 	  tooltip = entries[i].tooltip;
 	}
 
-      action = g_object_new (GTK_TYPE_TOGGLE_ACTION,
-			     "name", entries[i].name,
-			     "label", label,
-			     "tooltip", tooltip,
-			     "stock_id", entries[i].stock_id,
-			     NULL);
+      action = gtk_toggle_action_new (entries[i].name,
+				      label,
+				      tooltip,
+				      entries[i].stock_id);
 
-      gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), 
-				    entries[i].is_active);
+      gtk_toggle_action_set_active (action, entries[i].is_active);
 
       if (entries[i].callback)
 	g_signal_connect_data (action, "activate",
 			       entries[i].callback, 
 			       user_data, (GClosureNotify)destroy, 0);
 
-      gtk_action_group_add_action_with_accel (action_group, action,
+      gtk_action_group_add_action_with_accel (action_group, 
+					      action,
 					      entries[i].name,
 					      entries[i].accelerator,
 					      entries[i].stock_id);
@@ -670,7 +667,7 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
 
   for (i = 0; i < n_entries; i++)
     {
-      GtkAction *action;
+      GtkRadioAction *action;
       const gchar *label;
       const gchar *tooltip; 
 
@@ -685,24 +682,23 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
 	  tooltip = entries[i].tooltip;
 	}
 
-      action = g_object_new (GTK_TYPE_RADIO_ACTION,
-			     "name", entries[i].name,
-			     "label", label,
-			     "tooltip", tooltip,
-			     "stock_id", entries[i].stock_id,
-			     "value", entries[i].value,
-			     NULL);
+      action = gtk_radio_action_new (entries[i].name,
+				     label,
+				     tooltip,
+				     entries[i].stock_id,
+				     value);
 
       if (i == 0) 
 	first_action = action;
 
-      gtk_radio_action_set_group (GTK_RADIO_ACTION (action), group);
-      group = gtk_radio_action_get_group (GTK_RADIO_ACTION (action));
+      gtk_radio_action_set_group (action, group);
+      group = gtk_radio_action_get_group (action);
 
       if (value == entries[i].value)
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
+	gtk_toggle_action_set_active (action, TRUE);
 
-      gtk_action_group_add_action_with_accel (action_group, action,
+      gtk_action_group_add_action_with_accel (action_group, 
+					      action,
 					      entries[i].name,
 					      entries[i].accelerator,
 					      entries[i].stock_id);

@@ -102,6 +102,7 @@ gtk_accessible_get_type
 <FILE>gtkaction</FILE>
 <TITLE>GtkAction</TITLE>
 GtkAction
+gtk_action_new
 gtk_action_get_name
 gtk_action_activate
 gtk_action_create_icon
@@ -138,6 +139,7 @@ gtk_action_group_get_name
 gtk_action_group_get_action
 gtk_action_group_list_actions
 gtk_action_group_add_action
+gtk_action_group_add_action_with_accel
 gtk_action_group_remove_action
 GtkActionEntry
 gtk_action_group_add_actions
@@ -2325,6 +2327,7 @@ gtk_progress_bar_get_type
 <FILE>gtkradioaction</FILE>
 <TITLE>GtkRadioAction</TITLE>
 GtkRadioAction
+gtk_radio_action_new
 gtk_radio_action_get_group
 gtk_radio_action_set_group
 gtk_radio_action_get_current_value
@@ -3107,6 +3110,7 @@ gtk_tips_query_get_type
 <FILE>gtktoggleaction</FILE>
 <TITLE>GtkToggleAction</TITLE>
 GtkToggleAction
+gtk_toggle_action_new
 gtk_toggle_action_toggled
 gtk_toggle_action_set_active
 gtk_toggle_action_get_active

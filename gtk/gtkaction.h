@@ -81,6 +81,10 @@ struct _GtkActionClass
 };
 
 GType        gtk_action_get_type               (void);
+GtkAction   *gtk_action_new                    (const gchar *name,
+						const gchar *label,
+						const gchar *tooltip,
+						const gchar *stock_id);
 const gchar* gtk_action_get_name               (GtkAction     *action);
 void         gtk_action_activate               (GtkAction     *action);
 GtkWidget*   gtk_action_create_icon            (GtkAction     *action,
