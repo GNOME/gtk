@@ -853,7 +853,7 @@ gtk_label_setup_mnemonic (GtkLabel *label,
 	  _gtk_menu_shell_remove_mnemonic (GTK_MENU_SHELL (mnemonic_menu),
 					   last_key,
 					   widget);
-	  label->mnemonic_window = NULL;
+	  mnemonic_menu = NULL;
 	}
     }
   

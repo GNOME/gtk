@@ -1,3 +1,8 @@
+2004-12-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_setup_mnemonic): Fix a 
+	copy-and-paste error, noticed by Robert Ögren.
+
 2004-12-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_menu_fill_level) 
