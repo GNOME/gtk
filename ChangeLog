@@ -1,3 +1,11 @@
+Fri Mar 29 18:09:18 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccelgroup.c (gtk_accel_group_query): Call 
+	gdk_keyval_to_lower() on the key passed in, since we
+	lowercase all other key vals passed in, so querying
+	keyvals will otherwise fail if the caller used
+	an uppercase accelerators (#76899, Vitaly Tishkov)
+
 Fri Mar 29 17:41:21 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmain.c (load_modules): Fix screwup in handling

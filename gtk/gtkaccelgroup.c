@@ -695,7 +695,7 @@ gtk_accel_group_query (GtkAccelGroup  *accel_group,
 
   g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), NULL);
 
-  entries = quick_accel_find (accel_group, accel_key, accel_mods, &n);
+  entries = quick_accel_find (accel_group, gdk_keyval_to_lower (accel_key), accel_mods, &n);
 
   if (n_entries)
     *n_entries = entries ? n : 0;
