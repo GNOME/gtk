@@ -1,3 +1,22 @@
+Wed Dec 17 21:23:01 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Yay! Fixed height mode! Hooray! (Part 2 of #80868).
+
+	* gtk/gtktreeview.c (gtk_tree_view_class_init),
+	(gtk_tree_view_init), (gtk_tree_view_set_property),
+	(gtk_tree_view_get_property), (gtk_tree_view_set_model): add a
+	fixed_height_mode property,
+	(intialize_fixed_height_mode), (do_validate_rows),
+	(column_sizing_notify), (gtk_tree_view_set_fixed_height_mode),
+	(gtk_tree_view_style_set), (gtk_tree_view_row_changed),
+	(gtk_tree_view_row_inserted), (gtk_tree_view_remove_column),
+	(gtk_tree_view_insert_column): implement fixed height mode,
+	(gtk_tree_view_append_column), (gtk_tree_view_insert_column),
+	(gtk_tree_view_insert_column_with_attributes),
+	(gtk_tree_view_insert_column_with_data_func): update docs.
+
+	* gtk/gtktreeprivate.h: add two fields to GtkTreePrivate.
+
 2003-12-07  Murray Cumming  <murrayc@usa.net>
  
  	* gtk/gtktreemodel.c:

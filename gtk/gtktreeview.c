@@ -122,7 +122,8 @@ enum {
   PROP_REORDERABLE,
   PROP_RULES_HINT,
   PROP_ENABLE_SEARCH,
-  PROP_SEARCH_COLUMN
+  PROP_SEARCH_COLUMN,
+  PROP_FIXED_HEIGHT_MODE
 };
 
 static void     gtk_tree_view_class_init           (GtkTreeViewClass *klass);
@@ -348,6 +349,11 @@ static void     gtk_tree_view_real_set_cursor                (GtkTreeView       
 							      gboolean           clear_and_select,
 							      gboolean           clamp_node);
 static gboolean gtk_tree_view_has_special_cell               (GtkTreeView       *tree_view);
+static void     column_sizing_notify                         (GObject           *object,
+                                                              GParamSpec        *pspec,
+                                                              gpointer           data);
+static void     gtk_tree_view_set_fixed_height_mode          (GtkTreeView       *tree_view,
+                                                              gboolean           enable);
 
 static gboolean expand_collapse_timeout                      (gpointer           data);
 static gboolean do_expand_collapse                           (GtkTreeView       *tree_view);
@@ -596,6 +602,14 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 						       G_MAXINT,
 						       0,
 						       G_PARAM_READWRITE));
+
+    g_object_class_install_property (o_class,
+                                     PROP_FIXED_HEIGHT_MODE,
+                                     g_param_spec_boolean ("fixed_height_mode",
+                                                           _("Fixed Height Mode"),
+                                                           _("Speeds up GtkTreeView by assuming that all rows have the same height"),
+                                                           FALSE,
+                                                           G_PARAM_READWRITE));
 
   /* Style properties */
 #define _TREE_VIEW_EXPANDER_SIZE 10
@@ -1030,6 +1044,8 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->reorderable = FALSE;
   tree_view->priv->presize_handler_timer = 0;
   tree_view->priv->scroll_sync_timer = 0;
+  tree_view->priv->fixed_height = -1;
+  tree_view->priv->fixed_height_mode = 0;
   tree_view->priv->fixed_height_check = 0;
   gtk_tree_view_set_adjustments (tree_view, NULL, NULL);
   tree_view->priv->selection = _gtk_tree_selection_new_with_tree_view (tree_view);
@@ -1086,6 +1102,9 @@ gtk_tree_view_set_property (GObject         *object,
     case PROP_SEARCH_COLUMN:
       gtk_tree_view_set_search_column (tree_view, g_value_get_int (value));
       break;
+    case PROP_FIXED_HEIGHT_MODE:
+      gtk_tree_view_set_fixed_height_mode (tree_view, g_value_get_boolean (value));
+      break;
     default:
       break;
     }
@@ -1129,6 +1148,9 @@ gtk_tree_view_get_property (GObject    *object,
       break;
     case PROP_SEARCH_COLUMN:
       g_value_set_int (value, tree_view->priv->search_column);
+      break;
+    case PROP_FIXED_HEIGHT_MODE:
+      g_value_set_boolean (value, tree_view->priv->fixed_height_mode);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -4438,6 +4460,37 @@ validate_visible_area (GtkTreeView *tree_view)
     gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 }
 
+static void
+initialize_fixed_height_mode (GtkTreeView *tree_view)
+{
+  if (!tree_view->priv->tree)
+    return;
+
+  if (tree_view->priv->fixed_height < 0)
+    {
+      GtkTreeIter iter;
+      GtkTreePath *path;
+
+      GtkRBTree *tree = NULL;
+      GtkRBNode *node = NULL;
+
+      tree = tree_view->priv->tree;
+      node = tree->root;
+
+      path = _gtk_tree_view_find_path (tree_view, tree, node);
+      gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
+
+      validate_row (tree_view, tree, node, &iter, path);
+
+      gtk_tree_path_free (path);
+
+      tree_view->priv->fixed_height = MAX (GTK_RBNODE_GET_HEIGHT (node),
+                                           tree_view->priv->expander_size);
+    }
+
+   _gtk_rbtree_set_fixed_height (tree_view->priv->tree,
+                                 tree_view->priv->fixed_height);
+}
 
 /* Our strategy for finding nodes to validate is a little convoluted.  We find
  * the left-most uninvalidated node.  We then try walking right, validating
@@ -4463,6 +4516,14 @@ do_validate_rows (GtkTreeView *tree_view)
 
   if (tree_view->priv->tree == NULL)
       return FALSE;
+
+  if (tree_view->priv->fixed_height_mode)
+    {
+      if (tree_view->priv->fixed_height < 0)
+        initialize_fixed_height_mode (tree_view);
+
+      return FALSE;
+    }
 
   do
     {
@@ -4524,6 +4585,7 @@ do_validate_rows (GtkTreeView *tree_view)
 	  path = _gtk_tree_view_find_path (tree_view, tree, node);
 	  gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
 	}
+
       validated_area = validate_row (tree_view, tree, node, &iter, path) ||
                        validated_area;
 
@@ -5892,6 +5954,59 @@ gtk_tree_view_has_special_cell (GtkTreeView *tree_view)
   return FALSE;
 }
 
+static void
+column_sizing_notify (GObject    *object,
+                      GParamSpec *pspec,
+                      gpointer    data)
+{
+  GtkTreeViewColumn *c = GTK_TREE_VIEW_COLUMN (object);
+
+  if (gtk_tree_view_column_get_sizing (c) != GTK_TREE_VIEW_COLUMN_FIXED)
+    /* disable fixed height mode */
+    g_object_set (data, "fixed_height_mode", FALSE, NULL);
+}
+
+static void
+gtk_tree_view_set_fixed_height_mode (GtkTreeView *tree_view,
+                                     gboolean     enable)
+{
+  GList *l;
+
+  if (tree_view->priv->fixed_height_mode && enable)
+    return;
+
+  if (!enable)
+    {
+      tree_view->priv->fixed_height_mode = 0;
+      tree_view->priv->fixed_height = -1;
+
+      /* force a revalidation */
+      install_presize_handler (tree_view);
+      return;
+    }
+
+  /* make sure all columns are of type FIXED */
+  for (l = tree_view->priv->columns; l; l = l->next)
+    {
+      GtkTreeViewColumn *c = l->data;
+
+      g_return_if_fail (gtk_tree_view_column_get_sizing (c) == GTK_TREE_VIEW_COLUMN_FIXED);
+    }
+
+  /* yes, we really have to do this is in a separate loop */
+  for (l = tree_view->priv->columns; l; l = l->next)
+    g_signal_connect (l->data, "notify::sizing",
+                      G_CALLBACK (column_sizing_notify), tree_view);
+
+  tree_view->priv->fixed_height_mode = 1;
+  tree_view->priv->fixed_height = -1;
+
+  if (!tree_view->priv->tree)
+    return;
+
+  initialize_fixed_height_mode (tree_view);
+}
+
 /* Returns TRUE if the focus is within the headers, after the focus operation is
  * done
  */
@@ -6175,6 +6290,7 @@ gtk_tree_view_style_set (GtkWidget *widget,
       _gtk_tree_view_column_cell_set_dirty (column, TRUE);
     }
 
+  tree_view->priv->fixed_height = -1;
   _gtk_rbtree_mark_invalid (tree_view->priv->tree);
 
   gtk_widget_queue_resize (widget);
@@ -6432,23 +6548,32 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
   if (tree == NULL)
     goto done;
 
-  _gtk_rbtree_node_mark_invalid (tree, node);
-  for (list = tree_view->priv->columns; list; list = list->next)
+  if (tree_view->priv->fixed_height_mode
+      && tree_view->priv->fixed_height >= 0)
     {
-      GtkTreeViewColumn *column;
+      _gtk_rbtree_node_set_height (tree, node, tree_view->priv->fixed_height);
+    }
+  else
+    {
+      _gtk_rbtree_node_mark_invalid (tree, node);
+      for (list = tree_view->priv->columns; list; list = list->next)
+        {
+          GtkTreeViewColumn *column;
 
-      column = list->data;
-      if (! column->visible)
-	continue;
+          column = list->data;
+          if (! column->visible)
+            continue;
 
-      if (column->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE)
-	{
-	  _gtk_tree_view_column_cell_set_dirty (column, TRUE);
-	}
+          if (column->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE)
+            {
+              _gtk_tree_view_column_cell_set_dirty (column, TRUE);
+            }
+        }
     }
 
  done:
-  install_presize_handler (tree_view);
+  if (!tree_view->priv->fixed_height_mode)
+    install_presize_handler (tree_view);
   if (free_path)
     gtk_tree_path_free (path);
 }
@@ -6538,6 +6663,10 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
       tmpnode = _gtk_rbtree_find_count (tree, indices[depth - 1]);
       _gtk_rbtree_insert_after (tree, tmpnode, 0, FALSE);
     }
+
+  if (tree_view->priv->fixed_height_mode
+      && tree_view->priv->fixed_height >= 0)
+    _gtk_rbtree_node_set_height (tree, tmpnode, tree_view->priv->fixed_height);
 
  done:
   install_presize_handler (tree_view);
@@ -8440,6 +8569,7 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 
       tree_view->priv->search_column = -1;
       tree_view->priv->fixed_height_check = 0;
+      tree_view->priv->fixed_height = -1;
       tree_view->priv->dy = tree_view->priv->top_row_dy = 0;
     }
 
@@ -8800,7 +8930,9 @@ gtk_tree_view_get_rules_hint (GtkTreeView  *tree_view)
  * @tree_view: A #GtkTreeView.
  * @column: The #GtkTreeViewColumn to add.
  *
- * Appends @column to the list of columns.
+ * Appends @column to the list of columns. If @tree_view has "fixed_height"
+ * mode enbabled, then @column must have its "sizing" property set to be
+ * GTK_TREE_VIEW_COLUMN_FIXED.
  *
  * Return value: The number of columns in @tree_view after appending.
  **/
@@ -8844,6 +8976,10 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
       tree_view->priv->edited_column = NULL;
     }
 
+  g_signal_handlers_disconnect_by_func (column,
+                                        G_CALLBACK (column_sizing_notify),
+                                        tree_view);
+
   _gtk_tree_view_column_unset_tree_view (column);
 
   tree_view->priv->columns = g_list_remove (tree_view->priv->columns, column);
@@ -8883,7 +9019,9 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
  * @position: The position to insert @column in.
  *
  * This inserts the @column into the @tree_view at @position.  If @position is
- * -1, then the column is inserted at the end.
+ * -1, then the column is inserted at the end. If @tree_view has
+ * "fixed_height" mode enabled, then @column must have its "sizing" property
+ * set to be GTK_TREE_VIEW_COLUMN_FIXED.
  *
  * Return value: The number of columns in @tree_view after insertion.
  **/
@@ -8896,6 +9034,10 @@ gtk_tree_view_insert_column (GtkTreeView       *tree_view,
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (column), -1);
   g_return_val_if_fail (column->tree_view == NULL, -1);
 
+  if (tree_view->priv->fixed_height_mode)
+    g_return_val_if_fail (gtk_tree_view_column_get_sizing (column)
+                          == GTK_TREE_VIEW_COLUMN_FIXED, -1);
+
   g_object_ref (column);
   gtk_object_sink (GTK_OBJECT (column));
 
@@ -8905,6 +9047,9 @@ gtk_tree_view_insert_column (GtkTreeView       *tree_view,
     {
       gdk_window_show (tree_view->priv->header_window);
     }
+
+  g_signal_connect (column, "notify::sizing",
+                    G_CALLBACK (column_sizing_notify), tree_view);
 
   tree_view->priv->columns = g_list_insert (tree_view->priv->columns,
 					    column, position);
@@ -8942,7 +9087,9 @@ gtk_tree_view_insert_column (GtkTreeView       *tree_view,
  *
  * Creates a new #GtkTreeViewColumn and inserts it into the @tree_view at
  * @position.  If @position is -1, then the newly created column is inserted at
- * the end.  The column is initialized with the attributes given.
+ * the end.  The column is initialized with the attributes given. If @tree_view
+ * has "fixed_height" mode enabled, then @column must have its sizing
+ * property set to be GTK_TREE_VIEW_COLUMN_FIXED.
  *
  * Return value: The number of columns in @tree_view after insertion.
  **/
@@ -8997,6 +9144,8 @@ gtk_tree_view_insert_column_with_attributes (GtkTreeView     *tree_view,
  * with the given cell renderer and a #GtkCellDataFunc to set cell renderer
  * attributes (normally using data from the model). See also
  * gtk_tree_view_column_set_cell_data_func(), gtk_tree_view_column_pack_start().
+ * If @tree_view has "fixed_height" mode enabled, then @column must have its
+ * "sizing" property set to be GTK_TREE_VIEW_COLUMN_FIXED.
  *
  * Return value: number of columns in the tree view post-insert
  **/

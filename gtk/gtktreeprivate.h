@@ -176,6 +176,9 @@ struct _GtkTreeViewPrivate
   gint press_start_x;
   gint press_start_y;
 
+  /* fixed height */
+  gint fixed_height;
+
   /* Scroll-to functionality when unrealized */
   GtkTreeRowReference *scroll_to_path;
   GtkTreeViewColumn *scroll_to_column;
@@ -183,6 +186,7 @@ struct _GtkTreeViewPrivate
   gfloat scroll_to_col_align;
   guint scroll_to_use_align : 1;
 
+  guint fixed_height_mode : 1;
   guint fixed_height_check : 1;
 
   guint reorderable : 1;
