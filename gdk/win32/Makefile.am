@@ -40,12 +40,12 @@ noinst_LTLIBRARIES = libgdk-win32.la
 SUBDIRS=rc
 
 EXTRA_DIST = \
+	bdfcursor.c \
 	makefile.mingw \
 	makefile.msc \
 	libwntab32x.la
 
 libgdk_win32_la_SOURCES = \
-	bdfcursor.c \
 	xcursors.h \
 	gdkcc-win32.c \
 	gdkcolor-win32.c \

@@ -1,3 +1,19 @@
+2002-03-13  Tor Lillqvist  <tml@iki.fi>
+
+	* configure.in: Output the Makefiles in the build subdirectory.
+
+	* gdk/win32/Makefile.am (EXTRA_DIST): Move bdfcursor.c here, it is
+	not part of the library sources.
+
+	* gdk/gdkwindow.c (gdk_window_get_toplevel): Fix silly bug,
+	actually return the toplevel found, not the original
+	parameter. (Backport from HEAD.)
+
+	* gdk/win32/gdkdnd-win32.c (gdk_drag_find_window): Use
+	gdk_window_get_toplevel(), as it is the top-level windows that are
+	registered for DND. This fixes drag-and-drop of layers from GIMP's
+	L,C&P dialog to GIMP's toolbox, for instance.
+
 2002-02-28  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkgc-win32.c (gdk_win32_colormap_color_pack): In the

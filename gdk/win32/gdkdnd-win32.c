@@ -949,10 +949,6 @@ gdk_drag_find_window (GdkDragContext  *context,
   HWND recipient;
   POINT pt;
 
-  GDK_NOTE (DND, g_print ("gdk_drag_find_window: %p +%d+%d\n",
-			  (drag_window ? GDK_DRAWABLE_XID (drag_window) : 0),
-			  x_root, y_root));
-
   pt.x = x_root;
   pt.y = y_root;
   recipient = WindowFromPoint (pt);
@@ -960,15 +956,23 @@ gdk_drag_find_window (GdkDragContext  *context,
     *dest_window = NULL;
   else
     {
+      /* It's always top-level windows that are registered for DND */
       *dest_window = gdk_window_lookup (recipient);
       if (*dest_window)
-	gdk_window_ref (*dest_window);
+	{
+	  *dest_window = gdk_window_get_toplevel (*dest_window);
+	  gdk_window_ref (*dest_window);
+	}
 
       if (context->source_window)
         *protocol = GDK_DRAG_PROTO_LOCAL;
       else
 	*protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
     }
+  GDK_NOTE (DND, g_print ("gdk_drag_find_window: %p +%d+%d: dest=%p proto=%d\n",
+			  (drag_window ? GDK_DRAWABLE_XID (drag_window) : 0),
+			  x_root, y_root,
+			  *dest_window, *protocol));
 }
 
 gboolean
@@ -1078,6 +1082,8 @@ gdk_drag_drop (GdkDragContext *context,
 {
   g_return_if_fail (context != NULL);
 
+  GDK_NOTE (DND, g_print ("gdk_drag_drop\n"));
+
   if (context->dest_window)
     {
       switch (context->protocol)
@@ -1102,6 +1108,8 @@ gdk_drag_abort (GdkDragContext *context,
 {
   g_return_if_fail (context != NULL);
 
+  GDK_NOTE (DND, g_print ("gdk_drag_abort\n"));
+
   gdk_drag_do_leave (context, time);
 }
 
@@ -1120,6 +1128,8 @@ gdk_drag_status (GdkDragContext *context,
   src_context = gdk_drag_context_find (TRUE,
 				       context->source_window,
 				       context->dest_window);
+
+  GDK_NOTE (DND, g_print ("gdk_drag_status, src_context=%p\n", src_context));
 
   if (src_context)
     {
@@ -1216,7 +1226,7 @@ gdk_destroy_filter (GdkXEvent *xev,
 }
 
 void
-gdk_window_register_dnd (GdkWindow      *window)
+gdk_window_register_dnd (GdkWindow *window)
 {
 #ifdef OLE2_DND
   target_drag_context *context;

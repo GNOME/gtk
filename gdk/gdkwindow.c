@@ -118,7 +118,7 @@ gdk_window_get_toplevel (GdkWindow *window)
   while (GDK_DRAWABLE_TYPE (private) == GDK_WINDOW_CHILD)
     private = (GdkWindowPrivate *)private->parent;
   
-  return (GdkWindow *)window;
+  return (GdkWindow *)private;
 }
 
 void          
