@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 2.3.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-02 17:21-0500\n"
-"PO-Revision-Date: 2004-02-26 16:28+0100\n"
+"POT-Creation-Date: 2004-03-04 17:16+0100\n"
+"PO-Revision-Date: 2004-03-04 17:16+0100\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -930,15 +930,15 @@ msgstr "_Palette"
 msgid "Color Selection"
 msgstr "Schriftwahl"
 
-#: gtk/gtkentry.c:4210 gtk/gtktextview.c:6900
+#: gtk/gtkentry.c:4213 gtk/gtktextview.c:6906
 msgid "Select _All"
 msgstr "A_lles markieren"
 
-#: gtk/gtkentry.c:4220 gtk/gtktextview.c:6910
+#: gtk/gtkentry.c:4223 gtk/gtktextview.c:6916
 msgid "Input _Methods"
 msgstr "Eingabe_methoden"
 
-#: gtk/gtkentry.c:4230 gtk/gtktextview.c:6921
+#: gtk/gtkentry.c:4233 gtk/gtktextview.c:6927
 msgid "_Insert Unicode Control Character"
 msgstr "_Unicode-Steuerzeichen einfügen"
 
@@ -966,7 +966,7 @@ msgstr ""
 "Es konnte kein Lesezeichen für %s hinzugefügt werden:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:638 gtk/gtkfilechooserdefault.c:4010
+#: gtk/gtkfilechooserdefault.c:638 gtk/gtkfilechooserdefault.c:4022
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -993,9 +993,8 @@ msgstr ""
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:1331 gtk/gtkfilechooserdefault.c:1854
-#, fuzzy
 msgid "Name"
-msgstr "_Name:"
+msgstr "Name"
 
 #: gtk/gtkfilechooserdefault.c:1422
 #, c-format
@@ -1050,84 +1049,89 @@ msgid "Create _Folder"
 msgstr "_Ordner anlegen"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:2047
+#: gtk/gtkfilechooserdefault.c:2050
 msgid "_Name:"
 msgstr "_Name:"
 
 #. Folder combo
-#: gtk/gtkfilechooserdefault.c:2066
+#: gtk/gtkfilechooserdefault.c:2069
 msgid "Save in _Folder:"
 msgstr "In _Ordner speichern:"
 
-#: gtk/gtkfilechooserdefault.c:2089
+#: gtk/gtkfilechooserdefault.c:2092
 msgid "_Browse for other folders"
 msgstr "Ordner-_Browser"
 
+#: gtk/gtkfilechooserdefault.c:2848
+#, c-format
+msgid "Could not set current folder: %s"
+msgstr "Momentaner Ordner konnte nicht festgelegt werden: %s"
+
 # CHECK - shortcuts == Lesezeichen?
-#: gtk/gtkfilechooserdefault.c:3262
+#: gtk/gtkfilechooserdefault.c:3274
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "Das Lesezeichen %s existiert nicht"
 
 # CHECK
-#: gtk/gtkfilechooserdefault.c:3834
+#: gtk/gtkfilechooserdefault.c:3846
 msgid "Type name of new folder"
-msgstr "Namen des anzulegenden Ordners eingeben"
+msgstr "Name des anzulegenden Ordners eingeben"
 
-#: gtk/gtkfilechooserdefault.c:3863
+#: gtk/gtkfilechooserdefault.c:3875
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d Byte"
 msgstr[1] "%d Bytes"
 
-#: gtk/gtkfilechooserdefault.c:3865
+#: gtk/gtkfilechooserdefault.c:3877
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:3867
+#: gtk/gtkfilechooserdefault.c:3879
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:3869
+#: gtk/gtkfilechooserdefault.c:3881
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:3914
+#: gtk/gtkfilechooserdefault.c:3926
 msgid "Today"
 msgstr "Heute"
 
-#: gtk/gtkfilechooserdefault.c:3916
+#: gtk/gtkfilechooserdefault.c:3928
 msgid "Yesterday"
 msgstr "Gestern"
 
 #. FIXME: Get the right format for the locale
-#: gtk/gtkfilechooserdefault.c:3925
+#: gtk/gtkfilechooserdefault.c:3937
 msgid "%d/%b/%Y"
 msgstr "%d.%m.%Y"
 
-#: gtk/gtkfilechooserdefault.c:3928
+#: gtk/gtkfilechooserdefault.c:3940
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: gtk/gtkfilechooserdefault.c:3973
+#: gtk/gtkfilechooserdefault.c:3985
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "Es konnte kein Lesezeichen für den angegebenen Ordner hinzugefügt werden, da "
 "dessen Pfad ungültige ist."
 
-#: gtk/gtkfilechooserdefault.c:4065
+#: gtk/gtkfilechooserdefault.c:4077
 msgid "Open Location"
 msgstr "Ort öffnen"
 
-#: gtk/gtkfilechooserdefault.c:4080
+#: gtk/gtkfilechooserdefault.c:4092
 msgid "_Location:"
 msgstr "_Ort:"
 
-#: gtk/gtkfilechooserdefault.c:4114
+#: gtk/gtkfilechooserdefault.c:4126
 #, c-format
 msgid ""
 "Could not go to the parent folder of %s:\n"
@@ -1337,7 +1341,7 @@ msgstr "Dieses Dateisystem unterstützt das Einbinden nicht"
 msgid "Filesystem"
 msgstr "Dateisystem"
 
-#: gtk/gtkfilesystemunix.c:471 gtk/gtkfilesystemunix.c:1376
+#: gtk/gtkfilesystemunix.c:471 gtk/gtkfilesystemunix.c:1375
 #: gtk/gtkfilesystemwin32.c:1175
 #, c-format
 msgid "error getting information for '%s': %s"
