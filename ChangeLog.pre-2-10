@@ -1,3 +1,10 @@
+2004-05-08  Hans Breuer  <hans@breuer.org>
+
+	Merge from HEAD:
+
+	* gtk/gtkfilesystemwin32.c (extract_icon) : finally also
+	create the correct mask for 'pseudo mime' icons
+
 Sun May  9 01:57:17 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_list_button_released): 
