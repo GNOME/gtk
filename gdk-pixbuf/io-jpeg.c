@@ -27,7 +27,7 @@
 
 
 /*
-  Progressive file loading notes (10/29/199) <drmike@redhat.com>...
+  Progressive file loading notes (11/03/1999) <drmike@redhat.com>...
 
   These are issues I know of and will be dealing with shortly:
 
@@ -35,8 +35,6 @@
        requires a change in the way image_load_increment () calls
        libjpeg. Progressive jpegs are rarer but I will add this
        support asap.
-
-    - gray images are not properly loaded
 
     - error handling is not as good as it should be
 
@@ -321,14 +319,14 @@ image_stop_load (gpointer data)
 	if (context->pixbuf)
 		gdk_pixbuf_unref (context->pixbuf);
 
+	jpeg_finish_decompress(&context->cinfo);
+	jpeg_destroy_decompress(&context->cinfo);
+
 	if (context->cinfo.src) {
 		my_src_ptr src = (my_src_ptr) context->cinfo.src;
 		
 		g_free (src);
 	}
-
-	jpeg_finish_decompress(&context->cinfo);
-	jpeg_destroy_decompress(&context->cinfo);
 
 	g_free (context);
 }
@@ -350,6 +348,9 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 	struct jpeg_decompress_struct *cinfo;
 	my_src_ptr  src;
 	guint       num_left, num_copy;
+	guint       last_bytes_left;
+	guint       spinguard;
+	guchar *bufhd;
 
 	g_return_val_if_fail (context != NULL, FALSE);
 	g_return_val_if_fail (buf != NULL, FALSE);
@@ -357,6 +358,11 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 	src = (my_src_ptr) context->cinfo.src;
 
 	cinfo = &context->cinfo;
+
+	/* XXXXXXX (drmike) - loop(s) below need to be recoded now I
+         *                    have a grasp of what the flow needs to be!
+         */
+
 
 	/* skip over data if requested, handle unsigned int sizes cleanly */
 	/* only can happen if we've already called jpeg_get_header once   */
@@ -366,31 +372,51 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 			return TRUE;
 		} else {
 			num_left = size - src->skip_next;
+			bufhd = buf + src->skip_next;
 			src->skip_next = 0;
 		}
 	} else {
 		num_left = size;
+		bufhd = buf;
 	}
 
 
-	while (num_left > 0) {
-		/* copy as much data into buffer as possible */
+	last_bytes_left = 0;
+	spinguard = 0;
+	while (src->pub.bytes_in_buffer != 0 || num_left != 0) {
 
-		if(src->pub.bytes_in_buffer && 
-		   src->pub.next_input_byte != src->buffer)
-			memmove(src->buffer, src->pub.next_input_byte,
-				src->pub.bytes_in_buffer);
+		/* handle any data from caller we haven't processed yet */
+		if (num_left > 0) {
+			if(src->pub.bytes_in_buffer && 
+			   src->pub.next_input_byte != src->buffer)
+				memmove(src->buffer, src->pub.next_input_byte,
+					src->pub.bytes_in_buffer);
 
-		num_copy = MIN (JPEG_PROG_BUF_SIZE - src->pub.bytes_in_buffer,
-				size);
 
-		if (num_copy == 0) 
-			g_error ("Buffer overflow!");
+			num_copy = MIN (JPEG_PROG_BUF_SIZE - src->pub.bytes_in_buffer,
+					num_left);
 
-		memcpy(src->buffer + src->pub.bytes_in_buffer, buf, num_copy);
-		src->pub.next_input_byte = src->buffer;
-		src->pub.bytes_in_buffer += num_copy;
-		num_left -= num_copy;
+/*			if (num_copy == 0) 
+				g_error ("Buffer overflow!");
+*/
+			memcpy(src->buffer + src->pub.bytes_in_buffer, bufhd,num_copy);
+			src->pub.next_input_byte = src->buffer;
+			src->pub.bytes_in_buffer += num_copy;
+			bufhd += num_copy;
+			num_left -= num_copy;
+		} else {
+		/* did anything change from last pass, if not return */
+			if (last_bytes_left == 0)
+				last_bytes_left = src->pub.bytes_in_buffer;
+			else if (src->pub.bytes_in_buffer == last_bytes_left)
+				spinguard++;
+			else
+				last_bytes_left = src->pub.bytes_in_buffer;
+		}
+
+		/* should not go through twice and not pull bytes out of buf */
+		if (spinguard > 2)
+			return TRUE;
 
 		/* try to load jpeg header */
 		if (!context->got_header) {
@@ -475,6 +501,8 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 					explode_gray_into_buf (cinfo, lines);
 
 				context->dptr += nlines * context->pixbuf->art_pixbuf->rowstride;
+
+#undef DEBUG_JPEG_PROGRESSIVE
 #ifdef DEBUG_JPEG_PROGRESSIVE
 				
 				if (start_scanline != cinfo->output_scanline)
@@ -494,7 +522,10 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 #endif
 			}
 			/* did entire image */
-			return TRUE;
+			if (cinfo->output_scanline >= cinfo->output_height)
+				return TRUE;
+			else
+				continue;
 		}
 	}
 
