@@ -549,6 +549,14 @@ gdk_pointer_grab (GdkWindow    *window,
   if (return_val == GDK_GRAB_SUCCESS)
     {
       p_grab_window = window;
+
+      if (p_grab_cursor != NULL)
+	{
+	  if (GetCursor () == p_grab_cursor)
+	    SetCursor (NULL);
+	  DestroyCursor (p_grab_cursor);
+	}
+
       p_grab_cursor = hcursor;
 
       if (p_grab_cursor != NULL)
