@@ -1,3 +1,11 @@
+Sun May  9 21:05:38 2004  Matthias Clasen  <maclas@gmx.de>
+
+        Merge from 2.4:
+
+	* gtk/gtkactiongroup.c (gtk_action_group_add_action_with_accel): 
+	Allow to suppress the stock accelerator by using "".  (#142196,
+	David A Knight)
+	
 Sun May  9 02:01:13 2004  Matthias Clasen  <maclas@gmx.de>
 
         Merge from 2.4:
