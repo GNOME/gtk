@@ -133,6 +133,10 @@ gdk_drawable_get_data (GdkDrawable   *drawable,
  * Fills *@width and *@height with the size of @drawable.
  * @width or @height can be %NULL if you only want the other one.
  * 
+ * On the X11 platform, if @drawable is a #GdkWindow, the returned
+ * size is the size reported in the most-recently-processed configure
+ * event, rather than the current size on the X server.
+ * 
  **/
 void
 gdk_drawable_get_size (GdkDrawable *drawable,
@@ -423,6 +427,34 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_text_wc (drawable, font, gc, x, y, text, text_length);
 }
 
+/**
+ * gdk_draw_drawable:
+ * @drawable: a #GdkDrawable
+ * @gc: a #GdkGC sharing the drawable's visual and colormap
+ * @src: another #GdkDrawable
+ * @xsrc: X position in @src of rectangle to draw
+ * @ysrc: Y position in @src of rectangle to draw
+ * @xdest: X position in @drawable where the rectangle should be drawn
+ * @ydest: Y position in @drawable where the rectangle should be drawn
+ * @width: width of rectangle to draw, or -1 for entire @src width
+ * @height: height of rectangle to draw, or -1 for entire @src height
+ *
+ * Copies the @width x @height region of @src at coordinates (@xsrc,
+ * @ysrc) to coordinates (@xdest, @ydest) in @drawable.
+ * @width and/or @height may be given as -1, in which case the entire
+ * @src drawable will be copied.
+ *
+ * Most fields in @gc are not used for this operation, but notably the
+ * clip mask or clip region will be honored.
+ *
+ * The source and destination drawables must have the same visual and
+ * colormap, or errors will result. (On X11, failure to match
+ * visual/colormap results in a BadMatch error from the X server.)
+ * A common cause of this problem is an attempt to draw a bitmap to
+ * a color drawable. The way to draw a bitmap is to set the
+ * bitmap as a clip mask on your #GdkGC, then use gdk_draw_rectangle()
+ * to draw a rectangle clipped to the bitmap.
+ **/
 void
 gdk_draw_drawable (GdkDrawable *drawable,
 		   GdkGC       *gc,
@@ -550,6 +582,25 @@ gdk_draw_lines (GdkDrawable *drawable,
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_lines (drawable, gc, points, npoints);
 }
 
+/**
+ * gdk_draw_glyphs:
+ * @drawable: a #GdkDrawable
+ * @gc: a #GdkGC
+ * @font: font to be used
+ * @x: X coordinate of baseline origin
+ * @y: Y coordinate of baseline origin
+ * @glyphs: glyphs to render
+ *
+ * This is a low-level function; 99% of text rendering should be done
+ * using gdk_draw_layout() instead.
+ *
+ * A glyph is a character in a font. This function draws a sequence of
+ * glyphs.  To obtain a sequence of glyphs you have to understand a
+ * lot about internationalized text handling, which you don't want to
+ * understand; thus, use gdk_draw_layout() instead of this function,
+ * gdk_draw_layout() handles the details.
+ * 
+ **/
 void
 gdk_draw_glyphs (GdkDrawable      *drawable,
 		 GdkGC            *gc,

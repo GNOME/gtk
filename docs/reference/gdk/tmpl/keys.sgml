@@ -169,6 +169,15 @@ gdk_keymap_translate_keyboard_state() just to get the keyval.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_keymap_get_direction ##### -->
+<para>
+
+</para>
+
+@keymap: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_keyval_name ##### -->
 <para>
 Converts a key value into a symbolic name.

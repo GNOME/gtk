@@ -147,6 +147,22 @@ X Window System Interaction
 @font: 
 
 
+<!-- ##### MACRO GDK_CURSOR_XCURSOR ##### -->
+<para>
+
+</para>
+
+@win: 
+
+
+<!-- ##### MACRO GDK_CURSOR_XDISPLAY ##### -->
+<para>
+
+</para>
+
+@win: 
+
+
 <!-- ##### MACRO GDK_GC_XGC ##### -->
 <para>
 
@@ -188,16 +204,6 @@ X Window System Interaction
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_get_client_window ##### -->
-<para>
-
-</para>
-
-@dpy: 
-@win: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gdk_pixmap_foreign_new ##### -->
 <para>
 
@@ -227,18 +233,20 @@ X Window System Interaction
 
 <!-- ##### MACRO gdk_window_lookup ##### -->
 <para>
-
+Obtains the #GdkWindow for the given Xlib window ID, or %NULL if no #GdkWindow has
+been created for @xid.
 </para>
 
-@xid: 
+@xid: Xlib window ID
 
 
 <!-- ##### MACRO gdk_pixmap_lookup ##### -->
 <para>
-
+Obtains the #GdkPixmap for the given Xlib pixmap ID, or %NULL if no #GdkPixmap has
+been created for @xid.
 </para>
 
-@xid: 
+@xid: Xlib window ID
 
 
 <!-- ##### MACRO gdk_font_lookup ##### -->
@@ -264,6 +272,170 @@ X Window System Interaction
 </para>
 
 @property: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_colormap_get_xcolormap ##### -->
+<para>
+
+</para>
+
+@colormap: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_colormap_get_xdisplay ##### -->
+<para>
+
+</para>
+
+@colormap: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_cursor_get_xcursor ##### -->
+<para>
+
+</para>
+
+@cursor: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_cursor_get_xdisplay ##### -->
+<para>
+
+</para>
+
+@cursor: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_drawable_get_xdisplay ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_drawable_get_xid ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_font_get_name ##### -->
+<para>
+
+</para>
+
+@font: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_font_get_xdisplay ##### -->
+<para>
+
+</para>
+
+@font: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_font_get_xfont ##### -->
+<para>
+
+</para>
+
+@font: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_gc_get_xdisplay ##### -->
+<para>
+
+</para>
+
+@gc: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_gc_get_xgc ##### -->
+<para>
+
+</para>
+
+@gc: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_get_default_root_xwindow ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_get_default_screen ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_get_default_xdisplay ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_grab_server ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_x11_image_get_xdisplay ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_image_get_ximage ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_ungrab_server ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_x11_visual_get_xvisual ##### -->
+<para>
+
+</para>
+
+@visual: 
 @Returns: 
 
 

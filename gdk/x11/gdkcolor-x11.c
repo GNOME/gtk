@@ -993,6 +993,24 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
   return nremaining;
 }
 
+/**
+ * gdk_colormap_query_color:
+ * @colormap: a #GdkColormap
+ * @pixel: pixel value in hardware display format
+ * @result: #GdkColor with red, green, blue fields initialized
+ * 
+ * Locates the RGB color in @colormap corresponding to the given
+ * hardware pixel @pixel. @pixel must be a valid pixel in the
+ * colormap; it's a programmer error to call this function with a
+ * pixel which is not in the colormap. Hardware pixels are normally
+ * obtained from gdk_colormap_alloc_colors(), or from a #GdkImage. (A
+ * #GdkImage contains image data in hardware format, a #GdkPixbuf
+ * contains image data in a canonical 24-bit RGB format.)
+ *
+ * This function is rarely useful, it's used for example to
+ * implement the eyedropper feature in #GtkColorSelection.
+ * 
+ **/
 void
 gdk_colormap_query_color (GdkColormap *colormap,
 			  gulong       pixel,
@@ -1027,6 +1045,7 @@ gdk_colormap_query_color (GdkColormap *colormap,
     result->blue =  xcolor.blue;
     break;
   case GDK_VISUAL_PSEUDO_COLOR:
+    g_return_if_fail (pixel < colormap->size);
     result->red = colormap->colors[pixel].red;
     result->green = colormap->colors[pixel].green;
     result->blue = colormap->colors[pixel].blue;

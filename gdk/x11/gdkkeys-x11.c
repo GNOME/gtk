@@ -100,6 +100,13 @@ static PangoDirection current_direction;
 static gboolean       have_direction = FALSE;
 static GdkKeymap *default_keymap = NULL;
 
+/**
+ * gdk_keymap_get_default:
+ * 
+ * Gets the #GdkKeymap for the default display.
+ * 
+ * Return value: the default keymap
+ **/
 GdkKeymap*
 gdk_keymap_get_default (void)
 {

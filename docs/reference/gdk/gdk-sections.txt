@@ -10,6 +10,11 @@ gdk_set_locale
 gdk_set_sm_client_id
 gdk_exit
 
+
+<SUBSECTION>
+gdk_get_program_class
+gdk_set_program_class
+
 <SUBSECTION>
 gdk_get_display
 
@@ -152,6 +157,8 @@ gdk_image_get
 gdk_image_ref
 gdk_image_unref
 gdk_image_destroy
+gdk_image_get_colormap
+gdk_image_set_colormap
 <SUBSECTION>
 gdk_image_put_pixel
 gdk_image_get_pixel
@@ -215,7 +222,9 @@ gdk_pixbuf_render_threshold_alpha
 gdk_pixbuf_render_to_drawable
 gdk_pixbuf_render_to_drawable_alpha
 gdk_pixbuf_render_pixmap_and_mask
+gdk_pixbuf_render_pixmap_and_mask_for_colormap
 gdk_pixbuf_get_from_drawable
+gdk_pixbuf_get_from_image
 </SECTION>
 
 <SECTION>
@@ -407,6 +416,8 @@ gdk_gc_copy
 gdk_gc_set_colormap
 gdk_gc_get_colormap
 
+gdk_gc_offset
+
 <SUBSECTION Standard>
 GDK_GC
 GDK_TYPE_GC
@@ -429,6 +440,7 @@ GDK_TYPE_SUBWINDOW_MODE
 <TITLE>Visuals</TITLE>
 <FILE>visuals</FILE>
 GdkVisual
+GdkVisualClass
 GdkVisualType
 GdkByteOrder
 gdk_query_depths
@@ -449,6 +461,11 @@ gdk_visual_unref
 GDK_TYPE_BYTE_ORDER
 GDK_TYPE_VISUAL_TYPE
 GDK_TYPE_VISUAL
+GDK_IS_VISUAL
+GDK_IS_VISUAL_CLASS
+GDK_VISUAL
+GDK_VISUAL_CLASS
+GDK_VISUAL_GET_CLASS
 
 <SUBSECTION Private>
 gdk_visual_get_type
@@ -457,16 +474,16 @@ gdk_visual_get_type
 <SECTION>
 <TITLE>Windows</TITLE>
 <FILE>windows</FILE>
-GdkWindowAttr
 GdkWindow
 GdkWindowType
 GdkWindowClass
-GdkWindowAttributesType
 GdkWindowHints
 GdkGeometry
 GdkGravity
 GdkWindowEdge
 GdkWindowTypeHint
+GdkWindowAttr
+GdkWindowAttributesType
 gdk_window_new
 gdk_window_destroy
 gdk_window_ref
@@ -474,6 +491,7 @@ gdk_window_unref
 gdk_window_get_window_type
 gdk_window_at_pointer
 gdk_window_show
+gdk_window_show_unraised
 gdk_window_hide
 gdk_window_is_visible
 gdk_window_is_viewable
@@ -516,6 +534,7 @@ gdk_window_thaw_updates
 gdk_window_process_all_updates
 gdk_window_process_updates
 gdk_window_set_debug_updates
+gdk_window_get_internal_paint_info
 
 <SUBSECTION>
 gdk_window_set_user_data
@@ -571,6 +590,12 @@ GdkWMDecoration
 gdk_window_set_functions
 GdkWMFunction
 gdk_window_get_toplevels
+gdk_get_default_root_window
+
+
+<SUBSECTION>
+GdkPointerHooks
+gdk_set_pointer_hooks
 
 <SUBSECTION Standard>
 GDK_WINDOW
@@ -697,6 +722,8 @@ gdk_region_spans_intersect_foreach
 
 <SUBSECTION Standard>
 GDK_TYPE_OVERLAP_TYPE
+GDK_TYPE_RECTANGLE
+gdk_rectangle_get_type
 </SECTION>
 
 <SECTION>
@@ -721,6 +748,7 @@ gdk_keymap_lookup_key
 gdk_keymap_translate_keyboard_state
 gdk_keymap_get_entries_for_keyval
 gdk_keymap_get_entries_for_keycode
+gdk_keymap_get_direction
 
 <SUBSECTION>
 gdk_keyval_name
@@ -750,6 +778,7 @@ GDK_KEYMAP_GET_CLASS
 <TITLE>Input Devices</TITLE>
 <FILE>input_devices</FILE>
 GdkDevice
+GdkDeviceClass
 GdkInputSource
 GdkInputMode
 GdkDeviceKey
@@ -761,6 +790,7 @@ gdk_device_set_source
 gdk_device_set_mode
 gdk_device_set_key
 gdk_device_set_axis_use
+gdk_device_get_core_pointer
 
 <SUBSECTION>
 gdk_device_get_state
@@ -778,6 +808,13 @@ GDK_TYPE_AXIS_USE
 GDK_TYPE_EXTENSION_MODE
 GDK_TYPE_INPUT_MODE
 GDK_TYPE_INPUT_SOURCE
+GDK_DEVICE
+GDK_DEVICE_CLASS
+GDK_DEVICE_GET_CLASS
+GDK_IS_DEVICE
+GDK_IS_DEVICE_CLASS
+GDK_TYPE_DEVICE
+gdk_device_get_type
 
 <SUBSECTION Private>
 GDK_MAX_TIMECOORD_AXES
@@ -804,6 +841,8 @@ gdk_event_free
 gdk_event_get_time
 gdk_event_get_state
 gdk_event_get_axis
+gdk_event_get_coords
+gdk_event_get_root_coords
 
 <SUBSECTION>
 gdk_event_handler_set
@@ -888,6 +927,8 @@ gdk_cursor_destroy
 
 <SUBSECTION Standard>
 GDK_TYPE_CURSOR_TYPE
+GDK_TYPE_CURSOR
+gdk_cursor_get_type
 </SECTION>
 
 <SECTION>
@@ -961,6 +1002,8 @@ GDK_COLORMAP_XCOLORMAP
 GDK_VISUAL_XVISUAL
 GDK_FONT_XDISPLAY
 GDK_FONT_XFONT
+GDK_CURSOR_XCURSOR
+GDK_CURSOR_XDISPLAY
 GDK_GC_XGC
 GDK_GC_GET_XGC
 GDK_WINDOW_XWINDOW
@@ -980,6 +1023,25 @@ gdk_pixmap_lookup
 gdk_font_lookup
 gdk_x11_get_server_time
 gdk_net_wm_supports
+gdk_x11_colormap_get_xcolormap
+gdk_x11_colormap_get_xdisplay
+gdk_x11_cursor_get_xcursor
+gdk_x11_cursor_get_xdisplay
+gdk_x11_drawable_get_xdisplay
+gdk_x11_drawable_get_xid
+gdk_x11_font_get_name
+gdk_x11_font_get_xdisplay
+gdk_x11_font_get_xfont
+gdk_x11_gc_get_xdisplay
+gdk_x11_gc_get_xgc
+gdk_x11_get_default_root_xwindow
+gdk_x11_get_default_screen
+gdk_x11_get_default_xdisplay
+gdk_x11_grab_server
+gdk_x11_image_get_xdisplay
+gdk_x11_image_get_ximage
+gdk_x11_ungrab_server
+gdk_x11_visual_get_xvisual
 
 <SUBSECTION Private>
 GDK_TYPE_GC_X11

@@ -126,6 +126,18 @@ gdk_pango_free_gc (PangoContext *context,
   gdk_gc_unref (gc);
 }
 
+/**
+ * gdk_pango_context_set_colormap:
+ * @context: a #PangoContext
+ * @colormap: a #GdkColormap
+ *
+ * Sets the colormap to be used for drawing with @context.
+ * If you obtained your context from gtk_widget_get_pango_context() or
+ * gtk_widget_create_pango_context(), the colormap will already be set
+ * to the colormap for the widget, so you shouldn't need this
+ * function.
+ * 
+ **/
 void
 gdk_pango_context_set_colormap (PangoContext *context,
 				GdkColormap  *colormap)

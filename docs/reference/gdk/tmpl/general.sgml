@@ -113,6 +113,22 @@ of g_atexit()).
 @error_code: the error code to pass to the exit() call.
 
 
+<!-- ##### FUNCTION gdk_get_program_class ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_set_program_class ##### -->
+<para>
+
+</para>
+
+@program_class: 
+
+
 <!-- ##### FUNCTION gdk_get_display ##### -->
 <para>
 Gets the name of the display, which usually comes from the DISPLAY

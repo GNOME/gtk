@@ -3,23 +3,37 @@ Visuals
 
 <!-- ##### SECTION Short_Description ##### -->
 
+Low-level display hardware information
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
+A #GdkVisual describes a particular video hardware display format.  For example,
+a piece of display hardware might support 24-bit color, 16-bit color, or 8-bit
+color; meaning 24/16/8-bit pixel sizes. For a given pixel size, pixels can be in
+different formats; for example the "red" element of an RGB pixel may be in the
+top 8 bits of the pixel, or may be in the lower 4 bits.
+</para>
 
+<para>
+Usually you can avoid thinking about visuals in GTK+. Visuals are useful to
+interpret the contents of a #GdkImage, but you should avoid #GdkImage precisely
+because its contents depend on the display hardware; use #GdkPixbuf instead, for
+all but the most low-level purposes. Also, anytime you provide a #GdkColormap,
+the visual is implied as part of the colormap (gdk_colormap_get_visual()), so
+you won't have to provide a visual in addition.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+#GdkImage, #GdkColormap
 </para>
 
 <!-- ##### STRUCT GdkVisual ##### -->
 <para>
-
+Description of an image data format
 </para>
 
-@parent_instance: 
+@parent_instance: inherited portion from #GObject
 @type: 
 @depth: 
 @byte_order: 
@@ -34,6 +48,12 @@ Visuals
 @blue_mask: 
 @blue_shift: 
 @blue_prec: 
+
+<!-- ##### STRUCT GdkVisualClass ##### -->
+<para>
+
+</para>
+
 
 <!-- ##### ENUM GdkVisualType ##### -->
 <para>
@@ -143,22 +163,18 @@ Visuals
 
 <!-- ##### MACRO gdk_visual_ref ##### -->
 <para>
-
+Deprecated equivalent of g_object_ref().
 </para>
 
 @v: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@visual: 
 
 
 <!-- ##### MACRO gdk_visual_unref ##### -->
 <para>
-
+Deprecated equivalent of g_object_unref().
 </para>
 
 @v: 
-<!-- # Unused Parameters # -->
-@visual: 
 
 

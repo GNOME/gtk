@@ -30,12 +30,27 @@
 #include "gdkimage.h"
 #include "gdkprivate.h"
 
+/**
+ * gdk_image_ref:
+ * @image: a #GdkImage
+ * 
+ * Deprecated function; use g_object_ref() instead.
+ * 
+ * Return value: the image
+ **/
 GdkImage *
 gdk_image_ref (GdkImage *image)
 {
   return (GdkImage *) g_object_ref (G_OBJECT (image));
 }
 
+/**
+ * gdk_image_unref:
+ * @image: a #GdkImage
+ * 
+ * Deprecated function; use g_object_unref() instead.
+ * 
+ **/
 void
 gdk_image_unref (GdkImage *image)
 {

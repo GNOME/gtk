@@ -3,10 +3,15 @@ Windows
 
 <!-- ##### SECTION Short_Description ##### -->
 
+onscreen display areas in the target window system
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+A #GdkWindow is a rectangular region on the screen. It's a low-level object,
+used to implement high-level objects such as #GtkWidget and #GtkWindow on the
+GTK+ level. A #GtkWindow is a toplevel window, the thing a user might think of 
+as a "window" with a titlebar and so on; a #GtkWindow may contain many #GdkWindow. 
+For example, each #GtkButton has a #GdkWindow associated with it.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -14,66 +19,34 @@ Windows
 
 </para>
 
-<!-- ##### STRUCT GdkWindowAttr ##### -->
-<para>
-
-</para>
-
-@title: 
-@event_mask: 
-@x: 
-@y: 
-@width: 
-@height: 
-@wclass: 
-@visual: 
-@colormap: 
-@window_type: 
-@cursor: 
-@wmclass_name: 
-@wmclass_class: 
-@override_redirect: 
-
 <!-- ##### STRUCT GdkWindow ##### -->
 <para>
 
 </para>
 
-@user_data: 
+@user_data: used to store the #GtkWidget associated with this window
 
 <!-- ##### ENUM GdkWindowType ##### -->
 <para>
-
+Describes the kind of window.
 </para>
 
-@GDK_WINDOW_ROOT: 
-@GDK_WINDOW_TOPLEVEL: 
-@GDK_WINDOW_CHILD: 
-@GDK_WINDOW_DIALOG: 
-@GDK_WINDOW_TEMP: 
-@GDK_WINDOW_FOREIGN: 
+@GDK_WINDOW_ROOT: root window; this window has no parent, covers the entire screen, and is created by the window system
+@GDK_WINDOW_TOPLEVEL: toplevel window (used to implement #GtkWindow)
+@GDK_WINDOW_CHILD: child window (used to implement e.g. #GtkButton)
+@GDK_WINDOW_DIALOG: useless/deprecated compatibility type
+@GDK_WINDOW_TEMP: override redirect temporary window (used to implement #GtkMenu)
+@GDK_WINDOW_FOREIGN: foreign window (see gdk_window_foreign_new())
 
 <!-- ##### ENUM GdkWindowClass ##### -->
 <para>
-
+@GDK_INPUT_OUTPUT windows are the standard kind of window you might expect. 
+@GDK_INPUT_ONLY windows are invisible; they are used to trap events, but 
+you can't draw on them.
 </para>
 
-@GDK_INPUT_OUTPUT: 
-@GDK_INPUT_ONLY: 
-
-<!-- ##### ENUM GdkWindowAttributesType ##### -->
-<para>
-
-</para>
-
-@GDK_WA_TITLE: 
-@GDK_WA_X: 
-@GDK_WA_Y: 
-@GDK_WA_CURSOR: 
-@GDK_WA_COLORMAP: 
-@GDK_WA_VISUAL: 
-@GDK_WA_WMCLASS: 
-@GDK_WA_NOREDIR: 
+@GDK_INPUT_OUTPUT: window for graphics and events
+@GDK_INPUT_ONLY: window for events only
 
 <!-- ##### ENUM GdkWindowHints ##### -->
 <para>
@@ -146,7 +119,7 @@ a terminal area widget called "terminal" and a toplevel window "toplevel":
 
 	gtk_window_set_geometry_hints (GTK_WINDOW (toplevel),
 				       GTK_WIDGET (terminal),
- 				       &hints,
+ 				       &amp;hints,
 				       GDK_HINT_RESIZE_INC |
                                        GDK_HINT_MIN_SIZE |
                                        GDK_HINT_BASE_SIZE);
@@ -164,6 +137,7 @@ ratio.
 
 @min_width: minimum width of window (or -1 to use requisition, with #GtkWindow only)
 @min_height minimum height of window (or -1 to use requisition, with #GtkWindow only)
+@min_height: 
 @max_width: maximum width of window (or -1 to use requisition, with #GtkWindow only)
 @max_height: maximum height of window (or -1 to use requisition, with #GtkWindow only)
 @base_width: allowed window widths are base_width + width_inc * N where N is any integer (-1 allowed with #GtkWindow)
@@ -214,6 +188,45 @@ ratio.
 @GDK_WINDOW_TYPE_HINT_MENU: 
 @GDK_WINDOW_TYPE_HINT_TOOLBAR: 
 
+<!-- ##### STRUCT GdkWindowAttr ##### -->
+<para>
+Attributes to use for a newly-created window.
+</para>
+
+@title: title of the window (for toplevel windows)
+@event_mask: event mask (see gdk_window_set_events())
+@x: X coordinate relative to parent window (see gdk_window_move())
+@y: Y coordinate relative to parent window (see gdk_window_move())
+@width: width of window
+@height: height of window
+@wclass: #GDK_INPUT_OUTPUT (normal window) or #GDK_INPUT_ONLY (invisible window that receives events)
+@visual: #GdkVisual for window
+@colormap: #GdkColormap for window
+@window_type: type of window
+@cursor: cursor for the window (see gdk_window_set_cursor())
+@wmclass_name: don't use (see gtk_window_set_wmclass())
+@wmclass_class: don't use (see gtk_window_set_wmclass())
+@override_redirect: %TRUE to bypass the window manager
+
+<!-- ##### ENUM GdkWindowAttributesType ##### -->
+<para>
+Used to indicate which fields in the #GdkWindowAttr struct should be
+honored. For example, if you filled in the "cursor" and "x" fields of
+#GdkWindowAttr, pass "@GDK_WA_X | @GDK_WA_CURSOR" to gdk_window_new().  Fields
+in #GdkWindowAttr not covered by a bit in this enum are required; for example,
+the width/height, wclass, and window_type fields are required, they have no
+corresponding flag in #GdkWindowAttributesType.
+</para>
+
+@GDK_WA_TITLE: Honor the title field
+@GDK_WA_X: Honor the X coordinate field
+@GDK_WA_Y: Honor the Y coordinate field
+@GDK_WA_CURSOR: Honor the cursor field
+@GDK_WA_COLORMAP: Honor the colormap field
+@GDK_WA_VISUAL: Honor the visual field
+@GDK_WA_WMCLASS: Honor the wmclass_class and wmclass_name fields
+@GDK_WA_NOREDIR: Honor the override_redirect field
+
 <!-- ##### FUNCTION gdk_window_new ##### -->
 <para>
 
@@ -235,7 +248,7 @@ ratio.
 
 <!-- ##### MACRO gdk_window_ref ##### -->
 <para>
-
+Deprecated equivalent of g_object_ref()
 </para>
 
 @Returns: 
@@ -245,7 +258,7 @@ ratio.
 
 <!-- ##### MACRO gdk_window_unref ##### -->
 <para>
-
+Deprecated equivalent of g_object_unref()
 </para>
 
 <!-- # Unused Parameters # -->
@@ -272,6 +285,14 @@ ratio.
 
 
 <!-- ##### FUNCTION gdk_window_show ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_show_unraised ##### -->
 <para>
 
 </para>
@@ -457,7 +478,7 @@ ratio.
 
 <!-- ##### MACRO gdk_window_copy_area ##### -->
 <para>
-
+Deprecated equivalent to gdk_draw_drawable(), see that function for docs
 </para>
 
 @drawable: 
@@ -469,9 +490,6 @@ ratio.
 @source_y: 
 @width: 
 @height: 
-<!-- # Unused Parameters # -->
-@window: 
-@source_window: 
 
 
 <!-- ##### FUNCTION gdk_window_raise ##### -->
@@ -638,6 +656,17 @@ ratio.
 </para>
 
 @setting: 
+
+
+<!-- ##### FUNCTION gdk_window_get_internal_paint_info ##### -->
+<para>
+
+</para>
+
+@window: 
+@real_drawable: 
+@x_offset: 
+@y_offset: 
 
 
 <!-- ##### FUNCTION gdk_window_set_user_data ##### -->
@@ -813,7 +842,7 @@ ratio.
 
 <!-- ##### MACRO gdk_window_set_colormap ##### -->
 <para>
-
+Deprecated equivalent to gdk_drawable_set_colormap()
 </para>
 
 <!-- # Unused Parameters # -->
@@ -913,18 +942,14 @@ ratio.
 
 <!-- ##### MACRO gdk_window_get_size ##### -->
 <para>
-
+Deprecated equivalent of gdk_drawable_get_size().
 </para>
 
-<!-- # Unused Parameters # -->
-@window: 
-@width: 
-@height: 
 
 
 <!-- ##### MACRO gdk_window_get_visual ##### -->
 <para>
-
+Deprecated equivalent of gdk_drawable_get_visual().
 </para>
 
 @Returns: 
@@ -934,22 +959,18 @@ ratio.
 
 <!-- ##### MACRO gdk_window_get_colormap ##### -->
 <para>
-
+Deprecated equivalent of gdk_drawable_get_colormap().
 </para>
 
-@Returns: 
-<!-- # Unused Parameters # -->
-@window: 
+@Returns: colormap for the window
 
 
 <!-- ##### MACRO gdk_window_get_type ##### -->
 <para>
-
+Deprecated equivalent of gdk_drawable_get_type().
 </para>
 
-@Returns: 
-<!-- # Unused Parameters # -->
-@window: 
+@Returns: type of drawable
 
 
 <!-- ##### FUNCTION gdk_window_get_origin ##### -->
@@ -1166,6 +1187,31 @@ ratio.
 
 </para>
 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_get_default_root_window ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### STRUCT GdkPointerHooks ##### -->
+<para>
+
+</para>
+
+@get_pointer: 
+@window_at_pointer: 
+
+<!-- ##### FUNCTION gdk_set_pointer_hooks ##### -->
+<para>
+
+</para>
+
+@new_hooks: 
 @Returns: 
 
 

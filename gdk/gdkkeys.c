@@ -98,6 +98,16 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
 /* compatibility function from X11R6.3, since XConvertCase is not
  * supplied by X11R5.
  */
+/**
+ * gdk_keyval_convert_case:
+ * @symbol: a keyval
+ * @lower: return location for lowercase version of @symbol
+ * @upper: return location for uppercase version of @symbol
+ *
+ * Obtains the upper- and lower-case versions of the keyval @symbol.
+ * Examples of keyvals are #GDK_a, #GDK_Enter, #GDK_F1, etc.
+ * 
+ **/
 void
 gdk_keyval_convert_case (guint symbol,
 			 guint *lower,

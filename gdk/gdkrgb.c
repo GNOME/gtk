@@ -3342,6 +3342,24 @@ gdk_draw_rgb_32_image (GdkDrawable *drawable,
 			     image_info->conv_32_d, NULL, 0, 0);
 }
 
+/**
+ * gdk_draw_rgb_32_image_dithalign:
+ * @drawable: a #GdkDrawable
+ * @gc: a #GdkGC
+ * @x: X coordinate on @drawable where image should go
+ * @y: Y coordinate on @drawable where image should go
+ * @width: width of area of image to draw
+ * @height: height of area of image to draw
+ * @dith: dithering mode
+ * @buf: RGB image data
+ * @rowstride: rowstride of RGB image data
+ * @xdith: X dither offset
+ * @ydith: Y dither offset
+ *
+ * Like gdk_draw_rgb_32_image(), but allows you to specify the dither
+ * offsets. See gdk_draw_rgb_image_dithalign() for more details.
+ * 
+ **/
 void
 gdk_draw_rgb_32_image_dithalign (GdkDrawable *drawable,
 				 GdkGC *gc,

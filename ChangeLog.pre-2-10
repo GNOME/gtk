@@ -1,7 +1,23 @@
+2001-10-02  Havoc Pennington  <hp@redhat.com>
+
+        Throughout: assorted docs
+	
+	* gdk/gdkwindow.h: deprecate gdk_window_set_hints(), it's broken,
+	gdk_window_set_geometry_hints() should be used instead.
+
+	* gdk/gdkimage.h: deprecate gdk_image_ref, gdk_image_unref, and
+	document them
+
+	* gdk/x11/gdkx.h: remove gdk_get_client_window() since it doesn't
+	seem to exist in any .c files
+
+	* gdk/x11/gdkcolor-x11.c (gdk_colormap_query_color): docs, 
+	g_return_if_fail (pixel < colormap->size).
+
 Wed Oct  3 10:42:54 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_dest_find_target): Allow
-	NUOL for @target_list to mean, use
+	NULL for @target_list to mean, use
 	gtk_drag_dest_get_target_list (widget).
 
 	* gtk/gtkdnd.c (gtk_drag_finish): Fix problem where

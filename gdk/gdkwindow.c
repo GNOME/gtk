@@ -383,6 +383,18 @@ _gdk_window_destroy (GdkWindow *window,
   _gdk_window_destroy_hierarchy (window, FALSE, foreign_destroy);
 }
 
+/**
+ * gdk_window_destroy:
+ * @window: a #GdkWindow
+ *
+ * Destroys @window (destroys the server-side resource associated with @window).
+ * Memory allocated for @window may not be freed until all references
+ * to @window are dropped. All children of @window are also destroyed.
+ *
+ * There's normally no need to use this function, window are automatically
+ * destroyed when their reference count reaches 0.
+ * 
+ **/
 void
 gdk_window_destroy (GdkWindow *window)
 {
@@ -390,6 +402,20 @@ gdk_window_destroy (GdkWindow *window)
   gdk_drawable_unref (window);
 }
 
+/**
+ * gdk_window_set_user_data:
+ * @window: a #GdkWindow
+ * @user_data: user data
+ *
+ * For most purposes this function is deprecated in favor of
+ * g_object_set_data(). However, for historical reasons GTK+ stores
+ * the #GtkWidget that owns a #GdkWindow as user data on the
+ * #GdkWindow. So, custom widget implementations should use
+ * this function for that. If GTK+ receives an event for a #GdkWindow,
+ * and the user data for the window is non-%NULL, GTK+ will assume the
+ * user data is a #GtkWidget, and forward the event to that widget.
+ * 
+ **/
 void
 gdk_window_set_user_data (GdkWindow *window,
 			  gpointer   user_data)
@@ -399,6 +425,15 @@ gdk_window_set_user_data (GdkWindow *window,
   ((GdkWindowObject*)window)->user_data = user_data;
 }
 
+/**
+ * gdk_window_get_user_data:
+ * @window: a #GdkWindow
+ * @data: return location for user data
+ *
+ * Retrieves the user data for @window, which is normally the widget
+ * that @window belongs to. See gdk_window_set_user_data().
+ * 
+ **/
 void
 gdk_window_get_user_data (GdkWindow *window,
 			  gpointer  *data)
@@ -408,6 +443,14 @@ gdk_window_get_user_data (GdkWindow *window,
   *data = ((GdkWindowObject*)window)->user_data;
 }
 
+/**
+ * gdk_window_get_window_type:
+ * @window: a #GdkWindow
+ * 
+ * Gets the type of the window. See #GdkWindowType.
+ * 
+ * Return value: type of window
+ **/
 GdkWindowType
 gdk_window_get_window_type (GdkWindow *window)
 {
@@ -416,6 +459,20 @@ gdk_window_get_window_type (GdkWindow *window)
   return GDK_WINDOW_TYPE (window);
 }
 
+/**
+ * gdk_window_get_position:
+ * @window: a #GdkWindow
+ * @x: X coordinate of window
+ * @y: Y coordinate of window
+ *
+ * Obtains the position of the window as reported in the most-recently-processed
+ * #GdkEventConfigure. Contrast with gdk_window_get_geometry() which
+ * queries the X server for the current window position, regardless of which
+ * events have been received or processed.
+ *
+ * The position coordinates are relative to the window's parent window.
+ * 
+ **/
 void
 gdk_window_get_position (GdkWindow *window,
 			 gint      *x,
@@ -433,6 +490,19 @@ gdk_window_get_position (GdkWindow *window,
     *y = obj->y;
 }
 
+/**
+ * gdk_window_get_parent:
+ * @window: a #GdkWindow
+ * 
+ * Obtains the parent of @window, as known to GDK. Does not query the
+ * X server; thus this returns the parent as passed to gdk_window_new(),
+ * not the actual parent. This should never matter unless you're using
+ * Xlib calls mixed with GDK calls on the X11 platform. It may also
+ * matter for toplevel windows, because the window manager may choose
+ * to reparent them.
+ * 
+ * Return value: parent of @window
+ **/
 GdkWindow*
 gdk_window_get_parent (GdkWindow *window)
 {
@@ -441,6 +511,14 @@ gdk_window_get_parent (GdkWindow *window)
   return (GdkWindow*) ((GdkWindowObject*) window)->parent;
 }
 
+/**
+ * gdk_window_get_toplevel:
+ * @window: a #GdkWindow
+ * 
+ * Gets the toplevel window that's an ancestor of @window.
+ * 
+ * Return value: the toplevel window containing @window
+ **/
 GdkWindow*
 gdk_window_get_toplevel (GdkWindow *window)
 {
@@ -455,6 +533,20 @@ gdk_window_get_toplevel (GdkWindow *window)
   return GDK_WINDOW (obj);
 }
 
+/**
+ * gdk_window_get_children:
+ * @window: a #GdkWindow
+ * 
+ * Gets the list of children of @window known to GDK.
+ * This function only returns children created via GDK,
+ * so for example it's useless when used with the root window;
+ * it only returns windows an application created itself.
+ *
+ * The returned list must be freed, but the elements in the
+ * list need not be.
+ * 
+ * Return value: list of child windows inside @window
+ **/
 GList*
 gdk_window_get_children (GdkWindow *window)
 {
@@ -466,8 +558,17 @@ gdk_window_get_children (GdkWindow *window)
   return g_list_copy (GDK_WINDOW_OBJECT (window)->children);
 }
 
+/**
+ * gdk_window_peek_children:
+ * @window: a #GdkWindow
+ * 
+ * Like gdk_window_get_children(), but does not copy the list of
+ * children, so the list does not need to be freed.
+ * 
+ * Return value: a reference to the list of child windows in @window
+ **/
 GList *
-gdk_window_peek_children (GdkWindow       *window)
+gdk_window_peek_children (GdkWindow *window)
 {
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
@@ -477,6 +578,17 @@ gdk_window_peek_children (GdkWindow       *window)
   return GDK_WINDOW_OBJECT (window)->children;
 }
 
+/**
+ * gdk_window_add_filter:
+ * @window: a #GdkWindow
+ * @function: filter callback
+ * @data: data to pass to filter callback
+ *
+ * Adds an event filter to @window, allowing you to intercept events
+ * before they reach GDK. This is a low-level operation and makes it easy to break
+ * GDK and/or GTK+, so you have to know what you're doing.
+ * 
+ **/
 void          
 gdk_window_add_filter (GdkWindow     *window,
 		       GdkFilterFunc  function,
@@ -515,6 +627,15 @@ gdk_window_add_filter (GdkWindow     *window,
     _gdk_default_filters = g_list_append (_gdk_default_filters, filter);
 }
 
+/**
+ * gdk_window_remove_filter:
+ * @window: a #GdkWindow
+ * @function: previously-added filter function
+ * @data: user data for previously-added filter function
+ *
+ * Remove a filter previously added with gdk_window_add_filter().
+ * 
+ **/
 void
 gdk_window_remove_filter (GdkWindow     *window,
 			  GdkFilterFunc  function,
@@ -553,6 +674,18 @@ gdk_window_remove_filter (GdkWindow     *window,
     }
 }
 
+/**
+ * gdk_window_get_toplevels:
+ * 
+ * Obtains a list of all toplevel windows known to GDK.
+ * A toplevel window is a child of the root window (see
+ * gdk_get_default_root_window()).
+ *
+ * The returned list should be freed with g_list_free(), but
+ * its elements need not be freed.
+ * 
+ * Return value: list of toplevel windows, free with g_list_free()
+ **/
 GList *
 gdk_window_get_toplevels (void)
 {
@@ -569,15 +702,15 @@ gdk_window_get_toplevels (void)
   return new_list;
 }
 
-/*************************************************************
+/**
  * gdk_window_is_visible:
- *     Check if the given window is mapped.
- *   arguments:
- *     window: 
- *   results:
- *     is the window mapped
- *************************************************************/
-
+ * @window: a #GdkWindow
+ * 
+ * Checks whether the window has been mapped (with gdk_window_show() or
+ * gdk_window_show_unraised()).
+ * 
+ * Return value: %TRUE if the window is mapped
+ **/
 gboolean 
 gdk_window_is_visible (GdkWindow *window)
 {
@@ -586,18 +719,19 @@ gdk_window_is_visible (GdkWindow *window)
   return GDK_WINDOW_IS_MAPPED (window);
 }
 
-/*************************************************************
+/**
  * gdk_window_is_viewable:
- *     Check if the window and all ancestors of the window
- *     are mapped. (This is not necessarily "viewable" in
- *     the X sense, since we only check as far as we have
- *     GDK window parents, not to the root window)
- *   arguments:
- *     window:
- *   results:
- *     is the window viewable
- *************************************************************/
-
+ * @window: a #GdkWindow
+ * 
+ * Check if the window and all ancestors of the window are
+ * mapped. (This is not necessarily "viewable" in the X sense, since
+ * we only check as far as we have GDK window parents, not to the root
+ * window)
+ * 
+ * 
+ * 
+ * Return value: %TRUE if the window is viewable
+ **/
 gboolean 
 gdk_window_is_viewable (GdkWindow *window)
 {
@@ -1609,6 +1743,12 @@ gdk_window_clear_backing_rect (GdkWindow *window,
   gdk_gc_unref (tmp_gc);
 }
 
+/**
+ * gdk_window_clear:
+ * @window: a #GdkWindow
+ * 
+ * Clears an entire @window to the background color or background pixmap.
+ **/
 void
 gdk_window_clear (GdkWindow *window)
 {
@@ -1623,6 +1763,17 @@ gdk_window_clear (GdkWindow *window)
                          width, height);
 }
 
+/**
+ * gdk_window_clear_area:
+ * @window: a #GdkWindow
+ * @x: x coordinate of rectangle to clear
+ * @y: y coordinate of rectangle to clear
+ * @width: width of rectangle to clear
+ * @height: height of rectangle to clear
+ *
+ * Clears an area of @window to the background color or background pixmap.
+ * 
+ **/
 void
 gdk_window_clear_area (GdkWindow *window,
 		       gint       x,
@@ -1641,6 +1792,21 @@ gdk_window_clear_area (GdkWindow *window,
     _gdk_windowing_window_clear_area (window, x, y, width, height);
 }
 
+/**
+ * gdk_window_clear_area_e:
+ * @window: a #GdkWindow
+ * @x: x coordinate of rectangle to clear
+ * @y: y coordinate of rectangle to clear
+ * @width: width of rectangle to clear
+ * @height: height of rectangle to clear
+ *
+ * Like gdk_window_clear_area(), but also generates an expose event for
+ * the cleared area.
+ *
+ * This function has a stupid name because it dates back to the mists
+ * time, pre-GDK-1.0.
+ * 
+ **/
 void
 gdk_window_clear_area_e (GdkWindow *window,
 		         gint       x,
@@ -2155,6 +2321,16 @@ _gdk_window_clear_update_area (GdkWindow *window)
     }
 }
 
+/**
+ * gdk_window_freeze_updates:
+ * @window: a #GdkWindow
+ * 
+ * Temporarily freezes a window such that it won't receive expose
+ * events.  The window will begin receiving expose events again when
+ * gdk_window_thaw_updates() is called. If gdk_window_freeze_updates()
+ * has been called more than once, gdk_window_thaw_updates() must be called
+ * an equal number of times to begin processing exposes.
+ **/
 void
 gdk_window_freeze_updates (GdkWindow *window)
 {
@@ -2166,6 +2342,12 @@ gdk_window_freeze_updates (GdkWindow *window)
   private->update_freeze_count++;
 }
 
+/**
+ * gdk_window_thaw_updates:
+ * @window: a #GdkWindow
+ * 
+ * Thaws a window frozen with gdk_window_freeze_updates().
+ **/
 void
 gdk_window_thaw_updates (GdkWindow *window)
 {
@@ -2368,6 +2550,19 @@ gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks)
   return (GdkPointerHooks *)result;
 }
 
+/**
+ * gdk_window_get_pointer:
+ * @window: a #GdkWindow
+ * @x: return location for X coordinate of pointer
+ * @y: return location for Y coordinate of pointer
+ * @mask: return location for modifier mask
+ *
+ * Obtains the current pointer position and modifier state.
+ * The position is given in coordinates relative to @window.
+ * 
+ * Return value: the window containing the pointer (as with gdk_window_at_pointer()), or %NULL
+ *               if the window containing the pointer isn't known to GDK
+ **/
 GdkWindow*
 gdk_window_get_pointer (GdkWindow	  *window,
 			gint		  *x,
@@ -2379,6 +2574,18 @@ gdk_window_get_pointer (GdkWindow	  *window,
   return current_pointer_hooks->get_pointer (window, x, y, mask); 
 }
 
+/**
+ * gdk_window_at_pointer:
+ * @win_x: return location for origin of the window under the pointer
+ * @win_y: return location for origin of the window under the pointer
+ * 
+ * Obtains the window underneath the mouse pointer, returning the location
+ * of that window in @win_x, @win_y. Returns %NULL if the window under
+ * the mouse pointer is not known to GDK (for example, belongs to
+ * another application).
+ * 
+ * Return value: window under the mouse pointer
+ **/
 GdkWindow*
 gdk_window_at_pointer (gint *win_x,
 		       gint *win_y)
@@ -2386,6 +2593,14 @@ gdk_window_at_pointer (gint *win_x,
   return current_pointer_hooks->window_at_pointer (win_x, win_y);
 }
 
+/**
+ * gdk_get_default_root_window:
+ * 
+ * Obtains the root window (parent all other windows are inside)
+ * for the default display and screen.
+ * 
+ * Return value: the default root window
+ **/
 GdkWindow *
 gdk_get_default_root_window (void)
 {

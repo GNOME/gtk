@@ -249,6 +249,28 @@ no timestamp.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_event_get_coords ##### -->
+<para>
+
+</para>
+
+@event: 
+@x_win: 
+@y_win: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_event_get_root_coords ##### -->
+<para>
+
+</para>
+
+@event: 
+@x_root: 
+@y_root: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_event_handler_set ##### -->
 <para>
 Sets the function to call to handle all events from GDK.

@@ -310,30 +310,75 @@ _gdk_visual_init (void)
     g_error ("unable to find a usable visual type");
 }
 
+/**
+ * gdk_visual_get_best_depth:
+ * 
+ * Get the best available depth for the default GDK display.  "Best"
+ * means "largest," i.e. 32 preferred over 24 preferred over 8 bits
+ * per pixel.
+ * 
+ * Return value: best available depth
+ **/
 gint
 gdk_visual_get_best_depth (void)
 {
   return available_depths[0];
 }
 
+/**
+ * gdk_visual_get_best_type:
+ * 
+ * Return the best available visual type (the one with the most
+ * colors) for the default GDK display.
+ * 
+ * Return value: best visual type
+ **/
 GdkVisualType
 gdk_visual_get_best_type (void)
 {
   return available_types[0];
 }
 
+/**
+ * gdk_visual_get_system:
+ * 
+ * Get the default or system visual for the default GDK display.
+ * This is the visual for the root window of the display.
+ * The return value should not be freed.
+ * 
+ * Return value: system visual
+ **/
 GdkVisual*
 gdk_visual_get_system (void)
 {
   return ((GdkVisual*) system_visual);
 }
 
+/**
+ * gdk_visual_get_best:
+ *
+ * Get the visual with the most available colors for the default
+ * GDK display. The return value should not be freed.
+ * 
+ * Return value: best visual
+ **/
 GdkVisual*
 gdk_visual_get_best (void)
 {
   return ((GdkVisual*) visuals[0]);
 }
 
+/**
+ * gdk_visual_get_best_with_depth:
+ * @depth: a bit depth
+ * 
+ * Get the best visual with depth @depth for the default GDK display.
+ * Color visuals and visuals with mutable colormaps are preferred
+ * over grayscale or fixed-colormap visuals. The return value should not
+ * be freed. %NULL may be returned if no visual supports @depth.
+ * 
+ * Return value: best visual for the given depth
+ **/
 GdkVisual*
 gdk_visual_get_best_with_depth (gint depth)
 {
@@ -351,6 +396,17 @@ gdk_visual_get_best_with_depth (gint depth)
   return return_val;
 }
 
+/**
+ * gdk_visual_get_best_with_type:
+ * @visual_type: a visual type
+ *
+ * Get the best visual of the given @visual_type for the default GDK display.
+ * Visuals with higher color depths are considered better. The return value
+ * should not be freed. %NULL may be returned if no visual has type
+ * @visual_type.
+ * 
+ * Return value: best visual of the given type
+ **/
 GdkVisual*
 gdk_visual_get_best_with_type (GdkVisualType visual_type)
 {
@@ -368,6 +424,15 @@ gdk_visual_get_best_with_type (GdkVisualType visual_type)
   return return_val;
 }
 
+/**
+ * gdk_visual_get_best_with_both:
+ * @depth: a bit depth
+ * @visual_type: a visual type
+ *
+ * Combines gdk_visual_get_best_with_depth() and gdk_visual_get_best_with_type().
+ * 
+ * Return value: best visual with both @depth and @visual_type, or %NULL if none
+ **/
 GdkVisual*
 gdk_visual_get_best_with_both (gint          depth,
 			       GdkVisualType visual_type)
@@ -387,6 +452,19 @@ gdk_visual_get_best_with_both (gint          depth,
   return return_val;
 }
 
+/**
+ * gdk_query_depths:
+ * @depths: return location for available depths 
+ * @count: return location for number of available depths
+ *
+ * This function returns the available bit depths for the default
+ * display. It's equivalent to listing the visuals
+ * (gdk_list_visuals()) and then looking at the depth field in each
+ * visual, removing duplicates.
+ * 
+ * The array returned by this function should not be freed.
+ * 
+ **/
 void
 gdk_query_depths  (gint **depths,
 		   gint  *count)
@@ -395,6 +473,19 @@ gdk_query_depths  (gint **depths,
   *depths = available_depths;
 }
 
+/**
+ * gdk_query_visual_types:
+ * @visual_types: return location for the available visual types
+ * @count: return location for the number of available visual types
+ *
+ * This function returns the available visual types for the default
+ * display. It's equivalent to listing the visuals
+ * (gdk_list_visuals()) and then looking at the type field in each
+ * visual, removing duplicates.
+ * 
+ * The array returned by this function should not be freed.
+ * 
+ **/
 void
 gdk_query_visual_types (GdkVisualType **visual_types,
 			gint           *count)
@@ -403,6 +494,18 @@ gdk_query_visual_types (GdkVisualType **visual_types,
   *visual_types = available_types;
 }
 
+/**
+ * gdk_list_visuals:
+ * 
+ * Lists the available visuals for the default display.
+ * A visual describes a hardware image data format.
+ * For example, a visual might support 24-bit color, or 8-bit color,
+ * and might expect pixels to be in a certain format.
+ *
+ * Call g_list_free() on the return value when you're finished with it.
+ * 
+ * Return value: a list of visuals; the list must be freed, but not its contents
+ **/
 GList*
 gdk_list_visuals (void)
 {

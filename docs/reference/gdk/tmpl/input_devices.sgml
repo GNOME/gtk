@@ -106,6 +106,12 @@ sets of additional valuators than the pressure xtilt and ytilt.
 @num_keys: 
 @keys: 
 
+<!-- ##### STRUCT GdkDeviceClass ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ENUM GdkInputSource ##### -->
 <para>
 An enumeration describing the type of an input device
@@ -214,6 +220,14 @@ types that GTK+ understands.
 @device: 
 @index: 
 @use: 
+
+
+<!-- ##### FUNCTION gdk_device_get_core_pointer ##### -->
+<para>
+
+</para>
+
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_device_get_state ##### -->

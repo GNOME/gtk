@@ -987,6 +987,15 @@ gdk_synthesize_window_state (GdkWindow     *window,
     }
 }
 
+/**
+ * gdk_set_double_click_time:
+ * @msec: double click time in milliseconds (thousandths of a second)
+ *
+ * Sets the double click time (two clicks within this time interval
+ * count as a double click and result in a #GDK_2BUTTON_PRESS event).
+ * Applications should NOT set this, it is a global user-configured setting.
+ *
+ **/
 void
 gdk_set_double_click_time (guint msec)
 {

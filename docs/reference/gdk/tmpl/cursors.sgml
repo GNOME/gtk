@@ -30,11 +30,11 @@ The standard cursors available.
 
 <!-- ##### FUNCTION gdk_cursor_new ##### -->
 <para>
-Creates a new standard cursor.
+
 </para>
 
-@cursor_type: the type of the cursor.
-@Returns: a new #GdkCursor.
+@cursor_type: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_cursor_new_from_pixmap ##### -->

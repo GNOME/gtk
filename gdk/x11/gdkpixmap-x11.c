@@ -284,6 +284,16 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
   return pixmap;
 }
 
+/**
+ * gdk_pixmap_foreign_new:
+ * @anid: an X window ID for a pixmap
+ * 
+ * Creates a #GdkPixmap for the Xlib pixmap ID @anid.
+ * If the Xlib pixmap is destroyed while creating
+ * the #GdkPixmap, this function returns %NULL.
+ * 
+ * Return value: a new #GdkPixmap
+ **/
 GdkPixmap*
 gdk_pixmap_foreign_new (GdkNativeWindow anid)
 {

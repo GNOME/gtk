@@ -557,6 +557,15 @@ status information, so the application does not need to do anything.
 </para>
 
 
+<!-- ##### FUNCTION gdk_get_client_window ##### -->
+<para>
+
+</para>
+
+@dpy: 
+@win: 
+@Returns: 
+
 <!-- ##### FUNCTION gdk_ic_attr_destroy ##### -->
 <para>
 Destroys the given #GdkICAttr struct, freeing the allocated memory.
