@@ -2213,14 +2213,16 @@ gtk_entry_set_selection (GtkEditable       *editable,
 			 gint               start,
 			 gint               end)
 {
+  gint length = GTK_ENTRY (editable)->text_length;
+  
   g_return_if_fail (editable != NULL);
   g_return_if_fail (GTK_IS_ENTRY (editable));
 
   if (end < 0)
-    end = GTK_ENTRY (editable)->text_length;
+    end = length;
   
-  editable->selection_start_pos = start;
-  editable->selection_end_pos = end;
+  editable->selection_start_pos = CLAMP (start, 0, length);
+  editable->selection_end_pos = MIN (end, length);
 
   gtk_entry_queue_draw (GTK_ENTRY (editable));
 }

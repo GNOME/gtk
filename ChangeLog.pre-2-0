@@ -1,3 +1,8 @@
+Wed Jan 31 20:33:35 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_set_selection): Check bounds
+	when setting selection. (#7302)
+
 Thu Feb  1 02:26:18 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/Makefile.am ($(srcdir)/gtkmarshal.c): avoid regeneration
