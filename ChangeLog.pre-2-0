@@ -1,3 +1,7 @@
+2002-01-13  Sven Neumann  <sven@gimp.org>
+
+	* gdk/gdkwindow.c: documentation cleanups.
+
 Sun Jan 13 01:15:45 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodelsort.c: various cleanups,

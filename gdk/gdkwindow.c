@@ -280,17 +280,17 @@ gdk_window_finalize (GObject *object)
  * _gdk_window_destroy_hierarchy:
  * @window: a #GdkWindow
  * @recursing: If TRUE, then this is being called because a parent
- *            was destroyed. This generally means that the call to the windowing system
- *            to destroy the window can be omitted, since it will be destroyed as a result
- *            of the parent being destroyed. Unless @foreign_destroy
- *            
- * foreign_destroy: If TRUE, the window or a parent was destroyed by some external 
- *            agency. The window has already been destroyed and no windowing
- *            system calls should be made. (This may never happen for some
- *            windowing systems.)
+ *            was destroyed. This generally means that the call to the 
+ *            windowing system to destroy the window can be omitted, since
+ *            it will be destroyed as a result of the parent being destroyed.
+ *            Unless @foreign_destroy.           
+ * @foreign_destroy: If TRUE, the window or a parent was destroyed by some 
+ *            external agency. The window has already been destroyed and no 
+ *            windowing system calls should be made. (This may never happen
+ *            for some windowing systems.)
  *
- * Internal function to destroy a window. Like gdk_window_destroy(), but does not
- * drop the reference count created by gdk_window_new().
+ * Internal function to destroy a window. Like gdk_window_destroy(),
+ * but does not drop the reference count created by gdk_window_new().
  **/
 static void
 _gdk_window_destroy_hierarchy (GdkWindow *window,
@@ -350,7 +350,8 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 		  
 		  temp_private = (GdkWindowObject*) temp_window;
 		  if (temp_private)
-		    _gdk_window_destroy_hierarchy (temp_window, TRUE, foreign_destroy);
+		    _gdk_window_destroy_hierarchy (temp_window,
+                                                   TRUE, foreign_destroy);
 		}
 	      
 	      g_list_free (children);
@@ -386,13 +387,13 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 /**
  * _gdk_window_destroy:
  * @window: a #GdkWindow
- * foreign_destroy: If TRUE, the window or a parent was destroyed by some external 
- *            agency. The window has already been destroyed and no windowing
- *            system calls should be made. (This may never happen for some
- *            windowing systems.)
+ * @foreign_destroy: If TRUE, the window or a parent was destroyed by some
+ *            external agency. The window has already been destroyed and no
+ *            windowing system calls should be made. (This may never happen
+ *            for some windowing systems.)
  *
- * Internal function to destroy a window. Like gdk_window_destroy(), but does not
- * drop the reference count created by gdk_window_new().
+ * Internal function to destroy a window. Like gdk_window_destroy(),
+ * but does not drop the reference count created by gdk_window_new().
  **/
 void
 _gdk_window_destroy (GdkWindow *window,
@@ -405,9 +406,10 @@ _gdk_window_destroy (GdkWindow *window,
  * gdk_window_destroy:
  * @window: a #GdkWindow
  *
- * Destroys @window (destroys the server-side resource associated with @window).
- * Memory allocated for @window may not be freed until all references
- * to @window are dropped. All children of @window are also destroyed.
+ * Destroys @window (destroys the server-side resource associated with
+ * @window).  Memory allocated for @window may not be freed until all
+ * references to @window are dropped. All children of @window are also
+ * destroyed.
  *
  * There's normally no need to use this function, window are automatically
  * destroyed when their reference count reaches 0.
@@ -483,10 +485,11 @@ gdk_window_get_window_type (GdkWindow *window)
  * @x: X coordinate of window
  * @y: Y coordinate of window
  *
- * Obtains the position of the window as reported in the most-recently-processed
- * #GdkEventConfigure. Contrast with gdk_window_get_geometry() which
- * queries the X server for the current window position, regardless of which
- * events have been received or processed.
+ * Obtains the position of the window as reported in the
+ * most-recently-processed #GdkEventConfigure. Contrast with
+ * gdk_window_get_geometry() which queries the X server for the
+ * current window position, regardless of which events have been
+ * received or processed.
  *
  * The position coordinates are relative to the window's parent window.
  * 
@@ -603,8 +606,9 @@ gdk_window_peek_children (GdkWindow *window)
  * @data: data to pass to filter callback
  *
  * Adds an event filter to @window, allowing you to intercept events
- * before they reach GDK. This is a low-level operation and makes it easy to break
- * GDK and/or GTK+, so you have to know what you're doing.
+ * before they reach GDK. This is a low-level operation and makes it
+ * easy to break GDK and/or GTK+, so you have to know what you're
+ * doing.
  * 
  **/
 void          
@@ -745,10 +749,8 @@ gdk_window_is_visible (GdkWindow *window)
  * Check if the window and all ancestors of the window are
  * mapped. (This is not necessarily "viewable" in the X sense, since
  * we only check as far as we have GDK window parents, not to the root
- * window)
- * 
- * 
- * 
+ * window.)
+ *
  * Return value: %TRUE if the window is viewable
  **/
 gboolean 
@@ -831,14 +833,17 @@ gdk_window_get_bg_gc (GdkWindow *window, GdkWindowPaint *paint)
       
       return gdk_window_get_bg_gc (GDK_WINDOW (private->parent), &tmp_paint);
     }
-  else if (private->bg_pixmap && private->bg_pixmap != GDK_PARENT_RELATIVE_BG && private->bg_pixmap != GDK_NO_BG)
+  else if (private->bg_pixmap && 
+           private->bg_pixmap != GDK_PARENT_RELATIVE_BG && 
+           private->bg_pixmap != GDK_NO_BG)
     {
       gc_values.fill = GDK_TILED;
       gc_values.tile = private->bg_pixmap;
       gc_values.ts_x_origin = - paint->x_offset;
       gc_values.ts_y_origin = - paint->y_offset;
       
-      gc_mask = GDK_GC_FILL | GDK_GC_TILE | GDK_GC_TS_X_ORIGIN | GDK_GC_TS_Y_ORIGIN;
+      gc_mask = (GDK_GC_FILL | GDK_GC_TILE | 
+                 GDK_GC_TS_X_ORIGIN | GDK_GC_TS_Y_ORIGIN);
     }
   else
     {
@@ -1003,7 +1008,8 @@ gdk_window_begin_paint_region (GdkWindow *window,
     {
       paint->x_offset = clip_box.x;
       paint->y_offset = clip_box.y;
-      paint->pixmap = gdk_pixmap_new (window, clip_box.width, clip_box.height, -1);
+      paint->pixmap = gdk_pixmap_new (window, 
+                                      clip_box.width, clip_box.height, -1);
     }
 
   if (!gdk_region_empty (init_region))
@@ -1051,7 +1057,8 @@ gdk_window_end_paint (GdkWindow *window)
     }
 
   paint = private->paint_stack->data;
-  private->paint_stack = g_slist_delete_link (private->paint_stack, private->paint_stack);
+  private->paint_stack = g_slist_delete_link (private->paint_stack, 
+                                              private->paint_stack);
 
   gdk_region_get_clipbox (paint->region, &clip_box);
 
@@ -1135,11 +1142,14 @@ gdk_window_get_offsets (GdkWindow *window,
 /**
  * gdk_window_get_internal_paint_info:
  * @window: a #GdkWindow
- * @real_drawable: location to store the drawable to which drawing should be done.
- * @x_offset: location to store the X offset between coordinates in @window, and
- *            the underlying window system primitive coordinates for *@real_drawable.
- * @y_offset: location to store the Y offset between coordinates in @window, and
- *            the underlying window system primitive coordinates for *@real_drawable.
+ * @real_drawable: location to store the drawable to which drawing should be 
+ *            done.
+ * @x_offset: location to store the X offset between coordinates in @window,
+ *            and the underlying window system primitive coordinates for 
+ *            *@real_drawable.
+ * @y_offset: location to store the Y offset between coordinates in @window,
+ *            and the underlying window system primitive coordinates for
+ *            *@real_drawable.
  * 
  * If you bypass the GDK layer and use windowing system primitives to
  * draw directly onto a #GdkWindow, then you need to deal with two
@@ -2253,7 +2263,7 @@ gdk_window_invalidate_rect   (GdkWindow    *window,
  *
  * The @child_func parameter controls whether the region of
  * each child window that intersects @region will also be invalidated.
- * Only children for whic @child_func returns TRUE will have the area
+ * Only children for which @child_func returns TRUE will have the area
  * invalidated.
  **/
 void
@@ -2687,8 +2697,9 @@ gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks)
  * Obtains the current pointer position and modifier state.
  * The position is given in coordinates relative to @window.
  * 
- * Return value: the window containing the pointer (as with gdk_window_at_pointer()), or %NULL
- *               if the window containing the pointer isn't known to GDK
+ * Return value: the window containing the pointer (as with
+ * gdk_window_at_pointer()), or %NULL if the window containing the
+ * pointer isn't known to GDK
  **/
 GdkWindow*
 gdk_window_get_pointer (GdkWindow	  *window,
@@ -2706,10 +2717,10 @@ gdk_window_get_pointer (GdkWindow	  *window,
  * @win_x: return location for origin of the window under the pointer
  * @win_y: return location for origin of the window under the pointer
  * 
- * Obtains the window underneath the mouse pointer, returning the location
- * of that window in @win_x, @win_y. Returns %NULL if the window under
- * the mouse pointer is not known to GDK (for example, belongs to
- * another application).
+ * Obtains the window underneath the mouse pointer, returning the
+ * location of that window in @win_x, @win_y. Returns %NULL if the
+ * window under the mouse pointer is not known to GDK (for example,
+ * belongs to another application).
  * 
  * Return value: window under the mouse pointer
  **/
