@@ -40,6 +40,7 @@ enum
   PROP_MIN_WIDTH,
   PROP_MAX_WIDTH,
   PROP_TITLE,
+  PROP_EXPAND,
   PROP_CLICKABLE,
   PROP_WIDGET,
   PROP_ALIGNMENT,
@@ -252,6 +253,14 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
   
   g_object_class_install_property (object_class,
+                                   PROP_EXPAND,
+                                   g_param_spec_boolean ("expand",
+							 _("Expand"),
+							 _("Column gets share of extra width allocated to the widget"),
+							 FALSE,
+							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
                                    PROP_CLICKABLE,
                                    g_param_spec_boolean ("clickable",
                                                         _("Clickable"),
@@ -409,6 +418,11 @@ gtk_tree_view_column_set_property (GObject         *object,
                                       g_value_get_string (value));
       break;
 
+    case PROP_EXPAND:
+      gtk_tree_view_column_set_expand (tree_column,
+				       g_value_get_boolean (value));
+      break;
+
     case PROP_CLICKABLE:
       gtk_tree_view_column_set_clickable (tree_column,
                                           g_value_get_boolean (value));
@@ -495,6 +509,11 @@ gtk_tree_view_column_get_property (GObject         *object,
     case PROP_TITLE:
       g_value_set_string (value,
                           gtk_tree_view_column_get_title (tree_column));
+      break;
+
+    case PROP_EXPAND:
+      g_value_set_boolean (value,
+                          gtk_tree_view_column_get_expand (tree_column));
       break;
 
     case PROP_CLICKABLE:
@@ -1929,6 +1948,53 @@ gtk_tree_view_column_get_title (GtkTreeViewColumn *tree_column)
 }
 
 /**
+ * gtk_tree_view_column_set_expand:
+ * @tree_column: A #GtkTreeViewColumn
+ * @expand: 
+ * 
+ * Sets the column to take available extra space.  This space is shared equally
+ * amongst all columns that have the expand set to %TRUE.  If no column has this
+ * option set, then the last column gets all extra space.  By default, every
+ * column is created with this %FALSE.
+ **/
+void
+gtk_tree_view_column_set_expand (GtkTreeViewColumn *tree_column,
+				 gboolean           expand)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+
+  expand = expand?TRUE:FALSE;
+  if (tree_column->expand == expand)
+    return;
+  tree_column->expand = expand;
+
+  if (tree_column->visible &&
+      tree_column->tree_view != NULL &&
+      GTK_WIDGET_REALIZED (tree_column->tree_view))
+    {
+      gtk_widget_queue_resize (tree_column->tree_view);
+    }
+
+  g_object_notify (G_OBJECT (tree_column), "expand");
+}
+
+/**
+ * gtk_tree_view_column_get_expand:
+ * @tree_column: 
+ * 
+ * Return %TRUE if the column expands to take any available space.
+ * 
+ * Return value: %TRUE, if the column expands
+ **/
+gboolean
+gtk_tree_view_column_get_expand (GtkTreeViewColumn *tree_column)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), FALSE);
+
+  return tree_column->expand;
+}
+
+/**
  * gtk_tree_view_column_set_clickable:
  * @tree_column: A #GtkTreeViewColumn.
  * @clickable: %TRUE if the header is active.
@@ -2381,9 +2447,9 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn *tree_column,
     }
 }
 
-/* both rendering and rendering focus are somewhat complicated, and a bit of
- * code.  Rather than duplicate them, we put them together to keep the code in
- * one place
+/* rendering, event handling and rendering focus are somewhat complicated, and
+ * quite a bit of code.  Rather than duplicate them, we put them together to
+ * keep the code in one place.
  */
 enum {
   CELL_ACTION_RENDER,
@@ -2414,12 +2480,17 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
   gint focus_line_width;
   gint dx;
   gint special_cells;
+  gboolean rtl;
+  /* If we have rtl text, we need to transform our areas */
+  GdkRectangle rtl_cell_area;
+  GdkRectangle rtl_background_area;
 
   min_x = G_MAXINT;
   min_y = G_MAXINT;
   max_x = 0;
   max_y = 0;
 
+  rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_column->tree_view)) == GTK_TEXT_DIR_RTL);
   special_cells = _gtk_tree_view_column_count_special_cells (tree_column);
 
   if (special_cells > 1 && action == CELL_ACTION_FOCUS)
@@ -2452,7 +2523,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 
   real_cell_area = *cell_area;
   real_background_area = *background_area;
-  dx = real_cell_area.x - real_background_area.x - focus_line_width;
+  /* HUH?  dx = real_cell_area.x - real_background_area.x - focus_line_width; */
 
   real_cell_area.x += focus_line_width;
 
@@ -2469,7 +2540,8 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       full_requested_width += info->requested_width;
     }
 
-  extra_space = background_area->width - full_requested_width - dx;
+  extra_space = cell_area->width - full_requested_width;
+
   if (extra_space < 0)
     extra_space = 0;
   else if (extra_space > 0 && expand_cell_count > 0)
@@ -2496,23 +2568,34 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       real_cell_area.width = real_background_area.width;
       real_cell_area.width -= 2 * focus_line_width;
 
+      rtl_cell_area = real_cell_area;
+      rtl_background_area = real_background_area;
+      if (rtl)
+	{
+	  rtl_cell_area.x = cell_area->x + cell_area->width - (real_cell_area.x - cell_area->x) - real_cell_area.width;
+	  rtl_background_area.x = background_area->x + background_area->width - (real_background_area.x - background_area->x) - real_background_area.width;
+	}
+
+      /* RENDER */
       if (action == CELL_ACTION_RENDER)
 	{
 	  gtk_cell_renderer_render (info->cell,
 				    window,
 				    tree_column->tree_view,
-				    &real_background_area,
-				    &real_cell_area,
+				    &rtl_background_area,
+				    &rtl_cell_area,
 				    expose_area,
 				    flags);
 	}
+
+      /* FOCUS */
       else if (action == CELL_ACTION_FOCUS)
 	{
 	  gint x_offset, y_offset, width, height;
 
 	  gtk_cell_renderer_get_size (info->cell,
 				      tree_column->tree_view,
-				      &real_cell_area,
+				      &rtl_cell_area,
 				      &x_offset, &y_offset,
 				      &width, &height);
 
@@ -2520,24 +2603,25 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 	    {
 	      if (info->has_focus)
 	        {
-		  min_x = real_cell_area.x + x_offset;
+		  min_x = rtl_cell_area.x + x_offset;
 		  max_x = min_x + width;
-		  min_y = real_cell_area.y + y_offset;
+		  min_y = rtl_cell_area.y + y_offset;
 		  max_y = min_y + height;
 		}
 	    }
 	  else
 	    {
-	      if (min_x > (real_cell_area.x + x_offset))
-		min_x = real_cell_area.x + x_offset;
-	      if (max_x < real_cell_area.x + x_offset + width)
-		max_x = real_cell_area.x + x_offset + width;
-	      if (min_y > (real_cell_area.y + y_offset))
-		min_y = real_cell_area.y + y_offset;
-	      if (max_y < real_cell_area.y + y_offset + height)
-		max_y = real_cell_area.y + y_offset + height;
+	      if (min_x > (rtl_cell_area.x + x_offset))
+		min_x = rtl_cell_area.x + x_offset;
+	      if (max_x < rtl_cell_area.x + x_offset + width)
+		max_x = rtl_cell_area.x + x_offset + width;
+	      if (min_y > (rtl_cell_area.y + y_offset))
+		min_y = rtl_cell_area.y + y_offset;
+	      if (max_y < rtl_cell_area.y + y_offset + height)
+		max_y = rtl_cell_area.y + y_offset + height;
 	    }
 	}
+      /* EVENT */
       else if (action == CELL_ACTION_EVENT)
 	{
 	  gboolean try_event = FALSE;
@@ -2551,8 +2635,8 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 		      cell_area->x + cell_area->width > ((GdkEventButton *)event)->x)
 		    try_event = TRUE;
 		}
-	      else if (real_cell_area.x <= ((GdkEventButton *)event)->x &&
-		  real_cell_area.x + real_cell_area.width > ((GdkEventButton *)event)->x)
+	      else if (rtl_cell_area.x <= ((GdkEventButton *)event)->x &&
+		  rtl_cell_area.x + rtl_cell_area.width > ((GdkEventButton *)event)->x)
 		  /* only activate cell if the user clicked on an individual
 		   * cell
 		   */
@@ -2637,23 +2721,33 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       real_cell_area.width = real_background_area.width;
       real_cell_area.width -= 2 * focus_line_width;
 
+      rtl_cell_area = real_cell_area;
+      rtl_background_area = real_background_area;
+      if (rtl)
+	{
+	  rtl_cell_area.x = cell_area->x + cell_area->width - (real_cell_area.x - cell_area->x) - real_cell_area.width;
+	  rtl_background_area.x = background_area->x + background_area->width - (real_background_area.x - background_area->x) - real_background_area.width;
+	}
+
+      /* RENDER */
       if (action == CELL_ACTION_RENDER)
 	{
 	  gtk_cell_renderer_render (info->cell,
 				    window,
 				    tree_column->tree_view,
-				    &real_background_area,
-				    &real_cell_area,
+				    &rtl_background_area,
+				    &rtl_cell_area,
 				    expose_area,
 				    flags);
 	}
+      /* FOCUS */
       else if (action == CELL_ACTION_FOCUS)
 	{
 	  gint x_offset, y_offset, width, height;
 
 	  gtk_cell_renderer_get_size (info->cell,
 				      tree_column->tree_view,
-				      &real_cell_area,
+				      &rtl_cell_area,
 				      &x_offset, &y_offset,
 				      &width, &height);
 
@@ -2661,24 +2755,25 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 	    {
 	      if (info->has_focus)
 	        {
-		  min_x = real_cell_area.x + x_offset;
+		  min_x = rtl_cell_area.x + x_offset;
 		  max_x = min_x + width;
-		  min_y = real_cell_area.y + y_offset;
+		  min_y = rtl_cell_area.y + y_offset;
 		  max_y = min_y + height;
 		}
 	    }
 	  else
 	    {
-	      if (min_x > (real_cell_area.x + x_offset))
-		min_x = real_cell_area.x + x_offset;
-	      if (max_x < real_cell_area.x + x_offset + width)
-		max_x = real_cell_area.x + x_offset + width;
-	      if (min_y > (real_cell_area.y + y_offset))
-		min_y = real_cell_area.y + y_offset;
-	      if (max_y < real_cell_area.y + y_offset + height)
-		max_y = real_cell_area.y + y_offset + height;
+	      if (min_x > (rtl_cell_area.x + x_offset))
+		min_x = rtl_cell_area.x + x_offset;
+	      if (max_x < rtl_cell_area.x + x_offset + width)
+		max_x = rtl_cell_area.x + x_offset + width;
+	      if (min_y > (rtl_cell_area.y + y_offset))
+		min_y = rtl_cell_area.y + y_offset;
+	      if (max_y < rtl_cell_area.y + y_offset + height)
+		max_y = rtl_cell_area.y + y_offset + height;
 	    }
 	}
+      /* EVENT */
       else if (action == CELL_ACTION_EVENT)
         {
 	  gboolean try_event = FALSE;

@@ -497,6 +497,11 @@ calling gtk_tree_view_column_set_cell_data_func()
 
 </para>
 
+<!-- ##### ARG GtkTreeViewColumn:expand ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTreeViewColumn:fixed-width ##### -->
 <para>
 

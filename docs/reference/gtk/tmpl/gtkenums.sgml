@@ -204,6 +204,7 @@ Used for justifying the text inside a #GtkLabel widget. (See also
 @GTK_MOVEMENT_PARAGRAPH_ENDS: 
 @GTK_MOVEMENT_PAGES: 
 @GTK_MOVEMENT_BUFFER_ENDS: 
+@GTK_MOVEMENT_HORIZONTAL_PAGES: 
 
 <!-- ##### ENUM GtkOrientation ##### -->
 <para>

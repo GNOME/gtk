@@ -1,3 +1,43 @@
+Sun Mar  2 23:35:57 2003  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_get_size):
+	handle rtl code.
+
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_get_size): ditto
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_get_size): ditto
+
+	* gtk/gtktreeview.c: (invalidate_column),
+	(invalidate_last_column),
+	(gtk_tree_view_get_real_requested_width_from_column),
+	(gtk_tree_view_size_allocate_columns),
+	(gtk_tree_view_size_allocate), (gtk_tree_view_button_press),
+	(gtk_tree_view_button_release_drag_column),
+	(gtk_tree_view_update_current_reorder),
+	(gtk_tree_view_motion_drag_column), (gtk_tree_view_bin_expose),
+	(gtk_tree_view_key_press), (gtk_tree_view_header_focus),
+	(gtk_tree_view_get_background_xrange),
+	(gtk_tree_view_get_arrow_xrange),
+	(gtk_tree_view_is_expander_column),
+	(gtk_tree_view_set_column_drag_info),
+	(gtk_tree_view_move_cursor_left_right):
+	Add RTL support.
+
+	* gtk/gtktreeviewcolumn.h (struct _GtkTreeViewColumn): add an
+	expand flag.
+
+	* gtk/gtktreeviewcolumn.c:
+	(gtk_tree_view_column_class_init),
+	(gtk_tree_view_column_set_property),
+	(gtk_tree_view_column_get_property),
+	(gtk_tree_view_column_set_expand),
+	(gtk_tree_view_column_get_expand),
+	(gtk_tree_view_column_cell_process_action):
+	Add support for expand flag
+
+Fri Feb 28 02:06:17 2003  Jonathan Blandford  <jrb@gnome.org>
+
+
 2003-03-02  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdk.def

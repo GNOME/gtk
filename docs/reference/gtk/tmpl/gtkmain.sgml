@@ -458,6 +458,7 @@ point the timeout is destroyed and will not be called again.
 @Returns: A unique id for the event source.
 @Deprecated: Use g_timeout_add_full() instead.
 
+
 <!-- ##### FUNCTION gtk_timeout_add ##### -->
 <para>
 Registers a function to be called periodically. The function will be called
@@ -471,6 +472,7 @@ point the timeout is destroyed and will not be called again.
 @data: The data to pass to the function.
 @Returns: A unique id for the event source.
 @Deprecated: Use g_timeout_add() instead.
+
 
 <!-- ##### FUNCTION gtk_timeout_remove ##### -->
 <para>
@@ -508,6 +510,7 @@ Note that you will interfere with GTK+ if you use a priority above
 @data: Data to pass to that function.
 @Returns: A unique id for the event source.
 @Deprecated: Use g_idle_add_full() instead.
+
 
 <!-- ##### FUNCTION gtk_idle_add_full ##### -->
 <para>
@@ -560,6 +563,7 @@ on a file descriptor.
   handler is removed, or %NULL.
 @Returns: A unique id for the event source; to be used with gtk_input_remove().
 @Deprecated: Use g_io_watch_full() instead.
+
 
 <!-- ##### FUNCTION gtk_input_remove ##### -->
 <para>
