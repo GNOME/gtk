@@ -497,12 +497,13 @@ gtk_file_system_volume_render_icon (GtkFileSystem        *file_system,
  * @parent: location to store parent path name
  * @error: location to store error, or %NULL
  * 
- * Gets the name of the parent folder of a file.
+ * Gets the name of the parent folder of a path.  If the path has no parent, as when
+ * you request the parent of a file system root, then @parent will be set to %NULL.
  * 
- * Return value: TRUE if the operation was successful; note that in this case @parent
- * can be returned as %NULL if the base @path has no parent folder (i.e. if it is
- * already a file system root).  If the operation fails, this function returns FALSE
- * and sets the @error value if it is specified.
+ * Return value: %TRUE if the operation was successful:  @parent will be set to
+ * the name of the @path's parent, or to %NULL if @path is already a file system
+ * root.  If the operation fails, this function returns %FALSE, sets @parent to
+ * NULL, and sets the @error value if it is specified.
  **/
 gboolean
 gtk_file_system_get_parent (GtkFileSystem     *file_system,
@@ -510,21 +511,18 @@ gtk_file_system_get_parent (GtkFileSystem     *file_system,
 			    GtkFilePath      **parent,
 			    GError           **error)
 {
-  GtkFilePath *tmp_parent = NULL;
   gboolean result;
   
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (parent != NULL, FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  result = GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_parent (file_system, path, &tmp_parent, error);
-  g_assert (result || tmp_parent == NULL);
+  *parent = NULL;
 
-  if (parent)
-    *parent = tmp_parent;
-  else
-    gtk_file_path_free (tmp_parent);
-  
+  result = GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_parent (file_system, path, parent, error);
+  g_assert (result || *parent == NULL);
+
   return result;
 }
 
