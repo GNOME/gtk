@@ -127,7 +127,7 @@ gtk_path_bar_finalize (GObject *object)
   path_bar = GTK_PATH_BAR (object);
   g_list_free (path_bar->button_list);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_path_bar_parent_class)->finalize (object);
 }
 
 /* Size requisition:
