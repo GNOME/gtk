@@ -1,3 +1,7 @@
+Fri Aug 21 16:10:38 EDT 1998 The Rasterman <raster@redhat.com>
+	* gtkrc.c - added api calls to find module and theme paths from gtk.
+	  nuked gtk_install_prefix global.
+	
 Fri Aug 21 12:36:46 EDT 1998 The Rasterman <raster@redhat.com>
 	* fixed gtk_install_prefix global.
 	  

@@ -23,8 +23,6 @@
 #include <gtk/gtkstyle.h>
 #include <gtk/gtkwidget.h>
 
-extern gchar *gtk_install_prefix;
-
 #ifdef __cplusplus
 extern "C" {
 #pragma }
@@ -90,6 +88,8 @@ gchar      *gtk_rc_find_pixmap_in_path (GScanner *scanner,
 					gchar    *pixmap_file);
 gchar      *gtk_rc_find_module_in_path (GScanner *scanner,
 					gchar    *module_file);
+gchar      *gtk_rc_get_theme_dir(void);
+gchar      *gtk_rc_get_module_dir(void);
 
 /* private functions/definitions */
 typedef enum {

@@ -295,7 +295,10 @@ EXTRA_DIST = \
 	tree_minus.xbm          \
         circles.xbm
 
-INCLUDES = -DGTK_INSTALL_PREFIX=\"$(exec_prefix)\"   -I$(top_srcdir) @GLIB_CFLAGS@ @x_cflags@
+INCLUDES = \
+-DGTK_EXE_PREFIX=\"$(exec_prefix)\"   \
+-DGTK_DATA_PREFIX=\"$(prefix)\"   \
+-I$(top_srcdir) @GLIB_CFLAGS@ @x_cflags@
 
 noinst_PROGRAMS = testgtk testinput testselection testthreads simple 
 

@@ -96,8 +96,6 @@ static void        gtk_rc_append_default_pixmap_path (void);
 static void        gtk_rc_append_default_module_path (void);
 static void        gtk_rc_append_pixmap_path         (gchar *dir);
 
-gchar *gtk_install_prefix = GTK_INSTALL_PREFIX;
-
 
 static	GScannerConfig	gtk_rc_scanner_config =
 {
@@ -194,13 +192,13 @@ static GtkImageLoader image_loader = NULL;
 
 /* RC file handling */
 
-static void
-gtk_rc_append_default_pixmap_path(void)
+
+gchar *
+gtk_rc_get_theme_dir(void)
 {
   gchar *var, *path;
-  gint n;
 
-  var = getenv("GTK_INSTALL_PREFIX");
+  var = getenv("GTK_DATA_PREFIX");
   if (var)
     {
       path = g_malloc(strlen(var) + strlen("/share/gtk/themes") +1);
@@ -208,12 +206,51 @@ gtk_rc_append_default_pixmap_path(void)
     }
   else
     {
-      path = g_malloc(strlen(GTK_INSTALL_PREFIX) + strlen("/share/gtk/themes") +1);
-      sprintf(path, "%s%s", GTK_INSTALL_PREFIX, "/share/gtk/themes");
+      path = g_malloc(strlen(GTK_DATA_PREFIX) + strlen("/share/gtk/themes") +1);
+      sprintf(path, "%s%s", GTK_DATA_PREFIX, "/share/gtk/themes");
+    }
+  return path;
+}
+
+gchar *
+gtk_rc_get_module_dir(void)
+{
+  gchar *var, *path;
+
+  var = getenv("GTK_EXE_PREFIX");
+  if (var)
+    {
+      path = g_malloc(strlen(var) + strlen("/lib/gtk/themes/engines") +1);
+      sprintf(path, "%s%s", var, "/lib/gtk/themes/engines");
+    }
+  else
+    {
+      path = g_malloc(strlen(GTK_EXE_PREFIX) + strlen("/lib/gtk/themes/engines") +1);
+      sprintf(path, "%s%s", GTK_EXE_PREFIX, "/lib/gtk/themes/engines");
+    }
+  return path;
+}
+
+static void
+gtk_rc_append_default_pixmap_path(void)
+{
+  gchar *var, *path;
+  gint n;
+
+  var = getenv("GTK_DATA_PREFIX");
+  if (var)
+    {
+      path = g_malloc(strlen(var) + strlen("/share/gtk/themes") +1);
+      sprintf(path, "%s%s", var, "/share/gtk/themes");
+    }
+  else
+    {
+      path = g_malloc(strlen(GTK_DATA_PREFIX) + strlen("/share/gtk/themes") +1);
+      sprintf(path, "%s%s", GTK_DATA_PREFIX, "/share/gtk/themes");
     }
   
   for (n = 0; pixmap_path[n]; n++) ;
-  if (n >= GTK_RC_MAX_MODULE_PATHS - 1)
+  if (n >= GTK_RC_MAX_PIXMAP_PATHS - 1)
     return;
   pixmap_path[n++] = g_strdup(path);
   pixmap_path[n] = NULL;
@@ -242,7 +279,7 @@ gtk_rc_append_default_module_path(void)
   if (n >= GTK_RC_MAX_MODULE_PATHS - 1)
     return;
   
-  var = getenv("GTK_INSTALL_PREFIX");
+  var = getenv("GTK_EXE_PREFIX");
   if (var)
     {
       path = g_malloc(strlen(var) + strlen("/lib/gtk/themes/engines") +1);
@@ -250,8 +287,8 @@ gtk_rc_append_default_module_path(void)
     }
   else
     {
-      path = g_malloc(strlen(GTK_INSTALL_PREFIX) + strlen("/lib/gtk/themes/engines") +1);
-      sprintf(path, "%s%s", GTK_INSTALL_PREFIX, "/lib/gtk/themes/engines");
+      path = g_malloc(strlen(GTK_EXE_PREFIX) + strlen("/lib/gtk/themes/engines") +1);
+      sprintf(path, "%s%s", GTK_EXE_PREFIX, "/lib/gtk/themes/engines");
     }
   module_path[n++] = g_strdup(path);
   g_free(path);
