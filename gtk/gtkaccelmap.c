@@ -115,10 +115,10 @@ _gtk_accel_path_is_valid (const gchar *accel_path)
  * To change the accelerator during runtime programatically, use
  * gtk_accel_map_change_entry().
  * The accelerator path must consist of "&lt;WINDOWTYPE&gt;/Category1/Category2/.../Action",
- * where WINDOWTYPE should be a unique application specifc identifier, that
+ * where WINDOWTYPE should be a unique application-specific identifier, that
  * corresponds to the kind of window the accelerator is being used in, e.g. "Gimp-Image",
  * "Abiword-Document" or "Gnumeric-Settings".
- * The Category1/.../Action portion is most apropriately choosen by the action the
+ * The Category1/.../Action portion is most appropriately chosen by the action the
  * accelerator triggers, i.e. for accelerators on menu items, choose the item's menu path,
  * e.g. "File/Save As", "Image/View/Zoom" or "Edit/Select All".
  * So a full valid accelerator path may look like:
@@ -378,10 +378,10 @@ internal_change_entry (const gchar    *accel_path,
  * @returns:     %TRUE if the accelerator could be changed, %FALSE otherwise
  *
  * Change the @accel_key and @accel_mods currently associated with @accel_path.
- * Due to conflicts with other accelerators, a change may not alwys be possible,
+ * Due to conflicts with other accelerators, a change may not always be possible,
  * @replace indicates whether other accelerators may be deleted to resolve such
  * conflicts. A change will only occur if all conflicts could be resolved (which
- * might not be the case if conflicting accelerators are locked). Succesful
+ * might not be the case if conflicting accelerators are locked). Successful
  * changes are indicated by a %TRUE return value.
  */
 gboolean

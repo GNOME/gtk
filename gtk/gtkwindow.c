@@ -1223,6 +1223,14 @@ gtk_window_mnemonic_activate (GtkWindow      *window,
   return FALSE;
 }
 
+/**
+ * gtk_window_set_mnemonic_modifier:
+ * @window: a #GtkWindow
+ * @modifier: the modifier mask used to activate
+ *               mnemonics on this window.
+ *
+ * Sets the mnemonic modifier for this window. 
+ **/
 void
 gtk_window_set_mnemonic_modifier (GtkWindow      *window,
 				  GdkModifierType modifier)

@@ -165,7 +165,7 @@ it's larger
 
 <!-- ##### MACRO gtk_window_position ##### -->
 <para>
-
+Deperecated alias for gtk_window_set_position().
 </para>
 
 

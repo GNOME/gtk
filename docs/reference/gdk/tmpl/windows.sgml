@@ -528,10 +528,10 @@ Deprecated equivalent to gdk_draw_drawable(), see that function for docs
 
 <!-- ##### FUNCTION gdk_window_register_dnd ##### -->
 <para>
-
+Registers a window as a potential drop destination.
 </para>
 
-@window: 
+@window: a #GdkWindow.
 
 
 <!-- ##### FUNCTION gdk_window_begin_resize_drag ##### -->

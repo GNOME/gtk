@@ -152,7 +152,7 @@ is given in the <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
 Checks if any events are waiting to be processed.
 </para>
 
-@Returns: TRUE if any events are pending.
+@Returns: %TRUE if any events are pending.
 
 
 <!-- ##### FUNCTION gdk_event_peek ##### -->
@@ -162,7 +162,7 @@ Gets a copy of the first #GdkEvent in the event queue.
 It only checks the events that have already been moved to the GDK event queue.)
 </para>
 
-@Returns: a copy of the first #GdkEvent on the event queue, or NULL if no
+@Returns: a copy of the first #GdkEvent on the event queue, or %NULL if no
 events are in the queue. The returned #GdkEvent should be freed with
 gdk_event_free().
 
@@ -173,7 +173,7 @@ Gets the next #GdkEvent to be processed, fetching events from the X server if
 necessary.
 </para>
 
-@Returns: the next #GdkEvent to be processed, or NULL if no events are pending.
+@Returns: the next #GdkEvent to be processed, or %NULL if no events are pending.
 The returned #GdkEvent should be freed with gdk_event_free().
 
 
@@ -185,7 +185,7 @@ GraphicsExpose events are handled before the widget is scrolled.
 </para>
 
 @window: the #GdkWindow to wait for the events for.
-@Returns: a #GdkEventExpose if a GraphicsExpose was received, or NULL if a
+@Returns: a #GdkEventExpose if a GraphicsExpose was received, or %NULL if a
 NoExpose event was received.
 
 
@@ -225,7 +225,7 @@ Gets the timestamp from a #GdkEvent.
 </para>
 
 @event: a #GdkEvent.
-@Returns: the timestamp from @event, or #GDK_CURRENT_TIME if the event has
+@Returns: the timestamp from @event, or %GDK_CURRENT_TIME if the event has
 no timestamp.
 
 
@@ -350,19 +350,23 @@ Returns non-zero if event debugging output is enabled.
 <para>
 Sets whether event debugging information is output.
 Note that GTK+ must be compiled with debugging enabled, i.e. using the
-'--enable-debug' configure option.
+<option>--enable-debug</option> configure option.
 </para>
 
-@show_events: TRUE to output event debugging information.
+@show_events: %TRUE to output event debugging information.
 
 
 <!-- ##### FUNCTION gdk_setting_get ##### -->
 <para>
-
+Obtains a desktop-wide setting, such as the double-click time.
+</para>
+<para>
+FIXME needs a list of valid settings here, or a link to 
+more information.
 </para>
 
-@name: 
-@value: 
-@Returns: 
+@name: the name of the setting.
+@value: location to store the value of the setting.
+@Returns: %TRUE if the value has been successfully stored.
 
 

@@ -514,7 +514,7 @@ gtk_fixed_forall (GtkContainer *container,
  * Sets whether a #GtkFixed widget is created with a separate
  * #GdkWindow for widget->window or not. (By default, it will be
  * created with no separate #GdkWindow). This function must be called
- * while the is not realized, for instance, immediately after the
+ * while the #GtkFixed is not realized, for instance, immediately after the
  * window is created.
  **/
 void
@@ -540,7 +540,7 @@ gtk_fixed_set_has_window (GtkFixed *fixed,
  * Gets whether the #GtkFixed has it's own #GdkWindow.
  * See gdk_fixed_set_has_window().
  * 
- * Return value: 
+ * Return value: %TRUE if @fixed has its own window.
  **/
 gboolean
 gtk_fixed_get_has_window (GtkFixed *fixed)

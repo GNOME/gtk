@@ -7,7 +7,8 @@ functions for controlling drag and drop handling.
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 These functions provide a low level interface for drag and drop.
-GDK supports both the Xdnd and Motif drag and drop protocols transparently.
+The X backend of GDK supports both the Xdnd and Motif drag and drop protocols 
+transparently, the Win32 backend supports the WM_DROPFILES protocol.
 </para>
 <para>
 GTK+ provides a higher level abstraction based on top of these functions,
@@ -95,8 +96,6 @@ the GTK+ documentation for more information.
 @window: 
 @targets: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@actions: 
 
 
 <!-- ##### FUNCTION gdk_drag_motion ##### -->
@@ -113,8 +112,6 @@ the GTK+ documentation for more information.
 @possible_actions: 
 @time: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@action: 
 
 
 <!-- ##### FUNCTION gdk_drop_finish ##### -->
@@ -139,16 +136,18 @@ the GTK+ documentation for more information.
 
 <!-- ##### ENUM GdkDragProtocol ##### -->
 <para>
-
+Is used in #GdkDragContext to indicate the protocol according to
+which DND is done.
 </para>
 
-@GDK_DRAG_PROTO_MOTIF: 
-@GDK_DRAG_PROTO_XDND: 
-@GDK_DRAG_PROTO_ROOTWIN: 
-@GDK_DRAG_PROTO_NONE: 
-@GDK_DRAG_PROTO_WIN32_DROPFILES: 
-@GDK_DRAG_PROTO_OLE2: 
-@GDK_DRAG_PROTO_LOCAL: 
+@GDK_DRAG_PROTO_MOTIF: The Motif DND protocol.
+@GDK_DRAG_PROTO_XDND: The Xdnd protocol.
+@GDK_DRAG_PROTO_ROOTWIN: An extension to the Xdnd protocol for
+  unclaimed root window drops.
+@GDK_DRAG_PROTO_NONE: no protocol. 
+@GDK_DRAG_PROTO_WIN32_DROPFILES: The simple WM_DROPFILES protocol.
+@GDK_DRAG_PROTO_OLE2: The complex OLE2 DND protocol (not implemented). 
+@GDK_DRAG_PROTO_LOCAL: Intra-application DND.
 
 <!-- ##### FUNCTION gdk_drag_context_unref ##### -->
 <para>
@@ -160,19 +159,21 @@ the GTK+ documentation for more information.
 
 <!-- ##### STRUCT GdkDragContext ##### -->
 <para>
-
+A <structname>GdkDragContext</structname> holds information about a 
+drag in progress. It is used on both source and destination sides.
 </para>
 
-@parent_instance: 
-@protocol: 
-@is_source: 
-@source_window: 
-@dest_window: 
-@targets: 
-@actions: 
-@suggested_action: 
+@parent_instance:
+@protocol: the DND protocol which governs this drag.
+@is_source: %TRUE if the context is used on the source side.
+@source_window: the source of this drag.
+@dest_window: the destination window of this drag. 
+@targets: a list of targets accepted on the destination.
+@actions: a bitmask of all possible actions.
+@suggested_action: the suggested action.
 @action: 
-@start_time: 
+@start_time: a timestamp recording the start time of this drag.
+
 
 <!-- ##### ENUM GdkDragAction ##### -->
 <para>

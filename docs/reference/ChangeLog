@@ -1,6 +1,19 @@
 2001-11-28  Matthias Clasen  <matthiasc@poet.de>
 	
-	gdk/tmpl/windows.sgml, gdk/tmpl/general.sgml,
+	* gtk/tmpl/gtkwindow.sgml: Document gtk_window_position.
+
+	* gdk/tmpl/dnd.sgml: Document GdkDragProtocol and GdkDragContext.
+
+	* gdk/tmpl/events.sgml: Document gdk_setting_get.
+
+	* gdk/tmpl/fonts.sgml: Document gdk_font_full_name_get and
+	gdk_font_full_name_free.
+
+	* gdk/tmpl/windows.sgml: Document gdk_window_register_dnd.
+
+2001-11-28  Matthias Clasen  <matthiasc@poet.de>
+	
+	* gdk/tmpl/windows.sgml, gdk/tmpl/general.sgml,
 	gdk/tmpl/pixmaps.sgml, gdk/tmpl/drawing.sgml,
 	gdk/tmpl/gcs.sgml: Updates. 
 

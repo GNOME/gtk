@@ -1,3 +1,12 @@
+2001-11-28  Matthias Clasen  <matthiasc@poet.de>
+	
+	* gtk/gtkaccelmap.c: Typo fixes. (#65607)
+
+	* gtk/gtkfixed.c (gtk_fixed_set_has_window, gtk_fixed_get_has_window):
+	Fix docs. (#65505)
+
+	* gtk/gtkwindow.c (gtk_window_set_mnemnonic_modifier): Document.
+
 Wed Nov 28 18:19:12 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenu.c (gtk_menu_set_tearoff_hints): Move

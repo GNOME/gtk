@@ -6,7 +6,7 @@ loading and manipulating fonts
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-The GdkFont data type represents a font for drawing on
+The #GdkFont data type represents a font for drawing on
 the screen. These functions provide support for
 loading fonts, and also for determining the dimensions
 of characters and strings when drawn with a particular
@@ -147,7 +147,7 @@ the registry and and encoding fields match the desired
 character set, then that font is used, otherwise if
 the XLFD contains wild-cards for the registry and encoding
 fields, the registry and encoding for the desired character
-set are subsituted in and a lookup is done. If a match is found
+set are substituted in and a lookup is done. If a match is found
 that font is used. Otherwise, processing continues
 on to the next font in the list.
 </para>
@@ -197,7 +197,7 @@ of forms of string input:
   <varlistentry>
     <term>Wide character string</term>
     <listitem><para>
-    For a number of the text-measuring functions, GTK+
+    For a number of the text-measuring functions, GDK
     provides a variant (such as gdk_text_width_wc()) which
     takes a <type>GdkWChar *</type> instead of a 
     <type>gchar *</type>. The input is then taken to
@@ -265,64 +265,29 @@ here).
 
 <!-- ##### STRUCT GdkFont ##### -->
 <para>
-The GdkFont structure represents a font or fontset. It
-contains the following public fields. A new GdkFont
+The <structname>GdkFont</structname> structure represents a font or fontset. It
+contains the following public fields. A new <structname>GdkFont</structname>
 structure is returned by gdk_font_load() or gdk_fontset_load(),
 and is reference counted with gdk_font_ref() and gdk_font_unref()
-
-<informaltable pgwide=1 frame="none" role="struct">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
-<tbody>
-
-<row>
-<entry><structfield>type</structfield></entry>
-<entry>a value of type #GdkFontType which indicates
-whether this font is a single font or a fontset.</entry>
-</row>
-
-<row>
-<entry><structfield>ascent</structfield></entry>
-<entry>the maximum distance that the font, when drawn,
-ascends above the baseline.</entry>
-</row>
-
-<row>
-<entry><structfield>descent</structfield></entry>
-<entry>the maximum distance that the font, when drawn,
-descends below the baseline.</entry>
-</row>
-
-</tbody></tgroup></informaltable>
 </para>
 
-@type: 
-@ascent: 
-@descent: 
+@type: a value of type #GdkFontType which indicates
+  whether this font is a single font or a fontset.
+@ascent: the maximum distance that the font, when drawn,
+  ascends above the baseline.
+@descent: the maximum distance that the font, when drawn,
+descends below the baseline.
+
 
 <!-- ##### ENUM GdkFontType ##### -->
 <para>
 Indicates the type of a font. The possible values
 are currently:
-
-<informaltable pgwide=1 frame="none" role="enum">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
-<tbody>
-
-<row>
-<entry>GDK_FONT_FONT</entry>
-<entry>the font is a single font.</entry>
-</row>
-
-<row>
-<entry>GDK_FONT_FONT</entry>
-<entry>the font is a fontset.</entry>
-</row>
-
-</tbody></tgroup></informaltable>
 </para>
 
-@GDK_FONT_FONT: 
-@GDK_FONT_FONTSET: 
+@GDK_FONT_FONT: the font is a single font.
+@GDK_FONT_FONTSET: the font is a fontset.
+
 
 <!-- ##### FUNCTION gdk_font_load ##### -->
 <para>
@@ -330,14 +295,12 @@ Loads a font.
 </para>
 
 <para>
-Currently, this function will always return a new
-font, however, in the future, it may be changed to
-look up the font in a cache. You should make no
-assumptions about the initial reference count.
+The font may be newly loaded or looked up the font in a cache. 
+You should make no assumptions about the initial reference count.
 </para>
 
 @font_name: a XLFD describing the font to load.
-@Returns: a #GdkFont, or NULL if the font could not be loaded.
+@Returns: a #GdkFont, or %NULL if the font could not be loaded.
 
 
 <!-- ##### FUNCTION gdk_fontset_load ##### -->
@@ -345,15 +308,13 @@ assumptions about the initial reference count.
 Loads a fontset.
 </para>
 <para>
-Currently this function will always return a new
-font, however, in the future, it may be changed to
-look up the font in a cache. You should make no
-assumptions about the initial reference count.
+The fontset may be newly loaded or looked up in a cache. 
+You should make no assumptions about the initial reference count.
 </para>
 
 @fontset_name: a comma-separated list of XLFDs describing
    the component fonts of the fontset to load.
-@Returns: a #GdkFont, or NULL if the fontset could not be loaded.
+@Returns: a #GdkFont, or %NULL if the fontset could not be loaded.
 
 
 <!-- ##### FUNCTION gdk_font_from_description ##### -->
@@ -367,7 +328,7 @@ assumptions about the initial reference count.
 
 <!-- ##### FUNCTION gdk_font_ref ##### -->
 <para>
-Increase the reference count of a count by one.
+Increases the reference count of a font by one.
 </para>
 
 @font: a #GdkFont
@@ -376,7 +337,7 @@ Increase the reference count of a count by one.
 
 <!-- ##### FUNCTION gdk_font_unref ##### -->
 <para>
-Decrease the reference count of a count by one.
+Decreases the reference count of a font by one.
 If the result is zero, destroys the font.
 </para>
 
@@ -406,11 +367,11 @@ not currently work correctly for fontsets.
 
 <!-- ##### FUNCTION gdk_string_extents ##### -->
 <para>
-Returns the metrics of a NULL-terminated string.
+Returns the metrics of a nul-terminated string.
 </para>
 
 @font: a #GdkFont.
-@string: the NULL-terminated string to measure.
+@string: the nul-terminated string to measure.
 @lbearing: the left bearing of the string.
 @rbearing: the right bearing of the string.
 @width: the width of the string.
@@ -452,20 +413,20 @@ Returns the metrics of a string of wide characters.
 
 <!-- ##### FUNCTION gdk_string_width ##### -->
 <para>
-Determine the width of a NULL-terminated string.
+Determines the width of a nul-terminated string.
 (The distance from the origin of the string to the 
 point where the next string in a sequence of strings
 should be drawn)
 </para>
 
 @font: a #GdkFont
-@string: the NULL-terminated string to measure
+@string: the nul-terminated string to measure
 @Returns: the width of the string in pixels.
 
 
 <!-- ##### FUNCTION gdk_text_width ##### -->
 <para>
-Determine the width of a given string.
+Determines the width of a given string.
 </para>
 
 @font: a #GdkFont
@@ -476,7 +437,7 @@ Determine the width of a given string.
 
 <!-- ##### FUNCTION gdk_text_width_wc ##### -->
 <para>
-Determine the width of a given wide-character string.
+Determines the width of a given wide-character string.
 </para>
 
 @font: a #GdkFont
@@ -487,7 +448,7 @@ Determine the width of a given wide-character string.
 
 <!-- ##### FUNCTION gdk_char_width ##### -->
 <para>
-Determine the width of a given character.
+Determines the width of a given character.
 </para>
 
 @font: a #GdkFont
@@ -497,7 +458,7 @@ Determine the width of a given character.
 
 <!-- ##### FUNCTION gdk_char_width_wc ##### -->
 <para>
-Determine the width of a given wide character. (Encoded
+Determines the width of a given wide character. (Encoded
 in the wide-character encoding of the current locale).
 </para>
 
@@ -509,14 +470,14 @@ in the wide-character encoding of the current locale).
 <!-- ##### FUNCTION gdk_string_measure ##### -->
 <para>
 Determines the distance from the origin to the rightmost
-portion of a NULL-terminated string when drawn. This is not the
+portion of a nul-terminated string when drawn. This is not the
 correct value for determining the origin of the next
 portion when drawing text in multiple pieces.
 See gdk_string_width().
 </para>
 
 @font: a #GdkFont
-@string: the NULL-terminated string to measure.
+@string: the nul-terminated string to measure.
 @Returns: the right bearing of the string in pixels.
 
 
@@ -550,14 +511,14 @@ portion when drawing text in multiple pieces.
 
 <!-- ##### FUNCTION gdk_string_height ##### -->
 <para>
-Determines the total height of a given NULL-terminated
+Determines the total height of a given nul-terminated
 string. This value is not generally useful, because you
 cannot determine how this total height will be drawn in
 relation to the baseline. See gdk_string_extents().
 </para>
 
 @font: a #GdkFont
-@string: the NULL-terminated string to measure.
+@string: the nul-terminated string to measure.
 @Returns: the height of the string in pixels.
 
 
@@ -590,19 +551,21 @@ relation to the baseline. See gdk_text_extents().
 
 <!-- ##### FUNCTION gdk_font_full_name_get ##### -->
 <para>
-
+Returns a comma-separated list of XLFDs for the
+fonts making up a given #GdkFont.
 </para>
 
-@font: 
-@Returns: 
+@font: a #GdkFont
+@Returns: a newly-allocated string containing a list of XLFDs, 
+  should be freed with gdk_font_full_name_free() when no longer needed.
 
 
 <!-- ##### FUNCTION gdk_font_full_name_free ##### -->
 <para>
-
+Frees a full font name obtained from gdk_font_full_name_get().
 </para>
 
-@name: 
+@name: a full font name.
 
 
 <!-- ##### TYPEDEF GdkWChar ##### -->
@@ -648,7 +611,7 @@ Multi-Byte String').
 </para>
 
 @src: a wide character string.
-@Returns: the multi-byte string corresponding to @src, or NULL if the
+@Returns: the multi-byte string corresponding to @src, or %NULL if the
 conversion failed. The returned string should be freed with g_free() when no
 longer needed.
 
@@ -661,7 +624,7 @@ Character String').
 </para>
 
 @dest: the space to place the converted wide character string into.
-@src: the multi-byte string to convert, which must be null-terminated.
+@src: the multi-byte string to convert, which must be nul-terminated.
 @dest_max: the maximum number of wide characters to place in @dest.
 @Returns: the number of wide characters written into @dest, or -1 if the
 conversion failed.
