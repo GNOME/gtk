@@ -1,3 +1,42 @@
+2004-03-19  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix #137520.
+
+	* gtk/gtkfilesystem.h (struct _GtkFileFolderIface): Added slots
+	for an ::is_finished_loading() method and a ::finished_loading()
+	signal at the end of the struct.
+
+	* gtk/gtkfilesystem.c (gtk_file_folder_base_init): Create the
+	"finished-loading" signal.
+	(gtk_file_folder_is_finished_loading): New function.
+
+	* gtk/gtkfilesystemunix.c
+	(gtk_file_folder_unix_is_finished_loading): Implement.
+
+	* gtk/gtkfilesystemmodel.c (struct _GtkFileSystemModelClass): New
+	slot for a "finished-loading" signal.
+	(gtk_file_system_model_class_init): Create the "finished-loading"
+	signal.
+	(struct _GtkFileSystemModel): New field
+	idle_finished_loading_source.  We emit the "finished-loading"
+	signal in an idle if the root folder was done loading right in
+	_gtk_file_system_model_new(), so that the caller has a chance to
+	connect to the signal.
+	(_gtk_file_system_model_new): Connect to the normal signals of the
+	folder even if the initial _list_children() fails.  Also, see if
+	the folder is finished loading; connect to the "finished-loading"
+	signal otherwise.
+	(gtk_file_system_model_finalize): Remove the idle handler.
+
+	* gtk/gtkfilechooserdefault.c (set_list_model): Set a busy cursor
+	and connect to the model's "finished-loading" signal.
+	(get_toplevel): New helper function.
+	(error_message): Use get_toplevel().
+	(trap_activate_cb): Likewise.
+	(location_popup_handler): Likewise.
+	(set_busy_cursor): New function.
+	(browse_files_model_finished_loading_cb): New callback.
+
 Thu Mar 18 12:10:45 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktreeitem.c (gtk_tree_item_forall): Include 
