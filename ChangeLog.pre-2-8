@@ -1,3 +1,8 @@
+Sat Oct 25 23:30:13 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkactiongroup.c (gtk_action_group_class_init): Add "name" 
+	as a construct-only property.  (#125475, Murray Cumming)
+
 Thu Oct 23 21:55:10 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	Fix bug 116297 and 125472

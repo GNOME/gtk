@@ -48,9 +48,23 @@ struct _GtkActionGroupPrivate
   GtkDestroyNotify translate_notify;   
 };
 
+enum 
+{
+  PROP_0,
+  PROP_NAME
+};
+
 static void       gtk_action_group_init            (GtkActionGroup      *self);
 static void       gtk_action_group_class_init      (GtkActionGroupClass *class);
 static void       gtk_action_group_finalize        (GObject             *object);
+static void       gtk_action_group_set_property    (GObject             *object,
+						    guint                prop_id,
+						    const GValue        *value,
+						    GParamSpec          *pspec);
+static void       gtk_action_group_get_property    (GObject             *object,
+						    guint                prop_id,
+						    GValue              *value,
+						    GParamSpec          *pspec);
 static GtkAction *gtk_action_group_real_get_action (GtkActionGroup      *self,
 						    const gchar         *name);
 
@@ -93,8 +107,18 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
   parent_class = g_type_class_peek_parent (klass);
 
   gobject_class->finalize = gtk_action_group_finalize;
+  gobject_class->set_property = gtk_action_group_set_property;
+  gobject_class->get_property = gtk_action_group_get_property;
   klass->get_action = gtk_action_group_real_get_action;
 
+  g_object_class_install_property (gobject_class,
+				   PROP_NAME,
+				   g_param_spec_string ("name",
+							_("Name"),
+							_("A name for the action group."),
+							NULL,
+							G_PARAM_READWRITE |
+							G_PARAM_CONSTRUCT_ONLY));
   g_type_class_add_private (gobject_class, sizeof (GtkActionGroupPrivate));
 }
 
@@ -152,6 +176,51 @@ gtk_action_group_finalize (GObject *object)
 
   if (parent_class->finalize)
     (* parent_class->finalize) (object);
+}
+
+static void
+gtk_action_group_set_property (GObject         *object,
+			       guint            prop_id,
+			       const GValue    *value,
+			       GParamSpec      *pspec)
+{
+  GtkActionGroup *self;
+  gchar *tmp;
+  
+  self = GTK_ACTION_GROUP (object);
+
+  switch (prop_id)
+    {
+    case PROP_NAME:
+      tmp = self->private_data->name;
+      self->private_data->name = g_value_dup_string (value);
+      g_free (tmp);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_action_group_get_property (GObject    *object,
+			       guint       prop_id,
+			       GValue     *value,
+			       GParamSpec *pspec)
+{
+  GtkActionGroup *self;
+  
+  self = GTK_ACTION_GROUP (object);
+
+  switch (prop_id)
+    {
+    case PROP_NAME:
+      g_value_set_string (value, self->private_data->name);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static GtkAction *
