@@ -5370,7 +5370,19 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	  retval = FALSE;
 	}
       else
-	retval = TRUE;
+	{
+	  /* check that everything up to the last component exists */
+	  gtk_file_path_free (path);
+	  path = gtk_file_path_copy (_gtk_file_chooser_entry_get_current_folder (entry));
+	  is_folder = check_is_folder (impl->file_system, path, NULL);
+	  if (!is_folder)
+	    {
+	      change_folder_and_display_error (impl, path);
+	      retval = FALSE;
+	    }
+	  else
+	    retval = TRUE;
+	}
 
       gtk_file_path_free (path);
       return retval;
