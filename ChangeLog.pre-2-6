@@ -1,3 +1,8 @@
+Tue Dec  8 15:10:17 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_transient_parent_realized):
+	Fixed order of arguments to gdk_window_transient_for().
+
 Tue Dec  8 18:02:57 GMT 1998  Tony Gale  <gale@gtk.org>
 
 	* examples/Makefile: simple top level Makefile that invokes all

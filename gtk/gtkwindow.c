@@ -562,7 +562,7 @@ gtk_window_transient_parent_realized (GtkWidget *parent,
 				      GtkWidget *window)
 {
   if (GTK_WIDGET_REALIZED (window))
-    gdk_window_set_transient_for (parent->window, window->window);
+    gdk_window_set_transient_for (window->window, parent->window);
 }
 
 static void
