@@ -1,3 +1,8 @@
+1998-03-23  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkclist.c (gtk_clist_size_allocate): Fixed xthickness ->
+	ythickness typo.
+
 Tue Mar 24 03:53:18 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkbox.c (gtk_box_remove): save the widgets visibility flag for

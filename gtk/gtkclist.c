@@ -2237,7 +2237,7 @@ gtk_clist_size_allocate (GtkWidget * widget,
       clist_allocation.width = clist->internal_allocation.width - 
 	(2 * widget->style->klass->xthickness);
       clist_allocation.height = clist->internal_allocation.height -
-	(2 * widget->style->klass->xthickness) -
+	(2 * widget->style->klass->ythickness) -
 	clist->column_title_area.height;
 
       /* 
