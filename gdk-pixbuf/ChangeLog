@@ -1,3 +1,8 @@
+2001-06-04  Havoc Pennington  <hp@redhat.com>
+
+	* io-pnm.c (pnm_skip_whitespace): patch from Szekeres Istvan,
+	bug #52560
+
 2001-06-01  Havoc Pennington  <hp@redhat.com>
 
         Apply patch from sandmann@daimi.au.dk, with some tweaks.

@@ -195,7 +195,14 @@ pnm_skip_whitespace (PnmIOBuffer *inbuf, GError **error)
 	for ( ; inptr < inend; inptr++) {
 		if (*inptr == '#') {
 			/* in comment - skip to the end of this line */
-			for ( ; *inptr != '\n' && inptr < inend; inptr++);
+			for ( ; *inptr != '\n' && inptr < inend; inptr++)
+				;
+			
+			if ( *inptr != '\n' ) {
+				/* couldn't read whole comment */
+				return PNM_SUSPEND;
+			}
+			
 		} else if (!isspace (*inptr)) {
 			inbuf->byte = inptr;
 			inbuf->nbytes = (guint) (inend - inptr);
