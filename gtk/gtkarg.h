@@ -63,6 +63,9 @@ GtkArg*		gtk_arg_copy		 (GtkArg       *src_arg,
 					  GtkArg       *dest_arg);
 void		gtk_arg_free		 (GtkArg       *arg,
 					  gboolean	free_contents);
+void		gtk_arg_reset		 (GtkArg       *arg);
+gboolean	gtk_arg_values_equal	 (const GtkArg *arg1,
+					  const GtkArg *arg2);
 gchar*		gtk_args_collect	 (GtkType	object_type,
 					  GHashTable    *arg_info_hash_table,
 					  GSList      **arg_list_p,
@@ -87,10 +90,12 @@ GtkArg*		gtk_args_query		 (GtkType	class_type,
 					  guint32      **arg_flags,
 					  guint	       *n_args_p);
 gchar*		gtk_arg_name_strip_type	 (const gchar   *arg_name);
-gint		gtk_arg_info_equal	 (gconstpointer	arg_info_1,
-					  gconstpointer	arg_info_2);
-guint		gtk_arg_info_hash	 (gconstpointer	arg_info);
-
+gint		gtk_arg_info_equal	 (gconstpointer	 arg_info_1,
+					  gconstpointer	 arg_info_2);
+guint		gtk_arg_info_hash	 (gconstpointer	 arg_info);
+void		gtk_arg_to_valueloc	 (GtkArg	*arg,
+					  gpointer	 value_pointer);
+       
 
 
 

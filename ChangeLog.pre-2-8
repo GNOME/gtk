@@ -1,3 +1,15 @@
+Sat Mar 27 23:32:13 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkarg.[hc]: added functions from GLE, gtk_arg_reset() to free
+	the value and reset type to GTK_TYPE_INVALID, and gtk_arg_values_equal()
+	to compare two argument values. added gtk_arg_to_valueloc() to set a
+	variable from an arg through its location (pointer).
+
+	* gtk/gtkobject.[hc]: implemented gtk_object_get() in terms of
+	gtk_object_arg_get() and gtk_arg_to_valueloc(), floats are collected
+	as gfloat*, uchars are collected as guchar*, ints are collected as
+	gint*, etc...
+
 Mon Mar 29 17:45:47 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkaccelgroup.c gtk/gtkgtkbindings.c:
