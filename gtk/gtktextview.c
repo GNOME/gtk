@@ -2154,8 +2154,6 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
       gtk_widget_ensure_style (widget);
       gtk_text_view_set_values_from_style (text_view, style, widget->style);
       
-      style->font_desc = pango_font_description_copy (widget->style->font_desc);
-      
       style->pixels_above_lines = 2;
       style->pixels_below_lines = 2;
       style->pixels_inside_wrap = 1;

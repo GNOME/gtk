@@ -555,7 +555,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
 
       GtkTextLine *line = tmp_list->data;
      
-      line_display = gtk_text_layout_get_line_display (layout, line);
+      line_display = gtk_text_layout_get_line_display (layout, line, FALSE);
 
       if (have_selection)
 	{

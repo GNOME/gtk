@@ -146,7 +146,8 @@ void gtk_text_layout_wrap_loop_start (GtkTextLayout  *layout);
 void gtk_text_layout_wrap_loop_end   (GtkTextLayout  *layout);
 
 GtkTextLineDisplay *gtk_text_layout_get_line_display  (GtkTextLayout      *layout,
-						       GtkTextLine        *line);
+						       GtkTextLine        *line,
+						       gboolean            size_only);
 void                gtk_text_layout_free_line_display (GtkTextLayout      *layout,
 						       GtkTextLine        *line,
 						       GtkTextLineDisplay *display);

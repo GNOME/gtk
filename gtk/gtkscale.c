@@ -305,9 +305,9 @@ gtk_scale_get_value_size (GtkScale *scale,
       pango_layout_get_extents (layout, NULL, &logical_rect);
 
       if (width)
-	*width = logical_rect.width / 1000;
+	*width = logical_rect.width / PANGO_SCALE;
       if (height)
-	*height = logical_rect.width / 1000;
+	*height = logical_rect.width / PANGO_SCALE;
       
       value = ABS (range->adjustment->upper);
       if (value == 0) value = 1;
@@ -330,9 +330,9 @@ gtk_scale_get_value_size (GtkScale *scale,
       pango_layout_get_extents (layout, NULL, &logical_rect);
 
       if (width)
-	*width = MAX (*width, logical_rect.width / 1000);
+	*width = MAX (*width, logical_rect.width / PANGO_SCALE);
       if (height)
-	*height = MAX (*height, logical_rect.height / 1000);
+	*height = MAX (*height, logical_rect.height / PANGO_SCALE);
 
       pango_layout_unref (layout);
     }
