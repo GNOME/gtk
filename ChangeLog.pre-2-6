@@ -1,3 +1,16 @@
+Mon Aug 31 21:36:31 1998  Raph Levien  <raph@gimp.org>
+
+	* gdk/gdkrgb.c (gdk_rgb_select_conv): Improved the 24bpp
+	conversion selection logic, so Suns and other big-endian
+	machines should get faster conv routines. This is also the
+	point where 4bpp gray and 1bpp are checked in, although I
+	wouldn't be surprised if 1bpp is a little buggy. This is
+	synchronized with the 0.0.7 release of GdkRgb.
+
+	* gtk/Makefile.am: 
+	* gtk/testrgb.c: Checked in testrgb.c to CVS, and made the
+	appropriate change to the Makefile.am
+
 Mon Aug 31 15:18:19 1998  Raph Levien  <raph@gimp.org>
 
 	* gdk/gdkrgb.[ch]: Added a gdk_draw_rgb_image_dithalign function,

@@ -2500,6 +2500,7 @@ gdk_rgb_select_conv (GdkImage *image)
   GdkRgbConvFunc conv_32, conv_32_d;
   GdkRgbConvFunc conv_gray, conv_gray_d;
   GdkRgbConvFunc conv_indexed, conv_indexed_d;
+  gboolean lsb_24, msb_24;
 
   depth = image_info->visual->depth;
   bpp = image->bpp;
@@ -2523,6 +2524,17 @@ gdk_rgb_select_conv (GdkImage *image)
   red_mask = image_info->visual->red_mask;
   green_mask = image_info->visual->green_mask;
   blue_mask = image_info->visual->blue_mask;
+
+  lsb_24 =
+    (byte_order == GDK_LSB_FIRST &&
+     red_mask == 0xff0000 && green_mask == 0xff00 && blue_mask == 0xff) ||
+    (byte_order == GDK_MSB_FIRST &&
+     red_mask == 0xff && green_mask == 0xff00 && blue_mask == 0xff0000);
+  msb_24 =
+    (byte_order == GDK_MSB_FIRST &&
+     red_mask == 0xff0000 && green_mask == 0xff00 && blue_mask == 0xff) ||
+    (byte_order == GDK_LSB_FIRST &&
+     red_mask == 0xff && green_mask == 0xff00 && blue_mask == 0xff0000);
 
   conv = NULL;
   conv_d = NULL;
@@ -2563,23 +2575,22 @@ gdk_rgb_select_conv (GdkImage *image)
       red_mask == 0x7c00 && green_mask == 0x3e0 && blue_mask == 0x1f)
     conv = gdk_rgb_convert_555_br;
 
-  /* I'm not 100% sure about the 24bpp tests */
-  else if (bpp == 3 && depth == 24 &&
-	   vtype == GDK_VISUAL_TRUE_COLOR && byte_order == GDK_LSB_FIRST &&
-	   red_mask == 0xff0000 && green_mask == 0xff00 && blue_mask == 0xff)
+  /* I'm not 100% sure about the 24bpp tests - but testing will show*/
+  else if (bpp == 3 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR && lsb_24)
     conv = gdk_rgb_convert_888_lsb;
-  else if (bpp == 3 && depth == 24 &&
-	   vtype == GDK_VISUAL_TRUE_COLOR && byte_order == GDK_MSB_FIRST &&
-	   red_mask == 0xff0000 && green_mask == 0xff00 && blue_mask == 0xff)
+  else if (bpp == 3 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR && msb_24)
     conv = gdk_rgb_convert_888_msb;
-  else if (bpp == 4 && depth == 24 &&
-	   vtype == GDK_VISUAL_TRUE_COLOR && !byterev &&
-	   red_mask == 0xff0000 && green_mask == 0xff00 && blue_mask == 0xff)
-    conv = gdk_rgb_convert_0888;
-  else if (bpp == 4 && depth == 24 &&
-	   vtype == GDK_VISUAL_TRUE_COLOR && byterev &&
-	   red_mask == 0xff0000 && green_mask == 0xff00 && blue_mask == 0xff)
+#ifdef WORDS_BIGENDIAN
+  else if (bpp == 4 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR && lsb_24)
     conv = gdk_rgb_convert_0888_br;
+  else if (bpp == 4 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR && msb_24)
+    conv = gdk_rgb_convert_0888;
+#else
+  else if (bpp == 4 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR && lsb_24)
+    conv = gdk_rgb_convert_0888;
+  else if (bpp == 4 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR && msb_24)
+    conv = gdk_rgb_convert_0888_br;
+#endif
 
   else if (vtype == GDK_VISUAL_TRUE_COLOR && byte_order == GDK_LSB_FIRST)
     {
