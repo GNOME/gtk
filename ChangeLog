@@ -1,3 +1,8 @@
+Wed Apr  8 20:50:02 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwindow.c (gtk_window_set_hints): Removed unsed
+	variables (gtk-jbuhler-980408-0)
+
 Wed Apr  8 17:27:40 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkwidget.c (gtk_widget_unparent): Make sure

@@ -1283,7 +1283,6 @@ gtk_window_set_hints (GtkWidget      *widget,
   GtkWidgetAuxInfo *aux_info;
   gint flags;
   gint ux, uy;
-  gint min_width, min_height;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WINDOW (widget));
