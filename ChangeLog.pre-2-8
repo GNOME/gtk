@@ -1,3 +1,26 @@
+Mon Feb 26 16:34:33 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* README: Update to describe submitting patches
+	and bug reports to bugzilla.gnome.org.
+
+Tue Feb 20 23:48:16 2001  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gdk/gdkim.c,gdk/gdkprivate.h: Add private function
+         _gdk_wcstombs_len() which takes a length.
+ 
+ 	* gdk/gdkfont.c,gdk/gdkprivate.h,gdk/gdkdraw.c:
+ 	Consistently handle calls to _wc() font for GDK_FONT_FONT
+ 	routines by:
+ 
+ 	  a) for 8-bit fonts, converting to chars via wcstombs
+              (Will make GtkLabel handle using GDK_FONT_FONT for
+ 	     non-iso-8859-1 a wee bit better, though GDK_FONT_FONTSET
+ 	     is still the only supported way to get correct i18n.
+ 	     #50834)
+ 
+ 	  b) for 16-bit fonts, assuming each wchar is a glyph
+ 	     index. (Broken, but no more broken than anything else)
+ 
 Mon Feb 26 21:36:11 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.[ch] (gtk_window_focus_in/out_event): We can't

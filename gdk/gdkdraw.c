@@ -327,15 +327,15 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
 
   if (font->type == GDK_FONT_FONT)
     {
-      XFontStruct *xfont = (XFontStruct *) font_private->xfont;
-      gchar *text_8bit;
-      gint i;
-      XSetFont(drawable_private->xdisplay, gc_private->xgc, xfont->fid);
-      text_8bit = g_new (gchar, text_length);
-      for (i=0; i<text_length; i++) text_8bit[i] = text[i];
-      XDrawString (drawable_private->xdisplay, drawable_private->xwindow,
-                   gc_private->xgc, x, y, text_8bit, text_length);
-      g_free (text_8bit);
+      gchar *glyphs;
+      int glyphs_len;
+      
+      _gdk_font_wc_to_glyphs (font, text, text_length,
+			      &glyphs, &glyphs_len);
+
+      gdk_draw_text (drawable, font, gc, x, y, glyphs, glyphs_len);
+
+      g_free (glyphs);
     }
   else if (font->type == GDK_FONT_FONTSET)
     {

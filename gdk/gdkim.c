@@ -1484,64 +1484,89 @@ gdk_ic_get_events (GdkIC *ic)
  *
  * Returns a multi-byte string converted from the specified array
  * of wide characters. The string is newly allocated. The array of
+ * wide characters is nul-terminated, if len < 0
+ */
+gchar *
+_gdk_wcstombs_len (const GdkWChar *src,
+		   int             len)
+{
+  gchar *mbstr = NULL;
+  gint length;
+  
+  if (len < 0)
+    {
+      length = 0;
+
+      while (src[length] != 0)
+	length++;
+    }
+  else
+    length = len;
+
+  if (gdk_use_mb)
+    {
+      XTextProperty tpr;
+      wchar_t *src_wc;
+
+      /* The len < 0 part is to ensure nul termination
+       */
+      if (len < 0 && sizeof(wchar_t) == sizeof(GdkWChar))
+	{
+	  src_wc = (wchar_t *)src;
+	}
+      else
+	{
+	  gint i;
+
+	  src_wc = g_new (wchar_t, length + 1);
+
+	  for (i = 0; i < length; i++)
+	    src_wc[i] = src[i];
+
+	  src_wc[i] = 0;
+	}
+      
+      if (XwcTextListToTextProperty (gdk_display, &src_wc, 1,
+				     XTextStyle, &tpr) == Success)
+	{
+	  /*
+	   * We must copy the string into an area allocated by glib, because
+	   * the string 'tpr.value' must be freed by XFree().
+	   */
+	  mbstr = g_strdup(tpr.value);
+	  XFree (tpr.value);
+	}
+
+      if (src_wc != (wchar_t *)src)
+	g_free (src_wc);
+    }
+  else
+    {
+      gint i;
+
+      mbstr = g_new (gchar, length + 1);
+
+      for (i=0; i < length; i++)
+	mbstr[i] = src[i];
+
+      mbstr[i] = '\0';
+    }
+
+  return mbstr;
+}
+  
+/*
+ * gdk_wcstombs 
+ *
+ * Returns a multi-byte string converted from the specified array
+ * of wide characters. The string is newly allocated. The array of
  * wide characters must be null-terminated. If the conversion is
  * failed, it returns NULL.
  */
 gchar *
 gdk_wcstombs (const GdkWChar *src)
 {
-  gchar *mbstr;
-
-  if (gdk_use_mb)
-    {
-      XTextProperty tpr;
-
-      if (sizeof(wchar_t) != sizeof(GdkWChar))
-	{
-	  gint i;
-	  wchar_t *src_alt;
-	  for (i=0; src[i]; i++);
-	  src_alt = g_new (wchar_t, i+1);
-	  for (; i>=0; i--)
-	    src_alt[i] = src[i];
-	  if (XwcTextListToTextProperty (gdk_display, &src_alt, 1, XTextStyle, &tpr)
-	      != Success)
-	    {
-	      g_free (src_alt);
-	      return NULL;
-	    }
-	  g_free (src_alt);
-	}
-      else
-	{
-	  if (XwcTextListToTextProperty (gdk_display, (wchar_t**)&src, 1,
-					 XTextStyle, &tpr) != Success)
-	    {
-	      return NULL;
-	    }
-	}
-      /*
-       * We must copy the string into an area allocated by glib, because
-       * the string 'tpr.value' must be freed by XFree().
-       */
-      mbstr = g_strdup(tpr.value);
-      XFree (tpr.value);
-    }
-  else
-    {
-      gint length = 0;
-      gint i;
-
-      while (src[length] != 0)
-	length++;
-      
-      mbstr = g_new (gchar, length + 1);
-
-      for (i=0; i<length+1; i++)
-	mbstr[i] = src[i];
-    }
-
-  return mbstr;
+  return _gdk_wcstombs_len (src, -1);
 }
   
 /*
