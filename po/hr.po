@@ -4,17 +4,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-16 14:27-0500\n"
-"PO-Revision-Date: 2004-03-13 13:10+CET\n"
+"POT-Creation-Date: 2004-03-21 09:20+0100\n"
+"PO-Revision-Date: 2004-03-21 09:20+CET\n"
 "Last-Translator: auto\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: TransDict server\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:769
 #: gdk-pixbuf/gdk-pixbuf-io.c:902 tests/testfilechooser.c:192
@@ -23,34 +21,25 @@ msgid "Failed to open file '%s': %s"
 msgstr "Greška pri otvaranju datoteke '%s': %s"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:779
-#, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Slika \"%s\" ne sadrži podatke"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:813
 #: gdk-pixbuf/gdk-pixbuf-io.c:939 tests/testfilechooser.c:237
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Ne mogu učitati sliku \"%s\": razlog nepoznat, vjerojatno neispravan zapis"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr "Ne mogu učitati sliku \"%s\": razlog nepoznat, vjerojatno neispravan zapis"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:226
-#, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr ""
-"Ne mogu učitati animaciju \"%s\": razlog nepoznat, vjerojatno neispravan "
-"zapis"
+msgstr "Ne mogu učitati animaciju \"%s\": razlog nepoznat, vjerojatno neispravan zapis"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:415
-#, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Ne mogu učitati modul za učitavanje slika: %s: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:430
-#, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
@@ -59,12 +48,10 @@ msgstr ""
 "različite GTK inačice?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:577 gdk-pixbuf/gdk-pixbuf-io.c:625
-#, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Vrsta slike \"%s\" nije podržana"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:657
-#, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Ne mogu prepoznati datotečni format slike za datoteku \"%s\""
 
@@ -73,17 +60,14 @@ msgid "Unrecognized image file format"
 msgstr "Nepoznat način zapisa slike"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:824
-#, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Ne mogu učitati sliku \"%s\": %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1127
-#, c-format
 msgid "Error writing to image file: %s"
 msgstr "Greška pri interpretiranju JPEG slike (%s)"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1171 gdk-pixbuf/gdk-pixbuf-io.c:1287
-#, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Ovo izdanje programa gdk-pixbuf ne podržava ovu sliku vrste %s"
 
@@ -105,25 +89,20 @@ msgid "Failed to open '%s' for writing: %s"
 msgstr "Ne mogu otvoriti '%s' za pisanje: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1432
-#, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr ""
-"Ne može da zatvori \"%s\" pri upisu slike, moguće je da nisu spremljeni svi "
-"podaci: %s"
+msgstr "Ne može da zatvori \"%s\" pri upisu slike, moguće je da nisu spremljeni svi podaci: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1618 gdk-pixbuf/gdk-pixbuf-io.c:1668
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Nema dovoljno memorije za spremanje slike u međuspremnik"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:378
-#, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Nije podržano postepeno učitavanje slike vrste \"%s\""
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:402 gdk-pixbuf/gdk-pixbuf-loader.c:504
-#, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
@@ -143,6 +122,7 @@ msgstr "Nepoznat format slike"
 msgid "Image pixel data corrupt"
 msgstr "Oštećeni podaci o točkama slike"
 
+#. plural form
 #: gdk-pixbuf/gdk-pixdata.c:403
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
@@ -194,7 +174,6 @@ msgid "The BMP image format"
 msgstr "BMP zapis slike"
 
 #: gdk-pixbuf/io-gif.c:220
-#, c-format
 msgid "Failure reading GIF: %s"
 msgstr "Greška pri čitanju GIF-a: %s"
 
@@ -203,7 +182,6 @@ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF datoteci nedostaje nešto podataka (možda je nekako odsječena?)"
 
 #: gdk-pixbuf/io-gif.c:501
-#, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Unutrašnja greška pri učitavanju GIF-a (%s)"
 
@@ -237,7 +215,6 @@ msgid "File does not appear to be a GIF file"
 msgstr "Izgleda da se ne radi o GIF datoteci"
 
 #: gdk-pixbuf/io-gif.c:1157
-#, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Izdanje %s GIF načina zapisa nije podržano"
 
@@ -293,7 +270,6 @@ msgid "Cursor hotspot outside image"
 msgstr "Pokazivač žarišta je van slike"
 
 #: gdk-pixbuf/io-ico.c:973
-#, c-format
 msgid "Unsupported depth for ICO file: %d"
 msgstr "Nije podržana dubina za ICO datoteku: %d"
 
@@ -302,7 +278,6 @@ msgid "The ICO image format"
 msgstr "ICO zapis slike"
 
 #: gdk-pixbuf/io-jpeg.c:114
-#, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Greška pri interpretiranju JPEG slike (%s)"
 
@@ -315,7 +290,6 @@ msgstr ""
 "oslobodili memoriju"
 
 #: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:749
-#, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Nije podržan JPEG prostor boja (%s)"
 
@@ -325,21 +299,14 @@ msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Ne mogu pronaći dovoljno memorije za učitavanje JPEG datoteke"
 
 #: gdk-pixbuf/io-jpeg.c:893
-#, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
-msgstr ""
-"Kakvoća JPEG-a mora biti vrijednost između 0 i 100; ne može da razume "
-"vrijednost ˇ\"%s\"."
+msgstr "Kakvoća JPEG-a mora biti vrijednost između 0 i 100; ne može da razume vrijednost ˇ\"%s\"."
 
 #: gdk-pixbuf/io-jpeg.c:908
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"Kakvoća JPEG-a mora biti vrijednost između 0 i 100; nije dozvoljena "
-"vrijednost \"%d“."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr "Kakvoća JPEG-a mora biti vrijednost između 0 i 100; nije dozvoljena vrijednost \"%d\"."
 
 #: gdk-pixbuf/io-jpeg.c:1069
 msgid "The JPEG image format"
@@ -362,7 +329,6 @@ msgid "Image has unsupported bpp"
 msgstr "Slika koristi nepodržan broj bitova po točki"
 
 #: gdk-pixbuf/io-pcx.c:624 gdk-pixbuf/io-pcx.c:632
-#, c-format
 msgid "Image has unsupported number of %d-bit planes"
 msgstr "Slika sadrži nepodržan broj %d-bitnih ravnina"
 
@@ -408,11 +374,9 @@ msgstr "Transformirani PNG nije RGB ili RGBA."
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"Nije podržan broj kanala u transformiranoj  PNG slici; mora biti 3 ili 4."
+msgstr "Nije podržan broj kanala u transformiranoj  PNG slici; mora biti 3 ili 4."
 
 #: gdk-pixbuf/io-png.c:183
-#, c-format
 msgid "Fatal error in PNG image file: %s"
 msgstr "Kobna greška u PNG slici: %s"
 
@@ -421,7 +385,6 @@ msgid "Insufficient memory to load PNG file"
 msgstr "Nema dovoljno memorije za učitavanje PNG  datoteke"
 
 #: gdk-pixbuf/io-png.c:618
-#, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
@@ -434,27 +397,20 @@ msgid "Fatal error reading PNG image file"
 msgstr "Kobna greška tijekom čitanja PNG slike"
 
 #: gdk-pixbuf/io-png.c:718
-#, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "Nepovratna greška pri čitanju PNG slike: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"Ključevi za PNG tekstualne odjeljke moraju imati bar 1, a najviše 79 znakova."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgstr "Ključevi za PNG tekstualne odjeljke moraju imati bar 1, a najviše 79 znakova."
 
 #: gdk-pixbuf/io-png.c:821
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Ključevi za PNG tekstualne odjeljke moraju biti ASCII znakovi."
 
 #: gdk-pixbuf/io-png.c:854
-#, c-format
-msgid ""
-"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
-msgstr ""
-"Vrijednost PNG tekstualnog odjeljka %s se ne može pretvoriti u ISO-8859-1 "
-"zapis."
+msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgstr "Vrijednost PNG tekstualnog odjeljka %s se ne može pretvoriti u ISO-8859-1 zapis."
 
 #: gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
@@ -462,8 +418,7 @@ msgstr "PNG zapis slike"
 
 #: gdk-pixbuf/io-pnm.c:249
 msgid "PNM loader expected to find an integer, but didn't"
-msgstr ""
-"Dio za učitavanje PNM slika je očekivao da naiđe na cijeli broj, ali nije"
+msgstr "Dio za učitavanje PNM slika je očekivao da naiđe na cijeli broj, ali nije"
 
 #: gdk-pixbuf/io-pnm.c:281
 msgid "PNM file has an incorrect initial byte"
@@ -491,8 +446,7 @@ msgstr "Najveća vrijednost boje u PNM datoteci je prevelika"
 
 #: gdk-pixbuf/io-pnm.c:396
 msgid "Can't handle PNM files with maximum color values greater than 255"
-msgstr ""
-"Ne mogu rukovati PNM datotekama sa maksimalnim veličinama boja većim od 255"
+msgstr "Ne mogu rukovati PNM datotekama sa maksimalnim veličinama boja većim od 255"
 
 #: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
 msgid "Raw PNM image type is invalid"
@@ -728,49 +682,44 @@ msgid "The XPM image format"
 msgstr "XPM zapis slike"
 
 #. This is the text that should appear next to menu accelerators
-#. * that use the shift key. If the text on this key isn't typically
-#. * translated on keyboards used for your language, don't translate
-#. * this.
-#.
+#.  * that use the shift key. If the text on this key isn't typically
+#.  * translated on keyboards used for your language, don't translate
+#.  * this.
 #: gtk/gtkaccellabel.c:118
 msgid "Shift"
 msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
-#. * that use the control key. If the text on this key isn't typically
-#. * translated on keyboards used for your language, don't translate
-#. * this.
-#.
+#.  * that use the control key. If the text on this key isn't typically
+#.  * translated on keyboards used for your language, don't translate
+#.  * this.
 #: gtk/gtkaccellabel.c:124
 msgid "Ctrl"
 msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
-#. * that use the alt key. If the text on this key isn't typically
-#. * translated on keyboards used for your language, don't translate
-#. * this.
-#.
+#.  * that use the alt key. If the text on this key isn't typically
+#.  * translated on keyboards used for your language, don't translate
+#.  * this.
 #: gtk/gtkaccellabel.c:130
 msgid "Alt"
 msgstr "Alt"
 
 #. Translate to calendar:YM if you want years to be displayed
-#. * before months; otherwise translate to calendar:MY.
-#. * Do *not* translate it to anything else, if it
-#. * it isn't calendar:YM or calendar:MY it will not work.
-#. *
-#. * Note that this flipping is in top the text direction flipping,
-#. * so if you have a default text direction of RTL and YM, then
-#. * the year will appear on the right.
-#.
+#.  * before months; otherwise translate to calendar:MY.
+#.  * Do *not* translate it to anything else, if it
+#.  * it isn't calendar:YM or calendar:MY it will not work.
+#.  *
+#.  * Note that this flipping is in top the text direction flipping,
+#.  * so if you have a default text direction of RTL and YM, then
+#.  * the year will appear on the right.
 #: gtk/gtkcalendar.c:709
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
-#. * first day of the week to calendar:week_start:1 if you want Monday
-#. * to be the first day of the week, and so on.
-#.
+#.  * first day of the week to calendar:week_start:1 if you want Monday
+#.  * to be the first day of the week, and so on.
 #: gtk/gtkcalendar.c:719
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
@@ -810,8 +759,8 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"Pritisnite ovu stavku palete da je izaberete kao tekuću boju. Za promjenu "
-"ove stavke,  dovucite ovdje boju ili kliknite desnom tipkom miša i odaberite "
+"Pritisnite ovu stavku palete da je izaberete kao tekuću boju. Za promjenu ove "
+"stavke,  dovucite ovdje boju ili kliknite desnom tipkom miša i odaberite "
 "\"Spremi ovu boju\"."
 
 #: gtk/gtkcolorsel.c:1840
@@ -942,7 +891,7 @@ msgstr ""
 "Nisam mogao dodati knjižnu oznaku za %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:739 gtk/gtkfilechooserdefault.c:4942
+#: gtk/gtkfilechooserdefault.c:739 gtk/gtkfilechooserdefault.c:4938
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -952,7 +901,7 @@ msgstr ""
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:755
-#, c-format
+#, , c-format
 msgid ""
 "Could not change the current folder to %s:\n"
 "%s"
@@ -960,16 +909,15 @@ msgstr ""
 "Nisam mogao promijeniti trenutnu mapu u %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1037 gtk/gtkpathbar.c:809
+#: gtk/gtkfilechooserdefault.c:1037 gtk/gtkpathbar.c:828
 msgid "Home"
 msgstr "Početak"
 
-#: gtk/gtkfilechooserdefault.c:1055 gtk/gtkpathbar.c:811
+#: gtk/gtkfilechooserdefault.c:1055 gtk/gtkpathbar.c:830
 msgid "Desktop"
 msgstr "Radna površina"
 
-#: gtk/gtkfilechooserdefault.c:1491
-#, c-format
+#: gtk/gtkfilechooserdefault.c:1496
 msgid ""
 "Could not create folder %s:\n"
 "%s"
@@ -977,12 +925,12 @@ msgstr ""
 "Nisam mogao otići u izvornu mapu mape %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1648
+#: gtk/gtkfilechooserdefault.c:1643
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "Nisam mogao dodati knjižnu oznaku za %s, jer to nije mapa."
 
-#: gtk/gtkfilechooserdefault.c:1731
+#: gtk/gtkfilechooserdefault.c:1724
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -991,78 +939,74 @@ msgstr ""
 "Nisam mogao ukloniti knjišku oznaku za %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2297
+#: gtk/gtkfilechooserdefault.c:2290
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
-msgstr ""
-"Nisam mogao dodati knjižnu oznaku za %s, jer je to neispravno ime putanje."
+msgstr "Nisam mogao dodati knjižnu oznaku za %s, jer je to neispravno ime putanje."
 
-#: gtk/gtkfilechooserdefault.c:2485
+#: gtk/gtkfilechooserdefault.c:2478
 msgid "Folder"
 msgstr "Mapa"
 
 #. FIXME these need accelerators when appropriate, and
-#. * need the mnemonics to be rationalized
-#.
-#: gtk/gtkfilechooserdefault.c:2532 gtk/gtkstock.c:276
+#.  * need the mnemonics to be rationalized
+#: gtk/gtkfilechooserdefault.c:2525 gtk/gtkstock.c:276
 msgid "_Add"
 msgstr "_Dodaj"
 
-#: gtk/gtkfilechooserdefault.c:2542 gtk/gtkstock.c:324
+#: gtk/gtkfilechooserdefault.c:2535 gtk/gtkstock.c:324
 msgid "_Remove"
 msgstr "_Ukloni"
 
-#: gtk/gtkfilechooserdefault.c:2628
+#: gtk/gtkfilechooserdefault.c:2621
 msgid "Name"
 msgstr "Ime"
 
-#: gtk/gtkfilechooserdefault.c:2650
+#: gtk/gtkfilechooserdefault.c:2643
 msgid "Size"
 msgstr "Veličina"
 
-#: gtk/gtkfilechooserdefault.c:2662
+#: gtk/gtkfilechooserdefault.c:2655
 msgid "Modified"
 msgstr "Mijenjano"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2724
+#: gtk/gtkfilechooserdefault.c:2717
 msgid "Create _Folder"
 msgstr "Stvori _mapu"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:2831
+#: gtk/gtkfilechooserdefault.c:2824
 msgid "_Name:"
 msgstr "_Ime:"
 
-#: gtk/gtkfilechooserdefault.c:2873
+#: gtk/gtkfilechooserdefault.c:2866
 msgid "_Browse for other folders"
 msgstr "_Pregledaj druge mape"
 
-#: gtk/gtkfilechooserdefault.c:3111
+#: gtk/gtkfilechooserdefault.c:3104
 msgid "Save in _folder:"
 msgstr "Spremi u _mapu:"
 
-#: gtk/gtkfilechooserdefault.c:3113
+#: gtk/gtkfilechooserdefault.c:3106
 msgid "Create in _folder:"
 msgstr "Stvori u _mapi:"
 
-#: gtk/gtkfilechooserdefault.c:3701
-#, fuzzy
+#: gtk/gtkfilechooserdefault.c:3693
 msgid "Can't change to folder because it isn't local"
-msgstr ""
-"Nisam se mogao postaviti u mapu koju ste odredili, jer je to neispravna "
-"putanja."
+msgstr "Nisam se mogao postaviti u mapu, jer je nije na računalu."
 
-#: gtk/gtkfilechooserdefault.c:4148
+#: gtk/gtkfilechooserdefault.c:4144
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "Ne postoji kratica %s"
 
-#: gtk/gtkfilechooserdefault.c:4765
+#: gtk/gtkfilechooserdefault.c:4761
 msgid "Type name of new folder"
 msgstr "Upišite ime nove mape"
 
-#: gtk/gtkfilechooserdefault.c:4794
+#. plural form
+#: gtk/gtkfilechooserdefault.c:4790
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1070,41 +1014,39 @@ msgstr[0] "%d bajt"
 msgstr[1] "%d bajta"
 msgstr[2] "%d bajtova"
 
-#: gtk/gtkfilechooserdefault.c:4796
+#: gtk/gtkfilechooserdefault.c:4792
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:4798
+#: gtk/gtkfilechooserdefault.c:4794
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:4800
+#: gtk/gtkfilechooserdefault.c:4796
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:4845
+#: gtk/gtkfilechooserdefault.c:4841
 msgid "Today"
 msgstr "Danas"
 
-#: gtk/gtkfilechooserdefault.c:4847
+#: gtk/gtkfilechooserdefault.c:4843
 msgid "Yesterday"
 msgstr "Jučer"
 
-#: gtk/gtkfilechooserdefault.c:4858
+#: gtk/gtkfilechooserdefault.c:4854
 msgid "Unknown"
 msgstr "Nepoznato"
 
-#: gtk/gtkfilechooserdefault.c:4903
+#: gtk/gtkfilechooserdefault.c:4899
 msgid "Cannot change to the folder you specified as it is an invalid path."
-msgstr ""
-"Nisam se mogao postaviti u mapu koju ste odredili, jer je to neispravna "
-"putanja."
+msgstr "Nisam se mogao postaviti u mapu koju ste odredili, jer je to neispravna putanja."
 
-#: gtk/gtkfilechooserdefault.c:4980
-#, c-format
+#: gtk/gtkfilechooserdefault.c:4976
+#, , c-format
 msgid ""
 "Could not select %s:\n"
 "%s"
@@ -1112,11 +1054,11 @@ msgstr ""
 "Nisam mogao označiti %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5020
+#: gtk/gtkfilechooserdefault.c:5016
 msgid "Open Location"
 msgstr "Otvori mjesto"
 
-#: gtk/gtkfilechooserdefault.c:5044
+#: gtk/gtkfilechooserdefault.c:5040
 msgid "_Location:"
 msgstr "_Mjesto:"
 
@@ -1137,12 +1079,10 @@ msgid "_Files"
 msgstr "_Datoteke"
 
 #: gtk/gtkfilesel.c:853 gtk/gtkfilesel.c:2243
-#, c-format
 msgid "Folder unreadable: %s"
 msgstr "Nečitljiva mapa: %s"
 
 #: gtk/gtkfilesel.c:984
-#, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
 "available to this program.\n"
@@ -1165,14 +1105,10 @@ msgid "_Rename File"
 msgstr "_Promijeni ime datoteke"
 
 #: gtk/gtkfilesel.c:1439
-#, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Ime direktorija \"%s\" sadrži simbole koji nisu dozvoljeni u imenima datoteka"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr "Ime direktorija \"%s\" sadrži simbole koji nisu dozvoljeni u imenima datoteka"
 
 #: gtk/gtkfilesel.c:1441
-#, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
@@ -1185,7 +1121,6 @@ msgid "You probably used symbols not allowed in filenames."
 msgstr "Vjerojatno ste koristili nedozvoljene simbole u imenu datoteke."
 
 #: gtk/gtkfilesel.c:1450
-#, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Greška pri pravljenju direktorija \"%s\": %s\n"
 
@@ -1202,13 +1137,10 @@ msgid "C_reate"
 msgstr "_Stvori"
 
 #: gtk/gtkfilesel.c:1566
-#, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Ime datoteke \"%s\" sadrži simbole koji su nedozvoljeni u imenima datoteka"
+msgstr "Ime datoteke \"%s\" sadrži simbole koji su nedozvoljeni u imenima datoteka"
 
 #: gtk/gtkfilesel.c:1569
-#, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
 "%s"
@@ -1221,12 +1153,10 @@ msgid "It probably contains symbols not allowed in filenames."
 msgstr "Vjerojatno sadrži simbole nedozvoljene u imenima datoteka."
 
 #: gtk/gtkfilesel.c:1580
-#, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Greška pri brisanju datoteke \"%s\": %s"
 
 #: gtk/gtkfilesel.c:1623
-#, c-format
 msgid "Really delete file \"%s\"?"
 msgstr "Zaista obrisati datoteku \"%s\"?"
 
@@ -1235,12 +1165,10 @@ msgid "Delete File"
 msgstr "Obriši datoteku"
 
 #: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
-#, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Ime datoteke \"%s\" sadrži simbole koji su nedozvoljeni u imenima"
 
 #: gtk/gtkfilesel.c:1676
-#, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
@@ -1249,7 +1177,6 @@ msgstr ""
 "%s"
 
 #: gtk/gtkfilesel.c:1690
-#, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
@@ -1258,7 +1185,6 @@ msgstr ""
 "%s"
 
 #: gtk/gtkfilesel.c:1700
-#, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Greška pri preimenovanju datoteke \"%s\" to \"%s\": %s"
 
@@ -1267,7 +1193,6 @@ msgid "Rename File"
 msgstr "Promijeni ime datoteci"
 
 #: gtk/gtkfilesel.c:1762
-#, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Promijeni ime datoteke \"%s\" u:"
 
@@ -1280,7 +1205,6 @@ msgid "_Selection: "
 msgstr "_Odabir: "
 
 #: gtk/gtkfilesel.c:3139
-#, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
@@ -1307,10 +1231,10 @@ msgstr "(Prazno)"
 #: gtk/gtkfilesystemunix.c:415
 #, c-format
 msgid "%s: %s"
-msgstr ""
+msgstr "%s: %s"
 
 #: gtk/gtkfilesystemunix.c:422 gtk/gtkfilesystemunix.c:613
-#: gtk/gtkfilesystemunix.c:1657 gtk/gtkfilesystemwin32.c:1176
+#: gtk/gtkfilesystemunix.c:1657 gtk/gtkfilesystemwin32.c:1206
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "Greška kod dohvaćanja informacje za '%s': %s"
@@ -1328,17 +1252,17 @@ msgstr "Ovaj datotečni sustav ne podržava montiranje."
 msgid "Filesystem"
 msgstr "Datotečni sustav"
 
-#: gtk/gtkfilesystemunix.c:1258 gtk/gtkfilesystemwin32.c:794
+#: gtk/gtkfilesystemunix.c:1258 gtk/gtkfilesystemwin32.c:814
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Nije uspjelo spremanje knjižnih oznaka (%s)"
 
 #: gtk/gtkfilesystemunix.c:1553
-#, fuzzy, c-format
+#, , c-format
 msgid "error getting information for '%s'"
-msgstr "Greška kod dohvaćanja informacje za '%s': %s"
+msgstr "Greška kod dohvaćanja informacje za \"%s\""
 
-#: gtk/gtkfilesystemwin32.c:950
+#: gtk/gtkfilesystemwin32.c:970
 msgid "This file system does not support icons for everything"
 msgstr "Ovaj datotečni sustav ne podržava sličice za sve"
 
@@ -1356,7 +1280,7 @@ msgid "Font"
 msgstr "Pismo"
 
 #. This is the default text shown in the preview entry, though the user
-#. can set it. Remember that some fonts only have capital letters.
+#.  can set it. Remember that some fonts only have capital letters.
 #: gtk/gtkfontsel.c:69
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcčćdđdžef ABCČĆDĐDŽEF"
@@ -1391,10 +1315,8 @@ msgid "_Gamma value"
 msgstr "_Gama vrijednost"
 
 #. Remove this icon source so we don't keep trying to
-#. * load it.
-#.
+#.  * load it.
 #: gtk/gtkiconfactory.c:1564
-#, c-format
 msgid "Error loading icon: %s"
 msgstr "Greška pri učitavanju sličice: %s"
 
@@ -1412,7 +1334,6 @@ msgstr ""
 "\t%s"
 
 #: gtk/gtkicontheme.c:1251
-#, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Sličica %s nije prisutna u temi"
 
@@ -1508,10 +1429,9 @@ msgid "Input Methods"
 msgstr "Ulazne metode"
 
 #. Translate to default:RTL if you want your widgets
-#. * to be RTL, otherwise translate to default:LTR.
-#. * Do *not* translate it to "predefinito:LTR", if it
-#. * it isn't default:LTR or default:RTL it will not work
-#.
+#.  * to be RTL, otherwise translate to default:LTR.
+#.  * Do *not* translate it to "predefinito:LTR", if it
+#.  * it isn't default:LTR or default:RTL it will not work
 #: gtk/gtkmain.c:854
 msgid "default:LTR"
 msgstr "uobičajeno:LTR"
@@ -1530,7 +1450,6 @@ msgid "The radio tool button whose group this button belongs to."
 msgstr "Radijski gumb alata čijoj grupi pripada ovaj gumb."
 
 #: gtk/gtkrc.c:2390
-#, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Ne mogu uključiti datoteku: \"%s\""
 
@@ -1540,7 +1459,6 @@ msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Ne mogu pronaći slikovnu datoteku u pixmap_path: \"%s\""
 
 #: gtk/gtkrc.c:3467
-#, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Dio putanje za slike: \"%s\" mora biti apsolutna putanja, %s, %d. red"
 
@@ -1862,7 +1780,6 @@ msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ _nespojnica bez širine"
 
 #: gtk/gtkthemes.c:70
-#, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Ne mogu pronaći modul tema u putanji modula: \"%s\","
 
@@ -1871,17 +1788,14 @@ msgid "--- No Tip ---"
 msgstr "--- Nema savjeta ---"
 
 #: gtk/gtkuimanager.c:1075
-#, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Nepoznat atribut \"%s\" u %d. redu, %d. znak"
 
 #: gtk/gtkuimanager.c:1284
-#, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Neočekivana početna oznaka \"%s\" u %d. redu, %d. znak"
 
 #: gtk/gtkuimanager.c:1369
-#, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Neočekivani znakovni podaci u %d. redu, %d. znak"
 
@@ -1944,9 +1858,3 @@ msgstr "X način unosa (XIM)"
 msgid "Could not get information for file '%s': %s"
 msgstr "Nisam mogao dohvatiti podatak za datoteku '%s': %s"
 
-#~ msgid ""
-#~ "Could not go to the parent folder of %s:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Nisam mogao otići u izvornu mapu mape %s:\n"
-#~ "%s"
