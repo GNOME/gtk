@@ -1724,6 +1724,7 @@ gtk_tree_view_column_set_fixed_width (GtkTreeViewColumn *tree_column,
   g_return_if_fail (fixed_width > 0);
 
   tree_column->fixed_width = fixed_width;
+  tree_column->use_resized_width = FALSE;
 
   if (tree_column->tree_view &&
       GTK_WIDGET_REALIZED (tree_column->tree_view) &&
