@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-19 12:40+0100\n"
+"POT-Creation-Date: 2005-01-01 12:33+0100\n"
 "PO-Revision-Date: 2004-12-20 00:04+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -359,52 +359,52 @@ msgstr "动作组是否启用。"
 msgid "Whether the action group is visible."
 msgstr "动作组是否可见。"
 
-#: gtk/gtkadjustment.c:108 gtk/gtkcellrendererprogress.c:115
+#: gtk/gtkadjustment.c:115 gtk/gtkcellrendererprogress.c:115
 #: gtk/gtkspinbutton.c:303
 msgid "Value"
 msgstr "值"
 
-#: gtk/gtkadjustment.c:109
+#: gtk/gtkadjustment.c:116
 msgid "The value of the adjustment"
 msgstr "调整值"
 
-#: gtk/gtkadjustment.c:118
+#: gtk/gtkadjustment.c:132
 msgid "Minimum Value"
 msgstr "最小值"
 
-#: gtk/gtkadjustment.c:119
+#: gtk/gtkadjustment.c:133
 msgid "The minimum value of the adjustment"
 msgstr "调整的最小值"
 
-#: gtk/gtkadjustment.c:128
+#: gtk/gtkadjustment.c:152
 msgid "Maximum Value"
 msgstr "最大值"
 
-#: gtk/gtkadjustment.c:129
+#: gtk/gtkadjustment.c:153
 msgid "The maximum value of the adjustment"
 msgstr "调整的最大值"
 
-#: gtk/gtkadjustment.c:138
+#: gtk/gtkadjustment.c:169
 msgid "Step Increment"
 msgstr "步进"
 
-#: gtk/gtkadjustment.c:139
+#: gtk/gtkadjustment.c:170
 msgid "The step increment of the adjustment"
 msgstr "调整的步进增量"
 
-#: gtk/gtkadjustment.c:148
+#: gtk/gtkadjustment.c:186
 msgid "Page Increment"
 msgstr "页面增量"
 
-#: gtk/gtkadjustment.c:149
+#: gtk/gtkadjustment.c:187
 msgid "The page increment of the adjustment"
 msgstr "调整的页面增量"
 
-#: gtk/gtkadjustment.c:158
+#: gtk/gtkadjustment.c:206
 msgid "Page Size"
 msgstr "页面大小"
 
-#: gtk/gtkadjustment.c:159
+#: gtk/gtkadjustment.c:207
 msgid "The page size of the adjustment"
 msgstr "调整的页面大小"
 
@@ -673,7 +673,7 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "如果设置的话，标签将用于拾取后备项目，而不是显示的项目"
 
-#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:675
+#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:678
 msgid "Focus on click"
 msgstr "点击获得焦点"
 
@@ -749,8 +749,7 @@ msgstr "显示焦点"
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
-msgstr ""
-"child_displacement_x/_y 属性是否也影响焦点矩形"
+msgstr "child_displacement_x/_y 属性是否也影响焦点矩形"
 
 #: gtk/gtkbutton.c:417
 msgid "Show button images"
@@ -1189,7 +1188,8 @@ msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string, if at all"
 msgstr ""
-"如果单元格渲染器根本没有足够的空间显示整个字符串，这里给出了省略化字符串的首选位置"
+"如果单元格渲染器根本没有足够的空间显示整个字符串，这里给出了省略化字符串的首"
+"选位置"
 
 #: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:361
 #: gtk/gtklabel.c:453
@@ -1497,71 +1497,71 @@ msgstr "限于列表中存在值"
 msgid "Whether entered values must already be present in the list"
 msgstr "输入的内容是否必须已存在于列表中"
 
-#: gtk/gtkcombobox.c:548
+#: gtk/gtkcombobox.c:551
 msgid "ComboBox model"
 msgstr "组合框模型"
 
-#: gtk/gtkcombobox.c:549
+#: gtk/gtkcombobox.c:552
 msgid "The model for the combo box"
 msgstr "组合框的模型"
 
-#: gtk/gtkcombobox.c:565
+#: gtk/gtkcombobox.c:568
 msgid "Wrap width"
 msgstr "环绕宽度"
 
-#: gtk/gtkcombobox.c:566
+#: gtk/gtkcombobox.c:569
 msgid "Wrap width for layouting the items in a grid"
 msgstr "在网格中排列项目时的环绕宽度"
 
-#: gtk/gtkcombobox.c:588
+#: gtk/gtkcombobox.c:591
 msgid "Row span column"
 msgstr "行跨列"
 
-#: gtk/gtkcombobox.c:589
+#: gtk/gtkcombobox.c:592
 msgid "TreeModel column containing the row span values"
 msgstr "包含跨行值时的树型列"
 
-#: gtk/gtkcombobox.c:610
+#: gtk/gtkcombobox.c:613
 msgid "Column span column"
 msgstr "列跨列"
 
-#: gtk/gtkcombobox.c:611
+#: gtk/gtkcombobox.c:614
 msgid "TreeModel column containing the column span values"
 msgstr "包含跨列值时的树型列"
 
-#: gtk/gtkcombobox.c:631
+#: gtk/gtkcombobox.c:634
 msgid "Active item"
 msgstr "激活项"
 
-#: gtk/gtkcombobox.c:632
+#: gtk/gtkcombobox.c:635
 msgid "The item which is currently active"
 msgstr "当前激活的项目"
 
-#: gtk/gtkcombobox.c:651 gtk/gtkuimanager.c:228
+#: gtk/gtkcombobox.c:654 gtk/gtkuimanager.c:228
 msgid "Add tearoffs to menus"
 msgstr "在菜单上添加撕下标志"
 
-#: gtk/gtkcombobox.c:652
+#: gtk/gtkcombobox.c:655
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "下拉框是否应有撕下菜单项"
 
-#: gtk/gtkcombobox.c:667 gtk/gtkentry.c:530
+#: gtk/gtkcombobox.c:670 gtk/gtkentry.c:530
 msgid "Has Frame"
 msgstr "有边框"
 
-#: gtk/gtkcombobox.c:668
+#: gtk/gtkcombobox.c:671
 msgid "Whether the combo box draws a frame around the child"
 msgstr "组合框是否在子项目周围绘制边框"
 
-#: gtk/gtkcombobox.c:676
+#: gtk/gtkcombobox.c:679
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "用鼠标点击复选框时复选框是否要获得焦点"
 
-#: gtk/gtkcombobox.c:682
+#: gtk/gtkcombobox.c:685
 msgid "Appears as list"
 msgstr "表现为列表"
 
-#: gtk/gtkcombobox.c:683
+#: gtk/gtkcombobox.c:686
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "下拉框是否要显示为列表而不是菜单"
 
@@ -2469,107 +2469,107 @@ msgstr "布局宽度"
 msgid "The height of the layout"
 msgstr "布局高度"
 
-#: gtk/gtkmenu.c:524
+#: gtk/gtkmenu.c:526
 msgid "Tearoff Title"
 msgstr "折叠标题"
 
-#: gtk/gtkmenu.c:525
+#: gtk/gtkmenu.c:527
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "当此菜单被折叠可供窗口管理器显示的标题"
 
-#: gtk/gtkmenu.c:539
+#: gtk/gtkmenu.c:541
 msgid "Tearoff State"
 msgstr "撕下状态"
 
-#: gtk/gtkmenu.c:540
+#: gtk/gtkmenu.c:542
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "表明菜单是否被撕下的布尔值"
 
-#: gtk/gtkmenu.c:546
+#: gtk/gtkmenu.c:548
 msgid "Vertical Padding"
 msgstr "垂直留空"
 
-#: gtk/gtkmenu.c:547
+#: gtk/gtkmenu.c:549
 msgid "Extra space at the top and bottom of the menu"
 msgstr "菜单上下两端额外的空白"
 
-#: gtk/gtkmenu.c:555
+#: gtk/gtkmenu.c:557
 msgid "Vertical Offset"
 msgstr "垂直偏移"
 
-#: gtk/gtkmenu.c:556
+#: gtk/gtkmenu.c:558
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "菜单为子菜单时，在垂直方向上定位这么多像素的便宜"
 
-#: gtk/gtkmenu.c:564
+#: gtk/gtkmenu.c:566
 msgid "Horizontal Offset"
 msgstr "水平偏移"
 
-#: gtk/gtkmenu.c:565
+#: gtk/gtkmenu.c:567
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "菜单为子菜单时，在水平方向上定位这么多像素的便宜"
 
-#: gtk/gtkmenu.c:575
+#: gtk/gtkmenu.c:577
 msgid "Left Attach"
 msgstr "左侧附加"
 
-#: gtk/gtkmenu.c:576 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:578 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr "将子部件左侧附加到哪一列"
 
-#: gtk/gtkmenu.c:583
+#: gtk/gtkmenu.c:585
 msgid "Right Attach"
 msgstr "右侧附加"
 
-#: gtk/gtkmenu.c:584
+#: gtk/gtkmenu.c:586
 msgid "The column number to attach the right side of the child to"
 msgstr "将子部件右侧附加到哪一列"
 
-#: gtk/gtkmenu.c:591
+#: gtk/gtkmenu.c:593
 msgid "Top Attach"
 msgstr "上侧附加"
 
-#: gtk/gtkmenu.c:592
+#: gtk/gtkmenu.c:594
 msgid "The row number to attach the top of the child to"
 msgstr "将子部件上侧附加到哪一行"
 
-#: gtk/gtkmenu.c:599
+#: gtk/gtkmenu.c:601
 msgid "Bottom Attach"
 msgstr "下侧附加"
 
-#: gtk/gtkmenu.c:600 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:602 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr "将子部件下侧附加到哪一行"
 
-#: gtk/gtkmenu.c:687
+#: gtk/gtkmenu.c:689
 msgid "Can change accelerators"
 msgstr "可更改加速键"
 
-#: gtk/gtkmenu.c:688
+#: gtk/gtkmenu.c:690
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "菜单加速键是否可通过在菜单项上按键进行更改"
 
-#: gtk/gtkmenu.c:693
+#: gtk/gtkmenu.c:695
 msgid "Delay before submenus appear"
 msgstr "子菜单出现的延迟"
 
-#: gtk/gtkmenu.c:694
+#: gtk/gtkmenu.c:696
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr "在子菜单出现前鼠标指针必须指向菜单项的最短时间"
 
-#: gtk/gtkmenu.c:701
+#: gtk/gtkmenu.c:703
 msgid "Delay before hiding a submenu"
 msgstr "隐藏子菜单的延迟"
 
-#: gtk/gtkmenu.c:702
+#: gtk/gtkmenu.c:704
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4189,7 +4189,7 @@ msgstr "悬停展开"
 
 #: gtk/gtktreeview.c:693
 msgid ""
-"Whether rows should be expanded/collaped when the pointer moves over them"
+"Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "当鼠标指向行时是否要展开/折叠行"
 
 #: gtk/gtktreeview.c:713
@@ -4763,4 +4763,3 @@ msgstr "输入法状态样式"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "如何绘制输入法状态栏"
-
