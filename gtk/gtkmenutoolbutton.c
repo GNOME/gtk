@@ -586,7 +586,7 @@ gtk_menu_tool_button_get_menu (GtkMenuToolButton *button)
 }
 
 /**
- * gtk_menu_tool_set_arrow_tooltip:
+ * gtk_menu_tool_button_set_arrow_tooltip:
  * @button: a #GtkMenuToolButton
  * @tooltips: the #GtkTooltips object to be used
  * @tip_text: text to be used as tooltip text for tool_item

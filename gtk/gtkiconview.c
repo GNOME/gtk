@@ -405,7 +405,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    *
    * The columns property contains the number of the columns in which the
    * items should be displayed. If it is -1, the number of columns will
-   * be chosen automatically to fill the available area.
+   * be chosen automatically to fill the available area. 
    *
    * Since: 2.6
    */
@@ -3661,7 +3661,7 @@ gtk_icon_view_path_is_selected (GtkIconView *icon_view,
  * Activates the item determined by @path.
  *
  * Since: 2.6
- **/
+ */
 void
 gtk_icon_view_item_activated (GtkIconView      *icon_view,
 			      GtkTreePath      *path)
@@ -3681,7 +3681,7 @@ gtk_icon_view_item_activated (GtkIconView      *icon_view,
  * are drawn beside the icons instead of below.
  *
  * Since: 2.6
- **/
+ */
 void 
 gtk_icon_view_set_orientation (GtkIconView    *icon_view,
 			       GtkOrientation  orientation)
@@ -3709,7 +3709,7 @@ gtk_icon_view_set_orientation (GtkIconView    *icon_view,
  * Return value: the relative position of texts and icons 
  *
  * Since: 2.6
- **/
+ */
 GtkOrientation
 gtk_icon_view_get_orientation (GtkIconView *icon_view)
 {
@@ -3719,8 +3719,21 @@ gtk_icon_view_get_orientation (GtkIconView *icon_view)
   return icon_view->priv->orientation;
 }
 
-void gtk_icon_view_set_columns (GtkIconView *icon_view,
-				gint         columns)
+/**
+ * gtk_icon_view_set_columns:
+ * @icon_view: a #GtkIconView
+ * @columns: the number of columns
+ * 
+ * Sets the ::columns property which determines in how
+ * many columns the icons are arranged. If @columns is
+ * -1, the number of columns will be chosen automatically 
+ * to fill the available area. 
+ *
+ * Since: 2.6
+ */
+void 
+gtk_icon_view_set_columns (GtkIconView *icon_view,
+			   gint         columns)
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
   
@@ -3734,6 +3747,16 @@ void gtk_icon_view_set_columns (GtkIconView *icon_view,
     }  
 }
 
+/**
+ * gtk_icon_view_get_columns:
+ * @icon_view: a #GtkIconView
+ * 
+ * Returns the value of the ::columns property.
+ * 
+ * Return value: the number of columns, or -1
+ *
+ * Since: 2.6
+ */
 gint
 gtk_icon_view_get_columns (GtkIconView *icon_view)
 {
@@ -3742,8 +3765,20 @@ gtk_icon_view_get_columns (GtkIconView *icon_view)
   return icon_view->priv->columns;
 }
 
-void gtk_icon_view_set_item_width (GtkIconView *icon_view,
-				   gint         item_width)
+/**
+ * gtk_icon_view_set_item_width:
+ * @icon_view: a #GtkIconView
+ * @item_width: the width for each item
+ * 
+ * Sets the ::item-width property which specifies the width 
+ * to use for each item. If it is set to -1, the icon view will 
+ * automatically determine a suitable item size.
+ *
+ * Since: 2.6
+ */
+void 
+gtk_icon_view_set_item_width (GtkIconView *icon_view,
+			      gint         item_width)
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
   
@@ -3758,6 +3793,16 @@ void gtk_icon_view_set_item_width (GtkIconView *icon_view,
     }  
 }
 
+/**
+ * gtk_icon_view_get_item_width:
+ * @icon_view: a #GtkIconView
+ * 
+ * Returns the value of the ::item-width property.
+ * 
+ * Return value: the width of a single item, or -1
+ *
+ * Since: 2.6
+ */
 gint
 gtk_icon_view_get_item_width (GtkIconView *icon_view)
 {
@@ -3767,8 +3812,20 @@ gtk_icon_view_get_item_width (GtkIconView *icon_view)
 }
 
 
-void gtk_icon_view_set_spacing (GtkIconView *icon_view,
-				gint         spacing)
+/**
+ * gtk_icon_view_set_item_width:
+ * @icon_view: a #GtkIconView
+ * @spacing: the spacing
+ * 
+ * Sets the ::spacing property which specifies the space 
+ * which is inserted between the cells (i.e. the icon and 
+ * the text) of an item.
+ *
+ * Since: 2.6
+ */
+void 
+gtk_icon_view_set_spacing (GtkIconView *icon_view,
+			   gint         spacing)
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
   
@@ -3783,6 +3840,16 @@ void gtk_icon_view_set_spacing (GtkIconView *icon_view,
     }  
 }
 
+/**
+ * gtk_icon_view_get_spacing:
+ * @icon_view: a #GtkIconView
+ * 
+ * Returns the value of the ::spacing property.
+ * 
+ * Return value: the space between cells 
+ *
+ * Since: 2.6
+ */
 gint
 gtk_icon_view_get_spacing (GtkIconView *icon_view)
 {
@@ -3791,8 +3858,19 @@ gtk_icon_view_get_spacing (GtkIconView *icon_view)
   return icon_view->priv->spacing;
 }
 
-void gtk_icon_view_set_row_spacing (GtkIconView *icon_view,
-				    gint         row_spacing)
+/**
+ * gtk_icon_view_set_row_spacing:
+ * @icon_view: a #GtkIconView
+ * @spacing: the row spacing
+ * 
+ * Sets the ::row-spacing property which specifies the space 
+ * which is inserted between the rows of the icon view.
+ *
+ * Since: 2.6
+ */
+void 
+gtk_icon_view_set_row_spacing (GtkIconView *icon_view,
+			       gint         row_spacing)
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
   
@@ -3807,6 +3885,16 @@ void gtk_icon_view_set_row_spacing (GtkIconView *icon_view,
     }  
 }
 
+/**
+ * gtk_icon_view_get_row_spacing:
+ * @icon_view: a #GtkIconView
+ * 
+ * Returns the value of the ::row-spacing property.
+ * 
+ * Return value: the space between rows 
+ *
+ * Since: 2.6
+ */
 gint
 gtk_icon_view_get_row_spacing (GtkIconView *icon_view)
 {
@@ -3815,8 +3903,19 @@ gtk_icon_view_get_row_spacing (GtkIconView *icon_view)
   return icon_view->priv->row_spacing;
 }
 
-void gtk_icon_view_set_column_spacing (GtkIconView *icon_view,
-				       gint         column_spacing)
+/**
+ * gtk_icon_view_set_column_spacing:
+ * @icon_view: a #GtkIconView
+ * @spacing: the column spacing
+ * 
+ * Sets the ::column-spacing property which specifies the space 
+ * which is inserted between the columns of the icon view.
+ *
+ * Since: 2.6
+ */
+void 
+gtk_icon_view_set_column_spacing (GtkIconView *icon_view,
+				  gint         column_spacing)
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
   
@@ -3831,6 +3930,16 @@ void gtk_icon_view_set_column_spacing (GtkIconView *icon_view,
     }  
 }
 
+/**
+ * gtk_icon_view_get_column_spacing:
+ * @icon_view: a #GtkIconView
+ * 
+ * Returns the value of the ::column-spacing property.
+ * 
+ * Return value: the space between columns 
+ *
+ * Since: 2.6
+ */
 gint
 gtk_icon_view_get_column_spacing (GtkIconView *icon_view)
 {
@@ -3839,8 +3948,20 @@ gtk_icon_view_get_column_spacing (GtkIconView *icon_view)
   return icon_view->priv->column_spacing;
 }
 
-void gtk_icon_view_set_margin (GtkIconView *icon_view,
-			       gint         margin)
+/**
+ * gtk_icon_view_set_marging:
+ * @icon_view: a #GtkIconView
+ * @spacing: the margin
+ * 
+ * Sets the ::margin property which specifies the space 
+ * which is inserted at the top, bottom, left and right 
+ * of the icon view.
+ *
+ * Since: 2.6
+ */
+void 
+gtk_icon_view_set_margin (GtkIconView *icon_view,
+			  gint         margin)
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
   
@@ -3855,6 +3976,16 @@ void gtk_icon_view_set_margin (GtkIconView *icon_view,
     }  
 }
 
+/**
+ * gtk_icon_view_get_margin:
+ * @icon_view: a #GtkIconView
+ * 
+ * Returns the value of the ::margin property.
+ * 
+ * Return value: the space at the borders 
+ *
+ * Since: 2.6
+ */
 gint
 gtk_icon_view_get_margin (GtkIconView *icon_view)
 {
