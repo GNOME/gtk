@@ -706,12 +706,11 @@ gtk_text_unrealize (GtkWidget *widget)
   gtk_style_detach (widget->style);
   gdk_window_set_user_data (widget->window, NULL);
   gdk_window_destroy (widget->window);
+  widget->window = NULL;
   gdk_window_set_user_data (text->text_area, NULL);
   gdk_window_destroy (text->text_area);
-  gdk_gc_destroy (text->gc);
-
-  widget->window = NULL;
   text->text_area = NULL;
+  gdk_gc_destroy (text->gc);
   text->gc = NULL;
 }
 

@@ -690,16 +690,16 @@ gtk_entry_unrealize (GtkWidget *widget)
     {
       gdk_window_set_user_data (entry->text_area, NULL);
       gdk_window_destroy (entry->text_area);
+      entry->text_area = NULL;
       gdk_cursor_destroy (entry->cursor);
+      entry->cursor = NULL;
     }
   if (widget->window)
     {
       gdk_window_set_user_data (widget->window, NULL);
       gdk_window_destroy (widget->window);
+      widget->window = NULL;
     }
-
-  entry->text_area = NULL;
-  widget->window = NULL;
 }
 
 static void

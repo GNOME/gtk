@@ -147,6 +147,7 @@ gtk_handle_box_destroy (GtkObject *object)
   hb = GTK_HANDLE_BOX (object);
 
   gdk_cursor_destroy (hb->fleur_cursor);
+  hb->fleur_cursor = NULL;
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
@@ -264,15 +265,18 @@ gtk_handle_box_unrealize (GtkWidget *widget)
   hb = GTK_HANDLE_BOX (widget);
 
   if (widget->window)
-    gdk_window_destroy (widget->window);
+    {
+      gdk_window_set_user_data (widget->window, NULL);
+      gdk_window_destroy (widget->window);
+      widget->window = NULL;
+    }
 
   if (hb->steady_window)
-    gdk_window_destroy (hb->steady_window);
-
-  hb->steady_window = NULL;
-  widget->window = NULL;
-
-  /* FIXME: do we have to unref the float_window before destroying it? */
+    {
+      gdk_window_set_user_data (hb->steady_window, NULL);
+      gdk_window_destroy (hb->steady_window);
+      hb->steady_window = NULL;
+    }
 
   gtk_widget_destroy (hb->float_window);
   hb->float_window = NULL;

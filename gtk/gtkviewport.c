@@ -351,13 +351,12 @@ gtk_viewport_unrealize (GtkWidget *widget)
 
   gdk_window_set_user_data (widget->window, NULL);
   gdk_window_destroy (widget->window);
+  widget->window = NULL;
   gdk_window_set_user_data (viewport->view_window, NULL);
   gdk_window_destroy (viewport->view_window);
+  viewport->view_window = NULL;
   gdk_window_set_user_data (viewport->bin_window, NULL);
   gdk_window_destroy (viewport->bin_window);
-
-  widget->window = NULL;
-  viewport->view_window = NULL;
   viewport->bin_window = NULL;
 }
 

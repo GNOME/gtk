@@ -1,5 +1,20 @@
 Mon Feb  2 04:15:08 1998  Tim Janik  <timj@gimp.org>
 
+	* gtk/gtktoolbar.c: fixed destroy handler, so it doesn't
+	  segfault with the new refcounting scheme anymore.
+
+	* gtk/gtkhandlebox.c:
+	* gtk/gtkclist.c:
+	* gtk/gtkentry.c:
+	* gtk/gtkrange.c:
+	* gtk/gtktext.c:
+	* gtk/gtkviewport.c:
+	  enforced
+       	  gdk_window_set_user_data (window, NULL);
+	  gdk_window_destroy (window);
+	  window = NULL;
+	  throughout the code.
+
 	* gtk/gtkmain.c (gtk_propagate_event): fixed a bad, bad referencing
 	  bug that could caused unreferencing of finalized objects.
 

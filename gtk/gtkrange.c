@@ -652,33 +652,32 @@ gtk_range_unrealize (GtkWidget *widget)
     {
       gdk_window_set_user_data (range->slider, NULL);
       gdk_window_destroy (range->slider);
+      range->slider = NULL;
     }
   if (range->trough)
     {
       gdk_window_set_user_data (range->trough, NULL);
       gdk_window_destroy (range->trough);
+      range->trough = NULL;
     }
   if (range->step_forw)
     {
       gdk_window_set_user_data (range->step_forw, NULL);
       gdk_window_destroy (range->step_forw);
+      range->step_forw = NULL;
     }
   if (range->step_back)
     {
       gdk_window_set_user_data (range->step_back, NULL);
       gdk_window_destroy (range->step_back);
+      range->step_back = NULL;
     }
   if (widget->window)
     {
       gdk_window_set_user_data (widget->window, NULL);
       gdk_window_destroy (widget->window);
+      widget->window = NULL;
     }
-  
-  range->slider = NULL;
-  range->trough = NULL;
-  range->step_forw = NULL;
-  range->step_back = NULL;
-  widget->window = NULL;
 }
 
 static gint

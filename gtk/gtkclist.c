@@ -1572,18 +1572,21 @@ gtk_clist_unrealize (GtkWidget * widget)
   for (i = 0; i < clist->columns; i++)
     if (clist->column[i].window)
       {
+	gdk_window_set_user_data (clist->column[i].window, NULL);
 	gdk_window_destroy (clist->column[i].window);
 	clist->column[i].window = NULL;
       }
 
+  gdk_window_set_user_data (clist->clist_window, NULL);
   gdk_window_destroy (clist->clist_window);
+  clist->clist_window = NULL;
+  gdk_window_set_user_data (clist->title_window, NULL);
   gdk_window_destroy (clist->title_window);
+  clist->title_window = NULL;
   gdk_window_set_user_data (widget->window, NULL);
   gdk_window_destroy (widget->window);
-
   widget->window = NULL;
-  clist->clist_window = NULL;
-  clist->title_window = NULL;
+
   clist->cursor_drag = NULL;
   clist->xor_gc = NULL;
   clist->fg_gc = NULL;

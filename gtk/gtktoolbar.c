@@ -182,7 +182,6 @@ gtk_toolbar_destroy (GtkObject *object)
 {
   GtkToolbar *toolbar;
   GList      *children;
-  GtkToolbarChild      *child;
 
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_TOOLBAR (object));
@@ -190,23 +189,28 @@ gtk_toolbar_destroy (GtkObject *object)
   toolbar = GTK_TOOLBAR (object);
 
   gtk_object_unref (GTK_OBJECT (toolbar->tooltips));
+  toolbar->tooltips = NULL;
 
   for (children = toolbar->children; children; children = children->next)
     {
+      GtkToolbarChild      *child;
+
       child = children->data;
 
       if (child->type != GTK_TOOLBAR_CHILD_SPACE)
 	{
-	  child->widget->parent = NULL;
-	  gtk_object_unref (GTK_OBJECT (child->widget));
+	  gtk_widget_ref (child->widget);
+	  gtk_widget_unparent (child->widget);
 	  gtk_widget_destroy (child->widget);
+	  gtk_widget_unref (child->widget);
 	}
 
       g_free (child);
     }
 
   g_list_free (toolbar->children);
-
+  toolbar->children = NULL;
+  
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
@@ -515,6 +519,9 @@ gtk_toolbar_remove (GtkContainer *container,
 
       if ((child->type != GTK_TOOLBAR_CHILD_SPACE) && (child->widget == widget))
 	{
+	  gboolean was_visible;
+
+	  was_visible = GTK_WIDGET_VISIBLE (widget);
 	  gtk_widget_unparent (widget);
 
 	  toolbar->children = g_list_remove_link (toolbar->children, children);
@@ -522,7 +529,7 @@ gtk_toolbar_remove (GtkContainer *container,
 	  g_list_free (children);
 	  toolbar->num_children--;
 
-	  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (container))
+	  if (was_visible && GTK_WIDGET_VISIBLE (container))
 	    gtk_widget_queue_resize (GTK_WIDGET (container));
 
 	  break;
@@ -643,7 +650,6 @@ gtk_toolbar_insert_item (GtkToolbar    *toolbar,
 
       if (child->label)
 	gtk_widget_show (child->label);
-
       break;
 
     default:
