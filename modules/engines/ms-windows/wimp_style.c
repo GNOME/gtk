@@ -1146,7 +1146,7 @@ draw_box (GtkStyle      *style,
         {
           GtkScrollbar * scrollbar = GTK_SCROLLBAR(widget);
           if (xp_theme_draw(window,
-                            (! GTK_IS_VSCROLLBAR(widget))
+                            (GTK_IS_VSCROLLBAR(widget))
                             ? XP_THEME_ELEMENT_SCROLLBAR_V
                             : XP_THEME_ELEMENT_SCROLLBAR_H,
                             style, x, y, width, height, state_type, area))
