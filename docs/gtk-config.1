@@ -1,0 +1,35 @@
+.TH GTK "11 May 1998" Version 1.0.1
+.SH NAME
+gtk-config - script to perform various Gtk+ functions
+.SH SYNOPSIS
+.B gtk-config
+[\-\-prefix\fI[=DIR]\fP] [\-\-exec\-prefix\fI[=DIR]\fP] [\-\-version] [\-\-libs] [\-\-cflags]
+.SH DESCRIPTION
+.PP
+\fIgtk-config\fP is a tool that is used by programs that need to know
+what libraries and include-paths \fIGtk+\fP was compiled with. .m4
+macros for use with GNU autoconf are also included, to make detection
+of these libraries et cetera easy for the upstream maintainer.
+.SH OPTIONS
+.l
+\fIgtk-config\fP accepts the following options:
+.TP 8
+.B  \-\-version
+Display the currently installed version of Gtk+.
+.TP 8
+.B  \-\-libs
+Display the libraries Gtk+ was linked with at compile-time.
+.TP 8
+.B  \-\-cflags
+Display the flags that were passed to the compiler when Gtk+ was compiled.
+.SH SEE ALSO
+.BR gimp (1),
+.BR gimptool (1)
+.SH COPYRIGHT
+Copyright \(co  1995 Spencer Kimball and Peter Mattis
+
+Permission to use, copy, modify, and distribute this software and its
+documentation for any purpose and without fee is hereby granted,
+provided that the above copyright notice appear in all copies and that
+both that copyright notice and this permission notice appear in
+supporting documentation.
