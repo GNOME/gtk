@@ -8817,10 +8817,10 @@ gtk_tree_view_search_equal_func (GtkTreeModel *model,
   gint key_len;
 
   gtk_tree_model_get_value (model, iter, column, &value);
-  normalized_string = g_utf8_normalize (g_value_get_string (&value), G_NORMALIZE_ALL);
-  normalized_key = g_utf8_normalize (key, G_NORMALIZE_ALL);
-  case_normalized_string = g_utf8_casefold (normalized_string);
-  case_normalized_key = g_utf8_casefold (normalized_key);
+  normalized_string = g_utf8_normalize (g_value_get_string (&value), -1, G_NORMALIZE_ALL);
+  normalized_key = g_utf8_normalize (key, -1, G_NORMALIZE_ALL);
+  case_normalized_string = g_utf8_casefold (normalized_string, -1);
+  case_normalized_key = g_utf8_casefold (normalized_key, -1);
   
   key_len = strlen (case_normalized_key);
 
