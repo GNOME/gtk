@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
-"POT-Creation-Date: 2002-03-05 15:28-0500\n"
+"POT-Creation-Date: 2002-03-06 18:05-0500\n"
 "PO-Revision-Date: 2002-03-07 01:39+0100\n"
 "Last-Translator: Ronald Hummelink <ronald@hummelink.xs4all.nl>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -40,8 +40,8 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
 #, c-format
 msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt animation "
-"file"
+"Failed to load animation '%s': reason not known, probably a corrupt "
+"animation file"
 msgstr ""
 "Laden van animatie '%s' mislukt: reden onbekend, waarschijnlijk een "
 "beschadigde animatie"
@@ -99,8 +99,8 @@ msgstr "Openen van '%s' om te schrijven is mislukt: %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:880
 #, c-format
 msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: "
-"%s"
+"Failed to close '%s' while writing image, all data may not have been saved: %"
+"s"
 msgstr ""
 "Sluiten van '%s' tijdens het schrijven is mislukt; data kan verloren zijn "
 "gegaan: %s"
@@ -119,17 +119,17 @@ msgstr ""
 "Interne fout: afbeeldingslader '%s' starte niet met het laden van een "
 "afbeelding, maar gaf geen reden"
 
-#: gdk-pixbuf/io-bmp.c:267
+#: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
+msgid "Not enough memory to load bitmap image"
+msgstr "Onvoldoende geheugen voor het laden van de bitmap-afbeelding"
+
+#: gdk-pixbuf/io-bmp.c:275
 msgid "BMP image has unsupported header size"
 msgstr "BMP-afbeelding heeft een niet-ondersteunde headergrootte"
 
-#: gdk-pixbuf/io-bmp.c:292 gdk-pixbuf/io-bmp.c:315
+#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323
 msgid "BMP image has bogus header data"
 msgstr "BMP-afbeelding bevat onzinnige headerdata"
-
-#: gdk-pixbuf/io-bmp.c:341
-msgid "Not enough memory to load bitmap image"
-msgstr "Onvoldoende geheugen voor het laden van de bitmap-afbeelding"
 
 #: gdk-pixbuf/io-ico.c:207
 #, c-format
@@ -219,8 +219,7 @@ msgstr ""
 "GIF-bestand bevatte een afbeelding die buiten het kader lijkt te vallen"
 
 #: gdk-pixbuf/io-gif.c:1162
-msgid ""
-"First frame of GIF image had 'revert to previous' as its disposal mode."
+msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 "De eerste afbeelding in het GIF-bestand heeft 'terug naar vorige' als "
 "afsluiting"
@@ -247,8 +246,8 @@ msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
-"Onvoldoende geheugen om afbeelding te laten, probeer het afsluiten van enkele "
-"applicaties om geheugen te besparen"
+"Onvoldoende geheugen om afbeelding te laten, probeer het afsluiten van "
+"enkele applicaties om geheugen te besparen"
 
 #: gdk-pixbuf/io-jpeg.c:345 gdk-pixbuf/io-jpeg.c:538 gdk-pixbuf/io-jpeg.c:710
 msgid "Couldn't allocate memory for loading JPEG file"
@@ -652,8 +651,8 @@ msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
 msgstr ""
-"Horizontale postitie van kind in beschikbare ruimte. 0.0 is links uitgelijnd, "
-"1.0 is rechts uitgelijnd"
+"Horizontale postitie van kind in beschikbare ruimte. 0.0 is links "
+"uitgelijnd, 1.0 is rechts uitgelijnd"
 
 #: gtk/gtkalignment.c:112
 msgid "Vertical alignment"
@@ -676,8 +675,9 @@ msgid ""
 "If available horizontal space is bigger than needed for the child, how much "
 "of it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
-"Als beschikbare horizontale ruimte groter is dan nodig voor het kind, hoeveel "
-"hiervan te gebruiken voor het kind. 0.0 betekend niets, 1.0 betekend alles"
+"Als beschikbare horizontale ruimte groter is dan nodig voor het kind, "
+"hoeveel hiervan te gebruiken voor het kind. 0.0 betekend niets, 1.0 betekend "
+"alles"
 
 #: gtk/gtkalignment.c:130
 msgid "Vertical scale"
@@ -789,8 +789,8 @@ msgstr "Secundair"
 
 #: gtk/gtkbbox.c:161
 msgid ""
-"If TRUE, the child appears in a secondary group of children, suitable for, "
-"e.g., help buttons."
+"If TRUE, the child appears in a secondary group of children, suitable for, e."
+"g., help buttons."
 msgstr ""
 "Als WAAR, het kind laten verschijnen in een secundaire groep van kinderen, "
 "geschikt voot b.v. help knoppen."
@@ -842,8 +842,8 @@ msgstr "Gebruik voorraad"
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
-"Als gezet, het label is gebruikt om een voorraad item te kiezen in plaats van "
-"weergegeven te worden"
+"Als gezet, het label is gebruikt om een voorraad item te kiezen in plaats "
+"van weergegeven te worden"
 
 #: gtk/gtkbutton.c:213
 msgid "Border relief"
@@ -870,8 +870,8 @@ msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr ""
-"Extra spatie toe te voegen voor CAN_DEFAULT knoppen die altijd buiten de rand "
-"getekend worden"
+"Extra spatie toe te voegen voor CAN_DEFAULT knoppen die altijd buiten de "
+"rand getekend worden"
 
 #: gtk/gtkbutton.c:278
 msgid "Child X Displacement"
@@ -1064,7 +1064,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "Of de tekst gewijzigd kan worden door de gebruiker"
 
 #: gtk/gtkcellrenderertext.c:239 gtk/gtkcellrenderertext.c:247
-#: gtk/gtkfontsel.c:201 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
+#: gtk/gtkfontsel.c:209 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
 msgid "Font"
 msgstr "Lettertype"
 
@@ -1340,9 +1340,9 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"Klik op deze kleurenmap entry om het de huidige kleur te maken. Om deze entry "
-"te veranderen sleep de kleurenstaal hier of rechts-klik het en selecteer "
-"\"Bewaar kleur hier\""
+"Klik op deze kleurenmap entry om het de huidige kleur te maken. Om deze "
+"entry te veranderen sleep de kleurenstaal hier of rechts-klik het en "
+"selecteer \"Bewaar kleur hier\""
 
 #: gtk/gtkcolorsel.c:1704
 msgid "Has Opacity Control"
@@ -1375,8 +1375,8 @@ msgstr "Huidig Alpha"
 #: gtk/gtkcolorsel.c:1726
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
-"De huidige doorschijnendheid waarde (0 volledig doorschijnend, 65535 volledig "
-"dekkend)"
+"De huidige doorschijnendheid waarde (0 volledig doorschijnend, 65535 "
+"volledig dekkend)"
 
 #: gtk/gtkcolorsel.c:1739
 msgid "Custom palette"
@@ -1674,8 +1674,7 @@ msgid "Invisible character"
 msgstr "Onzichtbaar teken"
 
 #: gtk/gtkentry.c:489
-msgid ""
-"The character to use when masking entry contents (in \"password mode\")"
+msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Het teken om te gebruiken om de inhoud van een entry te maskeren (in "
 "\"wachtwoord modus\")"
@@ -1689,8 +1688,8 @@ msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed."
 msgstr ""
-"Of de standaard widget te activeren (als in de standaard knop in een dialoog) "
-"als op Enter wordt gedrukt."
+"Of de standaard widget te activeren (als in de standaard knop in een "
+"dialoog) als op Enter wordt gedrukt."
 
 #: gtk/gtkentry.c:503
 msgid "Width in chars"
@@ -1720,15 +1719,15 @@ msgstr "Selectie op activering"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Of de inhoud van een entry geselecteerd worden als het de focus krijgt"
 
-#: gtk/gtkentry.c:3838 gtk/gtklabel.c:3164
+#: gtk/gtkentry.c:3843 gtk/gtklabel.c:3164
 msgid "Select All"
 msgstr "Selecteer Alles"
 
-#: gtk/gtkentry.c:3848 gtk/gtklabel.c:3174
+#: gtk/gtkentry.c:3853 gtk/gtklabel.c:3174
 msgid "Input Methods"
 msgstr "Invoer methodes"
 
-#: gtk/gtkentry.c:3858 gtk/gtktextview.c:6344
+#: gtk/gtkentry.c:3863 gtk/gtktextview.c:6344
 msgid "_Insert Unicode control character"
 msgstr "Voeg Unicode control teken in"
 
@@ -1876,8 +1875,7 @@ msgstr "Verwijder Bestand"
 
 #: gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1595
 #, c-format
-msgid ""
-"The file name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "De bestandsnaam \"%s\" bevat symbolen die niet toegestaan zijn in "
 "bestandsnamen"
@@ -1957,51 +1955,51 @@ msgstr "Y positie van kind widget"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: gtk/gtkfontsel.c:61
+#: gtk/gtkfontsel.c:69
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdefghijk ABCDEFGHIJK"
 
-#: gtk/gtkfontsel.c:194
+#: gtk/gtkfontsel.c:202
 msgid "Font name"
 msgstr "Lettertype naam"
 
-#: gtk/gtkfontsel.c:195
+#: gtk/gtkfontsel.c:203
 msgid "The X string that represents this font."
 msgstr "De X string dat dit lettertype weergeeft"
 
-#: gtk/gtkfontsel.c:202
+#: gtk/gtkfontsel.c:210
 msgid "The GdkFont that is currently selected."
 msgstr "Het GdkFont dat nu is geselecteerd."
 
-#: gtk/gtkfontsel.c:208
+#: gtk/gtkfontsel.c:216
 #, fuzzy
 msgid "Preview text"
 msgstr "Preview:"
 
-#: gtk/gtkfontsel.c:209
+#: gtk/gtkfontsel.c:217
 msgid "The text to display in order to demonstrate the selected font."
 msgstr ""
 "De tekst om weer te geven om het geselecteerde lettertype te demonstreren."
 
-#: gtk/gtkfontsel.c:311
+#: gtk/gtkfontsel.c:321
 msgid "_Family:"
 msgstr "Familie:"
 
-#: gtk/gtkfontsel.c:317
+#: gtk/gtkfontsel.c:327
 msgid "_Style:"
 msgstr "Stijl:"
 
-#: gtk/gtkfontsel.c:323
+#: gtk/gtkfontsel.c:333
 msgid "Si_ze:"
 msgstr "Grootte:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:452
+#: gtk/gtkfontsel.c:462
 #, fuzzy
 msgid "_Preview:"
 msgstr "Preview:"
 
-#: gtk/gtkfontsel.c:1237
+#: gtk/gtkfontsel.c:1253
 msgid "Font Selection"
 msgstr "Lettertype Selectie"
 
@@ -2088,7 +2086,7 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1303
+#: gtk/gtkiconfactory.c:1308
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Fout bij laden van icoon: %s"
@@ -2380,8 +2378,8 @@ msgstr "Afscheur Titel"
 
 #: gtk/gtkmenu.c:192
 msgid ""
-"A title that may be displayed by the window manager when this menu is "
-"torn-off."
+"A title that may be displayed by the window manager when this menu is torn-"
+"off."
 msgstr ""
 "Een titel de weergegeven kan worden door de window manager als dit menu "
 "afgescheurd wordt."
@@ -2635,8 +2633,9 @@ msgstr "Activiteits modus"
 #: gtk/gtkprogress.c:123
 msgid ""
 "If true the GtkProgress is in activity mode, meaning that is signals "
-"something is happening, but not how much of the activity is finished. This is "
-"used when you're doing something that you don't know how long it will take."
+"something is happening, but not how much of the activity is finished. This "
+"is used when you're doing something that you don't know how long it will "
+"take."
 msgstr ""
 "als waar de GtkProgress is in activiteits modus, dit betekend dat het "
 "waarschuwd dat iets gebeurd, maar niet hoeveel vanb de activiteit al gedaan "
@@ -2660,8 +2659,8 @@ msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progresswidget"
 msgstr ""
-"Een getal tussen 0.0 en 1.0 dat de horizontale uitlijning van de tekst in een "
-"voortgangs widget weergeeft"
+"Een getal tussen 0.0 en 1.0 dat de horizontale uitlijning van de tekst in "
+"een voortgangs widget weergeeft"
 
 #: gtk/gtkprogress.c:147
 msgid "Text y alignment"
@@ -2669,8 +2668,8 @@ msgstr "Tekst y uitlijning"
 
 #: gtk/gtkprogress.c:148
 msgid ""
-"A number between 0.0 and 1.0 specifying the vertical alignment of the text in "
-"the progress widget"
+"A number between 0.0 and 1.0 specifying the vertical alignment of the text "
+"in the progress widget"
 msgstr ""
 "Een getal tussen 0.0 en 1.0 dat de vertikale uitlijning van de tekst in een "
 "voortgangs widget weergeeft"
@@ -3044,8 +3043,8 @@ msgstr "Gespleten cursor"
 
 #: gtk/gtksettings.c:173
 msgid ""
-"Whether two cursors should be displayed for mixed left-to-right and "
-"right-to-left text"
+"Whether two cursors should be displayed for mixed left-to-right and right-to-"
+"left text"
 msgstr ""
 "Of de twee cursors weergegeven moeten worden voor gemengd links-naar-rechts "
 "en rechts-naar-links"
@@ -3112,8 +3111,8 @@ msgstr ""
 
 #: gtk/gtkspinbutton.c:266
 msgid ""
-"Whether erroneous values are automatically changed to a spin button's nearest "
-"step increment"
+"Whether erroneous values are automatically changed to a spin button's "
+"nearest step increment"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:273
@@ -4164,8 +4163,8 @@ msgstr "Hoogte verzoek"
 
 #: gtk/gtkwidget.c:415
 msgid ""
-"Override for height request of the widget, or -1 if natural request should be "
-"used."
+"Override for height request of the widget, or -1 if natural request should "
+"be used."
 msgstr ""
 "Vervang voor hoogte verzoek van de widget, of -1 als natuurlijk verzoek "
 "gebruikt moet worden"
@@ -4227,8 +4226,7 @@ msgid "Receives default"
 msgstr ""
 
 #: gtk/gtkwidget.c:473
-msgid ""
-"If TRUE, the widget will receive the default action when it is focused."
+msgid "If TRUE, the widget will receive the default action when it is focused."
 msgstr ""
 
 #: gtk/gtkwidget.c:479
@@ -4469,157 +4467,156 @@ msgstr ""
 msgid "X Input Method"
 msgstr ""
 
-#~ msgid "Directories"
-#~ msgstr "Directories"
+msgid "Directories"
+msgstr "Directories"
 
 #, fuzzy
-#~ msgid "_Directories"
-#~ msgstr "Directories"
+msgid "_Directories"
+msgstr "Directories"
 
 #, fuzzy
-#~ msgid "Crea_te Dir"
-#~ msgstr "Maak Dir"
+msgid "Crea_te Dir"
+msgstr "Maak Dir"
 
-#~ msgid "Create Directory"
-#~ msgstr "Maak Directory"
-
-#, fuzzy
-#~ msgid "_Directory name:"
-#~ msgstr "Directory naam:"
-
-#~ msgid "Cancel"
-#~ msgstr "Annuleren"
-
-#~ msgid "Delete"
-#~ msgstr "Verwijder"
-
-#~ msgid "OK"
-#~ msgstr "OK"
-
-#~ msgid "Save"
-#~ msgstr "Opslaan"
-
-#~ msgid "Close"
-#~ msgstr "Sluiten"
-
-#~ msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-#~ msgstr "Kan plaatjes bestand in pixmap_path: \"%s\" regel %d niet vinden"
+msgid "Create Directory"
+msgstr "Maak Directory"
 
 #, fuzzy
-#~ msgid "He_x Value:"
-#~ msgstr "Hex Waarde:"
+msgid "_Directory name:"
+msgstr "Directory naam:"
 
-#~ msgid "Foundry:"
-#~ msgstr "Oorsprong:"
+msgid "Cancel"
+msgstr "Annuleren"
 
-#~ msgid "Slant:"
-#~ msgstr "Helling:"
+msgid "Delete"
+msgstr "Verwijder"
 
-#~ msgid "Resolution X:"
-#~ msgstr "Resolutie X:"
+msgid "OK"
+msgstr "OK"
 
-#~ msgid "Resolution Y:"
-#~ msgstr "Resolutie Y:"
+msgid "Save"
+msgstr "Opslaan"
 
-#~ msgid "Charset:"
-#~ msgstr "Karakterset:"
+msgid "Close"
+msgstr "Sluiten"
 
-#~ msgid "Requested Value"
-#~ msgstr "Gevraagde Waarde"
+msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+msgstr "Kan plaatjes bestand in pixmap_path: \"%s\" regel %d niet vinden"
 
-#~ msgid "Font:"
-#~ msgstr "Lettertype:"
+#, fuzzy
+msgid "He_x Value:"
+msgstr "Hex Waarde:"
 
-#~ msgid "Reset Filter"
-#~ msgstr "Reset Filter"
+msgid "Foundry:"
+msgstr "Oorsprong:"
 
-#~ msgid "Metric:"
-#~ msgstr "Metriek:"
+msgid "Slant:"
+msgstr "Helling:"
 
-#~ msgid "Pixels"
-#~ msgstr "Pixels"
+msgid "Resolution X:"
+msgstr "Resolutie X:"
 
-#~ msgid "Requested Font Name:"
-#~ msgstr "Naam Gewenste Lettertype:"
+msgid "Resolution Y:"
+msgstr "Resolutie Y:"
 
-#~ msgid "Actual Font Name:"
-#~ msgstr "Naam Werkelijke Lettertype:"
+msgid "Charset:"
+msgstr "Karakterset:"
 
-#~ msgid "%i fonts available with a total of %i styles."
-#~ msgstr "%i lettertypen beschikbaar met in totaal %i stijlen."
+msgid "Requested Value"
+msgstr "Gevraagde Waarde"
 
-#~ msgid "Filter"
-#~ msgstr "Filter"
+msgid "Font:"
+msgstr "Lettertype:"
 
-#~ msgid "Scaled Bitmap"
-#~ msgstr "Geschaalde Bitmap"
+msgid "Reset Filter"
+msgstr "Reset Filter"
 
-#~ msgid "*"
-#~ msgstr "*"
+msgid "Metric:"
+msgstr "Metriek:"
 
-#~ msgid "(nil)"
-#~ msgstr "(nil)"
+msgid "Pixels"
+msgstr "Pixels"
 
-#~ msgid "regular"
-#~ msgstr "gewoon"
+msgid "Requested Font Name:"
+msgstr "Naam Gewenste Lettertype:"
 
-#~ msgid "oblique"
-#~ msgstr "scheef"
+msgid "Actual Font Name:"
+msgstr "Naam Werkelijke Lettertype:"
 
-#~ msgid "reverse italic"
-#~ msgstr "omgekeerd schuingedrukt"
+msgid "%i fonts available with a total of %i styles."
+msgstr "%i lettertypen beschikbaar met in totaal %i stijlen."
 
-#~ msgid "reverse oblique"
-#~ msgstr "omgekeerd scheef"
+msgid "Filter"
+msgstr "Filter"
 
-#~ msgid "[M]"
-#~ msgstr "[M]"
+msgid "Scaled Bitmap"
+msgstr "Geschaalde Bitmap"
 
-#~ msgid "[C]"
-#~ msgstr "[C]"
+msgid "*"
+msgstr "*"
 
-#~ msgid "The selected font is not available."
-#~ msgstr "Het gekozen lettertype is niet beschikbaar."
+msgid "(nil)"
+msgstr "(nil)"
 
-#~ msgid "The selected font is not a valid font."
-#~ msgstr "Het gekozen lettertype is niet een geldig lettertype."
+msgid "regular"
+msgstr "gewoon"
 
-#~ msgid "This is a 2-byte font and may not be displayed correctly."
-#~ msgstr ""
-#~ "Dit is een 2-byte lettertype en wordt mischien niet goed weergegeven."
+msgid "oblique"
+msgstr "scheef"
 
-#~ msgid "roman"
-#~ msgstr "romaans"
+msgid "reverse italic"
+msgstr "omgekeerd schuingedrukt"
 
-#~ msgid "proportional"
-#~ msgstr "proportioneel"
+msgid "reverse oblique"
+msgstr "omgekeerd scheef"
 
-#~ msgid "monospaced"
-#~ msgstr "monospaced"
+msgid "[M]"
+msgstr "[M]"
 
-#~ msgid "char cell"
-#~ msgstr "karakter cel"
+msgid "[C]"
+msgstr "[C]"
 
-#~ msgid "Font: (Filter Applied)"
-#~ msgstr "Lettertype: (Filter toegepast)"
+msgid "The selected font is not available."
+msgstr "Het gekozen lettertype is niet beschikbaar."
 
-#~ msgid "heavy"
-#~ msgstr "zwaar"
+msgid "The selected font is not a valid font."
+msgstr "Het gekozen lettertype is niet een geldig lettertype."
 
-#~ msgid "extrabold"
-#~ msgstr "extra dik"
+msgid "This is a 2-byte font and may not be displayed correctly."
+msgstr "Dit is een 2-byte lettertype en wordt mischien niet goed weergegeven."
 
-#~ msgid "demibold"
-#~ msgstr "demi dik"
+msgid "roman"
+msgstr "romaans"
 
-#~ msgid "medium"
-#~ msgstr "middel"
+msgid "proportional"
+msgstr "proportioneel"
 
-#~ msgid "normal"
-#~ msgstr "normaal"
+msgid "monospaced"
+msgstr "monospaced"
 
-#~ msgid "thin"
-#~ msgstr "dun"
+msgid "char cell"
+msgstr "karakter cel"
 
-#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr "MAX_FONTS overtreden. Sommige fonts kunnen ontbreken."
+msgid "Font: (Filter Applied)"
+msgstr "Lettertype: (Filter toegepast)"
+
+msgid "heavy"
+msgstr "zwaar"
+
+msgid "extrabold"
+msgstr "extra dik"
+
+msgid "demibold"
+msgstr "demi dik"
+
+msgid "medium"
+msgstr "middel"
+
+msgid "normal"
+msgstr "normaal"
+
+msgid "thin"
+msgstr "dun"
+
+msgid "MAX_FONTS exceeded. Some fonts may be missing."
+msgstr "MAX_FONTS overtreden. Sommige fonts kunnen ontbreken."
