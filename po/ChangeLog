@@ -1,3 +1,7 @@
+2003-08-01  Richard Allen  <ra@ra.is>
+
+	* is.po: Added icelandic translation
+
 2003-07-11  Matthias Clasen  <maclas@gmx.de>
 
 	* POTFILES.in: Add gtkcolorbutton.c and gtkfontbutton.c.
