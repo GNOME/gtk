@@ -1,3 +1,8 @@
+Tue Aug 28 21:37:11 2001  Matthias Clasen  <matthiasc@poet.de>
+
+	* demos/gtk-demo/appwindow.c (do_appwindow): Use g_signal_connect_object
+	instead of gtk_signal_connect, to avoid warnings at destruction time. (#58161)
+
 Tue Aug 28 21:00:44 2001  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkprogressbar.c (gtk_progress_bar_set_text): Move the setting
