@@ -1038,12 +1038,15 @@ gdk/makefile.mingw
 gdk/x11/Makefile
 gdk/win32/Makefile
 gdk/win32/makefile.mingw
+gdk/win32/rc/Makefile
+gdk/win32/rc/gdk.rc
 gdk/nanox/Makefile
 gdk/linux-fb/Makefile
 gtk/Makefile
 gtk/makefile.mingw
 gtk/makefile.msc
 gtk/gtkcompat.h
+gtk/gtk.rc
 gtk/stock-icons/Makefile
 modules/Makefile
 modules/linux-fb/Makefile

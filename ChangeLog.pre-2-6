@@ -1,4 +1,15 @@
-2000-11-14  Tor Lillqvist  <tml@iki.fi>
+2000-11-15  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/rc/gdk.rc: Remove.
+	* gdk/win32/rc/gdk.rc.in: New file.
+	* gdk/win32/rc/Makefile.am: New file
+	* gdk/win32/Makefile.am: Corresponding changes.
+
+	* gtk/gtk.rc: Remove.
+	* gtk/gtk.rc.in: New file.
+	* gtk/Makefile.am: Corresponding changes.
+
+	* configure.in: Corresponding changes.
 
 	* gtk/gtkcompat.h.win32: Remove, useless. A distribution already
 	has a built gtkcompat.h. Developers using CVS code on Win32 can

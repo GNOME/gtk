@@ -1,3 +1,5 @@
+SUBDIRS=rc
+
 EXTRA_DIST = \
 	makefile.mingw \
 	makefile.msc \
@@ -23,86 +25,7 @@ EXTRA_DIST = \
 	gdkwin32.h \
 	gdkwin32id.c \
 	gdkwindow-win32.c \
-	surrogate-dimm.h \
-	rc/gdk.rc \
-	rc/gtk.ico \
-	rc/cursor00.cur \
-	rc/cursor02.cur \
-	rc/cursor04.cur \
-	rc/cursor06.cur \
-	rc/cursor08.cur \
-	rc/cursor0a.cur \
-	rc/cursor0c.cur \
-	rc/cursor0e.cur \
-	rc/cursor10.cur \
-	rc/cursor12.cur \
-	rc/cursor14.cur \
-	rc/cursor16.cur \
-	rc/cursor18.cur \
-	rc/cursor1a.cur \
-	rc/cursor1c.cur \
-	rc/cursor1e.cur \
-	rc/cursor20.cur \
-	rc/cursor22.cur \
-	rc/cursor24.cur \
-	rc/cursor26.cur \
-	rc/cursor28.cur \
-	rc/cursor2a.cur \
-	rc/cursor2c.cur \
-	rc/cursor2e.cur \
-	rc/cursor30.cur \
-	rc/cursor32.cur \
-	rc/cursor34.cur \
-	rc/cursor36.cur \
-	rc/cursor38.cur \
-	rc/cursor3a.cur \
-	rc/cursor3c.cur \
-	rc/cursor3e.cur \
-	rc/cursor40.cur \
-	rc/cursor42.cur \
-	rc/cursor44.cur \
-	rc/cursor46.cur \
-	rc/cursor48.cur \
-	rc/cursor4a.cur \
-	rc/cursor4c.cur \
-	rc/cursor4e.cur \
-	rc/cursor50.cur \
-	rc/cursor52.cur \
-	rc/cursor54.cur \
-	rc/cursor56.cur \
-	rc/cursor58.cur \
-	rc/cursor5a.cur \
-	rc/cursor5c.cur \
-	rc/cursor5e.cur \
-	rc/cursor60.cur \
-	rc/cursor62.cur \
-	rc/cursor64.cur \
-	rc/cursor66.cur \
-	rc/cursor68.cur \
-	rc/cursor6a.cur \
-	rc/cursor6c.cur \
-	rc/cursor6e.cur \
-	rc/cursor70.cur \
-	rc/cursor72.cur \
-	rc/cursor74.cur \
-	rc/cursor76.cur \
-	rc/cursor78.cur \
-	rc/cursor7a.cur \
-	rc/cursor7c.cur \
-	rc/cursor7e.cur \
-	rc/cursor80.cur \
-	rc/cursor82.cur \
-	rc/cursor84.cur \
-	rc/cursor86.cur \
-	rc/cursor88.cur \
-	rc/cursor8a.cur \
-	rc/cursor8c.cur \
-	rc/cursor8e.cur \
-	rc/cursor90.cur \
-	rc/cursor92.cur \
-	rc/cursor94.cur \
-	rc/cursor96.cur \
-	rc/cursor98.cur
+	surrogate-dimm.h
 
 makefile.mingw: $(top_builddir)/config.status $(top_srcdir)/gdk/win32/makefile.mingw.in
 	cd $(top_builddir) && CONFIG_FILES=gdk/win32/$@ CONFIG_HEADERS= $(SHELL) ./config.status

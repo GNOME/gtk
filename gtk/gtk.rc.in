@@ -1,8 +1,8 @@
 #include <winver.h>
 
 VS_VERSION_INFO VERSIONINFO
-  FILEVERSION 1,3,0,BUILDNUMBER
-  PRODUCTVERSION 1,3,0,0
+  FILEVERSION @GTK_MAJOR_VERSION@,@GTK_MINOR_VERSION@,@GTK_MICRO_VERSION@,BUILDNUMBER
+  PRODUCTVERSION @GTK_MAJOR_VERSION@,@GTK_MINOR_VERSION@,@GTK_MICRO_VERSION@,0
   FILEFLAGSMASK 0
   FILEFLAGS 0
   FILEOS VOS__WINDOWS32
@@ -13,14 +13,14 @@ VS_VERSION_INFO VERSIONINFO
     BEGIN
       BLOCK "040904B0"
       BEGIN
-	VALUE "CompanyName", "The GTk+ developer community"
+	VALUE "CompanyName", "The GTK+ developer community"
 	VALUE "FileDescription", "GIMP Toolkit"
-	VALUE "FileVersion", "1.3.0.BUILDNUMBER"
-	VALUE "InternalName", "gtk-1.3"
+	VALUE "FileVersion", "@GTK_VERSION@.BUILDNUMBER"
+	VALUE "InternalName", "gtk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@"
 	VALUE "LegalCopyright", "Copyright © 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald. Modified by the GTK+ Team and others 1997-2000."
-	VALUE "OriginalFilename", "gtk-1.3.dll"
-	VALUE "ProductName", "GTk+"
-	VALUE "ProductVersion", "1.3.0"
+	VALUE "OriginalFilename", "gtk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.dll"
+	VALUE "ProductName", "GTK+"
+	VALUE "ProductVersion", "@GTK_VERSION@"
       END
     END
     BLOCK "VarFileInfo"
