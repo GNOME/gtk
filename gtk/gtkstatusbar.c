@@ -226,6 +226,7 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
   gtk_widget_show (statusbar->frame);
 
   statusbar->label = gtk_label_new ("");
+  gtk_label_set_single_line_mode (GTK_LABEL (statusbar->label), TRUE);
   gtk_misc_set_alignment (GTK_MISC (statusbar->label), 0.0, 0.5);
   /* don't expand the size request for the label; if we
    * do that then toplevels weirdly resize

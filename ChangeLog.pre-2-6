@@ -1,3 +1,16 @@
+2004-11-09  Matthias Clasen  <mclasen@redhat.com>
+
+	Avoid resizing GtkStatusbar if the text of the label 
+	changes  (#90955, He Qiangqiang, fix proposed by 
+	Owen Taylor, patch by Christian Persch)
+	
+	* gtk/gtklabel.[hc]: Add a boolean single-line-mode property 
+	which causes the label height not to depend on the actual
+	text, but only on the font.
+
+	* gtk/gtkstatusbar.c (gtk_statusbar_init): Turn on
+	single-line-mode for the label.
+
 2004-11-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilefilter.c (gtk_file_filter_filter): Use 

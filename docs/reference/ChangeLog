@@ -1,3 +1,7 @@
+2004-11-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add gtk_label_[gs]et_single_line_mode.
+
 2004-11-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add gtk_file_filter_add_pixbuf_formats.

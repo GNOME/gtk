@@ -47,6 +47,7 @@
 typedef struct
 {
   gint width_chars;
+  guint single_line_mode : 1;
 }
 GtkLabelPrivate;
 
@@ -80,7 +81,8 @@ enum {
   PROP_CURSOR_POSITION,
   PROP_SELECTION_BOUND,
   PROP_ELLIPSIZE,
-  PROP_WIDTH_CHARS
+  PROP_WIDTH_CHARS,
+  PROP_SINGLE_LINE_MODE
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -420,7 +422,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * GtkLabel:width-chars:
    * 
    * The desired width of the label, in characters. If this property is set to
-   * %-1, the width will be calculated automatically, otherwise the label will
+   * -1, the width will be calculated automatically, otherwise the label will
    * request either 3 characters or the property value, whichever is greater.
    * 
    * Since: 2.6
@@ -435,6 +437,24 @@ gtk_label_class_init (GtkLabelClass *class)
                                                      -1,
                                                      G_PARAM_READWRITE));
   
+  /**
+   * GtkLabel:single-line-mode:
+   * 
+   * Whether the label is in single line mode. In single line mode,
+   * the height of the label does not depend on the actual text, it
+   * is always set to ascent + descent of the font. This can be an
+   * advantage in situations where resizing the label because of text 
+   * changes would be distracting, e.g. in a statusbar.
+   *
+   * Since: 2.6
+   **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_SINGLE_LINE_MODE,
+                                   g_param_spec_boolean ("single-line-mode",
+                                                        P_("Single Line Mode"),
+                                                        P_("Whether the label is in single line mode"),
+                                                        FALSE,
+                                                        G_PARAM_READWRITE));
   /*
    * Key bindings
    */
@@ -560,6 +580,9 @@ gtk_label_set_property (GObject      *object,
     case PROP_WIDTH_CHARS:
       gtk_label_set_width_chars (label, g_value_get_int (value));
       break;
+    case PROP_SINGLE_LINE_MODE:
+      gtk_label_set_single_line_mode (label, g_value_get_boolean (value));
+      break;	  
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -630,6 +653,9 @@ gtk_label_get_property (GObject     *object,
       break;
     case PROP_WIDTH_CHARS:
       g_value_set_enum (value, gtk_label_get_width_chars (label));
+      break;
+    case PROP_SINGLE_LINE_MODE:
+      g_value_set_boolean (value, gtk_label_get_single_line_mode (label));
       break;
 
     default:
@@ -1605,6 +1631,7 @@ gtk_label_ensure_layout (GtkLabel *label)
   if (!label->layout)
     {
       PangoAlignment align = PANGO_ALIGN_LEFT; /* Quiet gcc */
+      GtkLabelPrivate *priv = GTK_LABEL_GET_PRIVATE (label);
 
       label->layout = gtk_widget_create_pango_layout (widget, label->text);
 
@@ -1633,6 +1660,7 @@ gtk_label_ensure_layout (GtkLabel *label)
 
       pango_layout_set_alignment (label->layout, align);
       pango_layout_set_ellipsize (label->layout, label->ellipsize);
+      pango_layout_set_single_paragraph_mode (label->layout, priv->single_line_mode);
 
       if (label->ellipsize)
 	pango_layout_set_width (label->layout, 
@@ -1772,7 +1800,24 @@ gtk_label_size_request (GtkWidget      *widget,
 	width += PANGO_PIXELS (logical_rect.width);
     }
 
-  height += PANGO_PIXELS (logical_rect.height);
+  if (priv->single_line_mode)
+    {
+      PangoContext *context;
+      PangoFontMetrics *metrics;
+      gint ascent, descent;
+
+      context = pango_layout_get_context (label->layout);
+      metrics = pango_context_get_metrics (context, widget->style->font_desc,
+                                           pango_context_get_language (context));
+
+      ascent = pango_font_metrics_get_ascent (metrics);
+      descent = pango_font_metrics_get_descent (metrics);
+      pango_font_metrics_unref (metrics);
+    
+      height += PANGO_PIXELS (ascent + descent);
+    }
+  else
+    height += PANGO_PIXELS (logical_rect.height);
 
   requisition->width = width;
   requisition->height = height;
@@ -3032,6 +3077,59 @@ gtk_label_get_use_underline (GtkLabel *label)
   g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
   
   return label->use_underline;
+}
+
+/**
+ * gtk_label_set_single_line_mode:
+ * @label: a #GtkLabel
+ * @single_line_mode: %TRUE if the label should be in single line mode
+ *
+ * Sets whether the label is in single line mode.
+ *
+ * Since: 2.6
+ */
+void
+gtk_label_set_single_line_mode (GtkLabel *label,
+                                gboolean single_line_mode)
+{
+  GtkLabelPrivate *priv;
+
+  g_return_if_fail (GTK_IS_LABEL (label));
+
+  single_line_mode = single_line_mode != FALSE;
+
+  priv = GTK_LABEL_GET_PRIVATE (label);
+  if (priv->single_line_mode != single_line_mode)
+    {
+      priv->single_line_mode = single_line_mode;
+
+      gtk_label_clear_layout (label);
+      gtk_widget_queue_resize (GTK_WIDGET (label));
+
+      g_object_notify (G_OBJECT (label), "single-line-mode");
+    }
+}
+
+/**
+ * gtk_label_get_single_line_mode:
+ * @label: a #GtkLabel
+ *
+ * Returns whether the label is in single line mode.
+ *
+ * Return value: %TRUE when the label is in single line mode.
+ *
+ * Since: 2.6
+ **/
+gboolean
+gtk_label_get_single_line_mode  (GtkLabel *label)
+{
+  GtkLabelPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
+
+  priv = GTK_LABEL_GET_PRIVATE (label);
+
+  return priv->single_line_mode;
 }
 
 /* Compute the X position for an offset that corresponds to the "more important

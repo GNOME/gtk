@@ -155,6 +155,9 @@ void         gtk_label_get_layout_offsets (GtkLabel *label,
                                            gint     *x,
                                            gint     *y);
 
+void         gtk_label_set_single_line_mode  (GtkLabel *label,
+                                              gboolean single_line_mode);
+gboolean     gtk_label_get_single_line_mode  (GtkLabel *label);
 
 #ifndef GTK_DISABLE_DEPRECATED
 
