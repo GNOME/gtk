@@ -8,7 +8,9 @@
 
 <!-- NOTE: Use only one author tag, otherwise sgml2txt barfs - TRG --> 
 <author>Nathan Froyd, Tony Gale, Shawn T. Amundson.
-<date>May 11th 1998
+
+<date>July 6th 1998
+
 <abstract>
 This document is intended to answer questions that are likely to be 
 frequently asked by programmers using GTK+ or people who are just
@@ -363,7 +365,7 @@ using the following steps:
 <itemize>
 <item> In a bourne shell descendant (e.g. bash) type:
 <verb>
-export CVSROOT=':pserver:anonymous@cvs.gimp.org:/debian/home/gnomecvs'
+export CVSROOT=':pserver:anonymous@anoncvs.gimp.org:/debian/home/gnomecvs'
 </verb>
 <item>Next, the first time the source tree is checked out, a cvs login 
 is needed. 
@@ -374,8 +376,16 @@ This will ask you for a password. There is no password for cvs.gimp.org,
 so just enter a carriage return. 
 <item>To get the tree and place it in a subdir of your current working directory, issue the command: 
 <verb>
-cvs -z9 get gtk+
+cvs -z3 get gtk+
 </verb>
+
+Note that with the GTK+ 1.1 tree, glib has been moved to a separate CVS
+module, so if you don't have glib installed you will need to get that
+as well:
+<verb>
+cvs -z3 get glib
+</verb>
+
 </itemize>
 <!-- ----------------------------------------------------------------- -->
 <sect1>How can I contribute to GTK+?
