@@ -2209,6 +2209,22 @@ gdk_window_unfullscreen (GdkWindow *window)
 }
 
 void
+gdk_window_set_keep_above (GdkWindow *window, gboolean setting)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  g_warning ("gdk_window_set_keep_above() not implemented.\n");
+}
+
+void
+gdk_window_set_keep_below (GdkWindow *window, gboolean setting)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  g_warning ("gdk_window_set_keep_below() not implemented.\n");
+}
+
+void
 gdk_window_focus (GdkWindow *window,
                   guint32    timestamp)
 {

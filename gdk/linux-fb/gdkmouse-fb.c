@@ -36,6 +36,7 @@ typedef struct _GdkFBMouseDevice GdkFBMouseDevice;
 
 struct _GdkFBMouse {
   gint fd; /* Set by open */
+  gchar *file;
 
   /* These are written to by parse_packet */
   gdouble x, y;
@@ -252,7 +253,8 @@ handle_mouse_scroll (GdkFBMouse *mouse,
  */
 
 struct _GdkFBMouseDevice {
-  char *name;
+  gchar *name;
+  gchar *file;
   gint packet_size;
   gboolean (*open)(GdkFBMouse *mouse);
   void (*close)(GdkFBMouse *mouse);
@@ -280,6 +282,7 @@ static gboolean gdk_fb_mouse_fidmour_packet (GdkFBMouse   *mouse,
 static GdkFBMouseDevice mouse_devs[] =
 {
   { "ps2",
+    "/dev/psaux",
     3,
     gdk_fb_mouse_ps2_open,
     gdk_fb_mouse_ps2_close,
@@ -287,6 +290,7 @@ static GdkFBMouseDevice mouse_devs[] =
     { 0xc0, 0x00 }
   },
   { "imps2",
+    "/dev/psaux",
     4,
     gdk_fb_mouse_imps2_open,
     gdk_fb_mouse_ps2_close,
@@ -294,6 +298,7 @@ static GdkFBMouseDevice mouse_devs[] =
     { 0xc0, 0x00 }
   },
   { "ms",
+    "/dev/mouse",
     3,
     gdk_fb_mouse_ms_open,
     gdk_fb_mouse_ms_close,
@@ -301,6 +306,7 @@ static GdkFBMouseDevice mouse_devs[] =
     { 0x40, 0x40 }
   },
   { "fidmour",
+    "/dev/fidmour",
     5,
     gdk_fb_mouse_fidmour_open,
     gdk_fb_mouse_fidmour_close,
@@ -312,8 +318,8 @@ static GdkFBMouseDevice mouse_devs[] =
 gboolean
 gdk_fb_mouse_init (gboolean open_dev)
 {
-  char *mouse_type;
-  int i;
+  gchar *mouse_type, *mouse_file;
+  gint i;
 
   gdk_fb_mouse = g_new0 (GdkFBMouse, 1);
   gdk_fb_mouse->fd = -1;
@@ -335,6 +341,11 @@ gdk_fb_mouse_init (gboolean open_dev)
     }
 
   gdk_fb_mouse->dev = &mouse_devs[i];
+
+  mouse_file = getenv ("GDK_MOUSE_FILE");
+  if (!mouse_file)
+    mouse_file = gdk_fb_mouse->dev->file;
+  gdk_fb_mouse->file = mouse_file;
 
   gdk_fb_mouse->x = gdk_display->fb_width / 2;
   gdk_fb_mouse->y = gdk_display->fb_height / 2;
@@ -476,10 +487,13 @@ gdk_fb_mouse_ps2_open (GdkFBMouse *mouse)
   guchar buf[7];
   int i = 0;
 
-  fd = gdk_fb_mouse_dev_open ("/dev/psaux", O_RDWR);
+  fd = gdk_fb_mouse_dev_open (mouse->file, O_RDWR);
   if (fd < 0)
-    return FALSE;
-  
+    {
+      g_print ("Error opening %s: %s\n", mouse->file, strerror (errno));
+      return FALSE;
+    }
+
   /* From xf86_Mouse.c */
   buf[i++] = 230; /* 1:1 scaling */
   buf[i++] = 244; /* enable mouse */
@@ -487,7 +501,7 @@ gdk_fb_mouse_ps2_open (GdkFBMouse *mouse)
   buf[i++] = 200;
   buf[i++] = 232; /* device resolution */
   buf[i++] = 1;
-  
+
   if (!write_all (fd, buf, i))
     {
       close (fd);
@@ -511,10 +525,13 @@ gdk_fb_mouse_imps2_open (GdkFBMouse *mouse)
   guchar buf[7];
   int i = 0;
 
-  fd = gdk_fb_mouse_dev_open ("/dev/psaux", O_RDWR);
+  fd = gdk_fb_mouse_dev_open (mouse->file, O_RDWR);
   if (fd < 0)
-    return FALSE;
-  
+    {
+      g_print ("Error opening %s: %s\n", mouse->file, strerror (errno));
+      return FALSE;
+    }
+
   i = 0;
   buf[i++] = 243; /* Sample rate */
   buf[i++] = 200;
@@ -632,15 +649,15 @@ gdk_fb_mouse_ms_open (GdkFBMouse   *mouse)
   guchar buf[7];
   struct termios tty;
 
-  fd = gdk_fb_mouse_dev_open ("/dev/mouse", O_RDWR);
-  if (fd < 0) 
+  fd = gdk_fb_mouse_dev_open (mouse->file, O_RDWR);
+  if (fd < 0)
     {
-      g_print ("Error opening /dev/mouse: %s\n", strerror (errno));
+      g_print ("Error opening %s: %s\n", mouse->file, strerror (errno));
       return FALSE;
     }
-  
+
   while ((i = read (fd, buf, sizeof(buf))) > 0)
-    g_print ("Got %d bytes of junk from /dev/mouse\n", i);
+    g_print ("Got %d bytes of junk from %s\n", mouse->file, i);
 
   tcgetattr (fd, &tty);
   tty.c_iflag = IGNBRK | IGNPAR;
@@ -741,10 +758,13 @@ gdk_fb_mouse_fidmour_open (GdkFBMouse   *mouse)
 {
   gint fd;
 
-  fd = gdk_fb_mouse_dev_open ("/dev/fidmour", O_RDONLY);
+  fd = gdk_fb_mouse_dev_open (mouse->file, O_RDONLY);
   if (fd < 0)
-    return FALSE;
-  
+    {
+      g_print ("Error opening %s: %s\n", mouse->file, strerror (errno));
+      return FALSE;
+    }
+
   mouse->fd = fd;
   return TRUE;
 }
