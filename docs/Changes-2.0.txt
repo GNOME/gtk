@@ -454,3 +454,8 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
 * gtk_image_new() now takes no arguments and creates an empty GtkImage
   widget. To create a GtkImage widget from a GdkImage (the least
   common usage of GdkImage), use gtk_image_new_from_image.
+
+* GTK_SELECTION_EXTENDED is now deprecated, and neither the
+  GtkList/GtkTree nor the GtkCList/GtkCTree support
+  GTK_SELECTION_EXTENDED anymore.  However, the old extended behavior
+  replaces MULTIPLE behavior.
