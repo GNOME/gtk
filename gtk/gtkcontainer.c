@@ -35,6 +35,7 @@ enum {
 enum {
   ARG_0,
   ARG_BORDER_WIDTH,
+  ARG_RESIZE_MODE,
   ARG_CHILD
 };
 
@@ -168,6 +169,7 @@ gtk_container_class_init (GtkContainerClass *class)
   hadjustment_key_id = g_quark_from_static_string (hadjustment_key);
   
   gtk_object_add_arg_type ("GtkContainer::border_width", GTK_TYPE_ULONG, GTK_ARG_READWRITE, ARG_BORDER_WIDTH);
+  gtk_object_add_arg_type ("GtkContainer::resize_mode", GTK_TYPE_RESIZE_MODE, GTK_ARG_READWRITE, ARG_RESIZE_MODE);
   gtk_object_add_arg_type ("GtkContainer::child", GTK_TYPE_WIDGET, GTK_ARG_WRITABLE, ARG_CHILD);
 
   container_signals[ADD] =
@@ -697,6 +699,9 @@ gtk_container_set_arg (GtkContainer *container,
     case ARG_BORDER_WIDTH:
       gtk_container_border_width (container, GTK_VALUE_ULONG (*arg));
       break;
+    case ARG_RESIZE_MODE:
+      gtk_container_set_resize_mode (container, GTK_VALUE_ENUM (*arg));
+      break;
     case ARG_CHILD:
       gtk_container_add (container, GTK_WIDGET (GTK_VALUE_OBJECT (*arg)));
       break;
@@ -714,6 +719,9 @@ gtk_container_get_arg (GtkContainer *container,
     {
     case ARG_BORDER_WIDTH:
       GTK_VALUE_ULONG (*arg) = container->border_width;
+      break;
+    case ARG_RESIZE_MODE:
+      GTK_VALUE_ENUM (*arg) = container->resize_mode;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
@@ -819,19 +827,25 @@ gtk_container_set_resize_mode (GtkContainer  *container,
 {
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (!(GTK_WIDGET_TOPLEVEL (container) && 
-		      resize_mode == GTK_RESIZE_PARENT));
-
-  container->resize_mode = resize_mode;
-
-  if (container->resize_widgets != NULL)
+  g_return_if_fail (resize_mode <= GTK_RESIZE_IMMEDIATE);
+  
+  if (GTK_WIDGET_TOPLEVEL (container) &&
+      resize_mode == GTK_RESIZE_PARENT)
+    resize_mode = GTK_RESIZE_QUEUE;
+  
+  if (container->resize_mode != resize_mode)
     {
-      if (resize_mode == GTK_RESIZE_IMMEDIATE)
-	gtk_container_check_resize (container);
-      else if (resize_mode == GTK_RESIZE_PARENT)
+      container->resize_mode = resize_mode;
+      
+      if (container->resize_widgets != NULL)
 	{
-	  gtk_widget_queue_resize (GTK_WIDGET (container));
-	  container->resize_widgets = NULL;
+	  if (resize_mode == GTK_RESIZE_IMMEDIATE)
+	    gtk_container_check_resize (container);
+	  else if (resize_mode == GTK_RESIZE_PARENT)
+	    {
+	      gtk_container_clear_resize_widgets (container);
+	      gtk_widget_queue_resize (GTK_WIDGET (container));
+	    }
 	}
     }
 }
@@ -849,7 +863,7 @@ gint
 gtk_container_need_resize (GtkContainer     *container)
 {
   gtk_container_check_resize (container);
-  return TRUE;
+  return FALSE;
 }
 
 static void
@@ -876,7 +890,7 @@ gtk_container_real_check_resize (GtkContainer *container)
     }
 }
 
-/* The window hasn't changed size but one of its children
+/* The container hasn't changed size but one of its children
  *  queued a resize request. Which means that the allocation
  *  is not sufficient for the requisition of some child.
  *  We've already performed a size request at this point,
@@ -895,12 +909,12 @@ gtk_container_resize_children (GtkContainer *container)
   GSList *resize_containers;
   GSList *node;
   
-  resize_widgets = container->resize_widgets;
-  container->resize_widgets = NULL;
-  
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
 
+  resize_widgets = container->resize_widgets;
+  container->resize_widgets = NULL;
+  
   for (node = resize_widgets; node; node = node->next)
     {
       widget = node->data;

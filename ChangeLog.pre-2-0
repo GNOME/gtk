@@ -1,3 +1,23 @@
+Fri Jun 19 06:18:19 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcontainer.c (gtk_container_set_resize_mode): fail silently
+	for toplevels. if resize_mode changes to GTK_RESIZE_PARENT, clear the
+ 	resize widget list before queuing the container for a new reize.
+	(gtk_container_need_resize): changed return value to FALSE, since this
+	used to indicate that no further resizes are needed.
+	(gtk_container_set_arg): 
+	(gtk_container_get_arg): 
+	(gtk_container_class_init): implemented GtkContainer::resize_mode
+ 	argument.
+
+	(gtk_container_resize_children): when we walk up the tree of a resize
+	widget we need to stop if we are the current parent.
+
+	* gtk/gtkwidget.c (gtk_widget_queue_resize): flag the resize child with
+	GTK_RESIZE_NEEDED for container->resize_mode==GTK_RESIZE_IMMEDIATE.
+	(gtk_widget_hide_all): retrive the toplevel widget from via
+	gtk_widget_get_resize_container().
+
 Thu Jun 18 23:08:36 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtklist.c (gtk_list_button_press): Only respond

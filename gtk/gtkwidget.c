@@ -1421,7 +1421,7 @@ gtk_widget_hide_all (GtkWidget *widget)
     {
       GtkWidget *toplevel;
 
-      toplevel = gtk_widget_get_toplevel (widget);
+      toplevel = gtk_widget_get_resize_container (widget);
       GTK_CONTAINER (toplevel)->resize_widgets =
 	g_slist_remove (GTK_CONTAINER (toplevel)->resize_widgets, widget);
       GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_NEEDED);
@@ -1675,11 +1675,17 @@ gtk_widget_queue_resize (GtkWidget *widget)
 	      break;
 
 	    case GTK_RESIZE_IMMEDIATE:
-	      container->resize_widgets = 
-		g_slist_prepend (container->resize_widgets, widget);
-	      gtk_container_check_resize (container);
+	      if (!GTK_WIDGET_RESIZE_NEEDED (widget))
+		{
+		  GTK_PRIVATE_SET_FLAG (widget, GTK_RESIZE_NEEDED);
+		  container->resize_widgets =
+		    g_slist_prepend (container->resize_widgets, widget);
+		  gtk_container_check_resize (container);
+		}
+	      break;
 	    case GTK_RESIZE_PARENT:
 	      /* Ignore */
+	      break;
 	    }
 	}
       else
