@@ -1,3 +1,26 @@
+Wed Apr  5 16:37:29 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkeditable.c (gtk_editable_insert_text): Allow new_text_length == -1.
+
+Wed Apr  5 16:27:45 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimcontext.[ch]: Base class for new input context system
+
+	* gtk/gtkimmulticontext.[ch]: Proxy input context that allows
+	the real input context implementation to be loaded from modules
+	and switched on the fly.
+
+	* gtk/gtkcontextsimple.[ch]: Simple implementation of an input
+	context that just does direct keysymbol => unicode translation.
+
+	* gtk/gtkentry.[ch]: Start switching editing over to using
+	GtkInputContext. (No handling of preedit yet.)
+
+Wed Apr  5 15:48:41 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktypeutils.h (GTK_CHECK_GET_CLASS): Fix problem with one too
+	many substitutions. (klass should not be subsituted.)
+
 Wed Apr  5 00:18:14 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Add checks for Pango

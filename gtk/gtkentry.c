@@ -29,6 +29,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gdk/gdki18n.h"
 #include "gtkentry.h"
+#include "gtkimmulticontext.h"
 #include "gtkmain.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
@@ -159,6 +160,11 @@ static void gtk_entry_set_selection       (GtkEditable       *editable,
 
 static void gtk_entry_set_position_from_editable (GtkEditable *editable,
 						  gint         position);
+
+static void gtk_entry_commit_cb           (GtkIMContext      *context,
+					   const gchar       *str,
+					   GtkEntry          *entry);
+
 
 static GtkWidgetClass *parent_class = NULL;
 static GdkAtom ctext_atom = GDK_NONE;
@@ -365,6 +371,14 @@ gtk_entry_init (GtkEntry *entry)
   entry->timer = 0;
   entry->button = 0;
   entry->ascent = 0;
+
+  /* This object is completely private. No external entity can gain a reference
+   * to it; so we create it here and destroy it in finalize().
+   */
+  entry->im_context = gtk_im_multicontext_new ();
+  
+  gtk_signal_connect (GTK_OBJECT (entry->im_context), "commit",
+		      GTK_SIGNAL_FUNC (gtk_entry_commit_cb), entry);
 }
 
 GtkWidget*
@@ -495,6 +509,8 @@ gtk_entry_finalize (GtkObject *object)
 
   entry = GTK_ENTRY (object);
 
+  gtk_object_unref (GTK_OBJECT (entry->im_context));
+
   if (entry->timer)
     gtk_timeout_remove (entry->timer);
 
@@ -571,6 +587,8 @@ gtk_entry_realize (GtkWidget *widget)
       gtk_editable_claim_selection (editable, TRUE, GDK_CURRENT_TIME);
       gtk_entry_reset_attrs (entry);
     }
+
+  gtk_im_context_set_client_window (entry->im_context, entry->text_area);
 }
 
 static void
@@ -583,6 +601,8 @@ gtk_entry_unrealize (GtkWidget *widget)
 
   entry = GTK_ENTRY (widget);
 
+  gtk_im_context_set_client_window (entry->im_context, entry->text_area);
+  
   if (entry->text_area)
     {
       gdk_window_set_user_data (entry->text_area, NULL);
@@ -931,128 +951,6 @@ gtk_entry_motion_notify (GtkWidget      *widget,
   return TRUE;
 }
 
-struct {
-  guint keyval;
-  unicode_char_t ch;
-} keyval_to_unicode[] = {
-  { GDK_hebrew_aleph,     0x5d0 },
-  { GDK_hebrew_bet,       0x5d1 },
-  { GDK_hebrew_gimel,     0x5d2 },
-  { GDK_hebrew_dalet,     0x5d3 },
-  { GDK_hebrew_he,        0x5d4 },
-  { GDK_hebrew_waw,       0x5d5 },
-  { GDK_hebrew_zayin,     0x5d6 },
-  { GDK_hebrew_het,       0x5d7 },
-  { GDK_hebrew_tet,       0x5d8 },
-  { GDK_hebrew_yod,       0x5d9 },
-  { GDK_hebrew_finalkaph, 0x5da },
-  { GDK_hebrew_kaph,      0x5db },
-  { GDK_hebrew_lamed,     0x5dc },
-  { GDK_hebrew_finalmem,  0x5dd },
-  { GDK_hebrew_mem,       0x5de },
-  { GDK_hebrew_finalnun,  0x5df },
-  { GDK_hebrew_nun,       0x5e0 },
-  { GDK_hebrew_samech,    0x5e1 },
-  { GDK_hebrew_ayin,      0x5e2 },
-  { GDK_hebrew_finalpe,   0x5e3 },
-  { GDK_hebrew_pe,        0x5e4 },
-  { GDK_hebrew_finalzade, 0x5e5 },
-  { GDK_hebrew_zade,      0x5e6 },
-  { GDK_hebrew_qoph,      0x5e7 },
-  { GDK_hebrew_resh,      0x5e8 },
-  { GDK_hebrew_shin,      0x5e9 },
-  { GDK_hebrew_taw,       0x5ea }
-};
-
-static unicode_char_t
-find_unicode (gint keyval)
-{
-  gint first = 0;
-  gint last = G_N_ELEMENTS (keyval_to_unicode) - 1;
-
-#define KEYVAL(ind) keyval_to_unicode[ind].keyval
-  
-  if (KEYVAL (first) >= keyval)
-    return KEYVAL(first) == keyval ? keyval_to_unicode[first].ch : 0;
-  if (KEYVAL (last) <= keyval)
-    return KEYVAL(last) == keyval ? keyval_to_unicode[last].ch : 0;
-
-  /* Invariant: KEYVAL(first) < keyval < KEYVAL(LAST) */
-
-  do
-    {
-      gint middle = (first + last) / 2;
-      if (KEYVAL(middle) > keyval)
-	last = middle;
-      else if (KEYVAL(middle) == keyval)
-	return keyval_to_unicode[middle].ch;
-      else
-	first = middle;
-    }
-  while (last > first + 1);
-
-  return 0;
-
-#undef KEVAL  
-}
-
-/**
- * unicode_guchar4_to_utf8:
- * @ch: a ISO10646 character code
- * @out: output buffer, must have at least 6 bytes of space.
- * 
- * Convert a single character to utf8
- * 
- * Return value: number of bytes written
- **/
-static int
-ucs4_to_utf8 (unicode_char_t c, char *outbuf)
-{
-  size_t len = 0;
-  int first;
-  int i;
-
-  if (c < 0x80)
-    {
-      first = 0;
-      len = 1;
-    }
-  else if (c < 0x800)
-    {
-      first = 0xc0;
-      len = 2;
-    }
-  else if (c < 0x10000)
-    {
-      first = 0xe0;
-      len = 3;
-    }
-   else if (c < 0x200000)
-    {
-      first = 0xf0;
-      len = 4;
-    }
-  else if (c < 0x4000000)
-    {
-      first = 0xf8;
-      len = 5;
-    }
-  else
-    {
-      first = 0xfc;
-      len = 6;
-    }
-
-  for (i = len - 1; i > 0; --i)
-    {
-      outbuf[i] = (c & 0x3f) | 0x80;
-      c >>= 6;
-    }
-  outbuf[0] = c | first;
-
-  return len;
-}
-
 static gint
 gtk_entry_key_press (GtkWidget   *widget,
 		     GdkEventKey *event)
@@ -1194,41 +1092,7 @@ gtk_entry_key_press (GtkWidget   *widget,
 	      break;
 	    }
 	}
-      if (event->length > 0)
-	{
-	  gint tmp_pos;
-
-	  extend_selection = FALSE;
-	  gtk_editable_delete_selection (editable);
-
-	  tmp_pos = editable->current_pos;
-	  gtk_editable_insert_text (editable, event->string, event->length, &tmp_pos);
-	  editable->current_pos = tmp_pos;
-
-	  return_val = TRUE;
-	}
-      else
-	{
-	  unicode_char_t ch = find_unicode (event->keyval);
-	  
-	  if (ch != 0)
-	    {
-	      gint tmp_pos;
-	      gchar buf[6];
-	      gint len;
-
-	      len = ucs4_to_utf8 (ch, buf);
-
-	      extend_selection = FALSE;
-	      gtk_editable_delete_selection (editable);
-
-	      tmp_pos = editable->current_pos;
-	      gtk_editable_insert_text (editable, buf, len, &tmp_pos);
-	      editable->current_pos = tmp_pos;
-
-	      return_val = TRUE;
-	    }
-	}
+      gtk_im_context_filter_keypress (entry->im_context, event);
       
       break;
     }
@@ -1284,6 +1148,8 @@ gtk_entry_focus_in (GtkWidget     *widget,
   gtk_widget_draw_focus (widget);
   gtk_entry_queue_draw (GTK_ENTRY (widget));
   
+  gtk_im_context_focus_out (GTK_ENTRY (widget)->im_context);
+
   return FALSE;
 }
 
@@ -1298,6 +1164,8 @@ gtk_entry_focus_out (GtkWidget     *widget,
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_draw_focus (widget);
   gtk_entry_queue_draw (GTK_ENTRY (widget));
+
+  gtk_im_context_focus_out (GTK_ENTRY (widget)->im_context);
 
   return FALSE;
 }
@@ -2168,5 +2036,17 @@ gtk_entry_state_changed (GtkWidget      *widget,
 
   if (GTK_WIDGET_DRAWABLE (widget))
     gtk_widget_queue_clear(widget);
+}
+
+static void
+gtk_entry_commit_cb (GtkIMContext *context,
+		     const gchar  *str,
+		     GtkEntry     *entry)
+{
+  GtkEditable *editable = GTK_EDITABLE (entry);
+  gint tmp_pos = editable->current_pos;
+
+  gtk_editable_insert_text (editable, str, strlen (str), &tmp_pos);
+  editable->current_pos = tmp_pos;
 }
 

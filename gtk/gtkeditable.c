@@ -424,6 +424,9 @@ gtk_editable_insert_text (GtkEditable *editable,
 
   klass = GTK_EDITABLE_CLASS (GTK_OBJECT (editable)->klass);
 
+  if (new_text_length < 0)
+    new_text_length = strlen (new_text);
+  
   if (new_text_length <= 64)
     text = buf;
   else

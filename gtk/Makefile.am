@@ -94,6 +94,8 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkhscrollbar.h		\
 	gtkhseparator.h		\
 	gtkimage.h		\
+	gtkimcontext.h		\
+	gtkimmulticontext.h	\
 	gtkinputdialog.h	\
 	gtkinvisible.h		\
 	gtkitem.h		\
@@ -205,6 +207,10 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtkhscrollbar.c		\
 	gtkhseparator.c		\
 	gtkimage.c		\
+	gtkimcontext.c		\
+	gtkimcontextsimple.c	\
+	gtkimcontextsimple.h	\
+	gtkimmulticontext.c	\
 	gtkinputdialog.c	\
 	gtkintl.h		\
 	gtkinvisible.c		\

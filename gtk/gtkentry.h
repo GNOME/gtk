@@ -30,6 +30,7 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkeditable.h>
+#include <gtk/gtkimcontext.h>
 #include <pango/pango.h>
 
 #ifdef __cplusplus
@@ -69,6 +70,7 @@ struct _GtkEntry
   PangoLayout *layout;
   gint    scroll_offset;
   gint    ascent;	/* font ascent, in pango units  */
+  GtkIMContext *im_context;
 };
 
 struct _GtkEntryClass
