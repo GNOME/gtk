@@ -2401,10 +2401,13 @@ gtk_text_view_size_request (GtkWidget      *widget,
           GtkRequisition child_req;
           GtkRequisition old_req;
 
-          old_req = child->widget->requisition;
-
+          gtk_widget_get_child_requisition (child->widget, &old_req);
+          
           gtk_widget_size_request (child->widget, &child_req);
 
+          gtk_widget_get_child_requisition (child->widget, &child_req);
+
+          /* Invalidate layout lines if required */
           if (text_view->layout &&
               (old_req.width != child_req.width ||
                old_req.height != child_req.height))
@@ -2421,12 +2424,13 @@ gtk_text_view_size_request (GtkWidget      *widget,
 }
 
 static void
-gtk_text_view_update_child_allocation (GtkTextView      *text_view,
-                                       GtkTextViewChild *vc)
+gtk_text_view_compute_child_allocation (GtkTextView      *text_view,
+                                        GtkTextViewChild *vc,
+                                        GtkAllocation    *allocation)
 {
   gint buffer_y;
   GtkTextIter iter;
-  GtkAllocation allocation;
+  GtkRequisition req;
   
   gtk_text_buffer_get_iter_at_child_anchor (get_buffer (text_view),
                                             &iter,
@@ -2437,12 +2441,31 @@ gtk_text_view_update_child_allocation (GtkTextView      *text_view,
 
   buffer_y += vc->from_top_of_line;
 
-  allocation.x = vc->from_left_of_buffer;
-  allocation.y = buffer_y;
-  allocation.width = vc->widget->requisition.width;
-  allocation.height = vc->widget->requisition.height;
+  allocation->x = vc->from_left_of_buffer - text_view->xoffset;
+  allocation->y = buffer_y - text_view->yoffset;
+
+  gtk_widget_get_child_requisition (vc->widget, &req);
+  allocation->width = req.width;
+  allocation->height = req.height;
+}
+
+static void
+gtk_text_view_update_child_allocation (GtkTextView      *text_view,
+                                       GtkTextViewChild *vc)
+{
+  GtkAllocation allocation;
+
+  gtk_text_view_compute_child_allocation (text_view, vc, &allocation);
   
   gtk_widget_size_allocate (vc->widget, &allocation);
+
+#if 0
+  g_print ("allocation for %p allocated to %d,%d yoffset = %d\n",
+           vc->widget,
+           vc->widget->allocation.x,
+           vc->widget->allocation.y,
+           text_view->yoffset);
+#endif
 }
 
 static void
@@ -2461,11 +2484,11 @@ gtk_text_view_child_allocated (GtkTextLayout *layout,
    */
 
   vc = g_object_get_data (G_OBJECT (child),
-                            "gtk-text-view-child");
+                          "gtk-text-view-child");
 
   g_assert (vc != NULL);
 
-  g_print ("child allocated at %d,%d\n", x, y);
+  DV (g_print ("child allocated at %d,%d\n", x, y));
   
   vc->from_left_of_buffer = x;
   vc->from_top_of_line = y;
@@ -2976,6 +2999,7 @@ gtk_text_view_realize (GtkWidget *widget)
   GtkTextView *text_view;
   GdkWindowAttr attributes;
   gint attributes_mask;
+  GSList *tmp_list;
   
   text_view = GTK_TEXT_VIEW (widget);
   GTK_WIDGET_SET_FLAGS (text_view, GTK_REALIZED);
@@ -3027,6 +3051,16 @@ gtk_text_view_realize (GtkWidget *widget)
   if (text_view->buffer)
     gtk_text_buffer_add_selection_clipboard (text_view->buffer,
 					     gtk_clipboard_get (GDK_SELECTION_PRIMARY));
+
+  tmp_list = text_view->children;
+  while (tmp_list != NULL)
+    {
+      GtkTextViewChild *vc = tmp_list->data;
+      
+      text_view_child_set_parent_window (text_view, vc);
+      
+      tmp_list = tmp_list->next;
+    }
 }
 
 static void
@@ -3625,10 +3659,14 @@ gtk_text_view_motion_event (GtkWidget *widget, GdkEventMotion *event)
 }
 
 static void
-gtk_text_view_paint (GtkWidget *widget, GdkRectangle *area)
+gtk_text_view_paint (GtkWidget      *widget,
+                     GdkRectangle   *area,
+                     GdkEventExpose *event)
 {
   GtkTextView *text_view;
-
+  GList *child_exposes;
+  GList *tmp_list;
+  
   text_view = GTK_TEXT_VIEW (widget);
 
   g_return_if_fail (text_view->layout != NULL);
@@ -3649,7 +3687,8 @@ gtk_text_view_paint (GtkWidget *widget, GdkRectangle *area)
           area->x, area->y,
           area->width, area->height);
 #endif
-  
+
+  child_exposes = NULL;
   gtk_text_layout_draw (text_view->layout,
                         widget,
                         text_view->text_window->bin_window,
@@ -3657,31 +3696,34 @@ gtk_text_view_paint (GtkWidget *widget, GdkRectangle *area)
                         text_view->xoffset,
                         text_view->yoffset,
                         area->x, area->y,
-                        area->width, area->height);
+                        area->width, area->height,
+                        &child_exposes);
+
+  tmp_list = child_exposes;
+  while (tmp_list != NULL)
+    {
+      GtkWidget *child = tmp_list->data;
+      
+      gtk_container_propagate_expose (GTK_CONTAINER (text_view),
+                                      child,
+                                      event);
+
+      g_object_unref (G_OBJECT (child));
+      
+      tmp_list = tmp_list->next;
+    }
+
+  g_list_free (child_exposes);
 }
 
 static gint
 gtk_text_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
-{
-#if 0
-  {
-    GdkWindow *win = event->window;
-    GdkColor color = { 0, 0, 0, 65535 };
-    GdkGC *gc = gdk_gc_new (win);
-    gdk_gc_set_rgb_fg_color (gc, &color);
-    gdk_draw_rectangle (win,
-                        gc, TRUE,
-                        event->area.x, event->area.y,
-                        event->area.width, event->area.height);
-    gdk_gc_unref (gc);
-  }
-#endif
-  
+{  
   if (event->window == gtk_text_view_get_window (GTK_TEXT_VIEW (widget),
                                                  GTK_TEXT_WINDOW_TEXT))
     {
       DV(g_print (">Exposed ("G_STRLOC")\n"));
-      gtk_text_view_paint (widget, &event->area);
+      gtk_text_view_paint (widget, &event->area, event);
     }
 
   if (event->window == widget->window)
@@ -5166,7 +5208,7 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
   gint line_top;
   gint dx = 0;
   gint dy = 0;
-
+  
   /* Note that we oddly call this function with adj == NULL
    * sometimes
    */
@@ -5197,30 +5239,59 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
         }
     }
   
-  if (GTK_WIDGET_REALIZED (text_view) && (dx != 0 || dy != 0))
+  if (dx != 0 || dy != 0)
     {
-      if (dy != 0)
-        {
-          if (text_view->left_window)
-            text_window_scroll (text_view->left_window, 0, dy);
-          if (text_view->right_window)
-            text_window_scroll (text_view->right_window, 0, dy);
-        }
+      GSList *tmp_list;
 
-      if (dx != 0)
+      if (GTK_WIDGET_REALIZED (text_view))
         {
-          if (text_view->top_window)
-            text_window_scroll (text_view->top_window, dx, 0);
-          if (text_view->bottom_window)
-            text_window_scroll (text_view->bottom_window, dx, 0);
+          if (dy != 0)
+            {
+              if (text_view->left_window)
+                text_window_scroll (text_view->left_window, 0, dy);
+              if (text_view->right_window)
+                text_window_scroll (text_view->right_window, 0, dy);
+            }
+      
+          if (dx != 0)
+            {
+              if (text_view->top_window)
+                text_window_scroll (text_view->top_window, dx, 0);
+              if (text_view->bottom_window)
+                text_window_scroll (text_view->bottom_window, dx, 0);
+            }
+      
+          /* It looks nicer to scroll the main area last, because
+           * it takes a while, and making the side areas update
+           * afterward emphasizes the slowness of scrolling the
+           * main area.
+           */
+          text_window_scroll (text_view->text_window, dx, dy);
         }
-
-      /* It looks nicer to scroll the main area last, because
-       * it takes a while, and making the side areas update
-       * afterward emphasizes the slowness of scrolling the
-       * main area.
+      
+      /* Children are now "moved" in the text window, poke
+       * into widget->allocation for each child
        */
-      text_window_scroll (text_view->text_window, dx, dy);
+      tmp_list = text_view->children;
+      while (tmp_list != NULL)
+        {
+          GtkTextViewChild *child = tmp_list->data;
+          
+          if (child->anchor)
+            {              
+              child->widget->allocation.x -= dx;
+              child->widget->allocation.y -= dy;
+
+#if 0
+              g_print ("allocation for %p tweaked to %d,%d\n",
+                       child->widget,
+                       child->widget->allocation.x,
+                       child->widget->allocation.y);
+#endif
+            }
+          
+          tmp_list = g_slist_next (tmp_list);
+        }
     }
 
   /* This could result in invalidation, which would install the
@@ -5236,7 +5307,7 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
    * that, or shouldn't be.
    */
   gtk_text_view_validate_onscreen (text_view);
-
+  
   /* process exposes */
   if (GTK_WIDGET_REALIZED (text_view))
     {

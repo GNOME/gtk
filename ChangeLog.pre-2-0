@@ -1,3 +1,28 @@
+2001-11-05  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_paint): expose the child
+	widgets in here
+	(gtk_text_view_realize): set parent window of child widgets
+	(gtk_text_view_size_request): use child req to decide whether
+	to invalidate layout, not widget->requisition
+
+	* gtk/gtktextdisplay.c (render_layout_line): set
+	shaped_width_pixels for NULL shape objects, so that we properly
+	draw the "missing pixbuf/widget" thing
+	(render_layout_line): don't draw the widget here
+	(gtk_text_layout_draw): pass out a list of widgets that need exposing
+
+	* demos/gtk-demo/textview.c (insert_text): add demo of child
+	widgets
+
+	* gtk/gtktextlayout.c (add_child_attrs): remove debug spew
+
+	* gtk/gtktextdisplay.c (render_layout_line): remove debug spew
+
+	* gtk/gtktextview.c (gtk_text_view_update_child_allocation): add
+	scroll offsets
+	(gtk_text_view_value_changed): poke new X and Y into child allocations
+
 2001-11-06  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkmain.c (find_module): Do search GTK_BINARY_VERSION

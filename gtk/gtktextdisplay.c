@@ -222,7 +222,8 @@ render_layout_line (GdkDrawable        *drawable,
                     GSList            **shaped_pointer,
                     int                 x,
                     int                 y,
-                    gboolean            selected)
+                    gboolean            selected,
+                    GList             **widgets)
 {
   GSList *tmp_list = line->runs;
   PangoRectangle overall_rect;
@@ -331,6 +332,8 @@ render_layout_line (GdkDrawable        *drawable,
                                  shape_rect.x,
                                  shape_rect.y + shape_rect.height);
                 }
+
+              shaped_width_pixels = shape_rect.width;
             }
           else if (GDK_IS_PIXBUF (shaped))
             {
@@ -398,37 +401,17 @@ render_layout_line (GdkDrawable        *drawable,
             }
           else if (GTK_IS_WIDGET (shaped))
             {
-              gint width, height;
-              GdkRectangle draw_rect;
               GtkWidget *widget;
               
               widget = GTK_WIDGET (shaped);
               
-              width = widget->allocation.width;
-              height = widget->allocation.height;
+              shaped_width_pixels = widget->allocation.width;
 
-              g_print ("widget allocation at %d,%d %d x %d\n",
-		       widget->allocation.x,
-		       widget->allocation.y,
-		       widget->allocation.width,
-		       widget->allocation.height);
-              
-              if (GTK_WIDGET_DRAWABLE (widget) &&
-                  gdk_rectangle_intersect (&widget->allocation,
-                                           &render_state->clip_rect,
-                                           &draw_rect))
-
+              if (widgets)
                 {
-                  g_print ("drawing widget area %d,%d %d x %d\n",
-			   draw_rect.x,
-			   draw_rect.y,
-			   draw_rect.width,
-			   draw_rect.height);
-
-                  gtk_widget_draw (widget, &draw_rect);
+                  g_object_ref (G_OBJECT (widget));
+                  *widgets = g_list_prepend (*widgets, widget);
                 }
-
-              shaped_width_pixels = width;
             }
           else
             g_assert_not_reached (); /* not a pixbuf or widget */
@@ -490,7 +473,8 @@ render_para (GdkDrawable        *drawable,
              int                 x,
              int                 y,
              int                 selection_start_index,
-             int                 selection_end_index)
+             int                 selection_end_index,
+             GList             **widgets)
 {
   GSList *shaped_pointer = line_display->shaped_objects;
   PangoLayout *layout = line_display->layout;
@@ -571,7 +555,8 @@ render_para (GdkDrawable        *drawable,
           render_layout_line (drawable, render_state, line, &shaped_pointer,
                               x + PANGO_PIXELS (line_rect.x),
                               y + PANGO_PIXELS (baseline),
-                              TRUE);
+                              TRUE,
+                              widgets);
         }
       else
         {
@@ -581,7 +566,8 @@ render_para (GdkDrawable        *drawable,
                               line, &shaped_pointer,
                               x + PANGO_PIXELS (line_rect.x),
                               y + PANGO_PIXELS (baseline),
-                              FALSE);
+                              FALSE,
+                              widgets);
 
           if (selection_start_index <= byte_offset + line->length &&
               selection_end_index > byte_offset) /* Some selected */
@@ -605,7 +591,8 @@ render_para (GdkDrawable        *drawable,
               render_layout_line (drawable, render_state, line, &shaped_pointer_tmp,
                                   x + PANGO_PIXELS (line_rect.x),
                                   y + PANGO_PIXELS (baseline),
-                                  TRUE);
+                                  TRUE,
+                                  widgets);
 
               gdk_gc_set_clip_region (fg_gc, NULL);
               gdk_gc_set_clip_region (bg_gc, NULL);
@@ -727,7 +714,9 @@ gtk_text_layout_draw (GtkTextLayout *layout,
                       gint x,
                       gint y,
                       gint width,
-                      gint height)
+                      gint height,
+                      /* widgets to expose */
+                      GList **widgets)
 {
   GdkRectangle clip;
   gint current_y;
@@ -821,8 +810,8 @@ gtk_text_layout_draw (GtkTextLayout *layout,
           render_para (drawable, render_state, line_display,
                        - x_offset,
                        current_y,
-                       selection_start_index, selection_end_index);
-
+                       selection_start_index, selection_end_index,
+                       widgets);
 
           /* We paint the cursors last, because they overlap another chunk
          and need to appear on top. */
