@@ -268,9 +268,14 @@ struct _GtkCell
 
 guint gtk_clist_get_type (void);
 
+/* constructers useful for gtk-- wrappers */
+void gtk_clist_construct (GtkCList * clist,
+			  gint columns,
+			  gchar * titles[]);
+
 /* create a new GtkCList */
-GtkWidget *gtk_clist_new (int columns);
-GtkWidget *gtk_clist_new_with_titles (int columns,
+GtkWidget *gtk_clist_new (gint columns);
+GtkWidget *gtk_clist_new_with_titles (gint columns,
 				      gchar * titles[]);
 
 /* set the border style of the clist */

@@ -415,49 +415,13 @@ gtk_clist_init (GtkCList * clist)
   clist->selection = NULL;
 }
 
-/*
- * GTKCLIST PUBLIC INTERFACE
- *   gtk_clist_new_with_titles
- *   gtk_clist_new
- */
-GtkWidget *
-gtk_clist_new_with_titles (int columns,
-			   gchar * titles[])
+/* Constructors */
+void
+gtk_clist_construct (GtkCList * clist,
+		     gint columns,
+		     gchar *titles[])
 {
   int i;
-  GtkWidget *widget;
-  GtkCList *clist;
-
-  if (titles == NULL)
-    return NULL;
-
-  widget = gtk_clist_new (columns);
-  if (!widget)
-    return NULL;
-  else
-    clist = GTK_CLIST (widget);
-
-  /* set column titles */
-  GTK_CLIST_SET_FLAGS (clist, CLIST_SHOW_TITLES);
-  for (i = 0; i < columns; i++)
-    {
-      gtk_clist_set_column_title (clist, i, titles[i]);
-    }
-
-  return widget;
-}
-
-GtkWidget *
-gtk_clist_new (int columns)
-{
-  GtkCList *clist;
-
-  /* sanity check */
-  if (columns < 1)
-    return NULL;
-
-  clist = gtk_type_new (gtk_clist_get_type ());
-  GTK_CLIST_UNSET_FLAGS (clist, CLIST_SHOW_TITLES);
 
   /* initalize memory chunks */
   clist->row_mem_chunk = g_mem_chunk_new ("clist row mem chunk",
@@ -482,6 +446,53 @@ gtk_clist_new (int columns)
   /* create scrollbars */
   create_scrollbars (clist);
 
+  if (titles)
+    {
+      GTK_CLIST_SET_FLAGS (clist, CLIST_SHOW_TITLES);
+      for (i = 0; i < columns; i++)
+	gtk_clist_set_column_title (clist, i, titles[i]);
+    }
+  else
+    {
+      GTK_CLIST_UNSET_FLAGS (clist, CLIST_SHOW_TITLES);
+    }
+}
+
+/*
+ * GTKCLIST PUBLIC INTERFACE
+ *   gtk_clist_new_with_titles
+ *   gtk_clist_new
+ */
+GtkWidget *
+gtk_clist_new_with_titles (gint columns,
+			   gchar * titles[])
+{
+  GtkCList *clist;
+  GtkWidget *widget;
+
+ if (titles == NULL)
+    return NULL;
+
+  widget = gtk_clist_new (columns);
+  if (!widget)
+    return NULL;
+  else
+    clist = GTK_CLIST (widget);
+
+  gtk_clist_construct (clist, columns, titles);
+  return widget;
+}
+
+GtkWidget *
+gtk_clist_new (gint columns)
+{
+  GtkCList *clist;
+
+  if (columns < 1)
+    return NULL;
+
+  clist = gtk_type_new (gtk_clist_get_type ());
+  gtk_clist_construct (clist, columns, NULL);
   return GTK_WIDGET (clist);
 }
 
