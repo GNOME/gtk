@@ -1,3 +1,12 @@
+Wed Feb 27 14:58:12 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_size_request/allocate): 
+	Don't reserve space for border when the shadow type
+	for the menubar is "none". (#61843)
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_size_allocate): Fix
+	offset for right-justified menu items.
+
 Wed Feb 27 14:45:21 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_size_allocate): Go

@@ -228,13 +228,17 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
       gtk_widget_style_get (widget, "internal_padding", &ipadding, NULL);
       
       requisition->width += (GTK_CONTAINER (menu_bar)->border_width +
-			     widget->style->xthickness +
                              ipadding + 
 			     BORDER_SPACING) * 2;
       requisition->height += (GTK_CONTAINER (menu_bar)->border_width +
-			      widget->style->ythickness +
                               ipadding +
 			      BORDER_SPACING) * 2;
+
+      if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
+	{
+	  requisition->width += widget->style->xthickness * 2;
+	  requisition->height += widget->style->ythickness * 2;
+	}
 
       if (nchildren > 0)
 	requisition->width += 2 * CHILD_SPACING * (nchildren - 1);
@@ -271,16 +275,21 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
   if (menu_shell->children)
     {
       child_allocation.x = (GTK_CONTAINER (menu_bar)->border_width +
-			    widget->style->xthickness +
                             ipadding + 
 			    BORDER_SPACING);
-      offset = child_allocation.x; 	/* Window edge to menubar start */
-
       child_allocation.y = (GTK_CONTAINER (menu_bar)->border_width +
-			    widget->style->ythickness +
                             ipadding +
 			    BORDER_SPACING);
+
+      if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
+	{
+	  child_allocation.x += widget->style->xthickness;
+	  child_allocation.y += widget->style->ythickness;
+	}
+      
       child_allocation.height = MAX (1, (gint)allocation->height - child_allocation.y * 2);
+
+      offset = child_allocation.x; 	/* Window edge to menubar start */
 
       children = menu_shell->children;
       while (children)
@@ -297,11 +306,11 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
           child_requisition.width += toggle_size;
           
 	  /* Support for the right justified help menu */
-	  if ( (children == NULL) && (GTK_IS_MENU_ITEM(child))
+	  if ((children == NULL) && (GTK_IS_MENU_ITEM(child))
 	      && (GTK_MENU_ITEM(child)->right_justify)) 
 	    {
 	      child_allocation.x = allocation->width -
-		  child_requisition.width - CHILD_SPACING - offset;
+		  child_requisition.width - offset;
 	    }
 	  if (GTK_WIDGET_VISIBLE (child))
 	    {
