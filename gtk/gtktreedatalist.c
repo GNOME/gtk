@@ -59,7 +59,7 @@ _gtk_tree_data_list_free (GtkTreeDataList *list,
       if (g_type_is_a (column_headers [i], G_TYPE_STRING))
 	g_free ((gchar *) tmp->data.v_pointer);
       else if (g_type_is_a (column_headers [i], G_TYPE_OBJECT) && tmp->data.v_pointer != NULL)
-	g_object_unref (G_OBJECT (tmp->data.v_pointer));
+	g_object_unref (tmp->data.v_pointer);
       else if (g_type_is_a (column_headers [i], G_TYPE_BOXED) && tmp->data.v_pointer != NULL)
 	g_boxed_free (column_headers [i], (gpointer) tmp->data.v_pointer);
 
@@ -279,7 +279,7 @@ _gtk_tree_data_list_node_copy (GtkTreeDataList *list,
     case G_TYPE_OBJECT:
       new_list->data.v_pointer = list->data.v_pointer;
       if (new_list->data.v_pointer)
-	g_object_ref (G_OBJECT (new_list->data.v_pointer));
+	g_object_ref (new_list->data.v_pointer);
       break;
     case G_TYPE_BOXED:
       if (list->data.v_pointer)

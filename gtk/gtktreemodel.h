@@ -20,7 +20,7 @@
 #ifndef __GTK_TREE_MODEL_H__
 #define __GTK_TREE_MODEL_H__
 
-#include <gtk/gtkobject.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
@@ -173,7 +173,7 @@ GtkTreeIter *     gtk_tree_iter_copy             (GtkTreeIter  *iter);
 void              gtk_tree_iter_free             (GtkTreeIter  *iter);
 GType             gtk_tree_iter_get_type         (void);
 
-GtkType           gtk_tree_model_get_type        (void) G_GNUC_CONST;
+GType             gtk_tree_model_get_type        (void) G_GNUC_CONST;
 GtkTreeModelFlags gtk_tree_model_get_flags       (GtkTreeModel *tree_model);
 gint              gtk_tree_model_get_n_columns   (GtkTreeModel *tree_model);
 GType             gtk_tree_model_get_column_type (GtkTreeModel *tree_model,

@@ -20,14 +20,13 @@
 
 #include "gtktreesortable.h"
 #include "gtkmarshalers.h"
-#include "gtksignal.h"
 
 static void gtk_tree_sortable_base_init (gpointer g_class);
 
-GtkType
+GType
 gtk_tree_sortable_get_type (void)
 {
-  static GtkType tree_sortable_type = 0;
+  static GType tree_sortable_type = 0;
 
   if (! tree_sortable_type)
     {
@@ -43,7 +42,11 @@ gtk_tree_sortable_get_type (void)
 	0,
 	NULL
       };
-      tree_sortable_type = g_type_register_static (G_TYPE_INTERFACE, "GtkTreeSortable", &tree_sortable_info, 0);
+
+      tree_sortable_type =
+	g_type_register_static (G_TYPE_INTERFACE, "GtkTreeSortable",
+				&tree_sortable_info, 0);
+
       g_type_interface_add_prerequisite (tree_sortable_type, GTK_TYPE_TREE_MODEL);
     }
 
@@ -79,8 +82,7 @@ gtk_tree_sortable_sort_column_changed (GtkTreeSortable *sortable)
 {
   g_return_if_fail (GTK_IS_TREE_SORTABLE (sortable));
 
-  g_signal_emit_by_name (G_OBJECT (sortable),
-			 "sort_column_changed");
+  g_signal_emit_by_name (sortable, "sort_column_changed");
 }
 
 /**

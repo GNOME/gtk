@@ -40,7 +40,8 @@ gtk_tree_drag_source_get_type (void)
 	NULL
       };
 
-      our_type = g_type_register_static (G_TYPE_INTERFACE, "GtkTreeDragSource", &our_info, 0);
+      our_type = g_type_register_static (G_TYPE_INTERFACE, "GtkTreeDragSource",
+					 &our_info, 0);
     }
   
   return our_type;

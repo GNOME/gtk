@@ -26,7 +26,6 @@
 #include "gtktreeview.h"
 #include "gtktreeprivate.h"
 #include "gtkmarshalers.h"
-#include "gtksignal.h"
 
 
 #define INITIALIZE_TREE_ITER(Iter) \
@@ -47,10 +46,10 @@ struct _GtkTreePath
 static void gtk_tree_model_base_init (gpointer g_class);
 
 
-GtkType
+GType
 gtk_tree_model_get_type (void)
 {
-  static GtkType tree_model_type = 0;
+  static GType tree_model_type = 0;
 
   if (! tree_model_type)
     {
@@ -67,7 +66,10 @@ gtk_tree_model_get_type (void)
 	NULL
       };
 
-      tree_model_type = g_type_register_static (G_TYPE_INTERFACE, "GtkTreeModel", &tree_model_info, 0);
+      tree_model_type =
+	g_type_register_static (G_TYPE_INTERFACE, "GtkTreeModel",
+				&tree_model_info, 0);
+
       g_type_interface_add_prerequisite (tree_model_type, G_TYPE_OBJECT);
     }
 
@@ -1546,17 +1548,17 @@ gtk_tree_row_ref_reordered_callback (GObject     *object,
 static void
 connect_ref_callbacks (GtkTreeModel *model)
 {
-  g_signal_connect (G_OBJECT (model),
+  g_signal_connect (model,
 		    "row_inserted",
-		    (GCallback) gtk_tree_row_ref_inserted_callback,
+		    G_CALLBACK (gtk_tree_row_ref_inserted_callback),
 		    model);
-  g_signal_connect (G_OBJECT (model),
+  g_signal_connect (model,
 		    "row_deleted",
-		    (GCallback) gtk_tree_row_ref_deleted_callback,
+		    G_CALLBACK (gtk_tree_row_ref_deleted_callback),
 		    model);
-  g_signal_connect (G_OBJECT (model),
+  g_signal_connect (model,
 		    "rows_reordered",
-		    (GCallback) gtk_tree_row_ref_reordered_callback,
+		    G_CALLBACK (gtk_tree_row_ref_reordered_callback),
 		    model);
 }
 
@@ -1597,20 +1599,20 @@ gtk_tree_row_reference_unref_path (GtkTreePath  *path,
 static void
 disconnect_ref_callbacks (GtkTreeModel *model)
 {
-  g_signal_handlers_disconnect_matched (G_OBJECT (model),
+  g_signal_handlers_disconnect_matched (model,
                                         G_SIGNAL_MATCH_FUNC,
                                         0, 0, NULL,
-					(gpointer) gtk_tree_row_ref_inserted_callback,
+					gtk_tree_row_ref_inserted_callback,
 					NULL);
-  g_signal_handlers_disconnect_matched (G_OBJECT (model),
+  g_signal_handlers_disconnect_matched (model,
                                         G_SIGNAL_MATCH_FUNC,
                                         0, 0, NULL,
-					(gpointer) gtk_tree_row_ref_deleted_callback,
+					gtk_tree_row_ref_deleted_callback,
 					NULL);
-  g_signal_handlers_disconnect_matched (G_OBJECT (model),
+  g_signal_handlers_disconnect_matched (model,
                                         G_SIGNAL_MATCH_FUNC,
                                         0, 0, NULL,
-					(gpointer) gtk_tree_row_ref_reordered_callback,
+					gtk_tree_row_ref_reordered_callback,
 					NULL);
 }
 

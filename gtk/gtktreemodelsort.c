@@ -37,12 +37,12 @@
  * we warned you and we're not liable for any head injuries.
  */
 
+#include <string.h>
+
 #include "gtktreemodelsort.h"
 #include "gtktreesortable.h"
 #include "gtktreestore.h"
-#include "gtksignal.h"
 #include "gtktreedatalist.h"
-#include <string.h>
 #include "gtkintl.h"
 
 typedef struct _SortElt SortElt;
@@ -260,9 +260,10 @@ gtk_tree_model_sort_get_type (void)
         NULL
       };
 
-      tree_model_sort_type = g_type_register_static (G_TYPE_OBJECT,
-						     "GtkTreeModelSort",
-						     &tree_model_sort_info, 0);
+      tree_model_sort_type =
+	g_type_register_static (G_TYPE_OBJECT, "GtkTreeModelSort",
+				&tree_model_sort_info, 0);
+
       g_type_add_interface_static (tree_model_sort_type,
                                    GTK_TYPE_TREE_MODEL,
                                    &tree_model_info);
@@ -352,7 +353,7 @@ gtk_tree_model_sort_new_with_model (GtkTreeModel      *child_model)
 
   g_return_val_if_fail (GTK_IS_TREE_MODEL (child_model), NULL);
 
-  retval = GTK_TREE_MODEL (g_object_new (gtk_tree_model_sort_get_type (), NULL));
+  retval = g_object_new (gtk_tree_model_sort_get_type (), NULL);
 
   gtk_tree_model_sort_set_model (GTK_TREE_MODEL_SORT (retval), child_model);
 
@@ -1736,19 +1737,19 @@ gtk_tree_model_sort_set_model (GtkTreeModelSort *tree_model_sort,
   g_return_if_fail (GTK_IS_TREE_MODEL_SORT (tree_model_sort));
 
   if (child_model)
-    g_object_ref (G_OBJECT (child_model));
+    g_object_ref (child_model);
 
   if (tree_model_sort->child_model)
     {
-      g_signal_handler_disconnect (G_OBJECT (tree_model_sort->child_model),
+      g_signal_handler_disconnect (tree_model_sort->child_model,
                                    tree_model_sort->changed_id);
-      g_signal_handler_disconnect (G_OBJECT (tree_model_sort->child_model),
+      g_signal_handler_disconnect (tree_model_sort->child_model,
                                    tree_model_sort->inserted_id);
-      g_signal_handler_disconnect (G_OBJECT (tree_model_sort->child_model),
+      g_signal_handler_disconnect (tree_model_sort->child_model,
                                    tree_model_sort->has_child_toggled_id);
-      g_signal_handler_disconnect (G_OBJECT (tree_model_sort->child_model),
+      g_signal_handler_disconnect (tree_model_sort->child_model,
                                    tree_model_sort->deleted_id);
-      g_signal_handler_disconnect (G_OBJECT (tree_model_sort->child_model),
+      g_signal_handler_disconnect (tree_model_sort->child_model,
 				   tree_model_sort->reordered_id);
 
       /* reset our state */
@@ -1757,7 +1758,7 @@ gtk_tree_model_sort_set_model (GtkTreeModelSort *tree_model_sort,
       tree_model_sort->root = NULL;
       _gtk_tree_data_list_header_free (tree_model_sort->sort_list);
       tree_model_sort->sort_list = NULL;
-      g_object_unref (G_OBJECT (tree_model_sort->child_model));
+      g_object_unref (tree_model_sort->child_model);
     }
 
   tree_model_sort->child_model = child_model;

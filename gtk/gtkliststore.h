@@ -28,11 +28,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 #define GTK_TYPE_LIST_STORE	       (gtk_list_store_get_type ())
-#define GTK_LIST_STORE(obj)	       (GTK_CHECK_CAST ((obj), GTK_TYPE_LIST_STORE, GtkListStore))
-#define GTK_LIST_STORE_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_LIST_STORE, GtkListStoreClass))
-#define GTK_IS_LIST_STORE(obj)	       (GTK_CHECK_TYPE ((obj), GTK_TYPE_LIST_STORE))
-#define GTK_IS_LIST_STORE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LIST_STORE))
-#define GTK_LIST_STORE_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_LIST_STORE, GtkListStoreClass))
+#define GTK_LIST_STORE(obj)	       (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_LIST_STORE, GtkListStore))
+#define GTK_LIST_STORE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_LIST_STORE, GtkListStoreClass))
+#define GTK_IS_LIST_STORE(obj)	       (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_LIST_STORE))
+#define GTK_IS_LIST_STORE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LIST_STORE))
+#define GTK_LIST_STORE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_LIST_STORE, GtkListStoreClass))
 
 typedef struct _GtkListStore       GtkListStore;
 typedef struct _GtkListStoreClass  GtkListStoreClass;
@@ -69,7 +69,7 @@ struct _GtkListStoreClass
 };
 
 
-GtkType       gtk_list_store_get_type         (void);
+GType         gtk_list_store_get_type         (void);
 GtkListStore *gtk_list_store_new              (gint          n_columns,
 					       ...);
 GtkListStore *gtk_list_store_newv             (gint          n_columns,
