@@ -1,3 +1,6 @@
+2000-01-13 Elliot Lee <sopwith@redhat.com>
+	* gtk/gtktooltips.c: Add note about gtk_tooltips_set_colors().
+
 2000-01-07  Jesus Bravo Alvarez  <jba@pobox.com>
 
 	* configure.in (ALL_LINGUAS): Oops, Galician (gl) wasn't there yet

@@ -391,6 +391,19 @@ gtk_tooltips_set_tip (GtkTooltips *tooltips,
     }
 }
 
+/* 
+Elliot Lee <sopwith@redhat.com> writes:
+
+> Not only are the if() conditions backwards, but it is using the pointers
+> as passed in instead of copying the values.
+
+This has been reported a lot of times. The thing is, this
+tooltips->foreground/background aren't used at all; the
+colors are taken from the style now. So it doesn't matter.
+
+Regards,
+                                        Owen
+ */
 void
 gtk_tooltips_set_colors (GtkTooltips *tooltips,
 			 GdkColor    *background,
