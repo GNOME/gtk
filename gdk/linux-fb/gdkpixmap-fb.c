@@ -134,6 +134,10 @@ gdk_pixmap_new (GdkWindow *window,
   private = GDK_DRAWABLE_IMPL_FBDATA (pixmap);
   private->rowstride = (width * depth + 7) / 8; /* Round up to nearest whole byte */
   private->mem = g_malloc (private->rowstride * height);
+  private->abs_x = 0;
+  private->abs_y = 0;
+  private->llim_x = 0;
+  private->llim_y = 0;
   private->lim_x = width;
   private->lim_y = height;
   private->width = width;

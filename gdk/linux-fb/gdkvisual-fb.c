@@ -46,12 +46,12 @@ gdk_visual_init (void)
       system_visual->type = GDK_VISUAL_PSEUDO_COLOR;
       break;
     case FB_VISUAL_DIRECTCOLOR:
-      system_visual->colormap_size = 1 << gdk_display->modeinfo.bits_per_pixel;
-      system_visual->type = GDK_VISUAL_DIRECT_COLOR;
+      /* TODO: Should load the colormap to ramps here, as they might be initialized to
+	 some other garbage */
+      
       /* Fall through */
     case FB_VISUAL_TRUECOLOR:
-      if (gdk_display->sinfo.visual == FB_VISUAL_TRUECOLOR)
-	system_visual->type = GDK_VISUAL_TRUE_COLOR;
+      system_visual->type = GDK_VISUAL_TRUE_COLOR;
 
       system_visual->red_prec = gdk_display->modeinfo.red.length;
       system_visual->red_shift = gdk_display->modeinfo.red.offset;

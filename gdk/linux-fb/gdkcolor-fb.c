@@ -171,7 +171,7 @@ gdk_colormap_new (GdkVisual *visual,
       break;
 
     case GDK_VISUAL_DIRECT_COLOR:
-      g_error("NYI");
+      g_warning ("gdk_colormap_new () on a direct color visual not implemented");
 #if 0
       colormap->colors = g_new (GdkColor, colormap->size);
 
@@ -289,7 +289,7 @@ gdk_colormap_get_system (void)
 	    }
 	  break;
 	case GDK_VISUAL_DIRECT_COLOR:
-	  g_error("NYI");
+	  g_warning ("gdk_colormap_get_system() on a direct color visual is not implemented");
 	  break;
 	default:
 	  g_assert_not_reached ();

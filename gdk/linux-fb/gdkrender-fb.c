@@ -420,8 +420,8 @@ gdk_fb_fill_span_generic (GdkDrawable *drawable,
 	   gc_private->values.stipple)
     {
       ts = gc_private->values.stipple;
-      tsxoff = GDK_DRAWABLE_FBDATA (ts)->abs_x - gc_private->values.ts_x_origin - private->abs_x;
-      tsyoff = GDK_DRAWABLE_FBDATA (ts)->abs_y - gc_private->values.ts_y_origin - private->abs_y;
+      tsxoff = - GDK_DRAWABLE_IMPL_FBDATA (ts)->abs_x - gc_private->values.ts_x_origin - private->abs_x;
+      tsyoff = - GDK_DRAWABLE_IMPL_FBDATA (ts)->abs_y - gc_private->values.ts_y_origin - private->abs_y;
       solid_stipple = (gc_private->values.fill == GDK_OPAQUE_STIPPLED);
     }
   

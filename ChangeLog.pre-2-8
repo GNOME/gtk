@@ -1,3 +1,17 @@
+2001-05-04  Alex Larsson  <alla@lysator.liu.se>
+
+	* gdk/linux-fb/gdkcolor-fb.c:
+	Better error messages.
+
+	* gdk/linux-fb/gdkpixmap-fb.c (gdk_pixmap_new):
+	Initialize abs_x and abs_y.
+	
+	* gdk/linux-fb/gdkrender-fb.c (gdk_fb_fill_span_generic):
+	Correct handling of stipple offset.
+
+	* gdk/linux-fb/gdkvisual-fb.c (gdk_visual_init):
+	Treat directcolor framebuffers as truecolor.
+	
 Thu May  3 14:13:49 2001  Owen Taylor  <otaylor@redhat.com>
 
         * INSTALL.in HACKING gtk/gtkaccessible.[ch] gtk/gtk.c: Add
