@@ -1,14 +1,15 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# gtk+'s Portuguese translation
+# Copyright (C) 1999-2001 Free Software Foundation, Inc.
+# Nuno Ferreira <nmrf@rnl.ist.utl.pt>, 1999
+# Duarte Loreto <happyguy_pt@hotmail.com>, 2001
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.12\n"
-"POT-Creation-Date: 2001-03-28 16:12-0500\n"
-"PO-Revision-Date: 1999-02-17 01:20+00:00\n"
-"Last-Translator: Nuno Ferreira <nmrf@rnl.ist.utl.pt>\n"
-"Language-Team: Portuguese <pt@li.org>\n"
+"Project-Id-Version: gtk+ 1.4.1\n"
+"POT-Creation-Date: 2001-10-13 06:19-0400\n"
+"PO-Revision-Date: 2001-10-13 19:35+0000\n"
+"Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
+"Language-Team: Portuguese <none@none.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -61,7 +62,7 @@ msgstr "Ajuda"
 #. The directories clist
 #: gtk/gtkfilesel.c:430
 msgid "Directories"
-msgstr "Directorias"
+msgstr "Directórios"
 
 #. The files clist
 #: gtk/gtkfilesel.c:449
@@ -71,11 +72,11 @@ msgstr "Ficheiros"
 #: gtk/gtkfilesel.c:519 gtk/gtkfilesel.c:1478
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Directoria ilegível: %s"
+msgstr "Directório ilegível: %s"
 
 #: gtk/gtkfilesel.c:551
 msgid "Create Dir"
-msgstr "Criar Directoria"
+msgstr "Criar Directório"
 
 #: gtk/gtkfilesel.c:562 gtk/gtkfilesel.c:937
 msgid "Delete File"
@@ -101,11 +102,11 @@ msgstr "Fechar"
 
 #: gtk/gtkfilesel.c:832
 msgid "Create Directory"
-msgstr "Criar Directoria"
+msgstr "Criar Directório"
 
 #: gtk/gtkfilesel.c:846
 msgid "Directory name:"
-msgstr "Nome da directoria:"
+msgstr "Nome do directório:"
 
 #. buttons
 #: gtk/gtkfilesel.c:859
@@ -128,7 +129,7 @@ msgstr "Selecção: "
 
 #: gtk/gtkfontsel.c:210
 msgid "Foundry:"
-msgstr ""
+msgstr "Efeito:"
 
 #: gtk/gtkfontsel.c:211
 msgid "Family:"
@@ -273,7 +274,7 @@ msgstr "*"
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1215
 msgid "(nil)"
-msgstr ""
+msgstr "(nil)"
 
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
@@ -337,7 +338,7 @@ msgstr "monoespaçada"
 
 #: gtk/gtkfontsel.c:1985
 msgid "char cell"
-msgstr ""
+msgstr "célula do caracter"
 
 #: gtk/gtkfontsel.c:2185
 msgid "Font: (Filter Applied)"
@@ -361,7 +362,7 @@ msgstr "Gamma"
 
 #: gtk/gtkgamma.c:403
 msgid "Gamma value"
-msgstr "Valor Gamma"
+msgstr "Valor gamma"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:200
@@ -378,7 +379,7 @@ msgstr "Dispositivo:"
 
 #: gtk/gtkinputdialog.c:253
 msgid "Disabled"
-msgstr "Inactivo"
+msgstr "Desactivo"
 
 #: gtk/gtkinputdialog.c:261
 msgid "Screen"
@@ -422,11 +423,11 @@ msgstr "Pressão"
 
 #: gtk/gtkinputdialog.c:503
 msgid "X Tilt"
-msgstr ""
+msgstr "Tilt X"
 
 #: gtk/gtkinputdialog.c:504
 msgid "Y Tilt"
-msgstr ""
+msgstr "Tilt Y"
 
 #: gtk/gtkinputdialog.c:544
 msgid "none"
@@ -446,21 +447,21 @@ msgstr "limpar"
 msgid "Page %u"
 msgstr "Página %u"
 
-#: gtk/gtkrc.c:1703
+#: gtk/gtkrc.c:1758
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Não encontrei ficheiro de imagem na pixmap_path: \"%s\" linha %d"
+msgstr "Ficheiro de imagem na pixmap_path não encontrado: \"%s\" linha %d"
 
-#: gtk/gtkrc.c:1706
+#: gtk/gtkrc.c:1761
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Não encontrei ficheiro de imagem na pixmap_path: \"%s\""
+msgstr "Ficheiro de imagem na pixmap_path não encontrado: \"%s\""
 
 #: gtk/gtkthemes.c:79
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Não encontrei módulo na module_path: \"%s\","
+msgstr "Módulo na module_path não encontrado: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
-msgstr "--- Sem Ajuda ---"
+msgstr "--- Sem Dica ---"
