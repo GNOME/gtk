@@ -27,6 +27,8 @@
 #ifndef XP_THEME_DFNS_H
 #define XP_THEME_DFNS_H
 
+typedef HANDLE HTHEME;
+
 #define BP_PUSHBUTTON 1
 #define BP_CHECKBOX 3
 
