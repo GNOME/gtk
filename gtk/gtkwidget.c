@@ -4099,7 +4099,6 @@ gtk_widget_modify_fg (GtkWidget   *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (state >= GTK_STATE_NORMAL && state <= GTK_STATE_INSENSITIVE);
-  g_return_if_fail (color != NULL);
 
   gtk_widget_modify_color_component (widget, GTK_RC_FG, state, color);
 }
@@ -4123,7 +4122,6 @@ gtk_widget_modify_bg (GtkWidget   *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (state >= GTK_STATE_NORMAL && state <= GTK_STATE_INSENSITIVE);
-  g_return_if_fail (color != NULL);
 
   gtk_widget_modify_color_component (widget, GTK_RC_BG, state, color);
 }
@@ -4149,7 +4147,6 @@ gtk_widget_modify_text (GtkWidget   *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (state >= GTK_STATE_NORMAL && state <= GTK_STATE_INSENSITIVE);
-  g_return_if_fail (color != NULL);
 
   gtk_widget_modify_color_component (widget, GTK_RC_TEXT, state, color);
 }
@@ -4175,7 +4172,6 @@ gtk_widget_modify_base (GtkWidget  *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (state >= GTK_STATE_NORMAL && state <= GTK_STATE_INSENSITIVE);
-  g_return_if_fail (color != NULL);
 
   gtk_widget_modify_color_component (widget, GTK_RC_BASE, state, color);
 }
@@ -4196,7 +4192,6 @@ gtk_widget_modify_font (GtkWidget            *widget,
   GtkRcStyle *rc_style;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (font_desc != NULL);
 
   rc_style = gtk_widget_get_modifier_style (widget);  
 

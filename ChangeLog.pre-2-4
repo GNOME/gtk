@@ -1,3 +1,10 @@
+Sun Dec  8 18:28:51 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_modify_fg/bg/base/text/font): 
+	Remove left-over NULL checks that were preventing the
+	NULL to "unmodify" feature from actually working.
+	(#100702, Jon-Kare Hellan)
+
 2002-12-08  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcolorsel.c (gtk_color_selection_set_previous_color): 
