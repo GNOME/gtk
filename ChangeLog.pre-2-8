@@ -1,3 +1,10 @@
+2004-12-05  Tor Lillqvist  <tml@iki.fi>
+
+	* demos/gtk-demo/main.c (load_file): Use g_fopen().
+
+	* demos/gtk-demo/images.c (progressive_timeout): Use
+	g_fopen(). Open png file in binary mode.
+
 2004-12-02  Matthias Clasen  <mclasen@redhat.com>
 	
 	* configure.in: Bump version

@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 
 #include <demos.h>
 
@@ -465,7 +466,7 @@ load_file (const gchar *filename)
       return;
     }
 
-  file = fopen (full_filename, "r");
+  file = g_fopen (full_filename, "r");
 
   if (!file)
     g_warning ("Cannot open %s: %s\n", full_filename, g_strerror (errno));
