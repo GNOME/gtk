@@ -42,7 +42,7 @@
 #include "gtktoolbar.h"
 #include "gtkuimanager.h"
 
-#undef DEBUG_UI_MANAGER
+#define DEBUG_UI_MANAGER
 
 typedef enum 
 {
@@ -1783,7 +1783,7 @@ update_smart_separators (GtkWidget *proxy)
 static void
 update_node (GtkUIManager *self, 
 	     GNode        *node,
-	     gboolean      add_tearoffs)
+	     gboolean      in_popup)
 {
   Node *info;
   GNode *child;
@@ -1798,8 +1798,11 @@ update_node (GtkUIManager *self,
 
   info = NODE_INFO (node);
 
+  in_popup = in_popup || (info->type == NODE_TYPE_POPUP);
+
 #ifdef DEBUG_UI_MANAGER
-  g_print ("update_node name=%s dirty=%d (", info->name, info->dirty);
+  g_print ("update_node name=%s dirty=%d popup %d (", 
+	   info->name, info->dirty, in_popup);
   for (tmp = info->uifiles; tmp != NULL; tmp = tmp->next)
     {
       NodeUIReference *ref = tmp->data;
@@ -1859,7 +1862,9 @@ update_node (GtkUIManager *self,
 	      menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
 	      siblings = gtk_container_get_children (GTK_CONTAINER (menu));
 	      if (siblings != NULL && GTK_IS_TEAROFF_MENU_ITEM (siblings->data))
-		g_object_set (G_OBJECT (siblings->data), "visible", add_tearoffs, 0);
+		g_object_set (G_OBJECT (siblings->data), 
+			      "visible", self->private_data->add_tearoffs && !in_popup, 
+			      NULL);
 	    }
 
 	  goto recurse_children;
@@ -1938,7 +1943,9 @@ update_node (GtkUIManager *self,
 	    menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
 	    siblings = gtk_container_get_children (GTK_CONTAINER (menu));
 	    if (siblings != NULL && GTK_IS_TEAROFF_MENU_ITEM (siblings->data))
-	      g_object_set (G_OBJECT (siblings->data), "visible", add_tearoffs, 0);
+	      g_object_set (G_OBJECT (siblings->data), 
+			    "visible", self->private_data->add_tearoffs && !in_popup, 
+			    NULL);
 	  }
 	  break;
 	case NODE_TYPE_UNDECIDED:
@@ -2075,6 +2082,15 @@ update_node (GtkUIManager *self,
 	    }
 	  g_signal_connect (info->proxy, "notify::visible",
 			    G_CALLBACK (update_smart_separators), 0);
+	  if (in_popup) 
+	    {
+	      /* don't show accels in popups */
+	      GtkWidget *label = GTK_BIN (info->proxy)->child;
+	      g_object_set (G_OBJECT (label),
+			    "accel_closure", NULL,
+			    NULL);
+	    }
+
 	  break;
 	case NODE_TYPE_TOOLITEM:
 	  /* remove the proxy if it is of the wrong type ... */
@@ -2193,7 +2209,7 @@ update_node (GtkUIManager *self,
 
       current = child;
       child = current->next;
-      update_node (self, current, add_tearoffs && (info->type != NODE_TYPE_POPUP));
+      update_node (self, current, in_popup);
     }
 
   if (info->proxy) 
@@ -2233,8 +2249,7 @@ do_updates (GtkUIManager *self)
    *    the proxy is reconnected to the new action (or a new proxy widget
    *    is created and added to the parent container).
    */
-  update_node (self, self->private_data->root_node, 
-	       self->private_data->add_tearoffs);
+  update_node (self, self->private_data->root_node, FALSE);
 
   self->private_data->update_tag = 0;
 

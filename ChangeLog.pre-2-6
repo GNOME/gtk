@@ -1,3 +1,8 @@
+Tue Nov 25 00:10:05 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.c (update_node): Don't show accelerators in
+	popup menus.  (#127227)
+
 Mon Nov 24 13:47:39 GMT 2003  Tony Gale <gale@gtk.org>
 
 	* docs/faq/gtk-faq.sgml: start 2.x Section 4 updates
