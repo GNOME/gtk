@@ -1,5 +1,13 @@
 2003-07-01  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/tmpl/gtkexpander.sgml: New file. Template for GtkExpander docs.
+
+	* gtk/gtk-sections.txt: Add a section for GtkExpander.
+
+	* gtk/gtk-docs.sgml: Add an entity for GtkExpander.
+
+	* gtk/gtk.types: Add gtk_expander_get_type
+
 	* gdk/gdk-sections.txt: Add
 	gdk_cursor_new_from_pixbuf(), gdk_display_supports_cursor_alpha(), 
 	gdk_display_supports_cursor_color(), gdk_display_get_default_cursor_size() and

@@ -246,7 +246,9 @@ gtk_expander_class_init (GtkExpanderClass *klass)
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkExpanderClass, activate),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  _gtk_marsha  /**
+
+l_VOID__VOID,
 		  G_TYPE_NONE, 0);
 }
 
@@ -1081,12 +1083,39 @@ gtk_expander_activate (GtkExpander *expander)
   gtk_expander_set_expanded (expander, !expander->priv->expanded);
 }
 
+
+/**
+ * gtk_expander_new:
+ * @label: the text of the label
+ * 
+ * Creates a new expander using @label as the text of the label.
+ * 
+ * Return value: a new #GtkExpander widget.
+ *
+ * Since: 2.4
+ **/
 GtkWidget *
 gtk_expander_new (const gchar *label)
 {
   return g_object_new (GTK_TYPE_EXPANDER, "label", label, NULL);
 }
 
+/**
+ * gtk_expander_new_with_mnemonic:
+ * @label: the text of the label with an underscore in front of the
+ *         mnemonic character
+ * 
+ * Creates a new expander using @label as the text of the label.
+ * If characters in @label are preceded by an underscore, they are underlined.
+ * If you need a literal underscore character in a label, use '__' (two 
+ * underscores). The first underlined character represents a keyboard 
+ * accelerator called a mnemonic.
+ * Pressing Alt and that key activates the button.
+ * 
+ * Return value: a new #GtkExpander widget.
+ *
+ * Since: 2.4
+ **/
 GtkWidget *
 gtk_expander_new_with_mnemonic (const gchar *label)
 {
@@ -1166,9 +1195,11 @@ gtk_expander_start_animation (GtkExpander *expander)
  * @expander: a #GtkExpander
  * @expanded: whether the child widget is revealed
  *
- * Sets the state of the expander. Set to #TRUE, if you want
- * the child widget to be revealed, and #FALSE if you want the
+ * Sets the state of the expander. Set to %TRUE, if you want
+ * the child widget to be revealed, and %FALSE if you want the
  * child widget to be hidden.
+ *
+ * Since: 2.4
  **/
 void
 gtk_expander_set_expanded (GtkExpander *expander,
@@ -1205,12 +1236,14 @@ gtk_expander_set_expanded (GtkExpander *expander,
  * gtk_expander_get_expanded:
  * @expander:a #GtkExpander
  *
- * Queries a #GtkExpander and returns its current state. Returns #TRUE
+ * Queries a #GtkExpander and returns its current state. Returns %TRUE
  * if the child widget is revealed.
  *
  * See gtk_expander_set_expanded().
  *
  * Return value: the current state of the expander.
+ *
+ * Since: 2.4
  **/
 gboolean
 gtk_expander_get_expanded (GtkExpander *expander)
@@ -1227,6 +1260,8 @@ gtk_expander_get_expanded (GtkExpander *expander)
  *
  * Sets the spacing field of @expander, which is the number of pixels to
  * place between expander and the child.
+ *
+ * Since: 2.4
  **/
 void
 gtk_expander_set_spacing (GtkExpander *expander,
@@ -1252,6 +1287,8 @@ gtk_expander_set_spacing (GtkExpander *expander,
  * Gets the value set by gtk_expander_set_spacing().
  *
  * Return value: spacing between the expander and child.
+ *
+ * Since: 2.4
  **/
 gint
 gtk_expander_get_spacing (GtkExpander *expander)
@@ -1269,6 +1306,8 @@ gtk_expander_get_spacing (GtkExpander *expander)
  * Sets the text of the label of the expander to @label.
  *
  * This will also clear any previously set labels.
+ *
+ * Since: 2.4
  **/
 void
 gtk_expander_set_label (GtkExpander *expander,
@@ -1306,6 +1345,8 @@ gtk_expander_set_label (GtkExpander *expander,
  *
  * Return value: The text of the label widget. This string is owned
  * by the widget and must not be modified or freed.
+ *
+ * Since: 2.4
  **/
 G_CONST_RETURN char *
 gtk_expander_get_label (GtkExpander *expander)
@@ -1329,6 +1370,8 @@ gtk_expander_get_label (GtkExpander *expander)
  *
  * If true, an underline in the text of the expander label indicates
  * the next character should be used for the mnemonic accelerator key.
+ *
+ * Since: 2.4
  **/
 void
 gtk_expander_set_use_underline (GtkExpander *expander,
@@ -1358,10 +1401,12 @@ gtk_expander_set_use_underline (GtkExpander *expander,
  * @expander: a #GtkExpander
  *
  * Returns whether an embedded underline in the expander label indicates a
- * mnemonic. See gtk_expander_set_use_underline ().
+ * mnemonic. See gtk_expander_set_use_underline().
  *
  * Return value: %TRUE if an embedded underline in the expander label
  *               indicates the mnemonic accelerator keys.
+ *
+ * Since: 2.4
  **/
 gboolean
 gtk_expander_get_use_underline (GtkExpander *expander)
@@ -1378,6 +1423,8 @@ gtk_expander_get_use_underline (GtkExpander *expander)
  *
  * Set the label widget for the expander. This is the widget
  * that will appear embedded alongside the expander arrow.
+ *
+ * Since: 2.4
  **/
 void
 gtk_expander_set_label_widget (GtkExpander *expander,
@@ -1422,6 +1469,8 @@ gtk_expander_set_label_widget (GtkExpander *expander,
  * gtk_expander_set_label_widget().
  *
  * Return value: the label widget, or %NULL if there is none.
+ * 
+ * Since: 2.4
  **/
 GtkWidget *
 gtk_expander_get_label_widget (GtkExpander *expander)

@@ -51,6 +51,7 @@
 #include <gtk/gtkcheckmenuitem.h>
 #include <gtk/gtkclipboard.h>
 #include <gtk/gtkclist.h>
+#include <gtk/gtkcolorbutton.h>
 #include <gtk/gtkcolorsel.h>
 #include <gtk/gtkcolorseldialog.h>
 #include <gtk/gtkcombo.h>
@@ -64,8 +65,10 @@
 #include <gtk/gtkentry.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtkeventbox.h>
+#include <gtk/gtkexpander.h>
 #include <gtk/gtkfilesel.h>
 #include <gtk/gtkfixed.h>
+#include <gtk/gtkfontbutton.h>
 #include <gtk/gtkfontsel.h>
 #include <gtk/gtkframe.h>
 #include <gtk/gtkgamma.h>

@@ -19,6 +19,7 @@ gtk_cell_renderer_toggle_get_type
 gtk_check_button_get_type
 gtk_check_menu_item_get_type
 gtk_clist_get_type
+gtk_color_button_get_type
 gtk_color_selection_dialog_get_type
 gtk_color_selection_get_type
 gtk_combo_get_type
@@ -29,8 +30,10 @@ gtk_dialog_get_type
 gtk_drawing_area_get_type
 gtk_entry_get_type
 gtk_event_box_get_type
+gtk_expander_get_type
 gtk_file_selection_get_type
 gtk_fixed_get_type
+gtk_font_button_get_type
 gtk_font_selection_dialog_get_type
 gtk_font_selection_get_type
 gtk_frame_get_type

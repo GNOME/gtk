@@ -1,0 +1,173 @@
+<!-- ##### SECTION Title ##### -->
+GtkExpander
+
+<!-- ##### SECTION Short_Description ##### -->
+A container which can hide its child
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+A #GtkExpander allows the user to hide or show its child by clicking on an expander triangle similar to 
+the triangles used in a #GtkTreeView.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkExpander ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_expander_new ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_expander_new_with_mnemonic ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_expander_set_expanded ##### -->
+<para>
+
+</para>
+
+@expander: 
+@expanded: 
+
+
+<!-- ##### FUNCTION gtk_expander_get_expanded ##### -->
+<para>
+
+</para>
+
+@expander: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_expander_set_spacing ##### -->
+<para>
+
+</para>
+
+@expander: 
+@spacing: 
+
+
+<!-- ##### FUNCTION gtk_expander_get_spacing ##### -->
+<para>
+
+</para>
+
+@expander: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_expander_set_label ##### -->
+<para>
+
+</para>
+
+@expander: 
+@label: 
+
+
+<!-- ##### FUNCTION gtk_expander_get_label ##### -->
+<para>
+
+</para>
+
+@expander: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_expander_set_use_underline ##### -->
+<para>
+
+</para>
+
+@expander: 
+@use_underline: 
+
+
+<!-- ##### FUNCTION gtk_expander_get_use_underline ##### -->
+<para>
+
+</para>
+
+@expander: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_expander_set_label_widget ##### -->
+<para>
+
+</para>
+
+@expander: 
+@label_widget: 
+
+
+<!-- ##### FUNCTION gtk_expander_get_label_widget ##### -->
+<para>
+
+</para>
+
+@expander: 
+@Returns: 
+
+
+<!-- ##### SIGNAL GtkExpander::activate ##### -->
+<para>
+
+</para>
+
+@expander: the object which received the signal.
+
+<!-- ##### ARG GtkExpander:expanded ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkExpander:label ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkExpander:label-widget ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkExpander:spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkExpander:use-underline ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkExpander:expander-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkExpander:expander-spacing ##### -->
+<para>
+
+</para>
+

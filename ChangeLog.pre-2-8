@@ -1,3 +1,9 @@
+2003-07-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk.h: Include gtkexpander.h
+
+	* gtk/gtkexpander.c: Small additions to the docs. 
+
 2003-07-01  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkwindow-win32.c (_gdk_windowing_window_get_pointer):

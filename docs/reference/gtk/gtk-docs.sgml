@@ -14,6 +14,7 @@
 <!ENTITY GtkCheckButton SYSTEM "xml/gtkcheckbutton.xml">
 <!ENTITY GtkCheckMenuItem SYSTEM "xml/gtkcheckmenuitem.xml">
 <!ENTITY GtkCList SYSTEM "xml/gtkclist.xml">
+<!ENTITY GtkColorButton SYSTEM "xml/gtkcolorbutton.xml">
 <!ENTITY GtkColorSelection SYSTEM "xml/gtkcolorsel.xml">
 <!ENTITY GtkColorSelectionDialog SYSTEM "xml/gtkcolorseldlg.xml">
 <!ENTITY GtkCombo SYSTEM "xml/gtkcombo.xml">
@@ -26,8 +27,10 @@
 <!ENTITY GtkOldEditable SYSTEM "xml/gtkoldeditable.xml">
 <!ENTITY GtkEntry SYSTEM "xml/gtkentry.xml">
 <!ENTITY GtkEventBox SYSTEM "xml/gtkeventbox.xml">
+<!ENTITY GtkExpander SYSTEM "xml/gtkexpander.xml">
 <!ENTITY GtkFileSelection SYSTEM "xml/gtkfilesel.xml">
 <!ENTITY GtkFixed SYSTEM "xml/gtkfixed.xml">
+<!ENTITY GtkFontButton SYSTEM "xml/gtkfontbutton.xml">
 <!ENTITY GtkFontSelection SYSTEM "xml/gtkfontsel.xml">
 <!ENTITY GtkFontSelectionDialog SYSTEM "xml/gtkfontseldlg.xml">
 <!ENTITY GtkFrame SYSTEM "xml/gtkframe.xml">
@@ -379,9 +382,11 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
 
     <chapter id="SelectorWidgets">
       <title>Selectors (File/Font/Color/Input Devices)</title>
+        &GtkColorButton;
         &GtkColorSelection;
         &GtkColorSelectionDialog;
         &GtkFileSelection;
+        &GtkFontButton;
         &GtkFontSelection;
         &GtkFontSelectionDialog;
         &GtkInputDialog;
@@ -401,6 +406,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkLayout;
         &GtkNotebook;
         &GtkTable;
+        &GtkExpander;
     </chapter>
 
     <chapter id="Ornaments">

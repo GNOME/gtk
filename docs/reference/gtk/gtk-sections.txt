@@ -467,6 +467,31 @@ gtk_clist_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkcolorbutton</FILE>
+<TITLE>GtkColorButton</TITLE>
+GtkColorButton
+gtk_color_button_new
+gtk_color_button_set_color
+gtk_color_button_get_color
+gtk_color_button_set_alpha
+gtk_color_button_get_alpha
+gtk_color_button_set_use_alpha
+gtk_color_button_get_use_alpha
+gtk_color_button_set_title
+gtk_color_button_get_title
+<SUBSECTION Standard>
+GTK_COLOR_BUTTON
+GTK_IS_COLOR_BUTTON
+GTK_TYPE_COLOR_BUTTON
+GTK_COLOR_BUTTON_CLASS
+GTK_IS_COLOR_BUTTON_CLASS
+GTK_COLOR_BUTTON_GET_CLASS
+GTK_COLOR_BUTTON_GET_PRIVATE
+<SUBSECTION Private>
+gtk_color_button_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkcolorsel</FILE>
 <TITLE>GtkColorSelection</TITLE>
 GtkColorSelection
@@ -861,6 +886,33 @@ gtk_event_box_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkexpander</FILE>
+<TITLE>GtkExpander</TITLE>
+GtkExpander
+gtk_expander_new
+gtk_expander_new_with_mnemonic
+gtk_expander_set_expanded
+gtk_expander_get_expanded
+gtk_expander_set_spacing
+gtk_expander_get_spacing
+gtk_expander_set_label
+gtk_expander_get_label
+gtk_expander_set_use_underline
+gtk_expander_get_use_underline
+gtk_expander_set_label_widget
+gtk_expander_get_label_widget
+<SUBSECTION Standard>
+GTK_TYPE_EXPANDER
+GTK_EXPANDER_CLASS
+GTK_EXPANDER
+GTK_IS_EXPANDER
+GTK_IS_EXPANDER_CLASS
+GTK_EXPANDER_GET_CLASS
+<SUBSECTION Private>
+gtk_expander_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkfilesel</FILE>
 <TITLE>GtkFileSelection</TITLE>
 GtkFileSelection
@@ -903,6 +955,36 @@ GTK_IS_FIXED_CLASS
 GTK_FIXED_GET_CLASS
 <SUBSECTION Private>
 gtk_fixed_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkfontbutton</FILE>
+<TITLE>GtkFontButton</TITLE>
+GtkFontButton
+gtk_font_button_new
+gtk_font_button_new_with_font
+gtk_font_button_set_font_name
+gtk_font_button_get_font_name
+gtk_font_button_set_show_style
+gtk_font_button_get_show_style
+gtk_font_button_set_show_size
+gtk_font_button_get_show_size
+gtk_font_button_set_use_font
+gtk_font_button_get_use_font
+gtk_font_button_set_use_size
+gtk_font_button_get_use_size
+gtk_font_button_set_title
+gtk_font_button_get_title
+<SUBSECTION Standard>
+GTK_FONT_BUTTON
+GTK_IS_FONT_BUTTON
+GTK_TYPE_FONT_BUTTON
+GTK_FONT_BUTTON_CLASS
+GTK_IS_FONT_BUTTON_CLASS
+GTK_FONT_BUTTON_GET_CLASS
+GTK_FONT_BUTTON_GET_PRIVATE
+<SUBSECTION Private>
+gtk_font_button_get_type
 </SECTION>
 
 <SECTION>
