@@ -197,7 +197,7 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
 	}
 
       if (shape_set)
-	continue;
+	goto next_run;
 
       if (fg_set)
 	fg_gc = gdk_pango_get_gc (context, &fg_color, gc);
@@ -230,7 +230,8 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
 
       if (fg_set)
 	gdk_pango_free_gc (context, fg_gc);
-      
+
+    next_run:
       x_off += logical_rect.width;
     }
 }
