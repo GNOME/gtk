@@ -731,7 +731,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   row_text[2] = "";
   for (i = 0; i < GTK_XLFD_NUM_FIELDS; i++)
     {
-      row_text[0] = gettext(xlfd_field_names[i]);
+      row_text[0] = _(xlfd_field_names[i]);
       gtk_clist_append(GTK_CLIST(fontsel->info_clist), row_text);
       gtk_clist_set_shift(GTK_CLIST(fontsel->info_clist), i, 0, 0, 4);
       gtk_clist_set_shift(GTK_CLIST(fontsel->info_clist), i, 1, 0, 4);
@@ -824,7 +824,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
       gint left = filter_positions[prop][0];
       gint top = filter_positions[prop][1];
       
-      label = gtk_label_new(gettext(xlfd_field_names[xlfd_index[prop]]));
+      label = gtk_label_new(_(xlfd_field_names[xlfd_index[prop]]));
       gtk_misc_set_alignment (GTK_MISC (label), 0.0, 1.0);
       gtk_misc_set_padding (GTK_MISC (label), 0, 2);
       gtk_widget_show(label);

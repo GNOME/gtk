@@ -1,3 +1,9 @@
+Thu Jan 28 01:34:29 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtkfontsel.c gtkcolorsel.c: When translating
+	N_() strings, use _(), not gettext(), since we
+	really need to call dgettext().
+
 Wed Jan 27 20:51:25 PST 1999 Manish Singh <yosh@gimp.org>
 
 	* acinclude.m4: Xsed isn't valid here, don't use it
