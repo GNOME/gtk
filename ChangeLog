@@ -1,3 +1,10 @@
+2003-02-09  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkfilesel.c (win32_gtk_add_drives_to_dir_list): Use
+	GetDriveType() to recognize removable drives (in order to avoid
+	hanging if trying to access an empty floppy drive), instead of
+	hardcoding A: and B: (#105654).
+
 2003-02-09  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkwidget.c (gtk_widget_set_name): Add note about periods in 

@@ -2059,7 +2059,7 @@ win32_gtk_add_drives_to_dir_list (GtkListStore *model)
   while (*textPtr != '\0')
     {
       /* Ignore floppies (?) */
-      if ((tolower (textPtr[0]) != 'a') && (tolower (textPtr[0]) != 'b'))
+      if (GetDriveType (textPtr) != DRIVE_REMOVABLE)
 	{
 	  /* Build the actual displayable string */
 	  g_snprintf (formatBuffer, sizeof (formatBuffer), "%c:\\", toupper (textPtr[0]));
