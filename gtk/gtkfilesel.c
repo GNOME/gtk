@@ -82,7 +82,7 @@
 #include "gtkdnd.h"
 #include "gtkeventbox.h"
 
-#define WANT_HPANAED 1
+#define WANT_HPANED 1
 #include "gtkhpaned.h"
 
 #ifdef G_OS_WIN32
@@ -637,6 +637,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   GtkWidget *pulldown_hbox;
   GtkWidget *scrolled_win;
   GtkWidget *eventbox;
+  GtkWidget *spacer;
   GtkDialog *dialog;
 
   GtkListStore *model;
@@ -674,18 +675,29 @@ gtk_file_selection_init (GtkFileSelection *filesel)
 		      FALSE, FALSE, 0);
     
   /*  The horizontal box containing the directory and file listboxes  */
+
+  spacer = gtk_hbox_new (FALSE, 0);
+  gtk_widget_set_size_request (spacer, -1, 5);
+  gtk_box_pack_start (GTK_BOX (filesel->main_vbox), spacer, FALSE, FALSE, 0);
+  gtk_widget_show (spacer);
+  
   list_hbox = gtk_hbox_new (FALSE, 5);
   gtk_box_pack_start (GTK_BOX (filesel->main_vbox), list_hbox, TRUE, TRUE, 0);
   gtk_widget_show (list_hbox);
-  if (WANT_HPANAED)
+  if (WANT_HPANED)
     list_container = g_object_new (GTK_TYPE_HPANED,
 				   "visible", TRUE,
 				   "parent", list_hbox,
-				   "border_width", 5,
+				   "border_width", 0,
 				   NULL);
   else
     list_container = list_hbox;
 
+  spacer = gtk_hbox_new (FALSE, 0);
+  gtk_widget_set_size_request (spacer, -1, 5);
+  gtk_box_pack_start (GTK_BOX (filesel->main_vbox), spacer, FALSE, FALSE, 0);  
+  gtk_widget_show (spacer);
+  
   /* The directories list */
 
   model = gtk_list_store_new (1, G_TYPE_STRING);

@@ -1,3 +1,12 @@
+Fri Mar  8 14:22:43 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_init): Some packing
+	tweaks.
+
+	* configure.in: Include GLIB_LIBS when checking
+	for bind_textdomain_codeset, to catch the case where
+	it is in -lintl.
+
 Thu Mar  7 16:46:58 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (validate_visible_area): get rid of really

@@ -316,7 +316,7 @@ if test "x$enable_rebuilds" = "xyes" && \
 fi
 AC_SUBST(REBUILD)
 
-AC_CHECK_FUNCS(lstat mkstemp bind_textdomain_codeset)
+AC_CHECK_FUNCS(lstat mkstemp)
 
 # sigsetjmp is a macro on some platforms, so AC_CHECK_FUNCS is not reliable
 AC_MSG_CHECKING(for sigsetjmp)
@@ -413,6 +413,14 @@ AM_PATH_GLIB_2_0($GLIB_REQUIRED_VERSION, :,
 *** GLIB $GLIB_REQUIRED_VERSION or better is required. The latest version of 
 *** GLIB is always available from ftp://ftp.gtk.org/.]),
   gobject gmodule gthread)
+
+dnl
+dnl Check for bind_textdomain_codeset, including -lintl if GLib brings it in.
+dnl
+gtk_save_LIBS=$LIBS
+LIBS="$LIBS $GLIB_LIBS"
+AC_CHECK_FUNCS(bind_textdomain_codeset)
+LIBS=$gtk_save_LIBS
 
 AC_CHECK_HEADERS(pwd.h, AC_DEFINE(HAVE_PWD_H))
 AC_CHECK_HEADERS(sys/time.h, AC_DEFINE(HAVE_SYS_TIME_H))
