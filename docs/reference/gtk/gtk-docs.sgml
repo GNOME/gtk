@@ -171,6 +171,7 @@
 <!ENTITY gtk-Settings SYSTEM "xml/gtksettings.xml">
 
 <!ENTITY index-Object-Tree SYSTEM "xml/tree_index.sgml">
+<!ENTITY visual-index SYSTEM "visual_index.xml">
 
 <!ENTITY index-Objects-Grouped SYSTEM "objects_grouped.sgml">
 <!ENTITY gtk-TextWidget SYSTEM "text_widget.sgml">
@@ -324,6 +325,11 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
     <chapter>
       <title>Object Hierarchy</title>
     &index-Object-Tree;
+    </chapter>
+
+    <chapter>
+      <title>Widget Gallery</title>
+    &visual-index;
     </chapter>
 
     <chapter id="WindowWidgets">

@@ -1,0 +1,17 @@
+<para role="gallery">
+<link linkend="GtkButton"><inlinegraphic fileref="button.png" format="PNG"></inlinegraphic></link>
+<link linkend="GtkCheckButton"><inlinegraphic fileref="check-button.png" format="PNG"></inlinegraphic></link>
+<link linkend="GtkColorButton"><inlinegraphic fileref="color-button.png" format="PNG"></inlinegraphic></link>
+<link linkend="GtkComboBoxEntry"><inlinegraphic fileref="combo-box-entry.png" format="PNG"></inlinegraphic></link>
+<link linkend="GtkEntry"><inlinegraphic fileref="entry.png" format="PNG"></inlinegraphic></link>
+<link linkend="GtkFontButton"><inlinegraphic fileref="font-button.png" format="PNG"></inlinegraphic></link>
+<link linkend="GtkFrame"><inlinegraphic fileref="frame.png" format="PNG"></inlinegraphic></link>
+<link linkend="GtkLabel"><inlinegraphic fileref="label.png" format="PNG"></inlinegraphic></link>
+<link linkend="GtkTreeVew"><inlinegraphic fileref="list-and-tree.png" format="PNG"></inlinegraphic></link>
+<link linkend="GtkTextView"><inlinegraphic fileref="multiline-text.png" format="PNG"></inlinegraphic></link>
+<link linkend="GtkPaned"><inlinegraphic fileref="panes.png" format="PNG"></inlinegraphic></link>
+<link linkend="GtkRadioButton"><inlinegraphic fileref="radio-group.png" format="PNG"></inlinegraphic></link>
+<link linkend="GtkSeparator"><inlinegraphic fileref="separator.png" format="PNG"></inlinegraphic></link>
+<link linkend="GtkToggleButton"><inlinegraphic fileref="toggle-button.png" format="PNG"></inlinegraphic></link>
+<link linkend="GtkWindow"><inlinegraphic fileref="window.png" format="PNG"></inlinegraphic></link>
+</para>

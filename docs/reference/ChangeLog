@@ -1,4 +1,9 @@
-Tue Aug 24 02:26:25 2004  Matthias Clasen  <maclas@gmx.de>
+Tue Aug 24 02:28:21 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-docs.sgml: Include visual index.
+
+	* gtk/visual_index.xml: New file listing images for 
+	visual index.
 
 	* gtk/Makefile.am (HTML_IMAGES): Add visual index images.
 
