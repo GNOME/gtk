@@ -231,12 +231,14 @@ gdk_pixmap_new (GdkWindow *window,
 	bmi.u.bmiColors[1].rgbRed = 0xFF;
       bmi.u.bmiColors[1].rgbReserved = 0x00;
       draw_impl->colormap = NULL;
+      GDK_NOTE (MISC, g_print ("... colormap NULL\n"));
     }
   else
     {
       draw_impl->colormap = GDK_DRAWABLE_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->colormap;
       if (draw_impl->colormap == NULL)
 	draw_impl->colormap = gdk_colormap_get_system ();
+      GDK_NOTE (MISC, g_print ("... colormap %p\n", draw_impl->colormap));
 
       if (depth == 8)
 	{

@@ -44,6 +44,7 @@ static void         gdk_window_impl_win32_set_colormap (GdkDrawable *drawable,
 static void         gdk_window_impl_win32_get_size     (GdkDrawable *drawable,
 							gint *width,
 							gint *height);
+static GdkRegion*  gdk_window_impl_win32_get_visible_region (GdkDrawable *drawable);
 static void gdk_window_impl_win32_init       (GdkWindowImplWin32      *window);
 static void gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass);
 static void gdk_window_impl_win32_finalize   (GObject                 *object);
@@ -112,6 +113,10 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   drawable_class->set_colormap = gdk_window_impl_win32_set_colormap;
   drawable_class->get_colormap = gdk_window_impl_win32_get_colormap;
   drawable_class->get_size = gdk_window_impl_win32_get_size;
+
+  /* Visible and clip regions are the same */
+  drawable_class->get_clip_region = gdk_window_impl_win32_get_visible_region;
+  drawable_class->get_visible_region = gdk_window_impl_win32_get_visible_region;
 }
 
 static void
@@ -193,6 +198,22 @@ gdk_window_impl_win32_get_size (GdkDrawable *drawable,
     *width = GDK_WINDOW_IMPL_WIN32 (drawable)->width;
   if (height)
     *height = GDK_WINDOW_IMPL_WIN32 (drawable)->height;
+}
+
+static GdkRegion*
+gdk_window_impl_win32_get_visible_region (GdkDrawable *drawable)
+{
+  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (drawable);
+  GdkRectangle result_rect;
+
+  result_rect.x = 0;
+  result_rect.y = 0;
+  result_rect.width = impl->width;
+  result_rect.height = impl->height;
+
+  gdk_rectangle_intersect (&result_rect, &impl->position_info.clip_rect, &result_rect);
+
+  return gdk_region_rectangle (&result_rect);
 }
 
 void
@@ -394,9 +415,6 @@ gdk_window_new (GdkWindow     *parent,
   int width, height;
   int x, y;
   char *title;
-  gint titlelen;
-  wchar_t *wctitle;
-  gint wlen;
   char *mbtitle;
 
   g_return_val_if_fail (attributes != NULL, NULL);
@@ -406,6 +424,14 @@ gdk_window_new (GdkWindow     *parent,
 
   g_return_val_if_fail (GDK_IS_WINDOW (parent), NULL);
   
+  GDK_NOTE (MISC,
+	    g_print ("gdk_window_new: %s\n",
+		     (attributes->window_type == GDK_WINDOW_TOPLEVEL ? "TOPLEVEL" :
+		      (attributes->window_type == GDK_WINDOW_CHILD ? "CHILD" :
+		       (attributes->window_type == GDK_WINDOW_DIALOG ? "DIALOG" :
+			(attributes->window_type == GDK_WINDOW_TEMP ? "TEMP" :
+			 "???"))))));
+
   parent_private = (GdkWindowObject*) parent;
   if (GDK_WINDOW_DESTROYED (parent))
     return NULL;
@@ -453,7 +479,7 @@ gdk_window_new (GdkWindow     *parent,
     title = attributes->title;
   else
     title = g_get_prgname ();
-  if (!title)
+  if (!title || !*title)
     title = "GDK client window";
 
   impl->event_mask = GDK_STRUCTURE_MASK | attributes->event_mask;
@@ -479,14 +505,16 @@ gdk_window_new (GdkWindow     *parent,
 	{
 	  if ((((GdkVisualPrivate*)gdk_visual_get_system ())->xvisual) == xvisual)
             {
-              draw_impl->colormap =
-                gdk_colormap_get_system ();
+              draw_impl->colormap = gdk_colormap_get_system ();
               gdk_colormap_ref (draw_impl->colormap);
+	      GDK_NOTE (MISC, g_print ("...using system colormap %p\n",
+				       draw_impl->colormap));
             }
 	  else
             {
-              draw_impl->colormap =
-                gdk_colormap_new (visual, FALSE);
+              draw_impl->colormap = gdk_colormap_new (visual, FALSE);
+	      GDK_NOTE (MISC, g_print ("...using new colormap %p\n",
+				       draw_impl->colormap));
             }
 	}
     }
@@ -496,6 +524,7 @@ gdk_window_new (GdkWindow     *parent,
       private->depth = 0;
       private->input_only = TRUE;
       draw_impl->colormap = NULL;
+      GDK_NOTE (MISC, g_print ("...GDK_INPUT_ONLY, NULL colormap\n"));
     }
 
   if (parent_private)
@@ -564,13 +593,7 @@ gdk_window_new (GdkWindow     *parent,
       height = impl->height;
     }
 
-  titlelen = strlen (title);
-  wctitle = g_new (wchar_t, titlelen + 1);
-  mbtitle = g_new (char, 3*titlelen + 1);
-  wlen = gdk_nmbstowchar_ts (wctitle, title, titlelen, titlelen);
-  wctitle[wlen] = 0;
-  WideCharToMultiByte (GetACP (), 0, wctitle, -1,
-		       mbtitle, 3*titlelen, NULL, NULL);
+  mbtitle = g_locale_from_utf8 (title, NULL);
   
 #ifdef WITHOUT_WM_CREATE
   draw_impl->handle = CreateWindowEx (dwExStyle,
@@ -623,13 +646,8 @@ gdk_window_new (GdkWindow     *parent,
 #endif
 
   GDK_NOTE (MISC,
-	    g_print ("gdk_window_new: %s %s %dx%d@+%d+%d %#x = %#x\n"
-		     "...locale %#x codepage %d\n",
-		     (private->window_type == GDK_WINDOW_TOPLEVEL ? "TOPLEVEL" :
-		      (private->window_type == GDK_WINDOW_CHILD ? "CHILD" :
-		       (private->window_type == GDK_WINDOW_DIALOG ? "DIALOG" :
-			(private->window_type == GDK_WINDOW_TEMP ? "TEMP" :
-			 "???")))),
+	    g_print ("... \"%s\" %dx%d@+%d+%d %#x = %#x\n"
+		     "... locale %#x codepage %d\n",
 		     mbtitle,
 		     width, height, (x == CW_USEDEFAULT ? -9999 : x), y, 
 		     (guint) hparent,
@@ -638,7 +656,6 @@ gdk_window_new (GdkWindow     *parent,
 		     (guint) impl->charset_info.ciACP));
 
   g_free (mbtitle);
-  g_free (wctitle);
 
   if (draw_impl->handle == NULL)
     {
@@ -1377,10 +1394,7 @@ void
 gdk_window_set_title (GdkWindow   *window,
 		      const gchar *title)
 {
-  gint titlelen;
-  wchar_t *wcstr;
-  gint wlen;
-  char *mbstr;
+  char *mbtitle;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1398,19 +1412,11 @@ gdk_window_set_title (GdkWindow   *window,
       /* As the title is in UTF-8 we must translate it
        * to the system codepage.
        */
-      titlelen = strlen (title);
-      wcstr = g_new (wchar_t, titlelen + 1);
-      mbstr = g_new (char, 3*titlelen + 1);
-      wlen = gdk_nmbstowchar_ts (wcstr, title, titlelen, titlelen);
-      wcstr[wlen] = 0;
-      WideCharToMultiByte (GetACP (), 0, wcstr, -1,
-			   mbstr, 3*titlelen, NULL, NULL);
-
-      if (!SetWindowText (GDK_WINDOW_HWND (window), mbstr))
+      mbtitle = g_locale_from_utf8 (title, NULL);
+      if (!SetWindowText (GDK_WINDOW_HWND (window), mbtitle))
 	WIN32_API_FAILED ("SetWindowText");
 
-      g_free (mbstr);
-      g_free (wcstr);
+      g_free (mbtitle);
     }
 }
 

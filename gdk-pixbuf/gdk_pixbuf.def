@@ -14,9 +14,12 @@ EXPORTS
 	gdk_pixbuf_copy
 	gdk_pixbuf_copy_area
 	gdk_pixbuf_error_quark
+	gdk_pixbuf_frame_copy
+	gdk_pixbuf_frame_free
 	gdk_pixbuf_frame_get_action
 	gdk_pixbuf_frame_get_delay_time
 	gdk_pixbuf_frame_get_pixbuf
+	gdk_pixbuf_frame_get_type
 	gdk_pixbuf_frame_get_x_offset
 	gdk_pixbuf_frame_get_y_offset
 	gdk_pixbuf_get_bits_per_sample

@@ -341,7 +341,7 @@ GType gdk_gc_win32_get_type (void);
 #define GDK_PIXMAP_HBITMAP(pixmap)    (GDK_DRAWABLE_IMPL_WIN32(((GdkPixmapObject *)pixmap)->impl)->handle)
 #define GDK_DRAWABLE_HANDLE(win)      (GDK_IS_WINDOW (win) ? (GDK_WINDOW_HWND (win)) : (GDK_PIXMAP_HBITMAP (win)))
 #define GDK_IMAGE_HBM(image)          (((GdkImagePrivateWin32 *) GDK_IMAGE (image)->windowing_data)->hbm)
-#define GDK_COLORMAP_PRIVATE_DATA(cmap) ((GdkColormapPrivateWin32 *) cmap->windowing_data)
+#define GDK_COLORMAP_PRIVATE_DATA(cmap) ((GdkColormapPrivateWin32 *) GDK_COLORMAP (cmap)->windowing_data)
 #define GDK_COLORMAP_WIN32COLORMAP(cmap) (((GdkColormapPrivateWin32 *)GDK_COLORMAP (cmap)->windowing_data)->xcolormap)
 #define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate *) vis)->xvisual)
 

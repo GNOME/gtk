@@ -36,6 +36,8 @@ INCLUDES = -I . -I .. -I ../gdk -I ../gdk-pixbuf
 DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) $(INTL_CFLAGS)
 DEFINES = -DGTK_DISABLE_COMPAT_H -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" -DGTK_VERSION=\"@GTK_VERSION@\"
 
+GLIB_GENMARSHAL = $(GLIB)/gobject/glib-genmarshal.exe
+
 all :						\
 	../config.h				\
 	generated				\
@@ -385,10 +387,10 @@ gtktypebuiltins_evals.c: makeenums.pl gtk.defs
 	$(PERL) makeenums.pl arrays $(gtk_public_h_sources) $(gdk_headers) >gtktypebuiltins_evals.c
 
 gtkmarshal.h : gtkmarshal.list
-	glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --header >gtkmarshal.h
+	$(GLIB_GENMARSHAL) --prefix=gtk_marshal gtkmarshal.list --header >gtkmarshal.h
 
 gtkmarshal.c : gtkmarshal.list
-	glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --body >gtkmarshal.c
+	$(GLIB_GENMARSHAL) --prefix=gtk_marshal gtkmarshal.list --body >gtkmarshal.c
 
 #
 # Linking:

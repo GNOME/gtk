@@ -124,7 +124,7 @@ static GSourceFuncs event_funcs = {
   gdk_event_prepare,
   gdk_event_check,
   gdk_event_dispatch,
-  (GDestroyNotify)g_free
+  NULL
 };
 
 GPollFD event_poll_fd;
@@ -2323,7 +2323,7 @@ gdk_event_translate (GdkEvent *event,
       if (GDK_WINDOW_DESTROYED (window))
 	break;
 
-      colormap_private = (GdkColormapPrivateWin32 *) GDK_DRAWABLE_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->colormap;
+      colormap_private = GDK_COLORMAP_PRIVATE_DATA (GDK_DRAWABLE_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->colormap);
       hdc = (HDC) msg->wParam;
       if (colormap_private && colormap_private->xcolormap->rc_palette)
 	{
