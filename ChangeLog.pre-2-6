@@ -1,3 +1,8 @@
+Tue Mar  2 00:47:21 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkimmodule.c (match_locale): Use case-insensitive
+	comparison. Fixes XIM module loading on AIX.  (#131277)
+
 Mon Mar  1 23:59:18 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_deleted): 
