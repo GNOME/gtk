@@ -659,41 +659,39 @@ draw_expander(GtkStyle      *style,
 
   gdk_gc_get_values (style->fg_gc[state], &values);
 
-  if (xp_theme_draw(window, xp_expander, style,
-                    x, y,
-                    expander_size, expander_size, state, area))
+  if (! xp_theme_draw(window, xp_expander, style,
+                      x, y,
+                      expander_size, expander_size, state, area))
     {
-      return;
-    }
+      /* RGB values to emulate Windows Classic style */
+      color.red = color.green = color.blue = 128 << 8;
 
-  /* RGB values to emulate Windows Classic style */
-  color.red = color.green = color.blue = 128 << 8;
+      success = gdk_colormap_alloc_color
+        (gtk_widget_get_default_colormap (), &color, FALSE, TRUE);
 
-  success = gdk_colormap_alloc_color
-    (gtk_widget_get_default_colormap (), &color, FALSE, TRUE);
+      if (success)
+        gdk_gc_set_foreground (style->fg_gc[state], &color);
 
-  if (success)
-    gdk_gc_set_foreground (style->fg_gc[state], &color);
+      gdk_draw_rectangle
+        (window, style->fg_gc[state], FALSE, x, y,
+         expander_size - 1, expander_size - 1);
 
-  gdk_draw_rectangle
-    (window, style->fg_gc[state], FALSE, x, y,
-     expander_size - 1, expander_size - 1);
+      if (success)
+        gdk_gc_set_foreground (style->fg_gc[state], &values.foreground);
 
-  if (success)
-    gdk_gc_set_foreground (style->fg_gc[state], &values.foreground);
-
-  gdk_draw_line
-    (window, style->fg_gc[state], x + 2, y + expander_semi_size,
-     x + expander_size - 2, y + expander_semi_size);
-
-  switch (expander_style)
-    {
-    case GTK_EXPANDER_COLLAPSED:
-    case GTK_EXPANDER_SEMI_COLLAPSED:
       gdk_draw_line
-	(window, style->fg_gc[state], x + expander_semi_size, y + 2,
-	 x + expander_semi_size, y + expander_size - 2);
-      break;
+        (window, style->fg_gc[state], x + 2, y + expander_semi_size,
+         x + expander_size - 2, y + expander_semi_size);
+
+      switch (expander_style)
+        {
+        case GTK_EXPANDER_COLLAPSED:
+        case GTK_EXPANDER_SEMI_COLLAPSED:
+          gdk_draw_line
+            (window, style->fg_gc[state], x + expander_semi_size, y + 2,
+             x + expander_semi_size, y + expander_size - 2);
+          break;
+        }
     }
 
   if (area)

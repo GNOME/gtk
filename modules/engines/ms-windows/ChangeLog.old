@@ -1,3 +1,13 @@
+2003-09-20  Raymond Penners  <raymond@dotsphinx.com>
+
+	* === Released 0.4.3 ===
+
+	* src/wimp_style.c: The Gaim buddy icons were missing due to
+	recent tree expander changes, not the clipping area. Fixed.
+	
+	* src/xp_theme.c: Re-enabled clipping area, I am confident it
+	should not cause any problems now.
+	
 2003-09-18  Raymond Penners  <raymond@dotsphinx.com>
 
 	* === Released 0.4.2 ===
