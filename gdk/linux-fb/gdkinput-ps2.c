@@ -651,12 +651,19 @@ mouse_open(void)
   buf[i++] = 232; /* device resolution */
   buf[i++] = 1;
   write(retval->fd, buf, i);
-  read(retval->fd, buf, 3); /* Get rid of misc garbage whatever stuff from mouse */
+  if(read(retval->fd, buf, 3) < 0
+     || getenv("GDK_NO_PS2MOUSE")) /* Get rid of misc garbage whatever stuff from mouse */
+    {
+      close(retval->fd);
+      retval->fd = -1;
+    }
+  else
+    {
+      fcntl(retval->fd, F_SETFL, O_RDWR|O_NONBLOCK);
 
-  fcntl(retval->fd, F_SETFL, O_RDWR|O_NONBLOCK);
-
-  gioc = g_io_channel_unix_new(retval->fd);
-  retval->fd_tag = g_io_add_watch(gioc, G_IO_IN|G_IO_ERR|G_IO_HUP|G_IO_NVAL, handle_input, retval);
+      gioc = g_io_channel_unix_new(retval->fd);
+      retval->fd_tag = g_io_add_watch(gioc, G_IO_IN|G_IO_ERR|G_IO_HUP|G_IO_NVAL, handle_input, retval);
+    }
 
   retval->x = gdk_display->modeinfo.xres >> 1;
   retval->y = gdk_display->modeinfo.yres >> 1;
