@@ -414,9 +414,9 @@ gtk_text_btree_new (GtkTextTagTable *table,
   tree->mark_table = g_hash_table_new(g_str_hash, g_str_equal);
 
   /* We don't ref the buffer, since the buffer owns us;
-     we'd have some circularity issues. The buffer always
-     lasts longer than the BTree
-  */
+   * we'd have some circularity issues. The buffer always
+   * lasts longer than the BTree
+   */
   tree->buffer = buffer;
   
   {
@@ -434,7 +434,6 @@ gtk_text_btree_new (GtkTextTagTable *table,
                                                     FALSE);
     
     tree->insert_mark->body.mark.not_deleteable = TRUE;
-    
     tree->insert_mark->body.mark.visible = TRUE;
     
     tree->selection_bound_mark =
@@ -2486,6 +2485,8 @@ gtk_text_btree_get_selection_bounds (GtkTextBTree *tree,
 
       if (end)
         *end = tmp_end;
+
+      return FALSE;
     }
   else
     {
@@ -2502,7 +2503,7 @@ gtk_text_btree_get_selection_bounds (GtkTextBTree *tree,
 }
 
 void
-gtk_text_btree_place_cursor(GtkTextBTree *tree,
+gtk_text_btree_place_cursor(GtkTextBTree      *tree,
                             const GtkTextIter *iter)
 {
   GtkTextIter start, end;
@@ -2585,7 +2586,7 @@ gtk_text_btree_get_mark_by_name (GtkTextBTree *tree,
 
 void
 gtk_text_mark_set_visible (GtkTextMark       *mark,
-                           gboolean setting)
+                           gboolean           setting)
 {
   GtkTextLineSegment *seg;
   
@@ -2599,7 +2600,7 @@ gtk_text_mark_set_visible (GtkTextMark       *mark,
     {
       seg->body.mark.visible = setting;
 
-      redisplay_mark(seg);
+      redisplay_mark (seg);
     }
 }
 
@@ -3052,12 +3053,12 @@ gtk_text_line_previous (GtkTextLine *line)
         return prev;
     }
 
-  g_assert_not_reached();
+  g_assert_not_reached ();
   return NULL;
 }
 
 void
-gtk_text_line_add_data (GtkTextLine *line,
+gtk_text_line_add_data (GtkTextLine     *line,
                         GtkTextLineData *data)
 {
   g_return_if_fail(line != NULL);
@@ -3418,7 +3419,6 @@ gtk_text_line_char_to_byte (GtkTextLine *line,
   g_warning("FIXME not implemented");
 }
 
-
 /* FIXME sync with char_locate (or figure out a clean
    way to merge the two functions) */
 void
@@ -3692,6 +3692,101 @@ gtk_text_line_char_to_byte_offsets(GtkTextLine *line,
     }
 }
 
+static gint
+node_compare (GtkTextBTreeNode *lhs,
+              GtkTextBTreeNode *rhs)
+{
+  GtkTextBTreeNode *iter;
+  GtkTextBTreeNode *node;
+  GtkTextBTreeNode *common_parent;
+  GtkTextBTreeNode *parent_of_lower;
+  GtkTextBTreeNode *parent_of_higher;
+  gboolean lhs_is_lower;
+  GtkTextBTreeNode *lower;
+  GtkTextBTreeNode *higher;
+
+  /* This function assumes that lhs and rhs are not underneath each
+   * other.
+   */
+  
+  if (lhs == rhs)
+    return 0;
+  
+  if (lhs->level < rhs->level)
+    {
+      lhs_is_lower = TRUE;
+      lower = lhs;
+      higher = rhs;
+    }
+  else
+    {
+      lhs_is_lower = FALSE;
+      lower = rhs;
+      higher = lhs;
+    }
+  
+  /* Algorithm: find common parent of lhs/rhs. Save the child nodes
+   * of the common parent we used to reach the common parent; the
+   * ordering of these child nodes in the child list is the ordering
+   * of lhs and rhs.
+   */
+
+  /* Get on the same level (may be on same level already) */
+  node = lower;
+  while (node->level < higher->level)
+    node = node->parent;
+
+  g_assert (node->level == higher->level);
+  
+  g_assert (node != higher); /* Happens if lower is underneath higher */
+  
+  /* Go up until we have two children with a common parent.
+   */
+  parent_of_lower = node;
+  parent_of_higher = higher;
+
+  while (parent_of_lower->parent != parent_of_higher->parent)
+    {
+      parent_of_lower = parent_of_lower->parent;
+      parent_of_higher = parent_of_higher->parent;
+    }
+
+  g_assert (parent_of_lower->parent == parent_of_higher->parent);
+
+  common_parent = parent_of_lower->parent;
+
+  g_assert (common_parent != NULL);
+  
+  /* See which is first in the list of common_parent's children */
+  iter = common_parent->children.node;
+  while (iter != NULL)
+    {
+      if (iter == parent_of_higher)
+        {
+          /* higher is less than lower */
+          
+          if (lhs_is_lower)
+            return 1; /* lhs > rhs */
+          else
+            return -1;
+        }
+      else if (iter == parent_of_lower)
+        {
+          /* lower is less than higher */
+          
+          if (lhs_is_lower)
+            return -1; /* lhs < rhs */
+          else
+            return 1;
+        }
+      
+      iter = iter->next;
+    }
+
+  g_assert_not_reached ();
+  return 0;
+}
+
 /* remember that tag == NULL means "any tag" */
 GtkTextLine*
 gtk_text_line_next_could_contain_tag(GtkTextLine *line,
@@ -3710,7 +3805,8 @@ gtk_text_line_next_could_contain_tag(GtkTextLine *line,
   if (tag == NULL)
     {
       /* Right now we can only offer linear-search if the user wants
-         to know about any tag toggle at all. */
+       * to know about any tag toggle at all.
+       */
       return gtk_text_line_next (line);
     }
   
@@ -3733,6 +3829,9 @@ gtk_text_line_next_could_contain_tag(GtkTextLine *line,
 
   if (info->tag_root == NULL)
     return NULL;
+
+  if (info->tag_root == line->parent)
+    return NULL; /* we were at the last line under the tag root */
   
   /* We need to go up out of this node, and on to the next one with
      toggles for the target tag. If we're below the tag root, we need to
@@ -3773,57 +3872,25 @@ gtk_text_line_next_could_contain_tag(GtkTextLine *line,
     }
   else
     {
-      GtkTextBTreeNode * iter;
-      GtkTextBTreeNode * common_parent;
-      GtkTextBTreeNode * parent_of_tag_root;
-      GtkTextBTreeNode * parent_of_node;
+      gint ordering;
 
-      /* Find common parent between our current line, and the tag
-         root. Save the child nodes of the common parent we used to get
-         to the common parent; we then use these two child nodes to
-         determine whether the ordering of the tag root and the current
-         line in the tree. (Nice code cleanup: write
-         gtk_btree_node_compare() to compute node ordering.)
-      */
+      ordering = node_compare (line->parent, info->tag_root);
 
-      /* Get on the same level */
-      node = line->parent;
-      while (node->level < info->tag_root->level)
-        node = node->parent;
-
-      common_parent = info->tag_root->parent;
-
-      /* Find common parent, and children of that parent above
-         tag root and our current node */
-      parent_of_node = node;
-      parent_of_tag_root = info->tag_root;
-
-      while (node->parent != common_parent)
+      if (ordering < 0)
         {
-          parent_of_node = node;
-          parent_of_tag_root = common_parent;
-          node = node->parent;
-          common_parent = common_parent->parent;
+          /* Tag root is ahead of us, so search there. */
+          node = info->tag_root;
+          goto found;
+        }
+      else
+        {
+          /* Tag root is after us, so no more lines that
+           * could contain the tag.
+           */
+          return NULL;
         }
 
-      /* See which is first in the list of common_parent's children */
-      iter = common_parent->children.node;
-      while (iter != NULL)
-        {
-          if (iter == parent_of_tag_root)
-            return NULL; /* Tag root was before us in the tree */
-          else if (iter == parent_of_node)
-            {
-              /* We want the first inside-tag-root node,
-                 since we're before the tag root */
-              node = info->tag_root;
-              goto found;
-            }
-
-          iter = iter->next;
-        }
-      
-      return NULL;
+      g_assert_not_reached ();
     }
 
  found:
@@ -3831,42 +3898,261 @@ gtk_text_line_next_could_contain_tag(GtkTextLine *line,
   g_assert(node != NULL);
   
   /* We have to find the first sub-node of this node that contains
-     the target tag. */
+   * the target tag.
+   */
 
- continue_outer_loop:
   while (node->level > 0)
     {
-      g_assert(node != NULL); /* If this fails, it likely means an
-                                 incorrect tag summary led us on a
-                                 wild goose chase down this branch of
-                                 the tree. */
+      g_assert (node != NULL); /* If this fails, it likely means an
+                                  incorrect tag summary led us on a
+                                  wild goose chase down this branch of
+                                  the tree. */
       node = node->children.node;
       while (node != NULL)
         {
-          if (gtk_text_btree_node_has_tag(node, tag))
-            goto continue_outer_loop;
+          if (gtk_text_btree_node_has_tag (node, tag))
+            break;
           node = node->next;
         }
-      g_assert(node != NULL);
     }
 
-  g_assert(node != NULL);
-  g_assert(node->level == 0);
+  g_assert (node != NULL);
+  g_assert (node->level == 0);
   
   return node->children.line;
 }
-      
-GtkTextLine*
-gtk_text_line_previous_could_contain_tag(GtkTextLine *line,
-                                         GtkTextBTree *tree,
-                                         GtkTextTag  *tag)
-{
-  g_warning("FIXME");
 
+static GtkTextLine*
+prev_line_under_node (GtkTextBTreeNode *node,
+                      GtkTextLine      *line)
+{
+  GtkTextLine *prev;
+
+  prev = node->children.line;
+
+  g_assert (prev);
+
+  if (prev != line)
+    {
+      while (prev->next != line)
+        prev = prev->next;
+
+      return prev;
+    }
+
+  return NULL;
+}
+
+GtkTextLine*
+gtk_text_line_previous_could_contain_tag (GtkTextLine  *line,
+                                          GtkTextBTree *tree,
+                                          GtkTextTag   *tag)
+{
+  GtkTextBTreeNode *node;
+  GtkTextBTreeNode *found_node = NULL;
+  GtkTextTagInfo *info;
+  gboolean below_tag_root;
+  GtkTextLine *prev;
+  GtkTextBTreeNode *line_ancestor;
+  GtkTextBTreeNode *line_ancestor_parent;
+  
+  /* See next_could_contain_tag() for more extensive comments
+   * on what's going on here.
+   */
+  
+  g_return_val_if_fail(line != NULL, NULL);
+  
+  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+    gtk_text_btree_check (tree);
+  
+  if (tag == NULL)
+    {
+      /* Right now we can only offer linear-search if the user wants
+       * to know about any tag toggle at all.
+       */
+      return gtk_text_line_previous (line);
+    }
+
+  /* Return same-node line, if any. */
+  prev = prev_line_under_node (line->parent, line);
+  if (prev)
+    return prev;
+  
+  info = gtk_text_btree_get_existing_tag_info (tree, tag);
+  if (info == NULL)
+    return NULL;
+
+  if (info->tag_root == NULL)
+    return NULL;
+
+  if (info->tag_root == line->parent)
+    return NULL; /* we were at the first line under the tag root */
+  
+  /* Are we below the tag root */
+  node = line->parent;
+  below_tag_root = FALSE;
+  while (node != NULL)
+    {
+      if (node == info->tag_root)
+        {
+          below_tag_root = TRUE;
+          break;
+        }
+
+      node = node->parent;
+    }
+
+  if (below_tag_root)
+    {
+      /* Look for a previous node under this tag root that has our
+       * tag.
+       */
+
+      /* this assertion holds because line->parent is not the
+       * tag root, we are below the tag root, and the tag
+       * root exists.
+       */
+      g_assert (line->parent->parent != NULL);
+
+      line_ancestor = line->parent;
+      line_ancestor_parent = line->parent->parent;
+
+      node = line_ancestor_parent->children.node;
+      while (node != line_ancestor &&
+             line_ancestor != info->tag_root)
+        {
+          GSList *child_nodes = NULL;
+          GSList *tmp;
+          
+          /* Create reverse-order list of nodes before
+           * line_ancestor
+           */
+          while (node != line_ancestor
+                 && node != NULL)
+            {
+              child_nodes = g_slist_prepend (child_nodes, node);
+
+              node = node->next;
+            }
+          
+          /* Try to find a node with our tag on it in the list */
+          tmp = child_nodes;
+          while (tmp != NULL)
+            {
+              GtkTextBTreeNode *this_node = tmp->data;
+
+              g_assert (this_node != line_ancestor);
+              
+              if (gtk_text_btree_node_has_tag (this_node, tag))
+                {
+                  found_node = this_node;
+                  g_slist_free (child_nodes);
+                  goto found;
+                }
+              
+              tmp = g_slist_next (tmp);
+            }
+
+          g_slist_free (child_nodes);
+
+          /* Didn't find anything on this level; go up one level. */
+          line_ancestor = line_ancestor_parent;
+          line_ancestor_parent = line_ancestor->parent;
+
+          node = line_ancestor_parent->children.node;
+        }
+
+      /* No dice. */
+      return NULL;
+    }
+  else
+    {
+      gint ordering;
+
+      ordering = node_compare (line->parent, info->tag_root);
+
+      if (ordering < 0)
+        {
+          /* Tag root is ahead of us, so no more lines
+           * with this tag.
+           */
+          return NULL;
+        }
+      else
+        {
+          /* Tag root is after us, so grab last tagged
+           * line underneath the tag root.
+           */
+          found_node = info->tag_root;
+          goto found;
+        }
+
+      g_assert_not_reached ();
+    }
+
+ found:
+  
+  g_assert (found_node != NULL);
+  
+  /* We have to find the last sub-node of this node that contains
+   * the target tag.
+   */
+  node = found_node;
+  
+  while (node->level > 0)
+    {
+      GSList *child_nodes = NULL;
+      GSList *iter;
+      g_assert (node != NULL); /* If this fails, it likely means an
+                                  incorrect tag summary led us on a
+                                  wild goose chase down this branch of
+                                  the tree. */
+
+      node = node->children.node;
+      while (node != NULL)
+        {
+          child_nodes = g_slist_prepend (child_nodes, node);
+          node = node->next;
+        }
+
+      node = NULL; /* detect failure to find a child node. */
+      
+      iter = child_nodes;
+      while (iter != NULL)
+        {
+          if (gtk_text_btree_node_has_tag (iter->data, tag))
+            {
+              /* recurse into this node. */
+              node = iter->data;
+              break;
+            }
+
+          iter = g_slist_next (iter);
+        }
+
+      g_slist_free (child_nodes);
+
+      g_assert (node != NULL);
+    }
+
+  g_assert (node != NULL);
+  g_assert (node->level == 0);
+
+  /* this assertion is correct, but slow. */
+  /* g_assert (node_compare (node, line->parent) < 0); */
+  
+  /* Return last line in this node. */
+
+  prev = node->children.line;
+  while (prev->next)
+    prev = prev->next;
+
+  return prev;
 }
 
 /*
- * Non-public function implementations */
+ * Non-public function implementations
+ */
 
 static void
 summary_list_destroy(Summary *summary)
@@ -6260,6 +6546,11 @@ gtk_text_btree_spew (GtkTextBTree *tree)
 
         list = g_slist_next (list);
       }
+    
+    if (tree->tag_infos == NULL)
+      {
+        printf ("  (no tags in the tree)\n");
+      }
   }
 
   printf("=================== Tree nodes\n");
@@ -6301,11 +6592,17 @@ gtk_text_btree_spew_line_short (GtkTextLine *line, int indent)
         }
       else if (seg->type == &gtk_text_right_mark_type)
         {
-          printf("%s right mark `%s'\n", spaces, seg->body.mark.name);
+          printf("%s right mark `%s' visible: %d\n",
+                 spaces,
+                 seg->body.mark.name,
+                 seg->body.mark.visible);
         }
       else if (seg->type == &gtk_text_left_mark_type)
         {
-          printf("%s left mark `%s'\n", spaces, seg->body.mark.name);
+          printf("%s left mark `%s' visible: %d\n",
+                 spaces,
+                 seg->body.mark.name,
+                 seg->body.mark.visible);
         }
       else if (seg->type == &gtk_text_toggle_on_type ||
                seg->type == &gtk_text_toggle_off_type)
@@ -6397,11 +6694,17 @@ gtk_text_btree_spew_segment(GtkTextBTree* tree, GtkTextLineSegment * seg)
     }
   else if (seg->type == &gtk_text_right_mark_type)
     {
-      printf("       right mark `%s'\n", seg->body.mark.name);
+      printf("       right mark `%s' visible: %d not_deleteable: %d\n",
+             seg->body.mark.name,
+             seg->body.mark.visible,
+             seg->body.mark.not_deleteable);
     }
   else if (seg->type == &gtk_text_left_mark_type)
     {
-      printf("       left mark `%s'\n", seg->body.mark.name);
+      printf("       left mark `%s' visible: %d not_deleteable: %d\n",
+             seg->body.mark.name,
+             seg->body.mark.visible,
+             seg->body.mark.not_deleteable);
     }
   else if (seg->type == &gtk_text_toggle_on_type ||
            seg->type == &gtk_text_toggle_off_type)

@@ -530,7 +530,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 				"delete", 2,
 				GTK_TYPE_ENUM, GTK_DELETE_CHARS,
 				GTK_TYPE_INT, 1);
-
+  
   gtk_binding_entry_add_signal (binding_set, GDK_d, GDK_CONTROL_MASK,
 				"delete", 2,
 				GTK_TYPE_ENUM, GTK_DELETE_CHARS,
@@ -2590,6 +2590,16 @@ gtk_text_view_delete (GtkTextView   *text_view,
       break;
 
     case GTK_DELETE_PARAGRAPH_ENDS:
+      /* If we're already at a newline, we need to
+       * simply delete that newline, instead of
+       * moving to the next one.
+       */
+      if (gtk_text_iter_get_char (&end) == '\n')
+        {
+          gtk_text_iter_next_char (&end);
+          --count;
+        }
+
       while (count > 0)
         {
           if (!gtk_text_iter_forward_to_newline (&end))
@@ -3058,9 +3068,9 @@ gtk_text_view_destroy_layout (GtkTextView *text_view)
  */
 
 static void
-gtk_text_view_start_selection_dnd (GtkTextView *text_view,
+gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
                                    const GtkTextIter *iter,
-                                   GdkEventMotion *event)
+                                   GdkEventMotion    *event)
 {
   GdkDragContext *context;
   GtkTargetList *target_list;
@@ -3079,7 +3089,8 @@ gtk_text_view_start_selection_dnd (GtkTextView *text_view,
   gtk_drag_set_icon_default (context);
 
   /* We're inside the selection, so start without being able
-     to accept the drag. */
+   * to accept the drag.
+   */
   gdk_drag_status (context, 0, event->time);
   gtk_text_mark_set_visible (text_view->dnd_mark, FALSE);
 }
@@ -3201,7 +3212,8 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
     {
       if (gtk_text_iter_editable (&newplace, text_view->editable))
         {
-          gtk_text_mark_set_visible (text_view->dnd_mark, text_view->cursor_visible);
+          gtk_text_mark_set_visible (text_view->dnd_mark,
+                                     text_view->cursor_visible);
           
           gdk_drag_status (context, context->suggested_action, time);
         }

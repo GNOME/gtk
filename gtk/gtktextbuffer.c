@@ -821,8 +821,8 @@ gtk_text_buffer_emit_delete (GtkTextBuffer *buffer,
  **/
 void
 gtk_text_buffer_delete (GtkTextBuffer *buffer,
-                        GtkTextIter *start,
-                        GtkTextIter *end)
+                        GtkTextIter   *start,
+                        GtkTextIter   *end)
 {
   g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
   g_return_if_fail(start != NULL);
@@ -840,7 +840,9 @@ gtk_text_buffer_delete (GtkTextBuffer *buffer,
  * 
  * Deletes all <emphasis>editable</emphasis> text in the given range.
  * Calls gtk_text_buffer_delete() for each editable sub-range of
- * [@start,@end).
+ * [@start,@end). @start and @end are revalidated to point to
+ * the location of the last deleted range, or left untouched if
+ * no text was deleted.
  * 
  * Return value: whether some text was actually deleted
  **/
@@ -904,6 +906,10 @@ gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
                   gtk_text_buffer_emit_delete (buffer, &start, &iter, TRUE);
                   
                   deleted_stuff = TRUE;
+
+                  /* revalidate user's iterators. */
+                  *start_iter = start;
+                  *end_iter = iter;
                 }
 
               break;
@@ -923,6 +929,10 @@ gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
 
           current_state = FALSE;
           deleted_stuff = TRUE;
+
+          /* revalidate user's iterators. */
+          *start_iter = start;
+          *end_iter = iter;
         }
       else
         {
@@ -1478,7 +1488,7 @@ gtk_text_buffer_real_apply_tag (GtkTextBuffer *buffer,
                                 const GtkTextIter *start,
                                 const GtkTextIter *end)
 {
-  gtk_text_btree_tag(start, end, tag, TRUE);
+  gtk_text_btree_tag (start, end, tag, TRUE);
 }
 
 static void
@@ -1487,7 +1497,7 @@ gtk_text_buffer_real_remove_tag (GtkTextBuffer *buffer,
                                  const GtkTextIter *start,
                                  const GtkTextIter *end)
 {
-  gtk_text_btree_tag(start, end, tag, FALSE);
+  gtk_text_btree_tag (start, end, tag, FALSE);
 }
 
 
@@ -1500,12 +1510,14 @@ gtk_text_buffer_emit_tag(GtkTextBuffer *buffer,
 {
   g_return_if_fail(tag != NULL);
 
+  gtk_text_iter_reorder (start, end);
+  
   if (apply)
-    gtk_signal_emit(GTK_OBJECT(buffer), signals[APPLY_TAG],
-                    tag, start, end);
+    gtk_signal_emit (GTK_OBJECT(buffer), signals[APPLY_TAG],
+                     tag, start, end);
   else
-    gtk_signal_emit(GTK_OBJECT(buffer), signals[REMOVE_TAG],
-                    tag, start, end);
+    gtk_signal_emit (GTK_OBJECT(buffer), signals[REMOVE_TAG],
+                     tag, start, end);
 }
 
 

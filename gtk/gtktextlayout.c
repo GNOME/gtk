@@ -1204,8 +1204,6 @@ add_cursor (GtkTextLayout      *layout,
 	    GtkTextLineSegment *seg,
 	    gint                start)
 {
-  GtkTextIter selection_start, selection_end;
-  
   PangoRectangle strong_pos, weak_pos;
   GtkTextCursorDisplay *cursor;
 
@@ -1214,7 +1212,8 @@ add_cursor (GtkTextLayout      *layout,
    */
   if (gtk_text_btree_mark_is_insert (_gtk_text_buffer_get_btree (layout->buffer),
                                      (GtkTextMark*)seg) &&
-      (!layout->cursor_visible || gtk_text_buffer_get_selection_bounds (layout->buffer, &selection_start, &selection_end)))
+      (!layout->cursor_visible ||
+       gtk_text_buffer_get_selection_bounds (layout->buffer, NULL, NULL)))
     return;
   
   pango_layout_get_cursor_pos (display->layout, start, &strong_pos, &weak_pos);
@@ -1429,7 +1428,8 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
   tmp_list2 = cursor_segs;
   while (tmp_list1)
     {
-      add_cursor (layout, display, tmp_list2->data, GPOINTER_TO_INT (tmp_list1->data));
+      add_cursor (layout, display, tmp_list2->data,
+                  GPOINTER_TO_INT (tmp_list1->data));
       tmp_list1 = tmp_list1->next;
       tmp_list2 = tmp_list2->next;
     }

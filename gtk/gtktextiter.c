@@ -33,7 +33,8 @@
 
 typedef struct _GtkTextRealIter GtkTextRealIter;
 
-struct _GtkTextRealIter {
+struct _GtkTextRealIter
+{
   /* Always-valid information */
   GtkTextBTree *tree;
   GtkTextLine *line;
@@ -53,7 +54,7 @@ struct _GtkTextRealIter {
   /* Valid if the segments_changed_stamp is up-to-date */
   GtkTextLineSegment *segment;     /* indexable segment we index */
   GtkTextLineSegment *any_segment; /* first segment in our location,
-                                   maybe same as "segment" */
+                                      maybe same as "segment" */
   /* One of these will always be valid if segments_changed_stamp is
      up-to-date. If invalid, they are -1.
 
@@ -94,7 +95,7 @@ iter_set_from_byte_offset(GtkTextRealIter *iter,
 {
   iter_set_common(iter, line);
 
-  gtk_text_line_byte_locate(iter->line,
+  gtk_text_line_byte_locate (iter->line,
                              byte_offset,
                              &iter->segment,
                              &iter->any_segment,
@@ -110,7 +111,7 @@ iter_set_from_char_offset(GtkTextRealIter *iter,
 {
   iter_set_common(iter, line);
 
-  gtk_text_line_char_locate(iter->line,
+  gtk_text_line_char_locate (iter->line,
                              char_offset,
                              &iter->segment,
                              &iter->any_segment,
@@ -360,6 +361,12 @@ ensure_byte_offsets(GtkTextRealIter *iter)
                                          &iter->line_byte_offset,
                                          &iter->segment_byte_offset);
     }
+}
+
+static inline gboolean
+is_segment_start (GtkTextRealIter *real)
+{
+  return real->segment_byte_offset == 0 || real->segment_char_offset == 0;
 }
 
 #if 1
@@ -689,12 +696,15 @@ gtk_text_iter_get_line_index(const GtkTextIter *iter)
  * Returns the Unicode character at this iterator.  (Equivalent to
  * operator* on a C++ iterator.)  If the iterator points at a
  * non-character element, such as an image embedded in the buffer, the
- * Unicode "unknown" character 0xFFFD is returned.
+ * Unicode "unknown" character 0xFFFD is returned. If invoked on
+ * the end iterator, zero is returned; zero is not a valid Unicode character.
+ * So you can write a loop which ends when gtk_text_iter_get_char()
+ * returns 0.
  * 
- * Return value: a Unicode character
+ * Return value: a Unicode character, or 0 if @iter is not dereferenceable
  **/
 gunichar
-gtk_text_iter_get_char(const GtkTextIter *iter)
+gtk_text_iter_get_char (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
 
@@ -705,12 +715,11 @@ gtk_text_iter_get_char(const GtkTextIter *iter)
   if (real == NULL)
     return 0;
 
-  check_invariants(iter);
-  
-  /* FIXME probably want to special-case the end iterator
-     and either have an error or return 0 */
-  
-  if (real->segment->type == &gtk_text_char_type)
+  check_invariants(iter);  
+
+  if (gtk_text_iter_is_last (iter))
+    return 0;
+  else if (real->segment->type == &gtk_text_char_type)
     {
       ensure_byte_offsets(real);
       
@@ -1392,13 +1401,13 @@ gtk_text_iter_get_attributes (const GtkTextIter  *iter,
  * (MOVEMENT OCCURRED && NEW ITER IS DEREFERENCEABLE)
  */
 static gboolean
-forward_line_leaving_caches_unmodified(GtkTextRealIter *real)
+forward_line_leaving_caches_unmodified (GtkTextRealIter *real)
 {
   GtkTextLine *new_line;
   
-  new_line = gtk_text_line_next(real->line);
+  new_line = gtk_text_line_next (real->line);
 
-  g_assert(new_line != real->line);
+  g_assert (new_line != real->line);
   
   if (new_line != NULL)
     {      
@@ -1442,11 +1451,56 @@ forward_line_leaving_caches_unmodified(GtkTextRealIter *real)
     }
 }
 
+
+/* The return value of this indicates WHETHER WE MOVED.
+ * The return value of public functions indicates
+ * (MOVEMENT OCCURRED && NEW ITER IS DEREFERENCEABLE)
+ */
+static gboolean
+backward_line_leaving_caches_unmodified (GtkTextRealIter *real)
+{
+  GtkTextLine *new_line;
+  
+  new_line = gtk_text_line_previous (real->line);
+
+  g_assert (new_line != real->line);
+  
+  if (new_line != NULL)
+    {      
+      real->line = new_line;
+
+      real->line_byte_offset = 0;
+      real->line_char_offset = 0;
+      
+      real->segment_byte_offset = 0;
+      real->segment_char_offset = 0;
+      
+      /* Find first segments in new line */
+      real->any_segment = real->line->segments;
+      real->segment = real->any_segment;
+      while (real->segment->char_count == 0)
+        real->segment = real->segment->next;
+
+      return TRUE;
+    }
+  else
+    {
+      /* There is no way to move backward; we were already
+         at the first line. */
+      
+      /* We leave real->line as-is */
+
+      /* Note that we didn't clamp to the start of the first line. */
+      
+      return FALSE;
+    }
+}
+
 /* The return value indicates (MOVEMENT OCCURRED && NEW ITER IS
  * DEREFERENCEABLE)
  */
 static gboolean
-forward_char(GtkTextRealIter *real)
+forward_char (GtkTextRealIter *real)
 {
   GtkTextIter *iter = (GtkTextIter*)real;
 
@@ -1465,7 +1519,7 @@ forward_char(GtkTextRealIter *real)
       /* Just moving within a segment. Keep byte count
          up-to-date, if it was already up-to-date. */
 
-      g_assert(real->segment->type == &gtk_text_char_type);
+      g_assert (real->segment->type == &gtk_text_char_type);
       
       if (real->line_byte_offset >= 0)
         {
@@ -1502,7 +1556,7 @@ forward_char(GtkTextRealIter *real)
 }
 
 gboolean
-gtk_text_iter_forward_indexable_segment(GtkTextIter *iter)
+gtk_text_iter_forward_indexable_segment (GtkTextIter *iter)
 {
   /* Need to move to the next segment; if no next segment,
      need to move to next line. */
@@ -1524,7 +1578,7 @@ gtk_text_iter_forward_indexable_segment(GtkTextIter *iter)
   if (real->line_char_offset >= 0)
     {
       chars_skipped = real->segment->char_count - real->segment_char_offset;
-      g_assert(chars_skipped > 0);
+      g_assert (chars_skipped > 0);
     }
   else
     chars_skipped = 0;
@@ -1532,7 +1586,7 @@ gtk_text_iter_forward_indexable_segment(GtkTextIter *iter)
   if (real->line_byte_offset >= 0)
     {
       bytes_skipped = real->segment->byte_count - real->segment_byte_offset;
-      g_assert(bytes_skipped > 0);
+      g_assert (bytes_skipped > 0);
     }
   else
     bytes_skipped = 0;
@@ -1551,17 +1605,17 @@ gtk_text_iter_forward_indexable_segment(GtkTextIter *iter)
 
       if (real->line_byte_offset >= 0)
         {
-          g_assert(bytes_skipped > 0);
+          g_assert (bytes_skipped > 0);
           real->segment_byte_offset = 0;
           real->line_byte_offset += bytes_skipped;
         }
 
       if (real->line_char_offset >= 0)
         {
-          g_assert(chars_skipped > 0);
+          g_assert (chars_skipped > 0);
           real->segment_char_offset = 0;
           real->line_char_offset += chars_skipped;
-          adjust_char_index(real, chars_skipped);
+          adjust_char_index (real, chars_skipped);
         }
 
       check_invariants(iter);
@@ -1571,21 +1625,19 @@ gtk_text_iter_forward_indexable_segment(GtkTextIter *iter)
   else
     {      
       /* End of the line */
-      if (forward_line_leaving_caches_unmodified(real))
+      if (forward_line_leaving_caches_unmodified (real))
         {
-          adjust_line_number(real, 1);
+          adjust_line_number (real, 1);
           if (real->line_char_offset >= 0)
-            adjust_char_index(real, chars_skipped);
+            adjust_char_index (real, chars_skipped);
 
-          check_invariants(iter);
+          g_assert (real->line_byte_offset == 0);
+          g_assert (real->line_char_offset == 0);
+          g_assert (real->segment_byte_offset == 0);
+          g_assert (real->segment_char_offset == 0);
+          g_assert (gtk_text_iter_starts_line(iter));
 
-          g_assert(real->line_byte_offset == 0);
-          g_assert(real->line_char_offset == 0);
-          g_assert(real->segment_byte_offset == 0);
-          g_assert(real->segment_char_offset == 0);
-          g_assert(gtk_text_iter_starts_line(iter));
-
-          check_invariants(iter);
+          check_invariants (iter);
 
           if (gtk_text_iter_is_last (iter))
             return FALSE;
@@ -1603,13 +1655,156 @@ gtk_text_iter_forward_indexable_segment(GtkTextIter *iter)
     }
 }
 
-gboolean
-gtk_text_iter_backward_indexable_segment(GtkTextIter *iter)
+static gboolean
+at_last_indexable_segment (GtkTextRealIter *real)
 {
-  g_warning("FIXME");
+  GtkTextLineSegment *seg;
 
+  /* Return TRUE if there are no indexable segments after
+   * this iterator.
+   */
+  
+  seg = real->segment->next;
+  while (seg)
+    {
+      if (seg->char_count > 0)
+        return FALSE;
+      seg = seg->next;
+    }
+  return TRUE;
+}
 
-  return FALSE;
+/* Goes back to the start of the next segment, even if
+ * we're not at the start of the current segment (always
+ * ends up on a different segment if it returns TRUE)
+ */
+gboolean
+gtk_text_iter_backward_indexable_segment (GtkTextIter *iter)
+{
+  /* Move to the start of the previous segment; if no previous
+   * segment, to the last segment in the previous line. This is
+   * inherently a bit inefficient due to the singly-linked list and
+   * tree nodes, but we can't afford the RAM for doubly-linked.
+   */
+  GtkTextRealIter *real;
+  GtkTextLineSegment *seg;
+  GtkTextLineSegment *any_seg;
+  GtkTextLineSegment *prev_seg;
+  GtkTextLineSegment *prev_any_seg;
+  gint bytes_skipped;
+  gint chars_skipped;
+  
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  real = gtk_text_iter_make_real(iter);
+
+  if (real == NULL)
+    return FALSE;
+
+  check_invariants (iter);
+  
+  /* Find first segments in line */
+  any_seg = real->line->segments;
+  seg = any_seg;
+  while (seg->char_count == 0)
+    seg = seg->next;
+
+  if (seg == real->segment)
+    {
+      /* Could probably do this case faster by hand-coding the
+       * iteration.
+       */
+      
+      /* We were already at the start of a line;
+       * go back to the previous line.
+       */
+      if (gtk_text_iter_backward_line (iter))
+        {
+          /* Go forward to last indexable segment in line. */
+          while (!at_last_indexable_segment (real))
+            gtk_text_iter_forward_indexable_segment (iter);            
+
+          check_invariants (iter);
+
+          return TRUE;
+        }
+      else
+        return FALSE; /* We were at the start of the first line. */
+    }
+
+  /* We must be in the middle of a line; so find the indexable
+   * segment just before our current segment.
+   */
+  g_assert (seg != real->segment);
+  while (seg != real->segment)
+    {
+      prev_seg = seg;
+      prev_any_seg = any_seg;
+      
+      any_seg = seg->next;
+      seg = any_seg;
+      while (seg->char_count == 0)
+        seg = seg->next;
+    }
+
+  g_assert (prev_seg != NULL);
+  g_assert (prev_any_seg != NULL);
+  g_assert (prev_seg->char_count > 0);
+  
+  /* We skipped the entire previous segment, plus any
+   * chars we were into the current segment.
+   */
+  if (real->segment_byte_offset >= 0)
+    bytes_skipped = prev_seg->byte_count + real->segment_byte_offset;
+  else
+    bytes_skipped = -1;
+
+  if (real->segment_char_offset >= 0)
+    chars_skipped = prev_seg->char_count + real->segment_char_offset;
+  else
+    chars_skipped = -1;
+  
+  real->segment = prev_seg;
+  real->any_segment = prev_any_seg;
+  real->segment_byte_offset = 0;
+  real->segment_char_offset = 0;
+
+  if (bytes_skipped >= 0)
+    {
+      if (real->line_byte_offset >= 0)
+        {
+          real->line_byte_offset -= bytes_skipped;
+          g_assert (real->line_byte_offset >= 0);
+        }
+    }
+  else
+    real->line_byte_offset = -1;
+  
+  if (chars_skipped >= 0)
+    {
+      if (real->line_char_offset >= 0)
+        {
+          real->line_char_offset -= chars_skipped;
+          g_assert (real->line_char_offset >= 0);
+        }
+      
+      if (real->cached_char_index >= 0)
+        {
+          real->cached_char_index -= chars_skipped;
+          g_assert (real->cached_char_index >= 0);
+        }
+    }
+  else
+    {
+      real->line_char_offset = -1;
+      real->cached_char_index = -1;
+    }
+
+  /* line number is unchanged. */
+
+  check_invariants (iter);
+  
+  return TRUE;
 }
 
 /**
@@ -1677,7 +1872,7 @@ gtk_text_iter_prev_char(GtkTextIter *iter)
 
   I guess you'd have to profile the various approaches.
 */
-#define MAX_LINEAR_SCAN 300
+#define MAX_LINEAR_SCAN 150
 
 
 /**
@@ -1822,23 +2017,34 @@ gtk_text_iter_backward_chars(GtkTextIter *iter, gint count)
   else
     {
       /* We need to go back into previous segments. For now,
-         just keep this really simple. */
-      gint current_char_index;
-      gint new_char_index;
+       * just keep this really simple. FIXME
+       * use backward_indexable_segment.
+       */
+      if (TRUE || count > MAX_LINEAR_SCAN)
+        {
+          gint current_char_index;
+          gint new_char_index;
       
-      current_char_index = gtk_text_iter_get_offset(iter);
+          current_char_index = gtk_text_iter_get_offset (iter);
 
-      if (current_char_index == 0)
-        return FALSE; /* can't move backward */
+          if (current_char_index == 0)
+            return FALSE; /* can't move backward */
       
-      new_char_index = current_char_index - count;
-      if (new_char_index < 0)
-        new_char_index = 0;
-      gtk_text_iter_set_offset(iter, new_char_index);
+          new_char_index = current_char_index - count;
+          if (new_char_index < 0)
+            new_char_index = 0;
+          gtk_text_iter_set_offset (iter, new_char_index);
 
-      check_invariants(iter);
+          check_invariants(iter);
       
-      return TRUE;
+          return TRUE;
+        }
+      else
+        {
+          /* FIXME backward_indexable_segment here */
+          
+          return FALSE;
+        }
     }
 }
 
@@ -1935,7 +2141,7 @@ gtk_text_iter_backward_line(GtkTextIter *iter)
         return FALSE;
     }
 
-  invalidate_char_index(real);
+  invalidate_char_index (real);
   
   real->line_byte_offset = 0;
   real->line_char_offset = 0;
@@ -1946,7 +2152,7 @@ gtk_text_iter_backward_line(GtkTextIter *iter)
   /* Find first segment in line */
   real->any_segment = real->line->segments;
   real->segment = gtk_text_line_byte_to_segment(real->line,
-                                                 0, &offset);
+                                                0, &offset);
 
   g_assert(offset == 0);
 
@@ -2207,18 +2413,18 @@ gtk_text_iter_set_line_offset(GtkTextIter *iter,
 {
   GtkTextRealIter *real;
   
-  g_return_if_fail(iter != NULL);
+  g_return_if_fail (iter != NULL);
   
-  real = gtk_text_iter_make_surreal(iter);
+  real = gtk_text_iter_make_surreal (iter);
 
   if (real == NULL)
     return;
 
-  check_invariants(iter);
+  check_invariants (iter);
   
-  iter_set_from_char_offset(real, real->line, char_on_line);
+  iter_set_from_char_offset (real, real->line, char_on_line);
 
-  check_invariants(iter);
+  check_invariants (iter);
 }
 
 void
@@ -2228,23 +2434,23 @@ gtk_text_iter_set_line(GtkTextIter *iter, gint line_number)
   gint real_line;
   GtkTextRealIter *real;
   
-  g_return_if_fail(iter != NULL);
+  g_return_if_fail (iter != NULL);
   
-  real = gtk_text_iter_make_surreal(iter);
+  real = gtk_text_iter_make_surreal (iter);
 
   if (real == NULL)
     return;
 
-  check_invariants(iter);
+  check_invariants (iter);
   
-  line = gtk_text_btree_get_line(real->tree, line_number, &real_line);
+  line = gtk_text_btree_get_line (real->tree, line_number, &real_line);
 
-  iter_set_from_char_offset(real, line, 0);
+  iter_set_from_char_offset (real, line, 0);
   
   /* We might as well cache this, since we know it. */
   real->cached_line_number = real_line;
 
-  check_invariants(iter);
+  check_invariants (iter);
 }
 
 void
@@ -2360,10 +2566,10 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
   check_invariants(iter);
   
   current_line = real->line;
-  next_line = gtk_text_line_next_could_contain_tag(current_line,
-                                                   real->tree, tag);
+  next_line = gtk_text_line_next_could_contain_tag (current_line,
+                                                    real->tree, tag);
   
-  while (gtk_text_iter_forward_indexable_segment(iter))
+  while (gtk_text_iter_forward_indexable_segment (iter))
     {
       /* If we went forward to a line that couldn't contain a toggle
          for the tag, then skip forward to a line that could contain
@@ -2374,15 +2580,15 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
           if (next_line == NULL)
             {
               /* End of search. Set to end of buffer. */
-              gtk_text_btree_get_last_iter(real->tree, iter);
+              gtk_text_btree_get_last_iter (real->tree, iter);
               return FALSE;
             }
               
           if (real->line != next_line)
-            iter_set_from_byte_offset(real, next_line, 0);
+            iter_set_from_byte_offset (real, next_line, 0);
 
           current_line = real->line;
-          next_line = gtk_text_line_next_could_contain_tag(current_line,
+          next_line = gtk_text_line_next_could_contain_tag (current_line,
                                                             real->tree,
                                                             tag);
         }
@@ -2397,7 +2603,7 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
     }
 
   /* Check end iterator for tags */
-  if (gtk_text_iter_toggles_tag(iter, tag))
+  if (gtk_text_iter_toggles_tag (iter, tag))
     {
       /* If there's a toggle here, it isn't indexable so
          any_segment can't be the indexable segment. */
@@ -2409,12 +2615,103 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
   return FALSE;
 }
 
+/**
+ * gtk_text_iter_backward_to_tag_toggle:
+ * @iter: a #GtkTextIter
+ * @tag: a #GtkTextTag, or NULL
+ * 
+ * Moves backward to the next toggle (on or off) of the
+ * #GtkTextTag @tag, or to the next toggle of any tag if
+ * @tag is NULL. If no matching tag toggles are found,
+ * returns FALSE, otherwise TRUE. Does not return toggles
+ * located at @iter, only toggles before @iter.
+ * 
+ * Return value: whether we found a tag toggle before @iter
+ **/
 gboolean
 gtk_text_iter_backward_to_tag_toggle (GtkTextIter *iter,
                                       GtkTextTag  *tag)
 {
+  GtkTextLine *prev_line;
+  GtkTextLine *current_line;
+  GtkTextRealIter *real;
 
-  g_warning("FIXME");
+  g_return_val_if_fail(iter != NULL, FALSE);
+  
+  real = gtk_text_iter_make_real(iter);
+
+  if (real == NULL)
+    return FALSE;
+
+  check_invariants(iter);
+  
+  current_line = real->line;
+  prev_line = gtk_text_line_previous_could_contain_tag (current_line,
+                                                        real->tree, tag);
+  
+
+  /* If we're at segment start, go to the previous segment;
+   * if mid-segment, snap to start of current segment.
+   */
+  if (is_segment_start (real))
+    {
+      if (!gtk_text_iter_backward_indexable_segment (iter))
+        return FALSE;
+    }
+  else
+    {
+      ensure_char_offsets (real);
+      
+      if (!gtk_text_iter_backward_chars (iter, real->segment_char_offset))
+        return FALSE;
+    }
+  
+  do
+    {
+      /* If we went backward to a line that couldn't contain a toggle
+       * for the tag, then skip backward further to a line that
+       * could contain it. This potentially skips huge hunks of the
+       * tree, so we aren't a purely linear search.
+       */
+      if (real->line != current_line)
+        {
+          if (prev_line == NULL)
+            {
+              /* End of search. Set to start of buffer. */
+              gtk_text_btree_get_iter_at_char (real->tree, iter, 0);
+              return FALSE;
+            }
+              
+          if (real->line != prev_line)
+            {
+              /* Set to last segment in prev_line (could do this
+               * more quickly)
+               */
+              iter_set_from_byte_offset (real, prev_line, 0);
+              
+              while (!at_last_indexable_segment (real))
+                gtk_text_iter_forward_indexable_segment (iter);            
+            }
+          
+          current_line = real->line;
+          prev_line = gtk_text_line_previous_could_contain_tag (current_line,
+                                                                real->tree,
+                                                                tag);
+        }
+
+      if (gtk_text_iter_toggles_tag (iter, tag))
+        {
+          /* If there's a toggle here, it isn't indexable so
+           * any_segment can't be the indexable segment.
+           */
+          g_assert (real->any_segment != real->segment);
+          return TRUE;
+        }
+    }
+  while (gtk_text_iter_backward_indexable_segment (iter));    
+  
+  /* Reached front of buffer */
+  return FALSE;
 }
 
 static gboolean
@@ -2437,9 +2734,9 @@ gtk_text_iter_forward_find_char (GtkTextIter *iter,
   g_return_val_if_fail(iter != NULL, FALSE);
   g_return_val_if_fail(pred != NULL, FALSE);
 
-  while (gtk_text_iter_next_char(iter))
+  while (gtk_text_iter_next_char (iter))
     {
-      if (matches_pred(iter, pred, user_data))
+      if (matches_pred (iter, pred, user_data))
         return TRUE;
     }
   
@@ -2454,9 +2751,9 @@ gtk_text_iter_backward_find_char (GtkTextIter *iter,
   g_return_val_if_fail(iter != NULL, FALSE);
   g_return_val_if_fail(pred != NULL, FALSE);
 
-  while (gtk_text_iter_prev_char(iter))
+  while (gtk_text_iter_prev_char (iter))
     {
-      if (matches_pred(iter, pred, user_data))
+      if (matches_pred (iter, pred, user_data))
         return TRUE;
     }
   
@@ -2640,7 +2937,8 @@ gtk_text_iter_forward_search (GtkTextIter *iter,
        * gtk_text_iter_get_text() is called repeatedly on
        * a single line.
        */
-      if (lines_match (&search, (const gchar**)lines, visible_only, slice, &match))
+      if (lines_match (&search, (const gchar**)lines,
+                       visible_only, slice, &match))
         {
           retval = TRUE;
           
@@ -3062,8 +3360,8 @@ gtk_text_iter_check (const GtkTextIter *iter)
   if (real->line_byte_offset >= 0)
     {
       gtk_text_line_byte_locate(real->line, real->line_byte_offset,
-                                 &byte_segment, &byte_any_segment,
-                                 &seg_byte_offset, &line_byte_offset);
+                                &byte_segment, &byte_any_segment,
+                                &seg_byte_offset, &line_byte_offset);
 
       if (line_byte_offset != real->line_byte_offset)
         g_error("wrong byte offset was stored in iterator");
@@ -3084,8 +3382,8 @@ gtk_text_iter_check (const GtkTextIter *iter)
   if (real->line_char_offset >= 0)
     {
       gtk_text_line_char_locate(real->line, real->line_char_offset,
-                                 &char_segment, &char_any_segment,
-                                 &seg_char_offset, &line_char_offset);
+                                &char_segment, &char_any_segment,
+                                &seg_char_offset, &line_char_offset);
 
       if (line_char_offset != real->line_char_offset)
         g_error("wrong char offset was stored in iterator");

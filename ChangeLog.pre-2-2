@@ -1,3 +1,34 @@
+2000-10-03  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/testtextbuffer.c: clean up trailing whitespace,
+	add extensive tests for tag toggle iteration.
+	
+	* gtk/gtktextiter.c (MAX_LINEAR_SCAN): decrease linear scan 
+	distance
+
+	* gtk/gtktextbtree.c (gtk_text_line_next_could_contain_tag):
+	optimize case where the tag root is on level 1
+	(gtk_text_line_previous_could_contain_tag): attempt to implement
+	(gtk_text_line_next_could_contain_tag): Abstract out node_compare
+	functionality
+
+	* gtk/gtktextiter.c (gtk_text_iter_backward_to_tag_toggle):
+	Implement this, though not very efficiently.
+
+	* gtk/gtktextiterprivate.h: reformat
+
+	* gtk/gtktextiter.c (gtk_text_iter_get_char): return 0 on the end
+	iterator
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_delete_interactive): Fix
+	this to properly revalidate the iterators.
+
+	* gtk/gtktextview.c (gtk_text_view_delete): fix control-K to work
+	properly at the end of the line (and therefore on empty lines)
+
+	* gtk/gtktextbtree.c (gtk_text_btree_get_selection_bounds): Gee,
+	maybe we should return a value...
+
 2000-10-03  Tor Lillqvist  <tml@iki.fi>
 
 	* config.h.win32: Guard definition of alloca(). glib.h now handles
