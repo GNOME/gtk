@@ -1,3 +1,8 @@
+2005-03-31  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkbutton.c
+	* gtk/gtkiconview.c: fixed gtk-doc comments.
+
 2005-03-30  Federico Mena Quintero  <federico@ximian.com>
 
 	Fix #170755:
