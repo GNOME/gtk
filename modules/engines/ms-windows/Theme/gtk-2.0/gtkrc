@@ -14,6 +14,7 @@ style "msw-default"
 
   GtkTreeView::allow-rules = 0
   GtkTreeView::expander_size = 11
+  GtkUIManager::add-tearoffs = false
   
   engine "wimp" 
   {

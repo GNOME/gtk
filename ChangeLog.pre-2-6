@@ -1,3 +1,7 @@
+2004-11-30  Dom Lachowicz <cinamod@hotmail.com>
+
+	* modules/engines/ms-windows/Theme/gtk-2.0/gtkrc: MS Windows menus should not have tearoffs
+
 Tue Nov 30 17:53:37 2004  Søren Sandmann  <sandmann@redhat.com>
 
 	* gtk/gtksequence.c (node_compare): Assign an arbitrary, but
