@@ -1,3 +1,5 @@
+Makefile
+Makefile.in
 sgml
 html
 gtk-decl-list.txt
