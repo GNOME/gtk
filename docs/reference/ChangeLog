@@ -1,5 +1,8 @@
 2004-06-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkmenu.sgml: Document the push_in parameter
+	of GtkMenuPositionFunc.
+
 	* gtk/tmpl/gtkeditable.sgml: Make example UTF-8 
 	safe.  (#143264, Tommi Komulainen)
 

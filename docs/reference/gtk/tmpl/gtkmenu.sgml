@@ -387,7 +387,8 @@ and @y parameters to the coordinates where the menu is to be drawn.
 menu shall be drawn.  This is an output parameter.
 @y: address of the #gint representing the vertical position where the
 menu shall be drawn.  This is an output parameter.
-@push_in: 
+@push_in: whether the menu should be pushed in to be completely inside the
+  screen instead of just clamped to the size to the screen.
 @user_data: the data supplied by the user in the gtk_menu_popup() @data
 parameter.
 
