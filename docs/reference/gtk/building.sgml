@@ -82,7 +82,11 @@ How to compile GTK+ itself
     <para>
       If you don't have permission to write to the directory you are
       installing in, you may have to change to root temporarily before
-      running <literal>make install</literal>.
+      running <literal>make install</literal>. Also, if you are
+      installing in a system directory, on some systems (such as
+      Linux), you will need to run <command>ldconfig</command> after
+      <literal>make install</literal> so that the newly installed
+      libraries will be found.
     </para>
     <para>
       Several environment variables are useful to pass to set before
