@@ -1160,6 +1160,46 @@ gtk_toolbar_insert_space (GtkToolbar *toolbar,
 }
 
 void
+gtk_toolbar_remove_space (GtkToolbar *toolbar,
+                          gint        position)
+{
+  GList *children;
+  GtkToolbarChild *child;
+  gint i;
+  
+  g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
+  
+  i = 0;
+  for (children = toolbar->children; children; children = children->next)
+    {
+      child = children->data;
+
+      if (i == position)
+        {
+          if (child->type == GTK_TOOLBAR_CHILD_SPACE)
+            {
+              toolbar->children = g_list_remove_link (toolbar->children, children);
+              g_free (child);
+              g_list_free (children);
+              toolbar->num_children--;
+              
+              gtk_widget_queue_resize (GTK_WIDGET (toolbar));
+            }
+          else
+            {
+              g_warning ("Toolbar position %d is not a space", position);
+            }
+
+          return;
+        }
+
+      ++i;
+    }
+
+  g_warning ("Toolbar position %d doesn't exist", position);
+}
+
+void
 gtk_toolbar_append_widget (GtkToolbar  *toolbar,
 			   GtkWidget   *widget,
 			   const gchar *tooltip_text,

@@ -1,5 +1,9 @@
 2001-06-05  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktoolbar.c (gtk_toolbar_remove_space): new function
+
+2001-06-05  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtkspinbutton.c (gtk_spin_button_set_range): clamp the value 
 	to the range that was set
 

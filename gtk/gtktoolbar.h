@@ -153,6 +153,8 @@ void       gtk_toolbar_append_space    (GtkToolbar      *toolbar);
 void       gtk_toolbar_prepend_space   (GtkToolbar      *toolbar);
 void       gtk_toolbar_insert_space    (GtkToolbar      *toolbar,
 					gint             position);
+void       gtk_toolbar_remove_space    (GtkToolbar      *toolbar,
+                                        gint             position);
 
 /* Any element type */
 GtkWidget* gtk_toolbar_append_element  (GtkToolbar      *toolbar,
