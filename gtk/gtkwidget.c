@@ -7310,6 +7310,18 @@ gtk_requisition_get_type (void)
   return our_type;
 }
 
+/**
+ * gtk_widget_get_accessible:
+ * @widget: a #GtkWidget
+ *
+ * Returns the accessible object that describes the widget to an
+ * assistive technology. The documentation of the 
+ * <ulink url="http://developer.gnome.org/doc/API/2.0/atk/index.html">ATK</ulink>
+ * library contains more information about accessible objects and 
+ * their uses.
+ * 
+ * Returns: the #AtkObject associated with @widget
+ */
 AtkObject* 
 gtk_widget_get_accessible (GtkWidget *widget)
 {

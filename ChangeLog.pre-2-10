@@ -1,5 +1,8 @@
 2005-01-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwidget.c (gtk_widget_get_accessible): Add docs.  (#164725,
+	George Kraft IV)
+
 	* gtk/gtkdialog.c (gtk_dialog_map): Don't loop forever
 	here, even if the only focusable widgets are labels.
 
