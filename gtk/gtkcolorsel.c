@@ -136,7 +136,7 @@ struct _ColorSelectionPrivate
   GtkWidget *dropper_grab_widget;
 
   /* Connection to settings */
-  guint settings_connection;
+  gulong settings_connection;
 };
 
 

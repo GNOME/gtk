@@ -182,7 +182,7 @@ struct _GtkTextBTree {
   GtkTextBuffer *buffer;
   BTreeView *views;
   GSList *tag_infos;
-  guint tag_changed_handler;
+  gulong tag_changed_handler;
 
   /* Incremented when a segment with a byte size > 0
    * is added to or removed from the tree (i.e. the
