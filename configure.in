@@ -365,20 +365,21 @@ AC_C_CONST
 AC_TYPE_SIGNAL
 AC_FUNC_MMAP
 
-# Check for sys/select.h
-
-AC_MSG_CHECKING([fd_set and sys/select])
+# Check if <sys/select.h> needs to be included for fd_set
+AC_MSG_CHECKING([for fd_set])
 AC_TRY_COMPILE([#include <sys/types.h>],
         [fd_set readMask, writeMask;], gtk_ok=yes, gtk_ok=no)
-if test $gtk_ok = no; then
+if test $gtk_ok = yes; then
+    AC_MSG_RESULT([yes, found in sys/types.h])
+else
     AC_HEADER_EGREP(fd_mask, sys/select.h, gtk_ok=yes)
     if test $gtk_ok = yes; then
         AC_DEFINE(HAVE_SYS_SELECT_H)
+        AC_MSG_RESULT([yes, found in sys/select.h])
+    else
+	AC_DEFINE(NO_FD_SET)
+	AC_MSG_RESULT(no)
     fi
-fi
-AC_MSG_RESULT($gtk_ok)
-if test $gtk_ok = no; then
-    AC_DEFINE(NO_FD_SET)
 fi
 
 AC_OUTPUT([
