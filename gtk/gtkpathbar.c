@@ -62,8 +62,8 @@ struct _ButtonData
   GtkFilePath *path;
   GtkWidget *image;
   GtkWidget *label;
-  gboolean ignore_changes;
-  gboolean file_is_hidden;
+  gint ignore_changes : 1;
+  gint file_is_hidden : 1;
 };
 
 G_DEFINE_TYPE (GtkPathBar,
@@ -428,11 +428,13 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
 	{
 	  child_allocation.x -= path_bar->spacing;
 	  down_slider_offset = child_allocation.x - widget->allocation.x - path_bar->slider_width;
+	  down_slider_offset = border_width;
 	}
       else
 	{
-	  child_allocation.x += child_allocation.width + path_bar->spacing;
 	  down_slider_offset = child_allocation.x - widget->allocation.x;
+	  down_slider_offset = allocation->width - border_width - path_bar->slider_width;
+	  child_allocation.x += child_allocation.width + path_bar->spacing;
 	}
     }
   /* Now we go hide all the widgets that don't fit */
@@ -940,6 +942,7 @@ make_directory_button (GtkPathBar  *path_bar,
   GtkWidget *label_alignment = NULL;
   ButtonData *button_data;
 
+  file_is_hidden = !! file_is_hidden;
   /* Is it a special button? */
   button_data = g_new0 (ButtonData, 1);
 
@@ -957,7 +960,7 @@ make_directory_button (GtkPathBar  *path_bar,
     case DESKTOP_BUTTON:
       button_data->image = gtk_image_new ();
       button_data->label = gtk_label_new (NULL);
-      label_alignment = gtk_alignment_new (0.5, 0.5, 0., 0.);
+      label_alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
       gtk_container_add (GTK_CONTAINER (label_alignment), button_data->label);
       child = gtk_hbox_new (FALSE, 2);
       gtk_box_pack_start (GTK_BOX (child), button_data->image, FALSE, FALSE, 0);
@@ -966,7 +969,7 @@ make_directory_button (GtkPathBar  *path_bar,
     case NORMAL_BUTTON:
     default:
       button_data->label = gtk_label_new (NULL);
-      label_alignment = gtk_alignment_new (0.5, 0.5, 0., 0.);
+      label_alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
       gtk_container_add (GTK_CONTAINER (label_alignment), button_data->label);
       child = label_alignment;
       button_data->image = NULL;

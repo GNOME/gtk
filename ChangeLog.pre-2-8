@@ -1,3 +1,9 @@
+Wed Aug 25 15:15:56 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkpathbar.c (gtk_path_bar_size_allocate): Change the Down
+	button to be end-justified, so that clicking on it is a stable
+	operation.
+
 Tue Aug 24 02:06:37 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtktreeview.c
