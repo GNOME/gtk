@@ -421,6 +421,17 @@ gtk_statusbar_destroy (GtkObject *object)
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
+static GdkWindowEdge
+get_grip_edge (GtkStatusbar *statusbar)
+{
+  GtkWidget *widget = GTK_WIDGET (statusbar);
+
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
+    return GDK_WINDOW_EDGE_SOUTH_EAST; 
+  else
+    return GDK_WINDOW_EDGE_SOUTH_WEST; 
+}
+
 static void
 get_grip_rect (GtkStatusbar *statusbar,
                GdkRectangle *rect)
@@ -440,10 +451,14 @@ get_grip_rect (GtkStatusbar *statusbar,
   if (h > (widget->allocation.height - widget->style->ythickness))
     h = widget->allocation.height - widget->style->ythickness;
   
-  rect->x = widget->allocation.x + widget->allocation.width - w;
-  rect->y = widget->allocation.y + widget->allocation.height - h;
   rect->width = w;
   rect->height = h;
+  rect->y = widget->allocation.y + widget->allocation.height - h;
+
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
+      rect->x = widget->allocation.x + widget->allocation.width - w;
+  else 
+      rect->x = widget->allocation.x + widget->style->xthickness;
 }
 
 static void
@@ -543,6 +558,7 @@ gtk_statusbar_button_press (GtkWidget      *widget,
 {
   GtkStatusbar *statusbar;
   GtkWidget *ancestor;
+  GdkWindowEdge edge;
   
   statusbar = GTK_STATUSBAR (widget);
   
@@ -555,9 +571,11 @@ gtk_statusbar_button_press (GtkWidget      *widget,
   if (!GTK_IS_WINDOW (ancestor))
     return FALSE;
 
+  edge = get_grip_edge (statusbar);
+
   if (event->button == 1)
     gtk_window_begin_resize_drag (GTK_WINDOW (ancestor),
-                                  GDK_WINDOW_EDGE_SOUTH_EAST,
+                                  edge,
                                   event->button,
                                   event->x_root, event->y_root,
                                   event->time);
@@ -585,6 +603,10 @@ gtk_statusbar_expose_event (GtkWidget      *widget,
 
   if (statusbar->has_resize_grip)
     {
+      GdkWindowEdge edge;
+      
+      edge = get_grip_edge (statusbar);
+
       get_grip_rect (statusbar, &rect);
 
       gtk_paint_resize_grip (widget->style,
@@ -593,7 +615,7 @@ gtk_statusbar_expose_event (GtkWidget      *widget,
                              NULL,
                              widget,
                              "statusbar",
-                             GDK_WINDOW_EDGE_SOUTH_EAST,
+                             edge,
                              rect.x, rect.y,
                              /* don't draw grip over the frame, though you
                               * can click on the frame.

@@ -1,3 +1,15 @@
+2002-12-03  Matthias Clasen  <maclas@gmx.de>
+
+	RTL flipping for statusbars.  (#96832)
+	
+	* gtk/gtkstatusbar.c (get_grip_edge): New function returning the
+	appropriate grip edge for a statusbar.
+	(get_grip_rect): Do the right thing in RTL mode.
+	(gtk_statusbar_button_press): Initiate a resize drag on the
+	appropriate edge. 
+	(gtk_statusbar_expose_event): Paint the resize grip for the
+	appropriate edge.
+
 2002-12-03  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkstyle.c: Fix doc comment.
