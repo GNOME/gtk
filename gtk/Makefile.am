@@ -284,6 +284,16 @@ gtkmarshal.c gtkmarshal.h: @REBUILD@ gtkmarshal.list genmarshal.pl
 libgtk_la_LDFLAGS = \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -release $(LT_RELEASE)
 
+# We create a dummy theme for the default GTK+ theme
+
+install-data-local:
+	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk
+	echo "# Empty gtkrc for default theme" > \
+	    $(DESTDIR)$(datadir)/themes/Default/gtk/gtkrc
+
+uninstall-local:
+	rm -f $(DESTDIR)$(datadir)/themes/Default/gtkrc
+
 EXTRA_DIST = \
 	line-arrow.xbm 		\
 	line-wrap.xbm 		\

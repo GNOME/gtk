@@ -126,7 +126,6 @@ GdkWindow*    gdk_window_new	     (GdkWindow	    *parent,
 				      GdkWindowAttr *attributes,
 				      gint	     attributes_mask);
 
-GdkWindow*    gdk_window_foreign_new (guint32	     anid);
 void	      gdk_window_destroy     (GdkWindow	    *window);
 GdkWindow*    gdk_window_ref	     (GdkWindow	    *window);
 void	      gdk_window_unref	     (GdkWindow	    *window);

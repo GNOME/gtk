@@ -847,6 +847,7 @@ struct _GdkCursor
   GdkCursorType type;
 };
 
+
 struct _GdkColorContextDither
 {
   gint fast_rgb[32][32][32]; /* quick look-up table for faster rendering */

@@ -1,3 +1,27 @@
+Fri Nov 13 11:22:38 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkpixmap.c: New function gdk_pixmap_foreign_new().
+	(gtk-blizzard-981005-0. 
+	 Christopher Blizzard <blizzard@applied-theory.com)
+
+	* gdk/gdk.h gdk/gdkx.h: Moved gdk_window_foreign_new and
+	gdk_pixmap_foreign_new to gdkx.h.
+
+Fri Nov 13 16:06:48 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am: Added rules to generate an empty
+	GTK+ theme called "Default" upon installation.
+	
+	* gtk/gtkrc.c (gtk_rc_parse_style): Fix inheritance
+	of fonts and fontsets. 
+	(gtk-matsu-980924. Takashi Matsuda matsu@arch.comp.kyutech.ac.jp)
+
+	* gtk/gtkmain.c: Change test to detect glibc's
+	utf8 based mb* functions to be more specific.
+
+	* gtk/gtkwindow.[ch] gtk/gtkfixed.c: Indentation 
+	cleanups.
+
 Fri Nov 13 16:43:36 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtktogglebutton.c	(gtk_toggle_button_realize): don't

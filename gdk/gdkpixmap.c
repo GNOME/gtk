@@ -749,6 +749,53 @@ gdk_pixmap_create_from_xpm_d (GdkWindow  *window,
 }
 
 GdkPixmap*
+gdk_pixmap_foreign_new (guint32 anid)
+{
+  GdkPixmap *pixmap;
+  GdkWindowPrivate *window_private;
+  GdkWindowPrivate *private;
+  Pixmap xpixmap;
+  Window root_return;
+  unsigned int x_ret, y_ret, w_ret, h_ret, bw_ret, depth_ret;
+
+  /* check to make sure we were passed something at
+     least a little sane */
+  g_return_val_if_fail((anid != 0), NULL);
+  
+  /* set the pixmap to the passed in value */
+  xpixmap = anid;
+  /* get the root window */
+  window_private = &gdk_root_parent;
+
+  /* get information about the Pixmap to fill in the structure for
+     the gdk window */
+  if (!XGetGeometry(window_private->xdisplay, xpixmap, &root_return,
+		    &x_ret, &y_ret, &w_ret, &h_ret, &bw_ret, &depth_ret))
+      return NULL;
+      
+  /* allocate a new gdk pixmap */
+  private = g_new(GdkWindowPrivate, 1);
+  pixmap = (GdkPixmap *)private;
+
+  private->xdisplay = window_private->xdisplay;
+  private->window_type = GDK_WINDOW_PIXMAP;
+  private->xwindow = xpixmap;
+  private->colormap = NULL;
+  private->parent = NULL;
+  private->x = 0;
+  private->y = 0;
+  private->width = w_ret;
+  private->height = h_ret;
+  private->resize_count = 0;
+  private->ref_count = 1;
+  private->destroyed = 0;
+  
+  gdk_xid_table_insert(&private->xwindow, pixmap);
+
+  return pixmap;
+}
+
+GdkPixmap*
 gdk_pixmap_ref (GdkPixmap *pixmap)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)pixmap;

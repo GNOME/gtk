@@ -47,5 +47,8 @@ GdkColormap* gdkx_colormap_get (Colormap xcolormap);
 Window        gdk_get_client_window      (Display  *dpy,
                                           Window    win);
 
+/* Functions to create pixmaps and windows from their X equivalents */
+GdkPixmap    *gdk_pixmap_foreign_new (guint32     anid);
+GdkWindow    *gdk_window_foreign_new (guint32	     anid);
 
 #endif /* __GDK_X_H__ */

@@ -401,21 +401,32 @@ gtk_init (int	 *argc,
    * correctly - set if either mblen("\xc0", MB_CUR_MAX) == 1 in the
    * C locale, or we're using X's mb functions. (-DX_LOCALE && locale != C)
    */
-
-  current_locale = g_strdup (setlocale (LC_CTYPE, NULL));
+ 
+  current_locale = setlocale (LC_CTYPE, NULL);
 
 #ifdef X_LOCALE
   if ((strcmp (current_locale, "C")) && (strcmp (current_locale, "POSIX")))
     gtk_use_mb = TRUE;
   else
-#endif
+#endif /* X_LOCALE */
     {
-      setlocale (LC_CTYPE, "C");
-      gtk_use_mb = (mblen ("\xc0", MB_CUR_MAX) == 1);
-      setlocale (LC_CTYPE, current_locale);
+      /* Detect GNU libc, where mb == UTF8. Not useful unless it's
+       * really a UTF8 locale. The below still probably will
+       * screw up on Greek, Cyrillic, etc, encoded as UTF8.
+       */
+      
+      wchar_t result;
+      gtk_use_mb = TRUE;
+      
+      if ((MB_CUR_MAX == 2) &&
+	  (mbstowcs (&result, "\xdd\xa5", 1) > 0) &&
+	  result == 0x765)
+	{
+	  if ((strlen (current_locale) < 4) ||
+	      g_strcasecmp (current_locale + strlen(current_locale) - 4, "utf8"))
+	    gtk_use_mb = FALSE;
+	}
     }
-
-  g_free (current_locale);
 
   GTK_NOTE (MISC,
 	    g_message ("%s multi-byte string functions.", 

@@ -10,11 +10,11 @@
 # widget <widget_set> style <style_name>
 # widget_class <widget_class_set> style <style_name>
 
-include "/opt/themes/share/themes/Metal/gtk/gtkrc"
+#include "/opt/themes/share/themes/W/gtk/gtkrc"
 #include "/home/otaylor/.themes/Ignorant/gtk/gtkrc"
 
 style "defaultfont" {
-#  font = "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*,*"
+  font = "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*,*"
 #  fontset = "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*,*"
 }
 

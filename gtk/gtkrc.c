@@ -1117,14 +1117,16 @@ gtk_rc_parse_style (GScanner *scanner)
 	      rc_style->base[i] = parent_style->base[i];
 	    }
 	  
-	  if (rc_style->fontset_name)
+	  if (parent_style->fontset_name)
 	    {
-	      g_free (rc_style->fontset_name);
+	      if (rc_style->fontset_name)
+		g_free (rc_style->fontset_name);
 	      rc_style->fontset_name = g_strdup (parent_style->fontset_name);
 	    }
-	  else if (rc_style->font_name)
+	  else if (parent_style->font_name)
 	    {
-	      g_free (rc_style->font_name);
+	      if (rc_style->font_name)
+		g_free (rc_style->font_name);
 	      rc_style->font_name = g_strdup (parent_style->font_name);
 	    }
 	  
