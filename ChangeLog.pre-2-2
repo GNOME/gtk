@@ -15,7 +15,7 @@
 	* gdk/win32/Makefile.am: Corresponding changes.
 
 	* gtk/gtk.rc: Remove.
-	* gtk/gtk.rc.in: New file.
+	* gtk/gtk-win32.rc.in: New file.
 	* gtk/Makefile.am: Corresponding changes.
 
 	* configure.in: Corresponding changes.

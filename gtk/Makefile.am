@@ -613,7 +613,7 @@ makefile.mingw: $(top_builddir)/config.status $(top_srcdir)/gtk/makefile.mingw.i
 makefile.msc: $(top_builddir)/config.status $(top_srcdir)/gtk/makefile.msc.in
 	cd $(top_builddir) && CONFIG_FILES=gtk/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-gtk.rc: $(top_builddir)/config.status $(top_srcdir)/gtk/gtk.rc.in
+gtk-win32.rc: $(top_builddir)/config.status $(top_srcdir)/gtk/gtk-win32.rc.in
 	cd $(top_builddir) && CONFIG_FILES=gtk/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 .PHONY: files test test-debug
@@ -656,8 +656,8 @@ EXTRA_DIST += @STRIP_BEGIN@ 	\
 	check-n.xpm		\
 	test.xpm		\
 	gtk.def			\
-	gtk.rc			\
-	gtk.rc.in		\
+	gtk-win32.rc		\
+	gtk-win32.rc.in		\
 	makefile.mingw		\
 	makefile.mingw.in	\
 	makefile.msc		\

@@ -1046,7 +1046,7 @@ gtk/Makefile
 gtk/makefile.mingw
 gtk/makefile.msc
 gtk/gtkcompat.h
-gtk/gtk.rc
+gtk/gtk-win32.rc
 gtk/stock-icons/Makefile
 modules/Makefile
 modules/linux-fb/Makefile
