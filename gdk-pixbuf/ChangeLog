@@ -1,3 +1,8 @@
+2001-01-01  Havoc Pennington  <hp@redhat.com>
+
+	* Makefile.am (libgdk_pixbuf_1_3_la_LDFLAGS): add
+	@LIBTOOL_EXPORT_OPTIONS@
+
 2000-12-30  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk_pixbuf.def: Update.

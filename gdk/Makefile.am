@@ -33,6 +33,7 @@ LDFLAGS = @STRIP_BEGIN@ 					\
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) 	\
 	-export-dynamic 					\
 	-rpath @prefix@/lib 					\
+	@LIBTOOL_EXPORT_OPTIONS@				\
 	@PANGO_LIBS@						\
 	@GLIB_DEPLIBS@						\
 	@more_ldflags@						\

@@ -1,5 +1,14 @@
 2001-01-01  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/Makefile.am (LDFLAGS): add @LIBTOOL_EXPORT_OPTIONS@
+
+	* gdk/Makefile.am (LDFLAGS): add @LIBTOOL_EXPORT_OPTIONS@
+
+	* configure.in (LIBTOOL_EXPORT_OPTIONS): define
+	LIBTOOL_EXPORT_OPTIONS with options to control symbol export
+
+2001-01-01  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktexttagprivate.h: uscore-prepend all the stuff in here.
 
 	* gtk/gtk-boxed.defs (GtkTextAttributes): Add boxed type for 
