@@ -1,3 +1,27 @@
+Mon Aug 30 01:34:42 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Changes to make sure input methods respect the editability
+	of entries and text views. #114173, Noah Levitt.
+	
+	* gtk/gtkentry.c (popup_targets_received): Make the Input 
+	Methods menuitem insensitive if we're not editable.
+
+	* gtk/gtkentry.c (gtk_entry_delete_surrounding_cb): 
+	* gtk/gtkentry.c (gtk_entry_preedit_changed_cb): 
+	* gtk/gtkentry.c (gtk_entry_commit_cb): Don't change anything 
+	if we're not editable.
+
+	* gtk/gtkentry.c (gtk_entry_focus_out): 
+	* gtk/gtkentry.c (gtk_entry_focus_in): Only send focus_in and
+	focus_out to the im context if we're editable.
+
+	* gtk/gtkentry.c (gtk_entry_set_property): Reset the im context
+	if the entry just became non-editable.
+
+	* gtk/gtktextview.c (gtk_text_view_delete_surrounding_handler): 
+	Use gtk_text_buffer_delete_interactive() to not delete
+	non-editable portions of text.
+
 2004-08-30  Tor Lillqvist  <tml@iki.fi>
 
 	* modules/input/Makefile.am (im_ime_la_LIBADD): Link with -limm32.

@@ -869,11 +869,22 @@ gtk_entry_set_property (GObject         *object,
 
       	if (new_value != entry->editable)
 	  {
-	    entry->editable = new_value;
-	    gtk_entry_queue_draw (entry);
+	    if (!new_value)
+	      {
+		gtk_entry_reset_im_context (entry);
+		if (GTK_WIDGET_HAS_FOCUS (entry))
+		  gtk_im_context_focus_out (entry->im_context);
 
-	    if (!entry->editable)
-	      gtk_entry_reset_im_context (entry);
+		entry->preedit_length = 0;
+		entry->preedit_cursor = 0;
+	      }
+
+	    entry->editable = new_value;
+
+	    if (new_value && GTK_WIDGET_HAS_FOCUS (entry))
+	      gtk_im_context_focus_in (entry->im_context);
+	    
+	    gtk_entry_queue_draw (entry);
 	  }
       }
       break;
@@ -1845,8 +1856,11 @@ gtk_entry_focus_in (GtkWidget     *widget,
   
   gtk_widget_queue_draw (widget);
   
-  entry->need_im_reset = TRUE;
-  gtk_im_context_focus_in (entry->im_context);
+  if (entry->editable)
+    {
+      entry->need_im_reset = TRUE;
+      gtk_im_context_focus_in (entry->im_context);
+    }
 
   g_signal_connect (gdk_keymap_get_for_display (gtk_widget_get_display (widget)),
 		    "direction_changed",
@@ -1866,8 +1880,11 @@ gtk_entry_focus_out (GtkWidget     *widget,
   
   gtk_widget_queue_draw (widget);
 
-  entry->need_im_reset = TRUE;
-  gtk_im_context_focus_out (entry->im_context);
+  if (entry->editable)
+    {
+      entry->need_im_reset = TRUE;
+      gtk_im_context_focus_out (entry->im_context);
+    }
 
   gtk_entry_check_cursor_blink (entry);
   
@@ -2661,25 +2678,29 @@ gtk_entry_commit_cb (GtkIMContext *context,
 		     const gchar  *str,
 		     GtkEntry     *entry)
 {
-  gtk_entry_enter_text (entry, str);
+  if (entry->editable)
+    gtk_entry_enter_text (entry, str);
 }
 
 static void 
 gtk_entry_preedit_changed_cb (GtkIMContext *context,
 			      GtkEntry     *entry)
 {
-  gchar *preedit_string;
-  gint cursor_pos;
-  
-  gtk_im_context_get_preedit_string (entry->im_context,
-				     &preedit_string, NULL,
-				     &cursor_pos);
-  entry->preedit_length = strlen (preedit_string);
-  cursor_pos = CLAMP (cursor_pos, 0, g_utf8_strlen (preedit_string, -1));
-  entry->preedit_cursor = cursor_pos;
-  g_free (preedit_string);
-
-  gtk_entry_recompute (entry);
+  if (entry->editable)
+    {
+      gchar *preedit_string;
+      gint cursor_pos;
+      
+      gtk_im_context_get_preedit_string (entry->im_context,
+                                         &preedit_string, NULL,
+                                         &cursor_pos);
+      entry->preedit_length = strlen (preedit_string);
+      cursor_pos = CLAMP (cursor_pos, 0, g_utf8_strlen (preedit_string, -1));
+      entry->preedit_cursor = cursor_pos;
+      g_free (preedit_string);
+    
+      gtk_entry_recompute (entry);
+    }
 }
 
 static gboolean
@@ -2700,9 +2721,10 @@ gtk_entry_delete_surrounding_cb (GtkIMContext *slave,
 				 gint          n_chars,
 				 GtkEntry     *entry)
 {
-  gtk_editable_delete_text (GTK_EDITABLE (entry),
-			    entry->current_pos + offset,
-			    entry->current_pos + offset + n_chars);
+  if (entry->editable)
+    gtk_editable_delete_text (GTK_EDITABLE (entry),
+                              entry->current_pos + offset,
+                              entry->current_pos + offset + n_chars);
 
   return TRUE;
 }
@@ -4493,6 +4515,7 @@ popup_targets_received (GtkClipboard     *clipboard,
       gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
       
       menuitem = gtk_menu_item_new_with_mnemonic (_("Input _Methods"));
+      gtk_widget_set_sensitive (menuitem, entry->editable);      
       gtk_widget_show (menuitem);
       submenu = gtk_menu_new ();
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
