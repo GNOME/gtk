@@ -963,6 +963,47 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
   return nremaining;
 }
 
+void
+gdk_colormap_query_color (GdkColormap *colormap,
+			  gulong       pixel,
+			  GdkColor    *result)
+{
+  XColor xcolor;
+  GdkVisual *visual;
+
+  g_return_if_fail (GDK_IS_COLORMAP (colormap));
+  
+  visual = gdk_colormap_get_visual (colormap);
+
+  switch (visual->type) {
+  case GDK_VISUAL_DIRECT_COLOR:
+  case GDK_VISUAL_TRUE_COLOR:
+    result->red = 65535. * (double)((pixel & visual->red_mask) >> visual->red_shift) / ((1 << visual->red_prec) - 1);
+    result->green = 65535. * (double)((pixel & visual->green_mask) >> visual->green_shift) / ((1 << visual->green_prec) - 1);
+    result->blue = 65535. * (double)((pixel & visual->blue_mask) >> visual->blue_shift) / ((1 << visual->blue_prec) - 1);
+    break;
+  case GDK_VISUAL_STATIC_GRAY:
+  case GDK_VISUAL_GRAYSCALE:
+    result->red = result->green = result->blue = 65535. * (double)pixel/((1<<visual->depth) - 1);
+    break;
+  case GDK_VISUAL_STATIC_COLOR:
+    xcolor.pixel = pixel;
+    XQueryColor (GDK_DISPLAY (), GDK_COLORMAP_XCOLORMAP (colormap), &xcolor);
+    result->red = xcolor.red;
+    result->green = xcolor.green;
+    result->blue =  xcolor.blue;
+    break;
+  case GDK_VISUAL_PSEUDO_COLOR:
+    result->red = colormap->colors[pixel].red;
+    result->green = colormap->colors[pixel].green;
+    result->blue = colormap->colors[pixel].blue;
+    break;
+  default:
+    g_assert_not_reached ();
+    break;
+  }
+}
+
 gboolean
 gdk_color_change (GdkColormap *colormap,
 		  GdkColor    *color)

@@ -107,12 +107,11 @@ static void   gdk_pixmap_real_get_size  (GdkDrawable     *drawable,
                                          gint            *width,
                                          gint            *height);
 
-static GdkImage* gdk_pixmap_get_image   (GdkDrawable     *drawable,
-                                         gint             x,
-                                         gint             y,
-                                         gint             width,
-                                         gint             height);
-
+static GdkImage* gdk_pixmap_get_image (GdkDrawable *drawable,
+				       gint         x,
+				       gint         y,
+				       gint         width,
+				       gint         height);
 
 static GdkVisual*   gdk_pixmap_real_get_visual   (GdkDrawable *drawable);
 static gint         gdk_pixmap_real_get_depth    (GdkDrawable *drawable);

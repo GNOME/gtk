@@ -559,7 +559,7 @@ gtk_font_selection_show_available_styles (GtkFontSelection *fontsel)
 {
   PangoFontDescription **descs;
   int n_descs, i;
-  gint match_row = 0;
+  gint match_row = -1;
   gchar *str;
   
   pango_context_list_fonts (gtk_widget_get_pango_context (GTK_WIDGET (fontsel)),
@@ -590,8 +590,11 @@ gtk_font_selection_show_available_styles (GtkFontSelection *fontsel)
     }
 
   gtk_clist_select_row (GTK_CLIST (fontsel->font_style_clist), match_row, 0);
-  gtk_clist_get_text (GTK_CLIST (fontsel->font_style_clist), match_row, 0, &str);
-  gtk_entry_set_text (GTK_ENTRY (fontsel->font_style_entry), str);
+  if (match_row >= 0)
+    {
+      gtk_clist_get_text (GTK_CLIST (fontsel->font_style_clist), match_row, 0, &str);
+      gtk_entry_set_text (GTK_ENTRY (fontsel->font_style_entry), str);
+    }
   
   gtk_clist_thaw (GTK_CLIST(fontsel->font_style_clist));
 

@@ -398,6 +398,22 @@ if test "x$gdktarget" = "xx11"; then
       ,
       $x_libs)
 
+  #
+  # Checks for Xft/XRender
+  # 
+  have_xft=false
+  XFT_LIBS=""
+  AC_CHECK_LIB(Xrender, XRenderFindFormat, 
+    AC_CHECK_LIB(Xft, XftFontOpen, have_xft=true, :, -lXrender $X_LIBS)
+  ,:,-lXext $X_LIBS)
+
+  if $have_xft = 'true' ; then
+    X_LIBS="-lXft -lXrender -lXext $X_LIBS"
+  fi
+
+  AC_DEFINE(HAVE_XFT)
+  AM_CONDITIONAL(HAVE_XFT, $have_xft) 
+
   # Check for XIM support.
 
   AC_CHECK_LIB(X11, XUnregisterIMInstantiateCallback,
@@ -562,6 +578,9 @@ fi
 if test "x$gdktarget" = "xx11"; then
 	PANGO_CFLAGS="`$PANGO_CONFIG --cflags pangox`"
 	PANGO_LIBS="`$PANGO_CONFIG --libs pangox`"
+	if $have_xft = true ; then
+            PANGO_LIBS="$PANGO_LIBS -lpangoxft"
+        fi
 else
 	PANGO_CFLAGS="`$PANGO_CONFIG --cflags pango`"
 	PANGO_LIBS="`$PANGO_CONFIG --libs pango`"

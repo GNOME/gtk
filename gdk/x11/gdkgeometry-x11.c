@@ -382,7 +382,7 @@ _gdk_window_move_resize_child (GdkWindow *window,
 }
 
 static void
-gdk_window_compute_position (GdkWindowImplX11      *window,
+gdk_window_compute_position (GdkWindowImplX11   *window,
 			     GdkWindowParentPos *parent_pos,
 			     GdkXPositionInfo   *info)
 {

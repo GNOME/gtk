@@ -24,8 +24,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <config.h>
+
+#if HAVE_XFT
+#include <pango/pangoxft.h>
+#endif
+
 #include "gdkgc.h"
-#include "gdkx.h"
+#include "gdkprivate-x11.h"
 #include "gdkregion-generic.h"
 
 #include <string.h>
@@ -107,6 +113,11 @@ gdk_gc_x11_finalize (GObject *object)
     gdk_region_destroy (x11_gc->clip_region);
   
   XFreeGC (GDK_GC_XDISPLAY (x11_gc), GDK_GC_XGC (x11_gc));
+
+#if HAVE_XFT
+  if (x11_gc->xft_draw)
+    XftDrawDestroy (x11_gc->xft_draw);
+#endif  
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -148,6 +159,9 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
       private->dirty_mask |= GDK_GC_DIRTY_TS;
     }
 
+  if (values_mask & GDK_GC_FOREGROUND)
+    private->fg_pixel = values->foreground.pixel;
+  
   xvalues.function = GXcopy;
   xvalues.fill_style = FillSolid;
   xvalues.arc_mode = ArcPieSlice;
@@ -386,6 +400,9 @@ gdk_x11_gc_set_values (GdkGC           *gc,
 	}
     }
 
+  if (values_mask & GDK_GC_FOREGROUND)
+    x11_gc->fg_pixel = values->foreground.pixel;
+  
   gdk_x11_gc_values_to_xvalues (values, values_mask, &xvalues, &xvalues_mask);
 
   XChangeGC (GDK_GC_XDISPLAY (gc),
@@ -717,4 +734,5 @@ gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
     x11_dst_gc->clip_region = NULL;
 
   x11_dst_gc->dirty_mask = x11_src_gc->dirty_mask;
+  x11_dst_gc->fg_pixel = x11_src_gc->fg_pixel;
 }

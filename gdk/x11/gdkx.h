@@ -36,7 +36,6 @@
 #include <gdk/x11/gdkwindow-x11.h>
 #include <gdk/x11/gdkpixmap-x11.h>
 
-typedef struct _GdkGCXData             GdkGCXData;
 typedef struct _GdkColormapPrivateX11 GdkColormapPrivateX11;
 typedef struct _GdkCursorPrivate       GdkCursorPrivate;
 typedef struct _GdkFontPrivateX        GdkFontPrivateX;
@@ -120,6 +119,12 @@ struct _GdkGCX11
   Display *xdisplay;
   GdkRegion *clip_region;
   guint dirty_mask;
+
+  /* We can't conditionalize on HAVE_XFT here, so we simply always
+   * have this here as a gpointer.
+   */
+  gpointer xft_draw;
+  gulong fg_pixel;
 };
 
 struct _GdkGCX11Class

@@ -29,12 +29,13 @@
 #include "gdkwindow.h"
 
 static GdkDrawable* gdk_drawable_real_get_composite_drawable (GdkDrawable *drawable,
-                                                              gint         x,
-                                                              gint         y,
-                                                              gint         width,
-                                                              gint         height,
-                                                              gint        *composite_x_offset,
-                                                              gint        *composite_y_offset);
+							      gint         x,
+							      gint         y,
+							      gint         width,
+							      gint         height,
+							      gint        *composite_x_offset,
+							      gint        *composite_y_offset);
+static GdkRegion *  gdk_drawable_real_get_visible_region     (GdkDrawable *drawable);
 
 static void gdk_drawable_class_init (GdkDrawableClass *klass);
 
@@ -70,6 +71,9 @@ static void
 gdk_drawable_class_init (GdkDrawableClass *klass)
 {
   klass->get_composite_drawable = gdk_drawable_real_get_composite_drawable;
+  /* Default implementation for clip and visible region is the same */
+  klass->get_clip_region = gdk_drawable_real_get_visible_region;
+  klass->get_visible_region = gdk_drawable_real_get_visible_region;
 }
 
 /* Manipulation of drawables
@@ -524,4 +528,59 @@ gdk_drawable_real_get_composite_drawable (GdkDrawable *drawable,
   *composite_y_offset = 0;
   
   return GDK_DRAWABLE (g_object_ref (G_OBJECT (drawable)));
+}
+
+/**
+ * gdk_drawable_get_clip_region:
+ * @drawable: a #GdkDrawable
+ * 
+ * Computes the region of a drawable that potentially can be written
+ * to by drawing primitives. This region will not take into account
+ * the clip region for the GC, and may also not take into account
+ * other factors such as if the window is obscured by other windows,
+ * but no area outside of this region will be affected by drawing
+ * primitives.
+ * 
+ * Return value: a #GdkRegion. This must be freed with gdk_region_destroy()
+ *               when you are done.
+ **/
+GdkRegion *
+gdk_drawable_get_clip_region (GdkDrawable *drawable)
+{
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
+
+  return GDK_DRAWABLE_GET_CLASS (drawable)->get_clip_region (drawable);
+}
+
+/**
+ * gdk_drawable_get_visible_region:
+ * @drawable: 
+ * 
+ * Computes the region of a drawable that is potentially visible.
+ * This does not necessarily take into account if the window is
+ * obscured by other windows, but no area outside of this region
+ * is visible.
+ * 
+ * Return value: a #GdkRegion. This must be freed with gdk_region_destroy()
+ *               when you are done.
+ **/
+GdkRegion *
+gdk_drawable_get_visible_region (GdkDrawable *drawable)
+{
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
+
+  return GDK_DRAWABLE_GET_CLASS (drawable)->get_visible_region (drawable);
+}
+
+static GdkRegion *
+gdk_drawable_real_get_visible_region (GdkDrawable *drawable)
+{
+  GdkRectangle rect;
+
+  rect.x = 0;
+  rect.y = 0;
+
+  gdk_drawable_get_size (drawable, &rect.width, &rect.height);
+
+  return gdk_region_rectangle (&rect);
 }

@@ -17,12 +17,31 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
+#include <stdlib.h>
+
 #include "gdkprivate-x11.h"
 #include "gdkpango.h"
 #include <pango/pangox.h>
+#ifdef HAVE_XFT
+#include <pango/pangoxft.h>
+#endif
 
 PangoContext *
 gdk_pango_context_get (void)
 {
-  return pango_x_get_context (GDK_DISPLAY ());
+#ifdef HAVE_XFT
+  static gint use_xft = -1;
+  if (use_xft == -1)
+    {
+      char *val = g_getenv ("GDK_USE_XFT");
+
+      use_xft = val && (atoi (val) != 0);
+    }
+  
+  if (use_xft)
+    return pango_xft_get_context (GDK_DISPLAY (), DefaultScreen (GDK_DISPLAY ()));
+  else
+#endif /* HAVE_XFT */
+    return pango_x_get_context (GDK_DISPLAY ());
 }

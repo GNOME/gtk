@@ -257,6 +257,8 @@ gdk_x11_convert_grab_status (gint status)
     }
 
   g_assert_not_reached();
+
+  return 0;
 }
 
 /*

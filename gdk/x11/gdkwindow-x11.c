@@ -83,10 +83,11 @@ static gboolean gdk_window_icon_name_set          (GdkWindow *window);
 
 static GdkColormap* gdk_window_impl_x11_get_colormap (GdkDrawable *drawable);
 static void         gdk_window_impl_x11_set_colormap (GdkDrawable *drawable,
-                                                  GdkColormap *cmap);
-static void         gdk_window_impl_x11_get_size     (GdkDrawable *drawable,
-                                                  gint *width,
-                                                  gint *height);
+						      GdkColormap *cmap);
+static void         gdk_window_impl_x11_get_size    (GdkDrawable *drawable,
+						     gint *width,
+						     gint *height);
+static GdkRegion*  gdk_window_impl_x11_get_visible_region (GdkDrawable *drawable);
 static void gdk_window_impl_x11_init       (GdkWindowImplX11      *window);
 static void gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass);
 static void gdk_window_impl_x11_finalize   (GObject            *object);
@@ -147,6 +148,10 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   drawable_class->set_colormap = gdk_window_impl_x11_set_colormap;
   drawable_class->get_colormap = gdk_window_impl_x11_get_colormap;
   drawable_class->get_size = gdk_window_impl_x11_get_size;
+
+  /* Visible and clip regions are the same */
+  drawable_class->get_clip_region = gdk_window_impl_x11_get_visible_region;
+  drawable_class->get_visible_region = gdk_window_impl_x11_get_visible_region;
 }
 
 static void
@@ -233,6 +238,22 @@ gdk_window_impl_x11_get_size (GdkDrawable *drawable,
     *width = GDK_WINDOW_IMPL_X11 (drawable)->width;
   if (height)
     *height = GDK_WINDOW_IMPL_X11 (drawable)->height;
+}
+
+static GdkRegion*
+gdk_window_impl_x11_get_visible_region (GdkDrawable *drawable)
+{
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (drawable);
+  GdkRectangle result_rect;
+
+  result_rect.x = 0;
+  result_rect.y = 0;
+  result_rect.width = impl->width;
+  result_rect.height = impl->height;
+
+  gdk_rectangle_intersect (&result_rect, &impl->position_info.clip_rect, &result_rect);
+
+  return gdk_region_rectangle (&result_rect);
 }
 
 void

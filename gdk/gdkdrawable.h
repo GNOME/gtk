@@ -120,6 +120,9 @@ struct _GdkDrawableClass
                               gint          width,
                               gint          height);
 
+  GdkRegion*   (*get_clip_region)    (GdkDrawable  *drawable);
+  GdkRegion*   (*get_visible_region) (GdkDrawable  *drawable);
+
   GdkDrawable* (*get_composite_drawable) (GdkDrawable *drawable,
                                           gint         x,
                                           gint         y,
@@ -259,6 +262,9 @@ GdkImage* gdk_drawable_get_image (GdkDrawable *drawable,
                                   gint         y,
                                   gint         width,
                                   gint         height);
+
+GdkRegion *gdk_drawable_get_clip_region    (GdkDrawable *drawable);
+GdkRegion *gdk_drawable_get_visible_region (GdkDrawable *drawable);
 
 #ifdef __cplusplus
 }

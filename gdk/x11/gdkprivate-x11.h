@@ -43,9 +43,11 @@ gint          gdk_send_xevent          (Window           window,
 					gboolean         propagate,
 					glong            event_mask,
 					XEvent          *event_send);
-GdkGC *       _gdk_x11_gc_new          (GdkDrawable     *drawable,
-					GdkGCValues     *values,
-					GdkGCValuesMask  values_mask);
+
+GdkGC *_gdk_x11_gc_new                  (GdkDrawable     *drawable,
+					 GdkGCValues     *values,
+					 GdkGCValuesMask  values_mask);
+
 GdkColormap * gdk_colormap_lookup      (Colormap         xcolormap);
 GdkVisual *   gdk_visual_lookup        (Visual          *xvisual);
 

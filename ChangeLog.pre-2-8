@@ -1,3 +1,39 @@
+Thu Dec 14 20:22:31 2000  Owen Taylor  <otaylor@redhat.com>
+
+        * gdk/{gdkdrawable.[ch],gdkpixmap.c,gdkwindow.c,x11/gdkwindow.c}:
+	Add two virtualized functions gdk_drawable_get_clip_region - to
+	get the clip region when drawing.
+	
+	* gdk/gdkwindow.c (gdk_window_invalidate_rect): Rewrite to simple
+	use invalidate_region.
+
+	* gdk/gdkwindow.c (gdk_window_invalidate_region): Clip to visible
+	region.
+
+	* acconfig.h configure.in: Check for Xft. For now, assume
+	that if Xft is found, Pango was compiled with Xft support
+	as well.
+
+	* gdk/gdkcolor.h gdk/x11/gdkcolor-x11.c: Add 
+	gdk_colormap_query_color().
+	
+	* gdk/x11/gdkdrawable-x11.c (gdk_x11_draw_glyphs): Draw
+	with Xft if appropriate.
+
+	* gdk/x11/gdkpango-x11.c (gdk_pango_context_get): Create
+	a pangoxft context if we have XFT and the environment
+	variable GD_USE_XFT is set.
+	
+	* gdk/x11/gdkx.h (struct _GdkGCX11): Cache the fg_pixel
+	and also possibly an XftDraw structure.
+
+        * gtk/gtkfontsel.c: Handle the case where the font from the
+	style doesn't match any of the fonts a bit better.
+	
+	* gtk/testgtk.c: Add tabs between directional segments for
+	hebrew/arabic test. (Not really necessary, just a little
+	prettier.)
+
 2000-12-14  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/testtext.c (fill_file_buffer): fix unicode validation when

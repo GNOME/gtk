@@ -2057,8 +2057,8 @@ void create_labels (void)
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
       frame = gtk_frame_new ("Bidirection Label");
-      label = gtk_label_new ("Arabic  السلام عليكم\n"
-			     "Hebrew   שלום");
+      label = gtk_label_new ("Arabic	السلام عليكم\n"
+			     "Hebrew	שלום");
       gtk_widget_set_direction (label, GTK_TEXT_DIR_RTL);
       gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_RIGHT);
       gtk_container_add (GTK_CONTAINER (frame), label);

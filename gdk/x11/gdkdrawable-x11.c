@@ -25,8 +25,14 @@
  */
 
 #include "gdkprivate-x11.h"
+#include "gdkregion-generic.h"
+
 #include <pango/pangox.h>
 #include <config.h>
+
+#if HAVE_XFT
+#include <pango/pangoxft.h>
+#endif
 
 #include <stdlib.h>
 
@@ -564,6 +570,40 @@ gdk_x11_draw_lines (GdkDrawable *drawable,
   g_free (tmp_points);
 }
 
+#if HAVE_XFT
+static void
+update_xft_draw_clip (GdkGC *gc)
+{
+  GdkGCX11 *private = GDK_GC_X11 (gc);
+  int i;
+  
+  if (private->xft_draw)
+    {
+      if (private->clip_region)
+	{
+	  GdkRegionBox *boxes = private->clip_region->rects;
+	  Region region = XCreateRegion ();
+	  
+	  for (i=0; i<private->clip_region->numRects; i++)
+	    {
+	      XRectangle rect;
+	      
+	      rect.x = CLAMP (boxes[i].x1 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT);
+	      rect.y = CLAMP (boxes[i].y1 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT);
+	      rect.width = CLAMP (boxes[i].x2 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT) - rect.x;
+	      rect.height = CLAMP (boxes[i].y2 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT) - rect.y;
+	      XUnionRectWithRegion (&rect, region, region);
+	    }
+	  
+	  XftDrawSetClip (private->xft_draw, region);
+	  XDestroyRegion (region);
+	}
+      else
+	XftDrawSetClip (private->xft_draw, NULL);
+    }
+}
+#endif  
+
 static void
 gdk_x11_draw_glyphs (GdkDrawable      *drawable,
 		     GdkGC            *gc,
@@ -576,10 +616,49 @@ gdk_x11_draw_glyphs (GdkDrawable      *drawable,
 
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
-  pango_x_render (impl->xdisplay,
-                  impl->xid,
-		  GDK_GC_GET_XGC (gc),
-		  font, glyphs, x, y);
+#if HAVE_XFT
+  if (PANGO_XFT_IS_FONT (font))
+    {
+      GdkGCX11 *gc_x11 = GDK_GC_X11 (gc);
+      XftColor xft_color;
+      GdkColormap *cmap;
+      GdkColor color;
+      
+      cmap = gdk_gc_get_colormap (gc);
+
+      _gdk_x11_gc_flush (gc);
+      
+      if (!gc_x11->xft_draw)
+	{
+	  gc_x11->xft_draw = XftDrawCreate (impl->xdisplay,
+					    impl->xid,
+					    GDK_VISUAL_XVISUAL (gdk_colormap_get_visual (cmap)),
+					    GDK_COLORMAP_XCOLORMAP (cmap));
+	  update_xft_draw_clip (gc);
+	}
+      
+      else
+	{
+	  XftDrawChange (gc_x11->xft_draw, impl->xid);
+	  update_xft_draw_clip (gc);
+	}
+      
+      gdk_colormap_query_color (cmap, gc_x11->fg_pixel, &color);
+      
+      xft_color.color.red = color.red;
+      xft_color.color.green = color.green;
+      xft_color.color.blue = color.blue;
+      xft_color.color.alpha = 0xffff;
+      
+      pango_xft_render (gc_x11->xft_draw, &xft_color,
+			font, glyphs, x, y);
+    }
+  else
+#endif  /* !HAVE_XFT */
+    pango_x_render (impl->xdisplay,
+		    impl->xid,
+		    GDK_GC_GET_XGC (gc),
+		    font, glyphs, x, y);
 }
 
 static void

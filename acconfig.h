@@ -32,6 +32,7 @@
 #undef HAVE_SYS_SELECT_H
 #undef HAVE_SYS_TIME_H
 #undef HAVE_XCONVERTCASE
+#undef HAVE_XFT
 
 #undef NO_FD_SET
 
