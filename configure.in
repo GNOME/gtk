@@ -132,7 +132,7 @@ AC_SUBST(REBUILD)
 
 # i18n stuff
 ALL_LINGUAS="de pt"
-AM_GNU_GETTEXT_GTK
+AM_GTK_GNU_GETTEXT
 AC_CHECK_FUNC(gettext,
 	,
 	AC_CHECK_LIB(intl, gettext)

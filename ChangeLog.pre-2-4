@@ -1,3 +1,9 @@
+1998-12-15  Martin Baulig  <martin@home-of-linux.org>
+
+	* acinclude.m4: Rename AM_GNU_GETTEXT_GTK to AM_GTK_GNU_GETTEXT and
+	AM_WITH_NLS_GTK to AM_GTK_WITH_NLS to avoid this ugly automake
+	warnings.
+
 Tue Dec 15 16:06:15 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* acinclude.m4: Provide a hacked version of the

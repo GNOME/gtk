@@ -272,7 +272,7 @@ AC_SUBST(NM)
 
 # serial 5
 
-AC_DEFUN(AM_WITH_NLS_GTK,
+AC_DEFUN(AM_GTK_WITH_NLS,
   [AC_MSG_CHECKING([whether NLS is requested])
     dnl Default is enabled NLS
     AC_ARG_ENABLE(nls,
@@ -461,7 +461,7 @@ AC_DEFUN(AM_WITH_NLS_GTK,
     AC_SUBST(POSUB)
   ])
 
-AC_DEFUN(AM_GNU_GETTEXT_GTK,
+AC_DEFUN(AM_GTK_GNU_GETTEXT,
   [AC_REQUIRE([AC_PROG_MAKE_SET])dnl
    AC_REQUIRE([AC_PROG_CC])dnl
    AC_REQUIRE([AC_PROG_RANLIB])dnl
@@ -487,7 +487,7 @@ strdup __argz_count __argz_stringify __argz_next])
    fi
 
    AM_LC_MESSAGES
-   AM_WITH_NLS_GTK
+   AM_GTK_WITH_NLS
 
    if test "x$CATOBJEXT" != "x"; then
      if test "x$ALL_LINGUAS" = "x"; then
