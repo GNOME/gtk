@@ -1,5 +1,7 @@
 Overview of Changes from GTK+ 2.5.4 to GTK+ 2.5.5
 =================================================
+* gdk-pixbuf
+  - Make threadsafe [Colin Walters]
 * GtkFileChooser
   - Make tooltips work better [Matthias Clasen]
   - Show files (grayed out) in folder modes [Nickolay V. Shmyrev]
@@ -13,6 +15,9 @@ Overview of Changes from GTK+ 2.5.4 to GTK+ 2.5.5
   - Make file DND work better [Christan Persch]
 * GtkAction
   - Add a function to obtain the accel path [Michael Natterer]
+* GtkUIManager
+  - Major performance improvement [Dave Neary, Michael, 
+    Sven Neumann, Soeren Sandmann, Matthias]
 * GtkIconView
   - Make scrolling work with large icon views [Matthias]
 * GtkWindow
@@ -22,8 +27,8 @@ Overview of Changes from GTK+ 2.5.4 to GTK+ 2.5.5
   - Support ellipsizing the text [Morten Welinder, Matthias]
 * GtkStatusbar
   - Avoid resising if the text of the label changes [He Qiangqiang,
-    Owen Taylor, Christian Persch]
-  - Draw the resize grip better [Matthias]
+    Owen, Christian]
+  - Draw the resize grip better [Matthias, Christian]
   - Ellipsize the text [Matthias]
 * GtkClipboard
   - Add API for image transfer via copy-and-paste [Matthias]
@@ -35,16 +40,17 @@ Overview of Changes from GTK+ 2.5.4 to GTK+ 2.5.5
 * Win32
   - Build fixes [Hans Breuer, Tor Lillqvist]
   - Implement resize grips [Robert Ögren]
+  - Bug fixes [Robert, Tor, J. Ali Harlow]
 * Bug fixes [Paolo Borelli, Kjartan Maraas, Olivier Andrieu,
-  Torsten Schoenfeld, Matthias, Philip Langdale, Christian Persch,
-  Frances Keenan, Owen Taylor, Murray Cumming, Christophe Fergeau,
+  Torsten Schoenfeld, Matthias, Philip Langdale, Christian,
+  Frances Keenan, Owen, Murray Cumming, Christophe Fergeau,
   Tristan Van Berkom, Adam Hooper, James M. Cape, Carlos Garnacho
-  Parro, Mariano Suárez-Alvarez, John Finlay]	
+  Parro, Mariano Suárez-Alvarez, John Finlay, Jonathan Blandford]	
 * Documentation improvements [Masao Mutoh, Matthias, 
   Torsten Schoenfeld, Matthew H. Plough, Salvador Fandiño, 
-  Owen, Vincent Untz, Jonathan Blandford, Bastien Nocera]
+  Owen, Vincent Untz, Jonathan, Bastien Nocera]
 * Updated translations (da,en_CA,hu,ja)
-Bugs fixed: 156557,156698,156325,156298,156404,156863,156866,156792,143285,156845,156408,156575,156573,138650,157044,157056,156924,157087,53709,157156,156720,157080,156971,157123,157301,157354,157286,157528,157273,157074,157384,157013,145388,157665,157651,157566,157630,157675,143760,141224,90955,73359,148106,154466,157785,157409,156809,156956
+Bugs fixed: 156557,156698,156325,156298,156404,156863,156866,156792,143285,156845,156408,156575,156573,138650,157044,157056,156924,157087,53709,157156,156720,157080,156971,157123,157301,157354,157286,157528,157273,157074,157384,157013,145388,157665,157651,157566,157630,157675,143760,141224,90955,73359,148106,154466,157785,157409,156809,156956,157253,157778,152035,157949,156638,137551,158011,158010,157944,157979,157976
 
 Overview of Changes from GTK+ 2.5.3 to GTK+ 2.5.4
 =================================================

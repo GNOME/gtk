@@ -1,5 +1,9 @@
 2004-11-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
+2004-11-12  Matthias Clasen  <mclasen@redhat.com>
+
 	* tests/Makefile.am: Add pixbuf-threads
 
 	* tests/pixbuf-threads.c: Test loading images in multiple
