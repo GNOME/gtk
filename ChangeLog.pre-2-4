@@ -1,3 +1,36 @@
+Wed Oct 21 17:44:27 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_read_rcfiles): Reset
+	all toplevel widgets, not toplevel windows. (I.e.,
+	plugs should be reset)
+
+	* gtk/gtkwindow.c (gtk_window_read_rcfiles): Yes, we
+	_do_ need to notify the other toplevels - by the time
+	the get the client messages, the RC file dates will
+	have been updated.
+
+	* gtk/gtkcontainer.h: Added a function call to list
+	every toplevel widget.
+
+	* gdk/gdk.c (gdk_event_send_client_message_to_all_recurse): 
+	Don't send client messages to _every_ window on display!
+	
+Tue Oct 20 16:21:04 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_source_event_cb): Don't start drags 
+	when dragging across widgets, only in drags
+	starting in widget.
+
+Tue Oct 20 15:59:49 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_source_info_destroy): 
+	Emit "drag_end" signal at end of drag.
+
+Tue Oct 20 14:53:28 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c: Always send "drag_leave" to dests
+	without GTK_DEST_DEFAULT_MOTION. 
+
 Tue Oct 20 13:07:54 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_read_rcfiles): Look

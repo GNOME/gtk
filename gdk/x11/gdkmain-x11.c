@@ -3908,7 +3908,7 @@ gdk_event_send_client_message (GdkEvent *event, guint32 xid)
 gboolean
 gdk_event_send_client_message_to_all_recurse (XEvent  *xev, 
 					      guint32  xid,
-					      gboolean send_anyways)
+					      guint    level)
 {
   static GdkAtom wm_state_atom = GDK_NONE;
 
@@ -3921,7 +3921,7 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
   unsigned int ret_nchildren;
   int i;
   
-  gboolean send = TRUE;
+  gboolean send = FALSE;
   gboolean found = FALSE;
 
   if (!wm_state_atom)
@@ -3953,13 +3953,13 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
 	return FALSE;
 
       for(i = 0; i < ret_nchildren; i++)
-	if (gdk_event_send_client_message_to_all_recurse(xev, ret_children[i], FALSE))
+	if (gdk_event_send_client_message_to_all_recurse(xev, ret_children[i], level + 1))
 	  found = TRUE;
 
       XFree(ret_children);
     }
 
-  if (send || (!found && send_anyways))
+  if (send || (!found && (level == 1)))
     {
       xev->xclient.window = xid;
       gdk_send_xevent (xid, False, NoEventMask, xev);
@@ -3983,7 +3983,7 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
   memcpy(&sev.xclient.data, &event->client.data, sizeof(sev.xclient.data));
   sev.xclient.message_type = event->client.message_type;
 
-  gdk_event_send_client_message_to_all_recurse(&sev, gdk_root_window, TRUE);
+  gdk_event_send_client_message_to_all_recurse(&sev, gdk_root_window, 0);
 
   gdk_error_warnings = old_warnings;
 }

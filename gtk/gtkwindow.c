@@ -990,7 +990,22 @@ gtk_window_read_rcfiles (GtkWidget *widget,
     }
 
   if (gtk_rc_reparse_all ())
-    gtk_widget_reset_rc_styles (widget);
+    {
+      /* If the above returned true, some of our RC files are out
+       * of date, so we need to reset all our widgets. Our other
+       * toplevel windows will also get the message, but by
+       * then, the RC file will up to date, so we have to tell
+       * them now.
+       */
+      GList *toplevels;
+      
+      toplevels = gtk_container_get_toplevels();
+      while (toplevels)
+	{
+	  gtk_widget_reset_rc_styles (toplevels->data);
+	  toplevels = toplevels->next;
+	}
+    }
 }
 
 static gint

@@ -16,12 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-#include "gtkbutton.h"
 #include "gtkdrawwindow.h"
-#include "gtkhbox.h"
-#include "gtkhseparator.h"
-#include "gtkvbox.h"
-
 
 static void gtk_draw_window_class_init (GtkDrawWindowClass *klass);
 static void gtk_draw_window_init       (GtkDrawWindow      *draw_window);

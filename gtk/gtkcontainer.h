@@ -130,6 +130,8 @@ void   gtk_container_set_focus_hadjustment (GtkContainer     *container,
 					    GtkAdjustment    *adjustment);
 void    gtk_container_register_toplevel	   (GtkContainer     *container);
 void    gtk_container_unregister_toplevel  (GtkContainer     *container);
+GList * gtk_container_get_toplevels        (void);
+
 void    gtk_container_resize_children      (GtkContainer     *container);
 
 GtkType gtk_container_child_type	   (GtkContainer     *container);
