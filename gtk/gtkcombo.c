@@ -671,6 +671,7 @@ gtk_combo_update_entry (GtkCombo * combo)
   GtkList *list = GTK_LIST (combo->list);
   char *text;
 
+  g_signal_handler_block (list, combo->list_change_id);
   if (list->selection)
     {
       text = gtk_combo_func (GTK_LIST_ITEM (list->selection->data));
@@ -678,6 +679,15 @@ gtk_combo_update_entry (GtkCombo * combo)
 	text = "";
       gtk_entry_set_text (GTK_ENTRY (combo->entry), text);
     }
+  g_signal_handler_unblock (list, combo->list_change_id);
+}
+
+static void
+gtk_combo_selection_changed (GtkList  *list,
+			     GtkCombo *combo)
+{
+  if (!GTK_WIDGET_VISIBLE (combo->popwin))
+    gtk_combo_update_entry (combo);
 }
 
 static void
@@ -956,6 +966,9 @@ gtk_combo_init (GtkCombo * combo)
 				       gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (combo->popup)));
   gtk_widget_show (combo->list);
 
+  combo->list_change_id = g_signal_connect (combo->list, "selection_changed",
+					    G_CALLBACK (gtk_combo_selection_changed), combo);
+  
   g_signal_connect (combo->popwin, "key_press_event",
 		    G_CALLBACK (gtk_combo_list_key_press), combo);
   g_signal_connect (combo->popwin, "button_press_event",

@@ -1,3 +1,12 @@
+Wed Dec  4 12:44:50 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcombo.c (gtk_combo_selection_changed): Add
+	back the monitoring of the selection when the combo
+	isn't popped down; apparently people depended upon
+	the side-effect where gtk_combo_set_popdown_strings()
+	would wipe out the contents of the list when browse-mode
+	autoselected the first item in the list. (#100347)
+
 Tue Dec  3 17:47:24 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkgeometry-x11.c (gdk_window_guffaw_scroll): Fix wrong 
