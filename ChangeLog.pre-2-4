@@ -1,3 +1,7 @@
+Thu May 25 02:30:57 2000  Tim Janik  <timj@gtk.org>
+
+	* configure.in: gtk version 1.2.8, interface age 3, binary age 8.
+
 Fri May 19 09:54:53 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.c (gtk_widget_clip_rect): fix mangling of rectangle
