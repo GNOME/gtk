@@ -58,8 +58,6 @@
 #define MARK_CURRENT_FORE(mark)     (&((TextProperty*)(mark)->property->data)->fore_color)
 #define MARK_CURRENT_BACK(mark)     (&((TextProperty*)(mark)->property->data)->back_color)
 #define MARK_CURRENT_TEXT_FONT(m)   (((TextProperty*)(m)->property->data)->font)
-#define TEXT_INDEX(t, index)        ((index) < (t)->gap_position ? (t)->text[index] : \
-				     (t)->text[(index) + (t)->gap_size])
 #define TEXT_LENGTH(t)              ((t)->text_end - (t)->gap_size)
 #define FONT_HEIGHT(f)              ((f)->ascent + (f)->descent)
 #define LINE_HEIGHT(l)              ((l).font_ascent + (l).font_descent)
@@ -212,6 +210,9 @@ static void find_line_containing_point (GtkText* text, guint point);
 static TextProperty* new_text_property (GdkFont* font, GdkColor* fore, GdkColor* back, guint length);
 
 /* Display */
+static void compute_lines_pixels (GtkText* text, gint char_count,
+				  guint *lines, guint *pixels);
+
 static gint total_line_height (GtkText* text,
 			       GList* line,
 			       gint line_count);
@@ -220,8 +221,11 @@ static LineParams find_line_params (GtkText* text,
 				    const PrevTabCont *tab_cont,
 				    PrevTabCont *next_cont);
 static void recompute_geometry (GtkText* text);
-static void insert_char_line_expose (GtkText* text, gchar key, guint old_pixels);
-static void delete_char_line_expose (GtkText* text, gchar key, guint old_pixels);
+static void insert_expose (GtkText* text, guint old_pixels, gint nchars, guint new_line_count);
+static void delete_expose (GtkText* text,
+			   gint  nchars,
+			   guint old_lines, 
+			   guint old_pixels);
 static void clear_area (GtkText *text, GdkRectangle *area);
 static void draw_line (GtkText* text,
 		       gint pixel_height,
@@ -258,7 +262,7 @@ static void move_cursor_page_ver (GtkText *text, int dir);
 static void move_cursor_ver (GtkText *text, int count);
 static void move_cursor_hor (GtkText *text, int count);
 
-/* #define DEBUG_GTK_TEXT */
+#define DEBUG_GTK_TEXT
 
 #if defined(DEBUG_GTK_TEXT) && defined(__GNUC__)
 /* Debugging utilities. */
@@ -538,6 +542,11 @@ gtk_text_insert (GtkText    *text,
 		 const char *chars,
 		 gint        length)
 {
+  gint i;
+
+  gint new_line_count = 1;
+  guint old_height = 0;
+
   g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
 
@@ -557,6 +566,18 @@ gtk_text_insert (GtkText    *text,
   if (length == 0)
     return;
 
+  if (!text->freeze && (text->line_start_cache != NULL))
+    {
+      find_line_containing_point (text, text->point.index);
+      old_height = total_line_height (text, text->current_line, 1);
+      for (i=0; i<length; i++)
+	if (chars[i] == '\n')
+	  new_line_count++;
+    }
+
+  if (text->point.index < text->first_line_start_index)
+    text->first_line_start_index += length;
+
   move_gap_to_point (text);
 
   if (font == NULL)
@@ -572,6 +593,9 @@ gtk_text_insert (GtkText    *text,
   text->gap_position += length;
 
   advance_mark_n (&text->point, length);
+
+  if (!text->freeze && (text->line_start_cache != NULL))
+    insert_expose (text, old_height, length, new_line_count);
 }
 
 gint
@@ -593,11 +617,24 @@ gint
 gtk_text_forward_delete (GtkText *text,
 			  guint    nchars)
 {
+  guint old_lines, old_height;
+
   g_return_val_if_fail (text != NULL, 0);
   g_return_val_if_fail (GTK_IS_TEXT (text), 0);
 
   if (text->point.index + nchars > TEXT_LENGTH (text) || nchars <= 0)
     return FALSE;
+
+  if (!text->freeze && (text->line_start_cache != NULL))
+    {
+      find_line_containing_point (text, text->point.index);
+      compute_lines_pixels (text, nchars, &old_lines, &old_height);
+    }
+
+  if (text->point.index < text->first_line_start_index)
+    text->first_line_start_index -= MIN(nchars,
+					text->first_line_start_index - 
+					text->point.index);
 
   move_gap_to_point (text);
 
@@ -605,8 +642,52 @@ gtk_text_forward_delete (GtkText *text,
 
   delete_text_property (text, nchars);
 
+  if (!text->freeze && (text->line_start_cache != NULL))
+    delete_expose (text, nchars, old_lines, old_height);
+
   return TRUE;
 }
+
+gchar *    
+gtk_text_get_chars       (GtkText       *text,
+			  guint          index,
+			  guint          nchars)
+{
+  gchar *retval;
+  gchar *p;
+  guint n;
+  
+  if (index+nchars > TEXT_LENGTH (text))
+    return NULL;
+  
+  if (nchars < 0) 
+    nchars = TEXT_LENGTH (text) - index;
+
+  retval = g_new (gchar, nchars+1);
+  p = retval;
+
+  if (index < text->gap_position) 
+    {
+      n = MIN (text->gap_position - index, nchars);
+      memcpy (p, text->text + GTK_TEXT_INDEX(text, index), n);
+      p += n;
+      index += n;
+      nchars -= n;
+    }
+
+  if (index+nchars >= text->gap_position)
+    {
+      memcpy (p, 
+	      text->text + MAX (text->gap_position + text->gap_size, 
+				index + text->gap_size),
+	      nchars);
+    }
+  
+  retval[nchars+1] = 0;
+
+  return retval;
+}
+
 
 static void
 gtk_text_finalize (GtkObject *object)
@@ -1117,47 +1198,23 @@ gtk_text_motion_notify (GtkWidget      *widget,
 static void
 gtk_text_insert_1_at_point (GtkText* text, gchar key)
 {
-  guint old_height= total_line_height (text, text->current_line, 1);
   gtk_text_insert (text,
 		   MARK_CURRENT_FONT (&text->point),
 		   MARK_CURRENT_FORE (&text->point),
 		   MARK_CURRENT_BACK (&text->point),
 		   &key, 1);
-
-
-  insert_char_line_expose (text, key, old_height );
-
 }
 
 static void
 gtk_text_backward_delete_1_at_point (GtkText* text)
 {
-  guint old_height;
-  gchar key= TEXT_INDEX(text,text->cursor_mark.index-1);
-
-  if (1 > text->point.index )
-    return;
-
-  gtk_text_set_point (text, text->point.index - 1);
-  find_line_containing_point (text, text->cursor_mark.index-1);
-
-  old_height= total_line_height (text, text->current_line, 1 + (key == LINE_DELIM));
-
-  gtk_text_forward_delete (text, 1);
-  
-  delete_char_line_expose (text, key, old_height);
+  gtk_text_backward_delete (text, 1);
 }
 
 static void
 gtk_text_forward_delete_1_at_point (GtkText* text)
 {
-  guint old_height;
-  gchar key= TEXT_INDEX(text,text->cursor_mark.index);
-
-  old_height= total_line_height (text, text->current_line, 1 + (key == LINE_DELIM));
   gtk_text_forward_delete (text, 1);
-
-  delete_char_line_expose (text, key, old_height);
 }
 
 static gint
@@ -1386,7 +1443,7 @@ find_this_line_start_mark (GtkText* text, guint point_position, const GtkPropert
   mark = find_mark_near (text, point_position, near);
 
   while (mark.index > 0 &&
-	 TEXT_INDEX (text, mark.index - 1) != LINE_DELIM)
+	 GTK_TEXT_INDEX (text, mark.index - 1) != LINE_DELIM)
     decrement_mark (&mark);
 
   return mark;
@@ -1536,6 +1593,41 @@ fetch_lines_forward (GtkText* text, gint line_count)
     line->next->prev = line;
 }
 
+/* Compute the number of lines, and vertical pixels for n characters
+ * starting from the point 
+ */
+static void
+compute_lines_pixels (GtkText* text, gint char_count,
+		      guint *lines, guint *pixels)
+{
+  GList *line = text->current_line;
+
+  *lines = 0;
+  *pixels = 0;
+
+  /* If char_count == 0, that means we're joining two lines in a
+   * deletion, so add in the values for the next line as well 
+   */
+  for (; line && char_count >= 0; line = line->next)
+    {
+      *pixels += LINE_HEIGHT(CACHE_DATA(line));
+
+      if (line == text->current_line)
+	char_count -= CACHE_DATA(line).end.index - text->point.index + 1;
+      else
+	char_count -= CACHE_DATA(line).end.index -CACHE_DATA(line).end.index + 1;
+
+      if (!text->line_wrap || !CACHE_DATA(line).wraps)
+	*lines += 1;
+      else
+	if (char_count < 0)
+	  char_count = 0;	/* force another loop */
+
+      if (!line->next)
+	fetch_lines_forward (text, 1);
+    }
+}
+
 static gint
 total_line_height (GtkText* text, GList* line, gint line_count)
 {
@@ -1610,7 +1702,7 @@ swap_lines (GtkText* text, GList* old, GList* new, gint old_line_count)
 }
 
 static void
-correct_cache_delete (GtkText* text, gint lines)
+correct_cache_delete (GtkText* text, gint nchars, gint lines)
 {
   GList* cache = text->current_line;
   gint i;
@@ -1623,8 +1715,8 @@ correct_cache_delete (GtkText* text, gint lines)
       GtkPropertyMark *start = &CACHE_DATA(cache).start;
       GtkPropertyMark *end = &CACHE_DATA(cache).end;
 
-      start->index -= 1;
-      end->index -= 1;
+      start->index -= nchars;
+      end->index -= nchars;
 
       if (start->property == text->point.property)
 	start->offset = start->index - (text->point.index - text->point.offset);
@@ -1638,11 +1730,10 @@ correct_cache_delete (GtkText* text, gint lines)
 }
 
 static void
-delete_char_line_expose (GtkText* text, gchar key, guint old_pixels)
+delete_expose (GtkText* text, gint nchars, guint old_lines, guint old_pixels)
 {
   gint pixel_height;
   guint new_pixels = 0;
-  gint old_line_count = 1 + (key == LINE_DELIM);
   GdkRectangle rect;
   GList* new_line = NULL;
   gint width, height;
@@ -1651,7 +1742,7 @@ delete_char_line_expose (GtkText* text, gchar key, guint old_pixels)
 
   undraw_cursor (text, FALSE);
 
-  correct_cache_delete (text, old_line_count);
+  correct_cache_delete (text, nchars, old_lines);
 
   pixel_height = pixel_height_of(text, text->current_line) -
                  LINE_HEIGHT(CACHE_DATA(text->current_line));
@@ -1665,7 +1756,7 @@ delete_char_line_expose (GtkText* text, gchar key, guint old_pixels)
 			  FetchLinesCount,
 			  1);
 
-  swap_lines (text, text->current_line, new_line, old_line_count);
+  swap_lines (text, text->current_line, new_line, old_lines);
 
   text->current_line = new_line;
 
@@ -1711,30 +1802,31 @@ delete_char_line_expose (GtkText* text, gchar key, guint old_pixels)
   TEXT_SHOW(text);
 }
 
+/* note, the point has already been moved forward */
 static void
-correct_cache_insert (GtkText* text)
+correct_cache_insert (GtkText* text, gint nchars)
 {
-  GList* cache = text->current_line;
+  GList* cache = text->current_line->next;
 
   for (; cache; cache = cache->next)
     {
       GtkPropertyMark *start = &CACHE_DATA(cache).start;
       GtkPropertyMark *end = &CACHE_DATA(cache).end;
 
-      if (start->index >= text->point.index)
+      if (start->index >= text->point.index - nchars)
 	{
 	  if (start->property == text->point.property)
-	    move_mark_n(start, 1);
+	    move_mark_n(start, nchars);
 	  else
-	    start->index += 1;
+	    start->index += nchars;
 	}
 
-      if (end->index >= text->point.index)
+      if (end->index >= text->point.index - nchars)
 	{
 	  if (end->property == text->point.property)
-	    move_mark_n(end, 1);
+	    move_mark_n(end, nchars);
 	  else
-	    end->index += 1;
+	    end->index += nchars;
 	}
 
       /*TEXT_ASSERT_MARK(text, start, "start");*/
@@ -1744,37 +1836,37 @@ correct_cache_insert (GtkText* text)
 
 
 static void
-insert_char_line_expose (GtkText* text, gchar key, guint old_pixels)
+insert_expose (GtkText* text, guint old_pixels, gint nchars,
+	       guint new_line_count)
 {
   gint pixel_height;
   guint new_pixels = 0;
-  guint new_line_count = 1 + (key == LINE_DELIM);
   GdkRectangle rect;
-  GList* new_line = NULL;
+  GList* new_lines = NULL;
   gint width, height;
 
   text->cursor_virtual_x = 0;
 
   undraw_cursor (text, FALSE);
 
-  correct_cache_insert (text);
+  correct_cache_insert (text, nchars);
 
   TEXT_SHOW_ADJ (text, text->vadj, "vadj");
 
   pixel_height = pixel_height_of(text, text->current_line) -
                  LINE_HEIGHT(CACHE_DATA(text->current_line));
 
-  new_line = fetch_lines (text,
-			  &CACHE_DATA(text->current_line).start,
-			  &CACHE_DATA(text->current_line).tab_cont,
-			  FetchLinesCount,
-			  new_line_count);
+  new_lines = fetch_lines (text,
+			   &CACHE_DATA(text->current_line).start,
+			   &CACHE_DATA(text->current_line).tab_cont,
+			   FetchLinesCount,
+			   new_line_count);
 
-  swap_lines (text, text->current_line, new_line, 1);
+  swap_lines (text, text->current_line, new_lines, 1);
 
-  text->current_line = new_line;
+  text->current_line = new_lines;
 
-  new_pixels = total_line_height (text, new_line, new_line_count);
+  new_pixels = total_line_height (text, new_lines, new_line_count);
 
   gdk_window_get_size (text->text_area, &width, &height);
 
@@ -2275,7 +2367,7 @@ find_line_containing_point (GtkText* text, guint point)
 	}
     }
 
-  g_assert (FALSE); /* Must set text->current_line here */
+  g_assert_not_reached (); /* Must set text->current_line here */
 }
 
 static guint
@@ -2303,7 +2395,7 @@ pixel_height_of (GtkText* text, GList* cache_line)
 static gint
 find_char_width (GtkText* text, const GtkPropertyMark *mark, const TabStopMark *tab_mark)
 {
-  gchar ch = TEXT_INDEX (text, mark->index);
+  gchar ch = GTK_TEXT_INDEX (text, mark->index);
   gint16* char_widths = MARK_CURRENT_TEXT_FONT (mark)->char_widths;
 
   if (ch == '\t')
@@ -2358,7 +2450,7 @@ find_cursor_at_line (GtkText* text, const LineParams* start_line, gint pixel_hei
     {
       pixel_width += find_char_width (text, &mark, &tab_mark);
 
-      advance_tab_mark (text, &tab_mark, TEXT_INDEX(text, mark.index));
+      advance_tab_mark (text, &tab_mark, GTK_TEXT_INDEX(text, mark.index));
       advance_mark (&mark);
     }
 
@@ -2367,7 +2459,7 @@ find_cursor_at_line (GtkText* text, const LineParams* start_line, gint pixel_hei
   text->cursor_char_offset = start_line->font_descent;
   text->cursor_mark        = mark;
 
-  ch = TEXT_INDEX (text, mark.index);
+  ch = GTK_TEXT_INDEX (text, mark.index);
 
   if (!isspace(ch))
     text->cursor_char = ch;
@@ -2429,7 +2521,7 @@ mouse_click_1_at_line (GtkText *text, const LineParams* lp,
 
   for (;;)
     {
-      gchar ch = TEXT_INDEX (text, mark.index);
+      gchar ch = GTK_TEXT_INDEX (text, mark.index);
 
       if (button_x < pixel_width || mark.index == lp->end.index)
 	{
@@ -2578,7 +2670,7 @@ move_cursor_ver (GtkText *text, int count)
     {
       mark = text->cursor_mark;
 
-      while (!LAST_INDEX(text, mark) && TEXT_INDEX(text, mark.index) != LINE_DELIM)
+      while (!LAST_INDEX(text, mark) && GTK_TEXT_INDEX(text, mark.index) != LINE_DELIM)
 	advance_mark (&mark);
 
       if (LAST_INDEX(text, mark))
@@ -2588,7 +2680,7 @@ move_cursor_ver (GtkText *text, int count)
     }
 
   for (i=0; i < text->cursor_virtual_x; i += 1, advance_mark(&mark))
-    if (LAST_INDEX(text, mark) || TEXT_INDEX(text, mark.index) == LINE_DELIM)
+    if (LAST_INDEX(text, mark) || GTK_TEXT_INDEX(text, mark.index) == LINE_DELIM)
       break;
 
   undraw_cursor (text, FALSE);
@@ -2987,7 +3079,7 @@ find_line_params (GtkText* text,
     {
       g_assert (lp.end.property);
 
-      ch   = TEXT_INDEX (text, lp.end.index);
+      ch   = GTK_TEXT_INDEX (text, lp.end.index);
       font = MARK_CURRENT_FONT (&lp.end);
 
       if (ch == LINE_DELIM)
@@ -3118,7 +3210,7 @@ draw_line (GtkText* text,
       expand_scratch_buffer (text, chars);
 
       for (i = 0; i < chars; i += 1)
-	text->scratch_buffer[i] = TEXT_INDEX(text, mark.index + i);
+	text->scratch_buffer[i] = GTK_TEXT_INDEX(text, mark.index + i);
 
       buffer = text->scratch_buffer;
     }
@@ -3629,7 +3721,7 @@ gtk_text_show_cache_line (GtkText *text, GList *cache,
 	   LINE_HEIGHT(*lp));
 
   for (i = lp->start.index; i < (lp->end.index + lp->wraps); i += 1)
-    g_print ("%c", TEXT_INDEX (text, i));
+    g_print ("%c", GTK_TEXT_INDEX (text, i));
 
   g_print (")\n");
 }

@@ -206,18 +206,14 @@ gtk_handle_box_realize (GtkWidget *widget)
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
-  /* FIXME: we need a property that would tell the window manager not
-   * to put decoration on this window.  This is not part of the ICCCM,
-   * so we'll have to define our own (a la KWM) and hack some window
-   * managers to support it.
-   */
-
   hb->float_window = gtk_window_new (GTK_WINDOW_DIALOG);
   gtk_window_set_policy (GTK_WINDOW (hb->float_window), FALSE, FALSE, TRUE);
   gtk_container_border_width (GTK_CONTAINER (hb->float_window), 0);
   gtk_signal_connect (GTK_OBJECT (hb->float_window), "delete_event",
 		      (GtkSignalFunc) gtk_handle_box_delete_float,
 		      hb);
+  gtk_widget_realize (hb->float_window);
+  gdk_window_set_decorations (hb->float_window->window, 0);
   
   attributes.x = widget->allocation.x;
   attributes.y = widget->allocation.y;

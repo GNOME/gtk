@@ -1,3 +1,37 @@
+Fri Feb 27 01:11:55 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktext.c
+
+	- gtk_text_delete and gtk_text_insert now update caches
+	and refresh screen correctly if the text widget isn't frozen.
+       
+	- Fixed bug where text->first_line_start_index wasn't
+	being updated correctly on insertion and deletion.
+	
+	- Added new public macro GTK_TEXT_INDEX (text, ind), and 
+	function gtk_text_get_chars(text, index, nchars);
+	
+Thu Feb 26 22:36:46 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdkwindow.c gdktypes.c gdk.h: 
+	new functions for setting WM hints
+
+	 gdk_window_set_icon()
+	 gdk_window_set_icon_name()
+	 gdk_window_set_group()
+	 gdk_window_set_decorations()
+	 gdk_window_set_functions()
+
+	* gdk/MwmUtil.h: new uninstalled header file from lesstif 
+	distribution, used for setting MWM hints.
+
+	* gdk/gdkdnd.c Makefile.am: renamed from gdk/gdk_dnd.c
+	
+	* gtk/gtkhandlebox.c (gtk_handle_box_realize): Use MWM hints
+	to undecorate window.
+
+	* gtk/testgtk.c gtk/circles.xbm: new test for WM hints.
+
 Wed Feb 25 22:56:42 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkspinbutton.h: 

@@ -21,6 +21,8 @@
 #include "../gdk/gdk.h"
 #include "../gdk/gdkx.h"
 
+#include "circles.xbm"
+
 /* Variables used by the Drag/Drop and Shape Window demos */
 static GtkWidget *modeller = NULL;
 static GtkWidget *sheets = NULL;
@@ -2746,7 +2748,7 @@ create_text ()
 		       "spencer blah blah blah\n", -1);
       gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "kimball\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
 		       "is\n", -1);
       gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "a\n", -1);
@@ -3608,6 +3610,84 @@ create_shapes ()
     gtk_widget_destroy (rings);
 }
 
+void
+create_wmhints ()
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *label;
+  GtkWidget *separator;
+  GtkWidget *button;
+  GtkWidget *box1;
+  GtkWidget *box2;
+
+  GdkBitmap *circles;
+
+  if (!window)
+    {
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC(destroy_window),
+			  &window);
+      gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+			  GTK_SIGNAL_FUNC(destroy_window),
+			  &window);
+
+      gtk_window_set_title (GTK_WINDOW (window), "WM Hints");
+      gtk_container_border_width (GTK_CONTAINER (window), 0);
+
+      gtk_widget_realize (window);
+      
+      circles = gdk_bitmap_create_from_data (window->window,
+					     circles_bits,
+					     circles_width,
+					     circles_height);
+      gdk_window_set_icon (window->window, NULL,
+			   circles, circles);
+      
+      gdk_window_set_icon_name (window->window, "WMHints Test Icon");
+  
+      gdk_window_set_decorations (window->window, GDK_DECOR_ALL | GDK_DECOR_MENU);
+      gdk_window_set_functions (window->window, GDK_FUNC_ALL | GDK_FUNC_RESIZE);
+      
+      box1 = gtk_vbox_new (FALSE, 0);
+      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_widget_show (box1);
+
+      label = gtk_label_new ("Try iconizing me!");
+      gtk_widget_set_usize (label, 150, 50);
+      gtk_box_pack_start (GTK_BOX (box1), label, TRUE, TRUE, 0);
+      gtk_widget_show (label);
+
+
+      separator = gtk_hseparator_new ();
+      gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
+      gtk_widget_show (separator);
+
+
+      box2 = gtk_vbox_new (FALSE, 10);
+      gtk_container_border_width (GTK_CONTAINER (box2), 10);
+      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
+      gtk_widget_show (box2);
+
+
+      button = gtk_button_new_with_label ("close");
+
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
+				 GTK_OBJECT (window));
+
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_grab_default (button);
+      gtk_widget_show (button);
+    }
+
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show (window);
+  else
+    gtk_widget_destroy (window);
+}
 
 /*
  * Progress Bar
@@ -4571,6 +4651,7 @@ create_main_window ()
       { "panes", create_panes },
       { "shapes", create_shapes },
       { "dnd", create_dnd },
+      { "WM hints", create_wmhints },
       { "progress bar", create_progress_bar },
       { "preview color", create_color_preview },
       { "preview gray", create_gray_preview },
