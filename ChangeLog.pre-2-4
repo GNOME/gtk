@@ -1,7 +1,12 @@
+Sun Oct  5 23:59:03 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* tests/testsocket.c (child_read_watch): Remove an
+        extraneous unref.  (#122336, Frederic Crozat)
+
 Sun Oct  5 22:38:22 2003  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkeventbox.c (gtk_event_box_class_init): Trim whitespace in
-	"visible-window" blurb.  (#123910, Christian Rose)
+	* gtk/gtkeventbox.c (gtk_event_box_class_init): Trim 
+	whitespace in "visible-window" blurb.  (#123910, Christian Rose)
 
 Sun Oct  5 00:53:15 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
