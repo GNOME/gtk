@@ -935,8 +935,18 @@ gtk_object_get_arg_type (const gchar *arg_name)
   gchar buffer[1024];
   gchar *t;
 
+  g_return_val_if_fail (arg_name != NULL, 0);
+
   if (!arg_info_ht)
     return GTK_TYPE_INVALID;
+
+  if (!arg_name || strlen (arg_name) > 1000)
+    {
+      /* security audit
+       */
+      g_warning ("gtk_object_get_arg_type(): argument `arg_name' exceeds maximum size.");
+      return 0;
+    }
 
   t = strchr (arg_name, ':');
   if (!t || (t[0] != ':') || (t[1] != ':'))
@@ -1535,7 +1545,7 @@ gtk_trace_referencing (GtkObject   *object,
 
 #ifdef	G_ENABLE_DEBUG
       exists = g_hash_table_lookup (living_objs_ht, object) != NULL;
-#endif	/* !G_ENABLE_DEBUG */
+#endif	/* G_ENABLE_DEBUG */
       
       if (exists &&
 	  (object == gtk_trace_object ||

@@ -1,16 +1,28 @@
+Tue May 12 02:31:57 1998  Tim Janik  <timj@gtk.org>
+
+	[security audit by Alan Cox]
+
+	* gtk/gtkobject.c (gtk_object_get_arg_type): check for arg_name to not
+	exceed maximum assumed size.
+
+	* gtk/gtkmenufactory.c (gtk_menu_factory_create): check that `path' does
+	not exceed maximum assumed size.
+	(gtk_menu_factory_remove): likewise.
+	(gtk_menu_factory_find_recurse): likewise.
+
 Mon May 11 23:53:38 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.c (gtk_widget_queue_resize): queue the idle_sizer with
 	GTK_PRIORITY_INTERNAL - 1, so widgets get first resized and then
- 	redrawn if that is still neccessary. don't allow queueing of already
+	redrawn if that is still neccessary. don't allow queueing of already
 	destructed objects.
 	(gtk_widget_idle_sizer): proccess the resize queue in a save manner, so
 	widgets which are in the queue can be destroyed savely, handle
- 	requeueing properly.
+	requeueing properly.
 	(gtk_widget_idle_draw): proccess the redraw queue in a save manner, so
 	widgets which are in the queue can be destroyed/unrealized savely.
 
-Mon May 11 17:54:44 BST 1998 Tony Gale  <gale@gtk.org>
+Mon May 11 17:54:44 BST 1998 Tony Gale	<gale@gtk.org>
 
 	* gtkfaq.sgml: add question on multi-threading,
 	  minor URL cleanups.
@@ -19,24 +31,24 @@ Mon May 11 09:56:45 1998  Tim Janik  <timj@gtk.org>
 
 	* configure.in (cflags_set): preserve automake CFLAGS.
 
-        * Makefile.am: fully rename the created libraries to libgtk-1.1.la
+	* Makefile.am: fully rename the created libraries to libgtk-1.1.la
 	and libgdk-1.1.la. this means we need to change certain portions of
- 	the Makefile.am on major/minor version bumps.
+	the Makefile.am on major/minor version bumps.
 
 	* ltmain.sh: the -release option is not required anymore.
 	
-        * gtk/gtkobject.h (gtk_trace_referencing): compile time check the type
-        of the first argument to be of type GtkObject. unconditionally compile
-        this function. removed __GNUC__ dependancy of the gtk_object_ref and
-        gtk_object_unref macro wrappers for this function.
+	* gtk/gtkobject.h (gtk_trace_referencing): compile time check the type
+	of the first argument to be of type GtkObject. unconditionally compile
+	this function. removed __GNUC__ dependancy of the gtk_object_ref and
+	gtk_object_unref macro wrappers for this function.
 
 Mon May 11 02:31:19 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkobject.h:
 	* gtk/gtkobject.c:
 	(gtk_object_data_try_key):
- 	(gtk_object_data_force_id): these are now macros substituting the old
- 	functions. we just use the corresponding g_dataset_* functions for
+	(gtk_object_data_force_id): these are now macros substituting the old
+	functions. we just use the corresponding g_dataset_* functions for
 	key->id associations. (this is to assure unique key<->id associations).
 
 1998-05-10  Stefan Jeske  <stefan@gtk.org>
@@ -46,27 +58,27 @@ Mon May 11 02:31:19 1998  Tim Janik  <timj@gtk.org>
 
 	* docs/gtk.texi (GtkCTree): Started documentation of GtkCTree.
 
-Sat May  9 20:11:20 1998  Owen Taylor  <otaylor@gtk.org>
+Sat May	 9 20:11:20 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* configure.in (LIBS): Try to figure out if this
 	is Digital Unix and we need -std1 to get the
 	right prototypes.
 
-Sat May  9 16:30:33 BST 1998 Tony Gale  <gale@gtk.org>
+Sat May	 9 16:30:33 BST 1998 Tony Gale	<gale@gtk.org>
 
 	* docs/gtk_tut_it.sgml: update of Italian tutorial
 	  translation from Daniele Canazza <dcanazz@tin.it>
 
-Sat May  9 02:34:41 1998  Tim Janik  <timj@gtk.org>
+Sat May	 9 02:34:41 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkfeatures.h.in: new file used as template for
 	* gtk/gtkfeatures.h: new file to define macros indicating newly
- 	introduced features, such as GTK_HAVE_SIGNAL_INIT.
+	introduced features, such as GTK_HAVE_SIGNAL_INIT.
 
 	* gtk/gtksignal.c:
- 	(gtk_signal_emitv_by_name):
+	(gtk_signal_emitv_by_name):
 	(gtk_signal_emitv):
- 	new functions to emit signals with an already provided parameter set.
+	new functions to emit signals with an already provided parameter set.
 	(provided by Kenneth Albanowski <kjahds@kjahds.com>).
 	(gtk_signal_real_emit): prototype changes, so this functions always
 	gets its parameters and signal structure as arguments.
@@ -74,12 +86,12 @@ Sat May  9 02:34:41 1998  Tim Janik  <timj@gtk.org>
 	gtk_signal_real_emit.
 	(gtk_signal_emit_by_name): likewise.
 
-Sat May  9 00:03:12 1998  Tim Janik  <timj@gtk.org>
+Sat May	 9 00:03:12 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksignal.c (gtk_signal_handler_unref): reflect the presence of
- 	signal connections through unsetting GTK_CONNECTED.
+	signal connections through unsetting GTK_CONNECTED.
 	(gtk_signal_handler_insert): reflect the presence of signal connections
- 	through setting GTK_CONNECTED.
+	through setting GTK_CONNECTED.
 	(gtk_signal_real_emit): only check for handler emissions if the object
 	has the GTK_CONNECTED flag set.
 	(gtk_signal_handler_pending): don't check for pending handlers if the
