@@ -614,9 +614,16 @@ gtk_expander_size_allocate (GtkWidget     *widget,
 
       ltr = gtk_widget_get_direction (widget) != GTK_TEXT_DIR_RTL;
 
-      label_allocation.x = widget->allocation.x + border_width + focus_width + focus_pad;
       if (ltr)
-	label_allocation.x += expander_size + 2 * expander_spacing;
+	label_allocation.x = (widget->allocation.x +
+                              border_width + focus_width + focus_pad +
+                              expander_size + 2 * expander_spacing);
+      else
+        label_allocation.x = (widget->allocation.x + widget->allocation.width -
+                              (label_requisition.width +
+                               border_width + focus_width + focus_pad +
+                               expander_size + 2 * expander_spacing));
+
       label_allocation.y = widget->allocation.y + border_width + focus_width + focus_pad;
 
       label_allocation.width = MIN (label_requisition.width,
