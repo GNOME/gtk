@@ -215,10 +215,10 @@
 	  Currently, GTK+ has a large number of list and tree widgets
 	  (GtkList, GtkTree, GtkCList, GtkCTree), none of which are
 	  ideal. The GtkList and GtkTree widgets perform badly on large
-	  sets. (GtkTree widget is also quite buggy.) GtkCList
+	  number of items. (GtkTree widget is also quite buggy.) GtkCList
 	  and GtkCTree mostly solve the size problem, but are quite
 	  complex and, despite that, not very flexible. They are limited to
-	  displaying pixmaps and text, and neither support arbitrary
+	  displaying pixmaps and text, and can neither support arbitrary
 	  widgets nor custom drawing functions.
 	</p>
 	<p>
