@@ -1,3 +1,11 @@
+Mon Feb 15 18:02:22 1999  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtkdnd.c: Some coding style fixups.
+
+	* gtk/gtkdnd.c (gtk_drag_set_icon_pixmap): Set a flag
+	 so that we destroy the icon window that we created
+	 when the drag ends.
+
 Thu Feb 11 18:43:12 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkbindings.c (gtk_binding_set_add_path): When

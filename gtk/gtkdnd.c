@@ -36,13 +36,15 @@ typedef struct _GtkDragAnim GtkDragAnim;
 typedef struct _GtkDragFindData GtkDragFindData;
 
 
-typedef enum {
+typedef enum 
+{
   GTK_DRAG_STATUS_DRAG,
   GTK_DRAG_STATUS_WAIT,
   GTK_DRAG_STATUS_DROP
 } GtkDragStatus;
 
-struct _GtkDragSourceSite {
+struct _GtkDragSourceSite 
+{
   GdkModifierType    start_button_mask;
   GtkTargetList     *target_list;        /* Targets for drag data */
   GdkDragAction      actions;            /* Possible actions */
@@ -55,7 +57,8 @@ struct _GtkDragSourceSite {
   gint               x, y;
 };
   
-struct _GtkDragSourceInfo {
+struct _GtkDragSourceInfo 
+{
   GtkWidget         *widget;
   GtkTargetList     *target_list; /* Targets for drag data */
   GdkDragAction      possible_actions; /* Actions allowed by source */
@@ -76,10 +79,13 @@ struct _GtkDragSourceInfo {
   
   GtkDragDestInfo   *proxy_dest;  /* Set if this is a proxy drag */
 
-  guint              drop_timeout; /* Timeout for aborting drop */
+  guint              drop_timeout;     /* Timeout for aborting drop */
+  guint              destroy_icon : 1; /* If true, destroy icon_window
+					*/
 };
 
-struct _GtkDragDestSite {
+struct _GtkDragDestSite 
+{
   GtkDestDefaults    flags;
   GtkTargetList     *target_list;
   GdkDragAction      actions;
@@ -90,7 +96,8 @@ struct _GtkDragDestSite {
   gboolean           have_drag : 1;
 };
   
-struct _GtkDragDestInfo {
+struct _GtkDragDestInfo 
+{
   GtkWidget         *widget;	   /* Widget in which drag is in */
   GdkDragContext    *context;	   /* Drag context */
   GtkDragSourceInfo *proxy_source; /* Set if this is a proxy drag */
@@ -111,13 +118,15 @@ struct _GtkDragDestInfo {
 #define ANIM_MIN_STEPS 5
 #define ANIM_MAX_STEPS 10
 
-struct _GtkDragAnim {
+struct _GtkDragAnim 
+{
   GtkDragSourceInfo *info;
   gint step;
   gint n_steps;
 };
 
-struct _GtkDragFindData {
+struct _GtkDragFindData 
+{
   gint x;
   gint y;
   GdkDragContext *context;
@@ -146,19 +155,19 @@ static gint         default_icon_hot_x;
 static gint         default_icon_hot_y;
 
 /* Forward declarations */
-static void gtk_drag_get_event_actions   (GdkEvent        *event, 
-					  gint             button,
-					  GdkDragAction    actions,
-					  GdkDragAction   *suggested_action,
-					  GdkDragAction   *possible_actions);
+static void          gtk_drag_get_event_actions (GdkEvent        *event, 
+					         gint             button,
+					         GdkDragAction    actions,
+					         GdkDragAction   *suggested_action,
+					         GdkDragAction   *possible_actions);
 static GdkCursor *   gtk_drag_get_cursor         (GdkDragAction action);
 static GtkWidget    *gtk_drag_get_ipc_widget     (void);
-static void          gtk_drag_release_ipc_widget (GtkWidget *widget);
+static void          gtk_drag_release_ipc_widget (GtkWidget      *widget);
 
-static void          gtk_drag_highlight_paint  (GtkWidget  *widget);
-static gboolean      gtk_drag_highlight_expose (GtkWidget      *widget,
-						GdkEventExpose *event,
-						gpointer        data);
+static void          gtk_drag_highlight_paint    (GtkWidget      *widget);
+static gboolean      gtk_drag_highlight_expose   (GtkWidget      *widget,
+					  	  GdkEventExpose *event,
+						  gpointer        data);
 
 
 static GdkAtom   gtk_drag_dest_find_target    (GtkWidget          *widget,
@@ -311,7 +320,7 @@ static struct {
   { 0              ,  action_none_bits, action_none_mask_bits, NULL },
 };
 
-static const gint n_drag_cursors = sizeof(drag_cursors) / sizeof(drag_cursors[0]);
+static const gint n_drag_cursors = sizeof (drag_cursors) / sizeof (drag_cursors[0]);
 
 /* XPM */
 static const char * drag_default_xpm[] = {
@@ -366,7 +375,7 @@ static const char * drag_default_xpm[] = {
  *************************************************************/
 
 static GtkWidget *
-gtk_drag_get_ipc_widget(void)
+gtk_drag_get_ipc_widget (void)
 {
   GtkWidget *result;
   
@@ -379,20 +388,20 @@ gtk_drag_get_ipc_widget(void)
     }
   else
     {
-      result = gtk_invisible_new();
+      result = gtk_invisible_new ();
       gtk_widget_show (result);
     }
 
   return result;
 }
 
-/*************************************************************
+/***************************************************************
  * gtk_drag_release_ipc_widget:
- *     Releases widget retrieved with gtk_drag_get_ipc_widget()
+ *     Releases widget retrieved with gtk_drag_get_ipc_widget ()
  *   arguments:
  *     widget: the widget to release.
  *   results:
- *************************************************************/
+ ***************************************************************/
 
 static void
 gtk_drag_release_ipc_widget (GtkWidget *widget)
@@ -429,15 +438,15 @@ gtk_drag_get_event_actions (GdkEvent *event,
 	case GDK_KEY_RELEASE:
 	  state = event->key.state;
 	  break;
-      case GDK_ENTER_NOTIFY:
-      case GDK_LEAVE_NOTIFY:
+	case GDK_ENTER_NOTIFY:
+	case GDK_LEAVE_NOTIFY:
 	  state = event->crossing.state;
 	  break;
-      default:
-	break;
-      }
+	default:
+	  break;
+	}
       
-      if (((button == 2) || (button == 3)) && (actions & GDK_ACTION_ASK))
+      if ((button == 2 || button == 3) && (actions & GDK_ACTION_ASK))
 	{
 	  *suggested_action = GDK_ACTION_ASK;
 	  *possible_actions = actions;
@@ -511,8 +520,8 @@ gtk_drag_get_cursor (GdkDragAction action)
 				     drag_cursors[i].mask,
 				     CURSOR_WIDTH, CURSOR_HEIGHT);
 
-      gdk_color_white (gdk_colormap_get_system(), &bg);
-      gdk_color_black (gdk_colormap_get_system(), &fg);
+      gdk_color_white (gdk_colormap_get_system (), &bg);
+      gdk_color_black (gdk_colormap_get_system (), &fg);
       
       drag_cursors[i].cursor = gdk_cursor_new_from_pixmap (pixmap, mask, &fg, &bg, 0, 0);
 
@@ -549,7 +558,7 @@ gtk_drag_get_data (GtkWidget      *widget,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (context != NULL);
 
-  selection_widget = gtk_drag_get_ipc_widget();
+  selection_widget = gtk_drag_get_ipc_widget ();
 
   gdk_drag_context_ref (context);
   gtk_widget_ref (widget);
@@ -560,7 +569,7 @@ gtk_drag_get_data (GtkWidget      *widget,
   gtk_object_set_data (GTK_OBJECT (selection_widget), "drag-context", context);
 
   gtk_selection_convert (selection_widget,
-			 gdk_drag_get_selection(context),
+			 gdk_drag_get_selection (context),
 			 target,
 			 time);
 }
@@ -636,7 +645,7 @@ gtk_drag_finish (GdkDragContext *context,
 
   if (target != GDK_NONE)
     {
-      GtkWidget *selection_widget = gtk_drag_get_ipc_widget();
+      GtkWidget *selection_widget = gtk_drag_get_ipc_widget ();
 
       gdk_drag_context_ref (context);
       
@@ -646,7 +655,7 @@ gtk_drag_finish (GdkDragContext *context,
 			  NULL);
       
       gtk_selection_convert (selection_widget,
-			     gdk_drag_get_selection(context),
+			     gdk_drag_get_selection (context),
 			     target,
 			     time);
     }
@@ -746,13 +755,13 @@ gtk_drag_highlight (GtkWidget  *widget)
  *************************************************************/
 
 void 
-gtk_drag_unhighlight (GtkWidget  *widget)
+gtk_drag_unhighlight (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
 
   gtk_signal_disconnect_by_func (GTK_OBJECT (widget),
 				 GTK_SIGNAL_FUNC (gtk_drag_highlight_paint),
-		      NULL);
+				 NULL);
   gtk_signal_disconnect_by_func (GTK_OBJECT (widget),
 				 GTK_SIGNAL_FUNC (gtk_drag_highlight_expose),
 				 NULL);
@@ -870,7 +879,7 @@ gtk_drag_dest_set_proxy (GtkWidget      *widget,
  *************************************************************/
 
 void 
-gtk_drag_dest_unset (GtkWidget        *widget)
+gtk_drag_dest_unset (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
 
@@ -980,7 +989,7 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
       break;
 
     default:
-      g_assert_not_reached();
+      g_assert_not_reached ();
     }
 }
 
@@ -1026,10 +1035,10 @@ gtk_drag_dest_find_target (GtkWidget       *widget,
 }
 
 static void
-gtk_drag_selection_received (GtkWidget          *widget,
-			     GtkSelectionData   *selection_data,
-			     guint32             time,
-			     gpointer            data)
+gtk_drag_selection_received (GtkWidget        *widget,
+			     GtkSelectionData *selection_data,
+			     guint32           time,
+			     gpointer          data)
 {
   GdkDragContext *context;
   GtkDragDestInfo *info;
@@ -1048,7 +1057,7 @@ gtk_drag_selection_received (GtkWidget          *widget,
 			      selection_data->format,
 			      selection_data->data,
 			      selection_data->length);
-      gtk_main_quit();
+      gtk_main_quit ();
       return;
     }
 
@@ -1231,7 +1240,8 @@ gtk_drag_find_widget (GtkWidget       *widget,
 }
 
 static void
-gtk_drag_proxy_begin (GtkWidget *widget, GtkDragDestInfo *dest_info)
+gtk_drag_proxy_begin (GtkWidget       *widget, 
+		      GtkDragDestInfo *dest_info)
 {
   GtkDragSourceInfo *source_info;
   GList *tmp_list;
@@ -1594,6 +1604,7 @@ gtk_drag_begin (GtkWidget         *widget,
   info->last_event = NULL;
   info->selections = NULL;
   info->icon_window = NULL;
+  info->destroy_icon = FALSE;
 
   gtk_drag_get_event_actions (event, info->button, actions,
 			      &suggested_action, &possible_actions);
@@ -1612,7 +1623,7 @@ gtk_drag_begin (GtkWidget         *widget,
   else 
     {
       gint x, y;
-      gdk_window_get_pointer (GDK_ROOT_PARENT(), &x, &y, NULL);
+      gdk_window_get_pointer (GDK_ROOT_PARENT (), &x, &y, NULL);
 
       info->cur_x = x;
       info->cur_y = y;
@@ -1660,11 +1671,11 @@ gtk_drag_begin (GtkWidget         *widget,
  *************************************************************/
 
 void 
-gtk_drag_source_set  (GtkWidget            *widget,
-		      GdkModifierType       start_button_mask,
-		      const GtkTargetEntry *targets,
-		      gint                  n_targets,
-		      GdkDragAction         actions)
+gtk_drag_source_set (GtkWidget            *widget,
+		     GdkModifierType       start_button_mask,
+		     const GtkTargetEntry *targets,
+		     gint                  n_targets,
+		     GdkDragAction         actions)
 {
   GtkDragSourceSite *site;
 
@@ -1744,10 +1755,10 @@ gtk_drag_source_unset (GtkWidget        *widget)
  *************************************************************/
 
 void 
-gtk_drag_source_set_icon  (GtkWidget     *widget,
-			   GdkColormap   *colormap,
-			   GdkPixmap     *pixmap,
-			   GdkBitmap     *mask)
+gtk_drag_source_set_icon (GtkWidget     *widget,
+			  GdkColormap   *colormap,
+			  GdkPixmap     *pixmap,
+			  GdkBitmap     *mask)
 {
   GtkDragSourceSite *site;
 
@@ -1777,7 +1788,7 @@ gtk_drag_source_set_icon  (GtkWidget     *widget,
 }
 
 /*************************************************************
- * gtk_drag_set_icon_widget:
+ * gtk_drag_set_icon_window:
  *     Set a widget as the icon for a drag.
  *   arguments:
  *     context:
@@ -1787,11 +1798,12 @@ gtk_drag_source_set_icon  (GtkWidget     *widget,
  *   results:
  *************************************************************/
 
-void 
-gtk_drag_set_icon_widget  (GdkDragContext    *context,
-			   GtkWidget         *widget,
-			   gint               hot_x,
-			   gint               hot_y)
+static void 
+gtk_drag_set_icon_window (GdkDragContext *context,
+			  GtkWidget      *widget,
+			  gint            hot_x,
+			  gint            hot_y,
+			  gboolean        destroy_on_release)
 {
   GtkDragSourceInfo *info;
 
@@ -1800,7 +1812,7 @@ gtk_drag_set_icon_widget  (GdkDragContext    *context,
 
   info = g_dataset_get_data (context, "gtk-info");
   gtk_drag_remove_icon (info);
-  
+
   info->icon_window = widget;
   info->hot_x = hot_x;
   info->hot_y = hot_y;
@@ -1814,6 +1826,31 @@ gtk_drag_set_icon_widget  (GdkDragContext    *context,
       gdk_window_raise (widget->window);
       gtk_widget_show (widget);
     }
+
+  info->destroy_icon = destroy_on_release;
+}
+
+/*************************************************************
+ * gtk_drag_set_icon_widget:
+ *     Set a widget as the icon for a drag.
+ *   arguments:
+ *     context:
+ *     widget:
+ *     hot_x:    Hot spot
+ *     hot_y:
+ *   results:
+ *************************************************************/
+
+void 
+gtk_drag_set_icon_widget (GdkDragContext    *context,
+			  GtkWidget         *widget,
+			  gint               hot_x,
+			  gint               hot_y)
+{
+  g_return_if_fail (context != NULL);
+  g_return_if_fail (widget != NULL);
+
+  gtk_drag_set_icon_window (context, widget, hot_x, hot_y, FALSE);
 }
 
 /*************************************************************
@@ -1830,12 +1867,12 @@ gtk_drag_set_icon_widget  (GdkDragContext    *context,
  *************************************************************/
 
 void 
-gtk_drag_set_icon_pixmap  (GdkDragContext    *context,
-			   GdkColormap       *colormap,
-			   GdkPixmap         *pixmap,
-			   GdkBitmap         *mask,
-			   gint               hot_x,
-			   gint               hot_y)
+gtk_drag_set_icon_pixmap (GdkDragContext    *context,
+			  GdkColormap       *colormap,
+			  GdkPixmap         *pixmap,
+			  GdkBitmap         *mask,
+			  gint               hot_x,
+			  gint               hot_y)
 {
   GtkWidget *window;
   gint width, height;
@@ -1846,7 +1883,7 @@ gtk_drag_set_icon_pixmap  (GdkDragContext    *context,
 
   gdk_window_get_size (pixmap, &width, &height);
 
-  gtk_widget_push_visual (gdk_colormap_get_visual(colormap));
+  gtk_widget_push_visual (gdk_colormap_get_visual (colormap));
   gtk_widget_push_colormap (colormap);
 
   window = gtk_window_new (GTK_WINDOW_POPUP);
@@ -1864,7 +1901,7 @@ gtk_drag_set_icon_pixmap  (GdkDragContext    *context,
   if (mask)
     gtk_widget_shape_combine_mask (window, mask, 0, 0);
 
-  gtk_drag_set_icon_widget (context, window, hot_x, hot_y);
+  gtk_drag_set_icon_window (context, window, hot_x, hot_y, TRUE);
 }
 
 /*************************************************************
@@ -2020,7 +2057,7 @@ gtk_drag_source_handle_event (GtkWidget *widget,
       gtk_drag_drop_finished (info, TRUE, event->dnd.time);
       break;
     default:
-      g_assert_not_reached();
+      g_assert_not_reached ();
     }
 }
 
@@ -2123,7 +2160,7 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
 	  anim->n_steps = CLAMP (anim->n_steps, ANIM_MIN_STEPS, ANIM_MAX_STEPS);
 	  if (info->icon_window)
 	    {
-	      gtk_widget_show(info->icon_window);
+	      gtk_widget_show (info->icon_window);
 	      gdk_window_raise (info->icon_window->window);
 	    }
 	  
@@ -2162,7 +2199,8 @@ gtk_drag_source_release_selections (GtkDragSourceInfo *info,
  *************************************************************/
 
 static void
-gtk_drag_drop (GtkDragSourceInfo *info, guint32 time)
+gtk_drag_drop (GtkDragSourceInfo *info, 
+	       guint32            time)
 {
   if (info->context->protocol == GDK_DRAG_PROTO_ROOTWIN)
     {
@@ -2251,8 +2289,8 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
 		break;
 	    }
 	  
-	  if (MAX (abs(site->x - event->motion.x),
-		   abs(site->y - event->motion.y)) > 3)
+	  if (MAX (abs (site->x - event->motion.x),
+		   abs (site->y - event->motion.y)) > 3)
 	    {
 	      GtkDragSourceInfo *info;
 	      GdkDragContext *context;
@@ -2345,7 +2383,7 @@ gtk_drag_selection_get (GtkWidget        *widget,
 			     info->proxy_dest->context,
 			     selection_data->target,
 			     time);
-	  gtk_main();
+	  gtk_main ();
 	  info->proxy_dest->proxy_data = NULL;
 	}
       else
@@ -2408,8 +2446,10 @@ gtk_drag_remove_icon (GtkDragSourceInfo *info)
   if (info->icon_window)
     {
       gtk_widget_hide (info->icon_window);
-      gtk_widget_unref (info->icon_window);
+      if (info->destroy_icon)
+	gtk_widget_destroy (info->icon_window);
 
+      gtk_widget_unref (info->icon_window);
       info->icon_window = NULL;
     }
 }
