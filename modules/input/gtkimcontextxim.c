@@ -499,7 +499,7 @@ gtk_im_context_xim_get_preedit_string (GtkIMContext   *context,
 				       gint           *cursor_pos)
 {
   GtkIMContextXIM *context_xim = GTK_IM_CONTEXT_XIM (context);
-  gchar *utf8 = g_ucs4_to_utf8 (context_xim->preedit_chars, context_xim->preedit_length);
+  gchar *utf8 = g_ucs4_to_utf8 (context_xim->preedit_chars, context_xim->preedit_length, NULL, NULL, NULL);
 
   if (attrs)
     {
@@ -631,7 +631,7 @@ preedit_draw_callback (XIC                           xic,
   new_text_length = xim_text_to_utf8 (context, new_xim_text, &tmp);
   if (tmp)
     {
-      new_text = g_utf8_to_ucs4 (tmp, -1);
+      new_text = g_utf8_to_ucs4_fast (tmp, -1, NULL);
       g_free (tmp);
     }
   

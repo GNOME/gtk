@@ -189,7 +189,7 @@ gtk_im_context_get_preedit_string (GtkIMContext   *context,
   
   klass = GTK_IM_CONTEXT_GET_CLASS (context);
   klass->get_preedit_string (context, str, attrs, cursor_pos);
-  g_return_if_fail (str == NULL || g_utf8_validate (*str, -1, NULL));    
+  g_return_if_fail (str == NULL || g_utf8_validate (*str, -1, NULL));
 }
 
 /**

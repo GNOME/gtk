@@ -1,3 +1,9 @@
+Fri Jan  5 16:16:29 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/{gtkcalender.c,gtkfilesel.c,gtkimcontext.c},
+	modules/input/gtkimcontextxim.c: Adopt to new prototypes
+	for unicode,locale,filename conversion functions.
+
 2001-01-05  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextiter.c (gtk_text_iter_ends_line): this function was
