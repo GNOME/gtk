@@ -1,3 +1,9 @@
+Mon Dec 16 16:18:15 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktexttag.c (gtk_text_tag_get_property): Get rid
+	of incorrect calls to g_value_init(). (#100669, Johan
+	Dahlin, James Henstridge)
+
 Mon Dec 16 17:20:02 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkaccellabel.c: Implement Owen's susggestion from

@@ -1350,13 +1350,6 @@ gtk_text_tag_set_property (GObject      *object,
 }
 
 static void
-get_color_arg (GValue *value, GdkColor *orig)
-{
-  g_value_init (value, GDK_TYPE_COLOR);
-  g_value_set_boxed (value, orig);
-}
-
-static void
 gtk_text_tag_get_property (GObject      *object,
                            guint         prop_id,
                            GValue       *value,
@@ -1373,11 +1366,11 @@ gtk_text_tag_get_property (GObject      *object,
       break;
 
     case PROP_BACKGROUND_GDK:
-      get_color_arg (value, &tag->values->appearance.bg_color);
+      g_value_set_boxed (value, &tag->values->appearance.bg_color);
       break;
 
     case PROP_FOREGROUND_GDK:
-      get_color_arg (value, &tag->values->appearance.fg_color);
+      g_value_set_boxed (value, &tag->values->appearance.fg_color);
       break;
 
     case PROP_BACKGROUND_STIPPLE:
