@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-02 17:21-0500\n"
-"PO-Revision-Date: 2004-03-03 13:41+0100\n"
+"POT-Creation-Date: 2004-03-04 11:15+0100\n"
+"PO-Revision-Date: 2004-03-04 11:15+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -903,15 +903,15 @@ msgstr "_Palett"
 msgid "Color Selection"
 msgstr "Fargevalg"
 
-#: gtk/gtkentry.c:4210 gtk/gtktextview.c:6900
+#: gtk/gtkentry.c:4213 gtk/gtktextview.c:6906
 msgid "Select _All"
 msgstr "Velg _alt"
 
-#: gtk/gtkentry.c:4220 gtk/gtktextview.c:6910
+#: gtk/gtkentry.c:4223 gtk/gtktextview.c:6916
 msgid "Input _Methods"
 msgstr "Inndata_metoder"
 
-#: gtk/gtkentry.c:4230 gtk/gtktextview.c:6921
+#: gtk/gtkentry.c:4233 gtk/gtktextview.c:6927
 msgid "_Insert Unicode Control Character"
 msgstr "Sett _inn Unicode kontrolltegn"
 
@@ -939,7 +939,7 @@ msgstr ""
 "Kunne ikke legge til bokmerke for %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:638 gtk/gtkfilechooserdefault.c:4010
+#: gtk/gtkfilechooserdefault.c:638 gtk/gtkfilechooserdefault.c:4022
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1017,80 +1017,85 @@ msgid "Create _Folder"
 msgstr "Opprett _mappe"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:2047
+#: gtk/gtkfilechooserdefault.c:2050
 msgid "_Name:"
 msgstr "_Navn:"
 
 #. Folder combo
-#: gtk/gtkfilechooserdefault.c:2066
+#: gtk/gtkfilechooserdefault.c:2069
 msgid "Save in _Folder:"
 msgstr "Lagre i _mappe:"
 
-#: gtk/gtkfilechooserdefault.c:2089
+#: gtk/gtkfilechooserdefault.c:2092
 msgid "_Browse for other folders"
 msgstr "_Se gjennom andre mapper"
 
-#: gtk/gtkfilechooserdefault.c:3262
+#: gtk/gtkfilechooserdefault.c:2848
+#, c-format
+msgid "Could not set current folder: %s"
+msgstr "Kunne ikke sette aktiv mappe: %s"
+
+#: gtk/gtkfilechooserdefault.c:3274
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "snarvei %s eksisterer ikke"
 
-#: gtk/gtkfilechooserdefault.c:3834
+#: gtk/gtkfilechooserdefault.c:3846
 msgid "Type name of new folder"
 msgstr "Skriv inn navn på ny mappe"
 
-#: gtk/gtkfilechooserdefault.c:3863
+#: gtk/gtkfilechooserdefault.c:3875
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:3865
+#: gtk/gtkfilechooserdefault.c:3877
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:3867
+#: gtk/gtkfilechooserdefault.c:3879
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:3869
+#: gtk/gtkfilechooserdefault.c:3881
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:3914
+#: gtk/gtkfilechooserdefault.c:3926
 msgid "Today"
 msgstr "I dag"
 
-#: gtk/gtkfilechooserdefault.c:3916
+#: gtk/gtkfilechooserdefault.c:3928
 msgid "Yesterday"
 msgstr "I går"
 
 #. FIXME: Get the right format for the locale
-#: gtk/gtkfilechooserdefault.c:3925
+#: gtk/gtkfilechooserdefault.c:3937
 msgid "%d/%b/%Y"
 msgstr "%b.%d.%Y"
 
-#: gtk/gtkfilechooserdefault.c:3928
+#: gtk/gtkfilechooserdefault.c:3940
 msgid "Unknown"
 msgstr "Ukjent"
 
-#: gtk/gtkfilechooserdefault.c:3973
+#: gtk/gtkfilechooserdefault.c:3985
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "Kan ikke gå til mappen du oppga fordi det er en ugyldig sti."
 
-#: gtk/gtkfilechooserdefault.c:4065
+#: gtk/gtkfilechooserdefault.c:4077
 msgid "Open Location"
 msgstr "Åpne lokasjon"
 
-#: gtk/gtkfilechooserdefault.c:4080
+#: gtk/gtkfilechooserdefault.c:4092
 msgid "_Location:"
 msgstr "_Lokasjon: "
 
-#: gtk/gtkfilechooserdefault.c:4114
+#: gtk/gtkfilechooserdefault.c:4126
 #, c-format
 msgid ""
 "Could not go to the parent folder of %s:\n"
@@ -1294,7 +1299,7 @@ msgstr "Dette filsystemet støtter ikke montering"
 msgid "Filesystem"
 msgstr "Filsystem"
 
-#: gtk/gtkfilesystemunix.c:471 gtk/gtkfilesystemunix.c:1376
+#: gtk/gtkfilesystemunix.c:471 gtk/gtkfilesystemunix.c:1375
 #: gtk/gtkfilesystemwin32.c:1175
 #, c-format
 msgid "error getting information for '%s': %s"
