@@ -1,3 +1,9 @@
+Wed May 14 17:45:32 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkkeysyms.h gdk/gdkkeynames.c gdk/gdkkeyuni.c:
+	Patch from Vasilis Vasaitis to fix Greek_IOTAdi[a]eresis 
+	inconsistency and leave the old name as an aliass (#104873)
+
 Wed May 14 16:40:09 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkframe.c (gtk_frame_set_label_widget): Patch

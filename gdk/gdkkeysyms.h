@@ -874,7 +874,8 @@
 #define GDK_Greek_EPSILONaccent 0x7a2
 #define GDK_Greek_ETAaccent 0x7a3
 #define GDK_Greek_IOTAaccent 0x7a4
-#define GDK_Greek_IOTAdiaeresis 0x7a5
+#define GDK_Greek_IOTAdieresis 0x7a5
+#define GDK_Greek_IOTAdiaeresis GDK_Greek_IOTAdieresis
 #define GDK_Greek_OMICRONaccent 0x7a7
 #define GDK_Greek_UPSILONaccent 0x7a8
 #define GDK_Greek_UPSILONdieresis 0x7a9
