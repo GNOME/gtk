@@ -1,3 +1,11 @@
+Thu Feb 24 09:07:28 2000  Tim Janik  <timj@gtk.org>
+
+	* TODO.xml: some updates, added abunch of new entries.
+	a note for those fiddeling with this file, when done
+	with it, invoke:
+	$ ./docs/make-todo TODO.xml >/dev/null
+	and correct output errors before comitting changes.
+
 Wed Feb 23 22:59:50 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* TODO.xml: Added XML-structured TODO file.

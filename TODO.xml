@@ -1,8 +1,8 @@
 <todo>
-
+  
   <section>
     <title>GDK</title>
-
+    
     <entry size="medium" status="70%" target="1.4">
       <title>Add backing store support</title>
       <description>
@@ -128,14 +128,70 @@
   <section>
     <title>GTK+ Core</title>
 
-    <entry size="big" status="25%" target="1.4">
-      <title>Split GtkObject out</title>
+    <entry size="big" status="5%" target="1.4">
+      <title>GLib based object and type system</title>
       <description>
 	<p>
 	  The GTK+ object system is already in use in quite a few different
 	  non-GUI applications; it would be desirable for these uses
-	  to have the object system separated from the GUI portions
-	  of GTK+.
+	  to have the object and type systems separated from the GUI portions
+	  of GTK+ and be generalized for non-GUI usage.
+	</p>
+      </description>
+      <contact>Tim Janik &lt;timj@gtk.org&gt;</contact>
+    </entry>
+
+    <entry size="big" status="1%" target="1.4">
+      <title>Overall callback improvements</title>
+      <description>
+	<p>
+	  The GTK+ type and signal systems need significant improvements to
+	  allow signal creation with default handlers from language bindings
+	  and to aid language bindings in deriving new objects.
+	  One aspect of this is the Closure support, recently suggested by
+	  Karl Nelson &lt;kenelson@ece.ucdavis.edu&gt;, but this also
+	  requires a GLib based type and parameter system (ties in with
+	  "GLib based object and type system").
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+    <entry size="big" status="0%" target="1.4">
+      <title>State change notification</title>
+      <description>
+	<p>
+	  GTK+ objects emit various types of signals, some to perform
+	  arbitrary actions, some to allow customization from user code,
+	  and some signals are emitted to notify of certain changes
+	  of an object. For the latter, what really is required is a
+	  gneneric signal that can be used to monitor *any* kind of object
+	  changes. For that, all object changes need to be routed through
+	  a central point (otherwise the signal emissions are spread all
+	  over the object implementation), i.e. an object argument setter.
+	  The state change notification signal doesn't need to be emitted
+	  syncronously, in fact, it's probably most effective to always
+	  emit this asynchronously, so subsequent changes are accumulated.
+	</p>
+      </description>
+      <contact>Tim Janik &lt;timj@gtk.org&gt;</contact>
+    </entry>
+
+    <entry size="big" status="5%" target="1.4">
+      <title>Widget as sensitivity/grab state machine</title>
+      <description>
+	<p>
+	  Maintenance of pointer and keybnoard grabs is currently very
+	  tedious and error-prone, most widget's cook up their own stuff
+	  in this regard.
+	  By moving the general concept of "Grabs" to the GTK+ level as
+	  a widget state, and providing a new signal for alterations of
+	  a widget's state ("visible", "visible+insensitive",
+	  "visible+grab", "hidden", "hidden+insensitive", etc.), things
+	  can be unified and more stabelize. A couple of bugs, such as
+	  insensitive widgets still holding a grab, or buttons that
+	  still think they are depressed when hidden, will be squeezed
+	  automatically with that.
 	</p>
       </description>
       <contact>Tim Janik &lt;timj@gtk.org&gt;</contact>
@@ -173,6 +229,21 @@
 	</p>
       </description>
     </entry>
+
+    <entry size="small" status="0%" target="1.4">
+      <title>Gtk+ Modules installation directory</title>
+      <description>
+	<p>
+	  Gtk+ needs to support an extra lib/ directory, to search
+	  for dynamically loadable modules, it also needs to support
+	  an environment variable to specify module search paths.
+	  This has quite some cross-platform issues with the GModule
+	  code (especially on AIX).
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
   </section>
 
   <section>
@@ -212,6 +283,32 @@
 	</p>
       </description>
       <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+    <entry size="big" status="90%" target="1.4">
+      <title>Supply horizontable/vertical wrapping boxes</title>
+      <description>
+	<p>
+	  An often requested feature are wrapping containers, at this
+	  point, gimp's development version already uses such widgets:
+	  horizontable/vertical wrap boxes, that need to go into 1.4
+	  proper at some point.
+	</p>
+      </description>
+      <contact>Tim Janik &lt;timj@gtk.org&gt;</contact>
+    </entry>
+
+    <entry size="medium" status="90%" target="1.4">
+      <title>Improved generic combo support</title>
+      <description>
+	<p>
+	  Gtk+'s combo box has several drawbacks in design and
+	  implementation. An new attempt at providing the combo box
+	  functionality with improved flexibility has been made with
+	  the GtkClueHunter widget, sitting in the CVS module "gle".
+	</p>
+      </description>
+      <contact>Tim Janik &lt;timj@gtk.org&gt;</contact>
     </entry>
 
     <entry size="big" status="0%" target="> 1.4">
