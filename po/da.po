@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "POT-Creation-Date: 2000-08-10 21:20-0400\n"
-"PO-Revision-Date: 2000-10-22 17:14+02:00\n"
+"PO-Revision-Date: 2000-11-03 17:14+01:00\n"
 "Last-Translator: Birger Langkjer <birger.langkjer@image.dk>\n"
 "Language-Team: Danish <sslug-locale@sslug.dk>\n"
 "MIME-Version: 1.0\n"
@@ -82,18 +82,18 @@ msgstr "Sæt farve"
 
 #. The OK button
 #: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:565 gtk/gtkfontsel.c:952
-#: gtk/gtkgamma.c:415
+#: gtk/gtkgamma.c:415 gtk/gtkstock.c:175
 msgid "OK"
 msgstr "Ok"
 
 #. The Cancel button
 #: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:572 gtk/gtkfilesel.c:968
 #: gtk/gtkfilesel.c:1077 gtk/gtkfilesel.c:1201 gtk/gtkfontsel.c:965
-#: gtk/gtkgamma.c:423
+#: gtk/gtkgamma.c:423 gtk/gtkstock.c:176
 msgid "Cancel"
 msgstr "Annullér"
 
-#: gtk/gtkcolorseldialog.c:116
+#: gtk/gtkcolorseldialog.c:116 gtk/gtkstock.c:183
 msgid "Help"
 msgstr "Hjælp"
 
@@ -129,12 +129,12 @@ msgstr "Omdøb fil"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:827
+#: gtk/gtkfilesel.c:827 gtk/gtkstock.c:171
 msgid "Error"
 msgstr "Fejl"
 
 #. close button
-#: gtk/gtkfilesel.c:850 gtk/gtkinputdialog.c:338
+#: gtk/gtkfilesel.c:850 gtk/gtkinputdialog.c:338 gtk/gtkstock.c:181
 msgid "Close"
 msgstr "Luk"
 
@@ -239,7 +239,7 @@ msgstr "Taster"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
-#: gtk/gtkinputdialog.c:329
+#: gtk/gtkinputdialog.c:329 gtk/gtkstock.c:186
 msgid "Save"
 msgstr "Gem"
 
@@ -291,17 +291,58 @@ msgstr "ryd"
 msgid "default:LTR"
 msgstr "default:LTR"
 
+#. KEEP IN SYNC with gtkiconfactory.c stock icons
+#: gtk/gtkstock.c:169
+msgid "Information"
+msgstr "Information"
+
+#: gtk/gtkstock.c:170
+msgid "Warning"
+msgstr "Advarsel"
+
+#: gtk/gtkstock.c:172
+msgid "Question"
+msgstr "Spørgsmål"
+
+#: gtk/gtkstock.c:174
+msgid "_Apply"
+msgstr "_Anvend"
+
+#: gtk/gtkstock.c:177
+msgid "_Close"
+msgstr "_Luk"
+
+#: gtk/gtkstock.c:178
+msgid "_Yes"
+msgstr "_Ja"
+
+#: gtk/gtkstock.c:179
+msgid "_No"
+msgstr "_Nej"
+
+#: gtk/gtkstock.c:182
+msgid "Quit"
+msgstr "Afslut"
+
+#: gtk/gtkstock.c:184
+msgid "New"
+msgstr "Ny"
+
+#: gtk/gtkstock.c:185
+msgid "Open"
+msgstr "Åbn"
+
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
 
-#: gtk/gtkrc.c:1978
+#: gtk/gtkrc.c:1991
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kunne ikke finde billedfil i pixmap_path: \"%s\" linje %d"
 
-#: gtk/gtkrc.c:1981
+#: gtk/gtkrc.c:1994
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunne ikke finde billedfil i pixmap_path: \"%s\""
