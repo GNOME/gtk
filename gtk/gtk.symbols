@@ -2128,6 +2128,8 @@ gtk_menu_shell_insert
 gtk_menu_shell_prepend
 gtk_menu_shell_select_first
 gtk_menu_shell_select_item
+gtk_menu_shell_set_take_focus
+gtk_menu_shell_get_take_focus
 #endif
 #endif
 

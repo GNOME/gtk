@@ -1221,7 +1221,8 @@ gtk_menu_tearoff_bg_copy (GtkMenu *menu)
 
 static gboolean
 popup_grab_on_window (GdkWindow *window,
-		      guint32    activate_time)
+		      guint32    activate_time,
+		      gboolean   grab_keyboard)
 {
   if ((gdk_pointer_grab (window, TRUE,
 			 GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
@@ -1229,7 +1230,8 @@ popup_grab_on_window (GdkWindow *window,
 			 GDK_POINTER_MOTION_MASK,
 			 NULL, NULL, activate_time) == 0))
     {
-      if (gdk_keyboard_grab (window, TRUE,
+      if (!grab_keyboard ||
+	  gdk_keyboard_grab (window, TRUE,
 			     activate_time) == 0)
 	return TRUE;
       else
@@ -1283,13 +1285,15 @@ gtk_menu_popup (GtkMenu		    *menu,
   GtkWidget *parent;
   GdkEvent *current_event;
   GtkMenuShell *menu_shell;
-  GtkMenuPrivate *priv = gtk_menu_get_private (menu);
+  gboolean grab_keyboard;
+  GtkMenuPrivate *priv;
 
   g_return_if_fail (GTK_IS_MENU (menu));
   
   widget = GTK_WIDGET (menu);
   menu_shell = GTK_MENU_SHELL (menu);
-  
+  priv = gtk_menu_get_private (menu);
+
   menu_shell->parent_menu_shell = parent_menu_shell;
 
   priv->seen_item_enter = FALSE;
@@ -1334,9 +1338,12 @@ gtk_menu_popup (GtkMenu		    *menu,
    * probably could just leave the grab on the other window, with a
    * little reorganization of the code in gtkmenu*).
    */
+  grab_keyboard = gtk_menu_shell_get_take_focus (menu_shell);
+  gtk_window_set_accept_focus (GTK_WINDOW (menu->toplevel), grab_keyboard);
+
   if (xgrab_shell && xgrab_shell != widget)
     {
-      if (popup_grab_on_window (xgrab_shell->window, activate_time))
+      if (popup_grab_on_window (xgrab_shell->window, activate_time, grab_keyboard))
 	GTK_MENU_SHELL (xgrab_shell)->have_xgrab = TRUE;
     }
   else
@@ -1345,7 +1352,7 @@ gtk_menu_popup (GtkMenu		    *menu,
 
       xgrab_shell = widget;
       transfer_window = menu_grab_transfer_window_get (menu);
-      if (popup_grab_on_window (transfer_window, activate_time))
+      if (popup_grab_on_window (transfer_window, activate_time, grab_keyboard))
 	GTK_MENU_SHELL (xgrab_shell)->have_xgrab = TRUE;
     }
 
@@ -1437,7 +1444,7 @@ gtk_menu_popup (GtkMenu		    *menu,
   gtk_widget_show (menu->toplevel);
 
   if (xgrab_shell == widget)
-    popup_grab_on_window (widget->window, activate_time); /* Should always succeed */
+    popup_grab_on_window (widget->window, activate_time, grab_keyboard); /* Should always succeed */
   gtk_grab_add (GTK_WIDGET (menu));
 }
 

@@ -38,6 +38,8 @@
 #include "gtkmnemonichash.h"
 #include "gtktearoffmenuitem.h"
 #include "gtkwindow.h"
+#include "gtkprivate.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 #define MENU_SHELL_TIMEOUT   500
@@ -55,6 +57,11 @@ enum {
   CANCEL,
   CYCLE_FOCUS,
   LAST_SIGNAL
+};
+
+enum {
+  PROP_0,
+  PROP_TAKE_FOCUS
 };
 
 typedef void (*GtkMenuShellSignal1) (GtkObject           *object,
@@ -131,10 +138,20 @@ struct _GtkMenuShellPrivate
 {
   GtkMnemonicHash *mnemonic_hash;
   GtkKeyHash *key_hash;
+
+  gboolean take_focus;
 };
 
 static void gtk_menu_shell_class_init        (GtkMenuShellClass *klass);
 static void gtk_menu_shell_init              (GtkMenuShell      *menu_shell);
+static void gtk_menu_shell_set_property      (GObject           *object,
+                                              guint              prop_id,
+                                              const GValue      *value,
+                                              GParamSpec        *pspec);
+static void gtk_menu_shell_get_property      (GObject           *object,
+                                              guint              prop_id,
+                                              GValue            *value,
+                                              GParamSpec        *pspec);
 static void gtk_menu_shell_realize           (GtkWidget         *widget);
 static void gtk_menu_shell_finalize          (GObject           *object);
 static gint gtk_menu_shell_button_press      (GtkWidget         *widget,
@@ -230,6 +247,8 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 
   parent_class = g_type_class_peek_parent (klass);
 
+  object_class->set_property = gtk_menu_shell_set_property;
+  object_class->get_property = gtk_menu_shell_get_property;
   object_class->finalize = gtk_menu_shell_finalize;
 
   widget_class->realize = gtk_menu_shell_realize;
@@ -340,6 +359,23 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 				"cycle_focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
 
+  /**
+   * GtkMenuShell:take-focus:
+   *
+   * A boolean that determines whether the menu and its submenus grab the
+   * keyboard focus. See gtk_menu_shell_set_take_focus() and
+   * gtk_menu_shell_get_take_focus().
+   *
+   * Since: 2.8
+   **/
+  g_object_class_install_property (object_class,
+                                   PROP_TAKE_FOCUS,
+                                   g_param_spec_boolean ("take-focus",
+							 P_("Take Focus"),
+							 P_("A boolean that determines whether the menu grabs the keyboard focus"),
+							 TRUE,
+							 GTK_PARAM_READWRITE));
+
   g_type_class_add_private (object_class, sizeof (GtkMenuShellPrivate));
 }
 
@@ -365,6 +401,45 @@ gtk_menu_shell_init (GtkMenuShell *menu_shell)
 
   priv->mnemonic_hash = NULL;
   priv->key_hash = NULL;
+  priv->take_focus = TRUE;
+}
+
+static void
+gtk_menu_shell_set_property (GObject      *object,
+                             guint         prop_id,
+                             const GValue *value,
+                             GParamSpec   *pspec)
+{
+  GtkMenuShell *menu_shell = GTK_MENU_SHELL (object);
+
+  switch (prop_id)
+    {
+    case PROP_TAKE_FOCUS:
+      gtk_menu_shell_set_take_focus (menu_shell, g_value_get_boolean (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_menu_shell_get_property (GObject     *object,
+                             guint        prop_id,
+                             GValue      *value,
+                             GParamSpec  *pspec)
+{
+  GtkMenuShell *menu_shell = GTK_MENU_SHELL (object);
+
+  switch (prop_id)
+    {
+    case PROP_TAKE_FOCUS:
+      g_value_set_boolean (value, gtk_menu_shell_get_take_focus (menu_shell));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static void
@@ -1386,6 +1461,76 @@ _gtk_menu_shell_remove_mnemonic (GtkMenuShell *menu_shell,
   _gtk_mnemonic_hash_remove (gtk_menu_shell_get_mnemonic_hash (menu_shell, TRUE),
 			     keyval, target);
   gtk_menu_shell_reset_key_hash (menu_shell);
+}
+
+/**
+ * gtk_menu_shell_get_take_focus:
+ * @menu: a #GtkMenuShell
+ *
+ * @returns: %TRUE if the menu_shell will take the keyboard focus on popup.
+ *
+ * Since: 2.8
+ **/
+gboolean
+gtk_menu_shell_get_take_focus (GtkMenuShell *menu_shell)
+{
+  GtkMenuShellPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_MENU_SHELL (menu_shell), FALSE);
+
+  priv = GTK_MENU_SHELL_GET_PRIVATE (menu_shell);
+
+  return priv->take_focus;
+}
+
+/**
+ * gtk_menu_shell_set_take_focus:
+ * @menu: a #GtkMenuShell
+ * @take_focus: %TRUE if the menu_shell should take the keyboard focus on popup.
+ *
+ * If @take_focus is %TRUE (the default) the menu will take the keyboard focus
+ * so that it will receive all keyboard events which is needed to enable
+ * keyboard navigation in menus.
+ *
+ * Setting @take_focus to %FALSE is useful only for special applications
+ * like virtual keyboard implementations which should not take keyboard
+ * focus.
+ *
+ * The @take_focus state of a menu or menu bar is automatically propagated
+ * to submenus whenever a submenu is popped up, so you don't have to worry
+ * about recursively setting it for your entire menu hierarchy. Only when
+ * programmatically picking a submenu and popping it up manually, the
+ * @take_focus property of the submenu needs to be set explicitely.
+ *
+ * Note that setting it to %FALSE has side-effects:
+ *
+ * If the focus is in some other app, it keeps the focus and keynav in
+ * the menu doesn't work. Consequently, keynav on the menu will only
+ * work if the focus is on some toplevel owned by the onscreen keyboard.
+ *
+ * To avoid confusing the user, menus with @take_focus set to %FALSE
+ * should not display mnemonics or accelerators, since it cannot be
+ * guaranteed that they will work.
+ *
+ * See also gdk_keyboard_grab()
+ *
+ * Since: 2.8
+ **/
+void
+gtk_menu_shell_set_take_focus (GtkMenuShell *menu_shell,
+                               gboolean      take_focus)
+{
+  GtkMenuShellPrivate *priv;
+
+  g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
+
+  priv = GTK_MENU_SHELL_GET_PRIVATE (menu_shell);
+
+  if (priv->take_focus != take_focus)
+    {
+      priv->take_focus = take_focus;
+      g_object_notify (G_OBJECT (menu_shell), "take-focus");
+    }
 }
 
 #define __GTK_MENU_SHELL_C__

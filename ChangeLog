@@ -1,3 +1,20 @@
+2005-03-31  Michael Natterer  <mitch@gimp.org>
+
+	Allow to pop up menus without grabbing the keyboard. Useful for
+	stuff like virtual keyboards. Fixes bug #159890
+
+	* gtk/gtk.symbols
+	* gtk/gtkmenushell.[ch]: added boolean property "take-focus"
+	and public API gtk_menu_shell_set/get_take_focus().
+
+	* gtk/gtkmenu.c (gtk_menu_popup)
+	(popup_grab_on_window): don't grab the keyboard if take_focus
+	is FALSE.
+
+	* gtk/gtkmenuitem.c (_gtk_menu_item_popup_submen): propagate the
+	parent menu_shell's take_focus property to the submenu which is
+	about to be popped up.
+
 2005-03-30  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from gtk-2-6:

@@ -1054,13 +1054,21 @@ _gtk_menu_item_popup_submenu (GtkWidget *widget)
   menu_item->timer = 0;
 
   if (GTK_WIDGET_IS_SENSITIVE (menu_item->submenu))
-    gtk_menu_popup (GTK_MENU (menu_item->submenu),
-		    widget->parent,
-		    widget,
-		    gtk_menu_item_position_menu,
-		    menu_item,
-		    GTK_MENU_SHELL (widget->parent)->button,
-		    0);
+    {
+      gboolean take_focus;
+
+      take_focus = gtk_menu_shell_get_take_focus (GTK_MENU_SHELL (widget->parent));
+      gtk_menu_shell_set_take_focus (GTK_MENU_SHELL (menu_item->submenu),
+                                     take_focus);
+
+      gtk_menu_popup (GTK_MENU (menu_item->submenu),
+                      widget->parent,
+                      widget,
+                      gtk_menu_item_position_menu,
+                      menu_item,
+                      GTK_MENU_SHELL (widget->parent)->button,
+                      0);
+    }
 }
 
 static void
