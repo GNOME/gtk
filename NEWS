@@ -1,3 +1,46 @@
+Overview of Changes from GTK+ 2.5.2 to GTK+ 2.5.3
+=================================================
+* GtkFileChooserButton
+ - Work better with older version of the gnome-vfs backend [Zack Cerza]
+ - Keynav improvements [Jonathan Blandford]
+ - Make position of pathbar down button stable [Jonathan]
+* GtkComboBox
+ - Work without a model [Mariano Suarez-Alvarez
+* GtkTreeView
+ - Allow sorting of tree models to be turned off [Torsten Schoenfeld]
+* GtkRange
+ - Add a::slider-moved signal [Thomas Fitzsimmons]
+* GtkEntryCompletion
+ - Improve positioning of popups [Matthias]
+* Make input methods respect editability [Noah Levitt]
+* Add an setting to specify modules to load [Alex Graveley]
+* Use GOption for commandline argument parsing [Anders Carlsson]
+* Default theme
+ - Improve drawing of expanders [Matthias Clasen]
+* Add a configure option to disable the use of ELF visibility 
+  attributes for PLT reduction
+* gdk-pixbuf
+ - Add a variant of gdk_pixbuf_new_from_file_at_size() which 
+   optionally ignores aspect ratio [Dom Lachowicz]
+ - Fix saving of pixbufs with alpha-channel as jpeg [Emmanuel Pacaud]
+ - Security fixes [Chris Evans]
+* Win32
+ - Improve tablet handling [Robert Ögren]
+ - Make tablets work on multi-monitor systems [Robert]
+ - Handle screen resolution changes [Arjohn Kampman, Tor Lillqvist]
+ - Add IME input method [Takuro Ashie, Kazuki IWAMOTO]
+ - Add ms-windows (Wimp) theme engine [Raymond Penners, Dom Lachowicz,
+   Havoc Pennington]
+ - Fix loading of input modules on Win32 [Kazuki IWAMOTO]
+ - Build fixes [Tor Lillqvist]
+* Other bug fixes [Hans Petter Jonsson, Tim Janik, Manish Singh,
+ Soeren Sandmann, Bill Haneman, Padraig O'Briain, Olexi Avramchenko,
+ Jonathan, Frederic Croszat, Matthias, Christian Persch, Felipe Heidrich,
+ Lorenzo Gil Sanchez, Richard Hoelscher, Owen Taylor, Olivier Andrieu,
+ Morten Welinder, Jean Bréfort]
+* Documentation improvements [Matthias]
+* New and updated translations (ang,ar,en_CA,ne,pt_BR,ro,uk)
+
 Overview of Changes from GTK+ 2.5.1 to GTK+ 2.5.2
 =================================================
 * GtkFileChooserButton
