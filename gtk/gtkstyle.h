@@ -344,7 +344,7 @@ void	  gtk_style_set_background           (GtkStyle	   *style,
 					      GtkStateType  state_type);
 void      gtk_style_apply_default_background (GtkStyle     *style,
 					      GdkWindow    *window,
-					      gboolean	    copy_area,
+					      gboolean	    set_bg,
 					      GtkStateType  state_type, 
 					      GdkRectangle *area, 
 					      gint          x, 
