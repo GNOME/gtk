@@ -1,3 +1,7 @@
+2005-03-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkspinbutton.h: Fix a typo.
+
 2005-03-21  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/Makefile.am: Use grep | head -n 1 instead of grep -m 1 which
