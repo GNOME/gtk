@@ -2429,7 +2429,7 @@ get_darkened_gc (GdkWindow *window,
 
   while (darken_count)
     {
-      gtk_style_shade (&src, &shaded, 1.3);
+      gtk_style_shade (&src, &shaded, 0.93);
       src = shaded;
       --darken_count;
     }

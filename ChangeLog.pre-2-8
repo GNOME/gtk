@@ -1,5 +1,10 @@
 2001-02-08  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtkstyle.c (get_darkened_gc): let's darken colors, not
+	lighten them.
+
+2001-02-08  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextview.c (gtk_text_view_destroy_layout): remove
 	validation idle
 

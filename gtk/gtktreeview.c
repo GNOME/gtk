@@ -1109,7 +1109,6 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
           /* FIXME when we have style properties, clean this up.
            */
 
-#if 1
           if (tree_view->priv->has_rules)
             {
               if (flags & GTK_CELL_RENDERER_SORTED)
@@ -1146,7 +1145,6 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
             }
 
           g_assert (detail);
-#endif
           
           /* Draw background */
           gtk_paint_flat_box (widget->style,
