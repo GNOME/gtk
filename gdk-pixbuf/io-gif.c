@@ -669,12 +669,12 @@ gif_get_lzw (GifContext *context)
 		context->pixbuf = gdk_pixbuf_new (ART_PIX_RGB,
 						  context->gif89.transparent != -1,
 						  8,
-						  context->width,
-						  context->height);
+						  context->frame_len,
+						  context->frame_height);
 
 		if (context->prepare_func)
 			(* context->prepare_func) (context->pixbuf, context->user_data);
-		if (context->animation || context->frame_done_func) {
+		if (context->animation || context->frame_done_func || context->anim_done_func) {
 			context->frame = g_new (GdkPixbufFrame, 1);
 			context->frame->x_offset = context->x_offset;
 			context->frame->y_offset = context->y_offset;;
@@ -696,8 +696,15 @@ gif_get_lzw (GifContext *context)
 			}
 			context->frame->pixbuf = context->pixbuf;
 			if (context->animation) {
+				int w,h;
 				context->animation->n_frames ++;
 				context->animation->frames = g_list_append (context->animation->frames, context->frame);
+				w = gdk_pixbuf_get_width (context->pixbuf);
+				h = gdk_pixbuf_get_height (context->pixbuf);
+				if (w > context->animation->width)
+					context->animation->width = w;
+				if (h > context->animation->height)
+					context->animation->height = h;
 			}
 		}
 	}
@@ -782,7 +789,7 @@ gif_get_lzw (GifContext *context)
 	}
  done:
 	/* we got enough data. there may be more (ie, newer layers) but we can quit now */
-	if (context->animation) {
+	if (context->animation || context->frame_done_func || context->anim_done_func) {
 		context->state = GIF_GET_NEXT_STEP;
 	} else
 		context->state = GIF_DONE;
@@ -821,7 +828,8 @@ gif_get_lzw (GifContext *context)
 		}
 	}
 
-	if (context->animation && context->state == GIF_GET_NEXT_STEP) {
+	if ((context->animation || context->frame_done_func || context->anim_done_func)
+	    && context->state == GIF_GET_NEXT_STEP) {
 		if (context->frame_done_func)
 			(* context->frame_done_func) (context->frame,
 						      context->user_data);
@@ -1210,6 +1218,8 @@ gdk_pixbuf__gif_image_load_animation (FILE *file)
 	context->animation->ref_count = 1;
 	context->animation->n_frames = 0;
 	context->animation->frames = NULL;
+	context->animation->width = 0;
+	context->animation->height = 0;
 	context->file = file;
 
 	gif_main_loop (context);

@@ -263,10 +263,27 @@ gdk_pixbuf_loader_frame_done (GdkPixbufFrame *frame, gpointer loader)
 
 	priv = GDK_PIXBUF_LOADER (loader)->private;
 
+	priv->pixbuf = NULL;
+
 	if (priv->animation == NULL) {
 		priv->animation = g_new0 (GdkPixbufAnimation, 1);
 		priv->animation->n_frames = 0;
 		priv->animation->ref_count = 1;
+		priv->animation->width  = gdk_pixbuf_get_width  (frame->pixbuf);
+		priv->animation->height = gdk_pixbuf_get_height (frame->pixbuf);
+	} else {
+		int w, h;
+
+		/* update bbox size */
+		w = gdk_pixbuf_get_width (frame->pixbuf);
+		h = gdk_pixbuf_get_height (frame->pixbuf);
+
+		if (w > priv->animation->width) {
+			priv->animation->width = h;
+		}
+		if (h > priv->animation->height) {
+			priv->animation->height = h;
+		}
 	}
 
 	priv->animation->frames = g_list_append (priv->animation->frames, frame);

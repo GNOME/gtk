@@ -13,6 +13,33 @@
 	* gdk-pixbuf/gdk-pixbuf.c (gdk_pixbuf_get_has_alpha): Return
 	gboolean instead of int.
 
+2000-03-29  Radek Doulik  <rodo@helixcode.com>
+
+	* gdk-pixbuf/gdk-pixbuf-animation.c
+	(gdk_pixbuf_animation_new_from_file): same as below
+
+	* gdk-pixbuf/io-gif.c (gif_get_lzw): added update of width and
+	height in GdkPixbufAnimation
+
+2000-03-28  Radek Doulik  <rodo@helixcode.com>
+
+	* gdk-pixbuf/io-gif.c (gif_get_lzw): test also for
+	context->frame_done_func and context->anim_done_func to make
+	progressive animation loading work
+
+	* gdk-pixbuf/gdk-pixbuf-loader.c (gdk_pixbuf_loader_frame_done):
+	added priv->pixbuf = NULL as pixbuf is now in frame (and to make
+	gdk_pixbuf_loader_prepare happy)
+	(gdk_pixbuf_loader_frame_done): update animation bbox
+
+	* gdk-pixbuf/gdk-pixbuf.h: added bbox size (width, height) to
+	_GdkPixbufAnimation
+
+2000-03-27  Radek Doulik  <rodo@helixcode.com>
+
+	* gdk-pixbuf/io-gif.c (gif_get_lzw): use frame_len and frame_width
+	instead of width and height
+
 2000-03-27  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixbuf/pixops/pixops.c: Fix problem with 

@@ -80,6 +80,9 @@ struct _GdkPixbufAnimation {
 
 	/* List of GdkPixbufFrame structures */
         GList *frames;
+
+	/* bounding box size */
+	int width, height;
 };
 
 

@@ -102,6 +102,8 @@ gdk_pixbuf_animation_new_from_file (const char *filename)
 		animation->ref_count = 1;
 		animation->n_frames = 1;
 		animation->frames = g_list_prepend (NULL, frame);
+		animation->width = gdk_pixbuf_get_width (pixbuf);
+		animation->height = gdk_pixbuf_get_height (pixbuf);
 	} else {
 		fseek (f, 0, SEEK_SET);
 		animation = (* image_module->load_animation) (f);
