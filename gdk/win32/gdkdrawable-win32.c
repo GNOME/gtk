@@ -1214,18 +1214,14 @@ draw_segments (GdkGCWin32 *gcwin32,
 	    }
 	  else
 	    GDI_CALL (MoveToEx, (hdc, segs[i].x1, segs[i].y1, NULL)) &&
-	      GDI_CALL (LineTo, (hdc, segs[i].x2, segs[i].y2)) &&
-	      (gcwin32->pen_width <= 1 &&
-	       GDI_CALL (LineTo, (hdc, segs[i].x2 + 1, segs[i].y2 + 1)));
+	      GDI_CALL (LineTo, (hdc, segs[i].x2, segs[i].y2));
 	}
     }
   else
     {
       for (i = 0; i < nsegs; i++)
 	GDI_CALL (MoveToEx, (hdc, segs[i].x1, segs[i].y1, NULL)) &&
-	  GDI_CALL (LineTo, (hdc, segs[i].x2, segs[i].y2)) &&
-	  (gcwin32->pen_width <= 1 &&
-	   GDI_CALL (LineTo, (hdc, segs[i].x2 + 1, segs[i].y2 + 1)));
+	  GDI_CALL (LineTo, (hdc, segs[i].x2, segs[i].y2));
     }
 }
 
