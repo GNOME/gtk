@@ -300,9 +300,10 @@ gdk_pixbuf_loader_eat_header_write (GdkPixbufLoader *loader, const guchar *buf, 
 	    
 	priv->header_buf_offset += nbytes;
 	    
-	if(priv->header_buf_offset >= LOADER_HEADER_SIZE)
-		gdk_pixbuf_loader_load_module(loader);
-
+	if(priv->header_buf_offset >= LOADER_HEADER_SIZE) {
+		if (gdk_pixbuf_loader_load_module(loader) == 0)
+			return 0;
+	}
 	return nbytes;
 }
 

@@ -1,3 +1,8 @@
+2000-01-05  Mark Crichton  <crichton@gimp.org>
+
+	* gdk-pixbuf/gdk-pixbuf-loader.c (gdk_pixbuf_loader_eat_header_write): 
+	Return 0 if gdk_pixbuf_load_loader_module returns FALSE.
+
 2000-01-05 Elliot Lee <sopwith@redhat.com>
 	* gdk-pixbuf/pixops/Makefile.am: Link with -lm (to get 'ceil' function)
 
