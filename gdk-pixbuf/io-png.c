@@ -851,7 +851,7 @@ static gboolean real_save_png (GdkPixbuf        *pixbuf,
                                g_set_error (error,
                                             GDK_PIXBUF_ERROR,
                                             GDK_PIXBUF_ERROR_BAD_OPTION,
-                                            _("Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."), keys[i] + 6);
+                                            _("Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."), keys[i] + 6);
                                num_keys = i;
                                for (i = 0; i < num_keys; i++)
                                        g_free (text_ptr[i].text);

@@ -251,7 +251,7 @@ gdk_pixbuf_io_init ()
 
 	channel = g_io_channel_new_file (filename, "r",  &error);
 	if (!channel) {
-		g_warning ("Can not open pixbuf loader module file '%s': %s",
+		g_warning ("Cannot open pixbuf loader module file '%s': %s",
 			   filename, error->message);
 		return;
 	}

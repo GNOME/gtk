@@ -523,7 +523,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                    PROP_NO_MONTH_CHANGE,
                                    g_param_spec_boolean ("no_month_change",
 							 P_("No Month Change"),
-							 P_("If TRUE, the selected month can not be changed"),
+							 P_("If TRUE, the selected month cannot be changed"),
 							 FALSE,
 							 G_PARAM_READWRITE));
 

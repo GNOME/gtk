@@ -1,3 +1,9 @@
+Thu Jul 15 19:19:21 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* io-png.c (real_save_png): 
+	* gdk-pixbuf-io.c (gdk_pixbuf_io_init): Use 'cannot' instead
+	of 'can not' in messages.   (#144226, Morten Welinder)
+
 Fri Jul  9 15:38:06 2004  Manish Singh  <yosh@gimp.org>
 
 	* gdk-pixbuf-io.c (gdk_pixbuf_format_set_disabled): function doesn't
