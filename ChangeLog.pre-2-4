@@ -1,4 +1,10 @@
-Merges from gtk-1-0
+Fri May  1 00:42:25 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdkwindow.c (gdk_window_get_colormap): Fix up
+	getting colormap for FOREIGN windows to go along with
+	Raster's fix for visuals.
+
+erges from gtk-1-0
 ===================
 	
 Thu Apr 30 23:32:51 1998  Owen Taylor  <otaylor@gtk.org>
