@@ -3578,9 +3578,8 @@ gtk_label_do_popup (GtkLabel       *label,
   append_action_signal (label, label->select_info->popup_menu, GTK_STOCK_PASTE, "paste_clipboard",
                         FALSE);
   
-  menuitem = gtk_menu_item_new_with_label (_("Select All"));
-  g_signal_connect_swapped (menuitem, "activate",
-			    G_CALLBACK (gtk_label_select_all), label);
+  menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_DELETE, NULL);
+  gtk_widget_set_sensitive (menuitem, FALSE);
   gtk_widget_show (menuitem);
   gtk_menu_shell_append (GTK_MENU_SHELL (label->select_info->popup_menu), menuitem);
 
@@ -3588,10 +3587,10 @@ gtk_label_do_popup (GtkLabel       *label,
   gtk_widget_show (menuitem);
   gtk_menu_shell_append (GTK_MENU_SHELL (label->select_info->popup_menu), menuitem);
       
-  menuitem = gtk_menu_item_new_with_label (_("Input Methods"));
+  menuitem = gtk_menu_item_new_with_label (_("Select All"));
+  g_signal_connect_swapped (menuitem, "activate",
+			    G_CALLBACK (gtk_label_select_all), label);
   gtk_widget_show (menuitem);
-  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), gtk_menu_new ());
-  gtk_widget_set_sensitive (menuitem, FALSE);
   gtk_menu_shell_append (GTK_MENU_SHELL (label->select_info->popup_menu), menuitem);
 
   g_signal_emit (label,

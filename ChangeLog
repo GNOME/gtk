@@ -1,5 +1,8 @@
 2004-11-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtklabel.c (gtk_label_do_popup): Adjust to the current
+	entry popup menu.
+
 	Make GDK+ compile with X11R5 (#148032)
 	
 	* gdk/x11/xsettings-client.c (xsettings_client_new): 
