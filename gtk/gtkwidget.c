@@ -45,7 +45,7 @@ enum {
   SIZE_REQUEST,
   SIZE_ALLOCATE,
   STATE_CHANGED,
-  SET_PARENT,
+  PARENT_SET,
   INSTALL_ACCELERATOR,
   REMOVE_ACCELERATOR,
   EVENT,
@@ -381,11 +381,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    gtk_widget_marshal_signal_5,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_UINT);
-  widget_signals[SET_PARENT] =
-    gtk_signal_new ("set_parent",
+  widget_signals[PARENT_SET] =
+    gtk_signal_new ("parent_set",
 		    GTK_RUN_FIRST,
 		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, set_parent),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, parent_set),
 		    gtk_widget_marshal_signal_6,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_OBJECT);
@@ -676,7 +676,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->size_request = NULL;
   klass->size_allocate = gtk_widget_real_size_allocate;
   klass->state_changed = NULL;
-  klass->set_parent = NULL;
+  klass->parent_set = NULL;
   klass->install_accelerator = NULL;
   klass->remove_accelerator = NULL;
   klass->event = NULL;
@@ -1125,7 +1125,7 @@ gtk_widget_unparent (GtkWidget *widget)
 
   old_parent = widget->parent;
   widget->parent = NULL;
-  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SET_PARENT], old_parent);
+  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[PARENT_SET], old_parent);
   
   gtk_widget_unref (widget);
 }
@@ -2314,7 +2314,7 @@ gtk_widget_set_parent (GtkWidget *widget,
 			       NULL);
     }
 
-  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SET_PARENT], NULL);
+  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[PARENT_SET], NULL);
 }
 
 /*************************************************************

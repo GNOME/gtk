@@ -264,6 +264,7 @@ gtk_object_set_arg (GtkObject *object,
       if ((arg->name[9 + 2 + 6] != ':') || (arg->name[9 + 2 + 7] != ':'))
 	{
 	  g_warning ("invalid signal argument: \"%s\"\n", arg->name);
+	  arg->type = GTK_TYPE_INVALID;
 	  return;
 	}
       gtk_signal_connect (object, arg->name + 9 + 2 + 6 + 2,
@@ -274,6 +275,7 @@ gtk_object_set_arg (GtkObject *object,
       if ((arg->name[9 + 2 + 13] != ':') || (arg->name[9 + 2 + 14] != ':'))
 	{
 	  g_warning ("invalid signal argument: \"%s\"\n", arg->name);
+	  arg->type = GTK_TYPE_INVALID;
 	  return;
 	}
       gtk_signal_connect_object (object, arg->name + 9 + 2 + 13 + 2,

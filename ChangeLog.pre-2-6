@@ -3,6 +3,13 @@ Sun Feb 22 00:20:12 MET 1998  Eckehard Berns  <eb@berns.prima.de>
 	* gdk/gdkcc.c (gdk_color_context_query_colors): fixed a bug for mode
 	GDK_CC_MODE_TRUE, when on a 24-bit visual on a 32-bit mashine.
 
+Sat Feb 21 15:33:20 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkwidget.h: 
+	* gtk/gtkwidget.c: renamed signal GtkWidget::set_parent to
+	GtkWidget::parent_set. since it's purpose is pure notification,
+	it should have been named this way in the first place.
+
 Sat Feb 21 12:06:11 1998  Scott Goehring  <scott@poverty.bloomington.in.us>
 
 	* gtk/gtkentry.c (gtk_entry_set_text): Added a test for passing a
