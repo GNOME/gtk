@@ -1,3 +1,7 @@
+Thu Aug 12 23:18:03 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkhandlebox.c: Remove an accidentally added include.
+
 2004-08-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaction.c (gtk_action_new): Fix the doc comment to generate
