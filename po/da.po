@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-05 15:40+0100\n"
-"PO-Revision-Date: 2005-01-05 15:49+0100\n"
+"POT-Creation-Date: 2005-01-06 00:07+0100\n"
+"PO-Revision-Date: 2005-01-06 00:07+0100\n"
 "Last-Translator: Martin Willemoes Hansen <mwh@sysrq.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -1090,12 +1090,12 @@ msgstr "_Indsæt Unicode-kontroltegn"
 msgid "Invalid filename: %s"
 msgstr "Ugyldigt filnavn: %s"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1227
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1246
 #: gtk/gtkpathbar.c:982
 msgid "Home"
 msgstr "Hjem"
 
-#: gtk/gtkfilechooserbutton.c:66 gtk/gtkfilechooserdefault.c:1254
+#: gtk/gtkfilechooserbutton.c:66 gtk/gtkfilechooserdefault.c:1273
 #: gtk/gtkpathbar.c:984
 msgid "Desktop"
 msgstr "Skrivebord"
@@ -1136,182 +1136,187 @@ msgstr "Ugyldigt filnavn"
 msgid "The folder contents could not be displayed"
 msgstr "Indholdet af mappen kunne ikke vises"
 
-#: gtk/gtkfilechooserdefault.c:2091
+#: gtk/gtkfilechooserdefault.c:1118
+#, c-format
+msgid "Could not get information about '%s': %s"
+msgstr "Kunne ikke indhente oplysninger om \"%s\": %s"
+
+#: gtk/gtkfilechooserdefault.c:2110
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Tilføj mappen \"%s\" til bogmærkerne"
 
-#: gtk/gtkfilechooserdefault.c:2132
+#: gtk/gtkfilechooserdefault.c:2151
 msgid "Add the current folder to the bookmarks"
 msgstr "Tilføj den aktuelle mappe til bogmærkerne"
 
-#: gtk/gtkfilechooserdefault.c:2134
+#: gtk/gtkfilechooserdefault.c:2153
 msgid "Add the selected folders to the bookmarks"
 msgstr "Tilføj de markerede mapper til bogmærkerne"
 
-#: gtk/gtkfilechooserdefault.c:2174
+#: gtk/gtkfilechooserdefault.c:2193
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Fjern bogmærket \"%s\""
 
-#: gtk/gtkfilechooserdefault.c:2587
+#: gtk/gtkfilechooserdefault.c:2606
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr ""
 "Kunne ikke tilføje et bogmærke for \"%s\" fordi det er et ugyldigt stinavn."
 
-#: gtk/gtkfilechooserdefault.c:2765
+#: gtk/gtkfilechooserdefault.c:2784
 msgid "Shortcuts"
 msgstr "Genveje"
 
-#: gtk/gtkfilechooserdefault.c:2819
+#: gtk/gtkfilechooserdefault.c:2838
 msgid "Folder"
 msgstr "Mappe"
 
-#: gtk/gtkfilechooserdefault.c:2871 gtk/gtkstock.c:295
+#: gtk/gtkfilechooserdefault.c:2890 gtk/gtkstock.c:295
 msgid "_Add"
 msgstr "_Tilføj"
 
-#: gtk/gtkfilechooserdefault.c:2878
+#: gtk/gtkfilechooserdefault.c:2897
 msgid "Add the selected folder to the bookmarks"
 msgstr "Tilføj den markerede mappe til bogmærkerne"
 
-#: gtk/gtkfilechooserdefault.c:2883 gtk/gtkstock.c:352
+#: gtk/gtkfilechooserdefault.c:2902 gtk/gtkstock.c:352
 msgid "_Remove"
 msgstr "_Fjern"
 
-#: gtk/gtkfilechooserdefault.c:2890
+#: gtk/gtkfilechooserdefault.c:2909
 msgid "Remove the selected bookmark"
 msgstr "Fjern det markerede bogmærke"
 
-#: gtk/gtkfilechooserdefault.c:2985
+#: gtk/gtkfilechooserdefault.c:3004
 msgid "_Add to Shortcuts"
 msgstr "_Tilføj til genveje"
 
-#: gtk/gtkfilechooserdefault.c:2999
+#: gtk/gtkfilechooserdefault.c:3018
 msgid "Show _Hidden Files"
 msgstr "Vis _skjulte filer"
 
-#: gtk/gtkfilechooserdefault.c:3123 gtk/gtkfilesel.c:767
+#: gtk/gtkfilechooserdefault.c:3142 gtk/gtkfilesel.c:767
 msgid "Files"
 msgstr "Filer"
 
-#: gtk/gtkfilechooserdefault.c:3154
+#: gtk/gtkfilechooserdefault.c:3173
 msgid "Name"
 msgstr "Navn"
 
-#: gtk/gtkfilechooserdefault.c:3179
+#: gtk/gtkfilechooserdefault.c:3198
 msgid "Size"
 msgstr "Størrelse"
 
-#: gtk/gtkfilechooserdefault.c:3192
+#: gtk/gtkfilechooserdefault.c:3211
 msgid "Modified"
 msgstr "Ændret"
 
-#: gtk/gtkfilechooserdefault.c:3224
+#: gtk/gtkfilechooserdefault.c:3243
 msgid "Select which types of files are shown"
 msgstr "Vælg hvilke typer filer der vises"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3260
+#: gtk/gtkfilechooserdefault.c:3279
 msgid "Create Fo_lder"
 msgstr "Opret _mappe"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3378
+#: gtk/gtkfilechooserdefault.c:3397
 msgid "_Name:"
 msgstr "_Navn:"
 
-#: gtk/gtkfilechooserdefault.c:3418
+#: gtk/gtkfilechooserdefault.c:3437
 msgid "_Browse for other folders"
 msgstr "_Se efter andre mapper"
 
-#: gtk/gtkfilechooserdefault.c:3668
+#: gtk/gtkfilechooserdefault.c:3687
 msgid "Save in _folder:"
 msgstr "Gem i _mappe:"
 
-#: gtk/gtkfilechooserdefault.c:3670
+#: gtk/gtkfilechooserdefault.c:3689
 msgid "Create in _folder:"
 msgstr "Opret i _mappe:"
 
-#: gtk/gtkfilechooserdefault.c:4494
+#: gtk/gtkfilechooserdefault.c:4513
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan ikke skifte til mappen fordi den ikke er lokal"
 
-#: gtk/gtkfilechooserdefault.c:5019
+#: gtk/gtkfilechooserdefault.c:5038
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Genvejen %s findes ikke"
 
-#: gtk/gtkfilechooserdefault.c:5479
+#: gtk/gtkfilechooserdefault.c:5498
 #, c-format
 msgid "Could not mount %s"
 msgstr "Kunne ikke montere %s"
 
-#: gtk/gtkfilechooserdefault.c:5772
+#: gtk/gtkfilechooserdefault.c:5791
 msgid "Type name of new folder"
 msgstr "Indtast navn på ny mappe"
 
-#: gtk/gtkfilechooserdefault.c:5814
+#: gtk/gtkfilechooserdefault.c:5833
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: gtk/gtkfilechooserdefault.c:5816
+#: gtk/gtkfilechooserdefault.c:5835
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f k"
 
-#: gtk/gtkfilechooserdefault.c:5818
+#: gtk/gtkfilechooserdefault.c:5837
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5820
+#: gtk/gtkfilechooserdefault.c:5839
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5872
+#: gtk/gtkfilechooserdefault.c:5891
 msgid "Today"
 msgstr "I dag"
 
-#: gtk/gtkfilechooserdefault.c:5874
+#: gtk/gtkfilechooserdefault.c:5893
 msgid "Yesterday"
 msgstr "I går"
 
-#: gtk/gtkfilechooserdefault.c:5885
+#: gtk/gtkfilechooserdefault.c:5904
 msgid "Unknown"
 msgstr "Ukendt"
 
-#: gtk/gtkfilechooserdefault.c:5955
+#: gtk/gtkfilechooserdefault.c:5974
 msgid "Cannot change folder"
 msgstr "Kan ikke skifte mappe"
 
-#: gtk/gtkfilechooserdefault.c:5956
+#: gtk/gtkfilechooserdefault.c:5975
 msgid "The folder you specified is an invalid path."
 msgstr "Mappen du har angivet har en ugyldig sti."
 
-#: gtk/gtkfilechooserdefault.c:5995
+#: gtk/gtkfilechooserdefault.c:6014
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Kunne ikke opbygge filnavn fra \"%s\" og \"%s\""
 
-#: gtk/gtkfilechooserdefault.c:6031
+#: gtk/gtkfilechooserdefault.c:6050
 msgid "Could not select item"
 msgstr "Kunne ikke vælge element"
 
-#: gtk/gtkfilechooserdefault.c:6071
+#: gtk/gtkfilechooserdefault.c:6090
 msgid "Open Location"
 msgstr "Åbn placering"
 
-#: gtk/gtkfilechooserdefault.c:6078
+#: gtk/gtkfilechooserdefault.c:6097
 msgid "Save in Location"
 msgstr "Åbn i placering"
 
-#: gtk/gtkfilechooserdefault.c:6102
+#: gtk/gtkfilechooserdefault.c:6121
 msgid "_Location:"
 msgstr "_Sted:"
 
