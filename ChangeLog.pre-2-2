@@ -1,3 +1,9 @@
+2002-04-05  Alex Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkkeyboard-fb.c (write_string):
+	Fix undefined variable typo.
+	Patch from Simon Floery <simon.floery@gmx.at>
+
 Fri Apr  5 01:06:15 2002  Tim Janik  <timj@gtk.org>
 
 	* gdk/x11/gdkwindow-x11.c (set_text_property): fix segfault

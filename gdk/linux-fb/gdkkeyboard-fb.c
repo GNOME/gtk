@@ -876,7 +876,7 @@ static gboolean
 write_string (gint   fd,
 	      gchar *str)
 {
-  gsize to_write = strlen (string);
+  gsize to_write = strlen (str);
 
   while (to_write > 0)
     {
