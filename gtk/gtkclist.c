@@ -5220,6 +5220,8 @@ scroll_vertical (GtkCList      *clist,
 		 GtkScrollType  scroll_type,
 		 gfloat         position)
 {
+  gint old_focus_row;
+
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CLIST (clist));
 
@@ -5231,15 +5233,22 @@ scroll_vertical (GtkCList      *clist,
     case GTK_SELECTION_EXTENDED:
       if (clist->anchor >= 0)
 	return;
-      if (!GTK_CLIST_ADD_MODE (clist))
-	gtk_clist_unselect_all (clist);
 
     case GTK_SELECTION_BROWSE:
 
-      if (clist->selection_mode == GTK_SELECTION_BROWSE)
-	unselect_row (clist,clist->focus_row, -1, NULL);
-
+      old_focus_row = clist->focus_row;
       move_focus_row (clist, scroll_type, position);
+
+      if (old_focus_row != clist->focus_row)
+	{
+	  if (clist->selection_mode == GTK_SELECTION_BROWSE)
+	    unselect_row (clist,old_focus_row, -1, NULL);
+	  else if (!GTK_CLIST_ADD_MODE (clist))
+	    {
+	      gtk_clist_unselect_all (clist);
+	      clist->undo_anchor = old_focus_row;
+	    }
+	}
 
       if (clist->selection_mode == GTK_SELECTION_EXTENDED &&
 	  GTK_CLIST_ADD_MODE (clist))
@@ -5248,7 +5257,8 @@ scroll_vertical (GtkCList      *clist,
       switch (gtk_clist_row_is_visible (clist, clist->focus_row))
 	{
 	case GTK_VISIBILITY_NONE:
-	  select_row (clist, clist->focus_row, -1, NULL);
+	  if (old_focus_row != clist->focus_row)
+	    select_row (clist, clist->focus_row, -1, NULL);
 	  switch (scroll_type)
 	    {
 	    case GTK_SCROLL_STEP_BACKWARD:
@@ -5286,7 +5296,8 @@ scroll_vertical (GtkCList      *clist,
 	    }
 
 	default:
-	  select_row (clist, clist->focus_row, -1, NULL);
+	  if (old_focus_row != clist->focus_row)
+	    select_row (clist, clist->focus_row, -1, NULL);
 	  break;
 	}
       break;

@@ -1,3 +1,8 @@
+Fri Jul 17 17:54:02 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (scroll_vertical): fix to avoid flicker at begin/end
+	of list
+
 Fri Jul 17 05:30:47 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksignal.c (gtk_handlers_run) (gtk_signal_real_emit):
@@ -32,6 +37,7 @@ Thu Jul 16 14:16:16 PDT 1998 Manish Singh <yosh@gimp.org>
 	it; --libs strips out redundant -L<path>'s properly (there was
 	code in there to do it before, but it didn't work)
 
+>>>>>>> 1.528
 Thu Jul 16 18:24:41 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtknotebook.h: 
