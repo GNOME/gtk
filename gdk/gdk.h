@@ -101,11 +101,11 @@ GdkGrabStatus gdk_keyboard_grab      (GdkWindow    *window,
 void          gdk_keyboard_ungrab    (guint32       time);
 gboolean      gdk_pointer_is_grabbed (void);
 
-gint gdk_screen_width  (void);
-gint gdk_screen_height (void);
+gint gdk_screen_width  (void) G_GNUC_CONST;
+gint gdk_screen_height (void) G_GNUC_CONST;
 
-gint gdk_screen_width_mm  (void);
-gint gdk_screen_height_mm (void);
+gint gdk_screen_width_mm  (void) G_GNUC_CONST;
+gint gdk_screen_height_mm (void) G_GNUC_CONST;
 
 void gdk_flush (void);
 void gdk_beep (void);
@@ -136,7 +136,7 @@ gboolean gdk_event_send_client_message (GdkEvent    *event,
 
 /* Key values
  */
-gchar*   gdk_keyval_name         (guint        keyval);
+gchar*   gdk_keyval_name         (guint        keyval) G_GNUC_CONST;
 guint    gdk_keyval_from_name    (const gchar *keyval_name);
 void     gdk_keyval_convert_case (guint        symbol,
 				  guint       *lower,

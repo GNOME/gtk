@@ -1,3 +1,6 @@
+2000-11-13 Elliot Lee <sopwith@redhat.com>
+	* gdk/gdk.h: Add a couple of missing G_GNUC_CONST's.
+
 Mon Nov 13 14:29:32 2000  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.c (gtk_tree_path_copy): confirm path != NULL
