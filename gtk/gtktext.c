@@ -845,6 +845,10 @@ gtk_text_forward_delete (GtkText *text,
   
   if (!text->freeze && (text->line_start_cache != NULL))
     {
+      /* We need to undraw the cursor here, since we may later
+       * delete the cursor's property
+       */
+      undraw_cursor (text, FALSE);
       find_line_containing_point (text, text->point.index, TRUE);
       compute_lines_pixels (text, nchars, &old_lines, &old_height);
     }
@@ -871,8 +875,8 @@ gtk_text_forward_delete (GtkText *text,
       MIN(nchars, editable->selection_end_pos - text->point.index);
   /* We'll reset the cursor later anyways if we aren't frozen */
   if (text->point.index < text->cursor_mark.index)
-    text->cursor_mark.index -=
-      MIN(nchars, text->cursor_mark.index - text->point.index);
+    move_mark_n (&text->cursor_mark, 
+		 -MIN(nchars, text->cursor_mark.index - text->point.index));
 
   move_gap_to_point (text);
 
@@ -881,7 +885,10 @@ gtk_text_forward_delete (GtkText *text,
   delete_text_property (text, nchars);
 
   if (!text->freeze && (text->line_start_cache != NULL))
-    delete_expose (text, nchars, old_lines, old_height);
+    {
+      delete_expose (text, nchars, old_lines, old_height);
+      draw_cursor (text, FALSE);
+    }
 
   if (frozen)
     gtk_text_thaw (text);
@@ -2377,8 +2384,6 @@ delete_expose (GtkText* text, guint nchars, guint old_lines, guint old_pixels)
 
   text->cursor_virtual_x = 0;
 
-  undraw_cursor (text, FALSE);
-
   correct_cache_delete (text, nchars, old_lines);
 
   pixel_height = pixel_height_of(text, text->current_line) -
@@ -2432,8 +2437,6 @@ delete_expose (GtkText* text, guint nchars, guint old_lines, guint old_pixels)
 
   find_cursor (text, TRUE);
 
-  draw_cursor (text, FALSE);
-
   if (old_pixels != new_pixels)
     {
       if (widget->style->bg_pixmap[GTK_STATE_NORMAL])
@@ -2460,15 +2463,41 @@ correct_cache_insert (GtkText* text, gint nchars)
   GList *cache;
   GtkPropertyMark *start;
   GtkPropertyMark *end;
+  gboolean was_split = FALSE;
+
+  /* We need to distinguish whether the property was split in the
+   * insert or not, so we check if the point (which points after
+   * the insertion here), points to the same character as the
+   * point before. Ugh.
+   */
+  if (nchars > 0)
+    {
+      GtkPropertyMark tmp_mark = text->point;
+      move_mark_n (&tmp_mark, -1);
+
+      if (tmp_mark.property != text->point.property)
+	was_split = TRUE;
+    }
   
-  /* If we split a property exactly at the beginning of the
+  /* If we inserted a property exactly at the beginning of the
    * line, we have to correct here, or fetch_lines will
    * fetch junk.
+   *
+   * This also handles the case when we split exactly
+   *  at the beginning and start->offset is now invalid
    */
 
   start = &CACHE_DATA(text->current_line).start;
-  if (start->offset == MARK_CURRENT_PROPERTY (start)->length)
-    SET_PROPERTY_MARK (start, start->property->next, 0);
+  if (was_split)
+    {
+      /* If we split exactly at the beginning... */
+      if (start->offset ==  MARK_CURRENT_PROPERTY (start)->length)
+	SET_PROPERTY_MARK (start, start->property->next, 0);
+      /* If we inserted a property at the beginning of the text... */
+      else if ((start->property == text->point.property) &&
+	       (start->index == text->point.index - nchars))
+	SET_PROPERTY_MARK (start, start->property->prev, 0);
+    }
 
   /* Now correct the offsets, and check for start or end marks that
    * are after the point, yet point to a property before the point's
@@ -2488,7 +2517,7 @@ correct_cache_insert (GtkText* text, gint nchars)
 	*start = text->point;
       else if (start->index >= text->point.index - nchars)
 	{
-	  if (start->property == text->point.property)
+	  if (!was_split && start->property == text->point.property)
 	    move_mark_n(start, nchars);
 	  else
 	    {
@@ -2508,7 +2537,7 @@ correct_cache_insert (GtkText* text, gint nchars)
 	*end = text->point;
       if (end->index >= text->point.index - nchars)
 	{
-	  if (end->property == text->point.property)
+	  if (!was_split && end->property == text->point.property)
 	    move_mark_n(end, nchars);
 	  else 
 	    {
@@ -2877,6 +2906,24 @@ static void
 delete_text_property (GtkText* text, guint nchars)
 {
   /* Delete nchars forward from point. */
+
+  /* Deleting text properties is problematical, because we
+   * might be storing around marks pointing to a property.
+   *
+   * The marks in question and how we handle them are:
+   *
+   *  point: We know the new value, since it will be at the
+   *         end of the deleted text, and we move it there
+   *         first.
+   *  cursor: We just remove the mark and set it equal to the
+   *         point after the operation.
+   *  line-start cache: We replace most affected lines.
+   *         The current line gets used to fetch the new
+   *         lines so, if necessary, (delete at the beginning
+   *         of a line) we fix it up by setting it equal to the
+   *         point.
+   */
+
   TextProperty *prop;
   GList        *tmp;
   gint          is_first;

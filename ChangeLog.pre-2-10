@@ -1,3 +1,15 @@
+Mon Aug  3 19:24:48 1998  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtktext.c (gtk_text_forward_delete): Undraw the
+ 	  cursor before (possibly) deleting the cursor's text
+ 	  property.
+ 
+ 	* gtk/gtktext.c (correct_cache_delete): More attempts
+ 	  to clean the line-start cache up after inserting
+ 	  a property. Among other things, make sure to
+ 	  fix up text->current_line, since it is used to 
+ 	  refetch the changed lines.
+ 
 Tue Aug  4 10:59:19 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktable.[ch]: Empty rows/columns of the table
