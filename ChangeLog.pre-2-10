@@ -1,3 +1,10 @@
+Mon Mar 15 10:35:19 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_add_volumes): set
+	changing_folders to be true so we don't trigger a callback when we
+	remove the selection
+	(shortcuts_add_bookmarks): ditto
+
 Mon Mar 15 10:47:18 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilechooserentry.c: s/seperator/separator/.

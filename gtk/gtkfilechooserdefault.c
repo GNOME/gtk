@@ -1198,6 +1198,10 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
   int start_row;
   GSList *list, *l;
   int n;
+  gboolean old_changing_folders;
+
+  old_changing_folders = impl->changing_folder;
+  impl->changing_folder = TRUE;
 
   start_row = shortcuts_get_index (impl, SHORTCUTS_VOLUMES);
   shortcuts_remove_rows (impl, start_row, impl->num_volumes, volume_remove_cb);
@@ -1232,6 +1236,8 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
 
   if (impl->shortcuts_filter_model)
     gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (impl->shortcuts_filter_model));
+
+  impl->changing_folder = old_changing_folders;
 }
 
 /* Used from shortcuts_remove_rows() */
@@ -1268,6 +1274,10 @@ static void
 shortcuts_add_bookmarks (GtkFileChooserDefault *impl)
 {
   GSList *bookmarks;
+  gboolean old_changing_folders;
+
+  old_changing_folders = impl->changing_folder;
+  impl->changing_folder = TRUE;
 
   if (impl->num_bookmarks > 0)
     {
@@ -1288,6 +1298,8 @@ shortcuts_add_bookmarks (GtkFileChooserDefault *impl)
     }
   if (impl->shortcuts_filter_model)
     gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (impl->shortcuts_filter_model));
+
+  impl->changing_folder = old_changing_folders;
 }
 
 /* Appends a separator and a row to the shortcuts list for the current folder */
