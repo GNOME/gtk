@@ -2,6 +2,16 @@
 
 	Merged from gtk-2-4:
 
+	Fix #141077.  Based on a patch by Christian Neumair <chris@gnome-de.org>:
+
+	* gtk/gtkfilechooserdefault.c (new_folder_button_clicked):
+	Desensitize the "new folder" button.
+	(edited_idle_cb): Sensitize the button back.
+
+2004-11-19  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from gtk-2-4:
+
 	Fix #158477:
 
 	* gtk/gtkfilechooserdefault.c (struct _GtkFileChooserDefault):

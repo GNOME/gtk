@@ -1568,6 +1568,9 @@ new_folder_button_clicked (GtkButton             *button,
   if (!impl->browse_files_model)
     return; /* FIXME: this sucks.  Disable the New Folder button or something. */
 
+  /* Prevent button from being clicked twice */
+  gtk_widget_set_sensitive (impl->browse_new_folder_button, FALSE);
+
   _gtk_file_system_model_add_editable (impl->browse_files_model, &iter);
 
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->browse_files_model), &iter);
@@ -1595,6 +1598,8 @@ edited_idle_cb (GtkFileChooserDefault *impl)
 
   _gtk_file_system_model_remove_editable (impl->browse_files_model);
   g_object_set (impl->list_name_renderer, "editable", FALSE, NULL);
+
+  gtk_widget_set_sensitive (impl->browse_new_folder_button, TRUE);
 
   if (impl->edited_new_text) /* not cancelled? */
     {
