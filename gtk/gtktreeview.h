@@ -201,6 +201,8 @@ void                   gtk_tree_view_row_activated                 (GtkTreeView 
 								    GtkTreeViewColumn         *column);
 void                   gtk_tree_view_expand_all                    (GtkTreeView               *tree_view);
 void                   gtk_tree_view_collapse_all                  (GtkTreeView               *tree_view);
+void                   gtk_tree_view_expand_to_path                (GtkTreeView               *tree_view,
+								    GtkTreePath               *path);
 gboolean               gtk_tree_view_expand_row                    (GtkTreeView               *tree_view,
 								    GtkTreePath               *path,
 								    gboolean                   open_all);

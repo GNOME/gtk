@@ -8800,6 +8800,40 @@ gtk_tree_view_collapse_all (GtkTreeView *tree_view)
   gtk_tree_path_free (path);
 }
 
+/**
+ * gtk_tree_view_expand_to_path:
+ * @tree_view: A #GtkTreeView.
+ * @path: path to a row.
+ *
+ * Expands the row at @path. This will also expand all parent rows of
+ * @path as necessary.
+ **/
+void
+gtk_tree_view_expand_to_path (GtkTreeView *tree_view,
+			      GtkTreePath *path)
+{
+  gint i, depth;
+  gint *indices;
+  GtkTreePath *tmp;
+
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  g_return_if_fail (path != NULL);
+
+  depth = gtk_tree_path_get_depth (path);
+  indices = gtk_tree_path_get_indices (path);
+
+  tmp = gtk_tree_path_new ();
+  g_return_if_fail (tmp != NULL);
+
+  for (i = 0; i < depth; i++)
+    {
+      gtk_tree_path_append_index (path, indices[i]);
+      gtk_tree_view_expand_row (tree_view, path, FALSE);
+    }
+
+  gtk_tree_path_free (path);
+}
+
 /* FIXME the bool return values for expand_row and collapse_row are
  * not analagous; they should be TRUE if the row had children and
  * was not already in the requested state.
