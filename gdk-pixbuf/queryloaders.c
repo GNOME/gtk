@@ -53,6 +53,76 @@ print_escaped (const char *str)
 	g_free (tmp);
 }
 
+static int
+loader_sanity_check (const char *path, GdkPixbufFormat *info, GdkPixbufModule *vtable)
+{
+	const GdkPixbufModulePattern *pattern;
+	const char *error = "";
+
+	for (pattern = info->signature; pattern->prefix; pattern++)
+		if (strlen (pattern->prefix) == 0) 
+		{
+			error = "empty pattern";
+
+			goto error;
+		}
+
+	if (!vtable->load && !vtable->begin_load && !vtable->load_animation)
+	{
+		error = "no load method implemented";
+
+		goto error;
+	}
+
+	if (vtable->begin_load && (!vtable->stop_load || !vtable->load_increment))
+	{
+		error = "incremental loading support incomplete";
+
+		goto error;
+	}
+
+	if ((info->flags & GDK_PIXBUF_FORMAT_WRITABLE) & !vtable->save) 
+	{
+		error = "loader claims to support saving but doesn't implement save";
+		goto error;
+	}
+	    
+	return 1;
+
+ error:
+	g_fprintf (stderr, "Loader sanity check failed for %s: %s\n", 
+		   path, error);
+	
+	return 0;
+}
+
+static void 
+write_loader_info (const char *path, GdkPixbufFormat *info)
+{
+	const GdkPixbufModulePattern *pattern;
+	char **mime; 
+	char **ext; 
+
+	g_printf("\"%s\"\n", path);
+	g_printf ("\"%s\" %d \"%s\" \"%s\"\n", 
+		  info->name, info->flags, 
+		  info->domain ? info->domain : GETTEXT_PACKAGE, info->description);
+	for (mime = info->mime_types; *mime; mime++) {
+		g_printf ("\"%s\" ", *mime);
+	}
+	g_printf ("\"\"\n");
+	for (ext = info->extensions; *ext; ext++) {
+		g_printf ("\"%s\" ", *ext);
+	}
+	g_printf ("\"\"\n");
+	for (pattern = info->signature; pattern->prefix; pattern++) {
+		print_escaped (pattern->prefix);
+		print_escaped (pattern->mask ? (const char *)pattern->mask : "");
+		g_printf ("%d\n", pattern->relevance);
+	}
+	g_printf ("\n");
+}
+
 static void
 query_module (const char *dir, const char *file)
 {
@@ -60,9 +130,6 @@ query_module (const char *dir, const char *file)
 	GModule *module;
 	void                    (*fill_info)     (GdkPixbufFormat *info);
 	void                    (*fill_vtable)   (GdkPixbufModule *module);
-	char **mime; 
-	char **ext; 
-	const GdkPixbufModulePattern *pattern;
 
 	if (g_path_is_absolute (file)) 
 		path = g_strdup (file);
@@ -74,27 +141,19 @@ query_module (const char *dir, const char *file)
 	    g_module_symbol (module, "fill_info", (gpointer *) &fill_info) &&
 	    g_module_symbol (module, "fill_vtable", (gpointer *) &fill_vtable)) {
 		GdkPixbufFormat *info;
-		g_printf("\"%s\"\n", path);
+		GdkPixbufModule *vtable;
+		
 		info = g_new0 (GdkPixbufFormat, 1);
+		vtable = g_new0 (GdkPixbufModule, 1);
+		
 		(*fill_info) (info);
-		g_printf ("\"%s\" %d \"%s\" \"%s\"\n", 
-		       info->name, info->flags, 
-		       info->domain ? info->domain : GETTEXT_PACKAGE, info->description);
-		for (mime = info->mime_types; *mime; mime++) {
-			g_printf ("\"%s\" ", *mime);
-		}
-		g_printf ("\"\"\n");
-		for (ext = info->extensions; *ext; ext++) {
-			g_printf ("\"%s\" ", *ext);
-		}
-		g_printf ("\"\"\n");
-		for (pattern = info->signature; pattern->prefix; pattern++) {
-			print_escaped (pattern->prefix);
-			print_escaped (pattern->mask ? (const char *)pattern->mask : "");
-			g_printf ("%d\n", pattern->relevance);
-		}
-		g_printf ("\n");
+		(*fill_vtable) (vtable);
+		
+		if (loader_sanity_check (path, info, vtable)) 
+			write_loader_info (path, info);
+		
 		g_free (info);
+		g_free (vtable);
 	}
 	else {
 		if (module == NULL)

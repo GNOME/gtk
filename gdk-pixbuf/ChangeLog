@@ -1,3 +1,12 @@
+Sun Nov  9 21:56:20 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* queryloaders.c (write_loader_info): New function to write 
+	out the information for a single loader, factored out of 
+	query_module().
+	(loader_sanity_check): New function to perform
+	sanity checks on a loader.
+	(query_module): Use the new functions.
+
 Thu Nov  6 00:27:27 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* io-pcx.c (gdk_pixbuf__pcx_load_increment): Fold two similar
