@@ -1737,48 +1737,6 @@ gtk_window_get_decorated (GtkWindow *window)
   return window->decorated;
 }
 
-static void
-gdk_pixbuf_render_pixmap_and_mask_with_colormap (GdkPixbuf   *pixbuf,
-                                                 GdkPixmap  **pixmap_return,
-                                                 GdkBitmap  **mask_return,
-                                                 int          alpha_threshold,
-                                                 GdkColormap *cmap)
-{
-  g_return_if_fail (pixbuf != NULL);
-  
-  if (pixmap_return)
-    {
-      GdkGC *gc;
-      
-      *pixmap_return = gdk_pixmap_new (NULL, gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
-				       gdk_colormap_get_visual (cmap)->depth);
-      gdk_drawable_set_colormap (GDK_DRAWABLE (*pixmap_return),
-                                 cmap);
-      gc = gdk_gc_new (*pixmap_return);
-      gdk_pixbuf_render_to_drawable (pixbuf, *pixmap_return, gc,
-				     0, 0, 0, 0,
-				     gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
-				     GDK_RGB_DITHER_NORMAL,
-				     0, 0);
-      gdk_gc_unref (gc);
-    }
-  
-  if (mask_return)
-    {
-      if (gdk_pixbuf_get_has_alpha (pixbuf))
-	{
-	  *mask_return = gdk_pixmap_new (NULL, gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf), 1);
-          
-	  gdk_pixbuf_render_threshold_alpha (pixbuf, *mask_return,
-					     0, 0, 0, 0,
-					     gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
-					     alpha_threshold);
-	}
-      else
-	*mask_return = NULL;
-    }
-}
-
 static GtkWindowIconInfo*
 get_icon_info (GtkWindow *window)
 {
@@ -1884,11 +1842,11 @@ get_pixmap_and_mask (GtkWindowIconInfo  *parent_info,
         }
 
       if (best_icon)
-        gdk_pixbuf_render_pixmap_and_mask_with_colormap (best_icon,
-                                                         pmap_return,
-                                                         mask_return,
-                                                         128,
-                                                         gdk_colormap_get_system ());
+        gdk_pixbuf_render_pixmap_and_mask_for_colormap (best_icon,
+							gdk_colormap_get_system (),
+							pmap_return,
+							mask_return,
+							128);
 
       /* Save pmap/mask for others to use if appropriate */
       if (parent_info)

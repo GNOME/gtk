@@ -1,3 +1,22 @@
+Fri Sep  7 18:17:47 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.h gdk/x11/gdkmain-x11.c: Deprecate gdk_set/get_use_xshm, 
+	make gdk_set_use_xshm a noop. Remove --no-xshm command line
+	option. If we aren't autodetecting properly, we need
+	to fix the problem, or at least make it an environment
+	variable setting, to avoid problems with propagating
+	to embedded children, plugins, etc.
+
+	* gdk/gdkcolor.h: Deprecate gdk_colormap_get_system_size().
+
+	* gdk/gdkpixbuf-render.c gdk/gdkpixbuf.h
+	(gdk_pixbuf_render_pixmap_and_mask_for_colormap):
+	New function to render a pixmap and mask for a particular colormap.
+
+	* gtk/gtkwindow.c (get_pixmap_and_mask): Change to use
+	gdk_pixbuf_render_pixmap_and_mask_for_colormap () instead
+	of internal implementation of the same.
+
 2001-09-07  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextlayout.c (gtk_text_layout_get_lines): remove some

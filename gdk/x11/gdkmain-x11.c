@@ -105,7 +105,6 @@ static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);
 GdkArgDesc _gdk_windowing_args[] = {
   { "display",     GDK_ARG_STRING,   &_gdk_display_name,    (GdkArgFunc)NULL   },
   { "sync",        GDK_ARG_BOOL,     &gdk_synchronize,     (GdkArgFunc)NULL   },
-  { "no-xshm",     GDK_ARG_NOBOOL,   &_gdk_use_xshm,        (GdkArgFunc)NULL   },
   { "gxid-host",   GDK_ARG_STRING,   &_gdk_input_gxid_host, (GdkArgFunc)NULL   },
   { "gxid-port",   GDK_ARG_INT,      &_gdk_input_gxid_port, (GdkArgFunc)NULL   },
   { NULL }
@@ -193,7 +192,6 @@ _gdk_windowing_init_check (int argc, char **argv)
 void
 gdk_set_use_xshm (gboolean use_xshm)
 {
-  _gdk_use_xshm = use_xshm;
 }
 
 gboolean

@@ -75,10 +75,11 @@ void                 gdk_set_program_class (const char *program_class);
 void      gdk_error_trap_push           (void);
 gint      gdk_error_trap_pop            (void);
 
-
+#ifndef GDK_DISABLE_DEPRECATED
 void	  gdk_set_use_xshm		(gboolean	 use_xshm);
-
 gboolean  gdk_get_use_xshm		(void);
+#endif /* GDK_DISABLE_DEPRECATED */
+
 gchar*	  gdk_get_display		(void);
 
 #ifndef GDK_DISABLE_DEPRECATED
