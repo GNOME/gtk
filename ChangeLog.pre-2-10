@@ -1,5 +1,12 @@
 2004-04-05  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkfilechooserdefault.c (file_pane_create): Make the
+	new-folder button say "Create Fo_lder" rather than "Create
+	_Folder", so that the mnemonic doesn't conflict with the "Save in
+	_folder" label.  Fixes #136975.
+
+2004-04-05  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/gtkpathbar.c (_gtk_path_bar_set_path): Ref/sink the
 	buttons.  Also, free them correctly upon failure.  Based on a
 	patch by Morten Welinder, fixes #137956.

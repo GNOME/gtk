@@ -2825,7 +2825,7 @@ file_pane_create (GtkFileChooserDefault *impl,
   gtk_box_pack_start (GTK_BOX (hbox), impl->browse_path_bar, TRUE, TRUE, 0);
 
   /* Create Folder */
-  impl->browse_new_folder_button = gtk_button_new_with_mnemonic (_("Create _Folder"));
+  impl->browse_new_folder_button = gtk_button_new_with_mnemonic (_("Create Fo_lder"));
   g_signal_connect (impl->browse_new_folder_button, "clicked",
 		    G_CALLBACK (new_folder_button_clicked), impl);
   gtk_box_pack_end (GTK_BOX (hbox), impl->browse_new_folder_button, FALSE, FALSE, 0);
