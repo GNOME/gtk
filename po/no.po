@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2004-01-19 20:39+0100\n"
+"PO-Revision-Date: 2004-01-24 10:26+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -1365,6 +1365,10 @@ msgid ""
 "You can get a copy from:\n"
 "\t%s"
 msgstr ""
+"Kunne ikke finne ikonet «%s». Temaet «%s»\n"
+"ble heller ikke funnet. Kanskj du må installere det.\n"
+"Du kan finne en kopi av det på:\n"
+"\t%s"
 
 #: gtk/gtkicontheme.c:1247
 #, c-format
@@ -1617,11 +1621,11 @@ msgstr "_Hjem"
 
 #: gtk/gtkstock.c:301
 msgid "Increase Indent"
-msgstr ""
+msgstr "Rykk inn mer"
 
 #: gtk/gtkstock.c:302
 msgid "Decrease Indent"
-msgstr ""
+msgstr "Rykk inn mindre"
 
 #: gtk/gtkstock.c:303
 msgid "_Index"
