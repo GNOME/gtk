@@ -1392,7 +1392,7 @@ gdk_window_focus (GdkWindow *window,
       gdk_error_trap_push ();
       XSetInputFocus (GDK_WINDOW_XDISPLAY (window),
                       GDK_WINDOW_XWINDOW (window),
-                      RevertToNone,
+                      RevertToParent,
                       timestamp);
       XSync (GDK_WINDOW_XDISPLAY (window), False);
       gdk_error_trap_pop ();

@@ -1,3 +1,9 @@
+Mon Nov 19 13:56:45 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_focus): Use 
+	RevertToParent, not RevertToNone. (#64613, 
+	Matthias Clasen)
+
 Mon Nov 19 12:28:02 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkframe.c (gtk_frame_class_init): label_xalign
