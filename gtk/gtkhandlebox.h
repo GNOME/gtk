@@ -42,7 +42,8 @@ struct _GtkHandleBox
 {
   GtkEventBox event_box;
   GtkWidget *real_parent;
-  gboolean is_being_dragged;
+  GtkRequisition real_requisition;
+  gboolean is_being_dragged, is_onroot;
 };
 
 struct _GtkHandleBoxClass
