@@ -1,3 +1,10 @@
+Mon Nov 15 18:58:22 2004  Manish Singh  <yosh@gimp.org>
+
+	* gdk-pixbuf-private.h: _gdk_pixbuf_lock now returns a gboolean.
+
+	* abicheck.sh: don't hardcode lengths for cut, instead split on
+	the third field.
+
 2004-11-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-animation.c: 
