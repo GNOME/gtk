@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: Vasif Ismailoglu MD <azerb_linux@hotmail.com>\n"
 "Language-Team: Azerbaijani turkish \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-9e\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:221
