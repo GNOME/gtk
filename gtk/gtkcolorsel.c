@@ -165,7 +165,8 @@ static void gtk_color_selection_show_all        (GtkWidget               *widget
 static void     gtk_color_selection_set_palette_color   (GtkColorSelection *colorsel,
                                                          gint               index,
                                                          GdkColor          *color);
-static GdkGC   *get_focus_gc                            (GtkWidget         *drawing_area,
+static void    set_focus_line_attributes                (GtkWidget         *drawing_area,
+							 cairo_t           *cr,
 							 gint              *focus_width);
 static void     default_noscreen_change_palette_func    (const GdkColor    *colors,
 							 gint               n_colors);
@@ -216,7 +217,7 @@ static const guchar dropper_mask[] = {
 #define SAMPLE_HEIGHT 28
 
 static void color_sample_draw_sample (GtkColorSelection *colorsel, int which);
-static void color_sample_draw_samples (GtkColorSelection *colorsel);
+static void color_sample_update_samples (GtkColorSelection *colorsel);
 
 static void
 set_color_internal (GtkColorSelection *colorsel,
@@ -377,11 +378,9 @@ static void
 color_sample_draw_sample (GtkColorSelection *colorsel, int which)
 {
   GtkWidget *da;
-  gint x, y, i, wid, heig, f, n, goff;
-  guchar c[3 * 2], cc[3 * 4], *cp = c;
-  gdouble o;
-  guchar *buf;
+  gint x, y, wid, heig, goff;
   ColorSelectionPrivate *priv;
+  cairo_t *cr;
   
   g_return_if_fail (colorsel != NULL);
   priv = colorsel->private_data;
@@ -389,81 +388,74 @@ color_sample_draw_sample (GtkColorSelection *colorsel, int which)
   g_return_if_fail (priv->sample_area != NULL);
   if (!GTK_WIDGET_DRAWABLE (priv->sample_area))
     return;
-  
+
   if (which == 0)
     {
       da = priv->old_sample;
-      for (n = 0, i = COLORSEL_RED; n < 3; n++, i++)
-	c[n] = (guchar) (UNSCALE (priv->old_color[i]) >> 8);
       goff = 0;
     }
   else
     {
       da = priv->cur_sample;
-      for (n = 0, i = COLORSEL_RED; n < 3; n++, i++)
-	c[n] = (guchar) (UNSCALE (priv->color[i]) >> 8);
       goff =  priv->old_sample->allocation.width % 32;
     }
+
+  cr = gdk_drawable_create_cairo_context (da->window);
   
   wid = da->allocation.width;
   heig = da->allocation.height;
-  
-  buf = g_new (guchar, 3 * wid * heig);
-  
-#if 0
-  i = COLORSEL_RED;
-  for (n = 0; n < 3; n++)
-    {
-      c[n] = (guchar) (255.0 * priv->old_color[i]);
-      c[n + 3] = (guchar) (255.0 * priv->color[i++]);
-    }
-#endif
+
+  /* Below needs tweaking for non-power-of-two */  
+#define CHECK_SIZE 16  
   
   if (priv->has_opacity)
     {
-      o = (which) ? priv->color[COLORSEL_OPACITY] : priv->old_color[COLORSEL_OPACITY];
-      
-      for (n = 0; n < 3; n++)
-	{
-	  cc[n] = (guchar) ((1.0 - o) * 192 + (o * (gdouble) c[n]));
-	  cc[n + 3] = (guchar) ((1.0 - o) * 128 + (o * (gdouble) c[n]));
-	}
-      cp = cc;
+      /* Draw checks in background */
+
+      cairo_set_rgb_color (cr, 0.5, 0.5, 0.5);
+      cairo_rectangle (cr, 0, 0, wid, heig);
+      cairo_fill (cr);
+
+      cairo_set_rgb_color (cr, 0.75, 0.75, 0.75);
+      for (x = goff & -CHECK_SIZE; x < goff + wid; x += CHECK_SIZE)
+	for (y = 0; y < heig; y += CHECK_SIZE)
+	  if ((x / CHECK_SIZE + y / CHECK_SIZE) % 2 == 0)
+	    cairo_rectangle (cr, x - goff, y, CHECK_SIZE, CHECK_SIZE);
+      cairo_fill (cr);
     }
-  
-  i = 0;
-  for (y = 0; y < heig; y++)
+
+  if (which == 0)
     {
-      for (x = 0; x < wid; x++)
-	{
-	  if (priv->has_opacity)
-	    f = 3 * ((((goff + x) % 32) < 16) ^ ((y % 32) < 16));
-	  else
-	    f = 0;
-	  
-	  for (n = 0; n < 3; n++)
-	    buf[i++] = cp[n + f];
-	}
+      cairo_set_rgb_color (cr,
+			   priv->old_color[COLORSEL_RED], 
+			   priv->old_color[COLORSEL_GREEN], 
+			   priv->old_color[COLORSEL_BLUE]);
+      if (priv->has_opacity)
+	cairo_set_alpha (cr, priv->old_color[COLORSEL_OPACITY]);
     }
-  
-  gdk_draw_rgb_image (da->window,
-		      da->style->black_gc,
-		      0, 0,
-		      wid, heig,
-		      GDK_RGB_DITHER_NORMAL,
-		      buf,
-		      3*wid);
-  
-  
-  g_free (buf);
+  else
+    {
+      cairo_set_rgb_color (cr,
+			   priv->color[COLORSEL_RED], 
+			   priv->color[COLORSEL_GREEN], 
+			   priv->color[COLORSEL_BLUE]);
+      if (priv->has_opacity)
+	cairo_set_alpha (cr, priv->color[COLORSEL_OPACITY]);
+    }
+
+  cairo_rectangle (cr, 0, 0, wid, heig);
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
 }
 
 
 static void
-color_sample_draw_samples (GtkColorSelection *colorsel)
+color_sample_update_samples (GtkColorSelection *colorsel)
 {
-  color_sample_draw_sample (colorsel, 0);
-  color_sample_draw_sample (colorsel, 1);
+  ColorSelectionPrivate *priv = colorsel->private_data;
+  gtk_widget_queue_draw (priv->old_sample);
+  gtk_widget_queue_draw (priv->cur_sample);
 }
 
 static gboolean
@@ -614,31 +606,42 @@ palette_paint (GtkWidget    *drawing_area,
 	       GdkRectangle *area,
 	       gpointer      data)
 {
+  cairo_t *cr;
+  gint focus_width;
+    
   if (drawing_area->window == NULL)
     return;
 
-  gdk_draw_rectangle (drawing_area->window,
-                      drawing_area->style->bg_gc[GTK_STATE_NORMAL],
-                      TRUE,
-                      area->x, area->y, area->width, area->height);
+  cr = gdk_drawable_create_cairo_context (drawing_area->window);
+
+  gdk_cairo_set_source_color (cr, &drawing_area->style->bg[GTK_STATE_NORMAL]);
+  cairo_rectangle (cr,
+		   area->x, area->y, area->width, area->height);
+  cairo_fill (cr);
   
   if (GTK_WIDGET_HAS_FOCUS (drawing_area))
     {
-      gint focus_width;
-      GdkGC *gc = get_focus_gc (drawing_area, &focus_width);
-      gdk_draw_rectangle (drawing_area->window,
-			  gc, FALSE, focus_width / 2, focus_width / 2,
-			  drawing_area->allocation.width - focus_width,
-			  drawing_area->allocation.height - focus_width);
-      g_object_unref (gc);
+      set_focus_line_attributes (drawing_area, cr, &focus_width);
+      g_print ("%g %g %g %g\n",
+	       focus_width / 2., focus_width / 2.,
+	       (double)drawing_area->allocation.width - focus_width,
+	       (double)drawing_area->allocation.height - focus_width);
+
+      cairo_rectangle (cr,
+		       focus_width / 2., focus_width / 2.,
+		       drawing_area->allocation.width - focus_width,
+		       drawing_area->allocation.height - focus_width);
+      cairo_stroke (cr);
     }
+
+  cairo_destroy (cr);
 }
 
-static GdkGC *
-get_focus_gc (GtkWidget *drawing_area,
-	      gint      *focus_width)
+static void
+set_focus_line_attributes (GtkWidget *drawing_area,
+			   cairo_t   *cr,
+			   gint      *focus_width)
 {
-  GdkGC *gc = gdk_gc_new (drawing_area->window);
   gdouble color[4];
   gint8 *dash_list;
   
@@ -648,22 +651,42 @@ get_focus_gc (GtkWidget *drawing_area,
 			NULL);
       
   palette_get_color (drawing_area, color);
-      
-  if (INTENSITY (color[0], color[1], color[2]) > 0.5)
-    gdk_gc_copy (gc, drawing_area->style->black_gc);
-  else
-    gdk_gc_copy (gc, drawing_area->style->white_gc);
 
-  gdk_gc_set_line_attributes (gc, *focus_width,
-			      dash_list[0] ? GDK_LINE_ON_OFF_DASH : GDK_LINE_SOLID,
-			      GDK_CAP_BUTT, GDK_JOIN_MITER);
+  if (INTENSITY (color[0], color[1], color[2]) > 0.5)
+    cairo_set_rgb_color (cr, 0., 0., 0.);
+  else
+    cairo_set_rgb_color (cr, 1., 1., 1.);
+
+  cairo_set_line_width (cr, *focus_width);
 
   if (dash_list[0])
-    gdk_gc_set_dashes (gc, 0, dash_list, strlen ((char *)dash_list));
+    {
+      gint n_dashes = strlen (dash_list);
+      gdouble *dashes = g_new (gdouble, n_dashes);
+      gdouble total_length = 0;
+      gdouble dash_offset;
+      gint i;
+
+      for (i = 0; i < n_dashes; i++)
+	{
+	  dashes[i] = dash_list[i];
+	  total_length += dash_list[i];
+	}
+
+      /* The dash offset here aligns the pattern to integer pixels
+       * by starting the dash at the right side of the left border
+       * Negative dash offsets in cairo don't work
+       * (https://bugs.freedesktop.org/show_bug.cgi?id=2729)
+       */
+      dash_offset = - *focus_width / 2.;
+      while (dash_offset < 0)
+	dash_offset += total_length;
+      
+      cairo_set_dash (cr, dashes, n_dashes, dash_offset);
+      g_free (dashes);
+    }
 
   g_free (dash_list);
-  
-  return gc;
 }
 
 static void
@@ -1649,7 +1672,7 @@ update_color (GtkColorSelection *colorsel)
   gchar *ptr;
   
   priv->changing = TRUE;
-  color_sample_draw_samples (colorsel);
+  color_sample_update_samples (colorsel);
   
   gtk_hsv_set_color (GTK_HSV (priv->triangle_colorsel),
 		     priv->color[COLORSEL_HUE],
@@ -2208,7 +2231,7 @@ gtk_color_selection_set_has_opacity_control (GtkColorSelection *colorsel,
 	  gtk_widget_hide (priv->opacity_label);
 	  gtk_widget_hide (priv->opacity_entry);
 	}
-      color_sample_draw_samples (colorsel);
+      color_sample_update_samples (colorsel);
       
       g_object_notify (G_OBJECT (colorsel), "has_opacity_control");
     }
@@ -2448,7 +2471,7 @@ gtk_color_selection_set_previous_color (GtkColorSelection *colorsel,
 		  &priv->old_color[COLORSEL_HUE],
 		  &priv->old_color[COLORSEL_SATURATION],
 		  &priv->old_color[COLORSEL_VALUE]);
-  color_sample_draw_samples (colorsel);
+  color_sample_update_samples (colorsel);
   priv->default_set = TRUE;
   priv->changing = FALSE;
 }
@@ -2472,7 +2495,7 @@ gtk_color_selection_set_previous_alpha (GtkColorSelection *colorsel,
   priv = colorsel->private_data;
   priv->changing = TRUE;
   priv->old_color[COLORSEL_OPACITY] = SCALE (alpha);
-  color_sample_draw_samples (colorsel);
+  color_sample_update_samples (colorsel);
   priv->default_alpha_set = TRUE;
   priv->changing = FALSE;
 }

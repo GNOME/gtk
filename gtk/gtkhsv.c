@@ -917,10 +917,30 @@ gtk_hsv_motion (GtkWidget      *widget,
 
 /* Redrawing */
 
+void
+set_source_surface (cairo_t         *cr,
+		    cairo_surface_t *surface)
+{
+  cairo_pattern_t *pattern;
+  cairo_matrix_t *matrix;
+  double x, y;
+
+  pattern = cairo_pattern_create_for_surface (surface);
+  
+  cairo_current_point (cr, &x, &y);
+  matrix = cairo_matrix_create ();
+  cairo_matrix_translate (matrix, -x, -y);
+  cairo_pattern_set_matrix (pattern, matrix);
+  cairo_matrix_destroy (matrix);
+
+  cairo_set_pattern (cr, pattern);
+  cairo_pattern_destroy (pattern);
+}
+
 /* Paints the hue ring */
 static void
 paint_ring (GtkHSV      *hsv,
-	    GdkDrawable *drawable,
+	    cairo_t     *cr,
 	    gint         x,
 	    gint         y,
 	    gint         width,
@@ -932,13 +952,12 @@ paint_ring (GtkHSV      *hsv,
   gdouble dx, dy, dist;
   gdouble center;
   gdouble inner, outer;
-  guchar *buf, *p;
+  guint32 *buf, *p;
   gdouble angle;
   gdouble hue;
   gdouble r, g, b;
-  GdkBitmap *mask;
-  GdkGC *gc;
-  GdkColor color;
+  cairo_surface_t *source;
+  cairo_t *source_cr;
   gint focus_width;
   gint focus_pad;
 
@@ -954,13 +973,13 @@ paint_ring (GtkHSV      *hsv,
   outer = priv->size / 2.0;
   inner = outer - priv->ring_width;
   
-  /* Paint the ring */
+  /* Create an image initialized with the ring colors */
   
-  buf = g_new (guchar, width * height * 3);
+  buf = g_new (guint32, width * height);
   
   for (yy = 0; yy < height; yy++)
     {
-      p = buf + yy * width * 3;
+      p = buf + yy * width;
       
       dy = -(yy + y - center);
       
@@ -971,8 +990,6 @@ paint_ring (GtkHSV      *hsv,
 	  dist = dx * dx + dy * dy;
 	  if (dist < ((inner-1) * (inner-1)) || dist > ((outer+1) * (outer+1)))
 	    {
-	      *p++ = 0;
-	      *p++ = 0;
 	      *p++ = 0;
 	      continue;
 	    }
@@ -988,54 +1005,21 @@ paint_ring (GtkHSV      *hsv,
 	  b = 1.0;
 	  hsv_to_rgb (&r, &g, &b);
 	  
-	  *p++ = floor (r * 255 + 0.5);
-	  *p++ = floor (g * 255 + 0.5);
-	  *p++ = floor (b * 255 + 0.5);
+	  *p++ = (((int)floor (r * 255 + 0.5) << 16) |
+		  ((int)floor (g * 255 + 0.5) << 8) |
+		  (int)floor (b * 255 + 0.5));
 	}
     }
-  
-  /* Create clipping mask */
-  
-  mask = gdk_pixmap_new (widget->window, width, height, 1);
 
-  gc = gdk_gc_new (mask);
-  
-  color.pixel = 0;
-  gdk_gc_set_foreground (gc, &color);
-  gdk_draw_rectangle (mask, gc, TRUE,
-		      0, 0, width, height);
-  
-  
-  color.pixel = 1;
-  gdk_gc_set_foreground (gc, &color);
-  gdk_draw_arc (mask, gc, TRUE,
-		focus_width + focus_pad - x, 
-		focus_width + focus_pad - y,
-		priv->size - 1, priv->size - 1,
-		0, 360 * 64);
-  
-  color.pixel = 0;
-  gdk_gc_set_foreground (gc, &color);
-  gdk_draw_arc (mask, gc, TRUE,
-		focus_width + focus_pad - x + priv->ring_width - 1, 
-		focus_width + focus_pad - y + priv->ring_width - 1,
-		priv->size - 2 * priv->ring_width + 1, priv->size - 2 * priv->ring_width + 1,
-		0, 360 * 64);
-  
-  g_object_unref (gc);
-  
-  gdk_gc_set_clip_mask (priv->gc, mask);
-  gdk_gc_set_clip_origin (priv->gc, 0, 0);
-  
-  /* Draw ring */
-  
-  gdk_draw_rgb_image_dithalign (drawable, priv->gc, 0, 0, width, height,
-				GDK_RGB_DITHER_MAX,
-				buf,
-				width * 3,
-				x, y);
-  
-  /* Draw value marker */
+  source = cairo_image_surface_create_for_data ((char *)buf,
+						CAIRO_FORMAT_RGB24,
+						width, height, 4 * width);
+
+  /* Now draw the value marker onto the source image, so that it
+   * will get properly clipped at the edges of the ring
+   */
+  source_cr = cairo_create ();
+  cairo_set_target_surface (source_cr, source);
   
   r = priv->h;
   g = 1.0;
@@ -1043,31 +1027,36 @@ paint_ring (GtkHSV      *hsv,
   hsv_to_rgb (&r, &g, &b);
   
   if (INTENSITY (r, g, b) > 0.5)
-    {
-      color.red = 0x0000;
-      color.green = 0x0000;
-      color.blue = 0x0000;
-    }
+    cairo_set_rgb_color (source_cr, 0., 0., 0.);
   else
-    {
-      color.red = 0xffff;
-      color.green = 0xffff;
-      color.blue = 0xffff;
-    }
+    cairo_set_rgb_color (source_cr, 1., 1., 1.);
 
-  gdk_gc_set_rgb_fg_color (priv->gc, &color);
-  
-  gdk_draw_line (drawable, priv->gc,
-		 -x + center, -y + center,
+  cairo_move_to (source_cr, -x + center, - y + center);
+  cairo_line_to (source_cr,
 		 -x + center + cos (priv->h * 2.0 * G_PI) * center,
 		 -y + center - sin (priv->h * 2.0 * G_PI) * center);
+  cairo_stroke (source_cr);
+  cairo_destroy (source_cr);
+
+  /* Draw the ring using the source image */
+
+  cairo_save (cr);
+    
+  cairo_move_to (cr, x, y);
+  set_source_surface (cr, source);
+  cairo_surface_destroy (source);
+
+  cairo_set_line_width (cr, priv->ring_width);
+  cairo_new_path (cr);
+  cairo_arc (cr,
+	     center, center,
+	     priv->size / 2. - priv->ring_width / 2.,
+	     0, 2 * M_PI);
+  cairo_stroke (cr);
   
-  gdk_gc_set_clip_mask (priv->gc, NULL);
-  g_object_unref (mask);
+  cairo_restore (cr);
   
   g_free (buf);
-  
-  /* Draw ring outline */
 }
 
 /* Converts an HSV triplet to an integer RGB triplet */
@@ -1092,10 +1081,15 @@ get_color (gdouble h,
 			       ? ((a) + ((b) - (a)) * ((i) - (v1)) / ((v2) - (v1)))	\
 			       : (a))
 
+/* Number of pixels we extend out from the edges when creating
+ * color source to avoid artifacts
+ */
+#define PAD 3
+
 /* Paints the HSV triangle */
 static void
 paint_triangle (GtkHSV      *hsv,
-		GdkDrawable *drawable,
+		cairo_t     *cr,
 		gint         x,
 		gint         y,
 		gint         width,
@@ -1108,13 +1102,12 @@ paint_triangle (GtkHSV      *hsv,
   gint x2, y2, r2, g2, b2; /* Second vertex */
   gint x3, y3, r3, g3, b3; /* Third vertex */
   gint t;
-  guchar *buf, *p;
+  guint32 *buf, *p;
   gint xl, xr, rl, rr, gl, gr, bl, br; /* Scanline data */
   gint xx, yy;
-  GdkBitmap *mask;
-  GdkGC *gc;
-  GdkColor color;
-  GdkPoint points[3];
+  gint x_interp, y_interp;
+  gint x_start, x_end;
+  cairo_surface_t *source;
   gdouble r, g, b;
   gchar *detail;
   
@@ -1165,42 +1158,37 @@ paint_triangle (GtkHSV      *hsv,
   
   /* Shade the triangle */
   
-  buf = g_new (guchar, width * height * 3);
+  buf = g_new (guint32, width * height);
   
   for (yy = 0; yy < height; yy++)
     {
-      p = buf + yy * width * 3;
+      p = buf + yy * width;
       
-      if (yy + y < y1 || yy + y > y3)
-	for (xx = 0; xx < width; xx++)
+      if (yy + y >= y1 - PAD && yy + y < y3 + PAD) {
+	y_interp = CLAMP (yy + y, y1, y3);
+	
+	if (y_interp < y2)
 	  {
-	    *p++ = 0;
-	    *p++ = 0;
-	    *p++ = 0;
-	  }
-      else {
-	if (yy + y < y2)
-	  {
-	    xl = LERP (x1, x2, y1, y2, yy + y);
+	    xl = LERP (x1, x2, y1, y2, y_interp);
 	    
-	    rl = LERP (r1, r2, y1, y2, yy + y);
-	    gl = LERP (g1, g2, y1, y2, yy + y);
-	    bl = LERP (b1, b2, y1, y2, yy + y);
+	    rl = LERP (r1, r2, y1, y2, y_interp);
+	    gl = LERP (g1, g2, y1, y2, y_interp);
+	    bl = LERP (b1, b2, y1, y2, y_interp);
 	  }
 	else
 	  {
-	    xl = LERP (x2, x3, y2, y3, yy + y);
+	    xl = LERP (x2, x3, y2, y3, y_interp);
 	    
-	    rl = LERP (r2, r3, y2, y3, yy + y);
-	    gl = LERP (g2, g3, y2, y3, yy + y);
-	    bl = LERP (b2, b3, y2, y3, yy + y);
+	    rl = LERP (r2, r3, y2, y3, y_interp);
+	    gl = LERP (g2, g3, y2, y3, y_interp);
+	    bl = LERP (b2, b3, y2, y3, y_interp);
 	  }
 	
-	xr = LERP (x1, x3, y1, y3, yy + y);
+	xr = LERP (x1, x3, y1, y3, y_interp);
 	
-	rr = LERP (r1, r3, y1, y3, yy + y);
-	gr = LERP (g1, g3, y1, y3, yy + y);
-	br = LERP (b1, b3, y1, y3, yy + y);
+	rr = LERP (r1, r3, y1, y3, y_interp);
+	gr = LERP (g1, g3, y1, y3, y_interp);
+	br = LERP (b1, b3, y1, y3, y_interp);
 	
 	if (xl > xr)
 	  {
@@ -1209,69 +1197,45 @@ paint_triangle (GtkHSV      *hsv,
 	    SWAP (gl, gr, t);
 	    SWAP (bl, br, t);
 	  }
-	
-	for (xx = 0; xx < width; xx++)
+
+	x_start = MAX (xl - PAD, x);
+	x_end = MIN (xr + PAD, x + width);
+
+	p += (x_start - x);
+
+	for (xx = x_start; xx < x_end; xx++)
 	  {
-	    if (xx + x < xl || xx + x > xr)
-	      {
-		*p++ = 0;
-		*p++ = 0;
-		*p++ = 0;
-	      }
-	    else
-	      {
-		*p++ = LERP (rl, rr, xl, xr, xx + x);
-		*p++ = LERP (gl, gr, xl, xr, xx + x);
-		*p++ = LERP (bl, br, xl, xr, xx + x);
-	      }
+	    x_interp = CLAMP (xx, xl, xr);
+		
+	    *p++ = ((LERP (rl, rr, xl, xr, x_interp) << 16) |
+		    (LERP (gl, gr, xl, xr, x_interp) << 8) |
+		    LERP (bl, br, xl, xr, x_interp));
 	  }
       }
     }
-  
-  /* Create clipping mask */
-  
-  mask = gdk_pixmap_new (widget->window, width, height, 1);
 
-  gc = gdk_gc_new (mask);
+  source = cairo_image_surface_create_for_data ((char *)buf,
+						CAIRO_FORMAT_RGB24,
+						width, height, 4 * width);
   
-  color.pixel = 0;
-  gdk_gc_set_foreground (gc, &color);
-  gdk_draw_rectangle (mask, gc, TRUE,
-		      0, 0, width, height);
+  /* Draw a triangle with the image as a source */
+
+  cairo_move_to (cr, x, y);
+  set_source_surface (cr, source);
+  cairo_surface_destroy (source);
   
-  color.pixel = 1;
-  gdk_gc_set_foreground (gc, &color);
-  
-  points[0].x = x1 - x;
-  points[0].y = y1 - y;
-  points[1].x = x2 - x;
-  points[1].y = y2 - y;
-  points[2].x = x3 - x;
-  points[2].y = y3 - y;
-  gdk_draw_polygon (mask, gc, TRUE, points, 3);
-  
-  g_object_unref (gc);
-  
-  gdk_gc_set_clip_mask (priv->gc, mask);
-  gdk_gc_set_clip_origin (priv->gc, 0, 0);
-  
-  /* Draw triangle */
-  
-  gdk_draw_rgb_image_dithalign (drawable, priv->gc, 0, 0, width, height,
-				GDK_RGB_DITHER_MAX,
-				buf,
-				width * 3,
-				x, y);
-  
-  gdk_gc_set_clip_mask (priv->gc, NULL);
-  g_object_unref (mask);
+  cairo_move_to (cr, x1, y1);
+  cairo_line_to (cr, x2, y2);
+  cairo_line_to (cr, x3, y3);
+  cairo_close_path (cr);
+  cairo_fill (cr);
   
   g_free (buf);
   
   /* Draw value marker */
   
-  xx = floor (sx + (vx - sx) * priv->v + (hx - vx) * priv->s * priv->v + 0.5) - x;
-  yy = floor (sy + (vy - sy) * priv->v + (hy - vy) * priv->s * priv->v + 0.5) - y;
+  xx = floor (sx + (vx - sx) * priv->v + (hx - vx) * priv->s * priv->v + 0.5);
+  yy = floor (sy + (vy - sy) * priv->v + (hy - vy) * priv->s * priv->v + 0.5);
   
   r = priv->h;
   g = priv->s;
@@ -1281,33 +1245,21 @@ paint_triangle (GtkHSV      *hsv,
   if (INTENSITY (r, g, b) > 0.5)
     {
       detail = "colorwheel_light";
-      color.red = 0x0000;
-      color.green = 0x0000;
-      color.blue = 0x0000;
+      cairo_set_rgb_color (cr, 0., 0., 0.);
     }
   else
     {
       detail = "colorwheel_dark";
-      color.red = 0xffff;
-      color.green = 0xffff;
-      color.blue = 0xffff;
+      cairo_set_rgb_color (cr, 1., 1., 1.);
     }
 
-  gdk_gc_set_rgb_fg_color (priv->gc, &color);
-
-#define OUTER_RADIUS 4
-#define INNER_RADIUS 3 
+#define RADIUS 4
 #define FOCUS_RADIUS 6
-  
-  gdk_draw_arc (drawable, priv->gc, FALSE,
-		xx - OUTER_RADIUS, yy - OUTER_RADIUS,
-		OUTER_RADIUS * 2, OUTER_RADIUS * 2,
-		0, 360 * 64);
-  gdk_draw_arc (drawable, priv->gc, FALSE,
-		xx - INNER_RADIUS, yy - INNER_RADIUS,
-		INNER_RADIUS * 2, INNER_RADIUS * 2,
-		0, 360 * 64);
 
+  cairo_new_path (cr);
+  cairo_arc (cr, xx, yy, RADIUS, 0, 2 * M_PI);
+  cairo_stroke (cr);
+  
   /* Draw focus outline */
 
   if (GTK_WIDGET_HAS_FOCUS (hsv) &&
@@ -1321,11 +1273,11 @@ paint_triangle (GtkHSV      *hsv,
 			    "focus-padding", &focus_pad,
 			    NULL);
   
-      gtk_paint_focus (widget->style, drawable,
+      gtk_paint_focus (widget->style, widget->window,
 		       GTK_WIDGET_STATE (widget),
 		       NULL, widget, detail,
-		       xx - FOCUS_RADIUS - focus_width - focus_pad, 
-		       yy - FOCUS_RADIUS - focus_width - focus_pad, 
+		       widget->allocation.x + xx - FOCUS_RADIUS - focus_width - focus_pad, 
+		       widget->allocation.y + yy - FOCUS_RADIUS - focus_width - focus_pad, 
 		       2 * (FOCUS_RADIUS + focus_width + focus_pad), 
 		       2 * (FOCUS_RADIUS + focus_width + focus_pad));
     }
@@ -1335,14 +1287,14 @@ paint_triangle (GtkHSV      *hsv,
 /* Paints the contents of the HSV color selector */
 static void
 paint (GtkHSV      *hsv,
-       GdkDrawable *drawable,
+       cairo_t     *cr,
        gint         x,
        gint         y,
        gint         width,
        gint         height)
 {
-  paint_ring (hsv, drawable, x, y, width, height);
-  paint_triangle (hsv, drawable, x, y, width, height);
+  paint_ring (hsv, cr, x, y, width, height);
+  paint_triangle (hsv, cr, x, y, width, height);
 }
 
 /* Expose_event handler for the HSV color selector */
@@ -1353,14 +1305,14 @@ gtk_hsv_expose (GtkWidget      *widget,
   GtkHSV *hsv;
   HSVPrivate *priv;
   GdkRectangle rect, dest;
-  GdkPixmap *pixmap;
+  cairo_t *cr;
   
   hsv = GTK_HSV (widget);
   priv = hsv->priv;
   
   if (!(GTK_WIDGET_DRAWABLE (widget) && event->window == widget->window))
     return FALSE;
-  
+
   rect.x = widget->allocation.x;
   rect.y = widget->allocation.y;
   rect.width = widget->allocation.width;
@@ -1369,28 +1321,13 @@ gtk_hsv_expose (GtkWidget      *widget,
   if (!gdk_rectangle_intersect (&event->area, &rect, &dest))
     return FALSE;
   
-  pixmap = gdk_pixmap_new (widget->window, dest.width, dest.height,
-			   gtk_widget_get_visual (widget)->depth);
-  
-  rect = dest;
-  rect.x = 0;
-  rect.y = 0;
-  
-  gdk_draw_rectangle (pixmap,
-		      widget->style->bg_gc[GTK_WIDGET_STATE (widget)],
-		      TRUE,
-		      0, 0, dest.width, dest.height);
-  paint (hsv, pixmap,
-	 dest.x - widget->allocation.x, dest.y - widget->allocation.y,
+  cr = gdk_drawable_create_cairo_context (widget->window);
+
+  cairo_translate (cr, widget->allocation.x, widget->allocation.y);
+  paint (hsv, cr,
+	 dest.x - widget->allocation.x,
+	 dest.y - widget->allocation.y,
 	 dest.width, dest.height);
-  
-  gdk_draw_drawable (widget->window,
-		     priv->gc,
-		     pixmap,
-		     0, 0,
-		     dest.x,
-		     dest.y,
-		     event->area.width, event->area.height);
   
   if (GTK_WIDGET_HAS_FOCUS (hsv) && priv->focus_on_ring)
     gtk_paint_focus (widget->style, widget->window,
@@ -1401,8 +1338,6 @@ gtk_hsv_expose (GtkWidget      *widget,
 		     widget->allocation.width, 
 		     widget->allocation.height);
 
-  g_object_unref (pixmap);
-  
   return FALSE;
 }
 

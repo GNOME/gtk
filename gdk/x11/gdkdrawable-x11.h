@@ -32,7 +32,7 @@
 #include <gdk/gdkdrawable.h>
 
 #include <X11/Xlib.h>
-#include <X11/Xft/Xft.h>
+#include <X11/extensions/Xrender.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -70,7 +70,7 @@ struct _GdkDrawableImplX11
   Window xid;
   GdkScreen *screen;
 
-  XftDraw *xft_draw;
+  Picture picture;
   cairo_surface_t *cairo_surface;
 };
  
@@ -92,15 +92,7 @@ void  _gdk_x11_convert_to_format      (guchar           *src_buf,
                                        gint              height);
 
 /* Note that the following take GdkDrawableImplX11, not the wrapper drawable */
-void _gdk_x11_drawable_draw_xtrapezoids (GdkDrawable  *drawable,
-					 GdkGC        *gc,
-					 XTrapezoid   *xtrapezoids,
-					 int           n_trapezoids);
-void _gdk_x11_drawable_draw_xft_glyphs  (GdkDrawable  *drawable,
-					 GdkGC        *gc,
-					 XftFont      *xft_font,
-					 XftGlyphSpec *glyphs,
-					 gint          n_glyphs);
+void _gdk_x11_drawable_finish           (GdkDrawable  *drawable);
 
 #ifdef __cplusplus
 }

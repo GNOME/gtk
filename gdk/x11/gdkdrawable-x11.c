@@ -109,20 +109,6 @@ static void gdk_x11_draw_lines     (GdkDrawable    *drawable,
 				    GdkPoint       *points,
 				    gint            npoints);
 
-static void gdk_x11_draw_glyphs             (GdkDrawable      *drawable,
-					     GdkGC            *gc,
-					     PangoFont        *font,
-					     gint              x,
-					     gint              y,
-					     PangoGlyphString *glyphs);
-static void gdk_x11_draw_glyphs_transformed (GdkDrawable      *drawable,
-					     GdkGC            *gc,
-					     PangoMatrix      *matrix,
-					     PangoFont        *font,
-					     gint              x,
-					     gint              y,
-					     PangoGlyphString *glyphs);
-
 static void gdk_x11_draw_image     (GdkDrawable     *drawable,
                                     GdkGC           *gc,
                                     GdkImage        *image,
@@ -145,13 +131,7 @@ static void gdk_x11_draw_pixbuf    (GdkDrawable     *drawable,
 				    gint             x_dither,
 				    gint             y_dither);
 
-static void gdk_x11_draw_trapezoids (GdkDrawable     *drawable,
-				     GdkGC	     *gc,
-				     GdkTrapezoid    *trapezoids,
-				     gint             n_trapezoids);
-
-static void gdk_x11_set_cairo_target (GdkDrawable *drawable,
-				      cairo_t     *cr);
+static cairo_surface_t *gdk_x11_ref_cairo_surface (GdkDrawable *drawable);
      
 static void gdk_x11_set_colormap   (GdkDrawable    *drawable,
                                     GdkColormap    *colormap);
@@ -166,6 +146,7 @@ static void gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass);
 static void gdk_drawable_impl_x11_finalize   (GObject *object);
 
 static gpointer parent_class = NULL;
+static const cairo_user_data_key_t gdk_x11_cairo_key;
 
 GType
 _gdk_drawable_impl_x11_get_type (void)
@@ -215,13 +196,10 @@ gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
   drawable_class->draw_points = gdk_x11_draw_points;
   drawable_class->draw_segments = gdk_x11_draw_segments;
   drawable_class->draw_lines = gdk_x11_draw_lines;
-  drawable_class->draw_glyphs = gdk_x11_draw_glyphs;
-  drawable_class->draw_glyphs_transformed = gdk_x11_draw_glyphs_transformed;
   drawable_class->draw_image = gdk_x11_draw_image;
   drawable_class->draw_pixbuf = gdk_x11_draw_pixbuf;
-  drawable_class->draw_trapezoids = gdk_x11_draw_trapezoids;
   
-  drawable_class->set_cairo_target = gdk_x11_set_cairo_target;
+  drawable_class->ref_cairo_surface = gdk_x11_ref_cairo_surface;
 
   drawable_class->set_colormap = gdk_x11_set_colormap;
   drawable_class->get_colormap = gdk_x11_get_colormap;
@@ -239,6 +217,32 @@ gdk_drawable_impl_x11_finalize (GObject *object)
   gdk_drawable_set_colormap (GDK_DRAWABLE (object), NULL);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+/**
+ * _gdk_x11_drawable_finish:
+ * @drawable: a #GdkDrawableImplX11.
+ * 
+ * Performs necessary cleanup prior to freeing a pixmap or
+ * destroying a window.
+ **/
+void
+_gdk_x11_drawable_finish (GdkDrawable *drawable)
+{
+  GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
+  
+  if (impl->picture)
+    {
+      XRenderFreePicture (GDK_SCREEN_XDISPLAY (impl->screen),
+			  impl->picture);
+      impl->picture = None;
+    }
+  
+  if (impl->cairo_surface)
+    {
+      cairo_surface_set_user_data (impl->cairo_surface, &gdk_x11_cairo_key,
+				   NULL, NULL);
+    }
 }
 
 static void
@@ -329,94 +333,25 @@ _gdk_x11_have_render (GdkDisplay *display)
   return x11display->have_render == GDK_YES;
 }
 
-gboolean
-_gdk_x11_have_render_with_trapezoids (GdkDisplay *display)
-{
-  Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
-  GdkDisplayX11 *x11display = GDK_DISPLAY_X11 (display);
-
-  if (x11display->have_render_with_trapezoids == GDK_UNKNOWN)
-    {
-      x11display->have_render_with_trapezoids = GDK_NO;
-      if (_gdk_x11_have_render (display))
-	{
-	  /*
-	   * Require protocol >= 0.4 for CompositeTrapezoids support.
-	   */
-	  int major_version, minor_version;
-	
-#define XRENDER_TETRAPEZOIDS_MAJOR 0
-#define XRENDER_TETRAPEZOIDS_MINOR 4
-	
-	  if (XRenderQueryVersion (xdisplay, &major_version,
-				   &minor_version))
-	    {
-	      if ((major_version == XRENDER_TETRAPEZOIDS_MAJOR) &&
-		  (minor_version >= XRENDER_TETRAPEZOIDS_MINOR))
-		x11display->have_render_with_trapezoids = GDK_YES;
-	    }
-	}
-    }
-
-  return x11display->have_render_with_trapezoids == GDK_YES;
-}
-
-static XftDraw *
-gdk_x11_drawable_get_xft_draw (GdkDrawable *drawable)
-{
-  GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-   if (impl->xft_draw == NULL)
-    {
-      GdkColormap *colormap = gdk_drawable_get_colormap (drawable);
-      
-      if (colormap)
-	{
-          GdkVisual *visual;
-
-          visual = gdk_colormap_get_visual (colormap);
-      
-          impl->xft_draw = XftDrawCreate (GDK_SCREEN_XDISPLAY (impl->screen), impl->xid,
- 				          GDK_VISUAL_XVISUAL (visual), GDK_COLORMAP_XCOLORMAP (colormap));
-	}
-      else if (gdk_drawable_get_depth (drawable) == 1)
-	{
-	  impl->xft_draw = XftDrawCreateBitmap (GDK_SCREEN_XDISPLAY (impl->screen), impl->xid);
-	}
-      else
-        {
-	  g_warning ("Using Xft rendering requires the drawable argument to\n"
-		     "have a specified colormap. All windows have a colormap,\n"
-		     "however, pixmaps only have colormap by default if they\n"
-		     "were created with a non-NULL window argument. Otherwise\n"
-		     "a colormap must be set on them with gdk_drawable_set_colormap");
-	  return NULL;
-        }
-    }
-
-   return impl->xft_draw;
-}
-
 static Picture
 gdk_x11_drawable_get_picture (GdkDrawable *drawable)
 {
-  XftDraw *draw = gdk_x11_drawable_get_xft_draw (drawable);
-
-  return draw ? XftDrawPicture (draw) : None;
+  return None;
 }
 
 static void
-gdk_x11_drawable_update_xft_clip (GdkDrawable *drawable,
-				   GdkGC       *gc)
+gdk_x11_drawable_update_picture_clip (GdkDrawable *drawable,
+				      GdkGC       *gc)
 {
+  GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
+  Display *xdisplay = GDK_SCREEN_XDISPLAY (impl->screen);
   GdkGCX11 *gc_private = gc ? GDK_GC_X11 (gc) : NULL;
-  XftDraw *xft_draw = gdk_x11_drawable_get_xft_draw (drawable);
+  Picture picture = gdk_x11_drawable_get_picture (drawable);
 
   if (gc && gc_private->clip_region)
     {
       GdkRegionBox *boxes = gc_private->clip_region->rects;
       gint n_boxes = gc_private->clip_region->numRects;
-#if 0				/* Until XftDrawSetClipRectangles is there */
       XRectangle *rects = g_new (XRectangle, n_boxes);
       int i;
 
@@ -427,32 +362,18 @@ gdk_x11_drawable_update_xft_clip (GdkDrawable *drawable,
 	  rects[i].width = CLAMP (boxes[i].x2 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT) - rects[i].x;
 	  rects[i].height = CLAMP (boxes[i].y2 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT) - rects[i].y;
 	}
-      XftDrawSetClipRectangles (xft_draw, 0, 0, rects, n_boxes);
-
-      g_free (rects);
-#else
-      Region xregion = XCreateRegion ();
-      int i;
- 
-      for (i=0; i < n_boxes; i++)
- 	{
- 	  XRectangle rect;
- 	  
- 	  rect.x = CLAMP (boxes[i].x1 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT);
- 	  rect.y = CLAMP (boxes[i].y1 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT);
- 	  rect.width = CLAMP (boxes[i].x2 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT) - rect.x;
- 	  rect.height = CLAMP (boxes[i].y2 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT) - rect.y;
-	  
- 	  XUnionRectWithRegion (&rect, xregion, xregion);
- 	}
       
-      XftDrawSetClip (xft_draw, xregion);
-      XDestroyRegion (xregion);
-#endif      
+      XRenderSetPictureClipRectangles (xdisplay, picture,
+				       0, 0, rects, n_boxes);
+      
+      g_free (rects);
     }
   else
     {
-      XftDrawSetClip (xft_draw, NULL);
+      XRenderPictureAttributes pa;
+      pa.clip_mask = None;
+      XRenderChangePicture (xdisplay, picture,
+			    CPClipMask, &pa);
     }
 }
 
@@ -836,45 +757,6 @@ gdk_x11_draw_lines (GdkDrawable *drawable,
 	      CoordModeOrigin);
 
   g_free (tmp_points);
-}
-
-static void
-gdk_x11_draw_glyphs (GdkDrawable      *drawable,
-		     GdkGC            *gc,
-		     PangoFont        *font,
-		     gint              x,
-		     gint              y,
-		     PangoGlyphString *glyphs)
-{
-  gdk_x11_draw_glyphs_transformed (drawable, gc, NULL,
-				   font,
-				   x * PANGO_SCALE,
-				   y * PANGO_SCALE,
-				   glyphs);
-}
-
-static void
-gdk_x11_draw_glyphs_transformed (GdkDrawable      *drawable,
-				 GdkGC            *gc,
-				 PangoMatrix      *matrix,
-				 PangoFont        *font,
-				 gint              x,
-				 gint              y,
-				 PangoGlyphString *glyphs)
-{
-  GdkDrawableImplX11 *impl;
-  PangoRenderer *renderer;
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  g_return_if_fail (PANGO_XFT_IS_FONT (font));
-
-  renderer = _gdk_x11_renderer_get (drawable, gc);
-  if (matrix)
-    pango_renderer_set_matrix (renderer, matrix);
-  pango_renderer_draw_glyphs (renderer, font, glyphs, x, y);
-  if (matrix)
-    pango_renderer_set_matrix (renderer, NULL);
 }
 
 static void
@@ -1501,7 +1383,7 @@ gdk_x11_draw_pixbuf (GdkDrawable     *drawable,
       return;
     }
 
-  gdk_x11_drawable_update_xft_clip (drawable, gc);
+  gdk_x11_drawable_update_picture_clip (drawable, gc);
 
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
 
@@ -1526,239 +1408,65 @@ gdk_x11_draw_pixbuf (GdkDrawable     *drawable,
 }
 
 static void
-gdk_x11_draw_trapezoids (GdkDrawable  *drawable,
-			 GdkGC	      *gc,
-			 GdkTrapezoid *trapezoids,
-			 gint          n_trapezoids)
+gdk_x11_cairo_surface_destroy (void *data)
 {
-  GdkScreen *screen = GDK_DRAWABLE_IMPL_X11 (drawable)->screen;
-  GdkDisplay *display = gdk_screen_get_display (screen);
-  XTrapezoid *xtrapezoids;
-  gint i;
+  GdkDrawableImplX11 *impl = data;
 
-  if (!_gdk_x11_have_render_with_trapezoids (display))
-    {
-      GdkDrawable *wrapper = GDK_DRAWABLE_IMPL_X11 (drawable)->wrapper;
-      GDK_DRAWABLE_CLASS (parent_class)->draw_trapezoids (wrapper, gc,
-							  trapezoids, n_trapezoids);
-      return;
-    }
-
-  xtrapezoids = g_new (XTrapezoid, n_trapezoids);
-
-  for (i = 0; i < n_trapezoids; i++)
-    {
-      xtrapezoids[i].top = XDoubleToFixed (trapezoids[i].y1);
-      xtrapezoids[i].bottom = XDoubleToFixed (trapezoids[i].y2);
-      xtrapezoids[i].left.p1.x = XDoubleToFixed (trapezoids[i].x11);
-      xtrapezoids[i].left.p1.y = XDoubleToFixed (trapezoids[i].y1);
-      xtrapezoids[i].left.p2.x = XDoubleToFixed (trapezoids[i].x12);
-      xtrapezoids[i].left.p2.y = XDoubleToFixed (trapezoids[i].y2);
-      xtrapezoids[i].right.p1.x = XDoubleToFixed (trapezoids[i].x21);
-      xtrapezoids[i].right.p1.y = XDoubleToFixed (trapezoids[i].y1);
-      xtrapezoids[i].right.p2.x = XDoubleToFixed (trapezoids[i].x22);
-      xtrapezoids[i].right.p2.y = XDoubleToFixed (trapezoids[i].y2);
-    }
-
-  _gdk_x11_drawable_draw_xtrapezoids (drawable, gc,
-				      xtrapezoids, n_trapezoids);
-  
-  g_free (xtrapezoids);
+  impl->cairo_surface = NULL;
 }
 
 static cairo_surface_t *
-gdk_x11_drawable_get_cairo_surface (GdkDrawable *drawable)
+gdk_x11_ref_cairo_surface (GdkDrawable *drawable)
 {
   GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-  GdkColormap *colormap;
-  GdkVisual *visual;
 
   if (GDK_IS_WINDOW_IMPL_X11 (drawable) &&
       GDK_WINDOW_DESTROYED (impl->wrapper))
     return NULL;
 
-  colormap = gdk_drawable_get_colormap (drawable);
-  if (!colormap)
-    {
-      g_warning ("Using Cairo rendering requires the drawable argument to\n"
-		 "have a specified colormap. All windows have a colormap,\n"
-		 "however, pixmaps only have colormap by default if they\n"
-		 "were created with a non-NULL window argument. Otherwise\n"
-		 "a colormap must be set on them with gdk_drawable_set_colormap");
-      return NULL;
-    }
-
-  visual = gdk_colormap_get_visual (colormap);
-
   if (!impl->cairo_surface)
     {
-      impl->cairo_surface = cairo_xlib_surface_create (GDK_SCREEN_XDISPLAY (impl->screen),
-						       impl->xid,
-						       GDK_VISUAL_XVISUAL (visual),
-						       CAIRO_FORMAT_RGB24,
-						       GDK_COLORMAP_XCOLORMAP (colormap));
+      GdkVisual *visual = NULL;
+  
+      visual = gdk_drawable_get_visual (drawable);
+
+      if (GDK_IS_WINDOW (drawable))
+	impl->cairo_surface = cairo_xlib_surface_create_for_window_with_visual (GDK_SCREEN_XDISPLAY (impl->screen),
+										impl->xid,
+										GDK_VISUAL_XVISUAL (visual));
+      else if (visual) 
+	impl->cairo_surface = cairo_xlib_surface_create_for_pixmap_with_visual (GDK_SCREEN_XDISPLAY (impl->screen),
+										impl->xid,
+										GDK_VISUAL_XVISUAL (visual));
+      else if (gdk_drawable_get_depth (drawable) == 1)
+	impl->cairo_surface = cairo_xlib_surface_create_for_pixmap (GDK_SCREEN_XDISPLAY (impl->screen),
+								    impl->xid,
+								    CAIRO_FORMAT_A1);
+      else
+	{
+	  g_warning ("Using Cairo rendering requires the drawable argument to\n"
+		     "have a specified colormap. All windows have a colormap,\n"
+		     "however, pixmaps only have colormap by default if they\n"
+		     "were created with a non-NULL window argument. Otherwise\n"
+		     "a colormap must be set on them with gdk_drawable_set_colormap");
+	  return NULL;
+	}
+
+      cairo_surface_set_user_data (impl->cairo_surface, &gdk_x11_cairo_key,
+				   drawable, gdk_x11_cairo_surface_destroy);
     }
+  else
+    cairo_surface_reference (impl->cairo_surface);
 
   return impl->cairo_surface;
 }
 
-static void
-gdk_x11_set_cairo_target (GdkDrawable *drawable,
-			  cairo_t     *cr)
-{
-  cairo_surface_t *surface = gdk_x11_drawable_get_cairo_surface (drawable);
-  if (surface)
-    cairo_set_target_surface (cr, surface);
-}
-
-/**
- * gdk_draw_rectangle_alpha_libgtk_only:
- * @drawable: The #GdkDrawable to draw on
- * @x: the x coordinate of the left edge of the rectangle.
- * @y: the y coordinate of the top edge of the rectangle.
- * @width: the width of the rectangle.
- * @height: the height of the rectangle.
- * @color: The color
- * @alpha: The alpha value.
- * 
- * Tries to draw a filled alpha blended rectangle using the window
- * system's native routines. This is not public API and must not be
- * used by applications.
- * 
- * Return value: TRUE if the rectangle could be drawn, FALSE
- * otherwise.
- **/
-gboolean
-gdk_draw_rectangle_alpha_libgtk_only (GdkDrawable  *drawable,
-				      gint          x,
-				      gint          y,
-				      gint          width,
-				      gint          height,
-				      GdkColor     *color,
-				      guint16       alpha)
-{
-  Display *xdisplay;
-  XRenderColor render_color;
-  Picture pict;
-  int x_offset, y_offset;
-  GdkDrawable *real_drawable, *impl;
-
-  g_return_val_if_fail (color != NULL, FALSE);
-  
-  if (!GDK_IS_WINDOW (drawable))
-    return FALSE;
-  
-  if (!_gdk_x11_have_render (gdk_drawable_get_display (drawable)))
-    return FALSE;
-
-  gdk_window_get_internal_paint_info (GDK_WINDOW (drawable),
-				      &real_drawable,
-				      &x_offset, &y_offset);
-
-  impl = ((GdkWindowObject *)real_drawable)->impl;  
-      
-  pict = gdk_x11_drawable_get_picture (impl);
-
-  if (pict == None)
-    return FALSE;
-  
-  xdisplay = GDK_DISPLAY_XDISPLAY (gdk_drawable_get_display (drawable));
-
-  render_color.alpha = alpha;
-  render_color.red = (guint32)color->red * render_color.alpha / 0xffff;
-  render_color.green = (guint32)color->green * render_color.alpha / 0xffff;
-  render_color.blue = (guint32)color->blue * render_color.alpha / 0xffff;
-
-  XRenderFillRectangle (xdisplay,
-			PictOpOver, pict, &render_color,
-			x - x_offset, y - y_offset,
-			width, height);
-  return TRUE;
-}
-
 void
-_gdk_x11_drawable_draw_xtrapezoids (GdkDrawable      *drawable,
-				    GdkGC            *gc,
-				    XTrapezoid       *xtrapezoids,
-				    int               n_trapezoids)
+_gdk_windowing_set_surface_device_offset (cairo_surface_t *surface,
+					  gint             x_offset,
+					  gint             y_offset)
 {
-  GdkScreen *screen = GDK_DRAWABLE_IMPL_X11 (drawable)->screen;
-  GdkDisplay *display = gdk_screen_get_display (screen);
-  GdkDisplayX11 *x11display = GDK_DISPLAY_X11 (display);
-   
-  XftDraw *draw;
-
-  if (!_gdk_x11_have_render_with_trapezoids (display))
-    {
-      /* This is the case of drawing the borders of the unknown glyph box
-       * without render on the display, we need to feed it back to
-       * fallback code. Not efficient, but doesn't matter.
-       */
-      GdkTrapezoid *trapezoids = g_new (GdkTrapezoid, n_trapezoids);
-      int i;
-
-      for (i = 0; i < n_trapezoids; i++)
-	{
-	  trapezoids[i].y1 = XFixedToDouble (xtrapezoids[i].top);
-	  trapezoids[i].y2 = XFixedToDouble (xtrapezoids[i].bottom);
-	  trapezoids[i].x11 = XFixedToDouble (xtrapezoids[i].left.p1.x);
-	  trapezoids[i].x12 = XFixedToDouble (xtrapezoids[i].left.p2.x);
-	  trapezoids[i].x21 = XFixedToDouble (xtrapezoids[i].right.p1.x);
-	  trapezoids[i].x22 = XFixedToDouble (xtrapezoids[i].right.p2.x);
-	}
-
-      gdk_x11_draw_trapezoids (drawable, gc, trapezoids, n_trapezoids);
-      g_free (trapezoids);
-
-      return;
-    }
-
-  gdk_x11_drawable_update_xft_clip (drawable, gc);
-  draw = gdk_x11_drawable_get_xft_draw (drawable);
-
-  if (!x11display->mask_format)
-    x11display->mask_format = XRenderFindStandardFormat (x11display->xdisplay,
-							 PictStandardA8);
-
-  XRenderCompositeTrapezoids (x11display->xdisplay, PictOpOver,
-			      _gdk_x11_gc_get_fg_picture (gc),
-			      XftDrawPicture (draw),
-			      x11display->mask_format,
-			      - gc->ts_x_origin, - gc->ts_y_origin,
-			      xtrapezoids, n_trapezoids);
-}
-
-void
-_gdk_x11_drawable_draw_xft_glyphs (GdkDrawable      *drawable,
-				   GdkGC            *gc,
-				   XftFont          *xft_font,
-				   XftGlyphSpec     *glyphs,
-				   gint              n_glyphs)
-{
-  GdkScreen *screen = GDK_DRAWABLE_IMPL_X11 (drawable)->screen;
-  GdkDisplay *display = gdk_screen_get_display (screen);
-  GdkDisplayX11 *x11display = GDK_DISPLAY_X11 (display);
-  XftDraw *draw;
-   
-  gdk_x11_drawable_update_xft_clip (drawable, gc);
-  draw = gdk_x11_drawable_get_xft_draw (drawable);
-
-  if (_gdk_x11_have_render (display))
-    {
-      XftGlyphSpecRender (x11display->xdisplay, PictOpOver,
-			  _gdk_x11_gc_get_fg_picture (gc),
-			  xft_font,
-			  XftDrawPicture (draw),
-			  - gc->ts_x_origin, - gc->ts_y_origin,
-			  glyphs, n_glyphs);
-    }
-  else
-    {
-      XftColor color;
-      
-      _gdk_gc_x11_get_fg_xft_color (gc, &color);
-      XftDrawGlyphSpec (draw, &color, xft_font, glyphs, n_glyphs);
-    }
+  cairo_xlib_surface_set_device_offset (surface, x_offset, y_offset);
 }
 
 #define __GDK_DRAWABLE_X11_C__

@@ -41,8 +41,6 @@
 
 #include <config.h>
 
-#include <X11/extensions/Xrender.h>
-
 #define GDK_TYPE_GC_X11              (_gdk_gc_x11_get_type ())
 #define GDK_GC_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC_X11, GdkGCX11))
 #define GDK_GC_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_GC_X11, GdkGCX11Class))
@@ -70,8 +68,6 @@ struct _GdkGCX11
   GdkBitmap *stipple;
   GdkPixmap *tile;
 
-  Picture fg_picture;
-  XRenderColor fg_picture_color; 
   gulong fg_pixel;
   gulong bg_pixel;
 };
@@ -109,11 +105,6 @@ gint _gdk_send_xevent      (GdkDisplay *display,
 GType _gdk_gc_x11_get_type (void);
 
 gboolean _gdk_x11_have_render                 (GdkDisplay *display);
-gboolean _gdk_x11_have_render_with_trapezoids (GdkDisplay *display);
-
-Picture  _gdk_x11_gc_get_fg_picture   (GdkGC      *gc);
-void     _gdk_gc_x11_get_fg_xft_color (GdkGC      *gc,
-				       XftColor   *xftcolor);
 
 GdkGC *_gdk_x11_gc_new                  (GdkDrawable     *drawable,
 					 GdkGCValues     *values,

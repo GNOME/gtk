@@ -1,3 +1,54 @@
+2005-03-15  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdrawable.h gdk/gdkdraw.c gdk/gdkpixmap.c gdk/gdkwindow.c 
+	gdk/x11/gdkdrawable-x11.c gdk/x11/gdkpixmap-x11.c gdk/x11/gdkwindow-x11.c
+	gdk/gdkinternals.h: Switch set_cairo_target() virtual function to
+	ref_cairo_surface()
+
+	* gdk/gdkdrawable.h gdk/gdkdraw.h: Switch set_cairo_target() virtual
+	function to create_cairo_context()
+
+	* gdk/gdkwindow.c: Clear double buffer pixmaps with Cairo.
+
+	* gdk/x11/gdkwindow-x11.c: Keep all components in GdkWindowObject.bg_color,
+	not just the pixel.
+
+	* tests/testcairo.c: Update for create_cairo_context()
+
+	* gdk/gdkdraw.c (gdk_draw_trapezoids, gdk_draw_glyphs[_transformed]):
+	Reimplement in terms of Cairo, bypass the vtable entries.
+
+	* gdk/x11/gdkdrawable-x11.[ch] gdk/x11/gdkdisplay-x11.[ch]
+	gdk/x11/gdkgc-x11.c gdk/x11/gdkpango-x11.c
+	gdk/x11/gdkprivate-x11.h gdk/x11/Makefile.am: Remove
+	implementation of draw_trapezoids / draw_glyphs[_transformed].
+
+	* gdk/gdkpango.c: Switch GdkPangoRenderer to use Cairo
+
+	* gdk/gdkpango.c gdk/x11/gdkpango-x11.c: Move
+	gdk_pango_context_get_for_screen() into the backend independent code.
+
+	* gdk/x11/gdkdrawable-x11.[ch]: Remove Xft use, use RENDER directly
+	for drawing images.
+
+	* gdk/gdkdrawable.h gdk/x11/gdkdrawable-x11.c: Remove
+	gdk_draw_rectangle_alpha_libgtk_only.
+
+	* gdk/gdkpixbuf.h gdk/gdkpixbuf-render.c: Add 
+	gdk_pixbuf_set_as_cairo_source()
+
+	* gdk/gdk.symbols: Update
+
+	* gtk/gtkcolorsel.c gtk/gtkhsv.c gtk/gtkiconview.c gtk/gtkruler.[ch]
+	gtk/gtk[hv]ruler.c: Convert to Cairo rendering.
+
+	* gtk/gtkstyle.c (gtk_default_draw_check, gtk_default_draw_focus,
+	gtk_default_draw_option): Switch to Cairo. Simplify the checkbutton,
+	radio button style for now to get something more scalable.
+
+	*  gtk/gtksettings.c: #if 0 out the code to use PangoXft for hinting/
+	antialiasing/dpi settings.
+
 2005-03-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* demos/gtk-demo/editable_cells.c: Also demonstrate

@@ -210,6 +210,8 @@ GdkImage *_gdk_drawable_copy_to_image (GdkDrawable  *drawable,
 				       gint          width,
 				       gint          height);
 
+cairo_surface_t *_gdk_drawable_ref_cairo_surface (GdkDrawable *drawable);
+
 /* GC caching */
 GdkGC *_gdk_drawable_get_scratch_gc (GdkDrawable *drawable,
 				     gboolean     graphics_exposures);
@@ -259,6 +261,10 @@ void     _gdk_windowing_window_clear_area_e     (GdkWindow  *window,
 						 gint        y,
 						 gint        width,
 						 gint        height);
+
+void _gdk_windowing_set_surface_device_offset (cairo_surface_t *surface,
+					       gint             x_offset,
+					       gint             y_offset);
 
 void       _gdk_windowing_get_pointer        (GdkDisplay       *display,
 					      GdkScreen       **screen,

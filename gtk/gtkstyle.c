@@ -325,128 +325,6 @@ static GdkFont *gtk_style_get_font_internal (GtkStyle *style);
 static const GtkRequisition default_option_indicator_size = { 7, 13 };
 static const GtkBorder default_option_indicator_spacing = { 7, 5, 2, 2 };
 
-#define INDICATOR_PART_SIZE 13
-
-typedef enum {
-  CHECK_AA,
-  CHECK_BASE,
-  CHECK_BLACK,
-  CHECK_DARK,
-  CHECK_LIGHT,
-  CHECK_MID,
-  CHECK_TEXT,
-  CHECK_INCONSISTENT_TEXT,
-  RADIO_BASE,
-  RADIO_BLACK,
-  RADIO_DARK,
-  RADIO_LIGHT,
-  RADIO_MID,
-  RADIO_TEXT,
-  RADIO_INCONSISTENT_AA,
-  RADIO_INCONSISTENT_TEXT
-} IndicatorPart;
-
-/*
- * Extracted from check-13.png, width=13, height=13
- */
-static const guchar check_black_bits[] = {
-  0x00,0x00,0xfe,0x0f,0x02,0x00,0x02,0x00,0x02,0x00,0x02,0x00,0x02,0x00,0x02,
-  0x00,0x02,0x00,0x02,0x00,0x02,0x00,0x02,0x00,0x00,0x00,0x00,0x00};
-static const guchar check_dark_bits[] = {
-  0xff,0x1f,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,
-  0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00,0x00,0x00};
-static const guchar check_mid_bits[] = {
-  0x00,0x00,0x00,0x00,0x00,0x08,0x00,0x08,0x00,0x08,0x00,0x08,0x00,0x08,0x00,
-  0x08,0x00,0x08,0x00,0x08,0x00,0x08,0xfc,0x0f,0x00,0x00,0x00,0x00};
-static const guchar check_light_bits[] = {
-  0x00,0x00,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x10,0x00,
-  0x10,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x10,0xfe,0x1f,0x00,0x00};
-static const guchar check_text_bits[] = {
-  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x02,0x00,0x03,0x80,0x01,0x80,0x00,0x58,
-  0x00,0x60,0x00,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-static const guchar check_aa_bits[] = {
-  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x00,0x58,0x00,0xa0,
-  0x00,0x10,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-static const guchar check_base_bits[] = {
-  0x00,0x00,0x00,0x00,0xfc,0x07,0xfc,0x07,0xfc,0x07,0xfc,0x07,0xfc,0x07,0xfc,
-  0x07,0xfc,0x07,0xfc,0x07,0xfc,0x07,0x00,0x00,0x00,0x00,0x00,0x00};
-
-/*
- * Extracted from check-13-inconsistent.png, width=13, height=13
- */
-static const guchar check_inconsistent_text_bits[] = {
-  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xf8,0x03,0xf8,
-  0x03,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-#if 0
-/*
- * check_inconsistent_aa_bits is currently not used, since it is all zeros.
- */
-static const guchar check_inconsistent_aa_bits[] = {
-  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-#endif
-
-/*
- * Extracted from radio-13.png, width=13, height=13
- */
-static const guchar radio_black_bits[] = {
-  0x00,0x00,0xf0,0x01,0x0c,0x02,0x04,0x00,0x02,0x00,0x02,0x00,0x02,0x00,0x02,
-  0x00,0x02,0x00,0x04,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x0d,0x08};
-static const guchar radio_dark_bits[] = {
-  0xf0,0x00,0x0c,0x02,0x02,0x04,0x02,0x04,0x01,0x08,0x01,0x08,0x01,0x08,0x01,
-  0x08,0x00,0x08,0x02,0x04,0x0c,0x06,0xf0,0x01,0x00,0x00,0x00,0x00};
-static const guchar radio_mid_bits[] = {
-  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-static const guchar radio_light_bits[] = {
-  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x10,0x00,0x10,0x00,
-  0x10,0x00,0x10,0x00,0x08,0x00,0x08,0x00,0x06,0xe0,0x01,0x00,0x00};
-static const guchar radio_text_bits[] = {
-  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xe0,0x00,0xf0,0x01,0xf0,0x01,0xf0,
-  0x01,0xe0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-#if 0
-/*
- * radio_aa_bits is currently not used, since it is all zeros.
- */
-static const guchar radio_aa_bits[] = {
-  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-#endif
-static const guchar radio_base_bits[] = {
-  0x00,0x00,0x00,0x00,0xf0,0x01,0xf8,0x03,0xfc,0x07,0xfc,0x07,0xfc,0x07,0xfc,
-  0x07,0xfc,0x07,0xf8,0x03,0xf0,0x01,0x00,0x00,0x00,0x00,0x00,0x00};
-
-/*
- * Extracted from radio-13.png, width=13, height=13
- */
-static const guchar radio_inconsistent_text_bits[] = {
-  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xf8,0x03,0x00,
-  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-static const guchar radio_inconsistent_aa_bits[] = {
-  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xf8,0x03,0x00,0x00,0xf8,
-  0x03,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-
-static struct {
-  const guchar      *bits;
-  GList	    *bmap_list; /* list of GdkBitmap */
-} indicator_parts[] = {
-  { check_aa_bits, NULL },
-  { check_base_bits, NULL },
-  { check_black_bits, NULL },
-  { check_dark_bits, NULL },
-  { check_light_bits, NULL },
-  { check_mid_bits, NULL },
-  { check_text_bits, NULL },
-  { check_inconsistent_text_bits, NULL },
-  { radio_base_bits, NULL },
-  { radio_black_bits, NULL },
-  { radio_dark_bits, NULL },
-  { radio_light_bits, NULL },
-  { radio_mid_bits, NULL },
-  { radio_text_bits, NULL },
-  { radio_inconsistent_aa_bits, NULL },
-  { radio_inconsistent_text_bits, NULL },
-};
 #define GTK_GRAY		0xdcdc, 0xdada, 0xd5d5
 #define GTK_DARK_GRAY		0xc4c4, 0xc2c2, 0xbdbd
 #define GTK_LIGHT_GRAY		0xeeee, 0xebeb, 0xe7e7
@@ -2263,57 +2141,6 @@ sanitize_size (GdkWindow *window,
     gdk_drawable_get_size (window, NULL, height);
 }
 
-static GdkBitmap * 
-get_indicator_for_screen (GdkDrawable   *drawable,
-			  IndicatorPart  part)
-			  
-{
-  GdkScreen *screen = gdk_drawable_get_screen (drawable);
-  GdkBitmap *bitmap;
-  GList *tmp_list;
-  
-  tmp_list = indicator_parts[part].bmap_list;
-  while (tmp_list)
-    {
-      bitmap = tmp_list->data;
-      
-      if (gdk_drawable_get_screen (bitmap) == screen)
-	return bitmap;
-      
-      tmp_list = tmp_list->next;
-    }
-  
-  bitmap = gdk_bitmap_create_from_data (drawable,
-					(gchar *)indicator_parts[part].bits,
-					INDICATOR_PART_SIZE, INDICATOR_PART_SIZE);
-  indicator_parts[part].bmap_list = g_list_prepend (indicator_parts[part].bmap_list, bitmap);
-
-  return bitmap;
-}
-
-static void
-draw_part (GdkDrawable  *drawable,
-	   GdkGC        *gc,
-	   GdkRectangle *area,
-	   gint          x,
-	   gint          y,
-	   IndicatorPart part)
-{
-  if (area)
-    gdk_gc_set_clip_rectangle (gc, area);
-  
-  gdk_gc_set_ts_origin (gc, x, y);
-  gdk_gc_set_stipple (gc, get_indicator_for_screen (drawable, part));
-  gdk_gc_set_fill (gc, GDK_STIPPLED);
-
-  gdk_draw_rectangle (drawable, gc, TRUE, x, y, INDICATOR_PART_SIZE, INDICATOR_PART_SIZE);
-
-  gdk_gc_set_fill (gc, GDK_SOLID);
-
-  if (area)
-    gdk_gc_set_clip_rectangle (gc, NULL);
-}
-
 static void
 gtk_default_draw_hline (GtkStyle     *style,
                         GdkWindow    *window,
@@ -3065,7 +2892,7 @@ gtk_default_draw_polygon (GtkStyle      *style,
 
 static void
 draw_arrow (GdkWindow     *window,
-	    GdkGC         *gc,
+	    GdkColor      *color,
 	    GdkRectangle  *area,
 	    GtkArrowType   arrow_type,
 	    gint           x,
@@ -3073,34 +2900,49 @@ draw_arrow (GdkWindow     *window,
 	    gint           width,
 	    gint           height)
 {
-  gint i, j;
-
+  cairo_t *cr = gdk_drawable_create_cairo_context (window);
+  gdk_cairo_set_source_color (cr, color);
+  
   if (area)
-    gdk_gc_set_clip_rectangle (gc, area);
-
+    {
+      cairo_save (cr);
+      cairo_rectangle (cr, area->x, area->y, area->width, area->height);
+      cairo_clip (cr);
+      cairo_new_path (cr);
+    }
+    
   if (arrow_type == GTK_ARROW_DOWN)
     {
-      for (i = 0, j = 0; i < height; i++, j++)
-	gdk_draw_line (window, gc, x + j, y + i, x + width - j - 1, y + i);
+      cairo_move_to (cr, x,              y);
+      cairo_line_to (cr, x + width,      y);
+      cairo_line_to (cr, x + width / 2., y + height);
     }
   else if (arrow_type == GTK_ARROW_UP)
     {
-      for (i = height - 1, j = 0; i >= 0; i--, j++)
-	gdk_draw_line (window, gc, x + j, y + i, x + width - j - 1, y + i);
+      cairo_move_to (cr, x,              y + height);
+      cairo_line_to (cr, x + width / 2., y);
+      cairo_line_to (cr, x + width,      y + height);
     }
   else if (arrow_type == GTK_ARROW_LEFT)
     {
-      for (i = width - 1, j = 0; i >= 0; i--, j++)
-	gdk_draw_line (window, gc, x + i, y + j, x + i, y + height - j - 1);
+      cairo_move_to (cr, x + width,      y);
+      cairo_line_to (cr, x + width,      y + height);
+      cairo_line_to (cr, x,              y + height / 2.);
     }
   else if (arrow_type == GTK_ARROW_RIGHT)
     {
-      for (i = 0, j = 0; i < width; i++, j++)
-	gdk_draw_line (window, gc, x + i, y + j, x + i, y + height - j - 1);
+      cairo_move_to (cr, x,              y);
+      cairo_line_to (cr, x + width,      y + height / 2.);
+      cairo_line_to (cr, x,              y + height);
     }
 
+  cairo_close_path (cr);
+  cairo_fill (cr);
+
   if (area)
-    gdk_gc_set_clip_rectangle (gc, NULL);
+    cairo_restore (cr);
+
+  cairo_destroy (cr);
 }
 
 static void
@@ -3200,9 +3042,9 @@ gtk_default_draw_arrow (GtkStyle      *style,
     y++;
 
   if (state == GTK_STATE_INSENSITIVE)
-    draw_arrow (window, style->white_gc, area, arrow_type,
+    draw_arrow (window, &style->white, area, arrow_type,
 		x + 1, y + 1, width, height);
-  draw_arrow (window, style->fg_gc[state], area, arrow_type,
+  draw_arrow (window, &style->fg[state], area, arrow_type,
 	      x, y, width, height);
 }
 
@@ -3760,21 +3602,6 @@ gtk_default_draw_flat_box (GtkStyle      *style,
     g_object_unref (freeme);
 }
 
-static GdkGC *
-create_aa_gc (GdkWindow *window, GtkStyle *style, GtkStateType state_type)
-{
-  GdkColor aa_color;
-  GdkGC *gc = gdk_gc_new (window);
-   
-  aa_color.red = (style->fg[state_type].red + style->bg[state_type].red) / 2;
-  aa_color.green = (style->fg[state_type].green + style->bg[state_type].green) / 2;
-  aa_color.blue = (style->fg[state_type].blue + style->bg[state_type].blue) / 2;
-  
-  gdk_gc_set_rgb_fg_color (gc, &aa_color);
-
-  return gc;
-}
-
 static void 
 gtk_default_draw_check (GtkStyle      *style,
 			GdkWindow     *window,
@@ -3788,92 +3615,121 @@ gtk_default_draw_check (GtkStyle      *style,
 			gint           width,
 			gint           height)
 {
-  if (detail && strcmp (detail, "cellcheck") == 0)
+  cairo_t *cr = gdk_drawable_create_cairo_context (window);
+  enum { BUTTON, MENU, CELL } type = BUTTON;
+  int exterior_size;
+  int interior_size;
+  int pad;
+  
+  if (detail)
     {
-      if (area)               
-      	gdk_gc_set_clip_rectangle (widget->style->base_gc[state_type], area);
-      gdk_draw_rectangle (window,
-			  widget->style->base_gc[state_type],
-			  TRUE,
-                          x, y,
-			  width, height);
-      if (area)
-	{
-	  gdk_gc_set_clip_rectangle (widget->style->base_gc[state_type], NULL);
-	  gdk_gc_set_clip_rectangle (widget->style->text_gc[state_type], area);
-	}
-      gdk_draw_rectangle (window,
-			  widget->style->text_gc[state_type],
-			  FALSE,
-                          x, y,
-			  width, height);
-      if (area)               
-      	gdk_gc_set_clip_rectangle (widget->style->text_gc[state_type], NULL);
-
-      x -= (1 + INDICATOR_PART_SIZE - width) / 2;
-      y -= (((1 + INDICATOR_PART_SIZE - height) / 2) - 1);
-      if (shadow_type == GTK_SHADOW_IN)
-	{
-	  draw_part (window, style->text_gc[state_type], area, x, y, CHECK_TEXT);
-	  draw_part (window, style->text_aa_gc[state_type], area, x, y, CHECK_AA);
-	}
-      else if (shadow_type == GTK_SHADOW_ETCHED_IN) /* inconsistent */
-	{
-	  draw_part (window, style->text_gc[state_type], area, x, y, CHECK_INCONSISTENT_TEXT);
-	}
+      if (strcmp (detail, "cellcheck") == 0)
+	type = CELL;
+      else if (strcmp (detail, "check") == 0)
+	type = MENU;
     }
-  else
-    {
-      GdkGC *free_me = NULL;
       
-      GdkGC *base_gc;
-      GdkGC *text_gc;
-      GdkGC *aa_gc;
-
-      x -= (1 + INDICATOR_PART_SIZE - width) / 2;
-      y -= (1 + INDICATOR_PART_SIZE - height) / 2;
-
-      if (detail && strcmp (detail, "check") == 0)	/* Menu item */
-	{
-	  text_gc = style->fg_gc[state_type];
-	  base_gc = style->bg_gc[state_type];
-	  aa_gc = free_me = create_aa_gc (window, style, state_type);
-	}
-      else
-	{
-	  if (state_type == GTK_STATE_ACTIVE)
-	    {
-	      text_gc = style->fg_gc[state_type];
-	      base_gc = style->bg_gc[state_type];
-	      aa_gc = free_me = create_aa_gc (window, style, state_type);
-	    }
-	  else
-	    {
-	      text_gc = style->text_gc[state_type];
-	      base_gc = style->base_gc[state_type];
-	      aa_gc = style->text_aa_gc[state_type];
-	    }
-
-	  draw_part (window, base_gc, area, x, y, CHECK_BASE);
-	  draw_part (window, style->black_gc, area, x, y, CHECK_BLACK);
-	  draw_part (window, style->dark_gc[state_type], area, x, y, CHECK_DARK);
-	  draw_part (window, style->mid_gc[state_type], area, x, y, CHECK_MID);
-	  draw_part (window, style->light_gc[state_type], area, x, y, CHECK_LIGHT);
-	}
-
-      if (shadow_type == GTK_SHADOW_IN)
-	{
-	  draw_part (window, text_gc, area, x, y, CHECK_TEXT);
-	  draw_part (window, aa_gc, area, x, y, CHECK_AA);
-	}
-      else if (shadow_type == GTK_SHADOW_ETCHED_IN) /* inconsistent */
-	{
-	  draw_part (window, text_gc, area, x, y, CHECK_INCONSISTENT_TEXT);
-	}
-
-      if (free_me)
-	g_object_unref (free_me);
+  if (area)
+    {
+      cairo_save (cr);
+      cairo_rectangle (cr, area->x, area->y, area->width, area->height);
+      cairo_clip (cr);
+      cairo_new_path (cr);
     }
+  
+  exterior_size = MIN (width, height);
+  if (exterior_size % 2 == 0) /* Ensure odd */
+    exterior_size -= -1;
+
+  pad = style->xthickness + MAX (1, (exterior_size - 2 * style->xthickness) / 9);
+  interior_size = MAX (1, exterior_size - 2 * pad);
+
+  if (interior_size < 7)
+    {
+      interior_size = 7;
+      pad = MAX (0, (exterior_size - interior_size) / 2);
+    }
+
+  x -= (1 + exterior_size - width) / 2;
+  y -= (1 + exterior_size - height) / 2;
+
+  switch (type)
+    {
+    case BUTTON:
+    case CELL:
+      if (type == BUTTON)
+	gdk_cairo_set_source_color (cr, &style->fg[state_type]);
+      else
+	gdk_cairo_set_source_color (cr, &style->text[state_type]);
+	
+      cairo_set_line_width (cr, 1.0);
+      cairo_rectangle (cr, x + 0.5, y + 0.5, exterior_size - 1, exterior_size - 1);
+      cairo_stroke (cr);
+
+      gdk_cairo_set_source_color (cr, &style->base[state_type]);
+      cairo_rectangle (cr, x + 1, y + 1, exterior_size - 2, exterior_size - 2);
+      cairo_fill (cr);
+      break;
+
+    case MENU:
+      break;
+    }
+      
+  switch (type)
+    {
+    case BUTTON:
+    case CELL:
+      gdk_cairo_set_source_color (cr, &style->text[state_type]);
+      break;
+    case MENU:
+      gdk_cairo_set_source_color (cr, &style->fg[state_type]);
+      break;
+    }
+
+  if (shadow_type == GTK_SHADOW_IN)
+    {
+      cairo_translate (cr,
+		       x + pad, y + pad);
+      
+      cairo_scale (cr, interior_size / 7., interior_size / 7.);
+      
+      cairo_move_to  (cr, 7.0, 0.0);
+      cairo_line_to  (cr, 7.5, 1.0);
+      cairo_curve_to (cr, 5.3, 2.0,
+		      4.3, 4.0,
+		      3.5, 7.0);
+      cairo_curve_to (cr, 3.0, 5.7,
+		      1.3, 4.7,
+		      0.0, 4.7);
+      cairo_line_to  (cr, 0.2, 3.5);
+      cairo_curve_to (cr, 1.1, 3.5,
+		      2.3, 4.3,
+		      3.0, 5.0);
+      cairo_curve_to (cr, 1.0, 3.9,
+		      2.4, 4.1,
+		      3.2, 4.9);
+      cairo_curve_to (cr, 3.5, 3.1,
+		      5.2, 2.0,
+		      7.0, 0.0);
+      
+      cairo_fill (cr);
+    }
+  else if (shadow_type == GTK_SHADOW_ETCHED_IN) /* inconsistent */
+    {
+      int line_thickness = MAX (1, (3 + interior_size * 2) / 7);
+
+      cairo_rectangle (cr,
+		       x + pad,
+		       y + pad + (1 + interior_size - line_thickness) / 2,
+		       interior_size,
+		       line_thickness);
+      cairo_fill (cr);
+    }
+  
+  if (area)
+    cairo_restore (cr);
+  
+  cairo_destroy (cr);
 }
 
 static void 
@@ -3889,96 +3745,118 @@ gtk_default_draw_option (GtkStyle      *style,
 			 gint           width,
 			 gint           height)
 {
-  if (detail && strcmp (detail, "cellradio") == 0)
+  cairo_t *cr = gdk_drawable_create_cairo_context (window);
+  enum { BUTTON, MENU, CELL } type = BUTTON;
+  int exterior_size;
+  
+  if (detail)
     {
-      if (area)               
-	gdk_gc_set_clip_rectangle (widget->style->fg_gc[state_type], area);
-      gdk_draw_arc (window,
-		    widget->style->fg_gc[state_type],
-		    FALSE,
-                    x, y,
-		    width,
-		    height,
-		    0, 360*64);
-
-      if (shadow_type == GTK_SHADOW_IN)
-	{
-	  gdk_draw_arc (window,
-			widget->style->fg_gc[state_type],
-			TRUE,
-                        x + 2,
-                        y + 2,
-			width - 4,
-			height - 4,
-			0, 360*64);
-	}
-      else if (shadow_type == GTK_SHADOW_ETCHED_IN) /* inconsistent */
-        {
-          draw_part (window, widget->style->fg_gc[state_type],
-	             area, x, y, CHECK_INCONSISTENT_TEXT);
-	}
-      if (area)               
-	gdk_gc_set_clip_rectangle (widget->style->fg_gc[state_type], NULL);
+      if (strcmp (detail, "radio") == 0)
+	type = CELL;
+      else if (strcmp (detail, "option") == 0)
+	type = MENU;
     }
-  else
-    {
-      GdkGC *free_me = NULL;
       
-      GdkGC *base_gc;
-      GdkGC *text_gc;
-      GdkGC *aa_gc;
-
-      x -= (1 + INDICATOR_PART_SIZE - width) / 2;
-      y -= (1 + INDICATOR_PART_SIZE - height) / 2;
-
-      if (detail && strcmp (detail, "option") == 0)	/* Menu item */
-	{
-	  text_gc = style->fg_gc[state_type];
-	  base_gc = style->bg_gc[state_type];
-	  aa_gc = free_me = create_aa_gc (window, style, state_type);
-	}
-      else
-	{
-	  if (state_type == GTK_STATE_ACTIVE)
-	    {
-	      text_gc = style->fg_gc[state_type];
-	      base_gc = style->bg_gc[state_type];
-	      aa_gc = free_me = create_aa_gc (window, style, state_type);
-	    }
-	  else
-	    {
-	      text_gc = style->text_gc[state_type];
-	      base_gc = style->base_gc[state_type];
-	      aa_gc = style->text_aa_gc[state_type];
-	    }
-
-	  draw_part (window, base_gc, area, x, y, RADIO_BASE);
-	  draw_part (window, style->black_gc, area, x, y, RADIO_BLACK);
-	  draw_part (window, style->dark_gc[state_type], area, x, y, RADIO_DARK);
-	  draw_part (window, style->mid_gc[state_type], area, x, y, RADIO_MID);
-	  draw_part (window, style->light_gc[state_type], area, x, y, RADIO_LIGHT);
-	}
-
-      if (shadow_type == GTK_SHADOW_IN)
-	{
-	  draw_part (window, text_gc, area, x, y, RADIO_TEXT);
-	}
-      else if (shadow_type == GTK_SHADOW_ETCHED_IN) /* inconsistent */
-	{
-	  if (detail && strcmp (detail, "option") == 0)  /* Menu item */
-	    {
-	      draw_part (window, text_gc, area, x, y, CHECK_INCONSISTENT_TEXT);
-	    }
-	  else
-	    {
-	      draw_part (window, text_gc, area, x, y, RADIO_INCONSISTENT_TEXT);
-	      draw_part (window, aa_gc, area, x, y, RADIO_INCONSISTENT_AA);
-	    }
-	}
-
-      if (free_me)
-	g_object_unref (free_me);
+  if (area)
+    {
+      cairo_save (cr);
+      cairo_rectangle (cr, area->x, area->y, area->width, area->height);
+      cairo_clip (cr);
+      cairo_new_path (cr);
     }
+  
+  exterior_size = MIN (width, height);
+  if (exterior_size % 2 == 0) /* Ensure odd */
+    exterior_size -= -1;
+  
+  x -= (1 + exterior_size - width) / 2;
+  y -= (1 + exterior_size - height) / 2;
+
+  switch (type)
+    {
+    case BUTTON:
+    case CELL:
+      gdk_cairo_set_source_color (cr, &style->base[state_type]);
+      
+      cairo_arc (cr,
+		 x + exterior_size / 2.,
+		 y + exterior_size / 2.,
+		 (exterior_size - 1) / 2.,
+		 0, 2 * M_PI);
+
+      cairo_save (cr);
+      cairo_fill (cr);
+      cairo_restore (cr);
+
+      if (type == BUTTON)
+	gdk_cairo_set_source_color (cr, &style->fg[state_type]);
+      else
+	gdk_cairo_set_source_color (cr, &style->text[state_type]);
+	
+      cairo_set_line_width (cr, 1.);
+      cairo_stroke (cr);
+      break;
+
+    case MENU:
+      break;
+    }
+      
+  switch (type)
+    {
+    case BUTTON:
+      gdk_cairo_set_source_color (cr, &style->text[state_type]);
+      break;
+    case CELL:
+      break;
+    case MENU:
+      gdk_cairo_set_source_color (cr, &style->fg[state_type]);
+      break;
+    }
+
+  if (shadow_type == GTK_SHADOW_IN)
+    {
+      int pad = style->xthickness + MAX (1, 2 * (exterior_size - 2 * style->xthickness) / 9);
+      int interior_size = MAX (1, exterior_size - 2 * pad);
+
+      if (interior_size < 5)
+	{
+	  interior_size = 7;
+	  pad = MAX (0, (exterior_size - interior_size) / 2);
+	}
+
+      cairo_arc (cr,
+		 x + pad + interior_size / 2.,
+		 y + pad + interior_size / 2.,
+		 interior_size / 2.,
+		 0, 2 * M_PI);
+      cairo_fill (cr);
+    }
+  else if (shadow_type == GTK_SHADOW_ETCHED_IN) /* inconsistent */
+    {
+      int pad = style->xthickness + MAX (1, (exterior_size - 2 * style->xthickness) / 9);
+      int interior_size = MAX (1, exterior_size - 2 * pad);
+      int line_thickness;
+
+      if (interior_size < 7)
+	{
+	  interior_size = 7;
+	  pad = MAX (0, (exterior_size - interior_size) / 2);
+	}
+
+      line_thickness = MAX (1, (3 + interior_size * 2) / 7);
+
+      cairo_rectangle (cr,
+		       x + pad,
+		       y + pad + (interior_size - line_thickness) / 2.,
+		       interior_size,
+		       line_thickness);
+      cairo_fill (cr);
+    }
+  
+  if (area)
+    cairo_restore (cr);
+  
+  cairo_destroy (cr);
 }
 
 static void
@@ -4010,21 +3888,21 @@ gtk_default_draw_tab (GtkStyle      *style,
 
   if (state_type == GTK_STATE_INSENSITIVE)
     {
-      draw_arrow (window, style->white_gc, area,
+      draw_arrow (window, &style->white, area,
 		  GTK_ARROW_UP, x + 1, y + 1,
 		  indicator_size.width, arrow_height);
       
-      draw_arrow (window, style->white_gc, area,
+      draw_arrow (window, &style->white, area,
 		  GTK_ARROW_DOWN, x + 1, y + arrow_height + ARROW_SPACE + 1,
 		  indicator_size.width, arrow_height);
     }
   
-  draw_arrow (window, style->fg_gc[state_type], area,
+  draw_arrow (window, &style->fg[state_type], area,
 	      GTK_ARROW_UP, x, y,
 	      indicator_size.width, arrow_height);
   
   
-  draw_arrow (window, style->fg_gc[state_type], area,
+  draw_arrow (window, &style->fg[state_type], area,
 	      GTK_ARROW_DOWN, x, y + arrow_height + ARROW_SPACE,
 	      indicator_size.width, arrow_height);
 }
@@ -4653,12 +4531,10 @@ gtk_default_draw_focus (GtkStyle      *style,
 			gint           width,
 			gint           height)
 {
-  GdkPoint points[5];
-  GdkGC    *gc;
+  cairo_t *cr;
   gboolean free_dash_list = FALSE;
   gint line_width = 1;
   gint8 *dash_list = "\1\1";
-  gint dash_len;
 
   if (widget)
     {
@@ -4670,22 +4546,6 @@ gtk_default_draw_focus (GtkStyle      *style,
       free_dash_list = TRUE;
   }
 
-  sanitize_size (window, &width, &height);
-  
-  if (detail && !strcmp (detail, "colorwheel_light"))
-    gc = style->black_gc;
-  else if (detail && !strcmp (detail, "colorwheel_dark"))
-    gc = style->white_gc;
-  else 
-    gc = style->fg_gc[state_type];
-
-  gdk_gc_set_line_attributes (gc, line_width,
-			      dash_list[0] ? GDK_LINE_ON_OFF_DASH : GDK_LINE_SOLID,
-			      GDK_CAP_BUTT, GDK_JOIN_MITER);
-  
-  if (area)
-    gdk_gc_set_clip_rectangle (gc, area);
-
   if (detail && !strcmp (detail, "add-mode"))
     {
       if (free_dash_list)
@@ -4695,88 +4555,61 @@ gtk_default_draw_focus (GtkStyle      *style,
       free_dash_list = FALSE;
     }
 
-  points[0].x = x + line_width / 2;
-  points[0].y = y + line_width / 2;
-  points[1].x = x + width - line_width + line_width / 2;
-  points[1].y = y + line_width / 2;
-  points[2].x = x + width - line_width + line_width / 2;
-  points[2].y = y + height - line_width + line_width / 2;
-  points[3].x = x + line_width / 2;
-  points[3].y = y + height - line_width + line_width / 2;
-  points[4] = points[0];
+  sanitize_size (window, &width, &height);
 
-  if (!dash_list[0])
-    {
-      gdk_draw_lines (window, gc, points, 5);
-    }
+  cr = gdk_drawable_create_cairo_context (window);
+  
+  if (detail && !strcmp (detail, "colorwheel_light"))
+    cairo_set_rgb_color (cr, 0., 0., 0.);
+  else if (detail && !strcmp (detail, "colorwheel_dark"))
+    cairo_set_rgb_color (cr, 1., 1., 1.);
   else
-    {
-      /* We go through all the pain below because the X rasterization
-       * rules don't really work right for dashed lines if you
-       * want continuity in segments that go between top/right
-       * and left/bottom. For instance, a top left corner
-       * with a 1-1 dash is drawn as:
-       *
-       *  X X X 
-       *  X
-       *
-       *  X
-       *
-       * This is because pixels on the top and left boundaries
-       * of polygons are drawn, but not on the bottom and right.
-       * So, if you have a line going up that turns the corner
-       * and goes right, there is a one pixel shift in the pattern.
-       *
-       * So, to fix this, we drawn the top and right in one call,
-       * then the left and bottom in another call, fixing up
-       * the dash offset for the second call ourselves to get
-       * continuity at the upper left.
-       *
-       * It's not perfect since we really should have a join at
-       * the upper left and lower right instead of two intersecting
-       * lines but that's only really apparent for no-dashes,
-       * which (for this reason) are done as one polygon and
-       * don't to through this code path.
-       */
-      
-      dash_len = strlen (dash_list);
-      
-      if (dash_list[0])
-	gdk_gc_set_dashes (gc, 0, dash_list, dash_len);
-      
-      gdk_draw_lines (window, gc, points, 3);
-      
-      /* We draw this line one farther over than it is "supposed" to
-       * because of another rasterization problem ... if two 1 pixel
-       * unjoined lines meet at the lower right, there will be a missing
-       * pixel.
-       */
-      points[2].x += 1;
-      
-      if (dash_list[0])
-	{
-	  gint dash_pixels = 0;
-	  gint i;
-	  
-	  /* Adjust the dash offset for the bottom and left so we
-	   * match up at the upper left.
-	   */
-	  for (i = 0; i < dash_len; i++)
-	    dash_pixels += dash_list[i];
-      
-	  if (dash_len % 2 == 1)
-	    dash_pixels *= 2;
-	  
-	  gdk_gc_set_dashes (gc, dash_pixels - (width + height - 2 * line_width) % dash_pixels, dash_list, dash_len);
-	}
-      
-      gdk_draw_lines (window, gc, points + 2, 3);
-    }
+    gdk_cairo_set_source_color (cr, &style->fg[state_type]);
 
-  gdk_gc_set_line_attributes (gc, 0, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
+  cairo_set_line_width (cr, line_width);
+
+  if (dash_list[0])
+    {
+      gint n_dashes = strlen (dash_list);
+      gdouble *dashes = g_new (gdouble, n_dashes);
+      gdouble total_length = 0;
+      gdouble dash_offset;
+      gint i;
+
+      for (i = 0; i < n_dashes; i++)
+	{
+	  dashes[i] = dash_list[i];
+	  total_length += dash_list[i];
+	}
+
+      /* The dash offset here aligns the pattern to integer pixels
+       * by starting the dash at the right side of the left border
+       * Negative dash offsets in cairo don't work
+       * (https://bugs.freedesktop.org/show_bug.cgi?id=2729)
+       */
+      dash_offset = - line_width / 2.;
+      while (dash_offset < 0)
+	dash_offset += total_length;
+      
+      cairo_set_dash (cr, dashes, n_dashes, dash_offset);
+      g_free (dashes);
+    }
 
   if (area)
-    gdk_gc_set_clip_rectangle (gc, NULL);
+    {
+      cairo_rectangle (cr,
+		       area->x, area->y, area->width, area->height);
+      cairo_clip (cr);
+      cairo_new_path (cr);
+    }
+
+  cairo_rectangle (cr,
+		   x + line_width / 2.,
+		   y + line_width / 2.,
+		   width - line_width,
+		   height - line_width);
+  cairo_stroke (cr);
+  cairo_destroy (cr);
 
   if (free_dash_list)
     g_free (dash_list);

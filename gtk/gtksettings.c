@@ -45,7 +45,7 @@ struct _GtkSettingsPropertyValue
   GtkSettingsSource source;
 };
 
-#ifdef GDK_WINDOWING_X11
+#if 0
 #include <pango/pangoxft.h>
 #include <gdk/x11/gdkx.h>
 #endif
@@ -133,7 +133,7 @@ gtk_settings_get_type (void)
   return settings_type;
 }
 
-#ifdef GDK_WINDOWING_X11
+#if 0
 static void
 gtk_default_substitute (FcPattern *pattern,
 			gpointer   data)
@@ -478,7 +478,7 @@ gtk_settings_get_for_screen (GdkScreen *screen)
       settings->screen = screen;
       g_object_set_data (G_OBJECT (screen), "gtk-settings", settings);
 
-#ifdef GDK_WINDOWING_X11  
+#if 0
       /* Set the default substitution function for the Pango fontmap.
        */
       pango_xft_set_default_substitute (GDK_SCREEN_XDISPLAY (screen),
@@ -615,7 +615,7 @@ gtk_settings_notify (GObject    *object,
     case PROP_DOUBLE_CLICK_DISTANCE:
       settings_update_double_click (settings);
       break;
-#ifdef GDK_WINDOWING_X11      
+#if 0
     case PROP_XFT_ANTIALIAS:
     case PROP_XFT_HINTING:
     case PROP_XFT_HINTSTYLE:

@@ -44,6 +44,7 @@ struct _GdkWindowPaint
   GdkPixmap *pixmap;
   gint x_offset;
   gint y_offset;
+  cairo_surface_t *surface;
 };
 
 static GdkGC *gdk_window_create_gc      (GdkDrawable     *drawable,
@@ -157,8 +158,7 @@ static GdkImage* gdk_window_copy_to_image (GdkDrawable *drawable,
 					   gint         width,
 					   gint         height);
 
-static void gdk_window_set_cairo_target (GdkDrawable *drawable,
-					 cairo_t     *cr);
+static cairo_surface_t *gdk_window_ref_cairo_surface (GdkDrawable *drawable);
 
 static void   gdk_window_real_get_size  (GdkDrawable     *drawable,
                                          gint            *width,
@@ -266,7 +266,7 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->get_colormap = gdk_window_real_get_colormap;
   drawable_class->get_visual = gdk_window_real_get_visual;
   drawable_class->_copy_to_image = gdk_window_copy_to_image;
-  drawable_class->set_cairo_target = gdk_window_set_cairo_target;
+  drawable_class->ref_cairo_surface = gdk_window_ref_cairo_surface;
   drawable_class->get_clip_region = gdk_window_get_clip_region;
   drawable_class->get_visible_region = gdk_window_get_visible_region;
   drawable_class->get_composite_drawable = gdk_window_get_composite_drawable;
@@ -973,6 +973,10 @@ gdk_window_begin_paint_region (GdkWindow *window,
     gdk_pixmap_new (window,
 		    MAX (clip_box.width, 1), MAX (clip_box.height, 1), -1);
 
+  paint->surface = _gdk_drawable_ref_cairo_surface (paint->pixmap);
+  _gdk_windowing_set_surface_device_offset (paint->surface,
+					    - paint->x_offset, - paint->y_offset);
+  
   for (list = private->paint_stack; list != NULL; list = list->next)
     {
       GdkWindowPaint *tmp_paint = list->data;
@@ -1047,7 +1051,8 @@ gdk_window_end_paint (GdkWindow *window)
 
   /* Reset clip region of the cached GdkGC */
   gdk_gc_set_clip_region (tmp_gc, NULL);
-  
+
+  cairo_surface_destroy (paint->surface);
   g_object_unref (paint->pixmap);
   gdk_region_destroy (paint->region);
   g_free (paint);
@@ -1720,42 +1725,60 @@ gdk_window_draw_glyphs_transformed (GdkDrawable      *drawable,
   RESTORE_GC (gc);
 }
 
-static GdkGC *
-gdk_window_get_bg_gc (GdkWindow      *window,
-		      GdkWindowPaint *paint)
+static void
+gdk_window_set_bg_pattern (GdkWindow      *window,
+			   cairo_t        *cr,
+			   int             x_offset,
+			   int             y_offset)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
 
-  guint gc_mask = 0;
-  GdkGCValues gc_values;
-
   if (private->bg_pixmap == GDK_PARENT_RELATIVE_BG && private->parent)
     {
-      GdkWindowPaint tmp_paint = *paint;
-      tmp_paint.x_offset += private->x;
-      tmp_paint.y_offset += private->y;
-      
-      return gdk_window_get_bg_gc (GDK_WINDOW (private->parent), &tmp_paint);
+      gdk_window_set_bg_pattern (GDK_WINDOW (private->parent), cr,
+				 private->x, private->y);
     }
   else if (private->bg_pixmap && 
            private->bg_pixmap != GDK_PARENT_RELATIVE_BG && 
            private->bg_pixmap != GDK_NO_BG)
     {
-      gc_values.fill = GDK_TILED;
-      gc_values.tile = private->bg_pixmap;
-      
-      gc_mask = GDK_GC_FILL | GDK_GC_TILE;
+      cairo_surface_t *surface = _gdk_drawable_ref_cairo_surface (private->bg_pixmap);
+      cairo_pattern_t *pattern = cairo_pattern_create_for_surface (surface);
+      cairo_surface_destroy (surface);
 
-      return gdk_gc_new_with_values (paint->pixmap, &gc_values, gc_mask);
+      if (x_offset != 0 || y_offset)
+	{
+	  cairo_matrix_t *matrix = cairo_matrix_create ();
+	  cairo_matrix_translate (matrix, x_offset, y_offset);
+	  cairo_pattern_set_matrix (pattern, matrix);
+	  cairo_matrix_destroy (matrix);
+	}
+
+      cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+      cairo_set_pattern (cr, pattern);
+      cairo_pattern_destroy (pattern);
     }
   else
     {
-      GdkGC *gc = _gdk_drawable_get_scratch_gc (paint->pixmap, FALSE);
-
-      gdk_gc_set_foreground (gc, &(private->bg_color));
-
-      return g_object_ref (gc);
+      gdk_cairo_set_source_color (cr, &private->bg_color);
     }
+}
+
+static void
+region_path (cairo_t   *cr,
+	     GdkRegion *region)
+{
+  GdkRectangle *rectangles;
+  int n_rectangles, i;
+  
+  gdk_region_get_rectangles (region, &rectangles, &n_rectangles);
+  for (i = 0; i < n_rectangles; i++)
+    {
+      cairo_rectangle (cr,
+		       rectangles[i].x, rectangles[i].y,
+		       rectangles[i].width, rectangles[i].height);
+    }
+  g_free (rectangles);
 }
 
 static void
@@ -1767,20 +1790,27 @@ gdk_window_clear_backing_rect (GdkWindow *window,
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowPaint *paint = private->paint_stack->data;
-  GdkGC *tmp_gc;
+  cairo_t *cr;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  tmp_gc = gdk_window_get_bg_gc (window, paint);
-  gdk_gc_set_clip_region (tmp_gc, paint->region);
-  
-  gdk_draw_rectangle (window, tmp_gc, TRUE,
-		      x, y, width, height);
+  cr = cairo_create ();
+  cairo_set_target_surface (cr, paint->surface);
 
-  gdk_gc_set_clip_region (tmp_gc, NULL);
-  
-  g_object_unref (tmp_gc);
+  gdk_window_set_bg_pattern (window, cr, 0, 0);
+
+  cairo_save (cr);
+
+  cairo_rectangle (cr, x, y, width, height);
+  cairo_clip (cr);
+
+  region_path (cr, paint->region);
+  cairo_fill (cr);
+
+  cairo_restore (cr);
+
+  cairo_destroy (cr);
 }
 
 /**
@@ -2095,11 +2125,11 @@ gdk_window_copy_to_image (GdkDrawable     *drawable,
 				     width, height);
 }
 
-static void
-gdk_window_set_cairo_target (GdkDrawable *drawable,
-			     cairo_t     *cr)
+static cairo_surface_t *
+gdk_window_ref_cairo_surface (GdkDrawable *drawable)
 {
   GdkWindowObject *private = (GdkWindowObject*) drawable;
+  cairo_surface_t *surface;
   gint x_offset, y_offset;
   
   gdk_window_get_offsets (GDK_WINDOW (drawable), &x_offset, &y_offset);
@@ -2107,12 +2137,14 @@ gdk_window_set_cairo_target (GdkDrawable *drawable,
   if (private->paint_stack)
     {
       GdkWindowPaint *paint = private->paint_stack->data;
-      gdk_drawable_set_cairo_target (paint->pixmap, cr);
+
+      surface = paint->surface;
+      cairo_surface_reference (surface);
     }
   else
-    gdk_drawable_set_cairo_target (private->impl, cr);
+    surface = _gdk_drawable_ref_cairo_surface (private->impl);
 
-  cairo_translate (cr, - x_offset, - y_offset);
+  return surface;
 }
 
 /* Code for dirty-region queueing

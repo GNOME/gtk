@@ -371,5 +371,23 @@ gdk_colormap_get_system (void)
   return gdk_screen_get_system_colormap (gdk_screen_get_default ());
 }
 
+/**
+ * gdk_cairo_set_source_color:
+ * @cr: a #cairo_t
+ * @color: a #GdkColor
+ * 
+ * Convenience function to set the specified GdkColor as the
+ * source color of the given Cairo context.
+ **/
+void
+gdk_cairo_set_source_color (cairo_t  *cr,
+			    GdkColor *color)
+{
+  cairo_set_rgb_color (cr,
+		       color->red / 65535.,
+		       color->green / 65535.,
+		       color->blue / 65535.);
+}
+
 #define __GDK_COLOR_C__
 #include "gdkaliasdef.c"

@@ -159,7 +159,6 @@ static void
 gtk_ruler_init (GtkRuler *ruler)
 {
   ruler->backing_store = NULL;
-  ruler->non_gr_exp_gc = NULL;
   ruler->xsrc = 0;
   ruler->ysrc = 0;
   ruler->slider_size = 0;
@@ -391,8 +390,6 @@ gtk_ruler_unrealize (GtkWidget *widget)
 
   if (ruler->backing_store)
     g_object_unref (ruler->backing_store);
-  if (ruler->non_gr_exp_gc)
-    g_object_unref (ruler->non_gr_exp_gc);
 
   ruler->backing_store = NULL;
   ruler->non_gr_exp_gc = NULL;

@@ -842,6 +842,7 @@ gdk_window_new (GdkWindow     *parent,
 	}
       
       private->bg_color.pixel = BlackPixel (xdisplay, screen_x11->screen_num);
+      private->bg_color.red = private->bg_color.green = private->bg_color.blue = 0;
       xattributes.background_pixel = private->bg_color.pixel;
 
       private->bg_pixmap = NULL;
@@ -1128,7 +1129,6 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkToplevelX11 *toplevel;
-  GdkDrawableImplX11 *draw_impl;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -1141,19 +1141,7 @@ _gdk_windowing_window_destroy (GdkWindow *window,
   if (toplevel)
     gdk_toplevel_x11_free_contents (GDK_WINDOW_DISPLAY (window), toplevel);
 
-  draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
-    
-  if (draw_impl->xft_draw)
-    {
-      XftDrawDestroy (draw_impl->xft_draw);
-      draw_impl->xft_draw = NULL;
-    }
-
-  if (draw_impl->cairo_surface)
-    {
-      cairo_surface_destroy (draw_impl->cairo_surface);
-      draw_impl->cairo_surface = NULL;
-    }
+  _gdk_x11_drawable_finish (private->impl);
 
   if (!recursing && !foreign_destroy)
     {
@@ -2773,6 +2761,7 @@ gdk_window_set_background (GdkWindow      *window,
 			   const GdkColor *color)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkColormap *colormap = gdk_drawable_get_colormap (window);
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -2782,6 +2771,7 @@ gdk_window_set_background (GdkWindow      *window,
 			  GDK_WINDOW_XID (window), color->pixel);
 
   private->bg_color = *color;
+  gdk_colormap_query_color (colormap, private->bg_color.pixel, &private->bg_color);
 
   if (private->bg_pixmap &&
       private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&

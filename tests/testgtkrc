@@ -122,6 +122,12 @@ style 'button_list' = 'button'
 }
 widget "main window.*GtkScrolledWindow.*GtkButton*" style "button_list"
 
+style "checkbutton" {
+#  GtkCheckButton::indicator-size = 27
+}
+
+class "GtkCheckButton" style "checkbutton"
+
 
 class "GtkScrollbar" style "red-bar"
 

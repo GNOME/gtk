@@ -26,6 +26,7 @@
 
 #include <config.h>
 #include <math.h>
+#include <pango/pangocairo.h>
 #include "gdkdrawable.h"
 #include "gdkinternals.h"
 #include "gdkwindow.h"
@@ -59,10 +60,6 @@ static void         gdk_drawable_real_draw_pixbuf            (GdkDrawable  *draw
 							      GdkRgbDither  dither,
 							      gint          x_dither,
 							      gint          y_dither);
-static void         gdk_drawable_real_draw_trapezoids        (GdkDrawable   *drawable,
-							      GdkGC	    *gc,
-							      GdkTrapezoid  *trapezoids,
-							      gint           n_trapezoids);
      
 static void gdk_drawable_class_init (GdkDrawableClass *klass);
 
@@ -104,7 +101,6 @@ gdk_drawable_class_init (GdkDrawableClass *klass)
   klass->get_clip_region = gdk_drawable_real_get_visible_region;
   klass->get_visible_region = gdk_drawable_real_get_visible_region;
   klass->draw_pixbuf = gdk_drawable_real_draw_pixbuf;
-  klass->draw_trapezoids = gdk_drawable_real_draw_trapezoids;
 }
 
 /* Manipulation of drawables
@@ -872,6 +868,43 @@ gdk_draw_lines (GdkDrawable *drawable,
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_lines (drawable, gc, points, npoints);
 }
 
+static void
+real_draw_glyphs (GdkDrawable      *drawable,
+		  GdkGC	           *gc,
+		  PangoMatrix      *matrix,
+		  PangoFont        *font,
+		  gdouble           x,
+		  gdouble           y,
+		  PangoGlyphString *glyphs)
+{
+  GdkColor color;
+  cairo_t *cr;
+
+  cr = gdk_drawable_create_cairo_context (drawable);
+  
+  _gdk_windowing_gc_get_foreground (gc, &color);
+  gdk_cairo_set_source_color (cr, &color);
+
+  if (matrix)
+    {
+      cairo_matrix_t *cairo_matrix;
+
+      cairo_matrix = cairo_matrix_create ();
+      cairo_matrix_set_affine (cairo_matrix,
+			       matrix->xx, matrix->yx,
+			       matrix->xy, matrix->yy,
+			       matrix->x0, matrix->y0);
+      
+      cairo_set_matrix (cr, cairo_matrix);
+      cairo_matrix_destroy (cairo_matrix);
+    }
+
+  cairo_move_to (cr, x, y);
+  pango_cairo_show_glyph_string (cr, font, glyphs);
+
+  cairo_destroy (cr);
+}
+
 /**
  * gdk_draw_glyphs:
  * @drawable: a #GdkDrawable
@@ -901,9 +934,9 @@ gdk_draw_glyphs (GdkDrawable      *drawable,
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (GDK_IS_GC (gc));
-
-
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_glyphs (drawable, gc, font, x, y, glyphs);
+  
+  real_draw_glyphs (drawable, gc, NULL, font,
+		    x, y, glyphs);
 }
 
 /**
@@ -941,9 +974,8 @@ gdk_draw_glyphs_transformed (GdkDrawable      *drawable,
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (GDK_IS_GC (gc));
 
-  if (GDK_DRAWABLE_GET_CLASS (drawable)->draw_glyphs_transformed)
-    GDK_DRAWABLE_GET_CLASS (drawable)->draw_glyphs_transformed (drawable, gc, matrix,
-								font, x, y, glyphs);
+  real_draw_glyphs (drawable, gc, matrix, font,
+		    x / PANGO_SCALE, y / PANGO_SCALE, glyphs);
 }
 
 /**
@@ -967,12 +999,31 @@ gdk_draw_trapezoids (GdkDrawable    *drawable,
 		     GdkTrapezoid   *trapezoids,
 		     gint            n_trapezoids)
 {
+  GdkColor color;
+  cairo_t *cr;
+  int i;
+
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (GDK_IS_GC (gc));
   g_return_if_fail (n_trapezoids == 0 || trapezoids != NULL);
 
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_trapezoids (drawable, gc,
-						      trapezoids, n_trapezoids);
+  cr = gdk_drawable_create_cairo_context (drawable);
+  
+  _gdk_windowing_gc_get_foreground (gc, &color);
+  gdk_cairo_set_source_color (cr, &color);
+
+  for (i = 0; i < n_trapezoids; i++)
+    {
+      cairo_move_to (cr, trapezoids[i].x11, trapezoids[i].y1);
+      cairo_line_to (cr, trapezoids[i].x21, trapezoids[i].y1);
+      cairo_line_to (cr, trapezoids[i].x22, trapezoids[i].y2);
+      cairo_line_to (cr, trapezoids[i].x21, trapezoids[i].y2);
+      cairo_close_path (cr);
+    }
+
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
 }
 
 /**
@@ -1222,26 +1273,50 @@ gdk_drawable_real_get_visible_region (GdkDrawable *drawable)
 }
 
 /**
- * gdk_drawable_set_cairo_target:
+ * _gdk_drawable_ref_cairo_surface:
  * @drawable: a #GdkDrawable
- * @cr: a cairo context
  * 
- * Sets the given drawable as the target surface for a Cairo context.
- * Note that when @drawable is a window and gdk_window_begin_paint()
- * has been called, the target surface will be set to the temporary
- * backing pixmap, so you can only use the Cairo context until
- * the matching call to gdk_window_end_paint().
+ * Obtains a #cairo_surface_t for the given drawable. If a
+ * #cairo_surface_t for the drawable already exists, it will be
+ * referenced, otherwise a new surface will be created.
+ * 
+ * Return value: a newly referenced #cairo_surface_t that points
+ *  to @drawable. Unref with cairo_surface_destroy()
+ **/
+cairo_surface_t *
+_gdk_drawable_ref_cairo_surface (GdkDrawable *drawable)
+{
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
+
+  return GDK_DRAWABLE_GET_CLASS (drawable)->ref_cairo_surface (drawable);
+}
+
+/**
+ * gdk_drawable_create_cairo_context:
+ * @drawable: a #GdkDrawable
+ * 
+ * Creates a Cairo context for drawing to @drawable.
  *
+ * Return value: A newly created Cairo context. Free with
+ *  cairo_destroy() when you are done drawing.
+ * 
  * Since: 2.10
  **/
-void
-gdk_drawable_set_cairo_target (GdkDrawable *drawable,
-			       cairo_t     *cr)
+cairo_t *
+gdk_drawable_create_cairo_context (GdkDrawable *drawable)
 {
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (cr != NULL);
+  cairo_surface_t *surface;
+  cairo_t *cr;
+    
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
 
-  return GDK_DRAWABLE_GET_CLASS (drawable)->set_cairo_target (drawable, cr);
+  cr = cairo_create ();
+
+  surface = _gdk_drawable_ref_cairo_surface (drawable);
+  if (surface)
+    cairo_set_target_surface (cr, surface);
+
+  return cr;
 }
 
 static void
@@ -1629,280 +1704,6 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
  out:
   if (composited)
     g_object_unref (composited);
-}
-
-/************************************************************************/
-
-/* Fallback rendering code for anti-aliased trapezoids. Note that this code
- * is cut-and-pasted (with the substitution of GdkPixbuf for FT_Bitmap) between
- * here and pangoft2-render.c.
- */
-typedef struct {
-  double y;
-  double x1;
-  double x2;
-} Position;
-
-static void
-draw_simple_trap (GdkPixbuf     *pixbuf,
-		  int            pixbuf_x,
-		  int            pixbuf_y,
-		  Position      *t,
-		  Position      *b)
-{
-  guchar *pixels = gdk_pixbuf_get_pixels (pixbuf);
-  int rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-  int pixbuf_width = gdk_pixbuf_get_width (pixbuf);
-  int pixbuf_height = gdk_pixbuf_get_height (pixbuf);
-  int iy = floor (t->y);
-  int x1, x2, x;
-  double dy = b->y - t->y;
-  guchar *dest;
-
-  if (iy < pixbuf_y || iy >= pixbuf_y + pixbuf_height)
-    return;
-
-  if (t->x1 < b->x1)
-    x1 = floor (t->x1);
-  else
-    x1 = floor (b->x1);
-
-  if (t->x2 > b->x2)
-    x2 = ceil (t->x2);
-  else
-    x2 = ceil (b->x2);
-
-  x1 = CLAMP (x1, pixbuf_x, pixbuf_x + pixbuf_width);
-  x2 = CLAMP (x2, pixbuf_x, pixbuf_x + pixbuf_width);
-
-  dest = pixels + (iy - pixbuf_y) * rowstride + (x1 - pixbuf_x) * 4;
-  
-  for (x = x1; x < x2; x++, dest += 4)
-    {
-      double top_left = MAX (t->x1, x);
-      double top_right = MIN (t->x2, x + 1);
-      double bottom_left = MAX (b->x1, x);
-      double bottom_right = MIN (b->x2, x + 1);
-      double c = 0.5 * dy * ((top_right - top_left) + (bottom_right - bottom_left));
-
-      /* When converting to [0,255], we round up. This is intended
-       * to prevent the problem of pixels that get divided into
-       * multiple slices not being fully black.
-       */
-      int ic = c * 256;
-
-      /* We already set the entire buffer to the destination color */
-      dest[3] = MIN (dest[3] + ic, 255);
-    }
-}
-
-static void
-interpolate_position (Position *result,
-		      Position *top,
-		      Position *bottom,
-		      double    val,
-		      double    val1,
-		      double    val2)
-{
-  result->y  = (top->y *  (val2 - val) + bottom->y *  (val - val1)) / (val2 - val1);
-  result->x1 = (top->x1 * (val2 - val) + bottom->x1 * (val - val1)) / (val2 - val1);
-  result->x2 = (top->x2 * (val2 - val) + bottom->x2 * (val - val1)) / (val2 - val1);
-}
-
-/* This draws a trapezoid with the parallel sides aligned with
- * the X axis. We do this by subdividing the trapezoid vertically
- * into thin slices (themselves trapezoids) where two edge sides are each
- * contained within a single pixel and then rasterizing each
- * slice. There are frequently multiple slices within a single
- * line so we have to accumulate to get the final result.
- */
-static void
-draw_trapezoid (GdkPixbuf       *pixbuf,
-		int              pixbuf_x,
-		int              pixbuf_y,
-		GdkTrapezoid    *trapezoid)
-{
-  Position pos;
-  Position t;
-  Position b;
-  gboolean done = FALSE;
-
-  if (trapezoid->y1 == trapezoid->y2)
-    return;
-
-  pos.y = t.y = trapezoid->y1;
-  pos.x1 = t.x1 = trapezoid->x11;
-  pos.x2 = t.x2 = trapezoid->x21;
-  b.y = trapezoid->y2;
-  b.x1 = trapezoid->x12;
-  b.x2 = trapezoid->x22;
-
-  while (!done)
-    {
-      Position pos_next;
-      double y_next, x1_next, x2_next;
-      double ix1, ix2;
-
-      /* The algorithm here is written to emphasize simplicity and
-       * numerical stability as opposed to speed.
-       *
-       * While the end result is slicing up the polygon vertically,
-       * conceptually we aren't walking in the X direction, rather we
-       * are walking along the edges. When we compute crossing of
-       * horizontal pixel boundaries, we use the X coordinate as the
-       * interpolating variable, when we compute crossing for vertical
-       * pixel boundaries, we use the Y coordinate.
-       *
-       * This allows us to handle almost exactly horizontal edges without
-       * running into difficulties. (Almost exactly horizontal edges
-       * come up frequently due to inexactness in computing, say,
-       * a 90 degree rotation transformation)
-       */
-
-      pos_next = b;
-      done = TRUE;
-
-      /* Check for crossing vertical pixel boundaries */
-      y_next = floor (pos.y) + 1;
-      if (y_next < pos_next.y)
-	{
-	  interpolate_position (&pos_next, &t, &b,
-				y_next, t.y, b.y);
-	  pos_next.y = y_next;
-	  done = FALSE;
-	}
-
-      /* Check left side for crossing horizontal pixel boundaries */
-      ix1 = floor (pos.x1);
-
-      if (b.x1 < t.x1)
-	{
-	  if (ix1 == pos.x1)
-	    x1_next = ix1 - 1;
-	  else
-	    x1_next = ix1;
-
-	  if (x1_next > pos_next.x1)
-	    {
-	      interpolate_position (&pos_next, &t, &b,
-				    x1_next, t.x1, b.x1);
-	      pos_next.x1 = x1_next;
-	      done = FALSE;
-	    }
-	}
-      else if (b.x1 > t.x1)
-	{
-	  x1_next = ix1 + 1;
-
-	  if (x1_next < pos_next.x1)
-	    {
-	      interpolate_position (&pos_next, &t, &b,
-				    x1_next, t.x1, b.x1);
-	      pos_next.x1 = x1_next;
-	      done = FALSE;
-	    }
-	}
-
-      /* Check right side for crossing horizontal pixel boundaries */
-      ix2 = floor (pos.x2);
-
-      if (b.x2 < t.x2)
-	{
-	  if (ix2 == pos.x2)
-	    x2_next = ix2 - 1;
-	  else
-	    x2_next = ix2;
-
-	  if (x2_next > pos_next.x2)
-	    {
-	      interpolate_position (&pos_next, &t, &b,
-				    x2_next, t.x2, b.x2);
-	      pos_next.x2 = x2_next;
-	      done = FALSE;
-	    }
-	}
-      else if (trapezoid->x22 > trapezoid->x21)
-	{
-	  x2_next = ix2 + 1;
-
-	  if (x2_next < pos_next.x2)
-	    {
-	      interpolate_position (&pos_next, &t, &b,
-				    x2_next, t.x2, b.x2);
-	      pos_next.x2 = x2_next;
-	      done = FALSE;
-	    }
-	}
-
-      draw_simple_trap (pixbuf, pixbuf_x, pixbuf_y, &pos, &pos_next);
-      pos = pos_next;
-    }
-}
-
-static void
-gdk_drawable_real_draw_trapezoids (GdkDrawable  *drawable,
-				   GdkGC	*gc,
-				   GdkTrapezoid *trapezoids,
-				   gint          n_trapezoids)
-{
-  GdkPixbuf *pixbuf;
-  double min_x, max_x, min_y, max_y;
-  int x, y, width, height;
-  GdkColor color;
-  int i;
-  
-  if (n_trapezoids == 0)
-    return;
-
-  /* compute bounding box */
-  
-  min_x = max_x = trapezoids[0].x11;
-  min_y = max_y = trapezoids[0].y1;
-
-  for (i = 0; i < n_trapezoids; i++)
-    {
-      if (trapezoids[i].x11 < min_x) min_x = trapezoids[i].x11;
-      if (trapezoids[i].x21 > max_x) max_x = trapezoids[i].x21;
-      if (trapezoids[i].x12 < min_x) min_x = trapezoids[i].x12;
-      if (trapezoids[i].x22 > max_x) max_x = trapezoids[i].x22;
-      if (trapezoids[i].y1 < min_y) min_y = trapezoids[i].y1;
-      if (trapezoids[i].y2 > max_y) max_y = trapezoids[i].y2;
-    }
-
-  /* allocate temporary pixbuf */
-
-  x = floor (min_x);
-  width = ceil (max_x) - x;
-  y = floor (min_y);
-  height = ceil (max_y) - y;
-
-  if (width == 0 || height == 0)
-    return;
-
-  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, width, height);
-  if (!pixbuf)
-    return;
-
-  /* Fill the pixbuf with the foreground color and alpha 0 */
-  
-  _gdk_windowing_gc_get_foreground (gc, &color);
-  gdk_pixbuf_fill (pixbuf,
-		   (((color.red   & 0xff00) << 16) |
-		    ((color.green & 0xff00) <<  8) |
-		    ((color.blue  & 0xff00))));
-
-  /* draw the trapezoids into the alpha channel */
-
-  for (i = 0; i < n_trapezoids; i++)
-    draw_trapezoid (pixbuf, x, y, &trapezoids[i]);
-
-  /* composite that onto the drawable */
-
-  gdk_draw_pixbuf (drawable, gc, pixbuf,
-		   0, 0, x, y, width, height,
-		   GDK_RGB_DITHER_NORMAL, 0, 0);
-
-  g_object_unref (pixbuf);
 }
 
 /************************************************************************/

@@ -202,9 +202,11 @@ static void       gtk_icon_view_adjustment_changed          (GtkAdjustment   *ad
 							     GtkIconView     *icon_view);
 static void       gtk_icon_view_layout                      (GtkIconView     *icon_view);
 static void       gtk_icon_view_paint_item                  (GtkIconView     *icon_view,
+							     cairo_t         *cr,
 							     GtkIconViewItem *item,
 							     GdkRectangle    *area);
 static void       gtk_icon_view_paint_rubberband            (GtkIconView     *icon_view,
+							     cairo_t         *cr,
 							     GdkRectangle    *area);
 static void       gtk_icon_view_queue_draw_item             (GtkIconView     *icon_view,
 							     GtkIconViewItem *item);
@@ -989,11 +991,15 @@ gtk_icon_view_expose (GtkWidget *widget,
 {
   GtkIconView *icon_view;
   GList *icons;
+  cairo_t *cr;
 
   icon_view = GTK_ICON_VIEW (widget);
 
   if (expose->window != icon_view->priv->bin_window)
     return FALSE;
+
+  cr = gdk_drawable_create_cairo_context (icon_view->priv->bin_window);
+  cairo_set_line_width (cr, 1.);
 
   for (icons = icon_view->priv->items; icons; icons = icons->next) {
     GtkIconViewItem *item = icons->data;
@@ -1008,23 +1014,21 @@ gtk_icon_view_expose (GtkWidget *widget,
       continue;
 
 #ifdef DEBUG_ICON_VIEW
-    gdk_draw_rectangle (icon_view->priv->bin_window,
-			GTK_WIDGET (icon_view)->style->black_gc,
-			FALSE,
-			item->x, item->y, 
-			item->width, item->height);
-    gdk_draw_rectangle (icon_view->priv->bin_window,
-			GTK_WIDGET (icon_view)->style->black_gc,
-			FALSE,
-			item->pixbuf_x, item->pixbuf_y, 
-			item->pixbuf_width, item->pixbuf_height);
-    gdk_draw_rectangle (icon_view->priv->bin_window,
-			GTK_WIDGET (icon_view)->style->black_gc,
-			FALSE,
-			item->layout_x, item->layout_y, 
-			item->layout_width, item->layout_height);
+    cairo_rectangle (cr,
+		     item->x + 0.5, item->y + 0.5,
+		     item->width - 1, item->height - 1);
+    cairo_rectangle (cr, 
+		     item->x + 0.5, item->y + 0.5, 
+		     item->width - 1, item->height- 1);
+    cairo_rectangle (cr,
+		     item->pixbuf_x + 0.5, item->pixbuf_y + 0.5, 
+		     item->pixbuf_width - 1, item->pixbuf_height- 1);
+    cairo_rectangle (cr,
+		     item->layout_x + 0.5, item->layout_y + 0.5, 
+		     item->layout_width - 1, item->layout_height - 1);
+    cairo_stroke (cr);
 #endif
-    gtk_icon_view_paint_item (icon_view, item, &expose->area);
+    gtk_icon_view_paint_item (icon_view, cr, item, &expose->area);
 
   }
 
@@ -1038,10 +1042,12 @@ gtk_icon_view_expose (GtkWidget *widget,
 				 &n_rectangles);
       
       while (n_rectangles--)
-	gtk_icon_view_paint_rubberband (icon_view, &rectangles[n_rectangles]);
+	gtk_icon_view_paint_rubberband (icon_view, cr, &rectangles[n_rectangles]);
 
       g_free (rectangles);
     }
+
+  cairo_destroy (cr);
 
   return TRUE;
 }
@@ -1995,6 +2001,7 @@ create_colorized_pixbuf (GdkPixbuf *src, GdkColor *new_color)
 
 static void
 gtk_icon_view_paint_item (GtkIconView     *icon_view,
+			  cairo_t         *cr,
 			  GtkIconViewItem *item,
 			  GdkRectangle    *area)
 {
@@ -2027,14 +2034,15 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
 	}
       else
 	pixbuf = tmp;
-      
-      gdk_draw_pixbuf (icon_view->priv->bin_window, NULL, pixbuf,
-		       0, 0,
-		       item->pixbuf_x, item->pixbuf_y,
-		       item->pixbuf_width, item->pixbuf_height,
-		       GDK_RGB_DITHER_NORMAL,
-		       item->pixbuf_width, item->pixbuf_height);
+
+      cairo_move_to (cr, item->pixbuf_x, item->pixbuf_y);
+      gdk_pixbuf_set_as_cairo_source (pixbuf, cr);
       g_object_unref (pixbuf);
+      
+      cairo_rectangle (cr,
+		       item->pixbuf_x, item->pixbuf_y,
+		       item->pixbuf_width, item->pixbuf_height);
+      cairo_fill (cr);
     }
 
   if (icon_view->priv->text_column != -1 ||
@@ -2042,13 +2050,13 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
     {
       if (item->selected)
 	{
-	  gdk_draw_rectangle (icon_view->priv->bin_window,
-			      GTK_WIDGET (icon_view)->style->base_gc[state],
-			      TRUE,
-			      item->layout_x - ICON_TEXT_PADDING,
-			      item->layout_y - ICON_TEXT_PADDING,
-			      item->layout_width + 2 * ICON_TEXT_PADDING,
-			      item->layout_height + 2 * ICON_TEXT_PADDING);
+	  gdk_cairo_set_source_color (cr, &GTK_WIDGET (icon_view)->style->base[state]);
+	  cairo_rectangle (cr,
+			   item->layout_x - ICON_TEXT_PADDING,
+			   item->layout_y - ICON_TEXT_PADDING,
+			   item->layout_width + 2 * ICON_TEXT_PADDING,
+			   item->layout_height + 2 * ICON_TEXT_PADDING);
+	  cairo_fill (cr);
 	}
 
       gtk_icon_view_update_item_text (icon_view, item);
@@ -2077,26 +2085,14 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
     }
 }
 
-static guint32
-gtk_gdk_color_to_rgb (const GdkColor *color)
-{
-  guint32 result;
-  result = (0xff0000 | (color->red & 0xff00));
-  result <<= 8;
-  result |= ((color->green & 0xff00) | (color->blue >> 8));
-  return result;
-}
-
 static void
 gtk_icon_view_paint_rubberband (GtkIconView     *icon_view,
+				cairo_t         *cr,
 				GdkRectangle    *area)
 {
   GdkRectangle rect;
-  GdkPixbuf *pixbuf;
-  GdkGC *gc;
   GdkRectangle rubber_rect;
   GdkColor *fill_color_gdk;
-  guint fill_color;
   guchar fill_color_alpha;
 
   rubber_rect.x = MIN (icon_view->priv->rubberband_x1, icon_view->priv->rubberband_x2);
@@ -2112,38 +2108,25 @@ gtk_icon_view_paint_rubberband (GtkIconView     *icon_view,
                         "selection_box_alpha", &fill_color_alpha,
                         NULL);
 
-  if (!fill_color_gdk) {
+  if (!fill_color_gdk)
     fill_color_gdk = gdk_color_copy (&GTK_WIDGET (icon_view)->style->base[GTK_STATE_SELECTED]);
-  }
 
-  fill_color = gtk_gdk_color_to_rgb (fill_color_gdk) << 8 | fill_color_alpha;
+  gdk_cairo_set_source_color (cr, fill_color_gdk);
+  cairo_set_alpha (cr, fill_color_alpha / 255.);
 
-  if (!gdk_draw_rectangle_alpha_libgtk_only (icon_view->priv->bin_window,
-					     rect.x, rect.y, rect.width, rect.height,
-					     fill_color_gdk,
-					     fill_color_alpha << 8 | fill_color_alpha))
-    {
-      pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, rect.width, rect.height);
-      gdk_pixbuf_fill (pixbuf, fill_color);
-      
-      gdk_draw_pixbuf (icon_view->priv->bin_window, NULL, pixbuf,
-		       0, 0, 
-		       rect.x,rect.y,
-		       rect.width, rect.height,
-		       GDK_RGB_DITHER_NONE,
-		       0, 0);
-      g_object_unref (pixbuf);
-    }
+  cairo_save (cr);
+  cairo_rectangle (cr, rect.x, rect.y, rect.width, rect.height);
+  cairo_clip (cr);
+  cairo_fill (cr);
+  
+  cairo_set_alpha (cr, 1.0);
+  cairo_rectangle (cr, 
+		   rubber_rect.x + 0.5, rubber_rect.y + 0.5,
+		   rubber_rect.width - 1, rubber_rect.height - 1);
+  cairo_stroke (cr);
+  cairo_restore (cr);
 
-  gc = gdk_gc_new (icon_view->priv->bin_window);
-  gdk_gc_set_rgb_fg_color (gc, fill_color_gdk);
-  gdk_gc_set_clip_rectangle (gc, &rect);
-  gdk_draw_rectangle (icon_view->priv->bin_window,
-		      gc, FALSE,
-		      rubber_rect.x, rubber_rect.y,
-		      rubber_rect.width - 1, rubber_rect.height - 1);
   gdk_color_free (fill_color_gdk);
-  g_object_unref (gc);
 }
 
 static void
