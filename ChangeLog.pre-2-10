@@ -1,3 +1,17 @@
+Wed Feb 25 00:13:24 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_row_changed): 
+	* gtk/gtkcombobox.c (gtk_combo_box_list_row_changed): 
+	Don't resize priv->cell_view if it is NULL.  (#127804, 
+	Damon Chaplin)
+	
+Wed Feb 25 00:06:50 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c: Add a comment about the different 
+	modi of this widget. Get rid of priv->hbox, and some other
+	cleanups. Make sure that gtk_combo_box_unset_model() is 
+	always called before setting up a different mode. 
+
 Tue Feb 24 17:51:49 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkaccellabel.c (gtk_accel_label_refetch): Convert
