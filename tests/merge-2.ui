@@ -1,0 +1,27 @@
+<!--*- xml -*-->
+<Root>
+  <menu>
+    <submenu name="FileMenu" verb="StockFileMenuAction">
+      <menuitem name="New" verb="NewAction" pos="top" />
+      <separator />
+      <menuitem name="Quit" verb="QuitAction" />
+    </submenu>
+    <submenu name="HelpMenu" verb="StockHelpMenuAction">
+      <menuitem name="About" verb="AboutAction" />
+    </submenu>
+  </menu>
+  <dockitem name="toolbar1">
+    <placeholder name="ToolbarPlaceholder">
+      <toolitem name="Quit" verb="QuitAction" />
+      <separator />
+    </placeholder>
+  </dockitem>
+  <popups>
+    <popup name="FileMenu" verb="StockFileMenuAction">
+      <menuitem name="New" verb="NewAction" pos="top" />
+      <submenu name="HelpMenu" verb="StockHelpMenuAction">
+        <menuitem name="About" verb="AboutAction" />
+      </submenu>
+    </popup>
+  </popups>
+</Root>

@@ -54,7 +54,9 @@ noinst_PROGRAMS =			\
 	pixbuf-read			\
 	pixbuf-lowmem			\
 	pixbuf-randomly-modified	\
-	pixbuf-random			
+	pixbuf-random			\
+	testmerge			\
+	testactions
 
 simple_DEPENDENCIES = $(TEST_DEPS)
 testicontheme_DEPENDENCIES = $(TEST_DEPS)
@@ -79,6 +81,8 @@ testtreecolumns_DEPENDENCIES = $(DEPS)
 testtreesort_DEPENDENCIES = $(DEPS)
 treestoretest_DEPENDENCIES = $(TEST_DEPS)
 testxinerama_DEPENDENCIES = $(TEST_DEPS)
+testmerge_DEPENDENCIES = $(TEST_DEPS)
+testactions_DEPENDENCIES = $(TEST_DEPS)
 
 simple_LDADD = $(LDADDS)
 testcalendar_LDADD = $(LDADDS)
@@ -109,6 +113,8 @@ pixbuf_read_LDADD = $(LDADDS)
 pixbuf_lowmem_LDADD = $(LDADDS)
 pixbuf_randomly_modified_LDADD = $(LDADDS)
 pixbuf_random_LDADD = $(LDADDS)
+testmerge_LDADD = $(LDADDS)
+testactions_LDADD = $(LDADDS)
 
 testgtk_SOURCES =	\
 	prop-editor.c   \
@@ -137,6 +143,12 @@ testsocket_child_SOURCES =    	\
 	testsocket_child.c	\
 	testsocket_common.c
 
+testmerge_SOURCES = 		\
+	testmerge.c
+
+testactions_SOURCES = 		\
+	testactions.c
+
 EXTRA_DIST = 			\
 	prop-editor.h		\
 	testgtk.1 		\
@@ -152,4 +164,7 @@ EXTRA_DIST = 			\
 	test.xpm		\
 	check-y.xpm		\
 	check-n.xpm		\
-	test.xpm
+	test.xpm		\
+	merge-1.ui		\
+	merge-2.ui		\
+	merge-3.ui

@@ -1,0 +1,23 @@
+<!--*- xml -*-->
+<Root>
+  <menu>
+    <submenu name="FileMenu" verb="StockFileMenuAction">
+      <menuitem name="New" verb="New2Action" />
+    </submenu>
+    <placeholder name="TestPlaceholder">
+      <submenu name="Test">
+        <menuitem name="Cut" verb="CutAction" />
+      </submenu>
+    </placeholder>
+  </menu>
+  <dockitem name="toolbar1">
+    <placeholder name="JustifyToolItems">
+      <separator name="first-sep"/>
+      <toolitem name="Left" verb="justify-left"/>
+      <toolitem name="Centre" verb="justify-center"/>
+      <toolitem name="Right" verb="justify-right"/>
+      <toolitem name="Fill" verb="justify-fill"/>
+      <separator name="second-sep" />
+    </placeholder>
+  </dockitem>
+</Root>

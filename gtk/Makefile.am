@@ -91,6 +91,8 @@ gtk_public_h_sources =          \
 	gtkaccellabel.h		\
 	gtkaccelmap.h		\
 	gtkaccessible.h		\
+	gtkaction.h		\
+	gtkactiongroup.h	\
 	gtkadjustment.h		\
 	gtkalignment.h		\
 	gtkarrow.h		\
@@ -165,6 +167,7 @@ gtk_public_h_sources =          \
 	gtkmenu.h		\
 	gtkmenubar.h		\
 	gtkmenuitem.h		\
+	gtkmenumerge.h		\
 	gtkmenushell.h		\
 	gtkmessagedialog.h	\
 	gtkmisc.h		\
@@ -179,11 +182,13 @@ gtk_public_h_sources =          \
 	gtkprivate.h		\
 	gtkprogress.h		\
 	gtkprogressbar.h	\
+	gtkradioaction.h	\
 	gtkradiobutton.h	\
 	gtkradiomenuitem.h	\
 	gtkradiotoolbutton.h	\
 	gtkrange.h		\
 	gtkrc.h			\
+	gtkresizegrip.h		\
 	gtkruler.h		\
 	gtkscale.h		\
 	gtkscrollbar.h		\
@@ -213,6 +218,7 @@ gtk_public_h_sources =          \
 	gtktexttagtable.h	\
 	gtktextview.h		\
 	gtktipsquery.h		\
+	gtktoggleaction.h	\
 	gtktogglebutton.h	\
 	gtktoggletoolbutton.h	\
 	gtktoolbar.h		\
@@ -257,13 +263,16 @@ gtk_private_h_sources =         \
 	gtkthemes.h		\
 	gtktreedatalist.h	\
 	gtktreeprivate.h	\
-	gtkwindow-decorate.h
+	gtkwindow-decorate.h	\
+	gtktoggleactionprivate.h
 
 # GTK+ C sources to build the library from
 gtk_c_sources =                 \
 	gtkaccelgroup.c		\
 	gtkaccelmap.c		\
 	gtkaccellabel.c		\
+	gtkaction.c		\
+	gtkactiongroup.c	\
 	gtkradiotoolbutton.c	\
 	gtktoggletoolbutton.c	\
 	gtktoolbar.c		\
@@ -350,6 +359,7 @@ gtk_c_sources =                 \
 	gtkmarshalers.c		\
 	gtkmarshal.c		\
 	gtkmenu.c		\
+	gtkmenumerge.c		\
 	gtkmenubar.c		\
 	gtkmenuitem.c		\
 	gtkmenushell.c		\
@@ -364,11 +374,13 @@ gtk_c_sources =                 \
 	gtkpreview.c		\
 	gtkprogress.c		\
 	gtkprogressbar.c	\
+	gtkradioaction.c	\
 	gtkradiobutton.c	\
 	gtkradiomenuitem.c	\
 	gtkrange.c		\
 	gtkrbtree.c 		\
 	gtkrc.c			\
+	gtkresizegrip.c		\
 	gtkruler.c		\
 	gtkscale.c		\
 	gtkscrollbar.c		\
@@ -402,6 +414,7 @@ gtk_c_sources =                 \
 	gtktextview.c		\
 	gtkthemes.c		\
 	gtktipsquery.c		\
+	gtktoggleaction.c	\
 	gtktogglebutton.c	\
 	gtktooltips.c		\
 	gtktree.c		\

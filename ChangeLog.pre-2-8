@@ -1,3 +1,24 @@
+2003-08-24  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkaction.[ch]: 
+	* gtk/gtktoggleaction.[ch]: 
+	* gtk/gtktoggleactionprivate.h: 
+	* gtk/gtkradioaction.[ch]: 
+	* gtk/gtkactiongroup.[ch]: 
+	* gtk/gtkmenumerge.[ch]: A model-view separation for menus and
+	toolbars, using the EggMenu code by James Henstridge.
+
+	* gtk/gtk.h: Include new headers.
+	* gtk/Makefile.am: Add new files.
+
+	* tests/testactions.c: Test for actions.
+	* tests/testmerge.c: Test for menu merging.
+	* tests/merge-[123].ui: Test data for testmerge. 
+	* tests/Makefile.am: Add testactions and testmerge.
+
+	* demos/gtk-demo/appwindow.c: Use GtkMenuMerge to construct the 
+	menubar and toolbar.
+	
 Sat Aug 23 21:40:18 2003  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtkrc.c (gtk_rc_context_parse_one_file): Fix 

@@ -8,20 +8,20 @@
 
 static GtkWidget *window = NULL;
 
-
 static void
-menuitem_cb (gpointer             callback_data,
-             guint                callback_action,
-             GtkWidget           *widget)
+activate_action (GtkAction *action)
 {
+  const gchar *name = gtk_action_get_name (action);
+  const gchar *typename = G_OBJECT_TYPE_NAME (action);
+
   GtkWidget *dialog;
   
-  dialog = gtk_message_dialog_new (GTK_WINDOW (callback_data),
+  dialog = gtk_message_dialog_new (GTK_WINDOW (window),
                                    GTK_DIALOG_DESTROY_WITH_PARENT,
                                    GTK_MESSAGE_INFO,
                                    GTK_BUTTONS_CLOSE,
-                                   "You selected or toggled the menu item: \"%s\"",
-                                    gtk_item_factory_path_from_widget (widget));
+                                   "You activated action: \"%s\" of type \"%s\"",
+                                    name, typename);
 
   /* Close dialog on user response */
   g_signal_connect (dialog,
@@ -33,53 +33,71 @@ menuitem_cb (gpointer             callback_data,
 }
 
 
-static GtkItemFactoryEntry menu_items[] =
-{
-  { "/_File",            NULL,         0,                     0, "<Branch>" },
-  { "/File/_New",        "<control>N", menuitem_cb,       0, "<StockItem>", GTK_STOCK_NEW },
-  { "/File/_Open",       "<control>O", menuitem_cb,       0, "<StockItem>", GTK_STOCK_OPEN },
-  { "/File/_Save",       "<control>S", menuitem_cb,       0, "<StockItem>", GTK_STOCK_SAVE },
-  { "/File/Save _As...", NULL,         menuitem_cb,       0, "<StockItem>", GTK_STOCK_SAVE },
-  { "/File/sep1",        NULL,         menuitem_cb,       0, "<Separator>" },
-  { "/File/_Quit",       "<control>Q", menuitem_cb,       0, "<StockItem>", GTK_STOCK_QUIT },
+#ifndef N_
+#define N_(String) String
+#endif
 
-  { "/_Preferences",                    NULL, 0,               0, "<Branch>" },
-  { "/_Preferences/_Color",             NULL, 0,               0, "<Branch>" },
-  { "/_Preferences/Color/_Red",         NULL, menuitem_cb, 0, "<RadioItem>" },
-  { "/_Preferences/Color/_Green",       NULL, menuitem_cb, 0, "/Preferences/Color/Red" },
-  { "/_Preferences/Color/_Blue",        NULL, menuitem_cb, 0, "/Preferences/Color/Red" },
-  { "/_Preferences/_Shape",             NULL, 0,               0, "<Branch>" },
-  { "/_Preferences/Shape/_Square",      NULL, menuitem_cb, 0, "<RadioItem>" },
-  { "/_Preferences/Shape/_Rectangle",   NULL, menuitem_cb, 0, "/Preferences/Shape/Square" },
-  { "/_Preferences/Shape/_Oval",        NULL, menuitem_cb, 0, "/Preferences/Shape/Rectangle" },
+static GtkActionGroupEntry entries[] = {
+  { "FileMenu", N_("_File"), NULL, NULL, NULL, NULL, NULL },
+  { "PreferencesMenu", N_("_Preferences"), NULL, NULL, NULL, NULL, NULL },
+  { "ColorMenu", N_("_Color"), NULL, NULL, NULL, NULL, NULL },
+  { "ShapeMenu", N_("_Shape"), NULL, NULL, NULL, NULL, NULL },
+  { "HelpMenu", N_("_Help"), NULL, NULL, NULL, NULL, NULL },
 
-  /* If you wanted this to be right justified you would use "<LastBranch>", not "<Branch>".
-   * Right justified help menu items are generally considered a bad idea now days.
-   */
-  { "/_Help",            NULL,         0,                     0, "<Branch>" },
-  { "/Help/_About",      NULL,         menuitem_cb,       0 },
+  { "New", N_("_New"), GTK_STOCK_NEW, "<control>N", N_("Create a new file"), G_CALLBACK (activate_action), NULL },
+  { "Open", N_("_Open"), GTK_STOCK_OPEN, "<control>O", N_("Open a file"), G_CALLBACK (activate_action), NULL },
+  { "Save", N_("_Save"), GTK_STOCK_SAVE, "<control>S", N_("Save current file"), G_CALLBACK (activate_action), NULL },
+  { "SaveAs", N_("Save _As..."), GTK_STOCK_SAVE, NULL, N_("Save to a file"), G_CALLBACK (activate_action), NULL },
+  { "Quit", N_("_Quit"), GTK_STOCK_QUIT, "<control>Q", N_("Quit"), G_CALLBACK (activate_action), NULL },
+
+  { "Red", N_("_Red"), NULL, "<control>R", N_("Blood"), G_CALLBACK (activate_action), NULL, RADIO_ACTION },
+  { "Green", N_("_Green"), NULL, "<control>G", N_("Grass"), G_CALLBACK (activate_action), NULL, RADIO_ACTION, "Red" },
+  { "Blue", N_("_Blue"), NULL, "<control>B", N_("Sky"), G_CALLBACK (activate_action), NULL, RADIO_ACTION, "Red" },
+
+  { "Square", N_("_Square"), NULL, "<control>S", N_("Square"), G_CALLBACK (activate_action), NULL, RADIO_ACTION },
+  { "Rectangle", N_("_Rectangle"), NULL, "<control>R", N_("Rectangle"), G_CALLBACK (activate_action), NULL, RADIO_ACTION, "Square" },
+  { "Oval", N_("_Oval"), NULL, "<control>O", N_("Egg"), G_CALLBACK (activate_action), NULL, RADIO_ACTION, "Square" },
+  { "About", N_("_About"), NULL, "<control>A", N_("About"), G_CALLBACK (activate_action), NULL },
+  { "Logo", NULL, "demo-gtk-logo", NULL, N_("GTK+"), G_CALLBACK (activate_action), NULL },
 };
+static guint n_entries = G_N_ELEMENTS (entries);
 
-static void
-toolbar_cb (GtkWidget *button,
-            gpointer   data)
-{
-  GtkWidget *dialog;
-  
-  dialog = gtk_message_dialog_new (GTK_WINDOW (data),
-                                   GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   GTK_MESSAGE_INFO,
-                                   GTK_BUTTONS_CLOSE,
-                                   "You selected a toolbar button");
+static const gchar *ui_info = 
+"<Root>\n"
+"  <menu>\n"
+"    <submenu name='FileMenu'>\n"
+"      <menuitem name='New'/>\n"
+"      <menuitem name='Open'/>\n"
+"      <menuitem name='Save'/>\n"
+"      <menuitem name='SaveAs'/>\n"
+"      <separator name='Sep1'/>\n"
+"      <menuitem name='Quit'/>\n"
+"    </submenu>\n"
+"    <submenu name='PreferencesMenu'>\n"
+"      <submenu name='ColorMenu'>\n"
+"	<menuitem name='Red'/>\n"
+"	<menuitem name='Green'/>\n"
+"	<menuitem name='Blue'/>\n"
+"      </submenu>\n"
+"      <submenu name='ShapeMenu'>\n"
+"        <menuitem name='Square'/>\n"
+"        <menuitem name='Rectangle'/>\n"
+"        <menuitem name='Oval'/>\n"
+"      </submenu>\n"
+"    </submenu>\n"
+"    <submenu name='HelpMenu'>\n"
+"      <menuitem name='About'/>\n"
+"    </submenu>\n"
+"  </menu>\n"
+"  <dockitem>\n"
+"    <toolitem name='Open'/>\n"
+"    <toolitem name='Quit'/>\n"
+"    <separator name='Sep1'/>\n"
+"    <toolitem name='Logo'/>\n"
+"  </dockitem>\n"
+"</Root>\n";
 
-  /* Close dialog on user response */
-  g_signal_connect (dialog,
-                    "response",
-                    G_CALLBACK (gtk_widget_destroy),
-                    NULL);
-  
-  gtk_widget_show (dialog);
-}
+
 
 /* This function registers our custom toolbar icons, so they can be themed.
  *
@@ -195,19 +213,47 @@ update_resize_grip (GtkWidget           *widget,
 }
 		    
 
+static void
+add_widget (GtkMenuMerge *merge,
+	    GtkWidget   *widget,
+	    GtkTable *table)
+{
+  if (GTK_IS_MENU_BAR (widget)) 
+    {
+      gtk_table_attach (GTK_TABLE (table),
+			widget, 
+                        /* X direction */          /* Y direction */
+                        0, 1,                      0, 1,
+                        GTK_EXPAND | GTK_FILL,     0,
+                        0,                         0);
+    }
+  else if (GTK_IS_TOOLBAR (widget)) 
+    {
+      gtk_table_attach (GTK_TABLE (table),
+                        widget,
+                        /* X direction */       /* Y direction */
+                        0, 1,                   1, 2,
+                        GTK_EXPAND | GTK_FILL,  0,
+                        0,                      0);
+    }
+
+  gtk_widget_show (widget);
+}
+
 GtkWidget *
 do_appwindow (void)
 {  
   if (!window)
     {
       GtkWidget *table;
-      GtkWidget *toolbar;
       GtkWidget *statusbar;
       GtkWidget *contents;
       GtkWidget *sw;
       GtkTextBuffer *buffer;
-      GtkAccelGroup *accel_group;      
-      GtkItemFactory *item_factory;
+      GtkActionGroup *action_group;
+      GtkAction *action;
+      GtkMenuMerge *merge;
+      GError *error = NULL;
 
       register_stock_icons ();
       
@@ -226,70 +272,28 @@ do_appwindow (void)
       
       gtk_container_add (GTK_CONTAINER (window), table);
       
-      /* Create the menubar
+      /* Create the menubar and toolbar
        */
       
-      accel_group = gtk_accel_group_new ();
-      gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
-      g_object_unref (accel_group);
+      action_group = gtk_action_group_new ("AppWindowActions");
+      gtk_action_group_add_actions (action_group, entries, n_entries);
+
+      action = gtk_action_group_get_action (action_group, "red");
+      gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
+      action = gtk_action_group_get_action (action_group, "square");
+      gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
+
+      merge = gtk_menu_merge_new ();
+      gtk_menu_merge_insert_action_group (merge, action_group, 0);
+      g_signal_connect (merge, "add_widget", G_CALLBACK (add_widget), table);
+      gtk_window_add_accel_group (GTK_WINDOW (window), 
+				  gtk_menu_merge_get_accel_group (merge));
       
-      item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accel_group);
-
-      /* Set up item factory to go away with the window */
-      g_object_ref (item_factory);
-      gtk_object_sink (GTK_OBJECT (item_factory));
-      g_object_set_data_full (G_OBJECT (window),
-                              "<main>",
-                              item_factory,
-                              (GDestroyNotify) g_object_unref);
-
-      /* create menu items */
-      gtk_item_factory_create_items (item_factory, G_N_ELEMENTS (menu_items),
-                                     menu_items, window);
-
-      gtk_table_attach (GTK_TABLE (table),
-			gtk_item_factory_get_widget (item_factory, "<main>"),
-                        /* X direction */          /* Y direction */
-                        0, 1,                      0, 1,
-                        GTK_EXPAND | GTK_FILL,     0,
-                        0,                         0);
-
-      /* Create the toolbar
-       */
-      toolbar = gtk_toolbar_new ();
-
-      gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar),
-                                GTK_STOCK_OPEN,
-                                "This is a demo button with an 'open' icon",
-                                NULL,
-                                G_CALLBACK (toolbar_cb),
-                                window, /* user data for callback */
-                                -1);  /* -1 means "append" */
-
-      gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar),
-                                GTK_STOCK_QUIT,
-                                "This is a demo button with a 'quit' icon",
-                                NULL,
-                                G_CALLBACK (toolbar_cb),
-                                window, /* user data for callback */
-                                -1);  /* -1 means "append" */
-
-      gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
-
-      gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar),
-                                "demo-gtk-logo",
-                                "This is a demo button with a 'gtk' icon",
-                                NULL,
-                                G_CALLBACK (toolbar_cb),
-                                window, /* user data for callback */
-                                -1);  /* -1 means "append" */
-
-      gtk_table_attach (GTK_TABLE (table),
-                        toolbar,
-                        /* X direction */       /* Y direction */
-                        0, 1,                   1, 2,
-                        GTK_EXPAND | GTK_FILL,  0,
-                        0,                      0);
+      if (!gtk_menu_merge_add_ui_from_string (merge, ui_info, -1, &error))
+	{
+	  g_message ("building menus failed: %s", error->message);
+	  g_error_free (error);
+	}
 
       /* Create document
        */

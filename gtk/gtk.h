@@ -33,6 +33,8 @@
 #include <gtk/gtkaccellabel.h>
 #include <gtk/gtkaccelmap.h>
 #include <gtk/gtkaccessible.h>
+#include <gtk/gtkaction.h>
+#include <gtk/gtkactiongroup.h>
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkalignment.h>
 #include <gtk/gtkarrow.h>
@@ -103,6 +105,7 @@
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmenubar.h>
 #include <gtk/gtkmenuitem.h>
+#include <gtk/gtkmenumerge.h>
 #include <gtk/gtkmenushell.h>
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkmisc.h>
@@ -116,11 +119,13 @@
 #include <gtk/gtkpreview.h>
 #include <gtk/gtkprogress.h>
 #include <gtk/gtkprogressbar.h>
+#include <gtk/gtkradioaction.h>
 #include <gtk/gtkradiobutton.h>
 #include <gtk/gtkradiomenuitem.h>
 #include <gtk/gtkradiotoolbutton.h>
 #include <gtk/gtkrange.h>
 #include <gtk/gtkrc.h>
+#include <gtk/gtkresizegrip.h>
 #include <gtk/gtkruler.h>
 #include <gtk/gtkscale.h>
 #include <gtk/gtkscrollbar.h>
@@ -143,6 +148,7 @@
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktextview.h>
 #include <gtk/gtktipsquery.h>
+#include <gtk/gtktoggleaction.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtktoggletoolbutton.h>
 #include <gtk/gtktoolbar.h>

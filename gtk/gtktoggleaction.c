@@ -1,0 +1,246 @@
+/*
+ * GTK - The GIMP Toolkit
+ * Copyright (C) 1998, 1999 Red Hat, Inc.
+ * All rights reserved.
+ *
+ * This Library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This Library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with the Gnome Library; see the file COPYING.LIB.  If not,
+ * write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+/*
+ * Author: James Henstridge <james@daa.com.au>
+ *
+ * Modified by the GTK+ Team and others 2003.  See the AUTHORS
+ * file for a list of people on the GTK+ Team.  See the ChangeLog
+ * files for a list of changes.  These files are distributed with
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ */
+
+#include <config.h>
+
+#include "gtktoggleaction.h"
+#include "gtktoggleactionprivate.h"
+#include "gtktoggletoolbutton.h"
+#include "gtkcheckmenuitem.h"
+
+enum 
+{
+  TOGGLED,
+  LAST_SIGNAL
+};
+
+static void gtk_toggle_action_init       (GtkToggleAction *action);
+static void gtk_toggle_action_class_init (GtkToggleActionClass *class);
+
+GType
+gtk_toggle_action_get_type (void)
+{
+  static GtkType type = 0;
+
+  if (!type)
+    {
+      static const GTypeInfo type_info =
+      {
+        sizeof (GtkToggleActionClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gtk_toggle_action_class_init,
+        (GClassFinalizeFunc) NULL,
+        NULL,
+        
+        sizeof (GtkToggleAction),
+        0, /* n_preallocs */
+        (GInstanceInitFunc) gtk_toggle_action_init,
+      };
+
+      type = g_type_register_static (GTK_TYPE_ACTION,
+                                     "GtkToggleAction",
+                                     &type_info, 0);
+    }
+  return type;
+}
+
+static void gtk_toggle_action_activate     (GtkAction *action);
+static void gtk_toggle_action_real_toggled (GtkToggleAction *action);
+static void connect_proxy                  (GtkAction *action,
+					    GtkWidget *proxy);
+static void disconnect_proxy               (GtkAction *action,
+					    GtkWidget *proxy);
+
+static GObjectClass *parent_class = NULL;
+static guint         action_signals[LAST_SIGNAL] = { 0 };
+
+static void
+gtk_toggle_action_class_init (GtkToggleActionClass *klass)
+{
+  GObjectClass *gobject_class;
+  GtkActionClass *action_class;
+
+  parent_class = g_type_class_peek_parent (klass);
+  gobject_class = G_OBJECT_CLASS (klass);
+  action_class = GTK_ACTION_CLASS (klass);
+
+  action_class->activate = gtk_toggle_action_activate;
+  action_class->connect_proxy = connect_proxy;
+  action_class->disconnect_proxy = disconnect_proxy;
+
+  action_class->menu_item_type = GTK_TYPE_CHECK_MENU_ITEM;
+  action_class->toolbar_item_type = GTK_TYPE_TOGGLE_TOOL_BUTTON;
+
+  klass->toggled = gtk_toggle_action_real_toggled;
+
+  action_signals[TOGGLED] =
+    g_signal_new ("toggled",
+                  G_OBJECT_CLASS_TYPE (klass),
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GtkToggleActionClass, toggled),
+		  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+
+  g_type_class_add_private (gobject_class, sizeof (GtkToggleActionPrivate));
+}
+
+static void
+gtk_toggle_action_init (GtkToggleAction *action)
+{
+  action->private_data = GTK_TOGGLE_ACTION_GET_PRIVATE (action);
+  action->private_data->active = FALSE;
+}
+
+static void
+gtk_toggle_action_activate (GtkAction *action)
+{
+  GtkToggleAction *toggle_action;
+
+  g_return_if_fail (GTK_IS_TOGGLE_ACTION (action));
+
+  toggle_action = GTK_TOGGLE_ACTION (action);
+
+  toggle_action->private_data->active = !toggle_action->private_data->active;
+
+  gtk_toggle_action_toggled (toggle_action);
+}
+
+static void
+gtk_toggle_action_real_toggled (GtkToggleAction *action)
+{
+  GSList *slist;
+
+  g_return_if_fail (GTK_IS_TOGGLE_ACTION (action));
+
+  for (slist = gtk_action_get_proxies (GTK_ACTION (action)); slist; slist = slist->next)
+    {
+      GtkWidget *proxy = slist->data;
+
+      gtk_action_block_activate_from (GTK_ACTION (action), proxy);
+      if (GTK_IS_CHECK_MENU_ITEM (proxy))
+	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (proxy),
+					action->private_data->active);
+      else if (GTK_IS_TOGGLE_TOOL_BUTTON (proxy))
+	gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (proxy),
+					   action->private_data->active);
+      else {
+	g_warning ("Don't know how to toggle `%s' widgets",
+		   G_OBJECT_TYPE_NAME (proxy));
+      }
+      gtk_action_unblock_activate_from (GTK_ACTION (action), proxy);
+    }
+}
+
+static void
+connect_proxy (GtkAction *action, 
+	       GtkWidget *proxy)
+{
+  GtkToggleAction *toggle_action;
+
+  toggle_action = GTK_TOGGLE_ACTION (action);
+
+  /* do this before hand, so that we don't call the "activate" handler */
+  if (GTK_IS_MENU_ITEM (proxy))
+    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (proxy),
+				    toggle_action->private_data->active);
+  else if (GTK_IS_TOGGLE_TOOL_BUTTON (proxy))
+    gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (proxy),
+				       toggle_action->private_data->active);
+
+  (* GTK_ACTION_CLASS (parent_class)->connect_proxy) (action, proxy);
+}
+
+static void
+disconnect_proxy (GtkAction *action, 
+		  GtkWidget *proxy)
+{
+  GtkToggleAction *toggle_action;
+
+  toggle_action = GTK_TOGGLE_ACTION (action);
+
+  (* GTK_ACTION_CLASS (parent_class)->disconnect_proxy) (action, proxy);
+}
+
+/**
+ * gtk_toggle_action_toggled:
+ * @action: the action object
+ *
+ * Emits the "toggled" signal on the toggle action.
+ *
+ * Since: 2.4
+ */
+void
+gtk_toggle_action_toggled (GtkToggleAction *action)
+{
+  g_return_if_fail (GTK_IS_TOGGLE_ACTION (action));
+
+  g_signal_emit (action, action_signals[TOGGLED], 0);
+}
+
+/**
+ * gtk_toggle_action_set_active:
+ * @action: the action object
+ * @is_active: whether the action should be checked or not
+ *
+ * Sets the checked state on the toggle action.
+ *
+ * Since: 2.4
+ */
+void
+gtk_toggle_action_set_active (GtkToggleAction *action, 
+			      gboolean         is_active)
+{
+  g_return_if_fail (GTK_IS_TOGGLE_ACTION (action));
+
+  is_active = is_active != FALSE;
+
+  if (action->private_data->active != is_active)
+    {
+      gtk_action_activate (GTK_ACTION (action));
+    }
+}
+
+/**
+ * gtk_toggle_action_get_active:
+ * @action: the action object
+ *
+ * Returns: the checked state of the toggle action
+ *
+ * Since: 2.4
+ */
+gboolean
+gtk_toggle_action_get_active (GtkToggleAction *action)
+{
+  g_return_val_if_fail (GTK_IS_TOGGLE_ACTION (action), FALSE);
+
+  return action->private_data->active;
+}
