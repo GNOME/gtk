@@ -1,3 +1,8 @@
+Sun Oct 31 22:21:11 1999  Tim Janik  <timj@gtk.org>
+
+	* docs/gtk_tut.sgml:
+	s/gtk_accel_group_attach/gtk_window_add_accel_group/.
+
 Sat Oct 30 13:17:18 BST 1999 Tony Gale <gale@gtk.org>
 
         * docs/gtkfaq.sgml: FAQ update

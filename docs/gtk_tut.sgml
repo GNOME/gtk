@@ -9664,7 +9664,7 @@ void get_main_menu( GtkWidget  *window,
   gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);
 
   /* Attach the new accelerator group to the window. */
-  gtk_accel_group_attach (accel_group, GTK_OBJECT (window));
+  gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
   if (menubar)
     /* Finally, return the actual menu bar created by the item factory. */ 
