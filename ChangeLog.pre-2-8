@@ -1,5 +1,10 @@
 2004-09-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_get_popup_accessible): 
+	Document the return value.
+
+2004-09-01  Matthias Clasen  <mclasen@redhat.com>
+
 	Make it possible to specify additional modules to load
 	via a setting.  (#117236, Alex Graveley)
 	

@@ -4866,6 +4866,8 @@ _gtk_combo_box_editing_canceled (GtkComboBox *combo_box)
  * This function is mostly intended for use by accessibility technologies;
  * applications should have little use for it.
  *
+ * Returns: the accessible object corresponding to the combo box's popup.
+ *
  * Since: 2.6
  **/
 AtkObject*
