@@ -306,3 +306,26 @@ gtk_im_context_set_cursor_location (GtkIMContext *context,
     klass->set_cursor_location (context, area);
 }
 
+/**
+ * gtk_im_context_set_use_preedit:
+ * @context: a #GtkIMContext
+ * @use_preedit: whether the IM context should use the preedit string.
+ * 
+ * Sets whether the IM context should use the preedit string
+ * to display feedback. If @use_preedit is FALSE (default
+ * is TRUE), then the IM context may use some other method to display
+ * feedback, such as displaying it in a child of the root window.
+ **/
+void
+gtk_im_context_set_use_preedit (GtkIMContext *context,
+				gboolean      use_preedit)
+{
+  GtkIMContextClass *klass;
+  
+  g_return_if_fail (context != NULL);
+  g_return_if_fail (GTK_IS_IM_CONTEXT (context));
+
+  klass = GTK_IM_CONTEXT_GET_CLASS (context);
+  if (klass->set_use_preedit)
+    klass->set_use_preedit (context, use_preedit);
+}

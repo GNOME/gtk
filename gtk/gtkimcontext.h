@@ -56,19 +56,21 @@ struct _GtkIMContextClass
   void (*commit)          (GtkIMContext *context, const gchar *str);
 
   /* Virtual functions */
-  void     (*set_client_window)  (GtkIMContext   *context,
-				  GdkWindow      *window);
-  void     (*get_preedit_string) (GtkIMContext   *context,
-				  gchar         **str,
-				  PangoAttrList **attrs,
-				  gint           *cursor_pos);
-  gboolean (*filter_keypress)    (GtkIMContext   *context,
-			          GdkEventKey    *event);
-  void     (*focus_in)           (GtkIMContext   *context);
-  void     (*focus_out)          (GtkIMContext   *context);
-  void     (*reset)              (GtkIMContext   *context);
+  void     (*set_client_window)   (GtkIMContext   *context,
+				   GdkWindow      *window);
+  void     (*get_preedit_string)  (GtkIMContext   *context,
+				   gchar         **str,
+				   PangoAttrList **attrs,
+				   gint           *cursor_pos);
+  gboolean (*filter_keypress)     (GtkIMContext   *context,
+			           GdkEventKey    *event);
+  void     (*focus_in)            (GtkIMContext   *context);
+  void     (*focus_out)           (GtkIMContext   *context);
+  void     (*reset)               (GtkIMContext   *context);
   void     (*set_cursor_location) (GtkIMContext   *context,
-				   GdkRectangle	 *area);
+				   GdkRectangle   *area);
+  void     (*set_use_preedit)     (GtkIMContext   *context,
+				   gboolean        use_preedit);
 };
 
 GtkType       gtk_im_context_get_type           (void) G_GNUC_CONST;
@@ -86,7 +88,8 @@ void          gtk_im_context_focus_out          (GtkIMContext   *context);
 void          gtk_im_context_reset              (GtkIMContext   *context);
 void          gtk_im_context_set_cursor_location (GtkIMContext   *context,
 						  GdkRectangle	*area);
-
+void          gtk_im_context_set_use_preedit     (GtkIMContext   *context,
+						  gboolean        use_preedit);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

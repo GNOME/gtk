@@ -1,3 +1,9 @@
+Mon Mar 26 15:26:17 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimcontext.c (gtk_im_context_set_use_preedit): Add
+	a virtual function to set whether the IM context should use 
+	the preedit string. (#51922)
+	
 Mon Mar 26 14:42:59 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkpango.h: Remove stale FIXME comment.
