@@ -1,3 +1,17 @@
+2004-01-27  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix #132314.
+
+	* gtk/gtkfilesystem.h: Removed the #ifdef-ed out, old icon API.
+
+	* gtk/gtkfilesystem.c: Likewise.
+
+	* gtk/gtkfilesystemunix.c (filename_get_info): Removed the old
+	icon-type code.
+	(gtk_file_system_unix_render_icon): Moved the icon-rendering code
+	from GtkFileInfo to here.
+	(gtk_file_system_unix_volume_render_icon): Implement.
+
 2004-01-28  Changwoo Ryu  <cwryu@debian.org>
 
 	* modules/input/imhangul-defs.h: 

@@ -55,26 +55,8 @@ typedef enum {
   GTK_FILE_INFO_MIME_TYPE         = 1 << 3,
   GTK_FILE_INFO_MODIFICATION_TIME = 1 << 4,
   GTK_FILE_INFO_SIZE              = 1 << 5,
-#if 0
-  GTK_FILE_INFO_ICON              = 1 << 6,
-#endif
-  GTK_FILE_INFO_ALL               = (1 << 7) - 1
+  GTK_FILE_INFO_ALL               = (1 << 6) - 1
 } GtkFileInfoType;
-
-#if 0
-/* Icon type, supplemented by MIME type
- */
-typedef enum {
-  GTK_FILE_ICON_REGULAR,	/* Use mime type for icon */
-  GTK_FILE_ICON_BLOCK_DEVICE,
-  GTK_FILE_ICON_BROKEN_SYMBOLIC_LINK,
-  GTK_FILE_ICON_CHARACTER_DEVICE,
-  GTK_FILE_ICON_DIRECTORY,
-  GTK_FILE_ICON_EXECUTABLE,
-  GTK_FILE_ICON_FIFO,
-  GTK_FILE_ICON_SOCKET
-} GtkFileIconType;
-#endif
 
 /* GError enumeration for GtkFileSystem
  */
@@ -122,14 +104,6 @@ void                  gtk_file_info_set_modification_time (GtkFileInfo       *in
 gint64                gtk_file_info_get_size              (const GtkFileInfo *info);
 void                  gtk_file_info_set_size              (GtkFileInfo       *info,
 							   gint64             size);
-#if 0
-void                  gtk_file_info_set_icon_type         (GtkFileInfo       *info,
-							   GtkFileIconType    icon_type);
-GtkFileIconType       gtk_file_info_get_icon_type         (const GtkFileInfo *info);
-GdkPixbuf *           gtk_file_info_render_icon           (const GtkFileInfo *info,
-							   GtkWidget         *widget,
-							   gint               pixel_size);
-#endif
 
 /* The base GtkFileSystem interface
  */

@@ -20,6 +20,7 @@
 
 #include "gtkfilesystem.h"
 #include "gtkfilesystemunix.h"
+#include "gtkicontheme.h"
 #include "gtkintl.h"
 
 #define XDG_PREFIX _gtk_xdg
@@ -47,10 +48,20 @@ struct _GtkFileSystemUnix
   GObject parent_instance;
 };
 
-/* Simple stub for our returned volumes */
-typedef struct {
-  int dummy;
-} Volume;
+/* Icon type, supplemented by MIME type
+ */
+typedef enum {
+  ICON_NONE,
+  ICON_REGULAR,	/* Use mime type for icon */
+  ICON_BLOCK_DEVICE,
+  ICON_BROKEN_SYMBOLIC_LINK,
+  ICON_CHARACTER_DEVICE,
+  ICON_DIRECTORY,
+  ICON_EXECUTABLE,
+  ICON_FIFO,
+  ICON_SOCKET
+} IconType;
+
 
 #define GTK_TYPE_FILE_FOLDER_UNIX             (gtk_file_folder_unix_get_type ())
 #define GTK_FILE_FOLDER_UNIX(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FILE_FOLDER_UNIX, GtkFileFolderUnix))
@@ -386,6 +397,128 @@ gtk_file_system_unix_volume_get_display_name (GtkFileSystem       *file_system,
   return g_strdup (_("Filesystem")); /* Same as Nautilus */
 }
 
+static IconType
+get_icon_type (const char *filename,
+	       GError    **error)
+{
+  struct stat statbuf;
+  IconType icon_type;
+
+  /* If stat fails, try to fall back to lstat to catch broken links
+   */
+  if (stat (filename, &statbuf) != 0 &&
+      lstat (filename, &statbuf) != 0)
+    {
+      gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+      g_set_error (error,
+		   GTK_FILE_SYSTEM_ERROR,
+		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
+		   _("error getting information for '%s': %s"),
+		   filename_utf8 ? filename_utf8 : "???",
+		   g_strerror (errno));
+      g_free (filename_utf8);
+
+      return ICON_NONE;
+    }
+
+  if (S_ISBLK (statbuf.st_mode))
+    icon_type = ICON_BLOCK_DEVICE;
+  else if (S_ISLNK (statbuf.st_mode))
+    icon_type = ICON_BROKEN_SYMBOLIC_LINK; /* See above */
+  else if (S_ISCHR (statbuf.st_mode))
+    icon_type = ICON_CHARACTER_DEVICE;
+  else if (S_ISDIR (statbuf.st_mode))
+    icon_type = ICON_DIRECTORY;
+  else if (S_ISFIFO (statbuf.st_mode))
+    icon_type =  ICON_FIFO;
+  else if (S_ISSOCK (statbuf.st_mode))
+    icon_type = ICON_SOCKET;
+  else
+    {
+      icon_type = ICON_REGULAR;
+
+#if 0
+      if ((types & GTK_FILE_INFO_ICON) && icon_type == GTK_FILE_ICON_REGULAR &&
+	  (statbuf.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)) &&
+	  (strcmp (mime_type, XDG_MIME_TYPE_UNKNOWN) == 0 ||
+	   strcmp (mime_type, "application/x-executable") == 0 ||
+	   strcmp (mime_type, "application/x-shellscript") == 0))
+	gtk_file_info_set_icon_type (info, GTK_FILE_ICON_EXECUTABLE);
+#endif
+    }
+
+  return icon_type;
+}
+
+typedef struct
+{
+  gint size;
+  GdkPixbuf *pixbuf;
+} IconCacheElement;
+
+static void
+icon_cache_element_free (IconCacheElement *element)
+{
+  if (element->pixbuf)
+    g_object_unref (element->pixbuf);
+  g_free (element);
+}
+
+static void
+icon_theme_changed (GtkIconTheme *icon_theme)
+{
+  GHashTable *cache;
+  
+  /* Difference from the initial creation is that we don't
+   * reconnect the signal
+   */
+  cache = g_hash_table_new_full (g_str_hash, g_str_equal,
+				 (GDestroyNotify)g_free,
+				 (GDestroyNotify)icon_cache_element_free);
+  g_object_set_data_full (G_OBJECT (icon_theme), "gtk-file-icon-cache",
+			  cache, (GDestroyNotify)g_hash_table_destroy);
+}
+
+static GdkPixbuf *
+get_cached_icon (GtkWidget   *widget,
+		 const gchar *name,
+		 gint         pixel_size)
+{
+  GtkIconTheme *icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
+  GHashTable *cache = g_object_get_data (G_OBJECT (icon_theme), "gtk-file-icon-cache");
+  IconCacheElement *element;
+  
+  if (!cache)
+    {
+      cache = g_hash_table_new_full (g_str_hash, g_str_equal,
+				     (GDestroyNotify)g_free,
+				     (GDestroyNotify)icon_cache_element_free);
+      
+      g_object_set_data_full (G_OBJECT (icon_theme), "gtk-file-icon-cache",
+			      cache, (GDestroyNotify)g_hash_table_destroy);
+      g_signal_connect (icon_theme, "changed",
+			G_CALLBACK (icon_theme_changed), NULL);
+    }
+
+  element = g_hash_table_lookup (cache, name);
+  if (!element)
+    {
+      element = g_new0 (IconCacheElement, 1);
+      g_hash_table_insert (cache, g_strdup (name), element);
+    }
+
+  if (element->size != pixel_size)
+    {
+      if (element->pixbuf)
+	g_object_unref (element->pixbuf);
+      element->size = pixel_size;
+      element->pixbuf = gtk_icon_theme_load_icon (icon_theme, name,
+						  pixel_size, 0, NULL);
+    }
+
+  return element->pixbuf ? g_object_ref (element->pixbuf) : NULL;
+}
+
 static GdkPixbuf *
 gtk_file_system_unix_volume_render_icon (GtkFileSystem        *file_system,
 					 GtkFileSystemVolume  *volume,
@@ -393,7 +526,8 @@ gtk_file_system_unix_volume_render_icon (GtkFileSystem        *file_system,
 					 gint                  pixel_size,
 					 GError              **error)
 {
-  return NULL; /* FIXME: We need a hard disk icon or something */
+  /* FIXME: set the GError if we can't load the icon */
+  return get_cached_icon (widget, "gnome-fs-blockdev", pixel_size);
 }
 
 static gboolean
@@ -641,12 +775,85 @@ gtk_file_system_unix_render_icon (GtkFileSystem     *file_system,
 				  gint               pixel_size,
 				  GError           **error)
 {
-  /* FIXME: Implement this */
-  g_set_error (error,
-	       GTK_FILE_SYSTEM_ERROR,
-	       GTK_FILE_SYSTEM_ERROR_FAILED,
-	       _("This file system does not support icons"));
-  return NULL;
+  const char *filename;
+  IconType icon_type;
+  const char *mime_type;
+
+  filename = gtk_file_path_get_string (path);
+  icon_type = get_icon_type (filename, error);
+
+  /* FIXME: this function should not return NULL without setting the GError; we
+   * should perhaps provide a "never fails" generic stock icon for when all else
+   * fails.
+   */
+
+  if (icon_type == ICON_NONE)
+    return NULL;
+
+  if (icon_type != ICON_REGULAR)
+    {
+      const char *name;
+      
+      switch (icon_type)
+	{
+	case ICON_BLOCK_DEVICE:
+          name = "gnome-fs-blockdev";
+	  break;
+	case ICON_BROKEN_SYMBOLIC_LINK:
+	  name = "gnome-fs-symlink";
+	  break;
+	case ICON_CHARACTER_DEVICE:
+	  name = "gnome-fs-chardev";
+	  break;
+	case ICON_DIRECTORY:
+	  name = "gnome-fs-directory";
+	  break;
+	case ICON_EXECUTABLE:
+	  name ="gnome-fs-executable";
+	  break;
+	case ICON_FIFO:
+	  name = "gnome-fs-fifo";
+	  break;
+	case ICON_SOCKET:
+	  name = "gnome-fs-socket";
+	  break;
+	default:
+	  g_assert_not_reached ();
+	  return NULL;
+	}
+
+      return get_cached_icon (widget, name, pixel_size);
+    }
+
+  mime_type = xdg_mime_get_mime_type_for_file (filename);
+  if (mime_type)
+    {
+      const char *separator;
+      GString *icon_name;
+      GdkPixbuf *pixbuf;
+
+      separator = strchr (mime_type, '/');
+      if (!separator)
+	return NULL;
+
+      icon_name = g_string_new ("gnome-mime-");
+      g_string_append_len (icon_name, mime_type, separator - mime_type);
+      g_string_append_c (icon_name, '-');
+      g_string_append (icon_name, separator + 1);
+      pixbuf = get_cached_icon (widget, icon_name->str, pixel_size);
+      g_string_free (icon_name, TRUE);
+      if (pixbuf)
+	return pixbuf;
+
+      icon_name = g_string_new ("gnome-mime-");
+      g_string_append_len (icon_name, mime_type, separator - mime_type);
+      pixbuf = get_cached_icon (widget, icon_name->str, pixel_size);
+      g_string_free (icon_name, TRUE);
+      if (pixbuf)
+	return pixbuf;
+    }
+
+  return get_cached_icon (widget, "gnome-fs-regular", pixel_size);
 }
 
 static gboolean
@@ -830,9 +1037,6 @@ filename_get_info (const gchar     *filename,
 		   GError         **error)
 {
   GtkFileInfo *info;
-#if 0
-  GtkFileIconType icon_type = GTK_FILE_ICON_REGULAR;
-#endif
   struct stat statbuf;
 
   /* If stat fails, try to fall back to lstat to catch broken links
@@ -890,42 +1094,10 @@ filename_get_info (const gchar     *filename,
       gtk_file_info_set_is_folder (info, S_ISDIR (statbuf.st_mode));
    }
 
-#if 0
-  if (types & GTK_FILE_INFO_ICON)
-    {
-      if (S_ISBLK (statbuf.st_mode))
-	icon_type = GTK_FILE_ICON_BLOCK_DEVICE;
-      else if (S_ISLNK (statbuf.st_mode))
-	icon_type = GTK_FILE_ICON_BROKEN_SYMBOLIC_LINK;
-      else if (S_ISCHR (statbuf.st_mode))
-	icon_type = GTK_FILE_ICON_CHARACTER_DEVICE;
-      else if (S_ISDIR (statbuf.st_mode))
-	icon_type = GTK_FILE_ICON_DIRECTORY;
-      else if (S_ISFIFO (statbuf.st_mode))
-	icon_type =  GTK_FILE_ICON_FIFO;
-      else if (S_ISSOCK (statbuf.st_mode))
-	icon_type = GTK_FILE_ICON_SOCKET;
-
-      gtk_file_info_set_icon_type (info, icon_type);
-    }
-
-  if ((types & GTK_FILE_INFO_MIME_TYPE) ||
-      ((types & GTK_FILE_INFO_ICON) && icon_type == GTK_FILE_ICON_REGULAR))
-#else
   if (types & GTK_FILE_INFO_MIME_TYPE)
-#endif
     {
       const char *mime_type = xdg_mime_get_mime_type_for_file (filename);
       gtk_file_info_set_mime_type (info, mime_type);
-
-#if 0
-      if ((types & GTK_FILE_INFO_ICON) && icon_type == GTK_FILE_ICON_REGULAR &&
-	  (statbuf.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)) &&
-	  (strcmp (mime_type, XDG_MIME_TYPE_UNKNOWN) == 0 ||
-	   strcmp (mime_type, "application/x-executable") == 0 ||
-	   strcmp (mime_type, "application/x-shellscript") == 0))
-	gtk_file_info_set_icon_type (info, GTK_FILE_ICON_EXECUTABLE);
-#endif
     }
 
   if (types & GTK_FILE_INFO_MODIFICATION_TIME)
