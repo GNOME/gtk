@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-09 12:22+0100\n"
-"PO-Revision-Date: 2005-01-09 14:55+0100\n"
+"POT-Creation-Date: 2005-01-14 12:30+0100\n"
+"PO-Revision-Date: 2005-01-14 17:55+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -917,7 +917,7 @@ msgstr "calendar:week_start:1"
 #: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "progress bar label|%d %%"
+msgstr "%d %%"
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
@@ -1697,7 +1697,7 @@ msgstr "(neznámá)"
 msgid "clear"
 msgstr "vyčistit"
 
-#: gtk/gtklabel.c:3930
+#: gtk/gtklabel.c:3931
 msgid "Select All"
 msgstr "Vybrat vše"
 
