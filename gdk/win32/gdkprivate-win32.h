@@ -406,7 +406,7 @@ extern GdkAtom		 gdk_ole2_dnd_atom;
       
 #endif /* G_ENABLE_DEBUG */
 
-extern guint gdk_debug_flags;
+GDKVAR guint gdk_debug_flags;
 
 /* Internal functions for debug output etc. */
 

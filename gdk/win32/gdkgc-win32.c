@@ -502,6 +502,8 @@ gdk_gc_set_function (GdkGC	 *gc,
 
   private = (GdkGCPrivate*) gc;
 
+  GDK_NOTE (MISC, g_print ("gdk_gc_set_function: (%d) %d\n", private, function));
+
   switch (function)
     {
     case GDK_COPY:
@@ -888,7 +890,11 @@ gdk_gc_set_dashes (GdkGC *gc,
   g_return_if_fail (dash_list != NULL);
 
   /* XXX ??? */
-  g_warning ("gdk_gc_set_dashes: Not implemented");
+
+  private = (GdkGCPrivate *) gc;
+
+  private->pen_style &= ~(PS_STYLE_MASK);
+  private->pen_style |= PS_DASH;
 }
 
 void

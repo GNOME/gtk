@@ -1157,6 +1157,13 @@ gdk_input_win32_grab_pointer (GdkWindow    *window,
   new_window = NULL;
   need_ungrab = FALSE;
 
+  GDK_NOTE (MISC, g_print ("gdk_input_win32_grab_pointer: %#x %d %#x\n",
+			   ((GdkWindowPrivate *) window)->xwindow,
+			   owner_events,
+			   (confine_to ?
+			    ((GdkWindowPrivate *) confine_to)->xwindow :
+			    0)));
+
   while (tmp_list)
     {
       input_window = (GdkInputWindow *)tmp_list->data;
@@ -1229,6 +1236,8 @@ gdk_input_win32_ungrab_pointer (guint32 time)
   GdkInputWindow *input_window;
   GdkDevicePrivate *gdkdev;
   GList *tmp_list;
+
+  GDK_NOTE (MISC, g_print ("gdk_input_win32_ungrab_pointer\n"));
 
   tmp_list = gdk_input_windows;
   while (tmp_list)

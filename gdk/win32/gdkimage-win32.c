@@ -424,7 +424,25 @@ gdk_image_get (GdkWindow *window,
   bmi.bmiHeader.biHeight = -height;
   bmi.bmiHeader.biPlanes = 1;
   bmi.bmiHeader.biBitCount = image->depth;
-  bmi.bmiHeader.biCompression = BI_RGB;
+  if (image->depth == 16)
+    {
+      bmi.bmiHeader.biCompression = BI_BITFIELDS;
+      if (image->visual == NULL)
+	{
+	  /* XXX ??? Is it always this if depth==16 and a pixmap? Guess so. */
+	  bmi.u.bmiMasks[0] = 0xf800;
+	  bmi.u.bmiMasks[1] = 0x07e0;
+	  bmi.u.bmiMasks[2] = 0x001f;
+	}
+      else
+	{
+	  bmi.u.bmiMasks[0] = image->visual->red_mask;
+	  bmi.u.bmiMasks[1] = image->visual->green_mask;
+	  bmi.u.bmiMasks[2] = image->visual->blue_mask;
+	}
+    }
+  else
+    bmi.bmiHeader.biCompression = BI_RGB;
   bmi.bmiHeader.biSizeImage = 0;
   bmi.bmiHeader.biXPelsPerMeter =
     bmi.bmiHeader.biYPelsPerMeter = 0;

@@ -43,8 +43,6 @@ gdk_draw_point (GdkDrawable *drawable,
   GdkWindowPrivate *drawable_private;
   GdkGCPrivate *gc_private;
   HDC hdc;
-  HBRUSH hbr;
-  RECT rect;
 
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (gc != NULL);
@@ -55,15 +53,14 @@ gdk_draw_point (GdkDrawable *drawable,
   gc_private = (GdkGCPrivate*) gc;
 
   hdc = gdk_gc_predraw (drawable_private, gc_private);
-  hbr = GetCurrentObject (hdc, OBJ_BRUSH);
-  /* We use FillRect because SetPixel wants the COLORREF directly,
-   * and doesn't use the current brush, which is what we want.
+
+  /* We use LineTo because SetPixel wants the COLORREF directly,
+   * and doesn't use the current pen, which is what we want.
    */
-  rect.left = x;
-  rect.top = y;
-  rect.right = rect.left + 1;
-  rect.bottom = rect.top + 1;
-  FillRect (hdc, &rect, hbr);
+  if (!MoveToEx (hdc, x, y, NULL))
+    g_warning ("gdk_draw_point: MoveToEx failed");
+  if (!LineTo (hdc, x + 1, y))
+    g_warning ("gdk_draw_point: LineTo failed");
   
   gdk_gc_postdraw (drawable_private, gc_private);
 }
@@ -119,9 +116,6 @@ gdk_draw_rectangle (GdkDrawable *drawable,
   GdkWindowPrivate *drawable_private;
   GdkGCPrivate *gc_private;
   HDC hdc;
-  LOGBRUSH lb;
-  HPEN hpen;
-  HBRUSH hbr;
   HGDIOBJ oldpen, oldbrush;
 
   g_return_if_fail (drawable != NULL);
@@ -528,7 +522,6 @@ gdk_draw_points (GdkDrawable *drawable,
   GdkWindowPrivate *drawable_private;
   GdkGCPrivate *gc_private;
   HDC hdc;
-  HBRUSH hbr;
   int i;
 
   g_return_if_fail (drawable != NULL);
@@ -541,18 +534,18 @@ gdk_draw_points (GdkDrawable *drawable,
   gc_private = (GdkGCPrivate*) gc;
 
   hdc = gdk_gc_predraw (drawable_private, gc_private);
-  hbr = GetCurrentObject (hdc, OBJ_BRUSH);
   
+  GDK_NOTE (MISC, g_print ("gdk_draw_points: %#x destdc: (%d) %#x "
+			   "npoints: %d\n",
+			   drawable_private->xwindow, gc_private, hdc,
+			   npoints));
+
   for (i = 0; i < npoints; i++)
     {
-      RECT rect;
-      
-      rect.left = points[i].x;
-      rect.top = points[i].y;
-      rect.right = rect.left + 1;
-      rect.bottom = rect.top + 1;
-      if (!FillRect (hdc, &rect, hbr))
-	g_warning ("gdk_draw_points: FillRect failed");
+      if (!MoveToEx (hdc, points[i].x, points[i].y, NULL))
+	g_warning ("gdk_draw_points: MoveToEx failed");
+      if (!LineTo (hdc, points[i].x + 1, points[i].y))
+	g_warning ("gdk_draw_points: LineTo failed");
     }
   gdk_gc_postdraw (drawable_private, gc_private);
 }
@@ -584,7 +577,8 @@ gdk_draw_segments (GdkDrawable *drawable,
 
   for (i = 0; i < nsegs; i++)
     {
-      MoveToEx (hdc, segs[i].x1, segs[i].y1, NULL);
+      if (!MoveToEx (hdc, segs[i].x1, segs[i].y1, NULL))
+	g_warning ("gdk_draw_segments: MoveToEx failed");
       if (!LineTo (hdc, segs[i].x2, segs[i].y2))
 	g_warning ("gdk_draw_segments: LineTo #1 failed");
       
