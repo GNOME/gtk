@@ -869,7 +869,7 @@ motif_find_drag_window (gboolean create)
 	  
 	  Display *display;
 	  XSetWindowAttributes attr;
-	  display = XOpenDisplay (NULL);
+	  display = XOpenDisplay (gdk_display_name);
 	  XSetCloseDownMode (display, RetainPermanent);
 
 	  XGrabServer (display);

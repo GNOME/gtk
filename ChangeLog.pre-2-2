@@ -1,3 +1,15 @@
+Tue Mar  9 10:46:49 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdnd.c (motif_find_drag_window): Fix bug where
+	if --display is specified on the command line, than
+	the drag window will not be created on that display.
+	
+Tue Mar  9 10:38:24 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkproperty.c (gdk_atom_intern): Fixed bug where
+	lookups with only_if_exists == TRUE were inserting
+	bogus values into the atom cache.
+
 Thu Mar 25 12:38:31 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkrc.c (gtk_rc_append_default_module_path): get $HOME from
