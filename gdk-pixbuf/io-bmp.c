@@ -392,8 +392,6 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 
 	State->BufferDone = 0;
 	if (State->Type <= 8) {
-		int biClrUsed = lsb_32 (&BIH[32]);
-		int n_colors = (biClrUsed ? biClrUsed : (1 << State->Header.depth)); 
 		State->read_state = READ_STATE_PALETTE;
 		State->BufferSize = lsb_32 (&BFH[10]) - 14 - State->Header.size;
 	} else if (State->Compressed == BI_RGB) {

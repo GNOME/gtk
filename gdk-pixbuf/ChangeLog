@@ -1,3 +1,8 @@
+2002-11-04  Sven Neumann  <sven@gimp.org>
+
+	* io-bmp.c (DecodeHeader): removed redundant code that did nothing,
+	caused a compiler warning and is also not in the HEAD branch.
+
 2002-10-23  Matthias Clasen  <maclas@gmx.de>
 
 	* io-gif.c (lzw_read_byte): Check for stack overflow throughout.
