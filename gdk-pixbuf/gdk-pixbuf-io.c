@@ -76,6 +76,25 @@ format_check (GdkPixbufModule *module, guchar *buffer, int size)
 	return 0;
 }
 
+G_LOCK_DEFINE_STATIC (init_lock);
+G_LOCK_DEFINE_STATIC (threadunsafe_loader_lock);
+
+void
+_gdk_pixbuf_lock (GdkPixbufModule *image_module)
+{
+ 	if (!(image_module->info->flags & GDK_PIXBUF_FORMAT_THREADSAFE)) {
+ 		G_LOCK (threadunsafe_loader_lock);
+ 	}
+}
+ 
+void
+_gdk_pixbuf_unlock (GdkPixbufModule *image_module)
+{
+	if (!(image_module->info->flags & GDK_PIXBUF_FORMAT_THREADSAFE)) {
+		G_UNLOCK (threadunsafe_loader_lock);
+	}
+}
+
 static GSList *file_formats = NULL;
 
 static void gdk_pixbuf_io_init ();
@@ -83,8 +102,10 @@ static void gdk_pixbuf_io_init ();
 static GSList *
 get_file_formats (void)
 {
+	G_LOCK (init_lock);
 	if (file_formats == NULL)
 		gdk_pixbuf_io_init ();
+	G_UNLOCK (init_lock);
 	
 	return file_formats;
 }
@@ -396,9 +417,9 @@ gdk_pixbuf_io_init (void)
 /* actually load the image handler - gdk_pixbuf_get_module only get a */
 /* reference to the module to load, it doesn't actually load it       */
 /* perhaps these actions should be combined in one function           */
-gboolean
-_gdk_pixbuf_load_module (GdkPixbufModule *image_module,
-                         GError         **error)
+static gboolean
+_gdk_pixbuf_load_module_unlocked (GdkPixbufModule *image_module,
+				  GError         **error)
 {
 	char *path;
 	GModule *module;
@@ -432,6 +453,19 @@ _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
                              path);
                 return FALSE;
         }
+}
+
+gboolean
+_gdk_pixbuf_load_module (GdkPixbufModule *image_module,
+			 GError         **error)
+{
+	gboolean ret;
+
+	G_LOCK (init_lock);
+	ret = _gdk_pixbuf_load_module_unlocked (image_module, error);
+	G_UNLOCK (init_lock);
+
+	return ret;
 }
 #else
 
@@ -593,11 +627,11 @@ gdk_pixbuf_io_init ()
 	};
 	gchar **name;
 	GdkPixbufModule *module = NULL;
-	
+
 	for (name = included_formats; *name; name++) {
 		module = g_new0 (GdkPixbufModule, 1);
 		module->module_name = *name;
-		if (_gdk_pixbuf_load_module (module, NULL))
+		if (_gdk_pixbuf_load_module_unlocked (module, NULL))
 			file_formats = g_slist_prepend (file_formats, module);
 		else
 			g_free (module);
@@ -703,37 +737,37 @@ _gdk_pixbuf_generic_image_load (GdkPixbufModule *module,
 	GdkPixbufAnimation *animation = NULL;
 	gpointer context;
 
-	if (module->load != NULL)
-		return (* module->load) (f, error);
-	
-	if (module->begin_load != NULL) {
+	_gdk_pixbuf_lock (module);
+
+	if (module->load != NULL) {
+		pixbuf = (* module->load) (f, error);
+	} else if (module->begin_load != NULL) {
 		
 		context = module->begin_load (NULL, prepared_notify, NULL, &pixbuf, error);
 	
 		if (!context)
-			return NULL;
+			goto out;
 		
 		while (!feof (f) && !ferror (f)) {
 			length = fread (buffer, 1, sizeof (buffer), f);
 			if (length > 0)
 				if (!module->load_increment (context, buffer, length, error)) {
 					module->stop_load (context, NULL);
-					if (pixbuf != NULL)
+					if (pixbuf != NULL) {
 						g_object_unref (pixbuf);
-					return NULL;
+						pixbuf = NULL;
+					}
+					goto out;
 				}
 		}
 		
 		if (!module->stop_load (context, error)) {
-			if (pixbuf != NULL)
+			if (pixbuf != NULL) {
 				g_object_unref (pixbuf);
-			return NULL;
+				pixbuf = NULL;
+			}
 		}
-		
-		return pixbuf;
-	}
-	
-	if (module->load_animation != NULL) {
+	} else if (module->load_animation != NULL) {
 		animation = (* module->load_animation) (f, error);
 		if (animation != NULL) {
 			pixbuf = gdk_pixbuf_animation_get_static_image (animation);
@@ -741,12 +775,12 @@ _gdk_pixbuf_generic_image_load (GdkPixbufModule *module,
 			g_object_ref (pixbuf);
 
 			g_object_unref (animation);
-			
-			return pixbuf;
 		}
 	}
 
-	return NULL;
+ out:
+	_gdk_pixbuf_unlock (module);
+	return pixbuf;
 }
 
 /**
@@ -1134,14 +1168,18 @@ gdk_pixbuf_new_from_xpm_data (const char **data)
                         return NULL;
                 }
         }
-          
+
+	_gdk_pixbuf_lock (xpm_module);
+
 	if (xpm_module->load_xpm_data == NULL) {
 		g_warning ("gdk-pixbuf XPM module lacks XPM data capability");
-		return NULL;
-	} else
+		pixbuf = NULL;
+	} else {
 		load_xpm_data = xpm_module->load_xpm_data;
+		pixbuf = (* load_xpm_data) (data);
+	}
 
-	pixbuf = (* load_xpm_data) (data);
+	_gdk_pixbuf_unlock (xpm_module);
 	return pixbuf;
 }
 
@@ -1210,39 +1248,43 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
                       gchar        **values,
                       GError       **error)
 {
-       GdkPixbufModule *image_module = NULL;       
+	gboolean ret;
+	GdkPixbufModule *image_module = NULL;       
 
-       image_module = _gdk_pixbuf_get_named_module (type, error);
+	image_module = _gdk_pixbuf_get_named_module (type, error);
 
-       if (image_module == NULL)
-               return FALSE;
+	if (image_module == NULL)
+		return FALSE;
        
-       if (image_module->module == NULL)
-               if (!_gdk_pixbuf_load_module (image_module, error))
-                       return FALSE;
+	if (image_module->module == NULL)
+		if (!_gdk_pixbuf_load_module (image_module, error))
+			return FALSE;
 
-       if (image_module->save) {
-	       /* save normally */
-	       return (* image_module->save) (filehandle, pixbuf,
+	_gdk_pixbuf_lock (image_module);
+
+	if (image_module->save) {
+		/* save normally */
+		ret = (* image_module->save) (filehandle, pixbuf,
 					      keys, values,
 					      error);
-       }
-       else if (image_module->save_to_callback) {
-	       /* save with simple callback */
-	       return (* image_module->save_to_callback) (save_to_file_callback,
+	} else if (image_module->save_to_callback) {
+		/* save with simple callback */
+		ret = (* image_module->save_to_callback) (save_to_file_callback,
 							  filehandle, pixbuf,
 							  keys, values,
 							  error);
-       }
-       else {
-	       /* can't save */
-               g_set_error (error,
-                            GDK_PIXBUF_ERROR,
-                            GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION,
-                            _("This build of gdk-pixbuf does not support saving the image format: %s"),
-                            type);
-               return FALSE;
-       }
+	} else {
+		/* can't save */
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION,
+			     _("This build of gdk-pixbuf does not support saving the image format: %s"),
+			     type);
+		ret = FALSE;
+	}
+
+	_gdk_pixbuf_unlock (image_module);
+	return ret;
 }
 
 #define TMP_FILE_BUF_SIZE 4096
@@ -1283,8 +1325,13 @@ save_to_callback_with_tmp_file (GdkPixbufModule   *image_module,
 			     _("Failed to open temporary file"));
 		goto end;
 	}
-	if (!(* image_module->save) (f, pixbuf, keys, values, error))
+
+	_gdk_pixbuf_lock (image_module);
+	retval = (image_module->save) (f, pixbuf, keys, values, error);
+	_gdk_pixbuf_unlock (image_module);
+	if (!retval)
 		goto end;
+
 	rewind (f);
 	for (;;) {
 		n = fread (buf, 1, TMP_FILE_BUF_SIZE, f);
@@ -1326,39 +1373,43 @@ gdk_pixbuf_real_save_to_callback (GdkPixbuf         *pixbuf,
 				  gchar            **values,
 				  GError           **error)
 {
-       GdkPixbufModule *image_module = NULL;       
+	gboolean ret;
+	GdkPixbufModule *image_module = NULL;       
 
-       image_module = _gdk_pixbuf_get_named_module (type, error);
+	image_module = _gdk_pixbuf_get_named_module (type, error);
 
-       if (image_module == NULL)
-               return FALSE;
+	if (image_module == NULL)
+		return FALSE;
        
-       if (image_module->module == NULL)
-               if (!_gdk_pixbuf_load_module (image_module, error))
-                       return FALSE;
+	if (image_module->module == NULL)
+		if (!_gdk_pixbuf_load_module (image_module, error))
+			return FALSE;
 
-       if (image_module->save_to_callback) {
-	       /* save normally */
-	       return (* image_module->save_to_callback) (save_func, user_data, 
+	_gdk_pixbuf_lock (image_module);
+
+	if (image_module->save_to_callback) {
+		/* save normally */
+		ret = (* image_module->save_to_callback) (save_func, user_data, 
 							  pixbuf, keys, values,
 							  error);
-       }
-       else if (image_module->save) {
-	       /* use a temporary file */
-	       return save_to_callback_with_tmp_file (image_module, pixbuf,
+	} else if (image_module->save) {
+		/* use a temporary file */
+		ret = save_to_callback_with_tmp_file (image_module, pixbuf,
 						      save_func, user_data, 
 						      keys, values,
 						      error);
-       }
-       else {
-	       /* can't save */
-               g_set_error (error,
-                            GDK_PIXBUF_ERROR,
-                            GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION,
-                            _("This build of gdk-pixbuf does not support saving the image format: %s"),
-                            type);
-               return FALSE;
-       }
+	} else {
+		/* can't save */
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION,
+			     _("This build of gdk-pixbuf does not support saving the image format: %s"),
+			     type);
+		ret = FALSE;
+	}
+
+	_gdk_pixbuf_unlock (image_module);
+	return ret;
 }
 
  

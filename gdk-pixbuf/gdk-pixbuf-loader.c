@@ -50,7 +50,6 @@ static void gdk_pixbuf_loader_finalize      (GObject                *loader);
 static gpointer parent_class = NULL;
 static guint    pixbuf_loader_signals[LAST_SIGNAL] = { 0 };
 
-
 /* Internal data */
 
 #define LOADER_HEADER_SIZE 128
@@ -59,6 +58,7 @@ typedef struct
 {
         GdkPixbufAnimation *animation;
         gboolean closed;
+        gboolean holds_threadlock;
         guchar header_buf[LOADER_HEADER_SIZE];
         gint header_buf_offset;
         GdkPixbufModule *image_module;
@@ -225,8 +225,12 @@ gdk_pixbuf_loader_finalize (GObject *object)
         loader = GDK_PIXBUF_LOADER (object);
         priv = loader->priv;
 
-        if (!priv->closed)
+        if (!priv->closed) {
                 g_warning ("GdkPixbufLoader finalized without calling gdk_pixbuf_loader_close() - this is not allowed. You must explicitly end the data stream to the loader before dropping the last reference.");
+                if (priv->holds_threadlock) {
+                        _gdk_pixbuf_unlock (priv->image_module);
+                }
+        }
         if (priv->animation)
                 g_object_unref (priv->animation);
   
@@ -381,6 +385,11 @@ gdk_pixbuf_loader_load_module (GdkPixbufLoader *loader,
 
                         return 0;
                 }
+
+	if (!priv->holds_threadlock) {
+                _gdk_pixbuf_lock (priv->image_module);
+                priv->holds_threadlock = TRUE;
+        }
 
         priv->context = priv->image_module->begin_load (gdk_pixbuf_loader_size_func,
                                                         gdk_pixbuf_loader_prepare,
@@ -736,6 +745,11 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
                 }
   
         priv->closed = TRUE;
+	if (priv->image_module) {
+                g_assert (priv->holds_threadlock);
+                _gdk_pixbuf_unlock (priv->image_module);
+                priv->holds_threadlock = FALSE;
+        }
 
         if (priv->needs_scale) 
                 {

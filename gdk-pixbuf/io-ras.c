@@ -543,7 +543,7 @@ MODULE_ENTRY (ras, fill_info) (GdkPixbufFormat *info)
 	info->description = N_("The Sun raster image format");
 	info->mime_types = mime_types;
 	info->extensions = extensions;
-	info->flags = 0;
+	info->flags = GDK_PIXBUF_FORMAT_THREADSAFE;
 	info->license = "LGPL";
 }
 

@@ -62,10 +62,6 @@ struct _TiffContext
 
 
 
-/* There's no user data for the error handlers, so we just have to
- * put a big-ass lock on the whole TIFF loader
- */
-G_LOCK_DEFINE_STATIC (tiff_loader);
 static char *global_error = NULL;
 static TIFFErrorHandler orig_error_handler = NULL;
 static TIFFErrorHandler orig_warning_handler = NULL;
@@ -242,10 +238,8 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
                 return NULL;
         }
 
-        G_UNLOCK (tiff_loader);
 	if (context)
 		(* context->prepare_func) (pixbuf, NULL, context->user_data);
-        G_LOCK (tiff_loader);
 
 #if TIFFLIB_VERSION >= 20031226
         if (tifflibversion(&major, &minor, &revision) && major == 3 &&
@@ -330,10 +324,8 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
                 _TIFFfree (rast);
              }
 
-        G_UNLOCK (tiff_loader);
 	if (context)
 		(* context->update_func) (pixbuf, 0, 0, width, height, context->user_data);
-        G_LOCK (tiff_loader);
         
         return pixbuf;
 }
@@ -350,8 +342,6 @@ gdk_pixbuf__tiff_image_load (FILE *f, GError **error)
         GdkPixbuf *pixbuf;
         
         g_return_val_if_fail (f != NULL, NULL);
-
-        G_LOCK (tiff_loader);
 
         tiff_push_handlers ();
         
@@ -371,7 +361,6 @@ gdk_pixbuf__tiff_image_load (FILE *f, GError **error)
                                 _("Failed to open TIFF image"));
                 tiff_pop_handlers ();
 
-                G_UNLOCK (tiff_loader);
                 return NULL;
         }
 
@@ -386,8 +375,6 @@ gdk_pixbuf__tiff_image_load (FILE *f, GError **error)
         
         tiff_pop_handlers ();
 
-        G_UNLOCK (tiff_loader);
-        
         return pixbuf;
 }
 
@@ -504,8 +491,6 @@ gdk_pixbuf__tiff_image_stop_load (gpointer data,
         
         g_return_val_if_fail (data != NULL, FALSE);
 
-        G_LOCK (tiff_loader);
-        
         tiff_push_handlers ();
         
         tiff = TIFFClientOpen ("libtiff-pixbuf", "r", data, 
@@ -545,8 +530,6 @@ gdk_pixbuf__tiff_image_stop_load (gpointer data,
         g_free (context);
 
         tiff_pop_handlers ();
-
-        G_UNLOCK (tiff_loader);
 
         return retval;
 }
@@ -627,6 +610,7 @@ MODULE_ENTRY (tiff, fill_info) (GdkPixbufFormat *info)
 	info->description = N_("The TIFF image format");
 	info->mime_types = mime_types;
 	info->extensions = extensions;
+        /* not threadsafe, due the the error handler handling */
 	info->flags = 0;
 	info->license = "LGPL";
 }

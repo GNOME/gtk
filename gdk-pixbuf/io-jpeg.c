@@ -1071,6 +1071,6 @@ MODULE_ENTRY (jpeg, fill_info) (GdkPixbufFormat *info)
 	info->description = N_("The JPEG image format");
 	info->mime_types = mime_types;
 	info->extensions = extensions;
-	info->flags = GDK_PIXBUF_FORMAT_WRITABLE;
+	info->flags = GDK_PIXBUF_FORMAT_WRITABLE | GDK_PIXBUF_FORMAT_THREADSAFE;
 	info->license = "LGPL";
 }

@@ -1,3 +1,39 @@
+2004-11-12  Matthias Clasen  <mclasen@redhat.com>
+
+	Changes to make gdk-pixbuf threadsafe  (#157310, #157306, 
+	Colin Walters):
+	
+	* gdk-pixbuf-io.h (enum GdkPixbufFormatFlags): Add 
+	GDK_PIXBUF_FORMAT_THREADSAFE to indicate that an image loader
+	is threadsafe.
+
+	* gdk-pixbuf-io.c (get_file_formats, _gdk_pixbuf_load_module): 
+	Use a lock to make initialization of global data structures 
+	threadsafe.
+	* gdk-pixbuf-private.h: 
+	* gdk-pixbuf-io.c (_gdk_pixbuf_lock, _gdk_pixbuf_unlock): 
+	Auxiliary functions which use another lock to protect 
+	threadunsafe image loaders.
+	
+	* gdk-pixbuf-io.c (gdk_pixbuf_real_save): 
+	(save_to_callback_with_tmp_file): 
+	(gdk_pixbuf_real_save_to_callback): 
+	(gdk_pixbuf_new_from_xpm_data): 
+	(_gdk_pixbuf_generic_image_load): 
+	* gdk-pixbuf-animation.c (gdk_pixbuf_animation_new_from_file): 
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_load_module): 
+	(gdk_pixbuf_loader_close): 
+	(gdk_pixbuf_loader_finalize): 
+	Use _gdk_pixbuf_lock() and _gdk_pixbuf_unlock().
+
+	* io-ani.c, io-bmp.c, io-gif.c, io-ico.c:
+	* io-jpeg.c, io-pcx.c, io-png.c, io-pnm.c:
+	* io-ras.c, io-tga.c, io-wbmp.c, io-xbm.c:
+	* io-xpm.c: Mark as threadsafe.
+	
+	* io-tiff.c: Remove pointless locking, mark as 
+	threadunsafe.
+
 2004-11-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-animation.c: 

@@ -181,6 +181,8 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
                         return NULL;
                 }
 
+        _gdk_pixbuf_lock (image_module);
+
 	if (image_module->load_animation == NULL) {
 		GdkPixbuf *pixbuf;
 
@@ -208,7 +210,8 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
                 
 		if (pixbuf == NULL) {
                         g_free (display_name);
-                        return NULL;
+                        animation = NULL;
+                        goto out_unlock;
                 }
 
                 animation = gdk_pixbuf_non_anim_new (pixbuf);
@@ -241,6 +244,8 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
 
         g_free (display_name);
 
+ out_unlock:
+        _gdk_pixbuf_unlock (image_module);
 	return animation;
 }
 
