@@ -525,7 +525,7 @@ set_markup (GtkLabel    *label,
       g_warning ("Failed to set label from markup due to error parsing markup: %s",
                  error->message);
       g_error_free (error);
-      return 0;
+      return;
     }
 
   if (text)

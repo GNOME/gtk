@@ -1,3 +1,8 @@
+2001-03-07  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtklabel.c (set_markup):
+	Removed warning
+
 Tue Mar  6 19:59:12 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkcellrenderer.h (struct _GtkCellRenderer): Add visible
