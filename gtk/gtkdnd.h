@@ -35,6 +35,13 @@ typedef enum {
   GTK_DEST_DEFAULT_ALL        = 0x07
 } GtkDestDefaults;
 
+/* Flags for the GtkTargetEntry on the destination side 
+ */
+typedef enum {
+  GTK_TARGET_SAME_APP = 1 << 0,    /*< nick=same-app >*/
+  GTK_TARGET_SAME_WIDGET = 1 << 1  /*< nick=same-widget >*/
+} GtkTargetFlags;
+
 /* Destination side */
 
 void gtk_drag_get_data (GtkWidget      *widget,
@@ -45,6 +52,8 @@ void gtk_drag_finish   (GdkDragContext *context,
 			gboolean        success,
 			gboolean        del,
 			guint32         time);
+
+GtkWidget *gtk_drag_get_source_widget (GdkDragContext *context);
 
 void gtk_drag_highlight   (GtkWidget  *widget);
 void gtk_drag_unhighlight (GtkWidget  *widget);

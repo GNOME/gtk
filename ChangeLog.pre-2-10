@@ -1,3 +1,14 @@
+Fri Nov 27 12:17:15 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.[ch] (gtk_drag_get_source_widget): New function to
+	get the source widget of a drag.
+
+	* gtk/gtkdnd.[ch]: Target flags GTK_TARGET_SAME_[WIDGET/APP]
+	to restrict certain targets to the same widget or to
+	the same application.
+
+	* gtk/testdnd.c: Test gtk_drag_get_source_widget().
+	
 Thu Nov 26 19:11:46 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtk-boxed.defs (GtkCTreeNode): define GtkCTreeNode as boxed type

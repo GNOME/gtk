@@ -302,12 +302,19 @@ target_drag_motion	   (GtkWidget	       *widget,
 			    gint                y,
 			    guint               time)
 {
+  GtkWidget *source_widget;
+
   if (!have_drag)
     {
       have_drag = TRUE;
       gtk_pixmap_set (GTK_PIXMAP (widget), trashcan_open, trashcan_open_mask);
     }
-  g_print("motion\n");
+
+  source_widget = gtk_drag_get_source_widget (context);
+  g_print("motion, source %s\n", source_widget ?
+	    gtk_type_name (GTK_OBJECT (source_widget)->klass->type) :
+	    "unknown");
+
   gdk_drag_status (context, context->suggested_action, time);
   return TRUE;
 }

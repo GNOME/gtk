@@ -26,6 +26,7 @@
 #include "gtkdrawwindow.h"
 
 static GSList *drag_widgets = NULL;
+static GSList *source_widgets = NULL;
 
 typedef struct _GtkDragSourceSite GtkDragSourceSite;
 typedef struct _GtkDragSourceInfo GtkDragSourceInfo;
@@ -151,7 +152,8 @@ static GdkCursor *   gtk_drag_get_cursor         (GdkDragAction action);
 static GtkWidget    *gtk_drag_get_ipc_widget     (void);
 static void          gtk_drag_release_ipc_widget (GtkWidget *widget);
 
-static GdkAtom   gtk_drag_dest_find_target    (GtkDragDestSite    *site,
+static GdkAtom   gtk_drag_dest_find_target    (GtkWidget          *widget,
+					       GtkDragDestSite    *site,
 			                       GdkDragContext     *context);
 static void      gtk_drag_selection_received  (GtkWidget          *widget,
 					       GtkSelectionData   *selection_data,
@@ -521,6 +523,42 @@ gtk_drag_get_data (GtkWidget      *widget,
 			 time);
 }
 
+
+/*************************************************************
+ * gtk_drag_get_source_widget:
+ *     Get the widget the was the source of this drag, if
+ *     the drag originated from this application.
+ *   arguments:
+ *     context: The drag context for this drag
+ *   results:
+ *     The source widget, or NULL if the drag originated from
+ *     a different application.
+ *************************************************************/
+
+GtkWidget *
+gtk_drag_get_source_widget (GdkDragContext *context)
+{
+  GSList *tmp_list;
+
+  tmp_list = source_widgets;
+  while (tmp_list)
+    {
+      GtkWidget *ipc_widget = tmp_list->data;
+      
+      if (ipc_widget->window == context->source_window)
+	{
+	  GtkDragSourceInfo *info;
+	  info = gtk_object_get_data (GTK_OBJECT (ipc_widget), "gtk-info");
+
+	  return info ? info->widget : NULL;
+	}
+
+      tmp_list = tmp_list->next;
+    }
+
+  return NULL;
+}
+
 /*************************************************************
  * gtk_drag_finish:
  *     Notify the drag source that the transfer of data
@@ -877,11 +915,13 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
  *************************************************************/
 
 static GdkAtom
-gtk_drag_dest_find_target (GtkDragDestSite *site,
+gtk_drag_dest_find_target (GtkWidget       *widget,
+			   GtkDragDestSite *site,
 			   GdkDragContext  *context)
 {
   GList *tmp_target;
   GList *tmp_source = NULL;
+  GtkWidget *source_widget = gtk_drag_get_source_widget (context);
 
   tmp_target = site->target_list->list;
   while (tmp_target)
@@ -891,7 +931,13 @@ gtk_drag_dest_find_target (GtkDragDestSite *site,
       while (tmp_source)
 	{
 	  if (tmp_source->data == GUINT_TO_POINTER (pair->target))
-	    return pair->target;
+	    {
+	      if ((!(pair->flags & GTK_TARGET_SAME_APP) || source_widget) &&
+		  (!(pair->flags & GTK_TARGET_SAME_WIDGET) || (source_widget == widget)))
+		return pair->target;
+	      else
+		break;
+	    }
 	  tmp_source = tmp_source->next;
 	}
       tmp_target = tmp_target->next;
@@ -1273,7 +1319,7 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
 	    }
 	}
       
-      if (action && gtk_drag_dest_find_target (site, context))
+      if (action && gtk_drag_dest_find_target (widget, site, context))
 	{
 	  if (!site->have_drag)
 	    {
@@ -1377,7 +1423,7 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
 
       if (site->flags & GTK_DEST_DEFAULT_MOTION)
 	{
-	  GdkAtom target = gtk_drag_dest_find_target (site, context);
+	  GdkAtom target = gtk_drag_dest_find_target (widget, site, context);
       
 	  if (target == GDK_NONE)
 	    return FALSE;
@@ -1429,6 +1475,9 @@ gtk_drag_begin (GtkWidget         *widget,
 
   info = g_new0 (GtkDragSourceInfo, 1);
   info->ipc_widget = gtk_drag_get_ipc_widget ();
+  source_widgets = g_slist_prepend (source_widgets, info->ipc_widget);
+
+  gtk_object_set_data (GTK_OBJECT (info->ipc_widget), "gtk-info", info);
 
   tmp_list = g_list_last (target_list->list);
   while (tmp_list)
@@ -2238,6 +2287,8 @@ gtk_drag_source_info_destroy (gpointer data)
   
   gtk_signal_disconnect_by_data (GTK_OBJECT (info->ipc_widget), info);
   gtk_selection_remove_all (info->ipc_widget);
+  gtk_object_set_data (GTK_OBJECT (info->ipc_widget), "gtk-info", NULL);
+  source_widgets = g_slist_remove (source_widgets, info->ipc_widget);
   gtk_drag_release_ipc_widget (info->ipc_widget);
 
   gtk_target_list_unref (info->target_list);
