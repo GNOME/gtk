@@ -1,3 +1,8 @@
+Sun Mar 10 21:04:30 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): finally get the
+	right behavior.
+
 Mon Mar 11 01:25:14 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_button_press): compare path with

@@ -1773,55 +1773,57 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       if (column == NULL)
 	return FALSE;
 
-      /* decide to edit */
+      /* decide if we edit */
       if (event->type == GDK_BUTTON_PRESS &&
-	  !(event->state & gtk_accelerator_get_default_mod_mask ()))
+	  !(event->state & gtk_accelerator_get_default_mod_mask ()) &&
+	  tree_view->priv->cursor)
 	{
-	  GtkCellEditable *cell_editable = NULL;
-	  /* FIXME: get the right flags */
-	  guint flags = 0;
-	  GtkTreeIter iter;
+	  GtkTreePath *cursor = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
 
-	  gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
-	  gtk_tree_view_column_cell_set_cell_data (column,
-						   tree_view->priv->model,
-						   &iter,
-						   GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT),
-						   node->children?TRUE:FALSE);
-
-	  path_string = gtk_tree_path_to_string (path);
-
-	  if (_gtk_tree_view_column_cell_event (column,
-						&cell_editable,
-						(GdkEvent *)event,
-						path_string,
-						&background_area,
-						&cell_area, flags) &&
-	      tree_view->priv->cursor)
+	  if (cursor && !gtk_tree_path_compare (cursor, path))
 	    {
-	      GtkTreePath *cursor = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
+	      GtkCellEditable *cell_editable = NULL;
 
-	      if (cell_editable != NULL && cursor &&
-		  !gtk_tree_path_compare (cursor, path))
-		{
-		  gtk_tree_view_real_start_editing (tree_view,
-						    column,
-						    path,
-						    cell_editable,
-						    &cell_area,
+	      /* FIXME: get the right flags */
+	      guint flags = 0;
+	      GtkTreeIter iter;
+
+	      gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
+	      gtk_tree_view_column_cell_set_cell_data (column,
+						       tree_view->priv->model,
+						       &iter,
+						       GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT),
+						       node->children?TRUE:FALSE);
+
+	      path_string = gtk_tree_path_to_string (path);
+
+	      if (_gtk_tree_view_column_cell_event (column,
+						    &cell_editable,
 						    (GdkEvent *)event,
-						    flags);
-		  gtk_tree_path_free (path);
-		  gtk_tree_path_free (cursor);
-		  return TRUE;
+						    path_string,
+						    &background_area,
+						    &cell_area, flags))
+		{
+		  if (cell_editable != NULL)
+		    {
+		      gtk_tree_view_real_start_editing (tree_view,
+							column,
+							path,
+							cell_editable,
+							&cell_area,
+							(GdkEvent *)event,
+							flags);
+		      gtk_tree_path_free (path);
+		      gtk_tree_path_free (cursor);
+		      return TRUE;
+		    }
+		  column_handled_click = TRUE;
 		}
-	      if (cursor)
-		gtk_tree_path_free (cursor);
-	      column_handled_click = TRUE;
+	      g_free (path_string);
 	    }
-	  g_free (path_string);
+	  if (cursor)
+	    gtk_tree_path_free (cursor);
 	}
-
       /* select */
       pre_val = tree_view->priv->vadjustment->value;
 
