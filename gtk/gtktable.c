@@ -1234,12 +1234,13 @@ gtk_table_size_allocate_init (GtkTable *table)
 	  table->rows[row].expand = FALSE;
 	  table->rows[row].shrink = FALSE;
 	}
-      {
-	if (table->rows[row].need_expand)
-	  table->rows[row].expand = TRUE;
-	if (!table->rows[row].need_shrink)
-	  table->rows[row].shrink = FALSE;
-      }
+      else
+	{
+	  if (table->rows[row].need_expand)
+	    table->rows[row].expand = TRUE;
+	  if (!table->rows[row].need_shrink)
+	    table->rows[row].shrink = FALSE;
+	}
     }
 }
 
