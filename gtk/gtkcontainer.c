@@ -720,7 +720,7 @@ gtk_container_focus_tab (GtkContainer     *container,
 	{
 	  child2 = tmp_list->prev->data;
 	  if ((child->allocation.x < child2->allocation.x) &&
-	      (child->allocation.y >= child2->allocation.y))
+	      (child->allocation.y == child2->allocation.y))
 	    {
 	      tmp_list->data = tmp_list->prev->data;
 	      tmp_list = tmp_list->prev;

@@ -1,3 +1,12 @@
+Mon Apr  6 00:28:28 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkcontainer.c (gtk_container_focus_tab): Make
+	tab key move in reading order (left-to-right top
+	to bottom) - which might have been the original intended 
+	behavior modulo sorting bugs.
+
+	* gtk-config.in: Never output -I/usr/include from --cflags
+
 Sun Apr  5 21:47:12 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkmenubar.c: Fixed bug where right justified

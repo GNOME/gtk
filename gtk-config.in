@@ -39,11 +39,12 @@ while test $# -gt 0; do
       echo @GTK_VERSION@
       ;;
     --cflags)
-      libdir=@libdir@
-      echo -I$libdir/glib/include -I@includedir@ @x_cflags@
+      if test @includedir@ != /usr/include ; then
+        includes=-I@includedir@
+      fi
+      echo -I@libdir@/glib/include $includes @x_cflags@
       ;;
     --libs)
-      libdir=@libdir@
       echo -L@libdir@ @x_ldflags@ -lgtk -lgdk -lglib @x_libs@ -lm
       ;;
     *)
