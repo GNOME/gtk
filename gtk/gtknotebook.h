@@ -43,10 +43,24 @@ struct _GtkNotebook
 
   GtkNotebookPage *cur_page;
   GList *children;
+  GList *first_tab;
+  GList *focus_tab;
+
+  GtkWidget *menu;
+  GdkWindow *panel;
+
+  guint32 timer;
+
+  gint16 tab_border;
 
   guint show_tabs : 1;
   guint show_border : 1;
   guint tab_pos : 2;
+  guint scrollable : 1;
+  guint in_child : 2;
+  guint click_child : 2;
+  guint button : 2;
+  guint need_timer : 1;
 };
 
 struct _GtkNotebookClass
@@ -61,6 +75,9 @@ struct _GtkNotebookPage
 {
   GtkWidget *child;
   GtkWidget *tab_label;
+  GtkWidget *menu_label;
+  gint8 default_menu : 1;
+  gint8 default_tab  : 1;
   GtkRequisition requisition;
   GtkAllocation allocation;
 };
@@ -68,30 +85,48 @@ struct _GtkNotebookPage
 
 guint      gtk_notebook_get_type        (void);
 GtkWidget* gtk_notebook_new             (void);
-void       gtk_notebook_append_page     (GtkNotebook      *notebook,
-				         GtkWidget        *child,
-				         GtkWidget        *tab_label);
-void       gtk_notebook_prepend_page    (GtkNotebook      *notebook,
-				         GtkWidget        *child,
-				         GtkWidget        *tab_label);
-void       gtk_notebook_insert_page     (GtkNotebook      *notebook,
-				         GtkWidget        *child,
-				         GtkWidget        *tab_label,
-				         gint              position);
-void       gtk_notebook_remove_page     (GtkNotebook      *notebook,
-				         gint              page_num);
-gint       gtk_notebook_current_page    (GtkNotebook      *notebook);
-void       gtk_notebook_set_page        (GtkNotebook      *notebook,
-				         gint              page_num);
-void       gtk_notebook_next_page       (GtkNotebook      *notebook);
-void       gtk_notebook_prev_page       (GtkNotebook      *notebook);
-void       gtk_notebook_set_tab_pos     (GtkNotebook      *notebook,
-					 GtkPositionType   pos);
-void       gtk_notebook_set_show_tabs   (GtkNotebook      *notebook,
-					 gint              show_tabs);
-void       gtk_notebook_set_show_border (GtkNotebook      *notebook,
-					 gint              show_border);
-
+void       gtk_notebook_append_page       (GtkNotebook      *notebook,
+				           GtkWidget        *child,
+				           GtkWidget        *tab_label);
+void       gtk_notebook_append_page_menu  (GtkNotebook      *notebook,
+					   GtkWidget        *child,
+					   GtkWidget        *tab_label,
+					   GtkWidget        *menu_label);
+void       gtk_notebook_prepend_page      (GtkNotebook      *notebook,
+				           GtkWidget        *child,
+				           GtkWidget        *tab_label);
+void       gtk_notebook_prepend_page_menu (GtkNotebook      *notebook,
+					   GtkWidget        *child,
+					   GtkWidget        *tab_label,
+					   GtkWidget        *menu_label);
+void       gtk_notebook_insert_page       (GtkNotebook      *notebook,
+				           GtkWidget        *child,
+				           GtkWidget        *tab_label,
+				           gint              position);
+void       gtk_notebook_insert_page_menu  (GtkNotebook      *notebook,
+				           GtkWidget        *child,
+				           GtkWidget        *tab_label,
+					   GtkWidget        *menu_label,
+				           gint              position);
+void       gtk_notebook_remove_page       (GtkNotebook      *notebook,
+				           gint              page_num);
+gint       gtk_notebook_current_page      (GtkNotebook      *notebook);
+void       gtk_notebook_set_page          (GtkNotebook      *notebook,
+				           gint              page_num);
+void       gtk_notebook_next_page         (GtkNotebook      *notebook);
+void       gtk_notebook_prev_page         (GtkNotebook      *notebook);
+void       gtk_notebook_set_tab_pos       (GtkNotebook      *notebook,
+					   GtkPositionType   pos);
+void       gtk_notebook_set_show_tabs     (GtkNotebook      *notebook,
+					   gint              show_tabs);
+void       gtk_notebook_set_show_border   (GtkNotebook      *notebook,
+					   gint              show_border);
+void       gtk_notebook_set_scrollable    (GtkNotebook      *notebook,
+					   gint              scrollable);
+void       gtk_notebook_set_tab_border    (GtkNotebook      *notebook,
+					   gint              border_width);
+void       gtk_notebook_popup_enable      (GtkNotebook      *notebook);
+void       gtk_notebook_popup_disable     (GtkNotebook      *notebook);
 
 #ifdef __cplusplus
 }

@@ -1,3 +1,20 @@
+Thu Feb 19 05:40:51 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtknotebook.h:
+	* gtk/gtknotebook.c:
+	applied gtk-hamann_jeske-980218-0.patch.gz, a patch from
+	Lars Hamann and Stefan Jeske which introduces major
+	usability improvements.
+	fixed bugs are:
+	- container border_width>0 does now work correctly for show_tabs==TRUE
+	  and for tab_pos=GTK_POS_BOTTOM/GTK_POS_RIGHT.
+	- toggleing visibility of the tab labels works now.
+	- emission of GtkNotebook:switch_page and all page changes
+	also the signature for the GtkNotebook:switch_page signal changed,
+	callbacks should now look like:
+	gint notebook_switch_page (GtkWidget *widget,   GtkNotebookPage *page,
+                                   gint       page_num, gpointer         data);
+
 Wed Feb 18 01:09:56 PST 1998  Jay Painter <jpaint@serv.net>
 	* gdk/gdk.c: fixed ambigous else compiler warning
 	* gtk/gtkgamma.c: fixed ambigous else compiler warning
