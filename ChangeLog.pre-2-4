@@ -1,3 +1,12 @@
+Fri Sep  5 14:15:10 2003  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* Back out locale-dependent interpretation of
+ 	KP_Decimal, the official XFree86 interpretation
+ 	is that KP_Decimal => . KP_Separator => ,
+ 	always, independent of locale. 
+ 	(#105161, Frederic Crozat, 
+ 	http://bugs.xfree86.org/show_bug.cgi?id=534)
+ 
 2003-09-04  Matthias Clasen  <maclas@gmx.de>
 
 	* tests/testmerge.c: Test buttons and toggle buttons as proxies.
