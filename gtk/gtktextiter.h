@@ -54,7 +54,7 @@ gint     gtk_text_iter_get_line_byte   (const GtkTextIter *iter);
 /*
  * "Dereference" operators
  */
-gint     gtk_text_iter_get_char          (const GtkTextIter  *iter);
+gunichar gtk_text_iter_get_char          (const GtkTextIter  *iter);
 
 /* includes the 0xFFFD char for pixmaps/widgets, so char offsets
    into the returned string map properly into buffer char offsets */
@@ -144,7 +144,7 @@ gboolean gtk_text_iter_forward_find_tag_toggle (GtkTextIter *iter,
 gboolean gtk_text_iter_backward_find_tag_toggle (GtkTextIter *iter,
                                                   GtkTextTag  *tag);
 
-typedef gboolean (* GtkTextViewCharPredicate) (guint16 ch, gpointer user_data);
+typedef gboolean (* GtkTextViewCharPredicate) (gunichar ch, gpointer user_data);
 
 gboolean gtk_text_iter_forward_find_char      (GtkTextIter *iter,
 					       GtkTextViewCharPredicate pred,

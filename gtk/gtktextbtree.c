@@ -3369,7 +3369,7 @@ gtk_text_line_byte_to_char (GtkTextLine *line,
   else
     {
       if (seg->type == &gtk_text_char_type)
-        return char_offset + gtk_text_view_num_utf_chars(seg->body.chars, byte_offset);
+        return char_offset + g_utf8_strlen (seg->body.chars, byte_offset);
       else
         {
           g_assert(seg->char_count == 1);
@@ -3594,8 +3594,7 @@ gtk_text_line_byte_to_char_offsets(GtkTextLine *line,
 
   if (seg->type == &gtk_text_char_type)
     {
-      *seg_char_offset = gtk_text_view_num_utf_chars(seg->body.chars,
-                                                     offset);
+      *seg_char_offset = g_utf8_strlen(seg->body.chars, offset);
 
       g_assert(*seg_char_offset < seg->char_count);
       
@@ -3643,11 +3642,10 @@ gtk_text_line_char_to_byte_offsets(GtkTextLine *line,
       *seg_byte_offset = 0;
       while (offset > 0)
         {
-          GtkTextUniChar ch;
           gint bytes;
+          const char * start = seg->body.chars + *seg_byte_offset;
           
-          bytes = gtk_text_utf_to_unichar(seg->body.chars + *seg_byte_offset,
-                                          &ch);
+          bytes = g_utf8_next_char (start) - start;
           *seg_byte_offset += bytes;
           offset -= 1;
         }

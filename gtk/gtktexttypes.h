@@ -8,9 +8,6 @@ extern "C" {
 #include <glib.h>
 
 #include <gtk/gtktextbuffer.h>
-
-typedef unsigned short GtkTextUniChar; /* Unicode character */
-
 #include <gtk/gtktexttagprivate.h>
 
 typedef struct _GtkTextLine GtkTextLine;
@@ -97,20 +94,6 @@ void              gtk_text_view_tab_array_ref   (GtkTextTabArray *tab_array);
 void              gtk_text_view_tab_array_unref (GtkTextTabArray *tab_array);
 
 /*
- * The constant below is used to specify a line when what is really
- * wanted is the entire text.  For now, just use a very big number.
- */
-
-#define GTK_TEXT_END_OF_TEXT 1000000
-
-/*
- * The following definition specifies the maximum number of characters
- * needed in a string to hold a position specifier.
- */
-
-#define GTK_TEXT_POS_CHARS 30
-
-/*
  * Declarations for variables shared among the text-related files:
  */
 
@@ -131,16 +114,17 @@ extern GtkTextLineSegmentClass gtk_text_view_child_type;
  * UTF 8 Stubs
  */
 
-extern const GtkTextUniChar gtk_text_unknown_char;
+extern const gunichar gtk_text_unknown_char;
 extern const gchar gtk_text_unknown_char_utf8[];
 
-gint gtk_text_view_num_utf_chars(const gchar *chars, gint len);
-gint gtk_text_utf_to_unichar(const gchar *p, GtkTextUniChar *ch);
-gchar *gtk_text_utf_prev(const gchar *p, const gchar *p2);
-gchar *gtk_text_utf_to_latin1(const gchar *p, gint len);
-gboolean gtk_text_byte_begins_utf8_char(const gchar *byte);
-guint gtk_text_utf_to_latin1_char(const gchar *p, guchar *ch);
-gchar *gtk_text_latin1_to_utf (const gchar *latin1, gint len);
+gboolean gtk_text_byte_begins_utf8_char (const gchar *byte);
+guint    gtk_text_utf_to_latin1_char    (const gchar *p,
+                                         guchar      *l1_ch);
+gchar*   gtk_text_utf_to_latin1         (const gchar *p,
+                                         gint         len);
+gchar*   gtk_text_latin1_to_utf         (const gchar *latin1,
+                                         gint         len);
+
 
 #ifdef __cplusplus
 }

@@ -1932,13 +1932,13 @@ gtk_text_view_scroll_text (GtkTextView *text_view,
 }
 
 static gboolean
-whitespace (GtkTextUniChar ch, gpointer user_data)
+whitespace (gunichar ch, gpointer user_data)
 {
   return (ch == ' ' || ch == '\t');
 }
 
 static gboolean
-not_whitespace (GtkTextUniChar ch, gpointer user_data)
+not_whitespace (gunichar ch, gpointer user_data)
 {
   return !whitespace (ch, user_data);
 }

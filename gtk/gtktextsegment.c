@@ -177,7 +177,7 @@ char_segment_self_check(GtkTextLineSegment *seg)
       g_error("char_segment_check_func: segment has wrong size");
     }
 
-  if (gtk_text_view_num_utf_chars(seg->body.chars, seg->byte_count) != seg->char_count)
+  if (g_utf8_strlen (seg->body.chars, seg->byte_count) != seg->char_count)
     {
       g_error("char segment has wrong character count");
     }
@@ -197,7 +197,7 @@ char_segment_new(const gchar *text, guint len)
   memcpy(seg->body.chars, text, len);
   seg->body.chars[len] = '\0';
 
-  seg->char_count = gtk_text_view_num_utf_chars(seg->body.chars, seg->byte_count);
+  seg->char_count = g_utf8_strlen (seg->body.chars, seg->byte_count);
 
   if (gtk_debug_flags & GTK_DEBUG_TEXT)
     char_segment_self_check(seg);
@@ -224,7 +224,7 @@ char_segment_new_from_two_strings(const gchar *text1, guint len1,
 
   /* In principle this function could probably take chars1 and chars2
      as args, since it's typically used to merge two char segments */
-  seg->char_count = gtk_text_view_num_utf_chars(seg->body.chars, seg->byte_count);
+  seg->char_count = g_utf8_strlen (seg->body.chars, seg->byte_count);
 
   if (gtk_debug_flags & GTK_DEBUG_TEXT)
     char_segment_self_check(seg);

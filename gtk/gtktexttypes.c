@@ -42,69 +42,11 @@ gtk_text_view_tab_array_unref(GtkTextTabArray *tab_array)
     }
 }
 
-/*
- * Unicode stubs (these are wrappers to make libunicode match the Tcl/Tk
- * API, eventually should just use libunicode/Pango directly)
+/* These are used to represent embedded non-character objects
+ * if you return a string representation of a text buffer
  */
-
-#if 0
-static void
-trigger_efence(const gchar *str, gint len)
-{
-  gchar ch;
-  gint i = 0;
-  while (i < len)
-    {
-      ch = str[i];
-      ((gchar*)str)[i] = ch;
-      ++i;
-    }
-}
-#else
-#define trigger_efence(foo,bar)
-#endif
-
-const GtkTextUniChar gtk_text_unknown_char = 0xFFFD;
+const gunichar gtk_text_unknown_char = 0xFFFD;
 const gchar gtk_text_unknown_char_utf8[] = { 0xEF, 0xBF, 0xBD, '\0' };
-
-gint
-gtk_text_view_num_utf_chars(const gchar *str, gint len)
-{
-  trigger_efence(str, len);
-  return g_utf8_strlen(str, len);
-}
-
-/* FIXME we need a version of this function with error handling, so we
-   can screen incoming UTF8 for validity. */
-
-gint
-gtk_text_utf_to_unichar(const gchar *str, GtkTextUniChar *chPtr)
-{
-  gunichar ch;
-
-  ch = g_utf8_get_char (str);
-
-  if (ch == (gunichar)-1)
-    g_error("Bad UTF8, need to add some error checking so this doesn't crash the program");
-
-  *chPtr = ch;
-
-  trigger_efence(str, end - str);
-  
-  return g_utf8_next_char (str) - str;
-}
-
-gchar*
-gtk_text_utf_prev(const gchar *str, const gchar *start)
-{
-  gchar *retval;
-
-  trigger_efence(start, str - start);
-  
-  retval = g_utf8_find_prev_char (start, str);
-
-  return retval;
-}
 
 static inline gboolean
 inline_byte_begins_utf8_char(const gchar *byte)
@@ -115,7 +57,6 @@ inline_byte_begins_utf8_char(const gchar *byte)
 gboolean
 gtk_text_byte_begins_utf8_char(const gchar *byte)
 {
-  trigger_efence(byte, 1);
   return inline_byte_begins_utf8_char(byte);
 }
 
@@ -123,11 +64,12 @@ guint
 gtk_text_utf_to_latin1_char(const gchar *p, guchar *l1_ch)
 {
   guint charlen;
-  GtkTextUniChar ch;
+  gunichar ch;
 
   g_assert(inline_byte_begins_utf8_char(p));
   
-  charlen = gtk_text_utf_to_unichar(p, &ch);
+  charlen = g_utf8_next_char (p) - p;
+  ch = g_utf8_get_char (p);
   
   g_assert(ch != '\0');
   
@@ -145,8 +87,6 @@ gtk_text_utf_to_latin1(const gchar *p, gint len)
   GString *str;
   guint i;
   gchar *retval;
-
-  trigger_efence(p, len);
   
   str = g_string_new("");
 
@@ -169,54 +109,6 @@ gtk_text_utf_to_latin1(const gchar *p, gint len)
   return retval;
 }
 
-static int
-gtk_text_view_unichar_to_utf(GtkTextUniChar c, char *outbuf)
-{
-  size_t len = 0;
-  int first;
-  int i;
-
-  if (c < 0x80)
-    {
-      first = 0;
-      len = 1;
-    }
-  else if (c < 0x800)
-    {
-      first = 0xc0;
-      len = 2;
-    }
-  else if (c < 0x10000)
-    {
-      first = 0xe0;
-      len = 3;
-    }
-   else if (c < 0x200000)
-    {
-      first = 0xf0;
-      len = 4;
-    }
-  else if (c < 0x4000000)
-    {
-      first = 0xf8;
-      len = 5;
-    }
-  else
-    {
-      first = 0xfc;
-      len = 6;
-    }
-
-  for (i = len - 1; i > 0; --i)
-    {
-      outbuf[i] = (c & 0x3f) | 0x80;
-      c >>= 6;
-    }
-  outbuf[0] = c | first;
-
-  return len;
-}
-
 gchar*
 gtk_text_latin1_to_utf (const gchar *latin1, gint len)
 {
@@ -232,7 +124,7 @@ gtk_text_latin1_to_utf (const gchar *latin1, gint len)
       gchar utf[7];
       gint count;
 
-      count = gtk_text_view_unichar_to_utf((guchar)latin1[i], utf);
+      count = g_unichar_to_utf8 ((guchar)latin1[i], utf);
       
       utf[count] = '\0';
       
@@ -245,3 +137,6 @@ gtk_text_latin1_to_utf (const gchar *latin1, gint len)
   g_string_free(retval, FALSE);
   return str;
 }
+
+
+

@@ -575,7 +575,7 @@ gtk_text_iter_get_line_byte(const GtkTextIter *iter)
  * Dereferencing
  */
 
-gint
+gunichar
 gtk_text_iter_get_char(const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
@@ -594,15 +594,10 @@ gtk_text_iter_get_char(const GtkTextIter *iter)
   
   if (real->segment->type == &gtk_text_char_type)
     {
-      GtkTextUniChar ch;
-
       ensure_byte_offsets(real);
       
-      gtk_text_utf_to_unichar(real->segment->body.chars +
-                               real->segment_byte_offset,
-                               &ch);
-
-      return ch;
+      return g_utf8_get_char (real->segment->body.chars +
+                              real->segment_byte_offset);
     }
   else
     {
@@ -1018,11 +1013,10 @@ forward_char(GtkTextRealIter *real)
       if (real->line_byte_offset >= 0)
         {
           gint bytes;
-          GtkTextUniChar ch;
-
-          bytes = gtk_text_utf_to_unichar(real->segment->body.chars +
-                                           real->segment_byte_offset,
-                                           &ch);
+          const char * start =
+            real->segment->body.chars + real->segment_byte_offset;
+          
+          bytes = g_utf8_next_char (start) - start;
 
           real->line_byte_offset += bytes;
           real->segment_byte_offset += bytes;
@@ -1281,10 +1275,9 @@ gtk_text_iter_backward_chars(GtkTextIter *iter, gint count)
           i = 0;
           while (i < real->segment_char_offset)
             {
-              GtkTextUniChar ch;
-              new_byte_offset +=
-                gtk_text_utf_to_unichar(real->segment->body.chars + new_byte_offset,
-                                         &ch);
+              const char * start = real->segment->body.chars + new_byte_offset;
+              new_byte_offset += g_utf8_next_char (start) - start;
+
               ++i;
             }
       
@@ -1464,14 +1457,14 @@ gtk_text_iter_backward_lines(GtkTextIter *iter, gint count)
 }
 
 static gboolean
-is_word_char(GtkTextUniChar ch, gpointer user_data)
+is_word_char(gunichar ch, gpointer user_data)
 {
   /* will likely need some i18n help FIXME */
   return isalpha(ch);
 }
 
 static gboolean
-is_not_word_char(GtkTextUniChar ch, gpointer user_data)
+is_not_word_char(gunichar ch, gpointer user_data)
 {
   return !is_word_char(ch, user_data);
 }
@@ -2339,10 +2332,8 @@ gtk_text_iter_check(const GtkTextIter *iter)
           gint char_offset = 0;
           while (char_offset < seg_char_offset)
             {
-              GtkTextUniChar ch;
-              byte_offset +=
-                gtk_text_utf_to_unichar(char_segment->body.chars + byte_offset,
-                                         &ch);
+              const char * start = char_segment->body.chars + byte_offset;
+              byte_offset += g_utf8_next_char (start) - start;
               char_offset += 1;
             }
 
@@ -2350,8 +2341,7 @@ gtk_text_iter_check(const GtkTextIter *iter)
             g_error("byte offset did not correspond to char offset");
 
           char_offset =
-            gtk_text_view_num_utf_chars(char_segment->body.chars,
-                                    seg_byte_offset);
+            g_utf8_strlen (char_segment->body.chars, seg_byte_offset);
 
           if (char_offset != seg_char_offset)
             g_error("char offset did not correspond to byte offset");

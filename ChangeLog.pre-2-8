@@ -1,3 +1,16 @@
+2000-06-21  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextiter.h: Use gunichar instead of gint when appropriate
+	in the interfaces
+
+	* gtk/gtktexttypes.c: Remove UTF functions, use glib 
+	stuff instead when possible.
+
+	* gtk/gtktexttypes.h: Delete some unused constants
+
+	* gtktextbtree.c, gtktextiter.c, gtktextsegment.c, gtktextview.c,
+	testtextbuffer.c: use glib instead of custom unicode routines
+
 Wed Jun 21 12:50:58 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* docs/es/: Removed mistakenly added generated sgml
