@@ -1,3 +1,9 @@
+Mon Aug  4 14:53:46 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkimage-x11.c (_gdk_windowing_image_init): 
+	Fix problem where use_xshm was getting set wrong if
+	MIT_SHM wasn't found. (George Lebel)
+
 2003-08-04  Tor Lillqvist  <tml@iki.fi
 
 	* gdk/win32/gdkevents-win32.c (apply_filters): Fix braino:
