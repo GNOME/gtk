@@ -1,3 +1,13 @@
+2001-02-25  Hans Breuer <hans@breuer.org>
+
+	* gtk/makefile.msc : corrected rule for generating gtkmarshal.[hc]
+
+	* gtk/gtkbindings.c : removed deprecated function calls
+	g_hash_table_(freeze|thaw)
+
+	* gdk/win32/gdkprivate-win32.h : define WM_SYNCPAINT cause
+	it's not known in msvc 5.0 standard headers
+
 2001-02-25  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab): Set grabbing

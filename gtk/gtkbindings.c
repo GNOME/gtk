@@ -122,11 +122,9 @@ binding_entry_new (GtkBindingSet *binding_set,
   binding_set->entries = entry;
 
   entry->hash_next = g_hash_table_lookup (binding_entry_hash_table, entry);
-  g_hash_table_freeze (binding_entry_hash_table);
   if (entry->hash_next)
     g_hash_table_remove (binding_entry_hash_table, entry->hash_next);
   g_hash_table_insert (binding_entry_hash_table, entry, entry);
-  g_hash_table_thaw (binding_entry_hash_table);
   
   return entry;
 }
@@ -205,10 +203,8 @@ binding_entry_destroy (GtkBindingEntry *entry)
     g_hash_table_remove (binding_entry_hash_table, entry);
   else if (begin != o_entry)
     {
-      g_hash_table_freeze (binding_entry_hash_table);
       g_hash_table_remove (binding_entry_hash_table, entry);
       g_hash_table_insert (binding_entry_hash_table, begin, begin);
-      g_hash_table_thaw (binding_entry_hash_table);
     }
 
   entry->destroyed = TRUE;
