@@ -1,3 +1,24 @@
+Sat Sep  8 16:19:02 2001  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtkmain.c: Implement a search path for GTK+ modules.
+ 
+ 	* configure.in gtk/gtkrc.c gtk/Makefile.am: Look for modules
+ 	in gtk-2.0/<type>/major.minor.(micro-binary_age) rather
+ 	than in gtk-2.0/major.minor.micro/<type>/. This
+ 	works better for a search path for modules.
+ 
+ 	* gtk+-2.0.pc.in gtk+-2.0-uninstalled.pc.in: Add
+ 	gtk_binary_version variable holding major.minor.(micro-binary_age).
+ 
+ 	* modules/input/Makefile.am (moduledir): Fix installation
+ 	directory to match change in lookup location.
+ 
+ 	* gtk/gtkmain.c (gtk_init_check): Remove OS/2 code for dll 
+ 	suffixes. Needs to be handled in g_module_build_path().
+
+	* gtk/gtkrc.c gtk/queryimmodules.c: Use g_build_filename() where
+	appropriate.
+ 
 Tue Sep 11 13:59:12 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c (insert_rc_property): Fixed reversed comparison

@@ -9,6 +9,7 @@ INCLUDES = @STRIP_BEGIN@ \
 	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"		\
 	-DGTK_LOCALEDIR=\"$(gtklocaledir)\"		\
 	-DGTK_VERSION=\"@GTK_VERSION@\"			\
+	-DGTK_BINARY_VERSION=\"@GTK_BINARY_VERSION@\"	\
 	-DTESTGTK_RCFILE=\"`pwd`/$(srcdir)/testgtkrc\"	\
 	-DG_DISABLE_CONST_RETURNS			\
 	-I$(top_builddir)/gtk				\

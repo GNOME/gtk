@@ -39,6 +39,9 @@
 #ifdef G_OS_UNIX
 #include <unistd.h>
 #endif
+
+#include <pango/pango-utils.h>	/* For pango_split_file_list */
+
 #include "gtkdnd.h"
 #include "gtkversion.h"
 #include "gtkmain.h"
@@ -174,23 +177,6 @@ gtk_check_version (guint required_major,
   return NULL;
 }
 
-#ifdef __EMX__
-static gchar *
-add_dll_suffix (gchar *module_name)
-{
-    gchar *suffix = strrchr (module_name, '.');
-    
-    if (!suffix || stricmp(suffix, ".dll"))
-    {
-	gchar *old = module_name;
-	  
-	module_name = g_strconcat (module_name, ".dll", NULL);
-	g_free (old);
-    }
-    return (module_name);
-}
-#endif
-
 #undef gtk_init_check
 
 /* This checks to see if the process is running suid or sgid
@@ -238,13 +224,145 @@ check_setugid (void)
   return TRUE;
 }
 
+static gchar **
+get_module_path (void)
+{
+  gchar *module_path = g_getenv ("GTK_MODULE_PATH");
+  gchar *exe_prefix = g_getenv("GTK_EXE_PREFIX");
+  gchar **result;
+  gchar *default_dir;
+
+  if (exe_prefix)
+    default_dir = g_build_filename (exe_prefix, "lib", "gtk-2.0", "modules", NULL);
+  else
+    default_dir = g_build_filename (GTK_LIBDIR, "gtk-2.0", "modules", NULL);
+
+  module_path = g_strconcat (module_path ? module_path : "",
+			     module_path ? G_SEARCHPATH_SEPARATOR_S : "",
+			     default_dir, NULL);
+
+  result = pango_split_file_list (module_path);
+
+  g_free (default_dir);
+  g_free (module_path);
+
+  return result;
+}
+
+static GModule *
+find_module (gchar      **module_path,
+	     const gchar *name)
+{
+  GModule *module;
+  gchar *module_name;
+  gint i;
+
+  if (g_path_is_absolute (name))
+    return g_module_open (name, G_MODULE_BIND_LAZY);
+
+  for (i = 0; module_path[i]; i++)
+    {
+      gchar *version_directory;
+
+      version_directory = g_build_filename (module_path[i], GTK_BINARY_VERSION, NULL);
+      module_name = g_module_build_path (version_directory, name);
+      g_free (version_directory);
+      
+      if (g_file_test (module_name, G_FILE_TEST_EXISTS))
+	{
+	  g_free (module_name);
+	  return g_module_open (module_name, G_MODULE_BIND_LAZY);
+	}
+      
+      g_free (module_name);
+
+      module_name = g_module_build_path (module_path[i], name);
+      
+      if (g_file_test (module_name, G_FILE_TEST_EXISTS))
+	{
+	  g_free (module_name);
+	  return g_module_open (module_name, G_MODULE_BIND_LAZY);
+	}
+
+      g_free (module_name);
+    }
+
+  /* As last resort, try loading without an absolute path (using system
+   * library path)
+   */
+  module_name = g_module_build_path (NULL, name);
+  module = g_module_open (module_name, G_MODULE_BIND_LAZY);
+  g_free(module_name);
+
+  return module;
+}
+
+static GSList *
+load_module (GSList      *gtk_modules,
+	     gchar      **module_path,
+	     const gchar *name)
+{
+  GtkModuleInitFunc modinit_func = NULL;
+  GModule *module = NULL;
+  
+  if (g_module_supported ())
+    {
+      module = find_module (module_path, name);
+      if (module &&
+	  g_module_symbol (module, "gtk_module_init", (gpointer*) &modinit_func) &&
+	  modinit_func)
+	{
+	  if (!g_slist_find (gtk_modules, modinit_func))
+	    {
+	      g_module_make_resident (module);
+	      gtk_modules = g_slist_prepend (gtk_modules, modinit_func);
+	    }
+	  else
+	    {
+	      g_module_close (module);
+	      module = NULL;
+	    }
+	}
+    }
+  if (!modinit_func)
+    {
+      g_message ("Failed to load module \"%s\": %s",
+		 module ? g_module_name (module) : name,
+		 g_module_error ());
+      if (module)
+	g_module_close (module);
+    }
+  
+  return gtk_modules;
+}
+
+static GSList *
+load_modules (const char *module_str)
+{
+  gchar **module_path = get_module_path ();
+  gchar **module_names = pango_split_file_list (module_str);
+  GSList *gtk_modules = NULL;
+  gint i;
+  
+  for (i = 0; module_names[i]; i++)
+    gtk_modules = load_module (gtk_modules, module_path, module_names[i]);
+  
+  gtk_modules = g_slist_reverse (gtk_modules);
+  
+  g_strfreev (module_names);
+  g_strfreev (module_path);
+
+  return gtk_modules;
+}
+
 gboolean
 gtk_init_check (int	 *argc,
 		char   ***argv)
 {
+  GString *gtk_modules_string = NULL;
   GSList *gtk_modules = NULL;
   GSList *slist;
-  gchar *env_string = NULL;
+  gchar *env_string;
 
   if (gtk_initialized)
     return TRUE;
@@ -280,24 +398,7 @@ gtk_init_check (int	 *argc,
 
   env_string = getenv ("GTK_MODULES");
   if (env_string)
-    {
-      gchar **modules, **as;
-
-#ifndef __EMX__
-      modules = g_strsplit (env_string, G_SEARCHPATH_SEPARATOR_S, -1);
-#else
-      modules = g_strsplit (env_string, ";", -1);
-#endif
-      for (as = modules; *as; as++)
-	{
-	  if (**as)
-	    gtk_modules = g_slist_prepend (gtk_modules, *as);
-	  else
-	    g_free (*as);
-	}
-      g_free (modules);
-      env_string = NULL;
-    }
+    gtk_modules_string = g_string_new (env_string);
 
   if (argc && argv)
     {
@@ -321,7 +422,14 @@ gtk_init_check (int	 *argc,
 	      (*argv)[i] = NULL;
 
 	      if (module_name && *module_name)
-		gtk_modules = g_slist_prepend (gtk_modules, g_strdup (module_name));
+		{
+		  if (gtk_modules_string)
+		    g_string_append_c (gtk_modules_string, G_SEARCHPATH_SEPARATOR);
+		  else
+		    gtk_modules_string = g_string_new (NULL);
+
+		  g_string_append (gtk_modules_string, module_name);
+		}
 	    }
 	  else if (strcmp ("--g-fatal-warnings", (*argv)[i]) == 0)
 	    {
@@ -397,56 +505,12 @@ gtk_init_check (int	 *argc,
 
   if (gtk_debug_flags & GTK_DEBUG_UPDATES)
     gdk_window_set_debug_updates (TRUE);
-  
+
   /* load gtk modules */
-  gtk_modules = g_slist_reverse (gtk_modules);
-  for (slist = gtk_modules; slist; slist = slist->next)
+  if (gtk_modules_string)
     {
-      gchar *module_name;
-      GModule *module = NULL;
-      GtkModuleInitFunc modinit_func = NULL;
-      
-      module_name = slist->data;
-      slist->data = NULL;
-#ifndef __EMX__
-      if (!g_path_is_absolute (module_name))
-	{
-	  gchar *old = module_name;
-	  
-	  module_name = g_module_build_path (NULL, module_name);
-	  g_free (old);
-	}
-#else
-      module_name = add_dll_suffix (module_name);
-#endif
-      if (g_module_supported ())
-	{
-	  module = g_module_open (module_name, G_MODULE_BIND_LAZY);
-	  if (module &&
-	      g_module_symbol (module, "gtk_module_init", (gpointer*) &modinit_func) &&
-	      modinit_func)
-	    {
-	      if (!g_slist_find (gtk_modules, modinit_func))
-		{
-		  g_module_make_resident (module);
-		  slist->data = modinit_func;
-		}
-	      else
-		{
-		  g_module_close (module);
-		  module = NULL;
-		}
-	    }
-	}
-      if (!modinit_func)
-	{
-	  g_message ("Failed to load module \"%s\": %s",
-		     module ? g_module_name (module) : module_name,
-		     g_module_error ());
-	  if (module)
-	    g_module_close (module);
-	}
-      g_free (module_name);
+      gtk_modules = load_modules (gtk_modules_string->str);
+      g_string_free (gtk_modules_string, TRUE);
     }
 
 #ifdef ENABLE_NLS

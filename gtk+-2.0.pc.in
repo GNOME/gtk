@@ -4,6 +4,8 @@ libdir=@libdir@
 includedir=@includedir@
 target=@gdktarget@
 
+gtk_binary_version=@GTK_BINARY_VERSION@
+
 Name: GTK+
 Description: GIMP Tool Kit (${target} target)
 Version: @VERSION@

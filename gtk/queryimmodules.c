@@ -65,10 +65,10 @@ query_module (const char *dir, const char *name)
   gchar *path;
   gboolean error = FALSE;
 
-  if (name[0] == G_DIR_SEPARATOR)
+  if (g_path_is_absolute (name))
     path = g_strdup (name);
   else
-    path = g_strconcat (dir, G_DIR_SEPARATOR_S, name, NULL);
+    path = g_build_filename (dir, name, NULL);
   
   module = g_module_open (path, 0);
 

@@ -22,7 +22,7 @@ LDADDS = @STRIP_BEGIN@ 					\
 	@GTK_DEP_LIBS@					\
 @STRIP_END@
 
-moduledir = $(libdir)/gtk-2.0/$(GTK_VERSION)/immodules
+moduledir = $(libdir)/gtk-2.0/immodules/$(GTK_BINARY_VERSION)
 
 im_xim_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module
 im_xim_la_SOURCES = 		\

@@ -125,8 +125,9 @@ gboolean      gdk_net_wm_supports      (GdkAtom property);
 
 #ifndef GDK_DISABLE_DEPRECATED
 
-Display *gdk_x11_font_get_xdisplay      (GdkFont     *font);
-gpointer gdk_x11_font_get_xfont         (GdkFont     *font);
+Display *            gdk_x11_font_get_xdisplay (GdkFont *font);
+gpointer             gdk_x11_font_get_xfont    (GdkFont *font);
+G_CONST_RETURN char *gdk_x11_font_get_name     (GdkFont *font);
 
 #define GDK_FONT_XDISPLAY(font)       (gdk_x11_font_get_xdisplay (font))
 #define GDK_FONT_XFONT(font)          (gdk_x11_font_get_xfont (font))

@@ -324,11 +324,11 @@ gtk_rc_make_default_dir (const gchar *type)
 #ifndef G_OS_WIN32
   var = getenv("GTK_EXE_PREFIX");
   if (var)
-    path = g_strconcat (var, "/lib/gtk-2.0/" GTK_VERSION "/", type, NULL);
+    path = g_build_filename (var, "lib", "gtk-2.0", type, GTK_BINARY_VERSION, NULL);
   else
-    path = g_strconcat (GTK_LIBDIR "/gtk-2.0/" GTK_VERSION "/", type, NULL);
+    path = g_build_filename (GTK_LIBDIR, "gtk-2.0,", type, GTK_BINARY_VERSION, NULL);
 #else
-  path = g_strconcat ("%s\\%s", get_themes_directory (), type);
+  path = g_build_filename (get_themes_directory (), type, NULL);
 #endif
 
   return path;
@@ -361,9 +361,9 @@ gtk_rc_get_im_module_file (void)
 	result = g_strdup (im_module_file);
       else
 #ifndef G_OS_WIN32
-	result = g_strdup (GTK_SYSCONFDIR G_DIR_SEPARATOR_S "gtk-2.0" G_DIR_SEPARATOR_S "gtk.immodules");
+	result = g_build_filename (GTK_SYSCONFDIR, "gtk-2.0", "gtk.immodules", NULL);
 #else
-	result = g_strdup_printf ("%s\\gtk.immodules", g_win32_get_package_installation_directory (GETTEXT_PACKAGE, get_gtk_dll_name ()));
+        result = g_build_filename (g_win32_get_package_installation_directory (GETTEXT_PACKAGE, get_gtk_dll_name ()), "gtk.immodules", NULL);
 #endif
     }
 
@@ -378,9 +378,9 @@ gtk_rc_get_theme_dir(void)
 #ifndef G_OS_WIN32
   var = getenv("GTK_DATA_PREFIX");
   if (var)
-    path = g_strconcat (var, "/share/themes", NULL);
+    path = g_build_filename (var, "share", "themes", NULL);
   else
-    path = g_strconcat (GTK_DATA_PREFIX, "/share/themes", NULL);
+    path = g_build_filename (GTK_DATA_PREFIX, "share", "themes", NULL);
 #else
   path = g_strdup (get_themes_directory ());
 #endif
@@ -408,30 +408,18 @@ gtk_rc_append_default_module_path(void)
 #ifndef G_OS_WIN32
   var = getenv("GTK_EXE_PREFIX");
   if (var)
-    path = g_strconcat(var, "/lib/gtk-2.0/" GTK_VERSION "/engines", NULL);
+    path = g_build_filename (var, "lib", "gtk-2.0", GTK_VERSION, "engines", NULL);
   else
-    path = g_strdup (GTK_LIBDIR "/gtk-2.0/" GTK_VERSION "/engines");
+    path = g_build_filename (GTK_LIBDIR, "gtk-2.0", GTK_VERSION, "engines", NULL);
 #else
-  path = g_strconcat (get_themes_directory (), "\\engines", NULL);
+  path = g_build_filename (get_themes_directory (), "engines", NULL);
 #endif
   module_path[n++] = path;
 
   var = g_get_home_dir ();
   if (var)
     {
-      gchar *sep;
-      /* Don't duplicate the directory separator, causes trouble at
-       * least on Windows.
-       */
-      if (var[strlen (var) -1] != G_DIR_SEPARATOR)
-	sep = G_DIR_SEPARATOR_S;
-      else
-	sep = "";
-      /* This produces something like ~/.gtk-2.0/2.0/engines */
-      path = g_strconcat (var, sep,
-			  ".gtk-2.0" G_DIR_SEPARATOR_S
-			  GTK_VERSION G_DIR_SEPARATOR_S
-			  "engines", NULL);
+      path = g_build_filename (var, ".gtk-2.0", GTK_VERSION, "engines", NULL);
       module_path[n++] = path;
     }
   module_path[n] = NULL;
@@ -467,9 +455,9 @@ gtk_rc_add_initial_default_files (void)
   else
     {
 #ifndef G_OS_WIN32
-      str = g_strdup (GTK_SYSCONFDIR G_DIR_SEPARATOR_S "gtk-2.0" G_DIR_SEPARATOR_S "gtkrc");
+      str = g_build_filename (GTK_SYSCONFDIR, "gtk-2.0", "gtkrc", NULL);
 #else
-      str = g_strdup_printf ("%s\\gtkrc", g_win32_get_package_installation_directory (GETTEXT_PACKAGE, get_gtk_dll_name ()));
+      str = g_build_filename (g_win32_get_package_installation_directory (GETTEXT_PACKAGE, get_gtk_dll_name ()), "gtkrc", NULL);
 #endif
 
       gtk_rc_add_default_file (str);
@@ -478,12 +466,7 @@ gtk_rc_add_initial_default_files (void)
       var = g_get_home_dir ();
       if (var)
 	{
-	  gchar *sep;
-	  if (var[strlen (var) -1] != G_DIR_SEPARATOR)
-	    sep = G_DIR_SEPARATOR_S;
-	  else
-	    sep = "";
-	  str = g_strdup_printf ("%s%s.gtkrc-2.0", var, sep);
+	  str = g_build_filename (var, ".gtkrc-2.0", NULL);
 	  gtk_rc_add_default_file (str);
 	  g_free (str);
 	}
@@ -682,32 +665,18 @@ gtk_rc_parse_named (GtkRcContext *context,
   gchar *subpath;
 
   if (type)
-    subpath = g_strconcat (G_DIR_SEPARATOR_S "gtk-2.0-",
-			   type,
+    subpath = g_strconcat ("gtk-2.0-", type,
 			   G_DIR_SEPARATOR_S "gtkrc",
 			   NULL);
   else
-    subpath = g_strdup (G_DIR_SEPARATOR_S "gtk-2.0" G_DIR_SEPARATOR_S "gtkrc");
+    subpath = g_strdup ("gtk-2.0" G_DIR_SEPARATOR_S "gtkrc");
   
   /* First look in the users home directory
    */
   home_dir = g_get_home_dir ();
   if (home_dir)
     {
-      gchar *sep;
-      /* Don't duplicate the directory separator, causes trouble at
-       * least on Windows.
-       */
-      if (home_dir[strlen (home_dir) -1] != G_DIR_SEPARATOR)
-	sep = G_DIR_SEPARATOR_S;
-      else
-	sep = "";
-      path = g_strconcat (home_dir, sep,
-			  ".themes" G_DIR_SEPARATOR_S ,
-			  name,
-			  subpath,
-			  NULL);
-
+      path = g_build_filename (home_dir, ".themes", name, subpath, NULL);
       if (!g_file_test (path, G_FILE_TEST_EXISTS))
 	{
 	  g_free (path);
@@ -715,10 +684,10 @@ gtk_rc_parse_named (GtkRcContext *context,
 	}
     }
 
-  if (!name)
+  if (!path)
     {
       gchar *theme_dir = gtk_rc_get_theme_dir ();
-      gchar *path = g_strconcat (theme_dir, G_DIR_SEPARATOR_S, name, subpath);
+      path = g_build_filename (theme_dir, name, subpath, NULL);
       g_free (theme_dir);
       
       if (!g_file_test (path, G_FILE_TEST_EXISTS))
@@ -887,18 +856,11 @@ gtk_rc_parse_file (GtkRcContext *context,
 	rc_file->canonical_name = rc_file->name;
       else
 	{
-	  GString *str;
 	  gchar *cwd;
 
 	  cwd = g_get_current_dir ();
-
-	  str = g_string_new (cwd);
+	  rc_file->canonical_name = g_build_filename (cwd, rc_file->name, NULL);
 	  g_free (cwd);
-	  g_string_append_c (str, G_DIR_SEPARATOR);
-	  g_string_append (str, rc_file->name);
-	  
-	  rc_file->canonical_name = str->str;
-	  g_string_free (str, FALSE);
 	}
     }
 
@@ -2740,7 +2702,7 @@ gtk_rc_check_pixmap_dir (const gchar *dir, const gchar *pixmap_file)
   gchar *buf;
   gint fd;
 
-  buf = g_strdup_printf ("%s" G_DIR_SEPARATOR_S "%s", dir, pixmap_file);
+  buf = g_build_filename (dir, pixmap_file, NULL);
   
   fd = open (buf, O_RDONLY);
   if (fd >= 0)
@@ -2814,8 +2776,7 @@ gtk_rc_find_module_in_path (const gchar *module_file)
   
   for (i = 0; (i < GTK_RC_MAX_MODULE_PATHS) && (module_path[i] != NULL); i++)
     {
-      buf = g_strdup_printf ("%s" G_DIR_SEPARATOR_S "%s",
-			     module_path[i], module_file);
+      buf = g_build_filename (module_path[i], module_file, NULL);
       
       fd = open (buf, O_RDONLY);
       if (fd >= 0)
