@@ -679,6 +679,32 @@
       <contact>gtk-devel-list@redhat.com</contact>
     </entry>
 
+    <entry size="small" status="0%" target="1.4">
+      <title>Integrate new color selector</title>
+      <description>
+	<p>
+          There's a new color selector in CVS (module gnome-colorsel),
+          it needs to be folded in to GTK and any remaining issues resolved.
+          (This new selector is API-compatible with the old one, and 
+          still called GtkColorSelector).
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+    <entry size="medium" status="0%" target="1.4">
+      <title>Write new font selector</title>
+      <description>
+	<p>
+          Pango introduces a new font handling system,
+          replacing the XLFD system. Need a font selector for this.
+          The XLFD selector should probably remain, for apps where
+          it makes sense (like gnome-terminal probably).
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
   </section> <!-- GTK+ -->
 </todo>
 
