@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "POT-Creation-Date: 2001-04-17 19:08-0400\n"
-"PO-Revision-Date: 2001-04-21 17:14+01:00\n"
+"PO-Revision-Date: 2001-04-21 19:14+01:00\n"
 "Last-Translator: Keld Simonsen <keld@dkuug.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -67,7 +67,7 @@ msgstr "Blå:"
 
 #: gtk/gtkcolorsel.c:1418
 msgid "Opacity:"
-msgstr ""
+msgstr "Uigennemsigtighed:"
 
 #: gtk/gtkcolorsel.c:1433
 msgid "Hex Value:"
@@ -156,15 +156,15 @@ msgstr "Valg: "
 
 #: gtk/gtkfontsel.c:190
 msgid "Family:"
-msgstr ""
+msgstr "Familie"
 
 #: gtk/gtkfontsel.c:195
 msgid "Style:"
-msgstr ""
+msgstr "St�l:"
 
 #: gtk/gtkfontsel.c:200
 msgid "Size:"
-msgstr ""
+msgstr "Størrelse"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:310
@@ -181,11 +181,11 @@ msgstr "Gamma"
 
 #: gtk/gtkgamma.c:402
 msgid "Gamma value"
-msgstr ""
+msgstr "Gammaværdi"
 
 #: gtk/gtkgamma.c:415 gtk/gtkstock.c:175
 msgid "OK"
-msgstr "Ok"
+msgstr "O.k."
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:181
@@ -198,7 +198,7 @@ msgstr "Ingen indenheder"
 
 #: gtk/gtkinputdialog.c:218
 msgid "Device:"
-msgstr ""
+msgstr "Enhed:"
 
 #: gtk/gtkinputdialog.c:234
 msgid "Disabled"
@@ -214,17 +214,17 @@ msgstr "Vindue"
 
 #: gtk/gtkinputdialog.c:258
 msgid "Mode: "
-msgstr ""
+msgstr "Tilstand: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:288
 msgid "Axes"
-msgstr ""
+msgstr "Akser"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:304
 msgid "Keys"
-msgstr ""
+msgstr "Nøgler"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
@@ -313,19 +313,19 @@ msgstr "_Nej"
 
 #: gtk/gtkstock.c:182
 msgid "Quit"
-msgstr ""
+msgstr "Afslut"
 
 #: gtk/gtkstock.c:183
 msgid "Help"
-msgstr ""
+msgstr "Hjælp"
 
 #: gtk/gtkstock.c:184
 msgid "New"
-msgstr ""
+msgstr "Ny"
 
 #: gtk/gtkstock.c:185
 msgid "Open"
-msgstr ""
+msgstr "æbn"
 
 #: gtk/gtknotebook.c:2034 gtk/gtknotebook.c:4353
 #, c-format
@@ -345,7 +345,7 @@ msgstr "Kunne ikke finde billedfil i pixmap_path: \"%s\""
 #: gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr ""
+msgstr "Kunne ikke finde indlæsbart modul i module_path: '%s',"
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
@@ -403,7 +403,8 @@ msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:167
 msgid "Image data is partially missing, probably it was ocorrupted somehow."
-msgstr ""
+msgstr "Billeddata mangler delvist, "
+"måske er data blevet ødelagt på en eller anden måde"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:183
 #, c-format
@@ -652,7 +653,7 @@ msgstr "Pixbuf der skal optegnes."
 
 #: gtk/gtkcellrenderertext.c:120
 msgid "Text String"
-msgstr ""
+msgstr "Tekststreng"
 
 #: gtk/gtkcellrenderertext.c:121
 msgid "The text of the renderer."
@@ -668,7 +669,7 @@ msgstr "Strengen for skrifttypen"
 
 #: gtk/gtkcellrenderertext.c:137
 msgid "Background Color string"
-msgstr ""
+msgstr "Baggrundsfarvestreng"
 
 #: gtk/gtkcellrenderertext.c:138 gtk/gtkcellrenderertext.c:146
 msgid "The color for the background of the text."
@@ -676,7 +677,7 @@ msgstr "Farven på baggrunden for teksten."
 
 #: gtk/gtkcellrenderertext.c:145
 msgid "Foreground Color string"
-msgstr ""
+msgstr "Forgrundsfarvestreng"
 
 #: gtk/gtkcellrenderertext.c:153
 msgid "Strikethrough"
@@ -684,7 +685,7 @@ msgstr "Gennemstreget"
 
 #: gtk/gtkcellrenderertext.c:154
 msgid "Draw a line through the text."
-msgstr ""
+msgstr "Tegn en linje gennem teksten."
 
 #: gtk/gtkcellrenderertext.c:162
 msgid "Underline"
@@ -692,7 +693,7 @@ msgstr "Understreget"
 
 #: gtk/gtkcellrenderertext.c:163
 msgid "Underline the text."
-msgstr ""
+msgstr "Understreg teksten."
 
 #: gtk/gtkcellrenderertext.c:171
 msgid "Editable"
@@ -764,7 +765,7 @@ msgstr "Skifte-status"
 
 #: gtk/gtkcellrenderertoggle.c:130
 msgid "The toggle-state of the button."
-msgstr ""
+msgstr "Skifte-tilstanden for knappen."
 
 #: gtk/gtkcellrenderertoggle.c:138
 msgid "Radio state"
@@ -772,7 +773,7 @@ msgstr "Radio status"
 
 #: gtk/gtkcellrenderertoggle.c:139
 msgid "Draw the toggle button as a radio button."
-msgstr ""
+msgstr "Tegn skifteknappen som en radioknap."
 
 #: gtk/gtkentry.c:2469 gtk/gtktextview.c:4507
 msgid "Cut"
@@ -822,7 +823,6 @@ msgstr "X Indputmetode"
 #~ msgid "Couldn't allocate memory for loading JPEG file"
 #~ msgstr "Ikke nok hukommelse til indlæsning af PNG-fil"
 
-#, fuzzy
 #~ msgid "Insufficient memory to load PNM file"
 #~ msgstr "Ikke nok hukommelse til indlæsning af PNG-fil"
 
