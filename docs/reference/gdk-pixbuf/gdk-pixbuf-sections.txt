@@ -138,14 +138,12 @@ gdk_pixbuf_loader_get_type
 <SECTION>
 <TITLE>Module Interface</TITLE>
 <FILE>module_interface</FILE>
+ModuleFillVtableFunc
 ModulePreparedNotifyFunc
 ModuleUpdatedNotifyFunc
 ModuleFrameDoneNotifyFunc
 ModuleAnimationDoneNotifyFunc
 GdkPixbufModule
-_gdk_pixbuf_get_module
-_gdk_pixbuf_get_named_module
-_gdk_pixbuf_load_module
 </SECTION>
 
 <SECTION>

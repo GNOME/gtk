@@ -546,6 +546,7 @@ nickname.
 Initialize the data structures associated with gtk types.
 </para>
 
+@debug_flags: 
 
 
 <!-- ##### FUNCTION gtk_type_unique ##### -->

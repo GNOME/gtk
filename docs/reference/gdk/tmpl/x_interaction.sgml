@@ -304,3 +304,12 @@ X Window System Interaction
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_net_wm_supports ##### -->
+<para>
+
+</para>
+
+@property: 
+@Returns: 
+
+

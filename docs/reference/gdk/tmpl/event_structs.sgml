@@ -344,6 +344,17 @@ FIXME: add more here.
 @window: the window which received the event.
 @send_event: TRUE if the event was sent explicitly (e.g. using XSendEvent).
 
+<!-- ##### STRUCT GdkEventWindowState ##### -->
+<para>
+
+</para>
+
+@type: 
+@window: 
+@send_event: 
+@changed_mask: 
+@new_window_state: 
+
 <!-- ##### ENUM GdkScrollDirection ##### -->
 <para>
 
@@ -391,4 +402,14 @@ Specifies the type of a property change for a #GdkEventProperty.
 
 @GDK_PROPERTY_NEW_VALUE: the property value wan changed.
 @GDK_PROPERTY_DELETE: the property was deleted.
+
+<!-- ##### ENUM GdkWindowState ##### -->
+<para>
+
+</para>
+
+@GDK_WINDOW_STATE_WITHDRAWN: 
+@GDK_WINDOW_STATE_ICONIFIED: 
+@GDK_WINDOW_STATE_MAXIMIZED: 
+@GDK_WINDOW_STATE_STICKY: 
 

@@ -61,6 +61,7 @@ GtkTreeSelection
 @selection: 
 @func: 
 @data: 
+@destroy: 
 
 
 <!-- ##### FUNCTION gtk_tree_selection_get_user_data ##### -->

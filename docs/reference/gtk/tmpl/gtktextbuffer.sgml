@@ -455,15 +455,6 @@ types related to the text widget and how they work together.
 @anchor: 
 
 
-<!-- ##### FUNCTION gtk_text_buffer_get_last_iter ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@iter: 
-
-
 <!-- ##### FUNCTION gtk_text_buffer_get_bounds ##### -->
 <para>
 
@@ -472,15 +463,6 @@ types related to the text widget and how they work together.
 @buffer: 
 @start: 
 @end: 
-
-
-<!-- ##### FUNCTION gtk_text_buffer_modified ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@Returns: 
 
 
 <!-- ##### FUNCTION gtk_text_buffer_set_modified ##### -->
@@ -608,6 +590,15 @@ types related to the text widget and how they work together.
 </para>
 
 @textbuffer: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextBuffer::insert-child-anchor ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+@arg1: 
+@arg2: 
 
 <!-- ##### SIGNAL GtkTextBuffer::insert-pixbuf ##### -->
 <para>

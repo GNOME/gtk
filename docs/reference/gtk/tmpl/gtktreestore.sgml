@@ -84,16 +84,6 @@ GtkTreeStore
 @Varargs: 
 
 
-<!-- ##### FUNCTION gtk_tree_store_get ##### -->
-<para>
-
-</para>
-
-@tree_store: 
-@iter: 
-@Varargs: 
-
-
 <!-- ##### FUNCTION gtk_tree_store_remove ##### -->
 <para>
 

@@ -151,6 +151,16 @@ Returns the smallest rectangle which includes the entire #GdkRegion.
 @rectangle: returns the smallest rectangle which includes all of @region.
 
 
+<!-- ##### FUNCTION gdk_region_get_rectangles ##### -->
+<para>
+
+</para>
+
+@region: 
+@rectangles: 
+@n_rectangles: 
+
+
 <!-- ##### FUNCTION gdk_region_empty ##### -->
 <para>
 Returns TRUE if the #GdkRegion is empty.
@@ -225,49 +235,58 @@ Positive values shrink the region. Negative values expand it.
 
 <!-- ##### FUNCTION gdk_region_union_with_rect ##### -->
 <para>
-Returns the union of a region and a rectangle.
+Sets the area of @region to the union of the areas of @region and
+@rect. The resulting area is the set of pixels contained in
+either @region or @rect.
+
 </para>
 
 @region: a #GdkRegion.
 @rect: a #GdkRectangle.
-<!-- # Unused Parameters # -->
-@Returns: the union of @region and @rect.
 
 
 <!-- ##### FUNCTION gdk_region_intersect ##### -->
 <para>
-
+Sets the area of @source1 to the intersection of the areas of @source1
+and @source2. The resulting area is the set of pixels contained in
+both @source1 and @source2.
 </para>
 
-@source1: 
-@source2: 
+@source1: a #GdkRegion
+@source2: a #GdkRegion
 
 
 <!-- ##### FUNCTION gdk_region_union ##### -->
 <para>
+Sets the area of @source1 to the union of the areas of @source1 and
+@source2. The resulting area is the set of pixels contained in
+either @source1 or @source2.
 
 </para>
 
-@source1: 
-@source2: 
+@source1: a #GdkRegion
+@source2: a #GdkRegion
 
 
 <!-- ##### FUNCTION gdk_region_subtract ##### -->
 <para>
-
+Subtracts the area of @source2 from the area @source1. The resulting
+area is the set of pixels contained in @source1 but not in @source2.
 </para>
 
-@source1: 
-@source2: 
+@source1: a #GdkRegion
+@source2: a #GdkRegion
 
 
 <!-- ##### FUNCTION gdk_region_xor ##### -->
 <para>
-
+Sets the area of @source1 to the exclusive-OR of the areas of @source1
+and @source2. The resulting area is the set of pixels contained in one
+or the other of the two sources but not in both.
 </para>
 
-@source1: 
-@source2: 
+@source1: a #GdkRegion
+@source2: a #GdkRegion
 
 
 <!-- ##### STRUCT GdkSpan ##### -->

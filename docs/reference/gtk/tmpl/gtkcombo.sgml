@@ -202,3 +202,18 @@ instead.
 @combo: a #GtkCombo.
 
 
+<!-- ##### ARG GtkCombo:enable-arrow-keys ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCombo:enable-arrows-always ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCombo:case-sensitive ##### -->
+<para>
+
+</para>
+

@@ -14,6 +14,14 @@ Module Interface
 
 </para>
 
+<!-- ##### USER_FUNCTION ModuleFillVtableFunc ##### -->
+<para>
+
+</para>
+
+@module: 
+
+
 <!-- ##### USER_FUNCTION ModulePreparedNotifyFunc ##### -->
 <para>
 

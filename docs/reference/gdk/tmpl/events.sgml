@@ -82,6 +82,7 @@ has changed.
 @GDK_NO_EXPOSE: indicates that the source region was completely available
 when parts of a drawable were copied. This is not very useful.
 @GDK_SCROLL: 
+@GDK_WINDOW_STATE: 
 
 <!-- ##### ENUM GdkEventMask ##### -->
 <para>

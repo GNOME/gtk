@@ -468,22 +468,6 @@ GtkWidget
 @area: 
 
 
-<!-- ##### FUNCTION gtk_widget_draw_focus ##### -->
-<para>
-
-</para>
-
-@widget: 
-
-
-<!-- ##### FUNCTION gtk_widget_draw_default ##### -->
-<para>
-
-</para>
-
-@widget: 
-
-
 <!-- ##### FUNCTION gtk_widget_size_request ##### -->
 <para>
 
@@ -1426,20 +1410,6 @@ GtkWidget
 @time: 
 @Returns: 
 
-<!-- ##### SIGNAL GtkWidget::draw-default ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-
-<!-- ##### SIGNAL GtkWidget::draw-focus ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-
 <!-- ##### SIGNAL GtkWidget::enter-notify-event ##### -->
 <para>
 
@@ -1730,6 +1700,15 @@ GtkWidget
 @widget: the object which received the signal.
 
 <!-- ##### SIGNAL GtkWidget::visibility-notify-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::window-state-event ##### -->
 <para>
 
 </para>

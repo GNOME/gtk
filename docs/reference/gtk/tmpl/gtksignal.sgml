@@ -244,13 +244,6 @@ to the signal.
 @GTK_RUN_ACTION: 
 @GTK_RUN_NO_HOOKS: 
 
-<!-- ##### MACRO gtk_signal_init ##### -->
-<para>
-
-</para>
-
-
-
 <!-- ##### FUNCTION gtk_signal_new ##### -->
 <para>
 Create a new signal type.  (This is usually done in the

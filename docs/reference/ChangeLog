@@ -1,3 +1,14 @@
+Sat Mar  3 17:20:53 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* */Makefile.am (scan-build.stamp): You can't use
+	+ as a metacharacter for basic regular expressions.
+	(This was the "all objects disappear")
+
+	* gdk/gdk-sections.txt gdk-pixbuf/gdk-pixbuf-sections.txt
+
+	* */*-unused.sgml: Remove a lot of empty stuff. (No
+	point in saving old docs when there aren't any.)
+
 2001-02-20  Havoc Pennington  <hp@pobox.com>
 
 	* gdk/tmpl/rgb.sgml: fix these docs to reflect the current state

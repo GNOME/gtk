@@ -407,22 +407,12 @@ applies to the first character in a paragraph.
 
 </para>
 
-<!-- ##### ARG GtkTextTag:background-gdk-set ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkTextTag:background-stipple-set ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkTextTag:foreground-set ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextTag:foreground-gdk-set ##### -->
 <para>
 
 </para>

@@ -38,8 +38,10 @@ GtkTreeViewColumn
 @width: 
 @min_width: 
 @max_width: 
+@displayed_width: 
 @func: 
 @func_data: 
+@destroy: 
 @title: 
 @cell: 
 @attributes: 
@@ -58,18 +60,6 @@ GtkTreeViewColumn
 @GTK_TREE_VIEW_COLUMN_RESIZEABLE: 
 @GTK_TREE_VIEW_COLUMN_AUTOSIZE: 
 @GTK_TREE_VIEW_COLUMN_FIXED: 
-
-<!-- ##### USER_FUNCTION GtkTreeViewColumnFunc ##### -->
-<para>
-
-</para>
-
-@tree_column: 
-@tree_model: 
-@iter: 
-@data: 
-@Returns: 
-
 
 <!-- ##### FUNCTION gtk_tree_view_column_new ##### -->
 <para>
@@ -225,6 +215,15 @@ GtkTreeViewColumn
 
 @tree_column: 
 @title: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_get_title ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_column_set_clickable ##### -->

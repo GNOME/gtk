@@ -212,6 +212,15 @@ Windows
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_window_get_state ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_window_withdraw ##### -->
 <para>
 
@@ -221,6 +230,46 @@ Windows
 
 
 <!-- ##### FUNCTION gdk_window_iconify ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_deiconify ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_stick ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_unstick ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_maximize ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_unmaximize ##### -->
 <para>
 
 </para>
@@ -346,6 +395,15 @@ Windows
 </para>
 
 @window: 
+
+
+<!-- ##### FUNCTION gdk_window_focus ##### -->
+<para>
+
+</para>
+
+@window: 
+@timestamp: 
 
 
 <!-- ##### FUNCTION gdk_window_register_dnd ##### -->
@@ -522,6 +580,17 @@ Windows
 
 @window: 
 @shape_mask: 
+@offset_x: 
+@offset_y: 
+
+
+<!-- ##### FUNCTION gdk_window_shape_combine_region ##### -->
+<para>
+
+</para>
+
+@window: 
+@shape_region: 
 @offset_x: 
 @offset_y: 
 

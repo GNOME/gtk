@@ -392,8 +392,14 @@ gdk_window_show
 gdk_window_hide
 gdk_window_is_visible
 gdk_window_is_viewable
+gdk_window_get_state
 gdk_window_withdraw
 gdk_window_iconify
+gdk_window_deiconify
+gdk_window_stick
+gdk_window_unstick
+gdk_window_maximize
+gdk_window_unmaximize
 gdk_window_move
 gdk_window_resize
 gdk_window_move_resize
@@ -405,6 +411,7 @@ gdk_window_clear_area_e
 gdk_window_copy_area
 gdk_window_raise
 gdk_window_lower
+gdk_window_focus
 gdk_window_register_dnd
 
 <SUBSECTION>
@@ -431,6 +438,7 @@ GdkFilterFunc
 GdkFilterReturn
 GdkXEvent
 gdk_window_shape_combine_mask
+gdk_window_shape_combine_region
 gdk_window_set_child_shapes
 gdk_window_merge_child_shapes
 gdk_window_set_static_gravities
@@ -592,6 +600,7 @@ gdk_region_destroy
 
 <SUBSECTION>
 gdk_region_get_clipbox
+gdk_region_get_rectangles
 gdk_region_empty
 gdk_region_equal
 gdk_region_point_in
@@ -751,6 +760,7 @@ GdkEventDND
 GdkEventProximity
 GdkEventClient
 GdkEventNoExpose
+GdkEventWindowState
 
 <SUBSECTION>
 GdkScrollDirection
@@ -758,6 +768,7 @@ GdkVisibilityState
 GdkCrossingMode
 GdkNotifyType
 GdkPropertyState
+GdkWindowState
 </SECTION>
 
 <SECTION>
@@ -856,6 +867,7 @@ gdk_window_lookup
 gdk_pixmap_lookup
 gdk_font_lookup
 gdk_x11_get_server_time
+gdk_net_wm_supports
 
 <SUBSECTION Private>
 GDK_TYPE_GC_X11

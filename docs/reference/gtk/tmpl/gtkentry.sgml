@@ -295,3 +295,8 @@ are visible or not. See gtk_entry_set_visibility().
 
 </para>
 
+<!-- ##### ARG GtkEntry:activates-default ##### -->
+<para>
+
+</para>
+

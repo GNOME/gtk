@@ -119,6 +119,7 @@ This function no longer does anything at all. It's completely useless
 </para>
 
 
+
 <!-- ##### FUNCTION gdk_draw_rgb_image ##### -->
 <para>
 Draws an RGB image in the drawable. This is the core GdkRgb
