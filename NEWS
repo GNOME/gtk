@@ -1,3 +1,12 @@
+Overview of Changes in GTK+ 1.2.7:
+
+* More header cleanups.
+* Fixed activation bug for insensitive widgets.
+* Locale fixes to RC file parsing code.
+* Miscellaneous bugfixes for Item Factory, CList, CTree, X Selections,
+  HScale, VScale, Pixmap, Viewport, OptionMenu, Entry and Notebook.
+* Upgrade to libtool 1.3.4.
+
 Overview of Changes in GTK+ 1.2.6:
 
 * container queue_resize fixes

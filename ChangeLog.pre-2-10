@@ -1,3 +1,10 @@
+Fri Feb  4 19:40:50 2000  Tim Janik  <timj@gtk.org>
+
+	* configure.in: up version number to 1.2.7, interface age 2, binary
+	age 7. depend on glib 1.2.7.
+	
+	* NEWS: updates.
+
 Fri Feb  4 15:54:54 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_size_request): Don't

@@ -15,7 +15,7 @@ AC_INIT(gdk/gdktypes.h)
 # Save this value here, since automake will set cflags later
 cflags_set=${CFLAGS+set}
 
-dnl we to AC_DIVERT_PUSH/AC_DIVERT_POP these variable definitions so they
+dnl we need to AC_DIVERT_PUSH/AC_DIVERT_POP these variable definitions so they
 dnl are available for $ac_help expansion (don't we all *love* autoconf?)
 AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
 #
@@ -29,9 +29,9 @@ AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
 #
 GTK_MAJOR_VERSION=1
 GTK_MINOR_VERSION=2
-GTK_MICRO_VERSION=6
-GTK_INTERFACE_AGE=1
-GTK_BINARY_AGE=6
+GTK_MICRO_VERSION=7
+GTK_INTERFACE_AGE=2
+GTK_BINARY_AGE=7
 GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
 dnl
 AC_DIVERT_POP()dnl
@@ -232,9 +232,9 @@ fi
 if test x$with_glib = x ; then 
   # Look for separately installed glib
 
-  AM_PATH_GLIB(1.2.4,,
+  AM_PATH_GLIB(1.2.7,,
     AC_MSG_ERROR([
-*** GLIB 1.2.4 or better is required. The latest version of GLIB
+*** GLIB 1.2.7 or better is required. The latest version of GLIB
 *** is always available from ftp://ftp.gtk.org/.]),
     gmodule gthread)
 
