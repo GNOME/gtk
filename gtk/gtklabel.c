@@ -323,7 +323,7 @@ guint
 gtk_label_set_markup_with_accel (GtkLabel    *label,
                                  const gchar *str)
 {
-  g_return_if_fail (GTK_IS_LABEL (label));
+  g_return_val_if_fail (GTK_IS_LABEL (label), GDK_VoidSymbol);
 
   return set_markup (label, str, TRUE);
 }

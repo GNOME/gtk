@@ -961,14 +961,22 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
 		   GdkGCValuesMask usage)
 {
   GdkGCWin32 *win32_gc = (GdkGCWin32 *) gc;
+  GdkDrawableImplWin32 *impl;
   gboolean ok = TRUE;
   int flag;
 
   g_assert (win32_gc->hdc == NULL);
 
-  win32_gc->hwnd = GDK_DRAWABLE_IMPL_WIN32(drawable)->handle;
+  if (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable))
+    impl = GDK_DRAWABLE_IMPL_WIN32(drawable);
+  else if (GDK_IS_WINDOW (drawable))
+    impl = ((GdkWindowObject *) drawable)->impl;
+  else if (GDK_IS_PIXMAP (drawable))
+    impl = ((GdkPixmapObject *) drawable)->impl;
 
-  if (GDK_IS_PIXMAP_IMPL_WIN32 (drawable))
+  win32_gc->hwnd = impl->handle;
+
+  if (GDK_IS_PIXMAP_IMPL_WIN32 (impl))
     {
       if ((win32_gc->hdc = CreateCompatibleDC (NULL)) == NULL)
 	WIN32_GDI_FAILED ("CreateCompatibleDC"), ok = FALSE;
@@ -989,12 +997,12 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
     }
   
   if (ok && (usage & GDK_GC_FOREGROUND))
-    predraw_set_foreground (gc, GDK_DRAWABLE_IMPL_WIN32 (drawable)->colormap, &ok);
+    predraw_set_foreground (gc, impl->colormap, &ok);
 
   if (ok
       && (usage & GDK_GC_BACKGROUND)
       && (win32_gc->values_mask & GDK_GC_BACKGROUND))
-    predraw_set_background (gc, GDK_DRAWABLE_IMPL_WIN32 (drawable)->colormap, &ok);
+    predraw_set_background (gc, impl->colormap, &ok);
   
   if (ok && (usage & GDK_GC_FONT))
     {
@@ -1148,8 +1156,16 @@ gdk_win32_hdc_release (GdkDrawable    *drawable,
 		       GdkGCValuesMask usage)
 {
   GdkGCWin32 *win32_gc = (GdkGCWin32 *) gc;
+  GdkDrawableImplWin32 *impl;
   HGDIOBJ hpen = NULL;
   HGDIOBJ hbr = NULL;
+
+  if (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable))
+    impl = GDK_DRAWABLE_IMPL_WIN32(drawable);
+  else if (GDK_IS_WINDOW (drawable))
+    impl = ((GdkWindowObject *) drawable)->impl;
+  else if (GDK_IS_PIXMAP (drawable))
+    impl = ((GdkPixmapObject *) drawable)->impl;
 
   if (usage & GDK_GC_FOREGROUND)
     {
@@ -1172,7 +1188,7 @@ gdk_win32_hdc_release (GdkDrawable    *drawable,
 	WIN32_GDI_FAILED ("UnrealizeObject");
     }
 #endif
-  if (GDK_IS_PIXMAP_IMPL_WIN32 (drawable))
+  if (GDK_IS_PIXMAP_IMPL_WIN32 (impl))
     {
       if (!DeleteDC (win32_gc->hdc))
 	WIN32_GDI_FAILED ("DeleteDC");

@@ -1039,7 +1039,7 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
     }
 
   if (cursor_pos)
-    cursor_pos = context_simple->tentative_match ? 1 : 0;
+    *cursor_pos = context_simple->tentative_match ? 1 : 0;
 }
 
 /**

@@ -31,11 +31,7 @@
 #include "gdkdrawable.h"
 #include "gdkpixmap.h"
 
-#ifndef USE_BACKING_STORE
-#ifndef GDK_WINDOWING_WIN32
-#define USE_BACKING_STORE	/* Doesn't work yet on Win32 */
-#endif
-#endif
+#define USE_BACKING_STORE	/* Appears to work on Win32, too, now. */
 
 typedef struct _GdkWindowPaint GdkWindowPaint;
 

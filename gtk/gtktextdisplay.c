@@ -371,11 +371,11 @@ render_layout_line (GdkDrawable        *drawable,
               width = widget->allocation.width;
               height = widget->allocation.height;
 
-              printf ("widget allocation at %d,%d %d x %d\n",
-                      widget->allocation.x,
-                      widget->allocation.y,
-                      widget->allocation.width,
-                      widget->allocation.height);
+              g_print ("widget allocation at %d,%d %d x %d\n",
+		       widget->allocation.x,
+		       widget->allocation.y,
+		       widget->allocation.width,
+		       widget->allocation.height);
               
               if (GTK_WIDGET_DRAWABLE (widget) &&
                   gdk_rectangle_intersect (&widget->allocation,
@@ -383,11 +383,11 @@ render_layout_line (GdkDrawable        *drawable,
                                            &draw_rect))
 
                 {
-                  printf ("drawing widget area %d,%d %d x %d\n",
-                          draw_rect.x,
-                          draw_rect.y,
-                          draw_rect.width,
-                          draw_rect.height);
+                  g_print ("drawing widget area %d,%d %d x %d\n",
+			   draw_rect.x,
+			   draw_rect.y,
+			   draw_rect.width,
+			   draw_rect.height);
 
                   gtk_widget_draw (widget, &draw_rect);
                 }

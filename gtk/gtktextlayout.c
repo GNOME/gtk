@@ -1481,7 +1481,7 @@ allocate_child_widgets (GtkTextLayout      *text_layout,
                                                  NULL,
                                                  &extents);
 
-              printf ("extents at %d,%d\n", extents.x, extents.y);
+              g_print ("extents at %d,%d\n", extents.x, extents.y);
               
               gtk_signal_emit (GTK_OBJECT (text_layout),
                                signals[ALLOCATE_CHILD],

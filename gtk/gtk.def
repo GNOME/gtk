@@ -857,6 +857,7 @@ EXPORTS
 	gtk_object_constructed
 	gtk_object_default_construct
 	gtk_object_destroy
+	gtk_object_get
 	gtk_object_get_data
 	gtk_object_get_data_by_id
 	gtk_object_get_type
@@ -1179,8 +1180,9 @@ EXPORTS
 	gtk_text_buffer_remove_tag_by_name
 	gtk_text_buffer_set_modified
 	gtk_text_byte_begins_utf8_char
-	gtk_text_char_type
-	gtk_text_child_type
+	gtk_text_child_anchor_get_deleted
+	gtk_text_child_anchor_get_type
+	gtk_text_child_anchor_get_widgets
 	gtk_text_forward_delete
 	gtk_text_freeze
 	gtk_text_get_length
@@ -1212,10 +1214,8 @@ EXPORTS
 	gtk_text_iter_reorder
 	gtk_text_iter_spew
 	gtk_text_iter_toggles_tag
-	gtk_text_left_mark_type
 	gtk_text_new
 	gtk_text_pixbuf_type
-	gtk_text_right_mark_type
 	gtk_text_set_adjustments
 	gtk_text_set_editable
 	gtk_text_set_line_wrap
@@ -1223,10 +1223,10 @@ EXPORTS
 	gtk_text_set_word_wrap
 	gtk_text_tag_get_type
 	gtk_text_tag_table_lookup
-	gtk_text_toggle_off_type
-	gtk_text_toggle_on_type
 	gtk_text_thaw
 	gtk_text_unknown_char_utf8
+	gtk_text_view_add_child_at_anchor
+	gtk_text_view_add_child_in_window
 	gtk_text_view_buffer_to_window_coords
 	gtk_text_view_get_buffer
 	gtk_text_view_get_editable
@@ -1243,6 +1243,7 @@ EXPORTS
 	gtk_text_view_get_type
 	gtk_text_view_get_window
 	gtk_text_view_get_wrap_mode
+	gtk_text_view_move_child
 	gtk_text_view_new_with_buffer
 	gtk_text_view_set_border_window_size
 	gtk_text_view_set_cursor_visible
@@ -1445,6 +1446,7 @@ EXPORTS
 	gtk_widget_set_default_direction
 	gtk_widget_set_default_style
 	gtk_widget_set_direction
+	gtk_widget_set_double_buffered
 	gtk_widget_set_events
 	gtk_widget_set_extension_events
 	gtk_widget_set_name

@@ -1885,7 +1885,7 @@ gtk_text_view_child_allocated (GtkTextLayout *layout,
 
   g_assert (vc != NULL);
 
-  printf ("child allocated at %d,%d\n", x, y);
+  g_print ("child allocated at %d,%d\n", x, y);
   
   vc->from_left_of_buffer = x;
   vc->from_top_of_line = y;

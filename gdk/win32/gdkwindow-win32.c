@@ -179,6 +179,7 @@ gdk_window_impl_win32_set_colormap (GdkDrawable *drawable,
   GDK_DRAWABLE_GET_CLASS (draw_impl)->set_colormap (drawable, cmap);
   
   /* XXX */
+  g_print("gdk_window_impl_win32_set_colormap: XXX\n");
 }
 
 static void
@@ -1313,9 +1314,13 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
       rect.bottom = geometry->max_height;
       dwStyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
       dwExStyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
-      AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle);
+      /* HB: dont' know why AdjustWindowRectEx is called here, ... */
+      SafeAdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle);
       impl->hint_max_width = rect.right - rect.left;
       impl->hint_max_height = rect.bottom - rect.top;
+      /* ... but negative sizes are always wrong */
+      if (impl->hint_max_width < 0) impl->hint_max_width = G_MAXSHORT;
+      if (impl->hint_max_height < 0) impl->hint_max_height = G_MAXSHORT;
 
       /* Again, check if the window is too large currently. */
       GetClientRect (GDK_WINDOW_HWND (window), &rect);

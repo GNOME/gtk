@@ -1,3 +1,41 @@
+2000-11-30  Tor Lillqvist  <tml@iki.fi>
+
+	Changes by Hans Breuer:
+	
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_geometry_hints):
+	Dont't use negative width and height as max_hints. This fixes
+	Owen's recent testgtk changes for win32.
+
+	* gdk/win32/gdkgc-win32.c (gdk_win32_hdc_get,
+	gdk_win32_hdc_release): These are exported and may be called with
+	other drawable types than our GdkDrawableImplWin32 (?).
+
+	* gdk/gdkwindow.c: Backing store appears to work on Windows now,
+	so always #define USE_BACKING_STORE.
+
+	* gtk/gtktextdisplay.c (render_layout_line): Use g_print instead
+	of printf for debugging output.
+
+	* gtk/gtktextlayout.c (allocate_child_widgets): Ditto.
+	
+	* gtk/gtktextview.c (gtk_text_view_child_allocated): Ditto.
+
+	* gtk/gtkmain.h (GTKMAIN_C_VAR): Win32 fix for dllimport
+	declaration.
+
+	* gtk/gtktexttypes.h: Ditto.
+
+	* gtk/gtklabel.c (gtk_label_set_markup_with_accel): Return a value
+	(GDK_VoidSymbol) also if in case of arg check failure.
+
+	* gtk/gtkimcontextsimple.c
+	(gtk_im_context_simple_get_preedit_string): Don't assign cursor
+	position to the pointer, but to the variable it points to.
+
+	* gtk/makefile.msc.in (DEFINES): Define GTK_VERSION.
+
+	* gtk/gtk.def: Updates.
+
 2000-11-29  Elliot Lee  <sopwith@redhat.com>
 
 	* gtk/gtkmodelsimple.c: Inherits from GTK_TYPE_OBJECT, not

@@ -25,24 +25,24 @@ typedef struct _GtkTextMarkBody GtkTextMarkBody;
 #ifdef GTK_COMPILATION
 #define VARIABLE __declspec(dllexport)
 #else
-#define VARIABLE __declspec(dllimport) extern
+#define VARIABLE extern __declspec(dllimport)
 #endif
 #else
 #define VARIABLE extern
 #endif
 
 /* In gtktextbtree.c */
-VARIABLE GtkTextLineSegmentClass gtk_text_char_type;
-VARIABLE GtkTextLineSegmentClass gtk_text_toggle_on_type;
-VARIABLE GtkTextLineSegmentClass gtk_text_toggle_off_type;
+extern GtkTextLineSegmentClass gtk_text_char_type;
+extern GtkTextLineSegmentClass gtk_text_toggle_on_type;
+extern GtkTextLineSegmentClass gtk_text_toggle_off_type;
 
 /* In gtktextmark.c */
-VARIABLE GtkTextLineSegmentClass gtk_text_left_mark_type;
-VARIABLE GtkTextLineSegmentClass gtk_text_right_mark_type;
+extern GtkTextLineSegmentClass gtk_text_left_mark_type;
+extern GtkTextLineSegmentClass gtk_text_right_mark_type;
 
 /* In gtktextchild.c */
-VARIABLE GtkTextLineSegmentClass gtk_text_pixbuf_type;
-VARIABLE GtkTextLineSegmentClass gtk_text_child_type;
+extern GtkTextLineSegmentClass gtk_text_pixbuf_type;
+extern GtkTextLineSegmentClass gtk_text_child_type;
 
 /*
  * UTF 8 Stubs

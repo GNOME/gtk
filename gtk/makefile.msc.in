@@ -27,7 +27,7 @@ INCLUDES = -I . -I .. -I ../gdk -I ../gdk-pixbuf
 DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) $(INTL_CFLAGS)
 LDFLAGS = /link /machine:ix86 $(LINKDEBUG)
 # Some files use near as an identifier
-DEFINES = -DGTK_DISABLE_COMPAT_H -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" -Dnear=xxnear
+DEFINES = -DGTK_DISABLE_COMPAT_H -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" -Dnear=xxnear -DGTK_VERSION=\"@GTK_VERSION@\"
 
 TOUCH = copy makefile.msc+nul
 
@@ -465,5 +465,6 @@ simple.obj : simple.c
 makefile.msc: makefile.msc.in
 	sed -e s,@GTK[_]MAJOR_VERSION@,@GTK_MAJOR_VERSION@, \
 	    -e s,@GTK[_]MINOR_VERSION@,@GTK_MINOR_VERSION@, \
+	    -e 's,@GTK[_]VERSION@,@GTK_VERSION@,' \
 	    -e 's,@GDK_PIXBUF[_]MAJOR@,@GDK_PIXBUF_MAJOR@,' \
 	    -e 's,@GDK_PIXBUF[_]MINOR@,@GDK_PIXBUF_MINOR@,'  <makefile.msc.in >$@
