@@ -1450,10 +1450,10 @@ draw_glyphs (GdkGCWin32 *gcwin32,
 
 static void
 draw_glyphs_transformed (GdkGCWin32 *gcwin32,
-	                   HDC         hdc,
-	                   gint        x_offset,
-	                   gint        y_offset,
-	                   va_list     args)
+			 HDC         hdc,
+			 gint        x_offset,
+			 gint        y_offset,
+			 va_list     args)
 {
   PangoFont *font;
   gint x;
@@ -1501,12 +1501,12 @@ gdk_win32_draw_glyphs (GdkDrawable      *drawable,
 
 static void 
 gdk_win32_draw_glyphs_transformed (GdkDrawable      *drawable,
-					     GdkGC            *gc,
-					     PangoMatrix      *matrix,
-					     PangoFont        *font,
-					     gint              x,
-					     gint              y,
-					     PangoGlyphString *glyphs)
+				   GdkGC            *gc,
+				   PangoMatrix      *matrix,
+				   PangoFont        *font,
+				   gint              x,
+				   gint              y,
+				   PangoGlyphString *glyphs)
 {
   GdkRectangle bounds;
   GdkRegion *region;
@@ -1534,7 +1534,7 @@ gdk_win32_draw_glyphs_transformed (GdkDrawable      *drawable,
   else
     { 
        generic_draw (drawable, gc, GDK_GC_FOREGROUND|GDK_GC_FONT,
-		    draw_glyphs, region, font, x/PANGO_SCALE, y/PANGO_SCALE, glyphs);
+		     draw_glyphs, region, font, x/PANGO_SCALE, y/PANGO_SCALE, glyphs);
     }
 
   gdk_region_destroy (region);
