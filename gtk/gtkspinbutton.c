@@ -483,18 +483,47 @@ gtk_spin_button_size_request (GtkWidget      *widget,
 			      GtkRequisition *requisition)
 {
   GtkEntry *entry;
+  GtkSpinButton *spin_button;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (requisition != NULL);
   g_return_if_fail (GTK_IS_SPIN_BUTTON (widget));
 
   entry = GTK_ENTRY (widget);
+  spin_button = GTK_SPIN_BUTTON (widget);
   
   GTK_WIDGET_CLASS (parent_class)->size_request (widget, requisition);
 
   if (entry->width_chars < 0)
-    requisition->width = MIN_SPIN_BUTTON_WIDTH + ARROW_SIZE +
-      2 * widget->style->xthickness;
+    {
+      PangoFontMetrics metrics;
+      PangoFont *font;
+      gchar *lang;
+      gchar buf[MAX_TEXT_LENGTH];
+      gint width;
+      gint w;
+
+
+      font = pango_context_load_font (gtk_widget_get_pango_context (widget),
+                                      widget->style->font_desc);
+      lang = pango_context_get_lang (gtk_widget_get_pango_context (widget));
+      pango_font_get_metrics (font, lang, &metrics);
+      g_free (lang);
+      g_object_unref (G_OBJECT (font));
+      
+      /* Get max of MIN_SPIN_BUTTON_WIDTH, size of upper, size of lower */
+      
+      width = MIN_SPIN_BUTTON_WIDTH;
+      
+      sprintf (buf, "%0.*f", spin_button->digits, spin_button->adjustment->upper);
+      w = strlen (buf) * PANGO_PIXELS (metrics.approximate_digit_width);
+      width = MAX (width, w);
+      sprintf (buf, "%0.*f", spin_button->digits, spin_button->adjustment->lower);
+      w = strlen (buf) * PANGO_PIXELS (metrics.approximate_digit_width);
+      width = MAX (width, w);
+      
+      requisition->width = width + ARROW_SIZE + 2 * widget->style->xthickness;
+    }
   else
     requisition->width += ARROW_SIZE + 2 * widget->style->xthickness;
 }
@@ -1392,7 +1421,7 @@ gtk_spin_button_new (GtkAdjustment *adjustment,
 }
 
 /* Callback used when the spin button's adjustment changes.  We need to redraw
- * the arrows when the adjustment's range changes.
+ * the arrows when the adjustment's range changes, and reevaluate our size request.
  */
 static void
 adjustment_changed_cb (GtkAdjustment *adjustment, gpointer data)
@@ -1401,8 +1430,7 @@ adjustment_changed_cb (GtkAdjustment *adjustment, gpointer data)
 
   spin_button = GTK_SPIN_BUTTON (data);
 
-  gtk_spin_button_draw_arrow (spin_button, GTK_ARROW_UP);
-  gtk_spin_button_draw_arrow (spin_button, GTK_ARROW_DOWN);
+  gtk_widget_queue_resize (GTK_WIDGET (spin_button));
 }
 
 void
@@ -1431,6 +1459,8 @@ gtk_spin_button_set_adjustment (GtkSpinButton *spin_button,
 			      (GtkSignalFunc) adjustment_changed_cb,
 			      (gpointer) spin_button);
         }
+
+      gtk_widget_queue_resize (GTK_WIDGET (spin_button));
     }
 }
 
@@ -1455,6 +1485,8 @@ gtk_spin_button_set_digits (GtkSpinButton *spin_button,
     {
       spin_button->digits = digits;
       gtk_spin_button_value_changed (spin_button->adjustment, spin_button);
+      /* since lower/upper may have changed */
+      gtk_widget_queue_resize (GTK_WIDGET (spin_button));
     }
 }
 

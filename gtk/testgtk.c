@@ -3837,7 +3837,7 @@ create_spins (void)
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
       
       vbox2 = gtk_vbox_new (FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 5);
+      gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, FALSE, 5);
       
       label = gtk_label_new ("Value :");
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
@@ -3847,11 +3847,10 @@ create_spins (void)
 						  0.5, 100.0, 0.0);
       spinner1 = gtk_spin_button_new (adj, 1.0, 2);
       gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner1), TRUE);
-      gtk_widget_set_usize (spinner1, 100, 0);
       gtk_box_pack_start (GTK_BOX (vbox2), spinner1, FALSE, TRUE, 0);
 
       vbox2 = gtk_vbox_new (FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 5);
+      gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, FALSE, 5);
 
       label = gtk_label_new ("Digits :");
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
@@ -3865,7 +3864,7 @@ create_spins (void)
       gtk_box_pack_start (GTK_BOX (vbox2), spinner2, FALSE, TRUE, 0);
 
       hbox = gtk_hbox_new (FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 5);
 
       button = gtk_check_button_new_with_label ("Snap to 0.5-ticks");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",

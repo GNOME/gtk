@@ -1,3 +1,11 @@
+2001-03-07  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/testgtk.c (create_spins): uglify so that size request gets
+	tested.
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_size_request): Base size
+	request on values for upper/lower, completes #6152
+
 Wed Mar  7 20:07:22 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am: Remove gtk-config-2.0 again.
