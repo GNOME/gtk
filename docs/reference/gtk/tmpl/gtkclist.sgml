@@ -959,46 +959,52 @@ automatically to data in the row.
 
 <!-- ##### FUNCTION gtk_clist_set_compare_func ##### -->
 <para>
-
+Sets the compare function of the #GtkClist to cmp_func. If cmp_func is NULL,
+then the default compare function is used. The default compare function sorts
+ascending or with the type set by gtk_clist_set_sort_type() by the column set
+by gtk_clist_set_sort_column().
 </para>
 
 @clist: The #GtkCList to affect.
-@cmp_func: 
+@cmp_func: The #GtkCompareFunction to use.
 
 
 <!-- ##### FUNCTION gtk_clist_set_sort_column ##### -->
 <para>
-
+Sets the sort column of the clist. The sort column is used by the
+default compare function to determine which column to sort by. 
 </para>
 
 @clist: The #GtkCList to affect.
-@column: 
+@column: The column to sort by
 
 
 <!-- ##### FUNCTION gtk_clist_set_sort_type ##### -->
 <para>
-
+Sets the sort type of the #GtkClist. This is either GTK_SORT_ASCENDING for
+ascening sort or GTK_SORT_DESCENDING for descending sort.
 </para>
 
 @clist: The #GtkCList to affect.
-@sort_type: 
+@sort_type: the #GtkSortType to use
 
 
 <!-- ##### FUNCTION gtk_clist_sort ##### -->
 <para>
-
+Sorts the #GtkClist according to the current compare function, which
+can be set with the gtk_clist_set_compare_func() function.
 </para>
 
-@clist: The #GtkCList to affect.
+@clist: The #GtkCList to sort.
 
 
 <!-- ##### FUNCTION gtk_clist_set_auto_sort ##### -->
 <para>
-
+Turns on or off auto sort of the #GtkCList. If auto sort is on, then the CList will be resorted when a row is inserted into the CList.
 </para>
 
 @clist: The #GtkCList to affect.
-@auto_sort: 
+@auto_sort: whether auto sort should be on or off
 
 
 <!-- ##### FUNCTION gtk_clist_columns_autosize ##### -->

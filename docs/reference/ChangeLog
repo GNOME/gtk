@@ -1,3 +1,7 @@
+1999-09-22  Martin Norbäck  <d95mback@dtek.chalmers.se>
+	
+	* gtk/tmpl/gtkclist.sgml: Added information about the sorting functions
+
 Tue Oct 26 16:50:15 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/tmpl/gtkrc.sgml: Added information about widget
