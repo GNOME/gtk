@@ -901,7 +901,7 @@ gtk_drag_dest_set   (GtkWidget            *widget,
 
   site->flags = flags;
   site->have_drag = FALSE;
-  site->target_list = gtk_target_list_new (targets, n_targets);
+  site->target_list = NULL;
   site->actions = actions;
   site->do_proxy = FALSE;
   site->proxy_window = NULL;
@@ -1036,6 +1036,8 @@ gtk_drag_dest_add_text_targets (GtkWidget *widget)
   GtkTargetList *target_list;
 
   target_list = gtk_drag_dest_get_target_list (widget);
+  if (!target_list)
+    target_list = gtk_target_list_new (NULL, 0);
   gtk_target_list_add_text_targets (target_list);
   gtk_drag_dest_set_target_list (widget, target_list);
 }
@@ -2198,6 +2200,8 @@ gtk_drag_source_add_text_targets (GtkWidget *widget)
   GtkTargetList *target_list;
 
   target_list = gtk_drag_source_get_target_list (widget);
+  if (!target_list)
+    target_list = gtk_target_list_new (NULL, 0);
   gtk_target_list_add_text_targets (target_list);
   gtk_drag_source_set_target_list (widget, target_list);
 }

@@ -1,6 +1,15 @@
+Fri Jul 23 13:04:10 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkdnd.c (gtk_drag_dest_set): Create the change to
+	initialize target_list to an empty list instead of NULL,
+	since it broke tree dnd.  (#148215, Ernst Persson)
+
+	* gtk/gtkdnd.c (gtk_drag_dest_add_text_targets): 
+	* gtk/gtkdnd.c (gtk_drag_source_add_text_targets): Instead 
+	handle target list being NULL here.
+
 2004-07-23  Dafydd Harries  <daf@muse.19inch.net>
 
-Fri Jul 23 16:35:23 2004
 	* gtk/gtkradioaction.c:
 	* gtk/gtkradiobutton.c:
 	* gtk/gtkentry.c:
@@ -10,7 +19,7 @@ Fri Jul 23 16:35:23 2004
 Fri Jul 23 11:11:10 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_start_editing): 
-	align the entry in the same way as the cell.  (#136749)
+	Align the entry in the same way as the cell.  (#136749)
 
 Fri Jul 23 11:01:00 2004  Matthias Clasen  <maclas@gmx.de>
 
