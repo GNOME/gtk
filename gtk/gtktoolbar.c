@@ -55,12 +55,11 @@ typedef struct _ToolbarContent ToolbarContent;
 
 #define DEFAULT_IPADDING 0
 
-/* note: keep in sync with DEFAULT_SPACE_SIZE and DEFAULT_SPACE_STYLE in gtkseparatortoolitem.c */
-#define DEFAULT_SPACE_SIZE  4
+#define DEFAULT_SPACE_SIZE  12
 #define DEFAULT_SPACE_STYLE GTK_TOOLBAR_SPACE_LINE
 #define SPACE_LINE_DIVISION 10.0
-#define SPACE_LINE_START    3.0
-#define SPACE_LINE_END      7.0
+#define SPACE_LINE_START    2.0
+#define SPACE_LINE_END      8.0
 
 #define DEFAULT_ICON_SIZE GTK_ICON_SIZE_LARGE_TOOLBAR
 #define DEFAULT_TOOLBAR_STYLE GTK_TOOLBAR_BOTH
@@ -69,7 +68,7 @@ typedef struct _ToolbarContent ToolbarContent;
 				    * in the homogeneous game. In units of
 				    * pango_font_get_estimated_char_width().
 				    */
-#define SLIDE_SPEED 800	   /* How fast the items slide, in pixels per second */
+#define SLIDE_SPEED 600	   /* How fast the items slide, in pixels per second */
 
 /* Properties */
 enum {
@@ -1047,7 +1046,6 @@ slide_idle_handler (gpointer data)
       GtkAllocation goal_allocation;
       GtkAllocation allocation;
       gboolean cont;
-      gboolean disappearing_placeholder;
 
       state = toolbar_content_get_state (content);
       toolbar_content_get_goal_allocation (content, &goal_allocation);
@@ -1063,10 +1061,6 @@ slide_idle_handler (gpointer data)
 	  cont = TRUE;
 	}
 
-      disappearing_placeholder =
-	toolbar_content_is_placeholder (content) &&
-	toolbar_content_disappearing (content);
-      
       /* An invisible item with a goal allocation of
        * 0 is already at its goal.
        */
@@ -1080,18 +1074,26 @@ slide_idle_handler (gpointer data)
 	       goal_allocation.width != allocation.width ||
 	       goal_allocation.height != allocation.height))
 	    {
-	      /* An item is simply not in its right position yet. Note
-	       * that OVERFLOWN items still get an allocation in
+	      /* An item is not in its right position yet. Note
+	       * that OVERFLOWN items do get an allocation in
 	       * gtk_toolbar_size_allocate(). This way you can see
-	       * them slide in when you drag out of the toolbar
+	       * them slide back in when you drag an item off the
+	       * toolbar.
 	       */
 	      cont = TRUE;
 	    }
 	}
 
-      if (disappearing_placeholder && toolbar_content_child_visible (content))
-	cont = TRUE;
-
+      if (toolbar_content_is_placeholder (content) &&
+	  toolbar_content_disappearing (content) &&
+	  toolbar_content_child_visible (content))
+	{
+	  /* A disappearing placeholder is still visible.
+	   */
+	     
+	  cont = TRUE;
+	}
+      
       if (cont)
 	{
 	  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (toolbar));
@@ -1109,7 +1111,8 @@ slide_idle_handler (gpointer data)
 }
 
 static gboolean
-rect_within (GtkAllocation *a1, GtkAllocation *a2)
+rect_within (GtkAllocation *a1,
+	     GtkAllocation *a2)
 {
   return (a1->x >= a2->x                         &&
 	  a1->x + a1->width <= a2->x + a2->width &&
@@ -1161,8 +1164,8 @@ gtk_toolbar_begin_sliding (GtkToolbar *toolbar)
     {
       ToolbarContent *content = list->data;
       GtkAllocation new_start_allocation;
-      ItemState state;
       GtkAllocation item_allocation;
+      ItemState state;
       
       state = toolbar_content_get_state (content);
       toolbar_content_get_allocation (content, &item_allocation);
@@ -2048,6 +2051,8 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
   GtkToolbarPrivate *priv;
   gint n_items;
   GtkRequisition requisition;
+  GtkRequisition old_requisition;
+  gboolean restart_sliding;
   
   g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
   g_return_if_fail (tool_item == NULL || GTK_IS_TOOL_ITEM (tool_item));
@@ -2070,6 +2075,10 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
       return;
     }
   
+  n_items = gtk_toolbar_get_n_items (toolbar);
+  if (index < 0 || index > n_items)
+    index = n_items;
+  
   if (tool_item != priv->highlight_tool_item)
     {
       if (priv->highlight_tool_item)
@@ -2083,10 +2092,6 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
       gtk_widget_set_parent (GTK_WIDGET (priv->highlight_tool_item),
 			     GTK_WIDGET (toolbar));
     }
-  
-  n_items = gtk_toolbar_get_n_items (toolbar);
-  if (index < 0 || index > n_items)
-    index = n_items;
   
   index = logical_to_physical (toolbar, index);
   
@@ -2117,22 +2122,36 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
   g_assert (content);
   g_assert (toolbar_content_is_placeholder (content));
   
-  reset_all_placeholders (toolbar);
-  
-  toolbar_content_set_disappearing (content, FALSE);
-  
   gtk_widget_size_request (GTK_WIDGET (priv->highlight_tool_item),
 			   &requisition);
+
   
+  restart_sliding = FALSE;
+  toolbar_content_size_request (content, toolbar, &old_requisition);
   if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
-    requisition.height = -1;
+    {
+      requisition.height = -1;
+      if (requisition.width != old_requisition.width)
+	restart_sliding = TRUE;
+    }
   else
-    requisition.width = -1;
+    {
+      requisition.width = -1;
+      if (requisition.height != old_requisition.height)
+	restart_sliding = TRUE;
+    }
+
+  if (toolbar_content_disappearing (content))
+    restart_sliding = TRUE;
+  
+  reset_all_placeholders (toolbar);
+  toolbar_content_set_disappearing (content, FALSE);
   
   toolbar_content_set_size_request (content,
 				    requisition.width, requisition.height);
   
-  gtk_toolbar_begin_sliding (toolbar);
+  if (restart_sliding)
+    gtk_toolbar_begin_sliding (toolbar);
 }
 
 static void

@@ -1,3 +1,20 @@
+Tue Jan 27 01:56:46 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c: Remove obsolete comment.
+
+	* gtk/gtktoolbar.c (DEFAULT_SPACE_SIZE, SPACE_LINE_START, 
+	SPACE_LINE_END): Make separators wider and taller, so they are
+	easier to pick up when editing the toolbar.
+
+	* gtk/gtktoolbar.c (slide_idle_handler): Add a comment, simplify
+	a bit, 
+
+	* gtk/gtktoolbar.c (rect_within): Formatting fix
+
+	* gtk/gtktoolbar.c (gtk_toolbar_set_drop_highlight_item): Make
+	sliding feel more responsive by only restarting sliding when the
+	placeholder actually changes its goal allocation.
+
 Tue Jan 27 02:00:37 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeitem.c (gtk_tree_item_add_pixmaps): Avoid a 
