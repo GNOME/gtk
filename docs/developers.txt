@@ -1,0 +1,69 @@
+Things to care about when using/programing for GTK+
+===================================================
+
+This file is meant to collect some frequently triggered failures when
+programming for/with Gtk, having the spirit of a developers FAQ.
+It is also the correct place to list up things that programmers should
+care about in general.
+
+In the hope that this text might be usefull to someone,
+
+        - Tim Janik <timj@gimp.org>
+          1998/02/11
+
+
+Automatic destruction of widgets on removal from parent
+-------------------------------------------------------
+
+This is a reference counting issue, you would want to refer
+to refcounting.txt on it.
+
+
+What are all the widget flags about?
+------------------------------------
+
+Refer to the file widget_system.txt which covers widget flags and the
+resulting invariants in a detailed way.
+
+
+GdkWindow pointers may be NULL in GdkEvents
+-------------------------------------------
+
+The notification nature of the signal mechanism might cause events to
+be emitted that have their GdkWindow pointer set to NULL.
+This is due to the fact that certain events need to be emitted after the
+real GdkWindow of a widget is not any longer pertinent.
+It's up to the signal handling function (application) to check for the
+window field of the event structure to be != NULL, if it is going to
+perform any operations through Gdk calls on it.
+Events that a likely to trigger a missing check for the window pointer
+currently are (and correspond to the trailing signals):
+
+GDK_SELECTION_CLEAR     GtkWidget::selection_clear_event
+GDK_FOCUS_CHANGE        GtkWidget::focus_in_event
+                        GtkWidget::focus_out_event
+
+Events that are asured to have a valid GdkEvent.any.window field are
+
+GDK_EXPOSE		GtkWidget::expose_event
+
+
+gtk_widget_ref() vs. gtk_object_ref()
+-------------------------------------
+
+The widget referencing functions gtk_widget_ref() and gtk_widget_unref()
+are currently just wrappers about the corresponding referencing functions
+for objects. Still you should use the widget referencing functions if you
+are sure the referenced object is of type GTK_WIDGET_TYPE.
+
+
+Writing Gdk functions
+---------------------
+
+When writing Gdk functions that operate on GdkWindow structures in any
+maeningfull sense, that is casting to a GdkWindowPrivate structure for
+access to fields other then GdkWindow.user_data, the programmer is
+recommended to check for the GdkWindowPrivate.destroyed field to be ==
+FALSE, especially if the GdkWindowPrivate.xwindow field is used.
+Silent abortion of the Gdk function is the correct behaviour if this
+condition isn't met.

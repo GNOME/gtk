@@ -31,11 +31,11 @@ new widgets.
 
 Main outline:
 	- Owen Taylor <owt1@cornell.edu>
-	  98/02/03
+	  1998/02/03
 
 Flag descriptions:
 	- Tim Janik <timj@gimp.org>
-	  98/02/04
+	  1998/02/04
 
 I. Flags
 --------

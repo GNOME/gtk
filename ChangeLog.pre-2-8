@@ -1,6 +1,8 @@
 Wed Feb 11 00:18:31 1998  Tim Janik  <timj@gimp.org>
 
-	* gtk/gtksignal.h:
+	* docs/refcounting.txt: backed out the section "Gnits to care about".
+	* docs/developers.txt: new file, kinda developers FAQ.
+
 	* gtk/gtksignal.c: new function gtk_signal_handler_pending() returning
 	  the id of the next handler pending for that signal or 0.
 	  put struct GtkHandler back into gtksignal.c along with
