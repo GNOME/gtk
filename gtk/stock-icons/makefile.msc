@@ -20,6 +20,7 @@ VARIABLES = \
 	stock_clear_24		stock_clear_24.png	\
 	stock_close_20		stock_close_20.png	\
 	stock_close_24		stock_close_24.png	\
+	stock_color_picker_25		stock_color_picker_25.png	\
 	stock_colorselector_24		stock_colorselector_24.png	\
 	stock_convert_16		stock_convert_16.png	\
 	stock_convert_24		stock_convert_24.png	\
@@ -27,6 +28,7 @@ VARIABLES = \
 	stock_copy_24		stock_copy_24.png	\
 	stock_cut_16		stock_cut_16.png	\
 	stock_cut_24		stock_cut_24.png	\
+	stock_dialog_authentication_48		stock_dialog_authentication_48.png	\
 	stock_dialog_error_48		stock_dialog_error_48.png	\
 	stock_dialog_info_48		stock_dialog_info_48.png	\
 	stock_dialog_question_48		stock_dialog_question_48.png	\
@@ -54,6 +56,8 @@ VARIABLES = \
 	stock_insert_object_24		stock_insert_object_24.png	\
 	stock_jump_to_16		stock_jump_to_16.png	\
 	stock_jump_to_24		stock_jump_to_24.png	\
+	stock_jump_to_rtl_16		stock_jump_to_rtl_16.png	\
+	stock_jump_to_rtl_24		stock_jump_to_rtl_24.png	\
 	stock_last_16		stock_last_16.png	\
 	stock_last_24		stock_last_24.png	\
 	stock_left_arrow_16		stock_left_arrow_16.png	\
@@ -76,12 +80,16 @@ VARIABLES = \
 	stock_properties_24		stock_properties_24.png	\
 	stock_redo_16		stock_redo_16.png	\
 	stock_redo_24		stock_redo_24.png	\
+	stock_redo_rtl_16		stock_redo_rtl_16.png	\
+	stock_redo_rtl_24		stock_redo_rtl_24.png	\
 	stock_refresh_16		stock_refresh_16.png	\
 	stock_refresh_24		stock_refresh_24.png	\
 	stock_remove_16		stock_remove_16.png	\
 	stock_remove_24		stock_remove_24.png	\
 	stock_revert_16		stock_revert_16.png	\
 	stock_revert_24		stock_revert_24.png	\
+	stock_revert_rtl_16		stock_revert_rtl_16.png	\
+	stock_revert_rtl_24		stock_revert_rtl_24.png	\
 	stock_right_arrow_16		stock_right_arrow_16.png	\
 	stock_right_arrow_24		stock_right_arrow_24.png	\
 	stock_save_16		stock_save_16.png	\
@@ -114,8 +122,12 @@ VARIABLES = \
 	stock_trash_24		stock_trash_24.png	\
 	stock_undelete_16		stock_undelete_16.png	\
 	stock_undelete_24		stock_undelete_24.png	\
+	stock_undelete_rtl_16		stock_undelete_rtl_16.png	\
+	stock_undelete_rtl_24		stock_undelete_rtl_24.png	\
 	stock_undo_16		stock_undo_16.png	\
 	stock_undo_24		stock_undo_24.png	\
+	stock_undo_rtl_16		stock_undo_rtl_16.png	\
+	stock_undo_rtl_24		stock_undo_rtl_24.png	\
 	stock_up_arrow_16		stock_up_arrow_16.png	\
 	stock_up_arrow_24		stock_up_arrow_24.png	\
 	stock_wizard_24		stock_wizard_24.png	\
@@ -130,4 +142,4 @@ all: \
 	gtkstockpixbufs.h
 
 gtkstockpixbufs.h : makefile.msc
-	..\..\gdk-pixbuf\gdk-pixbuf-csource --raw --build-list $(VARIABLES) > gtkstockpixbufs.h
+	..\..\gdk-pixbuf\gdk-pixbuf-csource --rle --build-list $(VARIABLES) > gtkstockpixbufs.h
