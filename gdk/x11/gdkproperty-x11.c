@@ -34,7 +34,7 @@
 
 GdkAtom
 gdk_atom_intern (const gchar *atom_name,
-		 gint         only_if_exists)
+		 gboolean     only_if_exists)
 {
   GdkAtom retval;
   static GHashTable *atom_hash = NULL;
