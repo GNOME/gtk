@@ -1532,7 +1532,8 @@ get_size (GtkCellRenderer *cell,
 	  char_width = pango_font_metrics_get_approximate_char_width (metrics);
 	  pango_font_metrics_unref (metrics);
 	  
-	  *width += (PANGO_PIXELS (char_width) * MAX (priv->width_chars, 3));
+	  *width = GTK_CELL_RENDERER (celltext)->xpad * 2
+	    + (PANGO_PIXELS (char_width) * MAX (priv->width_chars, 3));
 	}
       else
 	{
@@ -1653,12 +1654,9 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
   if (priv->ellipsize_set)
     pango_layout_set_width (layout, 
 			    (cell_area->width - x_offset - 2 * cell->xpad) * PANGO_SCALE);
-  else if (priv->wrap_width != -1)
-    pango_layout_set_width (layout, 
-			    priv->wrap_width * PANGO_SCALE);      
-  else
+  else if (priv->wrap_width == -1)
     pango_layout_set_width (layout, -1);
-  
+
   gtk_paint_layout (widget->style,
                     window,
                     state,
