@@ -27,6 +27,14 @@ Wed Feb  2 11:58:05 2000  Owen Taylor  <otaylor@redhat.com>
 	GLib). Some cleanups: Use gbooleans. Use GStrings instead of fixed
 	size buffers.
 
+	gtk_file_selection_get_filename returns the filename in the C
+	runtime encoding. It calls g_filename_from_utf8, but copies the
+	returned string to a static buffer, which is returned. I think
+	this is better than returning the result from g_filename_from_utf8
+	directly, which would mean all apps that use it would have to free
+	the return value. Or should this function care about this issue at
+	all? Maybe a new function with clearly defined semantics.
+
 	* gtk/gtkfilesel.h: Add comment about
 	gtk_file_selection_get_filename returning the filename in the C
 	runtime's encoding.

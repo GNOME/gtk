@@ -89,7 +89,8 @@ void       gtk_file_selection_set_filename        (GtkFileSelection *filesel,
 /* This function returns the selected filename in the C runtime's
  * multibyte string encoding, which may or may not be the same as that
  * used by GDK (UTF-8). To convert to UTF-8, call g_filename_to_utf8().
- * The returned string should be deallocated with g_free().
+ * The returned string points to a statically allocated buffer and
+ * should be copied away.
  */
 gchar*     gtk_file_selection_get_filename        (GtkFileSelection *filesel);
 

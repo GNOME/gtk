@@ -728,9 +728,10 @@ gtk_file_selection_set_filename (GtkFileSelection *filesel,
 gchar*
 gtk_file_selection_get_filename (GtkFileSelection *filesel)
 {
-  static char nothing[2] = "";
-  char *text;
+  static gchar nothing[2] = "";
+  static gchar something[MAXPATHLEN*2];
   char *filename;
+  char *text;
 
   g_return_val_if_fail (filesel != NULL, nothing);
   g_return_val_if_fail (GTK_IS_FILE_SELECTION (filesel), nothing);
@@ -741,8 +742,10 @@ gtk_file_selection_get_filename (GtkFileSelection *filesel)
   text = gtk_entry_get_text (GTK_ENTRY (filesel->selection_entry));
   if (text)
     {
-      filename = cmpl_completion_fullname (text, filesel->cmpl_state);
-      return g_filename_from_utf8 (filename);
+      filename = g_filename_from_utf8 (cmpl_completion_fullname (text, filesel->cmpl_state));
+      strncpy (something, filename, sizeof (something));
+      g_free (filename);
+      return something;
     }
 
   return nothing;
