@@ -1,3 +1,10 @@
+2003-01-21  Matthias Clasen  <maclas@gmx.de>
+
+	Merge from HEAD.
+	
+	* gtk/gtkcolorsel.c (hex_changed): Fix clamping to [0,1] to avoid 
+	unnecessary roundtrip failures.  (#93500)
+
 2003-01-20  Pablo Saratxaga  <pablo@mandrakesoft.com>
 
 	* configure.in: Added Amharic (am), Macedonian (mk)

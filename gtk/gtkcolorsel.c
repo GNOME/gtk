@@ -1375,9 +1375,9 @@ hex_changed (GtkWidget *hex_entry,
   text = gtk_editable_get_chars (GTK_EDITABLE (priv->hex_entry), 0, -1);
   if (gdk_color_parse (text, &color))
     {
-      priv->color[COLORSEL_RED] = CLAMP (color.red/65280.0, 0.0, 1.0);
-      priv->color[COLORSEL_GREEN] = CLAMP (color.green/65280.0, 0.0, 1.0);
-      priv->color[COLORSEL_BLUE] = CLAMP (color.blue/65280.0, 0.0, 1.0);
+      priv->color[COLORSEL_RED] = CLAMP (color.red/65535.0, 0.0, 1.0);
+      priv->color[COLORSEL_GREEN] = CLAMP (color.green/65535.0, 0.0, 1.0);
+      priv->color[COLORSEL_BLUE] = CLAMP (color.blue/65535.0, 0.0, 1.0);
       gtk_rgb_to_hsv (priv->color[COLORSEL_RED],
 		      priv->color[COLORSEL_GREEN],
 		      priv->color[COLORSEL_BLUE],
