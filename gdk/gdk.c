@@ -295,6 +295,13 @@ gdk_init_check (int    *argc,
       g_set_prgname ("<unknown>");
     }
   
+  /* We set the fallback program class here, rather than lazily in
+   * gdk_get_program_class, since we don't want -name to override it.
+   */
+  gdk_progclass = g_strdup (g_get_prgname ());
+  if (gdk_progclass[0])
+    gdk_progclass[0] = g_ascii_toupper (gdk_progclass[0]);  
+  
 #ifdef G_ENABLE_DEBUG
   {
     gchar *debug_string = getenv("GDK_DEBUG");
@@ -456,12 +463,6 @@ gdk_threads_init ()
 G_CONST_RETURN char *
 gdk_get_program_class (void)
 {
-  if (gdk_progclass == NULL)
-    {
-      gdk_progclass = g_strdup (g_get_prgname ());
-      gdk_progclass[0] = g_ascii_toupper (gdk_progclass[0]);
-    }
-  
   return gdk_progclass;
 }
 

@@ -1,3 +1,9 @@
+Mon Jan 21 11:46:39 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c (gdk_init_check): Set the fallback program class here,
+	rather than lazilygdk_get_program_class(), since we don't want
+	-name to override it. (#69123, Ryan Lovett)
+
 Mon Jan 21 10:29:45 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdk.c: Fix wrong types for command line arguments 
