@@ -558,10 +558,6 @@ gdk_fb_draw_drawable_3 (GdkDrawable *drawable,
     case 78:
       draw_func = gc_private->draw_drawable[GDK_FB_SRC_BPP_8_AA_GRAYVAL];
       break;
-    case 0:
-      g_warning ("gdk_fb_draw_drawable_3() - source drawable with zero depth, ignoring\n");
-      return;
-      break;
     default:
       g_assert_not_reached ();
       break;
@@ -623,7 +619,15 @@ gdk_fb_draw_drawable (GdkDrawable *drawable,
 		      gint         width,
 		      gint         height)
 {
-  gdk_fb_draw_drawable_2 (drawable, gc, GDK_DRAWABLE_IMPL (src), xsrc, ysrc, xdest, ydest, width, height, TRUE, TRUE);
+  GdkPixmap   *src_impl;
+
+  if (GDK_IS_DRAWABLE_IMPL_FBDATA (src))
+    src_impl = src;
+  else
+    src_impl = GDK_DRAWABLE_IMPL (src);
+
+  
+  gdk_fb_draw_drawable_2 (drawable, gc, src_impl , xsrc, ysrc, xdest, ydest, width, height, TRUE, TRUE);
 }
 
 

@@ -253,126 +253,26 @@ gdk_window_new (GdkWindow     *parent,
   return window;
 }
 
-/* Call this function when you want a window and all its children to
- * disappear.  When xdestroy is true, a request to destroy the XWindow
- * is sent out.  When it is false, it is assumed that the XWindow has
- * been or will be destroyed by destroying some ancestor of this
- * window.
- */
+/* This function is called when the XWindow is really gone.  */
 void
 _gdk_windowing_window_destroy (GdkWindow *window,
 			       gboolean   recursing,
 			       gboolean   foreign_destroy)
 {
+  GdkWindowObject *private;
+  GdkRectangle r;
+
+  private = (GdkWindowObject*) window;
+
   _gdk_selection_window_destroyed (window);
 
-#if 0
-  GdkWindowObject *private;
-  GdkWindowObject *temp_private;
-  GdkWindow *temp_window;
-  GList *children;
-  GList *tmp;
-  gboolean our_destroy = !foreign_destroy;
-  
-  g_return_if_fail (window != NULL);
-  
-  private = (GdkWindowObject*) window;
-  
-  switch (private->window_type)
-    {
-    case GDK_WINDOW_TOPLEVEL:
-    case GDK_WINDOW_CHILD:
-    case GDK_WINDOW_DIALOG:
-    case GDK_WINDOW_TEMP:
-    case GDK_WINDOW_FOREIGN:
-      if (!private->destroyed)
-	{
-	  if (private->parent)
-	    {
-	      GdkWindowObject *parent_private = (GdkWindowObject *)private->parent;
-	      if (parent_private->children)
-		parent_private->children = g_list_remove (parent_private->children, window);
-	    }
-
-	  if (private->bg_pixmap && private->bg_pixmap != GDK_PARENT_RELATIVE_BG && private->bg_pixmap != GDK_NO_BG)
-	    {
-	      gdk_pixmap_unref (private->bg_pixmap);
-	      private->bg_pixmap = NULL;
-	    }
-
-	  if (GDK_DRAWABLE_TYPE (window) != GDK_WINDOW_FOREIGN)
-	    {
-	      children = tmp = private->children;
-	      private->children = NULL;
-	      
-	      while (tmp)
-		{
-		  temp_window = tmp->data;
-		  tmp = tmp->next;
-		  
-		  temp_private = (GdkWindowObject*) temp_window;
-		  if (temp_private)
-		    _gdk_windowing_window_destroy (temp_window, !FALSE,
-						   !our_destroy);
-		}
-	      
-	      g_list_free (children);
-	    }
-	  
-	  if (private->extension_events != 0)
-	    gdk_input_window_destroy (window);
-	  
-	  if (private->filters)
-	    {
-	      tmp = private->filters;
-	      
-	      while (tmp)
-		{
-		  g_free (tmp->data);
-		  tmp = tmp->next;
-		}
-	      
-	      g_list_free (private->filters);
-	      private->filters = NULL;
-	    }
-	  
-	  if (private->window_type == GDK_WINDOW_FOREIGN)
-	    {
-	      if (our_destroy && (private->parent != NULL))
-		{
-		  /* It's somebody elses window, but in our heirarchy,
-		   * so reparent it to the root window, and then send
-		   * it a delete event, as if we were a WM
-		   */
-		  gdk_error_trap_push ();
-		  gdk_window_hide (window);
-		  gdk_window_reparent (window, NULL, 0, 0);
-		  
-		  gdk_flush ();
-		  gdk_error_trap_pop ();
-		}
-	    }
-	  
-	  if (private->colormap)
-	    gdk_colormap_unref (private->colormap);
-	  
-	  private->mapped = FALSE;
-	  private->drawable.destroyed = TRUE;
-	}
-      break;
-      
-    case GDK_WINDOW_ROOT:
-      g_error ("attempted to destroy root window");
-      break;
-      
-    case GDK_WINDOW_PIXMAP:
-      g_error ("called gdk_window_destroy on a pixmap (use gdk_pixmap_unref)");
-      break;
-    }
-#endif
+  /* Invalidate the area. */
+  r.x = private->x;
+  r.y = private->y;
+  r.width = GDK_DRAWABLE_IMPL_FBDATA (window)->width;
+  r.height = GDK_DRAWABLE_IMPL_FBDATA (window)->height;
+  gdk_window_invalidate_rect_clear ((GdkWindow *)private->parent, &r);
 }
-
-/* This function is called when the XWindow is really gone.  */
 
 static gboolean
 all_parents_shown (GdkWindowObject *private)
@@ -417,32 +317,6 @@ send_map_events (GdkWindowObject *private, gboolean is_map)
   if (is_map)
     gdk_window_clear ((GdkWindow *)private);
 
-#if 0
-  event = gdk_event_new ();
-  event->expose.type = GDK_EXPOSE;
-  event->expose.window = gdk_window_ref ((GdkWindow *)private);
-  if (GDK_DRAWABLE_IMPL_FBDATA (private)->abs_x > GDK_DRAWABLE_IMPL_FBDATA (parent)->llim_x)
-    event->expose.area.x = 0;
-  else
-    event->expose.area.x = GDK_DRAWABLE_IMPL_FBDATA (parent)->llim_x - GDK_DRAWABLE_IMPL_FBDATA (private)->abs_x;
-
-  if (GDK_DRAWABLE_IMPL_FBDATA (private)->abs_y > GDK_DRAWABLE_IMPL_FBDATA (parent)->llim_y)
-    event->expose.area.y = 0;
-  else
-    event->expose.area.y = GDK_DRAWABLE_IMPL_FBDATA (parent)->llim_y - GDK_DRAWABLE_IMPL_FBDATA (private)->abs_y;
-
-  event->expose.area.width = MIN (GDK_DRAWABLE_IMPL_FBDATA (private)->width,
-				  GDK_DRAWABLE_IMPL_FBDATA (private)->lim_x - GDK_DRAWABLE_IMPL_FBDATA (private)->abs_x);
-  event->expose.area.height = MIN (GDK_DRAWABLE_IMPL_FBDATA (private)->height,
-				   GDK_DRAWABLE_IMPL_FBDATA (private)->lim_y - GDK_DRAWABLE_IMPL_FBDATA (private)->abs_y);
-  if (event->expose.area.width > 0 &&
-      event->expose.area.height > 0)
-    {
-      gdk_event_queue_append (event);
-    }
-  else
-    gdk_event_free (event);
-#endif
   for (l = private->children; l; l = l->next)
     send_map_events (l->data, is_map);
 }

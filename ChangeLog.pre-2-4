@@ -1,3 +1,17 @@
+2000-12-05  Alexander Larsson  <alla@lysator.liu.se>
+
+	* gdk/linux-fb/gdkdrawable-fb2.c (gdk_fb_draw_drawable_3):
+	Remove old debug g_warning().
+	(gdk_fb_draw_drawable): The src argument can be either a wrapper
+	or an implementation, just pass the implementation to draw_drawable_2.
+	
+	* gdk/linux-fb/gdkprivate-fb.h:
+	Added GDK_IS_DRAWABLE_IMPL_FBDATA()
+
+	* gdk/linux-fb/gdkwindow-fb.c (_gdk_windowing_window_destroy):
+	clear and invalidate area when window is destroyed.
+	(send_map_events): Remove old commented out code.
+
 2000-12-05  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkpango-fb.c:

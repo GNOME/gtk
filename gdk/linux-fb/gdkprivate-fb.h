@@ -40,15 +40,18 @@
 #include <stdio.h>
 #include <freetype/freetype.h>
 
+
+#define GDK_TYPE_DRAWABLE_IMPL_FBDATA (gdk_drawable_impl_fb_get_type ())
 #define GDK_DRAWABLE_IMPL_FBDATA(win) ((GdkDrawableFBData *)((GdkWindowObject *)(win))->impl)
-#define GDK_DRAWABLE_IMPL(win) ((GdkDrawable *)((GdkWindowObject *)(win))->impl)
-#define GDK_WINDOW_IMPL_FBDATA(win) ((GdkWindowFBData *)((GdkWindowObject *)(win))->impl)
-#define GDK_PIXMAP_IMPL_FBDATA(win) ((GdkPixmapFBData *)((GdkWindowObject *)(win))->impl)
-#define GDK_DRAWABLE_FBDATA(win) ((GdkDrawableFBData *)(win))
-#define GDK_PIXMAP_FBDATA(win) ((GdkPixmapFBData *)(win))
-#define GDK_WINDOW_FBDATA(win) ((GdkWindowFBData *)(win))
-#define GDK_FONT_FB(f) ((GdkFontPrivateFB *)(f))
-#define GDK_CURSOR_FB(c) ((GdkCursorPrivateFB *)(c))
+#define GDK_IS_DRAWABLE_IMPL_FBDATA(object)     (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DRAWABLE_IMPL_FBDATA))
+#define GDK_DRAWABLE_IMPL(win)        ((GdkDrawable *)((GdkWindowObject *)(win))->impl)
+#define GDK_WINDOW_IMPL_FBDATA(win)   ((GdkWindowFBData *)((GdkWindowObject *)(win))->impl)
+#define GDK_PIXMAP_IMPL_FBDATA(win)   ((GdkPixmapFBData *)((GdkWindowObject *)(win))->impl)
+#define GDK_DRAWABLE_FBDATA(win)      ((GdkDrawableFBData *)(win))
+#define GDK_PIXMAP_FBDATA(win)        ((GdkPixmapFBData *)(win))
+#define GDK_WINDOW_FBDATA(win)        ((GdkWindowFBData *)(win))
+#define GDK_FONT_FB(f)                ((GdkFontPrivateFB *)(f))
+#define GDK_CURSOR_FB(c)              ((GdkCursorPrivateFB *)(c))
 
 #define GDK_CHECK_IMPL(drawable) \
  g_assert(G_OBJECT_TYPE(drawable) == _gdk_window_impl_get_type() || G_OBJECT_TYPE(drawable) == _gdk_pixmap_impl_get_type())
