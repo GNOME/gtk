@@ -86,7 +86,7 @@ Overview of Changes from GTK+-2.2.x to GTK+-2.3.0
  - Use Xlib asynchronous APIs to reduce roundtrips on startup
    and during DND [Owen]
  - Other changes to improve DND for large-latency connections [Owen]
- - Add support for EWMH "above" and "below" states [Matthias] (also
+ - Add support for EWMH "above" and "below" states [Manuel Clos] (also
    in GtkWindow)
  - Add Add GDK_MOUSE_DEVICE envvar for linux-fb backend [Marc Welz]
  - Other small linux-fb fixes [Eric Warmenhoven]
