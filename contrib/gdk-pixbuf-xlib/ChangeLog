@@ -1,3 +1,7 @@
+2001-05-19  Havoc Pennington  <hp@pobox.com>
+
+	* gdk-pixbuf-xlibrgb.c: docs
+
 2001-06-04  Havoc Pennington  <hp@redhat.com>
 
 	* gdk-pixbuf-xlibrgb.c (xlib_rgb_init): remove C++ comment,

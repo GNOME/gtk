@@ -32,6 +32,7 @@
 #include "gdkwindow.h"
 #include "gdkpixbuf.h"
 #include "gdk-pixbuf-private.h"
+#include "gdkinternals.h"
 
 #if (G_BYTE_ORDER == G_LITTLE_ENDIAN)
 #define LITTLE
@@ -62,10 +63,13 @@ static void
 rgb1 (GdkImage    *image,
       guchar      *pixels,
       int          rowstride,
+      int          x1,
+      int          y1,
+      int          x2,
+      int          y2,
       GdkColormap *colormap)
 {
   int xx, yy;
-  int width, height;
   int bpl;
   guint8 *s;
   register guint8 data;
@@ -78,16 +82,14 @@ rgb1 (GdkImage    *image,
   /* its probably not worth trying to make this run very fast, who uses
    * 1 bit displays anymore?
    */
-  width = image->width;
-  height = image->height;
   bpl = image->bpl;
 
-  for (yy = 0; yy < height; yy++)
+  for (yy = y1; yy < y2; yy++)
     {
       s = srow;
       o = orow;
       
-      for (xx = 0; xx < width; xx ++)
+      for (xx = x1; xx < x2; xx ++)
 	{
 	  data = srow[xx >> 3] >> (7 - (xx & 7)) & 1;
 	  *o++ = colormap->colors[data].red;
@@ -107,10 +109,13 @@ static void
 rgb1a (GdkImage    *image,
        guchar      *pixels,
        int          rowstride,
+       int          x1,
+       int          y1,
+       int          x2,
+       int          y2,
        GdkColormap *colormap)
 {
   int xx, yy;
-  int width, height;
   int bpl;
   guint8 *s;
   register guint8 data;
@@ -123,11 +128,9 @@ rgb1a (GdkImage    *image,
   /* convert upto 8 pixels/time */
   /* its probably not worth trying to make this run very fast, who uses
    * 1 bit displays anymore? */
-  width = image->width;
-  height = image->height;
   bpl = image->bpl;
 
-  for (xx = 0; xx < 2; xx++)
+  for (xx = x1; xx < 2; xx++)
     {
 #ifdef LITTLE
       remap[xx] = 0xff000000
@@ -142,12 +145,12 @@ rgb1a (GdkImage    *image,
 #endif
     }
 
-  for (yy = 0; yy < height; yy++)
+  for (yy = y1; yy < y2; yy++)
     {
       s = srow;
       o = orow;
       
-      for (xx = 0; xx < width; xx ++)
+      for (xx = x1; xx < x2; xx ++)
 	{
 	  data = srow[xx >> 3] >> (7 - (xx & 7)) & 1;
 	  *o++ = remap[data];
@@ -165,10 +168,13 @@ static void
 rgb8 (GdkImage    *image,
       guchar      *pixels,
       int          rowstride,
+      int          x1,
+      int          y1,
+      int          x2,
+      int          y2,
       GdkColormap *colormap)
 {
   int xx, yy;
-  int width, height;
   int bpl;
   guint32 mask;
   register guint32 data;
@@ -176,19 +182,17 @@ rgb8 (GdkImage    *image,
   register guint8 *s;
   register guint8 *o;
 
-  width = image->width;
-  height = image->height;
   bpl = image->bpl;
 
   d (printf ("8 bit, no alpha output\n"));
 
   mask = mask_table[image->depth];
 
-  for (yy = 0; yy < height; yy++)
+  for (yy = y1; yy < y2; yy++)
     {
       s = srow;
       o = orow;
-      for (xx = 0; xx < width; xx++) {
+      for (xx = x1; xx < x2; xx++) {
 	data = *s++ & mask;
 	*o++ = colormap->colors[data].red;
 	*o++ = colormap->colors[data].green;
@@ -207,10 +211,13 @@ static void
 rgb8a (GdkImage    *image,
        guchar      *pixels,
        int          rowstride,
+       int          x1,
+       int          y1,
+       int          x2,
+       int          y2,
        GdkColormap *colormap)
 {
   int xx, yy;
-  int width, height;
   int bpl;
   guint32 mask;
   register guint32 data;
@@ -219,15 +226,13 @@ rgb8a (GdkImage    *image,
   register guint32 *o;
   guint8 *srow = image->mem, *orow = pixels;
 
-  width = image->width;
-  height = image->height;
   bpl = image->bpl;
 
   d (printf ("8 bit, with alpha output\n"));
 
   mask = mask_table[image->depth];
 
-  for (xx = 0; xx < colormap->size; xx++)
+  for (xx = x1; xx < colormap->size; xx++)
     {
 #ifdef LITTLE
       remap[xx] = 0xff000000
@@ -242,11 +247,11 @@ rgb8a (GdkImage    *image,
 #endif
     }
 
-  for (yy = 0; yy < height; yy++)
+  for (yy = y1; yy < y2; yy++)
     {
       s = srow;
       o = (guint32 *) orow;
-      for (xx = 0; xx < width; xx ++)
+      for (xx = x1; xx < x2; xx ++)
 	{
 	  data = *s++ & mask;
 	  *o++ = remap[data];
@@ -265,10 +270,13 @@ static void
 rgb565lsb (GdkImage    *image,
 	   guchar      *pixels,
 	   int          rowstride,
+           int          x1,
+           int          y1,
+           int          x2,
+           int          y2,
 	   GdkColormap *colormap)
 {
   int xx, yy;
-  int width, height;
   int bpl;
 
 #ifdef LITTLE
@@ -278,12 +286,10 @@ rgb565lsb (GdkImage    *image,
 #endif
   register guint16 *o;
   guint8 *srow = image->mem, *orow = pixels;
-
-  width = image->width;
-  height = image->height;
+  
   bpl = image->bpl;
-
-  for (yy = 0; yy < height; yy++)
+  
+  for (yy = y1; yy < y2; yy++)
     {
 #ifdef LITTLE
       s = (guint32 *) srow;
@@ -291,7 +297,32 @@ rgb565lsb (GdkImage    *image,
       s = srow;
 #endif
       o = (guint16 *) orow;
-      for (xx = 1; xx < width; xx += 2)
+
+      /* check for first pixel odd */
+      xx = x1;
+      if (xx & 1)
+	{
+	  register guint16 data;
+#ifdef LITTLE
+	  data = *((short *) s);
+#else
+	  data = *((short *) s);
+	  data = ((data >> 8) & 0xff) | ((data & 0xff) << 8);
+#endif
+	  ((char *) o)[0] = ((data >> 8) & 0xf8) | ((data >> 13) & 0x7);
+	  ((char *) o)[1] = ((data >> 3) & 0xfc) | ((data >> 9) & 0x3);
+	  ((char *) o)[2] = ((data << 3) & 0xf8) | ((data >> 2) & 0x7);
+          ((char *) o) += 3;
+          ++xx;
+	}
+
+      g_assert (!(xx & 1));
+
+      /* if x2 is even, then the -1 does nothing to number of
+       * loop iterations, if x2 is odd then the -1 reduces
+       * iterations by one
+       */
+      for (; xx < (x2 - 1); xx += 2)
 	{
 	  register guint32 data;
 #ifdef LITTLE
@@ -315,7 +346,7 @@ rgb565lsb (GdkImage    *image,
 #endif
 	}
       /* check for last remaining pixel */
-      if (width & 1)
+      if (x2 & 1)
 	{
 	  register guint16 data;
 #ifdef LITTLE
@@ -342,10 +373,13 @@ static void
 rgb565msb (GdkImage    *image,
 	   guchar      *pixels,
 	   int          rowstride,
+           int          x1,
+           int          y1,
+           int          x2,
+           int          y2,
 	   GdkColormap *colormap)
 {
   int xx, yy;
-  int width, height;
   int bpl;
 
 #ifdef LITTLE
@@ -356,11 +390,9 @@ rgb565msb (GdkImage    *image,
   register guint16 *o;
   guint8 *srow = image->mem, *orow = pixels;
 
-  width = image->width;
-  height = image->height;
   bpl = image->bpl;
 
-  for (yy = 0; yy < height; yy++)
+  for (yy = y1; yy < y2; yy++)
     {
 #ifdef LITTLE
       s = srow;
@@ -368,7 +400,34 @@ rgb565msb (GdkImage    *image,
       s = (guint32 *) srow;
 #endif
       o = (guint16 *) orow;
-      for (xx = 1; xx < width; xx += 2)
+
+      xx = x1;
+      
+      /* check for first pixel odd */
+      if (xx & 1)
+	{
+	  register guint16 data;
+#ifdef LITTLE
+	  data = *((short *) s);
+	  data = ((data >> 8) & 0xff) | ((data & 0xff) << 8);
+#else
+	  data = *((short *) s);
+#endif
+	  ((char *) o)[0] = ((data >> 8) & 0xf8) | ((data >> 13) & 0x7);
+	  ((char *) o)[1] = ((data >> 3) & 0xfc) | ((data >> 9) & 0x3);
+	  ((char *) o)[2] = ((data << 3) & 0xf8) | ((data >> 2) & 0x7);
+
+          ((char *) o) += 3;
+          ++xx;
+	}
+
+      g_assert (!(xx & 1));
+
+      /* if x2 is even, then the -1 does nothing to number of
+       * loop iterations, if x2 is odd then the -1 reduces
+       * iterations by one
+       */
+      for (; xx < (x2 - 1); xx += 2)
 	{
 	  register guint32 data;
 #ifdef LITTLE
@@ -392,7 +451,7 @@ rgb565msb (GdkImage    *image,
 #endif
 	}
       /* check for last remaining pixel */
-      if (width & 1)
+      if (x2 & 1)
 	{
 	  register guint16 data;
 #ifdef LITTLE
@@ -419,10 +478,13 @@ static void
 rgb565alsb (GdkImage    *image,
 	    guchar      *pixels,
 	    int          rowstride,
+            int          x1,
+            int          y1,
+            int          x2,
+            int          y2,
 	    GdkColormap *colormap)
 {
   int xx, yy;
-  int width, height;
   int bpl;
 
 #ifdef LITTLE
@@ -434,11 +496,9 @@ rgb565alsb (GdkImage    *image,
 
   guint8 *srow = image->mem, *orow = pixels;
 
-  width = image->width;
-  height = image->height;
   bpl = image->bpl;
 
-  for (yy = 0; yy < height; yy++)
+  for (yy = y1; yy < y2; yy++)
     {
 #ifdef LITTLE
       s = (guint16 *) srow;
@@ -446,7 +506,7 @@ rgb565alsb (GdkImage    *image,
       s = (guint8 *) srow;
 #endif
       o = (guint32 *) orow;
-      for (xx = 0; xx < width; xx ++)
+      for (xx = x1; xx < x2; xx ++)
 	{
 	  register guint32 data;
 	  /*  rrrrrggg gggbbbbb -> rrrrrRRR ggggggGG bbbbbBBB aaaaaaaa */
@@ -481,10 +541,13 @@ static void
 rgb565amsb (GdkImage    *image,
 	    guchar      *pixels,
 	    int          rowstride,
+            int          x1,
+            int          y1,
+            int          x2,
+            int          y2,
 	    GdkColormap *colormap)
 {
   int xx, yy;
-  int width, height;
   int bpl;
 
 #ifdef LITTLE
@@ -496,15 +559,13 @@ rgb565amsb (GdkImage    *image,
 
   guint8 *srow = image->mem, *orow = pixels;
 
-  width = image->width;
-  height = image->height;
   bpl = image->bpl;
 
-  for (yy = 0; yy < height; yy++)
+  for (yy = y1; yy < y2; yy++)
     {
       s = srow;
       o = (guint32 *) orow;
-      for (xx = 0; xx < width; xx ++)
+      for (xx = x1; xx < x2; xx ++)
 	{
 	  register guint32 data;
 	  /*  rrrrrggg gggbbbbb -> rrrrrRRR gggggg00 bbbbbBBB aaaaaaaa */
@@ -539,10 +600,13 @@ static void
 rgb555lsb (GdkImage     *image,
 	   guchar       *pixels,
 	   int           rowstride,
+           int          x1,
+           int          y1,
+           int          x2,
+           int          y2,
 	   GdkColormap  *colormap)
 {
   int xx, yy;
-  int width, height;
   int bpl;
 
 #ifdef LITTLE
@@ -553,11 +617,9 @@ rgb555lsb (GdkImage     *image,
   register guint16 *o;
   guint8 *srow = image->mem, *orow = pixels;
 
-  width = image->width;
-  height = image->height;
   bpl = image->bpl;
 
-  for (yy = 0; yy < height; yy++)
+  for (yy = y1; yy < y2; yy++)
     {
 #ifdef LITTLE
       s = (guint32 *) srow;
@@ -565,7 +627,33 @@ rgb555lsb (GdkImage     *image,
       s = srow;
 #endif
       o = (guint16 *) orow;
-      for (xx = 1; xx < width; xx += 2)
+
+      xx = x1;
+      
+      /* check for first odd pixel */
+      if (xx & 1)
+	{
+	  register guint16 data;
+#ifdef LITTLE
+	  data = *((short *) s);
+#else
+	  data = *((short *) s);
+	  data = ((data >> 8) & 0xff) | ((data & 0xff) << 8);
+#endif
+	  ((char *) o)[0] = (data & 0x7c00) >> 7 | (data & 0x7000) >> 12;
+	  ((char *) o)[1] = (data & 0x3e0) >> 2 | (data & 0x380) >> 7;
+	  ((char *) o)[2] = (data & 0x1f) << 3 | (data & 0x1c) >> 2;
+          ((char *) o) += 3;
+          ++xx;
+	}
+
+      g_assert (!(xx & 1));
+
+      /* if x2 is even, then the -1 does nothing to number of
+       * loop iterations, if x2 is odd then the -1 reduces
+       * iterations by one
+       */
+      for (; xx < (x2 - 1); xx += 2)
 	{
 	  register guint32 data;
 #ifdef LITTLE
@@ -589,7 +677,7 @@ rgb555lsb (GdkImage     *image,
 #endif
 	}
       /* check for last remaining pixel */
-      if (width & 1)
+      if (x2 & 1)
 	{
 	  register guint16 data;
 #ifdef LITTLE
@@ -616,10 +704,13 @@ static void
 rgb555msb (GdkImage    *image,
 	   guchar      *pixels,
 	   int          rowstride,
+           int          x1,
+           int          y1,
+           int          x2,
+           int          y2,
 	   GdkColormap *colormap)
 {
   int xx, yy;
-  int width, height;
   int bpl;
 
 #ifdef LITTLE
@@ -630,15 +721,39 @@ rgb555msb (GdkImage    *image,
   register guint16 *o;
   guint8 *srow = image->mem, *orow = pixels;
 
-  width = image->width;
-  height = image->height;
   bpl = image->bpl;
 
-  for (yy = 0; yy < height; yy++)
+  for (yy = y1; yy < y2; yy++)
     {
       s = srow;
       o = (guint16 *) orow;
-      for (xx = 1; xx < width; xx += 2)
+
+      xx = x1;
+      /* See if first pixel is odd */
+      if (xx & 1)
+	{
+	  register guint16 data;
+#ifdef LITTLE
+	  data = *((short *) s);
+	  data = ((data >> 8) & 0xff) | ((data & 0xff) << 8);
+#else
+	  data = *((short *) s);
+#endif
+	  ((char *) o)[0] = (data & 0x7c00) >> 7 | (data & 0x7000) >> 12;
+	  ((char *) o)[1] = (data & 0x3e0) >> 2 | (data & 0x380) >> 7;
+	  ((char *) o)[2] = (data & 0x1f) << 3 | (data & 0x1c) >> 2;
+
+          ((char *) o) += 3;
+          ++xx;
+	}
+
+      g_assert (!(xx & 1));
+
+      /* if x2 is even, then the -1 does nothing to number of
+       * loop iterations, if x2 is odd then the -1 reduces
+       * iterations by one
+       */
+      for (; xx < (x2 - 1); xx += 2)
 	{
 	  register guint32 data;
 #ifdef LITTLE
@@ -662,7 +777,7 @@ rgb555msb (GdkImage    *image,
 #endif
 	}
       /* check for last remaining pixel */
-      if (width & 1)
+      if (x2 & 1)
 	{
 	  register guint16 data;
 #ifdef LITTLE
@@ -689,10 +804,13 @@ static void
 rgb555alsb (GdkImage    *image,
 	    guchar      *pixels,
 	    int          rowstride,
+            int          x1,
+            int          y1,
+            int          x2,
+            int          y2,
 	    GdkColormap *colormap)
 {
   int xx, yy;
-  int width, height;
   int bpl;
 
 #ifdef LITTLE
@@ -704,11 +822,9 @@ rgb555alsb (GdkImage    *image,
 
   guint8 *srow = image->mem, *orow = pixels;
 
-  width = image->width;
-  height = image->height;
   bpl = image->bpl;
 
-  for (yy = 0; yy < height; yy++)
+  for (yy = y1; yy < y2; yy++)
     {
 #ifdef LITTLE
       s = (guint16 *) srow;
@@ -716,7 +832,7 @@ rgb555alsb (GdkImage    *image,
       s = srow;
 #endif
       o = (guint32 *) orow;
-      for (xx = 0; xx < width; xx++)
+      for (xx = x1; xx < x2; xx++)
 	{
 	  register guint32 data;
 	  /*  rrrrrggg gggbbbbb -> rrrrrRRR gggggGGG bbbbbBBB aaaaaaaa */
@@ -751,10 +867,13 @@ static void
 rgb555amsb (GdkImage    *image,
 	    guchar      *pixels,
 	    int          rowstride,
+            int          x1,
+            int          y1,
+            int          x2,
+            int          y2,
 	    GdkColormap *colormap)
 {
   int xx, yy;
-  int width, height;
   int bpl;
 
 #ifdef LITTLE
@@ -766,11 +885,9 @@ rgb555amsb (GdkImage    *image,
 
   guint8 *srow = image->mem, *orow = pixels;
 
-  width = image->width;
-  height = image->height;
   bpl = image->bpl;
 
-  for (yy = 0; yy < height; yy++)
+  for (yy = y1; yy < y2; yy++)
     {
 #ifdef LITTLE
       s = (guint16 *) srow;
@@ -778,7 +895,7 @@ rgb555amsb (GdkImage    *image,
       s = srow;
 #endif
       o = (guint32 *) orow;
-      for (xx = 0; xx < width; xx++)
+      for (xx = x1; xx < x2; xx++)
 	{
 	  register guint32 data;
 	  /*  rrrrrggg gggbbbbb -> rrrrrRRR gggggGGG bbbbbBBB aaaaaaaa */
@@ -809,28 +926,29 @@ static void
 rgb888alsb (GdkImage    *image,
 	    guchar      *pixels,
 	    int          rowstride,
+            int          x1,
+            int          y1,
+            int          x2,
+            int          y2,
 	    GdkColormap *colormap)
 {
   int xx, yy;
-  int width, height;
   int bpl;
 
   guint8 *s;	/* for byte order swapping */
   guint8 *o;
   guint8 *srow = image->mem, *orow = pixels;
 
-  width = image->width;
-  height = image->height;
   bpl = image->bpl;
 
   d (printf ("32 bits/pixel with alpha\n"));
 
   /* lsb data */
-  for (yy = 0; yy < height; yy++)
+  for (yy = y1; yy < y2; yy++)
     {
       s = srow;
       o = orow;
-      for (xx = 0; xx < width; xx++)
+      for (xx = x1; xx < x2; xx++)
 	{
 	  *o++ = s[2];
 	  *o++ = s[1];
@@ -847,26 +965,27 @@ static void
 rgb888lsb (GdkImage    *image,
 	   guchar      *pixels,
 	   int          rowstride,
+           int          x1,
+           int          y1,
+           int          x2,
+           int          y2,
 	   GdkColormap *colormap)
 {
   int xx, yy;
-  int width, height;
   int bpl;
 
   guint8 *srow = image->mem, *orow = pixels;
   guint8 *o, *s;
 
-  width = image->width;
-  height = image->height;
   bpl = image->bpl;
 
   d (printf ("32 bit, lsb, no alpha\n"));
 
-  for (yy = 0; yy < height; yy++)
+  for (yy = y1; yy < y2; yy++)
     {
       s = srow;
       o = orow;
-      for (xx = 0; xx < width; xx++)
+      for (xx = x1; xx < x2; xx++)
 	{
 	  *o++ = s[2];
 	  *o++ = s[1];
@@ -882,10 +1001,13 @@ static void
 rgb888amsb (GdkImage    *image,
 	    guchar      *pixels,
 	    int          rowstride,
+            int          x1,
+            int          y1,
+            int          x2,
+            int          y2,
 	    GdkColormap *colormap)
 {
   int xx, yy;
-  int width, height;
   int bpl;
 
   guint8 *srow = image->mem, *orow = pixels;
@@ -899,12 +1021,10 @@ rgb888amsb (GdkImage    *image,
 
   d (printf ("32 bit, msb, with alpha\n"));
 
-  width = image->width;
-  height = image->height;
   bpl = image->bpl;
 
   /* msb data */
-  for (yy = 0; yy < height; yy++)
+  for (yy = y1; yy < y2; yy++)
     {
 #ifdef LITTLE
       s = (guint32 *) srow;
@@ -913,7 +1033,7 @@ rgb888amsb (GdkImage    *image,
       s = srow;
       o = orow;
 #endif
-      for (xx = 0; xx < width; xx++)
+      for (xx = x1; xx < x2; xx++)
 	{
 #ifdef LITTLE
 	  *o++ = s[1];
@@ -935,10 +1055,13 @@ static void
 rgb888msb (GdkImage    *image,
 	   guchar      *pixels,
 	   int          rowstride,
+           int          x1,
+           int          y1,
+           int          x2,
+           int          y2,
 	   GdkColormap *colormap)
 {
   int xx, yy;
-  int width, height;
   int bpl;
 
   guint8 *srow = image->mem, *orow = pixels;
@@ -947,15 +1070,13 @@ rgb888msb (GdkImage    *image,
 
   d (printf ("32 bit, msb, no alpha\n"));
 
-  width = image->width;
-  height = image->height;
   bpl = image->bpl;
 
-  for (yy = 0; yy < height; yy++)
+  for (yy = y1; yy < y2; yy++)
     {
       s = srow;
       o = orow;
-      for (xx = 0; xx < width; xx++)
+      for (xx = x1; xx < x2; xx++)
 	{
 	  *o++ = s[1];
 	  *o++ = s[2];
@@ -975,11 +1096,14 @@ static void
 convert_real_slow (GdkImage    *image,
 		   guchar      *pixels,
 		   int          rowstride,
+                   int          x1,
+                   int          y1,
+                   int          x2,
+                   int          y2,
 		   GdkColormap *cmap,
-		   int          alpha)
+		   gboolean     alpha)
 {
   int xx, yy;
-  int width, height;
   int bpl;
   guint8 *srow = image->mem, *orow = pixels;
   guint8 *s;
@@ -989,8 +1113,6 @@ convert_real_slow (GdkImage    *image,
   guint8 component;
   int i;
 
-  width = image->width;
-  height = image->height;
   bpl = image->bpl;
   v = gdk_colormap_get_visual(cmap);
 
@@ -999,11 +1121,11 @@ convert_real_slow (GdkImage    *image,
 	   v->red_shift, v->green_shift, v->blue_shift,
 	   v->red_prec, v->green_prec, v->blue_prec));
 
-  for (yy = 0; yy < height; yy++)
+  for (yy = y1; yy < y2; yy++)
     {
       s = srow;
       o = orow;
-      for (xx = 0; xx < width; xx++)
+      for (xx = x1; xx < x2; xx++)
 	{
 	  pixel = gdk_image_get_pixel(image, xx, yy);
 	  switch (v->type)
@@ -1049,7 +1171,14 @@ convert_real_slow (GdkImage    *image,
     }
 }
 
-typedef void (* cfunc) (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *cmap);
+typedef void (* cfunc) (GdkImage    *image,
+                        guchar      *pixels,
+                        int          rowstride,
+                        int          x1,
+                        int          y1,
+                        int          x2,
+                        int          y2,
+                        GdkColormap *cmap);
 
 static cfunc convert_map[] = {
   rgb1,rgb1,rgb1a,rgb1a,
@@ -1070,16 +1199,23 @@ static void
 rgbconvert (GdkImage    *image,
 	    guchar      *pixels,
 	    int          rowstride,
-	    int          alpha,
+	    gboolean     alpha,
+            int          x,
+            int          y,
+            int          width,
+            int          height,
 	    GdkColormap *cmap)
 {
   int index = (image->byte_order == GDK_MSB_FIRST) | (alpha != 0) << 1;
-  int bank=5;		/* default fallback converter */
-  GdkVisual *v = gdk_colormap_get_visual(cmap);
+  int bank = 5;		/* default fallback converter */
+  GdkVisual *v = gdk_colormap_get_visual (cmap);
 
   d(printf("masks = %x:%x:%x\n", v->red_mask, v->green_mask, v->blue_mask));
   d(printf("image depth = %d, bits per pixel = %d\n", image->depth, image->bits_per_pixel));
 
+  g_assert ((x + width) <= image->width);
+  g_assert ((y + height) <= image->height);
+  
   switch (v->type)
     {
 				/* I assume this is right for static & greyscale's too? */
@@ -1124,16 +1260,21 @@ rgbconvert (GdkImage    *image,
       break;
     }
 
-  d(printf("converting using conversion function in bank %d\n", bank));
+  d (g_print ("converting using conversion function in bank %d\n", bank));
 
-  if (bank==5)
+  if (bank == 5)
     {
-      convert_real_slow(image, pixels, rowstride, cmap, alpha);
+      convert_real_slow (image, pixels, rowstride,
+                         x, y, x + width, y + height,                         
+                         cmap, alpha);
     }
   else
     {
       index |= bank << 2;
-      (* convert_map[index]) (image, pixels, rowstride, cmap);
+      d (g_print ("converting with index %d\n", index));
+      (* convert_map[index]) (image, pixels, rowstride,
+                              x, y, x + width, y + height,
+                              cmap);
     }
 }
 
@@ -1142,7 +1283,7 @@ rgbconvert (GdkImage    *image,
 
 /**
  * gdk_pixbuf_get_from_drawable:
- * @dest: Destination pixbuf, or NULL if a new pixbuf should be created.
+ * @dest: Destination pixbuf, or %NULL if a new pixbuf should be created.
  * @src: Source drawable.
  * @cmap: A colormap if @src is a pixmap.  If it is a window, this argument will
  * be ignored.
@@ -1153,37 +1294,56 @@ rgbconvert (GdkImage    *image,
  * @width: Width in pixels of region to get.
  * @height: Height in pixels of region to get.
  *
- * Transfers image data from a Gdk drawable and converts it to an RGB(A)
- * representation inside a GdkPixbuf.
+ * Transfers image data from a #GdkDrawable and converts it to an RGB(A)
+ * representation inside a #GdkPixbuf. In other words, copies
+ * image data from a server-side drawable to a client-side RGB(A) buffer.
+ * This allows you to efficiently read individual pixels on the client side.
  *
- * If the drawable @src is a pixmap, then a suitable colormap must be specified,
- * since pixmaps are just blocks of pixel data without an associated colormap.
- * If the drawable is a window, the @cmap argument will be ignored and the
- * window's own colormap will be used instead.
+ * If the drawable @src is a pixmap, then a suitable colormap must be
+ * specified, since pixmaps are just blocks of pixel data without an
+ * associated colormap.  If the drawable is a window, the @cmap
+ * argument will be ignored and the window's own colormap will be used
+ * instead.
  *
- * If the specified destination pixbuf @dest is #NULL, then this function will
- * create an RGB pixbuf with 8 bits per channel and no alpha, with the same size
- * specified by the @width and @height arguments.  In this case, the @dest_x and
- * @dest_y arguments must be specified as 0, otherwise the function will return
- * #NULL.  If the specified destination pixbuf is not NULL and it contains alpha
- * information, then the filled pixels will be set to full opacity.
+ * If the specified destination pixbuf @dest is %NULL, then this
+ * function will create an RGB pixbuf with 8 bits per channel and no
+ * alpha, with the same size specified by the @width and @height
+ * arguments.  In this case, the @dest_x and @dest_y arguments must be
+ * specified as 0.  If the specified destination pixbuf is not %NULL
+ * and it contains alpha information, then the filled pixels will be
+ * set to full opacity (alpha = 255).
  *
- * If the specified drawable is a pixmap, then the requested source rectangle
- * must be completely contained within the pixmap, otherwise the function will
- * return #NULL.
+ * If the specified drawable is a pixmap, then the requested source
+ * rectangle must be completely contained within the pixmap, otherwise
+ * the function will return %NULL. For pixmaps only (not for windows)
+ * passing -1 for width or height is allowed to mean the full width
+ * or height of the pixmap.
  *
- * If the specified drawable is a window, then it must be viewable, i.e. all of
- * its ancestors up to the root window must be mapped.  Also, the specified
- * source rectangle must be completely contained within the window and within
- * the screen.  If regions of the window are obscured by noninferior windows, the
- * contents of those regions are undefined.  The contents of regions obscured by
- * inferior windows of a different depth than that of the source window will also
- * be undefined.
+ * If the specified drawable is a window, and the window is off the
+ * screen, then there is no image data in the obscured/offscreen
+ * regions to be placed in the pixbuf. The contents of portions of the
+ * pixbuf corresponding to the offscreen region are undefined.
  *
- * Return value: The same pixbuf as @dest if it was non-NULL, or a newly-created
- * pixbuf with a reference count of 1 if no destination pixbuf was specified; in
- * the latter case, NULL will be returned if not enough memory could be
- * allocated for the pixbuf to be created.
+ * If the window you're obtaining data from is partially obscured by
+ * other windows, then the contents of the pixbuf areas corresponding
+ * to the obscured regions are undefined.
+ * 
+ * If the target drawable is not mapped (typically because it's
+ * iconified/minimized or not on the current workspace), then %NULL
+ * will be returned.
+ *
+ * If memory can't be allocated for the return value, %NULL will be returned
+ * instead.
+ *
+ * (In short, there are several ways this function can fail, and if it fails
+ *  it returns %NULL; so check the return value.)
+ *
+ * This function calls gdk_drawable_get_image() internally and
+ * converts the resulting image to a #GdkPixbuf, so the
+ * documentation for gdk_drawable_get_image() may also be relevant.
+ * 
+ * Return value: The same pixbuf as @dest if it was non-%NULL, or a newly-created
+ * pixbuf with a reference count of 1 if no destination pixbuf was specified, or %NULL on error
  **/
 GdkPixbuf *
 gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
@@ -1195,7 +1355,6 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
 {
   int src_width, src_height;
   GdkImage *image;
-  int rowstride, bpp, alpha;
   
   /* General sanity checks */
 
@@ -1230,11 +1389,99 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
     }
   
   /* Coordinate sanity checks */
+  
+  if (GDK_IS_PIXMAP (src))
+    {
+      gdk_drawable_get_size (src, &src_width, &src_height);
+      if (width < 0)
+        width = src_width;
+      if (height < 0)
+        height = src_height;
+      
+      g_return_val_if_fail (src_x >= 0 && src_y >= 0, NULL);
+      g_return_val_if_fail (src_x + width <= src_width && src_y + height <= src_height, NULL);
+    }
 
-  gdk_drawable_get_size (src, &src_width, &src_height);
+  if (dest)
+    {
+      g_return_val_if_fail (dest_x >= 0 && dest_y >= 0, NULL);
+      g_return_val_if_fail (dest_x + width <= dest->width, NULL);
+      g_return_val_if_fail (dest_y + height <= dest->height, NULL);
+    }
+  
+  /* Get Image in ZPixmap format (packed bits). */
+  image = gdk_image_get (src, src_x, src_y, width, height);
+  
+  if (image == NULL)
+    return NULL;
+  
+  dest = gdk_pixbuf_get_from_image (dest, image, cmap,
+                                    0, 0, dest_x, dest_y,
+                                    width, height);
+
+  gdk_image_destroy (image);
+
+  return dest;
+}
+        
+/**
+ * gdk_pixbuf_get_from_image:
+ * @dest: Destination pixbuf, or %NULL if a new pixbuf should be created.
+ * @src: Source #GdkImage.
+ * @cmap: A colormap, or %NULL to use the one for @src
+ * @src_x: Source X coordinate within drawable.
+ * @src_y: Source Y coordinate within drawable.
+ * @dest_x: Destination X coordinate in pixbuf, or 0 if @dest is NULL.
+ * @dest_y: Destination Y coordinate in pixbuf, or 0 if @dest is NULL.
+ * @width: Width in pixels of region to get.
+ * @height: Height in pixels of region to get.
+ * 
+ * Same as gdk_pixbuf_get_from_drawable() but gets the pixbuf from
+ * an image.
+ * 
+ * Return value: @dest, newly-created pixbuf if @dest was %NULL, %NULL on error
+ **/
+GdkPixbuf*
+gdk_pixbuf_get_from_image (GdkPixbuf   *dest,
+                           GdkImage    *src,
+                           GdkColormap *cmap,
+                           int          src_x,
+                           int          src_y,
+                           int          dest_x,
+                           int          dest_y,
+                           int          width,
+                           int          height)
+{
+  int rowstride, bpp, alpha;
+  
+  /* General sanity checks */
+
+  g_return_val_if_fail (GDK_IS_IMAGE (src), NULL);
+
+  if (!dest)
+    g_return_val_if_fail (dest_x == 0 && dest_y == 0, NULL);
+  else
+    {
+      g_return_val_if_fail (dest->colorspace == GDK_COLORSPACE_RGB, NULL);
+      g_return_val_if_fail (dest->n_channels == 3 || dest->n_channels == 4, NULL);
+      g_return_val_if_fail (dest->bits_per_sample == 8, NULL);
+    }
+
+  if (cmap == NULL)
+    cmap = gdk_image_get_colormap (src);
+
+  if (cmap == NULL)
+    {
+      g_warning ("%s: Source image has no colormap; either pass "
+                 "in a colormap, or set the colormap on the image "
+                 "with gdk_image_set_colormap()", G_STRLOC);
+      return NULL;
+    }
+  
+  /* Coordinate sanity checks */
 
   g_return_val_if_fail (src_x >= 0 && src_y >= 0, NULL);
-  g_return_val_if_fail (src_x + width <= src_width && src_y + height <= src_height, NULL);
+  g_return_val_if_fail (src_x + width <= src->width && src_y + height <= src->height, NULL);
 
   if (dest)
     {
@@ -1243,54 +1490,29 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
       g_return_val_if_fail (dest_y + height <= dest->height, NULL);
     }
 
-  if (GDK_IS_WINDOW (src))
-    {
-      int ret;
-      int src_xorigin, src_yorigin;
-      int screen_width, screen_height;
-      int screen_srcx, screen_srcy;
-
-      ret = gdk_window_get_origin (src, &src_xorigin, &src_yorigin);
-      g_return_val_if_fail (ret != FALSE, NULL);
-
-      screen_width = gdk_screen_width ();
-      screen_height = gdk_screen_height ();
-
-      screen_srcx = src_xorigin + src_x;
-      screen_srcy = src_yorigin + src_y;
-
-      g_return_val_if_fail (screen_srcx >= 0 && screen_srcy >= 0, NULL);
-      g_return_val_if_fail (screen_srcx + width <= screen_width, NULL);
-      g_return_val_if_fail (screen_srcy + height <= screen_height, NULL);
-    }
-
-  /* Get Image in ZPixmap format (packed bits). */
-  image = gdk_image_get (src, src_x, src_y, width, height);
-  g_return_val_if_fail (image != NULL, NULL);
-
   /* Create the pixbuf if needed */
   if (!dest)
     {
       dest = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, width, height);
-      if (!dest)
-	{
-	  gdk_image_destroy(image);
-	  return NULL;
-	}
+      if (dest == NULL)
+        return NULL;
     }
 
   alpha = dest->has_alpha;
   rowstride = dest->rowstride;
   bpp = alpha ? 4 : 3;
 
-  /* we offset into the image data based on the position we are retrieving from */
-  rgbconvert (image, dest->pixels +
+  /* we offset into the image data based on the position we are
+   * retrieving from
+   */
+  rgbconvert (src, dest->pixels +
 	      (dest_y * rowstride) + (dest_x * bpp),
 	      rowstride,
 	      alpha,
+              src_x, src_y,
+              src_x + width,
+              src_y + height,
 	      cmap);
-
-  gdk_image_destroy(image);
-
+  
   return dest;
 }

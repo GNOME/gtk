@@ -273,6 +273,13 @@ directly, but into the vbox and action_area, as described above.
 @setting: 
 
 
+<!-- ##### SIGNAL GtkDialog::close ##### -->
+<para>
+
+</para>
+
+@dialog: the object which received the signal.
+
 <!-- ##### SIGNAL GtkDialog::response ##### -->
 <para>
 Emitted when an action widget is clicked, the dialog receives a delete event, or

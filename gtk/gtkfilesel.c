@@ -1416,7 +1416,9 @@ gtk_file_selection_key_press (GtkWidget   *widget,
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  if (event->keyval == GDK_Tab)
+  if (event->keyval == GDK_Tab ||
+      event->keyval == GDK_ISO_Left_Tab ||
+      event->keyval == GDK_KP_Tab)
     {
       fs = GTK_FILE_SELECTION (user_data);
 #ifdef G_WITH_CYGWIN

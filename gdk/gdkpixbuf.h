@@ -61,6 +61,16 @@ GdkPixbuf *gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
 					 int          width,
 					 int          height);
 
+GdkPixbuf *gdk_pixbuf_get_from_image    (GdkPixbuf   *dest,
+                                         GdkImage    *src,
+                                         GdkColormap *cmap,
+                                         int          src_x,
+                                         int          src_y,
+                                         int          dest_x,
+                                         int          dest_y,
+                                         int          width,
+                                         int          height);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -267,7 +267,9 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
   GdkGC *gc;
   GdkPixbuf *composited = NULL;
   gint dwidth, dheight;
-
+  GdkRegion *clip;
+  GdkRegion *drect;
+  GdkRectangle tmp_rect;
   
   g_return_if_fail (pixbuf != NULL);
   g_return_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB);
@@ -308,12 +310,70 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
   if (width <= 0 || height <= 0)
     return;
 
+  /* Clip to the clip region; this avoids getting more
+   * image data from the server than we need to.
+   */
+  
+  tmp_rect.x = dest_x;
+  tmp_rect.y = dest_y;
+  tmp_rect.width = width;
+  tmp_rect.height = height;
+
+  drect = gdk_region_rectangle (&tmp_rect);
+  clip = gdk_drawable_get_clip_region (drawable);
+
+  gdk_region_intersect (drect, clip);
+
+  gdk_region_get_clipbox (drect, &tmp_rect);
+  
+  gdk_region_destroy (drect);
+  gdk_region_destroy (clip);
+
+  if (tmp_rect.width == 0 ||
+      tmp_rect.height == 0)
+    return;
+  
   /* Actually draw */
   
   gc = gdk_gc_new (drawable);
 
   if (pixbuf->has_alpha)
     {
+      if (alpha_mode == GDK_PIXBUF_ALPHA_FULL)
+        {
+          GdkPixbuf *sub = NULL;
+          
+          composited = gdk_pixbuf_get_from_drawable (NULL,
+                                                     drawable,
+                                                     NULL,
+                                                     dest_x, dest_y,
+                                                     0, 0,
+                                                     width, height);
+
+          if (composited)
+            {
+              if (src_x != 0 || src_y != 0)
+                {
+                  sub = gdk_pixbuf_new_subpixbuf (pixbuf, src_x, src_y,
+                                                  width, height);
+                }
+              
+              gdk_pixbuf_composite (sub ? sub : pixbuf,
+                                    composited,
+                                    0, 0,
+                                    width, height,
+                                    0, 0,
+                                    1.0, 1.0,
+                                    GDK_INTERP_BILINEAR,
+                                    255);
+              
+              if (sub)
+                g_object_unref (G_OBJECT (sub));
+            }
+          else
+            alpha_mode = GDK_PIXBUF_ALPHA_BILEVEL; /* fall back */
+        }
+
       if (alpha_mode == GDK_PIXBUF_ALPHA_BILEVEL)
         {
           bitmap = gdk_pixmap_new (NULL, width, height, 1);
@@ -325,35 +385,6 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
           
           gdk_gc_set_clip_mask (gc, bitmap);
           gdk_gc_set_clip_origin (gc, dest_x, dest_y);
-        }
-      else if (alpha_mode == GDK_PIXBUF_ALPHA_FULL)
-        {
-          GdkPixbuf *sub = NULL;
-          
-          composited = gdk_pixbuf_get_from_drawable (NULL,
-                                                     drawable,
-                                                     NULL,
-                                                     dest_x, dest_y,
-                                                     0, 0,
-                                                     width, height);
-
-          if (src_x != 0 || src_y != 0)
-            {
-              sub = gdk_pixbuf_new_subpixbuf (pixbuf, src_x, src_y,
-                                              width, height);
-            }
-          
-          gdk_pixbuf_composite (sub ? sub : pixbuf,
-                                composited,
-                                0, 0,
-                                width, height,
-                                0, 0,
-                                1.0, 1.0,
-                                GDK_INTERP_BILINEAR,
-                                255);
-
-          if (sub)
-            g_object_unref (G_OBJECT (sub));
         }
     }
 

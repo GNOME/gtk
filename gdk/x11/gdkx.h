@@ -176,6 +176,9 @@ void          gdk_x11_ungrab_server    (void);
 /* returns TRUE if we support the given WM spec feature */
 gboolean      gdk_net_wm_supports      (GdkAtom property);
 
+void gdk_x11_grab_server (void);
+void gdk_x11_ungrab_server (void);
+
 #define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
 #define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
 #define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup (xid))

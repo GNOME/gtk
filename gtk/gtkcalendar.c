@@ -2648,6 +2648,7 @@ gtk_calendar_key_press (GtkWidget   *widget,
 
   switch (event->keyval)
     {
+    case GDK_KP_Left:
     case GDK_Left:
       return_val = TRUE;
       if (event->state & GDK_CONTROL_MASK)
@@ -2670,6 +2671,7 @@ gtk_calendar_key_press (GtkWidget   *widget,
 				  calendar->focus_col);
 	}
       break;
+    case GDK_KP_Right:
     case GDK_Right:
       return_val = TRUE;
       if (event->state & GDK_CONTROL_MASK)
@@ -2692,6 +2694,7 @@ gtk_calendar_key_press (GtkWidget   *widget,
 				  calendar->focus_col);
 	}
       break;
+    case GDK_KP_Up:
     case GDK_Up:
       return_val = TRUE;
       if (event->state & GDK_CONTROL_MASK)
@@ -2709,6 +2712,7 @@ gtk_calendar_key_press (GtkWidget   *widget,
 				  calendar->focus_col);
 	}
       break;
+    case GDK_KP_Down:
     case GDK_Down:
       return_val = TRUE;
       if (event->state & GDK_CONTROL_MASK)
@@ -2726,6 +2730,7 @@ gtk_calendar_key_press (GtkWidget   *widget,
 				  calendar->focus_col);
 	}
       break;
+    case GDK_KP_Space:
     case GDK_space:
       row = calendar->focus_row;
       col = calendar->focus_col;

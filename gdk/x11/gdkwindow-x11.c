@@ -193,7 +193,7 @@ gdk_window_impl_x11_get_colormap (GdkDrawable *drawable)
       drawable_impl->colormap == NULL)
     {
       XWindowAttributes window_attributes;
-      
+
       XGetWindowAttributes (drawable_impl->xdisplay,
                             drawable_impl->xid,
                             &window_attributes);
@@ -2278,7 +2278,7 @@ gdk_window_set_override_redirect (GdkWindow *window,
  * gdk_window_set_icon_list:
  * @window: The #GdkWindow toplevel window to set the icon of.
  * @pixbufs: A list of pixbufs, of different sizes.
- * @Returns: TRUE if the icons were set, false otherwise
+ * @Returns: %TRUE if the icons were set, false otherwise
  *
  * Sets a list of icons for the window. One of these will be used
  * to represent the window when it has been iconified. The icon is
@@ -3841,4 +3841,3 @@ gdk_window_begin_move_drag (GdkWindow *window,
   else
     emulate_move_drag (window, button, root_x, root_y, timestamp);
 }
-

@@ -47,6 +47,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkintl.h"
 #include "gtkaccessible.h"
+#include "gtktooltips.h"
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
 #define	INIT_PATH_SIZE	(512)
@@ -112,6 +113,7 @@ enum {
   VISIBILITY_NOTIFY_EVENT,
   WINDOW_STATE_EVENT,
   POPUP_MENU,
+  SHOW_HELP,
   LAST_SIGNAL
 };
 
@@ -176,7 +178,11 @@ static void	gtk_widget_style_set		 (GtkWidget	    *widget,
 						  GtkStyle          *previous_style);
 static void	gtk_widget_direction_changed	 (GtkWidget	    *widget,
 						  GtkTextDirection   previous_direction);
+
 static void	gtk_widget_real_grab_focus	 (GtkWidget         *focus_widget);
+static void     gtk_widget_real_show_help        (GtkWidget         *widget,
+                                                  GtkWidgetHelpType  help_type);
+
 static void	gtk_widget_dispatch_child_properties_changed	(GtkWidget        *object,
 								 guint             n_pspecs,
 								 GParamSpec      **pspecs);
@@ -214,7 +220,6 @@ static AtkObject*	gtk_widget_real_get_accessible		(GtkWidget	  *widget);
 static void		gtk_widget_accessible_interface_init	(AtkImplementorIface *iface);
 static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
 
-
 /* --- variables --- */
 static gpointer         parent_class = NULL;
 static guint            widget_signals[LAST_SIGNAL] = { 0 };
@@ -226,6 +231,7 @@ static GSList          *style_stack = NULL;
 static guint            composite_child_stack = 0;
 static GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
 static GParamSpecPool  *style_property_spec_pool = NULL;
+
 static GQuark		quark_property_parser = 0;
 static GQuark		quark_aux_info = 0;
 static GQuark		quark_event_mask = 0;
@@ -239,7 +245,6 @@ static GQuark		quark_rc_style = 0;
 static GQuark		quark_accessible_object = 0;
 GParamSpecPool         *_gtk_widget_child_property_pool = NULL;
 GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
-
 
 /* --- functions --- */
 GtkType
@@ -378,7 +383,12 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->drag_motion = NULL;
   klass->drag_drop = NULL;
   klass->drag_data_received = NULL;
-  klass->get_accessible = gtk_widget_real_get_accessible;	/* Accessibility support */
+
+  klass->show_help = gtk_widget_real_show_help;
+  
+  /* Accessibility support */
+  klass->get_accessible = gtk_widget_real_get_accessible;
+
   klass->no_expose_event = NULL;
 
   g_object_class_install_property (gobject_class,
@@ -1021,12 +1031,37 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, popup_menu),
                     gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
+  widget_signals[SHOW_HELP] =
+    gtk_signal_new ("show_help",
+		    GTK_RUN_LAST | GTK_RUN_ACTION,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, show_help),
+                    gtk_marshal_NONE__ENUM,
+		    GTK_TYPE_NONE, 1, GTK_TYPE_WIDGET_HELP_TYPE);
   
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set, GDK_F10, GDK_SHIFT_MASK,
                                 "popup_menu", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_Menu, 0,
                                 "popup_menu", 0);  
+
+  gtk_binding_entry_add_signal (binding_set, GDK_F1, GDK_CONTROL_MASK,
+                                "show_help", 1,
+                                GTK_TYPE_WIDGET_HELP_TYPE,
+                                GTK_WIDGET_HELP_TOOLTIP);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_F1, GDK_CONTROL_MASK,
+                                "show_help", 1,
+                                GTK_TYPE_WIDGET_HELP_TYPE,
+                                GTK_WIDGET_HELP_TOOLTIP);
+  
+  gtk_binding_entry_add_signal (binding_set, GDK_F1, GDK_SHIFT_MASK,
+                                "show_help", 1,
+                                GTK_TYPE_WIDGET_HELP_TYPE,
+                                GTK_WIDGET_HELP_WHATS_THIS);  
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_F1, GDK_SHIFT_MASK,
+                                "show_help", 1,
+                                GTK_TYPE_WIDGET_HELP_TYPE,
+                                GTK_WIDGET_HELP_WHATS_THIS);
 
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_boolean ("interior_focus",
@@ -3094,6 +3129,14 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
     }
 }
 
+static void
+gtk_widget_real_show_help (GtkWidget        *widget,
+                           GtkWidgetHelpType help_type)
+{
+  if (help_type == GTK_WIDGET_HELP_TOOLTIP)
+    _gtk_tooltips_show_tip (widget);
+}
+
 static gboolean
 gtk_widget_real_focus (GtkWidget         *widget,
                        GtkDirectionType   direction)
@@ -3109,7 +3152,6 @@ gtk_widget_real_focus (GtkWidget         *widget,
   else
     return FALSE;
 }
-
 
 /**
  * gtk_widget_is_focus:

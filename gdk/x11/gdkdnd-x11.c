@@ -930,7 +930,7 @@ motif_find_drag_window (gboolean create)
 	  display = XOpenDisplay (gdk_display_name);
 	  XSetCloseDownMode (display, RetainPermanent);
 
-	  XGrabServer (display);
+          XGrabServer (display);
 	  
 	  motif_drag_window = motif_lookup_drag_window (display);
 

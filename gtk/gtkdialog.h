@@ -109,6 +109,10 @@ struct _GtkDialogClass
   GtkWindowClass parent_class;
 
   void (* response) (GtkDialog *dialog, gint response_id);
+
+  /* Keybinding signals */
+
+  void (* close)    (GtkDialog *dialog);
 };
 
 

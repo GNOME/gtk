@@ -475,6 +475,11 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                 "select_page", 1, 
                                 G_TYPE_BOOLEAN, FALSE);
   gtk_binding_entry_add_signal (binding_set,
+                                GDK_KP_Space, 0,
+                                "select_page", 1, 
+                                G_TYPE_BOOLEAN, FALSE);
+  
+  gtk_binding_entry_add_signal (binding_set,
                                 GDK_Home, 0,
                                 "focus_tab", 1, 
                                 GTK_TYPE_NOTEBOOK_TAB, GTK_NOTEBOOK_TAB_FIRST);

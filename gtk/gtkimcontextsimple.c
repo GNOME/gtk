@@ -1154,7 +1154,9 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       if ((event->state & (ISO_14755_MOD_MASK)) == ISO_14755_MOD_MASK)
         {
           /* space ends the sequence, and we eat the space */
-          if (n_compose > 1 && event->keyval == GDK_space)
+          if (n_compose > 1 &&
+              (event->keyval == GDK_space ||
+               event->keyval == GDK_KP_Space))
             {
               gtk_im_context_simple_commit_char (context, context_simple->tentative_match);
               context_simple->compose_buffer[0] = 0;

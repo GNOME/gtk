@@ -715,9 +715,15 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   add_move_binding (binding_set, GDK_Right, 0,
                     GTK_MOVEMENT_VISUAL_POSITIONS, 1);
 
+  add_move_binding (binding_set, GDK_KP_Right, 0,
+                    GTK_MOVEMENT_VISUAL_POSITIONS, 1);
+  
   add_move_binding (binding_set, GDK_Left, 0,
                     GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 
+  add_move_binding (binding_set, GDK_KP_Left, 0,
+                    GTK_MOVEMENT_VISUAL_POSITIONS, -1);
+  
   add_move_binding (binding_set, GDK_f, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_LOGICAL_POSITIONS, 1);
 
@@ -727,16 +733,28 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   add_move_binding (binding_set, GDK_Right, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_WORDS, 1);
 
+  add_move_binding (binding_set, GDK_KP_Right, GDK_CONTROL_MASK,
+                    GTK_MOVEMENT_WORDS, 1);
+  
   add_move_binding (binding_set, GDK_Left, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_WORDS, -1);
 
+  add_move_binding (binding_set, GDK_KP_Left, GDK_CONTROL_MASK,
+                    GTK_MOVEMENT_WORDS, 1);
+  
   /* Eventually we want to move by display lines, not paragraphs */
   add_move_binding (binding_set, GDK_Up, 0,
                     GTK_MOVEMENT_DISPLAY_LINES, -1);
 
+  add_move_binding (binding_set, GDK_KP_Up, 0,
+                    GTK_MOVEMENT_DISPLAY_LINES, -1);
+  
   add_move_binding (binding_set, GDK_Down, 0,
                     GTK_MOVEMENT_DISPLAY_LINES, 1);
 
+  add_move_binding (binding_set, GDK_KP_Down, 0,
+                    GTK_MOVEMENT_DISPLAY_LINES, 1);
+  
   add_move_binding (binding_set, GDK_p, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_DISPLAY_LINES, -1);
 
@@ -758,26 +776,45 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   add_move_binding (binding_set, GDK_Home, 0,
                     GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
 
+  add_move_binding (binding_set, GDK_KP_Home, 0,
+                    GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
+  
   add_move_binding (binding_set, GDK_End, 0,
                     GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
 
+  add_move_binding (binding_set, GDK_KP_End, 0,
+                    GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
+  
   add_move_binding (binding_set, GDK_Home, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_BUFFER_ENDS, -1);
 
+  add_move_binding (binding_set, GDK_KP_Home, GDK_CONTROL_MASK,
+                    GTK_MOVEMENT_BUFFER_ENDS, -1);
+  
   add_move_binding (binding_set, GDK_End, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_BUFFER_ENDS, 1);
 
+  add_move_binding (binding_set, GDK_KP_End, GDK_CONTROL_MASK,
+                    GTK_MOVEMENT_BUFFER_ENDS, 1);
+  
   add_move_binding (binding_set, GDK_Page_Up, 0,
                     GTK_MOVEMENT_PAGES, -1);
 
+  add_move_binding (binding_set, GDK_KP_Page_Up, 0,
+                    GTK_MOVEMENT_PAGES, -1);
+  
   add_move_binding (binding_set, GDK_Page_Down, 0,
                     GTK_MOVEMENT_PAGES, 1);
 
-
+  add_move_binding (binding_set, GDK_KP_Page_Down, 0,
+                    GTK_MOVEMENT_PAGES, 1);
+  
   /* Setting the cut/paste/copy anchor */
   gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_CONTROL_MASK,
                                 "set_anchor", 0);
-
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, GDK_CONTROL_MASK,
+                                "set_anchor", 0);
+  
   /* Deleting text */
   gtk_binding_entry_add_signal (binding_set, GDK_Delete, 0,
                                 "delete_from_cursor", 2,
@@ -833,10 +870,17 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                 "delete_from_cursor", 2,
                                 GTK_TYPE_ENUM, GTK_DELETE_WHITESPACE,
                                 GTK_TYPE_INT, 1);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, GDK_MOD1_MASK,
+                                "delete_from_cursor", 2,
+                                GTK_TYPE_ENUM, GTK_DELETE_WHITESPACE,
+                                GTK_TYPE_INT, 1);
   gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_MOD1_MASK,
                                 "insert_at_cursor", 1,
                                 GTK_TYPE_STRING, " ");
-
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, GDK_MOD1_MASK,
+                                "insert_at_cursor", 1,
+                                GTK_TYPE_STRING, " ");
+  
   gtk_binding_entry_add_signal (binding_set, GDK_backslash, GDK_MOD1_MASK,
                                 "delete_from_cursor", 2,
                                 GTK_TYPE_ENUM, GTK_DELETE_WHITESPACE,
@@ -861,6 +905,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 
   /* Overwrite */
   gtk_binding_entry_add_signal (binding_set, GDK_Insert, 0,
+                                "toggle_overwrite", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Insert, 0,
                                 "toggle_overwrite", 0);
 }
 
@@ -2168,7 +2214,7 @@ gtk_text_view_set_property (GObject         *object,
     case PROP_WRAP_MODE:
       gtk_text_view_set_wrap_mode (text_view, g_value_get_enum (value));
       break;
-
+      
     case PROP_JUSTIFICATION:
       gtk_text_view_set_justification (text_view, g_value_get_enum (value));
       break;
@@ -3135,7 +3181,10 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
       retval = TRUE;
     }
   /* Pass through Tab as literal tab, unless Control is held down */
-  else if (event->keyval == GDK_Tab && !(event->state & GDK_CONTROL_MASK))
+  else if ((event->keyval == GDK_Tab ||
+            event->keyval == GDK_KP_Tab ||
+            event->keyval == GDK_ISO_Left_Tab) &&
+           !(event->state & GDK_CONTROL_MASK))
     {
       gtk_text_buffer_insert_interactive_at_cursor (get_buffer (text_view), "\t", 1,
                                                     text_view->editable);
@@ -3681,6 +3730,12 @@ gtk_text_view_check_cursor_blink (GtkTextView *text_view)
 #ifdef DEBUG_VALIDATION_AND_SCROLLING
   return;
 #endif
+
+  if (text_view->layout == NULL)
+    return;
+  
+  if (!text_view->cursor_visible)
+    return;
 
   if (text_view->layout != NULL &&
       text_view->cursor_visible &&

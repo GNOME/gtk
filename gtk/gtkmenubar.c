@@ -107,7 +107,17 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 				GTK_TYPE_MENU_DIRECTION_TYPE,
 				GTK_MENU_DIR_PREV);
   gtk_binding_entry_add_signal (binding_set,
+				GDK_KP_Left, 0,
+				"move_current", 1,
+				GTK_TYPE_MENU_DIRECTION_TYPE,
+				GTK_MENU_DIR_PREV);
+  gtk_binding_entry_add_signal (binding_set,
 				GDK_Right, 0,
+				"move_current", 1,
+				GTK_TYPE_MENU_DIRECTION_TYPE,
+				GTK_MENU_DIR_NEXT);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KP_Right, 0,
 				"move_current", 1,
 				GTK_TYPE_MENU_DIRECTION_TYPE,
 				GTK_MENU_DIR_NEXT);
@@ -117,11 +127,21 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 				GTK_TYPE_MENU_DIRECTION_TYPE,
 				GTK_MENU_DIR_PARENT);
   gtk_binding_entry_add_signal (binding_set,
+				GDK_KP_Up, 0,
+				"move_current", 1,
+				GTK_TYPE_MENU_DIRECTION_TYPE,
+				GTK_MENU_DIR_PARENT);
+  gtk_binding_entry_add_signal (binding_set,
 				GDK_Down, 0,
 				"move_current", 1,
 				GTK_TYPE_MENU_DIRECTION_TYPE,
 				GTK_MENU_DIR_CHILD);
-
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KP_Down, 0,
+				"move_current", 1,
+				GTK_TYPE_MENU_DIRECTION_TYPE,
+				GTK_MENU_DIR_CHILD);
+  
   gtk_settings_install_property (gtk_settings_get_global (),
                                  g_param_spec_string ("gtk-menu-bar-accel",
                                                       _("Menu bar accelerator"),

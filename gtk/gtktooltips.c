@@ -285,17 +285,6 @@ gtk_tooltips_set_tip (GtkTooltips *tooltips,
     }
 }
 
-void
-gtk_tooltips_set_colors (GtkTooltips *tooltips,
-			 GdkColor    *background,
-			 GdkColor    *foreground)
-{
-  g_return_if_fail (tooltips != NULL);
-
-  g_warning ("gtk_tooltips_set_colors is deprecated and does nothing.\n"
-	     "The colors for tooltips are now taken from the style.");
-}
-
 static gint
 gtk_tooltips_paint_window (GtkTooltips *tooltips)
 {
@@ -520,4 +509,26 @@ gtk_tooltips_widget_remove (GtkWidget *widget,
   tooltips->tips_data_list = g_list_remove (tooltips->tips_data_list,
 					    tooltipsdata);
   gtk_tooltips_destroy_data (tooltipsdata);
+}
+
+void
+_gtk_tooltips_show_tip (GtkWidget *widget)
+{
+  /* Showing the tip from the keyboard */
+
+  /* FIXME this function is completely broken right now,
+   * popdown doesn't occur when it should.
+   */
+  
+  GtkTooltipsData *tooltipsdata;
+
+  tooltipsdata = gtk_tooltips_data_get (widget);
+
+  if (tooltipsdata == NULL)
+    return;
+
+  gtk_tooltips_set_active_widget (tooltipsdata->tooltips,
+                                  widget);
+
+  gtk_tooltips_timeout (tooltipsdata->tooltips);
 }

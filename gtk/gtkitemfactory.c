@@ -1250,8 +1250,8 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   if (type_id == quark_type_stock_item)
     {
       image = gtk_image_new_from_stock (entry->extra_data, GTK_ICON_SIZE_MENU);
-      if (image)
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (widget), image);
+
+      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (widget), image);
       
       if (gtk_stock_lookup (entry->extra_data, &stock_item))
 	{

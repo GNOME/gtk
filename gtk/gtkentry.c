@@ -698,10 +698,17 @@ gtk_entry_class_init (GtkEntryClass *class)
 				"delete_from_cursor", 2,
 				GTK_TYPE_ENUM, GTK_DELETE_WHITESPACE,
 				GTK_TYPE_INT, 1);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, GDK_MOD1_MASK,
+				"delete_from_cursor", 2,
+				GTK_TYPE_ENUM, GTK_DELETE_WHITESPACE,
+				GTK_TYPE_INT, 1);
   gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_MOD1_MASK,
 				"insert_at_cursor", 1,
 				GTK_TYPE_STRING, " ");
-
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, GDK_MOD1_MASK,
+				"insert_at_cursor", 1,
+				GTK_TYPE_STRING, " ");
+  
   gtk_binding_entry_add_signal (binding_set, GDK_backslash, GDK_MOD1_MASK,
 				"delete_from_cursor", 2,
 				GTK_TYPE_ENUM, GTK_DELETE_WHITESPACE,
@@ -726,6 +733,8 @@ gtk_entry_class_init (GtkEntryClass *class)
 
   /* Overwrite */
   gtk_binding_entry_add_signal (binding_set, GDK_Insert, 0,
+				"toggle_overwrite", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Insert, 0,
 				"toggle_overwrite", 0);
 }
 

@@ -49,6 +49,8 @@ struct _GdkImage
   guint16       bits_per_pixel; /* bits per pixel */
   gpointer	mem;
 
+  GdkColormap  *colormap;
+  
   gpointer windowing_data;
 };
 
@@ -80,6 +82,11 @@ void	   gdk_image_put_pixel (GdkImage     *image,
 guint32	   gdk_image_get_pixel (GdkImage     *image,
 				gint	      x,
 				gint	      y);
+
+void       gdk_image_set_colormap (GdkImage    *image,
+                                   GdkColormap *colormap);
+GdkColormap* gdk_image_get_colormap (GdkImage    *image);
+
 
 #ifdef GDK_ENABLE_BROKEN
 GdkImage* gdk_image_new_bitmap (GdkVisual     *visual,

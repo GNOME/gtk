@@ -207,7 +207,15 @@ gtk_list_item_class_init (GtkListItemClass *class)
 				"scroll_vertical", 2,
 				GTK_TYPE_ENUM, GTK_SCROLL_STEP_BACKWARD,
 				GTK_TYPE_FLOAT, 0.0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Up, 0,
+				"scroll_vertical", 2,
+				GTK_TYPE_ENUM, GTK_SCROLL_STEP_BACKWARD,
+				GTK_TYPE_FLOAT, 0.0);
   gtk_binding_entry_add_signal (binding_set, GDK_Down, 0,
+				"scroll_vertical", 2,
+				GTK_TYPE_ENUM, GTK_SCROLL_STEP_FORWARD,
+				GTK_TYPE_FLOAT, 0.0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Down, 0,
 				"scroll_vertical", 2,
 				GTK_TYPE_ENUM, GTK_SCROLL_STEP_FORWARD,
 				GTK_TYPE_FLOAT, 0.0);
@@ -215,7 +223,15 @@ gtk_list_item_class_init (GtkListItemClass *class)
 				"scroll_vertical", 2,
 				GTK_TYPE_ENUM, GTK_SCROLL_PAGE_BACKWARD,
 				GTK_TYPE_FLOAT, 0.0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Up, 0,
+				"scroll_vertical", 2,
+				GTK_TYPE_ENUM, GTK_SCROLL_PAGE_BACKWARD,
+				GTK_TYPE_FLOAT, 0.0);
   gtk_binding_entry_add_signal (binding_set, GDK_Page_Down, 0,
+				"scroll_vertical", 2,
+				GTK_TYPE_ENUM, GTK_SCROLL_PAGE_FORWARD,
+				GTK_TYPE_FLOAT, 0.0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Down, 0,
 				"scroll_vertical", 2,
 				GTK_TYPE_ENUM, GTK_SCROLL_PAGE_FORWARD,
 				GTK_TYPE_FLOAT, 0.0);
@@ -223,16 +239,33 @@ gtk_list_item_class_init (GtkListItemClass *class)
 				"scroll_vertical", 2,
 				GTK_TYPE_ENUM, GTK_SCROLL_JUMP,
 				GTK_TYPE_FLOAT, 0.0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Home, GDK_CONTROL_MASK,
+				"scroll_vertical", 2,
+				GTK_TYPE_ENUM, GTK_SCROLL_JUMP,
+				GTK_TYPE_FLOAT, 0.0);
   gtk_binding_entry_add_signal (binding_set, GDK_End, GDK_CONTROL_MASK,
 				"scroll_vertical", 2,
 				GTK_TYPE_ENUM, GTK_SCROLL_JUMP,
 				GTK_TYPE_FLOAT, 1.0);
-
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_End, GDK_CONTROL_MASK,
+				"scroll_vertical", 2,
+				GTK_TYPE_ENUM, GTK_SCROLL_JUMP,
+				GTK_TYPE_FLOAT, 1.0);
+  
   gtk_binding_entry_add_signal (binding_set, GDK_Up, GDK_SHIFT_MASK,
 				"extend_selection", 3,
 				GTK_TYPE_ENUM, GTK_SCROLL_STEP_BACKWARD,
 				GTK_TYPE_FLOAT, 0.0, GTK_TYPE_BOOL, TRUE);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Up, GDK_SHIFT_MASK,
+				"extend_selection", 3,
+				GTK_TYPE_ENUM, GTK_SCROLL_STEP_BACKWARD,
+				GTK_TYPE_FLOAT, 0.0, GTK_TYPE_BOOL, TRUE);
+  
   gtk_binding_entry_add_signal (binding_set, GDK_Down, GDK_SHIFT_MASK,
+				"extend_selection", 3,
+				GTK_TYPE_ENUM, GTK_SCROLL_STEP_FORWARD,
+				GTK_TYPE_FLOAT, 0.0, GTK_TYPE_BOOL, TRUE);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Down, GDK_SHIFT_MASK,
 				"extend_selection", 3,
 				GTK_TYPE_ENUM, GTK_SCROLL_STEP_FORWARD,
 				GTK_TYPE_FLOAT, 0.0, GTK_TYPE_BOOL, TRUE);
@@ -240,11 +273,24 @@ gtk_list_item_class_init (GtkListItemClass *class)
 				"extend_selection", 3,
 				GTK_TYPE_ENUM, GTK_SCROLL_PAGE_BACKWARD,
 				GTK_TYPE_FLOAT, 0.0, GTK_TYPE_BOOL, TRUE);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Up, GDK_SHIFT_MASK,
+				"extend_selection", 3,
+				GTK_TYPE_ENUM, GTK_SCROLL_PAGE_BACKWARD,
+				GTK_TYPE_FLOAT, 0.0, GTK_TYPE_BOOL, TRUE);
   gtk_binding_entry_add_signal (binding_set, GDK_Page_Down, GDK_SHIFT_MASK,
 				"extend_selection", 3,
 				GTK_TYPE_ENUM, GTK_SCROLL_PAGE_FORWARD,
 				GTK_TYPE_FLOAT, 0.0, GTK_TYPE_BOOL, TRUE);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Down, GDK_SHIFT_MASK,
+				"extend_selection", 3,
+				GTK_TYPE_ENUM, GTK_SCROLL_PAGE_FORWARD,
+				GTK_TYPE_FLOAT, 0.0, GTK_TYPE_BOOL, TRUE);
   gtk_binding_entry_add_signal (binding_set, GDK_Home,
+				GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+				"extend_selection", 3,
+				GTK_TYPE_ENUM, GTK_SCROLL_JUMP,
+				GTK_TYPE_FLOAT, 0.0, GTK_TYPE_BOOL, TRUE);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Home,
 				GDK_SHIFT_MASK | GDK_CONTROL_MASK,
 				"extend_selection", 3,
 				GTK_TYPE_ENUM, GTK_SCROLL_JUMP,
@@ -254,8 +300,18 @@ gtk_list_item_class_init (GtkListItemClass *class)
 				"extend_selection", 3,
 				GTK_TYPE_ENUM, GTK_SCROLL_JUMP,
 				GTK_TYPE_FLOAT, 1.0, GTK_TYPE_BOOL, TRUE);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_End,
+				GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+				"extend_selection", 3,
+				GTK_TYPE_ENUM, GTK_SCROLL_JUMP,
+				GTK_TYPE_FLOAT, 1.0, GTK_TYPE_BOOL, TRUE);
 
+  
   gtk_binding_entry_add_signal (binding_set, GDK_Left, 0,
+				"scroll_horizontal", 2,
+				GTK_TYPE_ENUM, GTK_SCROLL_STEP_BACKWARD,
+				GTK_TYPE_FLOAT, 0.0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Left, 0,
 				"scroll_horizontal", 2,
 				GTK_TYPE_ENUM, GTK_SCROLL_STEP_BACKWARD,
 				GTK_TYPE_FLOAT, 0.0);
@@ -263,7 +319,15 @@ gtk_list_item_class_init (GtkListItemClass *class)
 				"scroll_horizontal", 2,
 				GTK_TYPE_ENUM, GTK_SCROLL_STEP_FORWARD,
 				GTK_TYPE_FLOAT, 0.0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Right, 0,
+				"scroll_horizontal", 2,
+				GTK_TYPE_ENUM, GTK_SCROLL_STEP_FORWARD,
+				GTK_TYPE_FLOAT, 0.0);
   gtk_binding_entry_add_signal (binding_set, GDK_Home, 0,
+				"scroll_horizontal", 2,
+				GTK_TYPE_ENUM, GTK_SCROLL_JUMP,
+				GTK_TYPE_FLOAT, 0.0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Home, 0,
 				"scroll_horizontal", 2,
 				GTK_TYPE_ENUM, GTK_SCROLL_JUMP,
 				GTK_TYPE_FLOAT, 0.0);
@@ -271,14 +335,24 @@ gtk_list_item_class_init (GtkListItemClass *class)
 				"scroll_horizontal", 2,
 				GTK_TYPE_ENUM, GTK_SCROLL_JUMP,
 				GTK_TYPE_FLOAT, 1.0);
-
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_End, 0,
+				"scroll_horizontal", 2,
+				GTK_TYPE_ENUM, GTK_SCROLL_JUMP,
+				GTK_TYPE_FLOAT, 1.0);
+  
   gtk_binding_entry_add_signal (binding_set, GDK_Escape, 0,
 				"undo_selection", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_space, 0,
 				"toggle_focus_row", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, 0,
+				"toggle_focus_row", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_CONTROL_MASK,
 				"toggle_add_mode", 0);
-  gtk_binding_entry_add_signal (binding_set, '/', GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, GDK_CONTROL_MASK,
+				"toggle_add_mode", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_slash, GDK_CONTROL_MASK,
+				"select_all", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Divide, GDK_CONTROL_MASK,
 				"select_all", 0);
   gtk_binding_entry_add_signal (binding_set, '\\', GDK_CONTROL_MASK,
 				"unselect_all", 0);

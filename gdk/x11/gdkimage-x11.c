@@ -381,8 +381,10 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
   GdkImagePrivateX11 *private;
   GdkDrawableImplX11 *impl;
   GdkVisual *visual;
+  gboolean have_grab;
+  GdkRectangle window_rect;
   XImage *ximage;
- 
+  
   g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_X11 (drawable), NULL);
 
   visual = gdk_drawable_get_visual (drawable);
@@ -399,31 +401,69 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
   
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
   
-  ximage = XGetImage (impl->xdisplay,
-		      impl->xid,
-		      x, y, width, height,
-		      AllPlanes, ZPixmap);
+  have_grab = FALSE;
+  window_rect.x = x;
+  window_rect.y = y;
+  window_rect.width = width;
+  window_rect.height = height;
+  if (GDK_IS_WINDOW (drawable))
+    {
+      GdkRectangle screen_rect;
+      
+      have_grab = TRUE;
+      gdk_x11_grab_server ();
 
-  if (!ximage)
+      screen_rect.x = 0;
+      screen_rect.y = 0;
+      screen_rect.width = gdk_screen_width ();
+      screen_rect.height = gdk_screen_height ();
+      
+      gdk_error_trap_push ();
+      
+      gdk_window_get_geometry (GDK_WINDOW (drawable),
+                               &window_rect.x,
+                               &window_rect.y,
+                               &window_rect.width,
+                               &window_rect.height,
+                               NULL);
+
+      if (gdk_error_trap_pop () ||
+          !gdk_rectangle_intersect (&window_rect, &screen_rect,
+                                    &window_rect))
+        {
+          gdk_x11_ungrab_server ();
+          return NULL;
+        }
+    }
+
+  image = gdk_image_new (GDK_IMAGE_FASTEST,
+                         visual,
+                         width, height);
+
+  if (image == NULL)
     return NULL;
 
-  image = g_object_new (gdk_image_get_type (), NULL);
   private = PRIVATE_DATA (image);
+  
+  gdk_error_trap_push ();
 
-  private->xdisplay = gdk_display;
-  private->ximage = ximage;
+  ximage = XGetSubImage (impl->xdisplay,
+                         impl->xid,
+                         x, y, width, height,
+                         AllPlanes, ZPixmap,
+                         private->ximage,
+                         x, y);
 
-  image->type = GDK_IMAGE_NORMAL;
-  image->visual = visual;
-  image->width = width;
-  image->height = height;
-  image->depth = private->ximage->depth;
+  if (have_grab)
+    gdk_x11_ungrab_server ();
+  
+  if (gdk_error_trap_pop () || ximage == NULL)
+    {
+      g_object_unref (G_OBJECT (image));
+      return NULL;
+    }
 
-  image->mem = private->ximage->data;
-  image->bpl = private->ximage->bytes_per_line;
-  image->bits_per_pixel = private->ximage->bits_per_pixel;
-  image->bpp = (private->ximage->bits_per_pixel + 7) / 8;
-  image->byte_order = private->ximage->byte_order;
+  g_assert (ximage == private->ximage);
 
   return image;
 }

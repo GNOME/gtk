@@ -1529,6 +1529,14 @@ GtkWidget
 @event: 
 @Returns: 
 
+<!-- ##### SIGNAL GtkWidget::event-after ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+
 <!-- ##### SIGNAL GtkWidget::expose-event ##### -->
 <para>
 
@@ -1788,6 +1796,14 @@ a widget changes from un-anchored to anchored or vice-versa.
 </para>
 
 @widget: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWidget::show-help ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
 
 <!-- ##### SIGNAL GtkWidget::size-allocate ##### -->
 <para>

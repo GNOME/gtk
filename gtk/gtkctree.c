@@ -474,36 +474,45 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set,
-				'+', GDK_SHIFT_MASK,
+				GDK_plus, GDK_SHIFT_MASK,
 				"change_focus_row_expansion", 1,
 				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_EXPAND);
   gtk_binding_entry_add_signal (binding_set,
-				'+', 0,
+				GDK_plus, 0,
 				"change_focus_row_expansion", 1,
 				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_EXPAND);
   gtk_binding_entry_add_signal (binding_set,
-				'+', GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+				GDK_plus, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
 				"change_focus_row_expansion", 1,
 				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_EXPAND_RECURSIVE);
   gtk_binding_entry_add_signal (binding_set,
-				'+', GDK_CONTROL_MASK,
+				GDK_plus, GDK_CONTROL_MASK,
 				"change_focus_row_expansion", 1,
 				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_EXPAND_RECURSIVE);
+
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KP_Add, GDK_SHIFT_MASK,
+				"change_focus_row_expansion", 1,
+				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_EXPAND);
   gtk_binding_entry_add_signal (binding_set,
 				GDK_KP_Add, 0,
 				"change_focus_row_expansion", 1,
 				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_EXPAND);
   gtk_binding_entry_add_signal (binding_set,
+				GDK_KP_Add, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+				"change_focus_row_expansion", 1,
+				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_EXPAND_RECURSIVE);
+  gtk_binding_entry_add_signal (binding_set,
 				GDK_KP_Add, GDK_CONTROL_MASK,
 				"change_focus_row_expansion", 1,
-				GTK_TYPE_ENUM,
-				GTK_CTREE_EXPANSION_EXPAND_RECURSIVE);
+				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_EXPAND_RECURSIVE);
+  
   gtk_binding_entry_add_signal (binding_set,
-				'-', 0,
+				GDK_minus, 0,
 				"change_focus_row_expansion", 1,
 				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_COLLAPSE);
   gtk_binding_entry_add_signal (binding_set,
-				'-', GDK_CONTROL_MASK,
+                                GDK_minus, GDK_CONTROL_MASK,
 				"change_focus_row_expansion", 1,
 				GTK_TYPE_ENUM,
 				GTK_CTREE_EXPANSION_COLLAPSE_RECURSIVE);
@@ -517,11 +526,19 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 				GTK_TYPE_ENUM,
 				GTK_CTREE_EXPANSION_COLLAPSE_RECURSIVE);
   gtk_binding_entry_add_signal (binding_set,
-				'=', 0,
+				GDK_equal, 0,
 				"change_focus_row_expansion", 1,
 				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_TOGGLE);
   gtk_binding_entry_add_signal (binding_set,
-				'=', GDK_SHIFT_MASK,
+				GDK_KP_Equal, 0,
+				"change_focus_row_expansion", 1,
+				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_TOGGLE);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_equal, GDK_SHIFT_MASK,
+				"change_focus_row_expansion", 1,
+				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_TOGGLE);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KP_Equal, GDK_SHIFT_MASK,
 				"change_focus_row_expansion", 1,
 				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_TOGGLE);
   gtk_binding_entry_add_signal (binding_set,
@@ -529,10 +546,19 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 				"change_focus_row_expansion", 1,
 				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_TOGGLE);
   gtk_binding_entry_add_signal (binding_set,
+				GDK_asterisk, 0,
+				"change_focus_row_expansion", 1,
+				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_TOGGLE);
+  gtk_binding_entry_add_signal (binding_set,
 				GDK_KP_Multiply, GDK_CONTROL_MASK,
 				"change_focus_row_expansion", 1,
 				GTK_TYPE_ENUM,
 				GTK_CTREE_EXPANSION_TOGGLE_RECURSIVE);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_asterisk, GDK_CONTROL_MASK,
+				"change_focus_row_expansion", 1,
+				GTK_TYPE_ENUM,
+				GTK_CTREE_EXPANSION_TOGGLE_RECURSIVE);  
 }
 
 static void

@@ -955,7 +955,10 @@ palette_activate (GtkWidget   *widget,
 		  gpointer     data)
 {
   /* should have a drawing area subclass with an activate signal */
-  if ((event->keyval == ' ') || (event->keyval == GDK_Return))
+  if ((event->keyval == GDK_space) ||
+      (event->keyval == GDK_Return) ||
+      (event->keyval == GDK_KP_Enter) ||
+      (event->keyval == GDK_KP_Space))
     {
       if (GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (widget), "color_set")) != 0)
         {

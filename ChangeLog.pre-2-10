@@ -1,3 +1,86 @@
+2001-06-28  Havoc Pennington  <hp@pobox.com>
+
+	* gdk/x11/gdkimage-x11.c (_gdk_x11_get_image): Clip the retrieved
+	image data to the screen, using a server grab to avoid race
+	conditions.
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_create_item): remove 
+	check for NULL return from gtk_image_new_from_stock(), it never
+	returns NULL.
+	(gtk_item_factory_create_item): fix bug where we parsed the stock
+	ID as an inline pixbuf
+
+	* gtk/gtktext.c (gtk_text_key_press): numeric keypad support
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_key_press): numeric keypad
+	support (should be using binding set here)
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_key_press): numeric keypad
+	support (should be using binding set here)
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_class_init): numeric keypad 
+	support
+
+	* gtk/gtkmenu.c (gtk_menu_class_init): numeric keypad support
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_class_init): numeric keypad
+
+	* gtk/gtklistitem.c (gtk_list_item_class_init): numeric keypad
+
+	* gtk/gtkimcontextsimple.c
+	(gtk_im_context_simple_filter_keypress): keypad
+
+	* gtk/gtkfilesel.c (gtk_file_selection_key_press): keypad 
+
+	* gtk/gtkentry.c (gtk_entry_class_init): numeric keypad fixes
+
+	* gtk/gtkctree.c (gtk_ctree_class_init): numeric keypad support
+
+	* gtk/gtkcolorsel.c (palette_activate): keypad support (of course,
+	should be binding-setted)
+
+	* gtk/gtkwindow.c (gtk_window_class_init): numeric keypad fixes
+
+	* gtk/gtkclist.c (gtk_clist_class_init): numeric keypad fixes
+
+	* gtk/gtkcalendar.c: numeric keypad fixes
+
+	* gtk/gtktextview.c (gtk_text_view_class_init): numeric keypad
+	support
+
+	* gdk/gdkwindow.c (gdk_window_get_clip_region): fix infinite loop
+	screwup
+
+	* gdk/gdkpixbuf-render.c (gdk_pixbuf_render_to_drawable_alpha): 
+	clip the render area to the drawable's clip region in advance,
+	so we don't get data from the server that we don't need.
+
+	* gdk/gdkpixbuf-render.c (gdk_pixbuf_render_to_drawable_alpha):
+	check return value of gdk_pixbuf_get_from_drawable(), fall back 
+	to bilevel alpha if we can't get the pixbuf to composite against.
+
+	* gdk/gdkdraw.c (gdk_drawable_get_image): set the image colormap
+
+	* gdk/gdkimage.c (gdk_image_get_colormap): add
+	gdk_image_set_colormap, gdk_image_get_colormap
+
+	* gdk/gdkpixbuf-drawable.c (rgbconvert): Change all converters to
+	take a region of the image, instead of converting the entire
+	image.
+
+	* gtk/gtkwidget.h (struct _GtkWidgetClass): add show_help
+	keybinding signal. Add default bindings for it. Add default
+	handler for show_help that shows the tooltip for the widget.
+
+	* gtk/gtkdialog.c (gtk_dialog_class_init): add binding set and
+	"close" keybinding signal, remove key press handler.
+
+	* gtk/gtktooltips.c (gtk_tooltips_set_colors): Just remove this,
+	it's not our usual practice to leave a deprecated function around
+	with a runtime warning, plus we don't want it to appear in docs,
+	plus if we make them yellow no one will want to change them
+	anyhow.
+
 Thu Jun 28 23:53:31 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.c (gtk_widget_hide): !GTK_OBJECT_DESTROYED() ->

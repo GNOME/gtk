@@ -476,7 +476,9 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   gtk_binding_entry_add_signal (binding_set, GDK_space, 0,
                                 "activate_focus", 0);
-
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, 0,
+                                "activate_focus", 0);
+  
   gtk_binding_entry_add_signal (binding_set, GDK_Return, 0,
                                 "activate_default", 0);
 
@@ -514,11 +516,17 @@ gtk_window_class_init (GtkWindowClass *klass)
   gtk_binding_entry_add_signal (binding_set, GDK_Tab, 0,
                                 "move_focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, 0,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
   gtk_binding_entry_add_signal (binding_set, GDK_ISO_Left_Tab, 0,
                                 "move_focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
 
   gtk_binding_entry_add_signal (binding_set, GDK_Tab, GDK_SHIFT_MASK,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, GDK_SHIFT_MASK,
                                 "move_focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
   gtk_binding_entry_add_signal (binding_set, GDK_ISO_Left_Tab, GDK_SHIFT_MASK,

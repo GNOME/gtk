@@ -1317,6 +1317,8 @@ gdk_window_get_clip_region (GdkDrawable *drawable)
 	  GdkWindowPaint *paint = tmp_list->data;
 	  
 	  gdk_region_union (paint_region, paint->region);
+
+          tmp_list = tmp_list->next;
 	}
 
       gdk_region_intersect (result, paint_region);

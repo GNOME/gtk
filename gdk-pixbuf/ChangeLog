@@ -1,3 +1,10 @@
+2001-06-28  Havoc Pennington  <hp@pobox.com>
+
+	* gdk-pixdata.c: <string.h>
+
+	* gdk-pixbuf-io.c (get_libdir): fix typo in dll name (aren't we
+	also leaking memory here from g_strdup_printf?)
+
 Tue Jun 26 09:48:02 2001  Tim Janik  <timj@gtk.org>
 
 	* Makefile.am (noinst_PROGRAMS): get rid of make-inline-pixbuf

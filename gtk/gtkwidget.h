@@ -78,6 +78,13 @@ typedef enum
   GTK_DOUBLE_BUFFERED  = 1 << 21
 } GtkWidgetFlags;
 
+/* Kinds of widget-specific help */
+typedef enum
+{
+  GTK_WIDGET_HELP_TOOLTIP,
+  GTK_WIDGET_HELP_WHATS_THIS
+} GtkWidgetHelpType;
+
 /* Macro for casting a pointer to a GtkWidget or GtkWidgetClass pointer.
  * Macros for testing whether `widget' or `klass' are of type GTK_TYPE_WIDGET.
  */
@@ -391,7 +398,14 @@ struct _GtkWidgetClass
 
   /* Signals used only for keybindings */
   void (* popup_menu)              (GtkWidget          *widget);
-  
+
+  /* If a widget has multiple tooltips/whatsthis, it should show the
+   * one for the current focus location, or if that doesn't make
+   * sense, should cycle through them showing each tip alongside
+   * whatever piece of the widget it applies to.
+   */
+  void (* show_help)               (GtkWidget          *widget,
+                                    GtkWidgetHelpType   help_type);
   
   /* accessibility support 
    */

@@ -383,3 +383,11 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
      gtk_container_child_setv         => gtk_container_child_get_property
      gtk_container_add_with_args      => gtk_container_add_with_properties
      gtk_container_addv               => gtk_container_add / gtk_container_child_set_property
+
+* gdk_image_get() (or rather its replacement,
+  gdk_drawable_get_image()) now handles errors properly by returning
+  NULL, previously it would crash. Also, a window being offscreen is
+  no longer considered an error; instead, the area being contains
+  undefined contents for the offscreen areas. In most cases, code
+  using gdk_image_get() should really be ported to
+  gdk_pixbuf_get_from_drawable().

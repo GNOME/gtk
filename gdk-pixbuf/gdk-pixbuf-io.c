@@ -239,7 +239,7 @@ get_libdir (void)
   if (libdir == NULL)
     libdir = g_win32_get_package_installation_subdirectory
       (GETTEXT_PACKAGE,
-       g_strdup_printf ("gdk_pixbug-%d.%d.dll",
+       g_strdup_printf ("gdk_pixbuf-%d.%d.dll",
 			GDK_PIXBUF_MAJOR, GDK_PIXBUF_MINOR),
        "loaders");
 

@@ -1154,7 +1154,8 @@ gtk_spin_button_key_press (GtkWidget     *widget,
   GtkSpinButton *spin;
   gint key;
   gboolean key_repeat = FALSE;
-
+  gboolean retval = FALSE;
+  
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_SPIN_BUTTON (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
@@ -1164,100 +1165,112 @@ gtk_spin_button_key_press (GtkWidget     *widget,
 
   key_repeat = (event->time == spin->ev_time);
 
-  if (GTK_ENTRY (widget)->editable &&
-      (key == GDK_Up || key == GDK_Down || 
-       key == GDK_Page_Up || key == GDK_Page_Down))
-    gtk_spin_button_update (spin);
-
-  switch (key)
+  if (GTK_ENTRY (widget)->editable)
     {
-    case GDK_Up:
+      switch (key)
+        {
+        case GDK_KP_Up:
+        case GDK_Up:
 
-      if (GTK_WIDGET_HAS_FOCUS (widget))
-	{
-	  gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), 
-					"key_press_event");
-	  if (!key_repeat)
-	    spin->timer_step = spin->adjustment->step_increment;
+          if (GTK_WIDGET_HAS_FOCUS (widget))
+            {
+              gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), 
+                                            "key_press_event");
+              if (!key_repeat)
+                spin->timer_step = spin->adjustment->step_increment;
 
-	 gtk_spin_button_real_spin (spin, spin->timer_step);
+              gtk_spin_button_real_spin (spin, spin->timer_step);
 
-	  if (key_repeat)
-	    {
-	      if (spin->climb_rate > 0.0 && spin->timer_step
-		  < spin->adjustment->page_increment)
-		{
-		  if (spin->timer_calls < MAX_TIMER_CALLS)
-		    spin->timer_calls++;
-		  else 
-		    {
-		      spin->timer_calls = 0;
-		      spin->timer_step += spin->climb_rate;
-		    }
-		}
-	    }
-	  return TRUE;
-	}
-      return FALSE;
+              if (key_repeat)
+                {
+                  if (spin->climb_rate > 0.0 && spin->timer_step
+                      < spin->adjustment->page_increment)
+                    {
+                      if (spin->timer_calls < MAX_TIMER_CALLS)
+                        spin->timer_calls++;
+                      else 
+                        {
+                          spin->timer_calls = 0;
+                          spin->timer_step += spin->climb_rate;
+                        }
+                    }
+                }
+              retval = TRUE;
+            }
+          break;
 
-    case GDK_Down:
+        case GDK_KP_Down:
+        case GDK_Down:
 
-      if (GTK_WIDGET_HAS_FOCUS (widget))
-	{
-	  gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), 
-					"key_press_event");
-	  if (!key_repeat)
-	    spin->timer_step = spin->adjustment->step_increment;
+          if (GTK_WIDGET_HAS_FOCUS (widget))
+            {
+              gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), 
+                                            "key_press_event");
+              if (!key_repeat)
+                spin->timer_step = spin->adjustment->step_increment;
 
-	 gtk_spin_button_real_spin (spin, -spin->timer_step);
+              gtk_spin_button_real_spin (spin, -spin->timer_step);
 
-	  if (key_repeat)
-	    {
-	      if (spin->climb_rate > 0.0 && spin->timer_step
-		  < spin->adjustment->page_increment)
-		{
-		  if (spin->timer_calls < MAX_TIMER_CALLS)
-		    spin->timer_calls++;
-		  else 
-		    {
-		      spin->timer_calls = 0;
-		      spin->timer_step += spin->climb_rate;
-		    }
-		}
-	    }
-	  return TRUE;
-	}
-      return FALSE;
+              if (key_repeat)
+                {
+                  if (spin->climb_rate > 0.0 && spin->timer_step
+                      < spin->adjustment->page_increment)
+                    {
+                      if (spin->timer_calls < MAX_TIMER_CALLS)
+                        spin->timer_calls++;
+                      else 
+                        {
+                          spin->timer_calls = 0;
+                          spin->timer_step += spin->climb_rate;
+                        }
+                    }
+                }
+              retval = TRUE;
+            }
+          break;
 
-    case GDK_Page_Up:
+        case GDK_KP_Page_Up:
+        case GDK_Page_Up:
 
-      if (event->state & GDK_CONTROL_MASK)
-	{
-	  gdouble diff = spin->adjustment->upper - spin->adjustment->value;
-	  if (diff > EPSILON)
-	    gtk_spin_button_real_spin (spin, diff);
-	}
-      else
-	gtk_spin_button_real_spin (spin, spin->adjustment->page_increment);
-      return TRUE;
+          if (event->state & GDK_CONTROL_MASK)
+            {
+              gdouble diff = spin->adjustment->upper - spin->adjustment->value;
+              if (diff > EPSILON)
+                gtk_spin_button_real_spin (spin, diff);
+            }
+          else
+            gtk_spin_button_real_spin (spin, spin->adjustment->page_increment);
 
-    case GDK_Page_Down:
+          retval = TRUE;
+          break;
+          
+        case GDK_KP_Page_Down:
+        case GDK_Page_Down:
 
-      if (event->state & GDK_CONTROL_MASK)
-	{
-	  gdouble diff = spin->adjustment->value - spin->adjustment->lower;
-	  if (diff > EPSILON)
-	    gtk_spin_button_real_spin (spin, -diff);
-	}
-      else
-	gtk_spin_button_real_spin (spin, -spin->adjustment->page_increment);
-      return TRUE;
+          if (event->state & GDK_CONTROL_MASK)
+            {
+              gdouble diff = spin->adjustment->value - spin->adjustment->lower;
+              if (diff > EPSILON)
+                gtk_spin_button_real_spin (spin, -diff);
+            }
+          else
+            gtk_spin_button_real_spin (spin, -spin->adjustment->page_increment);
 
-    default:
-      break;
+          retval = TRUE;
+          break;
+
+        default:
+          break;
+        }
     }
 
-  return GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
+  if (retval)
+    {
+      gtk_spin_button_update (spin);
+      return TRUE;
+    }
+  else
+    return GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
 }
 
 static gint

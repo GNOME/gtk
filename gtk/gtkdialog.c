@@ -33,11 +33,10 @@
 #include "gdkkeysyms.h"
 #include "gtkmain.h"
 #include "gtkintl.h"
+#include "gtkbindings.h"
 
 static void gtk_dialog_class_init (GtkDialogClass *klass);
 static void gtk_dialog_init       (GtkDialog      *dialog);
-static gint gtk_dialog_key_press  (GtkWidget      *widget,
-                                   GdkEventKey    *key);                                   
 
 static void gtk_dialog_add_buttons_valist (GtkDialog   *dialog,
                                            const gchar *first_button_text,
@@ -58,6 +57,8 @@ static void gtk_dialog_get_property      (GObject          *object,
 static void gtk_dialog_style_set         (GtkWidget        *widget,
                                           GtkStyle         *prev_style);
 
+static void gtk_dialog_close             (GtkDialog        *dialog);
+
 enum {
   PROP_0,
   PROP_HAS_SEPARATOR
@@ -65,6 +66,7 @@ enum {
 
 enum {
   RESPONSE,
+  CLOSE,
   LAST_SIGNAL
 };
 
@@ -102,18 +104,20 @@ gtk_dialog_class_init (GtkDialogClass *class)
   GObjectClass *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
-
+  GtkBindingSet *binding_set;
+  
   gobject_class = G_OBJECT_CLASS (class);
   object_class = GTK_OBJECT_CLASS (class);
   widget_class = GTK_WIDGET_CLASS (class);
-
+  
   parent_class = g_type_class_peek_parent (class);
 
   gobject_class->set_property = gtk_dialog_set_property;
   gobject_class->get_property = gtk_dialog_get_property;
   
-  widget_class->key_press_event = gtk_dialog_key_press;
   widget_class->style_set = gtk_dialog_style_set;
+
+  class->close = gtk_dialog_close;
   
   g_object_class_install_property (gobject_class,
                                    PROP_HAS_SEPARATOR,
@@ -132,6 +136,14 @@ gtk_dialog_class_init (GtkDialogClass *class)
 		    GTK_TYPE_NONE, 1,
                     GTK_TYPE_INT);
 
+  dialog_signals[CLOSE] =
+    gtk_signal_new ("close",
+                    GTK_RUN_LAST | GTK_RUN_ACTION,
+                    GTK_CLASS_TYPE (object_class),
+                    GTK_SIGNAL_OFFSET (GtkDialogClass, close),
+                    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("content_area_border",
                                                              _("Content area border"),
@@ -157,6 +169,11 @@ gtk_dialog_class_init (GtkDialogClass *class)
                                                              G_MAXINT,
                                                              5,
                                                              G_PARAM_READABLE));
+
+  binding_set = gtk_binding_set_by_class (class);
+  
+  gtk_binding_entry_add_signal (binding_set, GDK_Escape, 0,
+                                "close", 0);
 }
 
 static void
@@ -277,37 +294,32 @@ gtk_dialog_delete_event_handler (GtkWidget   *widget,
   return FALSE;
 }
 
-static gint
-gtk_dialog_key_press (GtkWidget   *widget,
-                      GdkEventKey *key)
-{
-  GdkEventAny event;
-
-  event.type = GDK_DELETE;
-  event.window = widget->window;
-  event.send_event = TRUE;
-
-  if (GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, key))
-    return TRUE;
-
-  if (key->keyval != GDK_Escape)
-    return FALSE;
-
-  /* Synthesize delete_event to close dialog. */
-  g_object_ref (G_OBJECT (event.window));
-  
-  gtk_main_do_event ((GdkEvent*)&event);
-  
-  g_object_unref (G_OBJECT (event.window));
-
-  return TRUE;
-}
-
 static void
 gtk_dialog_style_set (GtkWidget *widget,
                       GtkStyle  *prev_style)
 {
   update_spacings (GTK_DIALOG (widget));
+}
+
+static void
+gtk_dialog_close (GtkDialog *dialog)
+{
+  /* Synthesize delete_event to close dialog. */
+  
+  GdkEventAny event;
+  GtkWidget *widget;
+
+  widget = GTK_WIDGET (dialog);
+  
+  event.type = GDK_DELETE;
+  event.window = widget->window;
+  event.send_event = TRUE;
+  
+  g_object_ref (G_OBJECT (event.window));
+  
+  gtk_main_do_event ((GdkEvent*)&event);
+  
+  g_object_unref (G_OBJECT (event.window));
 }
 
 GtkWidget*

@@ -1947,23 +1947,30 @@ gtk_text_key_press (GtkWidget   *widget,
     {
       switch (event->keyval)
 	{
-	case GDK_Home:      
+	case GDK_Home:
+        case GDK_KP_Home:
 	  if (event->state & GDK_CONTROL_MASK)
 	    scroll_int (text, -text->vadj->value);
 	  else
 	    return_val = FALSE;
 	  break;
 	case GDK_End:
+        case GDK_KP_End:
 	  if (event->state & GDK_CONTROL_MASK)
 	    scroll_int (text, +text->vadj->upper); 
 	  else
 	    return_val = FALSE;
 	  break;
+        case GDK_KP_Page_Up:
 	case GDK_Page_Up:   scroll_int (text, -text->vadj->page_increment); break;
+        case GDK_KP_Page_Down:
 	case GDK_Page_Down: scroll_int (text, +text->vadj->page_increment); break;
+        case GDK_KP_Up:
 	case GDK_Up:        scroll_int (text, -KEY_SCROLL_PIXELS); break;
+        case GDK_KP_Down:
 	case GDK_Down:      scroll_int (text, +KEY_SCROLL_PIXELS); break;
 	case GDK_Return:
+        case GDK_KP_Enter:
 	  if (event->state & GDK_CONTROL_MASK)
 	    gtk_signal_emit_by_name (GTK_OBJECT (text), "activate");
 	  else
@@ -2047,6 +2054,7 @@ gtk_text_key_press (GtkWidget   *widget,
 	case GDK_Clear:
 	  gtk_text_delete_line (text);
 	  break;
+        case GDK_KP_Insert:
 	case GDK_Insert:
 	  if (event->state & GDK_SHIFT_MASK)
 	    {
@@ -2076,6 +2084,7 @@ gtk_text_key_press (GtkWidget   *widget,
 	  break;
 	case GDK_Tab:
         case GDK_ISO_Left_Tab:
+        case GDK_KP_Tab:
 	  position = text->point.index;
 	  gtk_editable_insert_text (GTK_EDITABLE (old_editable), "\t", 1, &position);
 	  break;
