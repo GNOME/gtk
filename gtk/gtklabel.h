@@ -82,6 +82,9 @@ void       gtk_label_get           (GtkLabel          *label,
 guint      gtk_label_parse_uline    (GtkLabel         *label,
 				     const gchar      *string);
 
+/* Deprecated */
+#define gtk_label_set				gtk_label_set_text
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

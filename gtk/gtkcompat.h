@@ -36,7 +36,6 @@ extern "C" {
 #define	gtk_paned_handle_size			gtk_paned_set_handle_size
 #define	gtk_scale_value_width                   gtk_scale_get_value_width
 #define	gtk_window_position			gtk_window_set_position
-#define gtk_label_set				gtk_label_set_text
 
 #ifdef __cplusplus
 }
