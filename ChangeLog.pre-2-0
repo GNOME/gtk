@@ -1,3 +1,32 @@
+2000-11-13  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
+
+	* gdk/linux-fb/gdkcolor-fb.c, gdk/nanox/gdkmain-nanox.c,
+	gdk/win32/gdkcolor-win32.c, gdk/win32/gdkwin32id.c,
+	gdk/x11/gdkcolor-x11.c, gdk/x11/gdkvisual-x11.c, gdk/x11/gdkxid.c,
+	gtk/gtkgc.c, gtk/gtkrc.c, gtk/gtktext.c: GCompareFunc ->
+	GEqualFunc where applicable.
+	
+	* gdk/linux-fb/gdkpango-fb.c: pango_font_description_compare ->
+	pango_font_description_equal as changed in pango.
+	
+	* gdk/nanox/gdkmain-nanox.c: gdk_xid_compare -> gdk_xid_equal.
+
+	* gdk/win32/gdkcolor-win32.c: gdk_colormap_cmp -> gdk_colormap_equal.
+
+	* gdk/win32/gdkwin32id.c: gdk_handle_compare -> gdk_handle_equal.
+
+	* gdk/x11/gdkcolor-x11.c: gdk_colormap_cmp -> gdk_colormap_equal.
+
+	* gdk/x11/gdkvisual-x11.c: gdk_visual_compare -> gdk_visual_equal.
+
+	* gdk/x11/gdkxid.c: gdk_xid_compare -> gdk_xid_equal.
+
+	* gtk/gtkgc.c: gtk_gc_key_compare -> gtk_gc_key_equal and
+	gtk_gc_drawable_compare -> gtk_gc_drawable_equal.
+
+	* gtk/gtkrc.c: gtk_rc_style_compare -> gtk_rc_style_equal and
+	gtk_rc_styles_compare -> gtk_rc_styles_equal.
+
 2000-11-12  Havoc Pennington  <hp@pobox.com>
 
 	* demos/gtk-demo/Makefile.am (democodedir): change demo install

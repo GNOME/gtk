@@ -37,7 +37,7 @@ gdk_handle_hash (HANDLE *handle)
 }
 
 static gint
-gdk_handle_compare (HANDLE *a,
+gdk_handle_equal (HANDLE *a,
 		 HANDLE *b)
 {
   return (*a == *b);
@@ -51,7 +51,7 @@ gdk_win32_handle_table_insert (HANDLE  *handle,
 
   if (!handle_ht)
     handle_ht = g_hash_table_new ((GHashFunc) gdk_handle_hash,
-				  (GCompareFunc) gdk_handle_compare);
+				  (GEqualFunc) gdk_handle_equal);
 
   g_hash_table_insert (handle_ht, handle, data);
 }
@@ -61,7 +61,7 @@ gdk_win32_handle_table_remove (HANDLE handle)
 {
   if (!handle_ht)
     handle_ht = g_hash_table_new ((GHashFunc) gdk_handle_hash,
-				  (GCompareFunc) gdk_handle_compare);
+				  (GEqualFunc) gdk_handle_equal);
 
   g_hash_table_remove (handle_ht, &handle);
 }

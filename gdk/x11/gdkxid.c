@@ -27,9 +27,9 @@
 #include "gdkprivate-x11.h"
 #include <stdio.h>
 
-static guint gdk_xid_hash    (XID *xid);
-static gint  gdk_xid_compare (XID *a,
-			      XID *b);
+static guint     gdk_xid_hash  (XID *xid);
+static gboolean  gdk_xid_equal (XID *a,
+				XID *b);
 
 
 static GHashTable *xid_ht = NULL;
@@ -43,7 +43,7 @@ gdk_xid_table_insert (XID      *xid,
 
   if (!xid_ht)
     xid_ht = g_hash_table_new ((GHashFunc) gdk_xid_hash,
-			       (GCompareFunc) gdk_xid_compare);
+			       (GEqualFunc) gdk_xid_equal);
 
   g_hash_table_insert (xid_ht, xid, data);
 }
@@ -53,7 +53,7 @@ gdk_xid_table_remove (XID xid)
 {
   if (!xid_ht)
     xid_ht = g_hash_table_new ((GHashFunc) gdk_xid_hash,
-			       (GCompareFunc) gdk_xid_compare);
+			       (GEqualFunc) gdk_xid_equal);
 
   g_hash_table_remove (xid_ht, &xid);
 }
@@ -76,9 +76,9 @@ gdk_xid_hash (XID *xid)
   return *xid;
 }
 
-static gint
-gdk_xid_compare (XID *a,
-		 XID *b)
+static gboolean
+gdk_xid_equal (XID *a,
+	       XID *b)
 {
   return (*a == *b);
 }

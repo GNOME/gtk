@@ -52,10 +52,10 @@ static gpointer  gtk_gc_new              (gpointer       key);
 static void      gtk_gc_destroy          (gpointer       value);
 static guint     gtk_gc_key_hash         (gpointer       key);
 static guint     gtk_gc_value_hash       (gpointer       value);
-static gint      gtk_gc_key_compare      (gpointer       a,
+static gint      gtk_gc_key_equal        (gpointer       a,
 					  gpointer       b);
 static guint     gtk_gc_drawable_hash    (GtkGCDrawable *d);
-static gint      gtk_gc_drawable_compare (GtkGCDrawable *a,
+static gint      gtk_gc_drawable_equal   (GtkGCDrawable *a,
 					  GtkGCDrawable *b);
 
 
@@ -109,10 +109,10 @@ gtk_gc_init (void)
 			  (GCacheDestroyFunc) gtk_gc_key_destroy,
 			  (GHashFunc) gtk_gc_key_hash,
 			  (GHashFunc) gtk_gc_value_hash,
-			  (GCompareFunc) gtk_gc_key_compare);
+			  (GEqualFunc) gtk_gc_key_equal);
 
   gc_drawable_ht = g_hash_table_new ((GHashFunc) gtk_gc_drawable_hash,
-				     (GCompareFunc) gtk_gc_drawable_compare);
+				     (GEqualFunc) gtk_gc_drawable_equal);
 }
 
 static GtkGCKey*
@@ -259,9 +259,9 @@ gtk_gc_value_hash (gpointer value)
   return (gulong) value;
 }
 
-static gint
-gtk_gc_key_compare (gpointer a,
-		    gpointer b)
+static gboolean
+gtk_gc_key_equal (gpointer a,
+		  gpointer b)
 {
   GtkGCKey *akey;
   GtkGCKey *bkey;
@@ -384,9 +384,9 @@ gtk_gc_drawable_hash (GtkGCDrawable *d)
   return d->depth;
 }
 
-static gint
-gtk_gc_drawable_compare (GtkGCDrawable *a,
-			 GtkGCDrawable *b)
+static gboolean
+gtk_gc_drawable_equal (GtkGCDrawable *a,
+		       GtkGCDrawable *b)
 {
   return (a->depth == b->depth);
 }

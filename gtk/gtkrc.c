@@ -81,10 +81,10 @@ struct _GtkRcFile
 };
 
 static guint       gtk_rc_style_hash                 (const char      *name);
-static gint        gtk_rc_style_compare              (const char      *a,
+static gboolean    gtk_rc_style_equal                (const char      *a,
                                                       const char      *b);
 static guint       gtk_rc_styles_hash                (const GSList    *rc_styles);
-static gint        gtk_rc_styles_compare             (const GSList    *a,
+static gboolean    gtk_rc_styles_equal                (const GSList    *a,
                                                       const GSList    *b);
 static GtkRcStyle* gtk_rc_style_find                 (const char      *name);
 static GSList *    gtk_rc_styles_match               (GSList          *rc_styles,
@@ -1388,9 +1388,9 @@ gtk_rc_styles_hash (const GSList *rc_styles)
   return result;
 }
 
-static gint	   
-gtk_rc_styles_compare (const GSList *a,
-		       const GSList *b)
+static gboolean
+gtk_rc_styles_equal (const GSList *a,
+		     const GSList *b)
 {
   while (a && b)
     {
@@ -1415,9 +1415,9 @@ gtk_rc_style_hash (const char *name)
   return result;
 }
 
-static gint
-gtk_rc_style_compare (const char *a,
-		      const char *b)
+static gboolean
+gtk_rc_style_equal (const char *a,
+		    const char *b)
 {
   return (strcmp (a, b) == 0);
 }
@@ -1458,7 +1458,7 @@ gtk_rc_init_style (GSList *rc_styles)
   
   if (!realized_style_ht)
     realized_style_ht = g_hash_table_new ((GHashFunc) gtk_rc_styles_hash,
-					  (GCompareFunc) gtk_rc_styles_compare);
+					  (GEqualFunc) gtk_rc_styles_equal);
 
   style = g_hash_table_lookup (realized_style_ht, rc_styles);
 
@@ -1817,7 +1817,7 @@ gtk_rc_parse_style (GScanner *scanner)
     {
       if (!rc_style_ht)
 	rc_style_ht = g_hash_table_new ((GHashFunc) gtk_rc_style_hash,
-					(GCompareFunc) gtk_rc_style_compare);
+					(GEqualFunc) gtk_rc_style_equal);
       
       g_hash_table_insert (rc_style_ht, rc_style->name, rc_style);
     }

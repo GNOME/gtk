@@ -31,13 +31,13 @@
 #include "gdkprivate-x11.h"
 #include "gdkinternals.h"
 
-static void  gdk_visual_add            (GdkVisual *visual);
-static void  gdk_visual_decompose_mask (gulong     mask,
-					gint      *shift,
-					gint      *prec);
-static guint gdk_visual_hash           (Visual    *key);
-static gint  gdk_visual_compare        (Visual    *a,
-					Visual    *b);
+static void     gdk_visual_add            (GdkVisual *visual);
+static void     gdk_visual_decompose_mask (gulong     mask,
+					   gint      *shift,
+					   gint      *prec);
+static guint    gdk_visual_hash           (Visual    *key);
+static gboolean gdk_visual_equal          (Visual    *a,
+					   Visual    *b);
 
 
 static GdkVisualPrivate *system_visual;
@@ -411,7 +411,7 @@ gdk_visual_add (GdkVisual *visual)
 
   if (!visual_hash)
     visual_hash = g_hash_table_new ((GHashFunc) gdk_visual_hash,
-				    (GCompareFunc) gdk_visual_compare);
+				    (GEqualFunc) gdk_visual_equal);
 
   private = (GdkVisualPrivate*) visual;
 
@@ -445,9 +445,9 @@ gdk_visual_hash (Visual *key)
   return key->visualid;
 }
 
-static gint
-gdk_visual_compare (Visual *a,
-		    Visual *b)
+static gboolean
+gdk_visual_equal (Visual *a,
+		  Visual *b)
 {
   return (a->visualid == b->visualid);
 }

@@ -168,9 +168,9 @@ gdk_keyval_convert_case (guint symbol,
 }
 */
 
-static guint gdk_xid_hash    (guint *xid);
-static gint  gdk_xid_compare (guint *a,
-			      guint *b);
+static guint     gdk_xid_hash  (guint *xid);
+static gboolean  gdk_xid_equal (guint *a,
+				guint *b);
 
 
 static GHashTable *xid_ht = NULL;
@@ -184,7 +184,7 @@ gdk_xid_table_insert (guint      *xid,
 
   if (!xid_ht)
     xid_ht = g_hash_table_new ((GHashFunc) gdk_xid_hash,
-			       (GCompareFunc) gdk_xid_compare);
+			       (GEqualFunc) gdk_xid_equal);
 
   g_hash_table_insert (xid_ht, xid, data);
 }
@@ -194,7 +194,7 @@ gdk_xid_table_remove (guint xid)
 {
   if (!xid_ht)
     xid_ht = g_hash_table_new ((GHashFunc) gdk_xid_hash,
-			       (GCompareFunc) gdk_xid_compare);
+			       (GEqualFunc) gdk_xid_equal);
 
   g_hash_table_remove (xid_ht, &xid);
 }
@@ -217,9 +217,9 @@ gdk_xid_hash (guint *xid)
   return *xid;
 }
 
-static gint
-gdk_xid_compare (guint *a,
-		 guint *b)
+static gboolean
+gdk_xid_equal (guint *a,
+	       guint *b)
 {
   return (*a == *b);
 }

@@ -31,14 +31,14 @@
 
 #define GDK_COLORMAP_PRIVATE_DATA(cmap) ((GdkColormapPrivateX11 *) GDK_COLORMAP (cmap)->windowing_data)
 
-static gint  gdk_colormap_match_color (GdkColormap *cmap,
-				       GdkColor    *color,
-				       const gchar *available);
-static void  gdk_colormap_add         (GdkColormap *cmap);
-static void  gdk_colormap_remove      (GdkColormap *cmap);
-static guint gdk_colormap_hash        (Colormap    *cmap);
-static gint  gdk_colormap_cmp         (Colormap    *a,
-				       Colormap    *b);
+static gint     gdk_colormap_match_color (GdkColormap *cmap,
+					  GdkColor    *color,
+					  const gchar *available);
+static void     gdk_colormap_add         (GdkColormap *cmap);
+static void     gdk_colormap_remove      (GdkColormap *cmap);
+static guint    gdk_colormap_hash        (Colormap    *cmap);
+static gboolean gdk_colormap_equal       (Colormap    *a,
+					  Colormap    *b);
 
 static void gdk_colormap_init       (GdkColormap      *colormap);
 static void gdk_colormap_class_init (GdkColormapClass *klass);
@@ -156,7 +156,7 @@ gdk_colormap_new (GdkVisual *visual,
       colormap->colors = g_new (GdkColor, colormap->size);
       
       private->hash = g_hash_table_new ((GHashFunc) gdk_color_hash,
-					(GCompareFunc) gdk_color_equal);
+					(GEqualFunc) gdk_color_equal);
       
       private->private_val = private_cmap;
       private->xcolormap = XCreateColormap (private->xdisplay, gdk_root_window,
@@ -304,7 +304,7 @@ gdk_colormap_get_system (void)
 	  colormap->colors = g_new (GdkColor, colormap->size);
 	  
 	  private->hash = g_hash_table_new ((GHashFunc) gdk_color_hash,
-					    (GCompareFunc) gdk_color_equal);
+					    (GEqualFunc) gdk_color_equal);
           
 	  gdk_colormap_sync (colormap, TRUE);
 	}
@@ -1101,7 +1101,7 @@ gdk_colormap_add (GdkColormap *cmap)
 
   if (!colormap_hash)
     colormap_hash = g_hash_table_new ((GHashFunc) gdk_colormap_hash,
-				      (GCompareFunc) gdk_colormap_cmp);
+				      (GEqualFunc) gdk_colormap_equal);
 
   private = GDK_COLORMAP_PRIVATE_DATA (cmap);
 
@@ -1115,7 +1115,7 @@ gdk_colormap_remove (GdkColormap *cmap)
 
   if (!colormap_hash)
     colormap_hash = g_hash_table_new ((GHashFunc) gdk_colormap_hash,
-				      (GCompareFunc) gdk_colormap_cmp);
+				      (GEqualFunc) gdk_colormap_equal);
 
   private = GDK_COLORMAP_PRIVATE_DATA (cmap);
 
@@ -1128,9 +1128,9 @@ gdk_colormap_hash (Colormap *cmap)
   return *cmap;
 }
 
-static gint
-gdk_colormap_cmp (Colormap *a,
-		  Colormap *b)
+static gboolean
+gdk_colormap_equal (Colormap *a,
+		    Colormap *b)
 {
   return (*a == *b);
 }

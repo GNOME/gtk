@@ -133,7 +133,7 @@ gdk_colormap_new (GdkVisual *visual,
       colormap->colors = g_new (GdkColor, colormap->size);
       
       private->hash = g_hash_table_new ((GHashFunc) gdk_color_hash,
-					(GCompareFunc) gdk_color_equal);
+					(GEqualFunc) gdk_color_equal);
       
       if (private_cmap)
 	{

@@ -2923,7 +2923,7 @@ get_text_font (GdkFont* gfont)
   gint i;
   
   if (!font_cache_table)
-    font_cache_table = g_hash_table_new (font_hash, (GCompareFunc) gdk_font_equal);
+    font_cache_table = g_hash_table_new (font_hash, (GEqualFunc) gdk_font_equal);
   
   tf = g_hash_table_lookup (font_cache_table, gfont);
   

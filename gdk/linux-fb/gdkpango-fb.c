@@ -143,7 +143,7 @@ pango_fb_font_map_load_font(PangoFontMap *fontmap,
     {
       fl = g_ptr_array_index(fbfm->all_descs, i);
 
-      /* Can't use pango_font_description_compare() because it checks ->size as well */
+      /* Can't use pango_font_description_equal() because it checks ->size as well */
       if(!g_strcasecmp(desc->family_name, fl->desc.family_name)
 	 && desc->style == fl->desc.style
 	 && desc->weight == fl->desc.weight
@@ -276,7 +276,7 @@ pango_fb_font_map_init(PangoFBFontMap *fontmap)
   };
   int i;
 
-  fontmap->all_fonts = g_hash_table_new(pango_font_description_hash, (GCompareFunc)pango_font_description_compare);
+  fontmap->all_fonts = g_hash_table_new(pango_font_description_hash, (GEqualFunc)pango_font_description_equal);
   fontmap->all_descs = g_ptr_array_new();
   for(i = 0; font_dirs[i]; i++)
     list_fonts(fontmap, NULL, fontmap->all_descs, font_dirs[i]);
