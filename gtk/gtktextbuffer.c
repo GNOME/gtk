@@ -113,7 +113,7 @@ static void remove_all_clipboard_contents_buffers (GtkTextBuffer *buffer);
 static void remove_all_selection_clipboards       (GtkTextBuffer *buffer);
 static void update_selection_clipboards           (GtkTextBuffer *buffer);
 
-static GtkObjectClass *parent_class = NULL;
+static GObjectClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
 
 GType

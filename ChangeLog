@@ -1,3 +1,12 @@
+2002-02-24  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextbuffer.c (parent_class): parent_class variable was
+	GtkObjectClass instead of GObjectClass
+
+	* gtk/gtktextview.c (widget_to_buffer): fix this the way 
+	buffer_to_widget was fixed, to avoid duplicating 
+	the code that computes text_window->allocation.x/y
+
 Sun Feb 24 21:18:20 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksocket.c (gtk_socket_end_embedding): Fix
