@@ -23,8 +23,8 @@
 #include <string.h>
 
 static const GtkIMContextInfo xim_ja_info = { 
-  "xim-ja",		           /* ID */
-  N_("Japanese (XIM)"),            /* Human readable name */
+  "xim",		           /* ID */
+  N_("X Input Method"),            /* Human readable name */
   "gtk+",			   /* Translation domain */
    GTK_LOCALEDIR,		   /* Dir for bindtextdomain (not strictly needed for "gtk+") */
   "ja"			           /* Languages for which this module is the default */
@@ -56,8 +56,8 @@ im_module_list (const GtkIMContextInfo ***contexts,
 GtkIMContext *
 im_module_create (const gchar *context_id)
 {
-  if (strcmp (context_id, "xim-ja") == 0)
-    return gtk_im_context_xim_new ("ja_JP.eucjp", "EUC-JP", "INTERNAL");
+  if (strcmp (context_id, "xim") == 0)
+    return gtk_im_context_xim_new ();
   else
     return NULL;
 }

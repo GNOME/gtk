@@ -1557,10 +1557,14 @@ gtk_entry_preedit_changed_cb (GtkIMContext *context,
 			      GtkEntry     *entry)
 {
   gchar *preedit_string;
+  gint cursor_pos;
   
   gtk_im_context_get_preedit_string (entry->im_context,
-				     &preedit_string, NULL);
+				     &preedit_string, NULL,
+				     &cursor_pos);
   entry->preedit_length = strlen (preedit_string);
+  cursor_pos = CLAMP (cursor_pos, 0, g_utf8_strlen (preedit_string, -1));
+  cursor_pos = g_utf8_offset_to_pointer (preedit_string, cursor_pos) - preedit_string;
   g_free (preedit_string);
 
   gtk_entry_recompute (entry);
@@ -1618,7 +1622,7 @@ gtk_entry_create_layout (GtkEntry *entry,
   if (include_preedit)
     {
       gtk_im_context_get_preedit_string (entry->im_context,
-					 &preedit_string, &preedit_attrs);
+					 &preedit_string, &preedit_attrs, NULL);
       preedit_length = entry->preedit_length;
     }
 
@@ -1859,15 +1863,11 @@ gtk_entry_get_cursor_locations (GtkEntry *entry,
 				gint     *weak_x)
 {
   PangoLayout *layout = gtk_entry_get_layout (entry, TRUE);
-  gint cursor_index = g_utf8_offset_to_pointer (entry->text, entry->current_pos) - entry->text;
+  gint index = g_utf8_offset_to_pointer (entry->text, entry->current_pos) - entry->text;
 
   PangoRectangle strong_pos, weak_pos;
-  gint index;
 
-  index = g_utf8_offset_to_pointer (entry->text, entry->current_pos) - entry->text;
-  if (index >= cursor_index)
-    index += entry->preedit_length;
-
+  index += entry->preedit_cursor;
   pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
   g_object_unref (G_OBJECT (layout));
 

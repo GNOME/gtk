@@ -1,3 +1,15 @@
+Tue Sep 19 10:54:22 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/{gtkimcontextxim.[ch],imxim.c}: Rip
+	out support for multiple locales; that simple doesn't
+	work reliably with current Xlib
+
+	* gtk/gtkimcontext*.[ch] gtk/gtkimmulticontext.[ch]
+	gtk/gtktextlayout.[ch] gtk/gtktextview.c gtk/gtkentry.c: 
+	Add support for positioning the cursor within the preedit string.
+
+	* modules/input/gtkimcontextxim.[ch]: 
+
 Mon Sep 18 23:56:32 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* modules/input/{imxim.c,gtkimcontextxim.[ch]}: Start

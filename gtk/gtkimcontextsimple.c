@@ -747,7 +747,8 @@ static gboolean gtk_im_context_simple_filter_keypress    (GtkIMContext          
 static void     gtk_im_context_simple_reset              (GtkIMContext             *context);
 static void     gtk_im_context_simple_get_preedit_string (GtkIMContext             *context,
 							  gchar                   **str,
-							  PangoAttrList           **attrs);
+							  PangoAttrList           **attrs,
+							  gint                     *cursor_pos);
 
 static GObjectClass *parent_class;
 
@@ -1006,7 +1007,8 @@ gtk_im_context_simple_reset (GtkIMContext *context)
 static void     
 gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
 					  gchar         **str,
-					  PangoAttrList **attrs)
+					  PangoAttrList **attrs,
+					  gint           *cursor_pos)
 {
   char outbuf[7];
   int len = 0;
@@ -1031,6 +1033,9 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
 	  pango_attr_list_insert (*attrs, attr);
 	}
     }
+
+  if (cursor_pos)
+    cursor_pos = context_simple->tentative_match ? 1 : 0;
 }
 
 /**

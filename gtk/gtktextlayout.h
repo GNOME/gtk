@@ -76,6 +76,7 @@ struct _GtkTextLayout
   gchar *preedit_string;
   PangoAttrList *preedit_attrs;
   gint preedit_len;
+  gint preedit_cursor;
 };
 
 struct _GtkTextLayoutClass
@@ -165,7 +166,8 @@ void gtk_text_layout_set_screen_width       (GtkTextLayout     *layout,
 					     gint               width);
 void gtk_text_layout_set_preedit_string     (GtkTextLayout     *layout,
 					     const gchar       *preedit_string,
-					     PangoAttrList     *preedit_attrs);
+					     PangoAttrList     *preedit_attrs,
+					     gint               cursor_pos);
 
 void     gtk_text_layout_set_cursor_visible (GtkTextLayout *layout,
 					     gboolean       cursor_visible);

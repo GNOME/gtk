@@ -1444,6 +1444,7 @@ main (int argc, char** argv)
   int i;
 
   test_init ();
+  gtk_set_locale ();
   gtk_init (&argc, &argv);
   
   buffer = create_buffer ();

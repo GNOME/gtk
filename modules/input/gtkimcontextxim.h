@@ -51,7 +51,6 @@ struct _GtkIMContextXIM
   GtkXIMInfo *im_info;
   
   gchar *mb_charset;
-  gchar *wide_charset;
 
   GdkWindow *client_window;
 
@@ -60,6 +59,8 @@ struct _GtkIMContextXIM
   gunichar *preedit_chars;
   XIMFeedback *feedbacks;
 
+  gint preedit_cursor;
+  
   XIMCallback preedit_start_callback;
   XIMCallback preedit_done_callback;
   XIMCallback preedit_draw_callback;
@@ -78,9 +79,7 @@ struct _GtkIMContextXIMClass
 };
 
 void gtk_im_context_xim_register_type (GtkModule *module);
-GtkIMContext *gtk_im_context_xim_new (const gchar *locale,
-				      const gchar *mb_charset,
-				      const gchar *wide_charset);
+GtkIMContext *gtk_im_context_xim_new (void);
 
 #ifdef __cplusplus
 }

@@ -2946,9 +2946,10 @@ gtk_text_view_preedit_changed_handler (GtkIMContext *context,
 {
   gchar *str;
   PangoAttrList *attrs;
+  gint cursor_pos;
   
-  gtk_im_context_get_preedit_string (context, &str, &attrs);
-  gtk_text_layout_set_preedit_string (text_view->layout, str, attrs);
+  gtk_im_context_get_preedit_string (context, &str, &attrs, &cursor_pos);
+  gtk_text_layout_set_preedit_string (text_view->layout, str, attrs, cursor_pos);
 
   pango_attr_list_unref (attrs);
   g_free (str);

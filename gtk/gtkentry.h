@@ -86,6 +86,7 @@ struct _GtkEntry
   guint16 n_bytes;	/* length in use, in bytes */
 
   guint16 preedit_length;	/* length of preedit string, in bytes */
+  guint16 preedit_cursor;	/* offset of cursor within preedit string, in bytes */
 };
 
 struct _GtkEntryClass

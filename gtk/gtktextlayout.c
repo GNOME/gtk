@@ -343,6 +343,7 @@ gtk_text_layout_set_screen_width (GtkTextLayout *layout, gint width)
  * @layout: a #PangoLayout
  * @preedit_string: a string to display at the insertion point
  * @preedit_attrs: a #PangoAttrList of attributes that apply to @preedit_string
+ * @cursor_pos: position of cursor within preedit string in chars
  * 
  * Set the preedit string and attributes. The preedit string is a
  * string showing text that is currently being edited and not
@@ -351,7 +352,8 @@ gtk_text_layout_set_screen_width (GtkTextLayout *layout, gint width)
 void
 gtk_text_layout_set_preedit_string (GtkTextLayout *layout,
 				    const gchar   *preedit_string,
-				    PangoAttrList *preedit_attrs)
+				    PangoAttrList *preedit_attrs,
+				    gint           cursor_pos)
 {
   GtkTextIter iter;
   GtkTextLine *line;
@@ -372,12 +374,16 @@ gtk_text_layout_set_preedit_string (GtkTextLayout *layout,
       layout->preedit_len = strlen (layout->preedit_string);
       pango_attr_list_ref (preedit_attrs);
       layout->preedit_attrs = preedit_attrs;
+
+      cursor_pos = CLAMP (cursor_pos, 0, g_utf8_strlen (layout->preedit_string, -1));
+      layout->preedit_cursor = g_utf8_offset_to_pointer (layout->preedit_string, cursor_pos) - layout->preedit_string;
     }
   else
     {
       layout->preedit_string = NULL;
       layout->preedit_len = 0;
       layout->preedit_attrs = NULL;
+      layout->preedit_cursor = 0;
     }
 
   /* Now invalidate the paragraph containing the cursor
@@ -1526,6 +1532,8 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
       else if (seg->type == &gtk_text_right_mark_type ||
                seg->type == &gtk_text_left_mark_type)
         {
+	  gint cursor_offset = 0;
+	  
 	  /* At the insertion point, add the preedit string, if any */
 	  
 	  if (gtk_text_btree_mark_is_insert (_gtk_text_buffer_get_btree (layout->buffer),
@@ -1544,6 +1552,8 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 	  
 		  memcpy (text + byte_offset, layout->preedit_string, layout->preedit_len);
 		  byte_offset += layout->preedit_len;
+
+		  cursor_offset = layout->preedit_cursor - layout->preedit_len;
 		}
 	    }
 	  
@@ -1551,7 +1561,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 
           if (seg->body.mark.visible)
 	    {
-	      cursor_byte_offsets = g_slist_prepend (cursor_byte_offsets, GINT_TO_POINTER (byte_offset));
+	      cursor_byte_offsets = g_slist_prepend (cursor_byte_offsets, GINT_TO_POINTER (byte_offset + cursor_offset));
 	      cursor_segs = g_slist_prepend (cursor_segs, seg);
 	    }
         }

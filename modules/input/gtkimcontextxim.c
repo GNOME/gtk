@@ -40,7 +40,8 @@ static gboolean gtk_im_context_xim_filter_keypress    (GtkIMContext          *co
 static void     gtk_im_context_xim_reset              (GtkIMContext          *context);
 static void     gtk_im_context_xim_get_preedit_string (GtkIMContext          *context,
 						       gchar                **str,
-						       PangoAttrList        **attrs);
+						       PangoAttrList        **attrs,
+						       gint                  *cursor_pos);
 
 static XIC       gtk_im_context_xim_get_ic            (GtkIMContextXIM *context_xim);
 static GObjectClass *parent_class;
@@ -152,7 +153,6 @@ get_im (const char *locale)
   GSList *tmp_list = open_ims;
   GtkXIMInfo *info;
   XIM im = NULL;
-  char *old_locale;
 
   while (tmp_list)
     {
@@ -164,15 +164,14 @@ get_im (const char *locale)
     }
 
   info = NULL;
-  old_locale = g_strdup (setlocale (LC_CTYPE, NULL));
 
-  if (setlocale (LC_CTYPE, locale) && XSupportsLocale ())
+  if (XSupportsLocale ())
     {
       if (!XSetLocaleModifiers (""))
 	g_warning ("can not set locale modifiers");
-
+      
       im = XOpenIM (GDK_DISPLAY(), NULL, NULL, NULL);
-
+      
       if (im)
 	{
 	  info = g_new (GtkXIMInfo, 1);
@@ -184,9 +183,6 @@ get_im (const char *locale)
 	  setup_im (info);
 	}
     }
-
-  setlocale (LC_CTYPE, old_locale);
-  g_free (old_locale);
 
   return info;
 }
@@ -223,7 +219,6 @@ gtk_im_context_xim_finalize (GObject *obj)
     }
  
   g_free (context_xim->mb_charset);
-  g_free (context_xim->wide_charset);
 }
 
 static void
@@ -242,22 +237,22 @@ gtk_im_context_xim_set_client_window (GtkIMContext          *context,
 }
 
 GtkIMContext *
-gtk_im_context_xim_new (const gchar *locale,
-			const gchar *mb_charset,
-			const gchar *wide_charset)
+gtk_im_context_xim_new (void)
 {
   GtkXIMInfo *info;
   GtkIMContextXIM *result;
+  gchar *charset;
 
-  info = get_im (locale);
+  info = get_im (setlocale (LC_CTYPE, NULL));
   if (!info)
     return NULL;
 
   result = GTK_IM_CONTEXT_XIM (gtk_type_new (GTK_TYPE_IM_CONTEXT_XIM));
 
   result->im_info = info;
-  result->mb_charset = g_strdup (mb_charset);
-  result->wide_charset = g_strdup (wide_charset);
+  
+  g_get_charset (&charset);
+  result->mb_charset = g_strdup (charset);
 
   return GTK_IM_CONTEXT (result);
 }
@@ -267,10 +262,11 @@ mb_to_utf8 (GtkIMContextXIM *context_xim,
 	    const char      *str)
 {
   GError *error = NULL;
-  
-  gchar *result = g_convert (str, -1,
-			     "UTF-8", context_xim->mb_charset,
-			     NULL, NULL, &error);
+  gchar *result;
+
+  result = g_convert (str, -1,
+		      "UTF-8", context_xim->mb_charset,
+		      NULL, NULL, &error);
 
   if (!result)
     {
@@ -425,12 +421,16 @@ add_feedback_attr (PangoAttrList *attrs,
 
       pango_attr_list_change (attrs, attr);
     }
+
+  if (feedback & ~FEEDBACK_MASK)
+    g_warning ("Unrendered feedback style: %#lx", feedback & ~FEEDBACK_MASK);
 }
 
 static void     
 gtk_im_context_xim_get_preedit_string (GtkIMContext   *context,
 				       gchar         **str,
-				       PangoAttrList **attrs)
+				       PangoAttrList **attrs,
+				       gint           *cursor_pos)
 {
   GtkIMContextXIM *context_xim = GTK_IM_CONTEXT_XIM (context);
   gchar *utf8 = g_ucs4_to_utf8 (context_xim->preedit_chars, context_xim->preedit_length);
@@ -464,6 +464,9 @@ gtk_im_context_xim_get_preedit_string (GtkIMContext   *context,
     *str = utf8;
   else
     g_free (utf8);
+
+  if (cursor_pos)
+    *cursor_pos = context_xim->preedit_cursor;
 }
 
 static void
@@ -497,10 +500,17 @@ xim_text_to_utf8 (GtkIMContextXIM *context, XIMText *xim_text, gchar **text)
 
   if (xim_text && xim_text->string.multi_byte)
     {
+      if (xim_text->encoding_is_wchar)
+	{
+	  g_warning ("Wide character return from Xlib not currently supported");
+	  *text = NULL;
+	  return 0;
+	}
+
       result = g_convert (xim_text->string.multi_byte,
-			  xim_text->encoding_is_wchar ? xim_text->length : -1,
+			  -1,
 			  "UTF-8",
-			  xim_text->encoding_is_wchar ? context->wide_charset : context->mb_charset,
+			  context->mb_charset,
 			  NULL, &text_length,  &error);
       
       if (result)
@@ -509,12 +519,12 @@ xim_text_to_utf8 (GtkIMContextXIM *context, XIMText *xim_text, gchar **text)
 	  
 	  if (text_length != xim_text->length)
 	    {
-	      g_warning ("Size mismatch when converting text from input method: supplied length = %d\n, result length = %d\n", xim_text->length, text_length);
+	      g_warning ("Size mismatch when converting text from input method: supplied length = %d\n, result length = %d", xim_text->length, text_length);
 	    }
 	}
       else
 	{
-	  g_warning ("Error converting text from IM to UCS-4: %s\n", error->message);
+	  g_warning ("Error converting text from IM to UCS-4: %s", error->message);
 	  g_error_free (error);
 	}
 
@@ -546,6 +556,8 @@ preedit_draw_callback (XIC                           xic,
   gint chg_first = CLAMP (call_data->chg_first, 0, context->preedit_length);
   gint chg_length = CLAMP (call_data->chg_length, 0, context->preedit_length - chg_first);
 
+  context->preedit_cursor = call_data->caret;
+  
   if (chg_first != call_data->chg_first || chg_length != call_data->chg_length)
     g_warning ("Invalid change to preedit string, first=%d length=%d (orig length == %d)",
 	       call_data->chg_first, call_data->chg_length, context->preedit_length);
@@ -600,11 +612,23 @@ preedit_draw_callback (XIC                           xic,
     
 
 static void
-preedit_caret_callback (XIC                           xic,
-			XPointer                      client_data,
-			XIMPreeditCaretCallbackStruct call_data)
+preedit_caret_callback (XIC                            xic,
+			XPointer                       client_data,
+			XIMPreeditCaretCallbackStruct *call_data)
 {
-}		     
+  GtkIMContextXIM *context = GTK_IM_CONTEXT_XIM (client_data);
+  
+  if (call_data->direction == XIMAbsolutePosition)
+    {
+      context->preedit_cursor = call_data->position;
+      gtk_signal_emit_by_name (GTK_OBJECT (context), "preedit-changed");
+    }
+  else
+    {
+      g_warning ("Caret movement command: %d %d %d not supported",
+		 call_data->position, call_data->direction, call_data->style);
+    }
+}	     
 
 static void
 status_start_callback (XIC      xic,
@@ -656,14 +680,14 @@ gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
     {
       if ((context_xim->im_info->style & PREEDIT_MASK) == XIMPreeditCallbacks)
 	{
-	  context_xim->preedit_start_callback.client_data = context_xim;
-	  context_xim->preedit_start_callback.callback = preedit_start_callback;
-	  context_xim->preedit_done_callback.client_data = context_xim;
-	  context_xim->preedit_done_callback.callback = preedit_done_callback;
-	  context_xim->preedit_draw_callback.client_data = context_xim;
-	  context_xim->preedit_draw_callback.callback = preedit_draw_callback;
-	  context_xim->preedit_caret_callback.client_data = context_xim;
-	  context_xim->preedit_caret_callback.callback = preedit_caret_callback;
+	  context_xim->preedit_start_callback.client_data = (XPointer)context_xim;
+	  context_xim->preedit_start_callback.callback = (XIMProc)preedit_start_callback;
+	  context_xim->preedit_done_callback.client_data = (XPointer)context_xim;
+	  context_xim->preedit_done_callback.callback = (XIMProc)preedit_done_callback;
+	  context_xim->preedit_draw_callback.client_data = (XPointer)context_xim;
+	  context_xim->preedit_draw_callback.callback = (XIMProc)preedit_draw_callback;
+	  context_xim->preedit_caret_callback.client_data = (XPointer)context_xim;
+	  context_xim->preedit_caret_callback.callback = (XIMProc)preedit_caret_callback;
 	  
 	  name1 = XNPreeditAttributes;
 	  list1 = XVaCreateNestedList (0,
@@ -678,12 +702,12 @@ gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
 	{
 	  XVaNestedList *status_attrs;
 	  
-	  context_xim->status_start_callback.client_data = context_xim;
-	  context_xim->status_start_callback.callback = status_start_callback;
-	  context_xim->status_done_callback.client_data = context_xim;
-	  context_xim->status_done_callback.callback = status_done_callback;
-	  context_xim->status_draw_callback.client_data = context_xim;
-	  context_xim->status_draw_callback.callback = status_draw_callback;
+	  context_xim->status_start_callback.client_data = (XPointer)context_xim;
+	  context_xim->status_start_callback.callback = (XIMProc)status_start_callback;
+	  context_xim->status_done_callback.client_data = (XPointer)context_xim;
+	  context_xim->status_done_callback.callback = (XIMProc)status_done_callback;
+	  context_xim->status_draw_callback.client_data = (XPointer)context_xim;
+	  context_xim->status_draw_callback.callback = (XIMProc)status_draw_callback;
 	  
 	  status_attrs = XVaCreateNestedList (0,
 					      XNStatusStartCallback, &context_xim->status_start_callback,
