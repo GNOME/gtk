@@ -1,3 +1,8 @@
+Wed Nov 10 12:12:03 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkinput-{x11,xfree}.c: Call XFreeDeviceState()
+	on results of XQueryDeviceState().
+
 Mon Nov  8 16:40:43 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c: Substitute gdkx.h => gdkprivate.h since

@@ -154,6 +154,8 @@ gdk_input_check_proximity (void)
 		}
 	      xic = (XInputClass *)((char *)xic + xic->length);
 	    }
+
+	  XFreeDeviceState (state);
  	}
       tmp_list = tmp_list->next;
     }
