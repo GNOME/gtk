@@ -1,3 +1,7 @@
+2003-02-09  Christian Rose  <menthos@menthos.com>
+
+	* configure.in: Removed "en@IPA.po" from ALL_LINGUAS.
+
 Fri Feb  7 04:49:46 2003  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkobject.c: remove quark_user_data usage in
