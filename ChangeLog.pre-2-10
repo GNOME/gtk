@@ -4,6 +4,8 @@ Mon May 10 23:04:25 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 2004-05-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwindow.c (get_screen_icon_info): Make static.
+
 	* gdk/gdkdisplay.c (singlehead_...): 
 	* gdk/x11/gdkkeys-x11.c (get_effective_keymap): 
 	* gdk/x11/gdkgeometry-x11.c (expose_serial_predicate): 
