@@ -1,3 +1,8 @@
+Sat Jan 31 16:27:44 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkmain.c (gtk_key_snooper_remove): Don't leak the
+	GtkKeySnooperData.  (#132038, R. McFarland)
+
 2004-01-30  Federico Mena Quintero  <federico@ximian.com>
 
 	Fixes #132975.

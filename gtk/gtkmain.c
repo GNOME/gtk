@@ -1817,7 +1817,7 @@ gtk_key_snooper_install (GtkKeySnoopFunc snooper,
 }
 
 void
-gtk_key_snooper_remove (guint		 snooper_id)
+gtk_key_snooper_remove (guint snooper_id)
 {
   GtkKeySnooperData *data = NULL;
   GSList *slist;
@@ -1833,7 +1833,10 @@ gtk_key_snooper_remove (guint		 snooper_id)
       data = NULL;
     }
   if (data)
-    key_snoopers = g_slist_remove (key_snoopers, data);
+    {
+      key_snoopers = g_slist_remove (key_snoopers, data);
+      g_free (data);
+    }
 }
 
 static gint
