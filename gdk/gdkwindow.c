@@ -937,7 +937,7 @@ gdk_window_draw_arc (GdkDrawable *drawable,
     {
       GdkWindowPaint *paint = private->paint_stack->data;
       gdk_draw_arc (paint->pixmap, gc, filled,
-		    x - x_offset, y_offset,
+		    x - x_offset, y - y_offset,
 		    width, height, angle1, angle2);
     }
   else
