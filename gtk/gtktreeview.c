@@ -2500,7 +2500,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
         flags |= GTK_CELL_RENDERER_SELECTED;
 
       parity = _gtk_rbtree_node_find_parity (tree, node);
-
+      
       for (i = 0, list = tree_view->priv->columns; i < tree_view->priv->n_columns; i++, list = list->next)
 	{
 	  GtkTreeViewColumn *column = list->data;

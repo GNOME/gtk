@@ -25,7 +25,7 @@ node_set (GtkTreeIter *iter)
   gtk_tree_store_set (base_model, iter, 0, str, -1);
   g_free (str);
 
-  n = g_random_int ();
+  n = g_random_int_range (10000,99999);
   if (n < 0)
     n *= -1;
   str = g_strdup_printf ("%d", n);

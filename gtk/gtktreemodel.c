@@ -1066,6 +1066,7 @@ gtk_tree_model_range_changed (GtkTreeModel *tree_model,
 			      GtkTreePath  *end_path,
 			      GtkTreeIter  *end_iter)
 {
+  gint i;
   g_return_if_fail (tree_model != NULL);
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (start_path != NULL);
@@ -1073,6 +1074,15 @@ gtk_tree_model_range_changed (GtkTreeModel *tree_model,
   g_return_if_fail (end_path != NULL);
   g_return_if_fail (end_iter != NULL);
 
+#ifndef G_DISABLE_CHECKS
+  g_return_if_fail (start_path->depth == end_path->depth);
+  for (i = 0; i < start_path->depth - 1; i++)
+    if (start_path->indices[i] != end_path->indices[i])
+      {
+	g_warning ("Concurrent paths were not passed in to gtk_tree_model_range_changed.\n");
+	return;
+      }
+#endif
   g_signal_emit_by_name (tree_model, "range_changed",
 			 start_path, start_iter,
 			 end_path, end_iter);

@@ -815,6 +815,8 @@ _gtk_rbtree_reorder (GtkRBTree *tree,
     {
       reorder = g_array_index (array, GtkRBReorder, i);
       node->children = reorder.children;
+      if (node->children)
+	node->children->parent_node = node;
       node->flags = GTK_RBNODE_GET_COLOR (node) | reorder.flags;
       /* We temporarily set the height to this. */
       node->offset = reorder.height;

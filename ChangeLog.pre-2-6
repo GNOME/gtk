@@ -1,3 +1,17 @@
+Fri Jun 15 18:53:48 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreesortable.c (gtk_tree_sortable_set_sort_func): Rename
+	gtk_tree_sortable_sort_column_id_set_func.  It's much shorter now.
+	* gtk/gtktreeview.c (gtk_tree_view_sort_iter_changed): WOOO!!!
+	Now I can really reorder/sort all Store widgets.  treesorttest
+	seems to just work now.
+	* gtk/gtklistview.c (gtk_list_store_iter_changed): Whoops.
+	testtreesort worked through a big coincidence all this time.
+	* gtk/gtkrbtree.c (_gtk_rbtree_reorder): Nasty bug fix in nasty
+	code.
+	* tests/testtreecolumns.c: Big 'ol warning at the top letting
+	people know that this code should never ever ever be copied.
+
 2001-06-15  Jonas Borgström  <jonas@codefactory.se>
 
 	* gtk/gtkwindow.h: Fixed a small typo, it should be
