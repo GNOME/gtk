@@ -1,3 +1,8 @@
+Sat Oct 10 00:50:53 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* HACKING
+	* autogen.sh: we need libtool 1.2b now
+
 Sat Oct 10 03:37:50 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktable.c (gtk_table_set_child_arg): take the left, right, top
