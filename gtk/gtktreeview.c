@@ -10620,14 +10620,24 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
 	  remaining_x -= tmp_column->width;
 	}
 
+      /* If found is FALSE and there is a last_column, then it the remainder
+       * space is in that area
+       */
       if (!found)
         {
-          if (column)
-            *column = last_column;
-
-          if (cell_x)
-            *cell_x = last_column->width + remaining_x;
-        }
+	  if (last_column)
+	    {
+	      if (column)
+		*column = last_column;
+	      
+	      if (cell_x)
+		*cell_x = last_column->width + remaining_x;
+	    }
+	  else
+	    {
+	      return FALSE;
+	    }
+	}
     }
 
   y_offset = _gtk_rbtree_find_offset (tree_view->priv->tree,

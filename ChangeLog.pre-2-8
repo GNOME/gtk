@@ -1,3 +1,8 @@
+Fri Jan 23 14:56:18 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_get_path_at_pos): Don't crash
+	when there are no columns, or all columns are hidden, #131402
+
 Fri Jan 23 16:58:28 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkmenu.c (DEFAULT_POPUP_DELAY): Changing to 200 was a
