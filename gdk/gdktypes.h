@@ -19,6 +19,8 @@
 #define __GDK_TYPES_H__
 
 
+#include <wchar.h>
+
 /* GDK uses "glib". (And so does GTK).
  */
 #include <glib.h>
@@ -81,6 +83,10 @@ typedef struct _GdkDeviceInfo     GdkDeviceInfo;
 typedef struct _GdkTimeCoord      GdkTimeCoord;
 typedef gint (*GdkEventFunc) (GdkEvent *event,
 			      gpointer  data);
+#ifdef USE_XIM
+typedef void*			  GdkIC;
+typedef void*			  GdkIM;
+#endif
 
 
 /* Types of windows.
@@ -535,6 +541,34 @@ typedef enum
   GDK_EXTENSION_EVENTS_CURSOR
 } GdkExtensionMode;
 
+#ifdef USE_XIM
+/*
+*/
+
+typedef enum
+{
+  GdkIMPreeditArea      = 0x0001L,
+  GdkIMPreeditCallbacks = 0x0002L,
+  GdkIMPreeditPosition  = 0x0004L,
+  GdkIMPreeditNothing   = 0x0008L,
+  GdkIMPreeditNone      = 0x0010L,
+  GdkIMStatusArea       = 0x0100L,
+  GdkIMStatusCallbacks  = 0x0200L,
+  GdkIMStatusNothing    = 0x0400L,
+  GdkIMStatusNone       = 0x0800L
+} GdkIMStyle;
+
+#define GdkIMPreeditMask \
+	( GdkIMPreeditArea     | GdkIMPreeditCallbacks | \
+	  GdkIMPreeditPosition | GdkIMPreeditNothing | \
+	  GdkIMPreeditNone )
+
+#define GdkIMStatusMask \
+	( GdkIMStatusArea | GdkIMStatusCallbacks | \
+	  GdkIMStatusNothing | GdkIMStatusNone )
+
+#endif
+
 typedef void (*GdkInputFunction) (gpointer          data,
 				  gint              source,
 				  GdkInputCondition condition);
@@ -767,6 +801,8 @@ struct _GdkEventKey
   guint32 time;
   guint state;
   guint keyval;
+  gint length;
+  gchar *string;
 };
 
 struct _GdkEventCrossing
