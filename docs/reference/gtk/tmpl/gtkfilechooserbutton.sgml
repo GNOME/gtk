@@ -28,35 +28,13 @@ property to %TRUE.
 </example>
 
 <para>
-The #GtkFileChooserButton supports all four #GtkFileChooserAction<!--
--->s that the #GtkFileChooser supports.  Two of the actions,
-%GTK_FILE_CHOOSER_ACTION_SAVE and
-%GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER, give the button the appearance
-of an entry next to a button.  The user can type the name of a file in
-this entry, and it will complete as it types.  The other two actions,
-%GTK_FILE_CHOOSER_ACTION_OPEN and
-%GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, make the #GtkFileChooserAction
-look like a #GtkButton.
+The #GtkFileChooserButton supports the #GtkFileChooserAction<!--
+-->s %GTK_FILE_CHOOSER_ACTION_OPEN and %GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER.
 </para>
-
-<example>
-<title>Using GtkFileChooserButton in save mode</title>
-<programlisting>
-{
-  GtkWidget *button;
-
-  button = gtk_file_chooser_button_new (_("Save as..."));
-  gtk_file_chooser_set_action (GTK_FILE_CHOOSER (button),
-                               GTK_FILE_CHOOSER_ACTION_SAVE);
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER_BUTTON (button),
-                                       DEFAULT_SAVE_DIRECTORY);
-}
-</programlisting>
-</example>
 
 <important>
 <para>
-The #GtkFileChooserButton will ellipsize the label while in Open mode,
+The #GtkFileChooserButton will ellipsize the label,
 and thus will thus request little horizontal space.  To give the button
 more space, you should call gtk_widget_size_request(),
 gtk_file_chooser_button_set_width_chars(), or pack the button in
