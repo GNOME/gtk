@@ -1,3 +1,16 @@
+Tue Dec 22 14:50:25 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_find_widget): Optimization -
+	when we've already found a widget, skip all checks
+	for subsequent children.
+
+	* gtk/gtkdnd.c (gtk_drag_find_widget): Checked for
+	!MAPPED, not !VISIBLE, since a widget (like a notebook
+	page), can be VISIBLE, but !REALIZED or !MAPPED.
+
+	* gtk/gtkdnd.c (gtk_drag_find_widget): Use forall(),
+	not foreach().
+
 Mon Dec 21 22:01:49 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c (gtk_clist_motion): fixed column resize bug

@@ -1054,7 +1054,7 @@ gtk_drag_find_widget (GtkWidget       *widget,
 
   new_allocation = widget->allocation;
 
-  if (!GTK_WIDGET_VISIBLE (widget))
+  if (data->found || !GTK_WIDGET_MAPPED (widget))
     return;
 
   if (!GTK_WIDGET_NO_WINDOW (widget))
@@ -1113,9 +1113,9 @@ gtk_drag_find_widget (GtkWidget       *widget,
 	  new_data.found = FALSE;
 	  new_data.toplevel = FALSE;
 	  
-	  gtk_container_foreach (GTK_CONTAINER (widget),
-				 (GtkCallback)gtk_drag_find_widget,
-				 &new_data);
+	  gtk_container_forall (GTK_CONTAINER (widget),
+				(GtkCallback)gtk_drag_find_widget,
+				&new_data);
 	  
 	  data->found = new_data.found;
 	}
