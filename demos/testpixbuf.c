@@ -427,7 +427,7 @@ new_testrgb_window (GdkPixbuf *pixbuf, gchar *title)
 
 	gtk_widget_show (window);
 
-        return window;
+        return drawing_area;
 }
 
 
@@ -508,7 +508,7 @@ extern void pixbuf_init ();
 
 void size_func (GdkPixbufLoader *loader, gint width, gint height, gpointer data)
 {
-  gdk_pixbuf_loader_set_size (loader, width*2, height*2);
+        gdk_pixbuf_loader_set_size (loader, width*2, height*2);
 }
 
 
@@ -525,7 +525,7 @@ main (int argc, char **argv)
 
 	gtk_init (&argc, &argv);
 
-	gdk_rgb_set_verbose (TRUE);
+	//	gdk_rgb_set_verbose (TRUE);
 
 	gtk_widget_set_default_colormap (gdk_rgb_get_colormap ());
 
@@ -611,8 +611,10 @@ main (int argc, char **argv)
 
 			status.buf = g_malloc (readlen);
 
+#if 0
 			g_signal_connect (pixbuf_loader, "size_prepared", 
 					  G_CALLBACK (size_func), NULL);
+#endif
 
                         g_signal_connect (pixbuf_loader, "area_prepared",
 					  G_CALLBACK (progressive_prepared_callback),

@@ -1,3 +1,10 @@
+2005-01-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* demos/testpixbuf.c (main): Remove the size_prepared callback,
+	to test incremental display.
+	(new_testrgb_window): Return the drawing area, not the window,
+	since we want to queue draws on the drawing area.
+
 2005-01-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* examples/*: Re-extract.
