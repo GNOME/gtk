@@ -248,3 +248,12 @@ Deprecated equivalent of g_object_unref().
 @v: 
 
 
+<!-- ##### FUNCTION gdk_visual_get_screen ##### -->
+<para>
+
+</para>
+
+@visual: 
+@Returns: 
+
+

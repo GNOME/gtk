@@ -2412,11 +2412,12 @@ gtk_text_buffer_get_iter_at_line    (GtkTextBuffer      *buffer,
  * gtk_text_buffer_get_iter_at_offset:
  * @buffer: a #GtkTextBuffer 
  * @iter: iterator to initialize
- * @char_offset: char offset from start of buffer, counting from 0
+ * @char_offset: char offset from start of buffer, counting from 0, or -1
  *
  * Initializes @iter to a position @char_offset chars from the start
- * of the entire buffer.
- * 
+ * of the entire buffer. If @char_offset is -1 or greater than the number
+ * of characters in the buffer, @iter is initialized to the end iterator,
+ * the iterator one past the last valid character in the buffer.
  **/
 void
 gtk_text_buffer_get_iter_at_offset         (GtkTextBuffer      *buffer,
@@ -2437,7 +2438,6 @@ gtk_text_buffer_get_iter_at_offset         (GtkTextBuffer      *buffer,
  * Initialized @iter with the first position in the text buffer. This
  * is the same as using gtk_text_buffer_get_iter_at_offset() to get
  * the iter at character offset 0.
- * 
  **/
 void
 gtk_text_buffer_get_start_iter (GtkTextBuffer *buffer,

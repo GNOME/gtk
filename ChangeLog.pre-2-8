@@ -1,3 +1,20 @@
+2002-09-01  Soeren Sandmann  <ssp@localhost.localdomain>
+
+	* docs/reference/gtk/tmpl/gtkdialog.sgml
+	docs/reference/gtk/tmpl/gtkhbbox.sgml
+	docs/reference/gtk/tmpl/gtkvbbox.sgml
+	docs/reference/gtk/tmpl/gtktogglebutton.sgml
+	docs/reference/gtk/tmpl/gtktreeselection.sgml
+	gtk/gtktextbuffer.c
+	gtk/gtktogglebutton.c
+	gtk/gtktreesortable.c
+
+	Minor documentation fixes:
+	
+	#79107, #82854, #76398, Vitaly Tishkov; 
+	#88627, Brian Tarricone;
+	#81046, Owen Taylor
+
 2002-08-31  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (_gdk_events_init): On Cygwin, open

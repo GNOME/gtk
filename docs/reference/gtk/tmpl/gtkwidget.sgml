@@ -2158,12 +2158,12 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 </para>
 
-<!-- ##### ARG GtkWidget:has-focus ##### -->
+<!-- ##### ARG GtkWidget:is-focus ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkWidget:is-focus ##### -->
+<!-- ##### ARG GtkWidget:has-focus ##### -->
 <para>
 
 </para>
@@ -2203,22 +2203,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 </para>
 
-<!-- ##### ARG GtkWidget:interior-focus ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:cursor-aspect-ratio ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:secondary-cursor-color ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:focus-line-pattern ##### -->
+<!-- ##### ARG GtkWidget:focus-padding ##### -->
 <para>
 
 </para>
@@ -2228,12 +2213,27 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 </para>
 
-<!-- ##### ARG GtkWidget:focus-padding ##### -->
+<!-- ##### ARG GtkWidget:secondary-cursor-color ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:interior-focus ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkWidget:focus-line-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:cursor-aspect-ratio ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:focus-line-pattern ##### -->
 <para>
 
 </para>

@@ -250,6 +250,20 @@ gtk_toggle_button_get_property (GObject      *object,
     }
 }
 
+/**
+ * gtk_toggle_button_set_mode:
+ * @toggle_button: a #GtkToggleButton
+ * @draw_indicator: if %TRUE, draw the button as a separate indicator
+ * and label; if %FALSE, draw the button like a normal button
+ *
+ * Sets whether the button is displayed as a separate indicator and label.
+ * You can call this function on a checkbutton or a radiobutton with
+ * @draw_indicator = %FALSE to make the button look like a normal button
+ *
+ * This function only effects instances of classes like #GtkCheckButton
+ * and #GtkRadioButton that derive from #GtkToggleButton,
+ * not instances of #GtkToggleButton itself.
+ */
 void
 gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
 			    gboolean         draw_indicator)

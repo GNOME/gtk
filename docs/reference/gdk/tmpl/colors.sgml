@@ -197,6 +197,15 @@ Returns the visual for which a given colormap was created.
 @Returns: the visual of the colormap.
 
 
+<!-- ##### FUNCTION gdk_colormap_get_screen ##### -->
+<para>
+
+</para>
+
+@cmap: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_colors_store ##### -->
 <para>
 Changes the value of the first @ncolors colors in
