@@ -1,5 +1,23 @@
 2004-07-09  Matthias Clasen  <mclasen@redhat.com>
 
+ 	Make GtkEntry work harder to protect passwords:  (#143955,
+	Morten Welinder)
+	
+	* gtk/gtkentry.c (gtk_entry_destroy): Add a destroy handler
+	to clear the password even if the widget is leaked.
+
+	* gtk/gtkentry.c (gtk_entry_real_delete_text): 
+	* gtk/gtkentry.c (gtk_entry_finalize): Zero out the memory
+	before freeing it.
+	
+	* gtk/gtkentry.c (gtk_entry_real_insert_text): Zero and free
+	the old memory instead of just reallocating it.
+
+	* gtk/gtkentry.c (gtk_entry_create_layout): Don't leak text
+	direction information for passwords.
+
+2004-07-09  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkstyle.c: Fix some cases where style functions were 
 	not handling widget == NULL properly.  (#146282)
 
