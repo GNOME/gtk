@@ -1,3 +1,8 @@
+2004-09-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/testfilechooser.c (main): Update sensitivity of the "Select all"
+	button.
+
 2004-09-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkstyle.c (gtk_default_draw_expander): Draw expanders a bit 
