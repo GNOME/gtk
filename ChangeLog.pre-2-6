@@ -1,3 +1,14 @@
+1999-11-10  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkfont-win32.c: Fix a couple of bugs. The Unicode
+	subrange table (from the "Developing International Software for
+	WIndows 95 and Windows NT" book) was missing the Hangul syllable
+	block... Get the loaded font's charset correctly.
+
+	(Note that this, and the other *-win32.c files, still really are
+	the old ones, the win32 subdirectory is not ready for compilation
+	yet after the reorg.)
+
 Wed Nov 10 17:26:49 GMT 1999 Tony Gale  <gale@gtk.org>
 
 	* gtk/gtkclist.c: Fix off-by-one bug in parameter
