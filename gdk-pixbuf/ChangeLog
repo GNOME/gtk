@@ -1,3 +1,8 @@
+1999-10-18  Federico Mena Quintero  <federico@redhat.com>
+
+	* configure.in: Use $GTK_LIBS as the extra libs when checking for
+	libgif/libungif, as they need the X libraries.  Fixes bug #2472.
+
 1999-10-10  Cody Russell  <bratsche@dfw.net>
 	* src/gdk-pixbuf-drawable.c: core function now determines whether
 	the requested geometry is on screen or not, and if some is not
