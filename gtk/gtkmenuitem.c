@@ -37,8 +37,6 @@
 
 #define MENU_ITEM_CLASS(w)  GTK_MENU_ITEM_CLASS (GTK_OBJECT (w)->klass)
 
-#define MIN_SUBMENU_ITEM_WIDTH 100
-
 enum {
   ACTIVATE,
   ACTIVATE_ITEM,
@@ -510,8 +508,6 @@ gtk_menu_item_size_request (GtkWidget      *widget,
 
 	  requisition->width += child_requisition.height;
 	  requisition->width += arrow_spacing;
-
-	  requisition->width = MAX (requisition->width, MIN_SUBMENU_ITEM_WIDTH);
 	}
     }
   else
