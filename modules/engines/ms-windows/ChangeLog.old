@@ -1,3 +1,7 @@
+2004-08-23  Dom Lachowicz <cinamod@hotmail.com>
+
+	* configure.in: Bump version number
+
 2004-08-13  Dom Lachowicz <cinamod@hotmail.com>
 
 	* src/msw_style.c: Proper gripper drawing for handle boxes/toolbars
