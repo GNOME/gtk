@@ -2346,6 +2346,7 @@ create_spins ()
       adj = (GtkAdjustment *) gtk_adjustment_new (1.0, 1.0, 31.0, 1.0,
 						  5.0, 0.0);
       spinner = gtk_spin_button_new (adj, 0, 0);
+      gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
       gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
 
       vbox2 = gtk_vbox_new (FALSE, 0);
@@ -2358,6 +2359,7 @@ create_spins ()
       adj = (GtkAdjustment *) gtk_adjustment_new (1.0, 1.0, 12.0, 1.0,
 						  5.0, 0.0);
       spinner = gtk_spin_button_new (adj, 0, 0);
+      gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
       gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
       
       vbox2 = gtk_vbox_new (FALSE, 0);
@@ -2370,6 +2372,7 @@ create_spins ()
       adj = (GtkAdjustment *) gtk_adjustment_new (1998.0, 0.0, 2100.0, 
 						  1.0, 100.0, 0.0);
       spinner = gtk_spin_button_new (adj, 0, 0);
+      gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
       gtk_widget_set_usize (spinner, 55, 0);
       gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
 
@@ -2393,6 +2396,7 @@ create_spins ()
       adj = (GtkAdjustment *) gtk_adjustment_new (0.0, -10000.0, 10000.0,
 						  0.5, 100.0, 0.0);
       spinner1 = gtk_spin_button_new (adj, 1.0, 2);
+      gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner1), TRUE);
       gtk_widget_set_usize (spinner1, 100, 0);
       gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (spinner1),
 					 GTK_UPDATE_ALWAYS);
@@ -2407,6 +2411,7 @@ create_spins ()
 
       adj = (GtkAdjustment *) gtk_adjustment_new (2, 1, 5, 1, 1, 0);
       spinner2 = gtk_spin_button_new (adj, 0.0, 0);
+      gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner2), TRUE);
       gtk_signal_connect (GTK_OBJECT (adj), "value_changed",
 			  GTK_SIGNAL_FUNC (change_digits),
 			  (gpointer) spinner2);
@@ -2466,7 +2471,6 @@ create_spins ()
   else
     gtk_widget_destroy (window);
 }
-
 
 /*
  * Cursors

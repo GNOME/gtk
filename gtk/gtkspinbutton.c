@@ -162,6 +162,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   spin_button->timer_calls = 0;
   spin_button->digits = 0;
   spin_button->numeric = 0;
+  spin_button->wrap = 0;
 }
 
 void
@@ -759,21 +760,41 @@ gtk_spin_button_spin (GtkSpinButton *spin_button,
 		      gfloat         step)
 {
   gfloat new_value = 0.0;
-
+  
   g_return_if_fail (spin_button != NULL);
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
   
   if (direction == GTK_ARROW_UP)
     {
-      new_value = MIN (spin_button->adjustment->value + step,
-		       spin_button->adjustment->upper);
+      new_value = spin_button->adjustment->value + step;
+      if (spin_button->wrap)
+	{
+	  if (spin_button->adjustment->value == spin_button->adjustment->upper)
+	    new_value = spin_button->adjustment->lower;
+	  else if (new_value > spin_button->adjustment->upper)
+	    new_value = spin_button->adjustment->upper;
+	}
+      else
+	{
+	  new_value = MIN (new_value, spin_button->adjustment->upper);
+	}
     }
   else if (direction == GTK_ARROW_DOWN) 
     {
-      new_value = MAX (spin_button->adjustment->value - step,
-		       spin_button->adjustment->lower);
+      new_value = spin_button->adjustment->value - step;
+      if (spin_button->wrap)
+	{
+	  if (spin_button->adjustment->value == spin_button->adjustment->lower)
+	    new_value = spin_button->adjustment->upper;
+	  else if (new_value < spin_button->adjustment->lower)
+	    new_value = spin_button->adjustment->lower;
+	}
+      else
+	{
+	  new_value = MAX (new_value, spin_button->adjustment->lower);
+	}
     }
-
+  
   if (new_value != spin_button->adjustment->value)
     gtk_adjustment_set_value (spin_button->adjustment, new_value);
 }
@@ -1099,4 +1120,14 @@ gtk_spin_button_insert_text (GtkEditable *editable,
 
   GTK_EDITABLE_CLASS (parent_class)->insert_text (editable, new_text,
 						  new_text_length, position);
+}
+
+void
+gtk_spin_button_set_wrap (GtkSpinButton  *spin_button,
+                         gint            wrap)
+{
+  g_return_if_fail (spin_button != NULL);
+  g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
+
+  spin_button->wrap = (wrap != 0);
 }

@@ -1,3 +1,9 @@
+Sun Mar 29 22:29:00 1998  Tim Janik  <timj@gtk.org>
+
+        * gtk/gtkspinbutton.[ch] gtk/testgtk.c (gtk_spin_button_set_wrap):
+	Added wrapping capabilities to GtkSpinButton. New function :
+	gtk_spin_button_set_wrap (Lars Hamann and Stefan Jeske).
+
 Sat Mar 28 21:18:42 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkcombo.c (gtk_combo_disable_activate): 
