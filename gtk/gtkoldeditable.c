@@ -39,9 +39,6 @@
 #define INNER_BORDER     2
 
 enum {
-  CHANGED,
-  INSERT_TEXT,
-  DELETE_TEXT,
   /* Binding actions */
   ACTIVATE,
   SET_EDITABLE,
@@ -182,9 +179,6 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
   widget_class->selection_received = gtk_old_editable_selection_received;
   widget_class->selection_get = gtk_old_editable_selection_get;
 
-  class->insert_text = NULL;
-  class->delete_text = NULL;
-
   class->activate = NULL;
   class->set_editable = gtk_old_editable_real_set_editable;
 
@@ -206,37 +200,6 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
   class->get_chars = NULL;
   class->set_selection = NULL;
   class->set_position = NULL;
-
-  editable_signals[CHANGED] =
-    gtk_signal_new ("changed",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, changed),
-		    gtk_marshal_NONE__NONE,
-		    GTK_TYPE_NONE, 0);
-
-  editable_signals[INSERT_TEXT] =
-    gtk_signal_new ("insert_text",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, insert_text),
-		    gtk_marshal_NONE__STRING_INT_POINTER,
-		    GTK_TYPE_NONE,
-		    3,
-		    GTK_TYPE_STRING,
-		    GTK_TYPE_INT,
-		    GTK_TYPE_POINTER);
-
-  editable_signals[DELETE_TEXT] =
-    gtk_signal_new ("delete_text",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, delete_text),
-		    gtk_marshal_NONE__INT_INT,
-		    GTK_TYPE_NONE,
-		    2,
-		    GTK_TYPE_INT,
-		    GTK_TYPE_INT);		    
 
   editable_signals[ACTIVATE] =
     gtk_signal_new ("activate",
@@ -361,8 +324,8 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 static void
 gtk_old_editable_editable_init (GtkEditableClass *iface)
 {
-  iface->insert_text = gtk_old_editable_insert_text;
-  iface->delete_text = gtk_old_editable_delete_text;
+  iface->do_insert_text = gtk_old_editable_insert_text;
+  iface->do_delete_text = gtk_old_editable_delete_text;
   iface->get_chars = gtk_old_editable_get_chars;
   iface->set_selection_bounds = gtk_old_editable_set_selection_bounds;
   iface->get_selection_bounds = gtk_old_editable_get_selection_bounds;
@@ -455,10 +418,11 @@ gtk_old_editable_insert_text (GtkEditable *editable,
 
   text[new_text_length] = '\0';
   strncpy (text, new_text, new_text_length);
-
-  gtk_signal_emit (GTK_OBJECT (editable), editable_signals[INSERT_TEXT], text, new_text_length, position);
-  gtk_signal_emit (GTK_OBJECT (editable), editable_signals[CHANGED]);
-
+  
+  g_signal_emit_by_name (editable, "insert_text", text, new_text_length,
+			 position);
+  g_signal_emit_by_name (editable, "changed");
+  
   if (new_text_length > 63)
     g_free (text);
 
@@ -474,8 +438,8 @@ gtk_old_editable_delete_text (GtkEditable *editable,
 
   gtk_widget_ref (GTK_WIDGET (old_editable));
 
-  gtk_signal_emit (GTK_OBJECT (old_editable), editable_signals[DELETE_TEXT], start_pos, end_pos);
-  gtk_signal_emit (GTK_OBJECT (old_editable), editable_signals[CHANGED]);
+  g_signal_emit_by_name (editable, "delete_text", start_pos, end_pos);
+  g_signal_emit_by_name (editable, "changed");
 
   if (old_editable->selection_start_pos == old_editable->selection_end_pos &&
       old_editable->has_selection)
@@ -847,5 +811,5 @@ gtk_old_editable_changed (GtkOldEditable *old_editable)
 {
   g_return_if_fail (GTK_IS_OLD_EDITABLE (old_editable));
   
-  gtk_signal_emit (GTK_OBJECT (old_editable), editable_signals[CHANGED]);
+  g_signal_emit_by_name (old_editable, "changed");
 }

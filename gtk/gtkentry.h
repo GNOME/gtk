@@ -115,17 +115,6 @@ struct _GtkEntry
 struct _GtkEntryClass
 {
   GtkWidgetClass parent_class;
-  
-  /* Notification of changes
-   */
-  void (* changed)          (GtkEntry       *entry);
-  void (* insert_text)      (GtkEntry       *entry,
-			     const gchar    *text,
-			     gint            length,
-			     gint           *position);
-  void (* delete_text)      (GtkEntry       *entry,
-		    	     gint            start_pos,
-			     gint            end_pos);
 
   /* Hook to customize right-click popup */
   void (* populate_popup)   (GtkEntry       *entry,

@@ -1,3 +1,23 @@
+Wed Oct  3 23:47:25  Kristian Rietveld  <kristian@planet.nl>
+
+	* gtk/gtkeditable.[ch]: move insert_text and delete_text virtual
+	functions to do_insert_text and do_delete_text, add signals
+	insert_text, delete_text and changed
+
+	* gtk/gtkentry.[ch]: remove signals insert_text, delete_text
+	and changed. Updates to match new situation.
+
+	* gtk/gtkspinbutton.c: updates to match new situation
+
+	* gtk/gtkoldeditable.h: remove signals changed, insert_text
+	and delete_text
+
+	* gtk/gtkoldeditable.c: updates to match new situation
+
+	* gtk/gtktext.c: updates to match new situation
+
+	Fixes bug #59803
+
 2001-10-03  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextiter.c (test_log_attrs): allow testing the end 

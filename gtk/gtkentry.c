@@ -56,9 +56,6 @@
 #define MAX_SIZE G_MAXUSHORT
 
 enum {
-  INSERT_TEXT,
-  DELETE_TEXT,
-  CHANGED,
   ACTIVATE,
   POPULATE_POPUP,
   MOVE_CURSOR,
@@ -203,11 +200,11 @@ static void gtk_entry_start_editing (GtkCellEditable *cell_editable,
 
 /* Default signal handlers
  */
-static void gtk_entry_real_insert_text   (GtkEntry        *entry,
+static void gtk_entry_real_insert_text   (GtkEditable     *editable,
 					  const gchar     *new_text,
 					  gint             new_text_length,
 					  gint            *position);
-static void gtk_entry_real_delete_text   (GtkEntry        *entry,
+static void gtk_entry_real_delete_text   (GtkEditable     *editable,
 					  gint             start_pos,
 					  gint             end_pos);
 static void gtk_entry_move_cursor        (GtkEntry        *entry,
@@ -393,9 +390,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->drag_data_delete = gtk_entry_drag_data_delete;
 
   widget_class->popup_menu = gtk_entry_popup_menu;
-  
-  class->insert_text = gtk_entry_real_insert_text;
-  class->delete_text = gtk_entry_real_delete_text;
+
   class->move_cursor = gtk_entry_move_cursor;
   class->insert_at_cursor = gtk_entry_insert_at_cursor;
   class->delete_from_cursor = gtk_entry_delete_from_cursor;
@@ -491,37 +486,6 @@ gtk_entry_class_init (GtkEntryClass *class)
 							       _("Color with which to draw insertion cursor"),
 							       GDK_TYPE_COLOR,
 							       G_PARAM_READABLE));
-
-  signals[INSERT_TEXT] =
-    gtk_signal_new ("insert_text",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkEntryClass, insert_text),
-		    gtk_marshal_VOID__STRING_INT_POINTER,
-		    GTK_TYPE_NONE,
-		    3,
-		    GTK_TYPE_STRING,
-		    GTK_TYPE_INT,
-		    GTK_TYPE_POINTER);
-
-  signals[DELETE_TEXT] =
-    gtk_signal_new ("delete_text",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkEntryClass, delete_text),
-		    gtk_marshal_VOID__INT_INT,
-		    GTK_TYPE_NONE,
-		    2,
-		    GTK_TYPE_INT,
-		    GTK_TYPE_INT);		    
-
-  signals[CHANGED] =
-    gtk_signal_new ("changed",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkEntryClass, changed),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
 
   signals[POPULATE_POPUP] =
     gtk_signal_new ("populate_popup",
@@ -777,8 +741,10 @@ gtk_entry_class_init (GtkEntryClass *class)
 static void
 gtk_entry_editable_init (GtkEditableClass *iface)
 {
-  iface->insert_text = gtk_entry_insert_text;
-  iface->delete_text = gtk_entry_delete_text;
+  iface->do_insert_text = gtk_entry_insert_text;
+  iface->do_delete_text = gtk_entry_delete_text;
+  iface->insert_text = gtk_entry_real_insert_text;
+  iface->delete_text = gtk_entry_real_delete_text;
   iface->get_chars = gtk_entry_get_chars;
   iface->set_selection_bounds = gtk_entry_set_selection_bounds;
   iface->get_selection_bounds = gtk_entry_get_selection_bounds;
@@ -1688,8 +1654,8 @@ gtk_entry_insert_text (GtkEditable *editable,
   text[new_text_length] = '\0';
   strncpy (text, new_text, new_text_length);
   
-  gtk_signal_emit (GTK_OBJECT (editable), signals[INSERT_TEXT], text, new_text_length, position);
-  gtk_signal_emit (GTK_OBJECT (editable), signals[CHANGED]);
+  g_signal_emit_by_name (editable, "insert_text", text, new_text_length, position);
+  g_signal_emit_by_name (editable, "changed");
 
   if (new_text_length > 63)
     g_free (text);
@@ -1713,8 +1679,8 @@ gtk_entry_delete_text (GtkEditable *editable,
   
   g_object_ref (G_OBJECT (editable));
 
-  gtk_signal_emit (GTK_OBJECT (editable), signals[DELETE_TEXT], start_pos, end_pos);
-  gtk_signal_emit (GTK_OBJECT (editable), signals[CHANGED]);
+  g_signal_emit_by_name (editable, "delete_text", start_pos, end_pos);
+  g_signal_emit_by_name (editable, "changed");
 
   g_object_unref (G_OBJECT (editable));
 }
@@ -1857,13 +1823,15 @@ gtk_entry_start_editing (GtkCellEditable *cell_editable,
 /* Default signal handlers
  */
 static void
-gtk_entry_real_insert_text (GtkEntry    *entry,
+gtk_entry_real_insert_text (GtkEditable *editable,
 			    const gchar *new_text,
 			    gint         new_text_length,
 			    gint        *position)
 {
   gint index;
   gint n_chars;
+
+  GtkEntry *entry = GTK_ENTRY (editable);
 
   if (new_text_length < 0)
     new_text_length = strlen (new_text);
@@ -1922,10 +1890,12 @@ gtk_entry_real_insert_text (GtkEntry    *entry,
 }
 
 static void
-gtk_entry_real_delete_text (GtkEntry *entry,
-			    gint      start_pos,
-			    gint      end_pos)
+gtk_entry_real_delete_text (GtkEditable *editable,
+			    gint         start_pos,
+			    gint         end_pos)
 {
+  GtkEntry *entry = GTK_ENTRY (editable);
+
   if (start_pos < 0)
     start_pos = 0;
   if (end_pos < 0 || end_pos > entry->text_length)

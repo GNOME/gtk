@@ -69,6 +69,7 @@ enum
 };
 
 static void gtk_spin_button_class_init     (GtkSpinButtonClass *klass);
+static void gtk_spin_button_editable_init  (GtkEditableClass   *iface);
 static void gtk_spin_button_init           (GtkSpinButton      *spin_button);
 static void gtk_spin_button_finalize       (GObject            *object);
 static void gtk_spin_button_set_property   (GObject         *object,
@@ -115,7 +116,7 @@ static gint gtk_spin_button_scroll         (GtkWidget          *widget,
 static void gtk_spin_button_activate       (GtkEntry           *entry);
 static void gtk_spin_button_snap           (GtkSpinButton      *spin_button,
 					    gdouble             val);
-static void gtk_spin_button_insert_text    (GtkEntry           *entry,
+static void gtk_spin_button_insert_text    (GtkEditable        *editable,
 					    const gchar        *new_text,
 					    gint                new_text_length,
 					    gint               *position);
@@ -150,7 +151,17 @@ gtk_spin_button_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
+      static const GInterfaceInfo editable_info =
+      {
+	(GInterfaceInitFunc) gtk_spin_button_editable_init, /* interface_init */
+	NULL, /* interface_finalize */
+	NULL  /* interface_data */
+      };
+
       spin_button_type = gtk_type_unique (GTK_TYPE_ENTRY, &spin_button_info);
+      g_type_add_interface_static (spin_button_type,
+				   GTK_TYPE_EDITABLE,
+				   &editable_info);
     }
   return spin_button_type;
 }
@@ -165,7 +176,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 
   object_class   = (GtkObjectClass*)   class;
   widget_class   = (GtkWidgetClass*)   class;
-  entry_class    = (GtkEntryClass*)    class; 
+  entry_class    = (GtkEntryClass*)    class;
 
   parent_class = gtk_type_class (GTK_TYPE_ENTRY);
 
@@ -191,7 +202,6 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->leave_notify_event = gtk_spin_button_leave_notify;
   widget_class->focus_out_event = gtk_spin_button_focus_out;
 
-  entry_class->insert_text = gtk_spin_button_insert_text;
   entry_class->activate = gtk_spin_button_activate;
 
   class->input = NULL;
@@ -298,6 +308,12 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 		    GTK_SIGNAL_OFFSET (GtkSpinButtonClass, value_changed),
 		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
+}
+
+static void
+gtk_spin_button_editable_init (GtkEditableClass *iface)
+{
+  iface->insert_text = gtk_spin_button_insert_text;
 }
 
 static void
@@ -1309,13 +1325,14 @@ gtk_spin_button_activate (GtkEntry *entry)
 }
 
 static void
-gtk_spin_button_insert_text (GtkEntry    *entry,
+gtk_spin_button_insert_text (GtkEditable *editable,
 			     const gchar *new_text,
 			     gint         new_text_length,
 			     gint        *position)
 {
-  GtkEditable *editable = GTK_EDITABLE (entry);
+  GtkEntry *entry = GTK_ENTRY (editable);
   GtkSpinButton *spin = GTK_SPIN_BUTTON (editable);
+  GtkEditableClass *parent_editable_iface = g_type_interface_peek (parent_class, GTK_TYPE_EDITABLE);
  
   if (spin->numeric)
     {
@@ -1385,8 +1402,8 @@ gtk_spin_button_insert_text (GtkEntry    *entry,
 	}
     }
 
-  GTK_ENTRY_CLASS (parent_class)->insert_text (entry, new_text,
-					       new_text_length, position);
+  parent_editable_iface->insert_text (editable, new_text,
+				      new_text_length, position);
 }
 
 static void

@@ -74,16 +74,6 @@ struct _GtkOldEditableClass
 {
   GtkWidgetClass parent_class;
   
-  /* Signals for notification/filtering of changes */
-  void (* changed)      (GtkOldEditable    *editable);
-  void (* insert_text)  (GtkOldEditable    *editable,
-			 const gchar       *text,
-			 gint               length,
-			 gint              *position);
-  void (* delete_text)  (GtkOldEditable    *editable,
-			 gint               start_pos,
-			 gint               end_pos);
-
   /* Bindings actions */
   void (* activate)        (GtkOldEditable *editable);
   void (* set_editable)    (GtkOldEditable *editable,
