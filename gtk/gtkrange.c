@@ -56,7 +56,8 @@ static gint gtk_range_focus_out                (GtkWidget        *widget,
 static void gtk_real_range_draw_trough         (GtkRange         *range);
 static void gtk_real_range_draw_slider         (GtkRange         *range);
 static gint gtk_real_range_timer               (GtkRange         *range);
-static gint gtk_range_scroll                   (GtkRange         *range);
+static gint gtk_range_scroll                   (GtkRange         *range,
+						gfloat            jump_perc);
 
 static void gtk_range_add_timer                (GtkRange         *range);
 static void gtk_range_remove_timer             (GtkRange         *range);
@@ -290,13 +291,14 @@ gtk_range_slider_update (GtkRange *range)
 gint
 gtk_range_trough_click (GtkRange *range,
 			gint      x,
-			gint      y)
+			gint      y,
+			gfloat   *jump_perc)
 {
   g_return_val_if_fail (range != NULL, GTK_TROUGH_NONE);
   g_return_val_if_fail (GTK_IS_RANGE (range), GTK_TROUGH_NONE);
 
   if (RANGE_CLASS (range)->trough_click)
-    return (* RANGE_CLASS (range)->trough_click) (range, x, y);
+    return (* RANGE_CLASS (range)->trough_click) (range, x, y, jump_perc);
 
   return GTK_TROUGH_NONE;
 }
@@ -382,7 +384,8 @@ gtk_range_default_vslider_update (GtkRange *range)
 gint
 gtk_range_default_htrough_click (GtkRange *range,
 				 gint      x,
-				 gint      y)
+				 gint      y,
+				 gfloat	  *jump_perc)
 {
   gint xthickness;
   gint ythickness;
@@ -403,7 +406,14 @@ gtk_range_default_htrough_click (GtkRange *range,
       if ((x < (trough_width - xthickness) && (y < (trough_height - ythickness))))
 	{
 	  gdk_window_get_position (range->slider, &slider_x, NULL);
+	  
+	  if (jump_perc)
+	    {
+	      *jump_perc = ((double) x) / ((double) trough_width);
 
+	      return GTK_TROUGH_JUMP;
+	    }
+	  
 	  if (x < slider_x)
 	    return GTK_TROUGH_START;
 	  else
@@ -417,7 +427,8 @@ gtk_range_default_htrough_click (GtkRange *range,
 gint
 gtk_range_default_vtrough_click (GtkRange *range,
 				 gint      x,
-				 gint      y)
+				 gint      y,
+				 gfloat   *jump_perc)
 {
   gint xthickness;
   gint ythickness;
@@ -438,7 +449,14 @@ gtk_range_default_vtrough_click (GtkRange *range,
       if ((x < (trough_width - xthickness) && (y < (trough_height - ythickness))))
 	{
 	  gdk_window_get_position (range->slider, NULL, &slider_y);
+	  
+	  if (jump_perc)
+	    {
+	      *jump_perc = ((double) y) / ((double) trough_height);
 
+	      return GTK_TROUGH_JUMP;
+	    }
+	  
 	  if (y < slider_y)
 	    return GTK_TROUGH_START;
 	  else
@@ -723,6 +741,7 @@ gtk_range_button_press (GtkWidget      *widget,
 {
   GtkRange *range;
   gint trough_part;
+  gfloat jump_perc;
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
@@ -731,8 +750,9 @@ gtk_range_button_press (GtkWidget      *widget,
   if (!GTK_WIDGET_HAS_FOCUS (widget))
     gtk_widget_grab_focus (widget);
 
+  jump_perc = -1;
   range = GTK_RANGE (widget);
-  if (!range->button)
+  if (range->button == 0)
     {
       gtk_grab_add (widget);
 
@@ -743,18 +763,24 @@ gtk_range_button_press (GtkWidget      *widget,
       if (event->window == range->trough)
 	{
 	  range->click_child = RANGE_CLASS (range)->trough;
-
-	  trough_part = gtk_range_trough_click (range, event->x, event->y);
-
+	  
+	  if (range->button == 2)
+	    trough_part = gtk_range_trough_click (range, event->x, event->y, &jump_perc);
+	  else
+	    trough_part = gtk_range_trough_click (range, event->x, event->y, NULL);
+	  
 	  range->scroll_type = GTK_SCROLL_NONE;
 	  if (trough_part == GTK_TROUGH_START)
 	    range->scroll_type = GTK_SCROLL_PAGE_BACKWARD;
 	  else if (trough_part == GTK_TROUGH_END)
 	    range->scroll_type = GTK_SCROLL_PAGE_FORWARD;
-
+	  else if (trough_part == GTK_TROUGH_JUMP &&
+		   jump_perc >= 0 && jump_perc <= 1)
+	    range->scroll_type = GTK_SCROLL_JUMP;
+	  
 	  if (range->scroll_type != GTK_SCROLL_NONE)
 	    {
-	      gtk_range_scroll (range);
+	      gtk_range_scroll (range, jump_perc);
 	      gtk_range_add_timer (range);
 	    }
 	}
@@ -768,7 +794,7 @@ gtk_range_button_press (GtkWidget      *widget,
 	  range->click_child = RANGE_CLASS (range)->step_forw;
 	  range->scroll_type = GTK_SCROLL_STEP_FORWARD;
 
-	  gtk_range_scroll (range);
+	  gtk_range_scroll (range, -1);
 	  gtk_range_add_timer (range);
 	  gtk_range_draw_step_forw (range);
 	}
@@ -777,7 +803,7 @@ gtk_range_button_press (GtkWidget      *widget,
 	  range->click_child = RANGE_CLASS (range)->step_back;
 	  range->scroll_type = GTK_SCROLL_STEP_BACKWARD;
 
-	  gtk_range_scroll (range);
+	  gtk_range_scroll (range, -1);
 	  gtk_range_add_timer (range);
 	  gtk_range_draw_step_back (range);
 	}
@@ -915,7 +941,7 @@ gtk_range_key_press (GtkWidget   *widget,
       if (scroll != GTK_SCROLL_NONE)
 	{
 	  range->scroll_type = scroll;
-	  gtk_range_scroll (range);
+	  gtk_range_scroll (range, -1);
 	  if (range->old_value != range->adjustment->value)
 	    {
 	      gtk_signal_emit_by_name (GTK_OBJECT (range->adjustment), "value_changed");
@@ -934,7 +960,7 @@ gtk_range_key_press (GtkWidget   *widget,
 	{
 	  if (pos == GTK_TROUGH_START)
 	    range->adjustment->value = range->adjustment->lower;
-	  else
+	  else if (pos == GTK_TROUGH_END)
 	    range->adjustment->value =
 	      range->adjustment->upper - range->adjustment->page_size;
 
@@ -1143,7 +1169,7 @@ gtk_real_range_timer (GtkRange *range)
 	  range->need_timer = FALSE;
 	}
 
-      if (gtk_range_scroll (range))
+      if (gtk_range_scroll (range, -1))
 	return return_val;
     }
 
@@ -1151,7 +1177,8 @@ gtk_real_range_timer (GtkRange *range)
 }
 
 static gint
-gtk_range_scroll (GtkRange *range)
+gtk_range_scroll (GtkRange *range,
+		  gfloat    jump_perc)
 {
   gfloat new_value;
   gint return_val;
@@ -1166,7 +1193,16 @@ gtk_range_scroll (GtkRange *range)
     {
     case GTK_SCROLL_NONE:
       break;
-
+      
+    case GTK_SCROLL_JUMP:
+      if (jump_perc >= 0 && jump_perc <= 1)
+	{
+	  new_value = (range->adjustment->lower +
+		       (range->adjustment->upper - range->adjustment->page_size -
+			range->adjustment->lower) * jump_perc);
+	}
+      break;
+      
     case GTK_SCROLL_STEP_BACKWARD:
       new_value -= range->adjustment->step_increment;
       if (new_value <= range->adjustment->lower)

@@ -3463,6 +3463,7 @@ gdk_ic_destroy (GdkIC ic)
 
   XDestroyIC (private->xic);
   xim_ic_list = g_list_remove (xim_ic_list, private);
+  g_free (private);
 }
 
 GdkIMStyle

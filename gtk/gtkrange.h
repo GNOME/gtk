@@ -89,7 +89,8 @@ struct _GtkRangeClass
   void (* slider_update)   (GtkRange *range);
   gint (* trough_click)    (GtkRange *range,
 			    gint      x,
-			    gint      y);
+			    gint      y,
+			    gfloat   *jump_perc);
   gint (* trough_keys)     (GtkRange *range,
 			    GdkEventKey *key,
 			    GtkScrollType *scroll,
@@ -116,16 +117,19 @@ void           gtk_range_draw_step_back         (GtkRange      *range);
 void           gtk_range_slider_update          (GtkRange      *range);
 gint           gtk_range_trough_click           (GtkRange      *range,
 						 gint           x,
-						 gint           y);
+						 gint           y,
+						 gfloat	       *jump_perc);
 
 void           gtk_range_default_hslider_update (GtkRange      *range);
 void           gtk_range_default_vslider_update (GtkRange      *range);
 gint           gtk_range_default_htrough_click  (GtkRange      *range,
 						 gint           x,
-						 gint           y);
+						 gint           y,
+						 gfloat	       *jump_perc);
 gint           gtk_range_default_vtrough_click  (GtkRange      *range,
 						 gint           x,
-						 gint           y);
+						 gint           y,
+						 gfloat	       *jump_perc);
 void           gtk_range_default_hmotion        (GtkRange      *range,
 						 gint           xdelta,
 						 gint           ydelta);

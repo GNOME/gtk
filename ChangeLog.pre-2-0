@@ -1,3 +1,15 @@
+Tue Mar 10 05:30:05 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkrange.h:
+	* gtk/gtkrange.c:
+ 	changed gtk_range_trough_click() to take an additional jump_perc arg,
+	class method and callers changed.
+
+Tue Mar 10 05:25:10 1998  Tim Janik  <timj@gimp.org>
+
+	* gdk/gdk.c (gdk_ic_destroy): applied gtk-gronlund-980309-1.patch.gz
+	which fixes a memory leak.
+
 Mon Mar  9 20:38:15 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkentry.c gtk/gtkeditable.c gtk/gtkspinbutton.c: 
@@ -1260,11 +1272,46 @@ Mon Feb  2 04:15:08 1998  Tim Janik  <timj@gimp.org>
 	  is destroyed. didn't include this before removal of the above
 	  mentioned bug.
 
-Sat Jan 31 23:55:03 1998  Tim Janik  <timj@gimp.org>
+Sat Jan 31 21:26:27 1998  Owen Taylor  <owt1@cornell.edu>
 
-	* ChangeLog entry for Friday (incorporation of Marius Vollmer's
-	  reference counting revolution, plus various fixups and additions
-	  from myself).
+	* gtk/gtkwidget.c: Added a new GTK_IN_REPARENT flag and revised
+	  gtk_widget_reparent so that the child would not be unrealized
+	  unnecessarily. Changed gtk_widget_unrealize () to recursively
+	  unrealize the children (since the child windows will be 
+	  destroyed too.)
+
+Sat Jan 31 00:05:34 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkcombo.c: changed to use g_strcasecmp
+	* gtk/gtkobject.c: #include <stdlib.h> for atexit
+
+Sat Jan 31 00:13:33 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkstyle.c: Backed out change to close polygons
+	  since it caused problems for the Notebook.
+
+Fri Jan 30 22:28:09 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkclist.{c,h}:
+	   - Conformity to new reference counting schemes
+	   - Font and color information is no-longer taken from
+	     the (possibly unitialized) style before the widget
+	     is realized, but is obtained when needed. (Fixes
+	     problems with non-default styles)
+	   - white_gc => base_gc where appropriate
+	   - Handle graphics expose events correctly (or as
+	     correctly as anywhere else) so that scrolling when
+	     overlapped works.
+
+Fri Jan 30 21:32:11 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwidget.c (gtk_widget_init): Don't replace the object
+	flags, augment them. (Otherwise we'll clear the FLOATING flag)
+
+Fri Jan 30 23:55:03 1998  Tim Janik  <timj@gimp.org>
+
+	* Incorporation of Marius Vollmer's reference counting revolution,
+	  plus various fixups and additions from myself.
 
 	* gdk/gdk.h:
  	* gdk/gdkgc.c: new functions gdk_gc_ref/gdk_gc_unref.
@@ -1377,42 +1424,6 @@ Sat Jan 31 23:55:03 1998  Tim Janik  <timj@gimp.org>
 	  field resize_widgets in GtkContainer now.
 
 	* gtk/testgtk.c: some changes because of all the above ;)
-
-Sat Jan 31 21:26:27 1998  Owen Taylor  <owt1@cornell.edu>
-
-	* gtk/gtkwidget.c: Added a new GTK_IN_REPARENT flag and revised
-	  gtk_widget_reparent so that the child would not be unrealized
-	  unnecessarily. Changed gtk_widget_unrealize () to recursively
-	  unrealize the children (since the child windows will be 
-	  destroyed too.)
-
-Sat Jan 31 00:05:34 PST 1998 Manish Singh <yosh@gimp.org>
-
-	* gtk/gtkcombo.c: changed to use g_strcasecmp
-	* gtk/gtkobject.c: #include <stdlib.h> for atexit
-
-Sat Jan 31 00:13:33 1998  Owen Taylor  <owt1@cornell.edu>
-
-	* gtk/gtkstyle.c: Backed out change to close polygons
-	  since it caused problems for the Notebook.
-
-Fri Jan 30 22:28:09 1998  Owen Taylor  <owt1@cornell.edu>
-
-	* gtk/gtkclist.{c,h}:
-	   - Conformity to new reference counting schemes
-	   - Font and color information is no-longer taken from
-	     the (possibly unitialized) style before the widget
-	     is realized, but is obtained when needed. (Fixes
-	     problems with non-default styles)
-	   - white_gc => base_gc where appropriate
-	   - Handle graphics expose events correctly (or as
-	     correctly as anywhere else) so that scrolling when
-	     overlapped works.
-
-Fri Jan 30 21:32:11 1998  Owen Taylor  <owt1@cornell.edu>
-
-	* gtk/gtkwidget.c (gtk_widget_init): Don't replace the object
-	flags, augment them. (Otherwise we'll clear the FLOATING flag)
 
 Fri Jan 30 17:41:06 1998  George Lebl  <jirka@5z.com>
 
