@@ -121,7 +121,7 @@ _gtk_accel_path_is_valid (const gchar *accel_path)
       accel_path[1] == '<' || accel_path[1] == '>' || !accel_path[1])
     return FALSE;
   p = strchr (accel_path, '>');
-  if (!p || p[1] != '/')
+  if (!p || (p[1] != 0 && p[1] != '/'))
     return FALSE;
   return TRUE;
 }
