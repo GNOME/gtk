@@ -1,7 +1,7 @@
 2004-10-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_set_model): Resize the
-	popup if a new model is set.  (#154129, Bernd Damian)
+	popup if a new model is set.  (#154129, Bernd Demian)
 
 2004-10-04  Matthias Clasen  <mclasen@redhat.com>
 
