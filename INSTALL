@@ -72,6 +72,18 @@ variables.  If you will be using multiple locales with GTK,
 specify the one for which your operating system has the worst
 support for the --with-locale option.
 
+*  --with-native-locale=[yes/no]  Use native locale support
+
+If set, GTK+ will use your C library's native locale support,
+instead of making conversions between wide characters and
+multibyte-strings by going through Xlib's property-conversion
+functions. Specifying this flag can speed up some operations
+involving text by between 5 and 20 times.
+
+This defaults to no, because it has not extensively been
+tested for portability, but should be safe on most modern
+systems.
+
 
 Options can be given to the compiler and linker by setting
 environment variables before running configure. A few of the more

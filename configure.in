@@ -99,6 +99,7 @@ AC_ARG_ENABLE(rebuilds, [  --disable-rebuilds      disable all source autogenera
 AC_ARG_WITH(locale, [  --with-locale=LOCALE    locale name you want to use ])
 
 AC_ARG_WITH(xinput, [  --with-xinput=[no/gxi/xfree] support XInput ])
+AC_ARG_WITH(native_locale, [  --with-native-locale=[yes/no] Use native locale support [default=no]],,with_native_locale=no)
 
 if test "x$enable_debug" = "xyes"; then
   test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
@@ -437,8 +438,41 @@ need_x_locale=yes,
 need_x_locale=no)
 AC_MSG_RESULT($need_x_locale)
 
+use_native_locale=no
 if test $need_x_locale = yes; then
   GTK_LOCALE_FLAGS="-DX_LOCALE"
+else
+  if test x$with_native_locale = xyes ; then
+    AC_MSG_CHECKING(functioning locale support)
+  
+    AC_TRY_COMPILE([#include <stdlib.h>],[
+          char c;
+          if (MB_CUR_MAX == 1) {
+              wctomb(&c, 42);
+          }
+    ],use_native_locale=yes,)
+
+    AC_MSG_RESULT($use_native_locale)
+  fi
+fi
+
+if test x$use_native_locale = xyes ; then
+  AC_MSG_CHECKING(if sizeof(wchar_t) == 4)
+
+  AC_TRY_RUN([
+  #include <stdlib.h>
+
+  int
+  main ()
+  {
+    return (sizeof(wchar_t) == 4) ? 0 : 1;
+  }],
+  ,use_native_locale=no,:)
+  AC_MSG_RESULT($use_native_locale)
+fi
+
+if test $use_native_locale = yes ; then 
+  AC_DEFINE(USE_NATIVE_LOCALE)
 fi
 
 # Checks for header files.

@@ -36,6 +36,10 @@
 /* Define to use X11R6 additions to XIM */
 #undef USE_X11R6_XIM
 
+/* Define if we should use mbstowcs and friends directly
+ */
+#undef USE_NATIVE_LOCALE
+
 #undef XINPUT_NONE
 #undef XINPUT_GXI
 #undef XINPUT_XFREE

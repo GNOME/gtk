@@ -37,6 +37,9 @@
 #  endif
 #endif
 
+#ifdef USE_NATIVE_LOCALE
+#include <stdlib.h>
+#endif
 
 /* If this variable is FALSE, it indicates that we should
  * avoid trying to use multibyte conversion functions and
@@ -1480,12 +1483,46 @@ gdk_ic_get_events (GdkIC *ic)
 #endif /* USE_XIM */
 
 /*
- * gdk_wcstombs 
+ * gdk_wcstombs_len
  *
  * Returns a multi-byte string converted from the specified array
  * of wide characters. The string is newly allocated. The array of
  * wide characters is nul-terminated, if len < 0
  */
+
+#ifdef USE_NATIVE_LOCALE
+gchar *
+_gdk_wcstombs_len (const GdkWChar *src,
+		   int             src_len)
+{
+  int len = 0;
+  int i;
+  char *result;
+  char buf[16];
+  char *p;
+
+  if (MB_CUR_MAX <= 16)
+    p = buf;
+  else
+    p = g_malloc (MB_CUR_MAX);	/* Presumably never hit */
+
+  wctomb (NULL, 0);
+
+  for (i=0; (src_len < 0 || i < src_len) && src[i]; i++)
+    len += wctomb (p, src[i]);
+
+  result = g_malloc (len + 1);
+
+  wcstombs (result, (wchar_t *)src, len);
+  result[len] = '\0';
+
+  if (p != buf)
+    g_free (p);
+
+  return result;
+}
+#else /* !USE_NATIVE_LOCALE */
+
 gchar *
 _gdk_wcstombs_len (const GdkWChar *src,
 		   int             len)
@@ -1554,6 +1591,7 @@ _gdk_wcstombs_len (const GdkWChar *src,
 
   return mbstr;
 }
+#endif /* !USE_NATIVE_LOCALE */
   
 /*
  * gdk_wcstombs 
@@ -1579,6 +1617,9 @@ gdk_wcstombs (const GdkWChar *src)
 gint
 gdk_mbstowcs (GdkWChar *dest, const gchar *src, gint dest_max)
 {
+#ifdef USE_NATIVE_LOCALE
+  return mbstowcs ((wchar_t *)dest, src, dest_max);
+#else
   if (gdk_use_mb)
     {
       XTextProperty tpr;
@@ -1611,10 +1652,11 @@ gdk_mbstowcs (GdkWChar *dest, const gchar *src, gint dest_max)
   else
     {
       gint i;
-
+      
       for (i=0; i<dest_max && src[i]; i++)
 	dest[i] = (guchar)src[i];
-
+      
       return i;
     }
+#endif
 }

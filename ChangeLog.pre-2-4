@@ -1,3 +1,14 @@
+Tue Feb 27 01:29:34 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in acconfig.h gdk/gdkfont.c gdk/gdkim.c INSTALL: Add a
+	configuration option --with-native-locale, that greatly speeds up
+	wide-character/multibyte conversions by dropping the indirection
+	through Xlib's property-conversion functions. Off by default due
+	to lack of testing for portability, but it should, in general be a
+	more correct way of doing things, and should also remove much of
+	the speed hit that the recent change to the handling of 8-bit
+	fonts may have introduced.
+
 Mon Feb 26 16:34:33 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* README: Update to describe submitting patches

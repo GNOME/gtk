@@ -29,8 +29,23 @@
 #include "gdk.h"
 #include "gdkprivate.h"
 
+#if HAVE_CONFIG_H
+#  include <config.h>
+#  if STDC_HEADERS
+#    include <string.h>
+#  endif
+#endif
+
+#ifdef USE_NATIVE_LOCALE
+#include <stdlib.h>
+#endif
+
 static GHashTable *font_name_hash = NULL;
 static GHashTable *fontset_name_hash = NULL;
+
+#define FONT_XFONT(private)  ((XFontStruct *)(private)->xfont)
+#define FONT_IS_8BIT(private) ((FONT_XFONT(private)->min_byte1 == 0) && \
+			       (FONT_XFONT(private)->max_byte1 == 0))
 
 static void
 gdk_font_hash_insert (GdkFontType type, GdkFont *font, const gchar *font_name)
@@ -482,18 +497,28 @@ gdk_char_width_wc (GdkFont *font,
   switch (font->type)
     {
     case GDK_FONT_FONT:
-      {
-	gchar *glyphs;
-	int glyphs_len;
+#ifdef USE_NATIVE_LOCALE
+      if (MB_CUR_MAX == 1 && FONT_IS_8BIT(private))
+	{
+	  char c;
+	  g_assert (wctomb(&c,character) == 1);
 
-	_gdk_font_wc_to_glyphs (font, &character, 1, &glyphs, &glyphs_len);
-
-	width = gdk_text_width (font, glyphs, glyphs_len);
-
-	g_free (glyphs);
-
-	break;
-      }
+	  return gdk_char_width (font, c);
+	}
+      else
+#endif /* USE_NATIVE_LOCALE */
+	{
+	  gchar *glyphs;
+	  int glyphs_len;
+	  
+	  _gdk_font_wc_to_glyphs (font, &character, 1, &glyphs, &glyphs_len);
+	  
+	  width = gdk_text_width (font, glyphs, glyphs_len);
+	  
+	  g_free (glyphs);
+	  
+	  break;
+	}
     case GDK_FONT_FONTSET:
       fontset = (XFontSet) private->xfont;
       {
@@ -811,7 +836,7 @@ _gdk_font_wc_to_glyphs (GdkFont        *font,
 
   xfont = (XFontStruct *) font_private->xfont;
 
-  if ((xfont->min_byte1 == 0) && (xfont->max_byte1 == 0))
+  if (FONT_IS_8BIT (font_private))
     {
       /* 8-bit font, assume that we are in a 8-bit locale,
        * and convert to bytes using wcstombs.
