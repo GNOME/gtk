@@ -20,6 +20,7 @@
    It would be nice if we kept track of the last menu item that
    people selected, so that we could allow choosing text by using
    up/down arrows. 
+   -- Elliot
 */
 #include <ctype.h>
 #include <string.h>
