@@ -1,4 +1,10 @@
-Tue May 30 14:01:10 2000  Owen Taylor  <otaylor@redhat.com>
+Tue May 30 15:03:19 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/testcalendar.c (calendar_font_selection_ok): Use font
+	descriptions.
+
+	* gtk/gtkentry.c (gtk_entry_draw_text): Center text within
+	the entry.
 
 	* gtk/gtkfontsel.c (gtk_font_selection_dialog_init): Start of
 	redoing (vastly simplifying) for Pango. Still needs quite

@@ -1222,6 +1222,10 @@ gtk_entry_draw_text (GtkEntry *entry)
   if (GTK_WIDGET_DRAWABLE (entry))
     {
       PangoRectangle logical_rect;
+      int area_height;
+
+      gdk_window_get_size (entry->text_area, NULL, &area_height);
+      area_height = PANGO_SCALE * (area_height - 2 * INNER_BORDER);
       
       widget = GTK_WIDGET (entry);
 
@@ -1232,7 +1236,8 @@ gtk_entry_draw_text (GtkEntry *entry)
 
       gdk_draw_layout (entry->text_area, widget->style->text_gc [widget->state], 
 		       INNER_BORDER - entry->scroll_offset,
-		       INNER_BORDER + (entry->ascent + logical_rect.y) / PANGO_SCALE,
+		       INNER_BORDER + ((area_height - logical_rect.height) / 2 +
+				       entry->ascent + logical_rect.y) / PANGO_SCALE,
 		       entry->layout);
 
       if (editable->selection_start_pos != editable->selection_end_pos)
@@ -1266,7 +1271,8 @@ gtk_entry_draw_text (GtkEntry *entry)
 	  gdk_gc_set_clip_region (widget->style->fg_gc [selected_state], clip_region);
 	  gdk_draw_layout (entry->text_area, widget->style->fg_gc [selected_state], 
 			   INNER_BORDER - entry->scroll_offset,
-			   INNER_BORDER + (entry->ascent + logical_rect.y) / PANGO_SCALE,
+			   INNER_BORDER + ((area_height - logical_rect.height) / 2 +
+					   entry->ascent + logical_rect.y) / PANGO_SCALE,
 			   entry->layout);
 	  gdk_gc_set_clip_region (widget->style->fg_gc [selected_state], NULL);
 	  

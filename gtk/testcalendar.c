@@ -31,7 +31,6 @@
 typedef struct _CalendarData {
   GtkWidget *flag_checkboxes[5];
   gboolean  settings[5];
-  gchar     *font;
   GtkWidget *font_dialog;
   GtkWidget *window;
   GtkWidget *prev2_sig;
@@ -184,26 +183,26 @@ void calendar_toggle_flag( GtkWidget    *toggle,
   
 }
 
-void calendar_font_selection_ok( GtkWidget    *button,
-                                 CalendarData *calendar )
+void calendar_font_selection_ok (GtkWidget    *button,
+                                 CalendarData *calendar)
 {
-  GtkStyle *style;
-  GdkFont  *font;
+  GtkRcStyle *style;
+  char *font_name;
 
-  calendar->font = gtk_font_selection_dialog_get_font_name(
-			GTK_FONT_SELECTION_DIALOG (calendar->font_dialog));
   if (calendar->window)
     {
-      font = gtk_font_selection_dialog_get_font(GTK_FONT_SELECTION_DIALOG(calendar->font_dialog));
-      if (font) 
+      font_name = gtk_font_selection_dialog_get_font_name (GTK_FONT_SELECTION_DIALOG(calendar->font_dialog));
+      if (font_name) 
 	{
-	  style = gtk_style_copy (gtk_widget_get_style (calendar->window));
-	  gdk_font_unref (style->font);
-	  style->font = font;
-	  gdk_font_ref (style->font);
-	  gtk_widget_set_style (calendar->window, style);
+	  style = gtk_rc_style_new ();
+	  pango_font_description_free (style->font_desc);
+	  style->font_desc = pango_font_description_from_string (font_name);
+	  gtk_widget_modify_style (calendar->window, style);
+	  g_free (font_name);
 	}
     }
+
+  gtk_widget_destroy (calendar->font_dialog);
 }
 
 void calendar_select_font( GtkWidget    *button,
@@ -267,7 +266,6 @@ void create_calendar()
 
   
   calendar_data.window = NULL;
-  calendar_data.font = NULL;
   calendar_data.font_dialog = NULL;
 
   for (i=0; i<5; i++) {

@@ -140,6 +140,7 @@ static char *
 gdk_font_charset_for_locale ()
 {
   static char *charset_map[][2] = {
+    { "ANSI_X3.4-1968", "iso8859-1" },
     { "ISO-8859-1", "iso8859-1" },
     { "ISO-8859-2", "iso8859-2" },
     { "ISO-8859-3", "iso8859-3" },
@@ -164,7 +165,10 @@ gdk_font_charset_for_locale ()
 
   g_free (codeset);
 
-  return g_strdup (result);
+  if (result)
+    return g_strdup (result);
+  else
+    return g_strdup ("iso-8859-1");
 };
 
 /**

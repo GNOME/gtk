@@ -326,6 +326,8 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gtk_widget_set_usize (fontsel->preview_entry, -1, INITIAL_PREVIEW_HEIGHT);
   gtk_box_pack_start (GTK_BOX (text_box), fontsel->preview_entry,
 		      TRUE, TRUE, 0);
+
+  gtk_font_selection_update_preview (fontsel);
 }
 
 GtkWidget *
@@ -354,8 +356,8 @@ gtk_font_selection_finalize (GtkObject *object)
   if (fontsel->font)
     gdk_font_unref (fontsel->font);
   
-  if (GTK_OBJECT_CLASS (font_selection_parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (font_selection_parent_class)->destroy) (object);
+  if (GTK_OBJECT_CLASS (font_selection_parent_class)->finalize)
+    (* GTK_OBJECT_CLASS (font_selection_parent_class)->finalize) (object);
 }
 
 
