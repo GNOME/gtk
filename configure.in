@@ -132,7 +132,7 @@ AC_SUBST(REBUILD)
 
 # i18n stuff
 ALL_LINGUAS="de pt"
-AM_GNU_GETTEXT
+AM_GNU_GETTEXT_GTK
 AC_CHECK_FUNC(gettext,
 	,
 	AC_CHECK_LIB(intl, gettext)
@@ -450,7 +450,6 @@ AC_SUBST(GTK_THREAD_FLAGS)
 AC_OUTPUT([
 Makefile
 gtk-config
-intl/Makefile
 po/Makefile.in
 docs/Makefile
 gdk/Makefile

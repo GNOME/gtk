@@ -1,3 +1,13 @@
+Tue Dec 15 16:06:15 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* acinclude.m4: Provide a hacked version of the
+	  gettext macros that never use the included gettext.
+	 
+	* Makefile.am configure.in: Remove references
+	  to intl/
+	
+	* autogen.sh: Don't run gettextize.
+
 Tue Dec 15 14:30:35 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdk.h gdk/gdkfonts.c: Added gdk_text_extents_wc()
