@@ -1,5 +1,9 @@
 2003-09-27  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkitemfactory.h: Deprecate GtkItemFactory in favor 
+	of GtkUIManager. Just leave GtkTranslateFunc undeprecated, 
+	since GtkActionGroup uses it.
+
 	* tests/testtext.c: Turn off GTK_DISABLE_DEPRECATED, since
 	this test uses the soon-to-be-deprecated GtkItemFactory.
 
