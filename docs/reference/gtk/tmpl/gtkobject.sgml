@@ -98,20 +98,6 @@ The object itself.  You should never use these members directly -
 </para>
 
 
-<!-- ##### SIGNAL GtkObject::destroy ##### -->
-<para>
-Signals that all holders of a reference to the #GtkObject should release
-the reference that they hold. May result in finalization of the object
-if all references are released.
-</para>
-
-@object: the object which received the signal.
-
-<!-- ##### ARG GtkObject:user-data ##### -->
-<para>
-
-</para>
-
 <!-- ##### MACRO GTK_OBJECT_TYPE ##### -->
 <para>
 Gets the type of an object.
@@ -510,4 +496,18 @@ Useless deprecated macro. Ignore it.
 </para>
 
 
+
+<!-- ##### SIGNAL GtkObject::destroy ##### -->
+<para>
+Signals that all holders of a reference to the #GtkObject should release
+the reference that they hold. May result in finalization of the object
+if all references are released.
+</para>
+
+@object: the object which received the signal.
+
+<!-- ##### ARG GtkObject:user-data ##### -->
+<para>
+
+</para>
 

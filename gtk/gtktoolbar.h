@@ -45,7 +45,7 @@
 #include <gtk/gtkpixmap.h>
 #include <gtk/gtksignal.h>
 
-#endif
+#endif /* GTK_DISABLE_DEPRECATED */
 
 G_BEGIN_DECLS
 
@@ -91,7 +91,8 @@ typedef struct _GtkToolbarPrivate    GtkToolbarPrivate;
 struct _GtkToolbar
 {
   GtkContainer container;
-  
+
+  /*< private >*/
   gint             num_children;
   GList           *children;
   GtkOrientation   orientation;
@@ -115,9 +116,9 @@ struct _GtkToolbarClass
   GtkContainerClass parent_class;
   
   /* signals */
-  void (* orientation_changed)     (GtkToolbar       *toolbar,
+  void     (* orientation_changed) (GtkToolbar       *toolbar,
 				    GtkOrientation    orientation);
-  void (* style_changed)           (GtkToolbar       *toolbar,
+  void     (* style_changed)       (GtkToolbar       *toolbar,
 				    GtkToolbarStyle   style);
   gboolean (* popup_context_menu)  (GtkToolbar       *toolbar,
 				    gint              x,
@@ -140,29 +141,27 @@ gint            gtk_toolbar_get_item_index            (GtkToolbar      *toolbar,
 gint            gtk_toolbar_get_n_items               (GtkToolbar      *toolbar);
 GtkToolItem *   gtk_toolbar_get_nth_item              (GtkToolbar      *toolbar,
 						       gint             n);
+gboolean        gtk_toolbar_get_show_arrow            (GtkToolbar      *toolbar);
 void            gtk_toolbar_set_show_arrow            (GtkToolbar      *toolbar,
 						       gboolean         show_arrow);
+GtkOrientation  gtk_toolbar_get_orientation           (GtkToolbar      *toolbar);
 void            gtk_toolbar_set_orientation           (GtkToolbar      *toolbar,
 						       GtkOrientation   orientation);
+gboolean        gtk_toolbar_get_tooltips              (GtkToolbar      *toolbar);
 void            gtk_toolbar_set_tooltips              (GtkToolbar      *toolbar,
 						       gboolean         enable);
-gboolean        gtk_toolbar_get_show_arrow            (GtkToolbar      *toolbar);
-GtkOrientation  gtk_toolbar_get_orientation           (GtkToolbar      *toolbar);
 GtkToolbarStyle gtk_toolbar_get_style                 (GtkToolbar      *toolbar);
-GtkIconSize     gtk_toolbar_get_icon_size             (GtkToolbar      *toolbar);
-gboolean        gtk_toolbar_get_tooltips              (GtkToolbar      *toolbar);
-GtkReliefStyle  gtk_toolbar_get_relief_style          (GtkToolbar      *toolbar);
 void            gtk_toolbar_set_style                 (GtkToolbar      *toolbar,
 						       GtkToolbarStyle  style);
 void            gtk_toolbar_unset_style               (GtkToolbar      *toolbar);
+GtkIconSize     gtk_toolbar_get_icon_size             (GtkToolbar      *toolbar);
+GtkReliefStyle  gtk_toolbar_get_relief_style          (GtkToolbar      *toolbar);
 gint            gtk_toolbar_get_drop_index            (GtkToolbar      *toolbar,
 						       gint             x,
 						       gint             y);
 void            gtk_toolbar_highlight_drop_location   (GtkToolbar      *toolbar,
-						       gint             x,
-						       gint             y,
-						       gint             width,
-						       gint             height);
+						       gint		index,
+						       GtkToolItem     *tool_item);
 void            gtk_toolbar_unhighlight_drop_location (GtkToolbar      *toolbar);
 
 

@@ -49,47 +49,6 @@ accessed through the functions described below.
 </para>
 
 
-<!-- ##### SIGNAL GtkToolItem::create-menu-proxy ##### -->
-<para>
-
-</para>
-
-@toolitem: the object which received the signal.
-@Returns: 
-
-<!-- ##### SIGNAL GtkToolItem::set-tooltip ##### -->
-<para>
-
-</para>
-
-@toolitem: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-@Returns: 
-
-<!-- ##### SIGNAL GtkToolItem::toolbar-reconfigured ##### -->
-<para>
-
-</para>
-
-@toolitem: the object which received the signal.
-
-<!-- ##### ARG GtkToolItem:is-important ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolItem:visible-horizontal ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolItem:visible-vertical ##### -->
-<para>
-
-</para>
-
 <!-- ##### FUNCTION gtk_tool_item_new ##### -->
 <para>
 
@@ -126,24 +85,6 @@ accessed through the functions described below.
 
 
 <!-- ##### FUNCTION gtk_tool_item_get_expand ##### -->
-<para>
-
-</para>
-
-@tool_item: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_tool_item_set_pack_end ##### -->
-<para>
-
-</para>
-
-@tool_item: 
-@pack_end: 
-
-
-<!-- ##### FUNCTION gtk_tool_item_get_pack_end ##### -->
 <para>
 
 </para>
@@ -299,4 +240,45 @@ accessed through the functions described below.
 @menu_item_id: 
 @menu_item: 
 
+
+<!-- ##### SIGNAL GtkToolItem::create-menu-proxy ##### -->
+<para>
+
+</para>
+
+@toolitem: the object which received the signal.
+@Returns: 
+
+<!-- ##### SIGNAL GtkToolItem::set-tooltip ##### -->
+<para>
+
+</para>
+
+@toolitem: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkToolItem::toolbar-reconfigured ##### -->
+<para>
+
+</para>
+
+@toolitem: the object which received the signal.
+
+<!-- ##### ARG GtkToolItem:is-important ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolItem:visible-horizontal ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolItem:visible-vertical ##### -->
+<para>
+
+</para>
 

@@ -26,26 +26,6 @@ a frame around the child. The frame will be
 </para>
 
 
-<!-- ##### ARG GtkAspectFrame:obey-child ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAspectFrame:ratio ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAspectFrame:xalign ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAspectFrame:yalign ##### -->
-<para>
-
-</para>
-
 <!-- ##### FUNCTION gtk_aspect_frame_new ##### -->
 <para>
 Create a new #GtkAspectFrame.
@@ -82,4 +62,24 @@ to 1.0 (right aligned)
 @obey_child: If %TRUE, @ratio is ignored, and the aspect
     ratio is taken from the requistion of the child.
 
+
+<!-- ##### ARG GtkAspectFrame:obey-child ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAspectFrame:ratio ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAspectFrame:xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAspectFrame:yalign ##### -->
+<para>
+
+</para>
 

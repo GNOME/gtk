@@ -12,9 +12,14 @@ A toolbar is created with a call to gtk_toolbar_new().
 A toolbar can contain instances of a subclass of #GtkToolItem. To add
 a #GtkToolItem to the a toolbar, use gtk_toolbar_insert(). To remove
 an item from the toolbar use gtk_container_remove(). To add a button
-to the toolbar, add an instance of #GtkToolButton. Toolbar items can
-be visually grouped by adding instances of #GtkSeparatorToolItem to
-the toolbar.
+to the toolbar, add an instance of #GtkToolButton.
+</para>
+<para>
+Toolbar items can be visually grouped by adding instances of
+#GtkSeparatorToolItem to the toolbar. If a #GtkSeparatorToolItem has
+the "expand" property set to #TRUE and the "draw" property set to
+#FALSE the effect is to force all following items to the end of the
+toolbar.
 </para>
 <para>
 Creating a context menu for the toolbar can be done by connecting to
@@ -39,109 +44,6 @@ The #GtkToolbar struct only contains private data and should only be
 accessed through the function described below.
 </para>
 
-
-<!-- ##### SIGNAL GtkToolbar::focus-home-or-end ##### -->
-<para>
-
-</para>
-
-@toolbar: the object which received the signal.
-@arg1: 
-@Returns: 
-
-<!-- ##### SIGNAL GtkToolbar::move-focus ##### -->
-<para>
-
-</para>
-
-@toolbar: the object which received the signal.
-@arg1: 
-@Returns: 
-
-<!-- ##### SIGNAL GtkToolbar::orientation-changed ##### -->
-<para>
-
-</para>
-
-@toolbar: the object which received the signal.
-@orientation: the new #GtkOrientation of the toolbar.
-
-<!-- ##### SIGNAL GtkToolbar::popup-context-menu ##### -->
-<para>
-
-</para>
-
-@toolbar: the object which received the signal.
-@Returns: 
-@: 
-@:
-@Returns: 
-@:
-@Returns: 
-@Returns: 
-
-<!-- ##### SIGNAL GtkToolbar::style-changed ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@style: 
-
-<!-- ##### ARG GtkToolbar:orientation ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:show-arrow ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:toolbar-style ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:expand ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:homogeneous ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:pack-end ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:button-relief ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:internal-padding ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:shadow-type ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:space-size ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:space-style ##### -->
-<para>
-
-</para>
 
 <!-- ##### ENUM GtkToolbarChildType ##### -->
 <para>
@@ -529,4 +431,102 @@ to a #GtkToolbar.
 
 @toolbar: 
 
+
+<!-- ##### SIGNAL GtkToolbar::focus-home-or-end ##### -->
+<para>
+
+</para>
+
+@toolbar: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkToolbar::move-focus ##### -->
+<para>
+
+</para>
+
+@toolbar: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkToolbar::orientation-changed ##### -->
+<para>
+
+</para>
+
+@toolbar: the object which received the signal.
+@orientation: the new #GtkOrientation of the toolbar.
+
+<!-- ##### SIGNAL GtkToolbar::popup-context-menu ##### -->
+<para>
+
+</para>
+
+@toolbar: the object which received the signal.
+@Returns: 
+@: 
+@:
+@Returns: 
+@:
+@Returns: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkToolbar::style-changed ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@style: 
+
+<!-- ##### ARG GtkToolbar:orientation ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:show-arrow ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:toolbar-style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:expand ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:homogeneous ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:button-relief ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:internal-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:shadow-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:space-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:space-style ##### -->
+<para>
+
+</para>
 

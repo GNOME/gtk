@@ -55,71 +55,6 @@ The <structname>GtkTable</structname> structure holds the data for the actual ta
 </para>
 
 
-<!-- ##### ARG GtkTable:column-spacing ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTable:homogeneous ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTable:n-columns ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTable:n-rows ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTable:row-spacing ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTable:bottom-attach ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTable:left-attach ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTable:right-attach ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTable:top-attach ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTable:x-options ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTable:x-padding ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTable:y-options ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTable:y-padding ##### -->
-<para>
-
-</para>
-
 <!-- ##### STRUCT GtkTableChild ##### -->
 <para>
 The <structfield>widget</structfield> field is a pointer to the widget that 
@@ -315,4 +250,69 @@ to %FALSE if this is not your desired behaviour.
 @table: 
 @Returns: 
 
+
+<!-- ##### ARG GtkTable:column-spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTable:homogeneous ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTable:n-columns ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTable:n-rows ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTable:row-spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTable:bottom-attach ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTable:left-attach ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTable:right-attach ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTable:top-attach ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTable:x-options ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTable:x-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTable:y-options ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTable:y-padding ##### -->
+<para>
+
+</para>
 

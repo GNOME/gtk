@@ -104,83 +104,6 @@ and should only be modified using the functions below.
 </para>
 
 
-<!-- ##### SIGNAL GtkSpinButton::change-value ##### -->
-<para>
-
-</para>
-
-@spinbutton: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkSpinButton::input ##### -->
-<para>
-
-</para>
-
-@spinbutton: the object which received the signal.
-@arg1: 
-@Returns: 
-
-<!-- ##### SIGNAL GtkSpinButton::output ##### -->
-<para>
-
-</para>
-
-@spinbutton: the object which received the signal.
-@Returns: 
-
-<!-- ##### SIGNAL GtkSpinButton::value-changed ##### -->
-<para>
-
-</para>
-
-@spinbutton: the object which received the signal.
-
-<!-- ##### ARG GtkSpinButton:adjustment ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkSpinButton:climb-rate ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkSpinButton:digits ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkSpinButton:numeric ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkSpinButton:snap-to-ticks ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkSpinButton:update-policy ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkSpinButton:value ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkSpinButton:wrap ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkSpinButton:shadow-type ##### -->
-<para>
-the type of border that surrounds the arrows of a spin button.
-</para>
-
 <!-- ##### ENUM GtkSpinButtonUpdatePolicy ##### -->
 <para>
 
@@ -477,4 +400,81 @@ use gtk_spin_button_get_value() instead.
 </para>
 
 
+
+<!-- ##### SIGNAL GtkSpinButton::change-value ##### -->
+<para>
+
+</para>
+
+@spinbutton: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkSpinButton::input ##### -->
+<para>
+
+</para>
+
+@spinbutton: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkSpinButton::output ##### -->
+<para>
+
+</para>
+
+@spinbutton: the object which received the signal.
+@Returns: 
+
+<!-- ##### SIGNAL GtkSpinButton::value-changed ##### -->
+<para>
+
+</para>
+
+@spinbutton: the object which received the signal.
+
+<!-- ##### ARG GtkSpinButton:adjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSpinButton:climb-rate ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSpinButton:digits ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSpinButton:numeric ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSpinButton:snap-to-ticks ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSpinButton:update-policy ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSpinButton:value ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSpinButton:wrap ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSpinButton:shadow-type ##### -->
+<para>
+the type of border that surrounds the arrows of a spin button.
+</para>
 

@@ -11,6 +11,11 @@ A toolbar item that separates groups of other toolbar items.
   often look like a vertical line on horizontally docked toolbars.
 </para>
 <para>
+If the property "expand" is #TRUE and the property "draw" is #FALSE, a
+#GtkSeparatorToolItem will act as a "spring" that forces other items
+to the ends of the toolbar.
+</para>
+<para>
   Use gtk_separator_tool_item_new() to create a new #GtkSeparatorToolItem.
 </para>
 
@@ -43,4 +48,9 @@ should only be accessed through the functions described below.
 
 @Returns: 
 
+
+<!-- ##### ARG GtkSeparatorToolItem:draw ##### -->
+<para>
+
+</para>
 

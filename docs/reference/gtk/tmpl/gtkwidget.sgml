@@ -41,671 +41,6 @@ gtk_widget_style_get_valist() to obtain the value of a style property.
  will be indicated by the #GTK_NO_WINDOW flag being set).
 @parent: 
 
-<!-- ##### SIGNAL GtkWidget::accel-closures-changed ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-
-<!-- ##### SIGNAL GtkWidget::button-press-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::button-release-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::child-notify ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkWidget::client-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::configure-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::delete-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::destroy-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::direction-changed ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkWidget::drag-begin ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@drag_context: 
-
-<!-- ##### SIGNAL GtkWidget::drag-data-delete ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@drag_context: 
-
-<!-- ##### SIGNAL GtkWidget::drag-data-get ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@drag_context: 
-@data: 
-@info: 
-@time: 
-<!-- # Unused Parameters # -->
-@time_: 
-
-<!-- ##### SIGNAL GtkWidget::drag-data-received ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@drag_context: 
-@x: 
-@y: 
-@data: 
-@info: 
-@time: 
-<!-- # Unused Parameters # -->
-@time_: 
-
-<!-- ##### SIGNAL GtkWidget::drag-drop ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@drag_context: 
-@x: 
-@y: 
-@time: 
-@Returns: 
-<!-- # Unused Parameters # -->
-@time_: 
-
-<!-- ##### SIGNAL GtkWidget::drag-end ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@drag_context: 
-
-<!-- ##### SIGNAL GtkWidget::drag-leave ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@drag_context: 
-@time: 
-<!-- # Unused Parameters # -->
-@time_: 
-
-<!-- ##### SIGNAL GtkWidget::drag-motion ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@drag_context: 
-@x: 
-@y: 
-@time: 
-@Returns: 
-<!-- # Unused Parameters # -->
-@time_: 
-
-<!-- ##### SIGNAL GtkWidget::enter-notify-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::event-after ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-
-<!-- ##### SIGNAL GtkWidget::expose-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::focus ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@arg1: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::focus-in-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::focus-out-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::grab-focus ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-
-<!-- ##### SIGNAL GtkWidget::grab-notify ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkWidget::hide ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-
-<!-- ##### SIGNAL GtkWidget::hierarchy-changed ##### -->
-<para>
-Emitted when there is a chance in the hierarchy to
-which a widget belong. More precisely, a widget is
-<firstterm>anchored</firstterm> when its toplevel
-ancestor is a #GtkWindow. This signal is emitted when 
-a widget changes from un-anchored to anchored or vice-versa.
-</para>
-
-@widget: the object which received the signal.
-@widget2: 
-
-<!-- ##### SIGNAL GtkWidget::key-press-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::key-release-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::leave-notify-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::map ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-
-<!-- ##### SIGNAL GtkWidget::map-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::mnemonic-activate ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@arg1: 
-@Returns: 
-
-<!-- ##### SIGNAL GtkWidget::motion-notify-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::no-expose-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::parent-set ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@old_parent: 
-
-<!-- ##### SIGNAL GtkWidget::popup-menu ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@Returns: 
-
-<!-- ##### SIGNAL GtkWidget::property-notify-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::proximity-in-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::proximity-out-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::realize ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-
-<!-- ##### SIGNAL GtkWidget::screen-changed ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkWidget::scroll-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::selection-clear-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::selection-get ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@data: 
-@info: 
-@time: 
-<!-- # Unused Parameters # -->
-@time_: 
-
-<!-- ##### SIGNAL GtkWidget::selection-notify-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::selection-received ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@data: 
-@time: 
-<!-- # Unused Parameters # -->
-@time_: 
-
-<!-- ##### SIGNAL GtkWidget::selection-request-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::show ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-
-<!-- ##### SIGNAL GtkWidget::show-help ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@arg1: 
-@Returns: 
-
-<!-- ##### SIGNAL GtkWidget::size-allocate ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@allocation: 
-
-<!-- ##### SIGNAL GtkWidget::size-request ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@requisition: 
-
-<!-- ##### SIGNAL GtkWidget::state-changed ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@state: 
-
-<!-- ##### SIGNAL GtkWidget::style-set ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@previous_style: 
-
-<!-- ##### SIGNAL GtkWidget::unmap ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-
-<!-- ##### SIGNAL GtkWidget::unmap-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::unrealize ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-
-<!-- ##### SIGNAL GtkWidget::visibility-notify-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### SIGNAL GtkWidget::window-state-event ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@event: 
-@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-
-<!-- ##### ARG GtkWidget:app-paintable ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:can-default ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:can-focus ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:composite-child ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:events ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:extension-events ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:has-default ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:has-focus ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:height-request ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:is-focus ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:name ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:no-show-all ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:parent ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:receives-default ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:sensitive ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:style ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:visible ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:width-request ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:cursor-aspect-ratio ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:cursor-color ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:focus-line-pattern ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:focus-line-width ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:focus-padding ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:interior-focus ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:secondary-cursor-color ##### -->
-<para>
-
-</para>
-
 <!-- ##### STRUCT GtkWidgetClass ##### -->
 <para>
 <structfield>activate_signal</structfield>
@@ -2319,4 +1654,669 @@ This function is deprecated; it does nothing.
 
 @requisition: 
 
+
+<!-- ##### SIGNAL GtkWidget::accel-closures-changed ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWidget::button-press-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::button-release-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::child-notify ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkWidget::client-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::configure-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::delete-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::destroy-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::direction-changed ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkWidget::drag-begin ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@drag_context: 
+
+<!-- ##### SIGNAL GtkWidget::drag-data-delete ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@drag_context: 
+
+<!-- ##### SIGNAL GtkWidget::drag-data-get ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@drag_context: 
+@data: 
+@info: 
+@time: 
+<!-- # Unused Parameters # -->
+@time_: 
+
+<!-- ##### SIGNAL GtkWidget::drag-data-received ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@drag_context: 
+@x: 
+@y: 
+@data: 
+@info: 
+@time: 
+<!-- # Unused Parameters # -->
+@time_: 
+
+<!-- ##### SIGNAL GtkWidget::drag-drop ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@drag_context: 
+@x: 
+@y: 
+@time: 
+@Returns: 
+<!-- # Unused Parameters # -->
+@time_: 
+
+<!-- ##### SIGNAL GtkWidget::drag-end ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@drag_context: 
+
+<!-- ##### SIGNAL GtkWidget::drag-leave ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@drag_context: 
+@time: 
+<!-- # Unused Parameters # -->
+@time_: 
+
+<!-- ##### SIGNAL GtkWidget::drag-motion ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@drag_context: 
+@x: 
+@y: 
+@time: 
+@Returns: 
+<!-- # Unused Parameters # -->
+@time_: 
+
+<!-- ##### SIGNAL GtkWidget::enter-notify-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::event-after ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+
+<!-- ##### SIGNAL GtkWidget::expose-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::focus ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::focus-in-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::focus-out-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::grab-focus ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWidget::grab-notify ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkWidget::hide ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWidget::hierarchy-changed ##### -->
+<para>
+Emitted when there is a chance in the hierarchy to
+which a widget belong. More precisely, a widget is
+<firstterm>anchored</firstterm> when its toplevel
+ancestor is a #GtkWindow. This signal is emitted when 
+a widget changes from un-anchored to anchored or vice-versa.
+</para>
+
+@widget: the object which received the signal.
+@widget2: 
+
+<!-- ##### SIGNAL GtkWidget::key-press-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::key-release-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::leave-notify-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::map ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWidget::map-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::mnemonic-activate ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::motion-notify-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::no-expose-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::parent-set ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@old_parent: 
+
+<!-- ##### SIGNAL GtkWidget::popup-menu ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::property-notify-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::proximity-in-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::proximity-out-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::realize ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWidget::screen-changed ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkWidget::scroll-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::selection-clear-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::selection-get ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@data: 
+@info: 
+@time: 
+<!-- # Unused Parameters # -->
+@time_: 
+
+<!-- ##### SIGNAL GtkWidget::selection-notify-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::selection-received ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@data: 
+@time: 
+<!-- # Unused Parameters # -->
+@time_: 
+
+<!-- ##### SIGNAL GtkWidget::selection-request-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::show ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWidget::show-help ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::size-allocate ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@allocation: 
+
+<!-- ##### SIGNAL GtkWidget::size-request ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@requisition: 
+
+<!-- ##### SIGNAL GtkWidget::state-changed ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@state: 
+
+<!-- ##### SIGNAL GtkWidget::style-set ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@previous_style: 
+
+<!-- ##### SIGNAL GtkWidget::unmap ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWidget::unmap-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::unrealize ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWidget::visibility-notify-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### SIGNAL GtkWidget::window-state-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+
+<!-- ##### ARG GtkWidget:app-paintable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:can-default ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:can-focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:composite-child ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:events ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:extension-events ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:has-default ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:has-focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:height-request ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:is-focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:no-show-all ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:parent ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:receives-default ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:sensitive ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:visible ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:width-request ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:cursor-aspect-ratio ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:cursor-color ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:focus-line-pattern ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:focus-line-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:focus-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:interior-focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:secondary-cursor-color ##### -->
+<para>
+
+</para>
 

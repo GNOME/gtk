@@ -52,36 +52,6 @@ This is a read-only struct; no members should be modified directly.
 </para>
 
 
-<!-- ##### ARG GtkButtonBox:layout-style ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkButtonBox:secondary ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkButtonBox:child-internal-pad-x ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkButtonBox:child-internal-pad-y ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkButtonBox:child-min-height ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkButtonBox:child-min-width ##### -->
-<para>
-
-</para>
-
 <!-- ##### MACRO GTK_BUTTONBOX_DEFAULT ##### -->
 <para>
 Used internally only.
@@ -199,4 +169,34 @@ box.
 @child: 
 @is_secondary: 
 
+
+<!-- ##### ARG GtkButtonBox:layout-style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButtonBox:secondary ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButtonBox:child-internal-pad-x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButtonBox:child-internal-pad-y ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButtonBox:child-min-height ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButtonBox:child-min-width ##### -->
+<para>
+
+</para>
 

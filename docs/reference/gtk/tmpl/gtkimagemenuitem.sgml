@@ -24,11 +24,6 @@ fill in the text label.
 </para>
 
 
-<!-- ##### ARG GtkImageMenuItem:image ##### -->
-<para>
-
-</para>
-
 <!-- ##### FUNCTION gtk_image_menu_item_set_image ##### -->
 <para>
 
@@ -85,4 +80,9 @@ fill in the text label.
 @label: 
 @Returns: 
 
+
+<!-- ##### ARG GtkImageMenuItem:image ##### -->
+<para>
+
+</para>
 

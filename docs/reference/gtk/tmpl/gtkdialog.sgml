@@ -140,44 +140,6 @@ as any other #GtkHButtonBox.
 @vbox: 
 @action_area: 
 
-<!-- ##### SIGNAL GtkDialog::close ##### -->
-<para>
-
-</para>
-
-@dialog: the object which received the signal.
-
-<!-- ##### SIGNAL GtkDialog::response ##### -->
-<para>
-Emitted when an action widget is clicked, the dialog receives a delete event, or
-the application programmer calls gtk_dialog_response(). On a delete event, the
-response ID is #GTK_RESPONSE_NONE. Otherwise, it depends on which action widget
-was clicked.
-</para>
-
-@dialog: the object which received the signal.
-@arg1: the response ID
-
-<!-- ##### ARG GtkDialog:has-separator ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkDialog:action-area-border ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkDialog:button-spacing ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkDialog:content-area-border ##### -->
-<para>
-
-</para>
-
 <!-- ##### ENUM GtkDialogFlags ##### -->
 <para>
 
@@ -313,4 +275,42 @@ directly, but into the @vbox and @action_area, as described above.
 @response_id: 
 @setting: 
 
+
+<!-- ##### SIGNAL GtkDialog::close ##### -->
+<para>
+
+</para>
+
+@dialog: the object which received the signal.
+
+<!-- ##### SIGNAL GtkDialog::response ##### -->
+<para>
+Emitted when an action widget is clicked, the dialog receives a delete event, or
+the application programmer calls gtk_dialog_response(). On a delete event, the
+response ID is #GTK_RESPONSE_NONE. Otherwise, it depends on which action widget
+was clicked.
+</para>
+
+@dialog: the object which received the signal.
+@arg1: the response ID
+
+<!-- ##### ARG GtkDialog:has-separator ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkDialog:action-area-border ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkDialog:button-spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkDialog:content-area-border ##### -->
+<para>
+
+</para>
 

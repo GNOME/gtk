@@ -25,34 +25,6 @@ and should be accessed using the functions below.
 </para>
 
 
-<!-- ##### SIGNAL GtkColorSelection::color-changed ##### -->
-<para>
-This signal is emitted when the color changes in the #GtkColorSelection
-according to its update policy.
-</para>
-
-@colorselection: the object which received the signal.
-
-<!-- ##### ARG GtkColorSelection:current-alpha ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkColorSelection:current-color ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkColorSelection:has-opacity-control ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkColorSelection:has-palette ##### -->
-<para>
-
-</para>
-
 <!-- ##### FUNCTION gtk_color_selection_new ##### -->
 <para>
 
@@ -285,4 +257,32 @@ time.
 @colorsel: 
 @color: 
 
+
+<!-- ##### SIGNAL GtkColorSelection::color-changed ##### -->
+<para>
+This signal is emitted when the color changes in the #GtkColorSelection
+according to its update policy.
+</para>
+
+@colorselection: the object which received the signal.
+
+<!-- ##### ARG GtkColorSelection:current-alpha ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkColorSelection:current-color ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkColorSelection:has-opacity-control ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkColorSelection:has-palette ##### -->
+<para>
+
+</para>
 

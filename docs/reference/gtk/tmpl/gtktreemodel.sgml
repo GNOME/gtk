@@ -199,51 +199,6 @@ enum
 </para>
 
 
-<!-- ##### SIGNAL GtkTreeModel::row-changed ##### -->
-<para>
-
-</para>
-
-@treemodel: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkTreeModel::row-deleted ##### -->
-<para>
-
-</para>
-
-@treemodel: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkTreeModel::row-has-child-toggled ##### -->
-<para>
-
-</para>
-
-@treemodel: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkTreeModel::row-inserted ##### -->
-<para>
-
-</para>
-
-@treemodel: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkTreeModel::rows-reordered ##### -->
-<para>
-
-</para>
-
-@treemodel: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-
 <!-- ##### STRUCT GtkTreeIter ##### -->
 <para>
 The <structname>GtkTreeIter</structname> is the primary structure for
@@ -859,4 +814,49 @@ versions of GTK+.
 @iter: 
 @new_order: 
 
+
+<!-- ##### SIGNAL GtkTreeModel::row-changed ##### -->
+<para>
+
+</para>
+
+@treemodel: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeModel::row-deleted ##### -->
+<para>
+
+</para>
+
+@treemodel: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkTreeModel::row-has-child-toggled ##### -->
+<para>
+
+</para>
+
+@treemodel: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeModel::row-inserted ##### -->
+<para>
+
+</para>
+
+@treemodel: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeModel::rows-reordered ##### -->
+<para>
+
+</para>
+
+@treemodel: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
 

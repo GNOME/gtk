@@ -22,27 +22,6 @@ should be accessed using the functions below.
 </para>
 
 
-<!-- ##### SIGNAL GtkItem::deselect ##### -->
-<para>
-Emitted when the item is deselected.
-</para>
-
-@item: the object which received the signal.
-
-<!-- ##### SIGNAL GtkItem::select ##### -->
-<para>
-Emitted when the item is selected.
-</para>
-
-@item: the object which received the signal.
-
-<!-- ##### SIGNAL GtkItem::toggle ##### -->
-<para>
-Emitted when the item is toggled.
-</para>
-
-@item: the object which received the signal.
-
 <!-- ##### FUNCTION gtk_item_select ##### -->
 <para>
 Emits the "select" signal on the given item.
@@ -66,4 +45,25 @@ Emits the "toggle" signal on the given item.
 
 @item: a #GtkItem.
 
+
+<!-- ##### SIGNAL GtkItem::deselect ##### -->
+<para>
+Emitted when the item is deselected.
+</para>
+
+@item: the object which received the signal.
+
+<!-- ##### SIGNAL GtkItem::select ##### -->
+<para>
+Emitted when the item is selected.
+</para>
+
+@item: the object which received the signal.
+
+<!-- ##### SIGNAL GtkItem::toggle ##### -->
+<para>
+Emitted when the item is toggled.
+</para>
+
+@item: the object which received the signal.
 

@@ -1,3 +1,27 @@
+Thu Oct 23 21:55:10 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_highlight_drop_location): Make
+	this function take an index and a GtkToolItem.
+
+	* tests/testtoolbar.c (main): Make "Show Arrow" default to
+	true. Make one of the separators !draw and expand.
+	Update for new highlight_drop_location() API.
+
+	* gtk/gtktoolitem.[ch]: Remove "pack_end" property
+
+	* gtk/gtktoolbar.h: Formatting fixes.
+
+	* gtk/gtktoolbar.c: Remove "pack_end" child property. Allow
+	separator tool items to expand.
+	(logical_to_physical, physical_to_logical): Fix off-by-one errors
+	(Fix #125472, Marco Pesenti Gritti)
+
+	* gtk/gtkseparatortoolitem.[ch]: Add new "draw" property.
+	(gtk_separator_tool_item_expose) only draw if "draw" is TRUE. Also
+	return FALSE, not TRUE.
+	(gtk_separator_too_item_{set|get}_property,
+	(gtk_separator_tool_item_{set|get}_draw): new functions
+
 Fri Oct 24 16:54:04 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* === Released 2.3.0 ===

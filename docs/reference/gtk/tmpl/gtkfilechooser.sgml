@@ -467,3 +467,31 @@ End:
 -->
 
 
+<!-- ##### SIGNAL GtkFileChooser::current-folder-changed ##### -->
+<para>
+
+</para>
+
+@filechooser: the object which received the signal.
+
+<!-- ##### SIGNAL GtkFileChooser::file-activated ##### -->
+<para>
+
+</para>
+
+@filechooser: the object which received the signal.
+
+<!-- ##### SIGNAL GtkFileChooser::selection-changed ##### -->
+<para>
+
+</para>
+
+@filechooser: the object which received the signal.
+
+<!-- ##### SIGNAL GtkFileChooser::update-preview ##### -->
+<para>
+
+</para>
+
+@filechooser: the object which received the signal.
+

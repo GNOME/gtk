@@ -23,16 +23,6 @@ should be accessed using the functions below.
 </para>
 
 
-<!-- ##### ARG GtkEventBox:above-child ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEventBox:visible-window ##### -->
-<para>
-
-</para>
-
 <!-- ##### FUNCTION gtk_event_box_new ##### -->
 <para>
 Creates a new #GtkEventBox.
@@ -76,4 +66,14 @@ Creates a new #GtkEventBox.
 @event_box: 
 @Returns: 
 
+
+<!-- ##### ARG GtkEventBox:above-child ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEventBox:visible-window ##### -->
+<para>
+
+</para>
 

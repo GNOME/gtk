@@ -78,10 +78,6 @@ void            gtk_tool_item_set_expand               (GtkToolItem *tool_item,
 							gboolean     expand);
 gboolean        gtk_tool_item_get_expand               (GtkToolItem *tool_item);
 
-void            gtk_tool_item_set_pack_end             (GtkToolItem *tool_item,
-							gboolean     pack_end);
-gboolean        gtk_tool_item_get_pack_end             (GtkToolItem *tool_item);
-
 void            gtk_tool_item_set_tooltip              (GtkToolItem *tool_item,
 							GtkTooltips *tooltips,
 							const gchar *tip_text,

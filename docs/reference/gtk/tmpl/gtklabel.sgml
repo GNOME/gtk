@@ -145,91 +145,6 @@ described below.
 </para>
 
 
-<!-- ##### SIGNAL GtkLabel::copy-clipboard ##### -->
-<para>
-
-</para>
-
-@label: the object which received the signal.
-
-<!-- ##### SIGNAL GtkLabel::move-cursor ##### -->
-<para>
-
-</para>
-
-@label: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-
-<!-- ##### SIGNAL GtkLabel::populate-popup ##### -->
-<para>
-
-</para>
-
-@label: the object which received the signal.
-@arg1: 
-
-<!-- ##### ARG GtkLabel:attributes ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkLabel:cursor-position ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkLabel:justify ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkLabel:label ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkLabel:mnemonic-keyval ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkLabel:mnemonic-widget ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkLabel:pattern ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkLabel:selectable ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkLabel:selection-bound ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkLabel:use-markup ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkLabel:use-underline ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkLabel:wrap ##### -->
-<para>
-
-</para>
-
 <!-- ##### FUNCTION gtk_label_new ##### -->
 <para>
 
@@ -530,4 +445,89 @@ Gtk+ 1.0.x.
 @label: 
 @setting: 
 
+
+<!-- ##### SIGNAL GtkLabel::copy-clipboard ##### -->
+<para>
+
+</para>
+
+@label: the object which received the signal.
+
+<!-- ##### SIGNAL GtkLabel::move-cursor ##### -->
+<para>
+
+</para>
+
+@label: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL GtkLabel::populate-popup ##### -->
+<para>
+
+</para>
+
+@label: the object which received the signal.
+@arg1: 
+
+<!-- ##### ARG GtkLabel:attributes ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:cursor-position ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:justify ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:label ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:mnemonic-keyval ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:mnemonic-widget ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:pattern ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:selectable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:selection-bound ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:use-markup ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:use-underline ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:wrap ##### -->
+<para>
+
+</para>
 

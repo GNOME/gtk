@@ -20,20 +20,6 @@ Interface for widgets which can are used for editing cells
 </para>
 
 
-<!-- ##### SIGNAL GtkCellEditable::editing-done ##### -->
-<para>
-
-</para>
-
-@celleditable: the object which received the signal.
-
-<!-- ##### SIGNAL GtkCellEditable::remove-widget ##### -->
-<para>
-
-</para>
-
-@celleditable: the object which received the signal.
-
 <!-- ##### STRUCT GtkCellEditableIface ##### -->
 <para>
 
@@ -68,4 +54,18 @@ Interface for widgets which can are used for editing cells
 
 @cell_editable: 
 
+
+<!-- ##### SIGNAL GtkCellEditable::editing-done ##### -->
+<para>
+
+</para>
+
+@celleditable: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCellEditable::remove-widget ##### -->
+<para>
+
+</para>
+
+@celleditable: the object which received the signal.
 

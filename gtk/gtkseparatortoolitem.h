@@ -33,12 +33,16 @@ G_BEGIN_DECLS
 #define GTK_IS_SEPARATOR_TOOL_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), GTK_TYPE_SEPARATOR_TOOL_ITEM))
 #define GTK_SEPARATOR_TOOL_ITEM_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_SEPARATOR_TOOL_ITEM, GtkSeparatorToolItemClass))
 
-typedef struct _GtkSeparatorToolItem      GtkSeparatorToolItem;
-typedef struct _GtkSeparatorToolItemClass GtkSeparatorToolItemClass;
+typedef struct _GtkSeparatorToolItem        GtkSeparatorToolItem;
+typedef struct _GtkSeparatorToolItemClass   GtkSeparatorToolItemClass;
+typedef struct _GtkSeparatorToolItemPrivate GtkSeparatorToolItemPrivate;
 
 struct _GtkSeparatorToolItem
 {
   GtkToolItem parent;
+  
+  /*< private >*/
+  GtkSeparatorToolItemPrivate *priv;
 };
 
 struct _GtkSeparatorToolItemClass
@@ -54,6 +58,10 @@ struct _GtkSeparatorToolItemClass
 
 GType        gtk_separator_tool_item_get_type (void) G_GNUC_CONST;
 GtkToolItem *gtk_separator_tool_item_new      (void);
+
+gboolean     gtk_separator_tool_item_get_draw (GtkSeparatorToolItem *item);
+void         gtk_separator_tool_item_set_draw (GtkSeparatorToolItem *tool_item,
+					       gboolean              draw);
 
 G_END_DECLS
 

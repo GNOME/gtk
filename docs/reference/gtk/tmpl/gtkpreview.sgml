@@ -32,11 +32,6 @@ should be accessed using the functions below.
 </para>
 
 
-<!-- ##### ARG GtkPreview:expand ##### -->
-<para>
-
-</para>
-
 <!-- ##### STRUCT GtkPreviewInfo ##### -->
 <para>
 Contains information about global properties
@@ -259,4 +254,9 @@ once used for changing the colormap and visual on the fly.
 </para>
 
 
+
+<!-- ##### ARG GtkPreview:expand ##### -->
+<para>
+
+</para>
 

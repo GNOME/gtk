@@ -79,21 +79,6 @@ In a #GtkScrollbar this is the size of the area which is currently visible.
 </para>
 
 
-<!-- ##### SIGNAL GtkAdjustment::changed ##### -->
-<para>
-Emitted when one or more of the #GtkAdjustment fields have been changed,
-other than the value field.
-</para>
-
-@adjustment: the object which received the signal.
-
-<!-- ##### SIGNAL GtkAdjustment::value-changed ##### -->
-<para>
-Emitted when the #GtkAdjustment value field has been changed.
-</para>
-
-@adjustment: the object which received the signal.
-
 <!-- ##### FUNCTION gtk_adjustment_new ##### -->
 <para>
 Creates a new #GtkAdjustment.
@@ -167,4 +152,19 @@ changed the #GtkAdjustment value field.
 
 @adjustment: 
 
+
+<!-- ##### SIGNAL GtkAdjustment::changed ##### -->
+<para>
+Emitted when one or more of the #GtkAdjustment fields have been changed,
+other than the value field.
+</para>
+
+@adjustment: the object which received the signal.
+
+<!-- ##### SIGNAL GtkAdjustment::value-changed ##### -->
+<para>
+Emitted when the #GtkAdjustment value field has been changed.
+</para>
+
+@adjustment: the object which received the signal.
 

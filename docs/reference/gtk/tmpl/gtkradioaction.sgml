@@ -23,19 +23,6 @@ only private members and should not be accessed directly.
 </para>
 
 
-<!-- ##### SIGNAL GtkRadioAction::changed ##### -->
-<para>
-
-</para>
-
-@radioaction: the object which received the signal.
-@arg1: 
-
-<!-- ##### ARG GtkRadioAction:value ##### -->
-<para>
-
-</para>
-
 <!-- ##### FUNCTION gtk_radio_action_get_group ##### -->
 <para>
 
@@ -62,4 +49,17 @@ only private members and should not be accessed directly.
 @action: 
 @Returns: 
 
+
+<!-- ##### SIGNAL GtkRadioAction::changed ##### -->
+<para>
+
+</para>
+
+@radioaction: the object which received the signal.
+@arg1: 
+
+<!-- ##### ARG GtkRadioAction:value ##### -->
+<para>
+
+</para>
 

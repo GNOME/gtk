@@ -54,7 +54,6 @@ struct _GtkToolItemPrivate
   guint visible_vertical : 1;
   guint homogeneous : 1;
   guint expand : 1;
-  guint pack_end : 1;
   guint use_drag_window : 1;
   guint is_important : 1;
 
@@ -669,52 +668,6 @@ gtk_tool_item_get_expand (GtkToolItem *tool_item)
   g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), FALSE);
 
   return tool_item->priv->expand;
-}
-
-/**
- * gtk_tool_item_set_pack_end:
- * @tool_item: a #GtkToolItem: 
- * @pack_end: whether @tool_item is allocated at the end of the toolbar.
- * 
- * Sets whether @tool_item is allocated at the end of the toolbar. This is
- * useful for #GtkToolItem<!-- -->s that are used as "throbbers" in
- * web-browser-type applications.
- * 
- * Since: 2.4
- **/
-void
-gtk_tool_item_set_pack_end (GtkToolItem *tool_item,
-			    gboolean     pack_end)
-{
-  g_return_if_fail (GTK_IS_TOOL_ITEM (tool_item));
-    
-  pack_end = pack_end != FALSE;
-
-  if (tool_item->priv->pack_end != pack_end)
-    {
-      tool_item->priv->pack_end = pack_end;
-      gtk_widget_child_notify (GTK_WIDGET (tool_item), "pack_end");
-      gtk_widget_queue_resize (GTK_WIDGET (tool_item));
-    }
-}
-
-/**
- * gtk_tool_item_get_pack_end:
- * @tool_item: a #GtkToolItem: 
- * 
- * Returns whether @tool_item is packed at the end of the toolbar.
- * See gtk_tool_item_set_pack_end().
- * 
- * Return value: %TRUE if @tool_item is packed at the end of the toolbar.
- * 
- * Since: 2.4
- **/
-gboolean
-gtk_tool_item_get_pack_end (GtkToolItem *tool_item)
-{
-  g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), FALSE);
-
-  return tool_item->priv->pack_end;
 }
 
 /**

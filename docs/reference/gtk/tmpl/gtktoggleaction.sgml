@@ -22,18 +22,6 @@ private members and should not be accessed directly.
 </para>
 
 
-<!-- ##### SIGNAL GtkToggleAction::toggled ##### -->
-<para>
-
-</para>
-
-@toggleaction: the object which received the signal.
-
-<!-- ##### ARG GtkToggleAction:draw-as-radio ##### -->
-<para>
-
-</para>
-
 <!-- ##### FUNCTION gtk_toggle_action_toggled ##### -->
 <para>
 
@@ -77,4 +65,16 @@ private members and should not be accessed directly.
 @action: 
 @Returns: 
 
+
+<!-- ##### SIGNAL GtkToggleAction::toggled ##### -->
+<para>
+
+</para>
+
+@toggleaction: the object which received the signal.
+
+<!-- ##### ARG GtkToggleAction:draw-as-radio ##### -->
+<para>
+
+</para>
 
