@@ -266,7 +266,12 @@ gtk_decorated_window_realize (GtkWindow   *window)
 				   gtk_decorated_window_inner_change,
 				   gtk_decorated_window_inner_get_pos,
 				   window);
+
+  /* This is a huge hack to make frames have the same shape as
+     the window they wrap */
+  gdk_window_shape_combine_mask (window->frame, GDK_FB_USE_CHILD_SHAPE, 0, 0);
 }
+
 
 static void
 gtk_decorated_window_unrealize (GtkWindow   *window)

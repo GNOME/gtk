@@ -29,6 +29,8 @@ typedef enum {
   GDK_FB_270_DEGREES
 } GdkFBAngle;
 
+#define GDK_FB_USE_CHILD_SHAPE ((void *)1)
+
 /* FB specific functions: */
 
 typedef gboolean (*GdkWindowChildChanged) (GdkWindow *window,
@@ -39,10 +41,10 @@ typedef void     (*GdkWindowChildGetPos)  (GdkWindow *window,
 					   gint *x, gint *y,
 					   gpointer user_data);
 
-void      gdk_fb_window_set_child_handler (GdkWindow             *window,
-					   GdkWindowChildChanged changed,
-					   GdkWindowChildGetPos  get_pos,
-					   gpointer              user_data);
+void      gdk_fb_window_set_child_handler (GdkWindow              *window,
+					   GdkWindowChildChanged  changed,
+					   GdkWindowChildGetPos   get_pos,
+					   gpointer               user_data);
 
 void      gdk_fb_set_rotation             (GdkFBAngle angle);
 

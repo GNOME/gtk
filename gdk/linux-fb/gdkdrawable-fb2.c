@@ -304,9 +304,10 @@ gdk_fb_clip_region (GdkDrawable *drawable,
 		    gboolean do_children)
 {
   GdkRectangle draw_rect;
-  GdkRegion *real_clip_region, *tmpreg;
+  GdkRegion *real_clip_region, *tmpreg, *shape;
   gboolean skipit = FALSE;
   GdkDrawableFBData *private;
+  GdkWindowObject *parent;
 
   private = GDK_DRAWABLE_FBDATA (drawable);
   
@@ -330,6 +331,21 @@ gdk_fb_clip_region (GdkDrawable *drawable,
   if (skipit)
     return real_clip_region;
 
+  if (GDK_IS_WINDOW (private->wrapper))
+    {
+      parent = GDK_WINDOW_P (private->wrapper);
+      while (parent != (GdkWindowObject *)gdk_parent_root)
+	{
+	  shape = gdk_fb_window_get_abs_shape (GDK_DRAWABLE (parent));
+	  if (shape)
+	    {
+	      gdk_region_intersect (real_clip_region, shape);
+	      gdk_region_destroy (shape);
+	    }
+	  parent = parent->parent;
+	}
+    }
+
   if (gc && GDK_GC_FBDATA(gc)->values.subwindow_mode == GDK_INCLUDE_INFERIORS)
     do_children = FALSE;
 
@@ -347,6 +363,7 @@ gdk_fb_clip_region (GdkDrawable *drawable,
       else
 	parentwin = (GdkWindow *)GDK_WINDOW_P (lastwin)->parent;
 
+      /* Remove the areas of all overlapping windows above parentwin in the hiearachy */
       for (; parentwin; lastwin = parentwin, parentwin = (GdkWindow *)GDK_WINDOW_P (parentwin)->parent)
 	{
 	  GList *cur;
@@ -364,6 +381,13 @@ gdk_fb_clip_region (GdkDrawable *drawable,
 
 	      tmpreg = gdk_region_rectangle (&draw_rect);
 
+	      shape = gdk_fb_window_get_abs_shape (impl_private->wrapper);
+	      if (shape)
+		{
+		  gdk_region_intersect (tmpreg, shape);
+		  gdk_region_destroy (shape);
+		}
+	      
 	      gdk_region_subtract (real_clip_region, tmpreg);
 	      gdk_region_destroy (tmpreg);
 	    }

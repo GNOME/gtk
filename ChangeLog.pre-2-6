@@ -1,3 +1,31 @@
+2001-01-12  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkdrawable-fb2.c (gdk_fb_clip_region): Take shaped
+	windows in consideration when generating clip region.
+
+	* gdk/linux-fb/gdkfb.h:
+	Huge HACK. Added GDK_FB_USE_CHILD_SHAPE.
+
+	* gdk/linux-fb/gdkprivate-fb.h:
+	Add shape to GdkWindowFBDatat.
+	exported gdk_fb_window_get_abs_shape().
+	removed gdk_fb_draw_lines declaration.
+
+	* gdk/linux-fb/gdkwindow-fb.c (gdk_window_impl_fb_init):
+	Init shape to NULL. (gdk_fb_window_send_crossing_events): Don't
+	send focus changes when there is a grabbed window.
+	(gdk_window_get_pointer): Handle shaped windows.
+	(gdk_fb_region_create_from_bitmap): Convert bitmap to region.
+	(gdk_fb_window_peek_shape): Returns the shape for a window,
+	handles GDK_FB_USE_CHILD_SHAPE.
+	(gdk_fb_window_get_abs_shape): Returns the shape of the window,
+	offseted to absolute positions. Handles GDK_FB_USE_CHILD_SHAPE.
+	(gdk_window_shape_combine_mask): Implement.
+
+	* gtk/gtkwindow-decorate.c:
+	HACK! Set GDK_FB_USE_CHILD_SHAPE on window->frame to make sure
+	setting the shape of a window makes the window transparent.
+
 2001-01-11  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktreemodelsimple.h: Oops, broke some macros

@@ -111,6 +111,8 @@ struct _GdkWindowFBData
   GdkCursor *cursor;
   GHashTable *properties;
 
+  GdkRegion *shape; /* Can also be GDK_FB_USE_CHILD_SHAPE */
+  
   GdkEventMask event_mask;
   gboolean realized : 1;
 };
@@ -269,6 +271,7 @@ void       gdk_fb_window_move_resize          (GdkWindow       *window,
 					       gint             height,
 					       gboolean         send_expose_events);
 GdkWindow *gdk_fb_window_find_focus           (void);
+GdkRegion *gdk_fb_window_get_abs_shape        (GdkDrawable *window);
 GdkGC *   _gdk_fb_gc_new                      (GdkDrawable     *drawable,
 					       GdkGCValues     *values,
 					       GdkGCValuesMask  values_mask);
@@ -344,10 +347,6 @@ void       gdk_fb_draw_rectangle           (GdkDrawable         *drawable,
 					    gint                 y,
 					    gint                 width,
 					    gint                 height);
-void       gdk_fb_draw_lines               (GdkDrawable         *drawable,
-					    GdkGC               *gc,
-					    GdkPoint            *points,
-					    gint                 npoints);
 void       gdk_fb_fill_spans               (GdkDrawable         *real_drawable,
 					    GdkGC               *gc,
 					    GdkSpan             *spans,
