@@ -1158,7 +1158,7 @@ icon_size_lookup_intern (GtkSettings *settings,
   
   init_icon_sizes ();
 
-  if (size >= icon_sizes_used || icon_sizes[size].width < 0)
+  if (size >= icon_sizes_used)
     return FALSE;
 
   if (size == GTK_ICON_SIZE_INVALID)
