@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.16\n"
-"POT-Creation-Date: 1999-09-03 14:16-0500\n"
-"PO-Revision-Date: 1998-03-27 00:09+0100\n"
+"Project-Id-Version: gtk+ 1.2.5\n"
+"POT-Creation-Date: 1999-09-04 10:32+0200\n"
+"PO-Revision-Date: 1999-09-04 11:33+02:00\n"
 "Last-Translator: Kjartan Maraas <kmaraas@online.no>\n"
 "Language-Team: Norwegian <no@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -273,7 +273,7 @@ msgstr "*"
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1215
 msgid "(nil)"
-msgstr ""
+msgstr "(nil)"
 
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
