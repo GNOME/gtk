@@ -3537,7 +3537,11 @@ gdk_ic_get_events (GdkIC ic)
 
   private = (GdkICPrivate *) ic;
 
-  XGetICValues (private->xic, XNFilterEvents, &xmask, NULL);
+  if (XGetICValues (private->xic, XNFilterEvents, &xmask, NULL) != NULL)
+    {
+      GDK_NOTE (XIM, g_warning ("Call to XGetICValues: %s failed", XNFilterEvents));
+      return 0;
+    }
 
   mask = 0;
   for (i=0, bit=2; i < nevent_masks; i++, bit <<= 1)
@@ -3548,7 +3552,7 @@ gdk_ic_get_events (GdkIC ic)
       }
 
   if (xmask)
-    g_warning ("ic requires the events not supported by the application (%04lx)", xmask);
+    g_warning ("ic requires events not supported by the application (%#04lx)", xmask);
   
   return mask;
 }
