@@ -1,3 +1,53 @@
+2001-01-09  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_check_dirty): handle case where
+	there are no rows in the model
+
+	* gtk/gtkliststore.c (gtk_list_store_iter_children): if parent is
+	NULL, then return the start of the list
+
+	* gtk/gtktreeview.c (gtk_tree_view_setup_model): don't build tree
+	if we can't get any rows from an empty model 
+
+	* gtk/gtktreeviewcolumn.h (struct _GtkTreeViewColumn): remove
+	extraneous * after function pointer typedef usage
+
+	* Makefile.am: don't specify full path to cp and rm
+
+	* gtk/gtkcellrenderertextpixbuf.c
+	(gtk_cell_renderer_text_pixbuf_get_size): check width/height !=
+	NULL before dereferencing, fixes a segfault that happened from
+	time to time
+
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_render):
+	use gdk_pixbuf_render_to_drawable_alpha() to get alpha channel,
+	and reindent the function
+	(gtk_cell_renderer_pixbuf_get_size): indentation
+
+	* gtk/gtkdialog.c (gtk_dialog_run): destroy main loop only after
+	we quit it
+	(gtk_dialog_add_buttons_valist): add g_return_if_fail
+	(gtk_dialog_set_default_response): New function, to set default
+	button
+	(gtk_dialog_set_response_sensitive): New function, to set 
+	sensitivity of buttons
+
+	* gtk/gtkcellrendererpixbuf.c
+	(gtk_cell_renderer_pixbuf_get_property): allow getting a NULL pixbuf
+	(gtk_cell_renderer_pixbuf_set_property): allow setting a NULL pixbuf
+
+	* gtk/gtktreedatalist.c (_gtk_tree_data_list_node_to_value):
+	handle any G_TYPE_OBJECT subclass, not just the base class, and 
+	also boxed types.
+	(_gtk_tree_data_list_value_to_node): ditto
+
+	* gtk/gtkrbtree.c: Run _gtk_rbtree_test at strategic points if 
+	--gtk-debug=tree
+
+	* gtk/gtkmain.c: add GTK_DEBUG_TREE
+
+	* gtk/gtkdebug.h: add GTK_DEBUG_TREE
+
 2001-01-09  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c: Implement better mouse

@@ -18,6 +18,7 @@
  */
 
 #include "gtkrbtree.h"
+#include "gtkdebug.h"
 
 static void       _gtk_rbnode_validate_allocator (GAllocator *allocator);
 static GtkRBNode *_gtk_rbnode_new                (GtkRBTree  *tree,
@@ -522,6 +523,9 @@ _gtk_rbtree_insert_after (GtkRBTree  *tree,
     }
   _gtk_rbtree_insert_fixup (tree, node);
 
+  if (gtk_debug_flags & GTK_DEBUG_TREE)
+    _gtk_rbtree_test (tree);
+  
   return node;
 }
 
@@ -580,6 +584,9 @@ _gtk_rbtree_insert_before (GtkRBTree  *tree,
     }
   _gtk_rbtree_insert_fixup (tree, node);
 
+  if (gtk_debug_flags & GTK_DEBUG_TREE)
+    _gtk_rbtree_test (tree);
+  
   return node;
 }
 
@@ -765,6 +772,9 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
   y->left = current_allocator->free_nodes;
   current_allocator->free_nodes = y;
   G_UNLOCK (current_allocator);
+
+  if (gtk_debug_flags & GTK_DEBUG_TREE)
+    _gtk_rbtree_test (tree);
 }
 
 GtkRBNode *

@@ -44,7 +44,7 @@ typedef enum
 
 } GtkDialogFlags;
 
-/* Convenience enum to use for action_id's.  Positive values are
+/* Convenience enum to use for response_id's.  Positive values are
  * totally user-interpreted. GTK will sometimes return
  * GTK_RESPONSE_NONE if no response_id is available.
  *
@@ -127,6 +127,12 @@ GtkWidget* gtk_dialog_add_button        (GtkDialog   *dialog,
 void       gtk_dialog_add_buttons       (GtkDialog   *dialog,
                                          const gchar *first_button_text,
                                          ...);
+
+void gtk_dialog_set_response_sensitive (GtkDialog *dialog,
+                                        gint       response_id,
+                                        gboolean   setting);
+void gtk_dialog_set_default_response   (GtkDialog *dialog,
+                                        gint       response_id);
 
 /* Emit response signal */
 void gtk_dialog_response           (GtkDialog *dialog,

@@ -119,12 +119,12 @@ GDKTARGET=@gdktarget@
 
 ## Copy .pc files to target-specific names
 gtk+-$(GDKTARGET)-2.0.pc: gtk+-2.0.pc
-	/bin/rm -f gtk+-$(GDKTARGET)-2.0.pc && \
-	/bin/cp gtk+-2.0.pc gtk+-$(GDKTARGET)-2.0.pc
+	rm -f gtk+-$(GDKTARGET)-2.0.pc && \
+	cp gtk+-2.0.pc gtk+-$(GDKTARGET)-2.0.pc
 
 gdk-$(GDKTARGET)-2.0.pc: gdk-2.0.pc
-	/bin/rm -f gdk-$(GDKTARGET)-2.0.pc && \
-	/bin/cp gdk-2.0.pc gdk-$(GDKTARGET)-2.0.pc
+	rm -f gdk-$(GDKTARGET)-2.0.pc && \
+	cp gdk-2.0.pc gdk-$(GDKTARGET)-2.0.pc
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA= gdk-pixbuf-2.0.pc gdk-$(GDKTARGET)-2.0.pc gtk+-$(GDKTARGET)-2.0.pc

@@ -181,12 +181,15 @@ _gtk_tree_data_list_node_to_value (GtkTreeDataList *list,
     case G_TYPE_STRING:
       g_value_set_string (value, (gchar *) list->data.v_pointer);
       break;
-    case G_TYPE_OBJECT:
-      g_value_set_object (value, (GObject *) list->data.v_pointer);
-      break;
+
     default:
-      g_warning ("Unsupported type (%s) retrieved.", g_type_name (value->g_type));
-      return;
+      if (g_type_is_a (type, G_TYPE_OBJECT))
+        g_value_set_object (value, (GObject *) list->data.v_pointer);
+      else if (g_type_is_a (type, G_TYPE_BOXED))
+        g_value_set_boxed (value, (GObject *) list->data.v_pointer);
+      else
+        g_warning ("Unsupported type (%s) retrieved.", g_type_name (value->g_type));
+      break;
     }
 }
 
@@ -220,12 +223,14 @@ _gtk_tree_data_list_value_to_node (GtkTreeDataList *list,
     case G_TYPE_STRING:
       list->data.v_pointer = g_value_dup_string (value);
       break;
-    case G_TYPE_OBJECT:
-      list->data.v_pointer = g_value_dup_object (value);
-      break;
     default:
-      g_warning ("Unsupported type (%s) stored.", g_type_name (value->g_type));
-      return;
+      if (g_type_is_a (G_VALUE_TYPE (value), G_TYPE_OBJECT))
+        list->data.v_pointer = g_value_dup_object (value);
+      else if (g_type_is_a (G_VALUE_TYPE (value), G_TYPE_BOXED))
+        list->data.v_pointer = g_value_dup_boxed (value);
+      else
+        g_warning ("Unsupported type (%s) stored.", g_type_name (value->g_type));
+      break;
     }
 }
 

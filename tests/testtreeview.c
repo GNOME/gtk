@@ -2,7 +2,38 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
+
+/* Don't copy this bad example; inline RGB data is always a better
+ * idea than inline XPMs.
+ */
+static char  *book_closed_xpm[] = {
+"16 16 6 1",
+"       c None s None",
+".      c black",
+"X      c red",
+"o      c yellow",
+"O      c #808080",
+"#      c white",
+"                ",
+"       ..       ",
+"     ..XX.      ",
+"   ..XXXXX.     ",
+" ..XXXXXXXX.    ",
+".ooXXXXXXXXX.   ",
+"..ooXXXXXXXXX.  ",
+".X.ooXXXXXXXXX. ",
+".XX.ooXXXXXX..  ",
+" .XX.ooXXX..#O  ",
+"  .XX.oo..##OO. ",
+"   .XX..##OO..  ",
+"    .X.#OO..    ",
+"     ..O..      ",
+"      ..        ",
+"                "
+};
+
 static GtkWidget* create_prop_editor (GObject *object);
+static void run_automated_tests (void);
 
 /* This custom model is to test custom model use. */
 
@@ -79,11 +110,111 @@ GtkTreeModelTypes *gtk_tree_model_types_new           (void);
 
 typedef enum
 {
+  COLUMNS_NONE,
+  COLUMNS_ONE,
+  COLUMNS_LOTS,
+  COLUMNS_LAST
+} ColumnsType;
+
+#define N_COLUMNS 9
+
+static GType*
+get_model_types (void)
+{
+  static GType column_types[N_COLUMNS] = { 0 };
+  
+  if (column_types[0] == 0)
+    {
+      column_types[0] = G_TYPE_STRING;
+      column_types[1] = G_TYPE_STRING;
+      column_types[2] = GDK_TYPE_PIXBUF;
+      column_types[3] = G_TYPE_FLOAT;
+      column_types[4] = G_TYPE_UINT;
+      column_types[5] = G_TYPE_UCHAR;
+      column_types[6] = G_TYPE_CHAR;
+      column_types[7] = G_TYPE_BOOLEAN;
+      column_types[8] = G_TYPE_INT;
+    }
+
+  return column_types;
+}
+
+static void
+set_columns_type (GtkTreeView *tree_view, ColumnsType type)
+{
+  GtkTreeViewColumn *col;
+  GtkCellRenderer *rend;
+
+  col = gtk_tree_view_get_column (tree_view, 0);
+  while (col)
+    {
+      gtk_tree_view_remove_column (tree_view, col);
+
+      col = gtk_tree_view_get_column (tree_view, 0);
+    }
+
+  switch (type)
+    {
+    case COLUMNS_NONE:
+      break;
+
+    case COLUMNS_LOTS:      
+      rend = gtk_cell_renderer_text_new ();
+      
+      col = gtk_tree_view_column_new_with_attributes ("Column 1",
+                                                      rend,
+                                                      "text", 1,
+                                                      NULL);
+      
+      gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
+      
+      g_object_unref (G_OBJECT (rend));
+      g_object_unref (G_OBJECT (col));
+
+      rend = gtk_cell_renderer_text_pixbuf_new ();
+      
+      col = gtk_tree_view_column_new_with_attributes ("Column 2",
+                                                      rend,
+                                                      "text", 0,
+                                                      "pixbuf", 2,
+                                                      NULL);
+      
+      gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
+      
+      g_object_unref (G_OBJECT (rend));
+      g_object_unref (G_OBJECT (col));
+      
+      /* FALL THRU */
+      
+    case COLUMNS_ONE:
+      rend = gtk_cell_renderer_text_new ();
+      
+      col = gtk_tree_view_column_new_with_attributes ("Column 0",
+                                                      rend,
+                                                      "text", 0,
+                                                      NULL);
+      
+      gtk_tree_view_insert_column (GTK_TREE_VIEW (tree_view), col, 0);
+      
+      g_object_unref (G_OBJECT (rend));
+      g_object_unref (G_OBJECT (col));
+      
+    default:
+      break;
+    }
+}
+
+static GdkPixbuf *our_pixbuf;
+  
+typedef enum
+{
   /*   MODEL_TYPES, */
   MODEL_TREE,
   MODEL_LIST,
   MODEL_SORTED_TREE,
   MODEL_SORTED_LIST,
+  MODEL_EMPTY_LIST,
+  MODEL_EMPTY_TREE,
   MODEL_NULL,
   MODEL_LAST
 } ModelType;
@@ -95,6 +226,8 @@ static const char *model_names[MODEL_LAST] = {
   "GtkListStore",
   "GtkTreeModelSort wrapping GtkTreeStore",
   "GtkTreeModelSort wrapping GtkListStore",
+  "Empty GtkListStore",
+  "Empty GtkTreeStore",
   "NULL (no model)"
 };
 
@@ -104,8 +237,14 @@ create_list_model (void)
   GtkListStore *store;
   GtkTreeIter iter;
   gint i;
+  GType *t;
+
+  t = get_model_types ();
   
-  store = gtk_list_store_new_with_types (2, G_TYPE_STRING, G_TYPE_STRING);
+  store = gtk_list_store_new_with_types (N_COLUMNS,
+                                         t[0], t[1], t[2],
+                                         t[3], t[4], t[5],
+                                         t[6], t[7], t[8]);
 
   i = 0;
   while (i < 200)
@@ -116,7 +255,12 @@ create_list_model (void)
 
       msg = g_strdup_printf ("%d", i);
       
-      gtk_list_store_set (store, &iter, 0, msg, 1, "Foo! Foo! Foo!", -1);
+      gtk_list_store_set (store, &iter, 0, msg, 1, "Foo! Foo! Foo!",
+                          2, our_pixbuf,
+                          3, 7.0, 4, (guint) 9000,
+                          5, 'f', 6, 'g',
+                          7, TRUE, 8, 23245454,
+                          -1);
 
       g_free (msg);
       
@@ -140,7 +284,12 @@ typesystem_recurse (GType        type,
   gtk_tree_store_append (store, &iter, parent_iter);
 
   str = g_strdup_printf ("%d", type);
-  gtk_tree_store_set (store, &iter, 0, str, 1, g_type_name (type), -1);
+  gtk_tree_store_set (store, &iter, 0, str, 1, g_type_name (type),
+                      2, our_pixbuf,
+                      3, 7.0, 4, (guint) 9000,
+                      5, 'f', 6, 'g',
+                      7, TRUE, 8, 23245454,
+                      -1);
   g_free (str);
   
   children = g_type_children (type, &n_children);
@@ -161,8 +310,25 @@ create_tree_model (void)
 {
   GtkTreeStore *store;
   gint i;
+  GType *t;
+  volatile GType dummy; /* G_GNUC_CONST makes the optimizer remove
+                         * get_type calls if you don't do something
+                         * like this
+                         */
   
-  store = gtk_tree_store_new_with_types (2, G_TYPE_STRING, G_TYPE_STRING);
+  /* Make the tree more interesting */
+  dummy = gtk_scrolled_window_get_type ();
+  dummy = gtk_label_get_type ();
+  dummy = gtk_hscrollbar_get_type ();
+  dummy = gtk_vscrollbar_get_type ();
+  dummy = pango_layout_get_type ();
+
+  t = get_model_types ();
+  
+  store = gtk_tree_store_new_with_types (N_COLUMNS,
+                                         t[0], t[1], t[2],
+                                         t[3], t[4], t[5],
+                                         t[6], t[7], t[8]);
 
   i = 0;
   while (i < G_TYPE_LAST_RESERVED_FUNDAMENTAL)
@@ -199,13 +365,13 @@ main (int    argc,
   GtkWidget *table;
   GtkWidget *om;
   GtkWidget *menu;
-  GtkTreeViewColumn *col;
-  GtkCellRenderer *rend;
   GtkTreeModel *model;
   gint i;
   
   gtk_init (&argc, &argv);
 
+  our_pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) book_closed_xpm);  
+  
 #if 0
   models[MODEL_TYPES] = GTK_TREE_MODEL (gtk_tree_model_types_new ());
 #endif
@@ -219,8 +385,13 @@ main (int    argc,
   model = create_tree_model ();
   models[MODEL_SORTED_TREE] = gtk_tree_model_sort_new_with_model (model, NULL, 0);
   g_object_unref (G_OBJECT (model));
+
+  models[MODEL_EMPTY_LIST] = GTK_TREE_MODEL (gtk_list_store_new ());
+  models[MODEL_EMPTY_TREE] = GTK_TREE_MODEL (gtk_tree_store_new ());
   
   models[MODEL_NULL] = NULL;
+
+  run_automated_tests ();
   
   menu = gtk_menu_new ();
   
@@ -283,29 +454,7 @@ main (int    argc,
   
   gtk_container_add (GTK_CONTAINER (sw), tv);
 
-  rend = gtk_cell_renderer_text_new ();
-  
-  col = gtk_tree_view_column_new_with_attributes ("Type ID",
-                                                  rend,
-                                                  "text", 0,
-                                                  NULL);
-
-  gtk_tree_view_append_column (GTK_TREE_VIEW (tv), col);
-
-  g_object_unref (G_OBJECT (rend));
-  g_object_unref (G_OBJECT (col));
-  
-  rend = gtk_cell_renderer_text_new ();
-  
-  col = gtk_tree_view_column_new_with_attributes ("Name",
-                                                  rend,
-                                                  "text", 1,
-                                                  NULL);
-
-  gtk_tree_view_append_column (GTK_TREE_VIEW (tv), col);
-
-  g_object_unref (G_OBJECT (rend));
-  g_object_unref (G_OBJECT (col));
+  set_columns_type (GTK_TREE_VIEW (tv), COLUMNS_LOTS);
   
   gtk_widget_show_all (window);
   
@@ -1165,3 +1314,15 @@ create_prop_editor (GObject *object)
   return win;
 }
 
+/*
+ * Automated testing
+ */
+
+static void
+run_automated_tests (void)
+{
+  /* FIXME TreePath basic verification */
+
+  /* FIXME consistency checks on the models */
+  
+}

@@ -355,10 +355,18 @@ gtk_list_store_iter_children (GtkTreeModel *tree_model,
 			      GtkTreeIter  *iter,
 			      GtkTreeIter  *parent)
 {
-  iter->stamp = 0;
-  iter->user_data = NULL;
-
-  return FALSE;
+  if (parent)
+    {
+      iter->stamp = 0;      
+      iter->user_data = NULL;
+      return FALSE;
+    }
+  else
+    {
+      iter->stamp = GTK_LIST_STORE (tree_model)->stamp;
+      iter->user_data = GTK_LIST_STORE (tree_model)->root;
+      return TRUE;
+    }
 }
 
 static gboolean

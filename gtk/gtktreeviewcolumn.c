@@ -486,7 +486,7 @@ gtk_tree_view_column_get_size (GtkTreeViewColumn *tree_column)
  **/
 void
 gtk_tree_view_column_set_width (GtkTreeViewColumn *tree_column,
-			       gint               size)
+                                gint               size)
 {
   g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));

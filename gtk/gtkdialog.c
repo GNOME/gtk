@@ -410,6 +410,8 @@ gtk_dialog_add_buttons_valist(GtkDialog      *dialog,
   const gchar* text;
   gint response_id;
 
+  g_return_if_fail (GTK_IS_DIALOG (dialog));
+  
   if (first_button_text == NULL)
     return;
   
@@ -443,8 +445,7 @@ void
 gtk_dialog_add_buttons (GtkDialog   *dialog,
                         const gchar *first_button_text,
                         ...)
-{
-  
+{  
   va_list args;
 
   va_start (args, first_button_text);
@@ -454,6 +455,78 @@ gtk_dialog_add_buttons (GtkDialog   *dialog,
                                  args);
   
   va_end (args);
+}
+
+/**
+ * gtk_dialog_set_response_sensitive:
+ * @dialog: a #GtkDialog
+ * @response_id: a response ID
+ * @setting: %TRUE for sensitive
+ *
+ * Calls gtk_widget_set_sensitive (widget, @setting) for each
+ * widget in the dialog's action area with the given @response_id.
+ * A convenient way to sensitize/desensitize dialog buttons.
+ * 
+ **/
+void
+gtk_dialog_set_response_sensitive (GtkDialog *dialog,
+                                   gint       response_id,
+                                   gboolean   setting)
+{
+  GList *children;
+  GList *tmp_list;
+
+  children = gtk_container_children (GTK_CONTAINER (dialog));
+
+  tmp_list = children;
+  while (tmp_list != NULL)
+    {
+      GtkWidget *widget = tmp_list->data;
+      ResponseData *rd = g_object_get_data (G_OBJECT (widget),
+                                            "gtk-dialog-response-data");
+
+      if (rd && rd->response_id == response_id)
+        gtk_widget_set_sensitive (widget, setting);
+
+      tmp_list = g_list_next (tmp_list);
+    }
+
+  g_list_free (children);
+}
+
+/**
+ * gtk_dialog_set_default_response:
+ * @dialog: a #GtkDialog
+ * @response_id: a response ID
+ * 
+ * Sets the last widget in the dialog's action area with the given @response_id
+ * as the default widget for the dialog. Pressing "Enter" normally activates
+ * the default widget.
+ * 
+ **/
+void
+gtk_dialog_set_default_response (GtkDialog *dialog,
+                                 gint       response_id)
+{
+  GList *children;
+  GList *tmp_list;
+
+  children = gtk_container_children (GTK_CONTAINER (dialog));
+
+  tmp_list = children;
+  while (tmp_list != NULL)
+    {
+      GtkWidget *widget = tmp_list->data;
+      ResponseData *rd = g_object_get_data (G_OBJECT (widget),
+                                            "gtk-dialog-response-data");
+
+      if (rd && rd->response_id == response_id)
+        gtk_widget_grab_default (widget);
+
+      tmp_list = g_list_next (tmp_list);
+    }
+
+  g_list_free (children);
 }
 
 /**
@@ -488,12 +561,8 @@ typedef struct
 static void
 shutdown_loop (RunInfo *ri)
 {
-  if (ri->loop != NULL)
-    {
-      g_main_quit (ri->loop);
-      g_main_destroy (ri->loop);
-      ri->loop = NULL;
-    }
+  if (g_main_loop_is_running (ri->loop))
+    g_main_loop_quit (ri->loop);
 }
 
 static void
@@ -615,9 +684,11 @@ gtk_dialog_run (GtkDialog *dialog)
   
   ri.loop = g_main_new (FALSE);
 
-  g_main_run (ri.loop);
-  
-  g_assert (ri.loop == NULL);
+  g_main_loop_run (ri.loop);
+
+  g_main_loop_unref (ri.loop);
+
+  ri.loop = NULL;
   
   if (!GTK_OBJECT_DESTROYED (dialog))
     {

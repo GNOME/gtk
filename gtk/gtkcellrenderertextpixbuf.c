@@ -301,13 +301,17 @@ gtk_cell_renderer_text_pixbuf_get_size (GtkCellRenderer *cell,
   if (celltextpixbuf->pixbuf_pos == GTK_POS_LEFT ||
       celltextpixbuf->pixbuf_pos == GTK_POS_RIGHT)
     {
-      *width = pixbuf_width + text_width;
-      *height = MAX (pixbuf_height, text_height);
+      if (width)
+        *width = pixbuf_width + text_width;
+      if (height)
+        *height = MAX (pixbuf_height, text_height);
     }
   else
     {
-      *width = MAX (pixbuf_width, text_width);
-      *height = pixbuf_height + text_height;
+      if (width)
+        *width = MAX (pixbuf_width, text_width);
+      if (height)
+        *height = pixbuf_height + text_height;
     }
 }
 
