@@ -1,20 +1,25 @@
-# Translation of gtk+ to Bangla
+# Bangla translation of gtk+-properties.
 # This file is distributed under the same license as the GTK package.
-# Copyright (C) 2003 Free Software Foundation, Inc.
-# Sayamindu Dasgupta <unmadindu@Softhome.net>, Progga <progga@BengaLinux.Org>, 2004.
+# Copyright (C) 2004, Free Software Foundation, Inc.
+# Sayamindu Dasgupta <unmadindu@Softhome.net>, 2003.
+# Progga <progga@BengaLinux.Org>, 2003, 2004.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-25 13:27-0400\n"
-"PO-Revision-Date: 2004-03-18 10:45+0600\n"
+"POT-Creation-Date: 2004-08-17 04:04+0200\n"
+"PO-Revision-Date: 2004-08-30 13:00+0600\n"
 "Last-Translator: Progga <progga@BengaLinux.Org>\n"
 "Language-Team: Bangla <gnome-translation@BengaLinux.Org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+
+# Untranslated string in Version 2.8 = 1.
+
 
 #: gdk-pixbuf/gdk-pixbuf.c:101
 msgid "Number of Channels"
@@ -30,7 +35,7 @@ msgstr "কালারস্পেস"
 
 #: gdk-pixbuf/gdk-pixbuf.c:113
 msgid "The colorspace in which the samples are interpreted"
-msgstr "যে কালারস্পেসে নমুনাগুলোকে রূপায়িত (?) করা হয়"
+msgstr "যে কালারস্পেসে নমুনাগুলোকে রূপায়িত করা হয়"
 
 #: gdk-pixbuf/gdk-pixbuf.c:123
 msgid "Has Alpha"
@@ -381,7 +386,8 @@ msgstr "অনুভূমিক অ্যালাইনমেন্ট"
 
 #: gtk/gtkaspectframe.c:110
 msgid "X alignment of the child"
-msgstr "এক্স অক্ষ"
+msgstr "চাইল্ডের X অক্ষ"
+#msgstr "এক্স অক্ষ"
 
 #: gtk/gtkaspectframe.c:116
 msgid "Vertical Alignment"
@@ -389,7 +395,8 @@ msgstr "উলম্ব অ্যালাইনমেন্ট"
 
 #: gtk/gtkaspectframe.c:117
 msgid "Y alignment of the child"
-msgstr "ওয়াই অক্ষ"
+msgstr "চাইল্ডের Y অক্ষ"
+#msgstr "ওয়াই অক্ষ"
 
 #: gtk/gtkaspectframe.c:123
 msgid "Ratio"
@@ -413,7 +420,8 @@ msgstr "চাইল্ডের সর্বনিম্ন প্রস্থ"
 
 #: gtk/gtkbbox.c:121
 msgid "Minimum width of buttons inside the box"
-msgstr "প্রস্থ"
+msgstr "বাক্সের মধ্যে বাটনের সর্বনিম্ন প্রস্থ"
+#msgstr "প্রস্থ"
 
 #: gtk/gtkbbox.c:129
 msgid "Minimum child height"
@@ -421,11 +429,13 @@ msgstr "চাইল্ডের সর্বনিম্ন উচ্চতা"
 
 #: gtk/gtkbbox.c:130
 msgid "Minimum height of buttons inside the box"
-msgstr "দৈর্ঘ্য"
+msgstr "বাক্সের মধ্যে বাটনের সর্বনিম্ন দৈর্ঘ্য"
+#msgstr "দৈর্ঘ্য"
 
 #: gtk/gtkbbox.c:138
 msgid "Child internal width padding"
-msgstr "প্রস্থ"
+msgstr "চাইল্ডের অভ্যন্তরীণ প্রস্থের প্যাডিং (Padding)"
+#msgstr "প্রস্থ"
 
 #: gtk/gtkbbox.c:139
 msgid "Amount to increase child's size on either side"
@@ -437,7 +447,7 @@ msgstr "চাইল্ডের অভ্যন্তরীণ উচ্চত�
 
 #: gtk/gtkbbox.c:148
 msgid "Amount to increase child's size on the top and bottom"
-msgstr "চাইল্ডের আকার উপর ও নিচে যে পরিমাণ বৃদ্ধি করা হবে"
+msgstr "চাইল্ডের আকার উপর ও নীচে যে পরিমাণ বৃদ্ধি করা হবে"
 
 #: gtk/gtkbbox.c:156
 msgid "Layout style"
@@ -502,7 +512,7 @@ msgstr ""
 
 #: gtk/gtkbox.c:161
 msgid "Padding"
-msgstr "স্থান নষ্ট করা (Padding)"
+msgstr "ফাঁকা স্থান রাখা (Padding)"
 
 #: gtk/gtkbox.c:162
 msgid "Extra space to put between the child and its neighbors, in pixels"
@@ -538,6 +548,7 @@ msgstr "যদি বাটনটি কোন লেবেল উইজেট �
 #: gtk/gtkbutton.c:220 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
+msgstr "নিম্নরেখা আঁকো"
 msgstr "নিম্নরেখা আঁকা হোক"
 
 #: gtk/gtkbutton.c:221 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
@@ -604,21 +615,23 @@ msgstr ""
 
 #: gtk/gtkbutton.c:363
 msgid "Child X Displacement"
-msgstr "এক্স অক্ষ"
+msgstr "চাইল্ডের X অক্ষে স্তানান্তরণ"
+#msgstr "এক্স অক্ষ"
 
 #: gtk/gtkbutton.c:364
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
-msgstr "বাটনটি চাপা অবস্থায় চাইল্ডটিকে এক্স অক্ষ বরাবর যে পরিমাণ সরানো হবে"
+msgstr "বাটনটি চাপা অবস্থায় চাইল্ডটিকে X অক্ষ বরাবর যে পরিমাণ সরানো হবে"
 
 #: gtk/gtkbutton.c:371
 msgid "Child Y Displacement"
-msgstr "ওয়াই অক্ষ"
+msgstr "চাইল্ডের Y অক্ষে স্তানান্তরণ"
+#msgstr "ওয়াই অক্ষ"
 
 #: gtk/gtkbutton.c:372
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
-msgstr "বাটনটি চাপা অবস্থায় চাইল্ডটিকে ওয়াই অক্ষ বরাবর যে পরিমাণ সরানো হবে"
+msgstr "বাটনটি চাপা অবস্থায় চাইল্ডটিকে Y অক্ষ বরাবর যে পরিমাণ সরানো হবে"
 
 #: gtk/gtkbutton.c:379
 msgid "Show button images"
@@ -707,35 +720,41 @@ msgstr "সেলটি প্রদর্শন করো"
 
 #: gtk/gtkcellrenderer.c:171
 msgid "xalign"
-msgstr "এক্স-অ্যালাইন"
+msgstr "xalign"
 
 #: gtk/gtkcellrenderer.c:172
 msgid "The x-align"
-msgstr "এক্স-অ্যালাইন"
+msgstr "x-অ্যালাইন"
 
 #: gtk/gtkcellrenderer.c:182
 msgid "yalign"
-msgstr "ওয়াই-অ্যালাইন"
+msgstr "yalign"
+#msgstr "ওয়াই-অ্যালাইন"
 
 #: gtk/gtkcellrenderer.c:183
 msgid "The y-align"
-msgstr "ওয়াই-অ্যালাইন"
+msgstr "y-অ্যালাইন"
+#msgstr "ওয়াই-অ্যালাইন"
 
 #: gtk/gtkcellrenderer.c:193
 msgid "xpad"
-msgstr "এক্স-প্যাড"
+msgstr "xpad"
+#msgstr "এক্স-প্যাড"
 
 #: gtk/gtkcellrenderer.c:194
 msgid "The xpad"
-msgstr "এক্স-প্যাড"
+msgstr "x-প্যাড"
+#msgstr "এক্স-প্যাড"
 
 #: gtk/gtkcellrenderer.c:204
 msgid "ypad"
-msgstr "ওয়াই-প্যাড"
+msgstr "ypad"
+#msgstr "ওয়াই-প্যাড"
 
 #: gtk/gtkcellrenderer.c:205
 msgid "The ypad"
-msgstr "ওয়াই-প্যাড"
+msgstr "y-প্যাড"
+#msgstr "ওয়াই-প্যাড"
 
 #: gtk/gtkcellrenderer.c:215
 msgid "width"
@@ -967,7 +986,8 @@ msgstr "ফন্ট বিন্দু"
 
 #: gtk/gtkcellrenderertext.c:340 gtk/gtktexttag.c:366
 msgid "Font size in points"
-msgstr "বিন্দু-মাপে ফন্টের আয়তন"
+msgstr "পয়েন্ট-মাপে ফন্টের আয়তন"
+#msgstr "বিন্দু-মাপে ফন্টের আয়তন"
 
 #: gtk/gtkcellrenderertext.c:349 gtk/gtktexttag.c:355
 msgid "Font scale"
@@ -975,32 +995,35 @@ msgstr "ফন্ট"
 
 #: gtk/gtkcellrenderertext.c:350
 msgid "Font scaling factor"
-msgstr "ফন্ট"
+msgstr ""
+#msgstr "ফন্ট"
 
 #: gtk/gtkcellrenderertext.c:359 gtk/gtktexttag.c:424
 msgid "Rise"
-msgstr "উত্থিত"
+msgstr ""
+#msgstr "উত্থিত"
 
 #: gtk/gtkcellrenderertext.c:360
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
-msgstr "ভিত্তিভূমির ওপর টেক্সটের উচ্চতা (Offset) (উচ্চতা ঋনাত্মক হলে ভিত্তিভূমির নিচে)"
+msgstr "ভিত্তিভূমির ওপর টেক্সটের উচ্চতা (Offset) (উচ্চতা ঋনাত্মক হলে ভিত্তিভূমির নীচে)"
 
 #: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:464
 msgid "Strikethrough"
-msgstr "মাঝ বরাবর রেখাংকন"
+msgstr "মাঝ বরাবর রেখাঙ্কন"
+#msgstr "মাঝ বরাবর রেখাংকন"
 
 #: gtk/gtkcellrenderertext.c:371 gtk/gtktexttag.c:465
 msgid "Whether to strike through the text"
-msgstr "লেখার মাঝ বরাবর রেখাংকন করা হবে কিনা"
+msgstr "লেখার মাঝ বরাবর রেখাঙ্কন করা হবে কিনা"
 
 #: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:472
 msgid "Underline"
-msgstr "নিচ দিয়ে রেখাংকন করা"
+msgstr "নিম্নরেখাঙ্কন"
 
 #: gtk/gtkcellrenderertext.c:379 gtk/gtktexttag.c:473
 msgid "Style of underline for this text"
-msgstr "লেখার নিচ দিয়ে রেখাংকন করার ধরন"
+msgstr "লেখার নিচ দিয়ে রেখাঙ্কন করার ধরন"
 
 #: gtk/gtkcellrenderertext.c:387 gtk/gtktexttag.c:384
 msgid "Language"
@@ -1013,7 +1036,9 @@ msgid ""
 "probably don't need it"
 msgstr ""
 "এই ভাষাটির আইএসও কোড। টেক্সট আঁকার সময় প্যানগো এই কোডটিকে ইঙ্গিত হিসেবে ব্যবহার "
-"করতে পারে। যদি আপনি এই ব্যাপারটি বুঝতে না পারেন তবে আপনার এটির প্রয়োজন নেই"
+"করতে পারে। যদি আপনি এই পরামিতিটি বুঝতে না পারেন তাহলে সম্ভবত আপনার এটি প্রয়োজন নেই"
+#"এই ভাষাটির আইএসও কোড। টেক্সট আঁকার সময় প্যানগো এই কোডটিকে ইঙ্গিত হিসেবে ব্যবহার "
+#"করতে পারে। যদি আপনি এই ব্যাপারটি বুঝতে না পারেন তবে আপনার এটির প্রয়োজন নেই"
 
 #: gtk/gtkcellrenderertext.c:398 gtk/gtkcellview.c:195 gtk/gtktexttag.c:509
 msgid "Background set"
@@ -1033,7 +1058,7 @@ msgstr "এই ট্যাগটি পুরোভূমির রঙকে �
 
 #: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:529
 msgid "Editability set"
-msgstr "এডিট করার যোগ্য সেট"
+msgstr "সম্পাদনযোগ্য সেট"
 
 #: gtk/gtkcellrenderertext.c:407 gtk/gtktexttag.c:530
 msgid "Whether this tag affects text editability"
@@ -1049,15 +1074,16 @@ msgstr "এই ট্যাগ (tag) ফন্ট বর্গকে প্র�
 
 #: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:537
 msgid "Font style set"
-msgstr "ফন্ট কায়দার (ধরন) সমষ্টি"
+msgstr "ফন্টের ধরনের সমষ্টি"
+
 
 #: gtk/gtkcellrenderertext.c:415 gtk/gtktexttag.c:538
 msgid "Whether this tag affects the font style"
-msgstr "এই ট্যাগ (tag) ফন্ট কায়দাকে (ধরনকে) প্রভাবিত করে কিনা"
+msgstr "এই ট্যাগ (tag) ফন্টের ধরনকে প্রভাবিত করে কিনা"
 
 #: gtk/gtkcellrenderertext.c:418 gtk/gtktexttag.c:541
 msgid "Font variant set"
-msgstr "ফন্ট রূপভেদের সেট"
+msgstr "ফন্ট রূপভেদের সমষ্টি"
 
 #: gtk/gtkcellrenderertext.c:419 gtk/gtktexttag.c:542
 msgid "Whether this tag affects the font variant"
@@ -1106,23 +1132,23 @@ msgstr "এটি উত্থান (Rise) প্রভাবিত করে �
 
 #: gtk/gtkcellrenderertext.c:442 gtk/gtktexttag.c:593
 msgid "Strikethrough set"
-msgstr "মাঝ বরাবর রেখাংকন করা সেট"
+msgstr "মাঝ বরাবর রেখাঙ্কন করা সেট"
 
 #: gtk/gtkcellrenderertext.c:443 gtk/gtktexttag.c:594
 msgid "Whether this tag affects strikethrough"
-msgstr "এই ট্যাগ (tag) মাঝ বরাবর রেখাংকন করা অবস্থাকে প্রভাবিত করে কিনা"
+msgstr "এই ট্যাগ (tag) মাঝ বরাবর রেখাঙ্কন করা অবস্থাকে প্রভাবিত করে কিনা"
 
 #: gtk/gtkcellrenderertext.c:446 gtk/gtktexttag.c:601
 msgid "Underline set"
-msgstr "নিচ বরাবর রেখাংকন করা সমষ্টি"
+msgstr "নিচ বরাবর রেখাঙ্কন করা সমষ্টি"
 
 #: gtk/gtkcellrenderertext.c:447 gtk/gtktexttag.c:602
 msgid "Whether this tag affects underlining"
-msgstr "এই ট্যাগ (tag) নিচ বরাবর রেখাংকন করাকে প্রভাবিত করে কিনা"
+msgstr "এই ট্যাগ (tag) নিচ বরাবর রেখাঙ্কন করাকে প্রভাবিত করে কিনা"
 
 #: gtk/gtkcellrenderertext.c:450 gtk/gtktexttag.c:565
 msgid "Language set"
-msgstr "ভাষা সমষ্টি"
+msgstr "ভাষার সমষ্টি"
 
 #: gtk/gtkcellrenderertext.c:451 gtk/gtktexttag.c:566
 msgid "Whether this tag affects the language the text is rendered as"
@@ -1151,7 +1177,7 @@ msgstr "সক্রিয়যোগ্য"
 # এইটা নিয়ে Confusion আছে
 #: gtk/gtkcellrenderertoggle.c:160
 msgid "The toggle button can be activated"
-msgstr "টোগল বাটনটিকে সক্রিয় করা যায়"
+msgstr "টোগল বাটনকে সক্রিয় করা যায়"
 
 #: gtk/gtkcellrenderertoggle.c:168
 msgid "Radio state"
@@ -1168,6 +1194,7 @@ msgstr "নির্দেশকের আকার"
 #: gtk/gtkcheckbutton.c:100 gtk/gtkcheckmenuitem.c:142
 msgid "Size of check or radio indicator"
 msgstr "টিক বা রেডিও নির্দেশকের আকার"
+#msgstr "চেক বা রেডিও নির্দেশকের মাপ"
 
 #: gtk/gtkcheckbutton.c:107 gtk/gtkexpander.c:255 gtk/gtkoptionmenu.c:206
 msgid "Indicator Spacing"
@@ -1258,7 +1285,7 @@ msgstr "বর্তমান রংটি"
 #: gtk/gtkcolorsel.c:1789
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
-"অস্বচ্ছতা (Opacity) বর্তমান মান (পূর্ণ স্বচ্ছতার জন্য ০, পূর্ণ অস্বচ্ছতার জন্য ৬৫৫৩৫)"
+"অস্বচ্ছতার বর্তমান মান (পূর্ণ স্বচ্ছতার জন্য ০, পূর্ণ অস্বচ্ছতার জন্য ৬৫৫৩৫)"
 
 #: gtk/gtkcolorsel.c:1803
 msgid "Custom palette"
@@ -1279,7 +1306,8 @@ msgstr ""
 
 #: gtk/gtkcombo.c:151
 msgid "Always enable arrows"
-msgstr "সর্বদা অ্যারো (তীরচিহ্ন প্রদর্শনকারী) সক্রিয় রাখা হোক"
+msgstr "সর্বদা তীরচিহ্ন সক্রিয় করো"
+#msgstr "সর্বদা অ্যারো (তীরচিহ্ন প্রদর্শনকারী) সক্রিয় রাখা হোক"
 
 #: gtk/gtkcombo.c:152
 msgid "Obsolete property, ignored"
@@ -1313,7 +1341,7 @@ msgstr "যেসব মান লেখা হবে সেগুলো সর�
 
 #: gtk/gtkcombobox.c:464
 msgid "ComboBox model"
-msgstr "কম্বোবক্স মডেল"
+msgstr "ComboBox মডেল"
 
 #: gtk/gtkcombobox.c:465
 msgid "The model for the combo box"
@@ -1322,12 +1350,13 @@ msgstr "কম্বোবক্সের মডেল"
 # FIXME
 #: gtk/gtkcombobox.c:472
 msgid "Wrap width"
-msgstr "গুটিয়ে যাওয়ার দৈর্ঘ্য"
+msgstr "গুটিয়ে ফেলার দৈর্ঘ্য"
 
 # FIXME
 #: gtk/gtkcombobox.c:473
 msgid "Wrap width for layouting the items in a grid"
-msgstr "গ্রীড-এ জিনিষপ্তর রাখার সময় গুটিয়ে যাওয়ার দৈর্ঘ্য"
+msgstr "গ্রীড-এ জিনিসপত্র রাখার সময় গুটিয়ে ফেলার দৈর্ঘ্য"
+#msgstr "গ্রীড-এ জিনিষপ্তর রাখার সময় গুটিয়ে যাওয়ার দৈর্ঘ্য"
 
 # FIXME
 #: gtk/gtkcombobox.c:482
@@ -1336,7 +1365,7 @@ msgstr "প্রতি সারিতে কলামের সংখ্যা
 
 #: gtk/gtkcombobox.c:483
 msgid "TreeModel column containing the row span values"
-msgstr ""
+msgstr "সারির বিস্তার ধারনকারী TreeModel কলাম"
 
 # FIXME
 #: gtk/gtkcombobox.c:492
@@ -1345,7 +1374,7 @@ msgstr "প্রতি কলামে কলামের সংখ্যা"
 
 #: gtk/gtkcombobox.c:493
 msgid "TreeModel column containing the column span values"
-msgstr ""
+msgstr "কলামের বিস্তার ধারনকারী TreeModel কলাম"
 
 #: gtk/gtkcombobox.c:502
 msgid "Active item"
@@ -1369,7 +1398,8 @@ msgstr "টেক্সট কলাম"
 
 #: gtk/gtkcomboboxentry.c:111
 msgid "A column in the data source model to get the strings from"
-msgstr "ডাটা সোর্স মডেলের যে কলাম থেকে পঙ্‌ক্তি নেওয়া হবে"
+msgstr "ডাটা সোর্স মডেলের যে কলাম থেকে পংক্তি নেওয়া হবে"
+#msgstr "ডাটা সোর্স মডেলের যে কলাম থেকে পঙ্‌ক্তি নেওয়া হবে"
 
 #: gtk/gtkcontainer.c:204
 msgid "Resize mode"
@@ -1405,35 +1435,35 @@ msgstr "এই বক্ররেখাটি কি লিনিয়ার, স�
 
 #: gtk/gtkcurve.c:131
 msgid "Minimum X"
-msgstr "সর্বনিম্ন এক্স অক্ষ"
+msgstr "সর্বনিম্ন X অক্ষ"
 
 #: gtk/gtkcurve.c:132
 msgid "Minimum possible value for X"
-msgstr "এক্সের সম্ভাব্য সর্বনিম্ন মান"
+msgstr "X সম্ভাব্য সর্বনিম্ন মান"
 
 #: gtk/gtkcurve.c:141
 msgid "Maximum X"
-msgstr "এক্স এর সর্বোচ্চ মান"
+msgstr "X এর সর্বোচ্চ মান"
 
 #: gtk/gtkcurve.c:142
 msgid "Maximum possible X value"
-msgstr "এক্সের সম্ভাব্য সর্বোচ্চ মান"
+msgstr "X-র সম্ভাব্য সর্বোচ্চ মান"
 
 #: gtk/gtkcurve.c:151
 msgid "Minimum Y"
-msgstr "ওয়াই এর সর্বনিম্ন মান"
+msgstr "Y এর সর্বনিম্ন মান"
 
 #: gtk/gtkcurve.c:152
 msgid "Minimum possible value for Y"
-msgstr "ওয়াই এর সম্ভাব্য সর্বনিম্ন মান"
+msgstr "Y এর সম্ভাব্য সর্বনিম্ন মান"
 
 #: gtk/gtkcurve.c:161
 msgid "Maximum Y"
-msgstr "ওয়াই এর সর্বনিম্ন মান"
+msgstr "Y এর সর্বনিম্ন মান"
 
 #: gtk/gtkcurve.c:162
 msgid "Maximum possible value for Y"
-msgstr "ওয়াই এর সম্ভাব্য সর্বোচ্চ মান"
+msgstr "Y এর সম্ভাব্য সর্বোচ্চ মান"
 
 #: gtk/gtkdialog.c:146
 msgid "Has separator"
@@ -1441,7 +1471,8 @@ msgstr "বিভাজক আছে"
 
 #: gtk/gtkdialog.c:147
 msgid "The dialog has a separator bar above its buttons"
-msgstr "ডায়ালগটিতে Bঅতনের ওপর একটি বিভাজক আছে"
+msgstr "ডায়ালগটিতে বাটনের ওপর একটি বিভাজক আছে"
+#msgstr "ডায়ালগটিতে Bঅতনের ওপর একটি বিভাজক আছে"
 
 #: gtk/gtkdialog.c:172
 msgid "Content area border"
@@ -1558,7 +1589,7 @@ msgstr "অন্তর্ভুক্তির (Entry) অভ্যন্তর
 
 #: gtk/gtkentry.c:567 gtk/gtkmisc.c:99
 msgid "X align"
-msgstr "এক্স অক্ষ"
+msgstr "X অক্ষ"
 
 #: gtk/gtkentry.c:568 gtk/gtkmisc.c:100
 msgid ""
@@ -1585,11 +1616,13 @@ msgstr "যে মডেলে মিল খোঁজা হবে"
 
 #: gtk/gtkentrycompletion.c:236
 msgid "Minimum Key Length"
-msgstr "মূলশব্দের (Key) সর্বনিম্ন দৈর্ঘ্য"
+msgstr "কী (Key)-র সর্বনিম্ন দৈর্ঘ্য"
+#msgstr "মূলশব্দের (Key) সর্বনিম্ন দৈর্ঘ্য"
 
 #: gtk/gtkentrycompletion.c:237
 msgid "Minimum length of the search key in order to look up matches"
-msgstr "মিল খোঁজায় ব্যবহৃত মূলশব্দের (Key) সর্বনিম্ন দৈর্ঘ্য"
+msgstr "মিল খোঁজায় ব্যবহৃত কী (Key)-র সর্বনিম্ন দৈর্ঘ্য"
+#msgstr "মিল খোঁজায় ব্যবহৃত মূলশব্দের (Key) সর্বনিম্ন দৈর্ঘ্য"
 
 #: gtk/gtkeventbox.c:120
 msgid "Visible Window"
@@ -1743,11 +1776,11 @@ msgstr "লুক্কায়িত জিনিষ প্রদর্শন ক
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "লুক্কায়িত ফাইল ও ফোল্ডার প্রদর্শন করা হবে কিনা"
 
-#: gtk/gtkfilechooserdefault.c:570
+#: gtk/gtkfilechooserdefault.c:569
 msgid "Default file chooser backend"
 msgstr "স্বাভাবিক অবস্থায় ব্যবহৃত ফাইল বাছাইকারী ব্যাকএন্ড"
 
-#: gtk/gtkfilechooserdefault.c:571
+#: gtk/gtkfilechooserdefault.c:570
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "স্বাভাবিক অবস্থায় যে GtkFileChooser ব্যাকএন্ড ব্যবহার করা হবে তার নাম"
 
@@ -1761,7 +1794,7 @@ msgstr "বর্তমানে বাছাইকৃত ফাইলনাম"
 
 #: gtk/gtkfilesel.c:566
 msgid "Show file operations"
-msgstr "ফাইল সংক্রান্ত কাজকর্ম দেখানো হোক"
+msgstr "ফাইল সংক্রান্ত কাজকর্ম প্রদর্শন করো"
 
 #: gtk/gtkfilesel.c:567
 msgid "Whether buttons for creating/manipulating files should be displayed"
@@ -1773,19 +1806,19 @@ msgstr "একাধিক বস্তু চিহ্নিত করো"
 
 #: gtk/gtkfixed.c:121 gtk/gtklayout.c:612
 msgid "X position"
-msgstr "এক্স অবস্থান"
+msgstr "X অবস্থান"
 
 #: gtk/gtkfixed.c:122 gtk/gtklayout.c:613
 msgid "X position of child widget"
-msgstr "চাইল্ড উইজেটের এক্স অক্ষ বরাবর অবস্থান"
+msgstr "চাইল্ড উইজেটের X অক্ষ বরাবর অবস্থান"
 
 #: gtk/gtkfixed.c:131 gtk/gtklayout.c:622
 msgid "Y position"
-msgstr "ওয়াই অবস্থান"
+msgstr "Y অবস্থান"
 
 #: gtk/gtkfixed.c:132 gtk/gtklayout.c:623
 msgid "Y position of child widget"
-msgstr "চাইল্ড উইজেটের ওয়াই অক্ষ বরাবর অবস্থান"
+msgstr "চাইল্ড উইজেটের Y অক্ষ বরাবর অবস্থান"
 
 #: gtk/gtkfontbutton.c:176
 msgid "The title of the font selection dialog"
@@ -1838,7 +1871,7 @@ msgstr "নির্বাচিত ফন্টের আকার লেবে
 # FIXME
 #: gtk/gtkfontsel.c:215
 msgid "The X string that represents this font"
-msgstr "যে এক্স অক্ষীয় পঙ্‌ক্তিটি এই ফন্টের প্রতিনিধিত্ব করে"
+msgstr "যে X অক্ষীয় পঙ্‌ক্তিটি এই ফন্টের প্রতিনিধিত্ব করে"
 
 #: gtk/gtkfontsel.c:222
 msgid "The GdkFont that is currently selected"
@@ -1854,11 +1887,13 @@ msgstr "চিহ্নিত ফন্টকে প্রদর্শনীর 
 
 #: gtk/gtkframe.c:127
 msgid "Text of the frame's label"
-msgstr "টেক্সট"
+msgstr "ফ্রেমের লেবেলের টেক্সট"
+#msgstr "টেক্সট"
+
 
 #: gtk/gtkframe.c:134
 msgid "Label xalign"
-msgstr "শিরোনাম"
+msgstr "xalign শিরোনাম"
 
 #: gtk/gtkframe.c:135
 msgid "The horizontal alignment of the label"
@@ -1866,7 +1901,8 @@ msgstr "লেবেলের অনুভূমিক অ্যালাইন�
 
 #: gtk/gtkframe.c:144
 msgid "Label yalign"
-msgstr "শিরোনাম"
+msgstr "xalign শিরোনাম"
+#msgstr "শিরোনাম"
 
 #: gtk/gtkframe.c:145
 msgid "The vertical alignment of the label"
@@ -2363,7 +2399,7 @@ msgstr ""
 
 #: gtk/gtknotebook.c:462
 msgid "Enable Popup"
-msgstr "পপ আপ সক্রিয় করো"
+msgstr "পপ-আপ সক্রিয় করো"
 
 #: gtk/gtknotebook.c:463
 msgid ""
@@ -2482,16 +2518,17 @@ msgstr "অবস্থানের বৈশিষ্ট্য ব্যবহ�
 
 #: gtk/gtkpaned.c:255
 msgid "Handle Size"
-msgstr "হাতলের (Handle) আকার"
+msgstr "হ্যন্ডেলের আকার"
+#msgstr "হাতলের (Handle) আকার"
 
 # Handle এর বাংলা "হাতল" context sensitive হচ্ছে কিনা কে জানে
 #: gtk/gtkpaned.c:256
 msgid "Width of handle"
-msgstr "হাতলের প্রস্থ"
+msgstr "হ্যন্ডেলের প্রস্থ"
 
 #: gtk/gtkpaned.c:272
 msgid "Minimal Position"
-msgstr "ন্যুনতম অবস্থান"
+msgstr "ন্যূনতম অবস্থান"
 
 #: gtk/gtkpaned.c:273
 msgid "Smallest possible value for the \"position\" property"
@@ -2549,7 +2586,8 @@ msgstr ""
 
 #: gtk/gtkprogress.c:138
 msgid "Show text"
-msgstr "টেক্সট দেখানো হোক"
+msgstr "টেক্সট প্রদর্শন করো"
+#msgstr "টেক্সট দেখানো হোক"
 
 #: gtk/gtkprogress.c:139
 msgid "Whether the progress is shown as text"
@@ -2557,7 +2595,7 @@ msgstr "অগ্রগতিকে টেক্সটের সাহায্�
 
 #: gtk/gtkprogress.c:146
 msgid "Text x alignment"
-msgstr "টেক্সটের এক্স (x) অ্যালাইনমেন্ট"
+msgstr "টেক্সটের x অ্যালাইনমেন্ট"
 
 #: gtk/gtkprogress.c:147
 msgid ""
@@ -2569,7 +2607,7 @@ msgstr ""
 
 #: gtk/gtkprogress.c:155
 msgid "Text y alignment"
-msgstr "টেক্সটের ওয়াই (y) অ্যালাইনমেন্ট"
+msgstr "টেক্সটের y অ্যালাইনমেন্ট"
 
 #: gtk/gtkprogress.c:156
 msgid ""
@@ -2645,13 +2683,14 @@ msgstr "পুরো কাজটার যে ভগ্নাংশ সম্�
 # FIXME: ভাল শোনাচ্ছে না
 #: gtk/gtkprogressbar.c:208
 msgid "Pulse Step"
-msgstr "স্পন্দন ধাপ"
+msgstr ""
+#msgstr "স্পন্দন ধাপ"
 
 #: gtk/gtkprogressbar.c:209
 msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr ""
-"মোট কাজের যে ভগাংশ পরিমাণ সম্পন্ন হলে স্পন্দনের ফলে লাফাতে থাকা ব্লকটিকে সরানো "
-"যাবে "
+#"মোট কাজের যে ভগাংশ পরিমাণ সম্পন্ন হলে স্পন্দনের ফলে লাফাতে থাকা ব্লকটিকে সরানো "
+#"যাবে "
 
 #: gtk/gtkprogressbar.c:219
 msgid "Text to be displayed in the progress bar"
@@ -2835,7 +2874,8 @@ msgstr "স্লাইডারের পূর্বনির্দিষ্�
 
 #: gtk/gtkscrollbar.c:91
 msgid "Don't change slider size, just lock it to the minimum length"
-msgstr "স্লাইডারের দৈর্ঘ্য পরিবর্তন না করে সর্বনিম্ন দৈর্ঘ্যে স্থির রাখা হোক"
+msgstr "স্লাইডারের দৈর্ঘ্য পরিবর্তন না করে সর্বনিম্ন দৈর্ঘ্যে স্থির রাখো"
+#msgstr "স্লাইডারের দৈর্ঘ্য পরিবর্তন না করে সর্বনিম্ন দৈর্ঘ্যে স্থির রাখা হোক"
 
 #: gtk/gtkscrollbar.c:115
 msgid ""
@@ -2957,27 +2997,28 @@ msgstr ""
 
 #: gtk/gtksettings.c:302
 msgid "Theme Name"
-msgstr "থিমের নাম"
+msgstr "থীমের নাম"
+#msgstr "থিমের নাম"
 
 #: gtk/gtksettings.c:303
 msgid "Name of theme RC file to load"
-msgstr "যে থিম আরসি (RC) ফাইলটি পড়া হবে"
+msgstr "যে থীম আরসি (RC) ফাইলটি পড়া হবে"
 
 #: gtk/gtksettings.c:310
 msgid "Icon Theme Name"
-msgstr "আইকন থিমের নাম"
+msgstr "আইকন থীমের নাম"
 
 #: gtk/gtksettings.c:311
 msgid "Name of icon theme to use"
-msgstr "যে আইকন থিম ব্যবহার করা হবে তার নাম"
+msgstr "যে আইকন থীম ব্যবহার করা হবে তার নাম"
 
 #: gtk/gtksettings.c:319
 msgid "Key Theme Name"
-msgstr "মূল (Key) থিমের নাম"
+msgstr "মূল (Key) থীমের নাম"
 
 #: gtk/gtksettings.c:320
 msgid "Name of key theme RC file to load"
-msgstr "যে মূল থিম আরসি ফাইল লোড করা হবে তার নাম"
+msgstr "যে মূল থীম আরসি ফাইল লোড করা হবে তার নাম"
 
 #: gtk/gtksettings.c:328
 msgid "Menu bar accelerator"
@@ -3038,7 +3079,7 @@ msgstr "কী মাত্রায় হিন্টিং ব্যবহার
 
 #: gtk/gtksettings.c:395
 msgid "Xft RGBA"
-msgstr "Xft আরজিবিএ"
+msgstr "Xft আর.জি.বি.এ."
 
 #: gtk/gtksettings.c:396
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
@@ -3835,7 +3876,7 @@ msgstr "অনুসন্ধানের কলাম"
 
 #: gtk/gtktreeview.c:610
 msgid "Model column to search through when searching through code"
-msgstr ""
+msgstr "কোডের মধ্যে অনুসন্ধানের ক্ষেত্রে যে মডেল কলামে খোঁজা হবে"
 
 #: gtk/gtktreeview.c:630
 msgid "Fixed Height Mode"
@@ -4008,7 +4049,7 @@ msgstr "একত্রিত UI-এর বিবরণ"
 
 #: gtk/gtkuimanager.c:229
 msgid "An XML string describing the merged UI"
-msgstr "একত্রিত UI-এর বিবরণ প্রদানকারী একটি এক্সএমএল পঙ্‌ক্তি"
+msgstr "একত্রিত UI-এর বিবরণ প্রদানকারী একটি এক্স.এম.এল. পঙ্‌ক্তি"
 
 #: gtk/gtkviewport.c:136
 msgid ""
@@ -4044,7 +4085,7 @@ msgstr "এই উইজেটের প্যারেন্ট উইজেট
 
 #: gtk/gtkwidget.c:424
 msgid "Width request"
-msgstr "প্রস্থর জন্য অনুরোধ"
+msgstr "প্রস্থের জন্য অনুরোধ"
 
 # FIXME
 #: gtk/gtkwidget.c:425
@@ -4275,7 +4316,8 @@ msgstr ""
 
 #: gtk/gtkwindow.c:474
 msgid "Allow Grow"
-msgstr "বড় হতে দেয়া হোক"
+msgstr ""
+#msgstr "বড় হতে দেয়া হোক"
 
 #: gtk/gtkwindow.c:475
 msgid "If TRUE, users can expand the window beyond its minimum size"
@@ -4370,7 +4412,8 @@ msgstr ""
 
 #: gtk/gtkwindow.c:576
 msgid "Skip taskbar"
-msgstr "টাস্কবার এড়িয়ে যাওয়া হোক"
+msgstr "টাস্কবার এড়িয়ে যাও"
+#msgstr "টাস্কবার এড়িয়ে যাওয়া হোক"
 
 #: gtk/gtkwindow.c:577
 msgid "TRUE if the window should not be in the task bar."
@@ -4378,7 +4421,8 @@ msgstr "উইন্ডোটি টাস্কবারে না থাকল
 
 #: gtk/gtkwindow.c:584
 msgid "Skip pager"
-msgstr "পেজার এড়িয়ে যাওয়া হোক"
+msgstr "পেজার এড়িয়ে যাও"
+#msgstr "পেজার এড়িয়ে যাওয়া হোক"
 
 #: gtk/gtkwindow.c:585
 msgid "TRUE if the window should not be in the pager."
@@ -4411,7 +4455,7 @@ msgstr "এই উইন্ডোটির উইন্ডো মাধ্যা
 
 #: modules/input/gtkimcontextxim.c:330
 msgid "IM Preedit style"
-msgstr "IM-এর এডিটপূর্ব ধরন"
+msgstr "IM-এর সম্পাদনপূর্ব ধরন"
 
 #: modules/input/gtkimcontextxim.c:331
 msgid "How to draw the input method preedit string"
