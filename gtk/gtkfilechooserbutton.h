@@ -47,7 +47,7 @@ typedef struct _GtkFileChooserButtonClass GtkFileChooserButtonClass;
 
 struct _GtkFileChooserButton
 {
-  /* <private> */
+  /*< private >*/
   GtkHBox parent;
 
   GtkFileChooserButtonPrivate *priv;
@@ -55,7 +55,7 @@ struct _GtkFileChooserButton
 
 struct _GtkFileChooserButtonClass
 {
-  /* <private> */
+  /*< private >*/
   GtkHBoxClass parent_class;
 
   void (*__gtk_reserved1);

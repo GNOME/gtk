@@ -1,5 +1,7 @@
 2004-11-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserbutton.h: Fix trigraphs in private markers.
+
 	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_class_init): 
 	Fix a doc comment.
 
