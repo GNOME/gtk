@@ -2878,7 +2878,7 @@ select_row (GtkCList * clist,
 	    gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW], 
 			     row, column, event);
 	  else if (clist_row->state == GTK_STATE_SELECTED)
-	    gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW], 
+	    gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW], 
 			     i, column, event);
 
 	  i++;

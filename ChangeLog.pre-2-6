@@ -1,3 +1,8 @@
+Thu Mar  5 12:32:06 1998  Marc Ewing  <marc@redhat.com>
+
+	* gtk/gtkclist.c (select_row): emit UNselect on rows
+	  that are not selected.
+
 Thu Mar  5 01:22:06 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkwidget.c (gtk_widget_unparent): Unset allocation
