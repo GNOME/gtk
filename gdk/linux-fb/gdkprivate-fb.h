@@ -32,6 +32,7 @@
 #define __GDK_PRIVATE_FB_H__
 
 #include <gdk/gdkprivate.h>
+#include <gdk/gdkinternals.h>
 #include <gdk/gdk.h>
 #include "gdkfb.h"
 #include "gdkregion-generic.h"
@@ -52,7 +53,7 @@
 #define GDK_CHECK_IMPL(drawable) \
  g_assert(G_OBJECT_TYPE(drawable) == _gdk_window_impl_get_type() || G_OBJECT_TYPE(drawable) == _gdk_pixmap_impl_get_type())
 #define GDK_CHECK_INTF(drawable) \
- g_assert(G_OBJECT_TYPE(drawable) == gdk_window_get_type() || G_OBJECT_TYPE(drawable) == gdk_pixmap_get_type())
+ g_assert(G_OBJECT_TYPE(drawable) == gdk_window_object_get_type() || G_OBJECT_TYPE(drawable) == gdk_pixmap_get_type())
 
 typedef struct _GdkDrawableFBData GdkDrawableFBData;
 typedef struct _GdkWindowFBData GdkWindowFBData;

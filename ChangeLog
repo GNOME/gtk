@@ -1,6 +1,11 @@
 2000-11-15  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gdk/linux-fb/gdkprivate-fb.h:
+	Fix debug macros.
+	
+2000-11-15  Alexander Larsson  <alla@lysator.liu.se>
+
+	* gdk/linux-fb/gdkprivate-fb.h:
 	Added virtual functions set_pixel, get_color,
 	fill_span and draw_drawable to the GC.
 	Added global _gdk_fb_screen_gc to use instead of
