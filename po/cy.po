@@ -1,0 +1,467 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# Rhoslyn Prys <rhoslyn.prys@ntlworld.com>, 2002
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk+ 1.4\n"
+"POT-Creation-Date: 2001-07-28 06:30+0200\n"
+"PO-Revision-Date: 2002-02-23 10:23-0000\n"
+"Last-Translator: Rhoslyn Prys <rhoslyn.prys@ntlworld.com>\n"
+"Language-Team: Cymraeg/Welsh <en@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gtk/gtkcolorsel.c:221
+msgid "Hue:"
+msgstr "Arlliw:"
+
+#: gtk/gtkcolorsel.c:222
+msgid "Saturation:"
+msgstr "Dirlawnder:"
+
+#: gtk/gtkcolorsel.c:223
+msgid "Value:"
+msgstr "Gwerth:"
+
+#: gtk/gtkcolorsel.c:224
+msgid "Red:"
+msgstr "Coch:"
+
+#: gtk/gtkcolorsel.c:225
+msgid "Green:"
+msgstr "Gwyrdd:"
+
+#: gtk/gtkcolorsel.c:226
+msgid "Blue:"
+msgstr "Glas:"
+
+#: gtk/gtkcolorsel.c:227
+msgid "Opacity:"
+msgstr "Didreiddedd:"
+
+#. The OK button
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:481 gtk/gtkfontsel.c:3501
+#: gtk/gtkgamma.c:416
+msgid "OK"
+msgstr "Iawn"
+
+#. The Cancel button
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:488 gtk/gtkfilesel.c:868
+#: gtk/gtkfilesel.c:968 gtk/gtkfilesel.c:1083 gtk/gtkfontsel.c:3514
+#: gtk/gtkgamma.c:424
+msgid "Cancel"
+msgstr "Diddymu"
+
+#: gtk/gtkcolorsel.c:1738
+msgid "Help"
+msgstr "Cymorth"
+
+#. The directories clist
+#: gtk/gtkfilesel.c:430
+msgid "Directories"
+msgstr "Cyfeiriaduron"
+
+#. The files clist
+#: gtk/gtkfilesel.c:449
+msgid "Files"
+msgstr "Ffeiliau"
+
+#: gtk/gtkfilesel.c:519 gtk/gtkfilesel.c:1478
+#, c-format
+msgid "Directory unreadable: %s"
+msgstr "Cyfeiriadur yn annarllenadwy: %s"
+
+#: gtk/gtkfilesel.c:551
+msgid "Create Dir"
+msgstr "Creu Cyfeiriadur"
+
+#: gtk/gtkfilesel.c:562 gtk/gtkfilesel.c:937
+msgid "Delete File"
+msgstr "Dileu Ffeil"
+
+#: gtk/gtkfilesel.c:573 gtk/gtkfilesel.c:1041
+msgid "Rename File"
+msgstr "Ail-enwi Ffeil"
+
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
+#: gtk/gtkfilesel.c:734
+msgid "Error"
+msgstr "Gwall"
+
+#. close button
+#: gtk/gtkfilesel.c:757 gtk/gtkinputdialog.c:354
+msgid "Close"
+msgstr "Cau"
+
+#: gtk/gtkfilesel.c:832
+msgid "Create Directory"
+msgstr "Creu Cyfeiriadur"
+
+#: gtk/gtkfilesel.c:846
+msgid "Directory name:"
+msgstr "Enw Cyfeiriadur:"
+
+#. buttons
+#: gtk/gtkfilesel.c:859
+msgid "Create"
+msgstr "Creu"
+
+#. buttons
+#: gtk/gtkfilesel.c:959
+msgid "Delete"
+msgstr "Dileu"
+
+#. buttons
+#: gtk/gtkfilesel.c:1074
+msgid "Rename"
+msgstr "Ail-enwi"
+
+#: gtk/gtkfilesel.c:1457
+msgid "Selection: "
+msgstr "Dewis: "
+
+#: gtk/gtkfontsel.c:210
+msgid "Foundry:"
+msgstr "Ffowndri:"
+
+#: gtk/gtkfontsel.c:211
+msgid "Family:"
+msgstr "Teulu:"
+
+#: gtk/gtkfontsel.c:212
+msgid "Weight:"
+msgstr "Pwysau:"
+
+#: gtk/gtkfontsel.c:213
+msgid "Slant:"
+msgstr "Goleddf:"
+
+#: gtk/gtkfontsel.c:214
+msgid "Set Width:"
+msgstr "Gosod Lled:"
+
+#: gtk/gtkfontsel.c:215
+msgid "Add Style:"
+msgstr "Ychwanegu Arddull:"
+
+#: gtk/gtkfontsel.c:216
+msgid "Pixel Size:"
+msgstr "Maint Picsel:"
+
+#: gtk/gtkfontsel.c:217
+msgid "Point Size:"
+msgstr "Maint Pwynt:"
+
+#: gtk/gtkfontsel.c:218
+msgid "Resolution X:"
+msgstr "Cydraniad X:"
+
+#: gtk/gtkfontsel.c:219
+msgid "Resolution Y:"
+msgstr "Cydraniad Y:"
+
+#: gtk/gtkfontsel.c:220
+msgid "Spacing:"
+msgstr "Bylchu:"
+
+#: gtk/gtkfontsel.c:221
+msgid "Average Width:"
+msgstr "Cyfartaledd Lled:"
+
+#: gtk/gtkfontsel.c:222
+msgid "Charset:"
+msgstr "Set nodau:"
+
+#. Number of internationalized titles here must match number
+#. of NULL initializers above
+#: gtk/gtkfontsel.c:459
+msgid "Font Property"
+msgstr "Ffurfweddiad Ffont"
+
+#: gtk/gtkfontsel.c:460
+msgid "Requested Value"
+msgstr "Gwerth y Cais"
+
+#: gtk/gtkfontsel.c:461
+msgid "Actual Value"
+msgstr "Gwerth Gwirioneddol"
+
+#: gtk/gtkfontsel.c:494
+msgid "Font"
+msgstr "Ffont"
+
+#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2180 gtk/gtkfontsel.c:2410
+msgid "Font:"
+msgstr "Ffont:"
+
+#: gtk/gtkfontsel.c:509
+msgid "Font Style:"
+msgstr "Arddull y Ffont:"
+
+#: gtk/gtkfontsel.c:514
+msgid "Size:"
+msgstr "Maint:"
+
+#: gtk/gtkfontsel.c:646 gtk/gtkfontsel.c:868
+msgid "Reset Filter"
+msgstr "Ailosod Hidl"
+
+#: gtk/gtkfontsel.c:660
+msgid "Metric:"
+msgstr "Metrig:"
+
+#: gtk/gtkfontsel.c:664
+msgid "Points"
+msgstr "Pwyntiau"
+
+#: gtk/gtkfontsel.c:671
+msgid "Pixels"
+msgstr "Picseli"
+
+#. create the text entry widget
+#: gtk/gtkfontsel.c:687
+msgid "Preview:"
+msgstr "Rhagolwg:"
+
+#: gtk/gtkfontsel.c:716
+msgid "Font Information"
+msgstr "Gwybodaeth am Ffontiau"
+
+#: gtk/gtkfontsel.c:749
+msgid "Requested Font Name:"
+msgstr "Enw'r Ffont Gofynnwyd Amdano:"
+
+#: gtk/gtkfontsel.c:760
+msgid "Actual Font Name:"
+msgstr "Gwir Enw'r Ffont:"
+
+#: gtk/gtkfontsel.c:771
+#, c-format
+msgid "%i fonts available with a total of %i styles."
+msgstr "%i ffont ar gael gyda chyfanswm o %i arddull."
+
+#: gtk/gtkfontsel.c:786
+msgid "Filter"
+msgstr "Hidl"
+
+#: gtk/gtkfontsel.c:799
+msgid "Font Types:"
+msgstr "Math o Ffont:"
+
+#: gtk/gtkfontsel.c:807
+msgid "Bitmap"
+msgstr "Didfap"
+
+#: gtk/gtkfontsel.c:813
+msgid "Scalable"
+msgstr "Graddadwy"
+
+#: gtk/gtkfontsel.c:819
+msgid "Scaled Bitmap"
+msgstr "Didfap Graddadwy"
+
+#: gtk/gtkfontsel.c:890
+msgid "*"
+msgstr "*"
+
+#. Convert '(nil)' weights to 'regular', since it looks nicer.
+#: gtk/gtkfontsel.c:1215
+msgid "(nil)"
+msgstr "(dim)"
+
+#: gtk/gtkfontsel.c:1215
+msgid "regular"
+msgstr "rheolaidd"
+
+#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1972
+msgid "italic"
+msgstr "italig"
+
+#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1973
+msgid "oblique"
+msgstr "arosgo"
+
+#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1974
+msgid "reverse italic"
+msgstr "italig gwrthdro"
+
+#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1975
+msgid "reverse oblique"
+msgstr "arosgo gwrthdro"
+
+#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1976
+msgid "other"
+msgstr "arall"
+
+#: gtk/gtkfontsel.c:1231
+msgid "[M]"
+msgstr "[M]"
+
+#: gtk/gtkfontsel.c:1232
+msgid "[C]"
+msgstr "[C]"
+
+#: gtk/gtkfontsel.c:1792
+msgid "The selected font is not available."
+msgstr "Nid yw'r ffont ddewiswyd ar gael"
+
+#: gtk/gtkfontsel.c:1798
+msgid "The selected font is not a valid font."
+msgstr "Nid yw'r ffont ddweiswyd yn ffont dilys"
+
+#: gtk/gtkfontsel.c:1856
+msgid "This is a 2-byte font and may not be displayed correctly."
+msgstr ""
+"Mae hwn yn ffont 2 beit ac efallai na fydd yn cael ei ddangos yn gywir."
+
+#: gtk/gtkfontsel.c:1960 gtk/gtkinputdialog.c:607
+msgid "(unknown)"
+msgstr "(anhysbys)"
+
+#: gtk/gtkfontsel.c:1971
+msgid "roman"
+msgstr "rhufeinig"
+
+#: gtk/gtkfontsel.c:1983
+msgid "proportional"
+msgstr "cyfraneddol"
+
+#: gtk/gtkfontsel.c:1984
+msgid "monospaced"
+msgstr "unbylwchwyd"
+
+#: gtk/gtkfontsel.c:1985
+msgid "char cell"
+msgstr "cell nod"
+
+#: gtk/gtkfontsel.c:2185
+msgid "Font: (Filter Applied)"
+msgstr "Ffont (Hidl wedi ei osod)"
+
+#: gtk/gtkfontsel.c:2661
+msgid "MAX_FONTS exceeded. Some fonts may be missing."
+msgstr "Wedi mynd tu hwnt i MAX-FONTS. Efallai bydd rhai ffontiau ar goll."
+
+#: gtk/gtkfontsel.c:3508
+msgid "Apply"
+msgstr "Gosodwch"
+
+#: gtk/gtkfontsel.c:3530
+msgid "Font Selection"
+msgstr "Dewis Ffont"
+
+#: gtk/gtkgamma.c:396
+msgid "Gamma"
+msgstr "Gamma"
+
+#: gtk/gtkgamma.c:403
+msgid "Gamma value"
+msgstr "Gwerth Gamma"
+
+#. shell and main vbox
+#: gtk/gtkinputdialog.c:200
+msgid "Input"
+msgstr "Mewnbwn"
+
+#: gtk/gtkinputdialog.c:208
+msgid "No input devices"
+msgstr "Dim dyfeisiau mewnbwn"
+
+#: gtk/gtkinputdialog.c:237
+msgid "Device:"
+msgstr "Dyfais:"
+
+#: gtk/gtkinputdialog.c:253
+msgid "Disabled"
+msgstr "Analluogwyd"
+
+#: gtk/gtkinputdialog.c:261
+msgid "Screen"
+msgstr "Sgrin"
+
+#: gtk/gtkinputdialog.c:269
+msgid "Window"
+msgstr "Ffenestr"
+
+#: gtk/gtkinputdialog.c:277
+msgid "Mode: "
+msgstr "Modd:"
+
+#. The axis listbox
+#: gtk/gtkinputdialog.c:307
+msgid "Axes"
+msgstr "Bwyeill"
+
+#. Keys listbox
+#: gtk/gtkinputdialog.c:323
+msgid "Keys"
+msgstr "Allweddi"
+
+#. We create the save button in any case, so that clients can
+#. connect to it, without paying attention to whether it exits
+#: gtk/gtkinputdialog.c:345
+msgid "Save"
+msgstr "Cadw"
+
+#: gtk/gtkinputdialog.c:500
+msgid "X"
+msgstr "X"
+
+#: gtk/gtkinputdialog.c:501
+msgid "Y"
+msgstr "Y"
+
+#: gtk/gtkinputdialog.c:502
+msgid "Pressure"
+msgstr "Pwysedd"
+
+#: gtk/gtkinputdialog.c:503
+msgid "X Tilt"
+msgstr "Osgo X"
+
+#: gtk/gtkinputdialog.c:504
+msgid "Y Tilt"
+msgstr "Osgo Y"
+
+#: gtk/gtkinputdialog.c:544
+msgid "none"
+msgstr "dim"
+
+#: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
+msgid "(disabled)"
+msgstr "(analluogwyd)"
+
+#. and clear button
+#: gtk/gtkinputdialog.c:692
+msgid "clear"
+msgstr "clir"
+
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
+#, c-format
+msgid "Page %u"
+msgstr "Tudalen %u"
+
+#: gtk/gtkrc.c:1758
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+msgstr "Methu canfod ffeil delwedd yn pixmap_path: \"%s\" llinell %d"
+
+#: gtk/gtkrc.c:1761
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Methu canfod ffeil delwedd yn pixmap_path: \"%s\""
+
+#: gtk/gtkthemes.c:79
+#, c-format
+msgid "Unable to locate loadable module in module_path: \"%s\","
+msgstr "Methu canfod modiwl llwythadwy yn module_path: \"%s\","
+
+#: gtk/gtktipsquery.c:180
+msgid "--- No Tip ---"
+msgstr "--- Dim Cyngor ---"

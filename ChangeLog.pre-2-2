@@ -1,3 +1,7 @@
+2002-02-23  Pablo Saratxaga  <pablo@mandrakesoft.com>
+
+	* configure.in (ALL_LINGUAS): Add "cy" to the language list.
+
 Tue Feb  5 19:34:31 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdnd.c (gdk_window_cache_filter): Fix ordering
