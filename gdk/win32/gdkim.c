@@ -186,7 +186,6 @@ gdk_wcstombs (const GdkWChar *src)
 	}
       mbstr[mbsl] = '\0';
       g_free (src_alt);
-      return mbstr;
     }
   else
     {
@@ -233,6 +232,7 @@ gdk_mbstowcs (GdkWChar *dest, const gchar *src, gint dest_max)
 	wcsl = dest_max;
       for (i = 0; i < wcsl; i++)
 	dest[i] = wcstr[i];
+      g_free (wcstr);
 
       return wcsl;
     }

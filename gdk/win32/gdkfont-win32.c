@@ -54,6 +54,8 @@ gdk_font_load (const gchar *font_name)
   int nHeight, nWidth, nEscapement, nOrientation, fnWeight;
   int logpixelsy;
 
+  g_return_val_if_fail (font_name != NULL, NULL);
+
   private = g_new (GdkFontPrivate, 1);
   font = (GdkFont*) private;
 
