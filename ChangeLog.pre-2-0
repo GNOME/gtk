@@ -1,4 +1,10 @@
-2001-09-09  Alexander Larsson  <alla@lysator.liu.se>
+2001-09-09  Alexander Larsson  <alla@lysator.liu.se> 
+
+	* gtk/gtkwidget.c (_gtk_widget_peek_colormap):
+	Really return NULL if not set.
+	(gtk_widget_init): Remove unused varaible.
+	
+2001-09-09  Alexander Larsson  <alla@lysator.liu.se> 
 
 	* configure.in:
 	Remove gdk/nanox/Makefile from AC_OUTPUT(), since it is no longer

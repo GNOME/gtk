@@ -1229,8 +1229,6 @@ gtk_widget_get_property (GObject         *object,
 static void
 gtk_widget_init (GtkWidget *widget)
 {
-  GdkColormap *colormap;
-  
   GTK_PRIVATE_FLAGS (widget) = PRIVATE_GTK_CHILD_VISIBLE;
   widget->state = GTK_STATE_NORMAL;
   widget->saved_state = GTK_STATE_NORMAL;
@@ -5351,6 +5349,7 @@ _gtk_widget_peek_colormap (void)
 {
   if (colormap_stack)
     return (GdkColormap*) colormap_stack->data;
+  return NULL;
 }
 
 static void
