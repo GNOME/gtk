@@ -51,6 +51,7 @@
 #include "gtkhbox.h"
 #include "gtkvbox.h"
 #include "gtkimage.h"
+#include "gtkseparatormenuitem.h"
 
 typedef struct _ToolbarContent ToolbarContent;
 
@@ -121,7 +122,6 @@ struct _GtkToolbarPrivate
   
   GtkWidget *	arrow;
   GtkWidget *	arrow_button;
-  
   GtkMenu *	menu;
   
   GdkWindow *	event_window;
@@ -136,6 +136,7 @@ struct _GtkToolbarPrivate
   guint		show_arrow : 1;
   guint		need_sync : 1;
   guint		is_sliding : 1;
+  guint		need_rebuild : 1;	/* whether the overflow menu should be regenerated */
 };
 
 static void       gtk_toolbar_init                 (GtkToolbar          *toolbar);
@@ -279,6 +280,7 @@ static void            toolbar_content_set_size_request     (ToolbarContent     
 static void            toolbar_content_toolbar_reconfigured (ToolbarContent      *content,
 							     GtkToolbar          *toolbar);
 static GtkWidget *     toolbar_content_retrieve_menu_item   (ToolbarContent      *content);
+static gboolean        toolbar_content_has_proxy_menu_item  (ToolbarContent	 *content);
 static gboolean        toolbar_content_is_separator         (ToolbarContent      *content);
 static void            toolbar_content_show_all             (ToolbarContent      *content);
 static void            toolbar_content_hide_all             (ToolbarContent      *content);
@@ -1134,6 +1136,9 @@ gtk_toolbar_begin_sliding (GtkToolbar *toolbar)
    * item into content->start_allocation. For items that haven't
    * been allocated yet, we calculate their position and save that
    * in start_allocatino along with zero width and zero height.
+   *
+   * FIXME: It would be nice if we could share this code with
+   * the equivalent in gtk_widget_size_allocate().
    */
   priv->is_sliding = TRUE;
   
@@ -1247,6 +1252,93 @@ gtk_toolbar_stop_sliding (GtkToolbar *toolbar)
 }
 
 static void
+remove_item (GtkWidget *menu_item,
+	     gpointer   data)
+{
+  gtk_container_remove (GTK_CONTAINER (menu_item->parent), menu_item);
+}
+
+static void
+menu_deactivated (GtkWidget  *menu,
+		  GtkToolbar *toolbar)
+{
+  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->arrow_button), FALSE);
+}
+
+static void
+menu_detached (GtkWidget  *toolbar,
+	       GtkMenu    *menu)
+{
+  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+  priv->menu = NULL;
+}
+
+static void
+rebuild_menu (GtkToolbar *toolbar)
+{
+  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+  GList *list, *children;
+  
+  if (!priv->menu)
+    {
+      priv->menu = GTK_MENU (gtk_menu_new());
+      gtk_menu_attach_to_widget (priv->menu,
+				 GTK_WIDGET (toolbar),
+				 menu_detached);
+
+      g_signal_connect (priv->menu, "deactivate", G_CALLBACK (menu_deactivated), toolbar);
+    }
+
+  gtk_container_foreach (GTK_CONTAINER (priv->menu), remove_item, NULL);
+  
+  for (list = priv->content; list != NULL; list = list->next)
+    {
+      ToolbarContent *content = list->data;
+      
+      if (toolbar_content_get_state (content) == OVERFLOWN &&
+	  !toolbar_content_is_placeholder (content))
+	{
+	  GtkWidget *menu_item = toolbar_content_retrieve_menu_item (content);
+	  
+	  if (menu_item)
+	    {
+	      g_assert (GTK_IS_MENU_ITEM (menu_item));
+	      gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), menu_item);
+	    }
+	}
+    }
+
+  /* Remove leading and trailing separator items */
+  children = gtk_container_get_children (GTK_CONTAINER (priv->menu));
+  
+  list = children;
+  while (list && GTK_IS_SEPARATOR_MENU_ITEM (list->data))
+    {
+      GtkWidget *child = list->data;
+      
+      gtk_container_remove (GTK_CONTAINER (priv->menu), child);
+      list = list->next;
+    }
+  g_list_free (children);
+
+  /* Regenerate the list of children so we don't try to remove items twice */
+  children = gtk_container_get_children (GTK_CONTAINER (priv->menu));
+
+  list = g_list_last (children);
+  while (list && GTK_IS_SEPARATOR_MENU_ITEM (list->data))
+    {
+      GtkWidget *child = list->data;
+
+      gtk_container_remove (GTK_CONTAINER (priv->menu), child);
+      list = list->prev;
+    }
+  g_list_free (children);
+
+  priv->need_rebuild = FALSE;
+}
+
+static void
 gtk_toolbar_size_allocate (GtkWidget     *widget,
 			   GtkAllocation *allocation)
 {
@@ -1331,15 +1423,31 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   new_states = g_new0 (ItemState, n_items);
   
   needed_size = 0;
+  need_arrow = FALSE;
   for (list = priv->content; list != NULL; list = list->next)
     {
       ToolbarContent *content = list->data;
       
       if (toolbar_content_visible (content, toolbar))
-	needed_size += get_item_size (toolbar, content);
+	{
+	  needed_size += get_item_size (toolbar, content);
+
+	  /* Do we need an arrow?
+	   *
+	   * Assume we don't, and see if any non-separator item with a
+	   * proxy menu item is then going to overflow.
+	   */
+	  if (needed_size > available_size			&&
+	      !need_arrow					&&
+	      priv->show_arrow					&&
+	      priv->api_mode == NEW_API				&&
+	      toolbar_content_has_proxy_menu_item (content)	&&
+	      !toolbar_content_is_separator (content))
+	    {
+	      need_arrow = TRUE;
+	    }
+	}
     }
-  
-  need_arrow = (needed_size > available_size) && priv->show_arrow && priv->api_mode == NEW_API;
   
   if (need_arrow)
     size = available_size - arrow_size;
@@ -1510,7 +1618,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       if (toolbar_content_get_state (content) == NORMAL &&
 	  new_states[i] != NORMAL)
 	{
-	  /* an item disappeared, begin sliding */
+	  /* an item disappeared and we didn't change size, so begin sliding */
 	  if (!size_changed && priv->api_mode == NEW_API)
 	    gtk_toolbar_begin_sliding (toolbar);
 	}
@@ -1582,6 +1690,9 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       toolbar_content_set_state (content, new_states[i]);
     }
   
+  if (priv->menu && priv->need_rebuild)
+    rebuild_menu (toolbar);
+  
   if (need_arrow)
     {
       gtk_widget_size_allocate (GTK_WIDGET (priv->arrow_button),
@@ -1591,8 +1702,11 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   else
     {
       gtk_widget_hide (GTK_WIDGET (priv->arrow_button));
+
+      if (priv->menu && GTK_WIDGET_VISIBLE (priv->menu))
+	gtk_menu_shell_deactivate (GTK_MENU_SHELL (priv->menu));
     }
-  
+
   g_free (allocations);
   g_free (new_states);
 }
@@ -2401,63 +2515,12 @@ menu_position_func (GtkMenu  *menu,
 }
 
 static void
-menu_deactivated (GtkWidget  *menu,
-		  GtkToolbar *toolbar)
-{
-  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->arrow_button), FALSE);
-}
-
-static void
-menu_detached (GtkWidget  *toolbar,
-	       GtkMenu    *menu)
-{
-  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
-  priv->menu = NULL;
-}
-
-static void
-remove_item (GtkWidget *menu_item,
-	     gpointer   data)
-{
-  gtk_container_remove (GTK_CONTAINER (menu_item->parent), menu_item);
-}
-
-static void
 show_menu (GtkToolbar     *toolbar,
 	   GdkEventButton *event)
 {
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
-  GList *list;
-  
-  if (priv->menu)
-    {
-      gtk_container_foreach (GTK_CONTAINER (priv->menu), remove_item, NULL);
-      gtk_widget_destroy (GTK_WIDGET (priv->menu));
-    }
 
-  priv->menu = GTK_MENU (gtk_menu_new ());
-  gtk_menu_attach_to_widget (priv->menu,
-			     GTK_WIDGET (toolbar),
-			     menu_detached);
-  g_signal_connect (priv->menu, "deactivate", G_CALLBACK (menu_deactivated), toolbar);
-
-  for (list = priv->content; list != NULL; list = list->next)
-    {
-      ToolbarContent *content = list->data;
-      
-      if (toolbar_content_get_state (content) == OVERFLOWN &&
-	  !toolbar_content_is_placeholder (content))
-	{
-	  GtkWidget *menu_item = toolbar_content_retrieve_menu_item (content);
-	  
-	  if (menu_item)
-	    {
-	      g_assert (GTK_IS_MENU_ITEM (menu_item));
-	      gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), menu_item);
-	    }
-	}
-    }
+  rebuild_menu (toolbar);
 
   gtk_widget_show_all (GTK_WIDGET (priv->menu));
 
@@ -2474,9 +2537,9 @@ gtk_toolbar_arrow_button_clicked (GtkWidget  *button,
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);  
   
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->arrow_button)) &&
-      (!priv->menu || !GTK_WIDGET_VISIBLE (GTK_WIDGET (priv->menu))))
+      (!priv->menu || !GTK_WIDGET_VISIBLE (priv->menu)))
     {
-      /* We only get here when the button is clicked with the keybaord,
+      /* We only get here when the button is clicked with the keyboard,
        * because mouse button presses result in the menu being shown so
        * that priv->menu would be non-NULL and visible.
        */
@@ -2973,7 +3036,7 @@ gtk_toolbar_finalize (GObject *object)
   
   if (priv->idle_id)
     g_source_remove (priv->idle_id);
-  
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -3693,6 +3756,7 @@ toolbar_content_new_tool_item (GtkToolbar  *toolbar,
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (toolbar));
+  priv->need_rebuild = TRUE;
   
   return content;
 }
@@ -3738,6 +3802,7 @@ toolbar_content_new_compatibility (GtkToolbar          *toolbar,
 
   priv->content = g_list_insert (priv->content, content, pos);
   toolbar->children = g_list_insert (toolbar->children, child, pos);
+  priv->need_rebuild = TRUE;
   
   toolbar->num_children++;
   
@@ -3780,6 +3845,7 @@ toolbar_content_remove (ToolbarContent *content,
     toolbar->num_children--;
 
   gtk_widget_queue_resize (GTK_WIDGET (toolbar));
+  priv->need_rebuild = TRUE;
 }
 
 static void
@@ -4370,6 +4436,16 @@ toolbar_content_retrieve_menu_item (ToolbarContent *content)
 }
 
 static gboolean
+toolbar_content_has_proxy_menu_item (ToolbarContent *content)
+{
+  GtkWidget *menu_item;
+
+  menu_item = toolbar_content_retrieve_menu_item (content);
+
+  return menu_item != NULL;
+}
+ 
+static gboolean
 toolbar_content_is_separator (ToolbarContent *content)
 {
   GtkToolbarChild *child;
@@ -4557,14 +4633,12 @@ _gtk_toolbar_paint_space_line (GtkWidget       *widget,
   const double start_fraction = (SPACE_LINE_START / SPACE_LINE_DIVISION);
   const double end_fraction = (SPACE_LINE_END / SPACE_LINE_DIVISION);
   
-  gint space_size;
   GtkToolbarSpaceStyle space_style;
   GtkOrientation orientation;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
-  space_size = get_space_size (toolbar);
-  space_style = get_space_style (toolbar);
+  space_style = toolbar? get_space_style (toolbar) : DEFAULT_SPACE_STYLE;
   orientation = toolbar? toolbar->orientation : GTK_ORIENTATION_HORIZONTAL;
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -4574,7 +4648,7 @@ _gtk_toolbar_paint_space_line (GtkWidget       *widget,
 		       "toolbar",
 		       allocation->y + allocation->height * start_fraction,
 		       allocation->y + allocation->height * end_fraction,
-		       allocation->x + (space_size - widget->style->xthickness) / 2);
+		       allocation->x + (allocation->width - widget->style->xthickness) / 2);
     }
   else
     {
@@ -4583,7 +4657,7 @@ _gtk_toolbar_paint_space_line (GtkWidget       *widget,
 		       "toolbar",
 		       allocation->x + allocation->width * start_fraction,
 		       allocation->x + allocation->width * end_fraction,
-		       allocation->y + (space_size - widget->style->ythickness) / 2);
+		       allocation->y + (allocation->height - widget->style->ythickness) / 2);
     }
 }
 

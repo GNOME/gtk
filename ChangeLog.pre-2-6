@@ -1,3 +1,24 @@
+Sat Jun  5 20:05:39 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* tests/testmerge.c: Add a checkbox to queue an
+	merge/unmerge. Patch from Matthias Clasen.
+
+	* gtk/gtktoolbar.c (struct _GtkToolbarPrivate): Add a new flag
+	"need_rebuild"
+	(rebuild_menu): New function that rebuilds the overflow menu and
+	makes sure it doesn't start or end with a separator.
+	(toolbar_content_new_tool_item)
+	(toolbar_content_remove)
+	(toolbar_content_new_compatibility): Set the rebuild_needed flag
+	(gtk_toolbar_size_allocate): Only show the overflow arrow when we
+	have actually overflown an item with a proxy menu item. Also make
+	sure we rebuild the menu if needed.
+
+	Fix #125504, #142377, #143463
+	
+	* gtk/gtkseparatortoolitem.c (gtk_separator_tool_item_expose):
+	Obey the "priv->draw" flag. (#143692)
+
 2004-06-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* docs/widget_geometry.txt: Add a note about the !CAN_FOCUS
