@@ -1,3 +1,23 @@
+Overview of Changes from GTK+ 2.4.10 to GTK+ 2.4.11
+===================================================
+* GtkFileChooser
+ - Make path bar arrows larger [Matthias Clasen]
+ - Make SELECT_FOLDER mode work [Matthias]
+ - Speed up the completion popup [Matthias]
+ - Update the preview when searching [Tommi Komulainen]
+ - Pop up completions again when tab is pressed [Jon Bech Madsen]
+ - Don't prepopulate the location entry [Matthias]
+* Win32 bug fixes [Robert Ögren]
+* Other bug fixes [Federico Mena Quintero, Joel Fredrikson, Matthias,
+ Padraig O'Briain, Michèle Garoche. Frederic Crozat, 
+ Jonathan Blandford, John Cupitt, Morten Welinder, Christian Persch,
+ Lorenzo Gil Sanchez, Federico]
+ Martyn Russell]
+* Documentation improvements [John Finlay, Billy Biggs, Jonathan, 
+  Owen Taylor]
+* New and updated translations (az_IR,ang,en_CA,gl,hu,it,nl)
+* Bugs fixed: 153185,153224,153628,145467,154191,153326,143826,147700,154186,154658,154703,153791,154444,152562,154188
+
 Overview of Changes from GTK+ 2.4.9 to GTK+ 2.4.10
 ==================================================
 * GtkFileChooser

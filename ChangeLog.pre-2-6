@@ -1,10 +1,12 @@
 2004-10-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
 	* gtk/gtktreeview.c (gtk_tree_view_button_press): Set cell data
 	unconditionally.  (#152562, Federico Mena Quintero)
 
 	* gtk/gtklayout.c (gtk_layout_add): Implement the GtkContainer::add 
-	vfunc. (#15444, Lorenzo Gil Sanchez)
+	vfunc. (#154444, Lorenzo Gil Sanchez)
 
 	* gtk/gtkuimanager.c (update_node): Also update smart separators 
 	if the visibility of a  menuitem with a submenu changes.  (#153791,
