@@ -748,6 +748,8 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
 	    WIN32_GDI_FAILED ("InvalidateRgn");
 	  if (!UpdateWindow (GDK_DRAWABLE_XID (drawable)))
 	    WIN32_GDI_FAILED ("UpdateWindow");
+	  if (!DeleteObject (updateRgn))
+	    WIN32_GDI_FAILED ("DeleteObject");
 	}
       else
 	{

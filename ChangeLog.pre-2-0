@@ -1,3 +1,8 @@
+2001-11-04  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdrawable-win32.c (gdk_win32_draw_drawable): Plug
+	region leak: Delete updateRgn after use. (Bug #56944)
+
 2001-10-30  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk+-1.3-win32-production.pc.in
