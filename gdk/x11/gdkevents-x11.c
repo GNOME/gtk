@@ -1889,7 +1889,9 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
       XSync (GDK_WINDOW_XDISPLAY (win), False);
       gdk_error_trap_pop ();
     }
-  else if ((Atom) xevent->xclient.data.l[0] == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_PING"))
+  else if ((Atom) xevent->xclient.data.l[0] == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_PING") &&
+	   !_gdk_x11_display_is_root_window (display,
+					     xevent->xclient.window))
     {
       XEvent xev = *xevent;
       

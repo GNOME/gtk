@@ -1,3 +1,10 @@
+Tue Jun  3 18:32:30 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (gdk_wm_protocols_filter): Don't
+	respond to pings on a root window; prevents infinite
+	loops if we are selecting for SubstructureNotify on the
+	root window. (#111945, Sergey V. Udaltsov)
+
 Tue Jun  3 17:39:16 2003  Owen Taylor  <otaylor@redhat.com>
 
 	#71597, reported by Morten Welinder
