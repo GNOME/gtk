@@ -321,6 +321,36 @@ _gdk_x11_have_render (GdkDisplay *display)
   return x11display->have_render == GDK_YES;
 }
 
+gboolean
+_gdk_x11_have_render_with_trapezoids (GdkDisplay *display)
+{
+  Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
+  GdkDisplayX11 *x11display = GDK_DISPLAY_X11 (display);
+
+  if (x11display->have_render_with_trapezoids == GDK_UNKNOWN)
+    if (!_gdk_x11_have_render (display))
+      x11display->have_render_with_trapezoids = GDK_NO;
+    else
+      {
+	/*
+	 * Require protocol >= 0.4 for CompositeTrapezoids support.
+	 */
+	int major_version, minor_version;
+	
+#define XRENDER_TETRAPEZOIDS_MAJOR 0
+#define XRENDER_TETRAPEZOIDS_MINOR 4
+	
+	if (XRenderQueryVersion (xdisplay, &major_version,
+				 &minor_version))
+	  if ((major_version < XRENDER_TETRAPEZOIDS_MAJOR) ||
+	      ((major_version == XRENDER_TETRAPEZOIDS_MAJOR) &&
+		 (minor_version < XRENDER_TETRAPEZOIDS_MINOR)))
+	    x11display->have_render_with_trapezoids = GDK_NO;
+      }
+
+  return x11display->have_render_with_trapezoids == GDK_YES;
+}
+
 static XftDraw *
 gdk_x11_drawable_get_xft_draw (GdkDrawable *drawable)
 {
@@ -1496,7 +1526,7 @@ gdk_x11_draw_trapezoids (GdkDrawable  *drawable,
   XTrapezoid *xtrapezoids;
   gint i;
 
-  if (!_gdk_x11_have_render (display))
+  if (!_gdk_x11_have_render_with_trapezoids (display))
     {
       GdkDrawable *wrapper = GDK_DRAWABLE_IMPL_X11 (drawable)->wrapper;
       GDK_DRAWABLE_CLASS (parent_class)->draw_trapezoids (wrapper, gc,
@@ -1603,7 +1633,7 @@ _gdk_x11_drawable_draw_xtrapezoids (GdkDrawable      *drawable,
    
   XftDraw *draw;
 
-  if (!_gdk_x11_have_render (display))
+  if (!_gdk_x11_have_render_with_trapezoids (display))
     {
       /* This is the case of drawing the borders of the unknown glyph box
        * without render on the display, we need to feed it back to

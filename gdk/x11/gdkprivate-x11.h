@@ -108,7 +108,9 @@ gint _gdk_send_xevent      (GdkDisplay *display,
 
 GType _gdk_gc_x11_get_type (void);
 
-gboolean _gdk_x11_have_render         (GdkDisplay *display);
+gboolean _gdk_x11_have_render                 (GdkDisplay *display);
+gboolean _gdk_x11_have_render_with_trapezoids (GdkDisplay *display);
+
 Picture  _gdk_x11_gc_get_fg_picture   (GdkGC      *gc);
 void     _gdk_gc_x11_get_fg_xft_color (GdkGC      *gc,
 				       XftColor   *xftcolor);
