@@ -866,7 +866,7 @@ gtk_window_show (GtkWidget *widget)
   if (need_resize)
     {
       GtkWindowGeometryInfo *info = gtk_window_get_geometry_info (window, TRUE);
-      GtkAllocation allocation = { 0, 0, };
+      GtkAllocation allocation = { 0, 0 };
       GdkGeometry new_geometry;
       guint width, height, new_flags;
 
