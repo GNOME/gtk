@@ -190,6 +190,7 @@ accel_group_weak_ref_detach (GSList  *free_list,
       g_object_unref (accel_group);
     }
   g_slist_free (free_list);
+  g_object_set_qdata (stale_object, quark_acceleratable_groups, NULL);
 }
 
 void

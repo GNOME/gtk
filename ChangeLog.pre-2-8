@@ -1,3 +1,10 @@
+Wed Mar 13 17:11:10 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccelgroup.c (accel_group_weak_ref_detach): Unset 
+	the acceleratable_groups qdata because qdata isn't removed
+	on ->dispose but rather on ->finalize. (#74569, found
+	by Matt Wilson.)
+
 Tue Mar 12 23:14:23 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeselection.c (gtk_tree_selection_unselect_iter): Fix
