@@ -152,15 +152,6 @@
 /* Define corresponding Windows types for some X11 types, just for laziness. */
 typedef PALETTEENTRY XColor;
 
-/* Define some of the X11 constants also here, again just for laziness */
-
-/* Error codes */
-#define Success            0
-
-/* Grabbing status */
-#define GrabSuccess	   0
-#define AlreadyGrabbed	   2
-
 /* Some structs are somewhat useful to emulate internally, just to
  * keep the code less #ifdefed.
  */

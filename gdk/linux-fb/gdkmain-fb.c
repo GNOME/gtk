@@ -155,7 +155,7 @@ _gdk_windowing_init_check (int argc, char **argv)
  *--------------------------------------------------------------
  */
 
-gint
+GdkGrabStatus
 gdk_pointer_grab (GdkWindow *	  window,
 		  gint		  owner_events,
 		  GdkEventMask	  event_mask,
@@ -183,7 +183,7 @@ gdk_pointer_grab (GdkWindow *	  window,
   if(cursor)
     gdk_fb_cursor_unhide();
   
-  return 0;
+  return GDK_GRAB_SUCCESS;
 }
 
 /*
@@ -266,7 +266,7 @@ gdk_pointer_is_grabbed (void)
  *--------------------------------------------------------------
  */
 
-gint
+GdkGrabStatus
 gdk_keyboard_grab (GdkWindow *	   window,
 		   gint		   owner_events,
 		   guint32	   time)
@@ -280,7 +280,7 @@ gdk_keyboard_grab (GdkWindow *	   window,
   if(!owner_events)
     _gdk_fb_keyboard_grab_window = gdk_window_ref(window);
   
-  return 0;
+  return GDK_GRAB_SUCCESS;
 }
 
 /*

@@ -314,7 +314,7 @@ _gdk_input_grab_pointer (GdkWindow *     window,
 void 
 _gdk_input_ungrab_pointer (guint32 time)
 {
-  GdkInputWindow *input_window;
+  GdkInputWindow *input_window = NULL; /* Quiet GCC */
   GdkDevicePrivate *gdkdev;
   GList *tmp_list;
 

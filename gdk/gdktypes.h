@@ -145,6 +145,19 @@ typedef enum
   GDK_ERROR_MEM	  = -4
 } GdkStatus;
 
+/* We define specific numeric values for these constants,
+ * since old application code may depend on them matching the X values
+ * We don't actually depend on the matchup ourselves.
+ */
+typedef enum
+{
+  GDK_GRAB_SUCCESS         = 0,
+  GDK_GRAB_ALREADY_GRABBED = 1,
+  GDK_GRAB_INVALID_TIME    = 2,
+  GDK_GRAB_NOT_VIEWABLE    = 3,
+  GDK_GRAB_FROZEN          = 4
+} GdkGrabStatus;
+
 typedef void (*GdkInputFunction) (gpointer	    data,
 				  gint		    source,
 				  GdkInputCondition condition);

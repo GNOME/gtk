@@ -88,18 +88,18 @@ gint gdk_input_add	  (gint		     source,
 			   gpointer	     data);
 void gdk_input_remove	  (gint		     tag);
 
-gint     gdk_pointer_grab       (GdkWindow    *window,
-				 gboolean      owner_events,
-				 GdkEventMask  event_mask,
-				 GdkWindow    *confine_to,
-				 GdkCursor    *cursor,
-				 guint32       time);
-void     gdk_pointer_ungrab     (guint32       time);
-gint     gdk_keyboard_grab      (GdkWindow    *window,
-				 gboolean      owner_events,
-				 guint32       time);
-void     gdk_keyboard_ungrab    (guint32       time);
-gboolean gdk_pointer_is_grabbed (void);
+GdkGrabStatus gdk_pointer_grab       (GdkWindow    *window,
+				      gboolean      owner_events,
+				      GdkEventMask  event_mask,
+				      GdkWindow    *confine_to,
+				      GdkCursor    *cursor,
+				      guint32       time);
+void          gdk_pointer_ungrab     (guint32       time);
+GdkGrabStatus gdk_keyboard_grab      (GdkWindow    *window,
+				      gboolean      owner_events,
+				      guint32       time);
+void          gdk_keyboard_ungrab    (guint32       time);
+gboolean      gdk_pointer_is_grabbed (void);
 
 gint gdk_screen_width  (void);
 gint gdk_screen_height (void);

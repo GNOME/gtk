@@ -1326,7 +1326,7 @@ gdk_input_win32_grab_pointer (GdkWindow    *window,
 	      
 	      /* FIXME: if failure occurs on something other than the first
 		 device, things will be badly inconsistent */
-	      if (result != Success)
+	      if (result != GDK_GRAB_SUCCESS)
 		return result;
 #endif
 	    }
@@ -1353,7 +1353,7 @@ gdk_input_win32_grab_pointer (GdkWindow    *window,
 	}
     }
 
-  return Success;
+  return GDK_GRAB_SUCCESS;
       
 }
 

@@ -1,3 +1,14 @@
+Thu Jul  6 11:54:03 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.h gdk/gdktypes.h gdk/linux-fb/gdkmain-fb.c
+	gdk/nanox/gdkmain-nanox.c gdk/win32/gdkevents-win32.c
+	gdk/win32/gdkinput-win32.c gdk/win32/gdkwin32.h
+	gdk/x11/gdkmain-x11.c: 
+
+	Patch from George Liebl to add a GdkGrabStatus enumeration to use
+	as a return value of gdk_*_grab(). Previously, we just
+	returned the X11 values directly.
+
 Thu Jul  6 11:27:44 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/Makefile.am: Patch from George Liebl to 

@@ -472,7 +472,7 @@ event_mask_string (GdkEventMask mask)
  *--------------------------------------------------------------
  */
 
-gint
+GdkGrabStatus
 gdk_pointer_grab (GdkWindow *	  window,
 		  gboolean	  owner_events,
 		  GdkEventMask	  event_mask,
@@ -511,9 +511,9 @@ gdk_pointer_grab (GdkWindow *	  window,
 						confine_to,
 						time);
   else
-    return_val = Success;
+    return_val = GDK_GRAB_SUCCESS;
   
-  if (return_val == Success)
+  if (return_val == GDK_GRAB_SUCCESS)
     {
       if (!GDK_DRAWABLE_DESTROYED (window))
       {
@@ -531,13 +531,13 @@ gdk_pointer_grab (GdkWindow *	  window,
        */
 	SetCapture (xwindow);
 #endif
-	return_val = GrabSuccess;
+	return_val = GDK_GRAB_SUCCESS;
       }
       else
-	return_val = AlreadyGrabbed;
+	return_val = GDK_GRAB_ALREADY_GRABBED;
     }
   
-  if (return_val == GrabSuccess)
+  if (return_val == GDK_GRAB_SUCCESS)
     {
       p_grab_window = window;
       p_grab_cursor = xcursor;
@@ -616,7 +616,7 @@ gdk_pointer_is_grabbed (void)
  *--------------------------------------------------------------
  */
 
-gint
+GdkGrabStatus
 gdk_keyboard_grab (GdkWindow *	   window,
 		   gboolean	   owner_events,
 		   guint32	   time)
@@ -632,12 +632,12 @@ gdk_keyboard_grab (GdkWindow *	   window,
   if (!GDK_DRAWABLE_DESTROYED (window))
     {
       k_grab_owner_events = owner_events != 0;
-      return_val = GrabSuccess;
+      return_val = GDK_GRAB_SUCCESS;
     }
   else
-    return_val = AlreadyGrabbed;
+    return_val = GDK_GRAB_ALREADY_GRABBED;
 
-  if (return_val == GrabSuccess)
+  if (return_val == GDK_GRAB_SUCCESS)
     k_grab_window = window;
   
   return return_val;

@@ -202,6 +202,26 @@ gdk_get_use_xshm (void)
   return gdk_use_xshm;
 }
 
+static GdkGrabStatus
+gdk_x11_convert_grab_status (gint status)
+{
+  switch (status)
+    {
+    case GrabSuccess:
+      return GDK_GRAB_SUCCESS;
+    case AlreadyGrabbed:
+      return GDK_GRAB_ALREADY_GRABBED;
+    case GrabInvalidTime:
+      return GDK_GRAB_INVALID_TIME;
+    case GrabNotViewable:
+      return GDK_GRAB_NOT_VIEWABLE;
+    case GrabFrozen:
+      return GDK_GRAB_FROZEN;
+    }
+
+  g_assert_not_reached();
+}
+
 /*
  *--------------------------------------------------------------
  * gdk_pointer_grab
@@ -225,7 +245,7 @@ gdk_get_use_xshm (void)
  *--------------------------------------------------------------
  */
 
-gint
+GdkGrabStatus
 gdk_pointer_grab (GdkWindow *	  window,
 		  gboolean	  owner_events,
 		  GdkEventMask	  event_mask,
@@ -273,7 +293,7 @@ gdk_pointer_grab (GdkWindow *	  window,
 					confine_to,
 					time);
 
-  if (return_val == Success)
+  if (return_val == GrabSuccess)
     {
       if (!GDK_WINDOW_DESTROYED (window))
 	return_val = XGrabPointer (GDK_WINDOW_XDISPLAY (window),
@@ -290,8 +310,8 @@ gdk_pointer_grab (GdkWindow *	  window,
   
   if (return_val == GrabSuccess)
     gdk_xgrab_window = (GdkWindowObject *)window;
-  
-  return return_val;
+
+  return gdk_x11_convert_grab_status (return_val);
 }
 
 /*
@@ -359,22 +379,26 @@ gdk_pointer_is_grabbed (void)
  *--------------------------------------------------------------
  */
 
-gint
+GdkGrabStatus
 gdk_keyboard_grab (GdkWindow *	   window,
 		   gboolean	   owner_events,
 		   guint32	   time)
 {
+  gint return_val;
+  
   g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   
   if (!GDK_WINDOW_DESTROYED (window))
-    return XGrabKeyboard (GDK_WINDOW_XDISPLAY (window),
-			  GDK_WINDOW_XID (window),
-			  owner_events,
-			  GrabModeAsync, GrabModeAsync,
-			  time);
+    return_val = XGrabKeyboard (GDK_WINDOW_XDISPLAY (window),
+				GDK_WINDOW_XID (window),
+				owner_events,
+				GrabModeAsync, GrabModeAsync,
+				time);
   else
-    return AlreadyGrabbed;
+    return_val = AlreadyGrabbed;
+
+  return gdk_x11_convert_grab_status (return_val);
 }
 
 /*

@@ -42,7 +42,7 @@ gdk_get_use_xshm (void)
   return gdk_use_xshm;
 }
 
-gint
+GdkGrabStatus
 gdk_pointer_grab (GdkWindow *	  window,
 		  gboolean	  owner_events,
 		  GdkEventMask	  event_mask,
@@ -68,7 +68,7 @@ gdk_pointer_is_grabbed (void)
   return gdk_xgrab_window != NULL;
 }
 
-gint
+GdkGrabStatus
 gdk_keyboard_grab (GdkWindow *	   window,
 		   gboolean	   owner_events,
 		   guint32	   time)
