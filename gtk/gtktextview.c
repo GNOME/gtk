@@ -6457,6 +6457,8 @@ set_window_width (GtkTextView      *text_view,
         {
           if ((*winp)->requisition.width == width)
             return;
+
+          (*winp)->requisition.width = width;
         }
 
       gtk_widget_queue_resize (GTK_WIDGET (text_view));
@@ -6495,6 +6497,8 @@ set_window_height (GtkTextView      *text_view,
         {
           if ((*winp)->requisition.height == height)
             return;
+
+          (*winp)->requisition.height = height;
         }
 
       gtk_widget_queue_resize (GTK_WIDGET (text_view));

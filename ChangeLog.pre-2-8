@@ -1,3 +1,9 @@
+2001-12-03  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextview.c (set_window_height): 
+	(set_window_width): Hmm, setter functions normally assign the new
+	value to the object field. Reported by Chris Phelps.
+
 2001-11-30  jacob berkman  <jacob@ximian.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_remove_tab_label): set the
