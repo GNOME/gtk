@@ -1,3 +1,8 @@
+Sun Feb  1 00:30:53 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/tmpl/general.sgml: Improve the documentation of event_mask for
+	gdk_pointer_grab.  (#132223, Pascal Haakmat)
+
 Fri Jan 30 00:27:36 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkcombo.sgml: Document clearing the list with
