@@ -28,8 +28,11 @@
 
 #include <string.h>
 
-#include <gdk/gdk.h>
-#include "gdkwin32.h"
+#include "gdkproperty.h"
+#include "gdkselection.h"
+#include "gdkinternals.h"
+#include "gdkprivate.h"
+#include "gdkprivate-win32.h"
 
 /* We emulate the GDK_SELECTION window properties by storing
  * it's data in a per-window hashtable.
@@ -74,11 +77,11 @@ gdk_sel_prop_store (GdkWindow *owner,
   g_hash_table_insert (sel_prop_table, &GDK_DRAWABLE_XID (owner), prop);
 }
 
-gint
+gboolean
 gdk_selection_owner_set (GdkWindow *owner,
 			 GdkAtom    selection,
 			 guint32    time,
-			 gint       send_event)
+			 gboolean   send_event)
 {
   gchar *sel_name;
   HWND xwindow;

@@ -29,6 +29,7 @@ CFLAGS = -I. -I.. -I..\.. -I$(WTKIT)\include -I$(GLIB) -DG_ENABLE_DEBUG -DHAVE_C
 
 all: \
 	..\..\config.h	\
+	..\gdkconfig.h \
 	gdk-win32.lib \
 	gdk.res
 
@@ -41,6 +42,7 @@ gdk_win32_OBJECTS = \
 	gdkevents-win32.obj \
 	gdkfont-win32.obj \
 	gdkgc-win32.obj \
+	gdkgeometry-win32.obj \
 	gdkglobals-win32.obj \
 	gdkim-win32.obj \
 	gdkimage-win32.obj \
@@ -49,6 +51,8 @@ gdk_win32_OBJECTS = \
 	gdkpixmap-win32.obj \
 	gdkproperty-win32.obj \
 	gdkregion-win32.obj \
+	gdkpolyreg-generic.obj \
+	gdkregion-generic.obj \
 	gdkselection-win32.obj \
 	gdkvisual-win32.obj \
 	gdkwin32id.obj \
@@ -57,8 +61,26 @@ gdk_win32_OBJECTS = \
 ..\..\config.h : ..\..\config.h.win32
 	copy ..\..\config.h.win32 ..\..\config.h
 
+..\gdkconfig.h : ..\gdkconfig.h.win32
+	copy ..\gdkconfig.h.win32 ..\gdkconfig.h
+
+gdkregion-generic.c: ..\x11\gdkregion-generic.c
+	copy ..\x11\gdkregion-generic.c gdkregion-generic.c
+
+gdkpolyreg-generic.c: ..\x11\gdkpolyreg-generic.c
+	copy ..\x11\gdkpolyreg-generic.c gdkpolyreg-generic.c
+
+gdkregion-generic.h: ..\x11\gdkregion-generic.h
+	copy ..\x11\gdkregion-generic.h gdkregion-generic.h
+
+gdkpoly-generic.h: ..\x11\gdkpoly-generic.h
+	copy ..\x11\gdkpoly-generic.h gdkpoly-generic.h
+
+gdkgc-win32.o:: gdkregion-generic.h
+gdkpolyreg-generic.o:: gdkpoly-generic.h
+
 gdk.res : rc\gdk.rc
-	rc -r -fo gdk.res rc\gdk.rc
+	rc -DBUILDNUMBER=0 -r -fo gdk.res rc\gdk.rc
 
 gdk-win32.lib : $(gdk_win32_OBJECTS)
 	lib -out:gdk-win32.lib $(gdk_win32_OBJECTS)

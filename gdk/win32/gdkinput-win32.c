@@ -31,8 +31,8 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "gdk.h"
 #include "gdkinput.h"
+#include "gdkinternals.h"
 #include "gdkprivate.h"
 #include "gdkwin32.h"
 
@@ -337,7 +337,7 @@ gdk_input_init (void)
 	  g_warning ("gdk_input_init: gdk_window_new failed");
 	  return;
 	}
-      gdk_window_ref (wintab_window);
+      gdk_drawable_ref (wintab_window);
       
       for (devix = 0; devix < ndevices; devix++)
 	{
@@ -1006,7 +1006,7 @@ gdk_input_win32_other_event (GdkEvent  *event,
   if (window == NULL)
     window = gdk_parent_root;
 
-  gdk_window_ref (window);
+  gdk_drawable_ref (window);
 
   GDK_NOTE (EVENTS,
 	    g_print ("gdk_input_win32_other_event: window=%#x (%d,%d)\n",
@@ -1106,9 +1106,9 @@ gdk_input_win32_other_event (GdkEvent  *event,
 	  pt.x = x;
 	  pt.y = y;
 	  ClientToScreen (GDK_DRAWABLE_XID (window), &pt);
-	  gdk_window_unref (window);
+	  gdk_drawable_unref (window);
 	  window = ((GdkWindowPrivate *) window)->parent;
-	  gdk_window_ref (window);
+	  gdk_drawable_ref (window);
 	  ScreenToClient (GDK_DRAWABLE_XID (window), &pt);
 	  x = pt.x;
 	  y = pt.y;
@@ -1602,7 +1602,7 @@ gdk_input_exit (void)
   g_list_free (gdk_input_windows);
   gdk_input_windows = NULL;
 
-  gdk_window_unref (wintab_window);
+  gdk_drawable_unref (wintab_window);
   wintab_window = NULL;
 
 #if 1

@@ -3,10 +3,18 @@ correct as the Unix/X11 version. For more information about the Win32
 port, see http://www.gimp.org/tml/gimp/win32/ or
 http://www.iki.fi/tml/gimp/win32/ .
 
+The current (CVS) version of the Win32 backend is *not* as stable as it
+was before the no-flicker branch was merged. A zipfile with that
+version is available from http://www.gimp.org/win32/. That should be
+use by "production" code until this CVS version is usable. (But note,
+the Win32 backend has never been claimed to be "production quality".)
+
 To build GTk+ on Win32, you need either the Microsoft compiler and
-tools, or gcc-2.95 or later running under cygwin-b20.1 or
-later. Compile in gdk\win32, gdk and gtk with `nmake -f makefile.msc` or
-`make -f makefile.cygwin`.
+tools, or gcc-2.95 or later. The mingw setup of gcc is preferred, but
+you can run gcc also under cygwin-b20.1 or later. Compile in
+gdk\win32, gdk and gtk with `nmake -f makefile.msc` or `make -f
+makefile.cygwin`. The name makefile.cygwin is misleading, it should
+really be called makefile.mingw.
 
 See the README.win32 file in the GLib distribution for instructions
 how to build with gcc.
@@ -32,6 +40,6 @@ config.h.win32 file, and remove references to the gnu-intl library
 from the makefiles.
 
 Note that while the GNU gettext package is under the GPL, the "intl"
-part of it as distributed with GNU libc is under the LGPL (like GTk+
-or GLib). We want the LGPL one, even if they are the same, more or
-less.
+part of it which is distributed with GNU libc is under the LGPL (like
+GTk+ or GLib). We want the LGPL one, even if they are the same, more
+or less.

@@ -29,6 +29,12 @@
 #include "gdk.h"		/* For gdk_rectangle_union() */
 #include "gdkpixmap.h"
 
+#ifndef USE_BACKING_STORE
+#ifndef GDK_WINDOWING_WIN32
+#define USE_BACKING_STORE	/* Doesn't work yet on Win32 */
+#endif
+#endif
+
 typedef struct _GdkWindowPaint GdkWindowPaint;
 
 struct _GdkWindowPaint
@@ -435,6 +441,7 @@ void
 gdk_window_begin_paint_region (GdkWindow *window,
 			       GdkRegion *region)
 {
+#ifdef USE_BACKING_STORE
   GdkWindowPrivate *private = (GdkWindowPrivate *)window;
   GdkRectangle clip_box;
   GdkWindowPaint *paint;
@@ -520,11 +527,13 @@ gdk_window_begin_paint_region (GdkWindow *window,
   gdk_region_destroy (init_region);
   
   private->paint_stack = g_slist_prepend (private->paint_stack, paint);
+#endif /* USE_BACKING_STORE */
 }
 
 void
 gdk_window_end_paint (GdkWindow *window)
 {
+#ifdef USE_BACKING_STORE
   GdkWindowPrivate *private = (GdkWindowPrivate *)window;
   GdkWindowPaint *paint;
   GdkGC *tmp_gc;
@@ -570,6 +579,7 @@ gdk_window_end_paint (GdkWindow *window)
 
   gdk_region_destroy (paint->region);
   g_free (paint);
+#endif /* USE_BACKING_STORE */
 }
 
 static void

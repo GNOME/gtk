@@ -315,15 +315,6 @@ gdk_visual_lookup (Visual *xvisual)
     return NULL;
 }
 
-GdkVisual*
-gdkx_visual_get (VisualID xvisualid)
-{
-  if (xvisualid == system_visual->xvisual->visualid)
-    return (GdkVisual*) system_visual;
-  else
-    return NULL;
-}
-
 static void
 gdk_visual_decompose_mask (gulong  mask,
 			   gint   *shift,

@@ -32,7 +32,7 @@
 #include <time.h>
 
 #include "gdkcolor.h"
-#include "gdkwin32.h"
+#include "gdkprivate-win32.h"
 
 static gint  gdk_colormap_match_color (GdkColormap *cmap,
 				       GdkColor    *color,
@@ -45,7 +45,7 @@ static gint  gdk_colormap_cmp         (Colormap    *a,
 
 static GHashTable *colormap_hash = NULL;
 
-static Status
+static gboolean
 alloc_color_cells(Colormap      colormap,
 		  gboolean      contig,
 		  unsigned long plane_masks_return[],
@@ -1316,7 +1316,7 @@ default_colormap ()
 
 GdkColormap*
 gdk_colormap_new (GdkVisual *visual,
-		  gint       private_cmap)
+		  gboolean   private_cmap)
 {
   GdkColormap *colormap;
   GdkColormapPrivateWin32 *private;
@@ -1564,7 +1564,7 @@ gdk_colormap_change (GdkColormap *colormap,
 
 gboolean
 gdk_colors_alloc (GdkColormap   *colormap,
-		  gint           contiguous,
+		  gboolean       contiguous,
 		  gulong        *planes,
 		  gint           nplanes,
 		  gulong        *pixels,
@@ -1764,7 +1764,7 @@ gdk_colormap_alloc_colors_writeable (GdkColormap *colormap,
 {
   GdkColormapPrivateWin32 *private;
   gulong *pixels;
-  Status status;
+  gboolean status;
   gint i, index;
 
   private = (GdkColormapPrivateWin32 *) colormap;

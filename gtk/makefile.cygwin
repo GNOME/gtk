@@ -10,7 +10,7 @@ PTHREADS = ../../pthreads-snap-1999-05-30
 PTHREAD_LIB = -L $(PTHREADS) -lpthread
 PTHREAD_INC = -I $(PTHREADS)
 
-OPTIMIZE = -g -O
+OPTIMIZE = -g
 
 ################################################################
 
@@ -333,7 +333,7 @@ gtk-$(GTK_VER).dll : generated $(gtk_OBJECTS) gtk.def gtk-win32res.o
 .SUFFIXES: .c .o .i
 
 # Kludge to get the path to the win32 headers
-WIN32APIHEADERS = $(shell echo "\#include <winver.h>" | $(CC) -M -E - | tail -1 | sed -e 's!/winver.h!!')
+WIN32APIHEADERS = $(shell echo "\#include <winver.h>" | $(CC) -M -E - | tail -1 | sed -e 's![\\/]winver.h!!' | tr -d '\015')
 
 gtk-win32res.o : gtk.rc gtk-build.tmp
 	m4 -DBUILDNUMBER=`cat gtk-build.tmp` <gtk.rc >gtk-win32res.rc

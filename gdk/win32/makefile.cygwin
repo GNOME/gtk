@@ -1,11 +1,11 @@
-## Makefile for building the machine dependent part of GDK with gcc on cygwin
+## Makefile for building the machine dependent part of GDK on Win32 with gcc 
 ## Use: make -f makefile.cygwin 
 
 # Location of the Wintab toolkit. Downloadable from http://www.pointing.com.
 # We use the wntab32x.lib archive library directly (copy it as libwntab32x.a).
 WTKIT = ../../../wtkit126
 
-OPTIMIZE = -g -O
+OPTIMIZE = -g
 
 ################################################################
 
@@ -35,6 +35,7 @@ gdk_win32_OBJECTS = \
 	gdkevents-win32.o \
 	gdkfont-win32.o \
 	gdkgc-win32.o \
+	gdkgeometry-win32.o \
 	gdkglobals-win32.o \
 	gdkim-win32.o \
 	gdkimage-win32.o \
@@ -42,20 +43,36 @@ gdk_win32_OBJECTS = \
 	gdkmain-win32.o \
 	gdkpixmap-win32.o \
 	gdkproperty-win32.o \
-	gdkregion-win32.o \
+	gdkpolyreg-generic.o \
+	gdkregion-generic.o \
 	gdkselection-win32.o \
 	gdkvisual-win32.o \
 	gdkwin32id.o \
 	gdkwindow-win32.o
 
 ../../config.h : ../../config.h.win32
-	cp ../../config.h.win32 ../../config.h
+	cp $< $@
 
 ../gdkconfig.h : ../gdkconfig.h.win32
-	cp ../gdkconfig.h.win32 ../gdkconfig.h
+	cp $< $@
+
+gdkregion-generic.c: ../x11/gdkregion-generic.c
+	cp $< $@
+
+gdkpolyreg-generic.c: ../x11/gdkpolyreg-generic.c
+	cp $< $@
+
+gdkregion-generic.h: ../x11/gdkregion-generic.h
+	cp $< $@
+
+gdkpoly-generic.h: ../x11/gdkpoly-generic.h
+	cp $< $@
+
+gdkgc-win32.o:: gdkregion-generic.h
+gdkpolyreg-generic.o:: gdkpoly-generic.h
 
 # Kludge to get the path to the win32 headers
-WIN32APIHEADERS = $(shell echo "\#include <winver.h>" | $(CC) -M -E - | tail -1 | sed -e 's!/winver.h!!')
+WIN32APIHEADERS = $(shell echo "\#include <winver.h>" | $(CC) -M -E - | tail -1 | sed -e 's![\\/]winver.h!!' | tr -d '\015')
 
 gdk-win32res.o : rc/gdk.rc gdk-build.tmp
 	m4 -DBUILDNUMBER=`cat gdk-build.tmp` <rc/gdk.rc >gdk-win32res.rc

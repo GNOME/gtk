@@ -223,17 +223,17 @@ EXPORTS
 	gdk_region_empty
 	gdk_region_equal
 	gdk_region_get_clipbox
+	gdk_region_intersect
 	gdk_region_new
 	gdk_region_offset
 	gdk_region_point_in
 	gdk_region_polygon
 	gdk_region_rect_in
 	gdk_region_shrink
+	gdk_region_subtract
+	gdk_region_union
 	gdk_region_union_with_rect
-	gdk_regions_intersect
-	gdk_regions_subtract
-	gdk_regions_union
-	gdk_regions_xor
+	gdk_region_xor
 	gdk_rgb_cmap_free
 	gdk_rgb_cmap_new
 	gdk_rgb_ditherable
@@ -258,6 +258,7 @@ EXPORTS
 	gdk_selection_send_notify
 	gdk_set_locale
 	gdk_set_show_events
+	gdk_set_sm_client_id
 	gdk_set_use_xshm
 	gdk_string_extents
 	gdk_string_height
@@ -286,10 +287,12 @@ EXPORTS
 	gdk_wcstombs
 	gdk_window_add_filter
 	gdk_window_at_pointer
+	gdk_window_begin_paint_rect
 	gdk_window_clear
 	gdk_window_clear_area
 	gdk_window_clear_area_e
 	gdk_window_destroy
+	gdk_window_end_paint
 	gdk_window_foreign_new
 	gdk_window_get_children
 	gdk_window_get_deskrelative_origin
@@ -304,6 +307,7 @@ EXPORTS
 	gdk_window_get_toplevels
 	gdk_window_get_user_data
 	gdk_window_hide
+	gdk_window_invalidate_rect
 	gdk_window_is_viewable
 	gdk_window_is_visible
 	gdk_window_lower
@@ -311,6 +315,8 @@ EXPORTS
 	gdk_window_move
 	gdk_window_move_resize
 	gdk_window_new
+	gdk_window_process_all_updates
+	gdk_window_process_updates
 	gdk_window_raise
 	gdk_window_register_dnd
 	gdk_window_remove_filter

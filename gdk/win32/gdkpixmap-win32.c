@@ -32,8 +32,8 @@
 #include <string.h>
 
 #include "gdkpixmap.h"
-#include "gdkprivate.h"
-#include "gdkwin32.h"
+#include "gdkinternals.h"
+#include "gdkprivate-win32.h"
 
 typedef struct
 {
@@ -116,7 +116,20 @@ gdk_pixmap_new (GdkWindow *window,
 
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
   g_return_val_if_fail ((window != NULL) || (depth != -1), NULL);
+#if 1
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
+#else
+  /* HB: Not The Right Thing to do, but a nice way to debug
+   * the backing store facility without immediate crashes ...
+   */
+  if (width == 0 || height == 0)
+    {
+      g_warning("gdk_pixmap_new: size requested: %ld %ld", width, height);
+      /* testing: where does it crash next? */
+      if (width == 0) width = 1;
+      if (height == 0) height = 1;
+    }
+#endif
 
   if (!window)
     window = gdk_parent_root;
@@ -387,21 +400,23 @@ gdk_pixmap_seek_string (FILE  *infile,
 {
   char instr[1024];
 
-  while (!feof (infile))
+  while (1)
     {
-      fscanf (infile, "%1023s", instr);
+      if (fscanf (infile, "%1023s", instr) != 1)
+	return FALSE;
+	  
       if (skip_comments == TRUE && strcmp (instr, "/*") == 0)
         {
-          fscanf (infile, "%1023s", instr);
-          while (!feof (infile) && strcmp (instr, "*/") != 0)
-            fscanf (infile, "%1023s", instr);
-          fscanf(infile, "%1023s", instr);
+	  do
+	    {
+	      if (fscanf (infile, "%1023s", instr) != 1)
+		return FALSE;
+	    }
+	  while (strcmp (instr, "*/") != 0);
         }
-      if (strcmp (instr, str)==0)
+      else if (strcmp (instr, str) == 0)
         return TRUE;
     }
-
-  return FALSE;
 }
 
 static gint

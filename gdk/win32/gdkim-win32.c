@@ -24,16 +24,15 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#if HAVE_CONFIG_H
-#  include <config.h>
-#endif
+#include <config.h>
 
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 
 #include "gdkim.h"
 #include "gdkpixmap.h"
-#include "gdkprivate.h"
+#include "gdkinternals.h"
 #include "gdki18n.h"
 #include "gdkwin32.h"
 
@@ -53,14 +52,10 @@
 gchar*
 gdk_set_locale (void)
 {
-  gchar *current_locale;
-
-  if (!setlocale (LC_ALL,""))
+  if (!setlocale (LC_ALL, ""))
     g_warning ("locale not supported by C library");
   
-  current_locale = setlocale (LC_ALL, NULL);
-
-  return current_locale;
+  return g_win32_getlocale ();
 }
 
 void 

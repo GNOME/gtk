@@ -337,7 +337,7 @@ gtktypebuiltins_evals.c: makeenums.pl gtk.defs
 	$(PERL) makeenums.pl arrays $(source_headers) $(gdk_headers) >gtktypebuiltins_evals.c
 
 gtkmarshal.h gtkmarshal.c : gtkmarshal.list genmarshal.pl
-	$(PERL) genmarshal.pl
+	$(PERL) genmarshal.pl gtkmarshal.list s-gmh s-gmc
 	del gtkmarshal.c
 	rename s-gmc gtkmarshal.c
 	del gtkmarshal.h
@@ -347,7 +347,7 @@ gtkmarshal.h gtkmarshal.c : gtkmarshal.list genmarshal.pl
 # Linking:
 #
 gtk-$(GTK_VER).dll : $(gtk_OBJECTS) gtk.def
-	$(CC) $(CFLAGS) -LD -Fegtk-$(GTK_VER).dll $(gtk_OBJECTS) ..\gdk\gdk-$(GTK_VER).lib $(INTL)\gnu-intl.lib $(GLIB)\glib-$(GLIB_VER).lib $(GLIB)\gmodule-$(GLIB_VER).lib gdi32.lib user32.lib $(LDFLAGS) /def:gtk.def
+	$(CC) $(CFLAGS) -LD -Fegtk-$(GTK_VER).dll $(gtk_OBJECTS) ..\gdk\gdk-$(GTK_VER).lib $(INTL)\gnu-intl.lib $(GLIB)\glib-$(GLIB_VER).lib $(GLIB)\gmodule-$(GLIB_VER).lib gdi32.lib user32.lib advapi32.lib $(LDFLAGS) /def:gtk.def
 
 # General rule for compiling the objects into the DLL
 .c.obj :
@@ -364,7 +364,7 @@ testdnd.obj : testdnd.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testdnd\" testdnd.c
 
 testgtk.exe : gtk-$(GTK_VER).dll testgtk.obj
-	$(CC) $(CFLAGS) testgtk.obj gtk-$(GTK_VER).lib ..\gdk\gdk-$(GTK_VER).lib $(GLIB)\glib-$(GLIB_VER).lib $(LDFLAGS)
+	$(CC) $(CFLAGS) testgtk.obj gtk-$(GTK_VER).lib ..\gdk\gdk-$(GTK_VER).lib $(GLIB)\glib-$(GLIB_VER).lib $(GLIB)\gthread-$[GLIB_VER).lib $(LDFLAGS)
 
 testgtk.obj : testgtk.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testgtk\" testgtk.c

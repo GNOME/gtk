@@ -34,6 +34,7 @@
 #include <io.h>
 
 #include "gdk.h"
+#include "gdkinternals.h"
 #include "gdkprivate-win32.h"
 #include "gdkinputprivate.h"
 #include "gdkkeysyms.h"
@@ -133,12 +134,12 @@ gdk_win32_gdi_failed (const gchar *where,
 }
 
 void
-gdk_set_use_xshm (gint use_xshm)
+gdk_set_use_xshm (gboolean use_xshm)
 {
   /* Always on */
 }
 
-gint
+gboolean
 gdk_get_use_xshm (void)
 {
   return TRUE;
@@ -226,6 +227,12 @@ gint
 gdk_screen_height_mm (void)
 {
   return GetDeviceCaps (gdk_DC, VERTSIZE);
+}
+
+void
+gdk_set_sm_client_id (const gchar* sm_client_id)
+{
+  g_warning("gdk_set_sm_client_id %s", sm_client_id ? sm_client_id : "NULL");
 }
 
 void

@@ -30,8 +30,8 @@
 
 #include "gdkproperty.h"
 #include "gdkselection.h"
-#include "gdkprivate.h"
-#include "gdkwin32.h"
+#include "gdkinternals.h"
+#include "gdkprivate-win32.h"
 
 GdkAtom
 gdk_atom_intern (const gchar *atom_name,

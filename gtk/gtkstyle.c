@@ -25,6 +25,7 @@
  */
 
 #include <math.h>
+#include <string.h>
 #include "gtkgc.h"
 #include "gtkrc.h"
 #include "gtkstyle.h"

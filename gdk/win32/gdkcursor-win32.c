@@ -20,7 +20,8 @@
 #include "config.h"
 
 #include "gdkcursor.h"
-#include "gdkwin32.h"
+#include "gdkinternals.h"
+#include "gdkprivate-win32.h"
 
 static const struct { const char *name; int type; } cursors[] = {
   { "x_cursor", 0 },

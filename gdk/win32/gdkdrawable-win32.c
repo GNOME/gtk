@@ -33,10 +33,8 @@
 #define G_PI 3.14159265358979323846
 #endif
 
-#include "gdkdrawable.h"
-#include "gdkprivate.h"
-#include "gdkwindow.h"
-#include "gdkwin32.h"
+#include "gdkinternals.h"
+#include "gdkprivate-win32.h"
 
 static void gdk_win32_drawable_destroy   (GdkDrawable     *drawable);
 
@@ -512,11 +510,19 @@ gdk_win32_draw_text (GdkDrawable *drawable,
 			   text, text_length));
   
   wcstr = g_new (wchar_t, text_length);
-  if ((wlen = gdk_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
-    g_warning ("gdk_draw_text: gdk_nmbstowchar_ts failed");
+  if (text_length == 1)
+    {
+      /* For single characters, don't try to interpret as UTF-8. */
+      wcstr[0] = (guchar) text[0];
+      gdk_wchar_text_handle (font, wcstr, 1, gdk_draw_text_handler, &arg);
+    }
   else
-    gdk_wchar_text_handle (font, wcstr, wlen,
-			   gdk_draw_text_handler, &arg);
+    {
+      if ((wlen = gdk_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
+	g_warning ("gdk_win32_draw_text: gdk_nmbstowchar_ts failed");
+      else
+	gdk_wchar_text_handle (font, wcstr, wlen, gdk_draw_text_handler, &arg);
+    }
 
   g_free (wcstr);
 
@@ -632,7 +638,7 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
 
 #if 1 /* Don't know if this is necessary  */
   if (CombineRgn (draw_rgn, draw_rgn, src_rgn, RGN_AND) == COMPLEXREGION)
-    g_warning ("gdk_draw_pixmap: CombineRgn returned a COMPLEXREGION");
+    g_warning ("gdk_win32_draw_drawable: CombineRgn returned a COMPLEXREGION");
 
   GetRgnBox (draw_rgn, &r);
   if (r.left != xsrc

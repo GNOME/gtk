@@ -26,10 +26,9 @@
 
 #include "config.h"
 
-#include "gdk.h"		/* For gdk_error_trap_* / gdk_flush_* */
 #include "gdkimage.h"
-#include "gdkprivate.h"
-#include "gdkwin32.h"
+#include "gdkinternals.h"
+#include "gdkprivate-win32.h"
 
 static void gdk_win32_image_destroy (GdkImage    *image);
 static void gdk_image_put  (GdkImage    *image,
@@ -338,7 +337,7 @@ gdk_image_get (GdkWindow *window,
   private->base.klass = &image_class;
 
   image->type = GDK_IMAGE_SHARED;
-  image->visual = gdk_window_get_visual (window);
+  image->visual = gdk_drawable_get_visual (window);
   image->width = width;
   image->height = height;
 

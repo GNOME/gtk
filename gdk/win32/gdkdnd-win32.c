@@ -35,8 +35,8 @@
 
 #include "gdkdnd.h"
 #include "gdkproperty.h"
-#include "gdkprivate.h"
-#include "gdkwin32.h"
+#include "gdkinternals.h"
+#include "gdkprivate-win32.h"
 
 #ifdef OLE2_DND
 #include <ole2.h>
@@ -144,9 +144,9 @@ gdk_drag_context_unref (GdkDragContext *context)
 
   private->ref_count--;
 
-  GDK_NOTE (DND, g_print ("gdk_drag_context_unref: %d%s\n",
-			  private->ref_count,
-			  (private->ref_count == 0 ? " freeing" : "")));
+  GDK_NOTE (MISC, g_print ("gdk_drag_context_unref: %d%s\n",
+			   private->ref_count,
+			   (private->ref_count == 0 ? " freeing" : "")));
 
   if (private->ref_count == 0)
     {
@@ -155,10 +155,10 @@ gdk_drag_context_unref (GdkDragContext *context)
       g_list_free (context->targets);
 
       if (context->source_window)
-	gdk_window_unref (context->source_window);
+	gdk_drawable_unref (context->source_window);
 
       if (context->dest_window)
-	gdk_window_unref (context->dest_window);
+	gdk_drawable_unref (context->dest_window);
 
       contexts = g_list_remove (contexts, private);
       g_free (private);
@@ -216,7 +216,7 @@ m_add_ref_target (IDropTarget __RPC_FAR *This)
   target_drag_context *ctx = (target_drag_context *) This;
   GdkDragContextPrivate *private = (GdkDragContextPrivate *) ctx->context;
 
-  GDK_NOTE (DND, g_print ("m_add_ref_target\n"));
+  GDK_NOTE (MISC, g_print ("m_add_ref_target\n"));
   gdk_drag_context_ref (ctx->context);
   
   return private->ref_count;
@@ -227,7 +227,7 @@ m_query_interface_target (IDropTarget __RPC_FAR *This,
 			  REFIID riid,
 			  void __RPC_FAR *__RPC_FAR *ppvObject)
 {
-  GDK_NOTE (DND, g_print ("m_query_interface_target\n"));
+  GDK_NOTE (MISC, g_print ("m_query_interface_target\n"));
 
   *ppvObject = NULL;
 
@@ -260,7 +260,7 @@ m_release_target (IDropTarget __RPC_FAR *This)
   target_drag_context *ctx = (target_drag_context *) This;
   GdkDragContextPrivate *private = (GdkDragContextPrivate *) ctx->context;
 
-  GDK_NOTE (DND, g_print ("m_release_target\n"));
+  GDK_NOTE (MISC, g_print ("m_release_target\n"));
   gdk_drag_context_unref (ctx->context);
 
   if (private->ref_count == 1)
@@ -279,7 +279,7 @@ m_drag_enter (IDropTarget __RPC_FAR *This,
 	      POINTL pt,
 	      DWORD __RPC_FAR *pdwEffect)
 {
-  GDK_NOTE (DND, g_print ("m_drag_enter\n"));
+  GDK_NOTE (MISC, g_print ("m_drag_enter\n"));
   return E_UNEXPECTED;
 }
 
@@ -289,14 +289,14 @@ m_drag_over (IDropTarget __RPC_FAR *This,
 	     POINTL pt,
 	     DWORD __RPC_FAR *pdwEffect)
 {
-  GDK_NOTE (DND, g_print ("m_drag_over\n"));
+  GDK_NOTE (MISC, g_print ("m_drag_over\n"));
   return E_UNEXPECTED;
 }
 
 static HRESULT STDMETHODCALLTYPE
 m_drag_leave (IDropTarget __RPC_FAR *This)
 {
-  GDK_NOTE (DND, g_print ("m_drag_leave\n"));
+  GDK_NOTE (MISC, g_print ("m_drag_leave\n"));
   return E_UNEXPECTED;
 }
 
@@ -307,7 +307,7 @@ m_drop (IDropTarget __RPC_FAR *This,
 	POINTL pt,
 	DWORD __RPC_FAR *pdwEffect)
 {
-  GDK_NOTE (DND, g_print ("m_drop\n"));
+  GDK_NOTE (MISC, g_print ("m_drop\n"));
   return E_UNEXPECTED;
 }
 
@@ -317,7 +317,7 @@ m_add_ref_source (IDropSource __RPC_FAR *This)
   source_drag_context *ctx = (source_drag_context *) This;
   GdkDragContextPrivate *private = (GdkDragContextPrivate *) ctx->context;
 
-  GDK_NOTE (DND, g_print ("m_add_ref_source\n"));
+  GDK_NOTE (MISC, g_print ("m_add_ref_source\n"));
   gdk_drag_context_ref (ctx->context);
   
   return private->ref_count;
@@ -328,7 +328,7 @@ m_query_interface_source (IDropSource __RPC_FAR *This,
 			  REFIID riid,
 			  void __RPC_FAR *__RPC_FAR *ppvObject)
 {
-  GDK_NOTE (DND, g_print ("m_query_interface_source\n"));
+  GDK_NOTE (MISC, g_print ("m_query_interface_source\n"));
 
   *ppvObject = NULL;
 
@@ -360,7 +360,7 @@ m_release_source (IDropSource __RPC_FAR *This)
   source_drag_context *ctx = (source_drag_context *) This;
   GdkDragContextPrivate *private = (GdkDragContextPrivate *) ctx->context;
 
-  GDK_NOTE (DND, g_print ("m_release_source\n"));
+  GDK_NOTE (MISC, g_print ("m_release_source\n"));
   gdk_drag_context_unref (ctx->context);
 
   if (private->ref_count == 1)
@@ -377,7 +377,7 @@ m_query_continue_drag (IDropSource __RPC_FAR *This,
 		       BOOL fEscapePressed,
 		       DWORD grfKeyState)
 {
-  GDK_NOTE (DND, g_print ("m_query_continue_drag\n"));
+  GDK_NOTE (MISC, g_print ("m_query_continue_drag\n"));
   return E_UNEXPECTED;
 }
 
@@ -385,7 +385,7 @@ static HRESULT STDMETHODCALLTYPE
 m_give_feedback (IDropSource __RPC_FAR *This,
 		 DWORD dwEffect)
 {
-  GDK_NOTE (DND, g_print ("m_give_feedback\n"));
+  GDK_NOTE (MISC, g_print ("m_give_feedback\n"));
   return E_UNEXPECTED;
 }
 
@@ -665,7 +665,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 
   if (msg->message == WM_DROPFILES)
     {
-      GDK_NOTE (DND, g_print ("WM_DROPFILES: %#x\n", msg->hwnd));
+      GDK_NOTE (MISC, g_print ("WM_DROPFILES: %#x\n", msg->hwnd));
 
       context = gdk_drag_context_new ();
       private = (GdkDragContextPrivate *) context;
@@ -673,7 +673,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
       context->is_source = FALSE;
       context->source_window = gdk_parent_root;
       context->dest_window = event->any.window;
-      gdk_window_ref (context->dest_window);
+      gdk_drawable_ref (context->dest_window);
       /* WM_DROPFILES drops are always file names */
       context->targets =
 	g_list_append (NULL, GUINT_TO_POINTER (text_uri_list_atom));
@@ -703,13 +703,13 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 	  if (resolve_link (msg->hwnd, fileName, linkedFile, NULL))
 	    {
 	      g_string_append (result, linkedFile);
-	      GDK_NOTE (DND, g_print ("...%s link to %s\n",
+	      GDK_NOTE (MISC, g_print ("...%s link to %s\n",
 				      fileName, linkedFile));
 	    }
 	  else
 	    {
 	      g_string_append (result, fileName);
-	      GDK_NOTE (DND, g_print ("...%s\n", fileName));
+	      GDK_NOTE (MISC, g_print ("...%s\n", fileName));
 	    }
 	  g_string_append (result, "\015\012");
 	}
@@ -755,8 +755,8 @@ gdk_drag_do_leave (GdkDragContext *context, guint32 time)
 {
   if (context->dest_window)
     {
-      GDK_NOTE (DND, g_print ("gdk_drag_do_leave\n"));
-      gdk_window_unref (context->dest_window);
+      GDK_NOTE (MISC, g_print ("gdk_drag_do_leave\n"));
+      gdk_drawable_unref (context->dest_window);
       context->dest_window = NULL;
     }
 }
@@ -770,12 +770,12 @@ gdk_drag_begin (GdkWindow     *window,
   
   g_return_val_if_fail (window != NULL, NULL);
 
-  GDK_NOTE (DND, g_print ("gdk_drag_begin\n"));
+  GDK_NOTE (MISC, g_print ("gdk_drag_begin\n"));
 
   ctx = source_context_new ();
   ctx->context->is_source = TRUE;
   ctx->context->source_window = window;
-  gdk_window_ref (window);
+  gdk_drawable_ref (window);
 
   tmp_list = g_list_last (targets);
   ctx->context->targets = NULL;
@@ -815,9 +815,9 @@ gdk_drag_find_window (GdkDragContext  *context,
   HWND recipient;
   POINT pt;
 
-  GDK_NOTE (DND, g_print ("gdk_drag_find_window: %#x +%d+%d\n",
-			  (drag_window ? GDK_DRAWABLE_XID (drag_window) : 0),
-			  x_root, y_root));
+  GDK_NOTE (MISC, g_print ("gdk_drag_find_window: %#x +%d+%d\n",
+			   (drag_window ? GDK_DRAWABLE_XID (drag_window) : 0),
+			   x_root, y_root));
 
   pt.x = x_root;
   pt.y = y_root;
@@ -828,7 +828,7 @@ gdk_drag_find_window (GdkDragContext  *context,
     {
       *dest_window = gdk_window_lookup (recipient);
       if (*dest_window)
-	gdk_window_ref (*dest_window);
+	gdk_drawable_ref (*dest_window);
       *protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
     }
 }
@@ -871,7 +871,7 @@ gdk_drag_status (GdkDragContext   *context,
 		 GdkDragAction     action,
 		 guint32           time)
 {
-  GDK_NOTE (DND, g_print ("gdk_drag_status\n"));
+  GDK_NOTE (MISC, g_print ("gdk_drag_status\n"));
 }
 
 void 
@@ -900,7 +900,7 @@ gdk_destroy_filter (GdkXEvent *xev,
     {
       IDropTarget *idtp = (IDropTarget *) data;
 
-      GDK_NOTE (DND, g_print ("gdk_destroy_filter: WM_DESTROY: %#x\n", msg->hwnd));
+      GDK_NOTE (MISC, g_print ("gdk_destroy_filter: WM_DESTROY: %#x\n", msg->hwnd));
       RevokeDragDrop (msg->hwnd);
       CoLockObjectExternal (idtp, FALSE, TRUE);
     }
@@ -918,8 +918,8 @@ gdk_window_register_dnd (GdkWindow      *window)
 
   g_return_if_fail (window != NULL);
 
-  GDK_NOTE (DND, g_print ("gdk_window_register_dnd: %#x\n",
-			  GDK_DRAWABLE_XID (window)));
+  GDK_NOTE (MISC, g_print ("gdk_window_register_dnd: %#x\n",
+			   GDK_DRAWABLE_XID (window)));
 
   /* We always claim to accept dropped files, but in fact we might not,
    * of course. This function is called in such a way that it cannot know

@@ -6,7 +6,7 @@
 ## There is no install target, you have to decide where and 
 ## how to install for yourself.
 
-OPTIMIZE = -g -O
+OPTIMIZE = -g
 
 ################################################################
 
@@ -15,7 +15,6 @@ OPTIMIZE = -g -O
 CC = gcc -mno-cygwin -mpentium -fnative-struct
 
 CP = cp
-LD = ld
 
 GLIB_VER=1.3
 GTK_VER=1.3

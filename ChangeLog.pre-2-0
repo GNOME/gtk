@@ -1,3 +1,70 @@
+2000-05-02  Tor Lillqvist  <tml@iki.fi>
+
+	Large changes to the Win32 backend, partially made necessary by
+	the changes to the backend-independent internal
+	structures. Attempts to implement similar backing store stuff as
+	on X11. The current (CVS) version of the Win32 backend is *not* as
+	stable as it was before the no-flicker branch was merged. A
+	zipfile with that version is available from
+	http://www.gimp.org/win32/. That should be use by "production"
+	code until this CVS version is usable. (But note, the Win32
+	backend has never been claimed to be "production quality".)
+
+	* README.win32: Add the above comment about versions.
+
+	* gdk/gdkwindow.c: Don't use backing store for now on Win32.
+
+	* gdk/gdk.def: Update.
+
+	* gdk/gdkfont.h: Declare temporary Win32-only functions. Will
+	presumably be replaced by some more better mechanism as 1.4 gets
+	closer to release shape.
+
+	* gdk/makefile.{cygwin,msc}: Update.
+
+	* gdk/win32/*.c: Correct inclusions of the backend-specific and
+	internal headers. Change code according to changes in these. Use
+	gdk_drawable_*, not gdk_window_* where necessary.
+
+	* gdk/win32/gdkdnd-win32.c: Use MISC selector for GDK_NOTE, not
+	our old DND.
+
+	* gdk/win32/gdkdrawable-win32.c (gdk_win32_draw_text): Don't try
+	to interpret single characters as UTF-8. Thanks to Hans Breuer.
+	Use correct function name in warning messages.
+
+	* gdk/win32/gdkevents-win32.c: Use correct parameter lists for the
+	GSourceFuncs gdk_event_prepare and gdk_event_check.
+	(gdk_event_get_graphics_expose): Do implement, use
+	PeekMessage. Thanks to Hans Breuer.
+	(event_mask_string): Debugging function to print an GdkEventMask.
+	(gdk_pointer_grab): Use it.
+
+	* gdk/win32/gdkfont-win32.c: The Unicode subrange that the
+	(old) book I used claimed was Hangul actually is CJK Unified
+	Ideographs Extension A. Also, Hangul Syllables were missing.
+	Improve logging.
+
+	* gdk/win32/gdkgc-win32.c: Largish changes.
+
+	* gdk/win32/gdkim-win32.c (gdk_set_locale): Use
+	g_win32_getlocale() from GLib, and not setlocale() to get current
+	locale name.
+
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkwin32.h: Move stuff from gdkprivate-win32.h to
+	gdkwin32.h, similarily as in the X11 backend.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_propagate_shapes): Bugfix,
+	assignment was used instead of equals in if test. Thanks to Hans
+	Breuer.
+
+	* gdk/win32/makefile.{cygwin,msc}
+	* gtk/makefile.{cygwin,msc}: Updates. Better kludge to get the
+	path to the Win32 headers that works also with the mingw compiler.
+
+	* gtk/gtkstyle.c: Include <string.h>.
+
 2000-04-26  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_get_text): Add this function,

@@ -33,6 +33,8 @@
 #include "gdkevents.h"
 #include "gdkpixmap.h"
 #include "gdkwindow.h"
+#include "gdkinternals.h"
+#include "gdkprivate.h"
 #include "gdkprivate-win32.h"
 #include "gdkinputprivate.h"
 #include "gdkwin32.h"
@@ -68,6 +70,8 @@ SafeAdjustWindowRectEx (RECT* lpRect,
   return TRUE;
 }
 
+GdkDrawableClass _gdk_windowing_window_class;
+
 static void
 gdk_win32_window_destroy (GdkDrawable *drawable)
 {
@@ -92,21 +96,20 @@ gdk_win32_window_alloc (void)
   GdkWindow *window;
   GdkWindowPrivate *private;
   
-  static GdkDrawableClass klass;
   static gboolean initialized = FALSE;
 
   if (!initialized)
     {
       initialized = TRUE;
       
-      klass = _gdk_win32_drawable_class;
-      klass.destroy = gdk_win32_window_destroy;
+      _gdk_windowing_window_class = _gdk_win32_drawable_class;
+      _gdk_win32_drawable_class.destroy = gdk_win32_window_destroy;
     }
 
   window = _gdk_window_alloc ();
   private = (GdkWindowPrivate *) window;
 
-  private->drawable.klass = &klass;
+  private->drawable.klass = &_gdk_windowing_window_class;
   private->drawable.klass_data = g_new (GdkWindowWin32Data, 1);
 
   GDK_WINDOW_WIN32DATA (window)->event_mask = 0;
@@ -1012,11 +1015,11 @@ gdk_window_clear (GdkWindow *window)
 
 
 void
-gdk_window_clear_area (GdkWindow *window,
-		       gint       x,
-		       gint       y,
-		       gint       width,
-		       gint       height)
+_gdk_windowing_window_clear_area (GdkWindow *window,
+				  gint       x,
+				  gint       y,
+				  gint       width,
+				  gint       height)
 {
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1029,21 +1032,22 @@ gdk_window_clear_area (GdkWindow *window,
 	width = ((GdkDrawablePrivate *) window)->width - x;
       if (height == 0)
 	height = ((GdkDrawablePrivate *) window)->height - y;
-      GDK_NOTE (MISC, g_print ("gdk_window_clear_area: %#x %dx%d@+%d+%d\n",
+      GDK_NOTE (MISC, g_print ("_gdk_windowing_window_clear_area: "
+			       "%#x %dx%d@+%d+%d\n",
 			       GDK_DRAWABLE_XID (window), width, height, x, y));
       hdc = GetDC (GDK_DRAWABLE_XID (window));
-      IntersectClipRect (hdc, x, y, x + width, y + height);
+      IntersectClipRect (hdc, x, y, x + width + 1, y + height + 1);
       SendMessage (GDK_DRAWABLE_XID (window), WM_ERASEBKGND, (WPARAM) hdc, 0);
       ReleaseDC (GDK_DRAWABLE_XID (window), hdc);
     }
 }
 
 void
-gdk_window_clear_area_e (GdkWindow *window,
-		         gint       x,
-		         gint       y,
-		         gint       width,
-		         gint       height)
+_gdk_windowing_window_clear_area_e (GdkWindow *window,
+				    gint       x,
+				    gint       y,
+				    gint       width,
+				    gint       height)
 {
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1052,13 +1056,14 @@ gdk_window_clear_area_e (GdkWindow *window,
     {
       RECT rect;
 
-      GDK_NOTE (MISC, g_print ("gdk_window_clear_area_e: %#x %dx%d@+%d+%d\n",
+      GDK_NOTE (MISC, g_print ("_gdk_windowing_window_clear_area_e: "
+			       "%#x %dx%d@+%d+%d\n",
 			       GDK_DRAWABLE_XID (window), width, height, x, y));
 
       rect.left = x;
-      rect.right = x + width;
+      rect.right = x + width + 1;
       rect.top = y;
-      rect.bottom = y + height;
+      rect.bottom = y + height + 1;
       if (!InvalidateRect (GDK_DRAWABLE_XID (window), &rect, TRUE))
 	WIN32_GDI_FAILED ("InvalidateRect");
       UpdateWindow (GDK_DRAWABLE_XID (window));
@@ -1342,6 +1347,8 @@ gdk_window_set_title (GdkWindow   *window,
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (title != NULL);
+  g_return_if_fail (strlen (title) > 0);
   
   GDK_NOTE (MISC, g_print ("gdk_window_set_title: %#x %s\n",
 			   GDK_DRAWABLE_XID (window), title));
@@ -1999,7 +2006,7 @@ gdk_propagate_shapes (HANDLE   win,
        for (i = 0; i < num; i++)
 	 {
 	   GetWindowPlacement (list[i], &placement);
-	   if (placement.showCmd = SW_SHOWNORMAL)
+	   if (placement.showCmd == SW_SHOWNORMAL)
 	     {
 	       childRegion = CreateRectRgnIndirect (&emptyRect);
 	       GetWindowRgn (list[i], childRegion);

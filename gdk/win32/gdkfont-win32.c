@@ -30,7 +30,8 @@
 #include <ctype.h>
 
 #include "gdkfont.h"
-#include "gdkwin32.h"
+#include "gdkinternals.h"
+#include "gdkprivate-win32.h"
 
 static GHashTable *font_name_hash = NULL;
 static GHashTable *fontset_name_hash = NULL;
@@ -447,11 +448,15 @@ gdk_font_list_free (gchar **font_list)
 }
 
 /* This table classifies Unicode characters according to the Microsoft
- * Unicode subset numbering. This is from the table in "Developing
+ * Unicode subset numbering. This is based on the table in "Developing
  * International Software for Windows 95 and Windows NT". This is almost,
  * but not quite, the same as the official Unicode block table in
  * Blocks.txt from ftp.unicode.org. The bit number field is the bitfield
  * number as in the FONTSIGNATURE struct's fsUsb field.
+ * There are some grave bugs in the table in the books. For instance
+ * it claims there are Hangul  at U+3400..U+4DFF while this range in
+ * fact contains CJK Unified Ideographs Extension A. Also, the whole
+ * block of Hangul Syllables U+AC00..U+D7A3 is missing from the book.
  */
 
 typedef enum
@@ -647,14 +652,20 @@ static struct {
     U_ENCLOSED_CJK, "Enclosed CJK" },
   { 0x3300, 0x33FF,
     U_CJK_COMPATIBILITY, "CJK Compatibility" },
-  { 0x3400, 0x3D2D,
-    U_HANGUL, "Hangul" },
-  { 0x3D2E, 0x44B7,
-    U_HANGUL_SUPPLEMENTARY_A, "Hangul Supplementary-A" },
-  { 0x44B8, 0x4DFF,
-    U_HANGUL_SUPPLEMENTARY_B, "Hangul Supplementary-B" },
+  /* The book claims:
+   * U+3400..U+3D2D = Hangul
+   * U+3D2E..U+44B7 = Hangul Supplementary A
+   * U+44B8..U+4DFF = Hangul Supplementary B
+   * but actually in Unicode
+   * U+3400..U+4DB5 = CJK Unified Ideographs Extension A
+   */
+  { 0x3400, 0x4DB5,
+    U_CJK_UNIFIED_IDEOGRAPHS, "CJK Unified Ideographs Extension A" },
   { 0x4E00, 0x9FFF,
     U_CJK_UNIFIED_IDEOGRAPHS, "CJK Unified Ideographs" },
+  /* This was missing completely from the book's table. */
+  { 0xAC00, 0xD7A3,
+    U_HANGUL, "Hangul Syllables" },
   { 0xE000, 0xF8FF,
     U_PRIVATE_USE_AREA, "Private Use Area" },
   { 0xF900, 0xFAFF,
@@ -829,6 +840,7 @@ check_unicode_subranges (UINT           charset,
       set_bit (U_SPACING_MODIFIER_LETTERS);
       set_bit (U_BASIC_GREEK);
       set_bit (U_CYRILLIC);
+      set_bit (U_HANGUL_JAMO);
       set_bit (U_GENERAL_PUNCTUATION);
       set_bit (U_SUPERSCRIPTS_AND_SUBSCRIPTS);
       set_bit (U_CURRENCY_SYMBOLS);
@@ -958,6 +970,7 @@ check_unicode_subranges (UINT           charset,
       set_bit (U_COMBINING_DIACRITICAL_MARKS_FOR_SYMBOLS);
       set_bit (U_BASIC_GREEK);
       set_bit (U_CYRILLIC);
+      set_bit (U_HANGUL_JAMO);
       set_bit (U_GENERAL_PUNCTUATION);
       set_bit (U_SUPERSCRIPTS_AND_SUBSCRIPTS);
       set_bit (U_CURRENCY_SYMBOLS);
@@ -1364,7 +1377,7 @@ gdk_font_load_internal (const gchar *font_name)
 
   for (tries = 0; ; tries++)
     {
-      GDK_NOTE (MISC, g_print ("...trying CreateFont(%d,%d,%d,%d,"
+      GDK_NOTE (MISC, g_print ("... trying CreateFont(%d,%d,%d,%d,"
 			       "%d,%d,%d,%d,"
 			       "%d,%d,%d,"
 			       "%d,%#.02x,\"%s\")\n",
@@ -1448,7 +1461,7 @@ gdk_font_load_internal (const gchar *font_name)
   else
     singlefont->codepage = 0;
 
-  GDK_NOTE (MISC, (g_print ("... = %#x %s cs %s cp%d ",
+  GDK_NOTE (MISC, (g_print ("... = %#x %s cs %s cp%d\n",
 			    singlefont->xfont, face,
 			    charset_name (singlefont->charset),
 			    singlefont->codepage),
@@ -1722,6 +1735,8 @@ gdk_wchar_text_handle (GdkFont       *font,
 
   g_assert (private->base.ref_count > 0);
 
+  GDK_NOTE (MISC, g_print ("gdk_wchar_text_handle: "));
+
   while (wcp < end)
     {
       /* Split Unicode string into pieces of the same class */
@@ -1745,10 +1760,15 @@ gdk_wchar_text_handle (GdkFont       *font,
       if (!list)
 	singlefont = NULL;
 
+      GDK_NOTE (MISC, g_print ("%d:%d:%d:%#x ",
+			       start-wcstr, wcp-wcstr, block,
+			       (singlefont ? singlefont->xfont : 0)));
+
       /* Call the callback function */
       (*handler) (singlefont, start, wcp+1 - start, arg);
       wcp++;
     }
+  GDK_NOTE (MISC, g_print ("\n"));
 }
 
 typedef struct
