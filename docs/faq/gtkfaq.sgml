@@ -134,9 +134,9 @@ Some applications which use GTK+ are:
 <itemize>
 <item>GIMP (<htmlurl url="http://www.XCF.Berkeley.EDU/~gimp/" name="http://www.XCF.Berkeley.EDU/~gimp/"> ), 
       an image manipulation program
-<item>Gsumi (<htmlurl url="http://student-www.uchicago.edu/users/otaylor/gsumi/gsumi.html" 
-                  name="http://student-www.uchicago.edu/users/otaylor/gsumi/gsumi.html">),
-      a port of xink
+<item>gsumi (<htmlurl url="http://www.msc.cornell.edu/~otaylor/gsumi/gsumi.html" 
+                  name="http://www.msc.cornell.edu/~otaylor/gsumi/gsumi.html">),
+      a fun B+W doodling program with XInput support.
 <item>GUBI (<htmlurl url="http://www.SoftHome.net/pub/users/timj/gubi/index.htm"
             name="http://www.SoftHome.net/pub/users/timj/gubi/index.htm">),
       a user interface builder
