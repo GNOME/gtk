@@ -2813,6 +2813,7 @@ GtkTreeModelFlags
 gtk_tree_path_new
 gtk_tree_path_new_from_string
 gtk_tree_path_to_string
+gtk_tree_path_new_first
 gtk_tree_path_new_root
 gtk_tree_path_append_index
 gtk_tree_path_prepend_index
@@ -2842,6 +2843,7 @@ gtk_tree_model_get_n_columns
 gtk_tree_model_get_column_type
 gtk_tree_model_get_iter
 gtk_tree_model_get_iter_from_string
+gtk_tree_model_get_iter_first
 gtk_tree_model_get_iter_root
 gtk_tree_model_get_path
 gtk_tree_model_get_value
@@ -3692,6 +3694,7 @@ gtk_window_get_type
 GtkWindowGeometryInfo
 gtk_window_remove_embedded_xid
 gtk_window_add_embedded_xid
+GtkWindowKeysForeachFunc
 </SECTION>
 
 

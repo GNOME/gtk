@@ -1,3 +1,10 @@
+Sat Feb 23 23:39:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtktreemodel.sgml: Document gtk_tree_path_new_root(),
+	gtk_tree_model_get_iter_root() as compatibility macros.
+
+	* gtk/gtk-sections.txt: Updates.
+
 2002-02-23  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/Makefile.am (HTML_IMAGES): Rename strikeout to 
