@@ -77,8 +77,6 @@ do_menus (void)
   GtkWidget *box1;
   GtkWidget *box2;
   GtkWidget *button;
-  GtkWidget *optionmenu;
-  GtkWidget *separator;
   
   if (!window)
     {

@@ -1027,8 +1027,6 @@ gtk_set_locale (void)
 gchar *
 _gtk_get_lc_ctype (void)
 {
-  gchar *p;
-
 #ifdef G_OS_WIN32
   /* Somebody might try to set the locale for this process using the
    * LANG or LC_ environment variables. The Microsoft C library
@@ -1040,6 +1038,8 @@ _gtk_get_lc_ctype (void)
    * don't have to clickety-click in the Control Panel, you can simply
    * start the program with LC_ALL=something on the command line.)
    */
+  gchar *p;
+
   p = getenv ("LC_ALL");
   if (p != NULL)
     return g_strdup (p);
