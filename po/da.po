@@ -222,7 +222,7 @@ msgstr "Punkter"
 
 #: gtk/gtkfontsel.c:684
 msgid "Pixels"
-msgstr ""
+msgstr "Pixels"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:700
@@ -393,7 +393,7 @@ msgstr "Skrifttypevalg"
 
 #: gtk/gtkgamma.c:396
 msgid "Gamma"
-msgstr ""
+msgstr "Gamma"
 
 #: gtk/gtkgamma.c:403
 msgid "Gamma value"
@@ -402,7 +402,7 @@ msgstr "Gamma-værdi"
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:200
 msgid "Input"
-msgstr ""
+msgstr "Input"
 
 #: gtk/gtkinputdialog.c:208
 msgid "No input devices"
