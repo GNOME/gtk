@@ -2430,38 +2430,29 @@ real_remove_row (GtkCList *clist,
    * list to reflect the deincrimented indexies of rows after the
    * removal */
   if (clist_row->state == GTK_STATE_SELECTED)
-    {
-      switch (clist->selection_mode)
-	{
-	case GTK_SELECTION_SINGLE:
-	case GTK_SELECTION_MULTIPLE:
-	case GTK_SELECTION_EXTENDED:
-	  gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW],
-			   row, -1, NULL);
-	  break;
-	case GTK_SELECTION_BROWSE:
-	  gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW],
-			   row - 1, -1, NULL);
-	  break;
-	default:
-	  break;
-	}
-    }
+    gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW],
+		     row, -1, NULL);
 
   /* reset the row end pointer if we're removing at the
    * end of the list */
-  if (row == clist->rows - 1)
-    clist->row_list_end = list->prev;
-  if (row >= clist->focus_row && clist->focus_row >=0)
-    clist->focus_row--;
-
-  clist->row_list = g_list_remove (clist->row_list, clist_row);
   clist->rows--;
-  
+  clist->row_list = g_list_remove (clist->row_list, clist_row);
+
+  if (row == clist->rows)
+    clist->row_list_end = list->prev;
+  /*if (clist->focus_row >=0 &&
+      (row <= clist->focus_row || clist->focus_row >= clist->rows))
+      clist->focus_row--;*/
+
   if (row < ROW_FROM_YPIXEL (clist, 0))
     clist->voffset += clist->row_height + CELL_SPACING;
 
   sync_selection (clist, row, SYNC_REMOVE);
+
+  if ((clist->selection_mode == GTK_SELECTION_BROWSE ||
+       clist->selection_mode == GTK_SELECTION_EXTENDED) && !clist->selection)
+    gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW],
+		     clist->focus_row, -1, NULL);
 
   /* toast the row */
   row_delete (clist, clist_row);
@@ -3809,9 +3800,12 @@ sync_selection (GtkCList *clist,
       
   if (clist->focus_row >= row)
     {
-      clist->focus_row += d;
+      if (d > 0 || clist->focus_row > row)
+	clist->focus_row += d;
       if (clist->focus_row == -1 && clist->rows >= 1)
 	clist->focus_row = 0;
+      else if (clist->focus_row >= clist->rows)
+	clist->focus_row = clist->rows - 1;
     }
 
   if (clist->selection_mode == GTK_SELECTION_BROWSE && clist->anchor != -1)
@@ -3827,6 +3821,7 @@ sync_selection (GtkCList *clist,
   clist->undo_anchor = clist->focus_row;
 
   list = clist->selection;
+
   while (list)
     {
       if (GPOINTER_TO_INT (list->data) >= row)
