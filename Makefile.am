@@ -146,4 +146,4 @@ sanity:
 
 
 snapshot:
-	$(MAKE) dist distdir=$(PACKAGE)`date +"%y%m%d"`
+	$(MAKE) dist distdir=$(PACKAGE)-snap`date +"%Y%m%d"`

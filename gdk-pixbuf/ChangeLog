@@ -1,3 +1,8 @@
+2000-08-10  Havoc Pennington  <hp@redhat.com>
+
+	* Makefile.am (EXTRA_DIST): The *.def files had the wrong names
+	(s/pixbuf_/pixbufloader_)
+	
 2000-08-02  Tor Lillqvist  <tml@iki.fi>
 
 	* io-bmp.c

@@ -13,7 +13,6 @@ EXTRA_DIST = \
 	gdkim-win32.c \
 	gdkimage-win32.c \
 	gdkinput-win32.c \
-	gdkinputprivate.h \
 	gdkmain-win32.c \
 	gdkpixmap-win32.c \
 	gdkprivate-win32.h \

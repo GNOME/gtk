@@ -1,3 +1,11 @@
+2000-08-10  Havoc Pennington  <hp@redhat.com>
+
+	* Makefile.am (snapshot): Change the format of the snapshot
+	version to match glib
+
+	* gdk/win32/Makefile.am (EXTRA_DIST): remove gdkinputprivate.h
+	from EXTRA_DIST since it doesn't seem to exist
+
 2000-08-10  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkfilesel.c (open_new_dir): Use the "system codepage"

@@ -182,16 +182,16 @@ EXTRA_DIST =			\
 	makefile.mingw		\
 	makefile.mingw.in	\
 	gdk_pixbuf.def		\
-	pixbuf_ico.def		\
-	pixbuf_pnm.def		\
-	pixbuf_xpm.def		\
-	pixbuf_bmp.def		\
-	pixbuf_jpeg.def		\
-	pixbuf_ras.def		\
-	pixbuf_gif.def		\
-	pixbuf_png.def		\
-	pixbuf_tiff.def		\
-	pixbuf_wbmp.def
+	pixbufloader_ico.def		\
+	pixbufloader_pnm.def		\
+	pixbufloader_xpm.def		\
+	pixbufloader_bmp.def		\
+	pixbufloader_jpeg.def		\
+	pixbufloader_ras.def		\
+	pixbufloader_gif.def		\
+	pixbufloader_png.def		\
+	pixbufloader_tiff.def		\
+	pixbufloader_wbmp.def
 
 makefile.mingw: $(top_builddir)/config.status $(top_srcdir)/gdk-pixbuf/makefile.mingw.in
 	cd $(top_builddir) && CONFIG_FILES=gdk-pixbuf/$@ CONFIG_HEADERS= $(SHELL) ./config.status
