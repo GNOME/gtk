@@ -359,7 +359,7 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   else
     y = y + widget->allocation.height + 4;
 
-  gtk_window_move (tooltips->tip_window, x, y);
+  gtk_window_move (GTK_WINDOW (tooltips->tip_window), x, y);
   gtk_widget_show (tooltips->tip_window);
 }
 
