@@ -4319,6 +4319,8 @@ void remove_selection (GtkWidget *widget, GtkCTree *ctree)
   while (selection)
     {
       work = selection->data;
+      selection = selection->next;
+
       if (GTK_CTREE_ROW (work)->is_leaf)
 	pages--;
       else
@@ -4343,7 +4345,6 @@ void remove_selection (GtkWidget *widget, GtkCTree *ctree)
 	}
 
       gtk_ctree_remove_node (ctree, work);
-      selection = GTK_CLIST (ctree)->selection;
     }
 
   if (new_sel)
@@ -4634,7 +4635,7 @@ void build_recursive (GtkCTree *ctree, gint cur_depth, gint depth,
 				       pixmap1, mask1, pixmap2, mask2,
 				       FALSE, FALSE);
 
-      style = gtk_style_new();
+      style = gtk_style_new ();
       switch (cur_depth % 3)
 	{
 	case 0:

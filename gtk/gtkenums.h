@@ -136,6 +136,15 @@ typedef enum
   GTK_ORIENTATION_VERTICAL
 } GtkOrientation;
 
+/* Placement type for scrolled window */
+typedef enum
+{
+  GTK_CORNER_TOP_LEFT,
+  GTK_CORNER_BOTTOM_LEFT,
+  GTK_CORNER_TOP_RIGHT,
+  GTK_CORNER_BOTTOM_RIGHT
+} GtkCornerType;
+
 /* Packing types (for boxes) */
 typedef enum
 {
