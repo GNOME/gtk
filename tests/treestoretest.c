@@ -117,20 +117,26 @@ iter_insert_after (GtkWidget *button, GtkTreeView *tree_view)
 				       NULL,
 				       &selected))
     {
-      gtk_tree_store_insert_after (model,
-				   &iter,
-				   NULL,
-				   &selected);
+      if (GTK_IS_TREE_STORE (model))
+	{
+	  gtk_tree_store_insert_after (model,
+				       &iter,
+				       NULL,
+				       &selected);
+	  node_set (&iter);
+	}
     }
   else
     {
-      gtk_tree_store_insert_after (model,
-				   &iter,
-				   NULL,
-				   &selected);
+      if (GTK_IS_TREE_STORE (model))
+	{
+	  gtk_tree_store_insert_after (model,
+				       &iter,
+				       NULL,
+				       &selected);
+	  node_set (&iter);
+	}
     }
-
-  node_set (&iter);
 }
 
 static void
@@ -219,7 +225,7 @@ make_window (gboolean use_sort)
       GtkTreeModel *sort_model;
 
       sort_model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (base_model),
-						       NULL, 0);
+						       NULL, 1);
       tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (sort_model));
     }
   else
@@ -297,6 +303,9 @@ make_window (gboolean use_sort)
   /* A few to start */
   if (!use_sort)
     {
+      iter_prepend (NULL, GTK_TREE_VIEW (tree_view));
+      iter_prepend (NULL, GTK_TREE_VIEW (tree_view));
+      iter_prepend (NULL, GTK_TREE_VIEW (tree_view));
       iter_prepend (NULL, GTK_TREE_VIEW (tree_view));
       iter_prepend (NULL, GTK_TREE_VIEW (tree_view));
       iter_prepend (NULL, GTK_TREE_VIEW (tree_view));
