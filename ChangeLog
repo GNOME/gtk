@@ -1,3 +1,12 @@
+2005-03-24  Tor Lillqvist  <tml@novell.com>
+
+	* configure.in (GTK_EXTRA_CFLAGS): Include the -mms-bitfields flag
+	in GTK_EXTRA_CFLAGS on Win32, so that it gets included in the
+	gtk+-2.0.pc file and automatically used by dependents. MSVC users
+	who use pkg-config will have to manually edit it out from
+	gtk+-2.0.pc, sorry. Maybe pkg-config should be enhanced to support
+	some kind of conditionals in .pc files?
+
 2005-03-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserbutton.c (update_combo_box): Remove
