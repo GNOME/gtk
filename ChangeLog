@@ -1,3 +1,8 @@
+Mon Aug 18 10:19:55 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk+-2.0-uninstalled.pc.in: Add a missing gtk/ in the
+	path to libgtk.la. (#120080, Benedikt Spranger)
+
 Sat Aug 16 10:34:49 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* modules/input/imcedilla.c: Make the list of default
