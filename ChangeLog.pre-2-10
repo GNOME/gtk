@@ -1,3 +1,18 @@
+2002-11-29  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkprivate-win32.h (WIN32_API_FAILED,
+	WIN32_GDI_FAILED, OTHER_API_FAILED): Don't use __PRETTY_FUNCTION__
+	if __GNUC__ >= 3, to avoid warning message.
+
+	* gdk/win32/gdkwindow-win32.c (show_window_internal): Only call
+	SetWindowPos() with HWND_TOPMOST if the raise flag is on.
+
+	(gdk_window_set_transient_for): Rewrite. Just call SetWindowLong()
+	with GWL_HWNDPARENT, which despite its name sets the *owner*
+	window, which should be exactly what we want. The PSDK
+	documentation is said to be misleading. testgtk's modal window
+	test now works much better. (#50586)
+
 Tue Nov 26 14:16:15 2002  HideToshi Tajima  <hidetoshi.tajima@sun.com>
 
 	* modules/input/gtkimcontextxim.c

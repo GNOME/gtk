@@ -434,7 +434,7 @@ void    gdk_win32_gdi_failed        (const gchar *where,
 
 /* Macros that print an warning message about failed GDI and other Win32 API calls */
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && (__GNUC__ < 3)
 #define WIN32_API_FAILED(api) gdk_win32_api_failed (__FILE__ ":" __PRETTY_FUNCTION__, __LINE__, api)
 #define WIN32_GDI_FAILED(api) gdk_win32_gdi_failed (__FILE__ ":" __PRETTY_FUNCTION__, __LINE__, api)
 #define OTHER_API_FAILED(api) gdk_other_api_failed (__FILE__ ":" __PRETTY_FUNCTION__, __LINE__, api)

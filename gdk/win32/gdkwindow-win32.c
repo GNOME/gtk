@@ -808,8 +808,9 @@ show_window_internal (GdkWindow *window,
       if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
 	{
 	  ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNOACTIVATE);
-	  SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOPMOST, 0, 0, 0, 0,
-			SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+	  if (raise)
+	    SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOPMOST, 0, 0, 0, 0,
+			  SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 #if 0
 	  /* Don't put on toolbar */
 	  ShowWindow (GDK_WINDOW_HWND (window), SW_HIDE);
@@ -1509,31 +1510,24 @@ gdk_window_set_transient_for (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window) || GDK_WINDOW_DESTROYED (parent))
     return;
 
+  if (((GdkWindowObject *) window)->window_type == GDK_WINDOW_CHILD)
+    {
+      GDK_NOTE (MISC, g_print ("...a child window!\n"));
+      return;
+    }
+  
   window_id = GDK_WINDOW_HWND (window);
   parent_id = GDK_WINDOW_HWND (parent);
 
-  if ((style = GetWindowLong (window_id, GWL_STYLE)) == 0)
-    WIN32_API_FAILED ("GetWindowLong");
-
-  style |= WS_POPUP;
-#if 0 /* not sure if we want to do this */
-  style &= ~(WS_SYSMENU | WS_MAXIMIZEBOX | WS_MINIMIZEBOX);
-#endif
-
-  if (!SetWindowLong (window_id, GWL_STYLE, style))
+  /* This changes the *owner* of the window, despite the misleading
+   * name. (Owner and parent are unrelated concepts.) At least that's
+   * what people who seem to know what they talk about say on
+   * USENET. Search on Google.
+   */
+  SetLastError (0);
+  if (SetWindowLong (window_id, GWL_HWNDPARENT, parent_id) == 0 &&
+      GetLastError () != 0)
     WIN32_API_FAILED ("SetWindowLong");
-#if 0 /* not sure if we want to do this, clipping to parent size! */
-  if (!SetParent (window_id, parent_id))
-	WIN32_API_FAILED ("SetParent");
-#else /* make the modal window topmost instead */
-  if (!SetWindowPos (window_id, HWND_NOTOPMOST, 0, 0, 0, 0,
-                     SWP_NOMOVE | SWP_NOSIZE))
-    WIN32_API_FAILED ("SetWindowPos");
-#endif
-
-  if (!RedrawWindow (window_id, NULL, NULL, 
-                     RDW_FRAME | RDW_INVALIDATE | RDW_UPDATENOW))
-    WIN32_API_FAILED ("RedrawWindow");
 }
 
 void
