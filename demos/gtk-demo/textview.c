@@ -48,7 +48,6 @@ static char gray50_bits[] = {
 static void
 create_tags (GtkTextBuffer *buffer)
 {
-  GtkTextTag *tag;
   GdkBitmap *stipple;
 
   /* Create a bunch of tags. Note that it's also possible to
@@ -64,91 +63,105 @@ create_tags (GtkTextBuffer *buffer)
    * new copies of the same tags for every buffer.
    *
    * Tags are assigned default priorities in order of addition to the
-   * tag table.  That is, tags created later that affect the same
-   * text property as an earlier tag will override the earlier tag.
-   * You can modify tag priorities with gtk_text_tag_set_priority().
+   * tag table.  That is, tags created later that affect the same text
+   * property affected by an earlier tag will override the earlier
+   * tag.  You can modify tag priorities with
+   * gtk_text_tag_set_priority().
    */
 
-  tag = gtk_text_buffer_create_tag (buffer, "italic");
-  g_object_set (G_OBJECT (tag), "style", PANGO_STYLE_ITALIC, NULL);
-
-  tag = gtk_text_buffer_create_tag (buffer, "bold");
-  g_object_set (G_OBJECT (tag), "weight", PANGO_WEIGHT_BOLD, NULL);  
-
-  tag = gtk_text_buffer_create_tag (buffer, "big");
-  /* 70 points times the PANGO_SCALE factor */
-  g_object_set (G_OBJECT (tag), "size", 45 * PANGO_SCALE, NULL);
+  gtk_text_buffer_create_tag (buffer, "heading",
+                              "weight", PANGO_WEIGHT_BOLD,
+                              "size", 20 * PANGO_SCALE,
+                              NULL);
   
-  tag = gtk_text_buffer_create_tag (buffer, "blue_foreground");
-  g_object_set (G_OBJECT (tag), "foreground", "blue", NULL);  
+  gtk_text_buffer_create_tag (buffer, "italic",
+                              "style", PANGO_STYLE_ITALIC, NULL);
 
-  tag = gtk_text_buffer_create_tag (buffer, "red_background");
-  g_object_set (G_OBJECT (tag), "background", "red", NULL);
+  gtk_text_buffer_create_tag (buffer, "bold",
+                              "weight", PANGO_WEIGHT_BOLD, NULL);  
+  
+  gtk_text_buffer_create_tag (buffer, "big",
+                              /* points times the PANGO_SCALE factor */
+                              "size", 30 * PANGO_SCALE, NULL);
+
+  gtk_text_buffer_create_tag (buffer, "monospace",
+                              "family", "monospace", NULL);
+  
+  gtk_text_buffer_create_tag (buffer, "blue_foreground",
+                              "foreground", "blue", NULL);  
+
+  gtk_text_buffer_create_tag (buffer, "red_background",
+                              "background", "red", NULL);
 
   stipple = gdk_bitmap_create_from_data (NULL,
                                          gray50_bits, gray50_width,
                                          gray50_height);
   
-  tag = gtk_text_buffer_create_tag (buffer, "background_stipple");
-  g_object_set (G_OBJECT (tag), "background_stipple", stipple, NULL);
+  gtk_text_buffer_create_tag (buffer, "background_stipple",
+                              "background_stipple", stipple, NULL);
 
-  tag = gtk_text_buffer_create_tag (buffer, "foreground_stipple");
-  g_object_set (G_OBJECT (tag), "foreground_stipple", stipple, NULL);
+  gtk_text_buffer_create_tag (buffer, "foreground_stipple",
+                              "foreground_stipple", stipple, NULL);
 
   g_object_unref (G_OBJECT (stipple));
 
-  tag = gtk_text_buffer_create_tag (buffer, "big_gap_before_line");
-  g_object_set (G_OBJECT (tag), "pixels_above_lines", 30, NULL);
+  gtk_text_buffer_create_tag (buffer, "big_gap_before_line",
+                              "pixels_above_lines", 30, NULL);
 
-  tag = gtk_text_buffer_create_tag (buffer, "big_gap_after_line");
-  g_object_set (G_OBJECT (tag), "pixels_below_lines", 30, NULL);
+  gtk_text_buffer_create_tag (buffer, "big_gap_after_line",
+                              "pixels_below_lines", 30, NULL);
 
-  tag = gtk_text_buffer_create_tag (buffer, "double_spaced_line");
-  g_object_set (G_OBJECT (tag), "pixels_inside_wrap", 10, NULL);
+  gtk_text_buffer_create_tag (buffer, "double_spaced_line",
+                              "pixels_inside_wrap", 10, NULL);
 
-  tag = gtk_text_buffer_create_tag (buffer, "not_editable");
-  g_object_set (G_OBJECT (tag), "editable", FALSE, NULL);
+  gtk_text_buffer_create_tag (buffer, "not_editable",
+                              "editable", FALSE, NULL);
   
-  tag = gtk_text_buffer_create_tag (buffer, "word_wrap");
-  g_object_set (G_OBJECT (tag), "wrap_mode", GTK_WRAP_WORD, NULL);
+  gtk_text_buffer_create_tag (buffer, "word_wrap",
+                              "wrap_mode", GTK_WRAP_WORD, NULL);
 
-  tag = gtk_text_buffer_create_tag (buffer, "char_wrap");
-  g_object_set (G_OBJECT (tag), "wrap_mode", GTK_WRAP_CHAR, NULL);
+  gtk_text_buffer_create_tag (buffer, "char_wrap",
+                              "wrap_mode", GTK_WRAP_CHAR, NULL);
 
-  tag = gtk_text_buffer_create_tag (buffer, "no_wrap");
-  g_object_set (G_OBJECT (tag), "wrap_mode", GTK_WRAP_NONE, NULL);
+  gtk_text_buffer_create_tag (buffer, "no_wrap",
+                              "wrap_mode", GTK_WRAP_NONE, NULL);
   
-  tag = gtk_text_buffer_create_tag (buffer, "center");
-  g_object_set (G_OBJECT (tag), "justification", GTK_JUSTIFY_CENTER, NULL);
+  gtk_text_buffer_create_tag (buffer, "center",
+                              "justification", GTK_JUSTIFY_CENTER, NULL);
 
-  tag = gtk_text_buffer_create_tag (buffer, "right_justify");
-  g_object_set (G_OBJECT (tag), "justification", GTK_JUSTIFY_RIGHT, NULL);
+  gtk_text_buffer_create_tag (buffer, "right_justify",
+                              "justification", GTK_JUSTIFY_RIGHT, NULL);
 
-  tag = gtk_text_buffer_create_tag (buffer, "wide_margins");
-  g_object_set (G_OBJECT (tag),
-                "left_margin", 50, "right_margin", 50,
-                NULL);
-
-  tag = gtk_text_buffer_create_tag (buffer, "strikethrough");
-  g_object_set (G_OBJECT (tag), "strikethrough", TRUE, NULL);
+  gtk_text_buffer_create_tag (buffer, "wide_margins",
+                              "left_margin", 50, "right_margin", 50,
+                              NULL);
   
-  tag = gtk_text_buffer_create_tag (buffer, "underline");
-  g_object_set (G_OBJECT (tag), "underline", PANGO_UNDERLINE_SINGLE, NULL);
-
-  tag = gtk_text_buffer_create_tag (buffer, "double_underline");
-  g_object_set (G_OBJECT (tag), "underline", PANGO_UNDERLINE_DOUBLE, NULL);
-
-  tag = gtk_text_buffer_create_tag (buffer, "superscript");
-  g_object_set (G_OBJECT (tag),
-                "rise", 10 * PANGO_SCALE,   /* 10 pixels */
-                "size", 8 * PANGO_SCALE,    /* 8 points */
-                NULL);
+  gtk_text_buffer_create_tag (buffer, "strikethrough",
+                              "strikethrough", TRUE, NULL);
   
-  tag = gtk_text_buffer_create_tag (buffer, "subscript");
-  g_object_set (G_OBJECT (tag),
-                "rise", -10 * PANGO_SCALE,   /* 10 pixels */
-                "size", 8 * PANGO_SCALE,     /* 8 points */
-                NULL); 
+  gtk_text_buffer_create_tag (buffer, "underline",
+                              "underline", PANGO_UNDERLINE_SINGLE, NULL);
+
+  gtk_text_buffer_create_tag (buffer, "double_underline",
+                              "underline", PANGO_UNDERLINE_DOUBLE, NULL);
+
+  gtk_text_buffer_create_tag (buffer, "superscript",
+                              "rise", 10 * PANGO_SCALE,   /* 10 pixels */
+                              "size", 8 * PANGO_SCALE,    /* 8 points */
+                              NULL);
+  
+  gtk_text_buffer_create_tag (buffer, "subscript",
+                              "rise", -10 * PANGO_SCALE,   /* 10 pixels */
+                              "size", 8 * PANGO_SCALE,     /* 8 points */
+                              NULL);
+
+  gtk_text_buffer_create_tag (buffer, "rtl_quote",
+                              "wrap_mode", GTK_WRAP_WORD,
+                              "direction", GTK_TEXT_DIR_RTL,
+                              "indent", 30,
+                              "left_margin", 20,
+                              "right_margin", 20,
+                              NULL);
 }
 
 static void
@@ -165,8 +178,11 @@ insert_text (GtkTextBuffer *buffer)
    */
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
 
-  gtk_text_buffer_insert (buffer, &iter, "The text widget can display text with all kinds of nifty attributes.\n", -1);
+  gtk_text_buffer_insert (buffer, &iter, "The text widget can display text with all kinds of nifty attributes. It also supports multiple views of the same buffer; this demo is showing the same buffer in two places.\n\n", -1);
 
+  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter, "Font styles. ", -1,
+                                            "heading", NULL);
+  
   gtk_text_buffer_insert (buffer, &iter, "For example, you can have ", -1);
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
                                             "italic", -1,
@@ -175,13 +191,20 @@ insert_text (GtkTextBuffer *buffer)
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
                                             "bold", -1,
                                             "bold", NULL);
-  gtk_text_buffer_insert (buffer, &iter, ", or ", -1);  
+  gtk_text_buffer_insert (buffer, &iter, ", or ", -1);
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
-                                            "huge", -1,
+                                            "monospace (typewriter)", -1,
+                                            "monospace", NULL);
+  gtk_text_buffer_insert (buffer, &iter, ", or ", -1);
+  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
+                                            "big", -1,
                                             "big", NULL);
-  gtk_text_buffer_insert (buffer, &iter, " text. ", -1);
+  gtk_text_buffer_insert (buffer, &iter, " text.\n\n", -1);
 
-  gtk_text_buffer_insert (buffer, &iter, "Also, colors such as ", -1);  
+  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter, "Colors. ", -1,
+                                            "heading", NULL);
+  
+  gtk_text_buffer_insert (buffer, &iter, "Colors such as ", -1);  
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
                                             "a blue foreground", -1,
                                             "blue_foreground", NULL);
@@ -203,8 +226,11 @@ insert_text (GtkTextBuffer *buffer)
                                             "red_background",
                                             "foreground_stipple",
                                             NULL);
-  gtk_text_buffer_insert (buffer, &iter, " (select that to read it) can be used.\n", -1);  
+  gtk_text_buffer_insert (buffer, &iter, " (select that to read it) can be used.\n\n", -1);  
 
+  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter, "Underline, strikethrough, and rise. ", -1,
+                                            "heading", NULL);
+  
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
                                             "Strikethrough", -1,
                                             "strikethrough", NULL);
@@ -224,40 +250,61 @@ insert_text (GtkTextBuffer *buffer)
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
                                             "subscript", -1,
                                             "subscript", NULL);
-  gtk_text_buffer_insert (buffer, &iter, ".\n", -1);
+  gtk_text_buffer_insert (buffer, &iter, " are all supported.\n\n", -1);
 
+  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter, "Images. ", -1,
+                                            "heading", NULL);
+  
   gtk_text_buffer_insert (buffer, &iter, "The buffer can have images in it: ", -1);
   gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
   gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
   gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
-  gtk_text_buffer_insert (buffer, &iter, ".\n", -1);
+  gtk_text_buffer_insert (buffer, &iter, " for example.\n\n", -1);
+
+  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter, "Spacing. ", -1,
+                                            "heading", NULL);
+
+  gtk_text_buffer_insert (buffer, &iter, "You can adjust the amount of space before each line.\n", -1);
   
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
-                                            "You can adjust the amount of space before each line; this line has a whole lot of space before it.\n", -1,
-                                            "big_gap_before_line", NULL);
+                                            "This line has a whole lot of space before it.\n", -1,
+                                            "big_gap_before_line", "wide_margins", NULL);
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
                                             "You can also adjust the amount of space after each line; this line has a whole lot of space after it.\n", -1,
-                                            "big_gap_after_line", NULL);
+                                            "big_gap_after_line", "wide_margins", NULL);
   
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
-                                            "Of course you can also adjust the amount of space between wrapped lines; this line has extra space between each wrapped line.\n", -1,
-                                            "double_spaced_line", NULL);
+                                            "You can also adjust the amount of space between wrapped lines; this line has extra space between each wrapped line in the same paragraph. To show off wrapping, some filler text: the quick brown fox jumped over the lazy dog. Blah blah blah blah blah blah blah blah blah.\n", -1,
+                                            "double_spaced_line", "wide_margins", NULL);
 
+  gtk_text_buffer_insert (buffer, &iter, "Also note that those lines have extra-wide margins.\n\n", -1);
+
+  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter, "Editability. ", -1,
+                                            "heading", NULL);
   
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
-                                            "This line is 'locked down' and can't be edited by the user - just try it! You can't delete this line.\n", -1,
+                                            "This line is 'locked down' and can't be edited by the user - just try it! You can't delete this line.\n\n", -1,
                                             "not_editable", NULL);
 
-  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
-                                            "If char wrap worked, this line would be char wrapped, but since char wrap isn't yet implemented, this line will fall back to word wrap.\n", -1,
-                                            "char_wrap", NULL);
+  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter, "Wrapping. ", -1,
+                                            "heading", NULL);
 
-  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
-                                            "This line has all wrapping turned off, so it makes the horizontal scrollbar appear.\n", -1,
-                                            "no_wrap", NULL);
+  gtk_text_buffer_insert (buffer, &iter,
+                          "This line (and most of the others in this buffer) is word-wrapped, using the proper Unicode algorithm. Word wrap should work in all scripts and languages that GTK+ supports. Let's make this a long paragraph to demonstrate: blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah\n\n", -1);  
   
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
-                                            "This line has center justification.\n", -1,
+                                            "This line has character-based wrapping, and can wrap between any two character glyphs. Let's make this a long paragraph to demonstrate: blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah\n\n", -1,
+                                            "char_wrap", NULL);
+  
+  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
+                                            "This line has all wrapping turned off, so it makes the horizontal scrollbar appear.\n\n\n", -1,
+                                            "no_wrap", NULL);
+
+  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter, "Justification. ", -1,
+                                            "heading", NULL);  
+  
+  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
+                                            "\nThis line has center justification.\n", -1,
                                             "center", NULL);
 
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
@@ -265,10 +312,20 @@ insert_text (GtkTextBuffer *buffer)
                                             "right_justify", NULL);
 
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
-                                            "This line has big wide margins. Text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text.\n", -1,
-                                            "wide_margins", NULL);
+                                            "\nThis line has big wide margins. Text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text.\n", -1,
+                                            "wide_margins", NULL);  
+
+  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter, "Internationalization. ", -1,
+                                            "heading", NULL);
+          
+  gtk_text_buffer_insert (buffer, &iter,
+                          "You can put all sorts of Unicode text in the buffer.\n\nGerman (Deutsch Süd) Grüß Gott\nGreek (Ελληνικά) Γειά σας\nHebrew   שלום\nJapanese (日本語)\n\nThe widget properly handles bidirectional text, word wrapping, DOS/UNIX/Unicode paragraph separators, grapheme boundaries, and so on using the Pango internationalization framework.\n", -1);  
+
+      gtk_text_buffer_insert (buffer, &iter, "Here's a word-wrapped quote in a right-to-left language:\n", -1);
+      gtk_text_buffer_insert_with_tags_by_name (buffer, &iter, "وقد بدأ ثلاث من أكثر المؤسسات تقدما في شبكة اكسيون برامجها كمنظمات لا تسعى للربح، ثم تحولت في السنوات الخمس الماضية إلى مؤسسات مالية منظمة، وباتت جزءا من النظام المالي في بلدانها، ولكنها تتخصص في خدمة قطاع المشروعات الصغيرة. وأحد أكثر هذه المؤسسات نجاحا هو »بانكوسول« في بوليفيا.\n\n", -1,
+                                                "rtl_quote", NULL);
   
-  gtk_text_buffer_insert (buffer, &iter, "This demo doesn't even demonstrate all the GtkTextBuffer features; it leaves out, for example: invisible/hidden text, tab stops, application-drawn areas on the sides of the widget for displaying breakpoints and such...", -1);
+  gtk_text_buffer_insert (buffer, &iter, "\n\nThis demo doesn't demonstrate all the GtkTextBuffer features; it leaves out, for example: invisible/hidden text (doesn't work in GTK 2, but planned), tab stops, application-drawn areas on the sides of the widget for displaying breakpoints and such...", -1);
 
   /* Apply word_wrap tag to whole buffer */
   gtk_text_buffer_get_bounds (buffer, &start, &end);
@@ -292,7 +349,7 @@ do_textview (void)
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_default_size (GTK_WINDOW (window),
-                                   300, 400);
+                                   450, 450);
       
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),

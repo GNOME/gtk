@@ -434,7 +434,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
    * we try to create tags a second time.
    */
   
-  tag = gtk_text_buffer_create_tag (buffer, "fg_blue");
+  tag = gtk_text_buffer_create_tag (buffer, "fg_blue", NULL);
 
   /*       gtk_timeout_add (1000, blink_timeout, tag); */
       
@@ -446,23 +446,23 @@ fill_example_buffer (GtkTextBuffer *buffer)
   color2.blue = 0x0;
   color2.green = 0;
   g_object_set (G_OBJECT (tag),
-		 "foreground_gdk", &color,
-		 "background_gdk", &color2,
-                  "size_points", 24.0,
-		 NULL);
+                "foreground_gdk", &color,
+                "background_gdk", &color2,
+                "size_points", 24.0,
+                NULL);
 
-  tag = gtk_text_buffer_create_tag (buffer, "fg_red");
+  tag = gtk_text_buffer_create_tag (buffer, "fg_red", NULL);
 
   setup_tag (tag);
       
   color.blue = color.green = 0;
   color.red = 0xffff;
   g_object_set (G_OBJECT (tag),
-		 "rise", -4 * PANGO_SCALE,
-		 "foreground_gdk", &color,
-		 NULL);
+                "rise", -4 * PANGO_SCALE,
+                "foreground_gdk", &color,
+                NULL);
 
-  tag = gtk_text_buffer_create_tag (buffer, "bg_green");
+  tag = gtk_text_buffer_create_tag (buffer, "bg_green", NULL);
 
   setup_tag (tag);
       
@@ -473,7 +473,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
                 "size_points", 10.0,
                 NULL);
 
-  tag = gtk_text_buffer_create_tag (buffer, "strikethrough");
+  tag = gtk_text_buffer_create_tag (buffer, "strikethrough", NULL);
 
   setup_tag (tag);
       
@@ -482,7 +482,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
                 NULL);
 
 
-  tag = gtk_text_buffer_create_tag (buffer, "underline");
+  tag = gtk_text_buffer_create_tag (buffer, "underline", NULL);
 
   setup_tag (tag);
       
@@ -496,13 +496,13 @@ fill_example_buffer (GtkTextBuffer *buffer)
                 "underline", PANGO_UNDERLINE_SINGLE,
                 NULL);
 
-  tag = gtk_text_buffer_create_tag (buffer, "centered");
+  tag = gtk_text_buffer_create_tag (buffer, "centered", NULL);
       
   g_object_set (G_OBJECT (tag),
                 "justification", GTK_JUSTIFY_CENTER,
                 NULL);
 
-  tag = gtk_text_buffer_create_tag (buffer, "rtl_quote");
+  tag = gtk_text_buffer_create_tag (buffer, "rtl_quote", NULL);
       
   g_object_set (G_OBJECT (tag),
                 "wrap_mode", GTK_WRAP_WORD,
@@ -1413,26 +1413,23 @@ create_buffer (void)
     {
       GtkTextTag *tag;
 
-      tag = gtk_text_buffer_create_tag (buffer->buffer, NULL);
+      tag = gtk_text_buffer_create_tag (buffer->buffer, NULL, NULL);
       
       buffer->color_tags = g_slist_prepend (buffer->color_tags, tag);
       
       ++i;
     }
   
-  buffer->invisible_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL);
-  g_object_set (G_OBJECT (buffer->invisible_tag),
-                  "invisible", TRUE,
-                  NULL);
+  buffer->invisible_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL,
+                                                      "invisible", TRUE);
   
-  buffer->not_editable_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL);
-  g_object_set (G_OBJECT (buffer->not_editable_tag),
-                  "editable", FALSE,
-                  "foreground", "purple", NULL);
+  buffer->not_editable_tag =
+    gtk_text_buffer_create_tag (buffer->buffer, NULL,
+                                "editable", FALSE,
+                                "foreground", "purple", NULL);
 
-  buffer->found_text_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL);
-  g_object_set (G_OBJECT (buffer->found_text_tag),
-                  "foreground", "red", NULL);
+  buffer->found_text_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL,
+                                                       "foreground", "red", NULL);
 
   tabs = pango_tab_array_new_with_positions (4,
                                              TRUE,
@@ -1441,10 +1438,9 @@ create_buffer (void)
                                              PANGO_TAB_LEFT, 60,
                                              PANGO_TAB_LEFT, 120);
   
-  buffer->custom_tabs_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL);
-  g_object_set (G_OBJECT (buffer->custom_tabs_tag),
-                  "tabs", tabs,
-                  "foreground", "green", NULL);
+  buffer->custom_tabs_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL,
+                                                        "tabs", tabs,
+                                                        "foreground", "green", NULL);
 
   pango_tab_array_free (tabs);
   

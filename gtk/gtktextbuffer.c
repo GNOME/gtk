@@ -26,6 +26,7 @@
 
 
 #include <string.h>
+#include <stdarg.h>
 
 #include "gtkclipboard.h"
 #include "gtkinvisible.h"
@@ -1888,6 +1889,9 @@ gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
  * gtk_text_buffer_create_tag:
  * @buffer: a #GtkTextBuffer
  * @tag_name: name of the new tag, or %NULL
+ * @first_property_name: name of first property to set, or %NULL
+ * @Varargs: %NULL-terminated list of property names and values
+ *
  *
  * Creates a tag and adds it to the tag table for @buffer.
  * Equivalent to calling gtk_text_tag_new () and then adding the
@@ -1896,20 +1900,33 @@ gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
  *
  * If @tag_name is %NULL, the tag is anonymous.
  *
+ * The @first_property_name argument and subsequent arguments are a list
+ * of properties to set on the tag, as with g_object_set().
+ *
  * Return value: a new tag
  **/
 GtkTextTag*
 gtk_text_buffer_create_tag (GtkTextBuffer *buffer,
-                            const gchar *tag_name)
+                            const gchar   *tag_name,
+                            const gchar   *first_property_name,
+                            ...)
 {
   GtkTextTag *tag;
-
+  va_list list;
+  
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
 
   tag = gtk_text_tag_new (tag_name);
 
   gtk_text_tag_table_add (get_table (buffer), tag);
 
+  if (first_property_name)
+    {
+      va_start (list, first_property_name);
+      g_object_set_valist (G_OBJECT (tag), first_property_name, list);
+      va_end (list);
+    }
+  
   return tag;
 }
 

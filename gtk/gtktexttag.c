@@ -837,7 +837,7 @@ gtk_text_tag_set_property (GObject      *object,
 
     case PROP_BACKGROUND_STIPPLE:
       {
-        GdkBitmap *bitmap = g_value_get_boxed (value);
+        GdkBitmap *bitmap = g_value_get_object (value);
 
         text_tag->bg_stipple_set = TRUE;
         g_object_notify (G_OBJECT (text_tag), "background_stipple_set");
@@ -857,7 +857,7 @@ gtk_text_tag_set_property (GObject      *object,
 
     case PROP_FOREGROUND_STIPPLE:
       {
-        GdkBitmap *bitmap = g_value_get_boxed (value);
+        GdkBitmap *bitmap = g_value_get_object (value);
 
         text_tag->fg_stipple_set = TRUE;
         g_object_notify (G_OBJECT (text_tag), "foreground_stipple_set");

@@ -1,3 +1,15 @@
+2001-03-15  Havoc Pennington  <hp@redhat.com>
+	
+	* gtk/gtktextbuffer.c (gtk_text_buffer_create_tag): add varargs 
+	for properties to set on the tag.
+
+	* gtk/testtext.c: fixups to reflect create_tag change
+	
+	* gtk/gtktexttag.c (gtk_text_tag_set_property):
+	background/foreground stipple are objects, not boxed.
+
+	* demos/gtk-demo/textview.c: intellihancing
+
 Fri Mar 16 11:38:42 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_model): Fixed some

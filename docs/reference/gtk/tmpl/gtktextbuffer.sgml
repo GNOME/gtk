@@ -390,6 +390,8 @@ types related to the text widget and how they work together.
 
 @buffer: 
 @tag_name: 
+@first_property_name: 
+@Varargs: 
 @Returns: 
 
 

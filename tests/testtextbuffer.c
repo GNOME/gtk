@@ -585,36 +585,33 @@ fill_buffer (GtkTextBuffer *buffer)
   GdkPixbuf *pixbuf;
   int i;
 
-  tag = gtk_text_buffer_create_tag (buffer, "fg_blue");
-
   color.red = color.green = 0;
   color.blue = 0xffff;
   color2.red = 0xfff;
   color2.blue = 0x0;
   color2.green = 0;
-  g_object_set (G_OBJECT (tag),
-                "foreground_gdk", &color,
-                "background_gdk", &color2,
-                "font", "-*-courier-bold-r-*-*-30-*-*-*-*-*-*-*",
-                NULL);
-
-  tag = gtk_text_buffer_create_tag (buffer, "fg_red");
+  
+  gtk_text_buffer_create_tag (buffer, "fg_blue",
+                              "foreground_gdk", &color,
+                              "background_gdk", &color2,
+                              "font", "-*-courier-bold-r-*-*-30-*-*-*-*-*-*-*",
+                              NULL);
 
   color.blue = color.green = 0;
   color.red = 0xffff;
-  g_object_set (G_OBJECT (tag),
-                "rise", -4,
-                "foreground_gdk", &color,
-                NULL);
-
-  tag = gtk_text_buffer_create_tag (buffer, "bg_green");
+  
+  gtk_text_buffer_create_tag (buffer, "fg_red",
+                              "rise", -4,
+                              "foreground_gdk", &color,
+                              NULL);
 
   color.blue = color.red = 0;
   color.green = 0xffff;
-  g_object_set (G_OBJECT (tag),
-                "background_gdk", &color,
-                "font", "-*-courier-bold-r-*-*-10-*-*-*-*-*-*-*",
-                NULL);
+  
+  gtk_text_buffer_create_tag (buffer, "bg_green",
+                              "background_gdk", &color,
+                              "font", "-*-courier-bold-r-*-*-10-*-*-*-*-*-*-*",
+                              NULL);
 
   pixbuf = gdk_pixbuf_new_from_xpm_data (book_closed_xpm);
 
@@ -708,13 +705,13 @@ fill_buffer (GtkTextBuffer *buffer)
   /* Put in tags that are just at the beginning, and just near the end,
    * and just near the middle.
    */
-  tag = gtk_text_buffer_create_tag (buffer, "front_tag");
+  tag = gtk_text_buffer_create_tag (buffer, "front_tag", NULL);
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 3);
   gtk_text_buffer_get_iter_at_offset (buffer, &iter2, 300);
 
   gtk_text_buffer_apply_tag (buffer, tag, &iter, &iter2);  
   
-  tag = gtk_text_buffer_create_tag (buffer, "end_tag");
+  tag = gtk_text_buffer_create_tag (buffer, "end_tag", NULL);
   gtk_text_buffer_get_end_iter (buffer, &iter2);
   gtk_text_iter_backward_chars (&iter2, 12);
   iter = iter2;
@@ -722,7 +719,7 @@ fill_buffer (GtkTextBuffer *buffer)
 
   gtk_text_buffer_apply_tag (buffer, tag, &iter, &iter2);
   
-  tag = gtk_text_buffer_create_tag (buffer, "center_tag");
+  tag = gtk_text_buffer_create_tag (buffer, "center_tag", NULL);
   gtk_text_buffer_get_iter_at_offset (buffer, &iter,
                                       gtk_text_buffer_get_char_count (buffer)/2);
   gtk_text_iter_backward_chars (&iter, 37);

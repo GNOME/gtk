@@ -1,13 +1,13 @@
 /* Dialog and Message Boxes
  *
- * The Dialog Box widgets are used to pop up a transient window for user feedback.
+ * Dialog widgets are used to pop up a transient window for user feedback.
  */
 
 #include <gtk/gtk.h>
 
-GtkWidget *window = NULL;
-GtkWidget *entry1 = NULL;
-GtkWidget *entry2 = NULL;
+static GtkWidget *window = NULL;
+static GtkWidget *entry1 = NULL;
+static GtkWidget *entry2 = NULL;
 
 static void
 message_dialog_clicked (GtkButton *button, gpointer user_data)

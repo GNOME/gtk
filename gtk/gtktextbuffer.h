@@ -271,9 +271,10 @@ void gtk_text_buffer_remove_tag_by_name    (GtkTextBuffer     *buffer,
 /* You can either ignore the return value, or use it to
  * set the attributes of the tag. tag_name can be NULL
  */
-/* FIXME this should take a varargs list of tag attributes I think */
 GtkTextTag    *gtk_text_buffer_create_tag (GtkTextBuffer *buffer,
-                                           const gchar   *tag_name);
+                                           const gchar   *tag_name,
+                                           const gchar   *first_property_name,
+                                           ...);
 
 /* Obtain iterators pointed at various places, then you can move the
    iterator around using the GtkTextIter operators */
