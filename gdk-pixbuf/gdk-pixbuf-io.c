@@ -349,17 +349,18 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 #else
 
 #define mname(type,fn) gdk_pixbuf__ ## type ## _image_ ##fn
-#define m_load(type)  extern GdkPixbuf * mname(type,load) (FILE *f);
+#define m_load(type)  extern GdkPixbuf * mname(type,load) (FILE *f, GError **error);
 #define m_load_xpm_data(type)  extern GdkPixbuf * mname(type,load_xpm_data) (const char **data);
 #define m_begin_load(type)  \
    extern gpointer mname(type,begin_load) (ModulePreparedNotifyFunc prepare_func, \
 				 ModuleUpdatedNotifyFunc update_func, \
 				 ModuleFrameDoneNotifyFunc frame_done_func,\
 				 ModuleAnimationDoneNotifyFunc anim_done_func,\
-				 gpointer user_data);
+				 gpointer user_data,\
+				 GError **error);
 #define m_stop_load(type)  extern void mname(type,stop_load) (gpointer context);
-#define m_load_increment(type)  extern gboolean mname(type,load_increment) (gpointer context, const guchar *buf, guint size);
-#define m_load_animation(type)  extern GdkPixbufAnimation * mname(type,load_animation) (FILE *f);
+#define m_load_increment(type)  extern gboolean mname(type,load_increment) (gpointer context, const guchar *buf, guint size, GError **error);
+#define m_load_animation(type)  extern GdkPixbufAnimation * mname(type,load_animation) (FILE *f, GError **error);
 #define m_save(type) \
    extern gboolean mname(type,save) (FILE          *f, \
 				     GdkPixbuf     *pixbuf, \
@@ -857,7 +858,7 @@ gdk_pixbuf_savev (GdkPixbuf  *pixbuf,
         g_return_val_if_fail (filename != NULL, FALSE);
         g_return_val_if_fail (type != NULL, FALSE);
        
-        f = fopen (filename, "w");
+        f = fopen (filename, "wb");
         
         if (f == NULL) {
                 g_set_error (error,
