@@ -1,3 +1,17 @@
+Sun Dec  7 Owen Taylor <owt1@cornell.edu>
+	* gdk/gdk.c, gdk/gdk.h, gdk/gdktypes.h: 
+	  Remove dependencies of interfaces on USE_XIM
+	* gdki18n.h: Attempt to make wchar handling more portable
+	* gdkwindow.c: Include config.h. (For gdkinput.h)
+	
+Sun Dec  7 Owen Taylor <owt1@cornell.edu>
+	* gtk/gtkentry.c, gtk/gtkentry.h: 
+	   Fixed word motion
+	   Added cut/copy/paste via X clipboard
+	   Generalized extending selection using <Shift> to work with all types
+             of motion, not just arrow keys.
+           Don't change length of GtkEntry structure because of USE_XIM
+
 Sun Dec  7 03:19:02 1997  Tim Janik  <timj@psynet.net>
 
 	* gtkfilesel.c: applied jamesa-971010-0 for stability.
