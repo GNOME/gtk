@@ -1,3 +1,7 @@
+2003-08-28  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Change how we draw handle boxes in the non-XP case. This does not yet apply to GtkHandleBoxes
+	
 2003-08-26  Dom Lachowicz <cinamod@hotmail.com>
 
 	* src/*.c: Tooltips should do XP-style theming. Handle Boxes/Panes do XP style REBAR theming (TODO: non-XP version of the above for handleboxes). Toolbars should draw the REBAR part properly. Preparation for using the Toolbar class. Menubars and Toolbars now are etched-in to mimic Windows' behavior. HandleBoxes' shadow types should also be correct now, compared to OfficeXP applications.
