@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-11-04 14:37+0100\n"
-"PO-Revision-Date: 2003-11-04 17:20+0100\n"
+"POT-Creation-Date: 2003-11-06 12:53+0100\n"
+"PO-Revision-Date: 2003-11-06 12:54+0100\n"
 "Last-Translator: Danilo Šegan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -351,12 +351,8 @@ msgstr "Slika je neispravne širine i/ili visine"
 msgid "Image has unsupported bpp"
 msgstr "Slika koristi nepodržan broj bitova po tački"
 
-#: gdk-pixbuf/io-pcx.c:619
-msgid "Image has unsupported number of 1-bit planes"
-msgstr "Slika koristi nepodržan broj 1-bitnih ravni"
-
 # bug: plural-forms; perhaps? I'm not sure if it applies
-#: gdk-pixbuf/io-pcx.c:627
+#: gdk-pixbuf/io-pcx.c:619 gdk-pixbuf/io-pcx.c:627
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
 msgstr "Slika sadrži nepodržan broj %d-bitnih ravni"
@@ -1113,7 +1109,7 @@ msgid ""
 "start or end of the parent"
 msgstr "Određuje da li je sadržani element vezan za početak ili kraj sadržaoca"
 
-#: gtk/gtkbox.c:174 gtk/gtknotebook.c:490 gtk/gtkpaned.c:236
+#: gtk/gtkbox.c:174 gtk/gtknotebook.c:490 gtk/gtkpaned.c:238
 #: gtk/gtkruler.c:138
 msgid "Position"
 msgstr "Mesto"
@@ -1790,10 +1786,10 @@ msgid "The title of the color selection dialog"
 msgstr "Naslov prozorčeta za izbor boje"
 
 #: gtk/gtkcolorbutton.c:219 gtk/gtkcolorbutton.c:573
-msgid "Pick a color"
+msgid "Pick a Color"
 msgstr "Izaberite boju"
 
-#: gtk/gtkcolorbutton.c:232 gtk/gtkcolorsel.c:1770
+#: gtk/gtkcolorbutton.c:232 gtk/gtkcolorsel.c:1775
 msgid "Current Color"
 msgstr "Tekuća boja"
 
@@ -1801,7 +1797,7 @@ msgstr "Tekuća boja"
 msgid "The selected color"
 msgstr "Izabrana boja"
 
-#: gtk/gtkcolorbutton.c:247 gtk/gtkcolorsel.c:1777
+#: gtk/gtkcolorbutton.c:247 gtk/gtkcolorsel.c:1782
 msgid "Current Alpha"
 msgstr "Trenutna providnost"
 
@@ -1847,41 +1843,41 @@ msgstr ""
 "„Sačuvaj ovde boju“."
 
 # Ovde nema greske!!!
-#: gtk/gtkcolorsel.c:1756
+#: gtk/gtkcolorsel.c:1761
 msgid "Has Opacity Control"
 msgstr "Sadrži upravljanje providnošću"
 
-#: gtk/gtkcolorsel.c:1757
+#: gtk/gtkcolorsel.c:1762
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Da li izbornik boje dozvoljava postavljanje providnosti"
 
-#: gtk/gtkcolorsel.c:1763
+#: gtk/gtkcolorsel.c:1768
 msgid "Has palette"
 msgstr "Sadrži paletu"
 
-#: gtk/gtkcolorsel.c:1764
+#: gtk/gtkcolorsel.c:1769
 msgid "Whether a palette should be used"
 msgstr "Da li treba koristiti paletu"
 
-#: gtk/gtkcolorsel.c:1771
+#: gtk/gtkcolorsel.c:1776
 msgid "The current color"
 msgstr "Tekuća boja"
 
-#: gtk/gtkcolorsel.c:1778
+#: gtk/gtkcolorsel.c:1783
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Trenutna vrednost providnosti (0 — potpuno providno, 65535 — potpuno "
 "neprovidno)"
 
-#: gtk/gtkcolorsel.c:1792
+#: gtk/gtkcolorsel.c:1797
 msgid "Custom palette"
 msgstr "Podešena paleta"
 
-#: gtk/gtkcolorsel.c:1793
+#: gtk/gtkcolorsel.c:1798
 msgid "Palette to use in the color selector"
 msgstr "Koja se paleta koristi u izborniku boje"
 
-#: gtk/gtkcolorsel.c:1834
+#: gtk/gtkcolorsel.c:1839
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1889,7 +1885,7 @@ msgstr ""
 "Izaberite boju koju želite iz spoljnog prstena. Izaberite osvetljenost ili "
 "zatamnjenost te boje pomoću unutrašnjeg prstena."
 
-#: gtk/gtkcolorsel.c:1859
+#: gtk/gtkcolorsel.c:1864
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1897,68 +1893,68 @@ msgstr ""
 "Pritisnite na kapalo, a zatim boju bilo gde na vašem ekranu da je izaberete."
 
 # Ako imamo strucni izraz za ovo, javite!
-#: gtk/gtkcolorsel.c:1868
+#: gtk/gtkcolorsel.c:1873
 msgid "_Hue:"
 msgstr "_Nijansa:"
 
-#: gtk/gtkcolorsel.c:1869
+#: gtk/gtkcolorsel.c:1874
 msgid "Position on the color wheel."
 msgstr "Mesto na točku boja."
 
-#: gtk/gtkcolorsel.c:1871
+#: gtk/gtkcolorsel.c:1876
 msgid "_Saturation:"
 msgstr "_Zasićenost:"
 
-#: gtk/gtkcolorsel.c:1872
+#: gtk/gtkcolorsel.c:1877
 msgid "\"Deepness\" of the color."
 msgstr "„Dubina“ boja."
 
-#: gtk/gtkcolorsel.c:1873
+#: gtk/gtkcolorsel.c:1878
 msgid "_Value:"
 msgstr "_Vrednost:"
 
 # Mozda "vedrina boje"?
-#: gtk/gtkcolorsel.c:1874
+#: gtk/gtkcolorsel.c:1879
 msgid "Brightness of the color."
 msgstr "Osvetljenost boje."
 
-#: gtk/gtkcolorsel.c:1875
+#: gtk/gtkcolorsel.c:1880
 msgid "_Red:"
 msgstr "_Crvena:"
 
-#: gtk/gtkcolorsel.c:1876
+#: gtk/gtkcolorsel.c:1881
 msgid "Amount of red light in the color."
 msgstr "Količina crvene svetlosti u boji."
 
-#: gtk/gtkcolorsel.c:1877
+#: gtk/gtkcolorsel.c:1882
 msgid "_Green:"
 msgstr "_Zelena:"
 
-#: gtk/gtkcolorsel.c:1878
+#: gtk/gtkcolorsel.c:1883
 msgid "Amount of green light in the color."
 msgstr "Količina zelene svetlosti u boji."
 
-#: gtk/gtkcolorsel.c:1879
+#: gtk/gtkcolorsel.c:1884
 msgid "_Blue:"
 msgstr "_Plava:"
 
-#: gtk/gtkcolorsel.c:1880
+#: gtk/gtkcolorsel.c:1885
 msgid "Amount of blue light in the color."
 msgstr "Količina plave svetlosti u boji."
 
-#: gtk/gtkcolorsel.c:1883
+#: gtk/gtkcolorsel.c:1888
 msgid "_Opacity:"
 msgstr "_Providnost:"
 
-#: gtk/gtkcolorsel.c:1891
+#: gtk/gtkcolorsel.c:1896
 msgid "Transparency of the currently-selected color."
 msgstr "Providnost trenutno izabrane boje."
 
-#: gtk/gtkcolorsel.c:1906
+#: gtk/gtkcolorsel.c:1911
 msgid "Color _Name:"
 msgstr "_Ime boje:"
 
-#: gtk/gtkcolorsel.c:1921
+#: gtk/gtkcolorsel.c:1926
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1966,7 +1962,7 @@ msgstr ""
 "Ovde možete uneti boju na HTML način kao heksadecimalnu vrednost, ili "
 "jednostavno englesko ime boje kao što je „orange“."
 
-#: gtk/gtkcolorsel.c:1940
+#: gtk/gtkcolorsel.c:1945
 msgid "_Palette"
 msgstr "_Paleta"
 
@@ -2804,8 +2800,8 @@ msgstr "Uspravna postavka sadržanog elementa"
 msgid "The title of the font selection dialog"
 msgstr "Naslov prozorčeta za izbor fonta"
 
-#: gtk/gtkfontbutton.c:177
-msgid "Pick a font"
+#: gtk/gtkfontbutton.c:177 gtk/gtkfontbutton.c:294
+msgid "Pick a Font"
 msgstr "Izaberite font"
 
 #: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:210
@@ -2852,10 +2848,6 @@ msgstr "Prikaži veličinu"
 #: gtk/gtkfontbutton.c:257
 msgid "Whether selected font size is shown in the label"
 msgstr "Da li se prikazuje izabrana veličina fonta u oznaci"
-
-#: gtk/gtkfontbutton.c:294
-msgid "Pick a Font"
-msgstr "Izaberite font"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
@@ -3636,44 +3628,60 @@ msgstr "Veličina padajućeg pokazatelja"
 msgid "Spacing around indicator"
 msgstr "Razmaci oko pokazatelja"
 
-#: gtk/gtkpaned.c:237
+#: gtk/gtkpaned.c:239
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 "Pozicija razdvojnika ploča u tačkama (0 označava skroz na levoj strani ili "
 "na vrhu)"
 
-#: gtk/gtkpaned.c:245
+#: gtk/gtkpaned.c:247
 msgid "Position Set"
 msgstr "Postavljena pozicija"
 
-#: gtk/gtkpaned.c:246
+#: gtk/gtkpaned.c:248
 msgid "TRUE if the Position property should be used"
 msgstr "Uključeno ukoliko treba koristiti osobinu za poziciju"
 
-#: gtk/gtkpaned.c:252
+#: gtk/gtkpaned.c:254
 msgid "Handle Size"
 msgstr "Veličina ručke"
 
-#: gtk/gtkpaned.c:253
+#: gtk/gtkpaned.c:255
 msgid "Width of handle"
 msgstr "Širina ručke"
 
-#: gtk/gtkpaned.c:270
+#: gtk/gtkpaned.c:271
+msgid "Minimal Position"
+msgstr "Najmanji položaj"
+
+#: gtk/gtkpaned.c:272
+msgid "Smallest possible value for the \"position\" property"
+msgstr "Najmanja moguća vrednost za osobinu „position“"
+
+#: gtk/gtkpaned.c:289
+msgid "Maximal Position"
+msgstr "Najveći položaj"
+
+#: gtk/gtkpaned.c:290
+msgid "Largest possible value for the \"position\" property"
+msgstr "Najveća moguća vrednost za osobinu „position“"
+
+#: gtk/gtkpaned.c:307
 msgid "Resize"
 msgstr "Promeni veličinu"
 
-#: gtk/gtkpaned.c:271
+#: gtk/gtkpaned.c:308
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr ""
 "Ukoliko je postavljeno, sadržani element se širi i skuplja zajedno sa okvirnim "
 "elementom"
 
-#: gtk/gtkpaned.c:286
+#: gtk/gtkpaned.c:323
 msgid "Shrink"
 msgstr "Skupljanje"
 
-#: gtk/gtkpaned.c:287
+#: gtk/gtkpaned.c:324
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr ""
 "Ukoliko je postavljeno, sadržani element može biti manji nego što je potrebno"
@@ -5957,6 +5965,12 @@ msgstr "X način unosa (XIM)"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Ne mogu da saznam podatke o datoteci „%s“: %s"
+
+#~ msgid "Image has unsupported number of 1-bit planes"
+#~ msgstr "Slika koristi nepodržan broj 1-bitnih ravni"
+
+#~ msgid "Pick a font"
+#~ msgstr "Izaberite font"
 
 #~ msgid "Pack End"
 #~ msgstr "Stavi na kraj"
