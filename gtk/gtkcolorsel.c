@@ -1944,8 +1944,9 @@ gtk_color_selection_finalize (GObject *object)
 
       priv = cselection->private_data;
 
-      g_signal_handler_disconnect (gtk_settings_get_default (),
-                                   priv->settings_connection);
+      if (priv->settings_connection)
+        g_signal_handler_disconnect (gtk_settings_get_default (),
+                                     priv->settings_connection);
       
       g_free (cselection->private_data);
       cselection->private_data = NULL;

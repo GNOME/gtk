@@ -1,3 +1,10 @@
+2002-02-20  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_finalize): check
+	handler_id before disconnecting the signal handler since it might
+	have never been connected if the GtkColorSelection is destroyed
+	before it was realized.
+
 2002-02-20  Matthias Clasen  <maclas@gmx.de>
 
 	* docs/tutorial/gtk-tut.sgml: Fold back Svens g_signal fixes from
