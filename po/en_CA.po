@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-19 00:26-0400\n"
-"PO-Revision-Date: 2004-09-01 03:57-0400\n"
+"POT-Creation-Date: 2004-09-19 16:41-0400\n"
+"PO-Revision-Date: 2004-09-19 03:57-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -853,7 +853,7 @@ msgstr "_Saturation:"
 
 #: gtk/gtkcolorsel.c:1885
 msgid "\"Deepness\" of the color."
-msgstr "\"Deppness\" of the colour."
+msgstr "\"Deepness\" of the colour."
 
 #: gtk/gtkcolorsel.c:1886
 msgid "_Value:"
@@ -1547,33 +1547,33 @@ msgstr "Input Methods"
 #. Description of --gtk-module=MODULES in --help output
 #: gtk/gtkmain.c:406
 msgid "Load additional GTK+ modules"
-msgstr ""
+msgstr "Load additional GTK+ modules"
 
 #. Placeholder in --gtk-module=MODULES in --help output
 #: gtk/gtkmain.c:407
 msgid "MODULES"
-msgstr ""
+msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
 #: gtk/gtkmain.c:409
 msgid "Make all warnings fatal"
-msgstr ""
+msgstr "Make all warnings fatal"
 
 #. Description of --gtk-debug=FLAGS in --help output
 #: gtk/gtkmain.c:412
 msgid "GTK+ debugging flags to set"
-msgstr ""
+msgstr "GTK+ debugging flags to set"
 
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
 #: gtk/gtkmain.c:413 gtk/gtkmain.c:416
 msgid "FLAGS"
-msgstr ""
+msgstr "FLAGS"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
 #: gtk/gtkmain.c:415
 msgid "GTK+ debugging flags to unset"
-msgstr ""
+msgstr "GTK+ debugging flags to unset"
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -1586,11 +1586,11 @@ msgstr "default:LTR"
 
 #: gtk/gtkmain.c:549
 msgid "GTK+ Options"
-msgstr ""
+msgstr "GTK+ Options"
 
 #: gtk/gtkmain.c:549
 msgid "Show GTK+ Options"
-msgstr ""
+msgstr "Show GTK+ Options"
 
 #: gtk/gtknotebook.c:2712 gtk/gtknotebook.c:5060
 #, c-format
