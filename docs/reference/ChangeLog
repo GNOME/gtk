@@ -1,5 +1,7 @@
 2004-09-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdk-sections.txt: Updates.
+
 	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add some missing
 	declarations.
 

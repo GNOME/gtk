@@ -61,8 +61,6 @@ GDK_TYPE_GRAB_STATUS
 
 <SUBSECTION Private>
 GDK_TYPE_STATUS
-
-<SUBSECTION Private>
 GdkStatus
 GDKVAR
 gdk_axis_use_get_type
@@ -110,6 +108,8 @@ gdk_window_type_get_type
 gdk_window_type_hint_get_type
 gdk_wm_decoration_get_type
 gdk_wm_function_get_type
+gdk_pointer_grab_info_libgtk_only
+gdk_keyboard_grab_info_libgtk_only
 </SECTION>
 
 <SECTION>
@@ -322,6 +322,7 @@ gdk_rgb_get_visual
 gdk_rgb_get_colormap
 gdk_rgb_get_cmap
 gdk_rgb_ditherable
+gdk_rgb_colormap_ditherable
 gdk_rgb_set_verbose
 
 <SUBSECTION Standard>
@@ -488,6 +489,7 @@ GDK_IS_DRAWABLE_CLASS
 <SUBSECTION Private>
 GdkDrawableClass
 gdk_draw_bitmap
+gdk_draw_rectangle_alpha_libgtk_only
 </SECTION>
 
 <SECTION>
@@ -662,6 +664,8 @@ gdk_window_process_all_updates
 gdk_window_process_updates
 gdk_window_set_debug_updates
 gdk_window_get_internal_paint_info
+gdk_window_enable_synchronized_configure
+gdk_window_configure_finished
 
 <SUBSECTION>
 gdk_window_set_user_data
