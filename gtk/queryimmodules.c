@@ -72,7 +72,7 @@ escape_string (const char *str)
 static void
 print_escaped (const char *str)
 {
-  char *tmp = escape_string (str, NULL);
+  char *tmp = escape_string (str);
   printf ("\"%s\" ", tmp);
   g_free (tmp);
 }

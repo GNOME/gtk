@@ -1,3 +1,8 @@
+2002-07-31  jacob berkman  <jacob@ximian.com>
+
+	* gtk/queryimmodules.c (print_escaped): escape_string() only takes
+	one arg
+
 Wed Jul 31 12:50:51 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/queryimmodules.c: Avoid using g_strescape(),
