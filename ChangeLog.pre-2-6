@@ -1,3 +1,28 @@
+Sun Mar 14 19:26:48 2004  Owen Taylor  <otaylor@redhat.com>
+
+	#136672, reported by Christian Persch; fixes based
+	on a patch by Soeren Sandmann.
+
+	* gtk/gtkmenu.c: Change the handling of mixed gridded
+	and non-gridded menu items; the old method was causing
+	major performance problems even with the "avoid relayout
+	on destruction" hack put in recently.
+
+	Now we first lay out the gridded items and then put the 
+	non-gridded items into empty rows / after the gridded items. 
+	Layout is done in a central menu_shell_ensure_layout(). Also
+	avoid emitting property notifications when we initially
+	insert or attach items.
+	
+	* gtk/gtkmenushell.[ch] gtk/gtkmenu.c: Stop setting the
+	unused menu_shell->menu_flag, and document it as unused
+	in the header.
+
+	* tests/testactions.c: Add a test of creating/removing
+	lots of items.
+
+	* test/testgtk.c: Add some more cruft to the menu test.
+
 Mon Mar 15 02:36:07 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_class_init): Add

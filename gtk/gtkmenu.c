@@ -46,7 +46,6 @@
 
 
 #define MENU_ITEM_CLASS(w)   GTK_MENU_ITEM_GET_CLASS (w)
-#define	MENU_NEEDS_RESIZE(m) GTK_MENU_SHELL (m)->menu_flag
 
 #define DEFAULT_POPUP_DELAY    225
 #define DEFAULT_POPDOWN_DELAY  1000
@@ -80,25 +79,28 @@ struct _GtkMenuPrivate
   gint y;
 
   /* info used for the table */
-  guint rows;
-  guint columns;
-
   guint *heights;
   gint heights_length;
 
   gint monitor_num;
 
-  gboolean destroying;
+  /* Cached layout information */
+  gboolean have_layout;
+  gint n_rows;
+  gint n_columns;
 };
 
 typedef struct
 {
-  guint left_attach;
-  guint right_attach;
-  guint top_attach;
-  guint bottom_attach;
-}
-AttachInfo;
+  gint left_attach;
+  gint right_attach;
+  gint top_attach;
+  gint bottom_attach;
+  gint effective_left_attach;
+  gint effective_right_attach;
+  gint effective_top_attach;
+  gint effective_bottom_attach;
+} AttachInfo;
 
 enum {
   MOVE_SCROLL,
@@ -110,8 +112,7 @@ enum {
   PROP_TEAROFF_TITLE
 };
 
-enum
-{
+enum {
   CHILD_PROP_0,
   CHILD_PROP_LEFT_ATTACH,
   CHILD_PROP_RIGHT_ATTACH,
@@ -175,9 +176,6 @@ static void     gtk_menu_scroll_item_visible (GtkMenuShell    *menu_shell,
 					      GtkWidget       *menu_item);
 static void     gtk_menu_select_item       (GtkMenuShell     *menu_shell,
 					    GtkWidget        *menu_item);
-static void     gtk_menu_do_insert         (GtkMenuShell     *menu_shell,
-                                            GtkWidget        *child,
-                                            gint              position);
 static void     gtk_menu_real_insert       (GtkMenuShell     *menu_shell,
 					    GtkWidget        *child,
 					    gint              position);
@@ -292,6 +290,171 @@ gtk_menu_get_type (void)
 }
 
 static void
+menu_queue_resize (GtkMenu *menu)
+{
+  GtkMenuPrivate *priv = gtk_menu_get_private (menu);
+
+  priv->have_layout = FALSE;
+  gtk_widget_queue_resize (GTK_WIDGET (menu));
+}
+
+static AttachInfo *
+get_attach_info (GtkWidget *child)
+{
+  GObject *object = G_OBJECT (child);
+  AttachInfo *ai = g_object_get_data (object, ATTACH_INFO_KEY);
+
+  if (!ai)
+    {
+      ai = g_new0 (AttachInfo, 1);
+      g_object_set_data_full (object, ATTACH_INFO_KEY, ai, g_free);
+    }
+
+  return ai;
+}
+
+static gboolean
+is_grid_attached (AttachInfo *ai)
+{
+  return (ai->left_attach >= 0 &&
+	  ai->right_attach >= 0 &&
+	  ai->top_attach >= 0 &&
+	  ai->bottom_attach >= 0);
+}
+
+static void
+menu_ensure_layout (GtkMenu *menu)
+{
+  GtkMenuPrivate *priv = gtk_menu_get_private (menu);
+
+  if (!priv->have_layout)
+    {
+      GtkMenuShell *menu_shell = GTK_MENU_SHELL (menu);
+      GList *l;
+      gchar *row_occupied;
+      gint current_row;
+      gint max_right_attach;      
+      gint max_bottom_attach;
+
+      /* Find extents of gridded portion
+       */
+      max_right_attach = 1;
+      max_bottom_attach = 0;
+
+      for (l = menu_shell->children; l; l = l->next)
+	{
+	  GtkWidget *child = l->data;
+	  AttachInfo *ai = get_attach_info (child);
+
+	  if (is_grid_attached (ai))
+	    {
+	      max_bottom_attach = MAX (max_bottom_attach, ai->bottom_attach);
+	      max_right_attach = MAX (max_right_attach, ai->right_attach);
+	    }
+	}
+	 
+      /* Find empty rows
+       */
+      row_occupied = g_malloc0 (max_bottom_attach);
+
+      for (l = menu_shell->children; l; l = l->next)
+	{
+	  GtkWidget *child = l->data;
+	  AttachInfo *ai = get_attach_info (child);
+
+	  if (is_grid_attached (ai))
+	    {
+	      gint i;
+
+	      for (i = ai->top_attach; i < ai->bottom_attach; i++)
+		row_occupied[i] = TRUE;
+	    }
+	}
+
+      /* Lay non-grid-items out in those rows
+       */
+      current_row = 0;
+      for (l = menu_shell->children; l; l = l->next)
+	{
+	  GtkWidget *child = l->data;
+	  AttachInfo *ai = get_attach_info (child);
+
+	  if (!is_grid_attached (ai))
+	    {
+	      while (current_row < max_bottom_attach && row_occupied[current_row])
+		current_row++;
+		
+	      ai->effective_left_attach = 0;
+	      ai->effective_right_attach = max_right_attach;
+	      ai->effective_top_attach = current_row;
+	      ai->effective_bottom_attach = current_row + 1;
+
+	      current_row++;
+	    }
+	  else
+	    {
+	      ai->effective_left_attach = ai->left_attach;
+	      ai->effective_right_attach = ai->right_attach;
+	      ai->effective_top_attach = ai->top_attach;
+	      ai->effective_bottom_attach = ai->bottom_attach;
+	    }
+	}
+
+      g_free (row_occupied);
+
+      priv->n_rows = MAX (current_row, max_bottom_attach);
+      priv->n_columns = max_right_attach;
+      priv->have_layout = TRUE;
+    }
+}
+
+
+static gint
+gtk_menu_get_n_columns (GtkMenu *menu)
+{
+  GtkMenuPrivate *priv = gtk_menu_get_private (menu);
+
+  menu_ensure_layout (menu);
+
+  return priv->n_columns;
+}
+
+static gint
+gtk_menu_get_n_rows (GtkMenu *menu)
+{
+  GtkMenuPrivate *priv = gtk_menu_get_private (menu);
+
+  menu_ensure_layout (menu);
+
+  return priv->n_rows;
+}
+
+static void
+get_effective_child_attach (GtkWidget *child,
+			    int       *l,
+			    int       *r,
+			    int       *t,
+			    int       *b)
+{
+  GtkMenu *menu = GTK_MENU (child->parent);
+  AttachInfo *ai;
+  
+  menu_ensure_layout (menu);
+
+  ai = get_attach_info (child);
+
+  if (l)
+    *l = ai->effective_left_attach;
+  if (r)
+    *r = ai->effective_right_attach;
+  if (t)
+    *t = ai->effective_top_attach;
+  if (b)
+    *b = ai->effective_bottom_attach;
+
+}
+
+static void
 gtk_menu_class_init (GtkMenuClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
@@ -387,34 +550,34 @@ gtk_menu_class_init (GtkMenuClass *class)
 
  gtk_container_class_install_child_property (container_class,
                                              CHILD_PROP_LEFT_ATTACH,
-                                             g_param_spec_uint ("left_attach",
+					      g_param_spec_int ("left_attach",
                                                                P_("Left Attach"),
                                                                P_("The column number to attach the left side of the child to"),
-                                                               0, UINT_MAX, 0,
+								-1, INT_MAX, -1,
                                                                G_PARAM_READWRITE));
 
  gtk_container_class_install_child_property (container_class,
                                              CHILD_PROP_RIGHT_ATTACH,
-                                             g_param_spec_uint ("right_attach",
+					      g_param_spec_int ("right_attach",
                                                                P_("Right Attach"),
                                                                P_("The column number to attach the right side of the child to"),
-                                                               0, UINT_MAX, 0,
+								-1, INT_MAX, -1,
                                                                G_PARAM_READWRITE));
 
  gtk_container_class_install_child_property (container_class,
                                              CHILD_PROP_TOP_ATTACH,
-                                             g_param_spec_uint ("top_attach",
+					      g_param_spec_int ("top_attach",
                                                                P_("Top Attach"),
                                                                P_("The row number to attach the top of the child to"),
-                                                               0, UINT_MAX, 0,
+								-1, INT_MAX, -1,
                                                                G_PARAM_READWRITE));
 
  gtk_container_class_install_child_property (container_class,
                                              CHILD_PROP_BOTTOM_ATTACH,
-                                             g_param_spec_uint ("bottom_attach",
+					      g_param_spec_int ("bottom_attach",
                                                                P_("Bottom Attach"),
                                                                P_("The row number to attach the bottom of the child to"),
-                                                               0, UINT_MAX, 0,
+								-1, INT_MAX, -1,
                                                                G_PARAM_READWRITE));
 
   binding_set = gtk_binding_set_by_class (class);
@@ -566,20 +729,6 @@ gtk_menu_get_property (GObject     *object,
     }
 }
 
-static AttachInfo *
-get_attach_info (GObject *child)
-{
-  AttachInfo *ai = g_object_get_data (child, ATTACH_INFO_KEY);
-
-  if (!ai)
-    {
-      ai = g_new0 (AttachInfo, 1);
-      g_object_set_data_full (child, ATTACH_INFO_KEY, ai, g_free);
-    }
-
-  return ai;
-}
-
 static void
 gtk_menu_set_child_property (GtkContainer *container,
                              GtkWidget    *child,
@@ -588,33 +737,29 @@ gtk_menu_set_child_property (GtkContainer *container,
                              GParamSpec   *pspec)
 {
   GtkMenu *menu = GTK_MENU (container);
-  GtkMenuPrivate *priv;
-  AttachInfo *ai = get_attach_info (G_OBJECT (child));
-
-  priv = gtk_menu_get_private (menu);
+  AttachInfo *ai = get_attach_info (child);
 
   switch (property_id)
     {
-      case CHILD_PROP_LEFT_ATTACH:
-        ai->left_attach = g_value_get_uint (value);
-        break;
-      case CHILD_PROP_RIGHT_ATTACH:
-        ai->right_attach = g_value_get_uint (value);
-	priv->columns = MAX (priv->columns, ai->right_attach);
-        break;
-      case CHILD_PROP_TOP_ATTACH:
-        ai->top_attach = g_value_get_uint (value);
-        break;
-      case CHILD_PROP_BOTTOM_ATTACH:
-        ai->bottom_attach = g_value_get_uint (value);
-	priv->rows = MAX (priv->rows, ai->bottom_attach);
-        break;
-      default:
-        GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
-        return;
+    case CHILD_PROP_LEFT_ATTACH:
+      ai->left_attach = g_value_get_int (value);
+      break;
+    case CHILD_PROP_RIGHT_ATTACH:
+      ai->right_attach = g_value_get_int (value);
+      break;
+    case CHILD_PROP_TOP_ATTACH:
+      ai->top_attach = g_value_get_int (value);	
+      break;
+    case CHILD_PROP_BOTTOM_ATTACH:
+      ai->bottom_attach = g_value_get_int (value);
+      break;
+
+    default:
+      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
+      return;
     }
 
-  gtk_widget_queue_resize (GTK_WIDGET (menu));
+  menu_queue_resize (menu);
 }
 
 static void
@@ -624,42 +769,27 @@ gtk_menu_get_child_property (GtkContainer *container,
                              GValue       *value,
                              GParamSpec   *pspec)
 {
-  AttachInfo *ai = get_attach_info (G_OBJECT (child));
+  AttachInfo *ai = get_attach_info (child);
 
   switch (property_id)
     {
-      case CHILD_PROP_LEFT_ATTACH:
-        g_value_set_uint (value, ai->left_attach);
-        break;
-      case CHILD_PROP_RIGHT_ATTACH:
-        g_value_set_uint (value, ai->right_attach);
-        break;
-      case CHILD_PROP_TOP_ATTACH:
-        g_value_set_uint (value, ai->top_attach);
-        break;
-      case CHILD_PROP_BOTTOM_ATTACH:
-        g_value_set_uint (value, ai->bottom_attach);
-        break;
-
-      default:
-        GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
-        return;
+    case CHILD_PROP_LEFT_ATTACH:
+      g_value_set_int (value, ai->left_attach);
+      break;
+    case CHILD_PROP_RIGHT_ATTACH:
+      g_value_set_int (value, ai->right_attach);
+      break;
+    case CHILD_PROP_TOP_ATTACH:
+      g_value_set_int (value, ai->top_attach);
+      break;
+    case CHILD_PROP_BOTTOM_ATTACH:
+      g_value_set_int (value, ai->bottom_attach);
+      break;
+      
+    default:
+      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
+      return;
     }
-}
-
-static void
-get_child_attach (GtkWidget *child,
-                  gint      *l,
-                  gint      *r,
-                  gint      *t,
-                  gint      *b)
-{
-  gtk_container_child_get (GTK_CONTAINER (child->parent), child,
-                           "left_attach", l,
-                           "right_attach", r,
-                           "top_attach", t,
-                           "bottom_attach", b,
-                           NULL);
 }
 
 static gboolean
@@ -758,10 +888,8 @@ gtk_menu_init (GtkMenu *menu)
   menu->lower_arrow_visible = FALSE;
   menu->upper_arrow_prelight = FALSE;
   menu->lower_arrow_prelight = FALSE;
-  
-  MENU_NEEDS_RESIZE (menu) = TRUE;
 
-  priv->columns = 1;
+  priv->have_layout = FALSE;
 }
 
 static void
@@ -809,8 +937,6 @@ gtk_menu_destroy (GtkObject *object)
 
   priv = gtk_menu_get_private (menu);
 
-  priv->destroying = TRUE;
-  
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
@@ -946,45 +1072,6 @@ gtk_menu_detach (GtkMenu *menu)
 }
 
 static void
-gtk_menu_do_remove (GtkMenuShell *menu_shell,
-		    GtkWidget    *child)
-{
-  AttachInfo *ai;
-  GList *children;
-  GtkMenuPrivate *priv;
-  gint delta;
-  gboolean single_column;
-
-  ai = get_attach_info (G_OBJECT (child));
-  priv = gtk_menu_get_private (GTK_MENU (menu_shell));
-  delta = ai->bottom_attach - ai->top_attach;
-  single_column = priv->columns == 1;
-
-  /* Recalculate these, assuming the child has already been removed. 
-   * Note that an empty menu is assumed to have one column
-   */
-  priv->rows = 0;
-  priv->columns = 1;
-
-  for (children = menu_shell->children; children; children = children->next)
-    {
-      AttachInfo *child_ai = get_attach_info (children->data);
-      
-      /* Do not move items in table menus */
-      if (single_column && child_ai->bottom_attach > ai->bottom_attach)
-        gtk_container_child_set (GTK_CONTAINER (menu_shell), children->data,
-                                 "top_attach", child_ai->top_attach - delta,
-                                 "bottom_attach", child_ai->bottom_attach - delta,
-                                 NULL);
-      else
-	{
-	  priv->columns = MAX (priv->columns, child_ai->right_attach);
-	  priv->rows = MAX (priv->rows, child_ai->bottom_attach);
-	}
-    }
-}
-
-static void 
 gtk_menu_remove (GtkContainer *container,
 		 GtkWidget    *widget)
 {
@@ -1006,11 +1093,10 @@ gtk_menu_remove (GtkContainer *container,
     }
 
   GTK_CONTAINER_CLASS (parent_class)->remove (container, widget);
-  if (!priv->destroying)
-    gtk_menu_do_remove (GTK_MENU_SHELL (container), widget);
   g_object_set_data (G_OBJECT (widget), ATTACH_INFO_KEY, NULL);
-}
 
+  menu_queue_resize (menu);
+}
 
 GtkWidget*
 gtk_menu_new (void)
@@ -1019,58 +1105,24 @@ gtk_menu_new (void)
 }
 
 static void
-gtk_menu_do_insert (GtkMenuShell *menu_shell,
-                    GtkWidget    *child,
-                    gint          position)
+gtk_menu_real_insert (GtkMenuShell *menu_shell,
+		      GtkWidget    *child,
+		      gint          position)
 {
-  GList *children;
-  GtkMenuPrivate *priv;
+  GtkMenu *menu = GTK_MENU (menu_shell);
+  AttachInfo *ai = get_attach_info (child);
 
-  priv = gtk_menu_get_private (GTK_MENU (menu_shell));
+  ai->left_attach = -1;
+  ai->right_attach = -1;
+  ai->top_attach = -1;
+  ai->bottom_attach = -1;
 
-  if (position < 0 || position >= priv->rows)
-    {
-      /* attach after the last row */
-      gtk_menu_attach (GTK_MENU (menu_shell), child,
-                       0, priv->columns,
-                       priv->rows, priv->rows + 1);
-
-      return;
-    }
-
-  /* We need to make space for this new item; move all items with
-   * top >= position one down. 
-   * Note that this does not prevent overlaps when the menu contains 
-   * vertically spanning items.
-   */
-  for (children = menu_shell->children; children; children = children->next)
-    {
-      AttachInfo *child_ai = get_attach_info (children->data);
-
-      if (child_ai->top_attach >= position)
-        gtk_container_child_set (GTK_CONTAINER (menu_shell), children->data,
-                                 "top_attach", child_ai->top_attach + 1,
-                                 "bottom_attach", child_ai->bottom_attach + 1,
-                                 NULL);
-    }
-
-  /* attach the new item */
-  gtk_menu_attach (GTK_MENU (menu_shell), child,
-                   0, priv->columns,
-                   position, position + 1);
-}
-
-static void
-gtk_menu_real_insert (GtkMenuShell     *menu_shell,
-		      GtkWidget        *child,
-		      gint              position)
-{
   if (GTK_WIDGET_REALIZED (menu_shell))
-    gtk_widget_set_parent_window (child, GTK_MENU (menu_shell)->bin_window);
+    gtk_widget_set_parent_window (child, menu->bin_window);
 
   GTK_MENU_SHELL_CLASS (parent_class)->insert (menu_shell, child, position);
 
-  gtk_menu_do_insert (menu_shell, child, position);
+  menu_queue_resize (menu);
 }
 
 static void
@@ -1851,10 +1903,8 @@ gtk_menu_reorder_child (GtkMenu   *menu,
     {   
       menu_shell->children = g_list_remove (menu_shell->children, child);
       menu_shell->children = g_list_insert (menu_shell->children, child, position);
-      gtk_menu_do_insert (menu_shell, child, position);
 
-      if (GTK_WIDGET_VISIBLE (menu_shell))
-        gtk_widget_queue_resize (GTK_WIDGET (menu_shell));
+      menu_queue_resize (menu);
     }   
 }
 
@@ -2065,8 +2115,8 @@ gtk_menu_size_request (GtkWidget      *widget,
   max_accel_width = 0;
   
   g_free (priv->heights);
-  priv->heights = g_new0 (guint, priv->rows);
-  priv->heights_length = priv->rows;
+  priv->heights = g_new0 (guint, gtk_menu_get_n_rows (menu));
+  priv->heights_length = gtk_menu_get_n_rows (menu);
 
   children = menu_shell->children;
   while (children)
@@ -2081,7 +2131,7 @@ gtk_menu_size_request (GtkWidget      *widget,
       if (! GTK_WIDGET_VISIBLE (child))
         continue;
 
-      get_child_attach (child, &l, &r, &t, &b);
+      get_effective_child_attach (child, &l, &r, &t, &b);
 
       /* It's important to size_request the child
        * before doing the toggle size request, in
@@ -2104,11 +2154,11 @@ gtk_menu_size_request (GtkWidget      *widget,
        priv->heights[t] = MAX (priv->heights[t], part);
     }
 
-  for (i = 0; i < priv->rows; i++)
+  for (i = 0; i < gtk_menu_get_n_rows (menu); i++)
     requisition->height += priv->heights[i];
 
   requisition->width += max_toggle_size + max_accel_width;
-  requisition->width *= priv->columns;
+  requisition->width *= gtk_menu_get_n_columns (menu);
   requisition->width += (GTK_CONTAINER (menu)->border_width +
 			 widget->style->xthickness) * 2;
 
@@ -2191,7 +2241,7 @@ gtk_menu_size_allocate (GtkWidget     *widget,
 
   if (menu_shell->children)
     {
-      gint base_width = width / priv->columns;
+      gint base_width = width / gtk_menu_get_n_columns (menu);
 
       children = menu_shell->children;
       while (children)
@@ -2204,13 +2254,13 @@ gtk_menu_size_allocate (GtkWidget     *widget,
               gint i;
 	      guint l, r, t, b;
 
-              get_child_attach (child, &l, &r, &t, &b);
+	      get_effective_child_attach (child, &l, &r, &t, &b);
 
               if (gtk_widget_get_direction (GTK_WIDGET (menu)) == GTK_TEXT_DIR_RTL)
                 {
                   guint tmp;
-                  tmp = priv->columns - l;
-                  l = priv->columns - r;
+		  tmp = gtk_menu_get_n_columns (menu) - l;
+		  l = gtk_menu_get_n_columns (menu) - r;
                   r = tmp;
                 }
 
@@ -2242,10 +2292,10 @@ gtk_menu_size_allocate (GtkWidget     *widget,
           gint width, height;
 
           height = 0;
-          for (i = 0; i < priv->rows; i++)
+	  for (i = 0; i < gtk_menu_get_n_rows (menu); i++)
             height += priv->heights[i];
 
-          width = priv->columns * base_width;
+	  width = gtk_menu_get_n_columns (menu) * base_width;
 	  gdk_window_resize (menu->bin_window, width, height);
 	}
 
@@ -3517,15 +3567,13 @@ compute_child_offset (GtkMenu   *menu,
   gint child_offset = 0;
   gint i;
 
-  gtk_container_child_get (GTK_CONTAINER (menu), menu_item,
-                           "top_attach", &item_top_attach,
-                           "bottom_attach", &item_bottom_attach,
-                           NULL);
+  get_effective_child_attach (menu_item, NULL, NULL,
+			      &item_top_attach, &item_bottom_attach);
 
   /* there is a possibility that we get called before _size_request, so
    * check the height table for safety.
    */
-  if (!priv->heights || priv->heights_length < priv->rows)
+  if (!priv->heights || priv->heights_length < gtk_menu_get_n_rows (menu))
     return FALSE;
 
   /* when we have a row with only invisible children, it's height will
@@ -3535,7 +3583,7 @@ compute_child_offset (GtkMenu   *menu,
     child_offset += priv->heights[i];
 
   if (is_last_child)
-    *is_last_child = (item_bottom_attach == priv->rows);
+    *is_last_child = (item_bottom_attach == gtk_menu_get_n_rows (menu));
   if (offset)
     *offset = child_offset;
   if (height)
@@ -3758,6 +3806,8 @@ gtk_menu_attach (GtkMenu   *menu,
                  guint      top_attach,
                  guint      bottom_attach)
 {
+  GtkMenuShell *menu_shell;
+  
   g_return_if_fail (GTK_IS_MENU (menu));
   g_return_if_fail (GTK_IS_MENU_ITEM (child));
   g_return_if_fail (child->parent == NULL || 
@@ -3765,20 +3815,32 @@ gtk_menu_attach (GtkMenu   *menu,
   g_return_if_fail (left_attach < right_attach);
   g_return_if_fail (top_attach < bottom_attach);
 
+  menu_shell = GTK_MENU_SHELL (menu);
+  
   if (!child->parent)
     {
-      GTK_MENU_SHELL (menu)->children = 
-	g_list_append (GTK_MENU_SHELL (menu)->children, child);
+      AttachInfo *ai = get_attach_info (child);
+      
+      ai->left_attach = left_attach;
+      ai->right_attach = right_attach;
+      ai->top_attach = top_attach;
+      ai->bottom_attach = bottom_attach;
+      
+      menu_shell->children = g_list_append (menu_shell->children, child);
 
       gtk_widget_set_parent (child, GTK_WIDGET (menu));
-    }
 
-  gtk_container_child_set (GTK_CONTAINER (menu), child,
-                           "left_attach", left_attach,
-                           "right_attach", right_attach,
-                           "top_attach", top_attach,
-                           "bottom_attach", bottom_attach,
-                           NULL);
+      menu_queue_resize (menu);
+    }
+  else
+    {
+      gtk_container_child_set (GTK_CONTAINER (child->parent), child,
+			       "left_attach",   left_attach,
+			       "right_attach",  right_attach,
+			       "top_attach",    top_attach,
+			       "bottom_attach", bottom_attach,
+			       NULL);
+    }
 }
 
 static gint
@@ -3813,7 +3875,7 @@ find_child_containing (GtkMenuShell *menu_shell,
       if (!_gtk_menu_item_is_selectable (list->data))
         continue;
 
-      get_child_attach (list->data, &l, &r, &t, &b);
+      get_effective_child_attach (list->data, &l, &r, &t, &b);
 
       if (l <= left && right <= r
           && t <= top && bottom <= b)
@@ -3827,21 +3889,21 @@ static void
 gtk_menu_move_current (GtkMenuShell *menu_shell,
                        GtkMenuDirectionType direction)
 {
-  GtkMenuPrivate *priv = gtk_menu_get_private (GTK_MENU (menu_shell));
+  GtkMenu *menu = GTK_MENU (menu_shell);
 
   /* use special table menu key bindings */
-  if (menu_shell->active_menu_item && priv->columns > 1)
+  if (menu_shell->active_menu_item && gtk_menu_get_n_columns (menu) > 1)
     {
       int i;
       guint l, r, t, b;
       gboolean rtl = (gtk_widget_get_direction (GTK_WIDGET (menu_shell)) == GTK_TEXT_DIR_RTL);
       GtkWidget *match = NULL;
 
-      get_child_attach (menu_shell->active_menu_item, &l, &r, &t, &b);
+      get_effective_child_attach (menu_shell->active_menu_item, &l, &r, &t, &b);
 
       if (direction == GTK_MENU_DIR_NEXT)
         {
-          for (i = b; i < priv->rows; i++)
+	  for (i = b; i < gtk_menu_get_n_rows (menu); i++)
             {
               match = find_child_containing (menu_shell, l, l + 1, i, i + 1);
               if (match)
@@ -3872,7 +3934,7 @@ gtk_menu_move_current (GtkMenuShell *menu_shell,
 	  if (!match)
 	    {
 	      /* wrap around */
-	      for (i = priv->rows; i > b; i--)
+	      for (i = gtk_menu_get_n_rows (menu); i > b; i--)
 	        {
                   match = find_child_containing (menu_shell,
                                                  l, l + 1, i - 1, i);
@@ -3901,7 +3963,7 @@ gtk_menu_move_current (GtkMenuShell *menu_shell,
                || (rtl && direction == GTK_MENU_DIR_PARENT))
         {
           /* we go one right if possible */
-          if (r < priv->columns)
+	  if (r < gtk_menu_get_n_columns (menu))
             match = find_child_containing (menu_shell, r, r + 1, t, t + 1);
 
           if (!match)

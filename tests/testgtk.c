@@ -3551,6 +3551,23 @@ create_table_menu (GdkScreen *screen, gint cols, gint rows, gboolean tearoff)
   menuitem = gtk_check_menu_item_new_with_label ("Check");
   gtk_menu_attach (GTK_MENU (submenu), menuitem, 1, 2, 5, 6);
   gtk_widget_show (menuitem);
+
+  menuitem = gtk_menu_item_new_with_label ("1. Inserted normally (8)");
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_insert (GTK_MENU_SHELL (submenu), menuitem, 8);
+
+  menuitem = gtk_menu_item_new_with_label ("2. Inserted normally (2)");
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_insert (GTK_MENU_SHELL (submenu), menuitem, 2);
+
+  menuitem = gtk_menu_item_new_with_label ("3. Inserted normally (0)");
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_insert (GTK_MENU_SHELL (submenu), menuitem, 0);
+
+  menuitem = gtk_menu_item_new_with_label ("4. Inserted normally (-1)");
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_insert (GTK_MENU_SHELL (submenu), menuitem, -1);
+  
   /* end of items submenu */
 
   menuitem = gtk_menu_item_new_with_label ("spanning");
@@ -3593,6 +3610,9 @@ create_table_menu (GdkScreen *screen, gint cols, gint rows, gboolean tearoff)
 
   menuitem = gtk_menu_item_new_with_label ("Empty");
   gtk_menu_attach (GTK_MENU (submenu), menuitem, 0, 1, 0, 1);
+  submenu = gtk_menu_new ();
+  gtk_menu_set_screen (GTK_MENU (submenu), screen);
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
   gtk_widget_show (menuitem);
 
   menuitem = gtk_menu_item_new_with_label ("right");
@@ -3616,6 +3636,19 @@ create_table_menu (GdkScreen *screen, gint cols, gint rows, gboolean tearoff)
 	gtk_menu_attach (GTK_MENU (menu), menuitem, i, i + 1, j, j + 1);
 	gtk_widget_show (menuitem);
       }
+  
+  menuitem = gtk_menu_item_new_with_label ("1. Inserted normally (8)");
+  gtk_menu_shell_insert (GTK_MENU_SHELL (menu), menuitem, 8);
+  gtk_widget_show (menuitem);
+  menuitem = gtk_menu_item_new_with_label ("2. Inserted normally (2)");
+  gtk_menu_shell_insert (GTK_MENU_SHELL (menu), menuitem, 2);
+  gtk_widget_show (menuitem);
+  menuitem = gtk_menu_item_new_with_label ("3. Inserted normally (0)");
+  gtk_menu_shell_insert (GTK_MENU_SHELL (menu), menuitem, 0);
+  gtk_widget_show (menuitem);
+  menuitem = gtk_menu_item_new_with_label ("4. Inserted normally (-1)");
+  gtk_menu_shell_insert (GTK_MENU_SHELL (menu), menuitem, -1);
+  gtk_widget_show (menuitem);
   
   return menu;
 }

@@ -325,7 +325,6 @@ gtk_menu_shell_init (GtkMenuShell *menu_shell)
   menu_shell->have_grab = FALSE;
   menu_shell->have_xgrab = FALSE;
   menu_shell->button = 0;
-  menu_shell->menu_flag = 0;
   menu_shell->activate_time = 0;
 }
 

@@ -94,6 +94,7 @@ toolbar_size_large (GtkAction *action)
 static GtkActionEntry entries[] = {
   { "Menu1Action", NULL, "Menu _1" },
   { "Menu2Action", NULL, "Menu _2" },
+  { "Menu3Action", NULL, "_Dynamic Menu" },
 
   { "cut", GTK_STOCK_CUT, "C_ut", "<control>X",
     "Cut the selected text to the clipboard", G_CALLBACK (activate_action) },
@@ -187,6 +188,7 @@ static const gchar *ui_info =
 "      <menuitem action=\"toolbar-small-icons\" />\n"
 "      <menuitem action=\"toolbar-large-icons\" />\n"
 "    </menu>\n"
+  "    <menu name=\"DynamicMenu\" action=\"Menu3Action\" />\n"
 "  </menubar>\n"
 "  <toolbar name=\"toolbar\">\n"
 "    <toolitem name=\"cut\" action=\"cut\" />\n"
@@ -209,7 +211,7 @@ add_widget (GtkUIManager *merge,
 	    GtkContainer *container)
 {
 
-  gtk_container_add (container, widget);
+  gtk_box_pack_start (GTK_BOX (container), widget, FALSE, FALSE, 0);
   gtk_widget_show (widget);
 
   if (GTK_IS_TOOLBAR (widget)) 
@@ -219,12 +221,91 @@ add_widget (GtkUIManager *merge,
     }
 }
 
+static guint ui_id = 0;
+static GtkActionGroup *dag = NULL;
+
+static void
+ensure_update (GtkUIManager *manager)
+{
+  GTimer *timer;
+  double seconds;
+  gulong microsecs;
+  
+  timer = g_timer_new ();
+  g_timer_start (timer);
+  
+  gtk_ui_manager_ensure_update (manager);
+  
+  g_timer_stop (timer);
+  seconds = g_timer_elapsed (timer, &microsecs);
+  g_timer_destroy (timer);
+  
+  g_print ("Time: %fs\n", seconds);
+}
+
+static void
+add_cb (GtkWidget *button,
+	GtkUIManager *manager)
+{
+  GtkWidget *spinbutton;
+  GtkAction *action;
+  int i, num;
+  char *name, *label;
+  
+  if (ui_id != 0 || dag != NULL)
+    return;
+  
+  spinbutton = g_object_get_data (G_OBJECT (button), "spinbutton");
+  num = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (spinbutton));
+  
+  dag = gtk_action_group_new ("DynamicActions");
+  gtk_ui_manager_insert_action_group (manager, dag, 0);
+  
+  ui_id = gtk_ui_manager_new_merge_id (manager);
+  
+  for (i = 0; i < num; i++)
+    {
+      name = g_strdup_printf ("DynAction%u", i);
+      label = g_strdup_printf ("Dynamic Item %d", i);
+      
+      action = g_object_new (GTK_TYPE_ACTION,
+			     "name", name,
+			     "label", label,
+			     NULL);
+      gtk_action_group_add_action (dag, action);
+      g_object_unref (action);
+      
+      gtk_ui_manager_add_ui (manager, ui_id, "/menubar/DynamicMenu",
+			     name, name,
+			     GTK_UI_MANAGER_MENUITEM, FALSE);
+    }
+  
+  ensure_update (manager);
+}
+
+static void
+remove_cb (GtkWidget *button,
+	   GtkUIManager *manager)
+{
+  if (ui_id == 0 || dag == NULL)
+    return;
+  
+  gtk_ui_manager_remove_ui (manager, ui_id);
+  ensure_update (manager);
+  ui_id = 0;
+  
+  gtk_ui_manager_remove_action_group (manager, dag);
+  g_object_unref (dag);
+  dag = NULL;
+}
+
 static void
 create_window (GtkActionGroup *action_group)
 {
   GtkUIManager *merge;
   GtkWidget *window;
   GtkWidget *box;
+  GtkWidget *hbox, *spinbutton, *button;
   GError *error = NULL;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -249,6 +330,27 @@ create_window (GtkActionGroup *action_group)
       g_error_free (error);
     }
 
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (box), hbox, FALSE, FALSE, 0);
+  gtk_widget_show (hbox);
+  
+  spinbutton = gtk_spin_button_new_with_range (100, 10000, 100);
+  gtk_box_pack_start (GTK_BOX (hbox), spinbutton, FALSE, FALSE, 0);
+  gtk_widget_show (spinbutton);
+  
+  button = gtk_button_new_with_label ("Add");
+  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+  gtk_widget_show (button);
+  
+  g_object_set_data (G_OBJECT (button), "spinbutton", spinbutton);
+  g_signal_connect (button, "clicked", G_CALLBACK (add_cb), merge);
+  
+  button = gtk_button_new_with_label ("Remove");
+  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+  gtk_widget_show (button);
+  
+  g_signal_connect (button, "clicked", G_CALLBACK (remove_cb), merge);
+  
   gtk_widget_show (window);
 }
 

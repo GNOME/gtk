@@ -63,7 +63,7 @@ struct _GtkMenuShell
   guint have_grab : 1;
   guint have_xgrab : 1;
   guint ignore_leave : 1;	/* unused */
-  guint menu_flag : 1;
+  guint menu_flag : 1;		/* unused */
   guint ignore_enter : 1;
 };
 
