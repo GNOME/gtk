@@ -1,6 +1,3 @@
-# translation of el.po to 
-# translation of el.po to
-# translation of el.po to Greek
 # gtk+ Greek PO file
 # Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
 #
@@ -26,18 +23,20 @@
 # Nikos Kannelopoulos <nkan@panafonet.gr>, 2003.
 # Kostas Papadimas <pkst@gnome.org>, 2002, 2003, 2004.
 # Nikos Charonitakis <charosn@her.forthnet.gr>, 2004, 2005.
+# Simos Xenitellis <simos74@gmx.net>, 2005.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-02-08 00:53+0200\n"
-"PO-Revision-Date: 2005-02-08 01:15+0200\n"
-"Last-Translator: Nikos Charonitakis <charosn@her.forthnet.gr>\n"
-"Language-Team:  <team@gnome.gr>\n"
+"PO-Revision-Date: 2005-02-23 18:01+0000\n"
+"Last-Translator: Simos Xenitellis <simos74@gmx.net>\n"
+"Language-Team: Greek <nls@tux.hellug.gr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.9.1\n"
+"X-Generator: KBabel 1.3.1\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:153 gdk-pixbuf/gdk-pixbuf-io.c:838
@@ -171,11 +170,10 @@ msgstr "Κατεστραμμένα δεδομένα εικονοστοιχείω
 
 #: gdk-pixbuf/gdk-pixdata.c:431
 #, c-format
-#, fuzzy
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "αποτυχία διάθεσης buffer εικόνας %u byte"
-msgstr[1] ""
+msgstr[0] "αποτυχία εκχώρισης %u byte για ενταμιευτή εικόνας"
+msgstr[1] "αποτυχία εκχώρισης %u byte για ενταμιευτή εικόνας"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
