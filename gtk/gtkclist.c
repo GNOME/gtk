@@ -71,13 +71,14 @@ COLUMN_FROM_XPIXEL (GtkCList * clist,
   gint i, cx;
 
   for (i = 0; i < clist->columns; i++)
-    {
-      cx = clist->column[i].area.x + clist->hoffset;
+    if (clist->column[i].visible)
+      {
+	cx = clist->column[i].area.x + clist->hoffset;
 
-      if (x >= (cx - (COLUMN_INSET + CELL_SPACING)) &&
-	  x <= (cx + clist->column[i].area.width + COLUMN_INSET))
-	return i;
-    }
+	if (x >= (cx - (COLUMN_INSET + CELL_SPACING)) &&
+	    x <= (cx + clist->column[i].area.width + COLUMN_INSET))
+	  return i;
+      }
 
   /* no match */
   return -1;

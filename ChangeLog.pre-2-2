@@ -1,3 +1,8 @@
+Thu Oct 22 16:22:55 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (COLUMN_FROM_XPIXEL): samll fix for invisible
+	columns
+
 Thu Oct 22 02:29:53 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkfilesel.h: GtkType and macro fixups
