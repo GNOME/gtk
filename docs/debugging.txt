@@ -53,11 +53,10 @@ by the:
 First the environment variables are applied, then the command line
 options are applied in the order given on the command line.
 
-Each of these can either be the special value ALL, or a sequence of
-':' separated options. (Note, case is significant). The environment
-variables and the --gtk-debug and --gdk-debug options add debugging
-options and the --gtk-no-debug and --gdk-no-debug options remove
-them.
+Each of these can either be the special value 'all', or a sequence of
+':' separated options. (case is ignored). The environment variables
+and the --gtk-debug and --gdk-debug options add debugging options and
+the --gtk-no-debug and --gdk-no-debug options remove them.
 
 As noted below, some of these are useful in application debugging, but
 most are only interested to those debugging the libraries

@@ -1054,7 +1054,8 @@ gtk_text_realize (GtkWidget *widget)
   if (editable->selection_start_pos != editable->selection_end_pos)
     gtk_editable_claim_selection (editable, TRUE, GDK_CURRENT_TIME);
 
-  recompute_geometry (text);
+  if ((widget->allocation.width > 1) || (widget->allocation.height > 1))
+    recompute_geometry (text);
 }
 
 static void

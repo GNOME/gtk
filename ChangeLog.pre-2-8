@@ -1,3 +1,19 @@
+Mon Apr  6 08:05:23 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkbutton.c (gtk_button_paint): Take border in
+	account properly.
+
+	* gtk/gtktext.c (gtk_text_realize): Don't recompute
+	geometry when creating with initial 1x1 geometry,
+	since our calculations can't handle that. Leave
+	text->line_start_cache NULL as sign we don't have
+	a real geometry yet.
+
+	* gtk/gtkentry.c (gtk_entry_motion_notify): Use the x
+	value we get from gdk_window_get_pointer, not from
+	event->x - since we always specify OwnerGrabButtonMask
+	(why???), event->x can refer to another window.
+
 Mon Apr  6 08:08:49 BST 1998  Tony Gale <gale@gtk.org>
 
 	* docs/gtk_tut.sgml examples/helloworld/helloworld.c:

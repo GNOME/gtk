@@ -870,7 +870,7 @@ gtk_entry_motion_notify (GtkWidget      *widget,
   if (event->is_hint || (entry->text_area != event->window))
     gdk_window_get_pointer (entry->text_area, &x, NULL, NULL);
 
-  GTK_EDITABLE(entry)->selection_end_pos = gtk_entry_position (entry, event->x + entry->scroll_offset);
+  GTK_EDITABLE(entry)->selection_end_pos = gtk_entry_position (entry, x + entry->scroll_offset);
   GTK_EDITABLE(entry)->current_pos = GTK_EDITABLE(entry)->selection_end_pos;
   gtk_entry_adjust_scroll (entry);
   gtk_entry_queue_draw (entry);

@@ -454,12 +454,12 @@ gtk_button_paint (GtkWidget    *widget,
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      restrict_area.x = (GTK_WIDGET (widget)->style->klass->xthickness +
-			 GTK_CONTAINER (widget)->border_width);
-      restrict_area.y = (GTK_WIDGET (widget)->style->klass->ythickness +
-			 GTK_CONTAINER (widget)->border_width);
-      restrict_area.width = GTK_WIDGET (widget)->allocation.width - restrict_area.x * 2;
-      restrict_area.height = GTK_WIDGET (widget)->allocation.height - restrict_area.y * 2;
+      restrict_area.x = GTK_WIDGET (widget)->style->klass->xthickness;
+      restrict_area.y = GTK_WIDGET (widget)->style->klass->ythickness;
+      restrict_area.width = GTK_WIDGET (widget)->allocation.width - 
+	restrict_area.x * 2 - GTK_CONTAINER (widget)->border_width * 2;
+      restrict_area.height = GTK_WIDGET (widget)->allocation.height - 
+	restrict_area.y * 2 - GTK_CONTAINER (widget)->border_width * 2;
 
       if (GTK_WIDGET_CAN_DEFAULT (widget))
 	{
