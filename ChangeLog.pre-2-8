@@ -1,3 +1,9 @@
+Wed Jan  2 23:09:06 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcontainer.c (_gtk_container_queue_resize): don't ignore
+	realized but visible && !mapped resize containers (which is
+	possible with unset CHILD_VISIBLE now).
+
 2002-01-02  jacob berkman  <jacob@ximian.com>
 
 	* gtk/Makefile.am (LDFLAGS): automake still doesn't support

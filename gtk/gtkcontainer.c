@@ -1056,7 +1056,7 @@ _gtk_container_queue_resize (GtkContainer *container)
 	}
       
       if (GTK_WIDGET_VISIBLE (resize_container) &&
-	  (GTK_WIDGET_TOPLEVEL (resize_container) || GTK_WIDGET_DRAWABLE (resize_container)))
+ 	  (GTK_WIDGET_TOPLEVEL (resize_container) || GTK_WIDGET_REALIZED (resize_container)))
 	{
 	  switch (resize_container->resize_mode)
 	    {
@@ -1077,7 +1077,7 @@ _gtk_container_queue_resize (GtkContainer *container)
 	      break;
 
 	    case GTK_RESIZE_PARENT:
-	      /* Ignore, should not be reached */
+	      g_assert_not_reached ();
 	      break;
 	    }
 	}
