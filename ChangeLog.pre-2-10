@@ -1,3 +1,8 @@
+2002-02-02  Peter Williams  <peterw@ximian.com>
+
+	* gtk/Makefile.am (install-data-local): Install gtkrc.default
+	from $(srcdir) for when $(builddir) is different.
+
 Sat Feb  2 19:00:39 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/Makefile.am: remove TESTGTK_RCFILE define
