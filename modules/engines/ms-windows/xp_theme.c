@@ -364,7 +364,7 @@ xp_theme_map_gtk_state(XpThemeElement element, GtkStateType state)
       switch(state)
         {
         case GTK_STATE_SELECTED:
-          ret =  CBS_CHECKEDPRESSED;
+          ret =  CBS_UNCHECKEDPRESSED;
           break;
         case GTK_STATE_PRELIGHT:
           ret =  CBS_UNCHECKEDHOT;

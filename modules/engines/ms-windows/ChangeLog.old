@@ -1,7 +1,10 @@
 2003-08-23  Raymond Penners <raymond@dotsphinx.com>
 
-	* src/*.c: Merged Dom Lachowicz's patches, now tooltips nicely
-	adhere to the system colors as well.
+	* src/*.c: Merged Dom Lachowicz's patches, now tooltips and
+	progress bars nicely adhere to the system colors as well.
+
+	* src/xp_theme.c: There was a mixup in drawing the proper checkbox
+	state, fixed (Gaim bug #790305).
 
 2003-08-20  Raymond Penners <raymond@dotsphinx.com>
 
@@ -11,7 +14,7 @@
 	* */Makefile.msc: Provided MS-VC++ make files.
 	
 	* src/xp_theme.c: The open/close tree expander symbols were
-	accidentally switched. Fixed.
+	accidentally switched, fixed (Gaim bug #790300).
 
 2003-08-11  Raymond Penners <raymond@dotsphinx.com>
 
