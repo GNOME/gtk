@@ -39,17 +39,36 @@ struct _GtkTextToggleBody {
 
 /* Class struct for segments */
 
-typedef GtkTextLineSegment *(* GtkTextLineSegmentSplitFunc)      (GtkTextLineSegment *segPtr,
-                                                        int index);
-typedef gboolean         (* GtkTextViewSegDeleteFunc)     (GtkTextLineSegment *segPtr,
-                                                        GtkTextLine *line,
-                                                        gboolean treeGone);
-typedef GtkTextLineSegment *(* GtkTextViewSegCleanupFunc)    (GtkTextLineSegment *segPtr,
-                                                        GtkTextLine *line);
-typedef void             (* GtkTextLineSegmentLineChangeFunc) (GtkTextLineSegment *segPtr,
-                                                        GtkTextLine *line);
-typedef void             (* GtkTextViewSegCheckFunc)      (GtkTextLineSegment *segPtr,
-                                                        GtkTextLine *line);
+/* Split seg at index, returning list of two new segments, and freeing seg */
+typedef GtkTextLineSegment* (*GtkTextSegSplitFunc)      (GtkTextLineSegment *seg,
+                                                         gint                index);
+
+/* Delete seg which is contained in line; if tree_gone, the tree is being
+ * freed in its entirety, which may matter for some reason (?)
+ * Return TRUE if the segment is not deleteable, e.g. a mark.
+ */
+typedef gboolean            (*GtkTextSegDeleteFunc)     (GtkTextLineSegment *seg,
+                                                         GtkTextLine        *line,
+                                                         gboolean            tree_gone);
+
+/* Called after segment structure of line changes, so segments can
+ * cleanup (e.g. merge with adjacent segments). Returns a segment list
+ * to replace the original segment list with. The line argument is
+ * the current line.
+ */
+typedef GtkTextLineSegment* (*GtkTextSegCleanupFunc)    (GtkTextLineSegment *seg,
+                                                         GtkTextLine        *line);
+
+/* Called when a segment moves from one line to another. CleanupFunc is also
+ * called in that case, so many segments just use CleanupFunc, I'm not sure
+ * what's up with that (this function may not be needed...)
+ */
+typedef void                (*GtkTextSegLineChangeFunc) (GtkTextLineSegment *seg,
+                                                         GtkTextLine        *line);
+
+/* Called to do debug checks on the segment. */
+typedef void                (*GtkTextSegCheckFunc)      (GtkTextLineSegment *seg,
+                                                         GtkTextLine        *line);
 
 struct _GtkTextLineSegmentClass {
   char *name;                           /* Name of this kind of segment. */
@@ -58,17 +77,17 @@ struct _GtkTextLineSegmentClass {
                                          * attach to character to its left
                                          * or right?  1 means left, 0 means
                                          * right. */
-  GtkTextLineSegmentSplitFunc splitFunc;       /* Procedure to split large segment
+  GtkTextSegSplitFunc splitFunc;        /* Procedure to split large segment
                                          * into two smaller ones. */
-  GtkTextViewSegDeleteFunc deleteFunc;     /* Procedure to call to delete
+  GtkTextSegDeleteFunc deleteFunc;      /* Procedure to call to delete
                                          * segment. */
-  GtkTextViewSegCleanupFunc cleanupFunc;   /* After any change to a line, this
+  GtkTextSegCleanupFunc cleanupFunc;   /* After any change to a line, this
                                          * procedure is invoked for all
                                          * segments left in the line to
                                          * perform any cleanup they wish
                                          * (e.g. joining neighboring
                                          * segments). */
-  GtkTextLineSegmentLineChangeFunc lineChangeFunc;
+  GtkTextSegLineChangeFunc lineChangeFunc;
                                          /* Invoked when a segment is about
                                           * to be moved from its current line
                                           * to an earlier line because of
@@ -77,7 +96,7 @@ struct _GtkTextLineSegmentClass {
                                           * CleanupFunc will be invoked after
                                           * the deletion is finished. */
 
-  GtkTextViewSegCheckFunc checkFunc;       /* Called during consistency checks
+  GtkTextSegCheckFunc checkFunc;       /* Called during consistency checks
                                          * to check internal consistency of
                                          * segment. */
 };
@@ -88,9 +107,9 @@ struct _GtkTextLineSegmentClass {
 
 struct _GtkTextLineSegment {
   GtkTextLineSegmentClass *type;                /* Pointer to record describing
-                                         * segment's type. */
+                                                 * segment's type. */
   GtkTextLineSegment *next;                /* Next in list of segments for this
-                                         * line, or NULL for end of list. */
+                                            * line, or NULL for end of list. */
 
   int char_count;                       /* # of chars of index space occupied */
   

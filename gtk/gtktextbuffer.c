@@ -348,6 +348,48 @@ gtk_text_buffer_get_tag_table (GtkTextBuffer  *buffer)
   return get_table (buffer);
 }
 
+/**
+ * gtk_text_buffer_set_text:
+ * @buffer: a #GtkTextBuffer
+ * @text: UTF-8 text to insert
+ * @len: length of @text in bytes
+ * 
+ * Deletes current contents of @buffer, and inserts @text instead.  If
+ * @text doesn't end with a newline, a newline is added;
+ * #GtkTextBuffer contents must always end with a newline. If @text
+ * ends with a newline, the new buffer contents will be exactly
+ * @text. If @len is -1, @text must be nul-terminated.
+ **/
+void
+gtk_text_buffer_set_text (GtkTextBuffer *buffer,
+                          const gchar   *text,
+                          gint           len)
+{
+  GtkTextIter start, end;
+  
+  g_return_if_fail (GTK_IS_TEXT_BUFFER(buffer));
+  g_return_if_fail (text != NULL);
+
+  if (len < 0)
+    len = strlen (text);
+
+  /* Chop newline, since the buffer will already have one
+   * in it.
+   */
+  if (len > 0 && text[len-1] == '\n')
+    len -= 1;
+
+  gtk_text_buffer_get_bounds (buffer, &start, &end);
+  
+  gtk_text_buffer_delete (buffer, &start, &end);
+
+  if (len > 0)
+    {
+      gtk_text_buffer_get_iter_at_offset (buffer, &start, 0);
+      gtk_text_buffer_insert (buffer, &start, text, len);
+    }
+}
+
 /*
  * Insertion
  */
@@ -510,6 +552,178 @@ gtk_text_buffer_insert_interactive_at_cursor (GtkTextBuffer *buffer,
                                              default_editable);
 }
 
+
+/**
+ * gtk_text_buffer_insert_range:
+ * @buffer: a #GtkTextBuffer
+ * @iter: a position in @buffer
+ * @start: a position in a #GtkTextBuffer
+ * @end: another position in the same buffer as @start
+ *
+ * Copies text, tags, and pixbufs between @start and @end (the order
+ * of @start and @end doesn't matter) and inserts the copy at @iter.
+ * Used instead of simply getting/inserting text because it preserves
+ * images and tags. If @start and @end are in a different buffer
+ * from @buffer, the two buffers must share the same tag table.
+ *
+ * Implemented via multiple emissions of the insert_text and
+ * apply_tag signals, so expect those.
+ **/
+void
+gtk_text_buffer_insert_range (GtkTextBuffer     *buffer,
+                              GtkTextIter       *iter,
+                              const GtkTextIter *start,
+                              const GtkTextIter *end)
+{
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+  g_return_if_fail (iter != NULL);
+  g_return_if_fail (start != NULL);
+  g_return_if_fail (end != NULL);
+  g_return_if_fail (gtk_text_iter_get_buffer (start) !=
+                    gtk_text_iter_get_buffer (end));
+  g_return_if_fail (gtk_text_iter_get_buffer (start)->tag_table !=
+                    buffer->tag_table);
+
+  /* FIXME */
+}
+
+gboolean
+gtk_text_buffer_insert_range_interactive (GtkTextBuffer     *buffer,
+                                          GtkTextIter       *iter,
+                                          const GtkTextIter *start,
+                                          const GtkTextIter *end,
+                                          gboolean           default_editable)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (start != NULL, FALSE);
+  g_return_val_if_fail (end != NULL, FALSE);
+  g_return_val_if_fail (gtk_text_iter_get_buffer (start) !=
+                        gtk_text_iter_get_buffer (end), FALSE);
+  g_return_val_if_fail (gtk_text_iter_get_buffer (start)->tag_table !=
+                        buffer->tag_table, FALSE);
+
+
+  /* FIXME */
+  
+  return FALSE;
+}
+
+/**
+ * gtk_text_buffer_insert_with_tags:
+ * @buffer: a #GtkTextBuffer
+ * @iter: an iterator in @buffer
+ * @text: UTF-8 text
+ * @len: length of @text, or -1 
+ * @first_tag: first tag to apply to @text
+ * @Varargs: NULL-terminated list of tags to apply 
+ * 
+ * Inserts @text into @buffer at @iter, applying the list of tags to
+ * the newly-inserted text. The last tag specified must be NULL to
+ * terminate the list. Equivalent to calling gtk_text_buffer_insert(),
+ * then gtk_text_buffer_apply_tag() on the inserted text;
+ * gtk_text_buffer_insert_with_tags() is just a convenience function.
+ **/
+void
+gtk_text_buffer_insert_with_tags (GtkTextBuffer *buffer,
+                                  GtkTextIter   *iter,
+                                  const gchar   *text,
+                                  gint           len,
+                                  GtkTextTag    *first_tag,
+                                  ...)
+{
+  gint start_offset;
+  GtkTextIter start;
+  va_list args;
+  GtkTextTag *tag;
+  
+  g_return_if_fail (GTK_IS_TEXT_BUFFER(buffer));
+  g_return_if_fail (iter != NULL);
+  g_return_if_fail (text != NULL);
+
+  start_offset = gtk_text_iter_get_offset (iter);
+  
+  gtk_text_buffer_insert (buffer, iter, text, len);
+
+  if (first_tag == NULL)
+    return;
+  
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, start_offset);
+  
+  va_start (args, first_tag);
+  tag = first_tag;
+  while (tag)
+    {
+      gtk_text_buffer_apply_tag (buffer, tag, &start, iter);
+
+      tag = va_arg (args, GtkTextTag*);
+    }
+
+  va_end (args);
+}
+
+/**
+ * gtk_text_buffer_insert_with_tags_by_name:
+ * @buffer: a #GtkTextBuffer
+ * @iter: position in @buffer
+ * @text: UTF-8 text
+ * @len: length of @text, or -1
+ * @first_tag_name: name of a tag to apply to @text
+ * @Varargs: more tag names
+ * 
+ * Same as gtk_text_buffer_insert_with_tags(), but allows you
+ * to pass in tag names instead of tag objects.
+ **/
+void
+gtk_text_buffer_insert_with_tags_by_name  (GtkTextBuffer *buffer,
+                                           GtkTextIter   *iter,
+                                           const gchar   *text,
+                                           gint           len,
+                                           const gchar   *first_tag_name,
+                                           ...)
+{
+  gint start_offset;
+  GtkTextIter start;
+  va_list args;
+  const gchar *tag_name;
+  
+  g_return_if_fail (GTK_IS_TEXT_BUFFER(buffer));
+  g_return_if_fail (iter != NULL);
+  g_return_if_fail (text != NULL);
+
+  start_offset = gtk_text_iter_get_offset (iter);
+  
+  gtk_text_buffer_insert (buffer, iter, text, len);
+
+  if (first_tag_name == NULL)
+    return;
+  
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, start_offset);
+  
+  va_start (args, first_tag_name);
+  tag_name = first_tag_name;
+  while (tag_name)
+    {
+      GtkTextTag *tag;
+
+      tag = gtk_text_tag_table_lookup (buffer->tag_table,
+                                       tag_name);
+
+      if (tag == NULL)
+        {
+          g_warning ("%s: no tag with name '%s'!", G_STRLOC, tag_name);
+          return;
+        }
+      
+      gtk_text_buffer_apply_tag (buffer, tag, &start, iter);
+
+      tag_name = va_arg (args, const gchar*);
+    }
+
+  va_end (args);
+}
+
+
 /*
  * Deletion
  */
@@ -535,10 +749,10 @@ gtk_text_buffer_real_delete_text(GtkTextBuffer *buffer,
 }
 
 static void
-gtk_text_buffer_emit_delete(GtkTextBuffer *buffer,
-                            GtkTextIter *start,
-                            GtkTextIter *end,
-                            gboolean interactive)
+gtk_text_buffer_emit_delete (GtkTextBuffer *buffer,
+                             GtkTextIter *start,
+                             GtkTextIter *end,
+                             gboolean interactive)
 {
   g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
   g_return_if_fail(start != NULL);
@@ -549,11 +763,14 @@ gtk_text_buffer_emit_delete(GtkTextBuffer *buffer,
 
   gtk_text_iter_reorder (start, end);
 
-  /* FIXME if the final newline is in the deletion range,
-   * shorten the range. (i.e. if end is the end iterator,
-   * move it backward by one)
+  /* Somewhat annoyingly, if you try to delete the final newline
+   * the BTree will put it back; which means you can't deduce the
+   * final contents of the buffer purely by monitoring insert/delete
+   * signals on the buffer. But if you delete the final newline, any
+   * tags on the newline will go away, oddly. See comment in
+   * gtktextbtree.c. This is all sort of annoying, but really hard
+   * to fix.
    */
-  
   gtk_signal_emit(GTK_OBJECT(buffer),
                   signals[DELETE_TEXT],
                   start, end,
@@ -822,11 +1039,15 @@ gtk_text_buffer_mark_set (GtkTextBuffer     *buffer,
      override the default handler or stop the emission; that is,
      this signal is purely for notification, and not to allow users
      to modify the default behavior. */
+
+  gtk_text_mark_ref (mark);
+  
   gtk_signal_emit(GTK_OBJECT(buffer),
                   signals[MARK_SET],
                   location,
                   mark);
 
+  gtk_text_mark_unref (mark);
 }
 
 /**
@@ -841,15 +1062,15 @@ gtk_text_buffer_mark_set (GtkTextBuffer     *buffer,
  * 
  * Move the mark to the given position, if not @should_exist, create the mark.
  * 
- * Return value: 
+ * Return value: mark
  **/
 static GtkTextMark*
-gtk_text_buffer_set_mark(GtkTextBuffer *buffer,
-                         GtkTextMark *existing_mark,
-                         const gchar *mark_name,
-                         const GtkTextIter *iter,
-                         gboolean left_gravity,
-                         gboolean should_exist)
+gtk_text_buffer_set_mark (GtkTextBuffer *buffer,
+                          GtkTextMark *existing_mark,
+                          const gchar *mark_name,
+                          const GtkTextIter *iter,
+                          gboolean left_gravity,
+                          gboolean should_exist)
 {
   GtkTextIter location;
   GtkTextMark *mark;
@@ -862,14 +1083,14 @@ gtk_text_buffer_set_mark(GtkTextBuffer *buffer,
                                  should_exist);
 
   if (gtk_text_btree_mark_is_insert(get_btree (buffer), mark) ||
-      gtk_text_btree_mark_is_selection_bound(get_btree (buffer), mark))
+      gtk_text_btree_mark_is_selection_bound (get_btree (buffer), mark))
     {
-      gtk_text_buffer_update_primary_selection(buffer);
+      gtk_text_buffer_update_primary_selection (buffer);
     }
   
-  gtk_text_btree_get_iter_at_mark(get_btree (buffer),
-                                  &location,
-                                  mark);
+  gtk_text_btree_get_iter_at_mark (get_btree (buffer),
+                                   &location,
+                                   mark);
   
   gtk_text_buffer_mark_set (buffer, &location, mark);
 
@@ -895,7 +1116,11 @@ gtk_text_buffer_set_mark(GtkTextBuffer *buffer,
  *
  * The caller of this function does <emphasis>not</emphasis> own a reference
  * to the returned #GtkTextMark, so you can ignore the return value
- * if you like.
+ * if you like. Marks are owned by the buffer and go away when the
+ * buffer does.
+ *
+ * Emits the "mark_set" signal as notification of the mark's initial
+ * placement.
  * 
  * Return value: the new #GtkTextMark object
  **/
@@ -905,90 +1130,219 @@ gtk_text_buffer_create_mark(GtkTextBuffer *buffer,
                             const GtkTextIter *where,
                             gboolean left_gravity)
 {
-  g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), NULL);
+  g_return_val_if_fail (GTK_IS_TEXT_BUFFER(buffer), NULL);
   
-  return gtk_text_buffer_set_mark(buffer, NULL, mark_name, where,
-                                  left_gravity, FALSE);
+  return gtk_text_buffer_set_mark (buffer, NULL, mark_name, where,
+                                   left_gravity, FALSE);
 }
 
 /**
  * gtk_text_buffer_move_mark:
- * @buffer: 
- * @mark: 
- * @where: 
+ * @buffer: a #GtkTextBuffer
+ * @mark: a #GtkTextMark
+ * @where: new location for @mark in @buffer
  * 
- * 
+ * Moves @mark to the new location @where. Emits the "mark_set" signal
+ * as notification of the move.
  **/
 void
-gtk_text_buffer_move_mark(GtkTextBuffer *buffer,
-                          GtkTextMark *mark,
-                          const GtkTextIter *where)
+gtk_text_buffer_move_mark (GtkTextBuffer *buffer,
+                           GtkTextMark *mark,
+                           const GtkTextIter *where)
 {
   g_return_if_fail (mark != NULL);
-  g_return_if_fail (!gtk_text_mark_deleted (mark));
-  g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
+  g_return_if_fail (!gtk_text_mark_get_deleted (mark));
+  g_return_if_fail (GTK_IS_TEXT_BUFFER(buffer));
   
-  gtk_text_buffer_set_mark(buffer, mark, NULL, where, FALSE, TRUE);
+  gtk_text_buffer_set_mark (buffer, mark, NULL, where, FALSE, TRUE);
 }
 
+/**
+ * gtk_text_buffer_get_iter_at_mark:
+ * @buffer: a #GtkTextBuffer
+ * @iter: iterator to initialize
+ * @mark: a #GtkTextMark in @buffer
+ * 
+ * Initializes @iter with the current position of @mark.
+ **/
 void
-gtk_text_buffer_get_iter_at_mark(GtkTextBuffer *buffer,
-                                 GtkTextIter *iter,
-                                 GtkTextMark *mark)
+gtk_text_buffer_get_iter_at_mark (GtkTextBuffer *buffer,
+                                  GtkTextIter *iter,
+                                  GtkTextMark *mark)
 {
   g_return_if_fail (mark != NULL);
-  g_return_if_fail (!gtk_text_mark_deleted (mark));
-  g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
+  g_return_if_fail (!gtk_text_mark_get_deleted (mark));
+  g_return_if_fail (GTK_IS_TEXT_BUFFER(buffer));
 
-  gtk_text_btree_get_iter_at_mark(get_btree (buffer),
-                                  iter,
-                                  mark);
+  gtk_text_btree_get_iter_at_mark (get_btree (buffer),
+                                   iter,
+                                   mark);
 }
 
+/**
+ * gtk_text_buffer_delete_mark:
+ * @buffer: a #GtkTextBuffer
+ * @mark: a #GtkTextMark in @buffer 
+ * 
+ * Deletes @mark, so that it's no longer located anywhere in the
+ * buffer. Removes the reference the buffer holds to the mark, so if
+ * you haven't called gtk_text_mark_ref() the mark will be freed. Even
+ * if the mark isn't freed, most operations on @mark become
+ * invalid. There is no way to undelete a
+ * mark. gtk_text_mark_get_deleted() will return TRUE after this
+ * function has been called on a mark; gtk_text_mark_get_deleted()
+ * indicates that a mark no longer belongs to a buffer. The "mark_deleted"
+ * signal will be emitted as notification after the mark is deleted.
+ **/
 void
 gtk_text_buffer_delete_mark(GtkTextBuffer *buffer,
-                            GtkTextMark *mark)
+                            GtkTextMark   *mark)
 {
   g_return_if_fail (mark != NULL);
-  g_return_if_fail (!gtk_text_mark_deleted (mark));
-  g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
-
+  g_return_if_fail (!gtk_text_mark_get_deleted (mark));
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+  
+  gtk_text_mark_ref (mark);
+  
   gtk_text_btree_remove_mark (get_btree (buffer), mark);
 
   /* See rationale above for MARK_SET on why we emit this after
-     removing the mark, rather than removing the mark in a default
-     handler. */
-  gtk_signal_emit(GTK_OBJECT(buffer), signals[MARK_DELETED],
-                  mark);
+   * removing the mark, rather than removing the mark in a default
+   * handler.
+   */
+  gtk_signal_emit (GTK_OBJECT(buffer), signals[MARK_DELETED],
+                   mark);
+
+  gtk_text_mark_unref (mark);
 }
 
+/**
+ * gtk_text_buffer_get_mark:
+ * @buffer: a #GtkTextBuffer
+ * @name: a mark name
+ * 
+ * Returns the mark named @name in buffer @buffer, or NULL if no such
+ * mark exists in the buffer.
+ * 
+ * Return value: a #GtkTextMark, or NULL
+ **/
 GtkTextMark*
 gtk_text_buffer_get_mark (GtkTextBuffer      *buffer,
                           const gchar         *name)
 {
   GtkTextMark *mark;
 
-  g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), NULL);
-  g_return_val_if_fail(name != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_TEXT_BUFFER(buffer), NULL);
+  g_return_val_if_fail (name != NULL, NULL);
   
-  mark = gtk_text_btree_get_mark_by_name(get_btree (buffer), name);
+  mark = gtk_text_btree_get_mark_by_name (get_btree (buffer), name);
 
   return mark;
 }
 
+
+/**
+ * gtk_text_buffer_move_mark_by_name:
+ * @buffer: a #GtkTextBuffer 
+ * @name: name of a mark
+ * @where: new location for mark
+ * 
+ * Moves the mark named @name (which must exist) to location @where.
+ * See gtk_text_buffer_move_mark() for details.
+ **/
+void
+gtk_text_buffer_move_mark_by_name (GtkTextBuffer     *buffer,
+                                   const gchar       *name,
+                                   const GtkTextIter *where)
+{
+  GtkTextMark *mark;
+
+  g_return_if_fail (GTK_IS_TEXT_BUFFER(buffer));
+  g_return_if_fail (name != NULL);
+  
+  mark = gtk_text_btree_get_mark_by_name (get_btree (buffer), name);  
+
+  if (mark == NULL)
+    {
+      g_warning ("%s: no mark named '%s'", G_STRLOC, name);
+      return;
+    }
+  
+  gtk_text_buffer_move_mark (buffer, mark, where);
+}
+
+/**
+ * gtk_text_buffer_delete_mark_by_name:
+ * @buffer: a #GtkTextBuffer
+ * @name: name of a mark in @buffer
+ * 
+ * Deletes the mark named @name; the mark must exist. See
+ * gtk_text_buffer_delete_mark() for details.
+ **/
+void
+gtk_text_buffer_delete_mark_by_name (GtkTextBuffer     *buffer,
+                                     const gchar       *name)
+{
+  GtkTextMark *mark;
+
+  g_return_if_fail (GTK_IS_TEXT_BUFFER(buffer));
+  g_return_if_fail (name != NULL);
+  
+  mark = gtk_text_btree_get_mark_by_name (get_btree (buffer), name);  
+
+  if (mark == NULL)
+    {
+      g_warning ("%s: no mark named '%s'", G_STRLOC, name);
+      return;
+    }
+  
+  gtk_text_buffer_delete_mark (buffer, mark);
+}
+
+/**
+ * gtk_text_buffer_get_insert:
+ * @buffer: a #GtkTextBuffer
+ * 
+ * Returns the mark that represents the cursor (insertion point).
+ * Equivalent to calling gtk_text_buffer_get_mark() to get the mark
+ * name "insert," but very slightly more efficient, and involves less
+ * typing.
+ * 
+ * Return value: insertion point mark
+ **/
 GtkTextMark*
 gtk_text_buffer_get_insert (GtkTextBuffer *buffer)
 {
   g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), NULL);
 
+  /* FIXME use struct member in btree */
   return gtk_text_buffer_get_mark (buffer, "insert");
 }
 
+/**
+ * gtk_text_buffer_get_selection_bound:
+ * @buffer: a #GtkTextBuffer
+ * 
+ * Returns the mark that represents the selection bound.  Equivalent
+ * to calling gtk_text_buffer_get_mark() to get the mark name
+ * "selection_bound," but very slightly more efficient, and involves
+ * less typing.
+ *
+ * The currently-selected text in @buffer is the region between the
+ * "selection_bound" and "insert" marks. If "selection_bound" and
+ * "insert" are in the same place, then there is no current selection.
+ * gtk_text_buffer_get_selection_bounds() is another convenient function
+ * for handling the selection, if you just want to know whether there's a
+ * selection and what its bounds are.
+ * 
+ * Return value: selection bound mark
+ **/
 GtkTextMark*
 gtk_text_buffer_get_selection_bound (GtkTextBuffer *buffer)
 {
   g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), NULL);
 
+  /* FIXME use struct member in btree */
   return gtk_text_buffer_get_mark (buffer, "selection_bound");
 }
 
@@ -1000,9 +1354,10 @@ gtk_text_buffer_get_selection_bound (GtkTextBuffer *buffer)
  * This function moves the "insert" and "selection_bound" marks
  * simultaneously.  If you move them to the same place in two steps
  * with gtk_text_buffer_move_mark(), you will temporarily select a
- * region in between their old and new locations, which marks part of
- * the buffer invalid and can be inefficient. This function moves
- * them as a unit, which can be optimized.
+ * region in between their old and new locations, which can be pretty
+ * inefficient since the temporarily-selected region will force stuff
+ * to be recalculated. This function moves them as a unit, which can
+ * be optimized.
  **/
 void
 gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
@@ -1017,7 +1372,7 @@ gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
   if (gtk_text_iter_is_last (&real))
     gtk_text_iter_prev_char (&real);
   
-  gtk_text_btree_place_cursor(get_btree (buffer), &real);
+  gtk_text_btree_place_cursor (get_btree (buffer), &real);
   gtk_text_buffer_mark_set (buffer, &real,
                             gtk_text_buffer_get_mark (buffer,
                                                       "insert"));
@@ -1384,7 +1739,7 @@ clipboard_received (GtkClipboard *clipboard,
       GtkTextMark *paste_point_override;
 
       paste_point_override = gtk_text_buffer_get_mark (buffer,
-						       "__paste_point_override");
+						       "gtk_paste_point_override");
       
       if (paste_point_override != NULL)
 	{
@@ -1392,7 +1747,7 @@ clipboard_received (GtkClipboard *clipboard,
 					   paste_point_override);
 	  gtk_text_buffer_delete_mark(buffer,
 				      gtk_text_buffer_get_mark (buffer,
-								"__paste_point_override"));
+								"gtk_paste_point_override"));
 	}
       else
 	{
@@ -1503,7 +1858,7 @@ gtk_text_buffer_paste_primary (GtkTextBuffer *buffer,
 {
   if (override_location != NULL)
     gtk_text_buffer_create_mark(buffer,
-                                "__paste_point_override",
+                                "gtk_paste_point_override",
                                 override_location, FALSE);
   
   paste (buffer, FALSE, TRUE, default_editable);
@@ -1580,7 +1935,8 @@ cut_or_copy(GtkTextBuffer *buffer,
       if (delete_region_after)
         {
           if (interactive)
-            gtk_text_buffer_delete_interactive (buffer, &start, &end, default_editable);
+            gtk_text_buffer_delete_interactive (buffer, &start, &end,
+                                                default_editable);
           else
             gtk_text_buffer_delete (buffer, &start, &end);
         }
@@ -1601,12 +1957,26 @@ gtk_text_buffer_copy_clipboard (GtkTextBuffer *buffer)
 }
 
 
+/**
+ * gtk_text_buffer_get_selection_bounds:
+ * @buffer: a #GtkTextBuffer
+ * @start: iterator to initialize with selection start
+ * @end: iterator to initialize with selection end
+ * 
+ * Returns %TRUE if some text is selected; places the bounds
+ * of the selection in @start and @end (if the selection has length 0,
+ * then @start and @end are filled in with the same value).
+ * @start and @end will be in ascending order. If @start and @end are
+ * NULL, then they are not filled in, but the return value still indicates
+ * whether text is selected.
+ * 
+ * Return value: whether the selection has nonzero length
+ **/
 gboolean
 gtk_text_buffer_get_selection_bounds   (GtkTextBuffer      *buffer,
                                         GtkTextIter        *start,
                                         GtkTextIter        *end)
 {
-  g_return_val_if_fail (buffer != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
 
   return gtk_text_btree_get_selection_bounds (get_btree (buffer), start, end);
@@ -1618,8 +1988,12 @@ gtk_text_buffer_get_selection_bounds   (GtkTextBuffer      *buffer,
  */
 
 void
-gtk_text_buffer_spew(GtkTextBuffer *buffer)
+_gtk_text_buffer_spew(GtkTextBuffer *buffer)
 {
   gtk_text_btree_spew(get_btree (buffer));
 }
+
+
+
+
 

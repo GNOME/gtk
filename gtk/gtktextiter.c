@@ -125,7 +125,13 @@ gtk_text_iter_make_surreal(const GtkTextIter *_iter)
   if (iter->chars_changed_stamp !=
       gtk_text_btree_get_chars_changed_stamp(iter->tree))
     {
-      g_warning("Invalid text buffer iterator: either the iterator is uninitialized, or the characters/pixmaps/widgets in the buffer have been modified since the iterator was created.\nYou must use marks, character numbers, or line numbers to preserve a position across buffer modifications.\nYou can apply tags and insert marks without invalidating your iterators, however.");
+      g_warning("Invalid text buffer iterator: either the iterator "
+                "is uninitialized, or the characters/pixbufs/widgets "
+                "in the buffer have been modified since the iterator "
+                "was created.\nYou must use marks, character numbers, "
+                "or line numbers to preserve a position across buffer "
+                "modifications.\nYou can apply tags and insert marks "
+                "without invalidating your iterators, however.");
       return NULL;
     }
 
@@ -335,7 +341,7 @@ static void
 check_invariants(const GtkTextIter *iter)
 {
   if (gtk_debug_flags & GTK_DEBUG_TEXT)
-    gtk_text_iter_check(iter);
+    gtk_text_iter_check (iter);
 }
 #else
 #define check_invariants(x)
@@ -1410,6 +1416,9 @@ forward_line_leaving_caches_unmodified(GtkTextRealIter *real)
     }
 }
 
+/* The return value indicates (MOVEMENT OCCURRED && NEW ITER IS
+ * DEREFERENCEABLE)
+ */
 static gboolean
 forward_char(GtkTextRealIter *real)
 {
@@ -1459,11 +1468,10 @@ forward_char(GtkTextRealIter *real)
       
       check_invariants((GtkTextIter*)real);
 
-      /* FIXME we don't currently return FALSE if
-       * we moved onto the end iterator
-       */
-      
-      return TRUE;
+      if (gtk_text_iter_is_last ((GtkTextIter*)real))
+        return FALSE;
+      else
+        return TRUE;
     }
 }
 
@@ -1653,14 +1661,12 @@ gtk_text_iter_prev_char(GtkTextIter *iter)
  * 
  * Moves @count characters if possible (if @count would move past the
  * start or end of the buffer, moves to the start or end of the
- * buffer). If @count is positive, the return value indicates whether
- * @iter was moved to a dereferenceable location (FALSE is returned if
- * @iter was moved to the non-dereferenceable end iterator). If @count
- * is negative, the return value indicates whether @iter was already
- * at character offset 0. If @count is 0, the function does nothing
- * and returns FALSE.
+ * buffer). The return value indicates whether the new position of
+ * @iter is different from its original position, and dereferenceable
+ * (the last iterator in the buffer is not dereferenceable). If @count
+ * is 0, the function does nothing and returns FALSE.
  * 
- * Return value: whether @iter moved or is dereferenceable
+ * Return value: whether @iter moved and is dereferenceable
  **/
 gboolean
 gtk_text_iter_forward_chars(GtkTextIter *iter, gint count)
@@ -1724,14 +1730,12 @@ gtk_text_iter_forward_chars(GtkTextIter *iter, gint count)
  *
  * Moves @count characters backward, if possible (if @count would move
  * past the start or end of the buffer, moves to the start or end of
- * the buffer). If @count is negative, the return value indicates
- * whether @iter was moved to a dereferenceable location (FALSE is
- * returned if @iter was moved to the non-dereferenceable end
- * iterator). If @count is positive, the return value indicates
- * whether @iter was already at character offset 0. If @count is 0,
+ * the buffer).  The return value indicates whether the iterator moved
+ * onto a dereferenceable position; if the iterator didn't move, or
+ * moved onto the end iterator, then FALSE is returned. If @count is 0,
  * the function does nothing and returns FALSE.
  * 
- * Return value: whether @iter moved or is dereferenceable
+ * Return value: whether @iter moved and is dereferenceable
  *  
  **/
 gboolean
@@ -1748,7 +1752,7 @@ gtk_text_iter_backward_chars(GtkTextIter *iter, gint count)
   else if (count == 0)
     return FALSE;
   else if (count < 0)
-    return gtk_text_iter_forward_chars(iter, 0 - count);
+    return gtk_text_iter_forward_chars (iter, 0 - count);
 
   ensure_char_offsets(real);
   check_invariants(iter);
@@ -1818,7 +1822,8 @@ gtk_text_iter_backward_chars(GtkTextIter *iter, gint count)
  * 
  * Moves @iter to the start of the next line. Returns TRUE if there
  * was a next line to move to, and FALSE if @iter was simply moved to
- * the end of the buffer and is now not dereferenceable.
+ * the end of the buffer and is now not dereferenceable, or if @iter was
+ * already at the end of the buffer.
  * 
  * Return value: whether @iter can be dereferenced
  **/
@@ -1863,7 +1868,9 @@ gtk_text_iter_forward_line(GtkTextIter *iter)
  * @iter could be moved; i.e. if @iter was at character offset 0, this
  * function returns FALSE. Therefore if @iter was already on line 0,
  * but not at the start of the line, @iter is snapped to the start of
- * the line and the function returns TRUE.
+ * the line and the function returns TRUE. (Note that this implies that
+ * in a loop calling this function, the line number may not change on
+ * every iteration, if your first iteration is on line 0.)
  * 
  * Return value: whether @iter moved
  **/
@@ -1921,7 +1928,8 @@ gtk_text_iter_backward_line(GtkTextIter *iter)
      of the first line and return TRUE, so TRUE means the
      iterator changed, not that the line changed; this is maybe
      a bit weird. I'm not sure there's an obvious right thing
-     to do though. */
+     to do though.
+  */
 
   check_invariants(iter);
   
@@ -1932,13 +1940,13 @@ gboolean
 gtk_text_iter_forward_lines(GtkTextIter *iter, gint count)
 {
   if (count < 0)
-    return gtk_text_iter_backward_lines(iter, 0 - count);
+    return gtk_text_iter_backward_lines (iter, 0 - count);
   else if (count == 0)
     return FALSE;
   else if (count == 1)
     {
       check_invariants(iter);
-      return gtk_text_iter_forward_line(iter);
+      return gtk_text_iter_forward_line (iter);
     }
   else
     {
@@ -1950,10 +1958,10 @@ gtk_text_iter_forward_lines(GtkTextIter *iter, gint count)
 
       check_invariants(iter);
 
-      /* FIXME this needs to return FALSE if we moved onto the
-       * end iterator.
-       */
-      return (gtk_text_iter_get_line(iter) != old_line);
+      /* return whether it moved, and is dereferenceable. */
+      return
+        (gtk_text_iter_get_line (iter) != old_line) &&
+        !gtk_text_iter_is_last (iter);
     }
 }
 
@@ -2149,7 +2157,7 @@ gtk_text_iter_forward_word_ends(GtkTextIter      *iter,
 
 gboolean
 gtk_text_iter_backward_word_starts(GtkTextIter      *iter,
-                                    gint               count)
+                                   gint               count)
 {
   g_return_val_if_fail(iter != NULL, FALSE);
   g_return_val_if_fail(count > 0, FALSE);
@@ -2169,7 +2177,7 @@ gtk_text_iter_backward_word_starts(GtkTextIter      *iter,
 
 void
 gtk_text_iter_set_line_offset(GtkTextIter *iter,
-                             gint char_on_line)
+                              gint char_on_line)
 {
   GtkTextRealIter *real;
   
@@ -2295,6 +2303,19 @@ gtk_text_iter_forward_to_newline(GtkTextIter *iter)
     }
 }
 
+/**
+ * gtk_text_iter_forward_to_tag_toggle:
+ * @iter: a #GtkTextIter
+ * @tag: a #GtkTextTag, or NULL
+ * 
+ * Moves forward to the next toggle (on or off) of the
+ * #GtkTextTag @tag, or to the next toggle of any tag if
+ * @tag is NULL. If no matching tag toggles are found,
+ * returns FALSE, otherwise TRUE. Does not return toggles
+ * located at @iter, only toggles after @iter.
+ * 
+ * Return value: whether we found a tag toggle after @iter
+ **/
 gboolean
 gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
                                      GtkTextTag  *tag)
@@ -2314,7 +2335,7 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
   
   current_line = real->line;
   next_line = gtk_text_line_next_could_contain_tag(current_line,
-                                                    real->tree, tag);
+                                                   real->tree, tag);
   
   while (gtk_text_iter_forward_indexable_segment(iter))
     {
@@ -2344,7 +2365,7 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
         {
           /* If there's a toggle here, it isn't indexable so
              any_segment can't be the indexable segment. */
-          g_assert(real->any_segment != real->segment);
+          g_assert (real->any_segment != real->segment);
           return TRUE;
         }
     }
@@ -2354,7 +2375,7 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
     {
       /* If there's a toggle here, it isn't indexable so
          any_segment can't be the indexable segment. */
-      g_assert(real->any_segment != real->segment);
+      g_assert (real->any_segment != real->segment);
       return TRUE;
     }
   

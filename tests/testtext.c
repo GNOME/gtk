@@ -1433,6 +1433,35 @@ cursor_set_callback (GtkTextBuffer     *buffer,
     }
 }
 
+
+static void
+text_changed_callback (GtkTextBuffer     *buffer,
+                       gpointer           user_data)
+{
+  GtkTextView *text_view;
+
+  /* Redraw line number windows if the buffer changes
+   * and the widget is mapped (windows may not exist otherwise)
+   */
+  
+  text_view = GTK_TEXT_VIEW (user_data);
+  
+  if (GTK_WIDGET_MAPPED (text_view))
+    {
+      GdkWindow *line_window;
+
+      line_window = gtk_text_view_get_window (text_view,
+                                              GTK_TEXT_WINDOW_LEFT);
+      
+      gdk_window_invalidate_rect (line_window, NULL, FALSE);
+      
+      line_window = gtk_text_view_get_window (text_view,
+                                              GTK_TEXT_WINDOW_RIGHT);
+
+      gdk_window_invalidate_rect (line_window, NULL, FALSE);
+    }
+}
+
 static gint
 tab_stops_expose (GtkWidget      *widget,
                   GdkEventExpose *event,
@@ -1783,6 +1812,11 @@ create_view (Buffer *buffer)
                       "expose_event",
                       GTK_SIGNAL_FUNC (line_numbers_expose),
                       NULL);
+
+  gtk_signal_connect (GTK_OBJECT (view->buffer->buffer),
+                      "changed",
+                      GTK_SIGNAL_FUNC (text_changed_callback),
+                      view->text_view);
   
   gtk_box_pack_start (GTK_BOX (vbox), sw, TRUE, TRUE, 0);
   gtk_container_add (GTK_CONTAINER (sw), view->text_view);

@@ -59,7 +59,7 @@ gtk_text_mark_unref (GtkTextMark *mark)
 }
 
 gboolean
-gtk_text_mark_deleted (GtkTextMark *mark)
+gtk_text_mark_get_deleted (GtkTextMark *mark)
 {
   GtkTextLineSegment *seg;
   
@@ -79,14 +79,14 @@ gtk_text_mark_deleted (GtkTextMark *mark)
 
 
 GtkTextLineSegment*
-mark_segment_new(GtkTextBTree *tree,
-                 gboolean left_gravity,
-                 const gchar *name)
+mark_segment_new (GtkTextBTree *tree,
+                  gboolean left_gravity,
+                  const gchar *name)
 {
   GtkTextLineSegment *mark;
 
-  mark = (GtkTextLineSegment *) g_malloc0(MSEG_SIZE);
-  mark->body.mark.name = g_strdup(name);
+  mark = (GtkTextLineSegment *) g_malloc0 (MSEG_SIZE);
+  mark->body.mark.name = g_strdup (name);
 
   if (left_gravity)
     mark->type = &gtk_text_left_mark_type;
@@ -111,10 +111,10 @@ mark_segment_new(GtkTextBTree *tree,
 void
 mark_segment_ref(GtkTextLineSegment *mark)
 {
-  g_return_if_fail(mark != NULL);
-  g_return_if_fail(mark->type == &gtk_text_right_mark_type ||
-                   mark->type == &gtk_text_left_mark_type);
-  g_return_if_fail(mark->body.mark.refcount > 0);
+  g_return_if_fail (mark != NULL);
+  g_return_if_fail (mark->type == &gtk_text_right_mark_type ||
+                    mark->type == &gtk_text_left_mark_type);
+  g_return_if_fail (mark->body.mark.refcount > 0);
   
   mark->body.mark.refcount += 1;
 }
@@ -122,10 +122,10 @@ mark_segment_ref(GtkTextLineSegment *mark)
 void
 mark_segment_unref(GtkTextLineSegment *mark)
 {
-  g_return_if_fail(mark != NULL);
-  g_return_if_fail(mark->type == &gtk_text_right_mark_type ||
-                   mark->type == &gtk_text_left_mark_type);
-  g_return_if_fail(mark->body.mark.refcount > 0);
+  g_return_if_fail (mark != NULL);
+  g_return_if_fail (mark->type == &gtk_text_right_mark_type ||
+                    mark->type == &gtk_text_left_mark_type);
+  g_return_if_fail (mark->body.mark.refcount > 0);
 
   mark->body.mark.refcount -= 1;
 
@@ -137,17 +137,15 @@ mark_segment_unref(GtkTextLineSegment *mark)
     }
 }
 
-/*
- * Forward references for procedures defined in this file:
- */
 
-static int              mark_segment_delete_func  (GtkTextLineSegment   *segPtr,
-                                                   GtkTextLine      *line,
-                                                   int                treeGone);
-static GtkTextLineSegment *mark_segment_cleanup_func (GtkTextLineSegment   *segPtr,
-                                                   GtkTextLine      *line);
-static void             mark_segment_check_func   (GtkTextLineSegment   *segPtr,
-                                                   GtkTextLine      *line);
+static int                 mark_segment_delete_func  (GtkTextLineSegment *segPtr,
+                                                      GtkTextLine        *line,
+                                                      int                 treeGone);
+static GtkTextLineSegment *mark_segment_cleanup_func (GtkTextLineSegment *segPtr,
+                                                      GtkTextLine        *line);
+static void                mark_segment_check_func   (GtkTextLineSegment *segPtr,
+                                                      GtkTextLine        *line);
+
 
 /*
  * The following structures declare the "mark" segment types.
@@ -157,26 +155,25 @@ static void             mark_segment_check_func   (GtkTextLineSegment   *segPtr,
  */
 
 GtkTextLineSegmentClass gtk_text_right_mark_type = {
-    "mark",					/* name */
+    "mark",					        /* name */
     FALSE,						/* leftGravity */
-    (GtkTextLineSegmentSplitFunc) NULL,			/* splitFunc */
+    NULL,		                        	/* splitFunc */
     mark_segment_delete_func,				/* deleteFunc */
     mark_segment_cleanup_func,				/* cleanupFunc */
-    (GtkTextLineSegmentLineChangeFunc) NULL,		/* lineChangeFunc */
+    NULL,		                                /* lineChangeFunc */
     mark_segment_check_func				/* checkFunc */
 };
 
 GtkTextLineSegmentClass gtk_text_left_mark_type = {
-    "mark",					/* name */
+    "mark",					        /* name */
     TRUE,						/* leftGravity */
-    (GtkTextLineSegmentSplitFunc) NULL,			/* splitFunc */
+    NULL,			                        /* splitFunc */
     mark_segment_delete_func,				/* deleteFunc */
     mark_segment_cleanup_func,				/* cleanupFunc */
-    (GtkTextLineSegmentLineChangeFunc) NULL,		/* lineChangeFunc */
+    NULL,		                                /* lineChangeFunc */
     mark_segment_check_func				/* checkFunc */
 };
 
-
 /*
  *--------------------------------------------------------------
  *
@@ -195,18 +192,14 @@ GtkTextLineSegmentClass gtk_text_left_mark_type = {
  *--------------------------------------------------------------
  */
 
-	/* ARGSUSED */
-static int
-mark_segment_delete_func(segPtr, line, treeGone)
-    GtkTextLineSegment *segPtr;		/* Segment being deleted. */
-    GtkTextLine *line;		/* Line containing segment. */
-    int treeGone;			/* Non-zero means the entire tree is
-					 * being deleted, so everything must
-					 * get cleaned up. */
+static gboolean
+mark_segment_delete_func (GtkTextLineSegment *segPtr,
+                          GtkTextLine        *line,
+                          gboolean            tree_gone)
 {
-    return 1;
+  return TRUE;
 }
-
+
 /*
  *--------------------------------------------------------------
  *
@@ -225,112 +218,14 @@ mark_segment_delete_func(segPtr, line, treeGone)
  */
 
 static GtkTextLineSegment *
-mark_segment_cleanup_func(markPtr, line)
-    GtkTextLineSegment *markPtr;		/* Mark segment that's being moved. */
-    GtkTextLine *line;		/* Line that now contains segment. */
+mark_segment_cleanup_func(GtkTextLineSegment *seg,
+                          GtkTextLine        *line)
 {
-    markPtr->body.mark.line = line;
-    return markPtr;
+  /* not sure why Tk did this here and not in LineChangeFunc */
+  seg->body.mark.line = line;
+  return seg;
 }
 
-#if 0
-
-
-/*
- *--------------------------------------------------------------
- *
- * GtkTextInsertDisplayFunc --
- *
- *	This procedure is called to display the insertion
- *	cursor.
- *
- * Results:
- *	None.
- *
- * Side effects:
- *	Graphics are drawn.
- *
- *--------------------------------------------------------------
- */
-
-	/* ARGSUSED */
-void
-GtkTextInsertDisplayFunc(chunkPtr, x, y, height, baseline, display, dst, screenY)
-    GtkTextDisplayChunk *chunkPtr;		/* Chunk that is to be drawn. */
-    int x;				/* X-position in dst at which to
-					 * draw this chunk (may differ from
-					 * the x-position in the chunk because
-					 * of scrolling). */
-    int y;				/* Y-position at which to draw this
-					 * chunk in dst (x-position is in
-					 * the chunk itself). */
-    int height;				/* Total height of line. */
-    int baseline;			/* Offset of baseline from y. */
-    Display *display;			/* Display to use for drawing. */
-    Drawable dst;			/* Pixmap or window in which to draw
-					 * chunk. */
-    int screenY;			/* Y-coordinate in text window that
-					 * corresponds to y. */
-{
-    GtkTextView *tkxt = (GtkTextView *) chunkPtr->clientData;
-    int halfWidth = tkxt->insertWidth/2;
-
-    if ((x + halfWidth) < 0) {
-	/*
-	 * The insertion cursor is off-screen.  Just return.
-	 */
-
-	return;
-    }
-
-    /*
-     * As a special hack to keep the cursor visible on mono displays
-     * (or anywhere else that the selection and insertion cursors
-     * have the same color) write the default background in the cursor
-     * area (instead of nothing) when the cursor isn't on.  Otherwise
-     * the selection might hide the cursor.
-     */
-
-    if (tkxt->flags & INSERT_ON) {
-	Tk_Fill3DRectangle(tkxt->tkwin, dst, tkxt->insertBorder,
-		x - tkxt->insertWidth/2, y, tkxt->insertWidth,
-		height, tkxt->insertBorderWidth, TK_RELIEF_RAISED);
-    } else if (tkxt->selBorder == tkxt->insertBorder) {
-	Tk_Fill3DRectangle(tkxt->tkwin, dst, tkxt->border,
-		x - tkxt->insertWidth/2, y, tkxt->insertWidth,
-		height, 0, TK_RELIEF_FLAT);
-    }
-}
-
-/*
- *--------------------------------------------------------------
- *
- * InsertUndisplayFunc --
- *
- *	This procedure is called when the insertion cursor is no
- *	longer at a visible point on the display.  It does nothing
- *	right now.
- *
- * Results:
- *	None.
- *
- * Side effects:
- *	None.
- *
- *--------------------------------------------------------------
- */
-
-	/* ARGSUSED */
-static void
-InsertUndisplayFunc(tkxt, chunkPtr)
-    GtkTextView *tkxt;			/* Overall information about text
-					 * widget. */
-    GtkTextDisplayChunk *chunkPtr;		/* Chunk that is about to be freed. */
-{
-    return;
-}
-
-#endif
 /*
  *--------------------------------------------------------------
  *
@@ -350,26 +245,9 @@ InsertUndisplayFunc(tkxt, chunkPtr)
  */
 
 static void
-mark_segment_check_func(markPtr, line)
-    GtkTextLineSegment *markPtr;		/* Segment to check. */
-    GtkTextLine *line;		/* Line containing segment. */
+mark_segment_check_func(GtkTextLineSegment *seg,
+                        GtkTextLine        *line)
 {
-    if (markPtr->body.mark.line != line)
-      g_error("mark_segment_check_func: markPtr->body.mark.line bogus");
-
-    /* No longer do this because we don't have access to btree
-       struct members */
-#if 0
-    /*
-     * Make sure that the mark is still present in the text's mark
-     * hash table.
-     */
-    for (hPtr = Tcl_FirstHashEntry(&markPtr->body.mark.tkxt->markTable,
-	    &search); hPtr != markPtr->body.mark.hPtr;
-	    hPtr = Tcl_NextHashEntry(&search)) {
-	if (hPtr == NULL) {
-	    panic("mark_segment_check_func couldn't find hash table entry for mark");
-	}
-    }
-#endif
+  if (seg->body.mark.line != line)
+    g_error("mark_segment_check_func: seg->body.mark.line bogus");
 }

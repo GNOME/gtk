@@ -1,3 +1,51 @@
+2000-09-30  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextbtree.c (gtk_text_btree_get_selection_bounds): Handle
+	NULL start/end pointers
+
+	* gtk/gtktextbuffer.c: Write some docs
+	(gtk_text_buffer_get_selection_bounds): Allow start/end to be
+	NULL, so you can just check whether there's a selection.	
+
+	* gtk/gtktextbtree.c (gtk_text_btree_remove_mark): No need to 
+	cleanup_line or segments_changed ourselves, it gets done 
+	in unlink_segment
+
+	* gtk/gtktextmark.h:
+	s/gtk_text_mark_deleted/gtk_text_mark_get_deleted/
+	
+	* gtk/gtktextsegment.h: Clean up some indentation and naming mess
+
+	* gtk/gtktextmark.c: delete some more old Tk cruft
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_delete_mark): add ref to
+	mark before removing it, so we can emit MARK_DELETED with a valid
+	pointer.
+	(gtk_text_buffer_mark_set): hold ref across signal emission
+
+	* gtk/gtktextbtree.c (gtk_text_btree_remove_mark): improve
+	whining about attempts to delete special marks
+
+	* gtk/gtktextbuffer.c (_gtk_text_buffer_spew): Prepend with
+	underscore, since it's internal.
+
+	* gtk/gtktextbuffer.h: Remove find_string prototype, this is 
+	now implemented in terms of iterators in gtktextiter.h
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_set_text): 
+	New function, destructively sets contents of buffer. Also 
+	a convenient way to clear the buffer by setting text to ""
+
+	* gtk/gtktextiter.c (gtk_text_iter_make_surreal): reformat
+	multiline string literal
+
+	* gtk/testtext.c (text_changed_callback): Redraw line numbers if
+	text changes.
+
+	* gtk/gtktextiter.c (forward_char): Return FALSE if new location 
+	is not dereferenceable
+	(gtk_text_iter_forward_lines): fix return value
+
 2000-09-29  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktexttag.c (gtk_text_tag_set_priority): fix indentation

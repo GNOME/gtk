@@ -2472,16 +2472,31 @@ gtk_text_btree_get_selection_bounds (GtkTextBTree *tree,
 				     GtkTextIter  *start,
 				     GtkTextIter  *end)
 {
-  gtk_text_btree_get_iter_at_mark (tree, start,
+  GtkTextIter tmp_start, tmp_end;
+  
+  gtk_text_btree_get_iter_at_mark (tree, &tmp_start,
                                    (GtkTextMark*)tree->insert_mark);
-  gtk_text_btree_get_iter_at_mark (tree, end,
+  gtk_text_btree_get_iter_at_mark (tree, &tmp_end,
                                    (GtkTextMark*)tree->selection_bound_mark);
   
-  if (gtk_text_iter_equal(start, end))
-    return FALSE;
+  if (gtk_text_iter_equal(&tmp_start, &tmp_end))
+    {
+      if (start)
+        *start = tmp_start;
+
+      if (end)
+        *end = tmp_end;
+    }
   else
     {
-      gtk_text_iter_reorder(start, end);
+      gtk_text_iter_reorder(&tmp_start, &tmp_end);
+
+      if (start)
+        *start = tmp_start;
+
+      if (end)
+        *end = tmp_end;
+      
       return TRUE;
     }
 }
@@ -2523,27 +2538,25 @@ gtk_text_btree_remove_mark (GtkTextBTree *tree,
 {
   GtkTextLineSegment *segment = (GtkTextLineSegment*) mark;
   
-  g_return_if_fail(segment != NULL);
-  g_return_if_fail(segment != tree->selection_bound_mark);
-  g_return_if_fail(segment != tree->insert_mark);
-  g_return_if_fail(tree != NULL);
+  g_return_if_fail (segment != NULL);
+  g_return_if_fail (tree != NULL);
 
   if (segment->body.mark.not_deleteable)
     {
       g_warning("Can't delete special mark `%s'", segment->body.mark.name);
       return;
     }
+
+  /* This calls cleanup_line and segments_changed */
+  gtk_text_btree_unlink_segment (tree, segment, segment->body.mark.line);
   
-  gtk_text_btree_unlink_segment(tree, segment, segment->body.mark.line);
-  /* FIXME should probably cleanup_line but Tk didn't */
   if (segment->body.mark.name)
-    g_hash_table_remove(tree->mark_table, segment->body.mark.name);
-  mark_segment_unref(segment);
+    g_hash_table_remove (tree->mark_table, segment->body.mark.name);
+  
+  mark_segment_unref (segment);
 
   segment->body.mark.tree = NULL;
   segment->body.mark.line = NULL;
-  
-  segments_changed(tree);
 }
 
 gboolean

@@ -721,7 +721,7 @@ gtk_text_view_set_buffer (GtkTextView *text_view,
       gtk_text_buffer_get_iter_at_offset (text_view->buffer, &start, 0);
       
       text_view->dnd_mark = gtk_text_buffer_create_mark (text_view->buffer,
-							 "__drag_target",
+							 "gtk_drag_target",
 							 &start, FALSE);
 
       text_view->first_para_mark = gtk_text_buffer_create_mark (text_view->buffer,
@@ -1866,7 +1866,7 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
   
   /* debug hack */
   if (event->button == 3 && (event->state & GDK_CONTROL_MASK) != 0)
-    gtk_text_buffer_spew (GTK_TEXT_VIEW (widget)->buffer);
+    _gtk_text_buffer_spew (GTK_TEXT_VIEW (widget)->buffer);
   else if (event->button == 3)
     gtk_text_layout_spew (GTK_TEXT_VIEW (widget)->layout);
 
@@ -3116,7 +3116,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
 
   gtk_text_buffer_move_mark (text_view->buffer,
                              gtk_text_buffer_get_mark (text_view->buffer,
-                                                       "__drag_target"),
+                                                       "gtk_drag_target"),
                              &newplace);
 
   {
@@ -3130,7 +3130,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
     
     gtk_text_view_scroll_to_mark_adjusted (text_view,
                                            gtk_text_buffer_get_mark (text_view->buffer,
-                                                                     "__drag_target"),
+                                                                     "gtk_drag_target"),
                                            margin, 1.0);
   }
   
@@ -3176,7 +3176,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
   text_view = GTK_TEXT_VIEW (widget);
   
   drag_target_mark = gtk_text_buffer_get_mark (text_view->buffer,
-                                               "__drag_target");
+                                               "gtk_drag_target");
   
   if (drag_target_mark == NULL)
     return;

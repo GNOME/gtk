@@ -91,6 +91,11 @@ gint           gtk_text_buffer_get_char_count (GtkTextBuffer   *buffer);
 
 GtkTextTagTable* gtk_text_buffer_get_tag_table (GtkTextBuffer  *buffer);
 
+/* Delete whole buffer, then insert */
+void gtk_text_buffer_set_text          (GtkTextBuffer *buffer,
+                                        const gchar   *text,
+                                        gint           len);
+
 /* Insert into the buffer */
 void gtk_text_buffer_insert            (GtkTextBuffer *buffer,
                                         GtkTextIter   *iter,
@@ -110,6 +115,29 @@ gboolean gtk_text_buffer_insert_interactive_at_cursor (GtkTextBuffer *buffer,
                                                        gint           len,
                                                        gboolean       default_editable);
 
+void     gtk_text_buffer_insert_range             (GtkTextBuffer     *buffer,
+                                                   GtkTextIter       *iter,
+                                                   const GtkTextIter *start,
+                                                   const GtkTextIter *end);
+gboolean gtk_text_buffer_insert_range_interactive (GtkTextBuffer     *buffer,
+                                                   GtkTextIter       *iter,
+                                                   const GtkTextIter *start,
+                                                   const GtkTextIter *end,
+                                                   gboolean           default_editable);
+
+void    gtk_text_buffer_insert_with_tags          (GtkTextBuffer     *buffer,
+                                                   GtkTextIter       *iter,
+                                                   const gchar       *text,
+                                                   gint               len,
+                                                   GtkTextTag        *first_tag,
+                                                   ...);
+
+void    gtk_text_buffer_insert_with_tags_by_name  (GtkTextBuffer     *buffer,
+                                                   GtkTextIter       *iter,
+                                                   const gchar       *text,
+                                                   gint               len,
+                                                   const gchar       *first_tag_name,
+                                                   ...);
 
 /* Delete from the buffer */
 void     gtk_text_buffer_delete             (GtkTextBuffer *buffer,
@@ -150,6 +178,12 @@ void           gtk_text_buffer_delete_mark (GtkTextBuffer     *buffer,
                                             GtkTextMark       *mark);
 GtkTextMark*   gtk_text_buffer_get_mark    (GtkTextBuffer     *buffer,
                                             const gchar       *name);
+
+void gtk_text_buffer_move_mark_by_name   (GtkTextBuffer     *buffer,
+                                          const gchar       *name,
+                                          const GtkTextIter *where);
+void gtk_text_buffer_delete_mark_by_name (GtkTextBuffer     *buffer,
+                                          const gchar       *name);
 
 GtkTextMark* gtk_text_buffer_get_insert          (GtkTextBuffer *buffer);
 GtkTextMark* gtk_text_buffer_get_selection_bound (GtkTextBuffer *buffer);
@@ -242,23 +276,8 @@ gboolean        gtk_text_buffer_delete_selection        (GtkTextBuffer *buffer,
                                                          gboolean       interactive,
                                                          gboolean       default_editable);
 
-/* This function is not implemented. */
-gboolean gtk_text_buffer_find_string(GtkTextBuffer *buffer,
-                                     GtkTextIter *iter,
-                                     const gchar *str,
-                                     const GtkTextIter *start,
-                                     const GtkTextIter *end);
-
-#if 0
-/* Waiting on glib 1.4 regexp facility */
-gboolean gtk_text_buffer_find_regexp(GtkTextBuffer *buffer,
-                                     GRegexp *regexp,
-                                     const GtkTextIter *start,
-                                     const GtkTextIter *end);
-#endif
-
 /* INTERNAL private stuff */
-void            gtk_text_buffer_spew                   (GtkTextBuffer      *buffer);
+void            _gtk_text_buffer_spew                  (GtkTextBuffer      *buffer);
 
 GtkTextBTree*   _gtk_text_buffer_get_btree             (GtkTextBuffer      *buffer);
 
