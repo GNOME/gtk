@@ -364,7 +364,7 @@ msgstr "d' espåçmint egål"
 
 #: gtk/gtkfontsel.c:1958
 msgid "char cell"
-msgstr ""
+msgstr "caracteres-bloc"
 
 #: gtk/gtkfontsel.c:2158
 msgid "Font: (Filter Applied)"
@@ -449,11 +449,11 @@ msgstr "Tchôke"
 
 #: gtk/gtkinputdialog.c:503
 msgid "X Tilt"
-msgstr ""
+msgstr "Limite X"
 
 #: gtk/gtkinputdialog.c:504
 msgid "Y Tilt"
-msgstr ""
+msgstr "Limite Y"
 
 #: gtk/gtkinputdialog.c:544
 msgid "none"
