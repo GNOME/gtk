@@ -2436,6 +2436,19 @@ gtk_widget_size_allocate (GtkWidget	*widget,
       if (aux_info->y != -1)
 	real_allocation.y = aux_info->y;
     }
+
+  real_allocation.width = MAX (real_allocation.width, 1);
+  real_allocation.height = MAX (real_allocation.height, 1);
+
+  if (real_allocation.width > 32767 ||
+      real_allocation.height > 32767)
+    {
+      g_warning ("gtk_widget_size_allocate(): attempt to allocate widget with width %d and height %d",
+		 real_allocation.width,
+		 real_allocation.height);
+      real_allocation.width = MIN (real_allocation.width, 32767);
+      real_allocation.height = MIN (real_allocation.height, 32767);
+    }
   
   if (GTK_WIDGET_NO_WINDOW (widget))
     {

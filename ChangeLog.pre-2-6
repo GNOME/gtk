@@ -1,3 +1,9 @@
+Sun Jul 18 00:35:49 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_size_allocate): ensure that the allocated
+	width and height is never zero. sanity check both dimensions against
+	32767 and issue a warning if the allocation is greater than that.
+
 Fri Jul 16 22:20:21 PDT 1999 Manish Singh <yosh@gimp.org>
 
 	* ltconfig
