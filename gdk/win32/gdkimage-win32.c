@@ -522,7 +522,7 @@ gdk_image_get (GdkWindow *window,
     }
   image->byte_order = GDK_LSB_FIRST;
   if (image->depth == 1)
-    image->bpl = (width - 1)/8 + 1;
+    image->bpl = ((width - 1)/32 + 1)*4;
   else
     image->bpl = ((width*image->bpp - 1)/4 + 1)*4;
 

@@ -1,3 +1,9 @@
+Mon Jun 28 10:03:07 1999  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkimage.c (gdk_image_get): bpl was set wrong for
+ 	bitmaps, should be multiple of 4. (Thanks to Hans Breuer for
+ 	finding this.)
+
 1999-06-01  Jose H Mercado  <jmercado@mit.edu>
 
 	* gtk+.spec.in: Corrected some typos in files section.
