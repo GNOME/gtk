@@ -740,25 +740,6 @@ gtk_dialog_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkdisclosure</FILE>
-<TITLE>GtkDisclosure</TITLE>
-GtkDisclosure
-gtk_disclosure_new
-gtk_disclosure_new_with_label
-gtk_disclosure_new_with_labels
-gtk_disclosure_set_container
-<SUBSECTION Standard>
-GTK_DISCLOSURE
-GTK_IS_DISCLOSURE
-GTK_TYPE_DISCLOSURE
-GTK_DISCLOSURE_CLASS
-GTK_IS_DISCLOSURE_CLASS
-GTK_DISCLOSURE_GET_CLASS
-<SUBSECTION Private>
-gtk_disclosure_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkdrawingarea</FILE>
 <TITLE>GtkDrawingArea</TITLE>
 GtkDrawingArea

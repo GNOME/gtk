@@ -142,7 +142,6 @@
 <!ENTITY gtk-Settings SYSTEM "xml/gtksettings.xml">
 
 <!ENTITY index-Object-Tree SYSTEM "xml/tree_index.sgml">
-<!ENTITY graphic-tree SYSTEM "xml/tree_map.sgml">
 
 <!ENTITY index-Objects-Grouped SYSTEM "objects_grouped.sgml">
 <!ENTITY gtk-TextWidget SYSTEM "text_widget.sgml">
@@ -251,7 +250,6 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
 </variablelist>
     </para>
 </partintro>
-    &graphic-tree;     
     &gtk-Building;
     &gtk-Compiling;
     &gtk-Running;

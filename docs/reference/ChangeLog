@@ -1,3 +1,8 @@
+2003-05-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-docs.sgml: 
+	* gtk/gtk-sections.txt: Remove some accidentally committed changes.
+
 2003-04-16  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkstyle.sgml: Additions.
