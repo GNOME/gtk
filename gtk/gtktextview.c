@@ -680,7 +680,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boxed ("error-underline-color",
-							       P_("Error Underline Color"),
+							       P_("Error underline color"),
 							       P_("Color with which to draw error-indication underlines"),
 							       GDK_TYPE_COLOR,
 							       G_PARAM_READABLE));
