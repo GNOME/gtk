@@ -5614,7 +5614,7 @@ location_entry_create (GtkFileChooserDefault *impl,
   if (path[0])
     {
       _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (entry), 
-					       (const GtkFilePath *)gtk_file_path_new_steal (path));
+					       gtk_file_path_new_steal ((gchar *)path));
       _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (entry), path);
     }
   else
@@ -5891,7 +5891,7 @@ _shortcuts_model_filter_init (ShortcutsModelFilter *model)
 /* GtkTreeDragSource::row_draggable implementation for the shortcuts filter model */
 static gboolean
 shortcuts_model_filter_row_draggable (GtkTreeDragSource *drag_source,
-				      GtkTreePath[0]       *path)
+				      GtkTreePath       *path)
 {
   ShortcutsModelFilter *model;
   int pos;
