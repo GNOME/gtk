@@ -421,7 +421,7 @@ get_visible (GtkTreeViewColumn *tree_column,
   if (column)
     {
       gtk_cell_renderer_toggle_set_active (GTK_CELL_RENDERER_TOGGLE (cell),
-					   column->visible);
+					   gtk_tree_view_column_get_visible (column));
     }
 }
 

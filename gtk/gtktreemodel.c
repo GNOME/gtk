@@ -1407,6 +1407,8 @@ gtk_tree_row_reference_new_proxy (GObject      *proxy,
 
   reference = g_new (GtkTreeRowReference, 1);
 
+  g_object_ref (proxy);
+  g_object_ref (model);
   reference->proxy = proxy;
   reference->model = model;
   reference->path = gtk_tree_path_copy (path);
@@ -1452,26 +1454,25 @@ gtk_tree_row_reference_free (GtkTreeRowReference *reference)
 
   g_return_if_fail (reference != NULL);
 
-  if (reference->proxy)
+  refs = g_object_get_data (G_OBJECT (reference->proxy), ROW_REF_DATA_STRING);
+
+  if (refs == NULL)
     {
-      refs = g_object_get_data (G_OBJECT (reference->proxy), ROW_REF_DATA_STRING);
-
-      if (refs == NULL)
-        {
-          g_warning (G_STRLOC": bad row reference, proxy has no outstanding row references");
-          return;
-        }
-
-      refs->list = g_slist_remove (refs->list, reference);
-
-      if (refs->list == NULL)
-        {
-          disconnect_ref_callbacks (reference->model);
-          g_object_set_data (G_OBJECT (reference->proxy),
-                             ROW_REF_DATA_STRING,
-                             NULL);
-        }
+      g_warning (G_STRLOC": bad row reference, proxy has no outstanding row references");
+      return;
     }
+
+  refs->list = g_slist_remove (refs->list, reference);
+
+  if (refs->list == NULL)
+    {
+      disconnect_ref_callbacks (reference->model);
+      g_object_set_data (G_OBJECT (reference->proxy),
+			 ROW_REF_DATA_STRING,
+			 NULL);
+    }
+  g_object_unref (reference->proxy);
+  g_object_unref (reference->model);
 
   if (reference->path)
     gtk_tree_path_free (reference->path);

@@ -387,5 +387,5 @@ gtk_cell_renderer_toggle_set_active (GtkCellRendererToggle *toggle,
 {
   g_return_if_fail (GTK_IS_CELL_RENDERER_TOGGLE (toggle));
 
-  g_object_set (G_OBJECT (toggle), "active", !! setting, NULL);
+  g_object_set (G_OBJECT (toggle), "active", setting?TRUE:FALSE, NULL);
 }
