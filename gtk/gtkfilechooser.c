@@ -1641,7 +1641,7 @@ gtk_file_chooser_remove_shortcut_folder (GtkFileChooser    *chooser,
  * @chooser: a #GtkFileChooser
  * 
  * Queries the list of shortcut folders in the file chooser, as set by
- * gtk_file_chooser_set_shortcut_folders().
+ * gtk_file_chooser_add_shortcut_folder().
  * 
  * Return value: A list of folder filenames, or %NULL if there are no shortcut
  * folders.  Free the returned list with g_slist_free(), and the filenames with
@@ -1760,7 +1760,7 @@ gtk_file_chooser_remove_shortcut_folder_uri (GtkFileChooser    *chooser,
  * @chooser: a #GtkFileChooser
  * 
  * Queries the list of shortcut folders in the file chooser, as set by
- * gtk_file_chooser_set_shortcut_folder_uris().
+ * gtk_file_chooser_add_shortcut_folder_uri().
  * 
  * Return value: A list of folder URIs, or %NULL if there are no shortcut
  * folders.  Free the returned list with g_slist_free(), and the URIs with
