@@ -1251,6 +1251,9 @@ gdk_window_reparent (GdkWindow *window,
 		     GDK_WINDOW_XID (new_parent),
 		     x, y);
 
+  window_private->x = x;
+  window_private->y = y;
+  
   /* From here on, we treat parents of type GDK_WINDOW_FOREIGN like
    * the root window
    */
