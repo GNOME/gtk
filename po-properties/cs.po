@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-02 19:58+0200\n"
-"PO-Revision-Date: 2004-10-03 02:39+0200\n"
+"POT-Creation-Date: 2004-10-19 12:40+0200\n"
+"PO-Revision-Date: 2004-10-19 15:24+0200\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -94,6 +94,109 @@ msgstr "Implicitní displej"
 msgid "The default display for GDK"
 msgstr "Implicitní displej pro GDK"
 
+#: gtk/gtkaboutdialog.c:186
+msgid "Program name"
+msgstr "Název programu"
+
+#: gtk/gtkaboutdialog.c:187
+msgid ""
+"The name of the program. If this is not set, it defaults to "
+"g_get_application_name()"
+msgstr "Název programu. Pokud není nastaven, je implicitně g_get_application_name()"
+
+#: gtk/gtkaboutdialog.c:194
+msgid "Program version"
+msgstr "Verze programu"
+
+#: gtk/gtkaboutdialog.c:195
+msgid "The version of the program"
+msgstr "Verze programu"
+
+#: gtk/gtkaboutdialog.c:201
+msgid "Copyright string"
+msgstr "Řetězec copyrightu"
+
+#: gtk/gtkaboutdialog.c:202
+msgid "Copyright information for the program"
+msgstr "Informace o copyrightu na program"
+
+#: gtk/gtkaboutdialog.c:209
+msgid "Comments string"
+msgstr "Řetězec poznámek"
+
+#: gtk/gtkaboutdialog.c:210
+msgid "Comments about the program"
+msgstr "Poznámky o programu"
+
+#: gtk/gtkaboutdialog.c:224
+msgid "Website URL"
+msgstr "URL WWW stránek"
+
+#: gtk/gtkaboutdialog.c:225
+msgid "The URL for the link to the website of the program"
+msgstr "URL pro odkaz na WWW stránky programu"
+
+#: gtk/gtkaboutdialog.c:232
+msgid "Website label"
+msgstr "Popisek WWW stránek"
+
+#: gtk/gtkaboutdialog.c:233
+msgid ""
+"The label for the link to the website of the program. If this is not set, it "
+"defaults to the URL"
+msgstr "Popisek pro odkaz na WWW stránky programu. Není-li nastaven, je implicitně roven URL"
+
+#: gtk/gtkaboutdialog.c:240
+msgid "Authors"
+msgstr "Autoři"
+
+#: gtk/gtkaboutdialog.c:241
+msgid "List of authors of the programs"
+msgstr "Seznam autorů programů"
+
+#: gtk/gtkaboutdialog.c:247
+msgid "Documenters"
+msgstr "Dokumentátoři"
+
+#: gtk/gtkaboutdialog.c:248
+msgid "List of people documenting the program"
+msgstr "Seznam lidí dokumentujících program"
+
+#: gtk/gtkaboutdialog.c:255
+msgid "Artists"
+msgstr "Umělci"
+
+#: gtk/gtkaboutdialog.c:256
+msgid "List of people who have contributed artwork to the program"
+msgstr "Seznam lidí, kteří pro program tvořili grafiku"
+
+#: gtk/gtkaboutdialog.c:263
+msgid "Translator credits"
+msgstr "Kredity překladatelů"
+
+#: gtk/gtkaboutdialog.c:264
+msgid ""
+"Credits to the translators. This string should be marked as translatable"
+msgstr "Kredity překladatelů. Tento řetězec by měl být označen jako přeložitelný"
+
+#: gtk/gtkaboutdialog.c:271
+msgid "Logo"
+msgstr "Logo"
+
+#: gtk/gtkaboutdialog.c:272
+msgid ""
+"A logo for the about box. If this is not set, it defaults to "
+"gtk_window_get_default_icon_list()"
+msgstr "Logo pro dialog o aplikaci. Pokud není nastaveno, je implicitně gtk_window_get_default_icon_list()"
+
+#: gtk/gtkaboutdialog.c:279
+msgid "Link Color"
+msgstr "Barva odkazu"
+
+#: gtk/gtkaboutdialog.c:280
+msgid "Color of hyperlinks"
+msgstr "Barva odkazů"
+
 #: gtk/gtkaccellabel.c:139
 msgid "Accelerator Closure"
 msgstr "Objekt akcelerátoru"
@@ -171,7 +274,9 @@ msgstr "Viditelné při přetečení"
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
-msgstr "Je-li TRUE, proxy toolitem pro tuto akci jsou reprezentovány v menu přetečení lišty nástrojů."
+msgstr ""
+"Je-li TRUE, proxy toolitem pro tuto akci jsou reprezentovány v menu "
+"přetečení lišty nástrojů."
 
 #: gtk/gtkaction.c:258 gtk/gtktoolitem.c:166
 msgid "Visible when vertical"
@@ -214,7 +319,7 @@ msgstr "Citlivý"
 msgid "Whether the action is enabled."
 msgstr "Jestli je akce povolena."
 
-#: gtk/gtkaction.c:289 gtk/gtkactiongroup.c:149 gtk/gtktreeview.c:579
+#: gtk/gtkaction.c:289 gtk/gtkactiongroup.c:149 gtk/gtktreeview.c:582
 #: gtk/gtktreeviewcolumn.c:225 gtk/gtkwidget.c:443
 msgid "Visible"
 msgstr "Viditelný"
@@ -247,7 +352,8 @@ msgstr "Jestli je skupina akcí povolena."
 msgid "Whether the action group is visible."
 msgstr "Jestli je skupina akcí viditelná."
 
-#: gtk/gtkadjustment.c:108 gtk/gtkspinbutton.c:303
+#: gtk/gtkadjustment.c:108 gtk/gtkcellrendererprogress.c:115
+#: gtk/gtkspinbutton.c:303
 msgid "Value"
 msgstr "Hodnota"
 
@@ -645,7 +751,9 @@ msgstr "Přemístit fokus"
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
-msgstr "Jestli vlastnosti child_displacement_x/_y properties mají mít také vliv na obdélník fokusu"
+msgstr ""
+"Jestli vlastnosti child_displacement_x/_y properties mají mít také vliv na "
+"obdélník fokusu"
 
 #: gtk/gtkbutton.c:402
 msgid "Show button images"
@@ -823,6 +931,31 @@ msgstr "Pozadí buňky nastavené"
 msgid "Whether this tag affects the cell background color"
 msgstr "Jestli tento tag ovlivňuje barvu pozadí buňky"
 
+#: gtk/gtkcellrenderercombo.c:117
+msgid "Model"
+msgstr "Model"
+
+#: gtk/gtkcellrenderercombo.c:118
+msgid "The model containing the possible values for the combo box"
+msgstr "Model obsahující možné hodnoty kombinovaného pole"
+
+#: gtk/gtkcellrenderercombo.c:136 gtk/gtkcomboboxentry.c:114
+msgid "Text Column"
+msgstr "Sloupec textu"
+
+#: gtk/gtkcellrenderercombo.c:137 gtk/gtkcomboboxentry.c:115
+msgid "A column in the data source model to get the strings from"
+msgstr "Sloupec v modelu zdroje dat, odkud získat řetězce"
+
+#: gtk/gtkcellrenderercombo.c:155
+msgid "Has Entry"
+msgstr "Má vstup"
+
+#: gtk/gtkcellrenderercombo.c:156
+#, c-format
+msgid "If %FALSE, don't allow to enter strings other than the chosen ones"
+msgstr "Je-li %FALSE, nepovolit zadávat jiné řetězce než zvolené"
+
 #: gtk/gtkcellrendererpixbuf.c:136
 msgid "Pixbuf Object"
 msgstr "Objekt Pixbuf"
@@ -871,9 +1004,18 @@ msgstr "Detail"
 msgid "Render detail to pass to the theme engine"
 msgstr "Detail zobrazení předávaný vykreslovači témat"
 
-#: gtk/gtkcellrenderertext.c:204 gtk/gtkentry.c:573 gtk/gtkprogressbar.c:219
+#: gtk/gtkcellrendererprogress.c:116
+msgid "Value of the progress bar"
+msgstr "Hodnota pruhu průběhu"
+
+#: gtk/gtkcellrendererprogress.c:133 gtk/gtkcellrenderertext.c:204
+#: gtk/gtkentry.c:573 gtk/gtkprogressbar.c:219
 msgid "Text"
 msgstr "Text"
+
+#: gtk/gtkcellrendererprogress.c:134
+msgid "Text on the progress bar"
+msgstr "Text na pruhu průběhu"
 
 #: gtk/gtkcellrenderertext.c:205
 msgid "Text to render"
@@ -1054,7 +1196,9 @@ msgstr "Zkrátit"
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string, if at all"
-msgstr "Preferované místo, kde zkrátit řetězec, pokud vykreslovač buňky nemá dost místa na zobrazení celého řetězce, pokud vůbec nečeho"
+msgstr ""
+"Preferované místo, kde zkrátit řetězec, pokud vykreslovač buňky nemá dost "
+"místa na zobrazení celého řetězce, pokud vůbec nečeho"
 
 #: gtk/gtkcellrenderertext.c:418 gtk/gtkcellview.c:195 gtk/gtktexttag.c:510
 msgid "Background set"
@@ -1221,7 +1365,8 @@ msgstr "Mezera okolo indikátoru"
 msgid "Spacing around check or radio indicator"
 msgstr "Mezera okolo zaškrtnutí nebo indikátoru přepínače"
 
-#: gtk/gtkcheckmenuitem.c:118 gtk/gtktogglebutton.c:134
+#: gtk/gtkcheckmenuitem.c:118 gtk/gtkfilechooserbutton.c:232
+#: gtk/gtktogglebutton.c:134
 msgid "Active"
 msgstr "Aktivní"
 
@@ -1253,8 +1398,8 @@ msgstr "Používat alfu"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Jestli dát barvě hodnotu alfa"
 
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfontbutton.c:176
-#: gtk/gtktreeviewcolumn.c:298
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:226
+#: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Titulek"
 
@@ -1417,14 +1562,6 @@ msgstr "Vypadá jako seznam"
 #: gtk/gtkcombobox.c:620
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Jestli mají rozbalené comboboxy vypadat jako seznamy a ne jako menu"
-
-#: gtk/gtkcomboboxentry.c:114
-msgid "Text Column"
-msgstr "Sloupec textu"
-
-#: gtk/gtkcomboboxentry.c:115
-msgid "A column in the data source model to get the strings from"
-msgstr "Sloupec v modelu zdroje dat, odkud získat řetězce"
 
 #: gtk/gtkcontainer.c:205
 msgid "Resize mode"
@@ -1614,7 +1751,9 @@ msgstr "Zarovnání X"
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
-msgstr "Vodorovné zarovnání, od 0 (vlevo) do 1 (vpravo). Obráceně pro rozložení zprava doleva."
+msgstr ""
+"Vodorovné zarovnání, od 0 (vlevo) do 1 (vpravo). Obráceně pro rozložení "
+"zprava doleva."
 
 #: gtk/gtkentry.c:828
 msgid "Select on focus"
@@ -1640,7 +1779,7 @@ msgstr "Minimální délka klíče"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimální délka hledaného klíče, aby se hledaly odpovídající položky"
 
-#: gtk/gtkentrycompletion.c:296
+#: gtk/gtkentrycompletion.c:296 gtk/gtkiconview.c:361
 msgid "Text column"
 msgstr "Sloupec textu"
 
@@ -1720,11 +1859,11 @@ msgstr "Widget popisku"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Widget zobrazovaný místo obvyklého popisku rozbalovače"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:701
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:704
 msgid "Expander Size"
 msgstr "Velikost rozbalovače"
 
-#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:702
+#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:705
 msgid "Size of the expander arrow"
 msgstr "Velikost šipky rozbalovače"
 
@@ -1813,11 +1952,27 @@ msgstr "Zobrazovat skryté"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Jestli mají být zobrazovány skryté soubory a adresáře"
 
-#: gtk/gtkfilechooserdefault.c:587
+#: gtk/gtkfilechooserbutton.c:219
+msgid "Dialog"
+msgstr "Dialog"
+
+#: gtk/gtkfilechooserbutton.c:220
+msgid "The file chooser dialog to use."
+msgstr "Dialog výběru souborů, který používat."
+
+#: gtk/gtkfilechooserbutton.c:227
+msgid "The title of the file chooser dialog."
+msgstr "Titulek dialogu výběru souborů."
+
+#: gtk/gtkfilechooserbutton.c:233
+msgid "Whether the browse dialog is visible or not."
+msgstr "Jestli je dialog procházení viditelný."
+
+#: gtk/gtkfilechooserdefault.c:588
 msgid "Default file chooser backend"
 msgstr "Implicitní backend výběru souborů"
 
-#: gtk/gtkfilechooserdefault.c:588
+#: gtk/gtkfilechooserdefault.c:589
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Název backendu GtkFileChooser, který používat implicitně"
 
@@ -1996,6 +2151,67 @@ msgstr ""
 "Jestli používat hodnotu vlastnosti snap_edge nebo hodnotu odvozenou z "
 "handle_position"
 
+#: gtk/gtkiconview.c:324
+msgid "Selection mode"
+msgstr "Režim výběru"
+
+#: gtk/gtkiconview.c:325
+msgid "The selection mode"
+msgstr "Režim výběru"
+
+#: gtk/gtkiconview.c:343
+msgid "Pixbuf column"
+msgstr "Sloupec pixbufu"
+
+#: gtk/gtkiconview.c:344
+msgid "Model column used to retrieve the icon pixbuf from"
+msgstr "Sloupec modelu používaný pro získání pixbufu ikony"
+
+#: gtk/gtkiconview.c:362
+msgid "Model column used to retrieve the text from"
+msgstr "Sloupec modelu používaný pro získání textu"
+
+#: gtk/gtkiconview.c:381
+msgid "Markup column"
+msgstr "Sloupec značek"
+
+#: gtk/gtkiconview.c:382
+msgid "Model column used to retrieve the text if using Pango markup"
+msgstr "Sloupec modelu používaný pro získání textu, pokud se používají značky Pango"
+
+#: gtk/gtkiconview.c:389
+msgid "Icon View Model"
+msgstr "Model ikonového pohledu"
+
+#: gtk/gtkiconview.c:390
+msgid "The model for the icon view"
+msgstr "Model pro ikonový pohled"
+
+#: gtk/gtkiconview.c:397 gtk/gtkprogressbar.c:151 gtk/gtktoolbar.c:507
+msgid "Orientation"
+msgstr "Orientace"
+
+#: gtk/gtkiconview.c:398
+msgid ""
+"How the text and icon of each item are positioned relative to each other"
+msgstr "Jak jsou text a ikony každé položky navzájem relativně umístěny"
+
+#: gtk/gtkiconview.c:406
+msgid "Selection Box Color"
+msgstr "Barva obdélníku výběru"
+
+#: gtk/gtkiconview.c:407
+msgid "Color of the selection box"
+msgstr "Barva obdélníku výběru"
+
+#: gtk/gtkiconview.c:413
+msgid "Selection Box Alpha"
+msgstr "Alfa obdélníku výběru"
+
+#: gtk/gtkiconview.c:414
+msgid "Opacity of the selection box"
+msgstr "Neprůhlednost obdélníku výběru"
+
 #: gtk/gtkimage.c:139
 msgid "Pixbuf"
 msgstr "Pixbuf"
@@ -2160,7 +2376,9 @@ msgstr "Widget aktivovaný při stisku klávesové zkratky popisu"
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string, if at all"
-msgstr "Preferované místo, kde zkrátit řetězec, pokud popisek nemá dost místa pro zobrazení celého řetězce, pokud vůbec něčeho"
+msgstr ""
+"Preferované místo, kde zkrátit řetězec, pokud popisek nemá dost místa pro "
+"zobrazení celého řetězce, pokud vůbec něčeho"
 
 #: gtk/gtklayout.c:635 gtk/gtkviewport.c:136
 msgid "Horizontal adjustment"
@@ -2315,6 +2533,14 @@ msgstr "Prodleva před zobrazením rozbalovacího menu"
 #: gtk/gtkmenubar.c:174
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Prodleva před zobrazením podmenu lišty menu"
+
+#: gtk/gtkmenutoolbutton.c:247 gtk/gtkoptionmenu.c:194
+msgid "Menu"
+msgstr "Menu"
+
+#: gtk/gtkmenutoolbutton.c:248
+msgid "The dropdown menu"
+msgstr "Rozbalovací menu"
 
 #: gtk/gtkmessagedialog.c:108
 msgid "Image/label border"
@@ -2527,10 +2753,6 @@ msgstr "Šipka pro krok vpřed"
 msgid "Display the standard forward arrow button"
 msgstr "Zobrazovat tlačítko se standardní šipkou vpřed"
 
-#: gtk/gtkoptionmenu.c:194
-msgid "Menu"
-msgstr "Menu"
-
 #: gtk/gtkoptionmenu.c:195
 msgid "The menu of options"
 msgstr "Menu možností"
@@ -2652,10 +2874,6 @@ msgstr "Zarovnání"
 #: gtk/gtkprogressbar.c:144
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "GtkAdjustment spojený s pruhem průběhu (Zastaralé)"
-
-#: gtk/gtkprogressbar.c:151 gtk/gtktoolbar.c:507
-msgid "Orientation"
-msgstr "Orientace"
 
 #: gtk/gtkprogressbar.c:152
 msgid "Orientation and growth direction of the progress bar"
@@ -2907,11 +3125,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Zobrazit tlačítko s druhou šipkou dopředu na opačném konci posuvníku"
 
-#: gtk/gtkscrolledwindow.c:238 gtk/gtktext.c:603 gtk/gtktreeview.c:563
+#: gtk/gtkscrolledwindow.c:238 gtk/gtktext.c:603 gtk/gtktreeview.c:566
 msgid "Horizontal Adjustment"
 msgstr "Vodorovné zarovnání"
 
-#: gtk/gtkscrolledwindow.c:245 gtk/gtktext.c:611 gtk/gtktreeview.c:571
+#: gtk/gtkscrolledwindow.c:245 gtk/gtktext.c:611 gtk/gtktreeview.c:574
 msgid "Vertical Adjustment"
 msgstr "Svislé zarovnání"
 
@@ -3440,7 +3658,10 @@ msgstr "Zarovnání vlevo, vpravo nebo na střed"
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If not set, an appropriate default will be used."
-msgstr "Jazyk, ve kterém je tento text, jako kód ISO. Pango to umí použít jako nápovědu při vykreslování textu. Není-li nastaven, bude použita vhodná implicitní hodnota."
+msgstr ""
+"Jazyk, ve kterém je tento text, jako kód ISO. Pango to umí použít jako "
+"nápovědu při vykreslování textu. Není-li nastaven, bude použita vhodná "
+"implicitní hodnota."
 
 #: gtk/gtktexttag.c:393
 msgid "Left margin"
@@ -3839,145 +4060,146 @@ msgstr "Model TreeModelSort"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Model, který má TreeModelSort třídit"
 
-#: gtk/gtktreeview.c:555
+#: gtk/gtktreeview.c:558
 msgid "TreeView Model"
 msgstr "Model TreeView"
 
-#: gtk/gtktreeview.c:556
+#: gtk/gtktreeview.c:559
 msgid "The model for the tree view"
 msgstr "Model pro stromový pohled"
 
-#: gtk/gtktreeview.c:564
+#: gtk/gtktreeview.c:567
 msgid "Horizontal Adjustment for the widget"
 msgstr "Vodorovné zarovnání widgetu"
 
-#: gtk/gtktreeview.c:572
+#: gtk/gtktreeview.c:575
 msgid "Vertical Adjustment for the widget"
 msgstr "Vertikální zarovnání widgetu"
 
-#: gtk/gtktreeview.c:580
+#: gtk/gtktreeview.c:583
 msgid "Show the column header buttons"
 msgstr "Zobrazovat tlačítka v záhlavích sloupců"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:590
 msgid "Headers Clickable"
 msgstr "Kliknutelná záhlaví"
 
-#: gtk/gtktreeview.c:588
+#: gtk/gtktreeview.c:591
 msgid "Column headers respond to click events"
 msgstr "Záhlaví sloupců reagují na události kliknutí"
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:598
 msgid "Expander Column"
 msgstr "Sloupec rozbalovacího symbolu"
 
-#: gtk/gtktreeview.c:596
+#: gtk/gtktreeview.c:599
 msgid "Set the column for the expander column"
 msgstr "Nastaví sloupec pro rozbalovací sloupec"
 
-#: gtk/gtktreeview.c:603 gtk/gtktreeviewcolumn.c:341
+#: gtk/gtktreeview.c:606 gtk/gtktreeviewcolumn.c:341
 msgid "Reorderable"
 msgstr "Měnitelné pořadí"
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:607
 msgid "View is reorderable"
 msgstr "Je možná změna pořadí pohledu"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:614
 msgid "Rules Hint"
 msgstr "Rada o pravidlech"
 
-#: gtk/gtktreeview.c:612
+#: gtk/gtktreeview.c:615
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Nastaví radu pro podporu témat pro kreslení řádků ve střídavých barvách"
 
-#: gtk/gtktreeview.c:619
+#: gtk/gtktreeview.c:622
 msgid "Enable Search"
 msgstr "Povolit hledání"
 
-#: gtk/gtktreeview.c:620
+#: gtk/gtktreeview.c:623
 msgid "View allows user to search through columns interactively"
 msgstr "Pohled umožní uživateli interaktivně hledat ve sloupcích"
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:630
 msgid "Search Column"
 msgstr "Sloupec hledání"
 
-#: gtk/gtktreeview.c:628
+#: gtk/gtktreeview.c:631
 msgid "Model column to search through when searching through code"
 msgstr "Sloupec modelu, ve kterém se má hledat při hledání v kódu"
 
-#: gtk/gtktreeview.c:648
+#: gtk/gtktreeview.c:651
 msgid "Fixed Height Mode"
 msgstr "Režim pevné výšky"
 
-#: gtk/gtktreeview.c:649
+#: gtk/gtktreeview.c:652
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "Urychlí GtkTreeView předpokladem, že všechny řádky jsou stejně vysoké"
 
-#: gtk/gtktreeview.c:669
+#: gtk/gtktreeview.c:672
 msgid "Hover Selection"
 msgstr "Výběr pohybem"
 
-#: gtk/gtktreeview.c:670
+#: gtk/gtktreeview.c:673
 msgid "Whether the selection should follow the pointer"
 msgstr "Jestli má výběr sledovat kurzor"
 
-#: gtk/gtktreeview.c:689
+#: gtk/gtktreeview.c:692
 msgid "Hover Expand"
 msgstr "Expandovat pohybem"
 
-#: gtk/gtktreeview.c:690
+#: gtk/gtktreeview.c:693
 msgid ""
 "Whether rows should be expanded/collaped when the pointer moves over them"
-msgstr "Jestli mají být řádky rozbalovány/sbalovány, když přes ně přesouvá kurzor"
+msgstr ""
+"Jestli mají být řádky rozbalovány/sbalovány, když přes ně přesouvá kurzor"
 
-#: gtk/gtktreeview.c:710
+#: gtk/gtktreeview.c:713
 msgid "Vertical Separator Width"
 msgstr "Šířka svislého oddělovače"
 
-#: gtk/gtktreeview.c:711
+#: gtk/gtktreeview.c:714
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Svislý prostor mezi buňkami. Musí to být sudé číslo"
 
-#: gtk/gtktreeview.c:719
+#: gtk/gtktreeview.c:722
 msgid "Horizontal Separator Width"
 msgstr "Šířka vodorovného oddělovače"
 
-#: gtk/gtktreeview.c:720
+#: gtk/gtktreeview.c:723
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Vodorovný prostor mezi buňkami. Musí to být sudé číslo"
 
-#: gtk/gtktreeview.c:728
+#: gtk/gtktreeview.c:731
 msgid "Allow Rules"
 msgstr "Povolit pravidla"
 
-#: gtk/gtktreeview.c:729
+#: gtk/gtktreeview.c:732
 msgid "Allow drawing of alternating color rows"
 msgstr "Povolit kreslení různobarevných řádků"
 
-#: gtk/gtktreeview.c:735
+#: gtk/gtktreeview.c:738
 msgid "Indent Expanders"
 msgstr "Odsadit rozbalovací symboly"
 
-#: gtk/gtktreeview.c:736
+#: gtk/gtktreeview.c:739
 msgid "Make the expanders indented"
 msgstr "Odsadit rozbalovací symboly"
 
-#: gtk/gtktreeview.c:742
+#: gtk/gtktreeview.c:745
 msgid "Even Row Color"
 msgstr "Barva sudého řádku"
 
-#: gtk/gtktreeview.c:743
+#: gtk/gtktreeview.c:746
 msgid "Color to use for even rows"
 msgstr "Barva používaná pro sudé řádky"
 
-#: gtk/gtktreeview.c:749
+#: gtk/gtktreeview.c:752
 msgid "Odd Row Color"
 msgstr "Barva lichého řádku"
 
-#: gtk/gtktreeview.c:750
+#: gtk/gtktreeview.c:753
 msgid "Color to use for odd rows"
 msgstr "Barva používaná pro liché řádky"
 
