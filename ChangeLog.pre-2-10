@@ -1,3 +1,8 @@
+Mon Feb  9 22:22:19 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcellview.c (gtk_cell_view_cell_layout_clear_attributes): 
+	Ugh. Don't try to free ints, even if they're stored in pointers.
+
 2004-02-09  Federico Mena Quintero  <federico@ximian.com>
 
 	Fix #132256.
