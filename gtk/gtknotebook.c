@@ -2650,19 +2650,19 @@ gtk_notebook_focus (GtkContainer     *container,
     {
       if (GTK_WIDGET_VISIBLE (notebook->cur_page->child))
 	{
-	  if (GTK_WIDGET_CAN_FOCUS (notebook->cur_page->child))
+	  if (GTK_IS_CONTAINER (notebook->cur_page->child))
+	    {
+	      if (gtk_container_focus 
+		  (GTK_CONTAINER (notebook->cur_page->child), direction))
+		return TRUE;
+	    }
+	  else if (GTK_WIDGET_CAN_FOCUS (notebook->cur_page->child))
 	    {
 	      if (!focus_child)
 		{
 		  gtk_widget_grab_focus (notebook->cur_page->child);
 		  return TRUE;
 		}
-	    }
-	  else if (GTK_IS_CONTAINER (notebook->cur_page->child))
-	    {
-	      if (gtk_container_focus 
-		  (GTK_CONTAINER (notebook->cur_page->child), direction))
-		return TRUE;
 	    }
 	}
       return FALSE;
@@ -2759,16 +2759,16 @@ gtk_notebook_page_select (GtkNotebook *notebook)
 
      if (GTK_WIDGET_VISIBLE (page->child))
        {
-	 if (GTK_WIDGET_CAN_FOCUS (page->child))
-	   {
-	     gtk_widget_grab_focus (page->child);
-	     return TRUE;
-	   }
-	 else if (GTK_IS_CONTAINER (page->child))
+	 if (GTK_IS_CONTAINER (page->child))
 	   {
 	     if (gtk_container_focus (GTK_CONTAINER (page->child), 
 				      GTK_DIR_TAB_FORWARD))
 	       return TRUE;
+	   }
+	 else if (GTK_WIDGET_CAN_FOCUS (page->child))
+	   {
+	     gtk_widget_grab_focus (page->child);
+	     return TRUE;
 	   }
        }
     }

@@ -1044,15 +1044,15 @@ gtk_container_focus_move (GtkContainer     *container,
         }
       else if (GTK_WIDGET_VISIBLE (child))
         {
-          if (GTK_WIDGET_CAN_FOCUS (child))
-            {
-              gtk_widget_grab_focus (child);
-              return TRUE;
-            }
-          else if (GTK_IS_CONTAINER (child))
+	  if (GTK_IS_CONTAINER (child))
             {
               if (gtk_container_focus (GTK_CONTAINER (child), direction))
                 return TRUE;
+            }
+          else if (GTK_WIDGET_CAN_FOCUS (child))
+            {
+              gtk_widget_grab_focus (child);
+              return TRUE;
             }
         }
     }
