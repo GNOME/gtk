@@ -1,3 +1,9 @@
+2000-11-14  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_drag_motion): Fix drag-and-drop
+	to default to GDK_ACTION_MOVE if the drag is within a single
+	widget. Defaults to GDK_ACTION_COPY between widgets.
+
 Mon Nov 13 14:43:48 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* demos/Makefile.am (test-inline-pixbufs.h): Fix srcdir != builddir

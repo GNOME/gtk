@@ -3818,7 +3818,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
   GtkTextIter end;
   GdkRectangle target_rect;
   gint bx, by;
-
+  
   text_view = GTK_TEXT_VIEW (widget);
 
   target_rect = text_view->text_window->allocation;
@@ -3836,8 +3836,8 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
 
   gtk_text_layout_get_iter_at_pixel (text_view->layout,
                                      &newplace,
-                                     bx, by);
-
+                                     bx, by);  
+  
   if (gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
                                             &start, &end) &&
       gtk_text_iter_in_range (&newplace, &start, &end))
@@ -3847,13 +3847,29 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
       gtk_text_mark_set_visible (text_view->dnd_mark, FALSE);
     }
   else
-    {
+    {      
       if (gtk_text_iter_editable (&newplace, text_view->editable))
         {
+          GtkWidget *source_widget;
+          GdkDragAction suggested_action;
+          
+          suggested_action = context->suggested_action;
+          
+          source_widget = gtk_drag_get_source_widget (context);
+          
+          if (source_widget == widget)
+            {
+              /* Default to MOVE, unless the user has
+               * pressed ctrl or alt to affect available actions
+               */
+              if ((context->actions & GDK_ACTION_MOVE) != 0)
+                suggested_action = GDK_ACTION_MOVE;
+            }
+          
           gtk_text_mark_set_visible (text_view->dnd_mark,
                                      text_view->cursor_visible);
 
-          gdk_drag_status (context, context->suggested_action, time);
+          gdk_drag_status (context, suggested_action, time);
         }
       else
         {
