@@ -198,7 +198,8 @@ gboolean            gtk_text_line_byte_has_tag               (GtkTextLine       
                                                               GtkTextBTree        *tree,
                                                               gint                 byte_in_line,
                                                               GtkTextTag          *tag);
-gboolean            gtk_text_line_is_last                    (GtkTextLine *line);
+gboolean            gtk_text_line_is_last                    (GtkTextLine  *line,
+                                                              GtkTextBTree *tree);
 GtkTextLine *       gtk_text_line_next                       (GtkTextLine         *line);
 GtkTextLine *       gtk_text_line_previous                   (GtkTextLine         *line);
 void                gtk_text_line_add_data                   (GtkTextLine         *line,

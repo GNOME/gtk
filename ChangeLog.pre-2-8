@@ -1,3 +1,13 @@
+2000-08-31  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextbtree.c (GtkTextBTree): cache end line, 
+	for rapid testing whether an iterator is the end iterator
+	(gtk_text_btree_new): init end line cache
+	(gtk_text_line_is_last): use fast cached line to 
+	see if we're the last line.
+	(get_last_line): use cached line here too, should 
+	speed up some random unrelated code.
+	
 2000-08-30  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkmarshal.list: Add marshallers for changed GtkTextBuffer

@@ -191,6 +191,10 @@ struct _GtkTextBTree {
      pointed-to segment and segment offset.
   */
   guint segments_changed_stamp;
+
+  GtkTextLine *end_iter_line;
+  
+  guint end_iter_line_stamp;
 };
 
 
@@ -390,6 +394,9 @@ gtk_text_btree_new (GtkTextTagTable *table,
      in random memory garbage. */
   tree->chars_changed_stamp = 49;
   tree->segments_changed_stamp = 243;
+
+  tree->end_iter_line_stamp = tree->chars_changed_stamp - 1;
+  tree->end_iter_line = NULL;
   
   gtk_object_ref(GTK_OBJECT(tree->table));
   gtk_object_sink(GTK_OBJECT(tree->table));
@@ -843,6 +850,8 @@ gtk_text_btree_delete (GtkTextIter *start,
 	       * no way to add ld without also validating the node, which would
 	       * be improper at this point.
 	       */
+              /* This assertion does actually fail sometimes, must
+                 fix before stable release -hp */
 	      g_assert (ld);
 
 	      ld->width = MAX (deleted_width, ld->width);
@@ -2937,20 +2946,10 @@ gtk_text_line_byte_has_tag (GtkTextLine *line,
 }
 
 gboolean
-gtk_text_line_is_last (GtkTextLine *line)
+gtk_text_line_is_last (GtkTextLine *line,
+                       GtkTextBTree *tree)
 {
-  GtkTextBTreeNode *node;
-
-  if (line->next != NULL)
-    return FALSE;
-  else
-    {
-      node = line->parent;
-      while (node != NULL && node->next == NULL)
-        node = node->parent;      
-
-      return node == NULL;
-    }
+  return line == get_last_line (tree);
 }
 
 GtkTextLine*
@@ -3872,17 +3871,23 @@ summary_list_destroy(Summary *summary)
 static GtkTextLine*
 get_last_line(GtkTextBTree *tree)
 {
-  gint n_lines;
-  GtkTextLine *line;
-  gint real_line;
-  
-  n_lines = gtk_text_btree_line_count(tree);
+  if (tree->end_iter_line_stamp != tree->chars_changed_stamp)
+    {
+      gint n_lines;
+      GtkTextLine *line;
+      gint real_line;
 
-  g_assert(n_lines >= 1); /* num_lines doesn't return bogus last line. */
+      n_lines = gtk_text_btree_line_count(tree);
+      
+      g_assert(n_lines >= 1); /* num_lines doesn't return bogus last line. */
+      
+      line = gtk_text_btree_get_line(tree, n_lines, &real_line);
 
-  line = gtk_text_btree_get_line(tree, n_lines, &real_line);
+      tree->end_iter_line_stamp = tree->chars_changed_stamp;
+      tree->end_iter_line = line;
+    }
   
-  return line;
+  return tree->end_iter_line;
 }
 
 /*

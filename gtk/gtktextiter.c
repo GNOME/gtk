@@ -1240,8 +1240,8 @@ gtk_text_iter_ends_line (const GtkTextIter   *iter)
  * 
  * Returns TRUE if @iter is the end iterator, i.e. one past the last
  * dereferenceable iterator in the buffer. gtk_text_iter_is_last() is
- * the second most efficient way to check whether an iterator is the
- * end iterator.
+ * the most efficient way to check whether an iterator is the end
+ * iterator.
  * 
  * Return value: whether @iter is the end iterator 
  **/
@@ -1259,7 +1259,7 @@ gtk_text_iter_is_last (const GtkTextIter *iter)
 
   check_invariants(iter);
   
-  return gtk_text_line_is_last(real->line);
+  return gtk_text_line_is_last(real->line, real->tree);
 }
 
 /**
