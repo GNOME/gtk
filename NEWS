@@ -22,6 +22,11 @@ Overview of Changes in GTK+ 1.2.5:
             [...]
             gtk_widget_modify_style (widget, rc_style);
             gtk_rc_style_unref (rc_style);
+* fix problems with positioning menus offscreen.
+* GtkText fixes for some crashes and drawing errors.
+* Better handling for unexpected window destroys in GDK and GTK+.
+  This should make it possible to use a GtkPlug and catch the
+  case where its parent socket is randomly killed.
 * FAQ updates.
 * FileSelection i18n patches, RadioButton fixups.
 * miscellaneous other bugs fixed.
