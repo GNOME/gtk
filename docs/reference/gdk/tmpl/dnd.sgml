@@ -24,20 +24,20 @@ the GTK+ documentation for more information.
 
 <!-- ##### FUNCTION gdk_drag_get_selection ##### -->
 <para>
-
+Returns the selection atom for the current source window.
 </para>
 
-@context: 
-@Returns: 
+@context: a #GdkDragContext.
+@Returns: the selection atom.
 
 
 <!-- ##### FUNCTION gdk_drag_abort ##### -->
 <para>
-
+Aborts a drag without dropping.
 </para>
 
-@context: 
-@time: 
+@context: a #GdkDragContext.
+@time: the timestamp for this operation.
 
 
 <!-- ##### FUNCTION gdk_drop_reply ##### -->
@@ -52,10 +52,10 @@ the GTK+ documentation for more information.
 
 <!-- ##### FUNCTION gdk_drag_context_new ##### -->
 <para>
-
+Creates a new #GdkDragContext.
 </para>
 
-@Returns: 
+@Returns: the newly created #GdkDragContext.
 
 
 <!-- ##### FUNCTION gdk_drag_drop ##### -->
@@ -82,20 +82,21 @@ the GTK+ documentation for more information.
 
 <!-- ##### FUNCTION gdk_drag_context_ref ##### -->
 <para>
-
+Increases the reference count of a drag context by one.
 </para>
 
-@context: 
+@context: a #GdkDragContext.
 
 
 <!-- ##### FUNCTION gdk_drag_begin ##### -->
 <para>
-
+Creates a new drag context with @window as @source_window and @targets 
+as list of targets.
 </para>
 
-@window: 
-@targets: 
-@Returns: 
+@window: the source window for this drag.
+@targets: the list of targets.
+@Returns: a newly created #GdkDragContext.
 
 
 <!-- ##### FUNCTION gdk_drag_motion ##### -->
@@ -126,12 +127,14 @@ the GTK+ documentation for more information.
 
 <!-- ##### FUNCTION gdk_drag_get_protocol ##### -->
 <para>
-
+Finds out the DND protocol supported by a window.
 </para>
 
-@xid: 
-@protocol: 
-@Returns: 
+@xid: the X id of the destination window.
+@protocol: location where the supported DND protocol is returned.
+@Returns: the X id of the window where the drop should happen. This 
+  may be @xid or the X id of a proxy window, or None if @xid doesn't
+  support Drag and Drop.
 
 
 <!-- ##### ENUM GdkDragProtocol ##### -->
@@ -151,10 +154,10 @@ which DND is done.
 
 <!-- ##### FUNCTION gdk_drag_context_unref ##### -->
 <para>
-
+Decreases the reference count of a drag context by one.
 </para>
 
-@context: 
+@context: a #GdkDragContext.
 
 
 <!-- ##### STRUCT GdkDragContext ##### -->

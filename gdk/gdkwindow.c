@@ -2572,7 +2572,7 @@ gdk_window_constrain_size (GdkGeometry *geometry,
 
 /**
  * gdk_set_pointer_hooks:
- * @new_hooks: a table of pointer to functions for getting
+ * @new_hooks: a table of pointers to functions for getting
  *   quantities related to the current pointer position,
  *   or %NULL to restore the default table.
  * 

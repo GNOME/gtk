@@ -33,19 +33,22 @@ Pango Interaction
 
 <!-- ##### STRUCT GdkPangoAttrEmbossed ##### -->
 <para>
-
+A Pango text attribute containing a embossed bitmap to be used when
+rendering the text.
 </para>
 
-@attr: 
-@embossed: 
+@attr: the #PangoAttribute.
+@embossed: the embossed bitmap.
+
 
 <!-- ##### STRUCT GdkPangoAttrStipple ##### -->
 <para>
-
+A Pango text attribute containing a stipple bitmap to be used when
+rendering the text.
 </para>
 
-@attr: 
-@stipple: 
+@attr: the #PangoAttribute.
+@stipple: the stipple bitmap.
 
 <!-- ##### FUNCTION gdk_pango_attr_embossed_new ##### -->
 <para>

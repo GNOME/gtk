@@ -2573,6 +2573,10 @@ gtk_text_view_backward_display_line_start
 gtk_text_view_starts_display_line
 gtk_text_view_move_visually
 gtk_text_view_add_child_at_anchor
+GtkTextChildAnchor
+gtk_text_child_anchor_new
+gtk_text_child_anchor_get_widgets
+gtk_text_child_anchor_get_deleted
 gtk_text_view_add_child_in_window
 gtk_text_view_move_child
 gtk_text_view_set_wrap_mode
@@ -2606,8 +2610,15 @@ GTK_TYPE_TEXT_VIEW
 GTK_TEXT_VIEW_CLASS
 GTK_IS_TEXT_VIEW_CLASS
 GTK_TEXT_VIEW_GET_CLASS
+GTK_TEXT_CHILD_ANCHOR
+GTK_IS_TEXT_CHILD_ANCHOR
+GTK_TYPE_TEXT_CHILD_ANCHOR
+GTK_TEXT_CHILD_ANCHOR_CLASS
+GTK_IS_TEXT_CHILD_ANCHOR_CLASS
+GTK_TEXT_CHILD_ANCHOR_GET_CLASS
 <SUBSECTION Private>
 gtk_text_view_get_type
+gtk_text_child_anchor_get_type
 GtkTextBTree
 GtkTextChildBody
 GtkTextPixbuf
