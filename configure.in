@@ -1171,7 +1171,7 @@ AC_SUBST(HTML_DIR)
 
 AC_CHECK_PROG(GTKDOC, gtkdoc-mkdb, true, false)
 
-gtk_doc_min_version=0.6
+gtk_doc_min_version=0.9
 if $GTKDOC ; then 
     gtk_doc_version=`gtkdoc-mkdb --version`
     AC_MSG_CHECKING([gtk-doc version ($gtk_doc_version) >= $gtk_doc_min_version])
