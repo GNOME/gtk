@@ -1,3 +1,16 @@
+Thu May 29 15:38:30 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Fixes #75745, reported by Richard Hult. Merged from stable.
+
+	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): set/unset
+	GTK_CELL_RENDERER_FOCUSED flag whether the current node is the
+	cursor or not.
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_process_action):
+	if we are rendering a cursor row, and the cell the be
+	processed has focus, then set the GTK_CELL_RENDERER_FOCUSED
+	flag (else we unset it).
+
 2003-05-27  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkwindow-decorate.c: 

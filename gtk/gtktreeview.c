@@ -3095,6 +3095,11 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
           else
             flags &= ~GTK_CELL_RENDERER_SORTED;
 
+	  if (cursor == node)
+            flags |= GTK_CELL_RENDERER_FOCUSED;
+          else
+            flags &= ~GTK_CELL_RENDERER_FOCUSED;
+
 	  background_area.x = cell_offset;
 	  background_area.width = column->width;
 
