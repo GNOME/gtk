@@ -1,7 +1,7 @@
 2002-01-30  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/*.c: Remove excess g_return_if_fail calls from static
-	and virtual functions. 
+	and virtual functions.  (#57615)
 	
 2002-01-30  Anders Carlsson  <andersca@gnu.org>
 
