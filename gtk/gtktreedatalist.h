@@ -63,11 +63,15 @@ GtkTreeDataList *_gtk_tree_data_list_node_copy      (GtkTreeDataList *list,
                                                      GType            type);
 
 /* Header code */
-GList *                _gtk_tree_data_list_header_new  (gint   n_columns,
-							GType *types);
-void                   _gtk_tree_data_list_header_free (GList *header_list);
-GtkTreeDataSortHeader *_gtk_tree_data_list_get_header  (GList *header_list,
-							gint   sort_column_id);
+gint                   gtk_tree_data_list_compare_func (GtkTreeModel *model,
+							GtkTreeIter  *a,
+							GtkTreeIter  *b,
+							gpointer      user_data);
+GList *                _gtk_tree_data_list_header_new  (gint          n_columns,
+							GType        *types);
+void                   _gtk_tree_data_list_header_free (GList        *header_list);
+GtkTreeDataSortHeader *_gtk_tree_data_list_get_header  (GList        *header_list,
+							gint          sort_column_id);
 
 
 #endif /* __GTK_TREE_DATA_LIST_H__ */

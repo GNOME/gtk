@@ -83,7 +83,8 @@ static gboolean gtk_list_store_row_drop_possible  (GtkTreeDragDest   *drag_dest,
 /* sortable */
 static void     gtk_list_store_sort                    (GtkListStore           *list_store);
 static void     gtk_list_store_sort_iter_changed       (GtkListStore           *list_store,
-							GtkTreeIter            *iter);
+							GtkTreeIter            *iter,
+							gint                    column);
 static gboolean gtk_list_store_get_sort_column_id      (GtkTreeSortable        *sortable,
 							gint                   *sort_column_id,
 							GtkTreeSortOrder       *order);
@@ -674,7 +675,7 @@ gtk_list_store_set_value (GtkListStore *list_store,
     g_value_unset (&real_value);
 
   if (GTK_LIST_STORE_IS_SORTED (list_store))
-    gtk_list_store_sort_iter_changed (list_store, iter);
+    gtk_list_store_sort_iter_changed (list_store, iter, column);
 }
 
 /**
@@ -1460,17 +1461,22 @@ gtk_list_store_sort (GtkListStore *list_store)
 
 static void
 gtk_list_store_sort_iter_changed (GtkListStore *list_store,
-				  GtkTreeIter  *iter)
+				  GtkTreeIter  *iter,
+				  gint          column)
 
 {
   GtkTreeDataSortHeader *header;
   GSList *prev = NULL;
   GSList *next = NULL;
   GSList *list = G_SLIST (list_store->root);
-
+  GtkTreePath *tmp_path;
   GtkTreeIter tmp_iter;
   gint cmp_a = 0;
   gint cmp_b = 0;
+  gint i;
+  gint old_location;
+  gint new_location;
+  gint *new_order;
 
   if (list_store->length < 2)
     return;
@@ -1480,7 +1486,13 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
 					   list_store->sort_column_id);
   g_return_if_fail (header != NULL);
   g_return_if_fail (header->func != NULL);
-  
+
+  /* If it's the built in function, we don't sort. */
+  if (header->func == gtk_tree_data_list_compare_func &&
+      list_store->sort_column_id != column)
+    return;
+
+  old_location = 0;
   /* First we find the iter, its prev, and its next */
   while (list)
     {
@@ -1488,6 +1500,7 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
 	break;
       prev = list;
       list = list->next;
+      old_location++;
     }
   g_assert (list != NULL);
 
@@ -1522,7 +1535,6 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
 	cmp_b = 1;
       else if (cmp_b > 0)
 	cmp_b = -1;
-
     }
 
   if (prev == NULL && cmp_b <= 0)
@@ -1547,7 +1559,7 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
   /* FIXME: as an optimization, we can potentially start at next */
   prev = NULL;
   list = G_SLIST (list_store->root);
-
+  new_location = 0;
   tmp_iter.user_data = list;
   if (list_store->order == GTK_TREE_SORT_DESCENDING)
     cmp_a = (* header->func) (GTK_TREE_MODEL (list_store),
@@ -1560,6 +1572,7 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
     {
       prev = list;
       list = list->next;
+      new_location++;
       tmp_iter.user_data = list;
       if (list_store->order == GTK_TREE_SORT_DESCENDING)
 	cmp_a = (* header->func) (GTK_TREE_MODEL (list_store),
@@ -1584,6 +1597,43 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
       G_SLIST (iter->user_data)->next = G_SLIST (list_store->root);
       list_store->root = G_SLIST (iter->user_data);
     }
+
+  /* Emit the reordered signal. */
+  new_order = g_new (int, list_store->length);
+  if (old_location < new_location)
+    for (i = 0; i < list_store->length; i++)
+      {
+	if (i < old_location ||
+	    i > new_location)
+	  new_order[i] = i;
+	else if (i >= old_location &&
+		 i < new_location)
+	  new_order[i] = i + 1;
+	else if (i == new_location)
+	  new_order[i] = old_location;
+      }
+  else
+    for (i = 0; i < list_store->length; i++)
+      {
+	if (i < new_location ||
+	    i > old_location)
+	  new_order[i] = i;
+	else if (i > new_location &&
+		 i <= old_location)
+	  new_order[i] = i - 1;
+	else if (i == new_location)
+	  new_order[i] = old_location;
+      }
+
+  tmp_path = gtk_tree_path_new ();
+  tmp_iter.user_data = NULL;
+
+  gtk_tree_model_reordered (GTK_TREE_MODEL (list_store),
+			    tmp_path, &tmp_iter,
+			    new_order);
+
+  gtk_tree_path_free (tmp_path);
+  g_free (new_order);
 }
 
 static gboolean

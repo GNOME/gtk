@@ -253,7 +253,7 @@ _gtk_tree_data_list_node_copy (GtkTreeDataList *list,
   return new_list;
 }
 
-static gint
+gint
 gtk_tree_data_list_compare_func (GtkTreeModel *model,
 				 GtkTreeIter  *a,
 				 GtkTreeIter  *b,

@@ -1,3 +1,8 @@
+Sun Apr  1 00:52:06 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreestore.c: Initial work on implementing the
+	GtkTreeSortable interface.  Basicaly a big cut'n'paste job.
+
 Sun Apr  1 03:28:14 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.c: fixed a bunch of notifications, added
@@ -132,7 +137,7 @@ Wed Mar 28 20:30:26 2001  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtkwidget.c (gtk_widget_render_icon): remove bogus
 	g_return_if_fail
 
-Thu Mar 29 16:29:12 2001  Jonathan Blandford  <jrb@webwynk.net>
+Thu Mar 29 16:29:12 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkliststore.c (gtk_list_store_iter_changed): Massive
 	reordering/sorting work.  Now pretty much works.
@@ -253,7 +258,7 @@ Tue Mar 27 22:36:07 2001  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtkmarshal.list gtk/gtktexttag.c: Make EVENT
 	signal return a boolean.
 
-Tue Mar 27 22:07:44 2001  Jonathan Blandford  <jrb@webwynk.net>
+Tue Mar 27 22:07:44 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkliststore.c (gtk_list_store_sort): Fix arguments to
 	reordered signal.
@@ -557,7 +562,7 @@ Thu Mar 22 13:01:44 2001  Tim Janik  <timj@gtk.org>
 	* gtk/gtkimagemenuitem.[c]:
 	Add gtk_image_menu_item_new_from_stock()
 
-Tue Mar 20 15:00:43 2001  Jonathan Blandford  <jrb@webwynk.net>
+Tue Mar 20 15:00:43 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_render):
 	Fix buglet in meeting.
@@ -1649,7 +1654,7 @@ Tue Feb 27 13:37:38 GMT 2001  Tony Gale <gale@gtk.org>
 	for everthing built here, but for gtk-x.x.dll only. This solves
 	problem of indifferent gtk type definitions
 
-Sat Feb 24 20:11:39 2001  Jonathan Blandford  <jrb@webwynk.net>
+Sat Feb 24 20:11:39 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkclipboard.h: actually put /* */ around #endif comment.
 
