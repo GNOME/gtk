@@ -324,7 +324,7 @@ msgstr "A fonte seleccionada non é unha fonte válida."
 
 #: gtk/gtkfontsel.c:1857
 msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "Esta é una fonte de 2 bytes e pode non ser amosada correctamente."
+msgstr "Esta é unha fonte de 2 bytes e pode non ser amosada correctamente."
 
 #: gtk/gtkfontsel.c:1961 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
