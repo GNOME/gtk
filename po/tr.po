@@ -4,11 +4,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+-1.2.9\n"
+"Project-Id-Version: gtk+ 1.2.10\n"
 "POT-Creation-Date: 2001-02-22 20:39-0500\n"
 "PO-Revision-Date: 2001-03-18 18:33+0200\n"
 "Last-Translator: Nilgün Belma Bugüner <nilgun@technologist.com>\n"
-"Language-Team: Turkish <tr@li.org>\n"
+"Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-9\n"
 "Content-Transfer-Encoding: 8bit\n"
