@@ -1,3 +1,29 @@
+2003-01-12  Tor Lillqvist  <tml@iki.fi>
+
+	Merge from stable:
+		
+	* gtk/gtkmain.c: Move inclusion of config.h and gtkintl.h earlier,
+	as gtkprivate.h redefines GTK_LOCALEDIR on Win32, for run-time
+	lookup.
+
+	* gdk/Makefile.am (libgdk_win32_2_0_la_DEPENDENCIES): Depend on
+	gdk.def.
+
+	* gdk/gdk.def
+	* gtk/gtk.def: Add some missing entries. Thanks to Kenichi SUTO.
+
+	* gtk-zip.sh.in (DEVZIP): Add bin/{gtk-query-immodules-2.0,
+	gtk-demo}.exe and share/gtk-2.0.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_skip_taskbar_hint):
+	Implement by setting or clearing the WS_EX_TOOLWINDOW extended
+	window style.
+	(gdk_window_set_type_hint): Add all cases to the switch (not all
+	do anything, though). Handle GDK_WINDOW_TYPE_HINT_TOOLBAR by
+	calling gdk_window_set_skip_taskbar_hint(). This means that GTK
+	won't know that the skip_taskbar hint is on for the window, is
+	this bad?
+
 Wed Jan  8 18:43:03 2003  Manish Singh  <yosh@gimp.org>
 
 	* gdk/x11/gdkdisplay-x11.c: #include <stdlib.h> for putenv,

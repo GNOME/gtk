@@ -48,6 +48,9 @@
 
 #include <pango/pango-utils.h>	/* For pango_split_file_list */
 
+#include "config.h"
+#include "gtkintl.h"
+
 #include "gtkaccelmap.h"
 #include "gtkbox.h"
 #include "gtkdnd.h"
@@ -59,9 +62,7 @@
 #include "gtkwidget.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
-#include "config.h"
 #include "gtkdebug.h"
-#include "gtkintl.h"
 
 /* Private type definitions
  */

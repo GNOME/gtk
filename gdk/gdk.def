@@ -63,8 +63,9 @@ EXPORTS
 	gdk_display_get_core_pointer
 	gdk_display_get_default
 	gdk_display_get_default_screen
-	gdk_display_get_name
+	gdk_display_get_event
 	gdk_display_get_n_screens
+	gdk_display_get_name
 	gdk_display_get_pointer
 	gdk_display_get_screen
 	gdk_display_get_type
@@ -72,12 +73,17 @@ EXPORTS
 	gdk_display_keyboard_ungrab
 	gdk_display_list_devices
 	gdk_display_manager_get
+	gdk_display_manager_get_default_display
 	gdk_display_manager_list_displays
+	gdk_display_manager_set_default_display
 	gdk_display_open
 	gdk_display_open_default_libgtk_only
+	gdk_display_peek_event
 	gdk_display_pointer_is_grabbed
 	gdk_display_pointer_ungrab
+	gdk_display_put_event
 	gdk_display_set_double_click_time
+	gdk_display_set_pointer_hooks
 	gdk_display_sync
 	gdk_drag_abort
 	gdk_drag_action_get_type
@@ -158,6 +164,7 @@ EXPORTS
 	gdk_event_send_client_message
 	gdk_event_send_client_message_for_display
 	gdk_event_send_clientmessage_toall
+	gdk_event_set_screen
 	gdk_event_type_get_type
 	gdk_events_pending
 	gdk_exit
@@ -352,6 +359,7 @@ EXPORTS
 	gdk_screen_get_root_window
 	gdk_screen_get_setting
 	gdk_screen_get_system_colormap
+	gdk_screen_get_toplevel_windows
 	gdk_screen_get_type
 	gdk_screen_get_width
 	gdk_screen_height
@@ -523,4 +531,3 @@ EXPORTS
 	gdk_window_withdraw
 	gdk_wm_decoration_get_type
 	gdk_wm_function_get_type
-
