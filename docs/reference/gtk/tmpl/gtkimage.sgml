@@ -2,21 +2,29 @@
 GtkImage
 
 <!-- ##### SECTION Short_Description ##### -->
-
+A widget displaying a graphical image
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+The #GtkImage widget displays a graphical image. The image is typically created
+using gdk_image_new.
+</para>
+<para>
+The pixels in a #GtkImage may be manipulated by the application after creation,
+as #GtkImage store the pixel data on the client side. If you wish to store the
+pixel data on the server side (thus not allowing manipulation of the data after
+creation) you should use #GtkPixmap.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+#GtkPixmap, #GdkRgb
 </para>
 
 <!-- ##### STRUCT GtkImage ##### -->
 <para>
-
+This struct contain private data only and should be accessed by the functions
+below.
 </para>
 
 @misc: 
@@ -25,31 +33,31 @@ GtkImage
 
 <!-- ##### FUNCTION gtk_image_new ##### -->
 <para>
-
+Creates the new GtkImage using the value and the mask.
 </para>
 
 @val: 
-@mask: 
-@Returns: 
+@mask: a GDKBitmap that indicates which parts of the image should be transparent.
+@Returns: the GtkImage 
 
 
 <!-- ##### FUNCTION gtk_image_set ##### -->
 <para>
-
+Sets the GtkImage
 </para>
 
-@image: 
+@image: a #GdkPixmap
 @val: 
-@mask: 
+@mask: a GDKBitmap that indicates which parts of the image should be transparent.
 
 
 <!-- ##### FUNCTION gtk_image_get ##### -->
 <para>
-
+Gets the GtkImage
 </para>
 
-@image: 
+@image: a #GdkPixmap 
 @val: 
-@mask: 
+@mask: a GDKBitmap that indicates which parts of the image should be transparent.
 
 
