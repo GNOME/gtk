@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.2\n"
 "POT-Creation-Date: 2001-02-06 16:45+0100\n"
-"PO-Revision-Date: 2001-02-06 16:38+0100\n"
+"PO-Revision-Date: 2001-02-06 16:47+0100\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@eikonex.org>\n"
 "Language-Team: GNOME French Team <gnomefr@gnomefr.traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -55,13 +55,13 @@ msgid ""
 "Image has an incorrect pixel rowstride, perhaps the data was corrupted "
 "somehow."
 msgstr ""
-"L'image a une rangée de pixels incorrect, peut-etre que les données ont "
+"L'image a une rangée de pixels incorrect, peut-être que les données ont "
 "été corrompues."
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:154
 msgid "Image size is impossibly large, perhaps the data was corrupted somehow"
 msgstr ""
-"La taille de l'image est vraiment trop grande, peut-etre que les données "
+"La taille de l'image est vraiment trop grande, peut-être que les données "
 "ont été corrompues"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:167
@@ -76,7 +76,7 @@ msgid ""
 "Image has an unknown colorspace code (%d), perhaps the image data was "
 "corrupted"
 msgstr ""
-"L'image a un code d'espace de couleur inconnu (%d), peut-etre que les "
+"L'image a un code d'espace de couleur inconnu (%d), peut-être que les "
 "données de l'image ont été corrompues"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:192
@@ -85,7 +85,7 @@ msgid ""
 "Image has an improper number of bits per sample (%d), perhaps the image data "
 "was corrupted"
 msgstr ""
-"L'image a un nombre impropre de bits par échantillon (%d), peut-etre que "
+"L'image a un nombre impropre de bits par échantillon (%d), peut-être que "
 "les données de l'image ont été corrompues"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:201 gdk-pixbuf/gdk-pixbuf-data.c:210
@@ -94,7 +94,7 @@ msgid ""
 "Image has an improper number of channels (%d), perhaps the image data was "
 "corrupted"
 msgstr ""
-"L'image a un nombre impropre de canaux (%d), peut-etre que les données de "
+"L'image a un nombre impropre de canaux (%d), peut-être que les données de "
 "l'image ont été corrompues"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:228
@@ -133,7 +133,7 @@ msgid ""
 "from a different GTK version?"
 msgstr ""
 "Le module de chargement d'image %s n'exporte pas la bonne interface ; "
-"peut-etre qu'il est d'une version différente de GTK ?"
+"peut-être qu'il est d'une version différente de GTK ?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:425 gdk-pixbuf/gdk-pixbuf-io.c:451
 #, c-format
@@ -179,12 +179,12 @@ msgid ""
 "%s"
 msgstr ""
 "Échec à la fermeture de « %s » durand l'écriture de l'image, toutes les "
-"données n'ont peut-etre pas été enregistré : %s"
+"données n'ont peut-être pas été enregistré : %s"
 
 #: gdk-pixbuf/io-gif.c:426
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
-"Il manque au fichier GIF quelques données (peut-etre a t'il été tronquée "
+"Il manque au fichier GIF quelques données (peut-être a t'il été tronquée "
 "?)"
 
 #: gdk-pixbuf/io-gif.c:435
@@ -198,7 +198,7 @@ msgstr "Entrée de table circulaire dans le fichier GIF"
 
 #: gdk-pixbuf/io-gif.c:921
 msgid "File does not appear to be a GIF file"
-msgstr "Le fichier n'apparait pas etre un fichier GIF"
+msgstr "Le fichier n'apparait pas être un fichier GIF"
 
 #: gdk-pixbuf/io-gif.c:933
 #, c-format
@@ -232,15 +232,15 @@ msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
-"La qualité JPEG doit etre une valeur entre 0 et 100 ; la valeur « %s » ne "
-"peut etre analysée"
+"La qualité JPEG doit être une valeur entre 0 et 100 ; la valeur « %s » ne "
+"peut être analysée"
 
 #: gdk-pixbuf/io-jpeg.c:673
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
-"La qualité JPEG doit etre une valeur entre 0 et 100 ; la valeur « %d » "
+"La qualité JPEG doit être une valeur entre 0 et 100 ; la valeur « %d » "
 "n'est pas autorisée"
 
 #: gdk-pixbuf/io-png.c:158
@@ -371,7 +371,7 @@ msgstr "Le pixbuf à rendre."
 
 #: gtk/gtkcellrenderertext.c:117
 msgid "Text String"
-msgstr "Chaine de texte"
+msgstr "Chaîne de texte"
 
 #: gtk/gtkcellrenderertext.c:118
 msgid "The text of the renderer."
@@ -379,15 +379,15 @@ msgstr "Le texte du rendeur."
 
 #: gtk/gtkcellrenderertext.c:126
 msgid "Font String"
-msgstr "Chaine de police"
+msgstr "Chaîne de police"
 
 #: gtk/gtkcellrenderertext.c:127
 msgid "The string of the font."
-msgstr "La chaine de la police."
+msgstr "La chaîne de la police."
 
 #: gtk/gtkcellrenderertext.c:134
 msgid "Background Color string"
-msgstr "Chaine de couleur d'arrière-plan"
+msgstr "Chaîne de couleur d'arrière-plan"
 
 #: gtk/gtkcellrenderertext.c:135 gtk/gtkcellrenderertext.c:143
 msgid "The color for the background of the text."
@@ -395,7 +395,7 @@ msgstr "La couleur de l'arrière-plan du texte."
 
 #: gtk/gtkcellrenderertext.c:142
 msgid "Foreground Color string"
-msgstr "Chaine de couleur d'avant-plan"
+msgstr "Chaîne de couleur d'avant-plan"
 
 #: gtk/gtkcellrenderertext.c:150
 msgid "Strikethrough"
@@ -403,7 +403,7 @@ msgstr "Barré"
 
 #: gtk/gtkcellrenderertext.c:151
 msgid "Draw a line through the text."
-msgstr "Dessine une ligne a travers le texte."
+msgstr "Dessine une ligne à travers le texte."
 
 #: gtk/gtkcellrenderertext.c:159
 msgid "Underline"
