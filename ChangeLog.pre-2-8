@@ -1,3 +1,10 @@
+Thu Dec 12 18:02:34 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (gtk_main_do_event): Intercept events
+	of type GDK_SETTING before we check to see if there
+	was an event widget or not. (#97451, Simon Wong,
+	Bastien Nocera)
+
 Thu Dec 12 17:58:41 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.key.emacs: Add C-u/C-h/C-w. (#72245)

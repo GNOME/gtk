@@ -1351,6 +1351,12 @@ gtk_main_do_event (GdkEvent *event)
   if (next_event)
     gdk_event_free (next_event);
 
+  if (event->type == GDK_SETTING)
+    {
+      _gtk_settings_handle_event (&event->setting);
+      return;
+    }
+
   /* Find the widget which got the event. We store the widget
    *  in the user_data field of GdkWindow's.
    *  Ignore the event if we don't have a widget for it, except
@@ -1370,8 +1376,6 @@ gtk_main_do_event (GdkEvent *event)
       if (event->type == GDK_PROPERTY_NOTIFY)
 	_gtk_selection_incr_event (event->any.window,
 				   &event->property);
-      else if (event->type == GDK_SETTING)
-	_gtk_settings_handle_event (&event->setting);
 
       return;
     }
