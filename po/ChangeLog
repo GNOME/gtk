@@ -1,3 +1,7 @@
+2000-02-01  Tor Lillqvist  <tml@iki.fi>
+
+	* makefile.cygwin: Handle zh_CN.GB2312.
+
 2000-01-31  Yuan-Chung Cheng <platin@linux.org.tw>
 
         * zh_CN.GB2312.po: Added po file from TurboLinux Chinese Develop Team.
