@@ -1494,7 +1494,6 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
     {
       gtk_range_slider_update (range);
       gtk_range_clear_background (range);
-      gdk_window_process_updates (range->trough, TRUE);
 
       range->old_value = adjustment->value;
     }

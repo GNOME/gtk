@@ -29,8 +29,6 @@
 
 #if defined (GDK_WINDOWING_X11)
 #include "x11/gdkx.h"
-#elif defined (GDK_WINDOWING_FB)
-#include "linux-fb/gdkfb.h"
 #endif
 #include "gdk/gdkkeysyms.h"
 #include "gtkcolorsel.h"
