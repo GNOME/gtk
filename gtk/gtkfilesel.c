@@ -312,7 +312,7 @@ static gint                cmpl_last_valid_char    (CompletionState* cmpl_state)
 /* When the user selects a non-directory, call cmpl_completion_fullname
  * to get the full name of the selected file.
  */
-static gchar*              cmpl_completion_fullname (const gchar*, CompletionState* cmpl_state);
+static const gchar*        cmpl_completion_fullname (const gchar*, CompletionState* cmpl_state);
 
 
 /* Directory operations. */
@@ -2515,7 +2515,7 @@ cmpl_last_valid_char (CompletionState *cmpl_state)
   return cmpl_state->last_valid_char;
 }
 
-static gchar*
+static const gchar*
 cmpl_completion_fullname (const gchar     *text,
 			  CompletionState *cmpl_state)
 {

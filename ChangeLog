@@ -1,3 +1,8 @@
+Thu Dec 12 20:07:25 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (cmpl_completion_fullname): Const
+	warning fix.
+
 Thu Dec 12 19:51:45 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c (open_new_dir): Include "."
