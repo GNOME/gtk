@@ -721,6 +721,13 @@ gtk_style_finalize (GObject *object)
 
   clear_property_cache (style);
   
+  /* All the styles in the list have the same 
+   * style->styles pointer. If we delete the 
+   * *first* style from the list, we need to update
+   * the style->styles pointers from all the styles.
+   * Otherwise we simply remove the node from
+   * the list.
+   */
   if (style->styles)
     {
       if (style->styles->data != style)
@@ -788,6 +795,11 @@ gtk_style_duplicate (GtkStyle *style)
   
   new_style = gtk_style_copy (style);
   
+  /* All the styles in the list have the same 
+   * style->styles pointer. When we insert a new 
+   * style, we append it to the list to avoid having 
+   * to update the existing ones. 
+   */
   style->styles = g_slist_append (style->styles, new_style);
   new_style->styles = style->styles;  
   
@@ -825,22 +837,6 @@ gtk_style_new (void)
  * involve the creation of a new style if the style has already 
  * been attached to a window with a different style and colormap.
  **/
- /*
- * FIXME: The sequence - 
- *    create a style => s1
- *    attach s1 to v1, c1 => s1
- *    attach s1 to v2, c2 => s2
- *    detach s1 from v1, c1
- *    attach s1 to v2, c2 => s3
- * results in two separate, unlinked styles s2 and s3 which
- * are identical and could be shared. To fix this, we would
- * want to never remove a style from the list of linked
- * styles as long as as it has a reference count. However, the 
- * disadvantage of doing it this way means that we would need two 
- * passes through the linked list when attaching (one to check for 
- * matching styles, one to look for empty unattached styles - but 
- * it will almost never be longer than 2 elements.
- */
 GtkStyle*
 gtk_style_attach (GtkStyle  *style,
                   GdkWindow *window)
@@ -862,16 +858,30 @@ gtk_style_attach (GtkStyle  *style,
     {
       new_style = styles->data;
       
-      if (new_style->attach_count == 0)
-        {
-          gtk_style_realize (new_style, colormap);
-          break;
-        }
-      else if (new_style->colormap == colormap)
+      if (new_style->colormap == colormap)
         break;
-      
+
       new_style = NULL;
       styles = styles->next;
+    }
+
+  if (!new_style)
+    {
+      styles = style->styles;
+      
+      while (styles)
+	{
+	  new_style = styles->data;
+	  
+	  if (new_style->attach_count == 0)
+	    {
+	      gtk_style_realize (new_style, colormap);
+	      break;
+	    }
+	  
+	  new_style = NULL;
+	  styles = styles->next;
+	}
     }
   
   if (!new_style)
@@ -1672,8 +1682,12 @@ gtk_style_real_copy (GtkStyle *style,
       style->bg[i] = src->bg[i];
       style->text[i] = src->text[i];
       style->base[i] = src->base[i];
-      
+
+      if (style->bg_pixmap[i])
+	g_object_unref (style->bg_pixmap[i]),
       style->bg_pixmap[i] = src->bg_pixmap[i];
+      if (style->bg_pixmap[i])
+	g_object_ref (style->bg_pixmap[i]);
     }
 
   if (style->private_font)
@@ -1903,7 +1917,7 @@ gtk_style_real_realize (GtkStyle *style)
   for (i = 0; i < 5; i++)
     {
       if (style->rc_style && style->rc_style->bg_pixmap_name[i])
-        style->bg_pixmap[i] = load_bg_image (style->colormap,
+	style->bg_pixmap[i] = load_bg_image (style->colormap,
 					     &style->bg[i],
 					     style->rc_style->bg_pixmap_name[i]);
       
@@ -1978,7 +1992,11 @@ gtk_style_real_unrealize (GtkStyle *style)
       gtk_gc_release (style->text_aa_gc[i]);
 
       if (style->bg_pixmap[i] &&  style->bg_pixmap[i] != (GdkPixmap*) GDK_PARENT_RELATIVE)
-	g_object_unref (style->bg_pixmap[i]);
+	{
+	  g_object_unref (style->bg_pixmap[i]);
+	  style->bg_pixmap[i] = NULL;
+	}
+      
     }
   
   gdk_colormap_free_colors (style->colormap, style->fg, 5);

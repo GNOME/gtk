@@ -1,3 +1,17 @@
+Thu Jul 15 22:19:40 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Fix #60128, #58307, #144706:
+	
+	* gtk/gtkstyle.c (gtk_style_real_copy): Handle references
+	to bg_pixmaps properly.
+	(gtk_style_real_unrealize): Don't keep dangling references
+	to the bg_pixmaps.  
+	(gtk_style_attach): Split the loop into two loops, first 
+	looking for a matching style, then for an empty one.
+	(gtk_style_finalize): 
+	(gtk_style_duplicate): Add comments explaining the handling
+	of style->styles.
+
 Thu Jul 15 20:31:28 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkspinbutton.c (start_spinning): Install the timeout
