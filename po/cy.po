@@ -1,15 +1,15 @@
 # gtk+ yn Gymraeg.
 # Rhoslyn Prys <rhoslyn.prys@ntlworld.com>, 2002.
-# Dafydd Harries <daf@muse.19inch.net>, 2003, 2004.
+# Dafydd Harries <daf@muse.19inch.net>, 2003, 2004 2005.
 # Rhys Jones <rhys@sucs.org>, 2004 2005.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-01 11:34-0500\n"
-"PO-Revision-Date: 2005-02-08 06:51+0000\n"
-"Last-Translator: Rhys Jones <rhys@sucs.org>\n"
+"POT-Creation-Date: 2005-03-04 13:27+0000\n"
+"PO-Revision-Date: 2005-03-04 13:28+0000\n"
+"Last-Translator: Dafydd Harries <daf@muse.19inch.net>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -203,7 +203,7 @@ msgstr "Y fformat delwedd BMP"
 msgid "Failure reading GIF: %s"
 msgstr "Methiant wrth ddarllen GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1435 gdk-pixbuf/io-gif.c:1596
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463 gdk-pixbuf/io-gif.c:1624
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 "Roedd peth data ar goll o'r ffeil GIF (efallai cafodd ei dalfyrru rhywsut?)"
@@ -229,25 +229,29 @@ msgstr "Canfodwyd côd gwael"
 msgid "Circular table entry in GIF file"
 msgstr "Cofnod cylchol mewn tabl ffeil GIF"
 
-#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1423 gdk-pixbuf/io-gif.c:1469
-#: gdk-pixbuf/io-gif.c:1584
+#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1451 gdk-pixbuf/io-gif.c:1497
+#: gdk-pixbuf/io-gif.c:1612
 msgid "Not enough memory to load GIF file"
 msgstr "Dim digon o gôf er mwyn llwytho ffeil GIF"
 
-#: gdk-pixbuf/io-gif.c:1088
+#: gdk-pixbuf/io-gif.c:947
+msgid "Not enough memory to composite a frame in GIF file"
+msgstr "Dim digon o gôf er mwyn cyfansoddi ffrâm mewn ffeil GIF"
+
+#: gdk-pixbuf/io-gif.c:1116
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Mae'r ddelwedd GIF yn llygredig (cywasgiad LZW anghywir)"
 
-#: gdk-pixbuf/io-gif.c:1138
+#: gdk-pixbuf/io-gif.c:1166
 msgid "File does not appear to be a GIF file"
 msgstr "Mae'n ymddangos mai nad ffeil GIF yw'r ffeil hwn"
 
-#: gdk-pixbuf/io-gif.c:1150
+#: gdk-pixbuf/io-gif.c:1178
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Ni chynhelir fersiwn %s y fformat delwedd GIF"
 
-#: gdk-pixbuf/io-gif.c:1259
+#: gdk-pixbuf/io-gif.c:1287
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -255,11 +259,11 @@ msgstr ""
 "Doedd dim map lliwiau gan y ddelwedd GIF, ac roedd yn cynnwys ffrâm heb fap "
 "lliwiau lleol"
 
-#: gdk-pixbuf/io-gif.c:1491
+#: gdk-pixbuf/io-gif.c:1519
 msgid "GIF image was truncated or incomplete."
 msgstr "Roedd y ddelwedd GIF yn anghyflawn neu wedi gorffen yn rhy fuan"
 
-#: gdk-pixbuf/io-gif.c:1643
+#: gdk-pixbuf/io-gif.c:1671
 msgid "The GIF image format"
 msgstr "Y fformat delwedd GIF"
 
@@ -700,35 +704,39 @@ msgstr "Y fformat delwedd XBM"
 msgid "No XPM header found"
 msgstr "Ni canfodwyd pennawd delwedd XPM"
 
-#: gdk-pixbuf/io-xpm.c:1237
+#: gdk-pixbuf/io-xpm.c:1238
+msgid "Invalid XPM header"
+msgstr "Pennawd XPM annilys"
+
+#: gdk-pixbuf/io-xpm.c:1246
 msgid "XPM file has image width <= 0"
 msgstr "Mae gan y ffeil delwedd XPM lled yn llai na 1"
 
-#: gdk-pixbuf/io-xpm.c:1245
+#: gdk-pixbuf/io-xpm.c:1254
 msgid "XPM file has image height <= 0"
 msgstr "Mae gan y ffeil delwedd XPM hyd yn llai na 1"
 
-#: gdk-pixbuf/io-xpm.c:1253
+#: gdk-pixbuf/io-xpm.c:1262
 msgid "XPM has invalid number of chars per pixel"
 msgstr "Mae gan y ddelwedd XPM nifer annilys o feitiau i bob picsel"
 
-#: gdk-pixbuf/io-xpm.c:1260
+#: gdk-pixbuf/io-xpm.c:1269
 msgid "XPM file has invalid number of colors"
 msgstr "Mae gan y ffeil delwedd XPM nifer annilys o liwiau"
 
-#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
+#: gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1290 gdk-pixbuf/io-xpm.c:1342
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "Methu dyrannu cof er mwyn llwytho delwedd XPM"
 
-#: gdk-pixbuf/io-xpm.c:1295
+#: gdk-pixbuf/io-xpm.c:1304
 msgid "Cannot read XPM colormap"
 msgstr "Methu darllen map lliwiau delwedd XPM"
 
-#: gdk-pixbuf/io-xpm.c:1524
+#: gdk-pixbuf/io-xpm.c:1533
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Methu ysgrifennu at ffeil dros dro wrth lwytho delwedd XPM"
 
-#: gdk-pixbuf/io-xpm.c:1559
+#: gdk-pixbuf/io-xpm.c:1568
 msgid "The XPM image format"
 msgstr "Y fformat delwedd XPM"
 
@@ -916,11 +924,6 @@ msgstr "calendar:MY"
 #: gtk/gtkcalendar.c:710
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
-
-#: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
-#, c-format
-msgid "progress bar label|%d %%"
-msgstr "%d %%"
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
@@ -2222,6 +2225,9 @@ msgstr "Modd Mewnbwn X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Methwyd cyrchu gwybodaeth ar gyfer y ffeil '%s': %s"
+
+#~ msgid "progress bar label|%d %%"
+#~ msgstr "%d %%"
 
 #~ msgid "Error getting information for '%s'"
 #~ msgstr "Gwall wrth gyrchu gwybodaeth ar gyfer '%s'"
