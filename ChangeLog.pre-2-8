@@ -1,3 +1,17 @@
+Fri Dec 19 01:35:34 2003  Matthias Clasen  <maclas@gmx.de>
+
+	Fix the behaviour of insensitive actions, which was broken
+	when gtk_action_activate() was changed to pay attention to 
+	sensitivity  (#129557, Christian Persch)
+	
+	* gtk/gtkaction.h: 
+	* gtk/gtkaction.c (_gtk_action_emit_activate): New auxiliary
+	function to emit an activate signal without regard to sensitivity.
+
+	* gtk/gtkradioaction.c: 
+	* gtk/gtktoggleaction.c: Always use _gtk_action_emit_activate()
+	instead of gtk_action_activate().
+
 Thu Dec 18 19:13:12 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Fixes #110249, reworked patch from Joshua N Pritikin.

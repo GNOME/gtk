@@ -871,6 +871,12 @@ disconnect_proxy (GtkAction *action,
   g_signal_emit (action, action_signals[DISCONNECT_PROXY], 0, proxy);
 }
 
+void
+_gtk_action_emit_activate (GtkAction *action)
+{
+    g_signal_emit (action, action_signals[ACTIVATE], 0);
+}
+
 /**
  * gtk_action_activate:
  * @action: the action object
@@ -889,7 +895,7 @@ gtk_action_activate (GtkAction *action)
   g_return_if_fail (GTK_IS_ACTION (action));
   
   if (action->private_data->sensitive)
-    g_signal_emit (action, action_signals[ACTIVATE], 0);
+    _gtk_action_emit_activate (action);
 }
 
 /**

@@ -276,7 +276,7 @@ gtk_radio_action_activate (GtkAction *action)
 
 	  if (tmp_action->private_data->active && (tmp_action != toggle_action))
 	    {
-	      gtk_action_activate (GTK_ACTION (tmp_action));
+	      _gtk_action_emit_activate (GTK_ACTION (tmp_action));
 	      break;
 	    }
 	}
