@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-29 19:29+0100\n"
-"PO-Revision-Date: 2004-02-29 19:33+0100\n"
+"POT-Creation-Date: 2004-03-02 22:12+0100\n"
+"PO-Revision-Date: 2004-03-02 22:17+0100\n"
 "Last-Translator: Alessio Dessi <alessiodessi@tiscali.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -766,7 +766,7 @@ msgstr "Altezza fissa"
 
 #: gtk/gtkcellrenderer.c:235
 msgid "Is Expander"
-msgstr "È espandibile"
+msgstr "È estensore"
 
 #: gtk/gtkcellrenderer.c:236
 msgid "Row has children"
@@ -778,7 +778,7 @@ msgstr "È espansa"
 
 #: gtk/gtkcellrenderer.c:246
 msgid "Row is an expander row, and is expanded"
-msgstr "La riga è una riga espandibile ed è stata espansa"
+msgstr "La riga è un estensore ed è stata espansa"
 
 #: gtk/gtkcellrenderer.c:254
 msgid "Cell background color name"
@@ -814,19 +814,19 @@ msgstr "Il pixbuf da disegnare"
 
 #: gtk/gtkcellrendererpixbuf.c:142
 msgid "Pixbuf Expander Open"
-msgstr "Pixbuf espandibile aperto"
+msgstr "Pixbuf estensore aperto"
 
 #: gtk/gtkcellrendererpixbuf.c:143
 msgid "Pixbuf for open expander"
-msgstr "Pixbuf per l'oggetto espandibile aperto"
+msgstr "Pixbuf per l'oggetto estensore aperto"
 
 #: gtk/gtkcellrendererpixbuf.c:151
 msgid "Pixbuf Expander Closed"
-msgstr "Pixbuf espandibile chiuso"
+msgstr "Pixbuf estensore chiuso"
 
 #: gtk/gtkcellrendererpixbuf.c:152
 msgid "Pixbuf for closed expander"
-msgstr "Pixbuf per l'oggetto espandibile chiuso"
+msgstr "Pixbuf per l'oggetto estensore chiuso"
 
 #: gtk/gtkcellrendererpixbuf.c:160 gtk/gtkimage.c:176
 msgid "Stock ID"
@@ -853,7 +853,7 @@ msgstr "Dettaglio"
 msgid "Render detail to pass to the theme engine"
 msgstr "Opzioni di rendering da passare al motore dei temi"
 
-#: gtk/gtkcellrenderertext.c:192 gtk/gtkentry.c:534 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:192 gtk/gtkentry.c:544 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "Testo"
 
@@ -919,7 +919,7 @@ msgstr "Colore di primo piano"
 msgid "Foreground color as a GdkColor"
 msgstr "Colore di primo piano come GdkColor"
 
-#: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:466 gtk/gtktexttag.c:273
+#: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:476 gtk/gtktexttag.c:273
 #: gtk/gtktextview.c:585
 msgid "Editable"
 msgstr "Modificabile"
@@ -1329,54 +1329,54 @@ msgstr "Valore nella lista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Indica se il valore inserito dev'essere già presente nella lista"
 
-#: gtk/gtkcombobox.c:407
+#: gtk/gtkcombobox.c:430
 msgid "ComboBox model"
 msgstr "Modello ComboBox"
 
-#: gtk/gtkcombobox.c:408
+#: gtk/gtkcombobox.c:431
 msgid "The model for the combo box"
 msgstr "Il modello per il combo box"
 
-#: gtk/gtkcombobox.c:415
+#: gtk/gtkcombobox.c:438
 msgid "Wrap width"
 msgstr "Adatta larghezza"
 
-#: gtk/gtkcombobox.c:416
+#: gtk/gtkcombobox.c:439
 msgid "Wrap width for layouting the items in a grid"
 msgstr ""
 "Adatta la larghezza per la visualizzazione degli elementi su una griglia"
 
-#: gtk/gtkcombobox.c:425
+#: gtk/gtkcombobox.c:448
 msgid "Row span column"
 msgstr "Spaziatura riga-colonna"
 
-#: gtk/gtkcombobox.c:426
+#: gtk/gtkcombobox.c:449
 msgid "TreeModel column containing the row span values"
 msgstr "Colonna di TreeModel contenente i valori di spaziatura della riga"
 
-#: gtk/gtkcombobox.c:435
+#: gtk/gtkcombobox.c:458
 msgid "Column span column"
 msgstr "Spaziatura colonna-colonna"
 
-#: gtk/gtkcombobox.c:436
+#: gtk/gtkcombobox.c:459
 msgid "TreeModel column containing the column span values"
 msgstr "Colonna di TreeModel contenente i valori di spaziatura della colonna"
 
-#: gtk/gtkcombobox.c:445
+#: gtk/gtkcombobox.c:468
 msgid "Active item"
 msgstr "Elemento attivo"
 
-#: gtk/gtkcombobox.c:446
+#: gtk/gtkcombobox.c:469
 msgid "The item which is currently active"
 msgstr "L'elemento attivo in questo momento"
 
-#: gtk/gtkcombobox.c:454
-msgid "ComboBox appareance"
-msgstr "Aspetto del ComboBox"
+#: gtk/gtkcombobox.c:477
+msgid "Appears as list"
+msgstr "Appare come una lista"
 
-#: gtk/gtkcombobox.c:455
-msgid "ComboBox appearance, where TRUE means Windows-style."
-msgstr "Aspetto del ComboBox, TRUE indica stile-Windows."
+#: gtk/gtkcombobox.c:478
+msgid "Whether combobox dropdowns should look like lists rather than menus"
+msgstr "Indica se la tendina delle caselle combinate appare come una lista invece che come un menu"
 
 #: gtk/gtkcomboboxentry.c:109
 msgid "Text Column"
@@ -1486,40 +1486,40 @@ msgstr ""
 "Larghezza del bordo intorno al pulsante nella parte bassa della finestra di "
 "dialogo"
 
-#: gtk/gtkentry.c:446 gtk/gtklabel.c:366
+#: gtk/gtkentry.c:456 gtk/gtklabel.c:366
 msgid "Cursor Position"
 msgstr "Posizione del cursore"
 
-#: gtk/gtkentry.c:447 gtk/gtklabel.c:367
+#: gtk/gtkentry.c:457 gtk/gtklabel.c:367
 msgid "The current position of the insertion cursor in chars"
 msgstr "La posizione corrente di inserimento dei caratteri"
 
-#: gtk/gtkentry.c:456 gtk/gtklabel.c:376
+#: gtk/gtkentry.c:466 gtk/gtklabel.c:376
 msgid "Selection Bound"
 msgstr "Limite della selezione"
 
-#: gtk/gtkentry.c:457 gtk/gtklabel.c:377
+#: gtk/gtkentry.c:467 gtk/gtklabel.c:377
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "La posizione in caratteri dall'altro estremo della selezione"
 
-#: gtk/gtkentry.c:467
+#: gtk/gtkentry.c:477
 msgid "Whether the entry contents can be edited"
 msgstr "Indica se il contenuto del campo di inserimento può essere modificato"
 
-#: gtk/gtkentry.c:474
+#: gtk/gtkentry.c:484
 msgid "Maximum length"
 msgstr "Lunghezza massima"
 
-#: gtk/gtkentry.c:475
+#: gtk/gtkentry.c:485
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Numero massimo di caratteri per il campo. Zero per non mettere limite"
 
-#: gtk/gtkentry.c:483
+#: gtk/gtkentry.c:493
 msgid "Visibility"
 msgstr "Visibilità"
 
-#: gtk/gtkentry.c:484
+#: gtk/gtkentry.c:494
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1527,29 +1527,29 @@ msgstr ""
 "FALSE visualizza i \"caratteri di mascheramento\" invece del testo in chiaro "
 "(modalità password)"
 
-#: gtk/gtkentry.c:491
+#: gtk/gtkentry.c:501
 msgid "Has Frame"
 msgstr "Con bordo"
 
-#: gtk/gtkentry.c:492
+#: gtk/gtkentry.c:502
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE rimuove le smussature esterne dal campo"
 
-#: gtk/gtkentry.c:499
+#: gtk/gtkentry.c:509
 msgid "Invisible character"
 msgstr "Carattere di mascheramento"
 
-#: gtk/gtkentry.c:500
+#: gtk/gtkentry.c:510
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Il carattere da usare quando si nasconde il contenuto di un campo ( nella "
 "\"modalità password\")"
 
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:517
 msgid "Activates default"
 msgstr "Imposta i valori predefiniti"
 
-#: gtk/gtkentry.c:508
+#: gtk/gtkentry.c:518
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -1557,33 +1557,45 @@ msgstr ""
 "Indica se attivare i widget predefiniti (come il pulsante predefinito in una "
 "finestra di dialogo) quando viene premuto Invio"
 
-#: gtk/gtkentry.c:514
+#: gtk/gtkentry.c:524
 msgid "Width in chars"
 msgstr "Larghezza in caratteri"
 
-#: gtk/gtkentry.c:515
+#: gtk/gtkentry.c:525
 msgid "Number of characters to leave space for in the entry"
 msgstr "Numero di caratteri del campo"
 
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:534
 msgid "Scroll offset"
 msgstr "Ampiezza spostamento"
 
-#: gtk/gtkentry.c:525
+#: gtk/gtkentry.c:535
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 "Numero di pixel lasciati fuori sulla sinistra del campo durante lo "
 "scorrimento"
 
-#: gtk/gtkentry.c:535
+#: gtk/gtkentry.c:545
 msgid "The contents of the entry"
 msgstr "Il contenuto del campo"
 
-#: gtk/gtkentry.c:766
+#: gtk/gtkentry.c:552 gtk/gtkmisc.c:98
+msgid "X align"
+msgstr "Allineamento orizzontale"
+
+#: gtk/gtkentry.c:553 gtk/gtkmisc.c:99
+msgid ""
+"The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
+"layouts"
+msgstr ""
+"L'allineamento orizzontale, da 0 (sinistra) a 1 (destra). Invertito per "
+"layout destra-sinistra"
+
+#: gtk/gtkentry.c:786
 msgid "Select on focus"
 msgstr "Seleziona al focus"
 
-#: gtk/gtkentry.c:767
+#: gtk/gtkentry.c:787
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Indica se selezionare il contenuto del campo quando ottiene il focus"
 
@@ -1634,11 +1646,11 @@ msgstr "Espanso"
 
 #: gtk/gtkexpander.c:195
 msgid "Whether the expander has been opened to reveal the child widget"
-msgstr "Indica se l'espansore è stato aperto per mostrare il widget figlio"
+msgstr "Indica se l'estensore è stato aperto per mostrare il widget figlio"
 
 #: gtk/gtkexpander.c:203
 msgid "Text of the expander's label"
-msgstr "Testo dell'etichetta dell'espansore"
+msgstr "Testo dell'etichetta dell'estensore"
 
 #: gtk/gtkexpander.c:218 gtk/gtklabel.c:302
 msgid "Use markup"
@@ -1658,19 +1670,19 @@ msgstr "Widget etichetta"
 
 #: gtk/gtkexpander.c:237
 msgid "A widget to display in place of the usual expander label"
-msgstr "Un widget visualizzato al posto dalla tipica etichetta dell'espansore"
+msgstr "Un widget visualizzato al posto dalla tipica etichetta dell'estensore"
 
 #: gtk/gtkexpander.c:243 gtk/gtktreeview.c:621
 msgid "Expander Size"
-msgstr "Dimensione dell'espansore"
+msgstr "Dimensione dell'estensore"
 
 #: gtk/gtkexpander.c:244 gtk/gtktreeview.c:622
 msgid "Size of the expander arrow"
-msgstr "Dimensione della freccia espansore"
+msgstr "Dimensione della freccia estensore"
 
 #: gtk/gtkexpander.c:253
 msgid "Spacing around expander arrow"
-msgstr "Spaziatura intorno alla freccia dell'espansore"
+msgstr "Spaziatura intorno alla freccia dell'estensore"
 
 #: gtk/gtkfilechooser.c:92
 msgid "Action"
@@ -1731,7 +1743,9 @@ msgstr "Usa etichetta di anteprima"
 
 #: gtk/gtkfilechooser.c:130
 msgid "Whether to display a stock label with the name of the previewed file."
-msgstr "Indica se mostrare un'etichetta dello stock con il nome del file di cui si mostra l'anteprima."
+msgstr ""
+"Indica se mostrare un'etichetta dello stock con il nome del file di cui si "
+"mostra l'anteprima."
 
 #: gtk/gtkfilechooser.c:135
 msgid "Extra widget"
@@ -1756,6 +1770,14 @@ msgstr "Mostra nascosti"
 #: gtk/gtkfilechooser.c:149
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Indica se devono essere visualizzati i file e le cartelle nascoste"
+
+#: gtk/gtkfilechooserdefault.c:473
+msgid "Default file chooser backend"
+msgstr "Backend predefinito del selettore file"
+
+#: gtk/gtkfilechooserdefault.c:474
+msgid "Name of the GtkFileChooser backend to use by default"
+msgstr "Nome del backend di GtkFileChooser da usare come predefinito"
 
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
 msgid "Filename"
@@ -2282,7 +2304,9 @@ msgstr "Usa separatore"
 #: gtk/gtkmessagedialog.c:126
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
-msgstr "Indica se usare un separatore tra il testo e i pulsanti della finestra di dialogo"
+msgstr ""
+"Indica se usare un separatore tra il testo e i pulsanti della finestra di "
+"dialogo"
 
 #: gtk/gtkmessagedialog.c:132
 msgid "Message Type"
@@ -2299,14 +2323,6 @@ msgstr "Pulsanti messaggio"
 #: gtk/gtkmessagedialog.c:141
 msgid "The buttons shown in the message dialog"
 msgstr "I pulsanti visualizzati nella finestra di messaggio"
-
-#: gtk/gtkmisc.c:98
-msgid "X align"
-msgstr "Allineamento orizzontale"
-
-#: gtk/gtkmisc.c:99
-msgid "The horizontal alignment, from 0 (left) to 1 (right)"
-msgstr "L'allineamento orizzontale, da 0 (sinistra) a 1 (destra)"
 
 #: gtk/gtkmisc.c:108
 msgid "Y align"
@@ -2423,7 +2439,7 @@ msgstr "Etichetta della linguetta"
 
 #: gtk/gtknotebook.c:477
 msgid "The string displayed on the childs tab label"
-msgstr "Stringa visualizzata nelle linguette figlie"
+msgstr "Stringa visualizzata nell'etichetta delle linguette"
 
 #: gtk/gtknotebook.c:483
 msgid "Menu label"
@@ -2439,7 +2455,7 @@ msgstr "Espandi linguetta"
 
 #: gtk/gtknotebook.c:498
 msgid "Whether to expand the childs tab or not"
-msgstr "Indica se le linguette figlie devono essere espanse"
+msgstr "Indica se le linguette (figlie) devono essere espanse"
 
 #: gtk/gtknotebook.c:504
 msgid "Tab fill"
@@ -2958,22 +2974,22 @@ msgstr "Disegna"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Indica se il separatore è disegnato o solo lasciato vuoto"
 
-#: gtk/gtksettings.c:262
+#: gtk/gtksettings.c:261
 msgid "Double Click Time"
 msgstr "Durata doppio clic"
 
-#: gtk/gtksettings.c:263
+#: gtk/gtksettings.c:262
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
 msgstr ""
 "Ritardo, in millisecondi, affinché due clic siano considerati un doppio clic"
 
-#: gtk/gtksettings.c:270
+#: gtk/gtksettings.c:269
 msgid "Double Click Distance"
 msgstr "Distanza doppio clic"
 
-#: gtk/gtksettings.c:271
+#: gtk/gtksettings.c:270
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -2981,27 +2997,27 @@ msgstr ""
 "Massima distanza consentita tra due clic affinchè siano considerati doppio "
 "clic (in pixel)"
 
-#: gtk/gtksettings.c:278
+#: gtk/gtksettings.c:277
 msgid "Cursor Blink"
 msgstr "Cursore lampeggiante"
 
-#: gtk/gtksettings.c:279
+#: gtk/gtksettings.c:278
 msgid "Whether the cursor should blink"
 msgstr "Indica se il cursore debba lampeggiare o meno"
 
-#: gtk/gtksettings.c:286
+#: gtk/gtksettings.c:285
 msgid "Cursor Blink Time"
 msgstr "Velocità lampeggiamento cursore"
 
-#: gtk/gtksettings.c:287
+#: gtk/gtksettings.c:286
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Lunghezza del ciclo di lampeggiamento del cursore, in millisecondi"
 
-#: gtk/gtksettings.c:294
+#: gtk/gtksettings.c:293
 msgid "Split Cursor"
 msgstr "Dividi cursore"
 
-#: gtk/gtksettings.c:295
+#: gtk/gtksettings.c:294
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -3009,19 +3025,19 @@ msgstr ""
 "Indica se debbano essere visualizzati due cursori per testo misto, sinistra-"
 "destra e destra-sinistra"
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:301
 msgid "Theme Name"
 msgstr "Nome del tema"
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:302
 msgid "Name of theme RC file to load"
 msgstr "Nome del file RC del tema da caricare"
 
-#: gtk/gtksettings.c:310
+#: gtk/gtksettings.c:309
 msgid "Icon Theme Name"
 msgstr "Nome del tema delle icone"
 
-#: gtk/gtksettings.c:311
+#: gtk/gtksettings.c:310
 msgid "Name of icon theme to use"
 msgstr "Nome del tema delle icone da utilizzare"
 
@@ -3687,6 +3703,14 @@ msgid "Whether Tab will result in a tab character being entered"
 msgstr ""
 "Indica se la pressione del tasto «Tab» inserisce il carattere di tabulazione"
 
+#: gtk/gtktextview.c:683
+msgid "Error underline color"
+msgstr "Colore di sottolineatura errore"
+
+#: gtk/gtktextview.c:684
+msgid "Color with which to draw error-indication underlines"
+msgstr "Colore con cui disegnare le sottolineature indicanti l'errore"
+
 #: gtk/gtktoggleaction.c:129
 msgid "Create the same proxies as a radio action"
 msgstr "Crea lo stesso proxy di un'azione «radio»"
@@ -3877,11 +3901,11 @@ msgstr "Le intestazioni delle colonne rispondono ai clic"
 
 #: gtk/gtktreeview.c:567
 msgid "Expander Column"
-msgstr "Espansore colonna"
+msgstr "Estensore colonna"
 
 #: gtk/gtktreeview.c:568
 msgid "Set the column for the expander column"
-msgstr "Imposta la colonna per l'espansore colonna"
+msgstr "Imposta la colonna per l'estensore colonna"
 
 #: gtk/gtktreeview.c:575 gtk/gtktreeviewcolumn.c:329
 msgid "Reorderable"
@@ -3954,11 +3978,11 @@ msgstr "Consente di utilizzare righe con colori alternati"
 
 #: gtk/gtktreeview.c:655
 msgid "Indent Expanders"
-msgstr "Rientra gli espansori"
+msgstr "Rientra gli estensori"
 
 #: gtk/gtktreeview.c:656
 msgid "Make the expanders indented"
-msgstr "Rende gli espansori rientrati"
+msgstr "Rende gli estensori rientrati"
 
 #: gtk/gtktreeview.c:662
 msgid "Even Row Color"
