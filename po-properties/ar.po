@@ -4,8 +4,7 @@
 # Isam Bayazidi <bayazidi@arabeyes.org>, 2002.
 # Arafat Medini <lumina@silverpen.de>, 2003.
 # Arafat Medini <lumina@silverpen.de>, 2004.
-# <lumina@silverpen.de>, 2004.
-# Christian Meyer <chrisime@gnome.org>, 2004.
+#  <lumina@silverpen.de>, 2004.
 # 
 # 
 msgid ""
@@ -13,60 +12,60 @@ msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-03-13 15:32+0100\n"
-"PO-Revision-Date: 2004-03-17 01:48+0100\n"
+"PO-Revision-Date: 2004-03-17 08:30+0100\n"
 "Last-Translator: Arafat Medini <lumina@silverpen.de>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-6\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit"
 
 #: gdk-pixbuf/gdk-pixbuf.c:100
 msgid "Number of Channels"
-msgstr "ÙÏÏ ÇäâæèÇÊ"
+msgstr "Ø¹Ø¯Ø¯ Ø§Ù„Ù‚Ù†ÙˆØ§Øª"
 
 #: gdk-pixbuf/gdk-pixbuf.c:101
 msgid "The number of samples per pixel"
-msgstr "ÙÏÏ ÇäæåÇĞÌ äãä ÈãÓä"
+msgstr "Ø¹Ø¯Ø¯ Ø§Ù„Ù†Ù…Ø§Ø°Ø¬ Ù„ÙƒÙ„ Ø¨ÙƒØ³Ù„"
 
 #: gdk-pixbuf/gdk-pixbuf.c:111
 msgid "Colorspace"
-msgstr "åÓÇÍÉ Çääèæ"
+msgstr "Ù…Ø³Ø§Ø­Ø© Ø§Ù„Ù„ÙˆÙ†"
 
 #: gdk-pixbuf/gdk-pixbuf.c:112
 msgid "The colorspace in which the samples are interpreted"
-msgstr "åÓÇÍÉ Çääèæ ÇäÊê áêçÇ ÊÊÑÌå ÇäæåÇĞÌ"
+msgstr "Ù…Ø³Ø§Ø­Ø© Ø§Ù„Ù„ÙˆÙ† Ø§Ù„ØªÙŠ ÙÙŠÙ‡Ø§ ØªØªØ±Ø¬Ù… Ø§Ù„Ù†Ù…Ø§Ø°Ø¬"
 
 #: gdk-pixbuf/gdk-pixbuf.c:122
 msgid "Has Alpha"
-msgstr "äç ÔáÇáêÉ"
+msgstr "Ù„Ù‡ Ø´ÙØ§ÙÙŠØ©"
 
 #: gdk-pixbuf/gdk-pixbuf.c:123
 msgid "Whether the pixbuf has an alpha channel"
-msgstr "áêåÇ ÅĞÇ ãÇæ ääÈãÓÈá ÔáÇáêÉ (âæÇÊ ÃäáÇ)"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ù„Ù„Ø¨ÙƒØ³Ø¨Ù Ø´ÙØ§ÙÙŠØ© (Ù‚Ù†Ø§Øª Ø£Ù„ÙØ§)"
 
 #: gdk-pixbuf/gdk-pixbuf.c:131
 msgid "Bits per Sample"
-msgstr "ÈêÊÇÊ äãä æåèĞÌ"
+msgstr "Ø¨ÙŠØªØ§Øª Ù„ÙƒÙ„ Ù†Ù…ÙˆØ°Ø¬"
 
 #: gdk-pixbuf/gdk-pixbuf.c:132
 msgid "The number of bits per sample"
-msgstr "ÙÏÏ ÇäÈêÊÇÊ äãä æåèĞÌ"
+msgstr "Ø¹Ø¯Ø¯ Ø§Ù„Ø¨ÙŠØªØ§Øª Ù„ÙƒÙ„ Ù†Ù…ÙˆØ°Ø¬"
 
 #: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:648 gtk/gtktreeviewcolumn.c:239
 msgid "Width"
-msgstr "ÇäÙÑÖ"
+msgstr "Ø§Ù„Ø¹Ø±Ø¶"
 
 #: gdk-pixbuf/gdk-pixbuf.c:143
 msgid "The number of columns of the pixbuf"
-msgstr "ÙÏÏ ÃÙåÏÉ ÇäÈãÓÈá"
+msgstr "Ø¹Ø¯Ø¯ Ø£Ø¹Ù…Ø¯Ø© Ø§Ù„Ø¨ÙƒØ³Ø¨Ù"
 
 #: gdk-pixbuf/gdk-pixbuf.c:153 gtk/gtklayout.c:657
 msgid "Height"
-msgstr "ÇäÇÑÊáÇÙ"
+msgstr "Ø§Ù„Ø§Ø±ØªÙØ§Ø¹"
 
 #: gdk-pixbuf/gdk-pixbuf.c:154
 msgid "The number of rows of the pixbuf"
-msgstr "ÙÏÏ ÇäÓ×èÑ áê ÇäÈãÓÈá"
+msgstr "Ø¹Ø¯Ø¯ Ø§Ù„Ø³Ø·ÙˆØ± ÙÙŠ Ø§Ù„Ø¨ÙƒØ³Ø¨Ù"
 
 #: gdk-pixbuf/gdk-pixbuf.c:164
 msgid "Rowstride"
@@ -75,238 +74,238 @@ msgstr "Rowstride"
 #: gdk-pixbuf/gdk-pixbuf.c:165
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
-msgstr "ÙÏÏ ÇäÈêÊÇÊ Èêæ ÈÏÇêÉ ÙåèÏ è ÈÏÇêÉ ÇäÙåèÏ ÇäÊÇäê"
+msgstr "Ø¹Ø¯Ø¯ Ø§Ù„Ø¨ÙŠØªØ§Øª Ø¨ÙŠÙ† Ø¨Ø¯Ø§ÙŠØ© Ø¹Ù…ÙˆØ¯ Ùˆ Ø¨Ø¯Ø§ÙŠØ© Ø§Ù„Ø¹Ù…ÙˆØ¯ Ø§Ù„ØªØ§Ù„ÙŠ"
 
 #: gdk-pixbuf/gdk-pixbuf.c:175
 msgid "Pixels"
-msgstr "ÈãÓäÇÊ"
+msgstr "Ø¨ÙƒØ³Ù„Ø§Øª"
 
 #: gdk-pixbuf/gdk-pixbuf.c:176
 msgid "A pointer to the pixel data of the pixbuf"
-msgstr "åÄÔÑ ääÈêÇæÇÊ ÇäÈãÓäêÉ ääÈãÓÈá"
+msgstr "Ù…Ø¤Ø´Ø± Ù„Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø¨ÙƒØ³Ù„ÙŠØ© Ù„Ù„Ø¨ÙƒØ³Ø¨Ù"
 
 #: gdk/gdkdisplaymanager.c:126
 msgid "Default Display"
-msgstr "ÇäÔÇÔÉ ÇäÇáÊÑÇÖêÉ"
+msgstr "Ø§Ù„Ø´Ø§Ø´Ø© Ø§Ù„Ø§ÙØªØ±Ø§Ø¶ÙŠØ©"
 
 #: gdk/gdkdisplaymanager.c:127
 msgid "The default display for GDK"
-msgstr "ÔÇÔÉ GDK ÇäÇáÊÑÇÖêÉ"
+msgstr "Ø´Ø§Ø´Ø© GDK Ø§Ù„Ø§ÙØªØ±Ø§Ø¶ÙŠØ©"
 
 #: gtk/gtkaccellabel.c:138
 msgid "Accelerator Closure"
-msgstr "åæçê åáÊÇÍ ÇäÅÎÊÕÇÑ"
+msgstr "Ù…Ù†Ù‡ÙŠ Ù…ÙØªØ§Ø­ Ø§Ù„Ø¥Ø®ØªØµØ§Ø±"
 
 #: gtk/gtkaccellabel.c:139
 msgid "The closure to be monitored for accelerator changes"
-msgstr "Çäåæçê ÇäĞê ÓêÙÑÖ äÊÚêêÑÇÊ åáÊÇÍ ÇäÅÎÊÕÇÑ"
+msgstr "Ø§Ù„Ù…Ù†Ù‡ÙŠ Ø§Ù„Ø°ÙŠ Ø³ÙŠØ¹Ø±Ø¶ Ù„ØªØºÙŠÙŠØ±Ø§Øª Ù…ÙØªØ§Ø­ Ø§Ù„Ø¥Ø®ØªØµØ§Ø±"
 
 #: gtk/gtkaccellabel.c:145
 msgid "Accelerator Widget"
-msgstr "â×ÙÉ åáÊÇÍ ÇäÇÎÊÕÇÑ"
+msgstr "Ù‚Ø·Ø¹Ø© Ù…ÙØªØ§Ø­ Ø§Ù„Ø§Ø®ØªØµØ§Ø±"
 
 #: gtk/gtkaccellabel.c:146
 msgid "The widget to be monitored for accelerator changes"
-msgstr "Çäâ×ÙÉ ÇäÊê ÓÊÑÇâÈ äÊÚêêÑÇÊ åáÇÊêÍ ÇäÇÎÊÕÇÑ"
+msgstr "Ø§Ù„Ù‚Ø·Ø¹Ø© Ø§Ù„ØªÙŠ Ø³ØªØ±Ø§Ù‚Ø¨ Ù„ØªØºÙŠÙŠØ±Ø§Øª Ù…ÙØ§ØªÙŠØ­ Ø§Ù„Ø§Ø®ØªØµØ§Ø±"
 
 #: gtk/gtkaction.c:193 gtk/gtkactiongroup.c:133
 msgid "Name"
-msgstr "ÇäÇÓå"
+msgstr "Ø§Ù„Ø§Ø³Ù…"
 
 #: gtk/gtkaction.c:194
 msgid "A unique name for the action."
-msgstr "ÇÓå èÍêÏ ääÙåäêÉ."
+msgstr "Ø§Ø³Ù… ÙˆØ­ÙŠØ¯ Ù„Ù„Ø¹Ù…Ù„ÙŠØ©."
 
 #: gtk/gtkaction.c:201 gtk/gtkbutton.c:212 gtk/gtkexpander.c:205
 #: gtk/gtkframe.c:126 gtk/gtklabel.c:292 gtk/gtktoolbutton.c:180
 msgid "Label"
-msgstr "ÙäÇåÉ"
+msgstr "Ø¹Ù„Ø§Ù…Ø©"
 
 #: gtk/gtkaction.c:202
 msgid "The label used for menu items and buttons that activate this action."
-msgstr "ÇäÙäÇåÉ ÇäåÓÊÎÏåÉ äÙæÇÕÑ ÇäâèÇÆå è ÇäÃÒÑÇÑ ÇäåÔÚäÉ äçĞç ÇäÙåäêÉ."
+msgstr "Ø§Ù„Ø¹Ù„Ø§Ù…Ø© Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…Ø© Ù„Ø¹Ù†Ø§ØµØ± Ø§Ù„Ù‚ÙˆØ§Ø¦Ù… Ùˆ Ø§Ù„Ø£Ø²Ø±Ø§Ø± Ø§Ù„Ù…Ø´ØºÙ„Ø© Ù„Ù‡Ø°Ù‡ Ø§Ù„Ø¹Ù…Ù„ÙŠØ©."
 
 #: gtk/gtkaction.c:208
 msgid "Short label"
-msgstr "ÙäÇåÉ âÕêÑÉ"
+msgstr "Ø¹Ù„Ø§Ù…Ø© Ù‚ØµÙŠØ±Ø©"
 
 #: gtk/gtkaction.c:209
 msgid "A shorter label that may be used on toolbar buttons."
-msgstr "ÙäÇåÉ ÇâÕÑ êåãæ ÇÓÊÎÏÇåçÇ Ùäé ÃÒÑÇÑ ÃÙåÏÉ ÇäÃÏèÇÊ."
+msgstr "Ø¹Ù„Ø§Ù…Ø© Ø§Ù‚ØµØ± ÙŠÙ…ÙƒÙ† Ø§Ø³ØªØ®Ø¯Ø§Ù…Ù‡Ø§ Ø¹Ù„Ù‰ Ø£Ø²Ø±Ø§Ø± Ø£Ø¹Ù…Ø¯Ø© Ø§Ù„Ø£Ø¯ÙˆØ§Øª."
 
 #: gtk/gtkaction.c:215
 msgid "Tooltip"
-msgstr "ÊäåêÍÉ"
+msgstr "ØªÙ„Ù…ÙŠØ­Ø©"
 
 #: gtk/gtkaction.c:216
 msgid "A tooltip for this action."
-msgstr "ÊäåêÍÉ äçĞç ÇäÙåäêÉ."
+msgstr "ØªÙ„Ù…ÙŠØ­Ø© Ù„Ù‡Ø°Ù‡ Ø§Ù„Ø¹Ù…Ù„ÙŠØ©."
 
 #: gtk/gtkaction.c:222
 msgid "Stock Icon"
-msgstr "ÃêâèæÉ ÇäåÎÒèæ"
+msgstr "Ø£ÙŠÙ‚ÙˆÙ†Ø© Ø§Ù„Ù…Ø®Ø²ÙˆÙ†"
 
 #: gtk/gtkaction.c:223
 msgid "The stock icon displayed in widgets representing this action."
-msgstr "ÃêâèæÉ ÇäåÎÒèæ ÇäåÙÑèÖÉ áê â×Ù ÊåËä çĞç ÇäÙåäêÉ."
+msgstr "Ø£ÙŠÙ‚ÙˆÙ†Ø© Ø§Ù„Ù…Ø®Ø²ÙˆÙ† Ø§Ù„Ù…Ø¹Ø±ÙˆØ¶Ø© ÙÙŠ Ù‚Ø·Ø¹ ØªÙ…Ø«Ù„ Ù‡Ø°Ù‡ Ø§Ù„Ø¹Ù…Ù„ÙŠØ©."
 
 #: gtk/gtkaction.c:229 gtk/gtktoolitem.c:158
 msgid "Visible when horizontal"
-msgstr "åÑÆê ÙæÏåÇ êãèæ Çáâê"
+msgstr "Ù…Ø±Ø¦ÙŠ Ø¹Ù†Ø¯Ù…Ø§ ÙŠÙƒÙˆÙ† Ø§ÙÙ‚ÙŠ"
 
 #: gtk/gtkaction.c:230 gtk/gtktoolitem.c:159
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
 msgstr ""
-"áêåÇ ÅĞÇ Óêãèæ ÙæÕÑ ÙåèÏ ÇäÃÏèÇÊ åÑÆêÇ ÙæÏåÇ êãèæ ÙåèÏ ÇäÃÏèÇÊ áê ÇÊÌÇç Çáâê."
+"ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ÙŠÙƒÙˆÙ† Ø¹Ù†ØµØ± Ø¹Ù…ÙˆØ¯ Ø§Ù„Ø£Ø¯ÙˆØ§Øª Ù…Ø±Ø¦ÙŠØ§ Ø¹Ù†Ø¯Ù…Ø§ ÙŠÙƒÙˆÙ† Ø¹Ù…ÙˆØ¯ Ø§Ù„Ø£Ø¯ÙˆØ§Øª ÙÙŠ Ø§ØªØ¬Ø§Ù‡ Ø§ÙÙ‚ÙŠ."
 
 #: gtk/gtkaction.c:236 gtk/gtktoolitem.c:165
 msgid "Visible when vertical"
-msgstr "åÑÆê ÙæÏåÇ êãèæ ÙåèÏê"
+msgstr "Ù…Ø±Ø¦ÙŠ Ø¹Ù†Ø¯Ù…Ø§ ÙŠÙƒÙˆÙ† Ø¹Ù…ÙˆØ¯ÙŠ"
 
 #: gtk/gtkaction.c:237 gtk/gtktoolitem.c:166
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
 msgstr ""
-"áêåÇ ÅĞÇ Óêãèæ ÙæÕÑ ÙåèÏ ÇäÃÏèÇÊ åÑÆêÇ ÙæÏåÇ êãèæ ÙåèÏ ÇäÃÏèÇÊ áê ÇÊÌÇç "
-"ÙåèÏê."
+"ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ÙŠÙƒÙˆÙ† Ø¹Ù†ØµØ± Ø¹Ù…ÙˆØ¯ Ø§Ù„Ø£Ø¯ÙˆØ§Øª Ù…Ø±Ø¦ÙŠØ§ Ø¹Ù†Ø¯Ù…Ø§ ÙŠÙƒÙˆÙ† Ø¹Ù…ÙˆØ¯ Ø§Ù„Ø£Ø¯ÙˆØ§Øª ÙÙŠ Ø§ØªØ¬Ø§Ù‡ "
+"Ø¹Ù…ÙˆØ¯ÙŠ."
 
 #: gtk/gtkaction.c:243 gtk/gtktoolitem.c:172
 msgid "Is important"
-msgstr "åçå"
+msgstr "Ù…Ù‡Ù…"
 
 #: gtk/gtkaction.c:244
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
 msgstr ""
-"áêåÇ ÅĞÇ ÓêÙÊÈÑ ÇäÙåä åçåÇ. ÙæÏ ÕÈ×ç äà TRUE¬ ÓÊÙÑÖ ÈÑèãÓêÇÊ ÙæÕÑ ÇäÃÏÇÊ "
-"äçĞÇ ÇäÙåä ÇäæÕ áê æÓâ GTK_TOOLBAR_BOTH_HORIZ."
+"ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ÙŠØ¹ØªØ¨Ø± Ø§Ù„Ø¹Ù…Ù„ Ù…Ù‡Ù…Ø§. Ø¹Ù†Ø¯ ØµØ¨Ø·Ù‡ Ù„Ù€ TRUEØŒ Ø³ØªØ¹Ø±Ø¶ Ø¨Ø±ÙˆÙƒØ³ÙŠØ§Øª Ø¹Ù†ØµØ± Ø§Ù„Ø£Ø¯Ø§Øª "
+"Ù„Ù‡Ø°Ø§ Ø§Ù„Ø¹Ù…Ù„ Ø§Ù„Ù†Øµ ÙÙŠ Ù†Ø³Ù‚ GTK_TOOLBAR_BOTH_HORIZ."
 
 #: gtk/gtkaction.c:250
 msgid "Hide if empty"
-msgstr "ÇÎáÇÁ ÇĞÇ ãÇæ áÇÑÚÇ"
+msgstr "Ø§Ø®ÙØ§Ø¡ Ø§Ø°Ø§ ÙƒØ§Ù† ÙØ§Ø±ØºØ§"
 
 #: gtk/gtkaction.c:251
 msgid "When TRUE, empty menu proxies for this action are hidden."
-msgstr "ÙæÏåÇ êãèæ TRUE¬ ÊÎáé âèÇÆå ÇäÈÑèãÓê ÇäáÇÑÚÉ äçĞç ÇäÙåäêÉ."
+msgstr "Ø¹Ù†Ø¯Ù…Ø§ ÙŠÙƒÙˆÙ† TRUEØŒ ØªØ®ÙÙ‰ Ù‚ÙˆØ§Ø¦Ù… Ø§Ù„Ø¨Ø±ÙˆÙƒØ³ÙŠ Ø§Ù„ÙØ§Ø±ØºØ© Ù„Ù‡Ø°Ù‡ Ø§Ù„Ø¹Ù…Ù„ÙŠØ©."
 
 #: gtk/gtkaction.c:257 gtk/gtkactiongroup.c:141 gtk/gtkwidget.c:449
 msgid "Sensitive"
-msgstr "ÍÓÇÓ"
+msgstr "Ø­Ø³Ø§Ø³"
 
 #: gtk/gtkaction.c:258
 msgid "Whether the action is enabled."
-msgstr "áêåÇ ÅĞÇ ãÇæÊ ÇäÙåäêÉ åáÙäÉ."
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø§Ù„Ø¹Ù…Ù„ÙŠØ© Ù…ÙØ¹Ù„Ø©."
 
 #: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:552
 #: gtk/gtktreeviewcolumn.c:223 gtk/gtkwidget.c:442
 msgid "Visible"
-msgstr "åÑÆê"
+msgstr "Ù…Ø±Ø¦ÙŠ"
 
 #: gtk/gtkaction.c:265
 msgid "Whether the action is visible."
-msgstr "áêåÇ ÅĞÇ ãÇæÊ ÇäÙåäêÉ åÑÆêÉ."
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø§Ù„Ø¹Ù…Ù„ÙŠØ© Ù…Ø±Ø¦ÙŠØ©."
 
 #: gtk/gtkaction.c:271
 msgid "Action Group"
-msgstr "åÌåèÙÉ ÇäÙåäêÇÊ"
+msgstr "Ù…Ø¬Ù…ÙˆØ¹Ø© Ø§Ù„Ø¹Ù…Ù„ÙŠØ§Øª"
 
 #: gtk/gtkaction.c:272
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
-msgstr "GtkActionGroup ÇäåÑÈè× Èç GtkAction çĞÇ Ãè NULL (ääÇÓÊÎÏÇå ÇäÏÇÎäê)"
+msgstr "GtkActionGroup Ø§Ù„Ù…Ø±Ø¨ÙˆØ· Ø¨Ù‡ GtkAction Ù‡Ø°Ø§ Ø£Ùˆ NULL (Ù„Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø§Ù„Ø¯Ø§Ø®Ù„ÙŠ)"
 
 #: gtk/gtkactiongroup.c:134
 msgid "A name for the action group."
-msgstr "ÇÓå äåÌåèÙÉ ÇäÙåäêÇÊ."
+msgstr "Ø§Ø³Ù… Ù„Ù…Ø¬Ù…ÙˆØ¹Ø© Ø§Ù„Ø¹Ù…Ù„ÙŠØ§Øª."
 
 #: gtk/gtkactiongroup.c:142
 msgid "Whether the action group is enabled."
-msgstr "áêåÇ ÅĞÇ ãÇæÊ åÌåèÙÉ ÇäÙåäêÇÊ åáÙäÉ."
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ù…Ø¬Ù…ÙˆØ¹Ø© Ø§Ù„Ø¹Ù…Ù„ÙŠØ§Øª Ù…ÙØ¹Ù„Ø©."
 
 #: gtk/gtkactiongroup.c:149
 msgid "Whether the action group is visible."
-msgstr "áêåÇ ÅĞÇ ãÇæÊ åÌåèÙÉ ÇäÙåäêÇÊ åÑÆêÉ."
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ù…Ø¬Ù…ÙˆØ¹Ø© Ø§Ù„Ø¹Ù…Ù„ÙŠØ§Øª Ù…Ø±Ø¦ÙŠØ©."
 
 #: gtk/gtkadjustment.c:107 gtk/gtkspinbutton.c:302
 msgid "Value"
-msgstr "ÇäâêåÉ"
+msgstr "Ø§Ù„Ù‚ÙŠÙ…Ø©"
 
 #: gtk/gtkadjustment.c:108
 msgid "The value of the adjustment"
-msgstr "âêåÉ ÇäÊÓèêÉ"
+msgstr "Ù‚ÙŠÙ…Ø© Ø§Ù„ØªØ³ÙˆÙŠØ©"
 
 #: gtk/gtkadjustment.c:117
 msgid "Minimum Value"
-msgstr "ÇäâêåÉ ÇäÏæêÇ"
+msgstr "Ø§Ù„Ù‚ÙŠÙ…Ø© Ø§Ù„Ø¯Ù†ÙŠØ§"
 
 #: gtk/gtkadjustment.c:118
 msgid "The minimum value of the adjustment"
-msgstr "âêåÉ ÇäÊÓèêÉ ÇäÏæêÇ"
+msgstr "Ù‚ÙŠÙ…Ø© Ø§Ù„ØªØ³ÙˆÙŠØ© Ø§Ù„Ø¯Ù†ÙŠØ§"
 
 #: gtk/gtkadjustment.c:127
 msgid "Maximum Value"
-msgstr "ÇäâêåÉ ÇäâÕèé"
+msgstr "Ø§Ù„Ù‚ÙŠÙ…Ø© Ø§Ù„Ù‚ØµÙˆÙ‰"
 
 #: gtk/gtkadjustment.c:128
 msgid "The maximum value of the adjustment"
-msgstr "âêåÉ ÇäÊÓèêÉ ÇäâÕèé"
+msgstr "Ù‚ÙŠÙ…Ø© Ø§Ù„ØªØ³ÙˆÙŠØ© Ø§Ù„Ù‚ØµÙˆÙ‰"
 
 #: gtk/gtkadjustment.c:137
 msgid "Step Increment"
-msgstr "ÒêÇÏÉ ÏÑÌêÉ"
+msgstr "Ø²ÙŠØ§Ø¯Ø© Ø¯Ø±Ø¬ÙŠØ©"
 
 #: gtk/gtkadjustment.c:138
 msgid "The step increment of the adjustment"
-msgstr "ÒêÇÏÉ ÇäÊÓèêÉ ÇäÏÑÌêÉ"
+msgstr "Ø²ÙŠØ§Ø¯Ø© Ø§Ù„ØªØ³ÙˆÙŠØ© Ø§Ù„Ø¯Ø±Ø¬ÙŠØ©"
 
 #: gtk/gtkadjustment.c:147
 msgid "Page Increment"
-msgstr "ÒêÇÏÉ ÇäÕáÍÉ"
+msgstr "Ø²ÙŠØ§Ø¯Ø© Ø§Ù„ØµÙØ­Ø©"
 
 #: gtk/gtkadjustment.c:148
 msgid "The page increment of the adjustment"
-msgstr "ÒêÇÏÉ ÇäÕáÍÉ ÙæÏ ÇäÊÓèêÉ"
+msgstr "Ø²ÙŠØ§Ø¯Ø© Ø§Ù„ØµÙØ­Ø© Ø¹Ù†Ø¯ Ø§Ù„ØªØ³ÙˆÙŠØ©"
 
 #: gtk/gtkadjustment.c:157
 msgid "Page Size"
-msgstr "ÍÌå ÇäÕáÍÉ"
+msgstr "Ø­Ø¬Ù… Ø§Ù„ØµÙØ­Ø©"
 
 #: gtk/gtkadjustment.c:158
 msgid "The page size of the adjustment"
-msgstr "ÍÌå ÇäÕáÍÉ ÙæÏ ÇäÊÓèêÉ"
+msgstr "Ø­Ø¬Ù… Ø§Ù„ØµÙØ­Ø© Ø¹Ù†Ø¯ Ø§Ù„ØªØ³ÙˆÙŠØ©"
 
 #: gtk/gtkalignment.c:117
 msgid "Horizontal alignment"
-msgstr "ÊÑÕêá Ãáâê"
+msgstr "ØªØ±ØµÙŠÙ Ø£ÙÙ‚ÙŠ"
 
 #: gtk/gtkalignment.c:118 gtk/gtkbutton.c:263
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
 msgstr ""
-"ÇäåèâÙ ÇäÃáâê ääÇÈæ áê ÇäåÓÇÍÉ ÇäåÊÇÍÉ¬ ÊÑÕêá ÃêÓÑ ÙæÏåÇ êãèæ 0.0 è ÊÑÕêá "
-"Ãêåæ ÙæÏåÇ êãèæ 1.0"
+"Ø§Ù„Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ø£ÙÙ‚ÙŠ Ù„Ù„Ø§Ø¨Ù† ÙÙŠ Ø§Ù„Ù…Ø³Ø§Ø­Ø© Ø§Ù„Ù…ØªØ§Ø­Ø©ØŒ ØªØ±ØµÙŠÙ Ø£ÙŠØ³Ø± Ø¹Ù†Ø¯Ù…Ø§ ÙŠÙƒÙˆÙ† 0.0 Ùˆ ØªØ±ØµÙŠÙ "
+"Ø£ÙŠÙ…Ù† Ø¹Ù†Ø¯Ù…Ø§ ÙŠÙƒÙˆÙ† 1.0"
 
 #: gtk/gtkalignment.c:127
 msgid "Vertical alignment"
-msgstr "ÊÑÕêá ÙåèÏê"
+msgstr "ØªØ±ØµÙŠÙ Ø¹Ù…ÙˆØ¯ÙŠ"
 
 #: gtk/gtkalignment.c:128 gtk/gtkbutton.c:282
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
 msgstr ""
-"ÇäåèâÙ ÇäÙåèÏê ääÇÈæ áê ÇäåÓÇÍÉ ÇäåÊÇÍÉ¬ ÊÑÕêá ääÃÙäé ÙæÏåÇ êãèæ 0.0 è ÊÑÕêá "
-"ääÃÓáä ÙæÏåÇ êãèæ 1.0"
+"Ø§Ù„Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ Ù„Ù„Ø§Ø¨Ù† ÙÙŠ Ø§Ù„Ù…Ø³Ø§Ø­Ø© Ø§Ù„Ù…ØªØ§Ø­Ø©ØŒ ØªØ±ØµÙŠÙ Ù„Ù„Ø£Ø¹Ù„Ù‰ Ø¹Ù†Ø¯Ù…Ø§ ÙŠÙƒÙˆÙ† 0.0 Ùˆ ØªØ±ØµÙŠÙ "
+"Ù„Ù„Ø£Ø³ÙÙ„ Ø¹Ù†Ø¯Ù…Ø§ ÙŠÙƒÙˆÙ† 1.0"
 
 #: gtk/gtkalignment.c:136
 msgid "Horizontal scale"
-msgstr "âêÇÓ Ãáâê"
+msgstr "Ù‚ÙŠØ§Ø³ Ø£ÙÙ‚ÙŠ"
 
 #: gtk/gtkalignment.c:137
 msgid ""
@@ -318,7 +317,7 @@ msgstr ""
 
 #: gtk/gtkalignment.c:145
 msgid "Vertical scale"
-msgstr "âêÇÓ ÙåèÏê"
+msgstr "Ù‚ÙŠØ§Ø³ Ø¹Ù…ÙˆØ¯ÙŠ"
 
 #: gtk/gtkalignment.c:146
 msgid ""
@@ -330,31 +329,31 @@ msgstr ""
 
 #: gtk/gtkalignment.c:163
 msgid "Top Padding"
-msgstr "ÇäÍÔè ÇäÃÙäé"
+msgstr "Ø§Ù„Ø­Ø´Ùˆ Ø§Ù„Ø£Ø¹Ù„Ù‰"
 
 #: gtk/gtkalignment.c:164
 msgid "The padding to insert at the top of the widget."
-msgstr "ÇäÍÔè ÇäĞê ÓêÏÎä áê ÃÙäé Çäâ×ÙÉ."
+msgstr "Ø§Ù„Ø­Ø´Ùˆ Ø§Ù„Ø°ÙŠ Ø³ÙŠØ¯Ø®Ù„ ÙÙŠ Ø£Ø¹Ù„Ù‰ Ø§Ù„Ù‚Ø·Ø¹Ø©."
 
 #: gtk/gtkalignment.c:180
 msgid "Bottom Padding"
-msgstr "ÇäÍÔè ÇäÃÓáä"
+msgstr "Ø§Ù„Ø­Ø´Ùˆ Ø§Ù„Ø£Ø³ÙÙ„"
 
 #: gtk/gtkalignment.c:181
 msgid "The padding to insert at the bottom of the widget."
-msgstr "ÇäÍÔè ÇäĞê ÓêÏÎä áê ÃÓáä Çäâ×ÙÉ."
+msgstr "Ø§Ù„Ø­Ø´Ùˆ Ø§Ù„Ø°ÙŠ Ø³ÙŠØ¯Ø®Ù„ ÙÙŠ Ø£Ø³ÙÙ„ Ø§Ù„Ù‚Ø·Ø¹Ø©."
 
 #: gtk/gtkalignment.c:197
 msgid "Left Padding"
-msgstr "ÇäÍÔè ÇäÃêÓÑ"
+msgstr "Ø§Ù„Ø­Ø´Ùˆ Ø§Ù„Ø£ÙŠØ³Ø±"
 
 #: gtk/gtkalignment.c:198
 msgid "The padding to insert at the left of the widget."
-msgstr "ÇäÍÔè ÇäĞê ÓêÏÎä ÙæÏ êÓÇÑ Çäâ×ÙÉ"
+msgstr "Ø§Ù„Ø­Ø´Ùˆ Ø§Ù„Ø°ÙŠ Ø³ÙŠØ¯Ø®Ù„ Ø¹Ù†Ø¯ ÙŠØ³Ø§Ø± Ø§Ù„Ù‚Ø·Ø¹Ø©"
 
 #: gtk/gtkalignment.c:214
 msgid "Right Padding"
-msgstr "ÇäÍÔè ÇäÃêåæ"
+msgstr "Ø§Ù„Ø­Ø´Ùˆ Ø§Ù„Ø£ÙŠÙ…Ù†"
 
 #: gtk/gtkalignment.c:215
 msgid "The padding to insert at the right of the widget."
@@ -362,445 +361,445 @@ msgstr "Ø§Ù„Ø­Ø´ÙˆÂ·Ø§Ù„Ø°ÙŠÂ·Ø³ÙŠØ¯Ø®Ù„Â·Ø¹Ù„Ù‰Â·ÙŠÙ…ÙŠÙ†Â·Ø§Ù„Ù‚Ø·Ø¹Ø©"
 
 #: gtk/gtkarrow.c:99
 msgid "Arrow direction"
-msgstr "ÇÊÌÇç ÇäÓçå"
+msgstr "Ø§ØªØ¬Ø§Ù‡ Ø§Ù„Ø³Ù‡Ù…"
 
 #: gtk/gtkarrow.c:100
 msgid "The direction the arrow should point"
-msgstr "ÇÊÌÇç ÊÃÔêÑ ÇäÓçå"
+msgstr "Ø§ØªØ¬Ø§Ù‡ ØªØ£Ø´ÙŠØ± Ø§Ù„Ø³Ù‡Ù…"
 
 #: gtk/gtkarrow.c:107
 msgid "Arrow shadow"
-msgstr "Øä ÇäÓçå"
+msgstr "Ø¸Ù„ Ø§Ù„Ø³Ù‡Ù…"
 
 #: gtk/gtkarrow.c:108
 msgid "Appearance of the shadow surrounding the arrow"
-msgstr "åØçÑ ÇäØä ÇäåÍê× ÈÇäÓçå"
+msgstr "Ù…Ø¸Ù‡Ø± Ø§Ù„Ø¸Ù„ Ø§Ù„Ù…Ø­ÙŠØ· Ø¨Ø§Ù„Ø³Ù‡Ù…"
 
 #: gtk/gtkaspectframe.c:109
 msgid "Horizontal Alignment"
-msgstr "ÇäÊÑÕêá ÇäÃáâê"
+msgstr "Ø§Ù„ØªØ±ØµÙŠÙ Ø§Ù„Ø£ÙÙ‚ÙŠ"
 
 #: gtk/gtkaspectframe.c:110
 msgid "X alignment of the child"
-msgstr "ÊÑÕêá Ó ääÇÈæ"
+msgstr "ØªØ±ØµÙŠÙ Ø³ Ù„Ù„Ø§Ø¨Ù†"
 
 #: gtk/gtkaspectframe.c:116
 msgid "Vertical Alignment"
-msgstr "ÇäÊÑÕêá ÇäÙåèÏê"
+msgstr "Ø§Ù„ØªØ±ØµÙŠÙ Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ"
 
 #: gtk/gtkaspectframe.c:117
 msgid "Y alignment of the child"
-msgstr "ÊÑÕêá Õ ääÇÈæ"
+msgstr "ØªØ±ØµÙŠÙ Øµ Ù„Ù„Ø§Ø¨Ù†"
 
 #: gtk/gtkaspectframe.c:123
 msgid "Ratio"
-msgstr "ÇäæÓÈÉ"
+msgstr "Ø§Ù„Ù†Ø³Ø¨Ø©"
 
 #: gtk/gtkaspectframe.c:124
 msgid "Aspect ratio if obey_child is FALSE"
-msgstr "æÓÈÉ ÇäÅÔÙÇÙ ÅĞÇ ãÇæ obey_child åÖÈè×Ç äà FALSE"
+msgstr "Ù†Ø³Ø¨Ø© Ø§Ù„Ø¥Ø´Ø¹Ø§Ø¹ Ø¥Ø°Ø§ ÙƒØ§Ù† obey_child Ù…Ø¶Ø¨ÙˆØ·Ø§ Ù„Ù€ FALSE"
 
 #: gtk/gtkaspectframe.c:130
 msgid "Obey child"
-msgstr "ÇÈæ å×êÙ"
+msgstr "Ø§Ø¨Ù† Ù…Ø·ÙŠØ¹"
 
 #: gtk/gtkaspectframe.c:131
 msgid "Force aspect ratio to match that of the frame's child"
-msgstr "áÑÖ æÓÈÉ ÇäÅÔÙÇÙ ÍÊé ÊæÇÓÈ æÓÈÉ Å×ÇÑ ÇäÅÈæ"
+msgstr "ÙØ±Ø¶ Ù†Ø³Ø¨Ø© Ø§Ù„Ø¥Ø´Ø¹Ø§Ø¹ Ø­ØªÙ‰ ØªÙ†Ø§Ø³Ø¨ Ù†Ø³Ø¨Ø© Ø¥Ø·Ø§Ø± Ø§Ù„Ø¥Ø¨Ù†"
 
 #: gtk/gtkbbox.c:120
 msgid "Minimum child width"
-msgstr "ÙÑÖ ÇäÇÈæ ÇäÇÏæé"
+msgstr "Ø¹Ø±Ø¶ Ø§Ù„Ø§Ø¨Ù† Ø§Ù„Ø§Ø¯Ù†Ù‰"
 
 #: gtk/gtkbbox.c:121
 msgid "Minimum width of buttons inside the box"
-msgstr "ÙÑÖ ÇäÃÒÑÇÑ ÇäÃÏæé ÏÇÎä ÇäÕæÏèâ"
+msgstr "Ø¹Ø±Ø¶ Ø§Ù„Ø£Ø²Ø±Ø§Ø± Ø§Ù„Ø£Ø¯Ù†Ù‰ Ø¯Ø§Ø®Ù„ Ø§Ù„ØµÙ†Ø¯ÙˆÙ‚"
 
 #: gtk/gtkbbox.c:129
 msgid "Minimum child height"
-msgstr "ÇÑÊáÇÙ ÇäÇÈæ ÇäÇÏæé"
+msgstr "Ø§Ø±ØªÙØ§Ø¹ Ø§Ù„Ø§Ø¨Ù† Ø§Ù„Ø§Ø¯Ù†Ù‰"
 
 #: gtk/gtkbbox.c:130
 msgid "Minimum height of buttons inside the box"
-msgstr "ÇÑÊáÇÙ ÇäÃÒÑÇÑ ÇäÃÏæé ÏÇÎä ÇäÕæÏèâ"
+msgstr "Ø§Ø±ØªÙØ§Ø¹ Ø§Ù„Ø£Ø²Ø±Ø§Ø± Ø§Ù„Ø£Ø¯Ù†Ù‰ Ø¯Ø§Ø®Ù„ Ø§Ù„ØµÙ†Ø¯ÙˆÙ‚"
 
 #: gtk/gtkbbox.c:138
 msgid "Child internal width padding"
-msgstr "ÍÔè ÇäÙÑÖ ÇäÏÇÎäê ääÇÈæ"
+msgstr "Ø­Ø´Ùˆ Ø§Ù„Ø¹Ø±Ø¶ Ø§Ù„Ø¯Ø§Ø®Ù„ÙŠ Ù„Ù„Ø§Ø¨Ù†"
 
 #: gtk/gtkbbox.c:139
 msgid "Amount to increase child's size on either side"
-msgstr "åâÏÇÑ ÒêÇÏÉ ÍÌå ÇäÇÈæ áê ãäÇ ÇäÌÇæÈêæ"
+msgstr "Ù…Ù‚Ø¯Ø§Ø± Ø²ÙŠØ§Ø¯Ø© Ø­Ø¬Ù… Ø§Ù„Ø§Ø¨Ù† ÙÙŠ ÙƒÙ„Ø§ Ø§Ù„Ø¬Ø§Ù†Ø¨ÙŠÙ†"
 
 #: gtk/gtkbbox.c:147
 msgid "Child internal height padding"
-msgstr "ÍÔè ÇäÇÑÊáÇÙ ÇäÏÇÎäê ääÇÈæ"
+msgstr "Ø­Ø´Ùˆ Ø§Ù„Ø§Ø±ØªÙØ§Ø¹ Ø§Ù„Ø¯Ø§Ø®Ù„ÙŠ Ù„Ù„Ø§Ø¨Ù†"
 
 #: gtk/gtkbbox.c:148
 msgid "Amount to increase child's size on the top and bottom"
-msgstr "åâÏÇÑ ÒêÇÏÉ ÍÌå ÇäÇÈæ áê ÇäÃÙäé èÇäÃÓáä"
+msgstr "Ù…Ù‚Ø¯Ø§Ø± Ø²ÙŠØ§Ø¯Ø© Ø­Ø¬Ù… Ø§Ù„Ø§Ø¨Ù† ÙÙŠ Ø§Ù„Ø£Ø¹Ù„Ù‰ ÙˆØ§Ù„Ø£Ø³ÙÙ„"
 
 #: gtk/gtkbbox.c:156
 msgid "Layout style"
-msgstr "æå× ÇäÊÎ×ê×"
+msgstr "Ù†Ù…Ø· Ø§Ù„ØªØ®Ø·ÙŠØ·"
 
 #: gtk/gtkbbox.c:157
 msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
 msgstr ""
-"ãêáêÉ ÊÎ×ê× ÇäÃÒÑÇÑ áê ÇäÕæÏèâ. Çäâêå ÇäååãæÉ çê ÇáÊÑÇÖÇ¬ ÇæÊÔÑÇ¬ ÍÇáÉ¬ ÈÏÁ "
-"è¬ æçÇêÉ"
+"ÙƒÙŠÙÙŠØ© ØªØ®Ø·ÙŠØ· Ø§Ù„Ø£Ø²Ø±Ø§Ø± ÙÙŠ Ø§Ù„ØµÙ†Ø¯ÙˆÙ‚. Ø§Ù„Ù‚ÙŠÙ… Ø§Ù„Ù…Ù…ÙƒÙ†Ø© Ù‡ÙŠ Ø§ÙØªØ±Ø§Ø¶Ø§ØŒ Ø§Ù†ØªØ´Ø±Ø§ØŒ Ø­Ø§ÙØ©ØŒ Ø¨Ø¯Ø¡ "
+"ÙˆØŒ Ù†Ù‡Ø§ÙŠØ©"
 
 #: gtk/gtkbbox.c:165
 msgid "Secondary"
-msgstr "ËÇæèê"
+msgstr "Ø«Ø§Ù†ÙˆÙŠ"
 
 #: gtk/gtkbbox.c:166
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
 msgstr ""
-"ÅĞÇ ãÇæ TRUE¬ áÓêÈÏè ÇäÇÈæ áê åÌåèÙÉ ËÇæèêÉ ääÃÈæÇÁ¬ åæÇÓÈÉ äÃÒÑÇÑ ÇäåÓÇÙÏÉ "
-"åËäÇ."
+"Ø¥Ø°Ø§ ÙƒØ§Ù† TRUEØŒ ÙØ³ÙŠØ¨Ø¯Ùˆ Ø§Ù„Ø§Ø¨Ù† ÙÙŠ Ù…Ø¬Ù…ÙˆØ¹Ø© Ø«Ø§Ù†ÙˆÙŠØ© Ù„Ù„Ø£Ø¨Ù†Ø§Ø¡ØŒ Ù…Ù†Ø§Ø³Ø¨Ø© Ù„Ø£Ø²Ø±Ø§Ø± Ø§Ù„Ù…Ø³Ø§Ø¹Ø¯Ø© "
+"Ù…Ø«Ù„Ø§."
 
 #: gtk/gtkbox.c:129 gtk/gtkexpander.c:229
 msgid "Spacing"
-msgstr "áÑÇÚÇÊ"
+msgstr "ÙØ±Ø§ØºØ§Øª"
 
 #: gtk/gtkbox.c:130
 msgid "The amount of space between children"
-msgstr "åâÏÇÑ ÇäáÑÇÚ Èêæ ÇäÃÈæÇÁ."
+msgstr "Ù…Ù‚Ø¯Ø§Ø± Ø§Ù„ÙØ±Ø§Øº Ø¨ÙŠÙ† Ø§Ù„Ø£Ø¨Ù†Ø§Ø¡."
 
 #: gtk/gtkbox.c:139 gtk/gtknotebook.c:469 gtk/gtktoolbar.c:531
 msgid "Homogeneous"
-msgstr "åÊæÇÓâ"
+msgstr "Ù…ØªÙ†Ø§Ø³Ù‚"
 
 #: gtk/gtkbox.c:140
 msgid "Whether the children should all be the same size"
-msgstr "åÇ ÅĞÇ Óêãèæ ãä ÇäÃÈæÇÁ ÈæáÓ ÇäÍÌå"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ Ø³ÙŠÙƒÙˆÙ† ÙƒÙ„ Ø§Ù„Ø£Ø¨Ù†Ø§Ø¡ Ø¨Ù†ÙØ³ Ø§Ù„Ø­Ø¬Ù…"
 
 #: gtk/gtkbox.c:147 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:523
 #: gtk/gtktreeviewcolumn.c:295
 msgid "Expand"
-msgstr "ÊåÏêÏ"
+msgstr "ØªÙ…Ø¯ÙŠØ¯"
 
 #: gtk/gtkbox.c:148
 msgid "Whether the child should receive extra space when the parent grows"
-msgstr "áêåÇ ÅĞÇ èÌÈ Ãæ êÊäâé ÇäÅÈæ áÖÇÁÇ ÃãÈÑ ÙæÏ æåè ÃÈêç"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙˆØ¬Ø¨ Ø£Ù† ÙŠØªÙ„Ù‚Ù‰ Ø§Ù„Ø¥Ø¨Ù† ÙØ¶Ø§Ø¡Ø§ Ø£ÙƒØ¨Ø± Ø¹Ù†Ø¯ Ù†Ù…Ùˆ Ø£Ø¨ÙŠÙ‡"
 
 #: gtk/gtkbox.c:154
 msgid "Fill"
-msgstr "åäÃ"
+msgstr "Ù…Ù„Ø£"
 
 #: gtk/gtkbox.c:155
 msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 msgstr ""
-"áêåÇ ÅĞÇ êÌÈ ÊÎÕêÕ ÇäáÖÇÁ ÇäÅÖÇáê ääÅÈæ ääÅÈæ æáÓç Ãè ãÍÔè"
+"ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙŠØ¬Ø¨ ØªØ®ØµÙŠØµ Ø§Ù„ÙØ¶Ø§Ø¡ Ø§Ù„Ø¥Ø¶Ø§ÙÙŠ Ù„Ù„Ø¥Ø¨Ù† Ù„Ù„Ø¥Ø¨Ù† Ù†ÙØ³Ù‡ Ø£Ùˆ ÙƒØ­Ø´Ùˆ"
 
 #: gtk/gtkbox.c:161
 msgid "Padding"
-msgstr "ÍÔè"
+msgstr "Ø­Ø´Ùˆ"
 
 #: gtk/gtkbox.c:162
 msgid "Extra space to put between the child and its neighbors, in pixels"
-msgstr "ÇäáÖÇÁ ÇäÅÖÇáê äèÖÙç Èêæ ÇäÅÈæ è ÌêÑÇæç¬ ÈÇäÈãÓäÇÊ"
+msgstr "Ø§Ù„ÙØ¶Ø§Ø¡ Ø§Ù„Ø¥Ø¶Ø§ÙÙŠ Ù„ÙˆØ¶Ø¹Ù‡ Ø¨ÙŠÙ† Ø§Ù„Ø¥Ø¨Ù† Ùˆ Ø¬ÙŠØ±Ø§Ù†Ù‡ØŒ Ø¨Ø§Ù„Ø¨ÙƒØ³Ù„Ø§Øª"
 
 #: gtk/gtkbox.c:168
 msgid "Pack type"
-msgstr "æèÙ ÇäÊÍÒêå"
+msgstr "Ù†ÙˆØ¹ Ø§Ù„ØªØ­Ø²ÙŠÙ…"
 
 #: gtk/gtkbox.c:169 gtk/gtknotebook.c:513
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr ""
-"GtkPackType åÄÔÑ äåÇ ÅĞÇ ÓêÍÒå ÇäÅÈæ ÈåÑÌÙ äÈÏÇêÉ Ãè æçÇêÉ ÇäÃÈ"
+"GtkPackType Ù…Ø¤Ø´Ø± Ù„Ù…Ø§ Ø¥Ø°Ø§ Ø³ÙŠØ­Ø²Ù… Ø§Ù„Ø¥Ø¨Ù† Ø¨Ù…Ø±Ø¬Ø¹ Ù„Ø¨Ø¯Ø§ÙŠØ© Ø£Ùˆ Ù†Ù‡Ø§ÙŠØ© Ø§Ù„Ø£Ø¨"
 
 #: gtk/gtkbox.c:175 gtk/gtknotebook.c:491 gtk/gtkpaned.c:239
 #: gtk/gtkruler.c:139
 msgid "Position"
-msgstr "ÇäåèâÙ"
+msgstr "Ø§Ù„Ù…ÙˆÙ‚Ø¹"
 
 #: gtk/gtkbox.c:176 gtk/gtknotebook.c:492
 msgid "The index of the child in the parent"
-msgstr "áçÑÓ ÇäÅÈæ ÙæÏ ÇäÃÈ"
+msgstr "ÙÙ‡Ø±Ø³ Ø§Ù„Ø¥Ø¨Ù† Ø¹Ù†Ø¯ Ø§Ù„Ø£Ø¨"
 
 #: gtk/gtkbutton.c:213
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
-msgstr "æÕ â×ÙÉ ÇäÔÇÑÉ ÏÇÎä ÇäÒÑ¬ ÅĞÇ ãÇæ ÇäÒÑ êÍèê ãÇÆæ ÔÇÑÉ"
+msgstr "Ù†Øµ Ù‚Ø·Ø¹Ø© Ø§Ù„Ø´Ø§Ø±Ø© Ø¯Ø§Ø®Ù„ Ø§Ù„Ø²Ø±ØŒ Ø¥Ø°Ø§ ÙƒØ§Ù† Ø§Ù„Ø²Ø± ÙŠØ­ÙˆÙŠ ÙƒØ§Ø¦Ù† Ø´Ø§Ø±Ø©"
 
 #: gtk/gtkbutton.c:220 gtk/gtkexpander.c:213 gtk/gtklabel.c:313
 #: gtk/gtktoolbutton.c:187
 msgid "Use underline"
-msgstr "ÇÓÊÎÏÇå ÇäÊÓ×êÑ"
+msgstr "Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø§Ù„ØªØ³Ø·ÙŠØ±"
 
 #: gtk/gtkbutton.c:221 gtk/gtkexpander.c:214 gtk/gtklabel.c:314
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
 msgstr ""
-"ÅĞÇ ÖÈ×¬ áÓêãèæ çæÇã ÊÓ×êÑ áê ÇäæÕ êÔêÑ Åäé ÇäÑåÒ ÇäÊÇäê ÇäĞê êÌÈ ÇÓÊÎÏÇåç "
-"ãÑåÒ åÓ×Ñ äåáÊÇÍ ÇäÇÎÊÕÇÑ"
+"Ø¥Ø°Ø§ Ø¶Ø¨Ø·ØŒ ÙØ³ÙŠÙƒÙˆÙ† Ù‡Ù†Ø§Ùƒ ØªØ³Ø·ÙŠØ± ÙÙŠ Ø§Ù„Ù†Øµ ÙŠØ´ÙŠØ± Ø¥Ù„Ù‰ Ø§Ù„Ø±Ù…Ø² Ø§Ù„ØªØ§Ù„ÙŠ Ø§Ù„Ø°ÙŠ ÙŠØ¬Ø¨ Ø§Ø³ØªØ®Ø¯Ø§Ù…Ù‡ "
+"ÙƒØ±Ù…Ø² Ù…Ø³Ø·Ø± Ù„Ù…ÙØªØ§Ø­ Ø§Ù„Ø§Ø®ØªØµØ§Ø±"
 
 #: gtk/gtkbutton.c:228
 msgid "Use stock"
-msgstr "åÎÒæ ÇäåÓÊÎÏå"
+msgstr "Ù…Ø®Ø²Ù† Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…"
 
 #: gtk/gtkbutton.c:229
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
-msgstr "ÅĞÇ ÖÈ×¬ áÓÊÓÊÎÏå ÇäÙäÇåÉ äÇÎÊêÇÑ ÙæÕÑ åÎÒæ ÈÏä ÙÑÖçÇ"
+msgstr "Ø¥Ø°Ø§ Ø¶Ø¨Ø·ØŒ ÙØ³ØªØ³ØªØ®Ø¯Ù… Ø§Ù„Ø¹Ù„Ø§Ù…Ø© Ù„Ø§Ø®ØªÙŠØ§Ø± Ø¹Ù†ØµØ± Ù…Ø®Ø²Ù† Ø¨Ø¯Ù„ Ø¹Ø±Ø¶Ù‡Ø§"
 
 #: gtk/gtkbutton.c:236
 msgid "Focus on click"
-msgstr "ÊÑãêÒ ÙæÏ ÇäæâÑ"
+msgstr "ØªØ±ÙƒÙŠØ² Ø¹Ù†Ø¯ Ø§Ù„Ù†Ù‚Ø±"
 
 #: gtk/gtkbutton.c:237
 msgid "Whether the button grabs focus when it is clicked with the mouse"
-msgstr "áêåÇ ÅĞÇ ÓêâÈÖ ÇäÒÑ ÇäÊÑãêÒ ÙæÏ æâÑç ÈÇäáÃÑÉ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ÙŠÙ‚Ø¨Ø¶ Ø§Ù„Ø²Ø± Ø§Ù„ØªØ±ÙƒÙŠØ² Ø¹Ù†Ø¯ Ù†Ù‚Ø±Ù‡ Ø¨Ø§Ù„ÙØ£Ø±Ø©"
 
 #: gtk/gtkbutton.c:244
 msgid "Border relief"
-msgstr "æÍÊ ÇäÍÏ"
+msgstr "Ù†Ø­Øª Ø§Ù„Ø­Ø¯"
 
 #: gtk/gtkbutton.c:245
 msgid "The border relief style"
-msgstr "ÃÓäèÈ æÍÊ ÇäÍÏ"
+msgstr "Ø£Ø³Ù„ÙˆØ¨ Ù†Ø­Øª Ø§Ù„Ø­Ø¯"
 
 #: gtk/gtkbutton.c:262
 msgid "Horizontal alignment for child"
-msgstr "ÇäÊÑÕêá ÇäÃáâê ääÅÈæ"
+msgstr "Ø§Ù„ØªØ±ØµÙŠÙ Ø§Ù„Ø£ÙÙ‚ÙŠ Ù„Ù„Ø¥Ø¨Ù†"
 
 #: gtk/gtkbutton.c:281
 msgid "Vertical alignment for child"
-msgstr "ÇäÊÑÕêá ÇäÙåèÏê ääÅÈæ"
+msgstr "Ø§Ù„ØªØ±ØµÙŠÙ Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ Ù„Ù„Ø¥Ø¨Ù†"
 
 #: gtk/gtkbutton.c:349
 msgid "Default Spacing"
-msgstr "ÇäåÈÇÙÏÉ ÇäÇáÊÑÇÖêÉ"
+msgstr "Ø§Ù„Ù…Ø¨Ø§Ø¹Ø¯Ø© Ø§Ù„Ø§ÙØªØ±Ø§Ø¶ÙŠØ©"
 
 #: gtk/gtkbutton.c:350
 msgid "Extra space to add for CAN_DEFAULT buttons"
-msgstr "ÇäáÑÇÚ ÇäÅÖÇáê ääÅÖÇáÉ äÃÒÑÇÑ CAN_DEFAULT"
+msgstr "Ø§Ù„ÙØ±Ø§Øº Ø§Ù„Ø¥Ø¶Ø§ÙÙŠ Ù„Ù„Ø¥Ø¶Ø§ÙØ© Ù„Ø£Ø²Ø±Ø§Ø± CAN_DEFAULT"
 
 #: gtk/gtkbutton.c:356
 msgid "Default Outside Spacing"
-msgstr "ÇäáÑÇÚÇÊ ÇäÎÇÑÌêÉ ÇäÇáÊÑÇÖêÉ"
+msgstr "Ø§Ù„ÙØ±Ø§ØºØ§Øª Ø§Ù„Ø®Ø§Ø±Ø¬ÙŠØ© Ø§Ù„Ø§ÙØªØ±Ø§Ø¶ÙŠØ©"
 
 #: gtk/gtkbutton.c:357
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
-msgstr "ÇäáÑÇÚ ÇäÅÖÇáê ääÅÖÇáÉ äÃÒÑÇÑ CAN_DEFAULT ÇäĞê êÑÓå ÏÇÆåÇë ÎÇÑÌ ÇäÍÏ"
+msgstr "Ø§Ù„ÙØ±Ø§Øº Ø§Ù„Ø¥Ø¶Ø§ÙÙŠ Ù„Ù„Ø¥Ø¶Ø§ÙØ© Ù„Ø£Ø²Ø±Ø§Ø± CAN_DEFAULT Ø§Ù„Ø°ÙŠ ÙŠØ±Ø³Ù… Ø¯Ø§Ø¦Ù…Ø§Ù‹ Ø®Ø§Ø±Ø¬ Ø§Ù„Ø­Ø¯"
 
 #: gtk/gtkbutton.c:362
 msgid "Child X Displacement"
-msgstr "ÅÒÇÍÉ ÇäÇÈæ áê Ó"
+msgstr "Ø¥Ø²Ø§Ø­Ø© Ø§Ù„Ø§Ø¨Ù† ÙÙŠ Ø³"
 
 #: gtk/gtkbutton.c:363
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
-msgstr "åâÏÇÑ æâä ÇäÇÈæ áê ÇÊÌÇç Ó ÇËÑ ÊÍÑêÑ ÇäÒÑ"
+msgstr "Ù…Ù‚Ø¯Ø§Ø± Ù†Ù‚Ù„ Ø§Ù„Ø§Ø¨Ù† ÙÙŠ Ø§ØªØ¬Ø§Ù‡ Ø³ Ø§Ø«Ø± ØªØ­Ø±ÙŠØ± Ø§Ù„Ø²Ø±"
 
 #: gtk/gtkbutton.c:370
 msgid "Child Y Displacement"
-msgstr "ÅÒÇÍÉ ÇäÇÈæ áê Õ"
+msgstr "Ø¥Ø²Ø§Ø­Ø© Ø§Ù„Ø§Ø¨Ù† ÙÙŠ Øµ"
 
 #: gtk/gtkbutton.c:371
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
-msgstr "åâÏÇÑ æâä ÇäÇÈæ áê ÇÊÌÇç Õ ÇËÑ ÊÍÑêÑ ÇäÒÑ"
+msgstr "Ù…Ù‚Ø¯Ø§Ø± Ù†Ù‚Ù„ Ø§Ù„Ø§Ø¨Ù† ÙÙŠ Ø§ØªØ¬Ø§Ù‡ Øµ Ø§Ø«Ø± ØªØ­Ø±ÙŠØ± Ø§Ù„Ø²Ø±"
 
 #: gtk/gtkbutton.c:378
 msgid "Show button images"
-msgstr "ÅØçÇÑ ÕèÑ ÇäÃÒÑÇÑ"
+msgstr "Ø¥Ø¸Ù‡Ø§Ø± ØµÙˆØ± Ø§Ù„Ø£Ø²Ø±Ø§Ø±"
 
 #: gtk/gtkbutton.c:379
 msgid "Whether stock icons should be shown in buttons"
-msgstr "áêåÇ ÅĞÇ ÓêÊå ÙÑÖ ÃêâèæÇÊ ÇäåÎÒèæ áê ÇäÃÒÑÇÑ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ÙŠØªÙ… Ø¹Ø±Ø¶ Ø£ÙŠÙ‚ÙˆÙ†Ø§Øª Ø§Ù„Ù…Ø®Ø²ÙˆÙ† ÙÙŠ Ø§Ù„Ø£Ø²Ø±Ø§Ø±"
 
 #: gtk/gtkcalendar.c:464
 msgid "Year"
-msgstr "ÇäÓæÉ"
+msgstr "Ø§Ù„Ø³Ù†Ø©"
 
 #: gtk/gtkcalendar.c:465
 msgid "The selected year"
-msgstr "ÃÇäÓæÉ ÇäåæÊâÇÊ"
+msgstr "Ø£Ø§Ù„Ø³Ù†Ø© Ø§Ù„Ù…Ù†ØªÙ‚Ø§Øª"
 
 #: gtk/gtkcalendar.c:471
 msgid "Month"
-msgstr "ÇäÔçÑ"
+msgstr "Ø§Ù„Ø´Ù‡Ø±"
 
 #: gtk/gtkcalendar.c:472
 msgid "The selected month (as a number between 0 and 11)"
-msgstr "ÇäÔçÑ ÇäåæÊâé (ãÙÏÏ Èêæ 0 è 11)"
+msgstr "Ø§Ù„Ø´Ù‡Ø± Ø§Ù„Ù…Ù†ØªÙ‚Ù‰ (ÙƒØ¹Ø¯Ø¯ Ø¨ÙŠÙ† 0 Ùˆ 11)"
 
 #: gtk/gtkcalendar.c:478
 msgid "Day"
-msgstr "Çäêèå"
+msgstr "Ø§Ù„ÙŠÙˆÙ…"
 
 #: gtk/gtkcalendar.c:479
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
-msgstr "Çäêèå ÇäåæÊâé (ãÙÏÏ Èêæ 1 è 31¬ Ãè 0 äÅäÚÇÁ ÇæÊâÇÁ ÇäÙÏÏ ÇäÍÇäê)"
+msgstr "Ø§Ù„ÙŠÙˆÙ… Ø§Ù„Ù…Ù†ØªÙ‚Ù‰ (ÙƒØ¹Ø¯Ø¯ Ø¨ÙŠÙ† 1 Ùˆ 31ØŒ Ø£Ùˆ 0 Ù„Ø¥Ù„ØºØ§Ø¡ Ø§Ù†ØªÙ‚Ø§Ø¡ Ø§Ù„Ø¹Ø¯Ø¯ Ø§Ù„Ø­Ø§Ù„ÙŠ)"
 
 #: gtk/gtkcalendar.c:493
 msgid "Show Heading"
-msgstr "ÇØçÇÑ ÇäÊÑèêÓÉ"
+msgstr "Ø§Ø¸Ù‡Ø§Ø± Ø§Ù„ØªØ±ÙˆÙŠØ³Ø©"
 
 #: gtk/gtkcalendar.c:494
 msgid "If TRUE, a heading is displayed"
-msgstr "ÇĞÇ ãÇæ TRUE¬ ÓÊÙÑÖ ÊÑèêÓÉ"
+msgstr "Ø§Ø°Ø§ ÙƒØ§Ù† TRUEØŒ Ø³ØªØ¹Ø±Ø¶ ØªØ±ÙˆÙŠØ³Ø©"
 
 #: gtk/gtkcalendar.c:508
 msgid "Show Day Names"
-msgstr "ÇØçÇÑ ÇÓåÇÁ ÇäÃêÇå"
+msgstr "Ø§Ø¸Ù‡Ø§Ø± Ø§Ø³Ù…Ø§Ø¡ Ø§Ù„Ø£ÙŠØ§Ù…"
 
 #: gtk/gtkcalendar.c:509
 msgid "If TRUE, day names are displayed"
-msgstr "ÇĞÇ ãÇæ TRUE¬ ÓÊÙÑÖ ÇÓåÇÁ ÇäÃêÇå"
+msgstr "Ø§Ø°Ø§ ÙƒØ§Ù† TRUEØŒ Ø³ØªØ¹Ø±Ø¶ Ø§Ø³Ù…Ø§Ø¡ Ø§Ù„Ø£ÙŠØ§Ù…"
 
 #: gtk/gtkcalendar.c:522
 msgid "No Month Change"
-msgstr "äÇ ÊÚêêÑ ääÔçÑ"
+msgstr "Ù„Ø§ ØªØºÙŠÙŠØ± Ù„Ù„Ø´Ù‡Ø±"
 
 #: gtk/gtkcalendar.c:523
 msgid "If TRUE, the selected month can not be changed"
-msgstr "ÇĞÇ ãÇæ TRUE¬ áäæ êåãæ ÊÚêêÑ ÇäÔçÑ ÇäåæÊâé"
+msgstr "Ø§Ø°Ø§ ÙƒØ§Ù† TRUEØŒ ÙÙ„Ù† ÙŠÙ…ÙƒÙ† ØªØºÙŠÙŠØ± Ø§Ù„Ø´Ù‡Ø± Ø§Ù„Ù…Ù†ØªÙ‚Ù‰"
 
 #: gtk/gtkcalendar.c:537
 msgid "Show Week Numbers"
-msgstr "ÇØçÇÑ ÃÑâÇå ÇäÃÓÇÈêÙ"
+msgstr "Ø§Ø¸Ù‡Ø§Ø± Ø£Ø±Ù‚Ø§Ù… Ø§Ù„Ø£Ø³Ø§Ø¨ÙŠØ¹"
 
 #: gtk/gtkcalendar.c:538
 msgid "If TRUE, week numbers are displayed"
-msgstr "ÇĞÇ ãÇæ TRUE¬ ÓÊÙÑÖ ÃÑâÇå ÇäÃÓÇÈêÙ"
+msgstr "Ø§Ø°Ø§ ÙƒØ§Ù† TRUEØŒ Ø³ØªØ¹Ø±Ø¶ Ø£Ø±Ù‚Ø§Ù… Ø§Ù„Ø£Ø³Ø§Ø¨ÙŠØ¹"
 
 #: gtk/gtkcellrenderer.c:151
 msgid "mode"
-msgstr "æå×"
+msgstr "Ù†Ù…Ø·"
 
 #: gtk/gtkcellrenderer.c:152
 msgid "Editable mode of the CellRenderer"
-msgstr "æØÇå CellRenderer ÇäâÇÈä ääÊÍÑêÑ"
+msgstr "Ù†Ø¸Ø§Ù… CellRenderer Ø§Ù„Ù‚Ø§Ø¨Ù„ Ù„Ù„ØªØ­Ø±ÙŠØ±"
 
 #: gtk/gtkcellrenderer.c:161
 msgid "visible"
-msgstr "åÑÆê"
+msgstr "Ù…Ø±Ø¦ÙŠ"
 
 #: gtk/gtkcellrenderer.c:162
 msgid "Display the cell"
-msgstr "ÙÑÖ ÇäÎäêÉ"
+msgstr "Ø¹Ø±Ø¶ Ø§Ù„Ø®Ù„ÙŠØ©"
 
 #: gtk/gtkcellrenderer.c:170
 msgid "xalign"
-msgstr "ÊÑÕêá Ó"
+msgstr "ØªØ±ØµÙŠÙ Ø³"
 
 #: gtk/gtkcellrenderer.c:171
 msgid "The x-align"
-msgstr "ÊÑÕêá Ó"
+msgstr "ØªØ±ØµÙŠÙ Ø³"
 
 #: gtk/gtkcellrenderer.c:181
 msgid "yalign"
-msgstr "ÊÑÕêá Õ"
+msgstr "ØªØ±ØµÙŠÙ Øµ"
 
 #: gtk/gtkcellrenderer.c:182
 msgid "The y-align"
-msgstr "ÊÑÕêá Õ"
+msgstr "ØªØ±ØµÙŠÙ Øµ"
 
 #: gtk/gtkcellrenderer.c:192
 msgid "xpad"
-msgstr "ÍÔè Ó"
+msgstr "Ø­Ø´Ùˆ Ø³"
 
 #: gtk/gtkcellrenderer.c:193
 msgid "The xpad"
-msgstr "ÍÔè Ó"
+msgstr "Ø­Ø´Ùˆ Ø³"
 
 #: gtk/gtkcellrenderer.c:203
 msgid "ypad"
-msgstr "ÍÔè Õ"
+msgstr "Ø­Ø´Ùˆ Øµ"
 
 #: gtk/gtkcellrenderer.c:204
 msgid "The ypad"
-msgstr "ÍÔè Õ"
+msgstr "Ø­Ø´Ùˆ Øµ"
 
 #: gtk/gtkcellrenderer.c:214
 msgid "width"
-msgstr "ÇäÙÑÖ"
+msgstr "Ø§Ù„Ø¹Ø±Ø¶"
 
 #: gtk/gtkcellrenderer.c:215
 msgid "The fixed width"
-msgstr "ÇäÙÑÖ ÇäËÇÈÊ"
+msgstr "Ø§Ù„Ø¹Ø±Ø¶ Ø§Ù„Ø«Ø§Ø¨Øª"
 
 #: gtk/gtkcellrenderer.c:225
 msgid "height"
-msgstr "ÇäÇÑÊáÇÙ"
+msgstr "Ø§Ù„Ø§Ø±ØªÙØ§Ø¹"
 
 #: gtk/gtkcellrenderer.c:226
 msgid "The fixed height"
-msgstr "ÇäÇÑÊáÇÙ ÇäËÇÈÊ"
+msgstr "Ø§Ù„Ø§Ø±ØªÙØ§Ø¹ Ø§Ù„Ø«Ø§Ø¨Øª"
 
 #: gtk/gtkcellrenderer.c:236
 msgid "Is Expander"
-msgstr "çè åèÓñğÙ"
+msgstr "Ù‡Ùˆ Ù…ÙˆØ³Ù‘ÙØ¹"
 
 #: gtk/gtkcellrenderer.c:237
 msgid "Row has children"
-msgstr "Õá äç ÃÈæÇÁ"
+msgstr "ØµÙ Ù„Ù‡ Ø£Ø¨Ù†Ø§Ø¡"
 
 #: gtk/gtkcellrenderer.c:246
 msgid "Is Expanded"
-msgstr "çè åèÓÙ"
+msgstr "Ù‡Ùˆ Ù…ÙˆØ³Ø¹"
 
 #: gtk/gtkcellrenderer.c:247
 msgid "Row is an expander row, and is expanded"
-msgstr "ÇäÕá Õá ÊèÓêÙ èçè åèÓÙ"
+msgstr "Ø§Ù„ØµÙ ØµÙ ØªÙˆØ³ÙŠØ¹ ÙˆÙ‡Ùˆ Ù…ÙˆØ³Ø¹"
 
 #: gtk/gtkcellrenderer.c:255
 msgid "Cell background color name"
-msgstr "ÇÓå äèæ ÎäáêÉ ÇäÎäêÉ"
+msgstr "Ø§Ø³Ù… Ù„ÙˆÙ† Ø®Ù„ÙÙŠØ© Ø§Ù„Ø®Ù„ÙŠØ©"
 
 #: gtk/gtkcellrenderer.c:256
 msgid "Cell background color as a string"
-msgstr "äèæ ÎäáêÉ ÇäÎäêÉ ãÓäÓäÉ"
+msgstr "Ù„ÙˆÙ† Ø®Ù„ÙÙŠØ© Ø§Ù„Ø®Ù„ÙŠØ© ÙƒØ³Ù„Ø³Ù„Ø©"
 
 #: gtk/gtkcellrenderer.c:263
 msgid "Cell background color"
-msgstr "äèæ ÎäáêÉ ÇäÎäêÉ"
+msgstr "Ù„ÙˆÙ† Ø®Ù„ÙÙŠØ© Ø§Ù„Ø®Ù„ÙŠØ©"
 
 #: gtk/gtkcellrenderer.c:264
 msgid "Cell background color as a GdkColor"
-msgstr "äèæ ÎäáêÉ ÇäÎäêÉ ãà GdkColor"
+msgstr "Ù„ÙˆÙ† Ø®Ù„ÙÙŠØ© Ø§Ù„Ø®Ù„ÙŠØ© ÙƒÙ€ GdkColor"
 
 #: gtk/gtkcellrenderer.c:272
 msgid "Cell background set"
-msgstr "ÖÈ× ÎäáêÉ ÇäÎäêÉ"
+msgstr "Ø¶Ø¨Ø· Ø®Ù„ÙÙŠØ© Ø§Ù„Ø®Ù„ÙŠØ©"
 
 #: gtk/gtkcellrenderer.c:273
 msgid "Whether this tag affects the cell background color"
-msgstr "áêåÇ ÅĞÇ ãÇæÊ çĞç ÇäÔÇÑÉ ÊÄËÑ áê äèæ ÎäáêÉ ÇäÎäêÉ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø´Ø§Ø±Ø© ØªØ¤Ø«Ø± ÙÙŠ Ù„ÙˆÙ† Ø®Ù„ÙÙŠØ© Ø§Ù„Ø®Ù„ÙŠØ©"
 
 #: gtk/gtkcellrendererpixbuf.c:134
 msgid "Pixbuf Object"
-msgstr "ÌÓå ÈêãÓÈá"
+msgstr "Ø¬Ø³Ù… Ø¨ÙŠÙƒØ³Ø¨Ù"
 
 #: gtk/gtkcellrendererpixbuf.c:135
 msgid "The pixbuf to render"
-msgstr "ÈêãÓÈá ääÊÑÌåÉ"
+msgstr "Ø¨ÙŠÙƒØ³Ø¨Ù Ù„Ù„ØªØ±Ø¬Ù…Ø©"
 
 #: gtk/gtkcellrendererpixbuf.c:143
 msgid "Pixbuf Expander Open"
-msgstr "åèÓÙ åáÊèÍ ääÈêãÓÈá"
+msgstr "Ù…ÙˆØ³Ø¹ Ù…ÙØªÙˆØ­ Ù„Ù„Ø¨ÙŠÙƒØ³Ø¨Ù"
 
 #: gtk/gtkcellrendererpixbuf.c:144
 msgid "Pixbuf for open expander"
-msgstr "ÈêãÓÈá ääåèÓÙ ÇäåáÊèÍ"
+msgstr "Ø¨ÙŠÙƒØ³Ø¨Ù Ù„Ù„Ù…ÙˆØ³Ø¹ Ø§Ù„Ù…ÙØªÙˆØ­"
 
 #: gtk/gtkcellrendererpixbuf.c:152
 msgid "Pixbuf Expander Closed"
@@ -808,196 +807,196 @@ msgstr "Ù…ÙˆØ³Ø¹Â·Ù…ØºÙ„Ù‚Â·Ù„Ù„Ø¨ÙŠÙƒØ³Ø¨Ù"
 
 #: gtk/gtkcellrendererpixbuf.c:153
 msgid "Pixbuf for closed expander"
-msgstr "ÈêãÓÈá ÇäåèÓÙ ÇäåÚäâ."
+msgstr "Ø¨ÙŠÙƒØ³Ø¨Ù Ø§Ù„Ù…ÙˆØ³Ø¹ Ø§Ù„Ù…ØºÙ„Ù‚."
 
 #: gtk/gtkcellrendererpixbuf.c:161 gtk/gtkimage.c:177
 msgid "Stock ID"
-msgstr "çèêÉ ÇäåÎÒèæ"
+msgstr "Ù‡ÙˆÙŠØ© Ø§Ù„Ù…Ø®Ø²ÙˆÙ†"
 
 #: gtk/gtkcellrendererpixbuf.c:162
 msgid "The stock ID of the stock icon to render"
-msgstr "çèêÉ ÇäåÎÒèæ äÃêâèæÉ ÇäåÎÒèæ ÇäÊê ÓÊÊÑÌå"
+msgstr "Ù‡ÙˆÙŠØ© Ø§Ù„Ù…Ø®Ø²ÙˆÙ† Ù„Ø£ÙŠÙ‚ÙˆÙ†Ø© Ø§Ù„Ù…Ø®Ø²ÙˆÙ† Ø§Ù„ØªÙŠ Ø³ØªØªØ±Ø¬Ù…"
 
 #: gtk/gtkcellrendererpixbuf.c:169
 msgid "Size"
-msgstr "ÇäÍÌå"
+msgstr "Ø§Ù„Ø­Ø¬Ù…"
 
 #: gtk/gtkcellrendererpixbuf.c:170
 msgid "The GtkIconSize value that specifies the size of the rendered icon"
-msgstr "âêåÉ GtkIconSize ÇäÊê ÊÍÏÏ ÍÌå ÇäÃêâèæÉ ÇäåÑÓèåÉ"
+msgstr "Ù‚ÙŠÙ…Ø© GtkIconSize Ø§Ù„ØªÙŠ ØªØ­Ø¯Ø¯ Ø­Ø¬Ù… Ø§Ù„Ø£ÙŠÙ‚ÙˆÙ†Ø© Ø§Ù„Ù…Ø±Ø³ÙˆÙ…Ø©"
 
 #: gtk/gtkcellrendererpixbuf.c:179
 msgid "Detail"
-msgstr "ÇäÊáÇÕêä"
+msgstr "Ø§Ù„ØªÙØ§ØµÙŠÙ„"
 
 #: gtk/gtkcellrendererpixbuf.c:180
 msgid "Render detail to pass to the theme engine"
-msgstr "ÊáÇÕêä ÇäÊÑÌåÉ äÊåÑêÑçÇ äåÍÑã ÇäÊêåÇÊ"
+msgstr "ØªÙØ§ØµÙŠÙ„ Ø§Ù„ØªØ±Ø¬Ù…Ø© Ù„ØªÙ…Ø±ÙŠØ±Ù‡Ø§ Ù„Ù…Ø­Ø±Ùƒ Ø§Ù„ØªÙŠÙ…Ø§Øª"
 
 #: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:545 gtk/gtkprogressbar.c:218
 msgid "Text"
-msgstr "ÇäæÕ"
+msgstr "Ø§Ù„Ù†Øµ"
 
 #: gtk/gtkcellrenderertext.c:194
 msgid "Text to render"
-msgstr "æÕ ääÊÑÌåÉ"
+msgstr "Ù†Øµ Ù„Ù„ØªØ±Ø¬Ù…Ø©"
 
 #: gtk/gtkcellrenderertext.c:201
 msgid "Markup"
-msgstr "ÊÙäêå"
+msgstr "ØªØ¹Ù„ÙŠÙ…"
 
 #: gtk/gtkcellrenderertext.c:202
 msgid "Marked up text to render"
-msgstr "æÕ åÙäñå ääÊÑÌåÉ"
+msgstr "Ù†Øµ Ù…Ø¹Ù„Ù‘Ù… Ù„Ù„ØªØ±Ø¬Ù…Ø©"
 
 #: gtk/gtkcellrenderertext.c:209 gtk/gtklabel.c:299
 msgid "Attributes"
-msgstr "ÇäÕáÇÊ"
+msgstr "Ø§Ù„ØµÙØ§Øª"
 
 #: gtk/gtkcellrenderertext.c:210
 msgid "A list of style attributes to apply to the text of the renderer"
-msgstr "âÇÆåÉ ÕáÇÊ ÇäÃÓäèÈ äÊ×ÈêâçÇ Ùäé æÕ ÇäåÊÑÌå"
+msgstr "Ù‚Ø§Ø¦Ù…Ø© ØµÙØ§Øª Ø§Ù„Ø£Ø³Ù„ÙˆØ¨ Ù„ØªØ·Ø¨ÙŠÙ‚Ù‡Ø§ Ø¹Ù„Ù‰ Ù†Øµ Ø§Ù„Ù…ØªØ±Ø¬Ù…"
 
 #: gtk/gtkcellrenderertext.c:217
 msgid "Single Paragraph Mode"
-msgstr "æÓâ ÇäáâÑÉ ÇäèÍêÏÉ"
+msgstr "Ù†Ø³Ù‚ Ø§Ù„ÙÙ‚Ø±Ø© Ø§Ù„ÙˆØ­ÙŠØ¯Ø©"
 
 #: gtk/gtkcellrenderertext.c:218
 msgid "Whether or not to keep all text in a single paragraph"
-msgstr "áêåÇ ÅĞÇ êâÙ êÌåÙ ãÇåä ÇäæÕ áê áâÑÉ èÍêÏÉ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙŠÙ‚Ø¹ ÙŠØ¬Ù…Ø¹ ÙƒØ§Ù…Ù„ Ø§Ù„Ù†Øµ ÙÙŠ ÙÙ‚Ø±Ø© ÙˆØ­ÙŠØ¯Ø©"
 
 #: gtk/gtkcellrenderertext.c:226 gtk/gtkcellview.c:180 gtk/gtktexttag.c:206
 msgid "Background color name"
-msgstr "ÇÓå äèæ ÇäÎäáêÉ"
+msgstr "Ø§Ø³Ù… Ù„ÙˆÙ† Ø§Ù„Ø®Ù„ÙÙŠØ©"
 
 #: gtk/gtkcellrenderertext.c:227 gtk/gtkcellview.c:181 gtk/gtktexttag.c:207
 msgid "Background color as a string"
-msgstr "äèæ ÇäÎäáêÉ ãÓäÓäÉ"
+msgstr "Ù„ÙˆÙ† Ø§Ù„Ø®Ù„ÙÙŠØ© ÙƒØ³Ù„Ø³Ù„Ø©"
 
 #: gtk/gtkcellrenderertext.c:234 gtk/gtkcellview.c:187 gtk/gtktexttag.c:214
 msgid "Background color"
-msgstr "äèæ ÇäÎäáêÉ"
+msgstr "Ù„ÙˆÙ† Ø§Ù„Ø®Ù„ÙÙŠØ©"
 
 #: gtk/gtkcellrenderertext.c:235 gtk/gtkcellview.c:188
 msgid "Background color as a GdkColor"
-msgstr "äèæ ÇäÎäáêÉ ãà GdkColor"
+msgstr "Ù„ÙˆÙ† Ø§Ù„Ø®Ù„ÙÙŠØ© ÙƒÙ€ GdkColor"
 
 #: gtk/gtkcellrenderertext.c:242 gtk/gtktexttag.c:240
 msgid "Foreground color name"
-msgstr "ÇÓå äèæ ÇäèÇÌçÉ ÇäÃåÇåêÉ"
+msgstr "Ø§Ø³Ù… Ù„ÙˆÙ† Ø§Ù„ÙˆØ§Ø¬Ù‡Ø© Ø§Ù„Ø£Ù…Ø§Ù…ÙŠØ©"
 
 #: gtk/gtkcellrenderertext.c:243 gtk/gtktexttag.c:241
 msgid "Foreground color as a string"
-msgstr "äèæ ÇäèÇÌçÉ ÇäÃåÇåêÉ ãÓäÓäÉ"
+msgstr "Ù„ÙˆÙ† Ø§Ù„ÙˆØ§Ø¬Ù‡Ø© Ø§Ù„Ø£Ù…Ø§Ù…ÙŠØ© ÙƒØ³Ù„Ø³Ù„Ø©"
 
 #: gtk/gtkcellrenderertext.c:250 gtk/gtktexttag.c:248
 msgid "Foreground color"
-msgstr "äèæ ÇäèÇÌçÉ ÇäÃåÇåêÉ"
+msgstr "Ù„ÙˆÙ† Ø§Ù„ÙˆØ§Ø¬Ù‡Ø© Ø§Ù„Ø£Ù…Ø§Ù…ÙŠØ©"
 
 #: gtk/gtkcellrenderertext.c:251
 msgid "Foreground color as a GdkColor"
-msgstr "äèæ ÇäèÇÌçÉ ÇäÃåÇåêÉ ãà GdkColor"
+msgstr "Ù„ÙˆÙ† Ø§Ù„ÙˆØ§Ø¬Ù‡Ø© Ø§Ù„Ø£Ù…Ø§Ù…ÙŠØ© ÙƒÙ€ GdkColor"
 
 #: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:477 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:586
 msgid "Editable"
-msgstr "âÇÈä ääÊÍÑêÑ"
+msgstr "Ù‚Ø§Ø¨Ù„ Ù„Ù„ØªØ­Ø±ÙŠØ±"
 
 #: gtk/gtkcellrenderertext.c:260 gtk/gtktexttag.c:275 gtk/gtktextview.c:587
 msgid "Whether the text can be modified by the user"
-msgstr "áêåÇ ÅĞÇ êåãæ ÊÙÏêä ÇäæÕ Ùæ ×Ñêâ ÇäåÓÊÎÏå"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙŠÙ…ÙƒÙ† ØªØ¹Ø¯ÙŠÙ„ Ø§Ù„Ù†Øµ Ø¹Ù† Ø·Ø±ÙŠÙ‚ Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…"
 
 #: gtk/gtkcellrenderertext.c:267 gtk/gtkcellrenderertext.c:275
 #: gtk/gtkfontsel.c:218 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
 msgid "Font"
-msgstr "ÇäÎ×"
+msgstr "Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkcellrenderertext.c:268
 msgid "Font description as a string"
-msgstr "èÕá ÇäÎ× ãÓäÓäÉ"
+msgstr "ÙˆØµÙ Ø§Ù„Ø®Ø· ÙƒØ³Ù„Ø³Ù„Ø©"
 
 #: gtk/gtkcellrenderertext.c:276 gtk/gtktexttag.c:291
 msgid "Font description as a PangoFontDescription struct"
-msgstr "èÕá ÇäÎ× ãÈæêÉ PangoFontDescription"
+msgstr "ÙˆØµÙ Ø§Ù„Ø®Ø· ÙƒØ¨Ù†ÙŠØ© PangoFontDescription"
 
 #: gtk/gtkcellrenderertext.c:284 gtk/gtktexttag.c:299
 msgid "Font family"
-msgstr "ÙÇÆäÉ ÇäÎ×è×"
+msgstr "Ø¹Ø§Ø¦Ù„Ø© Ø§Ù„Ø®Ø·ÙˆØ·"
 
 #: gtk/gtkcellrenderertext.c:285 gtk/gtktexttag.c:300
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
-msgstr "ÇÓå ÙÇÆäÉ ÇäÎ×è× åËä Sans, Helvetica, Times, Monospace"
+msgstr "Ø§Ø³Ù… Ø¹Ø§Ø¦Ù„Ø© Ø§Ù„Ø®Ø·ÙˆØ· Ù…Ø«Ù„ Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:292 gtk/gtkcellrenderertext.c:293
 #: gtk/gtktexttag.c:307
 msgid "Font style"
-msgstr "ÃÓäèÈ ÇäÎ×"
+msgstr "Ø£Ø³Ù„ÙˆØ¨ Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkcellrenderertext.c:301 gtk/gtkcellrenderertext.c:302
 #: gtk/gtktexttag.c:316
 msgid "Font variant"
-msgstr "ÖÑÈ ÇäÎ×"
+msgstr "Ø¶Ø±Ø¨ Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkcellrenderertext.c:310 gtk/gtkcellrenderertext.c:311
 #: gtk/gtktexttag.c:325
 msgid "Font weight"
-msgstr "èÒæ ÇäÎ×"
+msgstr "ÙˆØ²Ù† Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkcellrenderertext.c:320 gtk/gtkcellrenderertext.c:321
 #: gtk/gtktexttag.c:336
 msgid "Font stretch"
-msgstr "ÊåÏêÏ ÇäÎ×"
+msgstr "ØªÙ…Ø¯ÙŠØ¯ Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkcellrenderertext.c:329 gtk/gtkcellrenderertext.c:330
 #: gtk/gtktexttag.c:345
 msgid "Font size"
-msgstr "ÍÌå ÇäÎ×"
+msgstr "Ø­Ø¬Ù… Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkcellrenderertext.c:339 gtk/gtktexttag.c:365
 msgid "Font points"
-msgstr "æâÇ× ÇäÎ×"
+msgstr "Ù†Ù‚Ø§Ø· Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkcellrenderertext.c:340 gtk/gtktexttag.c:366
 msgid "Font size in points"
-msgstr "ÍÌå ÇäÎ× ÈÇäæâÇ×"
+msgstr "Ø­Ø¬Ù… Ø§Ù„Ø®Ø· Ø¨Ø§Ù„Ù†Ù‚Ø§Ø·"
 
 #: gtk/gtkcellrenderertext.c:349 gtk/gtktexttag.c:355
 msgid "Font scale"
-msgstr "ÊÍÌêå ÇäÎ×"
+msgstr "ØªØ­Ø¬ÙŠÙ… Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkcellrenderertext.c:350
 msgid "Font scaling factor"
-msgstr "ÙÇåä ÊÍÌêå ÇäÎ×"
+msgstr "Ø¹Ø§Ù…Ù„ ØªØ­Ø¬ÙŠÙ… Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkcellrenderertext.c:359 gtk/gtktexttag.c:424
 msgid "Rise"
-msgstr "ÑáÙ"
+msgstr "Ø±ÙØ¹"
 
 #: gtk/gtkcellrenderertext.c:360
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
-"åâÏÇÑ ÇäÊÚêêÑ ääæÕ áèâ ÇäÓ×Ñ ÇäÇÓÇÓ (ÊÍÊ ÇäÓ×Ñ ÇäÇÓÇÓ ÅĞÇ ãÇæ ÇäÑáÙ ÓÇäÈÇ)"
+"Ù…Ù‚Ø¯Ø§Ø± Ø§Ù„ØªØºÙŠÙŠØ± Ù„Ù„Ù†Øµ ÙÙˆÙ‚ Ø§Ù„Ø³Ø·Ø± Ø§Ù„Ø§Ø³Ø§Ø³ (ØªØ­Øª Ø§Ù„Ø³Ø·Ø± Ø§Ù„Ø§Ø³Ø§Ø³ Ø¥Ø°Ø§ ÙƒØ§Ù† Ø§Ù„Ø±ÙØ¹ Ø³Ø§Ù„Ø¨Ø§)"
 
 #: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:464
 msgid "Strikethrough"
-msgstr "ÊÔÑê×"
+msgstr "ØªØ´Ø±ÙŠØ·"
 
 #: gtk/gtkcellrenderertext.c:371 gtk/gtktexttag.c:465
 msgid "Whether to strike through the text"
-msgstr "áêåÇ ÅĞÇ ÓêÔÑ× ÇäæÕ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ÙŠØ´Ø±Ø· Ø§Ù„Ù†Øµ"
 
 #: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:472
 msgid "Underline"
-msgstr "ÊÓ×êÑ"
+msgstr "ØªØ³Ø·ÙŠØ±"
 
 #: gtk/gtkcellrenderertext.c:379 gtk/gtktexttag.c:473
 msgid "Style of underline for this text"
-msgstr "ÃÓäèÈ ÇäÊÓ×êÑ äçĞÇ ÇäæÕ"
+msgstr "Ø£Ø³Ù„ÙˆØ¨ Ø§Ù„ØªØ³Ø·ÙŠØ± Ù„Ù‡Ø°Ø§ Ø§Ù„Ù†Øµ"
 
 #: gtk/gtkcellrenderertext.c:387 gtk/gtktexttag.c:384
 msgid "Language"
-msgstr "ÇääÚÉ"
+msgstr "Ø§Ù„Ù„ØºØ©"
 
 #: gtk/gtkcellrenderertext.c:388 gtk/gtktexttag.c:385
 msgid ""
@@ -1005,776 +1004,776 @@ msgid ""
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it"
 msgstr ""
-"ÇääÚÉ ÇäÊê áêçÇ çĞÇ ÇäæÕ¬ ãÔáÑÉ ISO. êåãæ äÈÇæãè ÅÓÊÙåÇä çĞÇ ãÊäåêÍÉ "
-"ÙæÏ ÑÓå ÇäæÕ. ÅĞÇ ãæÊ äÇ Êáçå çĞÇ ÇäåÊÚêñÑ áÃæã ÑÈåÇ äÇ ÊÓÊÍâñç"
+"Ø§Ù„Ù„ØºØ© Ø§Ù„ØªÙŠ ÙÙŠÙ‡Ø§ Ù‡Ø°Ø§ Ø§Ù„Ù†ØµØŒ ÙƒØ´ÙØ±Ø© ISO. ÙŠÙ…ÙƒÙ† Ù„Ø¨Ø§Ù†ÙƒÙˆ Ø¥Ø³ØªØ¹Ù…Ø§Ù„ Ù‡Ø°Ø§ ÙƒØªÙ„Ù…ÙŠØ­Ø© "
+"Ø¹Ù†Ø¯ Ø±Ø³Ù… Ø§Ù„Ù†Øµ. Ø¥Ø°Ø§ ÙƒÙ†Øª Ù„Ø§ ØªÙÙ‡Ù… Ù‡Ø°Ø§ Ø§Ù„Ù…ØªØºÙŠÙ‘Ø± ÙØ£Ù†Ùƒ Ø±Ø¨Ù…Ø§ Ù„Ø§ ØªØ³ØªØ­Ù‚Ù‘Ù‡"
 
 #: gtk/gtkcellrenderertext.c:398 gtk/gtkcellview.c:195 gtk/gtktexttag.c:509
 msgid "Background set"
-msgstr "ÖÈ× ÇäÎäáêÉ"
+msgstr "Ø¶Ø¨Ø· Ø§Ù„Ø®Ù„ÙÙŠØ©"
 
 #: gtk/gtkcellrenderertext.c:399 gtk/gtkcellview.c:196 gtk/gtktexttag.c:510
 msgid "Whether this tag affects the background color"
-msgstr "áêåÇ ÇĞÇ ãÇæÊ çĞç ÇäÔÇÑÉ ÓÊÄËÑ áê äèæ ÇäÎäáêÉ"
+msgstr "ÙÙŠÙ…Ø§ Ø§Ø°Ø§ ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø´Ø§Ø±Ø© Ø³ØªØ¤Ø«Ø± ÙÙŠ Ù„ÙˆÙ† Ø§Ù„Ø®Ù„ÙÙŠØ©"
 
 #: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:521
 msgid "Foreground set"
-msgstr "ÖÈ× ÇäèÇÌçÉ ÇäÃåÇåêÉ"
+msgstr "Ø¶Ø¨Ø· Ø§Ù„ÙˆØ§Ø¬Ù‡Ø© Ø§Ù„Ø£Ù…Ø§Ù…ÙŠØ©"
 
 #: gtk/gtkcellrenderertext.c:403 gtk/gtktexttag.c:522
 msgid "Whether this tag affects the foreground color"
-msgstr "áêåÇ ÅĞÇ ãÇæÊ çĞç ÇäÔÇÑÉ ÓÊÄËÑ áê äèæ ÇäèÇÌçÉ ÇäÃåÇåêÉ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø´Ø§Ø±Ø© Ø³ØªØ¤Ø«Ø± ÙÙŠ Ù„ÙˆÙ† Ø§Ù„ÙˆØ§Ø¬Ù‡Ø© Ø§Ù„Ø£Ù…Ø§Ù…ÙŠØ©"
 
 #: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:529
 msgid "Editability set"
-msgstr "ÖÈ× ÇäâÈèä ääÊÍÑêÑ"
+msgstr "Ø¶Ø¨Ø· Ø§Ù„Ù‚Ø¨ÙˆÙ„ Ù„Ù„ØªØ­Ø±ÙŠØ±"
 
 #: gtk/gtkcellrenderertext.c:407 gtk/gtktexttag.c:530
 msgid "Whether this tag affects text editability"
-msgstr "áêåÇ ÅĞÇ ãÇæÊ çĞç ÇäÔÇÑÉ ÓÊÄËÑ áê âÇÈäêÉ ÇäæÕ ääÊÍÑêÑ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø´Ø§Ø±Ø© Ø³ØªØ¤Ø«Ø± ÙÙŠ Ù‚Ø§Ø¨Ù„ÙŠØ© Ø§Ù„Ù†Øµ Ù„Ù„ØªØ­Ø±ÙŠØ±"
 
 #: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:533
 msgid "Font family set"
-msgstr "ÖÈ× ÙÇÆäÉ ÇäÎ×è×"
+msgstr "Ø¶Ø¨Ø· Ø¹Ø§Ø¦Ù„Ø© Ø§Ù„Ø®Ø·ÙˆØ·"
 
 #: gtk/gtkcellrenderertext.c:411 gtk/gtktexttag.c:534
 msgid "Whether this tag affects the font family"
-msgstr "áêåÇ ÇĞÇ ãÇæÊ çĞç ÇäÔÇÑÉ ÓÊÄËÑ áê ÙÇÆäÉ ÇäÎ×è×"
+msgstr "ÙÙŠÙ…Ø§ Ø§Ø°Ø§ ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø´Ø§Ø±Ø© Ø³ØªØ¤Ø«Ø± ÙÙŠ Ø¹Ø§Ø¦Ù„Ø© Ø§Ù„Ø®Ø·ÙˆØ·"
 
 #: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:537
 msgid "Font style set"
-msgstr "ÖÈ× ÃÓäèÈ ÇäÎ×"
+msgstr "Ø¶Ø¨Ø· Ø£Ø³Ù„ÙˆØ¨ Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkcellrenderertext.c:415 gtk/gtktexttag.c:538
 msgid "Whether this tag affects the font style"
-msgstr "áêåÇ ÇĞÇ ãÇæÊ çĞç ÇäÔÇÑÉ ÓÊÄËÑ áê ÃÓäèÈ ÇäÎ×"
+msgstr "ÙÙŠÙ…Ø§ Ø§Ø°Ø§ ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø´Ø§Ø±Ø© Ø³ØªØ¤Ø«Ø± ÙÙŠ Ø£Ø³Ù„ÙˆØ¨ Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkcellrenderertext.c:418 gtk/gtktexttag.c:541
 msgid "Font variant set"
-msgstr "åÌåèÙÉ ÖèÇÑÈ ÇäÎ×"
+msgstr "Ù…Ø¬Ù…ÙˆØ¹Ø© Ø¶ÙˆØ§Ø±Ø¨ Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkcellrenderertext.c:419 gtk/gtktexttag.c:542
 msgid "Whether this tag affects the font variant"
-msgstr "áêåÇ ÅĞÇ ÓÊÄËÑ çĞç ÇäÔÇÑÉ áê ÖÑÈ ÇäÎ×"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ØªØ¤Ø«Ø± Ù‡Ø°Ù‡ Ø§Ù„Ø´Ø§Ø±Ø© ÙÙŠ Ø¶Ø±Ø¨ Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkcellrenderertext.c:422 gtk/gtktexttag.c:545
 msgid "Font weight set"
-msgstr "ÖÈ× èÒæ ÇäÎ×"
+msgstr "Ø¶Ø¨Ø· ÙˆØ²Ù† Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkcellrenderertext.c:423 gtk/gtktexttag.c:546
 msgid "Whether this tag affects the font weight"
-msgstr "áêåÇ ÅĞÇ ãÇæÊ çĞç ÇäÔÇÑÉ ÓÊÄËÑ Ùäé èÒæ ÇäÎ×"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø´Ø§Ø±Ø© Ø³ØªØ¤Ø«Ø± Ø¹Ù„Ù‰ ÙˆØ²Ù† Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkcellrenderertext.c:426 gtk/gtktexttag.c:549
 msgid "Font stretch set"
-msgstr "ÖÈ× ÊåÏêÏ ÇäÎ×"
+msgstr "Ø¶Ø¨Ø· ØªÙ…Ø¯ÙŠØ¯ Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkcellrenderertext.c:427 gtk/gtktexttag.c:550
 msgid "Whether this tag affects the font stretch"
-msgstr "áêåÇ ÅĞÇ ãÇæÊ çĞç ÇäÔÇÑÉ ÓÊÄËÑ áê ÊåÏêÏ ÇäÎ×"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø´Ø§Ø±Ø© Ø³ØªØ¤Ø«Ø± ÙÙŠ ØªÙ…Ø¯ÙŠØ¯ Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkcellrenderertext.c:430 gtk/gtktexttag.c:553
 msgid "Font size set"
-msgstr "ÖÈ× ÍÌå ÇäÎ×"
+msgstr "Ø¶Ø¨Ø· Ø­Ø¬Ù… Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkcellrenderertext.c:431 gtk/gtktexttag.c:554
 msgid "Whether this tag affects the font size"
-msgstr "áêåÇ ÇĞÇ ãÇæÊ çĞç ÇäÔÇÑÉ ÓÊÄËÑ áê ÍÌå ÇäÎ×"
+msgstr "ÙÙŠÙ…Ø§ Ø§Ø°Ø§ ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø´Ø§Ø±Ø© Ø³ØªØ¤Ø«Ø± ÙÙŠ Ø­Ø¬Ù… Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkcellrenderertext.c:434 gtk/gtktexttag.c:557
 msgid "Font scale set"
-msgstr "ÖÈ× ÊÍÌêå ÇäÎ×"
+msgstr "Ø¶Ø¨Ø· ØªØ­Ø¬ÙŠÙ… Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkcellrenderertext.c:435 gtk/gtktexttag.c:558
 msgid "Whether this tag scales the font size by a factor"
-msgstr "áêåÇ ÅĞÇ ãÇæÊ çĞç ÇäÙäÇåÉ ÓÊÍÌå ÍÌå ÇäÎ× Ùæ ×Ñêâ ÙÇåä"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø¹Ù„Ø§Ù…Ø© Ø³ØªØ­Ø¬Ù… Ø­Ø¬Ù… Ø§Ù„Ø®Ø· Ø¹Ù† Ø·Ø±ÙŠÙ‚ Ø¹Ø§Ù…Ù„"
 
 #: gtk/gtkcellrenderertext.c:438 gtk/gtktexttag.c:577
 msgid "Rise set"
-msgstr "ÖÈ× ÇäÑáÙ"
+msgstr "Ø¶Ø¨Ø· Ø§Ù„Ø±ÙØ¹"
 
 #: gtk/gtkcellrenderertext.c:439 gtk/gtktexttag.c:578
 msgid "Whether this tag affects the rise"
-msgstr "áêåÇ ÅĞÇ ãÇæÊ çĞç ÇäÔÇÑÉ ÓÊÄËÑ Ùäé ÇäÑáÙ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø´Ø§Ø±Ø© Ø³ØªØ¤Ø«Ø± Ø¹Ù„Ù‰ Ø§Ù„Ø±ÙØ¹"
 
 #: gtk/gtkcellrenderertext.c:442 gtk/gtktexttag.c:593
 msgid "Strikethrough set"
-msgstr "ÖÈ× ÇäÊÔÑê×"
+msgstr "Ø¶Ø¨Ø· Ø§Ù„ØªØ´Ø±ÙŠØ·"
 
 #: gtk/gtkcellrenderertext.c:443 gtk/gtktexttag.c:594
 msgid "Whether this tag affects strikethrough"
-msgstr "áêåÇ ÅĞÇ ãÇæÊ çĞç ÇäÔÇÑÉ ÓÊÄËÑ Ùäé ÇäÊÔÑê×"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø´Ø§Ø±Ø© Ø³ØªØ¤Ø«Ø± Ø¹Ù„Ù‰ Ø§Ù„ØªØ´Ø±ÙŠØ·"
 
 #: gtk/gtkcellrenderertext.c:446 gtk/gtktexttag.c:601
 msgid "Underline set"
-msgstr "ÖÈ× ÇäÊÓ×êÑ"
+msgstr "Ø¶Ø¨Ø· Ø§Ù„ØªØ³Ø·ÙŠØ±"
 
 #: gtk/gtkcellrenderertext.c:447 gtk/gtktexttag.c:602
 msgid "Whether this tag affects underlining"
-msgstr "áêåÇ ÅĞÇ ãÇæÊ çĞç ÇäÔÇÑÉ ÓÊÄËÑ áê ÇäÊÓ×êÑ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø´Ø§Ø±Ø© Ø³ØªØ¤Ø«Ø± ÙÙŠ Ø§Ù„ØªØ³Ø·ÙŠØ±"
 
 #: gtk/gtkcellrenderertext.c:450 gtk/gtktexttag.c:565
 msgid "Language set"
-msgstr "ÊÙêêæ ÇääÚÉ"
+msgstr "ØªØ¹ÙŠÙŠÙ† Ø§Ù„Ù„ØºØ©"
 
 #: gtk/gtkcellrenderertext.c:451 gtk/gtktexttag.c:566
 msgid "Whether this tag affects the language the text is rendered as"
-msgstr "Åæ ãÇæÊ çĞç ÇäÙäÇåÉ ÊÄËÑ áê ÇääÚÉ ÇäÊê ÊÊå ÊÑÌåÉ ÇäæÕ äçÇ"
+msgstr "Ø¥Ù† ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø¹Ù„Ø§Ù…Ø© ØªØ¤Ø«Ø± ÙÙŠ Ø§Ù„Ù„ØºØ© Ø§Ù„ØªÙŠ ØªØªÙ… ØªØ±Ø¬Ù…Ø© Ø§Ù„Ù†Øµ Ù„Ù‡Ø§"
 
 #: gtk/gtkcellrenderertoggle.c:141
 msgid "Toggle state"
-msgstr "ÍÇäÉ ÇäÊÍèä"
+msgstr "Ø­Ø§Ù„Ø© Ø§Ù„ØªØ­ÙˆÙ„"
 
 #: gtk/gtkcellrenderertoggle.c:142
 msgid "The toggle state of the button"
-msgstr "ÍÇäÉ ÇäÊÍèä ääÒÑ"
+msgstr "Ø­Ø§Ù„Ø© Ø§Ù„ØªØ­ÙˆÙ„ Ù„Ù„Ø²Ø±"
 
 #: gtk/gtkcellrenderertoggle.c:150
 msgid "Inconsistent state"
-msgstr "ÍÇäÉ åÊæÇâÖÉ"
+msgstr "Ø­Ø§Ù„Ø© Ù…ØªÙ†Ø§Ù‚Ø¶Ø©"
 
 #: gtk/gtkcellrenderertoggle.c:151
 msgid "The inconsistent state of the button"
-msgstr "ÇäÍÇäÉ ÇäåÊæÇâÖÉ ääÒÑ"
+msgstr "Ø§Ù„Ø­Ø§Ù„Ø© Ø§Ù„Ù…ØªÙ†Ø§Ù‚Ø¶Ø© Ù„Ù„Ø²Ø±"
 
 #: gtk/gtkcellrenderertoggle.c:159
 msgid "Activatable"
-msgstr "âÇÈä ääÊæÔê×"
+msgstr "Ù‚Ø§Ø¨Ù„ Ù„Ù„ØªÙ†Ø´ÙŠØ·"
 
 #: gtk/gtkcellrenderertoggle.c:160
 msgid "The toggle button can be activated"
-msgstr "êåãæ ÊáÙêä ÒÑ ÇäÊÍèä"
+msgstr "ÙŠÙ…ÙƒÙ† ØªÙØ¹ÙŠÙ„ Ø²Ø± Ø§Ù„ØªØ­ÙˆÙ„"
 
 #: gtk/gtkcellrenderertoggle.c:168
 msgid "Radio state"
-msgstr "ÍÇäÉ ÇäÅÔÙÇÙ"
+msgstr "Ø­Ø§Ù„Ø© Ø§Ù„Ø¥Ø´Ø¹Ø§Ø¹"
 
 #: gtk/gtkcellrenderertoggle.c:169
 msgid "Draw the toggle button as a radio button"
-msgstr "ÑÓå ÒÑ ÇäÊÍèä ãÒÑ åÔÙ"
+msgstr "Ø±Ø³Ù… Ø²Ø± Ø§Ù„ØªØ­ÙˆÙ„ ÙƒØ²Ø± Ù…Ø´Ø¹"
 
 #: gtk/gtkcheckbutton.c:99 gtk/gtkcheckmenuitem.c:140 gtk/gtkoptionmenu.c:200
 msgid "Indicator Size"
-msgstr "ÍÌå ÇäåÄÔÑ"
+msgstr "Ø­Ø¬Ù… Ø§Ù„Ù…Ø¤Ø´Ø±"
 
 #: gtk/gtkcheckbutton.c:100 gtk/gtkcheckmenuitem.c:142
 msgid "Size of check or radio indicator"
-msgstr "ÍÌå åÄÔÑ ÇäáÍÕ Ãè ÇäÅÔÙÇÙ"
+msgstr "Ø­Ø¬Ù… Ù…Ø¤Ø´Ø± Ø§Ù„ÙØ­Øµ Ø£Ùˆ Ø§Ù„Ø¥Ø´Ø¹Ø§Ø¹"
 
 #: gtk/gtkcheckbutton.c:107 gtk/gtkexpander.c:255 gtk/gtkoptionmenu.c:206
 msgid "Indicator Spacing"
-msgstr "áÑÇÚÇÊ ÇäåÄÔÑ"
+msgstr "ÙØ±Ø§ØºØ§Øª Ø§Ù„Ù…Ø¤Ø´Ø±"
 
 #: gtk/gtkcheckbutton.c:108
 msgid "Spacing around check or radio indicator"
-msgstr "ÇäáÑÇÚÇÊ Íèä åÄÔÑ ÇäáÍÕ Ãè ÇäÅÔÙÇÙ"
+msgstr "Ø§Ù„ÙØ±Ø§ØºØ§Øª Ø­ÙˆÙ„ Ù…Ø¤Ø´Ø± Ø§Ù„ÙØ­Øµ Ø£Ùˆ Ø§Ù„Ø¥Ø´Ø¹Ø§Ø¹"
 
 #: gtk/gtkcheckmenuitem.c:117 gtk/gtktogglebutton.c:133
 msgid "Active"
-msgstr "æÔ×"
+msgstr "Ù†Ø´Ø·"
 
 #: gtk/gtkcheckmenuitem.c:118
 msgid "Whether the menu item is checked"
-msgstr "áêåÇ ÅĞÇ ãÇæ ÙæÕÑ ÇäâÇÆåÉ åÖÈè×"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ø¹Ù†ØµØ± Ø§Ù„Ù‚Ø§Ø¦Ù…Ø© Ù…Ø¶Ø¨ÙˆØ·"
 
 #: gtk/gtkcheckmenuitem.c:125 gtk/gtktogglebutton.c:141
 msgid "Inconsistent"
-msgstr "ÊæÇâÖ"
+msgstr "ØªÙ†Ø§Ù‚Ø¶"
 
 #: gtk/gtkcheckmenuitem.c:126
 msgid "Whether to display an \"inconsistent\" state"
-msgstr "áêåÇ ÅĞÇ êÌÈ ÙÑÖ ÍÇäÉ \"ÊæÇâÖ\""
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙŠØ¬Ø¨ Ø¹Ø±Ø¶ Ø­Ø§Ù„Ø© \"ØªÙ†Ø§Ù‚Ø¶\""
 
 #: gtk/gtkcheckmenuitem.c:133
 msgid "Draw as radio menu item"
-msgstr "ÑÓå ãÙæÕÑ âÇÆåÉ åÔÙ"
+msgstr "Ø±Ø³Ù… ÙƒØ¹Ù†ØµØ± Ù‚Ø§Ø¦Ù…Ø© Ù…Ø´Ø¹"
 
 #: gtk/gtkcheckmenuitem.c:134
 msgid "Whether the menu item looks like a radio menu item"
-msgstr "áêåÇ ÇĞÇ ãÇæ ÙæÕÑ ÇäâÇÆåÉ êÔÈç ÙæÕÑ âÇÆåÉ åÔÙ"
+msgstr "ÙÙŠÙ…Ø§ Ø§Ø°Ø§ ÙƒØ§Ù† Ø¹Ù†ØµØ± Ø§Ù„Ù‚Ø§Ø¦Ù…Ø© ÙŠØ´Ø¨Ù‡ Ø¹Ù†ØµØ± Ù‚Ø§Ø¦Ù…Ø© Ù…Ø´Ø¹"
 
 #: gtk/gtkcolorbutton.c:202
 msgid "Use alpha"
-msgstr "ÇÓÊÎÏÇå ÇäÔáÇáêÉ (âæÇÊ ÃäáÇ)"
+msgstr "Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø§Ù„Ø´ÙØ§ÙÙŠØ© (Ù‚Ù†Ø§Øª Ø£Ù„ÙØ§)"
 
 #: gtk/gtkcolorbutton.c:203
 msgid "Whether or not to give the color an alpha value"
-msgstr "áêåÇ ÅĞÇ ÓêåæÍ ääèæ ÔáÇáêÉ Ãå äÇ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ÙŠÙ…Ù†Ø­ Ù„Ù„ÙˆÙ† Ø´ÙØ§ÙÙŠØ© Ø£Ù… Ù„Ø§"
 
 #: gtk/gtkcolorbutton.c:217 gtk/gtkfontbutton.c:175
 #: gtk/gtktreeviewcolumn.c:287
 msgid "Title"
-msgstr "ÇäÙæèÇæ"
+msgstr "Ø§Ù„Ø¹Ù†ÙˆØ§Ù†"
 
 #: gtk/gtkcolorbutton.c:218
 msgid "The title of the color selection dialog"
-msgstr "ÙæèÇæ ÍèÇÑ ÇæÊâÇÁ ÇäÃäèÇæ"
+msgstr "Ø¹Ù†ÙˆØ§Ù† Ø­ÙˆØ§Ø± Ø§Ù†ØªÙ‚Ø§Ø¡ Ø§Ù„Ø£Ù„ÙˆØ§Ù†"
 
 #: gtk/gtkcolorbutton.c:232 gtk/gtkcolorsel.c:1776
 msgid "Current Color"
-msgstr "Çääèæ ÇäÍÇäê"
+msgstr "Ø§Ù„Ù„ÙˆÙ† Ø§Ù„Ø­Ø§Ù„ÙŠ"
 
 #: gtk/gtkcolorbutton.c:233
 msgid "The selected color"
-msgstr "Çääèæ ÇäåæÊâé"
+msgstr "Ø§Ù„Ù„ÙˆÙ† Ø§Ù„Ù…Ù†ØªÙ‚Ù‰"
 
 #: gtk/gtkcolorbutton.c:247 gtk/gtkcolorsel.c:1783
 msgid "Current Alpha"
-msgstr "ÇäÔáÇáêÉ ÇäÍÇäêÉ (âêåÉ ÃäáÇ ÇäÍÇäêÉ)"
+msgstr "Ø§Ù„Ø´ÙØ§ÙÙŠØ© Ø§Ù„Ø­Ø§Ù„ÙŠØ© (Ù‚ÙŠÙ…Ø© Ø£Ù„ÙØ§ Ø§Ù„Ø­Ø§Ù„ÙŠØ©)"
 
 #: gtk/gtkcolorbutton.c:248
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr "âêåÉ ÇäÊÙÊêå ÇäÍÇäêÉ (0 ÔáÇá ÊåÇåÇë, 65535 åÙÊå ÊåÇåÇë)"
+msgstr "Ù‚ÙŠÙ…Ø© Ø§Ù„ØªØ¹ØªÙŠÙ… Ø§Ù„Ø­Ø§Ù„ÙŠØ© (0 Ø´ÙØ§Ù ØªÙ…Ø§Ù…Ø§Ù‹, 65535 Ù…Ø¹ØªÙ… ØªÙ…Ø§Ù…Ø§Ù‹)"
 
 #: gtk/gtkcolorsel.c:1762
 msgid "Has Opacity Control"
-msgstr "äç åÊÍãå ÊÙÊêå"
+msgstr "Ù„Ù‡ Ù…ØªØ­ÙƒÙ… ØªØ¹ØªÙŠÙ…"
 
 #: gtk/gtkcolorsel.c:1763
 msgid "Whether the color selector should allow setting opacity"
-msgstr "áêåÇ ÇĞÇ ãÇæ åæÊâê ÇäÃäèÇæ ÓêÓåÍ ÈÖÈ× ÇäÊÙÊêå"
+msgstr "ÙÙŠÙ…Ø§ Ø§Ø°Ø§ ÙƒØ§Ù† Ù…Ù†ØªÙ‚ÙŠ Ø§Ù„Ø£Ù„ÙˆØ§Ù† Ø³ÙŠØ³Ù…Ø­ Ø¨Ø¶Ø¨Ø· Ø§Ù„ØªØ¹ØªÙŠÙ…"
 
 #: gtk/gtkcolorsel.c:1769
 msgid "Has palette"
-msgstr "äç äèÍÉ ÃäèÇæ"
+msgstr "Ù„Ù‡ Ù„ÙˆØ­Ø© Ø£Ù„ÙˆØ§Ù†"
 
 #: gtk/gtkcolorsel.c:1770
 msgid "Whether a palette should be used"
-msgstr "áêåÇ ÇĞÇ èÌÈ ÇÓÊÎÏÇå äèÍÉ ÃäèÇæ"
+msgstr "ÙÙŠÙ…Ø§ Ø§Ø°Ø§ ÙˆØ¬Ø¨ Ø§Ø³ØªØ®Ø¯Ø§Ù… Ù„ÙˆØ­Ø© Ø£Ù„ÙˆØ§Ù†"
 
 #: gtk/gtkcolorsel.c:1777
 msgid "The current color"
-msgstr "Çääèæ ÇäÍÇäê"
+msgstr "Ø§Ù„Ù„ÙˆÙ† Ø§Ù„Ø­Ø§Ù„ÙŠ"
 
 #: gtk/gtkcolorsel.c:1784
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr "âêåÉ ÇäÊÙÊêå ÇäÍÇäêÉ (0 ÔáÇá ÊåÇåÇë, 65535 åÙÊå ÊåÇåÇë)"
+msgstr "Ù‚ÙŠÙ…Ø© Ø§Ù„ØªØ¹ØªÙŠÙ… Ø§Ù„Ø­Ø§Ù„ÙŠØ© (0 Ø´ÙØ§Ù ØªÙ…Ø§Ù…Ø§Ù‹, 65535 Ù…Ø¹ØªÙ… ØªÙ…Ø§Ù…Ø§Ù‹)"
 
 #: gtk/gtkcolorsel.c:1798
 msgid "Custom palette"
-msgstr "äèÍÉ ÇäÃäèÇæ ÇäÎÇÕÉ"
+msgstr "Ù„ÙˆØ­Ø© Ø§Ù„Ø£Ù„ÙˆØ§Ù† Ø§Ù„Ø®Ø§ØµØ©"
 
 #: gtk/gtkcolorsel.c:1799
 msgid "Palette to use in the color selector"
-msgstr "äèÍÉ ÇäÃäèÇæ ÇäÊê ÓÊÓÊÎÏå áê åæÊâê ÇäÃäèÇæ"
+msgstr "Ù„ÙˆØ­Ø© Ø§Ù„Ø£Ù„ÙˆØ§Ù† Ø§Ù„ØªÙŠ Ø³ØªØ³ØªØ®Ø¯Ù… ÙÙŠ Ù…Ù†ØªÙ‚ÙŠ Ø§Ù„Ø£Ù„ÙˆØ§Ù†"
 
 #: gtk/gtkcombo.c:144
 msgid "Enable arrow keys"
-msgstr "ÊáÙêä åáÇÊêÍ ÇäÃÓçå"
+msgstr "ØªÙØ¹ÙŠÙ„ Ù…ÙØ§ØªÙŠØ­ Ø§Ù„Ø£Ø³Ù‡Ù…"
 
 #: gtk/gtkcombo.c:145
 msgid "Whether the arrow keys move through the list of items"
-msgstr "Åæ ãÇæÊ åáÇÊêÍ ÇäÃÓçå ÊÊæâä ÎäÇä âÇÆåÉ ÇäÙæÇÕÑ"
+msgstr "Ø¥Ù† ÙƒØ§Ù†Øª Ù…ÙØ§ØªÙŠØ­ Ø§Ù„Ø£Ø³Ù‡Ù… ØªØªÙ†Ù‚Ù„ Ø®Ù„Ø§Ù„ Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ø¹Ù†Ø§ØµØ±"
 
 #: gtk/gtkcombo.c:151
 msgid "Always enable arrows"
-msgstr "ÊáÙêä ÇäÃÓçå ÏÇÆåÇ"
+msgstr "ØªÙØ¹ÙŠÙ„ Ø§Ù„Ø£Ø³Ù‡Ù… Ø¯Ø§Ø¦Ù…Ø§"
 
 #: gtk/gtkcombo.c:152
 msgid "Obsolete property, ignored"
-msgstr "ÎÇÕêÉ ÈÇ×äÉ¬ ÊÌÇçä"
+msgstr "Ø®Ø§ØµÙŠØ© Ø¨Ø§Ø·Ù„Ø©ØŒ ØªØ¬Ø§Ù‡Ù„"
 
 #: gtk/gtkcombo.c:158
 msgid "Case sensitive"
-msgstr "ÍÓÇÓ ääÍÇäÉ"
+msgstr "Ø­Ø³Ø§Ø³ Ù„Ù„Ø­Ø§Ù„Ø©"
 
 #: gtk/gtkcombo.c:159
 msgid "Whether list item matching is case sensitive"
-msgstr "áêåÇ ÅĞÇ ãÇæ Ê×ÇÈâ ÙæÇÕÑ ÇäâÇÆåÉ ÍÓÇÓ ääÍÇäÉ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† ØªØ·Ø§Ø¨Ù‚ Ø¹Ù†Ø§ØµØ± Ø§Ù„Ù‚Ø§Ø¦Ù…Ø© Ø­Ø³Ø§Ø³ Ù„Ù„Ø­Ø§Ù„Ø©"
 
 #: gtk/gtkcombo.c:166
 msgid "Allow empty"
-msgstr "ÇäÓåÇÍ ÈÇäáÑÇÚ"
+msgstr "Ø§Ù„Ø³Ù…Ø§Ø­ Ø¨Ø§Ù„ÙØ±Ø§Øº"
 
 #: gtk/gtkcombo.c:167
 msgid "Whether an empty value may be entered in this field"
-msgstr "áêåÇ ÇĞÇ ãÇæ åæ Çäååãæ ÅÏÎÇä âêåÉ áÇÑÚÉ áê çĞÇ ÇäÍâä"
+msgstr "ÙÙŠÙ…Ø§ Ø§Ø°Ø§ ÙƒØ§Ù† Ù…Ù† Ø§Ù„Ù…Ù…ÙƒÙ† Ø¥Ø¯Ø®Ø§Ù„ Ù‚ÙŠÙ…Ø© ÙØ§Ø±ØºØ© ÙÙŠ Ù‡Ø°Ø§ Ø§Ù„Ø­Ù‚Ù„"
 
 #: gtk/gtkcombo.c:174
 msgid "Value in list"
-msgstr "ÇäâêåÉ áê ÇäâÇÆåÉ"
+msgstr "Ø§Ù„Ù‚ÙŠÙ…Ø© ÙÙŠ Ø§Ù„Ù‚Ø§Ø¦Ù…Ø©"
 
 #: gtk/gtkcombo.c:175
 msgid "Whether entered values must already be present in the list"
-msgstr "áêåÇ ÅĞÇ èÌÈ Ùäé Çäâêå ÇäåÏÎäÉ Ãæ Êãèæ åèÌèÏÉë áê ÇäâÇÆåÉ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙˆØ¬Ø¨ Ø¹Ù„Ù‰ Ø§Ù„Ù‚ÙŠÙ… Ø§Ù„Ù…Ø¯Ø®Ù„Ø© Ø£Ù† ØªÙƒÙˆÙ† Ù…ÙˆØ¬ÙˆØ¯Ø©Ù‹ ÙÙŠ Ø§Ù„Ù‚Ø§Ø¦Ù…Ø©"
 
 #: gtk/gtkcombobox.c:455
 msgid "ComboBox model"
-msgstr "æåèĞÌ ComboBox"
+msgstr "Ù†Ù…ÙˆØ°Ø¬ ComboBox"
 
 #: gtk/gtkcombobox.c:456
 msgid "The model for the combo box"
-msgstr "æåèĞÌ äÕæÏèâ ÇäåÌåèÙÇÊ"
+msgstr "Ù†Ù…ÙˆØ°Ø¬ Ù„ØµÙ†Ø¯ÙˆÙ‚ Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹Ø§Øª"
 
 #: gtk/gtkcombobox.c:463
 msgid "Wrap width"
-msgstr "ÙÑÖ Çääá"
+msgstr "Ø¹Ø±Ø¶ Ø§Ù„Ù„Ù"
 
 #: gtk/gtkcombobox.c:464
 msgid "Wrap width for layouting the items in a grid"
-msgstr "ÙÑÖ Çääá ÙæÏ ÊÕåêå ÇäÙæÇÕÑ áê ÇäÔÈãÉ"
+msgstr "Ø¹Ø±Ø¶ Ø§Ù„Ù„Ù Ø¹Ù†Ø¯ ØªØµÙ…ÙŠÙ… Ø§Ù„Ø¹Ù†Ø§ØµØ± ÙÙŠ Ø§Ù„Ø´Ø¨ÙƒØ©"
 
 #: gtk/gtkcombobox.c:473
 msgid "Row span column"
-msgstr "ÙåèÏ ÅåÊÏÇÏ ÇäÓ×Ñ"
+msgstr "Ø¹Ù…ÙˆØ¯ Ø¥Ù…ØªØ¯Ø§Ø¯ Ø§Ù„Ø³Ø·Ø±"
 
 #: gtk/gtkcombobox.c:474
 msgid "TreeModel column containing the row span values"
-msgstr "ÙåèÏ æåèĞÌ ÇäÔÌÑÉ ÇäåÍÊèê Ùäé âêå ÅåÊÏÇÏ ÇäÓ×Ñ"
+msgstr "Ø¹Ù…ÙˆØ¯ Ù†Ù…ÙˆØ°Ø¬ Ø§Ù„Ø´Ø¬Ø±Ø© Ø§Ù„Ù…Ø­ØªÙˆÙŠ Ø¹Ù„Ù‰ Ù‚ÙŠÙ… Ø¥Ù…ØªØ¯Ø§Ø¯ Ø§Ù„Ø³Ø·Ø±"
 
 #: gtk/gtkcombobox.c:483
 msgid "Column span column"
-msgstr "ÙåèÏ ÅåÊÏÇÏ ÇäÙåèÏ"
+msgstr "Ø¹Ù…ÙˆØ¯ Ø¥Ù…ØªØ¯Ø§Ø¯ Ø§Ù„Ø¹Ù…ÙˆØ¯"
 
 #: gtk/gtkcombobox.c:484
 msgid "TreeModel column containing the column span values"
-msgstr "ÙåèÏ TreeModel ÇäÍÇèê äâêå åÏé ÇäÙåèÏ"
+msgstr "Ø¹Ù…ÙˆØ¯ TreeModel Ø§Ù„Ø­Ø§ÙˆÙŠ Ù„Ù‚ÙŠÙ… Ù…Ø¯Ù‰ Ø§Ù„Ø¹Ù…ÙˆØ¯"
 
 #: gtk/gtkcombobox.c:493
 msgid "Active item"
-msgstr "ÇäÙæÕÑ ÇäæÔ×"
+msgstr "Ø§Ù„Ø¹Ù†ØµØ± Ø§Ù„Ù†Ø´Ø·"
 
 #: gtk/gtkcombobox.c:494
 msgid "The item which is currently active"
-msgstr "ÇäÙæÕÑ ÇäæÔ× ÍÇäêÇ"
+msgstr "Ø§Ù„Ø¹Ù†ØµØ± Ø§Ù„Ù†Ø´Ø· Ø­Ø§Ù„ÙŠØ§"
 
 #: gtk/gtkcombobox.c:502
 msgid "Appears as list"
-msgstr "êØçÑ ãâÇÆåÉ"
+msgstr "ÙŠØ¸Ù‡Ø± ÙƒÙ‚Ø§Ø¦Ù…Ø©"
 
 #: gtk/gtkcombobox.c:503
 msgid "Whether combobox dropdowns should look like lists rather than menus"
-msgstr "áåÇ ÅĞÇ ÇäâèÇÆå ÇäæÇÒäÉ äÕæÇÏêâ ÇäåÌåèÙÇÊ êÌÈ Ãæ Êãèæ âèÇÆå ÈÓê×É ÙèÖ âèÇÆå ÍÇÓèÈ"
+msgstr "ÙÙ…Ø§ Ø¥Ø°Ø§ Ø§Ù„Ù‚ÙˆØ§Ø¦Ù… Ø§Ù„Ù†Ø§Ø²Ù„Ø© Ù„ØµÙ†Ø§Ø¯ÙŠÙ‚ Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹Ø§Øª ÙŠØ¬Ø¨ Ø£Ù† ØªÙƒÙˆÙ† Ù‚ÙˆØ§Ø¦Ù… Ø¨Ø³ÙŠØ·Ø© Ø¹ÙˆØ¶ Ù‚ÙˆØ§Ø¦Ù… Ø­Ø§Ø³ÙˆØ¨"
 
 #: gtk/gtkcomboboxentry.c:110
 msgid "Text Column"
-msgstr "ÙåèÏ æÕ"
+msgstr "Ø¹Ù…ÙˆØ¯ Ù†Øµ"
 
 #: gtk/gtkcomboboxentry.c:111
 msgid "A column in the data source model to get the strings from"
-msgstr "ÌÏèä áê æåèĞÌ åÕÏÑ ÇäÈêÇæÇÊ äÊäâê ÇäÓäÇÓä åæç"
+msgstr "Ø¬Ø¯ÙˆÙ„ ÙÙŠ Ù†Ù…ÙˆØ°Ø¬ Ù…ØµØ¯Ø± Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ù„ØªÙ„Ù‚ÙŠ Ø§Ù„Ø³Ù„Ø§Ø³Ù„ Ù…Ù†Ù‡"
 
 #: gtk/gtkcontainer.c:204
 msgid "Resize mode"
-msgstr "æå× ÇäÊÍÌêå"
+msgstr "Ù†Ù…Ø· Ø§Ù„ØªØ­Ø¬ÙŠÙ…"
 
 #: gtk/gtkcontainer.c:205
 msgid "Specify how resize events are handled"
-msgstr "ÊÍÏêÏ ãêáêÉ åÙÇäÌÉ ÃÍÏÇË ÇäÊÍÌêå"
+msgstr "ØªØ­Ø¯ÙŠØ¯ ÙƒÙŠÙÙŠØ© Ù…Ø¹Ø§Ù„Ø¬Ø© Ø£Ø­Ø¯Ø§Ø« Ø§Ù„ØªØ­Ø¬ÙŠÙ…"
 
 #: gtk/gtkcontainer.c:212
 msgid "Border width"
-msgstr "ÙÑÖ ÇäÍÏ"
+msgstr "Ø¹Ø±Ø¶ Ø§Ù„Ø­Ø¯"
 
 #: gtk/gtkcontainer.c:213
 msgid "The width of the empty border outside the containers children"
-msgstr "ÙÑÖ ÇäÍÏ ÇäáÇÑÚ ÎÇÑÌ ÃÈæÇÁ ÇäÍÇèêÇÊ"
+msgstr "Ø¹Ø±Ø¶ Ø§Ù„Ø­Ø¯ Ø§Ù„ÙØ§Ø±Øº Ø®Ø§Ø±Ø¬ Ø£Ø¨Ù†Ø§Ø¡ Ø§Ù„Ø­Ø§ÙˆÙŠØ§Øª"
 
 #: gtk/gtkcontainer.c:221
 msgid "Child"
-msgstr "ÇÈæ"
+msgstr "Ø§Ø¨Ù†"
 
 #: gtk/gtkcontainer.c:222
 msgid "Can be used to add a new child to the container"
-msgstr "êåãæ ÇÓÊÎÏÇåç äÅÖÇáÉ ÇÈæ ÌÏêÏ ääÍÇèê"
+msgstr "ÙŠÙ…ÙƒÙ† Ø§Ø³ØªØ®Ø¯Ø§Ù…Ù‡ Ù„Ø¥Ø¶Ø§ÙØ© Ø§Ø¨Ù† Ø¬Ø¯ÙŠØ¯ Ù„Ù„Ø­Ø§ÙˆÙŠ"
 
 #: gtk/gtkcurve.c:122
 msgid "Curve type"
-msgstr "æèÙ ÇäåæÍæé"
+msgstr "Ù†ÙˆØ¹ Ø§Ù„Ù…Ù†Ø­Ù†Ù‰"
 
 #: gtk/gtkcurve.c:123
 msgid "Is this curve linear, spline interpolated, or free-form"
-msgstr "çä çĞÇ ÇäåæÍæé Î×ê Ãè æâÇ× ÊèÌêç åÓÊáÇÊ Ãè Ğê Ôãä ÍÑ"
+msgstr "Ù‡Ù„ Ù‡Ø°Ø§ Ø§Ù„Ù…Ù†Ø­Ù†Ù‰ Ø®Ø·ÙŠ Ø£Ùˆ Ù†Ù‚Ø§Ø· ØªÙˆØ¬ÙŠÙ‡ Ù…Ø³ØªÙØ§Øª Ø£Ùˆ Ø°ÙŠ Ø´ÙƒÙ„ Ø­Ø±"
 
 #: gtk/gtkcurve.c:131
 msgid "Minimum X"
-msgstr "Ó ÇäÏæêÇ"
+msgstr "Ø³ Ø§Ù„Ø¯Ù†ÙŠØ§"
 
 #: gtk/gtkcurve.c:132
 msgid "Minimum possible value for X"
-msgstr "ÇäâêåÉ ÇäååãæÉ ÇäÏæêÇ äà Ó"
+msgstr "Ø§Ù„Ù‚ÙŠÙ…Ø© Ø§Ù„Ù…Ù…ÙƒÙ†Ø© Ø§Ù„Ø¯Ù†ÙŠØ§ Ù„Ù€ Ø³"
 
 #: gtk/gtkcurve.c:141
 msgid "Maximum X"
-msgstr "Ó ÇäÃâÕé"
+msgstr "Ø³ Ø§Ù„Ø£Ù‚ØµÙ‰"
 
 #: gtk/gtkcurve.c:142
 msgid "Maximum possible X value"
-msgstr "ÇäâêåÉ ÇäâÕèé ÇäååãæÉ äà Ó"
+msgstr "Ø§Ù„Ù‚ÙŠÙ…Ø© Ø§Ù„Ù‚ØµÙˆÙ‰ Ø§Ù„Ù…Ù…ÙƒÙ†Ø© Ù„Ù€ Ø³"
 
 #: gtk/gtkcurve.c:151
 msgid "Minimum Y"
-msgstr "Õ ÇäÃÏæé"
+msgstr "Øµ Ø§Ù„Ø£Ø¯Ù†Ù‰"
 
 #: gtk/gtkcurve.c:152
 msgid "Minimum possible value for Y"
-msgstr "ÇäâêåÉ ÇäååãæÉ ÇäÏæêÇ äà Õ"
+msgstr "Ø§Ù„Ù‚ÙŠÙ…Ø© Ø§Ù„Ù…Ù…ÙƒÙ†Ø© Ø§Ù„Ø¯Ù†ÙŠØ§ Ù„Ù€ Øµ"
 
 #: gtk/gtkcurve.c:161
 msgid "Maximum Y"
-msgstr "Õ ÇäÃâÕé"
+msgstr "Øµ Ø§Ù„Ø£Ù‚ØµÙ‰"
 
 #: gtk/gtkcurve.c:162
 msgid "Maximum possible value for Y"
-msgstr "ÇäâêåÉ ÇäååãæÉ ÇäâÕèé äà Õ"
+msgstr "Ø§Ù„Ù‚ÙŠÙ…Ø© Ø§Ù„Ù…Ù…ÙƒÙ†Ø© Ø§Ù„Ù‚ØµÙˆÙ‰ Ù„Ù€ Øµ"
 
 #: gtk/gtkdialog.c:146
 msgid "Has separator"
-msgstr "äç áÇÕä"
+msgstr "Ù„Ù‡ ÙØ§ØµÙ„"
 
 #: gtk/gtkdialog.c:147
 msgid "The dialog has a separator bar above its buttons"
-msgstr "ääÍèÇÑ ÙåèÏ áÇÕä áèâ ÃÒÑÇÑç"
+msgstr "Ù„Ù„Ø­ÙˆØ§Ø± Ø¹Ù…ÙˆØ¯ ÙØ§ØµÙ„ ÙÙˆÙ‚ Ø£Ø²Ø±Ø§Ø±Ù‡"
 
 #: gtk/gtkdialog.c:172
 msgid "Content area border"
-msgstr "ÍÏ åæ×âÉ ÇäåÍÊèé"
+msgstr "Ø­Ø¯ Ù…Ù†Ø·Ù‚Ø© Ø§Ù„Ù…Ø­ØªÙˆÙ‰"
 
 #: gtk/gtkdialog.c:173
 msgid "Width of border around the main dialog area"
-msgstr "ÙÑÖ ÍÏ åæ×âÉ ÇäÍèÇÑ ÇäÑÆêÓêÉ"
+msgstr "Ø¹Ø±Ø¶ Ø­Ø¯ Ù…Ù†Ø·Ù‚Ø© Ø§Ù„Ø­ÙˆØ§Ø± Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©"
 
 #: gtk/gtkdialog.c:180
 msgid "Button spacing"
-msgstr "áÑÇÚÇÊ ÇäÃÒÇÑ"
+msgstr "ÙØ±Ø§ØºØ§Øª Ø§Ù„Ø£Ø²Ø§Ø±"
 
 #: gtk/gtkdialog.c:181
 msgid "Spacing between buttons"
-msgstr "ÇäáÑÇÚÇÊ Èêæ ÇäÃÒÑÇÑ"
+msgstr "Ø§Ù„ÙØ±Ø§ØºØ§Øª Ø¨ÙŠÙ† Ø§Ù„Ø£Ø²Ø±Ø§Ø±"
 
 #: gtk/gtkdialog.c:189
 msgid "Action area border"
-msgstr "ÍÏ åæ×âÉ ÇäÙåä"
+msgstr "Ø­Ø¯ Ù…Ù†Ø·Ù‚Ø© Ø§Ù„Ø¹Ù…Ù„"
 
 #: gtk/gtkdialog.c:190
 msgid "Width of border around the button area at the bottom of the dialog"
-msgstr "ÙÑÖ ÍÏ åæ×âÉ ÇäÒÑ ÃÓáä ÇäÕæÏèâ"
+msgstr "Ø¹Ø±Ø¶ Ø­Ø¯ Ù…Ù†Ø·Ù‚Ø© Ø§Ù„Ø²Ø± Ø£Ø³ÙÙ„ Ø§Ù„ØµÙ†Ø¯ÙˆÙ‚"
 
 #: gtk/gtkentry.c:457 gtk/gtklabel.c:370
 msgid "Cursor Position"
-msgstr "åèâÙ ÇäåÄÔÑ"
+msgstr "Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ù…Ø¤Ø´Ø±"
 
 #: gtk/gtkentry.c:458 gtk/gtklabel.c:371
 msgid "The current position of the insertion cursor in chars"
-msgstr "ÇäåèâÙ ÇäÍÇäê äåÄÔÑ ÇäÅÏÎÇä áê ÇäÑåèÒ"
+msgstr "Ø§Ù„Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ø­Ø§Ù„ÙŠ Ù„Ù…Ø¤Ø´Ø± Ø§Ù„Ø¥Ø¯Ø®Ø§Ù„ ÙÙŠ Ø§Ù„Ø±Ù…ÙˆØ²"
 
 #: gtk/gtkentry.c:467 gtk/gtklabel.c:380
 msgid "Selection Bound"
-msgstr "âêÏ ÇäåæÊâé"
+msgstr "Ù‚ÙŠØ¯ Ø§Ù„Ù…Ù†ØªÙ‚Ù‰"
 
 #: gtk/gtkentry.c:468 gtk/gtklabel.c:381
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
-"åèâÙ ÇäæçÇêÉ ÇäåÙãèÓÉ ääåæÊâé åæ ÇäåÄÔÑ áê ÇäÑåèÒ"
+"Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ù†Ù‡Ø§ÙŠØ© Ø§Ù„Ù…Ø¹ÙƒÙˆØ³Ø© Ù„Ù„Ù…Ù†ØªÙ‚Ù‰ Ù…Ù† Ø§Ù„Ù…Ø¤Ø´Ø± ÙÙŠ Ø§Ù„Ø±Ù…ÙˆØ²"
 
 #: gtk/gtkentry.c:478
 msgid "Whether the entry contents can be edited"
-msgstr "áêåÇ ÅĞÇ ãÇæÊ åÍÊèêÇÊ ÇäÎÇæÉ âÇÈäÉ ääÊÍÑêÑ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ù…Ø­ØªÙˆÙŠØ§Øª Ø§Ù„Ø®Ø§Ù†Ø© Ù‚Ø§Ø¨Ù„Ø© Ù„Ù„ØªØ­Ø±ÙŠØ±"
 
 #: gtk/gtkentry.c:485
 msgid "Maximum length"
-msgstr "ÇäÇÑÊáÇÙ ÇäÃâÕé"
+msgstr "Ø§Ù„Ø§Ø±ØªÙØ§Ø¹ Ø§Ù„Ø£Ù‚ØµÙ‰"
 
 #: gtk/gtkentry.c:486
 msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr "ÇäÙÏÏ ÇäÃâÕé ääÑåèÒ äçĞÇ ÇäåÏÎä. ÕáÑ ÅĞÇ äå êãæ ÃâÕé"
+msgstr "Ø§Ù„Ø¹Ø¯Ø¯ Ø§Ù„Ø£Ù‚ØµÙ‰ Ù„Ù„Ø±Ù…ÙˆØ² Ù„Ù‡Ø°Ø§ Ø§Ù„Ù…Ø¯Ø®Ù„. ØµÙØ± Ø¥Ø°Ø§ Ù„Ù… ÙŠÙƒÙ† Ø£Ù‚ØµÙ‰"
 
 #: gtk/gtkentry.c:494
 msgid "Visibility"
-msgstr "ÇäÑÄêÉ"
+msgstr "Ø§Ù„Ø±Ø¤ÙŠØ©"
 
 #: gtk/gtkentry.c:495
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
-msgstr "FALSE ÓêÙÑÖ \"ÇäÑåÒ ÇäåÎáê\" ÈÏäÇë åæ ÇäæÕ ÇäÍÇäê (æå× ãäåÉ ÇäÓÑ)"
+msgstr "FALSE Ø³ÙŠØ¹Ø±Ø¶ \"Ø§Ù„Ø±Ù…Ø² Ø§Ù„Ù…Ø®ÙÙŠ\" Ø¨Ø¯Ù„Ø§Ù‹ Ù…Ù† Ø§Ù„Ù†Øµ Ø§Ù„Ø­Ø§Ù„ÙŠ (Ù†Ù…Ø· ÙƒÙ„Ù…Ø© Ø§Ù„Ø³Ø±)"
 
 #: gtk/gtkentry.c:502
 msgid "Has Frame"
-msgstr "äç Å×ÇÑ"
+msgstr "Ù„Ù‡ Ø¥Ø·Ø§Ø±"
 
 #: gtk/gtkentry.c:503
 msgid "FALSE removes outside bevel from entry"
-msgstr "FALSE êÍĞá ÇäÍÇáÉ ÇäÎÇÑÌêÉ åæ ÇäÎÇæÉ"
+msgstr "FALSE ÙŠØ­Ø°Ù Ø§Ù„Ø­Ø§ÙØ© Ø§Ù„Ø®Ø§Ø±Ø¬ÙŠØ© Ù…Ù† Ø§Ù„Ø®Ø§Ù†Ø©"
 
 #: gtk/gtkentry.c:510
 msgid "Invisible character"
-msgstr "ÑåÒ åÎáê"
+msgstr "Ø±Ù…Ø² Ù…Ø®ÙÙŠ"
 
 #: gtk/gtkentry.c:511
 msgid "The character to use when masking entry contents (in \"password mode\")"
-msgstr "ÇäÑåÒ ÇäĞê ÓêÓÊÎÏå äÇÎáÇÁ åÍÊèêÇÊ ÇäÎÇæÉ (áê \"æå× ãäåÉ ÇäÓÑ\")"
+msgstr "Ø§Ù„Ø±Ù…Ø² Ø§Ù„Ø°ÙŠ Ø³ÙŠØ³ØªØ®Ø¯Ù… Ù„Ø§Ø®ÙØ§Ø¡ Ù…Ø­ØªÙˆÙŠØ§Øª Ø§Ù„Ø®Ø§Ù†Ø© (ÙÙŠ \"Ù†Ù…Ø· ÙƒÙ„Ù…Ø© Ø§Ù„Ø³Ø±\")"
 
 #: gtk/gtkentry.c:518
 msgid "Activates default"
-msgstr "ÊæÔê× ÇäÇáÊÑÇÖÇÊ"
+msgstr "ØªÙ†Ø´ÙŠØ· Ø§Ù„Ø§ÙØªØ±Ø§Ø¶Ø§Øª"
 
 #: gtk/gtkentry.c:519
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr ""
-"áêåÇ ÇĞÇ èÌÈ ÊæÔê× Çäâ×ÙÉ ÇäÇáÊÑÇÖêÉ (åËä ÇäÒÑ ÇäÇáÊÑÇÖê áê ÍèÇÑ åÇ)ÙæÏ æâÑ "
-"ÒÑ ÇäÇÏÎÇä"
+"ÙÙŠÙ…Ø§ Ø§Ø°Ø§ ÙˆØ¬Ø¨ ØªÙ†Ø´ÙŠØ· Ø§Ù„Ù‚Ø·Ø¹Ø© Ø§Ù„Ø§ÙØªØ±Ø§Ø¶ÙŠØ© (Ù…Ø«Ù„ Ø§Ù„Ø²Ø± Ø§Ù„Ø§ÙØªØ±Ø§Ø¶ÙŠ ÙÙŠ Ø­ÙˆØ§Ø± Ù…Ø§)Ø¹Ù†Ø¯ Ù†Ù‚Ø± "
+"Ø²Ø± Ø§Ù„Ø§Ø¯Ø®Ø§Ù„"
 
 #: gtk/gtkentry.c:525
 msgid "Width in chars"
-msgstr "ÇäÙÑÖ ÈÇäÑåèÒ"
+msgstr "Ø§Ù„Ø¹Ø±Ø¶ Ø¨Ø§Ù„Ø±Ù…ÙˆØ²"
 
 #: gtk/gtkentry.c:526
 msgid "Number of characters to leave space for in the entry"
-msgstr "ÙÏÏ ÇäÑåèÒ ÇäÊê ÓÊÊÑã äçÇ áÑÇÚÇÊ áê ÇäÎÇæÉ"
+msgstr "Ø¹Ø¯Ø¯ Ø§Ù„Ø±Ù…ÙˆØ² Ø§Ù„ØªÙŠ Ø³ØªØªØ±Ùƒ Ù„Ù‡Ø§ ÙØ±Ø§ØºØ§Øª ÙÙŠ Ø§Ù„Ø®Ø§Ù†Ø©"
 
 #: gtk/gtkentry.c:535
 msgid "Scroll offset"
-msgstr "ÊãÇáÄ Çääá"
+msgstr "ØªÙƒØ§ÙØ¤ Ø§Ù„Ù„Ù"
 
 #: gtk/gtkentry.c:536
 msgid "Number of pixels of the entry scrolled off the screen to the left"
-msgstr "ÙÏÏ ÈãÓäÇÊ ÇäÎÇæÉ ÇäåäáèáÉ ÎÇÑÌ ÇäÔÇÔÉ Åäé ÇäêÓÇÑ"
+msgstr "Ø¹Ø¯Ø¯ Ø¨ÙƒØ³Ù„Ø§Øª Ø§Ù„Ø®Ø§Ù†Ø© Ø§Ù„Ù…Ù„ÙÙˆÙØ© Ø®Ø§Ø±Ø¬ Ø§Ù„Ø´Ø§Ø´Ø© Ø¥Ù„Ù‰ Ø§Ù„ÙŠØ³Ø§Ø±"
 
 #: gtk/gtkentry.c:546
 msgid "The contents of the entry"
-msgstr "åÍÊèêÇÊ ÇäÎÇæÉ"
+msgstr "Ù…Ø­ØªÙˆÙŠØ§Øª Ø§Ù„Ø®Ø§Ù†Ø©"
 
 #: gtk/gtkentry.c:553 gtk/gtkmisc.c:99
 msgid "X align"
-msgstr "ÊæÓêâ Ó"
+msgstr "ØªÙ†Ø³ÙŠÙ‚ Ø³"
 
 #: gtk/gtkentry.c:554 gtk/gtkmisc.c:100
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
 msgstr ""
-"ÇäÊÑÕêá ÇäÃáâê¬ åæ 0 (êÓÇÑ) Åäé 1 (êåêæ). åâäèÈ äÊÕÇåêå RTL"
+"Ø§Ù„ØªØ±ØµÙŠÙ Ø§Ù„Ø£ÙÙ‚ÙŠØŒ Ù…Ù† 0 (ÙŠØ³Ø§Ø±) Ø¥Ù„Ù‰ 1 (ÙŠÙ…ÙŠÙ†). Ù…Ù‚Ù„ÙˆØ¨ Ù„ØªØµØ§Ù…ÙŠÙ… RTL"
 
 #: gtk/gtkentry.c:787
 msgid "Select on focus"
-msgstr "ÇÎÊêÇÑ ÙæÏ ÇäÊÑãêÒ"
+msgstr "Ø§Ø®ØªÙŠØ§Ø± Ø¹Ù†Ø¯ Ø§Ù„ØªØ±ÙƒÙŠØ²"
 
 #: gtk/gtkentry.c:788
 msgid "Whether to select the contents of an entry when it is focused"
-msgstr "áêåÇ ÇĞÇ ÓêâÙ ÇæÊâÇÁ åÍÊèêÇÊ ÎÇæÉ ÙæÏ ÊÑãêÒçÇ"
+msgstr "ÙÙŠÙ…Ø§ Ø§Ø°Ø§ Ø³ÙŠÙ‚Ø¹ Ø§Ù†ØªÙ‚Ø§Ø¡ Ù…Ø­ØªÙˆÙŠØ§Øª Ø®Ø§Ù†Ø© Ø¹Ù†Ø¯ ØªØ±ÙƒÙŠØ²Ù‡Ø§"
 
 #: gtk/gtkentrycompletion.c:200
 msgid "Completion Model"
-msgstr "æå× ÇäÇæçÇÁ"
+msgstr "Ù†Ù…Ø· Ø§Ù„Ø§Ù†Ù‡Ø§Ø¡"
 
 #: gtk/gtkentrycompletion.c:201
 msgid "The model to find matches in"
-msgstr "ÇäæåèĞÌ ÇäĞê áêç ÊèÌÏ ÇäåâÇÈäÇÊ"
+msgstr "Ø§Ù„Ù†Ù…ÙˆØ°Ø¬ Ø§Ù„Ø°ÙŠ ÙÙŠÙ‡ ØªÙˆØ¬Ø¯ Ø§Ù„Ù…Ù‚Ø§Ø¨Ù„Ø§Øª"
 
 #: gtk/gtkentrycompletion.c:207
 msgid "Minimum Key Length"
-msgstr "Çä×èä ÇäÃÏæé ääåáÊÇÍ"
+msgstr "Ø§Ù„Ø·ÙˆÙ„ Ø§Ù„Ø£Ø¯Ù†Ù‰ Ù„Ù„Ù…ÙØªØ§Ø­"
 
 #: gtk/gtkentrycompletion.c:208
 msgid "Minimum length of the search key in order to look up matches"
-msgstr "Çä×èä ÇäÃÏæé äåáÊÇÍ ÇäÈÍË ÍÊé êåãæ ÇäÈÍË Ùæ ÇäåÊ×ÇÈâÇÊ"
+msgstr "Ø§Ù„Ø·ÙˆÙ„ Ø§Ù„Ø£Ø¯Ù†Ù‰ Ù„Ù…ÙØªØ§Ø­ Ø§Ù„Ø¨Ø­Ø« Ø­ØªÙ‰ ÙŠÙ…ÙƒÙ† Ø§Ù„Ø¨Ø­Ø« Ø¹Ù† Ø§Ù„Ù…ØªØ·Ø§Ø¨Ù‚Ø§Øª"
 
 #: gtk/gtkeventbox.c:120
 msgid "Visible Window"
-msgstr "ÇäæÇáĞÉ ÇäåÑÆêÉ"
+msgstr "Ø§Ù„Ù†Ø§ÙØ°Ø© Ø§Ù„Ù…Ø±Ø¦ÙŠØ©"
 
 #: gtk/gtkeventbox.c:121
 msgid ""
 "Whether the event box is visible, as opposed to invisible and only used to "
 "trap events."
 msgstr ""
-"áêåÇ ÅĞÇ ãÇæ ÕæÏèâ ÇäÃÍÏÇË åÑÆêñÇ¬ ÙãÓ Ãæ êãèæ åÎáêñÇ è åÓÊÎÏåÇ áâ× äÊèÌêç ÇäÃÍÏÇË."
+"ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† ØµÙ†Ø¯ÙˆÙ‚ Ø§Ù„Ø£Ø­Ø¯Ø§Ø« Ù…Ø±Ø¦ÙŠÙ‘Ø§ØŒ Ø¹ÙƒØ³ Ø£Ù† ÙŠÙƒÙˆÙ† Ù…Ø®ÙÙŠÙ‘Ø§ Ùˆ Ù…Ø³ØªØ®Ø¯Ù…Ø§ ÙÙ‚Ø· Ù„ØªÙˆØ¬ÙŠÙ‡ Ø§Ù„Ø£Ø­Ø¯Ø§Ø«."
 
 #: gtk/gtkeventbox.c:127
 msgid "Above child"
-msgstr "áèâ ÇäÇÈæ"
+msgstr "ÙÙˆÙ‚ Ø§Ù„Ø§Ø¨Ù†"
 
 #: gtk/gtkeventbox.c:128
 msgid ""
 "Whether the event-trapping window of the eventbox is above the window of the "
 "child widget as opposed to below it."
 msgstr ""
-"áêåÇ ÅĞÇ ãÇæÊ æÇáĞÉ ÊèÌêç ÇäÃÍÏÇË äÕæÏèâ ÇäÃÍÏÇË áèâ æÇáĞÉ Çäâ×ÙÉ ÇäÅÈæ ÙãÓ Ãæ Êãèæ ÊÍÊçÇ."
+"ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ù†Ø§ÙØ°Ø© ØªÙˆØ¬ÙŠÙ‡ Ø§Ù„Ø£Ø­Ø¯Ø§Ø« Ù„ØµÙ†Ø¯ÙˆÙ‚ Ø§Ù„Ø£Ø­Ø¯Ø§Ø« ÙÙˆÙ‚ Ù†Ø§ÙØ°Ø© Ø§Ù„Ù‚Ø·Ø¹Ø© Ø§Ù„Ø¥Ø¨Ù† Ø¹ÙƒØ³ Ø£Ù† ØªÙƒÙˆÙ† ØªØ­ØªÙ‡Ø§."
 
 #: gtk/gtkexpander.c:197
 msgid "Expanded"
-msgstr "ååÏÏ"
+msgstr "Ù…Ù…Ø¯Ø¯"
 
 #: gtk/gtkexpander.c:198
 msgid "Whether the expander has been opened to reveal the child widget"
-msgstr "áêåÇ ÅĞÇ èâÙ áÊÍ ÇäåèÓÙ ääãÔá Ùæ Çäâ×ÙÉ ÇäÅÈæÉ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙˆÙ‚Ø¹ ÙØªØ­ Ø§Ù„Ù…ÙˆØ³Ø¹ Ù„Ù„ÙƒØ´Ù Ø¹Ù† Ø§Ù„Ù‚Ø·Ø¹Ø© Ø§Ù„Ø¥Ø¨Ù†Ø©"
 
 #: gtk/gtkexpander.c:206
 msgid "Text of the expander's label"
-msgstr "æÕ ÔÇÑÉ ÇäåèÓÙ"
+msgstr "Ù†Øµ Ø´Ø§Ø±Ø© Ø§Ù„Ù…ÙˆØ³Ø¹"
 
 #: gtk/gtkexpander.c:221 gtk/gtklabel.c:306
 msgid "Use markup"
-msgstr "ÇÓÊÎÏÇå ÇäÊÙäêå"
+msgstr "Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø§Ù„ØªØ¹Ù„ÙŠÙ…"
 
 #: gtk/gtkexpander.c:222 gtk/gtklabel.c:307
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
-msgstr "æÕ ÇäÔÇÑÉ êÍèê ÊÙäêå XML. ÑÇÌÙ pango_parse_markup()"
+msgstr "Ù†Øµ Ø§Ù„Ø´Ø§Ø±Ø© ÙŠØ­ÙˆÙŠ ØªØ¹Ù„ÙŠÙ… XML. Ø±Ø§Ø¬Ø¹ pango_parse_markup()"
 
 #: gtk/gtkexpander.c:230
 msgid "Space to put between the label and the child"
-msgstr "ÇäáÖÇÁ ÇäĞê ÓêèÖÙ Èêæ ÇäÔÇÑÉ è ÇäÅÈæ"
+msgstr "Ø§Ù„ÙØ¶Ø§Ø¡ Ø§Ù„Ø°ÙŠ Ø³ÙŠÙˆØ¶Ø¹ Ø¨ÙŠÙ† Ø§Ù„Ø´Ø§Ø±Ø© Ùˆ Ø§Ù„Ø¥Ø¨Ù†"
 
 #: gtk/gtkexpander.c:239 gtk/gtkframe.c:170 gtk/gtktoolbutton.c:194
 msgid "Label widget"
-msgstr "â×ÙÉ ÇäÔÇÑÉ"
+msgstr "Ù‚Ø·Ø¹Ø© Ø§Ù„Ø´Ø§Ø±Ø©"
 
 #: gtk/gtkexpander.c:240
 msgid "A widget to display in place of the usual expander label"
-msgstr "Çäâ×ÙÉ ÇäÊê ÓÊÙÑÖ ÙèÖ ÔÇÑÉ ÇäåèÓÙ ÇäÇÙÊÇÏêÉ"
+msgstr "Ø§Ù„Ù‚Ø·Ø¹Ø© Ø§Ù„ØªÙŠ Ø³ØªØ¹Ø±Ø¶ Ø¹ÙˆØ¶ Ø´Ø§Ø±Ø© Ø§Ù„Ù…ÙˆØ³Ø¹ Ø§Ù„Ø§Ø¹ØªØ§Ø¯ÙŠØ©"
 
 #: gtk/gtkexpander.c:246 gtk/gtktreeview.c:622
 msgid "Expander Size"
-msgstr "ÍÌå ÇäåèÓÙ"
+msgstr "Ø­Ø¬Ù… Ø§Ù„Ù…ÙˆØ³Ø¹"
 
 #: gtk/gtkexpander.c:247 gtk/gtktreeview.c:623
 msgid "Size of the expander arrow"
-msgstr "ÍÌå Óçå ÇäåèÓÙ"
+msgstr "Ø­Ø¬Ù… Ø³Ù‡Ù… Ø§Ù„Ù…ÙˆØ³Ø¹"
 
 #: gtk/gtkexpander.c:256
 msgid "Spacing around expander arrow"
-msgstr "ÇäáÑÇÚÇÊ Íèä Óçå ÇäåèÓÙ"
+msgstr "Ø§Ù„ÙØ±Ø§ØºØ§Øª Ø­ÙˆÙ„ Ø³Ù‡Ù… Ø§Ù„Ù…ÙˆØ³Ø¹"
 
 #: gtk/gtkfilechooser.c:93
 msgid "Action"
-msgstr "ÙåäêÉ"
+msgstr "Ø¹Ù…Ù„ÙŠØ©"
 
 #: gtk/gtkfilechooser.c:94
 msgid "The type of operation that the file selector is performing"
-msgstr "æèÙ ÇäÙåäêÉ ÇäÊê êâèå ÈçÇ åæÊâê ÇäåäáÇÊ"
+msgstr "Ù†ÙˆØ¹ Ø§Ù„Ø¹Ù…Ù„ÙŠØ© Ø§Ù„ØªÙŠ ÙŠÙ‚ÙˆÙ… Ø¨Ù‡Ø§ Ù…Ù†ØªÙ‚ÙŠ Ø§Ù„Ù…Ù„ÙØ§Øª"
 
 #: gtk/gtkfilechooser.c:100
 msgid "File System Backend"
-msgstr "ÎäáêÉ æØÇå ÇäåäáÇÊ"
+msgstr "Ø®Ù„ÙÙŠØ© Ù†Ø¸Ø§Ù… Ø§Ù„Ù…Ù„ÙØ§Øª"
 
 #: gtk/gtkfilechooser.c:101
 msgid "Name of file system backend to use"
-msgstr "ÇÓå ÎäáêÉ æØÇå ÇäåäáÇÊ ÇäÊê ÓÊÓÊÎÏå"
+msgstr "Ø§Ø³Ù… Ø®Ù„ÙÙŠØ© Ù†Ø¸Ø§Ù… Ø§Ù„Ù…Ù„ÙØ§Øª Ø§Ù„ØªÙŠ Ø³ØªØ³ØªØ®Ø¯Ù…"
 
 #: gtk/gtkfilechooser.c:106
 msgid "Filter"
-msgstr "åÑÔÍ"
+msgstr "Ù…Ø±Ø´Ø­"
 
 #: gtk/gtkfilechooser.c:107
 msgid "The current filter for selecting which files are displayed"
-msgstr "ÇäåÑÔÍ ÇäÍÇäê äÇæÊâÇÁ ÇäåäáÇÊ ääÙÑÖ"
+msgstr "Ø§Ù„Ù…Ø±Ø´Ø­ Ø§Ù„Ø­Ø§Ù„ÙŠ Ù„Ø§Ù†ØªÙ‚Ø§Ø¡ Ø§Ù„Ù…Ù„ÙØ§Øª Ù„Ù„Ø¹Ø±Ø¶"
 
 #: gtk/gtkfilechooser.c:112
 msgid "Local Only"
-msgstr "ÇäåÍäê áâ×"
+msgstr "Ø§Ù„Ù…Ø­Ù„ÙŠ ÙÙ‚Ø·"
 
 #: gtk/gtkfilechooser.c:113
 msgid "Whether the selected file(s) should be limited to local file: URLs"
-msgstr "áêåÇ ÅĞÇ ÓêâÙ ÍÏ ÇäåäáÇÊ ÇäåæÊâÇÊ ääåäá ÇäåÍäê: ÇäÙæÇèêæ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ÙŠÙ‚Ø¹ Ø­Ø¯ Ø§Ù„Ù…Ù„ÙØ§Øª Ø§Ù„Ù…Ù†ØªÙ‚Ø§Øª Ù„Ù„Ù…Ù„Ù Ø§Ù„Ù…Ø­Ù„ÙŠ: Ø§Ù„Ø¹Ù†Ø§ÙˆÙŠÙ†"
 
 #: gtk/gtkfilechooser.c:118
 msgid "Preview widget"
-msgstr "â×ÙÉ ÇäÊäåêÍ"
+msgstr "Ù‚Ø·Ø¹Ø© Ø§Ù„ØªÙ„Ù…ÙŠØ­"
 
 #: gtk/gtkfilechooser.c:119
 msgid "Application supplied widget for custom previews."
-msgstr "â×ÙÉ ååÏñÏÉ ÈÊ×Èêâ ääÊäåêÍÇÊ ÇäÎÇÕñÉ."
+msgstr "Ù‚Ø·Ø¹Ø© Ù…Ù…Ø¯Ù‘Ø¯Ø© Ø¨ØªØ·Ø¨ÙŠÙ‚ Ù„Ù„ØªÙ„Ù…ÙŠØ­Ø§Øª Ø§Ù„Ø®Ø§ØµÙ‘Ø©."
 
 #: gtk/gtkfilechooser.c:124
 msgid "Preview Widget Active"
-msgstr "â×ÙÉ ÇäÊäåêÍ æÔ×É"
+msgstr "Ù‚Ø·Ø¹Ø© Ø§Ù„ØªÙ„Ù…ÙŠØ­ Ù†Ø´Ø·Ø©"
 
 #: gtk/gtkfilechooser.c:125
 msgid ""
 "Whether the application supplied widget for custom previews should be shown."
 msgstr ""
-"áêåÇ ÅĞÇ ÓÊÙÑÖ Çäâ×ÙÉ ÇäååÏñÏÉ ÈÊ×Èêâ ääÊäåêÍÇÊ ÇäÎÇÕñÉ."
+"ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ØªØ¹Ø±Ø¶ Ø§Ù„Ù‚Ø·Ø¹Ø© Ø§Ù„Ù…Ù…Ø¯Ù‘Ø¯Ø© Ø¨ØªØ·Ø¨ÙŠÙ‚ Ù„Ù„ØªÙ„Ù…ÙŠØ­Ø§Øª Ø§Ù„Ø®Ø§ØµÙ‘Ø©."
 
 #: gtk/gtkfilechooser.c:130
 msgid "Use Preview Label"
-msgstr "ÇÓÊÎÏÇå ÙäÇåÉ ÇäåÙÇêæÉ"
+msgstr "Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø¹Ù„Ø§Ù…Ø© Ø§Ù„Ù…Ø¹Ø§ÙŠÙ†Ø©"
 
 #: gtk/gtkfilechooser.c:131
 msgid "Whether to display a stock label with the name of the previewed file."
-msgstr "áêåÇ ÅĞÇ ÓÊÙÑÖ ÙäÇåÉ åÎÒèæÉ åÙ ÃÓå Çäåäá ÇäåÙÇêæ."
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ØªØ¹Ø±Ø¶ Ø¹Ù„Ø§Ù…Ø© Ù…Ø®Ø²ÙˆÙ†Ø© Ù…Ø¹ Ø£Ø³Ù… Ø§Ù„Ù…Ù„Ù Ø§Ù„Ù…Ø¹Ø§ÙŠÙ†."
 
 #: gtk/gtkfilechooser.c:136
 msgid "Extra widget"
-msgstr "â×ÙÉ ÇÖÇáêÉ"
+msgstr "Ù‚Ø·Ø¹Ø© Ø§Ø¶Ø§ÙÙŠØ©"
 
 #: gtk/gtkfilechooser.c:137
 msgid "Application supplied widget for extra options."
-msgstr "â×ÙÉ ååÏñÏÉ ÈÊ×Èêâ ääÎêÇÑÇÊ ÇäÅÖÇáêñÉ."
+msgstr "Ù‚Ø·Ø¹Ø© Ù…Ù…Ø¯Ù‘Ø¯Ø© Ø¨ØªØ·Ø¨ÙŠÙ‚ Ù„Ù„Ø®ÙŠØ§Ø±Ø§Øª Ø§Ù„Ø¥Ø¶Ø§ÙÙŠÙ‘Ø©."
 
 #: gtk/gtkfilechooser.c:142
 msgid "Select Multiple"
-msgstr "ÅæÊâÇÁ åÊÙÏñÏ"
+msgstr "Ø¥Ù†ØªÙ‚Ø§Ø¡ Ù…ØªØ¹Ø¯Ù‘Ø¯"
 
 #: gtk/gtkfilechooser.c:143 gtk/gtkfilesel.c:575
 msgid "Whether to allow multiple files to be selected"
-msgstr "åÇ ÅĞÇ ÓêÊå ÇäÓåÇÍ ÈÇæÊâÇÁ åäáÇÊ åÊÙÏÏÉ"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ Ø³ÙŠØªÙ… Ø§Ù„Ø³Ù…Ø§Ø­ Ø¨Ø§Ù†ØªÙ‚Ø§Ø¡ Ù…Ù„ÙØ§Øª Ù…ØªØ¹Ø¯Ø¯Ø©"
 
 #: gtk/gtkfilechooser.c:149
 msgid "Show Hidden"
-msgstr "ÇØçÇÑ ÇäåÎáê"
+msgstr "Ø§Ø¸Ù‡Ø§Ø± Ø§Ù„Ù…Ø®ÙÙŠ"
 
 #: gtk/gtkfilechooser.c:150
 msgid "Whether the hidden files and folders should be displayed"
-msgstr "áêåÇ ÇĞÇ èÌÈ ÙÑÖ ÇäåäáÇÊ è ÇäÏäÇÆä ÇäåÎáêÉ"
+msgstr "ÙÙŠÙ…Ø§ Ø§Ø°Ø§ ÙˆØ¬Ø¨ Ø¹Ø±Ø¶ Ø§Ù„Ù…Ù„ÙØ§Øª Ùˆ Ø§Ù„Ø¯Ù„Ø§Ø¦Ù„ Ø§Ù„Ù…Ø®ÙÙŠØ©"
 
 #: gtk/gtkfilechooserdefault.c:526
 msgid "Default file chooser backend"
-msgstr "ÎäáêñÉ åæÊâê ÇäåäáÇÊ ÇäÅáÊÑÇÖêñÉ"
+msgstr "Ø®Ù„ÙÙŠÙ‘Ø© Ù…Ù†ØªÙ‚ÙŠ Ø§Ù„Ù…Ù„ÙØ§Øª Ø§Ù„Ø¥ÙØªØ±Ø§Ø¶ÙŠÙ‘Ø©"
 
 #: gtk/gtkfilechooserdefault.c:527
 msgid "Name of the GtkFileChooser backend to use by default"
-msgstr "ÇÓå ÎäáêÉ GtkFileChooser ÇäÊê ÓÊÓÊÎÏå ÅáÊÑÇÖêñÇ"
+msgstr "Ø§Ø³Ù… Ø®Ù„ÙÙŠØ© GtkFileChooser Ø§Ù„ØªÙŠ Ø³ØªØ³ØªØ®Ø¯Ù… Ø¥ÙØªØ±Ø§Ø¶ÙŠÙ‘Ø§"
 
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:168
 msgid "Filename"
-msgstr "ÇÓå Çäåäá"
+msgstr "Ø§Ø³Ù… Ø§Ù„Ù…Ù„Ù"
 
 #: gtk/gtkfilesel.c:560
 msgid "The currently selected filename"
-msgstr "ÇÓå Çäåäá ÇäåæÊâé ÍÇäêÇ"
+msgstr "Ø§Ø³Ù… Ø§Ù„Ù…Ù„Ù Ø§Ù„Ù…Ù†ØªÙ‚Ù‰ Ø­Ø§Ù„ÙŠØ§"
 
 #: gtk/gtkfilesel.c:566
 msgid "Show file operations"
-msgstr "ÅØçÇÑ ÙåäêÇÊ ÇäåäáÇÊ"
+msgstr "Ø¥Ø¸Ù‡Ø§Ø± Ø¹Ù…Ù„ÙŠØ§Øª Ø§Ù„Ù…Ù„ÙØ§Øª"
 
 #: gtk/gtkfilesel.c:567
 msgid "Whether buttons for creating/manipulating files should be displayed"
-msgstr "áêå ÇĞÇ èÌÈ ÙÑÖ ÃÒÑÇÑ äÅæÔÇÁ Ãè åÙÇäÌÉ ÇäåäáÇÊ"
+msgstr "ÙÙŠÙ… Ø§Ø°Ø§ ÙˆØ¬Ø¨ Ø¹Ø±Ø¶ Ø£Ø²Ø±Ø§Ø± Ù„Ø¥Ù†Ø´Ø§Ø¡ Ø£Ùˆ Ù…Ø¹Ø§Ù„Ø¬Ø© Ø§Ù„Ù…Ù„ÙØ§Øª"
 
 #: gtk/gtkfilesel.c:574
 msgid "Select multiple"
-msgstr "ÇÎÊêÇÑ åÊÙÏÏ"
+msgstr "Ø§Ø®ØªÙŠØ§Ø± Ù…ØªØ¹Ø¯Ø¯"
 
 #: gtk/gtkfixed.c:121 gtk/gtklayout.c:612
 msgid "X position"
-msgstr "åèâÙ Ó"
+msgstr "Ù…ÙˆÙ‚Ø¹ Ø³"
 
 #: gtk/gtkfixed.c:122 gtk/gtklayout.c:613
 msgid "X position of child widget"
-msgstr "åèâÙ Ó ääâ×ÙÉ ÇäÇÈæÉ"
+msgstr "Ù…ÙˆÙ‚Ø¹ Ø³ Ù„Ù„Ù‚Ø·Ø¹Ø© Ø§Ù„Ø§Ø¨Ù†Ø©"
 
 #: gtk/gtkfixed.c:131 gtk/gtklayout.c:622
 msgid "Y position"
-msgstr "åèâÙ Õ"
+msgstr "Ù…ÙˆÙ‚Ø¹ Øµ"
 
 #: gtk/gtkfixed.c:132 gtk/gtklayout.c:623
 msgid "Y position of child widget"
-msgstr "åèâÙ Õ ääâ×ÙÉ ÇäÇÈæÉ"
+msgstr "Ù…ÙˆÙ‚Ø¹ Øµ Ù„Ù„Ù‚Ø·Ø¹Ø© Ø§Ù„Ø§Ø¨Ù†Ø©"
 
 #: gtk/gtkfontbutton.c:176
 msgid "The title of the font selection dialog"
-msgstr "ÙæèÇæ ÍèÇÑ ÇæÊâÇÁ ÇäÎ×è×"
+msgstr "Ø¹Ù†ÙˆØ§Ù† Ø­ÙˆØ§Ø± Ø§Ù†ØªÙ‚Ø§Ø¡ Ø§Ù„Ø®Ø·ÙˆØ·"
 
 #: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:211
 msgid "Font name"
-msgstr "ÇÓå ÇäÎ×"
+msgstr "Ø§Ø³Ù… Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkfontbutton.c:192
 msgid "The name of the selected font"
-msgstr "ÇÓå ÇäÎ× ÇäåæÊâé"
+msgstr "Ø§Ø³Ù… Ø§Ù„Ø®Ø· Ø§Ù„Ù…Ù†ØªÙ‚Ù‰"
 
 #: gtk/gtkfontbutton.c:193
 msgid "Sans 12"
@@ -1782,234 +1781,234 @@ msgstr "SansÂ·12"
 
 #: gtk/gtkfontbutton.c:207
 msgid "Use font in label"
-msgstr "ÇÓÊÎÏÇå Î× áê ÇäÔÇÑÉ"
+msgstr "Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø®Ø· ÙÙŠ Ø§Ù„Ø´Ø§Ø±Ø©"
 
 #: gtk/gtkfontbutton.c:208
 msgid "Whether the label is drawn in the selected font"
-msgstr "áêåÇ ÅĞÇ ÓÊÑÓå ÇäÙäÇåÉ áê ÇäÎ× ÇäåæÊâé"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ØªØ±Ø³Ù… Ø§Ù„Ø¹Ù„Ø§Ù…Ø© ÙÙŠ Ø§Ù„Ø®Ø· Ø§Ù„Ù…Ù†ØªÙ‚Ù‰"
 
 #: gtk/gtkfontbutton.c:223
 msgid "Use size in label"
-msgstr "ÇÓÊÎÏÇå ÍÌå áê ÇäÔÇÑÉ"
+msgstr "Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø­Ø¬Ù… ÙÙŠ Ø§Ù„Ø´Ø§Ø±Ø©"
 
 #: gtk/gtkfontbutton.c:224
 msgid "Whether the label is drawn with the selected font size"
-msgstr "áêåÇ ÅĞÇ ÓÊÑÓå ÇäÙäÇåÉ ÈÍÌå ÇäÎ× ÇäåæÊâé"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ØªØ±Ø³Ù… Ø§Ù„Ø¹Ù„Ø§Ù…Ø© Ø¨Ø­Ø¬Ù… Ø§Ù„Ø®Ø· Ø§Ù„Ù…Ù†ØªÙ‚Ù‰"
 
 #: gtk/gtkfontbutton.c:240
 msgid "Show style"
-msgstr "ÇØçÇÑ ÇäÃÓäèÈ"
+msgstr "Ø§Ø¸Ù‡Ø§Ø± Ø§Ù„Ø£Ø³Ù„ÙˆØ¨"
 
 #: gtk/gtkfontbutton.c:241
 msgid "Whether the selected font style is shown in the label"
-msgstr "áêåÇ ÅĞÇ ÓêÙÑÖ ÃÓäèÈ ÇäÎ× ÇäåæÊâé áê ÇäÙäÇåÉ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ÙŠØ¹Ø±Ø¶ Ø£Ø³Ù„ÙˆØ¨ Ø§Ù„Ø®Ø· Ø§Ù„Ù…Ù†ØªÙ‚Ù‰ ÙÙŠ Ø§Ù„Ø¹Ù„Ø§Ù…Ø©"
 
 #: gtk/gtkfontbutton.c:256
 msgid "Show size"
-msgstr "ÇØçÇÑ ÇäÍÌå"
+msgstr "Ø§Ø¸Ù‡Ø§Ø± Ø§Ù„Ø­Ø¬Ù…"
 
 #: gtk/gtkfontbutton.c:257
 msgid "Whether selected font size is shown in the label"
-msgstr "áêåÇ ÅĞÇ ÓêÙÑÖ ÍÌå ÇäÎ× ÇäåæÊâé áê ÇäÙäÇåÉ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ÙŠØ¹Ø±Ø¶ Ø­Ø¬Ù… Ø§Ù„Ø®Ø· Ø§Ù„Ù…Ù†ØªÙ‚Ù‰ ÙÙŠ Ø§Ù„Ø¹Ù„Ø§Ù…Ø©"
 
 #: gtk/gtkfontsel.c:212
 msgid "The X string that represents this font"
-msgstr "ÓäÓäÉ X ÇäÊê ÓÊÙÑÖ çĞÇ ÇäÎ×"
+msgstr "Ø³Ù„Ø³Ù„Ø© X Ø§Ù„ØªÙŠ Ø³ØªØ¹Ø±Ø¶ Ù‡Ø°Ø§ Ø§Ù„Ø®Ø·"
 
 #: gtk/gtkfontsel.c:219
 msgid "The GdkFont that is currently selected"
-msgstr "Î× Gdk ÇäåæÊâé ÍÇäêÇë"
+msgstr "Ø®Ø· Gdk Ø§Ù„Ù…Ù†ØªÙ‚Ù‰ Ø­Ø§Ù„ÙŠØ§Ù‹"
 
 #: gtk/gtkfontsel.c:225
 msgid "Preview text"
-msgstr "æÕ ÇääåÍÉ"
+msgstr "Ù†Øµ Ø§Ù„Ù„Ù…Ø­Ø©"
 
 #: gtk/gtkfontsel.c:226
 msgid "The text to display in order to demonstrate the selected font"
-msgstr "ÇäæÕ ÇäĞê ÓêÙÑÖ äÊâÏêå ÇäÎ× ÇäåæÊâé"
+msgstr "Ø§Ù„Ù†Øµ Ø§Ù„Ø°ÙŠ Ø³ÙŠØ¹Ø±Ø¶ Ù„ØªÙ‚Ø¯ÙŠÙ… Ø§Ù„Ø®Ø· Ø§Ù„Ù…Ù†ØªÙ‚Ù‰"
 
 #: gtk/gtkframe.c:127
 msgid "Text of the frame's label"
-msgstr "æÕ ÔÇÑÉ ÇäÅ×ÇÑ"
+msgstr "Ù†Øµ Ø´Ø§Ø±Ø© Ø§Ù„Ø¥Ø·Ø§Ø±"
 
 #: gtk/gtkframe.c:134
 msgid "Label xalign"
-msgstr "ÊÑÕêá Ó ääÙäÇåÉ"
+msgstr "ØªØ±ØµÙŠÙ Ø³ Ù„Ù„Ø¹Ù„Ø§Ù…Ø©"
 
 #: gtk/gtkframe.c:135
 msgid "The horizontal alignment of the label"
-msgstr "ÇäÊÑÕêá ÇäÃáâê ääÔÇÑÉ"
+msgstr "Ø§Ù„ØªØ±ØµÙŠÙ Ø§Ù„Ø£ÙÙ‚ÙŠ Ù„Ù„Ø´Ø§Ø±Ø©"
 
 #: gtk/gtkframe.c:144
 msgid "Label yalign"
-msgstr "ÊÑÕêá Õ ääÙäÇåÉ"
+msgstr "ØªØ±ØµÙŠÙ Øµ Ù„Ù„Ø¹Ù„Ø§Ù…Ø©"
 
 #: gtk/gtkframe.c:145
 msgid "The vertical alignment of the label"
-msgstr "ÇäÊÑÕêá ÇäÙåèÏê ääÔÇÑÉ"
+msgstr "Ø§Ù„ØªØ±ØµÙŠÙ Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ Ù„Ù„Ø´Ø§Ø±Ø©"
 
 #: gtk/gtkframe.c:154 gtk/gtkhandlebox.c:196
 msgid "Deprecated property, use shadow_type instead"
-msgstr "ÎÇÖêÉ åäÚÇÊ¬ ÅÓÊÙåä shadow_type ÙèÖÇ ÙæçÇ"
+msgstr "Ø®Ø§Ø¶ÙŠØ© Ù…Ù„ØºØ§ØªØŒ Ø¥Ø³ØªØ¹Ù…Ù„ shadow_type Ø¹ÙˆØ¶Ø§ Ø¹Ù†Ù‡Ø§"
 
 #: gtk/gtkframe.c:161
 msgid "Frame shadow"
-msgstr "Øä ÇäÅ×ÇÑ"
+msgstr "Ø¸Ù„ Ø§Ù„Ø¥Ø·Ø§Ø±"
 
 #: gtk/gtkframe.c:162
 msgid "Appearance of the frame border"
-msgstr "åØçÑ ÍÏèÏ ÇäÅ×ÇÑ"
+msgstr "Ù…Ø¸Ù‡Ø± Ø­Ø¯ÙˆØ¯ Ø§Ù„Ø¥Ø·Ø§Ø±"
 
 #: gtk/gtkframe.c:171
 msgid "A widget to display in place of the usual frame label"
-msgstr "â×ÙÉ ääÙÑÖ ÙèÖ ÔÇÑÉ ÇäÇØÇÑ ÇäåÙÊÇÏÉ"
+msgstr "Ù‚Ø·Ø¹Ø© Ù„Ù„Ø¹Ø±Ø¶ Ø¹ÙˆØ¶ Ø´Ø§Ø±Ø© Ø§Ù„Ø§Ø¸Ø§Ø± Ø§Ù„Ù…Ø¹ØªØ§Ø¯Ø©"
 
 #: gtk/gtkhandlebox.c:203 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:200
 #: gtk/gtktoolbar.c:572 gtk/gtkviewport.c:151
 msgid "Shadow type"
-msgstr "æèÙ ÇäØä"
+msgstr "Ù†ÙˆØ¹ Ø§Ù„Ø¸Ù„"
 
 #: gtk/gtkhandlebox.c:204
 msgid "Appearance of the shadow that surrounds the container"
-msgstr "åØçÑ ÇäØä ÇäåÃ×Ñ ääÍÇèê"
+msgstr "Ù…Ø¸Ù‡Ø± Ø§Ù„Ø¸Ù„ Ø§Ù„Ù…Ø£Ø·Ø± Ù„Ù„Ø­Ø§ÙˆÙŠ"
 
 #: gtk/gtkhandlebox.c:212
 msgid "Handle position"
-msgstr "åèâÙ ÇäåâÈÖ"
+msgstr "Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ù…Ù‚Ø¨Ø¶"
 
 #: gtk/gtkhandlebox.c:213
 msgid "Position of the handle relative to the child widget"
-msgstr "åèâÙ ÇäåÙÇäÌ æÓÈÉ äâ×ÙÉ ÇäÇÈæ"
+msgstr "Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ù…Ø¹Ø§Ù„Ø¬ Ù†Ø³Ø¨Ø© Ù„Ù‚Ø·Ø¹Ø© Ø§Ù„Ø§Ø¨Ù†"
 
 #: gtk/gtkhandlebox.c:221
 msgid "Snap edge"
-msgstr "ÍÇáÉ ãÇÈÓÉ"
+msgstr "Ø­Ø§ÙØ© Ø³Ø±ÙŠØ¹Ø©"
 
 #: gtk/gtkhandlebox.c:222
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr ""
-"ÍÌå ÕæÏèâ ÇäåÙÇäÌÉ ÇäåÑÕñá åÙ æâ×É ÇäÅÑÓÇÁ äÅÑÓÇÁ ÕæÏèâ ÇäåÙÇäÌÉ"
+"Ø­Ø¬Ù… ØµÙ†Ø¯ÙˆÙ‚ Ø§Ù„Ù…Ø¹Ø§Ù„Ø¬Ø© Ø§Ù„Ù…Ø±ØµÙ‘Ù Ù…Ø¹ Ù†Ù‚Ø·Ø© Ø§Ù„Ø¥Ø±Ø³Ø§Ø¡ Ù„Ø¥Ø±Ø³Ø§Ø¡ ØµÙ†Ø¯ÙˆÙ‚ Ø§Ù„Ù…Ø¹Ø§Ù„Ø¬Ø©"
 
 #: gtk/gtkhandlebox.c:230
 msgid "Snap edge set"
-msgstr "ÖÈ× ÇäÍÇáÉ ÇäãÇÈÓÉ"
+msgstr "Ø¶Ø¨Ø· Ø§Ù„Ø­Ø§ÙØ© Ø§Ù„Ø³Ø±ÙŠØ¹Ø©"
 
 #: gtk/gtkhandlebox.c:231
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
 msgstr ""
-"áêåÇ ÅĞÇ ÓÊÓÊÎÏå ÇäâêåÉ åæ ÎÇÕêñÉ snap_edge Ãè âêåÉ åæ handle_position"
+"ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ØªØ³ØªØ®Ø¯Ù… Ø§Ù„Ù‚ÙŠÙ…Ø© Ù…Ù† Ø®Ø§ØµÙŠÙ‘Ø© snap_edge Ø£Ùˆ Ù‚ÙŠÙ…Ø© Ù…Ù† handle_position"
 
 #: gtk/gtkimage.c:136
 msgid "Pixbuf"
-msgstr "ÈãÓÈá"
+msgstr "Ø¨ÙƒØ³Ø¨Ù"
 
 #: gtk/gtkimage.c:137
 msgid "A GdkPixbuf to display"
-msgstr "GdkPixbuf äÙÑÖç"
+msgstr "GdkPixbuf Ù„Ø¹Ø±Ø¶Ù‡"
 
 #: gtk/gtkimage.c:144
 msgid "Pixmap"
-msgstr "ÈãÓåÇÈ"
+msgstr "Ø¨ÙƒØ³Ù…Ø§Ø¨"
 
 #: gtk/gtkimage.c:145
 msgid "A GdkPixmap to display"
-msgstr "GdkPixmap äÙÑÖçÇ"
+msgstr "GdkPixmap Ù„Ø¹Ø±Ø¶Ù‡Ø§"
 
 #: gtk/gtkimage.c:152
 msgid "Image"
-msgstr "ÕèÑÉ"
+msgstr "ØµÙˆØ±Ø©"
 
 #: gtk/gtkimage.c:153
 msgid "A GdkImage to display"
-msgstr "GdkImage äÙÑÖçÇ"
+msgstr "GdkImage Ù„Ø¹Ø±Ø¶Ù‡Ø§"
 
 #: gtk/gtkimage.c:160
 msgid "Mask"
-msgstr "ÚäÇá"
+msgstr "ØºÙ„Ø§Ù"
 
 #: gtk/gtkimage.c:161
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
-msgstr "ÈêÊåÇÈ ÇäÚäÇá äÇÓÊÎÏÇåç åÙ GdkImage Ãè GdkPixmap"
+msgstr "Ø¨ÙŠØªÙ…Ø§Ø¨ Ø§Ù„ØºÙ„Ø§Ù Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù…Ù‡ Ù…Ø¹ GdkImage Ø£Ùˆ GdkPixmap"
 
 #: gtk/gtkimage.c:169
 msgid "Filename to load and display"
-msgstr "ÇÓå Çäåäá ääÊÍåêä è ÇäÙÑÖ"
+msgstr "Ø§Ø³Ù… Ø§Ù„Ù…Ù„Ù Ù„Ù„ØªØ­Ù…ÙŠÙ„ Ùˆ Ø§Ù„Ø¹Ø±Ø¶"
 
 #: gtk/gtkimage.c:178
 msgid "Stock ID for a stock image to display"
-msgstr "çèêÉ ÇäåÎÒèæ äÕèÑÉ åÎÒèæ ääÙÑÖ"
+msgstr "Ù‡ÙˆÙŠØ© Ø§Ù„Ù…Ø®Ø²ÙˆÙ† Ù„ØµÙˆØ±Ø© Ù…Ø®Ø²ÙˆÙ† Ù„Ù„Ø¹Ø±Ø¶"
 
 #: gtk/gtkimage.c:185
 msgid "Icon set"
-msgstr "åÌåèÙÉ ÇäÃêâèæÇÊ"
+msgstr "Ù…Ø¬Ù…ÙˆØ¹Ø© Ø§Ù„Ø£ÙŠÙ‚ÙˆÙ†Ø§Øª"
 
 #: gtk/gtkimage.c:186
 msgid "Icon set to display"
-msgstr "åÌåèÙÉ ÇäÃêâèæÇÊ ääÙÑÖ"
+msgstr "Ù…Ø¬Ù…ÙˆØ¹Ø© Ø§Ù„Ø£ÙŠÙ‚ÙˆÙ†Ø§Øª Ù„Ù„Ø¹Ø±Ø¶"
 
 #: gtk/gtkimage.c:193
 msgid "Icon size"
-msgstr "ÍÌå ÇäÃêâèæÉ"
+msgstr "Ø­Ø¬Ù… Ø§Ù„Ø£ÙŠÙ‚ÙˆÙ†Ø©"
 
 #: gtk/gtkimage.c:194
 msgid "Size to use for stock icon or icon set"
-msgstr "ÇäÍÌå ääÇÓÊÎÏÇå äÃêâèæÉ ÇäåÎÒèæ Ãè åÌåèÙÉ ÇäÃêâèæÇÊ"
+msgstr "Ø§Ù„Ø­Ø¬Ù… Ù„Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù… Ù„Ø£ÙŠÙ‚ÙˆÙ†Ø© Ø§Ù„Ù…Ø®Ø²ÙˆÙ† Ø£Ùˆ Ù…Ø¬Ù…ÙˆØ¹Ø© Ø§Ù„Ø£ÙŠÙ‚ÙˆÙ†Ø§Øª"
 
 #: gtk/gtkimage.c:202
 msgid "Animation"
-msgstr "ÑÓèå åÊÍÑãÉ"
+msgstr "Ø±Ø³ÙˆÙ… Ù…ØªØ­Ø±ÙƒØ©"
 
 #: gtk/gtkimage.c:203
 msgid "GdkPixbufAnimation to display"
-msgstr "GdkPixbufAnimation äÙÑÖçÇ"
+msgstr "GdkPixbufAnimation Ù„Ø¹Ø±Ø¶Ù‡Ø§"
 
 #: gtk/gtkimage.c:210
 msgid "Storage type"
-msgstr "æèÙ ÇäÊÎÒêæ"
+msgstr "Ù†ÙˆØ¹ Ø§Ù„ØªØ®Ø²ÙŠÙ†"
 
 #: gtk/gtkimage.c:211
 msgid "The representation being used for image data"
-msgstr "ÇäÊâÏêå ÇäåÓÊÙåä äÈêÇæÇÊ ÇäÑÓèå"
+msgstr "Ø§Ù„ØªÙ‚Ø¯ÙŠÙ… Ø§Ù„Ù…Ø³ØªØ¹Ù…Ù„ Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø±Ø³ÙˆÙ…"
 
 #: gtk/gtkimagemenuitem.c:138
 msgid "Image widget"
-msgstr "â×ÙÉ ÕèÑÉ"
+msgstr "Ù‚Ø·Ø¹Ø© ØµÙˆØ±Ø©"
 
 #: gtk/gtkimagemenuitem.c:139
 msgid "Child widget to appear next to the menu text"
-msgstr "Çäâ×ÙÉ ÇäÇÈæ ÇäÊê ÓÊØçÑ Åäé ÌÇæÈ æÕ ÇäâÇÆåÉ"
+msgstr "Ø§Ù„Ù‚Ø·Ø¹Ø© Ø§Ù„Ø§Ø¨Ù† Ø§Ù„ØªÙŠ Ø³ØªØ¸Ù‡Ø± Ø¥Ù„Ù‰ Ø¬Ø§Ù†Ø¨ Ù†Øµ Ø§Ù„Ù‚Ø§Ø¦Ù…Ø©"
 
 #: gtk/gtkimagemenuitem.c:144
 msgid "Show menu images"
-msgstr "ÇØçÇÑ ÕèÑ ÇäâèÇÆå"
+msgstr "Ø§Ø¸Ù‡Ø§Ø± ØµÙˆØ± Ø§Ù„Ù‚ÙˆØ§Ø¦Ù…"
 
 #: gtk/gtkimagemenuitem.c:145
 msgid "Whether images should be shown in menus"
-msgstr "áêåÇ ÅĞÇ ÓêÊå ÅØçÇÑ ÕèÑ áê ÇäâèÇÆå"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ÙŠØªÙ… Ø¥Ø¸Ù‡Ø§Ø± ØµÙˆØ± ÙÙŠ Ø§Ù„Ù‚ÙˆØ§Ø¦Ù…"
 
 #: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:543
 msgid "Screen"
-msgstr "ÔÇÔÉ"
+msgstr "Ø´Ø§Ø´Ø©"
 
 #: gtk/gtkinvisible.c:116 gtk/gtkwindow.c:544
 msgid "The screen where this window will be displayed"
-msgstr "ÇäÔÇÔÉ ÇäÊê ÓÊÙÑÖ áêçÇ çĞç ÇäæÇáĞÉ"
+msgstr "Ø§Ù„Ø´Ø§Ø´Ø© Ø§Ù„ØªÙŠ Ø³ØªØ¹Ø±Ø¶ ÙÙŠÙ‡Ø§ Ù‡Ø°Ù‡ Ø§Ù„Ù†Ø§ÙØ°Ø©"
 
 #: gtk/gtklabel.c:293
 msgid "The text of the label"
-msgstr "æÕ ÇäÔÇÑÉ"
+msgstr "Ù†Øµ Ø§Ù„Ø´Ø§Ø±Ø©"
 
 #: gtk/gtklabel.c:300
 msgid "A list of style attributes to apply to the text of the label"
-msgstr "âÇÆåÉ äÕáÇÊ ÇäÃÓÇäêÈ äÊ×ÈêâçÇ Ùäé æÕ ÇäÙäÇåÉ"
+msgstr "Ù‚Ø§Ø¦Ù…Ø© Ù„ØµÙØ§Øª Ø§Ù„Ø£Ø³Ø§Ù„ÙŠØ¨ Ù„ØªØ·Ø¨ÙŠÙ‚Ù‡Ø§ Ø¹Ù„Ù‰ Ù†Øµ Ø§Ù„Ø¹Ù„Ø§Ù…Ø©"
 
 #: gtk/gtklabel.c:321 gtk/gtktexttag.c:375 gtk/gtktextview.c:603
 msgid "Justification"
-msgstr "ÖÈ×"
+msgstr "Ø¶Ø¨Ø·"
 
 #: gtk/gtklabel.c:322
 msgid ""
@@ -2017,110 +2016,110 @@ msgid ""
 "This does NOT affect the alignment of the label within its allocation. See "
 "GtkMisc::xalign for that"
 msgstr ""
-"ÊÑÕêá ÇäÓ×èÑ áê æÕ ÇäÙäÇåÉ ÈÇäæÓÈÉ äÈÙÖçÇ ÇäÈÙÖ. "
-"äÇ êÄËñÑ çĞÇ áê ÊÑÕêá ÇäÙäÇåÉ æáÓçÇ áê åãÇæçÇ ÇäåÎÕÕ äçÇ. "
-"ÑÇÌÙ GtkMisc::xalign ääåÒêÏ åæ ÇäÙåäèåÇÊ"
+"ØªØ±ØµÙŠÙ Ø§Ù„Ø³Ø·ÙˆØ± ÙÙŠ Ù†Øµ Ø§Ù„Ø¹Ù„Ø§Ù…Ø© Ø¨Ø§Ù„Ù†Ø³Ø¨Ø© Ù„Ø¨Ø¹Ø¶Ù‡Ø§ Ø§Ù„Ø¨Ø¹Ø¶. "
+"Ù„Ø§ ÙŠØ¤Ø«Ù‘Ø± Ù‡Ø°Ø§ ÙÙŠ ØªØ±ØµÙŠÙ Ø§Ù„Ø¹Ù„Ø§Ù…Ø© Ù†ÙØ³Ù‡Ø§ ÙÙŠ Ù…ÙƒØ§Ù†Ù‡Ø§ Ø§Ù„Ù…Ø®ØµØµ Ù„Ù‡Ø§. "
+"Ø±Ø§Ø¬Ø¹ GtkMisc::xalign Ù„Ù„Ù…Ø²ÙŠØ¯ Ù…Ù† Ø§Ù„Ø¹Ù…Ù„ÙˆÙ…Ø§Øª"
 
 #: gtk/gtklabel.c:330
 msgid "Pattern"
-msgstr "æå×"
+msgstr "Ù†Ù…Ø·"
 
 #: gtk/gtklabel.c:331
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
 msgstr ""
-"ÓäÓäÉ ÈÑåèÒ _ áê åèÇâÙ åÙêæÉ êÑåÒ äÑåèÒ ÓÊÓ×ñÑ áê ÇäæÕ"
+"Ø³Ù„Ø³Ù„Ø© Ø¨Ø±Ù…ÙˆØ² _ ÙÙŠ Ù…ÙˆØ§Ù‚Ø¹ Ù…Ø¹ÙŠÙ†Ø© ÙŠØ±Ù…Ø² Ù„Ø±Ù…ÙˆØ² Ø³ØªØ³Ø·Ù‘Ø± ÙÙŠ Ø§Ù„Ù†Øµ"
 
 #: gtk/gtklabel.c:338
 msgid "Line wrap"
-msgstr "Êâ×êÙ ÇäÓ×èÑ"
+msgstr "ØªÙ‚Ø·ÙŠØ¹ Ø§Ù„Ø³Ø·ÙˆØ±"
 
 #: gtk/gtklabel.c:339
 msgid "If set, wrap lines if the text becomes too wide"
-msgstr "ÇĞÇ ÖÈ×¬ áÓÊâ×Ù ÇäÓ×èÑ ÙæÏåÇ êÕÈÍ ÇäæÕ èÇÓÙÇ ÌÏÇ"
+msgstr "Ø§Ø°Ø§ Ø¶Ø¨Ø·ØŒ ÙØ³ØªÙ‚Ø·Ø¹ Ø§Ù„Ø³Ø·ÙˆØ± Ø¹Ù†Ø¯Ù…Ø§ ÙŠØµØ¨Ø­ Ø§Ù„Ù†Øµ ÙˆØ§Ø³Ø¹Ø§ Ø¬Ø¯Ø§"
 
 #: gtk/gtklabel.c:345
 msgid "Selectable"
-msgstr "âÇÈä ääÇÎÊêÇÑ"
+msgstr "Ù‚Ø§Ø¨Ù„ Ù„Ù„Ø§Ø®ØªÙŠØ§Ø±"
 
 #: gtk/gtklabel.c:346
 msgid "Whether the label text can be selected with the mouse"
-msgstr "áêåÇ ÇĞÇ ãÇæ åæ Çäååãæ ÇæÊâÇÁ æÕ ÇäÔÇÑÉ ÈÇäáÃÑÉ"
+msgstr "ÙÙŠÙ…Ø§ Ø§Ø°Ø§ ÙƒØ§Ù† Ù…Ù† Ø§Ù„Ù…Ù…ÙƒÙ† Ø§Ù†ØªÙ‚Ø§Ø¡ Ù†Øµ Ø§Ù„Ø´Ø§Ø±Ø© Ø¨Ø§Ù„ÙØ£Ø±Ø©"
 
 #: gtk/gtklabel.c:352
 msgid "Mnemonic key"
-msgstr "åáÊÇÍ ÇäÅÎÊÕÇÑ ÇäåÓ×ñÑ"
+msgstr "Ù…ÙØªØ§Ø­ Ø§Ù„Ø¥Ø®ØªØµØ§Ø± Ø§Ù„Ù…Ø³Ø·Ù‘Ø±"
 
 #: gtk/gtklabel.c:353
 msgid "The mnemonic accelerator key for this label"
-msgstr "åáÊÇÍ ÇäÅÎÊÕÇÑ ÇäåÓ×Ñ äçĞç ÇäÙäÇåÉ"
+msgstr "Ù…ÙØªØ§Ø­ Ø§Ù„Ø¥Ø®ØªØµØ§Ø± Ø§Ù„Ù…Ø³Ø·Ø± Ù„Ù‡Ø°Ù‡ Ø§Ù„Ø¹Ù„Ø§Ù…Ø©"
 
 #: gtk/gtklabel.c:361
 msgid "Mnemonic widget"
-msgstr "â×ÙÉ åáÊÇÍ ÇäÅÎÊÕÇÑ ÇäåÓ×Ñ"
+msgstr "Ù‚Ø·Ø¹Ø© Ù…ÙØªØ§Ø­ Ø§Ù„Ø¥Ø®ØªØµØ§Ø± Ø§Ù„Ù…Ø³Ø·Ø±"
 
 #: gtk/gtklabel.c:362
 msgid "The widget to be activated when the label's mnemonic key is pressed"
-msgstr "Çäâ×ÙÉ ÇäÊê ÓÊáÙä ÙæÏ æâÑ åáÊÇÍ ÇäÅÎÊÕÇÑ ÇäåÓ×Ñ"
+msgstr "Ø§Ù„Ù‚Ø·Ø¹Ø© Ø§Ù„ØªÙŠ Ø³ØªÙØ¹Ù„ Ø¹Ù†Ø¯ Ù†Ù‚Ø± Ù…ÙØªØ§Ø­ Ø§Ù„Ø¥Ø®ØªØµØ§Ø± Ø§Ù„Ù…Ø³Ø·Ø±"
 
 #: gtk/gtklayout.c:632 gtk/gtkviewport.c:135
 msgid "Horizontal adjustment"
-msgstr "ÖÈ× Ãáâê"
+msgstr "Ø¶Ø¨Ø· Ø£ÙÙ‚ÙŠ"
 
 #: gtk/gtklayout.c:633 gtk/gtkscrolledwindow.c:238
 msgid "The GtkAdjustment for the horizontal position"
-msgstr "GtkAdjustment ääåèâÙ ÇäÃáâê"
+msgstr "GtkAdjustment Ù„Ù„Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ø£ÙÙ‚ÙŠ"
 
 #: gtk/gtklayout.c:640 gtk/gtkviewport.c:143
 msgid "Vertical adjustment"
-msgstr "ÖÈ× ÙåèÏê"
+msgstr "Ø¶Ø¨Ø· Ø¹Ù…ÙˆØ¯ÙŠ"
 
 #: gtk/gtklayout.c:641 gtk/gtkscrolledwindow.c:245
 msgid "The GtkAdjustment for the vertical position"
-msgstr "GtkAdjustment ääåèâÙ ÇäÙåèÏê"
+msgstr "GtkAdjustment Ù„Ù„Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ"
 
 #: gtk/gtklayout.c:649
 msgid "The width of the layout"
-msgstr "ÙÑÖ ÇäÊÕåêå"
+msgstr "Ø¹Ø±Ø¶ Ø§Ù„ØªØµÙ…ÙŠÙ…"
 
 #: gtk/gtklayout.c:658
 msgid "The height of the layout"
-msgstr "ÇÑÊáÇÙ ÇäÊÕåêå"
+msgstr "Ø§Ø±ØªÙØ§Ø¹ Ø§Ù„ØªØµÙ…ÙŠÙ…"
 
 #: gtk/gtkmenu.c:355
 msgid "Tearoff Title"
-msgstr "â×á ÇäÙæèÇæ"
+msgstr "Ù‚Ø·Ù Ø§Ù„Ø¹Ù†ÙˆØ§Ù†"
 
 #: gtk/gtkmenu.c:356
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
-"ÙæèÇæ âÏ êÙÑÖ åæ âÈä åÏêÑ ÇäæèÇáĞ ÙæÏ â×á çĞç ÇäâÇÆåÉ"
+"Ø¹Ù†ÙˆØ§Ù† Ù‚Ø¯ ÙŠØ¹Ø±Ø¶ Ù…Ù† Ù‚Ø¨Ù„ Ù…Ø¯ÙŠØ± Ø§Ù„Ù†ÙˆØ§ÙØ° Ø¹Ù†Ø¯ Ù‚Ø·Ù Ù‡Ø°Ù‡ Ø§Ù„Ù‚Ø§Ø¦Ù…Ø©"
 
 #: gtk/gtkmenu.c:362
 msgid "Vertical Padding"
-msgstr "ÇäÍÔè ÇäÙåèÏê"
+msgstr "Ø§Ù„Ø­Ø´Ùˆ Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ"
 
 #: gtk/gtkmenu.c:363
 msgid "Extra space at the top and bottom of the menu"
-msgstr "åÓÇÍÉ ÇÖÇáêÉ äÃÙäé èÃÓáä ÇäâÇÆåÉ"
+msgstr "Ù…Ø³Ø§Ø­Ø© Ø§Ø¶Ø§ÙÙŠØ© Ù„Ø£Ø¹Ù„Ù‰ ÙˆØ£Ø³ÙÙ„ Ø§Ù„Ù‚Ø§Ø¦Ù…Ø©"
 
 #: gtk/gtkmenu.c:371
 msgid "Vertical Offset"
-msgstr "ÇäÊãÇáÄ ÇäÙåèÏê"
+msgstr "Ø§Ù„ØªÙƒØ§ÙØ¤ Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ"
 
 #: gtk/gtkmenu.c:372
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
-"ÙæÏåÇ Êãèæ ÇäâÇÆåÉ âÇÆåÉ áÑÙêñÉ ÊåèâÙ çĞÇ ÇäÙÏÏ åæ ÇäÈãÓäÇÊ ÙåèÏêñÇ ãÊÙèêÖ"
+"Ø¹Ù†Ø¯Ù…Ø§ ØªÙƒÙˆÙ† Ø§Ù„Ù‚Ø§Ø¦Ù…Ø© Ù‚Ø§Ø¦Ù…Ø© ÙØ±Ø¹ÙŠÙ‘Ø© ØªÙ…ÙˆÙ‚Ø¹ Ù‡Ø°Ø§ Ø§Ù„Ø¹Ø¯Ø¯ Ù…Ù† Ø§Ù„Ø¨ÙƒØ³Ù„Ø§Øª Ø¹Ù…ÙˆØ¯ÙŠÙ‘Ø§ ÙƒØªØ¹ÙˆÙŠØ¶"
 
 #: gtk/gtkmenu.c:380
 msgid "Horizontal Offset"
-msgstr "ÇäÊãÇáÄ ÇäÙåèÏê"
+msgstr "Ø§Ù„ØªÙƒØ§ÙØ¤ Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ"
 
 #: gtk/gtkmenu.c:381
 msgid ""
@@ -2131,15 +2130,15 @@ msgstr ""
 
 #: gtk/gtkmenu.c:391
 msgid "Left Attach"
-msgstr "ÑÈ× Ùäé ÇäêÓÇÑ"
+msgstr "Ø±Ø¨Ø· Ø¹Ù„Ù‰ Ø§Ù„ÙŠØ³Ø§Ø±"
 
 #: gtk/gtkmenu.c:392 gtk/gtktable.c:204
 msgid "The column number to attach the left side of the child to"
-msgstr "Ñâå ÇäÙåèÏ ÇäĞê Åäêç ÓÊÑÈ× ÇäÌçÉ ÇäêÓÑé ääÅÈæ"
+msgstr "Ø±Ù‚Ù… Ø§Ù„Ø¹Ù…ÙˆØ¯ Ø§Ù„Ø°ÙŠ Ø¥Ù„ÙŠÙ‡ Ø³ØªØ±Ø¨Ø· Ø§Ù„Ø¬Ù‡Ø© Ø§Ù„ÙŠØ³Ø±Ù‰ Ù„Ù„Ø¥Ø¨Ù†"
 
 #: gtk/gtkmenu.c:399
 msgid "Right Attach"
-msgstr "ÑÈ× Ùäé Çäêåêæ"
+msgstr "Ø±Ø¨Ø· Ø¹Ù„Ù‰ Ø§Ù„ÙŠÙ…ÙŠÙ†"
 
 #: gtk/gtkmenu.c:400
 msgid "The column number to attach the right side of the child to"
@@ -2147,7 +2146,7 @@ msgstr "Ø±Ù‚Ù…Â·Ø§Ù„Ø¹Ù…ÙˆØ¯Â·Ø§Ù„Ø°ÙŠÂ·Ø¥Ù„ÙŠÙ‡Â·Ø³ØªØ±Ø¨Ø·Â·Ø§Ù„Ø¬Ù‡Ø©Â·Ø§Ù„ÙŠ
 
 #: gtk/gtkmenu.c:407
 msgid "Top Attach"
-msgstr "ÑÈ× ÈÇäÃÙäé"
+msgstr "Ø±Ø¨Ø· Ø¨Ø§Ù„Ø£Ø¹Ù„Ù‰"
 
 #: gtk/gtkmenu.c:408
 msgid "The row number to attach the top of the child to"
@@ -2155,7 +2154,7 @@ msgstr "Ø±Ù‚Ù…Â·Ø§Ù„Ø³Ø·Ø±Â·Ø§Ù„Ø°ÙŠÂ·Ø¥Ù„ÙŠÙ‡Â·Ø³ØªØ±Ø¨Ø·Â·Ø§Ù„Ø¬Ù‡Ø©Â·Ø§Ù„Ø¹Ù„
 
 #: gtk/gtkmenu.c:415
 msgid "Bottom Attach"
-msgstr "ÑÈ× ÈÇäÃÓáä"
+msgstr "Ø±Ø¨Ø· Ø¨Ø§Ù„Ø£Ø³ÙÙ„"
 
 #: gtk/gtkmenu.c:416 gtk/gtktable.c:225
 msgid "The row number to attach the bottom of the child to"
@@ -2163,323 +2162,323 @@ msgstr "Ø±Ù‚Ù…Â·Ø§Ù„Ø³Ø·Ø±Â·Ø§Ù„Ø°ÙŠÂ·Ø¥Ù„ÙŠÙ‡Â·Ø³ØªØ±Ø¨Ø·Â·Ø§Ù„Ø¬Ù‡Ø©Â·Ø§Ù„Ø³Ù
 
 #: gtk/gtkmenu.c:503
 msgid "Can change accelerators"
-msgstr "åæ Çäååãæ ÊÚêêÑ åáÇÊêÍ ÇäÇÎÊÕÇÑ"
+msgstr "Ù…Ù† Ø§Ù„Ù…Ù…ÙƒÙ† ØªØºÙŠÙŠØ± Ù…ÙØ§ØªÙŠØ­ Ø§Ù„Ø§Ø®ØªØµØ§Ø±"
 
 #: gtk/gtkmenu.c:504
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
-"áêåÇ ÇĞÇ ãÇæ åæ Çäååãæ ÊÚêêÑ åáÇÊêÍ ÇÎÊÕÇÑ ÇäâèÇÆå ÈÖÚ× åáÊÇÍ áèâ ÙæÕÑ "
-"ÇäâÇÆåÉ"
+"ÙÙŠÙ…Ø§ Ø§Ø°Ø§ ÙƒØ§Ù† Ù…Ù† Ø§Ù„Ù…Ù…ÙƒÙ† ØªØºÙŠÙŠØ± Ù…ÙØ§ØªÙŠØ­ Ø§Ø®ØªØµØ§Ø± Ø§Ù„Ù‚ÙˆØ§Ø¦Ù… Ø¨Ø¶ØºØ· Ù…ÙØªØ§Ø­ ÙÙˆÙ‚ Ø¹Ù†ØµØ± "
+"Ø§Ù„Ù‚Ø§Ø¦Ù…Ø©"
 
 #: gtk/gtkmenu.c:509
 msgid "Delay before submenus appear"
-msgstr "ÇäÊÃÎêÑ âÈä ØçèÑ ÇäâèÇÆå ÇäåÍèêÉ"
+msgstr "Ø§Ù„ØªØ£Ø®ÙŠØ± Ù‚Ø¨Ù„ Ø¸Ù‡ÙˆØ± Ø§Ù„Ù‚ÙˆØ§Ø¦Ù… Ø§Ù„Ù…Ø­ÙˆÙŠØ©"
 
 #: gtk/gtkmenu.c:510
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
-"ÇäèâÊ ÇäÃÏæé ÇäĞê êÌÈ Ãæ êÈâé áêç ÇäåÄÔÑ áèâ ÙæÕÑ âÇÆåÉ äÊØçÑ ÇäâÇÆåÉ ÇäåÍèêÉ"
+"Ø§Ù„ÙˆÙ‚Øª Ø§Ù„Ø£Ø¯Ù†Ù‰ Ø§Ù„Ø°ÙŠ ÙŠØ¬Ø¨ Ø£Ù† ÙŠØ¨Ù‚Ù‰ ÙÙŠÙ‡ Ø§Ù„Ù…Ø¤Ø´Ø± ÙÙˆÙ‚ Ø¹Ù†ØµØ± Ù‚Ø§Ø¦Ù…Ø© Ù„ØªØ¸Ù‡Ø± Ø§Ù„Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ù…Ø­ÙˆÙŠØ©"
 
 #: gtk/gtkmenu.c:517
 msgid "Delay before hiding a submenu"
-msgstr "ÇäÊÃÎêÑ âÈä ÇÎáÇÁ âÇÆåÉ åÍèêÉ"
+msgstr "Ø§Ù„ØªØ£Ø®ÙŠØ± Ù‚Ø¨Ù„ Ø§Ø®ÙØ§Ø¡ Ù‚Ø§Ø¦Ù…Ø© Ù…Ø­ÙˆÙŠØ©"
 
 #: gtk/gtkmenu.c:518
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
 msgstr ""
-"ÇäèâÊ âÈä ÅÎáÇÁ âÇÆåÉ áÑÙêñÉ ÙæÏ Êæâñä ÇäåÄÔÑ æÍè ÇäâÇÆåÉ ÇäáÑÙêñÉ"
+"Ø§Ù„ÙˆÙ‚Øª Ù‚Ø¨Ù„ Ø¥Ø®ÙØ§Ø¡ Ù‚Ø§Ø¦Ù…Ø© ÙØ±Ø¹ÙŠÙ‘Ø© Ø¹Ù†Ø¯ ØªÙ†Ù‚Ù‘Ù„ Ø§Ù„Ù…Ø¤Ø´Ø± Ù†Ø­Ùˆ Ø§Ù„Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„ÙØ±Ø¹ÙŠÙ‘Ø©"
 
 #: gtk/gtkmenubar.c:157
 msgid "Style of bevel around the menubar"
-msgstr "ÃÓäèÈ ÇäÍÇáÉ Íèä ÙåèÏ ÇäâèÇÆå"
+msgstr "Ø£Ø³Ù„ÙˆØ¨ Ø§Ù„Ø­Ø§ÙØ© Ø­ÙˆÙ„ Ø¹Ù…ÙˆØ¯ Ø§Ù„Ù‚ÙˆØ§Ø¦Ù…"
 
 #: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:548
 msgid "Internal padding"
-msgstr "ÇäÍÔè ÇäÏÇÎäê"
+msgstr "Ø§Ù„Ø­Ø´Ùˆ Ø§Ù„Ø¯Ø§Ø®Ù„ÙŠ"
 
 #: gtk/gtkmenubar.c:165
 msgid "Amount of border space between the menubar shadow and the menu items"
-msgstr "åâÏÇÑ åÓÇáÉ ÇäÍÏ Èêæ Øä ÙåèÏ ÇäâÇÆåÉ èÙæÇÕÑ ÇäâÇÆåÉ"
+msgstr "Ù…Ù‚Ø¯Ø§Ø± Ù…Ø³Ø§ÙØ© Ø§Ù„Ø­Ø¯ Ø¨ÙŠÙ† Ø¸Ù„ Ø¹Ù…ÙˆØ¯ Ø§Ù„Ù‚Ø§Ø¦Ù…Ø© ÙˆØ¹Ù†Ø§ØµØ± Ø§Ù„Ù‚Ø§Ø¦Ù…Ø©"
 
 #: gtk/gtkmenubar.c:172
 msgid "Delay before drop down menus appear"
-msgstr "ÇäÊÃÎêÑ âÈä ØçèÑ ÇäâÇÆå ÇäåæÍÏÑÉ"
+msgstr "Ø§Ù„ØªØ£Ø®ÙŠØ± Ù‚Ø¨Ù„ Ø¸Ù‡ÙˆØ± Ø§Ù„Ù‚Ø§Ø¦Ù… Ø§Ù„Ù…Ù†Ø­Ø¯Ø±Ø©"
 
 #: gtk/gtkmenubar.c:173
 msgid "Delay before the submenus of a menu bar appear"
-msgstr "ÇäÊÃÎêÑ âÈä Ãæ ÊØçÑ ÇäâèÇÆå ÇäåÍèêÉ äÙåèÏ âÇÆåÉ"
+msgstr "Ø§Ù„ØªØ£Ø®ÙŠØ± Ù‚Ø¨Ù„ Ø£Ù† ØªØ¸Ù‡Ø± Ø§Ù„Ù‚ÙˆØ§Ø¦Ù… Ø§Ù„Ù…Ø­ÙˆÙŠØ© Ù„Ø¹Ù…ÙˆØ¯ Ù‚Ø§Ø¦Ù…Ø©"
 
 #: gtk/gtkmessagedialog.c:107
 msgid "Image/label border"
-msgstr "ÍÏ ÇäÕèÑÉ/ÇäÔÇÑÉ"
+msgstr "Ø­Ø¯ Ø§Ù„ØµÙˆØ±Ø©/Ø§Ù„Ø´Ø§Ø±Ø©"
 
 #: gtk/gtkmessagedialog.c:108
 msgid "Width of border around the label and image in the message dialog"
-msgstr "ÙÑÖ ÇäÍÏ Íèä ÇäÔÇÑÉ èÇäÕèÑÉ áê ÍèÇÑ ÇäÑÓÇäÉ"
+msgstr "Ø¹Ø±Ø¶ Ø§Ù„Ø­Ø¯ Ø­ÙˆÙ„ Ø§Ù„Ø´Ø§Ø±Ø© ÙˆØ§Ù„ØµÙˆØ±Ø© ÙÙŠ Ø­ÙˆØ§Ø± Ø§Ù„Ø±Ø³Ø§Ù„Ø©"
 
 #: gtk/gtkmessagedialog.c:123
 msgid "Use separator"
-msgstr "ÇÓÊÎÏå áÇÕä"
+msgstr "Ø§Ø³ØªØ®Ø¯Ù… ÙØ§ØµÙ„"
 
 #: gtk/gtkmessagedialog.c:124
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
 msgstr ""
-"áêåÇ ÅĞÇ ÓêèÖÙ áÇÕä Èêæ æÕ ÍèÇÑ ÇäÑÓÇäÉ è ÇäÃÒÑÇÑ"
+"ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ÙŠÙˆØ¶Ø¹ ÙØ§ØµÙ„ Ø¨ÙŠÙ† Ù†Øµ Ø­ÙˆØ§Ø± Ø§Ù„Ø±Ø³Ø§Ù„Ø© Ùˆ Ø§Ù„Ø£Ø²Ø±Ø§Ø±"
 
 #: gtk/gtkmessagedialog.c:130
 msgid "Message Type"
-msgstr "æèÙ ÇäÑÓÇäÉ"
+msgstr "Ù†ÙˆØ¹ Ø§Ù„Ø±Ø³Ø§Ù„Ø©"
 
 #: gtk/gtkmessagedialog.c:131
 msgid "The type of message"
-msgstr "æèÙ ÇäÑÓÇäÉ"
+msgstr "Ù†ÙˆØ¹ Ø§Ù„Ø±Ø³Ø§Ù„Ø©"
 
 #: gtk/gtkmessagedialog.c:138
 msgid "Message Buttons"
-msgstr "ÃÒÑÇÑ ÇäÑÓÇäÉ"
+msgstr "Ø£Ø²Ø±Ø§Ø± Ø§Ù„Ø±Ø³Ø§Ù„Ø©"
 
 #: gtk/gtkmessagedialog.c:139
 msgid "The buttons shown in the message dialog"
-msgstr "ÇäÃÒÑÇÑ ÇäåÙÑèÖÉ áê ÍèÇÑ ÇäÑÓÇäÉ"
+msgstr "Ø§Ù„Ø£Ø²Ø±Ø§Ø± Ø§Ù„Ù…Ø¹Ø±ÙˆØ¶Ø© ÙÙŠ Ø­ÙˆØ§Ø± Ø§Ù„Ø±Ø³Ø§Ù„Ø©"
 
 #: gtk/gtkmisc.c:109
 msgid "Y align"
-msgstr "ÊæÓêâ Õ"
+msgstr "ØªÙ†Ø³ÙŠÙ‚ Øµ"
 
 #: gtk/gtkmisc.c:110
 msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
-msgstr "ÇäÊæÓêâ ÇäÙåèÏê¬ åæ 0 (áèâ) Åäé 1 (ÊÍÊ)"
+msgstr "Ø§Ù„ØªÙ†Ø³ÙŠÙ‚ Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠØŒ Ù…Ù† 0 (ÙÙˆÙ‚) Ø¥Ù„Ù‰ 1 (ØªØ­Øª)"
 
 #: gtk/gtkmisc.c:119
 msgid "X pad"
-msgstr "ÍÔè Ó"
+msgstr "Ø­Ø´Ùˆ Ø³"
 
 #: gtk/gtkmisc.c:120
 msgid ""
 "The amount of space to add on the left and right of the widget, in pixels"
-msgstr "ÇäåÓÇÍÉ ÇäÊê ÓÊÖÇá äêåêæ èêÓÇÑ Çäâ×ÙÉ¬ ÈÇäÈãÓä"
+msgstr "Ø§Ù„Ù…Ø³Ø§Ø­Ø© Ø§Ù„ØªÙŠ Ø³ØªØ¶Ø§Ù Ù„ÙŠÙ…ÙŠÙ† ÙˆÙŠØ³Ø§Ø± Ø§Ù„Ù‚Ø·Ø¹Ø©ØŒ Ø¨Ø§Ù„Ø¨ÙƒØ³Ù„"
 
 #: gtk/gtkmisc.c:129
 msgid "Y pad"
-msgstr "ÍÔè Õ"
+msgstr "Ø­Ø´Ùˆ Øµ"
 
 #: gtk/gtkmisc.c:130
 msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
-msgstr "ÇäåÓÇÍÉ ÇäÊê ÊÖÇá äÃÙäé èÃÓáä Çäâ×ÙÉ¬ ÈÇäÈãÓä"
+msgstr "Ø§Ù„Ù…Ø³Ø§Ø­Ø© Ø§Ù„ØªÙŠ ØªØ¶Ø§Ù Ù„Ø£Ø¹Ù„Ù‰ ÙˆØ£Ø³ÙÙ„ Ø§Ù„Ù‚Ø·Ø¹Ø©ØŒ Ø¨Ø§Ù„Ø¨ÙƒØ³Ù„"
 
 #: gtk/gtknotebook.c:397
 msgid "Page"
-msgstr "ÕáÍÉ"
+msgstr "ØµÙØ­Ø©"
 
 #: gtk/gtknotebook.c:398
 msgid "The index of the current page"
-msgstr "Ïäêä ÇäÕáÍÉ ÇäÍÇäêÉ"
+msgstr "Ø¯Ù„ÙŠÙ„ Ø§Ù„ØµÙØ­Ø© Ø§Ù„Ø­Ø§Ù„ÙŠØ©"
 
 #: gtk/gtknotebook.c:406
 msgid "Tab Position"
-msgstr "åèâÙ ÇääÓÇæ"
+msgstr "Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ù„Ø³Ø§Ù†"
 
 #: gtk/gtknotebook.c:407
 msgid "Which side of the notebook holds the tabs"
-msgstr "Ãê ÌçÉ åæ ÇäÏáÊÑ ÊÍèê ÇäÃäÓæÉ"
+msgstr "Ø£ÙŠ Ø¬Ù‡Ø© Ù…Ù† Ø§Ù„Ø¯ÙØªØ± ØªØ­ÙˆÙŠ Ø§Ù„Ø£Ù„Ø³Ù†Ø©"
 
 #: gtk/gtknotebook.c:414
 msgid "Tab Border"
-msgstr "ÍÏ ÇääÓÇæ"
+msgstr "Ø­Ø¯ Ø§Ù„Ù„Ø³Ø§Ù†"
 
 #: gtk/gtknotebook.c:415
 msgid "Width of the border around the tab labels"
-msgstr "ÙÑÖ ÇäÍÏ Íèä ÔÇÑÇÊ ÇäÃäÓæÉ"
+msgstr "Ø¹Ø±Ø¶ Ø§Ù„Ø­Ø¯ Ø­ÙˆÙ„ Ø´Ø§Ø±Ø§Øª Ø§Ù„Ø£Ù„Ø³Ù†Ø©"
 
 #: gtk/gtknotebook.c:423
 msgid "Horizontal Tab Border"
-msgstr "ÍÏ ÇääÓÇæ ÇäÃáâê"
+msgstr "Ø­Ø¯ Ø§Ù„Ù„Ø³Ø§Ù† Ø§Ù„Ø£ÙÙ‚ÙŠ"
 
 #: gtk/gtknotebook.c:424
 msgid "Width of the horizontal border of tab labels"
-msgstr "ÙÑÖ ÇäÍÏ ÇäÃáâê äÔÇÑÇÊ ÇäÃäÓæÉ"
+msgstr "Ø¹Ø±Ø¶ Ø§Ù„Ø­Ø¯ Ø§Ù„Ø£ÙÙ‚ÙŠ Ù„Ø´Ø§Ø±Ø§Øª Ø§Ù„Ø£Ù„Ø³Ù†Ø©"
 
 #: gtk/gtknotebook.c:432
 msgid "Vertical Tab Border"
-msgstr "ÇäÍÏ ÇäÙåèÏê ääÓÇæ"
+msgstr "Ø§Ù„Ø­Ø¯ Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ Ù„Ù„Ø³Ø§Ù†"
 
 #: gtk/gtknotebook.c:433
 msgid "Width of the vertical border of tab labels"
-msgstr "ÙÑÖ ÇäÍÏ ÇäÙåèÏê äÔÇÑÇÊ ÇääÓÇæ"
+msgstr "Ø¹Ø±Ø¶ Ø§Ù„Ø­Ø¯ Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ Ù„Ø´Ø§Ø±Ø§Øª Ø§Ù„Ù„Ø³Ø§Ù†"
 
 #: gtk/gtknotebook.c:441
 msgid "Show Tabs"
-msgstr "ÙÑÖ ÇäÃäÓæÉ"
+msgstr "Ø¹Ø±Ø¶ Ø§Ù„Ø£Ù„Ø³Ù†Ø©"
 
 #: gtk/gtknotebook.c:442
 msgid "Whether tabs should be shown or not"
-msgstr "áêåÇ ÅĞÇ ãÇæ ÓêÊå ÙÑÖ ÇäÃäÓæÉ Ãå äÇ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ø³ÙŠØªÙ… Ø¹Ø±Ø¶ Ø§Ù„Ø£Ù„Ø³Ù†Ø© Ø£Ù… Ù„Ø§"
 
 #: gtk/gtknotebook.c:448
 msgid "Show Border"
-msgstr "ÙÑÖ ÇäÍÏ"
+msgstr "Ø¹Ø±Ø¶ Ø§Ù„Ø­Ø¯"
 
 #: gtk/gtknotebook.c:449
 msgid "Whether the border should be shown or not"
-msgstr "áêåÇ ÅĞÇ ãÇæ ÓêÊå ÙÑÖ ÇäÍÏ Ãå äÇ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ø³ÙŠØªÙ… Ø¹Ø±Ø¶ Ø§Ù„Ø­Ø¯ Ø£Ù… Ù„Ø§"
 
 #: gtk/gtknotebook.c:455
 msgid "Scrollable"
-msgstr "âÇÈä ääá"
+msgstr "Ù‚Ø§Ø¨Ù„ Ù„Ù„Ù"
 
 #: gtk/gtknotebook.c:456
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
-msgstr "ÅĞÇ ãÇæ TRUE¬ áÓÊÖÇá ÃÓçå äá ÅĞÇ ãÇæÊ çæÇã ÃäÓæÉ ãËêÑÉ ääåäÇÆåÉ"
+msgstr "Ø¥Ø°Ø§ ÙƒØ§Ù† TRUEØŒ ÙØ³ØªØ¶Ø§Ù Ø£Ø³Ù‡Ù… Ù„Ù Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ù‡Ù†Ø§Ùƒ Ø£Ù„Ø³Ù†Ø© ÙƒØ«ÙŠØ±Ø© Ù„Ù„Ù…Ù„Ø§Ø¦Ù…Ø©"
 
 #: gtk/gtknotebook.c:462
 msgid "Enable Popup"
-msgstr "ÊáÙêä ÇäæèÇáĞ ÇäÈÇÑÒÉ"
+msgstr "ØªÙØ¹ÙŠÙ„ Ø§Ù„Ù†ÙˆØ§ÙØ° Ø§Ù„Ø¨Ø§Ø±Ø²Ø©"
 
 #: gtk/gtknotebook.c:463
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr ""
-"ÅĞÇ ãÇæ TRUE¬ áÅæ ãÈÓ ÒÑ ÇäáÃÑÉ ÇäÃêåæ Ùäé ÇäÏáÊÑ êÈÑÒ äã âÇÆåÉ Êåãæã åæ "
-"ÇäĞçÇÈ äÕáÍÉ"
+"Ø¥Ø°Ø§ ÙƒØ§Ù† TRUEØŒ ÙØ¥Ù† ÙƒØ¨Ø³ Ø²Ø± Ø§Ù„ÙØ£Ø±Ø© Ø§Ù„Ø£ÙŠÙ…Ù† Ø¹Ù„Ù‰ Ø§Ù„Ø¯ÙØªØ± ÙŠØ¨Ø±Ø² Ù„Ùƒ Ù‚Ø§Ø¦Ù…Ø© ØªÙ…ÙƒÙ†Ùƒ Ù…Ù† "
+"Ø§Ù„Ø°Ù‡Ø§Ø¨ Ù„ØµÙØ­Ø©"
 
 #: gtk/gtknotebook.c:470
 msgid "Whether tabs should have homogeneous sizes"
-msgstr "áêåÇ ÅĞÇ èÌÈ Ãæ êãèæ ääÃäÓæÉ ÃÍÌÇå åÊæÇÓâÉ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙˆØ¬Ø¨ Ø£Ù† ÙŠÙƒÙˆÙ† Ù„Ù„Ø£Ù„Ø³Ù†Ø© Ø£Ø­Ø¬Ø§Ù… Ù…ØªÙ†Ø§Ø³Ù‚Ø©"
 
 #: gtk/gtknotebook.c:477
 msgid "Tab label"
-msgstr "ÔÇÑÉ ÇääÓÇæ"
+msgstr "Ø´Ø§Ø±Ø© Ø§Ù„Ù„Ø³Ø§Ù†"
 
 #: gtk/gtknotebook.c:478
 msgid "The string displayed on the childs tab label"
-msgstr "ÇäÓäÓäÉ ÇäåÙÑèÖÉ Ùäé ÔÇÑÉ ÇÈæ ÇääÓÇæ"
+msgstr "Ø§Ù„Ø³Ù„Ø³Ù„Ø© Ø§Ù„Ù…Ø¹Ø±ÙˆØ¶Ø© Ø¹Ù„Ù‰ Ø´Ø§Ø±Ø© Ø§Ø¨Ù† Ø§Ù„Ù„Ø³Ø§Ù†"
 
 #: gtk/gtknotebook.c:484
 msgid "Menu label"
-msgstr "ÔÇÑÉ ÇäâÇÆåÉ"
+msgstr "Ø´Ø§Ø±Ø© Ø§Ù„Ù‚Ø§Ø¦Ù…Ø©"
 
 #: gtk/gtknotebook.c:485
 msgid "The string displayed in the childs menu entry"
-msgstr "ÇäÓäÓäÉ ÇäåÙÑèÖÉ áê ÎÇæÉ âÇÆåÉ ÇäÇÈæ"
+msgstr "Ø§Ù„Ø³Ù„Ø³Ù„Ø© Ø§Ù„Ù…Ø¹Ø±ÙˆØ¶Ø© ÙÙŠ Ø®Ø§Ù†Ø© Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ø§Ø¨Ù†"
 
 #: gtk/gtknotebook.c:498
 msgid "Tab expand"
-msgstr "ÊåÏêÏ ÇääÓÇæ"
+msgstr "ØªÙ…Ø¯ÙŠØ¯ Ø§Ù„Ù„Ø³Ø§Ù†"
 
 #: gtk/gtknotebook.c:499
 msgid "Whether to expand the childs tab or not"
-msgstr "áêåÇ ÅĞÇ èÌÈ ÊåÏêÏ äÓÇæ ÇäÃÈæ Ãå äÇ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙˆØ¬Ø¨ ØªÙ…Ø¯ÙŠØ¯ Ù„Ø³Ø§Ù† Ø§Ù„Ø£Ø¨Ù† Ø£Ù… Ù„Ø§"
 
 #: gtk/gtknotebook.c:505
 msgid "Tab fill"
-msgstr "åäÃ ÇääÓÇæ"
+msgstr "Ù…Ù„Ø£ Ø§Ù„Ù„Ø³Ø§Ù†"
 
 #: gtk/gtknotebook.c:506
 msgid "Wheather the childs tab should fill the allocated area or not"
-msgstr "áêåÇ ÅĞÇ èÌÈ ääÓÇæ ÇäÅÈæ åäÃ ÇäåÓÇÍÉ ÇäåÎÕÕÉ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙˆØ¬Ø¨ Ù„Ù„Ø³Ø§Ù† Ø§Ù„Ø¥Ø¨Ù† Ù…Ù„Ø£ Ø§Ù„Ù…Ø³Ø§Ø­Ø© Ø§Ù„Ù…Ø®ØµØµØ©"
 
 #: gtk/gtknotebook.c:512
 msgid "Tab pack type"
-msgstr "æèÙ ÍÒå ÇäÃäÓæÉ"
+msgstr "Ù†ÙˆØ¹ Ø­Ø²Ù… Ø§Ù„Ø£Ù„Ø³Ù†Ø©"
 
 #: gtk/gtknotebook.c:528 gtk/gtkscrollbar.c:114
 msgid "Secondary backward stepper"
-msgstr "åÊÎ×ê ÇäÊÑÇÌÙ ÇäËÇæèê"
+msgstr "Ù…ØªØ®Ø·ÙŠ Ø§Ù„ØªØ±Ø§Ø¬Ø¹ Ø§Ù„Ø«Ø§Ù†ÙˆÙŠ"
 
 #: gtk/gtknotebook.c:529
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
-msgstr "ÙÑÖ ÒÑ Óçå ÇäÊÑÇÌÙ ÇäËÇæèê Ùäé ÇäæçÇêÉ ÇäåâÇÈäÉ äåÓÇÍÉ ÇääÓÇæ"
+msgstr "Ø¹Ø±Ø¶ Ø²Ø± Ø³Ù‡Ù… Ø§Ù„ØªØ±Ø§Ø¬Ø¹ Ø§Ù„Ø«Ø§Ù†ÙˆÙŠ Ø¹Ù„Ù‰ Ø§Ù„Ù†Ù‡Ø§ÙŠØ© Ø§Ù„Ù…Ù‚Ø§Ø¨Ù„Ø© Ù„Ù…Ø³Ø§Ø­Ø© Ø§Ù„Ù„Ø³Ø§Ù†"
 
 #: gtk/gtknotebook.c:545 gtk/gtkscrollbar.c:122
 msgid "Secondary forward stepper"
-msgstr "åÊÎ×ê ÇäÊâÏå ÇäËÇæèê"
+msgstr "Ù…ØªØ®Ø·ÙŠ Ø§Ù„ØªÙ‚Ø¯Ù… Ø§Ù„Ø«Ø§Ù†ÙˆÙŠ"
 
 #: gtk/gtknotebook.c:546
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
-msgstr "ÙÑÖ ÒÑ Óçå ÇäÊâÏå ÇäËÇæèê Ùäé ÇäæçÇêÉ ÇäåâÇÈäÉ äåÓÇÍÉ ÇääÓÇæ"
+msgstr "Ø¹Ø±Ø¶ Ø²Ø± Ø³Ù‡Ù… Ø§Ù„ØªÙ‚Ø¯Ù… Ø§Ù„Ø«Ø§Ù†ÙˆÙŠ Ø¹Ù„Ù‰ Ø§Ù„Ù†Ù‡Ø§ÙŠØ© Ø§Ù„Ù…Ù‚Ø§Ø¨Ù„Ø© Ù„Ù…Ø³Ø§Ø­Ø© Ø§Ù„Ù„Ø³Ø§Ù†"
 
 #: gtk/gtknotebook.c:561 gtk/gtkscrollbar.c:98
 msgid "Backward stepper"
-msgstr "åÊÎ×ê ÇäÊÑÇÌÙ"
+msgstr "Ù…ØªØ®Ø·ÙŠ Ø§Ù„ØªØ±Ø§Ø¬Ø¹"
 
 #: gtk/gtknotebook.c:562 gtk/gtkscrollbar.c:99
 msgid "Display the standard backward arrow button"
-msgstr "ÙÑÖ ÒÑ Óçå ÇäÊÑÇÌÙ ÇäâêÇÓê"
+msgstr "Ø¹Ø±Ø¶ Ø²Ø± Ø³Ù‡Ù… Ø§Ù„ØªØ±Ø§Ø¬Ø¹ Ø§Ù„Ù‚ÙŠØ§Ø³ÙŠ"
 
 #: gtk/gtknotebook.c:577 gtk/gtkscrollbar.c:106
 msgid "Forward stepper"
-msgstr "åÊÎ×ê ÇäÊâÏå"
+msgstr "Ù…ØªØ®Ø·ÙŠ Ø§Ù„ØªÙ‚Ø¯Ù…"
 
 #: gtk/gtknotebook.c:578 gtk/gtkscrollbar.c:107
 msgid "Display the standard forward arrow button"
-msgstr "ÙÑÖ ÒÑ Óçå ÇäÊâÏå ÇäâêÇÓê"
+msgstr "Ø¹Ø±Ø¶ Ø²Ø± Ø³Ù‡Ù… Ø§Ù„ØªÙ‚Ø¯Ù… Ø§Ù„Ù‚ÙŠØ§Ø³ÙŠ"
 
 #: gtk/gtkoptionmenu.c:193
 msgid "Menu"
-msgstr "ÇäâÇÆåÉ"
+msgstr "Ø§Ù„Ù‚Ø§Ø¦Ù…Ø©"
 
 #: gtk/gtkoptionmenu.c:194
 msgid "The menu of options"
-msgstr "âÇÆåÉ ÇäÎêÇÑÇÊ"
+msgstr "Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ø®ÙŠØ§Ø±Ø§Øª"
 
 #: gtk/gtkoptionmenu.c:201
 msgid "Size of dropdown indicator"
-msgstr "ÍÌå åÄÔÑ ÇäÅÓâÇ× ÇäÓáäê"
+msgstr "Ø­Ø¬Ù… Ù…Ø¤Ø´Ø± Ø§Ù„Ø¥Ø³Ù‚Ø§Ø· Ø§Ù„Ø³ÙÙ„ÙŠ"
 
 #: gtk/gtkoptionmenu.c:207
 msgid "Spacing around indicator"
-msgstr "ÇäáÑÇÚÇÊ Íèä ÇäåÄÔÑ"
+msgstr "Ø§Ù„ÙØ±Ø§ØºØ§Øª Ø­ÙˆÙ„ Ø§Ù„Ù…Ø¤Ø´Ø±"
 
 #: gtk/gtkpaned.c:240
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
-"åèâÙ ÇäáÇÕä ÇäåÍÇ× ÈäèÍÉ ÈÇäÈãÓäÇÊ (0 êÙæê ãÇåä ÇäåÓÇáÉ Åäé ÇäêÓÇÑ/ÇäÃÙäé)"
+"Ù…ÙˆÙ‚Ø¹ Ø§Ù„ÙØ§ØµÙ„ Ø§Ù„Ù…Ø­Ø§Ø· Ø¨Ù„ÙˆØ­Ø© Ø¨Ø§Ù„Ø¨ÙƒØ³Ù„Ø§Øª (0 ÙŠØ¹Ù†ÙŠ ÙƒØ§Ù…Ù„ Ø§Ù„Ù…Ø³Ø§ÙØ© Ø¥Ù„Ù‰ Ø§Ù„ÙŠØ³Ø§Ø±/Ø§Ù„Ø£Ø¹Ù„Ù‰)"
 
 #: gtk/gtkpaned.c:248
 msgid "Position Set"
-msgstr "ÖÈ× ÇäåèâÙ"
+msgstr "Ø¶Ø¨Ø· Ø§Ù„Ù…ÙˆÙ‚Ø¹"
 
 #: gtk/gtkpaned.c:249
 msgid "TRUE if the Position property should be used"
-msgstr " TRUE ÅĞÇ åÇ èÌÈ ÇÓÊÎÏÇå ÎÇÕêÉ ÇäåèâÙ"
+msgstr " TRUE Ø¥Ø°Ø§ Ù…Ø§ ÙˆØ¬Ø¨ Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø®Ø§ØµÙŠØ© Ø§Ù„Ù…ÙˆÙ‚Ø¹"
 
 #: gtk/gtkpaned.c:255
 msgid "Handle Size"
-msgstr "ÍÌå ÇäåâÈÖ"
+msgstr "Ø­Ø¬Ù… Ø§Ù„Ù…Ù‚Ø¨Ø¶"
 
 #: gtk/gtkpaned.c:256
 msgid "Width of handle"
-msgstr "ÙÑÖ ÇäåâÈÖ"
+msgstr "Ø¹Ø±Ø¶ Ø§Ù„Ù…Ù‚Ø¨Ø¶"
 
 #: gtk/gtkpaned.c:272
 msgid "Minimal Position"
-msgstr "ÇäåèâÙ ÇäÃÏæé"
+msgstr "Ø§Ù„Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ø£Ø¯Ù†Ù‰"
 
 #: gtk/gtkpaned.c:273
 msgid "Smallest possible value for the \"position\" property"
-msgstr "ÃÕÚÑ âêåÉ ååãæÉ äÎÇÕêÉ \"ÇäåèâÙ\""
+msgstr "Ø£ØµØºØ± Ù‚ÙŠÙ…Ø© Ù…Ù…ÙƒÙ†Ø© Ù„Ø®Ø§ØµÙŠØ© \"Ø§Ù„Ù…ÙˆÙ‚Ø¹\""
 
 #: gtk/gtkpaned.c:290
 msgid "Maximal Position"
-msgstr "ÇäåèâÙ ÇäÃâÕé"
+msgstr "Ø§Ù„Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ø£Ù‚ØµÙ‰"
 
 #: gtk/gtkpaned.c:291
 msgid "Largest possible value for the \"position\" property"
-msgstr "ÃãÈÑ âêåÉ ååãæÉ äÎÇÕêÉ \"ÇäåèâÙ\""
+msgstr "Ø£ÙƒØ¨Ø± Ù‚ÙŠÙ…Ø© Ù…Ù…ÙƒÙ†Ø© Ù„Ø®Ø§ØµÙŠØ© \"Ø§Ù„Ù…ÙˆÙ‚Ø¹\""
 
 #: gtk/gtkpaned.c:308
 msgid "Resize"
-msgstr "ÊÍÌêå"
+msgstr "ØªØ­Ø¬ÙŠÙ…"
 
 #: gtk/gtkpaned.c:309
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
@@ -2487,11 +2486,11 @@ msgstr "Ø¥Ø°Ø§ Ø¶Ø¨Ø· Ù„Ù€ Â·TRUEØŒ ÙÙŠØªÙ…Ø¯Ù‘Ø¯ Ùˆ ÙŠØªÙ‚Ù„ØµÙ‘ Ø§Ù„Ø£Ø¨Ù† Ù…
 
 #: gtk/gtkpaned.c:324
 msgid "Shrink"
-msgstr "ÊâäêÕ"
+msgstr "ØªÙ‚Ù„ÙŠØµ"
 
 #: gtk/gtkpaned.c:325
 msgid "If TRUE, the child can be made smaller than its requisition"
-msgstr "ÅĞÇ ÖÈ× äà TRUE¬ áêåãæ ÌÙä ÇäÅÈæ ÃÕÚÑ åæ ÅÓÊÏÙÇÆç"
+msgstr "Ø¥Ø°Ø§ Ø¶Ø¨Ø· Ù„Ù€ TRUEØŒ ÙÙŠÙ…ÙƒÙ† Ø¬Ø¹Ù„ Ø§Ù„Ø¥Ø¨Ù† Ø£ØµØºØ± Ù…Ù† Ø¥Ø³ØªØ¯Ø¹Ø§Ø¦Ù‡"
 
 #: gtk/gtkpreview.c:133
 msgid ""
@@ -2500,7 +2499,7 @@ msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙˆØ¬Ø¨ Ø£Ù† ØªÙ…Ù„Ø£ Ù‚Ø·Ø¹Ø©Â·Ø§Ù„ØªÙ„Ù…ÙŠØ­ ÙƒØ§Ù…Ù„ Ø
 
 #: gtk/gtkprogress.c:130
 msgid "Activity mode"
-msgstr "æå× ÇäæÔÇ×"
+msgstr "Ù†Ù…Ø· Ø§Ù„Ù†Ø´Ø§Ø·"
 
 #: gtk/gtkprogress.c:131
 msgid ""
@@ -2508,198 +2507,198 @@ msgid ""
 "something is happening, but not how much of the activity is finished. This "
 "is used when you're doing something that you don't know how long it will take"
 msgstr ""
-"ÅĞÇ ÖÈ× äà TRUE áÓêãèæ GtkProgress áê æÓâ ÇäÔÇÚä¬ ååÇ êÙæê "
-"Ãæç êÔêÑ Åäé ÍÕèä ÔêÁ åÇ äãæç äæ êÔêÑ Åäé ãåêÉ ÇäæÔÇ× ÇäåãÊåäÉ. "
-"êÓÊÙåä çĞÇ ÙæÏåÇ Êãèæ ÊáÙäï ÔêÆÇ äÇ ÊÙäå ãå ÓêÓÊÚÑâ"
+"Ø¥Ø°Ø§ Ø¶Ø¨Ø· Ù„Ù€ TRUE ÙØ³ÙŠÙƒÙˆÙ† GtkProgress ÙÙŠ Ù†Ø³Ù‚ Ø§Ù„Ø´Ø§ØºÙ„ØŒ Ù…Ù…Ø§ ÙŠØ¹Ù†ÙŠ "
+"Ø£Ù†Ù‡ ÙŠØ´ÙŠØ± Ø¥Ù„Ù‰ Ø­ØµÙˆÙ„ Ø´ÙŠØ¡ Ù…Ø§ Ù„ÙƒÙ†Ù‡ Ù„Ù† ÙŠØ´ÙŠØ± Ø¥Ù„Ù‰ ÙƒÙ…ÙŠØ© Ø§Ù„Ù†Ø´Ø§Ø· Ø§Ù„Ù…ÙƒØªÙ…Ù„Ø©. "
+"ÙŠØ³ØªØ¹Ù…Ù„ Ù‡Ø°Ø§ Ø¹Ù†Ø¯Ù…Ø§ ØªÙƒÙˆÙ† ØªÙØ¹Ù„Ù Ø´ÙŠØ¦Ø§ Ù„Ø§ ØªØ¹Ù„Ù… ÙƒÙ… Ø³ÙŠØ³ØªØºØ±Ù‚"
 
 #: gtk/gtkprogress.c:138
 msgid "Show text"
-msgstr "ÇØçÇÑ æÕ"
+msgstr "Ø§Ø¸Ù‡Ø§Ø± Ù†Øµ"
 
 #: gtk/gtkprogress.c:139
 msgid "Whether the progress is shown as text"
-msgstr "áêåÇ ÅĞÇ ãÇæ ÇäÊâÏå ÓêÙÑÖ ãæÕ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ø§Ù„ØªÙ‚Ø¯Ù… Ø³ÙŠØ¹Ø±Ø¶ ÙƒÙ†Øµ"
 
 #: gtk/gtkprogress.c:146
 msgid "Text x alignment"
-msgstr "ÊÑÕêá Ó ääæÕ"
+msgstr "ØªØ±ØµÙŠÙ Ø³ Ù„Ù„Ù†Øµ"
 
 #: gtk/gtkprogress.c:147
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
-msgstr "ÙÏÏ Èêæ 0.0 è 1.0 äÊÍÏêÏ ÇäÊÑÕêá ÇäÃáâê ääæÕ ÙæÏ â×ÙÉ ÇäÊâÏå"
+msgstr "Ø¹Ø¯Ø¯ Ø¨ÙŠÙ† 0.0 Ùˆ 1.0 Ù„ØªØ­Ø¯ÙŠØ¯ Ø§Ù„ØªØ±ØµÙŠÙ Ø§Ù„Ø£ÙÙ‚ÙŠ Ù„Ù„Ù†Øµ Ø¹Ù†Ø¯ Ù‚Ø·Ø¹Ø© Ø§Ù„ØªÙ‚Ø¯Ù…"
 
 #: gtk/gtkprogress.c:155
 msgid "Text y alignment"
-msgstr "ÊÑÕêá Õ ääæÕ"
+msgstr "ØªØ±ØµÙŠÙ Øµ Ù„Ù„Ù†Øµ"
 
 #: gtk/gtkprogress.c:156
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
-msgstr "Ñâå Èêæ 0.0 è 1.0 äÊÍÏêÏ ÇäÊÑÕêá ÇäÙåèÏê ääæÕ ÙæÏ â×ÙÉ ÇäÊâÏå"
+msgstr "Ø±Ù‚Ù… Ø¨ÙŠÙ† 0.0 Ùˆ 1.0 Ù„ØªØ­Ø¯ÙŠØ¯ Ø§Ù„ØªØ±ØµÙŠÙ Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ Ù„Ù„Ù†Øµ Ø¹Ù†Ø¯ Ù‚Ø·Ø¹Ø© Ø§Ù„ØªÙ‚Ø¯Ù…"
 
 #: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:293 gtk/gtkspinbutton.c:241
 msgid "Adjustment"
-msgstr "ÇäåäÇÆåÉ"
+msgstr "Ø§Ù„Ù…Ù„Ø§Ø¦Ù…Ø©"
 
 #: gtk/gtkprogressbar.c:143
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
-msgstr "GtkAdjustment ÇäåÑÊÈ× ÈÙåèÏ ÇäÊ×èñÑ (åäÚé)"
+msgstr "GtkAdjustment Ø§Ù„Ù…Ø±ØªØ¨Ø· Ø¨Ø¹Ù…ÙˆØ¯ Ø§Ù„ØªØ·ÙˆÙ‘Ø± (Ù…Ù„ØºÙ‰)"
 
 #: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:497
 msgid "Orientation"
-msgstr "ÇäÇÊÌÇç"
+msgstr "Ø§Ù„Ø§ØªØ¬Ø§Ù‡"
 
 #: gtk/gtkprogressbar.c:151
 msgid "Orientation and growth direction of the progress bar"
-msgstr "ÅÊÌÇç è èÌçÉ æåèñ çåèÏ ÇäÊ×èñÑ"
+msgstr "Ø¥ØªØ¬Ø§Ù‡ Ùˆ ÙˆØ¬Ù‡Ø© Ù†Ù…ÙˆÙ‘ Ù‡Ù…ÙˆØ¯ Ø§Ù„ØªØ·ÙˆÙ‘Ø±"
 
 #: gtk/gtkprogressbar.c:159
 msgid "Bar style"
-msgstr "ÃÓäèÈ ÇäÙåèÏ"
+msgstr "Ø£Ø³Ù„ÙˆØ¨ Ø§Ù„Ø¹Ù…ÙˆØ¯"
 
 #: gtk/gtkprogressbar.c:160
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
-msgstr "êÍÏÏ ÇäÃÓäèÈ ÇäåÑÆê ääÙåèÏ ÈæÓâ ÇäæÓÈÉ ÇäåÇÆèêÉ (åäÚÇÉ)"
+msgstr "ÙŠØ­Ø¯Ø¯ Ø§Ù„Ø£Ø³Ù„ÙˆØ¨ Ø§Ù„Ù…Ø±Ø¦ÙŠ Ù„Ù„Ø¹Ù…ÙˆØ¯ Ø¨Ù†Ø³Ù‚ Ø§Ù„Ù†Ø³Ø¨Ø© Ø§Ù„Ù…Ø§Ø¦ÙˆÙŠØ© (Ù…Ù„ØºØ§Ø©)"
 
 #: gtk/gtkprogressbar.c:168
 msgid "Activity Step"
-msgstr "Î×èÉ ÇäæÔÇ×"
+msgstr "Ø®Ø·ÙˆØ© Ø§Ù„Ù†Ø´Ø§Ø·"
 
 #: gtk/gtkprogressbar.c:169
 msgid "The increment used for each iteration in activity mode (Deprecated)"
-msgstr "ÇäÊÒÇêÏ ÇäåÓÊÎÏå äãä ÊãÑÇÑ áê æÓâ ÇäæÔÇ× (åäÚé)"
+msgstr "Ø§Ù„ØªØ²Ø§ÙŠØ¯ Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù… Ù„ÙƒÙ„ ØªÙƒØ±Ø§Ø± ÙÙŠ Ù†Ø³Ù‚ Ø§Ù„Ù†Ø´Ø§Ø· (Ù…Ù„ØºÙ‰)"
 
 #: gtk/gtkprogressbar.c:178
 msgid "Activity Blocks"
-msgstr "âèÇäÈ ÇäæÔÇ×"
+msgstr "Ù‚ÙˆØ§Ù„Ø¨ Ø§Ù„Ù†Ø´Ø§Ø·"
 
 #: gtk/gtkprogressbar.c:179
 msgid ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
-msgstr "ÙÏÏ ÇäâèÇäÈ ÇäÊê êåãæ Ãæ ÊäÇÆå åæ×âÉ ÙåèÏ ÇäÊâÏå áê æÓâ ÇäæÔÇ× (åäÚÇÉ)"
+msgstr "Ø¹Ø¯Ø¯ Ø§Ù„Ù‚ÙˆØ§Ù„Ø¨ Ø§Ù„ØªÙŠ ÙŠÙ…ÙƒÙ† Ø£Ù† ØªÙ„Ø§Ø¦Ù… Ù…Ù†Ø·Ù‚Ø© Ø¹Ù…ÙˆØ¯ Ø§Ù„ØªÙ‚Ø¯Ù… ÙÙŠ Ù†Ø³Ù‚ Ø§Ù„Ù†Ø´Ø§Ø· (Ù…Ù„ØºØ§Ø©)"
 
 #: gtk/gtkprogressbar.c:188
 msgid "Discrete Blocks"
-msgstr "ÇäâèÇäÈ ÇäåÊâ×ÙÉ"
+msgstr "Ø§Ù„Ù‚ÙˆØ§Ù„Ø¨ Ø§Ù„Ù…ØªÙ‚Ø·Ø¹Ø©"
 
 #: gtk/gtkprogressbar.c:189
 msgid ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
-msgstr "ÙÏÏ ÇäâèÇäÈ ÇäåÊâ×ÙÉ áê ÙåèÏ ÇäÊâÏå (ÙæÏ ÙÑÖçÇ ÈÇäÃÓäèÈ ÇäåÊâ×Ù)"
+msgstr "Ø¹Ø¯Ø¯ Ø§Ù„Ù‚ÙˆØ§Ù„Ø¨ Ø§Ù„Ù…ØªÙ‚Ø·Ø¹Ø© ÙÙŠ Ø¹Ù…ÙˆØ¯ Ø§Ù„ØªÙ‚Ø¯Ù… (Ø¹Ù†Ø¯ Ø¹Ø±Ø¶Ù‡Ø§ Ø¨Ø§Ù„Ø£Ø³Ù„ÙˆØ¨ Ø§Ù„Ù…ØªÙ‚Ø·Ø¹)"
 
 #: gtk/gtkprogressbar.c:198
 msgid "Fraction"
-msgstr "ÌÒÁ"
+msgstr "Ø¬Ø²Ø¡"
 
 #: gtk/gtkprogressbar.c:199
 msgid "The fraction of total work that has been completed"
-msgstr "ÌÒÁ åæ ÇäÙåä ÇäĞê Êå"
+msgstr "Ø¬Ø²Ø¡ Ù…Ù† Ø§Ù„Ø¹Ù…Ù„ Ø§Ù„Ø°ÙŠ ØªÙ…"
 
 #: gtk/gtkprogressbar.c:208
 msgid "Pulse Step"
-msgstr "Î×èÉ ÇäæÈÖ"
+msgstr "Ø®Ø·ÙˆØ© Ø§Ù„Ù†Ø¨Ø¶"
 
 #: gtk/gtkprogressbar.c:209
 msgid "The fraction of total progress to move the bouncing block when pulsed"
-msgstr "ÌÒÁ ÇäÊâÏå Çäãäê äÊÍÑêã ÇäãÊäÉ ÇäâÇáÒÉ ÙæÏ ÇäæÈÖ"
+msgstr "Ø¬Ø²Ø¡ Ø§Ù„ØªÙ‚Ø¯Ù… Ø§Ù„ÙƒÙ„ÙŠ Ù„ØªØ­Ø±ÙŠÙƒ Ø§Ù„ÙƒØªÙ„Ø© Ø§Ù„Ù‚Ø§ÙØ²Ø© Ø¹Ù†Ø¯ Ø§Ù„Ù†Ø¨Ø¶"
 
 #: gtk/gtkprogressbar.c:219
 msgid "Text to be displayed in the progress bar"
-msgstr "ÇäæÕ ÇäĞê ÓêÙÑÖ áê ÙåèÏ ÇäÊâÏå"
+msgstr "Ø§Ù„Ù†Øµ Ø§Ù„Ø°ÙŠ Ø³ÙŠØ¹Ø±Ø¶ ÙÙŠ Ø¹Ù…ÙˆØ¯ Ø§Ù„ØªÙ‚Ø¯Ù…"
 
 #: gtk/gtkradioaction.c:138
 msgid "The value"
-msgstr "ÇäâêåÉ"
+msgstr "Ø§Ù„Ù‚ÙŠÙ…Ø©"
 
 #: gtk/gtkradioaction.c:139
 msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
 msgstr ""
-"ÇäâêåÉ ÇäåÑÌÙÉ åæ âÈä gtk_radio_action_get_current_value() "
-"ÙæÏåÇ êãèæ çĞÇ ÇäÍÏË çè ÇäÍÏË ÇäÍÇäê äåÌåèÙÊç."
+"Ø§Ù„Ù‚ÙŠÙ…Ø© Ø§Ù„Ù…Ø±Ø¬Ø¹Ø© Ù…Ù† Ù‚Ø¨Ù„ gtk_radio_action_get_current_value() "
+"Ø¹Ù†Ø¯Ù…Ø§ ÙŠÙƒÙˆÙ† Ù‡Ø°Ø§ Ø§Ù„Ø­Ø¯Ø« Ù‡Ùˆ Ø§Ù„Ø­Ø¯Ø« Ø§Ù„Ø­Ø§Ù„ÙŠ Ù„Ù…Ø¬Ù…ÙˆØ¹ØªÙ‡."
 
 #: gtk/gtkradioaction.c:155 gtk/gtkradiobutton.c:112
 msgid "Group"
-msgstr "åÌåèÙÉ"
+msgstr "Ù…Ø¬Ù…ÙˆØ¹Ø©"
 
 #: gtk/gtkradioaction.c:156
 msgid "The radio action whose group this action belongs."
-msgstr "ÇäÒÑ ÇäåÔÙ ÇäĞê Åäé åÌåèÙÊç êæÊåê çĞÇ ÇäáÙä."
+msgstr "Ø§Ù„Ø²Ø± Ø§Ù„Ù…Ø´Ø¹ Ø§Ù„Ø°ÙŠ Ø¥Ù„Ù‰ Ù…Ø¬Ù…ÙˆØ¹ØªÙ‡ ÙŠÙ†ØªÙ…ÙŠ Ù‡Ø°Ø§ Ø§Ù„ÙØ¹Ù„."
 
 #: gtk/gtkradiobutton.c:113
 msgid "The radio button whose group this widget belongs."
-msgstr "ÇäÒÑ ÇäåÔÙ ÇäĞê Åäé åÌåèÙÊç ÊæÊåê çĞç Çäâ×ÙÉ."
+msgstr "Ø§Ù„Ø²Ø± Ø§Ù„Ù…Ø´Ø¹ Ø§Ù„Ø°ÙŠ Ø¥Ù„Ù‰ Ù…Ø¬Ù…ÙˆØ¹ØªÙ‡ ØªÙ†ØªÙ…ÙŠ Ù‡Ø°Ù‡ Ø§Ù„Ù‚Ø·Ø¹Ø©."
 
 #: gtk/gtkrange.c:284
 msgid "Update policy"
-msgstr "ÓêÇÓÉ ÇäÊÍÏêË"
+msgstr "Ø³ÙŠØ§Ø³Ø© Ø§Ù„ØªØ­Ø¯ÙŠØ«"
 
 #: gtk/gtkrange.c:285
 msgid "How the range should be updated on the screen"
-msgstr "ãêáêÉ ÊÍÏêË ÇäåÏé Ùäé ÇäÔÇÔÉ"
+msgstr "ÙƒÙŠÙÙŠØ© ØªØ­Ø¯ÙŠØ« Ø§Ù„Ù…Ø¯Ù‰ Ø¹Ù„Ù‰ Ø§Ù„Ø´Ø§Ø´Ø©"
 
 #: gtk/gtkrange.c:294
 msgid "The GtkAdjustment that contains the current value of this range object"
-msgstr "GtkAdjustment ÇäåÍÊèê Ùäé ÇäâêåÉ ÇäÍÇäêÉ äÌÓå ÇäåÏé çĞÇ"
+msgstr "GtkAdjustment Ø§Ù„Ù…Ø­ØªÙˆÙŠ Ø¹Ù„Ù‰ Ø§Ù„Ù‚ÙŠÙ…Ø© Ø§Ù„Ø­Ø§Ù„ÙŠØ© Ù„Ø¬Ø³Ù… Ø§Ù„Ù…Ø¯Ù‰ Ù‡Ø°Ø§"
 
 #: gtk/gtkrange.c:301
 msgid "Inverted"
-msgstr "åÙãèÓ"
+msgstr "Ù…Ø¹ÙƒÙˆØ³"
 
 #: gtk/gtkrange.c:302
 msgid "Invert direction slider moves to increase range value"
-msgstr "ÙãÓ ÇäÇÊÌÇç ÇäĞê Åäêç êæÊâä ÇäåÊÒÍäâ äÒêÇÏÉ âêåÉ ÇäåÏé"
+msgstr "Ø¹ÙƒØ³ Ø§Ù„Ø§ØªØ¬Ø§Ù‡ Ø§Ù„Ø°ÙŠ Ø¥Ù„ÙŠÙ‡ ÙŠÙ†ØªÙ‚Ù„ Ø§Ù„Ù…ØªØ²Ø­Ù„Ù‚ Ù„Ø²ÙŠØ§Ø¯Ø© Ù‚ÙŠÙ…Ø© Ø§Ù„Ù…Ø¯Ù‰"
 
 #: gtk/gtkrange.c:308
 msgid "Slider Width"
-msgstr "ÙÑÖ ÇäåÊÒÍäâ"
+msgstr "Ø¹Ø±Ø¶ Ø§Ù„Ù…ØªØ²Ø­Ù„Ù‚"
 
 #: gtk/gtkrange.c:309
 msgid "Width of scrollbar or scale thumb"
-msgstr "ÙÑÖ ÙåèÏ Çääá Ãè åÑÈÙ ÇäâêÇÓ"
+msgstr "Ø¹Ø±Ø¶ Ø¹Ù…ÙˆØ¯ Ø§Ù„Ù„Ù Ø£Ùˆ Ù…Ø±Ø¨Ø¹ Ø§Ù„Ù‚ÙŠØ§Ø³"
 
 #: gtk/gtkrange.c:316
 msgid "Trough Border"
-msgstr "ÍÏ åæÎáÖ"
+msgstr "Ø­Ø¯ Ù…Ù†Ø®ÙØ¶"
 
 #: gtk/gtkrange.c:317
 msgid "Spacing between thumb/steppers and outer trough bevel"
-msgstr "ÇäáÑÇÚÇÊ Èêæ ÇäåÑÈÙ/ÇäåÊÎ×ê èÇäÍÇáÉ ÇäåæÍÏÑÉ ÇäÎÇÑÌêÉ"
+msgstr "Ø§Ù„ÙØ±Ø§ØºØ§Øª Ø¨ÙŠÙ† Ø§Ù„Ù…Ø±Ø¨Ø¹/Ø§Ù„Ù…ØªØ®Ø·ÙŠ ÙˆØ§Ù„Ø­Ø§ÙØ© Ø§Ù„Ù…Ù†Ø­Ø¯Ø±Ø© Ø§Ù„Ø®Ø§Ø±Ø¬ÙŠØ©"
 
 #: gtk/gtkrange.c:324
 msgid "Stepper Size"
-msgstr "ÍÌå ÇäåÊÎ×ê"
+msgstr "Ø­Ø¬Ù… Ø§Ù„Ù…ØªØ®Ø·ÙŠ"
 
 #: gtk/gtkrange.c:325
 msgid "Length of step buttons at ends"
-msgstr "×èä ÃÒÑÇÑ ÇäÎ×èÇÊ ÙæÏ ÇäæçÇêÇÊ"
+msgstr "Ø·ÙˆÙ„ Ø£Ø²Ø±Ø§Ø± Ø§Ù„Ø®Ø·ÙˆØ§Øª Ø¹Ù†Ø¯ Ø§Ù„Ù†Ù‡Ø§ÙŠØ§Øª"
 
 #: gtk/gtkrange.c:332
 msgid "Stepper Spacing"
-msgstr "áÑÇÚÇÊ ÇäåÊÎ×ê"
+msgstr "ÙØ±Ø§ØºØ§Øª Ø§Ù„Ù…ØªØ®Ø·ÙŠ"
 
 #: gtk/gtkrange.c:333
 msgid "Spacing between step buttons and thumb"
-msgstr "ÇäáÑÇÚÇÊ Èêæ ÃÒÑÇÑ ÇäÎ×èÇÊ èÇäÅÈçÇå"
+msgstr "Ø§Ù„ÙØ±Ø§ØºØ§Øª Ø¨ÙŠÙ† Ø£Ø²Ø±Ø§Ø± Ø§Ù„Ø®Ø·ÙˆØ§Øª ÙˆØ§Ù„Ø¥Ø¨Ù‡Ø§Ù…"
 
 #: gtk/gtkrange.c:340
 msgid "Arrow X Displacement"
-msgstr "ÅÒÇÍÉ ÇäÓçå áê Ó"
+msgstr "Ø¥Ø²Ø§Ø­Ø© Ø§Ù„Ø³Ù‡Ù… ÙÙŠ Ø³"
 
 #: gtk/gtkrange.c:341
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
-msgstr "åâÏÇÑ ÊÍÑêã ÇäÓçå ÈÇÊÌÇç Ó ÙæÏ ÊÍÑêÑ ÇäÒÑ"
+msgstr "Ù…Ù‚Ø¯Ø§Ø± ØªØ­Ø±ÙŠÙƒ Ø§Ù„Ø³Ù‡Ù… Ø¨Ø§ØªØ¬Ø§Ù‡ Ø³ Ø¹Ù†Ø¯ ØªØ­Ø±ÙŠØ± Ø§Ù„Ø²Ø±"
 
 #: gtk/gtkrange.c:348
 msgid "Arrow Y Displacement"
-msgstr "ÅÒÇÍÉ ÇäÓçå áê Õ"
+msgstr "Ø¥Ø²Ø§Ø­Ø© Ø§Ù„Ø³Ù‡Ù… ÙÙŠ Øµ"
 
 #: gtk/gtkrange.c:349
 msgid ""
@@ -2708,255 +2707,255 @@ msgstr "Ù…Ù‚Ø¯Ø§Ø±Â·ØªØ­Ø±ÙŠÙƒÂ·Ø§Ù„Ø³Ù‡Ù…Â·Ø¨Ø§ØªØ¬Ø§Ù‡Â·ØµÂ·Ø¹Ù†Ø¯Â·ØªØ­Ø±ÙŠØ±
 
 #: gtk/gtkruler.c:119
 msgid "Lower"
-msgstr "ÇäÃÓáä"
+msgstr "Ø§Ù„Ø£Ø³ÙÙ„"
 
 #: gtk/gtkruler.c:120
 msgid "Lower limit of ruler"
-msgstr "ÇäÍÏ ÇäÃÓáä ääåÓ×ÑÉ"
+msgstr "Ø§Ù„Ø­Ø¯ Ø§Ù„Ø£Ø³ÙÙ„ Ù„Ù„Ù…Ø³Ø·Ø±Ø©"
 
 #: gtk/gtkruler.c:129
 msgid "Upper"
-msgstr "ÇäÃÙäé"
+msgstr "Ø§Ù„Ø£Ø¹Ù„Ù‰"
 
 #: gtk/gtkruler.c:130
 msgid "Upper limit of ruler"
-msgstr "ÇäÍÏ ÇäÃÙäé ääåÓ×ÑÉ"
+msgstr "Ø§Ù„Ø­Ø¯ Ø§Ù„Ø£Ø¹Ù„Ù‰ Ù„Ù„Ù…Ø³Ø·Ø±Ø©"
 
 #: gtk/gtkruler.c:140
 msgid "Position of mark on the ruler"
-msgstr "åèâÙ ÇäÙäÇåÉ Ùäé ÇäåÓ×ÑÉ"
+msgstr "Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ø¹Ù„Ø§Ù…Ø© Ø¹Ù„Ù‰ Ø§Ù„Ù…Ø³Ø·Ø±Ø©"
 
 #: gtk/gtkruler.c:149
 msgid "Max Size"
-msgstr "ÇäÍÌå ÇäÃâÕé"
+msgstr "Ø§Ù„Ø­Ø¬Ù… Ø§Ù„Ø£Ù‚ØµÙ‰"
 
 #: gtk/gtkruler.c:150
 msgid "Maximum size of the ruler"
-msgstr "ÇäÍÌå ÇäÃâÕé ääåÓ×ÑÉ"
+msgstr "Ø§Ù„Ø­Ø¬Ù… Ø§Ù„Ø£Ù‚ØµÙ‰ Ù„Ù„Ù…Ø³Ø·Ø±Ø©"
 
 #: gtk/gtkscale.c:171 gtk/gtkspinbutton.c:259
 msgid "Digits"
-msgstr "ÎÇæÇÊ ÑâåêÉ"
+msgstr "Ø®Ø§Ù†Ø§Øª Ø±Ù‚Ù…ÙŠØ©"
 
 #: gtk/gtkscale.c:172
 msgid "The number of decimal places that are displayed in the value"
-msgstr "ÙÏÏ ÇäÎÇæÇÊ ÇäÙÔÑêÉ ÇäÊê êÊå ÙÑÖçÇ áê ÇäâêåÉ"
+msgstr "Ø¹Ø¯Ø¯ Ø§Ù„Ø®Ø§Ù†Ø§Øª Ø§Ù„Ø¹Ø´Ø±ÙŠØ© Ø§Ù„ØªÙŠ ÙŠØªÙ… Ø¹Ø±Ø¶Ù‡Ø§ ÙÙŠ Ø§Ù„Ù‚ÙŠÙ…Ø©"
 
 #: gtk/gtkscale.c:181
 msgid "Draw Value"
-msgstr "ÑÓå ÇäâêåÉ"
+msgstr "Ø±Ø³Ù… Ø§Ù„Ù‚ÙŠÙ…Ø©"
 
 #: gtk/gtkscale.c:182
 msgid "Whether the current value is displayed as a string next to the slider"
-msgstr "åÇ ÅĞÇ ÓêÊå ÙÑÖ ÇäâêåÉ ÇäÍÇäêÉ ãÓäÓäÉ ÈÌÇæÈ ÇäåÊÒÍäâ"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ Ø³ÙŠØªÙ… Ø¹Ø±Ø¶ Ø§Ù„Ù‚ÙŠÙ…Ø© Ø§Ù„Ø­Ø§Ù„ÙŠØ© ÙƒØ³Ù„Ø³Ù„Ø© Ø¨Ø¬Ø§Ù†Ø¨ Ø§Ù„Ù…ØªØ²Ø­Ù„Ù‚"
 
 #: gtk/gtkscale.c:189
 msgid "Value Position"
-msgstr "åèâÙ ÇäâêåÉ"
+msgstr "Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ù‚ÙŠÙ…Ø©"
 
 #: gtk/gtkscale.c:190
 msgid "The position in which the current value is displayed"
-msgstr "åèâÙ ÙÑÖ ÇäâêåÉ ÇäÍÇäêÉ"
+msgstr "Ù…ÙˆÙ‚Ø¹ Ø¹Ø±Ø¶ Ø§Ù„Ù‚ÙŠÙ…Ø© Ø§Ù„Ø­Ø§Ù„ÙŠØ©"
 
 #: gtk/gtkscale.c:197
 msgid "Slider Length"
-msgstr "×èä ÇäåÊÒÍäâ"
+msgstr "Ø·ÙˆÙ„ Ø§Ù„Ù…ØªØ²Ø­Ù„Ù‚"
 
 #: gtk/gtkscale.c:198
 msgid "Length of scale's slider"
-msgstr "×èä åÊÒÍäâ ÇäâêÇÓ"
+msgstr "Ø·ÙˆÙ„ Ù…ØªØ²Ø­Ù„Ù‚ Ø§Ù„Ù‚ÙŠØ§Ø³"
 
 #: gtk/gtkscale.c:206
 msgid "Value spacing"
-msgstr "áÑÇÚÇÊ ÇäâêåÉ"
+msgstr "ÙØ±Ø§ØºØ§Øª Ø§Ù„Ù‚ÙŠÙ…Ø©"
 
 #: gtk/gtkscale.c:207
 msgid "Space between value text and the slider/trough area"
-msgstr "ÇäáÑÇÚ Èêæ æÕ ÇäâêåÉ èåæ×âÉ ÇäåÊÒÍäâ/ÇäåæÎáÖ"
+msgstr "Ø§Ù„ÙØ±Ø§Øº Ø¨ÙŠÙ† Ù†Øµ Ø§Ù„Ù‚ÙŠÙ…Ø© ÙˆÙ…Ù†Ø·Ù‚Ø© Ø§Ù„Ù…ØªØ²Ø­Ù„Ù‚/Ø§Ù„Ù…Ù†Ø®ÙØ¶"
 
 #: gtk/gtkscrollbar.c:81
 msgid "Minimum Slider Length"
-msgstr "Çä×èä ÇäÃÏæé ääåÊÒÍäâ"
+msgstr "Ø§Ù„Ø·ÙˆÙ„ Ø§Ù„Ø£Ø¯Ù†Ù‰ Ù„Ù„Ù…ØªØ²Ø­Ù„Ù‚"
 
 #: gtk/gtkscrollbar.c:82
 msgid "Minimum length of scrollbar slider"
-msgstr "Çä×èä ÇäÃÏæé äåÊÒÍäâ ÙåèÏ Çääá"
+msgstr "Ø§Ù„Ø·ÙˆÙ„ Ø§Ù„Ø£Ø¯Ù†Ù‰ Ù„Ù…ØªØ²Ø­Ù„Ù‚ Ø¹Ù…ÙˆØ¯ Ø§Ù„Ù„Ù"
 
 #: gtk/gtkscrollbar.c:90
 msgid "Fixed slider size"
-msgstr "åÊÒÍäâ Ğê ÍÌå ËÇÈÊ"
+msgstr "Ù…ØªØ²Ø­Ù„Ù‚ Ø°ÙŠ Ø­Ø¬Ù… Ø«Ø§Ø¨Øª"
 
 #: gtk/gtkscrollbar.c:91
 msgid "Don't change slider size, just lock it to the minimum length"
-msgstr "äÇ ÊÚêÑ ÍÌå ÇäåÊÒÍäâ¬Èä âå Èâáäç ÙæÏ Çä×èä ÇäÃÏæé"
+msgstr "Ù„Ø§ ØªØºÙŠØ± Ø­Ø¬Ù… Ø§Ù„Ù…ØªØ²Ø­Ù„Ù‚ØŒØ¨Ù„ Ù‚Ù… Ø¨Ù‚ÙÙ„Ù‡ Ø¹Ù†Ø¯ Ø§Ù„Ø·ÙˆÙ„ Ø§Ù„Ø£Ø¯Ù†Ù‰"
 
 #: gtk/gtkscrollbar.c:115
 msgid ""
 "Display a second backward arrow button on the opposite end of the scrollbar"
-msgstr "ÙÑÖ ÒÑ Óçå ÊÑÇÌÙ ËÇæ ÙæÏ ÇäæçÇêÉ ÇäåÙÇãÓÉ äÙåèÏ ÇäÊÏÑÌ"
+msgstr "Ø¹Ø±Ø¶ Ø²Ø± Ø³Ù‡Ù… ØªØ±Ø§Ø¬Ø¹ Ø«Ø§Ù† Ø¹Ù†Ø¯ Ø§Ù„Ù†Ù‡Ø§ÙŠØ© Ø§Ù„Ù…Ø¹Ø§ÙƒØ³Ø© Ù„Ø¹Ù…ÙˆØ¯ Ø§Ù„ØªØ¯Ø±Ø¬"
 
 #: gtk/gtkscrollbar.c:123
 msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
-msgstr "ÙÑÖ ÒÑ Óçå ÊâÏå ËÇæ ÙæÏ ÇäæçÇêÉ ÇäåÙÇãÓÉ äÙåèÏ ÇäÊÏÑÌ"
+msgstr "Ø¹Ø±Ø¶ Ø²Ø± Ø³Ù‡Ù… ØªÙ‚Ø¯Ù… Ø«Ø§Ù† Ø¹Ù†Ø¯ Ø§Ù„Ù†Ù‡Ø§ÙŠØ© Ø§Ù„Ù…Ø¹Ø§ÙƒØ³Ø© Ù„Ø¹Ù…ÙˆØ¯ Ø§Ù„ØªØ¯Ø±Ø¬"
 
 #: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:536
 msgid "Horizontal Adjustment"
-msgstr "ÖÈ× Ãáâê"
+msgstr "Ø¶Ø¨Ø· Ø£ÙÙ‚ÙŠ"
 
 #: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:544
 msgid "Vertical Adjustment"
-msgstr "ÖÈ× ÙåèÏê"
+msgstr "Ø¶Ø¨Ø· Ø¹Ù…ÙˆØ¯ÙŠ"
 
 #: gtk/gtkscrolledwindow.c:251
 msgid "Horizontal Scrollbar Policy"
-msgstr "ÓêÇÓÉ ÙåèÏ Çääá ÇäÃáâê"
+msgstr "Ø³ÙŠØ§Ø³Ø© Ø¹Ù…ÙˆØ¯ Ø§Ù„Ù„Ù Ø§Ù„Ø£ÙÙ‚ÙŠ"
 
 #: gtk/gtkscrolledwindow.c:252
 msgid "When the horizontal scrollbar is displayed"
-msgstr "Âæ ÙÑÖ ÙåèÏ Çääá ÇäÃáâê"
+msgstr "Ø¢Ù† Ø¹Ø±Ø¶ Ø¹Ù…ÙˆØ¯ Ø§Ù„Ù„Ù Ø§Ù„Ø£ÙÙ‚ÙŠ"
 
 #: gtk/gtkscrolledwindow.c:259
 msgid "Vertical Scrollbar Policy"
-msgstr "ÓêÇÓÉ ÙåèÏ ÇäÊÏÑÌ ÇäÙåèÏê"
+msgstr "Ø³ÙŠØ§Ø³Ø© Ø¹Ù…ÙˆØ¯ Ø§Ù„ØªØ¯Ø±Ø¬ Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ"
 
 #: gtk/gtkscrolledwindow.c:260
 msgid "When the vertical scrollbar is displayed"
-msgstr "Âæ ÙÑÖ ÔÑê× ÇäÊÏÑÌ ÇäÙåèÏê"
+msgstr "Ø¢Ù† Ø¹Ø±Ø¶ Ø´Ø±ÙŠØ· Ø§Ù„ØªØ¯Ø±Ø¬ Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ"
 
 #: gtk/gtkscrolledwindow.c:268
 msgid "Window Placement"
-msgstr "åèÖÙ ÇäæÇáĞÉ"
+msgstr "Ù…ÙˆØ¶Ø¹ Ø§Ù„Ù†Ø§ÙØ°Ø©"
 
 #: gtk/gtkscrolledwindow.c:269
 msgid "Where the contents are located with respect to the scrollbars"
-msgstr "åèâÙ ÇäåÍÊèêÇÊ ÈÇÙÊÈÇÑ ÃÙåÏÉ Çääá"
+msgstr "Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ù…Ø­ØªÙˆÙŠØ§Øª Ø¨Ø§Ø¹ØªØ¨Ø§Ø± Ø£Ø¹Ù…Ø¯Ø© Ø§Ù„Ù„Ù"
 
 #: gtk/gtkscrolledwindow.c:276
 msgid "Shadow Type"
-msgstr "æèÙ ÇäØä"
+msgstr "Ù†ÙˆØ¹ Ø§Ù„Ø¸Ù„"
 
 #: gtk/gtkscrolledwindow.c:277
 msgid "Style of bevel around the contents"
-msgstr "ÃÓäèÈ ÇäÍÇáÉ Íèä ÇäåÍÊèêÇÊ"
+msgstr "Ø£Ø³Ù„ÙˆØ¨ Ø§Ù„Ø­Ø§ÙØ© Ø­ÙˆÙ„ Ø§Ù„Ù…Ø­ØªÙˆÙŠØ§Øª"
 
 #: gtk/gtkscrolledwindow.c:284
 msgid "Scrollbar spacing"
-msgstr "áÑÇÚÇÊ ÙåèÏ Çääá"
+msgstr "ÙØ±Ø§ØºØ§Øª Ø¹Ù…ÙˆØ¯ Ø§Ù„Ù„Ù"
 
 #: gtk/gtkscrolledwindow.c:285
 msgid "Number of pixels between the scrollbars and the scrolled window"
-msgstr "ÙÏÏ ÇäÈãÓäÇÊ Èêæ ÃÙåÏÉ Çääá è ÇäæÇáĞÉ ÇäåäáèáÉ"
+msgstr "Ø¹Ø¯Ø¯ Ø§Ù„Ø¨ÙƒØ³Ù„Ø§Øª Ø¨ÙŠÙ† Ø£Ø¹Ù…Ø¯Ø© Ø§Ù„Ù„Ù Ùˆ Ø§Ù„Ù†Ø§ÙØ°Ø© Ø§Ù„Ù…Ù„ÙÙˆÙØ©"
 
 #: gtk/gtkseparatortoolitem.c:135
 msgid "Draw"
-msgstr "ÑÓå"
+msgstr "Ø±Ø³Ù…"
 
 #: gtk/gtkseparatortoolitem.c:136
 msgid "Whether the separator is drawn, or just blank"
-msgstr "áêåÇ ÅĞÇ ãÇæ ÇäáÇÕä ÑÓåÇ Ãè áÑÇÚÇ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ø§Ù„ÙØ§ØµÙ„ Ø±Ø³Ù…Ø§ Ø£Ùˆ ÙØ±Ø§ØºØ§"
 
 #: gtk/gtksettings.c:262
 msgid "Double Click Time"
-msgstr "èâÊ ÇäæâÑ ÇäËæÇÆê"
+msgstr "ÙˆÙ‚Øª Ø§Ù„Ù†Ù‚Ø± Ø§Ù„Ø«Ù†Ø§Ø¦ÙŠ"
 
 #: gtk/gtksettings.c:263
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
-msgstr "ÇäèâÊ ÇäÃâÕé ÇäåÓåèÍ Èêæ æâÑÊêæ äÇÍÊÓÇÈçåÇ ãæâÑÉ ËæÇÆêÉ (ÈÇäåäêËÇæêÉ)"
+msgstr "Ø§Ù„ÙˆÙ‚Øª Ø§Ù„Ø£Ù‚ØµÙ‰ Ø§Ù„Ù…Ø³Ù…ÙˆØ­ Ø¨ÙŠÙ† Ù†Ù‚Ø±ØªÙŠÙ† Ù„Ø§Ø­ØªØ³Ø§Ø¨Ù‡Ù…Ø§ ÙƒÙ†Ù‚Ø±Ø© Ø«Ù†Ø§Ø¦ÙŠØ© (Ø¨Ø§Ù„Ù…Ù„ÙŠØ«Ø§Ù†ÙŠØ©)"
 
 #: gtk/gtksettings.c:270
 msgid "Double Click Distance"
-msgstr "åÓÇáÉ ÇäæâÑ ÇäËæÇÆê"
+msgstr "Ù…Ø³Ø§ÙØ© Ø§Ù„Ù†Ù‚Ø± Ø§Ù„Ø«Ù†Ø§Ø¦ÙŠ"
 
 #: gtk/gtksettings.c:271
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
-msgstr "ÇäåÓÇáÉ ÇäâÕèé ÇäåÓåèÍ ÈçÇ Èêæ æâÑÊêæ äÇÙÊÈÇÑçåÇ æâÑÉ ËæÇÆêÉ (ÈÇäÈãÓä)"
+msgstr "Ø§Ù„Ù…Ø³Ø§ÙØ© Ø§Ù„Ù‚ØµÙˆÙ‰ Ø§Ù„Ù…Ø³Ù…ÙˆØ­ Ø¨Ù‡Ø§ Ø¨ÙŠÙ† Ù†Ù‚Ø±ØªÙŠÙ† Ù„Ø§Ø¹ØªØ¨Ø§Ø±Ù‡Ù…Ø§ Ù†Ù‚Ø±Ø© Ø«Ù†Ø§Ø¦ÙŠØ© (Ø¨Ø§Ù„Ø¨ÙƒØ³Ù„)"
 
 #: gtk/gtksettings.c:278
 msgid "Cursor Blink"
-msgstr "èåêÖ ÇäåÄÔÑ"
+msgstr "ÙˆÙ…ÙŠØ¶ Ø§Ù„Ù…Ø¤Ø´Ø±"
 
 #: gtk/gtksettings.c:279
 msgid "Whether the cursor should blink"
-msgstr "áêåÇ ÅĞÇ ãÇæ ÇäåÄÔÑ ÓêèåÖ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ø§Ù„Ù…Ø¤Ø´Ø± Ø³ÙŠÙˆÙ…Ø¶"
 
 #: gtk/gtksettings.c:286
 msgid "Cursor Blink Time"
-msgstr "èâÊ èåêÖ ÇäåÄÔÑ"
+msgstr "ÙˆÙ‚Øª ÙˆÙ…ÙŠØ¶ Ø§Ù„Ù…Ø¤Ø´Ø±"
 
 #: gtk/gtksettings.c:287
 msgid "Length of the cursor blink cycle, in milleseconds"
-msgstr "åÏÉ ÏèÑÉ èåêÖ ÇäåÄÔÑ¬ ÈÇäåäêËÇæêÉ"
+msgstr "Ù…Ø¯Ø© Ø¯ÙˆØ±Ø© ÙˆÙ…ÙŠØ¶ Ø§Ù„Ù…Ø¤Ø´Ø±ØŒ Ø¨Ø§Ù„Ù…Ù„ÙŠØ«Ø§Ù†ÙŠØ©"
 
 #: gtk/gtksettings.c:294
 msgid "Split Cursor"
-msgstr "âÓå ÇäåÄÔÑ"
+msgstr "Ù‚Ø³Ù… Ø§Ù„Ù…Ø¤Ø´Ø±"
 
 #: gtk/gtksettings.c:295
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
-msgstr "áêåÇ ÅĞÇ êÌÈ ÙÑÖ åÄÔÑêæ ääæÕèÕ ÇäåÎäè×É åæ êÓÇÑ-ääêåêæ èêåêæ-ääêÓÇÑ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙŠØ¬Ø¨ Ø¹Ø±Ø¶ Ù…Ø¤Ø´Ø±ÙŠÙ† Ù„Ù„Ù†ØµÙˆØµ Ø§Ù„Ù…Ø®Ù„ÙˆØ·Ø© Ù…Ù† ÙŠØ³Ø§Ø±-Ù„Ù„ÙŠÙ…ÙŠÙ† ÙˆÙŠÙ…ÙŠÙ†-Ù„Ù„ÙŠØ³Ø§Ø±"
 
 #: gtk/gtksettings.c:302
 msgid "Theme Name"
-msgstr "ÇÓå ÇäÊêåÉ"
+msgstr "Ø§Ø³Ù… Ø§Ù„ØªÙŠÙ…Ø©"
 
 #: gtk/gtksettings.c:303
 msgid "Name of theme RC file to load"
-msgstr "ÇÓå åäá RC ääÊêåÉ äÊÍåêäç"
+msgstr "Ø§Ø³Ù… Ù…Ù„Ù RC Ù„Ù„ØªÙŠÙ…Ø© Ù„ØªØ­Ù…ÙŠÙ„Ù‡"
 
 #: gtk/gtksettings.c:310
 msgid "Icon Theme Name"
-msgstr "ÇÓå ÊêåÉ ÇäÃêâèæÇÊ"
+msgstr "Ø§Ø³Ù… ØªÙŠÙ…Ø© Ø§Ù„Ø£ÙŠÙ‚ÙˆÙ†Ø§Øª"
 
 #: gtk/gtksettings.c:311
 msgid "Name of icon theme to use"
-msgstr "ÇÓå ÊêåÉ ÇäÃêâèæÇÊ äÇÓÊÎÏÇåçÇ"
+msgstr "Ø§Ø³Ù… ØªÙŠÙ…Ø© Ø§Ù„Ø£ÙŠÙ‚ÙˆÙ†Ø§Øª Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù…Ù‡Ø§"
 
 #: gtk/gtksettings.c:319
 msgid "Key Theme Name"
-msgstr "ÇÓå ÊêåÉ ÇäåáÊÇÍ"
+msgstr "Ø§Ø³Ù… ØªÙŠÙ…Ø© Ø§Ù„Ù…ÙØªØ§Ø­"
 
 #: gtk/gtksettings.c:320
 msgid "Name of key theme RC file to load"
-msgstr "ÇÓå åäá RC äÊêåÉ ÇäåáÊÇÍ äÊÍåêäç"
+msgstr "Ø§Ø³Ù… Ù…Ù„Ù RC Ù„ØªÙŠÙ…Ø© Ø§Ù„Ù…ÙØªØ§Ø­ Ù„ØªØ­Ù…ÙŠÙ„Ù‡"
 
 #: gtk/gtksettings.c:328
 msgid "Menu bar accelerator"
-msgstr "åáÊÇÍ ÇäÇÎÊÕÇÑ äÙåèÏ ÇäâÇÆåÉ"
+msgstr "Ù…ÙØªØ§Ø­ Ø§Ù„Ø§Ø®ØªØµØ§Ø± Ù„Ø¹Ù…ÙˆØ¯ Ø§Ù„Ù‚Ø§Ø¦Ù…Ø©"
 
 #: gtk/gtksettings.c:329
 msgid "Keybinding to activate the menu bar"
-msgstr "ÇäåáÊÇÍ ÇäÑÇÈ× äÊæÔê× ÙåèÏ ÇäâèÇÆå"
+msgstr "Ø§Ù„Ù…ÙØªØ§Ø­ Ø§Ù„Ø±Ø§Ø¨Ø· Ù„ØªÙ†Ø´ÙŠØ· Ø¹Ù…ÙˆØ¯ Ø§Ù„Ù‚ÙˆØ§Ø¦Ù…"
 
 #: gtk/gtksettings.c:337
 msgid "Drag threshold"
-msgstr "ÓÍÈ ÇäÙÊÈÉ"
+msgstr "Ø³Ø­Ø¨ Ø§Ù„Ø¹ØªØ¨Ø©"
 
 #: gtk/gtksettings.c:338
 msgid "Number of pixels the cursor can move before dragging"
-msgstr "ÙÏÏ ÇäÈãÓäÇÊ ÇäÊê êåãæ ääåÄÔÑ ÊÍÑêãçÇ âÈä ÇäÓÍÈ"
+msgstr "Ø¹Ø¯Ø¯ Ø§Ù„Ø¨ÙƒØ³Ù„Ø§Øª Ø§Ù„ØªÙŠ ÙŠÙ…ÙƒÙ† Ù„Ù„Ù…Ø¤Ø´Ø± ØªØ­Ø±ÙŠÙƒÙ‡Ø§ Ù‚Ø¨Ù„ Ø§Ù„Ø³Ø­Ø¨"
 
 #: gtk/gtksettings.c:346
 msgid "Font Name"
-msgstr "ÇÓå ÇäÎ×"
+msgstr "Ø§Ø³Ù… Ø§Ù„Ø®Ø·"
 
 #: gtk/gtksettings.c:347
 msgid "Name of default font to use"
-msgstr "ÇÓå ÇäÎ× ÇäÇáÊÑÇÖê äÇÓÊÎÏÇåç"
+msgstr "Ø§Ø³Ù… Ø§Ù„Ø®Ø· Ø§Ù„Ø§ÙØªØ±Ø§Ø¶ÙŠ Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù…Ù‡"
 
 #: gtk/gtksettings.c:355
 msgid "Icon Sizes"
-msgstr "ÃÍÌÇå ÇäÃêâèæÇÊ"
+msgstr "Ø£Ø­Ø¬Ø§Ù… Ø§Ù„Ø£ÙŠÙ‚ÙˆÙ†Ø§Øª"
 
 #: gtk/gtksettings.c:356
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
-msgstr "âÇÆåÉ ÃÍÌÇå ÇäÃêâèæÇÊ (gtk-âÇÆåÉ=16,16;gtk-ÒÑ=20,20..."
+msgstr "Ù‚Ø§Ø¦Ù…Ø© Ø£Ø­Ø¬Ø§Ù… Ø§Ù„Ø£ÙŠÙ‚ÙˆÙ†Ø§Øª (gtk-Ù‚Ø§Ø¦Ù…Ø©=16,16;gtk-Ø²Ø±=20,20..."
 
 #: gtk/gtksettings.c:365
 msgid "Xft Antialias"
@@ -2964,23 +2963,23 @@ msgstr "ØªØ­Ø³ÙŠÙ† Ø§Ù„Ø­ÙˆØ§Ù Ù„Ù€ XftÂ·"
 
 #: gtk/gtksettings.c:366
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
-msgstr "áêåÇ ÅĞÇ ÓÊÍÓñæ ÍèÇá Î×è× Xft¬ 0=äÇ¬ 1=æÙå¬ -1=ÇäÅáÊÑÇÖ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ØªØ­Ø³Ù‘Ù† Ø­ÙˆØ§Ù Ø®Ø·ÙˆØ· XftØŒ 0=Ù„Ø§ØŒ 1=Ù†Ø¹Ù…ØŒ -1=Ø§Ù„Ø¥ÙØªØ±Ø§Ø¶"
 
 #: gtk/gtksettings.c:375
 msgid "Xft Hinting"
-msgstr "ÊÑãêÒ Xft"
+msgstr "ØªØ±ÙƒÙŠØ² Xft"
 
 #: gtk/gtksettings.c:376
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
-msgstr "áêåÇ ÅĞÇ êâÙ ÊÑãêÒ Î×è× Xft¬ 0=äÇ¬ 1=æÙå¬ -1=ÇäÅáÊÑÇÖ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙŠÙ‚Ø¹ ØªØ±ÙƒÙŠØ² Ø®Ø·ÙˆØ· XftØŒ 0=Ù„Ø§ØŒ 1=Ù†Ø¹Ù…ØŒ -1=Ø§Ù„Ø¥ÙØªØ±Ø§Ø¶"
 
 #: gtk/gtksettings.c:385
 msgid "Xft Hint Style"
-msgstr "ÃÓäèÈ ÊÑãêÒ Xft"
+msgstr "Ø£Ø³Ù„ÙˆØ¨ ØªØ±ÙƒÙŠØ² Xft"
 
 #: gtk/gtksettings.c:386
 msgid "What degree of hinting to use; none, slight, medium, or full"
-msgstr "ÏÑÌÉ ÇäÊÑãêÒ ÇäÊÓ ÓÊÓÊÎÏå¬ äÇ ÊÑãêÒ Ãè ÖÙêá Ãè åÊèÓñ× Ãè ãÇåä"
+msgstr "Ø¯Ø±Ø¬Ø© Ø§Ù„ØªØ±ÙƒÙŠØ² Ø§Ù„ØªØ³ Ø³ØªØ³ØªØ®Ø¯Ù…ØŒ Ù„Ø§ ØªØ±ÙƒÙŠØ² Ø£Ùˆ Ø¶Ø¹ÙŠÙ Ø£Ùˆ Ù…ØªÙˆØ³Ù‘Ø· Ø£Ùˆ ÙƒØ§Ù…Ù„"
 
 #: gtk/gtksettings.c:395
 msgid "Xft RGBA"
@@ -3000,181 +2999,181 @@ msgstr "Ø§Ù„Ø¥Ø³ØªØ¨Ø§Ù†Ø© Ù„Ù€ XftØŒ Ø¨Ø§Ù„Ù€ 1024Â·*Â·Ù†Ù‚Ø·Ø© Ù„Ù„Ø¥Ù†Ø´. -1Â
 
 #: gtk/gtksizegroup.c:242
 msgid "Mode"
-msgstr "ÇäæÓâ"
+msgstr "Ø§Ù„Ù†Ø³Ù‚"
 
 #: gtk/gtksizegroup.c:243
 msgid ""
 "The directions in which the size group effects the requested sizes of its "
 "component widgets"
 msgstr ""
-"ÇäÅÊÌÇç ÇäĞê áêç ÊÄËÑ åÌåèÙÉ ÇäÃÍÌÇå¬ ÇäÃÍÌÇå Çäå×äèÈÉ äâğ×Ù åãèñæÇÊçÇ"
+"Ø§Ù„Ø¥ØªØ¬Ø§Ù‡ Ø§Ù„Ø°ÙŠ ÙÙŠÙ‡ ØªØ¤Ø«Ø± Ù…Ø¬Ù…ÙˆØ¹Ø© Ø§Ù„Ø£Ø­Ø¬Ø§Ù…ØŒ Ø§Ù„Ø£Ø­Ø¬Ø§Ù… Ø§Ù„Ù…Ø·Ù„ÙˆØ¨Ø© Ù„Ù‚ÙØ·Ø¹ Ù…ÙƒÙˆÙ‘Ù†Ø§ØªÙ‡Ø§"
 
 #: gtk/gtkspinbutton.c:242
 msgid "The adjustment that holds the value of the spinbutton"
-msgstr "ÇäÊÓèêÉ ÇäÍÇåäÉ äâêåÉ ÇäÒÑ ÇäæÇÈÖ"
+msgstr "Ø§Ù„ØªØ³ÙˆÙŠØ© Ø§Ù„Ø­Ø§Ù…Ù„Ø© Ù„Ù‚ÙŠÙ…Ø© Ø§Ù„Ø²Ø± Ø§Ù„Ù†Ø§Ø¨Ø¶"
 
 #: gtk/gtkspinbutton.c:249
 msgid "Climb Rate"
-msgstr "æÓÈÉ ÇäÊÓäâ"
+msgstr "Ù†Ø³Ø¨Ø© Ø§Ù„ØªØ³Ù„Ù‚"
 
 #: gtk/gtkspinbutton.c:250
 msgid "The acceleration rate when you hold down a button"
-msgstr "æÓÈÉ ÇäÊÓÇÑÙ ÃËæÇÁ ÖÚ×ã ääÒÑ"
+msgstr "Ù†Ø³Ø¨Ø© Ø§Ù„ØªØ³Ø§Ø±Ø¹ Ø£Ø«Ù†Ø§Ø¡ Ø¶ØºØ·Ùƒ Ù„Ù„Ø²Ø±"
 
 #: gtk/gtkspinbutton.c:260
 msgid "The number of decimal places to display"
-msgstr "ÙÏÏ ÇäÎÇæÇÊ ÇäÙÔÑêÉ äÙÑÖçÇ"
+msgstr "Ø¹Ø¯Ø¯ Ø§Ù„Ø®Ø§Ù†Ø§Øª Ø§Ù„Ø¹Ø´Ø±ÙŠØ© Ù„Ø¹Ø±Ø¶Ù‡Ø§"
 
 #: gtk/gtkspinbutton.c:269
 msgid "Snap to Ticks"
-msgstr "×â×âÇÊ äæâÑÇÊ"
+msgstr "Ø·Ù‚Ø·Ù‚Ø§Øª Ù„Ù†Ù‚Ø±Ø§Øª"
 
 #: gtk/gtkspinbutton.c:270
 msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
 msgstr ""
-"áêåÇ ÅĞÇ ÊÚêñÑ Çäâêå ÇäÎÇ×ÆÉ ÂäêÇ äÎ×èÉ ÇäÊÒÇêÏ ÇäÃâÑÈ ääÒÑ ÇäæÇÈÖ"
+"ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ØªØºÙŠÙ‘Ø± Ø§Ù„Ù‚ÙŠÙ… Ø§Ù„Ø®Ø§Ø·Ø¦Ø© Ø¢Ù„ÙŠÙ‘Ø§ Ù„Ø£Ù‚Ø±Ø¨ ØªØ²Ø§ÙŠØ¯ ØªØ¯Ø±Ù‘Ø¬ Ù„Ù„Ø²Ø± Ø§Ù„Ù†Ø§Ø¨Ø¶"
 
 #: gtk/gtkspinbutton.c:277
 msgid "Numeric"
-msgstr "Ñâåê"
+msgstr "Ø±Ù‚Ù…ÙŠ"
 
 #: gtk/gtkspinbutton.c:278
 msgid "Whether non-numeric characters should be ignored"
-msgstr "åÇ ÅĞ êÌÈ ÊÌÇçä ÇäÑåèÒ ÚêÑ ÇäÑâåêÉ"
+msgstr "Ù…Ø§ Ø¥Ø° ÙŠØ¬Ø¨ ØªØ¬Ø§Ù‡Ù„ Ø§Ù„Ø±Ù…ÙˆØ² ØºÙŠØ± Ø§Ù„Ø±Ù‚Ù…ÙŠØ©"
 
 #: gtk/gtkspinbutton.c:285
 msgid "Wrap"
-msgstr "ÇäÊèÇÁ"
+msgstr "Ø§Ù„ØªÙˆØ§Ø¡"
 
 #: gtk/gtkspinbutton.c:286
 msgid "Whether a spin button should wrap upon reaching its limits"
-msgstr "áêåÇ ÅĞÇ èÌÈ äÒÑ ÇäæÈÖ ÇäÅäÊáÇá ÙæÏ ÇäèÕèä Åäé ÍÏèÏç"
+msgstr "ÙÙŠÙ…Ø§Ø¥Ø°Ø§ ÙˆØ¬Ø¨ Ù„Ù„Ø²Ø± Ø§Ù„Ù†Ø§Ø¨Ø¶ Ø§Ù„Ù„Ù Ø¹Ù†Ø¯ Ø§Ù„ÙˆØµÙˆÙ„ Ø¥Ù„Ù‰ Ø­Ø¯ÙˆØ¯Ù‡"
 
 #: gtk/gtkspinbutton.c:293
 msgid "Update Policy"
-msgstr "ÓêÇÓÉ ÇäÊÍÏêË"
+msgstr "Ø³ÙŠØ§Ø³Ø© Ø§Ù„ØªØ­Ø¯ÙŠØ«"
 
 #: gtk/gtkspinbutton.c:294
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
-msgstr "åÇ ÅĞÇ êÌÈ ÊÍÏêË ÒÑ Çääá ÏèåÇ¬ Ãè áâ× ÙæÏåÇ Êãèæ ÇäâêåÉ åâÈèäÉ"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ÙŠØ¬Ø¨ ØªØ­Ø¯ÙŠØ« Ø²Ø± Ø§Ù„Ù„Ù Ø¯ÙˆÙ…Ø§ØŒ Ø£Ùˆ ÙÙ‚Ø· Ø¹Ù†Ø¯Ù…Ø§ ØªÙƒÙˆÙ† Ø§Ù„Ù‚ÙŠÙ…Ø© Ù…Ù‚Ø¨ÙˆÙ„Ø©"
 
 #: gtk/gtkspinbutton.c:303
 msgid "Reads the current value, or sets a new value"
-msgstr "êâÑÃ ÇäâêåÉ ÇäÍÇäêÉ¬ Ãè êÙêæ âêåÉ ÌÏêÏÉ"
+msgstr "ÙŠÙ‚Ø±Ø£ Ø§Ù„Ù‚ÙŠÙ…Ø© Ø§Ù„Ø­Ø§Ù„ÙŠØ©ØŒ Ø£Ùˆ ÙŠØ¹ÙŠÙ† Ù‚ÙŠÙ…Ø© Ø¬Ø¯ÙŠØ¯Ø©"
 
 #: gtk/gtkspinbutton.c:312
 msgid "Style of bevel around the spin button"
-msgstr "ÃÓäèÈ Çäåêä Íèä ÑÒ ÇäæÈÖ"
+msgstr "Ø£Ø³Ù„ÙˆØ¨ Ø§Ù„Ù…ÙŠÙ„ Ø­ÙˆÙ„ Ø§Ù„Ø²Ø± Ø§Ù„Ù†Ø§Ø¨Ø¶"
 
 #: gtk/gtkstatusbar.c:173
 msgid "Has Resize Grip"
-msgstr "äç åâÈÖ ÊÍÌêå"
+msgstr "Ù„Ù‡ Ù…Ù‚Ø¨Ø¶ ØªØ­Ø¬ÙŠÙ…"
 
 #: gtk/gtkstatusbar.c:174
 msgid "Whether the statusbar has a grip for resizing the toplevel"
-msgstr "áêåÇ ÅĞÇ ãÇæ äÙåèÏ ÇäÍÇäÉ åâÈÖ äÅÙÇÏÉ ÊÍÌêå ÇäåÓÊèé ÇäÃÙäé"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ù„Ø¹Ù…ÙˆØ¯ Ø§Ù„Ø­Ø§Ù„Ø© "
 
 #: gtk/gtkstatusbar.c:201
 msgid "Style of bevel around the statusbar text"
-msgstr "ÃÓäèÈ ÇäÍÇáÉ Íèä æÕ ÙåèÏ ÇäÍÇäÉ"
+msgstr "Ø£Ø³Ù„ÙˆØ¨ Ø§Ù„Ø­Ø§ÙØ© Ø­ÙˆÙ„ Ù†Øµ Ø¹Ù…ÙˆØ¯ Ø§Ù„Ø­Ø§Ù„Ø©"
 
 #: gtk/gtktable.c:159
 msgid "Rows"
-msgstr "Ó×èÑ"
+msgstr "Ø³Ø·ÙˆØ±"
 
 #: gtk/gtktable.c:160
 msgid "The number of rows in the table"
-msgstr "ÙÏÏ ÇäÓ×èÑ áê ÇäÌÏèä"
+msgstr "Ø¹Ø¯Ø¯ Ø§Ù„Ø³Ø·ÙˆØ± ÙÙŠ Ø§Ù„Ø¬Ø¯ÙˆÙ„"
 
 #: gtk/gtktable.c:168
 msgid "Columns"
-msgstr "ÇäÃÙåÏÉ"
+msgstr "Ø§Ù„Ø£Ø¹Ù…Ø¯Ø©"
 
 #: gtk/gtktable.c:169
 msgid "The number of columns in the table"
-msgstr "ÙÏÏ ÇäÃÙåÏÉ áê ÇäÌÏèä"
+msgstr "Ø¹Ø¯Ø¯ Ø§Ù„Ø£Ø¹Ù…Ø¯Ø© ÙÙŠ Ø§Ù„Ø¬Ø¯ÙˆÙ„"
 
 #: gtk/gtktable.c:177
 msgid "Row spacing"
-msgstr "áÑÇÚÇÊ ÇäÓ×èÑ"
+msgstr "ÙØ±Ø§ØºØ§Øª Ø§Ù„Ø³Ø·ÙˆØ±"
 
 #: gtk/gtktable.c:178
 msgid "The amount of space between two consecutive rows"
-msgstr "åâÏÇÑ ÇäáÑÇÚ Èêæ Õáêæ åÊÊÇäêêæ"
+msgstr "Ù…Ù‚Ø¯Ø§Ø± Ø§Ù„ÙØ±Ø§Øº Ø¨ÙŠÙ† ØµÙÙŠÙ† Ù…ØªØªØ§Ù„ÙŠÙŠÙ†"
 
 #: gtk/gtktable.c:186
 msgid "Column spacing"
-msgstr "áÑÇÚÇÊ ÇäÙåèÏ"
+msgstr "ÙØ±Ø§ØºØ§Øª Ø§Ù„Ø¹Ù…ÙˆØ¯"
 
 #: gtk/gtktable.c:187
 msgid "The amount of space between two consecutive columns"
-msgstr "åâÏÇÑ ÇäáÑÇÚÉ Èêæ ÙåèÏêæ åÊÊÇäêêæ"
+msgstr "Ù…Ù‚Ø¯Ø§Ø± Ø§Ù„ÙØ±Ø§ØºØ© Ø¨ÙŠÙ† Ø¹Ù…ÙˆØ¯ÙŠÙ† Ù…ØªØªØ§Ù„ÙŠÙŠÙ†"
 
 #: gtk/gtktable.c:195
 msgid "Homogenous"
-msgstr "åÊÌÇæÓ"
+msgstr "Ù…ØªØ¬Ø§Ù†Ø³"
 
 #: gtk/gtktable.c:196
 msgid "If TRUE this means the table cells are all the same width/height"
-msgstr "ÅĞÇ ãÇæ TRUE áÓÊãèæ ÎäÇêÇ ÇäÌÏèä ÈæáÓ ÇäÙÑÖ/Çä×èä"
+msgstr "Ø¥Ø°Ø§ ÙƒØ§Ù† TRUE ÙØ³ØªÙƒÙˆÙ† Ø®Ù„Ø§ÙŠØ§ Ø§Ù„Ø¬Ø¯ÙˆÙ„ Ø¨Ù†ÙØ³ Ø§Ù„Ø¹Ø±Ø¶/Ø§Ù„Ø·ÙˆÙ„"
 
 #: gtk/gtktable.c:203
 msgid "Left attachment"
-msgstr "ÑÈ× Åäé ÇäêÓÇÑ"
+msgstr "Ø±Ø¨Ø· Ø¥Ù„Ù‰ Ø§Ù„ÙŠØ³Ø§Ø±"
 
 #: gtk/gtktable.c:210
 msgid "Right attachment"
-msgstr "ÑÈ× Åäé Çäêåêæ"
+msgstr "Ø±Ø¨Ø· Ø¥Ù„Ù‰ Ø§Ù„ÙŠÙ…ÙŠÙ†"
 
 #: gtk/gtktable.c:211
 msgid "The column number to attach the right side of a child widget to"
-msgstr "Ñâå ÇäÙåèÏ ÇäÖê Åäêç ÓÊÑÈ× ÇäÌçÉ Çäêåæé ääâ×ÙÉ ÇäÅÈæÉ"
+msgstr "Ø±Ù‚Ù… Ø§Ù„Ø¹Ù…ÙˆØ¯ Ø§Ù„Ø¶ÙŠ Ø¥Ù„ÙŠÙ‡ Ø³ØªØ±Ø¨Ø· Ø§Ù„Ø¬Ù‡Ø© Ø§Ù„ÙŠÙ…Ù†Ù‰ Ù„Ù„Ù‚Ø·Ø¹Ø© Ø§Ù„Ø¥Ø¨Ù†Ø©"
 
 #: gtk/gtktable.c:217
 msgid "Top attachment"
-msgstr "ÑÈ× ääÃÙäé"
+msgstr "Ø±Ø¨Ø· Ù„Ù„Ø£Ø¹Ù„Ù‰"
 
 #: gtk/gtktable.c:218
 msgid "The row number to attach the top of a child widget to"
-msgstr "Ñâå ÇäÓ×Ñ ÇäĞê Åäêç ÓêÑÈ× ÃÙäé â×ÙÉ ÅÈæÉ"
+msgstr "Ø±Ù‚Ù… Ø§Ù„Ø³Ø·Ø± Ø§Ù„Ø°ÙŠ Ø¥Ù„ÙŠÙ‡ Ø³ÙŠØ±Ø¨Ø· Ø£Ø¹Ù„Ù‰ Ù‚Ø·Ø¹Ø© Ø¥Ø¨Ù†Ø©"
 
 #: gtk/gtktable.c:224
 msgid "Bottom attachment"
-msgstr "ÑÈ× ääÃÓáä"
+msgstr "Ø±Ø¨Ø· Ù„Ù„Ø£Ø³ÙÙ„"
 
 #: gtk/gtktable.c:231
 msgid "Horizontal options"
-msgstr "ÇäÎêÇÑÇÊ ÇäÃáâêÉ"
+msgstr "Ø§Ù„Ø®ÙŠØ§Ø±Ø§Øª Ø§Ù„Ø£ÙÙ‚ÙŠØ©"
 
 #: gtk/gtktable.c:232
 msgid "Options specifying the horizontal behaviour of the child"
-msgstr "ÎêÇÑÇÊ ÊÍÏÏ ÇäÓäèã ÇäÃáâê ääÅÈæ"
+msgstr "Ø®ÙŠØ§Ø±Ø§Øª ØªØ­Ø¯Ø¯ Ø§Ù„Ø³Ù„ÙˆÙƒ Ø§Ù„Ø£ÙÙ‚ÙŠ Ù„Ù„Ø¥Ø¨Ù†"
 
 #: gtk/gtktable.c:238
 msgid "Vertical options"
-msgstr "ÇäÎêÇÑÇÊ ÇäÙåèÏêÉ"
+msgstr "Ø§Ù„Ø®ÙŠØ§Ø±Ø§Øª Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠØ©"
 
 #: gtk/gtktable.c:239
 msgid "Options specifying the vertical behaviour of the child"
-msgstr "ÎêÇÑÇÊ ÊÍÏÏ ÇäÓäèã ÇäÙåèÏê ääÅÈæ"
+msgstr "Ø®ÙŠØ§Ø±Ø§Øª ØªØ­Ø¯Ø¯ Ø§Ù„Ø³Ù„ÙˆÙƒ Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ Ù„Ù„Ø¥Ø¨Ù†"
 
 #: gtk/gtktable.c:245
 msgid "Horizontal padding"
-msgstr "ÇäÍÔè ÇäÃáâê"
+msgstr "Ø§Ù„Ø­Ø´Ùˆ Ø§Ù„Ø£ÙÙ‚ÙŠ"
 
 #: gtk/gtktable.c:246
 msgid ""
 "Extra space to put between the child and its left and right neighbors, in "
 "pixels"
 msgstr ""
-"ÇäáÖÇÁ ÇäÅÖÇáê ÇäĞê ÓêèÖÙ Èêæ ÇäÅÈæ èÌêÑÇæç Ùäé Çäêåêæ è ÇäêÓÇÑ ÈÇäÈãÓäÇÊ"
+"Ø§Ù„ÙØ¶Ø§Ø¡ Ø§Ù„Ø¥Ø¶Ø§ÙÙŠ Ø§Ù„Ø°ÙŠ Ø³ÙŠÙˆØ¶Ø¹ Ø¨ÙŠÙ† Ø§Ù„Ø¥Ø¨Ù† ÙˆØ¬ÙŠØ±Ø§Ù†Ù‡ Ø¹Ù„Ù‰ Ø§Ù„ÙŠÙ…ÙŠÙ† Ùˆ Ø§Ù„ÙŠØ³Ø§Ø± Ø¨Ø§Ù„Ø¨ÙƒØ³Ù„Ø§Øª"
 
 #: gtk/gtktable.c:252
 msgid "Vertical padding"
-msgstr "ÇäÍÔè ÇäÙåèÏê"
+msgstr "Ø§Ù„Ø­Ø´Ùˆ Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ"
 
 #: gtk/gtktable.c:253
 msgid ""
@@ -3184,39 +3183,39 @@ msgstr "Ø§Ù„ÙØ¶Ø§Ø¡Â·Ø§Ù„Ø¥Ø¶Ø§ÙÙŠÂ·Ø§Ù„Ø°ÙŠÂ·Ø³ÙŠÙˆØ¶Ø¹Â·Ø¨ÙŠÙ†Â·Ø§Ù„Ø¥Ø¨Ù†Â·
 
 #: gtk/gtktext.c:603
 msgid "Horizontal adjustment for the text widget"
-msgstr "ÇäÖÈ× ÇäÃáâê äâ×ÙÉ ÇäæÕ"
+msgstr "Ø§Ù„Ø¶Ø¨Ø· Ø§Ù„Ø£ÙÙ‚ÙŠ Ù„Ù‚Ø·Ø¹Ø© Ø§Ù„Ù†Øµ"
 
 #: gtk/gtktext.c:611
 msgid "Vertical adjustment for the text widget"
-msgstr "ÇäÖÈ× ÇäÙåèÏê äâ×ÙÉ ÇäæÕ"
+msgstr "Ø§Ù„Ø¶Ø¨Ø· Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ Ù„Ù‚Ø·Ø¹Ø© Ø§Ù„Ù†Øµ"
 
 #: gtk/gtktext.c:618
 msgid "Line Wrap"
-msgstr "âÓå ÇäÓ×Ñ"
+msgstr "Ù‚Ø³Ù… Ø§Ù„Ø³Ø·Ø±"
 
 #: gtk/gtktext.c:619
 msgid "Whether lines are wrapped at widget edges"
-msgstr "åÇ ÅĞÇ ÊâÓå ÇäÓ×èÑ ÙæÏ ÍèÇá Çäâ×Ù"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ØªÙ‚Ø³Ù… Ø§Ù„Ø³Ø·ÙˆØ± Ø¹Ù†Ø¯ Ø­ÙˆØ§Ù Ø§Ù„Ù‚Ø·Ø¹"
 
 #: gtk/gtktext.c:626
 msgid "Word Wrap"
-msgstr "âÓå ÇäãäåÇÊ"
+msgstr "Ù‚Ø³Ù… Ø§Ù„ÙƒÙ„Ù…Ø§Øª"
 
 #: gtk/gtktext.c:627
 msgid "Whether words are wrapped at widget edges"
-msgstr "åÇ ÅĞÇ ÊâÓå ÇäãäåÇÊ ÙæÏ ÍèÇá Çäâ×Ù"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ØªÙ‚Ø³Ù… Ø§Ù„ÙƒÙ„Ù…Ø§Øª Ø¹Ù†Ø¯ Ø­ÙˆØ§Ù Ø§Ù„Ù‚Ø·Ø¹"
 
 #: gtk/gtktextbuffer.c:181
 msgid "Tag Table"
-msgstr "ÌÏèä ÇäÔÇÑÇÊ"
+msgstr "Ø¬Ø¯ÙˆÙ„ Ø§Ù„Ø´Ø§Ø±Ø§Øª"
 
 #: gtk/gtktextbuffer.c:182
 msgid "Text Tag Table"
-msgstr "ÌÏèä ÇäÔÇÑÇÊ ÇäæÕêÉ"
+msgstr "Ø¬Ø¯ÙˆÙ„ Ø§Ù„Ø´Ø§Ø±Ø§Øª Ø§Ù„Ù†ØµÙŠØ©"
 
 #: gtk/gtktexttag.c:196
 msgid "Tag name"
-msgstr "ÇÓå ÇäÔÇÑÉ"
+msgstr "Ø§Ø³Ù… Ø§Ù„Ø´Ø§Ø±Ø©"
 
 #: gtk/gtktexttag.c:197
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
@@ -3228,42 +3227,42 @@ msgstr "Ù„ÙˆÙ† Ø§Ù„Ø®Ù„ÙÙŠØ© ÙƒÙ€ GdkColor (Ø±Ø¨Ù…Ø§Â·ØºÙŠØ±Â·Ù…Ø®ØµØµ)"
 
 #: gtk/gtktexttag.c:222
 msgid "Background full height"
-msgstr "ÇÑÊáÇÙ ÇäÎäáêÉ ÇäÃâÕé"
+msgstr "Ø§Ø±ØªÙØ§Ø¹ Ø§Ù„Ø®Ù„ÙÙŠØ© Ø§Ù„Ø£Ù‚ØµÙ‰"
 
 #: gtk/gtktexttag.c:223
 msgid ""
 "Whether the background color fills the entire line height or only the height "
 "of the tagged characters"
 msgstr ""
-"áêåÇ ÅĞÇ ÓêåäÃ äèæ ÇäÎäáêñÉ ãÇåä ÅÑÊáÇÙ ÇäÓ×Ñ Ãè ÅÑÊáÇÙ ÇäÑåèÒ ÇäåÙñäåÉ áâ×"
+"ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ÙŠÙ…Ù„Ø£ Ù„ÙˆÙ† Ø§Ù„Ø®Ù„ÙÙŠÙ‘Ø© ÙƒØ§Ù…Ù„ Ø¥Ø±ØªÙØ§Ø¹ Ø§Ù„Ø³Ø·Ø± Ø£Ùˆ Ø¥Ø±ØªÙØ§Ø¹ Ø§Ù„Ø±Ù…ÙˆØ² Ø§Ù„Ù…Ø¹Ù‘Ù„Ù…Ø© ÙÙ‚Ø·"
 
 #: gtk/gtktexttag.c:231
 msgid "Background stipple mask"
-msgstr "ÚäÇá Êæâê× ÇäÎäáêÉ"
+msgstr "ØºÙ„Ø§Ù ØªÙ†Ù‚ÙŠØ· Ø§Ù„Ø®Ù„ÙÙŠØ©"
 
 #: gtk/gtktexttag.c:232
 msgid "Bitmap to use as a mask when drawing the text background"
-msgstr "ÕèÑÉ ÈêÊåÇÈ ÇäåÓÊÎÏåÉ ãÚäÇá ÃËæÇÁ ÑÓå ÇäèÇÌçÉ ÇäÎäáêÉ ääæÕ"
+msgstr "ØµÙˆØ±Ø© Ø¨ÙŠØªÙ…Ø§Ø¨ Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…Ø© ÙƒØºÙ„Ø§Ù Ø£Ø«Ù†Ø§Ø¡ Ø±Ø³Ù… Ø§Ù„ÙˆØ§Ø¬Ù‡Ø© Ø§Ù„Ø®Ù„ÙÙŠØ© Ù„Ù„Ù†Øµ"
 
 #: gtk/gtktexttag.c:249
 msgid "Foreground color as a (possibly unallocated) GdkColor"
-msgstr "äèæ ÇäèÇÌçÉ ÇäÃåÇåêÉ ãà GdkColor (ÑÈåÇ ÚêÑ åÎÕÕ)"
+msgstr "Ù„ÙˆÙ† Ø§Ù„ÙˆØ§Ø¬Ù‡Ø© Ø§Ù„Ø£Ù…Ø§Ù…ÙŠØ© ÙƒÙ€ GdkColor (Ø±Ø¨Ù…Ø§ ØºÙŠØ± Ù…Ø®ØµØµ)"
 
 #: gtk/gtktexttag.c:257
 msgid "Foreground stipple mask"
-msgstr "âæÇÙ Êæâê× ÇäèÇÌçÉ"
+msgstr "Ù‚Ù†Ø§Ø¹ ØªÙ†Ù‚ÙŠØ· Ø§Ù„ÙˆØ§Ø¬Ù‡Ø©"
 
 #: gtk/gtktexttag.c:258
 msgid "Bitmap to use as a mask when drawing the text foreground"
-msgstr "ÕèÑÉ ÈêÊåÇÈ ÇäåÓÊÎÏåÉ ãÚäÇá ÃËæÇÁ ÑÓå ÇäèÇÌçÉ Ç?åÇåêÉ ääæÕ"
+msgstr "ØµÙˆØ±Ø© Ø¨ÙŠØªÙ…Ø§Ø¨ Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…Ø© ÙƒØºÙ„Ø§Ù Ø£Ø«Ù†Ø§Ø¡ Ø±Ø³Ù… Ø§Ù„ÙˆØ§Ø¬Ù‡Ø© Ø§?Ù…Ø§Ù…ÙŠØ© Ù„Ù„Ù†Øµ"
 
 #: gtk/gtktexttag.c:265
 msgid "Text direction"
-msgstr "ÇÊÌÇç ÇäæÕ"
+msgstr "Ø§ØªØ¬Ø§Ù‡ Ø§Ù„Ù†Øµ"
 
 #: gtk/gtktexttag.c:266
 msgid "Text direction, e.g. right-to-left or left-to-right"
-msgstr "ÇÊÌÇç ÇäæÕ¬ åËäÇ êåêæ ääêÓÇÑ Ãè êÓÇÑ ääêåêæ"
+msgstr "Ø§ØªØ¬Ø§Ù‡ Ø§Ù„Ù†ØµØŒ Ù…Ø«Ù„Ø§ ÙŠÙ…ÙŠÙ† Ù„Ù„ÙŠØ³Ø§Ø± Ø£Ùˆ ÙŠØ³Ø§Ø± Ù„Ù„ÙŠÙ…ÙŠÙ†"
 
 #: gtk/gtktexttag.c:283
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
@@ -3271,26 +3270,26 @@ msgstr "ÙˆØµÙ Ø§Ù„Ø®Ø· ÙƒØ³Ù„Ø³Ù„Ø©ØŒ Ù…Ø«Ù„Ø§ \"SansÂ·ItalicÂ·12\""
 
 #: gtk/gtktexttag.c:308
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
-msgstr "ÃÓäèÈ ÇäÎ× ãÃÓäèÈ ÈÇæãè¬ åËäÇ PANGO_STYLE_ITALIC"
+msgstr "Ø£Ø³Ù„ÙˆØ¨ Ø§Ù„Ø®Ø· ÙƒØ£Ø³Ù„ÙˆØ¨ Ø¨Ø§Ù†ÙƒÙˆØŒ Ù…Ø«Ù„Ø§ PANGO_STYLE_ITALIC"
 
 #: gtk/gtktexttag.c:317
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
-msgstr "ÖÑÈ ÇäÎ× ãà PangoVariant åËä PANGO_VARIANT_SMALL_CAPS"
+msgstr "Ø¶Ø±Ø¨ Ø§Ù„Ø®Ø· ÙƒÙ€ PangoVariant Ù…Ø«Ù„ PANGO_VARIANT_SMALL_CAPS"
 
 #: gtk/gtktexttag.c:326
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD"
 msgstr ""
-"èÒæ ÇäÎ× ãÙÏÏ ÕÍêÍ¬ ÑÇÌÙ Çäâêå ÇäåÍÏÏ áê PangoWeight¬ åËäÇ PANGO_WEIGHT_BOLD"
+"ÙˆØ²Ù† Ø§Ù„Ø®Ø· ÙƒØ¹Ø¯Ø¯ ØµØ­ÙŠØ­ØŒ Ø±Ø§Ø¬Ø¹ Ø§Ù„Ù‚ÙŠÙ… Ø§Ù„Ù…Ø­Ø¯Ø¯ ÙÙŠ PangoWeightØŒ Ù…Ø«Ù„Ø§ PANGO_WEIGHT_BOLD"
 
 #: gtk/gtktexttag.c:337
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
-msgstr "ääåÏ ãà PangoStretch¬ åËäÇ PANGO_STRETCH_CONDENSED"
+msgstr "Ù„Ù„Ù…Ø¯ ÙƒÙ€ PangoStretchØŒ Ù…Ø«Ù„Ø§ PANGO_STRETCH_CONDENSED"
 
 #: gtk/gtktexttag.c:346
 msgid "Font size in Pango units"
-msgstr "ÍÌå ÇäÎ× ÈèÍÏÇÊ ÈÇæãè"
+msgstr "Ø­Ø¬Ù… Ø§Ù„Ø®Ø· Ø¨ÙˆØ­Ø¯Ø§Øª Ø¨Ø§Ù†ÙƒÙˆ"
 
 #: gtk/gtktexttag.c:356
 msgid ""
@@ -3298,90 +3297,90 @@ msgid ""
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
 "such as PANGO_SCALE_X_LARGE"
 msgstr ""
-"ÍÌå ÇäÎ× ãÙÇåä ÊÍÌêå æÓÈÉ äÍÌå ÇäÎ× ÇäÅáÊÑÇÖê. "
-"êÊãêá çĞÇ ÊåÇåÇ åÙ ÊÚêêÑÇÊ ÇäÊêåÇÊ ÇäÎ ååÇ êÌÙäç åèÕé Èç. "
-"êÍÏñÏ ÈÇæãè ÈÙÖ ÇäåâÇêêÓ åËä PANGO_SCALE_X_LARGE"
+"Ø­Ø¬Ù… Ø§Ù„Ø®Ø· ÙƒØ¹Ø§Ù…Ù„ ØªØ­Ø¬ÙŠÙ… Ù†Ø³Ø¨Ø© Ù„Ø­Ø¬Ù… Ø§Ù„Ø®Ø· Ø§Ù„Ø¥ÙØªØ±Ø§Ø¶ÙŠ. "
+"ÙŠØªÙƒÙŠÙ Ù‡Ø°Ø§ ØªÙ…Ø§Ù…Ø§ Ù…Ø¹ ØªØºÙŠÙŠØ±Ø§Øª Ø§Ù„ØªÙŠÙ…Ø§Øª Ø§Ù„Ø® Ù…Ù…Ø§ ÙŠØ¬Ø¹Ù„Ù‡ Ù…ÙˆØµÙ‰ Ø¨Ù‡. "
+"ÙŠØ­Ø¯Ù‘Ø¯ Ø¨Ø§Ù†ÙƒÙˆ Ø¨Ø¹Ø¶ Ø§Ù„Ù…Ù‚Ø§ÙŠÙŠØ³ Ù…Ø«Ù„ PANGO_SCALE_X_LARGE"
 
 #: gtk/gtktexttag.c:376 gtk/gtktextview.c:604
 msgid "Left, right, or center justification"
-msgstr "ÖÈ× ääêÓÇÑ Ãè ääêåêæ Ãè ääèÓ×"
+msgstr "Ø¶Ø¨Ø· Ù„Ù„ÙŠØ³Ø§Ø± Ø£Ùˆ Ù„Ù„ÙŠÙ…ÙŠÙ† Ø£Ùˆ Ù„Ù„ÙˆØ³Ø·"
 
 #: gtk/gtktexttag.c:392
 msgid "Left margin"
-msgstr "ÇäçÇåÔ Ç?êÓÑ"
+msgstr "Ø§Ù„Ù‡Ø§Ù…Ø´ Ø§?ÙŠØ³Ø±"
 
 #: gtk/gtktexttag.c:393 gtk/gtktextview.c:613
 msgid "Width of the left margin in pixels"
-msgstr "ÙÑÖ ÇäçÇåÔ Ç?êÓÑ ÈÇäÈãÓä"
+msgstr "Ø¹Ø±Ø¶ Ø§Ù„Ù‡Ø§Ù…Ø´ Ø§?ÙŠØ³Ø± Ø¨Ø§Ù„Ø¨ÙƒØ³Ù„"
 
 #: gtk/gtktexttag.c:402
 msgid "Right margin"
-msgstr "ÇäçÇåÔ Ç?êåæ"
+msgstr "Ø§Ù„Ù‡Ø§Ù…Ø´ Ø§?ÙŠÙ…Ù†"
 
 #: gtk/gtktexttag.c:403 gtk/gtktextview.c:623
 msgid "Width of the right margin in pixels"
-msgstr "ÙÑÖ ÇäçÇåÔ Ç?êåæ ÈÇäÈãÓä"
+msgstr "Ø¹Ø±Ø¶ Ø§Ù„Ù‡Ø§Ù…Ø´ Ø§?ÙŠÙ…Ù† Ø¨Ø§Ù„Ø¨ÙƒØ³Ù„"
 
 #: gtk/gtktexttag.c:413 gtk/gtktextview.c:632
 msgid "Indent"
-msgstr "ÅÒÇÍÉ"
+msgstr "Ø¥Ø²Ø§Ø­Ø©"
 
 #: gtk/gtktexttag.c:414 gtk/gtktextview.c:633
 msgid "Amount to indent the paragraph, in pixels"
-msgstr "åâÏÇÑ ÅÒÇÍÉ ÇäáâÑÇÊ¬ ÈÇäÈãÓä"
+msgstr "Ù…Ù‚Ø¯Ø§Ø± Ø¥Ø²Ø§Ø­Ø© Ø§Ù„ÙÙ‚Ø±Ø§ØªØŒ Ø¨Ø§Ù„Ø¨ÙƒØ³Ù„"
 
 #: gtk/gtktexttag.c:425
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in pixels"
 msgstr ""
-"ÊÙèêÖ ÇäæÕ áèâ ÇäÓ×Ñ ÇäÑÆêÓê (ÊÍÊ ÇäÓ×Ñ ÇäÑÆêÓê ÅĞÇ ãÇæ "
-"ÇäÑáÙ ÓäÈêñÇ) ÈÇäÈãÓä"
+"ØªØ¹ÙˆÙŠØ¶ Ø§Ù„Ù†Øµ ÙÙˆÙ‚ Ø§Ù„Ø³Ø·Ø± Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠ (ØªØ­Øª Ø§Ù„Ø³Ø·Ø± Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠ Ø¥Ø°Ø§ ÙƒØ§Ù† "
+"Ø§Ù„Ø±ÙØ¹ Ø³Ù„Ø¨ÙŠÙ‘Ø§) Ø¨Ø§Ù„Ø¨ÙƒØ³Ù„"
 
 #: gtk/gtktexttag.c:434
 msgid "Pixels above lines"
-msgstr "ÈãÓäÇÊ ÃÙäé Ç?Ó×Ñ"
+msgstr "Ø¨ÙƒØ³Ù„Ø§Øª Ø£Ø¹Ù„Ù‰ Ø§?Ø³Ø·Ø±"
 
 #: gtk/gtktexttag.c:435 gtk/gtktextview.c:557
 msgid "Pixels of blank space above paragraphs"
-msgstr "ÈãÓäÇÊ åæ ÇäåÓÇáÇÊ ÇäáÇÑÚÉ ÃÙäé ÇäáâÑÇÊ"
+msgstr "Ø¨ÙƒØ³Ù„Ø§Øª Ù…Ù† Ø§Ù„Ù…Ø³Ø§ÙØ§Øª Ø§Ù„ÙØ§Ø±ØºØ© Ø£Ø¹Ù„Ù‰ Ø§Ù„ÙÙ‚Ø±Ø§Øª"
 
 #: gtk/gtktexttag.c:444
 msgid "Pixels below lines"
-msgstr "ÈãÓäÇÊ ÃÓáä Ç?Ó×Ñ"
+msgstr "Ø¨ÙƒØ³Ù„Ø§Øª Ø£Ø³ÙÙ„ Ø§?Ø³Ø·Ø±"
 
 #: gtk/gtktexttag.c:445 gtk/gtktextview.c:567
 msgid "Pixels of blank space below paragraphs"
-msgstr "ÈãÓäÇÊ åæ ÇäåÓÇáÇÊ ÇäáÇÑÚÉ ÃÓáä ÇäáâÑÇÊ"
+msgstr "Ø¨ÙƒØ³Ù„Ø§Øª Ù…Ù† Ø§Ù„Ù…Ø³Ø§ÙØ§Øª Ø§Ù„ÙØ§Ø±ØºØ© Ø£Ø³ÙÙ„ Ø§Ù„ÙÙ‚Ø±Ø§Øª"
 
 #: gtk/gtktexttag.c:454
 msgid "Pixels inside wrap"
-msgstr "ÈãÓäÇÊ ÏÇÎä ÇäÇäÊèÇÁ"
+msgstr "Ø¨ÙƒØ³Ù„Ø§Øª Ø¯Ø§Ø®Ù„ Ø§Ù„Ø§Ù„ØªÙˆØ§Ø¡"
 
 #: gtk/gtktexttag.c:455 gtk/gtktextview.c:577
 msgid "Pixels of blank space between wrapped lines in a paragraph"
-msgstr "ÈãÓäÇÊ åæ ÇäåÓÇáÇÊ ÇäáÇÑÚÉ Èêæ Ç?Ó×Ñ ÇäåäÊèêÉ áê áâÑÉ"
+msgstr "Ø¨ÙƒØ³Ù„Ø§Øª Ù…Ù† Ø§Ù„Ù…Ø³Ø§ÙØ§Øª Ø§Ù„ÙØ§Ø±ØºØ© Ø¨ÙŠÙ† Ø§?Ø³Ø·Ø± Ø§Ù„Ù…Ù„ØªÙˆÙŠØ© ÙÙŠ ÙÙ‚Ø±Ø©"
 
 #: gtk/gtktexttag.c:481
 msgid "Wrap mode"
-msgstr "æØÇå ÇäÇäÊèÇÁ"
+msgstr "Ù†Ø¸Ø§Ù… Ø§Ù„Ø§Ù„ØªÙˆØ§Ø¡"
 
 #: gtk/gtktexttag.c:482 gtk/gtktextview.c:595
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
-msgstr "åÇ ÅĞÇ äæ êÊå ÇäÊèÇÁ ÇäÃÓ×Ñ ÙæÏ ÍÏèÏ ÇäãäåÇÊ Ãè ÇäÑåèÒ"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ Ù„Ù† ÙŠØªÙ… Ø§Ù„ØªÙˆØ§Ø¡ Ø§Ù„Ø£Ø³Ø·Ø± Ø¹Ù†Ø¯ Ø­Ø¯ÙˆØ¯ Ø§Ù„ÙƒÙ„Ù…Ø§Øª Ø£Ùˆ Ø§Ù„Ø±Ù…ÙˆØ²"
 
 #: gtk/gtktexttag.c:491 gtk/gtktextview.c:642
 msgid "Tabs"
-msgstr "ÇäÃÔÑ×É"
+msgstr "Ø§Ù„Ø£Ø´Ø±Ø·Ø©"
 
 #: gtk/gtktexttag.c:492 gtk/gtktextview.c:643
 msgid "Custom tabs for this text"
-msgstr "ÃÔÑ×É åÎÕÕÉ äçĞÇ ÇäæÕ"
+msgstr "Ø£Ø´Ø±Ø·Ø© Ù…Ø®ØµØµØ© Ù„Ù‡Ø°Ø§ Ø§Ù„Ù†Øµ"
 
 #: gtk/gtktexttag.c:499
 msgid "Invisible"
-msgstr "åÎáê"
+msgstr "Ù…Ø®ÙÙŠ"
 
 #: gtk/gtktexttag.c:500
 msgid "Whether this text is hidden. Not implemented in GTK 2.0"
@@ -3389,558 +3388,558 @@ msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ø§Ù„Ù†Øµ Ù…Ø®ÙÙŠÙ‘Ø§. Ù„Ù… ÙŠÙ†Ø¬Ø² Ø¨Ø¹Ø¯ ÙÙŠ 
 
 #: gtk/gtktexttag.c:513
 msgid "Background full height set"
-msgstr "ÊÙêêæ ÇäÇÑÊáÇÙ ÇäÊÇå ääÎäáêÉ"
+msgstr "ØªØ¹ÙŠÙŠÙ† Ø§Ù„Ø§Ø±ØªÙØ§Ø¹ Ø§Ù„ØªØ§Ù… Ù„Ù„Ø®Ù„ÙÙŠØ©"
 
 #: gtk/gtktexttag.c:514
 msgid "Whether this tag affects background height"
-msgstr "Åæ ãÇæÊ çĞç ÇäÙäÇåÉ ÊÄËÑ áê ÇÑÊáÇÙ ÇäÎäáêÉ"
+msgstr "Ø¥Ù† ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø¹Ù„Ø§Ù…Ø© ØªØ¤Ø«Ø± ÙÙŠ Ø§Ø±ØªÙØ§Ø¹ Ø§Ù„Ø®Ù„ÙÙŠØ©"
 
 #: gtk/gtktexttag.c:517
 msgid "Background stipple set"
-msgstr "ÊÙêêæ Êæâê× ÇäèÇÌçÉ ÇäÎäáêÉ"
+msgstr "ØªØ¹ÙŠÙŠÙ† ØªÙ†Ù‚ÙŠØ· Ø§Ù„ÙˆØ§Ø¬Ù‡Ø© Ø§Ù„Ø®Ù„ÙÙŠØ©"
 
 #: gtk/gtktexttag.c:518
 msgid "Whether this tag affects the background stipple"
-msgstr "Åæ ãÇæÊ çĞç ÇäÙäÇåÉ ÊÄËÑ áê ÇäÑÓå Çäæâ×ê ääèÇÌçÉ ÇäÎäáêÉ"
+msgstr "Ø¥Ù† ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø¹Ù„Ø§Ù…Ø© ØªØ¤Ø«Ø± ÙÙŠ Ø§Ù„Ø±Ø³Ù… Ø§Ù„Ù†Ù‚Ø·ÙŠ Ù„Ù„ÙˆØ§Ø¬Ù‡Ø© Ø§Ù„Ø®Ù„ÙÙŠØ©"
 
 #: gtk/gtktexttag.c:525
 msgid "Foreground stipple set"
-msgstr "ÊÙêêæ Êæâê× ÇäèÇÌçÉ Ç?åÇåêÉ"
+msgstr "ØªØ¹ÙŠÙŠÙ† ØªÙ†Ù‚ÙŠØ· Ø§Ù„ÙˆØ§Ø¬Ù‡Ø© Ø§?Ù…Ø§Ù…ÙŠØ©"
 
 #: gtk/gtktexttag.c:526
 msgid "Whether this tag affects the foreground stipple"
-msgstr "Åæ ãÇæÊ çĞç ÇäÙäÇåÉ ÊÄËÑ áê ÇäÑÓå Çäæâ×ê ääèÇÌçÉ Ç?åÇåêÉ"
+msgstr "Ø¥Ù† ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø¹Ù„Ø§Ù…Ø© ØªØ¤Ø«Ø± ÙÙŠ Ø§Ù„Ø±Ø³Ù… Ø§Ù„Ù†Ù‚Ø·ÙŠ Ù„Ù„ÙˆØ§Ø¬Ù‡Ø© Ø§?Ù…Ø§Ù…ÙŠØ©"
 
 #: gtk/gtktexttag.c:561
 msgid "Justification set"
-msgstr "ÊÙêêæ ÇäÖÈ×"
+msgstr "ØªØ¹ÙŠÙŠÙ† Ø§Ù„Ø¶Ø¨Ø·"
 
 #: gtk/gtktexttag.c:562
 msgid "Whether this tag affects paragraph justification"
-msgstr "Åæ ãÇæÊ çĞç ÇäÙäÇåÉ ÊÄËÑ áê ÖÈ× ÇäáâÑÇÊ"
+msgstr "Ø¥Ù† ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø¹Ù„Ø§Ù…Ø© ØªØ¤Ø«Ø± ÙÙŠ Ø¶Ø¨Ø· Ø§Ù„ÙÙ‚Ø±Ø§Øª"
 
 #: gtk/gtktexttag.c:569
 msgid "Left margin set"
-msgstr "ÊÙêêæ ÇäçÇåÔ Ç?êÓÑ"
+msgstr "ØªØ¹ÙŠÙŠÙ† Ø§Ù„Ù‡Ø§Ù…Ø´ Ø§?ÙŠØ³Ø±"
 
 #: gtk/gtktexttag.c:570
 msgid "Whether this tag affects the left margin"
-msgstr "Åæ ãÇæÊ çĞç ÇäÙäÇåÉ ÊÄËÑ áê ÇäçÇåÔ Ç?êÓÑ"
+msgstr "Ø¥Ù† ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø¹Ù„Ø§Ù…Ø© ØªØ¤Ø«Ø± ÙÙŠ Ø§Ù„Ù‡Ø§Ù…Ø´ Ø§?ÙŠØ³Ø±"
 
 #: gtk/gtktexttag.c:573
 msgid "Indent set"
-msgstr "ÊÙêêæ ÇäÅÒÇÍÉ"
+msgstr "ØªØ¹ÙŠÙŠÙ† Ø§Ù„Ø¥Ø²Ø§Ø­Ø©"
 
 #: gtk/gtktexttag.c:574
 msgid "Whether this tag affects indentation"
-msgstr "Åæ ãÇæÊ çĞç ÇäÙäÇåÉ ÊÄËÑ áê ÇäÅÒÇÍÉ"
+msgstr "Ø¥Ù† ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø¹Ù„Ø§Ù…Ø© ØªØ¤Ø«Ø± ÙÙŠ Ø§Ù„Ø¥Ø²Ø§Ø­Ø©"
 
 #: gtk/gtktexttag.c:581
 msgid "Pixels above lines set"
-msgstr "ÊÙêêæ ÈãÓäÇÊ ÃÙäé Ç?Ó×Ñ"
+msgstr "ØªØ¹ÙŠÙŠÙ† Ø¨ÙƒØ³Ù„Ø§Øª Ø£Ø¹Ù„Ù‰ Ø§?Ø³Ø·Ø±"
 
 #: gtk/gtktexttag.c:582 gtk/gtktexttag.c:586
 msgid "Whether this tag affects the number of pixels above lines"
-msgstr "Åæ ãÇæÊ çĞç ÇäÙäÇåÉ ÊÄËÑ áê ÙÏÏ ÇäÈêãÓäÇÊ Ùäé Ç?Ó×Ñ"
+msgstr "Ø¥Ù† ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø¹Ù„Ø§Ù…Ø© ØªØ¤Ø«Ø± ÙÙŠ Ø¹Ø¯Ø¯ Ø§Ù„Ø¨ÙŠÙƒØ³Ù„Ø§Øª Ø¹Ù„Ù‰ Ø§?Ø³Ø·Ø±"
 
 #: gtk/gtktexttag.c:585
 msgid "Pixels below lines set"
-msgstr "ÊÙêêæ ÈãÓäÇÊ ÃÓáä Ç?Ó×Ñ"
+msgstr "ØªØ¹ÙŠÙŠÙ† Ø¨ÙƒØ³Ù„Ø§Øª Ø£Ø³ÙÙ„ Ø§?Ø³Ø·Ø±"
 
 #: gtk/gtktexttag.c:589
 msgid "Pixels inside wrap set"
-msgstr "ÊÙêêæ ÈãÓäÇÊ ÏÇÎä Ç?äÊèÇÁ"
+msgstr "ØªØ¹ÙŠÙŠÙ† Ø¨ÙƒØ³Ù„Ø§Øª Ø¯Ø§Ø®Ù„ Ø§?Ù„ØªÙˆØ§Ø¡"
 
 #: gtk/gtktexttag.c:590
 msgid "Whether this tag affects the number of pixels between wrapped lines"
-msgstr "Åæ ãÇæÊ çĞç ÇäÙäÇåÉ ÊÄËÑ áê ÙÏÏ ÇäÈêãÓäÇÊ Èêæ Ç?Ó×Ñ ÇäåäÊèêÉ"
+msgstr "Ø¥Ù† ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø¹Ù„Ø§Ù…Ø© ØªØ¤Ø«Ø± ÙÙŠ Ø¹Ø¯Ø¯ Ø§Ù„Ø¨ÙŠÙƒØ³Ù„Ø§Øª Ø¨ÙŠÙ† Ø§?Ø³Ø·Ø± Ø§Ù„Ù…Ù„ØªÙˆÙŠØ©"
 
 #: gtk/gtktexttag.c:597
 msgid "Right margin set"
-msgstr "ÊÙêêæ ÇäçÇåÔ Ç?êåæ"
+msgstr "ØªØ¹ÙŠÙŠÙ† Ø§Ù„Ù‡Ø§Ù…Ø´ Ø§?ÙŠÙ…Ù†"
 
 #: gtk/gtktexttag.c:598
 msgid "Whether this tag affects the right margin"
-msgstr "Åæ ãÇæÊ çĞç ÇäÙäÇåÉ ÊÄËÑ áê ÇäçÇåÔ Ç?êåæ"
+msgstr "Ø¥Ù† ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø¹Ù„Ø§Ù…Ø© ØªØ¤Ø«Ø± ÙÙŠ Ø§Ù„Ù‡Ø§Ù…Ø´ Ø§?ÙŠÙ…Ù†"
 
 #: gtk/gtktexttag.c:605
 msgid "Wrap mode set"
-msgstr "ÊÙêêæ æØÇå ÇäÇäÊèÇÁ"
+msgstr "ØªØ¹ÙŠÙŠÙ† Ù†Ø¸Ø§Ù… Ø§Ù„Ø§Ù„ØªÙˆØ§Ø¡"
 
 #: gtk/gtktexttag.c:606
 msgid "Whether this tag affects line wrap mode"
-msgstr "Åæ ãÇæÊ çĞç ÇäÙäÇåÉ ÊÄËÑ áê æØÇå ÇäÊèÇÁ ÇäÓ×Ñ"
+msgstr "Ø¥Ù† ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø¹Ù„Ø§Ù…Ø© ØªØ¤Ø«Ø± ÙÙŠ Ù†Ø¸Ø§Ù… Ø§Ù„ØªÙˆØ§Ø¡ Ø§Ù„Ø³Ø·Ø±"
 
 #: gtk/gtktexttag.c:609
 msgid "Tabs set"
-msgstr "ÊÙêêæ ÇäÃÔÑ×É"
+msgstr "ØªØ¹ÙŠÙŠÙ† Ø§Ù„Ø£Ø´Ø±Ø·Ø©"
 
 #: gtk/gtktexttag.c:610
 msgid "Whether this tag affects tabs"
-msgstr "Åæ ãÇæÊ çĞç ÇäÙäÇåÉ ÊÄËÑ áê ÇäÃÔÑ×É"
+msgstr "Ø¥Ù† ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø¹Ù„Ø§Ù…Ø© ØªØ¤Ø«Ø± ÙÙŠ Ø§Ù„Ø£Ø´Ø±Ø·Ø©"
 
 #: gtk/gtktexttag.c:613
 msgid "Invisible set"
-msgstr "ÊÙêêæ ÚêÑ ÇäåÑÆêÉ"
+msgstr "ØªØ¹ÙŠÙŠÙ† ØºÙŠØ± Ø§Ù„Ù…Ø±Ø¦ÙŠØ©"
 
 #: gtk/gtktexttag.c:614
 msgid "Whether this tag affects text visibility"
-msgstr "Åæ ãÇæÊ çĞç ÇäÙäÇåÉ ÊÄËÑ áê èÖèÍ ÇäæÕ"
+msgstr "Ø¥Ù† ÙƒØ§Ù†Øª Ù‡Ø°Ù‡ Ø§Ù„Ø¹Ù„Ø§Ù…Ø© ØªØ¤Ø«Ø± ÙÙŠ ÙˆØ¶ÙˆØ­ Ø§Ù„Ù†Øµ"
 
 #: gtk/gtktextview.c:556
 msgid "Pixels Above Lines"
-msgstr "ÈãÓäÇÊ áèâ Ç?Ó×Ñ"
+msgstr "Ø¨ÙƒØ³Ù„Ø§Øª ÙÙˆÙ‚ Ø§?Ø³Ø·Ø±"
 
 #: gtk/gtktextview.c:566
 msgid "Pixels Below Lines"
-msgstr "ÈãÓäÇÊ ÊÍÊ Ç?Ó×Ñ"
+msgstr "Ø¨ÙƒØ³Ù„Ø§Øª ØªØ­Øª Ø§?Ø³Ø·Ø±"
 
 #: gtk/gtktextview.c:576
 msgid "Pixels Inside Wrap"
-msgstr "ÈãÓäÇÊ ÏÇÎä ÇäÇäÊèÇÁ"
+msgstr "Ø¨ÙƒØ³Ù„Ø§Øª Ø¯Ø§Ø®Ù„ Ø§Ù„Ø§Ù„ØªÙˆØ§Ø¡"
 
 #: gtk/gtktextview.c:594
 msgid "Wrap Mode"
-msgstr "æØÇå ÇäÇäÊèÇÁ"
+msgstr "Ù†Ø¸Ø§Ù… Ø§Ù„Ø§Ù„ØªÙˆØ§Ø¡"
 
 #: gtk/gtktextview.c:612
 msgid "Left Margin"
-msgstr "ÇäçÇåÔ ÇäÃêÓÑ"
+msgstr "Ø§Ù„Ù‡Ø§Ù…Ø´ Ø§Ù„Ø£ÙŠØ³Ø±"
 
 #: gtk/gtktextview.c:622
 msgid "Right Margin"
-msgstr "ÇäçÇåÔ ÇäÃêåæ"
+msgstr "Ø§Ù„Ù‡Ø§Ù…Ø´ Ø§Ù„Ø£ÙŠÙ…Ù†"
 
 #: gtk/gtktextview.c:650
 msgid "Cursor Visible"
-msgstr "ÇäåÄÔÑ åÑÆê"
+msgstr "Ø§Ù„Ù…Ø¤Ø´Ø± Ù…Ø±Ø¦ÙŠ"
 
 #: gtk/gtktextview.c:651
 msgid "If the insertion cursor is shown"
-msgstr "åÇ ÅĞÇ ãÇæ åÄÔÑ Ç?ÏÎÇä ÓêÊå ÙÑÖç"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ù…Ø¤Ø´Ø± Ø§?Ø¯Ø®Ø§Ù„ Ø³ÙŠØªÙ… Ø¹Ø±Ø¶Ù‡"
 
 #: gtk/gtktextview.c:658
 msgid "Buffer"
-msgstr "ĞÇãÑÉ èÓê×É"
+msgstr "Ø°Ø§ÙƒØ±Ø© ÙˆØ³ÙŠØ·Ø©"
 
 #: gtk/gtktextview.c:659
 msgid "The buffer which is displayed"
-msgstr "ÇäĞÇãÑÉ ÇäèÓê×É ÇäåÙÑèÖÉ"
+msgstr "Ø§Ù„Ø°Ø§ÙƒØ±Ø© Ø§Ù„ÙˆØ³ÙŠØ·Ø© Ø§Ù„Ù…Ø¹Ø±ÙˆØ¶Ø©"
 
 #: gtk/gtktextview.c:666
 msgid "Overwrite mode"
-msgstr "æÓâ ÇäÊæåêâ"
+msgstr "Ù†Ø³Ù‚ Ø§Ù„ØªÙ†Ù…ÙŠÙ‚"
 
 #: gtk/gtktextview.c:667
 msgid "Whether entered text overwrites existing contents"
-msgstr "áêåÇ ÅĞÇ Óêæåñâ ÇäæÕ ÇäåÏÎä ÇäåÍÊèêÇÊ ÇäåèÌèÏÉ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ÙŠÙ†Ù…Ù‘Ù‚ Ø§Ù„Ù†Øµ Ø§Ù„Ù…Ø¯Ø®Ù„ Ø§Ù„Ù…Ø­ØªÙˆÙŠØ§Øª Ø§Ù„Ù…ÙˆØ¬ÙˆØ¯Ø©"
 
 #: gtk/gtktextview.c:674
 msgid "Accepts tab"
-msgstr "ÊâÈä ÇäÃäÓæÉ"
+msgstr "ØªÙ‚Ø¨Ù„ Ø§Ù„Ø£Ù„Ø³Ù†Ø©"
 
 #: gtk/gtktextview.c:675
 msgid "Whether Tab will result in a tab character being entered"
-msgstr "áêåÇ ÓêæÊÌ Ùæ ÇääÓÇæ ÅÏÎÇä ÑåÒ äÓÇæ"
+msgstr "ÙÙŠÙ…Ø§ Ø³ÙŠÙ†ØªØ¬ Ø¹Ù† Ø§Ù„Ù„Ø³Ø§Ù† Ø¥Ø¯Ø®Ø§Ù„ Ø±Ù…Ø² Ù„Ø³Ø§Ù†"
 
 #: gtk/gtktextview.c:684
 msgid "Error underline color"
-msgstr "Î×Ã áê äèæ ÇäÊÓ×êÑ"
+msgstr "Ø®Ø·Ø£ ÙÙŠ Ù„ÙˆÙ† Ø§Ù„ØªØ³Ø·ÙŠØ±"
 
 #: gtk/gtktextview.c:685
 msgid "Color with which to draw error-indication underlines"
-msgstr "Çääèæ ÇäĞê êÊå Èç ÑÓå ÇäÊÓ×êÑÇÊ ÇäåÄÔÑÉ ääÃÎ×ÇÁ"
+msgstr "Ø§Ù„Ù„ÙˆÙ† Ø§Ù„Ø°ÙŠ ÙŠØªÙ… Ø¨Ù‡ Ø±Ø³Ù… Ø§Ù„ØªØ³Ø·ÙŠØ±Ø§Øª Ø§Ù„Ù…Ø¤Ø´Ø±Ø© Ù„Ù„Ø£Ø®Ø·Ø§Ø¡"
 
 #: gtk/gtktoggleaction.c:129
 msgid "Create the same proxies as a radio action"
-msgstr "ÅæÔÇÁ ÇäÈÑèãÓêÇÊ ÇäåÊèÇáâÉ ãáÙä åÔÙ"
+msgstr "Ø¥Ù†Ø´Ø§Ø¡ Ø§Ù„Ø¨Ø±ÙˆÙƒØ³ÙŠØ§Øª Ø§Ù„Ù…ØªÙˆØ§ÙÙ‚Ø© ÙƒÙØ¹Ù„ Ù…Ø´Ø¹"
 
 #: gtk/gtktoggleaction.c:130
 msgid "Whether the proxies for this action look like radio action proxies"
-msgstr "áêåÇ ÅĞÇ ÓÊÈÏè ÈÑèãÓêñÇÊ çĞÇ ÇäÍÏË ãÈÑèãÓêñÇÊ ÍÏË åÔÙñÉ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ØªØ¨Ø¯Ùˆ Ø¨Ø±ÙˆÙƒØ³ÙŠÙ‘Ø§Øª Ù‡Ø°Ø§ Ø§Ù„Ø­Ø¯Ø« ÙƒØ¨Ø±ÙˆÙƒØ³ÙŠÙ‘Ø§Øª Ø­Ø¯Ø« Ù…Ø´Ø¹Ù‘Ø©"
 
 #: gtk/gtktogglebutton.c:134
 msgid "If the toggle button should be pressed in or not"
-msgstr "åÇ ÅĞÇ ÊèÌÈ Ãæ êãèæ ÒÑ Çäâáä åãÈèÓÇ Ãå äÇ"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ØªÙˆØ¬Ø¨ Ø£Ù† ÙŠÙƒÙˆÙ† Ø²Ø± Ø§Ù„Ù‚ÙÙ„ Ù…ÙƒØ¨ÙˆØ³Ø§ Ø£Ù… Ù„Ø§"
 
 #: gtk/gtktogglebutton.c:142
 msgid "If the toggle button is in an \"in between\" state"
-msgstr "áêåÇ ÅĞÇ ãÇæ ÒÑ ÇäÊÍèñä áê ÍÇäÉ \"Èêæ\""
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ø²Ø± Ø§Ù„ØªØ­ÙˆÙ‘Ù„ ÙÙŠ Ø­Ø§Ù„Ø© \"Ø¨ÙŠÙ†\""
 
 #: gtk/gtktogglebutton.c:149
 msgid "Draw Indicator"
-msgstr "ÑÓå ÇäåÄÔÑ"
+msgstr "Ø±Ø³Ù… Ø§Ù„Ù…Ø¤Ø´Ø±"
 
 #: gtk/gtktogglebutton.c:150
 msgid "If the toggle part of the button is displayed"
-msgstr "åÇ ÅĞÇ ãÇæ ÌÒÁ Çäâáä åæ ÇäÑÒ ÓêÊå ÙÑÖç"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ø¬Ø²Ø¡ Ø§Ù„Ù‚ÙÙ„ Ù…Ù† Ø§Ù„Ø±Ø² Ø³ÙŠØªÙ… Ø¹Ø±Ø¶Ù‡"
 
 #: gtk/gtktoolbar.c:498
 msgid "The orientation of the toolbar"
-msgstr "ÇÊÌÇç ÔÑê× Ç?ÏèÇÊ"
+msgstr "Ø§ØªØ¬Ø§Ù‡ Ø´Ø±ÙŠØ· Ø§?Ø¯ÙˆØ§Øª"
 
 #: gtk/gtktoolbar.c:506
 msgid "Toolbar Style"
-msgstr "åæ× ÔÑê× ÇäÃÏèÇÊ"
+msgstr "Ù…Ù†Ø· Ø´Ø±ÙŠØ· Ø§Ù„Ø£Ø¯ÙˆØ§Øª"
 
 #: gtk/gtktoolbar.c:507
 msgid "How to draw the toolbar"
-msgstr "ãêáêÉ ÑÓå ÔÑê× Ç?ÏèÇÊ"
+msgstr "ÙƒÙŠÙÙŠØ© Ø±Ø³Ù… Ø´Ø±ÙŠØ· Ø§?Ø¯ÙˆØ§Øª"
 
 #: gtk/gtktoolbar.c:514
 msgid "Show Arrow"
-msgstr "ÙÑÖ ÇäÓçå"
+msgstr "Ø¹Ø±Ø¶ Ø§Ù„Ø³Ù‡Ù…"
 
 #: gtk/gtktoolbar.c:515
 msgid "If an arrow should be shown if the toolbar doesn't fit"
-msgstr "áêåÇ ÅĞÇ ÓêÙÑÖ Óçå ÅĞÇ äå êÊäÇÆå ÙåèÏ ÇäÃÏèÇÊ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ÙŠØ¹Ø±Ø¶ Ø³Ù‡Ù… Ø¥Ø°Ø§ Ù„Ù… ÙŠØªÙ„Ø§Ø¦Ù… Ø¹Ù…ÙˆØ¯ Ø§Ù„Ø£Ø¯ÙˆØ§Øª"
 
 #: gtk/gtktoolbar.c:524
 msgid "Whether the item should receive extra space when the toolbar grows"
-msgstr "áêåÇ ÅĞÇ ÓêÊäâé ÇäÙæÕÑ áÖÇÁ ÇÖÇáêñÇ ÙæÏ æåèñ ÙåèÏ ÇäÃÏèÇÊ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ÙŠØªÙ„Ù‚Ù‰ Ø§Ù„Ø¹Ù†ØµØ± ÙØ¶Ø§Ø¡ Ø§Ø¶Ø§ÙÙŠÙ‘Ø§ Ø¹Ù†Ø¯ Ù†Ù…ÙˆÙ‘ Ø¹Ù…ÙˆØ¯ Ø§Ù„Ø£Ø¯ÙˆØ§Øª"
 
 #: gtk/gtktoolbar.c:532
 msgid "Whether the item should be the same size as other homogeneous items"
-msgstr "åÇ ÅĞÇ êÌÈ Ãæ êãèæ ÇäÙæÕÑ ÈæáÓ ÇäÍÌå ãÇäÙæÇÕÑ ÇäåÊÌÇæÓÉ ÇäÃÎÑé"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ÙŠØ¬Ø¨ Ø£Ù† ÙŠÙƒÙˆÙ† Ø§Ù„Ø¹Ù†ØµØ± Ø¨Ù†ÙØ³ Ø§Ù„Ø­Ø¬Ù… ÙƒØ§Ù„Ø¹Ù†Ø§ØµØ± Ø§Ù„Ù…ØªØ¬Ø§Ù†Ø³Ø© Ø§Ù„Ø£Ø®Ø±Ù‰"
 
 #: gtk/gtktoolbar.c:539
 msgid "Spacer size"
-msgstr "ÍÌå ÇäáÇÕä"
+msgstr "Ø­Ø¬Ù… Ø§Ù„ÙØ§ØµÙ„"
 
 #: gtk/gtktoolbar.c:540
 msgid "Size of spacers"
-msgstr "ÍÌå ÇäáèÇÕä"
+msgstr "Ø­Ø¬Ù… Ø§Ù„ÙÙˆØ§ØµÙ„"
 
 #: gtk/gtktoolbar.c:549
 msgid "Amount of border space between the toolbar shadow and the buttons"
-msgstr "ãåêÉ åÓÇáÉ ÇäÍÏ Èêæ Øä ÔÑê× Ç?ÏèÇÊ èÇ?ÒÑÇÑ"
+msgstr "ÙƒÙ…ÙŠØ© Ù…Ø³Ø§ÙØ© Ø§Ù„Ø­Ø¯ Ø¨ÙŠÙ† Ø¸Ù„ Ø´Ø±ÙŠØ· Ø§?Ø¯ÙˆØ§Øª ÙˆØ§?Ø²Ø±Ø§Ø±"
 
 #: gtk/gtktoolbar.c:557
 msgid "Space style"
-msgstr "æå× ÇäáÇÕä"
+msgstr "Ù†Ù…Ø· Ø§Ù„ÙØ§ØµÙ„"
 
 #: gtk/gtktoolbar.c:558
 msgid "Whether spacers are vertical lines or just blank"
-msgstr "åÇ ÅĞÇ ãÇæÊ ÇäáèÇÕä Î×è× ÙåèÏêÉ Ãè áâ× áÑÇÚÇÊ"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø§Ù„ÙÙˆØ§ØµÙ„ Ø®Ø·ÙˆØ· Ø¹Ù…ÙˆØ¯ÙŠØ© Ø£Ùˆ ÙÙ‚Ø· ÙØ±Ø§ØºØ§Øª"
 
 #: gtk/gtktoolbar.c:565
 msgid "Button relief"
-msgstr "ÊÍÑêÑ ÇäÒÑ"
+msgstr "ØªØ­Ø±ÙŠØ± Ø§Ù„Ø²Ø±"
 
 #: gtk/gtktoolbar.c:566
 msgid "Type of bevel around toolbar buttons"
-msgstr "æèÙ ÇäÇæÍÏÇÑ Íèä ÃÒÑÇÑ ÔÑê× ÇäÃÏèÇÊ"
+msgstr "Ù†ÙˆØ¹ Ø§Ù„Ø§Ù†Ø­Ø¯Ø§Ø± Ø­ÙˆÙ„ Ø£Ø²Ø±Ø§Ø± Ø´Ø±ÙŠØ· Ø§Ù„Ø£Ø¯ÙˆØ§Øª"
 
 #: gtk/gtktoolbar.c:573
 msgid "Style of bevel around the toolbar"
-msgstr "æå× ÇäÇæÍÏÇÑ Íèä ÔÑê× ÇäÃÏèÇÊ"
+msgstr "Ù†Ù…Ø· Ø§Ù„Ø§Ù†Ø­Ø¯Ø§Ø± Ø­ÙˆÙ„ Ø´Ø±ÙŠØ· Ø§Ù„Ø£Ø¯ÙˆØ§Øª"
 
 #: gtk/gtktoolbar.c:579
 msgid "Toolbar style"
-msgstr "æå× ÔÑê× ÇäÃÏèÇÊ"
+msgstr "Ù†Ù…Ø· Ø´Ø±ÙŠØ· Ø§Ù„Ø£Ø¯ÙˆØ§Øª"
 
 #: gtk/gtktoolbar.c:580
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
-"åÇ ÅĞÇ ãÇæÊ ÃÔÑ×É Ç?ÏèÇÊ ÇäÇáÊÑÇÖêÉ äçÇ æÕ áâ×¬ æÕ åÙ ÃêâèæÇÊ¬ ÃêâèæÇÊ áâ×¬ "
-"ÅäÎ."
+"Ù…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø£Ø´Ø±Ø·Ø© Ø§?Ø¯ÙˆØ§Øª Ø§Ù„Ø§ÙØªØ±Ø§Ø¶ÙŠØ© Ù„Ù‡Ø§ Ù†Øµ ÙÙ‚Ø·ØŒ Ù†Øµ Ù…Ø¹ Ø£ÙŠÙ‚ÙˆÙ†Ø§ØªØŒ Ø£ÙŠÙ‚ÙˆÙ†Ø§Øª ÙÙ‚Ø·ØŒ "
+"Ø¥Ù„Ø®."
 
 #: gtk/gtktoolbar.c:586
 msgid "Toolbar icon size"
-msgstr "ÍÌå ÃêâèæÉ ÔÑê× ÇäÃÏèÇÊ"
+msgstr "Ø­Ø¬Ù… Ø£ÙŠÙ‚ÙˆÙ†Ø© Ø´Ø±ÙŠØ· Ø§Ù„Ø£Ø¯ÙˆØ§Øª"
 
 #: gtk/gtktoolbar.c:587
 msgid "Size of icons in default toolbars"
-msgstr "ÍÌå Ç?êâèæÇÊ áê ÃÔÑ×É Ç?ÏèÇÊ ÇäÇáÊÑÇÖêÉ"
+msgstr "Ø­Ø¬Ù… Ø§?ÙŠÙ‚ÙˆÙ†Ø§Øª ÙÙŠ Ø£Ø´Ø±Ø·Ø© Ø§?Ø¯ÙˆØ§Øª Ø§Ù„Ø§ÙØªØ±Ø§Ø¶ÙŠØ©"
 
 #: gtk/gtktoolbutton.c:181
 msgid "Text to show in the item."
-msgstr "ÇäæÕ ÇäĞê ÓêÙÑÖ áê ÇäÙæÕÑ."
+msgstr "Ø§Ù„Ù†Øµ Ø§Ù„Ø°ÙŠ Ø³ÙŠØ¹Ø±Ø¶ ÙÙŠ Ø§Ù„Ø¹Ù†ØµØ±."
 
 #: gtk/gtktoolbutton.c:188
 msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
 msgstr ""
-"ÅĞÇ ¬ áÓêãèæ çæÇã ÊÓ×êÑ áê ÇäæÕ êÔêÑ Åäé ÇäÑåÒ ÇäÊÇäê ÇäĞê êÌÈ ÇÓÊÎÏÇåç "
-"äåáÊÇÍ ÇäÊĞãêÑ ÇäåÓÑÙ"
+"Ø¥Ø°Ø§ ØŒ ÙØ³ÙŠÙƒÙˆÙ† Ù‡Ù†Ø§Ùƒ ØªØ³Ø·ÙŠØ± ÙÙŠ Ø§Ù„Ù†Øµ ÙŠØ´ÙŠØ± Ø¥Ù„Ù‰ Ø§Ù„Ø±Ù…Ø² Ø§Ù„ØªØ§Ù„ÙŠ Ø§Ù„Ø°ÙŠ ÙŠØ¬Ø¨ Ø§Ø³ØªØ®Ø¯Ø§Ù…Ù‡ "
+"Ù„Ù…ÙØªØ§Ø­ Ø§Ù„ØªØ°ÙƒÙŠØ± Ø§Ù„Ù…Ø³Ø±Ø¹"
 
 #: gtk/gtktoolbutton.c:195
 msgid "Widget to use as the item label"
-msgstr "Çäâ×ÙÉ ÇäÊê ÓÊÓÊÎÏå ãÔÇÑÉ ÇäÙæÕÑ"
+msgstr "Ø§Ù„Ù‚Ø·Ø¹Ø© Ø§Ù„ØªÙŠ Ø³ØªØ³ØªØ®Ø¯Ù… ÙƒØ´Ø§Ø±Ø© Ø§Ù„Ø¹Ù†ØµØ±"
 
 #: gtk/gtktoolbutton.c:201
 msgid "Stock Id"
-msgstr "çèêÉ ÇäåÎÒèæ"
+msgstr "Ù‡ÙˆÙŠØ© Ø§Ù„Ù…Ø®Ø²ÙˆÙ†"
 
 #: gtk/gtktoolbutton.c:202
 msgid "The stock icon displayed on the item"
-msgstr "Óçå ÇäåÎÒèæ ÇäåÙÑèÖ Ùäé ÇäÙæÕÑ"
+msgstr "Ø³Ù‡Ù… Ø§Ù„Ù…Ø®Ø²ÙˆÙ† Ø§Ù„Ù…Ø¹Ø±ÙˆØ¶ Ø¹Ù„Ù‰ Ø§Ù„Ø¹Ù†ØµØ±"
 
 #: gtk/gtktoolbutton.c:208
 msgid "Icon widget"
-msgstr "â×ÙÉ ÇäÃêâèæÉ"
+msgstr "Ù‚Ø·Ø¹Ø© Ø§Ù„Ø£ÙŠÙ‚ÙˆÙ†Ø©"
 
 #: gtk/gtktoolbutton.c:209
 msgid "Icon widget to display in the item"
-msgstr "â×ÙÉ ÇäÃêâèæÉ ÇäÊÓ ÓÊÙÑÖ áê ÇäÙæÕÑ"
+msgstr "Ù‚Ø·Ø¹Ø© Ø§Ù„Ø£ÙŠÙ‚ÙˆÙ†Ø© Ø§Ù„ØªØ³ Ø³ØªØ¹Ø±Ø¶ ÙÙŠ Ø§Ù„Ø¹Ù†ØµØ±"
 
 #: gtk/gtktoolitem.c:173
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
 msgstr ""
-"áêåÇ ÅĞÇ êÙÊÈÑ ÙæÕÑ ÙåèÏ ÇäÃÏèÇÊ åçåñ. ÅĞÇ ÖÈ× äà TRUE áÓÊÙÑÖ ÃèÑÇÑ ÙåèÏ "
-"ÇäÃÏèÇÊ ÇäæÕ ÈæÓâ GTK_TOOLBAR_BOTH_HORIZ"
+"ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙŠØ¹ØªØ¨Ø± Ø¹Ù†ØµØ± Ø¹Ù…ÙˆØ¯ Ø§Ù„Ø£Ø¯ÙˆØ§Øª Ù…Ù‡Ù…Ù‘. Ø¥Ø°Ø§ Ø¶Ø¨Ø· Ù„Ù€ TRUE ÙØ³ØªØ¹Ø±Ø¶ Ø£ÙˆØ±Ø§Ø± Ø¹Ù…ÙˆØ¯ "
+"Ø§Ù„Ø£Ø¯ÙˆØ§Øª Ø§Ù„Ù†Øµ Ø¨Ù†Ø³Ù‚ GTK_TOOLBAR_BOTH_HORIZ"
 
 #: gtk/gtktreemodelsort.c:329
 msgid "TreeModelSort Model"
-msgstr "æå× ÊÑÊêÈ ÇäÙÑÖ ÇäÔÌÑê"
+msgstr "Ù†Ù…Ø· ØªØ±ØªÙŠØ¨ Ø§Ù„Ø¹Ø±Ø¶ Ø§Ù„Ø´Ø¬Ø±ÙŠ"
 
 #: gtk/gtktreemodelsort.c:330
 msgid "The model for the TreeModelSort to sort"
-msgstr "æå× áÑÒ ÇäÙÑÖ ÇäÔÌÑê ÇäåÓÊÎÏå ääáÑÒ"
+msgstr "Ù†Ù…Ø· ÙØ±Ø² Ø§Ù„Ø¹Ø±Ø¶ Ø§Ù„Ø´Ø¬Ø±ÙŠ Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù… Ù„Ù„ÙØ±Ø²"
 
 #: gtk/gtktreeview.c:528
 msgid "TreeView Model"
-msgstr "æå× ÇäÙÑÖ ÇäÔÌÑê"
+msgstr "Ù†Ù…Ø· Ø§Ù„Ø¹Ø±Ø¶ Ø§Ù„Ø´Ø¬Ø±ÙŠ"
 
 #: gtk/gtktreeview.c:529
 msgid "The model for the tree view"
-msgstr "æå× ÙÑÖ ÇäÔÌÑÉ"
+msgstr "Ù†Ù…Ø· Ø¹Ø±Ø¶ Ø§Ù„Ø´Ø¬Ø±Ø©"
 
 #: gtk/gtktreeview.c:537
 msgid "Horizontal Adjustment for the widget"
-msgstr "ÇäÖÈ× ÇäÃáâê ääãÇÆæ"
+msgstr "Ø§Ù„Ø¶Ø¨Ø· Ø§Ù„Ø£ÙÙ‚ÙŠ Ù„Ù„ÙƒØ§Ø¦Ù†"
 
 #: gtk/gtktreeview.c:545
 msgid "Vertical Adjustment for the widget"
-msgstr "ÇäÖÈ× ÇäÙåèÏê ääãÇÆæ"
+msgstr "Ø§Ù„Ø¶Ø¨Ø· Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ Ù„Ù„ÙƒØ§Ø¦Ù†"
 
 #: gtk/gtktreeview.c:553
 msgid "Show the column header buttons"
-msgstr "ÃØçÑ ÃÒÑÇÑ ÑÄèÓ ÇäÙåèÏ"
+msgstr "Ø£Ø¸Ù‡Ø± Ø£Ø²Ø±Ø§Ø± Ø±Ø¤ÙˆØ³ Ø§Ù„Ø¹Ù…ÙˆØ¯"
 
 #: gtk/gtktreeview.c:560
 msgid "Headers Clickable"
-msgstr "ÇäÑÄèÓ âÇÈäÉ ääæâÑ"
+msgstr "Ø§Ù„Ø±Ø¤ÙˆØ³ Ù‚Ø§Ø¨Ù„Ø© Ù„Ù„Ù†Ù‚Ø±"
 
 #: gtk/gtktreeview.c:561
 msgid "Column headers respond to click events"
-msgstr "ÑÄèÓ ÇäÙåèÏ ÊÓÊÌêÈ äÃÍÏÇË ÇäæâÑ"
+msgstr "Ø±Ø¤ÙˆØ³ Ø§Ù„Ø¹Ù…ÙˆØ¯ ØªØ³ØªØ¬ÙŠØ¨ Ù„Ø£Ø­Ø¯Ø§Ø« Ø§Ù„Ù†Ù‚Ø±"
 
 #: gtk/gtktreeview.c:568
 msgid "Expander Column"
-msgstr "ÙåèÏ åèÓÙ"
+msgstr "Ø¹Ù…ÙˆØ¯ Ù…ÙˆØ³Ø¹"
 
 #: gtk/gtktreeview.c:569
 msgid "Set the column for the expander column"
-msgstr "ÊÙêæ ÇäÙåèÏ ääÙåèÏ ÇäåèÓÙ"
+msgstr "ØªØ¹ÙŠÙ† Ø§Ù„Ø¹Ù…ÙˆØ¯ Ù„Ù„Ø¹Ù…ÙˆØ¯ Ø§Ù„Ù…ÙˆØ³Ø¹"
 
 #: gtk/gtktreeview.c:576 gtk/gtktreeviewcolumn.c:330
 msgid "Reorderable"
-msgstr "âÇÈä äÅÙÇÏÉ ÇäÊÑÊêÈ"
+msgstr "Ù‚Ø§Ø¨Ù„ Ù„Ø¥Ø¹Ø§Ø¯Ø© Ø§Ù„ØªØ±ØªÙŠØ¨"
 
 #: gtk/gtktreeview.c:577
 msgid "View is reorderable"
-msgstr "ÇäÙÑÖ âÇÈä äÅÙÇÏÉ ÇäÊÑÊêÈ"
+msgstr "Ø§Ù„Ø¹Ø±Ø¶ Ù‚Ø§Ø¨Ù„ Ù„Ø¥Ø¹Ø§Ø¯Ø© Ø§Ù„ØªØ±ØªÙŠØ¨"
 
 #: gtk/gtktreeview.c:584
 msgid "Rules Hint"
-msgstr "ÊäåêÍÉ ÇäâèÇÙÏ"
+msgstr "ØªÙ„Ù…ÙŠØ­Ø© Ø§Ù„Ù‚ÙˆØ§Ø¹Ø¯"
 
 #: gtk/gtktreeview.c:585
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
-msgstr "ÊÙêæ ÊäåêÍÉ äÂäÉ ÇäÊêåÉ ÍÊé ÊÑÓå ÕáèáÇ ÈÃäèÇæ åÊÚÇêÑÉ"
+msgstr "ØªØ¹ÙŠÙ† ØªÙ„Ù…ÙŠØ­Ø© Ù„Ø¢Ù„Ø© Ø§Ù„ØªÙŠÙ…Ø© Ø­ØªÙ‰ ØªØ±Ø³Ù… ØµÙÙˆÙØ§ Ø¨Ø£Ù„ÙˆØ§Ù† Ù…ØªØºØ§ÙŠØ±Ø©"
 
 #: gtk/gtktreeview.c:592
 msgid "Enable Search"
-msgstr "ÊáÙêä ÇäÈÍË"
+msgstr "ØªÙØ¹ÙŠÙ„ Ø§Ù„Ø¨Ø­Ø«"
 
 #: gtk/gtktreeview.c:593
 msgid "View allows user to search through columns interactively"
-msgstr "ÙÑÖ êÓåÍ ääåÓÊÎÏå ÈÇäÈÍË ÎäÇä ÇäÃÙåÏÉ ÈÊáÇÙä"
+msgstr "Ø¹Ø±Ø¶ ÙŠØ³Ù…Ø­ Ù„Ù„Ù…Ø³ØªØ®Ø¯Ù… Ø¨Ø§Ù„Ø¨Ø­Ø« Ø®Ù„Ø§Ù„ Ø§Ù„Ø£Ø¹Ù…Ø¯Ø© Ø¨ØªÙØ§Ø¹Ù„"
 
 #: gtk/gtktreeview.c:600
 msgid "Search Column"
-msgstr "ÙåèÏ ÈÍË"
+msgstr "Ø¹Ù…ÙˆØ¯ Ø¨Ø­Ø«"
 
 #: gtk/gtktreeview.c:601
 msgid "Model column to search through when searching through code"
-msgstr "ÙåèÏ Çäæå× ÇäĞê êÊå ÇäÈÍË ÎäÇäç ÃËæÇÁ ÇäÈÍË ÎäÇä ÇäãèÏ"
+msgstr "Ø¹Ù…ÙˆØ¯ Ø§Ù„Ù†Ù…Ø· Ø§Ù„Ø°ÙŠ ÙŠØªÙ… Ø§Ù„Ø¨Ø­Ø« Ø®Ù„Ø§Ù„Ù‡ Ø£Ø«Ù†Ø§Ø¡ Ø§Ù„Ø¨Ø­Ø« Ø®Ù„Ø§Ù„ Ø§Ù„ÙƒÙˆØ¯"
 
 #: gtk/gtktreeview.c:610
 msgid "Fixed Height Mode"
-msgstr "æÓâ ÇäÇÑÊáÇÙ ÇäËÇÈÊ"
+msgstr "Ù†Ø³Ù‚ Ø§Ù„Ø§Ø±ØªÙØ§Ø¹ Ø§Ù„Ø«Ø§Ø¨Øª"
 
 #: gtk/gtktreeview.c:611
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
-msgstr "êÓÑÙ GtkTreeView ÈÇÙÊÈÇÑ ÌåêÙ ÇäÃÙåÏÉ ĞÇÊ ÅÑÊáÇÙ åèÍÏ"
+msgstr "ÙŠØ³Ø±Ø¹ GtkTreeView Ø¨Ø§Ø¹ØªØ¨Ø§Ø± Ø¬Ù…ÙŠØ¹ Ø§Ù„Ø£Ø¹Ù…Ø¯Ø© Ø°Ø§Øª Ø¥Ø±ØªÙØ§Ø¹ Ù…ÙˆØ­Ø¯"
 
 #: gtk/gtktreeview.c:631
 msgid "Vertical Separator Width"
-msgstr "ÇäÙÑÖ ÇäÙåèÏê ääáÇÕä"
+msgstr "Ø§Ù„Ø¹Ø±Ø¶ Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ Ù„Ù„ÙØ§ØµÙ„"
 
 #: gtk/gtktreeview.c:632
 msgid "Vertical space between cells.  Must be an even number"
-msgstr "ÇäáÑÇÚ ÇäÙåèÏê Èêæ ÇäÎäÇêÇ. êÌÈ Ãæ êãèæ ÑâåÇ ÒèÌêÇ"
+msgstr "Ø§Ù„ÙØ±Ø§Øº Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ Ø¨ÙŠÙ† Ø§Ù„Ø®Ù„Ø§ÙŠØ§. ÙŠØ¬Ø¨ Ø£Ù† ÙŠÙƒÙˆÙ† Ø±Ù‚Ù…Ø§ Ø²ÙˆØ¬ÙŠØ§"
 
 #: gtk/gtktreeview.c:640
 msgid "Horizontal Separator Width"
-msgstr "ÇäÙÑÖ ÇäÃáâê ääáÇÕä"
+msgstr "Ø§Ù„Ø¹Ø±Ø¶ Ø§Ù„Ø£ÙÙ‚ÙŠ Ù„Ù„ÙØ§ØµÙ„"
 
 #: gtk/gtktreeview.c:641
 msgid "Horizontal space between cells.  Must be an even number"
-msgstr "ÇäáÑÇÚ ÇäÃáâê Èêæ ÇäÎäÇêÇ. êÌÈ Ãæ êãèæ ÑâåÇ ÒèÌêÇ"
+msgstr "Ø§Ù„ÙØ±Ø§Øº Ø§Ù„Ø£ÙÙ‚ÙŠ Ø¨ÙŠÙ† Ø§Ù„Ø®Ù„Ø§ÙŠØ§. ÙŠØ¬Ø¨ Ø£Ù† ÙŠÙƒÙˆÙ† Ø±Ù‚Ù…Ø§ Ø²ÙˆØ¬ÙŠØ§"
 
 #: gtk/gtktreeview.c:649
 msgid "Allow Rules"
-msgstr "ÇÓåÍ ÈÇäâèÇÙÏ"
+msgstr "Ø§Ø³Ù…Ø­ Ø¨Ø§Ù„Ù‚ÙˆØ§Ø¹Ø¯"
 
 #: gtk/gtktreeview.c:650
 msgid "Allow drawing of alternating color rows"
-msgstr "ÇäÓåÇÍ ÈÑÓå ÃÙåÏÉ åäèæÉ åÊèÇäêÉ"
+msgstr "Ø§Ù„Ø³Ù…Ø§Ø­ Ø¨Ø±Ø³Ù… Ø£Ø¹Ù…Ø¯Ø© Ù…Ù„ÙˆÙ†Ø© Ù…ØªÙˆØ§Ù„ÙŠØ©"
 
 #: gtk/gtktreeview.c:656
 msgid "Indent Expanders"
-msgstr "ÅÒÇÍÉ ÇäåèÓÙÇÊ"
+msgstr "Ø¥Ø²Ø§Ø­Ø© Ø§Ù„Ù…ÙˆØ³Ø¹Ø§Øª"
 
 #: gtk/gtktreeview.c:657
 msgid "Make the expanders indented"
-msgstr "ÌÙä ÇäåèÓÙÇÊ åÌèáÉ"
+msgstr "Ø¬Ø¹Ù„ Ø§Ù„Ù…ÙˆØ³Ø¹Ø§Øª Ù…Ø¬ÙˆÙØ©"
 
 #: gtk/gtktreeview.c:663
 msgid "Even Row Color"
-msgstr "äèæ ÇäÓ×Ñ ÇäÒèÌê"
+msgstr "Ù„ÙˆÙ† Ø§Ù„Ø³Ø·Ø± Ø§Ù„Ø²ÙˆØ¬ÙŠ"
 
 #: gtk/gtktreeview.c:664
 msgid "Color to use for even rows"
-msgstr "Çääèæ ääÇÓÊÎÏÇå ääÓ×èÑ ÇäÒèÌêÉ"
+msgstr "Ø§Ù„Ù„ÙˆÙ† Ù„Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù… Ù„Ù„Ø³Ø·ÙˆØ± Ø§Ù„Ø²ÙˆØ¬ÙŠØ©"
 
 #: gtk/gtktreeview.c:670
 msgid "Odd Row Color"
-msgstr "äèæ ÇäÓ×Ñ ÇäÚÑêÈ"
+msgstr "Ù„ÙˆÙ† Ø§Ù„Ø³Ø·Ø± Ø§Ù„ØºØ±ÙŠØ¨"
 
 #: gtk/gtktreeview.c:671
 msgid "Color to use for odd rows"
-msgstr "Çääèæ ääÇÓÊÎÏÇå ääÓ×èÑ ÇäÚÑêÈÉ"
+msgstr "Ø§Ù„Ù„ÙˆÙ† Ù„Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù… Ù„Ù„Ø³Ø·ÙˆØ± Ø§Ù„ØºØ±ÙŠØ¨Ø©"
 
 #: gtk/gtktreeviewcolumn.c:224
 msgid "Whether to display the column"
-msgstr "åÇ ÅĞÇ êÙÑÖ ÇäÙåèÏ"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ÙŠØ¹Ø±Ø¶ Ø§Ù„Ø¹Ù…ÙˆØ¯"
 
 #: gtk/gtktreeviewcolumn.c:231 gtk/gtkwindow.c:482
 msgid "Resizable"
-msgstr "âÇÈä ääÊÍÌêå"
+msgstr "Ù‚Ø§Ø¨Ù„ Ù„Ù„ØªØ­Ø¬ÙŠÙ…"
 
 #: gtk/gtktreeviewcolumn.c:232
 msgid "Column is user-resizable"
-msgstr "ÇäÙåèÏ âÇÈä ääÊÍÌêå åæ âÈä ÇäåÓÊÎÏå"
+msgstr "Ø§Ù„Ø¹Ù…ÙˆØ¯ Ù‚Ø§Ø¨Ù„ Ù„Ù„ØªØ­Ø¬ÙŠÙ… Ù…Ù† Ù‚Ø¨Ù„ Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…"
 
 #: gtk/gtktreeviewcolumn.c:240
 msgid "Current width of the column"
-msgstr "ÇäÙÑÖ ÇäÍÇäê ääÙåèÏ"
+msgstr "Ø§Ù„Ø¹Ø±Ø¶ Ø§Ù„Ø­Ø§Ù„ÙŠ Ù„Ù„Ø¹Ù…ÙˆØ¯"
 
 #: gtk/gtktreeviewcolumn.c:248
 msgid "Sizing"
-msgstr "ÊÍÌêå"
+msgstr "ØªØ­Ø¬ÙŠÙ…"
 
 #: gtk/gtktreeviewcolumn.c:249
 msgid "Resize mode of the column"
-msgstr "æØÇå ÇäÊÍÌêå ääÙåèÏ"
+msgstr "Ù†Ø¸Ø§Ù… Ø§Ù„ØªØ­Ø¬ÙŠÙ… Ù„Ù„Ø¹Ù…ÙˆØ¯"
 
 #: gtk/gtktreeviewcolumn.c:257
 msgid "Fixed Width"
-msgstr "ÇäÙÑÖ ÇäËÇÈÊ"
+msgstr "Ø§Ù„Ø¹Ø±Ø¶ Ø§Ù„Ø«Ø§Ø¨Øª"
 
 #: gtk/gtktreeviewcolumn.c:258
 msgid "Current fixed width of the column"
-msgstr "ÇäÙÑÖ ÇäÍÇäê ÇäËÇÈÊ ääÙåèÏ"
+msgstr "Ø§Ù„Ø¹Ø±Ø¶ Ø§Ù„Ø­Ø§Ù„ÙŠ Ø§Ù„Ø«Ø§Ø¨Øª Ù„Ù„Ø¹Ù…ÙˆØ¯"
 
 #: gtk/gtktreeviewcolumn.c:267
 msgid "Minimum Width"
-msgstr "ÇäÙÑÖ ÇäÃÕÚÑ"
+msgstr "Ø§Ù„Ø¹Ø±Ø¶ Ø§Ù„Ø£ØµØºØ±"
 
 #: gtk/gtktreeviewcolumn.c:268
 msgid "Minimum allowed width of the column"
-msgstr "ÇäÙÑÖ ÇäÃÕÚÑ ÇäåÓåèÍ Èç ääÙåèÏ"
+msgstr "Ø§Ù„Ø¹Ø±Ø¶ Ø§Ù„Ø£ØµØºØ± Ø§Ù„Ù…Ø³Ù…ÙˆØ­ Ø¨Ù‡ Ù„Ù„Ø¹Ù…ÙˆØ¯"
 
 #: gtk/gtktreeviewcolumn.c:277
 msgid "Maximum Width"
-msgstr "ÇäÙÑÖ ÇäÃãÈÑ"
+msgstr "Ø§Ù„Ø¹Ø±Ø¶ Ø§Ù„Ø£ÙƒØ¨Ø±"
 
 #: gtk/gtktreeviewcolumn.c:278
 msgid "Maximum allowed width of the column"
-msgstr "ÇäÙÑÖ ÇäÃãÈÑ ÇäåÓåèÍ Èç ääÙåèÏ"
+msgstr "Ø§Ù„Ø¹Ø±Ø¶ Ø§Ù„Ø£ÙƒØ¨Ø± Ø§Ù„Ù…Ø³Ù…ÙˆØ­ Ø¨Ù‡ Ù„Ù„Ø¹Ù…ÙˆØ¯"
 
 #: gtk/gtktreeviewcolumn.c:288
 msgid "Title to appear in column header"
-msgstr "ÇäÙæèÇæ ÇäĞê êÊå ÙÑÖç áê ÊÑèêÓÉ ÇäÙåèÏ"
+msgstr "Ø§Ù„Ø¹Ù†ÙˆØ§Ù† Ø§Ù„Ø°ÙŠ ÙŠØªÙ… Ø¹Ø±Ø¶Ù‡ ÙÙŠ ØªØ±ÙˆÙŠØ³Ø© Ø§Ù„Ø¹Ù…ÙˆØ¯"
 
 #: gtk/gtktreeviewcolumn.c:296
 msgid "Column gets share of extra width allocated to the widget"
-msgstr "êÊäâé ÇäÙåèÏ âÓåÊç åæ ÇäÙÑÖ ÇäÅÖÇáê ÇäåÎÕñÕ ääâ×ÙÉ"
+msgstr "ÙŠØªÙ„Ù‚Ù‰ Ø§Ù„Ø¹Ù…ÙˆØ¯ Ù‚Ø³Ù…ØªÙ‡ Ù…Ù† Ø§Ù„Ø¹Ø±Ø¶ Ø§Ù„Ø¥Ø¶Ø§ÙÙŠ Ø§Ù„Ù…Ø®ØµÙ‘Øµ Ù„Ù„Ù‚Ø·Ø¹Ø©"
 
 #: gtk/gtktreeviewcolumn.c:303
 msgid "Clickable"
-msgstr "âÇÈä ääæâÑ"
+msgstr "Ù‚Ø§Ø¨Ù„ Ù„Ù„Ù†Ù‚Ø±"
 
 #: gtk/gtktreeviewcolumn.c:304
 msgid "Whether the header can be clicked"
-msgstr "åÇ ÅĞÇ ãÇæÊ ÇäÊÑèêÓÉ âÇÈäÉ ääæâÑ Ãå äÇ"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø§Ù„ØªØ±ÙˆÙŠØ³Ø© Ù‚Ø§Ø¨Ù„Ø© Ù„Ù„Ù†Ù‚Ø± Ø£Ù… Ù„Ø§"
 
 #: gtk/gtktreeviewcolumn.c:312
 msgid "Widget"
-msgstr "ãÇÆæ"
+msgstr "ÙƒØ§Ø¦Ù†"
 
 #: gtk/gtktreeviewcolumn.c:313
 msgid "Widget to put in column header button instead of column title"
-msgstr "ÇäãÇÆæ ÇäĞê êÊå èÖÙç áê ÒÑ ÊÑèêÓÉ ÇäÙåèÏ ÈÏä ÙæèÇæ ÇäÙåèÏ"
+msgstr "Ø§Ù„ÙƒØ§Ø¦Ù† Ø§Ù„Ø°ÙŠ ÙŠØªÙ… ÙˆØ¶Ø¹Ù‡ ÙÙŠ Ø²Ø± ØªØ±ÙˆÙŠØ³Ø© Ø§Ù„Ø¹Ù…ÙˆØ¯ Ø¨Ø¯Ù„ Ø¹Ù†ÙˆØ§Ù† Ø§Ù„Ø¹Ù…ÙˆØ¯"
 
 #: gtk/gtktreeviewcolumn.c:320
 msgid "Alignment"
-msgstr "ÊæÓêâ"
+msgstr "ØªÙ†Ø³ÙŠÙ‚"
 
 #: gtk/gtktreeviewcolumn.c:321
 msgid "X Alignment of the column header text or widget"
-msgstr "ÖÈ× Ó äãÇÆæ Ãè æÕ ÊÑèêÓÉ ÇäÙåèÏ"
+msgstr "Ø¶Ø¨Ø· Ø³ Ù„ÙƒØ§Ø¦Ù† Ø£Ùˆ Ù†Øµ ØªØ±ÙˆÙŠØ³Ø© Ø§Ù„Ø¹Ù…ÙˆØ¯"
 
 #: gtk/gtktreeviewcolumn.c:331
 msgid "Whether the column can be reordered around the headers"
-msgstr "ÅĞÇ åÇ ãÇæ åæ Çäååãæ Ãæ êÙÇÏ ÊÑÊêÈ ÇäÙåèÏ Íèä ÇäÊÑèêÓÇÊ"
+msgstr "Ø¥Ø°Ø§ Ù…Ø§ ÙƒØ§Ù† Ù…Ù† Ø§Ù„Ù…Ù…ÙƒÙ† Ø£Ù† ÙŠØ¹Ø§Ø¯ ØªØ±ØªÙŠØ¨ Ø§Ù„Ø¹Ù…ÙˆØ¯ Ø­ÙˆÙ„ Ø§Ù„ØªØ±ÙˆÙŠØ³Ø§Øª"
 
 #: gtk/gtktreeviewcolumn.c:338
 msgid "Sort indicator"
-msgstr "åÄÔÑ ÇäáÑÒ"
+msgstr "Ù…Ø¤Ø´Ø± Ø§Ù„ÙØ±Ø²"
 
 #: gtk/gtktreeviewcolumn.c:339
 msgid "Whether to show a sort indicator"
-msgstr "åÇ ÅĞÇ ãÇæ ÓêÊå ÙÑÖ åÄÔÑ ÇäáÑÒ Ãå äÇ."
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ø³ÙŠØªÙ… Ø¹Ø±Ø¶ Ù…Ø¤Ø´Ø± Ø§Ù„ÙØ±Ø² Ø£Ù… Ù„Ø§."
 
 #: gtk/gtktreeviewcolumn.c:346
 msgid "Sort order"
-msgstr "ÊÑÊêÈ ÇäáÑÒ"
+msgstr "ØªØ±ØªÙŠØ¨ Ø§Ù„ÙØ±Ø²"
 
 #: gtk/gtktreeviewcolumn.c:347
 msgid "Sort direction the sort indicator should indicate"
-msgstr "ÇÊÌÇç ÇäáÑÒ ÇäĞê êÊèÌÈ Ùäé åÄÔÑ ÇäáÑÒ Ãæ êÔêÑ Åäêç"
+msgstr "Ø§ØªØ¬Ø§Ù‡ Ø§Ù„ÙØ±Ø² Ø§Ù„Ø°ÙŠ ÙŠØªÙˆØ¬Ø¨ Ø¹Ù„Ù‰ Ù…Ø¤Ø´Ø± Ø§Ù„ÙØ±Ø² Ø£Ù† ÙŠØ´ÙŠØ± Ø¥Ù„ÙŠÙ‡"
 
 #: gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
-msgstr "ÅÖÇáÉ âÇ×áÇÊ ääâèÇÆå"
+msgstr "Ø¥Ø¶Ø§ÙØ© Ù‚Ø§Ø·ÙØ§Øª Ù„Ù„Ù‚ÙˆØ§Ø¦Ù…"
 
 #: gtk/gtkuimanager.c:221
 msgid "Whether tearoff menu items should be added to menus"
-msgstr "áêåÇ ÅĞÇ ÓÊÖÇá ÙæÇÕÑ ÇäâèÇÆå ÇäâÇÈäÉ ääâ×á ääâèÇÆå"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ø³ØªØ¶Ø§Ù Ø¹Ù†Ø§ØµØ± Ø§Ù„Ù‚ÙˆØ§Ø¦Ù… Ø§Ù„Ù‚Ø§Ø¨Ù„Ø© Ù„Ù„Ù‚Ø·Ù Ù„Ù„Ù‚ÙˆØ§Ø¦Ù…"
 
 #: gtk/gtkuimanager.c:228
 msgid "Merged UI definition"
-msgstr "ÊÙÑêá èÇÌçÉ åÓÊÎÏå åÏåÌÉ"
+msgstr "ØªØ¹Ø±ÙŠÙ ÙˆØ§Ø¬Ù‡Ø© Ù…Ø³ØªØ®Ø¯Ù… Ù…Ø¯Ù…Ø¬Ø©"
 
 #: gtk/gtkuimanager.c:229
 msgid "An XML string describing the merged UI"
-msgstr "ÓäÓäÉ XML ÊÕá èÇÌçÉ ÇäåÓÊÎÏå ÇäåÏåÌÉ"
+msgstr "Ø³Ù„Ø³Ù„Ø© XML ØªØµÙ ÙˆØ§Ø¬Ù‡Ø© Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù… Ø§Ù„Ù…Ø¯Ù…Ø¬Ø©"
 
 #: gtk/gtkviewport.c:136
 msgid ""
@@ -3955,31 +3954,31 @@ msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
 "this viewport"
 msgstr ""
-"GtkAdjustment ÇäåÍÏñÏ äâêå ÇäåèâÙ ÇäÙåèÏê äåæáĞ ÇäåÔçÏ"
+"GtkAdjustment Ø§Ù„Ù…Ø­Ø¯Ù‘Ø¯ Ù„Ù‚ÙŠÙ… Ø§Ù„Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ø¹Ù…ÙˆØ¯ÙŠ Ù„Ù…Ù†ÙØ° Ø§Ù„Ù…Ø´Ù‡Ø¯"
 
 #: gtk/gtkviewport.c:152
 msgid "Determines how the shadowed box around the viewport is drawn"
-msgstr "êÍÏñÏ ãêáêñÉ ÑÓå ÇäÕæÏèâ ÇäåÖäñä Íèä åæáĞ ÇäåÔçÏ"
+msgstr "ÙŠØ­Ø¯Ù‘Ø¯ ÙƒÙŠÙÙŠÙ‘Ø© Ø±Ø³Ù… Ø§Ù„ØµÙ†Ø¯ÙˆÙ‚ Ø§Ù„Ù…Ø¶Ù„Ù‘Ù„ Ø­ÙˆÙ„ Ù…Ù†ÙØ° Ø§Ù„Ù…Ø´Ù‡Ø¯"
 
 #: gtk/gtkwidget.c:409
 msgid "Widget name"
-msgstr "ÇÓå ÇäãÇÆæ"
+msgstr "Ø§Ø³Ù… Ø§Ù„ÙƒØ§Ø¦Ù†"
 
 #: gtk/gtkwidget.c:410
 msgid "The name of the widget"
-msgstr "ÇÓå ÇäãÇÆæ"
+msgstr "Ø§Ø³Ù… Ø§Ù„ÙƒØ§Ø¦Ù†"
 
 #: gtk/gtkwidget.c:416
 msgid "Parent widget"
-msgstr "ÇäãÇÆæ Ç?È"
+msgstr "Ø§Ù„ÙƒØ§Ø¦Ù† Ø§?Ø¨"
 
 #: gtk/gtkwidget.c:417
 msgid "The parent widget of this widget. Must be a Container widget"
-msgstr "Çäâ×ÙÉ ÇäÃÈ äçĞç Çäâ×ÙÉ. êÌÈ Ãæ êãèæ â×ÙÉ ÍÇèêÉ"
+msgstr "Ø§Ù„Ù‚Ø·Ø¹Ø© Ø§Ù„Ø£Ø¨ Ù„Ù‡Ø°Ù‡ Ø§Ù„Ù‚Ø·Ø¹Ø©. ÙŠØ¬Ø¨ Ø£Ù† ÙŠÙƒÙˆÙ† Ù‚Ø·Ø¹Ø© Ø­Ø§ÙˆÙŠØ©"
 
 #: gtk/gtkwidget.c:424
 msgid "Width request"
-msgstr "×äÈ ÙÑÖ"
+msgstr "Ø·Ù„Ø¨ Ø¹Ø±Ø¶"
 
 #: gtk/gtkwidget.c:425
 msgid ""
@@ -3989,207 +3988,207 @@ msgstr "Ø·Ù„Ø¨Â·ØªÙ†Ù…ÙŠÙ‚Â·Ù„Ø¹Ø±Ø¶Â·Ø§Ù„Ù‚Ø·Ø¹Ø©Â·Ø£ÙˆÂ·-1Â·Ø¥Ø°Ø§Â·ÙˆØ¬Ø¨Â·Ø§
 
 #: gtk/gtkwidget.c:433
 msgid "Height request"
-msgstr "×äÈ ÇÑÊáÇÙ"
+msgstr "Ø·Ù„Ø¨ Ø§Ø±ØªÙØ§Ø¹"
 
 #: gtk/gtkwidget.c:434
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
-msgstr "×äÈ Êæåêâ äÅÑÊáÇÙ Çäâ×ÙÉ Ãè -1 ÅĞÇ èÌÈ ÇÓÊÎÏÇå ×äÈ ÇÙÊêÇÏê"
+msgstr "Ø·Ù„Ø¨ ØªÙ†Ù…ÙŠÙ‚ Ù„Ø¥Ø±ØªÙØ§Ø¹ Ø§Ù„Ù‚Ø·Ø¹Ø© Ø£Ùˆ -1 Ø¥Ø°Ø§ ÙˆØ¬Ø¨ Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø·Ù„Ø¨ Ø§Ø¹ØªÙŠØ§Ø¯ÙŠ"
 
 #: gtk/gtkwidget.c:443
 msgid "Whether the widget is visible"
-msgstr "åÇ ÅĞÇ ãÇæ ÇäãÇÆæ ØÇçÑÇ"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ø§Ù„ÙƒØ§Ø¦Ù† Ø¸Ø§Ù‡Ø±Ø§"
 
 #: gtk/gtkwidget.c:450
 msgid "Whether the widget responds to input"
-msgstr "åÇ ÅĞÇ ãÇæ ÇäãÇÆæ êÑÏ Ùäé Ç?ÏÎÇä"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ø§Ù„ÙƒØ§Ø¦Ù† ÙŠØ±Ø¯ Ø¹Ù„Ù‰ Ø§?Ø¯Ø®Ø§Ù„"
 
 #: gtk/gtkwidget.c:456
 msgid "Application paintable"
-msgstr "ÇäÊ×Èêâ âÇÈä ääÑÓå"
+msgstr "Ø§Ù„ØªØ·Ø¨ÙŠÙ‚ Ù‚Ø§Ø¨Ù„ Ù„Ù„Ø±Ø³Ù…"
 
 #: gtk/gtkwidget.c:457
 msgid "Whether the application will paint directly on the widget"
-msgstr "åÇ ÅĞÇ ãÇæ ÇäÊ×Èêâ ÓêÑÓå åÈÇÔÑÉ Ùäé ÇäãÇÆæ"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ø§Ù„ØªØ·Ø¨ÙŠÙ‚ Ø³ÙŠØ±Ø³Ù… Ù…Ø¨Ø§Ø´Ø±Ø© Ø¹Ù„Ù‰ Ø§Ù„ÙƒØ§Ø¦Ù†"
 
 #: gtk/gtkwidget.c:463
 msgid "Can focus"
-msgstr "ååãæ Êäâê ÇäÈÄÑÉ"
+msgstr "Ù…Ù…ÙƒÙ† ØªÙ„Ù‚ÙŠ Ø§Ù„Ø¨Ø¤Ø±Ø©"
 
 #: gtk/gtkwidget.c:464
 msgid "Whether the widget can accept the input focus"
-msgstr "åÇ ÅĞÇ ãÇæ ÈâÏÑÉ ÇäãÇÆæ âÈèä ÈÄÑÉ Ç?ÏÎÇä"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ø¨Ù‚Ø¯Ø±Ø© Ø§Ù„ÙƒØ§Ø¦Ù† Ù‚Ø¨ÙˆÙ„ Ø¨Ø¤Ø±Ø© Ø§?Ø¯Ø®Ø§Ù„"
 
 #: gtk/gtkwidget.c:470
 msgid "Has focus"
-msgstr "äç ÈÄÑÉ"
+msgstr "Ù„Ù‡ Ø¨Ø¤Ø±Ø©"
 
 #: gtk/gtkwidget.c:471
 msgid "Whether the widget has the input focus"
-msgstr "åÇ ÅĞÇ ãÇæ ÇäãÇÆæ äç ÈÄÑÉ Ç?ÏÎÇä"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ø§Ù„ÙƒØ§Ø¦Ù† Ù„Ù‡ Ø¨Ø¤Ø±Ø© Ø§?Ø¯Ø®Ø§Ù„"
 
 #: gtk/gtkwidget.c:477
 msgid "Is focus"
-msgstr "çè ÊÑãêÒ"
+msgstr "Ù‡Ùˆ ØªØ±ÙƒÙŠØ²"
 
 #: gtk/gtkwidget.c:478
 msgid "Whether the widget is the focus widget within the toplevel"
-msgstr "åÇ ÅĞÇ ãÇæÊ Çäâ×ÙÉ çê â×ÙÉ ÇäÊÑãêÒ Öåæ ÇäåÓÊèé ÇäÃÙäé"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø§Ù„Ù‚Ø·Ø¹Ø© Ù‡ÙŠ Ù‚Ø·Ø¹Ø© Ø§Ù„ØªØ±ÙƒÙŠØ² Ø¶Ù…Ù† Ø§Ù„Ù…Ø³ØªÙˆÙ‰ Ø§Ù„Ø£Ø¹Ù„Ù‰"
 
 #: gtk/gtkwidget.c:484
 msgid "Can default"
-msgstr "ååãæ ÇäÇáÊÑÇÖ"
+msgstr "Ù…Ù…ÙƒÙ† Ø§Ù„Ø§ÙØªØ±Ø§Ø¶"
 
 #: gtk/gtkwidget.c:485
 msgid "Whether the widget can be the default widget"
-msgstr "åÇ ÅĞÇ Ãåãæ Ãæ êÕÈÍ ÇäãÇÆæ çè ÇäãÇÆæ ÇäÇáÊÑÇÖê"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ Ø£Ù…ÙƒÙ† Ø£Ù† ÙŠØµØ¨Ø­ Ø§Ù„ÙƒØ§Ø¦Ù† Ù‡Ùˆ Ø§Ù„ÙƒØ§Ø¦Ù† Ø§Ù„Ø§ÙØªØ±Ø§Ø¶ÙŠ"
 
 #: gtk/gtkwidget.c:491
 msgid "Has default"
-msgstr "äç ÇáÊÑÇÖ"
+msgstr "Ù„Ù‡ Ø§ÙØªØ±Ø§Ø¶"
 
 #: gtk/gtkwidget.c:492
 msgid "Whether the widget is the default widget"
-msgstr "åÇ ÅĞÇ ãÇæ ÇäãÇÆæ çè ÇäãÇÆæ ÇäÇáÊÑÇÖê"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ø§Ù„ÙƒØ§Ø¦Ù† Ù‡Ùˆ Ø§Ù„ÙƒØ§Ø¦Ù† Ø§Ù„Ø§ÙØªØ±Ø§Ø¶ÙŠ"
 
 #: gtk/gtkwidget.c:498
 msgid "Receives default"
-msgstr "ÇÓÊâÈÇä ÇäÇáÊÑÇÖ"
+msgstr "Ø§Ø³ØªÙ‚Ø¨Ø§Ù„ Ø§Ù„Ø§ÙØªØ±Ø§Ø¶"
 
 #: gtk/gtkwidget.c:499
 msgid "If TRUE, the widget will receive the default action when it is focused"
-msgstr "ÅĞÇ ãÇæ TRUE¬ áÓÊÊäâé Çäâ×ÙÉ ÇäÍÏË ÇäÇáÊÑÇÖê ÙæÏ ÊÑãêÒçÇ"
+msgstr "Ø¥Ø°Ø§ ÙƒØ§Ù† TRUEØŒ ÙØ³ØªØªÙ„Ù‚Ù‰ Ø§Ù„Ù‚Ø·Ø¹Ø© Ø§Ù„Ø­Ø¯Ø« Ø§Ù„Ø§ÙØªØ±Ø§Ø¶ÙŠ Ø¹Ù†Ø¯ ØªØ±ÙƒÙŠØ²Ù‡Ø§"
 
 #: gtk/gtkwidget.c:505
 msgid "Composite child"
-msgstr "ÇÈæ åÑãÈ"
+msgstr "Ø§Ø¨Ù† Ù…Ø±ÙƒØ¨"
 
 #: gtk/gtkwidget.c:506
 msgid "Whether the widget is part of a composite widget"
-msgstr "åÇ ÅĞÇ ãÇæ ÇäãÇÆæ åÑãÈÇ åæ ãÇÆæ ÂÎÑ"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ø§Ù„ÙƒØ§Ø¦Ù† Ù…Ø±ÙƒØ¨Ø§ Ù…Ù† ÙƒØ§Ø¦Ù† Ø¢Ø®Ø±"
 
 #: gtk/gtkwidget.c:512
 msgid "Style"
-msgstr "æå×"
+msgstr "Ù†Ù…Ø·"
 
 #: gtk/gtkwidget.c:513
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
-msgstr "ÃÓäèÈ Çäâ×ÙÉ¬ ÇäåÍÊèêÉ Ùäé åÙäèåÇÊ Íèä åØçÑçÇ (ÇäÃäèÇæ ÇäÎ)"
+msgstr "Ø£Ø³Ù„ÙˆØ¨ Ø§Ù„Ù‚Ø·Ø¹Ø©ØŒ Ø§Ù„Ù…Ø­ØªÙˆÙŠØ© Ø¹Ù„Ù‰ Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø­ÙˆÙ„ Ù…Ø¸Ù‡Ø±Ù‡Ø§ (Ø§Ù„Ø£Ù„ÙˆØ§Ù† Ø§Ù„Ø®)"
 
 #: gtk/gtkwidget.c:519
 msgid "Events"
-msgstr "ÃÍÏÇË"
+msgstr "Ø£Ø­Ø¯Ø§Ø«"
 
 #: gtk/gtkwidget.c:520
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
-msgstr "ÚäÇá ÇäÃÍÏÇË ÇäÏê êÍÏñÏ Ãê æèÙ åæ GdkEvents ÓÊÊäâé çĞç Çäâ×ÙÉ"
+msgstr "ØºÙ„Ø§Ù Ø§Ù„Ø£Ø­Ø¯Ø§Ø« Ø§Ù„Ø¯ÙŠ ÙŠØ­Ø¯Ù‘Ø¯ Ø£ÙŠ Ù†ÙˆØ¹ Ù…Ù† GdkEvents Ø³ØªØªÙ„Ù‚Ù‰ Ù‡Ø°Ù‡ Ø§Ù„Ù‚Ø·Ø¹Ø©"
 
 #: gtk/gtkwidget.c:527
 msgid "Extension events"
-msgstr "ÃÍÏÇË ÇåÊÏÇÏ"
+msgstr "Ø£Ø­Ø¯Ø§Ø« Ø§Ù…ØªØ¯Ø§Ø¯"
 
 #: gtk/gtkwidget.c:528
 msgid "The mask that decides what kind of extension events this widget gets"
-msgstr "ÇäÚäÇá ÇäĞê êÍÏñÏ Ãê ÅåÊÏÇÏÇÊ ÇäÃÍÏÇË ÓÊÊäâñé çĞç Çäâ×ÙÉ"
+msgstr "Ø§Ù„ØºÙ„Ø§Ù Ø§Ù„Ø°ÙŠ ÙŠØ­Ø¯Ù‘Ø¯ Ø£ÙŠ Ø¥Ù…ØªØ¯Ø§Ø¯Ø§Øª Ø§Ù„Ø£Ø­Ø¯Ø§Ø« Ø³ØªØªÙ„Ù‚Ù‘Ù‰ Ù‡Ø°Ù‡ Ø§Ù„Ù‚Ø·Ø¹Ø©"
 
 #: gtk/gtkwidget.c:535
 msgid "No show all"
-msgstr "äÇ ÙÑÖ ääãä"
+msgstr "Ù„Ø§ Ø¹Ø±Ø¶ Ù„Ù„ÙƒÙ„"
 
 #: gtk/gtkwidget.c:536
 msgid "Whether gtk_widget_show_all() should not affect this widget"
-msgstr "áêåÇ ÅĞÇ äæ êÄËñÑ gtk_widget_show_all() çĞç Çäâ×ÙÉ"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ Ù„Ù† ÙŠØ¤Ø«Ù‘Ø± gtk_widget_show_all() Ù‡Ø°Ù‡ Ø§Ù„Ù‚Ø·Ø¹Ø©"
 
 #: gtk/gtkwidget.c:1377
 msgid "Interior Focus"
-msgstr "ÈÄÑÉ ÏÇÎäêÉ"
+msgstr "Ø¨Ø¤Ø±Ø© Ø¯Ø§Ø®Ù„ÙŠØ©"
 
 #: gtk/gtkwidget.c:1378
 msgid "Whether to draw the focus indicator inside widgets"
-msgstr "åÇ ÅĞÇ êÑÓå åÄÔÑ ÇäÊÑãêÒ ÏÇÎä Çäâ×Ù"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ÙŠØ±Ø³Ù… Ù…Ø¤Ø´Ø± Ø§Ù„ØªØ±ÙƒÙŠØ² Ø¯Ø§Ø®Ù„ Ø§Ù„Ù‚Ø·Ø¹"
 
 #: gtk/gtkwidget.c:1384
 msgid "Focus linewidth"
-msgstr "ÙÑÖ Î× ÇäÈÄÑÉ"
+msgstr "Ø¹Ø±Ø¶ Ø®Ø· Ø§Ù„Ø¨Ø¤Ø±Ø©"
 
 #: gtk/gtkwidget.c:1385
 msgid "Width, in pixels, of the focus indicator line"
-msgstr "ÇäÙÑÖ ÈÇäÈãÓäÇÊ äÓ×Ñ åÄÔÑ ÇäÊÑãêÒ"
+msgstr "Ø§Ù„Ø¹Ø±Ø¶ Ø¨Ø§Ù„Ø¨ÙƒØ³Ù„Ø§Øª Ù„Ø³Ø·Ø± Ù…Ø¤Ø´Ø± Ø§Ù„ØªØ±ÙƒÙŠØ²"
 
 #: gtk/gtkwidget.c:1391
 msgid "Focus line dash pattern"
-msgstr "Î× ÇäÈÄÑÉ ÈÇäæâÔ ÇäåÊâ×Ù"
+msgstr "Ø®Ø· Ø§Ù„Ø¨Ø¤Ø±Ø© Ø¨Ø§Ù„Ù†Ù‚Ø´ Ø§Ù„Ù…ØªÙ‚Ø·Ø¹"
 
 #: gtk/gtkwidget.c:1392
 msgid "Dash pattern used to draw the focus indicator"
-msgstr "æå× ÇäÎ× ÇäáÇÕä ÇäåÓÊÙåä äÑÓå åÄÔÑ ÇäÊãêÒ"
+msgstr "Ù†Ù…Ø· Ø§Ù„Ø®Ø· Ø§Ù„ÙØ§ØµÙ„ Ø§Ù„Ù…Ø³ØªØ¹Ù…Ù„ Ù„Ø±Ø³Ù… Ù…Ø¤Ø´Ø± Ø§Ù„ØªÙƒÙŠØ²"
 
 #: gtk/gtkwidget.c:1397
 msgid "Focus padding"
-msgstr "ÍÔè ÇäÈÄÑÉ"
+msgstr "Ø­Ø´Ùˆ Ø§Ù„Ø¨Ø¤Ø±Ø©"
 
 #: gtk/gtkwidget.c:1398
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
-msgstr "ÇäÙÑÖ ÈÇäÈãÓäÇÊ Èêæ åÄÔÑ ÇäÊÑãêÒ è â×ÙÉ 'ÕæÏèâ'"
+msgstr "Ø§Ù„Ø¹Ø±Ø¶ Ø¨Ø§Ù„Ø¨ÙƒØ³Ù„Ø§Øª Ø¨ÙŠÙ† Ù…Ø¤Ø´Ø± Ø§Ù„ØªØ±ÙƒÙŠØ² Ùˆ Ù‚Ø·Ø¹Ø© 'ØµÙ†Ø¯ÙˆÙ‚'"
 
 #: gtk/gtkwidget.c:1403
 msgid "Cursor color"
-msgstr "äèæ ÇäåÄÔÑ"
+msgstr "Ù„ÙˆÙ† Ø§Ù„Ù…Ø¤Ø´Ø±"
 
 #: gtk/gtkwidget.c:1404
 msgid "Color with which to draw insertion cursor"
-msgstr "Çääèæ ÇäĞê êÊå Èç ÑÓå åÄÔÑ Ç?ÏÎÇä"
+msgstr "Ø§Ù„Ù„ÙˆÙ† Ø§Ù„Ø°ÙŠ ÙŠØªÙ… Ø¨Ù‡ Ø±Ø³Ù… Ù…Ø¤Ø´Ø± Ø§?Ø¯Ø®Ø§Ù„"
 
 #: gtk/gtkwidget.c:1409
 msgid "Secondary cursor color"
-msgstr "åÄÔÑ Ç?ÏÎÇä ÇäËÇæèê"
+msgstr "Ù…Ø¤Ø´Ø± Ø§?Ø¯Ø®Ø§Ù„ Ø§Ù„Ø«Ø§Ù†ÙˆÙŠ"
 
 #: gtk/gtkwidget.c:1410
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
 msgstr ""
-"Çääèæ ÇäĞê ÓêÑÓå êç åÄÔÑ ÇäÅÏÎÇä ÇäËÇæèê ÙæÏ ÊÍÑêÑ æÕ åÎÊä× åæ Çäêåêæ Åäé "
-"ÇäêÓÇÑ è åæ ÇäêÓÇÑ Åäé Çäêåêæ"
+"Ø§Ù„Ù„ÙˆÙ† Ø§Ù„Ø°ÙŠ Ø³ÙŠØ±Ø³Ù… ÙŠÙ‡ Ù…Ø¤Ø´Ø± Ø§Ù„Ø¥Ø¯Ø®Ø§Ù„ Ø§Ù„Ø«Ø§Ù†ÙˆÙŠ Ø¹Ù†Ø¯ ØªØ­Ø±ÙŠØ± Ù†Øµ Ù…Ø®ØªÙ„Ø· Ù…Ù† Ø§Ù„ÙŠÙ…ÙŠÙ† Ø¥Ù„Ù‰ "
+"Ø§Ù„ÙŠØ³Ø§Ø± Ùˆ Ù…Ù† Ø§Ù„ÙŠØ³Ø§Ø± Ø¥Ù„Ù‰ Ø§Ù„ÙŠÙ…ÙŠÙ†"
 
 #: gtk/gtkwidget.c:1415
 msgid "Cursor line aspect ratio"
-msgstr "æÓÈÉ Çä×èä ääÙÑÖ äåÄÔÑ ÇäÓ×Ñ"
+msgstr "Ù†Ø³Ø¨Ø© Ø§Ù„Ø·ÙˆÙ„ Ù„Ù„Ø¹Ø±Ø¶ Ù„Ù…Ø¤Ø´Ø± Ø§Ù„Ø³Ø·Ø±"
 
 #: gtk/gtkwidget.c:1416
 msgid "Aspect ratio with which to draw insertion cursor"
-msgstr "æÓÈÉ Çä×èä ääÙÑÖ ÇäÊê ÓêÑÓå ÈçÇ åÄÔÑ ÅÏÎÇä."
+msgstr "Ù†Ø³Ø¨Ø© Ø§Ù„Ø·ÙˆÙ„ Ù„Ù„Ø¹Ø±Ø¶ Ø§Ù„ØªÙŠ Ø³ÙŠØ±Ø³Ù… Ø¨Ù‡Ø§ Ù…Ø¤Ø´Ø± Ø¥Ø¯Ø®Ø§Ù„."
 
 #: gtk/gtkwindow.c:440
 msgid "Window Type"
-msgstr "æèÙ ÇäæÇáĞÉ"
+msgstr "Ù†ÙˆØ¹ Ø§Ù„Ù†Ø§ÙØ°Ø©"
 
 #: gtk/gtkwindow.c:441
 msgid "The type of the window"
-msgstr "æèÙ ÇäæÇáĞÉ"
+msgstr "Ù†ÙˆØ¹ Ø§Ù„Ù†Ø§ÙØ°Ø©"
 
 #: gtk/gtkwindow.c:449
 msgid "Window Title"
-msgstr "ÙæèÇæ ÇäæÇáĞÉ"
+msgstr "Ø¹Ù†ÙˆØ§Ù† Ø§Ù„Ù†Ø§ÙØ°Ø©"
 
 #: gtk/gtkwindow.c:450
 msgid "The title of the window"
-msgstr "ÙæèÇæ ÇäæÇáĞÉ"
+msgstr "Ø¹Ù†ÙˆØ§Ù† Ø§Ù„Ù†Ø§ÙØ°Ø©"
 
 #: gtk/gtkwindow.c:457
 msgid "Window Role"
-msgstr "ÏèÑ ÇäæÇáĞÉ"
+msgstr "Ø¯ÙˆØ± Ø§Ù„Ù†Ø§ÙØ°Ø©"
 
 #: gtk/gtkwindow.c:458
 msgid "Unique identifier for the window to be used when restoring a session"
-msgstr "åÙÑá èÍêÏ ääæÇáĞÉ êÓÊÎÏå ÙæÏ ÇÓÊÑÌÇÙ ÌäÓÉ"
+msgstr "Ù…Ø¹Ø±Ù ÙˆØ­ÙŠØ¯ Ù„Ù„Ù†Ø§ÙØ°Ø© ÙŠØ³ØªØ®Ø¯Ù… Ø¹Ù†Ø¯ Ø§Ø³ØªØ±Ø¬Ø§Ø¹ Ø¬Ù„Ø³Ø©"
 
 #: gtk/gtkwindow.c:465
 msgid "Allow Shrink"
-msgstr "ÇäÓåÇÍ ÈÇäÇæãåÇÔ"
+msgstr "Ø§Ù„Ø³Ù…Ø§Ø­ Ø¨Ø§Ù„Ø§Ù†ÙƒÙ…Ø§Ø´"
 
 #: gtk/gtkwindow.c:467
 #, no-c-format
@@ -4197,154 +4196,154 @@ msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 msgstr ""
-"ÅĞÇ ÖÈ× äà TRUE áäæ êãèæ ääæÇáĞÉ ÍÌå ÃÏæé. ÖÈ× çĞÇ äà TRUE áãÑÉ ÓêñÆÉ  áê 99% åæ ÇäÍÇäÇÊ."
+"Ø¥Ø°Ø§ Ø¶Ø¨Ø· Ù„Ù€ TRUE ÙÙ„Ù† ÙŠÙƒÙˆÙ† Ù„Ù„Ù†Ø§ÙØ°Ø© Ø­Ø¬Ù… Ø£Ø¯Ù†Ù‰. Ø¶Ø¨Ø· Ù‡Ø°Ø§ Ù„Ù€ TRUE ÙÙƒØ±Ø© Ø³ÙŠÙ‘Ø¦Ø©  ÙÙŠ 99% Ù…Ù† Ø§Ù„Ø­Ø§Ù„Ø§Øª."
 
 #: gtk/gtkwindow.c:474
 msgid "Allow Grow"
-msgstr "ÇäÓåÇÍ ÈÇäæåè"
+msgstr "Ø§Ù„Ø³Ù…Ø§Ø­ Ø¨Ø§Ù„Ù†Ù…Ùˆ"
 
 #: gtk/gtkwindow.c:475
 msgid "If TRUE, users can expand the window beyond its minimum size"
-msgstr "ÇĞÇ ãÇæ TRUE¬ áÓêÊåãæ ÇäåÓÊÎÏåèæ åæ ÊåÏêÏ ÇäæÇáĞÉ áèâ ÍÌåçÇ ÇäÃÏæé"
+msgstr "Ø§Ø°Ø§ ÙƒØ§Ù† TRUEØŒ ÙØ³ÙŠØªÙ…ÙƒÙ† Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…ÙˆÙ† Ù…Ù† ØªÙ…Ø¯ÙŠØ¯ Ø§Ù„Ù†Ø§ÙØ°Ø© ÙÙˆÙ‚ Ø­Ø¬Ù…Ù‡Ø§ Ø§Ù„Ø£Ø¯Ù†Ù‰"
 
 #: gtk/gtkwindow.c:483
 msgid "If TRUE, users can resize the window"
-msgstr "ÅĞÇ ãÇæ TRUE¬ ÈÇÓÊ×ÇÙÉ ÇäåÓÊÎÏåêæ ÊÍÌêå ÇäæÇáĞÉ."
+msgstr "Ø¥Ø°Ø§ ÙƒØ§Ù† TRUEØŒ Ø¨Ø§Ø³ØªØ·Ø§Ø¹Ø© Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…ÙŠÙ† ØªØ­Ø¬ÙŠÙ… Ø§Ù„Ù†Ø§ÙØ°Ø©."
 
 #: gtk/gtkwindow.c:490
 msgid "Modal"
-msgstr "ÓÇÆÏÉ"
+msgstr "Ø³Ø§Ø¦Ø¯Ø©"
 
 #: gtk/gtkwindow.c:491
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
 msgstr ""
-"ÅĞÇ ÖÈ× äà TRUE áÓÊãèæ ÇäæÇáĞÉ ÓÇÆÏÉ (äæ êåãæ ÇÓÊÎÏÇå æèÇáĞ ÃÎÑé ÙæÏ ÊãêÒ "
-"çĞç ÇäæÇáĞÉ)"
+"Ø¥Ø°Ø§ Ø¶Ø¨Ø· Ù„Ù€ TRUE ÙØ³ØªÙƒÙˆÙ† Ø§Ù„Ù†Ø§ÙØ°Ø© Ø³Ø§Ø¦Ø¯Ø© (Ù„Ù† ÙŠÙ…ÙƒÙ† Ø§Ø³ØªØ®Ø¯Ø§Ù… Ù†ÙˆØ§ÙØ° Ø£Ø®Ø±Ù‰ Ø¹Ù†Ø¯ ØªÙƒÙŠØ² "
+"Ù‡Ø°Ù‡ Ø§Ù„Ù†Ø§ÙØ°Ø©)"
 
 #: gtk/gtkwindow.c:498
 msgid "Window Position"
-msgstr "åèâÙ ÇäæÇáĞÉ"
+msgstr "Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ù†Ø§ÙØ°Ø©"
 
 #: gtk/gtkwindow.c:499
 msgid "The initial position of the window"
-msgstr "åèâÙ ÇäæÇáĞÉ ÇäÃèäê"
+msgstr "Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ù†Ø§ÙØ°Ø© Ø§Ù„Ø£ÙˆÙ„ÙŠ"
 
 #: gtk/gtkwindow.c:507
 msgid "Default Width"
-msgstr "ÇäÙÑÖ ÇäÇáÊÑÇÖê"
+msgstr "Ø§Ù„Ø¹Ø±Ø¶ Ø§Ù„Ø§ÙØªØ±Ø§Ø¶ÙŠ"
 
 #: gtk/gtkwindow.c:508
 msgid "The default width of the window, used when initially showing the window"
-msgstr "ÙÑÖ ÇäæÇáĞÉ ÇäÅáÊÑÇÖê¬ åÓÊÎÏå ÙæÏ ÙÑÖ ÇäæÇáĞÉ áê ÇäåÑÉ ÇäÃèäé"
+msgstr "Ø¹Ø±Ø¶ Ø§Ù„Ù†Ø§ÙØ°Ø© Ø§Ù„Ø¥ÙØªØ±Ø§Ø¶ÙŠØŒ Ù…Ø³ØªØ®Ø¯Ù… Ø¹Ù†Ø¯ Ø¹Ø±Ø¶ Ø§Ù„Ù†Ø§ÙØ°Ø© ÙÙŠ Ø§Ù„Ù…Ø±Ø© Ø§Ù„Ø£ÙˆÙ„Ù‰"
 
 #: gtk/gtkwindow.c:517
 msgid "Default Height"
-msgstr "ÇäÅÑÊáÇÙ ÇäÅáÊÑÇÖê"
+msgstr "Ø§Ù„Ø¥Ø±ØªÙØ§Ø¹ Ø§Ù„Ø¥ÙØªØ±Ø§Ø¶ÙŠ"
 
 #: gtk/gtkwindow.c:518
 msgid ""
 "The default height of the window, used when initially showing the window"
-msgstr "ÇÑÊáÇÙ ÇäæÇáĞÉ ÇäÅáÊÑÇÖê¬ åÓÊÎÏå ÙæÏ ÙÑÖ ÇäæÇáĞÉ áê ÇäåÑÉ ÇäÃèäé"
+msgstr "Ø§Ø±ØªÙØ§Ø¹ Ø§Ù„Ù†Ø§ÙØ°Ø© Ø§Ù„Ø¥ÙØªØ±Ø§Ø¶ÙŠØŒ Ù…Ø³ØªØ®Ø¯Ù… Ø¹Ù†Ø¯ Ø¹Ø±Ø¶ Ø§Ù„Ù†Ø§ÙØ°Ø© ÙÙŠ Ø§Ù„Ù…Ø±Ø© Ø§Ù„Ø£ÙˆÙ„Ù‰"
 
 #: gtk/gtkwindow.c:527
 msgid "Destroy with Parent"
-msgstr "ÊÏåêÑ åÙ ÇäÃå"
+msgstr "ØªØ¯Ù…ÙŠØ± Ù…Ø¹ Ø§Ù„Ø£Ù…"
 
 #: gtk/gtkwindow.c:528
 msgid "If this window should be destroyed when the parent is destroyed"
-msgstr "áêåÇ ÅĞÇ èÌÈ ÊÏåêÑ çĞç ÇäæÇáĞÉ ÙæÏ ÊÏåêÑ ÇäæÇáĞÉ ÇäÃå"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙˆØ¬Ø¨ ØªØ¯Ù…ÙŠØ± Ù‡Ø°Ù‡ Ø§Ù„Ù†Ø§ÙØ°Ø© Ø¹Ù†Ø¯ ØªØ¯Ù…ÙŠØ± Ø§Ù„Ù†Ø§ÙØ°Ø© Ø§Ù„Ø£Ù…"
 
 #: gtk/gtkwindow.c:535
 msgid "Icon"
-msgstr "ÃêâèæÉ"
+msgstr "Ø£ÙŠÙ‚ÙˆÙ†Ø©"
 
 #: gtk/gtkwindow.c:536
 msgid "Icon for this window"
-msgstr "ÃêâèæÉ äçĞç ÇäæÇáĞÉ"
+msgstr "Ø£ÙŠÙ‚ÙˆÙ†Ø© Ù„Ù‡Ø°Ù‡ Ø§Ù„Ù†Ø§ÙØ°Ø©"
 
 #: gtk/gtkwindow.c:551
 msgid "Is Active"
-msgstr "æÔ×"
+msgstr "Ù†Ø´Ø·"
 
 #: gtk/gtkwindow.c:552
 msgid "Whether the toplevel is the current active window"
-msgstr "áêåÇ ÅĞÇ ãÇæ ÇäåÓÊèé ÇäÃÙäé çè ÇäæÇáĞÉ ÇäæÔ×É"
+msgstr "ÙÙŠÙ…Ø§ Ø¥Ø°Ø§ ÙƒØ§Ù† Ø§Ù„Ù…Ø³ØªÙˆÙ‰ Ø§Ù„Ø£Ø¹Ù„Ù‰ Ù‡Ùˆ Ø§Ù„Ù†Ø§ÙØ°Ø© Ø§Ù„Ù†Ø´Ø·Ø©"
 
 #: gtk/gtkwindow.c:559
 msgid "Focus in Toplevel"
-msgstr "ÊÑãêÒ áê ÇäåÓÊèé ÇäÃÙäé"
+msgstr "ØªØ±ÙƒÙŠØ² ÙÙŠ Ø§Ù„Ù…Ø³ØªÙˆÙ‰ Ø§Ù„Ø£Ø¹Ù„Ù‰"
 
 #: gtk/gtkwindow.c:560
 msgid "Whether the input focus is within this GtkWindow"
-msgstr "åÇ ÇĞÇ êãèæ ÊÑãêÒ ÇäÅÏÎÇä Öåæ GtkWindow ÇäÍÇäê"
+msgstr "Ù…Ø§ Ø§Ø°Ø§ ÙŠÙƒÙˆÙ† ØªØ±ÙƒÙŠØ² Ø§Ù„Ø¥Ø¯Ø®Ø§Ù„ Ø¶Ù…Ù† GtkWindow Ø§Ù„Ø­Ø§Ù„ÙŠ"
 
 #: gtk/gtkwindow.c:567
 msgid "Type hint"
-msgstr "ÃãÊÈ ÇäÊäåêÍÉ"
+msgstr "Ø£ÙƒØªØ¨ Ø§Ù„ØªÙ„Ù…ÙŠØ­Ø©"
 
 #: gtk/gtkwindow.c:568
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
-msgstr "ÊäåêÍÉ äåÓÇÙÏÉ ÈêÆÉ Ó×Í ÇäåãÊÈ áê áçå æèÙ ÇäæÇáĞÉ è ×ÑêâÉ ÇäÊÙÇãä åÙçÇ"
+msgstr "ØªÙ„Ù…ÙŠØ­Ø© Ù„Ù…Ø³Ø§Ø¹Ø¯Ø© Ø¨ÙŠØ¦Ø© Ø³Ø·Ø­ Ø§Ù„Ù…ÙƒØªØ¨ ÙÙŠ ÙÙ‡Ù… Ù†ÙˆØ¹ Ø§Ù„Ù†Ø§ÙØ°Ø© Ùˆ Ø·Ø±ÙŠÙ‚Ø© Ø§Ù„ØªØ¹Ø§ÙƒÙ„ Ù…Ø¹Ù‡Ø§"
 
 #: gtk/gtkwindow.c:576
 msgid "Skip taskbar"
-msgstr "ÊÎ×ê ÙåèÏ ÇäåçÇå"
+msgstr "ØªØ®Ø·ÙŠ Ø¹Ù…ÙˆØ¯ Ø§Ù„Ù…Ù‡Ø§Ù…"
 
 #: gtk/gtkwindow.c:577
 msgid "TRUE if the window should not be in the task bar."
-msgstr "TRUE ÅĞÇ èÌÈ Ãæ äÇ Êãèæ ÇäæÇáĞÉ áê ÙåèÏ ÇäåçÇå."
+msgstr "TRUE Ø¥Ø°Ø§ ÙˆØ¬Ø¨ Ø£Ù† Ù„Ø§ ØªÙƒÙˆÙ† Ø§Ù„Ù†Ø§ÙØ°Ø© ÙÙŠ Ø¹Ù…ÙˆØ¯ Ø§Ù„Ù…Ù‡Ø§Ù…."
 
 #: gtk/gtkwindow.c:584
 msgid "Skip pager"
-msgstr "ÊÎ×ê ÇäåÊÕáÍ"
+msgstr "ØªØ®Ø·ÙŠ Ø§Ù„Ù…ØªØµÙØ­"
 
 #: gtk/gtkwindow.c:585
 msgid "TRUE if the window should not be in the pager."
-msgstr "êÖÈ× äà TRUE ÅĞÇ èÌÈ Ãæ äÇ Êãèæ ÇäæÇáĞÉ áê ÇäåÊÕáÍ."
+msgstr "ÙŠØ¶Ø¨Ø· Ù„Ù€ TRUE Ø¥Ø°Ø§ ÙˆØ¬Ø¨ Ø£Ù† Ù„Ø§ ØªÙƒÙˆÙ† Ø§Ù„Ù†Ø§ÙØ°Ø© ÙÙŠ Ø§Ù„Ù…ØªØµÙØ­."
 
 #: gtk/gtkwindow.c:599
 msgid "Accept focus"
-msgstr "ÊâÈä ÇäÊÑãêÒ"
+msgstr "ØªÙ‚Ø¨Ù„ Ø§Ù„ØªØ±ÙƒÙŠØ²"
 
 #: gtk/gtkwindow.c:600
 msgid "TRUE if the window should receive the input focus."
-msgstr "êÖÈ× äà TRUE ÅĞÇ èÌÈ ääæÇáĞÉ Ãæ ÊÊäâé ÊÑãêÒ ÇäÅÏÎÇä."
+msgstr "ÙŠØ¶Ø¨Ø· Ù„Ù€ TRUE Ø¥Ø°Ø§ ÙˆØ¬Ø¨ Ù„Ù„Ù†Ø§ÙØ°Ø© Ø£Ù† ØªØªÙ„Ù‚Ù‰ ØªØ±ÙƒÙŠØ² Ø§Ù„Ø¥Ø¯Ø®Ø§Ù„."
 
 #: gtk/gtkwindow.c:614
 msgid "Decorated"
-msgstr "åÒèâ"
+msgstr "Ù…Ø²ÙˆÙ‚"
 
 #: gtk/gtkwindow.c:615
 msgid "Whether the window should be decorated by the window manager"
-msgstr "åÇ ÅĞÇ èÌÈ ÊÒèêâ ÇäæÇáĞÉ ÈåÏêÑ ÇäæèÇáĞ"
+msgstr "Ù…Ø§ Ø¥Ø°Ø§ ÙˆØ¬Ø¨ ØªØ²ÙˆÙŠÙ‚ Ø§Ù„Ù†Ø§ÙØ°Ø© Ø¨Ù…Ø¯ÙŠØ± Ø§Ù„Ù†ÙˆØ§ÙØ°"
 
 #: gtk/gtkwindow.c:630
 msgid "Gravity"
-msgstr "ÇäÌÇĞÈêÉ"
+msgstr "Ø§Ù„Ø¬Ø§Ø°Ø¨ÙŠØ©"
 
 #: gtk/gtkwindow.c:631
 msgid "The window gravity of the window"
-msgstr "ÌÇĞêÈÉ ÇäÔÈÇã ääÔÈÇã"
+msgstr "Ø¬Ø§Ø°ÙŠØ¨Ø© Ø§Ù„Ø´Ø¨Ø§Ùƒ Ù„Ù„Ø´Ø¨Ø§Ùƒ"
 
 #: modules/input/gtkimcontextxim.c:326
 msgid "IM Preedit style"
-msgstr "ÃÓäèÈ äåÍÉ ÇäÊÍÑêÑ ä×ÑêâÉ ÇäÅÏÎÇä"
+msgstr "Ø£Ø³Ù„ÙˆØ¨ Ù„Ù…Ø­Ø© Ø§Ù„ØªØ­Ø±ÙŠØ± Ù„Ø·Ø±ÙŠÙ‚Ø© Ø§Ù„Ø¥Ø¯Ø®Ø§Ù„"
 
 #: modules/input/gtkimcontextxim.c:327
 msgid "How to draw the input method preedit string"
-msgstr "ãêáêÉ ÑÓå ÓäÓäÉ äåÍÉ ÇäÊÍÑêÑ ä×ÑêâÉ ÇäÅÏÎÇä"
+msgstr "ÙƒÙŠÙÙŠØ© Ø±Ø³Ù… Ø³Ù„Ø³Ù„Ø© Ù„Ù…Ø­Ø© Ø§Ù„ØªØ­Ø±ÙŠØ± Ù„Ø·Ø±ÙŠÙ‚Ø© Ø§Ù„Ø¥Ø¯Ø®Ø§Ù„"
 
 #: modules/input/gtkimcontextxim.c:335
 msgid "IM Status style"
-msgstr "ÃÓäèÈ ÍÇäÉ ×ÑêâÉ ÇäÅÏÎÇä"
+msgstr "Ø£Ø³Ù„ÙˆØ¨ Ø­Ø§Ù„Ø© Ø·Ø±ÙŠÙ‚Ø© Ø§Ù„Ø¥Ø¯Ø®Ø§Ù„"
 
 #: modules/input/gtkimcontextxim.c:336
 msgid "How to draw the input method statusbar"
-msgstr "ãêáêÉ ÑÓå ÙåèÏ ÇäÍÇäÉ ä×ÑêâÉ ÇäÅÏÎÇä"
+msgstr "ÙƒÙŠÙÙŠØ© Ø±Ø³Ù… Ø¹Ù…ÙˆØ¯ Ø§Ù„Ø­Ø§Ù„Ø© Ù„Ø·Ø±ÙŠÙ‚Ø© Ø§Ù„Ø¥Ø¯Ø®Ø§Ù„"
 
 #~ msgid "ComboBox appareance"
 #~ msgstr "Ù…Ø¸Ù‡Ø± Ø§Ù„Ù€ ComboBox"
