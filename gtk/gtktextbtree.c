@@ -1125,13 +1125,20 @@ _gtk_text_btree_insert_pixbuf (GtkTextIter *iter,
   insert_pixbuf_or_widget_segment (iter, seg);
 }
 
-GtkTextChildAnchor*
-_gtk_text_btree_create_child_anchor (GtkTextIter *iter)
+void
+_gtk_text_btree_insert_child_anchor (GtkTextIter        *iter,
+                                     GtkTextChildAnchor *anchor)
 {
   GtkTextLineSegment *seg;
   GtkTextBTree *tree;
+
+  if (anchor->segment != NULL)
+    {
+      g_warning (G_STRLOC": Same child anchor can't be inserted twice");
+      return;
+    }
   
-  seg = _gtk_widget_segment_new ();
+  seg = _gtk_widget_segment_new (anchor);
 
   tree = seg->body.child.tree = _gtk_text_iter_get_btree (iter);
   
@@ -1143,8 +1150,6 @@ _gtk_text_btree_create_child_anchor (GtkTextIter *iter)
   g_hash_table_insert (tree->child_anchor_table,
                        seg->body.child.obj,
                        seg->body.child.obj);
-  
-  return seg->body.child.obj;
 }
 
 void

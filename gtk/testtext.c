@@ -429,7 +429,6 @@ fill_example_buffer (GtkTextBuffer *buffer)
   GdkPixbuf *pixbuf;
   int i;
   char *str;
-  GtkTextChildAnchor *anchor;
   
   /* FIXME this is broken if called twice on a buffer, since
    * we try to create tags a second time.
@@ -510,7 +509,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
                 "direction", GTK_TEXT_DIR_RTL,
                 "indent", 30,
                 "left_margin", 20,
-                  "right_margin", 20,
+                "right_margin", 20,
                 NULL);
 
 
@@ -693,7 +692,7 @@ static View *
 get_empty_view (View *view)
 {
   if (!view->buffer->filename &&
-      !gtk_text_buffer_modified (view->buffer->buffer))
+      !gtk_text_buffer_get_modified (view->buffer->buffer))
     return view;
   else
     return create_view (create_buffer ());
@@ -1366,7 +1365,7 @@ save_as_buffer (Buffer *buffer)
 static gboolean
 check_buffer_saved (Buffer *buffer)
 {
-  if (gtk_text_buffer_modified (buffer->buffer))
+  if (gtk_text_buffer_get_modified (buffer->buffer))
     {
       char *pretty_name = buffer_pretty_name (buffer);
       char *msg = g_strdup_printf ("Save changes to '%s'?", pretty_name);

@@ -75,7 +75,7 @@ struct _GtkTextChildBody
   GtkTextLine *line;
 };
 
-GtkTextLineSegment *_gtk_widget_segment_new      (void);
+GtkTextLineSegment *_gtk_widget_segment_new      (GtkTextChildAnchor *anchor);
 void                _gtk_widget_segment_add      (GtkTextLineSegment *widget_segment,
                                                   GtkWidget          *child);
 void                _gtk_widget_segment_remove   (GtkTextLineSegment *widget_segment,

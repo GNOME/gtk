@@ -1,5 +1,20 @@
 2001-02-19  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextbuffer.h (struct _GtkTextBufferClass): add
+	insert_child_anchor signal, bug #50245
+
+	* gtk/gtktextbtree.c (_gtk_text_btree_insert_child_anchor): change
+	from create_child_anchor, so the anchor is passed in
+
+	* gtk/gtktextchild.c (gtk_text_child_anchor_new): new function
+	(_gtk_widget_segment_new): have the child anchor object passed in, 
+	instead of creating it.
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_modified): rename
+	to gtk_text_buffer_get_modified
+
+2001-02-19  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktreemodel.c (gtk_tree_model_get_valist): hmm, someone
 	changed GLib without fixing GTK
 

@@ -199,7 +199,7 @@ GtkTextLineSegmentClass gtk_text_child_type = {
         + sizeof (GtkTextChildBody)))
 
 GtkTextLineSegment *
-_gtk_widget_segment_new (void)
+_gtk_widget_segment_new (GtkTextChildAnchor *anchor)
 {
   GtkTextLineSegment *seg;
 
@@ -214,12 +214,14 @@ _gtk_widget_segment_new (void)
                         */
   seg->char_count = 1;
 
-  seg->body.child.obj = g_object_new (GTK_TYPE_TEXT_CHILD_ANCHOR, NULL);
+  seg->body.child.obj = anchor;
   seg->body.child.obj->segment = seg;
   seg->body.child.widgets = NULL;
   seg->body.child.tree = NULL;
   seg->body.child.line = NULL;
 
+  g_object_ref (G_OBJECT (anchor));
+  
   return seg;
 }
 
@@ -329,6 +331,13 @@ gtk_text_child_anchor_class_init (GtkTextChildAnchorClass *klass)
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gtk_text_child_anchor_finalize;
+}
+
+GtkTextChildAnchor*
+gtk_text_child_anchor_new (void)
+{
+  return GTK_TEXT_CHILD_ANCHOR (g_object_new (GTK_TYPE_TEXT_CHILD_ANCHOR,
+                                              NULL));
 }
 
 static void

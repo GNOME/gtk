@@ -34,7 +34,8 @@ void _gtk_text_btree_insert        (GtkTextIter *iter,
 void _gtk_text_btree_insert_pixbuf (GtkTextIter *iter,
                                     GdkPixbuf   *pixbuf);
 
-GtkTextChildAnchor* _gtk_text_btree_create_child_anchor (GtkTextIter *iter);
+void _gtk_text_btree_insert_child_anchor (GtkTextIter        *iter,
+                                          GtkTextChildAnchor *anchor);
 
 void _gtk_text_btree_unregister_child_anchor (GtkTextChildAnchor *anchor);
 

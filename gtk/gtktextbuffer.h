@@ -85,14 +85,9 @@ struct _GtkTextBufferClass
                             GtkTextIter   *pos,
                             GdkPixbuf     *pixbuf);
 
-#if 0
-  /* FIXME To do this, first have to implement the sequence
-   * gtk_text_child_anchor_new(); gtk_text_buffer_insert_child_anchor();
-   */
-  void (* insert_child_anchor)   (GtkTextBuffer *buffer,
-                                  GtkTextIter   *pos,
+  void (* insert_child_anchor)   (GtkTextBuffer      *buffer,
+                                  GtkTextIter        *pos,
                                   GtkTextChildAnchor *anchor);
-#endif
   
   void (* delete_range)     (GtkTextBuffer *buffer,
                              GtkTextIter   *start,
@@ -217,7 +212,12 @@ void gtk_text_buffer_insert_pixbuf         (GtkTextBuffer *buffer,
                                             GtkTextIter   *iter,
                                             GdkPixbuf     *pixbuf);
 
-/* Create a child anchor */
+/* Insert a child anchor */
+void               gtk_text_buffer_insert_child_anchor (GtkTextBuffer      *buffer,
+                                                        GtkTextIter        *iter,
+                                                        GtkTextChildAnchor *anchor);
+
+/* Convenience, create and insert a child anchor */
 GtkTextChildAnchor *gtk_text_buffer_create_child_anchor (GtkTextBuffer *buffer,
                                                          GtkTextIter   *iter);
 
@@ -313,7 +313,7 @@ void gtk_text_buffer_get_iter_at_child_anchor (GtkTextBuffer      *buffer,
    flag, but if you would like them to you can connect a handler to
    the tag/mark signals and call set_modified in your handler */
 
-gboolean        gtk_text_buffer_modified                (GtkTextBuffer *buffer);
+gboolean        gtk_text_buffer_get_modified            (GtkTextBuffer *buffer);
 void            gtk_text_buffer_set_modified            (GtkTextBuffer *buffer,
                                                          gboolean       setting);
 

@@ -64,6 +64,8 @@ struct _GtkTextChildAnchorClass
 
 GType gtk_text_child_anchor_get_type (void) G_GNUC_CONST;
 
+GtkTextChildAnchor* gtk_text_child_anchor_new (void);
+
 GList*   gtk_text_child_anchor_get_widgets (GtkTextChildAnchor *anchor);
 gboolean gtk_text_child_anchor_get_deleted (GtkTextChildAnchor *anchor);
 

@@ -49,6 +49,7 @@ struct _ClipboardRequest
 enum {
   INSERT_TEXT,
   INSERT_PIXBUF,
+  INSERT_CHILD_ANCHOR,
   DELETE_RANGE,
   CHANGED,
   MODIFIED_CHANGED,
@@ -87,6 +88,9 @@ static void gtk_text_buffer_real_insert_text           (GtkTextBuffer     *buffe
 static void gtk_text_buffer_real_insert_pixbuf         (GtkTextBuffer     *buffer,
                                                         GtkTextIter       *iter,
                                                         GdkPixbuf         *pixbuf);
+static void gtk_text_buffer_real_insert_anchor         (GtkTextBuffer     *buffer,
+                                                        GtkTextIter       *iter,
+                                                        GtkTextChildAnchor *anchor);
 static void gtk_text_buffer_real_delete_range          (GtkTextBuffer     *buffer,
                                                         GtkTextIter       *start,
                                                         GtkTextIter       *end);
@@ -184,6 +188,22 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
 #endif
                    GTK_TYPE_POINTER,
                    GDK_TYPE_PIXBUF);
+
+  signals[INSERT_CHILD_ANCHOR] =
+    g_signal_newc ("insert_child_anchor",
+                   G_TYPE_FROM_CLASS (object_class),
+                   G_SIGNAL_RUN_LAST,
+                   G_STRUCT_OFFSET (GtkTextBufferClass, insert_child_anchor),
+                   NULL,
+                   gtk_marshal_VOID__BOXED_OBJECT,
+                   GTK_TYPE_NONE,
+                   2,
+#if 0
+                   /* FIXME */
+                   GTK_TYPE_TEXT_ITER,
+#endif
+                   GTK_TYPE_POINTER,
+                   GTK_TYPE_TEXT_CHILD_ANCHOR);
   
   signals[DELETE_RANGE] =
     g_signal_newc ("delete_range",
@@ -1427,6 +1447,63 @@ gtk_text_buffer_insert_pixbuf         (GtkTextBuffer      *buffer,
  * Child anchor
  */
 
+
+static void
+gtk_text_buffer_real_insert_anchor (GtkTextBuffer      *buffer,
+                                    GtkTextIter        *iter,
+                                    GtkTextChildAnchor *anchor)
+{
+  _gtk_text_btree_insert_child_anchor (iter, anchor);
+
+  g_signal_emit (G_OBJECT (buffer), signals[CHANGED], 0);
+}
+
+/**
+ * gtk_text_buffer_insert_child_anchor:
+ * @buffer: a #GtkTextBuffer
+ * @iter: location to insert the anchor
+ * @anchor: a #GtkTextChildAnchor
+ *
+ * Inserts a child widget anchor into the text buffer at @iter. The
+ * anchor will be counted as one character in character counts, and
+ * when obtaining the buffer contents as a string, will be represented
+ * by the Unicode "object replacement character" 0xFFFC. Note that the
+ * "slice" variants for obtaining portions of the buffer as a string
+ * include this character for pixbufs, but the "text" variants do
+ * not. e.g. see gtk_text_buffer_get_slice() and
+ * gtk_text_buffer_get_text(). Consider
+ * gtk_text_buffer_create_child_anchor() as a more convenient
+ * alternative to this function. The buffer will add a reference to
+ * the anchor, so you can unref it after insertion.
+ * 
+ **/
+void
+gtk_text_buffer_insert_child_anchor (GtkTextBuffer      *buffer,
+                                     GtkTextIter        *iter,
+                                     GtkTextChildAnchor *anchor)
+{
+  GtkTextChildAnchor *anchor;
+  
+  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
+  g_return_val_if_fail (iter != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_TEXT_CHILD_ANCHOR (anchor), NULL);
+  
+  g_signal_emit (G_OBJECT (buffer), signals[INSERT_CHILD_ANCHOR], 0,
+                 iter, anchor);
+}
+
+
+/**
+ * gtk_text_buffer_create_child_anchor:
+ * @buffer: a #GtkTextBuffer
+ * @iter: location in the buffer
+ * 
+ * This is a convenience function which simply creates a child anchor
+ * with gtk_text_child_anchor_new() and inserts it into the buffer
+ * with gtk_text_buffer_insert_child_anchor().
+ * 
+ * Return value: the created child anchor
+ **/
 GtkTextChildAnchor*
 gtk_text_buffer_create_child_anchor (GtkTextBuffer *buffer,
                                      GtkTextIter   *iter)
@@ -1436,15 +1513,14 @@ gtk_text_buffer_create_child_anchor (GtkTextBuffer *buffer,
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
   g_return_val_if_fail (iter != NULL, NULL);
 
-  anchor = _gtk_text_btree_create_child_anchor (iter);
+  anchor = gtk_text_child_anchor_new ();
 
-  /* FIXME child-anchor-specific signal */
-  
-  gtk_signal_emit (GTK_OBJECT (buffer), signals[CHANGED]);
+  gtk_text_buffer_insert_child_anchor (buffer, iter, anchor);
+
+  g_object_unref (G_OBJECT (anchor));
 
   return anchor;
 }
-
 
 /*
  * Mark manipulation
@@ -2180,7 +2256,7 @@ gtk_text_buffer_get_bounds (GtkTextBuffer *buffer,
  */
 
 /**
- * gtk_text_buffer_modified:
+ * gtk_text_buffer_get_modified:
  * @buffer: a #GtkTextBuffer 
  * 
  * Indicates whether the buffer has been modified since the last call
@@ -2191,7 +2267,7 @@ gtk_text_buffer_get_bounds (GtkTextBuffer *buffer,
  * Return value: %TRUE if the buffer has been modified
  **/
 gboolean
-gtk_text_buffer_modified (GtkTextBuffer      *buffer)
+gtk_text_buffer_get_modified (GtkTextBuffer *buffer)
 {
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
 
