@@ -45,6 +45,8 @@
 #define MAX_TEXT_LENGTH                    256
 #define MAX_TIMER_CALLS                    5
 #define EPSILON                            1e-5
+#define WHEEL_UP_BUTTON                    4
+#define WHEEL_DOWN_BUTTON                  5
 
 enum {
   ARG_0,
@@ -763,7 +765,19 @@ gtk_spin_button_button_press (GtkWidget      *widget,
 
   if (!spin->button)
     {
-      if (event->window == spin->panel)
+      if (event->button == WHEEL_UP_BUTTON)
+	{
+	  if (!GTK_WIDGET_HAS_FOCUS (widget))
+	    gtk_widget_grab_focus (widget);
+	  gtk_spin_button_real_spin (spin, spin->adjustment->step_increment);
+	}
+      else if (event->button == WHEEL_DOWN_BUTTON)
+	{
+	  if (!GTK_WIDGET_HAS_FOCUS (widget))
+	    gtk_widget_grab_focus (widget);
+	  gtk_spin_button_real_spin (spin, -spin->adjustment->step_increment); 
+	}
+      else if (event->window == spin->panel)
 	{
 	  if (!GTK_WIDGET_HAS_FOCUS (widget))
 	    gtk_widget_grab_focus (widget);
