@@ -987,7 +987,7 @@ gtk_menu_shell_move_selected (GtkMenuShell  *menu_shell,
 }
 
 /**
- * _gtk_menu_shell_select_first:
+ * gtk_menu_shell_select_first:
  * @menu_shell: a #GtkMenuShell
  * @search_sensitive: if %TRUE, search for the first selectable
  *                    menu item, otherwise select nothing if
@@ -1000,8 +1000,8 @@ gtk_menu_shell_move_selected (GtkMenuShell  *menu_shell,
  * item.
  **/
 void
-_gtk_menu_shell_select_first (GtkMenuShell *menu_shell,
-			      gboolean      search_sensitive)
+gtk_menu_shell_select_first (GtkMenuShell *menu_shell,
+			     gboolean      search_sensitive)
 {
   GtkWidget *to_select = NULL;
   GList *tmp_list;
@@ -1061,7 +1061,7 @@ gtk_menu_shell_select_submenu_first (GtkMenuShell     *menu_shell)
   menu_item = GTK_MENU_ITEM (menu_shell->active_menu_item); 
   
   if (menu_item->submenu)
-    _gtk_menu_shell_select_first (GTK_MENU_SHELL (menu_item->submenu), TRUE);
+    gtk_menu_shell_select_first (GTK_MENU_SHELL (menu_item->submenu), TRUE);
 }
 
 static void
@@ -1134,7 +1134,7 @@ gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
       if (!had_selection &&
 	  !menu_shell->active_menu_item &&
 	  menu_shell->children)
-	_gtk_menu_shell_select_first (menu_shell, TRUE);
+	gtk_menu_shell_select_first (menu_shell, TRUE);
       break;
     }
   

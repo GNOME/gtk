@@ -450,7 +450,7 @@ window_key_press_handler (GtkWidget   *widget,
 	      GtkMenuShell *menu_shell = GTK_MENU_SHELL (menubars->data);
 
 	      _gtk_menu_shell_activate (menu_shell);
-	      _gtk_menu_shell_select_first (menu_shell, FALSE);
+	      gtk_menu_shell_select_first (menu_shell, FALSE);
 	      
 	      g_list_free (menubars);
 	      
