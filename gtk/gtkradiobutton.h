@@ -60,7 +60,7 @@ struct _GtkRadioButtonClass
   GtkCheckButtonClass parent_class;
 
   /* Signals */
-  void (*group_changed) (void);
+  void (*group_changed) (GtkRadioButton *radio_button);
 
   /* Padding for future expansion */
   void (*_gtk_reserved2) (void);

@@ -1,3 +1,9 @@
+2004-03-03  Murray Cumming  <murrayc@murrayc.com>
+
+	* gtk/gtkradiobutton.h, radiomenuitem.h: Corrected the group_changed
+	signal vfunc declaration, adding the first parameter, which is the
+	widget emitting the signal.
+
 2004-03-03  Morten Welinder  <terra@gnome.org>
 
 	* tests/testfilechooser.c (update_preview_cb): Plug leak.

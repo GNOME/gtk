@@ -56,7 +56,7 @@ struct _GtkRadioMenuItemClass
   GtkCheckMenuItemClass parent_class;
   
   /* Signals */
-  void (*group_changed) (void);
+  void (*group_changed) (GtkRadioMenuItem *radio_menu_item);
 
   /* Padding for future expansion */
   void (*_gtk_reserved2) (void);
