@@ -1,3 +1,12 @@
+1999-11-20  Michael Zucchi  <zucchi@zedzone.mmc.com.au>
+
+	* src/gdk-pixbuf-drawable.c (gdk_pixbuf_from_drawable_core):
+	Rework/reorder of the code.  Each case has been separated into
+	another function; its big but it should be quick.
+	gdk_pixbuf_rgba_from_drawable() will now return a pixbuf with
+	opaque alpha information.  Not all depths/formats have been
+	tested, but 8, 15/16 and 24 (alinged 32) should work ok.
+
 1999-11-17  Larry Ewing  <lewing@gimp.org>
 
 	* src/gnome-canvas-pixbuf.c (gnome_canvas_pixbuf_bounds):
