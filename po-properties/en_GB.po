@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-17 12:51+0100\n"
-"PO-Revision-Date: 2004-10-17 12:53+0100\n"
+"POT-Creation-Date: 2004-10-20 23:52+0100\n"
+"PO-Revision-Date: 2004-10-20 23:53+0100\n"
 "Last-Translator: David Lodge <dave@cirt.net>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1309,7 +1309,6 @@ msgid "Whether this tag affects underlining"
 msgstr "Whether this tag affects underlining"
 
 #: gtk/gtkcellrenderertext.c:470
-#: gtk/gtkcellrenderertext.c:474
 #: gtk/gtktexttag.c:566
 msgid "Language set"
 msgstr "Language set"
@@ -1318,6 +1317,10 @@ msgstr "Language set"
 #: gtk/gtktexttag.c:567
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "Whether this tag affects the language the text is rendered as"
+
+#: gtk/gtkcellrenderertext.c:474
+msgid "Ellipsize set"
+msgstr "Ellipsise set"
 
 #: gtk/gtkcellrenderertext.c:475
 msgid "Whether this tag affects the ellipsize mode"
