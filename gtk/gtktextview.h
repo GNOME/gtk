@@ -93,9 +93,10 @@ struct _GtkTextView
   /* if we have reset the IM since the last character entered */  
   guint  need_im_reset : 1;	
 
-  /* these flags are no longer used */
-  guint reserved1 : 1;
-  guint reserved2 : 1;
+  guint tab_moves_focus : 1;
+  
+  /* this flag is no longer used */
+  guint reserved : 1;
   
   /* debug flag - means that we've validated onscreen since the
    * last "invalidate" signal from the layout
@@ -326,6 +327,9 @@ gboolean         gtk_text_view_get_editable           (GtkTextView      *text_vi
 void             gtk_text_view_set_overwrite          (GtkTextView      *text_view,
 						       gboolean          overwrite);
 gboolean         gtk_text_view_get_overwrite          (GtkTextView      *text_view);
+void		 gtk_text_view_set_tab_moves_focus    (GtkTextView	*text_view,
+						       gboolean		 tab_moves_focus);
+gboolean	 gtk_text_view_get_tab_moves_focus    (GtkTextView	*text_view);
 void             gtk_text_view_set_pixels_above_lines (GtkTextView      *text_view,
                                                        gint              pixels_above_lines);
 gint             gtk_text_view_get_pixels_above_lines (GtkTextView      *text_view);

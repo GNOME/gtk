@@ -1,3 +1,7 @@
+Sun Sep 21 23:13:37 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktextview.[ch]: Add new "tab moves focus" property (#122709)
+
 2003-09-20  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk-zip.sh.in: Don't use zip -r on the etc directory, to avoid

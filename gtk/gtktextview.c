@@ -140,6 +140,7 @@ enum
   PROP_CURSOR_VISIBLE,
   PROP_BUFFER,
   PROP_OVERWRITE,
+  PROP_TAB_MOVES_FOCUS,
   LAST_PROP
 };
 
@@ -666,7 +667,14 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 							 FALSE,
 							 G_PARAM_READWRITE));
 
-  
+  g_object_class_install_property (gobject_class,
+                                   PROP_TAB_MOVES_FOCUS,
+                                   g_param_spec_boolean ("tab_moves_focus",
+							 _("Tab moves focus"),
+							 _("Whether tab moves focus"),
+							 FALSE,
+							 G_PARAM_READWRITE));
+
   /*
    * Signals
    */
@@ -2592,6 +2600,10 @@ gtk_text_view_set_property (GObject         *object,
       gtk_text_view_set_buffer (text_view, GTK_TEXT_BUFFER (g_value_get_object (value)));
       break;
 
+    case PROP_TAB_MOVES_FOCUS:
+      gtk_text_view_set_tab_moves_focus (text_view, g_value_get_boolean (value));
+      break;
+      
     default:
       g_assert_not_reached ();
       break;
@@ -2660,6 +2672,10 @@ gtk_text_view_get_property (GObject         *object,
 
     case PROP_OVERWRITE:
       g_value_set_boolean (value, text_view->overwrite_mode);
+      break;
+
+    case PROP_TAB_MOVES_FOCUS:
+      g_value_set_boolean (value, text_view->tab_moves_focus);
       break;
       
     default:
@@ -3795,10 +3811,10 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
             event->keyval == GDK_KP_Tab) &&
            !(event->state & GDK_CONTROL_MASK))
     {
-      /* If the text widget isn't editable overall, move the focus
-       * instead
+      /* If the text widget isn't editable overall, or if the application
+       * has turned on "tab_moves_focus", move the focus instead
        */
-      if (text_view->editable)
+      if (!text_view->tab_moves_focus && text_view->editable)
 	{
 	  gtk_text_view_commit_text (text_view, "\t");
 	  obscure = TRUE;
@@ -5167,6 +5183,52 @@ gtk_text_view_set_overwrite (GtkTextView *text_view,
 
       g_object_notify (G_OBJECT (text_view), "overwrite");
     }
+}
+
+/**
+ * gtk_text_view_set_tab_moves_focus:
+ * @text_view: A #GtkTextView
+ * @tab_moves_focus: %TRUE if pressing the Tab should move the keyboard focus, %FALSE, if pressing the Tab key should insert a Tab character.
+ * 
+ * Sets the behavior of the text widget when the Tab key is pressed. If @tab_moves_focus
+ * is %TRUE the keyboard focus is moved to the next widget in the focus chain. If
+ * @tab_moves_focus is %FALSE a tab character is inserted.
+ * 
+ * Since: 2.4
+ **/
+void
+gtk_text_view_set_tab_moves_focus (GtkTextView *text_view,
+				   gboolean     tab_moves_focus)
+{
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+
+  tab_moves_focus = tab_moves_focus != FALSE;
+
+  if (text_view->tab_moves_focus != tab_moves_focus)
+    {
+      text_view->tab_moves_focus = tab_moves_focus;
+
+      g_object_notify (G_OBJECT (text_view), "tab_moves_focus");
+    }
+}
+
+/**
+ * gtk_text_view_get_tab_moves_focus:
+ * @text_view: A #GtkTextView
+ * 
+ * Returns whether pressing the Tab key moves the keyboard focus. See
+ * gtk_text_view_set_tab_moves_focus().
+ * 
+ * Return value: %TRUE if pressing the Tab key moves the keyboard focus.
+ * 
+ * Since: 2.4
+ **/
+gboolean
+gtk_text_view_get_tab_moves_focus (GtkTextView *text_view)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
+
+  return text_view->tab_moves_focus;
 }
 
 static void
