@@ -254,7 +254,7 @@ if (g_file_get_contents (filename, &amp;text, &amp;length, NULL))
        g_print (utf8_text);
   }
 else 
-  fprintf (stderr, "Unable to read file %percnt;s\n", filename);
+  fprintf (stderr, "Unable to read file &percnt;s\n", filename);
 </programlisting></informalexample>
 </para>
 <para>
