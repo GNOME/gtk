@@ -1,3 +1,8 @@
+Sat Mar  2 15:46:29 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtkentry.sgml: Move a couple of function
+	docs into the C file.
+
 Fri Mar  1 10:35:15 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/changes-2.0.sgml: Add note about gtk_notebook_reorder_child().
