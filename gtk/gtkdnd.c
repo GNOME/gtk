@@ -22,6 +22,7 @@
 #include "gtkdnd.h"
 #include "gtkinvisible.h"
 #include "gtkmain.h"
+#include "gtkprivate.h"
 #include "gtksignal.h"
 #include "gtkdrawwindow.h"
 
@@ -2268,13 +2269,16 @@ gtk_drag_anim_timeout (gpointer data)
 {
   GtkDragAnim *anim = data;
   gint x, y;
+  gboolean retval;
+
+  GTK_THREADS_ENTER;
 
   if (anim->step == anim->n_steps)
     {
       gtk_drag_source_info_destroy (anim->info);
       g_free (anim);
 
-      return FALSE;
+      retval = FALSE;
     }
   else
     {
@@ -2287,8 +2291,12 @@ gtk_drag_anim_timeout (gpointer data)
   
       anim->step++;
 
-      return TRUE;
+      retval = TRUE;
     }
+
+  GTK_THREADS_LEAVE;
+
+  return retval;
 }
 
 static void

@@ -86,7 +86,7 @@ typedef struct _GdkDeviceKey	    GdkDeviceKey;
 typedef struct _GdkDeviceInfo	    GdkDeviceInfo;
 typedef struct _GdkTimeCoord	    GdkTimeCoord;
 typedef struct _GdkRegion	    GdkRegion;
-typedef gint (*GdkEventFunc) (GdkEvent *event,
+typedef void (*GdkEventFunc) (GdkEvent *event,
 			      gpointer	data);
 
 typedef struct _GdkIC               GdkIC;

@@ -21,6 +21,7 @@
 #include <stdio.h>
 
 #include "gtkmain.h"
+#include "gtkprivate.h"
 #include "gtkwidget.h"
 #include "gtkdrawwindow.h"
 #include "gtksignal.h"
@@ -493,9 +494,13 @@ gtk_tooltips_timeout (gpointer data)
 {
   GtkTooltips *tooltips = (GtkTooltips *) data;
 
+  GTK_THREADS_ENTER;
+  
   if (tooltips->active_tips_data != NULL &&
       GTK_WIDGET_DRAWABLE (tooltips->active_tips_data->widget))
     gtk_tooltips_draw_tips (tooltips);
+
+  GTK_THREADS_LEAVE;
 
   return FALSE;
 }

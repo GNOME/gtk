@@ -37,11 +37,15 @@ gchar* gdk_set_locale	   (void);
 gint gdk_events_pending	 (void);
 GdkEvent *gdk_event_get	 (void);
 GdkEvent *gdk_event_get_graphics_expose (GdkWindow *window);
-void gdk_event_put	 (GdkEvent     *event);
+void      gdk_event_put	 (GdkEvent     *event);
 
 GdkEvent *gdk_event_copy     (GdkEvent *event);
 void	  gdk_event_free     (GdkEvent *event);
 guint32   gdk_event_get_time (GdkEvent *event);
+
+void gdk_event_handler_set (GdkEventFunc   func,
+			    gpointer       data,
+			    GDestroyNotify notify);
 
 void gdk_set_show_events (gint	show_events);
 void gdk_set_use_xshm	 (gint	use_xshm);
@@ -932,18 +936,6 @@ GdkRegion*    gdk_regions_subtract	  (GdkRegion	  *source1,
 					   GdkRegion	  *source2);
 GdkRegion*    gdk_regions_xor		  (GdkRegion	  *source1,
 					   GdkRegion	  *source2);
-
-/* Threads
- */
-
-gboolean      gdk_threads_init  (void);
-void          gdk_threads_enter (void);
-void          gdk_threads_leave (void);
-
-/* If the mainloop thread is in its select, wake it up. 
- * For GTK's idle handling 
- */
-void          gdk_threads_wake (void);
 
 /* Miscellaneous */
 void     gdk_event_send_clientmessage_toall (GdkEvent    *event);

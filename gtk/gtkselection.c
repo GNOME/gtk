@@ -49,6 +49,7 @@
 #include <gdk/gdkx.h>
 /* we need this for gdk_window_lookup() */
 #include "gtkmain.h"
+#include "gtkprivate.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
 
@@ -1089,6 +1090,9 @@ static gint
 gtk_selection_incr_timeout (GtkIncrInfo *info)
 {
   GList *tmp_list;
+  gboolean retval;
+
+  GTK_THREADS_ENTER;
   
   /* Determine if retrieval has finished by checking if it still in
      list of pending retrievals */
@@ -1116,14 +1120,18 @@ gtk_selection_incr_timeout (GtkIncrInfo *info)
       
       g_free (info);
       
-      return FALSE;		/* remove timeout */
+      retval =  FALSE;		/* remove timeout */
     }
   else
     {
       info->idle_time++;
       
-      return TRUE;		/* timeout will happen again */
+      retval = TRUE;		/* timeout will happen again */
     }
+  
+  GTK_THREADS_LEAVE;
+
+  return retval;
 }
 
 /*************************************************************
@@ -1324,6 +1332,9 @@ static gint
 gtk_selection_retrieval_timeout (GtkRetrievalInfo *info)
 {
   GList *tmp_list;
+  gboolean retval;
+
+  GTK_THREADS_ENTER;
   
   /* Determine if retrieval has finished by checking if it still in
      list of pending retrievals */
@@ -1349,15 +1360,18 @@ gtk_selection_retrieval_timeout (GtkRetrievalInfo *info)
       g_free (info->buffer);
       g_free (info);
       
-      return FALSE;		/* remove timeout */
+      retval =  FALSE;		/* remove timeout */
     }
   else
     {
       info->idle_time++;
       
-      return TRUE;		/* timeout will happen again */
+      retval =  TRUE;		/* timeout will happen again */
     }
-  
+
+  GTK_THREADS_LEAVE;
+
+  return retval;
 }
 
 /*************************************************************

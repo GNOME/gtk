@@ -21,6 +21,7 @@ libgdk_la_SOURCES = \
 	gdkcursor.c	\
 	gdkdnd.c	\
 	gdkdraw.c	\
+	gdkevents.c     \
 	gdkfont.c	\
 	gdkgc.c		\
 	gdkglobals.c	\
@@ -38,7 +39,6 @@ libgdk_la_SOURCES = \
 	gdkrectangle.c	\
 	gdkregion.c	\
 	gdkselection.c	\
-	gdkthreads.c    \
 	gdkvisual.c	\
 	gdkwindow.c	\
 	gdkxid.c 	\

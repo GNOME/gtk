@@ -1235,8 +1235,6 @@ gdk_ic_get_events (GdkIC *ic)
   gint i;
   
   /*  From gdkwindow.c	*/
-  extern int nevent_masks;
-  extern int event_mask_table[];
   
   g_return_val_if_fail (ic != NULL, 0);
   
@@ -1252,11 +1250,11 @@ gdk_ic_get_events (GdkIC *ic)
     }
   
   mask = 0;
-  for (i=0, bit=2; i < nevent_masks; i++, bit <<= 1)
-    if (xmask & event_mask_table [i])
+  for (i=0, bit=2; i < gdk_nevent_masks; i++, bit <<= 1)
+    if (xmask & gdk_event_mask_table [i])
       {
 	mask |= bit;
-	xmask &= ~ event_mask_table [i];
+	xmask &= ~ gdk_event_mask_table [i];
       }
   
   if (xmask)

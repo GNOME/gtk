@@ -184,7 +184,7 @@ if test x$with_glib = x ; then
     AC_MSG_ERROR([
 *** GLIB 1.1.6 or better is required. The latest version of GLIB
 *** is always available from ftp://ftp.gtk.org.]),
-    gmodule)
+    gmodule gthread)
 
   glib_cflags=$GLIB_CFLAGS
   glib_libs=$GLIB_LIBS
@@ -305,20 +305,6 @@ else
   AC_DEFINE(XINPUT_NONE)
 fi
 
-# Threads
-
-if test "x$with_threads" = "xposix" || test "x$with_threads" = "xyes"; then
-  AC_CHECK_LIB(pthread, pthread_attr_init, 
-    [AC_DEFINE(USE_PTHREADS)
-    x_libs="$x_libs -lpthread"
-    GTK_THREAD_FLAGS="-D_REENTRANT"],
-    # AIX has libpthreads, cause they're special. Special friends (TM)
-    AC_CHECK_LIB(pthreads, pthread_attr_init,
-      [AC_DEFINE(USE_PTHREADS)
-      x_libs="$x_libs -lpthreads"
-      GTK_THREAD_FLAGS="-D_REENTRANT -D_THREAD_SAFE"]))
-fi
-
 CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"
 
@@ -348,27 +334,6 @@ if test "x$enable_shm" = "xyes"; then
     fi
   fi
 fi
-
-# Check for private display resource base variable
-AC_MSG_CHECKING(resource base field in XDisplay)
-AC_CACHE_VAL(gtk_cv_display_resource_base,
-[AC_TRY_RUN([
-#define XLIB_ILLEGAL_ACCESS
-#include <X11/Xlib.h>
-
-int
-main ()
-{
-  Display *display;
-
-  return 0;
-
-  display->resource_base;
-}],
-gtk_cv_display_resource_base="resource_base",
-gtk_cv_display_resource_base="private3")])
-AC_MSG_RESULT($gtk_cv_display_resource_base)
-AC_DEFINE_UNQUOTED(RESOURCE_BASE, gdk_display->$gtk_cv_display_resource_base)
 
 # Check if X_LOCALE definition is necessary
 

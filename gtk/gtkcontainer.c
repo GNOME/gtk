@@ -811,11 +811,13 @@ gtk_container_get_resize_container (GtkContainer *container)
 static gboolean
 gtk_container_idle_sizer (gpointer data)
 {
+  GTK_THREADS_ENTER;
+
   /* we may be invoked with a container_resize_queue of NULL, because
    * queue_resize could have been adding an extra idle function while
    * the queue still got processed. we better just ignore such case
    * than trying to explicitely work around them with some extra flags,
-   * sine it doesn't cause any actual harm.
+   * since it doesn't cause any actual harm.
    */
   while (container_resize_queue)
     {
@@ -830,6 +832,8 @@ gtk_container_idle_sizer (gpointer data)
       GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_PENDING);
       gtk_container_check_resize (GTK_CONTAINER (widget));
     }
+
+  GTK_THREADS_LEAVE;
   
   return FALSE;
 }

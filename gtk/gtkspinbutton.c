@@ -28,6 +28,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkspinbutton.h"
 #include "gtkmain.h"
+#include "gtkprivate.h"
 #include "gtksignal.h"
 
 
@@ -907,8 +908,9 @@ gtk_spin_button_motion_notify (GtkWidget      *widget,
 static gint
 gtk_spin_button_timer (GtkSpinButton *spin_button)
 {
-  g_return_val_if_fail (spin_button != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), FALSE);
+  gboolean retval = FALSE;
+  
+  GTK_THREADS_ENTER;
 
   if (spin_button->timer)
     {
@@ -923,22 +925,27 @@ gtk_spin_button_timer (GtkSpinButton *spin_button)
 	  spin_button->timer = gtk_timeout_add 
 	    (SPIN_BUTTON_TIMER_DELAY, (GtkFunction) gtk_spin_button_timer, 
 	     (gpointer) spin_button);
-	  return FALSE;
 	}
-      else if (spin_button->climb_rate > 0.0 && spin_button->timer_step 
-	       < spin_button->adjustment->page_increment)
+      else 
 	{
-	  if (spin_button->timer_calls < MAX_TIMER_CALLS)
-	    spin_button->timer_calls++;
-	  else 
+	  if (spin_button->climb_rate > 0.0 && spin_button->timer_step 
+	      < spin_button->adjustment->page_increment)
 	    {
-	      spin_button->timer_calls = 0;
-	      spin_button->timer_step += spin_button->climb_rate;
+	      if (spin_button->timer_calls < MAX_TIMER_CALLS)
+		spin_button->timer_calls++;
+	      else 
+		{
+		  spin_button->timer_calls = 0;
+		  spin_button->timer_step += spin_button->climb_rate;
+		}
 	    }
+	  retval = TRUE;
 	}
-      return TRUE;
     }
-  return FALSE;
+
+  GTK_THREADS_LEAVE;
+
+  return retval;
 }
 
 static void

@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include "gtkmain.h"
 #include "gtkrange.h"
+#include "gtkprivate.h"
 #include "gtksignal.h"
 
 
@@ -1236,8 +1237,7 @@ gtk_real_range_timer (GtkRange *range)
 {
   gint return_val;
 
-  g_return_val_if_fail (range != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_RANGE (range), FALSE);
+  GTK_THREADS_ENTER;
 
   return_val = TRUE;
   if (range->click_child == RANGE_CLASS (range)->slider)
@@ -1258,7 +1258,10 @@ gtk_real_range_timer (GtkRange *range)
 					    (GtkFunction) RANGE_CLASS (range)->timer,
 					    (gpointer) range);
 	  else
-	    return FALSE;
+	    {
+	      GTK_THREADS_LEAVE;
+	      return FALSE;
+	    }
 	  range->need_timer = FALSE;
 	}
 
@@ -1283,6 +1286,8 @@ gtk_real_range_timer (GtkRange *range)
       if (mods & mask)
 	return_val = gtk_range_scroll (range, -1);
     }
+
+  GTK_THREADS_LEAVE;
 
   return return_val;
 }

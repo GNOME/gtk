@@ -49,7 +49,8 @@ typedef enum
   GTK_HAS_DEFAULT      = 1 << 14,
   GTK_HAS_GRAB	       = 1 << 15,
   GTK_RC_STYLE	       = 1 << 16,
-  GTK_COMPOSITE_CHILD  = 1 << 17
+  GTK_COMPOSITE_CHILD  = 1 << 17,
+  GTK_NO_REPARENT      = 1 << 18
 } GtkWidgetFlags;
 
 /* Macro for casting a pointer to a GtkWidget or GtkWidgetClass pointer.

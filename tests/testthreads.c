@@ -53,7 +53,7 @@ counter (void *data)
   GtkWidget *label;
   GtkWidget *button;
 
-  gdk_threads_enter();
+  gtk_threads_enter();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), name);
@@ -83,7 +83,7 @@ counter (void *data)
     {
       sprintf(buffer, "%d", counter);
       gtk_label_set (GTK_LABEL (label), buffer);
-      gdk_threads_leave();
+      gtk_threads_leave();
       counter++;
       /* Give someone else a chance to get the lock next time.
        * Only necessary because we don't do anything else while
@@ -91,7 +91,7 @@ counter (void *data)
        */
       sleep(0);
       
-      gdk_threads_enter();
+      gtk_threads_enter();
     }
 
   gtk_widget_destroy (window);
@@ -102,7 +102,7 @@ counter (void *data)
     gtk_main_quit();
   pthread_mutex_unlock (&nthreads_mutex);
 
-  gdk_threads_leave();
+  gtk_threads_leave();
 
   return NULL;
 }
@@ -115,7 +115,7 @@ main (int argc, char **argv)
 #ifdef USE_PTHREADS
   int i;
 
-  if (!gdk_threads_init())
+  if (!gtk_threads_init())
     {
       fprintf(stderr, "Could not initialize threads\n");
       exit(1);
@@ -141,9 +141,9 @@ main (int argc, char **argv)
 
   pthread_mutex_unlock (&nthreads_mutex);
 
-  gdk_threads_enter();
+  gtk_threads_enter();
   gtk_main();
-  gdk_threads_leave();
+  gtk_threads_leave();
   fprintf(stderr, "Done\n");
 #else /* !USE_PTHREADS */
   fprintf (stderr, "GTK+ not compiled with threads support\n");

@@ -19,6 +19,7 @@
 #include "gtklist.h"
 #include "gtklistitem.h"
 #include "gtkmain.h"
+#include "gtkprivate.h"
 #include "gtksignal.h"
 #include "gtklabel.h"
 
@@ -2308,7 +2309,7 @@ gtk_list_horizontal_timeout (GtkWidget *list)
   GdkEventMotion event;
   GdkModifierType mask;
 
-  g_return_val_if_fail (GTK_IS_LIST (list), FALSE);
+  GTK_THREADS_ENTER;
 
   GTK_LIST (list)->htimer = 0;
   gdk_window_get_pointer (list->window, &x, &y, &mask);
@@ -2319,6 +2320,8 @@ gtk_list_horizontal_timeout (GtkWidget *list)
   event.state = mask;
 
   gtk_list_motion_notify (list, &event);
+
+  GTK_THREADS_LEAVE;
 
   return FALSE;
 }
@@ -2331,7 +2334,7 @@ gtk_list_vertical_timeout (GtkWidget *list)
   GdkEventMotion event;
   GdkModifierType mask;
 
-  g_return_val_if_fail (GTK_IS_LIST (list), FALSE);
+  GTK_THREADS_ENTER;
 
   GTK_LIST (list)->vtimer = 0;
   gdk_window_get_pointer (list->window, &x, &y, &mask);
@@ -2342,6 +2345,8 @@ gtk_list_vertical_timeout (GtkWidget *list)
   event.state = mask;
 
   gtk_list_motion_notify (list, &event);
+
+  GTK_THREADS_LEAVE;
 
   return FALSE;
 }

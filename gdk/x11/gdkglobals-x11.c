@@ -54,6 +54,14 @@ gint              gdk_error_warnings = TRUE;
 gint              gdk_null_window_warnings = TRUE;
 GList            *gdk_default_filters = NULL;
 
+gboolean      gdk_xim_using;  	        /* using XIM Protocol if TRUE */
+GdkICPrivate *gdk_xim_ic;		/* currently using IC */
+GdkWindow    *gdk_xim_window;		/* currently using Widow */
+
+GdkWindowPrivate *gdk_xgrab_window = NULL;  /* Window that currently holds the
+					     *	x pointer grab
+					     */
+
 gboolean          gdk_using_threads = FALSE;
 
 /* Used to signal the mainloop thread from its select() */

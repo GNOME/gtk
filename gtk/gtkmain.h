@@ -30,7 +30,7 @@ extern "C" {
 
 #define GTK_PRIORITY_HIGH      -20
 #define GTK_PRIORITY_INTERNAL  -10
-#define GTK_PRIORITY_DEFAULT	 0
+#define GTK_PRIORITY_DEFAULT	-5
 #define GTK_PRIORITY_LOW	10
 
 typedef void	(*GtkModuleInitFunc)	(gint		*argc,
@@ -58,6 +58,13 @@ void	   gtk_init		 (int	       *argc,
 void	   gtk_exit		 (gint		error_code);
 gchar*	   gtk_set_locale	 (void);
 gint	   gtk_events_pending	 (void);
+
+/* The following is the event func GTK+ registers with GDK
+ * we expose it mainly to allow filtering of events between
+ * GDK and GTK+.
+ */
+void  gtk_main_do_event          (GdkEvent           *event);
+
 void	   gtk_main		 (void);
 guint	   gtk_main_level	 (void);
 void	   gtk_main_quit	 (void);
@@ -122,8 +129,10 @@ guint	   gtk_key_snooper_install (GtkKeySnoopFunc snooper,
 void	   gtk_key_snooper_remove  (guint	    snooper_handler_id);
   
 GdkEvent*  gtk_get_current_event   (void);
-GtkWidget* gtk_get_event_widget	 (GdkEvent	*event);
+GtkWidget* gtk_get_event_widget	   (GdkEvent	   *event);
 
+void       gtk_threads_enter       (void);
+void       gtk_threads_leave       (void);
 
 /* deprecated */
 guint	   gtk_idle_add_interp	   (GtkCallbackMarshal marshal,

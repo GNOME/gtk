@@ -353,7 +353,8 @@ INCLUDES = \
 	@GLIB_CFLAGS@				\
 	@x_cflags@
 
-noinst_PROGRAMS = testgtk testinput testselection testthreads testrgb testdnd simple 
+noinst_PROGRAMS = testgtk testinput testselection testrgb testdnd simple 
+# testthreads
 
 DEPS =	\
 	libgtk.la					\
@@ -369,7 +370,7 @@ LDADDS = \
 
 testgtk_DEPENDENCIES = $(DEPS)
 testinput_DEPENDENCIES = $(DEPS)
-testthreads_DEPENDENCIES = $(DEPS)
+#testthreads_DEPENDENCIES = $(DEPS)
 testselection_DEPENDENCIES = $(DEPS)
 testrgb_DEPENDENCIES = $(DEPS)
 testdnd_DEPENDENCIES = $(DEPS)
@@ -377,7 +378,7 @@ simple_DEPENDENCIES = $(DEPS)
 
 testgtk_LDADD = $(LDADDS)
 testinput_LDADD = $(LDADDS)
-testthreads_LDADD = $(LDADDS)
+#testthreads_LDADD = $(LDADDS)
 testselection_LDADD = $(LDADDS)
 testrgb_LDADD = $(LDADDS)
 testdnd_LDADD = $(LDADDS)

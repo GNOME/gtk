@@ -1,3 +1,41 @@
+Tue Dec 15 01:38:53 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am: Commented out testthreads from
+	the build process, since we won't have any idea
+	how to create a thread.
+
+	* configure.in (LIBS): use glib-config ... gthread
+	so we always build a thread-compatible library.
+
+        * gtk/gtkaccellabel.c gtk/gtkclist.c gtk/gtkcolorsel.c
+	  gtk/gtkcombo.c gtk/gtkcontainer.c gtk/gtkentry.c
+	  gtk/gtklist.c gtk/gtkmenuitem.c gtk/gtknotebook.c
+	  gtk/gtkrange.c gtk/gtkselection.c gtk/gtkspinbutton.c
+	  gtk/gtktext.c gtk/gtktooltips.c gtk/gtkwidget.c:
+	
+	Add GTK_THREADS_ENTER/LEAVE pairs around timeouts
+	and idles to account for the fact that they are no
+	longer called within the GTK+ lock.
+
+	* gtk/gtkprivate.h: Added definitions for locking
+	the main GTK+ mutex.
+	
+	* gtk/gtkmain.c: Re-implement the main loop 
+	in terms of the GLib main loop.
+
+	* gdk/gdk.h gdk/gdkthreads.c gdk/Makefile.am: Removed threading 
+	functionality, as it seems better to subsume GDK within the 
+	GTK+ lock than vice-versa.
+
+        * gdk/gdkevents.c: New file, containing event handling bits 
+	from gdk.c.
+
+	* gdk/gdkevents.c: Implement event source for GDK
+	events.
+	
+	* configure.in gdk/gdkevents.c: Removed attempts to 
+	subtract base_id, which were already non-functional.
+
 Mon Dec 14 23:05:20 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* acconfig.h
@@ -870,6 +908,8 @@ Tue Nov 24 11:31:06 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* testgtk.c: Modified layout test to test scrolling over 
 	long distances.
+
+	* gtk/gtkplug.c: Added a few blank lines.
 
 Tue Nov 24 11:11:05 1998  Owen Taylor  <otaylor@redhat.com>
 

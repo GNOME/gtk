@@ -22,6 +22,7 @@
 #include "gdk/gdki18n.h"
 #include "gtkentry.h"
 #include "gtkmain.h"
+#include "gtkprivate.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
 #include "gtkstyle.h"
@@ -1480,11 +1481,13 @@ gtk_entry_timer (gpointer data)
 {
   GtkEntry *entry;
 
-  g_return_val_if_fail (data != NULL, FALSE);
+  GTK_THREADS_ENTER;
 
   entry = GTK_ENTRY (data);
   entry->timer = 0;
   gtk_entry_draw_text (entry);
+
+  GTK_THREADS_LEAVE;
 
   return FALSE;
 }

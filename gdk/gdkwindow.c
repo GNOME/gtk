@@ -33,7 +33,7 @@
 #include <X11/extensions/shape.h>
 #endif
 
-const int event_mask_table[20] =
+const int gdk_event_mask_table[20] =
 {
   ExposureMask,
   PointerMotionMask,
@@ -56,7 +56,7 @@ const int event_mask_table[20] =
   0,				/* PROXIMTY_OUT */
   SubstructureNotifyMask
 };
-const int nevent_masks = sizeof(event_mask_table)/sizeof(int);
+const int gdk_nevent_masks = sizeof(gdk_event_mask_table)/sizeof(int);
 
 static gboolean gdk_window_have_shape_ext (void);
 
@@ -299,10 +299,10 @@ gdk_window_new (GdkWindow     *parent,
   xvisual = ((GdkVisualPrivate*) visual)->xvisual;
 
   xattributes.event_mask = StructureNotifyMask;
-  for (i = 0; i < nevent_masks; i++)
+  for (i = 0; i < gdk_nevent_masks; i++)
     {
       if (attributes->event_mask & (1 << (i + 1)))
-	xattributes.event_mask |= event_mask_table[i];
+	xattributes.event_mask |= gdk_event_mask_table[i];
     }
 
   if (xattributes.event_mask)
@@ -1703,9 +1703,9 @@ gdk_window_get_events      (GdkWindow       *window)
 			&attrs);
 
   event_mask = 0;
-  for (i = 0; i < nevent_masks; i++)
+  for (i = 0; i < gdk_nevent_masks; i++)
     {
-      if (attrs.your_event_mask & event_mask_table[i])
+      if (attrs.your_event_mask & gdk_event_mask_table[i])
 	event_mask |= 1 << (i + 1);
     }
 
@@ -1727,10 +1727,10 @@ gdk_window_set_events      (GdkWindow       *window,
     return;
 
   xevent_mask = StructureNotifyMask;
-  for (i = 0; i < nevent_masks; i++)
+  for (i = 0; i < gdk_nevent_masks; i++)
     {
       if (event_mask & (1 << (i + 1)))
-	xevent_mask |= event_mask_table[i];
+	xevent_mask |= gdk_event_mask_table[i];
     }
   
   XSelectInput (gdk_display, private->xwindow, 

@@ -23,6 +23,7 @@
 #include "gtkmain.h"
 #include "gtkclist.h"
 #include "gtkbindings.h"
+#include "gtkprivate.h"
 #include <gdk/gdkkeysyms.h>
 
 /* the number rows memchunk expands at a time */
@@ -5041,7 +5042,7 @@ horizontal_timeout (GtkCList *clist)
   GdkEventMotion event;
   GdkModifierType mask;
 
-  g_return_val_if_fail (GTK_IS_CLIST (clist), FALSE);
+  GTK_THREADS_ENTER;
 
   clist->htimer = 0;
   gdk_window_get_pointer (clist->clist_window, &x, &y, &mask);
@@ -5053,6 +5054,8 @@ horizontal_timeout (GtkCList *clist)
 
   gtk_clist_motion (GTK_WIDGET (clist), &event);
 
+  GTK_THREADS_LEAVE;
+  
   return FALSE;
 }
 
@@ -5063,7 +5066,7 @@ vertical_timeout (GtkCList *clist)
   GdkEventMotion event;
   GdkModifierType mask;
 
-  g_return_val_if_fail (GTK_IS_CLIST (clist), FALSE);
+  GTK_THREADS_ENTER;
 
   clist->vtimer = 0;
   gdk_window_get_pointer (clist->clist_window, &x, &y, &mask);
@@ -5074,6 +5077,8 @@ vertical_timeout (GtkCList *clist)
   event.state = mask;
 
   gtk_clist_motion (GTK_WIDGET (clist), &event);
+
+  GTK_THREADS_LEAVE;
 
   return FALSE;
 }

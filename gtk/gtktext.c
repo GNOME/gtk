@@ -21,6 +21,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gdk/gdki18n.h"
 #include "gtkmain.h"
+#include "gtkprivate.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
 #include "gtktext.h"
@@ -1697,26 +1698,27 @@ gtk_text_scroll_timeout (gpointer data)
 {
   GtkText *text;
   GdkEventMotion event;
-  
   gint x, y;
   GdkModifierType mask;
   
-  g_return_val_if_fail (GTK_IS_TEXT (data), FALSE);
-  
+  GTK_THREADS_ENTER;
+
   text = GTK_TEXT (data);
   
   text->timer = 0;
   gdk_window_get_pointer (text->text_area, &x, &y, &mask);
   
-  if (!(mask & (GDK_BUTTON1_MASK | GDK_BUTTON3_MASK)))
-    return FALSE;
-  
-  event.is_hint = 0;
-  event.x = x;
-  event.y = y;
-  event.state = mask;
-  
-  gtk_text_motion_notify (GTK_WIDGET (text), &event);
+  if (mask & (GDK_BUTTON1_MASK | GDK_BUTTON3_MASK))
+    {
+      event.is_hint = 0;
+      event.x = x;
+      event.y = y;
+      event.state = mask;
+      
+      gtk_text_motion_notify (GTK_WIDGET (text), &event);
+    }
+
+  GTK_THREADS_LEAVE;
   
   return FALSE;
 }

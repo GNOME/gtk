@@ -218,6 +218,7 @@ typedef enum {
   GDK_DEBUG_XIM           = 1 << 4
 } GdkDebugFlag;
 
+void gdk_events_init (void);
 void gdk_window_init (void);
 void gdk_visual_init (void);
 void gdk_dnd_init    (void);
@@ -276,6 +277,12 @@ extern gint		 gdk_error_warnings;
 extern gint              gdk_null_window_warnings;
 extern GList            *gdk_default_filters;
 extern gboolean          gdk_using_threads;
+extern const int         gdk_nevent_masks;
+extern const int         gdk_event_mask_table[];
+
+extern GdkWindowPrivate *gdk_xgrab_window;  /* Window that currently holds the
+					     * x pointer grab
+					     */
 
 /* Threading stuff */
 #ifdef USE_PTHREADS

@@ -28,6 +28,7 @@
 #include "gtklistitem.h"
 #include "gtkscrolledwindow.h"
 #include "gtkmain.h"
+#include "gtkprivate.h"
 #include "gtksignal.h"
 #include "gtkwindow.h"
 #include "gdk/gdkkeysyms.h"
@@ -235,7 +236,11 @@ static gint
 gtk_combo_focus_idle (GtkCombo * combo)
 {
   if (combo)
-    gtk_widget_grab_focus (combo->entry);
+    {
+      GTK_THREADS_ENTER;
+      gtk_widget_grab_focus (combo->entry);
+      GTK_THREADS_LEAVE;
+    }
   return FALSE;
 }
 

@@ -19,6 +19,7 @@
 #include "gtknotebook.h"
 #include "gtksignal.h"
 #include "gtkmain.h"
+#include "gtkprivate.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtklabel.h"
@@ -1834,9 +1835,10 @@ gtk_notebook_focus_changed (GtkNotebook     *notebook,
 static gint
 gtk_notebook_timer (GtkNotebook *notebook)
 {
-  g_return_val_if_fail (notebook != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), FALSE);
+  gboolean retval = FALSE;
 
+  GTK_THREADS_ENTER;
+  
   if (notebook->timer)
     {
       if (notebook->click_child == GTK_ARROW_LEFT)
@@ -1859,11 +1861,14 @@ gtk_notebook_timer (GtkNotebook *notebook)
 	  notebook->timer = gtk_timeout_add (NOTEBOOK_SCROLL_DELAY,
 					     (GtkFunction) gtk_notebook_timer, 
 					     (gpointer) notebook);
-	  return FALSE;
 	}
-      return TRUE;
+      else
+	retval = TRUE;
     }
-  return FALSE;
+
+  GTK_THREADS_LEAVE;
+
+  return retval;
 }
 
 static gint

@@ -24,6 +24,7 @@
 #include "gtkmain.h"
 #include "gtksignal.h"
 #include "gtkaccellabel.h"
+#include "gtkprivate.h"
 
 
 enum {
@@ -45,6 +46,7 @@ static void gtk_accel_label_size_request (GtkWidget	 *widget,
 					  GtkRequisition *requisition);
 static gint gtk_accel_label_expose_event (GtkWidget	 *widget,
 					  GdkEventExpose *event);
+static gboolean gtk_accel_label_refetch_idle (GtkAccelLabel *accel_label);
 
 static GtkAccelLabelClass *accel_label_class = NULL;
 static GtkLabelClass *parent_class = NULL;
@@ -304,7 +306,7 @@ gtk_accel_label_queue_refetch (GtkAccelLabel *accel_label)
 
   if (accel_label->queue_id == 0)
     accel_label->queue_id = gtk_idle_add_priority (GTK_PRIORITY_HIGH - 2,
-						   (GtkFunction) gtk_accel_label_refetch,
+						   (GtkFunction) gtk_accel_label_refetch_idle,
 						   accel_label);
 }
 
@@ -345,6 +347,18 @@ gtk_accel_label_set_accel_widget (GtkAccelLabel *accel_label,
 					   GTK_OBJECT (accel_label));
 	}
     }
+}
+
+static gboolean
+gtk_accel_label_refetch_idle (GtkAccelLabel *accel_label)
+{
+  gboolean retval;
+
+  GTK_THREADS_ENTER;
+  retval = gtk_accel_label_refetch (accel_label);
+  GTK_THREADS_LEAVE;
+
+  return retval;
 }
 
 gboolean
