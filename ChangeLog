@@ -1,5 +1,8 @@
 2003-08-06  Hans Breuer  <hans@breuer.org>
 
+	* gdk/win32/gdkpixmap-win32.c (gdk_pixmap_new) :
+	initialize bits to 0 (probably default on NT)
+
 	* gdk/win32/gdkwindow-win32.c (gdk_window_set_icon) :
 	now it works as intended ;-)
 
