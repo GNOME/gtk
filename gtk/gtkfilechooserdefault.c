@@ -628,10 +628,10 @@ shortcuts_append_paths (GtkFileChooserDefault *impl,
       path = paths->data;
       error = NULL;
 
-      if (shortcuts_insert_path (impl, -1, FALSE, NULL, path, NULL, &error))
+      /* NULL GError, but we don't really want to show error boxes here */
+
+      if (shortcuts_insert_path (impl, -1, FALSE, NULL, path, NULL, NULL))
 	num_inserted++;
-      else
-	error_getting_info_dialog (impl, path, error);
     }
 
   return num_inserted;
@@ -791,6 +791,7 @@ shortcuts_append_bookmarks (GtkFileChooserDefault *impl)
 		      SHORTCUTS_COL_NAME, NULL,
 		      SHORTCUTS_COL_PATH, NULL,
 		      -1);
+  shortcuts_add_bookmarks (impl);
 }
 
 /* Creates the GtkTreeStore used as the shortcuts model */
@@ -1070,6 +1071,7 @@ static void
 remove_bookmark_button_clicked_cb (GtkButton *button,
 				   GtkFileChooserDefault *impl)
 {
+  GtkTreeSelection *selection;
   GtkTreeIter iter;
   GtkFilePath *path;
   int selected, start_row;
@@ -1080,6 +1082,9 @@ remove_bookmark_button_clicked_cb (GtkButton *button,
   start_row = shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS);
   if (selected < start_row || selected >= start_row + impl->num_bookmarks)
     g_assert_not_reached ();
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->shortcuts_tree));
+  gtk_tree_selection_get_selected (selection, NULL, &iter);
 
   gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter, SHORTCUTS_COL_PATH, &path, -1);
 
@@ -1350,7 +1355,6 @@ create_file_list (GtkFileChooserDefault *impl)
   /* Tree/list view */
 
   impl->list = gtk_tree_view_new ();
-  gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (impl->list), TRUE);
   gtk_container_add (GTK_CONTAINER (impl->list_scrollwin), impl->list);
   g_signal_connect (impl->list, "row_activated",
 		    G_CALLBACK (list_row_activated), impl);

@@ -1,5 +1,14 @@
 2004-01-05  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkfilechooserdefault.c (shortcuts_append_bookmarks): Oops,
+	call shortcuts_add_bookmarks() here.
+	(remove_bookmark_button_clicked_cb): Ahem, fetch the selected
+	iter.
+	(shortcuts_append_paths): Don't display error dialogs here.
+	(create_file_list): Remove the @#$% rules hint.
+
+2004-01-05  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/gtkfilechooserdefault.c (toolbar_button_new): New helper
 	function.
 	(toolbar_create): Do not use a toolbar widget, just an hbox
