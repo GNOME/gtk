@@ -2441,6 +2441,7 @@ gdk_window_invalidate_maybe_recurse (GdkWindow *window,
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkRegion *visible_region;
+  GList *tmp_list;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -2454,6 +2455,45 @@ gdk_window_invalidate_maybe_recurse (GdkWindow *window,
   visible_region = gdk_drawable_get_visible_region (window);
   gdk_region_intersect (visible_region, region);
 
+  tmp_list = private->children;
+  while (tmp_list)
+    {
+      GdkWindowObject *child = tmp_list->data;
+      
+      if (!child->input_only)
+	{
+	  GdkRegion *child_region;
+	  GdkRectangle child_rect;
+	  
+	  gdk_window_get_position ((GdkWindow *)child,
+				   &child_rect.x, &child_rect.y);
+	  gdk_drawable_get_size ((GdkDrawable *)child,
+				 &child_rect.width, &child_rect.height);
+
+	  child_region = gdk_region_rectangle (&child_rect);
+	  
+	  /* remove child area from the invalid area of the parent */
+	  if (GDK_WINDOW_IS_MAPPED (child))
+	    gdk_region_subtract (visible_region, child_region);
+	  
+	  if (child_func && (*child_func) ((GdkWindow *)child, user_data))
+	    {
+	      gdk_region_offset (region, - child_rect.x, - child_rect.y);
+	      gdk_region_offset (child_region, - child_rect.x, - child_rect.y);
+	      gdk_region_intersect (child_region, region);
+	      
+	      gdk_window_invalidate_maybe_recurse ((GdkWindow *)child,
+						   child_region, child_func, user_data);
+	      
+	      gdk_region_offset (region, child_rect.x, child_rect.y);
+	    }
+
+	  gdk_region_destroy (child_region);
+	}
+
+      tmp_list = tmp_list->next;
+    }
+  
   if (!gdk_region_empty (visible_region))
     {
       if (debug_updates)
@@ -2469,34 +2509,6 @@ gdk_window_invalidate_maybe_recurse (GdkWindow *window,
 	  private->update_area = gdk_region_copy (visible_region);
 	  
 	  gdk_window_schedule_update (window);
-	}
-      
-      if (child_func)
-	{
-	  GList *tmp_list;
-	  
-	  tmp_list = private->children;
-	  while (tmp_list)
-	    {
-	      GdkWindowObject *child = tmp_list->data;
-	      tmp_list = tmp_list->next;
-
-	      if (!child->input_only && (*child_func) ((GdkWindow *)child, user_data))
-		{
-		  GdkRegion *child_region;
-		  gint x, y;
-
-		  gdk_window_get_position ((GdkWindow *)child, &x, &y);
-
-		  /* This copy could be saved with a little more complexity */
-		  child_region = gdk_region_copy (visible_region);
-		  gdk_region_offset (child_region, - x, - y);
-		  
-		  gdk_window_invalidate_maybe_recurse ((GdkWindow *)child, child_region, child_func, user_data);
-		  
-		  gdk_region_destroy (child_region);
-		}
-	    }
 	}
     }
   

@@ -1,3 +1,9 @@
+Mon Mar 28 15:13:42 2005  Søren Sandmann  <sandmann@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_invalidate_maybe_recurse): Don't
+	invalidate areas that are covered by mapped input-output child
+	windows. Bug 141380.
+
 2005-03-28  Jeroen Zwartepoorte  <jeroen.zwartepoorte@gmail.com>
 
 	* gtk/gtkfilechooserdefault.c: (update_preview_widget_visibility): Make
