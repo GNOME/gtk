@@ -56,21 +56,16 @@ An object representing and maintaining a group of accelerators.
 
 <!-- ##### MACRO gtk_accel_group_ref ##### -->
 <para>
-
+Deprecated equivalent of g_object_ref().
 </para>
 
 @Returns: 
-<!-- # Unused Parameters # -->
-@accel_group: 
 
 
 <!-- ##### MACRO gtk_accel_group_unref ##### -->
 <para>
-
+Deprecated equivalent of g_object_unref().
 </para>
-
-<!-- # Unused Parameters # -->
-@accel_group: 
 
 
 <!-- ##### FUNCTION gtk_accel_group_connect ##### -->

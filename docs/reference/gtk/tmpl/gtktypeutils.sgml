@@ -6,7 +6,7 @@ Handle run-time type creation.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-Gtk's type system is extensible.  Because of that, types have to be
+The GTK+ type system is extensible.  Because of that, types have to be
 managed at runtime.
 </para>
 
@@ -17,7 +17,7 @@ managed at runtime.
 
 <!-- ##### TYPEDEF GtkType ##### -->
 <para>
-@GtkType is unique integer identifying the type.  The guts of the
+#GtkType is unique integer identifying the type.  The guts of the
 information about the type is held in a private struct named
 #GtkTypeNode.
 </para>
@@ -97,27 +97,27 @@ Use in place of <function>offsetof()</function>, which is used if it exists.
 
 <!-- ##### MACRO GTK_CHECK_CAST ##### -->
 <para>
-Casts the object in @tobj into @cast.  If GTK_NO_CHECK_CASTS is
+Casts the object in @tobj into @cast.  If %G_DISABLE_CAST_CHECKS is
 defined, just cast it.  Otherwise, check to see if we can cast @tobj
 into a @cast.
 </para>
 
 <!-- # Unused Parameters # -->
-@tobj: a pointer to a GtkObject.
-@cast_type: a Gtk type.
+@tobj: a #GtkObject.
+@cast_type: a GTK+ type.
 @cast: a C type
 
 
 <!-- ##### MACRO GTK_CHECK_CLASS_CAST ##### -->
 <para>
-Casts the object in @tobj into @cast.  If GTK_NO_CHECK_CASTS is
+Casts the object in @tobj into @cast.  If %G_DISABLE_CAST_CHECKS is
 defined, just cast it.  Otherwise, check to see if we can cast @tobj
 into a @cast.
 </para>
 
 <!-- # Unused Parameters # -->
-@tclass: a pointer to a GtkClassInitFunc
-@cast_type: a Gtk type.
+@tclass: a #GtkClassInitFunc
+@cast_type: a GTK+ type.
 @cast: a C type
 
 
@@ -127,7 +127,7 @@ Determines whether @type_object is a type of @otype.
 </para>
 
 <!-- # Unused Parameters # -->
-@type_object: A GtkTypeObject object.
+@type_object: a #GtkTypeObject object
 @otype: 
 
 
@@ -137,20 +137,21 @@ Determines whether @type_class is a type of @otype.
 </para>
 
 <!-- # Unused Parameters # -->
-@type_class: A GtkTypeClass class.
+@type_class: a #GtkTypeClass class.
 @otype: 
 
 
 <!-- ##### MACRO GTK_CHECK_GET_CLASS ##### -->
 <para>
-
+Gets the class of @tobj.
 </para>
 
+@tobj: a #GtkObject.
 
 
 <!-- ##### MACRO GTK_FUNDAMENTAL_TYPE ##### -->
 <para>
-Converts a Gtk type into a fundamental type.
+Converts a GTK+ type into a fundamental type.
 </para>
 
 <!-- # Unused Parameters # -->
@@ -189,8 +190,8 @@ Defines a function pointer.
 Defines a function pointer.
 </para>
 
-@data: gpointer
-@Returns: gint
+@data: #gpointer
+@Returns: #gint
 
 
 <!-- ##### USER_FUNCTION GtkDestroyNotify ##### -->
@@ -198,7 +199,7 @@ Defines a function pointer.
 Defines a function pointer.
 </para>
 
-@data: gpointer
+@data: #gpointer
 
 
 <!-- ##### USER_FUNCTION GtkCallbackMarshal ##### -->
@@ -206,10 +207,10 @@ Defines a function pointer.
 Defines a function pointer.
 </para>
 
-@object: GtkObject*
-@data: gpointer
-@n_args: guint
-@args: GtkArg*
+@object: #GtkObject*
+@data: #gpointer
+@n_args: #guint
+@args: #GtkArg*
 
 
 <!-- ##### TYPEDEF GtkSignalMarshaller ##### -->
@@ -504,7 +505,7 @@ function for an instance of the object.  @reserved_1 is used for
 
 <!-- ##### TYPEDEF GtkTypeClass ##### -->
 <para>
-The base structure for a Gtk type. Every type inherits this as a base structure.
+The base structure for a GTK+ type. Every type inherits this as a base structure.
 </para>
 
 
@@ -523,7 +524,7 @@ nickname.
 
 <!-- ##### FUNCTION gtk_type_init ##### -->
 <para>
-Initializes the data structures associated with Gtk types.
+Initializes the data structures associated with GTK+ types.
 </para>
 
 @debug_flags: 
@@ -555,7 +556,7 @@ Returns a pointer to the name of a type, or %NULL if it has none.
 Gets the internal representation of a type, given its name.
 </para>
 
-@name: the name of a Gtk type
+@name: the name of a GTK+ type
 @Returns: a #GtkType.
 
 

@@ -241,6 +241,13 @@ _gtk_accel_group_detach (GtkAccelGroup *accel_group,
   g_object_unref (accel_group);
 }
 
+/**
+ * gtk_accel_groups_from_object:
+ * @object:        a #GObject, usually a #GtkWindow 
+ * @returns: a list of all accel groups which are attached to @object
+ *
+ * Gets a list of all accel groups which are attached to @object.
+ */
 GSList*
 gtk_accel_groups_from_object (GObject *object)
 {
@@ -249,6 +256,18 @@ gtk_accel_groups_from_object (GObject *object)
   return g_object_get_qdata (object, quark_acceleratable_groups);
 }
 
+/**
+ * gtk_accel_group_find:
+ * @accel_group: a #GtkAccelGroup
+ * @find_func: a function to filter the entries of @accel_group with
+ * @data: data to pass to @find_func
+ * @returns: the key of the first entry passing @find_func. The key is 
+ * owned by GTK+ and must not be freed.
+ *
+ * Finds the first entry in an accelerator group for which @find_func
+ * returns %TRUE and returns its #GtkAccelKey.
+ *
+ */
 GtkAccelKey*
 gtk_accel_group_find (GtkAccelGroup  *accel_group,
 		      gboolean (*find_func) (GtkAccelKey *key,
@@ -651,6 +670,17 @@ _gtk_accel_group_reconnect (GtkAccelGroup *accel_group,
   g_object_unref (accel_group);
 }
 
+/**
+ * gtk_accel_group_query:
+ * @accel_group:      the accelerator group to query
+ * @accel_key:        key value of the accelerator
+ * @accel_mods:       modifier combination of the accelerator
+ * @n_entries:        location to return the number of entries found, or %NULL
+ * @returns:          an array of @n_entries #GtkAccelGroupEntry elements, or %NULL. The array is owned by GTK+ and must not be freed. 
+ *
+ * Queries an accelerator group for all entries matching @accel_key and 
+ * @accel_mods.
+ */
 GtkAccelGroupEntry*
 gtk_accel_group_query (GtkAccelGroup  *accel_group,
 		       guint           accel_key,
@@ -670,6 +700,14 @@ gtk_accel_group_query (GtkAccelGroup  *accel_group,
   return entries;
 }
 
+/**
+ * gtk_accel_group_from_accel_closure:
+ * @closure: a #GClosure
+ * @returns: the #GtkAccelGroup to which @closure is connected, or %NULL.
+ *
+ * Finds the #GtkAccelGroup to which @closure is connected; 
+ * see gtk_accel_group_connect().
+ */
 GtkAccelGroup*
 gtk_accel_group_from_accel_closure (GClosure *closure)
 {
@@ -711,7 +749,7 @@ _gtk_accel_group_activate (GtkAccelGroup  *accel_group,
 
 /**
  * gtk_accel_groups_activate:
- * @object:        the #Gobject, usually a #GtkWindow, on which
+ * @object:        the #GObject, usually a #GtkWindow, on which
  *                 to activate the accelerator.
  * @accel_key:     accelerator keyval from a key event
  * @accel_mods:    keyboard state mask from a key event

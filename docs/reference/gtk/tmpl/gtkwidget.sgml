@@ -88,10 +88,10 @@ Tells about certain properties of the widget.
 
 <!-- ##### MACRO GTK_WIDGET_TYPE ##### -->
 <para>
-
+Gets the type of a widget.
 </para>
 
-@wid: 
+@wid: a #GtkWidget.
 
 
 <!-- ##### MACRO GTK_WIDGET_STATE ##### -->

@@ -428,6 +428,14 @@ check_accel_changed (GtkAccelGroup  *accel_group,
     gtk_accel_label_queue_refetch (accel_label);
 }
 
+/**
+ * gtk_accel_label_set_accel_closure:
+ * @accel_label: a #GtkAccelLabel
+ * @accel_closure: the closure to monitor for accelerator changes.
+ *
+ * Sets the closure to be monitored by this accelerator label. The closure
+ * must be connected to an accelerator group; see gtk_accel_group_connect().
+ **/
 void
 gtk_accel_label_set_accel_closure (GtkAccelLabel *accel_label,
 				   GClosure      *accel_closure)

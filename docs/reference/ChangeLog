@@ -1,3 +1,12 @@
+2002-01-06  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtktypeutils.sgml: Replace GTK_NO_CHECK_CASTS by 
+	G_DISABLE_CAST_CHECKS, fix some markup and add stuff.
+
+	* gtk/tmpl/gtkaccelgroup.sgml, gtk/tmpl/gtkwidget.sgml: Additions.
+
+	* gtk/gtk-sections.txt: Make gtk_accel_group_get_type private.
+
 2002-01-06  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/question_index.sgml: a few more questions I thought of

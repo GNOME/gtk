@@ -5,7 +5,6 @@
 <FILE>gtkaccelgroup</FILE>
 <TITLE>Keyboard Accelerators</TITLE>
 GtkAccelGroup
-gtk_accel_group_get_type
 gtk_accel_group_new
 gtk_accel_group_ref
 gtk_accel_group_unref
@@ -27,8 +26,11 @@ gtk_accelerator_parse
 gtk_accelerator_name
 gtk_accelerator_set_default_mod_mask
 gtk_accelerator_get_default_mod_mask
+
 <SUBSECTION Private>
 GtkAccelGroupEntry
+gtk_accel_group_get_type
+
 <SUBSECTION Standard>
 GtkAccelGroupClass
 GTK_TYPE_ACCEL_GROUP
