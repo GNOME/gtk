@@ -264,8 +264,8 @@ gdk_image_get_pixel (GdkImage *image,
   GdkImagePrivateFB *private;
 
   g_return_val_if_fail (image != NULL, 0);
-  g_return_val_if_fail (x < 0 || x >= image->width, 0);
-  g_return_val_if_fail (y < 0 || y >= image->height, 0);
+  g_return_val_if_fail (x >= 0 && x < image->width, 0);
+  g_return_val_if_fail (y >= 0 && y < image->height, 0);
 
   private = GDK_IMAGE_PRIVATE_DATA (image);
 
@@ -298,8 +298,8 @@ gdk_image_put_pixel (GdkImage *image,
   guchar *ptr = image->mem;
 
   g_return_if_fail (image != NULL);
-  g_return_if_fail (x < 0 || x >= image->width);
-  g_return_if_fail (y < 0 || y >= image->height);
+  g_return_if_fail (x >= 0 && x < image->width);
+  g_return_if_fail (y >= 0 && y < image->height);
 
   switch (image->depth)
     {

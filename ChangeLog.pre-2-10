@@ -1,3 +1,9 @@
+Mon Oct 7 16:07:52 2002  Bill Haneman <bill.haneman@sun.com>
+
+	* gdk/x11/gdkimage-x11.c gdk/linux-fb/gdkimage-x11.c 
+	gdk/win32/gdkimage-x11.c: (gdk_image_get_pixel): 
+	(gdk_image_put_pixel): Fixed sense of bounds checks.
+
 Sun Oct  6 21:23:29 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkcontainer.[ch] gtk/gtkbox.[ch] gtk/gtkhbox.[ch]

@@ -697,8 +697,8 @@ gdk_image_get_pixel (GdkImage *image,
   GdkImagePrivateX11 *private;
 
   g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
-  g_return_val_if_fail (x < 0 || x >= image->width, 0);
-  g_return_val_if_fail (y < 0 || y >= image->height, 0);
+  g_return_val_if_fail (x >= 0 && x < image->width, 0);
+  g_return_val_if_fail (y >= 0 && y < image->height, 0);
 
   private = PRIVATE_DATA (image);
 
@@ -719,8 +719,8 @@ gdk_image_put_pixel (GdkImage *image,
   GdkImagePrivateX11 *private;
 
   g_return_if_fail (GDK_IS_IMAGE (image));
-  g_return_if_fail (x < 0 || x >= image->width);
-  g_return_if_fail (y < 0 || y >= image->height);
+  g_return_if_fail (x >= 0 && x < image->width);
+  g_return_if_fail (y >= 0 && y < image->height);
 
   private = PRIVATE_DATA (image);
 

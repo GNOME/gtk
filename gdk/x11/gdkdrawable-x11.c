@@ -1255,7 +1255,7 @@ draw_with_images (GdkDrawable       *drawable,
 				 GDK_PIXMAP_XID (pix),
 				 mask_format, 0, NULL);
 
-  dest_pict = gdk_x11_drawable_get_picture (drawable);
+  dest_pict = gdk_x11_drawable_get_picture (drawable);  
   
   pix_gc = gdk_gc_new (pix);
 

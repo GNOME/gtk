@@ -265,8 +265,8 @@ gdk_image_get_pixel (GdkImage *image,
   guchar *pixelp;
 
   g_return_val_if_fail (image != NULL, 0);
-  g_return_val_if_fail (x < 0 || x >= image->width, 0);
-  g_return_val_if_fail (y < 0 || y >= image->height, 0);
+  g_return_val_if_fail (x >= 0 && x < image->width, 0);
+  g_return_val_if_fail (y >= 0 && y < image->height, 0);
 
   if (!(x >= 0 && x < image->width && y >= 0 && y < image->height))
       return 0;
@@ -313,8 +313,8 @@ gdk_image_put_pixel (GdkImage *image,
   guchar *pixelp;
 
   g_return_if_fail (image != NULL);
-  g_return_if_fail (x < 0 || x >= image->width);
-  g_return_if_fail (y < 0 || y >= image->height);
+  g_return_if_fail (x >= 0 && x < image->width);
+  g_return_if_fail (y >= 0 && y < image->height);
 
   if  (!(x >= 0 && x < image->width && y >= 0 && y < image->height))
     return;
