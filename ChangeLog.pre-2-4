@@ -1,5 +1,10 @@
 2002-01-01  Havoc Pennington  <hp@pobox.com>
 
+	* gtk/gtktextview.c (gtk_text_view_get_default_attributes): doc 
+	fix
+	
+2002-01-01  Havoc Pennington  <hp@pobox.com>
+
 	* gtk/gtktextview.c (changed_handler): Replace call to
 	gtk_widget_size_request() that expected to actually compute the
 	request with a direct use of widget_class->size_request, so we get
