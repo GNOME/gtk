@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-25 13:27-0400\n"
+"POT-Creation-Date: 2004-09-12 04:35+0100\n"
 "PO-Revision-Date: 2004-04-15 17:12+0100\n"
-"Last-Translator: Rhys Jones <rhys@sucs.org>\n"
+"Last-Translator: Dafydd Harries <daf@muse.19inch.net>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1004,7 +1004,7 @@ msgstr "Methwyd ychwanegu llyfrnod ar gyfer %s am nad yw'n enw llwybr dilys."
 
 #: gtk/gtkfilechooserdefault.c:2572
 msgid "Shortcuts"
-msgstr ""
+msgstr "Byrlwybrau"
 
 #: gtk/gtkfilechooserdefault.c:2626
 msgid "Folder"
@@ -1349,9 +1349,9 @@ msgid "Filesystem"
 msgstr "System Ffeiliau"
 
 #: gtk/gtkfilesystemunix.c:735
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "Methwyd cyrchu gwybodaeth ar gyfer y ffeil '%s': %s"
+msgstr "Methwyd cyrchu eicon stoc ar gyfer %s"
 
 #: gtk/gtkfilesystemunix.c:830
 #, c-format
