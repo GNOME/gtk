@@ -49,7 +49,7 @@
 
 /***************************************************************************/
 /* The following date routines are taken from the lib_date package.  Keep
- * them seperate in case we want to update them if a newer lib_date comes
+ * them separate in case we want to update them if a newer lib_date comes
  * out with fixes.  */
 
 typedef	 unsigned   int	    N_int;

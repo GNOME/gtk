@@ -2116,7 +2116,7 @@ gtk_menu_key_press (GtkWidget	*widget,
   /* Modify the accelerators */
   if (can_change_accels &&
       menu_shell->active_menu_item &&
-      GTK_BIN (menu_shell->active_menu_item)->child &&			/* no seperators */
+      GTK_BIN (menu_shell->active_menu_item)->child &&			/* no separators */
       GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu == NULL &&	/* no submenus */
       (delete || gtk_accelerator_valid (accel_key, accel_mods)))
     {

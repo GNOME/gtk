@@ -486,7 +486,7 @@ gtk_extra_sources =				\
 	gtkmarshal.list
 
 #
-# setup GTK+ sources and their dependancies
+# setup GTK+ sources and their dependencies
 #
 MAINTAINERCLEANFILES = $(gtk_built_sources) $(stamp_files)
 EXTRA_HEADERS =
@@ -496,7 +496,7 @@ EXTRA_DIST += $(gtk_built_sources)
 #
 # rules to generate built sources
 #
-# setup autogeneration dependancies
+# setup autogeneration dependencies
 gen_sources = xgen-gdef xgen-gtbh xgen-gtic xgen-gmh xgen-gmc xgen-gmlh xgen-gmlc
 CLEANFILES = $(gen_sources)
 

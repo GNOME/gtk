@@ -3441,7 +3441,7 @@ gtk_drag_abort_timeout (gpointer data)
  * @current_y: current Y coordinate
  * 
  * Checks to see if a mouse drag starting at (@start_x, @start_y) and ending
- * at (@current_x, @current_y) has passed the GTK+ drag threshhold, and thus
+ * at (@current_x, @current_y) has passed the GTK+ drag threshold, and thus
  * should trigger the beginning of a drag-and-drop operation.
  *
  * Return Value: %TRUE if the drag threshold has been passed.

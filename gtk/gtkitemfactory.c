@@ -360,7 +360,7 @@ gtk_item_factory_add_item (GtkItemFactory		*ifactory,
   if (GTK_IS_MENU (widget))
     gtk_menu_set_accel_group ((GtkMenu*) widget, ifactory->accel_group);
 
-  /* connect callback if neccessary
+  /* connect callback if necessary
    */
   if (callback)
     {

@@ -5337,7 +5337,7 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
 
   gtk_widget_freeze_child_notify (child);
 
-  /* Move around the menu items if necesary */
+  /* Move around the menu items if necessary */
   gtk_notebook_child_reordered (notebook, page);
   gtk_widget_child_notify (child, "tab_pack");
   gtk_widget_child_notify (child, "position");

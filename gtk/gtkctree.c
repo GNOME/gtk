@@ -2969,7 +2969,7 @@ set_cell_contents (GtkCList    *clist,
       old_mask = GTK_CELL_PIXTEXT (clist_row->cell[column])->mask;
       break;
     case GTK_CELL_WIDGET:
-      /* unimplimented */
+      /* unimplemented */
       break;
       
     default:

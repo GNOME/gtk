@@ -3420,7 +3420,7 @@ gtk_entry_new (void)
  *
  * Creates a new #GtkEntry widget with the given maximum length.
  * 
- * Note: the existance of this function is inconsistent
+ * Note: the existence of this function is inconsistent
  * with the rest of the GTK+ API. The normal setup would
  * be to just require the user to make an extra call
  * to gtk_entry_set_max_length() instead. It is not
