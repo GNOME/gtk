@@ -1,3 +1,11 @@
+2002-02-25  Matthias Clasen  <maclas@gmx.de>
+
+	* docs/tutorial/gtk-tut.sgml, docs/tutorial/images/*, examples/*: More
+	 GTK+ 2.0 updates.
+
+	* docs/tutorial/Makefile.am: build and dist the new tutorial, not
+	the old Linuxdoc one.
+
 Mon Feb 25 01:14:26 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktextlayout.c (find_display_line_above): free iter before
