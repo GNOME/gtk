@@ -21,6 +21,7 @@
 #include "gtkfilechooserdialog.h"
 #include "gtkfilechooserwidget.h"
 #include "gtkfilechooserutils.h"
+#include "gtkfilechooserembed.h"
 #include "gtkfilesystem.h"
 #include "gtktypebuiltins.h"
 
@@ -32,8 +33,12 @@
 struct _GtkFileChooserDialogPrivate
 {
   GtkWidget *widget;
-
+  
   char *file_system;
+
+  /* for use with GtkFileChooserEmbed */
+  gint default_width;
+  gint default_height;
 };
 
 #define GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE(o)  (GTK_FILE_CHOOSER_DIALOG (o)->priv)
@@ -54,11 +59,8 @@ static void     gtk_file_chooser_dialog_get_property (GObject               *obj
 						      GValue                *value,
 						      GParamSpec            *pspec);
 
-static void gtk_file_chooser_dialog_realize        (GtkWidget *widget);
 static void gtk_file_chooser_dialog_style_set      (GtkWidget *widget,
 						    GtkStyle  *previous_style);
-static void gtk_file_chooser_dialog_screen_changed (GtkWidget *widget,
-						    GdkScreen *previous_screen);
 
 static GObjectClass *parent_class;
 
@@ -112,9 +114,7 @@ gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class)
   gobject_class->get_property = gtk_file_chooser_dialog_get_property;
   gobject_class->finalize = gtk_file_chooser_dialog_finalize;
 
-  widget_class->realize = gtk_file_chooser_dialog_realize;
   widget_class->style_set = gtk_file_chooser_dialog_style_set;
-  widget_class->screen_changed = gtk_file_chooser_dialog_screen_changed;
 
   _gtk_file_chooser_install_properties (gobject_class);
 
@@ -128,6 +128,8 @@ gtk_file_chooser_dialog_init (GtkFileChooserDialog *dialog)
 								   GTK_TYPE_FILE_CHOOSER_DIALOG,
 								   GtkFileChooserDialogPrivate);
   dialog->priv = priv;
+  dialog->priv->default_width = -1;
+  dialog->priv->default_height = -1;
 
   gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
 }
@@ -149,6 +151,52 @@ file_chooser_widget_file_activated (GtkFileChooser       *chooser,
 {
   gtk_window_activate_default (GTK_WINDOW (dialog));
 }
+
+static void
+file_chooser_widget_default_size_changed (GtkWidget            *widget,
+					  GtkFileChooserDialog *dialog)
+{
+  GtkFileChooserDialogPrivate *priv;
+  gint extra_width;
+  gint extra_height;
+  gint width, height;
+
+  priv = GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE (dialog);
+
+  /* Determine how much space the rest of the dialog uses compared to priv->widget */
+  extra_width = GTK_WIDGET (dialog)->requisition.width - priv->widget->requisition.width;
+  extra_height = GTK_WIDGET (dialog)->requisition.height - priv->widget->requisition.height;
+
+  _gtk_file_chooser_embed_get_default_size (GTK_FILE_CHOOSER_EMBED (priv->widget),
+					    &width, &height);
+
+  width = extra_width + width;
+  height = extra_height + height;
+
+  /*  g_print ("file_chooser_widget_default_size_changed: %d %d\n", width, height);*/
+  /* FIXME: We should make sure that we arent' bigger than the current screen */
+  if (GTK_WIDGET_REALIZED (dialog) &&
+      priv->default_width > 0 &&
+      priv->default_height > 0)
+    {
+      gint cur_width, cur_height;
+      gint dx, dy;
+
+      gtk_window_get_size (GTK_WINDOW (dialog), &cur_width, &cur_height);
+      dx = width - priv->default_width;
+      dy = height - priv->default_height;
+      gtk_window_resize (GTK_WINDOW (dialog),
+			 cur_width + dx,
+			 cur_height + dy);
+    }
+  else
+    {
+      gtk_window_set_default_size (GTK_WINDOW (dialog), width, height);
+    }
+  priv->default_width = width;
+  priv->default_height = height;
+}
+
 
 static GObject*
 gtk_file_chooser_dialog_constructor (GType                  type,
@@ -174,6 +222,8 @@ gtk_file_chooser_dialog_constructor (GType                  type,
 
   g_signal_connect (priv->widget, "file-activated",
 		    G_CALLBACK (file_chooser_widget_file_activated), object);
+  g_signal_connect (priv->widget, "default-size-changed",
+		    G_CALLBACK (file_chooser_widget_default_size_changed), object);
 
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (object)->vbox), priv->widget, TRUE, TRUE, 0);
   gtk_widget_show (priv->widget);
@@ -268,13 +318,6 @@ set_default_size (GtkFileChooserDialog *dialog)
 }
 
 static void
-gtk_file_chooser_dialog_realize (GtkWidget *widget)
-{
-  GTK_WIDGET_CLASS (parent_class)->realize (widget);
-  set_default_size (GTK_FILE_CHOOSER_DIALOG (widget));
-}
-
-static void
 gtk_file_chooser_dialog_style_set (GtkWidget *widget,
 				   GtkStyle  *previous_style)
 {
@@ -282,9 +325,6 @@ gtk_file_chooser_dialog_style_set (GtkWidget *widget,
 
   if (GTK_WIDGET_CLASS (parent_class)->style_set)
     GTK_WIDGET_CLASS (parent_class)->style_set (widget, previous_style);
-
-  if (GTK_WIDGET_REALIZED (widget))
-    set_default_size (GTK_FILE_CHOOSER_DIALOG (widget));
 
   dialog = GTK_DIALOG (widget);
 
@@ -294,21 +334,10 @@ gtk_file_chooser_dialog_style_set (GtkWidget *widget,
    */
 
   gtk_container_set_border_width (GTK_CONTAINER (dialog->vbox), 12);
-  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 24);
+  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 12);
 
   gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 0);
   gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
-}
-
-static void
-gtk_file_chooser_dialog_screen_changed (GtkWidget *widget,
-					GdkScreen *previous_screen)
-{
-  if (GTK_WIDGET_CLASS (parent_class)->screen_changed)
-    GTK_WIDGET_CLASS (parent_class)->screen_changed (widget, previous_screen);
-
-  if (GTK_WIDGET_REALIZED (widget))
-    set_default_size (GTK_FILE_CHOOSER_DIALOG (widget));
 }
 
 static GtkWidget *

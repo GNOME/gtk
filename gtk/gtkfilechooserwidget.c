@@ -22,6 +22,7 @@
 #include "gtkfilechooserdefault.h"
 #include "gtkfilechooserutils.h"
 #include "gtktypebuiltins.h"
+#include "gtkfilechooserembed.h"
 
 struct _GtkFileChooserWidgetPrivate
 {
@@ -77,11 +78,22 @@ gtk_file_chooser_widget_get_type (void)
 	NULL			                                    /* interface_data */
       };
 
+      static const GInterfaceInfo file_chooser_embed_info =
+      {
+	(GInterfaceInitFunc) _gtk_file_chooser_embed_delegate_iface_init, /* interface_init */
+	NULL,			                                          /* interface_finalize */
+	NULL			                                          /* interface_data */
+      };
+
       file_chooser_widget_type = g_type_register_static (GTK_TYPE_VBOX, "GtkFileChooserWidget",
 							 &file_chooser_widget_info, 0);
+
       g_type_add_interface_static (file_chooser_widget_type,
 				   GTK_TYPE_FILE_CHOOSER,
 				   &file_chooser_info);
+      g_type_add_interface_static (file_chooser_widget_type,
+				   GTK_TYPE_FILE_CHOOSER_EMBED,
+				   &file_chooser_embed_info);
     }
 
   return file_chooser_widget_type;
@@ -150,6 +162,9 @@ gtk_file_chooser_widget_constructor (GType                  type,
   
   _gtk_file_chooser_set_delegate (GTK_FILE_CHOOSER (object),
 				  GTK_FILE_CHOOSER (priv->impl));
+
+  _gtk_file_chooser_embed_set_delegate (GTK_FILE_CHOOSER (object),
+					GTK_FILE_CHOOSER (priv->impl));
   
   gtk_widget_pop_composite_child ();
 

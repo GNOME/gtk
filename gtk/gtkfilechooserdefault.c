@@ -29,6 +29,7 @@
 #include "gtkentry.h"
 #include "gtkexpander.h"
 #include "gtkfilechooserdefault.h"
+#include "gtkfilechooserembed.h"
 #include "gtkfilechooserentry.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooser.h"
@@ -70,6 +71,8 @@ typedef struct _GtkFileChooserDefaultClass GtkFileChooserDefaultClass;
 #define GTK_FILE_CHOOSER_DEFAULT_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FILE_CHOOSER_DEFAULT, GtkFileChooserDefaultClass))
 #define GTK_IS_FILE_CHOOSER_DEFAULT_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FILE_CHOOSER_DEFAULT))
 #define GTK_FILE_CHOOSER_DEFAULT_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FILE_CHOOSER_DEFAULT, GtkFileChooserDefaultClass))
+
+#define PREVIEW_HBOX_SPACING 12
 
 struct _GtkFileChooserDefaultClass
 {
@@ -204,9 +207,10 @@ typedef enum {
 /* FIXME: maybe this should correspond to the font size in the tree views... */
 #define ICON_SIZE 20
 
-static void gtk_file_chooser_default_class_init   (GtkFileChooserDefaultClass *class);
-static void gtk_file_chooser_default_iface_init   (GtkFileChooserIface        *iface);
-static void gtk_file_chooser_default_init         (GtkFileChooserDefault      *impl);
+static void gtk_file_chooser_default_class_init       (GtkFileChooserDefaultClass *class);
+static void gtk_file_chooser_default_iface_init       (GtkFileChooserIface        *iface);
+static void gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface   *iface);
+static void gtk_file_chooser_default_init             (GtkFileChooserDefault      *impl);
 
 static GObject* gtk_file_chooser_default_constructor  (GType                  type,
 						       guint                  n_construct_properties,
@@ -221,7 +225,11 @@ static void     gtk_file_chooser_default_get_property (GObject               *ob
 						       GValue                *value,
 						       GParamSpec            *pspec);
 static void     gtk_file_chooser_default_dispose      (GObject               *object);
-static void     gtk_file_chooser_default_show_all     (GtkWidget             *widget);
+static void     gtk_file_chooser_default_show_all       (GtkWidget             *widget);
+static void     gtk_file_chooser_default_style_set      (GtkWidget             *widget,
+							 GtkStyle              *previous_style);
+static void     gtk_file_chooser_default_screen_changed (GtkWidget             *widget,
+							 GdkScreen             *previous_screen);
 
 static void           gtk_file_chooser_default_set_current_folder 	   (GtkFileChooser    *chooser,
 									    const GtkFilePath *path);
@@ -249,6 +257,12 @@ static gboolean       gtk_file_chooser_default_remove_shortcut_folder (GtkFileCh
 								       const GtkFilePath *path,
 								       GError           **error);
 static GSList *       gtk_file_chooser_default_list_shortcut_folders  (GtkFileChooser    *chooser);
+static void           gtk_file_chooser_default_get_default_size       (GtkFileChooserEmbed *chooser_embed,
+								       gint                *default_width,
+								       gint                *default_height);
+static void           gtk_file_chooser_default_get_resizable_hints    (GtkFileChooserEmbed *chooser_embed,
+								       gboolean            *resize_horizontally,
+								       gboolean            *resize_vertically);
 
 static void location_popup_handler (GtkFileChooserDefault *impl);
 static void up_folder_handler      (GtkFileChooserDefault *impl);
@@ -347,11 +361,22 @@ _gtk_file_chooser_default_get_type (void)
 	NULL			                                       /* interface_data */
       };
 
+      static const GInterfaceInfo file_chooser_embed_info =
+      {
+	(GInterfaceInitFunc) gtk_file_chooser_embed_default_iface_init, /* interface_init */
+	NULL,			                                       /* interface_finalize */
+	NULL			                                       /* interface_data */
+      };
+
       file_chooser_default_type = g_type_register_static (GTK_TYPE_VBOX, "GtkFileChooserDefault",
 							 &file_chooser_default_info, 0);
+
       g_type_add_interface_static (file_chooser_default_type,
 				   GTK_TYPE_FILE_CHOOSER,
 				   &file_chooser_info);
+      g_type_add_interface_static (file_chooser_default_type,
+				   GTK_TYPE_FILE_CHOOSER_EMBED,
+				   &file_chooser_embed_info);
     }
 
   return file_chooser_default_type;
@@ -373,6 +398,8 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   gobject_class->dispose = gtk_file_chooser_default_dispose;
 
   widget_class->show_all = gtk_file_chooser_default_show_all;
+  widget_class->style_set = gtk_file_chooser_default_style_set;
+  widget_class->screen_changed = gtk_file_chooser_default_screen_changed;
 
   signals[LOCATION_POPUP] =
     _gtk_binding_signal_new ("location-popup",
@@ -448,6 +475,12 @@ gtk_file_chooser_default_iface_init (GtkFileChooserIface *iface)
   iface->list_shortcut_folders = gtk_file_chooser_default_list_shortcut_folders;
 }
 
+static void
+gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface *iface)
+{
+  iface->get_default_size = gtk_file_chooser_default_get_default_size;
+  iface->get_resizable_hints = gtk_file_chooser_default_get_resizable_hints;
+}
 static void
 gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
 {
@@ -593,6 +626,8 @@ update_preview_widget_visibility (GtkFileChooserDefault *impl)
     gtk_widget_show (impl->preview_frame);
   else
     gtk_widget_hide (impl->preview_frame);
+
+  g_signal_emit_by_name (impl, "default-size-changed");
 }
 
 static void
@@ -1751,7 +1786,7 @@ file_pane_create (GtkFileChooserDefault *impl,
 
   /* Box for lists and preview */
 
-  hbox = gtk_hbox_new (FALSE, 12);
+  hbox = gtk_hbox_new (FALSE, PREVIEW_HBOX_SPACING);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
   gtk_widget_show (hbox);
 
@@ -2129,6 +2164,7 @@ update_appearance (GtkFileChooserDefault *impl)
       gtk_widget_hide (impl->save_extra_align);
       gtk_widget_hide (impl->browse_extra_align);
     }
+  g_signal_emit_by_name (impl, "default-size-changed");
 }
 
 static void
@@ -2271,6 +2307,26 @@ static void
 gtk_file_chooser_default_show_all (GtkWidget *widget)
 {
   gtk_widget_show (widget);
+}
+
+static void
+gtk_file_chooser_default_style_set      (GtkWidget *widget,
+					 GtkStyle  *previous_style)
+{
+    if (GTK_WIDGET_CLASS (parent_class)->style_set)
+    GTK_WIDGET_CLASS (parent_class)->style_set (widget, previous_style);
+
+  g_signal_emit_by_name (widget, "default-size-changed");
+}
+
+static void
+gtk_file_chooser_default_screen_changed (GtkWidget *widget,
+					 GdkScreen *previous_screen)
+{
+  if (GTK_WIDGET_CLASS (parent_class)->screen_changed)
+    GTK_WIDGET_CLASS (parent_class)->screen_changed (widget, previous_screen);
+
+  g_signal_emit_by_name (widget, "default-size-changed");
 }
 
 static void
@@ -3007,6 +3063,85 @@ gtk_file_chooser_default_list_shortcut_folders (GtkFileChooser *chooser)
     }
 
   return g_slist_reverse (list);
+}
+
+#define NUM_LINES 40
+#define NUM_CHARS 50
+
+/* Guesses a size based upon font sizes */
+static void
+find_good_size_from_style (GtkWidget *widget,
+			   gint      *width,
+			   gint      *height)
+{
+  GtkFileChooserDefault *impl;
+  gint default_width, default_height;
+  int font_size;
+  GtkRequisition req;
+  GtkRequisition preview_req;
+
+  g_assert (widget->style != NULL);
+  impl = GTK_FILE_CHOOSER_DEFAULT (widget);
+
+  font_size = pango_font_description_get_size (widget->style->font_desc);
+  font_size = PANGO_PIXELS (font_size);
+
+  default_width = font_size * NUM_CHARS;
+  default_height = font_size * NUM_LINES;
+
+  /* Use at least the requisition size not including the preview widget */
+  gtk_widget_size_request (widget, &req);
+
+  if (impl->preview_widget_active && impl->preview_widget)
+    gtk_widget_size_request (impl->preview_frame, &preview_req);
+  else
+    preview_req.width = 0;
+
+  default_width = MAX (default_width, (req.width - (preview_req.width + PREVIEW_HBOX_SPACING)));
+  default_height = MAX (default_height, req.height);
+
+  *width = default_width;
+  *height = default_height;
+}
+
+static void
+gtk_file_chooser_default_get_default_size (GtkFileChooserEmbed *chooser_embed,
+					   gint                *default_width,
+					   gint                *default_height)
+{
+  GtkFileChooserDefault *impl;
+
+  impl = GTK_FILE_CHOOSER_DEFAULT (chooser_embed);
+
+  find_good_size_from_style (GTK_WIDGET (chooser_embed), default_width, default_height);
+
+  if (impl->preview_widget_active && impl->preview_widget)
+    *default_width += impl->preview_widget->requisition.width + PREVIEW_HBOX_SPACING;
+}
+
+static void
+gtk_file_chooser_default_get_resizable_hints (GtkFileChooserEmbed *chooser_embed,
+					      gboolean            *resize_horizontally,
+					      gboolean            *resize_vertically)
+{
+  GtkFileChooserDefault *impl;
+
+  impl = GTK_FILE_CHOOSER_DEFAULT (chooser_embed);
+
+  if (*resize_horizontally)
+    *resize_horizontally = TRUE;
+
+  if (resize_vertically)
+    {
+      *resize_vertically = TRUE;
+
+      if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
+	  impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+	{
+	  if (! gtk_expander_get_expanded (GTK_EXPANDER (impl->save_expander)))
+	    *resize_vertically = FALSE;
+	}
+    }
 }
 
 static void

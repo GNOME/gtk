@@ -275,6 +275,7 @@ gtk_private_h_sources =         \
 	gtkcellview.h		\
 	gtkcellviewmenuitem.h	\
 	gtkentryprivate.h	\
+	gtkfilechooserembed.h	\
 	gtkfilechooserentry.h	\
 	gtkfilechooserdefault.h	\
 	gtkfilechooserprivate.h	\
@@ -348,6 +349,7 @@ gtk_c_sources =                 \
 	gtkexpander.c		\
 	gtkfilechooser.c	\
 	gtkfilechooserdialog.c	\
+	gtkfilechooserembed.c	\
 	gtkfilechooserentry.c	\
 	gtkfilechooserdefault.c	\
 	gtkfilechooserutils.c	\
