@@ -1,3 +1,16 @@
+Wed Nov 19 22:15:01 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkentry.c (gtk_entry_completion_timeout): always resize
+	the popup when it is visible, popdown when there are less chars
+	than the minimum key length in the entry,
+	(gtk_entry_completion_changed): popdown when the entry is empty.
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_init): set the
+	size request of the vscrollbar to (-1, 0), to get a nicely sized
+	completion treeview (Fixes #126573, reported by Piers Cornwell),
+	(_gtk_entry_completion_resize_popup): show/hide the action_view
+	based on items.
+
 2003-11-19  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdialog.c (gtk_file_chooser_dialog_init): Turn

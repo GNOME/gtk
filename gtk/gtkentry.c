@@ -4514,14 +4514,14 @@ gtk_entry_completion_timeout (gpointer data)
 
       actions = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->actions), NULL);
 
-      if (matches > 0 || actions > 0)
-        {
-          if (! GTK_WIDGET_MAPPED (completion->priv->popup_window))
-            _gtk_entry_completion_popup (completion);
-          else
-            _gtk_entry_completion_resize_popup (completion);
-        }
+      if ((matches > 0 || actions > 0)
+          && ! GTK_WIDGET_VISIBLE (completion->priv->popup_window))
+        _gtk_entry_completion_popup (completion);
+      else if (GTK_WIDGET_VISIBLE (completion->priv->popup_window))
+        _gtk_entry_completion_resize_popup (completion);
     }
+  else if (GTK_WIDGET_VISIBLE (completion->priv->popup_window))
+    _gtk_entry_completion_popdown (completion);
 
   GDK_THREADS_LEAVE ();
 
@@ -4682,7 +4682,11 @@ gtk_entry_completion_changed (GtkWidget *entry,
 
   /* no need to normalize for this test */
   if (! strcmp ("", gtk_entry_get_text (GTK_ENTRY (entry))))
-    return;
+    {
+      if (GTK_WIDGET_VISIBLE (completion->priv->popup_window))
+        _gtk_entry_completion_popdown (completion);
+      return;
+    }
 
   completion->priv->completion_timeout =
     g_timeout_add (COMPLETION_TIMEOUT,

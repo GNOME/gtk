@@ -258,6 +258,8 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (priv->scrolled_window),
                                        GTK_SHADOW_ETCHED_IN);
 
+  /* a nasty hack to get the completions treeview to size nicely */
+  gtk_widget_set_size_request (GTK_SCROLLED_WINDOW (priv->scrolled_window)->vscrollbar, -1, 0);
 
   /* actions */
   priv->actions = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_BOOLEAN);
@@ -1061,6 +1063,8 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 
   if (items)
     {
+      gtk_widget_show (completion->priv->action_view);
+
       gtk_tree_view_column_cell_get_size (gtk_tree_view_get_column (GTK_TREE_VIEW (completion->priv->action_view), 0),
                                           NULL, NULL, NULL, NULL,
                                           &height);
@@ -1069,6 +1073,8 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
                                    completion->priv->entry->allocation.width - 2 * x_border,
                                    items * height);
     }
+  else
+    gtk_widget_hide (completion->priv->action_view);
 
   return height;
 }
