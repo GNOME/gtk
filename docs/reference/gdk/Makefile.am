@@ -10,7 +10,7 @@ DOC_MAIN_SGML_FILE=gdk-docs.sgml
 DOC_SOURCE_DIR=$(top_srcdir)/gdk
 
 # Extra options to supply to gtkdoc-scan
-SCAN_OPTIONS=
+SCAN_OPTIONS=--deprecated-guards="GDK_ENABLE_BROKEN|GDK_DISABLE_DEPRECATED"
 
 # Extra options to supply to gtkdoc-mkdb
 MKDB_OPTIONS=

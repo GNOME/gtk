@@ -1,3 +1,11 @@
+2001-02-19  Havoc Pennington  <hp@pobox.com>
+
+	* gdk/Makefile.am (SCAN_OPTIONS): add --deprecated-guards
+
+	* gdk/gdk-sections.txt: update
+
+	* gdk/gdk-docs.sgml: update
+
 2001-02-18  Havoc Pennington  <hp@pobox.com>
 
 	* gdk-pixbuf/Makefile.am (IGNORE_HFILES): add gdk-pixbuf-marshal.h

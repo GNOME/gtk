@@ -27,6 +27,14 @@
 #include "gdkcursor.h"
 #include "gdkinternals.h"
 
+/**
+ * gdk_cursor_ref:
+ * @cursor: a #GdkCursor
+ * 
+ * Adds a reference to @cursor.
+ * 
+ * Return value: Same @cursor that was passed in
+ **/
 GdkCursor*
 gdk_cursor_ref (GdkCursor *cursor)
 {
@@ -38,6 +46,14 @@ gdk_cursor_ref (GdkCursor *cursor)
   return cursor;
 }
 
+/**
+ * gdk_cursor_unref:
+ * @cursor: a #GdkCursor
+ *
+ * Removes a reference from @cursor, deallocating the cursor
+ * if no references remain.
+ * 
+ **/
 void
 gdk_cursor_unref (GdkCursor *cursor)
 {

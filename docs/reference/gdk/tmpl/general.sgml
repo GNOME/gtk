@@ -53,20 +53,6 @@ by GTK+ applications.
 @Returns: TRUE if initialization succeeded.
 
 
-<!-- ##### FUNCTION gdk_exit ##### -->
-<para>
-Exits the application using the exit() system call.
-</para>
-<para>
-This routine is provided mainly for backwards compatability, since it used to
-perform tasks necessary to exit the application cleanly. Those tasks are now
-performed in a function which is automatically called on exit (via the use
-of g_atexit()).
-</para>
-
-@error_code: the error code to pass to the exit() call.
-
-
 <!-- ##### FUNCTION gdk_set_locale ##### -->
 <para>
 Initializes the support for internationalization by calling the setlocale()
@@ -111,6 +97,20 @@ part of the X Windows distribution.)
 
 @sm_client_id: the client id assigned by the session manager when the
 connection was opened, or NULL to remove the property.
+
+
+<!-- ##### FUNCTION gdk_exit ##### -->
+<para>
+Exits the application using the exit() system call.
+</para>
+<para>
+This routine is provided mainly for backwards compatability, since it used to
+perform tasks necessary to exit the application cleanly. Those tasks are now
+performed in a function which is automatically called on exit (via the use
+of g_atexit()).
+</para>
+
+@error_code: the error code to pass to the exit() call.
 
 
 <!-- ##### FUNCTION gdk_get_display ##### -->
@@ -272,22 +272,6 @@ Ungrabs the keyboard, if it is grabbed by this application.
 
 @time: a timestamp from a #GdkEvent, or #GDK_CURRENT_TIME if no timestamp is
 available.
-
-
-<!-- ##### FUNCTION gdk_key_repeat_disable ##### -->
-<para>
-Disables the keyboard auto-repeat mode.
-This should be used with care as it may affect other applications.
-</para>
-
-
-
-<!-- ##### FUNCTION gdk_key_repeat_restore ##### -->
-<para>
-Restores the keyboard auto-repeat mode to its state when the application was
-started.
-</para>
-
 
 
 <!-- ##### FUNCTION gdk_beep ##### -->

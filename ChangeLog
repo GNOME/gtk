@@ -1,3 +1,17 @@
+2001-02-19  Havoc Pennington  <hp@pobox.com>
+
+	* gdk/gdkwindow.c: docs
+
+	* gdk/gdkrgb.c: docs
+
+	* gdk/gdkregion-generic.c: docs
+
+	* gdk/gdkgc.c (gdk_gc_set_values): docs
+
+	* gdk/gdkdraw.c: docs
+
+	* gdk/gdkdrawable.h: deprecate drawable get/set data
+
 Mon Feb 19 20:37:35 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* demos/gtk-demo/dialog.c: Add simple new demo.

@@ -31,3 +31,63 @@ Pango Interaction
 @colormap: 
 
 
+<!-- ##### STRUCT GdkPangoAttrEmbossed ##### -->
+<para>
+
+</para>
+
+@attr: 
+@embossed: 
+
+<!-- ##### STRUCT GdkPangoAttrStipple ##### -->
+<para>
+
+</para>
+
+@attr: 
+@stipple: 
+
+<!-- ##### FUNCTION gdk_pango_attr_embossed_new ##### -->
+<para>
+
+</para>
+
+@embossed: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pango_attr_stipple_new ##### -->
+<para>
+
+</para>
+
+@bitmap: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pango_layout_get_clip_region ##### -->
+<para>
+
+</para>
+
+@layout: 
+@x_origin: 
+@y_origin: 
+@index_ranges: 
+@n_ranges: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pango_layout_line_get_clip_region ##### -->
+<para>
+
+</para>
+
+@line: 
+@x_origin: 
+@y_origin: 
+@index_ranges: 
+@n_ranges: 
+@Returns: 
+
+

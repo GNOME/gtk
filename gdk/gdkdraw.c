@@ -79,6 +79,17 @@ gdk_drawable_class_init (GdkDrawableClass *klass)
 /* Manipulation of drawables
  */
 
+/**
+ * gdk_drawable_set_data:
+ * @drawable: a #GdkDrawable
+ * @key: name to store the data under
+ * @data: arbitrary data
+ * @destroy_func: function to free @data, or %NULL
+ *
+ * This function is equivalent to g_object_set_data(),
+ * the #GObject variant should be used instead.
+ * 
+ **/
 void          
 gdk_drawable_set_data (GdkDrawable   *drawable,
 		       const gchar   *key,
@@ -93,6 +104,16 @@ gdk_drawable_set_data (GdkDrawable   *drawable,
                            destroy_func);
 }
 
+/**
+ * gdk_drawable_get_data:
+ * @drawable: a #GdkDrawable
+ * @key: name the data was stored under
+ * 
+ * Equivalent to g_object_get_data(); the #GObject variant should be
+ * used instead.
+ * 
+ * Return value: the data stored at @key
+ **/
 gpointer
 gdk_drawable_get_data (GdkDrawable   *drawable,
 		       const gchar   *key)
@@ -103,6 +124,16 @@ gdk_drawable_get_data (GdkDrawable   *drawable,
                              g_quark_try_string (key));
 }
 
+/**
+ * gdk_drawable_get_size:
+ * @drawable: a #GdkDrawable
+ * @width: location to store drawable's width, or %NULL
+ * @height: location to store drawable's height, or %NULL
+ *
+ * Fills *@width and *@height with the size of @drawable.
+ * @width or @height can be %NULL if you only want the other one.
+ * 
+ **/
 void
 gdk_drawable_get_size (GdkDrawable *drawable,
 		       gint        *width,
@@ -113,6 +144,14 @@ gdk_drawable_get_size (GdkDrawable *drawable,
   GDK_DRAWABLE_GET_CLASS (drawable)->get_size (drawable, width, height);  
 }
 
+/**
+ * gdk_drawable_get_visual:
+ * @drawable: a #GdkDrawable
+ * 
+ * Gets the #GdkVisual describing the pixel format of @drawable.
+ * 
+ * Return value: a #GdkVisual
+ **/
 GdkVisual*
 gdk_drawable_get_visual (GdkDrawable *drawable)
 {
@@ -121,6 +160,16 @@ gdk_drawable_get_visual (GdkDrawable *drawable)
   return GDK_DRAWABLE_GET_CLASS (drawable)->get_visual (drawable);
 }
 
+/**
+ * gdk_drawable_get_depth:
+ * @drawable: a #GdkDrawable
+ * 
+ * Obtains the bit depth of the drawable, that is, the number of bits
+ * that make up a pixel in the drawable's visual. Examples are 8 bits
+ * per pixel, 24 bits per pixel, etc.
+ * 
+ * Return value: number of bits per pixel
+ **/
 gint
 gdk_drawable_get_depth (GdkDrawable *drawable)
 {
@@ -129,6 +178,21 @@ gdk_drawable_get_depth (GdkDrawable *drawable)
   return GDK_DRAWABLE_GET_CLASS (drawable)->get_depth (drawable);
 }
 
+/**
+ * gdk_drawable_set_colormap:
+ * @drawable: a #GdkDrawable
+ * @colormap: a #GdkColormap
+ *
+ * Sets the colormap associated with @drawable. Normally this will
+ * happen automatically when the drawable is created; you only need to
+ * use this function if the drawable-creating function did not have a
+ * way to determine the colormap, and you then use drawable operations
+ * that require a colormap. The colormap for all drawables and
+ * graphics contexts you intend to use together should match. i.e.
+ * when using a #GdkGC to draw to a drawable, or copying one drawable
+ * to another, the colormaps should match.
+ * 
+ **/
 void
 gdk_drawable_set_colormap (GdkDrawable *drawable,
                            GdkColormap *cmap)
@@ -138,6 +202,15 @@ gdk_drawable_set_colormap (GdkDrawable *drawable,
   GDK_DRAWABLE_GET_CLASS (drawable)->set_colormap (drawable, cmap);
 }
 
+/**
+ * gdk_drawable_get_colormap:
+ * @drawable: a #GdkDrawable
+ * 
+ * Gets the colormap for @drawable, if one is set; returns
+ * %NULL otherwise.
+ * 
+ * Return value: the colormap, or %NULL
+ **/
 GdkColormap*
 gdk_drawable_get_colormap (GdkDrawable *drawable)
 {
@@ -146,12 +219,28 @@ gdk_drawable_get_colormap (GdkDrawable *drawable)
   return GDK_DRAWABLE_GET_CLASS (drawable)->get_colormap (drawable);
 }
 
+/**
+ * gdk_drawable_ref:
+ * @drawable: a #GdkDrawable
+ * 
+ * Deprecated equivalent of calling g_object_ref() on @drawable.
+ * (Drawables were not objects in previous versions of GDK.)
+ * 
+ * Return value: the same @drawable passed in
+ **/
 GdkDrawable*
 gdk_drawable_ref (GdkDrawable *drawable)
 {
   return (GdkDrawable *) g_object_ref (G_OBJECT (drawable));
 }
 
+/**
+ * gdk_drawable_unref:
+ * @drawable: a #GdkDrawable
+ * 
+ * Deprecated equivalent of calling g_object_unref() on @drawable.
+ * 
+ **/
 void
 gdk_drawable_unref (GdkDrawable *drawable)
 {
@@ -475,6 +564,42 @@ gdk_draw_glyphs (GdkDrawable      *drawable,
 }
 
 
+/**
+ * gdk_drawable_get_image:
+ * @drawable: a #GdkDrawable
+ * @x: x coordinate on @drawable
+ * @y: y coordinate on @drawable
+ * @width: width of region to get
+ * @height: height or region to get
+ * 
+ * A #GdkImage stores client-side image data (pixels). In contrast,
+ * #GdkPixmap and #GdkWindow are server-side
+ * objects. gdk_drawable_get_image() obtains the pixels from a
+ * server-side drawable as a client-side #GdkImage.  The format of a
+ * #GdkImage depends on the #GdkVisual of the current display, which
+ * makes manipulating #GdkImage extremely difficult; therefore, in
+ * most cases you should use gdk_pixbuf_get_from_drawable() instead of
+ * this lower-level function. A #GdkPixbuf contains image data in a
+ * canonicalized RGB format, rather than a display-dependent format.
+ * Of course, there's a convenience vs. speed tradeoff here, so you'll
+ * want to think about what makes sense for your application.
+ *
+ * @x, @y, @width, and @height define the region of @drawable to
+ * obtain as an image.
+ *
+ * You would usually copy image data to the client side if you intend
+ * to examine the values of individual pixels, for example to darken
+ * an image or add a red tint. It would be prohibitively slow to
+ * make a round-trip request to the windowing system for each pixel,
+ * so instead you get all of them at once, modify them, then copy
+ * them all back at once.
+ *
+ * If the X server or other windowing system backend is on the local
+ * machine, this function may use shared memory to avoid copying
+ * the image data.
+ * 
+ * Return value: a #GdkImage containing the contents of @drawable
+ **/
 GdkImage*
 gdk_drawable_get_image (GdkDrawable *drawable,
                         gint         x,

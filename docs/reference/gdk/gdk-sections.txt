@@ -6,9 +6,9 @@
 <FILE>general</FILE>
 gdk_init
 gdk_init_check
-gdk_exit
 gdk_set_locale
 gdk_set_sm_client_id
+gdk_exit
 
 <SUBSECTION>
 gdk_get_display
@@ -31,10 +31,6 @@ gdk_pointer_is_grabbed
 <SUBSECTION>
 gdk_keyboard_grab
 gdk_keyboard_ungrab
-
-<SUBSECTION>
-gdk_key_repeat_disable
-gdk_key_repeat_restore
 
 <SUBSECTION>
 gdk_beep
@@ -273,8 +269,9 @@ gdk_draw_arc
 gdk_draw_polygon
 gdk_draw_glyphs
 gdk_draw_layout_line
+gdk_draw_layout_line_with_colors
 gdk_draw_layout
-
+gdk_draw_layout_with_colors
 <SUBSECTION>
 gdk_draw_string
 gdk_draw_text
@@ -423,6 +420,7 @@ gdk_window_freeze_updates
 gdk_window_thaw_updates
 gdk_window_process_all_updates
 gdk_window_process_updates
+gdk_window_set_debug_updates
 
 <SUBSECTION>
 gdk_window_set_user_data
@@ -547,6 +545,12 @@ GDK_HAVE_WCTYPE_H
 <FILE>pango_interaction</FILE>
 gdk_pango_context_get
 gdk_pango_context_set_colormap
+GdkPangoAttrEmbossed
+GdkPangoAttrStipple
+gdk_pango_attr_embossed_new
+gdk_pango_attr_stipple_new
+gdk_pango_layout_get_clip_region
+gdk_pango_layout_line_get_clip_region
 </SECTION>
 
 <SECTION>
@@ -565,28 +569,6 @@ GdkICAttr
 GdkICAttributesType
 gdk_ic_attr_new
 gdk_ic_attr_destroy
-</SECTION>
-
-<SECTION>
-<TITLE>Color Contexts</TITLE>
-<FILE>color_contexts</FILE>
-GdkColorContext
-GdkColorContextDither
-GdkColorContextMode
-
-gdk_color_context_new
-gdk_color_context_new_mono
-gdk_color_context_free
-gdk_color_context_get_pixel
-gdk_color_context_get_pixels
-gdk_color_context_get_pixels_incremental
-gdk_color_context_query_color
-gdk_color_context_query_colors
-gdk_color_context_add_palette
-gdk_color_context_init_dither
-gdk_color_context_free_dither
-gdk_color_context_get_pixel_from_palette
-gdk_color_context_get_index_from_palette
 </SECTION>
 
 <SECTION>

@@ -122,6 +122,24 @@ more information.
 @height: 
 
 
+<!-- ##### FUNCTION gdk_drawable_get_clip_region ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drawable_get_visible_region ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_draw_point ##### -->
 <para>
 Draws a point, using the foreground color and other attributes of the #GdkGC.
@@ -279,6 +297,20 @@ polygon.
 @line: 
 
 
+<!-- ##### FUNCTION gdk_draw_layout_line_with_colors ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+@line: 
+@foreground: 
+@background: 
+
+
 <!-- ##### FUNCTION gdk_draw_layout ##### -->
 <para>
 
@@ -289,6 +321,20 @@ polygon.
 @x: 
 @y: 
 @layout: 
+
+
+<!-- ##### FUNCTION gdk_draw_layout_with_colors ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+@layout: 
+@foreground: 
+@background: 
 
 
 <!-- ##### FUNCTION gdk_draw_string ##### -->

@@ -917,6 +917,27 @@ gdk_rgb_gc_set_background (GdkGC *gc, guint32 rgb)
   gdk_gc_set_background (gc, &color);
 }
 
+/**
+ * gdk_rgb_find_color:
+ * @colormap: a #GdkColormap
+ * @color: a #GdkColor
+ *
+ * @colormap should be the colormap for the graphics context and
+ * drawable you're using to draw. If you're drawing to a #GtkWidget,
+ * call gtk_widget_get_colormap().
+ *
+ * @color should have its %red, %green, and %blue fields initialized;
+ * gdk_rgb_find_color() will fill in the %pixel field with the best
+ * matching pixel from a color cube. The color is then ready to be
+ * used for drawing, e.g. you can call gdk_gc_set_foreground() which
+ * expects %pixel to be initialized.
+ *
+ * In many cases, you can avoid this whole issue by calling
+ * gdk_gc_set_rgb_fg_color() or gdk_gc_set_rgb_bg_color(), which
+ * do not expect %pixel to be initialized in advance. If you use those
+ * functions, there's no need for gdk_rgb_find_color().
+ * 
+ **/
 void
 gdk_rgb_find_color (GdkColormap *colormap, GdkColor *color)
 {
@@ -3522,6 +3543,17 @@ gdk_rgb_ditherable (void)
   return gdk_rgb_colormap_ditherable (gdk_rgb_get_colormap ());
 }
 
+/**
+ * gdk_rgb_get_colormap:
+ * 
+ * Returns the preferred colormap for rendering image data.  Not a
+ * very useful function; historically, GDK could only render RGB image
+ * data to one colormap and visual, but in the current version it can
+ * render to any colormap and visual. So there's no need to call this
+ * function.
+ * 
+ * Return value: the preferred colormap
+ **/
 GdkColormap *
 gdk_rgb_get_colormap (void)
 {

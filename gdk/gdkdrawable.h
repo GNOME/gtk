@@ -138,12 +138,14 @@ GType           gdk_drawable_get_type     (void);
 /* Manipulation of drawables
  */
 
+#ifndef GDK_DISABLE_DEPRECATED
 void            gdk_drawable_set_data     (GdkDrawable    *drawable,
 					   const gchar    *key,
 					   gpointer	  data,
 					   GDestroyNotify  destroy_func);
 gpointer        gdk_drawable_get_data     (GdkDrawable    *drawable,
 					   const gchar    *key);
+#endif /* GDK_DISABLE_DEPRECATED */
 
 void            gdk_drawable_get_size     (GdkDrawable	  *drawable,
 					   gint	          *width,

@@ -123,6 +123,14 @@ gdk_region_new ()
   return temp;
 }
 
+/**
+ * gdk_region_rectangle:
+ * @rectangle: a #GdkRectangle
+ * 
+ * Creates a new region containing the area @rectangle.
+ * 
+ * Return value: a new region
+ **/
 GdkRegion *
 gdk_region_rectangle (GdkRectangle *rectangle)
 {
@@ -144,6 +152,14 @@ gdk_region_rectangle (GdkRectangle *rectangle)
   return temp;
 }
 
+/**
+ * gdk_region_copy:
+ * @region: a #GdkRegion
+ * 
+ * Copies @region, creating an identical new region.
+ * 
+ * Return value: a new region identical to @region
+ **/
 GdkRegion *
 gdk_region_copy (GdkRegion *region)
 {
@@ -456,6 +472,16 @@ miIntersectO (GdkRegion    *pReg,
     }
 }
 
+/**
+ * gdk_region_intersect:
+ * @source1: a #GdkRegion
+ * @source2: another #GdkRegion
+ *
+ * Converts @source1 into the intersection between @source1 and @source2.
+ * That is, after calling this function @source2 will be unchanged and
+ * @source1 will be the areas the two regions have in common.
+ * 
+ **/
 void
 gdk_region_intersect (GdkRegion *region,
 		      GdkRegion *other)
@@ -1310,21 +1336,15 @@ miSubtractO (GdkRegion    *pReg,
 	}
     }
 }
-	
-/*-
- *-----------------------------------------------------------------------
- * gdk_region_subtract --
- *	Subtract other from region and leave the result in region.
- *
- * Results:
- *	TRUE.
- *
- * Side Effects:
- *	region is overwritten.
- *
- *-----------------------------------------------------------------------
- */
 
+/**
+ * gdk_region_subtract:
+ * @source1: a #GdkRegion
+ * @source2: another #GdkRegion
+ *
+ * Subtracts any area in @source2 from the area in @source1.
+ * 
+ **/
 void
 gdk_region_subtract (GdkRegion *region,
 		     GdkRegion *other)
@@ -1346,6 +1366,17 @@ gdk_region_subtract (GdkRegion *region,
   miSetExtents (region);
 }
 
+/**
+ * gdk_region_xor:
+ * @source1: a #GdkRegion
+ * @source2: another #GdkRegion
+ *
+ * XORs the two regions, placing the result in @source1.  The XOR of two
+ * regions contains all areas which were not overlapping.  That is,
+ * it's the union of the regions minus the intersection of the
+ * regions.
+ * 
+ **/
 void
 gdk_region_xor (GdkRegion *sra,
 		GdkRegion *srb)

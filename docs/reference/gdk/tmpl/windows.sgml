@@ -443,6 +443,14 @@ Windows
 @update_children: 
 
 
+<!-- ##### FUNCTION gdk_window_set_debug_updates ##### -->
+<para>
+
+</para>
+
+@setting: 
+
+
 <!-- ##### FUNCTION gdk_window_set_user_data ##### -->
 <para>
 

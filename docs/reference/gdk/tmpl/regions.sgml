@@ -270,3 +270,34 @@ Returns the union of a region and a rectangle.
 @source2: 
 
 
+<!-- ##### STRUCT GdkSpan ##### -->
+<para>
+
+</para>
+
+@x: 
+@y: 
+@width: 
+
+<!-- ##### USER_FUNCTION GdkSpanFunc ##### -->
+<para>
+
+</para>
+
+@span: 
+@data: 
+
+
+<!-- ##### FUNCTION gdk_region_spans_intersect_foreach ##### -->
+<para>
+
+</para>
+
+@region: 
+@spans: 
+@n_spans: 
+@sorted: 
+@function: 
+@data: 
+
+

@@ -144,6 +144,19 @@ gdk_gc_get_values (GdkGC       *gc,
   GDK_GC_GET_CLASS (gc)->get_values (gc, values);
 }
 
+/**
+ * gdk_gc_set_values:
+ * @gc: a #GdkGC
+ * @values: struct containing the new values
+ * @values_mask: mask indicating which struct fields are to be used
+ *
+ * Sets attributes of a graphics context in bulk. For each flag set in
+ * @values_mask, the corresponding field will be read from @values and
+ * set as the new value for @gc. If you're only setting a few values
+ * on @gc, calling individual "setter" functions is likely more
+ * convenient.
+ * 
+ **/
 void
 gdk_gc_set_values (GdkGC           *gc,
 		   GdkGCValues	   *values,

@@ -614,6 +614,16 @@ gdk_window_is_viewable (GdkWindow *window)
   return TRUE;
 }
 
+/**
+ * gdk_window_begin_paint_rect:
+ * @window: a #GdkWindow
+ * @rectangle: rectangle you intend to draw to
+ *
+ * A convenience wrapper around gdk_window_begin_paint_region() which
+ * creates a rectangular region for you. See
+ * gdk_window_begin_paint_region() for details.
+ * 
+ **/
 void
 gdk_window_begin_paint_rect (GdkWindow    *window,
 			     GdkRectangle *rectangle)
@@ -684,6 +694,51 @@ gdk_window_paint_init_bg (GdkWindow      *window,
 #include "x11/gdkx.h"
 #endif
 
+/**
+ * gdk_window_begin_paint_region:
+ * @window: a #GdkWindow
+ * @region: region you intend to draw to
+ *
+ * Indicates that you are beginning the process of redrawing @region.
+ * A backing store (offscreen buffer) large enough to contain @region
+ * will be created. The backing store will be initialized with the
+ * background color or background pixmap for @window. Then, all
+ * drawing operations performed on @window will be diverted to the
+ * backing store.  When you call gdk_window_end_paint(), the backing
+ * store will be copied to @window, making it visible onscreen. Only
+ * the part of window contained in @region will be modified; that is,
+ * drawing operations are clipped to @region.
+ *
+ * The net result of all this is to remove flicker, because the user
+ * sees the finished product appear all at once when you call
+ * gdk_window_end_paint(). If you draw to @window directly without
+ * calling gdk_window_begin_paint_region(), the user may see flicker
+ * as individual drawing operations are performed in sequence.  The
+ * clipping and background-initializing features of
+ * gdk_window_begin_paint_region() are conveniences for the
+ * programmer, so you can avoid doing that work yourself.
+ *
+ * When using GTK+, the widget system automatically places calls to
+ * gdk_window_begin_paint_region() and gdk_window_end_paint() around
+ * emissions of the expose_event signal. That is, if you're writing an
+ * expose event handler, you can assume that the exposed area in
+ * #GdkEventExpose has already been cleared to the window background,
+ * is already set as the clip region, and already has a backing store.
+ * Therefore in most cases, application code need not call
+ * gdk_window_begin_paint_region(). (You can disable the automatic
+ * calls around expose events on a widget-by-widget basis by calling
+ * gtk_widget_set_double_buffered().)
+ *
+ * If you call this function multiple times before calling the
+ * matching gdk_window_end_paint(), the backing stores are pushed onto
+ * a stack. gdk_window_end_paint() copies the topmost backing store
+ * onscreen, subtracts the topmost region from all other regions in
+ * the stack, and pops the stack. All drawing operations affect only
+ * the topmost backing store in the stack. One matching call to
+ * gdk_window_end_paint() is required for each call to
+ * gdk_window_begin_paint_region().
+ * 
+ **/
 void	      
 gdk_window_begin_paint_region (GdkWindow *window,
 			       GdkRegion *region)
@@ -783,6 +838,19 @@ gdk_window_begin_paint_region (GdkWindow *window,
 #endif /* USE_BACKING_STORE */
 }
 
+/**
+ * gdk_window_end_paint:
+ * @window: a #GdkWindow
+ *
+ * Indicates that the backing store created by the most recent call to
+ * gdk_window_begin_paint_region() should be copied onscreen and
+ * deleted, leaving the next-most-recent backing store or no backing
+ * store at all as the active paint region. See
+ * gdk_window_begin_paint_region() for full details. It is an error to
+ * call this function without a matching
+ * gdk_window_begin_paint_region() first.
+ * 
+ **/
 void
 gdk_window_end_paint (GdkWindow *window)
 {
@@ -798,8 +866,12 @@ gdk_window_end_paint (GdkWindow *window)
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
-  
-  g_return_if_fail (private->paint_stack != NULL);
+
+  if (private->paint_stack == NULL)
+    {
+      g_warning (G_STRLOC": no preceding call to gdk_window_begin_paint_region(), see documentation");
+      return;
+    }
 
   paint = private->paint_stack->data;
   private->paint_stack = g_slist_delete_link (private->paint_stack, private->paint_stack);
@@ -1694,6 +1766,13 @@ gdk_window_process_updates_internal (GdkWindow *window)
     }
 }
 
+/**
+ * gdk_window_process_all_updates:
+ *
+ * Calls gdk_window_process_updates() for all windows (see #GdkWindow)
+ * in the application.
+ * 
+ **/
 void
 gdk_window_process_all_updates (void)
 {
@@ -1725,6 +1804,21 @@ gdk_window_update_idle (gpointer data)
   return FALSE;
 }
 
+/**
+ * gdk_window_process_updates:
+ * @window: a #GdkWindow
+ * @update_children: whether to also process updates for child windows
+ *
+ * Sends one or more expose events to @window. The areas in each 
+ * expose event will cover the entire update area for the window (see
+ * gdk_window_invalidate_region() for details). Normally GDK calls
+ * gdk_window_process_all_updates() on your behalf, so there's no
+ * need to call this function unless you want to force expose events
+ * to be delivered immediately and synchronously (vs. the usual
+ * case, where GDK delivers them in an idle handler). Occasionally
+ * this is useful to produce nicer scrolling behavior, for example.
+ * 
+ **/
 void
 gdk_window_process_updates (GdkWindow *window,
 			    gboolean   update_children)
@@ -1751,6 +1845,17 @@ gdk_window_process_updates (GdkWindow *window,
     }
 }
 
+/**
+ * gdk_window_invalidate_rect:
+ * @window: a #GdkWindow
+ * @rect: rectangle to invalidate
+ * @invalidate_children: whether to also invalidate child windows
+ *
+ * A convenience wrapper around gdk_window_invalidate_region() which
+ * invalidates a rectangular region. See
+ * gdk_window_invalidate_region() for details.
+ * 
+ **/
 void
 gdk_window_invalidate_rect   (GdkWindow    *window,
 			      GdkRectangle *rect,
@@ -1784,6 +1889,30 @@ gdk_window_invalidate_rect   (GdkWindow    *window,
   gdk_region_destroy (region);
 }
 
+/**
+ * gdk_window_invalidate_region:
+ * @window: a #GdkWindow
+ * @region: a #GdkRegion
+ * @invalidate_children: %TRUE to also invalidate child windows 
+ *
+ * Adds @region to the update area for @window. The update area is the
+ * region that needs to be redrawn, or "dirty region." The call
+ * gdk_window_process_updates() sends one or more expose events to the
+ * window, which together cover the entire update area. An
+ * application would normally redraw the contents of @window in
+ * response to those expose events.
+ *
+ * GDK will call gdk_window_process_all_updates() on your behalf
+ * whenever your program returns to the main loop and becomes idle, so
+ * normally there's no need to do that manually, you just need to
+ * invalidate regions that you know should be redrawn.
+ *
+ * The @invalidate_children parameter controls whether the region of
+ * each child window that intersects @region will also be invalidated.
+ * If %FALSE, then the update area for child windows will remain
+ * unaffected.
+ *
+ **/
 void
 gdk_window_invalidate_region (GdkWindow *window,
 			      GdkRegion *region,
@@ -1874,6 +2003,19 @@ gdk_window_invalidate_region (GdkWindow *window,
   gdk_region_destroy (visible_region);
 }
 
+/**
+ * gdk_window_get_update_area:
+ * @window: a #GdkWindow
+ * 
+ * Transfers ownership of the update area from @window to the caller
+ * of the function. That is, after calling this function, @window will
+ * no longer have an invalid/dirty region; the update area is removed
+ * from @window and handed to you. If a window has no update area,
+ * gdk_window_get_update_area() returns %NULL. You are responsible for
+ * calling gdk_region_destroy() on the returned region if it's non-%NULL.
+ * 
+ * Return value: the update area for @window
+ **/
 GdkRegion *
 gdk_window_get_update_area (GdkWindow *window)
 {
@@ -1946,8 +2088,34 @@ gdk_window_thaw_updates (GdkWindow *window)
 				   gdk_window_update_idle, NULL, NULL);
 }
 
+/**
+ * gdk_window_set_debug_updates:
+ * @setting: %TRUE to turn on update debugging
+ *
+ * With update debugging enabled, calls to
+ * gdk_window_invalidate_region() clear the invalidated region of the
+ * screen to a noticeable color, and GDK pauses for a short time
+ * before sending exposes to windows during
+ * gdk_window_process_updates().  The net effect is that you can see
+ * the invalid region for each window and watch redraws as they
+ * occur. This allows you to diagnose inefficiencies in your application.
+ *
+ * In essence, because the GDK rendering model prevents all flicker,
+ * if you are redrawing the same region 400 times you may never
+ * notice, aside from noticing a speed problem. Enabling update
+ * debugging causes GTK to flicker slowly and noticeably, so you can
+ * see exactly what's being redrawn when, in what order.
+ *
+ * The --gtk-debug=updates command line option passed to GTK+ programs
+ * enables this debug option at application startup time. That's
+ * usually more useful than calling gdk_window_set_debug_updates()
+ * yourself, though you might want to use this function to enable
+ * updates sometime after application startup time.
+ * 
+ **/
 void
 gdk_window_set_debug_updates (gboolean setting)
 {
   debug_updates = setting;
 }
+
