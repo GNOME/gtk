@@ -1307,6 +1307,7 @@ motif_send_enter (GdkDragContext  *context,
     motif_set_targets (context);
 
   MOTIF_XCLIENT_LONG (&xev, 3) = private->motif_selection;
+  MOTIF_XCLIENT_LONG (&xev, 4) = 0;
 
   if (!_gdk_send_xevent (display,
 			 GDK_DRAWABLE_XID (context->dest_window),
@@ -1332,8 +1333,9 @@ motif_send_leave (GdkDragContext  *context,
   MOTIF_XCLIENT_BYTE (&xev, 1) = local_byte_order;
   MOTIF_XCLIENT_SHORT (&xev, 1) = 0;
   MOTIF_XCLIENT_LONG (&xev, 1) = time;
-  MOTIF_XCLIENT_LONG (&xev, 2) = GDK_DRAWABLE_XID (context->source_window);
+  MOTIF_XCLIENT_LONG (&xev, 2) = 0;
   MOTIF_XCLIENT_LONG (&xev, 3) = 0;
+  MOTIF_XCLIENT_LONG (&xev, 4) = 0;
 
   if (!_gdk_send_xevent (display,
 			 GDK_DRAWABLE_XID (context->dest_window),
@@ -1363,6 +1365,8 @@ motif_send_motion (GdkDragContext  *context,
   MOTIF_XCLIENT_BYTE (&xev, 1) = local_byte_order;
   MOTIF_XCLIENT_SHORT (&xev, 1) = motif_dnd_get_flags (context);
   MOTIF_XCLIENT_LONG (&xev, 1) = time;
+  MOTIF_XCLIENT_LONG (&xev, 3) = 0;
+  MOTIF_XCLIENT_LONG (&xev, 4) = 0;
 
   if ((context->suggested_action != private->old_action) ||
       (context->actions != private->old_actions))
@@ -3223,6 +3227,8 @@ gdk_drag_status (GdkDragContext   *context,
 
   if (context->protocol == GDK_DRAG_PROTO_MOTIF)
     {
+      gboolean need_coords = FALSE;
+      
       xev.xclient.type = ClientMessage;
       xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display,
 									"_MOTIF_DRAG_AND_DROP_MESSAGE");
@@ -3238,12 +3244,18 @@ gdk_drag_status (GdkDragContext   *context,
 	  if ((action != 0) != (private->old_action != 0))
 	    {
 	      if (action != 0)
-		MOTIF_XCLIENT_BYTE (&xev, 0) = XmDROP_SITE_ENTER | 0x80;
+		{
+		  MOTIF_XCLIENT_BYTE (&xev, 0) = XmDROP_SITE_ENTER | 0x80;
+		  need_coords = TRUE;
+		}
 	      else
 		MOTIF_XCLIENT_BYTE (&xev, 0) = XmDROP_SITE_LEAVE | 0x80;
 	    }
 	  else
-	    MOTIF_XCLIENT_BYTE (&xev, 0) = XmDRAG_MOTION | 0x80;
+	    {
+	      MOTIF_XCLIENT_BYTE (&xev, 0) = XmDRAG_MOTION | 0x80;
+	      need_coords = TRUE;
+	    }
 	}
 
       MOTIF_XCLIENT_BYTE (&xev, 1) = local_byte_order;
@@ -3270,8 +3282,17 @@ gdk_drag_status (GdkDragContext   *context,
 	MOTIF_XCLIENT_SHORT (&xev, 1) |= (XmNO_DROP_SITE << 4);
 
       MOTIF_XCLIENT_LONG (&xev, 1) = time;
-      MOTIF_XCLIENT_SHORT (&xev, 4) = private->last_x;
-      MOTIF_XCLIENT_SHORT (&xev, 5) = private->last_y;
+      
+      if (need_coords)
+	{
+	  MOTIF_XCLIENT_SHORT (&xev, 4) = private->last_x;
+	  MOTIF_XCLIENT_SHORT (&xev, 5) = private->last_y;
+	}
+      else
+	MOTIF_XCLIENT_LONG (&xev, 2) = 0;
+      
+      MOTIF_XCLIENT_LONG (&xev, 3) = 0;
+      MOTIF_XCLIENT_LONG (&xev, 4) = 0;
 
       if (!_gdk_send_xevent (display,
 			     GDK_DRAWABLE_XID (context->source_window),
@@ -3350,6 +3371,9 @@ gdk_drop_reply (GdkDragContext   *context,
 	                               (XmDROP_CANCEL << 12);
       MOTIF_XCLIENT_SHORT (&xev, 2) = private->last_x;
       MOTIF_XCLIENT_SHORT (&xev, 3) = private->last_y;
+      MOTIF_XCLIENT_LONG (&xev, 2) = 0;
+      MOTIF_XCLIENT_LONG (&xev, 3) = 0;
+      MOTIF_XCLIENT_LONG (&xev, 4) = 0;
       
       _gdk_send_xevent (display,
 			GDK_DRAWABLE_XID (context->source_window),
