@@ -277,11 +277,10 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   
   g_object_class_install_property (object_class,
                                    PROP_WEIGHT,
-                                   g_param_spec_int ("weight",
+                                   g_param_spec_enum ("weight",
                                                      _("Font weight"),
                                                      _("Font weight"),
-                                                     0,
-                                                     G_MAXINT,
+                                                     PANGO_TYPE_WEIGHT,
                                                      PANGO_WEIGHT_NORMAL,
                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
   
