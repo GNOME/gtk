@@ -1099,7 +1099,8 @@ gdk_window_focus (GdkWindow *window,
     }
   else
     {
-      XSetInputFocus (GDK_DISPLAY (),
+      XRaiseWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
+      XSetInputFocus (GDK_WINDOW_XDISPLAY (window),
                       GDK_WINDOW_XWINDOW (window),
                       RevertToNone,
                       timestamp);

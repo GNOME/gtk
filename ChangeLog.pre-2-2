@@ -1,3 +1,10 @@
+Sun Apr  1 23:41:37 2001  Tim Janik  <timj@gtk.org>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_focus): raise window for non
+	_NET window managers.
+
+	* gtk/gtkmenufactory.[hc]: cvs removed those files now.
+
 Sun Apr  1 08:00:13 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.[hc]: got rid of gtk_widget_popup(), a function that
