@@ -527,7 +527,7 @@ gtk_text_set_word_wrap (GtkText *text,
 
   text->word_wrap = (word_wrap != FALSE);
   
-  if (GTK_WIDGET_DRAWABLE (text))
+  if (GTK_WIDGET_REALIZED (text))
     {
       recompute_geometry (text);
       gtk_widget_queue_draw (GTK_WIDGET (text));
@@ -666,7 +666,7 @@ gtk_text_thaw (GtkText *text)
 
   text->freeze = FALSE;
 
-  if (GTK_WIDGET_DRAWABLE (text))
+  if (GTK_WIDGET_REALIZED (text))
     {
       recompute_geometry (text);
       gtk_widget_queue_draw (GTK_WIDGET (text));
