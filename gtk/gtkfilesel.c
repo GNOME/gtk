@@ -653,11 +653,11 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   filesel->dir_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
   g_object_unref (model);
 
-  column = gtk_tree_view_column_new_with_attributes (_("Directories"),
+  column = gtk_tree_view_column_new_with_attributes (_("Folders"),
 						     gtk_cell_renderer_text_new (),
 						     "text", DIR_COLUMN,
 						     NULL);
-  label = gtk_label_new_with_mnemonic (_("_Directories"));
+  label = gtk_label_new_with_mnemonic (_("Fol_ders"));
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), filesel->dir_list);
   gtk_widget_show (label);
   gtk_tree_view_column_set_widget (column, label);
@@ -765,7 +765,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
     {
       gchar err_buf[256];
 
-      sprintf (err_buf, _("Directory unreadable: %s"), cmpl_strerror (cmpl_errno));
+      sprintf (err_buf, _("Folder unreadable: %s"), cmpl_strerror (cmpl_errno));
 
       gtk_label_set_text (GTK_LABEL (filesel->selection_text), err_buf);
     }
@@ -1019,7 +1019,7 @@ gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel)
   /* delete, create directory, and rename */
   if (!filesel->fileop_c_dir) 
     {
-      filesel->fileop_c_dir = gtk_button_new_with_mnemonic (_("Crea_te Dir"));
+      filesel->fileop_c_dir = gtk_button_new_with_mnemonic (_("_New Folder"));
       gtk_signal_connect (GTK_OBJECT (filesel->fileop_c_dir), "clicked",
 			  (GtkSignalFunc) gtk_file_selection_create_dir, 
 			  (gpointer) filesel);
@@ -1289,9 +1289,9 @@ gtk_file_selection_create_dir_confirmed (GtkWidget *widget,
   if (error)
     {
       if (g_error_matches (error, G_CONVERT_ERROR, G_CONVERT_ERROR_ILLEGAL_SEQUENCE))
-	buf = g_strdup_printf (_("The directory name \"%s\" contains symbols that are not allowed in filenames"), dirname);
+	buf = g_strdup_printf (_("The folder name \"%s\" contains symbols that are not allowed in filenames"), dirname);
       else
-	buf = g_strdup_printf (_("Error creating directory \"%s\": %s\n%s"), dirname, error->message,
+	buf = g_strdup_printf (_("Error creating folder \"%s\": %s\n%s"), dirname, error->message,
 			       _("You probably used symbols not allowed in filenames."));
       gtk_file_selection_fileop_error (fs, buf);
       g_error_free (error);
@@ -1300,7 +1300,7 @@ gtk_file_selection_create_dir_confirmed (GtkWidget *widget,
 
   if (mkdir (sys_full_path, 0755) < 0) 
     {
-      buf = g_strdup_printf (_("Error creating directory \"%s\": %s\n"), dirname,
+      buf = g_strdup_printf (_("Error creating folder \"%s\": %s\n"), dirname,
 			     g_strerror (errno));
       gtk_file_selection_fileop_error (fs, buf);
     }
@@ -1334,7 +1334,7 @@ gtk_file_selection_create_dir (GtkWidget *widget,
   gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
 		      (GtkSignalFunc) gtk_file_selection_fileop_destroy, 
 		      (gpointer) fs);
-  gtk_window_set_title (GTK_WINDOW (dialog), _("Create Directory"));
+  gtk_window_set_title (GTK_WINDOW (dialog), _("New Folder"));
   gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
   gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (fs));
 
@@ -1349,7 +1349,7 @@ gtk_file_selection_create_dir (GtkWidget *widget,
 		     FALSE, FALSE, 0);
   gtk_widget_show( vbox);
   
-  label = gtk_label_new_with_mnemonic (_("_Directory name:"));
+  label = gtk_label_new_with_mnemonic (_("_Folder name:"));
   gtk_misc_set_alignment(GTK_MISC (label), 0.0, 0.0);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
   gtk_widget_show (label);
@@ -2102,7 +2102,7 @@ gtk_file_selection_abort (GtkFileSelection *fs)
 {
   gchar err_buf[256];
 
-  sprintf (err_buf, _("Directory unreadable: %s"), cmpl_strerror (cmpl_errno));
+  sprintf (err_buf, _("Folder unreadable: %s"), cmpl_strerror (cmpl_errno));
 
   /*  BEEP gdk_beep();  */
 
@@ -2683,7 +2683,7 @@ open_new_dir (gchar       *dir_name,
 
       if (!dirent)
 	{
-	  g_warning ("Failure reading directory '%s'", sys_dir_name);
+	  g_warning ("Failure reading folder '%s'", sys_dir_name);
 	  g_dir_close (directory);
 	  g_free (sys_dir_name);
 	  return NULL;

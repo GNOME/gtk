@@ -1,3 +1,8 @@
+Fri Feb  1 12:12:12 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (attempt_file_completion): 
+	s/directory/folder/ in all labels and messages.
+
 Fri Feb  1 08:57:38 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmain.c (gtk_exit_func): Remove this useless
