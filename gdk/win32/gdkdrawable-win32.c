@@ -545,14 +545,13 @@ generic_draw (GdkDrawable    *drawable,
        * the areas where mask is one. (It is filled with said pattern.)
        */
 
-      if (mask_blt != NULL)
+      if (IS_WIN_NT ())
 	{
-	  if (!(*mask_blt) (hdc, region->extents.x1, region->extents.y1,
-			    width, height,
-			    tile_hdc, 0, 0,
-			    GDK_PIXMAP_HBITMAP (mask_pixmap), 0, 0,
-			    MAKEROP4 (rop2_to_rop3 (gcwin32->rop2), ROP3_D)))
-	    WIN32_GDI_FAILED ("MaskBlt");
+	  GDI_CALL (MaskBlt, (hdc, region->extents.x1, region->extents.y1,
+			      width, height,
+			      tile_hdc, 0, 0,
+			      GDK_PIXMAP_HBITMAP (mask_pixmap), 0, 0,
+			      MAKEROP4 (rop2_to_rop3 (gcwin32->rop2), ROP3_D)));
 	}
       else
 	{

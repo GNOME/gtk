@@ -1,3 +1,13 @@
+2002-11-15  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkglobals-win32.c
+	* gdk/win32/gdkmain-win32.c
+	* gdk/win32/gdkdrawable-win32.c (generic_draw): Don't check if
+	MaskBlt() is present in gdi32.dll, it is, even on Win9x. It just
+	always returns failure on Win9x. Instead, call MaskBlt() only if
+	we are on NT/2k/XP.
+
 2002-11-14  Tor Lillqvist  <tml@iki.fi>
 
 	Start implementing all fill styles (i.e. tiled, stippled, and

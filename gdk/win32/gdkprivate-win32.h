@@ -492,8 +492,6 @@ extern DWORD		 windows_version;
 extern gboolean		 gdk_input_ignore_wintab;
 extern gint		 gdk_max_colors;
 
-typedef BOOL (WINAPI *mask_blt_t) (HDC, int, int, int, int, HDC, int, int, HBITMAP, int, int, DWORD);
-extern mask_blt_t mask_blt;
 
 #define GDK_WIN32_COLORMAP_DATA(cmap) ((GdkColormapPrivateWin32 *) GDK_COLORMAP (cmap)->windowing_data)
 

@@ -86,12 +86,6 @@ _gdk_windowing_init_check (int    argc,
   if (gdk_synchronize)
     GdiSetBatchLimit (1);
 
-  if (!getenv ("NO_MASKBLT"))
-    {
-      mask_blt = GetProcAddress (GetModuleHandle ("gdi32.dll"), "MaskBlt");
-      GDK_NOTE (MISC, g_print ("MaskBlt found %p\n", mask_blt));
-    }
-
   gdk_app_hmodule = GetModuleHandle (NULL);
   gdk_display_hdc = CreateDC ("DISPLAY", NULL, NULL, NULL);
   gdk_root_window = GetDesktopWindow ();
