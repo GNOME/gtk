@@ -2466,7 +2466,9 @@ gtk_ctree_link (GtkCTree     *ctree,
 		gboolean      update_focus_row)
 {
   GtkCList *clist;
-  GtkCTreeNode *list_end;
+  GList *list_end;
+  GList *list;
+  GList *work;
   gboolean visible = FALSE;
   gint rows = 0;
   
@@ -2489,8 +2491,8 @@ gtk_ctree_link (GtkCTree     *ctree,
       clist->undo_unselection = NULL;
     }
 
-  for (rows = 1, list_end = node; GTK_CTREE_NODE_NEXT (list_end);
-       list_end = GTK_CTREE_NODE_NEXT (list_end))
+  for (rows = 1, list_end = (GList *)node; list_end->next;
+       list_end = list_end->next)
     rows++;
 
   GTK_CTREE_ROW (node)->parent = parent;
@@ -2502,20 +2504,18 @@ gtk_ctree_link (GtkCTree     *ctree,
       visible = TRUE;
       clist->rows += rows;
     }
-      
+
+  if (parent)
+    work = (GList *)(GTK_CTREE_ROW (parent)->children);
+  else
+    work = clist->row_list;
 
   if (sibling)
     {
-      GtkCTreeNode *work;
-
-      if (parent)
-	work = GTK_CTREE_ROW (parent)->children;
-      else
-	work = GTK_CTREE_NODE (clist->row_list);
-      if (work != sibling)
+      if (work != (GList *)sibling)
 	{
 	  while (GTK_CTREE_ROW (work)->sibling != sibling)
-	    work = GTK_CTREE_ROW (work)->sibling;
+	    work = (GList *)(GTK_CTREE_ROW (work)->sibling);
 	  GTK_CTREE_ROW (work)->sibling = node;
 	}
 
@@ -2523,61 +2523,66 @@ gtk_ctree_link (GtkCTree     *ctree,
 	clist->row_list = (GList *) node;
       if (GTK_CTREE_NODE_PREV (sibling) &&
 	  GTK_CTREE_NODE_NEXT (GTK_CTREE_NODE_PREV (sibling)) == sibling)
-	GTK_CTREE_NODE_NEXT (GTK_CTREE_NODE_PREV (sibling)) = node;
+	{
+	  list = (GList *)GTK_CTREE_NODE_PREV (sibling);
+	  list->next = (GList *)node;
+	}
       
-      GTK_CTREE_NODE_PREV (node) = GTK_CTREE_NODE_PREV (sibling);
-      GTK_CTREE_NODE_NEXT (list_end) = sibling;
-      GTK_CTREE_NODE_PREV (sibling) = list_end;
+      list = (GList *)node;
+      list->prev = (GList *)GTK_CTREE_NODE_PREV (sibling);
+      list_end->next = (GList *)sibling;
+      list = (GList *)sibling;
+      list->prev = list_end;
       if (parent && GTK_CTREE_ROW (parent)->children == sibling)
 	GTK_CTREE_ROW (parent)->children = node;
     }
   else
     {
-      GtkCTreeNode *work;
-
-      if (parent)
-	work = GTK_CTREE_ROW (parent)->children;
-      else
-	work = GTK_CTREE_NODE (clist->row_list);
-
       if (work)
 	{
 	  /* find sibling */
 	  while (GTK_CTREE_ROW (work)->sibling)
-	    work = GTK_CTREE_ROW (work)->sibling;
+	    work = (GList *)(GTK_CTREE_ROW (work)->sibling);
 	  GTK_CTREE_ROW (work)->sibling = node;
 	  
 	  /* find last visible child of sibling */
-	  work = gtk_ctree_last_visible (ctree, work);
+	  work = (GList *) gtk_ctree_last_visible (ctree,
+						   GTK_CTREE_NODE (work));
 	  
-	  GTK_CTREE_NODE_NEXT (list_end) = GTK_CTREE_NODE_NEXT (work);
-	  if (GTK_CTREE_NODE_NEXT (work))
-	    GTK_CTREE_NODE_PREV (GTK_CTREE_NODE_NEXT (work)) = list_end;
-	  GTK_CTREE_NODE_NEXT (work) = node;
-	  GTK_CTREE_NODE_PREV (node) = work;
+	  list_end->next = work->next;
+	  if (work->next)
+	    list = work->next->prev = list_end;
+	  work->next = (GList *)node;
+	  list = (GList *)node;
+	  list->prev = work;
 	}
       else
 	{
 	  if (parent)
 	    {
 	      GTK_CTREE_ROW (parent)->children = node;
-	      GTK_CTREE_NODE_PREV (node) = parent;
+	      list = (GList *)node;
+	      list->prev = (GList *)parent;
 	      if (GTK_CTREE_ROW (parent)->expanded)
 		{
-		  GTK_CTREE_NODE_NEXT (list_end)= GTK_CTREE_NODE_NEXT (parent);
+		  list_end->next = (GList *)GTK_CTREE_NODE_NEXT (parent);
 		  if (GTK_CTREE_NODE_NEXT(parent))
-		    GTK_CTREE_NODE_PREV (GTK_CTREE_NODE_NEXT (parent)) =
-		      list_end;
-		  GTK_CTREE_NODE_NEXT (parent) = node;
+		    {
+		      list = (GList *)GTK_CTREE_NODE_NEXT (parent);
+		      list->prev = list_end;
+		    }
+		  list = (GList *)parent;
+		  list->next = (GList *)node;
 		}
 	      else
-		GTK_CTREE_NODE_NEXT (list_end) = NULL;
+		list_end->next = NULL;
 	    }
 	  else
 	    {
 	      clist->row_list = (GList *)node;
-	      GTK_CTREE_NODE_PREV (node) = NULL;
-	      GTK_CTREE_NODE_NEXT (list_end) = NULL;
+	      list = (GList *)node;
+	      list->prev = NULL;
+	      list_end->next = NULL;
 	    }
 	}
     }
@@ -2586,7 +2591,7 @@ gtk_ctree_link (GtkCTree     *ctree,
 
   if (clist->row_list_end == NULL ||
       clist->row_list_end->next == (GList *)node)
-    GTK_CTREE_NODE (clist->row_list_end) = list_end;
+    clist->row_list_end = list_end;
 
   if (visible && update_focus_row)
     {
@@ -2613,6 +2618,7 @@ gtk_ctree_unlink (GtkCTree     *ctree,
   gint visible;
   GtkCTreeNode *work;
   GtkCTreeNode *parent;
+  GList *list;
 
   g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
@@ -2670,13 +2676,18 @@ gtk_ctree_unlink (GtkCTree     *ctree,
 
   if (work)
     {
-      GTK_CTREE_NODE_NEXT (GTK_CTREE_NODE_PREV (work)) = NULL;
-      GTK_CTREE_NODE_PREV (work) = GTK_CTREE_NODE_PREV (node);
+      list = (GList *)GTK_CTREE_NODE_PREV (work);
+      list->next = NULL;
+      list = (GList *)work;
+      list->prev = (GList *)GTK_CTREE_NODE_PREV (node);
     }
 
   if (GTK_CTREE_NODE_PREV (node) &&
       GTK_CTREE_NODE_NEXT (GTK_CTREE_NODE_PREV (node)) == node)
-    GTK_CTREE_NODE_NEXT (GTK_CTREE_NODE_PREV (node)) = work;
+    {
+      list = (GList *)GTK_CTREE_NODE_PREV (node);
+      list->next = (GList *)work;
+    }
 
   /* update tree */
   parent = GTK_CTREE_ROW (node)->parent;
@@ -2849,7 +2860,7 @@ real_tree_expand (GtkCTree     *ctree,
   g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
-  if (!node || GTK_CTREE_ROW (node)->expanded)
+  if (!node || GTK_CTREE_ROW (node)->expanded || GTK_CTREE_ROW (node)->is_leaf)
     return;
 
   clist = GTK_CLIST (ctree);
@@ -2898,21 +2909,27 @@ real_tree_expand (GtkCTree     *ctree,
     {
       gint tmp = 0;
       gint row;
-
+      GList *list;
+      
       while (GTK_CTREE_NODE_NEXT (work))
 	{
 	  work = GTK_CTREE_NODE_NEXT (work);
 	  tmp++;
 	}
 
-      GTK_CTREE_NODE_NEXT (work) = GTK_CTREE_NODE_NEXT (node);
+      list = (GList *)work;
+      list->next = (GList *)GTK_CTREE_NODE_NEXT (node);
 
       if (GTK_CTREE_NODE_NEXT (node))
-	GTK_CTREE_NODE_PREV (GTK_CTREE_NODE_NEXT (node)) = work;
+	{
+	  list = (GList *)GTK_CTREE_NODE_NEXT (node);
+	  list->prev = (GList *)work;
+	}
       else
 	clist->row_list_end = (GList *)work;
 
-      GTK_CTREE_NODE_NEXT (node) = GTK_CTREE_ROW (node)->children;
+      list = (GList *)node;
+      list->next = (GList *)(GTK_CTREE_ROW (node)->children);
       
       if (gtk_ctree_is_viewable (ctree, node))
 	{
@@ -2937,7 +2954,7 @@ real_tree_collapse (GtkCTree     *ctree,
   g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
-  if (!node || !GTK_CTREE_ROW (node)->expanded)
+  if (!node || !GTK_CTREE_ROW (node)->expanded ||GTK_CTREE_ROW (node)->is_leaf)
     return;
 
   clist = GTK_CLIST (ctree);
@@ -2986,6 +3003,7 @@ real_tree_collapse (GtkCTree     *ctree,
     {
       gint tmp = 0;
       gint row;
+      GList *list;
 
       while (work && GTK_CTREE_ROW (work)->level > level)
 	{
@@ -2995,13 +3013,17 @@ real_tree_collapse (GtkCTree     *ctree,
 
       if (work)
 	{
-	  GTK_CTREE_NODE_NEXT (node) = work;
-	  GTK_CTREE_NODE_NEXT (GTK_CTREE_NODE_PREV (work)) = NULL;
-	  GTK_CTREE_NODE_PREV (work) = node;
+	  list = (GList *)node;
+	  list->next = (GList *)work;
+	  list = (GList *)GTK_CTREE_NODE_PREV (work);
+	  list->next = NULL;
+	  list = (GList *)work;
+	  list->prev = (GList *)node;
 	}
       else
 	{
-	  GTK_CTREE_NODE_NEXT (node) = NULL;
+	  list = (GList *)node;
+	  list->next = NULL;
 	  clist->row_list_end = (GList *)node;
 	}
 
@@ -3809,7 +3831,8 @@ gtk_ctree_insert_node (GtkCTree     *ctree,
 	GTK_CLIST_CLASS_FW (clist)->set_cell_contents
 	  (clist, &(new_row->row), i, GTK_CELL_TEXT, text[i], 0, NULL, NULL);
 
-  set_node_info (ctree, node, text ? text[ctree->tree_column] : NULL, spacing, pixmap_closed,
+  set_node_info (ctree, node, text ?
+		 text[ctree->tree_column] : NULL, spacing, pixmap_closed,
 		 mask_closed, pixmap_opened, mask_opened, is_leaf, expanded);
 
   /* sorted insertion */
@@ -3845,7 +3868,7 @@ gtk_ctree_insert_gnode (GtkCTree          *ctree,
   GtkCTreeNode *cnode = NULL;
   GtkCTreeNode *child = NULL;
   GtkCTreeNode *new_child;
-  GtkCTreeRow *new_row;
+  GList *list;
   gboolean thaw;
   GNode *work;
   guint depth = 1;
@@ -3862,9 +3885,9 @@ gtk_ctree_insert_gnode (GtkCTree          *ctree,
   if (parent)
     depth = GTK_CTREE_ROW (parent)->level + 1;
 
-  new_row = row_new (ctree);
-  cnode = GTK_CTREE_NODE (g_list_alloc ());
-  GTK_CTREE_ROW (cnode) = new_row;
+  list = g_list_alloc ();
+  list->data = row_new (ctree);
+  cnode = GTK_CTREE_NODE (list);
 
   thaw = !GTK_CLIST_FROZEN (clist);
   if (thaw)

@@ -1,3 +1,12 @@
+Sat Oct  3 01:25:24 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkctree.c (gtk_ctree_insert_gnode) (real_tree_collapse)
+	(gtk_ctree_link) (gtk_ctree_unlink) (real_tree_expand): 
+	fixes for assignment errors with GTK_CTREE_NODE_NEXT/PREV
+
+	(real_tree_expand) (real_tree_collapse):
+	don't expand/collapse a leaf
+
 Fri Oct  2 16:10:36 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktypeutils.c (gtk_type_enum_find_value): make sure we don't
