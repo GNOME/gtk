@@ -1,3 +1,7 @@
+2003-08-29  Laurent Dhima  <laurenti@alblinux.net>
+
+	* configure.in: Added "sq" to ALL_LINGUAS.
+	
 2003-08-28  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkkeys-x11.c (gdk_keymap_translate_keyboard_state): Markup
@@ -1047,7 +1051,7 @@ Mon Jul 28 18:21:34 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktreeselection.c (gtk_tree_selection_selected_foreach):
 	Fix function name in warning message.  (#118156, Tim-Philipp
-	Müller)
+	Mller)
 
 	* gtk/gtkcellrenderer.c (gtk_cell_renderer_get_property):
 	is-expander and is-expanded are boolean properties, not ints.
@@ -2470,7 +2474,7 @@ Thu Jun  5 17:20:40 2003  Owen Taylor  <otaylor@redhat.com>
 
 2003-06-05  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtktextview.c: Fix for #84668, reported by Torbjörn Andersson:
+	* gtk/gtktextview.c: Fix for #84668, reported by Torbjrn Andersson:
 	(gtk_text_view_grab_notify): 
 	(gtk_text_view_state_changed): Implement these
 	to unobscure cursor when grab shadowed or insensitised.
