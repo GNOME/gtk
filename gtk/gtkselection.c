@@ -813,6 +813,55 @@ init_atoms (void)
     }
 }
 
+static gboolean
+selection_set_string (GtkSelectionData *selection_data,
+		      const gchar      *str,
+		      gint              len)
+{
+  gchar *tmp = g_strndup (str, len);
+  gchar *latin1 = gdk_utf8_to_string_target (tmp);
+  g_free (tmp);
+  
+  if (latin1)
+    {
+      gtk_selection_data_set (selection_data,
+			      GDK_SELECTION_TYPE_STRING,
+			      8, latin1, strlen (latin1));
+      g_free (latin1);
+      
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
+
+static gboolean
+selection_set_compound_text (GtkSelectionData *selection_data,
+			     const gchar      *str,
+			     gint              len)
+{
+  gchar *tmp;
+  guchar *text;
+  GdkAtom encoding;
+  gint format;
+  gint new_length;
+  gboolean result = FALSE;
+  
+  tmp = g_strndup (str, len);
+  if (gdk_utf8_to_compound_text_for_display (selection_data->display, tmp,
+					     &encoding, &format, &text, &new_length))
+    {
+      gtk_selection_data_set (selection_data, encoding, format, text, new_length);
+      gdk_free_compound_text (text);
+      
+      result = TRUE;
+    }
+
+  g_free (tmp);
+
+  return result;
+}
+
 /**
  * gtk_selection_data_set_text:
  * @selection_data: a #GtkSelectionData
@@ -831,8 +880,6 @@ gtk_selection_data_set_text (GtkSelectionData     *selection_data,
 			     const gchar          *str,
 			     gint                  len)
 {
-  gboolean result = FALSE;
-  
   if (len < 0)
     len = strlen (str);
   
@@ -843,48 +890,22 @@ gtk_selection_data_set_text (GtkSelectionData     *selection_data,
       gtk_selection_data_set (selection_data,
 			      utf8_atom,
 			      8, (guchar *)str, len);
-      result = TRUE;
+      return TRUE;
     }
   else if (selection_data->target == GDK_TARGET_STRING)
     {
-      gchar *tmp = g_strndup (str, len);
-      gchar *latin1 = gdk_utf8_to_string_target (tmp);
-      g_free (tmp);
-
-      if (latin1)
-	{
-	  gtk_selection_data_set (selection_data,
-				  GDK_SELECTION_TYPE_STRING,
-				  8, latin1, strlen (latin1));
-	  g_free (latin1);
-	  
-	  result = TRUE;
-	}
-
+      return selection_set_string (selection_data, str, len);
     }
   else if (selection_data->target == ctext_atom ||
 	   selection_data->target == text_atom)
     {
-      gchar *tmp;
-      guchar *text;
-      GdkAtom encoding;
-      gint format;
-      gint new_length;
-
-      tmp = g_strndup (str, len);
-      if (gdk_utf8_to_compound_text_for_display (selection_data->display, tmp,
-						 &encoding, &format, &text, &new_length))
-	{
-	  gtk_selection_data_set (selection_data, encoding, format, text, new_length);
-	  gdk_free_compound_text (text);
-
-	  result = TRUE;
-	}
-
-      g_free (tmp);
+      if (selection_set_compound_text (selection_data, str, len))
+	return TRUE;
+      else if (selection_data->target == text_atom)
+	return selection_set_string (selection_data, str, len);
     }
-  
-  return result;
+
+  return FALSE;
 }
 
 /**

@@ -819,15 +819,19 @@ gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,
 
   if (need_conversion)
     {
-      locale_str = g_convert_with_fallback (tmp_str, -1,
-					    charset, "UTF-8",
-					    NULL, NULL, NULL, &error);
+      locale_str = g_convert (tmp_str, -1,
+			      charset, "UTF-8",
+			      NULL, NULL, &error);
       g_free (tmp_str);
 
       if (!locale_str)
 	{
-	  g_warning ("Error converting from UTF-8 to '%s': %s",
-		     charset, error->message);
+	  if (!(error->domain = G_CONVERT_ERROR &&
+		error->code == G_CONVERT_ERROR_ILLEGAL_SEQUENCE))
+	    {
+	      g_warning ("Error converting from UTF-8 to '%s': %s",
+			 charset, error->message);
+	    }
 	  g_error_free (error);
 
 	  if (encoding)
