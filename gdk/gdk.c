@@ -116,7 +116,7 @@ gdk_arg_context_parse (GdkArgContext *context, gint *argc, gchar ***argv)
 	  arg = (*argv)[i] + 2;
 
 	  /* '--' terminates list of arguments */
-	  if (arg == 0)
+	  if (*arg == 0)
 	    {
 	      (*argv)[i] = NULL;
 	      break;

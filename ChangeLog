@@ -1,3 +1,7 @@
+2004-04-05  Anders Carlsson  <andersca@gnome.org>
+
+	* gdk/gdk.c (gdk_arg_context_parse): Handle '--' correctly.
+
 Fri Apr  2 17:57:33 2004  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_row_inserted): set the height
