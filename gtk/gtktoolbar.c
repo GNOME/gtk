@@ -2099,8 +2099,9 @@ gtk_toolbar_forall (GtkContainer *container,
     {
       ToolbarContent *content = list->data;
       GList *next = list->next;
-      
-      (*callback) (GTK_WIDGET (content->item), callback_data);
+
+      if (!content->is_placeholder || include_internals)
+	(*callback) (GTK_WIDGET (content->item), callback_data);
       
       list = next;
     }

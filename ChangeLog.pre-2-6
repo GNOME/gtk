@@ -1,3 +1,8 @@
+Thu Oct 30 22:04:31 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_forall): Only include
+	placeholders when include_internals is TRUE.
+
 Thu Oct 30 17:57:53 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c (logical_to_physical): Make it work even when
