@@ -51,6 +51,10 @@
 #define VIETNAMESE_CHARSET 163
 #endif
 
+#ifndef FS_VIETNAMESE
+#define FS_VIETNAMESE 0x100
+#endif
+
 #ifndef VM_OEM_PLUS
 #define VK_OEM_PLUS 0xBB
 #endif
@@ -219,7 +223,7 @@ struct _GdkCursorPrivate
 struct _GdkWin32SingleFont
 {
   HFONT xfont;
-  DWORD charset;
+  UINT charset;
   UINT codepage;
   FONTSIGNATURE fs;
 };

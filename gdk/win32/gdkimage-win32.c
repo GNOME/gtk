@@ -747,7 +747,6 @@ gdk_image_put (GdkImage    *image,
 	  gdk_gc_postdraw (drawable, gc_private);
 	  return;
 	}
-
       if (!BitBlt (hdc, xdest, ydest, width, height,
 		   memdc, xsrc, ysrc, SRCCOPY))
 	g_warning ("gdk_image_put: BitBlt failed");

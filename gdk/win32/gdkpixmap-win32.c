@@ -52,7 +52,7 @@ typedef struct
 static void
 gdk_win32_pixmap_destroy (GdkPixmap *pixmap)
 {
-  GdkDrawablePrivate *private = (GdkDrawablePrivate *)pixmap;
+  GdkDrawablePrivate *private = (GdkDrawablePrivate *) pixmap;
 
   GDK_NOTE (MISC, g_print ("gdk_win32_pixmap_destroy: %#x\n",
 			   GDK_DRAWABLE_XID (pixmap)));
@@ -172,7 +172,7 @@ gdk_pixmap_new (GdkWindow *window,
 
       bmi.u.bmiColors[1].rgbBlue =
 	bmi.u.bmiColors[1].rgbGreen =
-      bmi.u.bmiColors[1].rgbRed = 0xFF;
+	bmi.u.bmiColors[1].rgbRed = 0xFF;
       bmi.u.bmiColors[1].rgbReserved = 0x00;
       private->colormap = NULL;
     }
@@ -766,14 +766,14 @@ _gdk_pixmap_create_from_xpm (GdkWindow   *window,
 	  strncpy (pixel_str, &buffer[n], cpp);
 	  pixel_str[cpp] = 0;
 	  ns = 0;
-	
+	  
 	  color = g_hash_table_lookup (color_hash, pixel_str);
-	
+	  
 	  if (!color) /* screwed up XPM file */
 	    color = fallbackcolor;
-	
+	  
 	  gdk_image_put_pixel (image, xcnt, ycnt, color->color.pixel);
-	
+	  
 	  if (mask && color->transparent)
 	    {
 	      if (cnt < xcnt)

@@ -44,7 +44,7 @@
 #include <objbase.h>
 #endif
 
-#ifdef _MSC_VER			/* These aren't in mingw32 */
+#ifdef _MSC_VER
 #include <shlobj.h>
 #include <shlguid.h>
 #endif

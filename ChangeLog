@@ -1,3 +1,15 @@
+1999-12-06  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkfont-win32.c (check_unicode_subranges): New
+	function. Guesstimate what Unicode subranges a font covers based
+	on the codepages. Windows tells us it covers. This will hopefully
+	help those Windows versions or fonts that don't give us any useful
+	Unicode subrange information with GetTextCharsetInfo. Call this
+	function in gdk_font_load_internal.
+
+	* gdk/win32/{gdkdnd,gdkimage,gdkpixmap,gdkprivate}-win32.c: Misc
+	minor changes.
+
 Fri Dec  3 14:09:50 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkoptionmenu.[ch] (gtk_option_menu_get_history):
