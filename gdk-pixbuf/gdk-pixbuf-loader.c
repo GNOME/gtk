@@ -600,7 +600,7 @@ gdk_pixbuf_loader_new_with_mime_type (const char *mime_type,
                 mimes = info->mime_types;
                 
                 for (j = 0; mimes[j] != NULL; j++)
-                        if (g_ascii_strcasecmp (mimes[i], mime_type)) {
+                        if (g_ascii_strcasecmp (mimes[j], mime_type)) {
                                 image_type = info->name;
                                 break;
                         }
