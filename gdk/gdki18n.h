@@ -145,7 +145,7 @@ extern int _g_mbtowc (wchar_t *wstr, const char *str, size_t len);
 
 #endif /* X_LOCALE */
 
-#if (defined(HAVE_WCTYPE_H) || defined(HAVE_WCHAR_H)) && !defined(X_LOCALE)
+#if !defined(HAVE_BROKEN_WCTYPE) && (defined(HAVE_WCTYPE_H) || defined(HAVE_WCHAR_H)) && !defined(X_LOCALE)
 #  ifdef HAVE_WCTYPE_H
 #    include <wctype.h>
 #  else

@@ -32,6 +32,7 @@
 
 
 /* Other stuff */
+#undef HAVE_BROKEN_WCTYPE
 #undef HAVE_DOPRNT
 #undef HAVE_FLOAT_H
 #undef HAVE_LIMITS_H
@@ -42,6 +43,8 @@
 #undef HAVE_VSNPRINTF
 #undef HAVE_VALUES_H
 #undef HAVE_VPRINTF
+#undef HAVE_WCHAR_H
+#undef HAVE_WCTYPE_H
 
 #undef NO_FD_SET
 #undef NO_SYS_ERRLIST
@@ -52,10 +55,6 @@
 #undef SIZEOF_LONG
 #undef SIZEOF_INT
 #undef SIZEOF_VOID_P
-
-#undef HAVE_WCHAR_H
-#undef HAVE_WCSTR_H
-#undef HAVE_WCTYPE_H
 
 
 /* #undef PACKAGE */

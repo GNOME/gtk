@@ -32,8 +32,10 @@
 #undef NO_SYS_SIGLIST
 
 #undef HAVE_WCHAR_H
-#undef HAVE_WCSTR_H
 #undef HAVE_WCTYPE_H
+
+/* Define if iswalnum(), etc. should not be used */
+#undef HAVE_BROKEN_WCTYPE
 
 /* #undef PACKAGE */
 /* #undef VERSION */

@@ -1,3 +1,9 @@
+Tue Feb 10 13:04:36 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* configure.in: Add check to see if the C library's
+	  iswalnum can actually be used. (Not true for
+	  Linux libc-5.4.38)
+
 Sat Feb  7 11:48:09 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gstring.c gutils.c: added some additional consts in
