@@ -1,3 +1,10 @@
+Wed May 21 19:01:06 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_realize): 
+	g_return_if_fail() if
+	GTK_WIDGET_ANCHORED (widget) || GTK_IS_INVISIBLE (widget).
+	(#107872, Christian Reis)
+
 2003-05-22  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkfilesel.c (gtk_file_selection_create_dir): 
@@ -18,7 +25,7 @@ Wed May 21 15:53:14 2003  Owen Taylor  <otaylor@redhat.com>
 	gtk_progress_set_show_text): Always queue a resize ... 
 	we rely on the size-allocate to do the update, plus a 
 	different format can actually change our size requisition.
-	(#111052)
+	(#111052, Vasco Alexandre da Silva Costa)
 
 	* gtk/gtkprogress.c (gtk_progress_changed): Track
 	::changed as well as ::value_changed, and queue a

@@ -1925,6 +1925,8 @@ gtk_widget_realize (GtkWidget *widget)
   GtkWidgetShapeInfo *shape_info;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_WIDGET_ANCHORED (widget) ||
+		    GTK_IS_INVISIBLE (widget));
   
   if (!GTK_WIDGET_REALIZED (widget))
     {
