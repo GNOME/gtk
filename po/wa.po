@@ -2,7 +2,7 @@
 #
 # Si vos voloz donner on côp di spale pol ratoûrnaedje di Gnome (ou des
 # ôtes libes programes) sicrijhoz-mu a l' adresse emile
-# <srtxg@chanae.alphanet.ch>; nos avons co bråmint di l' ovraedje a fwaire.
+# <srtxg@chanae.alphanet.ch>; nos avons co bråmint di l' ovraedje a fé.
 #
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Pablo Saratxaga <srtxg@chanae.alphanet.ch> 1999
@@ -20,7 +20,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:213
 msgid "Hue:"
-msgstr ""
+msgstr "Tinte:"
 
 #: gtk/gtkcolorsel.c:214
 msgid "Saturation:"
@@ -137,7 +137,7 @@ msgstr "Fondeu:"
 
 #: gtk/gtkfontsel.c:211
 msgid "Family:"
-msgstr "Famile"
+msgstr "Famile:"
 
 #: gtk/gtkfontsel.c:212
 msgid "Weight:"
@@ -306,24 +306,34 @@ msgstr "[C]"
 
 msgid "(nil)"
 msgstr "(nole)"
+
 msgid "heavy"
 msgstr ""
+
 msgid "extrabold"
 msgstr ""
+
 msgid "bold"
 msgstr "cråsses"
+
 msgid "demibold"
 msgstr ""
+
 msgid "medium"
 msgstr ""
+
 msgid "normal"
 msgstr "normå"
+
 msgid "light"
 msgstr ""
+
 msgid "extralight"
 msgstr ""
+
 msgid "thin"
 msgstr ""
+
 msgid "regular"
 msgstr ""
 
