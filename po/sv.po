@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-05-06 03:12+0200\n"
-"PO-Revision-Date: 2002-05-06 03:14+0200\n"
+"POT-Creation-Date: 2002-05-14 20:15+0200\n"
+"PO-Revision-Date: 2002-05-14 20:15+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -553,7 +553,7 @@ msgstr "Bredden eller höjden på TIFF-bilden är noll"
 
 #: gdk-pixbuf/io-tiff.c:211 gdk-pixbuf/io-tiff.c:220
 msgid "Dimensions of TIFF image too large"
-msgstr ""
+msgstr "TIFF-bildens dimensioner är för stora"
 
 #: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:521
 msgid "Insufficient memory to open TIFF file"
@@ -2685,13 +2685,12 @@ msgid "Tab fill"
 msgstr "Flikfyllnad"
 
 #: gtk/gtknotebook.c:471
-#, fuzzy
 msgid "Wheather the childs tab should fill the allocated area or not"
-msgstr "Huruvida barnen allihop ska vara av samma storlek."
+msgstr "Huruvida barnets flik ska fylla den allokerade ytan eller inte"
 
 #: gtk/gtknotebook.c:477
 msgid "Tab pack type"
-msgstr ""
+msgstr "Flikpackningstyp"
 
 #: gtk/gtknotebook.c:2452 gtk/gtknotebook.c:4708
 #, c-format
@@ -2749,7 +2748,6 @@ msgid "Activity mode"
 msgstr "Aktivitetsläge"
 
 #: gtk/gtkprogress.c:123
-#, fuzzy
 msgid ""
 "If TRUE the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
@@ -2757,8 +2755,8 @@ msgid ""
 "take."
 msgstr ""
 "Om sant är GtkProgress i aktivitetsläge, vilket betyder att det signalerar "
-"att något händer, men inte hur mycket aktiviteten är slutförd. Detta används "
-"när du gör någonting som du inte vet hur lång tid det kommer att ta."
+"att något händer, men inte hur mycket av aktiviteten som är slutfört. Detta "
+"används när du gör någonting som du inte vet hur lång tid det kommer att ta."
 
 #: gtk/gtkprogress.c:130
 msgid "Show text"
@@ -2773,12 +2771,11 @@ msgid "Text x alignment"
 msgstr "X-justering för text"
 
 #: gtk/gtkprogress.c:139
-#, fuzzy
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
 msgstr ""
-"Ett tal mellan 0.0 och 1.0 som anger den horisontella justeringen av texten "
+"Ett tal mellan 0,0 och 1,0 som anger den horisontella justeringen av texten "
 "i förloppswidgeten"
 
 #: gtk/gtkprogress.c:147
@@ -2790,7 +2787,7 @@ msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
 msgstr ""
-"Ett tal mellan 0.0 och 1.0 som anger den vertikala justeringen av texten i "
+"Ett tal mellan 0,0 och 1,0 som anger den vertikala justeringen av texten i "
 "förloppswidgeten"
 
 #: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:282 gtk/gtkspinbutton.c:237
@@ -2806,9 +2803,8 @@ msgid "Orientation"
 msgstr "Orientering"
 
 #: gtk/gtkprogressbar.c:140
-#, fuzzy
 msgid "Orientation and growth direction of the progress bar"
-msgstr "Orientering och tillväxt av förloppsmätaren"
+msgstr "Orientering och tillväxtriktning för förloppsmätaren"
 
 #: gtk/gtkprogressbar.c:148
 msgid "Bar style"
@@ -3536,7 +3532,6 @@ msgid "_Yes"
 msgstr "_Ja"
 
 #: gtk/gtkstock.c:334
-#, c-format
 msgid "Zoom _100%"
 msgstr "Zooma _100%"
 
@@ -3597,78 +3592,72 @@ msgid "Left attachment"
 msgstr ""
 
 #: gtk/gtktable.c:201
-#, fuzzy
 msgid "The leftmost column of the child"
-msgstr "Titeln på fönstret"
+msgstr "Kolumnen längst till vänster på barnet"
 
 #: gtk/gtktable.c:207
 msgid "Right attachment"
 msgstr ""
 
 #: gtk/gtktable.c:208
-#, fuzzy
 msgid "The rightmost column of the child"
-msgstr "Y-justering av barnet"
+msgstr "Kolumnen längst till höger på barnet"
 
 #: gtk/gtktable.c:214
 msgid "Top attachment"
 msgstr ""
 
 #: gtk/gtktable.c:215
-#, fuzzy
 msgid "The uppermost row of the child"
-msgstr "Antalet rader i tabellen"
+msgstr "Raden längst upp på barnet"
 
 #: gtk/gtktable.c:221
 msgid "Bottom attachment"
 msgstr ""
 
 #: gtk/gtktable.c:222
-#, fuzzy
 msgid "The lowest row of the child"
-msgstr "Y-justering av barnet"
+msgstr "Raden längst ned på barnet"
 
 #: gtk/gtktable.c:228
-#, fuzzy
 msgid "Horizontal options"
-msgstr "Horisontell skala"
+msgstr "Horisontella alternativ"
 
 #: gtk/gtktable.c:229
 msgid "Options specifying the horizontal behaviour of the child."
-msgstr ""
+msgstr "Alternativ som anger beteende i horisontalled för barnet."
 
 #: gtk/gtktable.c:235
-#, fuzzy
 msgid "Vertical options"
-msgstr "Vertikal skala"
+msgstr "Vertikala alternativ"
 
 #: gtk/gtktable.c:236
 msgid "Options specifying the vertical behaviour of the child"
-msgstr ""
+msgstr "Alternativ som anger beteende i vertikalled för barnet."
 
 #: gtk/gtktable.c:242
-#, fuzzy
 msgid "Horizontal padding"
-msgstr "Horisontell justering"
+msgstr "Horisontell utfyllnad"
 
 #: gtk/gtktable.c:243
-#, fuzzy
 msgid ""
 "Extra space to put between the child and its left and right neighbors, in "
 "pixels"
 msgstr ""
-"Mängden utrymme att lägga till på vänster och höger sida, i bildpunkter"
+"Extra utrymme att lägga till mellan barnet och dess vänstra och högra "
+"grannar, i bildpunkter"
 
 #: gtk/gtktable.c:249
-#, fuzzy
 msgid "Vertical padding"
-msgstr "Intern utfyllnad"
+msgstr "Vertikal utfyllnad"
 
 #: gtk/gtktable.c:250
 msgid ""
 "Extra space to put between the child and its upper and lower neighbors, in "
 "pixels"
 msgstr ""
+"Extra utrymme att lägga till mellan barnet och dess övre och nedre grannar, "
+"i bildpunkter"
 
 #: gtk/gtktext.c:600
 msgid "Horizontal adjustment for the text widget"
@@ -3699,14 +3688,12 @@ msgid "Tag name"
 msgstr "Taggnamn"
 
 #: gtk/gtktexttag.c:200
-#, fuzzy
 msgid "Name used to refer to the text tag. NULL for anonymous tags."
-msgstr "Namn som används för att peka på texttaggen"
+msgstr "Namn som används för att peka på texttaggen. NULL för anonyma taggar."
 
 #: gtk/gtktexttag.c:218
-#, fuzzy
 msgid "Background color as a (possibly unallocated) GdkColor"
-msgstr "Bakgrundsfärg som en GdkColor"
+msgstr "Bakgrundsfärg som en (möjligtvis oallokerad) GdkColor"
 
 #: gtk/gtktexttag.c:225
 msgid "Background full height"
@@ -3729,9 +3716,8 @@ msgid "Bitmap to use as a mask when drawing the text background"
 msgstr "Bitmappsbild att använda som mask när textbakgrunden ritas"
 
 #: gtk/gtktexttag.c:252
-#, fuzzy
 msgid "Foreground color as a (possibly unallocated) GdkColor"
-msgstr "Förgrundsfärg som en GdkColor"
+msgstr "Förgrundsfärg som en (möjligtvis oallokerad) GdkColor"
 
 #: gtk/gtktexttag.c:260
 msgid "Foreground stipple mask"
@@ -3750,32 +3736,32 @@ msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "Textriktning, d.v.s. höger till vänster eller vänster till höger"
 
 #: gtk/gtktexttag.c:286
-#, fuzzy
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr "Typsnittsbeskrivning som en sträng"
+msgstr "Typsnittsbeskrivning som en sträng, t.ex. \"Sans Italic 12\""
 
 #: gtk/gtktexttag.c:311
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC."
-msgstr ""
+msgstr "Typsnittsstil som en PangoStyle, t.ex. PANGO_STYLE_ITALIC."
 
 #: gtk/gtktexttag.c:320
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS."
-msgstr ""
+msgstr "Typsnittsvariant som en PangoVariant, t.ex. PANGO_VARIANT_SMALL_CAPS."
 
 #: gtk/gtktexttag.c:329
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD."
 msgstr ""
+"Typsnittsvikt som ett heltal, se fördefinierade värden i PangoWeight; till "
+"exempel PANGO_WEIGHT_BOLD."
 
 #: gtk/gtktexttag.c:340
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED."
-msgstr ""
+msgstr "Typsnittsbredd som en PangoStretch, t.ex. PANGO_STRETCH_CONDENSED."
 
 #: gtk/gtktexttag.c:349
-#, fuzzy
 msgid "Font size in Pango units."
-msgstr "Typsnittsstorlek i punkter"
+msgstr "Typsnittsstorlek i Pango-enheter."
 
 #: gtk/gtktexttag.c:359
 msgid ""
@@ -3783,6 +3769,10 @@ msgid ""
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
 "such as PANGO_SCALE_X_LARGE."
 msgstr ""
+"Typsnittsstorlek som en skalfaktor relativ till standardtypsnittsstorleken. "
+"Detta anpassar sig korrekt till ändringar i teman m.m. och är därför "
+"rekommenderat. Pango fördefinierar en del skalningar som till exempel "
+"PANGO_SCALE_X_LARGE."
 
 #: gtk/gtktexttag.c:379 gtk/gtktextview.c:586
 msgid "Left, right, or center justification"
@@ -3798,6 +3788,9 @@ msgid ""
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it."
 msgstr ""
+"Det språk som denna text är i, som en ISO-kod. Pango kan använda detta som "
+"ett tips när den renderar texten. Om du inte förstår denna parameter behöver "
+"du den troligtvis inte."
 
 #: gtk/gtktexttag.c:395
 msgid "Left margin"
@@ -3824,13 +3817,12 @@ msgid "Amount to indent the paragraph, in pixels"
 msgstr "Hur mycket stycket ska dras in, i bildpunkter"
 
 #: gtk/gtktexttag.c:428
-#, fuzzy
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in pixels"
 msgstr ""
 "Offset för texten ovanför baslinjen (nedanför baslinjen om höjning är "
-"negativt)"
+"negativt), i bildpunkter"
 
 #: gtk/gtktexttag.c:437
 msgid "Pixels above lines"
@@ -3880,9 +3872,8 @@ msgid "Invisible"
 msgstr "Osynlig"
 
 #: gtk/gtktexttag.c:503
-#, fuzzy
 msgid "Whether this text is hidden. Not implemented in GTK 2.0"
-msgstr "Huruvida denna text är gömd"
+msgstr "Huruvida denna text är gömd. Inte implementerat i GTK 2.0"
 
 #: gtk/gtktexttag.c:516
 msgid "Background full height set"
@@ -4501,9 +4492,8 @@ msgid "Composite child"
 msgstr "Sammansatt barn"
 
 #: gtk/gtkwidget.c:481
-#, fuzzy
 msgid "Whether the widget is part of a composite widget"
-msgstr "Huruvida widgeten är sammansatt av andra widgetar"
+msgstr "Huruvida widgeten är en del av en sammansatt widget"
 
 #: gtk/gtkwidget.c:487
 msgid "Style"
@@ -4691,7 +4681,7 @@ msgstr "Ikon för detta fönster"
 
 #: gtk/gtkwindow.c:502
 msgid "The screen where this window will be displayed."
-msgstr ""
+msgstr "Den skärm där detta fönster kommer att visas."
 
 #. ID
 #: modules/input/imam-et.c:454
@@ -4737,6 +4727,9 @@ msgstr "Vietnamesisk (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "X-inmatningsmetod"
+
+#~ msgid "Whether this text is hidden."
+#~ msgstr "Huruvida denna text är gömd."
 
 #~ msgid "Insufficient memory to load TGA image"
 #~ msgstr "Inte tillräckligt med minne för att läsa in TGA-bild"
@@ -4800,16 +4793,16 @@ msgstr "X-inmatningsmetod"
 #~ msgstr "Inte tillräckligt med minne för att spara PNG-fil"
 
 #~ msgid "Value between 0.0 and 1.0 to indicate X alignment"
-#~ msgstr "Värde mellan 0.0 och 1.0 för att indikera X-justering"
+#~ msgstr "Värde mellan 0,0 och 1,0 för att indikera X-justering"
 
 #~ msgid "Value between 0.0 and 1.0 to indicate Y alignment"
-#~ msgstr "Värde mellan 0.0 och 1.0 för att indikera Y-justering"
+#~ msgstr "Värde mellan 0,0 och 1,0 för att indikera Y-justering"
 
 #~ msgid "Value between 0.0 and 1.0 to indicate X scale"
-#~ msgstr "Värde mellan 0.0 och 1.0 för att indikera X-skala"
+#~ msgstr "Värde mellan 0,0 och 1,0 för att indikera X-skala"
 
 #~ msgid "Value between 0.0 and 1.0 to indicate Y scale"
-#~ msgstr "Värde mellan 0.0 och 1.0 för att indikera Y-skala"
+#~ msgstr "Värde mellan 0,0 och 1,0 för att indikera Y-skala"
 
 #~ msgid "Text Position"
 #~ msgstr "Textposition"
