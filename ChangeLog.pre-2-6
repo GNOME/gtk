@@ -1,3 +1,9 @@
+Wed Jun 12 17:46:53 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (blink_cb): Add an informative 
+	g_warning() when the entry has lost a focus-out-event.
+	(#78305, Michel Selten)
+
 Wed Jun 12 17:31:15 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenushell.c (gtk_menu_shell_real_select_item): 
