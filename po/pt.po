@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.6\n"
 "Report-Msgid-Bugs-To: Duarte Loreto <happyguy_pt@hotmail.com>\n"
-"POT-Creation-Date: 2003-12-25 04:08+0000\n"
-"PO-Revision-Date: 2003-12-25 04:15+0000\n"
+"POT-Creation-Date: 2003-12-29 18:37+0000\n"
+"PO-Revision-Date: 2003-12-29 18:40+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -2080,7 +2080,7 @@ msgstr "Coluna de Texto"
 
 #: gtk/gtkcomboboxentry.c:105
 msgid "A column in the data source model to get the strings from"
-msgstr "Uma colina no modelo de fonte de dados de onde obter as expressões"
+msgstr "Uma coluna no modelo de fonte de dados de onde obter as expressões"
 
 #: gtk/gtkcontainer.c:203
 msgid "Resize mode"
