@@ -689,7 +689,7 @@ gtk_icon_theme_get_search_path (GtkIconTheme      *icon_theme,
     {
       *path = g_new (gchar *, priv->search_path_len + 1);
       for (i = 0; i < priv->search_path_len; i++)
-	(*path)[i] = g_strdup (priv->search_path[i] + 1);
+	(*path)[i] = g_strdup (priv->search_path[i]);
       (*path)[i] = NULL;
     }
 }

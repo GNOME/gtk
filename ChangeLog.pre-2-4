@@ -1,3 +1,8 @@
+Thu Feb 12 17:59:52 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkicontheme.c (gtk_icon_theme_get_search_path): 
+	Remove an extraneous + 1 (#134015, Torsten Schoenfeld)
+
 Thu Feb 12 23:55:08 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktooltips.h:
