@@ -208,6 +208,8 @@ struct _GtkTreeViewPrivate
   /* interactive search */
   guint enable_search : 1;
   guint disable_popdown : 1;
+  
+  guint hover_selection : 1;
 
   gint selected_iter;
   gint search_column;
