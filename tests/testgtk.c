@@ -3019,8 +3019,6 @@ create_tooltips (GtkWidget *widget)
 			"GtkWindow::title", "Tooltips",
 			"GtkWindow::allow_shrink", TRUE,
 			"GtkWindow::allow_grow", FALSE,
-			"GtkWindow::auto_shrink", TRUE,
-			"GtkWidget::width", 200,
 			NULL);
 
       gtk_window_set_screen (GTK_WINDOW (window),
@@ -9633,16 +9631,6 @@ allow_grow_callback (GtkWidget *widget,
 }
 
 static void
-auto_shrink_callback (GtkWidget *widget,
-                      gpointer   data)
-{
-  g_object_set (G_OBJECT (g_object_get_data (data, "target")),
-                "auto_shrink",
-                GTK_TOGGLE_BUTTON (widget)->active,
-                NULL);
-}
-
-static void
 gravity_selected (GtkWidget *widget,
                   gpointer   data)
 {
@@ -10025,14 +10013,6 @@ window_controls (GtkWidget *window)
                       GTK_OBJECT (control_window));
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
   
-  button = gtk_check_button_new_with_label ("Auto shrink");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
-  gtk_signal_connect (GTK_OBJECT (button),
-                      "toggled",
-                      GTK_SIGNAL_FUNC (auto_shrink_callback),
-                      GTK_OBJECT (control_window));
-  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-
   button = gtk_button_new_with_mnemonic ("_Show");
   gtk_signal_connect_object (GTK_OBJECT (button),
                              "clicked",

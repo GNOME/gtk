@@ -1,3 +1,9 @@
+Sun Oct 13 17:21:15 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* tests/testgtk.c (window_controls), tests/testgtk.c
+	(create_tooltips): remove references to non-existing properties
+	GtkWindow::allow_shrink and GtkWidget::width
+
 Sat Oct 12 15:44:29 2002  Manish Singh  <yosh@gimp.org>
 
         * gtk/gtkitemfactory.c: use GTK_IS_RADIO_MENU_ITEM instead
