@@ -1,13 +1,24 @@
-Thu Jun  8 15:44:42 2000  Elliot Lee <sopwith@redhat.com>
-	* configure.in: Save cflags for all backends, not just X11.
+Sun Jun 11 12:46:19 2000  Owen Taylor  <otaylor@redhat.com>
 
-Wed Jun  7 15:44:42 2000  Elliot Lee <sopwith@redhat.com>
-	* configure.in: Use $PANGO_CONFIG instead of pango-config
+	* gtk/gtkdnd.c (gtk_drag_set_default_icon): Fix
+	cut and paste typo where wrong pixmap was being
+	unref'ed. (Pointed out by a friend of KUSANO Takayuki.)
+
+Sun Jun 11 10:22:36 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkselection.c (gtk_selection_bytes_per_item):
+	Add helper function to compute format / bytes 
+	relationship. Use in a couple places to fix up
+	errors which assume 8 * format.
+
+	* gtk/gtkselection.c (gtk_selection_request): Use 32
+	rather than 8 * sizeof (GdkAtom), to work correctly
+	on Alpha.
 
 Wed Jun  7 15:44:42 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am (LDFLAGS): Add missing backslash that was keeping
-	GTK+ from even building at all
+	GTK+ from building at all.
 
 	* gdk/Makefile.am (gdk_c_sources): Fix up some indentation issues.
 

@@ -139,18 +139,21 @@ struct _GtkRetrievalInfo
 };
 
 /* Local Functions */
-static void gtk_selection_init			 (void);
-static gint gtk_selection_incr_timeout		 (GtkIncrInfo *info);
-static gint gtk_selection_retrieval_timeout	 (GtkRetrievalInfo *info);
-static void gtk_selection_retrieval_report	 (GtkRetrievalInfo *info,
-						  GdkAtom type, gint format, 
-						  guchar *buffer, gint length,
-						  guint32 time);
-static void gtk_selection_invoke_handler	 (GtkWidget	   *widget,
-						  GtkSelectionData *data,
-						  guint             time);
-static void gtk_selection_default_handler	 (GtkWidget	  *widget,
-						  GtkSelectionData *data);
+static void gtk_selection_init              (void);
+static gint gtk_selection_incr_timeout      (GtkIncrInfo      *info);
+static gint gtk_selection_retrieval_timeout (GtkRetrievalInfo *info);
+static void gtk_selection_retrieval_report  (GtkRetrievalInfo *info,
+					     GdkAtom           type,
+					     gint              format,
+					     guchar           *buffer,
+					     gint              length,
+					     guint32           time);
+static void gtk_selection_invoke_handler    (GtkWidget        *widget,
+					     GtkSelectionData *data,
+					     guint             time);
+static void gtk_selection_default_handler   (GtkWidget        *widget,
+					     GtkSelectionData *data);
+static int  gtk_selection_bytes_per_item    (gint              format);
 
 /* Local Data */
 static gint initialize = TRUE;
@@ -891,7 +894,7 @@ gtk_selection_request (GtkWidget *widget,
   for (i=0; i<info->num_conversions; i++)
     {
       GtkSelectionData data;
-      gint items;
+      glong items;
       
       data.selection = event->selection;
       data.target = info->conversions[i].target;
@@ -916,7 +919,7 @@ gtk_selection_request (GtkWidget *widget,
       
       g_return_val_if_fail ((data.format >= 8) && (data.format % 8 == 0), FALSE);
       
-      items = (data.length + data.format/8 - 1) / (data.format/8);
+      items = data.length / gtk_selection_bytes_per_item (data.format);
       
       if (data.length > GTK_SELECTION_MAX_SIZE)
 	{
@@ -929,7 +932,7 @@ gtk_selection_request (GtkWidget *widget,
 	  gdk_property_change (info->requestor, 
 			       info->conversions[i].property,
 			       gtk_selection_atoms[INCR],
-			       8*sizeof (GdkAtom),
+			       32,
 			       GDK_PROP_MODE_REPLACE,
 			       (guchar *)&items, 1);
 	}
@@ -972,7 +975,7 @@ gtk_selection_request (GtkWidget *widget,
   if (event->target == gtk_selection_atoms[MULTIPLE])
     {
       gdk_property_change (info->requestor, event->property,
-			   GDK_SELECTION_TYPE_ATOM, 8*sizeof(GdkAtom), 
+			   GDK_SELECTION_TYPE_ATOM, 32, 
 			   GDK_PROP_MODE_REPLACE,
 			   mult_atoms, 2*info->num_conversions);
       g_free (mult_atoms);
@@ -1053,6 +1056,8 @@ gtk_selection_incr_event (GdkWindow	   *window,
       if (info->conversions[i].property == event->atom &&
 	  info->conversions[i].offset != -1)
 	{
+	  int bytes_per_item;
+	  
 	  info->idle_time = 0;
 	  
 	  if (info->conversions[i].offset == -2) /* only the last 0-length
@@ -1081,13 +1086,14 @@ gtk_selection_incr_event (GdkWindow	   *window,
 		     num_bytes, info->conversions[i].offset, 
 		     GDK_WINDOW_XWINDOW(info->requestor), event->atom);
 #endif
+
+	  bytes_per_item = gtk_selection_bytes_per_item (info->conversions[i].data.format);
 	  gdk_property_change (info->requestor, event->atom,
 			       info->conversions[i].data.type,
 			       info->conversions[i].data.format,
 			       GDK_PROP_MODE_REPLACE,
-			       buffer, 
-			       (num_bytes + info->conversions[i].data.format/8 - 1) / 
-			       (info->conversions[i].data.format/8));
+			       buffer,
+			       num_bytes / bytes_per_item);
 	  
 	  if (info->conversions[i].offset == -2)
 	    {
@@ -1517,11 +1523,13 @@ gtk_selection_default_handler (GtkWidget	*widget,
 	  if ((selection_info->widget == widget) &&
 	      (selection_info->selection == data->selection))
 	    {
+	      gulong time = selection_info->time;
+
 	      gtk_selection_data_set (data,
 				      GDK_SELECTION_TYPE_INTEGER,
-				      sizeof (guint32)*8,
-				      (guchar *)&selection_info->time,
-				      sizeof (guint32));
+				      32,
+				      (guchar *)&time,
+				      sizeof (time));
 	      return;
 	    }
 	  
@@ -1544,7 +1552,7 @@ gtk_selection_default_handler (GtkWidget	*widget,
       count = g_list_length (target_list->list) + 3;
       
       data->type = GDK_SELECTION_TYPE_ATOM;
-      data->format = 8*sizeof (GdkAtom);
+      data->format = 32;
       data->length = count * sizeof (GdkAtom);
       
       p = g_new (GdkAtom, count);
@@ -1589,4 +1597,24 @@ gtk_selection_data_free (GtkSelectionData *data)
   g_return_if_fail (data != NULL);
   
   g_free (data);
+}
+
+static int 
+gtk_selection_bytes_per_item (gint format)
+{
+  switch (format)
+    {
+    case 8:
+      return sizeof (char);
+      break;
+    case 16:
+      return sizeof (short);
+      break;
+    case 32:
+      return sizeof (long);
+      break;
+    default:
+      g_assert_not_reached();
+    }
+  return 0;
 }

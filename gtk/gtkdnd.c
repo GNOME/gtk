@@ -2065,7 +2065,7 @@ gtk_drag_set_default_icon (GdkColormap   *colormap,
   if (default_icon_pixmap)
     gdk_pixmap_unref (default_icon_pixmap);
   if (default_icon_mask)
-    gdk_pixmap_unref (default_icon_pixmap);
+    gdk_pixmap_unref (default_icon_mask);
 
   default_icon_colormap = colormap;
   gdk_colormap_ref (colormap);
