@@ -1,3 +1,13 @@
+2004-02-20  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c: (shortcuts_append_desktop):
+	Desktop directory is not translated.
+	(set_tree_model):
+	There might not be volumes for all paths.
+	* gtk/gtkfilechooserwidget.c:
+	(gtk_file_chooser_widget_constructor):
+	Use gtk_file_chooser_set_current_folder to set cwd.
+
 Thu Feb 19 19:58:53 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkpathbar.[ch]: New widget to handle the path in the

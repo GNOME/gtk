@@ -649,9 +649,7 @@ shortcuts_append_desktop (GtkFileChooserDefault *impl)
   char *name;
   GtkFilePath *path;
 
-  /* FIXME: What is the Right Way of finding the desktop directory? */
-
-  name = g_build_filename (g_get_home_dir (), _("Desktop"), NULL);
+  name = g_build_filename (g_get_home_dir (), "Desktop", NULL);
   path = gtk_file_system_filename_to_path (impl->file_system, name);
   g_free (name);
 
@@ -2127,18 +2125,36 @@ static void
 set_tree_model (GtkFileChooserDefault *impl, const GtkFilePath *path)
 {
   GtkFileSystemVolume *volume;
-  GtkFilePath *volume_path;
+  GtkFilePath *base_path, *parent_path;
 
+  base_path = NULL;
+  
   volume = gtk_file_system_get_volume_for_path (impl->file_system, path);
-  volume_path = gtk_file_system_volume_get_base_path (impl->file_system, volume);
+  
+  if (volume)
+    base_path = gtk_file_system_volume_get_base_path (impl->file_system, volume);
+  
+  if (base_path == NULL)
+    {
+      base_path = gtk_file_path_copy (path);
+      while (gtk_file_system_get_parent (impl->file_system,
+					 base_path,
+					 &parent_path,
+					 NULL) &&
+	     parent_path != NULL)
+	{
+	  gtk_file_path_free (base_path);
+	  base_path = parent_path;
+	}
+    }
 
-  if (impl->current_volume_path && gtk_file_path_compare (volume_path, impl->current_volume_path) == 0)
+  if (impl->current_volume_path && gtk_file_path_compare (base_path, impl->current_volume_path) == 0)
     goto out;
 
   if (impl->tree_model)
     g_object_unref (impl->tree_model);
 
-  impl->current_volume_path = gtk_file_path_copy (volume_path);
+  impl->current_volume_path = gtk_file_path_copy (base_path);
 
   impl->tree_model = _gtk_file_system_model_new (impl->file_system, impl->current_volume_path, -1,
 						 GTK_FILE_INFO_DISPLAY_NAME);
@@ -2150,8 +2166,9 @@ set_tree_model (GtkFileChooserDefault *impl, const GtkFilePath *path)
 
  out:
 
-  gtk_file_path_free (volume_path);
-  gtk_file_system_volume_free (impl->file_system, volume);
+  gtk_file_path_free (base_path);
+  if (volume) 
+    gtk_file_system_volume_free (impl->file_system, volume);
 }
 
 static void
