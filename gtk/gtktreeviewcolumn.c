@@ -2677,7 +2677,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 
   real_cell_area.x += focus_line_width;
 
-  /* Find out how many extra space we have to allocate */
+  /* Find out how much extra space we have to allocate */
   for (list = tree_column->cell_list; list; list = list->next)
     {
       GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *)list->data;
@@ -2813,8 +2813,8 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 						  event,
 						  tree_column->tree_view,
 						  path_string,
-						  background_area,
-						  cell_area,
+						  &rtl_background_area,
+						  &rtl_cell_area,
 						  flags))
 		    {
                       flags &= ~GTK_CELL_RENDERER_FOCUSED;
@@ -2828,8 +2828,8 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 						     event,
 						     tree_column->tree_view,
 						     path_string,
-						     background_area,
-						     cell_area,
+						     &rtl_background_area,
+						     &rtl_cell_area,
 						     flags);
 
 		  if (*editable_widget != NULL)
@@ -2967,8 +2967,8 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 						  event,
 						  tree_column->tree_view,
 						  path_string,
-						  background_area,
-						  cell_area,
+						  &rtl_background_area,
+						  &rtl_cell_area,
 						  flags))
 		    {
 		      flags &= ~GTK_CELL_RENDERER_FOCUSED;
@@ -2982,8 +2982,8 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 						     event,
 						     tree_column->tree_view,
 						     path_string,
-						     background_area,
-						     cell_area,
+						     &rtl_background_area,
+						     &rtl_cell_area,
 						     flags);
 
 		  if (*editable_widget != NULL)
@@ -3492,10 +3492,22 @@ _gtk_tree_view_column_get_neighbor_sizes (GtkTreeViewColumn *column,
 					  gint              *right)
 {
   GList *list;
+  gint *rtl_left, *rtl_right;
 
-  if (left)
+  if (gtk_widget_get_direction (GTK_WIDGET (column->tree_view)) == GTK_TEXT_DIR_RTL)
     {
-      *left = 0;
+      rtl_left = right;
+      rtl_right = left;
+    }
+  else
+    {
+      rtl_left = left;
+      rtl_right = right;
+    }
+
+  if (rtl_left)
+    {
+      *rtl_left = 0;
       list = gtk_tree_view_column_cell_first (column);
 
       for (; list; list = gtk_tree_view_column_cell_next (column, list))
@@ -3507,15 +3519,15 @@ _gtk_tree_view_column_get_neighbor_sizes (GtkTreeViewColumn *column,
 	    break;
 
 	  if (info->cell->visible)
-	    *left += info->real_width;
+	    *rtl_left += info->real_width;
 	}
     }
 
-  if (right)
+  if (rtl_right)
     {
       GList *next;
 
-      *right = 0;
+      *rtl_right = 0;
       list = gtk_tree_view_column_cell_first (column);
 
       for (; list; list = gtk_tree_view_column_cell_next (column, list))
@@ -3538,7 +3550,7 @@ _gtk_tree_view_column_get_neighbor_sizes (GtkTreeViewColumn *column,
 	        (GtkTreeViewColumnCellInfo *)list->data;
 
 	      if (info->cell->visible)
-	        *right += info->real_width;
+	        *rtl_right += info->real_width;
 	    }
 	}
     }
