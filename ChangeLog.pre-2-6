@@ -12,6 +12,8 @@ Wed May 21 19:01:06 2003  Owen Taylor  <otaylor@redhat.com>
 	"Rename File" and "Create Directory" subdialogs: Enter in entry
 	activates default, default is "Create"/"Rename", Escape cancels
 	dialog.  (#113110)
+	(gtk_file_selection_set_filename): Add a hint about opening 
+	directories.  (#113175)
 
 2003-05-22  Matthias Clasen  <maclas@gmx.de>
 
