@@ -90,7 +90,7 @@ and not as fast at random data access.  The #GtkListStore sets the
 -->s can be cached while the row exists.  Thus, if access to a
 particular row is needed often, it is worth keeping the iter around.
 </para>
-</refsect>
+</refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
