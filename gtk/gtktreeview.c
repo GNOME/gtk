@@ -3790,6 +3790,7 @@ validate_rows_handler (GtkTreeView *tree_view)
   if (tree_view->priv->tree == NULL)
     {
       tree_view->priv->validate_rows_timer = 0;
+      GDK_THREADS_LEAVE ();
       return FALSE;
     }
 
