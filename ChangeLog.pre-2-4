@@ -1,3 +1,8 @@
+Sat Dec 13 23:37:50 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdkdraw.c (gdk_draw_pixbuf): Document that the clip mask
+	of gc is ignored.  (#101983, Sebastian Rittau)
+
 Sat Dec 13 16:13:27 2003  Kristian Rietveld  <kris@gtk.org>
 
 	A trick for a faster treeview, step 1. Patch to short circuit
