@@ -1,3 +1,7 @@
+2001-10-02  Sven Neumann  <sven@gimp.org>
+
+	* gdk-pixdata.c: g_string_printfa => g_string_append_printf. 
+
 Wed Sep 26 18:08:19 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am (s-enum-types-h): Fix a typo in the include

@@ -482,7 +482,7 @@ save_uchar (CSourceData *cdata,
     }
   if (d < 33 || d > 126)
     {
-      g_string_printfa (gstring, "\\%o", d);
+      g_string_append_printf (gstring, "\\%o", d);
       cdata->pos += 1 + 1 + (d > 7) + (d > 63);
       cdata->pad = d < 64;
       return;
@@ -519,28 +519,28 @@ save_rle_decoder (GString     *gstring,
 		  const gchar *s_uint_8,
 		  guint        n_ch)
 {
-  g_string_printfa (gstring, "#define %s_RUN_LENGTH_DECODE(image_buf, rle_data, size, bpp) do \\\n",
+  g_string_append_printf (gstring, "#define %s_RUN_LENGTH_DECODE(image_buf, rle_data, size, bpp) do \\\n",
 		    macro_name);
-  g_string_printfa (gstring, "{ %s __bpp; %s *__ip; const %s *__il, *__rd; \\\n", s_uint, s_uint_8, s_uint_8);
-  g_string_printfa (gstring, "  __bpp = (bpp); __ip = (image_buf); __il = __ip + (size) * __bpp; \\\n");
+  g_string_append_printf (gstring, "{ %s __bpp; %s *__ip; const %s *__il, *__rd; \\\n", s_uint, s_uint_8, s_uint_8);
+  g_string_append_printf (gstring, "  __bpp = (bpp); __ip = (image_buf); __il = __ip + (size) * __bpp; \\\n");
   
-  g_string_printfa (gstring, "  __rd = (rle_data); if (__bpp > 3) { /* RGBA */ \\\n");
+  g_string_append_printf (gstring, "  __rd = (rle_data); if (__bpp > 3) { /* RGBA */ \\\n");
   
-  g_string_printfa (gstring, "    while (__ip < __il) { %s __l = *(__rd++); \\\n", s_uint);
-  g_string_printfa (gstring, "      if (__l & 128) { __l = __l - 128; \\\n");
-  g_string_printfa (gstring, "        do { memcpy (__ip, __rd, 4); __ip += 4; } while (--__l); __rd += 4; \\\n");
-  g_string_printfa (gstring, "      } else { __l *= 4; memcpy (__ip, __rd, __l); \\\n");
-  g_string_printfa (gstring, "               __ip += __l; __rd += __l; } } \\\n");
+  g_string_append_printf (gstring, "    while (__ip < __il) { %s __l = *(__rd++); \\\n", s_uint);
+  g_string_append_printf (gstring, "      if (__l & 128) { __l = __l - 128; \\\n");
+  g_string_append_printf (gstring, "        do { memcpy (__ip, __rd, 4); __ip += 4; } while (--__l); __rd += 4; \\\n");
+  g_string_append_printf (gstring, "      } else { __l *= 4; memcpy (__ip, __rd, __l); \\\n");
+  g_string_append_printf (gstring, "               __ip += __l; __rd += __l; } } \\\n");
   
-  g_string_printfa (gstring, "  } else { /* RGB */ \\\n");
+  g_string_append_printf (gstring, "  } else { /* RGB */ \\\n");
   
-  g_string_printfa (gstring, "    while (__ip < __il) { %s __l = *(__rd++); \\\n", s_uint);
-  g_string_printfa (gstring, "      if (__l & 128) { __l = __l - 128; \\\n");
-  g_string_printfa (gstring, "        do { memcpy (__ip, __rd, 3); __ip += 3; } while (--__l); __rd += 3; \\\n");
-  g_string_printfa (gstring, "      } else { __l *= 3; memcpy (__ip, __rd, __l); \\\n");
-  g_string_printfa (gstring, "               __ip += __l; __rd += __l; } } \\\n");
+  g_string_append_printf (gstring, "    while (__ip < __il) { %s __l = *(__rd++); \\\n", s_uint);
+  g_string_append_printf (gstring, "      if (__l & 128) { __l = __l - 128; \\\n");
+  g_string_append_printf (gstring, "        do { memcpy (__ip, __rd, 3); __ip += 3; } while (--__l); __rd += 3; \\\n");
+  g_string_append_printf (gstring, "      } else { __l *= 3; memcpy (__ip, __rd, __l); \\\n");
+  g_string_append_printf (gstring, "               __ip += __l; __rd += __l; } } \\\n");
   
-  g_string_printfa (gstring, "  } } while (0)\n");
+  g_string_append_printf (gstring, "  } } while (0)\n");
 }
 
 GString*
@@ -634,7 +634,7 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
 
   /* initial comment
    */
-  g_string_printfa (gstring,
+  g_string_append_printf (gstring,
 		    "/* GdkPixbuf %s C-Source image dump %s*/\n\n",
 		    bpp > 3 ? "RGBA" : "RGB",
 		    rle_encoded ? "1-byte-run-length-encoded " : "");
@@ -652,33 +652,33 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
    */
   if (cdata.dump_macros)
     {
-      g_string_printfa (gstring, "#define %s_ROWSTRIDE (%u)\n",
+      g_string_append_printf (gstring, "#define %s_ROWSTRIDE (%u)\n",
 			macro_name, rowstride);
-      g_string_printfa (gstring, "#define %s_WIDTH (%u)\n",
+      g_string_append_printf (gstring, "#define %s_WIDTH (%u)\n",
 			macro_name, width);
-      g_string_printfa (gstring, "#define %s_HEIGHT (%u)\n",
+      g_string_append_printf (gstring, "#define %s_HEIGHT (%u)\n",
 			macro_name, height);
-      g_string_printfa (gstring, "#define %s_BYTES_PER_PIXEL (%u) /* 3:RGB, 4:RGBA */\n",
+      g_string_append_printf (gstring, "#define %s_BYTES_PER_PIXEL (%u) /* 3:RGB, 4:RGBA */\n",
 			macro_name, bpp);
     }
   if (cdata.dump_struct)
     {
-      g_string_printfa (gstring, "%s%sGdkPixdata %s = {\n",
+      g_string_append_printf (gstring, "%s%sGdkPixdata %s = {\n",
 			cdata.static_prefix, cdata.const_prefix, name);
-      g_string_printfa (gstring, "  0x%x, /* Pixbuf magic: 'GdkP' */\n",
+      g_string_append_printf (gstring, "  0x%x, /* Pixbuf magic: 'GdkP' */\n",
 			GDK_PIXBUF_MAGIC_NUMBER);
-      g_string_printfa (gstring, "  %u + %u, /* header length + pixel_data length */\n",
+      g_string_append_printf (gstring, "  %u + %u, /* header length + pixel_data length */\n",
 			GDK_PIXDATA_HEADER_LENGTH,
 			rle_encoded ? img_buffer_end - img_buffer : rowstride * height);
-      g_string_printfa (gstring, "  0x%x, /* pixdata_type */\n",
+      g_string_append_printf (gstring, "  0x%x, /* pixdata_type */\n",
 			pixdata->pixdata_type);
-      g_string_printfa (gstring, "  %u, /* rowstride */\n",
+      g_string_append_printf (gstring, "  %u, /* rowstride */\n",
 			rowstride);
-      g_string_printfa (gstring, "  %u, /* width */\n",
+      g_string_append_printf (gstring, "  %u, /* width */\n",
 			width);
-      g_string_printfa (gstring, "  %u, /* height */\n",
+      g_string_append_printf (gstring, "  %u, /* height */\n",
 			height);
-      g_string_printfa (gstring, "  /* pixel_data: */\n");
+      g_string_append_printf (gstring, "  /* pixel_data: */\n");
     }
   if (cdata.dump_stream)
     {
@@ -687,40 +687,40 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
       stream = gdk_pixdata_serialize (pixdata, &stream_length);
       img_buffer_end = stream + stream_length;
 
-      g_string_printfa (gstring, "%s%s%s %s[] = \n",
+      g_string_append_printf (gstring, "%s%s%s %s[] = \n",
 			cdata.static_prefix, cdata.const_prefix,
 			cdata.dump_gtypes ? "guint8" : "unsigned char",
 			name);
-      g_string_printfa (gstring, "( \"\"\n  /* Pixbuf magic (0x%x) */\n  \"",
+      g_string_append_printf (gstring, "( \"\"\n  /* Pixbuf magic (0x%x) */\n  \"",
 			GDK_PIXBUF_MAGIC_NUMBER);
       cdata.pos = 3;
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
-      g_string_printfa (gstring, "\"\n  /* length: header (%u) + pixel_data (%u) */\n  \"",
+      g_string_append_printf (gstring, "\"\n  /* length: header (%u) + pixel_data (%u) */\n  \"",
 			GDK_PIXDATA_HEADER_LENGTH,
 			rle_encoded ? pix_length : rowstride * height);
       cdata.pos = 3;
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
-      g_string_printfa (gstring, "\"\n  /* pixdata_type (0x%x) */\n  \"",
+      g_string_append_printf (gstring, "\"\n  /* pixdata_type (0x%x) */\n  \"",
 			pixdata->pixdata_type);
       cdata.pos = 3;
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
-      g_string_printfa (gstring, "\"\n  /* rowstride (%u) */\n  \"",
+      g_string_append_printf (gstring, "\"\n  /* rowstride (%u) */\n  \"",
 			rowstride);
       cdata.pos = 3;
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
-      g_string_printfa (gstring, "\"\n  /* width (%u) */\n  \"", width);
+      g_string_append_printf (gstring, "\"\n  /* width (%u) */\n  \"", width);
       cdata.pos = 3;
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
-      g_string_printfa (gstring, "\"\n  /* height (%u) */\n  \"", height);
+      g_string_append_printf (gstring, "\"\n  /* height (%u) */\n  \"", height);
       cdata.pos = 3;
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
-      g_string_printfa (gstring, "\"\n  /* pixel_data: */\n");
+      g_string_append_printf (gstring, "\"\n  /* pixel_data: */\n");
       img_buffer = stream;
     }
 
@@ -728,21 +728,21 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
    */
   if (cdata.dump_macros)
     {
-      g_string_printfa (gstring, "#define %s_%sPIXEL_DATA ((%s*) \\\n",
+      g_string_append_printf (gstring, "#define %s_%sPIXEL_DATA ((%s*) \\\n",
 			macro_name,
 			rle_encoded ? "RLE_" : "",
 			s_uint_8);
-      g_string_printfa (gstring, "  \"");
+      g_string_append_printf (gstring, "  \"");
       cdata.pos = 2;
     }
   if (cdata.dump_struct)
     {
-      g_string_printfa (gstring, "  \"");
+      g_string_append_printf (gstring, "  \"");
       cdata.pos = 3;
     }
   if (cdata.dump_stream)
     {
-      g_string_printfa (gstring, "  \"");
+      g_string_append_printf (gstring, "  \"");
       cdata.pos = 3;
     }
     
@@ -755,11 +755,11 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
   /* pixel_data trailer
    */
   if (cdata.dump_macros)
-    g_string_printfa (gstring, "\")\n\n");
+    g_string_append_printf (gstring, "\")\n\n");
   if (cdata.dump_struct)
-    g_string_printfa (gstring, "\",\n};\n\n");
+    g_string_append_printf (gstring, "\",\n};\n\n");
   if (cdata.dump_stream)
-    g_string_printfa (gstring, "\");\n\n");
+    g_string_append_printf (gstring, "\");\n\n");
 
   /* dump RLE decoder for macros
    */
