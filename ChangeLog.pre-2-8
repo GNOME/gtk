@@ -1,3 +1,14 @@
+Tue Jan 29 16:11:55 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfontsel.c (gtk_font_selection_show_available_sizes): Use
+	gtk_tree_view_set_cursor() instead of gtk_tree_selection_select_iter().
+
+	* gtk/gtkfontsel.c (gtk_font_selection_init): Add mnemonic to
+	preview field. (#52433, patch from Anders Carlsson)
+	
+	* gtk/gtkfontsel.c (gtk_font_selection_dialog_init): Remove the 
+	dialog separator. (#69558, Alex Larsson, patch from Anders Carlsson)
+
 Tue Jan 29 15:24:59 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfontsel.[ch]: Switch over to GtkTreeView from
