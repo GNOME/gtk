@@ -336,6 +336,10 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
   gint level;
   GdkModifierType consumed_modifiers;
 
+  /* We don't want Caps_Lock to affect keybinding lookups.
+   */
+  state &= ~GDK_LOCK_MASK;
+  
   gdk_keymap_translate_keyboard_state (key_hash->keymap,
 				       hardware_keycode, state, group,
 				       &keyval, &effective_group, &level, &consumed_modifiers);
