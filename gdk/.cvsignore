@@ -2,6 +2,7 @@
 Makefile
 .deps
 _libs
+.libs
 libgdk.la
 gdkcursors.h
 gdkkeysyms.h

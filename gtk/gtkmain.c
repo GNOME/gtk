@@ -366,6 +366,11 @@ gtk_main_iteration ()
 	case GDK_SELECTION_REQUEST:
 	case GDK_SELECTION_NOTIFY:
 	case GDK_CLIENT_EVENT:
+	case GDK_DRAG_BEGIN:
+	case GDK_DRAG_REQUEST:
+	case GDK_DROP_ENTER:
+	case GDK_DROP_LEAVE:
+	case GDK_DROP_DATA_AVAIL:
 	  gtk_widget_event (event_widget, &event_copy);
 	  break;
 	  
@@ -379,11 +384,6 @@ gtk_main_iteration ()
 	case GDK_PROXIMITY_IN:
 	case GDK_PROXIMITY_OUT:
 	case GDK_OTHER_EVENT:
-	case GDK_DRAG_BEGIN:
-	case GDK_DRAG_REQUEST:
-	case GDK_DROP_ENTER:
-	case GDK_DROP_LEAVE:
-	case GDK_DROP_DATA_AVAIL:
 	  gtk_propagate_event (grab_widget, &event_copy);
 	  break;
 	  

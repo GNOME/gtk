@@ -17,6 +17,8 @@
  */
 #include "../config.h"
 
+/* #define DEBUG_DND 1 */ /* Shouldn't be needed much these days */
+
 #include <X11/Xlocale.h>
 #include <ctype.h>
 #include <signal.h>
@@ -109,20 +111,24 @@ static void      gdk_synthesize_click   (GdkEvent     *event,
 static void      gdk_dnd_drag_begin     (GdkWindow    *initial_window);
 static void      gdk_dnd_drag_enter     (Window        dest);
 static void      gdk_dnd_drag_leave     (Window        dest);
-static void      gdk_dnd_drag_end       (Window        dest, 
+static void      gdk_dnd_drag_end       (Window        dest,
 					 GdkPoint      coords);
 static GdkAtom   gdk_dnd_check_types    (GdkWindow    *window,
 					 XEvent       *xevent);
+#ifdef DEBUG_DND
 static void      gdk_print_atom         (GdkAtom       anatom);
+#endif
 
 /* 
  * old junk from offix, we might use it though so leave it 
  */
-static Window       gdk_drop_get_client_window   (Display     *dpy, 
-						  Window       win);
+Window       gdk_get_client_window   (Display     *dpy, 
+				      Window       win);
+#ifdef WE_HAVE_MOTIF_DROPS_DONE
 static GdkWindow *  gdk_drop_get_real_window     (GdkWindow   *w, 
 						  guint16     *x,
 						  guint16     *y);
+#endif
 static void         gdk_exit_func                (void);
 static int          gdk_x_error                  (Display     *display, 
 						  XErrorEvent *error);
@@ -1708,7 +1714,6 @@ gdk_event_translate (GdkEvent *event,
 	       will be the one that is actually dragged */
 	    XWindowAttributes dnd_winattr;
 	    XSetWindowAttributes dnd_setwinattr;
-	    Status rv;
 
 	    /* We need to get motion events while the button is down, so
 	       we can know whether to really start dragging or not... */
@@ -1835,16 +1840,17 @@ gdk_event_translate (GdkEvent *event,
 	  /* XXX there has to be a better way to do this, perhaps with
 	     XTranslateCoordinates or XQueryTree - I don't know how,
 	     and this sort of works */
-	  Window curwin, childwin = gdk_root_window, rootwinret;
+	  static Window lastwin = None, curwin = None;
+	  Window childwin = gdk_root_window;
 	  int x, y;
-	  unsigned int mask;
+	  lastwin = curwin;
 	  while(childwin != None)
 	    {
 	      curwin = childwin;
-	      XQueryPointer(gdk_display, curwin, &rootwinret, &childwin,
-			    &x, &y, &x, &y, &mask);
+	      XTranslateCoordinates(gdk_display, curwin, childwin,
+				x, y, &x, &y, &childwin);
 	    }
-	  if(curwin != dnd_drag_curwin)
+	  if(curwin != dnd_drag_curwin && curwin != lastwin)
 	    {
 	      /* We have left one window and entered another
 		 (do leave & enter bits) */
@@ -1855,6 +1861,10 @@ gdk_event_translate (GdkEvent *event,
 	      dnd_drag_dropzone.x = dnd_drag_dropzone.y = 0;
 	      dnd_drag_dropzone.width = dnd_drag_dropzone.height = 0;
 	      dnd_drag_target = None;
+#ifdef DEBUG_DND
+	      g_print("curwin = %#x, lastwin = %#x, dnd_drag_curwin = %#x\n",
+		      curwin, lastwin, dnd_drag_curwin);
+#endif
 	      XChangeActivePointerGrab(gdk_display,
 				       ButtonMotionMask |
 				       ButtonPressMask | ButtonReleaseMask |
@@ -1863,7 +1873,8 @@ gdk_event_translate (GdkEvent *event,
 				       CurrentTime);
 	    }
 	  else if(dnd_drag_dropzone.width > 0
-		  && dnd_drag_dropzone.height > 0)
+		  && dnd_drag_dropzone.height > 0
+		  && curwin == dnd_drag_curwin)
 	    {
 	      /* Handle all that dropzone stuff - thanks John ;-) */
 	      if(dnd_drag_target != None
@@ -1879,6 +1890,8 @@ gdk_event_translate (GdkEvent *event,
 		{
 		  /* We were outside drop zone but in the window
 		     - have to send enter events */
+#ifdef DEBUG_DND
+#endif
 		  gdk_dnd_drag_enter(curwin);
 		  dnd_drag_curwin = curwin;
 		  dnd_drag_dropzone.x = dnd_drag_dropzone.y = 0;
@@ -1889,7 +1902,7 @@ gdk_event_translate (GdkEvent *event,
 	  return_val = FALSE;
 	}
       else
-      return_val = window_private && !window_private->destroyed;
+	return_val = window_private && !window_private->destroyed;
       break;
 
     case EnterNotify:
@@ -1942,13 +1955,39 @@ gdk_event_translate (GdkEvent *event,
 	  break;
 	}
 
-      if(dnd_drag_perhaps
-	 && gdk_dnd.drag_really
-	 && xevent->xcrossing.window == real_sw->xwindow)
+#ifdef DEBUG_DND
+	if(dnd_drag_perhaps)
 	{
-	  gdk_dnd.drag_really = 0;
-	  XUngrabPointer(gdk_display, CurrentTime);
+		g_print("We may[%d] have a drag into %#x = %#x\n",
+			gdk_dnd.drag_really,
+			xevent->xcrossing.window, real_sw->xwindow);
 	}
+#endif
+      if(dnd_drag_perhaps) {
+	if(!gdk_dnd.drag_really && xevent->xcrossing.window != real_sw->xwindow)
+	  {
+	    gdk_dnd_drag_addwindow((GdkWindow *) real_sw);
+	    gdk_dnd_drag_begin((GdkWindow *) real_sw);
+	    XGrabPointer(gdk_display, real_sw->xwindow, False,
+			 ButtonMotionMask |
+			 ButtonPressMask | ButtonReleaseMask |
+			 EnterWindowMask | LeaveWindowMask,
+			 GrabModeAsync, GrabModeAsync, gdk_root_window,
+			 gdk_dnd.gdk_cursor_dragdefault, CurrentTime);
+	    gdk_dnd.drag_really = 1;
+	  }
+	else if(gdk_dnd.drag_really && xevent->xcrossing.window == real_sw->xwindow)
+	  {
+	    gdk_dnd.drag_really = 0;
+#ifdef DEBUG_DND
+	    g_print("Ungrabbed\n");
+#endif
+	    gdk_dnd.drag_numwindows = 0;
+	    g_free(gdk_dnd.drag_startwindows);
+	    gdk_dnd.drag_startwindows = NULL;
+	    XUngrabPointer(gdk_display, CurrentTime);
+	  }
+      }
 
       return_val = window_private && !window_private->destroyed;
       break;
@@ -1987,19 +2026,40 @@ gdk_event_translate (GdkEvent *event,
 	  event->crossing.detail = GDK_NOTIFY_UNKNOWN;
 	  break;
 	}
-      if(dnd_drag_perhaps
-	 && !gdk_dnd.drag_really)
+#ifdef DEBUG_DND
+      if(dnd_drag_perhaps)
 	{
-	  gdk_dnd_drag_addwindow((GdkWindow *) real_sw);
-	  gdk_dnd_drag_begin((GdkWindow *) real_sw);
-	  XGrabPointer(gdk_display, real_sw->xwindow, False,
-		       ButtonMotionMask |
-		       ButtonPressMask | ButtonReleaseMask |
-		       EnterWindowMask | LeaveWindowMask,
-		       GrabModeAsync, GrabModeAsync, gdk_root_window,
-		       gdk_dnd.gdk_cursor_dragdefault, CurrentTime);
-	  gdk_dnd.drag_really = 1;
+	  g_print("We may[%d] have a drag out of %#x = %#x\n",
+		  gdk_dnd.drag_really,
+		  xevent->xcrossing.window, real_sw->xwindow);
+	}
+#endif
+      if(dnd_drag_perhaps) {
+	if(!gdk_dnd.drag_really && xevent->xcrossing.window != real_sw->xwindow)
+	  {
+	    gdk_dnd_drag_addwindow((GdkWindow *) real_sw);
+	    gdk_dnd_drag_begin((GdkWindow *) real_sw);
+	    XGrabPointer(gdk_display, real_sw->xwindow, False,
+			 ButtonMotionMask |
+			 ButtonPressMask | ButtonReleaseMask |
+			 EnterWindowMask | LeaveWindowMask,
+			 GrabModeAsync, GrabModeAsync, gdk_root_window,
+			 gdk_dnd.gdk_cursor_dragdefault, CurrentTime);
+	    gdk_dnd.drag_really = 1;
+	  }
+	else if(gdk_dnd.drag_really && xevent->xcrossing.window == real_sw->xwindow)
+	  {
+	    gdk_dnd.drag_really = 0;
+#ifdef DEBUG_DND
+	    g_print("Ungrabbed\n");
+#endif
+	    gdk_dnd.drag_numwindows = 0;
+	    g_free(gdk_dnd.drag_startwindows);
+	    gdk_dnd.drag_startwindows = NULL;
+	    XUngrabPointer(gdk_display, CurrentTime);
+	  }
       }
+
       return_val = window_private && !window_private->destroyed;
       break;
 
@@ -2331,7 +2391,9 @@ gdk_event_translate (GdkEvent *event,
 	  Atom reptype = 0;
 
 	  event->dropenter.u.allflags = xevent->xclient.data.l[1];
+#ifndef DEBUG_DND
 	  if (gdk_show_events)
+#endif
 	    g_print ("GDK_DROP_ENTER\n");
 	  return_val = FALSE;
 
@@ -2372,7 +2434,9 @@ gdk_event_translate (GdkEvent *event,
 	}
       else if (xevent->xclient.message_type == gdk_dnd.gdk_XdeLeave)
 	{
+#ifndef DEBUG_DND
 	  if (gdk_show_events)
+#endif
 	    g_print ("GDK_DROP_LEAVE\n");
 	  if (window_private && window_private->dnd_drop_enabled)
 	    {
@@ -2391,7 +2455,9 @@ gdk_event_translate (GdkEvent *event,
 	   * make sure to only handle requests from the window the cursor is
 	   * over 
 	   */
+#ifndef DEBUG_DND
 	  if (gdk_show_events)
+#endif
 	    g_print ("GDK_DRAG_REQUEST\n");
 	  event->dragrequest.u.allflags = xevent->xclient.data.l[1];
 	  return_val = FALSE;
@@ -2443,9 +2509,10 @@ gdk_event_translate (GdkEvent *event,
 	    gint tmp_int; Atom tmp_atom;
 	    gulong tmp_long;
 	    guchar *tmp_charptr;
-	    gpointer tmp_ptr;
-	    
+
+#ifndef DEBUG_DND
 	    if(gdk_show_events)
+#endif
 	      g_print("GDK_DROP_DATA_AVAIL\n");
 	    event->dropdataavailable.u.allflags = xevent->xclient.data.l[1];
 	    if(window
@@ -2474,8 +2541,10 @@ gdk_event_translate (GdkEvent *event,
 		  }
 		else
 		  {
+#ifdef DEBUG_DND
 		    g_print("XGetWindowProperty got us %d bytes\n",
 			    event->dropdataavailable.data_numbytes);
+#endif
 		    event->dropdataavailable.data =
 			g_malloc(event->dropdataavailable.data_numbytes);
 		    memcpy(event->dropdataavailable.data,
@@ -2485,7 +2554,9 @@ gdk_event_translate (GdkEvent *event,
 		  }
 	      return_val = TRUE;
 	    }
-	} else {
+	}
+      else
+	{
 	  /* Send unknown ClientMessage's on to Gtk for it to use */
 	  event->client.type = GDK_CLIENT_EVENT;
 	  event->client.window = window;
@@ -2816,7 +2887,6 @@ gdk_dnd_drag_enter (Window dest)
 
 void gdk_im_begin (GdkIC ic, GdkWindow* window)
 {
-  GdkEventMask event;
   GdkICPrivate *private;
   Window xwin;
 
@@ -2904,6 +2974,7 @@ gdk_im_choose_better_style (GdkIMStyle style1, GdkIMStyle style2)
     else if ( u & GdkIMStatusNone)
       return (s1 == GdkIMStatusNone)? style1:style2;
   }
+  return 0; /* Get rid of stupid warning */
 }
 
 GdkIMStyle
@@ -2969,8 +3040,6 @@ gdk_im_set_best_style (GdkIMStyle style)
 
 static gint gdk_im_open (XrmDatabase db, gchar* res_name, gchar* res_class)
 {
-  XIMStyle style;
-  int i;
 
   xim_im = XOpenIM (GDK_DISPLAY(), db, res_name, res_class);
   if (xim_im == NULL)
@@ -3171,7 +3240,7 @@ gdk_ic_get_events (GdkIC ic)
       }
 
   if (xmask)
-    g_warning ("ic requires the events not supported by the application (%04x)", xmask);
+    g_warning ("ic requires the events not supported by the application (%04lx)", xmask);
   
   return mask;
 }
@@ -3267,7 +3336,6 @@ gdk_dnd_drag_end (Window     dest,
 {
   GdkWindowPrivate *wp;
   GdkEventDragRequest tev;
-  gchar *tmp_cptr;
   int i;
 
   tev.type = GDK_DRAG_REQUEST;
@@ -3359,6 +3427,7 @@ gdk_dnd_check_types (GdkWindow   *window,
 /* 
  * used for debugging only 
  */
+#ifdef DEBUG_DND
 static void
 gdk_print_atom (GdkAtom anatom)
 {
@@ -3368,6 +3437,7 @@ gdk_print_atom (GdkAtom anatom)
   if(tmpstr)
     g_free(tmpstr);
 }
+#endif
 
 /* 
  * used only by below routine and itself 
@@ -3441,6 +3511,7 @@ gdk_get_client_window (Display  *dpy,
     return inf;
 }
 
+#ifdef WE_HAVE_MOTIF_DROPS_DONE
 static GdkWindow *
 gdk_drop_get_real_window (GdkWindow   *w, 
 			  guint16     *x, 
@@ -3478,6 +3549,7 @@ descend:
 
   return retval;
 }
+#endif
 
 /* Sends a ClientMessage to all toplevel client windows */
 void

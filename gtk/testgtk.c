@@ -54,10 +54,10 @@ create_buttons ()
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "buttons");
@@ -87,7 +87,7 @@ create_buttons ()
       button[8] = gtk_button_new_with_label ("button9");
 
       gtk_signal_connect (GTK_OBJECT (button[0]), "clicked",
-			  (GtkSignalFunc) button_window,
+			  GTK_SIGNAL_FUNC(button_window),
 			  button[1]);
 
       gtk_table_attach (GTK_TABLE (table), button[0], 0, 1, 0, 1,
@@ -95,7 +95,7 @@ create_buttons ()
       gtk_widget_show (button[0]);
 
       gtk_signal_connect (GTK_OBJECT (button[1]), "clicked",
-			  (GtkSignalFunc) button_window,
+			  GTK_SIGNAL_FUNC(button_window),
 			  button[2]);
 
       gtk_table_attach (GTK_TABLE (table), button[1], 1, 2, 1, 2,
@@ -103,49 +103,49 @@ create_buttons ()
       gtk_widget_show (button[1]);
 
       gtk_signal_connect (GTK_OBJECT (button[2]), "clicked",
-			  (GtkSignalFunc) button_window,
+			  GTK_SIGNAL_FUNC(button_window),
 			  button[3]);
       gtk_table_attach (GTK_TABLE (table), button[2], 2, 3, 2, 3,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
       gtk_widget_show (button[2]);
 
       gtk_signal_connect (GTK_OBJECT (button[3]), "clicked",
-			  (GtkSignalFunc) button_window,
+			  GTK_SIGNAL_FUNC(button_window),
 			  button[4]);
       gtk_table_attach (GTK_TABLE (table), button[3], 0, 1, 2, 3,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
       gtk_widget_show (button[3]);
 
       gtk_signal_connect (GTK_OBJECT (button[4]), "clicked",
-			  (GtkSignalFunc) button_window,
+			  GTK_SIGNAL_FUNC(button_window),
 			  button[5]);
       gtk_table_attach (GTK_TABLE (table), button[4], 2, 3, 0, 1,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
       gtk_widget_show (button[4]);
 
       gtk_signal_connect (GTK_OBJECT (button[5]), "clicked",
-			  (GtkSignalFunc) button_window,
+			  GTK_SIGNAL_FUNC(button_window),
 			  button[6]);
       gtk_table_attach (GTK_TABLE (table), button[5], 1, 2, 2, 3,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
       gtk_widget_show (button[5]);
 
       gtk_signal_connect (GTK_OBJECT (button[6]), "clicked",
-			  (GtkSignalFunc) button_window,
+			  GTK_SIGNAL_FUNC(button_window),
 			  button[7]);
       gtk_table_attach (GTK_TABLE (table), button[6], 1, 2, 0, 1,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
       gtk_widget_show (button[6]);
 
       gtk_signal_connect (GTK_OBJECT (button[7]), "clicked",
-			  (GtkSignalFunc) button_window,
+			  GTK_SIGNAL_FUNC(button_window),
 			  button[8]);
       gtk_table_attach (GTK_TABLE (table), button[7], 2, 3, 1, 2,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
       gtk_widget_show (button[7]);
 
       gtk_signal_connect (GTK_OBJECT (button[8]), "clicked",
-			  (GtkSignalFunc) button_window,
+			  GTK_SIGNAL_FUNC(button_window),
 			  button[0]);
       gtk_table_attach (GTK_TABLE (table), button[8], 0, 1, 1, 2,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
@@ -165,7 +165,7 @@ create_buttons ()
 
       button[9] = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button[9]), "clicked",
-				 (GtkSignalFunc) gtk_widget_destroy,
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));
       gtk_box_pack_start (GTK_BOX (box2), button[9], TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button[9], GTK_CAN_DEFAULT);
@@ -193,10 +193,10 @@ create_toggle_buttons ()
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "toggle buttons");
@@ -240,7 +240,7 @@ create_toggle_buttons ()
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 (GtkSignalFunc) gtk_widget_destroy,
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
@@ -268,10 +268,10 @@ create_check_buttons ()
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "check buttons");
@@ -315,7 +315,7 @@ create_check_buttons ()
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 (GtkSignalFunc) gtk_widget_destroy,
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
@@ -343,10 +343,10 @@ create_radio_buttons ()
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "radio buttons");
@@ -395,7 +395,7 @@ create_radio_buttons ()
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 (GtkSignalFunc) gtk_widget_destroy,
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
@@ -433,9 +433,9 @@ create_bbox_window (gint  horizontal,
   gtk_window_set_title (GTK_WINDOW (window), title);
 
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      (GtkSignalFunc) bbox_widget_destroy, window);
+		      GTK_SIGNAL_FUNC(bbox_widget_destroy), window);
   gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-		      (GtkSignalFunc) bbox_widget_destroy, window);
+		      GTK_SIGNAL_FUNC(bbox_widget_destroy), window);
   
   if (horizontal)
   {
@@ -469,7 +469,7 @@ create_bbox_window (gint  horizontal,
   gtk_container_add (GTK_CONTAINER(bbox), button);
 
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      (GtkSignalFunc) bbox_widget_destroy, window);
+		      GTK_SIGNAL_FUNC(bbox_widget_destroy), window);
 
   gtk_widget_show (button);
   
@@ -516,9 +516,9 @@ create_button_box ()
 			  "Button Box Test");
     
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			(GtkSignalFunc) destroy_window, &window);
+			GTK_SIGNAL_FUNC(destroy_window), &window);
     gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			(GtkSignalFunc) destroy_window, &window);
+			GTK_SIGNAL_FUNC(destroy_window), &window);
     
     gtk_container_border_width (GTK_CONTAINER (window), 20);
     
@@ -531,13 +531,13 @@ create_button_box ()
     
     button = gtk_button_new_with_label ("Horizontal");
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			(GtkSignalFunc) test_hbbox, 0);
+			GTK_SIGNAL_FUNC(test_hbbox), 0);
     gtk_container_add (GTK_CONTAINER (bbox), button);
     gtk_widget_show (button);
     
     button = gtk_button_new_with_label ("Vertical");
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			(GtkSignalFunc) test_vbbox, 0);
+			GTK_SIGNAL_FUNC(test_vbbox), 0);
     gtk_container_add (GTK_CONTAINER (bbox), button);
     gtk_widget_show (button);
   }
@@ -577,10 +577,10 @@ create_reparent ()
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "buttons");
@@ -611,7 +611,7 @@ create_reparent ()
 
       button = gtk_button_new_with_label ("switch");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  (GtkSignalFunc) reparent_label,
+			  GTK_SIGNAL_FUNC(reparent_label),
 			  box3);
       gtk_object_set_user_data (GTK_OBJECT (button), label);
       gtk_box_pack_start (GTK_BOX (box3), button, FALSE, TRUE, 0);
@@ -632,7 +632,7 @@ create_reparent ()
 
       button = gtk_button_new_with_label ("switch");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  (GtkSignalFunc) reparent_label,
+			  GTK_SIGNAL_FUNC(reparent_label),
 			  box3);
       gtk_object_set_user_data (GTK_OBJECT (button), label);
       gtk_box_pack_start (GTK_BOX (box3), button, FALSE, TRUE, 0);
@@ -652,7 +652,7 @@ create_reparent ()
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 (GtkSignalFunc) gtk_widget_destroy,
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
@@ -686,10 +686,10 @@ create_pixmap ()
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-                          (GtkSignalFunc) destroy_window,
+                          GTK_SIGNAL_FUNC(destroy_window),
                           &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-                          (GtkSignalFunc) destroy_window,
+                          GTK_SIGNAL_FUNC(destroy_window),
                           &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "pixmap");
@@ -739,7 +739,7 @@ create_pixmap ()
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-                                 (GtkSignalFunc) gtk_widget_destroy,
+                                 GTK_SIGNAL_FUNC(gtk_widget_destroy),
                                  GTK_OBJECT (window));
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
@@ -768,10 +768,10 @@ create_tooltips ()
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-                          (GtkSignalFunc) destroy_window,
+                          GTK_SIGNAL_FUNC(destroy_window),
                           &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-                          (GtkSignalFunc) destroy_window,
+                          GTK_SIGNAL_FUNC(destroy_window),
                           &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "tooltips");
@@ -821,7 +821,7 @@ create_tooltips ()
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-                                 (GtkSignalFunc) gtk_widget_destroy,
+                                 GTK_SIGNAL_FUNC(gtk_widget_destroy),
                                  GTK_OBJECT (window));
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
@@ -891,10 +891,10 @@ create_menus ()
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "menus");
@@ -955,7 +955,7 @@ create_menus ()
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 (GtkSignalFunc) gtk_widget_destroy,
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
@@ -984,10 +984,10 @@ create_scrolled_windows ()
       window = gtk_dialog_new ();
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "dialog");
@@ -1022,7 +1022,7 @@ create_scrolled_windows ()
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 (GtkSignalFunc) gtk_widget_destroy,
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
@@ -1052,10 +1052,10 @@ create_entry ()
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "entry");
@@ -1093,7 +1093,7 @@ create_entry ()
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 (GtkSignalFunc) gtk_widget_destroy,
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
@@ -1185,10 +1185,10 @@ create_list ()
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "list");
@@ -1229,7 +1229,7 @@ create_list ()
       button = gtk_button_new_with_label ("add");
       GTK_WIDGET_UNSET_FLAGS (button, GTK_CAN_FOCUS);
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  (GtkSignalFunc) list_add,
+			  GTK_SIGNAL_FUNC(list_add),
 			  list);
       gtk_box_pack_start (GTK_BOX (box2), button, FALSE, TRUE, 0);
       gtk_widget_show (button);
@@ -1237,7 +1237,7 @@ create_list ()
       button = gtk_button_new_with_label ("remove");
       GTK_WIDGET_UNSET_FLAGS (button, GTK_CAN_FOCUS);
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  (GtkSignalFunc) list_remove,
+			  GTK_SIGNAL_FUNC(list_remove),
 			  list);
       gtk_box_pack_start (GTK_BOX (box2), button, FALSE, TRUE, 0);
       gtk_widget_show (button);
@@ -1256,7 +1256,7 @@ create_list ()
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 (GtkSignalFunc) gtk_widget_destroy,
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
@@ -1318,28 +1318,28 @@ create_color_selection ()
       gtk_window_position (GTK_WINDOW (window), GTK_WIN_POS_MOUSE);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-                          (GtkSignalFunc) destroy_window,
+                          GTK_SIGNAL_FUNC(destroy_window),
                           &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-                          (GtkSignalFunc) destroy_window,
+                          GTK_SIGNAL_FUNC(destroy_window),
                           &window);
 
       gtk_signal_connect (
 	GTK_OBJECT (GTK_COLOR_SELECTION_DIALOG (window)->colorsel),
 	"color_changed",
-	(GtkSignalFunc) color_selection_changed,
+	GTK_SIGNAL_FUNC(color_selection_changed),
 	window);
 
       gtk_signal_connect (
 	GTK_OBJECT (GTK_COLOR_SELECTION_DIALOG (window)->ok_button),
 	"clicked",
-	(GtkSignalFunc) color_selection_ok,
+	GTK_SIGNAL_FUNC(color_selection_ok),
 	window);
 
       gtk_signal_connect_object (
         GTK_OBJECT (GTK_COLOR_SELECTION_DIALOG (window)->cancel_button),
 	"clicked",
-	(GtkSignalFunc) gtk_widget_destroy,
+	GTK_SIGNAL_FUNC(gtk_widget_destroy),
 	GTK_OBJECT (window));
 
       gtk_widget_pop_colormap ();
@@ -1371,17 +1371,17 @@ create_file_selection ()
       gtk_window_position (GTK_WINDOW (window), GTK_WIN_POS_MOUSE);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
 
       gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (window)->ok_button),
-			  "clicked", (GtkSignalFunc) file_selection_ok,
+			  "clicked", GTK_SIGNAL_FUNC(file_selection_ok),
 			  window);
       gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION (window)->cancel_button),
-				 "clicked", (GtkSignalFunc) gtk_widget_destroy,
+				 "clicked", GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));
     }
 
@@ -1427,10 +1427,10 @@ create_dialog ()
       dialog_window = gtk_dialog_new ();
 
       gtk_signal_connect (GTK_OBJECT (dialog_window), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &dialog_window);
       gtk_signal_connect (GTK_OBJECT (dialog_window), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &dialog_window);
 
       gtk_window_set_title (GTK_WINDOW (dialog_window), "dialog");
@@ -1445,7 +1445,7 @@ create_dialog ()
 
       button = gtk_button_new_with_label ("Toggle");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  (GtkSignalFunc) label_toggle,
+			  GTK_SIGNAL_FUNC(label_toggle),
 			  &label);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog_window)->action_area),
@@ -1482,10 +1482,10 @@ create_range_controls ()
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "range controls");
@@ -1533,7 +1533,7 @@ create_range_controls ()
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 (GtkSignalFunc) gtk_widget_destroy,
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
@@ -1563,10 +1563,10 @@ create_rulers ()
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "rulers");
@@ -1586,8 +1586,8 @@ create_rulers ()
       gtk_signal_connect_object (
         GTK_OBJECT (window), 
 	"motion_notify_event",
-	(GtkSignalFunc) 
-          GTK_WIDGET_CLASS (GTK_OBJECT (ruler)->klass)->motion_notify_event,
+	GTK_SIGNAL_FUNC(
+          GTK_WIDGET_CLASS (GTK_OBJECT (ruler)->klass)->motion_notify_event),
 	GTK_OBJECT (ruler));
 
       gtk_table_attach (GTK_TABLE (table), ruler, 1, 2, 0, 1,
@@ -1601,8 +1601,7 @@ create_rulers ()
       gtk_signal_connect_object (
         GTK_OBJECT (window), 
 	"motion_notify_event",
-	(GtkSignalFunc) 
-          GTK_WIDGET_CLASS (GTK_OBJECT (ruler)->klass)->motion_notify_event,
+	GTK_SIGNAL_FUNC (GTK_WIDGET_CLASS (GTK_OBJECT (ruler)->klass)->motion_notify_event),
 	GTK_OBJECT (ruler));
 
       gtk_table_attach (GTK_TABLE (table), ruler, 0, 1, 1, 2,
@@ -1639,10 +1638,10 @@ create_text ()
       gtk_widget_set_name (window, "text window");
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "test");
@@ -1742,7 +1741,7 @@ create_text ()
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 (GtkSignalFunc) gtk_widget_destroy,
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
@@ -1786,10 +1785,10 @@ create_notebook ()
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "notebook");
@@ -1844,7 +1843,7 @@ create_notebook ()
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 (GtkSignalFunc) gtk_widget_destroy,
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
@@ -1853,21 +1852,21 @@ create_notebook ()
 
       button = gtk_button_new_with_label ("next");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 (GtkSignalFunc) gtk_notebook_next_page,
+				 GTK_SIGNAL_FUNC(gtk_notebook_next_page),
 				 GTK_OBJECT (notebook));
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("prev");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 (GtkSignalFunc) gtk_notebook_prev_page,
+				 GTK_SIGNAL_FUNC(gtk_notebook_prev_page),
 				 GTK_OBJECT (notebook));
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("rotate");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  (GtkSignalFunc) rotate_notebook,
+			  GTK_SIGNAL_FUNC(rotate_notebook),
 			  notebook);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       gtk_widget_show (button);
@@ -1896,10 +1895,10 @@ create_panes ()
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "Panes");
@@ -1944,12 +1943,64 @@ create_panes ()
 /*
  * Drag -N- Drop
  */
+
+gboolean
+dnd_drop_destroy_popup (GtkWidget *widget, GtkWindow **window)
+{
+  if(GTK_IS_BUTTON(widget)) /* I.e. they clicked the close button */
+    gtk_widget_destroy(GTK_WIDGET(*window));
+  else {
+    gtk_grab_remove(GTK_WIDGET(*window));
+    *window = NULL;
+  }
+  return TRUE;
+}
+
 void
 dnd_drop (GtkWidget *button, GdkEvent *event)
 {
-  g_print ("Got drop of type |%s| with data of:\n%s\n",
-	   event->dropdataavailable.data_type,
-	   event->dropdataavailable.data);
+  static GtkWidget *window = NULL;
+  GtkWidget *vbox, *lbl, *btn;
+  gchar *msg;
+
+  window = gtk_window_new(GTK_WINDOW_DIALOG);
+  gtk_container_border_width (GTK_CONTAINER(window), 10);
+
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC(dnd_drop_destroy_popup),
+		      &window);
+  gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+		      GTK_SIGNAL_FUNC(dnd_drop_destroy_popup),
+		      &window);
+
+  vbox = gtk_vbox_new(FALSE, 5);
+
+  /* Display message that we got from drop source */
+  msg = g_malloc(strlen(event->dropdataavailable.data)
+		 + strlen(event->dropdataavailable.data_type) + 100);
+  sprintf(msg, "Drop data of type %s was:\n\n%s",
+	  event->dropdataavailable.data_type,
+	  event->dropdataavailable.data);
+  lbl = gtk_label_new(msg);
+  gtk_label_set_justify(GTK_LABEL(lbl), GTK_JUSTIFY_FILL);
+  g_free(msg);
+  gtk_widget_show(lbl);
+  gtk_box_pack_start_defaults(GTK_BOX(vbox), lbl);
+
+  /* Provide an obvious way out of this heinousness */
+  btn = gtk_button_new_with_label("Continue with life in\nspite of this oppression");
+  gtk_signal_connect (GTK_OBJECT (btn), "clicked",
+		      GTK_SIGNAL_FUNC(dnd_drop_destroy_popup),
+		      &window);
+  gtk_widget_show(btn);
+  gtk_box_pack_start_defaults(GTK_BOX(vbox), btn);
+
+  gtk_container_add(GTK_CONTAINER(window), vbox);
+
+  gtk_widget_show(vbox);
+  gtk_grab_add(window);
+  gtk_widget_show(window);
+
   g_free (event->dropdataavailable.data);
   g_free (event->dropdataavailable.data_type);
 }
@@ -1957,11 +2008,8 @@ dnd_drop (GtkWidget *button, GdkEvent *event)
 void
 dnd_drag_request (GtkWidget *button, GdkEvent *event)
 {
-  g_print ("Button |%s| got drag request %d\n",
-	   gtk_widget_get_name (button), event->type);
-
-  gtk_widget_dnd_data_set (button, event, "Hello world!!!", 
-			   strlen("Hello world!!!") + 1);
+#define DND_STRING "Bill Gates demands royalties for\nyour use of his innovation."
+  gtk_widget_dnd_data_set (button, event, DND_STRING, strlen(DND_STRING) + 1);
 }
 
 void
@@ -1975,17 +2023,19 @@ create_dnd ()
   GtkWidget *frame;
   GtkWidget *button;
   GtkWidget *separator;
-  char *foo = "testing";
+  /* For clarity... */
+  char *possible_drag_types[] = {"text/plain"};
+  char *accepted_drop_types[] = {"text/plain"};
 
   if (!window)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "Drag -N- Drop");
@@ -2012,7 +2062,7 @@ create_dnd ()
       /*
        * FROM Button
        */
-      button = gtk_button_new_with_label ("From");
+      button = gtk_button_new_with_label ("Drag me!");
       gtk_box_pack_start (GTK_BOX (box3), button, FALSE, TRUE, 0);
       gtk_widget_show (button);
 
@@ -2021,12 +2071,12 @@ create_dnd ()
        * set dnd on it, this needs to change
        */
       gtk_widget_realize (button);
-      gtk_signal_connect (GTK_OBJECT (button), 
+      gtk_signal_connect (GTK_OBJECT (button),
 			  "drag_request_event",
-			  (GtkSignalFunc) dnd_drag_request,
+			  GTK_SIGNAL_FUNC(dnd_drag_request),
 			  button);
       
-      gtk_widget_dnd_drag_set (button, TRUE, &foo, 1);
+      gtk_widget_dnd_drag_set (button, TRUE, possible_drag_types, 1);
 
 
       frame = gtk_frame_new ("Drop");
@@ -2049,10 +2099,10 @@ create_dnd ()
       gtk_widget_realize (button);
       gtk_signal_connect (GTK_OBJECT (button), 
 			  "drop_data_available_event",
-			  (GtkSignalFunc) dnd_drop,
+			  GTK_SIGNAL_FUNC(dnd_drop),
 			  button);
 
-      gtk_widget_dnd_drop_set (button, TRUE, &foo, 1, FALSE);
+      gtk_widget_dnd_drop_set (button, TRUE, accepted_drop_types, 1, FALSE);
 
 
       separator = gtk_hseparator_new ();
@@ -2069,7 +2119,7 @@ create_dnd ()
       button = gtk_button_new_with_label ("close");
 
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 (GtkSignalFunc) gtk_widget_destroy,
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));
 
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
@@ -2203,10 +2253,10 @@ create_shapes ()
 				    440, 140, 0,0, GTK_WINDOW_POPUP);
 
       gtk_signal_connect (GTK_OBJECT (modeller), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &modeller);
       gtk_signal_connect (GTK_OBJECT (modeller), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &modeller);
     }
   else
@@ -2218,10 +2268,10 @@ create_shapes ()
 				  580, 170, 0,0, GTK_WINDOW_POPUP);
 
       gtk_signal_connect (GTK_OBJECT (sheets), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &sheets);
       gtk_signal_connect (GTK_OBJECT (sheets), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &sheets);
 
     }
@@ -2234,10 +2284,10 @@ create_shapes ()
 				 460, 270, 25,25, GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (rings), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &rings);
       gtk_signal_connect (GTK_OBJECT (rings), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &rings);
     }
   else
@@ -2288,10 +2338,10 @@ create_progress_bar ()
       window = gtk_dialog_new ();
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_progress,
+			  GTK_SIGNAL_FUNC(destroy_progress),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_progress,
+			  GTK_SIGNAL_FUNC(destroy_progress),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "dialog");
@@ -2318,7 +2368,7 @@ create_progress_bar ()
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 (GtkSignalFunc) gtk_widget_destroy,
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
@@ -2392,10 +2442,10 @@ create_color_preview ()
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) color_preview_destroy,
+			  GTK_SIGNAL_FUNC(color_preview_destroy),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) color_preview_destroy,
+			  GTK_SIGNAL_FUNC(color_preview_destroy),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "test");
@@ -2485,10 +2535,10 @@ create_gray_preview ()
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) gray_preview_destroy,
+			  GTK_SIGNAL_FUNC(gray_preview_destroy),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) gray_preview_destroy,
+			  GTK_SIGNAL_FUNC(gray_preview_destroy),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "test");
@@ -2600,10 +2650,10 @@ create_selection_test ()
       window = gtk_dialog_new ();
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "Selection Test");
@@ -2681,10 +2731,10 @@ create_gamma_curve ()
       gtk_container_border_width (GTK_CONTAINER (window), 10);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_window,
+			  GTK_SIGNAL_FUNC(destroy_window),
 			  &window);
 
       curve = gtk_gamma_curve_new ();
@@ -2768,10 +2818,10 @@ create_timeout_test ()
       window = gtk_dialog_new ();
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_timeout_test,
+			  GTK_SIGNAL_FUNC(destroy_timeout_test),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_timeout_test,
+			  GTK_SIGNAL_FUNC(destroy_timeout_test),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "Timeout Test");
@@ -2785,7 +2835,7 @@ create_timeout_test ()
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 (GtkSignalFunc) gtk_widget_destroy,
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
@@ -2795,7 +2845,7 @@ create_timeout_test ()
 
       button = gtk_button_new_with_label ("start");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  (GtkSignalFunc) start_timeout_test,
+			  GTK_SIGNAL_FUNC(start_timeout_test),
 			  label);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
@@ -2804,7 +2854,7 @@ create_timeout_test ()
 
       button = gtk_button_new_with_label ("stop");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  (GtkSignalFunc) stop_timeout_test,
+			  GTK_SIGNAL_FUNC(stop_timeout_test),
 			  NULL);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
@@ -2877,10 +2927,10 @@ create_idle_test ()
       window = gtk_dialog_new ();
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) destroy_idle_test,
+			  GTK_SIGNAL_FUNC(destroy_idle_test),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) destroy_idle_test,
+			  GTK_SIGNAL_FUNC(destroy_idle_test),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "Idle Test");
@@ -2894,7 +2944,7 @@ create_idle_test ()
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 (GtkSignalFunc) gtk_widget_destroy,
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
@@ -2904,7 +2954,7 @@ create_idle_test ()
 
       button = gtk_button_new_with_label ("start");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  (GtkSignalFunc) start_idle_test,
+			  GTK_SIGNAL_FUNC(start_idle_test),
 			  label);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
@@ -2913,7 +2963,7 @@ create_idle_test ()
 
       button = gtk_button_new_with_label ("stop");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  (GtkSignalFunc) stop_idle_test,
+			  GTK_SIGNAL_FUNC(stop_idle_test),
 			  NULL);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
@@ -2948,10 +2998,10 @@ create_test ()
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) test_destroy,
+			  GTK_SIGNAL_FUNC(test_destroy),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  (GtkSignalFunc) test_destroy,
+			  GTK_SIGNAL_FUNC(test_destroy),
 			  &window);
 
 
@@ -3037,10 +3087,10 @@ create_main_window ()
   gtk_widget_set_uposition (window, 20, 20);
 
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      (GtkSignalFunc) gtk_exit,
+		      GTK_SIGNAL_FUNC(gtk_main_quit),
 		      NULL);
   gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-		      (GtkSignalFunc) gtk_exit,
+		      GTK_SIGNAL_FUNC(gtk_main_quit),
 		      NULL);
 
   box1 = gtk_vbox_new (FALSE, 0);
@@ -3066,8 +3116,8 @@ create_main_window ()
       if (buttons[i].func)
         gtk_signal_connect (GTK_OBJECT (button), 
 			    "clicked", 
-			    (GtkSignalFunc) 
-			    buttons[i].func, NULL);
+			    GTK_SIGNAL_FUNC(buttons[i].func),
+			    NULL);
       else
         gtk_widget_set_sensitive (button, FALSE);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
@@ -3085,7 +3135,7 @@ create_main_window ()
 
   button = gtk_button_new_with_label ("close");
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      (GtkSignalFunc) do_exit, NULL);
+		      GTK_SIGNAL_FUNC(do_exit), NULL);
   gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
   GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
   gtk_widget_grab_default (button);

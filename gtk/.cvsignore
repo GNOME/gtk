@@ -2,6 +2,7 @@
 Makefile
 .deps
 _libs
+.libs
 libgtk.la
 testgtk
 testinput

@@ -1323,7 +1323,9 @@ gdk_window_dnd_data_set (GdkWindow       *window,
 		       XA_PRIMARY, 8, GDK_PROP_MODE_REPLACE, data,
 		       data_numbytes);
   tmp = gdk_atom_name(window_private->dnd_drag_data_type);
+#ifdef DEBUG_DND
   g_print("DnD type %s on window %ld\n", tmp, window_private->xwindow);
+#endif
   g_free(tmp);
   
   /* 

@@ -1,3 +1,15 @@
+Fri Dec 5 1997 Elliot Lee <sopwith@cuc.edu>
+	* gdk/gdk.c: clean up warnings, remove some un-ifdef'd debugging
+	printing, DnD is Bug Free now, etc.
+	* gtk/gtkcolorsel.c: fix DnD support.
+	* gtk/gtkmain.c: DnD events go to the original window even if
+	there is a grab - if I drop on a window the data had better go
+	to it and not some other window :)
+	* gtk/testgtk.c: Replace (GtkSignalFunc) with GTK_SIGNAL_FUNC(),
+	and do a nicer DnD demo.
+	* My very first ChangeLog entry, seeing as people have
+	a fixation on them (what's wrong with "rcs2log" output?)
+
 Thu Dec 4 1997 Owen Taylor <owt1@cornell.edu>
 	* gdk/gdkgc.c: Ignore gdk_gc_set_font if font is a fontset.
 

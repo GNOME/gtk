@@ -18,6 +18,11 @@
 #include <math.h>
 #include "gtkcolorsel.h"
 
+/*
+ * If you change the way the color values are stored,
+ * please make sure to update the drag & drop support so it sends
+ * across all the color info (currently RGBA). - Elliot
+ */
 
 #define DEGTORAD(a) (2.0*M_PI*a/360.0)
 #define SQR(a) (a*a)
@@ -126,9 +131,11 @@ static gint gtk_color_selection_wheel_timeout     (GtkColorSelection  *colorsel)
 static void gtk_color_selection_sample_resize     (GtkWidget          *widget,
                                                    gpointer            data);
 static void gtk_color_selection_drop_handle       (GtkWidget          *widget,
-						   GdkEvent           *event);
+						   GdkEvent           *event,
+						   GtkWidget          *theclorsel);
 static void gtk_color_selection_drag_handle       (GtkWidget          *widget,
-						   GdkEvent           *event);
+						   GdkEvent           *event,
+						   GtkWidget          *thecolorsel);
 static void gtk_color_selection_draw_wheel_marker (GtkColorSelection  *colorsel);
 static void gtk_color_selection_draw_wheel_frame  (GtkColorSelection  *colorsel);
 static void gtk_color_selection_draw_value_marker (GtkColorSelection  *colorsel);
@@ -261,6 +268,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_widget_show (hbox2);
 
   colorsel->wheel_area = gtk_preview_new (GTK_PREVIEW_COLOR);
+  old_mask = gtk_widget_get_events(colorsel->wheel_area);
   gtk_widget_set_events (colorsel->wheel_area,
 			 old_mask |
 			 GDK_BUTTON_PRESS_MASK |
@@ -493,11 +501,11 @@ gtk_color_selection_realize (GtkWidget         *widget)
   gtk_signal_connect_after (GTK_OBJECT (colorsel->sample_area),
 			    "drop_data_available_event",
 			    GTK_SIGNAL_FUNC (gtk_color_selection_drop_handle),
-			    NULL);
+			    colorsel);
   gtk_signal_connect_after (GTK_OBJECT (colorsel->sample_area),
 			    "drag_request_event",
 			    GTK_SIGNAL_FUNC (gtk_color_selection_drag_handle),
-			    NULL);
+			    colorsel);
 }
 
 static void
@@ -770,24 +778,39 @@ gtk_color_selection_sample_resize (GtkWidget *widget,
 }
 
 static void
-gtk_color_selection_drop_handle (GtkWidget *widget, GdkEvent *event)
+gtk_color_selection_drop_handle (GtkWidget *widget, GdkEvent *event,
+				 GtkWidget *thecolorsel)
 {
-  int i;
-  GtkColorSelection *w;
-  gdouble *newbuf;
-  g_print("Handling drop in color selection\n");
-  gtk_color_selection_set_color(GTK_COLOR_SELECTION(widget),
-				event->dropdataavailable.data);
+  /* This is currently a gdouble array of the format (I think):
+     use_opacity
+     R
+     G
+     B
+     opacity
+  */
+  gdouble *v = event->dropdataavailable.data;
+  gtk_color_selection_set_opacity(GTK_COLOR_SELECTION(thecolorsel),
+				  (v[0]==1.0)?TRUE:FALSE);
+  gtk_color_selection_set_color(GTK_COLOR_SELECTION(thecolorsel),
+				v + 1);
   g_free(event->dropdataavailable.data);
   g_free(event->dropdataavailable.data_type);
 }
 
 static void
-gtk_color_selection_drag_handle (GtkWidget *widget, GdkEvent *event)
+gtk_color_selection_drag_handle (GtkWidget *widget, GdkEvent *event,
+				 GtkWidget *thecolorsel)
 {
-  g_print("Handling drag in color selector\n");
-  gtk_widget_dnd_data_set(widget, event, GTK_COLOR_SELECTION(widget)->values,
-			  sizeof(GTK_COLOR_SELECTION(widget)->values));
+  gdouble sendvals[(BLUE - RED + 1) + 3];
+
+  sendvals[0] = (GTK_COLOR_SELECTION(thecolorsel)->use_opacity)?1.0:0.0;
+  gtk_color_selection_get_color(GTK_COLOR_SELECTION(thecolorsel),
+				sendvals + 1);
+
+  gtk_widget_dnd_data_set(widget,
+			  event,
+			  (gpointer)sendvals,
+			  sizeof(sendvals));
 }
 
 static void
