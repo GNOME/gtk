@@ -1,0 +1,80 @@
+/* Wimp "Windows Impersonator" Engine
+ *
+ * Copyright (C) 2003 Raymond Penners <raymond@dotsphinx.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+#ifndef XP_THEME_H
+#define XP_THEME_H
+
+#include <windows.h>
+#include <gtk/gtk.h>
+
+typedef enum
+{
+  XP_THEME_CLASS_SCROLLBAR = 0,
+  XP_THEME_CLASS_BUTTON,
+  XP_THEME_CLASS_HEADER,
+  XP_THEME_CLASS_COMBOBOX,
+  XP_THEME_CLASS_TAB,
+  XP_THEME_CLASS_EDIT,
+  XP_THEME_CLASS_TREEVIEW,
+  XP_THEME_CLASS_SPIN,
+  XP_THEME_CLASS__SIZEOF
+} XpThemeClass;
+
+typedef enum
+{
+  XP_THEME_ELEMENT_PRESSED_CHECKBOX = 0,
+  XP_THEME_ELEMENT_CHECKBOX,
+  XP_THEME_ELEMENT_BUTTON,
+  XP_THEME_ELEMENT_LIST_HEADER,
+  XP_THEME_ELEMENT_COMBOBUTTON,
+  XP_THEME_ELEMENT_BODY,
+  XP_THEME_ELEMENT_TAB_ITEM,
+  XP_THEME_ELEMENT_TAB_ITEM_LEFT_EDGE,
+  XP_THEME_ELEMENT_TAB_PANE,
+  XP_THEME_ELEMENT_SCROLLBAR_H,
+  XP_THEME_ELEMENT_SCROLLBAR_V,
+  XP_THEME_ELEMENT_ARROW_UP,
+  XP_THEME_ELEMENT_ARROW_DOWN,
+  XP_THEME_ELEMENT_ARROW_LEFT,
+  XP_THEME_ELEMENT_ARROW_RIGHT,
+  XP_THEME_ELEMENT_GRIP_H,
+  XP_THEME_ELEMENT_GRIP_V,
+  XP_THEME_ELEMENT_TROUGH_H,
+  XP_THEME_ELEMENT_TROUGH_V,
+  XP_THEME_ELEMENT_EDIT_TEXT,
+  XP_THEME_ELEMENT_DEFAULT_BUTTON,
+  XP_THEME_ELEMENT_SPIN_BUTTON_UP,
+  XP_THEME_ELEMENT_SPIN_BUTTON_DOWN,
+  XP_THEME_ELEMENT_RADIO_BUTTON,
+  XP_THEME_ELEMENT_TREEVIEW_EXPANDER_OPENED,
+  XP_THEME_ELEMENT_TREEVIEW_EXPANDER_CLOSED,
+  XP_THEME_ELEMENT__SIZEOF
+} XpThemeElement;
+
+void xp_theme_init();
+void xp_theme_exit();
+gboolean xp_theme_draw(GdkWindow *win, XpThemeElement element, GtkStyle *style,
+                       int x, int y, int width, int height, GtkStateType state_type);
+gboolean xp_theme_can_draw(XpThemeElement element, GtkStyle *style,
+                       int x, int y, int width, int height, GtkStateType state_type);
+gboolean xp_theme_is_drawable(XpThemeElement element);
+gboolean xp_theme_get_system_font(LOGFONTW *lf);
+
+#endif /* XP_THEME_H */

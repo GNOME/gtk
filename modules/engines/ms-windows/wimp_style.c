@@ -21,10 +21,9 @@
  */
 
 #include "wimp_style.h"
+#include "xp_theme.h"
 
 #include <windows.h>
-#include <uxtheme.h>
-#include <tmschema.h>
 #include <math.h>
 #include <string.h>
 #include <gtk/gtk.h>
@@ -118,58 +117,12 @@ static struct {
   { radio_text_bits, NULL }
 };
 
-static HINSTANCE uxtheme_dll;
-typedef HRESULT (FAR PASCAL *GetThemeSysFontFunc)
-     (HTHEME hTheme, int iFontID, FAR LOGFONTW *plf);
-typedef HTHEME (FAR PASCAL *OpenThemeDataFunc)
-     (HWND hwnd, LPCWSTR pszClassList);
-typedef HRESULT (FAR PASCAL *CloseThemeDataFunc)(HTHEME theme);
-typedef HRESULT (FAR PASCAL *DrawThemeBackgroundFunc)
-     (HTHEME hTheme, HDC hdc, int iPartId, int iStateId,
-      const RECT *pRect, const RECT *pClipRect);
-
-static HTHEME
-open_theme_data(HWND hwnd, LPCWSTR pszClassList)
-{
-  OpenThemeDataFunc proc = (OpenThemeDataFunc)
-    GetProcAddress(uxtheme_dll, "OpenThemeData");
-  return (*proc)(hwnd, pszClassList);
-}
-
-static HRESULT
-draw_theme_background(HTHEME hTheme,
-                      HDC hdc,
-                      int iPartId,
-                      int iStateId,
-                      const RECT *pRect,
-                      const RECT *pClipRect)
-{
-  DrawThemeBackgroundFunc proc = (DrawThemeBackgroundFunc)
-    GetProcAddress(uxtheme_dll, "DrawThemeBackground");
-  return (*proc)(hTheme, hdc, iPartId, iStateId, pRect, pClipRect);
-}
-
-
-static HRESULT
-close_theme_data(HTHEME theme)
-{
-  CloseThemeDataFunc proc = (CloseThemeDataFunc) GetProcAddress(uxtheme_dll, "CloseThemeData");
-  return (*proc)(theme);
-}
-
-static gboolean
-get_system_font_xp(LOGFONTW *lf)
-{
-  GetThemeSysFontFunc proc = (GetThemeSysFontFunc) GetProcAddress(uxtheme_dll, "GetThemeSysFont");
-  HRESULT hr;
-  hr = (*proc)(NULL, TMT_MSGBOXFONT, lf);
-  return hr == S_OK;
-}
 
 static gboolean
 get_system_font(LOGFONT *lf)
 {
   gboolean ok;
+  /*
   if (NULL)//uxtheme_dll)
     {
       LOGFONTW lfw;
@@ -183,6 +136,7 @@ get_system_font(LOGFONT *lf)
         }
     }
   else
+  */
     {
       NONCLIENTMETRICS ncm;
       ncm.cbSize = sizeof(NONCLIENTMETRICS);
@@ -192,14 +146,16 @@ get_system_font(LOGFONT *lf)
         {
           *lf = ncm.lfMessageFont;
         }
-//      HGDIOBJ font = GetStockObject(SYSTEM_FONT);
-//      if (font)
-//        {
-//          if (GetObject( font, sizeof( LOGFONT ), lf ))
-//            {
-//              ok = TRUE;
-//            }
-//        }
+      /*
+      HGDIOBJ font = GetStockObject(SYSTEM_FONT);
+      if (font)
+        {
+          if (GetObject( font, sizeof( LOGFONT ), lf ))
+            {
+              ok = TRUE;
+            }
+        }
+      */
     }
   return ok;
 }
@@ -229,387 +185,101 @@ static void
 sys_color_to_gtk_color(int id, GdkColor *pcolor)
 {
   DWORD color   = GetSysColor(id);
-  pcolor->red   = GetRValue(color) << 8;
-  pcolor->green = GetGValue(color) << 8;
-  pcolor->blue  = GetBValue(color) << 8;
+  pcolor->pixel = color;
+  pcolor->red   = (GetRValue(color) << 8) | GetRValue(color);
+  pcolor->green = (GetGValue(color) << 8) | GetGValue(color);
+  pcolor->blue  = (GetBValue(color) << 8) | GetBValue(color);
 }
 
 static void
 setup_system_colors(GtkStyle *style)
 {
-  char buf[512];
+  char buf[1024];
+  GdkColor menu_color;
+  GdkColor menu_text_color;
+  GdkColor fg_prelight;
+  GdkColor bg_prelight;
+  GdkColor base_prelight;
+  GdkColor text_prelight;
+  int i;
 
+  /* Default forgeground */
+  sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->fg[GTK_STATE_NORMAL]);
+  sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->fg[GTK_STATE_ACTIVE]);
+  sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->fg[GTK_STATE_PRELIGHT]);
+  sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT, &style->fg[GTK_STATE_SELECTED]);
+  sys_color_to_gtk_color(COLOR_GRAYTEXT, &style->fg[GTK_STATE_INSENSITIVE]);
+
+  /* Default background */
   sys_color_to_gtk_color(COLOR_3DFACE, &style->bg[GTK_STATE_NORMAL]);
+  sys_color_to_gtk_color(COLOR_SCROLLBAR, &style->bg[GTK_STATE_ACTIVE]);
   sys_color_to_gtk_color(COLOR_3DFACE, &style->bg[GTK_STATE_PRELIGHT]);
-  sys_color_to_gtk_color(COLOR_3DFACE, &style->bg[GTK_STATE_SELECTED]);
-  sys_color_to_gtk_color(COLOR_3DFACE, &style->bg[GTK_STATE_ACTIVE]);
+  sys_color_to_gtk_color(COLOR_HIGHLIGHT, &style->bg[GTK_STATE_SELECTED]);
   sys_color_to_gtk_color(COLOR_3DFACE, &style->bg[GTK_STATE_INSENSITIVE]);
+
+  /* Default base */
+  sys_color_to_gtk_color(COLOR_WINDOW, &style->base[GTK_STATE_NORMAL]);
+  sys_color_to_gtk_color(COLOR_HIGHLIGHT, &style->base[GTK_STATE_ACTIVE]);
+  sys_color_to_gtk_color(COLOR_WINDOW, &style->base[GTK_STATE_PRELIGHT]);
+  sys_color_to_gtk_color(COLOR_HIGHLIGHT, &style->base[GTK_STATE_SELECTED]);
+  sys_color_to_gtk_color(COLOR_3DFACE, &style->base[GTK_STATE_INSENSITIVE]);
+
+  /* Default text */
+  sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->text[GTK_STATE_NORMAL]);
+  sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT, &style->text[GTK_STATE_ACTIVE]);
+  sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->text[GTK_STATE_PRELIGHT]);
+  sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT, &style->text[GTK_STATE_SELECTED]);
+  sys_color_to_gtk_color(COLOR_GRAYTEXT, &style->text[GTK_STATE_INSENSITIVE]);
   
-  sys_color_to_gtk_color(COLOR_HIGHLIGHT,
-                         &style->base[GTK_STATE_SELECTED]);
-  sys_color_to_gtk_color(COLOR_HIGHLIGHT,
-                         &style->bg[GTK_STATE_SELECTED]);
-  sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT,
-                         &style->text[GTK_STATE_SELECTED]);
+  /* Prelight */
+  sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT, &fg_prelight);
+  sys_color_to_gtk_color(COLOR_HIGHLIGHT, &bg_prelight);
+  sys_color_to_gtk_color(COLOR_HIGHLIGHT, &base_prelight);
+  sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT, &text_prelight);
 
-  sprintf(buf, "style \"wimp-menu-item\"\n"
-          "{ bg[PRELIGHT] = { %d, %d, %d }\n"
-          "  fg[PRELIGHT] = { %d, %d, %d }\n"
-          "}\n"
-          "class \"GtkMenuItem\" style \"wimp-menu-item\"\n"
-          "widget_class \"*GtkAccelLabel*\" style \"wimp-menu-item\"\n",
-          style->base[GTK_STATE_SELECTED].red,
-          style->base[GTK_STATE_SELECTED].green,
-          style->base[GTK_STATE_SELECTED].blue,
-          style->text[GTK_STATE_SELECTED].red,
-          style->text[GTK_STATE_SELECTED].green,
-          style->text[GTK_STATE_SELECTED].blue);
-  gtk_rc_parse_string(buf);
+  sys_color_to_gtk_color(COLOR_MENUTEXT, &menu_text_color);
+  sys_color_to_gtk_color(COLOR_MENU, &menu_color);
 
-  sprintf(buf, "style \"wimp-option-menu\"\n"
-          "{ GtkOptionMenu::indicator_width = 7\n"
-          "GtkOptionMenu::indicator_left_spacing = 6\n"
-          "GtkOptionMenu::indicator_right_spacing = 4\n"
+
+  for (i = 0; i < 5; i++)
+    {
+      sys_color_to_gtk_color(COLOR_3DSHADOW, &style->dark[i]);
+      sys_color_to_gtk_color(COLOR_3DHILIGHT, &style->light[i]);
+      
+      style->mid[i].red = (style->light[i].red + style->dark[i].red) / 2;
+      style->mid[i].green = (style->light[i].green + style->dark[i].green) / 2;
+      style->mid[i].blue = (style->light[i].blue + style->dark[i].blue) / 2;
+
+      style->text_aa[i].red = (style->text[i].red + style->base[i].red) / 2;
+      style->text_aa[i].green = (style->text[i].green + style->base[i].green) / 2;
+      style->text_aa[i].blue = (style->text[i].blue + style->base[i].blue) / 2;
+    }
+  
+  // Enable prelighting for menus.
+  sprintf(buf, "style \"wimp-menu\"\n"
+          "{fg[PRELIGHT] = { %d, %d, %d }\n"
           "bg[PRELIGHT] = { %d, %d, %d }\n"
-          "fg[PRELIGHT] = { %d, %d, %d }\n"
-          "}\nclass \"GtkOptionMenu\" style \"wimp-option-menu\"\n"
-          "widget_class \"*GtkOptionMenu*GtkAccelLabel*\" style \"wimp-option-menu\"\n",
-          style->bg[GTK_STATE_NORMAL].red,
-          style->bg[GTK_STATE_NORMAL].green,
-          style->bg[GTK_STATE_NORMAL].blue,
-          style->text[GTK_STATE_NORMAL].red,
-          style->text[GTK_STATE_NORMAL].green,
-          style->text[GTK_STATE_NORMAL].blue);
+          "text[PRELIGHT] = { %d, %d, %d }\n"
+          "base[PRELIGHT] = { %d, %d, %d }\n"
+          "}widget_class \"*GtkMenu*\" style \"wimp-menu\"\n",
+          fg_prelight.red,
+          fg_prelight.green,
+          fg_prelight.blue,
+          bg_prelight.red,
+          bg_prelight.green,
+          bg_prelight.blue,
+          text_prelight.red,
+          text_prelight.green,
+          text_prelight.blue,
+          base_prelight.red,
+          base_prelight.green,
+          base_prelight.blue);
   gtk_rc_parse_string(buf);
 }
 
 
-struct ThemeDrawInfo
-{
-  GdkDrawable *drawable;
-  GdkGC *gc;
-  HTHEME theme;
-  RECT rect;
-  HDC dc;
-};
 
 
-static gboolean
-get_theme_draw_info(GtkStyle *style, GdkWindow *window,
-                    int x, int y, int width, int height,
-                    LPCWSTR klazz, struct ThemeDrawInfo *info)
-{
-  int xoff, yoff;
-
-  if (! uxtheme_dll)
-    return FALSE;
-
-  info->theme = open_theme_data(NULL, klazz);
-  if (! info->theme)
-    return FALSE;
-  
-  gdk_window_get_internal_paint_info(window, &info->drawable, &xoff, &yoff);
-  info->rect.left = x - xoff;
-  info->rect.top = y - yoff;
-  info->rect.right = info->rect.left + width;
-  info->rect.bottom = info->rect.top + height;
-  info->gc = style->dark_gc[GTK_STATE_NORMAL];
-  info->dc = gdk_win32_hdc_get(info->drawable, info->gc, 0);
-
-  return TRUE;
-}
-
-static void
-free_theme_draw_info(struct ThemeDrawInfo *info)
-{
-  gdk_win32_hdc_release(info->drawable, info->gc, 0);
-  close_theme_data(info->theme);
-}
-
-static int
-get_check_button_state(GtkShadowType shadow, GtkStateType state)
-{
-  int ret;
-  if (shadow == GTK_SHADOW_IN)
-    {
-    switch (state)
-      {
-      case GTK_STATE_NORMAL:
-        ret = CBS_CHECKEDNORMAL;
-        break;
-      case GTK_STATE_ACTIVE:
-        ret = CBS_CHECKEDPRESSED;
-        break;
-      case GTK_STATE_PRELIGHT:
-      case GTK_STATE_SELECTED:
-        ret = CBS_CHECKEDHOT;
-        break;
-      case GTK_STATE_INSENSITIVE:
-        ret = CBS_CHECKEDDISABLED;
-        break;
-      }
-    }
-  else 
-    {
-    switch (state)
-      {
-      case GTK_STATE_NORMAL:
-        ret = CBS_UNCHECKEDNORMAL;
-        break;
-      case GTK_STATE_ACTIVE:
-        ret = CBS_UNCHECKEDPRESSED;
-        break;
-      case GTK_STATE_PRELIGHT:
-      case GTK_STATE_SELECTED:
-        ret = CBS_UNCHECKEDHOT;
-        break;
-      case GTK_STATE_INSENSITIVE:
-        ret = CBS_UNCHECKEDDISABLED;
-        break;
-      }
-    }
-  return ret;
-}
-
-static int
-get_scrollbar_trough_state(GtkStateType state_type)
-{
-  int state;
-  switch (state_type)
-    {
-    case GTK_STATE_NORMAL:
-      state = SCRBS_NORMAL;
-      break;
-    case GTK_STATE_ACTIVE:
-      state = SCRBS_NORMAL;
-      break;
-    case GTK_STATE_PRELIGHT:
-    case GTK_STATE_SELECTED:
-      state = SCRBS_HOT;
-      break;
-    case GTK_STATE_INSENSITIVE:
-      state = SCRBS_DISABLED;
-      break;
-    }
-  return state;
-}
-
-static int
-get_spin_state(int part, GtkStateType state_type)
-{
-  int state;
-  if (part == SPNP_UP)
-    {
-    switch (state_type)
-      {
-      case GTK_STATE_NORMAL:
-        state = UPS_NORMAL;
-        break;
-      case GTK_STATE_ACTIVE:
-        state = UPS_PRESSED;
-        break;
-      case GTK_STATE_PRELIGHT:
-      case GTK_STATE_SELECTED:
-        state = UPS_HOT;
-        break;
-      case GTK_STATE_INSENSITIVE:
-        state = UPS_DISABLED;
-        break;
-      }
-    }
-  else
-    {
-    switch (state_type)
-      {
-      case GTK_STATE_NORMAL:
-        state = DNS_NORMAL;
-        break;
-      case GTK_STATE_ACTIVE:
-        state = DNS_PRESSED;
-        break;
-      case GTK_STATE_PRELIGHT:
-      case GTK_STATE_SELECTED:
-        state = DNS_HOT;
-        break;
-      case GTK_STATE_INSENSITIVE:
-        state = DNS_DISABLED;
-        break;
-      }
-    }
-  return state;
-}
-
-static int
-get_scrollbar_arrow_button_state(GtkArrowType arrow_type,
-                                 GtkStateType state_type)
-{
-  int state;
-  if (arrow_type == GTK_ARROW_DOWN)
-    {
-      switch (state_type)
-        {
-        case GTK_STATE_NORMAL:
-          state = ABS_DOWNNORMAL;
-          break;
-        case GTK_STATE_ACTIVE:
-          state = ABS_DOWNPRESSED;
-          break;
-        case GTK_STATE_PRELIGHT:
-        case GTK_STATE_SELECTED:
-          state = ABS_DOWNHOT;
-          break;
-        case GTK_STATE_INSENSITIVE:
-          state = ABS_DOWNDISABLED;
-          break;
-        }
-    }
-  else if (arrow_type == GTK_ARROW_UP)
-    {
-      switch (state_type)
-        {
-        case GTK_STATE_NORMAL:
-          state = ABS_UPNORMAL;
-          break;
-        case GTK_STATE_ACTIVE:
-          state = ABS_UPPRESSED;
-          break;
-        case GTK_STATE_PRELIGHT:
-        case GTK_STATE_SELECTED:
-          state = ABS_UPHOT;
-          break;
-        case GTK_STATE_INSENSITIVE:
-          state = ABS_UPDISABLED;
-          break;
-        }
-    }
-  else if (arrow_type == GTK_ARROW_LEFT)
-    {
-      switch (state_type)
-        {
-        case GTK_STATE_NORMAL:
-          state = ABS_LEFTNORMAL;
-          break;
-        case GTK_STATE_ACTIVE:
-          state = ABS_LEFTPRESSED;
-          break;
-        case GTK_STATE_PRELIGHT:
-        case GTK_STATE_SELECTED:
-          state = ABS_LEFTHOT;
-          break;
-        case GTK_STATE_INSENSITIVE:
-          state = ABS_LEFTDISABLED;
-          break;
-        }
-    }
-  else if (arrow_type == GTK_ARROW_RIGHT)
-    {
-      switch (state_type)
-        {
-        case GTK_STATE_NORMAL:
-          state = ABS_RIGHTNORMAL;
-          break;
-        case GTK_STATE_ACTIVE:
-          state = ABS_RIGHTPRESSED;
-          break;
-        case GTK_STATE_PRELIGHT:
-        case GTK_STATE_SELECTED:
-          state = ABS_RIGHTHOT;
-          break;
-        case GTK_STATE_INSENSITIVE:
-          state = ABS_RIGHTDISABLED;
-          break;
-        }
-    }
-  return state;
-}
-
-static int
-get_expander_state(GtkExpanderStyle expander_style, GtkStateType gtk_state)
-{
-  int state = GLPS_OPENED;
-
-  switch (expander_style)
-    {
-    case GTK_EXPANDER_COLLAPSED:
-    case GTK_EXPANDER_SEMI_COLLAPSED:
-      state = GLPS_CLOSED;
-    }
-  return state;
-}
-
-static int
-get_part_state(const char *detail, GtkStateType gtk_state)
-{
-  int state = 0;
-
-  if (!strcmp(detail, "button"))
-    {
-      state = PBS_NORMAL;
-      switch (gtk_state)
-        {
-        case GTK_STATE_NORMAL:
-        case GTK_STATE_SELECTED:
-          state = PBS_NORMAL;
-          break;
-        case GTK_STATE_ACTIVE:
-          state = PBS_PRESSED;
-          break;
-        case GTK_STATE_PRELIGHT:
-          state = PBS_HOT;
-          break;
-        case GTK_STATE_INSENSITIVE:
-          state = PBS_DISABLED;
-          break;
-        }
-    }
-  else if (! strcmp(detail, "buttondefault"))
-    {
-      state = PBS_DEFAULTED;
-    }
-  else if (! strcmp(detail, "tab"))
-    {
-      state = TIS_NORMAL;
-      switch (gtk_state)
-        {
-        case GTK_STATE_NORMAL:
-          state = TIS_SELECTED;
-          break;
-        case GTK_STATE_ACTIVE:
-          state = TIS_NORMAL;
-          break;
-        case GTK_STATE_PRELIGHT:
-          state = TIS_NORMAL;
-          break;
-        case GTK_STATE_SELECTED:
-          state = TIS_NORMAL;
-          break;
-        case GTK_STATE_INSENSITIVE:
-          state = TIS_DISABLED;
-          break;
-        }
-    }
-  else if (! strcmp(detail, "slider"))
-    {
-      state = TIS_NORMAL;
-      switch (gtk_state)
-        {
-        case GTK_STATE_NORMAL:
-          state = SCRBS_NORMAL;
-          break;
-        case GTK_STATE_ACTIVE:
-          state = SCRBS_PRESSED;
-          break;
-        case GTK_STATE_PRELIGHT:
-        case GTK_STATE_SELECTED:
-          state = SCRBS_HOT;
-          break;
-        case GTK_STATE_INSENSITIVE:
-          state = SCRBS_DISABLED;
-          break;
-        }
-    }
-  return state;
-}
 
 static gboolean 
 sanitize_size (GdkWindow *window,
@@ -685,14 +355,11 @@ draw_check(GtkStyle      *style,
     }
   else
     {
-      struct ThemeDrawInfo info;
-      if (get_theme_draw_info(style, window, x, y, width,
-                              height, L"Button", &info))
+      if (xp_theme_draw(window, shadow == GTK_SHADOW_IN
+                        ? XP_THEME_ELEMENT_PRESSED_CHECKBOX
+                        : XP_THEME_ELEMENT_CHECKBOX,
+                        style, x, y, width, height, state))
         {
-          int pstate = get_check_button_state(shadow, state);
-          draw_theme_background(info.theme, info.dc, BP_CHECKBOX,
-                                pstate, &info.rect, NULL);
-          free_theme_draw_info(&info);
         }
       else
         {
@@ -727,18 +394,25 @@ draw_expander(GtkStyle      *style,
   GdkColor color;
   GdkGCValues values;
   gboolean success;
-  struct ThemeDrawInfo info;
+  XpThemeElement xp_expander;
 
   gtk_widget_style_get (widget, "expander_size", &expander_size, NULL);
 
-  if (get_theme_draw_info(style, window, x, y - expander_size / 2,
-			  expander_size, expander_size, L"TreeView", &info))
+  switch (expander_style)
     {
-      int pstate = get_expander_state (expander_style, state);
-
-      draw_theme_background(info.theme, info.dc, TVP_GLYPH,
-                            pstate, &info.rect, NULL);
-      free_theme_draw_info(&info);
+    case GTK_EXPANDER_COLLAPSED:
+    case GTK_EXPANDER_SEMI_COLLAPSED:
+      xp_expander = XP_THEME_ELEMENT_TREEVIEW_EXPANDER_CLOSED;
+      break;
+    default:
+      xp_expander = XP_THEME_ELEMENT_TREEVIEW_EXPANDER_OPENED;
+      break;
+    }
+  
+  if (xp_theme_draw(window, xp_expander, style,
+                    x, y - expander_size / 2,
+                    expander_size, expander_size, state))
+    {
       return;
     }
 
@@ -810,14 +484,10 @@ draw_option(GtkStyle      *style,
     }
   else
     {
-      struct ThemeDrawInfo info;
-      if (get_theme_draw_info(style, window, x, y, width,
-                              height, L"Button", &info))
+      if (xp_theme_draw(window,
+                        XP_THEME_ELEMENT_RADIO_BUTTON, style,
+                        x, y, width, height, state))
         {
-          int pstate = get_check_button_state(shadow, state);
-          draw_theme_background(info.theme, info.dc, BP_RADIOBUTTON,
-                                pstate, &info.rect, NULL);
-          free_theme_draw_info(&info);
         }
       else
 	{
@@ -1007,13 +677,8 @@ draw_arrow (GtkStyle      *style,
   
   if (detail && strcmp (detail, "spinbutton") == 0)
     {
-      struct ThemeDrawInfo info;
-      
-      if (get_theme_draw_info(style, window, x, y, width,
-                              height, L"Spin", &info))
+      if (xp_theme_is_drawable(XP_THEME_ELEMENT_SPIN_BUTTON_UP))
         {
-          // already drawn in draw_box()
-          free_theme_draw_info(&info);
           return;
         }
       else
@@ -1035,20 +700,27 @@ draw_arrow (GtkStyle      *style,
       gint box_y = y;
       gint box_width = width;
       gint box_height = height;
-      struct ThemeDrawInfo info;
-
+      XpThemeElement xp_arrow;
       reverse_engineer_stepper_box (widget, arrow_type,
 				    &box_x, &box_y, &box_width, &box_height);
 
-      if (get_theme_draw_info(style, window, box_x, box_y,
-                              box_width, box_height,
-                              L"Scrollbar", &info))
+      switch (arrow_type)
         {
-          int pstate = get_scrollbar_arrow_button_state(arrow_type,
-                                                       state);
-          draw_theme_background(info.theme, info.dc, SBP_ARROWBTN,
-                                pstate, &info.rect, NULL);
-          free_theme_draw_info(&info);
+        case GTK_ARROW_UP:
+          xp_arrow = XP_THEME_ELEMENT_ARROW_UP;
+          break;
+        case GTK_ARROW_DOWN:
+          xp_arrow = XP_THEME_ELEMENT_ARROW_DOWN;
+          break;
+        case GTK_ARROW_LEFT:
+          xp_arrow = XP_THEME_ELEMENT_ARROW_LEFT;
+          break;
+        default:
+          xp_arrow = XP_THEME_ELEMENT_ARROW_RIGHT;
+          break;
+        }
+      if (xp_theme_draw(window, xp_arrow, style, box_x, box_y, box_width, box_height, state))
+        {
         }
       else if (arrow_type == GTK_ARROW_UP || arrow_type == GTK_ARROW_DOWN)
         {
@@ -1136,48 +808,37 @@ draw_box (GtkStyle      *style,
       (!strcmp (detail, "button") ||
        !strcmp (detail, "buttondefault")))
     {
-      struct ThemeDrawInfo info;
-
-      if (get_theme_draw_info(style, window, x, y, width, height,
-                              L"Button", &info))
+      if (GTK_IS_TREE_VIEW (widget->parent) || GTK_IS_CLIST (widget->parent))
         {
-          int win_state = get_part_state(detail, state_type);
-          draw_theme_background(info.theme, info.dc, BP_PUSHBUTTON,
-                                win_state, &info.rect, NULL);
-          free_theme_draw_info(&info);
-          return;
+          if (xp_theme_draw(window, XP_THEME_ELEMENT_LIST_HEADER, style, x, y,
+                            width, height, state_type))
+            return;
+        }
+      else
+        {
+          gboolean is_default = !strcmp (detail, "buttondefault");
+          if (xp_theme_draw(window, is_default ? XP_THEME_ELEMENT_DEFAULT_BUTTON
+                            : XP_THEME_ELEMENT_BUTTON, style, x, y,
+                            width, height, state_type))
+            return;
         }
     }
   else if (detail && !strcmp (detail, "spinbutton"))
     {
-      struct ThemeDrawInfo info;
-
-      if (get_theme_draw_info(style, window, x, y, width, height,
-                              L"Spin", &info))
+      if (xp_theme_is_drawable(XP_THEME_ELEMENT_SPIN_BUTTON_UP))
         {
-          // Skip. We draw the box when the arrow is drawn.
-          free_theme_draw_info(&info);
           return;
         }
     }
   else if (detail && (!strcmp (detail, "spinbutton_up")
                       || !strcmp (detail, "spinbutton_down")))
     {
-      struct ThemeDrawInfo info;
-
-      if (get_theme_draw_info(style, window, x, y, width, height,
-                              L"Spin", &info))
+      if (xp_theme_draw(window, 
+                        (! strcmp (detail, "spinbutton_up"))
+                        ? XP_THEME_ELEMENT_SPIN_BUTTON_UP
+                        : XP_THEME_ELEMENT_SPIN_BUTTON_DOWN,
+                        style, x, y, width, height, state_type))
         {
-          int part;
-          int pstate;
-
-          part = 
-            ! strcmp (detail, "spinbutton_up")
-            ? SPNP_UP : SPNP_DOWN;
-          pstate = get_spin_state(part, state_type);
-          draw_theme_background(info.theme, info.dc, part,
-                                pstate, &info.rect, NULL);
-          free_theme_draw_info(&info);
           return;
         }
     }
@@ -1187,29 +848,12 @@ draw_box (GtkStyle      *style,
       if (GTK_IS_SCROLLBAR(widget))
         {
           GtkScrollbar * scrollbar = GTK_SCROLLBAR(widget);
-        
-          struct ThemeDrawInfo info;
-
-          if (get_theme_draw_info(style, window, x, y, width, height,
-                                  L"Scrollbar", &info))
+          if (xp_theme_draw(window, 
+                            (! GTK_IS_VSCROLLBAR(widget))
+                            ? XP_THEME_ELEMENT_SCROLLBAR_V
+                            : XP_THEME_ELEMENT_SCROLLBAR_H,
+                            style, x, y, width, height, state_type))
             {
-              int part, state, grip;
-              if (GTK_IS_VSCROLLBAR(widget))
-                {
-                  part = SBP_THUMBBTNHORZ;
-                  grip = SBP_GRIPPERVERT;
-                }
-              else
-                {
-                  part = SBP_THUMBBTNVERT;
-                  grip = SBP_GRIPPERHORZ;
-                }
-              state = get_part_state(detail, state_type);
-              draw_theme_background(info.theme, info.dc, part,
-                                    state, &info.rect, NULL);
-              draw_theme_background(info.theme, info.dc, grip,
-                                    0, &info.rect, NULL);
-              free_theme_draw_info(&info);
               return;
             }
         }
@@ -1226,26 +870,16 @@ draw_box (GtkStyle      *style,
         }
       else
         {
-          struct ThemeDrawInfo info;
-
+          gboolean is_vertical = GTK_IS_VSCROLLBAR(widget);
+          
           if (GTK_IS_RANGE(widget)
-              && get_theme_draw_info(style, window, x, y, width, height,
-                                     L"Scrollbar", &info))
+              && xp_theme_draw(window,
+                               is_vertical
+                               ? XP_THEME_ELEMENT_TROUGH_V
+                               : XP_THEME_ELEMENT_TROUGH_H,
+                               style,
+                               x, y, width, height, state_type))
             {
-              int part, pstate;
-              if (GTK_IS_VSCROLLBAR(widget))
-                {
-                  part = SBP_LOWERTRACKVERT;
-                }
-              else
-                {
-                  part = SBP_LOWERTRACKHORZ;
-                }
-              pstate = get_scrollbar_trough_state(state_type);
-              draw_theme_background(info.theme, info.dc,
-                                    part, pstate,
-                                    &info.rect, NULL);
-              free_theme_draw_info(&info);
               return;
             }
           else
@@ -1280,6 +914,14 @@ draw_box (GtkStyle      *style,
       
               return;
             }
+        }
+    }
+  else if (detail && strcmp (detail, "optionmenu") == 0)
+    {
+      if (xp_theme_draw(window, XP_THEME_ELEMENT_EDIT_TEXT,
+                        style, x, y, width, height, state_type))
+        {
+          return;
         }
     }
 
@@ -1330,25 +972,19 @@ draw_tab (GtkStyle      *style,
   g_return_if_fail (style != NULL);
   g_return_if_fail (window != NULL);
 
-  if (widget)
-    gtk_widget_style_get (widget, "indicator_size", &indicator_size, NULL);
-
-#if 0
-  if (detail && strcmp (detail, "optionmenutab") == 0)
+  if (detail && ! strcmp (detail, "optionmenutab"))
     {
-      struct ThemeDrawInfo info;
-      if (get_theme_draw_info(style, window, x, y, width, height,
-                              L"ComboBox", &info))
+      if (xp_theme_draw(window, XP_THEME_ELEMENT_COMBOBUTTON,
+                        style, x-5, widget->allocation.y+1,
+                        width+10, widget->allocation.height-2, state))
         {
-          int partid = CP_DROPDOWNBUTTON;
-          int pstate = CBXS_NORMAL;
-          draw_theme_background(info.theme, info.dc, partid,
-                                pstate, &info.rect, NULL);
-          free_theme_draw_info(&info);
           return;
         }
     }
-#endif
+
+  if (widget)
+    gtk_widget_style_get (widget, "indicator_size", &indicator_size, NULL);
+
   option_menu_get_props (widget, &indicator_size, &indicator_spacing);
 
   x += (width - indicator_size.width) / 2;
@@ -1377,30 +1013,19 @@ draw_extension(GtkStyle *style,
 {
   if (detail && !strcmp(detail, "tab"))
     {
-      struct ThemeDrawInfo info;
       GtkNotebook *notebook = GTK_NOTEBOOK(widget);
 
       /* FIXME: pos != TOP to be implemented */
       if (gtk_notebook_get_tab_pos(notebook) == GTK_POS_TOP
-          && get_theme_draw_info(style, window, x, y, width, height,
-                                 L"Tab", &info))
+          && xp_theme_draw (window,
+                            gtk_notebook_get_current_page(notebook)==0
+                            ? XP_THEME_ELEMENT_TAB_ITEM_LEFT_EDGE
+                            : XP_THEME_ELEMENT_TAB_ITEM,
+                            style, x, y, width, height
+                            /* FIXME: where does the magic number 2 come from? */
+                            + ( state_type == GTK_STATE_NORMAL
+                                ? 2 : 0), state_type))
         {
-          int partid = TABP_TABITEM;
-          int win_state = get_part_state(detail, state_type);
-
-          if (state_type == GTK_STATE_NORMAL)
-            {
-              /* FIXME: where does the magic number 2 come from? */
-              info.rect.bottom+=2; 
-              if (gtk_notebook_get_current_page(notebook) == 0)
-                {
-                  partid = TABP_TABITEMLEFTEDGE;
-                }
-            }
-
-          draw_theme_background(info.theme, info.dc, partid,
-                                win_state, &info.rect, NULL);
-          free_theme_draw_info(&info);
           return;
         }
     }
@@ -1418,17 +1043,13 @@ draw_box_gap (GtkStyle *style, GdkWindow *window, GtkStateType state_type,
 {
   if (detail && !strcmp(detail, "notebook"))
     {
-      struct ThemeDrawInfo info;
       GtkNotebook *notebook = GTK_NOTEBOOK(widget);
 
       /* FIXME: pos != TOP to be implemented */
       if (gtk_notebook_get_tab_pos(notebook) == GTK_POS_TOP
-          && get_theme_draw_info(style, window, x, y, width, height,
-                                 L"Tab", &info))
+          && xp_theme_draw(window, XP_THEME_ELEMENT_TAB_PANE, style,  x, y, width, height,
+                           state_type))
         {
-          draw_theme_background(info.theme, info.dc, TABP_PANE,
-                                0, &info.rect, NULL);
-          free_theme_draw_info(&info);
           return;
         }
     }
@@ -1471,7 +1092,8 @@ wimp_style_init_from_rc (GtkStyle * style, GtkRcStyle * rc_style)
 static void
 wimp_style_init (WimpStyle * style)
 {
-  uxtheme_dll = LoadLibrary("uxtheme.dll");
+  //  uxtheme_dll = LoadLibrary("uxtheme.dll");
+  xp_theme_init ();
 }
 
 static void
