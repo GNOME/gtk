@@ -1028,7 +1028,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderer.c:116
 msgid "mode"
-msgstr ""
+msgstr "hamur"
 
 #: gtk/gtkcellrenderer.c:117
 msgid "Editable mode of the CellRenderer"
@@ -1036,11 +1036,11 @@ msgstr ""
 
 #: gtk/gtkcellrenderer.c:126
 msgid "visible"
-msgstr ""
+msgstr "sýnilegt"
 
 #: gtk/gtkcellrenderer.c:127
 msgid "Display the cell"
-msgstr ""
+msgstr "Sýna selluna"
 
 #: gtk/gtkcellrenderer.c:135
 msgid "xalign"
@@ -1180,11 +1180,11 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:175 gtk/gtkentry.c:527 gtk/gtkprogressbar.c:218
 msgid "Text"
-msgstr ""
+msgstr "Texti"
 
 #: gtk/gtkcellrenderertext.c:176
 msgid "Text to render"
-msgstr ""
+msgstr "textinn sem teikna á"
 
 #: gtk/gtkcellrenderertext.c:183
 msgid "Markup"
@@ -1196,7 +1196,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:191 gtk/gtklabel.c:297
 msgid "Attributes"
-msgstr ""
+msgstr "Eiginleikar"
 
 #: gtk/gtkcellrenderertext.c:192
 msgid "A list of style attributes to apply to the text of the renderer"
@@ -1204,155 +1204,156 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:199 gtk/gtktexttag.c:205
 msgid "Background color name"
-msgstr ""
+msgstr "Heiti bakgrunnslits"
 
 #: gtk/gtkcellrenderertext.c:200 gtk/gtktexttag.c:206
 msgid "Background color as a string"
-msgstr ""
+msgstr "Bakgrunnslitur sem strengur"
 
 #: gtk/gtkcellrenderertext.c:207 gtk/gtktexttag.c:213
 msgid "Background color"
-msgstr ""
+msgstr "Bakgrunnslitur"
 
 #: gtk/gtkcellrenderertext.c:208
 msgid "Background color as a GdkColor"
-msgstr ""
+msgstr "Bakgrunnslitur sem GdkColor"
 
 #: gtk/gtkcellrenderertext.c:215 gtk/gtktexttag.c:239
 msgid "Foreground color name"
-msgstr ""
+msgstr "Heiti forgrunnslits"
 
 #: gtk/gtkcellrenderertext.c:216 gtk/gtktexttag.c:240
 msgid "Foreground color as a string"
-msgstr ""
+msgstr "Forgrunnslitur sem strengur"
 
 #: gtk/gtkcellrenderertext.c:223 gtk/gtktexttag.c:247
 msgid "Foreground color"
-msgstr ""
+msgstr "Forgrunnslitur"
 
 #: gtk/gtkcellrenderertext.c:224
 msgid "Foreground color as a GdkColor"
-msgstr ""
+msgstr "Forgrunnslitur sem GdkColor"
 
 #: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:459 gtk/gtktexttag.c:273
 #: gtk/gtktextview.c:576
 msgid "Editable"
-msgstr ""
+msgstr "Breytanlegt"
 
 #: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:577
 msgid "Whether the text can be modified by the user"
-msgstr ""
+msgstr "Hvort notandinn megi breyta textanum"
 
 #: gtk/gtkcellrenderertext.c:240 gtk/gtkcellrenderertext.c:248
 #: gtk/gtkfontsel.c:217 gtk/gtktexttag.c:281 gtk/gtktexttag.c:289
 msgid "Font"
-msgstr ""
+msgstr "Letur"
 
 #: gtk/gtkcellrenderertext.c:241
 msgid "Font description as a string"
-msgstr ""
+msgstr "Leturslýsing sem strengur"
 
 #: gtk/gtkcellrenderertext.c:249 gtk/gtktexttag.c:290
 msgid "Font description as a PangoFontDescription struct"
-msgstr ""
+msgstr "Leturslýsing sem PangoFontDescription strúktúr"
 
 #: gtk/gtkcellrenderertext.c:257 gtk/gtktexttag.c:298
 msgid "Font family"
-msgstr ""
+msgstr "Leturfjölskylda"
 
 #: gtk/gtkcellrenderertext.c:258 gtk/gtktexttag.c:299
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
-msgstr ""
+msgstr "Heiti leturfjölskyldu, t.d. Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:265 gtk/gtkcellrenderertext.c:266
 #: gtk/gtktexttag.c:306
 msgid "Font style"
-msgstr ""
+msgstr "Letursstíll"
 
 #: gtk/gtkcellrenderertext.c:274 gtk/gtkcellrenderertext.c:275
 #: gtk/gtktexttag.c:315
 msgid "Font variant"
-msgstr ""
+msgstr "Leturstilbrigði"
 
 #: gtk/gtkcellrenderertext.c:283 gtk/gtkcellrenderertext.c:284
 #: gtk/gtktexttag.c:324
 msgid "Font weight"
-msgstr ""
+msgstr "Þyngd leturs"
 
 #: gtk/gtkcellrenderertext.c:293 gtk/gtkcellrenderertext.c:294
 #: gtk/gtktexttag.c:335
 msgid "Font stretch"
-msgstr ""
+msgstr "Teyging leturs"
 
 #: gtk/gtkcellrenderertext.c:302 gtk/gtkcellrenderertext.c:303
 #: gtk/gtktexttag.c:344
 msgid "Font size"
-msgstr ""
+msgstr "Letursstærð"
 
 #: gtk/gtkcellrenderertext.c:312 gtk/gtktexttag.c:364
 msgid "Font points"
-msgstr ""
+msgstr "Myndeinigar leturs"
 
 #: gtk/gtkcellrenderertext.c:313 gtk/gtktexttag.c:365
 msgid "Font size in points"
-msgstr ""
+msgstr "Stærð leturs í myndeiningum"
 
 #: gtk/gtkcellrenderertext.c:322 gtk/gtktexttag.c:354
 msgid "Font scale"
-msgstr ""
+msgstr "Skölun leturs"
 
 #: gtk/gtkcellrenderertext.c:323
 msgid "Font scaling factor"
-msgstr ""
+msgstr "Hlutfall letursskölunar"
 
 #: gtk/gtkcellrenderertext.c:332 gtk/gtktexttag.c:423
 msgid "Rise"
-msgstr ""
+msgstr "Ris"
 
 #: gtk/gtkcellrenderertext.c:333
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
+"Hæð texta yfir grunnlínu (eða undir henni ef talan er nækvæð)"
 
 #: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:463
 msgid "Strikethrough"
-msgstr ""
+msgstr "Yfirstrikað"
 
 #: gtk/gtkcellrenderertext.c:344 gtk/gtktexttag.c:464
 msgid "Whether to strike through the text"
-msgstr ""
+msgstr "Hvort strika eigi yfir textann"
 
 #: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:471
 msgid "Underline"
-msgstr ""
+msgstr "Undirstrikun"
 
 #: gtk/gtkcellrenderertext.c:352 gtk/gtktexttag.c:472
 msgid "Style of underline for this text"
-msgstr ""
+msgstr "Undirstrikunarstíll þessa texta"
 
 #: gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:508
 msgid "Background set"
-msgstr ""
+msgstr "Bakgrunnskerfi"
 
 #: gtk/gtkcellrenderertext.c:363 gtk/gtktexttag.c:509
 msgid "Whether this tag affects the background color"
-msgstr ""
+msgstr "Hvort þetta tag hefur áhrif á bakgrunnslit"
 
 #: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:520
 msgid "Foreground set"
-msgstr ""
+msgstr "Forgrunnskerfi"
 
 #: gtk/gtkcellrenderertext.c:367 gtk/gtktexttag.c:521
 msgid "Whether this tag affects the foreground color"
-msgstr ""
+msgstr "Hvort þetta tag hefur áhrif á forgrunnslit"
 
 #: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:528
 msgid "Editability set"
-msgstr ""
+msgstr "Breytingakerfi"
 
 #: gtk/gtkcellrenderertext.c:371 gtk/gtktexttag.c:529
 msgid "Whether this tag affects text editability"
-msgstr ""
+msgstr "Hvort þetta tag hefur áhrif á hvort breyta megi texta"
 
 #: gtk/gtkcellrenderertext.c:374 gtk/gtktexttag.c:532
 msgid "Font family set"
