@@ -1,3 +1,8 @@
+Mon Jul 29 23:06:10 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-pixbuf-scale.c: Fix some warnings by adding
+	casts to PixopsInterpType. (#85839, David L. Cooper, II.)
+
 2002-07-16  Matthias Clasen  <maclas@gmx.de>
 
 	* io-ras.c (DoCompressed): Avoid unnecessary casting.

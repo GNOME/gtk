@@ -78,7 +78,7 @@ gdk_pixbuf_scale (const GdkPixbuf *src,
 		dest->rowstride, dest->n_channels, dest->has_alpha,
 		src->pixels, src->width, src->height,
 		src->rowstride, src->n_channels, src->has_alpha,
-		scale_x, scale_y, interp_type);
+		scale_x, scale_y, (PixopsInterpType)interp_type);
 }
 
 /**
@@ -129,7 +129,7 @@ gdk_pixbuf_composite (const GdkPixbuf *src,
 		    dest->rowstride, dest->n_channels, dest->has_alpha,
 		    src->pixels, src->width, src->height,
 		    src->rowstride, src->n_channels, src->has_alpha,
-		    scale_x, scale_y, interp_type, overall_alpha);
+		    scale_x, scale_y, (PixopsInterpType)interp_type, overall_alpha);
 }
 
 /**
@@ -197,7 +197,7 @@ gdk_pixbuf_composite_color (const GdkPixbuf *src,
 			  dest->rowstride, dest->n_channels, dest->has_alpha,
 			  src->pixels, src->width, src->height,
 			  src->rowstride, src->n_channels, src->has_alpha,
-			  scale_x, scale_y, interp_type, overall_alpha, check_x, check_y,
+			  scale_x, scale_y, (PixopsInterpType)interp_type, overall_alpha, check_x, check_y,
 			  check_size, color1, color2);
 }
 
