@@ -884,7 +884,7 @@ gdk_pixbuf_new_from_file_at_size (const char *filename,
 			if (!gdk_pixbuf_loader_write (loader, buffer, length, error)) {
 				gdk_pixbuf_loader_close (loader, NULL);
 				fclose (f);
-				g_object_unref (G_OBJECT (loader));
+				g_object_unref (loader);
 				return NULL;
 			}
 	}
@@ -892,14 +892,14 @@ gdk_pixbuf_new_from_file_at_size (const char *filename,
 	fclose (f);
 
 	if (!gdk_pixbuf_loader_close (loader, error)) {
-		g_object_unref (G_OBJECT (loader));
+		g_object_unref (loader);
 		return NULL;
 	}
 
 	pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
 
 	if (!pixbuf) {
-		g_object_unref (G_OBJECT (loader));
+		g_object_unref (loader);
 		g_set_error (error,
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_FAILED,
@@ -910,7 +910,7 @@ gdk_pixbuf_new_from_file_at_size (const char *filename,
 
 	g_object_ref (pixbuf);
 
-	g_object_unref (G_OBJECT (loader));
+	g_object_unref (loader);
 
 	return pixbuf;
 }
@@ -956,7 +956,6 @@ gdk_pixbuf_get_file_info (const gchar  *filename,
 			  gint         *height)
 {
 	GdkPixbufLoader *loader;
-	GError *temp = NULL;
 	guchar buffer [4096];
 	int length;
 	FILE *f;
@@ -992,7 +991,7 @@ gdk_pixbuf_get_file_info (const gchar  *filename,
 
 	fclose (f);
 	gdk_pixbuf_loader_close (loader, NULL);
-	g_object_unref (G_OBJECT (loader));
+	g_object_unref (loader);
 
 	if (width) 
 		*width = info.width;

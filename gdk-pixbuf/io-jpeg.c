@@ -829,7 +829,7 @@ to_callback_do_write (j_compress_ptr cinfo, gsize length)
         }
 }
 
-static guchar
+static boolean
 to_callback_empty_output_buffer (j_compress_ptr cinfo)
 {
 	ToFunctionDestinationManager *destmgr;

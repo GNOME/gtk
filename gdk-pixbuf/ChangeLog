@@ -1,3 +1,12 @@
+Sun Feb  8 01:07:20 2004  Manish Singh  <yosh@gimp.org>
+
+	* gdk-pixbuf-io.c: removed unnecessary G_OBJECT() cast checks.
+
+	* io-jpeg.c: make the return type for to_callback_empty_output_buffer
+	"boolean", which should be defined by the jpeg headers. The right
+	return type for this function depends on how the jpeg library
+	was built (one wonders what happens if different compilers are used).
+
 2004-01-28  Hans Breuer  <hans@breuer.org>
 
 	* gdk_pixbuf.def : updated externals
