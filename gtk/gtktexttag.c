@@ -414,7 +414,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    g_param_spec_int ("indent",
                                                      _("Indent"),
                                                      _("Amount to indent the paragraph, in pixels"),
-                                                     0,
+                                                     G_MININT,
                                                      G_MAXINT,
                                                      0,
                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
@@ -425,7 +425,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    g_param_spec_int ("rise",
                                                      _("Rise"),
                                                      _("Offset of text above the baseline (below the baseline if rise is negative)"),
-                                                     -G_MAXINT,
+						     G_MININT,
                                                      G_MAXINT,
                                                      0,
                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));

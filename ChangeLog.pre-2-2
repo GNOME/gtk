@@ -1,3 +1,10 @@
+2001-10-25  Matt Wilson  <msw@redhat.com>
+
+	* gtk/gtktexttag.c (gtk_text_tag_class_init): the valid range for
+	the 'indent' property is G_MININT to G_MAXINT.  Don't use
+	-G_MAXINT for the minimum of the 'rise' property, use G_MININT
+	instead.
+
 2001-10-24  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtktreeview.c: 
@@ -49,6 +56,7 @@ Wed Oct 24 20:29:47 2001  Kristian Rietveld  <kristian@planet.nl>
 	remove hack to strip off the bogus newline, since we killed the
 	bogus newline; fixes #61779
 
+>>>>>>> 1.2451
 2001-10-24  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_update_adjustments): don't
