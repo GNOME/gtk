@@ -1336,7 +1336,10 @@ gdk_drag_find_window (GdkDragContext  *context,
     {
       *dest_window = gdk_win32_handle_table_lookup (GPOINTER_TO_UINT(recipient));
       if (*dest_window)
-	gdk_drawable_ref (*dest_window);
+	{
+	  *dest_window = gdk_window_get_toplevel (*dest_window);
+	  gdk_drawable_ref (*dest_window);
+	}
 
       if (context->source_window)
         *protocol = GDK_DRAG_PROTO_LOCAL;

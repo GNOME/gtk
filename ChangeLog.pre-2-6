@@ -1,3 +1,11 @@
+2002-03-20  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdnd-win32.c (gdk_drag_find_window): Use
+	gdk_window_get_toplevel(), as it is the top-level windows that are
+	registered for DND.
+
+	* gdk/win32/gdkwin32.h: Don't include gdkinternals.h.
+
 2002-03-19  jacob berkman  <jacob@ximian.com>
 
 	* gtk/gtkcombo.c (gtk_combo_find): fix infinite loop when
