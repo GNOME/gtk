@@ -1,5 +1,12 @@
 2005-03-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk-pixbuf/gdk-pixbuf.c:
+	* gdk-pixbuf/gdk-pixbuf-features.h.in:
+	Revert the previous change, since it breaks
+	bin compat.
+
+2005-03-01  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/gdkkeyuni.c
 	* gdk/gdkpixbuf-drawable.c
 	* gdk/gdkrgb.c
