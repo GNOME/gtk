@@ -203,7 +203,7 @@ gtk_spin_button_map (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_SPIN_BUTTON (widget));
 
-  if (!GTK_WIDGET_MAPPED (widget))
+  if (GTK_WIDGET_REALIZED (widget) && !GTK_WIDGET_MAPPED (widget))
     {
       gdk_window_show (GTK_SPIN_BUTTON (widget)->panel);
       GTK_WIDGET_CLASS (parent_class)->map (widget);
@@ -277,6 +277,7 @@ gtk_spin_button_unrealize (GtkWidget *widget)
 
   if (spin->panel)
     {
+      gdk_window_set_user_data (spin->panel, NULL);
       gdk_window_destroy (spin->panel);
       spin->panel = NULL;
     }
@@ -314,19 +315,22 @@ gtk_spin_button_size_allocate (GtkWidget     *widget,
   GTK_WIDGET_CLASS (parent_class)->size_allocate (widget, &child_allocation);
 
   widget->allocation = *allocation;
-  
-  child_allocation.width = ARROW_SIZE + 2 * widget->style->klass->xthickness;
-  child_allocation.height = widget->requisition.height;  
-  child_allocation.x = allocation->x + allocation->width - ARROW_SIZE 
-    - 2 * widget->style->klass->xthickness;
-  child_allocation.y = allocation->y + 
-    (allocation->height - widget->requisition.height) / 2;
 
-  gdk_window_move_resize (GTK_SPIN_BUTTON (widget)->panel, 
-			  child_allocation.x,
-			  child_allocation.y,
-			  child_allocation.width,
-			  child_allocation.height); 
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      child_allocation.width = ARROW_SIZE + 2 * widget->style->klass->xthickness;
+      child_allocation.height = widget->requisition.height;  
+      child_allocation.x = (allocation->x + allocation->width - ARROW_SIZE - 
+			    2 * widget->style->klass->xthickness);
+      child_allocation.y = allocation->y + (allocation->height - 
+					    widget->requisition.height) / 2;
+
+      gdk_window_move_resize (GTK_SPIN_BUTTON (widget)->panel, 
+			      child_allocation.x,
+			      child_allocation.y,
+			      child_allocation.width,
+			      child_allocation.height); 
+    }
 }
 
 static void
