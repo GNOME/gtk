@@ -1,3 +1,7 @@
+2002-01-09  Sven Neumann  <sven@gimp.org>
+
+	* tests/prop-editor.c: declared internal functions static.
+	
 Wed Jan  9 11:13:12 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenuitem.c (_gtk_menu_item_refresh_accel_path): 
