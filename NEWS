@@ -1,3 +1,46 @@
+Overview of Changes from GTK+ 2.5.5 to GTK+ 2.5.6
+=================================================
+* GtkFileChooser
+  - Improve keybindings [Davyd Madeley, Federico Mena Quintero]
+  - Speed up loading of large directories [Federico]
+  - Move "Browse for other folders" expander up [Federico]
+  - Support DND from the path bar [Federico]
+* GtkColorSelectionDialog
+  - Add keynav to the color picker [Frances Keenan, Matthias Clasen]
+* GtkButton
+  - Allow construction of stock-like buttons  [Matthias,
+    Jonathan Blandford]
+* GtkLabel
+  - Support DND for selectable labels [Matthias]
+  - Support rotated text [Owen Taylor, Hans Breuer]
+* GtkTextView
+  - Support rotated text [Owen Taylor]
+  - Make it possible to select the first/last line
+    when moving by lines  [Paolo Borelli]
+* GtkSettings
+  - Handle changes to gtk-menu-images and gtk-button-images
+    much more efficiently [Matthias]
+* GtkClipboard
+  - Reduce timeout to 30 seconds [Billy Biggs]
+* Add pixbuf theme engine [Owen]
+* GDK 
+  - Compile against X11R5 [Matthias]  
+  - Add GdkPangoRenderer [Owen]
+  - Support rotated text [Owen]
+  - Add dead_hook and dead_horn keysyms [Samuel Thibault]
+  - Determine direction of XKB groups from their content 
+    [Behdad Esfahbod, Ilya Konstantinov]
+* Bug fixes [Vasco Alexandre da Silva Costa, Kazuki IWAMOTO,
+  Erwann Chenede, Tim Janik, Gavin Romig-Koch, Jonathan,
+  Manish Singh, Morten Welinder, Billy Biggs, Matthias, Owen,
+  John Finlay, Christian Neumair, Sven Neumann, Felipe
+  Heidrich, Martin Jeppensen, Kristian Høgsberg, Olivier 
+  Andrieu, Jody Goldberg, Søren Sandmann, Dan Winship,
+  Alex Larsson]
+* Documentation improvements [Matthias, Jonathan, Owen]
+* New and updated translations (bg,ca,cs,da,de,en_CA,en_GB,es,hu,ja,nb,rw,sq,zh_CN)
+* Bugs fixed: 148032,158225,158243,156805,143668,62466,158420,158422,155428,154615,154611,158459,158470,125627,158522,155744,158477,141077,158475,158798,131345,159061,159098,151742,128968,159389,159373,159436,135385,151541,155891,149826,159739,116626, 157670,159931,158177,159330,159737
+
 Overview of Changes from GTK+ 2.5.4 to GTK+ 2.5.5
 =================================================
 * gdk-pixbuf
