@@ -552,6 +552,12 @@ gtk_entry_class_init (GtkEntryClass *class)
   add_move_binding (binding_set, GDK_Left, 0,
 		    GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 
+  add_move_binding (binding_set, GDK_KP_Right, 0,
+		    GTK_MOVEMENT_VISUAL_POSITIONS, 1);
+  
+  add_move_binding (binding_set, GDK_KP_Left, 0,
+		    GTK_MOVEMENT_VISUAL_POSITIONS, -1);
+  
   add_move_binding (binding_set, GDK_f, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_LOGICAL_POSITIONS, 1);
   
@@ -562,6 +568,12 @@ gtk_entry_class_init (GtkEntryClass *class)
 		    GTK_MOVEMENT_WORDS, 1);
 
   add_move_binding (binding_set, GDK_Left, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_WORDS, -1);
+
+  add_move_binding (binding_set, GDK_KP_Right, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_WORDS, 1);
+
+  add_move_binding (binding_set, GDK_KP_Left, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_WORDS, -1);
   
   add_move_binding (binding_set, GDK_a, GDK_CONTROL_MASK,
@@ -581,6 +593,12 @@ gtk_entry_class_init (GtkEntryClass *class)
 
   add_move_binding (binding_set, GDK_End, 0,
 		    GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
+
+  add_move_binding (binding_set, GDK_KP_Home, 0,
+		    GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
+
+  add_move_binding (binding_set, GDK_KP_End, 0,
+		    GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
   
   add_move_binding (binding_set, GDK_Home, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_BUFFER_ENDS, -1);
@@ -588,12 +606,31 @@ gtk_entry_class_init (GtkEntryClass *class)
   add_move_binding (binding_set, GDK_End, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_BUFFER_ENDS, 1);
 
+  add_move_binding (binding_set, GDK_KP_Home, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_BUFFER_ENDS, -1);
+
+  add_move_binding (binding_set, GDK_KP_End, GDK_CONTROL_MASK,
+		    GTK_MOVEMENT_BUFFER_ENDS, 1);
+
+  /* Activate */
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Return, 0,
+				"activate", 0);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Enter, 0,
+				"activate", 0);
+  
   /* Deleting text */
   gtk_binding_entry_add_signal (binding_set, GDK_Delete, 0,
 				"delete_from_cursor", 2,
 				GTK_TYPE_ENUM, GTK_DELETE_CHARS,
 				GTK_TYPE_INT, 1);
 
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Delete, 0,
+				"delete_from_cursor", 2,
+				GTK_TYPE_ENUM, GTK_DELETE_CHARS,
+				GTK_TYPE_INT, 1);
+  
   gtk_binding_entry_add_signal (binding_set, GDK_d, GDK_CONTROL_MASK,
 				"delete_from_cursor", 2,
 				GTK_TYPE_ENUM, GTK_DELETE_CHARS,
@@ -609,6 +646,11 @@ gtk_entry_class_init (GtkEntryClass *class)
 				GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
 				GTK_TYPE_INT, 1);
 
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Delete, GDK_CONTROL_MASK,
+				"delete_from_cursor", 2,
+				GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
+				GTK_TYPE_INT, 1);
+  
   gtk_binding_entry_add_signal (binding_set, GDK_d, GDK_MOD1_MASK,
 				"delete_from_cursor", 2,
 				GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
@@ -882,7 +924,9 @@ gtk_entry_realize (GtkWidget *widget)
 			    GDK_BUTTON_RELEASE_MASK |
 			    GDK_BUTTON1_MOTION_MASK |
 			    GDK_BUTTON3_MOTION_MASK |
-			    GDK_POINTER_MOTION_HINT_MASK);
+			    GDK_POINTER_MOTION_HINT_MASK |
+                            GDK_ENTER_NOTIFY_MASK |
+			    GDK_LEAVE_NOTIFY_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
   widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
@@ -1463,11 +1507,6 @@ gtk_entry_key_press (GtkWidget   *widget,
     /* Activate key bindings
      */
     return TRUE;
-  else if (event->keyval == GDK_Return)
-    {
-      gtk_widget_activate (widget);
-      return TRUE;
-    }
 
   return FALSE;
 }

@@ -109,6 +109,8 @@ gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
   colorseldiag->help_button = gtk_dialog_add_button (GTK_DIALOG (colorseldiag),
                                                      GTK_STOCK_HELP,
                                                      GTK_RESPONSE_HELP);
+
+  gtk_widget_hide (colorseldiag->help_button);
 }
 
 GtkWidget*

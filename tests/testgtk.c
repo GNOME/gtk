@@ -773,6 +773,8 @@ create_toolbar (void)
       gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
 
+      gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
+
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			       "Enable", "Enable tooltips", NULL,
 			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
@@ -3205,6 +3207,9 @@ cmw_color (GtkWidget *widget, GtkWidget *parent)
 
     csd=gtk_color_selection_dialog_new ("This is a modal color selection dialog");
 
+    gtk_color_selection_set_has_palette (GTK_COLOR_SELECTION (GTK_COLOR_SELECTION_DIALOG (csd)->colorsel),
+                                         TRUE);
+    
     /* Set as modal */
     gtk_window_set_modal (GTK_WINDOW(csd),TRUE);
 

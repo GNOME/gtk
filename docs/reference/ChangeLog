@@ -1,3 +1,7 @@
+2001-04-20  Havoc Pennington  <hp@redhat.com>
+
+	* gdk/tmpl/images.sgml: add warning about gtk_image_new_bitmap
+
 Wed Apr 25 12:33:03 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/tmpl/gtktreeitem.sgml: Add note about GTK_ENABLE_BROKEN.

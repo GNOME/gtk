@@ -85,45 +85,6 @@ Retrieve the currently selected color value.
 blue, and opacity.
 
 
-<!-- ##### FUNCTION gtk_color_selection_set_palette_color ##### -->
-<para>
-
-</para>
-
-@colorsel: 
-@index: 
-@color: 
-<!-- # Unused Parameters # -->
-@x: 
-@y: 
-
-
-<!-- ##### FUNCTION gtk_color_selection_get_palette_color ##### -->
-<para>
-
-</para>
-
-@colorsel: 
-@index: 
-@color: 
-@Returns: 
-<!-- # Unused Parameters # -->
-@x: 
-@y: 
-
-
-<!-- ##### FUNCTION gtk_color_selection_unset_palette_color ##### -->
-<para>
-
-</para>
-
-@colorsel: 
-@index: 
-<!-- # Unused Parameters # -->
-@x: 
-@y: 
-
-
 <!-- ##### FUNCTION gtk_color_selection_is_adjusting ##### -->
 <para>
 

@@ -57,7 +57,14 @@
 #include "gtkentry.h"
 #include "gtkbutton.h"
 #include "gtkhseparator.h"
+#include "gtktooltips.h"
+#include "gtkinvisible.h"
+#include "gtkmenuitem.h"
+#include "gtkmain.h"
+#include "gtksettings.h"
 #include "gtkintl.h"
+
+#include <string.h>
 
 /* Number of elements in the custom palatte */
 #define GTK_CUSTOM_PALETTE_WIDTH 10
@@ -89,9 +96,6 @@ struct _ColorSelectionPrivate
   guint default_set : 1;
   guint default_alpha_set : 1;
   
-  /* The color dropper */
-  guint moving_dropper : 1;
-  
   gdouble color[COLORSEL_NUM_CHANNELS];
   gdouble old_color[COLORSEL_NUM_CHANNELS];
   
@@ -110,24 +114,45 @@ struct _ColorSelectionPrivate
   
   /* The Palette code */
   GtkWidget *custom_palette [GTK_CUSTOM_PALETTE_WIDTH][GTK_CUSTOM_PALETTE_HEIGHT];
-  GtkWidget *last_palette;
   
   /* The color_sample stuff */
   GtkWidget *sample_area;
   GtkWidget *old_sample;
   GtkWidget *cur_sample;
   GtkWidget *colorsel;
+
+  /* Tooltips group */
+  GtkTooltips *tooltips;
+
+  /* Window for grabbing on */
+  GtkWidget *dropper_grab_widget;
 };
 
 
 static void gtk_color_selection_init		(GtkColorSelection	 *colorsel);
 static void gtk_color_selection_class_init	(GtkColorSelectionClass	 *klass);
 static void gtk_color_selection_destroy		(GtkObject		 *object);
+static void gtk_color_selection_finalize        (GObject		 *object);
 static void update_color			(GtkColorSelection	 *colorsel);
+
+static gint     gtk_color_selection_get_palette_size    (GtkColorSelection *colorsel);
+static gboolean gtk_color_selection_get_palette_color   (GtkColorSelection *colorsel,
+                                                         gint               index,
+                                                         GdkColor          *color);
+static void     gtk_color_selection_set_palette_color   (GtkColorSelection *colorsel,
+                                                         gint               index,
+                                                         GdkColor          *color);
+static void     gtk_color_selection_unset_palette_color (GtkColorSelection *colorsel,
+                                                         gint               index);
 
 static gpointer parent_class = NULL;
 static guint color_selection_signals[LAST_SIGNAL] = { 0 };
 
+static gchar* default_colors = "black:white:gray50:red:purple:blue:light blue:green:yellow:orange:lavender:brown:goldenrod4:dodger blue:pink:light green:gray10:gray30:gray75:gray90";
+
+static GtkColorSelectionChangePaletteFunc change_palette_hook = NULL;
+
+static GdkColor current_colors[GTK_CUSTOM_PALETTE_WIDTH * GTK_CUSTOM_PALETTE_HEIGHT];
 
 /* The cursor for the dropper */
 #define DROPPER_WIDTH 17
@@ -500,6 +525,12 @@ color_sample_new (GtkColorSelection *colorsel)
   priv->sample_area = gtk_hbox_new (FALSE, 0);
   priv->old_sample = gtk_drawing_area_new ();
   priv->cur_sample = gtk_drawing_area_new ();
+
+  /* We need enter/leave to do tooltips */
+  gtk_widget_add_events (priv->old_sample,
+                         GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
+  gtk_widget_add_events (priv->cur_sample,
+                         GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
   
   gtk_box_pack_start (GTK_BOX (priv->sample_area), priv->old_sample,
 		      TRUE, TRUE, 0);
@@ -515,6 +546,15 @@ color_sample_new (GtkColorSelection *colorsel)
   
   color_sample_setup_dnd (colorsel, priv->old_sample);
   color_sample_setup_dnd (colorsel, priv->cur_sample);
+
+  gtk_tooltips_set_tip (priv->tooltips,
+                        priv->old_sample,
+                        _("The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."), NULL);
+
+
+  gtk_tooltips_set_tip (priv->tooltips,
+                        priv->cur_sample,
+                        _("The color you've chosen. You can drag this color to a palette entry to save it for use in the future."), NULL);
   
   gtk_widget_show_all (priv->sample_area);
 }
@@ -525,8 +565,8 @@ color_sample_new (GtkColorSelection *colorsel)
  * The palette area code
  *
  */
-#define CUSTOM_PALETTE_ENTRY_WIDTH   16
-#define CUSTOM_PALETTE_ENTRY_HEIGHT  16
+#define CUSTOM_PALETTE_ENTRY_WIDTH   20
+#define CUSTOM_PALETTE_ENTRY_HEIGHT  20
 
 static void
 palette_get_color (GtkWidget *drawing_area, gdouble *color)
@@ -558,9 +598,6 @@ palette_paint (GtkWidget    *drawing_area,
 	       GdkRectangle *area,
 	       gpointer      data)
 {
-  GtkColorSelection *colorsel = GTK_COLOR_SELECTION (data); 
-  ColorSelectionPrivate *priv = colorsel->private_data; 
-
   if (drawing_area->window == NULL)
     return;
   
@@ -570,7 +607,7 @@ palette_paint (GtkWidget    *drawing_area,
 			 area->width, 
 			 area->height);
   
-  if (priv->last_palette == drawing_area)
+  if (GTK_WIDGET_HAS_FOCUS (drawing_area))
     {
       GdkGC *gc;
       gdouble color[4];
@@ -589,50 +626,6 @@ palette_paint (GtkWidget    *drawing_area,
     }
 }
 
-static void
-palette_expose (GtkWidget      *drawing_area,
-		GdkEventExpose *event,
-		gpointer        data)
-{
-  if (drawing_area->window == NULL)
-    return;
-  
-  palette_paint (drawing_area, &(event->area), data);
-}
-
-static gint
-palette_press (GtkWidget      *drawing_area,
-	       GdkEventButton *event,
-	       gpointer        data)
-{
-  GtkColorSelection *colorsel = GTK_COLOR_SELECTION (data); 
-  ColorSelectionPrivate *priv = colorsel->private_data; 
- 
-  if (priv->last_palette != NULL) 
-    gtk_widget_queue_clear (priv->last_palette);
-  
-  priv->last_palette = drawing_area;
-
-  if (GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (drawing_area), "color_set")) != 0)
-    {
-      gdouble color[4];
-      palette_get_color (drawing_area, color);
-      gtk_color_selection_set_color (GTK_COLOR_SELECTION (data), color);
-    }
-
-  gtk_widget_queue_clear (priv->last_palette);
-  return TRUE;
-}
-
-static void
-palette_unset_color (GtkWidget *drawing_area)
-{
-  if (GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (drawing_area), "color_set")) == 0)
-    return;
-  
-  gtk_widget_reset_rc_styles (drawing_area);
-  gtk_object_set_data (GTK_OBJECT (drawing_area), "color_set", GINT_TO_POINTER (0));
-}
 
 static void
 palette_drag_begin (GtkWidget      *widget,
@@ -690,21 +683,72 @@ palette_drag_handle (GtkWidget        *widget,
 }
 
 static void
+palette_drag_end (GtkWidget      *widget,
+		  GdkDragContext *context,
+		  gpointer        data)
+{
+  gtk_object_set_data (GTK_OBJECT (widget), "gtk-color-selection-drag-window", NULL);
+}
+
+/* Changes the model color */
+static void
+palette_change_color (GtkWidget         *drawing_area,
+                      GtkColorSelection *colorsel,
+                      gdouble           *color)
+{
+  gint x, y;
+  ColorSelectionPrivate *priv;
+  GdkColor gdk_color;
+
+  g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
+  g_return_if_fail (GTK_IS_DRAWING_AREA (drawing_area));
+  
+  priv = colorsel->private_data;
+  
+  gdk_color.red = color[0]*65535;
+  gdk_color.green = color[1]*65535;
+  gdk_color.blue = color[2]*65535;
+
+  x = 0;
+  while (x < GTK_CUSTOM_PALETTE_WIDTH)
+    {
+      y = 0;
+      while (y < GTK_CUSTOM_PALETTE_HEIGHT)
+        {
+          if (priv->custom_palette[x][y] == drawing_area)
+            goto out;
+          
+          ++y;
+        }
+
+      ++x;
+    }
+
+ out:
+  
+  g_assert (x < GTK_CUSTOM_PALETTE_WIDTH || y < GTK_CUSTOM_PALETTE_HEIGHT);
+
+  current_colors[y * GTK_CUSTOM_PALETTE_WIDTH + x] = gdk_color;
+
+  if (change_palette_hook)
+    (* change_palette_hook) (current_colors, GTK_CUSTOM_PALETTE_WIDTH * GTK_CUSTOM_PALETTE_HEIGHT);
+}
+
+/* Changes the view color */
+static void
 palette_set_color (GtkWidget         *drawing_area,
 		   GtkColorSelection *colorsel,
 		   gdouble           *color)
 {
-  GtkRcStyle *rc_style;
   gdouble *new_color = g_new (double, 4);
   gdouble *old_color;
+  GdkColor gdk_color;
   
-  rc_style = gtk_rc_style_new ();
-  rc_style->bg[GTK_STATE_NORMAL].red = color[0]*65535;
-  rc_style->bg[GTK_STATE_NORMAL].green = color[1]*65535;
-  rc_style->bg[GTK_STATE_NORMAL].blue = color[2]*65535;
-  rc_style->color_flags[GTK_STATE_NORMAL] = GTK_RC_BG;
-  gtk_rc_style_ref (rc_style);
-  gtk_widget_modify_style (drawing_area, rc_style);
+  gdk_color.red = color[0]*65535;
+  gdk_color.green = color[1]*65535;
+  gdk_color.blue = color[2]*65535;
+
+  gtk_widget_modify_bg (drawing_area, GTK_STATE_NORMAL, &gdk_color);
   
   if (GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (drawing_area), "color_set")) == 0)
     {
@@ -744,11 +788,132 @@ palette_set_color (GtkWidget         *drawing_area,
 }
 
 static void
-palette_drag_end (GtkWidget      *widget,
-		  GdkDragContext *context,
-		  gpointer        data)
+palette_expose (GtkWidget      *drawing_area,
+		GdkEventExpose *event,
+		gpointer        data)
 {
-  gtk_object_set_data (GTK_OBJECT (widget), "gtk-color-selection-drag-window", NULL);
+  if (drawing_area->window == NULL)
+    return;
+  
+  palette_paint (drawing_area, &(event->area), data);
+}
+
+static void
+popup_position_func (GtkMenu   *menu,
+                     gint      *x,
+                     gint      *y,
+                     gboolean  *push_in,
+                     gpointer	user_data)
+{
+  GtkWidget *widget;
+  GtkRequisition req;      
+  gint root_x, root_y;
+  
+  widget = GTK_WIDGET (user_data);
+  
+  g_return_if_fail (GTK_WIDGET_REALIZED (widget));
+
+  gdk_window_get_origin (widget->window, &root_x, &root_y);
+  
+  gtk_widget_size_request (GTK_WIDGET (menu), &req);
+
+  /* Put corner of menu centered on color cell */
+  *x = root_x + widget->allocation.width / 2;
+  *y = root_y + widget->allocation.height / 2;
+
+  /* Ensure sanity */
+  *x = CLAMP (*x, 0, MAX (0, gdk_screen_width () - req.width));
+  *y = CLAMP (*y, 0, MAX (0, gdk_screen_height () - req.height));
+}
+
+static void
+save_color_selected (GtkWidget *menuitem,
+                     gpointer   data)
+{
+  GtkColorSelection *colorsel;
+  GtkWidget *drawing_area;
+  ColorSelectionPrivate *priv;
+
+  drawing_area = GTK_WIDGET (data);
+  
+  colorsel = GTK_COLOR_SELECTION (g_object_get_data (G_OBJECT (drawing_area),
+                                                     "gtk-color-sel"));
+
+  priv = colorsel->private_data;
+  
+  palette_change_color (drawing_area, colorsel, priv->color);  
+}
+
+static void
+do_popup (GtkColorSelection *colorsel,
+          GtkWidget         *drawing_area,
+          guint32            timestamp)
+{
+  GtkWidget *menu;
+  GtkWidget *mi;
+  GtkWidget *label;
+  
+  g_object_set_data (G_OBJECT (drawing_area),
+                     "gtk-color-sel",
+                     colorsel);
+  
+  menu = gtk_menu_new ();
+
+  label = gtk_label_new_with_mnemonic (_("_Save color here"));
+  mi = gtk_menu_item_new ();
+  gtk_container_add (GTK_CONTAINER (mi), label);
+
+  gtk_signal_connect (GTK_OBJECT (mi), "activate",
+                      GTK_SIGNAL_FUNC (save_color_selected),
+                      drawing_area);
+  
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
+
+  gtk_widget_show_all (mi);
+
+  gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
+                  popup_position_func, drawing_area,
+                  3, timestamp);
+}
+
+
+static gint
+palette_press (GtkWidget      *drawing_area,
+	       GdkEventButton *event,
+	       gpointer        data)
+{
+  GtkColorSelection *colorsel = GTK_COLOR_SELECTION (data);
+
+  gtk_widget_grab_focus (drawing_area);
+  
+  if (event->button == 1 &&
+      event->type == GDK_BUTTON_PRESS)
+    {      
+      if (GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (drawing_area), "color_set")) != 0)
+        {
+          gdouble color[4];
+          palette_get_color (drawing_area, color);
+          gtk_color_selection_set_color (GTK_COLOR_SELECTION (data), color);
+        }
+    }
+  
+  if (event->button == 3 &&
+      event->type == GDK_BUTTON_PRESS)
+    {
+      do_popup (colorsel, drawing_area, event->time);
+    }
+  
+  return TRUE;
+}
+
+static void
+palette_unset_color (GtkWidget *drawing_area)
+{
+  if (GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (drawing_area), "color_set")) == 0)
+    return;
+  
+  gtk_widget_reset_rc_styles (drawing_area);
+  gtk_object_set_data (GTK_OBJECT (drawing_area), "color_set", GINT_TO_POINTER (0));
 }
 
 static void
@@ -780,7 +945,7 @@ palette_drop_handle (GtkWidget        *widget,
   color[1] = (gdouble)vals[1] / 0xffff;
   color[2] = (gdouble)vals[2] / 0xffff;
   color[3] = (gdouble)vals[3] / 0xffff;
-  palette_set_color (widget, GTK_COLOR_SELECTION (data), color);
+  palette_change_color (widget, GTK_COLOR_SELECTION (data), color);
   gtk_color_selection_set_color (GTK_COLOR_SELECTION (data), color);
 }
 
@@ -789,37 +954,63 @@ palette_activate (GtkWidget   *widget,
 		  GdkEventKey *event,
 		  gpointer     data)
 {
-  GtkColorSelection *colorsel = data;
-  ColorSelectionPrivate *priv;
-  
+  /* should have a drawing area subclass with an activate signal */
   if ((event->keyval == ' ') || (event->keyval == GDK_Return))
     {
-      priv = colorsel->private_data;
-      palette_set_color (widget, GTK_COLOR_SELECTION (data), priv->color);
+      if (GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (widget), "color_set")) != 0)
+        {
+          gdouble color[4];
+          palette_get_color (widget, color);
+          gtk_color_selection_set_color (GTK_COLOR_SELECTION (data), color);
+        }
       return TRUE;
     }
   
   return FALSE;
 }
 
+static void
+palette_popup (GtkWidget *widget,
+               gpointer   data)
+{
+  GtkColorSelection *colorsel = GTK_COLOR_SELECTION (data);
+
+  do_popup (colorsel, widget, GDK_CURRENT_TIME);
+}
+               
+
 static GtkWidget*
 palette_new (GtkColorSelection *colorsel)
 {
   GtkWidget *retval;
+  ColorSelectionPrivate *priv;
   
   static const GtkTargetEntry targets[] = {
     { "application/x-color", 0 }
   };
+
+  priv = colorsel->private_data;
   
   retval = gtk_drawing_area_new ();
+
+  GTK_WIDGET_SET_FLAGS (retval, GTK_CAN_FOCUS);
+  
   gtk_object_set_data (GTK_OBJECT (retval), "color_set", GINT_TO_POINTER (0)); 
-  gtk_widget_set_events (retval, GDK_BUTTON_PRESS_MASK | GDK_EXPOSURE_MASK);
+  gtk_widget_set_events (retval, GDK_BUTTON_PRESS_MASK
+                         | GDK_BUTTON_RELEASE_MASK
+                         | GDK_EXPOSURE_MASK
+                         | GDK_ENTER_NOTIFY_MASK
+                         | GDK_LEAVE_NOTIFY_MASK);
   
 
   gtk_signal_connect (GTK_OBJECT (retval), "expose_event",
                       GTK_SIGNAL_FUNC (palette_expose), colorsel);
   gtk_signal_connect (GTK_OBJECT (retval), "button_press_event",
                       GTK_SIGNAL_FUNC (palette_press), colorsel);
+  gtk_signal_connect (GTK_OBJECT (retval), "key_press_event",
+                      GTK_SIGNAL_FUNC (palette_activate), colorsel);
+  gtk_signal_connect (GTK_OBJECT (retval), "popup_menu",
+                      GTK_SIGNAL_FUNC (palette_popup), colorsel);
   
   gtk_drag_dest_set (retval,
 		     GTK_DEST_DEFAULT_HIGHLIGHT |
@@ -832,9 +1023,11 @@ palette_new (GtkColorSelection *colorsel)
                       GTK_SIGNAL_FUNC (palette_drag_end), NULL);
   gtk_signal_connect (GTK_OBJECT (retval), "drag_data_received",
                       GTK_SIGNAL_FUNC (palette_drop_handle), colorsel);
-  gtk_signal_connect (GTK_OBJECT (retval), "key_press_event",
-                      GTK_SIGNAL_FUNC (palette_activate), colorsel);
-  
+
+  gtk_tooltips_set_tip (priv->tooltips,
+                        retval,
+                        _("This is a palette entry used for quick access to commonly-used colors. Double click it to make this color the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""),
+                        NULL);
   return retval;
 }
 
@@ -870,7 +1063,7 @@ initialize_cursor (void)
 }
 
 static void
-grab_color_at_mouse (GtkWidget *button,
+grab_color_at_mouse (GtkWidget *invisible,
 		     gint       x_root,
 		     gint       y_root,
 		     gpointer   data)
@@ -905,15 +1098,29 @@ grab_color_at_mouse (GtkWidget *button,
 }
 
 static void
-mouse_motion (GtkWidget      *button,
+shutdown_eyedropper (GtkWidget *widget)
+{
+  GtkColorSelection *colorsel;
+  ColorSelectionPrivate *priv;
+
+  colorsel = GTK_COLOR_SELECTION (widget);
+  priv = colorsel->private_data;    
+
+  gdk_keyboard_ungrab (gtk_get_current_event_time ());
+  gdk_pointer_ungrab (gtk_get_current_event_time ());
+  gtk_grab_remove (priv->dropper_grab_widget);
+}
+
+static void
+mouse_motion (GtkWidget      *invisible,
 	      GdkEventMotion *event,
 	      gpointer        data)
 {
-  grab_color_at_mouse (button, event->x_root, event->y_root, data); 
+  grab_color_at_mouse (invisible, event->x_root, event->y_root, data); 
 }
 
 static gboolean
-mouse_release (GtkWidget      *button,
+mouse_release (GtkWidget      *invisible,
 	       GdkEventButton *event,
 	       gpointer        data)
 {
@@ -921,36 +1128,77 @@ mouse_release (GtkWidget      *button,
   ColorSelectionPrivate *priv;
   priv = colorsel->private_data;  
 
-  gtk_signal_disconnect_by_func (GTK_OBJECT (button),
-                                 GTK_SIGNAL_FUNC (mouse_motion), data);
-  gtk_signal_disconnect_by_func (GTK_OBJECT (button),
-                                 GTK_SIGNAL_FUNC (mouse_release), data);
+  if (event->button != 1)
+    return FALSE;
+
+  grab_color_at_mouse (invisible, event->x_root, event->y_root, data);
+
+  shutdown_eyedropper (GTK_WIDGET (data));
   
-  grab_color_at_mouse (button, event->x_root, event->y_root, data);
-  gdk_pointer_ungrab (0);
+  gtk_signal_disconnect_by_func (GTK_OBJECT (invisible),
+                                 GTK_SIGNAL_FUNC (mouse_motion), data);
+  gtk_signal_disconnect_by_func (GTK_OBJECT (invisible),
+                                 GTK_SIGNAL_FUNC (mouse_release), data);
+
   return TRUE;
 }
 
 /* Helper Functions */
+
+static gboolean mouse_press (GtkWidget      *invisible,
+                             GdkEventButton *event,
+                             gpointer        data);
+
 static gboolean
-mouse_press (GtkWidget      *button,
+key_press (GtkWidget   *invisible,
+           GdkEventKey *event,
+           gpointer     data)
+{  
+  if (event->keyval == GDK_Escape)
+    {
+      shutdown_eyedropper (data);
+
+      gtk_signal_disconnect_by_func (GTK_OBJECT (invisible),
+                                     GTK_SIGNAL_FUNC (mouse_press),
+                                     data);
+      gtk_signal_disconnect_by_func (GTK_OBJECT (invisible),
+                                     GTK_SIGNAL_FUNC (key_press),
+                                     data);
+      
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+mouse_press (GtkWidget      *invisible,
 	     GdkEventButton *event,
 	     gpointer        data)
 {
   GtkColorSelection *colorsel = data;
   ColorSelectionPrivate *priv;
   priv = colorsel->private_data;
+  
+  if (event->type == GDK_BUTTON_PRESS &&
+      event->button == 1)
+    {
+      gtk_signal_connect (GTK_OBJECT (invisible), "motion_notify_event",
+                          GTK_SIGNAL_FUNC (mouse_motion),
+                          data);
+      gtk_signal_connect (GTK_OBJECT (invisible), "button_release_event",
+                          GTK_SIGNAL_FUNC (mouse_release),
+                          data);
+      gtk_signal_disconnect_by_func (GTK_OBJECT (invisible),
+                                     GTK_SIGNAL_FUNC (mouse_press),
+                                     data);
+      gtk_signal_disconnect_by_func (GTK_OBJECT (invisible),
+                                     GTK_SIGNAL_FUNC (key_press),
+                                     data);
+      return TRUE;
+    }
 
-  gtk_signal_connect (GTK_OBJECT (button), "motion_notify_event",
-                      GTK_SIGNAL_FUNC (mouse_motion),
-                      data);
-  gtk_signal_connect (GTK_OBJECT (button), "button_release_event",
-                      GTK_SIGNAL_FUNC (mouse_release),
-                      data);
-  gtk_signal_disconnect_by_func (GTK_OBJECT (button),
-                                 GTK_SIGNAL_FUNC (mouse_press),
-                                 data);
-  return TRUE;
+  return FALSE;
 }
 
 /* when the button is clicked */
@@ -964,30 +1212,43 @@ get_screen_color (GtkWidget *button)
     {
       initialize_cursor ();
     }
-  
-  /* Why do we do this? Because the "clicked" signal will be emitted after the "button_released"
-     signal. We don't want to do this stuff again, though, or else it will get trapped here. So, 
-     priv->moving_dropper is initialized to FALSE at the initialization of the colorselector, 
-     it is initialized to true when we start waiting for the user to click the the dropper on a 
-     color, and whenver it is true when this function starts to execute, we set it to false. */
-  if (priv->moving_dropper == FALSE)
-    {
-      priv->moving_dropper = TRUE;
 
-      gtk_signal_connect (GTK_OBJECT (button), "button_press_event",
-                          GTK_SIGNAL_FUNC (mouse_press), colorsel); 
-      
-      gdk_pointer_grab (button->window,
-			FALSE,
-			GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK,
-			NULL,
-			picker_cursor,
-			0);
-    }
-  else
+  if (priv->dropper_grab_widget == NULL)
     {
-      priv->moving_dropper = FALSE; 
+      priv->dropper_grab_widget = gtk_invisible_new ();
+
+      gtk_widget_add_events (priv->dropper_grab_widget,
+                             GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK);
+      
+      gtk_widget_show (priv->dropper_grab_widget);
     }
+
+  if (gdk_keyboard_grab (priv->dropper_grab_widget->window,
+                         FALSE,
+                         gtk_get_current_event_time ()) != GDK_GRAB_SUCCESS)
+    {
+      g_warning ("Failed to grab keyboard to do eyedropper");
+      return;
+    }
+  
+  if (gdk_pointer_grab (priv->dropper_grab_widget->window,
+                        FALSE,
+                        GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK,
+                        NULL,
+                        picker_cursor,
+                        gtk_get_current_event_time ()) != GDK_GRAB_SUCCESS)
+    {
+      gdk_keyboard_ungrab (GDK_CURRENT_TIME);
+      g_warning ("Failed to grab pointer to do eyedropper");
+      return;
+    }
+
+  gtk_grab_add (priv->dropper_grab_widget);
+  
+  gtk_signal_connect (GTK_OBJECT (priv->dropper_grab_widget), "button_press_event",
+                      GTK_SIGNAL_FUNC (mouse_press), colorsel);
+  gtk_signal_connect (GTK_OBJECT (priv->dropper_grab_widget), "key_press_event",
+                      GTK_SIGNAL_FUNC (key_press), colorsel);
 }
 
 static void
@@ -1125,24 +1386,6 @@ opacity_entry_changed (GtkWidget *opacity_entry,
   g_free (text);
 }
 
-static gboolean
-widget_focus_in (GtkWidget     *drawing_area,
-		 GdkEventFocus *event,
-		 gpointer       data)
-{
-  GtkColorSelection *colorsel = GTK_COLOR_SELECTION (data);
-  ColorSelectionPrivate *priv = colorsel->private_data;
-  
-  /* This signal is connected to by all of the widgets except the "Set Color" button
-   * This will let you add a color to the currently selected palette
-   */
-  
-  priv->last_palette = NULL;
-
-  return FALSE;
-}
-
-
 static void
 make_label_spinbutton (GtkColorSelection *colorsel,
 		       GtkWidget        **spinbutton,
@@ -1150,10 +1393,12 @@ make_label_spinbutton (GtkColorSelection *colorsel,
 		       GtkWidget         *table,
 		       gint               i,
 		       gint               j,
-		       gint               channel_type)
+		       gint               channel_type,
+                       const gchar       *tooltip)
 {
   GtkWidget *label;
   GtkAdjustment *adjust;
+  ColorSelectionPrivate *priv = colorsel->private_data;
   
   if (channel_type == COLORSEL_HUE)
     {
@@ -1166,8 +1411,8 @@ make_label_spinbutton (GtkColorSelection *colorsel,
   gtk_object_set_data (GTK_OBJECT (adjust), "COLORSEL", colorsel);
   *spinbutton = gtk_spin_button_new (adjust, 10.0, 0);
 
-  gtk_signal_connect (GTK_OBJECT (*spinbutton), "focus_in_event",
-                      GTK_SIGNAL_FUNC (widget_focus_in), colorsel);
+  gtk_tooltips_set_tip (priv->tooltips, *spinbutton, tooltip, NULL);  
+
   gtk_signal_connect (GTK_OBJECT (adjust), "value_changed",
                       GTK_SIGNAL_FUNC (adjustment_changed),
                       GINT_TO_POINTER (channel_type));
@@ -1204,12 +1449,7 @@ set_selected_palette (GtkColorSelection *colorsel, int x, int y)
 {
   ColorSelectionPrivate *priv = colorsel->private_data; 
 
-  if (priv->last_palette != NULL) 
-    gtk_widget_queue_clear (priv->last_palette);
-
-  priv->last_palette = priv->custom_palette[x][y]; 
-
-  gtk_widget_queue_clear (priv->last_palette);
+  gtk_widget_grab_focus (priv->custom_palette[x][y]);
 }
 
 static double
@@ -1273,45 +1513,82 @@ update_color (GtkColorSelection *colorsel)
   priv->changing = FALSE;
 }
 
+
 static void
-add_button_pressed (GtkWidget         *button,
-		    GtkColorSelection *colorsel)
+fill_palette_from_string (const gchar *str)
 {
-  ColorSelectionPrivate *priv;
+  GdkColor *colors = NULL;
+  gint n_colors = 0;
+
+  if (str == NULL)
+    return;
+  
+  if (!gtk_color_selection_palette_from_string (str, &colors, &n_colors))
+    return;
+
+  if (n_colors > (GTK_CUSTOM_PALETTE_WIDTH * GTK_CUSTOM_PALETTE_HEIGHT))    
+    n_colors = GTK_CUSTOM_PALETTE_WIDTH * GTK_CUSTOM_PALETTE_HEIGHT;
+
+  memcpy (current_colors, colors, sizeof (GdkColor) * n_colors);
+
+  g_free (colors);
+}
+
+static void
+palette_change_notify_class (GObject    *object,
+                             GParamSpec *pspec)
+{
+  gchar *str = NULL;
+  
+  g_object_get (object, pspec->name, &str, NULL);
+
+  fill_palette_from_string (str);
+
+  g_free (str);
+}
+
+static void
+update_palette (GtkColorSelection *colorsel)
+{
   gint i, j;
   
-  priv = colorsel->private_data;
-  
-  for (j = 0; j < GTK_CUSTOM_PALETTE_HEIGHT; j++)
+  for (i = 0; i < GTK_CUSTOM_PALETTE_HEIGHT; i++)
     {
-      for (i = 0; i < GTK_CUSTOM_PALETTE_WIDTH; i++)
+      for (j = 0; j < GTK_CUSTOM_PALETTE_WIDTH; j++)
 	{
-	  /* Either last_palette is set and we're on it, or it's an empty palette */
-	  if ((priv->last_palette && priv->last_palette == priv->custom_palette[i][j]) ||
-	      ((priv->last_palette == NULL) &&
-	       (GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (priv->custom_palette[i][j]),
-						      "color_set")) == 0)))
-	    {
-	      palette_set_color (priv->custom_palette[i][j], colorsel, priv->color);
+          gint index;
 
-	      /* forward the selection */
-	      if ((i == GTK_CUSTOM_PALETTE_WIDTH - 1) && (j == GTK_CUSTOM_PALETTE_HEIGHT - 1))
- 		set_selected_palette (colorsel, 0, 0);
-	      else if (i == GTK_CUSTOM_PALETTE_WIDTH - 1)
- 		set_selected_palette (colorsel, 0, j + 1);
-	      else
- 		set_selected_palette (colorsel, i + 1, j);
-
-	      return;
-	    }
+          index = i * GTK_CUSTOM_PALETTE_WIDTH + j;
+          
+          gtk_color_selection_set_palette_color (colorsel,
+                                                 index,
+                                                 &current_colors[index]);
 	}
     }
+}
 
-  /* the palette is totally full.  Add to the first one totally arbitrarily */
-  palette_set_color (priv->custom_palette[0][0], colorsel, priv->color);
+static void
+palette_change_notify_instance (GObject    *object,
+                                GParamSpec *pspec,
+                                gpointer    data)
+{
+  update_palette (GTK_COLOR_SELECTION (data));
+}
 
-  /* forward the selection */
-  set_selected_palette (colorsel, 1, 0);
+static void
+default_change_palette_func (const GdkColor *colors,
+                             gint            n_colors)
+{
+  gchar *str;
+  
+  str = gtk_color_selection_palette_to_string (colors, n_colors);
+
+  gtk_settings_set_string_property (gtk_settings_get_global (),
+                                    "gtk-color-palette",
+                                    str,
+                                    "gtk_color_selection_palette_to_string");
+
+  g_free (str);
 }
 
 GtkType
@@ -1343,13 +1620,16 @@ static void
 gtk_color_selection_class_init (GtkColorSelectionClass *klass)
 {
   GtkObjectClass *object_class;
+  GObjectClass *gobject_class;
   
-  object_class = (GtkObjectClass*) klass;
+  object_class = GTK_OBJECT_CLASS (klass);
+  gobject_class = G_OBJECT_CLASS (klass);
   
   parent_class = gtk_type_class (GTK_TYPE_VBOX);
   
   object_class->destroy = gtk_color_selection_destroy;
-
+  gobject_class->finalize = gtk_color_selection_finalize;
+  
   color_selection_signals[COLOR_CHANGED] =
     gtk_signal_new ("color_changed",
                     GTK_RUN_FIRST,
@@ -1357,9 +1637,26 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
                     GTK_SIGNAL_OFFSET (GtkColorSelectionClass, color_changed),
                     gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
+
+  gtk_settings_install_property (gtk_settings_get_global (),
+                                 g_param_spec_string ("gtk-color-palette",
+                                                      _("Custom palette"),
+                                                      _("Palette to use in the color selector"),
+                                                      default_colors,
+                                                      G_PARAM_READWRITE));
+  
+  fill_palette_from_string (default_colors);
+
+  change_palette_hook = default_change_palette_func;
+  
+  g_signal_connect_data (G_OBJECT (gtk_settings_get_global ()),
+                         "notify::gtk-color-palette",
+                         G_CALLBACK (palette_change_notify_class),
+                         NULL, NULL, FALSE, FALSE);
 }
 
 /* widget functions */
+
 static void
 gtk_color_selection_init (GtkColorSelection *colorsel)
 {
@@ -1378,8 +1675,8 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   priv->changing = FALSE;
   priv->default_set = FALSE;
   priv->default_alpha_set = FALSE;
-  priv->last_palette = NULL;
-  priv->moving_dropper = FALSE;
+  
+  priv->tooltips = gtk_tooltips_new ();
   
   gtk_box_set_spacing (GTK_BOX (colorsel), 4);
   top_hbox = gtk_hbox_new (FALSE, 8);
@@ -1392,6 +1689,8 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_hsv_set_metrics (GTK_HSV (priv->triangle_colorsel), 174, 15);
   gtk_box_pack_start (GTK_BOX (top_hbox), vbox, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), priv->triangle_colorsel, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (priv->tooltips, priv->triangle_colorsel,
+                        _("Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."), NULL);
   
   hbox = gtk_hbox_new (FALSE, 4);
   gtk_box_pack_end (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
@@ -1404,8 +1703,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
   
   button = gtk_button_new ();
-  gtk_signal_connect (GTK_OBJECT (button), "focus_in_event",
-                      GTK_SIGNAL_FUNC (widget_focus_in), colorsel);
+
   gtk_widget_set_events (button, GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
   gtk_object_set_data (GTK_OBJECT (button), "COLORSEL", colorsel); 
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
@@ -1417,6 +1715,10 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
     gdk_pixmap_unref (mask);
   gtk_container_add (GTK_CONTAINER (button), dropper_image);
   gtk_box_pack_end (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+
+  gtk_tooltips_set_tip (priv->tooltips,
+                        button,
+                        _("Click the eyedropper, then click a color anywhere on your screen to select that color."), NULL);
   
   top_right_vbox = gtk_vbox_new (FALSE, 4);
   gtk_box_pack_start (GTK_BOX (top_hbox), top_right_vbox, FALSE, FALSE, 0);
@@ -1425,12 +1727,18 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_table_set_row_spacings (GTK_TABLE (table), 4);
   gtk_table_set_col_spacings (GTK_TABLE (table), 4);
   
-  make_label_spinbutton (colorsel, &priv->hue_spinbutton, _("_Hue:"), table, 0, 0, COLORSEL_HUE);
-  make_label_spinbutton (colorsel, &priv->sat_spinbutton, _("_Saturation:"), table, 0, 1, COLORSEL_SATURATION);
-  make_label_spinbutton (colorsel, &priv->val_spinbutton, _("_Value:"), table, 0, 2, COLORSEL_VALUE);
-  make_label_spinbutton (colorsel, &priv->red_spinbutton, _("_Red:"), table, 6, 0, COLORSEL_RED);
-  make_label_spinbutton (colorsel, &priv->green_spinbutton, _("_Green:"), table, 6, 1, COLORSEL_GREEN);
-  make_label_spinbutton (colorsel, &priv->blue_spinbutton, _("_Blue:"), table, 6, 2, COLORSEL_BLUE);
+  make_label_spinbutton (colorsel, &priv->hue_spinbutton, _("_Hue:"), table, 0, 0, COLORSEL_HUE,
+                         _("Position on the color wheel."));
+  make_label_spinbutton (colorsel, &priv->sat_spinbutton, _("_Saturation:"), table, 0, 1, COLORSEL_SATURATION,
+                         _("\"Deepness\" of the color."));
+  make_label_spinbutton (colorsel, &priv->val_spinbutton, _("_Value:"), table, 0, 2, COLORSEL_VALUE,
+                         _("Brightness of the color."));
+  make_label_spinbutton (colorsel, &priv->red_spinbutton, _("_Red:"), table, 6, 0, COLORSEL_RED,
+                         _("Amount of red light in the color."));
+  make_label_spinbutton (colorsel, &priv->green_spinbutton, _("_Green:"), table, 6, 1, COLORSEL_GREEN,
+                         _("Amount of green light in the color."));
+  make_label_spinbutton (colorsel, &priv->blue_spinbutton, _("_Blue:"), table, 6, 2, COLORSEL_BLUE,
+                         _("Amount of blue light in the color."));
   gtk_table_attach_defaults (GTK_TABLE (table), gtk_hseparator_new (), 0, 8, 3, 4); 
   
   priv->opacity_label = gtk_label_new_with_mnemonic (_("_Opacity:")); 
@@ -1439,6 +1747,9 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   adjust = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 255.0, 1.0, 1.0, 0.0)); 
   gtk_object_set_data (GTK_OBJECT (adjust), "COLORSEL", colorsel); 
   priv->opacity_slider = gtk_hscale_new (adjust);
+  gtk_tooltips_set_tip (priv->tooltips,
+                        priv->opacity_slider,
+                        _("Transparency of the currently-selected color."), NULL);
   gtk_label_set_mnemonic_widget (GTK_LABEL (priv->opacity_label),
                                  priv->opacity_slider);
   gtk_scale_set_draw_value (GTK_SCALE (priv->opacity_slider), FALSE);
@@ -1448,13 +1759,12 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_table_attach_defaults (GTK_TABLE (table), priv->opacity_slider, 1, 7, 4, 5); 
   priv->opacity_entry = gtk_entry_new (); 
   gtk_widget_set_usize (priv->opacity_entry, 40, 0); 
-  gtk_signal_connect (GTK_OBJECT (priv->opacity_entry), "focus_in_event",
-                      GTK_SIGNAL_FUNC (widget_focus_in), colorsel);
+
   gtk_signal_connect (GTK_OBJECT (priv->opacity_entry), "activate",
                       GTK_SIGNAL_FUNC (opacity_entry_changed), colorsel);
   gtk_table_attach_defaults (GTK_TABLE (table), priv->opacity_entry, 7, 8, 4, 5);
   
-  label = gtk_label_new_with_mnemonic (_("He_x Value:"));
+  label = gtk_label_new_with_mnemonic (_("Color _Name:"));
   gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 5, 6);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
   priv->hex_entry = gtk_entry_new ();
@@ -1464,6 +1774,10 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_signal_connect (GTK_OBJECT (priv->hex_entry), "activate",
                       GTK_SIGNAL_FUNC (hex_changed), colorsel);
 
+  gtk_tooltips_set_tip (priv->tooltips,
+                        priv->hex_entry,
+                        _("You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."), NULL);
+  
   gtk_widget_set_usize (priv->hex_entry, 75, -1);  
   gtk_table_set_col_spacing (GTK_TABLE (table), 3, 15);
   gtk_table_attach_defaults (GTK_TABLE (table), priv->hex_entry, 1, 5, 5, 6);
@@ -1480,20 +1794,32 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
 	}
     }
   set_selected_palette (colorsel, 0, 0);
-  priv->palette_frame = gtk_frame_new (_("Custom Palette"));
+  priv->palette_frame = gtk_frame_new (NULL);
+  label = gtk_label_new_with_mnemonic (_("_Palette"));
+  gtk_frame_set_label_widget (GTK_FRAME (priv->palette_frame), label);
+
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label),
+                                 priv->custom_palette[0][0]);
+  
   gtk_box_pack_end (GTK_BOX (top_right_vbox), priv->palette_frame, FALSE, FALSE, 0);
   vbox = gtk_vbox_new (FALSE, 4);
   gtk_container_add (GTK_CONTAINER (priv->palette_frame), vbox);
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
 
-  button = gtk_button_new_with_mnemonic (_("Set _Color"));
-
-  gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_button_pressed), colorsel);
-
-  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 4);
   
   gtk_widget_show_all (top_hbox);
+
+  /* Set default colors */
+
+  update_palette (colorsel);
+  
+  g_signal_connect_data (G_OBJECT (gtk_settings_get_global ()),
+                         "notify::gtk-color-palette",
+                         G_CALLBACK (palette_change_notify_instance),
+                         colorsel, NULL, FALSE, FALSE);
+  
+  /* hide unused stuff */
   
   if (priv->has_opacity == FALSE)
     {
@@ -1512,6 +1838,27 @@ static void
 gtk_color_selection_destroy (GtkObject *object)
 {
   GtkColorSelection *cselection = GTK_COLOR_SELECTION (object);
+  ColorSelectionPrivate *priv = cselection->private_data;
+
+  if (priv->dropper_grab_widget)
+    {
+      gtk_widget_destroy (priv->dropper_grab_widget);
+      priv->dropper_grab_widget = NULL;
+    }
+
+  if (priv->tooltips)
+    {
+      gtk_object_destroy (priv->tooltips);
+      priv->tooltips = NULL;
+    }
+  
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+}
+
+static void
+gtk_color_selection_finalize (GObject *object)
+{
+  GtkColorSelection *cselection = GTK_COLOR_SELECTION (object);
   
   if (cselection->private_data)
     {
@@ -1519,9 +1866,8 @@ gtk_color_selection_destroy (GtkObject *object)
       cselection->private_data = NULL;
     }
   
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
-
 
 
 /**
@@ -1969,7 +2315,7 @@ gtk_color_selection_get_previous_alpha (GtkColorSelection *colorsel)
  * Set the palette located at at @index to have @color set as its color.
  * 
  **/
-void
+static void
 gtk_color_selection_set_palette_color (GtkColorSelection   *colorsel,
 				       gint                 index,
 				       GdkColor            *color)
@@ -2005,7 +2351,7 @@ gtk_color_selection_set_palette_color (GtkColorSelection   *colorsel,
  * Return value: TRUE if the palette located at @index has a color set.  FALSE
  * if it doesn't.
  **/
-gboolean
+static gboolean
 gtk_color_selection_get_palette_color (GtkColorSelection   *colorsel,
 				       gint                 index,
 				       GdkColor            *color)
@@ -2043,7 +2389,7 @@ gtk_color_selection_get_palette_color (GtkColorSelection   *colorsel,
  * Change the palette located @index to have no color set.
  * 
  **/
-void
+static void
 gtk_color_selection_unset_palette_color (GtkColorSelection   *colorsel,
 					 gint                 index)
 {
@@ -2069,7 +2415,7 @@ gtk_color_selection_unset_palette_color (GtkColorSelection   *colorsel,
  *
  * Return value: the maximum number of palette indexes
  **/
-gint
+static gint
 gtk_color_selection_get_palette_size (GtkColorSelection *colorsel)
 {
   return GTK_CUSTOM_PALETTE_WIDTH * GTK_CUSTOM_PALETTE_HEIGHT;
@@ -2097,3 +2443,163 @@ gtk_color_selection_is_adjusting (GtkColorSelection *colorsel)
   
   return (gtk_hsv_is_adjusting (GTK_HSV (priv->triangle_colorsel)));
 }
+
+
+/**
+ * gtk_color_selection_palette_from_string:
+ * @str: a string encoding a color palette
+ * @colors: return location for allocated array of GdkColor
+ * @n_colors: return location for length of array
+ * 
+ * Parses a color palette string; the string is a colon-separated
+ * list of color names readable by gdk_color_parse().
+ * 
+ * Return value: %TRUE if a palette was successfully parsed
+ **/
+gboolean
+gtk_color_selection_palette_from_string (const gchar *str,
+                                         GdkColor   **colors,
+                                         gint        *n_colors)
+{
+  GdkColor *retval;
+  gint count;
+  gchar *p;
+  gchar *start;
+  gchar *copy;
+  
+  count = 0;
+  retval = NULL;
+  copy = g_strdup (str);
+
+  start = copy;
+  p = copy;
+  while (TRUE)
+    {
+      if (*p == ':' || *p == '\0')
+        {
+          gboolean done = TRUE;
+
+          if (start == p)
+            {
+              goto failed; /* empty entry */
+            }
+              
+          if (*p)
+            {
+              *p = '\0';
+              done = FALSE;
+            }
+
+          retval = g_renew (GdkColor, retval, count + 1);
+          if (!gdk_color_parse (start, retval + count))
+            {
+              goto failed;
+            }
+
+          ++count;
+
+          if (done)
+            break;
+          else
+            start = p + 1;
+        }
+
+      ++p;
+    }
+
+  g_free (copy);
+  
+  if (colors)
+    *colors = retval;
+  else
+    g_free (retval);
+
+  if (n_colors)
+    *n_colors = count;
+
+  return TRUE;
+  
+ failed:
+  g_free (copy);
+  g_free (retval);
+
+  if (colors)
+    *colors = NULL;
+  if (n_colors)
+    *n_colors = 0;
+
+  return FALSE;
+}
+
+/**
+ * gtk_color_selection_palette_to_string:
+ * @colors: an array of colors
+ * @n_colors: length of the array
+ * 
+ * Encodes a palette as a string, useful for persistent storage.
+ * 
+ * Return value: allocated string encoding the palette
+ **/
+gchar*
+gtk_color_selection_palette_to_string (const GdkColor *colors,
+                                       gint            n_colors)
+{
+  gint i;
+  gchar **strs = NULL;
+  gchar *retval;
+  
+  if (n_colors == 0)
+    return g_strdup ("");
+
+  strs = g_new0 (gchar*, n_colors + 1);
+
+  i = 0;
+  while (i < n_colors)
+    {
+      gchar *ptr;
+      
+      strs[i] =
+        g_strdup_printf ("#%2X%2X%2X",
+                         colors[i].red / 256,
+                         colors[i].green / 256,
+                         colors[i].blue / 256);
+
+      for (ptr = strs[i]; *ptr; ptr++)
+        if (*ptr == ' ')
+          *ptr = '0';
+      
+      ++i;
+    }
+
+  retval = g_strjoinv (":", strs);
+
+  g_strfreev (strs);
+
+  return retval;
+}
+
+/**
+ * gtk_color_selection_set_change_palette_hook:
+ * @func: a function to call when the custom palette needs saving
+ * 
+ * Installs a global function to be called whenever the user tries to
+ * modify the palette in a color selection. This function should save
+ * the new palette contents, and update the GtkSettings property
+ * "gtk-color-palette" so all GtkColorSelection widgets will be modified.
+ * 
+ * Return value: the previous change palette hook (that was replaced)
+ **/
+GtkColorSelectionChangePaletteFunc
+gtk_color_selection_set_change_palette_hook (GtkColorSelectionChangePaletteFunc func)
+{
+  GtkColorSelectionChangePaletteFunc old;
+
+  old = change_palette_hook;
+
+  change_palette_hook = func;
+
+  return old;
+}
+
+
+

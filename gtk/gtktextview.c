@@ -683,6 +683,11 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                 GTK_TYPE_ENUM, GTK_DELETE_CHARS,
                                 GTK_TYPE_INT, 1);
 
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Delete, 0,
+                                "delete_from_cursor", 2,
+                                GTK_TYPE_ENUM, GTK_DELETE_CHARS,
+                                GTK_TYPE_INT, 1);
+  
   gtk_binding_entry_add_signal (binding_set, GDK_d, GDK_CONTROL_MASK,
                                 "delete_from_cursor", 2,
                                 GTK_TYPE_ENUM, GTK_DELETE_CHARS,
@@ -698,6 +703,11 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                 GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
                                 GTK_TYPE_INT, 1);
 
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Delete, GDK_CONTROL_MASK,
+                                "delete_from_cursor", 2,
+                                GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
+                                GTK_TYPE_INT, 1);
+  
   gtk_binding_entry_add_signal (binding_set, GDK_d, GDK_MOD1_MASK,
                                 "delete_from_cursor", 2,
                                 GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
@@ -2951,7 +2961,8 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
   else if (GTK_WIDGET_CLASS (parent_class)->key_press_event &&
  	   GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
     retval = TRUE;
-  else if (event->keyval == GDK_Return)
+  else if (event->keyval == GDK_Return ||
+           event->keyval == GDK_KP_Enter)
     {
       gtk_text_buffer_insert_interactive_at_cursor (get_buffer (text_view), "\n", 1,
                                                     text_view->editable);

@@ -336,6 +336,22 @@ Compatibility macro; in gtkcompat.h.
 @tab_vborder: 
 
 
+<!-- ##### SIGNAL GtkNotebook::focus-tab ##### -->
+<para>
+
+</para>
+
+@notebook: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkNotebook::select-page ##### -->
+<para>
+
+</para>
+
+@notebook: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL GtkNotebook::switch-page ##### -->
 <para>
 Emitted when the user or a function changes the current page.

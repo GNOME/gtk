@@ -45,6 +45,12 @@ extern "C" {
 #define GTK_NOTEBOOK_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_NOTEBOOK, GtkNotebookClass))
 
 
+typedef enum
+{
+  GTK_NOTEBOOK_TAB_FIRST,
+  GTK_NOTEBOOK_TAB_LAST
+} GtkNotebookTab;
+
 typedef struct _GtkNotebook       GtkNotebook;
 typedef struct _GtkNotebookClass  GtkNotebookClass;
 typedef struct _GtkNotebookPage   GtkNotebookPage;
@@ -86,6 +92,14 @@ struct _GtkNotebookClass
   void (* switch_page)       (GtkNotebook     *notebook,
                               GtkNotebookPage *page,
 			      guint            page_num);
+
+  /* Action signals for keybindings */
+  void (* select_page)       (GtkNotebook       *notebook,
+                              gboolean           move_focus);
+
+  void (* focus_tab)         (GtkNotebook       *notebook,
+                              GtkNotebookTab     type);
+  
 };
 
 /***********************************************************

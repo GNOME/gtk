@@ -331,7 +331,9 @@ gtk_hsv_realize (GtkWidget *widget)
   attr.event_mask |= (GDK_KEY_PRESS_MASK
                       | GDK_BUTTON_PRESS_MASK
 		      | GDK_BUTTON_RELEASE_MASK
-		      | GDK_POINTER_MOTION_MASK);
+		      | GDK_POINTER_MOTION_MASK
+                      | GDK_ENTER_NOTIFY_MASK
+                      | GDK_LEAVE_NOTIFY_MASK);
   
   attr_mask = GDK_WA_X | GDK_WA_Y;
   
@@ -1275,14 +1277,17 @@ paint_triangle (GtkHSV      *hsv,
     gdk_rgb_gc_set_foreground (priv->gc, 0x000000);
   else
     gdk_rgb_gc_set_foreground (priv->gc, 0xffffff);
+
+#define OUTER_RADIUS 4
+#define INNER_RADIUS 3 
   
   gdk_draw_arc (drawable, priv->gc, FALSE,
-		xx - 3, yy - 3,
-		6, 6,
+		xx - OUTER_RADIUS, yy - OUTER_RADIUS,
+		OUTER_RADIUS * 2, OUTER_RADIUS * 2,
 		0, 360 * 64);
   gdk_draw_arc (drawable, priv->gc, FALSE,
-		xx - 2, yy - 2,
-		4, 4,
+		xx - INNER_RADIUS, yy - INNER_RADIUS,
+		INNER_RADIUS * 2, INNER_RADIUS * 2,
 		0, 360 * 64);
 }
 

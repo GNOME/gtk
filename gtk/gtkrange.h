@@ -92,6 +92,12 @@ struct _GtkRangeClass
   guint8 step_forw;
   guint8 step_back;
 
+  /* action signals for keybindings */
+  void (* move_slider)      (GtkRange     *range,
+                             GtkScrollType scroll,
+                             GtkTroughType trough);
+
+  /* Completely broken virtual functions, please ignore */
   void (* draw_background)  (GtkRange *range);
   void (* clear_background) (GtkRange *range);
   void (* draw_trough)      (GtkRange *range);
@@ -103,10 +109,6 @@ struct _GtkRangeClass
 			     gint      x,
 			     gint      y,
 			     gdouble  *jump_perc);
-  gboolean (* trough_keys)  (GtkRange      *range,
-			     GdkEventKey   *key,
-			     GtkScrollType *scroll,
-			     GtkTroughType *trough);
   void (* motion)           (GtkRange *range,
 			     gint      xdelta,
 			     gint      ydelta);

@@ -29,6 +29,7 @@
 #include "gtksignal.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkintl.h"
+#include "gtkbindings.h"
 
 
 #define SCALE_CLASS(w)  GTK_SCALE_GET_CLASS (w)
@@ -66,10 +67,6 @@ static void     gtk_vscale_pos_background   (GtkVScale      *vscale,
 					     gint           *h);
 static void     gtk_vscale_draw_slider      (GtkRange       *range);
 static void     gtk_vscale_draw_value       (GtkScale       *scale);
-static gboolean gtk_vscale_trough_keys      (GtkRange       *range,
-					     GdkEventKey    *key,
-					     GtkScrollType  *scroll,
-					     GtkTroughType  *pos);
 static void     gtk_vscale_clear_background (GtkRange       *range);
 
 GtkType
@@ -97,6 +94,12 @@ gtk_vscale_get_type (void)
   return vscale_type;
 }
 
+#define add_slider_binding(binding_set, keyval, mask, scroll, trough) \
+  gtk_binding_entry_add_signal (binding_set, keyval, mask,             \
+                                "move_slider", 2,                      \
+                                GTK_TYPE_SCROLL_TYPE, scroll,          \
+                                GTK_TYPE_TROUGH_TYPE, trough)
+
 static void
 gtk_vscale_class_init (GtkVScaleClass *class)
 {
@@ -105,6 +108,7 @@ gtk_vscale_class_init (GtkVScaleClass *class)
   GtkWidgetClass *widget_class;
   GtkRangeClass *range_class;
   GtkScaleClass *scale_class;
+  GtkBindingSet *binding_set;
   
   object_class = (GtkObjectClass*) class;
   gobject_class = G_OBJECT_CLASS (class);
@@ -123,7 +127,6 @@ gtk_vscale_class_init (GtkVScaleClass *class)
   range_class->trough_click = _gtk_range_default_vtrough_click;
   range_class->motion = _gtk_range_default_vmotion;
   range_class->draw_slider = gtk_vscale_draw_slider;
-  range_class->trough_keys = gtk_vscale_trough_keys;
   range_class->clear_background = gtk_vscale_clear_background;
   
   scale_class->draw_value = gtk_vscale_draw_value;
@@ -135,6 +138,58 @@ gtk_vscale_class_init (GtkVScaleClass *class)
 							_("The GtkAdjustment that determines the values to use for this VScale."),
 							GTK_TYPE_ADJUSTMENT,
 							G_PARAM_READWRITE));
+
+  binding_set = gtk_binding_set_by_class (object_class);
+
+  add_slider_binding (binding_set, GDK_Up, 0,
+                      GTK_SCROLL_STEP_UP, GTK_TROUGH_NONE);
+
+  add_slider_binding (binding_set, GDK_Up, GDK_CONTROL_MASK,
+                      GTK_SCROLL_PAGE_UP, GTK_TROUGH_NONE);
+
+  add_slider_binding (binding_set, GDK_KP_Up, 0,
+                      GTK_SCROLL_STEP_UP, GTK_TROUGH_NONE);
+
+  add_slider_binding (binding_set, GDK_KP_Up, GDK_CONTROL_MASK,
+                      GTK_SCROLL_PAGE_UP, GTK_TROUGH_NONE);
+
+
+  add_slider_binding (binding_set, GDK_Down, 0,
+                      GTK_SCROLL_STEP_DOWN, GTK_TROUGH_NONE);
+
+  add_slider_binding (binding_set, GDK_Down, GDK_CONTROL_MASK,
+                      GTK_SCROLL_PAGE_DOWN, GTK_TROUGH_NONE);
+
+  add_slider_binding (binding_set, GDK_KP_Down, 0,
+                      GTK_SCROLL_STEP_DOWN, GTK_TROUGH_NONE);
+
+  add_slider_binding (binding_set, GDK_KP_Down, GDK_CONTROL_MASK,
+                      GTK_SCROLL_PAGE_DOWN, GTK_TROUGH_NONE);
+
+  add_slider_binding (binding_set, GDK_Page_Up, 0,
+                      GTK_SCROLL_PAGE_BACKWARD, GTK_TROUGH_NONE);
+
+  add_slider_binding (binding_set, GDK_KP_Page_Up, 0,
+                      GTK_SCROLL_PAGE_BACKWARD, GTK_TROUGH_NONE);  
+
+  add_slider_binding (binding_set, GDK_Page_Down, 0,
+                      GTK_SCROLL_PAGE_FORWARD, GTK_TROUGH_NONE);
+
+  add_slider_binding (binding_set, GDK_KP_Page_Down, 0,
+                      GTK_SCROLL_PAGE_FORWARD, GTK_TROUGH_NONE);
+
+  add_slider_binding (binding_set, GDK_Home, 0,
+                      GTK_SCROLL_NONE, GTK_TROUGH_START);
+
+  add_slider_binding (binding_set, GDK_KP_Home, 0,
+                      GTK_SCROLL_NONE, GTK_TROUGH_START);
+
+
+  add_slider_binding (binding_set, GDK_End, 0,
+                      GTK_SCROLL_NONE, GTK_TROUGH_END);
+
+  add_slider_binding (binding_set, GDK_KP_End, 0,
+                      GTK_SCROLL_NONE, GTK_TROUGH_END);
 }
 
 static void
@@ -551,47 +606,4 @@ gtk_vscale_draw_value (GtkScale *scale)
 
       g_object_unref (G_OBJECT (layout));
     }
-}
-
-static gboolean
-gtk_vscale_trough_keys (GtkRange *range,
-			GdkEventKey *key,
-			GtkScrollType *scroll,
-			GtkTroughType *pos)
-{
-  gint return_val = FALSE;
-  switch (key->keyval)
-    {
-    case GDK_Up:
-      return_val = TRUE;
-      if (key->state & GDK_CONTROL_MASK)
-        *scroll = GTK_SCROLL_PAGE_UP;
-      else
-        *scroll = GTK_SCROLL_STEP_UP;
-      break;
-    case GDK_Down:
-      return_val = TRUE;
-      if (key->state & GDK_CONTROL_MASK)
-        *scroll = GTK_SCROLL_PAGE_DOWN;
-      else
-        *scroll = GTK_SCROLL_STEP_DOWN;
-      break;
-    case GDK_Page_Up:
-      return_val = TRUE;
-      *scroll = GTK_SCROLL_PAGE_BACKWARD;
-      break;
-    case GDK_Page_Down:
-      return_val = TRUE;
-      *scroll = GTK_SCROLL_PAGE_FORWARD;
-      break;
-    case GDK_Home:
-      return_val = TRUE;
-      *pos = GTK_TROUGH_START;
-      break;
-    case GDK_End:
-      return_val = TRUE;
-      *pos = GTK_TROUGH_END;
-      break;
-    }
-  return return_val;
 }

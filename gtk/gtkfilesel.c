@@ -1430,8 +1430,6 @@ gtk_file_selection_key_press (GtkWidget   *widget,
 
       g_free (text);
 
-      gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
-
       return TRUE;
     }
 

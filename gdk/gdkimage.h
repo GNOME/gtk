@@ -59,10 +59,6 @@ struct _GdkImageClass
 
 GType     gdk_image_get_type   (void) G_GNUC_CONST;
 
-GdkImage* gdk_image_new_bitmap (GdkVisual     *visual,
-				gpointer      data,
-				gint          width,
-				gint          height);
 GdkImage*  gdk_image_new       (GdkImageType  type,
 				GdkVisual    *visual,
 				gint	      width,
@@ -84,6 +80,13 @@ void	   gdk_image_put_pixel (GdkImage     *image,
 guint32	   gdk_image_get_pixel (GdkImage     *image,
 				gint	      x,
 				gint	      y);
+
+#ifdef GDK_ENABLE_BROKEN
+GdkImage* gdk_image_new_bitmap (GdkVisual     *visual,
+				gpointer      data,
+				gint          width,
+				gint          height);
+#endif /* GDK_ENABLE_BROKEN */
 
 #ifdef __cplusplus
 }

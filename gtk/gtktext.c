@@ -1970,29 +1970,37 @@ gtk_text_key_press (GtkWidget   *widget,
       
       switch (event->keyval)
 	{
+        case GDK_KP_Home:
 	case GDK_Home:
 	  if (event->state & GDK_CONTROL_MASK)
 	    move_cursor_buffer_ver (text, -1);
 	  else
 	    gtk_text_move_beginning_of_line (text);
 	  break;
+        case GDK_KP_End:
 	case GDK_End:
 	  if (event->state & GDK_CONTROL_MASK)
 	    move_cursor_buffer_ver (text, +1);
 	  else
 	    gtk_text_move_end_of_line (text);
 	  break;
+        case GDK_KP_Page_Up:
 	case GDK_Page_Up:   move_cursor_page_ver (text, -1); break;
+        case GDK_KP_Page_Down:
 	case GDK_Page_Down: move_cursor_page_ver (text, +1); break;
 	  /* CUA has Ctrl-Up/Ctrl-Down as paragraph up down */
+        case GDK_KP_Up:
 	case GDK_Up:        move_cursor_ver (text, -1); break;
+        case GDK_KP_Down:
 	case GDK_Down:      move_cursor_ver (text, +1); break;
+        case GDK_KP_Left:
 	case GDK_Left:
 	  if (event->state & GDK_CONTROL_MASK)
 	    gtk_text_move_backward_word (text);
 	  else
 	    move_cursor_hor (text, -1); 
 	  break;
+        case GDK_KP_Right:
 	case GDK_Right:     
 	  if (event->state & GDK_CONTROL_MASK)
 	    gtk_text_move_forward_word (text);
@@ -2025,6 +2033,7 @@ gtk_text_key_press (GtkWidget   *widget,
 	    }
 	  break;
 	case GDK_Delete:
+        case GDK_KP_Delete:
 	  if (event->state & GDK_CONTROL_MASK)
 	    gtk_text_delete_forward_word (text);
 	  else if (event->state & GDK_SHIFT_MASK)
@@ -2036,9 +2045,11 @@ gtk_text_key_press (GtkWidget   *widget,
 	    gtk_text_delete_forward_character (text);
 	  break;
 	case GDK_Tab:
+        case GDK_ISO_Left_Tab:
 	  position = text->point.index;
 	  gtk_editable_insert_text (GTK_EDITABLE (old_editable), "\t", 1, &position);
 	  break;
+        case GDK_KP_Enter:
 	case GDK_Return:
 	  if (event->state & GDK_CONTROL_MASK)
 	    gtk_signal_emit_by_name (GTK_OBJECT (text), "activate");

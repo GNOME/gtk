@@ -65,6 +65,15 @@ GtkRange
 @setting: 
 
 
+<!-- ##### SIGNAL GtkRange::move-slider ##### -->
+<para>
+
+</para>
+
+@range: the object which received the signal.
+@arg1: 
+@arg2: 
+
 <!-- ##### ARG GtkRange:update-policy ##### -->
 <para>
 

@@ -58,10 +58,6 @@ static void     gtk_vscrollbar_draw_step_forw   (GtkRange           *range);
 static void     gtk_vscrollbar_draw_step_back   (GtkRange           *range);
 static void     gtk_vscrollbar_slider_update    (GtkRange           *range);
 static void     gtk_vscrollbar_calc_slider_size (GtkVScrollbar      *vscrollbar);
-static gboolean gtk_vscrollbar_trough_keys      (GtkRange           *range,
-						 GdkEventKey        *key,
-						 GtkScrollType      *scroll,
-						 GtkTroughType      *pos);
 
 GtkType
 gtk_vscrollbar_get_type (void)
@@ -110,7 +106,6 @@ gtk_vscrollbar_class_init (GtkVScrollbarClass *class)
   range_class->draw_step_back = gtk_vscrollbar_draw_step_back;
   range_class->slider_update = gtk_vscrollbar_slider_update;
   range_class->trough_click = _gtk_range_default_vtrough_click;
-  range_class->trough_keys = gtk_vscrollbar_trough_keys;
   range_class->motion = _gtk_range_default_vmotion;
 
   g_object_class_install_property (gobject_class,
@@ -459,39 +454,4 @@ gtk_vscrollbar_calc_slider_size (GtkVScrollbar *vscrollbar)
 	  gdk_window_invalidate_rect (range->slider, NULL, FALSE);
 	}
     }
-}
-
-static gboolean
-gtk_vscrollbar_trough_keys (GtkRange *range,
-                            GdkEventKey *key,
-                            GtkScrollType *scroll,
-                            GtkTroughType *pos)
-{
-  gint return_val = FALSE;
-  switch (key->keyval)
-    {
-    case GDK_Up:
-      return_val = TRUE;
-      *scroll = GTK_SCROLL_STEP_UP;
-      break;
-    case GDK_Down:
-      return_val = TRUE;
-      *scroll = GTK_SCROLL_STEP_DOWN;
-      break;
-    case GDK_Page_Up:
-      return_val = TRUE;
-      if (key->state & GDK_CONTROL_MASK)
-        *pos = GTK_TROUGH_START;
-      else
-        *scroll = GTK_SCROLL_PAGE_BACKWARD;
-      break;
-    case GDK_Page_Down:
-      return_val = TRUE;
-      if (key->state & GDK_CONTROL_MASK)
-        *pos = GTK_TROUGH_END;
-      else
-        *scroll = GTK_SCROLL_PAGE_FORWARD;
-      break;
-    }
-  return return_val;
 }

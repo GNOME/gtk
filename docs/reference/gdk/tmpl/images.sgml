@@ -105,6 +105,9 @@ and if that fails then %GDK_IMAGE_NORMAL will be used.
 <!-- ##### FUNCTION gdk_image_new_bitmap ##### -->
 <para>
 Creates a new #GdkImage with a depth of 1 from the given data.
+<warning><para>THIS FUNCTION IS INCREDIBLY BROKEN. The passed-in data must 
+be allocated by malloc() (NOT g_malloc()) and will be freed when the 
+image is freed.</para></warning>
 </para>
 
 @visual: the #GdkVisual to use for the image.

@@ -33,6 +33,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <stdio.h>
 #include "gtkintl.h"
+#include "gtkbindings.h"
 
 
 #define TAB_OVERLAP    2
@@ -46,6 +47,8 @@
 
 enum {
   SWITCH_PAGE,
+  FOCUS_TAB,
+  SELECT_PAGE,
   LAST_SIGNAL
 };
 
@@ -111,6 +114,11 @@ struct _GtkNotebookPage
 static void gtk_notebook_class_init          (GtkNotebookClass *klass);
 static void gtk_notebook_init                (GtkNotebook      *notebook);
 
+static void gtk_notebook_select_page         (GtkNotebook       *notebook,
+                                              gboolean           move_focus);
+static void gtk_notebook_focus_tab           (GtkNotebook       *notebook,
+                                              GtkNotebookTab     type);
+
 /*** GtkObject Methods ***/
 static void gtk_notebook_destroy             (GtkObject        *object);
 static void gtk_notebook_set_arg             (GtkObject        *object,
@@ -141,8 +149,6 @@ static gint gtk_notebook_leave_notify        (GtkWidget        *widget,
 					      GdkEventCrossing *event);
 static gint gtk_notebook_motion_notify       (GtkWidget        *widget,
 					      GdkEventMotion   *event);
-static gint gtk_notebook_key_press           (GtkWidget        *widget,
-					      GdkEventKey      *event);
 static gint gtk_notebook_focus_in            (GtkWidget        *widget,
 					      GdkEventFocus    *event);
 static void gtk_notebook_draw_focus          (GtkWidget        *widget);
@@ -274,7 +280,8 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
-
+  GtkBindingSet *binding_set;
+  
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
@@ -297,7 +304,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->enter_notify_event = gtk_notebook_enter_notify;
   widget_class->leave_notify_event = gtk_notebook_leave_notify;
   widget_class->motion_notify_event = gtk_notebook_motion_notify;
-  widget_class->key_press_event = gtk_notebook_key_press;
   widget_class->focus_in_event = gtk_notebook_focus_in;
   widget_class->style_set = gtk_notebook_style_set;
    
@@ -312,6 +318,9 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 
   class->switch_page = gtk_notebook_real_switch_page;
 
+  class->focus_tab = gtk_notebook_focus_tab;
+  class->select_page = gtk_notebook_select_page;
+  
   gtk_object_add_arg_type ("GtkNotebook::page", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_PAGE);
   gtk_object_add_arg_type ("GtkNotebook::tab_pos", GTK_TYPE_POSITION_TYPE, GTK_ARG_READWRITE, ARG_TAB_POS);
   gtk_object_add_arg_type ("GtkNotebook::tab_border", GTK_TYPE_UINT, GTK_ARG_WRITABLE, ARG_TAB_BORDER);
@@ -338,6 +347,60 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 		    GTK_TYPE_NONE, 2,
 		    GTK_TYPE_POINTER,
 		    GTK_TYPE_UINT);
+
+  notebook_signals[FOCUS_TAB] = 
+    g_signal_newc ("focus_tab",
+                   G_TYPE_FROM_CLASS (object_class),
+                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                   G_STRUCT_OFFSET (GtkNotebookClass, focus_tab),
+                   NULL, NULL,
+                   gtk_marshal_VOID__ENUM,
+                   G_TYPE_NONE, 1,
+                   GTK_TYPE_NOTEBOOK_TAB);
+
+  notebook_signals[SELECT_PAGE] = 
+    g_signal_newc ("select_page",
+                   G_TYPE_FROM_CLASS (object_class),
+                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                   G_STRUCT_OFFSET (GtkNotebookClass, select_page),
+                   NULL, NULL,
+                   gtk_marshal_VOID__BOOLEAN,
+                   G_TYPE_NONE, 1,
+                   G_TYPE_BOOLEAN);
+
+  binding_set = gtk_binding_set_by_class (object_class);
+
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_Return, 0,
+                                "select_page", 1, 
+                                G_TYPE_BOOLEAN, TRUE);
+
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KP_Enter, 0,
+                                "select_page", 1, 
+                                G_TYPE_BOOLEAN, TRUE);
+
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_space, 0,
+                                "select_page", 1, 
+                                G_TYPE_BOOLEAN, FALSE);
+
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_Home, 0,
+                                "focus_tab", 1, 
+                                GTK_TYPE_NOTEBOOK_TAB, GTK_NOTEBOOK_TAB_FIRST);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KP_Home, 0,
+                                "focus_tab", 1, 
+                                GTK_TYPE_NOTEBOOK_TAB, GTK_NOTEBOOK_TAB_FIRST);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_End, 0,
+                                "focus_tab", 1, 
+                                GTK_TYPE_NOTEBOOK_TAB, GTK_NOTEBOOK_TAB_LAST);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KP_End, 0,
+                                "focus_tab", 1, 
+                                GTK_TYPE_NOTEBOOK_TAB, GTK_NOTEBOOK_TAB_LAST);
 }
 
 static void
@@ -366,6 +429,34 @@ gtk_notebook_init (GtkNotebook *notebook)
   notebook->need_timer = 0;
   notebook->child_has_focus = FALSE;
   notebook->have_visible_child = FALSE;
+}
+
+static void
+gtk_notebook_select_page (GtkNotebook *notebook,
+                          gboolean     move_focus)
+{
+  gtk_notebook_page_select (notebook, move_focus);
+}
+
+static void
+gtk_notebook_focus_tab (GtkNotebook       *notebook,
+                        GtkNotebookTab     type)
+{
+  GList *list;
+  
+  switch (type)
+    {
+    case GTK_NOTEBOOK_TAB_FIRST:
+      list = gtk_notebook_search_page (notebook, NULL, STEP_NEXT, TRUE);
+      if (list)
+	gtk_notebook_switch_focus_tab (notebook, list);
+      break;
+    case GTK_NOTEBOOK_TAB_LAST:
+      list = gtk_notebook_search_page (notebook, NULL, STEP_PREV, TRUE);
+      if (list)
+	gtk_notebook_switch_focus_tab (notebook, list);
+      break;
+    }
 }
 
 /**
@@ -509,7 +600,6 @@ gtk_notebook_get_arg (GtkObject *object,
  * gtk_notebook_enter_notify
  * gtk_notebook_leave_notify
  * gtk_notebook_motion_notify
- * gtk_notebook_key_press
  * gtk_notebook_focus_in
  * gtk_notebook_focus_out
  * gtk_notebook_draw_focus
@@ -1233,45 +1323,6 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
 	gtk_notebook_redraw_arrows (notebook);	
     }
   
-  return FALSE;
-}
-
-static gint
-gtk_notebook_key_press (GtkWidget   *widget,
-			GdkEventKey *event)
-{
-  GtkNotebook *notebook;
-  GList *list;
-
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_NOTEBOOK (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  notebook = GTK_NOTEBOOK (widget);
-
-  if (!notebook->children || !notebook->show_tabs)
-    return FALSE;
-
-  switch (event->keyval)
-    {
-    case GDK_Home:
-      list = gtk_notebook_search_page (notebook, NULL, STEP_NEXT, TRUE);
-      if (list)
-	gtk_notebook_switch_focus_tab (notebook, list);
-      return TRUE;
-    case GDK_End:
-      list = gtk_notebook_search_page (notebook, NULL, STEP_PREV, TRUE);
-      if (list)
-	gtk_notebook_switch_focus_tab (notebook, list);
-      return TRUE;
-    case GDK_Return:
-      gtk_notebook_page_select (GTK_NOTEBOOK (widget), TRUE);
-      return TRUE;
-    case GDK_space:
-      gtk_notebook_page_select (GTK_NOTEBOOK (widget), FALSE);
-      return TRUE;
-    }
-
   return FALSE;
 }
 

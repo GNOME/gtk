@@ -86,13 +86,6 @@ static void     gtk_font_selection_select_font           (GtkWidget        *w,
 							  gint              column,
 							  GdkEventButton   *bevent,
 							  gpointer          data);
-static gint     gtk_font_selection_on_clist_key_press    (GtkWidget        *clist,
-							  GdkEventKey      *event,
-							  GtkFontSelection *fs);
-static gboolean gtk_font_selection_select_next           (GtkFontSelection *fs,
-							  GtkWidget        *clist,
-							  gint              step);
-
 static void     gtk_font_selection_show_available_fonts  (GtkFontSelection *fs);
 
 static void     gtk_font_selection_show_available_styles (GtkFontSelection *fs);
@@ -106,8 +99,7 @@ static void     gtk_font_selection_select_style          (GtkWidget        *w,
 
 static void     gtk_font_selection_select_best_size      (GtkFontSelection *fs);
 static void     gtk_font_selection_show_available_sizes  (GtkFontSelection *fs);
-static gint     gtk_font_selection_size_key_press        (GtkWidget        *w,
-							  GdkEventKey      *event,
+static void     gtk_font_selection_size_activate         (GtkWidget        *w,
 							  gpointer          data);
 static void     gtk_font_selection_select_size           (GtkWidget        *w,
 							  gint              row,
@@ -206,8 +198,8 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gtk_widget_show (fontsel->size_entry);
   gtk_table_attach (GTK_TABLE (table), fontsel->size_entry, 2, 3, 1, 2,
 		    GTK_FILL, 0, 0, 0);
-  gtk_signal_connect (GTK_OBJECT (fontsel->size_entry), "key_press_event",
-		      (GtkSignalFunc) gtk_font_selection_size_key_press,
+  gtk_signal_connect (GTK_OBJECT (fontsel->size_entry), "activate",
+		      (GtkSignalFunc) gtk_font_selection_size_activate,
 		      fontsel);
   
   fontsel->font_label = gtk_label_new_with_mnemonic (_("_Family:"));
@@ -285,9 +277,10 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
 		      GTK_SIGNAL_FUNC(gtk_font_selection_select_font),
 		      fontsel);
   GTK_WIDGET_SET_FLAGS (fontsel->font_clist, GTK_CAN_FOCUS);
-  gtk_signal_connect (GTK_OBJECT (fontsel->font_clist), "key_press_event",
-		      GTK_SIGNAL_FUNC(gtk_font_selection_on_clist_key_press),
-		      fontsel);
+
+  gtk_signal_connect_after (GTK_OBJECT (fontsel->font_clist), "expose_event",
+			    GTK_SIGNAL_FUNC(gtk_font_selection_expose_list),
+			    fontsel);
   
   gtk_font_selection_show_available_styles (fontsel);
   
@@ -295,10 +288,6 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
 		      GTK_SIGNAL_FUNC(gtk_font_selection_select_style),
 		      fontsel);
   GTK_WIDGET_SET_FLAGS (fontsel->font_style_clist, GTK_CAN_FOCUS);
-  gtk_signal_connect (GTK_OBJECT (fontsel->font_style_clist),
-		      "key_press_event",
-		      GTK_SIGNAL_FUNC(gtk_font_selection_on_clist_key_press),
-		      fontsel);
 
   gtk_font_selection_show_available_sizes (fontsel);
   
@@ -306,9 +295,6 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
 		      GTK_SIGNAL_FUNC(gtk_font_selection_select_size),
 		      fontsel);
   GTK_WIDGET_SET_FLAGS (fontsel->size_clist, GTK_CAN_FOCUS);
-  gtk_signal_connect (GTK_OBJECT (fontsel->size_clist), "key_press_event",
-		      GTK_SIGNAL_FUNC(gtk_font_selection_on_clist_key_press),
-		      fontsel);
   
   /* create the text entry widget */
   text_frame = gtk_frame_new (_("Preview:"));
@@ -475,59 +461,6 @@ gtk_font_selection_show_available_fonts (GtkFontSelection *fontsel)
   gtk_clist_thaw (GTK_CLIST(fontsel->font_clist));
 
   pango_font_map_free_families (families, n_families);
-}
-
-static gint
-gtk_font_selection_on_clist_key_press (GtkWidget        *clist,
-				       GdkEventKey      *event,
-				       GtkFontSelection *fontsel)
-{
-#ifdef FONTSEL_DEBUG
-  g_message("In on_clist_key_press\n");
-#endif
-  if (event->keyval == GDK_Up)
-    return gtk_font_selection_select_next (fontsel, clist, -1);
-  else if (event->keyval == GDK_Down)
-    return gtk_font_selection_select_next (fontsel, clist, 1);
-  else
-    return FALSE;
-}
-
-
-static gboolean
-gtk_font_selection_select_next (GtkFontSelection *fontsel,
-				GtkWidget        *clist,
-				gint		  step)
-{
-  GList *selection;
-  gint current_row, row;
-  
-  selection = GTK_CLIST(clist)->selection;
-  if (!selection)
-    return FALSE;
-  current_row = GPOINTER_TO_INT (selection->data);
-  
-  /* Stop the normal clist key handler from being run. */
-  gtk_signal_emit_stop_by_name (GTK_OBJECT (clist), "key_press_event");
-
-  for (row = current_row + step;
-       row >= 0 && row < GTK_CLIST(clist)->rows;
-       row += step)
-    {
-      /* If this is the style clist, make sure that the item is not a charset
-	 entry. */
-      if (clist == fontsel->font_style_clist)
-	if (GPOINTER_TO_INT (gtk_clist_get_row_data(GTK_CLIST(clist), row)) == -1)
-	  continue;
-      
-      /* Now we've found the row to select. */
-      if (gtk_clist_row_is_visible(GTK_CLIST(clist), row)
-	  != GTK_VISIBILITY_FULL)
-	gtk_clist_moveto(GTK_CLIST(clist), row, -1, (step < 0) ? 0 : 1, 0);
-      gtk_clist_select_row(GTK_CLIST(clist), row, 0);
-      break;
-    }
-  return TRUE;
 }
 
 static int
@@ -699,31 +632,24 @@ gtk_font_selection_select_best_size (GtkFontSelection *fontsel)
 
 /* If the user hits return in the font size entry, we change to the new font
    size. */
-static gint
-gtk_font_selection_size_key_press (GtkWidget   *w,
-				   GdkEventKey *event,
-				   gpointer     data)
+static void
+gtk_font_selection_size_activate (GtkWidget   *w,
+                                  gpointer     data)
 {
   GtkFontSelection *fontsel;
   gint new_size;
   gchar *text;
   
   fontsel = GTK_FONT_SELECTION (data);
-  
-  if (event->keyval == GDK_Return)
-    {
-      text = gtk_entry_get_text (GTK_ENTRY (fontsel->size_entry));
-      new_size = atoi (text) * PANGO_SCALE;
 
-      if (fontsel->font_desc->size != new_size)
-	{
-	  fontsel->font_desc->size = new_size;
-	  gtk_font_selection_load_font (fontsel);
-	}
-      return TRUE;
-    }
+  text = gtk_entry_get_text (GTK_ENTRY (fontsel->size_entry));
+  new_size = atoi (text) * PANGO_SCALE;
   
-  return FALSE;
+  if (fontsel->font_desc->size != new_size)
+    {
+      fontsel->font_desc->size = new_size;
+      gtk_font_selection_load_font (fontsel);
+    }
 }
 
 /* This is called when a size is selected in the list. */

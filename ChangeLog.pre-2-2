@@ -1,3 +1,78 @@
+2001-04-24  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextlayout.c (gtk_text_layout_move_iter_to_previous_line): 
+	(gtk_text_layout_move_iter_to_next_line): fix these two for
+	invisible text, lots of other stuff still hosed.
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_set_change_palette_hook):
+	new function, replaces the get/set palette stuff. This function 
+	is intended for use by libgnomeui which should set the hook to a
+	thing which sets the palette in GConf, and we need the
+	GConf-to-xsettings proxy which will result in the change being
+	propagated back to the GTK app.
+
+	* gtk/gtkaccelgroup.c (gtk_accel_group_add): add note to warning 
+	about unusable signals that it may be because the signal has 
+	parameters.
+
+	* gtk/gtkwidget.c (gtk_widget_modify_style): always copy the
+	style, otherwise gtkrc.c won't know to create a new GtkStyle for
+	it.
+	(gtk_widget_modify_color_component): call
+	gtk_widget_modify_style() so the rc style will get copied.
+	(gtk_widget_modify_font): ditto
+
+	* gtk/gtkrc.c: make a couple variables static
+
+	* gtk/gtkcolorseldialog.c (gtk_color_selection_dialog_init): hide
+	help button by default, since it does nothing
+
+	* gtk/gtkcolorsel.c: add tooltips, work on key navigation, fool
+	around with UI
+
+	* gtk/gtkentry.c (gtk_entry_realize): request enter/leave notify
+	so we can have tooltips
+
+	* gtk/gtkhsv.c (gtk_hsv_realize): request enter/leave notify so we
+	can have tooltips
+
+	* gdk/gdkimage.h: mark gdk_image_new_bitmap with
+	GDK_ENABLE_BROKEN, because its memory behavior is completely
+	hosed.
+
+	* gtk/gtknotebook.c: remove key press handler, replace with
+	binding set, add numeric keypad support
+
+	* gtk/gtktextview.c (gtk_text_view_class_init): accept KP_Delete
+
+	* gtk/gtktext.c (gtk_text_key_press): add a bunch of KP keysyms
+
+	* gtk/gtkentry.c (gtk_entry_class_init): accept GDK_KP_Delete in
+	addition to plain Delete
+
+	* gtk/gtktextview.c (gtk_text_view_key_press_event): accept
+	GDK_KP_Enter in addition to GDK_Return
+
+	* gtk/gtkfontsel.c (gtk_font_selection_size_key_press): connect to
+	activate on entry instead of key press
+	(gtk_font_selection_on_clist_key_press): get
+	rid of this signal handler, not needed with new font sel.
+
+	* gtk/gtkfilesel.c (gtk_file_selection_key_press): remove a
+	no-longer-needed emit_stop_by_name(), just return TRUE
+
+	* gtk/gtkhscrollbar.c, gtk/gtkvscrollbar.c: remove keybindings
+	cruft, this widget is no longer focusable.
+
+	* gtk/gtkrange.h, gtk/gtkrange.c, gtk/gtkvscale.c,
+	gtk/gtkhscale.c: Get rid of trough_keys virtual function, add
+	move_slider action signal, add binding set for vscale/hscale, in
+	the process support numeric keypad
+
+	* gtk/gtkentry.c (gtk_entry_class_init): Add keypad bindings; 
+	make GDK_Return and GDK_KP_Enter activate the entry via 
+	binding set, instead of hardcoded.
+
 Fri Apr 27 20:27:21 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.[hc]: Massive reorder/cleanup of a lot of the

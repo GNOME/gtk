@@ -3509,12 +3509,15 @@ gtk_widget_modify_style (GtkWidget      *widget,
   old_style = gtk_object_get_data_by_id (GTK_OBJECT (widget),
 					 quark_rc_style);
 
-  if (style != old_style)
-    gtk_object_set_data_by_id_full (GTK_OBJECT (widget),
-				    quark_rc_style,
-				    gtk_rc_style_copy (style),
-				    (GtkDestroyNotify)gtk_rc_style_unref);
+  gtk_object_set_data_by_id_full (GTK_OBJECT (widget),
+                                  quark_rc_style,
+                                  gtk_rc_style_copy (style),
+                                  (GtkDestroyNotify)gtk_rc_style_unref);
 
+  /* note that "style" may be invalid here if it was the old
+   * modifier style and the only reference was our own.
+   */
+  
   if (GTK_WIDGET_RC_STYLE (widget))
     gtk_widget_set_rc_style (widget);
 }
@@ -3529,6 +3532,12 @@ gtk_widget_modify_style (GtkWidget      *widget,
  * modifier style for the widget. If you make changes to this rc
  * style, you must call gtk_widget_modify_style(), passing in the
  * returned rc style, to make sure that your changes take effect.
+ *
+ * Caution: passing the style back to gtk_widget_modify_style() will
+ * normally end up destroying it, because gtk_widget_modify_style() copies
+ * the passed-in style and sets the copy as the new modifier style,
+ * thus dropping any reference to the old modifier style. Add a reference
+ * to the modifier style if you want to keep it alive.
  * 
  * Return value: the modifier style for the widget. This rc style is
  *   owned by the widget. If you want to keep a pointer to value this
@@ -3582,8 +3591,7 @@ gtk_widget_modify_color_component (GtkWidget     *widget,
 
   rc_style->color_flags[state] |= component;
 
-  if (GTK_WIDGET_RC_STYLE (widget))
-    gtk_widget_set_rc_style (widget);
+  gtk_widget_modify_style (widget, rc_style);
 }
 
 /**
@@ -3701,9 +3709,8 @@ gtk_widget_modify_font (GtkWidget            *widget,
     pango_font_description_free (rc_style->font_desc);
   
   rc_style->font_desc = pango_font_description_copy (font_desc);
-  
-  if (GTK_WIDGET_RC_STYLE (widget))
-    gtk_widget_set_rc_style (widget);
+
+  gtk_widget_modify_style (widget, rc_style);
 }
 
 static void

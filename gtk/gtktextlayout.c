@@ -2436,38 +2436,74 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
   GSList *tmp_list;
   PangoLayoutLine *layout_line;
   GtkTextIter orig;
+  gboolean update_byte = FALSE;
   
   g_return_val_if_fail (layout != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
 
   orig = *iter;
-  
+
+
   line = _gtk_text_iter_get_text_line (iter);
-  display = gtk_text_layout_get_line_display (layout, line, FALSE);  
+  display = gtk_text_layout_get_line_display (layout, line, FALSE);
   line_byte = line_display_iter_to_index (layout, display, iter);
 
-  /* FIXME can't use layout until we check display->height > 0) */
+  /* If display->height == 0 then the line is invisible, so don't
+   * move onto it.
+   */
+  while (display->height == 0)
+    {
+      GtkTextLine *prev_line;
+
+      prev_line = _gtk_text_line_previous (line);
+
+      if (prev_line == NULL)
+        {
+          line_display_index_to_iter (layout, display, iter, 0, 0);
+          goto out;
+        }
+
+      gtk_text_layout_free_line_display (layout, display);
+
+      line = prev_line;
+      display = gtk_text_layout_get_line_display (layout, prev_line, FALSE);
+      update_byte = TRUE;
+    }
+  
   tmp_list = pango_layout_get_lines (display->layout);
   layout_line = tmp_list->data;
 
+  if (update_byte)
+    {
+      line_byte = layout_line->start_index + layout_line->length;
+    }
+  
   if (line_byte < layout_line->length || !tmp_list->next) /* first line of paragraph */
     {
-      GtkTextLine *prev_line = _gtk_text_line_previous (line);
+      GtkTextLine *prev_line;
 
-      /* FIXME keep going back while display->height == 0 */
-      
-      if (prev_line)
+      prev_line = _gtk_text_line_previous (line);
+      while (prev_line)
         {
           gtk_text_layout_free_line_display (layout, display);
-          display = gtk_text_layout_get_line_display (layout, prev_line, FALSE);
-	  tmp_list = g_slist_last (pango_layout_get_lines (display->layout));
-	  layout_line = tmp_list->data;
 
-          line_display_index_to_iter (layout, display, iter,
-                                      layout_line->start_index + layout_line->length, 0);
+          display = gtk_text_layout_get_line_display (layout, prev_line, FALSE);
+
+          if (display->height > 0)
+            {
+              tmp_list = g_slist_last (pango_layout_get_lines (display->layout));
+              layout_line = tmp_list->data;
+
+              line_display_index_to_iter (layout, display, iter,
+                                          layout_line->start_index + layout_line->length, 0);
+              break;
+            }
+
+          prev_line = _gtk_text_line_previous (prev_line);
         }
-      else
+
+      if (prev_line == NULL)
  	line_display_index_to_iter (layout, display, iter, 0, 0);
     }
   else
@@ -2491,6 +2527,8 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
         }
     }
 
+ out:
+  
   gtk_text_layout_free_line_display (layout, display);
 
   return
@@ -2533,6 +2571,9 @@ gtk_text_layout_move_iter_to_next_line (GtkTextLayout *layout,
 
       display = gtk_text_layout_get_line_display (layout, line, FALSE);
 
+      if (display->height == 0)
+        goto next;
+      
       if (first)
 	{
 	  line_byte = line_display_iter_to_index (layout, display, iter);
@@ -2558,6 +2599,8 @@ gtk_text_layout_move_iter_to_next_line (GtkTextLayout *layout,
           tmp_list = tmp_list->next;
         }
 
+    next:
+      
       gtk_text_layout_free_line_display (layout, display);
 
       line = _gtk_text_line_next (line);
@@ -2661,7 +2704,7 @@ gtk_text_layout_iter_starts_line (GtkTextLayout       *layout,
       if (line_byte < layout_line->start_index + layout_line->length ||
           !tmp_list->next)
         {
-          /* We're located on this line of the para delimiters before
+          /* We're located on this line or the para delimiters before
            * it
            */
           gtk_text_layout_free_line_display (layout, display);

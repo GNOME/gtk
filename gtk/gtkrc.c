@@ -257,10 +257,10 @@ static gchar *module_path[GTK_RC_MAX_MODULE_PATHS];
 /* A stack of directories for RC files we are parsing currently.
  * these are implicitely added to the end of PIXMAP_PATHS
  */
-GSList *rc_dir_stack = NULL;
+static GSList *rc_dir_stack = NULL;
 
 /* The files we have parsed, to reread later if necessary */
-GSList *rc_files = NULL;
+static GSList *rc_files = NULL;
 
 static GtkImageLoader image_loader = NULL;
 

@@ -47,6 +47,9 @@ typedef struct _GtkColorSelection       GtkColorSelection;
 typedef struct _GtkColorSelectionClass  GtkColorSelectionClass;
 
 
+typedef void (* GtkColorSelectionChangePaletteFunc) (const GdkColor    *colors,
+                                                     gint               n_colors);
+
 struct _GtkColorSelection
 {
   GtkVBox parent_instance;
@@ -63,7 +66,7 @@ struct _GtkColorSelectionClass
 };
 
 
-/* ColorSelection */ 
+/* ColorSelection */
 
 GtkType    gtk_color_selection_get_type                (void) G_GNUC_CONST;
 GtkWidget *gtk_color_selection_new                     (void);
@@ -91,17 +94,16 @@ void     gtk_color_selection_set_previous_alpha  (GtkColorSelection *colorsel,
 void     gtk_color_selection_get_previous_color  (GtkColorSelection *colorsel,
 						  GdkColor          *color);
 guint16  gtk_color_selection_get_previous_alpha  (GtkColorSelection *colorsel);
-gint     gtk_color_selection_get_palette_size    (GtkColorSelection *colorsel);
-gboolean gtk_color_selection_get_palette_color   (GtkColorSelection *colorsel,
-						  gint               index,
-						  GdkColor          *color);
-void     gtk_color_selection_set_palette_color   (GtkColorSelection *colorsel,
-						  gint               index,
-						  GdkColor          *color);
-void     gtk_color_selection_unset_palette_color (GtkColorSelection *colorsel,
-						  gint               index);
+
 gboolean gtk_color_selection_is_adjusting        (GtkColorSelection *colorsel);
 
+gboolean gtk_color_selection_palette_from_string (const gchar       *str,
+                                                  GdkColor         **colors,
+                                                  gint              *n_colors);
+gchar*   gtk_color_selection_palette_to_string   (const GdkColor    *colors,
+                                                  gint               n_colors);
+
+GtkColorSelectionChangePaletteFunc gtk_color_selection_set_change_palette_hook (GtkColorSelectionChangePaletteFunc func);
 
 #ifndef GTK_DISABLE_DEPRECATED
 /* Deprecated calls: */

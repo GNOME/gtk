@@ -381,7 +381,7 @@ gtk_accel_group_add (GtkAccelGroup	*accel_group,
   if (!query.signal_id || query.n_params > 0)
     {
       g_warning ("gtk_accel_group_add(): signal \"%s\" in the `%s' class ancestry"
-		 "cannot be used as accelerator signal",
+		 "cannot be used as accelerator signal (perhaps it has parameters)",
 		 accel_signal,
 		 gtk_type_name (GTK_OBJECT_TYPE (object)));
 
