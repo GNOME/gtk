@@ -1,3 +1,7 @@
+Thu Nov 15 18:44:33 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreedatalist.c (_gtk_tree_data_list_free): maybe fix #64160
+
 2001-11-15  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkwindow.c (gtk_window_new): Move '.' out of quote. (#64407)

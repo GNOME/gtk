@@ -58,9 +58,9 @@ _gtk_tree_data_list_free (GtkTreeDataList *list,
       next = tmp->next;
       if (g_type_is_a (column_headers [i], G_TYPE_STRING))
 	g_free ((gchar *) tmp->data.v_pointer);
-      else if (g_type_is_a (column_headers [i], G_TYPE_OBJECT))
+      else if (g_type_is_a (column_headers [i], G_TYPE_OBJECT) && tmp->data.v_pointer != NULL)
 	g_object_unref (G_OBJECT (tmp->data.v_pointer));
-      else if (g_type_is_a (column_headers [i], G_TYPE_BOXED))
+      else if (g_type_is_a (column_headers [i], G_TYPE_BOXED) && tmp->data.v_pointer != NULL)
 	g_boxed_free (column_headers [i], (gpointer) tmp->data.v_pointer);
 
       g_mem_chunk_free (tree_chunk, tmp);
