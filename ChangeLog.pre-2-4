@@ -1,3 +1,14 @@
+Wed Feb 21 14:23:05 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_cell_data_func):
+	Changed name to be set_cell_data_func to make it clear what
+	the functino does.  Close bug #51069.
+
+Tue Feb 20 16:49:00 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/testgtk.c (main): Remove turning on of profiling malloc,
+	have memory actually freed.  Keeps box running longer.
+
 2001-02-21  Alexander Larsson  <alexl@redhat.com>
 	
         * gtk/gtkseparatormenuitem.[ch]:
@@ -25,6 +36,11 @@
 
 	* gtk/gtkarrow.c: Convert to new property API, patch from 
 	Lee Mallabone
+
+Tue Feb 20 14:26:41 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* tests/testtreeview.c (toggled_callback): fix to reflect change
+	in GtkTreeModelStore.
 
 Tue Feb 20 12:16:12 2001  Jonathan Blandford  <jrb@redhat.com>
 
@@ -297,7 +313,6 @@ Sat Feb 17 06:47:27 2001  Tim Janik  <timj@gtk.org>
 	* gtk/gtkliststore.c (gtk_list_store_set_valist): 
 	fix G_VALUE_COLLECT() and G_VALUE_LCOPY() calls.
 	
->>>>>>> 1.1728
 Fri Feb 16 17:49:59 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreestore.[hc], gtk/gtkliststore.[ch]: removed

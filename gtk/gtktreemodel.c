@@ -21,8 +21,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <glib.h>
+#include <gobject/gobject.h>
 #include <gobject/gvaluecollector.h>
-
+#include "gtkmarshal.h"
 #include "gtktreemodel.h"
 
 struct _GtkTreePath
@@ -30,6 +31,9 @@ struct _GtkTreePath
   gint depth;
   gint *indices;
 };
+
+static void gtk_tree_model_base_init (gpointer g_class);
+
 
 GtkType
 gtk_tree_model_get_type (void)
@@ -41,7 +45,7 @@ gtk_tree_model_get_type (void)
       static const GTypeInfo tree_model_info =
       {
         sizeof (GtkTreeModelIface), /* class_size */
-	NULL,		/* base_init */
+	gtk_tree_model_base_init,   /* base_init */
 	NULL,		/* base_finalize */
 	NULL,
 	NULL,		/* class_finalize */
@@ -55,6 +59,56 @@ gtk_tree_model_get_type (void)
     }
 
   return tree_model_type;
+}
+
+
+static void
+gtk_tree_model_base_init (gpointer g_class)
+{
+  static gboolean initted = FALSE;
+#if 0
+  if (! initted)
+    {
+      g_signal_newc ("changed",
+		     GTK_TYPE_TREE_MODEL,
+		     G_SIGNAL_RUN_FIRST,
+		     G_STRUCT_OFFSET (GtkTreeModelIface, changed),
+		     NULL,
+		     gtk_marshal_VOID__BOXED_BOXED,
+		     G_TYPE_NONE, 2,
+		     GTK_TYPE_TREE_PATH,
+		     GTK_TYPE_TREE_ITER);
+
+      g_signal_newc ("inserted",
+		     GTK_TYPE_TREE_MODEL,
+		     G_SIGNAL_RUN_FIRST,
+		     G_STRUCT_OFFSET (GtkTreeModelIface, inserted),
+		     NULL,
+		     gtk_marshal_VOID__BOXED_BOXED,
+		     G_TYPE_NONE, 2,
+		     GTK_TYPE_TREE_PATH,
+		     GTK_TYPE_TREE_ITER);
+      g_signal_newc ("child_toggled",
+		     GTK_TYPE_TREE_MODEL,
+		     G_SIGNAL_RUN_FIRST,
+		     G_STRUCT_OFFSET (GtkTreeModelIface, child_toggled),
+		     NULL,
+		     gtk_marshal_VOID__BOXED_BOXED,
+		     G_TYPE_NONE, 2,
+		     GTK_TYPE_TREE_PATH,
+		     GTK_TYPE_TREE_ITER);
+      g_signal_newc ("deleted",
+		     GTK_TYPE_TREE_MODEL,
+		     G_SIGNAL_RUN_FIRST,
+		     G_STRUCT_OFFSET (GtkTreeModelIface, deleted),
+		     NULL,
+		     gtk_marshal_VOID__BOXED_BOXED,
+		     G_TYPE_NONE, 1,
+		     GTK_TYPE_TREE_PATH);
+
+      initted = TRUE;
+    }
+#endif
 }
 
 /**

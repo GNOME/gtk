@@ -209,7 +209,7 @@ toggled_callback (GtkCellRendererToggle *celltoggle,
   
   if (GTK_IS_LIST_STORE (model))
     {
-      gtk_list_store_get (GTK_LIST_STORE (model),
+      gtk_tree_model_get (GTK_TREE_MODEL (model),
                           &iter,
                           BOOL_COLUMN,
                           &active,
@@ -223,7 +223,7 @@ toggled_callback (GtkCellRendererToggle *celltoggle,
     }
   else if (GTK_IS_TREE_STORE (model))
     {
-      gtk_tree_store_get (GTK_TREE_STORE (model),
+      gtk_tree_model_get (GTK_TREE_MODEL (model),
                           &iter,
                           BOOL_COLUMN,
                           &active,

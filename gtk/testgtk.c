@@ -9472,8 +9472,6 @@ main (int argc, char *argv[])
 {
   GtkBindingSet *binding_set;
 
-  g_mem_set_vtable (glib_mem_profiler_table);
-
   srand (time (NULL));
 
   test_init ();
@@ -9508,8 +9506,6 @@ main (int argc, char *argv[])
       while (g_main_pending ())
 	g_main_iteration (FALSE);
     }
-  g_blow_chunks ();
-  g_mem_profile ();
 
   return 0;
 }

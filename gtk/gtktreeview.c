@@ -48,9 +48,7 @@
  * TREE_VIEW_VERTICAL_SEPARATOR%2 pixels below the row. 
  */
 
-/* Set to large number for debugging. Should normally be 2. */
 #define TREE_VIEW_VERTICAL_SEPARATOR 2
-
 #define TREE_VIEW_HORIZONTAL_SEPARATOR 0
 
 /* The "background" areas of all rows/cells add up to cover the entire tree.
@@ -3360,7 +3358,11 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
     }
   else
     {
-      state = (node==tree_view->priv->prelight_node&&GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_ARROW_PRELIT)?GTK_STATE_PRELIGHT:GTK_STATE_NORMAL);
+      if (node == tree_view->priv->prelight_node &&
+	  GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_ARROW_PRELIT))
+	state = GTK_STATE_PRELIGHT;
+      else
+	state = GTK_STATE_NORMAL;
     }
 
   /* FIXME expander size should come from a style property */

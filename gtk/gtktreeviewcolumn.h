@@ -45,10 +45,11 @@ typedef enum
 typedef struct _GtkTreeViewColumn      GtkTreeViewColumn;
 typedef struct _GtkTreeViewColumnClass GtkTreeViewColumnClass;
 
-typedef void (* GtkTreeViewColumnFunc) (GtkTreeViewColumn *tree_column,
-					GtkTreeModel      *tree_model,
-					GtkTreeIter       *iter,
-					gpointer           data);
+typedef void (* CellDataFunc) (GtkTreeViewColumn *tree_column,
+			       GtkCellRenderer   *cell,
+			       GtkTreeModel      *tree_model,
+			       GtkTreeIter       *iter,
+			       gpointer           data);
 
   
 struct _GtkTreeViewColumn
@@ -68,8 +69,9 @@ struct _GtkTreeViewColumn
   gint width;
   gint min_width;
   gint max_width;
+  gint allocated_width;
 
-  GtkTreeViewColumnFunc func;
+  CellDataFunc func;
   gpointer func_data;
   GtkDestroyNotify destroy;
   gchar *title;
@@ -104,8 +106,8 @@ void               gtk_tree_view_column_add_attribute       (GtkTreeViewColumn  
 							     gint                   column);
 void               gtk_tree_view_column_set_attributes      (GtkTreeViewColumn     *tree_column,
 							     ...);
-void               gtk_tree_view_column_set_func            (GtkTreeViewColumn     *tree_column,
-							     GtkTreeViewColumnFunc  func,
+void               gtk_tree_view_column_set_cell_data_func  (GtkTreeViewColumn     *tree_column,
+							     CellDataFunc           func,
 							     gpointer               func_data,
 							     GtkDestroyNotify       destroy);
 void               gtk_tree_view_column_clear_attributes    (GtkTreeViewColumn     *tree_column);
@@ -134,7 +136,7 @@ void               gtk_tree_view_column_clicked             (GtkTreeViewColumn  
 /* Options for manipulating the column headers
  */
 void                  gtk_tree_view_column_set_title          (GtkTreeViewColumn *tree_column,
-                                                               gchar             *title);
+                                                               const gchar       *title);
 G_CONST_RETURN gchar *gtk_tree_view_column_get_title          (GtkTreeViewColumn *tree_column);
 void                  gtk_tree_view_column_set_clickable      (GtkTreeViewColumn *tree_column,
                                                                gboolean           active);

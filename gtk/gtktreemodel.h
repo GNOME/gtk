@@ -57,10 +57,6 @@ struct _GtkTreeModelIface
   GTypeInterface g_iface;
 
   /* Signals */
-  /* Currently unimplemented as interfaces do not support signals yet, so
-   * objects implementing this interface need this.  Later, it will be moved
-   * back here.
-   */
   void         (* changed)           (GtkTreeModel *tree_model,
 				      GtkTreePath  *path,
 				      GtkTreeIter  *iter);
@@ -76,7 +72,7 @@ struct _GtkTreeModelIface
 				      GtkTreePath  *path,
 				      gint         *new_order);
 
-  /* VTable - not signals */
+  /* Virtual Table */
   GtkTreeModelFlags (* get_flags)  (GtkTreeModel *tree_model);   
 
   gint         (* get_n_columns)   (GtkTreeModel *tree_model);
