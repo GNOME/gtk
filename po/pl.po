@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-05-01 12:45+0200\n"
-"PO-Revision-Date: 2002-05-01 12:45+0200\n"
+"POT-Creation-Date: 2002-05-10 14:30+0200\n"
+"PO-Revision-Date: 2002-05-10 14:43+0200\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1676,7 +1676,7 @@ msgstr "Bieżące położenie kursora wstawiania, liczone w znakach."
 
 #: gtk/gtkentry.c:1 gtk/gtklabel.c:1
 msgid "Selection Bound"
-msgstr ""
+msgstr "Granica zaznaczenia"
 
 #: gtk/gtkentry.c:1 gtk/gtklabel.c:1
 msgid ""
@@ -1746,11 +1746,11 @@ msgstr "Liczba znaków, na jaką powinno pozostać miejsce w wejściu."
 
 #: gtk/gtkentry.c:1
 msgid "Scroll offset"
-msgstr ""
+msgstr "Rozmiar przewinięcia"
 
 #: gtk/gtkentry.c:1
 msgid "Number of pixels of the entry scrolled off the screen to the left"
-msgstr ""
+msgstr "Liczba pikseli wejścia przewiniętych w lewo za jego obszar"
 
 #: gtk/gtkentry.c:1
 msgid "The contents of the entry"
@@ -2118,7 +2118,7 @@ msgstr "Położenie uchwytu względem widgetu pochodnego."
 
 #: gtk/gtkhandlebox.c:1
 msgid "Snap edge"
-msgstr ""
+msgstr "Przyciągana krawędź"
 
 #: gtk/gtkhandlebox.c:1
 msgid ""
@@ -2359,7 +2359,7 @@ msgstr "Klawisz mnemonika"
 
 #: gtk/gtklabel.c:1
 msgid "The mnemonic accelerator key for this label."
-msgstr ""
+msgstr "Klawisz mnemonika związany z etykietą."
 
 #: gtk/gtklabel.c:1
 msgid "Mnemonic widget"
@@ -2367,23 +2367,23 @@ msgstr "Widget mnemonika"
 
 #: gtk/gtklabel.c:1
 msgid "The widget to be activated when the label's mnemonic key is pressed."
-msgstr ""
+msgstr "Widget uaktywniany po przyciśnięciu mnemonika związanego z etykietą."
 
 #: gtk/gtklayout.c:1 gtk/gtkviewport.c:1
 msgid "Horizontal adjustment"
-msgstr ""
+msgstr "Dopasowanie poziome"
 
 #: gtk/gtklayout.c:1 gtk/gtkscrolledwindow.c:1
 msgid "The GtkAdjustment for the horizontal position."
-msgstr ""
+msgstr "Obiekt GtkAdjustment, określający położenie poziome."
 
 #: gtk/gtklayout.c:1 gtk/gtkviewport.c:1
 msgid "Vertical adjustment"
-msgstr ""
+msgstr "Dopasowanie pionowe"
 
 #: gtk/gtklayout.c:1 gtk/gtkscrolledwindow.c:1
 msgid "The GtkAdjustment for the vertical position."
-msgstr ""
+msgstr "Obiekt GtkAdjustment, określający wartość położenia pionowego."
 
 #: gtk/gtklayout.c:1 gtk/gtktreeviewcolumn.c:1
 msgid "Width"
@@ -2575,6 +2575,8 @@ msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr ""
+"Określa, czy kliknięcie notatnika prawym przyciskiem powinno powodować "
+"wyświetlenie menu z wyborem strony."
 
 #: gtk/gtknotebook.c:1
 msgid "Whether tabs should have homogeneous sizes"
@@ -2595,11 +2597,11 @@ msgstr "Menu z opcjami"
 
 #: gtk/gtkoptionmenu.c:1
 msgid "Size of dropdown indicator"
-msgstr ""
+msgstr "Rozmiar wskaźnika wyświetlającego opcje"
 
 #: gtk/gtkoptionmenu.c:1
 msgid "Spacing around indicator"
-msgstr ""
+msgstr "Odstępy wokół wskaźnika"
 
 #: gtk/gtkpaned.c:1 gtk/gtkruler.c:1
 msgid "Position"
@@ -2748,11 +2750,13 @@ msgstr "Ukończona część całego zadania"
 
 #: gtk/gtkprogressbar.c:1
 msgid "Pulse Step"
-msgstr ""
+msgstr "Krok impulsu"
 
 #: gtk/gtkprogressbar.c:1
 msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr ""
+"Część postępu, o jaką powinien zostać przesunięty odbijający się prostokąt "
+"przy każdym impulsie."
 
 #: gtk/gtkprogressbar.c:1
 msgid "Text to be displayed in the progress bar"
@@ -2936,45 +2940,49 @@ msgstr ""
 
 #: gtk/gtkscrollbar.c:1
 msgid "Backward stepper"
-msgstr ""
+msgstr "Krok wstecz"
 
 #: gtk/gtkscrollbar.c:1
 msgid "Display the standard backward arrow button"
-msgstr ""
+msgstr "Wyświetla standardowy przycisk ze strzałką wstecz"
 
 #: gtk/gtkscrollbar.c:1
 msgid "Forward stepper"
-msgstr ""
+msgstr "Krok naprzód"
 
 #: gtk/gtkscrollbar.c:1
 msgid "Display the standard forward arrow button"
-msgstr ""
+msgstr "Wyświetla standardowy przycisk ze strzałką naprzód"
 
 #: gtk/gtkscrollbar.c:1
 msgid "Secondary backward stepper"
-msgstr ""
+msgstr "Dodatkowy krok wstecz"
 
 #: gtk/gtkscrollbar.c:1
 msgid ""
 "Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr ""
+"Wyświetla dodatkowy przycisk ze strzałką wstecz po przeciwnej stronie paska "
+"przewijania"
 
 #: gtk/gtkscrollbar.c:1
 msgid "Secondary forward stepper"
-msgstr ""
+msgstr "Dodatkowy krok naprzód"
 
 #: gtk/gtkscrollbar.c:1
 msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
+"Wyświetla dodatkowy przycisk ze strzałką naprzód po przeciwnej stronie paska "
+"przewijania"
 
 #: gtk/gtkscrolledwindow.c:1 gtk/gtktext.c:1 gtk/gtktreeview.c:1
 msgid "Horizontal Adjustment"
-msgstr ""
+msgstr "Dopasowanie poziome"
 
 #: gtk/gtkscrolledwindow.c:1 gtk/gtktext.c:1 gtk/gtktreeview.c:1
 msgid "Vertical Adjustment"
-msgstr ""
+msgstr "Dopasowanie pionowe"
 
 #: gtk/gtkscrolledwindow.c:1
 msgid "Horizontal Scrollbar Policy"
@@ -3058,11 +3066,11 @@ msgstr "Nazwa odczytywanego pliku RC"
 
 #: gtk/gtksettings.c:1
 msgid "Key Theme Name"
-msgstr ""
+msgstr "Nazwa głównego motywu"
 
 #: gtk/gtksettings.c:1
 msgid "Name of key theme RC file to load"
-msgstr ""
+msgstr "Nazwa głównego odczytywanego pliku RC"
 
 #: gtk/gtksettings.c:1
 msgid "Menu bar accelerator"
@@ -3102,7 +3110,7 @@ msgstr ""
 
 #: gtk/gtkspinbutton.c:1
 msgid "The adjustment that holds the value of the spinbutton"
-msgstr ""
+msgstr "Obiekt GtkAdjustment, zawierający bieżącą wartość wejścia liczbowego"
 
 #: gtk/gtkspinbutton.c:1
 msgid "Climb Rate"
@@ -3118,13 +3126,15 @@ msgstr "Liczba wyświetlanych pozycji dziesiętnych"
 
 #: gtk/gtkspinbutton.c:1
 msgid "Snap to Ticks"
-msgstr ""
+msgstr "Zaokrąglanie do poprawnych"
 
 #: gtk/gtkspinbutton.c:1
 msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
 msgstr ""
+"Określa, czy błędne wartości powinny być automatycznie zmieniane na "
+"najbliższe poprawne z uwzględnieniem kroku wejścia liczbowego."
 
 #: gtk/gtkspinbutton.c:1
 msgid "Numeric"
@@ -3301,11 +3311,11 @@ msgstr "Prz_ejdź do"
 
 #: gtk/gtkstock.c:1
 msgid "_Center"
-msgstr ""
+msgstr "Śr_odek"
 
 #: gtk/gtkstock.c:1
 msgid "_Fill"
-msgstr ""
+msgstr "Wyp_ełnienie"
 
 #: gtk/gtkstock.c:1
 msgid "_Left"
@@ -3313,7 +3323,7 @@ msgstr "_Lewa"
 
 #: gtk/gtkstock.c:1
 msgid "_Right"
-msgstr "_Praca"
+msgstr "_Prawa"
 
 #: gtk/gtkstock.c:1
 msgid "_New"
@@ -3484,11 +3494,11 @@ msgstr ""
 
 #: gtk/gtktext.c:1
 msgid "Horizontal adjustment for the text widget"
-msgstr ""
+msgstr "Poziome dopasowanie widgetu tekstowego"
 
 #: gtk/gtktext.c:1
 msgid "Vertical adjustment for the text widget"
-msgstr ""
+msgstr "Pionowe dopasowanie widgetu tekstowego"
 
 #: gtk/gtktext.c:1
 msgid "Line Wrap"
@@ -3801,7 +3811,7 @@ msgstr "Miejsce pod wierszami"
 
 #: gtk/gtktextview.c:1
 msgid "Pixels Inside Wrap"
-msgstr ""
+msgstr "Piksele w zawinięciu"
 
 #: gtk/gtktextview.c:1
 msgid "Wrap Mode"
@@ -3838,19 +3848,19 @@ msgstr "--- Brak podpowiedzi ---"
 
 #: gtk/gtktogglebutton.c:1
 msgid "If the toggle button should be pressed in or not"
-msgstr ""
+msgstr "Określa, czy przycisk przełączany powinien być wciśnięty, czy nie."
 
 #: gtk/gtktogglebutton.c:1
 msgid "If the toggle button is in an \"in between\" state."
-msgstr ""
+msgstr "Określa, czy przycisk przełączany jest w stanie \"pośrednim\"."
 
 #: gtk/gtktogglebutton.c:1
 msgid "Draw Indicator"
-msgstr ""
+msgstr "Rysowanie wskaźnika"
 
 #: gtk/gtktogglebutton.c:1
 msgid "If the toggle part of the button is displayed"
-msgstr ""
+msgstr "Określa, czy rysowana powinna być przełączalna część przycisku"
 
 #: gtk/gtktoolbar.c:1
 msgid "The orientation of the toolbar"
@@ -3866,15 +3876,16 @@ msgstr "Sposób rysowania paska narzędziowego"
 
 #: gtk/gtktoolbar.c:1
 msgid "Spacer size"
-msgstr ""
+msgstr "Rozmiar elementu rozdzielającego"
 
 #: gtk/gtktoolbar.c:1
 msgid "Size of spacers"
-msgstr ""
+msgstr "Rozmiary elementów rozdzielających"
 
 #: gtk/gtktoolbar.c:1
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr ""
+"Ilość miejsca na krawędzi pomiędzy cieniem paska narzędziowego i przyciskami"
 
 #: gtk/gtktoolbar.c:1
 msgid "Space style"
@@ -3935,15 +3946,15 @@ msgstr "Model dla widoku drzewa"
 
 #: gtk/gtktreeview.c:1
 msgid "Horizontal Adjustment for the widget"
-msgstr ""
+msgstr "Poziome dopasowanie widgetu"
 
 #: gtk/gtktreeview.c:1
 msgid "Vertical Adjustment for the widget"
-msgstr ""
+msgstr "Pionowe dopasowanie widgetu"
 
 #: gtk/gtktreeview.c:1 gtk/gtktreeviewcolumn.c:1 gtk/gtkwidget.c:1
 msgid "Visible"
-msgstr ""
+msgstr "Widoczność"
 
 #: gtk/gtktreeview.c:1
 msgid "Show the column header buttons"
@@ -3967,19 +3978,21 @@ msgstr "Ustawia kolumnę, w której pojawia się element rozwijający"
 
 #: gtk/gtktreeview.c:1 gtk/gtktreeviewcolumn.c:1
 msgid "Reorderable"
-msgstr ""
+msgstr "Zmienny porządek"
 
 #: gtk/gtktreeview.c:1
 msgid "View is reorderable"
-msgstr ""
+msgstr "Określa, czy możliwa jest zmiana porządku w widoku"
 
 #: gtk/gtktreeview.c:1
 msgid "Rules Hint"
-msgstr ""
+msgstr "Różnicowanie wierszy"
 
 #: gtk/gtktreeview.c:1
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
+"Określa, czy powinien zostać ustawiony atrybut, który podopowiada "
+"mechanizmowi motywu wyróżnianie kolejnych wierszy (np. różnymi kolorami)."
 
 #: gtk/gtktreeview.c:1
 msgid "Enable Search"
@@ -3993,11 +4006,11 @@ msgstr ""
 
 #: gtk/gtktreeview.c:1
 msgid "Search Column"
-msgstr ""
+msgstr "Kolumna wyszukiwania"
 
 #: gtk/gtktreeview.c:1
 msgid "Model column to search through when searching through code"
-msgstr ""
+msgstr "Kolumna modelu, używana w trybie wyszukiwania."
 
 #: gtk/gtktreeview.c:1
 msgid "Expander Size"
@@ -4059,7 +4072,7 @@ msgstr "Bieżąca szerokość kolumny"
 
 #: gtk/gtktreeviewcolumn.c:1
 msgid "Sizing"
-msgstr ""
+msgstr "Zmiana rozmiaru"
 
 #: gtk/gtktreeviewcolumn.c:1
 msgid "Resize mode of the column"
@@ -4139,19 +4152,23 @@ msgstr "Porządek sortowania"
 
 #: gtk/gtktreeviewcolumn.c:1
 msgid "Sort direction the sort indicator should indicate"
-msgstr ""
+msgstr "Kierunek, jaki powinien wskazywać wskaźnik uporządkowania"
 
 #: gtk/gtkviewport.c:1
 msgid ""
 "The GtkAdjustment that determines the values of the horizontal position for "
 "this viewport."
 msgstr ""
+"Obiekt GtkAdjustment, określający wartość poziomego położenia wewnątrz tego "
+"obszaru wyświetlania."
 
 #: gtk/gtkviewport.c:1
 msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
 "this viewport."
 msgstr ""
+"Obiekt GtkAdjustment, określający wartość pionowego położenia wewnątrz tego "
+"obszaru wyświetlania."
 
 #: gtk/gtkviewport.c:1
 msgid "Determines how the shadowed box around the viewport is drawn."
@@ -4261,11 +4278,11 @@ msgstr ""
 
 #: gtk/gtkwidget.c:1
 msgid "Composite child"
-msgstr ""
+msgstr "Potomek złożonego"
 
 #: gtk/gtkwidget.c:1
-msgid "Whether the widget is composed of other widgets"
-msgstr "Określa, czy widget jest złożony z innych widgetów"
+msgid "Whether the widget is part of a composite widget"
+msgstr "Określa, czy widget jest częścią widgetu złożonego"
 
 #: gtk/gtkwidget.c:1
 msgid "Style"
@@ -4314,11 +4331,11 @@ msgstr "Szerokość linii wskazującej skupienie, liczona w pikselach."
 
 #: gtk/gtkwidget.c:1
 msgid "Focus line dash pattern"
-msgstr ""
+msgstr "Wzór linii skupienia"
 
 #: gtk/gtkwidget.c:1
 msgid "Dash pattern used to draw the focus indicator."
-msgstr ""
+msgstr "Wzór linii przerywanej używanej przy rysowaniu skupienia."
 
 #: gtk/gtkwidget.c:1
 msgid "Focus padding"
@@ -4481,7 +4498,7 @@ msgstr "IPA"
 #. ID
 #: modules/input/imthai-broken.c:1
 msgid "Thai (Broken)"
-msgstr ""
+msgstr "Tajska (błędna)"
 
 #. ID
 #: modules/input/imti-er.c:1
@@ -4496,7 +4513,7 @@ msgstr ""
 #. ID
 #: modules/input/imviqr.c:1
 msgid "Vietnamese (VIQR)"
-msgstr ""
+msgstr "Wietnamska ((VIQR)"
 
 #. ID
 #: modules/input/imxim.c:1
