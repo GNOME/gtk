@@ -1,3 +1,8 @@
+Fri Jan 11 18:05:07 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* pixops/pixops.c: Fix integer overflow for the values
+	passed to the pixel functions. (#55148)
+
 Fri Jan 11 17:53:58 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* pixops/pixops.c (pixops_scale_nearest): Remove meaningless

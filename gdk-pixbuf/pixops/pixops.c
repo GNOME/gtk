@@ -30,7 +30,7 @@ typedef guchar *(*PixopsLineFunc) (int *weights, int n_x, int n_y,
 typedef void (*PixopsPixelFunc) (guchar *dest, int dest_x, int dest_channels, int dest_has_alpha,
 				 int src_has_alpha, int check_size, guint32 color1,
 				 guint32 color2,
-				 int r, int g, int b, int a);
+				 guint r, guint g, guint b, guint a);
 
 static int
 get_check_shift (int check_size)
@@ -343,7 +343,7 @@ pixops_composite_color_nearest (guchar        *dest_buf,
 static void
 composite_pixel (guchar *dest, int dest_x, int dest_channels, int dest_has_alpha,
 		 int src_has_alpha, int check_size, guint32 color1, guint32 color2,
-		 int r, int g, int b, int a)
+		 guint r, guint g, guint b, guint a)
 {
   if (dest_has_alpha)
     {
@@ -547,7 +547,7 @@ composite_line_22_4a4_mmx_stub (int *weights, int n_x, int n_y,
 static void
 composite_pixel_color (guchar *dest, int dest_x, int dest_channels, int dest_has_alpha,
 		       int src_has_alpha, int check_size, guint32 color1, guint32 color2,
-		       int r, int g, int b, int a)
+		       guint r, guint g, guint b, guint a)
 {
   int dest_r, dest_g, dest_b;
   int check_shift = get_check_shift (check_size);
@@ -693,7 +693,7 @@ composite_line_color_22_4a4_mmx_stub (int *weights, int n_x, int n_y,
 static void
 scale_pixel (guchar *dest, int dest_x, int dest_channels, int dest_has_alpha,
 	     int src_has_alpha, int check_size, guint32 color1, guint32 color2,
-	     int r, int g, int b, int a)
+	     guint r, guint g, guint b, guint a)
 {
   if (src_has_alpha)
     {
