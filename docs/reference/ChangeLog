@@ -1,6 +1,7 @@
 2004-12-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add new list store methods.
+	Add gtk_cell_renderer_stop_editing.
 
 2004-12-08  Matthias Clasen  <mclasen@redhat.com>
 

@@ -117,6 +117,7 @@ gtk_cell_renderer_init (GtkCellRenderer *cell)
   cell->sensitive = TRUE;
   cell->is_expander = FALSE;
   cell->is_expanded = FALSE;
+  cell->editing = FALSE;
 }
 
 static void
@@ -687,7 +688,6 @@ gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
   if (GTK_CELL_RENDERER_GET_CLASS (cell)->start_editing == NULL)
     return NULL;
 
-  
   editable = GTK_CELL_RENDERER_GET_CLASS (cell)->start_editing (cell,
 								event,
 								widget,
@@ -699,6 +699,8 @@ gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
   g_signal_emit (cell, 
 		 cell_renderer_signals[EDITING_STARTED], 0,
 		 editable, path);
+
+  cell->editing = TRUE;
 
   return editable;
 }
@@ -770,11 +772,39 @@ gtk_cell_renderer_get_fixed_size (GtkCellRenderer *cell,
  * changes were not committed.
  *
  * Since: 2.4
+ * Deprecated: Use gtk_cell_renderer_stop_editing() instead
  **/
 void
 gtk_cell_renderer_editing_canceled (GtkCellRenderer *cell)
 {
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
 
-  g_signal_emit (cell, cell_renderer_signals[EDITING_CANCELED], 0);
+  gtk_cell_renderer_stop_editing (cell, TRUE);
 }
+
+/**
+ * gtk_cell_renderer_stop_editing:
+ * @cell: A #GtkCellRenderer
+ * @canceled: %TRUE if the editing has been canceled
+ * 
+ * Informs the cell renderer that the editing is stopped.
+ * If @canceled is %TRUE, the cell renderer will emit the "editing-canceled" 
+ * signal. This function should be called by cell renderer implementations 
+ * in response to the "editing-done" signal of #GtkCellEditable.
+ *
+ * Since: 2.6
+ **/
+void
+gtk_cell_renderer_stop_editing (GtkCellRenderer *cell,
+				gboolean         canceled)
+{
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+
+  if (cell->editing)
+    {
+      cell->editing = FALSE;
+      if (canceled)
+	g_signal_emit (cell, cell_renderer_signals[EDITING_CANCELED], 0);
+    }
+}
+

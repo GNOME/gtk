@@ -1572,11 +1572,10 @@ gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
       priv->entry_menu_popdown_timeout = 0;
     }
 
+  gtk_cell_renderer_stop_editing (GTK_CELL_RENDERER (data), 
+				  GTK_ENTRY (entry)->editing_canceled);
   if (GTK_ENTRY (entry)->editing_canceled)
-    {
-      gtk_cell_renderer_editing_canceled (GTK_CELL_RENDERER (data));
-      return;
-    }
+    return;
 
   path = g_object_get_data (G_OBJECT (entry), GTK_CELL_RENDERER_TEXT_PATH);
   new_text = gtk_entry_get_text (GTK_ENTRY (entry));

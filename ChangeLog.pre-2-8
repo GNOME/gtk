@@ -1,5 +1,22 @@
 2004-12-09  Matthias Clasen  <mclasen@redhat.com>
 
+	Fix #145463, reported by Michael Natterer.
+	
+	* gtk/gtkcellrenderer.h (struct _GtkCellRenderer): Add an
+	editing flag to keep track of when editing is done.
+	
+	* gtk/gtkcellrenderer.h:
+	* gtk/gtkcellrenderer.c (gtk_cell_renderer_stop_editing): New
+	function to replace gtk_cell_renderer_editing_canceled(). 
+	Deprecate gtk_cell_renderer_editing_canceled(). 
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_editing_done): 
+	* gtk/gtkcellrenderercombo.c (gtk_cell_renderer_combo_editing_done): 
+	* gtk/gtktreeview.c (gtk_tree_view_stop_editing):
+	Use gtk_cell_renderer_stop_editing().
+	
+2004-12-09  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkliststore.h: 
 	* gtk/gtkliststore.c (gtk_list_store_insert_with_values): 
 	(gtk_list_store_insert_with_valuesv): Add functions which allow

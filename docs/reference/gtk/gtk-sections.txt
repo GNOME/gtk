@@ -4136,6 +4136,7 @@ gtk_cell_renderer_render
 gtk_cell_renderer_activate
 gtk_cell_renderer_start_editing
 gtk_cell_renderer_editing_canceled
+gtk_cell_renderer_stop_editing
 gtk_cell_renderer_get_fixed_size
 gtk_cell_renderer_set_fixed_size
 

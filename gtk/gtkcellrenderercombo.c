@@ -254,6 +254,7 @@ gtk_cell_renderer_combo_editing_done (GtkCellEditable *combo,
   GtkTreeIter iter;
   GtkCellRendererCombo *cell;
   GtkEntry *entry;
+  gboolean canceled;
 
   cell = GTK_CELL_RENDERER_COMBO (data);
 
@@ -262,12 +263,11 @@ gtk_cell_renderer_combo_editing_done (GtkCellEditable *combo,
       g_signal_handler_disconnect (combo, cell->focus_out_id);
       cell->focus_out_id = 0;
     }
-
-  if (_gtk_combo_box_editing_canceled (GTK_COMBO_BOX (combo)))
-    {
-      gtk_cell_renderer_editing_canceled (GTK_CELL_RENDERER (data));
-      return;
-    }
+  
+  canceled = _gtk_combo_box_editing_canceled (GTK_COMBO_BOX (combo));
+  gtk_cell_renderer_stop_editing (GTK_CELL_RENDERER (data), canceled);
+  if (canceled)
+    return;
 
   if (GTK_IS_COMBO_BOX_ENTRY (combo))
     {

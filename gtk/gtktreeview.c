@@ -12870,6 +12870,7 @@ gtk_tree_view_stop_editing (GtkTreeView *tree_view,
 			    gboolean     cancel_editing)
 {
   GtkTreeViewColumn *column;
+  GtkCellRenderer *cell;
 
   if (tree_view->priv->edited_column == NULL)
     return;
@@ -12887,7 +12888,10 @@ gtk_tree_view_stop_editing (GtkTreeView *tree_view,
   column = tree_view->priv->edited_column;
   tree_view->priv->edited_column = NULL;
 
-  if (! cancel_editing)
+  cell = _gtk_tree_view_column_get_edited_cell (column);
+  gtk_cell_renderer_stop_editing (cell, cancel_editing);
+
+  if (!cancel_editing)
     gtk_cell_editable_editing_done (column->editable_widget);
 
   tree_view->priv->edited_column = column;
