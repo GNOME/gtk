@@ -477,6 +477,11 @@ gdk_check_wm_state_changed (GdkWindow *window)
 
   gboolean had_sticky = toplevel->have_sticky;
 
+  toplevel->have_sticky = FALSE;
+  toplevel->have_maxvert = FALSE;
+  toplevel->have_maxhorz = FALSE;
+  toplevel->have_fullscreen = FALSE;
+
   XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
 		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE"),
 		      0, G_MAXLONG, False, XA_ATOM, &type, &format, &nitems,
@@ -488,7 +493,7 @@ gdk_check_wm_state_changed (GdkWindow *window)
       Atom maxvert_atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_MAXIMIZED_VERT");
       Atom maxhorz_atom	= gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_MAXIMIZED_HORZ");
       Atom fullscreen_atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_FULLSCREEN");
-      
+
       i = 0;
       while (i < nitems)
         {
