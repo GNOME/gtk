@@ -49,7 +49,7 @@ static void gtk_cell_renderer_toggle_render     (GtkCellRenderer            *cel
 static gboolean gtk_cell_renderer_toggle_activate  (GtkCellRenderer            *cell,
 						    GdkEvent                   *event,
 						    GtkWidget                  *widget,
-						    gchar                      *path,
+						    const gchar                      *path,
 						    GdkRectangle               *background_area,
 						    GdkRectangle               *cell_area,
 						    guint                       flags);
@@ -338,7 +338,7 @@ static gint
 gtk_cell_renderer_toggle_activate (GtkCellRenderer *cell,
 				   GdkEvent        *event,
 				   GtkWidget       *widget,
-				   gchar           *path,
+				   const gchar     *path,
 				   GdkRectangle    *background_area,
 				   GdkRectangle    *cell_area,
 				   guint            flags)
@@ -401,7 +401,7 @@ gtk_cell_renderer_toggle_get_radio (GtkCellRendererToggle *toggle)
  * gtk_cell_renderer_toggle_set_active().
  *
  * Return value: %TRUE if the cell renderer is active.
-
+ **/
 gboolean
 gtk_cell_renderer_toggle_get_active (GtkCellRendererToggle *toggle)
 {

@@ -81,8 +81,8 @@ struct _GtkCellRendererTextClass
   GtkCellRendererClass parent_class;
 
   void (* edited) (GtkCellRendererText *cell_renderer_text,
-		   gchar               *path,
-		   gchar               *new_text);
+		   const gchar               *path,
+		   const gchar               *new_text);
 };
 
 GtkType          gtk_cell_renderer_text_get_type (void);

@@ -54,7 +54,7 @@ static void gtk_cell_renderer_text_render     (GtkCellRenderer          *cell,
 static GtkCellEditable *gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 							      GdkEvent             *event,
 							      GtkWidget            *widget,
-							      gchar                *path,
+							      const gchar          *path,
 							      GdkRectangle         *background_area,
 							      GdkRectangle         *cell_area,
 							      GtkCellRendererState  flags);
@@ -1316,7 +1316,7 @@ static void
 gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
 				     gpointer         data)
 {
-  gchar *path;
+  const gchar *path;
   const gchar *new_text;
 
   path = g_object_get_data (G_OBJECT (entry), GTK_CELL_RENDERER_TEXT_PATH);
@@ -1329,7 +1329,7 @@ static GtkCellEditable *
 gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 				      GdkEvent             *event,
 				      GtkWidget            *widget,
-				      gchar                *path,
+				      const gchar          *path,
 				      GdkRectangle         *background_area,
 				      GdkRectangle         *cell_area,
 				      GtkCellRendererState  flags)

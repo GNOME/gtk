@@ -1,3 +1,12 @@
+2001-10-31  Murray Cumming  <murrayc@usa.net>
+
+	* gtk/cellrenderertext.h: "edited" default signal handler
+	gchar* args are now const.
+	gtk/cellrenderertoggle.h: "toggled" default signal handler
+	gchar* arg is now const.
+	Also changed other signal handlers for "edited" and "toggled" to
+	have the same signature.
+
 Tue Oct 30 19:17:57 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_sort_level): massize
