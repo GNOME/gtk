@@ -1274,6 +1274,7 @@ else
   AM_CONDITIONAL(HAVE_XFT, false)
   AM_CONDITIONAL(XINPUT_XFREE, false)
   AM_CONDITIONAL(USE_X11, false)
+  AM_CONDITIONAL(HAVE_X11R6, false)
 fi
 
 if test "x$gdktarget" = "xwin32"; then
