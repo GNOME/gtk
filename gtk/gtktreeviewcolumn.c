@@ -495,7 +495,6 @@ static void
 gtk_tree_view_column_set_attributesv (GtkTreeViewColumn *tree_column,
 				      va_list            args)
 {
-  GSList *list;
   gchar *attribute;
   gint column;
 
@@ -504,16 +503,8 @@ gtk_tree_view_column_set_attributesv (GtkTreeViewColumn *tree_column,
 
   attribute = va_arg (args, gchar *);
 
-  list = tree_column->attributes;
-
-  while (list && list->next)
-    {
-      g_free (list->data);
-      list = list->next->next;
-    }
-  g_slist_free (tree_column->attributes);
-  tree_column->attributes = NULL;
-
+  gtk_tree_view_column_clear_attributes (tree_column);
+  
   while (attribute != NULL)
     {
       column = va_arg (args, gint);
@@ -548,6 +539,31 @@ gtk_tree_view_column_set_attributes (GtkTreeViewColumn *tree_column,
   gtk_tree_view_column_set_attributesv (tree_column, args);
 
   va_end (args);
+}
+
+/**
+ * gtk_tree_view_column_clear_attributes:
+ * @tree_column: a #GtkTreeViewColumn
+ * 
+ * Clears all existing attributes previously set with
+ * gtk_tree_view_column_set_attributes().
+ **/
+void
+gtk_tree_view_column_clear_attributes (GtkTreeViewColumn *tree_column)
+{
+  GSList *list;
+  
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+
+  list = tree_column->attributes;
+
+  while (list && list->next)
+    {
+      g_free (list->data);
+      list = list->next->next;
+    }
+  g_slist_free (tree_column->attributes);
+  tree_column->attributes = NULL;
 }
 
 /**

@@ -95,6 +95,7 @@ void               gtk_tree_view_column_add_attribute       (GtkTreeViewColumn  
 							     gint                   column);
 void               gtk_tree_view_column_set_attributes      (GtkTreeViewColumn     *tree_column,
 							     ...);
+void               gtk_tree_view_column_clear_attributes    (GtkTreeViewColumn     *tree_column);
 void               gtk_tree_view_column_set_cell_data       (GtkTreeViewColumn     *tree_column,
 							     GtkTreeModel          *tree_model,
 							     GtkTreeIter           *iter);

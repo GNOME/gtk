@@ -1,3 +1,11 @@
+2001-01-10  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_clear_attributes):
+	add this function, bug 40251
+
+	* gtk/gtktreemodelsimple.h (GTK_TYPE_TREE_MODEL_SIMPLE): fix name
+	of type macro	
+
 2001-01-11  Alexander Larsson  <alexl@redhat.com>
 
 	* acconfig.h:
