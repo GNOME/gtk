@@ -1040,7 +1040,7 @@ if test "x$gdktarget" = "xx11"; then
       AC_MSG_ERROR([Xft Pango backend found but did not find freetype libraries])
     fi
   else
-    AC_MSG_ERROR([Pango 1.2.0 and Xft backend is required for x11 target])
+    AC_MSG_ERROR([Xft Pango backend is required for x11 target])
   fi
 
   if $PKG_CONFIG --exists xft ; then : ; else
