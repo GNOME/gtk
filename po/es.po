@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.15\n"
-"POT-Creation-Date: 2002-06-16 00:04-0400\n"
-"PO-Revision-Date: 2002-06-01 23:18+0100\n"
+"POT-Creation-Date: 2002-06-16 15:04+0200\n"
+"PO-Revision-Date: 2002-06-16 15:05+0200\n"
 "Last-Translator: Juan Manuel García Molina <juanma_gm@wanadoo.es>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -3471,6 +3471,7 @@ msgid "_Yes"
 msgstr "_Si"
 
 #: gtk/gtkstock.c:334
+#, c-format
 msgid "Zoom _100%"
 msgstr "Aumentos _100%"
 
@@ -3821,12 +3822,11 @@ msgstr "PDF Formateado direccional _pop"
 
 #: gtk/gtktextutil.c:53
 msgid "ZWS _Zero width space"
-msgstr "ZWS Espacio de ancho _cero"
+msgstr "ZWS Espacio con ancho _cero"
 
 #: gtk/gtktextutil.c:54
-#, fuzzy
 msgid "ZWJ Zero width _joiner"
-msgstr "ZWN _Unión de ancho cero"
+msgstr "ZWJ _Unión con ancho cero"
 
 #: gtk/gtktextutil.c:55
 msgid "ZWNJ Zero width _non-joiner"
@@ -4551,7 +4551,3 @@ msgstr "Vietnamita (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "Método de la Entrada X"
-
-#, fuzzy
-#~ msgid "Insufficient memory to load TGA image"
-#~ msgstr "No hay memoria suficiente para cargar el archivo PNG"
