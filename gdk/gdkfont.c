@@ -25,7 +25,7 @@
  */
 
 #include "gdkfont.h"
-#include "gdkprivate.h"
+#include "gdkinternals.h"
 
 GdkFont*
 gdk_font_ref (GdkFont *font)

@@ -25,7 +25,7 @@
  */
 
 #include "gdkdrawable.h"
-#include "gdkprivate.h"
+#include "gdkinternals.h"
 #include "gdkwindow.h"
 
 /* Manipulation of drawables

@@ -27,7 +27,7 @@
 #include <time.h>
 
 #include "gdkcolor.h"
-#include "gdkprivate.h"
+#include "gdkinternals.h"
 
 GdkColormap*
 gdk_colormap_ref (GdkColormap *cmap)

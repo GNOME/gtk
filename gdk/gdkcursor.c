@@ -25,7 +25,7 @@
  */
 
 #include "gdkcursor.h"
-#include "gdkprivate.h"
+#include "gdkinternals.h"
 
 GdkCursor*
 gdk_cursor_ref (GdkCursor *cursor)

@@ -1,3 +1,8 @@
+Mon Mar 27 20:39:49 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkcolor.c cursor.c gdkdraw.c gdkfont.c: Include gdkinternals.h
+	instead of gdkprivate.h
+
 Sun Mar 12 15:19:24 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkinputdialog.h (struct _GtkInputDialogClass): Fix
