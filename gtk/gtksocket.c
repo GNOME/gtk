@@ -562,15 +562,19 @@ typedef struct
   GdkModifierType	 accel_mods;
 } GrabbedKey;
 
-static void
-activate_key (GtkAccelGroup *accel_group,
-	      GrabbedKey    *grabbed_key)
+static gboolean
+activate_key (GtkAccelGroup  *accel_group,
+	      GObject        *acceleratable,
+	      guint           accel_key,
+	      GdkModifierType accel_mods,
+	      GrabbedKey     *grabbed_key)
 {
   XEvent xevent;
   GdkEvent *gdk_event = gtk_get_current_event ();
   
   GtkSocket *socket = g_object_get_data (G_OBJECT (accel_group), "gtk-socket");
   GdkScreen *screen = gdk_drawable_get_screen (socket->plug_window);
+  gboolean retval = FALSE;
 
   if (gdk_event && gdk_event->type == GDK_KEY_PRESS && socket->plug_window)
     {
@@ -593,10 +597,14 @@ activate_key (GtkAccelGroup *accel_group,
 		  False, KeyPressMask, &xevent);
       gdk_display_sync (gdk_screen_get_display (screen));
       gdk_error_trap_pop ();
+
+      retval = TRUE;
     }
 
   if (gdk_event)
     gdk_event_free (gdk_event);
+
+  return retval;
 }
 
 static gboolean

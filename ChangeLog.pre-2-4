@@ -1,3 +1,8 @@
+Mon Apr 21 19:02:16 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksocket.c (activate_key): Fix prototype for
+	activate_key. (#108927, Jason D. Hildebrand)
+
 Mon Apr 21 18:42:51 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* demos/gtk-demo/Makefile.am demos/gtk-demo/geninclude.pl:
