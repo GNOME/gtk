@@ -1,3 +1,10 @@
+Wed Jun 12 16:34:13 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenubar.c: When fetching the menubars for
+	the window for F10 handling, only add viewable menu
+	bars. (Apparently, people sometimes put menu bars
+	in notebook pages!) (Tim Janik, #82627)
+
 Wed Jun 12 16:21:38 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcheckbutton.c (gtk_check_button_size_allocate): 

@@ -372,6 +372,34 @@ get_menu_bars (GtkWindow *window)
   return g_object_get_data (G_OBJECT (window), "gtk-menu-bar-list");
 }
 
+static GList *
+get_viewable_menu_bars (GtkWindow *window)
+{
+  GList *menu_bars;
+  GList *viewable_menu_bars = NULL;
+
+  for (menu_bars = get_menu_bars (window);
+       menu_bars;
+       menu_bars = menu_bars->next)
+    {
+      GtkWidget *widget = menu_bars->data;
+      gboolean viewable = TRUE;
+      
+      while (widget)
+	{
+	  if (!GTK_WIDGET_MAPPED (widget))
+	    viewable = FALSE;
+	  
+	  widget = widget->parent;
+	}
+
+      if (viewable)
+	viewable_menu_bars = g_list_prepend (viewable_menu_bars, menu_bars->data);
+    }
+
+  return g_list_reverse (viewable_menu_bars);
+}
+
 static void
 set_menu_bars (GtkWindow *window,
 	       GList     *menubars)
@@ -410,10 +438,13 @@ window_key_press_handler (GtkWidget   *widget,
           ((event->state & gtk_accelerator_get_default_mod_mask ()) ==
 	   (mods & gtk_accelerator_get_default_mod_mask ())))
         {
-	  GList *menubars = get_menu_bars (GTK_WINDOW (widget));
+	  GList *tmp_menubars = get_viewable_menu_bars (GTK_WINDOW (widget));
+	  GList *menubars;
 
-	  menubars = _gtk_container_focus_sort (GTK_CONTAINER (widget), menubars,
+	  menubars = _gtk_container_focus_sort (GTK_CONTAINER (widget), tmp_menubars,
 						GTK_DIR_TAB_FORWARD, NULL);
+	  g_list_free (tmp_menubars);
+	  
 	  if (menubars)
 	    {
 	      GtkMenuShell *menu_shell = GTK_MENU_SHELL (menubars->data);
@@ -504,12 +535,14 @@ _gtk_menu_bar_cycle_focus (GtkMenuBar       *menubar,
 
   if (GTK_WIDGET_TOPLEVEL (toplevel))
     {
-      GList *menubars = get_menu_bars (GTK_WINDOW (toplevel));
+      GList *tmp_menubars = get_viewable_menu_bars (GTK_WINDOW (toplevel));
+      GList *menubars;
       GList *current;
       GtkMenuBar *new;
 
-      menubars = _gtk_container_focus_sort (GTK_CONTAINER (toplevel), menubars,
+      menubars = _gtk_container_focus_sort (GTK_CONTAINER (toplevel), tmp_menubars,
 					    dir, GTK_WIDGET (menubar));
+      g_list_free (tmp_menubars);
 
       if (menubars)
 	{
