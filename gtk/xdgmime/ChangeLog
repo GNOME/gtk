@@ -1,3 +1,7 @@
+2004-03-12  Morten Welinder  <terra@gnome.org>
+
+	* *.c: Make sure to include <config.h>  (#137001)
+
 Wed Mar 10 22:48:15 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* Sync from upstream

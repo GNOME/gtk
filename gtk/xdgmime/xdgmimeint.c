@@ -25,6 +25,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
 #include "xdgmimeint.h"
 #include <ctype.h>
 #include <string.h>
