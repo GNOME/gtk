@@ -1,3 +1,9 @@
+Sun Aug 02 22:58:00 1998  George Lebl  <jirka@5z.com>
+
+	* gtk/gtkclist.c: draw the buttons during a "draw" as well,
+	  this fixes a bug when the whole widget is made non-sesitive
+	  the buttons weren't redrawn
+
 Mon Aug  3 00:04:09 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c (abort_column_resize): reset drag_pos after abort

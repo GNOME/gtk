@@ -2521,6 +2521,7 @@ gtk_clist_draw (GtkWidget * widget,
 {
   GtkCList *clist;
   gint border_width;
+  int i;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_CLIST (widget));
@@ -2548,6 +2549,11 @@ gtk_clist_draw (GtkWidget * widget,
 			     0, 0, -1, -1);
 
       draw_rows (clist, NULL);
+
+      for (i = 0; i < clist->columns; i++)
+	{
+	  gtk_widget_queue_draw (clist->column[i].button);
+	}
     }
 }
 
