@@ -1428,7 +1428,7 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
     {
       gboolean retval;
 
-      if (site->flags & GTK_DEST_DEFAULT_MOTION)
+      if (site->flags & GTK_DEST_DEFAULT_DROP)
 	{
 	  GdkAtom target = gtk_drag_dest_find_target (widget, site, context);
       
@@ -1441,7 +1441,7 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
       gtk_signal_emit_by_name (GTK_OBJECT (widget), "drag_drop",
 			       context, x, y, time, &retval);
 
-      return (site->flags & GTK_DEST_DEFAULT_MOTION) ? TRUE : retval;
+      return (site->flags & GTK_DEST_DEFAULT_DROP) ? TRUE : retval;
     }
 }
 
