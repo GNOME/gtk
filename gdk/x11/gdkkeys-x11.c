@@ -378,6 +378,23 @@ get_keymap (GdkKeymapX11 *keymap_x11)
   return keymap_x11->keymap;
 }
 
+#define GET_EFFECTIVE_KEYMAP(keymap) get_effective_keymap ((keymap), G_STRFUNC)
+
+GdkKeymap *
+get_effective_keymap (GdkKeymap  *keymap,
+                      const char *function)
+{
+  if (!keymap)
+    {
+      GDK_NOTE (MULTIHEAD,
+		g_message ("reverting to default display keymap in %s",
+			   function));
+      return gdk_keymap_get_default ();
+    }
+
+  return keymap;
+}
+
 #if HAVE_XKB
 static PangoDirection
 get_direction (GdkKeymapX11 *keymap_x11)
@@ -444,13 +461,7 @@ _gdk_keymap_keys_changed (GdkDisplay *display)
 PangoDirection
 gdk_keymap_get_direction (GdkKeymap *keymap)
 {
-  if (!keymap)
-    {
-      keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
-      GDK_NOTE (MULTIHEAD,
-		g_message ("_multihead : reverting to default display keymap "
-			   "in gdk_keymap_get_direction"));
-    }
+  keymap = GET_EFFECTIVE_KEYMAP (keymap);
   
 #if HAVE_XKB
   if (KEYMAP_USE_XKB (keymap))
@@ -505,14 +516,7 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
   g_return_val_if_fail (n_keys != NULL, FALSE);
   g_return_val_if_fail (keyval != 0, FALSE);
 
-  if (!keymap)
-    {
-      keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
-      GDK_NOTE (MULTIHEAD,
-		g_message ("_multihead : reverting to default display keymap "
-			   "in gdk_keymap_get_entries_for_keyval\n"));
-    }
-
+  keymap = GET_EFFECTIVE_KEYMAP (keymap);
   keymap_x11 = GDK_KEYMAP_X11 (keymap);
   
   retval = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
@@ -659,14 +663,7 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
   g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
   g_return_val_if_fail (n_entries != NULL, FALSE);
 
-  if (!keymap)
-    {
-      keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
-      GDK_NOTE (MULTIHEAD,
-		g_message ("_multihead : reverting to default display keymap "
-			   "in gdk_keymap_get_entries_for_keycode\n"));
-    }
-
+  keymap = GET_EFFECTIVE_KEYMAP (keymap);
   keymap_x11 = GDK_KEYMAP_X11 (keymap);
 
   update_keyrange (keymap_x11);
@@ -832,15 +829,8 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
   g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), 0);
   g_return_val_if_fail (key != NULL, 0);
   g_return_val_if_fail (key->group < 4, 0);
-  
-  if (!keymap)
-    {
-      keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
-      GDK_NOTE (MULTIHEAD,
-		g_message ("_multihead : reverting to default display keymap "
-			   "in gdk_keymap_lookup_key\n"));
-    }
 
+  keymap = GET_EFFECTIVE_KEYMAP (keymap);
   keymap_x11 = GDK_KEYMAP_X11 (keymap);
   
 #ifdef HAVE_XKB
@@ -1165,7 +1155,8 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 
   g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
   g_return_val_if_fail (group < 4, FALSE);
-  
+
+  keymap = GET_EFFECTIVE_KEYMAP (keymap);  
   keymap_x11 = GDK_KEYMAP_X11 (keymap);
 
   if (keyval)
