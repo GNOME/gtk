@@ -6800,6 +6800,7 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
       gtk_tree_path_free (path);
 
       /*  FIXME: do I need to do this? gtk_tree_view_create_buttons (tree_view); */
+      install_presize_handler (tree_view);
     }
 
   g_object_notify (G_OBJECT (tree_view), "model");

@@ -1,3 +1,8 @@
+Mon Feb 11 16:40:44 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_model): install presize
+	handler, so the validate_rows_handler will always be run (#70997)
+
 Sun Feb 10 22:20:46 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkliststore.c (gtk_list_store_sort_iter_changed): increase
