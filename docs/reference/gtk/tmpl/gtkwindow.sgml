@@ -742,6 +742,8 @@ Deprecated alias for gtk_window_set_position().
 </para>
 
 @icon: 
+<!-- # Unused Parameters # -->
+@pixbuf: 
 
 
 <!-- ##### FUNCTION gtk_window_set_default_icon_from_file ##### -->

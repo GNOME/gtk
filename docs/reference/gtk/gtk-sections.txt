@@ -2853,7 +2853,6 @@ gtk_toolbar_get_type
 <TITLE>GtkToolItem</TITLE>
 GtkToolItem
 gtk_tool_item_new
-gtk_tool_item_toolbar_reconfigured
 gtk_tool_item_set_homogeneous
 gtk_tool_item_get_homogeneous
 gtk_tool_item_set_expand

@@ -3012,6 +3012,13 @@ Creates a border around the arrows of a #GtkSpinButton. The type of border is de
 
 @Returns: 
 
+<!-- ##### FUNCTION gtk_tool_item_toolbar_reconfigured ##### -->
+<para>
+
+</para>
+
+@tool_item: 
+
 <!-- ##### FUNCTION gtk_trace_referencing ##### -->
 <para>
 Private: print debugging information while doing a gtk_object_ref() or 

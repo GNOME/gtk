@@ -28,14 +28,6 @@ GtkToolItem
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_tool_item_toolbar_reconfigured ##### -->
-<para>
-
-</para>
-
-@tool_item: 
-
-
 <!-- ##### FUNCTION gtk_tool_item_set_homogeneous ##### -->
 <para>
 

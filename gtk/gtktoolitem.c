@@ -222,7 +222,7 @@ static void
 gtk_tool_item_parent_set   (GtkWidget   *toolitem,
 			    GtkWidget   *prev_parent)
 {
-  gtk_tool_item_toolbar_reconfigured (GTK_TOOL_ITEM (toolitem));
+  _gtk_tool_item_toolbar_reconfigured (GTK_TOOL_ITEM (toolitem));
 }
 
 static void
@@ -491,16 +491,6 @@ gtk_tool_item_get_relief_style (GtkToolItem *tool_item)
 }
 
 void
-gtk_tool_item_toolbar_reconfigured (GtkToolItem *tool_item)
-{
-  g_return_if_fail (GTK_IS_TOOL_ITEM (tool_item));
-
-  g_signal_emit (tool_item, toolitem_signals[TOOLBAR_RECONFIGURED], 0);
-  
-  gtk_widget_queue_resize (GTK_WIDGET (tool_item));
-}
-
-void
 gtk_tool_item_set_expand (GtkToolItem *tool_item,
 			  gboolean     expand)
 {
@@ -744,8 +734,13 @@ gtk_tool_item_set_proxy_menu_item (GtkToolItem *tool_item,
     }
 }
 
-GdkWindow *
-_gtk_tool_item_get_drag_window (GtkToolItem *tool_item)
+void
+_gtk_tool_item_toolbar_reconfigured (GtkToolItem *tool_item)
 {
-  return tool_item->priv->drag_window;
+  g_return_if_fail (GTK_IS_TOOL_ITEM (tool_item));
+
+  g_signal_emit (tool_item, toolitem_signals[TOOLBAR_RECONFIGURED], 0);
+  
+  gtk_widget_queue_resize (GTK_WIDGET (tool_item));
 }
+

@@ -63,8 +63,6 @@ struct _GtkToolItemClass
 GType        gtk_tool_item_get_type (void);
 GtkToolItem *gtk_tool_item_new      (void);
 
-void            gtk_tool_item_toolbar_reconfigured     (GtkToolItem *tool_item);
-
 void            gtk_tool_item_set_homogeneous          (GtkToolItem *tool_item,
 							gboolean     homogeneous);
 gboolean	gtk_tool_item_get_homogeneous          (GtkToolItem *tool_item);
@@ -107,7 +105,7 @@ void            gtk_tool_item_set_proxy_menu_item      (GtkToolItem *tool_item,
 							GtkWidget   *menu_item);
 
 /* internal function */
-GdkWindow *_gtk_tool_item_get_drag_window (GtkToolItem *tool_item);
+void       _gtk_tool_item_toolbar_reconfigured (GtkToolItem *tool_item);
 
 
 #endif /* __GTK_TOOL_ITEM_H__ */

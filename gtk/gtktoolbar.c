@@ -1819,7 +1819,7 @@ gtk_toolbar_reconfigured (GtkToolbar *toolbar)
     {
       GtkToolItem *item = GTK_TOOL_ITEM (items->data);
       
-      gtk_tool_item_toolbar_reconfigured (item);
+      _gtk_tool_item_toolbar_reconfigured (item);
       
       items = items->next;
     }
@@ -2826,7 +2826,6 @@ gtk_toolbar_append_element (GtkToolbar          *toolbar,
 
 /**
  * gtk_toolbar_prepend_element:
- * 
  * @toolbar: a #GtkToolbar.
  * @type: a value of type #GtkToolbarChildType that determines what @widget will be.
  * @widget: a #GtkWidget, or %NULL

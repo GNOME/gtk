@@ -1,3 +1,11 @@
+Wed Jul 30 21:11:13 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolitem.h: make _gtk_tool_item_toolbar_reconfigured()
+	an internal function
+
+	* gtk/gtktoolitem.h: remove unused declaration of
+	_gtk_tool_item_get_drag_window().
+
 Wed Jul 30 17:03:58 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbutton.[ch]:

@@ -1051,7 +1051,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *      private_data->pending_status = context->suggested_action;
    *      gtk_drag_get_data (widget, context, target, time);
    *    }
-   *
+   *  
    *   return TRUE;
    * }
    *   

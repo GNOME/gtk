@@ -313,9 +313,6 @@ to a #GtkToolbar.
 <para>
 
 </para>
-:<para>
-I
-</para>
 
 @toolbar: 
 @type: 
