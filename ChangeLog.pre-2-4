@@ -1,3 +1,8 @@
+Sun Jun  8 18:59:01 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gdk/gdkpixbuf-drawable.c (G8fromRGB565): swap G and B.
+	Fixes (#114669)
+
 Thu Jun  5 09:28:03 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c: Recompute unconditionally in

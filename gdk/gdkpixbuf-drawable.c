@@ -379,8 +379,8 @@ rgb8a (GdkImage    *image,
  * RGBA8888: RGBA, 32-bit native endian
  */
 #define R8fromRGB565(d) ((((d) >> 8) & 0xf8) | (((d) >> 13) & 0x7))
-#define B8fromRGB565(d) ((((d) >> 3) & 0xfc) | (((d) >> 9)  & 0x3))
-#define G8fromRGB565(d) ((((d) << 3) & 0xf8) | (((d) >> 2)  & 0x7))
+#define G8fromRGB565(d) ((((d) >> 3) & 0xfc) | (((d) >> 9)  & 0x3))
+#define B8fromRGB565(d) ((((d) << 3) & 0xf8) | (((d) >> 2)  & 0x7))
 
 #define ABGR8888fromRGB565(d) (  ((d) & 0xf800) >> 8  | ((d) & 0xe000) >> 13 \
 			       | ((d) & 0x07e0) << 5  | ((d) & 0x0600) >> 1  \
@@ -392,8 +392,8 @@ rgb8a (GdkImage    *image,
 			       | 0xff)
 
 #define R8fromRGB555(d) (((d) & 0x7c00) >> 7 | ((d) & 0x7000) >> 12)
-#define B8fromRGB555(d) (((d) & 0x03e0) >> 2 | ((d) & 0x0380) >> 7)
-#define G8fromRGB555(d) (((d) & 0x001f) << 3 | ((d) & 0x001c) >> 2)
+#define G8fromRGB555(d) (((d) & 0x03e0) >> 2 | ((d) & 0x0380) >> 7)
+#define B8fromRGB555(d) (((d) & 0x001f) << 3 | ((d) & 0x001c) >> 2)
 
 #define ABGR8888fromRGB555(d) (  ((d) & 0x7c00) >> 7  | ((d) & 0x7000) >> 12 \
 			       | ((d) & 0x03e0) << 6  | ((d) & 0x0380) << 1  \
