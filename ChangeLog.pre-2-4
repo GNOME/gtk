@@ -1,3 +1,15 @@
+Fri Mar  8 11:12:32 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* NEWS: Fix version numbers. (Johan Dahlin.)
+
+	* INSTALL.in: Update, just refer to gtk-building.html
+	rather than duplicating information.
+
+	* README.in: Add release specific notes.
+
+	* Makefile.am (EXTRA_DIST): Remove TODO and TODO.xml
+	from the distribution.
+
 Thu Mar  7 23:29:35 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* NEWS: Final updates for 2.0.0

@@ -1,11 +1,11 @@
-Overview of Changes in GTK+ 1.0.0
+Overview of Changes in GTK+ 2.0.0
 =================================
 
 * GtkTreeView fixes [Jonathan Blandford, Kristian Rietveld, Darin Adler]
 * Build fixes [Anders Carlsson, Tor Lillqvist, Manish Singh]
 * Bug fixes. [Thomas Leonard, Owen Taylor]
 
-Overview of Changes in GTK+ 1.0.0 rc1
+Overview of Changes in GTK+ 2.0.0 rc1
 =====================================
 
 * GtkTreeView fixes [Kristian Rietveld, Jonathan Blandford, Richard Hult]
