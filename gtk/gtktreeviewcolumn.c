@@ -663,17 +663,16 @@ gtk_tree_view_column_cell_layout_clear (GtkCellLayout *cell_layout)
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (cell_layout));
   column = GTK_TREE_VIEW_COLUMN (cell_layout);
 
-  for (list = column->cell_list; list; list = list->next)
+  while (column->cell_list)
     {
-      GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *)list->data;
+      GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *)column->cell_list->data;
 
-      gtk_tree_view_column_clear_attributes (column, info->cell);
-      g_object_unref (info->cell);
+      gtk_tree_view_column_cell_layout_clear_attributes (cell_layout, info->cell);
+      g_object_unref (G_OBJECT (info->cell));
       g_free (info);
+      column->cell_list = g_list_delete_link (column->cell_list, 
+					      column->cell_list);
     }
-
-  g_list_free (column->cell_list);
-  column->cell_list = NULL;
 }
 
 static void

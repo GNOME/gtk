@@ -1,3 +1,10 @@
+Sat Mar 13 00:07:51 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_layout_clear): 
+	Keep the cell_list in a consistent state while iterating over it, 
+	since clear_attributes() also iterates over it.  (another instance
+	of #136585, Morten Welinder)
+	
 Fri Mar 12 17:20:15 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkarrow.c (gtk_arrow_expose): Swap GTK_ARROW_LEFT
