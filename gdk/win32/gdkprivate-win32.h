@@ -363,23 +363,9 @@ void	_gdk_win32_adjust_client_rect   (GdkWindow *window,
 void	_gdk_win32_get_adjusted_client_rect (GdkWindow *window,
 					     RECT      *RECT);
 
-void    _gdk_selection_property_store (GdkWindow *owner,
-                                       GdkAtom    type,
-                                       gint       format,
-                                       guchar    *data,
-                                       gint       length);
-
 void    _gdk_selection_property_delete (GdkWindow *);
 
 void    _gdk_dropfiles_store (gchar *data);
-
-gint    _gdk_utf8_to_ucs2         (wchar_t     *dest,
-                                   const gchar *src,
-                                   gint         src_len,
-                                   gint         dest_max);
-
-gchar  *_gdk_ucs2_to_utf8         (const wchar_t *src,
-				   gint           src_len);
 
 void    _gdk_wchar_text_handle    (GdkFont       *font,
 				   const wchar_t *wcstr,
@@ -491,6 +477,7 @@ extern WORD		 _cf_utf8_string;
 extern GdkAtom           _utf8_string;
 extern GdkAtom		 _compound_text;
 extern GdkAtom		 _text_uri_list;
+extern GdkAtom		 _targets;
 
 /* DND selections */
 extern GdkAtom           _local_dnd;

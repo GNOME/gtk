@@ -41,7 +41,7 @@
 
 typedef struct {
   guchar *data;
-  gint length;
+  gsize length;
   gint format;
   GdkAtom type;
 } GdkSelProp;
@@ -62,7 +62,73 @@ _gdk_win32_selection_init (void)
   sel_owner_table = g_hash_table_new (NULL, NULL);
 }
 
-void
+/* The specifications for COMPOUND_TEXT and STRING specify that C0 and
+ * C1 are not allowed except for \n and \t, however the X conversions
+ * routines for COMPOUND_TEXT only enforce this in one direction,
+ * causing cut-and-paste of \r and \r\n separated text to fail.
+ * This routine strips out all non-allowed C0 and C1 characters
+ * from the input string and also canonicalizes \r, and \r\n to \n
+ */
+static gchar * 
+sanitize_utf8 (const gchar *src,
+	       gint         length)
+{
+  GString *result = g_string_sized_new (length + 1);
+  const gchar *p = src;
+  const gchar *endp = src + length;
+
+  while (p < endp)
+    {
+      if (*p == '\r')
+	{
+	  p++;
+	  if (*p == '\n')
+	    p++;
+
+	  g_string_append_c (result, '\n');
+	}
+      else
+	{
+	  gunichar ch = g_utf8_get_char (p);
+	  char buf[7];
+	  gint buflen;
+	  
+	  if (!((ch < 0x20 && ch != '\t' && ch != '\n') || (ch >= 0x7f && ch < 0xa0)))
+	    {
+	      buflen = g_unichar_to_utf8 (ch, buf);
+	      g_string_append_len (result, buf, buflen);
+	    }
+
+	  p = g_utf8_next_char (p);
+	}
+    }
+  g_string_append_c (result, '\0');
+
+  return g_string_free (result, FALSE);
+}
+
+static gchar *
+_gdk_utf8_to_string_target_internal (const gchar *str,
+				     gint         length)
+{
+  GError *error = NULL;
+  
+  gchar *tmp_str = sanitize_utf8 (str, length);
+  gchar *result =  g_convert_with_fallback (tmp_str, -1,
+					    "ISO-8859-1", "UTF-8",
+					    NULL, NULL, NULL, &error);
+  if (!result)
+    {
+      g_warning ("Error converting from UTF-8 to STRING: %s",
+		 error->message);
+      g_error_free (error);
+    }
+  
+  g_free (tmp_str);
+  return result;
+}
+
+static void
 _gdk_selection_property_store (GdkWindow *owner,
                                GdkAtom    type,
                                gint       format,
@@ -78,8 +144,27 @@ _gdk_selection_property_store (GdkWindow *owner,
       g_hash_table_remove (sel_prop_table, GDK_WINDOW_HWND (owner));
     }
   prop = g_new (GdkSelProp, 1);
-  prop->data = data;
-  prop->length = length;
+
+  if (type == GDK_TARGET_STRING)
+    {
+      /* We know that data is UTF-8 */
+      prop->data = _gdk_utf8_to_string_target_internal (data, length);
+      g_free (data);
+
+      if (!prop->data)
+	{
+	  g_free (prop);
+
+	  return;
+	}
+      else
+	prop->length = strlen (prop->data + 1);
+    }
+  else
+    {
+      prop->data = data;
+      prop->length = length;
+    }
   prop->format = format;
   prop->type = type;
   g_hash_table_insert (sel_prop_table, GDK_WINDOW_HWND (owner), prop);
@@ -120,7 +205,8 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
   GdkEvent tmp_event;
   gchar *sel_name;
 
-  g_return_val_if_fail (display == gdk_display_get_default (), FALSE);
+  g_return_val_if_fail (display == _gdk_display, FALSE);
+  g_return_val_if_fail (selection != GDK_NONE, FALSE);
 
   GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
@@ -176,7 +262,7 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
       tmp_event.selection.window = owner;
       tmp_event.selection.send_event = FALSE;
       tmp_event.selection.selection = selection;
-      tmp_event.selection.target = GDK_TARGET_STRING;
+      tmp_event.selection.target = _utf8_string;
       tmp_event.selection.property = _gdk_selection_property;
       tmp_event.selection.requestor = (guint32) hwnd;
       tmp_event.selection.time = time;
@@ -194,12 +280,13 @@ gdk_selection_owner_get_for_display (GdkDisplay *display,
   GdkWindow *window;
   gchar *sel_name;
 
-  g_return_val_if_fail (display == gdk_display_get_default (), NULL);
+  g_return_val_if_fail (display == _gdk_display, NULL);
+  g_return_val_if_fail (selection != GDK_NONE, NULL);
 
-  /* Return NULL for CLIPBOARD, because otherwise cut&paste
-   * inside the same application doesn't work. We must pretend to gtk
-   * that we don't have the selection, so that we always fetch it from
-   * the Windows clipboard. See also comments in
+  /* Return NULL for CLIPBOARD, because otherwise cut&paste inside the
+   * same application doesn't work. We must pretend to gtk that we
+   * don't have the selection, so that we always fetch it from the
+   * Windows clipboard. See also comments in
    * gdk_selection_send_notify().
    */
   if (selection == GDK_SELECTION_CLIPBOARD)
@@ -247,8 +334,11 @@ gdk_selection_convert (GdkWindow *requestor,
   HGLOBAL hdata;
   GdkAtom property = _gdk_selection_property;
   gchar *sel_name, *tgt_name;
+  GError *error = NULL;
 
+  g_return_if_fail (selection != GDK_NONE);
   g_return_if_fail (requestor != NULL);
+
   if (GDK_WINDOW_DESTROYED (requestor))
     return;
 
@@ -262,8 +352,7 @@ gdk_selection_convert (GdkWindow *requestor,
 	     g_free (sel_name),
 	     g_free (tgt_name)));
 
-  if (selection == GDK_SELECTION_CLIPBOARD &&
-      target == gdk_atom_intern ("TARGETS", FALSE))
+  if (selection == GDK_SELECTION_CLIPBOARD && target == _targets)
     {
       /* He wants to know what formats are on the clipboard.  If there
        * is some kind of text, tell him so.
@@ -276,7 +365,7 @@ gdk_selection_convert (GdkWindow *requestor,
 	  IsClipboardFormatAvailable (CF_TEXT))
 	{
 	  GdkAtom *data = g_new (GdkAtom, 1);
-	  *data = GDK_TARGET_STRING;
+	  *data = _utf8_string;
 	  _gdk_selection_property_store (requestor, GDK_SELECTION_TYPE_ATOM,
 					 32, (guchar *) data, 1 * sizeof (GdkAtom));
 	}
@@ -286,36 +375,36 @@ gdk_selection_convert (GdkWindow *requestor,
       API_CALL (CloseClipboard, ());
     }
   else if (selection == GDK_SELECTION_CLIPBOARD &&
-	   (target == _compound_text ||
-	    target == GDK_TARGET_STRING))
+	   (target == GDK_TARGET_STRING ||
+	    target == _utf8_string))
     {
       /* Converting the CLIPBOARD selection means he wants the
-       * contents of the clipboard. Get the clipboard data,
-       * and store it for later.
+       * contents of the clipboard. Get the clipboard data, and store
+       * it for later.
        */
       if (!API_CALL (OpenClipboard, (GDK_WINDOW_HWND (requestor))))
 	return;
 
       /* Try various formats. First the simplest, CF_UNICODETEXT. */
-      if ((hdata = GetClipboardData (CF_UNICODETEXT)) != NULL)
+      if (IS_WIN_NT () && (hdata = GetClipboardData (CF_UNICODETEXT)) != NULL)
 	{
 	  wchar_t *ptr, *wcs, *p, *q;
 	  guchar *data;
-	  gint length, wclen;
+	  glong length, wclen;
 
 	  if ((ptr = GlobalLock (hdata)) != NULL)
 	    {
 	      length = GlobalSize (hdata);
 	      
-	      GDK_NOTE (DND, g_print ("...CF_UNICODETEXT: %d bytes\n",
+	      GDK_NOTE (DND, g_print ("...CF_UNICODETEXT: %ld bytes\n",
 				      length));
 
 	      /* Strip out \r */
-	      wcs = g_new (wchar_t, (length + 1) * 2);
+	      wcs = g_new (wchar_t, length / 2 + 1);
 	      p = ptr;
 	      q = wcs;
 	      wclen = 0;
-	      while (*p)
+	      while (p < ptr + length / 2)
 		{
 		  if (*p != '\r')
 		    {
@@ -325,11 +414,16 @@ gdk_selection_convert (GdkWindow *requestor,
 		  p++;
 		}
 
-	      data = _gdk_ucs2_to_utf8 (wcs, wclen);
+	      data = g_utf16_to_utf8 (wcs, wclen, NULL, NULL, &error);
 	      g_free (wcs);
-	      
-	      _gdk_selection_property_store (requestor, target, 8,
-					     data, strlen (data) + 1);
+
+	      if (!data)
+		{
+		  g_error_free (error);
+		}
+	      else
+		_gdk_selection_property_store (requestor, target, 8,
+					       data, strlen (data) + 1);
 	      GlobalUnlock (hdata);
 	    }
 	}
@@ -347,7 +441,7 @@ gdk_selection_convert (GdkWindow *requestor,
 				      length, ptr));
 	      
 	      _gdk_selection_property_store (requestor, target, 8,
-					     g_strdup (ptr), strlen (ptr) + 1);
+					     g_memdup (ptr, length), length);
 	      GlobalUnlock (hdata);
 	    }
 	}
@@ -361,13 +455,13 @@ gdk_selection_convert (GdkWindow *requestor,
 	  UINT cp = CP_ACP;
 	  wchar_t *wcs, *wcs2, *p, *q;
 	  guchar *ptr, *data;
-	  gint length, wclen;
+	  glong length, wclen, wclen2;
 
 	  if ((ptr = GlobalLock (hdata)) != NULL)
 	    {
 	      length = GlobalSize (hdata);
 	      
-	      GDK_NOTE (DND, g_print ("...CF_TEXT: %d bytes: %.10s\n",
+	      GDK_NOTE (DND, g_print ("...CF_TEXT: %ld bytes: %.10s\n",
 				       length, ptr));
 	      
 	      if ((hlcid = GetClipboardData (CF_LOCALE)) != NULL)
@@ -385,30 +479,33 @@ gdk_selection_convert (GdkWindow *requestor,
 		}
 
 	      wcs = g_new (wchar_t, length + 1);
-	      wclen = MultiByteToWideChar (cp, 0, ptr, -1,
+	      wclen = MultiByteToWideChar (cp, 0, ptr, length,
 					   wcs, length + 1);
 
 	      /* Strip out \r */
 	      wcs2 = g_new (wchar_t, wclen);
 	      p = wcs;
 	      q = wcs2;
-	      wclen = 0;
-	      while (*p)
+	      wclen2 = 0;
+	      while (p < wcs + wclen)
 		{
 		  if (*p != '\r')
 		    {
 		      *q++ = *p;
-		      wclen++;
+		      wclen2++;
 		    }
 		  p++;
 		}
 	      g_free (wcs);
 
-	      data = _gdk_ucs2_to_utf8 (wcs2, wclen);
+	      data = g_utf16_to_utf8 (wcs2, wclen2, NULL, &length, &error);
 	      g_free (wcs2);
-	      
-	      _gdk_selection_property_store (requestor, target, 8,
-					     data, strlen (data) + 1);
+
+	      if (!data)
+		g_error_free (error);
+	      else
+		_gdk_selection_property_store (requestor, target, 8,
+					       data, length + 1);
 	      GlobalUnlock (hdata);
 	    }
 	}
@@ -498,16 +595,16 @@ _gdk_selection_property_delete (GdkWindow *window)
 
 void
 gdk_selection_send_notify_for_display (GdkDisplay *display,
-                                       guint32  requestor,
-                                       GdkAtom  selection,
-                                       GdkAtom  target,
-                                       GdkAtom  property,
-                                       guint32  time)
+                                       guint32     requestor,
+                                       GdkAtom     selection,
+                                       GdkAtom     target,
+                                       GdkAtom     property,
+                                       guint32     time)
 {
   GdkEvent tmp_event;
   gchar *sel_name, *tgt_name, *prop_name;
 
-  g_return_if_fail (display == gdk_display_get_default ());
+  g_return_if_fail (display == _gdk_display);
 
   GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
@@ -522,12 +619,13 @@ gdk_selection_send_notify_for_display (GdkDisplay *display,
 	     g_free (tgt_name),
 	     g_free (prop_name)));
 
-  /* Send ourselves a selection clear message so that gtk thinks we don't
-   * have the selection, and will claim it anew when needed, and
+  /* Send ourselves a selection clear message so that gtk thinks we
+   * don't have the selection, and will claim it anew when needed, and
    * we thus get a chance to store data in the Windows clipboard.
-   * Otherwise, if a gtkeditable does a copy to CLIPBOARD several times
-   * only the first one actually gets copied to the Windows clipboard,
-   * as only the first one causes a call to gdk_property_change().
+   * Otherwise, if a gtkeditable does a copy to CLIPBOARD several
+   * times only the first one actually gets copied to the Windows
+   * clipboard, as only the first one causes a call to
+   * gdk_property_change().
    *
    * Hmm, there is something fishy with this. Cut and paste inside the
    * same app didn't work, the gtkeditable immediately forgot the
@@ -548,19 +646,25 @@ gdk_selection_send_notify_for_display (GdkDisplay *display,
   gdk_event_put (&tmp_event);
 }
 
-/* Simplistic implementations of text list and compound text functions */
-
+/* It's hard to say whether implementing this actually is of any use
+ * on the Win32 platform? gtk calls only
+ * gdk_text_property_to_utf8_list_for_display().
+ */
 gint
-gdk_text_property_to_text_list_for_display (GdkDisplay     *display,
+gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
 					    GdkAtom       encoding,
 					    gint          format, 
 					    const guchar *text,
 					    gint          length,
 					    gchar      ***list)
 {
+  GError *error = NULL;
   gchar *enc_name;
+  gchar *result;
+  const gchar *charset;
+  const gchar *source_charset = NULL;
 
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
+  g_return_val_if_fail (display == _gdk_display, 0);
 
   GDK_NOTE (DND, (enc_name = gdk_atom_name (encoding),
 		  g_print ("gdk_text_property_to_text_list: %s %d %.20s %d\n",
@@ -570,8 +674,25 @@ gdk_text_property_to_text_list_for_display (GdkDisplay     *display,
   if (!list)
     return 0;
 
+  if (encoding == GDK_TARGET_STRING)
+    source_charset = "ISO-8859-1";
+  else if (encoding == _utf8_string)
+    source_charset = "UTF-8";
+  else
+    source_charset = gdk_atom_name (encoding);
+    
+  g_get_charset (&charset);
+
+  result = g_convert (text, length, charset, source_charset,
+		      NULL, NULL, &error);
+  if (!result)
+    {
+      g_error_free (error);
+      return 0;
+    }
+
   *list = g_new (gchar *, 1);
-  **list = g_strdup (text);
+  **list = result;
   
   return 1;
 }
@@ -584,47 +705,6 @@ gdk_free_text_list (gchar **list)
   g_free (*list);
   g_free (list);
 }
-
-gint
-gdk_string_to_compound_text_for_display (GdkDisplay  *display,
-					 const gchar *str,
-					 GdkAtom     *encoding,
-					 gint        *format,
-					 guchar     **ctext,
-					 gint        *length)
-{
-  g_return_val_if_fail (str != NULL, 0);
-  g_return_val_if_fail (length >= 0, 0);
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
-
-  GDK_NOTE (DND, g_print ("gdk_string_to_compound_text: %.20s\n", str));
-
-  if (encoding)
-    *encoding = _compound_text;
-
-  if (format)
-    *format = 8;
-
-  if (ctext)
-    *ctext = g_strdup (str);
-
-  if (length)
-    *length = strlen (str);
-
-  return 0;
-}
-
-void
-gdk_free_compound_text (guchar *ctext)
-{
-  g_free (ctext);
-}
-
-/* These are lifted from gdkselection-x11.c, just to get GTK+ to build.
- * These functions probably don't make much sense at all in Windows.
- */
-
-/* FIXME */
 
 static gint
 make_list (const gchar  *text,
@@ -705,7 +785,7 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
 {
   g_return_val_if_fail (text != NULL, 0);
   g_return_val_if_fail (length >= 0, 0);
-  g_return_val_if_fail (display == gdk_display_get_default (), 0);
+  g_return_val_if_fail (display == _gdk_display, 0);
 
   if (encoding == GDK_TARGET_STRING)
     {
@@ -717,164 +797,88 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
     }
   else
     {
-      gchar **local_list;
-      gint local_count;
-      gint i;
-      const gchar *charset = NULL;
-      gboolean need_conversion = g_get_charset (&charset);
-      gint count = 0;
-      GError *error = NULL;
-      
-      /* Probably COMPOUND text, we fall back to Xlib routines
-       */
-      local_count = gdk_text_property_to_text_list (encoding,
-						    format, 
-						    text,
-						    length,
-						    &local_list);
-      if (list)
-	*list = g_new (gchar *, local_count + 1);
-      
-      for (i=0; i<local_count; i++)
-	{
-	  /* list contains stuff in our default encoding
-	   */
-	  if (need_conversion)
-	    {
-	      gchar *utf = g_convert (local_list[i], -1,
-				      "UTF-8", charset,
-				      NULL, NULL, &error);
-	      if (utf)
-		{
-		  if (list)
-		    (*list)[count++] = utf;
-		  else
-		    g_free (utf);
-		}
-	      else
-		{
-		  g_warning ("Error converting to UTF-8 from '%s': %s",
-			     charset, error->message);
-		  g_error_free (error);
-		  error = NULL;
-		}
-	    }
-	  else
-	    {
-	      if (list)
-		(*list)[count++] = g_strdup (local_list[i]);
-	    }
-	}
-      
-      gdk_free_text_list (local_list);
-      (*list)[count] = NULL;
+      g_warning ("gdk_text_property_to_utf8_list_for_display: encoding %s not handled\n", gdk_atom_name (encoding));
 
-      return count;
+      if (list)
+	*list = NULL;
+
+      return 0;
     }
 }
 
-/* The specifications for COMPOUND_TEXT and STRING specify that C0 and
- * C1 are not allowed except for \n and \t, however the X conversions
- * routines for COMPOUND_TEXT only enforce this in one direction,
- * causing cut-and-paste of \r and \r\n separated text to fail.
- * This routine strips out all non-allowed C0 and C1 characters
- * from the input string and also canonicalizes \r, and \r\n to \n
- */
-static gchar * 
-sanitize_utf8 (const gchar *src)
+gint
+gdk_string_to_compound_text_for_display (GdkDisplay  *display,
+					 const gchar *str,
+					 GdkAtom     *encoding,
+					 gint        *format,
+					 guchar     **ctext,
+					 gint        *length)
 {
-  gint len = strlen (src);
-  GString *result = g_string_sized_new (len);
-  const gchar *p = src;
+  g_return_val_if_fail (str != NULL, 0);
+  g_return_val_if_fail (length >= 0, 0);
+  g_return_val_if_fail (display == _gdk_display, 0);
 
-  while (*p)
-    {
-      if (*p == '\r')
-	{
-	  p++;
-	  if (*p == '\n')
-	    p++;
+  GDK_NOTE (DND, g_print ("gdk_string_to_compound_text_for_display: %.20s\n", str));
 
-	  g_string_append_c (result, '\n');
-	}
-      else
-	{
-	  gunichar ch = g_utf8_get_char (p);
-	  char buf[7];
-	  gint buflen;
-	  
-	  if (!((ch < 0x20 && ch != '\t' && ch != '\n') || (ch >= 0x7f && ch < 0xa0)))
-	    {
-	      buflen = g_unichar_to_utf8 (ch, buf);
-	      g_string_append_len (result, buf, buflen);
-	    }
+  /* Always fail on Win32. No COMPOUND_TEXT support. */
 
-	  p = g_utf8_next_char (p);
-	}
-    }
+  if (encoding)
+    *encoding = GDK_NONE;
 
-  return g_string_free (result, FALSE);
+  if (format)
+    *format = 0;
+
+  if (ctext)
+    *ctext = NULL;
+
+  if (length)
+    *length = 0;
+
+  return -1;
 }
 
 gchar *
 gdk_utf8_to_string_target (const gchar *str)
 {
-  return sanitize_utf8 (str);
+  return _gdk_utf8_to_string_target_internal (str, strlen (str));
 }
 
 gboolean
-gdk_utf8_to_compound_text_for_display (GdkDisplay *display,
+gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,
                                        const gchar *str,
                                        GdkAtom     *encoding,
                                        gint        *format,
                                        guchar     **ctext,
                                        gint        *length)
 {
-  gboolean need_conversion;
-  const gchar *charset;
-  gchar *locale_str, *tmp_str;
-  GError *error = NULL;
-  gboolean result;
-
   g_return_val_if_fail (str != NULL, FALSE);
-  g_return_val_if_fail (display == gdk_display_get_default (), FALSE);
+  g_return_val_if_fail (display == _gdk_display, FALSE);
 
-  need_conversion = !g_get_charset (&charset);
+  GDK_NOTE (DND, g_print ("gdk_utf8_to_compound_text_for_display: %.20s\n", str));
 
-  tmp_str = sanitize_utf8 (str);
+  /* Always fail on Win32. No COMPOUND_TEXT support. */
 
-  if (need_conversion)
-    {
-      locale_str = g_convert_with_fallback (tmp_str, -1,
-					    charset, "UTF-8",
-					    NULL, NULL, NULL, &error);
-      g_free (tmp_str);
+  if (encoding)
+    *encoding = GDK_NONE;
 
-      if (!locale_str)
-	{
-	  g_warning ("Error converting from UTF-8 to '%s': %s",
-		     charset, error->message);
-	  g_error_free (error);
-
-	  if (encoding)
-	    *encoding = GDK_NONE;
-	  if (format)
-	    *format = GPOINTER_TO_UINT (GDK_ATOM_TO_POINTER (GDK_NONE));
-	  if (ctext)
-	    *ctext = NULL;
-	  if (length)
-	    *length = 0;
-
-	  return FALSE;
-	}
-    }
-  else
-    locale_str = tmp_str;
-    
-  result = gdk_string_to_compound_text (locale_str,
-					encoding, format, ctext, length);
+  if (format)
+    *format = 0;
   
-  g_free (locale_str);
+  if (ctext)
+    *ctext = NULL;
 
-  return result;
+  if (length)
+    *length = 0;
+
+  return FALSE;
+}
+
+void
+gdk_free_compound_text (guchar *ctext)
+{
+  /* As we never generate anything claimed to be COMPOUND_TEXT, this
+   * should never be called. Or if it is called, ctext should be the
+   * NULL returned for conversions to COMPOUND_TEXT above.
+   */
+  g_return_if_fail (ctext == NULL);
 }
