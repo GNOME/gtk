@@ -1,3 +1,9 @@
+2004-09-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_class_init): Add a missing _
+	to the name of the has_secondary_backward_stepper property.
+	Noticed by Michèle Garoche.
+
 2004-09-25  Robert Ögren  <gtk@roboros.com>
 
 	* gdk/win32/gdkinput-win32.c (gdk_input_wintab_init): Set
