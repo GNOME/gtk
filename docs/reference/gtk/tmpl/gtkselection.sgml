@@ -49,6 +49,7 @@ opaque.
 <para>
 Internally used structure in the drag-and-drop and 
 selection handling code.
+</para>
 
 @target: 
 @flags: 

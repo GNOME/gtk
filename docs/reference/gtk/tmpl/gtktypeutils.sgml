@@ -794,7 +794,7 @@ Register a new set of enum @values and give them the name in
 <para>
 Register a new set of flags @values and give them the name in
 @type_name.
-ara>
+</para>
 
 @type_name: must not be null.
 @values: GtkFlagValue*

@@ -71,7 +71,7 @@ node.</entry>
 <entry>FIXME.</entry>
 </row>
 
-</informaltable>
+</tbody></tgroup></informaltable>
 </para>
 
 @clist: 
@@ -390,7 +390,7 @@ the other children, just use the siblings of that node.
 <entry>Whether the children of this row are visible.
 </entry>
 </row>
-</informaltable>
+</tbody></tgroup></informaltable>
 
 </para>
 

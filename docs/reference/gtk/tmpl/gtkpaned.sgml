@@ -25,6 +25,7 @@ is called the gutter). Often, it is useful
 to put each child inside a #GtkFrame with the
 shadow type set to %GTK_SHADOW_IN so that the
 gutter appears as a ridge.
+</para>
 <para>
 Each child has two options that can be set, 
 @resize and @shrink. If @resize is true, then when the

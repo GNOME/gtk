@@ -128,7 +128,7 @@ by default.  Use gtk_box_set_spacing() to set this field.</entry>
 the GtkBox; %FALSE by default.  Use gtk_box_set_homogeneous() to set this
 field.</entry>
 </row>
-</informaltable>
+</tbody></tgroup></informaltable>
 </para>
 
 @container: 
@@ -186,7 +186,7 @@ around the widget; set when packed, %TRUE by default.</entry>
 #GtkPackType indicating whether the child is packed with reference to
 the start (top/left) or end (bottom/right) of the GtkBox.</entry>
 </row>
-</informaltable>
+</tbody></tgroup></informaltable>
 </para>
 
 @widget: 

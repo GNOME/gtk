@@ -1,3 +1,13 @@
+Tue Aug 17 09:14:01 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtktypeutils.sgml: Fix corrupted end tag.
+
+	* gtk/tmpl/gtkselection.sgml gtk/tmpl/gtkrc.sgml
+	  gtk/tmpl/gtkdnd.sgml gtk/tmpl/gtkarrow.sgml
+	  gtk/tmpl/gtkpaned.sgml gtk/tmpl/gtkmisc.sgml
+	  gtk/tmpl/gtkhandlebox.sgml gtk/tmpl/gtkctree.sgml:
+	Added missing close tags.
+
 Thu Aug 19 14:43:08 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/tmpl/gcs.sgml gdk/gdk-sections.txt: Added section. 

@@ -56,7 +56,7 @@ in pixels.</entry>
 <entry>the amount of space to add on the top and bottom of the widget,
 in pixels.</entry>
 </row>
-</informaltable>
+</tbody></tgroup></informaltable>
 </para>
 
 @widget: 

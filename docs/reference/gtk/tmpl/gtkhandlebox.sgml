@@ -61,7 +61,8 @@ to the child. (See gtk_handle_box_set_handle_position())</entry>
 <entry>gint snap_edge;</entry>
 <entry>A value of type #GtkPosition type indicating snap edge for the widget.
 (See gtk_handle_box_set_snap_edge). The value of -1 indicates
-that this value has not been set.
+that this value has not been set.</entry>
+</row>
 
 <row>
 <entry>#gboolean child_detached;</entry>

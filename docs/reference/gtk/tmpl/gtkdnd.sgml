@@ -86,6 +86,7 @@ of the user for a drag destination site.
 <para>
 The #GtkTargetFlags enumeration is used to specifies
 constraints on an entry in a GtkTargetTable. 
+</para>
 <variablelist>
  <varlistentry><term> %GTK_TARGET_SAME_APP </term>
  <listitem>

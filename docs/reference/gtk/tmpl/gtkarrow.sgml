@@ -53,7 +53,7 @@ an application.)
 <entry>#gint16 <structfield>shadow_type</structfield>;</entry>
 <entry>the style of the arrow, one of #GtkShadowType.</entry>
 </row>
-</informaltable>
+</tbody></tgroup></informaltable>
 </para>
 
 @misc: 
