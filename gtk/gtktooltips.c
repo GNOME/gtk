@@ -49,8 +49,6 @@
 static void gtk_tooltips_class_init        (GtkTooltipsClass *klass);
 static void gtk_tooltips_init              (GtkTooltips      *tooltips);
 static void gtk_tooltips_destroy           (GtkObject        *object);
-static void gtk_tooltips_realize	   (GtkWidget	     *widget);
-
 
 static gint gtk_tooltips_event_handler     (GtkWidget   *widget,
                                             GdkEvent    *event);
@@ -97,13 +95,9 @@ static void
 gtk_tooltips_class_init (GtkTooltipsClass *class)
 {
   GtkObjectClass *object_class;
-  GtkWidgetClass *widget_class;
   
   object_class = (GtkObjectClass*) class;
   parent_class = gtk_type_class (GTK_TYPE_OBJECT);
-  widget_class = (GtkWidgetClass*) class;
-
-  widget_class->realize = gtk_tooltips_realize; 
 
   object_class->destroy = gtk_tooltips_destroy;
 }
@@ -121,28 +115,6 @@ gtk_tooltips_init (GtkTooltips *tooltips)
   tooltips->use_sticky_delay = FALSE;
   tooltips->last_popdown.tv_sec = -1;
   tooltips->last_popdown.tv_usec = -1;
-}
-
-static void 
-gtk_tooltips_realize (GtkWidget	*widget)
-{
-  GdkScreen *screen = gtk_widget_get_screen (widget);
-  
-  if (!g_object_get_data (G_OBJECT (screen),"gtk-tooltips-have-rc"))
-    {
-      gtk_rc_parse_string_for_screen (screen,
-	    "style \"gtk-default-tooltips-style\" {\n"
-	    "  bg[NORMAL] = \"#ffffc0\"\n"
-	    "  fg[NORMAL] = \"#000000\"\n"
-	    "}\n"
-	    "\n"
-    "widget \"gtk-tooltips*\" style : gtk \"gtk-default-tooltips-style\"\n");
-      g_object_set_data (G_OBJECT (screen), "gtk-tooltips-have-rc", 
-			 widget);
-    }
-  
-  if (GTK_WIDGET_CLASS (parent_class)->realize)
-    (*GTK_WIDGET_CLASS (parent_class)->realize) (widget);
 }
 
 GtkTooltips *
@@ -269,11 +241,27 @@ gtk_tooltips_set_tip (GtkTooltips *tooltips,
 		      const gchar *tip_private)
 {
   GtkTooltipsData *tooltipsdata;
+  GdkScreen	  *screen;
 
   g_return_if_fail (GTK_IS_TOOLTIPS (tooltips));
   g_return_if_fail (widget != NULL);
 
   tooltipsdata = gtk_tooltips_data_get (widget);
+
+  screen = gtk_widget_get_screen (widget);
+  
+  if (!g_object_get_data (G_OBJECT (screen),"gtk-tooltips-have-rc"))
+    {
+      gtk_rc_parse_string_for_screen (screen,
+	    "style \"gtk-default-tooltips-style\" {\n"
+	    "  bg[NORMAL] = \"#ffffc0\"\n"
+	    "  fg[NORMAL] = \"#000000\"\n"
+	    "}\n"
+	    "\n"
+    "widget \"gtk-tooltips*\" style : gtk \"gtk-default-tooltips-style\"\n");
+      g_object_set_data (G_OBJECT (screen), "gtk-tooltips-have-rc", 
+			 widget);
+    }
 
   if (!tip_text)
     {
