@@ -1,3 +1,7 @@
+Fri Aug 13 00:40:18 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkhandlebox.c: Add missing include.
+
 Thu Aug 12 23:52:12 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Fix #149547, Markus Lausser:

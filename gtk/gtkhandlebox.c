@@ -27,6 +27,7 @@
 
 #include <config.h>
 #include <stdlib.h>
+#include "gtkalias.h"
 #include "gtkhandlebox.h"
 #include "gtkinvisible.h"
 #include "gtkmain.h"
