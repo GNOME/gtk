@@ -446,9 +446,9 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const gchar *utf8str)
       /*
        *  get attributes list of IME.
        */
-      len = ImmGetCompositionStringA (himc, GCS_COMPATTR, NULL, 0);
+      len = ImmGetCompositionStringW (himc, GCS_COMPATTR, NULL, 0);
       buf = g_alloca (len);
-      ImmGetCompositionStringA (himc, GCS_COMPATTR, buf, len);
+      ImmGetCompositionStringW (himc, GCS_COMPATTR, buf, len);
 
       /*
        *  schr and echr are pointer in utf8str.
