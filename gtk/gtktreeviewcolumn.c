@@ -1058,12 +1058,12 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
       gtk_widget_grab_focus (widget);
     }
 
-  if (event->type == GDK_BUTTON_RELEASE &&
-      column->maybe_reordered)
+  if (event->type == GDK_BUTTON_RELEASE ||
+      event->type == GDK_LEAVE_NOTIFY)
     column->maybe_reordered = FALSE;
-
+  
   if (event->type == GDK_MOTION_NOTIFY &&
-      (column->maybe_reordered) &&
+      column->maybe_reordered &&
       (gtk_drag_check_threshold (widget,
 				 column->drag_x,
 				 column->drag_y,

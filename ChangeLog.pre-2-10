@@ -1,3 +1,9 @@
+2004-12-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_button_event): 
+	Don't mess up the column header state if the button release
+	event is missed.  (#159640)
+
 2004-12-07  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* gtk/gtkcellview.c: (gtk_cell_view_set_background_color):
@@ -10,6 +16,10 @@
 	a redraw.  (#160679, Damon Chaplin)
 
 2004-12-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_button_event): 
+	Don't mess up the column header state if the button release
+	event is missed.  (#159640)
 
 	* docs/tools/widgets.h (enum): Add an ASIS widget size.
 
