@@ -1,3 +1,36 @@
+Sun Jan 17 22:47:15 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.[hc]: 
+	* gtk/gtkspinbutton.[hc]: 
+	* gtk/gtkscrolledwindow.[hc]:
+	* gtk/gtkprogressbar.[hc]:
+	* gtk/gtkpreview.[hc]: 
+	* gtk/gtkobject.[hc]:
+	* gtk/gtkentry.[hc]: 
+	* gtk/gtkctree.[hc]:
+	* gtk/gtkcontainer.[hc]:
+	* gtk/gtkclist.[hc]:
+	removed deprecated functions: gtk_clist_set_border,
+	gtk_container_block_resize, gtk_container_unblock_resize,
+	gtk_container_need_resize, gtk_ctree_set_reorderable,
+	gtk_ctree_show_stub, gtk_ctree_set_use_drag_icons,
+	gtk_entry_adjust_scroll, gtk_object_class_add_user_signal,
+	gtk_preview_put_row, gtk_progress_bar_construct,
+	gtk_scrolled_window_construct, gtk_spin_button_construct,
+	gtk_widget_freeze_accelerators,	gtk_widget_thaw_accelerators.
+
+	* gtk/gtkcheckmenuitem.c: removed binary variant of
+	gtk_check_menu_item_set_state, this is still defined in gtkcompat.h
+	though.
+
+	* docs/Changes-1.2.txt:
+	removed section about gtk_idle_remove_by_data vs.
+	gtk_timeout_remove_by_data, we actually don't even provide a
+	gtk_timeout_remove_by_data() function.
+	added a table with removed functions and their replacements.
+	
+	* NEWS: updates for 1.1.13.
+
 Sun Jan 17 17:56:33 1999  Owen Taylor  <otaylor@redhat.com>
 
 	Patch from Felix Bellaby <felix@pooh.u-net.com>

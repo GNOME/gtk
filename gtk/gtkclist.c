@@ -1106,7 +1106,6 @@ gtk_clist_construct (GtkCList *clist,
  *   gtk_clist_get_hadjustment
  *   gtk_clist_get_vadjustment
  *   gtk_clist_set_shadow_type
- *   gtk_clist_set_border *** deprecated function ***
  *   gtk_clist_set_selection_mode
  *   gtk_clist_freeze
  *   gtk_clist_thaw
@@ -1251,16 +1250,6 @@ gtk_clist_set_shadow_type (GtkCList      *clist,
 
   if (GTK_WIDGET_VISIBLE (clist))
     gtk_widget_queue_resize (GTK_WIDGET (clist));
-}
-
-/* deprecated function, use gtk_clist_set_shadow_type instead. */
-void
-gtk_clist_set_border (GtkCList      *clist,
-		      GtkShadowType  border)
-{
-  g_message ("gtk_clist_set_border() is deprecated");
-
-  gtk_clist_set_shadow_type (clist, border);
 }
 
 void

@@ -80,10 +80,6 @@ void           gtk_scrolled_window_set_placement     (GtkScrolledWindow *scrolle
 void	       gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrolled_window,
 						      GtkWidget		*child);
 
-/* deprecated */
-void           gtk_scrolled_window_construct         (GtkScrolledWindow *scrolled_window,
-						      GtkAdjustment     *hadjustment,
-						      GtkAdjustment     *vadjustment);
 
 #ifdef __cplusplus
 }

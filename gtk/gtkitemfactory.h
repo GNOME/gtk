@@ -41,9 +41,6 @@ typedef	void	(*GtkItemFactoryCallback)  ();
 typedef	void	(*GtkItemFactoryCallback1) (gpointer		 callback_data,
 					    guint		 callback_action,
 					    GtkWidget		*widget);
-typedef	void	(*GtkItemFactoryCallback2) (GtkWidget		*widget,
-					    gpointer		 callback_data,
-					    guint		 callback_action);
 
 #define	GTK_TYPE_ITEM_FACTORY		 (gtk_item_factory_get_type ())
 #define	GTK_ITEM_FACTORY(object)	 (GTK_CHECK_CAST (object, GTK_TYPE_ITEM_FACTORY, GtkItemFactory))
@@ -165,11 +162,6 @@ void	gtk_item_factory_create_items	(GtkItemFactory		*ifactory,
 					 guint			 n_entries,
 					 GtkItemFactoryEntry	*entries,
 					 gpointer		 callback_data);
-void	gtk_item_factory_create_items_ac(GtkItemFactory		*ifactory,
-					 guint			 n_entries,
-					 GtkItemFactoryEntry	*entries,
-					 gpointer		 callback_data,
-					 guint			 callback_type);
 void	gtk_item_factory_delete_item	(GtkItemFactory		*ifactory,
 					 const gchar		*path);
 void	gtk_item_factory_delete_entry	(GtkItemFactory		*ifactory,
@@ -203,7 +195,14 @@ void	gtk_item_factory_create_menu_entries (guint		 n_entries,
 					      GtkMenuEntry      *entries);
 void	gtk_item_factories_path_delete	   (const gchar		*ifactory_path,
 					    const gchar		*path);
-
+typedef	void	(*GtkItemFactoryCallback2) (GtkWidget		*widget,
+					    gpointer		 callback_data,
+					    guint		 callback_action);
+void	gtk_item_factory_create_items_ac (GtkItemFactory	*ifactory,
+					  guint			 n_entries,
+					  GtkItemFactoryEntry	*entries,
+					  gpointer		 callback_data,
+					  guint			 callback_type);
 
 
 

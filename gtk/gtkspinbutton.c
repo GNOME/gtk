@@ -1308,17 +1308,6 @@ gtk_spin_button_real_spin (GtkSpinButton *spin_button,
 
 
 void
-gtk_spin_button_construct (GtkSpinButton  *spin_button,
-			   GtkAdjustment  *adjustment,
-			   gfloat	    climb_rate,
-			   guint	    digits)
-{
-  g_message ("gtk_spin_button_construct() is deprecated");
-
-  gtk_spin_button_configure (spin_button, adjustment, climb_rate, digits);
-}
-
-void
 gtk_spin_button_configure (GtkSpinButton  *spin_button,
 			   GtkAdjustment  *adjustment,
 			   gfloat          climb_rate,

@@ -1544,17 +1544,6 @@ gtk_entry_position (GtkEntry *entry,
   return gtk_entry_find_position(entry, x);
 }
 
-void
-gtk_entry_adjust_scroll (GtkEntry *entry)
-{
-  g_return_if_fail (entry != NULL);
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-
-  g_message ("gtk_entry_adjust_scroll() is deprecated");
-
-  entry_adjust_scroll (entry);
-}
-
 static void
 entry_adjust_scroll (GtkEntry *entry)
 {

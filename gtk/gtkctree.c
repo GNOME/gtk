@@ -6062,32 +6062,3 @@ gtk_ctree_drag_data_received (GtkWidget        *widget,
 	}
     }
 }
-
-/* deprecated*/
-void
-gtk_ctree_set_reorderable (GtkCTree *ctree, 
-			   gboolean  reorderable)
-{
-  g_return_if_fail (ctree != NULL);
-  g_return_if_fail (GTK_IS_CTREE (ctree));
-
-  gtk_clist_set_reorderable (GTK_CLIST (ctree), reorderable);
-}
-
-void
-gtk_ctree_set_use_drag_icons (GtkCTree *ctree,
-			      gboolean  use_icons)
-{
-  g_return_if_fail (ctree != NULL);
-  g_return_if_fail (GTK_IS_CTREE (ctree));
-
-  gtk_clist_set_use_drag_icons (GTK_CLIST (ctree), use_icons);
-}
-
-void
-gtk_ctree_show_stub (GtkCTree *ctree,
-		     gboolean  show_stub)
-{
-  g_message ("gtk_ctree_show_stub() is deprecated");
-  gtk_ctree_set_show_stub (ctree, show_stub);
-}

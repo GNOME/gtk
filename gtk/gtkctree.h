@@ -424,14 +424,6 @@ void gtk_ctree_sort_recursive                    (GtkCTree     *ctree,
 						  GtkCTreeNode *node);
 
 
-/* deprecated*/
-void gtk_ctree_show_stub             (GtkCTree                *ctree, 
-				      gboolean                 show_stub);
-void gtk_ctree_set_reorderable       (GtkCTree                *ctree,
-				      gboolean                 reorderable);
-void gtk_ctree_set_use_drag_icons    (GtkCTree                *ctree,
-				      gboolean                 use_icons);
-
 
 #ifdef __cplusplus
 }

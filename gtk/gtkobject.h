@@ -353,15 +353,6 @@ void	gtk_trace_referencing	(GtkObject   *object,
 #endif	/* G_ENABLE_DEBUG */
 
 
-/* Deprecated methods */
-
-/* Use gtk_object_class_user_signal_new() instead */
-guint	gtk_object_class_add_user_signal (GtkObjectClass	*klass,
-					  const gchar		*name,
-					  GtkSignalMarshaller	 marshaller,
-					  GtkType		 return_val,
-					  guint			 nparams,
-					  ...);
 
 
 

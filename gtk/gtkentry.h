@@ -97,10 +97,6 @@ void       gtk_entry_set_editable   		(GtkEntry      *entry,
 /* text is truncated if needed */
 void       gtk_entry_set_max_length 		(GtkEntry      *entry,
 						 guint16        max);
-/* deprecated function. The only reason why it is public
- * is that there were bugs in GtkEntry. IT WILL DISAPPEAR.
- */
-void       gtk_entry_adjust_scroll  		(GtkEntry      *entry);
 
 #ifdef __cplusplus
 }

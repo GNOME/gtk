@@ -610,10 +610,6 @@ void	     gtk_widget_class_path	   (GtkWidget *widget,
 #endif	/* GTK_TRACE_OBJECTS && __GNUC__ */
 
 
-/* deprecated */
-void       gtk_widget_freeze_accelerators (GtkWidget	       *widget);
-void	   gtk_widget_thaw_accelerators   (GtkWidget	       *widget);
-
 
 #ifdef __cplusplus
 }

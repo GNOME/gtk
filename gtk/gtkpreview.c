@@ -229,17 +229,6 @@ gtk_preview_put (GtkPreview   *preview,
 }
 
 void
-gtk_preview_put_row (GtkPreview *preview,
-		     guchar     *src,
-		     guchar     *dest,
-		     gint        x,
-		     gint        y,
-		     gint        w)
-{
-  g_warning ("gtk_preview_put_row not implemented (deprecated)\n");
-}
-
-void
 gtk_preview_draw_row (GtkPreview *preview,
 		      guchar     *data,
 		      gint        x,

@@ -1,3 +1,29 @@
+What is new in GTK+ 1.1.13:
+
+* Dnd and selection bug fixes and memory purification.
+* Widget sensitivity fixups.
+* Tooltips windows are now named "gtk-tooltips" so rc file rules
+  can match tooltips windows. Fixed interaction of tooltips and NO_WINDOW
+  widgets.
+* Spin buttons now update their values upon value retrival.
+* Overhaul of the resizing vs. redrawing logic to reduce redrawing needs
+  a lot. Gtk makes full use of the draw_area coalescing code now, which
+  got minorly improved as well.
+* Containers map their Gdk windows after their children now to reduce
+  expose event generation.
+* Gdk event queue fixups, this solves the double-click problems people were
+  recently having.
+* Account for the fact that GSource's are only properly reentrant from
+  within dispatch(), thus we don't do Gdk event processing from within
+  check() or prepare() anymore.
+* Rc files feature a bg_pixmap value of "<none>" now.
+* Improved session management support in Gdk.  
+* Automatic disabling of NLS if no gettext is found should work now.
+* Removed deprecated functions, docs/Changes-1.2.txt gives an overview.
+* Gtk+ development now requires GNU autoconf 2.13, GNU automake 1.4
+  and GNU libtool 1.2d.
+* More bug fixes all over the place.
+
 What is new in GTK+ 1.1.12:
 
 * Korean translation added

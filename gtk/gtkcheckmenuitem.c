@@ -95,13 +95,6 @@ gtk_check_menu_item_new_with_label (const gchar *label)
   return check_menu_item;
 }
 
-void /* FIXME remove gtk_check_menu_item_set_state, this function is deprecated */
-gtk_check_menu_item_set_state (GtkCheckMenuItem *check_menu_item,
-			       gint              state)
-{
-  gtk_check_menu_item_set_active (check_menu_item, state);
-}
-
 void
 gtk_check_menu_item_set_active (GtkCheckMenuItem *check_menu_item,
 				gboolean          is_active)

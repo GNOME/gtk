@@ -241,18 +241,6 @@ gtk_progress_bar_new_with_adjustment (GtkAdjustment *adjustment)
   return pbar;
 }
 
-void
-gtk_progress_bar_construct (GtkProgressBar *pbar,
-			    GtkAdjustment  *adjustment)
-{
-  g_return_if_fail (pbar != NULL);
-  g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
-
-  g_message ("gtk_progress_bar_construct() is deprecated");
-
-  gtk_progress_set_adjustment (GTK_PROGRESS (pbar), adjustment);
-}
-
 static void
 gtk_progress_bar_real_update (GtkProgress *progress)
 {
@@ -756,7 +744,7 @@ gtk_progress_bar_update (GtkProgressBar *pbar,
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
   /***********************************************************************
-   *                 Use of this function is deprecated !	         * 
+   *          Use of gtk_progress_bar_update() is deprecated !	         * 
    * Use gtk_progress_set_value or gtk_progress_set_percentage instead.  *
    ***********************************************************************/
 

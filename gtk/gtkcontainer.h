@@ -213,15 +213,6 @@ gchar*	gtk_container_child_composite_name (GtkContainer *container,
 					    GtkWidget	 *child);
 
 
-/* Deprecated methods */
-
-/* Use gtk_container_set_resize_mode() instead */
-void    gtk_container_block_resize	 (GtkContainer	   *container);
-void    gtk_container_unblock_resize	 (GtkContainer	   *container);
-
-/* Use gtk_container_check_resize() instead */
-gint    gtk_container_need_resize        (GtkContainer     *container);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

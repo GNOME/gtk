@@ -3,12 +3,40 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
 * GtkAcceleratorTable has been replaced with GtkAccelGroup
 
 * GtkMenuFactory has been replaced with GtkItemFactory, although
-  a version of GtkMenuFactory is provided to ease compatibility.
+  a version of GtkMenuFactory is currently still provided to ease
+  the migration phase.
 
-* GtkButton has been changed to derive from GtkBin. 
- 
- To access a button's child, use GTK_BIN (button)->child, instead
- of the old GTK_BUTTON (button)->child.
+* A number of Gtk functions got renamed. For compatibility, function
+  name aliases covering the old 1.0.x function names are defined in
+  gtkcompat.h. To asure your Gtk program doesn't rely on outdated function
+  variants, compile you program with -DGTK_DISABLE_COMPAT_H to disable
+  the compatibility aliases.
+
+* During the development phase of the 1.1.x line of Gtk certain functions
+  got deprecated and later removed. Functions affected are:
+  Removed:                          Replacement:
+  gtk_clist_set_border		    gtk_clist_set_shadow_type
+  gtk_container_block_resize	    gtk_container_set_resize_mode
+  gtk_container_unblock_resize	    gtk_container_set_resize_mode
+  gtk_container_need_resize	    gtk_container_check_resize
+  gtk_ctree_show_stub		    gtk_ctree_set_show_stub
+  gtk_ctree_set_reorderable	    gtk_clist_set_reorderable
+  gtk_ctree_set_use_drag_icons	    gtk_clist_set_use_drag_icons
+  gtk_entry_adjust_scroll	    %
+  gtk_object_class_add_user_signal  gtk_object_class_user_signal_new
+  gtk_preview_put_row		    %
+  gtk_progress_bar_construct	    gtk_progress_set_adjustment
+  gtk_scrolled_window_construct	    gtk_scrolled_window_set_{h|v}adjustment
+  gtk_spin_button_construct	    gtk_spin_button_configure
+  gtk_widget_thaw_accelerators	    gtk_widget_unlock_accelerators
+  gtk_widget_freeze_accelerators    gtk_widget_lock_accelerators
+
+* Additionally, all gtk_*_interp function variants got removed, as a
+  replacement gtk_*_full variants are provided now.
+
+* GtkButton has been changed to derive from GtkBin.
+  To access a button's child, use GTK_BIN (button)->child, instead
+  of the old GTK_BUTTON (button)->child.
 
 * The selection API has been slightly modified:
 
@@ -90,13 +118,6 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
   been provided. However, you may want to consider migrating
   your code to use the GLib main loop directly.
 
-  Minor known incompatibilities:
-
-  - gtk_idle_remove_by_data() and gtk_timeout_remove_by_data() now
-    work from a common pool of "input sources", so 
-    gtk_idle_remove_by_data() will remove timeouts and 
-    vice-versa.
-
 * the GTK_BASIC flag was removed, and with it the corresponding
   macro and function GTK_WIDGET_BASIC() and gtk_widget_basic().
   
@@ -153,9 +174,3 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
       b) Link with the libraries returned by:
  
            gtk-config --libs gthread
-
-* All functions matching g_message* are deprecated
-
-* Functions *_interp are deprecated, *_full variants are available
-  instead
-

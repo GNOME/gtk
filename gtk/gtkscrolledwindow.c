@@ -285,17 +285,6 @@ gtk_scrolled_window_new (GtkAdjustment *hadjustment,
 }
 
 void
-gtk_scrolled_window_construct (GtkScrolledWindow *scrolled_window,
-			       GtkAdjustment     *hadjustment,
-			       GtkAdjustment     *vadjustment)
-{
-  g_message ("gtk_scrolled_window_construct() is deprecated");
-  gtk_scrolled_window_set_hadjustment (scrolled_window, hadjustment);
-  gtk_scrolled_window_set_vadjustment (scrolled_window, vadjustment);
-  gtk_object_default_construct (GTK_OBJECT (scrolled_window));
-}
-
-void
 gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
 				     GtkAdjustment     *hadjustment)
 {

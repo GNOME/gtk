@@ -712,24 +712,6 @@ gtk_container_remove (GtkContainer *container,
 }
 
 void
-gtk_container_block_resize (GtkContainer *container)
-{
-  g_return_if_fail (container != NULL);
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-
-  g_message ("gtk_container_block_resize() is deprecated");
-}
-
-void
-gtk_container_unblock_resize (GtkContainer *container)
-{
-  g_return_if_fail (container != NULL);
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-  
-  g_message ("gtk_container_unblock_resize() is deprecated");
-}
-
-void
 gtk_container_clear_resize_widgets (GtkContainer *container)
 {
   GSList *node;
@@ -780,15 +762,6 @@ gtk_container_set_resize_mode (GtkContainer  *container,
 	  gtk_widget_queue_resize (GTK_WIDGET (container));
 	}
     }
-}
-
-gint    
-gtk_container_need_resize (GtkContainer     *container)
-{
-  g_message ("gtk_container_need_resize() is deprecated");
-
-  gtk_container_check_resize (container);
-  return FALSE;
 }
 
 static GtkContainer*

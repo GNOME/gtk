@@ -92,10 +92,6 @@ void       gtk_progress_bar_set_orientation      (GtkProgressBar *pbar,
 void       gtk_progress_bar_update               (GtkProgressBar *pbar,
 						  gfloat          percentage);
 
-/* deprecated */
-void       gtk_progress_bar_construct            (GtkProgressBar *pbar,
-						  GtkAdjustment  *adjustment);
-
 
 #ifdef __cplusplus
 }

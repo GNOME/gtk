@@ -770,12 +770,6 @@ void gtk_clist_set_auto_sort (GtkCList *clist,
 			      gboolean  auto_sort);
 
 
-/* Deprecated methods */
-
-/* Use gtk_clist_set_shadow_type instead. */
-void gtk_clist_set_border (GtkCList      *clist,
-			   GtkShadowType  border);
-
 #ifdef __cplusplus
 }
 #endif				/* __cplusplus */

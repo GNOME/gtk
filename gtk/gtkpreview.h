@@ -95,13 +95,6 @@ void            gtk_preview_put                (GtkPreview      *preview,
 						gint             desty,
 						gint             width,
 						gint             height);
-/* gtk_preview_put_row is broken */
-void            gtk_preview_put_row            (GtkPreview      *preview,
-						guchar          *src,
-						guchar          *dest,
-						gint             x,
-						gint             y,
-						gint             w);
 void            gtk_preview_draw_row           (GtkPreview      *preview,
 						guchar          *data,
 						gint             x,

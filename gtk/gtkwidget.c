@@ -2484,22 +2484,6 @@ gtk_widget_unlock_accelerators (GtkWidget *widget)
 }
 
 void
-gtk_widget_thaw_accelerators (GtkWidget *widget)
-{
-  g_message ("gtk_widget_thaw_accelerators() is deprecated");
-
-  gtk_widget_unlock_accelerators (widget);
-}
-
-void
-gtk_widget_freeze_accelerators (GtkWidget *widget)
-{
-  g_message ("gtk_widget_freeze_accelerators() is deprecated");
-
-  gtk_widget_lock_accelerators (widget);
-}
-
-void
 gtk_widget_add_accelerator (GtkWidget           *widget,
 			    const gchar         *accel_signal,
 			    GtkAccelGroup       *accel_group,
