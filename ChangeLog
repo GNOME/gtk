@@ -1,7 +1,7 @@
 2002-10-09  Stanislav Brabec  <sbrabec@suse.cz>
 
 	* gtk/gtkimcontextsimple.c: Added support for hungarian characters
-	(addition to bug #91258). Only via dead keys, because compose key
+	(addition to bug #93421). Only via dead keys, because compose key
 	combinations in X are erratic.
 
 Tue Oct  8 09:41:43 2002  Owen Taylor  <otaylor@redhat.com>
@@ -43,7 +43,7 @@ Fri Oct  4 14:49:04 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-10-01  Stanislav Brabec  <sbrabec@suse.cz>
 
-	* gtk/gtkimcontextsimple.c: Fixed alphabetical order (bug #91258).
+	* gtk/gtkimcontextsimple.c: Fixed alphabetical order (bug #93421).
 
 Mon Sep 30 14:46:49 2002  Owen Taylor  <otaylor@redhat.com>
 
