@@ -2248,6 +2248,19 @@ gtk_entry_paste_clipboard (GtkEntry *entry)
 }
 
 static void
+gtk_entry_delete_cb (GtkEntry *entry)
+{
+  GtkEditable *editable = GTK_EDITABLE (entry);
+  gint start, end;
+
+  if (entry->editable)
+    {
+      if (gtk_editable_get_selection_bounds (editable, &start, &end))
+	gtk_editable_delete_text (editable, start, end);
+    }
+}
+
+static void
 gtk_entry_toggle_overwrite (GtkEntry *entry)
 {
   entry->overwrite_mode = !entry->overwrite_mode;
@@ -3953,6 +3966,16 @@ popup_targets_received (GtkClipboard     *clipboard,
 			    entry->current_pos != entry->selection_bound);
       append_action_signal (entry, entry->popup_menu, GTK_STOCK_PASTE, "paste_clipboard",
 			    entry->editable && clipboard_contains_text);
+      menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_DELETE, NULL);
+      gtk_widget_set_sensitive (menuitem, entry->current_pos != entry->selection_bound);
+      g_signal_connect_swapped (menuitem, "activate",
+			        G_CALLBACK (gtk_entry_delete_cb), entry);
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
+
+      menuitem = gtk_separator_menu_item_new ();
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
       
       menuitem = gtk_menu_item_new_with_label (_("Select All"));
       g_signal_connect_swapped (menuitem, "activate",
