@@ -1,3 +1,18 @@
+Thu Jan 21 12:20:51 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_dialog_new): 
+	Pushing	and popping the visual/cmap in the init() 
+	function does no good, because the window itself needs
+	to be create with that visual/cmap.
+
+	So do it in the new() function instead. 
+
+	This will require people doing gtk_widget_new() to do 
+	the push/pop themselves, but I don't see any way around
+	it other than digging in and tweaking the window
+	widget's colormap and visual ourselves, which
+	is highly non-kosher, but would be safe...
+
 Thu Jan 21 16:04:35 1999  Timur Bakeyev <mc@bat.ru>
 
 	* gtk/gtkrc.c (gtk_rc_init): It was reported by Owen Taylor 
