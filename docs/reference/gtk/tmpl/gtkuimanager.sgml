@@ -12,8 +12,8 @@ action groups.
 </para>
 <refsect2 id="XML-UI"><title>UI Definitions</title>
 <para>
-The UI definitions are specified in an XML format which is described
-by the following DTD.
+The UI definitions are specified in a #GMarkup format which can be
+roughly described by the following XML DTD.
 <programlisting>
 &lt;!ELEMENT ui          (menubar|toolbar|popup)* &gt;
 &lt;!ELEMENT menubar     (menuitem|separator|placeholder|menu)* &gt;
@@ -38,29 +38,77 @@ by the following DTD.
                        action           &num;REQUIRED
                        pos    (top|bot) &num;IMPLIED &gt;
 </programlisting>
-There are some additional restrictions beyond those specified in the DTD, e.g.
-every toolitem must have a toolbar in its anchestry and every menuitem must have
-a menubar or popup in its anchestry. If a name is not specified, it defaults to 
-the action. If an action is not specified either, the element name is used.
+There are some additional restrictions beyond those specified in the
+DTD, e.g. every toolitem must have a toolbar in its anchestry and
+every menuitem must have a menubar or popup in its anchestry. If a name 
+is not specified, it defaults to the action. If an action is not specified 
+either, the element name is used.  
+</para>
+<example>
+<title>A UI definition</title>
+<programlisting>
+&lt;ui&gt;
+  &lt;menubar&gt;
+    &lt;menu name="FileMenu" action="FileMenuAction"&gt;
+      &lt;menuitem name="New" action="New2Action" /&gt;
+      &lt;placeholder name="FileMenuAdditions" /&gt;
+    &lt;/menu&gt;
+    &lt;menu name="JustifyMenu" action="JustifyMenuAction"&gt;
+      &lt;menuitem name="Left" action="justify-left"/&gt;
+      &lt;menuitem name="Centre" action="justify-center"/&gt;
+      &lt;menuitem name="Right" action="justify-right"/&gt;
+      &lt;menuitem name="Fill" action="justify-fill"/&gt;
+    &lt;/menu&gt;
+  &lt;/menubar&gt;
+  &lt;toolbar action="toolbar1"&gt;
+    &lt;placeholder name="JustifyToolItems"&gt;
+      &lt;separator/&gt;
+      &lt;toolitem name="Left" action="justify-left"/&gt;
+      &lt;toolitem name="Centre" action="justify-center"/&gt;
+      &lt;toolitem name="Right" action="justify-right"/&gt;
+      &lt;toolitem name="Fill" action="justify-fill"/&gt;
+      &lt;separator/&gt;
+    &lt;/placeholder&gt;
+  &lt;/toolbar&gt;
+&lt;/ui&gt;
+</programlisting>
+</example>
+<para>
+The constructed widget hierarchy is very similar to the element tree
+of the XML, with the exception that placeholders are merged into their
+parents. The correspondence of XML elements to widgets should be
+almost obvious: 
+<variablelist>
+<varlistentry><term>menubar</term>
+<listitem><para>a #GtkMenuBar</para></listitem>
+</varlistentry>
+<varlistentry><term>toolbar</term>
+<listitem><para>a #GtkToolbar</para></listitem>
+</varlistentry>
+<varlistentry><term>popup</term>
+<listitem><para>a toplevel #GtkMenu</para></listitem>
+</varlistentry>
+<varlistentry><term>menu</term>
+<listitem><para>a #GtkMenu attached to a menuitem</para></listitem>
+</varlistentry>
+<varlistentry><term>menuitem</term>
+<listitem><para>a #GtkMenuItem subclass, the exact type depends on the
+action</para></listitem> 
+</varlistentry>
+<varlistentry><term>toolitem</term>
+<listitem><para>a #GtkToolItem subclass, the exact type depends on the
+action</para></listitem> 
+</varlistentry>
+<varlistentry><term>separator</term>
+<listitem><para>a #GtkSeparatorMenuItem or
+#GtkSeparatorToolItem</para></listitem> 
+</varlistentry>
+</variablelist>
 </para>
 <para>
-The constructed widget hierarchy is very similar to the element
-tree of the XML, with the exception that placeholders are merged into their 
-parents. The correspondence of XML elements to widgets should be almost obvious:
-<itemizedlist>
-<listitem><para>menubar: a #GtkMenuBar</para></listitem>
-<listitem><para>toolbar: a #GtkToolBar</para></listitem>
-<listitem><para>popup: a toplevel #GtkMenu</para></listitem>
-<listitem><para>menu: a #GtkMenu attached to a menuitem</para></listitem>
-<listitem><para>menuitem: a #GtkMenuItem subclass, the exact type depends on the action</para></listitem>
-<listitem><para>toolitem: a #GtkToolItem subclass, the exact type depends on the action</para></listitem>
-<listitem><para>separator: a #GtkSeparatorMenuItem or #GtkSeparatorToolItem</para></listitem>
-</itemizedlist>
-</para>
-<para>
-The pos attribute determines where a constructed widget is positioned wrt. to its
-siblings in the partially constructed tree. If it is "top", the widget is prepended,
-otherwise it is appended.
+The pos attribute determines where a constructed widget is positioned
+wrt. to its siblings in the partially constructed tree. If it is
+"top", the widget is prepended, otherwise it is appended.
 </para>
 </refsect2>
 
@@ -197,6 +245,14 @@ otherwise it is appended.
 
 @self: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_ui_manager_ensure_update ##### -->
+<para>
+
+</para>
+
+@self: 
 
 
 <!-- ##### SIGNAL GtkUIManager::add-widget ##### -->
