@@ -1,11 +1,5 @@
 *.lo
-config.log
-libtool
-config.status
-stamp-h
 Makefile
 .deps
 _libs
 libglib.la
-testglib
-glibconfig.h
