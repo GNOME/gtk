@@ -36,7 +36,7 @@
 #include "gtkwindow.h"
 #include "gtktextbuffer.h"
 
-#define DEBUG_ICON_VIEW
+#undef DEBUG_ICON_VIEW
 
 #define ICON_TEXT_PADDING 3
 
