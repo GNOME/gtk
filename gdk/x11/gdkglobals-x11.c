@@ -39,7 +39,7 @@ Window            gdk_leader_window;
 Atom              gdk_wm_delete_window;
 Atom              gdk_wm_take_focus;
 Atom              gdk_wm_protocols;
-Atom              gdk_wm_window_protocols[2];
+Atom              gdk_wm_window_protocols[3];
 Atom              gdk_selection_property;
 gchar            *gdk_progclass = NULL;
 gboolean          gdk_null_window_warnings = TRUE;

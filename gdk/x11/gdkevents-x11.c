@@ -1228,6 +1228,13 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
   else if ((Atom) xevent->xclient.data.l[0] == gdk_wm_take_focus)
     {
     }
+  else if ((Atom) xevent->xclient.data.l[0] == gdk_atom_intern ("_NET_WM_PING", FALSE))
+    {
+      XEvent xev = *xevent;
+      
+      xev.xclient.window = gdk_root_window;
+      XSendEvent (gdk_display, gdk_root_window, False, SubstructureRedirectMask | SubstructureNotifyMask, &xev);
+    }
 
   return GDK_FILTER_REMOVE;
 }

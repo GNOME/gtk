@@ -75,12 +75,13 @@ typedef enum
  */
 typedef enum
 {
-  GDK_HINT_POS	      = 1 << 0,
-  GDK_HINT_MIN_SIZE   = 1 << 1,
-  GDK_HINT_MAX_SIZE   = 1 << 2,
-  GDK_HINT_BASE_SIZE  = 1 << 3,
-  GDK_HINT_ASPECT     = 1 << 4,
-  GDK_HINT_RESIZE_INC = 1 << 5
+  GDK_HINT_POS	       = 1 << 0,
+  GDK_HINT_MIN_SIZE    = 1 << 1,
+  GDK_HINT_MAX_SIZE    = 1 << 2,
+  GDK_HINT_BASE_SIZE   = 1 << 3,
+  GDK_HINT_ASPECT      = 1 << 4,
+  GDK_HINT_RESIZE_INC  = 1 << 5,
+  GDK_HINT_WIN_GRAVITY = 1 << 6
 } GdkWindowHints;
 
 /* The next two enumeration values current match the
@@ -108,6 +109,24 @@ typedef enum
   GDK_FUNC_MAXIMIZE	= 1 << 4,
   GDK_FUNC_CLOSE	= 1 << 5
 } GdkWMFunction;
+
+/* Currently, these are the same values numerically as in the
+ * X protocol. If you change that, gdkwindow-x11.c/gdk_window_set_geometry_hints()
+ * will need fixing.
+ */
+typedef enum
+{
+  GDK_GRAVITY_NORTH_WEST = 1,
+  GDK_GRAVITY_NORTH,
+  GDK_GRAVITY_NORTH_EAST,
+  GDK_GRAVITY_WEST,
+  GDK_GRAVITY_CENTER,
+  GDK_GRAVITY_EAST,
+  GDK_GRAVITY_SOUTH_WEST,
+  GDK_GRAVITY_SOUTH,
+  GDK_GRAVITY_SOUTH_EAST,
+  GDK_GRAVITY_STATIC,
+} GdkGravity;
 
 struct _GdkWindowAttr
 {
@@ -137,7 +156,7 @@ struct _GdkGeometry {
   gint height_inc;
   gdouble min_aspect;
   gdouble max_aspect;
-  /* GdkGravity gravity; */
+  GdkGravity win_gravity;
 };
 
 typedef struct _GdkWindowObject GdkWindowObject;
@@ -372,6 +391,7 @@ void	      gdk_window_set_decorations (GdkWindow	  *window,
 void	      gdk_window_set_functions	 (GdkWindow	  *window,
 					  GdkWMFunction	   functions);
 GList *       gdk_window_get_toplevels   (void);
+void          gdk_window_iconify         (GdkWindow       *window);
 
 void          gdk_window_register_dnd    (GdkWindow       *window);
 

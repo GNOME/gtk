@@ -75,10 +75,11 @@ const int gdk_event_mask_table[21] =
 const int gdk_nevent_masks = sizeof (gdk_event_mask_table) / sizeof (int);
 
 /* Forward declarations */
-static gboolean gdk_window_gravity_works (void);
-static void     gdk_window_set_static_win_gravity (GdkWindow *window, 
+static gboolean gdk_window_gravity_works          (void);
+static void     gdk_window_set_static_win_gravity (GdkWindow *window,
 						   gboolean   on);
-static gboolean gdk_window_have_shape_ext (void);
+static gboolean gdk_window_have_shape_ext         (void);
+static gboolean gdk_window_icon_name_set          (GdkWindow *window);
 
 static GdkColormap* gdk_window_impl_x11_get_colormap (GdkDrawable *drawable);
 static void         gdk_window_impl_x11_set_colormap (GdkDrawable *drawable,
@@ -490,7 +491,7 @@ gdk_window_new (GdkWindow     *parent,
     case GDK_WINDOW_TEMP:
       XSetWMProtocols (GDK_WINDOW_XDISPLAY (window),
 		       GDK_WINDOW_XID (window),
-		       gdk_wm_window_protocols, 2);
+		       gdk_wm_window_protocols, 3);
       break;
     case GDK_WINDOW_CHILD:
       if ((attributes->wclass == GDK_INPUT_OUTPUT) &&
@@ -541,12 +542,8 @@ gdk_window_new (GdkWindow     *parent,
     title = attributes->title;
   else
     title = g_get_prgname ();
-  
-  XmbSetWMProperties (GDK_WINDOW_XDISPLAY (window),
-		      GDK_WINDOW_XID (window),
-                      title, title,
-                      NULL, 0,
-                      NULL, NULL, NULL);
+
+  gdk_window_set_title (window, title);
   
   if (attributes_mask & GDK_WA_WMCLASS)
     {
@@ -1050,6 +1047,12 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
 	}
     }
 
+  if (geom_mask & GDK_HINT_WIN_GRAVITY)
+    {
+      size_hints.flags |= PWinGravity;
+      size_hints.width_inc = geometry->win_gravity;
+    }
+  
   /* FIXME: Would it be better to delete this property of
    *        geom_mask == 0? It would save space on the server
    */
@@ -1058,17 +1061,83 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
 		     &size_hints);
 }
 
+static gboolean
+utf8_is_latin1 (const gchar *str)
+{
+  const char *p = str;
+
+  while (*p)
+    {
+      gunichar ch = g_utf8_get_char (p);
+
+      if (ch >= 0xff)
+	return FALSE;
+      
+      p = g_utf8_next_char (p);
+    }
+
+  return TRUE;
+}
+
+/* Set the property to @utf8_str as STRING if the @utf8_str is fully
+ * convertable to STRING, otherwise, set it as compound text
+ */
+static void
+set_text_property (GdkWindow   *window,
+		   GdkAtom      property,
+		   const gchar *utf8_str)
+{
+  guchar *prop_text = NULL;
+  GdkAtom prop_type;
+  gint prop_length;
+  gint prop_format;
+  
+  if (utf8_is_latin1 (utf8_str))
+    {
+      prop_type = GDK_TARGET_STRING;
+      prop_text = gdk_utf8_to_string_target (utf8_str);
+      prop_length = strlen (prop_text);
+      prop_format = 8;
+    }
+  else
+    {
+      gdk_utf8_to_compound_text (utf8_str, &prop_type, &prop_format,
+				 &prop_text, &prop_length);
+    }
+
+  if (prop_text)
+    {
+      XChangeProperty (GDK_WINDOW_XDISPLAY (window),
+		       GDK_WINDOW_XID (window),
+		       property,
+		       prop_type, prop_format,
+		       PropModeReplace, prop_text,
+		       prop_length);
+
+      g_free (prop_text);
+    }
+}
+
 void
 gdk_window_set_title (GdkWindow   *window,
 		      const gchar *title)
 {
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
   
-  if (!GDK_WINDOW_DESTROYED (window))
-    XmbSetWMProperties (GDK_WINDOW_XDISPLAY (window),
-			GDK_WINDOW_XID (window),
-			title, title, NULL, 0, NULL, NULL, NULL);
+  XChangeProperty (GDK_WINDOW_XDISPLAY (window),
+		   GDK_WINDOW_XID (window),
+		   gdk_atom_intern ("_NET_WM_NAME", FALSE),
+		   gdk_atom_intern ("UTF8_STRING", FALSE), 8,
+		   PropModeReplace, title,
+		   strlen (title));
+
+  set_text_property (window, gdk_atom_intern ("WM_NAME", FALSE), title);
+  if (!gdk_window_icon_name_set (window))
+    set_text_property (window, gdk_atom_intern ("WM_ICON_NAME", FALSE), title);
 }
 
 void          
@@ -1692,34 +1761,42 @@ gdk_window_set_icon (GdkWindow *window,
   XFree (wm_hints);
 }
 
+static gboolean
+gdk_window_icon_name_set (GdkWindow *window)
+{
+  return GPOINTER_TO_UINT (g_object_get_qdata (G_OBJECT (window),
+					       g_quark_from_static_string ("gdk-icon-name-set")));
+}
+
 void          
 gdk_window_set_icon_name (GdkWindow   *window, 
 			  const gchar *name)
 {
-  XTextProperty property;
-  gint res;
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  g_object_set_qdata (G_OBJECT (window), g_quark_from_static_string ("gdk-icon-name-set"),
+		      GUINT_TO_POINTER (TRUE));
+
+  set_text_property (window, gdk_atom_intern ("WM_ICON_NAME", FALSE), name);
+}  
+
+void
+gdk_window_iconify (GdkWindow *window)
+{
+  Display *display;
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
-  
-  res = XmbTextListToTextProperty (GDK_WINDOW_XDISPLAY (window),
-				   &name, 1, XStdICCTextStyle,
-                               	   &property);
-  if (res < 0)
-    {
-      g_warning ("Error converting icon name to text property: %d\n", res);
-      return;
-    }
-  
-  XSetWMIconName (GDK_WINDOW_XDISPLAY (window),
-		  GDK_WINDOW_XID (window),
-		  &property);
-  
-  if (property.value)
-    XFree (property.value);
+
+  display = GDK_WINDOW_XDISPLAY (window);
+  XIconifyWindow (display, GDK_WINDOW_XWINDOW (window), DefaultScreen (display));
 }
 
 void          

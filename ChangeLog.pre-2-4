@@ -1,3 +1,26 @@
+Mon Sep 25 15:05:17 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.h gdk/x11/gdkwindow-x11.c (gdk_window_iconify):
+	Add gdk_window_iconify.
+
+	* gdk/gdkwindow.h gdk/x11/gdkwindow-x11.c
+	(gdk_window_set_geometry_hints): Add win_gravity
+	to geometry structure.
+
+	* gdk/x11/gdkevents-x11.c (gdk_wm_protocols_filter):
+	Implement _NET_WM_PING.
+
+	* gdk/x11/gdkmain-x11.c (_gdk_windowing_init_check):
+	Set _NET_WM_PID on the client leader.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_icon_name):
+	Handle UTF-8 better.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_title): Handle
+	UTF-8 better, set _NET_WM_NAME as well. Only set
+	icon name if it hasn't previously been explicitely 
+	set.
+
 2000-10-03  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/testtextbuffer.c: clean up trailing whitespace,

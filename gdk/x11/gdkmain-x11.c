@@ -30,6 +30,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <limits.h>
 #include <errno.h>
 
@@ -148,6 +149,7 @@ _gdk_windowing_init_check (int argc, char **argv)
 {
   XKeyboardState keyboard_state;
   XClassHint *class_hint;
+  guint pid;
   
   XSetErrorHandler (gdk_x_error);
   XSetIOErrorHandler (gdk_x_io_error);
@@ -176,13 +178,21 @@ _gdk_windowing_init_check (int argc, char **argv)
                       NULL, NULL, argv, argc, 
                       NULL, NULL, class_hint);
   XFree (class_hint);
+
+  pid = getpid();
+  XChangeProperty (gdk_display, gdk_leader_window,
+		   gdk_atom_intern ("_NET_WM_PID", FALSE),
+		   XA_CARDINAL, 32,
+		   PropModeReplace,
+		   (guchar *)&pid, 1);
   
-  gdk_wm_delete_window = XInternAtom (gdk_display, "WM_DELETE_WINDOW", False);
-  gdk_wm_take_focus = XInternAtom (gdk_display, "WM_TAKE_FOCUS", False);
-  gdk_wm_protocols = XInternAtom (gdk_display, "WM_PROTOCOLS", False);
+  gdk_wm_delete_window = gdk_atom_intern ("WM_DELETE_WINDOW", FALSE);
+  gdk_wm_take_focus = gdk_atom_intern ("WM_TAKE_FOCUS", FALSE);
+  gdk_wm_protocols = gdk_atom_intern ("WM_PROTOCOLS", FALSE);
   gdk_wm_window_protocols[0] = gdk_wm_delete_window;
   gdk_wm_window_protocols[1] = gdk_wm_take_focus;
-  gdk_selection_property = XInternAtom (gdk_display, "GDK_SELECTION", False);
+  gdk_wm_window_protocols[2] = gdk_atom_intern ("_NET_WM_PING", FALSE);
+  gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
   
   XGetKeyboardControl (gdk_display, &keyboard_state);
   autorepeat = keyboard_state.global_auto_repeat;
