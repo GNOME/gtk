@@ -1529,7 +1529,6 @@ step_forward (GtkRange *range)
   gdouble newval;
 
   newval = range->adjustment->value + range->adjustment->step_increment;
-
   gtk_range_internal_set_value (range, newval);
 }
 
@@ -1549,7 +1548,21 @@ page_forward (GtkRange *range)
   gdouble newval;
 
   newval = range->adjustment->value + range->adjustment->page_increment;
+  gtk_range_internal_set_value (range, newval);
+}
 
+static void
+scroll_begin (GtkRange *range)
+{
+  gtk_range_internal_set_value (range, range->adjustment->lower);
+}
+
+static void
+scroll_end (GtkRange *range)
+{
+  gdouble newval;
+
+  newval = range->adjustment->upper - range->adjustment->page_size;
   gtk_range_internal_set_value (range, newval);
 }
 
@@ -1588,11 +1601,17 @@ gtk_range_scroll (GtkRange     *range,
       break;
                   
     case GTK_SCROLL_STEP_BACKWARD:
-      step_back (range);
+      if (should_invert (range))
+        step_forward (range);
+      else
+        step_back (range);
       break;
                   
     case GTK_SCROLL_STEP_FORWARD:
-      step_forward (range);
+      if (should_invert (range))
+        step_back (range);
+      else
+        step_forward (range);
       break;
 
     case GTK_SCROLL_PAGE_LEFT:
@@ -1624,21 +1643,31 @@ gtk_range_scroll (GtkRange     *range,
       break;
                   
     case GTK_SCROLL_PAGE_BACKWARD:
-      page_back (range);
+      if (should_invert (range))
+        page_forward (range);
+      else
+        page_back (range);
       break;
                   
     case GTK_SCROLL_PAGE_FORWARD:
-      page_forward (range);
+      if (should_invert (range))
+        page_back (range);
+      else
+        page_forward (range);
       break;
 
     case GTK_SCROLL_START:
-      gtk_range_internal_set_value (range,
-                                    range->adjustment->lower);
+      if (should_invert (range))
+	scroll_end (range);
+      else
+        scroll_begin (range);
       break;
 
     case GTK_SCROLL_END:
-      gtk_range_internal_set_value (range,
-                                    range->adjustment->upper - range->adjustment->page_size);
+      if (should_invert (range))
+        scroll_begin (range);
+      else
+	scroll_end (range);
       break;
 
     case GTK_SCROLL_JUMP:
