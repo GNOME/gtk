@@ -247,10 +247,27 @@ struct _LoadContext {
         png_structp png_read_ptr;
         png_infop   png_info_ptr;
 
-        ModulePreparedNotifyFunc notify_func;
+        ModulePreparedNotifyFunc prepare_func;
+        ModuleUpdatedNotifyFunc update_func;
         gpointer notify_user_data;
 
         GdkPixbuf* pixbuf;
+
+        /* row number of first row seen, or -1 if none yet seen */
+
+        gint first_row_seen_in_chunk;
+
+        /* pass number for the first row seen */
+
+        gint first_pass_seen_in_chunk;
+        
+        /* row number of last row seen */
+        gint last_row_seen_in_chunk;
+
+        gint last_pass_seen_in_chunk;
+
+        /* highest row number seen */
+        gint max_row_seen_in_chunk;
         
         guint fatal_error_occurred : 1;
 
@@ -267,9 +284,16 @@ image_begin_load (ModulePreparedNotifyFunc prepare_func,
         
         lc->fatal_error_occurred = FALSE;
 
-        lc->notify_func = prepare_func;
+        lc->prepare_func = prepare_func;
+        lc->update_func = update_func;
         lc->notify_user_data = user_data;
 
+        lc->first_row_seen_in_chunk = -1;
+        lc->last_row_seen_in_chunk = -1;
+        lc->first_pass_seen_in_chunk = -1;
+        lc->last_pass_seen_in_chunk = -1;
+        lc->max_row_seen_in_chunk = -1;
+        
         /* Create the main PNG context struct */
 
         lc->png_read_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,
@@ -322,13 +346,60 @@ image_load_increment(gpointer context, guchar *buf, guint size)
 
         g_return_val_if_fail(lc != NULL, FALSE);
 
+        /* reset */
+        lc->first_row_seen_in_chunk = -1;
+        lc->last_row_seen_in_chunk = -1;
+        lc->first_pass_seen_in_chunk = -1;
+        lc->last_pass_seen_in_chunk = -1;
+        lc->max_row_seen_in_chunk = -1;
+        
         /* Invokes our callbacks as needed */
         png_process_data(lc->png_read_ptr, lc->png_info_ptr, buf, size);
 
         if (lc->fatal_error_occurred)
                 return FALSE;
-        else
+        else {
+                if (lc->first_row_seen_in_chunk >= 0) {
+                        /* We saw at least one row */
+                        gint pass_diff = lc->last_pass_seen_in_chunk - lc->first_pass_seen_in_chunk;
+                        
+                        g_assert(pass_diff >= 0);
+                        
+                        if (pass_diff == 0) {
+                                /* start and end row were in the same pass */
+                                (lc->update_func)(lc->pixbuf, lc->notify_user_data, 0,
+                                                  lc->first_row_seen_in_chunk,
+                                                  lc->pixbuf->art_pixbuf->width,
+                                                  (lc->last_row_seen_in_chunk -
+                                                   lc->first_row_seen_in_chunk) + 1);
+                        } else if (pass_diff == 1) {
+                                /* We have from the first row seen to
+                                   the end of the image (max row
+                                   seen), then from the top of the
+                                   image to the last row seen */
+                                /* first row to end */
+                                (lc->update_func)(lc->pixbuf, lc->notify_user_data, 0,
+                                                  lc->first_row_seen_in_chunk,
+                                                  lc->pixbuf->art_pixbuf->width,
+                                                  (lc->max_row_seen_in_chunk -
+                                                   lc->first_row_seen_in_chunk) + 1);
+                                /* top to last row */
+                                (lc->update_func)(lc->pixbuf, lc->notify_user_data,
+                                                  0, 0, 
+                                                  lc->pixbuf->art_pixbuf->width,
+                                                  lc->last_row_seen_in_chunk + 1);
+                        } else {
+                                /* We made at least one entire pass, so update the
+                                   whole image */
+                                (lc->update_func)(lc->pixbuf, lc->notify_user_data,
+                                                  0, 0, 
+                                                  lc->pixbuf->art_pixbuf->width,
+                                                  lc->max_row_seen_in_chunk + 1);
+                        }
+                }
+                
                 return TRUE;
+        }
 }
 
 /* Called at the start of the progressive load, once we have image info */
@@ -372,8 +443,8 @@ png_info_callback   (png_structp png_read_ptr,
         
         /* Notify the client that we are ready to go */
 
-        if (lc->notify_func)
-                (* lc->notify_func) (lc->pixbuf, lc->notify_user_data);
+        if (lc->prepare_func)
+                (* lc->prepare_func) (lc->pixbuf, lc->notify_user_data);
         
         return;
 }
@@ -388,12 +459,21 @@ png_row_callback   (png_structp png_read_ptr,
 {
         LoadContext* lc;
         guchar* old_row = NULL;
-        
+
         lc = png_get_progressive_ptr(png_read_ptr);
 
         if (lc->fatal_error_occurred)
                 return;
-                
+
+        if (lc->first_row_seen_in_chunk < 0) {
+                lc->first_row_seen_in_chunk = row_num;
+                lc->first_pass_seen_in_chunk = pass_num;
+        }
+
+        lc->max_row_seen_in_chunk = MAX(lc->max_row_seen_in_chunk, ((gint)row_num));
+        lc->last_row_seen_in_chunk = row_num;
+        lc->last_pass_seen_in_chunk = pass_num;
+        
         old_row = lc->pixbuf->art_pixbuf->pixels + (row_num * lc->pixbuf->art_pixbuf->rowstride);
 
         png_progressive_combine_row(lc->png_read_ptr, old_row, new_row);
@@ -410,10 +490,7 @@ png_end_callback   (png_structp png_read_ptr,
 
         if (lc->fatal_error_occurred)
                 return;
-
-        /* Doesn't do anything for now */
 }
-
 
 static void
 png_error_callback(png_structp png_read_ptr,

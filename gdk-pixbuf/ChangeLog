@@ -1,3 +1,14 @@
+1999-11-22  Havoc Pennington  <hp@pobox.com>
+
+	* src/io-png.c (image_load_increment): Call the update_area
+	callback depending on the number of rows loaded in this increment.
+
+	* src/testpixbuf.c (main): slow down the progressive load demo
+
+1999-11-16  Havoc Pennington  <hp@pobox.com>
+
+	* src/gdk-pixbuf-drawable.h: Get the quotes right on the #include
+
 1999-11-22  Jonathan Blandford  <jrb@redhat.com>
 
 	* configure.in (GDK_PIXBUF_DIR): make the symlink.  Does not work
