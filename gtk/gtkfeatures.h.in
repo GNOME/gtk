@@ -45,17 +45,20 @@ extern "C" {
  */
 #define GTK_HAVE_SIGNAL_INIT				1-0-2
   
-#define GTK_HAVE_RC_SET_IMAGE_LOADER			1-1-0
+/* Gtk+ 1.1.0 version tag.
+ * - new gtk_rc_set_image_loader () to install custom image loaders for rc
+ *   files.
+ * - GtkAccel groups replaced GtkAcceleratorTables
+ * - Gdk supports full crossing event now.
+ * - Buttons featur relief styles now.
+ * - gdk_rgb_*() functions are in place.
+ * - stringified enum values can be queried for enum types now.
+ * - new key binding system is in place (GtkBindingSet).
+ * - simple algorithm for pattern matching is expoted now (GtkPatternSpec).
+ */
+#define GTK_HAVE_FEATURES_1_1_0				1-1-0
 
-#define GTK_HAVE_ACCEL_GROUP				1-1-0
 
-#define GDK_HAVE_FULL_CROSSING_EVENT			1-1-0
-
-#define GTK_HAVE_RELIEF_STYLE				1-1-0
-
-#define GTK_HAVE_GDK_RGB				1-1-0
-
-#define GTK_HAVE_ENUM_VALUE_STRUCT			1-1-0
 
 #ifdef __cplusplus
 }
