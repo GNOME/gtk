@@ -1,5 +1,5 @@
 /* GTK+ Pixbuf Engine
- * Copyright (C) 1998-2000 Red Hat Software
+ * Copyright (C) 1998-2000 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,7 +20,6 @@
  * Carsten Haitzler <raster@rasterman.com>
  */
 
-#include "pixmap_theme.h"
 #include "pixmap_theme.h"
 #include <gmodule.h>
 

@@ -1,3 +1,11 @@
+Mon Mar  6 11:02:07 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* pixmap_theme_pixbuf.c: Handle drawing transparency without a
+	mask correctly.
+
+	* pixmap_theme_main.c pixmap_theme_draw.c: Remove duplicate
+	includes.
+	
 Sun Feb  6 21:34:30 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* Started ChangeLog for pixbuf engine, check sources

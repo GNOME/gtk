@@ -1,5 +1,5 @@
 /* GTK+ Pixbuf Engine
- * Copyright (C) 1998-2000 Red Hat Software
+ * Copyright (C) 1998-2000 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -42,7 +42,6 @@ pixbuf_render (GdkPixbuf    *src,
   GdkPixbuf *tmp_pixbuf;
   GdkRectangle rect;
   int x_offset, y_offset;
-  art_u32 bg_color = 0xffffff;
 
   if (dest_width <= 0 || dest_height <= 0)
     return;
@@ -84,20 +83,10 @@ pixbuf_render (GdkPixbuf    *src,
       partial_src_gdk = gdk_pixbuf_new_from_art_pixbuf (partial_src_art);
       tmp_pixbuf = gdk_pixbuf_new (ART_PIX_RGB, src->art_pixbuf->has_alpha, 8, rect.width, rect.height);
 
-      if (mask)
-	{
-	  gdk_pixbuf_scale (partial_src_gdk, tmp_pixbuf, 0, 0, rect.width, rect.height,
-			    dest_x - rect.x, dest_y - rect.y, 
-			    (double)dest_width / src_width, (double)dest_height / src_height,
-			    ART_FILTER_BILINEAR);
-	}
-      else
-	{
-	  gdk_pixbuf_composite_color (partial_src_gdk, tmp_pixbuf, 0, 0, rect.width, rect.height,
-				      dest_x - rect.x, dest_y - rect.y, 
-				      (double)dest_width / src_width, (double)dest_height / src_height,
-				      ART_FILTER_BILINEAR, 255, 0, 0, 16, bg_color, bg_color);
-	}
+      gdk_pixbuf_scale (partial_src_gdk, tmp_pixbuf, 0, 0, rect.width, rect.height,
+			dest_x - rect.x, dest_y - rect.y, 
+			(double)dest_width / src_width, (double)dest_height / src_height,
+			ART_FILTER_BILINEAR);
 
       gdk_pixbuf_unref (partial_src_gdk);
       

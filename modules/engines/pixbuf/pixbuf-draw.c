@@ -1,5 +1,5 @@
 /* GTK+ Pixbuf Engine
- * Copyright (C) 1998-2000 Red Hat Software
+ * Copyright (C) 1998-2000 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,7 +22,6 @@
 
 #include "pixmap_theme.h"
 #include <math.h>
-#include "pixmap_theme.h"
 
 static ThemeImage *
 match_theme_image(GtkStyle       *style,
@@ -78,10 +77,10 @@ match_theme_image(GtkStyle       *style,
 }
 
 static void
-draw_simple_image(GtkStyle      *style,
-		  GdkWindow     *window,
-		  GdkRectangle  *area,
-		  GtkWidget     *widget,
+draw_simple_image(GtkStyle       *style,
+		  GdkWindow      *window,
+		  GdkRectangle   *area,
+		  GtkWidget      *widget,
 		  ThemeMatchData *match_data,
 		  gboolean        draw_center,
 		  gboolean        allow_setbg,
