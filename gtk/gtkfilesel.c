@@ -425,7 +425,6 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   /* The directories clist */
   filesel->dir_list = gtk_clist_new_with_titles (1, dir_title);
   gtk_widget_set_usize (filesel->dir_list, DIR_LIST_WIDTH, DIR_LIST_HEIGHT);
-  gtk_clist_set_column_width (GTK_CLIST (filesel->dir_list), 0, 150);
   gtk_signal_connect (GTK_OBJECT (filesel->dir_list), "select_row",
 		      (GtkSignalFunc) gtk_file_selection_dir_button, 
 		      (gpointer) filesel);
@@ -438,7 +437,6 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   /* The files clist */
   filesel->file_list = gtk_clist_new_with_titles (1, file_title);
   gtk_widget_set_usize (filesel->file_list, FILE_LIST_WIDTH, FILE_LIST_HEIGHT);
-  gtk_clist_set_column_width (GTK_CLIST (filesel->file_list), 0, 150);
   gtk_signal_connect (GTK_OBJECT (filesel->file_list), "select_row",
 		      (GtkSignalFunc) gtk_file_selection_file_button, 
 		      (gpointer) filesel);

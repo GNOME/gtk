@@ -178,7 +178,8 @@ static gint get_selection_info (GtkCList * clist,
 static void draw_xor_line (GtkCList * clist);
 static gint new_column_width (GtkCList * clist,
 			      gint column,
-			      gint * x);
+			      gint * x,
+			      gint * visible);
 static void resize_column (GtkCList * clist,
 			   gint column,
 			   gint width);
@@ -1740,7 +1741,7 @@ static gint
 gtk_clist_button_release (GtkWidget * widget,
 			  GdkEventButton * event)
 {
-  gint i, x, width;
+  gint i, x, width, visible;
   GtkCList *clist;
 
   g_return_val_if_fail (widget != NULL, FALSE);
@@ -1756,9 +1757,12 @@ gtk_clist_button_release (GtkWidget * widget,
 	{
 	  GTK_CLIST_UNSET_FLAGS (clist, CLIST_IN_DRAG);
 	  gtk_widget_get_pointer (widget, &x, NULL);
-	  width = new_column_width (clist, i, &x);
+	  width = new_column_width (clist, i, &x, &visible);
 	  gdk_pointer_ungrab (event->time);
 	  
+	  if (visible)
+	    draw_xor_line (clist);
+
 	  resize_column (clist, i, width);
 	  return FALSE;
 	}
@@ -1770,7 +1774,7 @@ static gint
 gtk_clist_motion (GtkWidget * widget,
 		  GdkEventMotion * event)
 {
-  gint i, x;
+  gint i, x, visible;
   GtkCList *clist;
 
   g_return_val_if_fail (widget != NULL, FALSE);
@@ -1787,10 +1791,20 @@ gtk_clist_motion (GtkWidget * widget,
 	  else
 	    x = event->x;
 
-	  new_column_width (clist, i, &x);
-	  if (x != clist->x_drag)
+	  new_column_width (clist, i, &x, &visible);
+	  /* Welcome to my hack!  I'm going to use a value of x_drage = -99999 to
+	   * indicate the the xor line is already no visible */
+	  if (!visible && clist->x_drag != -99999)
 	    {
 	      draw_xor_line (clist);
+	      clist->x_drag = -99999;
+	    }
+
+	  if (x != clist->x_drag && visible)
+	    {
+	      if (clist->x_drag != -99999)
+		draw_xor_line (clist);
+
 	      clist->x_drag = x;
 	      draw_xor_line (clist);
 	    }
@@ -2403,19 +2417,12 @@ size_allocate_title_buttons (GtkCList * clist)
 
   for (i = 0; i < clist->columns; i++)
     {
-      button_allocation.width += clist->column[i].width;
+      button_allocation.width += clist->column[i].area.width;
 
       if (i == clist->columns - 1)
-	{
-	  button_allocation.width += 2 * (CELL_SPACING + COLUMN_INSET);
-
-	  if (button_allocation.width < (clist->column_title_area.width - button_allocation.x))
-	    button_allocation.width = clist->column_title_area.width - button_allocation.x;
-	}
+	button_allocation.width += 2 * (CELL_SPACING + COLUMN_INSET);
       else
-	{
-	  button_allocation.width += CELL_SPACING + (2 * COLUMN_INSET);
-	}
+	button_allocation.width += CELL_SPACING + (2 * COLUMN_INSET);
 
       if (i == (clist->columns - 1) || clist->column[i + 1].button)
 	{
@@ -2452,8 +2459,9 @@ size_allocate_columns (GtkCList * clist)
       if (i == clist->columns - 1)
 	{
 	  clist->column[i].area.width = MAX (clist->column[i].width,
-					     clist->column_title_area.width -
+					     clist->clist_window_width -
 					     xoffset - (2 * (CELL_SPACING + COLUMN_INSET)));
+					    
 	}
       else
 	{
@@ -2664,7 +2672,8 @@ draw_xor_line (GtkCList * clist)
 static gint
 new_column_width (GtkCList * clist,
 		  gint column,
-		  gint * x)
+		  gint * x,
+		  gint * visible)
 {
   gint cx, rx, width;
 
@@ -2686,12 +2695,10 @@ new_column_width (GtkCList * clist,
       rx = cx - clist->hoffset;
     }
 
-  /*
   if (cx > clist->clist_window_width)
     *visible = 0;
   else
     *visible = 1;
-  */
 
   /* calculate new column width making sure it doesn't end up
    * less than the minimum width */
