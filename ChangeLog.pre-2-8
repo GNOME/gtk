@@ -1,3 +1,9 @@
+2004-11-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreedatalist.c: Support columns whose declared type is
+	an interface better, by treating them like G_TYPE_OBJECT if
+	the interface types requires G_TYPE_OBJECT.
+
 2004-11-08  Bastien Nocera  <hadess@hadess.net>
 
 	* gtk/stock-icons/stock_media_play_rtl_16.png:

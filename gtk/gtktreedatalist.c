@@ -110,7 +110,21 @@ _gtk_tree_data_list_check_type (GType type)
   return FALSE;
 }
 
+static inline GType
+get_fundamental_type (GType type)
+{
+  GType result;
 
+  result = G_TYPE_FUNDAMENTAL (type);
+
+  if (result == G_TYPE_INTERFACE)
+    {
+      if (g_type_is_a (type, G_TYPE_OBJECT))
+	result = G_TYPE_OBJECT;
+    }
+
+  return result;
+}
 void
 _gtk_tree_data_list_node_to_value (GtkTreeDataList *list,
 				   GType            type,
@@ -118,7 +132,7 @@ _gtk_tree_data_list_node_to_value (GtkTreeDataList *list,
 {
   g_value_init (value, type);
 
-  switch (G_TYPE_FUNDAMENTAL (type))
+  switch (get_fundamental_type (type))
     {
     case G_TYPE_BOOLEAN:
       g_value_set_boolean (value, (gboolean) list->data.v_int);
@@ -181,7 +195,7 @@ void
 _gtk_tree_data_list_value_to_node (GtkTreeDataList *list,
 				   GValue          *value)
 {
-  switch (G_TYPE_FUNDAMENTAL (G_VALUE_TYPE (value)))
+  switch (get_fundamental_type (G_VALUE_TYPE (value)))
     {
     case G_TYPE_BOOLEAN:
       list->data.v_int = g_value_get_boolean (value);
@@ -257,7 +271,7 @@ _gtk_tree_data_list_node_copy (GtkTreeDataList *list,
   new_list = _gtk_tree_data_list_alloc ();
   new_list->next = NULL;
 
-  switch (G_TYPE_FUNDAMENTAL (type))
+  switch (get_fundamental_type (type))
     {
     case G_TYPE_BOOLEAN:
     case G_TYPE_CHAR:
@@ -279,6 +293,7 @@ _gtk_tree_data_list_node_copy (GtkTreeDataList *list,
       new_list->data.v_pointer = g_strdup (list->data.v_pointer);
       break;
     case G_TYPE_OBJECT:
+    case G_TYPE_INTERFACE:
       new_list->data.v_pointer = list->data.v_pointer;
       if (new_list->data.v_pointer)
 	g_object_ref (new_list->data.v_pointer);
@@ -313,7 +328,7 @@ _gtk_tree_data_list_compare_func (GtkTreeModel *model,
   gtk_tree_model_get_value (model, a, column, &a_value);
   gtk_tree_model_get_value (model, b, column, &b_value);
 
-  switch (G_TYPE_FUNDAMENTAL (type))
+  switch (get_fundamental_type (type))
     {
     case G_TYPE_BOOLEAN:
       if (g_value_get_boolean (&a_value) < g_value_get_boolean (&b_value))
