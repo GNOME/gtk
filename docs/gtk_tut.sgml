@@ -11,16 +11,16 @@ Tony Gale <tt><htmlurl url="mailto:gale@gtk.org"
 			      name="&lt;gale@gtk.org&gt;"></tt>
 Ian Main <tt><htmlurl url="mailto:imain@gtk.org"
 			      name="&lt;imain@gtk.org&gt;"></tt>,
-<date>January 31th, 1999
+<date>February 1st, 1999
 
 <!-- ***************************************************************** -->
 <sect>Introduction
 <!-- ***************************************************************** -->
 <p>
 GTK (GIMP Toolkit) was originally developed as a toolkit for the GIMP
-(General Image Manipulation Program).  GTK is built on top of GDK
+(General Image Manipulation Program). GTK is built on top of GDK
 (GIMP Drawing Kit) which is basically a wrapper around the Xlib
-functions.  It's called the GIMP toolkit because it was originally
+functions. It's called the GIMP toolkit because it was originally
 written for developing the GIMP, but has now been used in several free
 software projects.  The authors are:
 <itemize>
@@ -4704,6 +4704,455 @@ int main (int argc, char *argv[])
 </verb></tscreen>
 
 <!-- ----------------------------------------------------------------- -->
+<sect1>Spin Buttons
+<p>
+The Spin Button widget is generally used to allow the user to select a
+value from a range of numeric values. It consists of a text
+entry box with up and down arrow buttons attached to the
+side. Selecting one of the buttons causes the value to 'spin' up and
+down the range of possible values. The entry box may also be edited
+directly to enter a specific value.
+
+The Spin Button allows the value to have zero or a number of decimal
+places and to be incremented/decremented in configurable steps. The
+action of holding down one of the buttons optionally result in an
+acceleration of change in the value according to how long it is
+depressed.
+
+The Spin Button uses an <ref id="sec_Adjustment" name="Adjustment">
+object to hold information about the range of values that the spin
+button can take. This makes for a powerful Spin Button widget.
+
+Recall that an adjustment widget is created with the following
+function, which illustrates the information that it holds:
+
+<tscreen><verb>
+GtkObject *gtk_adjustment_new( gfloat value,
+                               gfloat lower,
+                               gfloat upper,
+                               gfloat step_increment,
+                               gfloat page_increment,
+                               gfloat page_size );
+</verb></tscreen>
+
+These attributes of an Adjustment are used by the Spin Button in the
+following way:
+
+<itemize>
+<item> <tt/value/: initial value for the Spin Button
+<item> <tt/lower/: lower range value
+<item> <tt/upper/: upper range value
+<item> <tt/step_increment/: value to increment/decrement when pressing
+mouse button 1 on a button
+<item> <tt/page_increment/: value to increment/decrement when pressing
+mouse button 2 on a button
+<item> <tt/page_size/: unused
+</itemize>
+
+Additionally, mouse button 3 can be used to jump directly to the
+<tt/upper/ or <tt/lower/ values when used to select one of the
+buttons. Lets look at how to create a Spin Button:
+
+<tscreen><verb>
+GtkWidget *gtk_spin_button_new( GtkAdjustment *adjustment,
+                                gfloat         climb_rate,
+                                guint          digits );
+</verb></tscreen>
+
+The <tt/climb_rate/ argument take a value between 0.0 and 1.0 and
+indicates the amount of acceleration that the Spin Button has. The
+<tt/digits/ argument specifies the number of decimal places to which
+the value will be displayed.
+
+A Spin Button can be reconfigured after creation using the following
+function:
+
+<tscreen><verb>
+void gtk_spin_button_configure( GtkSpinButton *spin_button,
+                                GtkAdjustment *adjustment,
+                                gfloat         climb_rate,
+                                guint          digits );
+</verb></tscreen>
+
+The <tt/spin_button/ argument specifies the Spin Button widget that is
+to be reconfigured. The other arguments are as specified above.
+
+The adjustment can be set and retrieved independantly using the
+following two functions:
+
+<tscreen><verb>
+void gtk_spin_button_set_adjustment( GtkSpinButton  *spin_button,
+                                     GtkAdjustment  *adjustment );
+
+GtkAdjustment *gtk_spin_button_get_adjustment( GtkSpinButton *spin_button );
+</verb></tscreen>
+
+The number of decimal places can also be altered using:
+
+<tscreen><verb>
+void gtk_spin_button_set_digits( GtkSpinButton *spin_button,
+                                 guint          digits) ;
+</verb></tscreen>
+
+The value that a Spin Button is currently displaying can be changed
+using the following function:
+
+<tscreen><verb>
+void gtk_spin_button_set_value( GtkSpinButton *spin_button,
+                                gfloat         value );
+</verb></tscreen>
+
+The current value of a Spin Button can be retrieved as either a
+floating point or integer value with the following functions:
+
+<tscreen><verb>
+gfloat gtk_spin_button_get_value_as_float( GtkSpinButton *spin_button );
+
+gint gtk_spin_button_get_value_as_int( GtkSpinButton *spin_button );
+</verb></tscreen>
+
+If you want to alter the value of a Spin Value relative to its current
+value, then the following function can be used:
+
+<tscreen><verb>
+void gtk_spin_button_spin( GtkSpinButton *spin_button,
+                           GtkSpinType    direction,
+                           gfloat         increment );
+</verb></tscreen>
+
+The <tt/direction/ parameter can take one of the following values:
+
+<itemize>
+<item> GTK_SPIN_STEP_FORWARD
+<item> GTK_SPIN_STEP_BACKWARD
+<item> GTK_SPIN_PAGE_FORWARD
+<item> GTK_SPIN_PAGE_BACKWARD
+<item> GTK_SPIN_HOME
+<item> GTK_SPIN_END
+<item> GTK_SPIN_USER_DEFINED
+</itemize>
+
+This function packs in quite a bit of functionality, which I will
+attempt to clearly explain. Many of these settings use values from the
+Adjustment object that is associated with a Spin Button.
+
+GTK_SPIN_STEP_FORWARD and GTK_SPIN_STEP_BACKWARD change the value of
+the Spin Button by the amount specified by <tt/increment/, unless
+<tt/increment/ is equal to 0, in which case the value is changed by
+the value of <tt/step_increment/ in theAdjustment.
+
+GTK_SPIN_PAGE_FORWARD and GTK_SPIN_PAGE_BACKWARD simply alter the value of
+the Spin Button by <tt/increment/.
+
+GTK_SPIN_HOME sets the value of the Spin Button to the bottom of the
+Adjustments range.
+
+GTK_SPIN_END sets the value of the Spin Button to the top of the
+Adjustments range.
+
+GTK_SPIN_USER_DEFINED simply alters the value of the Spin Button by
+the specified amount.
+
+We move away from functions for setting and retreving the range attributes
+of the Spin Button now, and move onto functions that effect the
+appearance and behaviour of the Spin Button widget itself.
+
+The first of these functions is used to constrain the text box of the
+Spin Button such that it may only contain a numric value. This
+prevents a user from typing anything other than numeric values into
+the text box of a Spin Button:
+
+<tscreen><verb>
+void gtk_spin_button_set_numeric( GtkSpinButton *spin_button,
+                                  gboolean       numeric );
+</verb></tscreen>
+
+You can set whether a Spin Button will wrap around between the upper
+and lower range values with the following function:
+
+<tscreen><verb>
+void gtk_spin_button_set_wrap( GtkSpinButton *spin_button,
+                               gboolean       wrap );
+</verb></tscreen>
+
+You can set a Spin Button to round the value to the nearest
+<tt/step_increment/, which is set within the Adjustment object used
+with the Spin Button. This is accomplished with the following
+function:
+
+<tscreen><verb>
+void gtk_spin_button_set_snap_to_ticks( GtkSpinButton  *spin_button,
+                                        gboolean        snap_to_ticks );
+</verb></tscreen>
+
+The update policy of a Spin Button can be changed with the following
+function:
+
+<tscreen><verb>
+void gtk_spin_button_set_update_policy( GtkSpinButton  *spin_button,
+                                    GtkSpinButtonUpdatePolicy policy );
+</verb></tscreen>
+
+<!-- TODO: find out what this does - TRG -->
+
+The possible values of <tt/policy/ are either GTK_UPDATE_ALWAYS or
+GTK_UPDATE_IF_VALID.
+
+The appearance of the buttons used in a Spin Button can be changed
+using the following function:
+
+<tscreen><verb>
+void gtk_spin_button_set_shadow_type( GtkSpinButton *spin_button,
+                                      GtkShadowType  shadow_type );
+</verb></tscreen>
+
+As usual, the <tt/shadow_type/ can be one of:
+
+<itemize>
+<item> GTK_SHADOW_IN
+<item> GTK_SHADOW_OUT
+<item> GTK_SHADOW_ETCHED_IN
+<item> GTK_SHADOW_ETCHED_OUT
+</itemize>
+
+Finally, you can explicitly request that a Spin Button update itself:
+
+<tscreen><verb>
+void gtk_spin_button_update( GtkSpinButton  *spin_button );
+</verb></tscreen>
+
+It's example time again.
+
+<tscreen><verb>
+/* example-start spinbutton spinbutton.c */
+
+#include <gtk/gtk.h>
+
+static GtkWidget *spinner1;
+
+void toggle_snap( GtkWidget     *widget,
+		  GtkSpinButton *spin )
+{
+  gtk_spin_button_set_snap_to_ticks (spin, GTK_TOGGLE_BUTTON (widget)->active);
+}
+
+void toggle_numeric( GtkWidget *widget,
+		     GtkSpinButton *spin )
+{
+  gtk_spin_button_set_numeric (spin, GTK_TOGGLE_BUTTON (widget)->active);
+}
+
+void change_digits( GtkWidget *widget,
+	            GtkSpinButton *spin )
+{
+  gtk_spin_button_set_digits (GTK_SPIN_BUTTON (spinner1),
+                              gtk_spin_button_get_value_as_int (spin));
+}
+
+void get_value( GtkWidget *widget,
+		gpointer data )
+{
+  gchar buf[32];
+  GtkLabel *label;
+  GtkSpinButton *spin;
+
+  spin = GTK_SPIN_BUTTON (spinner1);
+  label = GTK_LABEL (gtk_object_get_user_data (GTK_OBJECT (widget)));
+  if (GPOINTER_TO_INT (data) == 1)
+    sprintf (buf, "%d", gtk_spin_button_get_value_as_int (spin));
+  else
+    sprintf (buf, "%0.*f", spin->digits,
+             gtk_spin_button_get_value_as_float (spin));
+  gtk_label_set_text (label, buf);
+}
+
+
+int main( int   argc,
+          char *argv[] )
+{
+  GtkWidget *window;
+  GtkWidget *frame;
+  GtkWidget *hbox;
+  GtkWidget *main_vbox;
+  GtkWidget *vbox;
+  GtkWidget *vbox2;
+  GtkWidget *spinner2;
+  GtkWidget *spinner;
+  GtkWidget *button;
+  GtkWidget *label;
+  GtkWidget *val_label;
+  GtkAdjustment *adj;
+
+  /* Initialise GTK */
+  gtk_init(&amp;argc, &amp;argv);
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC (gtk_main_quit),
+		      NULL);
+
+  gtk_window_set_title (GTK_WINDOW (window), "Spin Button");
+
+  main_vbox = gtk_vbox_new (FALSE, 5);
+  gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 10);
+  gtk_container_add (GTK_CONTAINER (window), main_vbox);
+  
+  frame = gtk_frame_new ("Not accelerated");
+  gtk_box_pack_start (GTK_BOX (main_vbox), frame, TRUE, TRUE, 0);
+  
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
+  gtk_container_add (GTK_CONTAINER (frame), vbox);
+  
+  /* Day, month, year spinners */
+  
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 5);
+  
+  vbox2 = gtk_vbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 5);
+  
+  label = gtk_label_new ("Day :");
+  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+  gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
+  
+  adj = (GtkAdjustment *) gtk_adjustment_new (1.0, 1.0, 31.0, 1.0,
+					      5.0, 0.0);
+  spinner = gtk_spin_button_new (adj, 0, 0);
+  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+  gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
+				   GTK_SHADOW_OUT);
+  gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
+  
+  vbox2 = gtk_vbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 5);
+  
+  label = gtk_label_new ("Month :");
+  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+  gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
+  
+  adj = (GtkAdjustment *) gtk_adjustment_new (1.0, 1.0, 12.0, 1.0,
+					      5.0, 0.0);
+  spinner = gtk_spin_button_new (adj, 0, 0);
+  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+  gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
+				   GTK_SHADOW_ETCHED_IN);
+  gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
+  
+  vbox2 = gtk_vbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 5);
+  
+  label = gtk_label_new ("Year :");
+  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+  gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
+  
+  adj = (GtkAdjustment *) gtk_adjustment_new (1998.0, 0.0, 2100.0,
+					      1.0, 100.0, 0.0);
+  spinner = gtk_spin_button_new (adj, 0, 0);
+  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+  gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
+				   GTK_SHADOW_IN);
+  gtk_widget_set_usize (spinner, 55, 0);
+  gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
+  
+  frame = gtk_frame_new ("Accelerated");
+  gtk_box_pack_start (GTK_BOX (main_vbox), frame, TRUE, TRUE, 0);
+  
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
+  gtk_container_add (GTK_CONTAINER (frame), vbox);
+  
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
+  
+  vbox2 = gtk_vbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 5);
+  
+  label = gtk_label_new ("Value :");
+  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+  gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
+  
+  adj = (GtkAdjustment *) gtk_adjustment_new (0.0, -10000.0, 10000.0,
+					      0.5, 100.0, 0.0);
+  spinner1 = gtk_spin_button_new (adj, 1.0, 2);
+  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner1), TRUE);
+  gtk_widget_set_usize (spinner1, 100, 0);
+  gtk_box_pack_start (GTK_BOX (vbox2), spinner1, FALSE, TRUE, 0);
+  
+  vbox2 = gtk_vbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 5);
+  
+  label = gtk_label_new ("Digits :");
+  gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+  gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
+  
+  adj = (GtkAdjustment *) gtk_adjustment_new (2, 1, 5, 1, 1, 0);
+  spinner2 = gtk_spin_button_new (adj, 0.0, 0);
+  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner2), TRUE);
+  gtk_signal_connect (GTK_OBJECT (adj), "value_changed",
+		      GTK_SIGNAL_FUNC (change_digits),
+		      (gpointer) spinner2);
+  gtk_box_pack_start (GTK_BOX (vbox2), spinner2, FALSE, TRUE, 0);
+  
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
+  
+  button = gtk_check_button_new_with_label ("Snap to 0.5-ticks");
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      GTK_SIGNAL_FUNC (toggle_snap),
+		      spinner1);
+  gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+  
+  button = gtk_check_button_new_with_label ("Numeric only input mode");
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      GTK_SIGNAL_FUNC (toggle_numeric),
+		      spinner1);
+  gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+  
+  val_label = gtk_label_new ("");
+  
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
+  button = gtk_button_new_with_label ("Value as Int");
+  gtk_object_set_user_data (GTK_OBJECT (button), val_label);
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      GTK_SIGNAL_FUNC (get_value),
+		      GINT_TO_POINTER (1));
+  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
+  
+  button = gtk_button_new_with_label ("Value as Float");
+  gtk_object_set_user_data (GTK_OBJECT (button), val_label);
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      GTK_SIGNAL_FUNC (get_value),
+		      GINT_TO_POINTER (2));
+  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
+  
+  gtk_box_pack_start (GTK_BOX (vbox), val_label, TRUE, TRUE, 0);
+  gtk_label_set_text (GTK_LABEL (val_label), "0");
+  
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, TRUE, 0);
+  
+  button = gtk_button_new_with_label ("Close");
+  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			     GTK_SIGNAL_FUNC (gtk_widget_destroy),
+			     GTK_OBJECT (window));
+  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
+
+  gtk_widget_show_all (window);
+
+  /* Enter the event loop */
+  gtk_main ();
+    
+  return(0);
+}
+/* example-end */
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
 <sect1> Color Selection
 <p>
 The color selection widget is, not surprisingly, a widget for
@@ -5297,6 +5746,81 @@ int main( int   argc,
   return(0);
 }
 /* example-end */
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1> Layout Container
+<p>
+The Layout container is similar to the Fixed container except that it
+implements an infinite (where infinity is less than 2^32) scrolling
+area. Xwindows has a limitation where windows can be at most 32767
+pixels wide or tall. The Layout container gets around this limitation
+by doing some exotic stuff using window and bit gravities, so that you
+can have smooth scrolling even when you have many child widgets in
+your scrolling area.
+
+A Layout container is created using:
+
+<tscreen><verb>
+GtkWidget *gtk_layout_new( GtkAdjustment *hadjustment,
+                           GtkAdjustment *vadjustment );
+</verb></tscreen>
+
+As you can see, you can optionally specify the Adjustment objects that
+the Layout widget will use for it's scrolling.
+
+You can add and move widgets in the Layout container using the
+following two functions:
+
+<tscreen><verb>
+void gtk_layout_put( GtkLayout *layout,
+                     GtkWidget *widget,
+                     gint       x,
+                     gint       y );
+
+void gtk_layout_move( GtkLayout *layout,
+                      GtkWidget *widget,
+                      gint       x,
+                      gint       y );
+</verb></tscreen>
+
+The size of the Layout container can be set using the next function:
+
+<tscreen><verb>
+void gtk_layout_set_size( GtkLayout *layout,
+                          guint      width,
+                          guint      height );
+</verb></tscreen>
+
+Layout containers are one of the very few widgets in the GTK widget
+set that actively repaint themselves on screen as they are changed
+using the above functions (the vast majority of widgets queue
+requests which are then processed when control returns to the
+<tt/gtk_main()/ function).
+
+When you want to make a large number of changes to a Layout container,
+you can use the following two functions to disable and re-enable this
+repainting functionality:
+
+<tscreen><verb>
+void gtk_layout_freeze( GtkLayout *layout );
+
+void gtk_layout_thaw( GtkLayout *layout );
+</verb></tscreen>
+
+The final four functions for use with Layout widgets are for
+manipulating the horizontal and vertical adjustment widgets:
+
+<tscreen><verb>
+GtkAdjustment* gtk_layout_get_hadjustment( GtkLayout *layout );
+
+GtkAdjustment* gtk_layout_get_vadjustment( GtkLayout *layout );
+
+void gtk_layout_set_hadjustment( GtkLayout     *layout,
+                                 GtkAdjustment *adjustment );
+
+void gtk_layout_set_vadjustment( GtkLayout     *layout,
+                                 GtkAdjustment *adjustment);
 </verb></tscreen>
 
 <!-- ----------------------------------------------------------------- -->
@@ -9304,9 +9828,6 @@ from your time.
 <sect1> Image
 <p>
 <!-- ----------------------------------------------------------------- -->
-<sect1> Layout
-<p>
-<!-- ----------------------------------------------------------------- -->
 <sect1> Packer
 <p>
 <!-- ----------------------------------------------------------------- -->
@@ -9314,9 +9835,6 @@ from your time.
 <p>
 <!-- ----------------------------------------------------------------- -->
 <sect1> Preview
-<p>
-<!-- ----------------------------------------------------------------- -->
-<sect1> Spin Button
 <p>
 
 <!--
