@@ -1,20 +1,22 @@
+# translation of pa.po to Punjabi
 # Copyright (C) 2004 THE gtk+.HEAD'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the gtk+.HEAD package.
 # Amanpreet Singh Alam <amanlinux@netscape.net>, 2004.
-# , fuzzy
-# 
-# 
+# Amanpreet Singh Alam <aalam@redhat.com>, 2004.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+.HEAD VERSION\n"
+"Project-Id-Version: pa\n"
 "POT-Creation-Date: 2004-07-20 02:54+0200\n"
-"PO-Revision-Date: 2004-07-13 16:33+0530\n"
-"Last-Translator: Amanpreet Singh Alam <amanlinux@netscape.net>\n"
-"Language-Team: Punjabi <punlinux-i18n@lists.sourceforge.>\n"
+"PO-Revision-Date: 2004-07-22 13:53+0530\n"
+"Last-Translator: Amanpreet Singh Alam <aalam@redhat.com>\n"
+"Language-Team: Punjabi <pa@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Report-Msgid-Bugs-To: \n"
+"X-Generator: KBabel 1.3.1\n"
+"Plural-Forms: nplurals=2; plural=0;\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:150 gdk-pixbuf/gdk-pixbuf-io.c:787
 #: gdk-pixbuf/gdk-pixbuf-io.c:934 tests/testfilechooser.c:192
@@ -30,8 +32,7 @@ msgstr "ਚਿੱਤਰ ਫਾਇਲ '%s' ਵਿੱਚ ਕੋਈ ਡਾਟਾ �
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:839
 #: gdk-pixbuf/gdk-pixbuf-io.c:977 tests/testfilechooser.c:237
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "ਚਿੱਤਰ '%s' ਨੂੰ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ: ਕਾਰਨ ਜਾਣਿਆ ਨਹੀ ਜਾ ਸਕਿਆ ਹੈ, ਸੰਭਵ ਹੈ ਕਿ ਚਿੱਤਰ ਫਾਇਲ "
 "ਨਿਕਾਰਾ ਹੈ"
@@ -55,8 +56,7 @@ msgstr "ਚਿੱਤਰ- ਲੋਡਿੰਗ-ਮੈਡੀਊਲ ਲੋਡ ਕਰ�
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
-msgstr ""
-"ਚਿੱਤਰ- ਲੋਡਿੰਗ-ਮੈਡੀਊਲ %s ਦਾ ਦਰਿਸ਼ ਵਧੀਆ ਨਹੀ ਹੈ; ਸੰਭਵ ਹੈ ਕਿ ਇਹ ਵੱਖਰੇ ਜੀਟੀਕੇ(GTK) ਵਰਜਨਤੋ ਹੋਵੇ?"
+msgstr "ਚਿੱਤਰ- ਲੋਡਿੰਗ-ਮੈਡੀਊਲ %s ਦਾ ਦਰਿਸ਼ ਵਧੀਆ ਨਹੀ ਹੈ; ਸੰਭਵ ਹੈ ਕਿ ਇਹ ਵੱਖਰੇ ਜੀਟੀਕੇ(GTK) ਵਰਜਨਤੋ ਹੋਵੇ?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:577 gdk-pixbuf/gdk-pixbuf-io.c:629
 #, c-format
@@ -142,11 +142,11 @@ msgid "Image pixel data corrupt"
 msgstr "ਚਿੱਤਰ ਪਿਕਸਲ ਡਾਟਾ ਨਿਕਾਰਾ"
 
 #: gdk-pixbuf/gdk-pixdata.c:403
-#, fuzzy, c-format
+#, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "ਚਿੱਤਰ ਬਫ਼ਰ ਦੇ %u ਬਾੲੀਟ ਜਾਰੀ ਕਰਨ ਵਿੱਚ ਅਸਫਲ"
-msgstr[1] "ਚਿੱਤਰ ਬਫ਼ਰ ਦੇ %u ਬਾੲੀਟ ਜਾਰੀ ਕਰਨ ਵਿੱਚ ਅਸਫਲ"
+msgstr[0] "ਚਿੱਤਰ ਬਫ਼ਰ ਦੇ %u ਬਾਈਟ ਜਾਰੀ ਕਰਨ ਵਿੱਚ ਅਸਫਲ"
+msgstr[1] "ਚਿੱਤਰ ਬਫ਼ਰ ਦੇ %u ਬਾਈਟ ਜਾਰੀ ਕਰਨ ਵਿੱਚ ਅਸਫਲ "
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -209,9 +209,8 @@ msgid "Stack overflow"
 msgstr "ਸਟਾਕ ਸੀਮਾ ਤੋ ਬਾਹਰ"
 
 #: gdk-pixbuf/io-gif.c:635
-#, fuzzy
 msgid "GIF image loader cannot understand this image."
-msgstr "ਜੀਆਈਐਫ(GIF) ਚਿੱਤਰ ਲੋਡਰ ਇਸ ਚਿੱਤਰ ਨੂੰ ਸਮਝ ਨਹੀ ਸਕਿਆ ।"
+msgstr "ਜੀਆਈਐਫ(GIF) ਚਿੱਤਰ ਲੋਡਰ ਇਸ ਚਿੱਤਰ ਨੂੰ ਸਮਝ ਨਹੀ ਸਕਿਆ "
 
 #: gdk-pixbuf/io-gif.c:664
 msgid "Bad code encountered"
@@ -333,8 +332,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:908
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "ਜੇਪੀਈਜੀ(JPEG) ਗੁਣ ਦਾ ਮੁੱਲ  0 ਤੇ  100 ਹੋਣਾ ਜ਼ਰੂਰੀ ਹੈ ; ਮੁੱਲ '%d' ਦੀ ਮਨਜ਼ੂਰੀ ਨਹੀ ਹੈ"
 
 #: gdk-pixbuf/io-jpeg.c:1069
@@ -404,8 +402,7 @@ msgstr "ਤਬਦੀਲ ਪੀਐਨਜੀ(PNG) RGB ਜਾਂ RGBA ਨਹੀ ਹ
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"ਤਬਦੀਲ ਪੀਐਨਜੀ(PNG) ਵਿੱਚ ਬਿਨ-ਸਹਾਇਤਾ ਪ੍ਰਾਪਤ ਚੈਨਲਾਂ ਦੀ ਗਿਣਤੀ, ਇਹ 3 ਜਾਂ 4 ਹੋਣੀ ਜ਼ਰੂਰੀ ਹੈ ।"
+msgstr "ਤਬਦੀਲ ਪੀਐਨਜੀ(PNG) ਵਿੱਚ ਬਿਨ-ਸਹਾਇਤਾ ਪ੍ਰਾਪਤ ਚੈਨਲਾਂ ਦੀ ਗਿਣਤੀ, ਇਹ 3 ਜਾਂ 4 ਹੋਣੀ ਜ਼ਰੂਰੀ ਹੈ ।"
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -435,8 +432,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "ਪੀਐਨਜੀ(PNG) ਚਿੱਤਰ ਫਾਇਲ ਪੜ੍ਹਨ ਵਿੱਚ ਘਾਤਕ ਗਲਤੀ: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "ਪੀਐਨਜੀ(PNG) ਵਿੱਚ ਪਾਠ ਹੋਣ ਲਈ ਅੱਖਰਾਂ ਦੀ ਗਿਣਤੀ ਨਿਊਨਤਮ 1 ਅਤੇ ਅਧਿਕਤਮ 79 ਹੋ ਸਕਦੀ ਹੈ"
 
 #: gdk-pixbuf/io-png.c:821
@@ -444,10 +440,9 @@ msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "ਪੀਐਨਜੀ(PNG) ਪਾਠ ਲਈ ਅੱਖਰ ASCII ਅੱਖਰ ਹੋਣੇ ਜ਼ਰੂਰੀ ਹਨ"
 
 #: gdk-pixbuf/io-png.c:854
-#, fuzzy, c-format
+#, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"ਪੀਐਨਜੀ(PNG) ਪਾਠ %s ਦਾ ਮੁੱਲ ਨੂੰ ISO-8859-1 ਇੰਕੋਡਿੰਗ ਵਿੱਚ ਤਬਦੀਲ ਨਹੀ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ"
+msgstr "ਪੀਐਨਜੀ(PNG) ਪਾਠ %s ਦਾ ਮੁੱਲ ਨੂੰ ISO-8859-1 ਇੰਕੋਡਿੰਗ ਵਿੱਚ ਤਬਦੀਲ ਨਹੀ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ"
 
 #: gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
@@ -482,7 +477,6 @@ msgid "Maximum color value in PNM file is too large"
 msgstr "ਪੀਐਨਐਮ(PNM) ਫਾਇਲ ਵਿੱਚ ਅਧਿਕਤਮ ਰੰਗ ਮੁੱਲ ਬਹੁਤ ਜਿਆਦਾ ਹੈ"
 
 #: gdk-pixbuf/io-pnm.c:396
-#, fuzzy
 msgid "Cannot handle PNM files with maximum color values greater than 255"
 msgstr "ਪੀਐਨਐਮ(PNM) ਫਾਇਲਾਂ ਵਿੱਚ ਅਧਿਕਤਮ ਰੰਗ ਮੁੱਲ 255 ਤੋ ਵੱਧ ਨੂੰ ਸੰਭਾਲ ਨਹੀ ਸਕਦਾ ਹੈ"
 
@@ -507,7 +501,6 @@ msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "ਅਨਘਡ਼ ਪੀਐਨਐਮ(PNM) ਫਾਰਮਿਟ ਲਈ ਇੱਕ ਨਮੂਨਾ ਡਾਟਾ ਤੋ ਪਹਿਲਾਂ ਇੱਕ  ਸਫੇਦ ਥਾਂ ਲੋਡ਼ੀਦੀ ਹੈ"
 
 #: gdk-pixbuf/io-pnm.c:770
-#, fuzzy
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "ਪੀਐਨਐਮ(PNM) ਚਿੱਤਰ ਲੋਡਿੰਗ ਲਈ ਮੈਮੋਰੀ ਜਾਰੀ ਨਹੀ ਕਰ ਸਕਿਆ"
 
@@ -548,52 +541,44 @@ msgid "The Sun raster image format"
 msgstr "ਸਨ ਪੇਸ਼ਕਾਰੀ ਚਿੱਤਰ ਫਾਰਮਿਟ"
 
 #: gdk-pixbuf/io-tga.c:159
-#, fuzzy
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "IOBuffer ਢਾਂਚਾ ਲੋਡ ਕਰਨ ਲਈ ਲੋਡ਼ੀਦੀ ਮੈਮੋਰੀ ਨਹੀ ਹੈ"
 
 #: gdk-pixbuf/io-tga.c:178
-#, fuzzy
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "IOBuffer ਡਾਟਾ ਲੋਡ ਕਰਨ ਲਈ ਲੋਡ਼ੀਦੀ ਮੈਮੋਰੀ ਨਹੀ ਹੈ"
 
 #: gdk-pixbuf/io-tga.c:189
-#, fuzzy
 msgid "Cannot realloc IOBuffer data"
-msgstr "IOBuffer ਡਾਟਾ ਮੁਡ਼ ਲੋਡ ਨਹੀ ਕੀਤਾ ਜਾ ਸਕਿਆ"
+msgstr "IOBuffer ਡਾਟਾ ਮੁਡ਼ ਲੋਡ ਨਹੀ ਕੀਤਾ ਜਾ ਸਕਿਆ "
 
 #: gdk-pixbuf/io-tga.c:219
-#, fuzzy
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "IOBuffer ਡਾਟਾ ਲਈ ਆਰਜ਼ੀ ਜਾਰੀ ਨਹੀ ਹੋ ਸਕਿਆ"
 
 #: gdk-pixbuf/io-tga.c:353
-#, fuzzy
 msgid "Cannot allocate new pixbuf"
 msgstr "ਨਵਾਂ ਪਿਕਬਫ਼ ਜਾਰੀ ਨਹੀ ਕੀਤਾ ਜਾ ਸਕਦਾ"
 
 #: gdk-pixbuf/io-tga.c:692
-#, fuzzy
 msgid "Cannot allocate colormap structure"
-msgstr "ਰੰਗ-ਨਕਸ਼ਾ ਢਾਂਚਾ ਜਾਰੀ ਨਹੀ ਕੀਤਾ ਜਾ ਸਕਦਾ"
+msgstr "ਰੰੰਗ-ਨਕਸ਼ਾ ਢਾਂਚਾ ਜਾਰੀ ਨਹੀ ਕੀਤਾ ਜਾ ਸਕਦਾ"
 
 #: gdk-pixbuf/io-tga.c:699
-#, fuzzy
 msgid "Cannot allocate colormap entries"
-msgstr "ਰੰਗ-ਨਕਸ਼ਾ ਇੰਦਰਾਜ਼ ਜਾਰੀ ਨਹੀ ਕੀਤਾ ਜਾ ਸਕਦਾ"
+msgstr "ਰੰਗ-ਨਕਸ਼ਾ ਇੰਦਰਾਜ਼ ਜਾਰੀ ਨਹੀ ਕੀਤਾ ਜਾ ਸਕਦਾ "
 
 #: gdk-pixbuf/io-tga.c:721
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "ਰੰਗ-ਨਕਸ਼ਾ ਇੰਦਰਾਜ਼ ਲਈ ਗਲਤ ਬਿੱਟ-ਡੂੰਘਾਈ"
 
 #: gdk-pixbuf/io-tga.c:739
-#, fuzzy
 msgid "Cannot allocate TGA header memory"
-msgstr "TGA (ਟੀਜੀਏ) ਸਿਰਲੇਖ ਮੈਮੋਰੀ ਜਾਰੀ ਨਹੀ ਹੋ ਸਕੀ"
+msgstr "TGA (ਟੀਜੀਏ) ਸਿਰਲੇਖ ਮੈਮੋਰੀ ਜਾਰੀ ਨਹੀ ਹੋ ਸਕੀ "
 
 #: gdk-pixbuf/io-tga.c:772
 msgid "TGA image has invalid dimensions"
-msgstr "TGA (ਟੀਜੀਏ) ਚਿੱਤਰ ਦਾ ਮਾਪ ਗਲਤ ਹੈ"
+msgstr "TGA (ਟੀਜੀਏ) ਚਿੱਤਰ ਦਾ ਮਾਪ ਗਲਤ ਹੈ "
 
 #: gdk-pixbuf/io-tga.c:778 gdk-pixbuf/io-tga.c:787 gdk-pixbuf/io-tga.c:797
 #: gdk-pixbuf/io-tga.c:807 gdk-pixbuf/io-tga.c:814
@@ -601,13 +586,12 @@ msgid "TGA image type not supported"
 msgstr "TGA (ਟੀਜੀਏ) ਕਿਸਮ ਸਹਾਇਤਾ ਪ੍ਰਾਪਤ ਨਹੀ ਹੈ"
 
 #: gdk-pixbuf/io-tga.c:861
-#, fuzzy
 msgid "Cannot allocate memory for TGA context struct"
-msgstr "TGA (ਟੀਜੀਏ) ਭਾਗ ਲਈ ਲਈ ਲੋਡ਼ੀਦੀ ਮੈਮੋਰੀ ਨਹੀ ਹੈ"
+msgstr "TGA (ਟੀਜੀਏ) ਭਾਗ ਲਈ ਲਈ ਲੋਡ਼ੀਦੀ ਮੈਮੋਰੀ ਨਹੀ ਹੈ "
 
 #: gdk-pixbuf/io-tga.c:926
 msgid "Excess data in file"
-msgstr "ਫਾਇਲ ਵਿੱਚ ਡਾਟਾ ਜਿਆਦਾ ਹੈ"
+msgstr "ਫਾਇਲ ਵਿੱਚ ਡਾਟਾ ਜਿਆਦਾ ਹੈ "
 
 #: gdk-pixbuf/io-tga.c:995
 msgid "The Targa image format"
@@ -711,14 +695,12 @@ msgid "XPM has invalid number of chars per pixel"
 msgstr "ਐਸਪੀਐਮ(XPM)  ਵਿੱਚ ਅੱਖਰ ਪ੍ਰਤੀ ਪਿਕਸਲ ਦੀ ਗਿਣਤੀ ਗਲਤ ਹੈ"
 
 #: gdk-pixbuf/io-xpm.c:1279
-#, fuzzy
 msgid "Cannot read XPM colormap"
-msgstr "ਐਸਪੀਐਮ(XPM) ਰੰਗ-ਨਕਸ਼ਾ ਪੜ੍ਹਿਆ ਨਹੀ ਜਾ ਸਕਿਆ"
+msgstr "ਐਸਪੀਐਮ(XPM) ਰੰਗ-ਨਕਸ਼ਾ ਪੜਿ੍ਹਿਆ ਨਹੀ ਜਾ ਸਕਿਆ"
 
 #: gdk-pixbuf/io-xpm.c:1317
-#, fuzzy
 msgid "Cannot allocate memory for loading XPM image"
-msgstr "ਐਸਪੀਐਮ(XPM) ਲੋਡ ਕਰਨ ਲਈ ਲੋਡ਼ੀਦੀ ਮੈਮੋਰੀ ਨਹੀ ਹੈ"
+msgstr "ਐਸਪੀਐਮ(XPM) ਲੋਡ ਕਰਨ ਲਈ ਲੋਡ਼ੀਦੀ ਮੈਮੋਰੀ ਨਹੀ ਹੈ "
 
 #: gdk-pixbuf/io-xpm.c:1508
 msgid "Failed to write to temporary file when loading XPM image"
@@ -730,46 +712,46 @@ msgstr "ਐਸਪੀਐਮ(XPM) ਚਿੱਤਰ ਫਾਰਮਿਟ"
 
 #: gtk/gtkaboutdialog.c:209 gtk/gtkaboutdialog.c:1707
 msgid "License"
-msgstr ""
+msgstr "ਲਾਇਸੈਂਸ"
 
 #: gtk/gtkaboutdialog.c:210
 msgid "The license of the program"
-msgstr ""
+msgstr "ਕਾਰਜ ਦਾ ਲਾਇਸੈਂਸ"
 
 #. Add the credits button
 #: gtk/gtkaboutdialog.c:349
 msgid "_Credits"
-msgstr ""
+msgstr "ਮਾਣ(_C)"
 
 #. Add the license button
 #: gtk/gtkaboutdialog.c:358
 msgid "_License"
-msgstr ""
+msgstr "ਲਾਇਸੈਂਸ(_L)"
 
 #: gtk/gtkaboutdialog.c:532
 #, c-format
 msgid "About %s"
-msgstr ""
+msgstr "%s ਬਾਰੇ"
 
 #: gtk/gtkaboutdialog.c:1647
 msgid "Credits"
-msgstr ""
+msgstr "ਮਾਣ"
 
 #: gtk/gtkaboutdialog.c:1670
 msgid "Written by"
-msgstr ""
+msgstr "ਲਿਖਣ ਵਾਲੇ"
 
 #: gtk/gtkaboutdialog.c:1673
 msgid "Documented by"
-msgstr ""
+msgstr "ਦਸਤਾਵੇਜ਼ ਤਿਆਰ ਕੀਤੇ"
 
 #: gtk/gtkaboutdialog.c:1684
 msgid "Translated by"
-msgstr ""
+msgstr "ਅਨੁਵਾਦ"
 
 #: gtk/gtkaboutdialog.c:1688
 msgid "Artwork by"
-msgstr ""
+msgstr "ਕਲਾਕਾਰੀ"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1015,7 +997,7 @@ msgstr "%s ਲਈ ਬੁੱਕਮਾਰਕ ਹਟਾ ਨਹੀ ਸਕਿਆ, ਕ
 
 #: gtk/gtkfilechooserdefault.c:2525
 msgid "Shortcuts"
-msgstr ""
+msgstr "ਸ਼ਾਰਟਕੱਟ"
 
 #: gtk/gtkfilechooserdefault.c:2579
 msgid "Folder"
@@ -1072,9 +1054,8 @@ msgid "Create in _folder:"
 msgstr "ਫੋਲਡਰ ਵਿੱਚ ਬਣਾਉ:"
 
 #: gtk/gtkfilechooserdefault.c:3973
-#, fuzzy
 msgid "Cannot change to folder because it is not local"
-msgstr "ਫੋਲਡਰ ਨੂੰ ਤਬਦੀਲ਼ ਨਹੀ ਕਰ ਸਕਿਆ ਕਿਉਕਿ ਇਹ ਸਥਾਨਿਕ ਨਹੀ ਹੈ"
+msgstr "ਫੋਲਡਰ ਨੂੰ ਤਬਦੀਲ਼ ਨਹੀ ਕਰ ਸਕਿਆ ਕਿਉਕਿ ਇਹ ਸਥਾਨਿਕ ਨਹੀ ਹੈ "
 
 #: gtk/gtkfilechooserdefault.c:4111
 msgid "Could not find the path"
@@ -1090,11 +1071,11 @@ msgid "Type name of new folder"
 msgstr "ਨਵੇ ਫੋਲਡਰ ਦਾ ਨਾਉ ਲਿਖੋ"
 
 #: gtk/gtkfilechooserdefault.c:5155
-#, fuzzy, c-format
+#, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
-msgstr[0] "%d ਬਾੲੀਟ"
-msgstr[1] "%d ਬਾੲੀਟ"
+msgstr[0] "%d ਬਾਈਟ"
+msgstr[1] "%d ਬਾਈਟ"
 
 #: gtk/gtkfilechooserdefault.c:5157
 #, c-format
@@ -1189,8 +1170,7 @@ msgstr "ਫਾਇਲ ਨਾਉ-ਤਬਦੀਲ"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ਫੋਲਡਰ ਨਾਉ \"%s\"  ਵਿੱਚ ਉਹ ਨਿਸ਼ਾਨ ਹਨ ਜੋ ਕਿ ਫਾਇਲ ਨਾਉ ਵਿੱਚ ਨਹੀ ਹੋ ਸਕਦੇ"
 
 #: gtk/gtkfilesel.c:1441
@@ -1350,16 +1330,16 @@ msgid "Filesystem"
 msgstr "ਫਾਇਲ ਸਿਸਟਮ"
 
 #: gtk/gtkfilesystemunix.c:731
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "ਫਾਇਲ '%s' ਲਈ ਜਾਣਕਾਰੀ ਪ੍ਰਾਪਤ ਕਰਨ ਵਿੱਚ ਅਸਫਲ਼: %s"
+msgstr "'%s' ਸਟਾਕ ਆਈਕਾਨ  ਪ੍ਰਾਪਤ ਕਰਨ ਵਿੱਚ ਅਸਫਲ਼"
 
 #: gtk/gtkfilesystemunix.c:826
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
-msgstr "ਨਾਂ \"%s\"  ਜਾਇਜ ਨਹੀਂ ਹੈ ਕਿਉਕ ਇਸ ਵਿੱਚ ਅੱਖਰ \"%s\" ਹੈਕਿਰਪਾ ਕਰਕੇ ਵੱਖਰਾ ਨਾਂ ਵਰਤੋਂ"
+msgstr "ਨਾਂ \"%s\"  ਜਾਇਜ ਨਹੀਂ ਹੈ ਕਿਉਕ ਇਸ ਵਿੱਚ ਅੱਖਰ \"%s\" ਹੈ, ਕਿਰਪਾ ਕਰਕੇ ਵੱਖਰਾ ਨਾਂ ਵਰਤੋਂ"
 
 #: gtk/gtkfilesystemunix.c:1434 gtk/gtkfilesystemwin32.c:923
 #, c-format
@@ -1599,7 +1579,7 @@ msgstr "ਸਵਾਲ"
 #.
 #: gtk/gtkstock.c:293
 msgid "_About"
-msgstr ""
+msgstr "ਇਸ ਬਾਰੇ(_A)"
 
 #: gtk/gtkstock.c:295
 msgid "_Apply"
@@ -1647,11 +1627,11 @@ msgstr "ਚਲਾਉ"
 
 #: gtk/gtkstock.c:306
 msgid "_Edit"
-msgstr ""
+msgstr "ਸੋਧ(_E)"
 
 #: gtk/gtkstock.c:307
 msgid "_Find"
-msgstr "ਖੋਜ"
+msgstr "ਖੋਜ(_F)"
 
 #: gtk/gtkstock.c:308
 msgid "Find and _Replace"
@@ -1742,80 +1722,76 @@ msgid "_Right"
 msgstr "ਸੱਹਾ"
 
 #: gtk/gtkstock.c:331
-#, fuzzy
 msgid "_Next"
-msgstr "ਨਵਾਂ"
+msgstr "ਅੱਗੇ(_N)"
 
 #: gtk/gtkstock.c:332
-#, fuzzy
 msgid "P_ause"
-msgstr "ਚਿਪਕਾਉ"
+msgstr "ਵਿਰਾਮ(_a)"
 
 #: gtk/gtkstock.c:333
 msgid "_Play"
-msgstr ""
+msgstr "ਚਲਾਉ(_P)"
 
 #: gtk/gtkstock.c:334
 msgid "Pre_vious"
-msgstr ""
+msgstr "ਪਿੱਛੇ(_v)"
 
 #: gtk/gtkstock.c:335
-#, fuzzy
 msgid "_Record"
-msgstr "ਲਾਲਃ"
+msgstr "ਰਿਕਾਰਡ(_R)"
 
 #: gtk/gtkstock.c:336
-#, fuzzy
 msgid "R_ewind"
-msgstr "ਖੋਜ"
+msgstr "ਵਾਪਿਸ(_e)"
 
 #: gtk/gtkstock.c:337 gtk/gtkstock.c:360
 msgid "_Stop"
-msgstr "ਰੋਕੋ"
+msgstr "ਰੋਕੋ(_S)"
 
 #: gtk/gtkstock.c:338
 msgid "_Network"
-msgstr "ਨੈਟਵਰਕ"
+msgstr "ਨੈੱਟਵਰਕ(_N)"
 
 #: gtk/gtkstock.c:339
 msgid "_New"
-msgstr "ਨਵਾਂ"
+msgstr "ਨਵਾਂ(_N)"
 
 #: gtk/gtkstock.c:340
 msgid "_No"
-msgstr "ਨਹੀ"
+msgstr "ਨਹੀ(_N)"
 
 #: gtk/gtkstock.c:341
 msgid "_OK"
-msgstr "ਠੀਕ ਹੈ"
+msgstr "ਠੀਕ ਹੈ(_O)"
 
 #: gtk/gtkstock.c:342
 msgid "_Open"
-msgstr "ਖੋਲ੍ਹੋ"
+msgstr "ਖੋਲ੍ਹੋ(_O)"
 
 #: gtk/gtkstock.c:343
 msgid "_Paste"
-msgstr "ਚਿਪਕਾਉ"
+msgstr "ਚਿਪਕਾਉ(_P)"
 
 #: gtk/gtkstock.c:344
 msgid "_Preferences"
-msgstr "ਮੇਰੀ ਪਸੰਦ"
+msgstr "ਮੇਰੀ ਪਸੰਦ(_P)"
 
 #: gtk/gtkstock.c:345
 msgid "_Print"
-msgstr "ਛਾਪੋ"
+msgstr "ਛਾਪੋ(_P)"
 
 #: gtk/gtkstock.c:346
 msgid "Print Pre_view"
-msgstr "ਛਾਪਣ ਨਮੂਨਾ"
+msgstr "ਛਾਪਣ ਨਮੂਨਾ(_v)"
 
 #: gtk/gtkstock.c:347
 msgid "_Properties"
-msgstr "ਵਿਸ਼ੇਸਤਾ"
+msgstr "ਵਿਸ਼ੇਸਤਾ(_P)"
 
 #: gtk/gtkstock.c:348
 msgid "_Quit"
-msgstr "ਬਾਹਰ"
+msgstr "ਬਾਹਰ(_Q)"
 
 #: gtk/gtkstock.c:349
 msgid "_Redo"
@@ -1831,19 +1807,19 @@ msgstr "ਮੁਡ਼ ਪ੍ਰਾਪਤ ਕਰੋ"
 
 #: gtk/gtkstock.c:353
 msgid "_Save"
-msgstr "ਸੰਭਾਲੋ"
+msgstr "ਸੰਭਾਲੋ(_S)"
 
 #: gtk/gtkstock.c:354
 msgid "Save _As"
-msgstr "ਇਸ ਤਰਾਂ ਸੰਭਾਲੋ"
+msgstr "ਇਸ ਤਰਾਂ ਸੰਭਾਲੋ(_A)"
 
 #: gtk/gtkstock.c:355
 msgid "_Color"
-msgstr "ਰੰਗ"
+msgstr "ਰੰਗ(_C)"
 
 #: gtk/gtkstock.c:356
 msgid "_Font"
-msgstr "ਫੋਟ"
+msgstr "ਫੋਟ(_F)"
 
 #: gtk/gtkstock.c:357
 msgid "_Ascending"
@@ -1855,19 +1831,19 @@ msgstr "ਘੱਟਦੇ ਕਰਮ ਅਨੁਸਾਰ"
 
 #: gtk/gtkstock.c:359
 msgid "_Spell Check"
-msgstr "ਸ਼ਬਦ-ਜੋਡ਼ ਜਾਂਚ"
+msgstr "ਸ਼ਬਦ-ਜੋਡ਼ ਜਾਂਚ(_S)"
 
 #: gtk/gtkstock.c:361
 msgid "_Strikethrough"
-msgstr "ਵਿੰਨ੍ਹੋ"
+msgstr "ਵਿੰਨ੍ਹੋ(_S)"
 
 #: gtk/gtkstock.c:362
 msgid "_Undelete"
-msgstr "ਨਾ-ਹਟਾਇਆ"
+msgstr "ਨਾ-ਹਟਾਇਆ(_U)"
 
 #: gtk/gtkstock.c:363
 msgid "_Underline"
-msgstr "ਹੇਠਾਂ ਰੇਖਾ"
+msgstr "ਹੇਠਾਂ ਰੇਖਾ(_U)"
 
 #: gtk/gtkstock.c:364
 msgid "_Undo"
@@ -2016,20 +1992,3 @@ msgstr "X ਇੰਪੁੱਟ ਢੰਗ"
 msgid "Could not get information for file '%s': %s"
 msgstr "ਫਾਇਲ '%s' ਲਈ ਜਾਣਕਾਰੀ ਪ੍ਰਾਪਤ ਕਰਨ ਵਿੱਚ ਅਸਫਲ਼: %s"
 
-#~ msgid "Unsupported TIFF variant"
-#~ msgstr "ਬਿਨ-ਸਹਾਇਤਾ ਪ੍ਰਾਪਤ ਟੀਆਈਐਫਐਫ(TIFF) ਪਰਵਰਤਨ"
-
-#~ msgid "Shift"
-#~ msgstr "ਸ਼ਿਫਟ(Shift)"
-
-#~ msgid "Ctrl"
-#~ msgstr "ਕੰਟਰੋਲ(Ctrl)"
-
-#~ msgid "Alt"
-#~ msgstr "ਆਲਟ(Alt)"
-
-#~ msgid "Could not set current folder: %s"
-#~ msgstr "ਮੌਜੂਦਾ ਫੋਲਡਰ ਨੂੰ ਨਿਰਧਾਰਿਤ ਨਹੀ ਕੀਤਾ ਜਾ ਸਕਿਆ:%s"
-
-#~ msgid "%d/%b/%Y"
-#~ msgstr "%d/%b/%Y"
