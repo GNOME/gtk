@@ -9175,7 +9175,6 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
 		}
 	    }
 	}
-      g_print ("scroll win %d\n", dy);
       gdk_window_scroll (tree_view->priv->bin_window, 0, dy);
 
       /* update our dy and top_row */

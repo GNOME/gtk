@@ -1,5 +1,8 @@
 2005-02-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_adjustment_changed): 
+	Remove debug printf.  (#165877, Carlos Garnacho Parro)
+
 	* */*.c: Fix many instances of "the the" in docs and
 	comments.  (#165815, Masao Mutoh)
 
