@@ -1,3 +1,21 @@
+2002-01-27  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/gtktextview.h (struct _GtkTextView): add mouse_cursor_obscured.
+
+	* gtk/gtkentry.h (struct _GtkEntry): Add mouse_cursor_obscured.
+
+	* gtk/gtktextview.c (set_invisible_cursor): New function.
+	(gtk_text_view_obscure_mouse_cursor): Likewise.
+	(gtk_text_view_key_press_event): Call obscure_cursor if text 
+	has been inserted.
+	(gtk_text_view_motion_event): Restore the mouse cursor.
+
+	* gtk/gtkentry.c (gtk_entry_realize): Add GDK_POINTER_MOTION_MASK.
+	(set_invisible_cursor): New function.
+	(gtk_entry_obscure_mouse_cursor): Likewise.
+	(gtk_entry_key_press): call obscure_cursor if text has been inserted.
+	(gtk_entry_motion_notify): Restore the mouse cursor.
+
 2002-01-27  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkstyle.c (sanitize_size): removed unused return value.

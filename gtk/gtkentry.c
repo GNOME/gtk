@@ -1016,6 +1016,7 @@ gtk_entry_realize (GtkWidget *widget)
 			    GDK_BUTTON1_MOTION_MASK |
 			    GDK_BUTTON3_MOTION_MASK |
 			    GDK_POINTER_MOTION_HINT_MASK |
+			    GDK_POINTER_MOTION_MASK |
                             GDK_ENTER_NOTIFY_MASK |
 			    GDK_LEAVE_NOTIFY_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
@@ -1031,7 +1032,7 @@ gtk_entry_realize (GtkWidget *widget)
   entry->text_area = gdk_window_new (widget->window, &attributes, attributes_mask);
   gdk_window_set_user_data (entry->text_area, entry);
 
-  gdk_cursor_destroy (attributes.cursor);
+  gdk_cursor_unref (attributes.cursor);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
 
@@ -1469,7 +1470,17 @@ gtk_entry_motion_notify (GtkWidget      *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   gint tmp_pos;
 
-  if (event->window != entry->text_area || entry->button != 1)
+  if (entry->mouse_cursor_obscured)
+    {
+      GdkCursor *cursor;
+      
+      cursor = gdk_cursor_new (GDK_XTERM);
+      gdk_window_set_cursor (entry->text_area, cursor);
+      gdk_cursor_unref (cursor);
+      entry->mouse_cursor_obscured = FALSE;
+    }
+
+  if (event->window != entry->text_area || entry->button !=1)
     return FALSE;
 
   if (event->is_hint || (entry->text_area != event->window))
@@ -1514,6 +1525,44 @@ gtk_entry_motion_notify (GtkWidget      *widget,
   return TRUE;
 }
 
+static void
+set_invisible_cursor (GdkWindow *window)
+{
+  GdkBitmap *empty_bitmap;
+  GdkCursor *cursor;
+  GdkColor useless;
+  char invisible_cursor_bits[] = { 0x0 };	
+	
+  useless.red = useless.green = useless.blue = 0;
+  useless.pixel = 0;
+  
+  empty_bitmap = gdk_bitmap_create_from_data (window,
+					      invisible_cursor_bits,
+					      1, 1);
+  
+  cursor = gdk_cursor_new_from_pixmap (empty_bitmap,
+				       empty_bitmap,
+				       &useless,
+				       &useless, 0, 0);
+  
+  gdk_window_set_cursor (window, cursor);
+  
+  gdk_cursor_unref (cursor);
+  
+  g_object_unref (empty_bitmap);
+}
+
+static void
+gtk_entry_obscure_mouse_cursor (GtkEntry *entry)
+{
+  if (entry->mouse_cursor_obscured)
+    return;
+
+  set_invisible_cursor (entry->text_area);
+  
+  entry->mouse_cursor_obscured = TRUE;  
+}
+
 static gint
 gtk_entry_key_press (GtkWidget   *widget,
 		     GdkEventKey *event)
@@ -1527,6 +1576,7 @@ gtk_entry_key_press (GtkWidget   *widget,
   
   if (gtk_im_context_filter_keypress (entry->im_context, event))
     {
+      gtk_entry_obscure_mouse_cursor (entry);
       entry->need_im_reset = TRUE;
       return TRUE;
     }

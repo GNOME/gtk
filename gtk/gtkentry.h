@@ -88,6 +88,8 @@ struct _GtkEntry
   guint        is_cell_renderer : 1;
   guint        editing_canceled : 1; /* Only used by GtkCellRendererText */
 
+  guint        mouse_cursor_obscured : 1;
+  
   guint   button;
   guint   blink_timeout;
   guint   recompute_idle;

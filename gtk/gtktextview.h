@@ -100,6 +100,8 @@ struct _GtkTextView
    * last "invalidate" signal from the layout
    */
   guint onscreen_validated : 1;
+
+  guint mouse_cursor_obscured : 1;
   
   GtkTextWindow *text_window;
   GtkTextWindow *left_window;

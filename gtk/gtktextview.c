@@ -3485,6 +3485,45 @@ gtk_text_view_direction_changed (GtkWidget        *widget,
     }
 }
 
+
+static void
+set_invisible_cursor (GdkWindow *window)
+{
+  GdkBitmap *empty_bitmap;
+  GdkCursor *cursor;
+  GdkColor useless;
+  char invisible_cursor_bits[] = { 0x0 };	
+	
+  useless.red = useless.green = useless.blue = 0;
+  useless.pixel = 0;
+  
+  empty_bitmap = gdk_bitmap_create_from_data (window,
+					      invisible_cursor_bits,
+					      1, 1);
+  
+  cursor = gdk_cursor_new_from_pixmap (empty_bitmap,
+				       empty_bitmap,
+				       &useless,
+				       &useless, 0, 0);
+  
+  gdk_window_set_cursor (window, cursor);
+  
+  gdk_cursor_unref (cursor);
+  
+  g_object_unref (empty_bitmap);
+}
+
+static void
+gtk_text_view_obscure_mouse_cursor (GtkTextView *text_view)
+{
+  if (text_view->mouse_cursor_obscured)
+    return;
+
+  set_invisible_cursor (text_view->text_window->bin_window);
+  
+  text_view->mouse_cursor_obscured = TRUE;  
+}
+
 /*
  * Events
  */
@@ -3620,6 +3659,7 @@ static gint
 gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
 {
   gboolean retval = FALSE;
+  gboolean obscure = FALSE;
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
   GtkTextMark *insert;
   GtkTextIter iter;
@@ -3634,6 +3674,7 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
       gtk_im_context_filter_keypress (text_view->im_context, event))
     {
       text_view->need_im_reset = TRUE;
+      obscure = TRUE;
       retval = TRUE;
     }
   else if (GTK_WIDGET_CLASS (parent_class)->key_press_event &&
@@ -3643,6 +3684,8 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
            event->keyval == GDK_KP_Enter)
     {
       gtk_text_view_commit_text (text_view, "\n");
+
+      obscure = TRUE;
       retval = TRUE;
     }
   /* Pass through Tab as literal tab, unless Control is held down */
@@ -3653,7 +3696,10 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
     {
       /* If the text isn't editable, move the focus instead */
       if (text_view->editable)
-	gtk_text_view_commit_text (text_view, "\t");
+	{
+	  gtk_text_view_commit_text (text_view, "\t");
+	  obscure = TRUE;
+	}
       else
 	gtk_text_view_move_focus (text_view,
 				  (event->state & GDK_SHIFT_MASK) ?
@@ -3664,6 +3710,9 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
   else
     retval = FALSE;
 
+  if (obscure)
+    gtk_text_view_obscure_mouse_cursor (text_view);
+  
   gtk_text_view_pend_cursor_blink (text_view);
 
   return retval;
@@ -3964,6 +4013,16 @@ static gint
 gtk_text_view_motion_event (GtkWidget *widget, GdkEventMotion *event)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+
+  if (text_view->mouse_cursor_obscured)
+    {
+      GdkCursor *cursor;
+      
+      cursor = gdk_cursor_new (GDK_XTERM);
+      gdk_window_set_cursor (text_view->text_window->bin_window, cursor);
+      gdk_cursor_unref (cursor);
+      text_view->mouse_cursor_obscured = FALSE;
+    }
 
   if (event->window == text_view->text_window->bin_window &&
       text_view->drag_start_x >= 0)
@@ -6425,7 +6484,7 @@ text_window_realize (GtkTextWindow *win,
       /* I-beam cursor */
       cursor = gdk_cursor_new (GDK_XTERM);
       gdk_window_set_cursor (win->bin_window, cursor);
-      gdk_cursor_destroy (cursor);
+      gdk_cursor_unref (cursor);
 
       gtk_im_context_set_client_window (GTK_TEXT_VIEW (win->widget)->im_context,
                                         win->window);
