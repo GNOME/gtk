@@ -1,3 +1,8 @@
+2004-03-03  Mark McLoughlin  <mark@skynet.ie>
+
+	* tests/testsocket_common.c: (print_hello): don't try and store
+	pointers in ints. Fixes 64-bit build.
+
 2004-03-03  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilesystem.c (gtk_file_system_get_parent): Simplify by

@@ -3,21 +3,47 @@
 #include "x11/gdkx.h"
 #include <gtk/gtk.h>
 
-static void
-print_hello (GtkWidget *w, gpointer data)
+enum
 {
-  g_message (data);
+  ACTION_FILE_NEW,
+  ACTION_FILE_OPEN,
+  ACTION_OK,
+  ACTION_HELP_ABOUT
+};
+
+static void
+print_hello (GtkWidget *w,
+	     guint      action)
+{
+  switch (action)
+    {
+    case ACTION_FILE_NEW:
+      g_message ("File New activated");
+      break;
+    case ACTION_FILE_OPEN:
+      g_message ("File Open activated");
+      break;
+    case ACTION_OK:
+      g_message ("OK activated");
+      break;
+    case ACTION_HELP_ABOUT:
+      g_message ("Help About activated ");
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+    }
 }
 
 static GtkItemFactoryEntry menu_items[] = {
   { "/_File",         NULL,         NULL,           0, "<Branch>" },
-  { "/File/_New",     "<control>N", print_hello,    GPOINTER_TO_INT("File New activated"), "<Item>" },
-  { "/File/_Open",    "<control>O", print_hello,    GPOINTER_TO_INT("File Open activated"), "<Item>" },
+  { "/File/_New",     "<control>N", print_hello,    ACTION_FILE_NEW, "<Item>" },
+  { "/File/_Open",    "<control>O", print_hello,    ACTION_FILE_OPEN, "<Item>" },
   { "/File/sep1",     NULL,         NULL,           0, "<Separator>" },
   { "/File/Quit",     "<control>Q", gtk_main_quit,  0, "<Item>" },
-  { "/O_K",            "<control>K",print_hello,    GPOINTER_TO_INT("OK activated"), "<Item>" },
+  { "/O_K",            "<control>K",print_hello,    ACTION_OK, "<Item>" },
   { "/_Help",         NULL,         NULL,           0, "<LastBranch>" },
-  { "/_Help/About",   NULL,         print_hello,    GPOINTER_TO_INT("Help About activated "), "<Item>" },
+  { "/_Help/About",   NULL,         print_hello,    ACTION_HELP_ABOUT, "<Item>" },
 };
 
 static void
