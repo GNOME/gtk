@@ -143,6 +143,7 @@ if test "$os_win32" = "yes"; then
   enable_shared=yes
 fi
 
+AC_LIBTOOL_WIN32_DLL
 AM_PROG_LIBTOOL
 
 # Make sure we use 64-bit versions of various file stuff.
