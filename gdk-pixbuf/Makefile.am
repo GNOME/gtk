@@ -211,7 +211,6 @@ man_MANS = gdk-pixbuf-csource.1
 # The GdkPixBuf library
 #
 
-BUILT_SOURCES=gdk-pixbuf-marshal.h gdk-pixbuf-marshal.c
 
 libgdk_pixbufincludedir = $(includedir)/gtk-2.0/gdk-pixbuf
 
