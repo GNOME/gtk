@@ -1,3 +1,16 @@
+2004-02-04  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix #59707.
+
+	* gtk/gtklabel.c (gtk_label_focus): Removed, so we don't ignore
+	the focus chain.
+	(gtk_label_button_press): Fix prototype.
+	(gtk_label_button_release): Likewise.
+	(gtk_label_motion): Likewise.
+
+	* tests/testgtk.c (create_message_dialog): For the dialog with
+	only GTK_BUTTONS_CLOSE, make GTK_RESPONSE_CLOSE the default.
+
 2004-02-04  Morten Welinder  <terra@gnome.org>
 
 	* gtk/gtktoolbar.c (show_menu): Show on the right screen.  (Fixes

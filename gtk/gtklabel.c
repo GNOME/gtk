@@ -102,12 +102,13 @@ static void gtk_label_realize           (GtkWidget        *widget);
 static void gtk_label_unrealize         (GtkWidget        *widget);
 static void gtk_label_map               (GtkWidget        *widget);
 static void gtk_label_unmap             (GtkWidget        *widget);
-static gint gtk_label_button_press      (GtkWidget        *widget,
-                                         GdkEventButton   *event);
-static gint gtk_label_button_release    (GtkWidget        *widget,
-                                         GdkEventButton   *event);
-static gint gtk_label_motion            (GtkWidget        *widget,
-                                         GdkEventMotion   *event);
+
+static gboolean gtk_label_button_press      (GtkWidget        *widget,
+					     GdkEventButton   *event);
+static gboolean gtk_label_button_release    (GtkWidget        *widget,
+					     GdkEventButton   *event);
+static gboolean gtk_label_motion            (GtkWidget        *widget,
+					     GdkEventMotion   *event);
 
 
 static void gtk_label_set_text_internal          (GtkLabel      *label,
@@ -145,8 +146,6 @@ static gboolean gtk_label_mnemonic_activate (GtkWidget         *widget,
 					     gboolean           group_cycling);
 static void     gtk_label_setup_mnemonic    (GtkLabel          *label,
 					     guint              last_key);
-static gboolean gtk_label_focus             (GtkWidget         *widget,
-					     GtkDirectionType   direction);
 
 /* For selectable lables: */
 static void gtk_label_move_cursor        (GtkLabel        *label,
@@ -248,7 +247,6 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->hierarchy_changed = gtk_label_hierarchy_changed;
   widget_class->screen_changed = gtk_label_screen_changed;
   widget_class->mnemonic_activate = gtk_label_mnemonic_activate;
-  widget_class->focus = gtk_label_focus;
 
   class->move_cursor = gtk_label_move_cursor;
   class->copy_clipboard = gtk_label_copy_clipboard;
@@ -2178,7 +2176,7 @@ gtk_label_select_word (GtkLabel *label)
   gtk_label_select_region_index (label, min, max);
 }
 
-static gint
+static gboolean
 gtk_label_button_press (GtkWidget      *widget,
                         GdkEventButton *event)
 {
@@ -2257,7 +2255,7 @@ gtk_label_button_press (GtkWidget      *widget,
   return FALSE;
 }
 
-static gint
+static gboolean
 gtk_label_button_release (GtkWidget      *widget,
                           GdkEventButton *event)
 
@@ -2279,7 +2277,7 @@ gtk_label_button_release (GtkWidget      *widget,
   return TRUE;
 }
 
-static gint
+static gboolean
 gtk_label_motion (GtkWidget      *widget,
                   GdkEventMotion *event)
 {
@@ -2765,14 +2763,6 @@ gtk_label_get_use_underline (GtkLabel *label)
   g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
   
   return label->use_underline;
-}
-
-static gboolean
-gtk_label_focus (GtkWidget         *widget,
-		 GtkDirectionType   direction)
-{
-  /* We never want to be in the tab chain */
-  return FALSE;
 }
 
 /* Compute the X position for an offset that corresponds to the "more important
