@@ -1,3 +1,11 @@
+Tue Mar  5 17:43:43 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfontsel.c (gtk_font_selection_init): Don't
+	create ->font_entry, ->font_style_entry at all rather
+	than just not showing them to avoid the problem of
+	them popping up if gtk_widget_show_all() is done
+	on the dialog. (#72913, Charles Kerr.)
+
 Tue Mar  5 18:06:49 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_resizable):

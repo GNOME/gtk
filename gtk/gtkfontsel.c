@@ -56,6 +56,14 @@
 #include "gtkscrolledwindow.h"
 #include "gtkintl.h"
 
+/* We don't enable the font and style entries because they don't add
+ * much in terms of visible effect and have a weird effect on keynav.
+ * the Windows font selector has entries similarly positioned but they
+ * act in conjunction with the associated lists to form a single focus
+ * location.
+ */
+#undef INCLUDE_FONT_ENTRIES
+
 /* This is the default text shown in the preview entry, though the user
    can set it. Remember that some fonts only have capital letters. */
 #define PREVIEW_TEXT N_("abcdefghijk ABCDEFGHIJK")
@@ -285,19 +293,21 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   gtk_table_set_col_spacings (GTK_TABLE (table), 8);
   gtk_box_pack_start (GTK_BOX (fontsel), table, TRUE, TRUE, 0);
 
+#ifdef INCLUDE_FONT_ENTRIES  
   fontsel->font_entry = gtk_entry_new ();
   gtk_entry_set_editable (GTK_ENTRY (fontsel->font_entry), FALSE);
   gtk_widget_set_usize (fontsel->font_entry, 20, -1);
-  /*  gtk_widget_show (fontsel->font_entry); */
+  gtk_widget_show (fontsel->font_entry);
   gtk_table_attach (GTK_TABLE (table), fontsel->font_entry, 0, 1, 1, 2,
 		    GTK_FILL, 0, 0, 0);
   
   fontsel->font_style_entry = gtk_entry_new ();
   gtk_entry_set_editable (GTK_ENTRY (fontsel->font_style_entry), FALSE);
   gtk_widget_set_usize (fontsel->font_style_entry, 20, -1);
-  /* gtk_widget_show (fontsel->font_style_entry); */
+  gtk_widget_show (fontsel->font_style_entry);
   gtk_table_attach (GTK_TABLE (table), fontsel->font_style_entry, 1, 2, 1, 2,
 		    GTK_FILL, 0, 0, 0);
+#endif /* INCLUDE_FONT_ENTRIES */
   
   fontsel->size_entry = gtk_entry_new ();
   gtk_widget_set_usize (fontsel->size_entry, 20, -1);
@@ -588,7 +598,9 @@ gtk_font_selection_select_font (GtkTreeSelection *selection,
 	  
 	  family_name = pango_font_family_get_name (fontsel->family);
 	  
+#ifdef INCLUDE_FONT_ENTRIES
 	  gtk_entry_set_text (GTK_ENTRY (fontsel->font_entry), family_name);
+#endif
 	  
 	  gtk_font_selection_show_available_styles (fontsel);
 	  gtk_font_selection_select_best_style (fontsel, TRUE);
@@ -646,8 +658,10 @@ gtk_font_selection_show_available_fonts (GtkFontSelection *fontsel)
   if (match_family)
     {
       set_cursor_to_iter (GTK_TREE_VIEW (fontsel->family_list), &match_row);
+#ifdef INCLUDE_FONT_ENTRIES      
       gtk_entry_set_text (GTK_ENTRY (fontsel->font_entry), 
 			  pango_font_family_get_name (match_family));
+#endif /* INCLUDE_FONT_ENTRIES */
     }
 
   g_free (families);
@@ -761,7 +775,9 @@ gtk_font_selection_show_available_styles (GtkFontSelection *fontsel)
     {
       const gchar *str = pango_font_face_get_face_name (fontsel->face);
 
+#ifdef INCLUDE_FONT_ENTRIES        
       gtk_entry_set_text (GTK_ENTRY (fontsel->font_style_entry), str);
+#endif      
       set_cursor_to_iter (GTK_TREE_VIEW (fontsel->face_list), &match_row);
     }
 
