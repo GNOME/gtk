@@ -1102,7 +1102,7 @@ gtk_bindings_activate (GtkObject      *object,
 }
 
 /**
- * _gtk_bindings_activate_event:
+ * gtk_bindings_activate_event:
  * @object: a #GtkObject (generally must be a widget)
  * @event: a #GdkEventKey
  * 
@@ -1112,8 +1112,8 @@ gtk_bindings_activate (GtkObject      *object,
  * Return value: %TRUE if a matching key binding was found
  **/
 gboolean
-_gtk_bindings_activate_event (GtkObject      *object,
-			      GdkEventKey    *event)
+gtk_bindings_activate_event (GtkObject      *object,
+                             GdkEventKey    *event)
 {
   GSList *entries = NULL;
   GdkDisplay *display;

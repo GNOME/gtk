@@ -1,3 +1,13 @@
+Mon Mar  1 23:52:15 2004  Tim Janik  <timj@gtk.org>
+
+        * gtk/gtkbindings.[hc]: expose gtk_bindings_activate_event(), changed
+        callers.
+
+        * gtk/gtkwindow.[hc]: added gtk_window_propagate_key_event() to expose
+        the key event propagation mechanism used for focus widgets.
+        (gtk_window_key_release_event): use the same key event propagation logic
+        as gtk_window_key_press_event().
+
 2004-03-01  Simon Budig  <simon@gimp.org>
 
 	* gdk/x11/gdkinput-x11.c: X11 R6.4 specifies 15 events

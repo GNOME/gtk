@@ -4183,53 +4183,75 @@ _gtk_window_query_nonaccels (GtkWindow      *window,
   return FALSE;
 }
 
+/**
+ * gtk_window_propagate_key_event:
+ * @window:  a #GtkWindow
+ * @event:   a #GdkEventKey
+ *
+ * Propagate a key press or release event to the focus widget and
+ * up the focus container chain until a widget handles @event.
+ * This is normally called by the default ::key_press_event and
+ * ::key_release_event handlers for toplevel windows,
+ * however in some cases it may be useful to call this directly when
+ * overriding the standard key handling for a toplevel window.
+ *
+ * Return value: %TRUE if a widget in the focus chain handled the event.
+ **/
+gboolean
+gtk_window_propagate_key_event (GtkWindow        *window,
+                                GdkEventKey      *event)
+{
+  gboolean handled = FALSE;
+  GtkWidget *widget, *focus;
+
+  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
+
+  widget = GTK_WIDGET (window);
+  focus = window->focus_widget;
+  if (focus)
+    g_object_ref (focus);
+  
+  while (!handled &&
+         focus && focus != widget &&
+         gtk_widget_get_toplevel (focus) == widget)
+    {
+      GtkWidget *parent;
+      
+      if (GTK_WIDGET_IS_SENSITIVE (focus))
+        handled = gtk_widget_event (focus, (GdkEvent*) event);
+      
+      parent = focus->parent;
+      if (parent)
+        g_object_ref (parent);
+      
+      g_object_unref (focus);
+      
+      focus = parent;
+    }
+  
+  if (focus)
+    g_object_unref (focus);
+
+  return handled;
+}
+
 static gint
 gtk_window_key_press_event (GtkWidget   *widget,
 			    GdkEventKey *event)
 {
-  GtkWindow *window;
-  GtkWidget *focus;
-  gboolean handled;
+  GtkWindow *window = GTK_WINDOW (widget);
+  gboolean handled = FALSE;
 
-  window = GTK_WINDOW (widget);
-
-  handled = FALSE;
-
-  /* Check for mnemonics and accelerators
-   */
+  /* handle mnemonics and accelerators */
   if (!handled)
     handled = gtk_window_activate_key (window, event);
 
+  /* handle focus widget key events */
   if (!handled)
-    {
-      focus = window->focus_widget;
-      if (focus)
-	g_object_ref (focus);
-      
-      while (!handled &&
-	     focus && focus != widget &&
-	     gtk_widget_get_toplevel (focus) == widget)
-	{
-	  GtkWidget *parent;
-	  
-	  if (GTK_WIDGET_IS_SENSITIVE (focus))
-	    handled = gtk_widget_event (focus, (GdkEvent*) event);
-	  
-	  parent = focus->parent;
-	  if (parent)
-	    g_object_ref (parent);
-	  
-	  g_object_unref (focus);
-	  
-	  focus = parent;
-	}
-
-      if (focus)
-	g_object_unref (focus);
-    }
+    handled = gtk_window_propagate_key_event (window, event);
 
   /* Chain up, invokes binding set */
-  if (!handled && GTK_WIDGET_CLASS (parent_class)->key_press_event)
+  if (!handled)
     handled = GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
 
   return handled;
@@ -4239,20 +4261,16 @@ static gint
 gtk_window_key_release_event (GtkWidget   *widget,
 			      GdkEventKey *event)
 {
-  GtkWindow *window;
-  gint handled;
-  
-  window = GTK_WINDOW (widget);
-  handled = FALSE;
-  if (window->focus_widget &&
-      window->focus_widget != widget &&
-      GTK_WIDGET_SENSITIVE (window->focus_widget))
-    {
-      handled = gtk_widget_event (window->focus_widget, (GdkEvent*) event);
-    }
+  GtkWindow *window = GTK_WINDOW (widget);
+  gboolean handled = FALSE;
 
-  if (!handled && GTK_WIDGET_CLASS (parent_class)->key_release_event)
-    handled = GTK_WIDGET_CLASS (parent_class)->key_release_event (widget, event);
+  /* handle focus widget key events */
+  if (!handled)
+    handled = gtk_window_propagate_key_event (window, event);
+
+  /* Chain up, invokes binding set */
+  if (!handled)
+    handled = GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
 
   return handled;
 }
@@ -7068,9 +7086,9 @@ gtk_window_free_key_hash (GtkWindow *window)
 
 /**
  * gtk_window_activate_key:
- * @window: a #GtkWindow
- * @event: a #GdkEventKey
- * 
+ * @window:  a #GtkWindow
+ * @event:   a #GdkEventKey
+ *
  * Activates mnemonics and accelerators for this #GtkWindow. This is normally
  * called by the default ::key_press_event handler for toplevel windows,
  * however in some cases it may be useful to call this directly when

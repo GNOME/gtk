@@ -3303,14 +3303,14 @@ static gboolean
 gtk_widget_real_key_press_event (GtkWidget         *widget,
 				 GdkEventKey       *event)
 {
-  return _gtk_bindings_activate_event (GTK_OBJECT (widget), event);
+  return gtk_bindings_activate_event (GTK_OBJECT (widget), event);
 }
 
 static gboolean
 gtk_widget_real_key_release_event (GtkWidget         *widget,
 				   GdkEventKey       *event)
 {
-  return _gtk_bindings_activate_event (GTK_OBJECT (widget), event);
+  return gtk_bindings_activate_event (GTK_OBJECT (widget), event);
 }
 
 static gboolean

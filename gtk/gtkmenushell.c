@@ -580,7 +580,7 @@ gtk_menu_shell_key_press (GtkWidget	*widget,
   if (!menu_shell->active_menu_item && menu_shell->parent_menu_shell)
     return gtk_widget_event (menu_shell->parent_menu_shell, (GdkEvent *)event);
   
-  if (_gtk_bindings_activate_event (GTK_OBJECT (widget), event))
+  if (gtk_bindings_activate_event (GTK_OBJECT (widget), event))
     return TRUE;
 
   toplevel = gtk_widget_get_toplevel (widget);
