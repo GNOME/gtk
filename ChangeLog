@@ -1,3 +1,9 @@
+Thu Jul 27 05:06:29 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktable.c: applied patch from Phil Thompson
+	<phil@river-bank.demon.co.uk> that enables space settings for
+	the last row/columns as well.
+
 2000-07-19  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
 
 	* gdk/gdk.h, gtk/gtktypeutils.h: Include gdk/gdkrgb.h and

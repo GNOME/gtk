@@ -42,8 +42,8 @@ quit_func (GtkWidget *widget, gpointer dummy)
   gtk_main_quit ();
 }
 
-#define WIDTH 320
-#define HEIGHT 200
+#define WIDTH 640
+#define HEIGHT 480
 
 gdouble
 get_time (void)
