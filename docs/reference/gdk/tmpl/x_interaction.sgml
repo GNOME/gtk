@@ -271,7 +271,6 @@ Returns a #GdkVisual corresponding to a X visual.
 
 <!-- ##### FUNCTION gdkx_colormap_get ##### -->
 <para>
-Returns a #GdkColormap corresponding to a X colormap.
 </para>
 
 @xcolormap: a X colormap.
