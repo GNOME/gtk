@@ -1,3 +1,9 @@
+Wed Jan 16 19:33:41 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_map): Refresh
+	the dialog on map. (#52877, inspired by request from
+	Murray Cumming)
+
 Wed Jan 16 19:23:04 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkbindings.c (gtk_binding_entry_activate): 

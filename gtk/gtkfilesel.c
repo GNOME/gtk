@@ -357,6 +357,7 @@ static void gtk_file_selection_get_property  (GObject         *object,
 static void gtk_file_selection_init          (GtkFileSelection      *filesel);
 static void gtk_file_selection_finalize      (GObject               *object);
 static void gtk_file_selection_destroy       (GtkObject             *object);
+static void gtk_file_selection_map           (GtkWidget             *widget);
 static gint gtk_file_selection_key_press     (GtkWidget             *widget,
 					      GdkEventKey           *event,
 					      gpointer               user_data);
@@ -490,9 +491,11 @@ gtk_file_selection_class_init (GtkFileSelectionClass *class)
 {
   GObjectClass *gobject_class;
   GtkObjectClass *object_class;
+  GtkWidgetClass *widget_class;
 
   gobject_class = (GObjectClass*) class;
   object_class = (GtkObjectClass*) class;
+  widget_class = (GtkWidgetClass*) class;
 
   parent_class = gtk_type_class (GTK_TYPE_DIALOG);
 
@@ -516,6 +519,7 @@ gtk_file_selection_class_init (GtkFileSelectionClass *class)
 							 G_PARAM_READABLE |
 							 G_PARAM_WRITABLE));
   object_class->destroy = gtk_file_selection_destroy;
+  widget_class->map = gtk_file_selection_map;
 }
 
 static void gtk_file_selection_set_property (GObject         *object,
@@ -1157,6 +1161,17 @@ gtk_file_selection_destroy (GtkObject *object)
     }
   
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
+}
+
+static void
+gtk_file_selection_map (GtkWidget *widget)
+{
+  GtkFileSelection *filesel = GTK_FILE_SELECTION (widget);
+
+  /* Refresh the contents */
+  gtk_file_selection_populate (filesel, "", FALSE);
+  
+  GTK_WIDGET_CLASS (parent_class)->map (widget);
 }
 
 static void
