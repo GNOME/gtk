@@ -6121,7 +6121,6 @@ gtk_ctree_drag_data_received (GtkWidget        *widget,
 	    case GTK_CLIST_DRAG_NONE:
 	      break;
 	    case GTK_CLIST_DRAG_INTO:
-	      g_print ("drag into\n");
 	      if (check_drag (ctree, source_node, dest_node,
 			      dest_info.insert_pos))
 		gtk_ctree_move (ctree, source_node, dest_node,
@@ -6129,7 +6128,6 @@ gtk_ctree_drag_data_received (GtkWidget        *widget,
 	      g_dataset_remove_data (context, "gtk-clist-drag-dest");
 	      break;
 	    case GTK_CLIST_DRAG_BEFORE:
-	      g_print ("drag before\n");
 	      if (check_drag (ctree, source_node, dest_node,
 			      dest_info.insert_pos))
 		gtk_ctree_move (ctree, source_node,
@@ -6137,7 +6135,6 @@ gtk_ctree_drag_data_received (GtkWidget        *widget,
 	      g_dataset_remove_data (context, "gtk-clist-drag-dest");
 	      break;
 	    case GTK_CLIST_DRAG_AFTER:
-	      g_print ("drag after\n");
 	      if (check_drag (ctree, source_node, dest_node,
 			      dest_info.insert_pos))
 		gtk_ctree_move (ctree, source_node,

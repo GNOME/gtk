@@ -1,3 +1,8 @@
+Sun Feb  6 10:13:15 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkctree.c (gtk_ctree_drag_data_received): Remove
+	debugging g_print's.
+
 Fri Feb  4 19:40:50 2000  Tim Janik  <timj@gtk.org>
 
 	* configure.in: up version number to 1.2.7, interface age 2, binary
