@@ -1,3 +1,15 @@
+Tue Jun 29 23:02:42 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c (gdk_x_error / gdk_x_io_error): Don't
+	core dump at all on X IO errors, only core dump
+	if --enable-debug for X errors.
+
+Tue Jun 29 17:04:09 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/testgtk.c (create_handle_box): Set the policy
+	to auto_shrink - otherwise the appearance is rather
+	strange when flipping between horizontal and vertical.
+
 Tue Jun 29 15:59:25 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in (LIBS): Look for libgmodule in the

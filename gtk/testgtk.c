@@ -1546,7 +1546,7 @@ create_handle_box (void)
     gtk_window_set_policy (GTK_WINDOW (window),
 			   TRUE,
 			   TRUE,
-			   FALSE);
+			   TRUE);
     
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			GTK_SIGNAL_FUNC(gtk_widget_destroyed),

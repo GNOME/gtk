@@ -31,6 +31,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
+#include <errno.h>
 
 #ifdef HAVE_SYS_SELECT_H
 #include <sys/select.h>
@@ -1042,12 +1043,24 @@ gdk_x_error (Display	 *display,
 	  char buf[64];
 	  
 	  XGetErrorText (display, error->error_code, buf, 63);
+
+#ifdef G_ENABLE_DEBUG	  
 	  g_error ("%s\n  serial %ld error_code %d request_code %d minor_code %d\n", 
 		   buf, 
 		   error->serial, 
 		   error->error_code, 
 		   error->request_code,
 		   error->minor_code);
+#else /* !G_ENABLE_DEBUG */
+	  fprintf (stderr, "Gdk-ERROR **: %s\n  serial %ld error_code %d request_code %d minor_code %d\n",
+		   buf, 
+		   error->serial, 
+		   error->error_code, 
+		   error->request_code,
+		   error->minor_code);
+
+	  exit(1);
+#endif /* G_ENABLE_DEBUG */
 	}
       gdk_error_code = error->error_code;
     }
@@ -1077,8 +1090,27 @@ gdk_x_error (Display	 *display,
 static int
 gdk_x_io_error (Display *display)
 {
-  g_error ("an x io error occurred");
-  return 0;
+  /* This is basically modelled after the code in XLib. We need
+   * an explicit error handler here, so we can disable our atexit()
+   * which would otherwise cause a nice segfault.
+   * We fprintf(stderr, instead of g_warning() because g_warning()
+   * could possibly be redirected to a dialog
+   */
+  if (errno == EPIPE)
+    {
+      fprintf (stderr, "Gdk-ERROR **: X connection to %s broken (explicit kill or server shutdown).\n", gdk_display ? DisplayString (gdk_display) : gdk_get_display());
+    }
+  else
+    {
+      fprintf (stderr, "Gdk-ERROR **: Fatal IO error %d (%s) on X server %s.\n",
+	       errno, g_strerror (errno),
+	       gdk_display ? DisplayString (gdk_display) : gdk_get_display());
+    }
+
+  /* Disable the atexit shutdown for GDK */
+  gdk_initialized = 0;
+  
+  exit(1);
 }
 
 gchar *
