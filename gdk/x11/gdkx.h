@@ -145,8 +145,8 @@ gboolean gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
 #ifndef GDK_MULTIHEAD_SAFE
 gpointer      gdk_xid_table_lookup   (XID              xid);
 gboolean      gdk_net_wm_supports    (GdkAtom    property);
-void          gdk_x11_grab_server    ();
-void          gdk_x11_ungrab_server  ();
+void          gdk_x11_grab_server    (void);
+void          gdk_x11_ungrab_server  (void);
 
 #endif
 
