@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "POT-Creation-Date: 2002-10-24 05:28+0200\n"
-"PO-Revision-Date: 2002-12-27 22:19+EDT\n"
+"PO-Revision-Date: 2002-12-29 19:37+EDT\n"
 "Last-Translator: Ge'ez Frontier Foundation <locales@geez.org>\n"
 "Language-Team: Amharic <locales@geez.org>\n"
 "MIME-Version: 1.0\n"
@@ -3214,7 +3214,7 @@ msgstr "አትም (_P)"
 
 #: gtk/gtkstock.c:314
 msgid "Print Pre_view"
-msgstr "ቅድመ ህትመት ዕይታ (_v)"
+msgstr "የቅድመ ህትመት ዕይታ (_v)"
 
 #: gtk/gtkstock.c:315
 msgid "_Properties"
@@ -3485,7 +3485,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:494 gtk/gtktextview.c:624
 msgid "Tabs"
-msgstr "ምክፈቻዎች"
+msgstr "መክፈቻዎች"
 
 #: gtk/gtktexttag.c:495 gtk/gtktextview.c:625
 msgid "Custom tabs for this text"
@@ -3681,7 +3681,7 @@ msgstr ""
 
 #: gtk/gtktextview.c:6417
 msgid "Input _Methods"
-msgstr "ዘገባ የማስትገባት ዘዴ (_M)"
+msgstr "ዘገባ የማስትገባት ዘዴዎች (_M)"
 
 #: gtk/gtkthemes.c:69
 #, c-format
