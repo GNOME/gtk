@@ -74,7 +74,6 @@ struct _GtkCellRendererPixbufPrivate
   gchar *stock_id;
   GtkIconSize stock_size;
   gchar *stock_detail;
-  GdkPixbuf *insensitive;
 };
 
 
@@ -203,9 +202,6 @@ gtk_cell_renderer_pixbuf_finalize (GObject *object)
 
   if (priv->stock_detail)
     g_free (priv->stock_detail);
-
-  if (priv->insensitive)
-    g_object_unref (priv->insensitive);
 
   (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
@@ -437,6 +433,7 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   GtkCellRendererPixbuf *cellpixbuf = (GtkCellRendererPixbuf *) cell;
   GtkCellRendererPixbufPrivate *priv;
   GdkPixbuf *pixbuf;
+  GdkPixbuf *invisible = NULL;
   GdkRectangle pix_rect;
   GdkRectangle draw_rect;
   gboolean stock_pixbuf = FALSE;
@@ -475,32 +472,29 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
 
   if (GTK_WIDGET_STATE (widget) == GTK_STATE_INSENSITIVE || !cell->sensitive)
     {
-      if (!priv->insensitive)
-	{
-	  GtkIconSource *source;
+      GtkIconSource *source;
       
-	  source = gtk_icon_source_new ();
-	  gtk_icon_source_set_pixbuf (source, pixbuf);
-	  /* The size here is arbitrary; since size isn't
-	   * wildcarded in the souce, it isn't supposed to be
-	   * scaled by the engine function
-	   */
-	  gtk_icon_source_set_size (source, GTK_ICON_SIZE_SMALL_TOOLBAR);
-	  gtk_icon_source_set_size_wildcarded (source, FALSE);
-	  
-	  priv->insensitive = gtk_style_render_icon (widget->style,
-						     source,
-						     gtk_widget_get_direction (widget),
-						     GTK_STATE_INSENSITIVE,
-						     /* arbitrary */
-						     (GtkIconSize)-1,
-						     widget,
-						     "gtkcellrendererpixbuf");
-
-	  gtk_icon_source_free (source);
-	}
+      source = gtk_icon_source_new ();
+      gtk_icon_source_set_pixbuf (source, pixbuf);
+      /* The size here is arbitrary; since size isn't
+       * wildcarded in the souce, it isn't supposed to be
+       * scaled by the engine function
+       */
+      gtk_icon_source_set_size (source, GTK_ICON_SIZE_SMALL_TOOLBAR);
+      gtk_icon_source_set_size_wildcarded (source, FALSE);
       
-      pixbuf = priv->insensitive;
+     invisible = gtk_style_render_icon (widget->style,
+					source,
+					gtk_widget_get_direction (widget),
+					GTK_STATE_INSENSITIVE,
+					/* arbitrary */
+					(GtkIconSize)-1,
+					widget,
+					"gtkcellrendererpixbuf");
+     
+     gtk_icon_source_free (source);
+     
+     pixbuf = invisible;
     }
 
   if (gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect) &&
@@ -517,4 +511,7 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
 		     draw_rect.height,
 		     GDK_RGB_DITHER_NORMAL,
 		     0, 0);
+  
+  if (invisible)
+    g_object_unref (invisible);
 }

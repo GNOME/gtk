@@ -1,5 +1,9 @@
 2004-09-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_render): Don't
+	reuse insensitive pixbufs across multiple rows.  (#153984, Milosz
+	Derezynski)
+
 	* gtk/gtkmain.c (gtk_parse_args): Use gtk_get_option_group() 
 	to obtain an option group with correctly set pre- and post-
 	parse hooks, instead of manually calling the hooks. This fixes
