@@ -1,3 +1,20 @@
+Sat Sep 26 04:46:22 1998  Tim Janik  <timj@gtk.org>
+
+	* configure.in: set binary age and interface age to 0.
+
+	* gtk/gtkspinbutton.h: 
+	* gtk/gtkspinbutton.c: changed gtk_spin_button_construct to
+	gtk_spin_button_configure. gtk_spin_button_construct is still defined
+	as an alias for gtk_spin_button_configure for source compatibility,
+ 	but actuall use is deprecated.
+	typeness corrections, i.e. gint->gboolean and gint->guint.
+	added object arguments: GtkSpinButton::value, GtkSpinButton::wrap,
+	GtkSpinButton::shadow_type, GtkSpinButton::update_policy,
+	GtkSpinButton::numeric, GtkSpinButton::snap_to_ticks,
+	GtkSpinButton::adjustment, GtkSpinButton::digits and
+ 	GtkSpinButton::climb_rate.
+	GtkType and macro fixups.
+
 Sat Sep 25 23:33:55 1998  Tim Janik  <timj@gtk.org>
 
 	* gdk/gdkwindow.c (gdk_window_get_root_origin): new function to get

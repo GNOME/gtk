@@ -31,20 +31,23 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
-  
-  
-#define GTK_SPIN_BUTTON(obj)	      GTK_CHECK_CAST (obj, gtk_spin_button_get_type (), GtkSpinButton)
-#define GTK_SPIN_BUTTON_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_spin_button_get_type (), GtkSpinButtonClass)
-#define GTK_IS_SPIN_BUTTON(obj)	      GTK_CHECK_TYPE (obj, gtk_spin_button_get_type ())
-  
-  
+
+
+#define GTK_TYPE_SPIN_BUTTON                  (gtk_spin_button_get_type ())
+#define GTK_SPIN_BUTTON(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_SPIN_BUTTON, GtkSpinButton))
+#define GTK_SPIN_BUTTON_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_SPIN_BUTTON, GtkSpinButtonClass))
+#define GTK_IS_SPIN_BUTTON(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_SPIN_BUTTON))
+#define GTK_IS_SPIN_BUTTON_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SPIN_BUTTON))
+
+
 typedef enum
 {
   GTK_UPDATE_ALWAYS,
   GTK_UPDATE_IF_VALID
 } GtkSpinButtonUpdatePolicy;
-  
+
 typedef enum
 {
   GTK_SPIN_STEP_FORWARD,
@@ -69,7 +72,7 @@ struct _GtkSpinButton
   
   GdkWindow *panel;
   GtkShadowType shadow_type;
-
+  
   guint32 timer;
   guint32 ev_time;
   
@@ -95,16 +98,16 @@ struct _GtkSpinButtonClass
 };
 
 
-guint		gtk_spin_button_get_type	   (void);
+GtkType		gtk_spin_button_get_type	   (void);
 
-void		gtk_spin_button_construct	   (GtkSpinButton  *spin_button,
+void		gtk_spin_button_configure	   (GtkSpinButton  *spin_button,
 						    GtkAdjustment  *adjustment,
 						    gfloat	    climb_rate,
-						    gint	    digits);
+						    guint	    digits);
 
 GtkWidget*	gtk_spin_button_new		   (GtkAdjustment  *adjustment,
 						    gfloat	    climb_rate,
-						    gint	    digits);
+						    guint	    digits);
 
 void		gtk_spin_button_set_adjustment	   (GtkSpinButton  *spin_button,
 						    GtkAdjustment  *adjustment);
@@ -112,7 +115,7 @@ void		gtk_spin_button_set_adjustment	   (GtkSpinButton  *spin_button,
 GtkAdjustment*	gtk_spin_button_get_adjustment	   (GtkSpinButton  *spin_button);
 
 void		gtk_spin_button_set_digits	   (GtkSpinButton  *spin_button,
-						    gint	    digits);
+						    guint	    digits);
 
 gfloat		gtk_spin_button_get_value_as_float (GtkSpinButton  *spin_button);
 
@@ -125,20 +128,23 @@ void		gtk_spin_button_set_update_policy  (GtkSpinButton  *spin_button,
 						    GtkSpinButtonUpdatePolicy  policy);
 
 void		gtk_spin_button_set_numeric	   (GtkSpinButton  *spin_button,
-						    gint	    numeric);
+						    gboolean	    numeric);
 
 void		gtk_spin_button_spin		   (GtkSpinButton  *spin_button,
 						    GtkSpinType     direction,
 						    gfloat	    increment);
 
 void		gtk_spin_button_set_wrap	   (GtkSpinButton  *spin_button,
-						    gint	    wrap);
+						    gboolean	    wrap);
 
 void		gtk_spin_button_set_shadow_type	   (GtkSpinButton  *spin_button,
 						    GtkShadowType   shadow_type);
 
 void		gtk_spin_button_set_snap_to_ticks  (GtkSpinButton  *spin_button,
-						    gint	    snap_to_ticks);
+						    gboolean	    snap_to_ticks);
+
+/* deprecated, defined for backwards compatibility */
+#define gtk_spin_button_construct gtk_spin_button_configure
 
 
 #ifdef __cplusplus

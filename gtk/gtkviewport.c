@@ -155,6 +155,7 @@ gtk_viewport_set_arg (GtkObject        *object,
       break;
     case ARG_SHADOW_TYPE:
       gtk_viewport_set_shadow_type (viewport, GTK_VALUE_ENUM (*arg));
+      break;
     default:
       break;
     }
