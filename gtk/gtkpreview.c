@@ -34,6 +34,8 @@ static void   gtk_preview_class_init    (GtkPreviewClass  *klass);
 static void   gtk_preview_init          (GtkPreview       *preview);
 static void   gtk_preview_finalize      (GtkObject        *object);
 static void   gtk_preview_realize       (GtkWidget        *widget);
+static void   gtk_preview_size_allocate (GtkWidget        *widget,
+					 GtkAllocation    *allocation);
 static gint   gtk_preview_expose        (GtkWidget        *widget,
 				         GdkEventExpose   *event);
 static void   gtk_preview_make_buffer   (GtkPreview       *preview);
@@ -84,6 +86,7 @@ gtk_preview_class_init (GtkPreviewClass *klass)
   object_class->finalize = gtk_preview_finalize;
 
   widget_class->realize = gtk_preview_realize;
+  widget_class->size_allocate = gtk_preview_size_allocate;
   widget_class->expose_event = gtk_preview_expose;
 
   klass->info.visual = NULL;
@@ -406,10 +409,21 @@ gtk_preview_realize (GtkWidget *widget)
   preview = GTK_PREVIEW (widget);
 
   attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = widget->allocation.x;
-  attributes.y = widget->allocation.y;
-  attributes.width = widget->allocation.width;
-  attributes.height = widget->allocation.height;
+
+  if (preview->expand)
+    {
+      attributes.width = widget->allocation.width;
+      attributes.height = widget->allocation.height;
+    }
+  else
+    {
+      attributes.width = MIN (widget->requisition.width, widget->allocation.width);
+      attributes.height = MIN (widget->requisition.height, widget->allocation.height);
+    }
+
+  attributes.x = widget->allocation.x + (widget->allocation.width - attributes.width) / 2;
+  attributes.y = widget->allocation.y + (widget->allocation.height - attributes.height) / 2;;
+
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = preview_class->info.visual;
   attributes.colormap = preview_class->info.cmap;
@@ -421,7 +435,39 @@ gtk_preview_realize (GtkWidget *widget)
 
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
-  gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+}
+
+static void   
+gtk_preview_size_allocate (GtkWidget        *widget,
+			   GtkAllocation    *allocation)
+{
+  GtkPreview *preview;
+  gint width, height;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_PREVIEW (widget));
+
+  preview = GTK_PREVIEW (widget);
+  widget->allocation = *allocation;
+
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      if (preview->expand)
+	{
+	  width = widget->allocation.width;
+	  height = widget->allocation.height;
+	}
+      else
+	{
+	  width = MIN (widget->allocation.width, widget->requisition.width);
+	  height = MIN (widget->allocation.height, widget->requisition.height);
+	}
+
+      gdk_window_move_resize (widget->window,
+			      widget->allocation.x + (widget->allocation.width - width) / 2,
+			      widget->allocation.y + (widget->allocation.height - height) / 2,
+			      width, height);
+    }
 }
 
 static gint
@@ -429,6 +475,7 @@ gtk_preview_expose (GtkWidget      *widget,
 		    GdkEventExpose *event)
 {
   GtkPreview *preview;
+  gint width, height;
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_PREVIEW (widget), FALSE);
@@ -438,12 +485,12 @@ gtk_preview_expose (GtkWidget      *widget,
     {
       preview = GTK_PREVIEW (widget);
       
+      gdk_window_get_size (widget->window, &width, &height);
+
       gtk_preview_put (GTK_PREVIEW (widget),
 		       widget->window, widget->style->black_gc,
-		       event->area.x -
-		       (widget->allocation.width - preview->buffer_width)/2,
-		       event->area.y -
-		       (widget->allocation.height - preview->buffer_height)/2,
+		       event->area.x - (width - preview->buffer_width)/2,
+		       event->area.y - (height - preview->buffer_height)/2,
 		       event->area.x, event->area.y,
 		       event->area.width, event->area.height);
     }

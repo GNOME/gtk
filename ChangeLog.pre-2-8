@@ -1,3 +1,45 @@
+Tue Jan  5 15:03:47 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (gtk_propagate_event): Make 
+	gtk_propagate_event() non-static, we need it in gtkdnd.c 
+	so that the button-release we synthesize gets propagated
+	correctly.
+
+	* gtk/gtkdnd.c: Use gtk_propagate_event() so
+	release gets to a GtkList. But we can't really
+	get this right without access to the windows
+	event masks and doing X-style propagation ourselves.
+
+Tue Jan  5 12:40:57 1999  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtkpreview.c: Add a size_allocate() routine 
+	and set the size of the preview window equal
+	to the area we are going to draw on, instead 
+	of the entire allocation. Do this to avoid having 
+	to set a parent-relative background.
+	
+Tue Jan  5 11:51:32 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_draw_cursor_on_drawable):
+	When redrawing the under-cursor character, don't
+	redraw the terminating NULL.
+	[ From: dov@imagic.weizmann.ac.il (Dov Grobgeld) ]
+
+Tue Jan  5 11:31:55 1999  Owen Taylor  <otaylor@redhat.com>
+	 
+	* gtk/gtkselection.c (gtk_target_list_unref): Free
+	memory allocated for target lists.
+
+	* gtk/gtkdnd.c (gtk_drag_drop_finished): Release
+	selections before destroying info structure.
+
+	* gdk/gdkdnd.c gdktypes.h (gdk_drag_get_protocol): Add
+	new value GDK_DRAG_PROTO_NONE, use it for non-drag
+	targets, to quiet Purify.
+
+	* gdk/gdkdnd.c (gdk_window_register_dnd): Set size
+	of property properly.
+
 Mon Jan  4 03:45:42 CST 1999 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.1.12

@@ -1454,12 +1454,14 @@ gtk_entry_draw_cursor_on_drawable (GtkEntry *entry, GdkDrawable *drawable)
 			      NULL, widget, "entry_bg", 
 			      xoffset, INNER_BORDER, 
 			      1, text_area_height - INNER_BORDER);
-	  /* Draw the character under the cursor again */
-
-	  gdk_draw_text_wc (drawable, widget->style->font,
-			    widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-			    xoffset, yoffset,
-			    entry->text + editable->current_pos, 1);
+	  
+	  /* Draw the character under the cursor again
+	   */
+	  if (editable->current_pos < entry->text_length)
+	    gdk_draw_text_wc (drawable, widget->style->font,
+			      widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+			      xoffset, yoffset,
+			      entry->text + editable->current_pos, 1);
     }
 
 
