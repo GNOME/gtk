@@ -1262,6 +1262,9 @@ synthesize_leave_event (GdkWindow      *window,
 {
   POINT pt;
 
+  if (p_grab_window != NULL && !p_grab_owner_events && !(p_grab_mask & GDK_LEAVE_NOTIFY_MASK))
+    return;
+
   if (!(((GdkWindowObject *) window)->event_mask & GDK_LEAVE_NOTIFY_MASK))
     return;
 
@@ -1292,6 +1295,9 @@ synthesize_enter_event (GdkWindow      *window,
 			GdkNotifyType   detail)
 {
   POINT pt;
+
+  if (p_grab_window != NULL && !p_grab_owner_events && !(p_grab_mask & GDK_ENTER_NOTIFY_MASK))
+    return;
 
   if (!(((GdkWindowObject *) window)->event_mask & GDK_ENTER_NOTIFY_MASK))
     return;
@@ -2668,19 +2674,8 @@ gdk_event_translate (GdkDisplay *display,
 
       break;
 
-#if 0
-    case WM_ACTIVATE:
-      GDK_NOTE (EVENTS, g_print (" %s",
-				 (msg->wParam == WA_ACTIVE ? "ACTIVE" :
-				  (msg->wParam == WA_CLICKACTIVE ? "CLICKACTIVE" :
-				   (msg->wParam == WA_INACTIVE ? "INACTIVE" : "???")))));
-
-      if (msg->wParam == WA_INACTIVE &&
-#else
     case WM_CANCELMODE:
-      if (
-#endif
-	  p_grab_window != NULL &&
+      if (p_grab_window != NULL &&
 	  k_grab_window != NULL &&
 	  gdk_win32_handle_table_lookup ((GdkNativeWindow) msg->lParam) == NULL)
 	{
@@ -2839,6 +2834,9 @@ gdk_event_translate (GdkDisplay *display,
 
     case WM_SETFOCUS:
     case WM_KILLFOCUS:
+      if (p_grab_window != NULL && !p_grab_owner_events && !(p_grab_mask & GDK_FOCUS_CHANGE_MASK))
+	break;
+
       if (!(((GdkWindowObject *) window)->event_mask & GDK_FOCUS_CHANGE_MASK))
 	break;
 
