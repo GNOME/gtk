@@ -551,7 +551,7 @@ gdk_pointer_grab (GdkWindow    *window,
 				     hcursor,
 				     event_mask_string (event_mask)));
 	  p_grab_mask = event_mask;
-	  p_grab_owner_events = (owner_events != 0);
+	  p_grab_owner_events = owner_events;
 	  p_grab_automatic = FALSE;
 	  
 #if USE_SETCAPTURE
@@ -629,7 +629,7 @@ find_window_for_pointer_event (GdkWindow*  reported_window,
   HWND hwnd;
   POINTS points;
   POINT pt;
-  GdkWindow* other_window;
+  GdkWindow* other_window = NULL;
 
   if (p_grab_window == NULL || !p_grab_owner_events)
     return reported_window;
@@ -643,13 +643,16 @@ find_window_for_pointer_event (GdkWindow*  reported_window,
                              pt.x, pt.y));
 
   hwnd = WindowFromPoint (pt);
-  if (hwnd == NULL)
-    return reported_window;
-  other_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwnd);
-  if (other_window == NULL)
-    return reported_window;
+  if (hwnd != NULL)
+    other_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwnd);
 
-  GDK_NOTE (EVENTS, g_print ("Found window %p for point (%ld, %ld)\n",
+  if (other_window == NULL)
+    {
+      GDK_NOTE (EVENTS, g_print ("...none, using original\n"));
+      return reported_window;
+    }
+
+  GDK_NOTE (EVENTS, g_print ("...found %p for (%ld, %ld)\n",
 			     hwnd, pt.x, pt.y));
 
   gdk_window_unref (reported_window);
@@ -1573,7 +1576,7 @@ propagate (GdkWindow  **window,
 	      *window = GDK_WINDOW (GDK_WINDOW_OBJECT (*window)->parent);
 	      gdk_drawable_ref (*window);
 	      GDK_NOTE (EVENTS, g_print ("%s %p",
-					 (in_propagation ? "," : " ...propagating to"),
+					 (in_propagation ? "," : "...propagating to"),
 					 GDK_WINDOW_HWND (*window)));
 	      /* The only branch where we actually continue the loop */
 	      in_propagation = TRUE;
@@ -2574,11 +2577,9 @@ gdk_event_translate (GdkDisplay *display,
       if (!p_grab_window)
 	{
 	  /* No explicit active grab, let's start one automatically */
-	  gint owner_events = (private->event_mask & (GDK_BUTTON_PRESS_MASK|GDK_BUTTON_RELEASE_MASK));
-	  
 	  GDK_NOTE (EVENTS, g_print ("...automatic grab started\n"));
 	  gdk_pointer_grab (window,
-			    owner_events,
+			    FALSE,
 			    private->event_mask,
 			    NULL, NULL, 0);
 	  p_grab_automatic = TRUE;

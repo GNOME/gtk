@@ -1,3 +1,12 @@
+2003-06-21  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): When
+	emulating X11's automatic grab on button down, pass owner_events
+	as FALSE. According to the XLib spec, automatic grabs use True for
+	owner_events when OwnerGrabButtonMask is selected, and I don't see
+	the X11 backend doing that. (#110271)
+	(find_window_for_pointer_event): Improve debugging output.
+
 2003-06-17  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk-zip.sh.in (DLLDIR): Look for DLLs also in the bin
