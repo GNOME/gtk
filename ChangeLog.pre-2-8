@@ -1,3 +1,8 @@
+Wed Nov 19 02:18:37 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkmenu.c (gtk_menu_set_tearoff_state): Call 
+	gtk_widget_hide(menu) when reattaching the menu.  (#126057) 
+
 Wed Nov 19 00:06:04 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_selection_changed):
