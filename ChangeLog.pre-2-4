@@ -1,4 +1,11 @@
 2002-02-24  Havoc Pennington  <hp@pobox.com>
+	
+	* gtk/gtktextview.c (gtk_text_view_value_changed): add dx/dy to
+	child allocation, don't subtract them. Also, copy code from CList
+	to recursively adjust the child allocation, instead of just 
+	adjusting immediate children. #69115
+
+2002-02-24  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkstyle.c (_gtk_draw_insertion_cursor): change to pass in
 	the cursor direction always, not just when we need an arrow, so we

@@ -5782,6 +5782,77 @@ gtk_text_view_set_scroll_adjustments (GtkTextView   *text_view,
     gtk_text_view_value_changed (NULL, text_view);
 }
 
+/* FIXME this adjust_allocation is a big cut-and-paste from
+ * GtkCList, needs to be some "official" way to do this
+ * factored out.
+ */
+typedef struct
+{
+  GdkWindow *window;
+  int dx;
+  int dy;
+} ScrollData;
+
+/* The window to which widget->window is relative */
+#define ALLOCATION_WINDOW(widget)		\
+   (GTK_WIDGET_NO_WINDOW (widget) ?		\
+    (widget)->window :                          \
+     gdk_window_get_parent ((widget)->window))
+
+static void
+adjust_allocation_recurse (GtkWidget *widget,
+			   gpointer   data)
+{
+  ScrollData *scroll_data = data;
+
+  /* Need to really size allocate instead of just poking
+   * into widget->allocation if the widget is not realized.
+   * FIXME someone figure out why this was.
+   */
+  if (!GTK_WIDGET_REALIZED (widget))
+    {
+      if (GTK_WIDGET_VISIBLE (widget))
+	{
+	  GdkRectangle tmp_rectangle = widget->allocation;
+	  tmp_rectangle.x += scroll_data->dx;
+          tmp_rectangle.y += scroll_data->dy;
+          
+	  gtk_widget_size_allocate (widget, &tmp_rectangle);
+	}
+    }
+  else
+    {
+      if (ALLOCATION_WINDOW (widget) == scroll_data->window)
+	{
+	  widget->allocation.x += scroll_data->dx;
+          widget->allocation.y += scroll_data->dy;
+          
+	  if (GTK_IS_CONTAINER (widget))
+	    gtk_container_forall (GTK_CONTAINER (widget),
+				  adjust_allocation_recurse,
+				  data);
+	}
+    }
+}
+
+static void
+adjust_allocation (GtkWidget *widget,
+		   int        dx,
+                   int        dy)
+{
+  ScrollData scroll_data;
+
+  if (GTK_WIDGET_REALIZED (widget))
+    scroll_data.window = ALLOCATION_WINDOW (widget);
+  else
+    scroll_data.window = NULL;
+    
+  scroll_data.dx = dx;
+  scroll_data.dy = dy;
+  
+  adjust_allocation_recurse (widget, &scroll_data);
+}
+            
 static void
 gtk_text_view_value_changed (GtkAdjustment *adj,
                              GtkTextView   *text_view)
@@ -5860,17 +5931,7 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
           GtkTextViewChild *child = tmp_list->data;
           
           if (child->anchor)
-            {              
-              child->widget->allocation.x -= dx;
-              child->widget->allocation.y -= dy;
-
-#if 0
-              g_print ("allocation for %p tweaked to %d,%d\n",
-                       child->widget,
-                       child->widget->allocation.x,
-                       child->widget->allocation.y);
-#endif
-            }
+            adjust_allocation (child->widget, dx, dy);
           
           tmp_list = g_slist_next (tmp_list);
         }
