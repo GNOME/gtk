@@ -32,7 +32,9 @@
 #include <config.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #include <stdio.h>
 #include <errno.h>
 #include "gdk-pixbuf-private.h"

@@ -1,3 +1,8 @@
+2004-02-28  Hans Breuer  <hans@breuer.org>
+
+	* io-tiff.c : include <io.h> for lseek()
+	* io-xbm.c : use HAVE_UNISTD_H
+
 Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* === Released 2.3.3 ===
