@@ -212,6 +212,36 @@ send_button_event (GdkFBMouse *mouse,
     }
 }
 
+static void
+handle_mouse_scroll (GdkFBMouse *mouse,
+		     gboolean    up)
+{
+  GdkEvent *event;
+  gint x, y;
+  GdkWindow *mouse_win;
+
+  mouse_win = gdk_window_at_pointer(NULL, NULL);
+
+  event = gdk_event_make (mouse_win, GDK_SCROLL, FALSE);
+
+  gdk_window_get_origin (mouse_win, &x, &y);
+  x = mouse->x - x;
+  y = mouse->y - y;
+
+  event->button.window = mouse_win;
+  event->scroll.direction = up ? GDK_SCROLL_UP : GDK_SCROLL_DOWN;
+  event->scroll.window = mouse_win;
+  event->scroll.time = GDK_CURRENT_TIME;
+  event->scroll.x = x;
+  event->scroll.y = y;
+  event->scroll.x_root = mouse->x;
+  event->scroll.y_root = mouse->y;
+  event->scroll.state = gdk_fb_keyboard_modifiers ();
+  event->scroll.device = _gdk_core_pointer;
+
+  _gdk_event_queue_append (gdk_display_get_default (), event);
+}
+
 /******************************************************
  ************ Device specific mouse code **************
  ******************************************************/
@@ -234,6 +264,7 @@ static gboolean handle_mouse_io             (GIOChannel   *gioc,
 					     GIOCondition  cond,
 					     gpointer      data);
 static gboolean gdk_fb_mouse_ps2_open       (GdkFBMouse   *mouse);
+static gboolean gdk_fb_mouse_imps2_open     (GdkFBMouse   *mouse);
 static void     gdk_fb_mouse_ps2_close      (GdkFBMouse   *mouse);
 static gboolean gdk_fb_mouse_ps2_packet     (GdkFBMouse   *mouse,
 					     gboolean     *got_motion);
@@ -257,7 +288,7 @@ static GdkFBMouseDevice mouse_devs[] =
   },
   { "imps2",
     4,
-    gdk_fb_mouse_ps2_open,
+    gdk_fb_mouse_imps2_open,
     gdk_fb_mouse_ps2_close,
     gdk_fb_mouse_ps2_packet,
     { 0xc0, 0x00 }
@@ -473,6 +504,56 @@ gdk_fb_mouse_ps2_open (GdkFBMouse *mouse)
   return TRUE;
 }
 
+static gboolean
+gdk_fb_mouse_imps2_open (GdkFBMouse *mouse)
+{
+  gint fd;
+  guchar buf[7];
+  int i = 0;
+
+  fd = gdk_fb_mouse_dev_open ("/dev/psaux", O_RDWR);
+  if (fd < 0)
+    return FALSE;
+  
+  i = 0;
+  buf[i++] = 243; /* Sample rate */
+  buf[i++] = 200;
+  buf[i++] = 243; /* Sample rate */
+  buf[i++] = 100;
+  buf[i++] = 243; /* Sample rate */
+  buf[i++] = 80;
+  buf[i++] = 242;
+
+  if (!write_all (fd, buf, i))
+    {
+      close (fd);
+      return FALSE;
+    }
+
+  if (read (fd, buf, 1) != 1)
+    {
+      close (fd);
+      return FALSE;
+    }
+  
+  i = 0;
+  buf[i++] = 230; /* 1:1 scaling */
+  buf[i++] = 244; /* enable mouse */
+  buf[i++] = 243; /* Sample rate */
+  buf[i++] = 100;
+  buf[i++] = 232; /* device resolution */
+  buf[i++] = 3;
+
+  if (!write_all (fd, buf, i))
+    {
+      close (fd);
+      return FALSE;
+    }
+  
+  mouse->fd = fd;
+  return TRUE;
+}
+
 static void
 gdk_fb_mouse_ps2_close (GdkFBMouse *mouse)
 {
@@ -492,7 +573,8 @@ gdk_fb_mouse_ps2_packet (GdkFBMouse *mouse, gboolean *got_motion)
   new_button1 = (buf[0] & 1) && 1;
   new_button3 = (buf[0] & 2) && 1;
   new_button2 = (buf[0] & 4) && 1;
-  
+  if (mouse->dev->packet_size == 4 && buf[3] != 0)
+    handle_mouse_scroll (mouse, buf[3] & 0x80);
 
   if (*got_motion &&
       (new_button1 != mouse->button_pressed[0] ||

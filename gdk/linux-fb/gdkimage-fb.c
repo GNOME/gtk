@@ -263,7 +263,7 @@ gdk_image_get_pixel (GdkImage *image,
 {
   GdkImagePrivateFB *private;
 
-  g_return_val_if_fail (image != NULL);
+  g_return_val_if_fail (image != NULL, 0);
   g_return_val_if_fail (x < 0 || x >= image->width, 0);
   g_return_val_if_fail (y < 0 || y >= image->height, 0);
 
