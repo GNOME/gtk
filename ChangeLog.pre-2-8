@@ -110,7 +110,6 @@
 
 2000-07-25  Havoc Pennington  <hp@redhat.com>
 
->>>>>>> 1.1355
 	* gtk/gtkprogressbar.h: Implement new sane, 5-function API for
 	using GtkProgressBar. See Changes-2.0.txt for details.
 
