@@ -60,14 +60,14 @@ GTK_RESERVED_2:
 GtkWidget, public flags:
 
 GTK_TOPLEVEL:
-	Widgets witghout a real parent, as there are GtkWindows and
+	Widgets without a real parent, as there are GtkWindows and
 	GtkMenus have this flag set throughout their lifetime.
 	Toplevel widgets always contain their own GdkWindow.
 	
 GTK_NO_WINDOW:
 	This flag is indicative for a widget that does not provide
 	its own GdkWindow. Visible action (e.g. drawing) is performed
-	on the parents GdkWindow.
+	on the parent's GdkWindow.
 
 GTK_REALIZED:
 	Set by gtk_widget_realize, unset by gtk_widget_unrealize.
@@ -90,7 +90,7 @@ GTK_VISIBLE:
 
 GTK_SENSITIVE:
 	Set and unset by gtk_widget_set_sensitive.
-	The sensitivity of a widget determines wether it will receive
+	The sensitivity of a widget determines whether it will receive
 	certain events (e.g. button or key presses). One premise for
 	the widgets sensitivity is to have GTK_SENSITIVE set.
 
@@ -106,17 +106,17 @@ GTK_CAN_FOCUS:
 	There are no directly corresponding functions for setting/unsetting
 	this flag, but it can be affected by the GtkWidget::has_focus argument
 	via gtk_widget_set_arg.
-	This flag determines wether a widget is able to handle focus grabs.
+	This flag determines whether a widget is able to handle focus grabs.
 
 GTK_HAS_FOCUS:
 	This flag will be set by gtk_widget_grab_focus for widgets that also
-	have GTK_CAN_FOCUS set. The flag will bve unset once another widget
+	have GTK_CAN_FOCUS set. The flag will be unset once another widget
 	grabs the focus.
 	
 GTK_CAN_DEFAULT:
 GTK_HAS_DEFAULT:
 	These two flags are mostly equal in functionality to their *_FOCUS
-	counterparts, but for the defalt widget.
+	counterparts, but for the default widget.
 
 GTK_HAS_GRAB:
 	Set by gtk_grab_add, unset by gtk_grab_remove.
@@ -124,15 +124,15 @@ GTK_HAS_GRAB:
 	one for receiving events other than ones of cosmetic value.
 
 GTK_BASIC:
-	The GTK_BASIC flag is an attempted at making a distinction between
-	widgets that will proper handle user input e.g. key/button presses.
-	Supsequent parent<->child relation ships of non `basic' widgets
-	should be avoided. The checking for this is currently not proper
-	enforced in the code. For example GtkButton is a non `basic' widget,
-	that will therefore disallow to act as a container for another
-	GtkButton. Now the gnit is, one can add a GtkHBox (which is a
-	`basic' widget) to the first button, and put the second into
-	the box.
+	The GTK_BASIC flag is an attempt at making a distinction
+	between widgets that handle user input e.g. key/button presses
+	and those that don't. Subsequent parent<->child relation ships
+	of non `basic' widgets should be avoided. The checking for
+	this is currently not properly enforced in the code. For
+	example GtkButton is a non `basic' widget, that will therefore
+	disallow to act as a container for another GtkButton. Now the
+	gnit is, one can add a GtkHBox (which is a `basic' widget) to
+	the first button, and put the second into the box.
 	
 
 GtkWidget, private flags:
@@ -192,13 +192,13 @@ GTK_IN_REPARENT:
 Related Macros:
 
 GTK_WIDGET_DRAWABLE:
-	This macro examines wether a widget is flagged as GTK_WIDGET_VISIBLE
+	This macro examines whether a widget is flagged as GTK_WIDGET_VISIBLE
 	and GTK_WIDGET_MAPPED.
 	Means: it _makes sense_ to draw in a widgets window.
 
 GTK_WIDGET_IS_SENSITIVE:
 	This macro tells the real sensitivity state of a widget. It returns
-	wether both the widget and all its parents are in sensitive state.
+	whether both the widget and all its parents are in sensitive state.
 
 
 II. Invariants:
@@ -243,7 +243,10 @@ Note:, the definition
       GTK_WIDGET_MAPPED => GTK_WIDGET_VISIBLE
 ]
 
-
+6) GTK_REDRAW_PENDING => GTK_WIDGET_REALIZED
+   GTK_RESIZE_PENDING =>         "
+   GTK_LEAVE_PENDING  =>         "
+   GTK_RESIZE_NEEDED  =>         "
 
 III. How states are changed:
 ----------------------------
