@@ -146,8 +146,6 @@ gboolean   gtk_entry_get_visibility             (GtkEntry      *entry);
 void       gtk_entry_set_invisible_char         (GtkEntry      *entry,
                                                  gunichar       ch);
 gunichar   gtk_entry_get_invisible_char         (GtkEntry      *entry);
-void       gtk_entry_set_editable   		(GtkEntry      *entry,
-						 gboolean       editable);
 void       gtk_entry_set_has_frame              (GtkEntry      *entry,
                                                  gboolean       setting);
 gboolean   gtk_entry_get_has_frame              (GtkEntry      *entry);
@@ -189,6 +187,8 @@ void       gtk_entry_set_position   		(GtkEntry      *entry,
 void       gtk_entry_select_region  		(GtkEntry      *entry,
 						 gint           start,
 						 gint           end);
+void       gtk_entry_set_editable   		(GtkEntry      *entry,
+						 gboolean       editable);
 #endif /* GTK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus

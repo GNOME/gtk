@@ -1,3 +1,26 @@
+Sat Oct 20 18:58:25 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.h: Deprecate gtk_entry_set_editable.
+	(#58768, Vitaly Tishkov)
+	
+	* gtk/gtkobject.h: Deprecate with abandon. 
+	(#61942, Vitaly Tishkov, Matthias Clasen)
+
+	* gtk/gtksignal.h: Deprecate everything.
+
+	* gtk/gtkmain.h (GTK_PRIORITY_INTERNAL): Deprecate
+	all GTK_PRIORITY_* defines other than GKT_PRIORITY_RESIZE>
+	(#61942, Matthias Clasen)
+
+	* gtk/gtkstyle.h: Deprecate gtk_draw_*. (#61140,
+	Havoc Pennington)
+
+	* gtk/gtkitemfactory.h: Deprecate compat functions
+	for GtkMenuFactory code. (#62071)
+
+	* gdk/gdkdrawable.h: Deprecate gdk_draw_string,
+	gdk_draw_text,gdk_draw_text_wc. (#62071)
+
 Mon Oct 22 10:12:08 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdk.c docs/Changes-2.0.txt (gdk_threads_init): Don't call

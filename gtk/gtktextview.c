@@ -4254,7 +4254,7 @@ static void
 gtk_text_view_cut_clipboard (GtkTextView *text_view)
 {
   gtk_text_buffer_cut_clipboard (get_buffer (text_view),
-				 gtk_clipboard_get (GDK_NONE),
+				 gtk_clipboard_get (GDK_SELECTION_CLIPBOARD),
 				 text_view->editable);
   DV(g_print (G_STRLOC": scrolling onscreen\n"));
   gtk_text_view_scroll_mark_onscreen (text_view,
@@ -4266,7 +4266,7 @@ static void
 gtk_text_view_copy_clipboard (GtkTextView *text_view)
 {
   gtk_text_buffer_copy_clipboard (get_buffer (text_view),
-				  gtk_clipboard_get (GDK_NONE));
+				  gtk_clipboard_get (GDK_SELECTION_CLIPBOARD));
   DV(g_print (G_STRLOC": scrolling onscreen\n"));
   gtk_text_view_scroll_mark_onscreen (text_view,
                                       gtk_text_buffer_get_mark (get_buffer (text_view),
@@ -4277,7 +4277,7 @@ static void
 gtk_text_view_paste_clipboard (GtkTextView *text_view)
 {
   gtk_text_buffer_paste_clipboard (get_buffer (text_view),
-				   gtk_clipboard_get (GDK_NONE),
+				   gtk_clipboard_get (GDK_SELECTION_CLIPBOARD),
 				   NULL,
 				   text_view->editable);
   DV(g_print (G_STRLOC": scrolling onscreen\n"));

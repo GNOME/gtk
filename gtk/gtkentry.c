@@ -2156,7 +2156,7 @@ gtk_entry_copy_clipboard (GtkEntry *entry)
   if (gtk_editable_get_selection_bounds (editable, &start, &end))
     {
       gchar *str = gtk_entry_get_public_chars (entry, start, end);
-      gtk_clipboard_set_text (gtk_clipboard_get (GDK_NONE), str, -1);
+      gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD), str, -1);
       g_free (str);
     }
 }

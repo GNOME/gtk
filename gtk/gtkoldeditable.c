@@ -792,7 +792,7 @@ gtk_old_editable_real_copy_clipboard (GtkOldEditable *old_editable)
 
       if (text)
 	{
-	  gtk_clipboard_set_text (gtk_clipboard_get (GDK_NONE), text, -1);
+	  gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD), text, -1);
 	  g_free (text);
 	}
     }
@@ -802,7 +802,7 @@ static void
 gtk_old_editable_real_paste_clipboard (GtkOldEditable *old_editable)
 {
   g_object_ref (G_OBJECT (old_editable));
-  gtk_clipboard_request_text (gtk_clipboard_get (GDK_NONE),
+  gtk_clipboard_request_text (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD),
 			      old_editable_text_received_cb, old_editable);
 }
 
