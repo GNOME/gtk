@@ -2998,6 +2998,9 @@ gdk_event_translate (GdkDisplay *display,
 #endif
 								 )
 	{
+	  GdkWindowState withdrawn_bit =
+	    IsWindowVisible (msg->hwnd) ? GDK_WINDOW_STATE_WITHDRAWN : 0;
+
 	  if (!(private->event_mask & GDK_STRUCTURE_MASK))
 	    break;
 
@@ -3019,12 +3022,12 @@ gdk_event_translate (GdkDisplay *display,
 	    gdk_synthesize_window_state (window,
 					 GDK_WINDOW_STATE_ICONIFIED |
 					 GDK_WINDOW_STATE_MAXIMIZED |
-					 GDK_WINDOW_STATE_WITHDRAWN,
+					 withdrawn_bit,
 					 0);
 	  else if (msg->wParam == SIZE_MAXIMIZED)
 	    gdk_synthesize_window_state (window,
 					 GDK_WINDOW_STATE_ICONIFIED |
-					 GDK_WINDOW_STATE_WITHDRAWN,
+					 withdrawn_bit,
 					 GDK_WINDOW_STATE_MAXIMIZED);
 
 	  if (private->resize_count > 1)

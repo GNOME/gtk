@@ -867,11 +867,17 @@ show_window_internal (GdkWindow *window,
     ShowWindow (GDK_WINDOW_HWND (window), SW_MAXIMIZE);
   else if (private->state & GDK_WINDOW_STATE_ICONIFIED)
     ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
+  else if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
+    ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNOACTIVATE);
   else
     ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
 
   if (raise)
-    BringWindowToTop (GDK_WINDOW_HWND (window));
+    if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
+      SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOPMOST, 0, 0, 0, 0,
+		    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+    else
+      BringWindowToTop (GDK_WINDOW_HWND (window));
   else if (old_active_window != GDK_WINDOW_HWND (window))
     SetActiveWindow (old_active_window);
 }
@@ -959,6 +965,9 @@ gdk_window_move (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
+  GDK_NOTE (MISC, g_print ("gdk_window_move: %p +%d+%d\n",
+			   GDK_WINDOW_HWND (window), x, y));
+      
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
   
   if (!GDK_WINDOW_DESTROYED (window))
@@ -1000,6 +1009,9 @@ gdk_window_resize (GdkWindow *window,
     width = 1;
   if (height < 1)
     height = 1;
+
+  GDK_NOTE (MISC, g_print ("gdk_window_resize: %p  %dx%d\n",
+			   GDK_WINDOW_HWND (window), width, height));
 
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
   

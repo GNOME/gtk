@@ -1,3 +1,18 @@
+2003-01-15  Tor Lillqvist  <tml@iki.fi>
+
+	Fix bug noticed by Alex Shaduri: Tooltips and other
+	GDK_WINDOW_TEMP windows were activated. This looked very odd, and
+	was a regression from earlier versions.
+	
+	* gdk/win32/gdkwindow-win32.c (show_window_internal): Fine-tune
+	behaviour. Don't ever activate GDK_WINDOW_TEMP windows.
+	(gdk_window_move, gdk_window_resize): Add debug logging.
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): When we get a
+	WM_SIZE message for a non-visible (withdrawn) window, don't clear
+	the GDK_WINDOW_STATE_WITHDRAWN bit. The window is still withdrawn
+	even if its size changes.
+
 Wed Jan 15 15:55:47 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksettings.c: Set the double click speed from
