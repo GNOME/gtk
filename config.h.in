@@ -31,3 +31,5 @@
 
 /* Define as the return type of signal handlers (int or void).  */
 #undef RETSIGTYPE
+
+#undef HAVE_MMAP

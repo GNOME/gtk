@@ -234,6 +234,7 @@ AC_C_CONST
 
 # Checks for library functions.
 AC_TYPE_SIGNAL
+AC_FUNC_MMAP
 
 # Check for sys/select.h
 

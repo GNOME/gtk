@@ -12,12 +12,8 @@ BUGS
 
  * Notebook: there are a few cosmetic problems left
 
- * Verticle scrollbar: the expose event looks hosed and is causing 
+ * Vertical scrollbar: the expose event looks hosed and is causing 
    quite a bit of flickering
-
- * Entry: the entire text line is getting re-drawn with every keystroke
-   and every mouse selection.  it's causing flickering, this needs to be
-   fixed
 
 NEW FEATURES
 ------------
@@ -26,9 +22,7 @@ NEW FEATURES
 
 WIDGETS
 -------
- * Tree widget (we have a new copy to look at)
  * Column-list (Jay Painter)
- * Combobox (one around somewhere?)
  * Text widget (needs to be finished)
  * Entry should have a password mode (and it should show stars
    for user feedback)
@@ -43,6 +37,10 @@ DND
   There also needs to be a way to set dnd-data on widget windows which are
   not the main window (for widgets that create more than one window).
     -Jay Painter
+  DnD seems to work for me, but yes, there needs to be some sort of
+  gtk_widget layer that makes it easier... Also, adding support for drop
+  zones might be nice.
+    -- Elliot
 
 OTHER
 -----

@@ -2263,6 +2263,7 @@ create_text ()
       gtk_widget_show (hscrollbar);
 
       vscrollbar = gtk_vscrollbar_new (GTK_TEXT (text)->vadj);
+      gtk_widget_set_usize(vscrollbar, 30, -1);
       gtk_table_attach (GTK_TABLE (table), vscrollbar, 1, 2, 0, 1,
 			GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
       gtk_widget_show (vscrollbar);
