@@ -1162,7 +1162,10 @@ gtk_widget_get_property (GObject         *object,
 	g_value_set_string (value, "");
       break;
     case PROP_PARENT:
-      g_value_set_object (value, G_OBJECT (widget->parent));
+      if (widget->parent)
+	g_value_set_object (value, G_OBJECT (widget->parent));
+      else
+	g_value_set_object (value, NULL);
       break;
     case PROP_X:
       aux_info =_gtk_widget_get_aux_info (widget, FALSE);

@@ -1,3 +1,14 @@
+2001-05-18  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkspinbutton.c:
+	Convert GtkArgs to GParams. Based on patch by John Margaglione.
+	Also do size request reasonable for MAXDOUBLE. Previously it printed
+	the limits to a buffer and overran it. Instead do it using log10() and
+	limit the width to 10 digits.
+	
+	* gtk/gtkwidget.c (gtk_widget_get_property):
+	Correctly handle setting the parent property to NULL.
+
 Fri May 18 15:26:26 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_style_set): Reset 
