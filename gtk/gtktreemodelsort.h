@@ -59,6 +59,11 @@ struct _GtkTreeModelSort
   guint has_child_toggled_id;
   guint deleted_id;
   guint reordered_id;
+
+  /* default sort */
+  GtkTreeIterCompareFunc default_sort_func;
+  gpointer default_sort_data;
+  GtkDestroyNotify default_sort_destroy;
 };
 
 struct _GtkTreeModelSortClass
