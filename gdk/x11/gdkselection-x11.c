@@ -132,6 +132,7 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
   OwnerInfo *info;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+  g_return_val_if_fail (selection != GDK_NONE, FALSE);
 
   if (display->closed)
     return FALSE;
@@ -202,8 +203,10 @@ gdk_selection_owner_get_for_display (GdkDisplay *display,
 				     GdkAtom     selection)
 {
   Window xwindow;
+  
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
+  g_return_val_if_fail (selection != GDK_NONE, NULL);
+  
   if (display->closed)
     return NULL;
   
@@ -223,6 +226,8 @@ gdk_selection_convert (GdkWindow *requestor,
 		       guint32    time)
 {
   GdkDisplay *display;
+
+  g_return_if_fail (selection != GDK_NONE);
   
   if (GDK_WINDOW_DESTROYED (requestor))
     return;
@@ -390,7 +395,7 @@ gdk_selection_send_notify_for_display (GdkDisplay *display,
   XSelectionEvent xevent;
   
   g_return_if_fail (GDK_IS_DISPLAY (display));
-
+  
   xevent.type = SelectionNotify;
   xevent.serial = 0;
   xevent.send_event = True;

@@ -321,6 +321,7 @@ gtk_selection_owner_set_for_display (GdkDisplay   *display,
   GdkWindow *window;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+  g_return_val_if_fail (selection != GDK_NONE, FALSE);
   g_return_val_if_fail (widget == NULL || GTK_WIDGET_REALIZED (widget), FALSE);
   g_return_val_if_fail (widget == NULL || gtk_widget_get_display (widget) == display, FALSE);
   
@@ -416,6 +417,7 @@ gtk_selection_owner_set (GtkWidget *widget,
   GdkDisplay *display;
   
   g_return_val_if_fail (widget == NULL || GTK_WIDGET_REALIZED (widget), FALSE);
+  g_return_val_if_fail (selection != GDK_NONE, FALSE);
 
   if (widget)
     display = gtk_widget_get_display (widget);
@@ -520,6 +522,9 @@ gtk_selection_clear_targets (GtkWidget *widget,
   GList *tmp_list;
   GList *lists;
 
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (selection != GDK_NONE);
+
   lists = g_object_get_data (G_OBJECT (widget), gtk_selection_handler_key);
   
   tmp_list = lists;
@@ -549,7 +554,8 @@ gtk_selection_add_target (GtkWidget	    *widget,
 {
   GtkTargetList *list;
 
-  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (selection != GDK_NONE);
 
   list = gtk_selection_target_list_get (widget, selection);
   gtk_target_list_add (list, target, 0, info);
@@ -562,8 +568,9 @@ gtk_selection_add_targets (GtkWidget            *widget,
 			   guint                 ntargets)
 {
   GtkTargetList *list;
-  
-  g_return_if_fail (widget != NULL);
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (selection != GDK_NONE);
   g_return_if_fail (targets != NULL);
   
   list = gtk_selection_target_list_get (widget, selection);
@@ -661,7 +668,8 @@ gtk_selection_convert (GtkWidget *widget,
   GdkWindow *owner_window;
   GdkDisplay *display;
   
-  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  g_return_val_if_fail (selection != GDK_NONE, FALSE);
   
   if (initialize)
     gtk_selection_init ();

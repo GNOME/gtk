@@ -784,7 +784,7 @@ motif_lookup_drag_window (GdkDisplay *display,
   gint format;
   guchar *data;
 
-  XGetWindowProperty (lookup_xdisplay, DefaultRootWindow (lookup_xdisplay),
+  XGetWindowProperty (lookup_xdisplay, RootWindow (lookup_xdisplay, 0),
 		      gdk_x11_get_xatom_by_name_for_display (display, "_MOTIF_DRAG_WINDOW"),
 		      0, 1, FALSE,
 		      XA_WINDOW, &type, &format, &nitems, &bytes_after,
@@ -837,7 +837,7 @@ motif_find_drag_window (GdkDisplay *display,
 	      
 	       display_x11->motif_drag_window = 
 		XCreateWindow (persistant_xdisplay, 
-			       DefaultRootWindow (persistant_xdisplay),
+			       RootWindow (persistant_xdisplay, 0),
 			      -100, -100, 10, 10, 0, 0,
 			      InputOnly, CopyFromParent,
 			      (CWOverrideRedirect | CWEventMask), &attr);
@@ -846,7 +846,7 @@ motif_find_drag_window (GdkDisplay *display,
 			g_message ("Created drag window %#lx\n", display_x11->motif_drag_window));
 	      
 	      XChangeProperty (persistant_xdisplay, 
-			       DefaultRootWindow (persistant_xdisplay),
+			       RootWindow (persistant_xdisplay, 0),
 			       motif_drag_window_atom, XA_WINDOW,
 			       32, PropModeReplace,
 			       (guchar *)&motif_drag_window_atom, 1);
@@ -1466,7 +1466,7 @@ motif_read_initiator_info (GdkDisplay *display,
     {
       g_warning ("Invalid target index in TOP_LEVEL_ENTER MESSAGE");
       XFree (initiator_info);
-      return GDK_FILTER_REMOVE;
+      return FALSE;
     }
 
   tmp_list = g_list_last (display_x11->motif_target_lists[initiator_info->targets_index]);

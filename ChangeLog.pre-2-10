@@ -1,6 +1,21 @@
+Wed Dec  4 14:31:46 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdnd-x11.c: Always look up and create the
+	Motif drag window as a child of the root window of screen 0
+	rather than the default screen.	(#100362, Erwann Chenede)
+
+	* gdk/x11/gdkdnd-x11.c (motif_read_initiator_info):
+	Return FALSE, not GDK_FILTER_REMOVE on failure; this
+	isn't a filter function.
+	
+	* gdk/x11/gdkselection-x11.c gtk/gtkselection.c: Add
+	some g_return_if_fail() to catch selection == None more 
+	gracefully than an X error.
+
 2002-12-04  Christian Neumair  <chris@gnome-de.org>
 
-	* src/gtkcellrendertoggle.c: Fixed typo.
+	* gtk/gtkcellrendertoggle.c: Fixed typo in property
+	description.
 
 Wed Dec  4 12:44:50 2002  Owen Taylor  <otaylor@redhat.com>
 
