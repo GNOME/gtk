@@ -67,7 +67,7 @@
       <description>
 	<p>
 	  The purpose of the Pango project is to provide a system for
-	  layout and rendering of internationlized text. It handles
+	  layout and rendering of internationalized text. It handles
 	  most of the issues necessary to 
 	</p>
       </description>
@@ -83,7 +83,7 @@
 	  with all strings in terms of UTF-8; by switching GTK+ over
 	  to UTF-8 we make it considerably simpler for developers to
 	  support multiple languages properly while still retaining
-	  a large degree of compatiblity with existing programs.
+	  a large degree of compatibility with existing programs.
 	</p>
 	<p>
 	  Some work has already been done on this as part of the Win32
@@ -213,7 +213,7 @@
       <description>
 	<p>
 	  Currently, GTK+ has a large number of list and tree widgets
-	  (GtkList, GtkTree, GtkCList, GtkCTree), non of which are
+	  (GtkList, GtkTree, GtkCList, GtkCTree), none of which are
 	  ideal. The GtkList and GtkTree widgets perform badly on large
 	  sets. (GtkTree widget is also quite buggy.) GtkCList
 	  and GtkCTree mostly solve the size problem, but are quite
