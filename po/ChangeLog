@@ -1,3 +1,7 @@
+2003-11-04   Vincent van Adrighem  <adrighem@gnome.org>
+
+	* nl.po: Dutch translation updated by Tino Meinen.
+
 Mon Nov  3 22:41:08 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* POTFILES.in: Add gtk/gtkactiongroup.c
