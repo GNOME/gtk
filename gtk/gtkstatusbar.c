@@ -353,7 +353,6 @@ gtk_statusbar_finalize (GtkObject *object)
     g_free (list->data);
   g_slist_free (statusbar->messages);
   statusbar->keys = NULL;
-  printf("huhu\n");
 
   GTK_OBJECT_CLASS (parent_class)->finalize (object);
 }
