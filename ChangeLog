@@ -1,3 +1,10 @@
+2002-02-09  Daniel Elstner  <daniel.elstner@gmx.net>
+
+	* gtk/gtktextchild.c (CHECK_IN_BUFFER_RETURN): Add missing
+	curled braces so that it doesn't always return.  Also indent
+	both CHECK_IN_BUFFER* macros properly, and make use of
+	G_STMT_START/G_STMT_END.
+
 Sat Feb  9 13:27:14 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkbindings.h: Add prototype for
