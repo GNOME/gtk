@@ -1,3 +1,7 @@
+Mon Nov  1 13:37:31 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/question_index.sgml (linkend): add missing tag.
+
 2004-11-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkrc.sgml: Document im_module_file and settings

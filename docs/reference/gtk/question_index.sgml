@@ -502,6 +502,8 @@ which keeps the compiler from optimizing the call away.
 volatile GType dummy = GTK_TYPE_BLAH;
 </programlisting></informalexample>
 </para>
+</answer>
+</qandaentry>
 </qandadiv>
 
 <qandadiv><title>Which widget should I use...</title>
