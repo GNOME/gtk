@@ -1,3 +1,8 @@
+Wed Jun 21 19:29:08 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkpixbuf-render.c gdk/gdkpixbuf-drawable.c: Indentation
+	fixups to GTK+ standard.
+
 Wed Jun 21 16:38:13 2000  Owen Taylor  <otaylor@redhat.com>
 
         * gdk-pixbuf/* docs/reference/gdk-pixbuf/*: Welcome aboard,
