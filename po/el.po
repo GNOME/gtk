@@ -22,14 +22,15 @@
 # Nikos Charonitakis <frolix68@yahoo.gr>, 2003, 2004 .
 # Nikos Kannelopoulos <nkan@panafonet.gr>, 2003.
 # Kostas Papadimas <pkst@gnome.org>, 2002, 2003, 2004.
+# Nikos Charonitakis <charosn@her.forthnet.gr>, 2004.
 msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-16 14:27-0500\n"
-"PO-Revision-Date: 2004-03-09 12:23+0200\n"
-"Last-Translator: Kostas Papadimas <pkst@gnome.org>\n"
-"Language-Team: Greek <nls@tux.hellug.gr>\n"
+"POT-Creation-Date: 2004-03-18 15:30+0200\n"
+"PO-Revision-Date: 2004-03-18 15:34+0200\n"
+"Last-Translator: Nikos Charonitakis <charosn@her.forthnet.gr>\n"
+"Language-Team: Greek <nls@hellug.gr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -50,8 +51,7 @@ msgstr "Το αρχείο εικόνας '%s' δεν περιέχει δεδομ
 #: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:813
 #: gdk-pixbuf/gdk-pixbuf-io.c:939 tests/testfilechooser.c:237
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Αποτυχία φόρτωσης εικόνας '%s': Ο λόγος είναι άγνωστος, πιθανόν πρόκειται "
 "για κατεστραμμένο αρχείο εικόνας"
@@ -361,8 +361,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:908
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "Η ποιότητα JPEG πρέπει να έχει τιμή μεταξύ 0 και 100; Η τιμή  '%d' δεν "
 "επιτρέπεται."
@@ -466,8 +465,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Μοιραίο σφάλμα στην ανάγνωση αρχείου εικόνας PNG: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Τα κλειδιά για PNG text chunks θα πρέπει να έχουν το ελάχιστο 1 και το "
 "μέγιστο 79 χαρακτήρες."
@@ -478,8 +476,7 @@ msgstr "Τα κλειδιά για PNG text chunks θα πρέπει να είν
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid ""
-"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
 "Η τιμή για PNG  text chunk %s δε μπορεί να μετατραπεί σε κωδικοποίηση ISO-"
 "8859-1."
@@ -968,7 +965,7 @@ msgstr ""
 "Αποτυχία πρoσθήκης σελιδοδείκτη για %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:739 gtk/gtkfilechooserdefault.c:4942
+#: gtk/gtkfilechooserdefault.c:739 gtk/gtkfilechooserdefault.c:4938
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -986,15 +983,15 @@ msgstr ""
 "Αδυναμία αλλαγής από τον τρέχοντα φάκελο σε %s:\n"
 "%s "
 
-#: gtk/gtkfilechooserdefault.c:1037 gtk/gtkpathbar.c:809
+#: gtk/gtkfilechooserdefault.c:1037 gtk/gtkpathbar.c:828
 msgid "Home"
 msgstr "Αρχή"
 
-#: gtk/gtkfilechooserdefault.c:1055 gtk/gtkpathbar.c:811
+#: gtk/gtkfilechooserdefault.c:1055 gtk/gtkpathbar.c:830
 msgid "Desktop"
 msgstr "Επιφάνεια εργασίας"
 
-#: gtk/gtkfilechooserdefault.c:1491
+#: gtk/gtkfilechooserdefault.c:1496
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -1003,12 +1000,12 @@ msgstr ""
 "Αδυναμία δημιουργίας φακέλου %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1648
+#: gtk/gtkfilechooserdefault.c:1643
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "Αποτυχία πρόθεσης σελιδοδείκτη για %s διότι δεν είναι φάκελος."
 
-#: gtk/gtkfilechooserdefault.c:1731
+#: gtk/gtkfilechooserdefault.c:1724
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -1017,118 +1014,114 @@ msgstr ""
 "Αδυναμία απομάκρυνσης σελιδοδείκτη για  %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2297
+#: gtk/gtkfilechooserdefault.c:2290
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
-msgstr ""
-"Αποτυχία πρόθεσης σελιδοδείκτη για %s επειδή έχει μή έγκυρο όνομα διαδρομής."
+msgstr "Αποτυχία πρόθεσης σελιδοδείκτη για %s επειδή έχει μή έγκυρο όνομα διαδρομής."
 
-#: gtk/gtkfilechooserdefault.c:2485
+#: gtk/gtkfilechooserdefault.c:2478
 msgid "Folder"
 msgstr "Φάκελος"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2532 gtk/gtkstock.c:276
+#: gtk/gtkfilechooserdefault.c:2525 gtk/gtkstock.c:276
 msgid "_Add"
 msgstr "_Προσθήκη"
 
-#: gtk/gtkfilechooserdefault.c:2542 gtk/gtkstock.c:324
+#: gtk/gtkfilechooserdefault.c:2535 gtk/gtkstock.c:324
 msgid "_Remove"
 msgstr "_Απομάκρυνση"
 
-#: gtk/gtkfilechooserdefault.c:2628
+#: gtk/gtkfilechooserdefault.c:2621
 msgid "Name"
 msgstr "Όνομα"
 
-#: gtk/gtkfilechooserdefault.c:2650
+#: gtk/gtkfilechooserdefault.c:2643
 msgid "Size"
 msgstr "Μέγεθος"
 
-#: gtk/gtkfilechooserdefault.c:2662
+#: gtk/gtkfilechooserdefault.c:2655
 msgid "Modified"
 msgstr "Τροποποιήθηκε"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2724
+#: gtk/gtkfilechooserdefault.c:2717
 msgid "Create _Folder"
 msgstr "Δημιουργία _Φάκελου"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:2831
+#: gtk/gtkfilechooserdefault.c:2824
 msgid "_Name:"
 msgstr "Ό_νομα:"
 
-#: gtk/gtkfilechooserdefault.c:2873
+#: gtk/gtkfilechooserdefault.c:2866
 msgid "_Browse for other folders"
 msgstr "_Περιήγηση για άλλους φακέλους"
 
-#: gtk/gtkfilechooserdefault.c:3111
+#: gtk/gtkfilechooserdefault.c:3104
 msgid "Save in _folder:"
 msgstr "Αποθήκευση σε _φάκελο:"
 
-#: gtk/gtkfilechooserdefault.c:3113
+#: gtk/gtkfilechooserdefault.c:3106
 msgid "Create in _folder:"
 msgstr "Δημιουργία σε _φάκελο:"
 
-#: gtk/gtkfilechooserdefault.c:3701
-#, fuzzy
+#: gtk/gtkfilechooserdefault.c:3697
 msgid "Can't change to folder because it isn't local"
-msgstr ""
-"Αποτυχία αλλαγής στο φάκελο που καθορίσατε επειδή έχει μή έγκυρο όνομα "
-"διαδρομής."
+msgstr "Αποτυχία αλλαγής στο φάκελο γιατί δεν είναι τοπικός"
 
-#: gtk/gtkfilechooserdefault.c:4148
+#: gtk/gtkfilechooserdefault.c:4144
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "Η συντόμευση  %s  δεν υπάρχει."
 
-#: gtk/gtkfilechooserdefault.c:4765
+#: gtk/gtkfilechooserdefault.c:4761
 msgid "Type name of new folder"
 msgstr "Πληκτρολογήστε το όνομα του νέου φακέλου"
 
-#: gtk/gtkfilechooserdefault.c:4794
+#: gtk/gtkfilechooserdefault.c:4790
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:4796
+#: gtk/gtkfilechooserdefault.c:4792
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:4798
+#: gtk/gtkfilechooserdefault.c:4794
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:4800
+#: gtk/gtkfilechooserdefault.c:4796
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:4845
+#: gtk/gtkfilechooserdefault.c:4841
 msgid "Today"
 msgstr "Σήμερα"
 
-#: gtk/gtkfilechooserdefault.c:4847
+#: gtk/gtkfilechooserdefault.c:4843
 msgid "Yesterday"
 msgstr "Χθές"
 
-#: gtk/gtkfilechooserdefault.c:4858
+#: gtk/gtkfilechooserdefault.c:4854
 msgid "Unknown"
 msgstr "Άγνωστο"
 
-#: gtk/gtkfilechooserdefault.c:4903
+#: gtk/gtkfilechooserdefault.c:4899
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "Αποτυχία αλλαγής στο φάκελο που καθορίσατε επειδή έχει μή έγκυρο όνομα "
 "διαδρομής."
 
-#: gtk/gtkfilechooserdefault.c:4980
+#: gtk/gtkfilechooserdefault.c:4976
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1137,11 +1130,11 @@ msgstr ""
 "Αδυναμία επιλογής %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5020
+#: gtk/gtkfilechooserdefault.c:5016
 msgid "Open Location"
 msgstr "Άνοιγμα τοποθεσίας"
 
-#: gtk/gtkfilechooserdefault.c:5044
+#: gtk/gtkfilechooserdefault.c:5040
 msgid "_Location:"
 msgstr "Τοπο_θεσία:"
 
@@ -1191,8 +1184,7 @@ msgstr "_Μετονομασία Αρχείου"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Το όνομα αρχείου \"%s\" περιέχει σύμβολα που δεν επιτρέπονται σε ονόματα "
 "αρχείου"
@@ -1208,8 +1200,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1442 gtk/gtkfilesel.c:1678
 msgid "You probably used symbols not allowed in filenames."
-msgstr ""
-"Πιθανόν να χρησιμοποιήσατε σύμβολα που δεν επιτρέπονται σε ονόματα αρχείων."
+msgstr "Πιθανόν να χρησιμοποιήσατε σύμβολα που δεν επιτρέπονται σε ονόματα αρχείων."
 
 #: gtk/gtkfilesel.c:1450
 #, c-format
@@ -1337,7 +1328,7 @@ msgstr "(Κενό)"
 #: gtk/gtkfilesystemunix.c:415
 #, c-format
 msgid "%s: %s"
-msgstr ""
+msgstr "%s: %s"
 
 #: gtk/gtkfilesystemunix.c:422 gtk/gtkfilesystemunix.c:613
 #: gtk/gtkfilesystemunix.c:1657 gtk/gtkfilesystemwin32.c:1176
@@ -1364,9 +1355,8 @@ msgid "Bookmark saving failed (%s)"
 msgstr "Η αποθήκευση σελιδοδεικτών απέτυχε (%s)"
 
 #: gtk/gtkfilesystemunix.c:1553
-#, fuzzy, c-format
 msgid "error getting information for '%s'"
-msgstr "σφάλμα λήψη πληροφοριών για '%s': %s"
+msgstr "σφάλμα λήψης πληροφοριών για '%s'"
 
 #: gtk/gtkfilesystemwin32.c:950
 msgid "This file system does not support icons for everything"
@@ -1557,7 +1547,7 @@ msgstr "Ομάδα"
 
 #: gtk/gtkradiotoolbutton.c:91
 msgid "The radio tool button whose group this button belongs to."
-msgstr "Το κουμπί εργαλείου radio στην ομάδα που ανήκει αυτό το κουμπί"
+msgstr "Το κουμπί εργαλείου radio στην ομάδα που ανήκει αυτό το κουμπί."
 
 #: gtk/gtkrc.c:2390
 #, c-format
@@ -2019,3 +2009,4 @@ msgstr "Αδυναμία λήψης πληροφοριών για το αρχε�
 
 #~ msgid "This file system does not support icons"
 #~ msgstr "Το σύστημα αρχείων δεν υποστηρίζει εικονίδια"
+
