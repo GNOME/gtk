@@ -65,7 +65,7 @@ struct _GtkSignal
 struct _GtkSignalHash
 {
   GtkType object_type;
-  guint	  name_key_id;
+  GQuark  quark;
   guint	  signal_id;
 };
 
@@ -172,7 +172,7 @@ static GtkSignalMarshal global_marshaller = NULL;
 static GtkSignalDestroy global_destroy_notify = NULL;
 
 static guint	   		 gtk_handler_id = 1;
-static guint	   		 handler_key_id = 0;
+static guint	   		 handler_quark = 0;
 static GHashTable  		*gtk_signal_hash_table = NULL;
 static GtkSignal   		*gtk_signals = NULL;
 static guint	   		 gtk_n_signals = 0;
@@ -231,14 +231,14 @@ gtk_signal_next_and_invalidate (void)
 void
 gtk_signal_init (void)
 {
-  if (!handler_key_id)
+  if (!handler_quark)
     {
       GtkSignal *zero;
       
       zero = gtk_signal_next_and_invalidate ();
       g_assert (zero == NULL);
       
-      handler_key_id = gtk_object_data_force_id ("gtk-signal-handlers");
+      handler_quark = g_quark_from_static_string ("gtk-signal-handlers");
       
       gtk_signal_hash_mem_chunk =
 	g_mem_chunk_new ("GtkSignalHash mem chunk",
@@ -270,7 +270,7 @@ gtk_signal_newv (const gchar	     *r_name,
 {
   GtkSignal *signal;
   GtkSignalHash *hash;
-  guint id;
+  GQuark quark;
   guint i;
   gchar *name;
   
@@ -280,15 +280,15 @@ gtk_signal_newv (const gchar	     *r_name,
   if (nparams)
     g_return_val_if_fail (params != NULL, 0);
   
-  if (!handler_key_id)
+  if (!handler_quark)
     gtk_signal_init ();
 
 
   name = g_strdup (r_name);
   g_strdelimit (name, NULL, '_');
 
-  id = gtk_signal_lookup (name, object_type);
-  if (id)
+  quark = gtk_signal_lookup (name, object_type);
+  if (quark)
     {
       g_warning ("gtk_signal_newv(): signal \"%s\" already exists in the `%s' class ancestry\n",
 		 r_name,
@@ -302,6 +302,7 @@ gtk_signal_newv (const gchar	     *r_name,
     {
       g_warning ("gtk_signal_newv(): signal \"%s\" with return value `%s' excludes GTK_RUN_LAST",
 		 name, gtk_type_name (return_val));
+      g_free (name);
       return 0;
     }
   
@@ -331,19 +332,19 @@ gtk_signal_newv (const gchar	     *r_name,
    */
   hash = g_chunk_new (GtkSignalHash, gtk_signal_hash_mem_chunk);
   hash->object_type = object_type;
-  hash->name_key_id = gtk_object_data_force_id (signal->name);
+  hash->quark = g_quark_from_string (signal->name);
   hash->signal_id = signal->signal_id;
   g_hash_table_insert (gtk_signal_hash_table, hash, GUINT_TO_POINTER (hash->signal_id));
 
   /* insert "signal-name" into hash table
    */
   g_strdelimit (signal->name, NULL, '-');
-  id = gtk_object_data_force_id (signal->name);
-  if (id != hash->name_key_id)
+  quark = g_quark_from_static_string (signal->name);
+  if (quark != hash->quark)
     {
       hash = g_chunk_new (GtkSignalHash, gtk_signal_hash_mem_chunk);
       hash->object_type = object_type;
-      hash->name_key_id = id;
+      hash->quark = quark;
       hash->signal_id = signal->signal_id;
       g_hash_table_insert (gtk_signal_hash_table, hash, GUINT_TO_POINTER (hash->signal_id));
     }
@@ -405,8 +406,8 @@ gtk_signal_lookup (const gchar *name,
   g_return_val_if_fail (name != NULL, 0);
   g_return_val_if_fail (gtk_type_is_a (object_type, GTK_TYPE_OBJECT), 0);
   
-  hash.name_key_id = gtk_object_data_try_key (name);
-  if (hash.name_key_id)
+  hash.quark = g_quark_try_string (name);
+  if (hash.quark)
     {
       while (object_type)
 	{
@@ -886,7 +887,7 @@ gtk_signal_disconnect (GtkObject *object,
   g_return_if_fail (object != NULL);
   g_return_if_fail (handler_id > 0);
   
-  handler = gtk_object_get_data_by_id (object, handler_key_id);
+  handler = gtk_object_get_data_by_id (object, handler_quark);
   
   while (handler)
     {
@@ -915,7 +916,7 @@ gtk_signal_disconnect_by_func (GtkObject     *object,
   g_return_if_fail (func != NULL);
   
   found_one = FALSE;
-  handler = gtk_object_get_data_by_id (object, handler_key_id);
+  handler = gtk_object_get_data_by_id (object, handler_quark);
   
   while (handler)
     {
@@ -948,7 +949,7 @@ gtk_signal_disconnect_by_data (GtkObject *object,
   g_return_if_fail (object != NULL);
   
   found_one = FALSE;
-  handler = gtk_object_get_data_by_id (object, handler_key_id);
+  handler = gtk_object_get_data_by_id (object, handler_quark);
   
   while (handler)
     {
@@ -979,7 +980,7 @@ gtk_signal_handler_block (GtkObject *object,
   g_return_if_fail (object != NULL);
   g_return_if_fail (handler_id > 0);
   
-  handler = gtk_object_get_data_by_id (object, handler_key_id);
+  handler = gtk_object_get_data_by_id (object, handler_quark);
   
   while (handler)
     {
@@ -1006,7 +1007,7 @@ gtk_signal_handler_block_by_func (GtkObject	*object,
   g_return_if_fail (func != NULL);
   
   found_one = FALSE;
-  handler = gtk_object_get_data_by_id (object, handler_key_id);
+  handler = gtk_object_get_data_by_id (object, handler_quark);
   
   while (handler)
     {
@@ -1034,7 +1035,7 @@ gtk_signal_handler_block_by_data (GtkObject *object,
   g_return_if_fail (object != NULL);
   
   found_one = FALSE;
-  handler = gtk_object_get_data_by_id (object, handler_key_id);
+  handler = gtk_object_get_data_by_id (object, handler_quark);
   
   while (handler)
     {
@@ -1060,7 +1061,7 @@ gtk_signal_handler_unblock (GtkObject *object,
   g_return_if_fail (object != NULL);
   g_return_if_fail (handler_id > 0);
   
-  handler = gtk_object_get_data_by_id (object, handler_key_id);
+  handler = gtk_object_get_data_by_id (object, handler_quark);
   
   while (handler)
     {
@@ -1090,7 +1091,7 @@ gtk_signal_handler_unblock_by_func (GtkObject	  *object,
   g_return_if_fail (func != NULL);
   
   found_one = FALSE;
-  handler = gtk_object_get_data_by_id (object, handler_key_id);
+  handler = gtk_object_get_data_by_id (object, handler_quark);
   
   while (handler)
     {
@@ -1119,7 +1120,7 @@ gtk_signal_handler_unblock_by_data (GtkObject *object,
   g_return_if_fail (object != NULL);
   
   found_one = FALSE;
-  handler = gtk_object_get_data_by_id (object, handler_key_id);
+  handler = gtk_object_get_data_by_id (object, handler_quark);
   
   while (handler)
     {
@@ -1147,7 +1148,7 @@ gtk_signal_handlers_destroy (GtkObject *object)
    * handler_key data on each removal
    */
   
-  handler = gtk_object_get_data_by_id (object, handler_key_id);
+  handler = gtk_object_get_data_by_id (object, handler_quark);
   if (handler)
     {
       handler = handler->next;
@@ -1159,7 +1160,7 @@ gtk_signal_handlers_destroy (GtkObject *object)
 	  gtk_signal_handler_unref (handler, object);
 	  handler = next;
 	}
-      handler = gtk_object_get_data_by_id (object, handler_key_id);
+      handler = gtk_object_get_data_by_id (object, handler_quark);
       gtk_signal_handler_unref (handler, object);
     }
 }
@@ -1190,7 +1191,7 @@ gtk_signal_hash (gconstpointer h)
 {
   register const GtkSignalHash *hash = h;
   
-  return hash->object_type ^ hash->name_key_id;
+  return hash->object_type ^ hash->quark;
 }
 
 static gint
@@ -1200,7 +1201,7 @@ gtk_signal_compare (gconstpointer h1,
   register const GtkSignalHash *hash1 = h1;
   register const GtkSignalHash *hash2 = h2;
   
-  return (hash1->name_key_id == hash2->name_key_id &&
+  return (hash1->quark == hash2->quark &&
 	  hash1->object_type == hash2->object_type);
 }
 
@@ -1288,11 +1289,11 @@ gtk_signal_handler_unref (GtkHandler *handler,
       if (handler->prev)
 	handler->prev->next = handler->next;
       else if (handler->next)
-	gtk_object_set_data_by_id (object, handler_key_id, handler->next);
+	gtk_object_set_data_by_id (object, handler_quark, handler->next);
       else
 	{
 	  GTK_OBJECT_UNSET_FLAGS (object, GTK_CONNECTED);
-	  gtk_object_set_data_by_id (object, handler_key_id, NULL);
+	  gtk_object_set_data_by_id (object, handler_quark, NULL);
 	}
       if (handler->next)
 	handler->next->prev = handler->prev;
@@ -1311,11 +1312,11 @@ gtk_signal_handler_insert (GtkObject  *object,
   /* FIXME: remove */ g_assert (handler->next == NULL);
   /* FIXME: remove */ g_assert (handler->prev == NULL);
   
-  tmp = gtk_object_get_data_by_id (object, handler_key_id);
+  tmp = gtk_object_get_data_by_id (object, handler_quark);
   if (!tmp)
     {
       GTK_OBJECT_SET_FLAGS (object, GTK_CONNECTED);
-      gtk_object_set_data_by_id (object, handler_key_id, handler);
+      gtk_object_set_data_by_id (object, handler_quark, handler);
     }
   else
     while (tmp)
@@ -1328,7 +1329,7 @@ gtk_signal_handler_insert (GtkObject  *object,
 		handler->prev = tmp->prev;
 	      }
 	    else
-	      gtk_object_set_data_by_id (object, handler_key_id, handler);
+	      gtk_object_set_data_by_id (object, handler_quark, handler);
 	    tmp->prev = handler;
 	    handler->next = tmp;
 	    break;
@@ -1469,7 +1470,7 @@ gtk_signal_get_handlers (GtkObject *object,
 {
   GtkHandler *handlers;
   
-  handlers = gtk_object_get_data_by_id (object, handler_key_id);
+  handlers = gtk_object_get_data_by_id (object, handler_quark);
   
   while (handlers)
     {

@@ -81,29 +81,29 @@ static const gchar	*item_factory_string = "Gtk-<ItemFactory>";
 static GMemChunk	*ifactory_item_chunks = NULL;
 static GMemChunk	*ifactory_cb_data_chunks = NULL;
 static const gchar	*key_popup_data = "GtkItemFactory-popup-data";
-static guint		 key_id_popup_data = 0;
+static GQuark		 quark_popup_data = 0;
 static const gchar	*key_if_menu_pos = "GtkItemFactory-menu-position";
-static guint		 key_id_if_menu_pos = 0;
+static GQuark		 quark_if_menu_pos = 0;
 static const gchar	*key_item_factory = "GtkItemFactory";
-static guint		 key_id_item_factory = 0;
+static GQuark		 quark_item_factory = 0;
 static const gchar	*key_item_factory_path = "GtkItemFactory-path";
-static guint		 key_id_item_factory_path = 0;
+static GQuark		 quark_item_factory_path = 0;
 static const gchar	*key_type_item = "<Item>";
-static guint		 key_id_type_item = 0;
+static GQuark		 quark_type_item = 0;
 static const gchar	*key_type_title = "<Title>";
-static guint		 key_id_type_title = 0;
+static GQuark		 quark_type_title = 0;
 static const gchar	*key_type_radio_item = "<RadioItem>";
-static guint		 key_id_type_radio_item = 0;
+static GQuark		 quark_type_radio_item = 0;
 static const gchar	*key_type_check_item = "<CheckItem>";
-static guint		 key_id_type_check_item = 0;
+static GQuark		 quark_type_check_item = 0;
 static const gchar	*key_type_toggle_item = "<ToggleItem>";
-static guint		 key_id_type_toggle_item = 0;
+static GQuark		 quark_type_toggle_item = 0;
 static const gchar	*key_type_separator_item = "<Separator>";
-static guint		 key_id_type_separator_item = 0;
+static GQuark		 quark_type_separator_item = 0;
 static const gchar	*key_type_branch = "<Branch>";
-static guint		 key_id_type_branch = 0;
+static GQuark		 quark_type_branch = 0;
 static const gchar	*key_type_last_branch = "<LastBranch>";
-static guint		 key_id_type_last_branch = 0;
+static GQuark		 quark_type_last_branch = 0;
 static	GScannerConfig	ifactory_scanner_config =
 {
   (
@@ -200,18 +200,18 @@ gtk_item_factory_class_init (GtkItemFactoryClass  *class)
 		     sizeof (GtkIFCBData) * ITEM_BLOCK_SIZE,
 		     G_ALLOC_AND_FREE);
 
-  key_id_popup_data = gtk_object_data_force_id (key_popup_data);
-  key_id_if_menu_pos = gtk_object_data_force_id (key_if_menu_pos);
-  key_id_item_factory = gtk_object_data_force_id (key_item_factory);
-  key_id_item_factory_path = gtk_object_data_force_id (key_item_factory_path);
-  key_id_type_item = gtk_object_data_force_id (key_type_item);
-  key_id_type_title = gtk_object_data_force_id (key_type_title);
-  key_id_type_radio_item = gtk_object_data_force_id (key_type_radio_item);
-  key_id_type_check_item = gtk_object_data_force_id (key_type_check_item);
-  key_id_type_toggle_item = gtk_object_data_force_id (key_type_toggle_item);
-  key_id_type_separator_item = gtk_object_data_force_id (key_type_separator_item);
-  key_id_type_branch = gtk_object_data_force_id (key_type_branch);
-  key_id_type_last_branch = gtk_object_data_force_id (key_type_last_branch);
+  quark_popup_data = g_quark_from_static_string (key_popup_data);
+  quark_if_menu_pos = g_quark_from_static_string (key_if_menu_pos);
+  quark_item_factory = g_quark_from_static_string (key_item_factory);
+  quark_item_factory_path = g_quark_from_static_string (key_item_factory_path);
+  quark_type_item = g_quark_from_static_string (key_type_item);
+  quark_type_title = g_quark_from_static_string (key_type_title);
+  quark_type_radio_item = g_quark_from_static_string (key_type_radio_item);
+  quark_type_check_item = g_quark_from_static_string (key_type_check_item);
+  quark_type_toggle_item = g_quark_from_static_string (key_type_toggle_item);
+  quark_type_separator_item = g_quark_from_static_string (key_type_separator_item);
+  quark_type_branch = g_quark_from_static_string (key_type_branch);
+  quark_type_last_branch = g_quark_from_static_string (key_type_last_branch);
 }
 
 static void
@@ -388,8 +388,8 @@ gtk_item_factory_item_remove_widget (GtkWidget		*widget,
 				     GtkItemFactoryItem *item)
 {
   item->widgets = g_slist_remove (item->widgets, widget);
-  gtk_object_remove_data_by_id (GTK_OBJECT (widget), key_id_item_factory);
-  gtk_object_remove_data_by_id (GTK_OBJECT (widget), key_id_item_factory_path);
+  gtk_object_remove_data_by_id (GTK_OBJECT (widget), quark_item_factory);
+  gtk_object_remove_data_by_id (GTK_OBJECT (widget), quark_item_factory_path);
 }
 
 static void
@@ -469,8 +469,8 @@ gtk_item_factory_add_item (GtkItemFactory		*ifactory,
 
   /* set back pointers for the widget
    */
-  gtk_object_set_data_by_id (GTK_OBJECT (widget), key_id_item_factory, ifactory);
-  gtk_object_set_data_by_id (GTK_OBJECT (widget), key_id_item_factory_path, item->path);
+  gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_item_factory, ifactory);
+  gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_item_factory_path, item->path);
   gtk_widget_set_name (widget, item->path);
 
   /* set accelerator group on menu widgets
@@ -678,7 +678,7 @@ gtk_item_factory_from_widget (GtkWidget	       *widget)
   g_return_val_if_fail (widget != NULL, NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  return gtk_object_get_data_by_id (GTK_OBJECT (widget), key_id_item_factory);
+  return gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_item_factory);
 }
 
 gchar*
@@ -687,7 +687,7 @@ gtk_item_factory_path_from_widget (GtkWidget	    *widget)
   g_return_val_if_fail (widget != NULL, NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  return gtk_object_get_data_by_id (GTK_OBJECT (widget), key_id_item_factory_path);
+  return gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_item_factory_path);
 }
 
 static void
@@ -903,7 +903,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
       entry->item_type[0] == 0)
     {
       item_type_path = (gpointer) key_type_item;
-      type_id = key_id_type_item;
+      type_id = quark_type_item;
     }
   else
     {
@@ -912,21 +912,21 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
     }
 
   radio_group = NULL;
-  if (type_id == key_id_type_item)
+  if (type_id == quark_type_item)
     type = GTK_TYPE_MENU_ITEM;
-  else if (type_id == key_id_type_title)
+  else if (type_id == quark_type_title)
     type = GTK_TYPE_MENU_ITEM;
-  else if (type_id == key_id_type_radio_item)
+  else if (type_id == quark_type_radio_item)
     type = GTK_TYPE_RADIO_MENU_ITEM;
-  else if (type_id == key_id_type_check_item)
+  else if (type_id == quark_type_check_item)
     type = GTK_TYPE_CHECK_MENU_ITEM;
-  else if (type_id == key_id_type_toggle_item)
+  else if (type_id == quark_type_toggle_item)
     type = GTK_TYPE_CHECK_MENU_ITEM;
-  else if (type_id == key_id_type_separator_item)
+  else if (type_id == quark_type_separator_item)
     type = GTK_TYPE_MENU_ITEM;
-  else if (type_id == key_id_type_branch)
+  else if (type_id == quark_type_branch)
     type = GTK_TYPE_MENU_ITEM;
-  else if (type_id == key_id_type_last_branch)
+  else if (type_id == quark_type_last_branch)
     type = GTK_TYPE_MENU_ITEM;
   else
     {
@@ -980,8 +980,8 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   
   widget = gtk_widget_new (type,
 			   "GtkWidget::visible", TRUE,
-			   "GtkWidget::sensitive", (type_id != key_id_type_separator_item &&
-						    type_id != key_id_type_title),
+			   "GtkWidget::sensitive", (type_id != quark_type_separator_item &&
+						    type_id != quark_type_title),
 			   "GtkWidget::parent", parent,
 			   NULL);
 
@@ -990,7 +990,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   if (GTK_IS_CHECK_MENU_ITEM (widget))
     gtk_check_menu_item_set_show_toggle (GTK_CHECK_MENU_ITEM (widget), TRUE);
     
-  if (type_id != key_id_type_separator_item && *p)
+  if (type_id != quark_type_separator_item && *p)
     {
       GtkWidget *label;
       
@@ -1003,10 +1003,10 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 			"GtkMisc::xalign", 0.0,
 			NULL);
     }
-  if (type_id == key_id_type_branch ||
-      type_id == key_id_type_last_branch)
+  if (type_id == quark_type_branch ||
+      type_id == quark_type_last_branch)
     {
-      if (type_id == key_id_type_last_branch)
+      if (type_id == quark_type_last_branch)
 	gtk_menu_item_right_justify (GTK_MENU_ITEM (widget));
 	
       parent = widget;
@@ -1242,7 +1242,7 @@ gtk_item_factory_popup_data_from_widget (GtkWidget     *widget)
 
   ifactory = gtk_item_factory_from_widget (widget);
   if (ifactory)
-    return gtk_object_get_data_by_id (GTK_OBJECT (ifactory), key_id_popup_data);
+    return gtk_object_get_data_by_id (GTK_OBJECT (ifactory), quark_popup_data);
 
   return NULL;
 }
@@ -1253,7 +1253,7 @@ gtk_item_factory_popup_data (GtkItemFactory *ifactory)
   g_return_val_if_fail (ifactory != NULL, NULL);
   g_return_val_if_fail (GTK_IS_ITEM_FACTORY (ifactory), NULL);
 
-  return gtk_object_get_data_by_id (GTK_OBJECT (ifactory), key_id_popup_data);
+  return gtk_object_get_data_by_id (GTK_OBJECT (ifactory), quark_popup_data);
 }
 
 static void
@@ -1263,7 +1263,7 @@ ifactory_delete_popup_data (GtkObject	   *object,
   gtk_signal_disconnect_by_func (object,
 				 GTK_SIGNAL_FUNC (ifactory_delete_popup_data),
 				 ifactory);
-  gtk_object_remove_data_by_id (GTK_OBJECT (ifactory), key_id_popup_data);
+  gtk_object_remove_data_by_id (GTK_OBJECT (ifactory), quark_popup_data);
 }
 
 void
@@ -1293,13 +1293,13 @@ gtk_item_factory_popup_with_data (GtkItemFactory	*ifactory,
     {
       MenuPos *mpos;
 
-      mpos = gtk_object_get_data_by_id (GTK_OBJECT (ifactory->widget), key_id_if_menu_pos);
+      mpos = gtk_object_get_data_by_id (GTK_OBJECT (ifactory->widget), quark_if_menu_pos);
 
       if (!mpos)
 	{
 	  mpos = g_new0 (MenuPos, 1);
 	  gtk_object_set_data_by_id_full (GTK_OBJECT (ifactory->widget),
-					  key_id_if_menu_pos,
+					  quark_if_menu_pos,
 					  mpos,
 					  g_free);
 	}
@@ -1310,7 +1310,7 @@ gtk_item_factory_popup_with_data (GtkItemFactory	*ifactory,
       if (popup_data != NULL)
 	{
 	  gtk_object_set_data_by_id_full (GTK_OBJECT (ifactory),
-					  key_id_popup_data,
+					  quark_popup_data,
 					  popup_data,
 					  destroy);
 	  gtk_signal_connect (GTK_OBJECT (ifactory->widget),

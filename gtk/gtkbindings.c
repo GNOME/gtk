@@ -35,7 +35,7 @@
 static GHashTable	*binding_entry_hash_table = NULL;
 static GSList		*binding_set_list = NULL;
 static const gchar	*key_class_binding_set = "gtk-class-binding-set";
-static guint		 key_id_class_binding_set = 0;
+static GQuark		 key_id_class_binding_set = 0;
 
 
 /* --- functions --- */
@@ -424,7 +424,7 @@ gtk_binding_set_by_class (gpointer object_class)
   g_return_val_if_fail (GTK_IS_OBJECT_CLASS (class), NULL);
 
   if (!key_id_class_binding_set)
-    key_id_class_binding_set = g_dataset_force_id (key_class_binding_set);
+    key_id_class_binding_set = g_quark_from_static_string (key_class_binding_set);
 
   binding_set = g_dataset_id_get_data (class, key_id_class_binding_set);
 

@@ -539,7 +539,7 @@ gtk_object_weakref (GtkObject        *object,
   g_return_if_fail (GTK_IS_OBJECT (object));
 
   if (!weakrefs_key_id)
-    weakrefs_key_id = gtk_object_data_force_id (weakrefs_key);
+    weakrefs_key_id = g_quark_from_static_string (weakrefs_key);
 
   weak = g_new (GtkWeakRef, 1);
   weak->next = gtk_object_get_data_by_id (object, weakrefs_key_id);
@@ -1046,7 +1046,7 @@ gtk_object_get_arg_type (const gchar *arg_name)
 
 void
 gtk_object_set_data_by_id (GtkObject        *object,
-			   guint	     data_id,
+			   GQuark	     data_id,
 			   gpointer          data)
 {
   g_return_if_fail (data_id > 0);
@@ -1066,7 +1066,7 @@ gtk_object_set_data (GtkObject        *object,
 
 void
 gtk_object_set_data_by_id_full (GtkObject        *object,
-				guint		  data_id,
+				GQuark		  data_id,
 				gpointer          data,
 				GtkDestroyNotify  destroy)
 {
@@ -1093,7 +1093,7 @@ gtk_object_set_data_by_id_full (GtkObject        *object,
 		object->object_data = odata->next;
 	      
 	      GTK_OBJECT_DATA_DESTROY (odata);
-	      break;
+	      return;
 	    }
 	  
 	  prev = odata;
@@ -1102,36 +1102,28 @@ gtk_object_set_data_by_id_full (GtkObject        *object,
     }
   else
     {
-      GtkObjectData *prev;
-
-      prev = NULL;
-      
       while (odata)
 	{
 	  if (odata->id == data_id)
 	    {
-	      /* we need to be unlinked while invoking the destroy function
-	       */
-	      if (odata->destroy)
-		{
-		  if (prev)
-		    prev->next = odata->next;
-		  else
-		    object->object_data = odata->next;
-		  
-		  odata->destroy (odata->data);
-		  
-		  odata->next = object->object_data;
-		  object->object_data = odata;
-		}
-	      
-	      odata->data = data;
+              register GtkDestroyNotify dfunc;
+	      register gpointer ddata;
+
+	      dfunc = odata->destroy;
+	      ddata = odata->data;
 	      odata->destroy = destroy;
+	      odata->data = data;
+
+	      /* we need to have updated all structures prior to
+	       * invokation of the destroy function
+	       */
+	      if (dfunc)
+		dfunc (ddata);
+
 	      return;
 	    }
 
-	  prev = odata;
-	  odata = prev->next;
+	  odata = odata->next;
 	}
       
       if (gtk_object_data_free_list)
@@ -1176,7 +1168,7 @@ gtk_object_set_data_full (GtkObject        *object,
 
 gpointer
 gtk_object_get_data_by_id (GtkObject   *object,
-			   guint        data_id)
+			   GQuark       data_id)
 {
   GtkObjectData *odata;
 
@@ -1214,7 +1206,7 @@ gtk_object_get_data (GtkObject   *object,
 
 void
 gtk_object_remove_data_by_id (GtkObject   *object,
-			      guint        data_id)
+			      GQuark       data_id)
 {
   if (data_id)
     gtk_object_set_data_by_id_full (object, data_id, NULL, NULL);
@@ -1246,7 +1238,7 @@ gtk_object_set_user_data (GtkObject *object,
 			  gpointer   data)
 {
   if (!user_data_key_id)
-    user_data_key_id = gtk_object_data_force_id (user_data_key);
+    user_data_key_id = g_quark_from_static_string (user_data_key);
 
   gtk_object_set_data_by_id_full (object, user_data_key_id, data, NULL);
 }

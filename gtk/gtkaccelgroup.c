@@ -94,8 +94,8 @@ gtk_accel_group_new (void)
   
   if (!accel_groups_key_id)
     {
-      accel_groups_key_id = gtk_object_data_force_id (accel_groups_key);
-      accel_entries_key_id = gtk_object_data_force_id (accel_entries_key);
+      accel_groups_key_id = g_quark_from_static_string (accel_groups_key);
+      accel_entries_key_id = g_quark_from_static_string (accel_entries_key);
       
       accel_entry_hash_table = g_hash_table_new (gtk_accel_entries_hash,
 						 gtk_accel_entries_equal);

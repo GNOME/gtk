@@ -2640,7 +2640,7 @@ gtk_widget_set_style (GtkWidget *widget,
     {
       gtk_style_ref (widget->style);
       if (!saved_default_style_key_id)
-	saved_default_style_key_id = gtk_object_data_force_id (saved_default_style_key);
+	saved_default_style_key_id = g_quark_from_static_string (saved_default_style_key);
       gtk_object_set_data_by_id (GTK_OBJECT (widget), saved_default_style_key_id, widget->style);
     }
 
@@ -2677,7 +2677,7 @@ gtk_widget_set_rc_style (GtkWidget *widget)
 	{
 	  gtk_style_ref (widget->style);
 	  if (!saved_default_style_key_id)
-	    saved_default_style_key_id = gtk_object_data_force_id (saved_default_style_key);
+	    saved_default_style_key_id = g_quark_from_static_string (saved_default_style_key);
 	  gtk_object_set_data_by_id (GTK_OBJECT (widget), saved_default_style_key_id, widget->style);
 	}
       gtk_widget_set_style_internal (widget, new_style, initial_emission);
@@ -2889,7 +2889,7 @@ gtk_widget_set_parent_window   (GtkWidget           *widget,
   if (parent_window != old_parent_window)
     {
       if (!parent_window_key_id)
-	parent_window_key_id = gtk_object_data_force_id (parent_window_key);
+	parent_window_key_id = g_quark_from_static_string (parent_window_key);
       gtk_object_set_data_by_id (GTK_OBJECT (widget), parent_window_key_id, 
 				 parent_window);
       if (old_parent_window)
@@ -2946,7 +2946,7 @@ gtk_widget_set_uposition (GtkWidget *widget,
   if (!aux_info)
     {
       if (!aux_info_key_id)
-	aux_info_key_id = gtk_object_data_force_id (aux_info_key);
+	aux_info_key_id = g_quark_from_static_string (aux_info_key);
       aux_info = gtk_widget_aux_info_new ();
       gtk_object_set_data_by_id (GTK_OBJECT (widget), aux_info_key_id, aux_info);
     }
@@ -2988,7 +2988,7 @@ gtk_widget_set_usize (GtkWidget *widget,
   if (!aux_info)
     {
       if (!aux_info_key_id)
-	aux_info_key_id = gtk_object_data_force_id (aux_info_key);
+	aux_info_key_id = g_quark_from_static_string (aux_info_key);
       aux_info = gtk_widget_aux_info_new ();
       gtk_object_set_data_by_id (GTK_OBJECT (widget), aux_info_key_id, aux_info);
     }
@@ -3029,7 +3029,7 @@ gtk_widget_set_events (GtkWidget *widget,
       
       *eventp = events;
       if (!event_key_id)
-	event_key_id = gtk_object_data_force_id (event_key);
+	event_key_id = g_quark_from_static_string (event_key);
       gtk_object_set_data_by_id (GTK_OBJECT (widget), event_key_id, eventp);
     }
   else if (eventp)
@@ -3062,7 +3062,7 @@ gtk_widget_set_extension_events (GtkWidget *widget,
   
   *modep = mode;
   if (!extension_event_key_id)
-    extension_event_key_id = gtk_object_data_force_id (extension_event_key);
+    extension_event_key_id = g_quark_from_static_string (extension_event_key);
   gtk_object_set_data_by_id (GTK_OBJECT (widget), extension_event_key_id, modep);
 }
 

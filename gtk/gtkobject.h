@@ -343,18 +343,18 @@ void gtk_object_remove_data	  (GtkObject   *object,
  *  These functions are meant for *internal* use only.
  */
 void gtk_object_set_data_by_id	    (GtkObject	     *object,
-				     guint	      data_id,
+				     GQuark	      data_id,
 				     gpointer	      data);
 void gtk_object_set_data_by_id_full (GtkObject	     *object,
-				     guint	      data_id,
+				     GQuark	      data_id,
 				     gpointer	      data,
 				     GtkDestroyNotify destroy);
 gpointer gtk_object_get_data_by_id  (GtkObject	     *object,
-				     guint	      data_id);
+				     GQuark	      data_id);
 void  gtk_object_remove_data_by_id  (GtkObject	     *object,
-				     guint	      data_id);
-#define	gtk_object_data_try_key	    g_dataset_try_key
-#define	gtk_object_data_force_id    g_dataset_force_id
+				     GQuark	      data_id);
+#define	gtk_object_data_try_key	    g_quark_try_string
+#define	gtk_object_data_force_id    g_quark_from_string
 
 /* Set the "user_data" object data field of "object". It should
  *  be noted that this is no different than calling 'gtk_object_set_data'

@@ -1,3 +1,18 @@
+Fri Jun 19 03:29:04 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkaccelgroup.c: 
+	* gtk/gtkbindings.c: 
+	* gtk/gtkcontainer.c:
+	* gtk/gtkitemfactory.c:
+	* gtk/gtkobject.c: 
+	* gtk/gtksignal.c:
+	* gtk/gtkwidget.c: replaced some gtk_object_data_force_id with
+	g_quark_from_static_string calls to save memory.
+
+	* gtk/gtkobject.c (gtk_object_set_data_by_id_full): invoke the destroy
+ 	function _after_ the new data has been setup.
+	minor changes to object data functions to feature the GQuark type.
+
 Thu Jun 18 21:13:54 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkmain.c (gtk_init): Remove --g-fatal-warnings flag

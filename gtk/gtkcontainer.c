@@ -164,8 +164,8 @@ gtk_container_class_init (GtkContainerClass *class)
 
   parent_class = gtk_type_class (gtk_widget_get_type ());
 
-  vadjustment_key_id = gtk_object_data_force_id (vadjustment_key);
-  hadjustment_key_id = gtk_object_data_force_id (hadjustment_key);
+  vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
+  hadjustment_key_id = g_quark_from_static_string (hadjustment_key);
   
   gtk_object_add_arg_type ("GtkContainer::border_width", GTK_TYPE_ULONG, GTK_ARG_READWRITE, ARG_BORDER_WIDTH);
   gtk_object_add_arg_type ("GtkContainer::child", GTK_TYPE_WIDGET, GTK_ARG_WRITABLE, ARG_CHILD);
