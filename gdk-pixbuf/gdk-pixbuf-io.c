@@ -195,7 +195,7 @@ static GdkPixbufModule file_formats [] = {
 	{ "ras",  pixbuf_check_sunras, NULL,  NULL, NULL, NULL, NULL, NULL },
 	{ "ico",  pixbuf_check_ico, NULL,  NULL, NULL, NULL, NULL, NULL },
 	{ "bmp",  pixbuf_check_bmp, NULL,  NULL, NULL, NULL, NULL, NULL },
-	{ "wbmp", pixbuf_check_wbmp, NULL, NULL, NULL, NULL, NULL, NULL }
+	{ "wbmp", pixbuf_check_wbmp, NULL, NULL, NULL, NULL, NULL, NULL },
 	{ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 };
 

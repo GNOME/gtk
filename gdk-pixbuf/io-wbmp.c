@@ -79,7 +79,7 @@ GdkPixbuf *gdk_pixbuf__wbmp_image_load(FILE * f)
 {
 	size_t length;
 	char membuf[4096];
-	struct bmp_progressive_state *State;
+	struct wbmp_progressive_state *State;
 
 	GdkPixbuf *pb;
 
@@ -98,7 +98,7 @@ GdkPixbuf *gdk_pixbuf__wbmp_image_load(FILE * f)
 
 	pb = State->pixbuf;
 
-	gdk_pixbuf__bmp_image_stop_load(State);
+	gdk_pixbuf__wbmp_image_stop_load(State);
 	return pb;
 }
 
@@ -115,9 +115,9 @@ gdk_pixbuf__wbmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleAnimationDoneNotifyFunc
 				 anim_done_func, gpointer user_data)
 {
-	struct bmp_progressive_state *context;
+	struct wbmp_progressive_state *context;
 
-	context = g_new0(struct bmp_progressive_state, 1);
+	context = g_new0(struct wbmp_progressive_state, 1);
 	context->prepared_func = prepared_func;
 	context->updated_func = updated_func;
 	context->user_data = user_data;
@@ -136,8 +136,8 @@ gdk_pixbuf__wbmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
  */
 void gdk_pixbuf__wbmp_image_stop_load(gpointer data)
 {
-	struct bmp_progressive_state *context =
-	    (struct bmp_progressive_state *) data;
+	struct wbmp_progressive_state *context =
+	    (struct wbmp_progressive_state *) data;
 
 	g_return_if_fail(context != NULL);
 	if (context->pixbuf)
@@ -147,7 +147,7 @@ void gdk_pixbuf__wbmp_image_stop_load(gpointer data)
 }
 
 static gboolean
-getin(struct bmp_progressive_state *context, const guchar **buf, guint *buf_size, guchar *ptr, int datum_size)
+getin(struct wbmp_progressive_state *context, guchar **buf, guint *buf_size, guchar *ptr, int datum_size)
 {
   int last_num, buf_num;
 
@@ -165,10 +165,12 @@ getin(struct bmp_progressive_state *context, const guchar **buf, guint *buf_size
     memmove(context->last_buf, context->last_buf+last_num, context->last_len);
   *buf_size -= buf_num;
   *buf += buf_num;
+
+  return TRUE;
 }
 
 static gboolean
-save_rest(struct bmp_progressive_state *context, const guchar *buf, guint buf_size)
+save_rest(struct wbmp_progressive_state *context, const guchar *buf, guint buf_size)
 {
   if(buf_size > (sizeof(context->last_buf) - context->last_len))
     return FALSE;
@@ -180,11 +182,10 @@ save_rest(struct bmp_progressive_state *context, const guchar *buf, guint buf_si
 }
 
 static gboolean
-get_mbi(struct bmp_progressive_state *context, const guchar **buf, guint *buf_size, int *val)
+get_mbi(struct wbmp_progressive_state *context, guchar **buf, guint *buf_size, int *val)
 {
   guchar intbuf[16];
   int i, n;
-  guchar last;
   gboolean rv;
 
   *val = 0;
@@ -221,8 +222,8 @@ get_mbi(struct bmp_progressive_state *context, const guchar **buf, guint *buf_si
 gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data, guchar * buf,
 					      guint size)
 {
-	struct bmp_progressive_state *context =
-	    (struct bmp_progressive_state *) data;
+	struct wbmp_progressive_state *context =
+	    (struct wbmp_progressive_state *) data;
 	gboolean bv;
 
 	do
@@ -273,7 +274,7 @@ gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data, guchar * buf,
 		first_row = context->cury;
 		for( ; context->cury < context->height; context->cury++, context->curx = 0)
 		  {
-		    for( ; context->curx < context->width, context->curx += 8)
+		    for( ; context->curx < context->width; context->curx += 8)
 		      {
 			guchar byte;
 			guchar *ptr;

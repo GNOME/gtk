@@ -399,7 +399,7 @@ gdk_pixbuf_loader_eat_header_write (GdkPixbufLoader *loader,
   
   if (priv->header_buf_offset >= LOADER_HEADER_SIZE)
     {
-      if (gdk_pixbuf_loader_load_module (loader) == 0)
+      if (gdk_pixbuf_loader_load_module (loader, NULL) == 0)
 	return 0;
     }
   
@@ -563,7 +563,7 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader)
   
   /* We have less the 128 bytes in the image.  Flush it, and keep going. */
   if (priv->image_module == NULL)
-    gdk_pixbuf_loader_load_module (loader);
+    gdk_pixbuf_loader_load_module (loader, NULL);
   
   if (priv->image_module && priv->image_module->stop_load)
     priv->image_module->stop_load (priv->context);
