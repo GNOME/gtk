@@ -3,7 +3,7 @@
 	* Makefile.am (SUBDIRS): Remove "macros"
 
 	* configure.in: Don't use GNOME_INIT, handle case where we are
-	inside gnome-libs
+	inside gnome-libs. AM_PATH_GTK for the GIF test
 
 	* src/Makefile.am: Change flags to work without libgnomeui,
 	comment out testpixbuf for now
