@@ -41,6 +41,9 @@ extern "C" {
 #define	gtk_window_position			gtk_window_set_position
 #define	gtk_toggle_button_set_state		gtk_toggle_button_set_active
 #define	gtk_check_menu_item_set_state		gtk_check_menu_item_set_active
+
+/* strongly deprecated: */
+#define	gtk_ctree_set_reorderable(t,r)		gtk_clist_set_reorderable((GtkCList*) (t),(r))
 #define	gtk_style_apply_default_pixmap(s,gw,st,a,x,y,w,h) \
     gtk_style_apply_default_background (s,gw,TRUE,st,a,x,y,w,h)
 

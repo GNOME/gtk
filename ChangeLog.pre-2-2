@@ -1,3 +1,8 @@
+Tue Jan 19 00:21:15 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcompat.h: add compatibility define for
+	gtk_ctree_set_reorderable.
+
 Tue Jan 19 00:02:10 1999  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkctree.c (gtk_ctree_node_set_row_data_full): 
