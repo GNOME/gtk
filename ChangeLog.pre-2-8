@@ -3,6 +3,9 @@
 	* gtk/gtkfilechooserdefault.c (check_is_folder): Don't free 
 	info too early.  (#154703, Morten Welinder)
 
+	* gtk/gtkfilechooserdefault.c: Include gtkeventbox.h.
+	(#154798, Morten Welinder)
+
 2004-10-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkpaned.c (gtk_paned_compute_position): Reduce rounding 

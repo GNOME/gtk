@@ -31,6 +31,7 @@
 #include "gtkcheckmenuitem.h"
 #include "gtkcombobox.h"
 #include "gtkentry.h"
+#include "gtkeventbox.h"
 #include "gtkexpander.h"
 #include "gtkfilechooserdefault.h"
 #include "gtkfilechooserembed.h"
