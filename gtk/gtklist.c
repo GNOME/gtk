@@ -20,7 +20,7 @@
 #include "gtklistitem.h"
 #include "gtkmain.h"
 #include "gtksignal.h"
-
+#include "gtklabel.h"
 
 enum {
   SELECTION_CHANGED,
@@ -28,6 +28,8 @@ enum {
   UNSELECT_CHILD,
   LAST_SIGNAL
 };
+
+#define SCROLL_TIME  100
 
 static void gtk_list_class_init	     (GtkListClass   *klass);
 static void gtk_list_init	     (GtkList	     *list);
@@ -40,8 +42,8 @@ static void gtk_list_draw	     (GtkWidget	     *widget,
 				      GdkRectangle   *area);
 static gint gtk_list_expose	     (GtkWidget	     *widget,
 				      GdkEventExpose *event);
-static gint gtk_list_enter_notify    (GtkWidget        *widget,
-				      GdkEventCrossing *event);
+static gint gtk_list_motion_notify   (GtkWidget      *widget,
+				      GdkEventMotion *event);
 static gint gtk_list_button_press    (GtkWidget      *widget,
 				      GdkEventButton *event);
 static gint gtk_list_button_release  (GtkWidget	     *widget,
@@ -63,12 +65,39 @@ static void gtk_real_list_select_child	 (GtkList	*list,
 static void gtk_real_list_unselect_child (GtkList	*list,
 					  GtkWidget	*child);
 
+
+static void gtk_list_set_anchor          (GtkList       *list,
+					  gboolean       add_mode,
+					  gint           anchor,
+					  GtkWidget     *undo_focus_child);
+static void gtk_list_fake_unselect_all   (GtkList       *list,
+			                  GtkWidget     *item);
+static void gtk_list_fake_toggle_row     (GtkList       *list,
+					  GtkWidget     *item);
+static void gtk_list_move_focus_child    (GtkList       *list,
+					  GtkScrollType  scroll_type,
+					  gfloat         position);
+static void gtk_list_update_extended_selection (GtkList *list,
+					        gint     row);
+static void gtk_list_focus_lost          (GtkWidget     *item,
+					  GdkEventKey   *event,
+					  GtkList       *list);
+static void gtk_list_set_focus_child     (GtkContainer  *container,
+					  GtkWidget     *widget);
+static gint gtk_list_focus               (GtkContainer     *container,
+					  GtkDirectionType  direction);
+
+
 static GtkType gtk_list_child_type  (GtkContainer   *container);
 
 
 static GtkContainerClass *parent_class = NULL;
 static guint list_signals[LAST_SIGNAL] = { 0 };
 
+static const gchar *vadjustment_key = "gtk-vadjustment";
+static guint        vadjustment_key_id = 0;
+static const gchar *hadjustment_key = "gtk-hadjustment";
+static guint        hadjustment_key_id = 0;
 
 GtkType
 gtk_list_get_type (void)
@@ -108,6 +137,9 @@ gtk_list_class_init (GtkListClass *class)
 
   parent_class = gtk_type_class (gtk_container_get_type ());
 
+  vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
+  hadjustment_key_id = g_quark_from_static_string (hadjustment_key);
+
   list_signals[SELECTION_CHANGED] =
     gtk_signal_new ("selection_changed",
 		    GTK_RUN_FIRST,
@@ -144,7 +176,7 @@ gtk_list_class_init (GtkListClass *class)
   widget_class->expose_event = gtk_list_expose;
   widget_class->button_press_event = gtk_list_button_press;
   widget_class->button_release_event = gtk_list_button_release;
-  widget_class->enter_notify_event = gtk_list_enter_notify;
+  widget_class->motion_notify_event = gtk_list_motion_notify;
   widget_class->size_request = gtk_list_size_request;
   widget_class->size_allocate = gtk_list_size_allocate;
 
@@ -152,6 +184,8 @@ gtk_list_class_init (GtkListClass *class)
   container_class->remove = gtk_list_remove;
   container_class->foreach = gtk_list_foreach;
   container_class->child_type = gtk_list_child_type;
+  container_class->set_focus_child = gtk_list_set_focus_child;
+  container_class->focus = gtk_list_focus;
 
   class->selection_changed = NULL;
   class->select_child = gtk_real_list_select_child;
@@ -169,12 +203,23 @@ gtk_list_init (GtkList *list)
 {
   list->children = NULL;
   list->selection = NULL;
-  list->timer = 0;
-  list->selection_start_pos = 0;
-  list->selection_end_pos = 0;
+
+  list->undo_selection = NULL;
+  list->undo_unselection = NULL;
+
+  list->last_focus_child = NULL;
+  list->undo_focus_child = NULL;
+
+  list->htimer = 0;
+  list->vtimer = 0;
+
+  list->anchor = -1;
+  list->drag_pos = -1;
+  list->anchor_state = GTK_STATE_SELECTED;
+
   list->selection_mode = GTK_SELECTION_SINGLE;
-  list->scroll_direction = 0;
-  list->button = 0;
+  list->drag_selection = FALSE;
+  list->add_mode = FALSE;
 }
 
 GtkWidget*
@@ -225,17 +270,27 @@ gtk_list_destroy (GtkObject *object)
     (*GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
-static void
-gtk_list_ungrab (GtkList *list)
+void
+gtk_list_end_drag_selection (GtkList *list)
 {
   g_return_if_fail (list != NULL);
   g_return_if_fail (GTK_IS_LIST (list));
 
-  if (list->button)
+  list->drag_selection = FALSE;
+  if (GTK_WIDGET_HAS_GRAB (list))
     {
-      list->button = 0;
       gtk_grab_remove (GTK_WIDGET (list));
       gdk_pointer_ungrab (GDK_CURRENT_TIME);
+    }
+  if (list->htimer)
+    {
+      gtk_timeout_remove (list->htimer);
+      list->htimer = 0;
+    }
+  if (list->vtimer)
+    {
+      gtk_timeout_remove (list->vtimer);
+      list->vtimer = 0;
     }
 }
 
@@ -255,7 +310,9 @@ gtk_list_insert_items (GtkList *list,
   if (!items)
     return;
 
-  gtk_list_ungrab (list);
+  gtk_list_end_drag_selection (list);
+  if (list->selection_mode == GTK_SELECTION_EXTENDED && list->anchor >= 0)
+    gtk_list_end_selection (list);
 
   tmp_list = items;
   while (tmp_list)
@@ -264,6 +321,8 @@ gtk_list_insert_items (GtkList *list,
       tmp_list = tmp_list->next;
 
       gtk_widget_set_parent (widget, GTK_WIDGET (list));
+      gtk_signal_connect (GTK_OBJECT (widget), "focus_out_event",
+			  GTK_SIGNAL_FUNC (gtk_list_focus_lost), list);
 
       if (GTK_WIDGET_VISIBLE (widget->parent))
 	{
@@ -346,28 +405,62 @@ gtk_list_remove_items_internal (GtkList	 *list,
 				gboolean no_unref)
 {
   GtkWidget *widget;
+  GtkWidget *new_focus_child;
+  GtkWidget *old_focus_child;
+  GtkContainer *container;
   GList *selected_widgets;
   GList *tmp_list;
+  GList *work;
+  gboolean grab_focus = FALSE;
   
   g_return_if_fail (list != NULL);
   g_return_if_fail (GTK_IS_LIST (list));
 
   if (!items)
     return;
+  
+  container = GTK_CONTAINER (list);
 
-  gtk_list_ungrab (list);
+  gtk_list_end_drag_selection (list);
+  if (list->selection_mode == GTK_SELECTION_EXTENDED && list->anchor >= 0)
+    gtk_list_end_selection (list);
+
   
   tmp_list = items;
   selected_widgets = NULL;
   widget = NULL;
-  
+  old_focus_child = new_focus_child = container->focus_child;
+
   while (tmp_list)
     {
       widget = tmp_list->data;
+
       tmp_list = tmp_list->next;
       
       if (no_unref)
 	gtk_widget_ref (widget);
+      
+      gtk_signal_disconnect_by_func
+	(GTK_OBJECT (widget), GTK_SIGNAL_FUNC (gtk_list_focus_lost), list);
+
+
+      if (widget == new_focus_child) 
+	{
+	  work = g_list_find (list->children, widget);
+
+	  if (work)
+	    {
+	      if (work->next)
+		new_focus_child = work->next->data;
+	      else if (list->children != work && work->prev)
+		new_focus_child = work->prev->data;
+	      else
+		new_focus_child = NULL;
+	      
+	      if (GTK_WIDGET_HAS_FOCUS (widget))
+		grab_focus = TRUE;
+	    }
+	}
 
       list->children = g_list_remove (list->children, widget);
 
@@ -395,11 +488,12 @@ gtk_list_remove_items_internal (GtkList	 *list,
   
   g_list_free (selected_widgets);
   
-  if (list->children && !list->selection &&
-      (list->selection_mode == GTK_SELECTION_BROWSE))
+  if (new_focus_child && new_focus_child != old_focus_child)
     {
-      widget = list->children->data;
-      gtk_list_select_child (list, widget);
+      if (grab_focus)
+	gtk_widget_grab_focus (new_focus_child);
+      else
+	gtk_container_set_focus_child (container, new_focus_child);
     }
   
   if (GTK_WIDGET_VISIBLE (list))
@@ -449,7 +543,9 @@ gtk_list_clear_items (GtkList *list,
       start_list = g_list_nth (list->children, start);
       end_list = g_list_nth (list->children, end);
 
-      gtk_list_ungrab (list);
+      gtk_list_end_drag_selection (list);
+      if (list->selection_mode == GTK_SELECTION_EXTENDED && list->anchor >= 0)
+	gtk_list_end_selection (list);
 
       if (start_list->prev)
 	start_list->prev->next = end_list;
@@ -568,7 +664,21 @@ gtk_list_set_selection_mode (GtkList	      *list,
   g_return_if_fail (list != NULL);
   g_return_if_fail (GTK_IS_LIST (list));
 
+  if (list->selection_mode == mode)
+    return;
+
   list->selection_mode = mode;
+
+  switch (mode)
+    {
+    case GTK_SELECTION_SINGLE:
+    case GTK_SELECTION_BROWSE:
+      gtk_list_unselect_all (list);
+      break;
+
+    default:
+      break;
+    }
 }
 
 
@@ -703,32 +813,165 @@ gtk_list_expose (GtkWidget	*widget,
   return FALSE;
 }
 
+static void
+move_horizontal (GtkList       *list,
+		 GtkAdjustment *adj,
+		 gint           diff)
+{
+  gfloat upper;
+
+  adj->value += diff;
+
+  upper = adj->upper - adj->page_size;
+  adj->value = MIN (adj->value, upper);
+  adj->value = MAX (adj->value, 0.0);
+
+  gtk_signal_emit_by_name (GTK_OBJECT (adj), "value_changed");
+}
+
 static gint
-gtk_list_enter_notify (GtkWidget        *widget,
-		       GdkEventCrossing *event)
+horizontal_timeout (GtkWidget *list)
+{
+  gint x, y;
+  GdkEventMotion event;
+  GdkModifierType mask;
+
+  g_return_val_if_fail (GTK_IS_LIST (list), FALSE);
+
+  GTK_LIST (list)->htimer = 0;
+  gdk_window_get_pointer (list->window, &x, &y, &mask);
+
+  event.is_hint = 0;
+  event.x = x;
+  event.y = y;
+  event.state = mask;
+
+  gtk_list_motion_notify (list, &event);
+
+  return FALSE;
+}
+
+static gint
+vertical_timeout (GtkWidget *list)
+{
+  gint x;
+  gint y;
+  GdkEventMotion event;
+  GdkModifierType mask;
+
+  g_return_val_if_fail (GTK_IS_LIST (list), FALSE);
+
+  GTK_LIST (list)->vtimer = 0;
+  gdk_window_get_pointer (list->window, &x, &y, &mask);
+
+  event.is_hint = 0;
+  event.x = x;
+  event.y = y;
+  event.state = mask;
+
+  gtk_list_motion_notify (list, &event);
+
+  return FALSE;
+}
+
+static gint
+gtk_list_motion_notify (GtkWidget      *widget,
+			GdkEventMotion *event)
 {
   GtkList *list;
-  GtkWidget *item;
+  GtkWidget *item = NULL;
+  GtkAdjustment *adj;
+  GtkContainer *container;
+  GList *work;
+  gint x;
+  gint y;
+  gint row = -1;
+  gint focus_row = 0;
+  gint length = 0;
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_LIST (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
   list = GTK_LIST (widget);
-  item = gtk_get_event_widget ((GdkEvent*) event);
 
-  if (!list->button)
+  if (!list->drag_selection || !list->children)
     return FALSE;
-  
-  while (item && !GTK_IS_LIST_ITEM (item))
-    item = item->parent;
 
-  if (item && (item->parent == widget))
+  container = GTK_CONTAINER (widget);
+
+  if (event->is_hint || event->window != widget->window)
+    gdk_window_get_pointer (widget->window, &x, &y, NULL);
+
+  adj = gtk_object_get_data_by_id (GTK_OBJECT (list), hadjustment_key_id);
+
+  /* horizontal autoscrolling */
+  if (adj && widget->allocation.width > adj->page_size &&
+      (x < adj->value || x >= adj->value + adj->page_size))
     {
-      gtk_list_select_child (list, item);
+      if (list->htimer == 0)
+	{
+	  list->htimer = gtk_timeout_add
+	    (SCROLL_TIME, (GtkFunction) horizontal_timeout, widget);
+	  
+	  if (!((x < adj->value && adj->value <= 0) ||
+		(x > adj->value + adj->page_size &&
+		 adj->value >= adj->upper - adj->page_size)))
+	    {
+	      if (x < adj->value)
+		move_horizontal (list, adj, - 1 + (x - adj->value) / 2 );
+	      else
+		move_horizontal (list, adj,
+				 1 + (x - adj->value - adj->page_size) / 2);
+	    }
+	}
+      else
+	return FALSE;
+    }
 
-      if (!GTK_WIDGET_HAS_FOCUS (item))
-	gtk_widget_grab_focus (item);
+  
+  /* vertical autoscrolling */
+  for (work = list->children; work; length++, work = work->next)
+    {
+      if (row < 0)
+	{
+	  item = GTK_WIDGET (work->data);
+	  if (item->allocation.y > y || 
+	      (item->allocation.y <= y &&
+	       item->allocation.y + item->allocation.height > y))
+	    row = length;
+	}
+
+      if (work->data == container->focus_child)
+	focus_row = length;
+    }
+  
+  if (row < 0)
+    row = length - 1;
+
+  if (list->vtimer != 0)
+    return FALSE;
+
+  if (!((y < 0 && focus_row == 0) ||
+	(y > widget->allocation.height && focus_row >= length - 1)))
+    list->vtimer = gtk_timeout_add (SCROLL_TIME,
+				    (GtkFunction) vertical_timeout, list);
+	  
+  if (row != focus_row)
+    gtk_widget_grab_focus (item);
+	  
+  switch (list->selection_mode)
+    {
+    case GTK_SELECTION_BROWSE:
+      gtk_list_select_child (list, item);
+      break;
+      
+    case GTK_SELECTION_EXTENDED:
+      gtk_list_update_extended_selection (list, row);
+      break;
+
+    default:
+      break;
     }
 
   return FALSE;
@@ -745,27 +988,126 @@ gtk_list_button_press (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_LIST (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
+  if (event->button != 1)
+    return FALSE;
+
   list = GTK_LIST (widget);
   item = gtk_get_event_widget ((GdkEvent*) event);
 
-  if ((event->button != 1) || (list->button))
-    return FALSE;
-  
   while (item && !GTK_IS_LIST_ITEM (item))
     item = item->parent;
 
-  list->button = event->button;
-  gdk_pointer_grab (widget->window, TRUE,
-		    GDK_BUTTON_PRESS_MASK | 
-		    GDK_BUTTON_RELEASE_MASK,
-		    NULL, NULL, event->time);
-  gtk_grab_add (widget);
-
-  /* note: gtk_list_select_child() may cause the grab to be removed again!
-   */
   if (item && (item->parent == widget))
-    gtk_list_select_child (list, item);
-  
+    {
+      gint last_focus_row;
+      gint focus_row;
+
+      if (event->type == GDK_BUTTON_PRESS)
+	{
+	  list->drag_selection = TRUE;
+	  gdk_pointer_grab (widget->window, TRUE,
+			    GDK_POINTER_MOTION_HINT_MASK |
+			    GDK_BUTTON1_MOTION_MASK |
+			    GDK_BUTTON_RELEASE_MASK,
+			    NULL, NULL, event->time);
+	  gtk_grab_add (widget);
+	}
+      else if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (list))
+	gtk_list_end_drag_selection (list);
+	  
+      if (!GTK_WIDGET_HAS_FOCUS(item))
+	gtk_widget_grab_focus (item);
+
+      if (list->add_mode)
+	{
+	  list->add_mode = FALSE;
+	  gtk_widget_queue_draw (item);
+	}
+      
+      switch (list->selection_mode)
+	{
+	case GTK_SELECTION_SINGLE:
+	case GTK_SELECTION_MULTIPLE:
+	  if (event->type != GDK_BUTTON_PRESS)
+	    gtk_list_select_child (list, item);
+	  else
+	    list->undo_focus_child = item;
+	  break;
+	  
+	case GTK_SELECTION_BROWSE:
+	  break;
+
+	case GTK_SELECTION_EXTENDED:
+	  focus_row = g_list_index (list->children, item);
+
+	  if (list->last_focus_child)
+	    last_focus_row = g_list_index (list->children,
+					   list->last_focus_child);
+	  else
+	    {
+	      last_focus_row = focus_row;
+	      list->last_focus_child = item;
+	    }
+
+	  if (event->type != GDK_BUTTON_PRESS)
+	    {
+	      if (list->anchor >= 0)
+		{
+		  gtk_list_update_extended_selection (list, focus_row);
+		  gtk_list_end_selection (list);
+		}
+	      gtk_list_select_child (list, item);
+	      break;
+	    }
+	      
+	  if (event->state & GDK_CONTROL_MASK)
+	    {
+	      if (event->state & GDK_SHIFT_MASK)
+		{
+		  if (list->anchor < 0)
+		    {
+		      g_list_free (list->undo_selection);
+		      g_list_free (list->undo_unselection);
+		      list->undo_selection = NULL;
+		      list->undo_unselection = NULL;
+
+		      list->anchor = last_focus_row;
+		      list->drag_pos = last_focus_row;
+		      list->undo_focus_child = list->last_focus_child;
+		    }
+		  gtk_list_update_extended_selection (list, focus_row);
+		}
+	      else
+		{
+		  if (list->anchor < 0)
+		    gtk_list_set_anchor (list, TRUE,
+					 focus_row, list->last_focus_child);
+		  else
+		    gtk_list_update_extended_selection (list, focus_row);
+		}
+	      break;
+	    }
+
+	  if (event->state & GDK_SHIFT_MASK)
+	    {
+	      gtk_list_set_anchor (list, FALSE,
+				   last_focus_row, list->last_focus_child);
+	      gtk_list_update_extended_selection (list, focus_row);
+	      break;
+	    }
+
+	  if (list->anchor < 0)
+	    gtk_list_set_anchor (list, FALSE, focus_row,
+				 list->last_focus_child);
+	  else
+	    gtk_list_update_extended_selection (list, focus_row);
+	  break;
+	  
+	default:
+	  break;
+	}
+    }
+
   return FALSE;
 }
 
@@ -781,11 +1123,43 @@ gtk_list_button_release (GtkWidget	*widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   list = GTK_LIST (widget);
-  item = gtk_get_event_widget ((GdkEvent*) event);
 
-  if (list->button == event->button)
-    gtk_list_ungrab (list);
+  /* we don't handle button 2 and 3 */
+  if (event->button != 1)
+    return FALSE;
 
+  if (list->drag_selection)
+    {
+      gtk_list_end_drag_selection (list);
+
+      switch (list->selection_mode)
+	{
+	case GTK_SELECTION_EXTENDED:
+ 	  if (!(event->state & GDK_SHIFT_MASK))
+	    gtk_list_end_selection (list);
+	  break;
+
+	case GTK_SELECTION_SINGLE:
+	case GTK_SELECTION_MULTIPLE:
+
+	  item = gtk_get_event_widget ((GdkEvent*) event);
+  
+	  while (item && !GTK_IS_LIST_ITEM (item))
+	    item = item->parent;
+	  
+	  if (item && item->parent == widget)
+	    {
+	      if (list->undo_focus_child == item)
+		gtk_list_toggle_row (list, item);
+	    }
+	  list->undo_focus_child = NULL;
+	  break;
+
+	default:
+	  break;
+	}
+    }
+  
   return FALSE;
 }
 
@@ -935,7 +1309,6 @@ gtk_list_foreach (GtkContainer *container,
     }
 }
 
-
 static void
 gtk_real_list_select_child (GtkList   *list,
 			    GtkWidget *child)
@@ -952,43 +1325,6 @@ gtk_real_list_select_child (GtkList   *list,
   switch (list->selection_mode)
     {
     case GTK_SELECTION_SINGLE:
-      selection = list->selection;
-
-      while (selection)
-	{
-	  tmp_item = selection->data;
-
-	  if (tmp_item != child)
-	    {
-	      tmp_list = selection;
-	      selection = selection->next;
-
-	      list->selection = g_list_remove_link (list->selection, tmp_list);
-	      g_list_free (tmp_list);
-
-	      gtk_list_item_deselect (GTK_LIST_ITEM (tmp_item));
-	      gtk_widget_unref (GTK_WIDGET (tmp_item));
-	    }
-	  else
-	    selection = selection->next;
-	}
-
-      if (child->state == GTK_STATE_NORMAL)
-	{
-	  list->selection = g_list_prepend (list->selection, child);
-	  gtk_widget_ref (child);
-	  gtk_list_item_select (GTK_LIST_ITEM (child));
-	}
-      else if (child->state == GTK_STATE_SELECTED)
-	{
-	  list->selection = g_list_remove (list->selection, child);
-	  gtk_list_item_deselect (GTK_LIST_ITEM (child));
-	  gtk_widget_unref (child);
-	}
-
-      gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
-      break;
-
     case GTK_SELECTION_BROWSE:
       selection = list->selection;
 
@@ -1016,9 +1352,13 @@ gtk_real_list_select_child (GtkList   *list,
 	  list->selection = g_list_prepend (list->selection, child);
 	  gtk_widget_ref (child);
 	  gtk_list_item_select (GTK_LIST_ITEM (child));
-	  gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
 	}
+      gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
       break;
+
+    case GTK_SELECTION_EXTENDED:
+      if (list->anchor >= 0)
+	return;
 
     case GTK_SELECTION_MULTIPLE:
       if (child->state == GTK_STATE_NORMAL)
@@ -1028,16 +1368,6 @@ gtk_real_list_select_child (GtkList   *list,
 	  gtk_list_item_select (GTK_LIST_ITEM (child));
 	  gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
 	}
-      else if (child->state == GTK_STATE_SELECTED)
-	{
-	  list->selection = g_list_remove (list->selection, child);
-	  gtk_list_item_deselect (GTK_LIST_ITEM (child));
-	  gtk_widget_unref (child);
-	  gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
-	}
-      break;
-
-    case GTK_SELECTION_EXTENDED:
       break;
     }
 }
@@ -1051,21 +1381,891 @@ gtk_real_list_unselect_child (GtkList	*list,
   g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_LIST_ITEM (child));
 
+  if (child->state == GTK_STATE_SELECTED)
+    {
+      list->selection = g_list_remove (list->selection, child);
+      gtk_list_item_deselect (GTK_LIST_ITEM (child));
+      gtk_widget_unref (child);
+      gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
+    }
+}
+
+
+/***************************************************************************/
+
+static void
+gtk_list_set_anchor (GtkList   *list,
+		     gboolean   add_mode,
+		     gint       anchor,
+		     GtkWidget *undo_focus_child)
+{
+  GList *work;
+
+  g_return_if_fail (list != NULL);
+  g_return_if_fail (GTK_IS_LIST (list));
+  
+  if (list->selection_mode != GTK_SELECTION_EXTENDED || list->anchor >= 0)
+    return;
+
+  g_list_free (list->undo_selection);
+  g_list_free (list->undo_unselection);
+  list->undo_selection = NULL;
+  list->undo_unselection = NULL;
+
+  if ((work = g_list_nth (list->children, anchor)))
+    {
+      if (add_mode)
+	gtk_list_fake_toggle_row (list, GTK_WIDGET (work->data));
+      else
+	{
+	  gtk_list_fake_unselect_all (list, GTK_WIDGET (work->data));
+	  list->anchor_state = GTK_STATE_SELECTED;
+	}
+    }
+
+  list->anchor = anchor;
+  list->drag_pos = anchor;
+  list->undo_focus_child = undo_focus_child;
+}
+
+static void
+gtk_list_fake_unselect_all (GtkList   *list,
+			    GtkWidget *item)
+{
+  GList *work;
+
+  if (item && item->state == GTK_STATE_NORMAL)
+    gtk_widget_set_state (item, GTK_STATE_SELECTED);
+
+  list->undo_selection = list->selection;
+  list->selection = NULL;
+  
+  for (work = list->undo_selection; work; work = work->next)
+    if (work->data != item)
+      gtk_widget_set_state (GTK_WIDGET (work->data), GTK_STATE_NORMAL);
+}
+
+static void
+gtk_list_fake_toggle_row (GtkList   *list,
+			  GtkWidget *item)
+{
+  if (!item)
+    return;
+  
+  if (item->state == GTK_STATE_NORMAL)
+    {
+      list->anchor_state = GTK_STATE_SELECTED;
+      gtk_widget_set_state (item, GTK_STATE_SELECTED);
+    }
+  else
+    {
+      list->anchor_state = GTK_STATE_NORMAL;
+      gtk_widget_set_state (item, GTK_STATE_NORMAL);
+    }
+}
+
+void
+gtk_list_scroll_horizontal (GtkList       *list,
+			    GtkScrollType  scroll_type,
+			    gfloat         position)
+{
+  GtkAdjustment *adj;
+
+  g_return_if_fail (list != 0);
+  g_return_if_fail (GTK_IS_LIST (list));
+
+  if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (list))
+    return;
+
+  if (!(adj =
+	gtk_object_get_data_by_id (GTK_OBJECT (list), hadjustment_key_id)))
+    return;
+
+  switch (scroll_type)
+    {
+    case GTK_SCROLL_STEP_BACKWARD:
+      adj->value = CLAMP (adj->value - adj->step_increment, adj->lower,
+			  adj->upper - adj->page_size);
+      break;
+    case GTK_SCROLL_STEP_FORWARD:
+      adj->value = CLAMP (adj->value + adj->step_increment, adj->lower,
+			  adj->upper - adj->page_size);
+      break;
+    case GTK_SCROLL_PAGE_BACKWARD:
+      adj->value = CLAMP (adj->value - adj->page_increment, adj->lower,
+			  adj->upper - adj->page_size);
+      break;
+    case GTK_SCROLL_PAGE_FORWARD:
+      adj->value = CLAMP (adj->value + adj->page_increment, adj->lower,
+			  adj->upper - adj->page_size);
+      break;
+    case GTK_SCROLL_JUMP:
+      adj->value = CLAMP (adj->lower + (adj->upper - adj->lower) * position,
+			  adj->lower, adj->upper - adj->page_size);
+      break;
+    default:
+      break;
+    }
+  gtk_adjustment_value_changed (adj);
+}
+
+void
+gtk_list_scroll_vertical (GtkList       *list,
+			  GtkScrollType  scroll_type,
+			  gfloat         position)
+{
+  g_return_if_fail (list != NULL);
+  g_return_if_fail (GTK_IS_LIST (list));
+
+  if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (list))
+    return;
+
+  if (list->selection_mode == GTK_SELECTION_EXTENDED)
+    {
+      GtkContainer *container;
+
+      if (list->anchor >= 0)
+	return;
+
+      container = GTK_CONTAINER (list);
+      list->undo_focus_child = container->focus_child;
+      gtk_list_move_focus_child (list, scroll_type, position);
+      if (container->focus_child != list->undo_focus_child && !list->add_mode)
+	{
+	  gtk_list_unselect_all (list);
+	  gtk_list_select_child (list, container->focus_child);
+	}
+    }
+  else
+    gtk_list_move_focus_child (list, scroll_type, position);
+}
+
+static void
+gtk_list_move_focus_child (GtkList       *list,
+			   GtkScrollType  scroll_type,
+			   gfloat         position)
+{
+  GtkContainer *container;
+  GList *work;
+  GtkWidget *item;
+  GtkAdjustment *adj;
+  gint new_value;
+
+  g_return_if_fail (list != 0);
+  g_return_if_fail (GTK_IS_LIST (list));
+
+  container = GTK_CONTAINER (list);
+
+  if (container->focus_child)
+    work = g_list_find (list->children, container->focus_child);
+  else
+    work = list->children;
+
+  if (!work)
+    return;
+
+  switch (scroll_type)
+    {
+    case GTK_SCROLL_STEP_BACKWARD:
+      work = work->prev;
+      if (work)
+	gtk_widget_grab_focus (GTK_WIDGET (work->data));
+      break;
+
+    case GTK_SCROLL_STEP_FORWARD:
+      work = work->next;
+      if (work)
+	gtk_widget_grab_focus (GTK_WIDGET (work->data));
+      break;
+
+    case GTK_SCROLL_PAGE_BACKWARD:
+      if (!work->prev)
+	return;
+
+      item = work->data;
+      adj = gtk_object_get_data_by_id (GTK_OBJECT (list), vadjustment_key_id);
+
+      if (adj)
+	{
+	  gboolean correct = FALSE;
+
+	  new_value = adj->value;
+
+	  if (item->allocation.y <= adj->value)
+	    {
+	      new_value = MAX (item->allocation.y + item->allocation.height
+			       - adj->page_size, adj->lower);
+	      correct = TRUE;
+	    }
+
+	  if (item->allocation.y > new_value)
+	    for (; work; work = work->prev)
+	      {
+		item = GTK_WIDGET (work->data);
+		if (item->allocation.y <= new_value &&
+		    item->allocation.y + item->allocation.height > new_value)
+		  break;
+	      }
+	  else
+	    for (; work; work = work->next)
+	      {
+		item = GTK_WIDGET (work->data);
+		if (item->allocation.y <= new_value &&
+		    item->allocation.y + item->allocation.height > new_value)
+		  break;
+	      }
+
+	  if (correct && work && work->next && item->allocation.y < new_value)
+	    item = work->next->data;
+	}
+      else
+	item = list->children->data;
+	  
+      gtk_widget_grab_focus (item);
+      break;
+	  
+    case GTK_SCROLL_PAGE_FORWARD:
+      if (!work->next)
+	return;
+
+      item = work->data;
+      adj = gtk_object_get_data_by_id (GTK_OBJECT (list), vadjustment_key_id);
+
+      if (adj)
+	{
+	  gboolean correct = FALSE;
+
+	  new_value = adj->value;
+
+	  if (item->allocation.y + item->allocation.height >=
+	      adj->value + adj->page_size)
+	    {
+	      new_value = item->allocation.y;
+	      correct = TRUE;
+	    }
+
+	  new_value = MIN (new_value + adj->page_size, adj->upper);
+
+	  if (item->allocation.y > new_value)
+	    for (; work; work = work->prev)
+	      {
+		item = GTK_WIDGET (work->data);
+		if (item->allocation.y <= new_value &&
+		    item->allocation.y + item->allocation.height > new_value)
+		  break;
+	      }
+	  else
+	    for (; work; work = work->next)
+	      {
+		item = GTK_WIDGET (work->data);
+		if (item->allocation.y <= new_value &&
+		    item->allocation.y + item->allocation.height > new_value)
+		  break;
+	      }
+
+	  if (correct && work && work->prev &&
+	      item->allocation.y + item->allocation.height - 1 > new_value)
+	    item = work->prev->data;
+	}
+      else
+	item = g_list_last (work)->data;
+	  
+      gtk_widget_grab_focus (item);
+      break;
+
+    case GTK_SCROLL_JUMP:
+      new_value = GTK_WIDGET(list)->allocation.height * CLAMP (position, 0, 1);
+
+      for (item = NULL, work = list->children; work; work =work->next)
+	{
+	  item = GTK_WIDGET (work->data);
+	  if (item->allocation.y <= new_value &&
+	      item->allocation.y + item->allocation.height > new_value)
+	    break;
+	}
+
+      gtk_widget_grab_focus (item);
+      break;
+
+    default:
+      break;
+    }
+}
+
+void
+gtk_list_select_all (GtkList *list)
+{
+  GtkContainer *container;
+  GList *work;
+ 
+  g_return_if_fail (list != NULL);
+  g_return_if_fail (GTK_IS_LIST (list));
+
+  if (!list->children)
+    return;
+  
+  if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (list))
+    gtk_list_end_drag_selection (list);
+
+  if (list->selection_mode == GTK_SELECTION_EXTENDED && list->anchor >= 0)
+    gtk_list_end_selection (list);
+
+  container = GTK_CONTAINER (list);
+
   switch (list->selection_mode)
     {
-    case GTK_SELECTION_SINGLE:
-    case GTK_SELECTION_MULTIPLE:
     case GTK_SELECTION_BROWSE:
-      if (child->state == GTK_STATE_SELECTED)
+      if (container->focus_child)
 	{
-	  list->selection = g_list_remove (list->selection, child);
-	  gtk_list_item_deselect (GTK_LIST_ITEM (child));
-	  gtk_widget_unref (child);
-	  gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
+	  gtk_list_select_child (list, container->focus_child);
+	  return;
 	}
       break;
 
     case GTK_SELECTION_EXTENDED:
+      g_list_free (list->undo_selection);
+      g_list_free (list->undo_unselection);
+      list->undo_selection = NULL;
+      list->undo_unselection = NULL;
+
+      if (list->children &&
+	  GTK_WIDGET_STATE (list->children->data) != GTK_STATE_SELECTED)
+	gtk_list_fake_toggle_row (list, GTK_WIDGET (list->children->data));
+
+      list->anchor_state =  GTK_STATE_SELECTED;
+      list->anchor = 0;
+      list->drag_pos = 0;
+      list->undo_focus_child = container->focus_child;
+      gtk_list_update_extended_selection (list, g_list_length(list->children));
+      gtk_list_end_selection (list);
+      return;
+
+    case GTK_SELECTION_MULTIPLE:
+      for (work = list->children; work; work = work->next)
+	{
+	  if (GTK_WIDGET_STATE (work->data) == GTK_STATE_NORMAL)
+	    gtk_list_select_child (list, GTK_WIDGET (work->data));
+	}
+      return;
+
+    default:
       break;
     }
+}
+
+void
+gtk_list_unselect_all (GtkList *list)
+{
+  GtkContainer *container;
+  GtkWidget *item;
+  GList *work;
+ 
+  g_return_if_fail (list != NULL);
+  g_return_if_fail (GTK_IS_LIST (list));
+
+  if (!list->children)
+    return;
+  
+  if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (list))
+    gtk_list_end_drag_selection (list);
+
+  if (list->selection_mode == GTK_SELECTION_EXTENDED && list->anchor >= 0)
+    gtk_list_end_selection (list);
+
+  container = GTK_CONTAINER (list);
+
+  switch (list->selection_mode)
+    {
+    case GTK_SELECTION_BROWSE:
+      if (container->focus_child)
+	{
+	  gtk_list_select_child (list, container->focus_child);
+	  return;
+	}
+      break;
+
+    case GTK_SELECTION_EXTENDED:
+      g_list_free (list->undo_selection);
+      g_list_free (list->undo_unselection);
+      list->undo_selection = NULL;
+      list->undo_unselection = NULL;
+
+      list->anchor = -1;
+      list->drag_pos = -1;
+      list->undo_focus_child = container->focus_child;
+      break;
+
+    default:
+      break;
+    }
+
+  work = list->selection;
+
+  while (work)
+    {
+      item = work->data;
+      work = work->next;
+      gtk_list_unselect_child (list, item);
+    }
+}
+
+void
+gtk_list_extend_selection (GtkList       *list,
+			   GtkScrollType  scroll_type,
+			   gfloat         position,
+			   gboolean       auto_start_selection)
+{
+  GtkContainer *container;
+
+  g_return_if_fail (list != NULL);
+  g_return_if_fail (GTK_IS_LIST (list));
+
+  if ((gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (list)) ||
+      list->selection_mode != GTK_SELECTION_EXTENDED)
+    return;
+
+  container = GTK_CONTAINER (list);
+
+  if (auto_start_selection)
+    {
+      gint focus_row;
+      focus_row = g_list_index (list->children, container->focus_child);
+      gtk_list_set_anchor (list, list->add_mode, focus_row,
+			   container->focus_child);
+    }
+  else if (list->anchor < 0)
+    return;
+
+  gtk_list_move_focus_child (list, scroll_type, position);
+  gtk_list_update_extended_selection 
+    (list, g_list_index (list->children, container->focus_child));
+}
+
+static void
+gtk_list_update_extended_selection (GtkList *list,
+				    gint     row)
+{
+  gint i;
+  GList *work;
+  gint s1 = -1;
+  gint s2 = -1;
+  gint e1 = -1;
+  gint e2 = -1;
+  gint length;
+
+  if (row < 0)
+    row = 0;
+
+  length = g_list_length (list->children);
+  if (row >= length)
+    row = length - 1;
+
+  if (list->selection_mode != GTK_SELECTION_EXTENDED || !list->anchor < 0)
+    return;
+
+  /* extending downwards */
+  if (row > list->drag_pos && list->anchor <= list->drag_pos)
+    {
+      s2 = list->drag_pos + 1;
+      e2 = row;
+    }
+  /* extending upwards */
+  else if (row < list->drag_pos && list->anchor >= list->drag_pos)
+    {
+      s2 = row;
+      e2 = list->drag_pos - 1;
+    }
+  else if (row < list->drag_pos && list->anchor < list->drag_pos)
+    {
+      e1 = list->drag_pos;
+      /* row and drag_pos on different sides of anchor :
+	 take back the selection between anchor and drag_pos,
+         select between anchor and row */
+      if (row < list->anchor)
+	{
+	  s1 = list->anchor + 1;
+	  s2 = row;
+	  e2 = list->anchor - 1;
+	}
+      /* take back the selection between anchor and drag_pos */
+      else
+	s1 = row + 1;
+    }
+  else if (row > list->drag_pos && list->anchor > list->drag_pos)
+    {
+      s1 = list->drag_pos;
+      /* row and drag_pos on different sides of anchor :
+	 take back the selection between anchor and drag_pos,
+         select between anchor and row */
+      if (row > list->anchor)
+	{
+	  e1 = list->anchor - 1;
+	  s2 = list->anchor + 1;
+	  e2 = row;
+	}
+      /* take back the selection between anchor and drag_pos */
+      else
+	e1 = row - 1;
+    }
+
+  list->drag_pos = row;
+
+  /* restore the elements between s1 and e1 */
+  if (s1 >= 0)
+    {
+      for (i = s1, work = g_list_nth (list->children, i); i <= e1;
+	   i++, work = work->next)
+	{
+	  if (g_list_find (list->selection, work->data))
+            gtk_widget_set_state (GTK_WIDGET (work->data), GTK_STATE_SELECTED);
+          else
+            gtk_widget_set_state (GTK_WIDGET (work->data), GTK_STATE_NORMAL);
+	}
+    }
+
+  /* extend the selection between s2 and e2 */
+  if (s2 >= 0)
+    {
+      for (i = s2, work = g_list_nth (list->children, i); i <= e2;
+	   i++, work = work->next)
+	if (GTK_WIDGET (work->data)->state != list->anchor_state)
+	  gtk_widget_set_state (GTK_WIDGET (work->data), list->anchor_state);
+    }
+}
+
+void
+gtk_list_end_selection (GtkList *list)
+{
+  gint i;
+  gint e;
+  GList *work;
+  GtkWidget *item;
+  gint item_index;
+
+  g_return_if_fail (list != NULL);
+  g_return_if_fail (GTK_IS_LIST (list));
+
+  if ((gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (list)) ||
+      list->anchor < 0)
+    return;
+
+  i = MIN (list->anchor, list->drag_pos);
+  e = MAX (list->anchor, list->drag_pos);
+  
+  list->anchor = -1;
+  list->drag_pos = -1;
+
+  if (list->undo_selection)
+    {
+      work = list->selection;
+      list->selection = list->undo_selection;
+      list->undo_selection = work;
+      work = list->selection;
+      while (work)
+	{
+	  item = work->data;
+	  work = work->next;
+	  item_index = g_list_index (list->children, item);
+	  if (item_index < i || item_index > e)
+	    {
+	      gtk_widget_set_state (item, GTK_STATE_SELECTED);
+	      gtk_list_unselect_child (list, item);
+	      list->undo_selection = g_list_prepend (list->undo_selection,
+						     item);
+	    }
+	}
+    }    
+
+  for (work = g_list_nth (list->children, i); i <= e; i++, work = work->next)
+    {
+      item = work->data;
+      if (g_list_find (list->selection, item))
+	  {
+	    if (item->state == GTK_STATE_NORMAL)
+	      {
+		gtk_widget_set_state (item, GTK_STATE_SELECTED);
+		gtk_list_unselect_child (list, item);
+		list->undo_selection = g_list_prepend (list->undo_selection,
+						       item);
+	      }
+	  }
+      else if (item->state == GTK_STATE_SELECTED)
+	{
+	  gtk_widget_set_state (item, GTK_STATE_NORMAL);
+	  list->undo_unselection = g_list_prepend (list->undo_unselection,
+						   item);
+	}
+    }
+
+  for (work = list->undo_unselection; work; work = work->next)
+    gtk_list_select_child (list, GTK_WIDGET (work->data));
+
+}
+
+void
+gtk_list_start_selection (GtkList *list)
+{
+  GtkContainer *container;
+  gint focus_row;
+
+  g_return_if_fail (list != NULL);
+  g_return_if_fail (GTK_IS_LIST (list));
+
+  if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (list))
+    return;
+
+  container = GTK_CONTAINER (list);
+
+  if ((focus_row = g_list_index (list->selection, container->focus_child))
+      >= 0)
+    gtk_list_set_anchor (list, list->add_mode,
+			 focus_row, container->focus_child);
+}
+
+void
+gtk_list_toggle_row (GtkList   *list,
+		     GtkWidget *item)
+{
+  g_return_if_fail (list != NULL);
+  g_return_if_fail (GTK_IS_LIST (list));
+  g_return_if_fail (item != NULL);
+  g_return_if_fail (GTK_IS_LIST_ITEM (item));
+
+  switch (list->selection_mode)
+    {
+    case GTK_SELECTION_EXTENDED:
+    case GTK_SELECTION_MULTIPLE:
+    case GTK_SELECTION_SINGLE:
+
+      if (item->state == GTK_STATE_SELECTED)
+	{
+	  gtk_list_unselect_child (list, item);
+	  return;
+	}
+
+    case GTK_SELECTION_BROWSE:
+      gtk_list_select_child (list, item);
+      break;
+    }
+}
+
+void
+gtk_list_toggle_focus_row (GtkList *list)
+{
+  GtkContainer *container;
+  gint focus_row;
+
+  g_return_if_fail (list != 0);
+  g_return_if_fail (GTK_IS_LIST (list));
+
+  container = GTK_CONTAINER (list);
+
+  if ((gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (list)) ||
+      !container->focus_child)
+    return;
+
+  switch (list->selection_mode)
+    {
+    case  GTK_SELECTION_SINGLE:
+    case  GTK_SELECTION_MULTIPLE:
+      
+      gtk_list_toggle_row (list, container->focus_child);
+      break;
+      
+    case GTK_SELECTION_EXTENDED:
+
+      if ((focus_row = g_list_index (list->children, container->focus_child))
+	  < 0)
+	return;
+
+      g_list_free (list->undo_selection);
+      g_list_free (list->undo_unselection);
+      list->undo_selection = NULL;
+      list->undo_unselection = NULL;
+
+      list->anchor = focus_row;
+      list->drag_pos = focus_row;
+      list->undo_focus_child = container->focus_child;
+
+      if (list->add_mode)
+	gtk_list_fake_toggle_row (list, container->focus_child);
+      else
+	gtk_list_fake_unselect_all (list, container->focus_child);
+      
+      gtk_list_end_selection (list);
+      break;
+      
+    default:
+      break;
+    }
+}
+
+void
+gtk_list_toggle_add_mode (GtkList *list)
+{
+  GtkContainer *container;
+
+  g_return_if_fail (list != 0);
+  g_return_if_fail (GTK_IS_LIST (list));
+  
+  if ((gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (list)) ||
+      list->selection_mode != GTK_SELECTION_EXTENDED)
+    return;
+  
+  container = GTK_CONTAINER (list);
+
+  if (list->add_mode)
+    {
+      list->add_mode = FALSE;
+      list->anchor_state = GTK_STATE_SELECTED;
+    }
+  else
+    list->add_mode = TRUE;
+  
+  if (container->focus_child)
+    gtk_widget_queue_draw (container->focus_child);
+}
+
+void
+gtk_list_undo_selection (GtkList *list)
+{
+  GList *work;
+
+  g_return_if_fail (list != NULL);
+  g_return_if_fail (GTK_IS_LIST (list));
+
+  if (list->selection_mode != GTK_SELECTION_EXTENDED ||
+      (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (list)))
+    return;
+  
+  if (list->anchor >= 0)
+    gtk_list_end_selection (list);
+
+  if (!(list->undo_selection || list->undo_unselection))
+    {
+      gtk_list_unselect_all (list);
+      return;
+    }
+
+  for (work = list->undo_selection; work; work = work->next)
+    gtk_list_select_child (list, GTK_WIDGET (work->data));
+
+  for (work = list->undo_unselection; work; work = work->next)
+    gtk_list_unselect_child (list, GTK_WIDGET (work->data));
+
+  if (list->undo_focus_child)
+    {
+      GtkContainer *container;
+
+      container = GTK_CONTAINER (list);
+
+      if (container->focus_child &&
+	  GTK_WIDGET_HAS_FOCUS (container->focus_child))
+	gtk_widget_grab_focus (list->undo_focus_child);
+      else
+	gtk_container_set_focus_child (container, list->undo_focus_child);
+    }
+
+  list->undo_focus_child = NULL;
+ 
+  g_list_free (list->undo_selection);
+  g_list_free (list->undo_unselection);
+  list->undo_selection = NULL;
+  list->undo_unselection = NULL;
+}
+
+static void
+gtk_list_focus_lost (GtkWidget   *item,
+		     GdkEventKey *event,
+		     GtkList     *list)
+{
+  g_return_if_fail (list != NULL);
+  g_return_if_fail (GTK_IS_LIST (list));
+  g_return_if_fail (item != NULL);
+  g_return_if_fail (GTK_IS_LIST_ITEM (item));
+
+  if (list->selection_mode == GTK_SELECTION_EXTENDED && list->anchor >= 0 &&
+      item == GTK_CONTAINER (list)->focus_child)
+    gtk_list_end_selection (list);
+}
+
+static void
+gtk_list_set_focus_child (GtkContainer *container,
+			  GtkWidget    *child)
+{
+  GtkList *list;
+
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_LIST (container));
+
+  if (child)
+    g_return_if_fail (GTK_IS_WIDGET (child));
+
+  list = GTK_LIST (container);
+  list->last_focus_child = container->focus_child;
+
+  if (child != container->focus_child)
+    {
+      if (container->focus_child)
+        gtk_widget_unref (container->focus_child);
+      container->focus_child = child;
+      if (container->focus_child)
+        gtk_widget_ref (container->focus_child);
+    }
+
+  /* check for v adjustment */
+  if (container->focus_child)
+    {
+      GtkAdjustment *adjustment;
+
+      adjustment = gtk_object_get_data_by_id (GTK_OBJECT (container),
+					      vadjustment_key_id);
+      if (adjustment)
+        gtk_adjustment_clamp_page (adjustment,
+                                   container->focus_child->allocation.y,
+                                   (container->focus_child->allocation.y +
+                                    container->focus_child->allocation.height));
+    }
+
+  switch (list->selection_mode)
+    {
+    case GTK_SELECTION_BROWSE:
+      if (child)
+	gtk_list_select_child (list, child);
+      break;
+    default:
+      break;
+    }
+}
+
+
+static gint
+gtk_list_focus (GtkContainer     *container,
+		GtkDirectionType  direction)
+{
+  gint return_val = FALSE;
+
+  g_return_val_if_fail (container != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_LIST (container), FALSE);
+
+  if (!GTK_WIDGET_SENSITIVE (container))
+    return_val = FALSE;
+  else if (container->focus_child == NULL ||
+      !GTK_WIDGET_HAS_FOCUS (container->focus_child))
+    {
+      if (*GTK_CONTAINER_CLASS (parent_class)->focus)
+	return_val = (*GTK_CONTAINER_CLASS (parent_class)->focus)
+	  (container, direction);
+    }
+  
+  if (!return_val)
+    {
+      GtkList *list;
+
+      list =  GTK_LIST (container);
+      if (list->selection_mode == GTK_SELECTION_EXTENDED && list->anchor >= 0)
+	gtk_list_end_selection (list);
+    }
+
+  return return_val;
 }

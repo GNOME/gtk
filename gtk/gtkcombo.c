@@ -383,6 +383,7 @@ gtk_combo_activate (GtkWidget        *widget,
 
   if (!GTK_WIDGET_HAS_FOCUS (combo->entry))
     gtk_widget_grab_focus (combo->entry);
+
   gtk_grab_add (combo->popwin);
   gdk_pointer_grab (combo->popwin->window, TRUE,
 		    GDK_BUTTON_PRESS_MASK | 
@@ -402,6 +403,14 @@ gtk_combo_popup_button_press (GtkWidget        *button,
     gtk_combo_popup_list (combo);
 
   combo->current_button = event->button;
+  
+  GTK_LIST (combo->list)->drag_selection = TRUE;
+  gdk_pointer_grab (combo->list->window, TRUE,
+		    GDK_POINTER_MOTION_HINT_MASK |
+		    GDK_BUTTON1_MOTION_MASK |
+		    GDK_BUTTON_RELEASE_MASK,
+		    NULL, NULL, event->time);
+  gtk_grab_add (combo->list);
 }
 
 static void         
@@ -527,8 +536,11 @@ gtk_combo_button_release (GtkWidget * widget, GdkEvent * event, GtkCombo * combo
     {
       /* The user has clicked inside the popwin and released */
 
-      gtk_grab_remove (combo->popwin);
-      gdk_pointer_ungrab (event->button.time);
+      if (GTK_WIDGET_HAS_GRAB (combo->popwin))
+	{
+	  gtk_grab_remove (combo->popwin);
+	  gdk_pointer_ungrab (event->button.time);
+	}
     }
   
   gtk_widget_hide (combo->popwin);
@@ -583,9 +595,21 @@ gtk_combo_list_key_press (GtkWidget * widget, GdkEventKey * event, GtkCombo * co
 {
   if (event->keyval == GDK_Escape)
     {
+      if (GTK_WIDGET_HAS_GRAB (combo->popwin))
+	{
+	  gtk_grab_remove (combo->popwin);
+	  gdk_pointer_ungrab (GDK_CURRENT_TIME);
+	}
+      else if (GTK_WIDGET_HAS_GRAB (combo->list))
+	gtk_list_end_drag_selection (GTK_LIST (combo->list));
       gtk_widget_hide (combo->popwin);
-      gtk_grab_remove (combo->popwin);
-      gdk_pointer_ungrab (GDK_CURRENT_TIME);
+      if (GTK_WIDGET_HAS_GRAB (combo->button))
+	{
+	  combo->current_button = 0;
+	  GTK_BUTTON (combo->button)->in_button = FALSE;
+	  gtk_button_released (combo->button);
+	  gtk_grab_remove (combo->button);
+	}
       return TRUE;
     }
   return FALSE;
@@ -625,8 +649,8 @@ gtk_combo_init (GtkCombo * combo)
 		      (GtkSignalFunc) gtk_combo_activate, combo);
   gtk_signal_connect_after (GTK_OBJECT (combo->button), "button_press_event",
 			    (GtkSignalFunc) gtk_combo_popup_button_press, combo);
-  gtk_signal_connect_after (GTK_OBJECT (combo->button), "button_release_event",
-			    (GtkSignalFunc) gtk_combo_button_release, combo);
+  /*gtk_signal_connect_after (GTK_OBJECT (combo->button), "button_release_event",
+    (GtkSignalFunc) gtk_combo_button_release, combo);*/
   gtk_signal_connect (GTK_OBJECT (combo->button), "leave_notify_event",
 		      (GtkSignalFunc) gtk_combo_popup_button_leave, combo);
   /*gtk_signal_connect(GTK_OBJECT(combo->button), "clicked",
@@ -670,6 +694,8 @@ gtk_combo_init (GtkCombo * combo)
   gtk_container_add (GTK_CONTAINER (combo->popup), combo->list);
   gtk_container_set_focus_vadjustment (GTK_CONTAINER (combo->list),
 				       gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (combo->popup)));
+  gtk_container_set_focus_hadjustment (GTK_CONTAINER (combo->list),
+				       gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (combo->popup)));
   gtk_widget_show (combo->list);
 
   combo->list_change_id = gtk_signal_connect (GTK_OBJECT (combo->list), "selection_changed",
@@ -679,8 +705,8 @@ gtk_combo_init (GtkCombo * combo)
   gtk_signal_connect (GTK_OBJECT (combo->popwin), "button_press_event",
 		      GTK_SIGNAL_FUNC (gtk_combo_button_press), combo);
 
-  gtk_signal_connect (GTK_OBJECT (combo->list), "button_release_event",
-		      GTK_SIGNAL_FUNC (gtk_combo_button_release), combo);
+  gtk_signal_connect_after (GTK_OBJECT (combo->list), "button_release_event",
+			    GTK_SIGNAL_FUNC (gtk_combo_button_release), combo);
   /* We connect here on the button, because we'll have a grab on it
    * when the event occurs. But we are actually interested in enters
    * for the combo->list.

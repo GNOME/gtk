@@ -1,3 +1,66 @@
+Fri Jul 31 20:45:07 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_button_press) (gtk_clist_motion)
+	(gtk_clist_button_release) (new_column_width): Few fixes for
+	column resize. Store resize column in clist->drag_pos.
+
+Thu Jul 31 15:18:36 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkctree.h 
+	* gtk/gtkctree.c 
+	* gtk/testgtk.c : New typedef GtkCTreeNode, changed all GList *node
+	to GtkCTreeNode *node.
+
+	* gtk/gtklist.h : added extended selection mode and auto scrolling.
+	(struct _GtkList): removed unneeded variables timer, button,
+	selection_start_pos, selection_end_pos, scroll_direction, have_grab.
+ 	Added new variables undo_selection, undo_unselection, last_focus_child,
+ 	undo_focus_child, htimer, vtimer, anchor, drag_pos, anchor_state,
+ 	drag_selection, add_mode.
+ 
+ 	New functions :
+ 	(gtk_list_extend_selection), (gtk_list_start_selection),
+ 	(gtk_list_end_selection), (gtk_list_select_all),
+ 	(gtk_list_unselect_all), (gtk_list_scroll_horizontal),
+ 	(gtk_list_scroll_vertical), (gtk_list_toggle_add_mode),
+ 	(gtk_list_toggle_focus_row), (gtk_list_toggle_row),
+ 	(gtk_list_undo_selection), (gtk_list_end_drag_selection)
+        
+	* gtk/gtklist.c : 
+ 	(gtk_list_enter_notify): removed, because auto scrolling now works
+ 	with gtk_list_motion_notify
+ 
+ 	New functions, needed for auto scrolling :
+ 	(gtk_list_motion_notify) (gtk_list_move_focus_child)
+ 
+ 	New functions for extended selection support :
+ 	(gtk_list_set_anchor), (gtk_list_fake_unselect_all),
+ 	(gtk_list_fake_toggle_row), (gtk_list_update_extended_selection),
+ 	(gtk_list_focus_lost)
+ 	
+ 	(gtk_list_set_focus_child): modified gtk_container_set_focus_child
+ 	function to support auto scrolling, and avoid out-of-sync errors in
+ 	case auf GTK_SELECTION_BROWSE
+ 	(gtk_list_focus): modified gtk_container_focus function to avoid out
+ 	off sync errors	in case auf GTK_SELECTION_EXTENDED
+
+	* gtk/gtklistitem.h 
+	* gtk/gtklistitem.c :
+ 	New signal functions for key binding support :
+ 	(toggle_focus_row), (select_all), (list_item), (unselect_all)
+ 	(list_item), (undo_selection), (start_selection), (end_selection)
+ 	(extend_selection), (scroll_horizontal), (scroll_vertical),
+ 	(toggle_add_mode)
+ 	(gtk_list_item_realize): added	GDK_KEY_PRESS_MASK |
+ 	GDK_KEY_RELEASE_MASK
+ 	(gtk_list_item_draw_focus): modify gc if parent has add_mode set.
+ 
+ 	* gtk/gtkcombo.c :
+ 	(gtk_combo_popup_button_press):  grab pointer for combo->list
+ 	(gtk_combo_button_release): ungrab only if combo->popwin HAS_GRAB
+ 	(gtk_combo_list_key_press): take care of which child HAS_GRAB
+ 	(gtk_comb_init): don't connect combo->button with button_release_event
+
 Thu Jul 30 12:39:36 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c (gtk_clist_motion): removed a few unneeded lines
@@ -17,12 +80,6 @@ Tue Jul 28 00:03:20 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtknotebook.c (gtk_notebook_paint): small fix for border drawing
 	bug
-
-Tue Jul 28 00:15:28 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
-
-	* docs/gdk.sgml: new format for GDK documentation.  Eventually
-	  plan to remove gdk.texi, but not quite yet.  Just getting 
-	  started.
 
 Mon Jul 27 09:18:13 BST 1998  Tony Gale  <gale@gtk.org>
 
@@ -102,7 +159,7 @@ Sat Jul 25 02:25:03 1998  Lars Hamann  <lars@gtk.org>
 
 Fri Jul 24 18:15:49 1998  Lars Hamann  <lars@gtk.org>
 
-        * gtk/gtkclist.c (toggle_focus_row): mini code cleanup
+	* gtk/gtkclist.c (toggle_focus_row): mini code cleanup
 
 Fri, 24 Jul 1998 10:56:22 +0200 Paolo Molaro <lupus@debian.org>
 
