@@ -1,3 +1,9 @@
+Wed Sep  1 19:11:44 2004  Søren Sandmann  <sandmann@redhat.com>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_size_allocate): Make sure
+	children of the toolbar are given positive dimensions. (149540,
+	Felipe Heidrich).
+
 Wed Sep  1 01:16:22 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_class_init): Fix
