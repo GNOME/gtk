@@ -28,8 +28,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2002-09-28 18:17+0200\n"
-"PO-Revision-Date: 2002-09-28 18:17+0200\n"
+"POT-Creation-Date: 2002-10-26 22:16+0200\n"
+"PO-Revision-Date: 2002-10-26 22:16+0200\n"
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -174,7 +174,7 @@ msgstr "BMP-billede har ugyldige data i filhoved"
 msgid "Failure reading GIF: %s"
 msgstr "Fejl under læsning af GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1392 gdk-pixbuf/io-gif.c:1552
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF-fil manglede nogle data (måske er den blev afkortet?)"
 
@@ -183,54 +183,58 @@ msgstr "GIF-fil manglede nogle data (måske er den blev afkortet?)"
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Intern fejl i GIF-indlæseren (%s)"
 
-#: gdk-pixbuf/io-gif.c:592
+#: gdk-pixbuf/io-gif.c:541
+msgid "Stack overflow"
+msgstr "Stakoverløb"
+
+#: gdk-pixbuf/io-gif.c:600
 msgid "GIF image loader can't understand this image."
 msgstr "GIF-billedindlæseren forstår ikke dette billede."
 
-#: gdk-pixbuf/io-gif.c:621
+#: gdk-pixbuf/io-gif.c:629
 msgid "Bad code encountered"
 msgstr "Ugyldig kode fundet"
 
-#: gdk-pixbuf/io-gif.c:630
+#: gdk-pixbuf/io-gif.c:639
 msgid "Circular table entry in GIF file"
 msgstr "Cirkulær tabelindgang i GIF-fil"
 
-#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
-#: gdk-pixbuf/io-gif.c:1530
+#: gdk-pixbuf/io-gif.c:772 gdk-pixbuf/io-gif.c:1380 gdk-pixbuf/io-gif.c:1425
+#: gdk-pixbuf/io-gif.c:1540
 msgid "Not enough memory to load GIF file"
 msgstr "Ikke nok hukommelse til indlæsning af GIF-fil"
 
-#: gdk-pixbuf/io-gif.c:1009
+#: gdk-pixbuf/io-gif.c:1019
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF-billede er ødelagt (ukorrekt LZW-kompression)"
 
-#: gdk-pixbuf/io-gif.c:1059
+#: gdk-pixbuf/io-gif.c:1069
 msgid "File does not appear to be a GIF file"
 msgstr "Fil synes ikke at være en GIF-fil"
 
-#: gdk-pixbuf/io-gif.c:1071
+#: gdk-pixbuf/io-gif.c:1081
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Version %s af GIF-filformatet er ikke understøttet"
 
 # 'image' må betyde animation her
-#: gdk-pixbuf/io-gif.c:1144
+#: gdk-pixbuf/io-gif.c:1154
 msgid "GIF image contained a frame with height or width 0."
 msgstr "GIF-animation indeholdt et billede med højden eller bredden 0."
 
 # 'image' må betyde animation her
-#: gdk-pixbuf/io-gif.c:1157
+#: gdk-pixbuf/io-gif.c:1167
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr "GIF-animation indeholdt et billede som var udenfor billedgrænserne."
 
 # 'disposal mode' betegner vist nok hvordan der skiftes fra et billede til et andet 
-#: gdk-pixbuf/io-gif.c:1173
+#: gdk-pixbuf/io-gif.c:1183
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 "Første billede af GIF-animation havde 'gå til forrige' som sin "
 "overgangstilstand."
 
-#: gdk-pixbuf/io-gif.c:1208
+#: gdk-pixbuf/io-gif.c:1218
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -238,7 +242,7 @@ msgstr ""
 "GIF-animation har ikke globalt farvekort, og et billede i den har ikke "
 "lokalt farvekort."
 
-#: gdk-pixbuf/io-gif.c:1437
+#: gdk-pixbuf/io-gif.c:1447
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-billedet er afkortet eller ikke komplet."
 
@@ -1793,15 +1797,15 @@ msgstr "Markér ved fokus"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Om indholdet af indtastningsfeltet markeres når feltet modtager fokus"
 
-#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3179
+#: gtk/gtkentry.c:3902 gtk/gtklabel.c:3179
 msgid "Select All"
 msgstr "Markér alt"
 
-#: gtk/gtkentry.c:3887 gtk/gtklabel.c:3189
+#: gtk/gtkentry.c:3912 gtk/gtklabel.c:3189
 msgid "Input Methods"
 msgstr "Indtastningsmetoder"
 
-#: gtk/gtkentry.c:3897 gtk/gtktextview.c:6426
+#: gtk/gtkentry.c:3922 gtk/gtktextview.c:6426
 msgid "_Insert Unicode control character"
 msgstr "_Indsæt Unicode-kontroltegn"
 
@@ -2402,7 +2406,7 @@ msgstr ""
 msgid "Horizontal adjustment"
 msgstr "Vandret justering"
 
-#: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:237
+#: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:233
 msgid "The GtkAdjustment for the horizontal position."
 msgstr "GtkAdjustment til den vandrette position"
 
@@ -2410,7 +2414,7 @@ msgstr "GtkAdjustment til den vandrette position"
 msgid "Vertical adjustment"
 msgstr "Lodret justering"
 
-#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:244
+#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:240
 msgid "The GtkAdjustment for the vertical position."
 msgstr "GtkAdjustment til den lodrette position"
 
@@ -3008,43 +3012,43 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Vis en ekstra fremadpilsknap i den modsatte ende af rulleskakten"
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:523
+#: gtk/gtkscrolledwindow.c:232 gtk/gtktext.c:598 gtk/gtktreeview.c:523
 msgid "Horizontal Adjustment"
 msgstr "Vandret justering"
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:531
+#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:531
 msgid "Vertical Adjustment"
 msgstr "Lodret justering"
 
-#: gtk/gtkscrolledwindow.c:250
+#: gtk/gtkscrolledwindow.c:246
 msgid "Horizontal Scrollbar Policy"
 msgstr "Vandret rulleskaktspolitik"
 
-#: gtk/gtkscrolledwindow.c:251
+#: gtk/gtkscrolledwindow.c:247
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Hvornår den vandrette rulleskakt vises"
 
-#: gtk/gtkscrolledwindow.c:258
+#: gtk/gtkscrolledwindow.c:254
 msgid "Vertical Scrollbar Policy"
 msgstr "Lodret rulleskaktspolitik"
 
-#: gtk/gtkscrolledwindow.c:259
+#: gtk/gtkscrolledwindow.c:255
 msgid "When the vertical scrollbar is displayed"
 msgstr "Hvornår den lodrette rulleskakt vises"
 
-#: gtk/gtkscrolledwindow.c:267
+#: gtk/gtkscrolledwindow.c:263
 msgid "Window Placement"
 msgstr "Vinduesposition"
 
-#: gtk/gtkscrolledwindow.c:268
+#: gtk/gtkscrolledwindow.c:264
 msgid "Where the contents are located with respect to the scrollbars"
 msgstr "Hvor indholdet er placeret i forhold til rulleskaktene"
 
-#: gtk/gtkscrolledwindow.c:275
+#: gtk/gtkscrolledwindow.c:271
 msgid "Shadow Type"
 msgstr "Skyggetype"
 
-#: gtk/gtkscrolledwindow.c:276
+#: gtk/gtkscrolledwindow.c:272
 msgid "Style of bevel around the contents"
 msgstr "Kantstil omkring indholdet"
 
