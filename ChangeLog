@@ -1,3 +1,9 @@
+2001-10-29  jacob berkman  <jacob@ximian.com>
+
+	* gdk/Makefile.am (LDFLAGS): 
+	* gtk/Makefile.am (LDFLAGS): automake doesn't support conditionalized
+	LDFLAGS, so put win32 flags in here
+
 Mon Oct 29 15:41:58 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_sort_level): Darn.

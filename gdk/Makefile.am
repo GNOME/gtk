@@ -70,6 +70,7 @@ LDFLAGS = @STRIP_BEGIN@ 					\
 	$(no_undefined)						\
 	@LIBTOOL_EXPORT_OPTIONS@				\
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la		\
+	$(gdk_win32_symbols)					\
 	@GDK_DEP_LIBS@						\
 @STRIP_END@
 
@@ -173,8 +174,6 @@ libgdk_win32_1_3_la_LIBADD = \
 
 libgdk_win32_include_HEADERS = $(gdk_headers)
 libgdk_win32_1_3_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c
-
-libgdk_win32_1_3_la_LDFLAGS = $(gdk_win32_symbols)
 
 endif
 
