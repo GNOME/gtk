@@ -528,9 +528,6 @@ gtk_spin_button_button_press (GtkWidget      *widget,
 
   spin = GTK_SPIN_BUTTON (widget);
 
-  if (event->type != GDK_BUTTON_PRESS)
-    return FALSE;
-
   if (!spin->button)
     {
       if (event->window == spin->panel)

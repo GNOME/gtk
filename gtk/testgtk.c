@@ -800,29 +800,62 @@ statusbar_push (GtkWidget *button,
 
   sprintf (text, "something %d", statusbar_counter++);
 
-  gtk_statusbar_push (statusbar, text);
+  gtk_statusbar_push (statusbar, 1, text);
 }
 
 static void
 statusbar_pop (GtkWidget *button,
 	       GtkStatusbar *statusbar)
 {
-  gtk_statusbar_pop (statusbar);
+  gtk_statusbar_pop (statusbar, 1);
 }
 
 static void
 statusbar_steal (GtkWidget *button,
 	         GtkStatusbar *statusbar)
 {
-  gtk_statusbar_steal (statusbar, 4);
+  gtk_statusbar_remove (statusbar, 1, 4);
 }
 
 static void
 statusbar_popped (GtkStatusbar  *statusbar,
+		  guint          context_id,
 		  const gchar	*text)
 {
   if (!statusbar->messages)
     statusbar_counter = 1;
+}
+
+static void
+statusbar_contexts (GtkWidget *button,
+		    GtkStatusbar *statusbar)
+{
+  gchar *string;
+
+  string = "any context";
+  g_print ("GtkStatusBar: context=\"%s\", context_id=%d\n",
+	   string,
+	   gtk_statusbar_get_context_id (statusbar, string));
+  
+  string = "idle messages";
+  g_print ("GtkStatusBar: context=\"%s\", context_id=%d\n",
+	   string,
+	   gtk_statusbar_get_context_id (statusbar, string));
+  
+  string = "some text";
+  g_print ("GtkStatusBar: context=\"%s\", context_id=%d\n",
+	   string,
+	   gtk_statusbar_get_context_id (statusbar, string));
+
+  string = "hit the mouse";
+  g_print ("GtkStatusBar: context=\"%s\", context_id=%d\n",
+	   string,
+	   gtk_statusbar_get_context_id (statusbar, string));
+
+  string = "hit the mouse2";
+  g_print ("GtkStatusBar: context=\"%s\", context_id=%d\n",
+	   string,
+	   gtk_statusbar_get_context_id (statusbar, string));
 }
 
 static void
@@ -836,7 +869,10 @@ statusbar_dump_stack (GtkWidget *button,
       GtkStatusbarMsg *msg;
 
       msg = list->data;
-      g_print ("status_id: %d, status_text: \"%s\"\n", msg->status_id, msg->text);
+      g_print ("context_id: %d, message_id: %d, status_text: \"%s\"\n",
+               msg->context_id,
+               msg->message_id,
+               msg->text);
     }
 }
 
@@ -909,6 +945,13 @@ create_statusbar ()
 			       "GtkWidget::visible", TRUE,
 			       "GtkWidget::parent", box2,
 			       "GtkObject::signal::clicked", statusbar_dump_stack, statusbar,
+			       NULL);
+
+      button = gtk_widget_new (gtk_button_get_type (),
+			       "GtkButton::label", "test contexts",
+			       "GtkWidget::visible", TRUE,
+			       "GtkWidget::parent", box2,
+			       "GtkObject::signal::clicked", statusbar_contexts, statusbar,
 			       NULL);
 
       separator = gtk_hseparator_new ();
@@ -2860,65 +2903,52 @@ GdkBitmap *book_open_mask;
 GdkBitmap *book_closed_mask;
 
 static char * book_open_xpm[] = {
-"16 16 11 1",
-"       c None",
-".      c #28A22CB228A2",
-"X      c #FFFFFFFFFFFF",
-"o      c #F7DEF7DEF7DE",
-"O      c #000000000000",
-"+      c #FFFF6DB60000",
-"@      c #CF3CCF3CCF3C",
-"#      c #FFFFDB6C0000",
-"$      c #30C234D330C2",
-"%      c #C71BC30BC71B",
-"&      c #D75C6DB60000",
+"16 16 4 1",
+"       c None s None",
+".      c black",
+"X      c #808080",
+"o      c white",
 "                ",
 "  ..            ",
-"  .X.           ",
-"  .oO     ...   ",
-" .+Xo.  ..oX..  ",
-" .+oXo..XXoX.@..",
-" .+ooX.@ooXo.@#.",
-" .+XXo.@XooX.@+.",
-" .+XoX.@XoXo.@#.",
-" .+oXo.@oXXX.@+.",
-" .++Xo$@oOO..%#.",
-" ..+&X.@.O@@@@+.",
-"   .++........#.",
-"   .+..+++++++&$",
-"   .+++.......$.",
-"    ...         "};
+" .Xo.    ...    ",
+" .Xoo. ..oo.    ",
+" .Xooo.Xooo...  ",
+" .Xooo.oooo.X.  ",
+" .Xooo.Xooo.X.  ",
+" .Xooo.oooo.X.  ",
+" .Xooo.Xooo.X.  ",
+" .Xooo.oooo.X.  ",
+"  .Xoo.Xoo..X.  ",
+"   .Xo.o..ooX.  ",
+"    .X..XXXXX.  ",
+"    ..X.......  ",
+"     ..         ",
+"                "};
 
 static char * book_closed_xpm[] = {
-"16 16 12 1",
-"       c None",
-".      c #000000000000",
-"X      c #FFFF6DB60000",
-"o      c #082008200820",
-"O      c #AEBA00005144",
-"+      c #FFFFDB6C0000",
-"@      c #AEBA00000000",
-"#      c #D75CDB6C0000",
-"$      c #28A22CB228A2",
-"%      c #FFFFFFFFFFFF",
-"&      c #F7DEF7DEF7DE",
-"*      c #30C234D330C2",
+"16 16 6 1",
+"       c None s None",
+".      c black",
+"X      c red",
+"o      c yellow",
+"O      c #808080",
+"#      c white",
 "                ",
 "       ..       ",
 "     ..XX.      ",
 "   ..XXXXX.     ",
-" o.XXXXXXXX.    ",
-".O+XXXXXXXXX.   ",
-"o.@#XXXXXXXXX.  ",
-".X.O+XXXXXXXXXo ",
-".XX.@+XXXXXXXX.$",
-"oXXX.O+XXXXX..%$",
-" .XXX.@+XX..&&&$",
-"  .XXX.O..&%&%.*",
-"   .XX$.&&%&..  ",
-"    .X$&%&.o    ",
-"     .$%..      ",
-"      .o        "};
+" ..XXXXXXXX.    ",
+".ooXXXXXXXXX.   ",
+"..ooXXXXXXXXX.  ",
+".X.ooXXXXXXXXX. ",
+".XX.ooXXXXXX..  ",
+" .XX.ooXXX..#O  ",
+"  .XX.oo..##OO. ",
+"   .XX..##OO..  ",
+"    .X.#OO..    ",
+"     ..O..      ",
+"      ..        ",
+"                "};
 
 static void
 page_switch (GtkWidget *widget, GtkNotebookPage *page, gint page_num)

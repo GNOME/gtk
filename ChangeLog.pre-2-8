@@ -1,3 +1,32 @@
+Sun Mar  1 22:59:09 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkstatusbar.h: 
+	* gtk/gtkstatusbar.c: complete api change to honour message contexts.
+	unfortunaltely this also involved argument changes on the signal
+ 	emissions which will not be caught by the compiler. your callbacks
+ 	should look like:
+  	void  message_text_popped (GtkStatusbar   *statusbar,
+				   guint           context_id,
+	                           const gchar    *text,
+				   gpointer        func_data);
+
+	* gtk/gtkwidget.c (gtk_widget_set_rc_style): eliminated bug about
+	initial signal emission.
+	(gtk_widget_set_parent): don't ensure style, just call
+	gtk_widget_set_style_recurse.
+	(gtk_widget_set_style_recurse): only change a widget's rc styles if
+	if there has already been a lookup.
+	
+	* gtk/testgtk.c: adaptions for statusbar widget.
+	substituted notebook pixmaps with pixmaps from fvwm, since
+	we don't know where the originals came from.
+	
+	* gtk/gtkobject.c (gtk_object_data_destroy): call the destroy
+	notifier with the objects data, not its internal structure.
+	
+	* gtk/gtkspinbutton.c (gtk_spin_button_button_press): small
+	fix from lars.
+
 Sun Mar  1 15:08:13 CST 1998 Shawn T. Amundson <amundson@gimp.org>
 
 	* docs/*.texi changes from Greg Mclean.

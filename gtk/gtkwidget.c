@@ -125,7 +125,7 @@ typedef void (*GtkWidgetSignal6) (GtkObject *object,
 				  GtkObject *arg1,
 				  gpointer   data);
 typedef void (*GtkWidgetSignal7) (GtkObject *object,
-				  gpointer  *arg1,
+				  gpointer   arg1,
 				  gpointer   data);
 
 typedef	struct	_GtkStateData	 GtkStateData;
@@ -2326,15 +2326,7 @@ gtk_widget_set_parent (GtkWidget *widget,
   while (parent->parent != NULL)
     parent = parent->parent;
   
-  if (GTK_WIDGET_TOPLEVEL (parent))
-    {
-      gtk_widget_ensure_style (widget);
-
-      if (GTK_IS_CONTAINER (widget))
-	gtk_container_foreach (GTK_CONTAINER (widget),
-			       gtk_widget_set_style_recurse,
-			       NULL);
-    }
+  gtk_widget_set_style_recurse (widget, NULL);
 
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[PARENT_SET], NULL);
 }
@@ -2413,9 +2405,8 @@ gtk_widget_set_rc_style (GtkWidget *widget)
 	}
       else
 	{
-	  g_assert (initial_emission == TRUE); /* FIXME: remove this line */
-
-	  gtk_widget_set_style_internal (widget, widget->style, TRUE);
+	  if (initial_emission)
+	    gtk_widget_set_style_internal (widget, widget->style, TRUE);
 	}
     }
 }
@@ -2508,7 +2499,7 @@ static void
 gtk_widget_set_style_recurse (GtkWidget *widget,
 			      gpointer	 client_data)
 {
-  if (!GTK_WIDGET_USER_STYLE (widget))
+  if (GTK_WIDGET_RC_STYLE (widget))
     gtk_widget_set_rc_style (widget);
   
   if (GTK_IS_CONTAINER (widget))

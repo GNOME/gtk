@@ -1272,7 +1272,7 @@ gtk_object_data_destroy (GtkObjectData *odata)
   g_return_if_fail (odata != NULL);
 
   if (odata->destroy)
-    odata->destroy (odata);
+    odata->destroy (odata->data);
 
   g_mem_chunk_free (object_data_mem_chunk, odata);
 }

@@ -41,9 +41,11 @@ struct _GtkStatusbar
   GtkWidget *frame;
   GtkWidget *label;
 
-  GList *messages;
+  GSList *messages;
+  GSList *keys;
 
-  guint seq_status_id;
+  guint seq_context_id;
+  guint seq_message_id;
 };
 
 struct _GtkStatusbarClass
@@ -53,26 +55,33 @@ struct _GtkStatusbarClass
   GMemChunk *messages_mem_chunk;
 
   void	(*text_pushed)	(GtkStatusbar	*statusbar,
+			 guint		 context_id,
 			 const gchar	*text);
   void	(*text_popped)	(GtkStatusbar	*statusbar,
+			 guint		 context_id,
 			 const gchar	*text);
 };
 
 struct _GtkStatusbarMsg
 {
   gchar *text;
-  guint status_id;
+  guint context_id;
+  guint message_id;
 };
 
 guint      gtk_statusbar_get_type     	(void);
 GtkWidget* gtk_statusbar_new          	(void);
-
-/* Returns StatusID used for gtk_statusbar_push */
-guint      gtk_statusbar_push          	(GtkStatusbar *statusbar, 
+guint	   gtk_statusbar_get_context_id	(GtkStatusbar *statusbar,
+					 const gchar  *context_description);
+/* Returns message_id used for gtk_statusbar_remove */
+guint      gtk_statusbar_push          	(GtkStatusbar *statusbar,
+					 guint	       context_id,
 					 const gchar  *text);
-void       gtk_statusbar_pop          	(GtkStatusbar *statusbar);
-void       gtk_statusbar_steal         	(GtkStatusbar *statusbar, 
-					 guint          status_id);
+void       gtk_statusbar_pop          	(GtkStatusbar *statusbar,
+					 guint	       context_id);
+void       gtk_statusbar_remove        	(GtkStatusbar *statusbar,
+					 guint	       context_id,
+					 guint         message_id);
 
 
 
