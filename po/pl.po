@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-04-05 23:54+0200\n"
-"PO-Revision-Date: 2002-04-06 12:11+0200\n"
+"POT-Creation-Date: 2002-05-01 12:45+0200\n"
+"PO-Revision-Date: 2002-05-04 18:26+0200\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -139,7 +139,7 @@ msgstr "Brak pamięci na bufor obrazu o rozmiarze %u bajtów"
 
 #: gdk-pixbuf/io-bmp.c:1 gdk-pixbuf/io-bmp.c:1
 msgid "Not enough memory to load bitmap image"
-msgstr "Brak wystarczającej ilości pamięci do załadowania pliku bitmapy"
+msgstr "Brak pamięci na odczytanie bitmapy z pliku"
 
 #: gdk-pixbuf/io-bmp.c:1
 msgid "BMP image has unsupported header size"
@@ -147,7 +147,7 @@ msgstr "Obraz BMP zawiera nagłówek o nieobsługiwanym rozmiarze"
 
 #: gdk-pixbuf/io-bmp.c:1 gdk-pixbuf/io-bmp.c:1 gdk-pixbuf/io-bmp.c:1
 msgid "BMP image has bogus header data"
-msgstr "Obraz BMP posiada błędne dane nagłówka"
+msgstr "Błędny nagłówek obrazu BMP"
 
 #: gdk-pixbuf/io-gif.c:1
 #, c-format
@@ -343,17 +343,16 @@ msgstr "Poważny błąd przy odczycie pliku z obrazem PNG: %s"
 #: gdk-pixbuf/io-png.c:1
 msgid ""
 "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"Klucze elementów PNG o nazwie tEXt muszą mieć długość od 1 do 79 znaków."
+msgstr "Klucze elementów tekstowych PNG muszą mieć długość od 1 do 79 znaków."
 
 #: gdk-pixbuf/io-png.c:1
 msgid "Keys for PNG tEXt chunks must be ASCII characters."
-msgstr "Klucze elementów PNG o nazwie tEXt muszą być znakami ASCII."
+msgstr "Klucze elementów tekstowych PNG muszą być znakami ASCII."
 
 #: gdk-pixbuf/io-png.c:1
 msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
 msgstr ""
-"Nie można przekonwertować elementu PNG o nazwie tEXt na kodowanie ISO-8859-1."
+"Nie można przekonwertować elementu tekstowego PNG %s na kodowanie ISO-8859-1."
 
 #: gdk-pixbuf/io-pnm.c:1
 msgid "PNM loader expected to find an integer, but didn't"
@@ -426,7 +425,7 @@ msgstr "Brak pamięci na odczytanie pliku PNM"
 
 #: gdk-pixbuf/io-ras.c:1
 msgid "RAS image has bogus header data"
-msgstr "Obraz RAS posiada błędne dane nagłówka"
+msgstr "Błędny nagłówek obrazu RAS"
 
 #: gdk-pixbuf/io-ras.c:1
 msgid "RAS image has unknown type"
@@ -459,11 +458,6 @@ msgstr "Błąd przy wywołaniu fread() - przedwcześnie wystąpił koniec pliku"
 #: gdk-pixbuf/io-tga.c:1
 msgid "fseek() failed -- premature end-of-file probably encountered"
 msgstr "Błąd przy wywołaniu fseek() - przedwcześnie wystąpił koniec pliku"
-
-#: gdk-pixbuf/io-tga.c:1 gdk-pixbuf/io-tga.c:1 gdk-pixbuf/io-tga.c:1
-#: gdk-pixbuf/io-tga.c:1
-msgid "Insufficient memory to load TGA image"
-msgstr "Brak pamięci na odczytanie pliku TGA"
 
 #: gdk-pixbuf/io-tga.c:1
 msgid "Can't allocate new pixbuf"
@@ -771,11 +765,12 @@ msgstr "Poziome wyrównanie widgetu potomnego"
 
 #: gtk/gtkaspectframe.c:1
 msgid "Ratio"
-msgstr ""
+msgstr "Proporcje"
 
 #: gtk/gtkaspectframe.c:1
 msgid "Aspect ratio if obey_child is FALSE"
 msgstr ""
+"Współczynnik proporcji, używany jeśli \"Decyzja potomka\" ma wartość fałsz"
 
 #: gtk/gtkaspectframe.c:1
 msgid "Obey child"
@@ -891,6 +886,8 @@ msgstr "Użycie typowego"
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
+"Określa, czy należy użyć etykiety do wyboru typowego elementu zamiast jej "
+"wyświetlenia."
 
 #: gtk/gtkbutton.c:1
 msgid "Border relief"
@@ -917,6 +914,8 @@ msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr ""
+"Dodatkowe miejsce na zewnątrz krawędzi przycisku przy przyciskach z "
+"CAN_DEFAULT"
 
 #: gtk/gtkbutton.c:1
 msgid "Child X Displacement"
@@ -946,7 +945,7 @@ msgstr "tryb"
 
 #: gtk/gtkcellrenderer.c:1
 msgid "Editable mode of the CellRenderer"
-msgstr ""
+msgstr "Tryb redagowania obiektu CellRenderer"
 
 #: gtk/gtkcellrenderer.c:1
 msgid "visible"
@@ -1010,7 +1009,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderer.c:1
 msgid "Row has children."
-msgstr ""
+msgstr "Wiersz ma potomka."
 
 #: gtk/gtkcellrenderer.c:1
 msgid "Is Expanded"
@@ -1066,7 +1065,7 @@ msgstr "Atrybuty"
 
 #: gtk/gtkcellrenderertext.c:1
 msgid "A list of style attributes to apply to the text of the renderer."
-msgstr ""
+msgstr "Lista atrybutów stylu stosowana do tekstu elementu renderującego."
 
 #: gtk/gtkcellrenderertext.c:1 gtk/gtktexttag.c:1
 msgid "Background color name"
@@ -1276,7 +1275,7 @@ msgstr "Ustawienie skali czcionki"
 
 #: gtk/gtkcellrenderertext.c:1 gtk/gtktexttag.c:1
 msgid "Whether this tag scales the font size by a factor"
-msgstr ""
+msgstr "Określa, czy ten znacznik ustawia współczynnik skalowania czcionki"
 
 #: gtk/gtkcellrenderertext.c:1 gtk/gtktexttag.c:1
 msgid "Rise set"
@@ -1320,11 +1319,11 @@ msgstr "Określa, czy przycisk przełączany może być uaktywniany"
 
 #: gtk/gtkcellrenderertoggle.c:1
 msgid "Radio state"
-msgstr ""
+msgstr "Stan radiowy"
 
 #: gtk/gtkcellrenderertoggle.c:1
 msgid "Draw the toggle button as a radio button"
-msgstr ""
+msgstr "Powoduje rysowanie przełączanego przycisku jako przycisku radiowego"
 
 #: gtk/gtkcheckbutton.c:1 gtk/gtkoptionmenu.c:1
 msgid "Indicator Size"
@@ -1348,7 +1347,7 @@ msgstr "Aktywny"
 
 #: gtk/gtkcheckmenuitem.c:1
 msgid "Whether the menu item is checked."
-msgstr ""
+msgstr "Określa, czy element menu jest wybrany."
 
 #: gtk/gtkcheckmenuitem.c:1 gtk/gtktogglebutton.c:1
 msgid "Inconsistent"
@@ -1364,6 +1363,9 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
+"Poprzednio wybrany kolor, dla porównania z obecnie wybieranym kolorem. "
+"Możesz przeciągnąć ten kolor na jedną z pozycji palety lub wybrać go "
+"bezpośrednio poprzez przeciągnięcie go nad kolor sąsiedni."
 
 #: gtk/gtkcolorsel.c:1
 msgid ""
@@ -1388,7 +1390,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1
 msgid "Has Opacity Control"
-msgstr "Kontrola nieprzepuszczalności"
+msgstr "Ustawienie nieprzepuszczalności"
 
 #: gtk/gtkcolorsel.c:1
 msgid "Whether the color selector should allow setting opacity"
@@ -1656,7 +1658,7 @@ msgstr "Odstępy pomiędzy przyciskami"
 
 #: gtk/gtkdialog.c:1
 msgid "Action area border"
-msgstr "Krawędź  obszaru operacji"
+msgstr "Krawędź obszaru akcji"
 
 #: gtk/gtkdialog.c:1
 msgid "Width of border around the button area at the bottom of the dialog"
@@ -1712,7 +1714,7 @@ msgstr "Z ramką"
 
 #: gtk/gtkentry.c:1
 msgid "FALSE removes outside bevel from entry."
-msgstr "Określa, czy nie powinien być wyświetlany kant wokół wejścia."
+msgstr "Określa, czy powinien być wyświetlany kant wokół wejścia."
 
 #: gtk/gtkentry.c:1
 msgid "Invisible character"
@@ -1724,13 +1726,15 @@ msgstr "Znak używany przy maskowaniu zawartości wejścia (w trybie hasła)"
 
 #: gtk/gtkentry.c:1
 msgid "Activates default"
-msgstr ""
+msgstr "Uaktywnia domyślny"
 
 #: gtk/gtkentry.c:1
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed."
 msgstr ""
+"Określa, czy przy przyciśnięciu klawisza Enter powinien być uaktywniony "
+"domyślny widget dla okna (np. domyślny przycisk)."
 
 #: gtk/gtkentry.c:1
 msgid "Width in chars"
@@ -1754,15 +1758,17 @@ msgstr "Zawartość wejścia"
 
 #: gtk/gtkentry.c:1
 msgid "Select on focus"
-msgstr ""
+msgstr "Zaznaczanie przy skupieniu"
 
 #: gtk/gtkentry.c:1
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr ""
+"Określa, czy zawartość wejścia powinna być zaznaczana przy otrzymaniu "
+"skupienia."
 
 #: gtk/gtkentry.c:1 gtk/gtklabel.c:1
 msgid "Select All"
-msgstr ""
+msgstr "Zaznacz wszystko"
 
 #: gtk/gtkentry.c:1 gtk/gtklabel.c:1
 msgid "Input Methods"
@@ -1823,10 +1829,10 @@ msgstr "Nie można odczytać folderu: %s"
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
-"availible to this program.\n"
+"available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
-"Plik \"%s\" umieszczony jest na innej maszynie (o nazwie %s) i może być "
+"Plik \"%s\" znajduje się na innej maszynie (o nazwie %s) i może być "
 "niedostępny dla tego programu.\n"
 "Czy na pewno chcesz go wybrać?"
 
@@ -2456,7 +2462,7 @@ msgstr "Typ komunikatu"
 
 #: gtk/gtkmessagedialog.c:1
 msgid "Message Buttons"
-msgstr "Przyciski komunikatu"
+msgstr "Przyciski pod komunikatem"
 
 #: gtk/gtkmessagedialog.c:1
 msgid "The buttons shown in the message dialog"
@@ -2569,6 +2575,8 @@ msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr ""
+"Określa, czy kliknięcie notatnika prawym przyciskiem powinno powodować "
+"wyświetlenie menu z wyborem strony."
 
 #: gtk/gtknotebook.c:1
 msgid "Whether tabs should have homogeneous sizes"
@@ -2606,11 +2614,11 @@ msgstr ""
 
 #: gtk/gtkpaned.c:1
 msgid "Position Set"
-msgstr ""
+msgstr "Ustalenie pozycji"
 
 #: gtk/gtkpaned.c:1
 msgid "TRUE if the Position property should be used"
-msgstr ""
+msgstr "Określa, czy powinna być używana własność \"Position\" (pozycja)."
 
 #: gtk/gtkpaned.c:1
 msgid "Handle Size"
@@ -2839,7 +2847,7 @@ msgstr "Nie można odnaleźć pliku z obrazem na ścieżce: \"%s\""
 #: gtk/gtkrc.c:1
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr ""
+msgstr "Element ścieżki piksmapy: \"%s\" musi być bezwzględne, %s, wiersz %d"
 
 #: gtk/gtkruler.c:1
 msgid "Lower"
@@ -2930,37 +2938,41 @@ msgstr ""
 
 #: gtk/gtkscrollbar.c:1
 msgid "Backward stepper"
-msgstr ""
+msgstr "Krok wstecz"
 
 #: gtk/gtkscrollbar.c:1
 msgid "Display the standard backward arrow button"
-msgstr ""
+msgstr "Wyświetla standardowy przycisk ze strzałką wstecz"
 
 #: gtk/gtkscrollbar.c:1
 msgid "Forward stepper"
-msgstr ""
+msgstr "Krok naprzód"
 
 #: gtk/gtkscrollbar.c:1
 msgid "Display the standard forward arrow button"
-msgstr ""
+msgstr "Wyświetla standardowy przycisk ze strzałką naprzód"
 
 #: gtk/gtkscrollbar.c:1
 msgid "Secondary backward stepper"
-msgstr ""
+msgstr "Dodatkowy krok wstecz"
 
 #: gtk/gtkscrollbar.c:1
 msgid ""
 "Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr ""
+"Wyświetla dodatkowy przycisk ze strzałką wstecz po przeciwnej stronie paska "
+"przewijania"
 
 #: gtk/gtkscrollbar.c:1
 msgid "Secondary forward stepper"
-msgstr ""
+msgstr "Dodatkowy krok naprzód"
 
 #: gtk/gtkscrollbar.c:1
 msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
+"Wyświetla dodatkowy przycisk ze strzałką naprzód po przeciwnej stronie paska "
+"przewijania"
 
 #: gtk/gtkscrolledwindow.c:1 gtk/gtktext.c:1 gtk/gtktreeview.c:1
 msgid "Horizontal Adjustment"
@@ -2988,11 +3000,11 @@ msgstr "Określa, kiedy powinien być wuświetlany pionowy pasek przewijania"
 
 #: gtk/gtkscrolledwindow.c:1
 msgid "Window Placement"
-msgstr ""
+msgstr "Położenie okna"
 
 #: gtk/gtkscrolledwindow.c:1
 msgid "Where the contents are located with respect to the scrollbars"
-msgstr ""
+msgstr "Określa położenie okna potomnego przy uwzględnieniu pasków przewijania"
 
 #: gtk/gtkscrolledwindow.c:1
 msgid "Shadow Type"
@@ -3044,7 +3056,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:1
 msgid "Theme Name"
-msgstr "Nazwa tematu"
+msgstr "Nazwa motywu"
 
 #: gtk/gtksettings.c:1
 msgid "Name of theme RC file to load"
@@ -3100,11 +3112,11 @@ msgstr ""
 
 #: gtk/gtkspinbutton.c:1
 msgid "Climb Rate"
-msgstr ""
+msgstr "Szybkość wzrostu"
 
 #: gtk/gtkspinbutton.c:1
 msgid "The acceleration rate when you hold down a button"
-msgstr ""
+msgstr "Przyśpieszenie wzrostu przy przytrzymaniu przycisku"
 
 #: gtk/gtkspinbutton.c:1
 msgid "The number of decimal places to display"
@@ -3135,6 +3147,8 @@ msgstr "Zawijanie"
 #: gtk/gtkspinbutton.c:1
 msgid "Whether a spin button should wrap upon reaching its limits"
 msgstr ""
+"Określa, czy wartość w wejściu liczbowym powina się zawijać po osiągnięciu "
+"którejś z granic"
 
 #: gtk/gtkspinbutton.c:1
 msgid "Update Policy"
@@ -3144,6 +3158,8 @@ msgstr "Reguła odświeżania"
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
+"Określa, czy wartość w wejściu liczbowym powina być odświeżana zawsze, czy "
+"tylko, gdy jest poprawna."
 
 #: gtk/gtkspinbutton.c:1
 msgid "Value"
@@ -3235,7 +3251,7 @@ msgstr "Znajdź i z_mień"
 
 #: gtk/gtkstock.c:1
 msgid "_Floppy"
-msgstr ""
+msgstr "_Dyskietka"
 
 #: gtk/gtkstock.c:1
 msgid "_Bottom"
@@ -3287,7 +3303,7 @@ msgstr "Pochy_lenie"
 
 #: gtk/gtkstock.c:1
 msgid "_Jump to"
-msgstr ""
+msgstr "Prz_ejdź do"
 
 #: gtk/gtkstock.c:1
 msgid "_Center"
@@ -3771,7 +3787,7 @@ msgstr ""
 
 #: gtk/gtktextutil.c:1
 msgid "ZWS _Zero width space"
-msgstr ""
+msgstr "ZWS - spacja o _zerowej szerokości"
 
 #: gtk/gtktextutil.c:1
 msgid "ZWN Zero width _joiner"
@@ -3828,11 +3844,11 @@ msgstr "--- Brak podpowiedzi ---"
 
 #: gtk/gtktogglebutton.c:1
 msgid "If the toggle button should be pressed in or not"
-msgstr ""
+msgstr "Określa, czy przycisk przełączany powinien być wciśnięty, czy nie."
 
 #: gtk/gtktogglebutton.c:1
 msgid "If the toggle button is in an \"in between\" state."
-msgstr ""
+msgstr "Określa, czy przycisk przełączany jest w stanie \"pośrednim\"."
 
 #: gtk/gtktogglebutton.c:1
 msgid "Draw Indicator"
@@ -3856,15 +3872,16 @@ msgstr "Sposób rysowania paska narzędziowego"
 
 #: gtk/gtktoolbar.c:1
 msgid "Spacer size"
-msgstr ""
+msgstr "Rozmiar elementu rozdzielającego"
 
 #: gtk/gtktoolbar.c:1
 msgid "Size of spacers"
-msgstr ""
+msgstr "Rozmiary elementów rozdzielających"
 
 #: gtk/gtktoolbar.c:1
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr ""
+"Ilość miejsca na krawędzi pomiędzy cieniem paska narzędziowego i przyciskami"
 
 #: gtk/gtktoolbar.c:1
 msgid "Space style"
@@ -3983,11 +4000,11 @@ msgstr ""
 
 #: gtk/gtktreeview.c:1
 msgid "Search Column"
-msgstr ""
+msgstr "Kolumna wyszukiwania"
 
 #: gtk/gtktreeview.c:1
 msgid "Model column to search through when searching through code"
-msgstr ""
+msgstr "Kolumna modelu, używana w trybie wyszukiwania."
 
 #: gtk/gtktreeview.c:1
 msgid "Expander Size"
@@ -4049,7 +4066,7 @@ msgstr "Bieżąca szerokość kolumny"
 
 #: gtk/gtktreeviewcolumn.c:1
 msgid "Sizing"
-msgstr ""
+msgstr "Zmiana rozmiaru"
 
 #: gtk/gtktreeviewcolumn.c:1
 msgid "Resize mode of the column"
@@ -4129,23 +4146,28 @@ msgstr "Porządek sortowania"
 
 #: gtk/gtktreeviewcolumn.c:1
 msgid "Sort direction the sort indicator should indicate"
-msgstr ""
+msgstr "Kierunek, jaki powinien wskazywać wskaźnik uporządkowania"
 
 #: gtk/gtkviewport.c:1
 msgid ""
 "The GtkAdjustment that determines the values of the horizontal position for "
 "this viewport."
 msgstr ""
+"Obiekt GtkAdjustment, określający wartość poziomego położenia wewnątrz tego "
+"obszaru wyświetlania."
 
 #: gtk/gtkviewport.c:1
 msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
 "this viewport."
 msgstr ""
+"Obiekt GtkAdjustment, określający wartość pionowego położenia wewnątrz tego "
+"obszaru wyświetlania."
 
 #: gtk/gtkviewport.c:1
 msgid "Determines how the shadowed box around the viewport is drawn."
 msgstr ""
+"Określa sposób rysowania cieniowanego prostokąta wokół obszaru wyświetlania."
 
 #: gtk/gtkwidget.c:1
 msgid "Widget name"
@@ -4165,23 +4187,27 @@ msgstr "Widget nadrzędny tego widgetu. Musi być kontenerem."
 
 #: gtk/gtkwidget.c:1
 msgid "Width request"
-msgstr ""
+msgstr "Żądanie ustalenia szerokości"
 
 #: gtk/gtkwidget.c:1
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used."
 msgstr ""
+"Zmienia żądanie ustalenia szerokości widgetu, wartość -1 oznacza użycie "
+"naturalnego ustalenia."
 
 #: gtk/gtkwidget.c:1
 msgid "Height request"
-msgstr ""
+msgstr "Żądanie ustalenia wysokości"
 
 #: gtk/gtkwidget.c:1
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used."
 msgstr ""
+"Zmienia żądanie ustalenia wysokości widgetu, wartość -1 oznacza użycie "
+"naturalnego ustalenia."
 
 #: gtk/gtkwidget.c:1
 msgid "Whether the widget is visible"
@@ -4205,31 +4231,31 @@ msgstr "Określa, czy aplikacja będzie rysować bezpośrednio po widgecie."
 
 #: gtk/gtkwidget.c:1
 msgid "Can focus"
-msgstr ""
+msgstr "Przyjmuje skupienie"
 
 #: gtk/gtkwidget.c:1
 msgid "Whether the widget can accept the input focus"
-msgstr ""
+msgstr "Określa, czy widget przyjmuje skupienie wejściowe"
 
 #: gtk/gtkwidget.c:1
 msgid "Has focus"
-msgstr ""
+msgstr "Skupienie"
 
 #: gtk/gtkwidget.c:1
 msgid "Whether the widget has the input focus"
-msgstr ""
+msgstr "Określa, czy na widgecie jest skupienie wejściowe"
 
 #: gtk/gtkwidget.c:1
 msgid "Can default"
-msgstr ""
+msgstr "Może być domyślny"
 
 #: gtk/gtkwidget.c:1
 msgid "Whether the widget can be the default widget"
-msgstr ""
+msgstr "Określa, czy widget może być widgetem domyślnym"
 
 #: gtk/gtkwidget.c:1
 msgid "Has default"
-msgstr ""
+msgstr "Jest domyślny"
 
 #: gtk/gtkwidget.c:1
 msgid "Whether the widget is the default widget"
@@ -4237,11 +4263,12 @@ msgstr "Określa, czy widget jest widgetem domyślnym"
 
 #: gtk/gtkwidget.c:1
 msgid "Receives default"
-msgstr ""
+msgstr "Przyjmuje domyślne"
 
 #: gtk/gtkwidget.c:1
 msgid "If TRUE, the widget will receive the default action when it is focused."
 msgstr ""
+"Określa, czy widget przyjmuje domyślną akcję, jeśli na nim jest skupienie."
 
 #: gtk/gtkwidget.c:1
 msgid "Composite child"
@@ -4259,7 +4286,7 @@ msgstr "Styl"
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)."
-msgstr ""
+msgstr "Styl widgetu, zawierający informacje o jego wyglądzie (kolory, itp.)."
 
 #: gtk/gtkwidget.c:1
 msgid "Events"
@@ -4268,46 +4295,51 @@ msgstr "Zdarzenia"
 #: gtk/gtkwidget.c:1
 msgid "The event mask that decides what kind of GdkEvents this widget gets."
 msgstr ""
+"Maska zdarzeń, określająca, jakie rodzaje zdarzeń otrzymuje ten widget."
 
 #: gtk/gtkwidget.c:1
 msgid "Extension events"
-msgstr ""
+msgstr "Zdarzenia rozszerzeń"
 
 #: gtk/gtkwidget.c:1
 msgid "The mask that decides what kind of extension events this widget gets."
 msgstr ""
+"Maska zdarzeń, określająca, jakie rodzaje zdarzeń rozszerzeń otrzymuje ten "
+"widget."
 
 #: gtk/gtkwidget.c:1
 msgid "Interior Focus"
-msgstr ""
+msgstr "Wewnętrzne skupienie"
 
 #: gtk/gtkwidget.c:1
 msgid "Whether to draw the focus indicator inside widgets."
-msgstr ""
+msgstr "Określa, czy należy rysować wskaźnik skupienie wewnątrz widgetów."
 
 #: gtk/gtkwidget.c:1
 msgid "Focus linewidth"
-msgstr ""
+msgstr "Szerokość linii skupienia"
 
 #: gtk/gtkwidget.c:1
 msgid "Width, in pixels, of the focus indicator line."
-msgstr ""
+msgstr "Szerokość linii wskazującej skupienie, liczona w pikselach."
 
 #: gtk/gtkwidget.c:1
 msgid "Focus line dash pattern"
-msgstr ""
+msgstr "Wzór linii skupienia"
 
 #: gtk/gtkwidget.c:1
 msgid "Dash pattern used to draw the focus indicator."
-msgstr ""
+msgstr "Wzór linii przerywanej używanej przy rysowaniu skupienia."
 
 #: gtk/gtkwidget.c:1
 msgid "Focus padding"
-msgstr ""
+msgstr "Wyściółka skupienia"
 
 #: gtk/gtkwidget.c:1
 msgid "Width, in pixels, between focus indicator and the widget 'box'."
 msgstr ""
+"Szerokość odstępu pomiędzy wskaźnikiem skupienia a prostokątem okalającym "
+"skupienie, liczona w pikselach."
 
 #: gtk/gtkwidget.c:1
 msgid "Cursor color"
@@ -4326,6 +4358,8 @@ msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text."
 msgstr ""
+"Kolor pomocniczego kursora wstawiania, używanego przy redagowaniu tekstu z "
+"przemieszanymi fragmentami RTL i LTR."
 
 #: gtk/gtkwidget.c:1
 msgid "Cursor line aspect ratio"
@@ -4458,7 +4492,7 @@ msgstr "IPA"
 #. ID
 #: modules/input/imthai-broken.c:1
 msgid "Thai (Broken)"
-msgstr ""
+msgstr "Tajska (błędna)"
 
 #. ID
 #: modules/input/imti-er.c:1
@@ -4473,7 +4507,7 @@ msgstr ""
 #. ID
 #: modules/input/imviqr.c:1
 msgid "Vietnamese (VIQR)"
-msgstr ""
+msgstr "Wietnamska ((VIQR)"
 
 #. ID
 #: modules/input/imxim.c:1
