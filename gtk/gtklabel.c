@@ -327,7 +327,7 @@ gtk_label_class_init (GtkLabelClass *class)
                                    g_param_spec_boolean ("wrap",
                                                         _("Line wrap"),
                                                         _("If set, wrap lines if the text becomes too wide."),
-                                                        TRUE,
+                                                        FALSE,
                                                         G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_SELECTABLE,
@@ -579,7 +579,7 @@ gtk_label_init (GtkLabel *label)
   
   label->label = NULL;
 
-  label->jtype = GTK_JUSTIFY_CENTER;
+  label->jtype = GTK_JUSTIFY_LEFT;
   label->wrap = FALSE;
 
   label->use_underline = FALSE;

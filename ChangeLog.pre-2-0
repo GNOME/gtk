@@ -1,3 +1,15 @@
+Mon Nov 19 14:08:18 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_init): Change default for
+	justify to GTK_JUSTIFY_LEFT. Assuming that multiline
+	labels are most often wrapped labels, this gives better
+	compatibility with GTK+-1.2, where justification was
+	ignored for wrapped labesl and is a more sensible
+	default in any case. (#64489)
+
+	* gtk/gtklabel.c (gtk_label_class_init): Fix default
+	for wrap property to FALSE.
+
 2001-11-19  jacob berkman  <jacob@ximian.com>
 
 	* gtk/Makefile.am (gtk_extra_sources): add gtkmarshal.list
