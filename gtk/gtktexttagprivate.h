@@ -51,6 +51,7 @@ struct _GtkTextStyleValues
   gint border_width;
   GtkShadowType relief;
   GtkJustification justify;
+  GtkTextDirection direction;
   
   PangoFontDescription *font_desc;
   
@@ -78,8 +79,7 @@ struct _GtkTextStyleValues
 				 * GTK_WRAPMODE_NONE, GTK_WRAPMODE_WORD
                                  */
 
-  /* hide the text */
-
+  /* hide the text  */
   guint elide : 1;
 
   /* Background is fit to full line height rather than

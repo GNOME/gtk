@@ -1,3 +1,21 @@
+Sun Apr 16 16:13:27 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_get_cursor_locations): Fix index/offset
+	confusion.
+
+	* gtk/gtktextview.c (gtk_text_view_ensure_layout): Set the default direction
+	from the widget direction.
+
+	* gtk/gtktexttag.c gkt/gtktexttagprivate.h (gtk_text_tag_set_arg): 
+	Add a "direction" attribute.
+
+	* gtk/gtktextview.c: global s/tkxt/text_view/.
+
+	* gtk/testtext.c: Added long block of text in Arabic, to test out
+	the direction attributes. (Some problems with the shaping system
+	for arabic become obvious - like the fact the cursor splits words
+	into unjoined pieces.)
+
 Fri Apr 14 12:54:34 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextdisplay.c (render_layout): Add overstrike handling.

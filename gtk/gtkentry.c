@@ -1373,7 +1373,7 @@ gtk_entry_get_cursor_locations (GtkEntry *entry,
 
   gtk_entry_ensure_layout (entry);
   
-  index = unicode_index_to_offset (entry->text, editable->current_pos);
+  index = unicode_offset_to_index (entry->text, editable->current_pos);
   pango_layout_get_cursor_pos (entry->layout, index, &strong_pos, &weak_pos);
 
   if (strong_x)

@@ -79,6 +79,7 @@ enum {
   ARG_EDITABLE,
   ARG_WRAP_MODE,
   ARG_JUSTIFY,
+  ARG_DIRECTION,
   ARG_LEFT_MARGIN,
   ARG_LEFT_WRAPPED_LINE_MARGIN,
   ARG_OVERSTRIKE,
@@ -196,6 +197,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_WRAP_MODE);
   gtk_object_add_arg_type ("GtkTextTag::justify", GTK_TYPE_ENUM,
                            GTK_ARG_READWRITE, ARG_JUSTIFY);
+  gtk_object_add_arg_type ("GtkTextTag::direction", GTK_TYPE_ENUM,
+                           GTK_ARG_READWRITE, ARG_DIRECTION);
   gtk_object_add_arg_type ("GtkTextTag::left_margin", GTK_TYPE_INT,
                            GTK_ARG_READWRITE, ARG_LEFT_MARGIN);
   gtk_object_add_arg_type ("GtkTextTag::left_wrapped_line_margin", GTK_TYPE_INT,
@@ -537,6 +540,10 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       tkxt_tag->justify_set = TRUE;
       tkxt_tag->values->justify = GTK_VALUE_ENUM(*arg);
       size_changed = TRUE;
+      break;
+
+    case ARG_DIRECTION:
+      tkxt_tag->values->direction = GTK_VALUE_ENUM(*arg);
       break;
 
     case ARG_LEFT_MARGIN:
@@ -1238,6 +1245,9 @@ gtk_text_view_style_values_fill_from_tags(GtkTextStyleValues *dest,
       if (tag->justify_set)
         dest->justify = vals->justify;
 
+      if (vals->direction != GTK_TEXT_DIR_NONE)
+        dest->direction = vals->direction;
+      
       if (tag->left_margin_set)
         dest->left_margin = vals->left_margin;
 

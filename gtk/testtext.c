@@ -262,6 +262,15 @@ main(int argc, char** argv)
                      "justify", GTK_JUSTIFY_CENTER,
                      NULL);
 
+      tag = gtk_text_buffer_create_tag(buffer, "rtl_quote");
+      
+      gtk_object_set(GTK_OBJECT(tag),
+                     "direction", GTK_TEXT_DIR_RTL,
+                     "left_wrapped_line_margin", 20,
+                     "left_margin", 20,
+		     "right_margin", 20,
+                     NULL);
+
       tag = gtk_text_buffer_create_tag(buffer, "wrap");
       
       gtk_object_set(GTK_OBJECT(tag),
@@ -336,6 +345,12 @@ main(int argc, char** argv)
 	  
 	  gtk_text_buffer_get_iter_at_mark (buffer, &iter2, "tmp_mark");
 	  gtk_text_buffer_apply_tag (buffer, "centered", &iter2, &iter);
+
+	  gtk_text_buffer_move_mark (buffer, "tmp_mark", &iter);
+	  gtk_text_buffer_insert (buffer, &iter, "Right-to-left Quote\n", -1);
+	  gtk_text_buffer_insert (buffer, &iter, "وقد بدأ ثلاث من أكثر المؤسسات تقدما في شبكة اكسيون برامجها كمنظمات لا تسعى للربح، ثم تحولت في السنوات الخمس الماضية إلى مؤسسات مالية منظمة، وباتت جزءا من النظام المالي في بلدانها، ولكنها تتخصص في خدمة قطاع المشروعات الصغيرة. وأحد أكثر هذه المؤسسات نجاحا هو »بانكوسول« في بوليفيا.\n", -1);
+	  gtk_text_buffer_get_iter_at_mark (buffer, &iter2, "tmp_mark");
+	  gtk_text_buffer_apply_tag (buffer, "rtl_quote", &iter2, &iter);
 	  
           ++i;
         }

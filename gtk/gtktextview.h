@@ -59,6 +59,16 @@ struct _GtkTextView {
 
   gboolean overwrite_mode;
 
+  /* When the cursor is moved vertically onto a line beyond the last
+   * character in the line, virtual_cursor_mark is set to the end
+   * of the line and virtual_cursor_x is set to the previous x
+   * coordinate for the cursor. If the cursor is subsequently placed
+   * moved from that position, the virtual_cursor_x is used instead
+   * of the physical x for the cursor.
+   */
+  GtkTextMark *virtual_cursor_mark;
+  gint virtual_cursor_x;
+
   GtkTextMark *dnd_mark;
   guint blink_timeout;
 };

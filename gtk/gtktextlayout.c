@@ -665,21 +665,19 @@ set_para_values (GtkTextLayout      *layout,
 		 gint               *total_width,
 		 gdouble            *align)
 {
-  PangoAlignment pango_align;
+  PangoAlignment pango_align = PANGO_ALIGN_LEFT;
+  int layout_width;
   
   switch (style->justify)
     {
     case GTK_JUSTIFY_LEFT:
-      pango_align = PANGO_ALIGN_LEFT;
-      *align = 0.0;
+      pango_align = (style->direction == GTK_TEXT_DIR_LTR) ? PANGO_ALIGN_LEFT : PANGO_ALIGN_RIGHT;
       break;
     case GTK_JUSTIFY_RIGHT:
-      pango_align = PANGO_ALIGN_RIGHT;
-      *align = 1.0;
+      pango_align = (style->direction == GTK_TEXT_DIR_LTR) ? PANGO_ALIGN_RIGHT : PANGO_ALIGN_LEFT;
       break;
     case GTK_JUSTIFY_CENTER:
       pango_align = PANGO_ALIGN_CENTER;
-      *align = 0.5;
       break;
     case GTK_JUSTIFY_FILL:
       g_warning ("FIXME we don't support GTK_JUSTIFY_FILL yet");
@@ -689,14 +687,27 @@ set_para_values (GtkTextLayout      *layout,
       break;
     }
 
-  pango_layout_set_alignment (display->layout, *align);
+  switch (pango_align)
+    {
+      case PANGO_ALIGN_LEFT:
+	*align = 0.0;
+	break;
+      case PANGO_ALIGN_RIGHT:
+	*align = 1.0;
+	break;
+      case PANGO_ALIGN_CENTER:
+	*align = 0.5;
+	break;
+    }
+
+  pango_layout_set_alignment (display->layout, pango_align);
   pango_layout_set_spacing (display->layout, style->pixels_inside_wrap * PANGO_SCALE);
 
   display->top_margin = style->pixels_above_lines;
   display->height = style->pixels_above_lines + style->pixels_below_lines;
   display->bottom_margin = style->pixels_below_lines;
 
-  pango_layout_set_indent (display->layout, style->left_wrapped_line_margin - style->left_margin);
+  pango_layout_set_indent (display->layout, style->left_margin - style->left_wrapped_line_margin);
   display->x_offset = MIN (style->left_margin, style->left_wrapped_line_margin);
 
   switch (style->wrap_mode)
@@ -704,11 +715,12 @@ set_para_values (GtkTextLayout      *layout,
     case GTK_WRAPMODE_CHAR:
       /* FIXME: Handle this; for now, fall-through */
     case GTK_WRAPMODE_WORD:
-      *total_width = layout->screen_width;
-      pango_layout_set_width (display->layout, *total_width * PANGO_SCALE);
+      *total_width = -1;
+      layout_width = layout->screen_width - display->x_offset - style->right_margin;
+      pango_layout_set_width (display->layout, layout_width * PANGO_SCALE);
       break;
     case GTK_WRAPMODE_NONE:
-      *total_width = layout->width;
+      *total_width = layout->width - display->x_offset - style->right_margin;
       break;
     }
 

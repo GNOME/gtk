@@ -105,7 +105,7 @@ gtk_text_render_state_update (GtkTextRenderState *state,
 {
   /* If the new_appearance is inside the selection, we actually modify its
    * foreground, background, and stipples accordingly. This is pretty
-   * gross, but we own the appearance attribute, safe, and its simpler than
+   * gross, but since we own the appearance attribute, safe, and it's simpler than
    * the alternatives
    */
   if (new_appearance->inside_selection)
