@@ -1430,88 +1430,79 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
                                                                 c_path,
                                                                 FALSE,
                                                                 FALSE);
+
   if (!path)
     {
-      path = gtk_real_tree_model_filter_convert_child_path_to_path (filter,
-                                                                    c_path,
-                                                                    FALSE,
-                                                                    TRUE);
+      /* fixup the offsets */
+      GtkTreePath *real_path;
 
-      if (!path)
+      if (!filter->priv->root)
+        return;
+
+      level = FILTER_LEVEL (filter->priv->root);
+
+      /* subtract vroot if necessary */
+      if (filter->priv->virtual_root)
         {
-          /* fixup the offsets */
-          GtkTreePath *real_path;
-
-          if (!filter->priv->root)
+          real_path = gtk_tree_model_filter_remove_root (c_path,
+                                                         filter->priv->virtual_root);
+          /* we don't handle this */
+          if (!real_path)
             return;
+        }
+      else
+        real_path = gtk_tree_path_copy (c_path);
 
-          level = FILTER_LEVEL (filter->priv->root);
-
-          /* subtract vroot if necessary */
-          if (filter->priv->virtual_root)
+      i = 0;
+      if (gtk_tree_path_get_depth (real_path) - 1 >= 1)
+        {
+          while (i < gtk_tree_path_get_depth (real_path) - 1)
             {
-              real_path = gtk_tree_model_filter_remove_root (c_path,
-                                                             filter->priv->virtual_root);
-              /* we don't handle this */
-              if (!real_path)
-                return;
-            }
-          else
-            real_path = gtk_tree_path_copy (c_path);
+              gint j;
 
-          i = 0;
-          if (gtk_tree_path_get_depth (real_path) - 1 >= 1)
-            {
-              while (i < gtk_tree_path_get_depth (real_path) - 1)
+              if (!level)
                 {
-                  gint j;
-
-                  if (!level)
-                    {
-                      /* we don't cover this */
-                      gtk_tree_path_free (real_path);
-                      return;
-                    }
-
-                  elt = bsearch_elt_with_offset (level->array,
-                                                 gtk_tree_path_get_indices (real_path)[i],
-                                                 &j);
-
-                  if (!elt || !elt->children)
-                    {
-                      /* parent is filtered out, so no level */
-                      gtk_tree_path_free (real_path);
-                      return;
-                    }
-
-                  level = elt->children;
-                  i++;
+                  /* we don't cover this */
+                  gtk_tree_path_free (real_path);
+                  return;
                 }
+
+              elt = bsearch_elt_with_offset (level->array,
+                                             gtk_tree_path_get_indices (real_path)[i],
+                                             &j);
+
+              if (!elt || !elt->children)
+                {
+                  /* parent is filtered out, so no level */
+                  gtk_tree_path_free (real_path);
+                  return;
+                }
+
+              level = elt->children;
+              i++;
             }
-
-          offset = gtk_tree_path_get_indices (real_path)[gtk_tree_path_get_depth (real_path) - 1];
-          gtk_tree_path_free (real_path);
-
-          if (!level)
-            return;
-
-          /* we need:
-           * - the offset of the removed item
-           * - the level
-           */
-          for (i = 0; i < level->array->len; i++)
-            {
-              elt = &g_array_index (level->array, FilterElt, i);
-              if (elt->offset > offset)
-                elt->offset--;
-              if (elt->children)
-                elt->children->parent_elt = elt;
-            }
-
-          return;
         }
 
-      emit_signal = FALSE;
+      offset = gtk_tree_path_get_indices (real_path)[gtk_tree_path_get_depth (real_path) - 1];
+      gtk_tree_path_free (real_path);
+
+      if (!level)
+        return;
+
+      /* we need:
+       * - the offset of the removed item
+       * - the level
+       */
+      for (i = 0; i < level->array->len; i++)
+        {
+          elt = &g_array_index (level->array, FilterElt, i);
+          if (elt->offset > offset)
+            elt->offset--;
+          if (elt->children)
+            elt->children->parent_elt = elt;
+        }
+
+      return;
     }
 
   gtk_tree_model_get_iter (GTK_TREE_MODEL (data), &iter, path);
