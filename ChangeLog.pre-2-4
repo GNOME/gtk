@@ -1,3 +1,17 @@
+Wed Mar 17 00:44:23 1999  Tim Janik  <timj@gtk.org>
+
+	* configure.in: bumped version number to Gtk+1.2.1, interface 0,
+	binary 1.
+
+	* gtk/gtkfeatures.h.in: added GTK_CHECK_VERSION(major,minor,micro)
+	macro to test for specific gtk versions, e.g.
+	#if GTK_CHECK_VERSION (1,2,1)
+	    gtk_menu_ensure_uline_accel_group (menu);
+	#endif /* Gtk+1.2.1 */
+	this macro will return whether the Gtk+ header files are from version
+	major.minor.micro or _newer_, as opposed to gtk_check_version() which
+	requires an exact match for binary compatibility.
+		
 Tue Mar 16 17:43:33 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkitemfactory.c (gtk_item_factory_parse_rc_string): ensure the
