@@ -1314,7 +1314,7 @@ gtk_color_selection_draw_value_bar (GtkColorSelection *colorsel,
     }
 
   v = 1.0;
-  sv = 1.0 / (gdouble) (heig - 1);
+  sv = 1.0 / (gdouble) MAX (heig - 1, 0);
 
   for (y = 0; y < heig; y++)
     {

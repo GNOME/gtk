@@ -1,3 +1,8 @@
+Tue Aug 17 15:47:07 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_draw_value_bar):
+	guard against division by zero. (Fixes bug #1339)
+
 Tue Aug 17 10:56:49 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_move_{forward,backward}_word): 
@@ -9,19 +14,6 @@ Tue Aug 17 10:28:52 1999  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtkfilesel.c (gtk_file_selection_fileop_error): Propagate
 	modality to error dialog as well as confirmation dialogs.
 	(Bug #1803, reported by Rosanna Wing Sze Yuen)
-
-Thu Aug  5 17:05:39 1999  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/gtkrc.c (gtk_rc_clear_styles): Don't call gtk_rc_init()
-	here since that will the default files to be parsed again.
-	Instead, recreate rc_style_ht upon demand.
-
-	* gtk/gtkrc.c: Fix problem where RC styles that were freed 
-	would be left in realized_style_ht, resulting in
-	lookups that returned stale data.
-
-	* gtk/gtkrc.c (gtk_rc_style_unref): Code style cleanups.
-	Create a GtkRcStylePrivate structure in the GDK style.
 
 Wed Aug 11 13:38:26 BST 1999 Tony Gale  <gale@gtk.org>
 
