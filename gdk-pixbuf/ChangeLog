@@ -1,3 +1,8 @@
+Wed Sep 26 18:08:19 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am (s-enum-types-h): Fix a typo in the include
+	guards. (#61254, Skip Montaro)
+
 2001-09-21  Matthias Clasen  <matthiasc@poet.de>
 
 	* io-xpm.c (xpm_extract_color): Rewritten to handle
