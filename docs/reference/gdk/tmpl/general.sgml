@@ -115,18 +115,21 @@ of g_atexit()).
 
 <!-- ##### FUNCTION gdk_get_program_class ##### -->
 <para>
-
+Gets the program class. Unless the program class has explicitly
+been set with gdk_set_program_class() or with the <option>--class</option> 
+commandline option, the default value is the program name (determined 
+with g_get_prgname()) with the first character converted to uppercase. 
 </para>
 
-@Returns: 
+@Returns: the program class. 
 
 
 <!-- ##### FUNCTION gdk_set_program_class ##### -->
 <para>
-
+Sets the program class.
 </para>
 
-@program_class: 
+@program_class: a string.
 
 
 <!-- ##### FUNCTION gdk_get_display ##### -->

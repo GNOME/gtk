@@ -51,7 +51,8 @@ of strings on the X server.
 
 <!-- ##### MACRO GDK_NONE ##### -->
 <para>
-
+A null value for #GdkAtom, used in a similar way as <literal>None</literal>
+in the Xlib API.
 </para>
 
 

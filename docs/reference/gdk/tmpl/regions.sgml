@@ -291,32 +291,36 @@ or the other of the two sources but not in both.
 
 <!-- ##### STRUCT GdkSpan ##### -->
 <para>
-
+A GdkSpan represents a horizontal line of pixels starting
+at the pixel with coordinates @x, @y and ending before @x + @width, @y.
 </para>
 
-@x: 
-@y: 
-@width: 
+@x: x coordinate of the first pixel.
+@y: y coordinate of the first pixel.
+@width: number of pixels in the span. 
+
 
 <!-- ##### USER_FUNCTION GdkSpanFunc ##### -->
 <para>
-
+This defines the type of the function passed to 
+gdk_region_spans_intersect_foreach(). 
 </para>
 
-@span: 
-@data: 
+@span: a #GdkSpan. 
+@data: the user data passed to gdk_region_spans_intersect_foreach().
 
 
 <!-- ##### FUNCTION gdk_region_spans_intersect_foreach ##### -->
 <para>
-
+Calls a function on each span in the intersection of @region and
+@spans.
 </para>
 
-@region: 
-@spans: 
-@n_spans: 
-@sorted: 
-@function: 
-@data: 
+@region: a #GdkRegion. 
+@spans: an array of #GdkSpans.
+@n_spans: the length of @spans.
+@sorted: %TRUE if @spans is sorted wrt. the y coordinate.
+@function: function to call on each span in the intersection.
+@data: data to pass to @function.
 
 
