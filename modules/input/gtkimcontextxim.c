@@ -20,6 +20,7 @@
 #include "locale.h"
 #include <string.h>
 
+#include "gtk/gtkintl.h"
 #include "gtk/gtklabel.h"
 #include "gtk/gtksignal.h"
 #include "gtk/gtkwindow.h"
@@ -32,6 +33,7 @@ struct _GtkXIMInfo
   GdkDisplay *display;
   XIM im;
   char *locale;
+  gboolean set_style;
   XIMStyle style;
 };
 
@@ -157,19 +159,66 @@ setup_im (GtkXIMInfo *info)
   XIMStyles *xim_styles = NULL;
   XIMValuesList *ic_values = NULL;
   int i;
-  
+  GtkSettings *settings;
+  unsigned long xim_preedit_style = 0;
+  unsigned long xim_status_style = 0;
+  unsigned long user_preference;
+
+  if (info->set_style)
+    {
+      settings = gtk_settings_get_default ();
+
+      if (settings)
+	{
+	  GtkIMPreeditStyle preedit_style;
+	  GtkIMStatusStyle status_style;
+
+	  g_object_get (settings,
+			"gtk-im-status-style", &status_style,
+			"gtk-im-preedit-style", &preedit_style,
+			NULL);
+	  switch (preedit_style)
+	    {
+	    case GTK_IM_PREEDIT_CALLBACK:
+	      xim_preedit_style = XIMPreeditCallbacks;
+	      break;
+	    case GTK_IM_PREEDIT_NOTHING:
+	      xim_preedit_style = XIMPreeditNothing;
+	      break;
+	    }
+	  switch (status_style)
+	    {
+	    case GTK_IM_STATUS_CALLBACK:
+	      xim_status_style = XIMStatusCallbacks;
+	      break;
+	    case GTK_IM_STATUS_NOTHING:
+	      xim_status_style = XIMStatusNothing;
+	      break;
+	    }
+	}
+      info->set_style = FALSE;
+    }
+
   XGetIMValues (info->im,
 		XNQueryInputStyle, &xim_styles,
 		XNQueryICValuesList, &ic_values,
 		NULL);
 
   info->style = 0;
+  user_preference = (xim_status_style | xim_preedit_style);
   if (xim_styles)
     {
       for (i = 0; i < xim_styles->count_styles; i++)
 	if ((xim_styles->supported_styles[i] & ALLOWED_MASK) == xim_styles->supported_styles[i])
-	  info->style = choose_better_style (info->style,
-					     xim_styles->supported_styles[i]);
+	  {
+	    if (user_preference == xim_styles->supported_styles[i])
+	      {
+		info->style = user_preference;
+		break;
+	      }
+	    info->style = choose_better_style (info->style,
+					       xim_styles->supported_styles[i]);
+	  }
     }
 
 
@@ -228,6 +277,7 @@ get_im (GdkDisplay *display,
 	  info->display = display;
 	  info->locale = g_strdup (locale);
 	  info->im = im;
+	  info->set_style = TRUE;
 
 	  setup_im (info);
 	}
@@ -253,6 +303,22 @@ gtk_im_context_xim_class_init (GtkIMContextXIMClass *class)
   im_context_class->set_cursor_location = gtk_im_context_xim_set_cursor_location;
   im_context_class->set_use_preedit = gtk_im_context_xim_set_use_preedit;
   gobject_class->finalize = gtk_im_context_xim_finalize;
+
+  gtk_settings_install_property (g_param_spec_enum ("gtk-im-preedit-style",
+                                                    _("IM Preedit style"),
+                                                    _("How to draw the input method preedit string"),
+                                                    GTK_TYPE_IM_PREEDIT_STYLE,
+                                                    GTK_IM_PREEDIT_CALLBACK,
+                                                    G_PARAM_READWRITE));
+
+  gtk_settings_install_property (g_param_spec_enum ("gtk-im-status-style",
+                                                    _("IM Status style"),
+                                                    _("How to draw the input method statusbar"),
+                                                    GTK_TYPE_IM_STATUS_STYLE,
+                                                    GTK_IM_STATUS_CALLBACK,
+                                                    G_PARAM_READWRITE));
+
+
 }
 
 static void

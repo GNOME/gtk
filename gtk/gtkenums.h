@@ -425,6 +425,19 @@ typedef enum
   GTK_SORT_DESCENDING
 } GtkSortType;
 
+/* Style for gtk input method preeeit/status */
+typedef enum
+{
+  GTK_IM_PREEDIT_NOTHING,
+  GTK_IM_PREEDIT_CALLBACK
+} GtkIMPreeditStyle;
+
+typedef enum
+{
+  GTK_IM_STATUS_NOTHING,
+  GTK_IM_STATUS_CALLBACK
+} GtkIMStatusStyle;
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

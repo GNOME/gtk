@@ -2204,6 +2204,8 @@ static struct
   { "Gtk/KeyThemeName", "gtk-key-theme-name" },
   { "Gtk/ToolbarStyle", "gtk-toolbar-style" },
   { "Gtk/ToolbarIconSize", "gtk-toolbar-icon-size" },
+  { "Gtk/IMPreeditStyle", "gtk-im-preedit-style" },
+  { "Gtk/IMStatusStyle", "gtk-im-status-style" },
   { "Net/CursorBlink", "gtk-cursor-blink" },
   { "Net/CursorBlinkTime", "gtk-cursor-blink-time" },
   { "Net/ThemeName", "gtk-theme-name" }

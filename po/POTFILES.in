@@ -98,3 +98,4 @@ modules/input/imti-er.c
 modules/input/imti-et.c
 modules/input/imviqr.c
 modules/input/imxim.c
+modules/input/gtkimcontextxim.c

@@ -1,3 +1,24 @@
+Tue Sep 24 15:35:42 2002  HideToshi Tajima  <hidetoshi.tajima@sun.com>
+
+	disable/enable preedit/status in GtkIMContextXIM (#59076)
+	
+	* gtk/gtkenums.h (enum): added preedit/status styles for gtk+
+	input method
+	* modules/input/gtkimcontextxim.c
+	* gdk/x11/gdkevents-x11.c: add gtk-im-preedit-style and
+	gtk-im-status-style to GtkSettings.
+	* po/POTFILES.in: added modules/input/gtkimcontextxim.c
+
+	With the other patch for gnome-control-center,
+	the preedit and status styles of GTK+ input method are
+	configurable with associated gconf schemas keys:
+	"/desktop/gnome/interface/gtk-im-preedit-style"
+	"/desktop/gnome/interface/gtk-im-status-style"
+
+	Both are set to "callback" by default, and platform's 
+	packging can have different default by changing
+	libgnome's desktop_gnome_interface.schemas.
+
 2002-09-25  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkvisual-x11.c (gdkx_visual_get): Replace leftover 
