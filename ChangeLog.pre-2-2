@@ -1,3 +1,16 @@
+Fri Mar 19 16:45:27 PST 1999 Manish Singh <yosh@gimp.org>
+
+        * acinclude.m4
+        * config.guess
+        * config.sub
+        * ltconfig
+        * ltmain.sh: upgrade to libtool 1.2f
+
+        * autogen.sh: libtool is not required to autogen gtk+
+
+        * acconfig.h: remove WITH_SYMBOL_UNDERSCORE (not explictly
+        needed)
+
 Fri Mar 19 00:00:22 1999  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c (gtk_clist_column_title_passive)
