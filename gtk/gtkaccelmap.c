@@ -43,6 +43,7 @@ typedef struct {
   guint	       std_accel_key;
   guint	       std_accel_mods;
   guint        changed : 1;
+  guint        locked  : 1;
   GSList      *groups;
 } AccelEntry;
 
@@ -160,6 +161,7 @@ gtk_accel_map_add_entry (const gchar    *accel_path,
       entry->accel_key = accel_key;
       entry->accel_mods = accel_mods;
       entry->changed = FALSE;
+      entry->locked = FALSE;
       g_hash_table_insert (accel_entry_ht, entry, entry);
     }
 }
@@ -240,6 +242,7 @@ internal_change_entry (const gchar    *accel_path,
 	  entry->accel_key = accel_key;
 	  entry->accel_mods = accel_mods;
 	  entry->changed = TRUE;
+	  entry->locked = FALSE;
 	}
       return TRUE;
     }
@@ -251,6 +254,9 @@ internal_change_entry (const gchar    *accel_path,
 	entry->changed = TRUE;
       return simulate ? TRUE : FALSE;
     }
+  
+  if (entry->locked)
+    return FALSE;
 
   /* nobody's interested, easy going */
   if (!entry->groups)
@@ -824,4 +830,58 @@ _gtk_accel_map_remove_group (const gchar   *accel_path,
   g_return_if_fail (g_slist_find (entry->groups, accel_group));
 
   entry->groups = g_slist_remove (entry->groups, accel_group);
+}
+
+
+/**
+ * gtk_accel_map_lock_path:
+ * @accel_path: a valid accelerator path
+ * 
+ * Locks the given accelerator path.
+ *
+ * Locking an accelerator path prevents its accelerator to be changed 
+ * during runtime. A locked accelerator path can be unlocked by 
+ * gtk_accel_map_unlock_path(). Refer to gtk_accel_map_change_entry() 
+ * about runtime accelerator changes.
+ *
+ * Note that locking of individual accelerator paths is independent from 
+ * locking the #GtkAccelGroup containing them. For runtime accelerator
+ * changes to be possible both the accelerator path and its #GtkAccelGroup
+ * have to be unlocked. 
+ *
+ * Since: 2.4
+ **/
+void 
+gtk_accel_map_lock_path (const gchar *accel_path)
+{
+  AccelEntry *entry;
+
+  g_return_if_fail (_gtk_accel_path_is_valid (accel_path));
+
+  entry = accel_path_lookup (accel_path);
+  
+  if (entry)
+    entry->locked = TRUE;
+}
+
+/**
+ * gtk_accel_map_unlock_path:
+ * @accel_path: a valid accelerator path
+ * 
+ * Unlocks the given accelerator path. Refer to gtk_accel_map_lock_path()
+ * about accelerator path locking.
+ *
+ * Since: 2.4
+ **/
+void 
+gtk_accel_map_unlock_path (const gchar *accel_path)
+{
+  AccelEntry *entry;
+
+  g_return_if_fail (_gtk_accel_path_is_valid (accel_path));
+
+  entry = accel_path_lookup (accel_path);
+  
+  if (entry)
+    entry->locked = FALSE;  
 }

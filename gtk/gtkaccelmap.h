@@ -51,6 +51,8 @@ void	   gtk_accel_map_load_fd	(gint			 fd);
 void	   gtk_accel_map_load_scanner	(GScanner		*scanner);
 void	   gtk_accel_map_save_fd	(gint			 fd);
 
+void       gtk_accel_map_lock_path      (const gchar            *accel_path);
+void       gtk_accel_map_unlock_path    (const gchar            *accel_path);
 
 /* --- filter functions --- */
 void	gtk_accel_map_add_filter	 (const gchar		*filter_pattern);

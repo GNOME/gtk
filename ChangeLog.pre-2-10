@@ -1,3 +1,9 @@
+Mon Dec 29 01:36:22 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkaccelmap.[hc]: (gtk_accel_map_lock_path, 
+	gtk_accel_map_unlock_path): Add a way to lock individual accelerator
+	paths.  (#73207, reported by Havoc Pennington)
+
 Sat Dec 27 23:17:56 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c (slide_idle_handler): use CHILD_VISIBLE
