@@ -215,55 +215,17 @@ pixbuf_module_symbol (GModule *module, const char *module_name, const char *symb
 
 #ifdef G_OS_WIN32
 
-/* What would be the right place for this function? Also
- * gtk needs this function (to find the gtkrc and themes).
- * But it seems stupid for the gdk-pixbuf DLL to depend
- * on the gtk DLL. Should it be in the gdk DLL? Or should we
- * have a small static library at the top gtk+ level?
- */
-
-static gchar *
-gtk_win32_get_installation_directory (void)
-{
-  static gboolean been_here = FALSE;
-  static gchar gtk_installation_dir[200];
-  gchar win_dir[100];
-  HKEY reg_key = NULL;
-  DWORD type;
-  DWORD nbytes = sizeof (gtk_installation_dir);
-
-  if (been_here)
-    return gtk_installation_dir;
-
-  been_here = TRUE;
-
-  if (RegOpenKeyEx (HKEY_LOCAL_MACHINE, "Software\\GNU\\GTk+", 0,
-		    KEY_QUERY_VALUE, &reg_key) != ERROR_SUCCESS
-      || RegQueryValueEx (reg_key, "InstallationDirectory", 0,
-			  &type, gtk_installation_dir, &nbytes) != ERROR_SUCCESS
-      || type != REG_SZ)
-    {
-      /* Uh oh. Use hard-coded %WinDir%\gtk+ value */
-      GetWindowsDirectory (win_dir, sizeof (win_dir));
-      sprintf (gtk_installation_dir, "%s\\gtk+", win_dir);
-    }
-
-  if (reg_key != NULL)
-    RegCloseKey (reg_key);
-
-  return gtk_installation_dir;
-}
-
 static char *
 get_libdir (void)
 {
   static char *libdir = NULL;
 
   if (libdir == NULL)
-    libdir = g_strdup_printf (gtk_win32_get_installation_directory (),
-			      G_DIR_SEPARATOR_S,
-			      "loaders",
-			      NULL);
+    libdir = g_win32_get_package_installation_subdirectory
+      (GETTEXT_PACKAGE,
+       g_strdup_printf ("gdk_pixbug-%d.%d.dll",
+			GDK_PIXBUF_MAJOR, GDK_PIXBUF_MINOR),
+       "loaders");
 
   return libdir;
 }

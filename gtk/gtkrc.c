@@ -51,6 +51,7 @@
 #include <glib.h>
 #include "gdkconfig.h"
 
+#include "gtkcompat.h"
 #include "gtkrc.h"
 #include "gtkbindings.h"
 #include "gtkthemes.h"
@@ -58,7 +59,6 @@
 #include "gtkiconfactory.h"
 
 #ifdef G_OS_WIN32
-#include <windows.h>		/* For GetWindowsDirectory */
 #include <io.h>
 #endif
 
@@ -268,45 +268,23 @@ static GtkImageLoader image_loader = NULL;
 
 #ifdef G_OS_WIN32
 
-gchar *
-gtk_win32_get_installation_directory (void)
+static gchar *
+get_gtk_dll_name (void)
 {
-  static gboolean been_here = FALSE;
-  static gchar gtk_installation_dir[200];
-  gchar win_dir[100];
-  HKEY reg_key = NULL;
-  DWORD type;
-  DWORD nbytes = sizeof (gtk_installation_dir);
+  static gchar *gtk_dll = NULL;
 
-  if (been_here)
-    return gtk_installation_dir;
+  if (!gtk_dll)
+    gtk_dll = g_strdup_printf ("gtk-%d.%d.dll", GTK_MAJOR_VERSION, GTK_MINOR_VERSION);
 
-  been_here = TRUE;
-
-  if (RegOpenKeyEx (HKEY_LOCAL_MACHINE, "Software\\GNU\\GTk+", 0,
-		    KEY_QUERY_VALUE, &reg_key) != ERROR_SUCCESS
-      || RegQueryValueEx (reg_key, "InstallationDirectory", 0,
-			  &type, gtk_installation_dir, &nbytes) != ERROR_SUCCESS
-      || type != REG_SZ)
-    {
-      /* Uh oh. Use the old hard-coded %WinDir%\GTk+ value */
-      GetWindowsDirectory (win_dir, sizeof (win_dir));
-      sprintf (gtk_installation_dir, "%s\\gtk+", win_dir);
-    }
-
-  if (reg_key != NULL)
-    RegCloseKey (reg_key);
-
-  return gtk_installation_dir;
+  return gtk_dll;
 }
 
 static gchar *
 get_themes_directory (void)
 {
-  static gchar themes_dir[200];
-
-  sprintf (themes_dir, "%s\\themes", gtk_win32_get_installation_directory ());
-  return themes_dir;
+  return g_win32_get_package_installation_subdirectory (GETTEXT_PACKAGE,
+							get_gtk_dll_name (),
+							"themes");
 }
 
 #endif
@@ -358,7 +336,7 @@ gtk_rc_get_im_module_file (void)
 #ifndef G_OS_WIN32
 	result = g_strdup (GTK_SYSCONFDIR G_DIR_SEPARATOR_S "gtk-2.0" G_DIR_SEPARATOR_S "gtk.immodules");
 #else
-	result = g_strdup_printf ("%s\\gtk.immodules", gtk_win32_get_installation_directory ());
+	result = g_strdup_printf ("%s\\gtk.immodules", g_win32_get_package_installation_directory (GETTEXT_PACKAGE, get_gtk_dll_name ()));
 #endif
     }
 
@@ -462,7 +440,7 @@ gtk_rc_add_initial_default_files (void)
 #ifndef G_OS_WIN32
       str = g_strdup (GTK_SYSCONFDIR G_DIR_SEPARATOR_S "gtk-2.0" G_DIR_SEPARATOR_S "gtkrc");
 #else
-      str = g_strdup_printf ("%s\\gtkrc", gtk_win32_get_installation_directory ());
+      str = g_strdup_printf ("%s\\gtkrc", g_win32_get_package_installation_directory (GETTEXT_PACKAGE, get_gtk_dll_name ()));
 #endif
 
       gtk_rc_add_default_file (str);

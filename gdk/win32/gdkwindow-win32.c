@@ -816,13 +816,24 @@ gdk_window_show (GdkWindow *window)
 	}
       else
 	{
-	  ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
-	  ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
-	  SetForegroundWindow (GDK_WINDOW_HWND (window));
-	  BringWindowToTop (GDK_WINDOW_HWND (window));
+          if (GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE) & WS_EX_TRANSPARENT)
+	    {
+	      SetWindowPos(GDK_WINDOW_HWND (window), HWND_TOP, 0, 0, 0, 0,
+			   SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOMOVE | SWP_NOSIZE);
+	    }
+          else
+            {
+	      GdkWindow *parent = private->parent;
+
+	      ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
+	      ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
+              if (parent == gdk_parent_root)
+                SetForegroundWindow (GDK_WINDOW_HWND (window));
+	      BringWindowToTop (GDK_WINDOW_HWND (window));
 #if 0
-	  ShowOwnedPopups (GDK_WINDOW_HWND (window), TRUE);
+	      ShowOwnedPopups (GDK_WINDOW_HWND (window), TRUE);
 #endif
+	    }
 	}
     }
 }
@@ -844,7 +855,15 @@ gdk_window_hide (GdkWindow *window)
       if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL)
 	ShowOwnedPopups (GDK_WINDOW_HWND (window), FALSE);
 
-      ShowWindow (GDK_WINDOW_HWND (window), SW_HIDE);
+      if (GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE) & WS_EX_TRANSPARENT)
+	{
+	  SetWindowPos(GDK_WINDOW_HWND (window), HWND_BOTTOM, 0, 0, 0, 0,
+		       SWP_HIDEWINDOW | SWP_NOREDRAW | SWP_NOZORDER | SWP_NOMOVE | SWP_NOSIZE);
+	}
+      else
+	{
+	  ShowWindow (GDK_WINDOW_HWND (window), SW_HIDE);
+	}
     }
 }
 

@@ -1,3 +1,9 @@
+2001-01-18  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk-pixbuf-io.c (get_libdir): (Win32) Use the new
+	g_win32_get_package_installation_subdirectory() function.
+	(gtk_win32_get_installation_directory): Remove this then.
+
 2001-01-01  Havoc Pennington  <hp@redhat.com>
 
 	* Makefile.am (libgdk_pixbuf_1_3_la_LDFLAGS): add

@@ -1142,6 +1142,7 @@ AC_PATH_PROG(SGML2HTML, sgml2html, no)
 AM_CONDITIONAL(HAVE_SGML2HTML, ! test x$SGML2HTML = xno)
 
 AC_OUTPUT([
+config.h.win32
 gtk+.spec
 docs/gtk-config.1
 Makefile

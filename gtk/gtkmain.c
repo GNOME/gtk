@@ -406,12 +406,10 @@ gtk_init_check (int	 *argc,
 #    endif
 #  else /* !G_OS_WIN32 */
   {
-    /* GTk+ locale dir is %WinDir%\gtk+\locale */
     bindtextdomain (GETTEXT_PACKAGE,
-		    g_strconcat (gtk_win32_get_installation_directory (),
-				 G_DIR_SEPARATOR_S,
-				 "locale",
-				 NULL));
+		    g_win32_get_package_installation_subdirectory (GETTEXT_PACKAGE,
+								   g_strdup_printf ("gtk-%d.%d.dll", GTK_MAJOR_VERSION, GTK_MINOR_VERSION),
+								   "locale"));
   }
 #endif
 #endif  

@@ -1,4 +1,4 @@
-/* config.h.win32.  Handcrafted for Microsoft C and gcc -mno-cygwin */
+/* config.h.win32.  Handcrafted for Microsoft C or mingw */
 
 #if ! (defined(_MSC_VER) || defined(__GNUC__))
 #error Unrecognized Win32 compiler, edit config.h.win32 by hand
@@ -198,4 +198,4 @@
 
 /* #undef HAVE_SIGSETJMP */
 
-#define GETTEXT_PACKAGE "gtk20"
+#define GETTEXT_PACKAGE "@GETTEXT_PACKAGE@"

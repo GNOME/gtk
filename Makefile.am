@@ -19,6 +19,7 @@ EXTRA_DIST =			\
 	README.cvs-commits	\
 	README.win32		\
 	README.nanox		\
+	config.h.win32		\
 	intl/libgettext.h	\
 	intl/po2tbl.sed.in	\
 	po/README.tools		\

@@ -1,3 +1,19 @@
+2001-01-18  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkmain.c
+	* gtk/gtkrc.c: (Win32) Use the new
+	g_win32_get_package_installation_(sub)directory() functions.
+
+	* config.h.win32.in: New file.
+	
+	* config.h.win32: Removed.
+
+	* configure.in: Output config.h.win32.
+
+	* Makefile.am: Add it to EXTRA_DIST.
+
+	* gtk/gtk.def: Update.
+
 Wed Jan 17 16:22:54 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_size_request): Set the
@@ -81,7 +97,12 @@ Mon Jan  8 11:58:05 2001  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtkdnd.c (gtk_drag_update):
 	Free info->last_event if gdk_drag_motion returned FALSE.
 
->>>>>>> 1.1676
+2001-01-16  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_show, gdk_window_hide):
+	Eliminate redraws when input-only windows are shown or
+	hidden. Thanks to jpe@archaeopteryx.com.
+
 Tue Jan 16 13:13:13 GMT 2001  Tony Gale <gale@gtk.org>
 
 	* docs/faq/gtk-faq.sgml: FAQ update:

@@ -1555,7 +1555,6 @@ EXPORTS
 	gtk_widget_unparent
 	gtk_widget_unrealize
 	gtk_widget_unref
-	gtk_win32_get_installation_directory
 	gtk_window_activate_default
 	gtk_window_activate_focus
 	gtk_window_add_accel_group
