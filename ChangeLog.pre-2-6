@@ -2,7 +2,7 @@ Mon Sep 23 18:53:35 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkprogressbar.c (gtk_progress_bar_set_text): 
 	Restore back to the default format instead of an
-	empty format.
+	empty format. (#82626, Tim Janik)
 
 	* gtk/gtkprogress.c (gtk_progress_set_format_string): 
 	Make NULL restore back to the default format.
