@@ -786,22 +786,22 @@ Deprecated alias for gtk_window_set_position().
 
 <!-- ##### ARG GtkWindow:type ##### -->
 <para>
-The type of the window.
+
 </para>
 
 <!-- ##### ARG GtkWindow:title ##### -->
 <para>
-The title of the window.
+
 </para>
 
 <!-- ##### ARG GtkWindow:allow-shrink ##### -->
 <para>
-If the window can be resized to a smaller size by the user.
+
 </para>
 
 <!-- ##### ARG GtkWindow:allow-grow ##### -->
 <para>
-If the window can be resized to a larger size by the user.
+
 </para>
 
 <!-- ##### ARG GtkWindow:resizable ##### -->
@@ -811,12 +811,12 @@ If the window can be resized to a larger size by the user.
 
 <!-- ##### ARG GtkWindow:modal ##### -->
 <para>
-If the window is modal, i.e. it grabs all GTK+ events.
+
 </para>
 
 <!-- ##### ARG GtkWindow:window-position ##### -->
 <para>
-The position of the window.
+
 </para>
 
 <!-- ##### ARG GtkWindow:default-width ##### -->

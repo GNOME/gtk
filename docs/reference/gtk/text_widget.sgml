@@ -157,7 +157,7 @@ You can change the default attributes for a given
 <link linkend="GtkTextView">GtkTextView</link>, and you can 
 apply tags that change the attributes for a region of text.
 For text features that come from the theme &mdash; such as 
-font and foreground color &mdash use standard 
+font and foreground color &mdash; use standard 
 <link linkend="GtkWidget">GtkWidget</link>
 functions such as 
 <link linkend="gtk-widget-modify-font">gtk_widget_modify_font()</link>

@@ -1,28 +1,29 @@
-<!doctype book PUBLIC "-//Davenport//DTD DocBook V3.0//EN"[
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY gdk-pixbuf-gdk-pixbuf SYSTEM "xml/gdk-pixbuf.xml">
+<!ENTITY gdk-pixbuf-refcounting SYSTEM "xml/refcounting.xml">
+<!ENTITY gdk-pixbuf-file-loading SYSTEM "xml/file-loading.xml">
+<!ENTITY gdk-pixbuf-file-saving SYSTEM "xml/file-saving.xml">
+<!ENTITY gdk-pixbuf-creating SYSTEM "xml/creating.xml">
+<!ENTITY gdk-pixbuf-inline SYSTEM "xml/inline.xml">
+<!ENTITY gdk-pixbuf-scaling SYSTEM "xml/scaling.xml">
+<!ENTITY gdk-pixbuf-rendering SYSTEM "gdk-pixbuf-rendering.sgml">
+<!ENTITY gdk-pixbuf-from-drawables SYSTEM "gdk-pixbuf-from-drawables.sgml">
+<!ENTITY gdk-pixbuf-util SYSTEM "xml/util.xml">
+<!ENTITY gdk-pixbuf-animation SYSTEM "xml/animation.xml">
+<!ENTITY GdkPixbufLoader SYSTEM "xml/gdk-pixbuf-loader.xml">
+<!ENTITY module-interface SYSTEM "xml/module_interface.xml">
+<!ENTITY initialization-versions SYSTEM "xml/initialization_versions.xml">
+<!ENTITY gdk-pixbuf-gdk-pixbuf-xlib-init SYSTEM "xml/gdk-pixbuf-xlib-init.xml">
+<!ENTITY gdk-pixbuf-gdk-pixbuf-xlib-rendering SYSTEM "xml/gdk-pixbuf-xlib-rendering.xml">
+<!ENTITY gdk-pixbuf-gdk-pixbuf-xlib-from-drawables SYSTEM "xml/gdk-pixbuf-xlib-from-drawables.xml">
+<!ENTITY gdk-pixbuf-gdk-pixbuf-xlib-rgb SYSTEM "xml/gdk-pixbuf-xlib-rgb.xml">
 
-<!entity gdk-pixbuf-gdk-pixbuf SYSTEM "sgml/gdk-pixbuf.sgml">
-<!entity gdk-pixbuf-refcounting SYSTEM "sgml/refcounting.sgml">
-<!entity gdk-pixbuf-file-loading SYSTEM "sgml/file-loading.sgml">
-<!entity gdk-pixbuf-file-saving SYSTEM "sgml/file-saving.sgml">
-<!entity gdk-pixbuf-creating SYSTEM "sgml/creating.sgml">
-<!entity gdk-pixbuf-inline SYSTEM "sgml/inline.sgml">
-<!entity gdk-pixbuf-scaling SYSTEM "sgml/scaling.sgml">
-<!entity gdk-pixbuf-rendering SYSTEM "gdk-pixbuf-rendering.sgml">
-<!entity gdk-pixbuf-from-drawables SYSTEM "gdk-pixbuf-from-drawables.sgml">
-<!entity gdk-pixbuf-util SYSTEM "sgml/util.sgml">
-<!entity gdk-pixbuf-animation SYSTEM "sgml/animation.sgml">
-<!entity GdkPixbufLoader SYSTEM "sgml/gdk-pixbuf-loader.sgml">
-<!entity module-interface SYSTEM "sgml/module_interface.sgml">
-<!entity initialization-versions SYSTEM "sgml/initialization_versions.sgml">
-<!entity gdk-pixbuf-gdk-pixbuf-xlib-init SYSTEM "sgml/gdk-pixbuf-xlib-init.sgml">
-<!entity gdk-pixbuf-gdk-pixbuf-xlib-rendering SYSTEM "sgml/gdk-pixbuf-xlib-rendering.sgml">
-<!entity gdk-pixbuf-gdk-pixbuf-xlib-from-drawables SYSTEM "sgml/gdk-pixbuf-xlib-from-drawables.sgml">
-<!entity gdk-pixbuf-gdk-pixbuf-xlib-rgb SYSTEM "sgml/gdk-pixbuf-xlib-rgb.sgml">
+<!ENTITY Porting-From-Imlib SYSTEM "porting-from-imlib.sgml">
 
-<!entity Porting-From-Imlib SYSTEM "porting-from-imlib.sgml">
-
-<!entity gdk-pixbuf "<application>gdk-pixbuf</application>">
-<!entity Imlib "<application>Imlib</application>">
+<!ENTITY gdk-pixbuf "<application>gdk-pixbuf</application>">
+<!ENTITY Imlib "<application>Imlib</application>">
 ]>
 
 <book id="index">

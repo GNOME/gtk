@@ -64,9 +64,9 @@ guint
 pixel_from_rgb (GdkVisual *visual,
                 guchar r, guchar b, guchar g)
 {
-  return ((r >> (16 - visual->red_prec))   << visual->red_shift) |
-         ((g >> (16 - visual->green_prec)) << visual->green_shift) |
-         ((r >> (16 - visual->blue_prec))  << visual->blue_shift);
+  return ((r &gt;&gt; (16 - visual-&gt;red_prec))   &lt;&lt; visual-&gt;red_shift) |
+         ((g &gt;&gt; (16 - visual-&gt;green_prec)) &lt;&lt; visual-&gt;green_shift) |
+         ((r &gt;&gt; (16 - visual-&gt;blue_prec))  &lt;&lt; visual-&gt;blue_shift);
 }
 </programlisting>
 </example>
@@ -93,7 +93,7 @@ pixel_from_rgb (GdkVisual *visual,
     <structfield>red_mask</structfield> is a contiguous sequence
     of <structfield>red_prec</structfield> bits starting at bit
     number <structfield>red_shift</structfield>. For example,
-    <xref linkend="rgbmask"> shows constructing a pixel value
+    <xref linkend="rgbmask"/> shows constructing a pixel value
     out of three 16 bit color values.
 @red_prec: See above.
 @green_mask: A mask giving the bits in a pixel value that

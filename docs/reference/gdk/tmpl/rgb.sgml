@@ -37,10 +37,10 @@ in cases where a "better" visual than the default is available.
 <example>
 <title>A simple example program using GdkRGB.</title>
 <programlisting>
-#include &lt;gtk/gtk.h&gt;
+&hash;include &lt;gtk/gtk.h&gt;
 
-#define IMAGE_WIDTH	256
-#define IMAGE_HEIGHT	256
+&hash;define IMAGE_WIDTH	256
+&hash;define IMAGE_HEIGHT	256
 
 guchar rgbbuf[IMAGE_WIDTH * IMAGE_HEIGHT * 3];
 
@@ -67,9 +67,9 @@ main (int argc, char *argv[])
 
   /* Set up the RGB buffer. */
   pos = rgbbuf;
-  for (y = 0; y < IMAGE_HEIGHT; y++)
+  for (y = 0; y &lt; IMAGE_HEIGHT; y++)
     {
-      for (x = 0; x < IMAGE_WIDTH; x++)
+      for (x = 0; x &lt; IMAGE_WIDTH; x++)
 	{
 	  *pos++ = x - x % 32;			/* Red. */
 	  *pos++ = (x / 32) * 4 + y - y % 32;	/* Green. */

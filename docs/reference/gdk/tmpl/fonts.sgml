@@ -30,8 +30,8 @@ full description:
 <para>
 The fields in the XLFD are:
 
-<informaltable pgwide=1 frame="none">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<informaltable pgwide="1" frame="none">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
 <tbody>
 
 <row>

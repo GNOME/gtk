@@ -356,14 +356,12 @@ use gtk_editable_set_editable() instead.
 
 <!-- ##### ARG GtkEntry:max-length ##### -->
 <para>
-Determines the maximum allowed length of the contents
-of the widget. See gtk_entry_set_max_length().
+
 </para>
 
 <!-- ##### ARG GtkEntry:visibility ##### -->
 <para>
-Determines whether the contents of the entry widget
-are visible or not. See gtk_entry_set_visibility().
+
 </para>
 
 <!-- ##### ARG GtkEntry:has-frame ##### -->

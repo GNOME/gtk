@@ -107,8 +107,8 @@ and should only be modified using the functions below.
 <!-- ##### ENUM GtkSpinButtonUpdatePolicy ##### -->
 <para>
 
-<informaltable pgwide=1 frame="none" role="enum">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<informaltable pgwide="1" frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
 <tbody>
 <row>
 <entry>GTK_UPDATE_ALWAYS</entry>
@@ -127,8 +127,8 @@ and should only be modified using the functions below.
 <!-- ##### ENUM GtkSpinType ##### -->
 <para>
 
-<informaltable pgwide=1 frame="none" role="struct">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<informaltable pgwide="1" frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
 <tbody>
 <row>
 <entry>GTK_SPIN_STEP_FORWARD, 
@@ -435,42 +435,42 @@ use gtk_spin_button_get_value() instead.
 
 <!-- ##### ARG GtkSpinButton:adjustment ##### -->
 <para>
-the #GtkAdjustment that defines a spin button's main properties.
+
 </para>
 
 <!-- ##### ARG GtkSpinButton:climb-rate ##### -->
 <para>
-the amount a spin button changes when an arrow is clicked.
+
 </para>
 
 <!-- ##### ARG GtkSpinButton:digits ##### -->
 <para>
-the number of decimal places to display.
+
 </para>
 
 <!-- ##### ARG GtkSpinButton:snap-to-ticks ##### -->
 <para>
-whether erroneous values are automatically changed to a spin button's nearest step increment.
+
 </para>
 
 <!-- ##### ARG GtkSpinButton:numeric ##### -->
 <para>
-whether non-numeric characters should be ignored.
+
 </para>
 
 <!-- ##### ARG GtkSpinButton:wrap ##### -->
 <para>
-whether a spin button should wrap upon reaching its limits.
+
 </para>
 
 <!-- ##### ARG GtkSpinButton:update-policy ##### -->
 <para>
-how a spin button should be updated.
+
 </para>
 
 <!-- ##### ARG GtkSpinButton:value ##### -->
 <para>
-reads the current value, or sets a new value.
+
 </para>
 
 <!-- ##### ARG GtkSpinButton:shadow-type ##### -->

@@ -230,13 +230,12 @@ mouse cursor is.
 
 <!-- ##### ARG GtkButton:label ##### -->
 <para>
-The text within the child #GtkLabel of the #GtkButton.  Only useful if
-there is actually a #GtkLabel inside of the #GtkButton.
+
 </para>
 
 <!-- ##### ARG GtkButton:relief ##### -->
 <para>
-The #GtkReliefStyle as outlined in gtk_button_set_relief().
+
 </para>
 
 <!-- ##### ARG GtkButton:use-underline ##### -->
@@ -249,22 +248,22 @@ The #GtkReliefStyle as outlined in gtk_button_set_relief().
 
 </para>
 
-<!-- ##### ARG GtkButton:default-border ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkButton:default-outside-border ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkButton:child-displacement-y ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkButton:child-displacement-x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:default-border ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:default-outside-border ##### -->
 <para>
 
 </para>

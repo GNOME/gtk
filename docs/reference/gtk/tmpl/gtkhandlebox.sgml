@@ -42,8 +42,8 @@ The #GtkHandleBox-struct struct contains the following fields.
 (These fields should be considered read-only. They should never be set by
 an application.)
 
-<informaltable pgwide=1 frame="none" role="struct">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<informaltable pgwide="1" frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
 <tbody>
 
 <row>
@@ -179,7 +179,7 @@ handlebox are detached from the main window.
 
 <!-- ##### ARG GtkHandleBox:shadow ##### -->
 <para>
-Determines the shadow type for the handlebox.
+
 </para>
 
 <!-- ##### ARG GtkHandleBox:shadow-type ##### -->
@@ -189,15 +189,11 @@ Determines the shadow type for the handlebox.
 
 <!-- ##### ARG GtkHandleBox:handle-position ##### -->
 <para>
-Determines the side of the handlebox where the handle is drawn.
+
 </para>
 
 <!-- ##### ARG GtkHandleBox:snap-edge ##### -->
 <para>
-Determines the snap edge of a handlebox. The snap edge is
-the edge of the detached child that must be aligned
-with the corresponding edge of the "ghost" left
-behind when the child was detached to reattach
-the torn-off window. See gtk_handle_box_set_snap_edge().
+
 </para>
 

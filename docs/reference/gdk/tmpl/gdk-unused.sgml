@@ -860,6 +860,14 @@ they will be ignored.
 </para>
 
 
+<!-- ##### FUNCTION gdk_screen_use_virtual_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
 <!-- ##### VARIABLE gdk_selection_property ##### -->
 <para>
 

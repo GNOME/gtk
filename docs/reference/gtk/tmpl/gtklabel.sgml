@@ -33,7 +33,7 @@ the label is inside a button:
 <informalexample>
 <programlisting>
   /* Pressing Alt+H will activate this button */
-  button = gtk_button_new ();
+  button = gtk_button_new (<!-- -->);
   label = gtk_label_new_with_mnemonic ("_Hello");
   gtk_container_add (GTK_CONTAINER (button), label);
 </programlisting>
@@ -54,7 +54,7 @@ gtk_label_set_mnemonic_widget():
 <informalexample>
 <programlisting>
   /* Pressing Alt+H will focus the entry */
-  entry = gtk_entry_new ();
+  entry = gtk_entry_new (<!-- -->);
   label = gtk_label_new_with_mnemonic ("_Hello");
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
 </programlisting>
@@ -473,7 +473,7 @@ Gtk+ 1.0.x.
 
 <!-- ##### ARG GtkLabel:label ##### -->
 <para>
-The actual label text.  Do not write to this pointer, it is not copied.
+
 </para>
 
 <!-- ##### ARG GtkLabel:attributes ##### -->
@@ -493,13 +493,12 @@ The actual label text.  Do not write to this pointer, it is not copied.
 
 <!-- ##### ARG GtkLabel:justify ##### -->
 <para>
-The #GtkJustification setting.  See gtk_label_set_justify() for more info.
+
 </para>
 
 <!-- ##### ARG GtkLabel:pattern ##### -->
 <para>
-The pattern of underlines under the existing text.  Do not change the
-pointer, it isn't copied.
+
 </para>
 
 <!-- ##### ARG GtkLabel:wrap ##### -->

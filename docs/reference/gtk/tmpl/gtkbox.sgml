@@ -106,8 +106,8 @@ The #GtkBox-struct describes an instance of GtkBox and contains the following fi
 (These fields should be considered read-only. They should never be set by
 an application.)
 
-<informaltable pgwide=1 frame="none" role="struct">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<informaltable pgwide="1" frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
 <tbody>
 
 <row>
@@ -146,8 +146,8 @@ and <structfield>pack</structfield> fields.
 should be considered read-only. They should never be directly set by an
 application.)
 
-<informaltable pgwide=1 frame="none" role="struct">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<informaltable pgwide="1" frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
 <tbody>
 
 <row>
@@ -372,14 +372,12 @@ in #GtkBoxChild-struct.
 
 <!-- ##### ARG GtkBox:spacing ##### -->
 <para>
-the minimum amount of space to put between children.  Refers to the
-<structfield>spacing</structfield> field of #GtkBox-struct.
+
 </para>
 
 <!-- ##### ARG GtkBox:homogeneous ##### -->
 <para>
-how to allocate space for children, equally or variably.  Refers to
-the <structfield>homogeneous</structfield> field of #GtkBox-struct.
+
 </para>
 
 <!-- ##### ARG GtkBox:expand ##### -->

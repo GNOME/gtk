@@ -33,7 +33,7 @@ Additionally, the <envar>GTK_RC_FILES</envar> environment variable
 can be set to a #G_SEARCHPATH_SEPARATOR_S-separated list of files
 in order to overwrite the set of default files at runtime.
 </para>
-<para><anchor id="locale-specific-rc">
+<para><anchor id="locale-specific-rc"/>
 For each RC file, in addition to the file itself, GTK+ will look for 
 a locale-specific file that will be parsed after the main file. 
 For instance, if <envar>LANG</envar> is set to <literal>ja_JP.ujis</literal>,
@@ -367,7 +367,7 @@ state of the widget. The states are:
 </variablelist>
 </para>
 
-<para><anchor id="color-format">
+<para><anchor id="color-format"/>
 Colors can be specified as a string containing a color name (GTK+ knows
 all names from the X color database 
 <filename>/usr/lib/X11/rgb.txt</filename>),  
@@ -794,7 +794,7 @@ otherwise %NULL.
 <para>
 </para>
 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_rc_get_im_module_path ##### -->

@@ -67,8 +67,8 @@ are 0-11) while <structfield>selected_day</structfield> is one-based
 
 <!-- ##### ENUM GtkCalendarDisplayOptions ##### -->
 <para>
-<informaltable pgwide=1 frame="none" role="enum">
-<tgroup cols="2"><colspec colwidth="*"><colspec colwidth="8*">
+<informaltable pgwide="1" frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="*"/><colspec colwidth="8*"/>
 <tbody>
 
 <row>

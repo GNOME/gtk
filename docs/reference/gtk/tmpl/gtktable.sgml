@@ -253,27 +253,27 @@ to %FALSE if this is not your desired behaviour.
 
 <!-- ##### ARG GtkTable:n-rows ##### -->
 <para>
-Sets or retrieves the number of rows in a table.
+
 </para>
 
 <!-- ##### ARG GtkTable:n-columns ##### -->
 <para>
-Sets or retrieves the number of columns in a table.
+
 </para>
 
 <!-- ##### ARG GtkTable:column-spacing ##### -->
 <para>
-Sets or retrieves the number of pixels of space between columns.
+
 </para>
 
 <!-- ##### ARG GtkTable:row-spacing ##### -->
 <para>
-Sets or retrieves the number of pixels of space between rows.
+
 </para>
 
 <!-- ##### ARG GtkTable:homogeneous ##### -->
 <para>
-Whether each cell in the table should be the same size or not.
+
 </para>
 
 <!-- ##### ARG GtkTable:left-attach ##### -->

@@ -153,22 +153,22 @@ area.
 
 <!-- ##### ARG GtkLayout:hadjustment ##### -->
 <para>
-Horizontal scroll adjustment, see gtk_layout_set_hadjustment()
+
 </para>
 
 <!-- ##### ARG GtkLayout:vadjustment ##### -->
 <para>
-Vertical scroll adjustment, see gtk_layout_set_vadjustment()
+
 </para>
 
 <!-- ##### ARG GtkLayout:width ##### -->
 <para>
-Layout width, see gtk_layout_set_size()
+
 </para>
 
 <!-- ##### ARG GtkLayout:height ##### -->
 <para>
-Layout height, see gtk_layout_set_size()
+
 </para>
 
 <!-- ##### ARG GtkLayout:x ##### -->

@@ -42,7 +42,7 @@ though it is almost always used to display just one accelerator key.
   GtkWidget *save_item;
   GtkAccelGroup *accel_group;
 
-  /* Create a #GtkAccelGroup and add it to the window. */
+  /* Create a GtkAccelGroup and add it to the window. */
   accel_group = gtk_accel_group_new (<!-- -->);
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
@@ -152,6 +152,6 @@ accelerators are added or removed from the associated widget.
 
 <!-- ##### ARG GtkAccelLabel:accel-widget ##### -->
 <para>
-The widget whose accelerators are to be shown by the #GtkAccelLabel.
+
 </para>
 

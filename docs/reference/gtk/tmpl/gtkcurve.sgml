@@ -56,8 +56,8 @@ Creates a new #GtkCurve.
 
 <!-- ##### FUNCTION gtk_curve_reset ##### -->
 <para>
-Resets the curve to a straight line from the minimum x & y values to the
-maximum x & y values (i.e. from the bottom-left to the top-right corners).
+Resets the curve to a straight line from the minimum x and y values to the
+maximum x and y values (i.e. from the bottom-left to the top-right corners).
 The curve type is not changed.
 </para>
 
@@ -79,7 +79,7 @@ FIXME: Needs a more precise definition of gamma.
 
 <!-- ##### FUNCTION gtk_curve_set_range ##### -->
 <para>
-Sets the minimum and maximum x & y values of the curve.
+Sets the minimum and maximum x and y values of the curve.
 The curve is also reset with a call to gtk_curve_reset().
 </para>
 

@@ -506,7 +506,6 @@ if all references are released.
 
 <!-- ##### ARG GtkObject:user-data ##### -->
 <para>
-A pointer for convenience when programming applications.
-Deprecated.
+
 </para>
 

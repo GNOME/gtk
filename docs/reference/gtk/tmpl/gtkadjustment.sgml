@@ -32,8 +32,8 @@ after changing the value and its bounds. This results in the emission of the
 <para>
 The #GtkAdjustment-struct struct contains the following fields.
 
-<informaltable pgwide=1 frame="none" role="struct">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<informaltable pgwide="1" frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
 <tbody>
 
 <row>

@@ -81,7 +81,7 @@ GtkTreeStore *store = gtk_tree_store_new (N_COLUMNS,       /* Total number of co
                                           G_TYPE_STRING,   /* Book title              */
                                           G_TYPE_STRING,   /* Author                  */
                                           G_TYPE_BOOLEAN); /* Is checked out?         */
-]]></programlisting</informalexample>
+]]></programlisting></informalexample>
     <para>
       Adding data to the model is done using <link linkend="gtk_tree_store_set">
       gtk_tree_store_set()</link> or <link linkend="gtk_list_store_set">

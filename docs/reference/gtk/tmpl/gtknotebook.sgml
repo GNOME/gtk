@@ -447,53 +447,52 @@ Emitted when the user or a function changes the current page.
 
 <!-- ##### ARG GtkNotebook:tab-pos ##### -->
 <para>
-The edge at which the tabs for switching pages are drawn.
+
 </para>
 
 <!-- ##### ARG GtkNotebook:show-tabs ##### -->
 <para>
-Whether to show tabs for the notebook pages.
+
 </para>
 
 <!-- ##### ARG GtkNotebook:show-border ##### -->
 <para>
-Whether to draw a bevel around the noteobook.
+
 </para>
 
 <!-- ##### ARG GtkNotebook:scrollable ##### -->
 <para>
-Whether the tab label area will have arrows for scrolling if there
-are too many tabs to fit in the area.
+
 </para>
 
 <!-- ##### ARG GtkNotebook:tab-border ##### -->
 <para>
-Whether the tab labels have a border on all sides.
+
 </para>
 
 <!-- ##### ARG GtkNotebook:tab-hborder ##### -->
 <para>
-Whether the tab labels have a horizontal border.
+
 </para>
 
 <!-- ##### ARG GtkNotebook:tab-vborder ##### -->
 <para>
-Whether the tab labels have a vertical border.
+
 </para>
 
 <!-- ##### ARG GtkNotebook:page ##### -->
 <para>
-The current page
+
 </para>
 
 <!-- ##### ARG GtkNotebook:enable-popup ##### -->
 <para>
-Whether the popup menu for switching pages is enabled.
+
 </para>
 
 <!-- ##### ARG GtkNotebook:homogeneous ##### -->
 <para>
-whether the tabs must have all the same size.
+
 </para>
 
 <!-- ##### ARG GtkNotebook:tab-label ##### -->

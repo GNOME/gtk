@@ -2724,8 +2724,8 @@ gtk_window_get_size (GtkWindow *window,
  * gdk_screen_height () - window_height)</literal>.
  *
  * The extended window manager hints specification at <ulink 
- * url="http://www.freedesktop.org/standards/wm-spec.html"
- * >http://www.freedesktop.org/standards/wm-spec.html</ulink> has a 
+ * url="http://www.freedesktop.org/standards/wm-spec.html">
+ * http://www.freedesktop.org/standards/wm-spec.html</ulink> has a 
  * nice table of gravities in the "implementation notes" section.
  *
  * The gtk_window_get_position() documentation may also be relevant.
@@ -3205,6 +3205,7 @@ gtk_window_unmap (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowGeometryInfo *info;    
+  GdkWindowState state;
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
   if (window->frame)
@@ -3227,6 +3228,11 @@ gtk_window_unmap (GtkWidget *widget)
       info->initial_pos_set = FALSE;
       info->position_constraints_changed = FALSE;
     }
+
+  state = gdk_window_get_state (widget->window);
+  window->iconify_initially = state & GDK_WINDOW_STATE_ICONIFIED;
+  window->maximize_initially = state & GDK_WINDOW_STATE_MAXIMIZED;
+  window->stick_initially = state & GDK_WINDOW_STATE_STICKY;
 }
 
 static void

@@ -200,121 +200,112 @@ modified directly.
 
 <!-- ##### ARG GtkTextTag:name ##### -->
 <para>
-Name of the tag, or %NULL for anonymous tags. Can only be set
-when the tag is created.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:background ##### -->
 <para>
-Background color, as a string such as "red" or "#FFFFFF"
+
 </para>
 
 <!-- ##### ARG GtkTextTag:foreground ##### -->
 <para>
-Foreground color as a string such as "red" or "#FFFFFF".
+
 </para>
 
 <!-- ##### ARG GtkTextTag:background-gdk ##### -->
 <para>
-Background color, as a #GdkColor. The color need not be allocated.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:foreground-gdk ##### -->
 <para>
-Foreground color as a #GdkColor. The color need not be allocated.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:background-stipple ##### -->
 <para>
-A #GdkBitmap to use for stippling the background color.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:foreground-stipple ##### -->
 <para>
-A #GdkBitmap to use as a stipple pattern for the foreground.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:font ##### -->
 <para>
-Font as a Pango font name, e.g. "Sans Italic 12"
+
 </para>
 
 <!-- ##### ARG GtkTextTag:font-desc ##### -->
 <para>
-Font as a #PangoFontDescription.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:family ##### -->
 <para>
-Font family as a string.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:style ##### -->
 <para>
-Font style as a #PangoStyle, e.g. #PANGO_STYLE_ITALIC.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:variant ##### -->
 <para>
-Font variant as a #PangoVariant, e.g. #PANGO_VARIANT_SMALL_CAPS.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:weight ##### -->
 <para>
-Font weight as an integer, see predefined values in #PangoWeight; 
-for example, #PANGO_WEIGHT_BOLD.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:stretch ##### -->
 <para>
-Font stretch as a #PangoStretch, e.g. #PANGO_STRETCH_CONDENSED.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:size ##### -->
 <para>
-Font size as an integer in Pango units, as for
-pango_font_description_set_size(). Using the "scale" property is
-usually better.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:size-points ##### -->
 <para>
-Font size as a double, in points. Using the "scale" property is
-usually better.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:scale ##### -->
 <para>
-Font size as a scale factor relative to the default font size.
-This properly adapts to theme changes etc. so is recommended. 
-Pango predefines some scales such as #PANGO_SCALE_X_LARGE.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:pixels-above-lines ##### -->
 <para>
-Pixels of blank space to leave above each newline-terminated line.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:pixels-below-lines ##### -->
 <para>
-Pixels of blank space to leave below each newline-terminated line.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:pixels-inside-wrap ##### -->
 <para>
-Pixels of blank space to leave between wrapped lines inside the same
-newline-terminated line (paragraph).
+
 </para>
 
 <!-- ##### ARG GtkTextTag:editable ##### -->
 <para>
-Whether the user can modify the tagged text.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:wrap-mode ##### -->
 <para>
-A #GtkWrapMode value. Only used if the tag applies to the first
-character in a paragraph.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:justification ##### -->
@@ -324,75 +315,67 @@ character in a paragraph.
 
 <!-- ##### ARG GtkTextTag:direction ##### -->
 <para>
-The #GtkTextDirection for the tagged text.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:left-margin ##### -->
 <para>
-Pixel width of left margin of the text.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:indent ##### -->
 <para>
-Pixel size of paragraph indentation; may be negative.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:strikethrough ##### -->
 <para>
-%TRUE to draw a line through the text.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:right-margin ##### -->
 <para>
-Pixel width of right margin.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:underline ##### -->
 <para>
-A #PangoUnderline value.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:rise ##### -->
 <para>
-Used for superscript or subscript; value is given in pixels.
-Negative rise means subscript.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:background-full-height ##### -->
 <para>
-Whether to make the background color for each character the height of
-the highest font used on the current line, or the height of the font 
-used for the current character.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:language ##### -->
 <para>
-The language this text is in, as an ISO code. Pango can use this as a
-hint when rendering the text. If you don't understand this argument, 
-you probably don't need it.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:tabs ##### -->
 <para>
-A #PangoTabArray indicating tabs for this text.  Only used if the tag
-applies to the first character in a paragraph.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:invisible ##### -->
 <para>
-Not implemented in GTK 2.0. Would make text disappear.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:background-set ##### -->
 <para>
-If %TRUE, honor the background property. Automatically toggled
-on when setting the background property.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:foreground-set ##### -->
 <para>
-If %TRUE, honor the foreground property. Automatically toggled
-on when setting the foreground property.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:background-stipple-set ##### -->

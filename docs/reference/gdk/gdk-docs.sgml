@@ -1,34 +1,34 @@
-<!doctype book PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
-<!notation PNG system "PNG">
-<!entity % local.notation.class "| PNG">
-
-<!entity gdk-General SYSTEM "sgml/general.sgml">
-<!entity gdk-Bitmaps-and-Pixmaps SYSTEM "sgml/pixmaps.sgml">
-<!entity gdk-Images SYSTEM "sgml/images.sgml">
-<!entity gdk-GdkRGB SYSTEM "sgml/rgb.sgml">
-<!entity gdk-Pixbufs SYSTEM "sgml/pixbufs.sgml">
-<!entity gdk-Colormaps-and-Colors SYSTEM "sgml/colors.sgml">
-<!entity gdk-Fonts SYSTEM "sgml/fonts.sgml">
-<!entity gdk-Drawing-Primitives SYSTEM "sgml/drawing.sgml">
-<!entity gdk-Graphics-Contexts SYSTEM "sgml/gcs.sgml">
-<!entity gdk-Visuals SYSTEM "sgml/visuals.sgml">
-<!entity gdk-Windows SYSTEM "sgml/windows.sgml">
-<!entity gdk-Selections SYSTEM "sgml/selections.sgml">
-<!entity gdk-Properties-and-Atoms SYSTEM "sgml/properties.sgml">
-<!entity gdk-Pango-Interaction SYSTEM "sgml/pango_interaction.sgml">
-<!entity gdk-Points-Rectangles-and-Regions SYSTEM "sgml/regions.sgml">
-<!entity gdk-Threads SYSTEM "sgml/threads.sgml">
-<!entity gdk-Keys SYSTEM "sgml/keys.sgml">
-<!entity gdk-Input-Devices SYSTEM "sgml/input_devices.sgml">
-<!entity gdk-Events SYSTEM "sgml/events.sgml">
-<!entity gdk-Event-Structures SYSTEM "sgml/event_structs.sgml">
-<!entity gdk-Cursors SYSTEM "sgml/cursors.sgml">
-<!entity gdk-Input SYSTEM "sgml/input.sgml">
-<!entity gdk-Drag-and-Drop SYSTEM "sgml/dnd.sgml">
-<!entity gdk-X-Window-System-Interaction SYSTEM "sgml/x_interaction.sgml">
-<!entity gdk-Screen SYSTEM "sgml/gdkscreen.sgml">
-<!entity gdk-Display SYSTEM "sgml/gdkdisplay.sgml">
-<!entity gdk-Multihead SYSTEM "multihead.sgml">
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY hash "#">
+<!ENTITY gdk-General SYSTEM "xml/general.xml">
+<!ENTITY gdk-Bitmaps-and-Pixmaps SYSTEM "xml/pixmaps.xml">
+<!ENTITY gdk-Images SYSTEM "xml/images.xml">
+<!ENTITY gdk-GdkRGB SYSTEM "xml/rgb.xml">
+<!ENTITY gdk-Pixbufs SYSTEM "xml/pixbufs.xml">
+<!ENTITY gdk-Colormaps-and-Colors SYSTEM "xml/colors.xml">
+<!ENTITY gdk-Fonts SYSTEM "xml/fonts.xml">
+<!ENTITY gdk-Drawing-Primitives SYSTEM "xml/drawing.xml">
+<!ENTITY gdk-Graphics-Contexts SYSTEM "xml/gcs.xml">
+<!ENTITY gdk-Visuals SYSTEM "xml/visuals.xml">
+<!ENTITY gdk-Windows SYSTEM "xml/windows.xml">
+<!ENTITY gdk-Selections SYSTEM "xml/selections.xml">
+<!ENTITY gdk-Properties-and-Atoms SYSTEM "xml/properties.xml">
+<!ENTITY gdk-Pango-Interaction SYSTEM "xml/pango_interaction.xml">
+<!ENTITY gdk-Points-Rectangles-and-Regions SYSTEM "xml/regions.xml">
+<!ENTITY gdk-Threads SYSTEM "xml/threads.xml">
+<!ENTITY gdk-Keys SYSTEM "xml/keys.xml">
+<!ENTITY gdk-Input-Devices SYSTEM "xml/input_devices.xml">
+<!ENTITY gdk-Events SYSTEM "xml/events.xml">
+<!ENTITY gdk-Event-Structures SYSTEM "xml/event_structs.xml">
+<!ENTITY gdk-Cursors SYSTEM "xml/cursors.xml">
+<!ENTITY gdk-Input SYSTEM "xml/input.xml">
+<!ENTITY gdk-Drag-and-Drop SYSTEM "xml/dnd.xml">
+<!ENTITY gdk-X-Window-System-Interaction SYSTEM "xml/x_interaction.xml">
+<!ENTITY gdk-Screen SYSTEM "xml/gdkscreen.xml">
+<!ENTITY gdk-Display SYSTEM "xml/gdkdisplay.xml">
+<!ENTITY gdk-Multihead SYSTEM "multihead.sgml">
 ]>
 
 <book id="index">

@@ -17,7 +17,7 @@ performance hits where #GtkArg structures have to be converted into #GValue<!-- 
 Signals are a way to get notification when something happens
 and to customize object behavior according to the
 user's needs.
-Every <WordAsWord>signal</WordAsWord> is uniquely identified by a name,
+Every <wordasword>signal</wordasword> is uniquely identified by a name,
 "class_name::signal_name", where signal_name might be something like
 "clicked" and class_name might be "GtkButton".  Note that some other class
 may also define a "clicked" callback, so long as it doesn't derive from
@@ -58,7 +58,7 @@ corresponding to that attachment.
 </para>
 <para>
 Functions that want to notify the user of certain actions,
-<Emphasis>emit</Emphasis> signals.
+<emphasis>emit</emphasis> signals.
 </para>
 </refsect2>
 <refsect2>

@@ -901,7 +901,7 @@ Function used for #gtk_tree_view_map_expanded_rows.
 
 </para>
 
-<!-- ##### ARG GtkTreeView:expander-size ##### -->
+<!-- ##### ARG GtkTreeView:allow-rules ##### -->
 <para>
 
 </para>
@@ -911,7 +911,7 @@ Function used for #gtk_tree_view_map_expanded_rows.
 
 </para>
 
-<!-- ##### ARG GtkTreeView:allow-rules ##### -->
+<!-- ##### ARG GtkTreeView:expander-size ##### -->
 <para>
 
 </para>

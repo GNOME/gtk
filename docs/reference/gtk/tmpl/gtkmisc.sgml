@@ -31,8 +31,8 @@ The #GtkMisc-struct struct contains the following fields.
 (These fields should be considered read-only. They should never be set by
 an application.)
 
-<informaltable pgwide=1 frame="none" role="struct">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<informaltable pgwide="1" frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
 <tbody>
 
 <row>
@@ -104,21 +104,21 @@ in pixels.
 
 <!-- ##### ARG GtkMisc:xalign ##### -->
 <para>
-the horizontal alignment, from 0 (left) to 1 (right).
+
 </para>
 
 <!-- ##### ARG GtkMisc:yalign ##### -->
 <para>
-the vertical alignment, from 0 (top) to 1 (bottom).
+
 </para>
 
 <!-- ##### ARG GtkMisc:xpad ##### -->
 <para>
-the amount of space to add on the left and right of the widget, in pixels.
+
 </para>
 
 <!-- ##### ARG GtkMisc:ypad ##### -->
 <para>
-the amount of space to add on the top and bottom of the widget, in pixels.
+
 </para>
 

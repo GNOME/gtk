@@ -267,7 +267,7 @@ To load an image file straight into a display widget, use <link
 linkend="gtk-image-new-from-file">gtk_image_new_from_file()</link>
 <footnote><para> If the file load fails, <link
 linkend="gtk-image-new-from-file">gtk_image_new_from_file()</link>
-will display a "broken image" graphic &mdash to detect a failed load
+will display a "broken image" graphic &mdash; to detect a failed load
 yourself, use <link
 linkend="gdk-pixbuf-new-from-file">gdk_pixbuf_new_from_file()</link>
 directly then <link
@@ -302,7 +302,7 @@ To load an image or animation file asynchronously (without blocking), use
 
 <answer>
 <para>
-See <link linkend="TreeWidget">tree widget overview</link> &mdash you
+See <link linkend="TreeWidget">tree widget overview</link> &mdash; you
 should use the <link linkend="GtkTreeView">GtkTreeView</link> widget.
 (A list is just a tree with no branches, so the tree widget is used
 for lists as well.) Do not use the deprecated widgets <link
@@ -321,7 +321,7 @@ less flexible and result in an inferior user interface.
 
 <answer>
 <para>
-See <link linkend="TextWidget">text widget overview</link> &mdash you
+See <link linkend="TextWidget">text widget overview</link> &mdash; you
 should use the <link linkend="GtkTextView">GtkTextView</link> widget.
 Do not use the deprecated widget <link
 linkend="GtkText">GtkText</link> in newly-written code, it has a

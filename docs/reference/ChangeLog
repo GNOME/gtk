@@ -1,3 +1,14 @@
+2002-05-29  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/*, gdk/*, gdk-pixbuf/*: Create XML, not SGML.
+	
+2002-05-28  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/*: Remove property documentation which comes from the
+	source now.
+
+	* gtk/building.sgml: Remove traces of gxi.
+
 2002-05-05  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_widget_class_find_style_property,

@@ -20,7 +20,7 @@ GList *group = NULL;
 GtkWidget *item;
 gint i;
 
-for(i = 0; i < 5; i++)
+for (i = 0; i &lt; 5; i++)
 {
   item = gtk_radio_menu_item_new_with_label (group, "This is an example");
   group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (item));

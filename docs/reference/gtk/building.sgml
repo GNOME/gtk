@@ -288,7 +288,7 @@ How to compile GTK+ itself
       Looking at the last couple of hundred lines in this file will
       frequently make clear what went wrong. If all else fails, you
       can ask for help on the gtk-list mailing list.
-      See <xref linkend="gtk-resources"> for more information.
+      See <xref linkend="gtk-resources"/> for more information.
     </para>
   </refsect1>
       <refsect1 id="extra-configuration-options">
@@ -335,7 +335,7 @@ How to compile GTK+ itself
 	    <arg>--enable-gtk-doc</arg>
 	  </group>
           <group>
-            <arg>--with-xinput=[no|gxi|xfree]</arg>
+            <arg>--with-xinput=[no|yes]</arg>
           </group>
 	  <group>
 	    <arg>--with-gdktarget=[x11|linux-fb|win32]</arg>
@@ -497,9 +497,6 @@ How to compile GTK+ itself
 	  provided by the device such as pressure and tilt
 	  information. This is only known to work well on XFree86
 	  systems, though other systems do have this extension.
-	  (If <systemitem>--with-xinput=gxi</systemitem>
-	  is supplied, support for an obsolete and unsupported
-	  way of interacting with XInput is compiled.)
         </para>
       </formalpara>
       <formalpara>

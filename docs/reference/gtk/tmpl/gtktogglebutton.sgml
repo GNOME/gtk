@@ -189,7 +189,7 @@ Should be connected if you wish to perform an action whenever the
 
 <!-- ##### ARG GtkToggleButton:active ##### -->
 <para>
-Sets whether the toggle button should be pressed in or not.
+
 </para>
 
 <!-- ##### ARG GtkToggleButton:inconsistent ##### -->
@@ -199,7 +199,6 @@ Sets whether the toggle button should be pressed in or not.
 
 <!-- ##### ARG GtkToggleButton:draw-indicator ##### -->
 <para>
-A value of %TRUE causes the toggle button to be invisible. %FALSE displays it.
-again.
+
 </para>
 

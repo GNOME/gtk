@@ -46,7 +46,7 @@ a signal handler with a gdk_threads_enter()/gdk_threads_leave() pair.
 <para>A minimal main program for a threaded GTK+ application
 looks like:</para>
 
-<para>
+<informalexample>
 <programlisting role="C">
 int
 main (int argc, char *argv[])
@@ -54,20 +54,20 @@ main (int argc, char *argv[])
   GtkWidget *window;
 
   g_thread_init (NULL);
-  gdk_threads_init ();
+  gdk_threads_init (<!-- -->);
   gtk_init (&amp;argc, &amp;argv);
 
-  window = create_window ();
+  window = create_window (<!-- -->);
   gtk_widget_show (window);
 
-  gdk_threads_enter ();
-  gtk_main ();
-  gdk_threads_leave ();
+  gdk_threads_enter (<!-- -->);
+  gtk_main (<!-- -->);
+  gdk_threads_leave (<!-- -->);
 
   return 0;
 }
 </programlisting>
-</para>
+</informalexample>
 
 <para>
 Callbacks require a bit of attention. Callbacks from GTK+ signals
@@ -82,7 +82,7 @@ do.
 illustrate how to use threads within GTK+ programs.
 </para>
 
-<para>
+<informalexample>
 <programlisting role="C">
 /*-------------------------------------------------------------------------
  * Filename:      gtk-thread.c
@@ -104,16 +104,16 @@ illustrate how to use threads within GTK+ programs.
  *
  */
 
-#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;time.h&gt;
-#include &lt;gtk/gtk.h&gt;
-#include &lt;glib.h&gt;
-#include &lt;pthread.h&gt;
+&hash;include &lt;stdio.h&gt;
+&hash;include &lt;stdlib.h&gt;
+&hash;include &lt;unistd.h&gt;
+&hash;include &lt;time.h&gt;
+&hash;include &lt;gtk/gtk.h&gt;
+&hash;include &lt;glib.h&gt;
+&hash;include &lt;pthread.h&gt;
 
-#define YES_IT_IS    (1)
-#define NO_IT_IS_NOT (0)
+&hash;define YES_IT_IS    (1)
+&hash;define NO_IT_IS_NOT (0)
 
 typedef struct 
 {
@@ -124,20 +124,20 @@ typedef struct
 G_LOCK_DEFINE_STATIC (yes_or_no);
 static volatile int yes_or_no = YES_IT_IS;
 
-void destroy(GtkWidget *widget, gpointer data)
+void destroy (GtkWidget *widget, gpointer data)
 {
-  gtk_main_quit();
+  gtk_main_quit (<!-- -->);
 }
 
-void *argument_thread(void *args)
+void *argument_thread (void *args)
 {
   yes_or_no_args *data = (yes_or_no_args *)args;
   gboolean say_something;
 
-  for(;;)
+  for (;;)
     {
       /* sleep a while */
-      sleep(rand() / (RAND_MAX / 3) + 1);
+      sleep(rand(<!-- -->) / (RAND_MAX / 3) + 1);
 
       /* lock the yes_or_no_variable */
       G_LOCK(yes_or_no);
@@ -152,28 +152,28 @@ void *argument_thread(void *args)
 	}
 
       /* Unlock the yes_or_no variable */
-      G_UNLOCK(yes_or_no);
+      G_UNLOCK (yes_or_no);
 
-      if(say_something)
+      if (say_something)
 	{
 	  /* get GTK thread lock */
-	  gdk_threads_enter();
+	  gdk_threads_enter (<!-- -->);
 
 	  /* set label text */
 	  if(data->what == YES_IT_IS)
-	    gtk_label_set_text(GTK_LABEL(data->label), "O yes, it is!");
+	    gtk_label_set_text (GTK_LABEL (data->label), "O yes, it is!");
 	  else
-	    gtk_label_set_text(GTK_LABEL(data->label), "O no, it isn't!");
+	    gtk_label_set_text (GTK_LABEL (data->label), "O no, it isn't!");
 
 	  /* release GTK thread lock */
-	  gdk_threads_leave();
+	  gdk_threads_leave (<!-- -->);
 	}
     }
 
-  return(NULL);
+  return NULL;
 }
 
-int main(int argc, char *argv[])
+int main (int argc, char *argv[])
 {
   GtkWidget *window;
   GtkWidget *label;
@@ -181,49 +181,49 @@ int main(int argc, char *argv[])
   pthread_t no_tid, yes_tid;
 
   /* init threads */
-  g_thread_init(NULL);
-  gdk_threads_init ();
+  g_thread_init (NULL);
+  gdk_threads_init (<!-- -->);
 
   /* init gtk */
   gtk_init(&amp;argc, &amp;argv);
 
   /* init random number generator */
-  srand((unsigned int)time(NULL));
+  srand ((unsigned int) time (NULL));
 
   /* create a window */
-  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-  gtk_signal_connect(GTK_OBJECT (window), "destroy",
-		     GTK_SIGNAL_FUNC(destroy), NULL);
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC (destroy), NULL);
 
-  gtk_container_set_border_width(GTK_CONTAINER (window), 10);
+  gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
   /* create a label */
-  label = gtk_label_new("And now for something completely different ...");
-  gtk_container_add(GTK_CONTAINER(window), label);
+  label = gtk_label_new ("And now for something completely different ...");
+  gtk_container_add (GTK_CONTAINER (window), label);
   
   /* show everything */
-  gtk_widget_show(label);
+  gtk_widget_show (label);
   gtk_widget_show (window);
 
   /* create the threads */
   yes_args.label = label;
   yes_args.what = YES_IT_IS;
-  pthread_create(&amp;yes_tid, NULL, argument_thread, &amp;yes_args);
+  pthread_create (&amp;yes_tid, NULL, argument_thread, &amp;yes_args);
 
   no_args.label = label;
   no_args.what = NO_IT_IS_NOT;
-  pthread_create(&amp;no_tid, NULL, argument_thread, &amp;no_args);
+  pthread_create (&amp;no_tid, NULL, argument_thread, &amp;no_args);
 
   /* enter the GTK main loop */
-  gdk_threads_enter();
-  gtk_main();
-  gdk_threads_leave();
+  gdk_threads_enter (<!-- -->);
+  gtk_main (<!-- -->);
+  gdk_threads_leave (<!-- -->);
 
-  return(0);
+  return 0;
 }
 </programlisting>
-</para>
+</informalexample>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
