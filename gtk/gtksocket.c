@@ -856,8 +856,7 @@ gtk_socket_add_window (GtkSocket *socket, GdkNativeWindow xid)
 		    GDK_WINDOW_XWINDOW(socket->plug_window),
 		    StructureNotifyMask | PropertyChangeMask);
       
-      if (gdk_drag_get_protocol_for_display (xid,
-	   GDK_WINDOW_DISPLAY(socket->plug_window),&protocol))
+      if (gdk_drag_get_protocol (GDK_WINDOW_DISPLAY(socket->plug_window), xid, &protocol))
 	gtk_drag_dest_set_proxy (GTK_WIDGET (socket), socket->plug_window, 
 				 protocol, TRUE);
       gdk_flush ();
@@ -1134,8 +1133,8 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 
 	    {
 	      gdk_error_trap_push ();
-	      if (gdk_drag_get_protocol_for_display (xevent->xproperty.window,
-			GDK_WINDOW_DISPLAY(socket->plug_window),&protocol))
+	      if (gdk_drag_get_protocol (GDK_WINDOW_DISPLAY(socket->plug_window),
+					 xevent->xproperty.window,&protocol))
 		gtk_drag_dest_set_proxy (GTK_WIDGET (socket),
 					 socket->plug_window,
 					 protocol, TRUE);

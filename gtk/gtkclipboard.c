@@ -105,7 +105,8 @@ static GQuark clipboards_owned_key_id = 0;
  **/
 
 GtkClipboard *
-gtk_clipboard_get_for_display (GdkAtom selection, GdkDisplay *display)
+gtk_clipboard_get_for_display (GdkDisplay *display, GdkAtom selection)
+
 {
   GtkClipboard *clipboard = NULL;
   GSList *tmp_list;
@@ -138,7 +139,8 @@ gtk_clipboard_get_for_display (GdkAtom selection, GdkDisplay *display)
 GtkClipboard *
 gtk_clipboard_get (GdkAtom selection)
 {
-  return gtk_clipboard_get_for_display(selection,DEFAULT_GDK_DISPLAY);
+  return gtk_clipboard_get_for_display (DEFAULT_GDK_DISPLAY, selection);
+
 }
 
 

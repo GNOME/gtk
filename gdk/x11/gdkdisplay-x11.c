@@ -246,3 +246,37 @@ gdk_display_atom (GdkDisplay * dpy,
   return retval;
 }
 
+
+gchar *
+gdk_display_atom_name (GdkDisplay * dpy, GdkAtom atom)
+{
+  gchar *t;
+  gchar *name;
+  gint old_error_warnings;
+
+  /*
+     If this atom doesn't exist, we'll die with an X error unless
+     we take precautions 
+   */
+
+  old_error_warnings = gdk_error_warnings;
+  gdk_error_warnings = 0;
+  gdk_error_code = 0;
+  t = XGetAtomName (GDK_DISPLAY_XDISPLAY (dpy), atom);
+  gdk_error_warnings = old_error_warnings;
+
+  if (gdk_error_code) {
+    if (t)
+      XFree (t);
+
+    return NULL;
+  }
+  else {
+    name = g_strdup (t);
+    if (t)
+      XFree (t);
+
+    return name;
+  }
+}
+

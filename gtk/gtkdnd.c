@@ -879,9 +879,8 @@ gtk_drag_dest_set   (GtkWidget            *widget,
   site->flags = flags;
   site->have_drag = FALSE;
   if (targets)
-    site->target_list = gtk_target_list_new_for_display (targets,
-							 n_targets,
-				    GTK_WIDGET_GET_DISPLAY(widget));
+    site->target_list = gtk_target_list_new_for_display (GTK_WIDGET_GET_DISPLAY(widget), targets, n_targets);
+
   else
     site->target_list = NULL;
 
@@ -1385,8 +1384,8 @@ gtk_drag_proxy_begin (GtkWidget       *widget,
   source_info->ipc_widget = ipc_widget;
   source_info->widget = gtk_widget_ref (widget);
 
-  source_info->target_list = gtk_target_list_new_for_display (NULL, 0,
-				       GTK_WIDGET_GET_DISPLAY(widget));
+  source_info->target_list = gtk_target_list_new_for_display (GTK_WIDGET_GET_DISPLAY(widget), NULL, 0);
+
   tmp_list = dest_info->context->targets;
   while (tmp_list)
     {
@@ -1926,8 +1925,8 @@ gtk_drag_source_set (GtkWidget            *widget,
   site->start_button_mask = start_button_mask;
 
   if (targets)
-    site->target_list = gtk_target_list_new_for_display (targets, n_targets,
-					    GTK_WIDGET_GET_DISPLAY(widget));
+    site->target_list = gtk_target_list_new_for_display (GTK_WIDGET_GET_DISPLAY(widget), targets, n_targets);
+
   else
     site->target_list = NULL;
 

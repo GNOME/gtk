@@ -7378,9 +7378,8 @@ gtk_tree_view_set_rows_drag_source (GtkTreeView              *tree_view,
   clear_source_info (di);
 
   di->start_button_mask = start_button_mask;
-  di->source_target_list = gtk_target_list_new_for_display (targets,
-							    n_targets,
-				    GTK_WIDGET_GET_DISPLAY(tree_view));
+  di->source_target_list = gtk_target_list_new_for_display (GTK_WIDGET_GET_DISPLAY(tree_view), targets, n_targets);
+
   di->source_actions = actions;
 
   if (row_draggable_func)
@@ -7416,9 +7415,8 @@ gtk_tree_view_set_rows_drag_dest (GtkTreeView              *tree_view,
   clear_dest_info (di);
 
   if (targets)
-    di->dest_target_list = gtk_target_list_new_for_display (targets, 
-							    n_targets,
-				    GTK_WIDGET_GET_DISPLAY(tree_view));
+    di->dest_target_list = gtk_target_list_new_for_display (GTK_WIDGET_GET_DISPLAY(tree_view), targets, n_targets);
+
 
   if (location_droppable_func)
     {

@@ -5284,8 +5284,8 @@ gtk_clist_motion (GtkWidget      *widget,
 	{
 	  GtkTargetList  *target_list;
 
-	  target_list = gtk_target_list_new_for_display (&clist_target_table,1,
-					       GTK_WIDGET_GET_DISPLAY(widget));
+	  target_list = gtk_target_list_new_for_display (GTK_WIDGET_GET_DISPLAY(widget), &clist_target_table, 1);
+
 	  gtk_drag_begin (widget, target_list, GDK_ACTION_MOVE,
 			  clist->drag_button, (GdkEvent *)event);
 

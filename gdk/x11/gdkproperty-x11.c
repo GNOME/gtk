@@ -43,44 +43,13 @@ gdk_atom_intern (const gchar *atom_name, gboolean only_if_exists)
   return gdk_display_atom (DEFAULT_GDK_DISPLAY, atom_name, only_if_exists);
 
 }
-gchar *
-gdk_atom_name_for_display (GdkAtom atom, GdkDisplay * dpy)
-{
-  gchar *t;
-  gchar *name;
-  gint old_error_warnings;
-
-  /*
-     If this atom doesn't exist, we'll die with an X error unless
-     we take precautions 
-   */
-
-  old_error_warnings = gdk_error_warnings;
-  gdk_error_warnings = 0;
-  gdk_error_code = 0;
-  t = XGetAtomName (GDK_DISPLAY_XDISPLAY (dpy), atom);
-  gdk_error_warnings = old_error_warnings;
-
-  if (gdk_error_code) {
-    if (t)
-      XFree (t);
-
-    return NULL;
-  }
-  else {
-    name = g_strdup (t);
-    if (t)
-      XFree (t);
-
-    return name;
-  }
-}
 
 gchar*
 gdk_atom_name (GdkAtom atom)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_atom_name_for_display instead\n"));
-  return gdk_atom_name_for_display(atom,DEFAULT_GDK_DISPLAY);	
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_atom_name instead\n"));
+  return gdk_display_atom_name (DEFAULT_GDK_DISPLAY, atom);	
+
 }
 
 gboolean
@@ -141,8 +110,10 @@ gdk_property_get (GdkWindow   *window,
       gchar *rn, *pn;
 
       XFree (ret_data);
-      rn = gdk_atom_name_for_display(ret_prop_type,GDK_WINDOW_DISPLAY(window));
-      pn = gdk_atom_name_for_display(type,GDK_WINDOW_DISPLAY(window));
+      rn = gdk_display_atom_name (GDK_WINDOW_DISPLAY(window), ret_prop_type);
+
+      pn = gdk_display_atom_name (GDK_WINDOW_DISPLAY(window), type);
+
       g_warning("Couldn't match property type %s to %s\n", rn, pn);
       g_free(rn); g_free(pn);
       return FALSE;

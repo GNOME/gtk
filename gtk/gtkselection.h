@@ -85,9 +85,8 @@ struct _GtkTargetPair {
   guint     info;
 };
 
-GtkTargetList *gtk_target_list_new_for_display(const GtkTargetEntry *targets,
-					       guint                 ntargets,
-					       GdkDisplay	    *display);
+GtkTargetList *gtk_target_list_new_for_display (GdkDisplay    *display, const GtkTargetEntry *targets, guint                 ntargets);
+
 GtkTargetList *gtk_target_list_new       (const GtkTargetEntry *targets,
 					  guint                 ntargets);
 void           gtk_target_list_ref       (GtkTargetList  *list);
@@ -96,10 +95,8 @@ void           gtk_target_list_add       (GtkTargetList  *list,
 				  	  GdkAtom         target,
 					  guint           flags,
 					  guint           info);
-void           gtk_target_list_add_table_for_display (GtkTargetList *list,
-						      GdkDisplay *display,
-						      const GtkTargetEntry *targets,
-						      guint ntargets);
+void           gtk_target_list_add_table_for_display (GdkDisplay *display, GtkTargetList *list, const GtkTargetEntry *targets, guint ntargets);
+
 void           gtk_target_list_add_table (GtkTargetList        *list,
 					  const GtkTargetEntry *targets,
 					  guint                 ntargets);

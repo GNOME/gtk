@@ -189,16 +189,18 @@ static GSList *open_displays_cache = NULL;
 /*
  * Target lists
  */
-GtkTargetList *gtk_target_list_new_for_display(const GtkTargetEntry *targets,
-					       guint                 ntargets,
-					       GdkDisplay	    *display)
+GtkTargetList *gtk_target_list_new_for_display (GdkDisplay	     *display,
+						const GtkTargetEntry *targets,
+						guint                 ntargets)
+
 {
   GtkTargetList *result = g_new (GtkTargetList, 1);
   result->list = NULL;
   result->ref_count = 1;
 
   if (targets)
-    gtk_target_list_add_table_for_display (result, display, targets, ntargets);
+    gtk_target_list_add_table_for_display (display, result, targets, ntargets);
+
   
   return result;
 }
@@ -207,7 +209,8 @@ GtkTargetList *
 gtk_target_list_new (const GtkTargetEntry *targets,
 		     guint                 ntargets)
 {
-  return gtk_target_list_new_for_display(targets, ntargets, DEFAULT_GDK_DISPLAY);
+  return gtk_target_list_new_for_display (DEFAULT_GDK_DISPLAY, targets, ntargets);
+
 }
 
 void               
@@ -260,10 +263,11 @@ gtk_target_list_add (GtkTargetList *list,
 }
 
 void               
-gtk_target_list_add_table_for_display (GtkTargetList        *list,
-				       GdkDisplay	 *display,
-		   		       const GtkTargetEntry *targets,
+gtk_target_list_add_table_for_display (GdkDisplay	    *display, 
+				       GtkTargetList	    *list, 
+				       const GtkTargetEntry *targets, 
 				       guint                 ntargets)
+
 {
   gint i;
 
@@ -286,10 +290,8 @@ gtk_target_list_add_table (GtkTargetList        *list,
 			   guint                 ntargets)
 {
     g_message("Use gtk_target_list_add_table_for_display instead\n");
-    gtk_target_list_add_table_for_display (list,
-					   DEFAULT_GDK_DISPLAY,
-					   targets,
-					   ntargets);
+    gtk_target_list_add_table_for_display (DEFAULT_GDK_DISPLAY, list, targets, ntargets);
+
 }
 
 void 
@@ -498,8 +500,8 @@ gtk_selection_target_list_get (GtkWidget    *widget,
 
   sellist = g_new (GtkSelectionTargetList, 1);
   sellist->selection = selection;
-  sellist->list = gtk_target_list_new_for_display (NULL, 0,
-			    GTK_WIDGET_GET_DISPLAY(widget));
+  sellist->list = gtk_target_list_new_for_display (GTK_WIDGET_GET_DISPLAY(widget), NULL, 0);
+
 
   lists = g_list_prepend (lists, sellist);
   gtk_object_set_data (GTK_OBJECT (widget), gtk_selection_handler_key, lists);
@@ -594,10 +596,8 @@ gtk_selection_add_targets (GtkWidget            *widget,
   g_return_if_fail (targets != NULL);
   
   list = gtk_selection_target_list_get (widget, selection);
-  gtk_target_list_add_table_for_display (list,
-  					 GTK_WIDGET_GET_DISPLAY(widget),
-					 targets,
-					 ntargets);
+  gtk_target_list_add_table_for_display (GTK_WIDGET_GET_DISPLAY(widget), list, targets, ntargets);
+
 }
 
 
@@ -1133,8 +1133,8 @@ gtk_selection_request (GtkWidget *widget,
 #ifdef DEBUG_SELECTION
       g_message ("Selection %ld, target %ld (%s) requested by 0x%x (property = %ld)",
 		 event->selection, info->conversions[i].target,
-		 gdk_atom_name_for_display (info->conversions[i].target,
-					GTK_WIDGET_GET_DISPLAY(widget)),
+		 gdk_display_atom_name (GTK_WIDGET_GET_DISPLAY(widget), info->conversions[i].target),
+
 		 event->requestor, event->property);
 #endif
       

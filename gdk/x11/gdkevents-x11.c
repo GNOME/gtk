@@ -1328,8 +1328,8 @@ gdk_event_translate (GdkEvent *event,
       
     case PropertyNotify:
       GDK_NOTE (EVENTS,
-		gchar *atom = gdk_atom_name_for_display (xevent->xproperty.atom,
-						    GDK_WINDOW_DISPLAY(window));
+		gchar *atom = gdk_display_atom_name (GDK_WINDOW_DISPLAY(window), xevent->xproperty.atom);
+
 		g_message ("property notify:\twindow: %ld, atom(%ld): %s%s%s",
 			   xevent->xproperty.window,
 			   xevent->xproperty.atom,

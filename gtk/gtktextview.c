@@ -4434,9 +4434,8 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
   text_view->drag_start_x = -1;
   text_view->drag_start_y = -1;
 
-  target_list = gtk_target_list_new_for_display (target_table,
-                                     G_N_ELEMENTS (target_table),
-				     GTK_WIDGET_GET_DISPLAY(text_view));
+  target_list = gtk_target_list_new_for_display (GTK_WIDGET_GET_DISPLAY(text_view), target_table, G_N_ELEMENTS (target_table));
+
 
   context = gtk_drag_begin (GTK_WIDGET (text_view), target_list,
                             GDK_ACTION_COPY | GDK_ACTION_MOVE,

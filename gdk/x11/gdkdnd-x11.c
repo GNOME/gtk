@@ -778,8 +778,8 @@ print_target_list (GList *targets, GdkDisplay *display)
 {
   while (targets)
     {
-      gchar *name = gdk_atom_name_for_display (GPOINTER_TO_INT (targets->data),
-					       display);
+      gchar *name = gdk_display_atom_name (display, GPOINTER_TO_INT (targets->data));
+
       g_message ("\t%s", name);
       g_free (name);
       targets = targets->next;
@@ -2888,8 +2888,10 @@ gdk_drag_begin (GdkWindow     *window,
   return new_context;
 }
 
+
 guint32
-gdk_drag_get_protocol_for_display (guint32 xid, GdkDisplay *display,
+gdk_drag_get_protocol (GdkDisplay *display,
+		       guint32 xid,
 		       GdkDragProtocol *protocol)
 {
   guint32 retval;
@@ -2969,15 +2971,6 @@ gdk_drag_get_protocol_for_display (guint32 xid, GdkDisplay *display,
   *protocol = GDK_DRAG_PROTO_NONE;
   return GDK_NONE;
 }
-	
-
-guint32
-gdk_drag_get_protocol (guint32          xid,
-		       GdkDragProtocol *protocol)
-{
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_drag_get_protocol_for_display instead\n"));
-  return gdk_drag_get_protocol_for_display (xid, DEFAULT_GDK_DISPLAY, protocol);
-}
 
 void
 gdk_drag_find_window (GdkDragContext  *context,
@@ -3014,9 +3007,9 @@ gdk_drag_find_window (GdkDragContext  *context,
        * two are passed explicitely, the third implicitly through
        * protocol->dest_xid.
        */
-      if ((recipient = gdk_drag_get_protocol_for_display (dest, 
-			 GDK_WINDOW_DISPLAY(context->source_window),
-			 protocol)))
+      if ((recipient = gdk_drag_get_protocol (GDK_WINDOW_DISPLAY(context->source_window), 
+			 		      dest,
+			 		      protocol)))
 	{
 	  *dest_window = gdk_window_lookup (recipient);
 	  if (*dest_window)

@@ -53,6 +53,7 @@ void		gdk_display_beep		(GdkDisplay * display);
 GdkAtom		gdk_display_atom		(GdkDisplay * dpy,
 						 const gchar * atom_name,
 						 gboolean only_if_exists);
+gchar *		gdk_display_atom_name		(GdkDisplay * dpy, GdkAtom atom);
 
 
 #ifdef __cplusplus

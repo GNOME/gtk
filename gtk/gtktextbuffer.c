@@ -2851,8 +2851,8 @@ gtk_text_buffer_update_primary_selection (GtkTextBuffer *buffer)
   GtkTextIter start;
   GtkTextIter end;
 
-  GtkClipboard *clipboard = gtk_clipboard_get_for_display (GDK_SELECTION_PRIMARY,
-						      buffer->clipboard_display);
+  GtkClipboard *clipboard = gtk_clipboard_get_for_display (buffer->clipboard_display, GDK_SELECTION_PRIMARY);
+
 
   /* Determine whether we have a selection and adjust X selection
    * accordingly.
@@ -2907,13 +2907,14 @@ paste (GtkTextBuffer *buffer,
     data->replace_selection = TRUE;
 
   if (is_clipboard)
-    gtk_clipboard_request_contents (gtk_clipboard_get_for_display (GDK_NONE, display),
+    gtk_clipboard_request_contents (gtk_clipboard_get_for_display (display, GDK_NONE),
+
                                     gdk_display_atom (display, "GTK_TEXT_BUFFER_CONTENTS", FALSE),
 
                                     clipboard_clipboard_buffer_received, data);
   else
-    gtk_clipboard_request_contents (gtk_clipboard_get_for_display (GDK_SELECTION_PRIMARY,
-								   display),
+    gtk_clipboard_request_contents (gtk_clipboard_get_for_display (display, GDK_SELECTION_PRIMARY),
+
                                     gdk_display_atom (display, "GTK_TEXT_BUFFER_CONTENTS", FALSE),
 
                                     clipboard_selection_buffer_received, data);    
@@ -3039,8 +3040,8 @@ cut_or_copy (GtkTextBuffer *buffer,
 
   if (!gtk_text_iter_equal (&start, &end))
     {
-      GtkClipboard *clipboard = gtk_clipboard_get_for_display (GDK_NONE, 
-					     buffer->clipboard_display);
+      GtkClipboard *clipboard = gtk_clipboard_get_for_display (buffer->clipboard_display, GDK_NONE);
+
       GtkTextIter ins;
       
       buffer->clipboard_contents =
