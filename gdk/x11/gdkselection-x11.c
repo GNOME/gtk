@@ -109,7 +109,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
 
   g_return_val_if_fail (requestor != NULL, 0);
 
-  /* If retrieved chunks are typically small, (and the ICCM says the
+  /* If retrieved chunks are typically small, (and the ICCCM says the
      should be) it would be a win to try first with a buffer of
      moderate length, to avoid two round trips to the server */
 

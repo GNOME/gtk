@@ -1,3 +1,16 @@
+Sat Sep  4 08:39:26 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_set_geometry_hints)
+	  gdk/gdkwindow.c (gdk_window_set_hints):
+
+	Don't omit setting the properties if flags == 0 -
+	there may be an existing set of properties there
+	already. (Very old bug. Would it be better to
+	delete the property instead?)
+
+	* gdk/gdkselection.c (gdk_selection_property_get): Fix 
+	  spelling error in comment.
+
 Wed Sep  1 20:46:11 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c: deal properly with the fact that RC
@@ -296,6 +309,7 @@ Sat Aug 21 14:07:36 1999  Lars Hamann  <lars@gtk.org>
 	show them instead. 
 	(Bug#1805 Reported by: Dave Cole <dave@dccs.com.au>)
 
+>>>>>>> 1.1061.2.110
 Wed Aug 18 09:20:10 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwindow.c:
@@ -352,6 +366,7 @@ Tue Aug 17 07:43:04 1999  Tim Janik  <timj@gtk.org>
 	function from gtk_tooltips_expose, as we connect to ::expose_event
 	*and* ::draw now.
 
+>>>>>>> 1.1061.2.104
 1999-08-18  Federico Mena Quintero  <federico@redhat.com>
 
 	* gtk/gtkselection.c (gtk_target_list_ref): Added missing sanity

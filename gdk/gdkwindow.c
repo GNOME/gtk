@@ -1082,8 +1082,10 @@ gdk_window_set_hints (GdkWindow *window,
       size_hints.max_height = max_height;
     }
   
-  if (flags)
-    XSetWMNormalHints (private->xdisplay, private->xwindow, &size_hints);
+  /* FIXME: Would it be better to delete this property of
+   *        flags == 0? It would save space on the server
+   */
+  XSetWMNormalHints (private->xdisplay, private->xwindow, &size_hints);
 }
 
 void 
@@ -1165,9 +1167,11 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
 	  size_hints.max_aspect.y = 65536 / geometry->max_aspect;;
 	}
     }
-  
-  if (geom_mask)
-    XSetWMNormalHints (private->xdisplay, private->xwindow, &size_hints);
+
+  /* FIXME: Would it be better to delete this property of
+   *        geom_mask == 0? It would save space on the server
+   */
+  XSetWMNormalHints (private->xdisplay, private->xwindow, &size_hints);
 }
 
 void
