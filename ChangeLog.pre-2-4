@@ -9,14 +9,14 @@ Mon Dec  7 03:08:39 1998  Tim Janik  <timj@gtk.org>
 	* gtk/gtktypeutils.h: 
 	* gtk/gtktypeutils.c: reverted marius change to expose the type systems
 	internal type info data to the user. if such functionality is required
-	we should provide wrapped accessors, ala gtk_signal_query().
+	we should provide wrapping accessors, ala gtk_signal_query(). also the
+	GtkTypeInfo structures are dynamically allocated memory portions, so
+	only the type system is really allowed to access that stuff.
 
 	* gtk/gtksignal.c (gtk_signal_connect_by_type): reverted marius change,
 	since it destroys the possibility to implement automatic marshaller
 	lookups some day, and it also disables third party code's ability to
-	connect to any signal. also the GtkTypeInfo structures are dynamically
-	allocated memory portions, so only the type system is really allowed
-	to access that stuff.
+	connect to any signal.
 
 Mon Dec  7 01:32:18 1998  Tim Janik  <timj@gtk.org>
 
