@@ -1,3 +1,11 @@
+2004-09-15  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_get_frame_extents):
+	Remove bogus code that tried to do what the X11 backend does in
+	its version of this function. There are no "frame windows" (for
+	toplevel window decoration) on Windows. The desktop ("root")
+	window is not the parent of a toplevel window. (#152481)
+
 2004-09-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Update.

@@ -2021,14 +2021,6 @@ gdk_window_get_frame_extents (GdkWindow    *window,
     private = (GdkWindowObject*) private->parent;
 
   hwnd = GDK_WINDOW_HWND (window);
-
-  /* find the frame window */
-  while (HWND_DESKTOP != GetParent (hwnd))
-    {
-      hwnd = GetParent (hwnd);
-      g_return_if_fail (NULL != hwnd);
-    }
-
   API_CALL (GetWindowRect, (hwnd, &r));
 
   rect->x = r.left + _gdk_offset_x;
