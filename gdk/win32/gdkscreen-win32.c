@@ -18,8 +18,10 @@
  */
 
 #include <gdkscreen.h>
+#include "gdkprivate-win32.h" /* _gdk_parent_root */
+#include "gdk.h" /* gdk_screen_width(), ... */
 
-static GdkColormap *default_colormap;
+static GdkColormap *default_colormap = NULL;
 
 GdkDisplay *
 gdk_screen_get_display (GdkScreen *screen)
@@ -49,7 +51,7 @@ void
 gdk_screen_set_default_colormap (GdkScreen   *screen,
 				 GdkColormap *colormap)
 {
-  default_coloramp = colormap;
+  default_colormap = colormap;
 }
 
 gint 
@@ -69,4 +71,12 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
   dest->y = 0;
   dest->width = gdk_screen_width ();
   dest->height = gdk_screen_height ();
+}
+
+gint
+gdk_screen_get_number (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);  
+  
+  return 0;
 }

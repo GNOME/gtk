@@ -31,6 +31,7 @@
 
 #include <pango/pangowin32.h>
 
+#include "gdkscreen.h" /* gdk_get_default_screen() */
 #include "gdkprivate-win32.h"
 
 static void gdk_win32_draw_rectangle (GdkDrawable    *drawable,

@@ -3164,7 +3164,11 @@ gtk_window_show (GtkWidget *widget)
 
   /* Try to make sure that we have some focused widget
    */
+#ifdef GDK_WINDOWING_X11
   if (!window->focus_widget && !GTK_IS_PLUG (window))
+#else
+  if (!window->focus_widget)
+#endif
     gtk_window_move_focus (window, GTK_DIR_TAB_FORWARD);
   
   if (window->modal)

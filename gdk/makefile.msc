@@ -66,6 +66,7 @@ gdk_OBJECTS = \
 	gdk.obj \
 	gdkcolor.obj \
 	gdkcursor.obj \
+	gdkdisplay.obj \
 	gdkdraw.obj \
 	gdkenumtypes.obj \
 	gdkevents.obj \
@@ -83,6 +84,7 @@ gdk_OBJECTS = \
 	gdkrectangle.obj \
 	gdkregion-generic.obj \
 	gdkrgb.obj \
+	gdkscreen.obj \
 	gdkselection.obj \
 	gdkvisual.obj \
 	gdkwindow.obj

@@ -17,6 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "gdk.h" /* gdk_get_display_arg_name() */
 #include "gdkdisplay.h"
 #include "gdkscreen.h"
 #include "gdkprivate-win32.h"
@@ -42,6 +43,8 @@ gdk_open_display (const gchar *display_name)
   gdk_set_default_display (_gdk_display);
 
   _gdk_visual_init ();
+  gdk_screen_set_default_colormap (_gdk_screen,
+                                   gdk_screen_get_system_colormap (_gdk_screen));
   _gdk_windowing_window_init ();
   _gdk_windowing_image_init ();
   _gdk_events_init ();
@@ -57,22 +60,22 @@ gdk_display_get_display_name (GdkDisplay *display)
   return gdk_get_display_arg_name ();
 }
 
-static gint
+gint
 gdk_display_get_n_screens (GdkDisplay * display)
 {
   return 1;
 }
 
-static GdkScreen *
+GdkScreen *
 gdk_display_get_screen (GdkDisplay *display,
 			gint        screen_num)
 {
-  g_return_if_fail (screen_num == 0);
+  g_return_val_if_fail (screen_num == 0, _gdk_screen);
   
   return _gdk_screen;
 }
 
-static GdkScreen *
+GdkScreen *
 gdk_display_get_default_screen (GdkDisplay * display)
 {
   return _gdk_screen;

@@ -1,3 +1,22 @@
+2002-06-10  Hans Breuer  <hans@breuer.org>
+
+	* gdk/makefile.msc : added gdkdisplay and gdkscreen
+
+	* gdk/win32/gdkdisplay-win32.c (gdk_open_display) : 
+	need to gdk_screen_set_default_colormap(). Also un-static
+	some exported gdk_display_*() functions
+
+	* gdk/win32/gdkdrawable-win32.c : added "gdkscreen.h"
+
+	* gdk/win32/gdkscreen-win32.c : implement
+	gdk_screen_get_number, fixed typo, added rewuired headers
+
+	[merge from 2.0.x branch, should we really manifest 
+	 GtkPlug as being an X11 only thing this way? See #58541]
+	* gtk/gtkwindow.c (gtk_window_show): Conditionalize
+	GTK_IS_PLUG() check on GDK_WINDOWING_X11. (Problem
+	reported by Sven Neumann)
+
 2002-06-10  Tor Lillqvist  <tml@iki.fi>
 
 	[ merge from stable ]
