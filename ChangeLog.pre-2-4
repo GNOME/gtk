@@ -1,3 +1,14 @@
+Sat Jan 31 22:41:57 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreemodel.c (gtk_tree_model_rows_reordered): Correct
+	the documentation for new_order.  (#124790, Tim-Philipp Müller)
+
+Sat Jan 31 22:38:07 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_fixed_width): 
+	Reset use_resized_width when setting fixed_width.  (#108612, 
+	Felipe Heidrich) 
+
 Sat Jan 31 16:27:44 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkmain.c (gtk_key_snooper_remove): Don't leak the
