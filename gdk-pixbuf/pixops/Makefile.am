@@ -1,6 +1,6 @@
 noinst_LTLIBRARIES = libpixops.la
 
-INCLUDES = $(GLIB_CFLAGS)
+INCLUDES = $(GLIB_CFLAGS) $(LIBART_CFLAGS)
 
 bin_PROGRAMS = timescale
 
