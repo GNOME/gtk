@@ -417,7 +417,7 @@ gdk_win32_print_dc (HDC hdc)
   RECT rect;
   int flag;
 
-  g_print ("%p\n", hdc);
+  g_print ("%p:\n", hdc);
   obj = GetCurrentObject (hdc, OBJ_BRUSH);
   GetObject (obj, sizeof (LOGBRUSH), &logbrush);
   g_print ("brush: %s color=%06lx hatch=%p\n",
@@ -549,6 +549,8 @@ gdk_win32_gcvalues_mask_to_string (GdkGCValuesMask mask)
   gchar buf[400];
   gchar *bufp = buf;
   gchar *s = "";
+
+  buf[0] = '\0';
 
 #define BIT(x) 						\
   if (mask & GDK_GC_##x) 				\

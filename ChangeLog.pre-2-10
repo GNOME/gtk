@@ -1,3 +1,19 @@
+2002-12-01  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdrawable-win32.c (generic_draw): Don't leak
+	stipple_gc. Some more checks for errors. Use correct ternary ROP
+	when blitting the foreground into the tile pixmap where the
+	stipple is set. (I didn't notice that I had used the wrong one, as
+	it didn't matter on Win2k, where DIB sections apparently are
+	zeroed upon creation. But on Win98 they have random initial
+	contents. Thanks to Hans Breuer for reporting this.)
+	(gdk_win32_draw_rectangle, gdk_win32_draw_arc,
+	gdk_win32_draw_polygon): Don't pass the LINE_ATTRIBUTES bits to
+	generic_draw() if drawing a filled figure.
+
+	* gdk/win32/gdkmain-win32.c (gdk_win32_print_dc): Minor cosmetics.
+	(gdk_win32_gcvalues_mask_to_string): Initialize buffer as empty.
+	
 2002-11-29  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkprivate-win32.h (WIN32_API_FAILED,
