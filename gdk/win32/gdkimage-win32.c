@@ -339,7 +339,7 @@ _gdk_win32_get_image (GdkDrawable *drawable,
       RGBQUAD bmiColors[256];
     } u;
   } bmi;
-  HGDIOBJ oldbitmap1, oldbitmap2;
+  HGDIOBJ oldbitmap1 = NULL, oldbitmap2;
   UINT iUsage;
   BITMAP bm;
   int i;
@@ -414,7 +414,7 @@ _gdk_win32_get_image (GdkDrawable *drawable,
   if ((memdc = CreateCompatibleDC (hdc)) == NULL)
     {
       WIN32_GDI_FAILED ("CreateCompatibleDC");
-      if (GDK_IS_PIXMAP (drawable))
+      if (GDK_IS_PIXMAP_IMPL_WIN32 (drawable))
 	{
 	  SelectObject (hdc, oldbitmap1);
 	  if (!DeleteDC (hdc))
@@ -547,7 +547,7 @@ _gdk_win32_get_image (GdkDrawable *drawable,
       image->bpp = 4;
       break;
     default:
-      g_warning ("gdk_image_get: image->depth = %d", image->depth);
+      g_warning ("_gdk_win32_get_image: image->depth = %d", image->depth);
       g_assert_not_reached ();
     }
   image->bits_per_pixel = image->depth;
@@ -568,7 +568,7 @@ gdk_image_get_pixel (GdkImage *image,
 		     gint      x,
 		     gint      y)
 {
-  guint32 pixel;
+  guint32 pixel = 0;
 
   g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
 
@@ -599,6 +599,10 @@ gdk_image_get_pixel (GdkImage *image,
 	case 4:
 	  pixel = pixelp[0] | (pixelp[1] << 8) | (pixelp[2] << 16);
 	  break;
+
+	default:
+	  g_warning ("gdk_image_get_pixel(): bpp = %d", image->bpp);
+	  g_assert_not_reached ();
 	}
     }
 

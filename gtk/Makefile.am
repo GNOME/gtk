@@ -28,7 +28,7 @@ endif
 
 if OS_WIN32
 gtk_def = gtk.def
-gtk_win32_symbols = -export-symbols $(gtk_def) -lwsock32
+gtk_win32_symbols = -export-symbols $(gtk_def)
 
 gtk_win32res_lo = gtk-win32res.lo
 
@@ -72,7 +72,6 @@ LDFLAGS = @STRIP_BEGIN@ \
 	@LIBTOOL_EXPORT_OPTIONS@				\
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la		\
 	$(top_builddir)/gdk/@gdktargetlib@			\
-	$(gtk_win32_symbols)					\
 	@GTK_DEP_LIBS@						\
 @STRIP_END@
 
@@ -580,7 +579,8 @@ libgtk_win32_includedir = $(includedir)/gtk-2.0/gtk
 libgtk_win32_include_HEADERS = $(gtk_target_headers)
 libgtk_win32_1_3_la_SOURCES = $(gtk_target_sources)
 libgtk_win32_1_3_la_LIBADD = $(gtk_win32res_lo)
-libgtk_win32_1_3_la_DEPENDENCIES = $(gtk_def) $(gtk_win32res_lo)
+libgtk_win32_1_3_la_DEPENDENCIES = $(gtk_def)
+libgtk_win32_1_3_la_LDFLAGS = $(gtk_win32_symbols) -lwsock32
 endif
 EXTRA_LTLIBRARIES = libgtk-x11-1.3.la libgtk-linux-fb-1.3.la libgtk-win32-1.3.la
 

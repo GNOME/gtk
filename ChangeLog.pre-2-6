@@ -1,3 +1,23 @@
+2002-01-01  Tor Lillqvist  <tml@iki.fi>
+
+	* demos/Makefile.am (test-inline-pixbufs.h): Append EXEEXT to
+	../gdk-pixbuf/gdk-pixbuf-csource.
+
+2001-12-31  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkgc-win32.c (predraw_set_foreground): Improved error
+	handling.
+	(gdk_win32_hdc_get,gdk_win32_hdc_release): Silence gcc -Wall.
+
+	* gdk/win32/gdkimage-win32.c (_gdk_win32_get_image): Silence gcc
+	-Wall.  Use GDK_IS_PIXMAP_IMPL_WIN32 instead of GDK_IS_PIXMAP in
+	one more place.
+
+	* gdk/win32/gdkinput-win32.c (_gdk_input_other_event): Silence gcc
+	-Wall.
+
+	* gtk/Makefile.am (libgtk_win32_1_3_la_LDFLAGS): Add -lwsock32.
+
 2002-01-01  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextview.c (gtk_text_view_get_default_attributes): doc 

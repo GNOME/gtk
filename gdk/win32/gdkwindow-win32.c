@@ -1592,6 +1592,7 @@ gdk_window_set_back_pixmap (GdkWindow *window,
   if (parent_relative)
     {
       private->bg_pixmap = GDK_PARENT_RELATIVE_BG;
+      GDK_NOTE (MISC, g_print (G_STRLOC ": setting background pixmap to parent_relative\n"));
     }
   else
     {
@@ -2564,8 +2565,6 @@ gdk_window_shape_combine_region (GdkWindow *window,
                                  gint       offset_x,
                                  gint       offset_y)
 {
-  gint xoffset, yoffset;
-  
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
