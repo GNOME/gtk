@@ -19,14 +19,28 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#undef GTK_DISABLE_DEPRECATED
+
 #include "gtkseparatormenuitem.h"
 #include "gtkseparatortoolitem.h"
 #include "gtkintl.h"
+#include "gtktoolbar.h"
 
-static void gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass*class);
+/* note: keep in sync with DEFAULT_SPACE_SIZE and DEFAULT_SPACE_STYLE in gtktoolbar.c */
+#define DEFAULT_SPACE_SIZE 5    
+#define DEFAULT_SPACE_STYLE GTK_TOOLBAR_SPACE_LINE
 
-static void gtk_separator_tool_item_add (GtkContainer *container,
-					 GtkWidget    *child);
+#define SPACE_LINE_DIVISION 10
+#define SPACE_LINE_START    3
+#define SPACE_LINE_END      7
+
+static void                 gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class);
+static gboolean             gtk_separator_tool_item_expose     (GtkWidget                 *widget,
+								GdkEventExpose            *event);
+static void                 gtk_separator_tool_item_add        (GtkContainer              *container,
+								GtkWidget                 *child);
+static GtkToolbarSpaceStyle get_space_style                    (GtkToolItem               *tool_item);
+static gint                 get_space_size                     (GtkToolItem               *tool_item);
 
 static GObjectClass *parent_class = NULL;
 
@@ -57,17 +71,52 @@ gtk_separator_tool_item_get_type (void)
   return type;
 }
 
+static GtkToolbarSpaceStyle
+get_space_style (GtkToolItem *tool_item)
+{
+  GtkToolbarSpaceStyle space_style = DEFAULT_SPACE_STYLE;
+  GtkWidget *parent = GTK_WIDGET (tool_item)->parent;
+
+  if (GTK_IS_TOOLBAR (parent))
+    {
+      gtk_widget_style_get (parent,
+			    "space_style", &space_style,
+			    NULL);
+    }
+
+  return space_style;  
+}
+
+static gint
+get_space_size (GtkToolItem *tool_item)
+{
+  gint space_size = DEFAULT_SPACE_SIZE;
+  GtkWidget *parent = GTK_WIDGET (tool_item)->parent;
+  
+  if (GTK_IS_TOOLBAR (parent))
+    {
+      gtk_widget_style_get (parent,
+			    "space_size", &space_size,
+			    NULL);
+    }
+
+  return space_size;
+}
 
 static void
 gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
 {
   GtkContainerClass *container_class;
   GtkToolItemClass *toolitem_class;
+  GtkWidgetClass *widget_class;
 
   parent_class = g_type_class_peek_parent (class);
   container_class = (GtkContainerClass *)class;
   toolitem_class = (GtkToolItemClass *)class;
+  widget_class = (GtkWidgetClass *)class;
 
+  widget_class->expose_event = gtk_separator_tool_item_expose;
+  
   container_class->add = gtk_separator_tool_item_add;
 }
 
@@ -76,6 +125,50 @@ gtk_separator_tool_item_add (GtkContainer *container,
 			     GtkWidget    *child)
 {
   g_warning("attempt to add a child to an GtkSeparatorToolItem");
+}
+
+static gboolean
+gtk_separator_tool_item_expose (GtkWidget      *widget,
+				GdkEventExpose *event)
+{
+  GtkToolItem *tool_item = GTK_TOOL_ITEM (widget);
+  gint space_size;
+  GtkAllocation *allocation;
+  GtkOrientation orientation;
+  GdkRectangle *area;
+
+  if (get_space_style (tool_item) == GTK_TOOLBAR_SPACE_LINE)
+    {
+      space_size = get_space_size (tool_item);
+      allocation = &(widget->allocation);
+      orientation = gtk_tool_item_get_orientation (tool_item);
+      area = &(event->area);
+      
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+	{
+	  gtk_paint_vline (widget->style, widget->window,
+			   GTK_WIDGET_STATE (widget), area, widget,
+			   "separator_tool_item",
+			   allocation->y + allocation->height *
+			   SPACE_LINE_START / SPACE_LINE_DIVISION,
+			   allocation->y + allocation->height *
+			   SPACE_LINE_END / SPACE_LINE_DIVISION,
+			   allocation->x + (space_size - widget->style->xthickness) / 2);
+	}
+      else if (orientation == GTK_ORIENTATION_VERTICAL)
+	{
+	  gtk_paint_hline (widget->style, widget->window,
+			   GTK_WIDGET_STATE (widget), area, widget,
+			   "separator_tool_item",
+			   allocation->x + allocation->width *
+			   SPACE_LINE_START / SPACE_LINE_DIVISION,
+			   allocation->x + allocation->width *
+			   SPACE_LINE_END / SPACE_LINE_DIVISION,
+			   allocation->y + (space_size - widget->style->ythickness) / 2);
+	}
+    }
+  
+  return TRUE;
 }
 
 GtkToolItem *

@@ -49,15 +49,13 @@
 #include <string.h>
 
 #define DEFAULT_IPADDING 0
+
+/* note: keep in sync with DEFAULT_SPACE_SIZE and DEFAULT_SPACE_STYLE in gtkseparatortoolitem.c */
 #define DEFAULT_SPACE_SIZE  5
 #define DEFAULT_SPACE_STYLE GTK_TOOLBAR_SPACE_LINE
 
 #define DEFAULT_ICON_SIZE GTK_ICON_SIZE_LARGE_TOOLBAR
 #define DEFAULT_TOOLBAR_STYLE GTK_TOOLBAR_BOTH
-
-#define SPACE_LINE_DIVISION 10
-#define SPACE_LINE_START    3
-#define SPACE_LINE_END      7
 
 enum {
   PROP_0,
@@ -164,7 +162,6 @@ static void                 gtk_toolbar_arrow_button_clicked (GtkWidget      *bu
 static void                 gtk_toolbar_update_button_relief (GtkToolbar     *toolbar);
 static GtkReliefStyle       get_button_relief                (GtkToolbar     *toolbar);
 static gint                 get_space_size                   (GtkToolbar     *toolbar);
-static GtkToolbarSpaceStyle get_space_style                  (GtkToolbar     *toolbar);
 static gint                 get_internal_padding             (GtkToolbar     *toolbar);
 static void                 gtk_toolbar_remove_tool_item     (GtkToolbar     *toolbar,
 							      GtkToolItem    *item);
@@ -639,42 +636,6 @@ gtk_toolbar_unmap (GtkWidget *widget)
 }
 
 static void
-gtk_toolbar_paint_space_line (GtkWidget    *widget,
-			      GdkRectangle *area,
-			      GtkToolItem  *item)
-{
-  GtkToolbar *toolbar;
-  GtkAllocation *allocation;
-  gint space_size;
-  
-  g_return_if_fail (GTK_BIN (item)->child == NULL);
-
-  toolbar = GTK_TOOLBAR (widget);
-
-  allocation = &GTK_WIDGET (item)->allocation;
-  space_size = get_space_size (toolbar);
-  
-  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
-    gtk_paint_vline (widget->style, widget->window,
-		     GTK_WIDGET_STATE (widget), area, widget,
-		     "toolbar",
-		     allocation->y +  allocation->height *
-		     SPACE_LINE_START / SPACE_LINE_DIVISION,
-		     allocation->y + allocation->height *
-		     SPACE_LINE_END / SPACE_LINE_DIVISION,
-		     allocation->x + (space_size-widget->style->xthickness)/2);
-  else if (toolbar->orientation == GTK_ORIENTATION_VERTICAL)
-    gtk_paint_hline (widget->style, widget->window,
-		     GTK_WIDGET_STATE (widget), area, widget,
-		     "toolbar",
-		     allocation->x + allocation->width *
-		     SPACE_LINE_START / SPACE_LINE_DIVISION,
-		     allocation->x + allocation->width *
-		     SPACE_LINE_END / SPACE_LINE_DIVISION,
-		     allocation->y + (space_size-widget->style->ythickness)/2);
-}
-
-static void
 gtk_toolbar_realize (GtkWidget *widget)
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
@@ -773,12 +734,9 @@ gtk_toolbar_expose (GtkWidget      *widget,
     {
       GtkToolItem *item = GTK_TOOL_ITEM (items->data);
 
-      if (GTK_BIN (item)->child)
-	gtk_container_propagate_expose (GTK_CONTAINER (widget),
-					GTK_WIDGET (item),
-					event);
-      else if (GTK_WIDGET_MAPPED (item) && get_space_style (toolbar) == GTK_TOOLBAR_SPACE_LINE)
-	gtk_toolbar_paint_space_line (widget, &event->area, item);
+      gtk_container_propagate_expose (GTK_CONTAINER (widget),
+				      GTK_WIDGET (item),
+				      event);
       
       items = items->next;
     }
@@ -2051,19 +2009,6 @@ get_space_size (GtkToolbar *toolbar)
                         NULL);
 
   return space_size;
-}
-
-static GtkToolbarSpaceStyle
-get_space_style (GtkToolbar *toolbar)
-{
-  GtkToolbarSpaceStyle space_style = DEFAULT_SPACE_STYLE;
-
-  gtk_widget_style_get (GTK_WIDGET (toolbar),
-                        "space_style", &space_style,
-                        NULL);
-
-
-  return space_style;  
 }
 
 static gint

@@ -1,3 +1,19 @@
+Mon Jul  7 16:50:32 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkcellrenderertext.c
+	(gtk_cell_renderer_text_class_init): remove accidentally committed
+	debugging spew
+
+	* gtk/gtktoolbar.c
+	(gtk_toolbar_paint_space_line): remove this function
+	(gtk_toolbar_expose): always propagate expose, even if the item is
+	a separator item
+
+	* gtk/gtkseparatortoolitem.c
+	(gtk_separator_tool_item_expose): moved here from gtktoolbar.c
+	(get_space_size): new function.
+	(get_space_style): new function
+
 Sun Jul  6 13:00:20 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (_gtk_drag_source_handle_event)
