@@ -1,3 +1,7 @@
+2004-07-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-features.h.in: Fix the build.
+
 2004-07-06  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk-pixbuf-features.h.in
