@@ -1,3 +1,11 @@
+Thu Nov 12 00:26:13 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkstyle.c (gtk_default_draw_box_gap): use GtkPositionType
+	defines.
+
+	* gtk/gtknotebook.c (gtk_notebook_draw_tab): fixed gap_side for
+	GTP_POS_RIGHT
+
 Wed Nov 11 19:54:58 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_class_init)

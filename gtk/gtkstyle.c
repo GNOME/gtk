@@ -2613,9 +2613,9 @@ gtk_default_draw_box_gap (GtkStyle       *style,
     case GTK_SHADOW_OUT:
     case GTK_SHADOW_ETCHED_IN:
     case GTK_SHADOW_ETCHED_OUT:
-      if (gap_side == 0)
-	/* top */
+      switch (gap_side)
 	{
+	case GTK_POS_TOP:
 	  gdk_draw_line (window, gc1,
 			 x, y, x, y + height - 1);
 	  gdk_draw_line (window, gc2,
@@ -2647,10 +2647,8 @@ gtk_default_draw_box_gap (GtkStyle       *style,
 	      gdk_draw_line (window, gc2,
 			     x + gap_x + gap_width - 1, y, x + gap_x + gap_width - 1, y);
 	    }
-	}
-      else if (gap_side == 1)
-	/* bottom */
-	{
+	  break;
+	case  GTK_POS_BOTTOM:
 	  gdk_draw_line (window, gc1,
 			 x, y, x + width - 1, y);
 	  gdk_draw_line (window, gc1,
@@ -2682,10 +2680,8 @@ gtk_default_draw_box_gap (GtkStyle       *style,
 	      gdk_draw_line (window, gc3,
 			     x + gap_x + gap_width - 1, y + height - 1, x + gap_x + gap_width - 1, y + height - 1);
 	    }
-	}
-      else if (gap_side == 2)
-	/* left */
-	{
+	  break;
+	case GTK_POS_LEFT:
 	  gdk_draw_line (window, gc1,
 			 x, y, x + width - 1, y);
 	  gdk_draw_line (window, gc2,
@@ -2717,10 +2713,8 @@ gtk_default_draw_box_gap (GtkStyle       *style,
 	      gdk_draw_line (window, gc2,
 			     x, y + gap_x + gap_width - 1, x, y + gap_x + gap_width - 1);
 	    }
-	}
-      else if (gap_side == 3)
-	/* right */
-	{
+	  break;
+	case GTK_POS_RIGHT:
 	  gdk_draw_line (window, gc1,
 			 x, y, x + width - 1, y);
 	  gdk_draw_line (window, gc1,
@@ -2752,6 +2746,7 @@ gtk_default_draw_box_gap (GtkStyle       *style,
 	      gdk_draw_line (window, gc3,
 			     x + width - 1, y + gap_x + gap_width - 1, x + width - 1, y + gap_x + gap_width - 1);
 	    }
+	  break;
 	}
     }
   if (area)

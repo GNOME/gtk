@@ -2295,7 +2295,7 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
 	  gap_side = GTK_POS_RIGHT;
 	  break;
 	case GTK_POS_RIGHT:
-	  gap_side = GTK_POS_RIGHT;
+	  gap_side = GTK_POS_LEFT;
 	  break;
 	}
       
