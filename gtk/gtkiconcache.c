@@ -24,7 +24,9 @@
 #ifdef HAVE_MMAP
 #include <sys/mman.h>
 #endif
-
+#ifdef G_OS_WIN32
+#include <io.h>
+#endif
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifdef HAVE_UNISTD_H
@@ -72,12 +74,13 @@ _gtk_icon_cache_unref (GtkIconCache *cache)
 GtkIconCache *
 _gtk_icon_cache_new_for_path (const gchar *path)
 {
+  GtkIconCache *cache = NULL;
+#ifdef HAVE_MMAP
   gchar *cache_filename;
   gint fd;
   struct stat st;
   struct stat path_st;
-  gchar *buffer = MAP_FAILED;
-  GtkIconCache *cache = NULL;
+  gchar *buffer;
 
   if (g_getenv ("GTK_NO_ICON_CACHE"))
     return NULL;
@@ -114,9 +117,7 @@ _gtk_icon_cache_new_for_path (const gchar *path)
       goto done; 
     }
 
-#ifdef HAVE_MMAP
   buffer = (gchar *) mmap (NULL, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
-#endif
 
   if (buffer == MAP_FAILED)
     goto done;
@@ -125,9 +126,7 @@ _gtk_icon_cache_new_for_path (const gchar *path)
   if (GET_UINT16 (buffer, 0) != MAJOR_VERSION ||
       GET_UINT16 (buffer, 2) != MINOR_VERSION)
     {
-#ifdef HAVE_MMAP
       munmap (buffer, st.st_size);
-#endif
       GTK_NOTE (ICONTHEME, 
 		g_print ("wrong cache version\n"));
       goto done;
@@ -143,6 +142,8 @@ _gtk_icon_cache_new_for_path (const gchar *path)
  done:
   g_free (cache_filename);  
   close (fd);
+
+#endif  /* HAVE_MMAP */
 
   return cache;
 }

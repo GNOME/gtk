@@ -1,5 +1,10 @@
 2004-10-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconcache.c: Include io.h on windows.  (#156075,
+	Kazuki IWAMOTO)
+	(_gtk_icon_cache_new_for_path): Don't use MAP_FAILED if we don't
+	have mmap.
+
 	* gtk/gtkicontheme.c (gtk_icon_theme_has_icon): Implement for
 	cached themes.
 
