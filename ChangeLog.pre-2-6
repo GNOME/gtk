@@ -1,3 +1,13 @@
+2003-09-22  Matthias Clasen  <maclas@gmx.de>
+
+	* tests/testmerge.c (main): Initially activate the JUSTIFY_RIGHT
+	group member to test the fix for #122904.
+
+	* gtk/gtkactiongroup.c (gtk_action_group_add_radio_actions_full): 
+	Add the action to the group before activating it, otherwise we
+	may end up with multiple active group members.  (#122904, Marco
+	Pesenti Gritti)
+
 2003-09-21  Matthias Clasen  <maclas@gmx.de>
 
 	Changes to make cross-process merging feasible:

@@ -597,14 +597,15 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
       if (i == 0) 
 	first_action = action;
 
-      if (value == entries[i].value)
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
-      
       gtk_radio_action_set_group (GTK_RADIO_ACTION (action), group);
       group = gtk_radio_action_get_group (GTK_RADIO_ACTION (action));
 
+      if (value == entries[i].value)
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
+      
       /* set the accel path for the menu item */
-      accel_path = g_strconcat ("<Actions>/", action_group->private_data->name, "/",
+      accel_path = g_strconcat ("<Actions>/", 
+				action_group->private_data->name, "/",
 				entries[i].name, NULL);
       if (entries[i].accelerator)
 	{

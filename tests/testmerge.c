@@ -462,7 +462,7 @@ main (int argc, char **argv)
 				       NULL);
   gtk_action_group_add_radio_actions (action_group, 
 				      radio_entries, n_radio_entries, 
-				      JUSTIFY_LEFT,
+				      JUSTIFY_RIGHT,
 				      G_CALLBACK (radio_action_changed), NULL);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -556,6 +556,8 @@ main (int argc, char **argv)
   gtk_widget_show_all (window);
   gtk_main ();
 
+  g_object_unref (action_group);
+  g_object_unref (merge);
 
   return 0;
 }
