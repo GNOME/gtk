@@ -25,6 +25,8 @@
  */
 
 #include <gdkdnd.h>
+#include <gdkdrawable.h>
+#include <gdkdisplay.h>
 
 /**
  * gdk_drag_find_window:
@@ -72,4 +74,7 @@ gdk_drag_get_protocol (guint32          xid,
 {
   return gdk_drag_get_protocol_for_display (gdk_display_get_default (), xid, protocol);
 }
+
+
+
 

@@ -143,7 +143,7 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
  * 
  * <example><title>Creating a custom cursor.</title>
  * <programlisting>
- * /* This data is in X bitmap format, and can be created with the 'bitmap'
+ * /<!-- -->* This data is in X bitmap format, and can be created with the 'bitmap'
  *    utility. *<!-- -->/
  * &num;define cursor1_width 16
  * &num;define cursor1_height 16
@@ -160,8 +160,8 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
  *
  *  GdkCursor *cursor;
  *  GdkPixmap *source, *mask;
- *  GdkColor fg = { 0, 65535, 0, 0 }; /* Red. *<!-- -->/
- *  GdkColor bg = { 0, 0, 0, 65535 }; /* Blue. *<!-- -->/
+ *  GdkColor fg = { 0, 65535, 0, 0 }; /<!-- -->* Red. *<!-- -->/
+ *  GdkColor bg = { 0, 0, 0, 65535 }; /<!-- -->* Blue. *<!-- -->/
  *
  *
  *  source = gdk_bitmap_create_from_data (NULL, cursor1_bits,

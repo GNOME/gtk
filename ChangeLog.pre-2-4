@@ -1,3 +1,9 @@
+2002-10-25  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkcursor-x11.c: Fix doc comment. 
+
+	* gdk/gdkdnd.c: Add missing includes.
+
 2002-10-24  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdkdnd.c: 
