@@ -1,3 +1,14 @@
+Mon Aug 24 10:55:51 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_draw_tab): Don't
+	  dereference NULL focus tab.
+
+	* gtk/gtkscale.c (gtk_scale_[un]map): Add map/unmap
+	  functions since we need to both show/hide and 
+	  queue a redraw. (There's some duplication of drawing here, 
+	  we probably should only be queuing a redraw on the
+	  "value" portion of the scale.)
+
 Fri Aug 21 19:02:30 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrange.[ch] gtk/gtkhscale.c gtk/gtkvscale.[ch]: Fit scales

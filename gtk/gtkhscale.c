@@ -182,7 +182,6 @@ gtk_hscale_realize (GtkWidget *widget)
   gtk_range_slider_update (GTK_RANGE (widget));
 
   gdk_window_show (range->slider);
-  gdk_window_show (range->trough);
 }
 
 static void

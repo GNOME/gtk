@@ -4,8 +4,6 @@ For 1.2.0 release:
 	
 Bugs:
  * Widget redrawing when the window resizes sometimes messes up.
-   GtkLabels sometimes redraw without clearing up the underlying background on
-   window resizes.
  
  * delay dnd settings to take effect once a widget is realized, this is
    to avoid force realizations. i think this goes along with owens dnd
@@ -271,3 +269,10 @@ Text/Edit widget:
     [ From: Stefan Jeske <jeske@braunschweig.netsurf.de> ]
 
   - "changed" emitted when doing deletes on empty Text widget.
+
+Themes
+======
+
+ - When a scale gets shown/hidden only queue a redraw on the
+   non-window portion, not the whole area.
+

@@ -2276,7 +2276,7 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
 			   page_area.width - 1, page_area.height - 1,
 			   gap_side);
        if ((GTK_WIDGET_HAS_FOCUS (widget)) &&
-	   (GTK_NOTEBOOK(widget)->focus_tab->data == page) &&
+	   notebook->focus_tab && (notebook->focus_tab->data == page) &&
 	   (page))
 	 {
 	    gtk_paint_focus (widget->style, widget->window,
