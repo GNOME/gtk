@@ -637,7 +637,9 @@ gtk_option_menu_position (GtkMenu  *menu,
       if (active == child)
 	break;
 
-      menu_ypos -= child->allocation.height;
+      if (GTK_WIDGET_VISIBLE (child))
+	menu_ypos -= child->allocation.height;
+
       children = children->next;
     }
 

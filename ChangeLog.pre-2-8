@@ -1,3 +1,10 @@
+Sun Nov  1 21:00:06 GMT 1998  Austin Donnelly  <austin@greenend.org.uk>
+
+	* gtk/gtkoptionmenu.c
+	* gtk/gtkmenushell.c: make option menus work when some of the
+	menuitems are hidden - previously, option menu would popup too
+	high.
+
 1998-10-31  Raja R Harinath  <harinath@cs.umn.edu>
 
 	* gtk/gtkfeatures.h.in: Remove `#pragma }'.
