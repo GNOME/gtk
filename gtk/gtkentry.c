@@ -999,7 +999,7 @@ gtk_entry_unrealize (GtkWidget *widget)
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkClipboard *clipboard;
 
-  gtk_im_context_set_client_window (entry->im_context, entry->text_area);
+  gtk_im_context_set_client_window (entry->im_context, NULL);
 
   clipboard = gtk_widget_get_clipboard (widget, GDK_SELECTION_PRIMARY);
   if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (entry))

@@ -1,3 +1,9 @@
+Fri Sep 20 18:01:26 2002  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtkentry.c (gtk_entry_unrealize): Set the IM
+ 	context client 	window to NULL, not to the window that 
+ 	is about to be destroyed. (#88231)
+ 
 Fri Sep 20 16:56:54 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c (gtk_rc_reparse_all_for_settings):
