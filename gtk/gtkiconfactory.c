@@ -727,12 +727,11 @@ gtk_icon_size_register (const gchar *name,
   icon_sizes[icon_sizes_used].width = width;
   icon_sizes[icon_sizes_used].height = height;
 
-  /* alias to self. */
-  gtk_icon_size_register_alias (icon_sizes[icon_sizes_used].name,
-                                icon_sizes[icon_sizes_used].size);
-  
   ++icon_sizes_used;
 
+  /* alias to self. */
+  gtk_icon_size_register_alias (name, icon_sizes_used - 1);
+  
   return icon_sizes_used - 1;
 }
 

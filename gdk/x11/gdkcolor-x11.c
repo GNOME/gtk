@@ -610,7 +610,7 @@ gdk_colormap_alloc1 (GdkColormap *colormap,
 	  if (private->info[ret->pixel].ref_count) /* got a duplicate */
 	    {
 	      XFreeColors (private->xdisplay, private->xcolormap,
-			   &ret->pixel, 1, 0);
+			   &xcolor.pixel, 1, 0);
 	    }
 	  else
 	    {

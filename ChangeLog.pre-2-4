@@ -1,3 +1,12 @@
+2001-07-18  Darin Adler  <darin@bentspoon.com>
+
+	* gtk/gtkiconfactory.c: (gtk_icon_size_register): Reorder code so
+	that we don't get a g_warning message every time we register a new
+	icon size.
+
+	* gdk/x11/gdkcolor-x11.c: (gdk_colormap_alloc1): Fix warning by
+	using pixel variable of the correct type.
+	
 Fri Jul 13 15:33:32 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.[ch]: Add a function gdk_window_get_internal_paint_info(),
