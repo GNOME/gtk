@@ -1,3 +1,11 @@
+Tue Oct 21 22:20:08 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merge from HEAD.
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_move_cursor): set
+	ctrl_pressed and shift_pressed according to the current event
+	state (if there is one). (Fixes #125063, reported by Sebastien Bacher).
+
 2003-10-13  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_real_collapse_row): Don't do
