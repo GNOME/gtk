@@ -110,10 +110,10 @@ gtk_hscale_new (GtkAdjustment *adjustment)
  * @max: maximum value
  * @step: step increment (tick size) used with keyboard shortcuts
  * 
- * Creates a new horizontal scale widget that lets the user
- * input a number between @min and @max with the increment @step.
- * @step must be nonzero; it's the distance the slider moves when
- * using the arrow keys to adjust the scale value.
+ * Creates a new horizontal scale widget that lets the user input a
+ * number between @min and @max (including @min and @max) with the
+ * increment @step.  @step must be nonzero; it's the distance the
+ * slider moves when using the arrow keys to adjust the scale value.
  * 
  * Return value: a new #GtkHScale
  **/

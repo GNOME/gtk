@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#define GTK_MENU_INTERNALS
+
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
 #include "gtkmain.h"
@@ -34,8 +36,6 @@
 #include "gtkwindow.h"
 
 #define MENU_SHELL_TIMEOUT   500
-
-#define GTK_MENU_INTERNALS
 
 enum {
   DEACTIVATE,
