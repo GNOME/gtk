@@ -6,17 +6,22 @@ SUBDIRS = $(SRC_SUBDIRS) docs
 bin_SCRIPTS = gtk-config
 
 EXTRA_DIST =	\
+	HACKING		\
 	gtk+.spec	\
         gtk.m4          \
 	makecopyright	\
 	TODO		\
 	NEWS.pre-1-0	\
 	ChangeLog.pre-1-0	\
+	examples/README.1ST	\
+	examples/extract.awk	\
+	examples/extract.sh	\
 	examples/aspectframe/Makefile  \
 	examples/aspectframe/aspectframe.c  \
 	examples/buttons/Makefile  \
 	examples/buttons/buttons.c  \
 	examples/buttons/info.xpm  \
+	examples/clist/clist.c \
 	examples/entry/Makefile  \
 	examples/entry/entry.c  \
 	examples/eventbox/Makefile  \

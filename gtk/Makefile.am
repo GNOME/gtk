@@ -266,9 +266,11 @@ libgtk_1_1_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 EXTRA_DIST = \
 	line-arrow.xbm 		\
 	line-wrap.xbm 		\
+	testgtk.1 		\
 	testgtkrc 		\
 	testgtkrc2 		\
 	gtkfeatures.h.in	\
+	makeenums.pl		\
 	makeenums.awk		\
 	maketypes.awk		\
 	makeenums.h		\
@@ -278,6 +280,8 @@ EXTRA_DIST = \
 	gtktypebuiltins_evals.c	\
 	gtk-boxed.defs		\
 	gtk.defs		\
+	genmarshal.pl		\
+	gtkmarshal.list		\
 	test.xpm		\
 	marble.xpm		\
 	3DRings.xpm		\
