@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3\n"
-"POT-Creation-Date: 2002-03-29 18:18-0500\n"
-"PO-Revision-Date: 2002-03-06 01:10+0000\n"
+"POT-Creation-Date: 2002-04-01 23:37+0100\n"
+"PO-Revision-Date: 2002-04-01 23:40+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -118,6 +118,23 @@ msgstr ""
 "Erro internp: Módulo de carregamento de imagem '%s' falhou ao começar a "
 "carregar uma imagem, mas não apresentou uma razão para a falha"
 
+#: gdk-pixbuf/gdk-pixdata.c:146
+msgid "Image header corrupt"
+msgstr "Cabeçalho de imagem corrompido"
+
+#: gdk-pixbuf/gdk-pixdata.c:151
+msgid "Image format unknown"
+msgstr "Formato de imagem desconhecido"
+
+#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
+msgid "Image pixel data corrupt"
+msgstr "Dados de pixel da imagem corrompidos"
+
+#: gdk-pixbuf/gdk-pixdata.c:403
+#, c-format
+msgid "failed to allocate image buffer of %u bytes"
+msgstr "falha ao alocar buffer de %u bytes para imagem"
+
 #: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
 msgid "Not enough memory to load bitmap image"
 msgstr "Memória insuficiente para carregar imagem bitmap"
@@ -129,44 +146,6 @@ msgstr "Imagem BMP tem um tamanho de cabeçalho não suportado"
 #: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
 msgstr "Imagem BMP tem dados de cabeçalho incorrectos"
-
-#: gdk-pixbuf/io-ico.c:207
-#, c-format
-msgid "Failure reading ICO: %s"
-msgstr "Falha ao ler ICO: %s"
-
-#: gdk-pixbuf/io-ico.c:224
-msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr "Dados incompletos no ficheiro ICO (talvez tenha sido truncado?)"
-
-#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
-#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
-msgid "Not enough memory to load icon"
-msgstr "Memória insuficiente para carregar ícone"
-
-#: gdk-pixbuf/io-ico.c:303
-msgid "Invalid header in icon"
-msgstr "Cabeçalho inválido no ícone"
-
-#: gdk-pixbuf/io-ico.c:340
-msgid "Icon has zero width"
-msgstr "Ícone tem largura zero"
-
-#: gdk-pixbuf/io-ico.c:350
-msgid "Icon has zero height"
-msgstr "Ícone tem altura zero"
-
-#: gdk-pixbuf/io-ico.c:395
-msgid "Compressed icons are not supported"
-msgstr "Ícones comprimidos não são suportados"
-
-#: gdk-pixbuf/io-ico.c:428
-msgid "Unsupported icon type"
-msgstr "Tipo de ícone não suportado"
-
-#: gdk-pixbuf/io-ico.c:499
-msgid "Not enough memory to load ICO file"
-msgstr "Memória insuficiente para carregar ficheiro ICO"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
@@ -213,9 +192,8 @@ msgid "Version %s of the GIF file format is not supported"
 msgstr "Versão %s do formato de ficheiro GIF não suportado"
 
 #: gdk-pixbuf/io-gif.c:1144
-#, fuzzy
 msgid "GIF image contained a frame with height or width 0."
-msgstr "Imagem GIF continha uma frame que surgia fora dos limites da imagem."
+msgstr "Imagem GIF continha uma frame com altura ou largura 0."
 
 #: gdk-pixbuf/io-gif.c:1157
 msgid "GIF image contained a frame appearing outside the image bounds."
@@ -238,6 +216,44 @@ msgstr ""
 #: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
 msgstr "Imagem GIF estava truncada ou incompleta."
+
+#: gdk-pixbuf/io-ico.c:207
+#, c-format
+msgid "Failure reading ICO: %s"
+msgstr "Falha ao ler ICO: %s"
+
+#: gdk-pixbuf/io-ico.c:224
+msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
+msgstr "Dados incompletos no ficheiro ICO (talvez tenha sido truncado?)"
+
+#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
+#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
+msgid "Not enough memory to load icon"
+msgstr "Memória insuficiente para carregar ícone"
+
+#: gdk-pixbuf/io-ico.c:303
+msgid "Invalid header in icon"
+msgstr "Cabeçalho inválido no ícone"
+
+#: gdk-pixbuf/io-ico.c:340
+msgid "Icon has zero width"
+msgstr "Ícone tem largura zero"
+
+#: gdk-pixbuf/io-ico.c:350
+msgid "Icon has zero height"
+msgstr "Ícone tem altura zero"
+
+#: gdk-pixbuf/io-ico.c:395
+msgid "Compressed icons are not supported"
+msgstr "Ícones comprimidos não são suportados"
+
+#: gdk-pixbuf/io-ico.c:428
+msgid "Unsupported icon type"
+msgstr "Tipo de ícone não suportado"
+
+#: gdk-pixbuf/io-ico.c:499
+msgid "Not enough memory to load ICO file"
+msgstr "Memória insuficiente para carregar ficheiro ICO"
 
 #: gdk-pixbuf/io-jpeg.c:125
 #, c-format
@@ -273,25 +289,24 @@ msgstr ""
 "Qualidade JPEG tem de ser um valor entre 0 e 100; valor '%d' não é permitido."
 
 #: gdk-pixbuf/io-png.c:55
-#, fuzzy
 msgid "Bits per channel of PNG image is invalid."
-msgstr "Tipo de imagem PNM em bruto é inválido"
+msgstr "Bits por canal da imagem PNG é inválido."
 
 #: gdk-pixbuf/io-png.c:136
 msgid "Transformed PNG has zero width or height."
-msgstr ""
+msgstr "PNG transformado tem largura ou altura zero."
 
 #: gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr ""
+msgstr "Bits por canal do PNG transformado não é 8."
 
 #: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
-msgstr ""
+msgstr "PNG transformado não é RGB ou GRBA."
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
+msgstr "PNG transformado tem número não suportado de canais, têm de ser 3 ou 4."
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -409,6 +424,18 @@ msgstr "Final inesperado de dados de imagem PNM"
 msgid "Insufficient memory to load PNM file"
 msgstr "Memória insuficiente para carregar ficheiro PNM"
 
+#: gdk-pixbuf/io-ras.c:158
+msgid "RAS image has bogus header data"
+msgstr "Imagem RAS tem dados de cabeçalho incorrectos"
+
+#: gdk-pixbuf/io-ras.c:180
+msgid "RAS image has unknown type"
+msgstr "Imagem RAS tem formato desconhecido"
+
+#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+msgid "Not enough memory to load RAS image"
+msgstr "Memória insuficiente para carregar imagem RAS"
+
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
 msgstr "Incapaz de alocar memória para struct IOBuffer"
@@ -437,9 +464,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-tga.c:295 gdk-pixbuf/io-tga.c:1030 gdk-pixbuf/io-tga.c:1142
 #: gdk-pixbuf/io-tga.c:1225
-#, fuzzy
 msgid "Insufficient memory to load TGA image"
-msgstr "Memória insuficiente para carregar ficheiro PNG"
+msgstr "Memória insuficiente para carregar ficheiro TGA"
 
 #: gdk-pixbuf/io-tga.c:305
 msgid "Can't allocate new pixbuf"
@@ -615,23 +641,6 @@ msgstr "Incapaz de alocar memória para ler imagem XPM"
 #: gdk-pixbuf/io-xpm.c:1509
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Falha na escrita de ficheiro temporário ao carregar imagem XPM"
-
-#: gdk-pixbuf/gdk-pixdata.c:146
-msgid "Image header corrupt"
-msgstr "Cabeçalho de imagem corrompido"
-
-#: gdk-pixbuf/gdk-pixdata.c:151
-msgid "Image format unknown"
-msgstr "Formato de imagem desconhecido"
-
-#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
-msgid "Image pixel data corrupt"
-msgstr "Dados de pixel da imagem corrompidos"
-
-#: gdk-pixbuf/gdk-pixdata.c:403
-#, c-format
-msgid "failed to allocate image buffer of %u bytes"
-msgstr "falha ao alocar buffer de %u bytes para imagem"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -1946,18 +1955,17 @@ msgid "Selection: "
 msgstr "Selecção: "
 
 #: gtk/gtkfilesel.c:2983
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
-"O nome de ficheiro %s não pode ser convertido em UTF-8. Tente definir a "
-"variável de ambiente G_BROKEN_FILENAMES."
+"O nome de ficheiro \"%s\" não pode ser convertido em UTF-8 (tente definir "
+"a variável de ambiente G_BROKEN_FILENAMES): %s"
 
 #: gtk/gtkfilesel.c:2986
-#, fuzzy
 msgid "Invalid Utf-8"
-msgstr "Ficheiro XBM inválido"
+msgstr "Utf-8 inválido"
 
 #: gtk/gtkfilesel.c:3852
 msgid "Name too long"
@@ -2620,21 +2628,6 @@ msgstr "Tamanho Handler"
 msgid "Width of handle"
 msgstr "Largura do handler"
 
-#: gtk/gtkrc.c:2270
-#, c-format
-msgid "Unable to find include file: \"%s\""
-msgstr "Incapaz de encontrar ficheiro include: \"%s\""
-
-#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
-#, c-format
-msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Incapaz de encontrar ficheiro de imagem na pixmap_path: \"%s\""
-
-#: gtk/gtkrc.c:3350
-#, c-format
-msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Elemento de caminho pixmap: \"%s\" tem de ser absoluto, %s, linha %d"
-
 #: gtk/gtkpreview.c:129
 msgid "Expand"
 msgstr "Expandir"
@@ -2841,6 +2834,21 @@ msgstr "Deslocamento Y Seta"
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Quão longe na direcção y mover a seta quando o botão é solto"
+
+#: gtk/gtkrc.c:2270
+#, c-format
+msgid "Unable to find include file: \"%s\""
+msgstr "Incapaz de encontrar ficheiro include: \"%s\""
+
+#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Incapaz de encontrar ficheiro de imagem na pixmap_path: \"%s\""
+
+#: gtk/gtkrc.c:3350
+#, c-format
+msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
+msgstr "Elemento de caminho pixmap: \"%s\" tem de ser absoluto, %s, linha %d"
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
@@ -3085,6 +3093,18 @@ msgstr "Nome Fonte"
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
 msgstr "Nome da fonte de defeito a utilizar"
+
+#: gtk/gtksizegroup.c:242
+msgid "Mode"
+msgstr "Modo"
+
+#: gtk/gtksizegroup.c:243
+msgid ""
+"The directions in which the size group effects the requested sizes of its "
+"component widgets."
+msgstr ""
+"As direcções em que o tamanho do grupo afecta os tamanhos pedidos dos "
+"widgets seus componentes."
 
 #: gtk/gtkspinbutton.c:238
 msgid "The adjustment that holds the value of the spinbutton"
@@ -3410,7 +3430,6 @@ msgid "_Yes"
 msgstr "_Sim"
 
 #: gtk/gtkstock.c:334
-#, c-format
 msgid "Zoom _100%"
 msgstr "Zoom _100%"
 
@@ -4428,18 +4447,6 @@ msgstr "Ícone"
 #: gtk/gtkwindow.c:495
 msgid "Icon for this window"
 msgstr "Ícone para esta janela"
-
-#: gtk/gtksizegroup.c:242
-msgid "Mode"
-msgstr "Modo"
-
-#: gtk/gtksizegroup.c:243
-msgid ""
-"The directions in which the size group effects the requested sizes of its "
-"component widgets."
-msgstr ""
-"As direcções em que o tamanho do grupo afecta os tamanhos pedidos dos "
-"widgets seus componentes."
 
 #. ID
 #: modules/input/imam-et.c:454
