@@ -1,3 +1,13 @@
+Wed Sep 19 02:50:40 2001  Tim Janik  <timj@gtk.org>
+
+	* demos/Makefile.am ($(testpixbuf_OBJECTS)): don't use BUILT_SOURCES
+	as its broken in automake 1.4, add explicit object rule to
+	generate this.
+	
+	* gdk-pixbuf/Makefile.am: fix maintainer and normal cleanfiles.
+	get rid of uneccessary stamps, group stuff more logically, and build
+	sources due to object rules. fix srcdir!=builddir.
+
 Tue Sep 18 20:47:16 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkspinbutton.c (gtk_spin_button_size_request): Fix 

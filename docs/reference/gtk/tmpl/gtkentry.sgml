@@ -398,6 +398,11 @@ Determines whether the contents of the entry widget
 are visible or not. See gtk_entry_set_visibility().
 </para>
 
+<!-- ##### ARG GtkEntry:has-frame ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkEntry:invisible-char ##### -->
 <para>
 

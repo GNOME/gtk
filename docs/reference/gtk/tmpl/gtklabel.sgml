@@ -336,6 +336,31 @@ Gtk+ 1.0.x.
 @setting: 
 
 
+<!-- ##### SIGNAL GtkLabel::copy-clipboard ##### -->
+<para>
+
+</para>
+
+@label: the object which received the signal.
+
+<!-- ##### SIGNAL GtkLabel::move-cursor ##### -->
+<para>
+
+</para>
+
+@label: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL GtkLabel::populate-popup ##### -->
+<para>
+
+</para>
+
+@label: the object which received the signal.
+@arg1: 
+
 <!-- ##### ARG GtkLabel:label ##### -->
 <para>
 The actual label text.  Do not write to this pointer, it is not copied.

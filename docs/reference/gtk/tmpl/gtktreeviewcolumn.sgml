@@ -33,6 +33,7 @@ GtkTreeViewColumn
 @arrow: 
 @alignment: 
 @window: 
+@editable_widget: 
 @xalign: 
 @property_changed_signal: 
 @spacing: 
