@@ -280,7 +280,7 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
         TIFFRGBAImageGet (&img, (uint32 *)pixels, width, height);
         TIFFRGBAImageEnd (&img);
 
-#ifdef WORDS_BIGENDIAN
+#if G_BYTE_ORDER == G_BIG_ENDIAN
 /* Turns out that the packing used by TIFFRGBAImage depends on the host byte order... */ 
         while (pixels < pixbuf->pixels + bytes) {
                 uint32 pixel = *(uint32 *)pixels;

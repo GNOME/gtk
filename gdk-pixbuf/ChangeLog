@@ -1,3 +1,8 @@
+2002-12-04  Bastien Nocera  <hadess@hadess.net>
+
+	* io-tiff.c: (tiff_image_parse): use G_BIG_ENDIAN instead of
+	WORDS_BIGENDIAN which isn't set by configure.in
+
 Wed Nov  6 15:19:53 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* io-gif.c (CHECK_LZW_SP): Fix trailing semicolon on macro,
