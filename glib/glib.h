@@ -660,7 +660,7 @@ gchar*	g_strconcat  (const gchar *string1, ...); /* NULL terminated */
 gdouble g_strtod     (const gchar *nptr, gchar **endptr);
 gchar*	g_strerror   (gint errnum);
 gchar*	g_strsignal  (gint signum);
-gint    g_strcasecmp (const guchar *s1, const guchar *s2);
+gint    g_strcasecmp (const gchar *s1, const gchar *s2);
 gint    g_snprintf   (gchar *str, gulong n, gchar const *fmt, ...);
 
 

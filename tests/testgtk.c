@@ -886,7 +886,7 @@ static void
 statusbar_dump_stack (GtkWidget *button,
 		      GtkStatusbar *statusbar)
 {
-  GList *list;
+  GSList *list;
 
   for (list = statusbar->messages; list; list = list->next)
     {
@@ -3251,6 +3251,15 @@ create_rulers ()
 }
 
 
+static void
+text_toggle_editable (GtkWidget *checkbutton,
+		       GtkWidget *text)
+{
+   gtk_text_set_editable(GTK_TEXT(text),
+			  GTK_TOGGLE_BUTTON(checkbutton)->active);
+}
+
+
 /*
  * GtkText
  */
@@ -3261,6 +3270,7 @@ create_text ()
   GtkWidget *box1;
   GtkWidget *box2;
   GtkWidget *button;
+  GtkWidget *editable_check;
   GtkWidget *separator;
   GtkWidget *table;
   GtkWidget *hscrollbar;
@@ -3363,6 +3373,13 @@ create_text ()
 		       "not", -1);
 
       gtk_text_thaw (GTK_TEXT (text));
+
+      editable_check = gtk_check_button_new_with_label("Editable");
+      gtk_box_pack_start (GTK_BOX (box2), editable_check, TRUE, TRUE, 0);
+      gtk_signal_connect (GTK_OBJECT(editable_check), "toggled",
+			  GTK_SIGNAL_FUNC(text_toggle_editable), text);
+      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(editable_check), TRUE);
+      gtk_widget_show (editable_check);
 
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);

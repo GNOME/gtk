@@ -845,7 +845,7 @@ g_snprintf (gchar       *str,
 }
 
 gint
-g_strcasecmp (const guchar *s1, const guchar *s2)
+g_strcasecmp (const gchar *s1, const gchar *s2)
 {
 #ifdef HAVE_STRCASECMP
   return strcasecmp(s1, s2);
@@ -854,12 +854,12 @@ g_strcasecmp (const guchar *s1, const guchar *s2)
 
   while (*s1 && *s2)
     {
-      c1 = tolower(*s1++); c2 = tolower(*s2++);
+      c1 = tolower((guchar)(*s1++)); c2 = tolower((guchar)(*s2++));
       if (c1 != c2)
         return (c1 - c2);
     }
 
-  return ((gint) *s1 - (gint) *s2);
+  return (((gint)(guchar) *s1) - ((gint)(guchar) *s2));
 #endif
 }
 

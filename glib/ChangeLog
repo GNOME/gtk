@@ -1,3 +1,10 @@
+Mon Mar  2 17:51:18 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* glib.h gutils.c : changed g_strcasecmp
+	  to take gchar* not guchar*
+
+	* testglib.c: Remove trailing ; after functions
+	
 Sun Mar  1 19:04:40 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* glib.h gstring.c: Added g_string_insert[_c]()

@@ -86,6 +86,7 @@ gdk_dnd_display_drag_cursor(gint x, gint y, gboolean drag_ok,
       GdkWindow *mypix, *opix;
       GdkPoint *myhotspot;
       gint itmp;
+      guint masktmp;
       Window wtmp;
 
       if(x == -2 && y == -2) /* Hide the cursors */
@@ -97,7 +98,7 @@ gdk_dnd_display_drag_cursor(gint x, gint y, gboolean drag_ok,
 
       if(x == -1 && y == -1) /* We're supposed to find it out for ourselves */
 	XQueryPointer(gdk_display, gdk_root_window,
-		      &wtmp, &wtmp, &x, &y, &itmp, &itmp, &itmp);
+		      &wtmp, &wtmp, &x, &y, &itmp, &itmp, &masktmp);
 
       if(drag_ok)
 	{

@@ -152,7 +152,7 @@ gtk_combo_find (GtkCombo * combo)
   if (combo->case_sensitive)
     string_compare = strcmp;
   else
-    string_compare = (void*) g_strcasecmp;
+    string_compare = g_strcasecmp;
 
   text = gtk_entry_get_text (GTK_ENTRY (combo->entry));
   clist = GTK_LIST (combo->list)->children;

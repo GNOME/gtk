@@ -149,7 +149,8 @@ gtk_tree_class_init (GtkTreeClass *class)
   widget_class->size_allocate = gtk_tree_size_allocate;
 
   container_class->add = gtk_tree_add;
-  container_class->remove = (void *) gtk_tree_remove_item;
+  container_class->remove = 
+             (void (*)(GtkContainer *, GtkWidget *)) gtk_tree_remove_item;
   container_class->foreach = gtk_tree_foreach;
 
   class->selection_changed = NULL;
@@ -619,8 +620,8 @@ gtk_tree_realize (GtkWidget *widget)
 }
 
 void
-gtk_tree_remove_item (GtkTree *container,
-		 GtkWidget    *widget)
+gtk_tree_remove_item (GtkTree      *container,
+		      GtkWidget    *widget)
 {
   GList *item_list;
 

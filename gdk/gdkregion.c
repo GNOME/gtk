@@ -115,7 +115,7 @@ gdk_region_rect_in (GdkRegion      *region,
     case RectanglePart: return GDK_OVERLAP_RECTANGLE_PART;
   }
   
-  return GDK_OVERLAP_RECTANGLE_OUT;  // what else ?
+  return GDK_OVERLAP_RECTANGLE_OUT;  /*what else ? */
 }
 				    
 void          

@@ -72,9 +72,11 @@ gdk_input_get_root_relative_geometry(Display *dpy, Window w, int *x_ret, int *y_
 {
   Window root,parent;
   Window *children;
-  int nchildren;
-  int x,y,width,height;
-  int xc,yc,widthc,heightc,border_widthc,depthc;
+  guint nchildren;
+  gint x,y;
+  guint width, height;
+  gint xc,yc;
+  guint widthc,heightc,border_widthc,depthc;
   
   XQueryTree(dpy,w,&root,&parent,&children,&nchildren);
   if (children) XFree(children);

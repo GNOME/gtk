@@ -1140,7 +1140,7 @@ gtk_input_add_interp (gint source,
 		      gpointer data,
 		      GtkDestroyNotify destroy)
 {
-  return gdk_input_add_full (source, condition, NULL, callback, data);
+  return gtk_input_add_full (source, condition, NULL, callback, data, destroy);
 }
 
 void

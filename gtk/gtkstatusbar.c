@@ -68,7 +68,7 @@ gtk_statusbar_get_type ()
     }
 
   return statusbar_type;
-};
+}
 
 static void
 gtk_statusbar_marshal_text_p (GtkObject      *object,

@@ -76,8 +76,8 @@ struct _GtkNotebookPage
   GtkWidget *child;
   GtkWidget *tab_label;
   GtkWidget *menu_label;
-  gint8 default_menu : 1;
-  gint8 default_tab  : 1;
+  guint default_menu : 1;
+  guint default_tab  : 1;
   GtkRequisition requisition;
   GtkAllocation allocation;
 };

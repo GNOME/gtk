@@ -1,3 +1,24 @@
+Mon Mar  2 17:48:38 1998  Owen Taylor  <owt1@cornell.edu>
+
+	Miscellaneous minor fixes to remove ANSI C incompatibilities
+
+	* gdk/gdkregion.c gtk/gtkclist.c: fix // comments
+
+	* gdk/gdkdnd.c gdk/gdkinputcommon.h: change types of
+	some arguments to ANSI functions
+
+	* gtk/gtkcombo.c gtk/gtktree.c: fix casts of function pointers
+	  to void *
+
+	* gtk/gtkmain.c: An actual bug! (in deprecated gtk_input_add_interp)
+
+	* gtk/gtknotebook.h: Bitfields must be gint or guint. (and should
+	  be guint)
+
+	* gtk/gtkstatusbar.c: trailing ';'
+
+	* gtk/testgtk.c: GList where there should have been GSList
+
 Mon Mar  2 12:26:59 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkentry.c: Changed 'entry != NULL' to 'editable != NULL'
