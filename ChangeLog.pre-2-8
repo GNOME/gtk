@@ -1,3 +1,7 @@
+2002-01-14  jacob berkman  <jacob@ximian.com>
+
+	* gtk/gtkrc.c (gtk_rc_get_im_module_path): close a comment block
+
 Tue Jan 15 01:13:51 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodelsort.c: fix a load of open line ends,

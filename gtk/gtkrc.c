@@ -344,7 +344,7 @@ gtk_rc_get_im_module_path (void)
  * Obtains the path to the IM modules file. See the documentation
  * of the <link linkend="im-module-file"><envar>GTK_IM_MODULE_FILE</envar></link>
  * environment variable for more details.
- * 
+ */
 gchar *
 gtk_rc_get_im_module_file (void)
 {
