@@ -38,7 +38,6 @@
 
 /* We need glib.h for G_DIR_SEPARATOR and G_OS_WIN32 */
 #include <glib.h>
-#include <ctype.h>
 
 
 /* Comment out all this code if we are using the GNU C Library, and are not

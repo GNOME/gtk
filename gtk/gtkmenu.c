@@ -24,7 +24,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include <ctype.h>
 #include <string.h> /* memset */
 #include "gdk/gdkkeysyms.h"
 #include "gtkaccelmap.h"

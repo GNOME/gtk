@@ -34,7 +34,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
 #include "gdk/gdkkeysyms.h"
 #include "gtkbutton.h"
 #include "gtkentry.h"

@@ -32,7 +32,6 @@
 #include "gtkwindow.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkclipboard.h"
-#include "gdk/gdki18n.h"
 #include <pango/pango.h>
 #include "gtkimagemenuitem.h"
 #include "gtkintl.h"

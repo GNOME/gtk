@@ -1,3 +1,26 @@
+2002-02-08  Darin Adler  <darin@bentspoon.com>
+
+	* demos/gtk-demo/main.c: (load_file): isspace -> g_ascii_isspace
+	* gdk/x11/gdkim-x11.c: Remove gdki8n.h include.
+	* gdk/x11/gdkkeys-x11.c: Remove <ctype.h> include.
+	* gdk/x11/gdkmain-x11.c: Remove <ctype.h> include.
+	* gtk/fnmatch.c: Remove <ctype.h> include.
+	* gtk/gtkaccelgroup.c: Remove <ctype.h> include.
+	* gtk/gtkaccellabel.c: (gtk_accel_label_refetch): toupper ->
+	g_unichar_toupper, toupper -> g_unichar_totile
+	* gtk/gtkbindings.c: Remove <ctype.h> include.
+	* gtk/gtkfontsel.c: Remove <ctype.h> include.
+	* gtk/gtkiconfactory.c: Remove <ctype.h> include.
+	* gtk/gtkinputdialog.c: Remove <ctype.h> include.
+	* gtk/gtklabel.c: Remove <ctype.h> include.
+	* gtk/gtkmain.c: Remove <ctype.h> include.
+	* gtk/gtkmenu.c: Remove <ctype.h> include.
+	* gtk/gtkoldeditable.c: Remove <ctype.h> include.
+	* gtk/gtkrc.c: Remove <ctype.h> include.
+	* gtk/gtktextbtree.c: Remove <ctype.h> include.
+	* gtk/gtktextiter.c: Remove <ctype.h> include.
+	* gtk/gtktextsegment.c: Remove <ctype.h> include.
+
 2002-02-08  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkfilesel.c

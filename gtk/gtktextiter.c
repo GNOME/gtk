@@ -30,7 +30,6 @@
 #include "gtktextiterprivate.h"
 #include "gtkdebug.h"
 #include <string.h>
-#include <ctype.h>
 
 #define FIX_OVERFLOWS(varname) if ((varname) == G_MININT) (varname) = G_MININT + 1
 

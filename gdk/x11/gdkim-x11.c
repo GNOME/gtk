@@ -25,10 +25,10 @@
  */
 
 #include <locale.h>
+#include <stdlib.h>
 
 #include "gdk.h"		/* For gdk_flush() */
 #include "gdkpixmap.h"
-#include "gdki18n.h"
 #include "gdkinternals.h"
 #include "gdkprivate-x11.h"
 
