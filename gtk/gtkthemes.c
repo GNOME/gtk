@@ -60,23 +60,17 @@ gtk_theme_engine_load (GTypeModule *module)
 {
   GtkThemeEngine *engine = GTK_THEME_ENGINE (module);
   
-  gchar *fullname;
   gchar *engine_path;
       
-  fullname = g_module_build_path (NULL, engine->name);
-  engine_path = gtk_rc_find_module_in_path (fullname);
+  engine_path = gtk_rc_find_module_in_path (engine->name);
   
   if (!engine_path)
     {
       g_warning (_("Unable to locate theme engine in module_path: \"%s\","),
-		 fullname);
-      
-      g_free (fullname);
+		 engine->name);
       return FALSE;
     }
     
-  g_free (fullname);
-       
   /* load the lib */
   
   GTK_NOTE (MISC, g_message ("Loading Theme %s\n", engine_path));

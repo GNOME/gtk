@@ -2,9 +2,6 @@
 
 if PLATFORM_WIN32
 no_undefined = -no-undefined
-SOSUFFIX=dll
-else
-SOSUFFIX=so
 endif
 
 INCLUDES = @STRIP_BEGIN@ \
@@ -98,6 +95,6 @@ module_LTLIBRARIES =				\
 	im-viqr.la
 
 gtk.immodules: Makefile.am $(module_LTLIBRARIES)
-	$(top_builddir)/gtk/gtk-query-immodules-2.0 .libs/*.$(SOSUFFIX) > gtk.immodules
+	$(top_builddir)/gtk/gtk-query-immodules-2.0 *.la > gtk.immodules
 
 all-local: gtk.immodules

@@ -377,6 +377,31 @@ _gtk_get_module_path (const gchar *type)
   return result;
 }
 
+/* Like g_module_path, but use .la as the suffix
+ */
+static gchar*
+module_build_la_path (const gchar *directory,
+		      const gchar *module_name)
+{
+	gchar *filename;
+	gchar *result;
+	
+	if (strncmp (module_name, "lib", 3) == 0)
+		filename = (gchar *)module_name;
+	else
+		filename =  g_strconcat ("lib", module_name, ".la", NULL);
+
+	if (directory && *directory)
+		result = g_build_filename (directory, filename, NULL);
+	else
+		result = g_strdup (filename);
+
+	if (filename != module_name)
+		g_free (filename);
+
+	return result;
+}
+
 /**
  * _gtk_find_module:
  * @name: the name of the module
@@ -402,15 +427,23 @@ _gtk_find_module (const gchar *name,
   paths = _gtk_get_module_path (type);
   for (path = paths; *path; path++)
     {
-      gchar *tmp_name = g_module_build_path (*path, name);
-	    
+      gchar *tmp_name;
+
+      tmp_name = g_module_build_path (*path, name);
       if (g_file_test (tmp_name, G_FILE_TEST_EXISTS))
 	{
 	  module_name = tmp_name;
 	  goto found;
 	}
-      else
-	g_free(tmp_name);
+      g_free(tmp_name);
+
+      tmp_name = module_build_la_path (*path, name);
+      if (g_file_test (tmp_name, G_FILE_TEST_EXISTS))
+	{
+	  module_name = tmp_name;
+	  goto found;
+	}
+      g_free(tmp_name);
     }
 
   g_strfreev (paths);

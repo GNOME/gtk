@@ -254,17 +254,17 @@ CLEANFILES = $(noinst_DATA)
 pixbuf_dir = $(top_builddir)/gdk-pixbuf
 
 gtkstockpixbufs.h: $(pixbuf_dir)/gdk-pixbuf-csource $(IMAGES)
-	GDK_PIXBUF_MODULEDIR=$(pixbuf_dir)/.libs \
+	GDK_PIXBUF_MODULEDIR=$(pixbuf_dir) \
 	   $(pixbuf_dir)/gdk-pixbuf-csource --raw --build-list $(VARIABLES1) >$(srcdir)/gtkstockpixbufs.h
-	GDK_PIXBUF_MODULEDIR=$(pixbuf_dir)/.libs \
+	GDK_PIXBUF_MODULEDIR=$(pixbuf_dir) \
 	   $(pixbuf_dir)/gdk-pixbuf-csource --raw --build-list $(VARIABLES2) >>$(srcdir)/gtkstockpixbufs.h
-	GDK_PIXBUF_MODULEDIR=$(pixbuf_dir)/.libs \
+	GDK_PIXBUF_MODULEDIR=$(pixbuf_dir) \
 	   $(pixbuf_dir)/gdk-pixbuf-csource --raw --build-list $(VARIABLES3) >>$(srcdir)/gtkstockpixbufs.h
-	GDK_PIXBUF_MODULEDIR=$(pixbuf_dir)/.libs \
+	GDK_PIXBUF_MODULEDIR=$(pixbuf_dir) \
 	   $(pixbuf_dir)/gdk-pixbuf-csource --raw --build-list $(VARIABLES4) >>$(srcdir)/gtkstockpixbufs.h
-	GDK_PIXBUF_MODULEDIR=$(pixbuf_dir)/.libs \
+	GDK_PIXBUF_MODULEDIR=$(pixbuf_dir) \
 	   $(pixbuf_dir)/gdk-pixbuf-csource --raw --build-list $(VARIABLES5) >>$(srcdir)/gtkstockpixbufs.h
-	GDK_PIXBUF_MODULEDIR=$(pixbuf_dir)/.libs \
+	GDK_PIXBUF_MODULEDIR=$(pixbuf_dir) \
 	   $(pixbuf_dir)/gdk-pixbuf-csource --raw --build-list $(VARIABLES6) >>$(srcdir)/gtkstockpixbufs.h
 
 EXTRA_DIST = $(IMAGES) gtkstockpixbufs.h

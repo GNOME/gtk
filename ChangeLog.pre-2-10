@@ -1,8 +1,39 @@
+Sat Mar  2 23:08:23 2002  Owen Taylor  <otaylor@redhat.com>
+
+	Fixes for uninstalled operation with module suffixes
+	other than .so and in general for platforms like AIX where
+	the module suffix isn't predictable. (#72185, problems
+	reported by Miroslaw Dobrzanski-Neumann)
+
+	* modules/input/Makefile.am (gtk.immodules): Query .la
+	files rather than shared objects in .libs when creating the
+	uninstalled gtk.immodules file.
+
+	* gtk/gtkmain.c (_gtk_find_module): Look for .la files
+	after looking for the normal soname extension to handle
+	cases where the soname extension isn't predictable,
+	like AIX.
+
+	* gtk/gtkthemes.c (gtk_theme_engine_load): Don't
+	call g_module_build_path... leave that to 
+	gtk_rc_find_module_in_path.
+
+	* demos/gtk-demo/main.c (main) demos/pixbuf-init.c (pixbuf_init):
+	tests/testgtk.c (test_init): tests/testtext.c (test_init)
+	tests/testdnd.c (test_init): Point gdk-pixbuf to .la
+	files rather than poking in .libs for .so files.
+
+	* gtk/stock-icons/Makefile.am (gtkstockpixbufs.h): Remove
+	.libs from GDK_PIXBUF_MODULEDIR.
+
 Sat Mar  2 20:58:30 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_reparent): Handle NO_WINDOW
 	widgets with windows that are children of widget->window.
 	(#50279)
+
+	* tests/testgtk.c: Add eventboxes to the example so that
+	we are reparenting between different GdkWindows.
 
 Sat Mar  2 20:39:38 2002  Owen Taylor  <otaylor@redhat.com>
 

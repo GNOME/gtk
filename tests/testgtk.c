@@ -11592,9 +11592,9 @@ create_main_window (void)
 static void
 test_init ()
 {
-  if (file_exists ("../gdk-pixbuf/.libs/libpixbufloader-pnm.so"))
+  if (file_exists ("../gdk-pixbuf/libpixbufloader-pnm.la"))
     {
-      putenv ("GDK_PIXBUF_MODULEDIR=../gdk-pixbuf/.libs");
+      putenv ("GDK_PIXBUF_MODULEDIR=../gdk-pixbuf");
       putenv ("GTK_IM_MODULE_FILE=../modules/input/gtk.immodules");
     }
 }
