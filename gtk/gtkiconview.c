@@ -64,6 +64,7 @@ struct _EggIconListPrivate
   gint width, height;
 
   gint text_column;
+  gint markup_column;
   gint pixbuf_column;
   
   GtkSelectionMode selection_mode;
@@ -125,6 +126,7 @@ enum
   PROP_0,
   PROP_PIXBUF_COLUMN,
   PROP_TEXT_COLUMN,
+  PROP_MARKUP_COLUMN,  
   PROP_SELECTION_MODE,
   PROP_MODEL,
 };
@@ -163,8 +165,6 @@ static gboolean egg_icon_list_button_press   (GtkWidget      *widget,
 					      GdkEventButton *event);
 static gboolean egg_icon_list_button_release (GtkWidget      *widget,
 					      GdkEventButton *event);
-static gboolean egg_icon_list_key_press      (GtkWidget      *widget,
-					      GdkEventKey    *event);
 
 /* EggIconList signals */
 static void     egg_icon_list_set_adjustments             (EggIconList             *icon_list,
@@ -193,10 +193,6 @@ static void       egg_icon_list_queue_draw_item             (EggIconList     *ic
 static void       egg_icon_list_queue_layout                (EggIconList     *icon_list);
 static void       egg_icon_list_set_cursor_item             (EggIconList     *icon_list,
 							     EggIconListItem *item);
-static void       egg_icon_list_append_typeahead_string     (EggIconList     *icon_list,
-							     const gchar     *string);
-static void       egg_icon_list_select_first_matching_item  (EggIconList     *icon_list,
-							     const char      *pattern);
 static void       egg_icon_list_start_rubberbanding         (EggIconList     *icon_list,
 							     gint             x,
 							     gint             y);
@@ -236,7 +232,7 @@ static void       egg_icon_list_scroll_to_item              (EggIconList     *ic
 							     EggIconListItem *item);
 static GdkPixbuf *egg_icon_list_get_item_icon               (EggIconList     *icon_list,
 							     EggIconListItem *item);
-static gchar *    egg_icon_list_get_item_text               (EggIconList     *icon_list,
+static void       egg_icon_list_update_item_text            (EggIconList     *icon_list,
 							     EggIconListItem *item);
 static void       egg_icon_list_select_item                 (EggIconList     *icon_list,
 							     EggIconListItem *item);
@@ -313,7 +309,6 @@ egg_icon_list_class_init (EggIconListClass *klass)
   widget_class->motion_notify_event = egg_icon_list_motion;
   widget_class->button_press_event = egg_icon_list_button_press;
   widget_class->button_release_event = egg_icon_list_button_release;
-  widget_class->key_press_event = egg_icon_list_key_press;
   
   klass->set_scroll_adjustments = egg_icon_list_set_adjustments;
   klass->select_all = egg_icon_list_real_select_all;
@@ -348,6 +343,14 @@ egg_icon_list_class_init (EggIconListClass *klass)
 						     -1, G_MAXINT, -1,
 						     G_PARAM_READWRITE));
 
+  g_object_class_install_property (gobject_class,
+				   PROP_MARKUP_COLUMN,
+				   g_param_spec_int ("markup_column",
+						      _("Markup column"),
+						      _("Model column used to retrieve the text if using pango markup"),
+						     -1, G_MAXINT, -1,
+						     G_PARAM_READWRITE));
+  
   g_object_class_install_property (gobject_class,
                                    PROP_MODEL,
                                    g_param_spec_object ("model",
@@ -562,6 +565,7 @@ egg_icon_list_init (EggIconList *icon_list)
   icon_list->priv->press_start_x = -1;
   icon_list->priv->press_start_y = -1;
   icon_list->priv->text_column = -1;
+  icon_list->priv->markup_column = -1;  
   icon_list->priv->pixbuf_column = -1;
   
   icon_list->priv->layout = gtk_widget_create_pango_layout (GTK_WIDGET (icon_list), NULL);
@@ -626,6 +630,9 @@ egg_icon_list_set_property (GObject      *object,
     case PROP_TEXT_COLUMN:
       egg_icon_list_set_text_column (icon_list, g_value_get_int (value));
       break;
+    case PROP_MARKUP_COLUMN:
+      egg_icon_list_set_markup_column (icon_list, g_value_get_int (value));
+      break;
     case PROP_MODEL:
       egg_icon_list_set_model (icon_list, g_value_get_object (value));
       break;
@@ -656,6 +663,9 @@ egg_icon_list_get_property (GObject      *object,
       break;
     case PROP_TEXT_COLUMN:
       g_value_set_int (value, icon_list->priv->text_column);
+      break;
+    case PROP_MARKUP_COLUMN:
+      g_value_set_int (value, icon_list->priv->markup_column);
       break;
     case PROP_MODEL:
       g_value_set_object (value, icon_list->priv->model);
@@ -1046,44 +1056,6 @@ egg_icon_list_button_release (GtkWidget      *widget,
   return TRUE;
 }
 
-
-static gboolean
-egg_icon_list_key_press (GtkWidget    *widget,
-			 GdkEventKey  *event)
-{
-  if ((* GTK_WIDGET_CLASS (parent_class)->key_press_event) (widget, event))
-    return TRUE;
-
-  return FALSE;
-  
-  if ((event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) == 0)
-    egg_icon_list_append_typeahead_string (EGG_ICON_LIST (widget), event->string);
-
-  return TRUE;
-}
-
-static void
-egg_icon_list_select_first_matching_item (EggIconList  *icon_list,
-					  const char   *pattern)
-{
-#if 0
-  GList *items;
-
-  if (pattern == NULL)
-    return;
-  
-  for (items = icon_list->priv->items; items; items = items->next)
-    {
-      EggIconListItem *item = items->data;
-
-      if (strncmp (pattern, item->label, strlen (pattern)) == 0)
-	{
-	  egg_icon_list_select_item (icon_list, item);
-	  break;
-	}
-    }
-#endif
-}
 
 static void
 rubberbanding (gpointer data)
@@ -1634,7 +1606,6 @@ egg_icon_list_calculate_item_size (EggIconList *icon_list,
   int layout_width, layout_height;
   int maximum_layout_width;
   GdkPixbuf *pixbuf;
-  char *label;
   
   if (item->width != -1 && item->width != -1) 
     return;
@@ -1654,12 +1625,11 @@ egg_icon_list_calculate_item_size (EggIconList *icon_list,
   
   maximum_layout_width = MAX (item->pixbuf_width, MINIMUM_ICON_ITEM_WIDTH);
 
-  if (icon_list->priv->text_column != -1)
+  if (icon_list->priv->markup_column != 1 ||
+      icon_list->priv->text_column != -1)
     {
-      label = egg_icon_list_get_item_text (icon_list, item);
-      pango_layout_set_text (icon_list->priv->layout, label, -1);
-      g_free (label);
-      
+      egg_icon_list_update_item_text (icon_list, item);
+
       pango_layout_set_alignment (icon_list->priv->layout, PANGO_ALIGN_CENTER);
       pango_layout_set_width (icon_list->priv->layout, maximum_layout_width * PANGO_SCALE);
       
@@ -1743,7 +1713,6 @@ egg_icon_list_paint_item (EggIconList     *icon_list,
 {
   GdkPixbuf *pixbuf, *tmp;
   GtkStateType state;
-  char *label;
   
   if (!VALID_MODEL_AND_COLUMNS (icon_list))
     return;
@@ -1786,15 +1755,13 @@ egg_icon_list_paint_item (EggIconList     *icon_list,
 			      item->layout_width + 2 * ICON_TEXT_PADDING,
 			      item->layout_height + 2 * ICON_TEXT_PADDING);
 	}
-      
-      label = egg_icon_list_get_item_text (icon_list, item);  
-      pango_layout_set_text (icon_list->priv->layout, label, -1);
+
+      egg_icon_list_update_item_text (icon_list, item);  
       gdk_draw_layout (icon_list->priv->bin_window,
 		       GTK_WIDGET (icon_list)->style->text_gc[item->selected ? state : GTK_STATE_NORMAL],
 		       item->layout_x - ((item->width - item->layout_width) / 2) - (MAX (item->pixbuf_width, MINIMUM_ICON_ITEM_WIDTH) - item->width) / 2,
 		       item->layout_y,
 		       icon_list->priv->layout);
-      g_free (label);
       
       if (GTK_WIDGET_HAS_FOCUS (icon_list) &&
 	  item == icon_list->priv->cursor_item)
@@ -1925,34 +1892,6 @@ egg_icon_list_set_cursor_item (EggIconList     *icon_list,
   egg_icon_list_queue_draw_item (icon_list, item);
 }
 
-static void
-egg_icon_list_append_typeahead_string (EggIconList     *icon_list,
-				       const gchar     *string)
-{
-  int i;
-  char *typeahead_string;
-
-  if (strlen (string) == 0)
-    return;
-
-  for (i = 0; i < strlen (string); i++)
-    {
-      if (!g_ascii_isprint (string[i]))
-	return;
-    }
-
-  typeahead_string = g_strconcat (icon_list->priv->typeahead_string ?
-				  icon_list->priv->typeahead_string : "",
-				  string, NULL);
-  g_free (icon_list->priv->typeahead_string);
-  icon_list->priv->typeahead_string = typeahead_string;
-
-  egg_icon_list_select_first_matching_item (icon_list,
-					    icon_list->priv->typeahead_string);
-  
-  g_print ("wooo: \"%s\"\n", typeahead_string);
-}
-
 /* Public API */
 GtkWidget *
 egg_icon_list_new (void)
@@ -2000,35 +1939,14 @@ egg_icon_list_item_unref (EggIconListItem *item)
   
 }
 
-#if 0
-void
-egg_icon_list_item_set_icon (EggIconListItem  *item,
-			     GdkPixbuf        *icon)
-{
-  g_return_if_fail (item != NULL);
-
-  if (icon == item->icon)
-    return;
-
-  g_object_unref (item->icon);
-  item->icon = g_object_ref (icon);
-
-  egg_icon_list_item_invalidate_size (item);
-
-  egg_icon_list_queue_layout (item->icon_list);
-}
-#endif
-
-static gchar *
-egg_icon_list_get_item_text (EggIconList     *icon_list,
-			     EggIconListItem *item)
+static void
+egg_icon_list_update_item_text (EggIconList     *icon_list,
+				EggIconListItem *item)
 {
   gboolean iters_persist;
   GtkTreeIter iter;
   GtkTreePath *path;
   gchar *text;
-  
-  g_return_val_if_fail (item != NULL, NULL);
   
   iters_persist = gtk_tree_model_get_flags (icon_list->priv->model) & GTK_TREE_MODEL_ITERS_PERSIST;
   
@@ -2040,12 +1958,23 @@ egg_icon_list_get_item_text (EggIconList     *icon_list,
     }
   else
     iter = item->iter;
-  
-  gtk_tree_model_get (icon_list->priv->model, &iter,
-		      icon_list->priv->text_column, &text,
-		      -1);
 
-  return text;
+  if (icon_list->priv->markup_column != -1)
+    {
+      gtk_tree_model_get (icon_list->priv->model, &iter,
+			  icon_list->priv->markup_column, &text,
+			  -1);
+      pango_layout_set_markup (icon_list->priv->layout, text, -1);
+    }
+  else
+    {
+      gtk_tree_model_get (icon_list->priv->model, &iter,
+			  icon_list->priv->text_column, &text,
+			  -1);
+      pango_layout_set_text (icon_list->priv->layout, text, -1);
+    }
+
+  g_free (text);        
 }
 
 static GdkPixbuf *
@@ -2575,6 +2504,51 @@ egg_icon_list_set_text_column (EggIconList *icon_list,
   g_object_notify (G_OBJECT (icon_list), "text_column");
 }
 
+gint
+egg_icon_list_get_text_column (EggIconList  *icon_list)
+{
+  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), -1);
+
+  return icon_list->priv->text_column;
+}
+
+void
+egg_icon_list_set_markup_column (EggIconList *icon_list,
+				 int          column)
+{
+  if (column == icon_list->priv->markup_column)
+    return;
+  
+  if (column == -1)
+    icon_list->priv->markup_column = -1;
+  else
+    {
+      if (icon_list->priv->model != NULL)
+	{
+	  GType column_type;
+	  
+	  column_type = gtk_tree_model_get_column_type (icon_list->priv->model, column);
+
+	  g_return_if_fail (column_type == G_TYPE_STRING);
+	}
+      
+      icon_list->priv->markup_column = column;
+    }
+
+  egg_icon_list_invalidate_sizes (icon_list);
+  egg_icon_list_queue_layout (icon_list);
+  
+  g_object_notify (G_OBJECT (icon_list), "markup_column");
+}
+
+gint
+egg_icon_list_get_markup_column (EggIconList  *icon_list)
+{
+  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), -1);
+
+  return icon_list->priv->markup_column;
+}
+
 void
 egg_icon_list_set_pixbuf_column (EggIconList *icon_list,
 				 int          column)
@@ -2603,6 +2577,14 @@ egg_icon_list_set_pixbuf_column (EggIconList *icon_list,
   
   g_object_notify (G_OBJECT (icon_list), "pixbuf_column");
   
+}
+
+gint
+egg_icon_list_get_pixbuf_column (EggIconList  *icon_list)
+{
+  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), -1);
+
+  return icon_list->priv->pixbuf_column;
 }
 
 static void

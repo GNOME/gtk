@@ -77,6 +77,9 @@ GtkTreeModel *egg_icon_list_get_model         (EggIconList  *icon_list);
 void          egg_icon_list_set_text_column   (EggIconList  *icon_list,
 					       gint          column);
 gint          egg_icon_list_get_text_column   (EggIconList  *icon_list);
+void          egg_icon_list_set_markup_column (EggIconList  *icon_list,
+					       int           column);
+gint          egg_icon_list_get_markup_column (EggIconList  *icon_list);
 void          egg_icon_list_set_pixbuf_column (EggIconList  *icon_list,
 					       gint          column);
 gint          egg_icon_list_get_pixbuf_column (EggIconList  *icon_list);
