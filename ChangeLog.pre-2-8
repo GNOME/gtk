@@ -1,3 +1,21 @@
+Sun Feb 22 03:03:29 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkaction.c: (gtk_action_finalize):
+	* gtk/gtkclipboard.c: (gtk_clipboard_finalize):
+	* gtk/gtkentrycompletion.c: (gtk_entry_completion_class_init),
+	(gtk_entry_completion_finalize):
+	* gtk/gtkfilechooserwidget.c: (gtk_file_chooser_widget_finalize):
+	* gtk/gtkfilesystemmodel.c: (gtk_file_system_model_class_init),
+	(gtk_file_system_model_finalize):
+	* gtk/gtkicontheme.c: (gtk_icon_theme_class_init),
+	(gtk_icon_theme_finalize):
+	* gtk/gtktextchild.c: (gtk_text_child_anchor_finalize):
+	* gtk/gtkuimanager.c: (gtk_ui_manager_class_init),
+	(gtk_ui_manager_finalize):
+	* modules/input/gtkimcontextxim.c: (gtk_im_context_xim_finalize):
+	Add chains to the parent's ::finalize() handler  (#134901, Morten Welinder,
+	patch by Jan Arne Petersen)
+
 Sun Feb 22 02:10:34 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_default_completion_func): 

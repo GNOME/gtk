@@ -153,6 +153,7 @@ enum
   PROP_UI
 };
 
+static GObjectClass *parent_class = NULL;
 static guint ui_manager_signals[LAST_SIGNAL] = { 0 };
 
 static GMemChunk *merge_node_chunk = NULL;
@@ -189,6 +190,8 @@ static void
 gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 {
   GObjectClass *gobject_class;
+
+  parent_class = g_type_class_peek_parent (klass);
 
   gobject_class = G_OBJECT_CLASS (klass);
 
@@ -405,6 +408,8 @@ gtk_ui_manager_finalize (GObject *object)
 
   g_object_unref (self->private_data->accel_group);
   self->private_data->accel_group = NULL;
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void

@@ -212,6 +212,8 @@ static BuiltinIcon *find_builtin_icon (const gchar *icon_name,
 				       gint        *min_difference_p,
 				       gboolean    *has_larger_p);
 
+static GObjectClass *parent_class = NULL;
+
 static guint signal_changed = 0;
 
 static GHashTable *icon_theme_builtin_icons;
@@ -329,6 +331,8 @@ static void
 gtk_icon_theme_class_init (GtkIconThemeClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  parent_class = g_type_class_peek_parent (klass);
 
   gobject_class->finalize = gtk_icon_theme_finalize;
 
@@ -608,6 +612,8 @@ gtk_icon_theme_finalize (GObject *object)
   priv->search_path = NULL;
 
   blow_themes (icon_theme);
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);  
 }
 
 /**

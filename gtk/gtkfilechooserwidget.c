@@ -119,6 +119,8 @@ gtk_file_chooser_widget_finalize (GObject *object)
   GtkFileChooserWidget *chooser = GTK_FILE_CHOOSER_WIDGET (object);
 
   g_free (chooser->priv->file_system);
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static GObject*

@@ -118,6 +118,7 @@ static void     gtk_entry_completion_action_data_func    (GtkTreeViewColumn     
                                                           gpointer                 data);
 
 
+static GObjectClass *parent_class = NULL;
 static guint entry_completion_signals[LAST_SIGNAL] = { 0 };
 
 
@@ -165,6 +166,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
 {
   GObjectClass *object_class;
 
+  parent_class = g_type_class_peek_parent (klass);
   object_class = (GObjectClass *)klass;
 
   object_class->set_property = gtk_entry_completion_set_property;
@@ -384,6 +386,8 @@ gtk_entry_completion_finalize (GObject *object)
 
   if (completion->priv->popup_window)
     gtk_widget_destroy (completion->priv->popup_window);
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 /* implement cell layout interface */

@@ -400,6 +400,8 @@ gtk_text_child_anchor_finalize (GObject *obj)
     }
 
   anchor->segment = NULL;
+
+  G_OBJECT_CLASS (parent_class)->finalize (obj);
 }
 
 /**

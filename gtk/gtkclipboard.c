@@ -143,6 +143,8 @@ static void
 gtk_clipboard_finalize   (GObject *object)
 {
   clipboard_unset (GTK_CLIPBOARD (object));
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void

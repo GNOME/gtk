@@ -174,6 +174,8 @@ static void root_files_removed_callback (GtkFileFolder      *folder,
 					 GSList             *paths,
 					 GtkFileSystemModel *model);
 
+static GObjectClass *parent_class = NULL;
+
 GType
 _gtk_file_system_model_get_type (void)
 {
@@ -216,7 +218,9 @@ static void
 gtk_file_system_model_class_init (GtkFileSystemModelClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-  
+
+  parent_class = g_type_class_peek_parent (class);
+
   gobject_class->finalize = gtk_file_system_model_finalize;
 }
 
@@ -269,6 +273,8 @@ gtk_file_system_model_finalize (GObject *object)
       file_model_node_free (children);
       children = next;
     }
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 /*

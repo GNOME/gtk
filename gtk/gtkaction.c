@@ -379,6 +379,8 @@ gtk_action_finalize (GObject *object)
   g_closure_unref (action->private_data->accel_closure);
   if (action->private_data->accel_group)
     g_object_unref (action->private_data->accel_group);
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);  
 }
 
 static void
