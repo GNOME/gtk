@@ -41,7 +41,7 @@
 #include "gtk/gtkrc.h"
 #include "gtk/gtkimmodule.h"
 
-void
+static void
 print_escaped (const char *str)
 {
   char *tmp = g_strescape (str, NULL);
@@ -49,7 +49,7 @@ print_escaped (const char *str)
   g_free (tmp);
 }
 
-gboolean
+static gboolean
 query_module (const char *dir, const char *name)
 {
   void          (*list)   (const GtkIMContextInfo ***contexts,

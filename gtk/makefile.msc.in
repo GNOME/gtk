@@ -25,14 +25,16 @@ GTK_BINARY_VERSION = @GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.@LT_CURRENT@
 PERL = perl
 AWK = gawk
 
-INCLUDES = -FImsvc_recommended_pragmas.h -I . -I .. -I ../gdk -I ../gdk-pixbuf -DPANGO_ENABLE_BACKEND
+INCLUDES = -FImsvc_recommended_pragmas.h -I . -I .. -I ../gdk -I ../gdk-pixbuf
 DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) \
 		$(INTL_CFLAGS) $(ATK_CFLAGS)
 LDFLAGS = $(ATK_LIBS) /link /machine:ix86 $(LINKDEBUG)
 # Some files use near as an identifier
 # Don't define GTK_COMPILATION here, because it's for gtk-x.x.dll only
 DEFINES = $(G_DEBUGGING) -DGTK_DISABLE_COMPAT_H -DG_LOG_DOMAIN=\"Gtk\" -Dnear=xxnear \
-	-DGTK_VERSION=\"$(GTK_VER)\" -DGTK_BINARY_VERSION=\"$(GTK_BINARY_VERSION)\"
+	-DPANGO_ENABLE_BACKEND \
+	-DGTK_VERSION=\"$(GTK_VER)\" -DGTK_BINARY_VERSION=\"$(GTK_BINARY_VERSION)\" \
+	-DGTK_HOST=\"win32\"
 
 TOUCH = copy makefile.msc+nul
 
@@ -113,6 +115,7 @@ gtk_OBJECTS = 					\
 	gtkinvisible.obj			\
 	gtkitem.obj				\
 	gtkitemfactory.obj			\
+	gtkkeyhash.obj	\
 	gtklabel.obj				\
 	gtklayout.obj				\
 	gtklist.obj				\

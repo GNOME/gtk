@@ -299,7 +299,9 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
     case LANG_HEBREW:
     case LANG_ARABIC:
       /* Not 100% sure about these */
+#ifdef LANG_URDU
     case LANG_URDU:
+#endif
     case LANG_FARSI:
       /* Others? */
       return PANGO_DIRECTION_RTL;
@@ -1971,11 +1973,9 @@ gdk_keyval_name (guint	      keyval)
 
   if (found != NULL)
     {
-      while (found > gdk_keys_by_keyval)
-	{
-	  if ((found - 1)->keyval == keyval)
-	    keyval--;
-	}
+      while ((found > gdk_keys_by_keyval) &&
+             ((found - 1)->keyval == keyval))
+        found--;
 	    
       return (gchar *) found->name;
     }

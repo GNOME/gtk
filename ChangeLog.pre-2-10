@@ -1,3 +1,22 @@
+2002-02-27  Hans Breuer  <hans@breuer.org>
+
+	* demos/gtk-demo/makefile.msc.in : new file
+
+	* gdk-pixbuf/gtk-pixbuf.rc.in : new file to include
+	  version resource
+	* gdk-pixbuf/makefile.msc : create and use gdk-pixbuf.res
+
+	* gdk/win32/gdkkeys-win32.c : handle undefined LANG_URDU,
+	(gdk_keyval_name) : fix endless looping
+
+	* gtk/gtkfilesel.c : translate_win32_path() static
+	* gtk/queryimmodules : print_escaped(), query_module() static
+
+	* gtk/makefile.msc.in : added gtkkeyhash, build gtk-win32.res
+
+	* gtk/stock-icons/makefile.msc : regenerated from directory
+	listing (almost all filenames changed)
+
 Wed Feb 27 10:34:46 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrange.c (gtk_range_set_range): After computing

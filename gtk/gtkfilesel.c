@@ -437,7 +437,7 @@ static gint cmpl_errno;
  * Return a boolean value concerning whether a
  * translation had to be made.
  */
-int
+static int
 translate_win32_path (GtkFileSelection *filesel)
 {
   int updated = 0;
