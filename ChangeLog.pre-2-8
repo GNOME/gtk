@@ -1,3 +1,10 @@
+2004-05-05  Matthias Clasen  <mclasen@redhat.com>
+   
+	Merge from 2.4:
+	
+	* gtk/gtkuimanager.c (print_node): Make the output 
+	parseable.  (#141929, Sven Neumann)
+
 2004-05-05  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdnd-win32.c (gdk_drag_find_window_for_screen): Add
