@@ -1,3 +1,7 @@
+2004-10-13  Crispin Flowerday  <gnome@flowerday.cx>
+
+	* NEWS: Fix a typo in my name (it's Crispin, not Chrispin)
+
 2004-10-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version.
