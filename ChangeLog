@@ -1,6 +1,6 @@
 Sun Jul 11 01:12:50 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
-	Bug 144371
+	Bug 144271
 	
 	* gtk/gtknotebook.c (gtk_notebook_size_allocate): Remove an
 	unnecessary redraw..
