@@ -1,3 +1,10 @@
+Tue Dec 15 09:22:44 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkrc.c (gtk_rc_init): Removed unused 
+	variable, fixed minor memory leak.
+
+	* gdk/gdk.c: Fixed another merge problem.
+
 Tue Dec 15 08:53:38 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdk.c (gdk_get_display): Remove gdk_signal,

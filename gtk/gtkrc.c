@@ -449,12 +449,12 @@ gtk_rc_init (void)
        */
       for (j=n_locale_suffixes-1; j>=0; j--)
 	{
-	  struct stat statbuf;
 	  gchar *name = g_strconcat (gtk_rc_default_files[i],
 				     ".",
 				     locale_suffixes[j],
 				     NULL);
 	  gtk_rc_parse (name);
+	  g_free (name);
 	}
 
       gtk_rc_parse (gtk_rc_default_files[i]);

@@ -1041,25 +1041,6 @@ gdk_x_io_error (Display *display)
   return 0;
 }
 
-/* Sends a ClientMessage to all toplevel client windows */
-gboolean
-gdk_event_send_client_message (GdkEvent *event, guint32 xid)
-{
-  XEvent sev;
-  
-  g_return_val_if_fail(event != NULL, FALSE);
-  
-  /* Set up our event to send, with the exception of its target window */
-  sev.xclient.type = ClientMessage;
-  sev.xclient.display = gdk_display;
-  sev.xclient.format = event->client.data_format;
-  sev.xclient.window = xid;
-  memcpy(&sev.xclient.data, &event->client.data, sizeof(sev.xclient.data));
-  sev.xclient.message_type = event->client.message_type;
-  
-  return gdk_send_xevent (xid, False, NoEventMask, &sev);
-}
-
 gchar *
 gdk_get_display(void)
 {
