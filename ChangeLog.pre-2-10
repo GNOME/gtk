@@ -1,3 +1,9 @@
+2004-12-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (_gtk_tree_view_column_start_drag): Use
+	button->event_window for the fake leave event, otherwise
+	the button ignores it.  
+
 2004-12-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c (gtk_icon_view_rows_reordered): Make this

@@ -8115,7 +8115,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 
   send_event = gdk_event_new (GDK_LEAVE_NOTIFY);
   send_event->crossing.send_event = TRUE;
-  send_event->crossing.window = g_object_ref (column->button->window);
+  send_event->crossing.window = g_object_ref (GTK_BUTTON (column->button)->event_window);
   send_event->crossing.subwindow = NULL;
   send_event->crossing.detail = GDK_NOTIFY_ANCESTOR;
   send_event->crossing.time = GDK_CURRENT_TIME;
