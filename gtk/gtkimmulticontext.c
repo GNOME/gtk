@@ -45,6 +45,8 @@ static void     gtk_im_multicontext_focus_out          (GtkIMContext            
 static void     gtk_im_multicontext_reset              (GtkIMContext            *context);
 static void     gtk_im_multicontext_set_cursor_location (GtkIMContext            *context,
 							GdkRectangle		*area);
+static void     gtk_im_multicontext_set_use_preedit    (GtkIMContext            *context,
+							gboolean                 use_preedit);
 static gboolean gtk_im_multicontext_get_surrounding    (GtkIMContext            *context,
 							gchar                  **text,
 							gint                    *cursor_index);
@@ -115,6 +117,7 @@ gtk_im_multicontext_class_init (GtkIMMulticontextClass *class)
   im_context_class->focus_out = gtk_im_multicontext_focus_out;
   im_context_class->reset = gtk_im_multicontext_reset;
   im_context_class->set_cursor_location = gtk_im_multicontext_set_cursor_location;
+  im_context_class->set_use_preedit = gtk_im_multicontext_set_use_preedit;
   im_context_class->set_surrounding = gtk_im_multicontext_set_surrounding;
   im_context_class->get_surrounding = gtk_im_multicontext_get_surrounding;
 
@@ -319,6 +322,17 @@ gtk_im_multicontext_set_cursor_location (GtkIMContext   *context,
 
   if (slave)
     gtk_im_context_set_cursor_location (slave, area);
+}
+
+static void
+gtk_im_multicontext_set_use_preedit (GtkIMContext   *context,
+				     gboolean	    use_preedit)
+{
+  GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
+  GtkIMContext *slave = gtk_im_multicontext_get_slave (multicontext);
+
+  if (slave)
+    gtk_im_context_set_use_preedit (slave, use_preedit);
 }
 
 static gboolean

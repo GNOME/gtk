@@ -1,3 +1,17 @@
+Fri Nov  2 15:30:34 2001  Owen Taylor  <otaylor@redhat.com>
+
+	Patch from HideToshi Tajima (#51922)
+	
+	* gtk/gtkimmulticontext.c: Proxy set_use_preedit().
+
+	* gtk/modules/input/gtkimcontextxim.[ch]: Implement
+	set_use_preedit().
+	
+	* gtk/modules/input/gtkimcontextxim.[ch]: If we have
+	to destroy the input context because we change the
+	client window or use_preedit, make sure we empty
+	the preedit string.
+
 Fri Nov  2 14:55:53 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/{gtkcolorseldialog.c,gtkfilesel.c,gtkfontsel.c,

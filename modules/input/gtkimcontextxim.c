@@ -42,6 +42,8 @@ static void     gtk_im_context_xim_focus_in           (GtkIMContext          *co
 static void     gtk_im_context_xim_focus_out          (GtkIMContext          *context);
 static void     gtk_im_context_xim_set_cursor_location (GtkIMContext          *context,
 						       GdkRectangle		*area);
+static void     gtk_im_context_xim_set_use_preedit    (GtkIMContext          *context,
+						       gboolean		      use_preedit);
 static void     gtk_im_context_xim_get_preedit_string (GtkIMContext          *context,
 						       gchar                **str,
 						       PangoAttrList        **attrs,
@@ -216,12 +218,14 @@ gtk_im_context_xim_class_init (GtkIMContextXIMClass *class)
   im_context_class->focus_in = gtk_im_context_xim_focus_in;
   im_context_class->focus_out = gtk_im_context_xim_focus_out;
   im_context_class->set_cursor_location = gtk_im_context_xim_set_cursor_location;
+  im_context_class->set_use_preedit = gtk_im_context_xim_set_use_preedit;
   gobject_class->finalize = gtk_im_context_xim_finalize;
 }
 
 static void
 gtk_im_context_xim_init (GtkIMContextXIM *im_context_xim)
 {
+  im_context_xim->use_preedit = TRUE;
 }
 
 static void
@@ -239,17 +243,28 @@ gtk_im_context_xim_finalize (GObject *obj)
 }
 
 static void
+reinitialize_ic (GtkIMContextXIM *context_xim)
+{
+  if (context_xim->ic)
+    {
+      XDestroyIC (context_xim->ic);
+      context_xim->ic = NULL;
+
+      if (context_xim->preedit_length)
+	{
+	  context_xim->preedit_length = 0;
+	  g_signal_emit_by_name (context_xim, "preedit_changed");
+	}
+    }
+}
+
+static void
 gtk_im_context_xim_set_client_window (GtkIMContext          *context,
 				      GdkWindow             *client_window)
 {
   GtkIMContextXIM *context_xim = GTK_IM_CONTEXT_XIM (context);
 
-  if (context_xim->ic)
-    {
-      XDestroyIC (context_xim->ic);
-      context_xim->ic = NULL;
-    }
-
+  reinitialize_ic (context_xim);
   context_xim->client_window = client_window;
 }
 
@@ -421,6 +436,23 @@ gtk_im_context_xim_set_cursor_location (GtkIMContext *context,
 		XNPreeditAttributes, preedit_attr,
 		NULL);
   XFree(preedit_attr);
+
+  return;
+}
+
+static void
+gtk_im_context_xim_set_use_preedit (GtkIMContext *context,
+				    gboolean      use_preedit)
+{
+  GtkIMContextXIM *context_xim = GTK_IM_CONTEXT_XIM (context);
+
+  use_preedit = use_preedit != FALSE;
+
+  if (context_xim->use_preedit != use_preedit)
+    {
+      context_xim->use_preedit = use_preedit;
+      reinitialize_ic (context_xim);
+    }
 
   return;
 }
@@ -784,6 +816,15 @@ gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
 
   if (!context_xim->ic && context_xim->client_window)
     {
+      if (!context_xim->use_preedit)
+	{
+	  context_xim->ic = XCreateIC (context_xim->im_info->im,
+				       XNInputStyle, XIMPreeditNothing | XIMStatusNothing,
+				       XNClientWindow, GDK_DRAWABLE_XID (context_xim->client_window),
+				       NULL);
+	  return context_xim->ic;
+	}
+
       if ((context_xim->im_info->style & PREEDIT_MASK) == XIMPreeditCallbacks)
 	{
 	  context_xim->preedit_start_callback.client_data = (XPointer)context_xim;
