@@ -15,6 +15,7 @@ demos =						\
 	entry_completion.c			\
 	expander.c  				\
 	hypertext.c				\
+	iconview.c				\
 	images.c				\
 	list_store.c				\
 	menus.c					\
@@ -72,12 +73,14 @@ IMAGEFILES=	alphatest.png		\
 		floppybuddy.gif		\
 		gnome-applets.png	\
 		gnome-calendar.png	\
+		gnome-fs-directory.png	\
+		gnome-fs-regular.png	\
 		gnome-foot.png		\
 		gnome-gimp.png		\
 		gnome-gmush.png		\
 		gnome-gsame.png		\
 		gnu-keys.png		\
-		gtk-logo-rgb.gif
+		gtk-logo-rgb.gif		
 
 democode_DATA = $(demos) $(IMAGEFILES)
 

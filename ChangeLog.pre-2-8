@@ -1,5 +1,22 @@
 2004-07-04  Anders Carlsson  <andersca@gnome.org>
 
+	* demos/gtk-demo/Makefile.am:
+	* demos/gtk-demo/gnome-fs-directory.png:
+	* demos/gtk-demo/gnome-fs-regular.png:
+	* demos/gtk-demo/iconview.c: (load_pixbufs), (fill_store),
+	(sort_func), (create_store), (item_activated), (up_clicked),
+	(home_clicked), (do_iconview):
+	Add a simple file browser based on the icon view.
+	
+	* gtk/gtk.h:
+	Add gtk/gtkiconview.h
+	
+	* gtk/gtkiconview.c: (gtk_icon_view_layout),
+	(gtk_icon_view_item_new), (gtk_icon_view_item_activated):
+	Fix a few bugs discovered while writing the demo.
+	
+2004-07-04  Anders Carlsson  <andersca@gnome.org>
+
 	* gtk/Makefile.am:
 	* gtk/gtkiconview.c
 	* gtk/gtkiconview.h:

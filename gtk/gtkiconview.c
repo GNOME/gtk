@@ -47,8 +47,6 @@
 
 typedef struct 
 {
-  gint ref_count;
-
   GtkTreeIter iter;
   int index;
   
@@ -1476,7 +1474,10 @@ gtk_icon_view_layout (GtkIconView *icon_view)
   GList *icons;
   GtkWidget *widget;
   gint row;
-  
+
+  if (!VALID_MODEL_AND_COLUMNS (icon_view))
+    return;
+
   widget = GTK_WIDGET (icon_view);
   icons = icon_view->priv->items;
 
@@ -1824,7 +1825,6 @@ gtk_icon_view_item_new (void)
 
   item = g_new0 (GtkIconViewItem, 1);
 
-  item->ref_count = 1;
   item->width = -1;
   item->height = -1;
   
@@ -3146,6 +3146,8 @@ gtk_icon_view_get_selected_items (GtkIconView *icon_view)
  * 
  * Selects all the icons. @icon_view must has its selection mode set
  * to #GTK_SELECTION_MULTIPLE.
+ *
+ * Since: 2.6
  **/
 void
 gtk_icon_view_select_all (GtkIconView *icon_view)
@@ -3179,6 +3181,8 @@ gtk_icon_view_select_all (GtkIconView *icon_view)
  * @icon_view: A #GtkIconView.
  * 
  * Unselects all the icons.
+ *
+ * Since: 2.6
  **/
 void
 gtk_icon_view_unselect_all (GtkIconView *icon_view)
@@ -3202,6 +3206,8 @@ gtk_icon_view_unselect_all (GtkIconView *icon_view)
  * selected. If @icon does not point to a valid location, %FALSE is returned.
  * 
  * Return value: %TRUE if @path is selected.
+ *
+ * Since: 2.6
  **/
 gboolean
 gtk_icon_view_path_is_selected (GtkIconView *icon_view,
@@ -3228,10 +3234,15 @@ gtk_icon_view_path_is_selected (GtkIconView *icon_view,
  * @path: The #GtkTreePath to be activated
  * 
  * Activates the item determined by @path.
+ *
+ * Since: 2.6
  **/
 void
 gtk_icon_view_item_activated (GtkIconView      *icon_view,
 			      GtkTreePath      *path)
 {
+  g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
+  g_return_if_fail (path != NULL);
+  
   g_signal_emit (G_OBJECT (icon_view), icon_view_signals[ITEM_ACTIVATED], 0, path);
 }
