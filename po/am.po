@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "POT-Creation-Date: 2003-01-06 06:02+0100\n"
-"PO-Revision-Date: 2003-01-07 10:33+EDT\n"
+"PO-Revision-Date: 2003-01-09 21:53+EDT\n"
 "Last-Translator: Ge'ez Frontier Foundation <locales@geez.org>\n"
 "Language-Team: Amharic <locales@geez.org>\n"
 "MIME-Version: 1.0\n"
@@ -1923,7 +1923,7 @@ msgstr "_አዲስ ዶሴ"
 
 #: gtk/gtkfilesel.c:1079
 msgid "De_lete File"
-msgstr "ፋይል _ሰረዝ"
+msgstr "ፋይል _አጥፉ"
 
 #: gtk/gtkfilesel.c:1090
 msgid "_Rename File"
@@ -1991,7 +1991,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1580
 msgid "Delete File"
-msgstr "ፋይል ሰረዝ"
+msgstr "ፋይል አጥፉ"
 
 #: gtk/gtkfilesel.c:1626 gtk/gtkfilesel.c:1640
 #, c-format
