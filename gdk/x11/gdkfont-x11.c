@@ -141,6 +141,7 @@ gdk_font_charset_for_locale ()
 {
   static char *charset_map[][2] = {
     { "ANSI_X3.4-1968", "iso8859-1" },
+    { "US-ASCII",   "iso8859-1" },
     { "ISO-8859-1", "iso8859-1" },
     { "ISO-8859-2", "iso8859-2" },
     { "ISO-8859-3", "iso8859-3" },
@@ -150,7 +151,7 @@ gdk_font_charset_for_locale ()
     { "ISO-8859-7", "iso8859-7" },
     { "ISO-8859-8", "iso8859-8" },
     { "ISO-8859-9", "iso8859-9" },
-    { "UTF-8", "iso8859-1" }
+    { "UTF-8",      "iso8859-1" }
   };
 
   char *codeset;
@@ -169,7 +170,7 @@ gdk_font_charset_for_locale ()
   if (result)
     return g_strdup (result);
   else
-    return g_strdup ("iso-8859-1");
+    return g_strdup ("iso8859-1");
 };
 
 /**
