@@ -2989,7 +2989,7 @@ msgstr "Байрлалын өндөр"
 #.
 #: gtk/gtkmain.c:806
 msgid "default:LTR"
-msgstr "Стандарт:LTR"
+msgstr "default:LTR"
 
 #: gtk/gtkmenu.c:263
 msgid "Tearoff Title"

@@ -2589,7 +2589,7 @@ msgstr "Înălţimea machetei"
 #.
 #: gtk/gtkmain.c:805
 msgid "default:LTR"
-msgstr ""
+msgstr "default:LTR"
 
 #: gtk/gtkmenu.c:263
 msgid "Tearoff Title"

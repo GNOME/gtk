@@ -1,3 +1,10 @@
+2003-06-29  Pablo Saratxaga  <pablo@mandrakesoft.com>
+
+	* wa.po: Updated Walloon file
+	* az.po: corrected syntax error
+	* {am,cy,en_GB,ga,gl,hi,hr,lt,mk,mn,ro}.po: fixed default:LTR entry
+
+
 2003-06-25  Fatih Demir <kabalak@gtranslator.org>
 
 	* ta.po: Also updated the Tamil file on HEAD...
