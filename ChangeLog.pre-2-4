@@ -1,5 +1,11 @@
-Tue Oct 22 15:13:59 2002  Owen Taylor  <otaylor@redhat.com>
+Tue Oct 22 15:46:09 2002  Owen Taylor  <otaylor@redhat.com>
 
+	* gtk/gtkentry.c (gtk_entry_unrealize): Reset the 
+	layout, since it holds a reference to the font on
+	a particular screen.
+
+Tue Oct 22 15:13:59 2002  Owen Taylor  <otaylor@redhat.com>
+	
 	* gtk/gtkimmulticontext.c: Include config.h
 	(#96441, Morten Welinder)
 
