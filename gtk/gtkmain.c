@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "gtkbutton.h"
+#include "gtkfeatures.h"
 #include "gtkhscrollbar.h"
 #include "gtkhseparator.h"
 #include "gtkmain.h"

@@ -18,6 +18,9 @@ GTK_MICRO_VERSION=0
 GTK_INTERFACE_AGE=0
 GTK_BINARY_AGE=0
 GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
+AC_SUBST(GTK_MAJOR_VERSION)
+AC_SUBST(GTK_MINOR_VERSION)
+AC_SUBST(GTK_MICRO_VERSION)
 AC_SUBST(GTK_VERSION)
 
 # libtool versioning
@@ -105,11 +108,6 @@ fi
 if test "x$enable_xim" = "xyes"; then
   CFLAGS="$CFLAGS -DUSE_XIM"
 fi
-
-AC_DEFINE_UNQUOTED(GTK_MAJOR_VERSION, $GTK_MAJOR_VERSION)
-AC_DEFINE_UNQUOTED(GTK_MINOR_VERSION, $GTK_MINOR_VERSION)
-AC_DEFINE_UNQUOTED(GTK_MICRO_VERSION, $GTK_MICRO_VERSION)
-AC_DEFINE_UNQUOTED(GTK_VERSION, "$GTK_VERSION")
 
 # Find the X11 include and library directories
 AC_PATH_X
@@ -296,5 +294,11 @@ if test $gtk_ok = no; then
     AC_DEFINE(NO_FD_SET)
 fi
 
-AC_OUTPUT([Makefile gtk-config docs/Makefile gdk/Makefile gtk/Makefile],
-          [chmod +x gtk-config])
+AC_OUTPUT([
+Makefile
+gtk-config
+docs/Makefile
+gdk/Makefile
+gtk/Makefile
+gtk/gtkfeatures.h
+], [chmod +x gtk-config])

@@ -86,6 +86,12 @@ void   gtk_signal_emit			  (GtkObject	       *object,
 void   gtk_signal_emit_by_name		  (GtkObject	       *object,
 					   const gchar	       *name,
 					   ...);
+void   gtk_signal_emitv			  (GtkObject           *object,
+					   guint                signal_id,
+					   GtkArg              *params);
+void   gtk_signal_emitv_by_name		  (GtkObject           *object,
+					   const gchar	       *name,
+					   GtkArg              *params);
 guint  gtk_signal_n_emissions		  (GtkObject   	       *object,
 					   guint                signal_id);
 guint  gtk_signal_n_emissions_by_name	  (GtkObject   	       *object,

@@ -1,3 +1,20 @@
+Sat May  9 02:34:41 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkfeatures.h.in: new file used as template for
+	* gtk/gtkfeatures.h: new file to define macros indicating newly
+ 	introduced features, such as GTK_HAVE_SIGNAL_INIT.
+
+	* gtk/gtksignal.c:
+ 	(gtk_signal_emitv_by_name):
+	(gtk_signal_emitv):
+ 	new functions to emit signals with an already provided parameter set.
+	(provided by Kenneth Albanowski <kjahds@kjahds.com>).
+	(gtk_signal_real_emit): prototype changes, so this functions always
+	gets its parameters and signal structure as arguments.
+	(gtk_signal_emit): provide the signal structure and parameter list for
+	gtk_signal_real_emit.
+	(gtk_signal_emit_by_name): likewise.
+
 Sat May  9 00:03:12 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksignal.c (gtk_signal_handler_unref): reflect the presence of

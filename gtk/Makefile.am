@@ -124,6 +124,7 @@ gtkinclude_HEADERS = \
 	gtkentry.h		\
 	gtkenums.h		\
 	gtkeventbox.h		\
+	gtkfeatures.h		\
 	gtkfilesel.h		\
 	gtkfixed.h		\
 	gtkframe.h		\
@@ -207,6 +208,7 @@ EXTRA_DIST = \
 	testgtkrc 		\
 	testgtkrc2 		\
 	gtk.defs		\
+	gtkfeatures.h.in	\
 	runelisp 		\
 	gentypeinfo.el 		\
 	gtktypebuiltins.c	\

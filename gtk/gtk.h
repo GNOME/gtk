@@ -45,6 +45,7 @@
 #include <gtk/gtkentry.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtkeventbox.h>
+#include <gtk/gtkfeatures.h>
 #include <gtk/gtkfilesel.h>
 #include <gtk/gtkfixed.h>
 #include <gtk/gtkframe.h>
