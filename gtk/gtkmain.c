@@ -459,8 +459,6 @@ static void
 do_post_parse_initialization (int    *argc,
 			      char ***argv)
 {
-  GSList *slist;
-
   if (gtk_debug_flags & GTK_DEBUG_UPDATES)
     gdk_window_set_debug_updates (TRUE);
 

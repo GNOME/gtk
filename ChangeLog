@@ -1,5 +1,8 @@
 2004-09-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmain.c (do_post_parse_initialization): Remove an unused 
+	variable, spotted by Morten Welinder.
+
 	* gtk/queryimmodules.c (escape_string): Copy code from queryloaders.c
 	which turns backslashes in slashes on win32.  (#152608, Kazuki IWAMOTO)
 
