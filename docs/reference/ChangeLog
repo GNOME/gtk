@@ -1,3 +1,8 @@
+Tue Mar 14 14:17:46 2000  Raph Levien  <raph@acm.org>
+
+	* gdk/tmpl/rgb.sgml: Better explanation of gdk_rgb_set_min_colors.
+	Thanks to Stric for spotting it.
+
 2000-03-07  Damon Chaplin  <damon@helixcode.com>
 
 	* gtk/tmpl/gtkclist.sgml: fix to gtk_clist_set_reorderable(). It

@@ -58,11 +58,15 @@ gdk_rgb_set_min_colors (). The default is 5x5x5 (125). If a colorcube
 of this size or larger can be allocated in the default colormap, then
 that's done. Otherwise, GdkRgb creates its own private colormap.
 Setting it to 0 means that it always tries to use the default
-colormap, and setting it to 256 means that it always creates a private
-one. Note, however, that setting it to 0 doesn't let you get away with
-ignoring the colormap and visual - a colormap is always created in
-grayscale and direct color modes, and the visual is changed in cases
-where a "better" visual than the default is available.
+colormap, and setting it to 216 means that it always creates a private
+one if it cannot allocate the 6x6x6 colormap in the default. If you
+always want a private colormap (to avoid consuming too many colormap
+entries for other apps, say), you can use gdk_rgb_set_install(TRUE).
+Setting the value greater than 216 exercises a bug in older versions
+of GdkRgb. Note, however, that setting it to 0 doesn't let you get
+away with ignoring the colormap and visual - a colormap is always
+created in grayscale and direct color modes, and the visual is changed
+in cases where a "better" visual than the default is available.
 </para>
 
 <example>
