@@ -174,37 +174,6 @@ expand_toggled(GtkCellRendererToggle *cell, const gchar *path_str,
 }
 
 static void
-set_pack_end_func(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
-		  GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
-{
-  GtkToolItem *tool_item;
-
-  gtk_tree_model_get (model, iter, 0, &tool_item, -1);
-
-  g_object_set (G_OBJECT (cell), "active", gtk_tool_item_get_pack_end (tool_item), NULL);
-  g_object_unref (tool_item);
-}
-
-static void
-pack_end_toggled(GtkCellRendererToggle *cell, const gchar *path_str,
-		 GtkTreeModel *model)
-{
-  GtkTreePath *path;
-  GtkTreeIter iter;
-  GtkToolItem *tool_item;
-
-  path = gtk_tree_path_new_from_string (path_str);
-  gtk_tree_model_get_iter (model, &iter, path);
-
-  gtk_tree_model_get (model, &iter, 0, &tool_item, -1);
-  gtk_tool_item_set_pack_end (tool_item, !gtk_tool_item_get_pack_end (tool_item));
-  g_object_unref (tool_item);
-
-  gtk_tree_model_row_changed (model, path, &iter);
-  gtk_tree_path_free (path);
-}
-
-static void
 set_homogeneous_func(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
 		     GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
 {
@@ -298,14 +267,6 @@ create_items_list (GtkWidget **tree_view_p)
 					      -1, "Expand",
 					      cell,
 					      set_expand_func, NULL, NULL);
-
-  cell = gtk_cell_renderer_toggle_new ();
-  g_signal_connect (cell, "toggled", G_CALLBACK (pack_end_toggled),
-		    list_store);
-  gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (tree_view),
-					      -1, "Pack End",
-					      cell,
-					      set_pack_end_func, NULL, NULL);
 
   cell = gtk_cell_renderer_toggle_new ();
   g_signal_connect (cell, "toggled", G_CALLBACK (homogeneous_toggled),
@@ -472,6 +433,8 @@ popup_context_menu (GtkToolbar *toolbar, gint x, gint y, gint button_number)
   return TRUE;
 }
 
+static GtkToolItem *drag_item = NULL;
+
 static gboolean
 toolbar_drag_motion (GtkToolbar     *toolbar,
 		     GdkDragContext *context,
@@ -480,8 +443,20 @@ toolbar_drag_motion (GtkToolbar     *toolbar,
 		     guint           time,
 		     gpointer        null)
 {
+  gint index;
+  
+  if (!drag_item)
+    {
+      drag_item = gtk_tool_button_new (NULL, "A quite long button");
+      gtk_object_sink (GTK_OBJECT (g_object_ref (drag_item)));
+    }
+      
   gdk_drag_status (context, GDK_ACTION_MOVE, time);
-  gtk_toolbar_highlight_drop_location (toolbar, x, y, 100, 60);
+
+  index = gtk_toolbar_get_drop_index (toolbar, x, y);
+  
+  gtk_toolbar_highlight_drop_location (toolbar, index, drag_item);
+  
   return TRUE;
 }
 
@@ -491,6 +466,12 @@ toolbar_drag_leave (GtkToolbar     *toolbar,
 		    guint           time,
 		    gpointer	    null)
 {
+  if (drag_item)
+    {
+      g_object_unref (G_OBJECT (drag_item));
+      drag_item = NULL;
+    }
+  
   gtk_toolbar_unhighlight_drop_location (toolbar);
 }
 
@@ -534,6 +515,7 @@ main (gint argc, gchar **argv)
 		    G_CALLBACK (change_orientation), toolbar);
 
   checkbox = gtk_check_button_new_with_mnemonic("_Show Arrow");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbox), TRUE);
   gtk_box_pack_start (GTK_BOX (hbox), checkbox, FALSE, FALSE, 0);
   g_signal_connect (checkbox, "toggled",
 		    G_CALLBACK (change_show_arrow), toolbar);
@@ -641,6 +623,8 @@ main (gint argc, gchar **argv)
   item = gtk_separator_tool_item_new ();
   add_item_to_list (store, item, "-----");  
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_tool_item_set_expand (item, TRUE);
+  gtk_separator_tool_item_set_draw (GTK_SEPARATOR_TOOL_ITEM (item), FALSE);
 
   item = gtk_radio_tool_button_new_from_stock (NULL, GTK_STOCK_JUSTIFY_LEFT);
   group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (item));
