@@ -29,6 +29,16 @@ style "defaultfont"
   font_name = "Sans 12"
 }
 
+style "myicons"
+{
+  stock["gtk-dialog-warning"] = 
+    { 
+      { "3DRings.xpm", *, *, *} 
+    }
+}
+
+class "GtkImage" style "myicons"
+
 # common default
 class "GtkWidget" style "defaultfont"
 

@@ -1,3 +1,7 @@
+<!-- ##### SECTION ./tmpl/from-drawables.sgml:Title ##### -->
+Drawables to Pixbufs
+
+
 <!-- ##### USER_FUNCTION GdkPixbufLastUnref ##### -->
   <para>
     A function of this type can be used to override the default
@@ -14,10 +18,6 @@
 
 @pixbuf: The pixbuf that is losing its last reference.
 @data: User closure data.
-
-<!-- ##### SECTION ./tmpl/from-drawables.sgml:Title ##### -->
-Drawables to Pixbufs
-
 
 <!-- ##### ARG GnomeCanvasPixbuf:height_pixels ##### -->
 <para>
@@ -415,16 +415,16 @@ XlibRGB
   </para>
 
 
-<!-- ##### SECTION ./tmpl/xlib-from-drawables.sgml:See_Also ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### SECTION ./tmpl/from-drawables.sgml:See_Also ##### -->
   <para>
     gdk_image_get().
   </para>
+
+
+<!-- ##### SECTION ./tmpl/xlib-from-drawables.sgml:See_Also ##### -->
+<para>
+
+</para>
 
 
 <!-- ##### STRUCT GdkPixbufAnimationClass ##### -->
@@ -510,6 +510,12 @@ Getting parts of a drawable's image data into a pixbuf.
 
 
 <!-- ##### STRUCT GdkPixbufClass ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Long_Description ##### -->
 <para>
 
 </para>
@@ -682,12 +688,6 @@ Getting parts of a drawable's image data into a pixbuf.
       zero and thus be freed.
     </para>
   </refsect2>
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Long_Description ##### -->
-<para>
-
-</para>
 
 
 <!-- ##### SECTION ./tmpl/xlib-rendering.sgml:Title ##### -->

@@ -266,7 +266,7 @@ elements are:
      </listitem>
   </varlistentry>
   <varlistentry>
-    <term><literal>stock[<replaceable>"stock-id"</replaceable>]</literal> = { <replaceable>icon source specifications</replaceable> }</literal></term>
+    <term><literal>stock[<replaceable>"stock-id"</replaceable>] = { <replaceable>icon source specifications</replaceable> }</literal></term>
      <listitem>
        <para>
         Defines the icon for a stock item.
@@ -327,7 +327,7 @@ state of the widget. The states are:
     <listitem>
       <para>
         A color used for the background of widgets that have
-        been set insenstivie with gtk_widget_set_senstive()
+        been set insensitive with gtk_widget_set_sensitive()
       </para>
     </listitem>
   </varlistentry>

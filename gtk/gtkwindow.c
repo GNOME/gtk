@@ -45,6 +45,7 @@
 #include "gtkwindow.h"
 #include "gtkbindings.h"
 #include "gtkmain.h"
+#include "gtkiconfactory.h"
 
 /* TODO: remove this define and assorted code in 1.3 and fix up the
  * real culprits.
@@ -65,7 +66,8 @@ enum {
   ARG_MODAL,
   ARG_WIN_POS,
   ARG_DEFAULT_WIDTH,
-  ARG_DEFAULT_HEIGHT
+  ARG_DEFAULT_HEIGHT,
+  ARG_DESTROY_WITH_PARENT
 };
 
 typedef struct {
@@ -225,6 +227,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   gtk_object_add_arg_type ("GtkWindow::window_position", GTK_TYPE_WINDOW_POSITION, GTK_ARG_READWRITE, ARG_WIN_POS);
   gtk_object_add_arg_type ("GtkWindow::default_width", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_DEFAULT_WIDTH);
   gtk_object_add_arg_type ("GtkWindow::default_height", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_DEFAULT_HEIGHT);
+  gtk_object_add_arg_type ("GtkWindow::destroy_with_parent", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_DESTROY_WITH_PARENT);
   
   window_signals[SET_FOCUS] =
     gtk_signal_new ("set_focus",
@@ -335,6 +338,9 @@ gtk_window_set_arg (GtkObject  *object,
     case ARG_DEFAULT_HEIGHT:
       gtk_window_set_default_size (window, -2, GTK_VALUE_INT (*arg));
       break;
+    case ARG_DESTROY_WITH_PARENT:
+      gtk_window_set_destroy_with_parent (window, GTK_VALUE_BOOL (*arg));
+      break;
     default:
       break;
     }
@@ -386,6 +392,9 @@ gtk_window_get_arg (GtkObject  *object,
 	GTK_VALUE_INT (*arg) = -1;
       else
 	GTK_VALUE_INT (*arg) = info->height;
+      break;
+    case ARG_DESTROY_WITH_PARENT:
+      GTK_VALUE_BOOL (*arg) = window->destroy_with_parent;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
@@ -525,6 +534,29 @@ gtk_window_remove_accel_group (GtkWindow       *window,
   g_return_if_fail (accel_group != NULL);
 
   gtk_accel_group_detach (accel_group, GTK_OBJECT (window));
+}
+
+GtkAccelGroup*
+gtk_window_get_default_accel_group (GtkWindow *window)
+{
+  GtkAccelGroup *group;
+  
+  g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
+
+  group = gtk_object_get_data (GTK_OBJECT (window),
+                               "gtk-accel-group");
+
+  if (group == NULL)
+    {
+      group = gtk_accel_group_new ();
+      gtk_window_add_accel_group (window, group);
+      gtk_object_set_data (GTK_OBJECT (window),
+                           "gtk-accel-group",
+                           group);
+      gtk_accel_group_unref (group);
+    }
+
+  return group;
 }
 
 void
@@ -688,6 +720,35 @@ gtk_window_shutdown (GObject *object)
 }
 
 static void
+parent_destroyed_callback (GtkWindow *parent, GtkWindow *child)
+{
+  gtk_widget_destroy (GTK_WIDGET (child));
+}
+
+static void
+connect_parent_destroyed (GtkWindow *window)
+{
+  if (window->transient_parent)
+    {
+      gtk_signal_connect (GTK_OBJECT (window->transient_parent),
+                          "destroy",
+                          GTK_SIGNAL_FUNC (parent_destroyed_callback),
+                          window);
+    }  
+}
+
+static void
+disconnect_parent_destroyed (GtkWindow *window)
+{
+  if (window->transient_parent)
+    {
+      gtk_signal_disconnect_by_func (GTK_OBJECT (window->transient_parent),
+                                     GTK_SIGNAL_FUNC (parent_destroyed_callback),
+                                     window);
+    }
+}
+
+static void
 gtk_window_transient_parent_realized (GtkWidget *parent,
 				      GtkWidget *window)
 {
@@ -719,6 +780,9 @@ gtk_window_unset_transient_for  (GtkWindow *window)
 				     GTK_SIGNAL_FUNC (gtk_widget_destroyed),
 				     &window->transient_parent);
 
+      if (window->destroy_with_parent)
+        disconnect_parent_destroyed (window);
+      
       window->transient_parent = NULL;
     }
 }
@@ -727,8 +791,11 @@ void
 gtk_window_set_transient_for  (GtkWindow *window, 
 			       GtkWindow *parent)
 {
-  g_return_if_fail (window != 0);
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (parent == NULL || GTK_IS_WINDOW (parent));
+  g_return_if_fail (window != parent);
 
+    
   if (window->transient_parent)
     {
       if (GTK_WIDGET_REALIZED (window) && 
@@ -754,11 +821,45 @@ gtk_window_set_transient_for  (GtkWindow *window,
 			  GTK_SIGNAL_FUNC (gtk_window_transient_parent_unrealized),
 			  window);
 
+      if (window->destroy_with_parent)
+        connect_parent_destroyed (window);
+      
       if (GTK_WIDGET_REALIZED (window) &&
 	  GTK_WIDGET_REALIZED (parent))
 	gtk_window_transient_parent_realized (GTK_WIDGET (parent),
 					      GTK_WIDGET (window));
     }
+}
+
+/**
+ * gtk_window_set_destroy_with_parent:
+ * @window: a #GtkWindow
+ * @setting: whether to destroy @window with its transient parent
+ * 
+ * If @setting is TRUE, then destroying the transient parent of @window
+ * will also destroy @window itself. This is useful for dialogs that
+ * shouldn't persist beyond the lifetime of the main window they're
+ * associated with, for example.
+ **/
+void
+gtk_window_set_destroy_with_parent  (GtkWindow *window,
+                                     gboolean   setting)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  if (window->destroy_with_parent == (setting != FALSE))
+    return;
+
+  if (window->destroy_with_parent)
+    {
+      disconnect_parent_destroyed (window);
+    }
+  else
+    {
+      connect_parent_destroyed (window);
+    }
+  
+  window->destroy_with_parent = setting;
 }
 
 static void
@@ -859,7 +960,7 @@ gtk_window_destroy (GtkObject *object)
   window = GTK_WINDOW (object);
 
   if (window->transient_parent)
-    gtk_window_unset_transient_for (window);
+    gtk_window_set_transient_for (window, NULL);
 
   if (window->has_user_ref_count)
     {
@@ -1432,10 +1533,15 @@ gtk_window_read_rcfiles (GtkWidget *widget,
        * of date, so we need to reset all our widgets. Our other
        * toplevel windows will also get the message, but by
        * then, the RC file will up to date, so we have to tell
-       * them now.
+       * them now. Also, we have to invalidate cached icons in
+       * icon sets so they get re-rendered.
        */
-      GList *list, *toplevels = gtk_window_list_toplevels ();
+      GList *list, *toplevels;
 
+      _gtk_icon_set_invalidate_caches ();
+      
+      toplevels = gtk_window_list_toplevels ();
+      
       for (list = toplevels; list; list = list->next)
 	{
 	  gtk_widget_reset_rc_styles (list->data);
@@ -2056,14 +2162,24 @@ gtk_window_compute_reposition (GtkWindow  *window,
 			       gint       *y)
 {
   GtkWidget *widget;
-
+  GtkWindowPosition pos;
+  GtkWidget *parent_widget;
+  
   widget = GTK_WIDGET (window);
 
   *x = -1;
   *y = -1;
+
+  parent_widget = (GtkWidget*) window->transient_parent;
   
-  switch (window->position)
-    {
+  pos = window->position;
+  if (pos == GTK_WIN_POS_CENTER_ON_PARENT &&
+      (parent_widget == NULL ||
+       !GTK_WIDGET_MAPPED (parent_widget)))
+    pos = GTK_WIN_POS_NONE;
+  
+  switch (pos)
+  {
     case GTK_WIN_POS_CENTER:
     case GTK_WIN_POS_CENTER_ALWAYS:
       if (window->use_uposition)
@@ -2075,6 +2191,19 @@ gtk_window_compute_reposition (GtkWindow  *window,
 	  *y = (screen_height - new_height) / 2;
 	}
       break;
+
+    case GTK_WIN_POS_CENTER_ON_PARENT:
+      if (window->use_uposition)
+        {
+          gint ox, oy;
+          gdk_window_get_origin (parent_widget->window,
+                                 &ox, &oy);
+                                 
+          *x = ox + (parent_widget->allocation.width - new_width) / 2;
+          *y = oy + (parent_widget->allocation.height - new_height) / 2;
+        }
+      break;
+
     case GTK_WIN_POS_MOUSE:
       if (window->use_uposition)
 	{

@@ -122,6 +122,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkmenufactory.h	\
 	gtkmenuitem.h		\
 	gtkmenushell.h		\
+	gtkmessagedialog.h	\
 	gtkmisc.h		\
 	gtkmodelsimple.h	\
 	gtknotebook.h		\
@@ -290,6 +291,7 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtkmenufactory.c	\
 	gtkmenuitem.c		\
 	gtkmenushell.c		\
+	gtkmessagedialog.c	\
 	gtkmisc.c		\
 	gtkmodelsimple.c	\
 	gtknotebook.c		\

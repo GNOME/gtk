@@ -322,6 +322,7 @@ Window placement can be influenced using this enumeration.
 @GTK_WIN_POS_CENTER: Windows should be placed in the center of the screen.
 @GTK_WIN_POS_MOUSE: Windows should be placed at the current mouse position.
 @GTK_WIN_POS_CENTER_ALWAYS: 
+@GTK_WIN_POS_CENTER_ON_PARENT: 
 
 <!-- ##### ENUM GtkWindowType ##### -->
 <para>

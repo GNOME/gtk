@@ -1,3 +1,7 @@
+2000-10-20  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtk-sections.txt: Add dialog docs
+
 2000-10-18  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtk-sections.txt: Some updates

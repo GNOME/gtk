@@ -6,56 +6,91 @@ GtkDialog
 create popup windows.
 
 <!-- ##### SECTION Long_Description ##### -->
+
 <para>
 Dialog boxes are a convenient way to prompt the user for a small amount of
-input, eg. to display
-a message, ask a question, or anything else that does not require extensive
-effort on the user's part.
+input, eg. to display a message, ask a question, or anything else that does not
+require extensive effort on the user's part.
 </para>
+
 <para>
 Gtk+ treats a dialog as a window split horizontally. The top section is a
 #GtkVBox, and is where widgets such as a #GtkLabel or a #GtkEntry should be
-packed. The second area is known as the <structfield>action_area</structfield>. This is generally used
-for packing buttons into the dialog which may perform functions such as cancel, ok, or apply. The two
-areas are separated by a #GtkHSeparator.
+packed. The second area is known as the
+<structfield>action_area</structfield>. This is generally used for packing
+buttons into the dialog which may perform functions such as cancel, ok, or
+apply. The two areas are separated by a #GtkHSeparator.
 </para>
+
 <para>
-#GtkDialog boxes are created with a call to gtk_dialog_new().
+#GtkDialog boxes are created with a call to gtk_dialog_new() or
+gtk_dialog_new_with_buttons(). gtk_dialog_new_with_buttons() is recommended; it
+allows you to set the dialog title, some convenient flags, and add simple
+buttons.
 </para>
+
 <para>
 If 'dialog' is a newly created dialog, the two primary areas of the window 
 can be accessed as GTK_DIALOG(dialog)->vbox and GTK_DIALOG(dialog)->action_area,
 as can be seen from the example, below.
 </para>
+
 <para>
-A 'modal' dialog (that is, one which freezes the rest of the application
-from user input), can be created by calling gtk_window_set_modal() on the dialog. Use the
-GTK_WINDOW() macro to cast the widget returned from gtk_dialog_new() into a
-#GtkWindow.
+A 'modal' dialog (that is, one which freezes the rest of the application from
+user input), can be created by calling gtk_window_set_modal() on the dialog. Use
+the GTK_WINDOW() macro to cast the widget returned from gtk_dialog_new() into a
+#GtkWindow. When using gtk_dialog_new_with_buttons() you can also pass the
+GTK_DIALOG_MODAL flag to make a dialog modal.
 </para>
+
 <para>
+If you add buttons to #GtkDialog using gtk_dialog_new_with_buttons(),
+gtk_dialog_add_button(), gtk_dialog_add_buttons(), or
+gtk_dialog_add_action_widget(), clicking the button will emit a signal called
+"response" with a response ID that you specified. GTK+ will never assign a
+meaning to positive response IDs; these are entirely user-defined. But for
+convenience, you can use the response IDs in the #GtkResponseType enumeration
+(these all have values less than zero). If a dialog receives a delete event, the
+"response" signal will be emitted with a response ID of GTK_RESPONSE_NONE.
+</para>
+
+
+<para>
+If you want to block waiting for a dialog to return before returning control
+flow to your code, you can call gtk_dialog_run(). This function enters a
+recursive main loop and waits for the user to respond to the dialog, returning the 
+response ID corresponding to the button the user clicked.
+</para>
+
+<para>
+For the simple dialog in the following example, in reality you'd probably use
+#GtkMessageDialog to save yourself some effort.  But you'd need to create the
+dialog contents manually if you had more than a simple message in the dialog.
 <example>
-<title>Using a #GtkDialog to keep the user informed.</title>
+<title>Simple #GtkDialog usage.</title>
 <programlisting>
 
 /* Function to open a dialog box displaying the message provided. */
 
 void quick_message(#gchar *message) {
 
-   #GtkWidget *dialog, *label, *okay_button;
+   #GtkWidget *dialog, *label;
    
    /* Create the widgets */
    
-   dialog = gtk_dialog_new();
+   dialog = gtk_dialog_new_with_buttons ("Message",
+                                         main_application_window,
+                                         GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         GTK_STOCK_BUTTON_OK,
+                                         GTK_RESPONSE_NONE,
+                                         NULL);
    label = gtk_label_new (message);
-   okay_button = gtk_button_new_with_label("Okay");
    
-   /* Ensure that the dialog box is destroyed when the user clicks ok. */
+   /* Ensure that the dialog box is destroyed when the user responds. */
    
-   gtk_signal_connect_object (GTK_OBJECT (okay_button), "clicked",
-                              GTK_SIGNAL_FUNC (gtk_widget_destroy), dialog);
-   gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->action_area),
-                      okay_button);
+   gtk_signal_connect_object (GTK_OBJECT (dialog), "response",
+                              GTK_SIGNAL_FUNC (gtk_widget_destroy), 
+                              GTK_OBJECT (dialog));
 
    /* Add the label, and show everything we've added to the dialog. */
 
@@ -102,11 +137,13 @@ gtk_window_set_title(). See the #GtkWindow section for more).
 </para>
 
 
-<!-- ##### STRUCT GtkDialogButton ##### -->
+<!-- ##### ENUM GtkDialogFlags ##### -->
 <para>
-Deprecated.
+
 </para>
 
+@GTK_DIALOG_MODAL: 
+@GTK_DIALOG_DESTROY_WITH_PARENT: 
 
 <!-- ##### FUNCTION gtk_dialog_new ##### -->
 <para>
@@ -116,4 +153,78 @@ directly, but into the vbox and action_area, as described above.
 
 @Returns: a #GtkWidget - the newly created dialog box.
 
+
+<!-- ##### FUNCTION gtk_dialog_new_with_buttons ##### -->
+<para>
+
+</para>
+
+@title: 
+@parent: 
+@flags: 
+@first_button_text: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_dialog_run ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_dialog_response ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@response_id: 
+
+
+<!-- ##### FUNCTION gtk_dialog_add_button ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@button_text: 
+@response_id: 
+
+
+<!-- ##### FUNCTION gtk_dialog_add_buttons ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@first_button_text: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_dialog_add_action_widget ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@child: 
+@response_id: 
+<!-- # Unused Parameters # -->
+@widget: 
+
+
+<!-- ##### SIGNAL GtkDialog::response ##### -->
+<para>
+Emitted when an action widget is clicked, the dialog receives a delete event, or
+the application programmer calls gtk_dialog_response(). On a delete event, the
+response ID is GTK_RESPONSE_NONE. Otherwise, it depends on which action widget
+was clicked.
+</para>
+
+@dialog: the object which received the signal.
+@arg1: the response ID
 

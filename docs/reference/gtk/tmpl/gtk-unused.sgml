@@ -149,13 +149,6 @@ A structure used to return values from @gtk_type_query.
 @object_size: 
 @class_size: 
 
-<!-- ##### MACRO gtk_widget_pop_visual ##### -->
-<para>
-
-</para>
-
-@v: 
-
 <!-- ##### FUNCTION gtk_text_buffer_get_clipboard_contents ##### -->
 <para>
 
@@ -163,6 +156,13 @@ A structure used to return values from @gtk_type_query.
 
 @buffer: 
 @Returns: 
+
+<!-- ##### MACRO gtk_widget_pop_visual ##### -->
+<para>
+
+</para>
+
+@v: 
 
 <!-- ##### FUNCTION gtk_marshal_NONE__C_CALLBACK ##### -->
 <para>
@@ -443,6 +443,12 @@ will not be used again.
 
 @textview: the object which received the signal.
 
+<!-- ##### STRUCT GtkDialogButton ##### -->
+<para>
+Deprecated.
+</para>
+
+
 <!-- ##### FUNCTION gtk_marshal_BOOL__POINTER ##### -->
 <para>
 
@@ -612,16 +618,6 @@ will not be used again.
 @func_data: 
 @args: 
 
-<!-- ##### FUNCTION gtk_paned_compute_position ##### -->
-<para>
-Internal function used by #GtkHPaned and #GtkVPaned
-</para>
-
-@paned: 
-@allocation: 
-@child1_req: 
-@child2_req: 
-
 <!-- ##### FUNCTION gtk_marshal_NONE__INT_FLOAT_BOOL ##### -->
 <para>
 
@@ -631,6 +627,16 @@ Internal function used by #GtkHPaned and #GtkVPaned
 @func: 
 @func_data: 
 @args: 
+
+<!-- ##### FUNCTION gtk_paned_compute_position ##### -->
+<para>
+Internal function used by #GtkHPaned and #GtkVPaned
+</para>
+
+@paned: 
+@allocation: 
+@child1_req: 
+@child2_req: 
 
 <!-- ##### MACRO gtk_marshal_NONE__POINTER_STRING_STRING ##### -->
 <para>
@@ -719,14 +725,6 @@ Register a new set of flags @values and give them the name in
 @values: GtkFlagValue*
 @Returns: 
 
-<!-- ##### SIGNAL GtkTextView::scroll-text ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-@arg1: 
-
 <!-- ##### FUNCTION gtk_selection_clear_targets ##### -->
 <para>
 
@@ -734,6 +732,14 @@ Register a new set of flags @values and give them the name in
 
 @widget: 
 @selection: 
+
+<!-- ##### SIGNAL GtkTextView::scroll-text ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
 
 <!-- ##### ENUM GtkPrivateFlags ##### -->
 <para>
@@ -949,8 +955,7 @@ Get the varargs type associated with @foreign_type
 </para>
 
 @clipboard: 
-@Returns: 
-<!--
+@Returns: <!--
 Local variables:
 mode: sgml
 sgml-parent-document: ("../gtk-docs.sgml" "book" "refsect2" "")
@@ -1325,14 +1330,6 @@ gtkenums.sgml
 @func_data: 
 @args: 
 
-<!-- ##### USER_FUNCTION GtkMenuCallback ##### -->
-<para>
-
-</para>
-
-@widget: 
-@user_data: 
-
 <!-- ##### FUNCTION gtk_type_check_object_cast ##### -->
 <para>
 Given a pointer to a GtkTypeObject @type_object, and a GtkType @cast_type,
@@ -1342,6 +1339,14 @@ make sure that it's okay to cast @type_object into a @cast_type.
 @type_object: GtkTypeObject*
 @cast_type: GtkType
 @Returns: the same GtkTypeObject* as @type_object
+
+<!-- ##### USER_FUNCTION GtkMenuCallback ##### -->
+<para>
+
+</para>
+
+@widget: 
+@user_data: 
 
 <!-- ##### FUNCTION gtk_themes_exit ##### -->
 <para>
@@ -1381,13 +1386,13 @@ will be informed that the attempt to get the data failed.
 @user_data_or_owner: the @user_data argument passed to gtk_clipboard_set_with_data(), or
                      the @owner argument passed to gtk_clipboard_set_owner()
 
-<!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:Long_Description ##### -->
+<!-- ##### MACRO gtk_marshal_NONE__OBJECT ##### -->
 <para>
 
 </para>
 
 
-<!-- ##### MACRO gtk_marshal_NONE__OBJECT ##### -->
+<!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:Long_Description ##### -->
 <para>
 
 </para>
@@ -1637,13 +1642,12 @@ Internal function.
 </para>
 
 
-<!-- ##### MACRO gtk_widget_push_visual ##### -->
+<!-- ##### FUNCTION gtk_container_register_toplevel ##### -->
 <para>
 
 </para>
 
-@v: 
-@visual: 
+@container: 
 
 <!-- ##### MACRO gtk_marshal_ENUM__ENUM ##### -->
 <para>
@@ -1651,12 +1655,13 @@ Internal function.
 </para>
 
 
-<!-- ##### FUNCTION gtk_container_register_toplevel ##### -->
+<!-- ##### MACRO gtk_widget_push_visual ##### -->
 <para>
 
 </para>
 
-@container: 
+@v: 
+@visual: 
 
 <!-- ##### SECTION ./tmpl/gtkimcontextsimple.sgml:Title ##### -->
 GtkIMContextSimple

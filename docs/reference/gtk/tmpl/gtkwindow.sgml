@@ -219,6 +219,15 @@ it's larger
 @parent: 
 
 
+<!-- ##### FUNCTION gtk_window_set_destroy_with_parent ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
 <!-- ##### FUNCTION gtk_window_list_toplevels ##### -->
 <para>
 
@@ -276,6 +285,11 @@ The position of the window.
 </para>
 
 <!-- ##### ARG GtkWindow:default_height ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:destroy_with_parent ##### -->
 <para>
 
 </para>

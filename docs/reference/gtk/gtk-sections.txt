@@ -605,8 +605,14 @@ GTK_DATA_GET_CLASS
 <FILE>gtkdialog</FILE>
 GtkDialog
 <TITLE>GtkDialog</TITLE>
-GtkDialogButton
+GtkDialogFlags
 gtk_dialog_new
+gtk_dialog_new_with_buttons
+gtk_dialog_run
+gtk_dialog_response
+gtk_dialog_add_button
+gtk_dialog_add_buttons
+gtk_dialog_add_action_widget
 <SUBSECTION Standard>
 GTK_DIALOG
 GTK_IS_DIALOG
@@ -1293,6 +1299,23 @@ gtk_menu_shell_get_type
 GTK_MENU_SHELL_CLASS
 GTK_IS_MENU_SHELL_CLASS
 GTK_MENU_SHELL_GET_CLASS
+</SECTION>
+
+<SECTION>
+<FILE>gtkmessagedialog</FILE>
+GtkMessageDialog
+<TITLE>GtkMessageDialog</TITLE>
+GtkMessageType
+GtkButtonsType
+gtk_message_dialog_new
+<SUBSECTION Standard>
+GTK_MESSAGE_DIALOG
+GTK_IS_MESSAGE_DIALOG
+GTK_TYPE_MESSAGE_DIALOG
+gtk_message_dialog_get_type
+GTK_MESSAGE_DIALOG_CLASS
+GTK_IS_MESSAGE_DIALOG_CLASS
+GTK_MESSAGE_DIALOG_GET_CLASS
 </SECTION>
 
 <SECTION>
@@ -2590,6 +2613,7 @@ gtk_window_set_default_size
 gtk_window_set_geometry_hints
 gtk_window_set_position
 gtk_window_set_transient_for
+gtk_window_set_destroy_with_parent
 gtk_window_list_toplevels
 <SUBSECTION Standard>
 GTK_WINDOW

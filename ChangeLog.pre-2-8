@@ -1,3 +1,57 @@
+2000-10-04  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/testgtk.c (create_buttons): create some stock buttons
+	with the default accel group
+	(create_image): test some new GtkImage features
+	(make_message_dialog): test GtkMessageDialog
+	(create_modal_window): fix someone's bizzarro indentation
+
+        * gtk/gtkwindow.h, gtk/gtkwindow.c: Implement 
+	GTK_WIN_POS_CENTER_ON_PARENT. 
+	Add "destroy with parent" setting, which means the window goes
+	away with its transient parent.
+	(gtk_window_get_default_accel_group): get the default accel group
+	for the window.
+	(gtk_window_set_destroy_with_parent): set/unset destroy with
+	parent flag
+	(gtk_window_read_rcfiles): invalidate icon set caches
+	after reloading rcfiles	
+
+	* gtk/gtkenums.h (GtkWindowPosition): add
+	GTK_WIN_POS_CENTER_ON_PARENT, which centers a dialog 
+	on its parent window when the dialog is mapped for the first time.
+
+        * gtk/gtkmessagedialog.h, gtk/gtkmessagedialog.c: Add 
+	a simple message dialog class
+	
+	* gtk/gtkdialog.c (gtk_dialog_init): Connect delete event 
+	handler to emit response signal, and maybe later it would
+	honor a hide_on_delete flag - though that isn't there yet.
+	Set border width on the vbox to 2, so we get some padding.	
+	Use a button box for the action area.
+	(gtk_dialog_key_press): synthesize a delete event if Esc
+	is pressed and the GtkWidget key press handler didn't 
+	handle the escape key.
+	(gtk_dialog_new_with_buttons): new function creates a dialog
+	with some default buttons in it.
+	(gtk_dialog_add_action_widget): add an activatable widget
+	as a button in the dialog - you can also add a non-activatable
+	widget by accessing the action area directly.
+	(gtk_dialog_add_button): add a simple button - stock ID or 
+	label - to the action area
+	(gtk_dialog_response): emit response signal
+	(gtk_dialog_run): block waiting for the dialog, return 
+	the response. Override normal delete_event behavior, so that 
+	delete_event does nothing inside gtk_dialog_run().
+
+	* gtk/gtkdialog.h, gtk/gtkdialog.c: Add "response" signal
+	emitted when an action widget is clicked or the dialog gets
+	delete_event
+
+	* gtk/gtk.h: add gtkmessagedialog.h
+
+	* gtk/Makefile.am: add gtkmessagedialog.[hc]
+
 2000-10-18  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextiter.c (gtk_text_iter_forward_to_newline): Fix a bug 

@@ -79,6 +79,7 @@ struct _GtkWindow
    */
   guint use_uposition : 1;
   guint modal : 1;
+  guint destroy_with_parent : 1;
 };
 
 struct _GtkWindowClass
@@ -112,6 +113,8 @@ gint	   gtk_window_activate_default	       (GtkWindow           *window);
 
 void       gtk_window_set_transient_for        (GtkWindow           *window, 
 						GtkWindow           *parent);
+void       gtk_window_set_destroy_with_parent  (GtkWindow           *window,
+                                                gboolean             setting);
 void       gtk_window_set_geometry_hints       (GtkWindow           *window,
 						GtkWidget           *geometry_widget,
 						GdkGeometry         *geometry,
@@ -129,6 +132,8 @@ void       gtk_window_set_modal                (GtkWindow           *window,
                                                 gboolean             modal);
 GList*	   gtk_window_list_toplevels	       (void);
 
+/* Get the "built-in" accel group (convenience thing) */
+GtkAccelGroup* gtk_window_get_default_accel_group (GtkWindow *window);
 
 /* --- internal functions --- */
 void       gtk_window_set_focus                (GtkWindow           *window,

@@ -161,8 +161,12 @@ create_buttons (void)
 
   if (!window)
     {
+      GtkAccelGroup *accel_group;
+      
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
+      accel_group = gtk_window_get_default_accel_group (GTK_WINDOW (window));
+      
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
 			  &window);
@@ -180,15 +184,15 @@ create_buttons (void)
       gtk_box_pack_start (GTK_BOX (box1), table, TRUE, TRUE, 0);
 
       button[0] = gtk_button_new_with_label ("button1");
-      button[1] = gtk_button_new_with_label ("button2");
+      button[1] = gtk_button_new_accel ("_button2", accel_group);
       button[2] = gtk_button_new_with_label ("button3");
-      button[3] = gtk_button_new_with_label ("button4");
+      button[3] = gtk_button_new_stock (GTK_STOCK_BUTTON_OK, NULL);
       button[4] = gtk_button_new_with_label ("button5");
       button[5] = gtk_button_new_with_label ("button6");
       button[6] = gtk_button_new_with_label ("button7");
-      button[7] = gtk_button_new_with_label ("button8");
+      button[7] = gtk_button_new_stock (GTK_STOCK_BUTTON_CLOSE, accel_group);
       button[8] = gtk_button_new_with_label ("button9");
-
+      
       gtk_signal_connect (GTK_OBJECT (button[0]), "clicked",
 			  GTK_SIGNAL_FUNC(button_window),
 			  button[1]);
@@ -2222,6 +2226,65 @@ create_tooltips (void)
 }
 
 /*
+ * GtkImage
+ */
+
+static void
+pack_image (GtkWidget *box,
+            const gchar *text,
+            GtkWidget *image)
+{
+  gtk_box_pack_start (GTK_BOX (box),
+                      gtk_label_new (text),
+                      FALSE, FALSE, 0);
+
+  gtk_box_pack_start (GTK_BOX (box),
+                      image,
+                      TRUE, TRUE, 0);  
+}
+
+static void
+create_image (void)
+{
+  static GtkWidget *window = NULL;
+  
+  if (window == NULL)
+    {
+      GtkWidget *vbox;
+      GdkPixmap *pixmap;
+      GdkBitmap *mask;
+        
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			  &window);
+
+      vbox = gtk_vbox_new (FALSE, 5);
+
+      gtk_container_add (GTK_CONTAINER (window), vbox);
+
+      pack_image (vbox, "Stock Warning Dialog",
+                  gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
+                                            GTK_ICON_SIZE_DIALOG));
+
+      pixmap = gdk_pixmap_colormap_create_from_xpm_d (NULL,
+                                                      gtk_widget_get_colormap (window),
+                                                      &mask,
+                                                      NULL,
+                                                      openfile);
+      
+      pack_image (vbox, "Pixmap",
+                  gtk_image_new_from_pixmap (pixmap, mask));
+    }
+
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show_all (window);
+  else
+    gtk_widget_destroy (window);
+}
+     
+/*
  * Menu demo
  */
 
@@ -2609,12 +2672,12 @@ create_modal_window (void)
     
   /* Pack widgets */
   gtk_container_add (GTK_CONTAINER (window), box1);
-   gtk_box_pack_start (GTK_BOX (box1), frame1, TRUE, TRUE, 4);
-    gtk_container_add (GTK_CONTAINER (frame1), box2);
-     gtk_box_pack_start (GTK_BOX (box2), btnColor, FALSE, FALSE, 4);
-     gtk_box_pack_start (GTK_BOX (box2), btnFile, FALSE, FALSE, 4);
-   gtk_box_pack_start (GTK_BOX (box1), gtk_hseparator_new (), FALSE, FALSE, 4);
-   gtk_box_pack_start (GTK_BOX (box1), btnClose, FALSE, FALSE, 4);
+  gtk_box_pack_start (GTK_BOX (box1), frame1, TRUE, TRUE, 4);
+  gtk_container_add (GTK_CONTAINER (frame1), box2);
+  gtk_box_pack_start (GTK_BOX (box2), btnColor, FALSE, FALSE, 4);
+  gtk_box_pack_start (GTK_BOX (box2), btnFile, FALSE, FALSE, 4);
+  gtk_box_pack_start (GTK_BOX (box1), gtk_hseparator_new (), FALSE, FALSE, 4);
+  gtk_box_pack_start (GTK_BOX (box1), btnClose, FALSE, FALSE, 4);
    
   /* connect signals */
   gtk_signal_connect_object (GTK_OBJECT (btnClose), "clicked",
@@ -2634,6 +2697,53 @@ create_modal_window (void)
 
   /* wait until dialog get destroyed */
   gtk_main();
+}
+
+/*
+ * GtkMessageDialog
+ */
+
+static void
+make_message_dialog (GtkWidget **dialog,
+                     GtkMessageType  type,
+                     GtkButtonsType  buttons)
+{
+  if (*dialog)
+    {
+      if (GTK_WIDGET_REALIZED (*dialog))
+        gdk_window_show ((*dialog)->window);
+
+      return;
+    }
+
+  *dialog = gtk_message_dialog_new (NULL, 0, type, buttons,
+                                    "This is a message dialog; it can wrap long lines. This is a long line. La la la. Look this line is wrapped. Blah blah blah blah blah blah. (Note: testgtk has a nonstandard gtkrc that changes some of the message dialog icons.)");
+
+  gtk_signal_connect_object (GTK_OBJECT (*dialog),
+                             "response",
+                             GTK_SIGNAL_FUNC (gtk_widget_destroy),
+                             GTK_OBJECT (*dialog));
+  
+  gtk_signal_connect (GTK_OBJECT (*dialog),
+                      "destroy",
+                      GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+                      dialog);
+  
+  gtk_widget_show (*dialog);
+}
+
+static void
+create_message_dialog (void)
+{
+  static GtkWidget *info = NULL;
+  static GtkWidget *warning = NULL;
+  static GtkWidget *error = NULL;
+  static GtkWidget *question = NULL;
+
+  make_message_dialog (&info, GTK_MESSAGE_INFO, GTK_BUTTONS_OK);
+  make_message_dialog (&warning, GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE);
+  make_message_dialog (&error, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK_CANCEL);
+  make_message_dialog (&question, GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO);
 }
 
 /*
@@ -8624,11 +8734,13 @@ create_main_window (void)
       { "font selection", create_font_selection },
       { "gamma curve", create_gamma_curve },
       { "handle box", create_handle_box },
+      { "image", create_image },
       { "item factory", create_item_factory },
       { "labels", create_labels },
       { "layout", create_layout },
       { "list", create_list },
       { "menus", create_menus },
+      { "message dialog", create_message_dialog },
       { "modal window", create_modal_window },
       { "notebook", create_notebook },
       { "panes", create_panes },
@@ -8770,8 +8882,6 @@ main (int argc, char *argv[])
     gtk_rc_add_default_file ("testgtkrc");
 
   gtk_init (&argc, &argv);
-
-  gdk_rgb_init ();
 
   /* bindings test
    */
