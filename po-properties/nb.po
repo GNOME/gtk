@@ -215,19 +215,19 @@ msgstr "Farge på hyperlenker"
 
 #: gtk/gtkaccellabel.c:139
 msgid "Accelerator Closure"
-msgstr "Akselerator-«closure»"
+msgstr "Snarveitast-closure"
 
 #: gtk/gtkaccellabel.c:140
 msgid "The closure to be monitored for accelerator changes"
-msgstr "«Closure» som skal overvåkes for akseleratorendringer"
+msgstr "«Closure» som skal overvåkes for endringer for snarveitaster"
 
 #: gtk/gtkaccellabel.c:146
 msgid "Accelerator Widget"
-msgstr "Akseleratorwidget"
+msgstr "Snarveitastkomponent"
 
 #: gtk/gtkaccellabel.c:147
 msgid "The widget to be monitored for accelerator changes"
-msgstr "Widgetet som skal overvåkes for akseleratorendringer"
+msgstr "Komponent som skal overvåkes for endringer i snarveitaster"
 
 #: gtk/gtkaction.c:196 gtk/gtkactiongroup.c:134
 msgid "Name"
@@ -689,7 +689,7 @@ msgstr "Bruk understreking"
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
-msgstr "Hvis satt vil en underscore i teksten indikere at neste tegn skal brukes som akseleratorhint"
+msgstr "Hvis satt vil en underscore i teksten indikere at neste tegn skal brukes som hint for snarveitast"
 
 #: gtk/gtkbutton.c:236
 msgid "Use stock"
@@ -2475,7 +2475,7 @@ msgstr "Hinttast"
 
 #: gtk/gtklabel.c:381
 msgid "The mnemonic accelerator key for this label"
-msgstr "Hint for akseleratortast for denne etiketten"
+msgstr "Hint for snarveitast for denne etiketten"
 
 #: gtk/gtklabel.c:389
 msgid "Mnemonic widget"
@@ -2629,12 +2629,12 @@ msgstr "Radnummer nederste del av avkommet skal festes til"
 
 #: gtk/gtkmenu.c:691
 msgid "Can change accelerators"
-msgstr "Kan endre akseleratorer"
+msgstr "Kan endre snarveitaster"
 
 #: gtk/gtkmenu.c:692
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
-msgstr "Om menyakseleratorer kan endres ved å trykke en tast over menyoppføringen"
+msgstr "Om snarveitaster for menyer kan endres ved å trykke en tast over menyoppføringen"
 
 #: gtk/gtkmenu.c:697
 msgid "Delay before submenus appear"
@@ -3414,7 +3414,7 @@ msgstr "Navn på RC-fil for nøkkeltema som skal lastes"
 
 #: gtk/gtksettings.c:336
 msgid "Menu bar accelerator"
-msgstr "Akselerator for menylinje"
+msgstr "Snarveitast for menylinje"
 
 #: gtk/gtksettings.c:337
 msgid "Keybinding to activate the menu bar"
@@ -3525,7 +3525,7 @@ msgstr "Klatrerate"
 
 #: gtk/gtkspinbutton.c:251
 msgid "The acceleration rate when you hold down a button"
-msgstr "Akseleratorrate når du holder nede en knapp"
+msgstr "Akselerasjonsrate når du holder nede en knapp"
 
 #: gtk/gtkspinbutton.c:261
 msgid "The number of decimal places to display"
@@ -4183,7 +4183,7 @@ msgstr "Tekst som skal vises i oppføringen."
 msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
-msgstr "Hvis satt vil en understreking i teksten indikere at neste tegn skal brukes som akseleratortast i overflytmenyen"
+msgstr "Hvis sann, vil en understreking i teksten indikere at neste tegn skal brukes som snarveitast i overflytmenyen"
 
 #: gtk/gtktoolbutton.c:196
 msgid "Widget to use as the item label"
