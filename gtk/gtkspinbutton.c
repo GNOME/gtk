@@ -700,7 +700,8 @@ gtk_spin_button_focus_out (GtkWidget     *widget,
   g_return_val_if_fail (GTK_IS_SPIN_BUTTON (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  gtk_spin_button_update (GTK_SPIN_BUTTON (widget));
+  if (GTK_EDITABLE (widget)->editable)
+    gtk_spin_button_update (GTK_SPIN_BUTTON (widget));
 
   return GTK_WIDGET_CLASS (parent_class)->focus_out_event (widget, event);
 }
@@ -726,7 +727,8 @@ gtk_spin_button_button_press (GtkWidget      *widget,
 	  gtk_grab_add (widget);
 	  spin->button = event->button;
 	  
-	  gtk_spin_button_update (spin);
+	  if (GTK_EDITABLE (widget)->editable)
+	    gtk_spin_button_update (spin);
 	  
 	  if (event->y <= widget->requisition.height / 2)
 	    {
@@ -969,8 +971,9 @@ gtk_spin_button_key_press (GtkWidget     *widget,
 
   key_repeat = (event->time == spin->ev_time);
 
-  if (key == GDK_Up || key == GDK_Down || 
-      key == GDK_Page_Up || key == GDK_Page_Down)
+  if (GTK_EDITABLE (widget)->editable &&
+      (key == GDK_Up || key == GDK_Down || 
+       key == GDK_Page_Up || key == GDK_Page_Down))
     gtk_spin_button_update (spin);
 
   switch (key)

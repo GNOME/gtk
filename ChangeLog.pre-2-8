@@ -1,3 +1,8 @@
+Mon Dec 14 20:04:31 1998  Stefan Jeske  <stefan@gtk.org>
+
+	* gtk/gtkspinbutton.c: Only call gtk_spin_button_update if
+ 	the spinbutton is editable.
+
 Mon Dec 14 12:24:13 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* HACKING: Added gettext-10.35
