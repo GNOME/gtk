@@ -10,7 +10,8 @@ typedef enum {
 static void gdk_x11_gc_values_to_xvalues (GdkGCValues    *values,
 					  GdkGCValuesMask mask,
 					  XGCValues      *xvalues,
-					  unsigned long  *xvalues_mask);
+					  unsigned long  *xvalues_mask,
+					  gboolean        initial);
      
 static void gdk_x11_gc_destroy    (GdkGC           *gc);
 static void gdk_x11_gc_get_values (GdkGC           *gc,
@@ -72,7 +73,7 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
   xvalues.graphics_exposures = True;
   xvalues_mask = GCFunction | GCFillStyle | GCArcMode | GCSubwindowMode | GCGraphicsExposures;
 
-  gdk_x11_gc_values_to_xvalues (values, values_mask, &xvalues, &xvalues_mask);
+  gdk_x11_gc_values_to_xvalues (values, values_mask, &xvalues, &xvalues_mask, TRUE);
   
   data->xgc = XCreateGC (GDK_GC_XDISPLAY (gc),
 			 GDK_DRAWABLE_XID (drawable),
@@ -311,7 +312,7 @@ gdk_x11_gc_set_values (GdkGC           *gc,
 	}
     }
 
-  gdk_x11_gc_values_to_xvalues (values, values_mask, &xvalues, &xvalues_mask);
+  gdk_x11_gc_values_to_xvalues (values, values_mask, &xvalues, &xvalues_mask, FALSE);
 
   XChangeGC (GDK_GC_XDISPLAY (gc),
 	     GDK_GC_XGC (gc),
@@ -336,7 +337,8 @@ static void
 gdk_x11_gc_values_to_xvalues (GdkGCValues    *values,
 			      GdkGCValuesMask mask,
 			      XGCValues      *xvalues,
-			      unsigned long  *xvalues_mask)
+			      unsigned long  *xvalues_mask,
+			      gboolean        initial)
 {
   if (mask & GDK_GC_FOREGROUND)
     {
@@ -479,10 +481,15 @@ gdk_x11_gc_values_to_xvalues (GdkGCValues    *values,
     }
 
   if (mask & GDK_GC_EXPOSURES)
-    xvalues->graphics_exposures = values->graphics_exposures;
-  else
-    xvalues->graphics_exposures = False;
-  *xvalues_mask |= GCGraphicsExposures;
+    {
+      xvalues->graphics_exposures = values->graphics_exposures;
+      *xvalues_mask |= GCGraphicsExposures;
+    }
+  else if (initial)
+    {
+      xvalues->graphics_exposures = False;
+      *xvalues_mask |= GCGraphicsExposures;
+    }
 
   if (mask & GDK_GC_LINE_WIDTH)
     {
