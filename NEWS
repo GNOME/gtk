@@ -2,10 +2,12 @@ Overview of Changes from GTK+ 2.4.9 to GTK+ 2.4.10
 ==================================================
 * GtkFileChooser
  - Fix some memory leaks [Kjartan Maraas]
+ - Make autocompletion less annoying in save mode [Owen Taylor]
 * Default theme
  - Improve drawing of expanders [Matthias Clasen]
 * GtkEntryCompletion
  - Improve positioning of popups [Matthias]
+* Make selection handling robust against invalid UTF-8 [Owen Taylor]
 * gdk-pixbuf
  - Fix saving of pixbufs with alpha-channel as jpeg [Emmanuel Pacaud]
  - Security fixes [Chris Evans]
@@ -15,7 +17,7 @@ Overview of Changes from GTK+ 2.4.9 to GTK+ 2.4.10
  - Fix loading of input modules on Win32 [Kazuki IWAMOTO]
 * Other bug fixes [Tim Janik, Bill Haneman, Padraig O'Briain,
   Frederic Croszat, Matthias, Felipe Heidrich, Lorenzo Gil
-  Sanchez, Olivier Andrieu, Jean Bréfort]
+  Sanchez, Olivier Andrieu, Jean Bréfort, Christian Persch]
 * Updated translations (ang,bn,cs,cy,de,en_CA,hu,ne,nn,ro,tr,uk)
 
 Overview of Changes from GTK+ 2.4.7 to GTK+ 2.4.8
