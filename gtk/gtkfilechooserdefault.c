@@ -5450,7 +5450,6 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 
       if (num_selected == 1 && all_folders)
 	{
-/* 	  pending_select_paths_free (impl); */
 	  switch_to_selected_folder (impl);
 	  return FALSE;
 	}
@@ -5765,7 +5764,6 @@ shortcuts_row_activated_cb (GtkTreeView           *tree_view,
 						    &child_iter,
 						    &iter);
   shortcuts_activate_iter (impl, &child_iter);
-/*   pending_select_paths_free (impl); */
 
   gtk_widget_grab_focus (impl->browse_files_tree_view);
 }
