@@ -1,3 +1,10 @@
+Sun May  5 02:22:59 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* tests/test-images/*: image files for testing pixbuf loaders
+	* tests/pixbuf-*.c: the old test-loaders.c split into four 
+	different programs
+	* tests/Makefile.am: add new pixbuf tests
+
 2002-05-03 Erwann Chenede - <erwann.chenede@sun.com>
 
 	* gdk/x11/gdkvisual-x11.c:

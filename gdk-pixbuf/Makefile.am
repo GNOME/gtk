@@ -229,10 +229,8 @@ INCLUDES = @STRIP_BEGIN@ 			\
 AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(loaderdir)\"" "-DBUILT_MODULES_DIR=\"$(srcdir)/.libs\""
 LDADDS = libgdk_pixbuf-$(GTK_API_VERSION).la
 
-noinst_PROGRAMS = test-gdk-pixbuf test-loaders
+noinst_PROGRAMS = test-gdk-pixbuf
 test_gdk_pixbuf_LDADD = $(LDADDS)
-test_loaders_LDADD = $(LDADDS)
-test_loaders_SOURCES = test-loaders.c test-images.h
 
 bin_PROGRAMS = gdk-pixbuf-csource
 gdk_pixbuf_csource_SOURCES = gdk-pixbuf-csource.c

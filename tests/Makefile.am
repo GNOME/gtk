@@ -24,27 +24,31 @@ testsocket_programs = testsocket testsocket_child
 endif
 
 
-noinst_PROGRAMS = 		\
-	simple			\
-	testcalendar		\
-	testdnd			\
-	testgtk 		\
-	testinput		\
-	testmultidisplay	\
-	testmultiscreen		\
-	testrgb			\
-	testselection 		\
-	$(testsocket_programs)	\
-	testtext		\
-        testtextbuffer		\
-	testtreeedit		\
-	testtreeview		\
-	testtreefocus		\
-	testtreeflow		\
-	testtreecolumns		\
-	testtreesort		\
-	treestoretest		\
-	testxinerama
+noinst_PROGRAMS =			\
+	simple				\
+	testcalendar			\
+	testdnd				\
+	testgtk				\
+	testinput			\
+	testmultidisplay		\
+	testmultiscreen			\
+	testrgb				\
+	testselection			\
+	$(testsocket_programs)		\
+	testtext			\
+        testtextbuffer			\
+	testtreeedit			\
+	testtreeview			\
+	testtreefocus			\
+	testtreeflow			\
+	testtreecolumns			\
+	testtreesort			\
+	treestoretest			\
+	testxinerama			\
+	pixbuf-read			\
+	pixbuf-lowmem			\
+	pixbuf-randomly-modified	\
+	pixbuf-random			
 
 simple_DEPENDENCIES = $(TEST_DEPS)
 testcalendar_DEPENDENCIES = $(TEST_DEPS)
@@ -89,6 +93,10 @@ testtreesort_LDADD = $(LDADDS)
 testtext_LDADD = $(LDADDS)
 treestoretest_LDADD = $(LDADDS)
 testxinerama_LDADD = $(LDADDS)
+pixbuf_read_LDADD = $(LDADDS)
+pixbuf_lowmem_LDADD = $(LDADDS)
+pixbuf_randomly_modified_LDADD = $(LDADDS)
+pixbuf_random_LDADD = $(LDADDS)
 
 testgtk_SOURCES =	\
 	prop-editor.c   \
