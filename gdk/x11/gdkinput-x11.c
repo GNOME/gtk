@@ -463,15 +463,32 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
     }
   else				/* GDK_MODE_WINDOW */
     {
-      double device_aspect = (device_height*gdkdev->axes[y_axis].resolution) /
-	(device_width*gdkdev->axes[x_axis].resolution);
-
+      double x_resolution = gdkdev->axes[x_axis].resolution;
+      double y_resolution = gdkdev->axes[y_axis].resolution;
+      double device_aspect;
+      /* 
+       * Some drivers incorrectly report the resolution of the device
+       * as zero (in partiular linuxwacom < 0.5.3 with usb tablets).
+       * This causes the device_aspect to become NaN and totally
+       * breaks windowed mode.  If this is the case, the best we can
+       * do is to assume the resolution is non-zero is equal in both
+       * directions (which is true for many devices).  The absolute
+       * value of the resolution doesn't matter since we only use the
+       * ratio.
+       */
+      if ((x_resolution == 0) || (y_resolution == 0))
+	{
+	  x_resolution = 1;
+	  y_resolution = 1;
+	}
+      device_aspect = (device_height*y_resolution) /
+        (device_width*x_resolution);
       if (device_aspect * impl->width >= impl->height)
 	{
 	  /* device taller than window */
 	  x_scale = impl->width / device_width;
-	  y_scale = (x_scale * gdkdev->axes[x_axis].resolution)
-	    / gdkdev->axes[y_axis].resolution;
+	  y_scale = (x_scale * x_resolution)
+	    / y_resolution;
 
 	  x_offset = 0;
 	  y_offset = -(device_height * y_scale - 
@@ -481,8 +498,8 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
 	{
 	  /* window taller than device */
 	  y_scale = impl->height / device_height;
-	  x_scale = (y_scale * gdkdev->axes[y_axis].resolution)
-	    / gdkdev->axes[x_axis].resolution;
+	  x_scale = (y_scale * y_resolution)
+	    / x_resolution;
 
 	  y_offset = 0;
 	  x_offset = - (device_width * x_scale - impl->width)/2;
@@ -494,12 +511,12 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
       switch (gdkdev->info.axes[i].use)
 	{
 	case GDK_AXIS_X:
-	  axis_out[i] = x_offset + x_scale*axis_data[x_axis];
+	  axis_out[i] = x_offset + x_scale * axis_data[x_axis];
 	  if (x_out)
 	    *x_out = axis_out[i];
 	  break;
 	case GDK_AXIS_Y:
-	  axis_out[i] = y_offset + y_scale*axis_data[y_axis];
+	  axis_out[i] = y_offset + y_scale * axis_data[y_axis];
 	  if (y_out)
 	    *y_out = axis_out[i];
 	  break;
