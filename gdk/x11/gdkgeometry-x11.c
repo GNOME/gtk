@@ -43,7 +43,6 @@ typedef enum {
 struct _GdkWindowQueueItem
 {
   GdkWindow *window;
-  GdkDisplay *display;
   gulong serial;
   GdkWindowQueueType type;
   union {
@@ -83,8 +82,6 @@ static void gdk_window_tmp_reset_bg       (GdkWindow          *window);
 static void gdk_window_clip_changed       (GdkWindow          *window,
 					   GdkRectangle       *old_clip,
 					   GdkRectangle       *new_clip);
-
-static GSList *translate_queue = NULL;
 
 void
 _gdk_windowing_window_get_offsets (GdkWindow *window,
@@ -676,32 +673,35 @@ gdk_window_queue_translation (GdkWindow *window,
 			      gint       dx,
 			      gint       dy)
 {
+  GdkDisplayImplX11 *display_impl = 
+      GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window));
   GdkWindowQueueItem *item = g_new (GdkWindowQueueItem, 1);
   item->window = window;
-  item->display = GDK_WINDOW_DISPLAY (window);
   item->serial = NextRequest (GDK_WINDOW_XDISPLAY (window));
   item->type = GDK_WINDOW_QUEUE_TRANSLATE;
   item->u.translate.dx = dx;
   item->u.translate.dy = dy;
 
   gdk_drawable_ref (window);
-  translate_queue = g_slist_append (translate_queue, item);
+  display_impl->translate_queue = g_slist_append (display_impl->translate_queue, 
+						  item);
 }
 
 gboolean
 _gdk_windowing_window_queue_antiexpose (GdkWindow *window,
 					GdkRegion *area)
 {
+  GdkDisplayImplX11 *display_impl = 
+	GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window));
   GdkWindowQueueItem *item = g_new (GdkWindowQueueItem, 1);
   item->window = window;
-  item->display = GDK_WINDOW_DISPLAY (window);
   item->serial = NextRequest (GDK_WINDOW_XDISPLAY (window));
   item->type = GDK_WINDOW_QUEUE_ANTIEXPOSE;
   item->u.antiexpose.area = area;
 
   gdk_drawable_ref (window);
-  translate_queue = g_slist_append (translate_queue, item);
-
+  display_impl->translate_queue = g_slist_append (display_impl->translate_queue,
+						  item);
   return TRUE;
 }
 
@@ -713,45 +713,44 @@ _gdk_window_process_expose (GdkWindow    *window,
   GdkWindowImplX11 *impl;
   GdkRegion *invalidate_region = gdk_region_rectangle (area);
   GdkRegion *clip_region;
-  GSList *tmp_list = translate_queue;
-  GdkDisplay *display = gdk_drawable_get_display (window);
-  
+  GdkDisplayImplX11 *display_impl = 
+	GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window));
+  GSList *tmp_list = display_impl->translate_queue;
+
   impl = GDK_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (window)->impl);
   
   while (tmp_list)
     {
       GdkWindowQueueItem *item = tmp_list->data;
       tmp_list = tmp_list->next;
-
-      if (display == item->display)
+      
+      if (serial < item->serial)
 	{
-	  if (serial < item->serial)
+	  if (item->window == window)
 	    {
-	      if (item->window == window)
-		{
-		  if (item->type == GDK_WINDOW_QUEUE_TRANSLATE)
-		    gdk_region_offset (invalidate_region, item->u.translate.dx, item->u.translate.dy);
-		  else		/* anti-expose */
-		    gdk_region_subtract (invalidate_region, item->u.antiexpose.area);
-		}
-	    }
-	  else
-	    {
-	      GSList *tmp_link = translate_queue;
-	      
-	      translate_queue = g_slist_remove_link (translate_queue, translate_queue);
-	      
-	      /* FIXME window and area get unref somewhere else (Where !?)
-	       * gdk_drawable_unref (item->window);
-	       
-	       if (item->type == GDK_WINDOW_QUEUE_ANTIEXPOSE)
-	       gdk_region_destroy (item->u.antiexpose.area);
-	      */
-	      
-	      g_free (item);
-	      g_slist_free_1 (tmp_link);
+	      if (item->type == GDK_WINDOW_QUEUE_TRANSLATE)
+		gdk_region_offset (invalidate_region, item->u.translate.dx, item->u.translate.dy);
+	      else		/* anti-expose */
+		gdk_region_subtract (invalidate_region, item->u.antiexpose.area);
 	    }
 	}
+      else
+	{
+	  GSList *tmp_link = display_impl->translate_queue;
+	  
+	  display_impl->translate_queue = 
+	    g_slist_remove_link (display_impl->translate_queue, 
+				 display_impl->translate_queue);
+	  gdk_drawable_unref (item->window);
+
+	  if (item->type == GDK_WINDOW_QUEUE_ANTIEXPOSE)
+	    gdk_region_destroy (item->u.antiexpose.area);
+	  
+	  g_free (item);
+	  g_slist_free_1 (tmp_link);
+	}
+      
+
     }
 
   clip_region = gdk_region_rectangle (&impl->position_info.clip_rect);

@@ -96,6 +96,9 @@ struct _GdkDisplayImplX11
   
   /* X ID hashtable */
   GHashTable *xid_ht;
+
+  /* translation queue */
+  GSList *translate_queue;
 };
 
 struct _GdkDisplayImplX11Class
