@@ -2964,6 +2964,8 @@ open_new_dir (gchar       *dir_name,
 
   for (i = 0; i < entry_count; i += 1)
     {
+      GError *error = NULL;
+
       dirent = g_dir_read_name (directory);
 
       if (!dirent)
@@ -2974,14 +2976,19 @@ open_new_dir (gchar       *dir_name,
 	  return NULL;
 	}
 
-      sent->entries[n_entries].entry_name = g_filename_to_utf8 (dirent, -1, NULL, NULL, NULL);
+      sent->entries[n_entries].entry_name = g_filename_to_utf8 (dirent, -1, NULL, NULL, &error);
       if (sent->entries[n_entries].entry_name == NULL
 	  || !g_utf8_validate (sent->entries[n_entries].entry_name, -1, NULL))
 	{
-	  g_warning (_("The filename %s couldn't be converted to UTF-8. Try setting the environment variable G_BROKEN_FILENAMES."), dirent);
+	  g_message (_("The filename \"%s\" couldn't be converted to UTF-8 "
+		       "(try setting the environment variable G_BROKEN_FILENAMES): %s"),
+		     dirent,
+		     error->message ? error->message : _("Invalid Utf-8"));
+	  g_clear_error (&error);
 	  continue;
 	}
-
+      g_clear_error (&error);
+      
       g_string_assign (path, sys_dir_name);
       if (path->str[path->len-1] != G_DIR_SEPARATOR)
 	{
