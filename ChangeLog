@@ -1,3 +1,7 @@
+Tue Feb 22 13:49:09 2005  Manish Singh  <yosh@gimp.org>
+
+	* gtk/updateiconcache.c: #include <config.h>
+
 2005-02-22  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from gtk-2-6:
