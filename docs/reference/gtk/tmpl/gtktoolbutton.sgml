@@ -69,38 +69,6 @@ accessed with the function described below.
 </para>
 
 
-<!-- ##### SIGNAL GtkToolButton::clicked ##### -->
-<para>
-
-</para>
-
-@toolbutton: the object which received the signal.
-
-<!-- ##### ARG GtkToolButton:icon-widget ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolButton:label ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolButton:label-widget ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolButton:stock-id ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolButton:use-underline ##### -->
-<para>
-
-</para>
-
 <!-- ##### FUNCTION gtk_tool_button_new ##### -->
 <para>
 
@@ -209,4 +177,36 @@ accessed with the function described below.
 @button: 
 @Returns: 
 
+
+<!-- ##### SIGNAL GtkToolButton::clicked ##### -->
+<para>
+
+</para>
+
+@toolbutton: the object which received the signal.
+
+<!-- ##### ARG GtkToolButton:icon-widget ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolButton:label ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolButton:label-widget ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolButton:stock-id ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolButton:use-underline ##### -->
+<para>
+
+</para>
 

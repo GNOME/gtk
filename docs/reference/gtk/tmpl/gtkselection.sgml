@@ -128,6 +128,14 @@ Adds a table of #GtkTargetEntry into a target list.
 @ntargets: number of targets in the table
 
 
+<!-- ##### FUNCTION gtk_target_list_add_text_targets ##### -->
+<para>
+
+</para>
+
+@list: 
+
+
 <!-- ##### FUNCTION gtk_target_list_remove ##### -->
 <para>
 Removes a target from a target list.

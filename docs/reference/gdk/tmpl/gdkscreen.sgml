@@ -31,13 +31,6 @@ when GDK gets multihead support.
 
 @Since: 2.2
 
-<!-- ##### SIGNAL GdkScreen::size-changed ##### -->
-<para>
-
-</para>
-
-@gdkscreen: the object which received the signal.
-
 <!-- ##### FUNCTION gdk_screen_get_default ##### -->
 <para>
 
@@ -301,4 +294,11 @@ when GDK gets multihead support.
 @error: 
 @Returns: 
 
+
+<!-- ##### SIGNAL GdkScreen::size-changed ##### -->
+<para>
+
+</para>
+
+@gdkscreen: the object which received the signal.
 

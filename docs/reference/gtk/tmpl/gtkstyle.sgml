@@ -52,20 +52,6 @@ Returns whether the style is attached to a window.
 @white_gc: 
 @bg_pixmap: 
 
-<!-- ##### SIGNAL GtkStyle::realize ##### -->
-<para>
-
-</para>
-
-@style: the object which received the signal.
-
-<!-- ##### SIGNAL GtkStyle::unrealize ##### -->
-<para>
-
-</para>
-
-@style: the object which received the signal.
-
 <!-- ##### FUNCTION gtk_style_new ##### -->
 <para>
 

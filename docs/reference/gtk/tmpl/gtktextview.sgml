@@ -26,194 +26,6 @@ types related to the text widget and how they work together.
 </para>
 
 
-<!-- ##### SIGNAL GtkTextView::copy-clipboard ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-
-<!-- ##### SIGNAL GtkTextView::cut-clipboard ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-
-<!-- ##### SIGNAL GtkTextView::delete-from-cursor ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkTextView::insert-at-cursor ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkTextView::move-cursor ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-
-<!-- ##### SIGNAL GtkTextView::move-focus ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkTextView::move-viewport ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkTextView::page-horizontally ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkTextView::paste-clipboard ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-
-<!-- ##### SIGNAL GtkTextView::populate-popup ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkTextView::select-all ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkTextView::set-anchor ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-
-<!-- ##### SIGNAL GtkTextView::set-scroll-adjustments ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkTextView::toggle-overwrite ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-
-<!-- ##### ARG GtkTextView:accepts-tab ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextView:buffer ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextView:cursor-visible ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextView:editable ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextView:indent ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextView:justification ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextView:left-margin ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextView:overwrite ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextView:pixels-above-lines ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextView:pixels-below-lines ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextView:pixels-inside-wrap ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextView:right-margin ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextView:tabs ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextView:wrap-mode ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextView:error-underline-color ##### -->
-<para>
-
-</para>
-
 <!-- ##### ENUM GtkTextWindowType ##### -->
 <para>
 
@@ -819,4 +631,192 @@ in an idle job in the background.
 </para>
 
 
+
+<!-- ##### SIGNAL GtkTextView::copy-clipboard ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextView::cut-clipboard ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextView::delete-from-cursor ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTextView::insert-at-cursor ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkTextView::move-cursor ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL GtkTextView::move-focus ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkTextView::move-viewport ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTextView::page-horizontally ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTextView::paste-clipboard ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextView::populate-popup ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkTextView::select-all ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkTextView::set-anchor ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextView::set-scroll-adjustments ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTextView::toggle-overwrite ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### ARG GtkTextView:accepts-tab ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:buffer ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:cursor-visible ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:editable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:indent ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:justification ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:left-margin ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:overwrite ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:pixels-above-lines ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:pixels-below-lines ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:pixels-inside-wrap ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:right-margin ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:tabs ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:wrap-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:error-underline-color ##### -->
+<para>
+
+</para>
 

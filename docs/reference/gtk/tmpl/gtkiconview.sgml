@@ -26,111 +26,6 @@ private fields and should not be directly accessed.
 </para>
 
 
-<!-- ##### SIGNAL GtkIconView::activate-cursor-item ##### -->
-<para>
-
-</para>
-
-@iconview: the object which received the signal.
-@Returns: 
-
-<!-- ##### SIGNAL GtkIconView::item-activated ##### -->
-<para>
-
-</para>
-
-@iconview: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkIconView::move-cursor ##### -->
-<para>
-
-</para>
-
-@iconview: the object which received the signal.
-@arg1: 
-@arg2: 
-@Returns: 
-
-<!-- ##### SIGNAL GtkIconView::select-all ##### -->
-<para>
-
-</para>
-
-@iconview: the object which received the signal.
-
-<!-- ##### SIGNAL GtkIconView::select-cursor-item ##### -->
-<para>
-
-</para>
-
-@iconview: the object which received the signal.
-
-<!-- ##### SIGNAL GtkIconView::selection-changed ##### -->
-<para>
-
-</para>
-
-@iconview: the object which received the signal.
-
-<!-- ##### SIGNAL GtkIconView::set-scroll-adjustments ##### -->
-<para>
-
-</para>
-
-@iconview: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkIconView::toggle-cursor-item ##### -->
-<para>
-
-</para>
-
-@iconview: the object which received the signal.
-
-<!-- ##### SIGNAL GtkIconView::unselect-all ##### -->
-<para>
-
-</para>
-
-@iconview: the object which received the signal.
-
-<!-- ##### ARG GtkIconView:markup-column ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkIconView:model ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkIconView:pixbuf-column ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkIconView:selection-mode ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkIconView:text-column ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkIconView:selection-box-alpha ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkIconView:selection-box-color ##### -->
-<para>
-
-</para>
-
 <!-- ##### STRUCT GtkIconViewPrivate ##### -->
 <para>
 
@@ -143,9 +38,11 @@ A function used by gtk_icon_view_selected_foreach() to map all
 selected rows.  It will be called on every selected row in the view.
 </para>
 
-@model: The #GtkTreeModel being viewed
+@icon_view: 
 @path: The #GtkTreePath of a selected row
 @data: user data
+<!-- # Unused Parameters # -->
+@model: The #GtkTreeModel being viewed
 
 
 <!-- ##### FUNCTION gtk_icon_view_new ##### -->
@@ -276,6 +173,24 @@ selected rows.  It will be called on every selected row in the view.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_icon_view_set_orientation ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@orientation: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_orientation ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_icon_view_select_path ##### -->
 <para>
 
@@ -337,4 +252,114 @@ selected rows.  It will be called on every selected row in the view.
 @icon_view: 
 @path: 
 
+
+<!-- ##### SIGNAL GtkIconView::activate-cursor-item ##### -->
+<para>
+
+</para>
+
+@iconview: the object which received the signal.
+@Returns: 
+
+<!-- ##### SIGNAL GtkIconView::item-activated ##### -->
+<para>
+
+</para>
+
+@iconview: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkIconView::move-cursor ##### -->
+<para>
+
+</para>
+
+@iconview: the object which received the signal.
+@arg1: 
+@arg2: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkIconView::select-all ##### -->
+<para>
+
+</para>
+
+@iconview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkIconView::select-cursor-item ##### -->
+<para>
+
+</para>
+
+@iconview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkIconView::selection-changed ##### -->
+<para>
+
+</para>
+
+@iconview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkIconView::set-scroll-adjustments ##### -->
+<para>
+
+</para>
+
+@iconview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkIconView::toggle-cursor-item ##### -->
+<para>
+
+</para>
+
+@iconview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkIconView::unselect-all ##### -->
+<para>
+
+</para>
+
+@iconview: the object which received the signal.
+
+<!-- ##### ARG GtkIconView:markup-column ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:model ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:orientation ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:pixbuf-column ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:selection-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:text-column ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:selection-box-alpha ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:selection-box-color ##### -->
+<para>
+
+</para>
 

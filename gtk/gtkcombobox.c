@@ -2692,10 +2692,14 @@ gtk_combo_box_list_destroy (GtkComboBox *combo_box)
 static void
 gtk_combo_box_list_remove_grabs (GtkComboBox *combo_box)
 {
-  if (GTK_WIDGET_HAS_GRAB (combo_box->priv->tree_view))
-    gtk_grab_remove (combo_box->priv->tree_view);
+  if (combo_box->priv->tree_view &&
+      GTK_WIDGET_HAS_GRAB (combo_box->priv->tree_view))
+    {
+      gtk_grab_remove (combo_box->priv->tree_view);
+    }
 
-  if (GTK_WIDGET_HAS_GRAB (combo_box->priv->popup_window))
+  if (combo_box->priv->popup_window &&
+      GTK_WIDGET_HAS_GRAB (combo_box->priv->popup_window))
     {
       gtk_grab_remove (combo_box->priv->popup_window);
       gdk_keyboard_ungrab (GDK_CURRENT_TIME);

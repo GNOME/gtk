@@ -38,6 +38,146 @@ planned to be implemented in future releases.
 </para>
 
 
+<!-- ##### ENUM GtkWrapMode ##### -->
+<para>
+Describes a type of line wrapping.
+</para>
+
+@GTK_WRAP_NONE: do not wrap lines; just make the text area wider
+@GTK_WRAP_CHAR: wrap text, breaking lines anywhere the cursor can
+                appear (between characters, usually - if you want to
+                be technical, between graphemes, see
+                pango_get_log_attrs())
+@GTK_WRAP_WORD: wrap text, breaking lines in between words
+@GTK_WRAP_WORD_CHAR: wrap text, breaking lines in between words, or if 
+                that is not enough, also between graphemes.
+
+<!-- ##### STRUCT GtkTextAttributes ##### -->
+<para>
+Using #GtkTextAttributes directly should rarely be necessary. It's
+primarily useful with gtk_text_iter_get_attributes(). As with most
+GTK+ structs, the fields in this struct should only be read, never
+modified directly.
+</para>
+
+@appearance: pointer to sub-struct containing certain attributes
+@justification: 
+@direction: 
+@font: 
+@font_scale: 
+@left_margin: 
+@indent: 
+@right_margin: 
+@pixels_above_lines: 
+@pixels_below_lines: 
+@pixels_inside_wrap: 
+@tabs: 
+@wrap_mode: 
+@language: 
+@invisible: 
+@bg_full_height: 
+@editable: 
+@realized: 
+
+<!-- ##### FUNCTION gtk_text_tag_new ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_tag_get_priority ##### -->
+<para>
+
+</para>
+
+@tag: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_tag_set_priority ##### -->
+<para>
+
+</para>
+
+@tag: 
+@priority: 
+
+
+<!-- ##### FUNCTION gtk_text_tag_event ##### -->
+<para>
+
+</para>
+
+@tag: 
+@event_object: 
+@event: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### STRUCT GtkTextAppearance ##### -->
+<para>
+
+</para>
+
+@bg_color: 
+@fg_color: 
+@bg_stipple: 
+@fg_stipple: 
+@rise: 
+@underline: 
+@strikethrough: 
+@draw_bg: 
+@inside_selection: 
+@is_text: 
+
+<!-- ##### FUNCTION gtk_text_attributes_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_attributes_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@Returns: 
+<!-- # Unused Parameters # -->
+@dest: 
+
+
+<!-- ##### FUNCTION gtk_text_attributes_copy_values ##### -->
+<para>
+
+</para>
+
+@src: 
+@dest: 
+
+
+<!-- ##### FUNCTION gtk_text_attributes_unref ##### -->
+<para>
+
+</para>
+
+@values: 
+
+
+<!-- ##### FUNCTION gtk_text_attributes_ref ##### -->
+<para>
+
+</para>
+
+@values: 
+
+
 <!-- ##### SIGNAL GtkTextTag::event ##### -->
 <para>
 
@@ -353,144 +493,4 @@ planned to be implemented in future releases.
 <para>
 
 </para>
-
-<!-- ##### ENUM GtkWrapMode ##### -->
-<para>
-Describes a type of line wrapping.
-</para>
-
-@GTK_WRAP_NONE: do not wrap lines; just make the text area wider
-@GTK_WRAP_CHAR: wrap text, breaking lines anywhere the cursor can
-                appear (between characters, usually - if you want to
-                be technical, between graphemes, see
-                pango_get_log_attrs())
-@GTK_WRAP_WORD: wrap text, breaking lines in between words
-@GTK_WRAP_WORD_CHAR: wrap text, breaking lines in between words, or if 
-                that is not enough, also between graphemes.
-
-<!-- ##### STRUCT GtkTextAttributes ##### -->
-<para>
-Using #GtkTextAttributes directly should rarely be necessary. It's
-primarily useful with gtk_text_iter_get_attributes(). As with most
-GTK+ structs, the fields in this struct should only be read, never
-modified directly.
-</para>
-
-@appearance: pointer to sub-struct containing certain attributes
-@justification: 
-@direction: 
-@font: 
-@font_scale: 
-@left_margin: 
-@indent: 
-@right_margin: 
-@pixels_above_lines: 
-@pixels_below_lines: 
-@pixels_inside_wrap: 
-@tabs: 
-@wrap_mode: 
-@language: 
-@invisible: 
-@bg_full_height: 
-@editable: 
-@realized: 
-
-<!-- ##### FUNCTION gtk_text_tag_new ##### -->
-<para>
-
-</para>
-
-@name: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_text_tag_get_priority ##### -->
-<para>
-
-</para>
-
-@tag: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_text_tag_set_priority ##### -->
-<para>
-
-</para>
-
-@tag: 
-@priority: 
-
-
-<!-- ##### FUNCTION gtk_text_tag_event ##### -->
-<para>
-
-</para>
-
-@tag: 
-@event_object: 
-@event: 
-@iter: 
-@Returns: 
-
-
-<!-- ##### STRUCT GtkTextAppearance ##### -->
-<para>
-
-</para>
-
-@bg_color: 
-@fg_color: 
-@bg_stipple: 
-@fg_stipple: 
-@rise: 
-@underline: 
-@strikethrough: 
-@draw_bg: 
-@inside_selection: 
-@is_text: 
-
-<!-- ##### FUNCTION gtk_text_attributes_new ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_text_attributes_copy ##### -->
-<para>
-
-</para>
-
-@src: 
-@Returns: 
-<!-- # Unused Parameters # -->
-@dest: 
-
-
-<!-- ##### FUNCTION gtk_text_attributes_copy_values ##### -->
-<para>
-
-</para>
-
-@src: 
-@dest: 
-
-
-<!-- ##### FUNCTION gtk_text_attributes_unref ##### -->
-<para>
-
-</para>
-
-@values: 
-
-
-<!-- ##### FUNCTION gtk_text_attributes_ref ##### -->
-<para>
-
-</para>
-
-@values: 
-
 

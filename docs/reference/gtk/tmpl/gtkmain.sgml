@@ -104,6 +104,16 @@ functions such as g_signal_connect().
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_parse_args ##### -->
+<para>
+
+</para>
+
+@argc: 
+@argv: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_init ##### -->
 <para>
 </para>

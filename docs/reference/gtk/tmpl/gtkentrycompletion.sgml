@@ -49,39 +49,6 @@ The GtkEntryCompletion struct contains only private data.
 </para>
 
 
-<!-- ##### SIGNAL GtkEntryCompletion::action-activated ##### -->
-<para>
-
-</para>
-
-@entrycompletion: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkEntryCompletion::match-selected ##### -->
-<para>
-
-</para>
-
-@entrycompletion: the object which received the signal.
-@arg1: 
-@arg2: 
-@Returns: 
-
-<!-- ##### ARG GtkEntryCompletion:minimum-key-length ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntryCompletion:model ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntryCompletion:text-column ##### -->
-<para>
-
-</para>
-
 <!-- ##### USER_FUNCTION GtkEntryCompletionMatchFunc ##### -->
 <para>
 A function which decides whether the row indicated by @iter matches a given 
@@ -224,4 +191,37 @@ to the unmodified key via <literal>gtk_entry_get_text (GTK_ENTRY (gtk_entry_comp
 @completion: 
 @Returns: 
 
+
+<!-- ##### SIGNAL GtkEntryCompletion::action-activated ##### -->
+<para>
+
+</para>
+
+@entrycompletion: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkEntryCompletion::match-selected ##### -->
+<para>
+
+</para>
+
+@entrycompletion: the object which received the signal.
+@arg1: 
+@arg2: 
+@Returns: 
+
+<!-- ##### ARG GtkEntryCompletion:minimum-key-length ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntryCompletion:model ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntryCompletion:text-column ##### -->
+<para>
+
+</para>
 

@@ -46,16 +46,6 @@ selected row).
 </para>
 
 
-<!-- ##### SIGNAL GtkTreeSelection::changed ##### -->
-<para>
-Emitted whenever the selection has (possibly) changed.  Please note that
-this signal is mostly a hint.  It may only be emitted once when a range
-of rows are selected, and it may occasionally be emitted when nothing
-has happened.
-</para>
-
-@treeselection: the object which received the signal.
-
 <!-- ##### USER_FUNCTION GtkTreeSelectionFunc ##### -->
 <para>
 A function used by gtk_tree_selection_set_select_function() to filter
@@ -262,4 +252,14 @@ selected rows.  It will be called on every selected row in the view.
 @start_path: 
 @end_path: 
 
+
+<!-- ##### SIGNAL GtkTreeSelection::changed ##### -->
+<para>
+Emitted whenever the selection has (possibly) changed.  Please note that
+this signal is mostly a hint.  It may only be emitted once when a range
+of rows are selected, and it may occasionally be emitted when nothing
+has happened.
+</para>
+
+@treeselection: the object which received the signal.
 

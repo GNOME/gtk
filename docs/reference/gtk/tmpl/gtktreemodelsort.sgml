@@ -123,11 +123,6 @@ This should not be accessed directly.  Use the accessor functions below.
 </para>
 
 
-<!-- ##### ARG GtkTreeModelSort:model ##### -->
-<para>
-
-</para>
-
 <!-- ##### FUNCTION gtk_tree_model_sort_new_with_model ##### -->
 <para>
 
@@ -215,4 +210,9 @@ This should not be accessed directly.  Use the accessor functions below.
 @iter: 
 @Returns: 
 
+
+<!-- ##### ARG GtkTreeModelSort:model ##### -->
+<para>
+
+</para>
 

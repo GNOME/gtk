@@ -40,16 +40,6 @@ The GtkTreeModelFilter struct contains only private fields.
 </para>
 
 
-<!-- ##### ARG GtkTreeModelFilter:child-model ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeModelFilter:virtual-root ##### -->
-<para>
-
-</para>
-
 <!-- ##### USER_FUNCTION GtkTreeModelFilterVisibleFunc ##### -->
 <para>
 A function which decides whether the row indicated by @iter is visible.
@@ -190,4 +180,14 @@ particularly efficient operation.
 
 @filter: 
 
+
+<!-- ##### ARG GtkTreeModelFilter:child-model ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeModelFilter:virtual-root ##### -->
+<para>
+
+</para>
 

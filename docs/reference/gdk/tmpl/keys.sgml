@@ -91,20 +91,6 @@ in the keymap and see what keyval it corresponds to.
 </para>
 
 
-<!-- ##### SIGNAL GdkKeymap::direction-changed ##### -->
-<para>
-
-</para>
-
-@keymap: the object which received the signal.
-
-<!-- ##### SIGNAL GdkKeymap::keys-changed ##### -->
-<para>
-
-</para>
-
-@keymap: the object which received the signal.
-
 <!-- ##### STRUCT GdkKeymapKey ##### -->
 <para>
 A <structname>GdkKeymapKey</structname> is a hardware key that can 

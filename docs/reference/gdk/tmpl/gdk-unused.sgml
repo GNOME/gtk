@@ -439,6 +439,20 @@ status information, so the application does not need to do anything.
 @group: 
 @level: 
 
+<!-- ##### SIGNAL GdkKeymap::direction-changed ##### -->
+<para>
+
+</para>
+
+@keymap: the object which received the signal.
+
+<!-- ##### SIGNAL GdkKeymap::keys-changed ##### -->
+<para>
+
+</para>
+
+@keymap: the object which received the signal.
+
 <!-- ##### STRUCT GdkKeymapClass ##### -->
 <para>
 

@@ -1210,9 +1210,11 @@ if test "x$gdktarget" = "xx11"; then
 
   # X SYNC check
   AC_CHECK_LIB(Xext, XSyncQueryExtension,
-  		[GTK_ADD_LIB(x_extra_libs,Xext)
-		AC_DEFINE([HAVE_XSYNC], [], [Have SYNC extension])],
-		,$x_libs_for_checks)
+      [AC_CHECK_HEADER(X11/extensions/sync.h,
+          [GTK_ADD_LIB(x_extra_libs, Xext)
+	  AC_DEFINE(HAVE_XSYNC, 1, Have the SYNC extension library)],
+	  :, [#include <X11/Xlib.h>])], : ,
+       $X_LIBS -lXext -lX11 $X_EXTRA_LIBS)
 
   # Checks for XFixes extension
   

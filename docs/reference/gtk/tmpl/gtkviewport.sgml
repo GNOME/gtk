@@ -20,30 +20,6 @@ An adapter which makes widgets scrollable
 </para>
 
 
-<!-- ##### SIGNAL GtkViewport::set-scroll-adjustments ##### -->
-<para>
-
-</para>
-
-@viewport: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### ARG GtkViewport:hadjustment ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkViewport:shadow-type ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkViewport:vadjustment ##### -->
-<para>
-
-</para>
-
 <!-- ##### FUNCTION gtk_viewport_new ##### -->
 <para>
 
@@ -107,4 +83,28 @@ An adapter which makes widgets scrollable
 @viewport: 
 @Returns: 
 
+
+<!-- ##### SIGNAL GtkViewport::set-scroll-adjustments ##### -->
+<para>
+
+</para>
+
+@viewport: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### ARG GtkViewport:hadjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkViewport:shadow-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkViewport:vadjustment ##### -->
+<para>
+
+</para>
 

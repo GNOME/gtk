@@ -62,11 +62,6 @@ gtk_radio_tool_button_new_from_widget_with_stock() to create a new
 </para>
 
 
-<!-- ##### ARG GtkRadioToolButton:group ##### -->
-<para>
-
-</para>
-
 <!-- ##### FUNCTION gtk_radio_tool_button_new ##### -->
 <para>
 
@@ -122,4 +117,9 @@ gtk_radio_tool_button_new_from_widget_with_stock() to create a new
 @button: 
 @group: 
 
+
+<!-- ##### ARG GtkRadioToolButton:group ##### -->
+<para>
+
+</para>
 

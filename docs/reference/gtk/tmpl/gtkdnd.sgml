@@ -137,6 +137,14 @@ notification of drags.
 @target_list: 
 
 
+<!-- ##### FUNCTION gtk_drag_dest_add_text_targets ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
 <!-- ##### FUNCTION gtk_drag_finish ##### -->
 <para>
 Informs the drag source that the drop is finished, and
@@ -357,5 +365,13 @@ Undoes the effects of gtk_drag_source_set().
 
 @widget: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_drag_source_add_text_targets ##### -->
+<para>
+
+</para>
+
+@widget: 
 
 

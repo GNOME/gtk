@@ -6,7 +6,7 @@ Overview of Changes from GTK+ 2.4.1 to GTK+ 2.5.0
 * GtkFileChooser
  - change to newly-created folders [Federico Mena Quintero]
  - always show icons [Federico]
- - bug fixes [Federico, Christian Neumair, Alex Roitman]
+ - bug fixes [Federico, Christian Neumair, Alex Roitman, Morten Welinder]
 * GtkComboBox, GtkComboBoxEntry
  - add missing getters and some more convience API [Matthias, 
   Christian Neumeir, Oliver Andrieu]
@@ -53,7 +53,7 @@ Overview of Changes from GTK+ 2.4.1 to GTK+ 2.5.0
  - simple multiple-of-90° rotation support [Matthias]
  - allow to disable loaders [Matthias]
  - bug fixes [Kouichirou Hiratsuka, Sven Neumann, Brian Cameron,
-  Manish Singh, Morten Welinder]
+  Manish Singh, Morten]
 * X11 selections 
  - make incremental transfer of MULTIPLE work [Matthias]
  - don't do incremental transfer in 4k chunks [Matthias]
@@ -63,11 +63,11 @@ Overview of Changes from GTK+ 2.4.1 to GTK+ 2.5.0
  - bug fixes [Hans Breuer, John Ehresman, Tor Lillqvist, 
   Robert Ögren, Benoît Carpentier, J. Ali Harlow, Laurent Sansonetti]
 * Performance improvements
- - predict exposes for override-redirect windows [Soeren Sandmann]
- - unset the background when mapping or unmapping windows [Soeren]
- - support the update counter spec for smoother resizing [Soeren]
-* Misc bug fixes [Matthias, Owen, Soeren, Anders, Padraig O'Briain, 
-  Crispin Flowerday, Michal Pasternak, Scott Tsai, Morten Welinder,
+ - predict exposes for override-redirect windows [Søren Sandmann]
+ - unset the background when mapping or unmapping windows [Søren]
+ - support the update counter spec for smoother resizing [Søren]
+* Misc bug fixes [Matthias, Owen, Søren, Anders, Padraig O'Briain, 
+  Crispin Flowerday, Michal Pasternak, Scott Tsai, Morten,
   Michael Natterer, Dmd Ljungmark, Sven Neumann, Billy Biggs, 
   Mark McLoughlin, Sam Stephenson, John Finlay, David Hawthorne, 
   Kent Sandvik, Davyd Madeley, Alexander Winston, Jean-François Wauthy, 

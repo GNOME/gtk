@@ -1,3 +1,11 @@
+Sun Jul 18 15:28:24 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkdnd.c (gtk_drag_source_set, gtk_drag_dest_set): Create an
+	empty target list if targets is NULL.
+
+	* configure.in: Add check for X11/extensions/sync.h. (#147416,
+	Morten Welinder)
+
 Sun Jul 18 01:24:31 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* NEWS: Updates for 2.5.0

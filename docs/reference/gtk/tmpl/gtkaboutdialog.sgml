@@ -20,12 +20,10 @@ clicks on a link or email address, see gtk_about_dialog_set_email_hook()
 and gtk_about_dialog_set_url_hook().
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 #GTK_STOCK_ABOUT
 </para>
-
 
 <!-- ##### STRUCT GtkAboutDialog ##### -->
 <para>

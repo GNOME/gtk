@@ -79,94 +79,6 @@ node.</entry>
 </para>
 
 
-<!-- ##### SIGNAL GtkCTree::change-focus-row-expansion ##### -->
-<para>
-The row which has the focus is either collapsed or expanded
-or toggled.
-</para>
-
-@ctree: the object which received the signal.
-@expansion: What is being done.
-
-<!-- ##### SIGNAL GtkCTree::tree-collapse ##### -->
-<para>
-Emitted when a node is collapsed.
-</para>
-
-@ctree: the object which received the signal.
-@node: 
-
-<!-- ##### SIGNAL GtkCTree::tree-expand ##### -->
-<para>
-Emitted when a node is expanded.
-</para>
-
-@ctree: the object which received the signal.
-@node: 
-
-<!-- ##### SIGNAL GtkCTree::tree-move ##### -->
-<para>
-Emitted when a node is moved.
-</para>
-
-@ctree: the object which received the signal.
-@node: The node that is moved.
-@new_parent: The new parent of the node.
-@new_sibling: The new sibling of the node.
-
-<!-- ##### SIGNAL GtkCTree::tree-select-row ##### -->
-<para>
-Emitted when a row is selected.
-</para>
-
-@ctree: the object which received the signal.
-@node: The node corresponding to the selected row.
-@column: The column which was selected.
-
-<!-- ##### SIGNAL GtkCTree::tree-unselect-row ##### -->
-<para>
-Emitted when a node is unselected.
-</para>
-
-@ctree: the object which received the signal.
-@node: The node  corresponding to the selected row.
-@column: 
-
-<!-- ##### ARG GtkCTree:expander-style ##### -->
-<para>
-The style of the expander buttons.
-</para>
-
-<!-- ##### ARG GtkCTree:indent ##### -->
-<para>
-The number of pixels to indent the tree levels.
-</para>
-
-<!-- ##### ARG GtkCTree:line-style ##### -->
-<para>
-The style of the lines in the tree graphic.
-</para>
-
-<!-- ##### ARG GtkCTree:n-columns ##### -->
-<para>
-The number of columns in the tree.
-</para>
-
-<!-- ##### ARG GtkCTree:show-stub ##### -->
-<para>
-FIXME
-</para>
-
-<!-- ##### ARG GtkCTree:spacing ##### -->
-<para>
-The number of pixels between the tree and the columns.
-</para>
-
-<!-- ##### ARG GtkCTree:tree-column ##### -->
-<para>
-The column in which the actual tree graphic appears.
-</para>
-
 <!-- ##### MACRO GTK_CTREE_ROW ##### -->
 <para>
 Used to get the #GtkCTreeRow structure corresponding to the given #GtkCTreeNode.
@@ -1254,4 +1166,92 @@ criteria etc.
 @ctree: 
 @show_stub: 
 
+
+<!-- ##### SIGNAL GtkCTree::change-focus-row-expansion ##### -->
+<para>
+The row which has the focus is either collapsed or expanded
+or toggled.
+</para>
+
+@ctree: the object which received the signal.
+@expansion: What is being done.
+
+<!-- ##### SIGNAL GtkCTree::tree-collapse ##### -->
+<para>
+Emitted when a node is collapsed.
+</para>
+
+@ctree: the object which received the signal.
+@node: 
+
+<!-- ##### SIGNAL GtkCTree::tree-expand ##### -->
+<para>
+Emitted when a node is expanded.
+</para>
+
+@ctree: the object which received the signal.
+@node: 
+
+<!-- ##### SIGNAL GtkCTree::tree-move ##### -->
+<para>
+Emitted when a node is moved.
+</para>
+
+@ctree: the object which received the signal.
+@node: The node that is moved.
+@new_parent: The new parent of the node.
+@new_sibling: The new sibling of the node.
+
+<!-- ##### SIGNAL GtkCTree::tree-select-row ##### -->
+<para>
+Emitted when a row is selected.
+</para>
+
+@ctree: the object which received the signal.
+@node: The node corresponding to the selected row.
+@column: The column which was selected.
+
+<!-- ##### SIGNAL GtkCTree::tree-unselect-row ##### -->
+<para>
+Emitted when a node is unselected.
+</para>
+
+@ctree: the object which received the signal.
+@node: The node  corresponding to the selected row.
+@column: 
+
+<!-- ##### ARG GtkCTree:expander-style ##### -->
+<para>
+The style of the expander buttons.
+</para>
+
+<!-- ##### ARG GtkCTree:indent ##### -->
+<para>
+The number of pixels to indent the tree levels.
+</para>
+
+<!-- ##### ARG GtkCTree:line-style ##### -->
+<para>
+The style of the lines in the tree graphic.
+</para>
+
+<!-- ##### ARG GtkCTree:n-columns ##### -->
+<para>
+The number of columns in the tree.
+</para>
+
+<!-- ##### ARG GtkCTree:show-stub ##### -->
+<para>
+FIXME
+</para>
+
+<!-- ##### ARG GtkCTree:spacing ##### -->
+<para>
+The number of pixels between the tree and the columns.
+</para>
+
+<!-- ##### ARG GtkCTree:tree-column ##### -->
+<para>
+The column in which the actual tree graphic appears.
+</para>
 

@@ -119,13 +119,6 @@ gtk_icon_theme_set_custom_theme().
 </para>
 
 
-<!-- ##### SIGNAL GtkIconTheme::changed ##### -->
-<para>
-
-</para>
-
-@icontheme: the object which received the signal.
-
 <!-- ##### ENUM GtkIconLookupFlags ##### -->
 <para>
 
@@ -276,6 +269,16 @@ gtk_icon_theme_set_custom_theme().
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_icon_theme_get_icon_sizes ##### -->
+<para>
+
+</para>
+
+@icon_theme: 
+@icon_name: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_icon_theme_get_example_icon_name ##### -->
 <para>
 
@@ -396,4 +399,11 @@ gtk_icon_theme_set_custom_theme().
 @icon_info: 
 @Returns: 
 
+
+<!-- ##### SIGNAL GtkIconTheme::changed ##### -->
+<para>
+
+</para>
+
+@icontheme: the object which received the signal.
 

@@ -41,38 +41,6 @@ an application.)
 </para>
 
 
-<!-- ##### SIGNAL GtkCheckMenuItem::toggled ##### -->
-<para>
-This signal is emitted when the state of the check box is changed.
-</para>
-
-<para>
-A signal handler can examine the <structfield>active</structfield> 
-field of the #GtkCheckMenuItem-struct struct to discover the new state.
-</para>
-
-@checkmenuitem: the object which received the signal.
-
-<!-- ##### ARG GtkCheckMenuItem:active ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCheckMenuItem:draw-as-radio ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCheckMenuItem:inconsistent ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCheckMenuItem:indicator-size ##### -->
-<para>
-
-</para>
-
 <!-- ##### FUNCTION gtk_check_menu_item_new ##### -->
 <para>
 Creates a new #GtkCheckMenuItem.
@@ -179,4 +147,36 @@ Emits the GtkCheckMenuItem::toggled signal.
 @check_menu_item: 
 @Returns: 
 
+
+<!-- ##### SIGNAL GtkCheckMenuItem::toggled ##### -->
+<para>
+This signal is emitted when the state of the check box is changed.
+</para>
+
+<para>
+A signal handler can examine the <structfield>active</structfield> 
+field of the #GtkCheckMenuItem-struct struct to discover the new state.
+</para>
+
+@checkmenuitem: the object which received the signal.
+
+<!-- ##### ARG GtkCheckMenuItem:active ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCheckMenuItem:draw-as-radio ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCheckMenuItem:inconsistent ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCheckMenuItem:indicator-size ##### -->
+<para>
+
+</para>
 
