@@ -1,3 +1,23 @@
+2001-06-05  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_set_range): clamp the value 
+	to the range that was set
+
+	* gtk/gtkrange.c: add value_changed signal, primarily 
+	intended for use with GtkScale
+	(gtk_range_set_increments): new function
+	(gtk_range_set_range): new function with weird name
+	(gtk_range_set_value): new function
+	(gtk_range_get_value): new function
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_get_value): rename 
+	from gtk_spin_button_get_value_as_float(). Compat #define
+	added for get_value_as_float.
+
+	* gtk/gtkhscale.c (gtk_hscale_new_with_range): new function
+
+	* gtk/gtkvscale.c (gtk_vscale_new_with_range): new function
+
 Tue Jun  5 14:57:18 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_get_size): Fix bug #55573

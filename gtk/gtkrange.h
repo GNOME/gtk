@@ -106,6 +106,8 @@ struct _GtkRangeClass
   /* what detail to pass to GTK drawing functions */
   gchar *slider_detail;
   gchar *stepper_detail;
+
+  void (* value_changed)    (GtkRange     *range);
   
   /* action signals for keybindings */
   void (* move_slider)      (GtkRange     *range,
@@ -119,16 +121,24 @@ struct _GtkRangeClass
 
 GtkType        gtk_range_get_type               (void) G_GNUC_CONST;
 
-void           gtk_range_set_update_policy      (GtkRange      *range,
-						 GtkUpdateType  policy);
+void           gtk_range_set_update_policy (GtkRange      *range,
+                                            GtkUpdateType  policy);
+void           gtk_range_set_adjustment    (GtkRange      *range,
+                                            GtkAdjustment *adjustment);
+GtkAdjustment* gtk_range_get_adjustment    (GtkRange      *range);
+void           gtk_range_set_inverted      (GtkRange      *range,
+                                            gboolean       setting);
+gboolean       gtk_range_get_inverted      (GtkRange      *range);
+void           gtk_range_set_increments    (GtkRange      *range,
+                                            gdouble        step,
+                                            gdouble        page);
+void           gtk_range_set_range         (GtkRange      *range,
+                                            gdouble        min,
+                                            gdouble        max);
+void           gtk_range_set_value         (GtkRange      *range,
+                                            gdouble        value);
+gdouble        gtk_range_get_value         (GtkRange      *range);
 
-void           gtk_range_set_adjustment         (GtkRange      *range,
-						 GtkAdjustment *adjustment);
-GtkAdjustment* gtk_range_get_adjustment         (GtkRange      *range);
-
-void           gtk_range_set_inverted           (GtkRange      *range,
-                                                 gboolean       setting);
-gboolean       gtk_range_get_inverted           (GtkRange      *range);
 
 #ifdef __cplusplus
 }

@@ -6,8 +6,17 @@ a base class for #GtkHScale and #GtkVScale.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
+A #GtkScale is a slider control used to select a numeric value.
+To use it, you'll probably want to investigate the methods on 
+its base class, #GtkRange, in addition to the methods for #GtkScale itself.
+To set the value of a scale, you would normally use gtk_range_set_value(). 
+To detect changes to the value, you would normally use the "value_changed" 
+signal.
+</para>
+<para>
 The #GtkScale widget is an abstract class, used only for deriving the
-subclasses #GtkHScale and #GtkVScale.
+subclasses #GtkHScale and #GtkVScale. To create a scale widget, 
+call gtk_hscale_new_with_range() or gtk_vscale_new_with_range().
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -74,12 +83,25 @@ Sets the position in which the current value is displayed.
 
 <!-- ##### SIGNAL GtkScale::format-value ##### -->
 <para>
-
+Signal which allows you to change how the scale value is displayed.  Connect a
+signal handler which returns an allocated string representing @value.
+That string will then be used to display the scale's value.
+Here's an example signal handler which displays a value 1.0 as
+with "-->1.0<--".
+<programlisting>
+static gchar*
+format_value_callback (GtkScale *scale,
+                       gdouble   value)
+{
+  return g_strdup_printf ("-->%0.*g<--",
+                          gtk_scale_get_digits (scale), value);
+}
+</programlisting>
 </para>
 
 @scale: the object which received the signal.
-@arg1: 
-@Returns: 
+@value: value to format
+@Returns: allocated string representing @value
 
 <!-- ##### ARG GtkScale:digits ##### -->
 <para>

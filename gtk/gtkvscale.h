@@ -59,8 +59,12 @@ struct _GtkVScaleClass
 };
 
 
-GtkType    gtk_vscale_get_type (void) G_GNUC_CONST;
-GtkWidget* gtk_vscale_new      (GtkAdjustment *adjustment);
+GtkType    gtk_vscale_get_type       (void) G_GNUC_CONST;
+GtkWidget* gtk_vscale_new            (GtkAdjustment *adjustment);
+GtkWidget* gtk_vscale_new_with_range (gdouble        min,
+                                      gdouble        max,
+                                      gdouble        step);
+
 
 
 #ifdef __cplusplus

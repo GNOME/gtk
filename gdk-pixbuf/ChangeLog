@@ -1,3 +1,8 @@
+2001-06-05  Havoc Pennington  <hp@redhat.com>
+
+	* test-loaders.c (main): use putenv not setenv, reported by 
+	 Armin Theissen
+
 2001-05-08  Havoc Pennington  <hp@redhat.com>
 
 	* gdk-pixbuf-util.c (gdk_pixbuf_add_alpha): docs fixup, 

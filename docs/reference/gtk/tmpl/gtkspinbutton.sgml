@@ -230,13 +230,14 @@ Creates a new #GtkSpinButton.
 @max: 
 
 
-<!-- ##### FUNCTION gtk_spin_button_get_value_as_float ##### -->
+<!-- ##### MACRO gtk_spin_button_get_value_as_float ##### -->
 <para>
 
 </para>
 
-@spin_button: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@spin_button: 
 
 
 <!-- ##### FUNCTION gtk_spin_button_get_value_as_int ##### -->

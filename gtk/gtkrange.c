@@ -43,6 +43,7 @@ enum {
 };
 
 enum {
+  VALUE_CHANGED,
   MOVE_SLIDER,
   LAST_SIGNAL
 };
@@ -222,6 +223,15 @@ gtk_range_class_init (GtkRangeClass *class)
 
   class->slider_detail = "slider";
   class->stepper_detail = "stepper";
+
+  signals[VALUE_CHANGED] =
+    g_signal_newc ("value_changed",
+		   G_TYPE_FROM_CLASS (object_class),
+		   G_SIGNAL_RUN_LAST,
+		   G_STRUCT_OFFSET (GtkRangeClass, value_changed),
+		   NULL, NULL,
+		   gtk_marshal_NONE__NONE,
+		   G_TYPE_NONE, 0);
   
   signals[MOVE_SLIDER] =
     g_signal_newc ("move_slider",
@@ -353,6 +363,17 @@ gtk_range_init (GtkRange *range)
   range->timer = NULL;  
 }
 
+/**
+ * gtk_range_get_adjustment:
+ * @range: a #GtkRange
+ * 
+ * Get the #GtkAdjustment which is the "model" object for #GtkRange.
+ * See gtk_range_set_adjustment() for details.
+ * The return value does not have a reference added, so should not
+ * be unreferenced.
+ * 
+ * Return value: a #GtkAdjustment
+ **/
 GtkAdjustment*
 gtk_range_get_adjustment (GtkRange *range)
 {
@@ -365,6 +386,21 @@ gtk_range_get_adjustment (GtkRange *range)
   return range->adjustment;
 }
 
+/**
+ * gtk_range_set_update_policy:
+ * @range: a #GtkRange
+ * @policy: update policy
+ *
+ * Sets the update policy for the range. #GTK_UPDATE_CONTINUOUS means that
+ * anytime the range slider is moved, the range value will change and the
+ * value_changed signal will be emitted. #GTK_UPDATE_DELAYED means that
+ * the value will be updated after a brief timeout where no slider motion
+ * occurs, so updates are spaced by a short time rather than
+ * continuous. #GTK_UPDATE_DISCONTINUOUS means that the value will only
+ * be updated when the user releases the button and ends the slider
+ * drag operation.
+ * 
+ **/
 void
 gtk_range_set_update_policy (GtkRange      *range,
 			     GtkUpdateType  policy)
@@ -379,6 +415,20 @@ gtk_range_set_update_policy (GtkRange      *range,
     }
 }
 
+/**
+ * gtk_range_set_adjustment:
+ * @range: a #GtkRange
+ * @adjustment: a #GtkAdjustment
+ *
+ * Sets the adjustment to be used as the "model" object for this range
+ * widget. The adjustment indicates the current range value, the
+ * minimum and maximum range values, the step/page increments used
+ * for keybindings and scrolling, and the page size. The page size
+ * is normally 0 for #GtkScale and nonzero for #GtkScrollbar, and
+ * indicates the size of the visible area of the widget being scrolled.
+ * The page size affects the size of the scrollbar slider.
+ * 
+ **/
 void
 gtk_range_set_adjustment (GtkRange      *range,
 			  GtkAdjustment *adjustment)
@@ -420,6 +470,17 @@ gtk_range_set_adjustment (GtkRange      *range,
     }
 }
 
+/**
+ * gtk_range_set_inverted:
+ * @range: a #GtkRange
+ * @setting: %TRUE to invert the range
+ *
+ * Ranges normally move from lower to higher values as the
+ * slider moves from top to bottom or left to right. Inverted
+ * ranges have higher values at the top or on the right rather than
+ * on the bottom or left.
+ * 
+ **/
 void
 gtk_range_set_inverted (GtkRange *range,
                         gboolean  setting)
@@ -435,12 +496,113 @@ gtk_range_set_inverted (GtkRange *range,
     }
 }
 
+/**
+ * gtk_range_get_inverted:
+ * @range: a #GtkRange
+ * 
+ * Gets the value set by gtk_range_set_inverted().
+ * 
+ * Return value: %TRUE if the range is inverted
+ **/
 gboolean
 gtk_range_get_inverted (GtkRange *range)
 {
   g_return_val_if_fail (GTK_IS_RANGE (range), FALSE);
 
   return range->inverted;
+}
+
+/**
+ * gtk_range_set_increments:
+ * @range: a #GtkRange
+ * @step: step size
+ * @page: page size
+ *
+ * Sets the step and page sizes for the range.
+ * The step size is used when the user clicks the #GtkScrollbar
+ * arrows or moves #GtkScale via arrow keys. The page size
+ * is used for example when moving via Page Up or Page Down keys.
+ * 
+ **/
+void
+gtk_range_set_increments (GtkRange *range,
+                          gdouble   step,
+                          gdouble   page)
+{
+  g_return_if_fail (GTK_IS_RANGE (range));
+
+  range->adjustment->step_increment = step;
+  range->adjustment->page_increment = page;
+
+  gtk_adjustment_changed (range->adjustment);
+}
+
+/**
+ * gtk_range_set_range:
+ * @range: a #GtkRange
+ * @min: minimum range value
+ * @max: maximum range value
+ * 
+ * Sets the allowable values in the #GtkRange, and clamps the range
+ * value to be between min and max.
+ **/
+void
+gtk_range_set_range (GtkRange *range,
+                     gdouble   min,
+                     gdouble   max)
+{
+  gdouble value;
+  
+  g_return_if_fail (GTK_IS_RANGE (range));
+  g_return_if_fail (min < max);
+  
+  range->adjustment->lower = min;
+  range->adjustment->upper = max;
+
+  value = CLAMP (range->adjustment->value,
+                 range->adjustment->lower,
+                 (range->adjustment->upper - range->adjustment->page_size));
+  
+  gtk_adjustment_changed (range->adjustment);  
+}
+
+/**
+ * gtk_range_set_value:
+ * @range: a #GtkRange
+ * @value: new value of the range
+ *
+ * Sets the current value of the range; if the value is outside the
+ * minimum or maximum range values, it will be clamped to fit inside
+ * them. The range emits the "value_changed" signal if the value
+ * changes.
+ * 
+ **/
+void
+gtk_range_set_value (GtkRange *range,
+                     gdouble   value)
+{
+  g_return_if_fail (GTK_IS_RANGE (range));
+  
+  value = CLAMP (value, range->adjustment->lower,
+                 (range->adjustment->upper - range->adjustment->page_size));
+
+  gtk_adjustment_set_value (range->adjustment, value);
+}
+
+/**
+ * gtk_range_get_value:
+ * @range: a #GtkRange
+ * 
+ * Gets the current value of the range.
+ * 
+ * Return value: current value of the range.
+ **/
+gdouble
+gtk_range_get_value (GtkRange *range)
+{
+  g_return_val_if_fail (GTK_IS_RANGE (range), 0.0);
+
+  return range->adjustment->value;
 }
 
 static gboolean
@@ -1184,6 +1346,8 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
    * can input into the adjustment, not a filter that the GtkRange
    * will enforce on the adjustment.
    */
+
+  g_signal_emit (G_OBJECT (range), signals[VALUE_CHANGED], 0);
 }
 
 static void

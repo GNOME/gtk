@@ -1,3 +1,7 @@
+2001-06-05  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/tmpl/gtkscale.sgml: more docs
+
 Tue Jun  5 10:54:48 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/tmpl/gtkenums.sgml: Improve docs for GtkStateType.

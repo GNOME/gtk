@@ -373,7 +373,7 @@ main (int argc, char **argv)
   g_type_init (G_TYPE_DEBUG_NONE);
   g_log_set_fatal_mask (NULL, G_LOG_LEVEL_WARNING | G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL);
   
-  setenv ("GDK_PIXBUF_MODULEDIR", BUILT_MODULES_DIR, TRUE);
+  putenv ("GDK_PIXBUF_MODULEDIR="BUILT_MODULES_DIR);
 
   TEST (valid_gif_test, TRUE); 
   TEST (gif_test_1, FALSE);   

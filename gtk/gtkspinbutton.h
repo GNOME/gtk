@@ -141,7 +141,7 @@ void		gtk_spin_button_set_range	   (GtkSpinButton  *spin_button,
 						    gdouble         min,
 						    gdouble         max);
 
-gdouble		gtk_spin_button_get_value_as_float (GtkSpinButton  *spin_button);
+gdouble		gtk_spin_button_get_value          (GtkSpinButton  *spin_button);
 
 gint		gtk_spin_button_get_value_as_int   (GtkSpinButton  *spin_button);
 
@@ -166,6 +166,9 @@ void		gtk_spin_button_set_snap_to_ticks  (GtkSpinButton  *spin_button,
 void            gtk_spin_button_update             (GtkSpinButton  *spin_button);
 
 
+#ifndef GTK_DISABLE_DEPRECATED
+#define gtk_spin_button_get_value_as_float gtk_spin_button_get_value
+#endif
 
 #ifdef __cplusplus
 }
