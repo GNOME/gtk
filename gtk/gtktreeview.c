@@ -1082,6 +1082,11 @@ gtk_tree_view_destroy (GtkObject *object)
       tree_view->priv->drag_dest_row = NULL;
     }
 
+  if (tree_view->priv->top_row != NULL)
+    {
+      gtk_tree_row_reference_free (tree_view->priv->top_row);
+      tree_view->priv->top_row = NULL;
+    }
 
   if (tree_view->priv->column_drop_func_data &&
       tree_view->priv->column_drop_func_data_destroy)
@@ -3197,6 +3202,8 @@ validate_visible_area (GtkTreeView *tree_view)
   gint y, height, offset;
   gboolean validated_area = FALSE;
   gboolean size_changed = FALSE;
+  gint height_above;
+  gint height_below;
   
   if (tree_view->priv->tree == NULL)
     return;
@@ -5756,7 +5763,6 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   gint x, y, width, height;
 
   g_return_if_fail (tree_view->priv->column_drag_info == NULL);
-  g_print ("start drag!\n");
 
   gtk_tree_view_set_column_drag_info (tree_view, column);
 
@@ -6504,6 +6510,10 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
   if (GTK_WIDGET_REALIZED (tree_view))
     {
       gint dy;
+      GtkTreePath *path;
+      GtkRBTree *tree;
+      GtkRBNode *node;
+	
       gdk_window_move (tree_view->priv->bin_window,
 		       - tree_view->priv->hadjustment->value,
 		       TREE_VIEW_HEADER_HEIGHT (tree_view));
@@ -6512,7 +6522,18 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
 		       0);
       dy = tree_view->priv->dy - (int) tree_view->priv->vadjustment->value;
       gdk_window_scroll (tree_view->priv->bin_window, 0, dy);
+
+      /* update our dy and top_row */
       tree_view->priv->dy = (int) tree_view->priv->vadjustment->value;
+      tree_view->priv->top_row_dy = _gtk_rbtree_find_offset (tree_view->priv->tree,
+							     tree_view->priv->dy,
+							     &tree, &node);
+      g_return_if_fail (tree != NULL);
+
+      path = _gtk_tree_view_find_path (tree_view, tree, node);
+      gtk_tree_row_reference_free (tree_view->priv->top_row);
+      tree_view->priv->top_row = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, path);
+      gtk_tree_path_free (path);
 
       gdk_window_process_updates (tree_view->priv->bin_window, TRUE);
       gdk_window_process_updates (tree_view->priv->header_window, TRUE);

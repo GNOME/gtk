@@ -104,6 +104,8 @@ struct _GtkTreeViewPrivate
   /* bin_window offset */
   GtkTreeRowReference *top_row;
   gint top_row_dy;
+  /* dy == y pos of top_row + top_row_dy */
+  /* we cache it for simplicity of the code */
   gint dy;
   gint drag_column_x;
 

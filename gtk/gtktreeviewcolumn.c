@@ -738,12 +738,9 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
 
   g_return_val_if_fail (event != NULL, FALSE);
 
-  g_print ("event->type: %d\ncolumn->reorderable: %d\n", event->type, column->reorderable);
-
   if (event->type == GDK_BUTTON_PRESS &&
       column->reorderable)
     {
-      g_print ("setting maybe_reordered\n");
       column->maybe_reordered = TRUE;
       gdk_window_get_pointer (widget->window,
 			      &column->drag_x,
@@ -756,13 +753,6 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
       column->maybe_reordered)
     column->maybe_reordered = FALSE;
 
-
-  if (event->type == GDK_MOTION_NOTIFY &&
-      (column->maybe_reordered))
-    {
-      g_print ("motion:\n");
-    }
-      
   if (event->type == GDK_MOTION_NOTIFY &&
       (column->maybe_reordered) &&
       (gtk_drag_check_threshold (widget,
