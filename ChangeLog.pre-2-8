@@ -1,3 +1,12 @@
+1998-11-13  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkpaned.c (gtk_paned_realize): Destroy the cursor after we
+	have assigned it to the window -- there is no point in keeping it around.
+	(gtk_paned_unrealize): No need to destroy the cursor here.
+
+	* gtk/gtkpaned.h (struct _GtkPaned): Removed the cursor field, as
+	it is not needed.
+
 Fri Nov 13 11:22:38 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkpixmap.c: New function gdk_pixmap_foreign_new().

@@ -152,7 +152,7 @@ gtk_paned_realize (GtkWidget *widget)
   attributes.y = paned->handle_ypos;
   attributes.width = paned->handle_size;
   attributes.height = paned->handle_size;
-  attributes.cursor = paned->cursor = gdk_cursor_new (GDK_CROSS);
+  attributes.cursor = gdk_cursor_new (GDK_CROSS);
   attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
 			    GDK_BUTTON_RELEASE_MASK |
 			    GDK_POINTER_MOTION_MASK |
@@ -162,6 +162,7 @@ gtk_paned_realize (GtkWidget *widget)
   paned->handle = gdk_window_new (widget->window,
 				  &attributes, attributes_mask);
   gdk_window_set_user_data (paned->handle, paned);
+  gdk_cursor_destroy (attributes.cursor);
   
   widget->style = gtk_style_attach (widget->style, widget->window);
   
@@ -228,8 +229,6 @@ gtk_paned_unrealize (GtkWidget *widget)
       gdk_window_set_user_data (paned->handle, NULL);
       gdk_window_destroy (paned->handle);
       paned->handle = NULL;
-      gdk_cursor_destroy (paned->cursor);
-      paned->cursor = NULL;
     }
   
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
