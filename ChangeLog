@@ -1,3 +1,7 @@
+2003-02-15  Larry Ewing  <lewing@ximian.com>
+
+        * gdk/gdkevents.c (gdk_event_copy): copy the event axes as well.
+
 2003-02-17  Mohammad DAMT  <mdamt@bisnisweb.com>
 
 	* po/id.po: Added Indonesian translation
