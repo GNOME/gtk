@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-15 08:35+0100\n"
-"PO-Revision-Date: 2003-12-15 09:03+0100\n"
+"POT-Creation-Date: 2003-12-16 05:50+0100\n"
+"PO-Revision-Date: 2003-12-16 05:53+0100\n"
 "Last-Translator: Danilo Šegan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -873,7 +873,9 @@ msgstr "Vodoravno poravnanje"
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
-msgstr "Vodoravni položaj sadržanog elementa u dostupnom prostoru. 0.0 označava levo poravnanje, 1.0 desno poravnanje."
+msgstr ""
+"Vodoravni položaj sadržanog elementa u dostupnom prostoru. 0.0 označava levo "
+"poravnanje, 1.0 desno poravnanje."
 
 #: gtk/gtkalignment.c:126
 msgid "Vertical alignment"
@@ -883,7 +885,9 @@ msgstr "Uspravno poravnanje"
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
-msgstr "Uspravni položaj sadržanog elementa u dostupnom prostoru. 0.0 označava poravnanje sa vrhom, a 1.0 poravnanje sa dnom."
+msgstr ""
+"Uspravni položaj sadržanog elementa u dostupnom prostoru. 0.0 označava "
+"poravnanje sa vrhom, a 1.0 poravnanje sa dnom."
 
 #: gtk/gtkalignment.c:135
 msgid "Horizontal scale"
@@ -3012,7 +3016,9 @@ msgstr "Postavljeno privlačenje ivici"
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
-msgstr "Da li se koristi vrednost iz osobine snap_edge (privuci ivici) ili vrednost izvedena iz handle_position (pozicije ručke)"
+msgstr ""
+"Da li se koristi vrednost iz osobine snap_edge (privuci ivici) ili vrednost "
+"izvedena iz handle_position (pozicije ručke)"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -3662,7 +3668,9 @@ msgstr "Razmaci oko pokazatelja"
 #: gtk/gtkpaned.c:239
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
-msgstr "Položaj razdvojnika ploča u tačkama (0 označava skroz na levoj strani ili na vrhu)"
+msgstr ""
+"Položaj razdvojnika ploča u tačkama (0 označava skroz na levoj strani ili na "
+"vrhu)"
 
 #: gtk/gtkpaned.c:247
 msgid "Position Set"
@@ -4106,11 +4114,11 @@ msgid "Whether the separator is drawn, or just blank"
 msgstr "Da li se razdvajači iscrtavaju, ili su praznine"
 
 # Da li je ovo novi izraz za dvostruki klik, ili ga je neko vec koristio?
-#: gtk/gtksettings.c:169
+#: gtk/gtksettings.c:170
 msgid "Double Click Time"
 msgstr "Vreme dvoklika"
 
-#: gtk/gtksettings.c:170
+#: gtk/gtksettings.c:171
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -4118,27 +4126,38 @@ msgstr ""
 "Najduži dozvoljeni razmak između dva klika kako bi se oni smatrali jednim "
 "dvoklikom (u milisekundama)"
 
-#: gtk/gtksettings.c:177
+# Da li je ovo novi izraz za dvostruki klik, ili ga je neko vec koristio?
+#: gtk/gtksettings.c:178
+msgid "Double Click Distance"
+msgstr "Razmak dvoklika"
+
+#: gtk/gtksettings.c:179
+msgid ""
+"Maximum distance allowed between two clicks for them to be considered a "
+"double click (in pixels)"
+msgstr "Najveći dozvoljeni razmak između dva klika kako bi se oni smatrali jednim dvoklikom (u tačkama)"
+
+#: gtk/gtksettings.c:186
 msgid "Cursor Blink"
 msgstr "Treperenje kursora"
 
-#: gtk/gtksettings.c:178
+#: gtk/gtksettings.c:187
 msgid "Whether the cursor should blink"
 msgstr "Da li kursor treba da treperi"
 
-#: gtk/gtksettings.c:185
+#: gtk/gtksettings.c:194
 msgid "Cursor Blink Time"
 msgstr "Vreme treptaja kursora"
 
-#: gtk/gtksettings.c:186
+#: gtk/gtksettings.c:195
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Vreme između dva treptaja kursora, u milisekundama"
 
-#: gtk/gtksettings.c:193
+#: gtk/gtksettings.c:202
 msgid "Split Cursor"
 msgstr "Razdvojeni kursor"
 
-#: gtk/gtksettings.c:194
+#: gtk/gtksettings.c:203
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -4146,59 +4165,59 @@ msgstr ""
 "Da li treba prikazati dva kursora za mešani sleva-na-desno i sdesna-na-levo "
 "tekst"
 
-#: gtk/gtksettings.c:201
+#: gtk/gtksettings.c:210
 msgid "Theme Name"
 msgstr "Ime teme"
 
-#: gtk/gtksettings.c:202
+#: gtk/gtksettings.c:211
 msgid "Name of theme RC file to load"
 msgstr "Ime RC datoteke teme za učitavanje"
 
-#: gtk/gtksettings.c:209
+#: gtk/gtksettings.c:218
 msgid "Icon Theme Name"
 msgstr "Ime teme ikona"
 
-#: gtk/gtksettings.c:210
+#: gtk/gtksettings.c:219
 msgid "Name of icon theme to use"
 msgstr "Ime teme ikona koja će se koristiti"
 
-#: gtk/gtksettings.c:217
+#: gtk/gtksettings.c:226
 msgid "Key Theme Name"
 msgstr "Ime teme tastera"
 
-#: gtk/gtksettings.c:218
+#: gtk/gtksettings.c:227
 msgid "Name of key theme RC file to load"
 msgstr "Ime RC datoteke teme tastera za učitavanje"
 
-#: gtk/gtksettings.c:226
+#: gtk/gtksettings.c:235
 msgid "Menu bar accelerator"
 msgstr "Prečica za meni liniju"
 
-#: gtk/gtksettings.c:227
+#: gtk/gtksettings.c:236
 msgid "Keybinding to activate the menu bar"
 msgstr "Izbor tastera za pristup meni liniji"
 
-#: gtk/gtksettings.c:235
+#: gtk/gtksettings.c:244
 msgid "Drag threshold"
 msgstr "Prag prevlačenja"
 
-#: gtk/gtksettings.c:236
+#: gtk/gtksettings.c:245
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "Koliko se tačaka sme kursor pomeriti pre povlačenja"
 
-#: gtk/gtksettings.c:244
+#: gtk/gtksettings.c:253
 msgid "Font Name"
 msgstr "Ime pisma"
 
-#: gtk/gtksettings.c:245
+#: gtk/gtksettings.c:254
 msgid "Name of default font to use"
 msgstr "Ime uobičajenog pisma koje će se koristiti"
 
-#: gtk/gtksettings.c:253
+#: gtk/gtksettings.c:262
 msgid "Icon Sizes"
 msgstr "Veličine ikona"
 
-#: gtk/gtksettings.c:254
+#: gtk/gtksettings.c:263
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
 msgstr "Spisak veličina ikona (gtk-menu=16,16;gtk-button=20,20...)"
 
