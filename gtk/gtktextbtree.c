@@ -1508,7 +1508,7 @@ gtk_text_btree_tag (const GtkTextIter *start_orig,
   iter = start;
   /* We don't want to delete a toggle that's at the start iterator. */
   gtk_text_iter_next_char(&iter);
-  while (gtk_text_iter_forward_find_tag_toggle(&iter, tag))
+  while (gtk_text_iter_forward_to_tag_toggle(&iter, tag))
     {
       if (gtk_text_iter_compare(&iter, &end) >= 0)
         break;

@@ -549,7 +549,7 @@ gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
       gboolean done = FALSE;
       GtkTextIter end;
 
-      gtk_text_iter_forward_find_tag_toggle (&iter, NULL);
+      gtk_text_iter_forward_to_tag_toggle (&iter, NULL);
       
       gtk_text_buffer_get_iter_at_mark (buffer, &end, end_mark);
       

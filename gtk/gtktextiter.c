@@ -1915,8 +1915,8 @@ gtk_text_iter_forward_to_newline(GtkTextIter *iter)
 }
 
 gboolean
-gtk_text_iter_forward_find_tag_toggle (GtkTextIter *iter,
-                                        GtkTextTag  *tag)
+gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
+                                     GtkTextTag  *tag)
 {
   GtkTextLine *next_line;
   GtkTextLine *current_line;
@@ -1982,8 +1982,8 @@ gtk_text_iter_forward_find_tag_toggle (GtkTextIter *iter,
 }
 
 gboolean
-gtk_text_iter_backward_find_tag_toggle (GtkTextIter *iter,
-                                         GtkTextTag  *tag)
+gtk_text_iter_backward_to_tag_toggle (GtkTextIter *iter,
+                                      GtkTextTag  *tag)
 {
 
   g_warning("FIXME");
@@ -2466,7 +2466,7 @@ gtk_text_btree_get_iter_at_first_toggle (GtkTextBTree   *tree,
   else
     {
       iter_init_from_byte_offset(iter, tree, line, 0);
-      gtk_text_iter_forward_find_tag_toggle(iter, tag);
+      gtk_text_iter_forward_to_tag_toggle(iter, tag);
       check_invariants(iter);
       return TRUE;
     }

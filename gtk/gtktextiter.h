@@ -146,11 +146,11 @@ gboolean gtk_text_iter_forward_to_newline (GtkTextIter *iter);
 /* returns TRUE if a toggle was found; NULL for the tag pointer
    means "any tag toggle", otherwise the next toggle of the
    specified tag is located. */
-gboolean gtk_text_iter_forward_find_tag_toggle (GtkTextIter *iter,
-                                                GtkTextTag  *tag);
+gboolean gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
+                                              GtkTextTag  *tag);
 
-gboolean gtk_text_iter_backward_find_tag_toggle (GtkTextIter *iter,
-                                                 GtkTextTag  *tag);
+gboolean gtk_text_iter_backward_to_tag_toggle (GtkTextIter *iter,
+                                               GtkTextTag  *tag);
 
 typedef gboolean (* GtkTextCharPredicate) (gunichar ch, gpointer user_data);
 
