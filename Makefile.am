@@ -84,7 +84,7 @@ EXTRA_DIST =	\
 m4datadir = $(datadir)/aclocal
 m4data_DATA = gtk.m4
 
-.PHONY: files populate checkin release
+.PHONY: files release sanity snapshot
 
 files:
 	@files=`ls $(DISTFILES) 2> /dev/null `; for p in $$files; do \
@@ -97,13 +97,14 @@ files:
 	  done; \
 	done
 
-populate:
-	@echo "populating project"
-	@files=`$(MAKE) files | grep -v "make\[[1-9]\]"`; prcs populate -d gtk+.prj $$files
-
-checkin: populate
-	@echo "checking in project"
-	@prcs checkin
-
 release:
+	rm -rf .deps */.deps
+	cd docs && make distdocs
+	$(MAKE) distcheck
+
+sanity:
+	./sanity_check $(VERSION)
+
+
+snapshot:
 	$(MAKE) dist distdir=$(PACKAGE)`date +"%y%m%d"`
