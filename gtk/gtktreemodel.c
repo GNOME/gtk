@@ -154,6 +154,18 @@ gtk_tree_model_base_init (gpointer g_class)
                       GTK_TYPE_TREE_PATH,
                       GTK_TYPE_TREE_ITER);
 
+      /* We need to get notification about structure changes
+       * to update row references., so instead of using the
+       * standard g_signal_new() with an offset into our interface
+       * structure, we use a customs closures for the class
+       * closures (default handlers) that first update row references
+       * and then calls the function from the interface structure.
+       *
+       * The reason we don't simply update the row references from
+       * the wrapper functions (gtk_tree_model_row_inserted(), etc.)
+       * is to keep proper ordering with respect to signal handlers
+       * connected normally and after.
+       */
       closure = g_closure_new_simple (sizeof (GClosure), NULL);
       g_closure_set_marshal (closure, row_inserted_marshal);
       tree_model_signals[ROW_INSERTED] =
@@ -1756,6 +1768,10 @@ gtk_tree_row_reference_new (GtkTreeModel *model,
   g_return_val_if_fail (GTK_IS_TREE_MODEL (model), NULL);
   g_return_val_if_fail (path != NULL, NULL);
 
+  /* We use the model itself as the proxy object; and call
+   * gtk_tree_row_reference_inserted(), etc, in the
+   * class closure (default handler) marshalers for the signal.
+   */  
   return gtk_tree_row_reference_new_proxy (G_OBJECT (model), model, path);
 }
 
@@ -1772,8 +1788,15 @@ gtk_tree_row_reference_new (GtkTreeModel *model,
  * gtk_tree_row_reference_new(), it does not listen to the model for changes.
  * The creator of the row reference must do this explicitly using
  * gtk_tree_row_reference_inserted(), gtk_tree_row_reference_deleted(),
- * gtk_tree_row_reference_reordered().  This must be called once per signal per
- * proxy.
+ * gtk_tree_row_reference_reordered().
+ * 
+ * These functions must be called exactly once per proxy when the
+ * corresponding signal on the model is emitted. This single call
+ * updates all row references for that proxy. Since built-in GTK+
+ * objects like #GtkTreeView already use this mechanism internally,
+ * using them as the proxy object will produce unpredictable results.
+ * Further more, passing the same object as @model and @proxy
+ * doesn't work for reasons of internal implementation.
  *
  * This type of row reference is primarily meant by structures that need to
  * carefully monitor exactly when a row_reference updates itself, and is not
@@ -1812,7 +1835,7 @@ gtk_tree_row_reference_new_proxy (GObject      *proxy,
       parent_iter = iter;
     }
 
-  /* Make ther row reference */
+  /* Make the row reference */
   reference = g_new (GtkTreeRowReference, 1);
 
   g_object_ref (proxy);

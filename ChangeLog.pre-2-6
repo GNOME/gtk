@@ -1,3 +1,11 @@
+Fri Mar  5 11:17:35 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktreemodel.c (gtk_tree_row_reference_new_proxy): 
+	Improve the docs (reported by Vitaly Tishkov, 
+	#74362) Add some comments to the code about the 
+	row reference handling that are hopefully not entirely
+	wrong.
+
 2004-03-05  Michael Natterer  <mitch@gimp.org>
 
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_show_all):
