@@ -1090,6 +1090,7 @@ fill_key_event_string (GdkEvent *event)
 
 static GdkFilterReturn
 apply_filters (GdkDisplay *display,
+	       GdkWindow  *window,
 	       MSG        *msg,
 	       GList      *filters)
 {
@@ -1097,6 +1098,11 @@ apply_filters (GdkDisplay *display,
   GdkEvent *event = gdk_event_new (GDK_NOTHING);
   GList *node;
 
+  if (window != NULL)
+    {
+      event->any.window = window;
+      g_object_ref (window);
+    }
   ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
 
   /* I think GdkFilterFunc semantics require the passed-in event
@@ -1105,7 +1111,7 @@ apply_filters (GdkDisplay *display,
    */
   node = _gdk_event_queue_append (display, event);
   
-  result = gdk_event_apply_filters (msg, event, _gdk_default_filters);
+  result = gdk_event_apply_filters (msg, event, filters);
       
   if (result == GDK_FILTER_CONTINUE || result == GDK_FILTER_REMOVE)
     {
@@ -1844,7 +1850,7 @@ gdk_event_translate (GdkDisplay *display,
       /* Apply global filters */
 
       GdkFilterReturn result =
-	apply_filters (display, msg, _gdk_default_filters);
+	apply_filters (display, NULL, msg, _gdk_default_filters);
       
       /* If result is GDK_FILTER_CONTINUE, we continue as if nothing
        * happened. If it is GDK_FILTER_REMOVE, we return FALSE from
@@ -1916,7 +1922,7 @@ gdk_event_translate (GdkDisplay *display,
       /* Apply per-window filters */
 
       GdkFilterReturn result =
-	apply_filters (display, msg, ((GdkWindowObject *) window)->filters);
+	apply_filters (display, window, msg, ((GdkWindowObject *) window)->filters);
 
       if (result == GDK_FILTER_REMOVE)
 	{
@@ -1999,7 +2005,7 @@ gdk_event_translate (GdkDisplay *display,
 	      GList *this_filter = g_list_append (NULL, filter);
 	      
 	      GdkFilterReturn result =
-		apply_filters (display, msg, this_filter);
+		apply_filters (display, window, msg, this_filter);
 
 	      GDK_NOTE (EVENTS, g_print ("Client filter match\n"));
 
