@@ -874,11 +874,8 @@ gdk_window_get_bg_gc (GdkWindow      *window,
     {
       gc_values.fill = GDK_TILED;
       gc_values.tile = private->bg_pixmap;
-      gc_values.ts_x_origin = - paint->x_offset;
-      gc_values.ts_y_origin = - paint->y_offset;
       
-      gc_mask = (GDK_GC_FILL | GDK_GC_TILE | 
-                 GDK_GC_TS_X_ORIGIN | GDK_GC_TS_Y_ORIGIN);
+      gc_mask = GDK_GC_FILL | GDK_GC_TILE;
     }
   else
     {

@@ -1,3 +1,9 @@
+Mon Sep  1 19:39:14 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gdk/gdkwindow.c (gdk_window_get_bg_gc): Fix bug where the
+	background pixmap was being offset twice, once by the ts_origin in
+	gdk_window_get_bg_gc(), and once by gdk_draw_rectangle().
+
 2003-09-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkuimanager.[ch] (gtk_ui_manager_ensure_update): Make
