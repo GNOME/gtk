@@ -4911,6 +4911,7 @@ gtk_widget_add_events (GtkWidget *widget,
 	      gdk_window_get_user_data (window, &user_data);
 	      if (user_data == widget)
 		gdk_window_set_events (window, gdk_window_get_events (window) | events);
+	      tmp_list = tmp_list->next;
 	    }
 
 	  g_list_free (children);

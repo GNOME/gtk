@@ -1,3 +1,8 @@
+2002-01-10  jacob berkman  <jacob@ximian.com>
+
+	* gtk/gtkwidget.c (gtk_widget_add_events): actually iterate
+	through the list rather than infinitely loop
+
 2002-01-08  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkwidget.c (gtk_widget_set_style_recurse): Rename to
