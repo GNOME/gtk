@@ -1,3 +1,11 @@
+Fri Dec 19 21:52:46 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkmenu.c (gtk_menu_do_insert): move item insertion logic
+	here from gtk_menu_real_insert(),
+	(gtk_menu_real_insert): just call gtk_menu_do_insert(),
+	(gtk_menu_reorder_child): run _do_insert after inserting the child
+	(unbreaks _reorder_child, reported by Tim Janik).
+
 2003-12-19  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (list_mtime_data_func): Use

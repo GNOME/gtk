@@ -172,6 +172,9 @@ static void     gtk_menu_scroll_item_visible (GtkMenuShell    *menu_shell,
 					      GtkWidget       *menu_item);
 static void     gtk_menu_select_item       (GtkMenuShell     *menu_shell,
 					    GtkWidget        *menu_item);
+static void     gtk_menu_do_insert         (GtkMenuShell     *menu_shell,
+                                            GtkWidget        *child,
+                                            gint              position);
 static void     gtk_menu_real_insert       (GtkMenuShell     *menu_shell,
 					    GtkWidget        *child,
 					    gint              position);
@@ -964,18 +967,13 @@ gtk_menu_new (void)
 }
 
 static void
-gtk_menu_real_insert (GtkMenuShell     *menu_shell,
-		      GtkWidget        *child,
-		      gint              position)
+gtk_menu_do_insert (GtkMenuShell *menu_shell,
+                    GtkWidget    *child,
+                    gint          position)
 {
   gint i;
   GList *children;
   GtkMenuPrivate *priv;
-
-  if (GTK_WIDGET_REALIZED (menu_shell))
-    gtk_widget_set_parent_window (child, GTK_MENU (menu_shell)->bin_window);
-
-  GTK_MENU_SHELL_CLASS (parent_class)->insert (menu_shell, child, position);
 
   priv = gtk_menu_get_private (GTK_MENU (menu_shell));
 
@@ -1013,6 +1011,19 @@ gtk_menu_real_insert (GtkMenuShell     *menu_shell,
   gtk_menu_attach (GTK_MENU (menu_shell), child,
                    0, priv->columns ? priv->columns : 1,
                    position, position + 1);
+}
+
+static void
+gtk_menu_real_insert (GtkMenuShell     *menu_shell,
+		      GtkWidget        *child,
+		      gint              position)
+{
+  if (GTK_WIDGET_REALIZED (menu_shell))
+    gtk_widget_set_parent_window (child, GTK_MENU (menu_shell)->bin_window);
+
+  GTK_MENU_SHELL_CLASS (parent_class)->insert (menu_shell, child, position);
+
+  gtk_menu_do_insert (menu_shell, child, position);
 }
 
 static void
@@ -1772,13 +1783,18 @@ gtk_menu_reorder_child (GtkMenu   *menu,
                         gint       position)
 {
   GtkMenuShell *menu_shell;
+
   g_return_if_fail (GTK_IS_MENU (menu));
   g_return_if_fail (GTK_IS_MENU_ITEM (child));
+
   menu_shell = GTK_MENU_SHELL (menu);
+
   if (g_list_find (menu_shell->children, child))
     {   
       menu_shell->children = g_list_remove (menu_shell->children, child);
-      menu_shell->children = g_list_insert (menu_shell->children, child, position);   
+      menu_shell->children = g_list_insert (menu_shell->children, child, position);
+      gtk_menu_do_insert (menu_shell, child, position);
+
       if (GTK_WIDGET_VISIBLE (menu_shell))
         gtk_widget_queue_resize (GTK_WIDGET (menu_shell));
     }   
