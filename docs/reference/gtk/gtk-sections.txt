@@ -3868,24 +3868,6 @@ gtk_tree_view_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtktreednd</FILE>
-<TITLE>GtkTreeView drag-and-drop</TITLE>
-GtkTreeDragDest
-GtkTreeDragSource
-GtkTreeDragDestIface
-GtkTreeDragSourceIface
-
-<SUBSECTION Standard>
-GTK_IS_TREE_DRAG_DEST
-GTK_IS_TREE_DRAG_SOURCE
-GTK_TREE_DRAG_DEST
-GTK_TREE_DRAG_DEST_GET_IFACE
-GTK_TREE_DRAG_SOURCE
-GTK_TREE_DRAG_SOURCE_GET_IFACE
-
-</SECTION>
-
-<SECTION>
 <FILE>gtkcelllayout</FILE>
 <TITLE>GtkCellLayout</TITLE>
 GtkCellLayout

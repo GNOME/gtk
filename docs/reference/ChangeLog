@@ -1,3 +1,8 @@
+Sat Feb 14 03:09:49 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Remove duplicated section for
+	file gtktreednd.sgml.
+
 Fri Feb 13 00:54:24 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_scale_get_layout
