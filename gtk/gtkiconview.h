@@ -74,6 +74,9 @@ struct _EggIconListClass
   void    (* unselect_all)           (EggIconList      *icon_list);
   void    (* select_cursor_item)     (EggIconList      *icon_list);
   void    (* toggle_cursor_item)     (EggIconList      *icon_list);
+  gboolean (* move_cursor)           (EggIconList      *icon_list,
+				      GtkMovementStep   step,
+				      gint              count);
 };
 
 GType      egg_icon_list_get_type      (void);
