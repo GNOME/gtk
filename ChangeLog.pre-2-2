@@ -1,3 +1,12 @@
+Wed Mar 20 12:27:07 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccelgroup.c (gtk_accelerator_valid): Allow
+	arrow keys as accelerators, as long as some modifier
+	is pressed. (#75495)
+
+	* gtk/gtkaccelgroup.c (gtk_accelerator_valid): Fix
+	incorrect example in the docs.
+
 Wed Mar 20 12:06:30 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_set_child_visible):

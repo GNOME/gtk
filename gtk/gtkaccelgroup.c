@@ -798,8 +798,8 @@ gtk_accel_groups_activate (GObject	  *object,
  * Determines whether a given keyval and modifier mask constitute
  * a valid keyboard accelerator. For example, the #GDK_a keyval
  * plus #GDK_CONTROL_MASK is valid - this is a "Ctrl+a" accelerator.
- * But by default (see gtk_accelerator_set_default_mod_mask()) you
- * cannot use the NumLock key as an accelerator modifier.
+ * But, you can't, for instance, use the #GDL_Control_L keyval
+ * as an accelerator.
  */
 gboolean
 gtk_accelerator_valid (guint		  keyval,
@@ -813,11 +813,15 @@ gtk_accelerator_valid (guint		  keyval,
     GDK_ISO_First_Group, GDK_ISO_Last_Group,
     GDK_Mode_switch, GDK_Num_Lock, GDK_Multi_key,
     GDK_Scroll_Lock, GDK_Sys_Req, 
-    GDK_Up, GDK_Down, GDK_Left, GDK_Right, GDK_Tab, GDK_ISO_Left_Tab,
-    GDK_KP_Up, GDK_KP_Down, GDK_KP_Left, GDK_KP_Right, GDK_KP_Tab,
+    GDK_Tab, GDK_ISO_Left_Tab, GDK_KP_Tab,
     GDK_First_Virtual_Screen, GDK_Prev_Virtual_Screen,
     GDK_Next_Virtual_Screen, GDK_Last_Virtual_Screen,
     GDK_Terminate_Server, GDK_AudibleBell_Enable,
+    0
+  };
+  static const guint invalid_unmodified_vals[] = {
+    GDK_Up, GDK_Down, GDK_Left, GDK_Right,
+    GDK_KP_Up, GDK_KP_Down, GDK_KP_Left, GDK_KP_Right,
     0
   };
   const guint *ac_val;
@@ -834,6 +838,16 @@ gtk_accelerator_valid (guint		  keyval,
 	return FALSE;
     }
 
+  if (!modifiers)
+    {
+      ac_val = invalid_unmodified_vals;
+      while (*ac_val)
+	{
+	  if (keyval == *ac_val++)
+	    return FALSE;
+	}
+    }
+  
   return TRUE;
 }
 
