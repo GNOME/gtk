@@ -1,3 +1,27 @@
+1998-01-13  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtktoolbar.c: (gtk_real_toolbar_style_changed): Fixed
+	child->icon and child->label == NULL bugs.
+
+	* gtk/gtktoolbar.h: Added some new functions:
+		gtk_toolbar_append_widget()
+		gtk_toolbar_prepend_widget()
+		gtk_toolbar_insert_widget()
+	These let the user insert any kind of widget in the toolbar.  Also
+	changed the gtk_toolbar_*_item() functions to return a
+	GtkWidget * so that the user can do things with the toolbar buttons.
+
+	* gtk/gtktoolbar.c: Now the toolbar supports its own buttons and
+	arbitrary widgets as well.  Geometry management has been changed
+	accordingly.  Added gtk_toolbar_remove() function, so container
+	functionality should be complete now.
+
+	* gtk/testgtk.c (create_toolbar): Added an entry widget to test
+	the new toolbar.
+
+	* Most of these changes are adapted from the
+	gtk-lupus-970112-0-patch (should be 970112... :-)
+
 Sat Jan  9 20:52:00 PST 1998 Ian Main <imain@gimp.org>
 	* gtk/gtkfilesel.c:  Changed a few tests in the path correcting
 		function.  Hopefully this helps the filesel stability.

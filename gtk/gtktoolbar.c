@@ -33,8 +33,15 @@ enum {
 };
 
 
+typedef enum {
+	CHILD_SPACE,
+	CHILD_BUTTON,
+	CHILD_WIDGET
+} ChildType;
+
 typedef struct {
-	GtkWidget *button;
+	ChildType type;
+	GtkWidget *widget;
 	GtkWidget *icon;
 	GtkWidget *label;
 } Child;
@@ -57,12 +64,16 @@ static void gtk_toolbar_map                      (GtkWidget       *widget);
 static void gtk_toolbar_unmap                    (GtkWidget       *widget);
 static void gtk_toolbar_draw                     (GtkWidget       *widget,
 				                  GdkRectangle    *area);
+static gint gtk_toolbar_expose                   (GtkWidget       *widget,
+						  GdkEventExpose  *event);
 static void gtk_toolbar_size_request             (GtkWidget       *widget,
 				                  GtkRequisition  *requisition);
 static void gtk_toolbar_size_allocate            (GtkWidget       *widget,
 				                  GtkAllocation   *allocation);
 static void gtk_toolbar_add                      (GtkContainer    *container,
 				                  GtkWidget       *widget);
+static void gtk_toolbar_remove                   (GtkContainer    *container,
+						  GtkWidget       *widget);
 static void gtk_toolbar_foreach                  (GtkContainer    *container,
 				                  GtkCallback      callback,
 				                  gpointer         callback_data);
@@ -135,10 +146,12 @@ gtk_toolbar_class_init(GtkToolbarClass *class)
 	widget_class->map = gtk_toolbar_map;
 	widget_class->unmap = gtk_toolbar_unmap;
 	widget_class->draw = gtk_toolbar_draw;
+	widget_class->expose_event = gtk_toolbar_expose;
 	widget_class->size_request = gtk_toolbar_size_request;
 	widget_class->size_allocate = gtk_toolbar_size_allocate;
 
 	container_class->add = gtk_toolbar_add;
+	container_class->remove = gtk_toolbar_remove;
 	container_class->foreach = gtk_toolbar_foreach;
 
 	class->orientation_changed = gtk_real_toolbar_orientation_changed;
@@ -156,6 +169,8 @@ gtk_toolbar_init(GtkToolbar *toolbar)
 	toolbar->style        = GTK_TOOLBAR_ICONS;
 	toolbar->space_size   = DEFAULT_SPACE_SIZE;
 	toolbar->tooltips     = gtk_tooltips_new();
+	toolbar->button_maxw  = 0;
+	toolbar->button_maxh  = 0;
 }
 
 GtkWidget *
@@ -185,18 +200,18 @@ gtk_toolbar_destroy(GtkObject *object)
 
 	toolbar = GTK_TOOLBAR(object);
 
-	gtk_tooltips_unref(toolbar->tooltips); /* XXX: do I have to unref the tooltips to destroy them? */
+	gtk_tooltips_unref(toolbar->tooltips);
 
 	for (children = toolbar->children; children; children = children->next) {
 		child = children->data;
 
-		/* NULL child means it is a space in the toolbar, rather than a button */
-		if (child) {
-			child->button->parent = NULL;
-			gtk_object_unref(GTK_OBJECT(child->button));
-			gtk_widget_destroy(child->button);
-			g_free(child);
+		if (child->type != CHILD_SPACE) {
+			child->widget->parent = NULL;
+			gtk_object_unref(GTK_OBJECT(child->widget));
+			gtk_widget_destroy(child->widget);
 		}
+
+		g_free(child);
 	}
 
 	g_list_free(toolbar->children);
@@ -221,8 +236,9 @@ gtk_toolbar_map(GtkWidget *widget)
 	for (children = toolbar->children; children; children = children->next) {
 		child = children->data;
 
-		if (child && GTK_WIDGET_VISIBLE(child->button) && !GTK_WIDGET_MAPPED(child->button))
-			gtk_widget_map(child->button);
+		if ((child->type != CHILD_SPACE)
+		    && GTK_WIDGET_VISIBLE(child->widget) && !GTK_WIDGET_MAPPED(child->widget))
+			gtk_widget_map(child->widget);
 	}
 }
 
@@ -242,8 +258,9 @@ gtk_toolbar_unmap(GtkWidget *widget)
 	for (children = toolbar->children; children; children = children->next) {
 		child = children->data;
 
-		if (child && GTK_WIDGET_VISIBLE(child->button) && GTK_WIDGET_MAPPED(child->button))
-			gtk_widget_unmap(child->button);
+		if ((child->type != CHILD_SPACE)
+		    && GTK_WIDGET_VISIBLE(child->widget) && GTK_WIDGET_MAPPED(child->widget))
+			gtk_widget_unmap(child->widget);
 	}
 }
 
@@ -265,20 +282,54 @@ gtk_toolbar_draw(GtkWidget    *widget,
 		for (children = toolbar->children; children; children = children->next) {
 			child = children->data;
 
-			if (child && gtk_widget_intersect(child->button, area, &child_area))
-				gtk_widget_draw(child->button, &child_area);
+			if ((child->type != CHILD_SPACE)
+			    && gtk_widget_intersect(child->widget, area, &child_area))
+				gtk_widget_draw(child->widget, &child_area);
 		}
 	}
+}
+
+static gint
+gtk_toolbar_expose(GtkWidget      *widget,
+		   GdkEventExpose *event)
+{
+	GtkToolbar     *toolbar;
+	GList          *children;
+	Child          *child;
+	GdkEventExpose  child_event;
+
+	g_return_val_if_fail(widget != NULL, FALSE);
+	g_return_val_if_fail(GTK_IS_TOOLBAR(widget), FALSE);
+	g_return_val_if_fail(event != NULL, FALSE);
+
+	if (GTK_WIDGET_DRAWABLE(widget)) {
+		toolbar = GTK_TOOLBAR(widget);
+
+		child_event = *event;
+
+		for (children = toolbar->children; children; children = children->next) {
+			child = children->data;
+
+			if ((child->type != CHILD_SPACE)
+			    && GTK_WIDGET_NO_WINDOW(child->widget)
+			    && gtk_widget_intersect(child->widget, &event->area, &child_event.area))
+				gtk_widget_event(child->widget, (GdkEvent *) &child_event);
+		}
+	}
+
+	return FALSE;
 }
 
 static void
 gtk_toolbar_size_request(GtkWidget      *widget,
 			 GtkRequisition *requisition)
 {
-	GtkToolbar     *toolbar;
-	GList          *children;
-	Child          *child;
-	gint           	nchildren;
+	GtkToolbar *toolbar;
+	GList      *children;
+	Child      *child;
+	gint        nbuttons;
+	gint        button_maxw, button_maxh;
+	gint        widget_maxw, widget_maxh;
 
 	g_return_if_fail(widget != NULL);
 	g_return_if_fail(GTK_IS_TOOLBAR(widget));
@@ -288,35 +339,65 @@ gtk_toolbar_size_request(GtkWidget      *widget,
 
 	requisition->width = GTK_CONTAINER(toolbar)->border_width * 2;
 	requisition->height = GTK_CONTAINER(toolbar)->border_width * 2;
-	nchildren = 0;
-	toolbar->child_maxw = 0;
-	toolbar->child_maxh = 0;
+	nbuttons = 0;
+	button_maxw = 0;
+	button_maxh = 0;
+	widget_maxw = 0;
+	widget_maxh = 0;
 
 	for (children = toolbar->children; children; children = children->next) {
 		child = children->data;
 
-		if (child) {
-			nchildren++;
+		switch (child->type) {
+			case CHILD_SPACE:
+				if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+					requisition->width += toolbar->space_size;
+				else
+					requisition->height += toolbar->space_size;
 
-			gtk_widget_size_request(child->button, &child->button->requisition);
+				break;
 
-			toolbar->child_maxw = MAX(toolbar->child_maxw, child->button->requisition.width);
-			toolbar->child_maxh = MAX(toolbar->child_maxh, child->button->requisition.height);
-		} else
-			/* NULL child means it is a space in the toolbar, rather than a button */
-			if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
-				requisition->width += toolbar->space_size;
-			else
-				requisition->height += toolbar->space_size;
+			case CHILD_BUTTON:
+				if (GTK_WIDGET_VISIBLE(child->widget)) {
+					gtk_widget_size_request(child->widget, &child->widget->requisition);
+
+					nbuttons++;
+					button_maxw = MAX(button_maxw, child->widget->requisition.width);
+					button_maxh = MAX(button_maxh, child->widget->requisition.height);
+				}
+
+				break;
+
+			case CHILD_WIDGET:
+				if (GTK_WIDGET_VISIBLE(child->widget)) {
+					gtk_widget_size_request(child->widget, &child->widget->requisition);
+
+					widget_maxw = MAX(widget_maxw, child->widget->requisition.width);
+					widget_maxh = MAX(widget_maxh, child->widget->requisition.height);
+
+					if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+						requisition->width += child->widget->requisition.width;
+					else
+						requisition->height += child->widget->requisition.height;
+				}
+
+				break;
+
+			default:
+				g_assert_not_reached();
+		}
 	}
 
 	if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL) {
-		requisition->width += nchildren * toolbar->child_maxw;
-		requisition->height += toolbar->child_maxh;
+		requisition->width += nbuttons * button_maxw;
+		requisition->height += MAX(button_maxh, widget_maxh);
 	} else {
-		requisition->width += toolbar->child_maxw;
-		requisition->height += nchildren * toolbar->child_maxh;
+		requisition->width += MAX(button_maxw, widget_maxw);
+		requisition->height += nbuttons * button_maxh;
 	}
+
+	toolbar->button_maxw = button_maxw;
+	toolbar->button_maxh = button_maxh;
 }
 
 static void
@@ -327,6 +408,7 @@ gtk_toolbar_size_allocate(GtkWidget     *widget,
 	GList          *children;
 	Child          *child;
 	GtkAllocation   alloc;
+	gint            border_width;
 
 	g_return_if_fail(widget != NULL);
 	g_return_if_fail(GTK_IS_TOOLBAR(widget));
@@ -335,27 +417,70 @@ gtk_toolbar_size_allocate(GtkWidget     *widget,
 	toolbar = GTK_TOOLBAR(widget);
 	widget->allocation = *allocation;
 
-	alloc.x      = allocation->x + GTK_CONTAINER(toolbar)->border_width;
-	alloc.y      = allocation->y + GTK_CONTAINER(toolbar)->border_width;
-	alloc.width  = toolbar->child_maxw;
-	alloc.height = toolbar->child_maxh;
+	border_width = GTK_CONTAINER(toolbar)->border_width;
+
+	if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+		alloc.x = allocation->x + border_width;
+	else
+		alloc.y = allocation->y + border_width;
 
 	for (children = toolbar->children; children; children = children->next) {
 		child = children->data;
 
-		if (child) {
-			gtk_widget_size_allocate(child->button, &alloc);
+		switch (child->type) {
+			case CHILD_SPACE:
+				if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+					alloc.x += toolbar->space_size;
+				else
+					alloc.y += toolbar->space_size;
 
-			if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
-				alloc.x += toolbar->child_maxw;
-			else
-				alloc.y += toolbar->child_maxh;
-		} else
-			/* NULL child means it is a space in the toolbar, rather than a button */
-			if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
-				alloc.x += toolbar->space_size;
-			else
-				alloc.y += toolbar->space_size;
+				break;
+
+			case CHILD_BUTTON:
+				alloc.width = toolbar->button_maxw;
+				alloc.height = toolbar->button_maxh;
+
+				if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+					alloc.y = (allocation->y
+						   + (allocation->height - toolbar->button_maxh) / 2);
+				else
+					alloc.x = (allocation->x
+						   + (allocation->width - toolbar->button_maxw) / 2);
+
+				gtk_widget_size_allocate(child->widget, &alloc);
+
+				if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+					alloc.x += toolbar->button_maxw;
+				else
+					alloc.y += toolbar->button_maxh;
+
+				break;
+
+			case CHILD_WIDGET:
+				alloc.width = child->widget->requisition.width;
+				alloc.height = child->widget->requisition.height;
+
+				if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+					alloc.y = (allocation->y
+						   + (allocation->height
+						      - child->widget->requisition.height) / 2);
+				else
+					alloc.x = (allocation->x
+						   + (allocation->width
+						      - child->widget->requisition.width) / 2);
+
+				gtk_widget_size_allocate(child->widget, &alloc);
+
+				if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+					alloc.x += child->widget->requisition.width;
+				else
+					alloc.y += child->widget->requisition.height;
+
+				break;
+
+			default:
+				g_assert_not_reached();
+		}
 	}
 }
 
@@ -363,13 +488,50 @@ static void
 gtk_toolbar_add(GtkContainer *container,
 		GtkWidget    *widget)
 {
-	g_warning("gtk_toolbar_add: use gtk_toolbar_add_item() instead!");
+	g_return_if_fail(container != NULL);
+	g_return_if_fail(GTK_IS_TOOLBAR(container));
+	g_return_if_fail(widget != NULL);
+	
+	gtk_toolbar_append_widget(GTK_TOOLBAR(container), NULL, widget);
 }
 
 static void
-gtk_toolbar_foreach(GtkContainer    *container,
-		    GtkCallback      callback,
-		    gpointer         callback_data)
+gtk_toolbar_remove(GtkContainer *container,
+		   GtkWidget    *widget)
+{
+	GtkToolbar *toolbar;
+	GList      *children;
+	Child      *child;
+
+	g_return_if_fail(container != NULL);
+	g_return_if_fail(GTK_IS_TOOLBAR(container));
+	g_return_if_fail(widget != NULL);
+
+	toolbar = GTK_TOOLBAR(container);
+
+	for (children = toolbar->children; children; children = children->next) {
+		child = children->data;
+
+		if ((child->type != CHILD_SPACE) && (child->widget == widget)) {
+			gtk_widget_unparent(widget);
+
+			toolbar->children = g_list_remove_link(toolbar->children, children);
+			g_free(child);
+			g_list_free(children);
+			toolbar->num_children--;
+
+			if (GTK_WIDGET_VISIBLE(widget) && GTK_WIDGET_VISIBLE(container))
+				gtk_widget_queue_resize(GTK_WIDGET(container));
+
+			break;
+		}
+	}
+}
+
+static void
+gtk_toolbar_foreach(GtkContainer *container,
+		    GtkCallback   callback,
+		    gpointer      callback_data)
 {
 	GtkToolbar *toolbar;
 	GList      *children;
@@ -384,70 +546,74 @@ gtk_toolbar_foreach(GtkContainer    *container,
 	for (children = toolbar->children; children; children = children->next) {
 		child = children->data;
 
-		if (child)
-			(*callback) (child->button, callback_data);
+		if (child->type != CHILD_SPACE)
+			(*callback) (child->widget, callback_data);
 	}
 }
 
-void
-gtk_toolbar_append_item(GtkToolbar      *toolbar,
-			const char      *text,
-			const char      *tooltip_text,
-			GtkPixmap       *icon,
-			GtkSignalFunc    callback,
-			gpointer         user_data)
+GtkWidget *
+gtk_toolbar_append_item(GtkToolbar    *toolbar,
+			const char    *text,
+			const char    *tooltip_text,
+			GtkPixmap     *icon,
+			GtkSignalFunc  callback,
+			gpointer       user_data)
 {
-	gtk_toolbar_insert_item(toolbar, text, tooltip_text, icon,
-				callback, user_data, toolbar->num_children);
+	return gtk_toolbar_insert_item(toolbar, text, tooltip_text, icon,
+				       callback, user_data, toolbar->num_children);
 }
 
-void
-gtk_toolbar_prepend_item(GtkToolbar      *toolbar,
-			 const char      *text,
-			 const char      *tooltip_text,
-			 GtkPixmap       *icon,
-			 GtkSignalFunc    callback,
-			 gpointer         user_data)
+GtkWidget *
+gtk_toolbar_prepend_item(GtkToolbar    *toolbar,
+			 const char    *text,
+			 const char    *tooltip_text,
+			 GtkPixmap     *icon,
+			 GtkSignalFunc  callback,
+			 gpointer       user_data)
 {
-	gtk_toolbar_insert_item(toolbar, text, tooltip_text, icon,
-				callback, user_data, 0);
+	return gtk_toolbar_insert_item(toolbar, text, tooltip_text, icon,
+				       callback, user_data, 0);
 }
 
-void
-gtk_toolbar_insert_item(GtkToolbar      *toolbar,
-			const char      *text,
-			const char      *tooltip_text,
-			GtkPixmap       *icon,
-			GtkSignalFunc    callback,
-			gpointer         user_data,
-			gint             position)
+GtkWidget *
+gtk_toolbar_insert_item(GtkToolbar    *toolbar,
+			const char    *text,
+			const char    *tooltip_text,
+			GtkPixmap     *icon,
+			GtkSignalFunc  callback,
+			gpointer       user_data,
+			gint           position)
 {
 	Child     *child;
 	GtkWidget *vbox;
 
-	g_return_if_fail(toolbar != NULL);
-	g_return_if_fail(GTK_IS_TOOLBAR(toolbar));
+	g_return_val_if_fail(toolbar != NULL, NULL);
+	g_return_val_if_fail(GTK_IS_TOOLBAR(toolbar), NULL);
 
 	child = g_new(Child, 1);
 
-	child->button = gtk_button_new();
+	child->type = CHILD_BUTTON;
+	child->widget = gtk_button_new();
 
 	if (callback)
-		gtk_signal_connect(GTK_OBJECT(child->button), "clicked",
+		gtk_signal_connect(GTK_OBJECT(child->widget), "clicked",
 				   callback, user_data);
 
 	if (tooltip_text)
-		gtk_tooltips_set_tips(toolbar->tooltips, child->button, tooltip_text);
+		gtk_tooltips_set_tips(toolbar->tooltips, child->widget, tooltip_text);
 
 	if (text)
 		child->label = gtk_label_new(text);
 	else
 		child->label = NULL;
-	
-	child->icon = GTK_WIDGET(icon);
+
+	if (icon)
+		child->icon = GTK_WIDGET(icon);
+	else
+		child->icon = NULL;
 
 	vbox = gtk_vbox_new(FALSE, 0);
-	gtk_container_add(GTK_CONTAINER(child->button), vbox);
+	gtk_container_add(GTK_CONTAINER(child->widget), vbox);
 	gtk_widget_show(vbox);
 
 	if (child->icon)
@@ -480,25 +646,27 @@ gtk_toolbar_insert_item(GtkToolbar      *toolbar,
 			g_assert_not_reached();
 	}
 
-	gtk_widget_show(child->button);
+	gtk_widget_show(child->widget);
 
 	toolbar->children = g_list_insert(toolbar->children, child, position);
 	toolbar->num_children++;
 
-	gtk_widget_set_parent(child->button, GTK_WIDGET(toolbar));
+	gtk_widget_set_parent(child->widget, GTK_WIDGET(toolbar));
 
 	if (GTK_WIDGET_VISIBLE(toolbar)) {
 		if (GTK_WIDGET_REALIZED(toolbar)
-		    && !GTK_WIDGET_REALIZED(child->button))
-			gtk_widget_realize(child->button);
+		    && !GTK_WIDGET_REALIZED(child->widget))
+			gtk_widget_realize(child->widget);
 
 		if (GTK_WIDGET_MAPPED(toolbar)
-		    && !GTK_WIDGET_MAPPED(child->button))
-			gtk_widget_map(child->button);
+		    && !GTK_WIDGET_MAPPED(child->widget))
+			gtk_widget_map(child->widget);
 	}
 
-	if (GTK_WIDGET_VISIBLE(child->button) && GTK_WIDGET_VISIBLE(toolbar))
-		gtk_widget_queue_resize(child->button);
+	if (GTK_WIDGET_VISIBLE(child->widget) && GTK_WIDGET_VISIBLE(toolbar))
+		gtk_widget_queue_resize(child->widget);
+
+	return child->widget;
 }
 
 void
@@ -517,16 +685,77 @@ void
 gtk_toolbar_insert_space(GtkToolbar *toolbar,
 			 gint        position)
 {
+	Child *child;
+	
 	g_return_if_fail(toolbar != NULL);
 	g_return_if_fail(GTK_IS_TOOLBAR(toolbar));
 
-	/* NULL child means it is a space in the toolbar, rather than a button */
+	child = g_new(Child, 1);
+	child->type   = CHILD_SPACE;
+	child->widget = NULL;
+	child->icon   = NULL;
+	child->label  = NULL;
 
-	toolbar->children = g_list_insert(toolbar->children, NULL, position);
+	toolbar->children = g_list_insert(toolbar->children, child, position);
 	toolbar->num_children++;
 
 	if (GTK_WIDGET_VISIBLE(toolbar))
 		gtk_widget_queue_resize(GTK_WIDGET(toolbar));
+}
+
+void
+gtk_toolbar_append_widget(GtkToolbar *toolbar,
+			  const char *tooltip_text,
+			  GtkWidget  *widget)
+{
+	gtk_toolbar_insert_widget(toolbar, tooltip_text, widget, toolbar->num_children);
+}
+
+void
+gtk_toolbar_prepend_widget(GtkToolbar *toolbar,
+			   const char *tooltip_text,
+			   GtkWidget  *widget)
+{
+	gtk_toolbar_insert_widget(toolbar, tooltip_text, widget, 0);
+}
+
+void
+gtk_toolbar_insert_widget(GtkToolbar *toolbar,
+			  const char *tooltip_text,
+			  GtkWidget  *widget,
+			  gint        position)
+{
+	Child *child;
+
+	g_return_if_fail(toolbar != NULL);
+	g_return_if_fail(widget != NULL);
+
+	child = g_new(Child, 1);
+	child->type   = CHILD_WIDGET;
+	child->widget = widget;
+	child->icon   = NULL;
+	child->label  = NULL;
+
+	if (tooltip_text)
+		gtk_tooltips_set_tips(toolbar->tooltips, child->widget, tooltip_text);
+
+	toolbar->children = g_list_insert(toolbar->children, child, position);
+	toolbar->num_children++;
+
+	gtk_widget_set_parent(child->widget, GTK_WIDGET(toolbar));
+
+	if (GTK_WIDGET_VISIBLE(toolbar)) {
+		if (GTK_WIDGET_REALIZED(toolbar)
+		    && !GTK_WIDGET_REALIZED(child->widget))
+			gtk_widget_realize(child->widget);
+
+		if (GTK_WIDGET_MAPPED(toolbar)
+		    && !GTK_WIDGET_MAPPED(child->widget))
+			gtk_widget_map(child->widget);
+	}
+
+	if (GTK_WIDGET_VISIBLE(child->widget) && GTK_WIDGET_VISIBLE(toolbar))
+		gtk_widget_queue_resize(child->widget);
 }
 
 void
@@ -583,8 +812,8 @@ gtk_toolbar_marshal_signal_1(GtkObject     *object,
 }
 
 static void
-gtk_real_toolbar_orientation_changed(GtkToolbar      *toolbar,
-				     GtkOrientation   orientation)
+gtk_real_toolbar_orientation_changed(GtkToolbar     *toolbar,
+				     GtkOrientation  orientation)
 {
 	g_return_if_fail(toolbar != NULL);
 	g_return_if_fail(GTK_IS_TOOLBAR(toolbar));
@@ -611,31 +840,31 @@ gtk_real_toolbar_style_changed(GtkToolbar      *toolbar,
 		for (children = toolbar->children; children; children = children->next) {
 			child = children->data;
 
-			if (child)
+			if (child->type == CHILD_BUTTON)
 				switch (style) {
 					case GTK_TOOLBAR_ICONS:
-						if (!GTK_WIDGET_VISIBLE(child->icon))
+						if (child->icon && !GTK_WIDGET_VISIBLE(child->icon))
 							gtk_widget_show(child->icon);
 
-						if (GTK_WIDGET_VISIBLE(child->label))
+						if (child->label && GTK_WIDGET_VISIBLE(child->label))
 							gtk_widget_hide(child->label);
 
 						break;
 
 					case GTK_TOOLBAR_TEXT:
-						if (GTK_WIDGET_VISIBLE(child->icon))
+						if (child->icon && GTK_WIDGET_VISIBLE(child->icon))
 							gtk_widget_hide(child->icon);
 
-						if (!GTK_WIDGET_VISIBLE(child->label))
+						if (child->label && !GTK_WIDGET_VISIBLE(child->label))
 							gtk_widget_show(child->label);
 
 						break;
 
 					case GTK_TOOLBAR_BOTH:
-						if (!GTK_WIDGET_VISIBLE(child->icon))
+						if (child->icon && !GTK_WIDGET_VISIBLE(child->icon))
 							gtk_widget_show(child->icon);
 
-						if (!GTK_WIDGET_VISIBLE(child->label))
+						if (child->label && !GTK_WIDGET_VISIBLE(child->label))
 							gtk_widget_show(child->label);
 
 						break;

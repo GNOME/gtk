@@ -54,8 +54,8 @@ struct _GtkToolbar
 
   GtkTooltips     *tooltips;
 
-  gint             child_maxw;
-  gint             child_maxh;
+  gint             button_maxw;
+  gint             button_maxh;
 };
 
 struct _GtkToolbarClass
@@ -73,19 +73,19 @@ guint      gtk_toolbar_get_type        (void);
 GtkWidget *gtk_toolbar_new             (GtkOrientation   orientation,
 					GtkToolbarStyle  style);
 
-void       gtk_toolbar_append_item     (GtkToolbar      *toolbar,
+GtkWidget *gtk_toolbar_append_item     (GtkToolbar      *toolbar,
 					const char      *text,
 					const char      *tooltip_text,
 					GtkPixmap       *icon,
 					GtkSignalFunc    callback,
 					gpointer         user_data);
-void       gtk_toolbar_prepend_item    (GtkToolbar      *toolbar,
+GtkWidget *gtk_toolbar_prepend_item    (GtkToolbar      *toolbar,
 					const char      *text,
 					const char      *tooltip_text,
 					GtkPixmap       *icon,
 					GtkSignalFunc    callback,
 					gpointer         user_data);
-void       gtk_toolbar_insert_item     (GtkToolbar      *toolbar,
+GtkWidget *gtk_toolbar_insert_item     (GtkToolbar      *toolbar,
 					const char      *text,
 					const char      *tooltip_text,
 					GtkPixmap       *icon,
@@ -95,6 +95,16 @@ void       gtk_toolbar_insert_item     (GtkToolbar      *toolbar,
 void       gtk_toolbar_append_space    (GtkToolbar      *toolbar);
 void       gtk_toolbar_prepend_space   (GtkToolbar      *toolbar);
 void       gtk_toolbar_insert_space    (GtkToolbar      *toolbar,
+					gint             position);
+void       gtk_toolbar_append_widget   (GtkToolbar      *toolbar,
+					const char      *tooltip_text,
+					GtkWidget       *widget);
+void       gtk_toolbar_prepend_widget  (GtkToolbar      *toolbar,
+					const char      *tooltip_text,
+					GtkWidget       *widget);
+void       gtk_toolbar_insert_widget   (GtkToolbar      *toolbar,
+					const char      *tooltip_text,
+					GtkWidget       *widget,
 					gint             position);
 
 void       gtk_toolbar_set_orientation (GtkToolbar      *toolbar,

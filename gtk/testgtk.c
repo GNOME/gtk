@@ -632,12 +632,13 @@ create_toolbar (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *toolbar;
+  GtkWidget *entry;
 
   if (!window)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Toolbar test");
-      gtk_window_set_policy (GTK_WINDOW (window), TRUE, TRUE, TRUE);
+      gtk_window_set_policy (GTK_WINDOW (window), FALSE, TRUE, TRUE);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			  GTK_SIGNAL_FUNC (destroy_window),
@@ -679,6 +680,12 @@ create_toolbar (void)
 			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
 						       &window->style->bg[GTK_STATE_NORMAL])),
 			       (GtkSignalFunc) set_toolbar_both, toolbar);
+
+      gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
+
+      entry = gtk_entry_new ();
+      gtk_widget_show(entry);
+      gtk_toolbar_append_widget (GTK_TOOLBAR (toolbar), NULL, entry);
 
       gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
