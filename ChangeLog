@@ -1,3 +1,14 @@
+Fri Feb  2 18:31:54 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkimage.c: Remove definition of _XOPEN_SOURCE, since
+	it breaks things on BSD. If you want to compile GTK+ with
+	-ansi -pedantic, you should supply CPP_FLAGS=_XOPEN_SOURCE 
+	when configuring, since GTK+ simply can't be "pure ANSI" 
+	in the header files it uses. (#8170, Greg Hudson)
+
+	* gdk/gdkrgb.c (gdk_rgb_select_conv): Exit with an informative
+	warning message if no converter can be found. 
+
 Fri Feb  2 15:09:51 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/fnmatch.c (FOLD): Fix problem with passing signed
