@@ -1,3 +1,12 @@
+1999-01-20  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* configure.in (gtklocaledir): New variable.  Define to
+	$prefix/$DATADIRNAME/locale.  This will point to the directory
+	where po/Makefile actually installs the message translation
+	tables. 
+	* gtk/Makefile.am (INCLUDES): Define GTK_LOCALEDIR to
+	$(gtklocaledir) rather than $prefix/share/locale.
+
 Wed Jan 20 21:07:45 1999  Timur Bakeyev <mc@bat.ru>
 
 	* gtk/gtkrc.c (gtk_rc_init): There are some systems, that lacks of

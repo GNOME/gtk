@@ -136,6 +136,10 @@ AC_CHECK_FUNC(gettext,
 	,
 	AC_CHECK_LIB(intl, gettext)
 )
+# AM_GTK_GNU_GETTEXT above substs $DATADIRNAME
+# this is the directory where the *.{mo,gmo} files are installed
+gtklocaledir='${prefix}/${DATADIRNAME}/locale'
+AC_SUBST(gtklocaledir)
 
 dnl The DU4 header files don't provide library prototypes unless 
 dnl -std1 is given to the native cc.

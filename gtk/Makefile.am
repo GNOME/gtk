@@ -235,15 +235,12 @@ gtkinclude_HEADERS = 		\
 	gtkmarshal.h		\
 	gtktypebuiltins.h
 
-# note gtk.defs, gtktypebuiltins.h, and gtkmarshal.[ch] aren't here, but their
-# stamps are
+# note gtk.defs, gtktypebuiltin* and gtkmarshal.[ch] aren't here, but
+# their stamps are.  Another trick is to use the temporary output files as
+# the stamp files.
 BUILT_SOURCES = \
-	stamp-d				\
-	stamp-t				\
-	stamp-m				\
-	gtktypebuiltins_evals.c		\
-	gtktypebuiltins_ids.c		\
-        gtktypebuiltins_vars.c
+	s-gd s-gtb s-gtbv s-gtbi s-gtbe \
+	stamp-m 
 
 # cause the built sources to be rebuild when possible, even with --include-deps
 $(static_sources): $(BUILT_SOURCES)
@@ -254,43 +251,46 @@ gdk_headers = \
 	../gdk/gdkrgb.h
 
 # generate gtk.defs file from gtk-boxed.defs and *.h
-$(srcdir)/gtk.defs: @REBUILD@ stamp-d
+gtk.defs: @REBUILD@ s-gd
 	@:
-stamp-d: @REBUILD@ makeenums.pl gtk-boxed.defs $(source_headers) $(gdk_headers)
+s-gd: @REBUILD@ makeenums.pl gtk-boxed.defs $(source_headers) $(gdk_headers)
 	cd $(srcdir) \
 	&& $(PERL) makeenums.pl defs $(source_headers) $(gdk_headers) > s-gd \
 	&& cat gtk-boxed.defs >> s-gd \
-	&& (cmp -s s-gd gtk.defs || mv s-gd gtk.defs) && rm -f s-gd \
-	&& echo timestamp > stamp-d
+	&& (cmp -s s-gd gtk.defs || cp s-gd gtk.defs)
 
 # generate type identifier header (GTK_TYPE_WIDGET_FLAGS)
-$(srcdir)/gtktypebuiltins.h: @REBUILD@ stamp-t
+gtktypebuiltins.h: @REBUILD@ s-gtb
 	@:
-stamp-t: $(srcdir)/gtk.defs $(srcdir)/maketypes.awk
+s-gtb: @REBUILD@ s-gd maketypes.awk
 	cd $(srcdir) \
 	&& $(AWK) -f maketypes.awk gtk.defs macros > s-gtb \
-	&& (cmp -s s-gtb gtktypebuiltins.h || mv s-gtb gtktypebuiltins.h) \
-	&& rm -f s-gtb \
-	&& echo timestamp > stamp-t
+	&& (cmp -s s-gtb gtktypebuiltins.h || cp s-gtb gtktypebuiltins.h)
 
 # generate type identifier variables (GTK_TYPE_WIDGET_FLAGS)
-$(srcdir)/gtktypebuiltins_vars.c: @REBUILD@ $(srcdir)/gtk.defs $(srcdir)/maketypes.awk
+gtktypebuiltins_vars.c: @REBUILD@ s-gtbv
+	@:
+s-gtbv: @REBUILD@ s-gd maketypes.awk
 	cd $(srcdir) \
 	&& $(AWK) -f maketypes.awk gtk.defs variables > s-gtbv \
-	&& mv s-gtbv gtktypebuiltins_vars.c
+	&& (cmp -s s-gtbv gtktypebuiltins_vars.c || cp s-gtbv gtktypebuiltins_vars.c)
 
 # generate type entries for type-id registration
-$(srcdir)/gtktypebuiltins_ids.c: @REBUILD@ $(srcdir)/gtk.defs $(srcdir)/maketypes.awk
+gtktypebuiltins_ids.c: @REBUILD@ s-gtbi
+	@:
+s-gtbi: @REBUILD@ s-gd maketypes.awk
 	cd $(srcdir) \
 	&& $(AWK) -f maketypes.awk gtk.defs entries > s-gtbi \
-	&& mv s-gtbi gtktypebuiltins_ids.c 
+	&& (cmp -s s-gtbi gtktypebuiltins_ids.c || cp s-gtbi gtktypebuiltins_ids.c)
 
 # generate enum value arrays
-$(srcdir)/gtktypebuiltins_evals.c: @REBUILD@ $(srcdir)/makeenums.pl $(srcdir)/gtk.defs
+gtktypebuiltins_evals.c: @REBUILD@ s-gtbe 
+	@:
+s-gtbe: @REBUILD@ makeenums.pl s-gd
 	cd $(srcdir) \
 	&& $(PERL) makeenums.pl arrays $(source_headers) $(gdk_headers) > \
 	s-gtbe \
-	&& mv s-gtbe gtktypebuiltins_evals.c
+	&& (cmp -s s-gtbe gtktypebuiltins_evals.c || cp s-gtbe gtktypebuiltins_evals.c)
 
 $(srcdir)/gtkmarshal.c $(srcdir)/gtkmarshal.h: @REBUILD@ stamp-m
 	@:
@@ -360,7 +360,7 @@ INCLUDES = \
 	-DGTK_EXE_PREFIX=\"$(exec_prefix)\"		\
 	-DGTK_DATA_PREFIX=\"$(prefix)\"			\
 	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"		\
-	-DGTK_LOCALEDIR=\"$(datadir)/locale\"		\
+	-DGTK_LOCALEDIR=\"$(gtklocaledir)\"		\
 	-I$(top_srcdir)					\
 	@GTK_DEBUG_FLAGS@				\
 	@GTK_XIM_FLAGS@					\
@@ -415,3 +415,4 @@ test-debug: testgtk
 	builddir=`pwd`; cd $(top_builddir); top_builddir=`pwd`; \
 	cd $$builddir; cd $(srcdir); \
 	$(SHELL) $$top_builddir/libtool --mode=execute gdb $$builddir/testgtk
+
