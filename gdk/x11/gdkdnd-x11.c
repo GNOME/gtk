@@ -2026,6 +2026,8 @@ xdnd_set_targets (GdkDragContext *context)
 		   XA_ATOM, 32, PropModeReplace,
 		   (guchar *)atomlist, n_atoms);
 
+  g_free (atomlist);
+
   private->xdnd_targets_set = 1;
 }
 
@@ -2071,6 +2073,8 @@ xdnd_set_actions (GdkDragContext *context)
 		   gdk_atom_intern ("XdndActionList", FALSE),
 		   XA_ATOM, 32, PropModeReplace,
 		   (guchar *)atomlist, n_atoms);
+
+  g_free (atomlist);
 
   private->xdnd_actions_set = 1;
   private->xdnd_actions = context->actions;

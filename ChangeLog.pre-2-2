@@ -1,3 +1,14 @@
+Tue Apr 27 18:23:35 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_draw_cursor_on_drawable): 
+	 When redrawing characters on non-visible entry, use appropriate
+	 '*' character. (Bug #1130 - Jean-Marc Jacquet <jm@littleigloo.org>)
+
+Tue Apr 27 11:17:35 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdnd.c (xdnd_set_{targets,actions}): Fix leak
+	pointed out by Morten Welinder <terra@diku.dk>.
+
 Tue Apr 27 01:31:40 1999  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c (drag_dest_cell): compute destination cell
