@@ -26,7 +26,7 @@ gdk_colormap_free_colors
 gdk_colormap_get_screen
 gdk_colormap_get_system
 gdk_colormap_get_system_size
-gdk_colormap_get_type
+gdk_colormap_get_type G_GNUC_CONST
 gdk_colormap_get_visual
 gdk_colormap_new
 gdk_colormap_query_color
@@ -79,7 +79,7 @@ gdk_display_keyboard_ungrab
 gdk_display_list_devices
 gdk_display_manager_get
 gdk_display_manager_get_default_display
-gdk_display_manager_get_type
+gdk_display_manager_get_type G_GNUC_CONST
 gdk_display_manager_list_displays
 gdk_display_manager_set_default_display
 gdk_display_open
@@ -101,7 +101,7 @@ gdk_display_sync
 gdk_drag_abort
 gdk_drag_action_get_type
 gdk_drag_begin
-gdk_drag_context_get_type
+gdk_drag_context_get_type G_GNUC_CONST
 gdk_drag_context_new
 gdk_drag_context_ref
 gdk_drag_context_unref
@@ -210,7 +210,7 @@ gdk_function_get_type
 gdk_gc_copy
 gdk_gc_get_colormap
 gdk_gc_get_screen
-gdk_gc_get_type
+gdk_gc_get_type G_GNUC_CONST
 gdk_gc_get_values
 gdk_gc_new
 gdk_gc_new_with_values
@@ -249,7 +249,7 @@ gdk_gravity_get_type
 gdk_image_get
 gdk_image_get_colormap
 gdk_image_get_pixel
-gdk_image_get_type
+gdk_image_get_type G_GNUC_CONST
 gdk_image_new
 gdk_image_new_bitmap
 gdk_image_put_pixel
@@ -275,17 +275,17 @@ gdk_keymap_get_direction
 gdk_keymap_get_entries_for_keycode
 gdk_keymap_get_entries_for_keyval
 gdk_keymap_get_for_display
-gdk_keymap_get_type
+gdk_keymap_get_type G_GNUC_CONST
 gdk_keymap_lookup_key
 gdk_keymap_translate_keyboard_state
 gdk_keyval_convert_case
 gdk_keyval_from_name
-gdk_keyval_is_lower
-gdk_keyval_is_upper
-gdk_keyval_name
-gdk_keyval_to_lower
-gdk_keyval_to_unicode
-gdk_keyval_to_upper
+gdk_keyval_is_lower G_GNUC_CONST
+gdk_keyval_is_upper G_GNUC_CONST
+gdk_keyval_name G_GNUC_CONST
+gdk_keyval_to_lower G_GNUC_CONST
+gdk_keyval_to_unicode G_GNUC_CONST
+gdk_keyval_to_upper G_GNUC_CONST
 gdk_line_style_get_type
 gdk_list_visuals
 gdk_mbstowcs
@@ -308,7 +308,7 @@ gdk_pango_context_set_colormap
 gdk_pango_layout_get_clip_region
 gdk_pango_layout_line_get_clip_region
 gdk_pango_renderer_get_default
-gdk_pango_renderer_get_type
+gdk_pango_renderer_get_type G_GNUC_CONST
 gdk_pango_renderer_new
 gdk_pango_renderer_set_drawable
 gdk_pango_renderer_set_gc
@@ -329,7 +329,7 @@ gdk_pixmap_create_from_xpm
 gdk_pixmap_create_from_xpm_d
 gdk_pixmap_foreign_new
 gdk_pixmap_foreign_new_for_display
-gdk_pixmap_get_type
+gdk_pixmap_get_type G_GNUC_CONST
 gdk_pixmap_lookup
 gdk_pixmap_lookup_for_display
 gdk_pixmap_new
@@ -381,7 +381,7 @@ gdk_rgb_init
 gdk_rgb_set_install
 gdk_rgb_set_min_colors
 gdk_rgb_set_verbose
-gdk_rgb_xpixel_from_rgb
+gdk_rgb_xpixel_from_rgb G_GNUC_CONST
 gdk_screen_broadcast_client_message
 gdk_screen_get_default
 gdk_screen_get_default_colormap
@@ -403,13 +403,13 @@ gdk_screen_get_toplevel_windows
 gdk_screen_get_type
 gdk_screen_get_width
 gdk_screen_get_width_mm
-gdk_screen_height
-gdk_screen_height_mm
+gdk_screen_height G_GNUC_CONST
+gdk_screen_height_mm G_GNUC_CONST
 gdk_screen_list_visuals
 gdk_screen_make_display_name
 gdk_screen_set_default_colormap
-gdk_screen_width
-gdk_screen_width_mm
+gdk_screen_width G_GNUC_CONST
+gdk_screen_width_mm G_GNUC_CONST
 gdk_scroll_direction_get_type
 gdk_selection_convert
 gdk_selection_owner_get
@@ -459,7 +459,7 @@ gdk_threads_lock
 gdk_threads_unlock
 #endif
 gdk_threads_set_lock_functions
-gdk_unicode_to_keyval
+gdk_unicode_to_keyval G_GNUC_CONST
 gdk_utf8_to_compound_text
 gdk_utf8_to_compound_text_for_display
 gdk_utf8_to_string_target
@@ -543,7 +543,7 @@ gdk_window_merge_child_shapes
 gdk_window_move
 gdk_window_move_resize
 gdk_window_new
-gdk_window_object_get_type
+gdk_window_object_get_type G_GNUC_CONST
 gdk_window_peek_children
 gdk_window_process_all_updates
 gdk_window_process_updates

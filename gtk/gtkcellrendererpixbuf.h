@@ -58,7 +58,7 @@ struct _GtkCellRendererPixbufClass
   void (*_gtk_reserved4) (void);
 };
 
-GType            gtk_cell_renderer_pixbuf_get_type (void);
+GType            gtk_cell_renderer_pixbuf_get_type (void) G_GNUC_CONST;
 GtkCellRenderer *gtk_cell_renderer_pixbuf_new      (void);
 
 #ifdef __cplusplus

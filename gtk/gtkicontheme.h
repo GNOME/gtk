@@ -90,7 +90,7 @@ typedef enum {
   GTK_ICON_THEME_FAILED
 } GtkIconThemeError;
 
-GQuark gtk_icon_theme_error_quark (void) G_GNUC_CONST;
+GQuark gtk_icon_theme_error_quark (void);
 
 GType         gtk_icon_theme_get_type              (void) G_GNUC_CONST;
 
@@ -138,7 +138,7 @@ void       gtk_icon_theme_add_builtin_icon  (const gchar *icon_name,
 					     gint         size,
 					     GdkPixbuf   *pixbuf);
 
-GType         gtk_icon_info_get_type (void);
+GType         gtk_icon_info_get_type (void) G_GNUC_CONST;
 GtkIconInfo  *gtk_icon_info_copy     (GtkIconInfo *icon_info);
 void          gtk_icon_info_free     (GtkIconInfo *icon_info);
 

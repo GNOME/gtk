@@ -50,7 +50,7 @@ struct _GtkCellViewClass
   GtkWidgetClass parent_class;
 };
 
-GType             gtk_cell_view_get_type               (void);
+GType             gtk_cell_view_get_type               (void) G_GNUC_CONST;
 GtkWidget        *gtk_cell_view_new                    (void);
 GtkWidget        *gtk_cell_view_new_with_text          (const gchar     *text);
 GtkWidget        *gtk_cell_view_new_with_markup        (const gchar     *markup);

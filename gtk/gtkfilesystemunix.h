@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 typedef struct _GtkFileSystemUnix      GtkFileSystemUnix;
 
 GtkFileSystem *gtk_file_system_unix_new       (void);
-GType          gtk_file_system_unix_get_type (void);
+GType          gtk_file_system_unix_get_type (void) G_GNUC_CONST;
      
 G_END_DECLS
 

@@ -40,7 +40,7 @@ typedef enum
   GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
 } GtkFileChooserAction;
 
-GType gtk_file_chooser_get_type (void);
+GType gtk_file_chooser_get_type (void) G_GNUC_CONST;
 
 /* GError enumeration for GtkFileChooser */
 

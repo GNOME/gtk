@@ -61,7 +61,7 @@ struct _GtkComboBoxClass
 
 
 /* construction */
-GType         gtk_combo_box_get_type         (void);
+GType         gtk_combo_box_get_type         (void) G_GNUC_CONST;
 GtkWidget    *gtk_combo_box_new              (void);
 GtkWidget    *gtk_combo_box_new_with_model   (GtkTreeModel    *model);
 

@@ -17,7 +17,7 @@ gtk_about_dialog_get_logo
 gtk_about_dialog_get_logo_icon_name
 gtk_about_dialog_get_name
 gtk_about_dialog_get_translator_credits
-gtk_about_dialog_get_type
+gtk_about_dialog_get_type G_GNUC_CONST
 gtk_about_dialog_get_version
 gtk_about_dialog_get_website
 gtk_about_dialog_get_website_label
@@ -42,7 +42,7 @@ gtk_accelerator_get_label
 gtk_accelerator_name
 gtk_accelerator_parse
 gtk_accelerator_set_default_mod_mask
-gtk_accelerator_valid
+gtk_accelerator_valid G_GNUC_CONST
 gtk_accel_flags_get_type
 gtk_accel_group_activate
 gtk_accel_group_connect
@@ -51,7 +51,7 @@ gtk_accel_group_disconnect
 gtk_accel_group_disconnect_key
 gtk_accel_group_find
 gtk_accel_group_from_accel_closure
-gtk_accel_group_get_type
+gtk_accel_group_get_type G_GNUC_CONST
 gtk_accel_group_lock
 gtk_accel_group_new
 gtk_accel_group_query
@@ -60,7 +60,7 @@ gtk_accel_groups_from_object
 gtk_accel_group_unlock
 gtk_accel_label_get_accel_widget
 gtk_accel_label_get_accel_width
-gtk_accel_label_get_type
+gtk_accel_label_get_type G_GNUC_CONST
 gtk_accel_label_new
 gtk_accel_label_refetch
 gtk_accel_label_set_accel_closure
@@ -71,7 +71,7 @@ gtk_accel_map_change_entry
 gtk_accel_map_foreach
 gtk_accel_map_foreach_unfiltered
 gtk_accel_map_get
-gtk_accel_map_get_type
+gtk_accel_map_get_type G_GNUC_CONST
 gtk_accel_map_load
 gtk_accel_map_load_fd
 gtk_accel_map_load_scanner
@@ -81,7 +81,7 @@ gtk_accel_map_save
 gtk_accel_map_save_fd
 gtk_accel_map_unlock_path
 gtk_accessible_connect_widget_destroyed
-gtk_accessible_get_type
+gtk_accessible_get_type G_GNUC_CONST
 gtk_action_activate
 gtk_action_block_activate_from
 gtk_action_connect_accelerator
@@ -95,7 +95,7 @@ gtk_action_get_accel_path
 gtk_action_get_name
 gtk_action_get_proxies
 gtk_action_get_sensitive
-gtk_action_get_type
+gtk_action_get_type G_GNUC_CONST
 gtk_action_get_visible
 gtk_action_group_add_action
 gtk_action_group_add_actions
@@ -108,7 +108,7 @@ gtk_action_group_add_toggle_actions_full
 gtk_action_group_get_action
 gtk_action_group_get_name
 gtk_action_group_get_sensitive
-gtk_action_group_get_type
+gtk_action_group_get_type G_GNUC_CONST
 gtk_action_group_get_visible
 gtk_action_group_list_actions
 gtk_action_group_new
@@ -128,24 +128,24 @@ gtk_action_set_visible
 gtk_action_unblock_activate_from
 gtk_adjustment_changed
 gtk_adjustment_clamp_page
-gtk_adjustment_get_type
+gtk_adjustment_get_type G_GNUC_CONST
 gtk_adjustment_get_value
 gtk_adjustment_new
 gtk_adjustment_set_value
 gtk_adjustment_value_changed
 gtk_alignment_get_padding
-gtk_alignment_get_type
+gtk_alignment_get_type G_GNUC_CONST
 gtk_alignment_new
 gtk_alignment_set
 gtk_alignment_set_padding
 gtk_alternative_dialog_button_order
 gtk_anchor_type_get_type
 gtk_arg_flags_get_type
-gtk_arrow_get_type
+gtk_arrow_get_type G_GNUC_CONST
 gtk_arrow_new
 gtk_arrow_set
 gtk_arrow_type_get_type
-gtk_aspect_frame_get_type
+gtk_aspect_frame_get_type G_GNUC_CONST
 gtk_aspect_frame_new
 gtk_aspect_frame_set
 gtk_attach_options_get_type
@@ -165,13 +165,13 @@ gtk_binding_set_by_class
 gtk_binding_set_find
 gtk_binding_set_new
 gtk_bin_get_child
-gtk_bin_get_type
+gtk_bin_get_type G_GNUC_CONST
 gtk_border_copy
 gtk_border_free
 gtk_border_get_type
 gtk_box_get_homogeneous
 gtk_box_get_spacing
-gtk_box_get_type
+gtk_box_get_type G_GNUC_CONST
 gtk_box_pack_end
 gtk_box_pack_end_defaults
 gtk_box_pack_start
@@ -186,7 +186,7 @@ gtk_button_box_get_child_ipadding
 gtk_button_box_get_child_secondary
 gtk_button_box_get_child_size
 gtk_button_box_get_layout
-gtk_button_box_get_type
+gtk_button_box_get_type G_GNUC_CONST
 gtk_button_box_set_child_ipadding
 gtk_button_box_set_child_secondary
 gtk_button_box_set_child_size
@@ -199,7 +199,7 @@ gtk_button_get_focus_on_click
 gtk_button_get_image
 gtk_button_get_label
 gtk_button_get_relief
-gtk_button_get_type
+gtk_button_get_type G_GNUC_CONST
 gtk_button_get_use_stock
 gtk_button_get_use_underline
 gtk_button_leave
@@ -223,7 +223,7 @@ gtk_calendar_display_options_get_type
 gtk_calendar_freeze
 gtk_calendar_get_date
 gtk_calendar_get_display_options
-gtk_calendar_get_type
+gtk_calendar_get_type G_GNUC_CONST
 gtk_calendar_mark_day
 gtk_calendar_new
 gtk_calendar_select_day
@@ -232,40 +232,40 @@ gtk_calendar_set_display_options
 gtk_calendar_thaw
 gtk_calendar_unmark_day
 gtk_cell_editable_editing_done
-gtk_cell_editable_get_type
+gtk_cell_editable_get_type G_GNUC_CONST
 gtk_cell_editable_remove_widget
 gtk_cell_editable_start_editing
 gtk_cell_layout_add_attribute
 gtk_cell_layout_clear
 gtk_cell_layout_clear_attributes
-gtk_cell_layout_get_type
+gtk_cell_layout_get_type G_GNUC_CONST
 gtk_cell_layout_pack_end
 gtk_cell_layout_pack_start
 gtk_cell_layout_reorder
 gtk_cell_layout_set_attributes
 gtk_cell_layout_set_cell_data_func
 gtk_cell_renderer_activate
-gtk_cell_renderer_combo_get_type
+gtk_cell_renderer_combo_get_type G_GNUC_CONST
 gtk_cell_renderer_combo_new
 gtk_cell_renderer_editing_canceled
 gtk_cell_renderer_get_fixed_size
 gtk_cell_renderer_get_size
-gtk_cell_renderer_get_type
+gtk_cell_renderer_get_type G_GNUC_CONST
 gtk_cell_renderer_mode_get_type
-gtk_cell_renderer_pixbuf_get_type
+gtk_cell_renderer_pixbuf_get_type G_GNUC_CONST
 gtk_cell_renderer_pixbuf_new
-gtk_cell_renderer_progress_get_type
+gtk_cell_renderer_progress_get_type G_GNUC_CONST
 gtk_cell_renderer_progress_new
 gtk_cell_renderer_render
 gtk_cell_renderer_set_fixed_size
 gtk_cell_renderer_start_editing
 gtk_cell_renderer_state_get_type
-gtk_cell_renderer_text_get_type
+gtk_cell_renderer_text_get_type G_GNUC_CONST
 gtk_cell_renderer_text_new
 gtk_cell_renderer_text_set_fixed_height_from_font
 gtk_cell_renderer_toggle_get_active
 gtk_cell_renderer_toggle_get_radio
-gtk_cell_renderer_toggle_get_type
+gtk_cell_renderer_toggle_get_type G_GNUC_CONST
 gtk_cell_renderer_toggle_new
 gtk_cell_renderer_toggle_set_active
 gtk_cell_renderer_toggle_set_radio
@@ -273,7 +273,7 @@ gtk_cell_type_get_type
 gtk_cell_view_get_cell_renderers
 gtk_cell_view_get_displayed_row
 gtk_cell_view_get_size_of_row
-gtk_cell_view_get_type
+gtk_cell_view_get_type G_GNUC_CONST
 gtk_cell_view_new
 gtk_cell_view_new_with_markup
 gtk_cell_view_new_with_pixbuf
@@ -284,14 +284,14 @@ gtk_cell_view_set_displayed_row
 gtk_cell_view_set_model
 gtk_cell_view_set_value
 gtk_cell_view_set_values
-gtk_check_button_get_type
+gtk_check_button_get_type G_GNUC_CONST
 gtk_check_button_new
 gtk_check_button_new_with_label
 gtk_check_button_new_with_mnemonic
 gtk_check_menu_item_get_active
 gtk_check_menu_item_get_draw_as_radio
 gtk_check_menu_item_get_inconsistent
-gtk_check_menu_item_get_type
+gtk_check_menu_item_get_type G_GNUC_CONST
 gtk_check_menu_item_new
 gtk_check_menu_item_new_with_label
 gtk_check_menu_item_new_with_mnemonic
@@ -306,7 +306,7 @@ gtk_clipboard_get
 gtk_clipboard_get_display
 gtk_clipboard_get_for_display
 gtk_clipboard_get_owner
-gtk_clipboard_get_type
+gtk_clipboard_get_type G_GNUC_CONST
 gtk_clipboard_request_contents
 gtk_clipboard_request_image
 gtk_clipboard_request_targets
@@ -348,7 +348,7 @@ gtk_clist_get_row_style
 gtk_clist_get_selectable
 gtk_clist_get_selection_info
 gtk_clist_get_text
-gtk_clist_get_type
+gtk_clist_get_type G_GNUC_CONST
 gtk_clist_get_vadjustment
 gtk_clist_insert
 gtk_clist_moveto
@@ -402,7 +402,7 @@ gtk_clist_unselect_row
 gtk_color_button_get_alpha
 gtk_color_button_get_color
 gtk_color_button_get_title
-gtk_color_button_get_type
+gtk_color_button_get_type G_GNUC_CONST
 gtk_color_button_get_use_alpha
 gtk_color_button_new
 gtk_color_button_new_with_color
@@ -410,7 +410,7 @@ gtk_color_button_set_alpha
 gtk_color_button_set_color
 gtk_color_button_set_title
 gtk_color_button_set_use_alpha
-gtk_color_selection_dialog_get_type
+gtk_color_selection_dialog_get_type G_GNUC_CONST
 gtk_color_selection_dialog_new
 gtk_color_selection_get_color
 gtk_color_selection_get_current_alpha
@@ -419,7 +419,7 @@ gtk_color_selection_get_has_opacity_control
 gtk_color_selection_get_has_palette
 gtk_color_selection_get_previous_alpha
 gtk_color_selection_get_previous_color
-gtk_color_selection_get_type
+gtk_color_selection_get_type G_GNUC_CONST
 gtk_color_selection_is_adjusting
 gtk_color_selection_new
 gtk_color_selection_palette_from_string
@@ -436,7 +436,7 @@ gtk_color_selection_set_previous_color
 gtk_color_selection_set_update_policy
 gtk_combo_box_append_text
 gtk_combo_box_entry_get_text_column
-gtk_combo_box_entry_get_type
+gtk_combo_box_entry_get_type G_GNUC_CONST
 gtk_combo_box_entry_new
 gtk_combo_box_entry_new_text
 gtk_combo_box_entry_new_with_model
@@ -451,7 +451,7 @@ gtk_combo_box_get_model
 gtk_combo_box_get_popup_accessible
 gtk_combo_box_get_row_separator_func
 gtk_combo_box_get_row_span_column
-gtk_combo_box_get_type
+gtk_combo_box_get_type G_GNUC_CONST
 gtk_combo_box_get_wrap_width
 gtk_combo_box_insert_text
 gtk_combo_box_new
@@ -471,7 +471,7 @@ gtk_combo_box_set_row_separator_func
 gtk_combo_box_set_row_span_column
 gtk_combo_box_set_wrap_width
 gtk_combo_disable_activate
-gtk_combo_get_type
+gtk_combo_get_type G_GNUC_CONST
 gtk_combo_new
 gtk_combo_set_case_sensitive
 gtk_combo_set_item_string
@@ -504,7 +504,7 @@ gtk_container_get_focus_chain
 gtk_container_get_focus_hadjustment
 gtk_container_get_focus_vadjustment
 gtk_container_get_resize_mode
-gtk_container_get_type
+gtk_container_get_type G_GNUC_CONST
 gtk_container_propagate_expose
 gtk_container_remove
 gtk_container_resize_children
@@ -533,7 +533,7 @@ gtk_ctree_find_by_row_data
 gtk_ctree_find_by_row_data_custom
 gtk_ctree_find_node_ptr
 gtk_ctree_get_node_info
-gtk_ctree_get_type
+gtk_ctree_get_type G_GNUC_CONST
 gtk_ctree_insert_gnode
 gtk_ctree_insert_node
 gtk_ctree_is_ancestor
@@ -552,7 +552,7 @@ gtk_ctree_node_get_row_data
 gtk_ctree_node_get_row_style
 gtk_ctree_node_get_selectable
 gtk_ctree_node_get_text
-gtk_ctree_node_get_type
+gtk_ctree_node_get_type G_GNUC_CONST
 gtk_ctree_node_is_visible
 gtk_ctree_node_moveto
 gtk_ctree_node_nth
@@ -589,7 +589,7 @@ gtk_ctree_toggle_expansion
 gtk_ctree_toggle_expansion_recursive
 gtk_ctree_unselect
 gtk_ctree_unselect_recursive
-gtk_curve_get_type
+gtk_curve_get_type G_GNUC_CONST
 gtk_curve_get_vector
 gtk_curve_new
 gtk_curve_reset
@@ -613,7 +613,7 @@ gtk_dialog_add_button
 gtk_dialog_add_buttons
 gtk_dialog_flags_get_type
 gtk_dialog_get_has_separator
-gtk_dialog_get_type
+gtk_dialog_get_type G_GNUC_CONST
 gtk_dialog_new
 gtk_dialog_new_with_buttons
 gtk_dialog_response
@@ -668,7 +668,7 @@ gtk_draw_flat_box
 gtk_draw_focus
 gtk_draw_handle
 gtk_draw_hline
-gtk_drawing_area_get_type
+gtk_drawing_area_get_type G_GNUC_CONST
 gtk_drawing_area_new
 gtk_drawing_area_size
 gtk_draw_insertion_cursor
@@ -690,7 +690,7 @@ gtk_editable_get_chars
 gtk_editable_get_editable
 gtk_editable_get_position
 gtk_editable_get_selection_bounds
-gtk_editable_get_type
+gtk_editable_get_type G_GNUC_CONST
 gtk_editable_insert_text
 gtk_editable_paste_clipboard
 gtk_editable_select_region
@@ -705,7 +705,7 @@ gtk_entry_completion_get_minimum_key_length
 gtk_entry_completion_get_model
 gtk_entry_completion_get_popup_completion
 gtk_entry_completion_get_text_column
-gtk_entry_completion_get_type
+gtk_entry_completion_get_type G_GNUC_CONST
 gtk_entry_completion_insert_action_markup
 gtk_entry_completion_insert_action_text
 gtk_entry_completion_insert_prefix
@@ -725,7 +725,7 @@ gtk_entry_get_layout
 gtk_entry_get_layout_offsets
 gtk_entry_get_max_length
 gtk_entry_get_text
-gtk_entry_get_type
+gtk_entry_get_type G_GNUC_CONST
 gtk_entry_get_visibility
 gtk_entry_get_width_chars
 gtk_entry_layout_index_to_text_index
@@ -746,7 +746,7 @@ gtk_entry_set_visibility
 gtk_entry_set_width_chars
 gtk_entry_text_index_to_layout_index
 gtk_event_box_get_above_child
-gtk_event_box_get_type
+gtk_event_box_get_type G_GNUC_CONST
 gtk_event_box_get_visible_window
 gtk_event_box_new
 gtk_event_box_set_above_child
@@ -757,7 +757,7 @@ gtk_expander_get_expanded
 gtk_expander_get_label
 gtk_expander_get_label_widget
 gtk_expander_get_spacing
-gtk_expander_get_type
+gtk_expander_get_type G_GNUC_CONST
 gtk_expander_get_use_markup
 gtk_expander_get_use_underline
 gtk_expander_new
@@ -769,14 +769,14 @@ gtk_expander_set_spacing
 gtk_expander_set_use_markup
 gtk_expander_set_use_underline
 gtk_expander_style_get_type
-gtk_false
+gtk_false G_GNUC_CONST
 gtk_file_chooser_action_get_type
 gtk_file_chooser_add_filter
 gtk_file_chooser_add_shortcut_folder
 gtk_file_chooser_add_shortcut_folder_uri
 gtk_file_chooser_button_get_active
 gtk_file_chooser_button_get_title
-gtk_file_chooser_button_get_type
+gtk_file_chooser_button_get_type G_GNUC_CONST
 gtk_file_chooser_button_get_width_chars
 gtk_file_chooser_button_new
 gtk_file_chooser_button_new_with_backend
@@ -784,7 +784,7 @@ gtk_file_chooser_button_new_with_dialog
 gtk_file_chooser_button_set_active
 gtk_file_chooser_button_set_title
 gtk_file_chooser_button_set_width_chars
-gtk_file_chooser_dialog_get_type
+gtk_file_chooser_dialog_get_type G_GNUC_CONST
 gtk_file_chooser_dialog_new
 gtk_file_chooser_dialog_new_with_backend
 gtk_file_chooser_error_get_type
@@ -803,7 +803,7 @@ gtk_file_chooser_get_preview_widget
 gtk_file_chooser_get_preview_widget_active
 gtk_file_chooser_get_select_multiple
 gtk_file_chooser_get_show_hidden
-gtk_file_chooser_get_type
+gtk_file_chooser_get_type G_GNUC_CONST
 gtk_file_chooser_get_uri
 gtk_file_chooser_get_uris
 gtk_file_chooser_get_use_preview_label
@@ -833,7 +833,7 @@ gtk_file_chooser_set_use_preview_label
 gtk_file_chooser_unselect_all
 gtk_file_chooser_unselect_filename
 gtk_file_chooser_unselect_uri
-gtk_file_chooser_widget_get_type
+gtk_file_chooser_widget_get_type G_GNUC_CONST
 gtk_file_chooser_widget_new
 gtk_file_chooser_widget_new_with_backend
 gtk_file_filter_add_custom
@@ -844,11 +844,11 @@ gtk_file_filter_filter
 gtk_file_filter_flags_get_type
 gtk_file_filter_get_name
 gtk_file_filter_get_needed
-gtk_file_filter_get_type
+gtk_file_filter_get_type G_GNUC_CONST
 gtk_file_filter_new
 gtk_file_filter_set_name
 gtk_file_folder_get_info
-gtk_file_folder_get_type
+gtk_file_folder_get_type G_GNUC_CONST
 gtk_file_folder_is_finished_loading
 gtk_file_folder_list_children
 gtk_file_info_copy
@@ -860,7 +860,7 @@ gtk_file_info_get_is_hidden
 gtk_file_info_get_mime_type
 gtk_file_info_get_modification_time
 gtk_file_info_get_size
-gtk_file_info_get_type
+gtk_file_info_get_type G_GNUC_CONST
 gtk_file_info_new
 gtk_file_info_set_display_name
 gtk_file_info_set_is_folder
@@ -868,7 +868,7 @@ gtk_file_info_set_is_hidden
 gtk_file_info_set_mime_type
 gtk_file_info_set_modification_time
 gtk_file_info_set_size
-gtk_file_path_get_type
+gtk_file_path_get_type G_GNUC_CONST
 gtk_file_paths_copy
 gtk_file_paths_free
 gtk_file_paths_sort
@@ -876,7 +876,7 @@ gtk_file_selection_complete
 gtk_file_selection_get_filename
 gtk_file_selection_get_selections
 gtk_file_selection_get_select_multiple
-gtk_file_selection_get_type
+gtk_file_selection_get_type G_GNUC_CONST
 gtk_file_selection_hide_fileop_buttons
 gtk_file_selection_new
 gtk_file_selection_set_filename
@@ -887,7 +887,7 @@ gtk_file_system_error_quark
 gtk_file_system_filename_to_path
 gtk_file_system_get_folder
 gtk_file_system_get_parent
-gtk_file_system_get_type
+gtk_file_system_get_type G_GNUC_CONST
 gtk_file_system_get_volume_for_path
 gtk_file_system_insert_bookmark
 gtk_file_system_list_bookmarks
@@ -900,7 +900,7 @@ gtk_file_system_path_to_uri
 gtk_file_system_remove_bookmark
 gtk_file_system_render_icon
 #ifdef G_OS_UNIX
-gtk_file_system_unix_get_type
+gtk_file_system_unix_get_type G_GNUC_CONST
 gtk_file_system_unix_new
 #endif
 gtk_file_system_uri_to_path
@@ -911,11 +911,11 @@ gtk_file_system_volume_get_is_mounted
 gtk_file_system_volume_mount
 gtk_file_system_volume_render_icon
 #ifdef G_OS_WIN32
-gtk_file_system_win32_get_type
+gtk_file_system_win32_get_type G_GNUC_CONST
 gtk_file_system_win32_new
 #endif
 gtk_fixed_get_has_window
-gtk_fixed_get_type
+gtk_fixed_get_type G_GNUC_CONST
 gtk_fixed_move
 gtk_fixed_new
 gtk_fixed_put
@@ -924,7 +924,7 @@ gtk_font_button_get_font_name
 gtk_font_button_get_show_size
 gtk_font_button_get_show_style
 gtk_font_button_get_title
-gtk_font_button_get_type
+gtk_font_button_get_type G_GNUC_CONST
 gtk_font_button_get_use_font
 gtk_font_button_get_use_size
 gtk_font_button_new
@@ -938,14 +938,14 @@ gtk_font_button_set_use_size
 gtk_font_selection_dialog_get_font
 gtk_font_selection_dialog_get_font_name
 gtk_font_selection_dialog_get_preview_text
-gtk_font_selection_dialog_get_type
+gtk_font_selection_dialog_get_type G_GNUC_CONST
 gtk_font_selection_dialog_new
 gtk_font_selection_dialog_set_font_name
 gtk_font_selection_dialog_set_preview_text
 gtk_font_selection_get_font
 gtk_font_selection_get_font_name
 gtk_font_selection_get_preview_text
-gtk_font_selection_get_type
+gtk_font_selection_get_type G_GNUC_CONST
 gtk_font_selection_new
 gtk_font_selection_set_font_name
 gtk_font_selection_set_preview_text
@@ -953,13 +953,13 @@ gtk_frame_get_label
 gtk_frame_get_label_align
 gtk_frame_get_label_widget
 gtk_frame_get_shadow_type
-gtk_frame_get_type
+gtk_frame_get_type G_GNUC_CONST
 gtk_frame_new
 gtk_frame_set_label
 gtk_frame_set_label_align
 gtk_frame_set_label_widget
 gtk_frame_set_shadow_type
-gtk_gamma_curve_get_type
+gtk_gamma_curve_get_type G_GNUC_CONST
 gtk_gamma_curve_new
 gtk_gc_get
 gtk_gc_release
@@ -975,33 +975,33 @@ gtk_grab_remove
 gtk_handle_box_get_handle_position
 gtk_handle_box_get_shadow_type
 gtk_handle_box_get_snap_edge
-gtk_handle_box_get_type
+gtk_handle_box_get_type G_GNUC_CONST
 gtk_handle_box_new
 gtk_handle_box_set_handle_position
 gtk_handle_box_set_shadow_type
 gtk_handle_box_set_snap_edge
-gtk_hbox_get_type
+gtk_hbox_get_type G_GNUC_CONST
 gtk_hbox_new
 gtk_hbutton_box_get_layout_default
 gtk_hbutton_box_get_spacing_default
-gtk_hbutton_box_get_type
+gtk_hbutton_box_get_type G_GNUC_CONST
 gtk_hbutton_box_new
 gtk_hbutton_box_set_layout_default
 gtk_hbutton_box_set_spacing_default
-gtk_hpaned_get_type
+gtk_hpaned_get_type G_GNUC_CONST
 gtk_hpaned_new
-gtk_hruler_get_type
+gtk_hruler_get_type G_GNUC_CONST
 gtk_hruler_new
-gtk_hscale_get_type
+gtk_hscale_get_type G_GNUC_CONST
 gtk_hscale_new
 gtk_hscale_new_with_range
-gtk_hscrollbar_get_type
+gtk_hscrollbar_get_type G_GNUC_CONST
 gtk_hscrollbar_new
-gtk_hseparator_get_type
+gtk_hseparator_get_type G_GNUC_CONST
 gtk_hseparator_new
 gtk_hsv_get_color
 gtk_hsv_get_metrics
-gtk_hsv_get_type
+gtk_hsv_get_type G_GNUC_CONST
 gtk_hsv_is_adjusting
 gtk_hsv_new
 gtk_hsv_set_color
@@ -1009,7 +1009,7 @@ gtk_hsv_set_metrics
 gtk_hsv_to_rgb
 gtk_icon_factory_add
 gtk_icon_factory_add_default
-gtk_icon_factory_get_type
+gtk_icon_factory_get_type G_GNUC_CONST
 gtk_icon_factory_lookup
 gtk_icon_factory_lookup_default
 gtk_icon_factory_new
@@ -1029,7 +1029,7 @@ gtk_icon_lookup_flags_get_type
 gtk_icon_set_add_source
 gtk_icon_set_copy
 gtk_icon_set_get_sizes
-gtk_icon_set_get_type
+gtk_icon_set_get_type G_GNUC_CONST
 gtk_icon_set_new
 gtk_icon_set_new_from_pixbuf
 gtk_icon_set_ref
@@ -1053,7 +1053,7 @@ gtk_icon_source_get_size
 gtk_icon_source_get_size_wildcarded
 gtk_icon_source_get_state
 gtk_icon_source_get_state_wildcarded
-gtk_icon_source_get_type
+gtk_icon_source_get_type G_GNUC_CONST
 gtk_icon_source_new
 gtk_icon_source_set_direction
 gtk_icon_source_set_direction_wildcarded
@@ -1073,7 +1073,7 @@ gtk_icon_theme_get_example_icon_name
 gtk_icon_theme_get_for_screen
 gtk_icon_theme_get_icon_sizes
 gtk_icon_theme_get_search_path
-gtk_icon_theme_get_type
+gtk_icon_theme_get_type G_GNUC_CONST
 gtk_icon_theme_has_icon
 gtk_icon_theme_list_icons
 gtk_icon_theme_load_icon
@@ -1124,9 +1124,9 @@ gtk_image_get_pixel_size
 gtk_image_get_pixmap
 gtk_image_get_stock
 gtk_image_get_storage_type
-gtk_image_get_type
+gtk_image_get_type G_GNUC_CONST
 gtk_image_menu_item_get_image
-gtk_image_menu_item_get_type
+gtk_image_menu_item_get_type G_GNUC_CONST
 gtk_image_menu_item_new
 gtk_image_menu_item_new_from_stock
 gtk_image_menu_item_new_with_label
@@ -1158,17 +1158,17 @@ gtk_im_context_focus_in
 gtk_im_context_focus_out
 gtk_im_context_get_preedit_string
 gtk_im_context_get_surrounding
-gtk_im_context_get_type
+gtk_im_context_get_type G_GNUC_CONST
 gtk_im_context_reset
 gtk_im_context_set_client_window
 gtk_im_context_set_cursor_location
 gtk_im_context_set_surrounding
 gtk_im_context_set_use_preedit
 gtk_im_context_simple_add_table
-gtk_im_context_simple_get_type
+gtk_im_context_simple_get_type G_GNUC_CONST
 gtk_im_context_simple_new
 gtk_im_multicontext_append_menuitems
-gtk_im_multicontext_get_type
+gtk_im_multicontext_get_type G_GNUC_CONST
 gtk_im_multicontext_new
 gtk_im_preedit_style_get_type
 gtk_im_status_style_get_type
@@ -1183,14 +1183,14 @@ gtk_init_check_abi_check
 #endif
 gtk_init_with_args
 gtk_input_add_full
-gtk_input_dialog_get_type
+gtk_input_dialog_get_type G_GNUC_CONST
 gtk_input_dialog_new
 gtk_input_remove
 #ifdef INCLUDE_VARIABLES
 gtk_interface_age
 #endif
 gtk_invisible_get_screen
-gtk_invisible_get_type
+gtk_invisible_get_type G_GNUC_CONST
 gtk_invisible_new
 gtk_invisible_new_for_screen
 gtk_invisible_set_screen
@@ -1209,7 +1209,7 @@ gtk_item_factory_from_path
 gtk_item_factory_from_widget
 gtk_item_factory_get_item
 gtk_item_factory_get_item_by_action
-gtk_item_factory_get_type
+gtk_item_factory_get_type G_GNUC_CONST
 gtk_item_factory_get_widget
 gtk_item_factory_get_widget_by_action
 gtk_item_factory_new
@@ -1219,7 +1219,7 @@ gtk_item_factory_popup_data
 gtk_item_factory_popup_data_from_widget
 gtk_item_factory_popup_with_data
 gtk_item_factory_set_translate_func
-gtk_item_get_type
+gtk_item_get_type G_GNUC_CONST
 gtk_item_select
 gtk_item_toggle
 gtk_justification_get_type
@@ -1240,7 +1240,7 @@ gtk_label_get_selectable
 gtk_label_get_selection_bounds
 gtk_label_get_single_line_mode
 gtk_label_get_text
-gtk_label_get_type
+gtk_label_get_type G_GNUC_CONST
 gtk_label_get_use_markup
 gtk_label_get_use_underline
 gtk_label_get_width_chars
@@ -1268,7 +1268,7 @@ gtk_label_set_width_chars
 gtk_layout_freeze
 gtk_layout_get_hadjustment
 gtk_layout_get_size
-gtk_layout_get_type
+gtk_layout_get_type G_GNUC_CONST
 gtk_layout_get_vadjustment
 gtk_layout_move
 gtk_layout_new
@@ -1283,10 +1283,10 @@ gtk_list_clear_items
 gtk_list_end_drag_selection
 gtk_list_end_selection
 gtk_list_extend_selection
-gtk_list_get_type
+gtk_list_get_type G_GNUC_CONST
 gtk_list_insert_items
 gtk_list_item_deselect
-gtk_list_item_get_type
+gtk_list_item_get_type G_GNUC_CONST
 gtk_list_item_new
 gtk_list_item_new_with_label
 gtk_list_item_select
@@ -1303,7 +1303,7 @@ gtk_list_set_selection_mode
 gtk_list_start_selection
 gtk_list_store_append
 gtk_list_store_clear
-gtk_list_store_get_type
+gtk_list_store_get_type G_GNUC_CONST
 gtk_list_store_insert
 gtk_list_store_insert_after
 gtk_list_store_insert_before
@@ -1365,7 +1365,7 @@ gtk_marshal_VOID__UINT_STRING
 gtk_match_type_get_type
 gtk_menu_attach
 gtk_menu_attach_to_widget
-gtk_menu_bar_get_type
+gtk_menu_bar_get_type G_GNUC_CONST
 gtk_menu_bar_new
 gtk_menu_detach
 gtk_menu_direction_type_get_type
@@ -1375,12 +1375,12 @@ gtk_menu_get_attach_widget
 gtk_menu_get_for_attach_widget
 gtk_menu_get_tearoff_state
 gtk_menu_get_title
-gtk_menu_get_type
+gtk_menu_get_type G_GNUC_CONST
 gtk_menu_item_activate
 gtk_menu_item_deselect
 gtk_menu_item_get_right_justified
 gtk_menu_item_get_submenu
-gtk_menu_item_get_type
+gtk_menu_item_get_type G_GNUC_CONST
 gtk_menu_item_new
 gtk_menu_item_new_with_label
 gtk_menu_item_new_with_mnemonic
@@ -1408,22 +1408,22 @@ gtk_menu_shell_append
 gtk_menu_shell_cancel
 gtk_menu_shell_deactivate
 gtk_menu_shell_deselect
-gtk_menu_shell_get_type
+gtk_menu_shell_get_type G_GNUC_CONST
 gtk_menu_shell_insert
 gtk_menu_shell_prepend
 gtk_menu_shell_select_first
 gtk_menu_shell_select_item
 gtk_menu_tool_button_get_menu
-gtk_menu_tool_button_get_type
+gtk_menu_tool_button_get_type G_GNUC_CONST
 gtk_menu_tool_button_new
 gtk_menu_tool_button_new_from_stock
 gtk_menu_tool_button_set_arrow_tooltip
 gtk_menu_tool_button_set_menu
-gtk_message_dialog_format_secondary_markup
-gtk_message_dialog_format_secondary_text
-gtk_message_dialog_get_type
-gtk_message_dialog_new
-gtk_message_dialog_new_with_markup
+gtk_message_dialog_format_secondary_markup G_GNUC_PRINTF(2,3)
+gtk_message_dialog_format_secondary_text G_GNUC_PRINTF(2,3)
+gtk_message_dialog_get_type G_GNUC_CONST
+gtk_message_dialog_new G_GNUC_PRINTF(5,6)
+gtk_message_dialog_new_with_markup G_GNUC_PRINTF(5,6)
 gtk_message_dialog_set_markup
 gtk_message_type_get_type
 gtk_metric_type_get_type
@@ -1433,7 +1433,7 @@ gtk_minor_version
 #endif
 gtk_misc_get_alignment
 gtk_misc_get_padding
-gtk_misc_get_type
+gtk_misc_get_type G_GNUC_CONST
 gtk_misc_set_alignment
 gtk_misc_set_padding
 gtk_movement_step_get_type
@@ -1450,7 +1450,7 @@ gtk_notebook_get_show_tabs
 gtk_notebook_get_tab_label
 gtk_notebook_get_tab_label_text
 gtk_notebook_get_tab_pos
-gtk_notebook_get_type
+gtk_notebook_get_type G_GNUC_CONST
 gtk_notebook_insert_page
 gtk_notebook_insert_page_menu
 gtk_notebook_new
@@ -1485,7 +1485,7 @@ gtk_object_flags_get_type
 gtk_object_get
 gtk_object_get_data
 gtk_object_get_data_by_id
-gtk_object_get_type
+gtk_object_get_type G_GNUC_CONST
 gtk_object_get_user_data
 gtk_object_new
 gtk_object_ref
@@ -1505,10 +1505,10 @@ gtk_object_weakref
 gtk_object_weakunref
 gtk_old_editable_changed
 gtk_old_editable_claim_selection
-gtk_old_editable_get_type
+gtk_old_editable_get_type G_GNUC_CONST
 gtk_option_menu_get_history
 gtk_option_menu_get_menu
-gtk_option_menu_get_type
+gtk_option_menu_get_type G_GNUC_CONST
 gtk_option_menu_new
 gtk_option_menu_remove_menu
 gtk_option_menu_set_history
@@ -1542,16 +1542,16 @@ gtk_paned_compute_position
 gtk_paned_get_child1
 gtk_paned_get_child2
 gtk_paned_get_position
-gtk_paned_get_type
+gtk_paned_get_type G_GNUC_CONST
 gtk_paned_pack1
 gtk_paned_pack2
 gtk_paned_set_position
 gtk_parse_args
-gtk_path_bar_get_type
+gtk_path_bar_get_type G_GNUC_CONST
 gtk_path_priority_type_get_type
 gtk_path_type_get_type
 gtk_pixmap_get
-gtk_pixmap_get_type
+gtk_pixmap_get_type G_GNUC_CONST
 gtk_pixmap_new
 gtk_pixmap_set
 gtk_pixmap_set_build_insensitive
@@ -1559,7 +1559,7 @@ gtk_pixmap_set_build_insensitive
 gtk_plug_construct
 gtk_plug_construct_for_display
 gtk_plug_get_id
-gtk_plug_get_type
+gtk_plug_get_type G_GNUC_CONST
 gtk_plug_new
 gtk_plug_new_for_display
 #endif
@@ -1568,7 +1568,7 @@ gtk_position_type_get_type
 gtk_preview_draw_row
 gtk_preview_get_cmap
 gtk_preview_get_info
-gtk_preview_get_type
+gtk_preview_get_type G_GNUC_CONST
 gtk_preview_get_visual
 gtk_preview_new
 gtk_preview_put
@@ -1588,7 +1588,7 @@ gtk_progress_bar_get_orientation
 gtk_progress_bar_get_pulse_step
 gtk_progress_bar_get_text
 gtk_progress_bar_get_ellipsize
-gtk_progress_bar_get_type
+gtk_progress_bar_get_type G_GNUC_CONST
 gtk_progress_bar_new
 gtk_progress_bar_new_with_adjustment
 gtk_progress_bar_orientation_get_type
@@ -1609,7 +1609,7 @@ gtk_progress_get_current_percentage
 gtk_progress_get_current_text
 gtk_progress_get_percentage_from_value
 gtk_progress_get_text_from_value
-gtk_progress_get_type
+gtk_progress_get_type G_GNUC_CONST
 gtk_progress_get_value
 gtk_progress_set_activity_mode
 gtk_progress_set_adjustment
@@ -1626,11 +1626,11 @@ gtk_quit_remove
 gtk_quit_remove_by_data
 gtk_radio_action_get_current_value
 gtk_radio_action_get_group
-gtk_radio_action_get_type
+gtk_radio_action_get_type G_GNUC_CONST
 gtk_radio_action_new
 gtk_radio_action_set_group
 gtk_radio_button_get_group
-gtk_radio_button_get_type
+gtk_radio_button_get_type G_GNUC_CONST
 gtk_radio_button_new
 gtk_radio_button_new_from_widget
 gtk_radio_button_new_with_label
@@ -1639,7 +1639,7 @@ gtk_radio_button_new_with_mnemonic
 gtk_radio_button_new_with_mnemonic_from_widget
 gtk_radio_button_set_group
 gtk_radio_menu_item_get_group
-gtk_radio_menu_item_get_type
+gtk_radio_menu_item_get_type G_GNUC_CONST
 gtk_radio_menu_item_new
 gtk_radio_menu_item_new_from_widget
 gtk_radio_menu_item_new_with_label
@@ -1648,7 +1648,7 @@ gtk_radio_menu_item_new_with_mnemonic
 gtk_radio_menu_item_new_with_mnemonic_from_widget
 gtk_radio_menu_item_set_group
 gtk_radio_tool_button_get_group
-gtk_radio_tool_button_get_type
+gtk_radio_tool_button_get_type G_GNUC_CONST
 gtk_radio_tool_button_new
 gtk_radio_tool_button_new_from_stock
 gtk_radio_tool_button_new_from_widget
@@ -1656,7 +1656,7 @@ gtk_radio_tool_button_new_with_stock_from_widget
 gtk_radio_tool_button_set_group
 gtk_range_get_adjustment
 gtk_range_get_inverted
-gtk_range_get_type
+gtk_range_get_type G_GNUC_CONST
 gtk_range_get_update_policy
 gtk_range_get_value
 gtk_range_set_adjustment
@@ -1695,7 +1695,7 @@ gtk_rc_reset_styles
 gtk_rc_scanner_new
 gtk_rc_set_default_files
 gtk_rc_style_copy
-gtk_rc_style_get_type
+gtk_rc_style_get_type G_GNUC_CONST
 gtk_rc_style_new
 gtk_rc_style_ref
 gtk_rc_style_unref
@@ -1711,25 +1711,25 @@ gtk_ruler_draw_pos
 gtk_ruler_draw_ticks
 gtk_ruler_get_metric
 gtk_ruler_get_range
-gtk_ruler_get_type
+gtk_ruler_get_type G_GNUC_CONST
 gtk_ruler_set_metric
 gtk_ruler_set_range
 gtk_scale_get_digits
 gtk_scale_get_draw_value
 gtk_scale_get_layout
 gtk_scale_get_layout_offsets
-gtk_scale_get_type
+gtk_scale_get_type G_GNUC_CONST
 gtk_scale_get_value_pos
 gtk_scale_set_digits
 gtk_scale_set_draw_value
 gtk_scale_set_value_pos
-gtk_scrollbar_get_type
+gtk_scrollbar_get_type G_GNUC_CONST
 gtk_scrolled_window_add_with_viewport
 gtk_scrolled_window_get_hadjustment
 gtk_scrolled_window_get_placement
 gtk_scrolled_window_get_policy
 gtk_scrolled_window_get_shadow_type
-gtk_scrolled_window_get_type
+gtk_scrolled_window_get_type G_GNUC_CONST
 gtk_scrolled_window_get_vadjustment
 gtk_scrolled_window_new
 gtk_scrolled_window_set_hadjustment
@@ -1749,7 +1749,7 @@ gtk_selection_data_free
 gtk_selection_data_get_pixbuf
 gtk_selection_data_get_targets
 gtk_selection_data_get_text
-gtk_selection_data_get_type
+gtk_selection_data_get_type G_GNUC_CONST
 gtk_selection_data_get_uris
 gtk_selection_data_set
 gtk_selection_data_set_pixbuf
@@ -1761,17 +1761,17 @@ gtk_selection_mode_get_type
 gtk_selection_owner_set
 gtk_selection_owner_set_for_display
 gtk_selection_remove_all
-gtk_separator_get_type
-gtk_separator_menu_item_get_type
+gtk_separator_get_type G_GNUC_CONST
+gtk_separator_menu_item_get_type G_GNUC_CONST
 gtk_separator_menu_item_new
 gtk_separator_tool_item_get_draw
-gtk_separator_tool_item_get_type
+gtk_separator_tool_item_get_type G_GNUC_CONST
 gtk_separator_tool_item_new
 gtk_separator_tool_item_set_draw
 gtk_set_locale
 gtk_settings_get_default
 gtk_settings_get_for_screen
-gtk_settings_get_type
+gtk_settings_get_type G_GNUC_CONST
 gtk_settings_install_property
 gtk_settings_install_property_parser
 gtk_settings_set_double_property
@@ -1795,7 +1795,7 @@ gtk_signal_newv
 gtk_signal_run_type_get_type
 gtk_size_group_add_widget
 gtk_size_group_get_mode
-gtk_size_group_get_type
+gtk_size_group_get_type G_GNUC_CONST
 gtk_size_group_mode_get_type
 gtk_size_group_new
 gtk_size_group_remove_widget
@@ -1803,7 +1803,7 @@ gtk_size_group_set_mode
 #ifdef GTK_WINDOWING_X11
 gtk_socket_add_id
 gtk_socket_get_id
-gtk_socket_get_type
+gtk_socket_get_type G_GNUC_CONST
 gtk_socket_new
 gtk_socket_steal
 #endif
@@ -1815,7 +1815,7 @@ gtk_spin_button_get_increments
 gtk_spin_button_get_numeric
 gtk_spin_button_get_range
 gtk_spin_button_get_snap_to_ticks
-gtk_spin_button_get_type
+gtk_spin_button_get_type G_GNUC_CONST
 gtk_spin_button_get_update_policy
 gtk_spin_button_get_value
 gtk_spin_button_get_value_as_int
@@ -1838,7 +1838,7 @@ gtk_spin_type_get_type
 gtk_state_type_get_type
 gtk_statusbar_get_context_id
 gtk_statusbar_get_has_resize_grip
-gtk_statusbar_get_type
+gtk_statusbar_get_type G_GNUC_CONST
 gtk_statusbar_new
 gtk_statusbar_pop
 gtk_statusbar_push
@@ -1855,7 +1855,7 @@ gtk_style_attach
 gtk_style_copy
 gtk_style_detach
 gtk_style_get_font
-gtk_style_get_type
+gtk_style_get_type G_GNUC_CONST
 gtk_style_lookup_icon_set
 gtk_style_new
 gtk_style_ref
@@ -1872,7 +1872,7 @@ gtk_table_get_default_col_spacing
 gtk_table_get_default_row_spacing
 gtk_table_get_homogeneous
 gtk_table_get_row_spacing
-gtk_table_get_type
+gtk_table_get_type G_GNUC_CONST
 gtk_table_new
 gtk_table_resize
 gtk_table_set_col_spacing
@@ -1891,7 +1891,7 @@ gtk_target_list_new
 gtk_target_list_ref
 gtk_target_list_remove
 gtk_target_list_unref
-gtk_tearoff_menu_item_get_type
+gtk_tearoff_menu_item_get_type G_GNUC_CONST
 gtk_tearoff_menu_item_new
 gtk_text_anchored_child_set_layout
 #ifdef INCLUDE_VARIABLES
@@ -1939,7 +1939,7 @@ gtk_text_buffer_get_slice
 gtk_text_buffer_get_start_iter
 gtk_text_buffer_get_tag_table
 gtk_text_buffer_get_text
-gtk_text_buffer_get_type
+gtk_text_buffer_get_type G_GNUC_CONST
 gtk_text_buffer_insert
 gtk_text_buffer_insert_at_cursor
 gtk_text_buffer_insert_child_anchor
@@ -1967,7 +1967,7 @@ gtk_text_byte_begins_utf8_char
 gtk_text_char_type
 #endif
 gtk_text_child_anchor_get_deleted
-gtk_text_child_anchor_get_type
+gtk_text_child_anchor_get_type G_GNUC_CONST
 gtk_text_child_anchor_get_widgets
 gtk_text_child_anchor_new
 gtk_text_child_anchor_queue_resize
@@ -1981,7 +1981,7 @@ gtk_text_forward_delete
 gtk_text_freeze
 gtk_text_get_length
 gtk_text_get_point
-gtk_text_get_type
+gtk_text_get_type G_GNUC_CONST
 gtk_text_insert
 gtk_text_iter_backward_char
 gtk_text_iter_backward_chars
@@ -2047,7 +2047,7 @@ gtk_text_iter_get_slice
 gtk_text_iter_get_tags
 gtk_text_iter_get_text
 gtk_text_iter_get_toggled_tags
-gtk_text_iter_get_type
+gtk_text_iter_get_type G_GNUC_CONST
 gtk_text_iter_get_visible_line_index
 gtk_text_iter_get_visible_line_offset
 gtk_text_iter_get_visible_slice
@@ -2087,7 +2087,7 @@ gtk_text_layout_get_line_display
 gtk_text_layout_get_lines
 gtk_text_layout_get_line_yrange
 gtk_text_layout_get_size
-gtk_text_layout_get_type
+gtk_text_layout_get_type G_GNUC_CONST
 gtk_text_layout_invalidate
 gtk_text_layout_is_valid
 gtk_text_layout_iter_starts_line
@@ -2119,7 +2119,7 @@ gtk_text_mark_get_buffer
 gtk_text_mark_get_deleted
 gtk_text_mark_get_left_gravity
 gtk_text_mark_get_name
-gtk_text_mark_get_type
+gtk_text_mark_get_type G_GNUC_CONST
 gtk_text_mark_get_visible
 gtk_text_mark_set_visible
 gtk_text_new
@@ -2135,13 +2135,13 @@ gtk_text_set_point
 gtk_text_set_word_wrap
 gtk_text_tag_event
 gtk_text_tag_get_priority
-gtk_text_tag_get_type
+gtk_text_tag_get_type G_GNUC_CONST
 gtk_text_tag_new
 gtk_text_tag_set_priority
 gtk_text_tag_table_add
 gtk_text_tag_table_foreach
 gtk_text_tag_table_get_size
-gtk_text_tag_table_get_type
+gtk_text_tag_table_get_type G_GNUC_CONST
 gtk_text_tag_table_lookup
 gtk_text_tag_table_new
 gtk_text_tag_table_remove
@@ -2177,7 +2177,7 @@ gtk_text_view_get_pixels_below_lines
 gtk_text_view_get_pixels_inside_wrap
 gtk_text_view_get_right_margin
 gtk_text_view_get_tabs
-gtk_text_view_get_type
+gtk_text_view_get_type G_GNUC_CONST
 gtk_text_view_get_visible_rect
 gtk_text_view_get_window
 gtk_text_view_get_window_type
@@ -2211,11 +2211,11 @@ gtk_text_view_window_to_buffer_coords
 gtk_text_window_type_get_type
 gtk_theme_engine_create_rc_style
 gtk_theme_engine_get
-gtk_theme_engine_get_type
+gtk_theme_engine_get_type G_GNUC_CONST
 gtk_timeout_add
 gtk_timeout_add_full
 gtk_timeout_remove
-gtk_tips_query_get_type
+gtk_tips_query_get_type G_GNUC_CONST
 gtk_tips_query_new
 gtk_tips_query_set_caller
 gtk_tips_query_set_labels
@@ -2223,7 +2223,7 @@ gtk_tips_query_start_query
 gtk_tips_query_stop_query
 gtk_toggle_action_get_active
 gtk_toggle_action_get_draw_as_radio
-gtk_toggle_action_get_type
+gtk_toggle_action_get_type G_GNUC_CONST
 gtk_toggle_action_new
 gtk_toggle_action_set_active
 gtk_toggle_action_set_draw_as_radio
@@ -2231,7 +2231,7 @@ gtk_toggle_action_toggled
 gtk_toggle_button_get_active
 gtk_toggle_button_get_inconsistent
 gtk_toggle_button_get_mode
-gtk_toggle_button_get_type
+gtk_toggle_button_get_type G_GNUC_CONST
 gtk_toggle_button_new
 gtk_toggle_button_new_with_label
 gtk_toggle_button_new_with_mnemonic
@@ -2240,7 +2240,7 @@ gtk_toggle_button_set_inconsistent
 gtk_toggle_button_set_mode
 gtk_toggle_button_toggled
 gtk_toggle_tool_button_get_active
-gtk_toggle_tool_button_get_type
+gtk_toggle_tool_button_get_type G_GNUC_CONST
 gtk_toggle_tool_button_new
 gtk_toggle_tool_button_new_from_stock
 gtk_toggle_tool_button_set_active
@@ -2259,7 +2259,7 @@ gtk_toolbar_get_relief_style
 gtk_toolbar_get_show_arrow
 gtk_toolbar_get_style
 gtk_toolbar_get_tooltips
-gtk_toolbar_get_type
+gtk_toolbar_get_type G_GNUC_CONST
 gtk_toolbar_insert
 gtk_toolbar_insert_element
 gtk_toolbar_insert_item
@@ -2303,7 +2303,7 @@ gtk_tool_item_get_orientation
 gtk_tool_item_get_proxy_menu_item
 gtk_tool_item_get_relief_style
 gtk_tool_item_get_toolbar_style
-gtk_tool_item_get_type
+gtk_tool_item_get_type G_GNUC_CONST
 gtk_tool_item_get_use_drag_window
 gtk_tool_item_get_visible_horizontal
 gtk_tool_item_get_visible_vertical
@@ -2323,7 +2323,7 @@ gtk_tooltips_disable
 gtk_tooltips_enable
 gtk_tooltips_force_window
 gtk_tooltips_get_info_from_tip_window
-gtk_tooltips_get_type
+gtk_tooltips_get_type G_GNUC_CONST
 gtk_tooltips_new
 gtk_tooltips_set_delay
 gtk_tooltips_set_tip
@@ -2331,19 +2331,19 @@ gtk_tree_append
 gtk_tree_child_position
 gtk_tree_clear_items
 gtk_tree_drag_dest_drag_data_received
-gtk_tree_drag_dest_get_type
+gtk_tree_drag_dest_get_type G_GNUC_CONST
 gtk_tree_drag_dest_row_drop_possible
 gtk_tree_drag_source_drag_data_delete
 gtk_tree_drag_source_drag_data_get
-gtk_tree_drag_source_get_type
+gtk_tree_drag_source_get_type G_GNUC_CONST
 gtk_tree_drag_source_row_draggable
 gtk_tree_get_row_drag_data
-gtk_tree_get_type
+gtk_tree_get_type G_GNUC_CONST
 gtk_tree_insert
 gtk_tree_item_collapse
 gtk_tree_item_deselect
 gtk_tree_item_expand
-gtk_tree_item_get_type
+gtk_tree_item_get_type G_GNUC_CONST
 gtk_tree_item_new
 gtk_tree_item_new_with_label
 gtk_tree_item_remove_subtree
@@ -2351,14 +2351,14 @@ gtk_tree_item_select
 gtk_tree_item_set_subtree
 gtk_tree_iter_copy
 gtk_tree_iter_free
-gtk_tree_iter_get_type
+gtk_tree_iter_get_type G_GNUC_CONST
 gtk_tree_model_filter_clear_cache
 gtk_tree_model_filter_convert_child_iter_to_iter
 gtk_tree_model_filter_convert_child_path_to_path
 gtk_tree_model_filter_convert_iter_to_child_iter
 gtk_tree_model_filter_convert_path_to_child_path
 gtk_tree_model_filter_get_model
-gtk_tree_model_filter_get_type
+gtk_tree_model_filter_get_type G_GNUC_CONST
 gtk_tree_model_filter_new
 gtk_tree_model_filter_refilter
 gtk_tree_model_filter_set_modify_func
@@ -2375,7 +2375,7 @@ gtk_tree_model_get_iter_from_string
 gtk_tree_model_get_n_columns
 gtk_tree_model_get_path
 gtk_tree_model_get_string_from_iter
-gtk_tree_model_get_type
+gtk_tree_model_get_type G_GNUC_CONST
 gtk_tree_model_get_valist
 gtk_tree_model_get_value
 gtk_tree_model_iter_children
@@ -2396,7 +2396,7 @@ gtk_tree_model_sort_convert_child_path_to_path
 gtk_tree_model_sort_convert_iter_to_child_iter
 gtk_tree_model_sort_convert_path_to_child_path
 gtk_tree_model_sort_get_model
-gtk_tree_model_sort_get_type
+gtk_tree_model_sort_get_type G_GNUC_CONST
 gtk_tree_model_sort_iter_is_valid
 gtk_tree_model_sort_new_with_model
 gtk_tree_model_sort_reset_default_sort_func
@@ -2409,7 +2409,7 @@ gtk_tree_path_down
 gtk_tree_path_free
 gtk_tree_path_get_depth
 gtk_tree_path_get_indices
-gtk_tree_path_get_type
+gtk_tree_path_get_type G_GNUC_CONST
 gtk_tree_path_is_ancestor
 gtk_tree_path_is_descendant
 gtk_tree_path_new
@@ -2428,7 +2428,7 @@ gtk_tree_row_reference_copy
 gtk_tree_row_reference_deleted
 gtk_tree_row_reference_free
 gtk_tree_row_reference_get_path
-gtk_tree_row_reference_get_type
+gtk_tree_row_reference_get_type G_GNUC_CONST
 gtk_tree_row_reference_inserted
 gtk_tree_row_reference_new
 gtk_tree_row_reference_new_proxy
@@ -2440,7 +2440,7 @@ gtk_tree_selection_get_mode
 gtk_tree_selection_get_selected
 gtk_tree_selection_get_selected_rows
 gtk_tree_selection_get_tree_view
-gtk_tree_selection_get_type
+gtk_tree_selection_get_type G_GNUC_CONST
 gtk_tree_selection_get_user_data
 gtk_tree_selection_iter_is_selected
 gtk_tree_selection_path_is_selected
@@ -2461,7 +2461,7 @@ gtk_tree_set_selection_mode
 gtk_tree_set_view_lines
 gtk_tree_set_view_mode
 gtk_tree_sortable_get_sort_column_id
-gtk_tree_sortable_get_type
+gtk_tree_sortable_get_type G_GNUC_CONST
 gtk_tree_sortable_has_default_sort_func
 gtk_tree_sortable_set_default_sort_func
 gtk_tree_sortable_set_sort_column_id
@@ -2469,7 +2469,7 @@ gtk_tree_sortable_set_sort_func
 gtk_tree_sortable_sort_column_changed
 gtk_tree_store_append
 gtk_tree_store_clear
-gtk_tree_store_get_type
+gtk_tree_store_get_type G_GNUC_CONST
 gtk_tree_store_insert
 gtk_tree_store_insert_after
 gtk_tree_store_insert_before
@@ -2517,7 +2517,7 @@ gtk_tree_view_column_get_sort_indicator
 gtk_tree_view_column_get_sort_order
 gtk_tree_view_column_get_spacing
 gtk_tree_view_column_get_title
-gtk_tree_view_column_get_type
+gtk_tree_view_column_get_type G_GNUC_CONST
 gtk_tree_view_column_get_visible
 gtk_tree_view_column_get_widget
 gtk_tree_view_column_get_width
@@ -2575,7 +2575,7 @@ gtk_tree_view_get_rules_hint
 gtk_tree_view_get_search_column
 gtk_tree_view_get_search_equal_func
 gtk_tree_view_get_selection
-gtk_tree_view_get_type
+gtk_tree_view_get_type G_GNUC_CONST
 gtk_tree_view_get_vadjustment
 gtk_tree_view_get_visible_rect
 gtk_tree_view_insert_column
@@ -2615,7 +2615,7 @@ gtk_tree_view_tree_to_widget_coords
 gtk_tree_view_unset_rows_drag_dest
 gtk_tree_view_unset_rows_drag_source
 gtk_tree_view_widget_to_tree_coords
-gtk_true
+gtk_true G_GNUC_CONST
 gtk_type_class
 gtk_type_enum_find_value
 gtk_type_enum_get_values
@@ -2633,7 +2633,7 @@ gtk_ui_manager_get_action
 gtk_ui_manager_get_action_groups
 gtk_ui_manager_get_add_tearoffs
 gtk_ui_manager_get_toplevels
-gtk_ui_manager_get_type
+gtk_ui_manager_get_type G_GNUC_CONST
 gtk_ui_manager_get_ui
 gtk_ui_manager_get_widget
 gtk_ui_manager_insert_action_group
@@ -2644,33 +2644,33 @@ gtk_ui_manager_remove_action_group
 gtk_ui_manager_remove_ui
 gtk_ui_manager_set_add_tearoffs
 gtk_update_type_get_type
-gtk_vbox_get_type
+gtk_vbox_get_type G_GNUC_CONST
 gtk_vbox_new
 gtk_vbutton_box_get_layout_default
 gtk_vbutton_box_get_spacing_default
-gtk_vbutton_box_get_type
+gtk_vbutton_box_get_type G_GNUC_CONST
 gtk_vbutton_box_new
 gtk_vbutton_box_set_layout_default
 gtk_vbutton_box_set_spacing_default
 gtk_viewport_get_hadjustment
 gtk_viewport_get_shadow_type
-gtk_viewport_get_type
+gtk_viewport_get_type G_GNUC_CONST
 gtk_viewport_get_vadjustment
 gtk_viewport_new
 gtk_viewport_set_hadjustment
 gtk_viewport_set_shadow_type
 gtk_viewport_set_vadjustment
 gtk_visibility_get_type
-gtk_vpaned_get_type
+gtk_vpaned_get_type G_GNUC_CONST
 gtk_vpaned_new
-gtk_vruler_get_type
+gtk_vruler_get_type G_GNUC_CONST
 gtk_vruler_new
-gtk_vscale_get_type
+gtk_vscale_get_type G_GNUC_CONST
 gtk_vscale_new
 gtk_vscale_new_with_range
-gtk_vscrollbar_get_type
+gtk_vscrollbar_get_type G_GNUC_CONST
 gtk_vscrollbar_new
-gtk_vseparator_get_type
+gtk_vseparator_get_type G_GNUC_CONST
 gtk_vseparator_new
 gtk_widget_activate
 gtk_widget_add_accelerator
@@ -2721,7 +2721,7 @@ gtk_widget_get_settings
 gtk_widget_get_size_request
 gtk_widget_get_style
 gtk_widget_get_toplevel
-gtk_widget_get_type
+gtk_widget_get_type G_GNUC_CONST
 gtk_widget_get_visual
 gtk_widget_grab_default
 gtk_widget_grab_focus
@@ -2838,10 +2838,10 @@ gtk_window_get_skip_pager_hint
 gtk_window_get_skip_taskbar_hint
 gtk_window_get_title
 gtk_window_get_transient_for
-gtk_window_get_type
+gtk_window_get_type G_GNUC_CONST
 gtk_window_get_type_hint
 gtk_window_group_add_window
-gtk_window_group_get_type
+gtk_window_group_get_type G_GNUC_CONST
 gtk_window_group_new
 gtk_window_group_remove_window
 gtk_window_has_toplevel_focus

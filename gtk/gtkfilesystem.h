@@ -79,7 +79,7 @@ GQuark     gtk_file_system_error_quark      (void);
  */
 #define GTK_TYPE_FILE_INFO (gtk_file_info_get_type ())
 
-GType       gtk_file_info_get_type (void);
+GType       gtk_file_info_get_type (void) G_GNUC_CONST; 
 
 GtkFileInfo *gtk_file_info_new  (void);
 GtkFileInfo *gtk_file_info_copy (GtkFileInfo *info);
@@ -201,7 +201,7 @@ struct _GtkFileSystemIface
   void (*bookmarks_changed) (GtkFileSystem *file_system);
 };
 
-GType             gtk_file_system_get_type       (void);
+GType             gtk_file_system_get_type       (void) G_GNUC_CONST;
 
 GSList *          gtk_file_system_list_volumes   (GtkFileSystem     *file_system);
 
@@ -313,7 +313,7 @@ struct _GtkFileFolderIface
   void     (*finished_loading)    (GtkFileFolder *folder);
 };
 
-GType        gtk_file_folder_get_type      (void);
+GType        gtk_file_folder_get_type      (void) G_GNUC_CONST;
 gboolean     gtk_file_folder_list_children (GtkFileFolder      *folder,
 					    GSList            **children,
 					    GError            **error);
@@ -327,7 +327,7 @@ gboolean     gtk_file_folder_is_finished_loading (GtkFileFolder *folder);
 /* GtkFilePath */
 #define GTK_TYPE_FILE_PATH             (gtk_file_path_get_type ())
 
-GType   gtk_file_path_get_type (void);
+GType   gtk_file_path_get_type (void) G_GNUC_CONST;
 #ifdef __GNUC__
 #define gtk_file_path_new_dup(str) \
  ({ const gchar *__s = (str); (GtkFilePath *)g_strdup(__s); })

@@ -69,7 +69,7 @@ struct _GtkIconViewClass
   gboolean (* activate_cursor_item)  (GtkIconView      *icon_view);
 };
 
-GType      gtk_icon_view_get_type       (void);
+GType      gtk_icon_view_get_type       (void) G_GNUC_CONST;
 GtkWidget *gtk_icon_view_new            (void);
 GtkWidget *gtk_icon_view_new_with_model (GtkTreeModel *model);
 

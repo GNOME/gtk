@@ -176,7 +176,7 @@ gboolean _gtk_selection_notify		  (GtkWidget         *widget,
 gboolean _gtk_selection_property_notify	  (GtkWidget         *widget,
 					   GdkEventProperty  *event);
 
-GType             gtk_selection_data_get_type (void);
+GType             gtk_selection_data_get_type (void) G_GNUC_CONST;
 GtkSelectionData *gtk_selection_data_copy     (GtkSelectionData *data);
 void		  gtk_selection_data_free     (GtkSelectionData *data);
 

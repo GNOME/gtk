@@ -69,7 +69,7 @@ struct _GtkSettingsValue
 
 
 /* --- functions --- */
-GType		gtk_settings_get_type		     (void);
+GType		gtk_settings_get_type		     (void) G_GNUC_CONST;
 #ifndef GDK_MULTIHEAD_SAFE
 GtkSettings*	gtk_settings_get_default	     (void);
 #endif

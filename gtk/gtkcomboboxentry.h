@@ -56,7 +56,7 @@ struct _GtkComboBoxEntryClass
 };
 
 
-GType       gtk_combo_box_entry_get_type        (void);
+GType       gtk_combo_box_entry_get_type        (void) G_GNUC_CONST;
 GtkWidget  *gtk_combo_box_entry_new             (void);
 GtkWidget  *gtk_combo_box_entry_new_with_model  (GtkTreeModel     *model,
                                                  gint              text_column);

@@ -85,7 +85,7 @@ GtkTextBuffer *gtk_text_iter_get_buffer (const GtkTextIter *iter);
 GtkTextIter *gtk_text_iter_copy     (const GtkTextIter *iter);
 void         gtk_text_iter_free     (GtkTextIter       *iter);
 
-GType        gtk_text_iter_get_type (void);
+GType        gtk_text_iter_get_type (void) G_GNUC_CONST;
 
 /*
  * Convert to different kinds of index

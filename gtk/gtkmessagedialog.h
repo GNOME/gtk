@@ -83,7 +83,7 @@ struct _GtkMessageDialogClass
   void (*_gtk_reserved4) (void);
 };
 
-GType      gtk_message_dialog_get_type (void);
+GType      gtk_message_dialog_get_type (void) G_GNUC_CONST;
 
 GtkWidget* gtk_message_dialog_new      (GtkWindow      *parent,
                                         GtkDialogFlags  flags,

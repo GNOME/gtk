@@ -57,7 +57,7 @@ typedef void (* GtkClipboardGetFunc)          (GtkClipboard     *clipboard,
 typedef void (* GtkClipboardClearFunc)        (GtkClipboard     *clipboard,
 					       gpointer          user_data_or_owner);
 
-GType         gtk_clipboard_get_type (void);
+GType         gtk_clipboard_get_type (void) G_GNUC_CONST;
 
 GtkClipboard *gtk_clipboard_get_for_display (GdkDisplay   *display,
 					     GdkAtom       selection);

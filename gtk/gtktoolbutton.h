@@ -62,7 +62,7 @@ struct _GtkToolButtonClass
   void (* _gtk_reserved4) (void);
 };
 
-GType        gtk_tool_button_get_type       (void);
+GType        gtk_tool_button_get_type       (void) G_GNUC_CONST;
 GtkToolItem *gtk_tool_button_new            (GtkWidget   *icon_widget,
 					     const gchar *label);
 GtkToolItem *gtk_tool_button_new_from_stock (const gchar *stock_id);

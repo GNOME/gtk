@@ -90,7 +90,7 @@ struct _GtkCellRendererTextClass
   void (*_gtk_reserved4) (void);
 };
 
-GType            gtk_cell_renderer_text_get_type (void);
+GType            gtk_cell_renderer_text_get_type (void) G_GNUC_CONST;
 GtkCellRenderer *gtk_cell_renderer_text_new      (void);
 
 void             gtk_cell_renderer_text_set_fixed_height_from_font (GtkCellRendererText *renderer,

@@ -65,7 +65,7 @@ struct _GtkTreeModelFilterClass
 };
 
 /* base */
-GType         gtk_tree_model_filter_get_type                   (void);
+GType         gtk_tree_model_filter_get_type                   (void) G_GNUC_CONST;
 GtkTreeModel *gtk_tree_model_filter_new                        (GtkTreeModel                 *child_model,
                                                                 GtkTreePath                  *root);
 void          gtk_tree_model_filter_set_visible_func           (GtkTreeModelFilter           *filter,

@@ -50,7 +50,7 @@ struct _GtkFileChooserDialog
   GtkFileChooserDialogPrivate *priv;
 };
 
-GType      gtk_file_chooser_dialog_get_type         (void);
+GType      gtk_file_chooser_dialog_get_type         (void) G_GNUC_CONST;
 GtkWidget *gtk_file_chooser_dialog_new              (const gchar          *title,
 						     GtkWindow            *parent,
 						     GtkFileChooserAction  action,

@@ -130,7 +130,7 @@ typedef gboolean (*GtkTreeViewRowSeparatorFunc) (GtkTreeModel      *model,
 
 
 /* Creators */
-GType                  gtk_tree_view_get_type                      (void);
+GType                  gtk_tree_view_get_type                      (void) G_GNUC_CONST;
 GtkWidget             *gtk_tree_view_new                           (void);
 GtkWidget             *gtk_tree_view_new_with_model                (GtkTreeModel              *model);
 

@@ -1,3 +1,73 @@
+2004-11-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkuimanager.h (gtk_ui_manager_get_type): 
+	* gtk/gtktreeview.h (gtk_tree_view_get_type): 
+	* gtk/gtktreeviewcolumn.h (gtk_tree_view_column_get_type): 
+	* gtk/gtktreestore.h (gtk_tree_store_get_type): 
+	* gtk/gtktreeselection.h (gtk_tree_selection_get_type): 
+	* gtk/gtktreemodelfilter.h (gtk_tree_model_filter_get_type): 
+	* gtk/gtktreemodel.h (gtk_tree_iter_get_type): 
+	(gtk_tree_path_get_type):
+	(gtk_tree_row_reference_get_type):
+	* gtk/gtktoolitem.h (gtk_tool_item_get_type): 
+	* gtk/gtktoolbutton.h (gtk_tool_button_get_type): 
+	* gtk/gtktoggleaction.h (gtk_toggle_action_get_type): 
+	* gtk/gtkthemes.h (gtk_theme_engine_get_type): 
+	* gtk/gtktextiter.h (gtk_text_iter_get_type): 
+	* gtk/gtksettings.h (gtk_settings_get_type): 
+	* gtk/gtkselection.h (gtk_selection_data_get_type): 
+	* gtk/gtkradioaction.h (gtk_radio_action_get_type): 
+	* gtk/gtkmenutoolbutton.h (gtk_menu_tool_button_get_type): 
+	* gtk/gtkliststore.h (gtk_list_store_get_type): 
+	* gtk/gtkiconview.h (gtk_icon_view_get_type): 
+	* gtk/gtkicontheme.h (gtk_icon_info_get_type): 
+	* gtk/gtkiconfactory.h (gtk_icon_factory_get_type): 
+	(gtk_icon_set_get_type):
+	(gtk_icon_source_get_type):
+	* gtk/gtkfilesystemwin32.h (gtk_file_system_win32_get_type): 
+	* gtk/gtkfilesystemunix.h (gtk_file_system_unix_get_type): 
+	* gtk/gtkfilesystem.h (gtk_file_folder_get_type):
+	(gtk_file_info_get_type, gtk_file_path_get_type):
+	(gtk_file_system_get_type):
+	* gtk/gtkfilefilter.h (gtk_file_filter_get_type): 
+	* gtk/gtkfilechooserwidget.h (gtk_file_chooser_widget_get_type): 
+	* gtk/gtkfilechooser.h (gtk_file_chooser_get_type): 
+	* gtk/gtkfilechooserdialog.h (gtk_file_chooser_dialog_get_type): 
+	* gtk/gtkexpander.h (gtk_expander_get_type): 
+	* gtk/gtkentrycompletion.h (gtk_entry_completion_get_type): 
+	* gtk/gtkcombobox.h (gtk_combo_box_get_type): 
+	* gtk/gtkcomboboxentry.h (gtk_combo_box_entry_get_type): 
+	* gtk/gtkclipboard.h (gtk_clipboard_get_type): 
+	* gtk/gtkcellview.h (gtk_cell_view_get_type): 
+	* gtk/gtkcellrenderertoggle.h (gtk_cell_renderer_toggle_get_type): 
+	* gtk/gtkcellrenderertext.h (gtk_cell_renderer_text_get_type): 
+	* gtk/gtkcellrendererprogress.h (gtk_cell_renderer_progress_get_type): 
+	* gtk/gtkcellrendererpixbuf.h (gtk_cell_renderer_pixbuf_get_type): 
+	* gtk/gtkcellrenderercombo.h (gtk_cell_renderer_combo_get_type): 
+	* gtk/gtkcelllayout.h (gtk_cell_layout_get_type):
+	* gtk/gtkactiongroup.h (gtk_action_group_get_type): 
+	* gtk/gtkaction.h (gtk_action_get_type): 
+	* gtk/gtkaccessible.h (gtk_accessible_get_type): 
+	* gtk/gtkaccelmap.h (gtk_accel_map_get_type): 
+	* gtk/gtkaccelgroup.h (gtk_accel_group_get_type): 
+	* gtk/gtkmessagedialog.h (gtk_message_dialog_get_type): Mark as const.  
+
+	* gtk/gtkicontheme.h:  Don't mark gtk_icon_theme_error_quark() 
+	as const, to be consistent with all the other error_quark 
+	functions. (technically they are const, but since these are 
+	called only in error paths, giving the compiler better 
+	optimization opportunities doesn't matter much)
+
+	* gtk/gtk.symbols:
+	* gdk/gdk.symbols: Add attribute annotations.
+
+	* gtk/makegtkalias.pl: 
+	* gdk/makegdkalias.pl: Keep attribute annotations, but strip PRIVATE.
+	
+	* gtk/Makefile.am (gtk.def): 
+	* gdk/Makefile.am (gdk.def): Strip attribute annotations, but keep 
+	PRIVATE.
+
 2004-11-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_set_icon_size): Add a deprecation

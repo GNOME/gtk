@@ -40,7 +40,7 @@ extern "C" {
 #define GTK_THEME_ENGINE(theme_engine)    (G_TYPE_CHECK_INSTANCE_CAST ((theme_engine), GTK_TYPE_THEME_ENGINE, GtkThemeEngine))
 #define GTK_IS_THEME_ENGINE(theme_engine) (G_TYPE_CHECK_INSTANCE_TYPE ((theme_engine), GTK_TYPE_THEME_ENGINE))
 
-GType           gtk_theme_engine_get_type        (void);
+GType           gtk_theme_engine_get_type        (void) G_GNUC_CONST;
 GtkThemeEngine *gtk_theme_engine_get             (const gchar     *name);
 GtkRcStyle     *gtk_theme_engine_create_rc_style (GtkThemeEngine  *engine);
 

@@ -53,7 +53,7 @@ struct _GtkCellRendererComboClass
   GtkCellRendererTextClass parent;
 };
 
-GType            gtk_cell_renderer_combo_get_type (void);
+GType            gtk_cell_renderer_combo_get_type (void) G_GNUC_CONST;
 GtkCellRenderer *gtk_cell_renderer_combo_new      (void);
 
 G_END_DECLS

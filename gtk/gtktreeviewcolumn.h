@@ -120,7 +120,7 @@ struct _GtkTreeViewColumnClass
   void (*_gtk_reserved4) (void);
 };
 
-GType                   gtk_tree_view_column_get_type            (void);
+GType                   gtk_tree_view_column_get_type            (void) G_GNUC_CONST;
 GtkTreeViewColumn      *gtk_tree_view_column_new                 (void);
 GtkTreeViewColumn      *gtk_tree_view_column_new_with_attributes (const gchar             *title,
 								  GtkCellRenderer         *cell,

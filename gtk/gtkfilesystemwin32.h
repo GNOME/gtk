@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 typedef struct _GtkFileSystemWin32      GtkFileSystemWin32;
 
 GtkFileSystem *gtk_file_system_win32_new      (void);
-GType          gtk_file_system_win32_get_type (void);
+GType          gtk_file_system_win32_get_type (void) G_GNUC_CONST;
      
 G_END_DECLS
 

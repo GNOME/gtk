@@ -68,7 +68,7 @@ struct _GtkTreeStoreClass
 };
 
 
-GType         gtk_tree_store_get_type         (void);
+GType         gtk_tree_store_get_type         (void) G_GNUC_CONST;
 GtkTreeStore *gtk_tree_store_new              (gint          n_columns,
 					       ...);
 GtkTreeStore *gtk_tree_store_newv             (gint          n_columns,

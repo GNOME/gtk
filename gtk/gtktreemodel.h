@@ -132,7 +132,7 @@ gint         gtk_tree_path_get_depth        (GtkTreePath       *path);
 gint        *gtk_tree_path_get_indices      (GtkTreePath       *path);
 void         gtk_tree_path_free             (GtkTreePath       *path);
 GtkTreePath *gtk_tree_path_copy             (const GtkTreePath *path);
-GType        gtk_tree_path_get_type         (void);
+GType        gtk_tree_path_get_type         (void) G_GNUC_CONST;
 gint         gtk_tree_path_compare          (const GtkTreePath *a,
 					     const GtkTreePath *b);
 void         gtk_tree_path_next             (GtkTreePath       *path);
@@ -154,7 +154,7 @@ gboolean     gtk_tree_path_is_descendant    (GtkTreePath       *path,
  * want to call gtk_tree_row_reference_new.
  */
 
-GType                gtk_tree_row_reference_get_type (void);
+GType                gtk_tree_row_reference_get_type (void) G_GNUC_CONST;
 GtkTreeRowReference *gtk_tree_row_reference_new       (GtkTreeModel        *model,
 						       GtkTreePath         *path);
 GtkTreeRowReference *gtk_tree_row_reference_new_proxy (GObject             *proxy,
@@ -178,7 +178,7 @@ void                 gtk_tree_row_reference_reordered (GObject     *proxy,
 /* GtkTreeIter operations */
 GtkTreeIter *     gtk_tree_iter_copy             (GtkTreeIter  *iter);
 void              gtk_tree_iter_free             (GtkTreeIter  *iter);
-GType             gtk_tree_iter_get_type         (void);
+GType             gtk_tree_iter_get_type         (void) G_GNUC_CONST;
 
 GType             gtk_tree_model_get_type        (void) G_GNUC_CONST;
 GtkTreeModelFlags gtk_tree_model_get_flags       (GtkTreeModel *tree_model);

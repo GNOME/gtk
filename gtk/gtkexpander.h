@@ -56,7 +56,7 @@ struct _GtkExpanderClass
   void        (* activate) (GtkExpander *expander);
 };
 
-GType                 gtk_expander_get_type          (void);
+GType                 gtk_expander_get_type          (void) G_GNUC_CONST;
 
 GtkWidget            *gtk_expander_new               (const gchar *label);
 GtkWidget            *gtk_expander_new_with_mnemonic (const gchar *label);

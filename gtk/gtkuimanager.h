@@ -98,7 +98,7 @@ typedef enum {
   GTK_UI_MANAGER_ACCELERATOR  = 1 << 8
 } GtkUIManagerItemType;
 
-GType          gtk_ui_manager_get_type            (void);
+GType          gtk_ui_manager_get_type            (void) G_GNUC_CONST;
 GtkUIManager  *gtk_ui_manager_new                 (void);
 void           gtk_ui_manager_set_add_tearoffs    (GtkUIManager          *self,
 						   gboolean               add_tearoffs);

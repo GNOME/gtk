@@ -103,7 +103,7 @@ struct _GtkRadioActionEntry
   gint   value; 
 };
 
-GType           gtk_action_group_get_type                (void);
+GType           gtk_action_group_get_type                (void) G_GNUC_CONST;
 GtkActionGroup *gtk_action_group_new                     (const gchar                *name);
 G_CONST_RETURN gchar *gtk_action_group_get_name          (GtkActionGroup             *action_group);
 gboolean        gtk_action_group_get_sensitive           (GtkActionGroup             *action_group);

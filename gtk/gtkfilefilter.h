@@ -52,7 +52,7 @@ struct _GtkFileFilterInfo
   const gchar *mime_type;
 };
 
-GType gtk_file_filter_get_type (void);
+GType gtk_file_filter_get_type (void) G_GNUC_CONST;
 
 GtkFileFilter *       gtk_file_filter_new      (void);
 void                  gtk_file_filter_set_name (GtkFileFilter *filter,

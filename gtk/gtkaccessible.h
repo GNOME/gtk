@@ -65,7 +65,7 @@ struct _GtkAccessibleClass
   void (*_gtk_reserved4) (void);
 };
 
-GType gtk_accessible_get_type (void);
+GType gtk_accessible_get_type (void) G_GNUC_CONST;
 
 void gtk_accessible_connect_widget_destroyed    (GtkAccessible     *accessible);
 

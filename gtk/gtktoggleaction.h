@@ -67,7 +67,7 @@ struct _GtkToggleActionClass
   void (*_gtk_reserved4) (void);
 };
 
-GType            gtk_toggle_action_get_type          (void);
+GType            gtk_toggle_action_get_type          (void) G_GNUC_CONST;
 GtkToggleAction *gtk_toggle_action_new               (const gchar     *name,
                                                       const gchar     *label,
                                                       const gchar     *tooltip,

@@ -70,7 +70,7 @@ struct _GtkCellLayoutIface
                                gint                   position);
 };
 
-GType gtk_cell_layout_get_type           (void);
+GType gtk_cell_layout_get_type           (void) G_GNUC_CONST;
 void  gtk_cell_layout_pack_start         (GtkCellLayout         *cell_layout,
                                           GtkCellRenderer       *cell,
                                           gboolean               expand);

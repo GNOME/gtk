@@ -67,7 +67,7 @@ struct _GtkToolItemClass
   void (* _gtk_reserved4) (void);
 };
 
-GType        gtk_tool_item_get_type (void);
+GType        gtk_tool_item_get_type (void) G_GNUC_CONST;
 GtkToolItem *gtk_tool_item_new      (void);
 
 void            gtk_tool_item_set_homogeneous          (GtkToolItem *tool_item,

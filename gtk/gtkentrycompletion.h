@@ -73,7 +73,7 @@ struct _GtkEntryCompletionClass
 };
 
 /* core */
-GType               gtk_entry_completion_get_type               (void);
+GType               gtk_entry_completion_get_type               (void) G_GNUC_CONST;
 GtkEntryCompletion *gtk_entry_completion_new                    (void);
 
 GtkWidget          *gtk_entry_completion_get_entry              (GtkEntryCompletion          *completion);

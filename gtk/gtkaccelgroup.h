@@ -101,7 +101,7 @@ struct _GtkAccelKey
 
 
 /* -- Accelerator Groups --- */
-GType          gtk_accel_group_get_type           (void);
+GType          gtk_accel_group_get_type           (void) G_GNUC_CONST;
 GtkAccelGroup* gtk_accel_group_new	      	  (void);
 void	       gtk_accel_group_lock		  (GtkAccelGroup  *accel_group);
 void	       gtk_accel_group_unlock		  (GtkAccelGroup  *accel_group);

@@ -67,7 +67,7 @@ struct _GtkRadioActionClass
   void (*_gtk_reserved4) (void);
 };
 
-GType           gtk_radio_action_get_type          (void);
+GType           gtk_radio_action_get_type          (void) G_GNUC_CONST;
 GtkRadioAction *gtk_radio_action_new               (const gchar           *name,
                                                     const gchar           *label,
                                                     const gchar           *tooltip,

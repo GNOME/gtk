@@ -71,7 +71,7 @@ struct _GtkTreeSelectionClass
 };
 
 
-GType            gtk_tree_selection_get_type            (void);
+GType            gtk_tree_selection_get_type            (void) G_GNUC_CONST;
 
 void             gtk_tree_selection_set_mode            (GtkTreeSelection            *selection,
 							 GtkSelectionMode             type);

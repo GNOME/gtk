@@ -71,7 +71,7 @@ uninstall-ms-lib:
 endif
 
 gtk.def: gtk.symbols
-	(echo -e EXPORTS; cpp -P -DINCLUDE_VARIABLES -DG_OS_WIN32 $(srcdir)/gtk.symbols | sed -e '/^$$/d' -e 's/^/	/') > gtk.def
+	(echo -e EXPORTS; cpp -P -DINCLUDE_VARIABLES -DG_OS_WIN32 $(srcdir)/gtk.symbols | sed -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > gtk.def
 
 gtkalias.h: gtk.symbols
 	  $(srcdir)/makegtkalias.pl < $(srcdir)/gtk.symbols > gtkalias.h

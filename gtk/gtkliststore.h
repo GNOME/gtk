@@ -69,7 +69,7 @@ struct _GtkListStoreClass
 };
 
 
-GType         gtk_list_store_get_type         (void);
+GType         gtk_list_store_get_type         (void) G_GNUC_CONST;
 GtkListStore *gtk_list_store_new              (gint          n_columns,
 					       ...);
 GtkListStore *gtk_list_store_newv             (gint          n_columns,
