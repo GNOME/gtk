@@ -867,51 +867,22 @@ grab_color_at_mouse (GtkWidget *button,
 {
   GdkImage *image;
   guint32 pixel;
-  GdkVisual *visual;
   GtkColorSelection *colorsel = data;
   ColorSelectionPrivate *priv;
   GdkColormap *colormap = gdk_colormap_get_system ();
-#if defined (GDK_WINDOWING_X11)
-  XColor xcolor;
-#endif
+  GdkColor color;
   
   priv = colorsel->private_data;
   
   image = gdk_image_get (GDK_ROOT_PARENT (), x_root, y_root, 1, 1);
   pixel = gdk_image_get_pixel (image, 0, 0);
-  visual = gdk_colormap_get_visual (colormap);
+  gdk_image_unref (image);
+
+  gdk_colormap_query_color (colormap, pixel, &color);
   
-  switch (visual->type) {
-  case GDK_VISUAL_DIRECT_COLOR:
-  case GDK_VISUAL_TRUE_COLOR:
-    priv->color[COLORSEL_RED] = (double)((pixel & visual->red_mask)>>visual->red_shift)/((1<<visual->red_prec) - 1);
-    priv->color[COLORSEL_GREEN] = (double)((pixel & visual->green_mask)>>visual->green_shift)/((1<<visual->green_prec) - 1);
-    priv->color[COLORSEL_BLUE] = (double)((pixel & visual->blue_mask)>>visual->blue_shift)/((1<<visual->blue_prec) - 1);
-    break;
-  case GDK_VISUAL_STATIC_GRAY:
-  case GDK_VISUAL_GRAYSCALE:
-    priv->color[COLORSEL_RED] = (double)pixel/((1<<visual->depth) - 1);
-    priv->color[COLORSEL_GREEN] = (double)pixel/((1<<visual->depth) - 1);
-    priv->color[COLORSEL_BLUE] = (double)pixel/((1<<visual->depth) - 1);
-    break;
-#if defined (GDK_WINDOWING_X11)
-  case GDK_VISUAL_STATIC_COLOR:
-    xcolor.pixel = pixel;
-    XQueryColor (GDK_DISPLAY (), GDK_COLORMAP_XCOLORMAP (colormap), &xcolor);
-    priv->color[COLORSEL_RED] = xcolor.red/65535.0;
-    priv->color[COLORSEL_GREEN] = xcolor.green/65535.0;
-    priv->color[COLORSEL_BLUE] = xcolor.blue/65535.0;
-    break;
-#endif
-  case GDK_VISUAL_PSEUDO_COLOR:
-    priv->color[COLORSEL_RED] = colormap->colors[pixel].red/(double)0xffffff;
-    priv->color[COLORSEL_GREEN] = colormap->colors[pixel].green/(double)0xffffff;
-    priv->color[COLORSEL_BLUE] = colormap->colors[pixel].blue/(double)0xffffff;
-    break;
-  default:
-    g_assert_not_reached ();
-    break;
-  }
+  priv->color[COLORSEL_RED] = (double)color.red / 65535.0;
+  priv->color[COLORSEL_GREEN] = (double)color.green / 65535.0;
+  priv->color[COLORSEL_BLUE] = (double)color.blue / 65535.0;
   
   gtk_rgb_to_hsv (priv->color[COLORSEL_RED],
 		  priv->color[COLORSEL_GREEN],
@@ -919,6 +890,7 @@ grab_color_at_mouse (GtkWidget *button,
 		  &priv->color[COLORSEL_HUE],
 		  &priv->color[COLORSEL_SATURATION],
 		  &priv->color[COLORSEL_VALUE]);
+
   update_color (colorsel);
 }
 
@@ -1397,6 +1369,9 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_signal_connect (GTK_OBJECT (button), "clicked", get_screen_color, NULL);
   dropper_pixmap = gdk_pixmap_colormap_create_from_xpm_d (NULL, gtk_widget_get_colormap (button), &mask, NULL, picker);
   dropper_image = gtk_pixmap_new (dropper_pixmap, mask);
+  gdk_pixmap_unref (dropper_pixmap);
+  if (mask)
+    gdk_pixmap_unref (mask);
   gtk_container_add (GTK_CONTAINER (button), dropper_image);
   gtk_box_pack_end (GTK_BOX (hbox), button, FALSE, FALSE, 0);
   
