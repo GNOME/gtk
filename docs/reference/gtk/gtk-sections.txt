@@ -3644,7 +3644,7 @@ gtk_gc_release
 
 <SECTION>
 <FILE>gtkstyle</FILE>
-<TITLE>Styles</TITLE>
+<TITLE>GtkStyle</TITLE>
 GTK_STYLE_NUM_STYLECOLORS
 GTK_STYLE_ATTACHED
 GtkStyle
