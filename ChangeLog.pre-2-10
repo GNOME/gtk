@@ -1,5 +1,14 @@
 2004-10-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcellview.c (gtk_cell_view_cell_layout_clear_attributes): 
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_layout_clear_attributes): 
+	Silently ignore info being NULL. This is unavoidable with the 
+	current design where we have every implementation of layout_clear
+	call layout_clear_attributes, and also delegate calls to dependent
+	cell layouts.  (#154191, Martyn Russell)
+
+2004-10-01  Matthias Clasen  <mclasen@redhat.com>
+
 	* modules/input/iminuktitut.c: Fix the spelling of Inuktitut
 	in several places.  (#154176, John Austin)
 

@@ -764,7 +764,8 @@ gtk_tree_view_column_cell_layout_clear_attributes (GtkCellLayout    *cell_layout
   column = GTK_TREE_VIEW_COLUMN (cell_layout);
 
   info = gtk_tree_view_column_get_cell_info (column, cell_renderer);
-  gtk_tree_view_column_clear_attributes_by_info (column, info);
+  if (info)
+    gtk_tree_view_column_clear_attributes_by_info (column, info);
 }
 
 static void
