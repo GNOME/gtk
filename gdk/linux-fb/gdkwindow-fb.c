@@ -761,6 +761,30 @@ recompute_drawable(GdkDrawable *drawable)
     recompute_abs_positions(drawable, 0, 0, 0, 0, INT_MAX, INT_MAX);
 }
 
+/* You can thank g_list_insert_sorted and GCompareFunc for these */
+static gint static_dx_hack, static_dy_hack;
+
+static gint
+compare_draw_rects(gconstpointer a, gconstpointer b)
+{
+  const GdkRegionBox *ba = a, *bb = b;
+
+  if(static_dy_hack > 0
+     && ba->y1 < bb->y1)
+    return 1;
+  if(static_dy_hack < 0
+     && ba->y1 > bb->y1)
+    return 1;
+  if(static_dx_hack > 0
+     && ba->x1 < bb->x1)
+    return 1;
+  if(static_dx_hack < 0
+     && ba->x1 > bb->x1)
+    return 1;
+
+  return -1;
+}
+
 void
 gdk_fb_window_move_resize (GdkWindow *window,
 			   gint       x,
@@ -785,20 +809,12 @@ gdk_fb_window_move_resize (GdkWindow *window,
   if (!private->destroyed)
     {
       GdkRegion *old_region = NULL;
-      GdkRectangle old_rect;
 
       if(private->input_only)
 	send_expose_events = FALSE;
 
       if(private->mapped && send_expose_events)
-	{
-	  old_region = gdk_fb_clip_region(GDK_DRAWABLE_IMPL(window), NULL, TRUE, FALSE);
-
-	  old_rect.x = GDK_DRAWABLE_IMPL_FBDATA(window)->llim_x;
-	  old_rect.y = GDK_DRAWABLE_IMPL_FBDATA(window)->llim_y;
-	  old_rect.width = GDK_DRAWABLE_IMPL_FBDATA(window)->lim_x - old_rect.x;
-	  old_rect.height = GDK_DRAWABLE_IMPL_FBDATA(window)->lim_y - old_rect.y;
-	}
+	old_region = gdk_fb_clip_region(GDK_DRAWABLE_IMPL(window), NULL, TRUE, FALSE);
 
       dx = x - private->x;
       dy = y - private->y;
@@ -816,17 +832,12 @@ gdk_fb_window_move_resize (GdkWindow *window,
 
 	  if(send_expose_events)
 	    {
-	      GdkRectangle new_rect;
 	      GdkRegion *new_region, *region;
 	      int i;
 	      gboolean handle_cursor = FALSE;
+	      GList *rects, *ltmp, *next;
 
 	      new_region = gdk_fb_clip_region(GDK_DRAWABLE_IMPL(window), NULL, TRUE, FALSE);
-
-	      new_rect.x = GDK_DRAWABLE_IMPL_FBDATA(window)->llim_x;
-	      new_rect.y = GDK_DRAWABLE_IMPL_FBDATA(window)->llim_y;
-	      new_rect.width = GDK_DRAWABLE_IMPL_FBDATA(window)->lim_x - new_rect.x;
-	      new_rect.height = GDK_DRAWABLE_IMPL_FBDATA(window)->lim_y - new_rect.y;
 
 	      region = gdk_region_copy(old_region);
 	      gdk_region_offset(region, dx, dy);
@@ -835,9 +846,6 @@ gdk_fb_window_move_resize (GdkWindow *window,
 	      if(region->numRects)
 		{
 		  GdkFBDrawingContext fbdc;
-		  GdkRectangle cursor_rect;
-
-		  gdk_fb_get_cursor_rect(&cursor_rect);
 
 		  if(gdk_fb_cursor_region_need_hide(region))
 		    {
@@ -846,16 +854,37 @@ gdk_fb_window_move_resize (GdkWindow *window,
 		    }
 
 		  gdk_fb_drawing_context_init(&fbdc, GDK_DRAWABLE_IMPL(gdk_parent_root), NULL, FALSE, FALSE);
-		  for(i = 0; i < region->numRects; i++)
+		  g_print("[%p] %ld rect +[%d, %d] move [%d, %d] from [%d, %d] to [%d, %d]\n",
+			  window,
+			  region->numRects,
+			  region->rects[0].x2 - region->rects[0].x1,
+			  region->rects[0].y2 - region->rects[0].y1,
+			  dx, dy,
+			  region->rects[0].x1 - dx,
+			  region->rects[0].y1 - dy,
+			  region->rects[0].x1,
+			  region->rects[0].y1);
+
+		  static_dx_hack = dx;
+		  static_dy_hack = dy;
+
+		  for(rects = NULL, i = 0; i < region->numRects; i++)
+		    rects = g_list_insert_sorted(rects, &region->rects[i], compare_draw_rects);
+
+		  for(ltmp = rects; ltmp; ltmp = next)
 		    {
+		      GdkRegionBox *reg = ltmp->data;
+
 		      gdk_fb_draw_drawable_3(GDK_DRAWABLE_IMPL(gdk_parent_root), NULL, GDK_DRAWABLE_IMPL(gdk_parent_root),
 					     &fbdc,
-					     (region->rects[i].x1 - dx),
-					     (region->rects[i].y1 - dy),
-					     (region->rects[i].x1),
-					     (region->rects[i].y1),
-					     (region->rects[i].x2 - region->rects[i].x1),
-					     (region->rects[i].y2 - region->rects[i].y1));
+					     (reg->x1 - dx),
+					     (reg->y1 - dy),
+					     (reg->x1),
+					     (reg->y1),
+					     (reg->x2 - reg->x1),
+					     (reg->y2 - reg->y1));
+		      next = ltmp->next;
+		      g_list_free_1(ltmp);
 		    }
 		  gdk_fb_drawing_context_finalize(&fbdc);
 		}
@@ -863,6 +892,13 @@ gdk_fb_window_move_resize (GdkWindow *window,
 	      gdk_region_union(new_region, old_region);
 	      gdk_region_subtract(new_region, region);
 	      gdk_region_destroy(region);
+
+#if 0
+	      g_print("Redraw region enclosed by [%d, %d] +[%d, %d]\n",
+		      new_region->extents.x1, new_region->extents.y1,
+		      new_region->extents.x2 - new_region->extents.x1,
+		      new_region->extents.y2 - new_region->extents.y1);
+#endif
 	      gdk_window_invalidate_region_clear(gdk_parent_root, new_region);
 	      if(handle_cursor)
 		gdk_fb_cursor_unhide();
