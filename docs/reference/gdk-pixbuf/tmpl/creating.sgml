@@ -82,6 +82,18 @@ Creating a pixbuf from image data that is already in memory.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_pixbuf_new_from_stream ##### -->
+<para>
+
+</para>
+
+@stream_length:
+@stream:
+@copy_pixels:
+@error:
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_pixbuf_new_subpixbuf ##### -->
 <para>
 

@@ -28,7 +28,9 @@ IGNORE_HFILES=				\
 	gdk-pixbuf-marshal.h		\
 	gdk-pixbuf-xlib-private.h 	\
 	gdk-pixbuf-i18n.h 		\
-	gdk-pixbuf-private.h
+	gdk-pixbuf-private.h		\
+	io-gif-animation.h		\
+	test-images.h
 
 # Extra files to add when scanning
 EXTRA_HFILES=

@@ -27,15 +27,23 @@ gdk_pixbuf_get_pixels
 gdk_pixbuf_get_width
 gdk_pixbuf_get_height
 gdk_pixbuf_get_rowstride
+gdk_pixbuf_get_option
 
 <SUBSECTION Standard>
+GDK_TYPE_PIXBUF_ERROR
+GDK_TYPE_COLORSPACE
+GDK_TYPE_PIXBUF_ALPHA_MODE
 GDK_PIXBUF
 GDK_TYPE_PIXBUF
 GDK_IS_PIXBUF
 
+
 <SUBSECTION Private>
 gdk_pixbuf_get_type
 gdk_pixbuf_error_quark
+gdk_colorspace_get_type
+gdk_pixbuf_alpha_mode_get_type
+gdk_pixbuf_error_get_type
 </SECTION>
 
 <SECTION>
@@ -61,9 +69,23 @@ gdk_pixbuf_save
 gdk_pixbuf_new
 gdk_pixbuf_new_from_data
 gdk_pixbuf_new_from_xpm_data
-gdk_pixbuf_new_from_inline
+gdk_pixbuf_new_from_stream
 gdk_pixbuf_new_subpixbuf
 gdk_pixbuf_copy
+</SECTION>
+
+<SECTION>
+<FILE>inline</FILE>
+GdkPixdata
+GdkPixdataType
+GdkPixdataDumpType
+GDK_PIXBUF_MAGIC_NUMBER
+GDK_PIXDATA_HEADER_LENGTH
+gdk_pixdata_from_pixbuf
+gdk_pixbuf_from_pixdata
+gdk_pixdata_serialize
+gdk_pixdata_deserialize
+gdk_pixdata_to_csource
 </SECTION>
 
 <SECTION>
@@ -71,6 +93,7 @@ gdk_pixbuf_copy
 gdk_pixbuf_add_alpha
 gdk_pixbuf_copy_area
 gdk_pixbuf_saturate_and_pixelate
+gdk_pixbuf_fill
 </SECTION>
 
 <SECTION>
@@ -78,6 +101,8 @@ gdk_pixbuf_saturate_and_pixelate
 GdkPixbufFrameAction
 GdkPixbufFrame
 GdkPixbufAnimation
+GdkPixbufAnimationIter
+GdkPixbufGifAnim
 gdk_pixbuf_animation_new_from_file
 gdk_pixbuf_animation_ref
 gdk_pixbuf_animation_unref
@@ -85,6 +110,9 @@ gdk_pixbuf_animation_get_frames
 gdk_pixbuf_animation_get_width
 gdk_pixbuf_animation_get_num_frames
 gdk_pixbuf_animation_get_height
+gdk_pixbuf_animation_get_iter
+gdk_pixbuf_animation_is_static_image
+gdk_pixbuf_animation_get_static_image
 gdk_pixbuf_frame_copy
 gdk_pixbuf_frame_free
 gdk_pixbuf_frame_get_pixbuf
@@ -92,16 +120,24 @@ gdk_pixbuf_frame_get_action
 gdk_pixbuf_frame_get_y_offset
 gdk_pixbuf_frame_get_delay_time
 gdk_pixbuf_frame_get_x_offset
+gdk_pixbuf_animation_iter_advance
+gdk_pixbuf_animation_iter_get_delay_time
+gdk_pixbuf_animation_iter_on_currently_loading_frame
+gdk_pixbuf_animation_iter_get_pixbuf
 
 <SUBSECTION Standard>
 GDK_PIXBUF_ANIMATION
 GDK_TYPE_PIXBUF_ANIMATION
 GDK_IS_PIXBUF_ANIMATION
 GDK_TYPE_PIXBUF_FRAME
+GDK_IS_PIXBUF_ANIMATION_ITER
+GDK_PIXBUF_ANIMATION_ITER
+GDK_TYPE_PIXBUF_ANIMATION_ITER
 
 <SUBSECTION Private>
 gdk_pixbuf_frame_get_type
 gdk_pixbuf_animation_get_type
+gdk_pixbuf_animation_iter_get_type
 </SECTION>
 
 <SECTION>
@@ -112,6 +148,12 @@ gdk_pixbuf_composite
 gdk_pixbuf_composite_color
 gdk_pixbuf_scale_simple
 gdk_pixbuf_composite_color_simple
+
+<SUBSECTION Standard>
+GDK_TYPE_INTERP_TYPE
+
+<SUBSECTION Private>
+gdk_interp_type_get_type
 </SECTION>
 
 <SECTION>
@@ -191,3 +233,4 @@ xlib_rgb_get_depth
 xlib_rgb_get_display
 xlib_rgb_get_screen
 </SECTION>
+

@@ -1,3 +1,18 @@
+2001-10-08  Matthias Clasen   <matthiasc@poet.de>
+
+	* gdk-pixbuf/gdk-pixbuf-sections.txt,
+	gdk-pixbuf/Makefile.am, gdk-pixbuf/tmpl/creating.sgml: Update.
+
+	* gdk-pixbuf/tmpl/inline.sgml: New file.
+	
+2001-10-07  Matthias Clasen   <matthiasc@poet.de>
+
+	* gdk/tmpl/properties.sgml, gdk/tmpl/events.sgml,
+	gdk/tmpl/regions.sgml, gdk/tmpl/general.sgml,
+	gdk/tmpl/keys.sgml: Update. 
+
+	* gdk/gdk-overrides.txt, gdk/gdk-sections.txt: Remove nanox traces.
+
 2001-10-06  Matthias Clasen   <matthiasc@poet.de>
 
 	* gtk/gtk-docs.sgml: add gtkimagemenuitem, 
