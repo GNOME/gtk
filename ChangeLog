@@ -1,3 +1,17 @@
+Fri May 29 13:53:57 BST 1998  Tony Gale  <gale@gtk.org>
+        [1-1-0-Merge]
+ 
+        * docs/gtk_tut.sgml:
+          - new section on Events
+          - change all delete_event callbacks to include
+            a GdkEvent parameter
+          - clean up the formatting
+
+        * examples - helloworld.c, helloworld2.c, notebook.c,
+          packbox.c, pixmap.c, progressbar.c, radiobuttons.c,
+          rulers.c, table.c, wheelbarrow.c: change all delete_event
+           callbacks to include a GdkEvent parameter.
+ 
 Mon May 25 19:54:20 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* configure.in: x_libs=, not $x_libs=. Enough said.
