@@ -79,6 +79,12 @@ typedef struct _GtkFileChooserDefaultClass GtkFileChooserDefaultClass;
 #define GTK_IS_FILE_CHOOSER_DEFAULT_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FILE_CHOOSER_DEFAULT))
 #define GTK_FILE_CHOOSER_DEFAULT_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FILE_CHOOSER_DEFAULT, GtkFileChooserDefaultClass))
 
+typedef enum {
+	LOAD_LOADING,
+	LOAD_FINISHED
+} LoadState;
+
+#define MAX_LOADING_TIME 500
 
 struct _GtkFileChooserDefaultClass
 {
@@ -127,6 +133,9 @@ struct _GtkFileChooserDefault
   GtkTreeModel *shortcuts_filter_model;
 
   GtkTreeModelSort *sort_model;
+
+  LoadState load_state;
+  guint load_timeout_id;
 
   GtkFileFilter *current_filter;
   GSList *filters;
@@ -396,6 +405,8 @@ static void list_mtime_data_func (GtkTreeViewColumn *tree_column,
 				  GtkTreeIter       *iter,
 				  gpointer           data);
 
+static void load_remove_timer (GtkFileChooserDefault *impl);
+
 static GObjectClass *parent_class;
 
 
@@ -611,6 +622,7 @@ gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->select_multiple = FALSE;
   impl->show_hidden = FALSE;
   impl->icon_size = FALLBACK_ICON_SIZE;
+  impl->load_state = LOAD_FINISHED;
 
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (impl), TRUE);
   gtk_box_set_spacing (GTK_BOX (impl), 12);
@@ -704,6 +716,8 @@ gtk_file_chooser_default_finalize (GObject *object)
 
   if (impl->preview_path)
     gtk_file_path_free (impl->preview_path);
+
+  load_remove_timer (impl);
 
   /* Free all the Models we have */
   if (impl->browse_files_model)
@@ -3957,11 +3971,90 @@ set_busy_cursor (GtkFileChooserDefault *impl,
     gdk_cursor_unref (cursor);
 }
 
+/* Creates a sort model to wrap the file system model and sets it on the tree view */
+static void
+load_set_model (GtkFileChooserDefault *impl)
+{
+  g_assert (impl->browse_files_model != NULL);
+  g_assert (impl->sort_model == NULL);
+
+  impl->sort_model = (GtkTreeModelSort *)gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (impl->browse_files_model));
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_NAME, name_sort_func, impl, NULL);
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_SIZE, size_sort_func, impl, NULL);
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_MTIME, mtime_sort_func, impl, NULL);
+  gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (impl->sort_model), NULL, NULL, NULL);
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_NAME, GTK_SORT_ASCENDING);
+  impl->list_sort_ascending = TRUE;
+
+  g_signal_connect (impl->sort_model, "sort-column-changed",
+		    G_CALLBACK (list_sort_column_changed_cb), impl);
+
+  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
+			   GTK_TREE_MODEL (impl->sort_model));
+  gtk_tree_view_columns_autosize (GTK_TREE_VIEW (impl->browse_files_tree_view));
+  gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->browse_files_tree_view),
+				   GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME);
+}
+
+/* Timeout callback used when the loading timer expires */
+static gboolean
+load_timeout_cb (gpointer data)
+{
+  GtkFileChooserDefault *impl;
+
+  impl = GTK_FILE_CHOOSER_DEFAULT (data);
+  g_assert (impl->load_state == LOAD_LOADING);
+  g_assert (impl->load_timeout_id != 0);
+  g_assert (impl->browse_files_model != NULL);
+
+  impl->load_timeout_id = 0;
+  impl->load_state = LOAD_FINISHED;
+
+  load_set_model (impl);
+
+  return FALSE;
+}
+
+/* Sets up a new load timer for the model and switches to the LOAD_LOADING state */
+static void
+load_setup_timer (GtkFileChooserDefault *impl)
+{
+  g_assert (impl->load_timeout_id == 0);
+  g_assert (impl->load_state == LOAD_FINISHED);
+
+  impl->load_timeout_id = g_timeout_add (MAX_LOADING_TIME, load_timeout_cb, impl);
+  impl->load_state = LOAD_LOADING;
+}
+
+/* Removes the load timeout and switches to the LOAD_FINISHED state */
+static void
+load_remove_timer (GtkFileChooserDefault *impl)
+{
+  if (impl->load_timeout_id != 0)
+    {
+      g_assert (impl->load_state == LOAD_LOADING);
+
+      g_source_remove (impl->load_timeout_id);
+      impl->load_timeout_id = 0;
+      impl->load_state = LOAD_FINISHED;
+    }
+  else
+    g_assert (impl->load_state == LOAD_FINISHED);
+}
+
 /* Callback used when the file system model finishes loading */
 static void
 browse_files_model_finished_loading_cb (GtkFileSystemModel    *model,
 					GtkFileChooserDefault *impl)
 {
+  if (impl->load_state == LOAD_LOADING)
+    {
+      load_remove_timer (impl);
+      load_set_model (impl);
+    }
+  else
+    g_assert (impl->load_state == LOAD_FINISHED);
+
   set_busy_cursor (impl, FALSE);
 }
 
@@ -3970,16 +4063,22 @@ static gboolean
 set_list_model (GtkFileChooserDefault *impl,
 		GError               **error)
 {
+  load_remove_timer (impl);
+
   if (impl->browse_files_model)
     {
       g_object_unref (impl->browse_files_model);
       impl->browse_files_model = NULL;
+    }
 
+  if (impl->sort_model)
+    {
       g_object_unref (impl->sort_model);
       impl->sort_model = NULL;
     }
 
   set_busy_cursor (impl, TRUE);
+  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view), NULL);
 
   impl->browse_files_model = _gtk_file_system_model_new (impl->file_system,
 							 impl->current_folder, 0,
@@ -3988,9 +4087,10 @@ set_list_model (GtkFileChooserDefault *impl,
   if (!impl->browse_files_model)
     {
       set_busy_cursor (impl, FALSE);
-      gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view), NULL);
       return FALSE;
     }
+
+  load_setup_timer (impl);
 
   g_signal_connect (impl->browse_files_model, "finished-loading",
 		    G_CALLBACK (browse_files_model_finished_loading_cb), impl);
@@ -4010,23 +4110,6 @@ set_list_model (GtkFileChooserDefault *impl,
       g_assert_not_reached ();
     }
   install_list_model_filter (impl);
-
-  impl->sort_model = (GtkTreeModelSort *)gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (impl->browse_files_model));
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_NAME, name_sort_func, impl, NULL);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_SIZE, size_sort_func, impl, NULL);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_MTIME, mtime_sort_func, impl, NULL);
-  gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (impl->sort_model), NULL, NULL, NULL);
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_NAME, GTK_SORT_ASCENDING);
-  impl->list_sort_ascending = TRUE;
-
-  g_signal_connect (impl->sort_model, "sort-column-changed",
-		    G_CALLBACK (list_sort_column_changed_cb), impl);
-
-  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
-			   GTK_TREE_MODEL (impl->sort_model));
-  gtk_tree_view_columns_autosize (GTK_TREE_VIEW (impl->browse_files_tree_view));
-  gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->browse_files_tree_view),
-				   GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME);
 
   return TRUE;
 }
