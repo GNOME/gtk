@@ -26,10 +26,6 @@
 
 #include <config.h>
 
-#if HAVE_XFT
-#include <pango/pangoxft.h>
-#endif
-
 #include "gdkgc.h"
 #include "gdkprivate-x11.h"
 #include "gdkregion-generic.h"
@@ -112,13 +108,13 @@ gdk_gc_x11_finalize (GObject *object)
   if (x11_gc->clip_region)
     gdk_region_destroy (x11_gc->clip_region);
   
-  XFreeGC (GDK_GC_XDISPLAY (x11_gc), GDK_GC_XGC (x11_gc));
-
 #if HAVE_XFT
-  if (x11_gc->xft_draw)
-    XftDrawDestroy (x11_gc->xft_draw);
+  if (x11_gc->fg_picture != None)
+    XRenderFreePicture (x11_gc->xdisplay, x11_gc->fg_picture);
 #endif  
   
+  XFreeGC (GDK_GC_XDISPLAY (x11_gc), GDK_GC_XGC (x11_gc));
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -757,3 +753,93 @@ gdk_x11_gc_get_xgc (GdkGC *gc)
 
   return gc_x11->xgc;
 }
+
+/* Various bits of the below are roughly cribbed from XFree86
+ * lib/Xft/xftdraw.c, Copyright 2000, Keith Packard
+ */
+
+static XRenderPictFormat *
+foreground_format (GdkGC *gc)
+{
+  XRenderPictFormat pf;
+
+  pf.type = PictTypeDirect;
+  pf.depth = 32;
+  pf.direct.redMask = 0xff;
+  pf.direct.greenMask = 0xff;
+  pf.direct.blueMask = 0xff;
+  pf.direct.alphaMask = 0xff;
+
+  return XRenderFindFormat (GDK_GC_XDISPLAY (gc),
+			    (PictFormatType |
+			     PictFormatDepth |
+			     PictFormatRedMask |
+			     PictFormatGreenMask |
+			     PictFormatBlueMask |
+			     PictFormatAlphaMask),
+			    &pf,
+			    0);
+}
+
+#ifdef HAVE_XFT
+/**
+ * _gdk_x11_gc_get_fg_picture:
+ * @gc: a #GdkGC
+ * 
+ * Gets a Xrender Picture object suitable for being the source
+ * drawable for drawing with the foreground the graphics context.
+ * (Currently, only foreground color is handled, but in the
+ * future we should handle tiles/stipples as well.)
+ * 
+ * Return value: a Picture, owned by the GC; this cannot be
+ *   used over subsequent modification of the GC.
+ **/
+Picture
+_gdk_x11_gc_get_fg_picture (GdkGC *gc)
+{
+  GdkGCX11 *x11_gc;
+  GdkColormap *cmap = gdk_gc_get_colormap (gc);
+  gboolean new = FALSE;
+  GdkColor color;
+  
+  g_return_val_if_fail (GDK_IS_GC_X11 (gc), None);
+
+  x11_gc = GDK_GC_X11 (gc);
+
+  if (x11_gc->fg_picture == None)
+    {
+      XRenderPictureAttributes pa;
+      XRenderPictFormat *pix_format = foreground_format (gc);
+
+      Pixmap pix = XCreatePixmap (x11_gc->xdisplay, _gdk_root_window,
+				  1, 1, pix_format->depth);
+      pa.repeat = True;
+      x11_gc->fg_picture = XRenderCreatePicture (x11_gc->xdisplay, 
+						 pix,
+						 pix_format,
+						 CPRepeat, &pa);
+      XFreePixmap (x11_gc->xdisplay, pix);
+      
+      new = TRUE;
+    }
+
+  gdk_colormap_query_color (cmap, x11_gc->fg_pixel, &color);
+
+  if (new ||
+      x11_gc->fg_picture_color.red != color.red ||
+      x11_gc->fg_picture_color.green != color.green ||
+      x11_gc->fg_picture_color.blue != color.blue)
+    {
+      x11_gc->fg_picture_color.red = color.red;
+      x11_gc->fg_picture_color.green = color.green;
+      x11_gc->fg_picture_color.blue = color.blue;
+      x11_gc->fg_picture_color.alpha = 0xffff;
+
+      XRenderFillRectangle (x11_gc->xdisplay, PictOpSrc, 
+			    x11_gc->fg_picture, &x11_gc->fg_picture_color,
+			    0, 0, 1, 1); 
+    }
+
+  return x11_gc->fg_picture;
+}
+#endif /* HAVE_XFT */

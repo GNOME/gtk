@@ -1,3 +1,14 @@
+Mon Nov  5 12:46:44 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdrawable-x11.[ch] gdk/x11/gdkgc-x11.c
+	gdk/x11/gdkpixmap-x11.c gdk/x11/gdkprivate-x11.h
+	gdk/x11/gdkwindow-x11.c: Redo Xft support to go
+	directly to Picture objects instead of using XftDraw.
+	This fixes the problem where we weren't able to 
+	properly destroy XftDraw objects before destroying
+	the accompanying windows, and probably improves
+	efficiency a bit too. (#50214)
+
 Mon Nov  5 10:01:49 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkgeometry-x11.c (gdk_window_compute_position): 

@@ -738,6 +738,15 @@ _gdk_windowing_window_destroy (GdkWindow *window,
   if (private->extension_events != 0)
     gdk_input_window_destroy (window);
 
+#ifdef HAVE_XFT  
+  {
+    GdkDrawableImplX11 *draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
+
+    if (draw_impl->picture)
+      XRenderFreePicture (draw_impl->xdisplay, draw_impl->picture);
+  }
+#endif /* HAVE_XFT */  
+
   if (private->window_type == GDK_WINDOW_FOREIGN)
     {
       if (!foreign_destroy && (private->parent != NULL))

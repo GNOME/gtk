@@ -203,6 +203,70 @@ gdk_drawable_impl_x11_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+#ifdef HAVE_XFT
+static Picture
+gdk_x11_drawable_get_picture (GdkDrawable *drawable)
+{
+  GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
+
+  if (impl->picture == None)
+    {
+      GdkVisual *visual = gdk_drawable_get_visual (drawable);
+      XRenderPictFormat *format;
+
+      if (!visual)
+	{
+	  g_warning ("Using Xft rendering requires the drawable argument to\n"
+		     "have a specified colormap. All windows have a colormap,\n"
+		     "however, pixmaps only have colormap by default if they\n"
+		     "were created with a non-NULL window argument. Otherwise\n"
+		     "a colormap must be set on them with gdk_drawable_set_colormap");
+	  return None;
+	}
+
+      format = XRenderFindVisualFormat (impl->xdisplay, GDK_VISUAL_XVISUAL (visual));
+      impl->picture = XRenderCreatePicture (impl->xdisplay, impl->xid, format, 0, NULL);
+    }
+
+  return impl->picture;
+}
+
+static void
+gdk_x11_drawable_update_picture_clip (GdkDrawable *drawable,
+				      GdkGC       *gc)
+{
+  GdkGCX11 *gc_private = GDK_GC_X11 (gc);  
+  GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
+  Picture picture = gdk_x11_drawable_get_picture (drawable);
+
+  if (gc_private->clip_region)
+    {
+      GdkRegionBox *boxes = gc_private->clip_region->rects;
+      gint n_boxes = gc_private->clip_region->numRects;
+      XRectangle *rects = g_new (XRectangle, n_boxes);
+      int i;
+
+      for (i=0; i < n_boxes; i++)
+	{
+	  rects[i].x = CLAMP (boxes[i].x1 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT);
+	  rects[i].y = CLAMP (boxes[i].y1 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT);
+	  rects[i].width = CLAMP (boxes[i].x2 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT) - rects[i].x;
+	  rects[i].height = CLAMP (boxes[i].y2 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT) - rects[i].y;
+	}
+
+      XRenderSetPictureClipRectangles (impl->xdisplay, picture, 0, 0, rects, n_boxes);
+
+      g_free (rects);
+    }
+  else
+    {
+      XRenderPictureAttributes pa;
+      pa.clip_mask = None;
+      XRenderChangePicture (impl->xdisplay, picture, CPClipMask, &pa);
+    }
+}
+#endif  
+
 /*****************************************************
  * X11 specific implementations of generic functions *
  *****************************************************/
@@ -581,40 +645,6 @@ gdk_x11_draw_lines (GdkDrawable *drawable,
   g_free (tmp_points);
 }
 
-#if HAVE_XFT
-static void
-update_xft_draw_clip (GdkGC *gc)
-{
-  GdkGCX11 *private = GDK_GC_X11 (gc);
-  int i;
-  
-  if (private->xft_draw)
-    {
-      if (private->clip_region)
-	{
-	  GdkRegionBox *boxes = private->clip_region->rects;
-	  Region region = XCreateRegion ();
-	  
-	  for (i=0; i<private->clip_region->numRects; i++)
-	    {
-	      XRectangle rect;
-	      
-	      rect.x = CLAMP (boxes[i].x1 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT);
-	      rect.y = CLAMP (boxes[i].y1 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT);
-	      rect.width = CLAMP (boxes[i].x2 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT) - rect.x;
-	      rect.height = CLAMP (boxes[i].y2 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT) - rect.y;
-	      XUnionRectWithRegion (&rect, region, region);
-	    }
-	  
-	  XftDrawSetClip (private->xft_draw, region);
-	  XDestroyRegion (region);
-	}
-      else
-	XftDrawSetClip (private->xft_draw, NULL);
-    }
-}
-#endif  
-
 static void
 gdk_x11_draw_glyphs (GdkDrawable      *drawable,
 		     GdkGC            *gc,
@@ -630,39 +660,15 @@ gdk_x11_draw_glyphs (GdkDrawable      *drawable,
 #if HAVE_XFT
   if (PANGO_XFT_IS_FONT (font))
     {
-      GdkGCX11 *gc_x11 = GDK_GC_X11 (gc);
-      XftColor xft_color;
-      GdkColormap *cmap;
-      GdkColor color;
-      
-      cmap = gdk_gc_get_colormap (gc);
+      Picture src_picture;
+      Picture dest_picture;
 
-      _gdk_x11_gc_flush (gc);
+      src_picture = _gdk_x11_gc_get_fg_picture (gc);
+
+      gdk_x11_drawable_update_picture_clip (drawable, gc);
+      dest_picture = gdk_x11_drawable_get_picture (drawable);
       
-      if (!gc_x11->xft_draw)
-	{
-	  gc_x11->xft_draw = XftDrawCreate (impl->xdisplay,
-					    impl->xid,
-					    GDK_VISUAL_XVISUAL (gdk_colormap_get_visual (cmap)),
-					    GDK_COLORMAP_XCOLORMAP (cmap));
-	  update_xft_draw_clip (gc);
-	}
-      
-      else
-	{
-	  XftDrawChange (gc_x11->xft_draw, impl->xid);
-	  update_xft_draw_clip (gc);
-	}
-      
-      gdk_colormap_query_color (cmap, gc_x11->fg_pixel, &color);
-      
-      xft_color.color.red = color.red;
-      xft_color.color.green = color.green;
-      xft_color.color.blue = color.blue;
-      xft_color.color.alpha = 0xffff;
-      
-      pango_xft_render (gc_x11->xft_draw, &xft_color,
-			font, glyphs, x, y);
+      pango_xft_picture_render (impl->xdisplay, src_picture, dest_picture, font, glyphs, x, y);
     }
   else
 #endif  /* !HAVE_XFT */

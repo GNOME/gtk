@@ -27,8 +27,14 @@
 #ifndef __GDK_DRAWABLE_X11_H__
 #define __GDK_DRAWABLE_X11_H__
 
+#include <config.h>
+
 #include <gdk/gdkdrawable.h>
 #include <gdk/x11/gdkx.h>
+
+#ifdef HAVE_XFT
+#include <X11/extensions/Xrender.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -57,6 +63,10 @@ struct _GdkDrawableImplX11
   
   Window xid;
   Display *xdisplay;
+
+#ifdef HAVE_XFT
+  Picture picture;
+#endif  
 };
  
 struct _GdkDrawableImplX11Class 

@@ -122,6 +122,15 @@ gdk_pixmap_impl_x11_finalize (GObject *object)
   GdkPixmapImplX11 *impl = GDK_PIXMAP_IMPL_X11 (object);
   GdkPixmap *wrapper = GDK_PIXMAP (GDK_DRAWABLE_IMPL_X11 (impl)->wrapper);
 
+#ifdef HAVE_XFT  
+  {
+    GdkDrawableImplX11 *draw_impl = GDK_DRAWABLE_IMPL_X11 (impl);
+
+    if (draw_impl->picture)
+      XRenderFreePicture (draw_impl->xdisplay, draw_impl->picture);
+  }
+#endif /* HAVE_XFT */  
+
   if (!impl->is_foreign)
     XFreePixmap (GDK_PIXMAP_XDISPLAY (wrapper), GDK_PIXMAP_XID (wrapper));
   

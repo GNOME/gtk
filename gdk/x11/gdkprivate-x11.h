@@ -39,6 +39,10 @@
 
 #include <config.h>
 
+#if HAVE_XFT
+#include <X11/extensions/Xrender.h>
+#endif
+
 #define GDK_TYPE_GC_X11              (_gdk_gc_x11_get_type ())
 #define GDK_GC_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC_X11, GdkGCX11))
 #define GDK_GC_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_GC_X11, GdkGCX11Class))
@@ -60,10 +64,10 @@ struct _GdkGCX11
   GdkRegion *clip_region;
   guint dirty_mask;
 
-  /* We can't conditionalize on HAVE_XFT here, so we simply always
-   * have this here as a gpointer.
-   */
-  gpointer xft_draw;
+#ifdef HAVE_XFT  
+  Picture fg_picture;
+  XRenderColor fg_picture_color; 
+#endif  
   gulong fg_pixel;
 };
 
@@ -94,6 +98,10 @@ gint          gdk_send_xevent          (Window           window,
 					XEvent          *event_send);
 
 GType _gdk_gc_x11_get_type (void);
+
+#ifdef HAVE_XFT
+Picture _gdk_x11_gc_get_fg_picture     (GdkGC            *gc);
+#endif /* HAVE_XFT */
 
 GdkGC *_gdk_x11_gc_new                  (GdkDrawable     *drawable,
 					 GdkGCValues     *values,
