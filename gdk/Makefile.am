@@ -9,7 +9,7 @@ libgdk_la_SOURCES = \
 	gdkcc.c		\
 	gdkcolor.c	\
 	gdkcursor.c	\
-	gdk_dnd.c	\
+	gdkdnd.c	\
 	gdkdraw.c	\
 	gdkfont.c	\
 	gdkgc.c		\
@@ -28,6 +28,7 @@ libgdk_la_SOURCES = \
 	gdkvisual.c	\
 	gdkwindow.c	\
 	gdkxid.c 	\
+	MwmUtil.h       \
 	gxid_lib.h	\
 	gxid_proto.h	\
         gxid_lib.c

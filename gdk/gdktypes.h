@@ -575,6 +575,32 @@ typedef enum
   GdkIMStatusNone       = 0x0800L
 } GdkIMStyle;
 
+/* The next two enumeration values current match the
+ * Motif constants. If this is changed, the implementation
+ * of gdk_window_set_decorations/gdk_window_set_functions
+ * will need to change as well.
+ */
+typedef enum
+{
+  GDK_DECOR_ALL         = 1 << 0,
+  GDK_DECOR_BORDER      = 1 << 1,
+  GDK_DECOR_RESIZEH     = 1 << 2,
+  GDK_DECOR_TITLE       = 1 << 3,
+  GDK_DECOR_MENU        = 1 << 4,
+  GDK_DECOR_MINIMIZE    = 1 << 5,
+  GDK_DECOR_MAXIMIZE    = 1 << 6
+} GdkWMDecoration;
+
+typedef enum
+{
+  GDK_FUNC_ALL          = 1 << 0,
+  GDK_FUNC_RESIZE       = 1 << 1,
+  GDK_FUNC_MOVE         = 1 << 2,
+  GDK_FUNC_MINIMIZE     = 1 << 3,
+  GDK_FUNC_MAXIMIZE     = 1 << 4,
+  GDK_FUNC_CLOSE        = 1 << 5
+} GdkWMFunction;
+
 #define GdkIMPreeditMask \
 	( GdkIMPreeditArea     | GdkIMPreeditCallbacks | \
 	  GdkIMPreeditPosition | GdkIMPreeditNothing | \

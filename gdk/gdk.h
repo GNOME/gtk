@@ -286,6 +286,19 @@ GdkEventMask  gdk_window_get_events      (GdkWindow       *window);
 void          gdk_window_set_events      (GdkWindow       *window,
 					  GdkEventMask     event_mask);
 
+void          gdk_window_set_icon        (GdkWindow       *window, 
+					  GdkWindow       *icon_window,
+					  GdkPixmap       *pixmap,
+					  GdkBitmap       *mask);
+void          gdk_window_set_icon_name   (GdkWindow       *window, 
+					  gchar           *name);
+void          gdk_window_set_group       (GdkWindow       *window, 
+					  GdkWindow       *leader);
+void          gdk_window_set_decorations (GdkWindow       *window,
+					  GdkWMDecoration  decorations);
+void          gdk_window_set_functions   (GdkWindow       *window,
+					  GdkWMFunction    functions);
+
 /* Cursors
  */
 GdkCursor* gdk_cursor_new                (GdkCursorType   cursor_type);
@@ -293,8 +306,8 @@ GdkCursor* gdk_cursor_new_from_pixmap    (GdkPixmap       *source,
 					  GdkPixmap       *mask,
 					  GdkColor        *fg,
 					  GdkColor        *bg,
-					  int             x,
-					  int             y);
+					  gint             x,
+					  gint             y);
 void       gdk_cursor_destroy            (GdkCursor      *cursor);
 
 

@@ -24,6 +24,7 @@
 #include "../config.h"
 #include "gdkinput.h"
 #include "gdkprivate.h"
+#include "MwmUtil.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -1542,4 +1543,168 @@ gdk_window_set_override_redirect(GdkWindow *window,
 			  ((GdkWindowPrivate *)window)->xwindow,
 			  CWOverrideRedirect,
 			  &attr);
+}
+
+void          
+gdk_window_set_icon        (GdkWindow *window, 
+			    GdkWindow *icon_window,
+			    GdkPixmap *pixmap,
+			    GdkBitmap *mask)
+{
+  XWMHints wm_hints;
+  GdkWindowPrivate *window_private;
+  GdkWindowPrivate *private;
+
+  g_return_if_fail (window != NULL);
+  window_private = (GdkWindowPrivate*) window;
+  if (window_private->destroyed)
+    return;
+
+  wm_hints.flags = 0;
+  
+  if (icon_window != NULL)
+    {
+      private = (GdkWindowPrivate *)icon_window;
+      wm_hints.flags |= IconWindowHint;
+      wm_hints.icon_window = private->xwindow;
+    }
+
+  if (pixmap != NULL)
+    {
+      private = (GdkWindowPrivate *)pixmap;
+      wm_hints.flags |= IconPixmapHint;
+      wm_hints.icon_pixmap = private->xwindow;
+    }
+
+  if (mask != NULL)
+    {
+      private = (GdkWindowPrivate *)mask;
+      wm_hints.flags |= IconMaskHint;
+      wm_hints.icon_mask = private->xwindow;
+    }
+
+  XSetWMHints (window_private->xdisplay, window_private->xwindow, &wm_hints);
+}
+
+void          
+gdk_window_set_icon_name   (GdkWindow *window, 
+			    gchar *    name)
+{
+  GdkWindowPrivate *window_private;
+  XTextProperty property;
+  gint res;
+
+  g_return_if_fail (window != NULL);
+  window_private = (GdkWindowPrivate*) window;
+  if (window_private->destroyed)
+    return;
+  res = XmbTextListToTextProperty (window_private->xdisplay,
+				   &name, 1, XStdICCTextStyle,
+                               	   &property);
+  if (res < 0)
+    {
+      g_warning("Error converting icon name to text property: %d\n", res);
+      return;
+    }
+
+  XSetWMIconName (window_private->xdisplay, window_private->xwindow,
+		  &property);
+
+  XFree(property.value);
+}
+
+void          
+gdk_window_set_group   (GdkWindow *window, 
+			GdkWindow *leader)
+{
+  XWMHints wm_hints;
+  GdkWindowPrivate *window_private;
+  GdkWindowPrivate *private;
+
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (leader != NULL);
+  window_private = (GdkWindowPrivate*) window;
+  if (window_private->destroyed)
+    return;
+
+  private = (GdkWindowPrivate *)leader;
+  wm_hints.flags |= WindowGroupHint;
+  wm_hints.window_group = private->xwindow;
+
+  XSetWMHints (window_private->xdisplay, window_private->xwindow, &wm_hints);
+}
+
+static void
+gdk_window_set_mwm_hints (GdkWindow *window,
+			  MotifWmHints *new_hints)
+{
+  static Atom hints_atom = None;
+  MotifWmHints *hints;
+  Atom type;
+  gint format;
+  gulong nitems;
+  gulong bytes_after;
+
+  GdkWindowPrivate *window_private;
+
+  g_return_if_fail (window != NULL);
+  window_private = (GdkWindowPrivate*) window;
+  if (window_private->destroyed)
+    return;
+
+  if (!hints_atom)
+    hints_atom = XInternAtom (window_private->xdisplay, 
+			      _XA_MOTIF_WM_HINTS, FALSE);
+  
+  XGetWindowProperty (window_private->xdisplay, window_private->xwindow,
+		      hints_atom, 0, sizeof(MotifWmHints)/4,
+		      False, AnyPropertyType, &type, &format, &nitems,
+		      &bytes_after, (guchar **)&hints);
+
+  if (type == None)
+    hints = new_hints;
+  else
+    {
+      if (new_hints->flags & MWM_HINTS_FUNCTIONS)
+	{
+	  hints->flags |= MWM_HINTS_FUNCTIONS;
+	  hints->functions = new_hints->functions;
+	}
+      if (new_hints->flags & MWM_HINTS_DECORATIONS)
+	{
+	  hints->flags |= MWM_HINTS_DECORATIONS;
+	  hints->decorations = new_hints->decorations;
+	}
+    }
+
+  XChangeProperty (window_private->xdisplay, window_private->xwindow,
+		   hints_atom, hints_atom, 32, PropModeReplace,
+		   (guchar *)hints, sizeof(MotifWmHints)/4);
+
+  if (hints != new_hints)
+    XFree (hints);
+}
+
+void
+gdk_window_set_decorations (GdkWindow      *window,
+			    GdkWMDecoration decorations)
+{
+  MotifWmHints hints;
+
+  hints.flags = MWM_HINTS_DECORATIONS;
+  hints.decorations = decorations;
+
+  gdk_window_set_mwm_hints (window, &hints);
+}
+
+void
+gdk_window_set_functions (GdkWindow    *window,
+			  GdkWMFunction functions)
+{
+  MotifWmHints hints;
+
+  hints.flags = MWM_HINTS_FUNCTIONS;
+  hints.functions = functions;
+
+  gdk_window_set_mwm_hints (window, &hints);
 }
