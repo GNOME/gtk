@@ -215,9 +215,9 @@ void	 gtk_type_set_arg	    (GtkObject	 *object,
 				     guint	  arg_id);
 GtkArg*	 gtk_arg_copy		    (GtkArg	 *src_arg,
 				     GtkArg	 *dest_arg);
-GtkEnumValue *gtk_enum_get_values   (GtkType	  enum_type);
-void	      gtk_enum_set_values   (GtkType	  enum_type,
-				     GtkEnumValue*values);
+GtkEnumValue *gtk_type_enum_get_values   (GtkType	  enum_type);
+void	      gtk_type_enum_set_values   (GtkType	  enum_type,
+					  GtkEnumValue   *values);
 
 
 #ifdef __cplusplus

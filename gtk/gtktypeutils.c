@@ -519,21 +519,21 @@ gtk_arg_copy (GtkArg         *src_arg,
 }
 
 GtkEnumValue*
-gtk_enum_get_values (GtkType      enum_type)
+gtk_type_enum_get_values (GtkType      enum_type)
 {
   if (gtk_type_is_a (enum_type, GTK_TYPE_ENUM) ||
       gtk_type_is_a (enum_type, GTK_TYPE_FLAGS))
     return g_dataset_id_get_data (gtk_type_name (enum_type), key_id_enum_vals);
 
-  g_warning ("gtk_enum_get_values(): type `%s' is not derived from `enum' or `flags'",
+  g_warning ("gtk_type_enum_get_values(): type `%s' is not derived from `enum' or `flags'",
 	     gtk_type_name (enum_type));
 
   return NULL;
 }
 
 void
-gtk_enum_set_values (GtkType       enum_type,
-		     GtkEnumValue *values)
+gtk_type_enum_set_values (GtkType       enum_type,
+			  GtkEnumValue *values)
 {
   if (!key_id_enum_vals)
     key_id_enum_vals = g_dataset_force_id (key_enum_vals);
@@ -545,7 +545,7 @@ gtk_enum_set_values (GtkType       enum_type,
 
       type_name = gtk_type_name (enum_type);
       if (g_dataset_id_get_data (type_name, key_id_enum_vals))
-	g_warning ("gtk_enum_set_values(): enum values for `%s' are already set",
+	g_warning ("gtk_type_enum_set_values(): enum values for `%s' are already set",
 		   type_name);
       else
 	g_dataset_id_set_data (type_name,
@@ -554,7 +554,7 @@ gtk_enum_set_values (GtkType       enum_type,
       return;
     }
 
-  g_warning ("gtk_enum_set_values(): type `%s' is not derived from `enum' or `flags'",
+  g_warning ("gtk_type_enum_set_values(): type `%s' is not derived from `enum' or `flags'",
 	     gtk_type_name (enum_type));
 }
 
@@ -717,7 +717,7 @@ gtk_type_init_builtin_types (void)
 	  g_assert (gtk_type_is_a (type_id, GTK_TYPE_ENUM) ||
 		    gtk_type_is_a (type_id, GTK_TYPE_FLAGS));
 
-	  gtk_enum_set_values (type_id, builtin_info[i].values);
+	  gtk_type_enum_set_values (type_id, builtin_info[i].values);
 	}
     }
 }

@@ -1,3 +1,14 @@
+Tue Jun  9 09:57:09 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.h: 
+	* gtk/gtktypeutils.c: renamed the newly created gtk_enum_get_values and
+	gtk_enum_set_values to gtk_type_enum_get_values and
+ 	gtk_type_enum_set_values respectively, since they are actually type
+ 	system features.
+
+	* gtk/gtktypebuiltins_evals.c: oops, screwed the NULL termination with
+	my last commit. ;)
+
 Tue Jun  9 01:57:23 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkselection.h: 

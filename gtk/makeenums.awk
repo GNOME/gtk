@@ -72,6 +72,7 @@ function generate_arrays ()
 	  printf ("  { %s, \"%s\", \"%s\" },\n",
 		  value_names[i], value_names[i], value_nicks[i]);
 	}
+      printf ("  { 0, NULL, NULL }\n");
       printf ("};\n");
     }
 }

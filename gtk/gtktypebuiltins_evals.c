@@ -8,15 +8,18 @@ static GtkEnumValue _gdk_window_type_values[] = {
   { GDK_WINDOW_TEMP, "GDK_WINDOW_TEMP", "temp" },
   { GDK_WINDOW_PIXMAP, "GDK_WINDOW_PIXMAP", "pixmap" },
   { GDK_WINDOW_FOREIGN, "GDK_WINDOW_FOREIGN", "foreign" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_window_class_values[] = {
   { GDK_INPUT_OUTPUT, "GDK_INPUT_OUTPUT", "input-output" },
   { GDK_INPUT_ONLY, "GDK_INPUT_ONLY", "input-only" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_image_type_values[] = {
   { GDK_IMAGE_NORMAL, "GDK_IMAGE_NORMAL", "normal" },
   { GDK_IMAGE_SHARED, "GDK_IMAGE_SHARED", "shared" },
   { GDK_IMAGE_FASTEST, "GDK_IMAGE_FASTEST", "fastest" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_visual_type_values[] = {
   { GDK_VISUAL_STATIC_GRAY, "GDK_VISUAL_STATIC_GRAY", "static-gray" },
@@ -25,10 +28,12 @@ static GtkEnumValue _gdk_visual_type_values[] = {
   { GDK_VISUAL_PSEUDO_COLOR, "GDK_VISUAL_PSEUDO_COLOR", "pseudo-color" },
   { GDK_VISUAL_TRUE_COLOR, "GDK_VISUAL_TRUE_COLOR", "true-color" },
   { GDK_VISUAL_DIRECT_COLOR, "GDK_VISUAL_DIRECT_COLOR", "direct-color" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_font_type_values[] = {
   { GDK_FONT_FONT, "GDK_FONT_FONT", "font" },
   { GDK_FONT_FONTSET, "GDK_FONT_FONTSET", "fontset" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_window_attributes_type_values[] = {
   { GDK_WA_TITLE, "GDK_WA_TITLE", "title" },
@@ -39,52 +44,62 @@ static GtkEnumValue _gdk_window_attributes_type_values[] = {
   { GDK_WA_VISUAL, "GDK_WA_VISUAL", "visual" },
   { GDK_WA_WMCLASS, "GDK_WA_WMCLASS", "wmclass" },
   { GDK_WA_NOREDIR, "GDK_WA_NOREDIR", "noredir" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_window_hints_values[] = {
   { GDK_HINT_POS, "GDK_HINT_POS", "pos" },
   { GDK_HINT_MIN_SIZE, "GDK_HINT_MIN_SIZE", "min-size" },
   { GDK_HINT_MAX_SIZE, "GDK_HINT_MAX_SIZE", "max-size" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_function_values[] = {
   { GDK_COPY, "GDK_COPY", "copy" },
   { GDK_INVERT, "GDK_INVERT", "invert" },
   { GDK_XOR, "GDK_XOR", "xor" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_fill_values[] = {
   { GDK_SOLID, "GDK_SOLID", "solid" },
   { GDK_TILED, "GDK_TILED", "tiled" },
   { GDK_STIPPLED, "GDK_STIPPLED", "stippled" },
   { GDK_OPAQUE_STIPPLED, "GDK_OPAQUE_STIPPLED", "opaque-stippled" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_fill_rule_values[] = {
   { GDK_EVEN_ODD_RULE, "GDK_EVEN_ODD_RULE", "even-odd-rule" },
   { GDK_WINDING_RULE, "GDK_WINDING_RULE", "winding-rule" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_line_style_values[] = {
   { GDK_LINE_SOLID, "GDK_LINE_SOLID", "solid" },
   { GDK_LINE_ON_OFF_DASH, "GDK_LINE_ON_OFF_DASH", "on-off-dash" },
   { GDK_LINE_DOUBLE_DASH, "GDK_LINE_DOUBLE_DASH", "double-dash" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_cap_style_values[] = {
   { GDK_CAP_NOT_LAST, "GDK_CAP_NOT_LAST", "not-last" },
   { GDK_CAP_BUTT, "GDK_CAP_BUTT", "butt" },
   { GDK_CAP_ROUND, "GDK_CAP_ROUND", "round" },
   { GDK_CAP_PROJECTING, "GDK_CAP_PROJECTING", "projecting" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_join_style_values[] = {
   { GDK_JOIN_MITER, "GDK_JOIN_MITER", "miter" },
   { GDK_JOIN_ROUND, "GDK_JOIN_ROUND", "round" },
   { GDK_JOIN_BEVEL, "GDK_JOIN_BEVEL", "bevel" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_filter_return_values[] = {
   { GDK_FILTER_CONTINUE, "GDK_FILTER_CONTINUE", "continue" },
   { GDK_FILTER_TRANSLATE, "GDK_FILTER_TRANSLATE", "translate" },
   { GDK_FILTER_REMOVE, "GDK_FILTER_REMOVE", "remove" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_visibility_state_values[] = {
   { GDK_VISIBILITY_UNOBSCURED, "GDK_VISIBILITY_UNOBSCURED", "unobscured" },
   { GDK_VISIBILITY_PARTIAL, "GDK_VISIBILITY_PARTIAL", "partial" },
   { GDK_VISIBILITY_FULLY_OBSCURED, "GDK_VISIBILITY_FULLY_OBSCURED", "fully-obscured" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_event_type_values[] = {
   { GDK_NOTHING, "GDK_NOTHING", "nothing" },
@@ -119,6 +134,7 @@ static GtkEnumValue _gdk_event_type_values[] = {
   { GDK_VISIBILITY_NOTIFY, "GDK_VISIBILITY_NOTIFY", "visibility-notify" },
   { GDK_NO_EXPOSE, "GDK_NO_EXPOSE", "no-expose" },
   { GDK_OTHER_EVENT, "GDK_OTHER_EVENT", "other-event" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_event_mask_values[] = {
   { GDK_EXPOSURE_MASK, "GDK_EXPOSURE_MASK", "exposure-mask" },
@@ -142,6 +158,7 @@ static GtkEnumValue _gdk_event_mask_values[] = {
   { GDK_PROXIMITY_OUT_MASK, "GDK_PROXIMITY_OUT_MASK", "proximity-out-mask" },
   { GDK_SUBSTRUCTURE_MASK, "GDK_SUBSTRUCTURE_MASK", "substructure-mask" },
   { GDK_ALL_EVENTS_MASK, "GDK_ALL_EVENTS_MASK", "all-events-mask" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_notify_type_values[] = {
   { GDK_NOTIFY_ANCESTOR, "GDK_NOTIFY_ANCESTOR", "ancestor" },
@@ -150,11 +167,13 @@ static GtkEnumValue _gdk_notify_type_values[] = {
   { GDK_NOTIFY_NONLINEAR, "GDK_NOTIFY_NONLINEAR", "nonlinear" },
   { GDK_NOTIFY_NONLINEAR_VIRTUAL, "GDK_NOTIFY_NONLINEAR_VIRTUAL", "nonlinear-virtual" },
   { GDK_NOTIFY_UNKNOWN, "GDK_NOTIFY_UNKNOWN", "unknown" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_crossing_mode_values[] = {
   { GDK_CROSSING_NORMAL, "GDK_CROSSING_NORMAL", "crossing-normal" },
   { GDK_CROSSING_GRAB, "GDK_CROSSING_GRAB", "crossing-grab" },
   { GDK_CROSSING_UNGRAB, "GDK_CROSSING_UNGRAB", "crossing-ungrab" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_modifier_type_values[] = {
   { GDK_SHIFT_MASK, "GDK_SHIFT_MASK", "shift-mask" },
@@ -171,15 +190,18 @@ static GtkEnumValue _gdk_modifier_type_values[] = {
   { GDK_BUTTON4_MASK, "GDK_BUTTON4_MASK", "button4-mask" },
   { GDK_BUTTON5_MASK, "GDK_BUTTON5_MASK", "button5-mask" },
   { GDK_MODIFIER_MASK, "GDK_MODIFIER_MASK", "modifier-mask" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_subwindow_mode_values[] = {
   { GDK_CLIP_BY_CHILDREN, "GDK_CLIP_BY_CHILDREN", "clip-by-children" },
   { GDK_INCLUDE_INFERIORS, "GDK_INCLUDE_INFERIORS", "include-inferiors" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_input_condition_values[] = {
   { GDK_INPUT_READ, "GDK_INPUT_READ", "read" },
   { GDK_INPUT_WRITE, "GDK_INPUT_WRITE", "write" },
   { GDK_INPUT_EXCEPTION, "GDK_INPUT_EXCEPTION", "exception" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_status_values[] = {
   { GDK_OK, "GDK_OK", "ok" },
@@ -187,10 +209,12 @@ static GtkEnumValue _gdk_status_values[] = {
   { GDK_ERROR_PARAM, "GDK_ERROR_PARAM", "error-param" },
   { GDK_ERROR_FILE, "GDK_ERROR_FILE", "error-file" },
   { GDK_ERROR_MEM, "GDK_ERROR_MEM", "error-mem" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_byte_order_values[] = {
   { GDK_LSB_FIRST, "GDK_LSB_FIRST", "lsb-first" },
   { GDK_MSB_FIRST, "GDK_MSB_FIRST", "msb-first" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_g_c_values_mask_values[] = {
   { GDK_GC_FOREGROUND, "GDK_GC_FOREGROUND", "foreground" },
@@ -211,19 +235,23 @@ static GtkEnumValue _gdk_g_c_values_mask_values[] = {
   { GDK_GC_LINE_STYLE, "GDK_GC_LINE_STYLE", "line-style" },
   { GDK_GC_CAP_STYLE, "GDK_GC_CAP_STYLE", "cap-style" },
   { GDK_GC_JOIN_STYLE, "GDK_GC_JOIN_STYLE", "join-style" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_selection_values[] = {
   { GDK_SELECTION_PRIMARY, "GDK_SELECTION_PRIMARY", "primary" },
   { GDK_SELECTION_SECONDARY, "GDK_SELECTION_SECONDARY", "secondary" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_property_state_values[] = {
   { GDK_PROPERTY_NEW_VALUE, "GDK_PROPERTY_NEW_VALUE", "new-value" },
   { GDK_PROPERTY_DELETE, "GDK_PROPERTY_DELETE", "delete" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_prop_mode_values[] = {
   { GDK_PROP_MODE_REPLACE, "GDK_PROP_MODE_REPLACE", "replace" },
   { GDK_PROP_MODE_PREPEND, "GDK_PROP_MODE_PREPEND", "prepend" },
   { GDK_PROP_MODE_APPEND, "GDK_PROP_MODE_APPEND", "append" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_dnd_type_values[] = {
   { GDK_DNDTYPE_NOTDND, "GDK_DNDTYPE_NOTDND", "notdnd" },
@@ -238,17 +266,20 @@ static GtkEnumValue _gdk_dnd_type_values[] = {
   { GDK_DNDTYPE_URL, "GDK_DNDTYPE_URL", "url" },
   { GDK_DNDTYPE_MIME, "GDK_DNDTYPE_MIME", "mime" },
   { GDK_DNDTYPE_END, "GDK_DNDTYPE_END", "end" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_input_source_values[] = {
   { GDK_SOURCE_MOUSE, "GDK_SOURCE_MOUSE", "mouse" },
   { GDK_SOURCE_PEN, "GDK_SOURCE_PEN", "pen" },
   { GDK_SOURCE_ERASER, "GDK_SOURCE_ERASER", "eraser" },
   { GDK_SOURCE_CURSOR, "GDK_SOURCE_CURSOR", "cursor" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_input_mode_values[] = {
   { GDK_MODE_DISABLED, "GDK_MODE_DISABLED", "disabled" },
   { GDK_MODE_SCREEN, "GDK_MODE_SCREEN", "screen" },
   { GDK_MODE_WINDOW, "GDK_MODE_WINDOW", "window" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_axis_use_values[] = {
   { GDK_AXIS_IGNORE, "GDK_AXIS_IGNORE", "ignore" },
@@ -258,6 +289,7 @@ static GtkEnumValue _gdk_axis_use_values[] = {
   { GDK_AXIS_XTILT, "GDK_AXIS_XTILT", "xtilt" },
   { GDK_AXIS_YTILT, "GDK_AXIS_YTILT", "ytilt" },
   { GDK_AXIS_LAST, "GDK_AXIS_LAST", "last" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_target_values[] = {
   { GDK_TARGET_BITMAP, "GDK_TARGET_BITMAP", "bitmap" },
@@ -265,6 +297,7 @@ static GtkEnumValue _gdk_target_values[] = {
   { GDK_TARGET_DRAWABLE, "GDK_TARGET_DRAWABLE", "drawable" },
   { GDK_TARGET_PIXMAP, "GDK_TARGET_PIXMAP", "pixmap" },
   { GDK_TARGET_STRING, "GDK_TARGET_STRING", "string" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_selection_type_values[] = {
   { GDK_SELECTION_TYPE_ATOM, "GDK_SELECTION_TYPE_ATOM", "atom" },
@@ -275,11 +308,13 @@ static GtkEnumValue _gdk_selection_type_values[] = {
   { GDK_SELECTION_TYPE_PIXMAP, "GDK_SELECTION_TYPE_PIXMAP", "pixmap" },
   { GDK_SELECTION_TYPE_WINDOW, "GDK_SELECTION_TYPE_WINDOW", "window" },
   { GDK_SELECTION_TYPE_STRING, "GDK_SELECTION_TYPE_STRING", "string" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_extension_mode_values[] = {
   { GDK_EXTENSION_EVENTS_NONE, "GDK_EXTENSION_EVENTS_NONE", "none" },
   { GDK_EXTENSION_EVENTS_ALL, "GDK_EXTENSION_EVENTS_ALL", "all" },
   { GDK_EXTENSION_EVENTS_CURSOR, "GDK_EXTENSION_EVENTS_CURSOR", "cursor" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_w_m_decoration_values[] = {
   { GDK_DECOR_ALL, "GDK_DECOR_ALL", "all" },
@@ -289,6 +324,7 @@ static GtkEnumValue _gdk_w_m_decoration_values[] = {
   { GDK_DECOR_MENU, "GDK_DECOR_MENU", "menu" },
   { GDK_DECOR_MINIMIZE, "GDK_DECOR_MINIMIZE", "minimize" },
   { GDK_DECOR_MAXIMIZE, "GDK_DECOR_MAXIMIZE", "maximize" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_w_m_function_values[] = {
   { GDK_FUNC_ALL, "GDK_FUNC_ALL", "all" },
@@ -297,6 +333,7 @@ static GtkEnumValue _gdk_w_m_function_values[] = {
   { GDK_FUNC_MINIMIZE, "GDK_FUNC_MINIMIZE", "minimize" },
   { GDK_FUNC_MAXIMIZE, "GDK_FUNC_MAXIMIZE", "maximize" },
   { GDK_FUNC_CLOSE, "GDK_FUNC_CLOSE", "close" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_color_context_mode_values[] = {
   { GDK_CC_MODE_UNDEFINED, "GDK_CC_MODE_UNDEFINED", "undefined" },
@@ -305,11 +342,13 @@ static GtkEnumValue _gdk_color_context_mode_values[] = {
   { GDK_CC_MODE_TRUE, "GDK_CC_MODE_TRUE", "true" },
   { GDK_CC_MODE_MY_GRAY, "GDK_CC_MODE_MY_GRAY", "my-gray" },
   { GDK_CC_MODE_PALETTE, "GDK_CC_MODE_PALETTE", "palette" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_overlap_type_values[] = {
   { GDK_OVERLAP_RECTANGLE_IN, "GDK_OVERLAP_RECTANGLE_IN", "in" },
   { GDK_OVERLAP_RECTANGLE_OUT, "GDK_OVERLAP_RECTANGLE_OUT", "out" },
   { GDK_OVERLAP_RECTANGLE_PART, "GDK_OVERLAP_RECTANGLE_PART", "part" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_debug_flag_values[] = {
   { GDK_DEBUG_MISC, "GDK_DEBUG_MISC", "misc" },
@@ -317,23 +356,27 @@ static GtkEnumValue _gdk_debug_flag_values[] = {
   { GDK_DEBUG_DND, "GDK_DEBUG_DND", "dnd" },
   { GDK_DEBUG_COLOR_CONTEXT, "GDK_DEBUG_COLOR_CONTEXT", "color-context" },
   { GDK_DEBUG_XIM, "GDK_DEBUG_XIM", "xim" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_accel_flags_values[] = {
   { GTK_ACCEL_VISIBLE, "GTK_ACCEL_VISIBLE", "visible" },
   { GTK_ACCEL_SIGNAL_VISIBLE, "GTK_ACCEL_SIGNAL_VISIBLE", "signal-visible" },
   { GTK_ACCEL_LOCKED, "GTK_ACCEL_LOCKED", "locked" },
   { GTK_ACCEL_MASK, "GTK_ACCEL_MASK", "mask" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_arrow_type_values[] = {
   { GTK_ARROW_UP, "GTK_ARROW_UP", "up" },
   { GTK_ARROW_DOWN, "GTK_ARROW_DOWN", "down" },
   { GTK_ARROW_LEFT, "GTK_ARROW_LEFT", "left" },
   { GTK_ARROW_RIGHT, "GTK_ARROW_RIGHT", "right" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_attach_options_values[] = {
   { GTK_EXPAND, "GTK_EXPAND", "expand" },
   { GTK_SHRINK, "GTK_SHRINK", "shrink" },
   { GTK_FILL, "GTK_FILL", "fill" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_button_box_style_values[] = {
   { GTK_BUTTONBOX_DEFAULT_STYLE, "GTK_BUTTONBOX_DEFAULT_STYLE", "default" },
@@ -341,11 +384,13 @@ static GtkEnumValue _gtk_button_box_style_values[] = {
   { GTK_BUTTONBOX_EDGE, "GTK_BUTTONBOX_EDGE", "edge" },
   { GTK_BUTTONBOX_START, "GTK_BUTTONBOX_START", "start" },
   { GTK_BUTTONBOX_END, "GTK_BUTTONBOX_END", "end" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_curve_type_values[] = {
   { GTK_CURVE_TYPE_LINEAR, "GTK_CURVE_TYPE_LINEAR", "linear" },
   { GTK_CURVE_TYPE_SPLINE, "GTK_CURVE_TYPE_SPLINE", "spline" },
   { GTK_CURVE_TYPE_FREE, "GTK_CURVE_TYPE_FREE", "free" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_direction_type_values[] = {
   { GTK_DIR_TAB_FORWARD, "GTK_DIR_TAB_FORWARD", "tab-forward" },
@@ -354,12 +399,14 @@ static GtkEnumValue _gtk_direction_type_values[] = {
   { GTK_DIR_DOWN, "GTK_DIR_DOWN", "down" },
   { GTK_DIR_LEFT, "GTK_DIR_LEFT", "left" },
   { GTK_DIR_RIGHT, "GTK_DIR_RIGHT", "right" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_justification_values[] = {
   { GTK_JUSTIFY_LEFT, "GTK_JUSTIFY_LEFT", "left" },
   { GTK_JUSTIFY_RIGHT, "GTK_JUSTIFY_RIGHT", "right" },
   { GTK_JUSTIFY_CENTER, "GTK_JUSTIFY_CENTER", "center" },
   { GTK_JUSTIFY_FILL, "GTK_JUSTIFY_FILL", "fill" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_match_type_values[] = {
   { GTK_MATCH_ALL, "GTK_MATCH_ALL", "all" },
@@ -368,24 +415,29 @@ static GtkEnumValue _gtk_match_type_values[] = {
   { GTK_MATCH_TAIL, "GTK_MATCH_TAIL", "tail" },
   { GTK_MATCH_EXACT, "GTK_MATCH_EXACT", "exact" },
   { GTK_MATCH_LAST, "GTK_MATCH_LAST", "last" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_menu_factory_type_values[] = {
   { GTK_MENU_FACTORY_MENU, "GTK_MENU_FACTORY_MENU", "menu" },
   { GTK_MENU_FACTORY_MENU_BAR, "GTK_MENU_FACTORY_MENU_BAR", "menu-bar" },
   { GTK_MENU_FACTORY_OPTION_MENU, "GTK_MENU_FACTORY_OPTION_MENU", "option-menu" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_metric_type_values[] = {
   { GTK_PIXELS, "GTK_PIXELS", "pixels" },
   { GTK_INCHES, "GTK_INCHES", "inches" },
   { GTK_CENTIMETERS, "GTK_CENTIMETERS", "centimeters" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_orientation_values[] = {
   { GTK_ORIENTATION_HORIZONTAL, "GTK_ORIENTATION_HORIZONTAL", "horizontal" },
   { GTK_ORIENTATION_VERTICAL, "GTK_ORIENTATION_VERTICAL", "vertical" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_pack_type_values[] = {
   { GTK_PACK_START, "GTK_PACK_START", "start" },
   { GTK_PACK_END, "GTK_PACK_END", "end" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_path_priority_type_values[] = {
   { GTK_PATH_PRIO_LOWEST, "GTK_PATH_PRIO_LOWEST", "lowest" },
@@ -394,30 +446,36 @@ static GtkEnumValue _gtk_path_priority_type_values[] = {
   { GTK_PATH_PRIO_RC, "GTK_PATH_PRIO_RC", "rc" },
   { GTK_PATH_PRIO_HIGHEST, "GTK_PATH_PRIO_HIGHEST", "highest" },
   { GTK_PATH_PRIO_MASK, "GTK_PATH_PRIO_MASK", "mask" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_path_type_values[] = {
   { GTK_PATH_WIDGET, "GTK_PATH_WIDGET", "widget" },
   { GTK_PATH_WIDGET_CLASS, "GTK_PATH_WIDGET_CLASS", "widget-class" },
   { GTK_PATH_CLASS, "GTK_PATH_CLASS", "class" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_policy_type_values[] = {
   { GTK_POLICY_ALWAYS, "GTK_POLICY_ALWAYS", "always" },
   { GTK_POLICY_AUTOMATIC, "GTK_POLICY_AUTOMATIC", "automatic" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_position_type_values[] = {
   { GTK_POS_LEFT, "GTK_POS_LEFT", "left" },
   { GTK_POS_RIGHT, "GTK_POS_RIGHT", "right" },
   { GTK_POS_TOP, "GTK_POS_TOP", "top" },
   { GTK_POS_BOTTOM, "GTK_POS_BOTTOM", "bottom" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_preview_type_values[] = {
   { GTK_PREVIEW_COLOR, "GTK_PREVIEW_COLOR", "color" },
   { GTK_PREVIEW_GRAYSCALE, "GTK_PREVIEW_GRAYSCALE", "grayscale" },
   { GTK_PREVIEW_GREYSCALE, "GTK_PREVIEW_GREYSCALE", "greyscale" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_relief_style_values[] = {
   { GTK_RELIEF_NORMAL, "GTK_RELIEF_NORMAL", "normal" },
   { GTK_RELIEF_NONE, "GTK_RELIEF_NONE", "none" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_scroll_type_values[] = {
   { GTK_SCROLL_NONE, "GTK_SCROLL_NONE", "none" },
@@ -426,12 +484,14 @@ static GtkEnumValue _gtk_scroll_type_values[] = {
   { GTK_SCROLL_PAGE_BACKWARD, "GTK_SCROLL_PAGE_BACKWARD", "page-backward" },
   { GTK_SCROLL_PAGE_FORWARD, "GTK_SCROLL_PAGE_FORWARD", "page-forward" },
   { GTK_SCROLL_JUMP, "GTK_SCROLL_JUMP", "jump" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_selection_mode_values[] = {
   { GTK_SELECTION_SINGLE, "GTK_SELECTION_SINGLE", "single" },
   { GTK_SELECTION_BROWSE, "GTK_SELECTION_BROWSE", "browse" },
   { GTK_SELECTION_MULTIPLE, "GTK_SELECTION_MULTIPLE", "multiple" },
   { GTK_SELECTION_EXTENDED, "GTK_SELECTION_EXTENDED", "extended" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_shadow_type_values[] = {
   { GTK_SHADOW_NONE, "GTK_SHADOW_NONE", "none" },
@@ -439,6 +499,7 @@ static GtkEnumValue _gtk_shadow_type_values[] = {
   { GTK_SHADOW_OUT, "GTK_SHADOW_OUT", "out" },
   { GTK_SHADOW_ETCHED_IN, "GTK_SHADOW_ETCHED_IN", "etched-in" },
   { GTK_SHADOW_ETCHED_OUT, "GTK_SHADOW_ETCHED_OUT", "etched-out" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_signal_run_type_values[] = {
   { GTK_RUN_FIRST, "GTK_RUN_FIRST", "first" },
@@ -447,6 +508,7 @@ static GtkEnumValue _gtk_signal_run_type_values[] = {
   { GTK_RUN_MASK, "GTK_RUN_MASK", "mask" },
   { GTK_RUN_NO_RECURSE, "GTK_RUN_NO_RECURSE", "no-recurse" },
   { GTK_RUN_ACTION, "GTK_RUN_ACTION", "action" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_state_type_values[] = {
   { GTK_STATE_NORMAL, "GTK_STATE_NORMAL", "normal" },
@@ -454,45 +516,54 @@ static GtkEnumValue _gtk_state_type_values[] = {
   { GTK_STATE_PRELIGHT, "GTK_STATE_PRELIGHT", "prelight" },
   { GTK_STATE_SELECTED, "GTK_STATE_SELECTED", "selected" },
   { GTK_STATE_INSENSITIVE, "GTK_STATE_INSENSITIVE", "insensitive" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_submenu_direction_values[] = {
   { GTK_DIRECTION_LEFT, "GTK_DIRECTION_LEFT", "left" },
   { GTK_DIRECTION_RIGHT, "GTK_DIRECTION_RIGHT", "right" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_submenu_placement_values[] = {
   { GTK_TOP_BOTTOM, "GTK_TOP_BOTTOM", "top-bottom" },
   { GTK_LEFT_RIGHT, "GTK_LEFT_RIGHT", "left-right" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_toolbar_style_values[] = {
   { GTK_TOOLBAR_ICONS, "GTK_TOOLBAR_ICONS", "icons" },
   { GTK_TOOLBAR_TEXT, "GTK_TOOLBAR_TEXT", "text" },
   { GTK_TOOLBAR_BOTH, "GTK_TOOLBAR_BOTH", "both" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_trough_type_values[] = {
   { GTK_TROUGH_NONE, "GTK_TROUGH_NONE", "none" },
   { GTK_TROUGH_START, "GTK_TROUGH_START", "start" },
   { GTK_TROUGH_END, "GTK_TROUGH_END", "end" },
   { GTK_TROUGH_JUMP, "GTK_TROUGH_JUMP", "jump" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_update_type_values[] = {
   { GTK_UPDATE_CONTINUOUS, "GTK_UPDATE_CONTINUOUS", "continuous" },
   { GTK_UPDATE_DISCONTINUOUS, "GTK_UPDATE_DISCONTINUOUS", "discontinuous" },
   { GTK_UPDATE_DELAYED, "GTK_UPDATE_DELAYED", "delayed" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_visibility_values[] = {
   { GTK_VISIBILITY_NONE, "GTK_VISIBILITY_NONE", "none" },
   { GTK_VISIBILITY_PARTIAL, "GTK_VISIBILITY_PARTIAL", "partial" },
   { GTK_VISIBILITY_FULL, "GTK_VISIBILITY_FULL", "full" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_window_position_values[] = {
   { GTK_WIN_POS_NONE, "GTK_WIN_POS_NONE", "none" },
   { GTK_WIN_POS_CENTER, "GTK_WIN_POS_CENTER", "center" },
   { GTK_WIN_POS_MOUSE, "GTK_WIN_POS_MOUSE", "mouse" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_window_type_values[] = {
   { GTK_WINDOW_TOPLEVEL, "GTK_WINDOW_TOPLEVEL", "toplevel" },
   { GTK_WINDOW_DIALOG, "GTK_WINDOW_DIALOG", "dialog" },
   { GTK_WINDOW_POPUP, "GTK_WINDOW_POPUP", "popup" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_fundamental_type_values[] = {
   { GTK_TYPE_INVALID, "GTK_TYPE_INVALID", "invalid" },
@@ -516,17 +587,20 @@ static GtkEnumValue _gtk_fundamental_type_values[] = {
   { GTK_TYPE_SIGNAL, "GTK_TYPE_SIGNAL", "signal" },
   { GTK_TYPE_C_CALLBACK, "GTK_TYPE_C_CALLBACK", "c-callback" },
   { GTK_TYPE_OBJECT, "GTK_TYPE_OBJECT", "object" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_debug_flag_values[] = {
   { GTK_DEBUG_OBJECTS, "GTK_DEBUG_OBJECTS", "objects" },
   { GTK_DEBUG_MISC, "GTK_DEBUG_MISC", "misc" },
   { GTK_DEBUG_SIGNALS, "GTK_DEBUG_SIGNALS", "signals" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_object_flags_values[] = {
   { GTK_DESTROYED, "GTK_DESTROYED", "destroyed" },
   { GTK_FLOATING, "GTK_FLOATING", "floating" },
   { GTK_CONNECTED, "GTK_CONNECTED", "connected" },
   { GTK_OBJECT_FLAG_LAST, "GTK_OBJECT_FLAG_LAST", "object-flag-last" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_arg_flags_values[] = {
   { GTK_ARG_READABLE, "GTK_ARG_READABLE", "readable" },
@@ -534,6 +608,7 @@ static GtkEnumValue _gtk_arg_flags_values[] = {
   { GTK_ARG_CONSTRUCT, "GTK_ARG_CONSTRUCT", "construct" },
   { GTK_ARG_MASK, "GTK_ARG_MASK", "mask" },
   { GTK_ARG_READWRITE, "GTK_ARG_READWRITE", "readwrite" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_widget_flags_values[] = {
   { GTK_TOPLEVEL, "GTK_TOPLEVEL", "toplevel" },
@@ -550,6 +625,7 @@ static GtkEnumValue _gtk_widget_flags_values[] = {
   { GTK_HAS_GRAB, "GTK_HAS_GRAB", "has-grab" },
   { GTK_RC_STYLE, "GTK_RC_STYLE", "rc-style" },
   { GTK_BASIC, "GTK_BASIC", "basic" },
+  { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_private_flags_values[] = {
   { PRIVATE_GTK_USER_STYLE, "PRIVATE_GTK_USER_STYLE", "user-style" },
@@ -559,5 +635,6 @@ static GtkEnumValue _gtk_private_flags_values[] = {
   { PRIVATE_GTK_LEAVE_PENDING, "PRIVATE_GTK_LEAVE_PENDING", "leave-pending" },
   { PRIVATE_GTK_HAS_SHAPE_MASK, "PRIVATE_GTK_HAS_SHAPE_MASK", "has-shape-mask" },
   { PRIVATE_GTK_IN_REPARENT, "PRIVATE_GTK_IN_REPARENT", "in-reparent" },
+  { 0, NULL, NULL }
 };
 
