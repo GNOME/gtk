@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-02 23:57-0500\n"
-"PO-Revision-Date: 2004-11-15 17:21+0100\n"
+"POT-Creation-Date: 2004-12-04 14:39+0100\n"
+"PO-Revision-Date: 2004-12-04 14:42+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -723,7 +723,7 @@ msgstr "XPM bildeformat"
 #. Description of --class=CLASS in --help output
 #: gdk/gdk.c:115
 msgid "Program class as used by the window manager"
-msgstr ""
+msgstr "Programklasse som brukes av vindushåndtereren"
 
 #. Placeholder in --class=CLASS in --help output
 #: gdk/gdk.c:116
@@ -733,7 +733,7 @@ msgstr "KLASSE"
 #. Description of --name=NAME in --help output
 #: gdk/gdk.c:118
 msgid "Program name as used by the window manager"
-msgstr ""
+msgstr "Programnavn som brukes av vindushåndtereren"
 
 #. Placeholder in --name=NAME in --help output
 #: gdk/gdk.c:119
@@ -743,27 +743,27 @@ msgstr "NAVN"
 #. Description of --display=DISPLAY in --help output
 #: gdk/gdk.c:121
 msgid "X display to use"
-msgstr ""
+msgstr "X-skjerm som skal brukes"
 
 #. Placeholder in --display=DISPLAY in --help output
 #: gdk/gdk.c:122
 msgid "DISPLAY"
-msgstr ""
+msgstr "SKJERM"
 
 #. Description of --screen=SCREEN in --help output
 #: gdk/gdk.c:124
 msgid "X screen to use"
-msgstr ""
+msgstr "X-skjerm som skal brukes"
 
 #. Placeholder in --screen=SCREEN in --help output
 #: gdk/gdk.c:125
 msgid "SCREEN"
-msgstr ""
+msgstr "SKJERM"
 
 #. Description of --gdk-debug=FLAGS in --help output
 #: gdk/gdk.c:128
 msgid "Gdk debugging flags to set"
-msgstr ""
+msgstr "Feilsøkingsflagg som skal settes for Gdk"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -776,32 +776,32 @@ msgstr "FLAGG"
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: gdk/gdk.c:131
 msgid "Gdk debugging flags to unset"
-msgstr ""
+msgstr "Feilsøkingsflagg for Gdk som skal fjernes"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:60
 msgid "Don't batch GDI requests"
-msgstr ""
+msgstr "Ikke send flere GDI-forespørsler sammen"
 
 #. Description of --no-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:62
 msgid "Don't use the Wintab API for tablet support"
-msgstr ""
+msgstr "Ikke bruk Wintab-APIet for støtte for tablet"
 
 #. Description of --ignore-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:64
 msgid "Same as --no-wintab"
-msgstr ""
+msgstr "Samme som --no-wintab"
 
 #. Description of --use-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:66
 msgid "Do use the Wintab API [default]"
-msgstr ""
+msgstr "Ikke bruk Wintab-API [forvalgt]"
 
 #. Description of --max-colors=COLORS in --help output
 #: gdk/win32/gdkmain-win32.c:68
 msgid "Size of the palette in 8 bit mode"
-msgstr ""
+msgstr "Størrelse på paletten i 8-bits modus"
 
 #. Placeholder in --max-colors=COLORS in --help output
 #: gdk/win32/gdkmain-win32.c:69
@@ -811,7 +811,7 @@ msgstr "FARGER"
 #. Description of --sync in --help output
 #: gdk/x11/gdkmain-x11.c:92
 msgid "Make X calls synchronous"
-msgstr ""
+msgstr "Gjør kall til X-bibliotekene synkrone"
 
 #: gtk/gtkaboutdialog.c:260 gtk/gtkaboutdialog.c:1938
 msgid "License"
@@ -903,11 +903,6 @@ msgstr "calendar:MY"
 #: gtk/gtkcalendar.c:710
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
-
-#: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
-#, c-format
-msgid "progress bar label|%d %%"
-msgstr ""
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
@@ -1720,7 +1715,7 @@ msgstr "Feilsøkingsflagg som skal settes for GTK+"
 #. Description of --gtk-no-debug=FLAGS in --help output
 #: gtk/gtkmain.c:407
 msgid "GTK+ debugging flags to unset"
-msgstr ""
+msgstr "Feilsøkingsflagg som skal fjernes for GTK+"
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -2201,9 +2196,3 @@ msgstr "X-inndatametode"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Kunne ikke hente informasjon for fil «%s»: %s"
-
-#~ msgid "Could not find the path"
-#~ msgstr "Kunne ikke finne stien"
-
-#~ msgid "Input Methods"
-#~ msgstr "Inndatametode"
