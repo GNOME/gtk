@@ -1,9 +1,10 @@
 Overview of Changes from GTK+ 2.5.2 to GTK+ 2.5.3
 =================================================
-* GtkFileChooserButton
+* GtkFileChooser
  - Work better with older version of the gnome-vfs backend [Zack Cerza]
  - Keynav improvements [Jonathan Blandford]
  - Make position of pathbar down button stable [Jonathan]
+ - Make autocompletion less annoying in save mode [Owen Taylor]
 * GtkComboBox
  - Work without a model [Mariano Suarez-Alvarez
 * GtkTreeView
@@ -19,6 +20,7 @@ Overview of Changes from GTK+ 2.5.2 to GTK+ 2.5.3
  - Improve drawing of expanders [Matthias Clasen]
 * Add a configure option to disable the use of ELF visibility 
   attributes for PLT reduction
+* Make selection handling robust against invalid UTF-8 [Owen]
 * gdk-pixbuf
  - Add a variant of gdk_pixbuf_new_from_file_at_size() which 
    optionally ignores aspect ratio [Dom Lachowicz]
@@ -36,10 +38,10 @@ Overview of Changes from GTK+ 2.5.2 to GTK+ 2.5.3
 * Other bug fixes [Hans Petter Jonsson, Tim Janik, Manish Singh,
  Soeren Sandmann, Bill Haneman, Padraig O'Briain, Olexi Avramchenko,
  Jonathan, Frederic Croszat, Matthias, Christian Persch, Felipe Heidrich,
- Lorenzo Gil Sanchez, Richard Hoelscher, Owen Taylor, Olivier Andrieu,
- Morten Welinder, Jean Bréfort]
-* Documentation improvements [Matthias]
-* New and updated translations (ang,ar,en_CA,ne,pt_BR,ro,uk)
+ Lorenzo Gil Sanchez, Richard Hoelscher, Owen, Olivier Andrieu,
+ Morten Welinder, Jean Bréfort, Alexander Larsson]
+* Documentation improvements [Matthias, Jonathan]
+* New and updated translations (ang,ar,en_CA,es,ne,pt_BR,ro,ru,uk)
 
 Overview of Changes from GTK+ 2.5.1 to GTK+ 2.5.2
 =================================================

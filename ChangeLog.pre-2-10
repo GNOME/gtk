@@ -1,5 +1,7 @@
 2004-09-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
 	* gtk/gtkfilechooserdefault.c (select_func): Scroll to the selected
 	row.  (#143868, Christian Persch)
 
