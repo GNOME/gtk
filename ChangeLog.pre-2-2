@@ -1,3 +1,24 @@
+Sun Sep 20 11:15:44 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkentry.c: Queue a redraw in gtk_entry_adjust_scroll.
+	call gtk_entry_adjust_scroll() from gtk_entry_set_position()
+
+Sat Jun 13 19:14:39 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdkinputcommon.h (gdk_input_device_new): Change
+	3.3.1 bug workaround to number keys starting at 1.
+
+Sat Jun 13 11:56:57 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* docs/gtk_tut.sgml: Fixed urls for complete example
+	source for scribble+widget-writing examples.
+
+Sat Jun 13 11:48:26 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdkpixmap.c (gdk_pixmap_extract_color): 
+	Patch from Tom Bech <tomb@ii.uib.no>, to handle color
+	specs of the form c #abcdef [ more keys ] properly.
+
 Fri Sep 18 11:56:19 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* Fixed up shldeps for Linux ltconfig patch, added
@@ -148,6 +169,7 @@ Sun Aug 02 23:09:56 1998  George Lebl  <jirka@5z.com>
           this fixes a bug when the whole widget is made non-sesitive
           the buttons weren't redrawn
 
+>>>>>>> 1.353.2.79
 Sun Jul 26 21:03:54 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.0.5
@@ -211,6 +233,7 @@ Fri Jun 19 18:47:05 1998  Stefan Jeske  <stefan@gtk.org>
 	- Fixed casting of GtkAdjustment* to GtkWidget* in
           gtk_spin_button_value_changed.
 
+>>>>>>> 1.353.2.68
 Fri Jun 12 21:20:42 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkoptionmenu.c (gtk_option_menu_expose): Removed

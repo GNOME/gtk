@@ -349,6 +349,8 @@ gtk_entry_set_position (GtkEntry *entry,
     GTK_EDITABLE(entry)->current_pos = entry->text_length;
   else
     GTK_EDITABLE(entry)->current_pos = position;
+
+  gtk_entry_adjust_scroll (entry);
 }
 
 void
@@ -1410,9 +1412,10 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
 
   if (xoffset < 0)
     entry->scroll_offset += xoffset;
-
   else if (xoffset > text_area_width)
     entry->scroll_offset += xoffset - text_area_width + 1;
+
+  gtk_widget_queue_draw (entry);
 }
 
 static void
