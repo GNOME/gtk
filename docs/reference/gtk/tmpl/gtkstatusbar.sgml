@@ -50,15 +50,6 @@ Contains private data that should be modified with the functions described below
 </para>
 
 
-<!-- ##### STRUCT GtkStatusbarMsg ##### -->
-<para>
-Holds the data for a statusbar message. <structfield>text</structfield> holds the actual text string. <structfield>context_id</structfield> is the context that this message is associated with, and <structfield>message_id</structfield> is this particular message's identifier. However, these fields should not be modified directly.
-</para>
-
-@text: 
-@context_id: 
-@message_id: 
-
 <!-- ##### FUNCTION gtk_statusbar_new ##### -->
 <para>
 Creates a new #GtkStatusbar ready for messages.

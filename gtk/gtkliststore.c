@@ -235,12 +235,37 @@ gtk_list_store_init (GtkListStore *list_store)
   list_store->length = 0;
 }
 
+/**
+ * gtk_list_store_new:
+ *
+ * Creates a new #GtkListStore. A #GtkListStore implements the
+ * #GtkTreeModel interface, and stores a linked list of
+ * rows; each row can have any number of columns. Columns are of uniform type,
+ * i.e. all cells in a column have the same type such as #G_TYPE_STRING or
+ * #GDK_TYPE_PIXBUF. Use #GtkListStore to store data to be displayed in a
+ * #GtkTreeView.
+ * 
+ * Return value: a new #GtkListStore
+ **/
 GtkListStore *
 gtk_list_store_new (void)
 {
   return GTK_LIST_STORE (gtk_type_new (gtk_list_store_get_type ()));
 }
 
+/**
+ * gtk_list_store_new_with_types:
+ * @n_columns: number of columns in the list store
+ * @Varargs: pairs of column number and #GType
+ *
+ * Creates a new list store as with gtk_list_store_new(),
+ * simultaneously setting up the columns and column types as with
+ * gtk_list_store_set_n_columns() and
+ * gtk_list_store_set_column_type().
+ * 
+ * 
+ * Return value: a new #GtkListStore
+ **/
 GtkListStore *
 gtk_list_store_new_with_types (gint n_columns,
 			       ...)
@@ -264,6 +289,14 @@ gtk_list_store_new_with_types (gint n_columns,
   return retval;
 }
 
+/**
+ * gtk_list_store_set_n_columns:
+ * @store: a #GtkListStore
+ * @n_columns: number of columns
+ *
+ * Sets the number of columns in the #GtkListStore.
+ * 
+ **/
 void
 gtk_list_store_set_n_columns (GtkListStore *list_store,
 			      gint          n_columns)
@@ -293,6 +326,18 @@ gtk_list_store_set_n_columns (GtkListStore *list_store,
   list_store->n_columns = n_columns;
 }
 
+/**
+ * gtk_list_store_set_column_type:
+ * @store: a #GtkListStore
+ * @column: column number
+ * @type: type of the data stored in @column
+ *
+ * Supported types include: %G_TYPE_UINT, %G_TYPE_INT, %G_TYPE_UCHAR,
+ * %G_TYPE_CHAR, %G_TYPE_BOOLEAN, %G_TYPE_POINTER, %G_TYPE_FLOAT, %G_TYPE_STRING,
+ * %G_TYPE_OBJECT, and %G_TYPE_BOXED, along with subclasses of those types such
+ * as %GDK_TYPE_PIXBUF.
+ * 
+ **/
 void
 gtk_list_store_set_column_type (GtkListStore *list_store,
 				gint          column,
@@ -504,6 +549,19 @@ gtk_list_store_iter_parent (GtkTreeModel *tree_model,
 /* This is a somewhat inelegant function that does a lot of list
  * manipulations on it's own.
  */
+
+/**
+ * gtk_list_store_set_cell:
+ * @store: a #GtkListStore
+ * @iter: iterator for the row you're modifying
+ * @column: column number to modify
+ * @value: new value for the cell
+ *
+ * Sets the data in the cell specified by @iter and @column.
+ * The type of @value must be convertible to the type of the
+ * column.
+ * 
+ **/
 void
 gtk_list_store_set_cell (GtkListStore *list_store,
 			 GtkTreeIter  *iter,
@@ -560,10 +618,20 @@ gtk_list_store_set_cell (GtkListStore *list_store,
 			   NULL, iter);
 }
 
+/**
+ * gtk_list_store_set_valist:
+ * @list_store: a #GtkListStore
+ * @iter: row to set data for
+ * @var_args: va_list of column/value pairs
+ *
+ * See gtk_list_store_set(); this version takes a va_list for
+ * use by language bindings.
+ * 
+ **/
 void
 gtk_list_store_set_valist (GtkListStore *list_store,
                            GtkTreeIter  *iter,
-                           va_list	var_args)
+                           va_list	 var_args)
 {
   gint column;
 
@@ -614,7 +682,7 @@ gtk_list_store_set_valist (GtkListStore *list_store,
  * 
  * Sets the value of one or more cells in the row referenced by @iter.
  * The variable argument list should contain integer column numbers,
- * each column number followed by the value to be set. For example,
+ * each column number followed by the value to be set.
  * The list is terminated by a -1. For example, to set column 0 with type
  * %G_TYPE_STRING to "Foo", you would write gtk_list_store_set (store, iter,
  * 0, "Foo", -1).
@@ -633,6 +701,16 @@ gtk_list_store_set (GtkListStore *list_store,
   va_end (var_args);
 }
 
+/**
+ * gtk_list_store_get_valist:
+ * @list_store: a #GtkListStore
+ * @iter: a row in @list_store
+ * @var_args: va_list of column/return location pairs
+ *
+ * See gtk_list_store_get(), this version takes a va_list for
+ * language bindings to use.
+ * 
+ **/
 void
 gtk_list_store_get_valist (GtkListStore *list_store,
                            GtkTreeIter  *iter,
@@ -675,6 +753,22 @@ gtk_list_store_get_valist (GtkListStore *list_store,
     }
 }
 
+/**
+ * gtk_list_store_get:
+ * @list_store: a #GtkListStore
+ * @iter: a row in @list_store
+ * @Varargs: pairs of column number and value return locations, terminated by -1
+ *
+ * Gets the value of one or more cells in the row referenced by @iter.
+ * The variable argument list should contain integer column numbers,
+ * each column number followed by a place to store the value being
+ * retrieved.  The list is terminated by a -1. For example, to get a
+ * value from column 0 with type %G_TYPE_STRING, you would
+ * write: gtk_list_store_set (store, iter, 0, &place_string_here, -1),
+ * where place_string_here is a gchar* to be filled with the string.
+ * If appropriate, the returned values have to be freed or unreferenced.
+ * 
+ **/
 void
 gtk_list_store_get (GtkListStore *list_store,
 		    GtkTreeIter  *iter,
@@ -751,6 +845,15 @@ gtk_list_store_remove_silently (GtkListStore *list_store,
   list_store->stamp ++;
 }
 
+/**
+ * gtk_list_store_remove:
+ * @store: a #GtkListStore
+ * @iter: a row in @list_store
+ *
+ * Removes the given row from the list store, emitting the
+ * "deleted" signal on #GtkTreeModel.
+ * 
+ **/
 void
 gtk_list_store_remove (GtkListStore *list_store,
 		       GtkTreeIter  *iter)
@@ -794,6 +897,17 @@ insert_after (GtkListStore *list_store,
   list_store->length += 1;
 }
 
+/**
+ * gtk_list_store_insert:
+ * @store: a #GtkListStore
+ * @iter: iterator to initialize with the new row
+ * @position: position to insert the new row
+ *
+ * Creates a new row at @position, initializing @iter to point to the
+ * new row, and emitting the "inserted" signal from the #GtkTreeModel
+ * interface.
+ * 
+ **/
 void
 gtk_list_store_insert (GtkListStore *list_store,
 		       GtkTreeIter  *iter,
@@ -839,6 +953,17 @@ gtk_list_store_insert (GtkListStore *list_store,
   gtk_tree_path_free (path);
 }
 
+/**
+ * gtk_list_store_insert_before:
+ * @store: a #GtkListStore
+ * @iter: iterator to initialize with the new row
+ * @sibling: an existing row
+ *
+ * Inserts a new row before @sibling, initializing @iter to point to
+ * the new row, and emitting the "inserted" signal from the
+ * #GtkTreeModel interface.
+ * 
+ **/
 void
 gtk_list_store_insert_before (GtkListStore *list_store,
 			      GtkTreeIter  *iter,
@@ -909,6 +1034,17 @@ gtk_list_store_insert_before (GtkListStore *list_store,
   gtk_tree_path_free (path);
 }
 
+/**
+ * gtk_list_store_insert_after:
+ * @store: a #GtkListStore
+ * @iter: iterator to initialize with the new row
+ * @sibling: an existing row
+ *
+ * Inserts a new row after @sibling, initializing @iter to point to
+ * the new row, and emitting the "inserted" signal from the
+ * #GtkTreeModel interface.
+ * 
+ **/
 void
 gtk_list_store_insert_after (GtkListStore *list_store,
 			     GtkTreeIter  *iter,
@@ -952,6 +1088,16 @@ gtk_list_store_insert_after (GtkListStore *list_store,
   gtk_tree_path_free (path);
 }
 
+/**
+ * gtk_list_store_prepend:
+ * @store: a #GtkListStore
+ * @iter: iterator to initialize with new row
+ *
+ * Prepends a row to @store, initializing @iter to point to the
+ * new row, and emitting the "inserted" signal on the #GtkTreeModel
+ * interface for the @store.
+ * 
+ **/
 void
 gtk_list_store_prepend (GtkListStore *list_store,
 			GtkTreeIter  *iter)
@@ -983,6 +1129,16 @@ gtk_list_store_prepend (GtkListStore *list_store,
   gtk_tree_path_free (path);
 }
 
+/**
+ * gtk_list_store_append:
+ * @store: a #GtkListStore
+ * @iter: iterator to initialize with the new row
+ *
+ * Appends a row to @store, initializing @iter to point to the
+ * new row, and emitting the "inserted" signal on the #GtkTreeModel
+ * interface for the @store.
+ * 
+ **/
 void
 gtk_list_store_append (GtkListStore *list_store,
 		       GtkTreeIter  *iter)

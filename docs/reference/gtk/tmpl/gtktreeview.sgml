@@ -203,6 +203,18 @@ GtkTreeView
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_tree_view_scroll_to_cell ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@column: 
+@row_align: 
+@col_align: 
+
+
 <!-- ##### FUNCTION gtk_tree_view_get_path_at_pos ##### -->
 <para>
 

@@ -1735,6 +1735,14 @@ gtk_text_attributes_new (void)
   return values;
 }
 
+/**
+ * gtk_text_attributes_copy:
+ * @src: a #GtkTextAttributes to be copied
+ * 
+ * Copies @src and returns a new #GtkTextAttributes.
+ * 
+ * Return value: a copy of @src
+ **/
 GtkTextAttributes*
 gtk_text_attributes_copy (GtkTextAttributes *src)
 {
@@ -1752,7 +1760,7 @@ gtk_text_attributes_copy (GtkTextAttributes *src)
  * @dest: another #GtkTextAttributes
  * 
  * Copies the values from @src to @dest so that @dest has the same values
- * as @src.
+ * as @src. Frees existing values in @dest.
  **/
 void
 gtk_text_attributes_copy_values (GtkTextAttributes *src,
@@ -1803,6 +1811,12 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
   dest->realized = FALSE;
 }
 
+/**
+ * gtk_text_attributes_ref:
+ * @values: a #GtkTextAttributes
+ * 
+ * Increments the reference count on @values.
+ **/
 void
 gtk_text_attributes_ref (GtkTextAttributes *values)
 {
@@ -1811,6 +1825,13 @@ gtk_text_attributes_ref (GtkTextAttributes *values)
   values->refcount += 1;
 }
 
+/**
+ * gtk_text_attributes_unref:
+ * @values: a #GtkTextAttributes
+ * 
+ * Decrements the reference count on @values, freeing the structure
+ * if the reference count reaches 0.
+ **/
 void
 gtk_text_attributes_unref (GtkTextAttributes *values)
 {

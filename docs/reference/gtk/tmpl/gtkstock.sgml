@@ -30,8 +30,10 @@ Stock Items
 
 </para>
 
-@item: 
+@items: 
 @n_items: 
+<!-- # Unused Parameters # -->
+@item: 
 
 
 <!-- ##### FUNCTION gtk_stock_add_static ##### -->
@@ -39,8 +41,10 @@ Stock Items
 
 </para>
 
-@item: 
+@items: 
 @n_items: 
+<!-- # Unused Parameters # -->
+@item: 
 
 
 <!-- ##### FUNCTION gtk_stock_item_copy ##### -->

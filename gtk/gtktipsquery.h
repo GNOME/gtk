@@ -27,6 +27,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 #ifndef __GTKTIPSQUERY_H__
 #define __GTKTIPSQUERY_H__
 
@@ -106,3 +108,5 @@ void		gtk_tips_query_set_labels 	(GtkTipsQuery   *tips_query,
 
 
 #endif	/* __GTKTIPSQUERY_H__ */
+
+#endif /* GTK_DISABLE_DEPRECATED */

@@ -160,7 +160,7 @@ void       gtk_image_get_icon_set (GtkImage         *image,
                                    gchar           **size);
 
 
-
+#ifndef GTK_DISABLE_DEPRECATED
 /* These three are deprecated */
 
 GtkWidget* gtk_image_new      (GdkImage   *val,
@@ -171,7 +171,7 @@ void       gtk_image_set      (GtkImage   *image,
 void       gtk_image_get      (GtkImage   *image,
 			       GdkImage  **val,
 			       GdkBitmap **mask);
-
+#endif /* GTK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus
 }

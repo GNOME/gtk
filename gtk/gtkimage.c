@@ -105,6 +105,19 @@ gtk_image_destroy (GtkObject *object)
 }
 
 
+/**
+ * gtk_image_new_from_pixmap:
+ * @pixmap: a #GdkPixmap, or %NULL
+ * @mask: a #GdkBitmap, or %NULL
+ * 
+ * Creates a #GtkImage widget displaying @pixmap with a @mask.
+ * A #GdkImage is a server-side image buffer in the pixel format of the
+ * current display. The #GtkImage does not assume a reference to the
+ * pixmap or mask; you still need to unref them if you own references.
+ * #GtkImage will add its own reference rather than adopting yours.
+ * 
+ * Return value: a new #GtkImage
+ **/
 GtkWidget*
 gtk_image_new_from_pixmap (GdkPixmap *pixmap,
                            GdkBitmap *mask)
@@ -118,6 +131,20 @@ gtk_image_new_from_pixmap (GdkPixmap *pixmap,
   return GTK_WIDGET (image);
 }
 
+/**
+ * gtk_image_new_from_image:
+ * @image: a #GdkImage, or %NULL
+ * @mask: a #GdkBitmap, or %NULL 
+ * 
+ * Creates a #GtkImage widget displaying a @image with a @mask.
+ * A #GdkImage is a client-side image buffer in the pixel format of the
+ * current display.
+ * The #GtkImage does not assume a reference to the
+ * image or mask; you still need to unref them if you own references.
+ * #GtkImage will add its own reference rather than adopting yours.
+ * 
+ * Return value: a new #GtkImage
+ **/
 GtkWidget*
 gtk_image_new_from_image  (GdkImage  *gdk_image,
                            GdkBitmap *mask)
@@ -131,6 +158,18 @@ gtk_image_new_from_image  (GdkImage  *gdk_image,
   return GTK_WIDGET (image);
 }
 
+/**
+ * gtk_image_new_from_file:
+ * @filename: a filename
+ * 
+ * Creates a new #GtkImage displaying the file @filename. If the
+ * file isn't found or can't be loaded, the #GtkImage will display
+ * a "broken image" icon. If you need to detect failures to load
+ * the file, use gdk_pixbuf_new_from_file() to load the file yourself,
+ * then create the #GtkImage from the pixbuf.
+ * 
+ * Return value: a new #GtkImage
+ **/
 GtkWidget*
 gtk_image_new_from_file   (const gchar *filename)
 {
@@ -143,6 +182,17 @@ gtk_image_new_from_file   (const gchar *filename)
   return GTK_WIDGET (image);
 }
 
+/**
+ * gtk_image_new_from_pixbuf:
+ * @pixbuf: a #GdkPixbuf, or %NULL
+ * 
+ * Creates a new #GtkImage displaying @pixbuf.
+ * The #GtkImage does not assume a reference to the
+ * pixbuf; you still need to unref it if you own references.
+ * #GtkImage will add its own reference rather than adopting yours.
+ * 
+ * Return value: a new #GtkImage
+ **/
 GtkWidget*
 gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
 {
@@ -155,6 +205,18 @@ gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
   return GTK_WIDGET (image);  
 }
 
+/**
+ * gtk_image_new_from_stock:
+ * @stock_id: a stock icon name
+ * @size: a stock icon size
+ * 
+ * Creates a #GtkImage displaying a stock icon. Sample stock icon
+ * names are #GTK_STOCK_ICON_OPEN, #GTK_STOCK_ICON_EXIT. Sample stock sizes
+ * are #GTK_ICON_SIZE_MENU, #GTK_ICON_SIZE_SMALL_TOOLBAR. If the stock
+ * icon name isn't known, a "broken image" icon will be displayed instead.
+ * 
+ * Return value: a new #GtkImage displaying the stock icon
+ **/
 GtkWidget*
 gtk_image_new_from_stock (const gchar    *stock_id,
                           const gchar    *size)
@@ -168,6 +230,26 @@ gtk_image_new_from_stock (const gchar    *stock_id,
   return GTK_WIDGET (image);
 }
 
+/**
+ * gtk_image_new_from_icon_set:
+ * @icon_set: a #GtkIconSet
+ * @size: a stock icon size
+ *
+ * Creates a #GtkImage displaying an icon set. Sample stock sizes are
+ * #GTK_ICON_SIZE_MENU, #GTK_ICON_SIZE_SMALL_TOOLBAR. Instead of using
+ * this function, usually it's better to create a #GtkIconFactory, put
+ * your icon sets in the icon factory, add the icon factory to the
+ * list of default factories with gtk_icon_factory_add_default(), and
+ * then use gtk_image_new_from_stock(). This will allow themes to
+ * override the icon you ship with your application.
+ *
+ * The #GtkImage does not assume a reference to the
+ * icon set; you still need to unref it if you own references.
+ * #GtkImage will add its own reference rather than adopting yours.
+ * 
+ * 
+ * Return value: a new #GtkImage
+ **/
 GtkWidget*
 gtk_image_new_from_icon_set (GtkIconSet     *icon_set,
                              const gchar    *size)
@@ -181,6 +263,15 @@ gtk_image_new_from_icon_set (GtkIconSet     *icon_set,
   return GTK_WIDGET (image);
 }
 
+/**
+ * gtk_image_set_from_pixmap:
+ * @image: a #GtkImage
+ * @pixmap: a #GdkPixmap or %NULL
+ * @mask: a #GdkBitmap or %NULL
+ *
+ * See gtk_image_new_from_pixmap() for details.
+ * 
+ **/
 void
 gtk_image_set_from_pixmap (GtkImage  *image,
                            GdkPixmap *pixmap,
@@ -222,6 +313,15 @@ gtk_image_set_from_pixmap (GtkImage  *image,
     }
 }
 
+/**
+ * gtk_image_set_from_image:
+ * @image: a #GtkImage
+ * @gdk_image: a #GdkImage or %NULL
+ * @mask: a #GdkBitmap or %NULL
+ *
+ * See gtk_image_new_from_image() for details.
+ * 
+ **/
 void
 gtk_image_set_from_image  (GtkImage  *image,
                            GdkImage  *gdk_image,
@@ -259,6 +359,14 @@ gtk_image_set_from_image  (GtkImage  *image,
     }
 }
 
+/**
+ * gtk_image_set_from_file:
+ * @image: a #GtkImage
+ * @filename: a filename or %NULL
+ *
+ * See gtk_image_new_from_file() for details.
+ * 
+ **/
 void
 gtk_image_set_from_file   (GtkImage    *image,
                            const gchar *filename)
@@ -283,6 +391,14 @@ gtk_image_set_from_file   (GtkImage    *image,
   g_object_unref (G_OBJECT (pixbuf));
 }
 
+/**
+ * gtk_image_set_from_pixbuf:
+ * @image: a #GtkImage
+ * @pixbuf: a #GdkPixbuf or %NULL
+ *
+ * See gtk_image_new_from_pixbuf() for details. 
+ * 
+ **/
 void
 gtk_image_set_from_pixbuf (GtkImage  *image,
                            GdkPixbuf *pixbuf)
@@ -308,6 +424,15 @@ gtk_image_set_from_pixbuf (GtkImage  *image,
     }
 }
 
+/**
+ * gtk_image_set_from_stock:
+ * @image: a #GtkImage
+ * @stock_id: a stock icon name
+ * @size: a stock icon size
+ *
+ * See gtk_image_new_from_stock for details.
+ * 
+ **/
 void
 gtk_image_set_from_stock  (GtkImage       *image,
                            const gchar    *stock_id,
@@ -331,6 +456,15 @@ gtk_image_set_from_stock  (GtkImage       *image,
     }
 }
 
+/**
+ * gtk_image_set_from_icon_set:
+ * @image: a #GtkImage
+ * @icon_set: a #GtkIconSet
+ * @size: a stock icon size
+ *
+ * See gtk_image_new_from_icon_set() for details.
+ * 
+ **/
 void
 gtk_image_set_from_icon_set  (GtkImage       *image,
                               GtkIconSet     *icon_set,
@@ -356,6 +490,16 @@ gtk_image_set_from_icon_set  (GtkImage       *image,
     }
 }
 
+/**
+ * gtk_image_get_storage_type:
+ * @image: a #GtkImage
+ * 
+ * Gets the type of representation being used by the #GtkImage
+ * to store image data. If the #GtkImage has no image data,
+ * the return value will be %GTK_IMAGE_EMPTY.
+ * 
+ * Return value: image representation being used
+ **/
 GtkImageType
 gtk_image_get_storage_type (GtkImage *image)
 {
@@ -364,6 +508,19 @@ gtk_image_get_storage_type (GtkImage *image)
   return image->storage_type;
 }
 
+/**
+ * gtk_image_get_pixmap:
+ * @image: a #GtkImage
+ * @pixmap: location to store the pixmap, or %NULL
+ * @mask: location to store the mask, or %NULL
+ *
+ * Gets the pixmap and mask being displayed by the #GtkImage.
+ * The storage type of the image must be %GTK_IMAGE_EMPTY or
+ * %GTK_IMAGE_PIXMAP (see gtk_image_get_storage_type()).
+ * The caller of this function does not own a reference to the
+ * returned pixmap and mask.
+ * 
+ **/
 void
 gtk_image_get_pixmap (GtkImage   *image,
                       GdkPixmap **pixmap,
@@ -380,6 +537,18 @@ gtk_image_get_pixmap (GtkImage   *image,
     *mask = image->data.pixmap.mask;
 }
 
+/**
+ * gtk_image_get_image:
+ * @image: a #GtkImage
+ * @gdk_image: return location for a #GtkImage
+ * @mask: return location for a #GdkBitmap
+ * 
+ * Gets the #GdkImage and mask being displayed by the #GtkImage.
+ * The storage type of the image must be %GTK_IMAGE_EMPTY or
+ * %GTK_IMAGE_IMAGE (see gtk_image_get_storage_type()).
+ * The caller of this function does not own a reference to the
+ * returned image and mask.
+ **/
 void
 gtk_image_get_image  (GtkImage   *image,
                       GdkImage  **gdk_image,
@@ -396,6 +565,19 @@ gtk_image_get_image  (GtkImage   *image,
     *mask = image->data.image.mask;
 }
 
+/**
+ * gtk_image_get_pixbuf:
+ * @image: a #GtkImage
+ *
+ *
+ * Gets the #GdkPixbuf being displayed by the #GtkImage.
+ * The storage type of the image must be %GTK_IMAGE_EMPTY or
+ * %GTK_IMAGE_PIXBUF (see gtk_image_get_storage_type()).
+ * The caller of this function does not own a reference to the
+ * returned pixbuf.
+ * 
+ * Return value: the displayed pixbuf, or %NULL if the image is empty
+ **/
 GdkPixbuf*
 gtk_image_get_pixbuf (GtkImage *image)
 {
@@ -409,6 +591,19 @@ gtk_image_get_pixbuf (GtkImage *image)
   return image->data.pixbuf.pixbuf;
 }
 
+/**
+ * gtk_image_get_stock:
+ * @image: a #GtkImage
+ * @stock_id: place to store a stock icon name
+ * @size: place to store a stock icon size
+ *
+ * Gets the stock icon name and size being displayed by the #GtkImage.
+ * The storage type of the image must be %GTK_IMAGE_EMPTY or
+ * %GTK_IMAGE_STOCK (see gtk_image_get_storage_type()).
+ * The returned strings are owned by the #GtkImage and should not
+ * be freed.
+ * 
+ **/
 void
 gtk_image_get_stock  (GtkImage        *image,
                       gchar          **stock_id,
@@ -422,12 +617,25 @@ gtk_image_get_stock  (GtkImage        *image,
     image->data.stock.stock_id = NULL;
   
   if (stock_id)
-    *stock_id = g_strdup (image->data.stock.stock_id);
+    *stock_id = image->data.stock.stock_id;
 
   if (size)
     *size = image->data.stock.size;
 }
 
+/**
+ * gtk_image_get_icon_set:
+ * @image: a #GtkImage
+ * @icon_set: location to store a #GtkIconSet
+ * @size: location to store a stock icon size
+ *
+ * Gets the icon set and size being displayed by the #GtkImage.
+ * The storage type of the image must be %GTK_IMAGE_EMPTY or
+ * %GTK_IMAGE_ICON_SET (see gtk_image_get_storage_type()).
+ * The returned size string is owned by the #GtkImage and should not
+ * be freed.
+ * 
+ **/
 void
 gtk_image_get_icon_set  (GtkImage        *image,
                          GtkIconSet     **icon_set,
@@ -441,7 +649,7 @@ gtk_image_get_icon_set  (GtkImage        *image,
     *icon_set = image->data.icon_set.icon_set;
 
   if (size)
-    *size = g_strdup (image->data.icon_set.size);
+    *size = image->data.icon_set.size;
 }
 
 GtkWidget*
@@ -534,10 +742,10 @@ gtk_image_expose (GtkWidget      *widget,
           break;
 
         case GTK_IMAGE_STOCK:
-          stock_pixbuf = gtk_widget_render_stock_icon (widget,
-                                                       image->data.stock.stock_id,
-                                                       image->data.stock.size,
-                                                       NULL);
+          stock_pixbuf = gtk_widget_render_icon (widget,
+                                                 image->data.stock.stock_id,
+                                                 image->data.stock.size,
+                                                 NULL);
           if (stock_pixbuf)
             {              
               image_bound.width = gdk_pixbuf_get_width (stock_pixbuf);
@@ -741,10 +949,10 @@ gtk_image_size_request (GtkWidget      *widget,
   switch (image->storage_type)
     {
     case GTK_IMAGE_STOCK:
-      pixbuf = gtk_widget_render_stock_icon (GTK_WIDGET (image),
-                                             image->data.stock.stock_id,
-                                             image->data.stock.size,
-                                             NULL);
+      pixbuf = gtk_widget_render_icon (GTK_WIDGET (image),
+                                       image->data.stock.stock_id,
+                                       image->data.stock.size,
+                                       NULL);
       break;
 
     case GTK_IMAGE_ICON_SET:

@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 #ifndef __GTK_OLD_EDITABLE_H__
 #define __GTK_OLD_EDITABLE_H__
 
@@ -140,3 +142,5 @@ void       gtk_old_editable_changed         (GtkOldEditable *old_editable);
 
 
 #endif /* __GTK_OLD_EDITABLE_H__ */
+
+#endif /* GTK_DISABLE_DEPRECATED */

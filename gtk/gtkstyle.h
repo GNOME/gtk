@@ -461,12 +461,14 @@ void gtk_draw_diamond    (GtkStyle        *style,
 			  gint             y,
 			  gint             width,
 			  gint             height);
+#ifndef GTK_DISABLE_DEPRECATED
 void gtk_draw_string     (GtkStyle        *style,
 			  GdkWindow       *window,
 			  GtkStateType     state_type,
 			  gint             x,
 			  gint             y,
 			  const gchar     *string);
+#endif /* GTK_DISABLE_DEPRECATED */
 void gtk_draw_box        (GtkStyle        *style,
 			  GdkWindow       *window,
 			  GtkStateType     state_type,
@@ -638,6 +640,7 @@ void gtk_paint_diamond    (GtkStyle        *style,
 			   gint             y,
 			   gint             width,
 			   gint             height);
+#ifndef GTK_DISABLE_DEPRECATED
 void gtk_paint_string     (GtkStyle        *style,
 			   GdkWindow       *window,
 			   GtkStateType     state_type,
@@ -647,6 +650,7 @@ void gtk_paint_string     (GtkStyle        *style,
 			   gint             x,
 			   gint             y,
 			   const gchar     *string);
+#endif /* GTK_DISABLE_DEPRECATED */
 void gtk_paint_box        (GtkStyle        *style,
 			   GdkWindow       *window,
 			   GtkStateType     state_type,

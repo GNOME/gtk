@@ -37,6 +37,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#ifndef GTK_DISABLE_DEPRECATED
 
 #define GTK_TYPE_PROGRESS            (gtk_progress_get_type ())
 #define GTK_PROGRESS(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_PROGRESS, GtkProgress))
@@ -45,6 +46,7 @@ extern "C" {
 #define GTK_IS_PROGRESS_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PROGRESS))
 #define GTK_PROGRESS_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_PROGRESS, GtkProgressClass))
 
+#endif /* GTK_DISABLE_DEPRECATED */
 
 typedef struct _GtkProgress       GtkProgress;
 typedef struct _GtkProgressClass  GtkProgressClass;
@@ -78,6 +80,8 @@ struct _GtkProgressClass
  * directly.
  */
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 GtkType    gtk_progress_get_type            (void) G_GNUC_CONST;
 void       gtk_progress_set_show_text       (GtkProgress   *progress,
 					     gint           show_text);
@@ -106,6 +110,7 @@ gfloat     gtk_progress_get_current_percentage (GtkProgress *progress);
 gfloat     gtk_progress_get_percentage_from_value (GtkProgress *progress,
 						   gfloat       value);
 
+#endif /* GTK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus
 }

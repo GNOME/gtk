@@ -264,6 +264,13 @@ iter_init_from_byte_offset (GtkTextIter *iter,
 
   iter_set_from_byte_offset (real, line, line_byte_offset);
 
+  if (real->segment->type == &gtk_text_char_type &&
+      (real->segment->body.chars[real->segment_byte_offset] & 0xc0) == 0x80)
+    g_warning ("Incorrect line byte index %d falls in the middle of a UTF-8 "
+               "character; this will crash the text buffer. "
+               "Byte indexes must refer to the start of a character.",
+               line_byte_offset);
+  
   return real;
 }
 
@@ -2699,12 +2706,36 @@ find_by_log_attrs (GtkTextIter    *iter,
     }
 }
 
+/**
+ * gtk_text_iter_forward_word_end:
+ * @iter: a #GtkTextIter
+ * 
+ * Moves forward to the next word end. (If @iter is currently on a
+ * word end, moves forward to the next one after that.) Word breaks
+ * are determined by Pango and should be correct for nearly any
+ * language (if not, the correct fix would be to the Pango word break
+ * algorithms).
+ * 
+ * Return value: %TRUE if @iter moved and is not the end iterator 
+ **/
 gboolean
 gtk_text_iter_forward_word_end (GtkTextIter *iter)
 {
   return find_by_log_attrs (iter, find_word_end_func, TRUE, FALSE);
 }
 
+/**
+ * gtk_text_iter_forward_word_end:
+ * @iter: a #GtkTextIter
+ * 
+ * Moves backward to the next word start. (If @iter is currently on a
+ * word start, moves backward to the next one after that.) Word breaks
+ * are determined by Pango and should be correct for nearly any
+ * language (if not, the correct fix would be to the Pango word break
+ * algorithms).
+ * 
+ * Return value: %TRUE if @iter moved and is not the end iterator 
+ **/
 gboolean
 gtk_text_iter_backward_word_start (GtkTextIter      *iter)
 {
@@ -2714,6 +2745,16 @@ gtk_text_iter_backward_word_start (GtkTextIter      *iter)
 /* FIXME a loop around a truly slow function means
  * a truly spectacularly slow function.
  */
+
+/**
+ * gtk_text_iter_forward_word_ends:
+ * @iter: a #GtkTextIter
+ * @count: number of times to move
+ * 
+ * Calls gtk_text_iter_forward_word_end() up to @count times.
+ *
+ * Return value: %TRUE if @iter moved and is not the end iterator 
+ **/
 gboolean
 gtk_text_iter_forward_word_ends (GtkTextIter      *iter,
                                  gint              count)
@@ -2739,6 +2780,15 @@ gtk_text_iter_forward_word_ends (GtkTextIter      *iter,
   return TRUE;
 }
 
+/**
+ * gtk_text_iter_backward_word_starts
+ * @iter: a #GtkTextIter
+ * @count: number of times to move
+ * 
+ * Calls gtk_text_iter_backward_word_starts() up to @count times.
+ *
+ * Return value: %TRUE if @iter moved and is not the end iterator 
+ **/
 gboolean
 gtk_text_iter_backward_word_starts (GtkTextIter      *iter,
                                     gint               count)
@@ -2761,48 +2811,139 @@ gtk_text_iter_backward_word_starts (GtkTextIter      *iter,
   return TRUE;
 }
 
+/**
+ * gtk_text_iter_starts_word:
+ * @iter: a #GtkTextIter
+ * 
+ * Determines whether @iter begins a natural-language word.  Word
+ * breaks are determined by Pango and should be correct for nearly any
+ * language (if not, the correct fix would be to the Pango word break
+ * algorithms).
+ *
+ * Return value: %TRUE if @iter is at the start of a word
+ **/
 gboolean
 gtk_text_iter_starts_word (const GtkTextIter *iter)
 {
   return test_log_attrs (iter, is_word_start_func);
 }
 
+/**
+ * gtk_text_iter_ends_word:
+ * @iter: a #GtkTextIter
+ * 
+ * Determines whether @iter ends a natural-language word.  Word breaks
+ * are determined by Pango and should be correct for nearly any
+ * language (if not, the correct fix would be to the Pango word break
+ * algorithms).
+ *
+ * Return value: %TRUE if @iter is at the end of a word
+ **/
 gboolean
 gtk_text_iter_ends_word (const GtkTextIter *iter)
 {
   return test_log_attrs (iter, is_word_end_func);
 }
 
+/**
+ * gtk_text_iter_inside_word:
+ * @iter: a #GtkTextIter
+ * 
+ * Determines whether @iter is inside a natural-language word (as
+ * opposed to say inside some whitespace).  Word breaks are determined
+ * by Pango and should be correct for nearly any language (if not, the
+ * correct fix would be to the Pango word break algorithms).
+ * 
+ * Return value: %TRUE if @iter is inside a word
+ **/
 gboolean
 gtk_text_iter_inside_word (const GtkTextIter *iter)
 {
   return test_log_attrs (iter, inside_word_func);
 }
 
+/**
+ * gtk_text_iter_starts_sentence:
+ * @iter: a #GtkTextIter
+ * 
+ * Determines whether @iter begins a sentence.  Sentence boundaries are
+ * determined by Pango and should be correct for nearly any language
+ * (if not, the correct fix would be to the Pango text boundary
+ * algorithms).
+ * 
+ * Return value: %TRUE if @iter is at the start of a sentence.
+ **/
 gboolean
 gtk_text_iter_starts_sentence (const GtkTextIter *iter)
 {
   return test_log_attrs (iter, is_sentence_start_func);
 }
 
+/**
+ * gtk_text_iter_ends_sentence:
+ * @iter: a #GtkTextIter
+ * 
+ * Determines whether @iter ends a sentence.  Sentence boundaries are
+ * determined by Pango and should be correct for nearly any language
+ * (if not, the correct fix would be to the Pango text boundary
+ * algorithms).
+ * 
+ * Return value: %TRUE if @iter is at the end of a sentence.
+ **/
 gboolean
 gtk_text_iter_ends_sentence (const GtkTextIter *iter)
 {
   return test_log_attrs (iter, is_sentence_end_func);
 }
 
+/**
+ * gtk_text_iter_inside_sentence:
+ * @iter: a #GtkTextIter
+ * 
+ * Determines whether @iter is inside a sentence (as opposed to in
+ * between two sentences, e.g. after a period and before the first
+ * letter of the next sentence).  Sentence boundaries are determined
+ * by Pango and should be correct for nearly any language (if not, the
+ * correct fix would be to the Pango text boundary algorithms).
+ * 
+ * Return value: %TRUE if @iter is inside a sentence.
+ **/
 gboolean
 gtk_text_iter_inside_sentence (const GtkTextIter *iter)
 {
   return test_log_attrs (iter, inside_sentence_func);
 }
 
+/**
+ * gtk_text_iter_forward_sentence_end:
+ * @iter: a #GtkTextIter
+ * 
+ * Moves forward to the next sentence end. (If @iter is at the end of
+ * a sentence, moves to the next end of sentence.)  Sentence
+ * boundaries are determined by Pango and should be correct for nearly
+ * any language (if not, the correct fix would be to the Pango text
+ * boundary algorithms).
+ * 
+ * Return value: %TRUE if @iter moved and is not the end iterator
+ **/
 gboolean
 gtk_text_iter_forward_sentence_end (GtkTextIter *iter)
 {
   return find_by_log_attrs (iter, find_sentence_end_func, TRUE, FALSE);
 }
 
+/**
+ * gtk_text_iter_backward_sentence_start:
+ * @iter: a #GtkTextIter
+ * 
+ * Moves backward to the next sentence start; if @iter is already at
+ * the start of a sentence, moves backward to the next one.  Sentence
+ * boundaries are determined by Pango and should be correct for nearly
+ * any language (if not, the correct fix would be to the Pango text
+ * boundary algorithms).
+ * 
+ * Return value: %TRUE if @iter moved and is not the end iterator
+ **/
 gboolean
 gtk_text_iter_backward_sentence_start (GtkTextIter      *iter)
 {
@@ -2812,6 +2953,15 @@ gtk_text_iter_backward_sentence_start (GtkTextIter      *iter)
 /* FIXME a loop around a truly slow function means
  * a truly spectacularly slow function.
  */
+/**
+ * gtk_text_iter_forward_sentence_ends:
+ * @iter: a #GtkTextIter
+ * @count: number of sentences to move
+ * 
+ * Calls gtk_text_iter_forward_sentence_end() up to @count times.
+ * 
+ * Return value: %TRUE if @iter moved and is not the end iterator
+ **/
 gboolean
 gtk_text_iter_forward_sentence_ends (GtkTextIter      *iter,
                                      gint              count)
@@ -2837,6 +2987,15 @@ gtk_text_iter_forward_sentence_ends (GtkTextIter      *iter,
   return TRUE;
 }
 
+/**
+ * gtk_text_iter_forward_sentence_ends:
+ * @iter: a #GtkTextIter
+ * @count: number of sentences to move
+ * 
+ * Calls gtk_text_iter_backward_sentence_start() up to @count times.
+ * 
+ * Return value: %TRUE if @iter moved and is not the end iterator
+ **/
 gboolean
 gtk_text_iter_backward_sentence_starts (GtkTextIter      *iter,
                                         gint               count)
@@ -2908,18 +3067,53 @@ is_cursor_pos_func (const PangoLogAttr *attrs,
   return attrs[offset].is_cursor_position;
 }
 
+/**
+ * gtk_text_iter_forward_cursor_position:
+ * @iter: a #GtkTextIter
+ * 
+ * Moves @iter forward by a single cursor position. Cursor positions
+ * are (unsurprisingly) positions where the cursor can appear. Perhaps
+ * surprisingly, there may not be a cursor position between all
+ * characters. The most common example for European languages would be
+ * a carriage return/newline sequence. For some Unicode characters,
+ * the equivalent of say the letter "a" with an accent mark will be
+ * represented as two characters, first the letter then a "combining
+ * mark" that causes the accent to be rendered; so the cursor can't go
+ * between those two characters. See also the #PangoLogAttr structure and
+ * pango_break() function.
+ * 
+ * Return value: %TRUE if we moved and the new position is dereferenceable
+ **/
 gboolean
 gtk_text_iter_forward_cursor_position (GtkTextIter *iter)
 {
   return find_by_log_attrs (iter, find_forward_cursor_pos_func, TRUE, FALSE);
 }
 
+/**
+ * gtk_text_iter_backward_cursor_position:
+ * @iter: a #GtkTextIter
+ * 
+ * Like gtk_text_iter_forward_cursor_position(), but moves backward.
+ * 
+ * Return value: %TRUE if we moved and the new position is dereferenceable
+ **/
 gboolean
 gtk_text_iter_backward_cursor_position (GtkTextIter *iter)
 {
   return find_by_log_attrs (iter, find_backward_cursor_pos_func, FALSE, FALSE);
 }
 
+/**
+ * gtk_text_iter_forward_cursor_positions:
+ * @iter: a #GtkTextIter
+ * @count: number of positions to move
+ * 
+ * Moves up to @count cursor positions. See
+ * gtk_text_iter_forward_cursor_position() for details.
+ * 
+ * Return value: %TRUE if we moved and the new position is dereferenceable
+ **/
 gboolean
 gtk_text_iter_forward_cursor_positions (GtkTextIter *iter,
                                         gint         count)
@@ -2945,6 +3139,16 @@ gtk_text_iter_forward_cursor_positions (GtkTextIter *iter,
   return TRUE;
 }
 
+/**
+ * gtk_text_iter_backward_cursor_positions:
+ * @iter: a #GtkTextIter
+ * @count: number of positions to move
+ *
+ * Moves up to @count cursor positions. See
+ * gtk_text_iter_forward_cursor_position() for details.
+ * 
+ * Return value: %TRUE if we moved and the new position is dereferenceable
+ **/
 gboolean
 gtk_text_iter_backward_cursor_positions (GtkTextIter *iter,
                                          gint         count)
@@ -2970,12 +3174,34 @@ gtk_text_iter_backward_cursor_positions (GtkTextIter *iter,
   return TRUE;
 }
 
+/**
+ * gtk_text_iter_is_cursor_position:
+ * @iter: a #GtkTextIter
+ * 
+ * See gtk_text_iter_forward_cursor_position() or #PangoLogAttr or
+ * pango_break() for details on what a cursor position is.
+ * 
+ * Return value: %TRUE if the cursor can be placed at @iter
+ **/
 gboolean
 gtk_text_iter_is_cursor_position (const GtkTextIter *iter)
 {
   return test_log_attrs (iter, is_cursor_pos_func);
 }
 
+/**
+ * gtk_text_iter_set_line_offset:
+ * @iter: a #GtkTextIter 
+ * @char_on_line: a character offset relative to the start of @iter's current line
+ * 
+ * Moves @iter within a line, to a new <emphasis>character</emphasis>
+ * (not byte) offset. The given character offset must be less than or
+ * equal to the number of characters in the line; if equal, @iter
+ * moves to the start of the next line. See
+ * gtk_text_iter_set_line_index() if you have a byte index rather than
+ * a character offset.
+ *
+ **/
 void
 gtk_text_iter_set_line_offset (GtkTextIter *iter,
                                gint         char_on_line)
@@ -3004,6 +3230,17 @@ gtk_text_iter_set_line_offset (GtkTextIter *iter,
   check_invariants (iter);
 }
 
+/**
+ * gtk_text_iter_set_line_index:
+ * @iter: a #GtkTextIter
+ * @byte_on_line: a byte index relative to the start of @iter's current line
+ *
+ * Same as gtk_text_iter_set_line_offset(), but works with a
+ * <emphasis>byte</emphasis> index. The given byte index must be at
+ * the start of a character, it can't be in the middle of a UTF-8
+ * encoded character.
+ * 
+ **/
 void
 gtk_text_iter_set_line_index (GtkTextIter *iter,
                               gint         byte_on_line)
@@ -3039,6 +3276,14 @@ gtk_text_iter_set_line_index (GtkTextIter *iter,
   check_invariants (iter);
 }
 
+/**
+ * gtk_text_iter_set_line:
+ * @iter: a #GtkTextIter
+ * @line_number: line number (counted from 0)
+ *
+ * Moves iterator @iter to the start of the line @line_number.
+ * 
+ **/
 void
 gtk_text_iter_set_line (GtkTextIter *iter,
                         gint         line_number)
@@ -3066,8 +3311,18 @@ gtk_text_iter_set_line (GtkTextIter *iter,
   check_invariants (iter);
 }
 
+/**
+ * gtk_text_iter_set_offset:
+ * @iter: a #GtkTextIter
+ * @char_offset: a character number
+ *
+ * Sets @iter to point to @char_offset. @char_offset counts from the start
+ * of the entire text buffer, starting with 0.
+ * 
+ **/
 void
-gtk_text_iter_set_offset (GtkTextIter *iter, gint char_index)
+gtk_text_iter_set_offset (GtkTextIter *iter,
+                          gint         char_offset)
 {
   GtkTextLine *line;
   GtkTextRealIter *real;
@@ -3084,11 +3339,11 @@ gtk_text_iter_set_offset (GtkTextIter *iter, gint char_index)
   check_invariants (iter);
 
   if (real->cached_char_index >= 0 &&
-      real->cached_char_index == char_index)
+      real->cached_char_index == char_offset)
     return;
 
   line = _gtk_text_btree_get_line_at_char (real->tree,
-                                           char_index,
+                                           char_offset,
                                            &line_start,
                                            &real_char_index);
 
@@ -3100,8 +3355,17 @@ gtk_text_iter_set_offset (GtkTextIter *iter, gint char_index)
   check_invariants (iter);
 }
 
+/**
+ * gtk_text_iter_forward_to_end:
+ * @iter: a #GtkTextIter
+ *
+ * Moves @iter forward to the "end iterator," which points one past the last
+ * valid character in the buffer. gtk_text_iter_get_char() called on the
+ * end iterator returns 0, which is convenient for writing loops.
+ * 
+ **/
 void
-gtk_text_iter_forward_to_end  (GtkTextIter       *iter)
+gtk_text_iter_forward_to_end  (GtkTextIter *iter)
 {
   GtkTextBuffer *buffer;
   GtkTextRealIter *real;
@@ -3399,6 +3663,17 @@ gtk_text_iter_forward_find_char (GtkTextIter         *iter,
   return FALSE;
 }
 
+/**
+ * gtk_text_iter_backward_find_char:
+ * @iter: a #GtkTextIter
+ * @pred: function to be called on each character
+ * @user_data: user data for @pred
+ * @limit: search limit, or %NULL for none
+ * 
+ * Same as gtk_text_iter_forward_find_char(), but goes backward from @iter.
+ * 
+ * Return value: whether a match was found
+ **/
 gboolean
 gtk_text_iter_backward_find_char (GtkTextIter         *iter,
                                   GtkTextCharPredicate pred,
@@ -3623,7 +3898,9 @@ strbreakup (const char *string,
  * @match_end: return location for end of match, or %NULL
  * @limit: bound for the search, or %NULL for the end of the buffer
  * 
- * 
+ * Searches forward for @str. Any match is returned as the range @match_start,
+ * @match_end. If you specify @visible_only or @slice, the match may have
+ * invisible text, pixbufs, or child widgets interspersed in @str.
  * 
  * Return value: whether a match was found
  **/
@@ -3941,7 +4218,7 @@ my_strrstr (const gchar *haystack,
  * @match_end: return location for end of match, or %NULL
  * @limit: location of last possible @match_start, or %NULL for start of buffer
  * 
- * 
+ * Same as gtk_text_iter_forward_search(), but moves backward.
  * 
  * Return value: whether a match was found
  **/
@@ -4079,6 +4356,19 @@ gtk_text_iter_backward_search (const GtkTextIter *iter,
  * Comparisons
  */
 
+/**
+ * gtk_text_iter_equal:
+ * @lhs: a #GtkTextIter
+ * @rhs: another #GtkTextIter
+ * 
+ * Tests whether two iterators are equal, using the fastest possible
+ * mechanism. This function is very fast; you can expect it to perform
+ * better than e.g. getting the character offset for each iterator and
+ * comparing the offsets yourself. Also, it's a bit faster than
+ * gtk_text_iter_compare().
+ * 
+ * Return value: %TRUE if the iterators point to the same place in the buffer
+ **/
 gboolean
 gtk_text_iter_equal (const GtkTextIter *lhs,
                      const GtkTextIter *rhs)
@@ -4107,8 +4397,21 @@ gtk_text_iter_equal (const GtkTextIter *lhs,
     }
 }
 
+/**
+ * gtk_text_iter_compare:
+ * @lhs: a #GtkTextIter
+ * @rhs: another #GtkTextIter
+ * 
+ * A qsort()-style function that returns negative if @lhs is less than
+ * @rhs, positive if @lhs is greater than @rhs, and 0 if they're equal.
+ * Ordering is in character offset order, i.e. the first character in the buffer
+ * is less than the second character in the buffer.
+ * 
+ * Return value: -1 if @lhs is less than @rhs, 1 if @lhs is greater, 0 if they are equal
+ **/
 gint
-gtk_text_iter_compare (const GtkTextIter *lhs, const GtkTextIter *rhs)
+gtk_text_iter_compare (const GtkTextIter *lhs,
+                       const GtkTextIter *rhs)
 {
   GtkTextRealIter *real_lhs;
   GtkTextRealIter *real_rhs;
@@ -4116,13 +4419,13 @@ gtk_text_iter_compare (const GtkTextIter *lhs, const GtkTextIter *rhs)
   real_lhs = gtk_text_iter_make_surreal (lhs);
   real_rhs = gtk_text_iter_make_surreal (rhs);
 
-  check_invariants (lhs);
-  check_invariants (rhs);
-
   if (real_lhs == NULL ||
       real_rhs == NULL)
     return -1; /* why not */
 
+  check_invariants (lhs);
+  check_invariants (rhs);
+  
   if (real_lhs->line == real_rhs->line)
     {
       gint left_index, right_index;
@@ -4165,6 +4468,18 @@ gtk_text_iter_compare (const GtkTextIter *lhs, const GtkTextIter *rhs)
     }
 }
 
+/**
+ * gtk_text_iter_in_range:
+ * @iter: a #GtkTextIter
+ * @start: start of range
+ * @end: end of range
+ * 
+ * @start and @end must be in order, unlike most text buffer
+ * functions, for efficiency reasons. The function returns %TRUE if
+ * @iter falls in the range [@start, @end).
+ * 
+ * Return value: %TRUE if @iter is in the range
+ **/
 gboolean
 gtk_text_iter_in_range (const GtkTextIter *iter,
                         const GtkTextIter *start,
@@ -4174,6 +4489,19 @@ gtk_text_iter_in_range (const GtkTextIter *iter,
     gtk_text_iter_compare (iter, end) < 0;
 }
 
+/**
+ * gtk_text_iter_reorder:
+ * @first: a #GtkTextIter
+ * @second: another #GtkTextIter
+ *
+ * Swaps the value of @first and @second if @second comes before
+ * @first in the buffer. That is, ensures that @first and @second are
+ * in sequence. Most text buffer functions that take a range call this
+ * automatically on your behalf, so there's no real reason to call it yourself
+ * in those cases. There are some exceptions, such as gtk_text_iter_in_range(),
+ * that expect a pre-sorted range.
+ * 
+ **/
 void
 gtk_text_iter_reorder         (GtkTextIter *first,
                                GtkTextIter *second)
@@ -4260,13 +4588,6 @@ _gtk_text_btree_get_iter_at_line_byte (GtkTextBTree   *tree,
 
   /* We might as well cache this, since we know it. */
   real->cached_line_number = real_line;
-
-  if (real->segment->type == &gtk_text_char_type &&
-      (real->segment->body.chars[real->segment_byte_offset] & 0xc0) == 0x80)
-    g_warning ("%s: Incorrect byte offset %d falls in the middle of a UTF-8 "
-               "character; this will crash the text buffer. "
-               "Byte indexes must refer to the start of a character.",
-               G_STRLOC, byte_index);
 
   check_invariants (iter);
 }

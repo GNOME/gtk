@@ -334,6 +334,9 @@ types related to the text widget and how they work together.
 
 @buffer: 
 @tag: 
+@start: 
+@end: 
+<!-- # Unused Parameters # -->
 @start_index: 
 @end_index: 
 
@@ -345,6 +348,9 @@ types related to the text widget and how they work together.
 
 @buffer: 
 @tag: 
+@start: 
+@end: 
+<!-- # Unused Parameters # -->
 @start_index: 
 @end_index: 
 
@@ -356,6 +362,9 @@ types related to the text widget and how they work together.
 
 @buffer: 
 @name: 
+@start: 
+@end: 
+<!-- # Unused Parameters # -->
 @start_index: 
 @end_index: 
 
@@ -367,6 +376,9 @@ types related to the text widget and how they work together.
 
 @buffer: 
 @name: 
+@start: 
+@end: 
+<!-- # Unused Parameters # -->
 @start_index: 
 @end_index: 
 

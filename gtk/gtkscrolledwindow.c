@@ -470,6 +470,15 @@ gtk_scrolled_window_set_placement (GtkScrolledWindow *scrolled_window,
     }
 }
 
+/**
+ * gtk_scrolled_window_set_shadow_type:
+ * @scrolled_window: a #GtkScrolledWindow
+ * @type: kind of shadow to draw around scrolled window contents
+ *
+ * Changes the type of shadow drawn around the contents of
+ * @scrolled_window.
+ * 
+ **/
 void
 gtk_scrolled_window_set_shadow_type (GtkScrolledWindow *scrolled_window,
 				     GtkShadowType      type)

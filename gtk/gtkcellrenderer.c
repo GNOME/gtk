@@ -198,17 +198,23 @@ gtk_cell_renderer_set_property (GObject      *object,
     }
 }
 
+/**
+ * gtk_cell_renderer_get_size:
+ * @cell: a #GtkCellRenderer
+ * @widget: the widget the renderer is rendering to
+ * @width: location to return width needed to render a cell, or %NULL
+ * @height: location to return height needed to render a cell, or %NULL
+ * 
+ * Obtains the width and height needed to render the cell. Used by
+ * view widgets to determine the appropriate size for the cell_area
+ * passed to gtk_cell_renderer_render().
+ **/
 void
 gtk_cell_renderer_get_size (GtkCellRenderer *cell,
 			    GtkWidget *widget,
 			    gint      *width,
 			    gint      *height)
 {
-  /* It's actually okay to pass in a NULL cell, as we run into that
-   * a lot
-   */
-  if (cell == NULL)
-    return;
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (GTK_CELL_RENDERER_GET_CLASS (cell)->get_size != NULL);
 
@@ -262,6 +268,22 @@ gtk_cell_renderer_render (GtkCellRenderer     *cell,
 					      flags);
 }
 
+/**
+ * gtk_cell_renderer_event:
+ * @cell: a #GtkCellRenderer
+ * @event: a #GdkEvent
+ * @widget: widget that received the event
+ * @path: widget-dependent string representation of the event location; e.g. for #GtkTreeView, a string representation of #GtkTreePath
+ * @background_area: background area as passed to gtk_cell_renderer_render()
+ * @cell_area: cell area as passed to gtk_cell_renderer_render()
+ * @flags: render flags
+ * 
+ * Passes an event to the cell renderer for possible processing.  Some
+ * cell renderers may use events; for example, #GtkCellRendererToggle
+ * toggles when it gets a mouse click.
+ * 
+ * Return value: %TRUE if the event was consumed/handled
+ **/
 gint
 gtk_cell_renderer_event (GtkCellRenderer     *cell,
 			 GdkEvent            *event,

@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 #ifndef __GTK_LIST_H__
 #define __GTK_LIST_H__
 
@@ -142,3 +144,5 @@ void       gtk_list_end_drag_selection    (GtkList          *list);
 
 
 #endif /* __GTK_LIST_H__ */
+
+#endif /* GTK_DISABLE_DEPRECATED */

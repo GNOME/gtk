@@ -3661,7 +3661,7 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
 }
 
 /**
- * gtk_widget_render_stock_icon:
+ * gtk_widget_render_icon:
  * @widget: a #GtkWidget
  * @stock_id: a stock ID
  * @size: a stock size
@@ -3678,10 +3678,10 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
  * Return value: a new pixbuf, or NULL if the stock ID wasn't known
  **/
 GdkPixbuf*
-gtk_widget_render_stock_icon (GtkWidget      *widget,
-                              const gchar    *stock_id,
-                              const gchar    *size,
-                              const gchar    *detail)
+gtk_widget_render_icon (GtkWidget      *widget,
+                        const gchar    *stock_id,
+                        const gchar    *size,
+                        const gchar    *detail)
 {
   GtkIconSet *icon_set;
   GdkPixbuf *retval;
@@ -3770,14 +3770,24 @@ gtk_widget_get_parent_window   (GtkWidget           *widget)
   return (parent_window != NULL) ? parent_window : widget->parent->window;
 }
 
-/*****************************************
+/**
  * gtk_widget_set_uposition:
+ * @widget: a #GtkWidget
+ * @x: x position
+ * @y: y position
+ * 
  *
- *   arguments:
+ * Sets the position of a widget. The funny "u" in the name comes from
+ * the "user position" hint specified by the X window system, and
+ * exists for legacy reasons. This function doesn't work if a widget
+ * is inside a container; it's only really useful on #GtkWindow.
  *
- *   results:
- *****************************************/
-
+ * Don't use this function to center dialogs over the main application
+ * window; most window managers will do the centering on your behalf
+ * if you call gtk_window_set_transient_for(), and it's really not
+ * possible to get the centering to work correctly in all cases from
+ * application code.
+ **/
 void
 gtk_widget_set_uposition (GtkWidget *widget,
 			  gint	     x,
@@ -3811,14 +3821,31 @@ gtk_widget_set_uposition (GtkWidget *widget,
     gtk_widget_size_allocate (widget, &widget->allocation);
 }
 
-/*****************************************
+/**
  * gtk_widget_set_usize:
+ * @widget: a #GtkWidget
+ * @width: minimum width, or -1 to unset
+ * @height: minimum height, or -1 to unset
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * Sets the minimum size of a widget; that is, the widget's size
+ * request will be @width by @height. You can use this function to
+ * force a widget to be either larger or smaller than it is. The
+ * strange "usize" name dates from the early days of GTK+, and derives
+ * from X Window System terminology. In many cases,
+ * gtk_window_set_default_size() is a better choice for toplevel
+ * windows than this function; setting the default size will still
+ * allow users to shrink the window. Setting the usize will force them
+ * to leave the window at least as large as the usize. When dealing
+ * with window sizes, gtk_window_set_geometry_hints() can be a useful
+ * function as well.
+ * 
+ * Note the inherent danger of setting any fixed size - themes,
+ * translations into other languages, different fonts, and user action
+ * can all change the appropriate size for a given widget. So, it's
+ * basically impossible to hardcode a size that will always be
+ * correct.
+ * 
+ **/
 void
 gtk_widget_set_usize (GtkWidget *widget,
 		      gint	 width,
@@ -3847,14 +3874,23 @@ gtk_widget_set_usize (GtkWidget *widget,
     gtk_widget_queue_resize (widget);
 }
 
-/*****************************************
+/**
  * gtk_widget_set_events:
+ * @widget: a #GtkWidget
+ * @events: event mask
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * Sets the event mask (see #GdkEventMask) for a widget. The event
+ * mask determines which events a widget will receive. Keep in mind
+ * that different widgets have different default event masks, and by
+ * changing the event mask you may disrupt a widget's functionality,
+ * so be careful. This function must be called while a widget is
+ * unrealized. Consider gtk_widget_add_events() for widgets that are
+ * already realized, or if you want to preserve the existing event
+ * mask. This function can't be used with #GTK_NO_WINDOW widgets;
+ * to get events on those widgets, place them inside a #GtkEventBox
+ * and receive events on the event box.
+ * 
+ **/
 void
 gtk_widget_set_events (GtkWidget *widget,
 		       gint	  events)
@@ -3885,14 +3921,15 @@ gtk_widget_set_events (GtkWidget *widget,
     }
 }
 
-/*****************************************
+/**
  * gtk_widget_add_events:
+ * @widget: a #GtkWidget
+ * @events: an event mask, see #GdkEventMask
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * Adds the events in the bitfield @events to the event mask for
+ * @widget. See gtk_widget_set_events() for details.
+ * 
+ **/
 void
 gtk_widget_add_events (GtkWidget *widget,
 		       gint	  events)
@@ -3931,14 +3968,15 @@ gtk_widget_add_events (GtkWidget *widget,
     }
 }
 
-/*****************************************
+/**
  * gtk_widget_set_extension_events:
+ * @widget: a #GtkWidget
+ * @mode: bitfield of extension events to receive
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * Sets the extension events mask to @mode. See #GdkExtensionMode
+ * and gdk_input_set_extension_events().
+ * 
+ **/
 void
 gtk_widget_set_extension_events (GtkWidget *widget,
 				 GdkExtensionMode mode)
@@ -3959,14 +3997,21 @@ gtk_widget_set_extension_events (GtkWidget *widget,
   gtk_object_set_data_by_id (GTK_OBJECT (widget), extension_event_key_id, modep);
 }
 
-/*****************************************
+/**
  * gtk_widget_get_toplevel:
+ * @widget: a #GtkWidget
+ * 
+ * This function returns the topmost widget in the container hierarchy
+ * @widget is a part of. If @widget has no parent widgets, it will be
+ * returned as the topmost widget. No reference will be added to the
+ * returned widget; it should not be unreferenced.
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * Note the difference in behavior vs. gtk_widget_get_ancestor();
+ * gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW) would return
+ * %NULL if @widget wasn't inside a toplevel window.
+ * 
+ * Return value: the topmost ancestor of @widget, or @widget itself if there's no ancestor
+ **/
 GtkWidget*
 gtk_widget_get_toplevel (GtkWidget *widget)
 {
@@ -3979,14 +4024,18 @@ gtk_widget_get_toplevel (GtkWidget *widget)
   return widget;
 }
 
-/*****************************************
+/**
  * gtk_widget_get_ancestor:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * @widget: a #GtkWidget
+ * @widget_type: ancestor type
+ * 
+ * Gets the first ancestor of @widget with type @widget_type. For example,
+ * gtk_widget_get_ancestor (widget, GTK_TYPE_BOX) gets the first #GtkBox that's
+ * an ancestor of @widget. No reference will be added to the returned widget;
+ * it should not be unreferenced.
+ * 
+ * Return value: the ancestor widget, or %NULL if not found
+ **/
 GtkWidget*
 gtk_widget_get_ancestor (GtkWidget *widget,
 			 GtkType    widget_type)
@@ -4003,14 +4052,15 @@ gtk_widget_get_ancestor (GtkWidget *widget,
   return widget;
 }
 
-/*****************************************
+/**
  * gtk_widget_get_colormap:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * @widget: a #GtkWidget
+ * 
+ * Gets the colormap that will be used to render @widget. No reference will
+ * be added to the returned colormap; it should not be unreferenced.
+ * 
+ * Return value: the colormap used by @widget
+ **/
 GdkColormap*
 gtk_widget_get_colormap (GtkWidget *widget)
 {
@@ -4034,14 +4084,14 @@ gtk_widget_get_colormap (GtkWidget *widget)
   return gtk_widget_get_default_colormap ();
 }
 
-/*****************************************
+/**
  * gtk_widget_get_visual:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * @widget: a #GtkWidget
+ * 
+ * Gets the visual that will be used to render @widget.
+ * 
+ * Return value: the visual for @widget
+ **/
 GdkVisual*
 gtk_widget_get_visual (GtkWidget *widget)
 {
@@ -4050,42 +4100,44 @@ gtk_widget_get_visual (GtkWidget *widget)
   return gdk_colormap_get_visual (gtk_widget_get_colormap (widget));
 }
 
-/*****************************************
- * gtk_widget_set_colormap:
- *    Set the colormap for the widget to the given
- *    value. Widget must not have been previously
- *    realized. This probably should only be used
- *    from an init() function.
- *   arguments:
- *    widget:
- *    colormap:
- *   results:
- *****************************************/
 
+/**
+ * gtk_widget_set_colormap:
+ * @widget: a #GtkWidget
+ * @colormap: a colormap
+ *
+ * Set the colormap for the widget to the given value. Widget must not
+ * have been previously realized. This probably should only be used
+ * from an init() function (i.e. from the constructor for the widget).
+ * 
+ **/
 void
-gtk_widget_set_colormap (GtkWidget *widget, GdkColormap *colormap)
+gtk_widget_set_colormap (GtkWidget   *widget,
+                         GdkColormap *colormap)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (!GTK_WIDGET_REALIZED (widget));
-  g_return_if_fail (colormap != NULL);
+  g_return_if_fail (GDK_IS_COLORMAP (colormap));
 
-  /* FIXME: reference count the colormap.
-   */
+  g_object_ref (G_OBJECT (colormap));
   
-  gtk_object_set_data (GTK_OBJECT (widget), 
-		       colormap_key,
-		       colormap);
+  gtk_object_set_data_full (GTK_OBJECT (widget), 
+                            colormap_key,
+                            colormap,
+                            (GtkDestroyNotify) g_object_unref);
 }
 
-/*****************************************
+/**
  * gtk_widget_get_events:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * @widget: a #GtkWidget
+ * 
+ * Returns the event mask for the widget (a bitfield containing flags
+ * from the #GdkEventMask enumeration). These are the events that the widget
+ * will receive.
+ * 
+ * Return value: event mask for @widget
+ **/
 gint
 gtk_widget_get_events (GtkWidget *widget)
 {
@@ -4101,14 +4153,15 @@ gtk_widget_get_events (GtkWidget *widget)
   return 0;
 }
 
-/*****************************************
+/**
  * gtk_widget_get_extension_events:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * @widget: a #GtkWidget
+ * 
+ * Retrieves the extension events the widget will receive; see
+ * gdk_input_set_extension_events().
+ * 
+ * Return value: extension events for @widget
+ **/
 GdkExtensionMode
 gtk_widget_get_extension_events (GtkWidget *widget)
 {
@@ -4124,14 +4177,19 @@ gtk_widget_get_extension_events (GtkWidget *widget)
   return 0;
 }
 
-/*****************************************
+/**
  * gtk_widget_get_pointer:
+ * @widget: a #GtkWidget
+ * @x: return location for the X coordinate, or %NULL
+ * @y: return location for the Y coordinate, or %NULL
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * Obtains the location of the mouse pointer in widget coordinates.
+ * Widget coordinates are a bit odd; for historical reasons, they are
+ * defined as widget->window coordinates for widgets that are not
+ * #GTK_NO_WINDOW widgets, and are relative to widget->allocation.x,
+ * widget->allocation.y for widgets that are #GTK_NO_WINDOW widgets.
+ * 
+ **/
 void
 gtk_widget_get_pointer (GtkWidget *widget,
 			gint	  *x,
@@ -4159,14 +4217,16 @@ gtk_widget_get_pointer (GtkWidget *widget,
     }
 }
 
-/*****************************************
+/**
  * gtk_widget_is_ancestor:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * @widget: a #GtkWidget
+ * @ancestor: another #GtkWidget
+ * 
+ * Determines whether @widget is somewhere inside @ancestor, possibly with
+ * intermediate containers.
+ * 
+ * Return value: %TRUE if @ancestor contains @widget as a child, grandchild, great grandchild, etc.
+ **/
 gboolean
 gtk_widget_is_ancestor (GtkWidget *widget,
 			GtkWidget *ancestor)
@@ -4231,14 +4291,16 @@ gtk_widget_pop_composite_child (void)
     composite_child_stack--;
 }
 
-/*****************************************
+/**
  * gtk_widget_push_colormap:
+ * @cmap: a #GdkColormap
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * Pushes @cmap onto a global stack of colormaps; the topmost
+ * colormap on the stack will be used to create all widgets.
+ * Remove @cmap with gtk_widget_pop_colormap(). There's little
+ * reason to use this function.
+ * 
+ **/
 void
 gtk_widget_push_colormap (GdkColormap *cmap)
 {
@@ -4247,14 +4309,12 @@ gtk_widget_push_colormap (GdkColormap *cmap)
   colormap_stack = g_slist_prepend (colormap_stack, cmap);
 }
 
-/*****************************************
+/**
  * gtk_widget_pop_colormap:
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * Removes a colormap pushed with gtk_widget_push_colormap().
+ * 
+ **/
 void
 gtk_widget_pop_colormap (void)
 {
@@ -4268,14 +4328,15 @@ gtk_widget_pop_colormap (void)
     }
 }
 
-/*****************************************
+/**
  * gtk_widget_set_default_colormap:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * @colormap: a #GdkColormap
+ * 
+ * Sets the default colormap to use when creating widgets.
+ * gtk_widget_push_colormap() is a better function to use if
+ * you only want to affect a few widgets, rather than all widgets.
+ * 
+ **/
 void
 gtk_widget_set_default_colormap (GdkColormap *colormap)
 {
@@ -4289,31 +4350,30 @@ gtk_widget_set_default_colormap (GdkColormap *colormap)
     }
 }
 
-/*****************************************
+/**
  * gtk_widget_get_default_colormap:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * 
+ * Obtains the default colormap used to create widgets.
+ * 
+ * Return value: default widget colormap
+ **/
 GdkColormap*
 gtk_widget_get_default_colormap (void)
 {
   if (!default_colormap)
-    default_colormap = gdk_colormap_get_system ();
+    gtk_widget_set_default_colormap (gdk_colormap_get_system ());
   
   return default_colormap;
 }
 
-/*****************************************
+/**
  * gtk_widget_get_default_visual:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * 
+ * Obtains the visual of the default colormap. Not really useful;
+ * used to be useful before gdk_colormap_get_visual() existed.
+ * 
+ * Return value: visual of the default colormap
+ **/
 GdkVisual*
 gtk_widget_get_default_visual (void)
 {
@@ -4898,6 +4958,17 @@ gtk_widget_reset_shapes (GtkWidget *widget)
     gtk_reset_shapes_recurse (widget, widget->window);
 }
 
+/**
+ * gtk_widget_ref:
+ * @widget: a #GtkWidget
+ * 
+ * Adds a reference to a widget. This function is exactly the same
+ * as calling g_object_ref(), and exists mostly for historical
+ * reasons. It can still be convenient to avoid casting a widget
+ * to a #GObject, it saves a small amount of typing.
+ * 
+ * Return value: the widget that was referenced
+ **/
 GtkWidget*
 gtk_widget_ref (GtkWidget *widget)
 {
@@ -4906,6 +4977,13 @@ gtk_widget_ref (GtkWidget *widget)
   return (GtkWidget*) g_object_ref ((GObject*) widget);
 }
 
+/**
+ * gtk_widget_unref:
+ * @widget: a #GtkWidget
+ *
+ * Inverse of gtk_widget_ref(). Equivalent to g_object_unref().
+ * 
+ **/
 void
 gtk_widget_unref (GtkWidget *widget)
 {
@@ -4914,6 +4992,27 @@ gtk_widget_unref (GtkWidget *widget)
   g_object_unref ((GObject*) widget);
 }
 
+/**
+ * gtk_widget_path:
+ * @widget: a #GtkWidget
+ * @path_length: location to store length of the path
+ * @path: location to store allocated path string 
+ * @path_reversed: location to store allocated reverse path string
+ *
+ * Obtains the full path to @widget. The path is simply the name of a
+ * widget and all its parents in the container hierarchy, separated by
+ * periods. The name of a widget comes from
+ * gtk_widget_get_name(). Paths are used to apply styles to a widget
+ * in gtkrc configuration files.  Widget names are the type of the
+ * widget by default (e.g. "GtkButton") or can be set to an
+ * application-specific value with gtk_widget_set_name().  By setting
+ * the name of a widget, you allow users or theme authors to apply
+ * styles to that specific widget in their gtkrc
+ * file. @path_reversed_p fills in the path in reverse order,
+ * i.e. starting with @widget's name instead of starting with the name
+ * of @widget's outermost ancestor.
+ * 
+ **/
 void
 gtk_widget_path (GtkWidget *widget,
 		 guint     *path_length_p,
@@ -4967,6 +5066,17 @@ gtk_widget_path (GtkWidget *widget,
     }
 }
 
+/**
+ * gtk_widget_class_path:
+ * @widget: a #GtkWidget
+ * @path_length: location to store the length of the class path
+ * @path: location to store the class path as an allocated string
+ * @path_reversed: location to store the reverse class path as an allocated string
+ *
+ * Same as gtk_widget_path(), but always uses the name of a widget's type,
+ * never uses a custom name set with gtk_widget_set_name().
+ * 
+ **/
 void
 gtk_widget_class_path (GtkWidget *widget,
 		       guint     *path_length_p,

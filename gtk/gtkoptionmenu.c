@@ -256,6 +256,15 @@ gtk_option_menu_set_history (GtkOptionMenu *option_menu,
     }
 }
 
+/**
+ * gtk_option_menu_get_history:
+ * @option_menu: a #GtkOptionMenu
+ * 
+ * Retrieves the index of the currently selected menu item. The menu
+ * items are numbered from top to bottom, starting with 0. 
+ * 
+ * Return value: index of the selected menu item, or -1 if there are no menu items
+ **/
 gint
 gtk_option_menu_get_history (GtkOptionMenu *option_menu)
 {

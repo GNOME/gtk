@@ -28,6 +28,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 #ifndef __GTK_CTREE_H__
 #define __GTK_CTREE_H__
 
@@ -434,3 +436,5 @@ void gtk_ctree_sort_recursive                    (GtkCTree     *ctree,
 #endif				/* __cplusplus */
 
 #endif				/* __GTK_CTREE_H__ */
+
+#endif /* GTK_DISABLE_DEPRECATED */

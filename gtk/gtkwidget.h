@@ -426,17 +426,21 @@ void	   gtk_widget_queue_draw_area	  (GtkWidget	       *widget,
 					   gint                 y,
 					   gint                 width,
 					   gint                 height);
+#ifndef GTK_DISABLE_DEPRECATED
 void	   gtk_widget_queue_clear	  (GtkWidget	       *widget);
 void	   gtk_widget_queue_clear_area	  (GtkWidget	       *widget,
 					   gint                 x,
 					   gint                 y,
 					   gint                 width,
 					   gint                 height);
+#endif /* GTK_DISABLE_DEPRECATED */
 
 
 void	   gtk_widget_queue_resize	  (GtkWidget	       *widget);
+#ifndef GTK_DISABLE_DEPRECATED
 void	   gtk_widget_draw		  (GtkWidget	       *widget,
 					   GdkRectangle	       *area);
+#endif /* GTK_DISABLE_DEPRECATED */
 void	   gtk_widget_draw_focus	  (GtkWidget	       *widget);
 void	   gtk_widget_draw_default	  (GtkWidget	       *widget);
 void	   gtk_widget_size_request	  (GtkWidget	       *widget,
@@ -575,10 +579,10 @@ PangoContext *gtk_widget_get_pango_context    (GtkWidget   *widget);
 PangoLayout  *gtk_widget_create_pango_layout  (GtkWidget   *widget,
 					       const gchar *text);
 
-GdkPixbuf* gtk_widget_render_stock_icon       (GtkWidget      *widget,
-                                               const gchar    *stock_id,
-                                               const gchar    *size,
-                                               const gchar    *detail);
+GdkPixbuf    *gtk_widget_render_icon          (GtkWidget   *widget,
+                                               const gchar *stock_id,
+                                               const gchar *size,
+                                               const gchar *detail);
 
 /* handle composite names for GTK_COMPOSITE_CHILD widgets,
  * the returned name is newly allocated.

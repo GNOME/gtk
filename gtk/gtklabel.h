@@ -47,8 +47,6 @@ extern "C" {
 typedef struct _GtkLabel       GtkLabel;
 typedef struct _GtkLabelClass  GtkLabelClass;
 
-typedef struct _GtkLabelWord   GtkLabelWord;
-
 struct _GtkLabel
 {
   GtkMisc misc;
@@ -101,9 +99,11 @@ guint       gtk_label_parse_uline   (GtkLabel         *label,
 #  define gtk_label_set				gtk_label_set_text
 #endif	/* GTK_DISABLE_COMPAT_H */
 
+#ifndef GTK_DISABLE_DEPRECATED
 /* Deprecated */
 void       gtk_label_get           (GtkLabel          *label,
                                     char             **str);
+#endif /* GTK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus
 }

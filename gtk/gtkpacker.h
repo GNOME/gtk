@@ -27,6 +27,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 #ifndef __GTK_PACKER_H__
 #define __GTK_PACKER_H__
 
@@ -171,3 +173,5 @@ void       gtk_packer_set_default_ipad	       (GtkPacker	*packer,
 
 
 #endif /* __GTK_PACKER_H__ */
+
+#endif /* GTK_DISABLE_DEPRECATED */

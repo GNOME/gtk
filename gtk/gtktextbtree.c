@@ -2705,6 +2705,18 @@ _gtk_text_btree_get_mark_by_name (GtkTextBTree *tree,
   return seg ? seg->body.mark.obj : NULL;
 }
 
+/**
+ * gtk_text_mark_set_visible:
+ * @mark: a #GtkTextMark
+ * @setting: visibility of mark
+ * 
+ * Sets the visibility of @mark; the insertion point is normally
+ * visible, i.e. you can see it as a vertical bar. Also, the text
+ * widget uses a visible mark to indicate where a drop will occur when
+ * dragging-and-dropping text. Most other marks are not visible.
+ * Marks are not visible by default.
+ * 
+ **/
 void
 gtk_text_mark_set_visible (GtkTextMark       *mark,
                            gboolean           setting)

@@ -1626,6 +1626,26 @@ Given the type of an object and a pointer to it, the object is freed.
 </para>
 
 
+<!-- ##### STRUCT GtkStatusbarMsg ##### -->
+<para>
+Holds the data for a statusbar message. <structfield>text</structfield> holds the actual text string. <structfield>context_id</structfield> is the context that this message is associated with, and <structfield>message_id</structfield> is this particular message's identifier. However, these fields should not be modified directly.
+</para>
+
+@text: 
+@context_id: 
+@message_id: 
+
+<!-- ##### FUNCTION gtk_widget_render_stock_icon ##### -->
+<para>
+
+</para>
+
+@widget: 
+@stock_id: 
+@size: 
+@detail: 
+@Returns: 
+
 <!-- ##### SECTION ./tmpl/gtkprivate.sgml:Title ##### -->
 Private Information
 
@@ -1940,6 +1960,12 @@ be used to bypass it.
 <!-- ##### MACRO gtk_marshal_NONE__UINT_POINTER_UINT_UINT_ENUM ##### -->
 <para>
 
+</para>
+
+
+<!-- ##### STRUCT GtkLabelWord ##### -->
+<para>
+Internal to #GtkLabel.
 </para>
 
 

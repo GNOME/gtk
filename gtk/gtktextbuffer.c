@@ -1394,6 +1394,22 @@ gtk_text_buffer_real_insert_pixbuf (GtkTextBuffer     *buffer,
   g_signal_emit (G_OBJECT (buffer), signals[CHANGED], 0);
 }
 
+/**
+ * gtk_text_buffer_insert_pixbuf:
+ * @buffer: a #GtkTextBuffer
+ * @iter: location to insert the pixbuf
+ * @pixbuf: a #GdkPixbuf
+ *
+ * Inserts an image into the text buffer at @iter. The image will be
+ * counted as one character in character counts, and when obtaining
+ * the buffer contents as a string, will be represented by the Unicode
+ * "object replacement character" 0xFFFC. Note that the "slice"
+ * variants for obtaining portions of the buffer as a string include
+ * this character for pixbufs, but the "text" variants do
+ * not. e.g. see gtk_text_buffer_get_slice() and
+ * gtk_text_buffer_get_text().
+ * 
+ **/
 void
 gtk_text_buffer_insert_pixbuf         (GtkTextBuffer      *buffer,
                                        GtkTextIter        *iter,
@@ -1889,6 +1905,18 @@ gtk_text_buffer_emit_tag (GtkTextBuffer *buffer,
 }
 
 
+/**
+ * gtk_text_buffer_apply_tag:
+ * @buffer: a #GtkTextBuffer
+ * @tag: a #GtkTextTag
+ * @start: one bound of range to be tagged
+ * @end: other bound of range to be tagged
+ *
+ * Emits the "apply_tag" signal on @buffer. The default
+ * handler for the signal applies @tag to the given range.
+ * @start and @end do not have to be in order.
+ * 
+ **/
 void
 gtk_text_buffer_apply_tag (GtkTextBuffer *buffer,
                            GtkTextTag    *tag,
@@ -1903,6 +1931,18 @@ gtk_text_buffer_apply_tag (GtkTextBuffer *buffer,
   gtk_text_buffer_emit_tag (buffer, tag, TRUE, start, end);
 }
 
+/**
+ * gtk_text_buffer_remove_tag:
+ * @buffer: a #GtkTextBuffer
+ * @tag: a #GtkTextTag
+ * @start: one bound of range to be untagged
+ * @end: other bound of range to be untagged
+ *
+ * Emits the "remove_tag" signal. The default handler for the signal
+ * removes all occurrences of @tag from the given range. @start and
+ * @end don't have to be in order.
+ * 
+ **/
 void
 gtk_text_buffer_remove_tag (GtkTextBuffer *buffer,
                             GtkTextTag    *tag,
@@ -1919,9 +1959,20 @@ gtk_text_buffer_remove_tag (GtkTextBuffer *buffer,
 }
 
 
+/**
+ * gtk_text_buffer_apply_tag_by_name:
+ * @buffer: a #GtkTextBuffer
+ * @name: name of a named #GtkTextTag
+ * @start: one bound of range to be tagged
+ * @end: other bound of range to be tagged
+ *
+ * Calls gtk_text_tag_table_lookup() on the buffer's tag table to
+ * get a #GtkTextTag, then calls gtk_text_buffer_apply_tag().
+ * 
+ **/
 void
 gtk_text_buffer_apply_tag_by_name (GtkTextBuffer *buffer,
-                                   const gchar *name,
+                                   const gchar   *name,
                                    const GtkTextIter *start,
                                    const GtkTextIter *end)
 {
@@ -1944,6 +1995,18 @@ gtk_text_buffer_apply_tag_by_name (GtkTextBuffer *buffer,
   gtk_text_buffer_emit_tag (buffer, tag, TRUE, start, end);
 }
 
+/**
+ * gtk_text_buffer_remove_tag_by_name:
+ * @buffer: a #GtkTextBuffer
+ * @name: name of a #GtkTextTag
+ * @start: one bound of range to be untagged
+ * @end: other bound of range to be untagged
+ *
+ * Calls gtk_text_tag_table_lookup() on the buffer's tag table to
+ * get a #GtkTextTag, then calls gtk_text_buffer_remove_tag().
+ * 
+ * 
+ **/
 void
 gtk_text_buffer_remove_tag_by_name (GtkTextBuffer *buffer,
                                     const gchar *name,
@@ -1974,6 +2037,19 @@ gtk_text_buffer_remove_tag_by_name (GtkTextBuffer *buffer,
  * Obtain various iterators
  */
 
+/**
+ * gtk_text_buffer_get_iter_at_line_offset:
+ * @buffer: a #GtkTextBuffer
+ * @iter: iterator to initialize
+ * @line_number: line number counting from 0
+ * @char_offset: char offset from start of line
+ *
+ * Obtains an iterator pointing to @char_offset within the given
+ * line. The @char_offset must exist, offsets off the end of the line
+ * are not allowed. Note <emphasis>characters</emphasis>, not bytes;
+ * UTF-8 may encode one character as multiple bytes.
+ * 
+ **/
 void
 gtk_text_buffer_get_iter_at_line_offset (GtkTextBuffer      *buffer,
                                          GtkTextIter        *iter,
@@ -1984,9 +2060,22 @@ gtk_text_buffer_get_iter_at_line_offset (GtkTextBuffer      *buffer,
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
 
   _gtk_text_btree_get_iter_at_line_char (get_btree (buffer),
-                                        iter, line_number, char_offset);
+                                         iter, line_number, char_offset);
 }
 
+/**
+ * gtk_text_buffer_get_iter_at_line_index:
+ * @buffer: a #GtkTextBuffer 
+ * @iter: iterator to initialize 
+ * @line_number: line number counting from 0
+ * @byte_index: byte index from start of line
+ *
+ * Obtains an iterator pointing to @byte_index within the given line.
+ * @byte_index must be the start of a UTF-8 character, and must not be
+ * beyond the end of the line.  Note <emphasis>bytes</emphasis>, not
+ * characters; UTF-8 may encode one character as multiple bytes.
+ * 
+ **/
 void
 gtk_text_buffer_get_iter_at_line_index  (GtkTextBuffer *buffer,
                                          GtkTextIter   *iter,
@@ -1997,9 +2086,17 @@ gtk_text_buffer_get_iter_at_line_index  (GtkTextBuffer *buffer,
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
 
   _gtk_text_btree_get_iter_at_line_byte (get_btree (buffer),
-                                        iter, line_number, byte_index);
+                                         iter, line_number, byte_index);
 }
 
+/**
+ * gtk_text_buffer_get_iter_at_line:
+ * @buffer: a #GtkTextBuffer 
+ * @iter: iterator to initialize
+ * @line_number: line number counting from 0
+ * 
+ * Initializes @iter to the start of the given line.
+ **/
 void
 gtk_text_buffer_get_iter_at_line    (GtkTextBuffer      *buffer,
                                      GtkTextIter        *iter,
@@ -2011,6 +2108,16 @@ gtk_text_buffer_get_iter_at_line    (GtkTextBuffer      *buffer,
   gtk_text_buffer_get_iter_at_line_offset (buffer, iter, line_number, 0);
 }
 
+/**
+ * gtk_text_buffer_get_iter_at_offset:
+ * @buffer: a #GtkTextBuffer 
+ * @iter: iterator to initialize
+ * @char_offset: char offset from start of buffer, counting from 0
+ *
+ * Initializes @iter to a position @char_offset chars from the start
+ * of the entire buffer.
+ * 
+ **/
 void
 gtk_text_buffer_get_iter_at_offset         (GtkTextBuffer      *buffer,
                                             GtkTextIter        *iter,
@@ -2022,6 +2129,19 @@ gtk_text_buffer_get_iter_at_offset         (GtkTextBuffer      *buffer,
   _gtk_text_btree_get_iter_at_char (get_btree (buffer), iter, char_offset);
 }
 
+/**
+ * gtk_text_buffer_get_last_iter:
+ * @buffer: a #GtkTextBuffer 
+ * @iter: iterator to initialize
+ *
+ * Initializes @iter with the "end iterator," one past the last valid
+ * character in the text buffer. If dereferenced with
+ * gtk_text_iter_get_char(), the end iterator has a character value of
+ * 0. The entire buffer lies in the range from the first position in
+ * the buffer (call gtk_text_buffer_get_iter_at_offset() to get
+ * character position 0) to the end iterator.
+ * 
+ **/
 void
 gtk_text_buffer_get_last_iter         (GtkTextBuffer      *buffer,
                                        GtkTextIter        *iter)
@@ -2032,6 +2152,16 @@ gtk_text_buffer_get_last_iter         (GtkTextBuffer      *buffer,
   _gtk_text_btree_get_last_iter (get_btree (buffer), iter);
 }
 
+/**
+ * gtk_text_buffer_get_bounds:
+ * @buffer: a #GtkTextBuffer 
+ * @start: iterator to initialize with first position in the buffer
+ * @end: iterator to initialize with the end iterator
+ *
+ * Retrieves the first and last iterators in the buffer, i.e. the
+ * entire buffer lies within the range [@start,@end).
+ * 
+ **/
 void
 gtk_text_buffer_get_bounds (GtkTextBuffer *buffer,
                             GtkTextIter   *start,
@@ -2049,6 +2179,17 @@ gtk_text_buffer_get_bounds (GtkTextBuffer *buffer,
  * Modified flag
  */
 
+/**
+ * gtk_text_buffer_modified:
+ * @buffer: a #GtkTextBuffer 
+ * 
+ * Indicates whether the buffer has been modified since the last call
+ * to gtk_text_buffer_set_modified() set the modification flag to
+ * %FALSE. Used for example to enable a "save" function in a text
+ * editor.
+ * 
+ * Return value: %TRUE if the buffer has been modified
+ **/
 gboolean
 gtk_text_buffer_modified (GtkTextBuffer      *buffer)
 {
@@ -2057,6 +2198,18 @@ gtk_text_buffer_modified (GtkTextBuffer      *buffer)
   return buffer->modified;
 }
 
+/**
+ * gtk_text_buffer_set_modified:
+ * @buffer: a #GtkTextBuffer 
+ * @setting: modification flag setting
+ *
+ * Used to keep track of whether the buffer has been modified since the
+ * last time it was saved. Whenever the buffer is saved to disk, call
+ * gtk_text_buffer_set_modified (@buffer, FALSE). When the buffer is modified,
+ * it will automatically toggled on the modified bit again. When the modified
+ * bit flips, the buffer emits a "modified_changed" signal.
+ * 
+ **/
 void
 gtk_text_buffer_set_modified (GtkTextBuffer      *buffer,
                               gboolean             setting)
@@ -2081,6 +2234,15 @@ gtk_text_buffer_set_modified (GtkTextBuffer      *buffer,
  * Assorted other stuff
  */
 
+/**
+ * gtk_text_buffer_get_line_count:
+ * @buffer: a #GtkTextBuffer 
+ * 
+ * Obtains the number of lines in the buffer. This value is cached, so
+ * the function is very fast.
+ * 
+ * Return value: number of lines in the buffer
+ **/
 gint
 gtk_text_buffer_get_line_count (GtkTextBuffer *buffer)
 {
@@ -2089,6 +2251,17 @@ gtk_text_buffer_get_line_count (GtkTextBuffer *buffer)
   return _gtk_text_btree_line_count (get_btree (buffer));
 }
 
+/**
+ * gtk_text_buffer_get_char_count:
+ * @buffer: a #GtkTextBuffer 
+ * 
+ * Gets the number of characters in the buffer; note that characters
+ * and bytes are not the same, you can't e.g. expect the contents of
+ * the buffer in string form to be this many bytes long. The character
+ * count is cached, so this function is very fast.
+ * 
+ * Return value: number of characters in the buffer
+ **/
 gint
 gtk_text_buffer_get_char_count (GtkTextBuffer *buffer)
 {
@@ -2539,6 +2712,17 @@ paste (GtkTextBuffer *buffer,
                                     clipboard_selection_buffer_received, data);    
 }
 
+/**
+ * gtk_text_buffer_paste_primary:
+ * @buffer: a #GtkTextBuffer 
+ * @override_location: location to insert pasted text, or %NULL for at the cursor
+ * @default_editable: whether the buffer is editable by default 
+ * 
+ * Pastes the primary selection at the insertion point, or at @override_location.
+ * (Note: pasting is asynchronous, that is, we'll ask for the paste data
+ * and return, and at some point later after the main loop runs, the paste
+ * data will be inserted.)
+ **/
 void
 gtk_text_buffer_paste_primary (GtkTextBuffer       *buffer,
                                const GtkTextIter   *override_location,
@@ -2552,6 +2736,17 @@ gtk_text_buffer_paste_primary (GtkTextBuffer       *buffer,
   paste (buffer, FALSE, TRUE, default_editable);
 }
 
+/**
+ * gtk_text_buffer_paste_clipboard:
+ * @buffer: a #GtkTextBuffer 
+ * @default_editable: whether the buffer is editable by default
+ *
+ * Pastes the clipboard contents at the insertion point.  (Note:
+ * pasting is asynchronous, that is, we'll ask for the paste data and
+ * return, and at some point later after the main loop runs, the paste
+ * data will be inserted.)
+ * 
+ **/
 void
 gtk_text_buffer_paste_clipboard (GtkTextBuffer *buffer,
                                  gboolean       default_editable)
@@ -2559,6 +2754,19 @@ gtk_text_buffer_paste_clipboard (GtkTextBuffer *buffer,
   paste (buffer, TRUE, TRUE, default_editable);
 }
 
+/**
+ * gtk_text_buffer_delete_selection:
+ * @buffer: a #GtkTextBuffer 
+ * @interactive: whether the deletion is caused by user interaction
+ * @default_editable: whether the buffer is editable by default
+ *
+ * Deletes the range between the "insert" and "selection_bound" marks,
+ * that is, the currently-selected text. If @interactive is %TRUE,
+ * the editability of the selection will be considered (users can't delete
+ * uneditable text).
+ * 
+ * Return value: whether there was a non-empty selection to delete
+ **/
 gboolean
 gtk_text_buffer_delete_selection (GtkTextBuffer *buffer,
                                   gboolean interactive,
@@ -2655,6 +2863,15 @@ cut_or_copy (GtkTextBuffer *buffer,
     }
 }
 
+/**
+ * gtk_text_buffer_cut_clipboard:
+ * @buffer: a #GtkTextBuffer 
+ * @default_editable: default editability of the buffer
+ *
+ * Copies the currently-selected text to the clipboard, then deletes
+ * said text if it's editable.
+ * 
+ **/
 void
 gtk_text_buffer_cut_clipboard (GtkTextBuffer *buffer,
                                gboolean       default_editable)
@@ -2664,6 +2881,13 @@ gtk_text_buffer_cut_clipboard (GtkTextBuffer *buffer,
   gtk_text_buffer_end_user_action (buffer);
 }
 
+/**
+ * gtk_text_buffer_copy_clipboard:
+ * @buffer: a #GtkTextBuffer 
+ *
+ * Copies the currently-selected text to the clipboard.
+ * 
+ **/
 void
 gtk_text_buffer_copy_clipboard (GtkTextBuffer *buffer)
 {
@@ -2675,7 +2899,7 @@ gtk_text_buffer_copy_clipboard (GtkTextBuffer *buffer)
 
 /**
  * gtk_text_buffer_get_selection_bounds:
- * @buffer: a #GtkTextBuffer
+ * @buffer: a #GtkTextBuffer a #GtkTextBuffer
  * @start: iterator to initialize with selection start
  * @end: iterator to initialize with selection end
  *
@@ -2715,9 +2939,9 @@ gtk_text_buffer_get_selection_bounds   (GtkTextBuffer      *buffer,
  *
  * The "interactive" buffer mutation functions, such as
  * gtk_text_buffer_insert_interactive(), automatically call begin/end
- * user action around the buffer operations they perform, so there's no
- * need to add extra calls if you user action consists solely of those
- * functions.
+ * user action around the buffer operations they perform, so there's
+ * no need to add extra calls if you user action consists solely of a
+ * single call to one of those functions.
  **/
 void
 gtk_text_buffer_begin_user_action (GtkTextBuffer *buffer)

@@ -45,9 +45,9 @@ struct _GtkStockItem
   gchar *translation_domain;
 };
 
-void     gtk_stock_add        (const GtkStockItem  *item,
+void     gtk_stock_add        (const GtkStockItem  *items,
                                guint                n_items);
-void     gtk_stock_add_static (const GtkStockItem  *item,
+void     gtk_stock_add_static (const GtkStockItem  *items,
                                guint                n_items);
 gboolean gtk_stock_lookup     (const gchar         *stock_id,
                                GtkStockItem        *item);

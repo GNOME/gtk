@@ -433,6 +433,20 @@ gtk_window_get_arg (GtkObject  *object,
     }
 }
 
+/**
+ * gtk_window_new:
+ * @type: type of window
+ * 
+ * Creates a new #GtkWindow, which is a toplevel window that can
+ * contain other widgets. Nearly always, the type of the window should
+ * be #GTK_WINDOW_TOPLEVEL. If you're implementing something like a
+ * popup menu from scratch (which is a bad idea, just use #GtkMenu),
+ * you might use #GTK_WINDOW_TOPLEVEL. #GTK_WINDOW_DIALOG is not
+ * useful; dialogs should be of type #GTK_WINDOW_TOPLEVEL.  (Probably
+ * you want to use the #GtkDialog widget for dialogs anyway).
+ * 
+ * Return value: a new #GtkWindow.
+ **/
 GtkWidget*
 gtk_window_new (GtkWindowType type)
 {
@@ -447,6 +461,19 @@ gtk_window_new (GtkWindowType type)
   return GTK_WIDGET (window);
 }
 
+/**
+ * gtk_window_set_title:
+ * @window: a #GtkWindow
+ * @title: title of the window
+ * 
+ * Sets the title of the #GtkWindow. The title of a window will be displayed in
+ * its title bar; on the X Window System, the title bar is rendered by the
+ * window manager, so exactly how the title appears to users may vary according
+ * to a user's exact configuration. The title should help a user distinguish
+ * this window from other windows they may have open. A good title might
+ * include the application name and current document filename, for example.
+ * 
+ **/
 void
 gtk_window_set_title (GtkWindow   *window,
 		      const gchar *title)
@@ -466,6 +493,21 @@ gtk_window_set_title (GtkWindow   *window,
     }
 }
 
+/**
+ * gtk_window_set_wmclass:
+ * @window: a #GtkWindow
+ * @wmclass_name: window name hint
+ * @wmclass_class: window class hint
+ *
+ * This function sets the X Window System "class" and "name" hints for a window.
+ * According to the ICCCM, you should always set these to the same value for
+ * all windows in an application, and GTK sets them to that value by default,
+ * so calling this function is sort of pointless. However, you may want to
+ * call gtk_window_set_role() on each window in your application, for the
+ * benefit of the session manager. Setting the role allows the window manager
+ * to restore window positions when loading a saved session.
+ * 
+ **/
 void
 gtk_window_set_wmclass (GtkWindow *window,
 			const gchar *wmclass_name,
@@ -484,6 +526,18 @@ gtk_window_set_wmclass (GtkWindow *window,
     g_warning ("shouldn't set wmclass after window is realized!\n");
 }
 
+/**
+ * gtk_window_set_focus:
+ * @window: a #GtkWindow
+ * @focus: widget to be the new focus widget
+ *
+ * If @focus is not the current focus widget, and is focusable, emits
+ * the "set_focus" signal to set @focus as the focus widget for the
+ * window.  This function is more or less GTK-internal; to focus an
+ * entry widget or the like, you should use gtk_widget_grab_focus()
+ * instead of this function.
+ * 
+ **/
 void
 gtk_window_set_focus (GtkWindow *window,
 		      GtkWidget *focus)
@@ -501,6 +555,20 @@ gtk_window_set_focus (GtkWindow *window,
     gtk_signal_emit (GTK_OBJECT (window), window_signals[SET_FOCUS], focus);
 }
 
+/**
+ * gtk_window_set_default:
+ * @window: a #GtkWindow
+ * @default_widget: widget to be the default
+ *
+ * The default widget is the widget that's activated when the user
+ * presses Enter in a dialog (for example). This function tells a
+ * #GtkWindow about the current default widget; it's really a GTK
+ * internal function and you shouldn't need it. Instead, to change the
+ * default widget, first set the #GTK_CAN_DEFAULT flag on the widget
+ * you'd like to make the default using GTK_WIDGET_SET_FLAGS(), then
+ * call gtk_widget_grab_default() to move the default.
+ * 
+ **/
 void
 gtk_window_set_default (GtkWindow *window,
 			GtkWidget *default_widget)
@@ -635,6 +703,20 @@ gtk_window_activate_default (GtkWindow      *window)
   return FALSE;
 }
 
+/**
+ * gtk_window_set_modal:
+ * @window: a #GtkWindow
+ * @modal: whether the window is modal
+ * 
+ * Sets a window modal or non-modal. Modal windows prevent interaction
+ * with other windows in the same application. To keep modal dialogs
+ * on top of main application windows, use
+ * gtk_window_set_transient_for() to make the dialog transient for the
+ * parent; most window managers will then disallow lowering the dialog
+ * below the parent.
+ * 
+ * 
+ **/
 void
 gtk_window_set_modal (GtkWindow *window,
 		      gboolean   modal)
@@ -651,6 +733,15 @@ gtk_window_set_modal (GtkWindow *window,
     gtk_grab_remove (GTK_WIDGET (window));
 }
 
+/**
+ * gtk_window_list_toplevels:
+ * 
+ * Returns a list of all existing toplevel windows. Each widget
+ * in the list has a reference added to it; to free the
+ * list, first unref each widget in the list, then free the list.
+ * 
+ * Return value: list of referenced toplevel widgets
+ **/
 GList*
 gtk_window_list_toplevels (void)
 {
@@ -825,6 +916,19 @@ gtk_window_unset_transient_for  (GtkWindow *window)
     }
 }
 
+/**
+ * gtk_window_set_transient_for:
+ * @window: a #GtkWindow
+ * @parent: parent window
+ *
+ * Dialog windows should be set transient for the main application
+ * window they were spawned from. This allows window managers to
+ * e.g. keep the dialog on top of the main window, or center the
+ * dialog over the main window. gtk_dialog_new_with_buttons() and
+ * other convenience functions in GTK+ will sometimes call
+ * gtk_window_set_transient_for() on yoru behalf.
+ * 
+ **/
 void       
 gtk_window_set_transient_for  (GtkWindow *window, 
 			       GtkWindow *parent)
@@ -938,6 +1042,19 @@ gtk_window_get_geometry_info (GtkWindow *window,
   return info;
 }
 
+/**
+ * gtk_window_set_geometry_hints:
+ * @window: a #GdkWindow
+ * @geometry_widget: widget the geometry hints will be applied to
+ * @geometry: struct containing geometry information
+ * @geom_mask: mask indicating which struct fields should be paid attention to
+ *
+ * This function sets up hints about how a window can be resized by
+ * the user.  You can set a minimum and maximum size; allowed resize
+ * increments (e.g. for xterm, you can only resize by the size of a
+ * character); aspect ratios; and more. See the #GdkGeometry struct.
+ * 
+ **/
 void       
 gtk_window_set_geometry_hints (GtkWindow       *window,
 			       GtkWidget       *geometry_widget,
@@ -969,6 +1086,25 @@ gtk_window_set_geometry_hints (GtkWindow       *window,
   gtk_widget_queue_resize (GTK_WIDGET (window));
 }
 
+/**
+ * gtk_window_set_default_size:
+ * @window: a #GtkWindow
+ * @width: width in pixels, or -1 to leave the default width unchanged
+ * @height: height in pixels, or -1 to leave the default height unchanged
+ *
+ * Sets the default size of a window. If the window's "natural" size
+ * (its size request) is larger than the default, the default will be
+ * ignored. So the default size is a minimum initial size.  Unlike
+ * gtk_widget_set_usize(), which sets a size request for a widget and
+ * thus would keep users from shrinking the window, this function only
+ * sets the initial size, just as if the user had resized the window
+ * themselves. Users can still shrink the window again as they
+ * normally would.
+ *
+ * For more control over a window's initial size and how resizing works,
+ * investigate gtk_window_set_geometry_hints().
+ * 
+ **/
 void       
 gtk_window_set_default_size (GtkWindow   *window,
 			     gint         width,

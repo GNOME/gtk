@@ -24,12 +24,6 @@ described below.
 </para>
 
 
-<!-- ##### STRUCT GtkLabelWord ##### -->
-<para>
-Internal to #GtkLabel.
-</para>
-
-
 <!-- ##### FUNCTION gtk_label_new ##### -->
 <para>
 Creates a new label with the given string of text inside it.  You can

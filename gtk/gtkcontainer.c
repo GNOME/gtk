@@ -684,6 +684,20 @@ gtk_container_get_arg (GtkObject    *object,
     }
 }
 
+/**
+ * gtk_container_set_border_width:
+ * @container: a #GtkContainer
+ * @border_width: amount of blank space to leave <emphasis>outside</emphasis> the container
+ *
+ * The border width of a container is the amount of space to leave
+ * around the outside of the container. The only exception to this is
+ * #GtkWindow; because toplevel windows can't leave space outside,
+ * they leave the space inside. The border is added on all sides of
+ * the container. To add space to only one side, one approach is to
+ * create a #GtkAlignment widget, call gtk_widget_set_usize() to give
+ * it a size, and place it on the side of the container as a spacer.
+ * 
+ **/
 void
 gtk_container_set_border_width (GtkContainer *container,
 				guint         border_width)
@@ -700,6 +714,20 @@ gtk_container_set_border_width (GtkContainer *container,
     }
 }
 
+/**
+ * gtk_container_add:
+ * @container: a #GtkContainer
+ * @widget: a widget to be placed inside @container
+ * 
+ * Adds @widget to @container. Typically used for simple containers
+ * such as #GtkWindow, #GtkFrame, or #GtkButton; for more complicated
+ * layout containers such as #GtkBox or #GtkTable, this function will
+ * pick default packing parameters that may not be correct.  So
+ * consider functions such as gtk_box_pack_start() and
+ * gtk_table_attach() as an alternative to gtk_container_add() in
+ * those cases. A widget may be added to only one container at a time;
+ * you can't place the same widget inside two different containers.
+ **/
 void
 gtk_container_add (GtkContainer *container,
 		   GtkWidget    *widget)
@@ -708,11 +736,32 @@ gtk_container_add (GtkContainer *container,
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (widget->parent == NULL);
+
+  if (widget->parent != NULL)
+    {
+      g_warning ("Attempting to add a widget with type %s to a container of "
+                 "type %s, but the widget is already inside a container of type %s",
+                 g_type_name (G_TYPE_FROM_INSTANCE (widget)),
+                 g_type_name (G_TYPE_FROM_INSTANCE (container)),
+                 g_type_name (G_TYPE_FROM_INSTANCE (widget->parent)));
+      return;
+    }
 
   gtk_signal_emit (GTK_OBJECT (container), container_signals[ADD], widget);
 }
 
+/**
+ * gtk_container_remove:
+ * @container: a #GtkContainer
+ * @widget: a current child of @container
+ * 
+ * Removes @widget from @container. @widget must be inside @container.
+ * Note that @container will own a reference to @widget, and that this
+ * may be the last reference held; so removing a widget from its
+ * container can destroy that widget. If you want to use @widget
+ * again, you need to add a reference to it while it's not inside
+ * a container, using g_object_ref().
+ **/
 void
 gtk_container_remove (GtkContainer *container,
 		      GtkWidget    *widget)
@@ -1087,6 +1136,19 @@ gtk_container_resize_children (GtkContainer *container)
   g_slist_free (resize_containers);
 }
 
+/**
+ * gtk_container_forall:
+ * @container: a #GtkContainer
+ * @callback: a callback
+ * @callback_data: callback user data
+ * 
+ * Invokes @callback on each child of @container, including children
+ * that are considered "internal" (implementation details of the
+ * container). "Internal" children generally weren't added by the user
+ * of the container, but were added by the container implementation
+ * itself.  Most applications should use gtk_container_foreach(),
+ * rather than gtk_container_forall().
+ **/
 void
 gtk_container_forall (GtkContainer *container,
 		      GtkCallback   callback,
@@ -1104,6 +1166,17 @@ gtk_container_forall (GtkContainer *container,
     class->forall (container, TRUE, callback, callback_data);
 }
 
+/**
+ * gtk_container_foreach:
+ * @container: a #GtkContainer
+ * @callback: a callback
+ * @callback_data: callback user data
+ * 
+ * Invokes @callback on each non-internal child of @container.  See
+ * gtk_container_forall() for details on what constitutes an
+ * "internal" child.  Most applications should use
+ * gtk_container_foreach(), rather than gtk_container_forall().
+ **/
 void
 gtk_container_foreach (GtkContainer *container,
 		       GtkCallback   callback,

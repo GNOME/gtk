@@ -357,10 +357,11 @@ An advanced widget set.
       <title>Abstract Base Classes</title>
         &GtkBin;
         &GtkBox;
+        &GtkButtonBox;
         &GtkContainer;
         &gtk-GtkEditable;
         &GtkOldEditable;
-        &GtkButtonBox;
+        &GtkItem;
         &GtkMisc;
         &GtkObject;
         &GtkPaned;
@@ -376,27 +377,30 @@ An advanced widget set.
         &GtkSocket;
     </sect1>
 
+    <sect1 id="SpecialObjects">
+      <title>Special-purpose features</title>
+        &GtkCurve;
+        &GtkGammaCurve;
+        &GtkHRuler;
+        &GtkRuler;
+        &GtkVRuler;
+    </sect1>
+
     <sect1 id="DeprecatedObjects">
       <title>Deprecated</title>
         &GtkCList;      
         &GtkCTree;
-        &GtkCurve;
         &GtkData;
-        &GtkGammaCurve;
-        &GtkHRuler;
-        &GtkItem;
         &GtkList;
         &GtkListItem;
         &GtkPacker;
         &GtkPixmap;
-        &GtkPreview;
         &GtkProgress;
-        &GtkRuler;
+        &GtkPreview;
         &GtkText;
         &GtkTipsQuery;
         &GtkTree;
         &GtkTreeItem;
-        &GtkVRuler;
     </sect1>
 
   </chapter>

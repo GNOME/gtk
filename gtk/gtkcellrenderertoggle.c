@@ -184,7 +184,7 @@ gtk_cell_renderer_toggle_set_property (GObject      *object,
   switch (param_id)
     {
     case PROP_ACTIVE:
-      gtk_cell_renderer_toggle_set_active (celltoggle, g_value_get_boolean (value));
+      celltoggle->active = g_value_get_boolean (value);
       break;
     case PROP_RADIO:
       celltoggle->radio = g_value_get_boolean (value);
@@ -195,6 +195,19 @@ gtk_cell_renderer_toggle_set_property (GObject      *object,
     }
 }
 
+/**
+ * gtk_cell_renderer_toggle_new:
+ * 
+ * Creates a new #GtkCellRendererToggle. Adjust rendering
+ * parameters using object properties. Object properties can be set
+ * globally (with g_object_set()). Also, with #GtkTreeViewColumn, you
+ * can bind a property to a value in a #GtkTreeModel. For example, you
+ * can bind the "active" property on the cell renderer to a boolean value
+ * in the model, thus causing the check button to reflect the state of
+ * the model.
+ * 
+ * Return value: the new cell renderer
+ **/
 GtkCellRenderer *
 gtk_cell_renderer_toggle_new (void)
 {
@@ -299,35 +312,38 @@ gtk_cell_renderer_toggle_event (GtkCellRenderer *cell,
   return retval;
 }
 
+/**
+ * gtk_cell_renderer_toggle_set_radio:
+ * @toggle: a #GtkCellRendererToggle
+ * @radio: %TRUE to make the toggle look like a radio button
+ * 
+ * If @radio is %TRUE, the cell renderer renders a radio toggle
+ * (i.e. a toggle in a group of mutually-exclusive toggles).
+ * If %FALSE, it renders a check toggle (a standalone boolean option).
+ * This can be set globally for the cell renderer, or changed just
+ * before rendering each cell in the model (for #GtkTreeView, you set
+ * up a per-row setting using #GtkTreeViewColumn to associate model
+ * columns with cell renderer properties).
+ **/
 void
 gtk_cell_renderer_toggle_set_radio (GtkCellRendererToggle *toggle,
 				    gboolean               radio)
 {
-  g_return_if_fail (toggle != NULL);
   g_return_if_fail (GTK_IS_CELL_RENDERER_TOGGLE (toggle));
 
   toggle->radio = radio;
 }
 
+/**
+ * gtk_cell_renderer_toggle_get_radio:
+ * @toggle: a #GtkCellRendererToggle
+ * 
+ * Return value: %TRUE if we're rendering radio toggles rather than checkboxes
+ **/
 gboolean
-gtk_cell_renderer_toggle_get_active (GtkCellRendererToggle *toggle)
+gtk_cell_renderer_toggle_get_radio (GtkCellRendererToggle *toggle)
 {
   g_return_val_if_fail (GTK_IS_CELL_RENDERER_TOGGLE (toggle), FALSE);
 
-  return toggle->active;
-}
-
-void
-gtk_cell_renderer_toggle_set_active (GtkCellRendererToggle *toggle,
-                                     gboolean               setting)
-{
-  g_return_if_fail (GTK_IS_CELL_RENDERER_TOGGLE (toggle));
-
-  setting = !! setting;
-
-  if (toggle->active != setting)
-    {
-      toggle->active = setting;
-      g_object_notify (G_OBJECT (toggle), "active");
-    }
+  return toggle->radio;
 }

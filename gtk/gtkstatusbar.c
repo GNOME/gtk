@@ -30,6 +30,14 @@
 #include "gtksignal.h"
 #include "gtkstatusbar.h"
 
+typedef struct _GtkStatusbarMsg GtkStatusbarMsg;
+
+struct _GtkStatusbarMsg
+{
+  gchar *text;
+  guint context_id;
+  guint message_id;
+};
 
 enum
 {

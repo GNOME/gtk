@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 #ifndef __GTK_PIXMAP_H__
 #define __GTK_PIXMAP_H__
 
@@ -85,3 +87,5 @@ void       gtk_pixmap_set_build_insensitive (GtkPixmap *pixmap,
 
 
 #endif /* __GTK_PIXMAP_H__ */
+
+#endif /* GTK_DISABLE_DEPRECATED */

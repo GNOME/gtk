@@ -25,6 +25,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 #ifndef __GTK_CLIST_H__
 #define __GTK_CLIST_H__
 
@@ -785,3 +787,5 @@ PangoLayout *_gtk_clist_create_cell_layout (GtkCList       *clist,
 #endif				/* __cplusplus */
 
 #endif				/* __GTK_CLIST_H__ */
+
+#endif /* GTK_DISABLE_DEPRECATED */

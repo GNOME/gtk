@@ -65,6 +65,19 @@ real_add (const GtkStockItem *items,
     }
 }
 
+/**
+ * gtk_stock_add:
+ * @items: a #GtkStockItem or array of items
+ * @n_items: number of #GtkStockItem in @items
+ *
+ * Registers each of the stock items in @items. If an item already
+ * exists with the same stock ID as one of the @items, the old item
+ * gets replaced. The stock items are copied, so GTK+ does not hold
+ * any pointer into @items and @items can be freed. Use
+ * gtk_stock_add_static() if @items is persistent and GTK+ need not
+ * copy the array.
+ * 
+ **/
 void
 gtk_stock_add (const GtkStockItem *items,
                guint               n_items)
@@ -74,6 +87,15 @@ gtk_stock_add (const GtkStockItem *items,
   real_add (items, n_items, TRUE);
 }
 
+/**
+ * gtk_stock_add_static:
+ * @items: a #GtkStockItem or array of #GtkStockItem
+ * @n_items: number of items
+ *
+ * Same as gtk_stock_add(), but doesn't copy @items, so
+ * @items must persist until application exit.
+ * 
+ **/
 void
 gtk_stock_add_static (const GtkStockItem *items,
                       guint               n_items)
@@ -83,6 +105,17 @@ gtk_stock_add_static (const GtkStockItem *items,
   real_add (items, n_items, FALSE);
 }
 
+/**
+ * gtk_stock_lookup:
+ * @stock_id: a stock item name
+ * @item: stock item to initialize with values
+ * 
+ * Fills @item with the registered values for @stock_id, returning %TRUE
+ * if @stock_id was known.
+ * 
+ * 
+ * Return value: %TRUE if @item was initialized
+ **/
 gboolean
 gtk_stock_lookup (const gchar  *stock_id,
                   GtkStockItem *item)
@@ -124,6 +157,15 @@ g_hash_table_get_values (GHashTable *table)
   return list;
 }
 
+/**
+ * gtk_stock_list_items:
+ * 
+ * Retrieves a list of all known #GtkStockItem. The items are not copied;
+ * they should not be freed. However, the list itself must be freed
+ * with g_slist_free().
+ * 
+ * Return value: a list of registered stock items
+ **/
 GSList *
 gtk_stock_list_items (void)
 {
@@ -132,6 +174,14 @@ gtk_stock_list_items (void)
   return g_hash_table_get_values (stock_hash);
 }
 
+/**
+ * gtk_stock_item_copy:
+ * @item: a #GtkStockItem
+ * 
+ * Copies a stock item, mostly useful for language bindings and not in applications.
+ * 
+ * Return value: a new #GtkStockItem
+ **/
 GtkStockItem *
 gtk_stock_item_copy (const GtkStockItem *item)
 {
@@ -150,6 +200,15 @@ gtk_stock_item_copy (const GtkStockItem *item)
   return copy;
 }
 
+/**
+ * gtk_stock_item_free:
+ * @item: a #GtkStockItem
+ *
+ * Frees a stock item allocated on the heap, such as one returned by
+ * gtk_stock_item_copy(). Also frees the fields inside the stock item,
+ * if they are not %NULL.
+ * 
+ **/
 void
 gtk_stock_item_free (GtkStockItem *item)
 {

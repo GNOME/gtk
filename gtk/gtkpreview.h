@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 #ifndef __GTK_PREVIEW_H__
 #define __GTK_PREVIEW_H__
 
@@ -141,3 +143,5 @@ void            gtk_preview_reset              (void);
 
 
 #endif /* __GTK_PREVIEW_H__ */
+
+#endif /* GTK_DISABLE_DEPRECATED */

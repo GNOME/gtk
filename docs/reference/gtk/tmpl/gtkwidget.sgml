@@ -1142,7 +1142,7 @@ GtkWidget
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_widget_render_stock_icon ##### -->
+<!-- ##### FUNCTION gtk_widget_render_icon ##### -->
 <para>
 
 </para>

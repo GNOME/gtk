@@ -115,7 +115,7 @@ GtkWidget* gtk_progress_bar_new                  (void);
  * rest deprecated. However, the changes are 100% backward-compatible and
  * should break no existing code.
  *
- * The following 5 functions are the new programming interface. 
+ * The following 9 functions are the new programming interface. 
  */
 void       gtk_progress_bar_pulse                (GtkProgressBar *pbar);
 void       gtk_progress_bar_set_text             (GtkProgressBar *pbar,
@@ -135,6 +135,8 @@ gfloat gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar);
 GtkProgressBarOrientation gtk_progress_bar_get_orientation (GtkProgressBar *pbar);
 
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 /* Everything below here is deprecated */
 GtkWidget* gtk_progress_bar_new_with_adjustment  (GtkAdjustment  *adjustment);
 void       gtk_progress_bar_set_bar_style        (GtkProgressBar *pbar,
@@ -151,6 +153,8 @@ void       gtk_progress_bar_set_activity_blocks  (GtkProgressBar *pbar,
 						  guint           blocks);
 void       gtk_progress_bar_update               (GtkProgressBar *pbar,
 						  gfloat          percentage);
+
+#endif /* GTK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus
 }

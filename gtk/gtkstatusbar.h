@@ -45,7 +45,6 @@ extern "C" {
 
 typedef struct _GtkStatusbar      GtkStatusbar;
 typedef struct _GtkStatusbarClass GtkStatusbarClass;
-typedef struct _GtkStatusbarMsg GtkStatusbarMsg;
 
 struct _GtkStatusbar
 {
@@ -75,12 +74,6 @@ struct _GtkStatusbarClass
 			 const gchar	*text);
 };
 
-struct _GtkStatusbarMsg
-{
-  gchar *text;
-  guint context_id;
-  guint message_id;
-};
 
 GtkType    gtk_statusbar_get_type     	(void) G_GNUC_CONST;
 GtkWidget* gtk_statusbar_new          	(void);

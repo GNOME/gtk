@@ -540,6 +540,17 @@ gtk_set_locale (void)
   return gdk_set_locale ();
 }
 
+/**
+ * gtk_get_default_language:
+ *
+ * Returns the ISO language code for the default language currently in
+ * effect. (Note that this can change over the life of an
+ * application.)  The default language is derived from the current
+ * locale. It determines, for example, whether GTK+ uses the
+ * right-to-left or left-to-right text direction.
+ * 
+ * Return value: the default language as an allocated string, must be freed
+ **/
 gchar*
 gtk_get_default_language (void)
 {
@@ -1304,6 +1315,17 @@ gtk_invoke_input (gpointer	    data,
   closure->marshal (NULL, closure->data, 2, args);
 }
 
+/**
+ * gtk_get_current_event:
+ * 
+ * Obtains a copy of the event currently being processed by GTK+.  For
+ * example, if you get a "clicked" signal from #GtkButton, the current
+ * event will be the #GdkEventButton that triggered the "clicked"
+ * signal. The returned event must be freed with gdk_event_free().
+ * If there is no current event, the function returns %NULL.
+ * 
+ * Return value: a copy of the current event, or %NULL if no current event.
+ **/
 GdkEvent*
 gtk_get_current_event (void)
 {
@@ -1330,6 +1352,16 @@ gtk_get_current_event_time (void)
     return GDK_CURRENT_TIME;
 }
 
+/**
+ * gtk_get_current_event_state:
+ * @state: a location to store the state of the current event
+ * 
+ * If there is a current event and it has a state field, place
+ * that state field in @state and return %TRUE, otherwise return
+ * %FALSE.
+ * 
+ * Return value: %TRUE if there was a current event and it had a state field
+ **/
 gboolean
 gtk_get_current_event_state (GdkModifierType *state)
 {
@@ -1344,6 +1376,16 @@ gtk_get_current_event_state (GdkModifierType *state)
     }
 }
 
+/**
+ * gtk_get_event_widget:
+ * @event: a #GdkEvent
+ *
+ * If @event is %NULL or the event was not associated with any widget,
+ * returns %NULL, otherwise returns the widget that received the event
+ * originally.
+ * 
+ * Return value: the widget that originally received @event, or %NULL
+ **/
 GtkWidget*
 gtk_get_event_widget (GdkEvent *event)
 {
@@ -1386,6 +1428,29 @@ gtk_quit_invoke_function (GtkQuitFunction *quitf)
     }
 }
 
+/**
+ * gtk_propagate_event:
+ * @widget: a #GtkWidget
+ * @event: an event
+ *
+ * Sends an event to a widget, propagating the event to parent widgets
+ * if the event remains unhandled. Events received by GTK+ from GDK
+ * normally begin in gtk_main_do_event(). Depending on the type of
+ * event, existence of modal dialogs, grabs, etc., the event may be
+ * propagated; if so, this function is used. gtk_propagate_event()
+ * calls gtk_widget_event() on each widget it decides to send the
+ * event to.  So gtk_widget_event() is the lowest-level function; it
+ * simply emits the "event" and possibly an event-specific signal on a
+ * widget.  gtk_propagate_event() is a bit higher-level, and
+ * gtk_main_do_event() is the highest level.
+ *
+ * All that said, you most likely don't want to use any of these
+ * functions; synthesizing events is rarely needed. Consider asking on
+ * the mailing list for better ways to achieve your goals. For
+ * example, use gdk_window_invalidate_rect() or
+ * gtk_widget_queue_draw() instead of making up expose events.
+ * 
+ **/
 void
 gtk_propagate_event (GtkWidget *widget,
 		     GdkEvent  *event)

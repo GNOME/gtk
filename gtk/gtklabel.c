@@ -308,7 +308,7 @@ gtk_label_set_markup (GtkLabel    *label,
 }
 
 /**
- * gtk_label_set_markup:
+ * gtk_label_set_markup_with_accel:
  * @label: a #GtkLabel
  * @str: a markup string (see <link linkend="PangoMarkupFormat">Pango markup format</link>)
  * 
@@ -318,6 +318,8 @@ gtk_label_set_markup (GtkLabel    *label,
  * indicating that they represent a keyboard accelerator, and the GDK
  * keyval for the first underlined accelerator is returned. If there are
  * no underlines in the text, GDK_VoidSymbol will be returned.
+ *
+ * Return value: GDK keyval for accelerator
  **/
 guint
 gtk_label_set_markup_with_accel (GtkLabel    *label,

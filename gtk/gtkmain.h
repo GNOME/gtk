@@ -103,7 +103,9 @@ gboolean gtk_init_check_abi_check (int	  *argc,
 
 #endif
 
+#ifndef GTK_DISABLE_DEPRECATED
 void     gtk_exit                 (gint    error_code);
+#endif /* GTK_DISABLE_DEPRECATED */
 gchar*   gtk_set_locale           (void);
 gchar*   gtk_get_default_language (void);
 gint     gtk_events_pending       (void);

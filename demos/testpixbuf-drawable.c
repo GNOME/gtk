@@ -98,9 +98,9 @@ int main(int argc, char **argv)
    gtk_container_add(GTK_CONTAINER(window), vbox);  
    
    drawing_area = gtk_drawing_area_new();
-   gtk_drawing_area_size(GTK_DRAWING_AREA(drawing_area),
-                         gdk_pixbuf_get_width (pixbuf),
-                         gdk_pixbuf_get_height (pixbuf));
+   gtk_widget_set_usize(GTK_WIDGET(drawing_area),
+                        gdk_pixbuf_get_width (pixbuf),
+                        gdk_pixbuf_get_height (pixbuf));
    gtk_signal_connect(GTK_OBJECT(drawing_area), "expose_event",
                       GTK_SIGNAL_FUNC(expose_cb), NULL);
 

@@ -63,9 +63,12 @@ struct _GtkDrawingAreaClass
 
 GtkType    gtk_drawing_area_get_type   (void) G_GNUC_CONST;
 GtkWidget* gtk_drawing_area_new        (void);
+
+#ifndef GTK_DISABLE_DEPRECATED
 void       gtk_drawing_area_size       (GtkDrawingArea      *darea,
 					gint                 width,
 					gint                 height);
+#endif /* GTK_DISABLE_DEPRECATED */
 
 
 #ifdef __cplusplus

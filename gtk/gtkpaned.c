@@ -480,6 +480,14 @@ gtk_paned_forall (GtkContainer *container,
     (*callback) (paned->child2, callback_data);
 }
 
+/**
+ * gtk_paned_get_position:
+ * @paned: a #GtkPaned widget
+ * 
+ * Obtains the position of the divider between the two panes.
+ * 
+ * Return value: position of the divider
+ **/
 gint
 gtk_paned_get_position (GtkPaned  *paned)
 {
@@ -489,6 +497,13 @@ gtk_paned_get_position (GtkPaned  *paned)
   return paned->child1_size;
 }
 
+/**
+ * gtk_paned_set_position:
+ * @paned: a #GtkPaned widget
+ * @position: pixel position of divider
+ * 
+ * Sets the position of the divider between the two panes.
+ **/
 void
 gtk_paned_set_position (GtkPaned *paned,
 			gint      position)

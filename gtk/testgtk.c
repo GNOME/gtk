@@ -969,23 +969,6 @@ statusbar_contexts (GtkStatusbar *statusbar)
 }
 
 static void
-statusbar_dump_stack (GtkStatusbar *statusbar)
-{
-  GSList *list;
-
-  for (list = statusbar->messages; list; list = list->next)
-    {
-      GtkStatusbarMsg *msg;
-
-      msg = list->data;
-      g_print ("context_id: %d, message_id: %d, status_text: \"%s\"\n",
-               msg->context_id,
-               msg->message_id,
-               msg->text);
-    }
-}
-
-static void
 create_statusbar (void)
 {
   static GtkWidget *window = NULL;
@@ -1045,15 +1028,6 @@ create_statusbar (void)
 			       NULL);
       g_object_set (G_OBJECT (button),
 		    "signal_after::clicked", statusbar_steal, statusbar,
-		    NULL);
-
-      button = gtk_widget_new (gtk_button_get_type (),
-			       "label", "dump stack",
-			       "visible", TRUE,
-			       "parent", box2,
-			       NULL);
-      g_object_set (G_OBJECT (button),
-		    "swapped_signal::clicked", statusbar_dump_stack, statusbar,
 		    NULL);
 
       button = gtk_widget_new (gtk_button_get_type (),

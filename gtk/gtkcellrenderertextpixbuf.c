@@ -217,7 +217,6 @@ gtk_cell_renderer_text_pixbuf_get_property (GObject     *object,
     }
 }
 
-
 static void
 gtk_cell_renderer_text_pixbuf_set_property (GObject      *object,
 					    guint         param_id,
@@ -263,6 +262,19 @@ gtk_cell_renderer_text_pixbuf_set_property (GObject      *object,
     }
 }
 
+/**
+ * gtk_cell_renderer_text_pixbuf_new:
+ * 
+ * Creates a new #GtkCellRendererTextPixbuf. Adjust rendering
+ * parameters using object properties. Object properties can be set
+ * globally (with g_object_set()). Also, with #GtkTreeViewColumn, you
+ * can bind a property to a value in a #GtkTreeModel. For example, you
+ * can bind the "text" property on the cell renderer to a string value
+ * in the model, thus rendering a different string in each row of the
+ * #GtkTreeView
+ * 
+ * Return value: the new cell renderer
+ **/
 GtkCellRenderer *
 gtk_cell_renderer_text_pixbuf_new (void)
 {

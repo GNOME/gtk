@@ -103,12 +103,49 @@ gtk_icon_factory_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+/**
+ * gtk_icon_factory_new:
+ *
+ * Creates a new #GtkIconFactory. An icon factory manages a collection
+ * of #GtkIconSet; a #GtkIconSet manages a set of variants of a
+ * particular icon (i.e. a #GtkIconSet contains variants for different
+ * sizes and widget states). Icons in an icon factory are named by a
+ * stock ID, which is a simple string identifying the icon. Each
+ * #GtkStyle has a list of #GtkIconFactory derived from the current
+ * theme; those icon factories are consulted first when searching for
+ * an icon. If the theme doesn't set a particular icon, GTK+ looks for
+ * the icon in a list of default icon factories, maintained by
+ * gtk_icon_factory_add_default() and
+ * gtk_icon_factory_remove_default(). Applications with icons should
+ * add a default icon factory with their icons, which will allow
+ * themes to override the icons for the application.
+ * 
+ * Return value: a new #GtkIconFactory
+ **/
 GtkIconFactory*
 gtk_icon_factory_new (void)
 {
   return GTK_ICON_FACTORY (g_object_new (GTK_TYPE_ICON_FACTORY, NULL));
 }
 
+/**
+ * gtk_icon_factory_add:
+ * @factory: a #GtkIconFactory
+ * @stock_id: icon name
+ * @icon_set: icon set
+ *
+ * Adds the given @icon_set to the icon factory, under the name
+ * @stock_id.  @stock_id should be namespaced for your application,
+ * e.g. "myapp-whatever-icon".  Normally applications create a
+ * #GtkIconFactory, then add it to the list of default factories with
+ * gtk_icon_factory_add_default(). Then they pass the @stock_id to
+ * widgets such as #GtkImage to display the icon. Themes can provide
+ * an icon with the same name (such as "myapp-whatever-icon") to
+ * override your application's default icons. If an icon already
+ * existed in @factory for @stock_id, it is unreferenced and replaced
+ * with the new @icon_set.
+ * 
+ **/
 void
 gtk_icon_factory_add (GtkIconFactory *factory,
                       const gchar    *stock_id,
@@ -139,6 +176,19 @@ gtk_icon_factory_add (GtkIconFactory *factory,
     gtk_icon_set_unref (old_value);
 }
 
+/**
+ * gtk_icon_factory_lookup:
+ * @factory: a #GtkIconFactory
+ * @stock_id: an icon name
+ * 
+ * Looks up @stock_id in the icon factory, returning an icon set
+ * if found, otherwise %NULL. For display to the user, you should
+ * use gtk_style_lookup_icon_set() on the #GtkStyle for the
+ * widget that will display the icon, instead of using this
+ * function directly, so that themes are taken into account.
+ * 
+ * Return value: icon set of @stock_id.
+ **/
 GtkIconSet *
 gtk_icon_factory_lookup (GtkIconFactory *factory,
                          const gchar    *stock_id)
@@ -152,6 +202,18 @@ gtk_icon_factory_lookup (GtkIconFactory *factory,
 static GtkIconFactory *gtk_default_icons = NULL;
 static GSList *default_factories = NULL;
 
+/**
+ * gtk_icon_factory_add_default:
+ * @factory: a #GtkIconFactory
+ * 
+ * Adds an icon factory to the list of icon factories searched by
+ * gtk_style_lookup_icon_set(). This means that, for example,
+ * gtk_image_new_from_stock() will be able to find icons in @factory.
+ * There will normally be an icon factory added for each library or
+ * application that comes with icons. The default icon factories
+ * can be overridden by themes.
+ * 
+ **/
 void
 gtk_icon_factory_add_default (GtkIconFactory *factory)
 {
@@ -162,6 +224,15 @@ gtk_icon_factory_add_default (GtkIconFactory *factory)
   default_factories = g_slist_prepend (default_factories, factory);
 }
 
+/**
+ * gtk_icon_factory_remove_default:
+ * @factory: a #GtkIconFactory previously added with gtk_icon_factory_add_default()
+ *
+ * Removes an icon factory from the list of default icon
+ * factories. Not normally used; you might use it for a library that
+ * can be unloaded or shut down.
+ * 
+ **/
 void
 gtk_icon_factory_remove_default (GtkIconFactory  *factory)
 {
@@ -172,6 +243,19 @@ gtk_icon_factory_remove_default (GtkIconFactory  *factory)
   g_object_unref (G_OBJECT (factory));
 }
 
+/**
+ * gtk_icon_factory_lookup_default:
+ * @stock_id: an icon name
+ *
+ * Looks for an icon in the list of default icon factories.  For
+ * display to the user, you should use gtk_style_lookup_icon_set() on
+ * the #GtkStyle for the widget that will display the icon, instead of
+ * using this function directly, so that themes are taken into
+ * account.
+ * 
+ * 
+ * Return value: a #GtkIconSet, or %NULL
+ **/
 GtkIconSet *
 gtk_icon_factory_lookup_default (const gchar *stock_id)
 {
@@ -428,6 +512,22 @@ init_icon_sizes (void)
     }
 }
 
+/**
+ * gtk_icon_size_lookup:
+ * @alias: name of an icon size
+ * @width: location to store icon width
+ * @height: location to store icon height
+ *
+ * Obtains the pixel size of an icon, normally @alias would be
+ * #GTK_ICON_SIZE_MENU, #GTK_ICON_SIZE_BUTTON, etc.  This function
+ * isn't normally needed, gtk_widget_render_icon() is the usual
+ * way to get an icon for rendering, then just look at the size of
+ * the rendered pixbuf. The rendered pixbuf may not even correspond to
+ * the width/height returned by gtk_icon_size_lookup(), because themes
+ * are free to render the pixbuf however they like.
+ * 
+ * Return value: %TRUE if @alias was known.
+ **/
 gboolean
 gtk_icon_size_lookup (const gchar *alias,
                       gint        *widthp,
@@ -453,6 +553,16 @@ gtk_icon_size_lookup (const gchar *alias,
   return TRUE;
 }
 
+/**
+ * gtk_icon_size_register:
+ * @alias: name of the icon size
+ * @width: the icon width
+ * @height: the icon height
+ *
+ * Registers a new icon size, along the same lines as #GTK_ICON_SIZE_MENU,
+ * etc.
+ * 
+ **/
 void
 gtk_icon_size_register (const gchar *alias,
                         gint         width,
@@ -467,6 +577,15 @@ gtk_icon_size_register (const gchar *alias,
   icon_size_add (alias, width, height);
 }
 
+/**
+ * gtk_icon_size_register_alias:
+ * @alias: an alias for @target
+ * @target: an existing icon size name
+ *
+ * Registers @alias as another name for @target, usable when calling
+ * gtk_icon_size_lookup().
+ * 
+ **/
 void
 gtk_icon_size_register_alias (const gchar *alias,
                               const gchar *target)
@@ -523,6 +642,21 @@ struct _GtkIconSet
 
 static guint cache_serial = 0;
 
+/**
+ * gtk_icon_set_new:
+ * 
+ * Creates a new #GtkIconSet. A #GtkIconSet represents a single icon
+ * in various sizes and widget states. It can provide a #GdkPixbuf
+ * for a given size and state on request, and automatically caches
+ * some of the rendered #GdkPixbuf objects.
+ *
+ * Normally you would use gtk_widget_render_icon() instead of
+ * using #GtkIconSet directly. The one case where you'd use
+ * #GtkIconSet is to create application-specific icon sets to place in
+ * a #GtkIconFactory.
+ * 
+ * Return value: a new #GtkIconSet
+ **/
 GtkIconSet*
 gtk_icon_set_new (void)
 {
@@ -539,6 +673,14 @@ gtk_icon_set_new (void)
   return icon_set;
 }
 
+/**
+ * gtk_icon_set_ref:
+ * @icon_set: a #GtkIconSet
+ * 
+ * Increments the reference count on @icon_set
+ * 
+ * Return value: @icon_set is returned
+ **/
 GtkIconSet*
 gtk_icon_set_ref (GtkIconSet *icon_set)
 {
@@ -550,6 +692,13 @@ gtk_icon_set_ref (GtkIconSet *icon_set)
   return icon_set;
 }
 
+/**
+ * gtk_icon_set_unref:
+ * @icon_set: a #GtkIconSet
+ * 
+ * Decrements the reference count on @icon_set, and frees memory
+ * if the reference count reaches 0.
+ **/
 void
 gtk_icon_set_unref (GtkIconSet *icon_set)
 {
@@ -574,6 +723,14 @@ gtk_icon_set_unref (GtkIconSet *icon_set)
     }
 }
 
+/**
+ * gtk_icon_set_copy:
+ * @icon_set: a #GtkIconSet
+ * 
+ * Copies @icon_set by value. 
+ * 
+ * Return value: a new #GtkIconSet identical to the first.
+ **/
 GtkIconSet*
 gtk_icon_set_copy (GtkIconSet *icon_set)
 {
@@ -693,6 +850,24 @@ find_and_prep_icon_source (GtkIconSet       *icon_set,
   return source;
 }
 
+/**
+ * gtk_icon_set_render_icon:
+ * @icon_set: a #GtkIconSet
+ * @style: a #GtkStyle associated with @widget, or %NULL
+ * @direction: text direction
+ * @state: widget state
+ * @size: icon size
+ * @widget: widget that will display the icon, or %NULL
+ * @detail: detail to pass to the theme engine, or %NULL
+ * 
+ * Renders an icon using gtk_style_render_icon(). In most cases,
+ * gtk_widget_render_icon() is better, since it automatically
+ * provides most of the arguments from the current widget settings.
+ * A %NULL return value is possible if an icon file fails to load
+ * or the like.
+ * 
+ * Return value: a #GdkPixbuf to be displayed, or %NULL
+ **/
 GdkPixbuf*
 gtk_icon_set_render_icon (GtkIconSet        *icon_set,
                           GtkStyle          *style,
@@ -780,6 +955,19 @@ icon_source_compare (gconstpointer ap, gconstpointer bp)
     return 0;
 }
 
+/**
+ * gtk_icon_set_add_source:
+ * @icon_set: a #GtkIconSet
+ * @source: a #GtkIconSource
+ *
+ * Icon sets have a list of #GtkIconSource, which they use as base
+ * icons for rendering icons in different states and sizes. Icons are
+ * scaled, made to look insensitive, etc. in
+ * gtk_icon_set_render_icon(), but #GtkIconSet needs base images to
+ * work with. The base images and when to use them are described by
+ * #GtkIconSource.
+ * 
+ **/
 void
 gtk_icon_set_add_source (GtkIconSet *icon_set,
                          const GtkIconSource *source)
@@ -799,7 +987,15 @@ gtk_icon_set_add_source (GtkIconSet *icon_set,
                                              icon_source_compare);
 }
 
-GtkIconSource *
+/**
+ * gtk_icon_source_copy:
+ * @source: a #GtkIconSource
+ * 
+ * Creates a copy of @source; mostly useful for language bindings.
+ * 
+ * Return value: a new #GtkIconSource
+ **/
+GtkIconSource*
 gtk_icon_source_copy (const GtkIconSource *source)
 {
   GtkIconSource *copy;
@@ -818,6 +1014,13 @@ gtk_icon_source_copy (const GtkIconSource *source)
   return copy;
 }
 
+/**
+ * gtk_icon_source_free:
+ * @source: a #GtkIconSource
+ * 
+ * Frees a dynamically-allocated icon source, along with its
+ * filename, size, and pixbuf fields if those are not %NULL.
+ **/
 void
 gtk_icon_source_free (GtkIconSource *source)
 {

@@ -331,6 +331,19 @@ gtk_cell_renderer_text_set_property (GObject      *object,
     }
 }
 
+/**
+ * gtk_cell_renderer_text_new:
+ * 
+ * Creates a new #GtkCellRendererText. Adjust how text is drawn using
+ * object properties. Object properties can be
+ * set globally (with g_object_set()). Also, with #GtkTreeViewColumn,
+ * you can bind a property to a value in a #GtkTreeModel. For example,
+ * you can bind the "text" property on the cell renderer to a string
+ * value in the model, thus rendering a different string in each row
+ * of the #GtkTreeView
+ * 
+ * Return value: the new cell renderer
+ **/
 GtkCellRenderer *
 gtk_cell_renderer_text_new (void)
 {

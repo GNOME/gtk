@@ -1,3 +1,25 @@
+2001-02-01  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtk-sections.txt: updated
+
+	* gtk/gtk-docs.sgml: Move the below from "Deprecated" section to
+	"special-purpose" section; move GtkItem out of deprecated section,
+	since GtkMenuItem uses it, though probably the GtkItem signals
+	should just migrate down to GtkMenuItem someday it won't happen
+	for 2.0
+
+	* gtk/tmpl/gtkgamma.sgml: add note about eventual removal
+
+	* gtk/tmpl/gtkcurve.sgml: add note about eventual removal
+
+	* gtk/tmpl/gtkruler.sgml: add note about eventual removal
+
+	* gtk/tmpl/gtkhruler.sgml: add note about eventual removal
+
+	* gtk/tmpl/gtkvruler.sgml: add note about eventual removal
+
+	* gtk/tmpl/gtkinputdialog.sgml: add note about eventual removal
+
 2001-01-30  Havoc Pennington  <hp@pobox.com>
 
         Also committed a bunch of automatic changes made by gtk-doc, 
