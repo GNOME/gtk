@@ -1,3 +1,9 @@
+Fri Oct  4 15:05:19 2002  HideToshi Tajima  <hidetoshi.tajima@sun.com>
+
+	* modules/input/gtkimcontextxim.c (get_ic_real): Fix memory
+	intilization error caused by my previous checkin.
+	#94908 a patch from famao@momonga-linux.org (Motonobu Ichimura)
+	
 Fri Oct  4 17:13:03 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c: Improve checks on public entry points,

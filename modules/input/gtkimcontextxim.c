@@ -1064,7 +1064,7 @@ get_ic_real (GtkIMContextXIM *context_xim)
        * (bugzilla #81759)
        */
       gulong mask = 0;
-      XGetICValues (context_xim->ic,
+      XGetICValues (xic,
 		    XNFilterEvents, &mask,
 		    NULL);
       context_xim->filter_key_release = (mask & KeyReleaseMask);
