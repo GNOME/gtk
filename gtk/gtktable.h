@@ -47,7 +47,8 @@ struct _GtkTable
   GtkTableRowCol *cols;
   guint16 nrows;
   guint16 ncols;
-
+  guint16 column_spacing;
+  guint16 row_spacing;
   guint homogeneous : 1;
 };
 

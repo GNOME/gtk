@@ -116,46 +116,84 @@ gtk_table_init (GtkTable *table)
   table->homogeneous = FALSE;
 }
 
+static void
+gtk_table_init_rows (GtkTable *table, int start, int end)
+{
+  const int spacing = table->row_spacing;
+  int row;
+
+  for (row = start; row < end; row++)
+    {
+      table->rows[row].requisition = 0;
+      table->rows[row].allocation = 0;
+      table->rows[row].spacing = spacing;
+      table->rows[row].need_expand = 0;
+      table->rows[row].need_shrink = 0;
+      table->rows[row].expand = 0;
+      table->rows[row].shrink = 0;
+    }
+}
+
+static void
+gtk_table_init_cols (GtkTable *table, int start, int end)
+{
+  const int spacing = table->column_spacing;
+  int col;
+  
+  for (col = start; col < end; col++)
+    {
+      table->cols[col].requisition = 0;
+      table->cols[col].allocation = 0;
+      table->cols[col].spacing = spacing;
+      table->cols[col].need_expand = 0;
+      table->cols[col].need_shrink = 0;
+      table->cols[col].expand = 0;
+      table->cols[col].shrink = 0;
+    }
+}
+
 GtkWidget*
 gtk_table_new (gint rows,
 	       gint columns,
 	       gint homogeneous)
 {
   GtkTable *table;
-  gint row, col;
 
   table = gtk_type_new (gtk_table_get_type ());
 
   table->nrows = rows;
   table->ncols = columns;
   table->homogeneous = (homogeneous ? TRUE : FALSE);
-
+  table->column_spacing = 0;
+  table->row_spacing = 0;
+  
   table->rows = g_new (GtkTableRowCol, table->nrows);
   table->cols = g_new (GtkTableRowCol, table->ncols);
 
-  for (row = 0; row < table->nrows; row++)
-    {
-      table->rows[row].requisition = 0;
-      table->rows[row].allocation = 0;
-      table->rows[row].spacing = 0;
-      table->rows[row].need_expand = 0;
-      table->rows[row].need_shrink = 0;
-      table->rows[row].expand = 0;
-      table->rows[row].shrink = 0;
-    }
-
-  for (col = 0; col < table->ncols; col++)
-    {
-      table->cols[col].requisition = 0;
-      table->cols[col].allocation = 0;
-      table->cols[col].spacing = 0;
-      table->cols[col].need_expand = 0;
-      table->cols[col].need_shrink = 0;
-      table->cols[col].expand = 0;
-      table->cols[col].shrink = 0;
-    }
+  gtk_table_init_rows (table, 0, table->nrows);
+  gtk_table_init_cols (table, 0, table->ncols);
 
   return GTK_WIDGET (table);
+}
+
+static void
+gtk_table_expand_cols (GtkTable *table, int new_max)
+{
+  int i;
+  
+  table->cols = g_realloc (table->cols, new_max * sizeof (GtkTableRowCol));
+  gtk_table_init_cols (table, table->ncols, new_max);
+  table->ncols = new_max;
+}
+
+static void
+gtk_table_expand_rows (GtkTable *table, int new_max)
+{
+  int i;
+  
+  table->rows = g_realloc (table->rows, new_max * sizeof (GtkTableRowCol));
+  gtk_table_init_rows (table, table->nrows, new_max);
+  table->nrows = new_max;
 }
 
 void
@@ -171,15 +209,22 @@ gtk_table_attach (GtkTable  *table,
 		  gint       ypadding)
 {
   GtkTableChild *table_child;
-
+  int resize = 0;
+  
   g_return_if_fail (table != NULL);
   g_return_if_fail (GTK_IS_TABLE (table));
   g_return_if_fail (child != NULL);
 
-  g_return_if_fail ((left_attach >= 0) && (left_attach < table->ncols));
-  g_return_if_fail ((left_attach < right_attach) && (right_attach <= table->ncols));
-  g_return_if_fail ((top_attach >= 0) && (top_attach < table->nrows));
-  g_return_if_fail ((top_attach < bottom_attach) && (bottom_attach <= table->nrows));
+  g_return_if_fail (left_attach >= 0);
+  g_return_if_fail (left_attach < right_attach);
+  g_return_if_fail (top_attach >= 0);
+  g_return_if_fail (top_attach < bottom_attach);
+
+  if (right_attach >= table->ncols)
+	  gtk_table_expand_cols (table, right_attach);
+
+  if (bottom_attach >= table->nrows)
+	  gtk_table_expand_rows (table, bottom_attach);
 
   table_child = g_new (GtkTableChild, 1);
   table_child->widget = child;
