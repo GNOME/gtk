@@ -450,11 +450,7 @@ gtk_rc_init (void)
     {
       gint length;
       
-#if defined (HAVE_LC_MESSAGES) && !defined (X_LOCALE)
-      char *locale = setlocale (LC_MESSAGES, NULL);
-#else
       char *locale = setlocale (LC_CTYPE, NULL);
-#endif
       char *p;
       
       initted = TRUE;

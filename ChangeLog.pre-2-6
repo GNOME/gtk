@@ -1,3 +1,11 @@
+Tue Oct 19 09:46:49 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_init): Always use LC_CTYPE 
+	to determine the locale for fontsets, not LC_MESSAGES;
+	the user may want English messages with a handling
+	for non-English languages. (LC_CTYPE=ru_RU LC_MESSAGES=fr_FR
+	will still be broken)
+
 Tue Oct 19 20:36:42 1999  Changwoo Ryu  <cwryu@adam.kaist.ac.kr>
 
 	* gtk/gtkrc.ko: Fixed the wrong number of "*"'s.
