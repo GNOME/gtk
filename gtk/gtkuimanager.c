@@ -711,8 +711,6 @@ gtk_ui_manager_get_widget (GtkUIManager *self,
    * widget */
   gtk_ui_manager_ensure_update (self);
 
-  if (strncmp ("/ui", path, 3) == 0)
-    path += 3;
   node = get_node (self, path, NODE_TYPE_UNDECIDED, FALSE);
 
   if (node == NULL)
@@ -914,6 +912,9 @@ get_node (GtkUIManager *self,
 {
   const gchar *pos, *end;
   GNode *parent, *node;
+  
+  if (strncmp ("/ui", path, 3) == 0)
+    path += 3;
   
   end = path + strlen (path);
   pos = path;

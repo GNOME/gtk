@@ -1,3 +1,12 @@
+Tue Aug  3 20:03:33 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.c (get_node): Make gtk_ui_manager_add_ui()
+	accept paths with a leading "/ui".  (#149077, David Malcolm)
+
+Tue Aug  3 19:59:29 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkiconview.c: Fix some warnings.
+
 Tue Aug  3 18:38:40 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreemodelfilter.c: Correct the return type
