@@ -554,7 +554,7 @@ gtk_option_menu_paint (GtkWidget    *widget,
 		     button_area.width, button_area.height);
       
       if (gtk_widget_get_direction (GTK_WIDGET (widget)) == GTK_TEXT_DIR_RTL) 
-	tab_x = button_area.x + props.indicator_spacing.left + 
+	tab_x = button_area.x + props.indicator_spacing.right + 
 	  widget->style->xthickness;
       else
 	tab_x = button_area.x + button_area.width - 
