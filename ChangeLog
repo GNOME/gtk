@@ -1,3 +1,8 @@
+Mon Apr 21 18:35:48 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkobject.h: Remove a couple of obsolete comments,
+	fix another comment. (#109737, Britton Kerin)
+
 Mon Apr 21 18:29:03 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkiconfactory.c (gtk_icon_set_unref): Free
