@@ -80,18 +80,18 @@ struct _GtkRcFile
   gboolean reload;
 };
 
-static guint       gtk_rc_style_hash                 (const char      *name);
-static gboolean    gtk_rc_style_equal                (const char      *a,
-                                                      const char      *b);
+static guint       gtk_rc_style_hash                 (const gchar     *name);
+static gboolean    gtk_rc_style_equal                (const gchar     *a,
+                                                      const gchar     *b);
 static guint       gtk_rc_styles_hash                (const GSList    *rc_styles);
-static gboolean    gtk_rc_styles_equal                (const GSList    *a,
+static gboolean    gtk_rc_styles_equal               (const GSList    *a,
                                                       const GSList    *b);
-static GtkRcStyle* gtk_rc_style_find                 (const char      *name);
+static GtkRcStyle* gtk_rc_style_find                 (const gchar     *name);
 static GSList *    gtk_rc_styles_match               (GSList          *rc_styles,
                                                       GSList          *sets,
                                                       guint            path_length,
-                                                      gchar           *path,
-                                                      gchar           *path_reversed);
+                                                      const gchar     *path,
+                                                      const gchar     *path_reversed);
 static GtkStyle *  gtk_rc_style_to_style             (GtkRcStyle      *rc_style);
 static GtkStyle*   gtk_rc_init_style                 (GSList          *rc_styles);
 static void        gtk_rc_parse_file                 (const gchar     *filename,
@@ -140,17 +140,17 @@ static void        gtk_rc_clear_styles               (void);
 static void        gtk_rc_append_default_module_path (void);
 static void        gtk_rc_add_initial_default_files  (void);
 
-static void        gtk_rc_style_init              (GtkRcStyle      *style);
-static void        gtk_rc_style_class_init        (GtkRcStyleClass *klass);
-static void        gtk_rc_style_finalize          (GObject         *object);
-static void        gtk_rc_style_real_merge        (GtkRcStyle      *dest,
-						   GtkRcStyle      *src);
-static GtkRcStyle *gtk_rc_style_real_clone        (GtkRcStyle      *rc_style);
-static GtkStyle *  gtk_rc_style_real_create_style (GtkRcStyle      *rc_style);
+static void        gtk_rc_style_init                 (GtkRcStyle      *style);
+static void        gtk_rc_style_class_init           (GtkRcStyleClass *klass);
+static void        gtk_rc_style_finalize             (GObject         *object);
+static void        gtk_rc_style_real_merge           (GtkRcStyle      *dest,
+                                                      GtkRcStyle      *src);
+static GtkRcStyle *gtk_rc_style_real_clone           (GtkRcStyle      *rc_style);
+static GtkStyle *  gtk_rc_style_real_create_style    (GtkRcStyle      *rc_style);
 
 static gpointer parent_class = NULL;
 
-static const GScannerConfig	gtk_rc_scanner_config =
+static const GScannerConfig  gtk_rc_scanner_config =
 {
   (
    " \t\r\n"
@@ -310,7 +310,7 @@ gtk_rc_make_default_dir (const gchar *type)
 gchar *
 gtk_rc_get_im_module_path (void)
 {
-  gchar *result = g_getenv ("GTK_IM_MODULE_PATH");
+  const gchar *result = g_getenv ("GTK_IM_MODULE_PATH");
 
   if (!result)
     {
@@ -370,7 +370,8 @@ gtk_rc_get_module_dir(void)
 static void
 gtk_rc_append_default_module_path(void)
 {
-  gchar *var, *path;
+  const gchar *var;
+  gchar *path;
   gint n;
 
   for (n = 0; module_path[n]; n++) ;
@@ -413,7 +414,8 @@ static void
 gtk_rc_add_initial_default_files (void)
 {
   static gint init = FALSE;
-  gchar *var, *str;
+  const gchar *var;
+  gchar *str;
   gchar **files;
   gint i;
 
@@ -519,14 +521,14 @@ gtk_rc_get_default_files (void)
   * names.  Normalization allows the user to use any of the common
   * names.
   */
- static char *
- _gtk_normalize_codeset (const char *codeset, int name_len)
+ static gchar *
+ _gtk_normalize_codeset (const gchar *codeset, gint name_len)
  {
-   int len = 0;
-   int only_digit = 1;
-   char *retval;
-   char *wp;
-   int cnt;
+   gint len = 0;
+   gint only_digit = 1;
+   gchar *retval;
+   gchar *wp;
+   gint cnt;
  
    for (cnt = 0; cnt < name_len; ++cnt)
      if (isalnum (codeset[cnt]))
@@ -784,6 +786,8 @@ gtk_rc_style_init (GtkRcStyle *style)
   guint i;
 
   style->name = NULL;
+  style->font_desc = NULL;
+
   for (i = 0; i < 5; i++)
     {
       static const GdkColor init_color = { 0, 0, 0, 0, };
@@ -797,7 +801,9 @@ gtk_rc_style_init (GtkRcStyle *style)
     }
   style->xthickness = -1;
   style->ythickness = -1;
+
   style->rc_style_lists = NULL;
+  style->icon_factories = NULL;
 }
 
 static void
@@ -816,7 +822,7 @@ gtk_rc_style_class_init (GtkRcStyleClass *klass)
 }
 
 /* Like g_slist_remove, but remove all copies of data */
-static GSList*
+static GSList *
 gtk_rc_slist_remove_all (GSList   *list,
 			 gpointer  data)
 {
@@ -1123,8 +1129,8 @@ static GSList *
 gtk_rc_styles_match (GSList       *rc_styles,
 		     GSList	  *sets,
 		     guint         path_length,
-		     gchar        *path,
-		     gchar        *path_reversed)
+		     const gchar  *path,
+		     const gchar  *path_reversed)
 		     
 {
   GtkRcSet *rc_set;
@@ -1141,7 +1147,7 @@ gtk_rc_styles_match (GSList       *rc_styles,
   return rc_styles;
 }
 
-GtkStyle*
+GtkStyle *
 gtk_rc_get_style (GtkWidget *widget)
 {
   GtkRcStyle *widget_rc_style;
@@ -1191,7 +1197,8 @@ gtk_rc_get_style (GtkWidget *widget)
       type = GTK_OBJECT_TYPE (widget);
       while (type)
 	{
-	  gchar *path, *path_reversed;
+	  const gchar *path;
+          gchar *path_reversed;
 	  guint path_length;
 
 	  path = gtk_type_name (type);
@@ -1212,10 +1219,10 @@ gtk_rc_get_style (GtkWidget *widget)
   return NULL;
 }
 
-static GSList*
-gtk_rc_add_rc_sets (GSList     *slist,
-		    GtkRcStyle *rc_style,
-		    const char *pattern)
+static GSList *
+gtk_rc_add_rc_sets (GSList      *slist,
+		    GtkRcStyle  *rc_style,
+		    const gchar *pattern)
 {
   GtkRcStyle *new_style;
   GtkRcSet *rc_set;
@@ -1385,7 +1392,7 @@ gtk_rc_styles_equal (const GSList *a,
 }
 
 static guint
-gtk_rc_style_hash (const char *name)
+gtk_rc_style_hash (const gchar *name)
 {
   guint result;
   
@@ -1397,14 +1404,14 @@ gtk_rc_style_hash (const char *name)
 }
 
 static gboolean
-gtk_rc_style_equal (const char *a,
-		    const char *b)
+gtk_rc_style_equal (const gchar *a,
+		    const gchar *b)
 {
   return (strcmp (a, b) == 0);
 }
 
 static GtkRcStyle*
-gtk_rc_style_find (const char *name)
+gtk_rc_style_find (const gchar *name)
 {
   if (rc_style_ht)
     return g_hash_table_lookup (rc_style_ht, (gpointer) name);
@@ -1537,8 +1544,6 @@ gtk_rc_parse_statement (GScanner *scanner)
   
   switch (token)
     {
-      gboolean is_varname;
-      gchar *p;
     case GTK_RC_TOKEN_INCLUDE:
       token = g_scanner_get_next_token (scanner);
       if (token != GTK_RC_TOKEN_INCLUDE)

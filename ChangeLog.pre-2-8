@@ -1,7 +1,13 @@
-Sun Mar 04  07:30:03 2001 CET Mikael Hermansson<mikeh@bahnhof.se>
+Mon Mar  5 14:51:10 MET 2001  Sven Neumann  <sven@gimp.org>
 
-	* gtk/gtktextview.c: fixed bug #51097 about setting gtk_text_view_set_border_window_size()
-	if the widget is already realized.
+	* gtk/gtkrc.c: fixed compiler warnings by inserting some consts.
+	Added missing initializers to gtk_rc_style_init().
+
+Sun Mar 04  07:30:03 2001 CET Mikael Hermansson <mikeh@bahnhof.se>
+
+	* gtk/gtktextview.c: fixed bug #51097 about setting 
+	gtk_text_view_set_border_window_size() if the widget is 
+	already realized.
 
 Sat Mar  3 16:59:16 2001  Owen Taylor  <otaylor@redhat.com>
 
