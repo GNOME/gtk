@@ -1,3 +1,9 @@
+Thu Apr 26 10:54:50 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (strstr_len): Fix optimization that
+	was correct for the use here, but completely incorrect
+	in general.
+
 Thu Apr 26 10:40:41 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.h: Remove deprecation of gtk_window_set_default_size()

@@ -1724,7 +1724,7 @@ strstr_len (const char *haystack,
 	  return (char *)p;
 
 	next:
-	  p += needle_len;
+	  p++;
 	}
     }
 
