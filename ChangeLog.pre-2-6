@@ -1,3 +1,8 @@
+Wed Oct 18 11:14:05 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in demos/Makefile.am demos/testgtk/*: Start of work to
+	move to new modularized testgtk.
+
 2000-10-17  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c: Draw the arrows correctly.
@@ -141,7 +146,7 @@
 	* gdk/gdkwindow.c (gdk_window_draw_arc): Fix obvious bug in circle
 	drawing.
 
-Wed Oct  4 15:52:15 2000    <otaylor@redhat.com>
+Wed Oct  4 15:52:15 2000 Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkselection-x11.c (_gdk_selection_window_destroyed):
 	Move list pointer forwards before removing item from
