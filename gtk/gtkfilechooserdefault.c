@@ -1357,6 +1357,7 @@ tree_selection_changed (GtkTreeSelection          *selection,
 						 file_path, 0,
 						 GTK_FILE_INFO_ICON |
 						 GTK_FILE_INFO_DISPLAY_NAME |
+						 GTK_FILE_INFO_IS_FOLDER |
 						 GTK_FILE_INFO_SIZE |
 						 GTK_FILE_INFO_MODIFICATION_TIME);
 #if 0
@@ -1510,6 +1511,30 @@ list_icon_data_func (GtkTreeViewColumn *tree_column,
     }
 }
 
+/* Sets a cellrenderer's text, making it bold if the GtkFileInfo is a folder */
+static void
+set_cell_text_bold_if_folder (const GtkFileInfo *info, GtkCellRenderer *cell, const char *text)
+{
+  if (gtk_file_info_get_is_folder (info))
+    {
+      char *escaped;
+      char *markup;
+
+      escaped = g_markup_escape_text (text, -1);
+      markup = g_strdup_printf ("<span weight=\"bold\">%s</span>", escaped);
+
+      g_object_set (cell, "markup", markup, NULL);
+
+      g_free (escaped);
+      g_free (markup);
+    }
+  else
+      g_object_set (cell,
+		    "text", text,
+		    "attributes", NULL,
+		    NULL);
+}
+
 static void
 list_name_data_func (GtkTreeViewColumn *tree_column,
 		     GtkCellRenderer   *cell,
@@ -1520,12 +1545,10 @@ list_name_data_func (GtkTreeViewColumn *tree_column,
   GtkFileChooserImplDefault *impl = data;
   const GtkFileInfo *info = get_list_file_info (impl, iter);
 
-  if (info)
-    {
-      g_object_set (cell,
-		    "text", gtk_file_info_get_display_name (info),
-		    NULL);
-    }
+  if (!info)
+    return;
+
+  set_cell_text_bold_if_folder (info, cell, gtk_file_info_get_display_name (info));
 }
 
 #if 0
@@ -1538,27 +1561,26 @@ list_size_data_func (GtkTreeViewColumn *tree_column,
 {
   GtkFileChooserImplDefault *impl = data;
   const GtkFileInfo *info = get_list_file_info (impl, iter);
+  gint64 size = gtk_file_info_get_size (info);
+  gchar *str;
 
-  if (info)
-    {
-      gint64 size = gtk_file_info_get_size (info);
-      gchar *str;
+  if (!info || gtk_file_info_get_is_folder (info))
+    return;
 
-      if (size < (gint64)1024)
-	str = g_strdup_printf ("%d bytes", (gint)size);
-      else if (size < (gint64)1024*1024)
-	str = g_strdup_printf ("%.1f K", size / (1024.));
-      else if (size < (gint64)1024*1024*1024)
-	str = g_strdup_printf ("%.1f M", size / (1024.*1024.));
-      else
-	str = g_strdup_printf ("%.1f G", size / (1024.*1024.*1024.));
+  if (size < (gint64)1024)
+    str = g_strdup_printf ("%d bytes", (gint)size);
+  else if (size < (gint64)1024*1024)
+    str = g_strdup_printf ("%.1f K", size / (1024.));
+  else if (size < (gint64)1024*1024*1024)
+    str = g_strdup_printf ("%.1f M", size / (1024.*1024.));
+  else
+    str = g_strdup_printf ("%.1f G", size / (1024.*1024.*1024.));
 
-      g_object_set (cell,
-		    "text", str,
-		    NULL);
+  g_object_set (cell,
+		"text", str,
+		NULL);
 
-      g_free (str);
-    }
+  g_free (str);
 }
 #endif
 
@@ -1630,7 +1652,7 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
 	}
     }
 
-  g_object_set (cell, "text", buf, NULL);
+  set_cell_text_bold_if_folder (info, cell, buf);
 }
 
 GtkWidget *
