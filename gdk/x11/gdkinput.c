@@ -44,7 +44,10 @@ static GdkDeviceAxis gdk_input_core_axes[] = {
 void
 _gdk_init_input_core (GdkDisplay *display)
 {
+  GdkDevicePrivate *private;
+  
   display->core_pointer = g_object_new (GDK_TYPE_DEVICE, NULL);
+  private = (GdkDevicePrivate *)display->core_pointer;
   
   display->core_pointer->name = "Core Pointer";
   display->core_pointer->source = GDK_SOURCE_MOUSE;
@@ -54,6 +57,8 @@ _gdk_init_input_core (GdkDisplay *display)
   display->core_pointer->axes = gdk_input_core_axes;
   display->core_pointer->num_keys = 0;
   display->core_pointer->keys = NULL;
+
+  private->display = display;
 }
 
 GType

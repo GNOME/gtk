@@ -1,3 +1,11 @@
+Tue Jun 18 19:38:08 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkinput.c (_gdk_init_input_core): Set the
+	display.
+
+	* gdk/x11/gdkwindow-x11.c (_gdk_moveresize_handle_event): Fix
+	missing check for mv_resize == NULL.
+
 Tue Jun 18 19:30:25 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktreeview.c: Typo fix.
