@@ -46,10 +46,18 @@ real_add (const GtkStockItem *items,
   i = 0;
   while (i < n_items)
     {
+      gpointer old_key, old_value;
       const GtkStockItem * item = &items[i];
       if (copy)
         item = gtk_stock_item_copy (item);
 
+      if (g_hash_table_lookup_extended (stock_hash, item->stock_id,
+                                        &old_key, &old_value))
+        {
+          g_hash_table_remove (stock_hash, old_key);
+          gtk_stock_item_free (old_value);
+        }
+      
       g_hash_table_insert (stock_hash,
                            (gchar*)item->stock_id, (GtkStockItem*)item);
 

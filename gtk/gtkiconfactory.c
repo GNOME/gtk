@@ -114,20 +114,21 @@ gtk_icon_factory_add (GtkIconFactory *factory,
 
   g_return_if_fail (GTK_IS_ICON_FACTORY (factory));
   g_return_if_fail (stock_id != NULL);
-  g_return_if_fail (icon_set != NULL);
-  
+  g_return_if_fail (icon_set != NULL);  
+
   g_hash_table_lookup_extended (factory->icons, stock_id,
                                 &old_key, &old_value);
 
   if (old_value == icon_set)
     return;
-
-  gtk_icon_set_ref (icon_set);
   
-  g_hash_table_insert (factory->icons, g_strdup (stock_id), icon_set);
+  gtk_icon_set_ref (icon_set);
 
+  /* GHashTable key memory management is so fantastically broken. */
   if (old_key)
-    g_free (old_key);
+    g_hash_table_insert (factory->icons, old_key, icon_set);
+  else
+    g_hash_table_insert (factory->icons, g_strdup (stock_id), icon_set);
 
   if (old_value)
     gtk_icon_set_unref (old_value);
