@@ -638,22 +638,14 @@ fill_file_buffer (GtkTextBuffer *buffer, const char *filename)
   while (!feof (f))
     {
       gint count;
-      char *leftover, *next;
+      const char *leftover;
       int to_read = 2047  - remaining;
 
       count = fread (buf + remaining, 1, to_read, f);
       buf[count + remaining] = '\0';
 
-      leftover = next = buf;
-      while (next)
-	{
-	  leftover = next;
-	  if (!*leftover)
-	    break;
-	  
-	  next = g_utf8_find_next_char (next, buf + count + remaining);
-	}
-
+      g_utf8_validate (buf, -1, &leftover);
+      
       g_assert (g_utf8_validate (buf, leftover - buf, NULL));
       gtk_text_buffer_insert (buffer, &iter, buf, leftover - buf);
 

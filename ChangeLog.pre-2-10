@@ -1,5 +1,10 @@
 2000-12-14  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/testtext.c (fill_file_buffer): fix unicode validation when
+	reading a file
+
+2000-12-14  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextbtree.c (_gtk_text_btree_validate_line): remove
 	unused call to get_last_line()
 
