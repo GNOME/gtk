@@ -2053,11 +2053,13 @@ gdk_keyval_name (guint keyval)
 	    
       return (gchar *) found->name;
     }
-  else
+  else if (keyval != 0)
     {
       sprintf (buf, "%#x", keyval);
       return buf;
     }
+
+  return NULL;
 }
 
 static int 

@@ -1,3 +1,25 @@
+2002-03-29  Hans Breuer  <hans@breuer.org>
+
+	Fixed dashed line issues (#74441) to an IMO reasonable extend. 
+	That is: use PS_USERSTYLE on WinNT (the next GDI limit appears
+	to be with lines width > 50); Render horizontal and vertical
+	dashed lines on Win9x 'by hand'. Dotted selection rectangles 
+	and Dia look nice ...
+
+	* gdk/win32/gdkprivate-win32.h : add pen_dashes pointer and
+	num_pen_dashes to _GdkGCWin32
+	* gdk/win32/gdkgc-win32.c : initialize pen_dashes and remove
+	the guesses from dashes to windoze line styles.
+	(predraw_set_forground) : always ExtCreatePen (PS_SOLID) on
+	Win9x, which does not support PS_USERSTYLE.
+	* gdk/win32/gdkdrawable-win32.c : new functions render_line_
+	<horizontal|vertical>. Use them if not running on NT in
+	gdk_win32_draw_<rectangle|segments|lines> ()
+
+	* gdk/win32/gdkkeys-win32.c (gdk_keyval_name) : return NULL
+	for keyval == 0 to avoid to have zeros in all menu entries 
+	without accelerator.
+
 2002-03-29  Jakub Steiner <jimmac@ximian.com>
 
 	* gtk/stock-icons/stock_add_24.png:

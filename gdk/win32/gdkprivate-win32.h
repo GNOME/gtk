@@ -284,6 +284,8 @@ struct _GdkGCWin32
   gint graphics_exposures;
   gint pen_width;
   DWORD pen_style;
+  DWORD *pen_dashes;		/* use for PS_USERSTYLE or step-by-step rendering */
+  gint pen_num_dashes;
   HANDLE hwnd;			/* If a HDC is allocated, for which window,
 				 * or what bitmap is selected into it
 				 */

@@ -107,6 +107,9 @@ gdk_gc_win32_finalize (GObject *object)
   
   if (win32_gc->values_mask & GDK_GC_STIPPLE)
     gdk_drawable_unref (win32_gc->stipple);
+
+  if (win32_gc->pen_dashes)
+    g_free (win32_gc->pen_dashes);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -363,23 +366,30 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
       switch (values->line_style)
 	{
 	case GDK_LINE_SOLID:
-        win32_gc->pen_style &= ~(PS_STYLE_MASK);
+	  if (win32_gc->pen_dashes)
+	    {
+	      g_free (win32_gc->pen_dashes);
+	      win32_gc->pen_dashes = NULL;
+            win32_gc->pen_num_dashes = 0;
+	    }
+          win32_gc->pen_style &= ~(PS_STYLE_MASK);
 	  GDK_NOTE (GC, (g_print ("%sps|=LINE_SOLID", s),
 			 s = ","));
 	  win32_gc->pen_style |= PS_SOLID;
 	  break;
 	case GDK_LINE_ON_OFF_DASH:
-	case GDK_LINE_DOUBLE_DASH: /* ??? */
-	  /* Only set the linestyle here, if it isn't already set
-	   * gdk_win32_gc_set_dashes () knows better
-	   */
-	  if (0 == (win32_gc->values_mask & GDK_GC_LINE_STYLE))
+	case GDK_LINE_DOUBLE_DASH: 
+	  if (!win32_gc->pen_dashes)
 	    {
+            /* setting to PS_DASH probably isn't correct. If I understand the
+             * xlib docs correctly it should influence the handling of
+             * line endings ? --hb
+             */
             win32_gc->pen_style &= ~(PS_STYLE_MASK);
-	      GDK_NOTE (GC, (g_print ("%sps|=DASH", s),
-			     s = ","));
-	      win32_gc->pen_style |= PS_DASH;
-	    }
+    	      GDK_NOTE (GC, (g_print ("%sps|=DASH", s),
+                                    s = ","));
+    	      win32_gc->pen_style |= PS_DASH;
+          }
 	  break;
 	}
       win32_gc->values_mask |= GDK_GC_LINE_STYLE;
@@ -468,6 +478,8 @@ _gdk_win32_gc_new (GdkDrawable	  *drawable,
   win32_gc->stipple = NULL;
   win32_gc->pen_style = PS_GEOMETRIC|PS_ENDCAP_FLAT|PS_JOIN_MITER;
   win32_gc->pen_width = 0;
+  win32_gc->pen_dashes = NULL;
+  win32_gc->pen_num_dashes = 0;
 
   win32_gc->values_mask = GDK_GC_FUNCTION | GDK_GC_FILL;
 
@@ -586,6 +598,7 @@ gdk_win32_gc_set_dashes (GdkGC *gc,
 			 gint   n)
 {
   GdkGCWin32 *win32_gc;
+  int i;
 
   g_return_if_fail (GDK_IS_GC (gc));
   g_return_if_fail (dash_list != NULL);
@@ -597,61 +610,11 @@ gdk_win32_gc_set_dashes (GdkGC *gc,
 
   win32_gc->pen_style &= ~(PS_STYLE_MASK);
 
-  /* 
-   * Set the extended line style. This could be done by 
-   * PS_USERSTYLE and ExtCreatePen; but ONLY on WinNT, 
-   * so let's make a guess (based on the implementation 
-   * in DIA). On Win9x this does only work for lines
-   * with width one ...
-   *
-   * More workarounds for Win9x descibed at:
-   * http://www.codeguru.com/gdi/dashed.shtml
-   */
-  if (!IS_WIN_NT () && win32_gc->pen_width > 1)
-    {
-      GDK_NOTE (GC, g_print ("gdk_win32_gc_set_dashes: not fully supported\n"));
-      win32_gc->pen_style |= PS_SOLID;
-      return;
-    }
-  
-  win32_gc->pen_style &= ~PS_STYLE_MASK;
-  switch (n)
-    {
-    case 2:
-      if ((dash_list[0] == dash_list[1]) && (dash_list[0] > 2))
-        {
-          win32_gc->pen_style |= PS_DASH;
-          GDK_NOTE (GC, g_print ("gdk_win32_gc_set_dashes: PS_DASH (%d,%d)\n", 
-				 dash_list[0], dash_list[1]));
-        }
-      else
-        {
-          win32_gc->pen_style |= PS_DOT;
-          GDK_NOTE (GC, g_print ("gdk_win32_gc_set_dashes: PS_DOT (%d,%d)\n",
-				 dash_list[0], dash_list[1]));
-        }
-      break;
-
-    case 4:
-      win32_gc->pen_style |= PS_DASHDOT; 
-      GDK_NOTE (GC, g_print ("gdk_win32_gc_set_dashes: PS_DASHDOT (%d,%d,%d,%d)\n", 
-			     dash_list[0], dash_list[1],
-			     dash_list[2], dash_list[3]));
-      break;
-
-    case 6:
-      win32_gc->pen_style |= PS_DASHDOTDOT; 
-      GDK_NOTE (GC, g_print ("gdk_win32_gc_set_dashes: PS_DASHDOTDOT (%d,%d,%d,%d,%d,%d)\n", 
-			     dash_list[0], dash_list[1],
-			     dash_list[2], dash_list[3],
-			     dash_list[4], dash_list[5]));
-      break;
-
-    default:
-      win32_gc->pen_style |= PS_DASH;
-      GDK_NOTE (GC, g_print ("gdk_win32_gc_set_dashes: no guess for %d dashes\n", n));
-      break;
-    }
+  win32_gc->pen_style |= (PS_GEOMETRIC | PS_USERSTYLE);
+  win32_gc->pen_num_dashes = n;
+  win32_gc->pen_dashes = g_new (DWORD, n);
+  for (i = 0; i < n; i++)
+    win32_gc->pen_dashes[i] = dash_list[i];
 }
 
 void
@@ -752,9 +715,14 @@ gdk_gc_copy (GdkGC *dst_gc,
     gdk_region_destroy (dst_win32_gc->clip_region);
   if (dst_win32_gc->hcliprgn != NULL)
     DeleteObject (dst_win32_gc->hcliprgn);
+  if (dst_win32_gc->pen_dashes)
+    g_free (dst_win32_gc->pen_dashes);
   
   *dst_win32_gc = *src_win32_gc;
 
+  if (dst_win32_gc->pen_dashes)
+    dst_win32_gc->pen_dashes = g_memdup (src_win32_gc->pen_dashes, 
+                                         sizeof (DWORD) * src_win32_gc->pen_num_dashes);
   if (dst_win32_gc->hcliprgn)
     {
       /* create a new region, to copy to */
@@ -856,10 +824,28 @@ predraw_set_foreground (GdkGC       *gc,
   logbrush.lbColor = fg;
   logbrush.lbHatch = 0;
 
-  if (*ok && (hpen = ExtCreatePen (win32_gc->pen_style,
-				   (win32_gc->pen_width > 0 ? win32_gc->pen_width : 1),
-				   &logbrush, 0, NULL)) == NULL)
-    WIN32_GDI_FAILED ("ExtCreatePen"), *ok = FALSE;
+  if (win32_gc->pen_num_dashes > 0 && !IS_WIN_NT ())
+    {
+      /* The Win9x GDI is rather limited so we either draw dotted
+       * lines ourselve (only horizontal and vertical) or let them
+       * be drawn solid to avoid implementing a whole line renderer
+       */
+      if (*ok && (hpen = ExtCreatePen (
+                           (win32_gc->pen_style & ~(PS_STYLE_MASK)) | PS_SOLID,
+                           (win32_gc->pen_width > 0 ? win32_gc->pen_width : 1),
+                           &logbrush, 
+                           0, NULL)) == NULL)
+        WIN32_GDI_FAILED ("ExtCreatePen"), *ok = FALSE;
+    }
+  else
+    {
+      if (*ok && (hpen = ExtCreatePen (win32_gc->pen_style,
+                           (win32_gc->pen_width > 0 ? win32_gc->pen_width : 1),
+                           &logbrush, 
+                           win32_gc->pen_num_dashes,
+                           win32_gc->pen_dashes)) == NULL)
+        WIN32_GDI_FAILED ("ExtCreatePen"), *ok = FALSE;
+    }
   
   if (*ok && SelectObject (win32_gc->hdc, hpen) == NULL)
     WIN32_GDI_FAILED ("SelectObject"), *ok = FALSE;
