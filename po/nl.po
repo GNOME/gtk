@@ -39,7 +39,7 @@ msgstr "Blauw:"
 
 #: gtk/gtkcolorsel.c:227
 msgid "Opacity:"
-msgstr "Doorschijnendheid:"
+msgstr "Ondoorschijnendheid:"
 
 #. The OK button
 #: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:481 gtk/gtkfontsel.c:3501
@@ -228,7 +228,7 @@ msgstr "Pixels"
 #. create the text entry widget
 #: gtk/gtkfontsel.c:687
 msgid "Preview:"
-msgstr ""
+msgstr "Voorbeeld:"
 
 #: gtk/gtkfontsel.c:716
 msgid "Font Information"
@@ -254,7 +254,7 @@ msgstr "Filter"
 
 #: gtk/gtkfontsel.c:799
 msgid "Font Types:"
-msgstr "Lettertypen Types:"
+msgstr "Lettertypen soorten:"
 
 #: gtk/gtkfontsel.c:807
 msgid "Bitmap"
@@ -335,7 +335,7 @@ msgstr "proportioneel"
 
 #: gtk/gtkfontsel.c:1989
 msgid "monospaced"
-msgstr ""
+msgstr "enkelvoudige spatiering"
 
 #: gtk/gtkfontsel.c:1990
 msgid "char cell"
@@ -347,7 +347,7 @@ msgstr "Lettertype: (Filter toegepast)"
 
 #: gtk/gtkfontsel.c:2666
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "MAX_FONTS overtreden. Sommige fonts kunnen ontbreken."
+msgstr "MAX_FONTS overschreden. Sommige fonts kunnen ontbreken."
 
 #: gtk/gtkfontsel.c:3508
 msgid "Apply"
