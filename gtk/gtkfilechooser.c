@@ -152,27 +152,64 @@ gtk_file_chooser_get_action (GtkFileChooser *chooser)
   return action;
 }
 
+/**
+ * gtk_file_chooser_set_folder_mode:
+ * @chooser: a #GtkFileChooser
+ * @folder_mode: %TRUE if the file chooser is used to select folders
+ *               rather than files.
+ * 
+ * Sets whether the file chooser is used to select folders
+ * rather than files. If in folder mode, only folders are displayed
+ * to the use, and not the individual files inside the folders
+ * and the user selects a single folder rather than one or
+ * more files.
+ **/
 void
-gtk_file_chooser_set_directory_mode (GtkFileChooser *chooser,
-				      gboolean        directory_mode)
+gtk_file_chooser_set_folder_mode (GtkFileChooser *chooser,
+				  gboolean        folder_mode)
 {
   g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
 
-  g_object_set (chooser, "directory_mode", directory_mode, NULL);
+  g_object_set (chooser, "folder_mode", folder_mode, NULL);
 }
 
+/**
+ * gtk_file_chooser_get_folder_mode:
+ * @chooser: a #GtkFileChooser
+ * 
+ * Gets whether the file chooser is used to select folders
+ * rather than files. See gtk_file_chooser_set_folder_mode()
+ * 
+ * Return value: %TRUE if the file chooser is used to select
+                 folders rather than files.
+ **/
 gboolean
-gtk_file_chooser_get_directory_mode (GtkFileChooser *chooser)
+gtk_file_chooser_get_folder_mode (GtkFileChooser *chooser)
 {
-  gboolean directory_mode;
+  gboolean folder_mode;
   
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
 
-  g_object_get (chooser, "directory_mode", &directory_mode, NULL);
+  g_object_get (chooser, "folder_mode", &folder_mode, NULL);
 
-  return directory_mode;
+  return folder_mode;
 }
 
+/**
+ * gtk_file_chooser_set_local_only:
+ * @chooser: a #GtkFileChooser
+ * @local_only: %TRUE if only local files can be selected
+ * 
+ * Sets whether only local files can be selected in the
+ * file selector. If @local_only is %TRUE (the default),
+ * then the selected file are files are guaranteed to be
+ * accessible through the operating systems native file
+ * file system and therefore the application only
+ * needs to worry about the filename functions in
+ * #GtkFileChooser, like gtk_file_chooser_get_filename(),
+ * rather than the URI functions like
+ * gtk_file_chooser_get_uri(),
+ **/
 void
 gtk_file_chooser_set_local_only (GtkFileChooser *chooser,
 				 gboolean        local_only)
@@ -182,6 +219,15 @@ gtk_file_chooser_set_local_only (GtkFileChooser *chooser,
   g_object_set (chooser, "local_only", local_only, NULL);
 }
 
+/**
+ * gtk_file_chooser_get_local_only:
+ * @chooser: a #GtkFileChoosre
+ * 
+ * Gets whether only local files can be selected in the
+ * file selector. See gtk_file_chooser_set_local_only()
+ * 
+ * Return value: %TRUE if only local files can be selected.
+ **/
 gboolean
 gtk_file_chooser_get_local_only (GtkFileChooser *chooser)
 {
@@ -194,6 +240,16 @@ gtk_file_chooser_get_local_only (GtkFileChooser *chooser)
   return local_only;
 }
 
+/**
+ * gtk_file_chooser_set_select_multiple:
+ * @chooser: a #GtkFileChooser
+ * @select_multiple: %TRUE if multiple files can be selected.
+ * 
+ * Sets whether multiple files can be selected in the file
+ * selector. If the file selector if in folder mode (see
+ * gtk_file_selector_set_folder_mode()) then only one folder
+ * can be selected, without regard to this setting.
+ **/
 void
 gtk_file_chooser_set_select_multiple (GtkFileChooser *chooser,
 				      gboolean        select_multiple)
@@ -203,6 +259,15 @@ gtk_file_chooser_set_select_multiple (GtkFileChooser *chooser,
   g_object_set (chooser, "select_multiple", select_multiple, NULL);
 }
 
+/**
+ * gtk_file_chooser_get_select_multiple:
+ * @chooser: a #GtkFileChooser
+ * 
+ * Gets whether multiple files can be selected in the file
+ * selector. See gtk_file_chooser_set_select_multiple().
+ * 
+ * Return value: %TRUE if multiple files can be selected.
+ **/
 gboolean
 gtk_file_chooser_get_select_multiple (GtkFileChooser *chooser)
 {
@@ -215,6 +280,18 @@ gtk_file_chooser_get_select_multiple (GtkFileChooser *chooser)
   return select_multiple;
 }
 
+/**
+ * gtk_file_chooser_get_filename:
+ * @chooser: a #GtkFileChooser
+ * 
+ * Gets the filename for the currently selected file in
+ * the file selector. If multiple files are selected,
+ * one of the filenames will be returned at random.
+ * 
+ * Return value: The currently selected filename, or %NULL
+ *  if no file is selected, or the selected file can't
+ *  be represented with a local filename.
+ **/
 gchar *
 gtk_file_chooser_get_filename (GtkFileChooser *chooser)
 {

@@ -46,7 +46,8 @@ typedef enum {
   GTK_FILE_INFO_MIME_TYPE         = 1 << 3,
   GTK_FILE_INFO_MODIFICATION_TIME = 1 << 4,
   GTK_FILE_INFO_SIZE              = 1 << 5,
-  GTK_FILE_INFO_ICON              = 1 << 6
+  GTK_FILE_INFO_ICON              = 1 << 6,
+  GTK_FILE_INFO_ALL               = (1 << 7) - 1
 } GtkFileInfoType;
 
 /* GError enumeration for GtkFileSystem

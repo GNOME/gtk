@@ -169,6 +169,9 @@ completion_idle_callback (GtkFileChooserEntry *chooser_entry)
 
   chooser_entry->completion_idle = NULL;
 
+  if (strcmp (chooser_entry->file_part, "") == 0)
+    return FALSE;
+
   if (!chooser_entry->current_folder &&
       chooser_entry->file_system &&
       chooser_entry->current_folder_path)
@@ -425,6 +428,7 @@ _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
     gtk_file_path_free (chooser_entry->base_folder);
 
   chooser_entry->base_folder = gtk_file_path_copy (path);
+  gtk_file_chooser_entry_changed (GTK_EDITABLE (chooser_entry));
 }
 
 /**
