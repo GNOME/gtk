@@ -1,3 +1,14 @@
+2001-10-04  Havoc Pennington  <hp@pobox.com>
+
+        Fix #56586
+	
+	* gtk/gtksettings.c (gtk_settings_class_init): move the F10
+	accelerator setting here...
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_class_init): ...from over here,
+	because we try to use it when a menu bar hasn't necessarily been 
+	initialized.
+
 2001-10-03  Havoc Pennington  <hp@redhat.com>
 
 	* tests/testtextbuffer.c (logical_motion_tests): fix test case, 

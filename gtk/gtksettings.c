@@ -28,7 +28,8 @@ enum {
   PROP_CURSOR_BLINK_TIME,
   PROP_SPLIT_CURSOR,
   PROP_THEME_NAME,
-  PROP_KEY_THEME_NAME
+  PROP_KEY_THEME_NAME,
+  PROP_MENU_BAR_ACCEL
 };
 
 
@@ -187,7 +188,17 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								  NULL,
 								  G_PARAM_READWRITE),
                                              NULL);
-  g_assert (result == PROP_KEY_THEME_NAME);
+  g_assert (result == PROP_KEY_THEME_NAME);    
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_string ("gtk-menu-bar-accel",
+                                                                  _("Menu bar accelerator"),
+                                                                  _("Keybinding to activate the menu bar"),
+                                                                  "F10",
+                                                                  G_PARAM_READWRITE),
+                                             NULL);
+
+  g_assert (result == PROP_MENU_BAR_ACCEL);
 }
 
 static void
