@@ -1,5 +1,7 @@
 2003-07-01  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkspinbutton.c (gtk_spin_button_set_digits): Improve docs.  (116364, Morten Welinder)
+
 	* tests/testgtk.c: Use GtkFontButton and GtkColorButton to bring up the corresponding 
 	dialogs.
 

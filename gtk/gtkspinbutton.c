@@ -1694,7 +1694,7 @@ gtk_spin_button_get_adjustment (GtkSpinButton *spin_button)
 /**
  * gtk_spin_button_set_digits:
  * @spin_button: a #GtkSpinButton
- * @digits: the number of digits to be displayed for the spin button's value
+ * @digits: the number of digits after the decimal point to be displayed for the spin button's value
  * 
  * Set the precision to be displayed by @spin_button. Up to 20 digit precision
  * is allowed.
