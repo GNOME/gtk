@@ -1,3 +1,11 @@
+Thu Jul  8 22:16:18 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkiconfactory.c (get_default_icons): 
+	* gtk/stock-icons/Makefile.am: Add stock file and 
+	directory icons in sizes 16 and 24. Do not add the stock ids
+	to the gtkstock.h, since they are only for internal use on the
+	2.4 branch.
+
 2004-07-08  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from HEAD:
