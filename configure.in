@@ -25,8 +25,8 @@ cflags_set=${CFLAGS+set}
 #
 GTK_MAJOR_VERSION=1
 GTK_MINOR_VERSION=1
-GTK_MICRO_VERSION=14
-GTK_INTERFACE_AGE=0
+GTK_MICRO_VERSION=15
+GTK_INTERFACE_AGE=1
 GTK_BINARY_AGE=1
 GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
 AC_SUBST(GTK_MAJOR_VERSION)
@@ -196,9 +196,9 @@ fi
 if test x$with_glib = x ; then 
   # Look for separately installed glib
 
-  AM_PATH_GLIB(1.1.14,,
+  AM_PATH_GLIB(1.1.15,,
     AC_MSG_ERROR([
-*** GLIB 1.1.14 or better is required. The latest version of GLIB
+*** GLIB 1.1.15 or better is required. The latest version of GLIB
 *** is always available from ftp://ftp.gtk.org.]),
     gmodule gthread)
 

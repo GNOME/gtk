@@ -46,10 +46,7 @@ EXTRA_DIST =	\
 	examples/list/list.c  \
 	examples/menu/Makefile  \
 	examples/menu/menu.c  \
-	examples/menu/menufactory.c  \
-	examples/menu/menufactory.h  \
-	examples/menu/mfmain.c  \
-	examples/menu/mfmain.h  \
+	examples/menu/itemfactory.c  \
 	examples/notebook/Makefile  \
 	examples/notebook/notebook.c  \
 	examples/packer/Makefile  \
