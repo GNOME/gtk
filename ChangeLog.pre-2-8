@@ -1,3 +1,12 @@
+2002-02-21  Matthias Clasen  <maclas@gmx.de>
+
+	* docs/tutorial/images/*.png: screenshots of examples.
+	
+	* docs/tutorial/gtk-tut.sgml: remove deprecated widgets, add
+	screenshots, fix chapters 1-4 for GTK+ 2.0. 
+
+	* demos/gtk-demo/Makefile.am (INCLUDES): add -DGDK_PIXBUF_DISABLE_DEPRECATED.
+
 Thu Feb 21 00:31:41 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkspinbutton.c: Many cleanups and fixes. Draw exclusively
