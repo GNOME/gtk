@@ -146,12 +146,16 @@ void
 _gdk_x11_events_init_screen (GdkScreen *screen)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
-  
+
+  /* Keep a flag to avoid extra notifies that we don't need
+   */
+  screen_x11->xsettings_in_init = TRUE;
   screen_x11->xsettings_client = xsettings_client_new (screen_x11->xdisplay,
 						       screen_x11->screen_num,
 						       gdk_xsettings_notify_cb,
 						       gdk_xsettings_watch_cb,
 						       screen);
+  screen_x11->xsettings_in_init = FALSE;
 }
 
 void
@@ -2212,8 +2216,12 @@ gdk_xsettings_notify_cb (const char       *name,
 {
   GdkEvent new_event;
   GdkScreen *screen = data;
+  GdkScreenX11 *screen_x11 = data;
   int i;
 
+  if (screen_x11->xsettings_in_init)
+    return;
+  
   new_event.type = GDK_SETTING;
   new_event.setting.window = gdk_screen_get_root_window (screen);
   new_event.setting.send_event = FALSE;
@@ -2226,6 +2234,7 @@ gdk_xsettings_notify_cb (const char       *name,
 	break;
       }
 
+  
   if (!new_event.setting.name)
     return;
   

@@ -1,3 +1,13 @@
+Thu Sep 19 16:39:29 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksettings.h (GTK_SETTINGS_GET_CLASS): Fix 
+	usage of compat GTK_TYPE_ macros without including
+	gtkobject.h.
+
+	* gdk/x11/gdkevents-x11.[ch]: Set a flag when initializing
+	to avoid having extra settings-notify events sent
+	when not needed.
+
 2002-09-17  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/stock-icons/stock_color_picker_25.png:

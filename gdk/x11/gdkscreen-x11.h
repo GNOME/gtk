@@ -71,6 +71,7 @@ struct _GdkScreenX11
   
   /* X settings */
   XSettingsClient *xsettings_client;
+  guint xsettings_in_init : 1;
   
   /* Xinerama */
   gint     num_monitors;

@@ -20,18 +20,16 @@
 
 #include	<gtk/gtkrc.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 
 /* -- type macros --- */
-#define GTK_TYPE_SETTINGS            (gtk_settings_get_type ())
-#define GTK_SETTINGS(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_SETTINGS, GtkSettings))
-#define GTK_SETTINGS_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_SETTINGS, GtkSettingsClass))
-#define GTK_IS_SETTINGS(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_SETTINGS))
-#define GTK_IS_SETTINGS_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SETTINGS))
-#define GTK_SETTINGS_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_SETTINGS, GtkSettingsClass))
+#define GTK_TYPE_SETTINGS             (gtk_settings_get_type ())
+#define GTK_SETTINGS(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SETTINGS, GtkSettings))
+#define GTK_SETTINGS_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_SETTINGS, GtkSettingsClass))
+#define GTK_IS_SETTINGS(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SETTINGS))
+#define GTK_IS_SETTINGS_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SETTINGS))
+#define GTK_SETTINGS_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SETTINGS, GtkSettingsClass))
 
 
 /* --- typedefs --- */
@@ -124,8 +122,6 @@ gboolean	    _gtk_settings_parse_convert       (GtkRcPropertyParser parser,
 						       GValue	          *dest_value);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GTK_SETTINGS_H__ */
