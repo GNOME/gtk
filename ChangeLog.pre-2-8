@@ -1,3 +1,13 @@
+2004-11-21  Hans Breuer  <hans@breuer.org>
+
+	* gdk/makefile.msc.in gtk/stock-icons/makefile.msc 
+	  gtk/makefile.msc.in demos/gtk-demo/makefile.msc.in : updated
+
+	* gdk/win32/gdkdrawable-win32.c : implement gdk_win32_draw_glyphs_transformed()
+	* gdk/win32/gdkgc-win32.c : implement _gdk_windowing_gc_get_foreground()
+
+	* demos/gtk-demo/rotated_text.c : use G_PI
+
 Sat Nov 20 15:13:51 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkpango.[ch]: Add GdkPangoRenderer, a subclass of 

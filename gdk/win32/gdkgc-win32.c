@@ -1,6 +1,7 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
- * Copyright (C) 1998-2002 Tor Lillqvist
+ * Copyright (C) 1998-2004 Tor Lillqvist
+ * Copyright (C) 2000-2004 Hans Breuer
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -1258,4 +1259,24 @@ _gdk_win32_gdkregion_to_hrgn (GdkRegion *region,
   g_free (rgndata);
 
   return (hrgn);
+}
+
+void
+_gdk_windowing_gc_get_foreground (GdkGC    *gc,
+				  GdkColor *color)
+{
+  GdkGCWin32 *win32_gc;
+  GdkColormap *cmap;
+  
+  g_return_if_fail (GDK_IS_GC_WIN32 (gc));
+
+  win32_gc = GDK_GC_WIN32 (gc);
+
+  color->pixel = win32_gc->foreground;
+  cmap = gdk_gc_get_colormap (gc);
+
+  if (cmap)
+    gdk_colormap_query_color (cmap, win32_gc->foreground, color);
+  else
+    g_warning ("No colormap in _gdk_windowing_gc_get_foreground");
 }

@@ -52,6 +52,7 @@ DEMOS = \
 	menus.c		\
 	panes.c		\
 	pixbufs.c		\
+	rotated_text.c	\
 	sizegroup.c	\
 	stock_browser.c	\
 	textview.c	\
@@ -80,6 +81,7 @@ OBJECTS = \
 	menus.obj		\
 	panes.obj		\
 	pixbufs.obj	\
+	rotated_text.obj \
 	sizegroup.obj	\
 	stock_browser.obj	\
 	textview.obj	\

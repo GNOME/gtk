@@ -68,7 +68,7 @@ rotated_text_expose_event (GtkWidget      *widget,
       double angle = (360. * i) / N_WORDS;
 
       /* Gradient from red at angle == 60 to blue at angle == 300 */
-      color.red   = 65535 * (1 + cos ((angle - 60) * M_PI / 180.)) / 2;
+      color.red   = 65535 * (1 + cos ((angle - 60) * G_PI / 180.)) / 2;
       color.green = 0;
       color.blue  = 65535  - color.red;
     

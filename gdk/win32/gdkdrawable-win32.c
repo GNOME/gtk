@@ -1,6 +1,7 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
- * Copyright (C) 1998-2002 Tor Lillqvist
+ * Copyright (C) 1998-2004 Tor Lillqvist
+ * Copyright (C) 2001-2004 Hans Breuer
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -105,6 +106,13 @@ static void gdk_win32_draw_glyphs    (GdkDrawable      *drawable,
 				      gint              x,
 				      gint              y,
 				      PangoGlyphString *glyphs);
+static void gdk_win32_draw_glyphs_transformed (GdkDrawable      *drawable,
+					     GdkGC            *gc,
+					     PangoMatrix      *matrix,
+					     PangoFont        *font,
+					     gint              x,
+					     gint              y,
+					     PangoGlyphString *glyphs);
 static void gdk_win32_draw_image     (GdkDrawable     *drawable,
 				      GdkGC           *gc,
 				      GdkImage        *image,
@@ -181,6 +189,7 @@ gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
   drawable_class->draw_segments = gdk_win32_draw_segments;
   drawable_class->draw_lines = gdk_win32_draw_lines;
   drawable_class->draw_glyphs = gdk_win32_draw_glyphs;
+  drawable_class->draw_glyphs_transformed = gdk_win32_draw_glyphs_transformed;
   drawable_class->draw_image = gdk_win32_draw_image;
   
   drawable_class->set_colormap = gdk_win32_set_colormap;
@@ -1440,6 +1449,31 @@ draw_glyphs (GdkGCWin32 *gcwin32,
 }
 
 static void
+draw_glyphs_transformed (GdkGCWin32 *gcwin32,
+	                   HDC         hdc,
+	                   gint        x_offset,
+	                   gint        y_offset,
+	                   va_list     args)
+{
+  PangoFont *font;
+  gint x;
+  gint y;
+  PangoGlyphString *glyphs;
+  PangoMatrix *matrix;
+
+  matrix = va_arg(args, PangoMatrix *);
+  font = va_arg (args, PangoFont *);
+  x = va_arg (args, gint);
+  y = va_arg (args, gint);
+  glyphs = va_arg (args, PangoGlyphString *);
+
+  x -= x_offset;
+  y -= y_offset;
+
+  pango_win32_render_transformed (hdc, matrix, font, glyphs, x, y);
+}
+
+static void
 gdk_win32_draw_glyphs (GdkDrawable      *drawable,
 		       GdkGC            *gc,
 		       PangoFont        *font,
@@ -1461,6 +1495,47 @@ gdk_win32_draw_glyphs (GdkDrawable      *drawable,
   
   generic_draw (drawable, gc, GDK_GC_FOREGROUND|GDK_GC_FONT,
 		draw_glyphs, region, font, x, y, glyphs);
+
+  gdk_region_destroy (region);
+}
+
+static void 
+gdk_win32_draw_glyphs_transformed (GdkDrawable      *drawable,
+					     GdkGC            *gc,
+					     PangoMatrix      *matrix,
+					     PangoFont        *font,
+					     gint              x,
+					     gint              y,
+					     PangoGlyphString *glyphs)
+{
+  GdkRectangle bounds;
+  GdkRegion *region;
+  PangoRectangle ink_rect;
+
+  pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
+
+  bounds.x = x + PANGO_PIXELS (ink_rect.x) - 1;
+  bounds.y = y + PANGO_PIXELS (ink_rect.y) - 1;
+  bounds.width = PANGO_PIXELS (ink_rect.width) + 2;
+  bounds.height = PANGO_PIXELS (ink_rect.height) + 2;
+  region = gdk_region_rectangle (&bounds);
+
+  if (matrix)
+    {
+      /* transform region */
+      bounds.x = bounds.x * matrix->xx + bounds.y * matrix->xy + matrix->x0;
+      bounds.y = bounds.x * matrix->yx + bounds.y * matrix->yy + matrix->x0;
+      bounds.width  = bounds.width  * matrix->xx + bounds.height * matrix->xy;
+      bounds.height = bounds.height * matrix->yx + bounds.width  * matrix->xy;
+ 
+      generic_draw (drawable, gc, GDK_GC_FOREGROUND|GDK_GC_FONT,
+		    draw_glyphs_transformed, region, matrix, font, x, y, glyphs);
+    }
+  else
+    { 
+       generic_draw (drawable, gc, GDK_GC_FOREGROUND|GDK_GC_FONT,
+		    draw_glyphs, region, font, x/PANGO_SCALE, y/PANGO_SCALE, glyphs);
+    }
 
   gdk_region_destroy (region);
 }
