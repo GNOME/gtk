@@ -118,6 +118,12 @@ struct _GtkWindowGeometryInfo
    * we sent the last configure request.
    */
   guint          position_constraints_changed : 1;
+
+  /* if true, default_width, height come from gtk_window_parse_geometry,
+   * and thus should be multiplied by the increments and affect the
+   * geometry widget only
+   */
+  guint          default_is_geometry : 1;
   
   GtkWindowLastGeometryInfo last;
 };
@@ -220,7 +226,8 @@ static void     gtk_window_set_default_size_internal (GtkWindow    *window,
                                                       gboolean      change_width,
                                                       gint          width,
                                                       gboolean      change_height,
-                                                      gint          height);
+                                                      gint          height,
+						      gboolean      is_geometry);
 
 static void     gtk_window_realize_icon               (GtkWindow    *window);
 static void     gtk_window_unrealize_icon             (GtkWindow    *window);
@@ -675,12 +682,12 @@ gtk_window_set_property (GObject      *object,
     case PROP_DEFAULT_WIDTH:
       gtk_window_set_default_size_internal (window,
                                             TRUE, g_value_get_int (value),
-                                            FALSE, -1);
+                                            FALSE, -1, FALSE);
       break;
     case PROP_DEFAULT_HEIGHT:
       gtk_window_set_default_size_internal (window,
                                             FALSE, -1,
-                                            TRUE, g_value_get_int (value));
+                                            TRUE, g_value_get_int (value), FALSE);
       break;
     case PROP_DESTROY_WITH_PARENT:
       gtk_window_set_destroy_with_parent (window, g_value_get_boolean (value));
@@ -1755,6 +1762,7 @@ gtk_window_get_geometry_info (GtkWindow *window,
       info->initial_x = 0;
       info->initial_y = 0;
       info->initial_pos_set = FALSE;
+      info->default_is_geometry = FALSE;
       info->position_constraints_changed = FALSE;
       info->last.configure_request.x = 0;
       info->last.configure_request.y = 0;
@@ -2340,7 +2348,8 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
                                       gboolean      change_width,
                                       gint          width,
                                       gboolean      change_height,
-                                      gint          height)
+                                      gint          height,
+				      gboolean      is_geometry)
 {
   GtkWindowGeometryInfo *info;
 
@@ -2350,6 +2359,8 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
   info = gtk_window_get_geometry_info (window, TRUE);
 
   g_object_freeze_notify (G_OBJECT (window));
+
+  info->default_is_geometry = is_geometry != FALSE;
 
   if (change_width)
     {
@@ -2426,7 +2437,7 @@ gtk_window_set_default_size (GtkWindow   *window,
   g_return_if_fail (width >= -1);
   g_return_if_fail (height >= -1);
 
-  gtk_window_set_default_size_internal (window, TRUE, width, TRUE, height);
+  gtk_window_set_default_size_internal (window, TRUE, width, TRUE, height, FALSE);
 }
 
 /**
@@ -3875,11 +3886,41 @@ gtk_window_compute_configure_request_size (GtkWindow *window,
 
        if (info)
          {
-           if (info->default_width > 0)
-             *width = info->default_width;
-           
-           if (info->default_height > 0)
-             *height = info->default_height;
+	   gint base_width = 0;
+	   gint base_height = 0;
+	   gint width_inc = 1;
+	   gint height_inc = 1;
+	   
+	   if (info->default_is_geometry &&
+	       (info->default_width > 0 || info->default_height > 0))
+	     {
+	       GdkGeometry geometry;
+	       guint flags;
+	       
+	       gtk_window_compute_hints (window, &geometry, &flags);
+
+	       if (flags & GDK_HINT_BASE_SIZE)
+		 {
+		   base_width = geometry.base_width;
+		   base_height = geometry.base_height;
+		 }
+	       else if (flags & GDK_HINT_MIN_SIZE)
+		 {
+		   base_width = geometry.min_width;
+		   base_height = geometry.min_height;
+		 }
+	       if (flags & GDK_HINT_RESIZE_INC)
+		 {
+		   width_inc = geometry.width_inc;
+		   height_inc = geometry.height_inc;
+		 }
+	     }
+	     
+	   if (info->default_width > 0)
+	     *width = info->default_width * width_inc + base_width;
+	   
+	   if (info->default_height > 0)
+	     *height = info->default_height * height_inc + base_height;
          }
     }
   else
@@ -5602,14 +5643,7 @@ gtk_window_parse_geometry (GtkWindow   *window,
   size_set = FALSE;
   if ((result & WidthValue) || (result & HeightValue))
     {
-      GtkWindowGeometryInfo *info;
-      info = gtk_window_get_geometry_info (window, FALSE);
-      if (info && info->mask & GDK_HINT_RESIZE_INC)
-        {
-          w *= info->geometry.width_inc;
-          h *= info->geometry.height_inc;
-        }
-      gtk_window_set_default_size (window, w, h);
+      gtk_window_set_default_size_internal (window, TRUE, w, TRUE, h, TRUE);
       size_set = TRUE;
     }
 

@@ -1,3 +1,14 @@
+Sun Mar  3 18:47:13 2002  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtkwindow.c (gtk_window_parse_geometry): Fix
+	to properly take the default window into account by
+	setting a flag and in gtk_window_compute_configure_request_size ()
+	multiplying by the increments and adding in the base
+	size. (#72393)
+
+	* tests/testgtk.c (create_gridded_geometry): Add a
+	test for gridded geometry and for gtk_window_parse_geometry().
+
 2002-03-04  Hans Breuer  <hans@breuer.org>
 
 	* gtk/makefile.msc.in : don't build gtk.defs anymore
