@@ -1,3 +1,10 @@
+2001-06-13  Alexander Larsson  <alla@lysator.liu.se>
+
+	* gdk/linux-fb/gdkgc-fb.c (gdk_gc_copy):
+	Deep copy dash_list too.
+	(_gdk_fb_gc_new): Set default cap_style before
+	setting values.
+
 2001-06-12  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gdk/linux-fb/gdkkeyboard-fb.c (gdk_keymap_get_default,

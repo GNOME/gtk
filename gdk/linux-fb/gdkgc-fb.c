@@ -75,7 +75,7 @@ _gdk_fb_gc_new (GdkDrawable      *drawable,
 {
   GdkGC *gc;
   GdkGCFBData *private;
-  
+
   gc = GDK_GC (g_object_new (gdk_gc_fb_get_type (), NULL));
 
   private = (GdkGCFBData *)gc;
@@ -86,11 +86,11 @@ _gdk_fb_gc_new (GdkDrawable      *drawable,
     private->values.foreground.green =
     private->values.foreground.blue = 65535;
 
+  private->values.cap_style = GDK_CAP_BUTT;
+
   _gdk_fb_gc_calc_state (gc, _GDK_FB_GC_DEPTH);
 
   gdk_fb_gc_set_values (gc, values, values_mask);
-
-  private->values.cap_style = GDK_CAP_BUTT;
   return gc;
 }
 
@@ -379,33 +379,46 @@ void
 gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
 {
   GdkGCFBData *dst_private;
+  GdkGCFBData *src_private;
 
+  src_private = GDK_GC_FBDATA (dst_gc);
   dst_private = GDK_GC_FBDATA (dst_gc);
 
   g_return_if_fail (dst_gc != NULL);
   g_return_if_fail (src_gc != NULL);
 
   if (dst_private->clip_region)
-    gdk_region_destroy(dst_private->clip_region);
+    gdk_region_destroy (dst_private->clip_region);
 
   if (dst_private->values_mask & GDK_GC_FONT)
-    gdk_font_unref(dst_private->values.font);
+    gdk_font_unref (dst_private->values.font);
   if (dst_private->values_mask & GDK_GC_TILE)
-    gdk_pixmap_unref(dst_private->values.tile);
+    gdk_pixmap_unref (dst_private->values.tile);
   if (dst_private->values_mask & GDK_GC_STIPPLE)
-    gdk_pixmap_unref(dst_private->values.stipple);
+    gdk_pixmap_unref (dst_private->values.stipple);
   if (dst_private->values_mask & GDK_GC_CLIP_MASK)
-    gdk_pixmap_unref(dst_private->values.clip_mask);
+    gdk_pixmap_unref (dst_private->values.clip_mask);
 
-  *dst_private = *GDK_GC_FBDATA (src_gc);
+  g_free (dst_private->dash_list);
+
+  *dst_private = *src_private;
   if (dst_private->values_mask & GDK_GC_FONT)
-    gdk_font_ref(dst_private->values.font);
+    gdk_font_ref (dst_private->values.font);
   if (dst_private->values_mask & GDK_GC_TILE)
-    gdk_pixmap_ref(dst_private->values.tile);
+    gdk_pixmap_ref (dst_private->values.tile);
   if (dst_private->values_mask & GDK_GC_STIPPLE)
-    gdk_pixmap_ref(dst_private->values.stipple);
+    gdk_pixmap_ref (dst_private->values.stipple);
   if (dst_private->values_mask & GDK_GC_CLIP_MASK)
-    gdk_pixmap_ref(dst_private->values.clip_mask);
+    gdk_pixmap_ref (dst_private->values.clip_mask);
+  
   if (dst_private->clip_region)
-    dst_private->clip_region = gdk_region_copy(dst_private->clip_region);
+    dst_private->clip_region = gdk_region_copy (dst_private->clip_region);
+  
+  if (dst_private->dash_list)
+    {
+      dst_private->dash_list = g_malloc (dst_private->dash_list_len);
+      memcpy (dst_private->dash_list,
+	      src_private->dash_list,
+	      dst_private->dash_list_len);
+    }
 }
