@@ -405,11 +405,11 @@ gtk_handle_box_realize (GtkWidget *widget)
   attributes.width = widget->allocation.width;
   attributes.height = widget->allocation.height;
   attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.event_mask |= (gtk_widget_get_events (widget) |
-			    GDK_EXPOSURE_MASK |
-			    GDK_BUTTON1_MOTION_MASK |
-			    GDK_POINTER_MOTION_HINT_MASK |
-			    GDK_BUTTON_PRESS_MASK |
+  attributes.event_mask = (gtk_widget_get_events (widget) |
+			   GDK_EXPOSURE_MASK |
+			   GDK_BUTTON1_MOTION_MASK |
+			   GDK_POINTER_MOTION_HINT_MASK |
+			   GDK_BUTTON_PRESS_MASK |
 			    GDK_BUTTON_RELEASE_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
   hb->bin_window = gdk_window_new (widget->window, &attributes, attributes_mask);
@@ -470,7 +470,7 @@ gtk_handle_box_style_set (GtkWidget *widget,
       !GTK_WIDGET_NO_WINDOW (widget))
     {
       gtk_style_set_background (widget->style, widget->window,
-widget->state);
+				widget->state);
       gtk_style_set_background (widget->style, hb->bin_window, widget->state);
       gtk_style_set_background (widget->style, hb->float_window, widget->state);
     }

@@ -1,3 +1,7 @@
+Wed Feb 27 23:02:55 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_realize): minor code cleanup
+
 Wed Feb 27 14:58:12 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenubar.c (gtk_menu_bar_size_request/allocate): 
