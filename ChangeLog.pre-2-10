@@ -1,3 +1,7 @@
+1999-10-01  Kjartan Maraas  <kmaraas@online.no>
+
+	* configure.in: Added "uk" to ALL_LINGUAS.
+
 Thu Sep 30 13:55:25 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/testgtk.c (destroy_idle_test): Rename idle to 
