@@ -125,7 +125,7 @@ static void        gtk_rc_parse_default_files        (GtkRcContext    *context);
 static void        gtk_rc_parse_named                (GtkRcContext    *context,
 						      const gchar     *name,
 						      const gchar     *type);
-static void        gtk_rc_parse_file                 (GtkRcContext    *context,
+static void        gtk_rc_context_parse_file         (GtkRcContext    *context,
 						      const gchar     *filename,
 						      gint             priority,
                                                       gboolean         reload);
@@ -288,6 +288,14 @@ static gchar *gtk_rc_default_files[GTK_RC_MAX_DEFAULT_FILES];
  * these are implicitely added to the end of PIXMAP_PATHS
  */
 static GSList *rc_dir_stack = NULL;
+
+/* RC files and strings that are parsed for every context
+ */
+static GSList *global_rc_files = NULL;
+
+/* Keep list of all current RC contexts for convenience
+ */
+static GSList *rc_contexts;
 
 /* RC file handling */
 
@@ -570,6 +578,8 @@ gtk_rc_context_get (GtkSettings *settings)
       context->pixmap_path[0] = NULL;
 
       context->default_priority = GTK_PATH_PRIO_RC;
+
+      rc_contexts = g_slist_prepend (rc_contexts, settings->rc_context);
     }
 
   return settings->rc_context;
@@ -619,7 +629,7 @@ gtk_rc_parse_named (GtkRcContext *context,
 
   if (path)
     {
-      gtk_rc_parse_file (context, path, GTK_PATH_PRIO_THEME, FALSE);
+      gtk_rc_context_parse_file (context, path, GTK_PATH_PRIO_THEME, FALSE);
       g_free (path);
     }
 
@@ -632,7 +642,7 @@ gtk_rc_parse_default_files (GtkRcContext *context)
   gint i;
 
   for (i = 0; gtk_rc_default_files[i] != NULL; i++)
-    gtk_rc_parse_file (context, gtk_rc_default_files[i], GTK_PATH_PRIO_RC, FALSE);
+    gtk_rc_context_parse_file (context, gtk_rc_default_files[i], GTK_PATH_PRIO_RC, FALSE);
 }
 
 void
@@ -647,8 +657,6 @@ _gtk_rc_init (void)
       gtk_rc_add_initial_default_files ();
     }
   
-  gtk_rc_reparse_all_for_settings (gtk_settings_get_default (), TRUE);
-
   /* Default RC string */
   gtk_rc_parse_string ("style \"gtk-default-tooltips-style\" {\n"
 		       "  bg[NORMAL] = \"#ffffc0\"\n"
@@ -658,14 +666,18 @@ _gtk_rc_init (void)
 		       "widget \"gtk-tooltips*\" style : gtk \"gtk-default-tooltips-style\"\n");
 }
   
+static void
+gtk_rc_context_parse_string (GtkRcContext *context,
+			     const gchar  *rc_string)
+{
+  gtk_rc_parse_any (context, "-", -1, rc_string);
+}
+
 void
 gtk_rc_parse_string (const gchar *rc_string)
 {
   GtkRcFile *rc_file;
-  /* This is wrong; once we have meaningful multiple RC contexts, we need to parse the
-   * string in all contexts, and in fact, in future contexts as well.
-   */
-  GtkRcContext *context = gtk_rc_context_get (gtk_settings_get_default ());
+  GSList *tmp_list;
       
   g_return_if_fail (rc_string != NULL);
 
@@ -676,49 +688,59 @@ gtk_rc_parse_string (const gchar *rc_string)
   rc_file->mtime = 0;
   rc_file->reload = TRUE;
 
-  context->rc_files = g_slist_append (context->rc_files, rc_file);
+  global_rc_files = g_slist_append (global_rc_files, rc_file);
 
-  gtk_rc_parse_any (context, "-", -1, rc_string);
+  for (tmp_list = rc_contexts; tmp_list; tmp_list = tmp_list->next)
+    gtk_rc_context_parse_string (tmp_list->data, rc_string);
+}
+
+static GtkRcFile *
+add_to_rc_file_list (GSList     **rc_file_list,
+		     const char  *filename,
+		     gboolean     reload)
+{
+  GSList *tmp_list;
+  GtkRcFile *rc_file;
+  
+  tmp_list = *rc_file_list;
+  while (tmp_list)
+    {
+      rc_file = tmp_list->data;
+      if (!strcmp (rc_file->name, filename))
+	return rc_file;
+      
+      tmp_list = tmp_list->next;
+    }
+
+  rc_file = g_new (GtkRcFile, 1);
+  rc_file->is_string = FALSE;
+  rc_file->name = g_strdup (filename);
+  rc_file->canonical_name = NULL;
+  rc_file->mtime = 0;
+  rc_file->reload = reload;
+  
+  *rc_file_list = g_slist_append (*rc_file_list, rc_file);
+  
+  return rc_file;
 }
 
 static void
-gtk_rc_parse_one_file (GtkRcContext *context,
-		       const gchar  *filename,
-		       gint          priority,
-		       gboolean      reload)
+gtk_rc_context_parse_one_file (GtkRcContext *context,
+			       const gchar  *filename,
+			       gint          priority,
+			       gboolean      reload)
 {
-  GtkRcFile *rc_file = NULL;
+  GtkRcFile *rc_file;
   struct stat statbuf;
-  GSList *tmp_list;
   gint saved_priority;
 
   g_return_if_fail (filename != NULL);
 
   saved_priority = context->default_priority;
   context->default_priority = priority;
+
+  rc_file = add_to_rc_file_list (&context->rc_files, filename, reload);
   
-  tmp_list = context->rc_files;
-  while (tmp_list)
-    {
-      rc_file = tmp_list->data;
-      if (!strcmp (rc_file->name, filename))
-	break;
-      
-      tmp_list = tmp_list->next;
-    }
-
-  if (!tmp_list)
-    {
-      rc_file = g_new (GtkRcFile, 1);
-      rc_file->is_string = FALSE;
-      rc_file->name = g_strdup (filename);
-      rc_file->canonical_name = NULL;
-      rc_file->mtime = 0;
-      rc_file->reload = reload;
-
-      context->rc_files = g_slist_append (context->rc_files, rc_file);
-    }
-
   if (!rc_file->canonical_name)
     {
       /* Get the absolute pathname */
@@ -782,10 +804,10 @@ strchr_len (const gchar *str, gint len, char c)
 }
 
 static void
-gtk_rc_parse_file (GtkRcContext *context,
-		   const gchar  *filename,
-		   gint          priority,
-		   gboolean      reload)
+gtk_rc_context_parse_file (GtkRcContext *context,
+			   const gchar  *filename,
+			   gint          priority,
+			   gboolean      reload)
 {
   gchar *locale_suffixes[2];
   gint n_locale_suffixes = 0;
@@ -794,7 +816,7 @@ gtk_rc_parse_file (GtkRcContext *context,
   gint length, j;
   gboolean found = FALSE;
 
-  #ifdef G_OS_WIN32      
+#ifdef G_OS_WIN32      
   locale = g_win32_getlocale ();
 #else      
   locale = setlocale (LC_CTYPE, NULL);
@@ -824,7 +846,7 @@ gtk_rc_parse_file (GtkRcContext *context,
 	}
     }
   
-  gtk_rc_parse_one_file (context, filename, priority, reload);
+  gtk_rc_context_parse_one_file (context, filename, priority, reload);
   for (j = 0; j < n_locale_suffixes; j++)
     {
       if (!found)
@@ -832,7 +854,7 @@ gtk_rc_parse_file (GtkRcContext *context,
 	  gchar *name = g_strconcat (filename, ".", locale_suffixes[j], NULL);
 	  if (g_file_test (name, G_FILE_TEST_EXISTS))
 	    {
-	      gtk_rc_parse_one_file (context, name, priority, FALSE);
+	      gtk_rc_context_parse_one_file (context, name, priority, FALSE);
 	      found = TRUE;
 	    }
 	      
@@ -846,13 +868,14 @@ gtk_rc_parse_file (GtkRcContext *context,
 void
 gtk_rc_parse (const gchar *filename)
 {
+  GSList *tmp_list;
+  
   g_return_if_fail (filename != NULL);
 
-  /* This is wrong; once we have meaningful multiple RC contexts, we need to parse the
-   * file in all contexts, and in fact, in future contexts as well.
-   */
-  gtk_rc_parse_file (gtk_rc_context_get (gtk_settings_get_default ()),
-		     filename, GTK_PATH_PRIO_RC, TRUE);
+  add_to_rc_file_list (&global_rc_files, filename, TRUE);
+  
+  for (tmp_list = rc_contexts; tmp_list; tmp_list = tmp_list->next)
+    gtk_rc_context_parse_file (tmp_list->data, filename, GTK_PATH_PRIO_RC, TRUE);
 }
 
 /* Handling of RC styles */
@@ -1379,38 +1402,40 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
       
   if (force_load || mtime_modified)
     {
-      GSList *old_files;
-
       _gtk_binding_reset_parsed ();
       gtk_rc_clear_styles (context);
       g_object_freeze_notify (G_OBJECT (context->settings));
 
-      old_files = context->rc_files;
-      context->rc_files = NULL;
-
-      gtk_rc_parse_default_files (context);
-
-      tmp_list = old_files;
+      tmp_list = context->rc_files;
       while (tmp_list)
 	{
 	  rc_file = tmp_list->data;
-	  if (rc_file->reload)
-	    {
-	      if (rc_file->is_string)
-		gtk_rc_parse_string (rc_file->name);
-	      else
-		gtk_rc_parse_file (context, rc_file->name, GTK_PATH_PRIO_RC, TRUE);
-	    }
 
 	  if (rc_file->canonical_name != rc_file->name)
 	    g_free (rc_file->canonical_name);
 	  g_free (rc_file->name);
 	  g_free (rc_file);
-	  
+
 	  tmp_list = tmp_list->next;
 	}
 
-      g_slist_free (old_files);;
+      g_slist_free (context->rc_files);
+      context->rc_files = NULL;
+
+      gtk_rc_parse_default_files (context);
+
+      tmp_list = global_rc_files;
+      while (tmp_list)
+	{
+	  rc_file = tmp_list->data;
+
+	  if (rc_file->is_string)
+	    gtk_rc_context_parse_string (context, rc_file->name);
+	  else
+	    gtk_rc_context_parse_file (context, rc_file->name, GTK_PATH_PRIO_RC, FALSE);
+
+	  tmp_list = tmp_list->next;
+	}
 
       g_free (context->theme_name);
       g_free (context->key_theme_name);
@@ -1445,7 +1470,17 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
 gboolean
 gtk_rc_reparse_all (void)
 {
-  return gtk_rc_reparse_all_for_settings (gtk_settings_get_default (), FALSE);
+  GSList *tmp_list;
+  gboolean result = FALSE;
+
+  for (tmp_list = rc_contexts; tmp_list; tmp_list = tmp_list->next)
+    {
+      GtkRcContext *context = tmp_list->data;
+      if (gtk_rc_reparse_all_for_settings (context->settings, FALSE))
+	result = TRUE;
+    }
+
+  return result;
 }
 
 static GSList *
@@ -2242,7 +2277,7 @@ parse_include_file (GtkRcContext *context,
   
   if (g_path_is_absolute (filename))
     {
-      /* For abolute paths, we call gtk_rc_parse_file unconditionally. We
+      /* For abolute paths, we call gtk_rc_context_parse_file unconditionally. We
        * don't print an error in this case.
        */
       to_parse = g_strdup (filename);
@@ -2273,7 +2308,7 @@ parse_include_file (GtkRcContext *context,
 
   if (to_parse)
     {
-      gtk_rc_parse_file (context, to_parse, context->default_priority, FALSE);
+      gtk_rc_context_parse_file (context, to_parse, context->default_priority, FALSE);
       g_free (to_parse);
     }
   else

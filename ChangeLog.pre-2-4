@@ -1,3 +1,13 @@
+Wed Jun 19 19:30:45 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c: Keep a global list of strings and
+	RC files to reparse, make gtk_rc_parse_string(),
+	gtk_rc_parse() add to the list, and parse the
+	string or file in _all_ contexts.
+
+	* gtk/gtkrc.c (gtk_rc_reparse_all): Reparse all
+	contexts, not just the default context.
+
 Tue Jun 18 19:38:08 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkinput.c (_gdk_init_input_core): Set the
