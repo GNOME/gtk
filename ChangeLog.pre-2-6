@@ -1,3 +1,31 @@
+Sat Nov  1 14:59:27 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_row_activated): 
+	Change on activation, not selection change (temporary
+	workaround for #125955, needed for keynav, likely
+	the right UI anyways.)
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_select_func): 
+	Don't allow the separator node to be selected.
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_constructor):
+	Set the focus chain so that the entry gets focused first.
+	(Not really right after initial focusing, maybe we
+	should just have a gtk_file_chooser_focus_entry() that
+	we call from gtk_file_chooser_dialog on creation.)
+
+Sat Nov  1 12:41:04 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_unfullscreen): Fix a
+	residual call to gtk_window_get_private().
+
+Sat Nov  1 09:10:13 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.[ch]: Move above_initially, below_initially
+	into GtkWindowPrivate structure, fixing ABI breakage
+	on Win32. (Hans Breuer). Switch GtkWindowPrivate over
+	to instance-private-data.
+
 Fri Oct 31 02:43:34 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c (get_item_requisition): delete this function

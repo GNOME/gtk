@@ -187,8 +187,17 @@ static void filter_combo_changed       (GtkComboBox           *combo_box,
 					GtkFileChooserDefault *impl);
 static void tree_selection_changed     (GtkTreeSelection      *tree_selection,
 					GtkFileChooserDefault *impl);
-static void shortcuts_selection_changed (GtkTreeSelection      *tree_selection,
+
+static void     shortcuts_row_activated (GtkTreeView           *tree_view,
+					 GtkTreePath           *path,
+					 GtkTreeViewColumn     *column,
 					 GtkFileChooserDefault *impl);
+static gboolean shortcuts_select_func   (GtkTreeSelection      *selection,
+					 GtkTreeModel          *model,
+					 GtkTreePath           *path,
+					 gboolean               path_currentlny_selected,
+					 gpointer               data);
+
 static void list_selection_changed     (GtkTreeSelection      *tree_selection,
 					GtkFileChooserDefault *impl);
 static void list_row_activated         (GtkTreeView           *tree_view,
@@ -807,8 +816,12 @@ create_shortcuts_tree (GtkFileChooserDefault *impl)
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (impl->shortcuts_tree), FALSE);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->shortcuts_tree));
-  g_signal_connect (selection, "changed",
-		    G_CALLBACK (shortcuts_selection_changed), impl);
+  gtk_tree_selection_set_select_function (selection,
+					  shortcuts_select_func,
+					  impl, NULL);
+  
+  g_signal_connect (impl->shortcuts_tree, "row_activated",
+		    G_CALLBACK (shortcuts_row_activated), impl);
 
   gtk_container_add (GTK_CONTAINER (impl->shortcuts_scrollwin), impl->shortcuts_tree);
   gtk_widget_show (impl->shortcuts_tree);
@@ -977,10 +990,10 @@ gtk_file_chooser_default_constructor (GType                  type,
   GObject *object;
   GtkWidget *table;
   GtkWidget *hpaned;
+  GtkWidget *entry_widget;
+  GtkWidget *filter_widget;
   GtkWidget *widget;
-#if 0
   GList *focus_chain;
-#endif
   GtkWidget *hbox;
 
   object = parent_class->constructor (type,
@@ -1001,8 +1014,8 @@ gtk_file_chooser_default_constructor (GType                  type,
 
   /* Filter */
 
-  widget = create_filter (impl);
-  gtk_table_attach (GTK_TABLE (table), widget,
+  filter_widget = create_filter (impl);
+  gtk_table_attach (GTK_TABLE (table), filter_widget,
 		    0, 1,                   0, 1,
 		    GTK_EXPAND | GTK_FILL,  0,
 		    0,                      0);
@@ -1038,8 +1051,8 @@ gtk_file_chooser_default_constructor (GType                  type,
 
   /* Location/filename entry */
 
-  widget = create_filename_entry (impl);
-  gtk_table_attach (GTK_TABLE (table), widget,
+  entry_widget = create_filename_entry (impl);
+  gtk_table_attach (GTK_TABLE (table), entry_widget,
 		    0, 2,                   2, 3,
 		    GTK_EXPAND | GTK_FILL,  0,
 		    0,                      6);
@@ -1053,14 +1066,15 @@ gtk_file_chooser_default_constructor (GType                  type,
 		    0,                      0);
   /* Don't show preview frame initially */
 
-#if 0
-  focus_chain = g_list_append (NULL, impl->entry);
-  focus_chain = g_list_append (focus_chain, impl->tree);
-  focus_chain = g_list_append (focus_chain, impl->list);
-  gtk_container_set_focus_chain (GTK_CONTAINER (impl), focus_chain);
+  /* Make the entry the first widget in the focus chain
+   */
+  focus_chain = g_list_append (NULL, entry_widget);
+  focus_chain = g_list_append (focus_chain, filter_widget);
+  focus_chain = g_list_append (focus_chain, hpaned);
+  focus_chain = g_list_append (focus_chain, impl->preview_frame);
+  gtk_container_set_focus_chain (GTK_CONTAINER (table), focus_chain);
   g_list_free (focus_chain);
-#endif
-
+    
   gtk_widget_pop_composite_child ();
 
   return object;
@@ -2013,37 +2027,54 @@ tree_selection_changed (GtkTreeSelection      *selection,
   g_signal_emit_by_name (impl, "selection-changed", 0);
 }
 
-/* Callback used when the selection in the shortcuts list changes */
+/* Callback used when a row in the shortcuts list is activated */
 static void
-shortcuts_selection_changed (GtkTreeSelection      *selection,
-			     GtkFileChooserDefault *impl)
+shortcuts_row_activated (GtkTreeView           *tree_view,
+			 GtkTreePath           *path,
+			 GtkTreeViewColumn     *column,
+			 GtkFileChooserDefault *impl)
 {
   GtkTreeIter iter;
-  GtkFilePath *path;
-
-  if (impl->changing_folder)
+  GtkFilePath *model_path;
+  
+  if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->shortcuts_model), &iter, path))
     return;
 
   bookmarks_check_remove_sensitivity (impl);
 
   /* Set the current folder */
 
-  if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
-    return;
+  gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter, SHORTCUTS_COL_PATH, &model_path, -1);
 
-  gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter, SHORTCUTS_COL_PATH, &path, -1);
-
-  if (!path)
+  if (!model_path)
     {
-      /* We are on the bookmarks separator node, so unselect it */
-      shortcuts_select_folder (impl);
-      /* FIXME: how to make this row unselectable? */
+      /* We are on the bookmarks separator node, so do nothing */
       return;
     }
 
   impl->changing_folder = TRUE;
-  _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (impl), path);
+  _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (impl), model_path);
   impl->changing_folder = FALSE;
+}
+
+static gboolean
+shortcuts_select_func  (GtkTreeSelection  *selection,
+			GtkTreeModel      *model,
+			GtkTreePath       *path,
+			gboolean           path_currently_selected,
+			gpointer           data)
+{
+  GtkFileChooserDefault *impl = data;
+  GtkTreeIter iter;
+  GtkFilePath *model_path;
+
+  if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->shortcuts_model), &iter, path))
+    return FALSE;
+
+  gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter, SHORTCUTS_COL_PATH, &model_path, -1);
+
+  /* Don't allow the separator node to be selected */
+  return model_path != NULL;
 }
 
 static void
