@@ -1,3 +1,9 @@
+1998-12-31  Jeff Garzik  <jgarzik@pobox.com>
+
+	* gtk/gtklabel.c (gtk_label_split_text_wrapped):
+	word->space is now initialized correctly.
+	Reported by Chi-Deok Hwang <cdhwang@sr.hei.co.kr>.
+
 1998-12-30  Miguel de Icaza  <miguel@nuclecu.unam.mx>
 
 	* gtk/gtkmain.c (gtk_main_do_event): Fix memory leak.
