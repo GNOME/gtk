@@ -128,11 +128,11 @@ static gint  gtk_timeout_remove_from_list (GList               **list,
 					   guint                 tag, 
 					   gint                  remove_link);
 
-static gint  gtk_idle_compare		 (gpointer	      a, 
-					  gpointer	      b);
+static gint  gtk_idle_compare		 (g_const_pointer      a, 
+					  g_const_pointer      b);
 
-static gint  gtk_timeout_compare	 (gpointer	      a, 
-					  gpointer	      b);
+static gint  gtk_timeout_compare	 (g_const_pointer      a, 
+					  g_const_pointer      b);
 
 const guint gtk_major_version = GTK_MAJOR_VERSION;
 const guint gtk_minor_version = GTK_MINOR_VERSION;
@@ -997,9 +997,10 @@ gtk_timeout_remove (guint tag)
  * sure that we insert at the _end_ of the idles of this priority
  */
 static gint
-gtk_idle_compare (gpointer a, gpointer b)
+gtk_idle_compare (g_const_pointer a, g_const_pointer b)
 {
-  return (((GtkIdleFunction *)a)->priority < ((GtkIdleFunction *)b)->priority)
+  return (((const GtkIdleFunction *)a)->priority <
+	  ((const GtkIdleFunction *)b)->priority)
     ? -1 : 1;
 }
 
@@ -1365,10 +1366,10 @@ gtk_exit_func (void)
  * sure that we insert after timeouts of equal interval
  */
 static gint
-gtk_timeout_compare (gpointer a, gpointer b)
+gtk_timeout_compare (g_const_pointer a, g_const_pointer b)
 {
-  return (((GtkTimeoutFunction *)a)->interval < 
-	  ((GtkTimeoutFunction *)b)->interval)
+  return (((const GtkTimeoutFunction *)a)->interval < 
+	  ((const GtkTimeoutFunction *)b)->interval)
     ? -1 : 1;
 }
 

@@ -5,13 +5,13 @@
 
 /* our callback.
  * the data passed to this function is printed to stdout */
-void callback (GtkWidget *widget, gpointer *data)
+void callback (GtkWidget *widget, gpointer data)
 {
     g_print ("Hello again - %s was pressed\n", (char *) data);
 }
 
 /* this callback quits the program */
-void delete_event (GtkWidget *widget, GdkEvent *event, gpointer *data)
+void delete_event (GtkWidget *widget, GdkEvent *event, gpointer data)
 {
     gtk_main_quit ();
 }

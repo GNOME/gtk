@@ -10,7 +10,7 @@ void file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
     g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
 }
 
-void destroy (GtkWidget *widget, gpointer *data)
+void destroy (GtkWidget *widget, gpointer data)
 {
     gtk_main_quit ();
 }

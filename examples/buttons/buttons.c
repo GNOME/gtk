@@ -46,7 +46,7 @@ GtkWidget *xpm_label_box (GtkWidget *parent, gchar *xpm_filename, gchar *label_t
 }
 
 /* our usual callback function */
-void callback (GtkWidget *widget, gpointer *data)
+void callback (GtkWidget *widget, gpointer data)
 {
     g_print ("Hello again - %s was pressed\n", (char *) data);
 }

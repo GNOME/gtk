@@ -120,15 +120,6 @@ gtk_object_debug (void)
 
   g_print ("GTK-DEBUG: living objects count = %d\n", obj_count);
 }
-static guint
-gtk_object_pointer_hash (const gpointer v)
-{
-  gint i;
-
-  i = (gint) v;
-  
-  return i;
-}
 #endif	/* G_ENABLE_DEBUG */
 
 /****************************************************
@@ -215,7 +206,7 @@ gtk_object_init (GtkObject *object)
       obj_count++;
       
       if (!living_objs_ht)
-	living_objs_ht = g_hash_table_new (gtk_object_pointer_hash, NULL);
+	living_objs_ht = g_hash_table_new (g_direct_hash, NULL);
 
       g_hash_table_insert (living_objs_ht, object, object);
     }

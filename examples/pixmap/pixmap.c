@@ -31,14 +31,15 @@ static const char * xpm_data[] = {
 
 /* when invoked (via signal delete_event), terminates the application.
  */
-void close_application( GtkWidget *widget, GdkEvent *event, gpointer *data ) {
+void close_application( GtkWidget *widget, GdkEvent *event, gpointer data ) 
+{
     gtk_main_quit();
 }
 
 
 /* is invoked when the button is clicked.  It just prints a message.
  */
-void button_clicked( GtkWidget *widget, gpointer *data ) {
+void button_clicked( GtkWidget *widget, gpointer data ) {
     printf( "button clicked\n" );
 }
 

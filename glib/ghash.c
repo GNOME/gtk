@@ -145,8 +145,8 @@ g_hash_table_insert (GHashTable *hash_table,
 }
 
 void
-g_hash_table_remove (GHashTable *hash_table,
-		     gpointer    key)
+g_hash_table_remove (GHashTable        *hash_table,
+		     g_const_pointer    key)
 {
   GRealHashTable *rhash_table;
   GHashNode *node;
@@ -187,7 +187,7 @@ g_hash_table_remove (GHashTable *hash_table,
 
 gpointer
 g_hash_table_lookup (GHashTable     *hash_table,
-		     const gpointer  key)
+		     g_const_pointer key)
 {
   GRealHashTable *rhash_table;
   GHashNode *node;

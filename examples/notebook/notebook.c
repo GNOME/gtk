@@ -36,7 +36,7 @@ void remove_book (GtkButton *button, GtkNotebook *notebook)
     gtk_widget_draw(GTK_WIDGET(notebook), NULL);
 }
 
-void delete (GtkWidget *widget, GdkEvent *event, gpointer *data)
+void delete (GtkWidget *widget, GdkEvent *event, gpointer data)
 {
     gtk_main_quit ();
 }

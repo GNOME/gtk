@@ -401,7 +401,7 @@ g_scanner_foreach_internal (gpointer  key,
   register gpointer *d;
 
   d = user_data;
-  func = d[0];
+  func = (GHFunc)d[0];
   func_data = d[1];
   hash_val = value;
 
@@ -417,7 +417,7 @@ g_scanner_foreach_symbol (GScanner       *scanner,
 
   g_return_if_fail (scanner != NULL);
 
-  d[0] = func;
+  d[0] = (gpointer)func;
   d[1] = func_data;
 
   g_hash_table_foreach (scanner->symbol_table, g_scanner_foreach_internal, d);

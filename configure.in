@@ -140,8 +140,8 @@ fi
 saved_cflags="$CFLAGS"
 saved_ldflags="$LDFLAGS"
 
-CFLAGS="$X_CFLAGS"
-LDFLAGS="$X_LDFLAGS $X_LIBS"
+CFLAGS="$CFLAGS $X_CFLAGS"
+LDFLAGS="$LDFLAGS $X_LDFLAGS $X_LIBS"
 
 if test "x$no_x" = "xyes"; then 
   AC_MSG_ERROR([
@@ -170,7 +170,7 @@ fi
 
 AC_CHECK_LIB(Xext, XShapeCombineMask,
       if test -z "`echo $x_libs | grep "\-lXext" 2> /dev/null`"; then
-           $x_libs="-lXext $x_libs"
+           x_libs="-lXext $x_libs"
       fi
       AC_DEFINE(HAVE_SHAPE_EXT),
       ,

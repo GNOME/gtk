@@ -149,13 +149,13 @@ gdk_font_unref (GdkFont *font)
 }
 
 gint
-gdk_font_id (GdkFont *font)
+gdk_font_id (const GdkFont *font)
 {
-  GdkFontPrivate *font_private;
+  const GdkFontPrivate *font_private;
 
   g_return_val_if_fail (font != NULL, 0);
 
-  font_private = (GdkFontPrivate*) font;
+  font_private = (const GdkFontPrivate*) font;
 
   if (font->type == GDK_FONT_FONT)
     {
@@ -168,17 +168,17 @@ gdk_font_id (GdkFont *font)
 }
 
 gint
-gdk_font_equal (GdkFont *fonta,
-                GdkFont *fontb)
+gdk_font_equal (const GdkFont *fonta,
+                const GdkFont *fontb)
 {
-  GdkFontPrivate *privatea;
-  GdkFontPrivate *privateb;
+  const GdkFontPrivate *privatea;
+  const GdkFontPrivate *privateb;
 
   g_return_val_if_fail (fonta != NULL, FALSE);
   g_return_val_if_fail (fontb != NULL, FALSE);
 
-  privatea = (GdkFontPrivate*) fonta;
-  privateb = (GdkFontPrivate*) fontb;
+  privatea = (const GdkFontPrivate*) fonta;
+  privateb = (const GdkFontPrivate*) fontb;
 
   if (fonta->type == GDK_FONT_FONT && fontb->type == GDK_FONT_FONT)
     {

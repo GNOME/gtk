@@ -33,31 +33,31 @@ my_hash_callback (gpointer key,
 }
 
 guint
-my_hash (gpointer key)
+my_hash (g_const_pointer key)
 {
-  return (guint) *((gint*) key);
+  return (guint) *((const gint*) key);
 }
 
 gint
-my_hash_compare (gpointer a,
-		 gpointer b)
+my_hash_compare (g_const_pointer a,
+		 g_const_pointer b)
 {
-  return *((gint*) a) == *((gint*) b);
+  return *((const gint*) a) == *((const gint*) b);
 }
 
 gint 
-my_list_compare_one (gpointer a, gpointer b)
+my_list_compare_one (g_const_pointer a, g_const_pointer b)
 {
-  gint one = *((gint*)a);
-  gint two = *((gint*)b);
+  gint one = *((const gint*)a);
+  gint two = *((const gint*)b);
   return one-two;
 }
 
 gint 
-my_list_compare_two (gpointer a, gpointer b)
+my_list_compare_two (g_const_pointer a, g_const_pointer b)
 {
-  gint one = *((gint*)a);
-  gint two = *((gint*)b);
+  gint one = *((const gint*)a);
+  gint two = *((const gint*)b);
   return two-one;
 }
 
@@ -69,11 +69,11 @@ my_list_print (gpointer a, gpointer b)
 }; */
 
 gint
-my_compare (gpointer a,
-	    gpointer b)
+my_compare (g_const_pointer a,
+	    g_const_pointer b)
 {
-  char *cha = a;
-  char *chb = b;
+  const char *cha = a;
+  const char *chb = b;
 
   return *cha - *chb;
 }

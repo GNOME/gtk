@@ -33,7 +33,7 @@ void progress_r (void)
     pstat = FALSE;  
 }
 
-void destroy (GtkWidget *widget, GdkEvent *event, gpointer *data)
+void destroy (GtkWidget *widget, GdkEvent *event, gpointer data)
 {
     gtk_main_quit ();
 }

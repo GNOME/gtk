@@ -7,7 +7,7 @@
 
 GtkWidget *status_bar;
 
-void push_item (GtkWidget *widget, gpointer *data)
+void push_item (GtkWidget *widget, gpointer data)
 {
   static int count = 1;
   char buff[20];
@@ -18,7 +18,7 @@ void push_item (GtkWidget *widget, gpointer *data)
   return;
 }
 
-void pop_item (GtkWidget *widget, gpointer *data)
+void pop_item (GtkWidget *widget, gpointer data)
 {
   gtk_statusbar_pop( GTK_STATUSBAR(status_bar), (guint) &data );
   return;

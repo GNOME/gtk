@@ -1,3 +1,21 @@
+Tue Jun  9 17:47:33 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* glib.h: Remove #error - HP/UX.
+
+Sat May 23 19:00:01 1998  Owen Taylor  <otaylor@gtk.org>
+  [ Combination of:
+     gtk-rrh-980412-0.patch (Raja R Harinath <harinath@cs.umn.edu>)
+     gtk-jbuhler-980516-0 (Jeremy Buhler <jbuhler@cs.washington.edu>) ]
+	
+	* glib.h ghash.c gstring.c gdataset.c gutils.c:
+	- Added new typedef g_const_pointer; expunged all incorrect
+	  uses of 'const gpointer'.
+	- Fixed up warnings that that created,
+	- Changed GHashFunc and GCompareFunc to take g_const_pointer
+	  arguments. (Necessary, but will cause warnings in existing
+	  code until fixed)
+	- Added other new const in harmless positions.
+
 Mon Jun  8 01:06:47 1998  Tim Janik  <timj@gtk.org>
 
 	* glib.h: added enum-helper macros for code generation.

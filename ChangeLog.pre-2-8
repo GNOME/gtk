@@ -1,3 +1,22 @@
+Tue Jun  9 18:44:57 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkobject.c: Removed g_object_pointer_hash, which
+	was just g_direct_hash.
+
+Mon May 25 19:54:20 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* configure.in: x_libs=, not $x_libs=. Enough said.
+          (Case only hit for --disable-xshm)
+	
+Mon May 25 12:08:14 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* configure.in (LDFLAGS): Add to $CFLAGS and $LDFLAGS
+	  when testing for X libraries, don't replace them. Because
+	  the user might have specified the path to the X libraries
+	  themself before running configure.
+
+	* examples/**.c: Changed all gpointer * to gpointer
+	
 1998-06-09  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkhandlebox.h (struct _GtkHandleBox): Removed the
@@ -265,7 +284,7 @@ Sun May 24 12:11:38 BST 1998  Tony Gale  <gale@gtk.org>
 
 Sat May 23 21:54:05 1998  Owen Taylor  <otaylor@gtk.org>
 
-	* configure.in (LDFLAGS): Bombo out with a moderately
+	* configure.in (LDFLAGS): Bomb out with a moderately
 	  helpful message if detection of X libraries fails.
 
 Sat May 23 18:57:06 1998  Owen Taylor  <otaylor@gtk.org>

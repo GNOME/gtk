@@ -118,11 +118,12 @@ gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * com
   GList *li;
 
   /* completion */
-  if ( event->keyval == GDK_Tab ) {
+  if (event->keyval == GDK_Tab) 
+    {
     GCompletion * cmpl;
     gchar* prefix;
     gchar* nprefix = NULL;
-    guint pos;
+    gint pos;
     
     gtk_signal_emit_stop_by_name (GTK_OBJECT (entry), "key_press_event");
     cmpl = g_completion_new((GCompletionFunc)gtk_combo_func);
@@ -130,9 +131,10 @@ gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * com
     pos = GTK_EDITABLE(entry)->current_pos;
     prefix = gtk_editable_get_chars(GTK_EDITABLE(entry), 0, pos);
     g_completion_complete(cmpl, prefix, &nprefix);
-    if ( nprefix && strlen(nprefix) > strlen(prefix) ) {
+    if (nprefix && strlen(nprefix) > strlen(prefix)) 
+      {
     	gtk_editable_insert_text(GTK_EDITABLE(entry), nprefix+pos, 
-    		strlen(nprefix)-strlen(prefix), &pos);
+				 strlen(nprefix)-strlen(prefix), &pos);
     	GTK_EDITABLE(entry)->current_pos = pos;
     }
     g_free(prefix);

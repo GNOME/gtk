@@ -5,7 +5,7 @@
 #include "gtk/gtk.h"
 
 void
-delete_event (GtkWidget *widget, GdkEvent *event, gpointer *data)
+delete_event (GtkWidget *widget, GdkEvent *event, gpointer data)
 {
     gtk_main_quit ();
 }
