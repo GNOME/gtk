@@ -4122,7 +4122,7 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
 {
   GList *list;
   GList *work;
-  GtkNotebookPage *page;
+  GtkNotebookPage *page = NULL;
   gint old_pos;
 
   g_return_if_fail (notebook != NULL);
@@ -4168,6 +4168,8 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
   if (notebook->menu)
     {
       GtkWidget *menu_item;
+
+      g_assert(page != NULL);
 
       menu_item = page->menu_label->parent;
       gtk_container_remove (GTK_CONTAINER (menu_item), page->menu_label);

@@ -1,3 +1,9 @@
+Mon Nov 30 12:17:10 1998  Jeff Garzik  <jgarzik@pobox.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_reorder_child):
+	Added initializer to quiet gcc warning.
+	Added assertion to check for null pointer deref.
+
 Mon Nov 30 10:11:29 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/testgtkrc: merged testgtkrc with the pre-themes one, removed
