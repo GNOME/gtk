@@ -1,3 +1,9 @@
+2002-05-01  Anders Carlsson  <andersca@gnu.org>
+
+	* gdk/x11/gdkevents-x11.c 
+	(gdk_x11_screen_supports_net_wm_hint): Use the same
+	key when setting and getting NetWmSupportedAtoms.
+
 Tue Apr 30 18:42:25 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_set_screen): Make it

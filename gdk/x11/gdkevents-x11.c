@@ -2124,7 +2124,7 @@ gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
   if (!supported_atoms)
     {
       supported_atoms = g_new0 (NetWmSupportedAtoms, 1);
-      g_object_set_data (G_OBJECT (screen), "net-wm-supported-atoms", supported_atoms);
+      g_object_set_data (G_OBJECT (screen), "gdk-net-wm-supported-atoms", supported_atoms);
     }
 
   if (screen_x11->wmspec_check_window != None)
