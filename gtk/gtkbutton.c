@@ -930,8 +930,15 @@ gtk_button_size_allocate (GtkWidget     *widget,
   gint xthickness = GTK_WIDGET (widget)->style->xthickness;
   gint ythickness = GTK_WIDGET (widget)->style->ythickness;
   GtkBorder default_border;
+  gint focus_width;
+  gint focus_pad;
 
   gtk_button_get_props (button, &default_border, NULL, NULL);
+  gtk_widget_style_get (GTK_WIDGET (widget),
+			"focus-line-width", &focus_width,
+			"focus-padding", &focus_pad,
+			NULL);
+ 
 			    
   widget->allocation = *allocation;
 
@@ -959,6 +966,11 @@ gtk_button_size_allocate (GtkWidget     *widget,
 	  child_allocation.width =  MAX (1, child_allocation.width - default_border.left - default_border.right);
 	  child_allocation.height = MAX (1, child_allocation.height - default_border.top - default_border.bottom);
 	}
+
+      child_allocation.x += focus_width + focus_pad;
+      child_allocation.y += focus_width + focus_pad;
+      child_allocation.width =  MAX (1, child_allocation.width - (focus_width + focus_pad) * 2);
+      child_allocation.height = MAX (1, child_allocation.height - (focus_width + focus_pad) * 2);
 
       if (button->depressed)
 	{

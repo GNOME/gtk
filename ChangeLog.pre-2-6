@@ -1,3 +1,10 @@
+2004-05-07  Matthias Clasen  <mclasen@redhat.com>
+
+        Merged from HEAD:
+	
+	* gtk/gtkbutton.c (gtk_button_size_allocate): Don't let the child
+	draw over the focus rectangle.
+
 Thu May  6 23:48:42 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkmenuitem.c (gtk_menu_item_select_timeout): Also 
