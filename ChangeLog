@@ -1,3 +1,7 @@
+Thu Nov 27 22:17:50 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.c: Remove debug define.
+
 Thu Nov 27 16:19:03 2003  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmenu.c: allow accel activation depending on sensitivity

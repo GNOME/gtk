@@ -42,7 +42,7 @@
 #include "gtktoolbar.h"
 #include "gtkuimanager.h"
 
-#define DEBUG_UI_MANAGER
+#undef DEBUG_UI_MANAGER
 
 typedef enum 
 {
