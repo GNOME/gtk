@@ -1,3 +1,9 @@
+Thu Feb 28 14:49:08 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_foreign_new): Initialize
+	private->event_mask from attributes we retrieved for
+	the window.
+
 2002-02-22  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextbuffer.c (save_range): change gravity of start/end

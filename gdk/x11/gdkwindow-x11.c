@@ -629,6 +629,21 @@ gdk_window_new (GdkWindow     *parent,
   return window;
 }
 
+static GdkEventMask
+x_event_mask_to_gdk_event_mask (long mask)
+{
+  GdkEventMask event_mask = 0;
+  int i;
+
+  for (i = 0; i < _gdk_nenvent_masks; i++)
+    {
+      if (mask & _gdk_event_mask_table[i])
+	event_mask |= 1 << (i + 1);
+    }
+
+  return event_mask;
+}
+
 /**
  * gdk_window_foreign_new:
  * @anid: a native window handle.
@@ -691,6 +706,8 @@ gdk_window_foreign_new (GdkNativeWindow anid)
   impl->height = attrs.height;
   private->window_type = GDK_WINDOW_FOREIGN;
   private->destroyed = FALSE;
+
+  private->event_mask = x_event_mask_to_gdk_event_mask (attrs.your_event_mask);
 
   if (attrs.map_state == IsUnmapped)
     private->state = GDK_WINDOW_STATE_WITHDRAWN;
@@ -2448,7 +2465,6 @@ gdk_window_get_events (GdkWindow *window)
 {
   XWindowAttributes attrs;
   GdkEventMask event_mask;
-  int i;
   
   g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
@@ -2461,13 +2477,7 @@ gdk_window_get_events (GdkWindow *window)
 			    GDK_WINDOW_XID (window), 
 			    &attrs);
       
-      event_mask = 0;
-      for (i = 0; i < _gdk_nenvent_masks; i++)
-	{
-	  if (attrs.your_event_mask & _gdk_event_mask_table[i])
-	    event_mask |= 1 << (i + 1);
-	}
-
+      event_mask = x_event_mask_to_gdk_event_mask (attrs.your_event_mask);
       GDK_WINDOW_OBJECT (window)->event_mask = event_mask;
   
       return event_mask;
