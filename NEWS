@@ -1,3 +1,9 @@
+What is new in GTK+ 1.1.12:
+
+* Korean translation added
+* Fixed memory leaks
+* A few other bug fixes
+
 What is new in GTK+ 1.1.11:
 
 * Dutch, Japanese, Swedish, Polish, and Norwegian translations

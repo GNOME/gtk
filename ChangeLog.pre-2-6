@@ -1,3 +1,15 @@
+Mon Jan  4 03:45:42 CST 1999 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.1.12
+
+	* INSTALL:
+	  NEWS:
+	  README:
+	  configure.in:
+	  gtk+.spec:
+	  docs/gtk-config.1:
+	  gtk/gtkfeatures.h.in: version=1.1.12
+
 1999-01-04  Sung-Hyun Nam  <namsh@lgic.co.kr>
 
 	* configure.in (ALL_LINGUAS): Added 'ko'.
