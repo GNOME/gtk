@@ -164,6 +164,26 @@ pixbuf_check_ico (guchar *buffer, int size)
 }
 
 static gboolean
+pixbuf_check_ani (guchar *buffer, int size)
+{
+        if (size < 12)
+                return FALSE;
+
+	if (buffer [0] != 'R' ||
+	    buffer [1] != 'I' ||
+	    buffer [2] != 'F' ||
+	    buffer [3] != 'F' ||
+	    buffer [8] != 'A' ||
+	    buffer [9] != 'C' ||
+	    buffer[10] != 'O' ||
+	    buffer[11] != 'N')
+		return FALSE;
+
+        return TRUE;
+}
+
+
+static gboolean
 pixbuf_check_bmp (guchar *buffer, int size)
 {
 	if (size < 20)
@@ -241,7 +261,9 @@ static GdkPixbufModule file_formats [] = {
 	{ "ras",  pixbuf_check_sunras, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
 	{ "bmp",  pixbuf_check_bmp, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
 	{ "xbm",  pixbuf_check_xbm, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
-	{ "ico",  pixbuf_check_ico, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },            { "tga", pixbuf_check_tga, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "ico",  pixbuf_check_ico, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },	
+	{ "ani",  pixbuf_check_ani, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },	
+	{ "tga", pixbuf_check_tga, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
 	{ "wbmp", pixbuf_check_wbmp, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
 	{ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 };
@@ -392,6 +414,7 @@ m_fill_vtable (bmp);
 m_fill_vtable (wbmp);
 m_fill_vtable (gif);
 m_fill_vtable (ico);
+m_fill_vtable (ani);
 m_fill_vtable (jpeg);
 m_fill_vtable (pnm);
 m_fill_vtable (ras);
@@ -438,6 +461,12 @@ _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 #ifdef INCLUDE_ico
 	else if (strcmp (image_module->module_name, "ico") == 0){
                 fill_vtable = mname (ico, fill_vtable);
+	}
+#endif
+
+#ifdef INCLUDE_ani
+	else if (strcmp (image_module->module_name, "ani") == 0){
+                fill_vtable = mname (ani, fill_vtable);
 	}
 #endif
 

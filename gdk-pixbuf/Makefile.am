@@ -87,6 +87,14 @@ libpixbufloader_ico_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_ico_la_LIBADD = $(module_libs)
 
 #
+# The ANI loader
+#
+libpixbufloader_static_ani_la_SOURCES = io-ani.c io-ani-animation.c io-ani-animation.h
+libpixbufloader_ani_la_SOURCES = io-ani.c io-ani-animation.c io-ani-animation.h
+libpixbufloader_ani_la_LDFLAGS = -avoid-version -module $(no_undefined)
+libpixbufloader_ani_la_LIBADD = $(module_libs)
+
+#
 # The RAS loader
 #
 libpixbufloader_static_ras_la_SOURCES = io-ras.c
@@ -158,6 +166,9 @@ STATIC_GIF_LIB = libpixbufloader-static-gif.la
 ICO_LIB = libpixbufloader-ico.la
 STATIC_ICO_LIB = libpixbufloader-static-ico.la
 
+ANI_LIB = libpixbufloader-ani.la
+STATIC_ANI_LIB = libpixbufloader-static-ani.la
+
 RAS_LIB = libpixbufloader-ras.la
 STATIC_RAS_LIB = libpixbufloader-static-ras.la
 
@@ -191,6 +202,7 @@ loader_LTLIBRARIES = 	\
 	$(JPEG_LIB)	\
 	$(GIF_LIB)	\
 	$(ICO_LIB)	\
+	$(ANI_LIB)	\
 	$(RAS_LIB)	\
 	$(XPM_LIB)	\
 	$(TIFF_LIB)	\
@@ -211,6 +223,7 @@ noinst_LTLIBRARIES =		\
 	$(STATIC_JPEG_LIB)	\
 	$(STATIC_GIF_LIB)	\
 	$(STATIC_ICO_LIB)	\
+	$(STATIC_ANI_LIB)	\
 	$(STATIC_RAS_LIB)	\
 	$(STATIC_XPM_LIB)	\
 	$(STATIC_TIFF_LIB)	\
@@ -379,6 +392,7 @@ EXTRA_DIST =			\
 	gdk-pixbuf-marshal.c	\
 	gdk-pixbuf-marshal.list		\
 	pixbufloader_ico.def		\
+	pixbufloader_ani.def		\
 	pixbufloader_pnm.def		\
 	pixbufloader_xpm.def		\
 	pixbufloader_bmp.def		\

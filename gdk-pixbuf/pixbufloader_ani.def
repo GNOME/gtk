@@ -1,0 +1,2 @@
+EXPORTS
+	gdk_pixbuf__ani_fill_vtable
