@@ -1,3 +1,7 @@
+2004-08-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add hover-expand setter and getter.
+
 2004-08-01  Matthias Clasen  <mclasen@redhat.com>
                                                                                 
         * === Released 2.5.1 ===
