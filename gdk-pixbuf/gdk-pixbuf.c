@@ -35,3 +35,7 @@ gdk_pixbuf_unref (GdkPixBuf *pixbuf)
 		gdk_pixbuf_destroy (pixbuf);
 }
 
+GdkPixBuf *
+gdk_pixbuf_scale (GdkPixBuf *pixbuf, gint w, gint h)
+{
+}

@@ -1,5 +1,4 @@
-1999-07-12  Raja R Harinath  <harinath@cs.umn.edu>
+1999-07-13    <crichton@gimp.org>
 
-	* configure.in (AC_OUTPUT): Remove spurious `,'.
-
+	* configure.in: I am a bonehead.  Added gif-lib check.
 
