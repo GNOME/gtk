@@ -112,6 +112,9 @@ static gboolean gdk_event_dispatch (GSource     *source,
 				    GSourceFunc  callback,
 				    gpointer     user_data);
 
+static void append_event (GdkDisplay *display,
+			  GdkEvent   *event);
+
 /* Private variable declarations
  */
 
@@ -228,6 +231,19 @@ _gdk_win32_get_next_tick (gulong suggested_tick)
     return cur_tick;
   else
     return cur_tick = suggested_tick;
+}
+
+static void
+generate_focus_event (GdkWindow *window,
+		      gboolean   in)
+{
+  GdkEvent *event;
+
+  event = gdk_event_new (GDK_FOCUS_CHANGE);
+  event->focus_change.window = window;
+  event->focus_change.in = in;
+
+  append_event (gdk_drawable_get_display (window), event);
 }
 
 static LRESULT 
@@ -716,6 +732,8 @@ gdk_keyboard_grab (GdkWindow *window,
 		   gboolean   owner_events,
 		   guint32    time)
 {
+  GdkWindow *real_focus_window, *grab_focus_window;
+
   gint return_val;
   
   g_return_val_if_fail (window != NULL, 0);
@@ -733,7 +751,31 @@ gdk_keyboard_grab (GdkWindow *window,
     return_val = GDK_GRAB_ALREADY_GRABBED;
 
   if (return_val == GDK_GRAB_SUCCESS)
-    k_grab_window = window;
+    {
+      k_grab_window = window;
+
+      if (!k_grab_owner_events)
+	{
+	  real_focus_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) GetFocus ());
+	  if (real_focus_window)
+	    real_focus_window = gdk_window_get_toplevel (real_focus_window);
+	  grab_focus_window = gdk_window_get_toplevel (k_grab_window);
+	  if (real_focus_window != grab_focus_window)
+	    {
+	      /* Generate events for focus change from the window that really
+	       * has focus to the grabber.
+	       */
+	      if (real_focus_window && !GDK_WINDOW_DESTROYED (real_focus_window)
+		  && (((GdkWindowObject *) real_focus_window)->event_mask
+		      & GDK_FOCUS_CHANGE_MASK))
+		generate_focus_event (real_focus_window, FALSE);
+
+	      if (((GdkWindowObject *) grab_focus_window)->event_mask 
+		  & GDK_FOCUS_CHANGE_MASK)
+		generate_focus_event (grab_focus_window, TRUE);
+	    }
+	}
+    }
   
   return return_val;
 }
@@ -742,9 +784,38 @@ void
 gdk_display_keyboard_ungrab (GdkDisplay *display,
                              guint32 time)
 {
+  GdkWindow *real_focus_window, *grab_focus_window;
+
   g_return_if_fail (display == gdk_display_get_default ());
 
   GDK_NOTE (EVENTS, g_print ("gdk_keyboard_ungrab\n"));
+
+  if (k_grab_window && !k_grab_owner_events)
+    {
+      real_focus_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) GetFocus ());
+      if (real_focus_window)
+	real_focus_window = gdk_window_get_toplevel (real_focus_window);
+      if (!GDK_WINDOW_DESTROYED (k_grab_window))
+	grab_focus_window = gdk_window_get_toplevel (k_grab_window);
+      else
+	grab_focus_window = NULL;
+      if (real_focus_window != grab_focus_window)
+	{
+	  /* Generate events for focus change from grabber to the window that
+	   * really has focus. Important for example if a new window is created
+	   * while focus is grabbed.
+	   */
+	  if (grab_focus_window
+	      && (((GdkWindowObject *) grab_focus_window)->event_mask
+		  & GDK_FOCUS_CHANGE_MASK))
+	    generate_focus_event (grab_focus_window, FALSE);
+
+	  if (real_focus_window && !GDK_WINDOW_DESTROYED (real_focus_window)
+	      && (((GdkWindowObject *) real_focus_window)->event_mask
+		  & GDK_FOCUS_CHANGE_MASK))
+	    generate_focus_event (real_focus_window, TRUE);
+	}
+    }
 
   k_grab_window = NULL;
 }
@@ -2831,7 +2902,7 @@ gdk_event_translate (GdkDisplay *display,
 
     case WM_SETFOCUS:
     case WM_KILLFOCUS:
-      if (p_grab_window != NULL && !p_grab_owner_events && !(p_grab_mask & GDK_FOCUS_CHANGE_MASK))
+      if (k_grab_window != NULL && !k_grab_owner_events)
 	break;
 
       if (!(((GdkWindowObject *) window)->event_mask & GDK_FOCUS_CHANGE_MASK))
@@ -2840,12 +2911,7 @@ gdk_event_translate (GdkDisplay *display,
       if (GDK_WINDOW_DESTROYED (window))
 	break;
 
-      event = gdk_event_new (GDK_FOCUS_CHANGE);
-      event->focus_change.window = window;
-      event->focus_change.in = (msg->message == WM_SETFOCUS);
-
-      append_event (display, event);
-
+      generate_focus_event (window, (msg->message == WM_SETFOCUS));
       return_val = TRUE;
       break;
 

@@ -1,3 +1,15 @@
+2004-11-11  Tor Lillqvist  <tml@iki.fi>
+
+	Fix for #137551, by Robert Ögren:
+
+	* gdk/win32/gdkevents-win32.c (generate_focus_event): New function.
+
+	(gdk_keyboard_grab, gdk_keyboard_ungrab): Generate focus change
+	events.
+	
+	(gdk_event_translate): Check for keyboard grabs and not pointer
+	grabs when handling WM_{SET,KILL}FOCUS. Use generate_focus_event().
+
 2004-11-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkuimanager.c (update_node): Remove two more places
