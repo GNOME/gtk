@@ -1,3 +1,27 @@
+Mon Apr 27 15:11:52 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_grab_focus): only allow grabbing of focus
+	for CAN_FOCUS widgets.
+
+	* gtk/testgtk.c (create_scrolled_windows): feature h/v focus
+	adjustments for the table.
+	(create_list): feature automatic adjustment of the scrolled window to
+	always contain the focused child.
+	(create_main_window): keep the focussed button always inside of the
+	scrolled windoww.
+
+	* gtk/gtkcontainer.c (gtk_real_container_focus): set the h/v focus
+	adjustments, to contain the allocation of the currently focused child.
+	(gtk_container_set_focus_hadjustment): new functin to set the
+ 	horizontal focus adjustment.
+	(gtk_container_set_focus_vadjustment): new functin to set the vertical
+ 	focus adjustment.
+
+	* gtk/gtkadjustment.c (gtk_adjustment_clamp_page): new fucntion to
+ 	clamp the currents adjustment page into a specific range.
+
+	* random GtkType fixups for gtk_*_get_type() functions.
+
 Fri Apr 24 18:37:16 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtktreeitem.c (gtk_tree_item_remove_subtree): 

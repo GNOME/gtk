@@ -34,10 +34,10 @@ static void gtk_adjustment_init       (GtkAdjustment      *adjustment);
 static guint adjustment_signals[LAST_SIGNAL] = { 0 };
 
 
-guint
+GtkType
 gtk_adjustment_get_type ()
 {
-  static guint adjustment_type = 0;
+  static GtkType adjustment_type = 0;
 
   if (!adjustment_type)
     {
@@ -129,4 +129,34 @@ gtk_adjustment_set_value (GtkAdjustment        *adjustment,
   adjustment->value = CLAMP (value, adjustment->lower, adjustment->upper);
 
   gtk_signal_emit_by_name (GTK_OBJECT (adjustment), "value_changed");
+}
+
+void
+gtk_adjustment_clamp_page (GtkAdjustment *adjustment,
+			   gfloat         lower,
+			   gfloat         upper)
+{
+  gint need_emission;
+
+  g_return_if_fail (adjustment != NULL);
+  g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+
+  lower = CLAMP (lower, adjustment->lower, adjustment->upper);
+  upper = CLAMP (upper, adjustment->lower, adjustment->upper);
+
+  need_emission = FALSE;
+
+  if (adjustment->value + adjustment->page_size < upper)
+    {
+      adjustment->value = upper - adjustment->page_size;
+      need_emission = TRUE;
+    }
+  if (adjustment->value > lower)
+    {
+      adjustment->value = lower;
+      need_emission = TRUE;
+    }
+
+  if (need_emission)
+    gtk_signal_emit_by_name (GTK_OBJECT (adjustment), "value_changed");
 }

@@ -51,10 +51,10 @@ static void gtk_scrolled_window_adjustment_changed (GtkAdjustment          *adju
 static GtkContainerClass *parent_class = NULL;
 
 
-guint
+GtkType
 gtk_scrolled_window_get_type ()
 {
-  static guint scrolled_window_type = 0;
+  static GtkType scrolled_window_type = 0;
 
   if (!scrolled_window_type)
     {

@@ -256,10 +256,10 @@ static const gchar *visual_key = "gtk-visual";
  *   results:
  *****************************************/
 
-guint
+GtkType
 gtk_widget_get_type ()
 {
-  static guint widget_type = 0;
+  static GtkType widget_type = 0;
   
   if (!widget_type)
     {
@@ -2244,27 +2244,31 @@ gtk_widget_basic (GtkWidget *widget)
 void
 gtk_widget_grab_focus (GtkWidget *widget)
 {
-  GtkWidget *window;
-  GtkWidget *child;
-  GtkType window_type;
-  
   g_return_if_fail (widget != NULL);
-  
-  window_type = gtk_window_get_type ();
-  window = widget->parent;
-  child = widget;
-  
-  while (window && !gtk_type_is_a (GTK_WIDGET_TYPE (window), window_type))
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (GTK_WIDGET_CAN_FOCUS (widget))
     {
-      GTK_CONTAINER (window)->focus_child = child;
-      child = window;
-      window = window->parent;
-    }
-  
-  if (window && gtk_type_is_a (GTK_WIDGET_TYPE (window), window_type))
-    {
-      GTK_CONTAINER (window)->focus_child = child;
-      gtk_window_set_focus (GTK_WINDOW (window), widget);
+      GtkWidget *window;
+      GtkWidget *child;
+      GtkType window_type;
+      
+      window_type = gtk_window_get_type ();
+      window = widget->parent;
+      child = widget;
+      
+      while (window && !gtk_type_is_a (GTK_WIDGET_TYPE (window), window_type))
+	{
+	  GTK_CONTAINER (window)->focus_child = child;
+	  child = window;
+	  window = window->parent;
+	}
+      
+      if (window && gtk_type_is_a (GTK_WIDGET_TYPE (window), window_type))
+	{
+	  GTK_CONTAINER (window)->focus_child = child;
+	  gtk_window_set_focus (GTK_WINDOW (window), widget);
+	}
     }
 }
 

@@ -2142,6 +2142,10 @@ create_scrolled_windows ()
       gtk_table_set_row_spacings (GTK_TABLE (table), 10);
       gtk_table_set_col_spacings (GTK_TABLE (table), 10);
       gtk_container_add (GTK_CONTAINER (scrolled_window), table);
+      gtk_container_set_focus_hadjustment (GTK_CONTAINER (table),
+					   gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
+      gtk_container_set_focus_vadjustment (GTK_CONTAINER (table),
+					   gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
       gtk_widget_show (table);
 
       for (i = 0; i < 20; i++)
@@ -2800,6 +2804,8 @@ create_list ()
       gtk_list_set_selection_mode (GTK_LIST (list), GTK_SELECTION_MULTIPLE);
       gtk_list_set_selection_mode (GTK_LIST (list), GTK_SELECTION_BROWSE);
       gtk_container_add (GTK_CONTAINER (scrolled_win), list);
+      gtk_container_set_focus_vadjustment (GTK_CONTAINER (list),
+					   gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scrolled_win)));
       gtk_widget_show (list);
 
       for (i = 0; i < nlist_items; i++)
@@ -5782,12 +5788,15 @@ create_main_window ()
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
      		                  GTK_POLICY_AUTOMATIC, 
                                   GTK_POLICY_AUTOMATIC);
+  GTK_WIDGET_UNSET_FLAGS (GTK_SCROLLED_WINDOW (scrolled_window)->vscrollbar, GTK_CAN_FOCUS);
   gtk_box_pack_start (GTK_BOX (box1), scrolled_window, TRUE, TRUE, 0);
   gtk_widget_show (scrolled_window);
 
   box2 = gtk_vbox_new (FALSE, 0);
   gtk_container_border_width (GTK_CONTAINER (box2), 10);
   gtk_container_add (GTK_CONTAINER (scrolled_window), box2);
+  gtk_container_set_focus_vadjustment (GTK_CONTAINER (box2),
+				       gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
   gtk_widget_show (box2);
 
   for (i = 0; i < nbuttons; i++)
