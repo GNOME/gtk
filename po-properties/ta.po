@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ta\n"
 "POT-Creation-Date: 2004-08-14 20:18+0200\n"
-"PO-Revision-Date: 2004-08-16 19:00+0530\n"
+"PO-Revision-Date: 2004-08-17 19:43+0530\n"
 "Last-Translator: Jayaradha N <jaya@pune.redhat.com>\n"
 "Language-Team: Tamil <zhakanini@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -80,7 +80,7 @@ msgstr "பிக்செல்கள்"
 
 #: gdk-pixbuf/gdk-pixbuf.c:177
 msgid "A pointer to the pixel data of the pixbuf"
-msgstr ""
+msgstr "pixbuf இன் பிக்செல் தகவலுக்கான காட்டி"
 
 #: gdk/gdkdisplaymanager.c:126
 msgid "Default Display"
@@ -88,7 +88,7 @@ msgstr "கொடா நிலை காட்சி(திரை)"
 
 #: gdk/gdkdisplaymanager.c:127
 msgid "The default display for GDK"
-msgstr ""
+msgstr "GDK விற்கான இயல்பான காட்சி முறை"
 
 #: gtk/gtkaccellabel.c:138
 msgid "Accelerator Closure"
@@ -329,7 +329,6 @@ msgid "The padding to insert at the bottom of the widget."
 msgstr "சாளரத்தின் கீழே செருகுவதற்கான இடைவெளி"
 
 #: gtk/gtkalignment.c:197
-#, fuzzy
 msgid "Left Padding"
 msgstr "இடது ஓரம்"
 
@@ -338,7 +337,6 @@ msgid "The padding to insert at the left of the widget."
 msgstr "சாளரத்தின் இடது பக்கம் செருகுவதற்கான இடைவெளி"
 
 #: gtk/gtkalignment.c:214
-#, fuzzy
 msgid "Right Padding"
 msgstr "வலது ஓரம்"
 
@@ -1440,7 +1438,7 @@ msgstr "தேர்வு செய்த வரம்பு"
 
 #: gtk/gtkentry.c:474 gtk/gtklabel.c:381
 msgid "The position of the opposite end of the selection from the cursor in chars"
-msgstr ""
+msgstr "கர்சர் தேர்வு செய்த எழுத்துக்களின் எதிர் இறுதி முனையின் நிலை"
 
 #: gtk/gtkentry.c:484
 msgid "Whether the entry contents can be edited"
@@ -1451,9 +1449,8 @@ msgid "Maximum length"
 msgstr "மிகக்கூடிய நீட்டம்"
 
 #: gtk/gtkentry.c:492
-#, fuzzy
 msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr "இந்த உள்ளீட்டத்திற்கு மிகக்கூடிய வரியுரு எண்"
+msgstr "உள்ளீட்டில் உள்ள அதிகபட்ச எழுத்துக்களின் எண்ணிக்கை. அதிக பட்சம் எனில் பூஜ்ஜியம்"
 
 #: gtk/gtkentry.c:500
 msgid "Visibility"
@@ -1473,7 +1470,7 @@ msgstr "சட்டம் கொன்டது"
 
 #: gtk/gtkentry.c:509
 msgid "FALSE removes outside bevel from entry"
-msgstr ""
+msgstr "பொய் உள்ளீட்டின் சாய்வை நீக்கும்"
 
 #: gtk/gtkentry.c:516
 msgid "Invisible character"
@@ -1491,16 +1488,15 @@ msgstr "கொடா நிலையை தொடங்கும்"
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
-msgstr ""
+msgstr "என்டர் விசையை அழுத்தும்போது (உரையாடல் பெட்டியில் உள்ளது போன்ற) இயல்பான சிறு சாளரத்தை செயல்படுத்த வேண்டுமா"
 
 #: gtk/gtkentry.c:531
 msgid "Width in chars"
 msgstr "charsஇல் அகலம்"
 
 #: gtk/gtkentry.c:532
-#, fuzzy
 msgid "Number of characters to leave space for in the entry"
-msgstr "`உள்லீட்டத்தில் இடைவிட வேண்டிய வரியுருகளின் எண்"
+msgstr "உள்ளீட்டில் விட வேண்டிய இடைவெளிகளின் எண்ணிக்கை"
 
 #: gtk/gtkentry.c:541
 msgid "Scroll offset"
@@ -1511,48 +1507,42 @@ msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Number of pixels of the entry scrolled off the screen to the left"
 
 #: gtk/gtkentry.c:552
-#, fuzzy
 msgid "The contents of the entry"
-msgstr "அடையாளத்தின் உரை"
+msgstr "உள்ளீட்டின் உள்ளடக்கம்"
 
 #: gtk/gtkentry.c:567 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "X align"
 
 #: gtk/gtkentry.c:568 gtk/gtkmisc.c:100
-#, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
-msgstr "கிடைதிசை நேர்ப்படுத்தல், 0 (இடது) இலிருந்து 1 (வலது) வரை"
+msgstr "இடவல பொருத்தம், 0 (இடது) இலிருந்து 1 (வலது) வரை. RTL உருவரைக்காக ஒதுக்கு"
 
 #: gtk/gtkentry.c:801
-#, fuzzy
 msgid "Select on focus"
-msgstr "தெரிவு செய்தது: "
+msgstr "துவக்கத்தை தேர்வு செய்"
 
 #: gtk/gtkentry.c:802
-#, fuzzy
 msgid "Whether to select the contents of an entry when it is focused"
-msgstr "உள்ளீடு பொருற்களை பதிப்பிற்க முடியுமா"
+msgstr "துவக்க நிலையில் இருக்கும் போது உள்ளீட்டின் உள்ளடக்கங்களை தேர்வு செய்ய வேண்டுமா"
 
 #: gtk/gtkentrycompletion.c:229
 msgid "Completion Model"
-msgstr ""
+msgstr "முடிவின் மாதிரி"
 
 #: gtk/gtkentrycompletion.c:230
-#, fuzzy
 msgid "The model to find matches in"
-msgstr "மரக்-காட்சியின் படிமம்"
+msgstr "பொருத்தம் பார்க்க வேண்டியவைகளின் மாதிரி"
 
 #: gtk/gtkentrycompletion.c:236
-#, fuzzy
 msgid "Minimum Key Length"
-msgstr "Minimum Slider Length"
+msgstr "அதிக பட்ச விசை நீளம்"
 
 #: gtk/gtkentrycompletion.c:237
 msgid "Minimum length of the search key in order to look up matches"
-msgstr ""
+msgstr "பொருத்தம் பார்க்க வேண்டிய தேடல் விசைகளின் அதிக பட நீளம்"
 
 #: gtk/gtkeventbox.c:120
 msgid "Visible Window"
@@ -1562,55 +1552,49 @@ msgstr "பாக்கக்கூடிய சாளரம்"
 msgid ""
 "Whether the event box is visible, as opposed to invisible and only used to "
 "trap events."
-msgstr ""
+msgstr "நிகழ்வுகளை தொடர்ந்து கவனிக்க நிகழ்வுகள் பட்டி தெரிகிறதா"
 
 #: gtk/gtkeventbox.c:127
-#, fuzzy
 msgid "Above child"
-msgstr "Obey child"
+msgstr "துணை செயலுக்கு மேல்"
 
 #: gtk/gtkeventbox.c:128
 msgid ""
 "Whether the event-trapping window of the eventbox is above the window of the "
 "child widget as opposed to below it."
-msgstr ""
+msgstr "நிகழுவுகள் பெட்டியில் உள்ள செயல்-தொடர்தல் சாளரம் துணை சிறு சாளரத்திற்கு மேலே உள்ளதா"
 
 #: gtk/gtkexpander.c:197
-#, fuzzy
 msgid "Expanded"
 msgstr "விரிக்கவும்"
 
 #: gtk/gtkexpander.c:198
-#, fuzzy
 msgid "Whether the expander has been opened to reveal the child widget"
-msgstr "Whether the widget can be the default widget"
+msgstr "துணை சிறு சாளரத்தை காண்பதற்காக சாளரம் விரிக்கப்பட்டதா"
 
 #: gtk/gtkexpander.c:206
-#, fuzzy
 msgid "Text of the expander's label"
-msgstr "சட்டத்தின் அடையாள உரை"
+msgstr "விரிப்பானில் உள்ள உரை அடையாளம்"
 
 #: gtk/gtkexpander.c:221 gtk/gtklabel.c:306
 msgid "Use markup"
 msgstr "Use markup"
 
 #: gtk/gtkexpander.c:222 gtk/gtklabel.c:307
-#, fuzzy
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
-msgstr "The text of the label includes XML markup. See pango_parse_markup()."
+msgstr "விளக்கசீட்டில் உள்ள உரையில் XML குறிமொழி உள்ளது pango_parse_markup() ஐ பார்க்கவும்"
 
 #: gtk/gtkexpander.c:230
 msgid "Space to put between the label and the child"
-msgstr ""
+msgstr "துணை செயலுக்கும் அதன் விளக்க குறிப்பிற்கும் உள்ள இடைவெளி"
 
 #: gtk/gtkexpander.c:239 gtk/gtkframe.c:170 gtk/gtktoolbutton.c:194
 msgid "Label widget"
 msgstr "விட்செட் அடையாளம்"
 
 #: gtk/gtkexpander.c:240
-#, fuzzy
 msgid "A widget to display in place of the usual expander label"
-msgstr "வழக்கமாகன சட்ட அடையாளம் இருக்குமிடத்தில் காணபிக்க ஓர் விட்செட்."
+msgstr "இயல்பான விரிப்பான் விளக்கச்சீட்டு இருக்க வேண்டிய இடத்தில் காட்டப்பட்ட சிறு சாளரம்"
 
 #: gtk/gtkexpander.c:246 gtk/gtktreeview.c:642
 msgid "Expander Size"
@@ -1621,9 +1605,8 @@ msgid "Size of the expander arrow"
 msgstr "Size of the expander arrow"
 
 #: gtk/gtkexpander.c:256
-#, fuzzy
 msgid "Spacing around expander arrow"
-msgstr "காட்டியைச் சுற்றிருக்கும் இடைவெளி அளவு"
+msgstr "விரிப்பான அம்புக்குறிகளுக்கு இடையே உள்ள இடைவெளி"
 
 #: gtk/gtkfilechooser.c:175
 msgid "Action"
@@ -1631,17 +1614,15 @@ msgstr "செயல்"
 
 #: gtk/gtkfilechooser.c:176
 msgid "The type of operation that the file selector is performing"
-msgstr ""
+msgstr "கோப்பு தேர்வு செய்வான் செய்யும் செயலின் வகை"
 
 #: gtk/gtkfilechooser.c:182
-#, fuzzy
 msgid "File System Backend"
-msgstr "கோப்புகள்"
+msgstr "கோப்பு முறைபின் பின்புலம்"
 
 #: gtk/gtkfilechooser.c:183
-#, fuzzy
 msgid "Name of file system backend to use"
-msgstr "Name of theme RC file to load"
+msgstr "கோப்பு முறைமை பயன்படுத்த வேண்டிய பின்புலத்தின் பெயர்"
 
 #: gtk/gtkfilechooser.c:188
 msgid "Filter"
@@ -1649,16 +1630,15 @@ msgstr "வடிகட்டி"
 
 #: gtk/gtkfilechooser.c:189
 msgid "The current filter for selecting which files are displayed"
-msgstr ""
+msgstr "தேர்வு செய்யப்பட்ட கோப்புகளை காட்டுவதற்கான வடிகட்டி"
 
 #: gtk/gtkfilechooser.c:194
 msgid "Local Only"
-msgstr ""
+msgstr "உள்கணினி மட்டும்"
 
 #: gtk/gtkfilechooser.c:195
-#, fuzzy
 msgid "Whether the selected file(s) should be limited to local file: URLs"
-msgstr "முன்னேற்றம் உரையைக் காண்பிக்கப்படுமோ"
+msgstr "தேர்வு செய்யப்பட்ட கோப்பு(கள்) உங்கள் கணினிக்கு மட்டும் என குறிக்கப்பட்டதா: URL"
 
 #: gtk/gtkfilechooser.c:200
 msgid "Preview widget"
@@ -1666,21 +1646,19 @@ msgstr "முன்காட்சி விட்செட்"
 
 #: gtk/gtkfilechooser.c:201
 msgid "Application supplied widget for custom previews."
-msgstr ""
+msgstr "தனிப்பயன் முன்காட்சிக்காக அனுப்பப்பட்ட சிறு சாளர பயன்பாடு"
 
 #: gtk/gtkfilechooser.c:206
-#, fuzzy
 msgid "Preview Widget Active"
-msgstr "உரை முன்-காட்சி"
+msgstr "முன்காட்சி சிறுசாளரம் செயலில்"
 
 #: gtk/gtkfilechooser.c:207
 msgid "Whether the application supplied widget for custom previews should be shown."
-msgstr ""
+msgstr "பயன்பாடு சிறுதாளரத்தின் தனிப்பயன் முன்காட்சிக்கு பயன்படுத்திய பயன்பாட்டை காட்ட வேண்டுமா?"
 
 #: gtk/gtkfilechooser.c:212
-#, fuzzy
 msgid "Use Preview Label"
-msgstr "விளக்கச்சீட்டில் அளவு பயன்படுத்தவும்"
+msgstr "முன்காட்சி விளக்க சீட்டை பயன்படுத்து்"
 
 #: gtk/gtkfilechooser.c:213
 msgid "Whether to display a stock label with the name of the previewed file."
