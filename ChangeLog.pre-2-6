@@ -1,5 +1,7 @@
 2003-04-09  Matthias Clasen  <maclas@gmx.de>
 
+	* INSTALL.in: Fix the real thing.
+
 	* INSTALL: Typo fix.
 
 Mon Apr  7 19:43:15 2003  Owen Taylor  <otaylor@redhat.com>
