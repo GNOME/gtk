@@ -810,7 +810,7 @@ gtk_im_context_xim_set_cursor_location (GtkIMContext *context,
 
   preedit_attr = XVaCreateNestedList (0,
 				      XNSpotLocation, &spot,
-				      0);
+				      NULL);
   XSetICValues (ic,
 		XNPreeditAttributes, preedit_attr,
 		NULL);
@@ -857,7 +857,7 @@ gtk_im_context_xim_reset (GtkIMContext *context)
 
   preedit_attr = XVaCreateNestedList(0,
                                      XNPreeditState, &preedit_state,
-                                     0);
+                                     NULL);
   if (!XGetICValues(ic,
                     XNPreeditAttributes, preedit_attr,
                     NULL))
@@ -869,7 +869,7 @@ gtk_im_context_xim_reset (GtkIMContext *context)
 
   preedit_attr = XVaCreateNestedList(0,
                                      XNPreeditState, preedit_state,
-                                     0);
+                                     NULL);
   if (have_preedit_state)
     XSetICValues(ic,
 		 XNPreeditAttributes, preedit_attr,

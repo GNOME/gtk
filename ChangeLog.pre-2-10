@@ -1,3 +1,8 @@
+2005-01-31  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/input/gtkimcontextxim.c: Use NULL, not 0 to terminate 
+	NULL-terminated va lists.  (#165683)
+
 2005-01-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkseparatortoolitem.c (gtk_separator_tool_item_set_draw): 
@@ -17,6 +22,9 @@ Thu Jan 27 14:25:45 2005  Manish Singh  <yosh@gimp.org>
 	loading but don't need a path change.  Fixes #165213.
 
 2005-01-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_render): 
+	Make wrapping work in RTL mode.  
 
 	* gtk/gtkaboutdialog.c: Some visual tweaks to the about dialog,
 	obey HIG spacing a bit more, add a hand cursor when over the
