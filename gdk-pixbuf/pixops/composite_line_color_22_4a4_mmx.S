@@ -1,5 +1,7 @@
 	.file	"composite_line_color_22_4a4_mmx.S"
 	.version	"01.01"
+	.section .note.GNU-stack, "", @progbits
+	.previous
 gcc2_compiled.:
 .text
 	.align 16
