@@ -1,9 +1,9 @@
-Overview of Changes in GTK+ 2.3.0
-=================================
+Overview of Changes from GTK+-2.2.x to GTK+-2.3.0
+=================================================
 * New action-based menu API: GtkUIManager, GtkActionGroup, 
   GtkAction, etc. [James Henstridge, Soeren Sandmann, Matthias Clasen]
-* New Combobox widget: GtkCombo [Kristian Rietveld]
-* Autocompletion and for entries: GtkEntryCompletion [Kristian]
+* New combo box widgets: GtkComboBox, GtkComboBoxEntry [Kristian Rietveld]
+* Autocompletion for entries: GtkEntryCompletion [Kristian]
 * New "disclosure triangle" widget: GtkExpander [Marc McLoughlin]
 * New "picker button" widgets: GtkFontButton, GtkColorButton [Matthias]
 * Support icon themes for stock icons [Owen Taylor]
@@ -22,6 +22,7 @@ Overview of Changes in GTK+ 2.3.0
 * Fix gdk_window_begin_paint() bug [Soeren]
 * New "focus_on_click" property for GtkButton [Soeren]
 * New "accepts_tab" property for GtkTextView [Soeren]
+* Deprecate GtkCombo and GtkOptionMenu [Kristian]
 
 GtkToolbar: [Soeren]
   - New toolbar API [James, Anders Carlsson, Owen]
@@ -32,8 +33,16 @@ GtkToolbar: [Soeren]
   - Drawing improvements
   - Support context menu
 
+GtkTreeView: [Kristian Rietveld]
+  - Handle RTL [Matthias, Jonathan]
+  - Add expand flag to column packing parameters [Jonathan, Kristian]
+  - gtk_tree_path_free now silently returns on NULL paths
+  - Move row reference updating code to closures
+  - Fix TreeView DnD: make TreeStore DnD work, make drops on empty views work,
+    get rid of gtk-tree-model-drop-append.
+
 Other contributors: Krasimir Angelov, Mariano Suarez-Alvarez, David
-   Bordoley, Christian Persch, Morten Welinder
+   Bordoley, Christian Persch, Morten Welinder, Marco Pesenti Gritti
 
 Overview of Changes in GTK+ 2.2.0
 =================================

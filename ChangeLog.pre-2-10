@@ -1,3 +1,8 @@
+Thu Oct 23 21:12:50 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* NEWS: Updates for 2.3.0; changed header to match the style we used
+	for 2.1.0.
+
 Thu Oct 23 20:47:44 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_window_set_group): Actually
