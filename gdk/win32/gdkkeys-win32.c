@@ -347,7 +347,8 @@ update_keymap (void)
 
   for (vk = 0; vk < 256; vk++)
     {
-      if ((scancode = MapVirtualKey (vk, 0)) == 0)
+      if ((scancode = MapVirtualKey (vk, 0)) == 0 &&
+	  vk != VK_DIVIDE)
 	keysym_tab[vk*4+0] =
 	  keysym_tab[vk*4+1] =
 	  keysym_tab[vk*4+2] =

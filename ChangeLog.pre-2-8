@@ -1,3 +1,8 @@
+2005-02-23  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkkeys-win32.c (update_keymap): Workaround for bug in
+	MapVirtualKey(VK_DIVIDE, 0) in some Windows versions. (#142998)
+
 Tue Feb 22 13:49:09 2005  Manish Singh  <yosh@gimp.org>
 
 	* gtk/updateiconcache.c: #include <config.h>
