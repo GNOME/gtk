@@ -1,3 +1,13 @@
+2000-04-14  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtksignal.c: (Win32:) Export the gtk_private_signals and
+	gtk_private_n_signals variables, they are used by some software,
+	sigh.
+
+	* gtk/gtkrc.c (get_gtk_sysconf_directory): (Win32:) Fetch the
+	installation directory from the Registry, where the installer
+	should have put it.
+
 Fri Apr  7 17:19:27 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/Makefile.am: Fix problem with installation directory for
