@@ -155,7 +155,7 @@ ratio.
 Defines the reference point of a window and the meaning of coordinates
 passed to gtk_window_move(). See gtk_window_move() and the "implementation 
 notes" section of the 
-<ulink url="http://www.freedesktop.org/standards/wm-spec.html">extended 
+<ulink url="http://www.freedesktop.org/standards/wm-spec">extended 
 window manager hints</ulink> specification for more details.
 </para>
 

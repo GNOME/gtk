@@ -134,7 +134,7 @@ How to compile GTK+ itself
       <listitem>
 	<para>
 	  <ulink
-	  url="http://www.freedesktop.org/software/pkgconfig/">pkg-config</ulink>
+	  url="http://www.freedesktop.org/software/pkgconfig">pkg-config</ulink>
 	  is a tool for tracking the compilation flags needed for
 	  libraries that are used by the GTK+ libraries. (For each
 	  library, a small <literal>.pc</literal> text file is installed in a standard

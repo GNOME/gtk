@@ -1,3 +1,9 @@
+Sat Jul  3 23:43:23 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* docs/faq/gtk-faq.sgml: 
+	* gtk/gtkwindow.c: Fix links to www.freedesktop.org.  (#145210,
+	Billy Biggs)
+
 Sat Jul  3 02:09:51 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtksocket.c (gtk_socket_end_embedding): Reset current_width

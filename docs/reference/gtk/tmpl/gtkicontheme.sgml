@@ -12,7 +12,7 @@ providing a filename is to allow different icons to be used
 depending on what <firstterm>icon theme</firstterm> is selecetd
 by the user. The operation of icon themes on Linux and Unix
 follows the <ulink
-url="http://www.freedesktop.org/standards/icon-theme-spec.html">Icon
+url="http://www.freedesktop.org/standards/icon-theme-spec">Icon
 Theme Specification</ulink>. There is a default icon theme,
 named <literal>hicolor</literal> where applications should install
 their icons, but more additional application themes can be

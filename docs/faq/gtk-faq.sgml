@@ -429,7 +429,7 @@ in which they need to be installed:</para>
 
 <itemizedlist spacing=compact>
 <listitem><simpara> pkg-config
-(<ulink url="http://www.freedesktop.org/software/pkgconfig/">
+(<ulink url="http://www.freedesktop.org/software/pkgconfig">
 pkg-config Site</ulink>)</simpara>
 </listitem>
 
