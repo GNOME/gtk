@@ -1,3 +1,8 @@
+Tue Jun 16 14:08:08 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtktable.c: fix from TimJ for off-by-one error in table
+	resizing
+
 Tue Jun 16 06:29:57 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkcheckmenuitem.c (gtk_check_menu_item_set_state): check for

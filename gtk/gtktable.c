@@ -261,7 +261,7 @@ gtk_table_set_child_arg (GtkContainer   *container,
       if (GTK_VALUE_UINT (*arg) > table_child->left_attach)
 	table_child->right_attach = GTK_VALUE_UINT (*arg);
       if (table_child->right_attach >= table->ncols)
-	gtk_table_resize (table, table->ncols, table_child->right_attach + 1);
+	gtk_table_resize (table, table->ncols, table_child->right_attach);
       break;
     case CHILD_ARG_TOP_ATTACH:
       if (GTK_VALUE_UINT (*arg) < table_child->bottom_attach)
@@ -271,7 +271,7 @@ gtk_table_set_child_arg (GtkContainer   *container,
       if (GTK_VALUE_UINT (*arg) > table_child->top_attach)
 	table_child->bottom_attach = GTK_VALUE_UINT (*arg);
       if (table_child->bottom_attach >= table->nrows)
-	gtk_table_resize (table, table_child->bottom_attach + 1, table->ncols);
+	gtk_table_resize (table, table_child->bottom_attach, table->ncols);
       break;
     case CHILD_ARG_X_OPTIONS:
       table_child->xexpand = (GTK_VALUE_FLAGS (*arg) & GTK_EXPAND) != 0;
@@ -410,8 +410,8 @@ gtk_table_resize (GtkTable *table,
 	  
 	  child = list->data;
 	  
-	  n_rows = MAX (n_rows, child->bottom_attach + 1);
-	  n_cols = MAX (n_cols, child->right_attach + 1);
+	  n_rows = MAX (n_rows, child->bottom_attach);
+	  n_cols = MAX (n_cols, child->right_attach);
 	}
       
       if (n_rows != table->nrows)
@@ -482,10 +482,10 @@ gtk_table_attach (GtkTable	  *table,
   g_return_if_fail (top_attach < bottom_attach);
   
   if (right_attach >= table->ncols)
-    gtk_table_resize (table, table->nrows, right_attach + 1);
+    gtk_table_resize (table, table->nrows, right_attach);
   
   if (bottom_attach >= table->nrows)
-    gtk_table_resize (table, bottom_attach + 1, table->ncols);
+    gtk_table_resize (table, bottom_attach, table->ncols);
   
   table_child = g_new (GtkTableChild, 1);
   table_child->widget = child;
