@@ -1,3 +1,7 @@
+Wed Feb 13 13:26:39 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmenu.c: fix figuring accel path and changing behaviour.
+
 Wed Feb 13 06:42:37 2002  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktable.c (gtk_table_size_allocate_pass1): partly revert

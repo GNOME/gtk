@@ -259,7 +259,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   gtk_settings_install_property (g_param_spec_boolean ("gtk-can-change-accels",
 						       _("Can change accelerators"),
 						       _("Whether menu accelerators can be changed by pressing a key over the menu item."),
-						       FALSE,
+						       TRUE,
 						       G_PARAM_READWRITE));
 }
 
@@ -1767,8 +1767,7 @@ gtk_menu_key_press (GtkWidget	*widget,
     }
 
   g_object_get (G_OBJECT (gtk_settings_get_default ()),
-		"gtk-can-change-accels",
-		&can_change_accels,
+		"gtk-can-change-accels", &can_change_accels,
 		NULL);
   
   accel_key = event->keyval;
@@ -1785,9 +1784,7 @@ gtk_menu_key_press (GtkWidget	*widget,
       gboolean replace_accels = TRUE;
       const gchar *path;
 
-      path = GTK_MENU_ITEM (menu_item)->accel_path;
-      if (!path)
-	path = _gtk_widget_get_accel_path (menu_item);
+      path = _gtk_widget_get_accel_path (menu_item);
       if (!path)
 	{
 	  /* can't change accelerators on menu_items without paths
