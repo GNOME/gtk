@@ -1,3 +1,9 @@
+Wed Jun 17 21:59:09 1998  Stefan Jeske  <stefan@gtk.org>
+
+	* gtkspinbutton.h gtkspinbutton.c testgtk.c:
+ 	Changed GtkSpinButtonUpdatePolicy enum, added keyboard
+	acceleration, new API gtk_spin_button_set_snap_to_ticks.
+
 Wed Jun 17 03:47:40 1998  Tim Janik  <timj@gtk.org>
 
 	* gdk/gdk.h:
