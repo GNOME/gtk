@@ -1,3 +1,9 @@
+Mon Jan 29 18:33:24 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c (gdk_init_check): Handle --display= forms
+	of options taking arguments. Fix some memory leaks with
+	repeated arguments. (#28842, Sam Hunter)
+
 Mon Jan 29 16:34:28 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfontsel.c (gtk_font_selection_select_best_size): Return

@@ -131,6 +131,41 @@ static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);
 
 #endif /* G_ENABLE_DEBUG */
 
+static const char *
+get_option (char ***argv,
+	    gint    argc,
+	    int    *i_inout)
+{
+  gchar *equal_pos;
+  const gchar *result = NULL;
+  gint i = *i_inout;
+  const gchar *orig = (*argv)[i];
+
+  equal_pos = strchr ((*argv)[i], '=');
+  (*argv)[i] = NULL;
+
+  if (equal_pos)
+    {
+      result = equal_pos + 1;
+    }
+  else
+    {
+      if ((i + 1) < argc && (*argv)[i + 1])
+	{
+	  i++;
+	  result = (*argv)[i];
+	  (*argv)[i] = NULL;
+	}
+      else
+	{
+	  g_warning ("Missing parameter for option %s", orig);
+	}
+    }
+
+  *i_inout = i;
+  return result;
+}
+
 /*
  *--------------------------------------------------------------
  * gdk_init_heck
@@ -163,6 +198,7 @@ gdk_init_check (int	 *argc,
   XClassHint *class_hint;
   gchar **argv_orig = NULL;
   gint argc_orig = 0;
+  const gchar *option;
   
   if (gdk_initialized)
     return TRUE;
@@ -218,56 +254,36 @@ gdk_init_check (int	 *argc,
 	  if ((strcmp ("--gdk-debug", (*argv)[i]) == 0) ||
 	      (strncmp ("--gdk-debug=", (*argv)[i], 12) == 0))
 	    {
-	      gchar *equal_pos = strchr ((*argv)[i], '=');
-	      
-	      if (equal_pos != NULL)
-		{
-		  gdk_debug_flags |= g_parse_debug_string (equal_pos+1,
-							   (GDebugKey *) gdk_debug_keys,
-							   gdk_ndebug_keys);
-		}
-	      else if ((i + 1) < *argc && (*argv)[i + 1])
-		{
-		  gdk_debug_flags |= g_parse_debug_string ((*argv)[i+1],
-							   (GDebugKey *) gdk_debug_keys,
-							   gdk_ndebug_keys);
-		  (*argv)[i] = NULL;
-		  i += 1;
-		}
-	      (*argv)[i] = NULL;
+	      option = get_option (argv, *argc, &i);
+
+	      if (option)
+		gdk_debug_flags |= g_parse_debug_string (option,
+							 (GDebugKey *) gdk_debug_keys,
+							 gdk_ndebug_keys);
 	    }
 	  else if ((strcmp ("--gdk-no-debug", (*argv)[i]) == 0) ||
 		   (strncmp ("--gdk-no-debug=", (*argv)[i], 15) == 0))
 	    {
-	      gchar *equal_pos = strchr ((*argv)[i], '=');
-	      
-	      if (equal_pos != NULL)
-		{
-		  gdk_debug_flags &= ~g_parse_debug_string (equal_pos+1,
-							    (GDebugKey *) gdk_debug_keys,
-							    gdk_ndebug_keys);
-		}
-	      else if ((i + 1) < *argc && (*argv)[i + 1])
-		{
-		  gdk_debug_flags &= ~g_parse_debug_string ((*argv)[i+1],
-							    (GDebugKey *) gdk_debug_keys,
-							    gdk_ndebug_keys);
-		  (*argv)[i] = NULL;
-		  i += 1;
-		}
-	      (*argv)[i] = NULL;
+	      option = get_option (argv, *argc, &i);
+
+	      if (option)
+		gdk_debug_flags &= ~g_parse_debug_string (option,
+							  (GDebugKey *) gdk_debug_keys,
+							  gdk_ndebug_keys);
 	    }
 	  else 
 #endif /* G_ENABLE_DEBUG */
-	    if (strcmp ("--display", (*argv)[i]) == 0)
+	    if ((strcmp ("--display", (*argv)[i]) == 0) ||
+	        (strncmp ("--display=", (*argv)[i], 10) == 0))
 	      {
-		(*argv)[i] = NULL;
-		
-		if ((i + 1) < *argc && (*argv)[i + 1])
+		option = get_option (argv, *argc, &i);
+
+		if (option)
 		  {
-		    gdk_display_name = g_strdup ((*argv)[i + 1]);
-		    (*argv)[i + 1] = NULL;
-		    i += 1;
+		    if (gdk_display_name)
+		      g_free (gdk_display_name);
+		      
+		    gdk_display_name = g_strdup (option);
 		  }
 	      }
 	    else if (strcmp ("--sync", (*argv)[i]) == 0)
@@ -280,82 +296,90 @@ gdk_init_check (int	 *argc,
 		(*argv)[i] = NULL;
 		gdk_use_xshm = FALSE;
 	      }
-	    else if (strcmp ("--name", (*argv)[i]) == 0)
+	    else if ((strcmp ("--name", (*argv)[i]) == 0) ||
+		     (strncmp ("--name=", (*argv)[i], 7) == 0))
 	      {
-		if ((i + 1) < *argc && (*argv)[i + 1])
-		  {
-		    (*argv)[i++] = NULL;
-		    g_set_prgname ((*argv)[i]);
-		    (*argv)[i] = NULL;
-		  }
+		option = get_option (argv, *argc, &i);
+
+		if (option)
+		  g_set_prgname (option);
 	      }
-	    else if (strcmp ("--class", (*argv)[i]) == 0)
+	    else if ((strcmp ("--class", (*argv)[i]) == 0) ||
+		     (strncmp ("--class=", (*argv)[i], 8) == 0))
 	      {
-		if ((i + 1) < *argc && (*argv)[i + 1])
+	      	option = get_option (argv, *argc, &i);
+
+		if (option)
 		  {
-		    (*argv)[i++] = NULL;
-		    gdk_progclass = (*argv)[i];
-		    (*argv)[i] = NULL;
+		    if (gdk_progclass)
+		      g_free (gdk_progclass);
+		    
+		    gdk_progclass = g_strdup (option);
 		  }
 	      }
 #ifdef XINPUT_GXI
-	    else if (strcmp ("--gxid_host", (*argv)[i]) == 0)
+	    else if ((strcmp ("--gxid_host", (*argv)[i]) == 0) ||
+		     (strncmp ("--gxid_host=", (*argv)[i], 12) == 0))
 	      {
-		if ((i + 1) < *argc && (*argv)[i + 1])
+		option = get_option (argv, *argc, &i);
+
+		if (option)
 		  {
-		    (*argv)[i++] = NULL;
-		    gdk_input_gxid_host = ((*argv)[i]);
-		    (*argv)[i] = NULL;
+		    if (gdk_input_gxid_host)
+		      g_free (gdk_input_gxid_host);
+		    
+		    gdk_input_gxid_host = g_strdup (option);
 		  }
 	      }
-	    else if (strcmp ("--gxid_port", (*argv)[i]) == 0)
+	    else if ((strcmp ("--gxid_port", (*argv)[i]) == 0) ||
+		     (strncmp ("--gxid_port=", (*argv)[i], 12) == 0))
 	      {
-		if ((i + 1) < *argc && (*argv)[i + 1])
-		  {
-		    (*argv)[i++] = NULL;
-		    gdk_input_gxid_port = atoi ((*argv)[i]);
-		    (*argv)[i] = NULL;
-		  }
+		option = get_option (argv, *argc, &i);
+
+		if (option)
+		  gdk_input_gxid_port = atoi (equal_pos + 1);
 	      }
 #endif
 #ifdef USE_XIM
-	    else if (strcmp ("--xim-preedit", (*argv)[i]) == 0)
+	    else if ((strcmp ("--xim-preedit", (*argv)[i]) == 0) ||
+		     (strncmp ("--xim-preedit=", (*argv)[i], 14) == 0))
 	      {
-		if ((i + 1) < *argc && (*argv)[i + 1])
+		option = get_option (argv, *argc, &i);
+
+		if (option)
 		  {
-		    (*argv)[i++] = NULL;
-		    if (strcmp ("none", (*argv)[i]) == 0)
+		    if (strcmp ("none", option) == 0)
 		      gdk_im_set_best_style (GDK_IM_PREEDIT_NONE);
-		    else if (strcmp ("nothing", (*argv)[i]) == 0)
+		    else if (strcmp ("nothing", option) == 0)
 		      gdk_im_set_best_style (GDK_IM_PREEDIT_NOTHING);
-		    else if (strcmp ("area", (*argv)[i]) == 0)
+		    else if (strcmp ("area", option) == 0)
 		      gdk_im_set_best_style (GDK_IM_PREEDIT_AREA);
-		    else if (strcmp ("position", (*argv)[i]) == 0)
+		    else if (strcmp ("position", option) == 0)
 		      gdk_im_set_best_style (GDK_IM_PREEDIT_POSITION);
-		    else if (strcmp ("callbacks", (*argv)[i]) == 0)
+		    else if (strcmp ("callbacks", option) == 0)
 		      gdk_im_set_best_style (GDK_IM_PREEDIT_CALLBACKS);
-		    (*argv)[i] = NULL;
 		  }
 	      }
-	    else if (strcmp ("--xim-status", (*argv)[i]) == 0)
+	    else if ((strcmp ("--xim-status", (*argv)[i]) == 0) ||
+		     (strncmp ("--xim-status=", (*argv)[i], 13) == 0))
 	      {
-		if ((i + 1) < *argc && (*argv)[i + 1])
+		option = get_option (argv, *argc, &i);
+		
+		if (option)
 		  {
-		    (*argv)[i++] = NULL;
-		    if (strcmp ("none", (*argv)[i]) == 0)
+		    if (strcmp ("none", option) == 0)
 		      gdk_im_set_best_style (GDK_IM_STATUS_NONE);
-		    else if (strcmp ("nothing", (*argv)[i]) == 0)
+		    else if (strcmp ("nothing", option) == 0)
 		      gdk_im_set_best_style (GDK_IM_STATUS_NOTHING);
-		    else if (strcmp ("area", (*argv)[i]) == 0)
+		    else if (strcmp ("area", option) == 0)
 		      gdk_im_set_best_style (GDK_IM_STATUS_AREA);
-		    else if (strcmp ("callbacks", (*argv)[i]) == 0)
+		    else if (strcmp ("callbacks", option) == 0)
 		      gdk_im_set_best_style (GDK_IM_STATUS_CALLBACKS);
-		    (*argv)[i] = NULL;
 		  }
 	      }
 #endif
 	  
-	  i += 1;
+	  i++;
 	}
       
       for (i = 1; i < *argc; i++)
