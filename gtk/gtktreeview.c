@@ -276,7 +276,7 @@ static void     install_presize_handler  (GtkTreeView *tree_view);
 static void     install_scroll_sync_handler (GtkTreeView *tree_view);
 static void	gtk_tree_view_dy_to_top_row (GtkTreeView *tree_view);
 static void     gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view);
-
+static void     invalidate_empty_focus      (GtkTreeView *tree_view);
 
 /* Internal functions */
 static gboolean gtk_tree_view_is_expander_column             (GtkTreeView       *tree_view,
@@ -2025,6 +2025,9 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 
   gtk_tree_view_size_allocate_columns (widget);
 
+  if (tree_view->priv->tree == NULL)
+    invalidate_empty_focus (tree_view);
+
   if (GTK_WIDGET_REALIZED (widget))
     {
       gboolean has_expand_column = FALSE;
@@ -3222,11 +3225,29 @@ gtk_tree_view_motion (GtkWidget      *widget,
   return FALSE;
 }
 
+/* Invalidate the focus rectangle near the edge of the bin_window; used when
+ * the tree is empty.
+ */
+static void
+invalidate_empty_focus (GtkTreeView *tree_view)
+{
+  GdkRectangle area;
+
+  if (!GTK_WIDGET_HAS_FOCUS (tree_view))
+    return;
+
+  area.x = 0;
+  area.y = 0;
+  gdk_drawable_get_size (tree_view->priv->bin_window, &area.width, &area.height);
+  gdk_window_invalidate_rect (tree_view->priv->bin_window, &area, FALSE);
+}
+
 /* Draws a focus rectangle near the edge of the bin_window; used when the tree
  * is empty.
  */
 static void
-draw_empty_focus (GtkTreeView *tree_view, GdkRectangle *clip_area)
+draw_empty_focus (GtkTreeView  *tree_view, 
+		  GdkRectangle *clip_area)
 {
   gint w, h;
 
