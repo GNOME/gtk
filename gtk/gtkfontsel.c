@@ -58,7 +58,7 @@
 
 /* This is the default text shown in the preview entry, though the user
    can set it. Remember that some fonts only have capital letters. */
-#define PREVIEW_TEXT "abcdefghijk ABCDEFGHIJK"
+#define PREVIEW_TEXT N_("abcdefghijk ABCDEFGHIJK")
 
 /* This is the initial and maximum height of the preview entry (it expands
    when large font sizes are selected). Initial height is also the minimum. */
@@ -997,7 +997,7 @@ gtk_font_selection_update_preview (GtkFontSelection *fontsel)
   /* This sets the preview text, if it hasn't been set already. */
   text = gtk_entry_get_text (GTK_ENTRY (preview_entry));
   if (strlen (text) == 0)
-    gtk_entry_set_text (GTK_ENTRY (preview_entry), PREVIEW_TEXT);
+    gtk_entry_set_text (GTK_ENTRY (preview_entry), _(PREVIEW_TEXT));
   gtk_entry_set_position (GTK_ENTRY (preview_entry), 0);
 }
 

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3\n"
-"POT-Creation-Date: 2002-02-24 00:08-0500\n"
+"POT-Creation-Date: 2002-02-27 18:10-0500\n"
 "PO-Revision-Date: 2002-02-11 23:33+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <none@none.org>\n"
@@ -603,19 +603,46 @@ msgstr "Dados de pixel da imagem corrompidos"
 msgid "failed to allocate image buffer of %u bytes"
 msgstr "falha ao alocar buffer de %u bytes para imagem"
 
-#: gtk/gtkaccellabel.c:121
+#. This is the text that should appear next to menu accelerators
+#. * that use the shift key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:116
+msgid "Shift"
+msgstr ""
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the control key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:122
+msgid "Ctrl"
+msgstr ""
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the alt key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:128
+msgid "Alt"
+msgstr ""
+
+#: gtk/gtkaccellabel.c:136
 msgid "Accelerator Closure"
 msgstr "Área Aceleradora"
 
-#: gtk/gtkaccellabel.c:122
+#: gtk/gtkaccellabel.c:137
 msgid "The closure to be monitored for accelerator changes"
 msgstr "A área a ser monitorizada por alterações de aceleração"
 
-#: gtk/gtkaccellabel.c:128
+#: gtk/gtkaccellabel.c:143
 msgid "Accelerator Widget"
 msgstr "Widget Aceleração"
 
-#: gtk/gtkaccellabel.c:129
+#: gtk/gtkaccellabel.c:144
 msgid "The widget to be monitored for accelerator changes"
 msgstr "O widget a ser monitorizado por alterações de aceleração"
 
@@ -972,7 +999,7 @@ msgstr "Pixbuf Expansor Fechado"
 msgid "Pixbuf for closed expander."
 msgstr "Pixbuf para um expansor fechado."
 
-#: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:521 gtk/gtkprogressbar.c:207
+#: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
 msgid "Text"
 msgstr "Texto"
 
@@ -1028,7 +1055,7 @@ msgstr "Cor 1º plano"
 msgid "Foreground color as a GdkColor"
 msgstr "Cor de 1º plano como uma GdkColor"
 
-#: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:453 gtk/gtktexttag.c:277
+#: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
 #: gtk/gtktextview.c:566
 msgid "Editable"
 msgstr "Editável"
@@ -1318,49 +1345,49 @@ msgstr ""
 "entrada, arraste uma cor aqui ou clique-direito sobre a cor e seleccione "
 "\"Gravar cor aqui.\""
 
-#: gtk/gtkcolorsel.c:1698
+#: gtk/gtkcolorsel.c:1704
 msgid "Has Opacity Control"
 msgstr "Tem Controlo Opacidade"
 
-#: gtk/gtkcolorsel.c:1699
+#: gtk/gtkcolorsel.c:1705
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Se o selector de cor deverá ou não permitir definir a opacidade"
 
-#: gtk/gtkcolorsel.c:1705
+#: gtk/gtkcolorsel.c:1711
 msgid "Has palette"
 msgstr "Tem paleta"
 
-#: gtk/gtkcolorsel.c:1706
+#: gtk/gtkcolorsel.c:1712
 msgid "Whether a palette should be used"
 msgstr "Se a paleta deverá ou não ser utilizada"
 
-#: gtk/gtkcolorsel.c:1712
+#: gtk/gtkcolorsel.c:1718
 msgid "Current Color"
 msgstr "Cor Actual"
 
-#: gtk/gtkcolorsel.c:1713
+#: gtk/gtkcolorsel.c:1719
 msgid "The current color"
 msgstr "A cor actual"
 
-#: gtk/gtkcolorsel.c:1719
+#: gtk/gtkcolorsel.c:1725
 msgid "Current Alpha"
 msgstr "Alfa Actual"
 
-#: gtk/gtkcolorsel.c:1720
+#: gtk/gtkcolorsel.c:1726
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "O valor de opacidade actual (0 completamente transaparente, 65535 "
 "completamente opaca)"
 
-#: gtk/gtkcolorsel.c:1733
+#: gtk/gtkcolorsel.c:1739
 msgid "Custom palette"
 msgstr "Paleta customizada"
 
-#: gtk/gtkcolorsel.c:1734
+#: gtk/gtkcolorsel.c:1740
 msgid "Palette to use in the color selector"
 msgstr "Paleta a utilizar no selector de cor"
 
-#: gtk/gtkcolorsel.c:1778
+#: gtk/gtkcolorsel.c:1784
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1368,7 +1395,7 @@ msgstr ""
 "Seleccione a cor que deseja do anel externo. Seleccione a luminusidade dessa "
 "cor utilizando o triângulo interno."
 
-#: gtk/gtkcolorsel.c:1806
+#: gtk/gtkcolorsel.c:1812
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1376,67 +1403,67 @@ msgstr ""
 "Seleccione a pipeta, depois clique numa cor em qualquer ponto do ecrã para "
 "seleccionar essa cor."
 
-#: gtk/gtkcolorsel.c:1815
+#: gtk/gtkcolorsel.c:1821
 msgid "_Hue:"
 msgstr "_Matiz:"
 
-#: gtk/gtkcolorsel.c:1816
+#: gtk/gtkcolorsel.c:1822
 msgid "Position on the color wheel."
 msgstr "Posição da roda de cor."
 
-#: gtk/gtkcolorsel.c:1817
+#: gtk/gtkcolorsel.c:1823
 msgid "_Saturation:"
 msgstr "_Saturação:"
 
-#: gtk/gtkcolorsel.c:1818
+#: gtk/gtkcolorsel.c:1824
 msgid "\"Deepness\" of the color."
 msgstr "\"Profundidade\" da cor."
 
-#: gtk/gtkcolorsel.c:1819
+#: gtk/gtkcolorsel.c:1825
 msgid "_Value:"
 msgstr "_Valor:"
 
-#: gtk/gtkcolorsel.c:1820
+#: gtk/gtkcolorsel.c:1826
 msgid "Brightness of the color."
 msgstr "Brilho da cor."
 
-#: gtk/gtkcolorsel.c:1821
+#: gtk/gtkcolorsel.c:1827
 msgid "_Red:"
 msgstr "_Vermelho:"
 
-#: gtk/gtkcolorsel.c:1822
+#: gtk/gtkcolorsel.c:1828
 msgid "Amount of red light in the color."
 msgstr "Quantidade de luz vermelha na cor."
 
-#: gtk/gtkcolorsel.c:1823
+#: gtk/gtkcolorsel.c:1829
 msgid "_Green:"
 msgstr "Ve_rde:"
 
-#: gtk/gtkcolorsel.c:1824
+#: gtk/gtkcolorsel.c:1830
 msgid "Amount of green light in the color."
 msgstr "Quantidade de luz verde na cor."
 
-#: gtk/gtkcolorsel.c:1825
+#: gtk/gtkcolorsel.c:1831
 msgid "_Blue:"
 msgstr "_Azul:"
 
-#: gtk/gtkcolorsel.c:1826
+#: gtk/gtkcolorsel.c:1832
 msgid "Amount of blue light in the color."
 msgstr "Quantidade de luz azul na cor."
 
-#: gtk/gtkcolorsel.c:1829
+#: gtk/gtkcolorsel.c:1835
 msgid "_Opacity:"
 msgstr "_Opacidade:"
 
-#: gtk/gtkcolorsel.c:1837
+#: gtk/gtkcolorsel.c:1843
 msgid "Transparency of the currently-selected color."
 msgstr "Transparência da cor actualmente seleccionada."
 
-#: gtk/gtkcolorsel.c:1852
+#: gtk/gtkcolorsel.c:1858
 msgid "Color _Name:"
 msgstr "_Nome Cor:"
 
-#: gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorsel.c:1870
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1444,7 +1471,7 @@ msgstr ""
 "Pode introduzir nesta entrada um valor de cor hexadecimal estilo-HTML, ou "
 "simplesmente um nome de cor tal como 'orange' (laranja)."
 
-#: gtk/gtkcolorsel.c:1883
+#: gtk/gtkcolorsel.c:1889
 msgid "_Palette"
 msgstr "_Paleta"
 
@@ -1587,41 +1614,41 @@ msgstr "Margem da área de acção"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Largura da margem à volta da área de botões no fundo do diálogo"
 
-#: gtk/gtkentry.c:433 gtk/gtklabel.c:359
+#: gtk/gtkentry.c:435 gtk/gtklabel.c:359
 msgid "Cursor Position"
 msgstr "Posição Cursor"
 
-#: gtk/gtkentry.c:434 gtk/gtklabel.c:360
+#: gtk/gtkentry.c:436 gtk/gtklabel.c:360
 msgid "The current position of the insertion cursor in chars."
 msgstr "A posição actual do cursor de inserção nos caracteres."
 
-#: gtk/gtkentry.c:443 gtk/gtklabel.c:369
+#: gtk/gtkentry.c:445 gtk/gtklabel.c:369
 msgid "Selection Bound"
 msgstr "Limite Selecção"
 
-#: gtk/gtkentry.c:444 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:446 gtk/gtklabel.c:370
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars."
 msgstr ""
 "A posição do lado oposto da selecção a partir do cursor nos caracteres."
 
-#: gtk/gtkentry.c:454
+#: gtk/gtkentry.c:456
 msgid "Whether the entry contents can be edited"
 msgstr "Se os conteudos da entrada podem ou não ser editados"
 
-#: gtk/gtkentry.c:461
+#: gtk/gtkentry.c:463
 msgid "Maximum length"
 msgstr "Comprimento máximo"
 
-#: gtk/gtkentry.c:462
+#: gtk/gtkentry.c:464
 msgid "Maximum number of characters for this entry"
 msgstr "Número máximo de caracteres para esta entrada"
 
-#: gtk/gtkentry.c:470
+#: gtk/gtkentry.c:472
 msgid "Visibility"
 msgstr "Visibilidade"
 
-#: gtk/gtkentry.c:471
+#: gtk/gtkentry.c:473
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1629,28 +1656,28 @@ msgstr ""
 "FALSO mostra o \"caracter da invisibilidade\" em vez do texto real (modo "
 "senha)"
 
-#: gtk/gtkentry.c:478
+#: gtk/gtkentry.c:480
 msgid "Has Frame"
 msgstr "Tem Moldura"
 
-#: gtk/gtkentry.c:479
+#: gtk/gtkentry.c:481
 msgid "FALSE removes outside bevel from entry."
 msgstr "FALSO remove o baixo-relevo externo da entrada."
 
-#: gtk/gtkentry.c:486
+#: gtk/gtkentry.c:488
 msgid "Invisible character"
 msgstr "Caracter invisibilidade"
 
-#: gtk/gtkentry.c:487
+#: gtk/gtkentry.c:489
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "O caracter a utilizar para mascarar entradas de conteudos (em \"modo senha\")"
 
-#: gtk/gtkentry.c:494
+#: gtk/gtkentry.c:496
 msgid "Activates default"
 msgstr "Activar defeito"
 
-#: gtk/gtkentry.c:495
+#: gtk/gtkentry.c:497
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed."
@@ -1658,43 +1685,43 @@ msgstr ""
 "Se deverá ou não ser activado o widget de defeito (tal como o botão de "
 "defeito num diálogo) quando o Enter é primido."
 
-#: gtk/gtkentry.c:501
+#: gtk/gtkentry.c:503
 msgid "Width in chars"
 msgstr "Largura em caracteres"
 
-#: gtk/gtkentry.c:502
+#: gtk/gtkentry.c:504
 msgid "Number of characters to leave space for in the entry."
 msgstr "Número de caracteres para dar espaço para a entrada."
 
-#: gtk/gtkentry.c:511
+#: gtk/gtkentry.c:513
 msgid "Scroll offset"
 msgstr "Deslocamento rolamento"
 
-#: gtk/gtkentry.c:512
+#: gtk/gtkentry.c:514
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Número de pixels da entrada rolados para fora do ecrã à esquerda"
 
-#: gtk/gtkentry.c:522
+#: gtk/gtkentry.c:524
 msgid "The contents of the entry"
 msgstr "Os conteudos da entrada"
 
-#: gtk/gtkentry.c:726
+#: gtk/gtkentry.c:728
 msgid "Select on focus"
 msgstr "Seleccionar no focus"
 
-#: gtk/gtkentry.c:727
+#: gtk/gtkentry.c:729
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Se os conteudos da entrada são ou não seleccionados ao terem o focus."
 
-#: gtk/gtkentry.c:3806 gtk/gtklabel.c:3163
+#: gtk/gtkentry.c:3834 gtk/gtklabel.c:3211
 msgid "Select All"
 msgstr "Seleccionar Tudo"
 
-#: gtk/gtkentry.c:3816 gtk/gtklabel.c:3173
+#: gtk/gtkentry.c:3844 gtk/gtklabel.c:3221
 msgid "Input Methods"
 msgstr "Métodos de Entrada"
 
-#: gtk/gtkentry.c:3826 gtk/gtktextview.c:6299
+#: gtk/gtkentry.c:3854 gtk/gtktextview.c:6360
 msgid "_Insert Unicode control character"
 msgstr "_Inserir caracter de controlo Unicode"
 
@@ -1924,6 +1951,12 @@ msgstr "Posição y"
 msgid "Y position of child widget"
 msgstr "A posição Y do widget filho"
 
+#. This is the default text shown in the preview entry, though the user
+#. can set it. Remember that some fonts only have capital letters.
+#: gtk/gtkfontsel.c:61
+msgid "abcdefghijk ABCDEFGHIJK"
+msgstr ""
+
 #: gtk/gtkfontsel.c:194
 msgid "Font name"
 msgstr "Nome fonte"
@@ -2045,7 +2078,7 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1282
+#: gtk/gtkiconfactory.c:1290
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Erro ao ler o ícone: %s"
@@ -2629,7 +2662,7 @@ msgstr ""
 "Um número entre 0.0 e 1.0 especificando o vertical horizontal do texto no "
 "progresswidget"
 
-#: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:280 gtk/gtkspinbutton.c:237
+#: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:282 gtk/gtkspinbutton.c:237
 msgid "Adjustment"
 msgstr "Ajustamento"
 
@@ -2707,57 +2740,79 @@ msgstr ""
 msgid "Text to be displayed in the progress bar"
 msgstr "Texto a mostrar na barra de progresso"
 
-#: gtk/gtkrange.c:271
+#: gtk/gtkrange.c:273
 msgid "Update policy"
 msgstr "Política actualização"
 
-#: gtk/gtkrange.c:272
+#: gtk/gtkrange.c:274
 msgid "How the range should be updated on the screen"
 msgstr "Como deverá ser a área actualizada no ecrã"
 
-#: gtk/gtkrange.c:281
+#: gtk/gtkrange.c:283
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "O GtkAdjustment que contém o valor actual da área deste objecto"
 
-#: gtk/gtkrange.c:288
+#: gtk/gtkrange.c:290
 msgid "Inverted"
 msgstr "Inverter"
 
-#: gtk/gtkrange.c:289
+#: gtk/gtkrange.c:291
 msgid "Invert direction slider moves to increase range value"
 msgstr "Inverter movimentos das barras de direcção para aumentar valor de área"
 
-#: gtk/gtkrange.c:295
+#: gtk/gtkrange.c:297
 msgid "Slider Width"
 msgstr "Largura Rolamento"
 
-#: gtk/gtkrange.c:296
+#: gtk/gtkrange.c:298
 msgid "Width of scrollbar or scale thumb"
 msgstr "Largura da barra de rolamento um indicador de escala"
 
-#: gtk/gtkrange.c:303
+#: gtk/gtkrange.c:305
 msgid "Trough Border"
 msgstr "Margem Externa"
 
-#: gtk/gtkrange.c:304
+#: gtk/gtkrange.c:306
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Espaçamento entre indicadores e relevo externo"
 
-#: gtk/gtkrange.c:311
+#: gtk/gtkrange.c:313
 msgid "Stepper Size"
 msgstr "Tamanho Indicador"
 
-#: gtk/gtkrange.c:312
+#: gtk/gtkrange.c:314
 msgid "Length of step buttons at ends"
 msgstr "Tamanho dos botões indicadores nas extremidades"
 
-#: gtk/gtkrange.c:319
+#: gtk/gtkrange.c:321
 msgid "Stepper Spacing"
 msgstr "Espaçamento Indicadores"
 
-#: gtk/gtkrange.c:320
+#: gtk/gtkrange.c:322
 msgid "Spacing between step buttons and thumb"
 msgstr "Espaçamento entre os botões indicadores e a marca"
+
+#: gtk/gtkrange.c:329
+#, fuzzy
+msgid "Arrow X Displacement"
+msgstr "Deslocamento X Filho"
+
+#: gtk/gtkrange.c:330
+#, fuzzy
+msgid ""
+"How far in the x direction to move the arrow when the button is depressed"
+msgstr "Quão longe na direcção x mover o filho quando o botão é solto"
+
+#: gtk/gtkrange.c:337
+#, fuzzy
+msgid "Arrow Y Displacement"
+msgstr "Deslocamento Y Filho"
+
+#: gtk/gtkrange.c:338
+#, fuzzy
+msgid ""
+"How far in the y direction to move the arrow when the button is depressed"
+msgstr "Quão longe na direcção y mover o filho quando o botão é solto"
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
@@ -3720,7 +3775,7 @@ msgstr "Cursor Visível"
 msgid "If the insertion cursor is shown"
 msgstr "Se o cursor de inserção é mostrado"
 
-#: gtk/gtktextview.c:6290
+#: gtk/gtktextview.c:6351
 msgid "Input _Methods"
 msgstr "_Métodos de Entrada"
 

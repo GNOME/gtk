@@ -108,9 +108,24 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
 
   class->signal_quote1 = g_strdup ("<:");
   class->signal_quote2 = g_strdup (":>");
-  class->mod_name_shift = g_strdup ("Shift");
-  class->mod_name_control = g_strdup ("Ctrl");
-  class->mod_name_alt = g_strdup ("Alt");
+  /* This is the text that should appear next to menu accelerators
+   * that use the shift key. If the text on this key isn't typically
+   * translated on keyboards used for your language, don't translate
+   * this.
+   */
+  class->mod_name_shift = g_strdup (_("Shift"));
+  /* This is the text that should appear next to menu accelerators
+   * that use the control key. If the text on this key isn't typically
+   * translated on keyboards used for your language, don't translate
+   * this.
+   */
+  class->mod_name_control = g_strdup (_("Ctrl"));
+  /* This is the text that should appear next to menu accelerators
+   * that use the alt key. If the text on this key isn't typically
+   * translated on keyboards used for your language, don't translate
+   * this.
+   */
+  class->mod_name_alt = g_strdup (_("Alt"));
   class->mod_separator = g_strdup ("+");
   class->accel_seperator = g_strdup (" / ");
   class->latin1_to_char = TRUE;

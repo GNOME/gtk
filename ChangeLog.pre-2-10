@@ -1,3 +1,12 @@
+Wed Feb 27 18:01:03 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccellabel.c (gtk_accelerator_name) po/POTFILES.in: 
+	Mark <Control>, <Shift>, <Release>, <Alt> for translation.
+	(#60590)
+
+	* gtk/gtkfontsel.c: Mark PREVIEW_TEXT for translation.
+	(Vlad Harchev, #53223)
+
 Wed Feb 27 17:32:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrange.c (gtk_range_get_props): if CAN_FOCUS

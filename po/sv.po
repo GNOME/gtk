@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-02-27 01:28+0100\n"
+"POT-Creation-Date: 2002-02-27 18:10-0500\n"
 "PO-Revision-Date: 2002-02-27 01:28+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -591,19 +591,46 @@ msgstr "Bildpunktsdata är trasigt"
 msgid "failed to allocate image buffer of %u bytes"
 msgstr "misslyckades med att allokera bildbuffert på %u byte"
 
-#: gtk/gtkaccellabel.c:121
+#. This is the text that should appear next to menu accelerators
+#. * that use the shift key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:116
+msgid "Shift"
+msgstr ""
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the control key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:122
+msgid "Ctrl"
+msgstr ""
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the alt key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:128
+msgid "Alt"
+msgstr ""
+
+#: gtk/gtkaccellabel.c:136
 msgid "Accelerator Closure"
 msgstr "Genvägsstängning"
 
-#: gtk/gtkaccellabel.c:122
+#: gtk/gtkaccellabel.c:137
 msgid "The closure to be monitored for accelerator changes"
 msgstr "Stängningen att övervakas för genvägsändringar"
 
-#: gtk/gtkaccellabel.c:128
+#: gtk/gtkaccellabel.c:143
 msgid "Accelerator Widget"
 msgstr "Genvägswidget"
 
-#: gtk/gtkaccellabel.c:129
+#: gtk/gtkaccellabel.c:144
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Widgeten att övervakas för genvägsändringar"
 
@@ -1900,6 +1927,12 @@ msgstr "Y-position"
 msgid "Y position of child widget"
 msgstr "Y-position på barnwidgeten"
 
+#. This is the default text shown in the preview entry, though the user
+#. can set it. Remember that some fonts only have capital letters.
+#: gtk/gtkfontsel.c:61
+msgid "abcdefghijk ABCDEFGHIJK"
+msgstr ""
+
 #: gtk/gtkfontsel.c:194
 msgid "Font name"
 msgstr "Typsnittsnamn"
@@ -2021,7 +2054,7 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1282
+#: gtk/gtkiconfactory.c:1290
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Fel vid inläsning av ikonen: %s"
