@@ -1,3 +1,14 @@
+Mon Sep 13 15:01:21 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_queue_clear_area): Ignore
+	queues of areas that are completely off screen.
+
+	* gtk/gtkwidget.c (gtk_widget_idle_draw): Fix broken
+	logic for handleboxes.
+
+	* gtk/gtkwidget.c (gtk_widget_queue_draw_data): Add santity
+	check on width/height.
+
 Mon Sep 13 02:22:47 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/Makefile.am: backed out Raja's recent VPATH build "improvements",

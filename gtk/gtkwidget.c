@@ -1734,6 +1734,7 @@ gtk_widget_queue_draw_data (GtkWidget *widget,
   GtkDrawData *data;
   
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (!(width < 0 || height < 0) || window == NULL);
 
   if ((width != 0) && (height != 0) && GTK_WIDGET_DRAWABLE (widget))
     {
@@ -1864,6 +1865,10 @@ gtk_widget_queue_clear_area (GtkWidget *widget,
 	  y -= wy - widget->allocation.y;
 	  
 	  gdk_window_get_size (widget->window, &wwidth, &wheight);
+
+	  if (x + width <= 0 || y + height <= 0 ||
+	      x >= wwidth || y >= wheight)
+	    return;
 	  
 	  if (x < 0)
 	    {
@@ -2083,23 +2088,23 @@ gtk_widget_idle_draw (gpointer cb_data)
 						       NULL, NULL);
 	      data->window = NULL;
 	    }
-	  else
+	  else if ((data->rect.width == 0) && (data->rect.height == 0))
+	    full_allocation = TRUE;
+
+	  if (full_allocation)
 	    {
-	      if ((data->rect.width == 0) && (data->rect.height == 0))
+	      if (GTK_WIDGET_NO_WINDOW (widget))
 		{
-		  if (GTK_WIDGET_NO_WINDOW (widget))
-		    {
-		      data->rect.x = widget->allocation.x;
-		      data->rect.y = widget->allocation.y;
-		    }
-		  else
-		    {
-		      data->rect.x = 0;
-		      data->rect.y = 0;
-		    }
-		  data->rect.width = widget->allocation.width;
-		  data->rect.height = widget->allocation.height;
+		  data->rect.x = widget->allocation.x;
+		  data->rect.y = widget->allocation.y;
 		}
+	      else
+		{
+		  data->rect.x = 0;
+		  data->rect.y = 0;
+		}
+	      data->rect.width = widget->allocation.width;
+	      data->rect.height = widget->allocation.height;
 	    }
 
 	  draw_data_list = draw_data_list->next;
@@ -2255,13 +2260,16 @@ gtk_widget_queue_resize (GtkWidget *widget)
   if (GTK_IS_RESIZE_CONTAINER (widget))
     gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
 
-  if (GTK_WIDGET_DRAWABLE (widget))
-    gtk_widget_queue_clear (widget);
-
   if (widget->parent)
-    gtk_container_queue_resize (GTK_CONTAINER (widget->parent));
+    {
+      gtk_widget_queue_clear (widget->parent);
+      gtk_container_queue_resize (GTK_CONTAINER (widget->parent));
+    }
   else if (GTK_WIDGET_TOPLEVEL (widget))
-    gtk_container_queue_resize (GTK_CONTAINER (widget));
+    {
+      gtk_widget_queue_clear (widget);
+      gtk_container_queue_resize (GTK_CONTAINER (widget));
+    }
 }
 
 /*****************************************
