@@ -24,6 +24,7 @@ gdk/gdkdisplaymanager.c
 gtk/gtkaccellabel.c
 gtk/gtkaction.c
 gtk/gtkactiongroup.c
+gtk/gtkadjustment.c
 gtk/gtkalignment.c
 gtk/gtkarrow.c
 gtk/gtkaspectframe.c
@@ -86,6 +87,7 @@ gtk/gtkprogress.c
 gtk/gtkprogressbar.c
 gtk/gtkradioaction.c
 gtk/gtkradiobutton.c
+gtk/gtkradiotoolbutton.c
 gtk/gtkrange.c
 gtk/gtkrc.c
 gtk/gtkruler.c

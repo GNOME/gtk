@@ -1,16 +1,16 @@
 # Serbian translation of gtk
-# Courtesy of Prevod.org team (http://www.prevod.org/) -- 2003.
-# 
+# Courtesy of Prevod.org team (http://www.prevod.org/) -- 2003, 2004.
+#
 # This file is distributed under the same license as the gtk package.
-# 
+#
 # Maintainer: Danilo Šegan <dsegan@gmx.net>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-23 11:03+0100\n"
-"PO-Revision-Date: 2004-01-23 11:04+0100\n"
+"POT-Creation-Date: 2004-02-01 16:43+0100\n"
+"PO-Revision-Date: 2004-02-01 16:43+0100\n"
 "Last-Translator: Danilo Šegan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -968,7 +968,7 @@ msgstr ""
 "Ne mogu da dodam obeleživač za %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2917
+#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2937
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1064,21 +1064,21 @@ msgid "Preview"
 msgstr "Pregled"
 
 #. Change the current folder label
-#: gtk/gtkfilechooserdefault.c:2118
+#: gtk/gtkfilechooserdefault.c:2130
 #, c-format
 msgid "Current folder: %s"
 msgstr "Tekući direktorijum: %s"
 
-#: gtk/gtkfilechooserdefault.c:2521
+#: gtk/gtkfilechooserdefault.c:2533
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "prečica %s ne postoji"
 
-#: gtk/gtkfilechooserdefault.c:3063
+#: gtk/gtkfilechooserdefault.c:3083
 msgid "Type name of new folder"
 msgstr "Unesite ime novog direktorijuma"
 
-#: gtk/gtkfilechooserdefault.c:3090
+#: gtk/gtkfilechooserdefault.c:3110
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1086,34 +1086,34 @@ msgstr[0] "%d bajt"
 msgstr[1] "%d bajta"
 msgstr[2] "%d bajtova"
 
-#: gtk/gtkfilechooserdefault.c:3092
+#: gtk/gtkfilechooserdefault.c:3112
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:3094
+#: gtk/gtkfilechooserdefault.c:3114
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:3096
+#: gtk/gtkfilechooserdefault.c:3116
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:3141
+#: gtk/gtkfilechooserdefault.c:3161
 msgid "Today"
 msgstr "Danas"
 
-#: gtk/gtkfilechooserdefault.c:3143
+#: gtk/gtkfilechooserdefault.c:3163
 msgid "Yesterday"
 msgstr "Juče"
 
-#: gtk/gtkfilechooserdefault.c:3151
+#: gtk/gtkfilechooserdefault.c:3171
 msgid "%d/%b/%Y"
 msgstr "%d.%b.%Y."
 
-#: gtk/gtkfilechooserdefault.c:3154
+#: gtk/gtkfilechooserdefault.c:3174
 msgid "Unknown"
 msgstr "Nepoznato"
 
@@ -1301,38 +1301,31 @@ msgstr "Ne može pretvoriti ime datoteke"
 msgid "(Empty)"
 msgstr "(Prazno)"
 
-#: gtk/gtkfilesystemunix.c:335 gtk/gtkfilesystemwin32.c:417
+#: gtk/gtkfilesystemunix.c:351 gtk/gtkfilesystemwin32.c:373
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "greška pri obrazovanju direktorijuma „%s“: %s"
 
-#: gtk/gtkfilesystemunix.c:378 gtk/gtkfilesystemwin32.c:458
+#: gtk/gtkfilesystemunix.c:392 gtk/gtkfilesystemwin32.c:414
 msgid "This file system does not support mounting"
 msgstr "Ovaj sistem datoteka ne podržava priključivanje"
 
-#: gtk/gtkfilesystemunix.c:386
+#: gtk/gtkfilesystemunix.c:400
 msgid "Filesystem"
 msgstr "Sistem datoteka"
 
-#: gtk/gtkfilesystemunix.c:648
-msgid "This file system does not support icons"
-msgstr "Ovaj sistem datoteka ne podržava ikone"
-
-#: gtk/gtkfilesystemunix.c:661 gtk/gtkfilesystemunix.c:674
-msgid "This file system does not support bookmarks"
-msgstr "Ovaj sistem datoteka ne podržava obeleživače"
-
-#: gtk/gtkfilesystemunix.c:847 gtk/gtkfilesystemwin32.c:1197
+#: gtk/gtkfilesystemunix.c:419 gtk/gtkfilesystemunix.c:1295
+#: gtk/gtkfilesystemwin32.c:1154
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "greška pri dobavljanju podataka o „%s“: %s"
 
-#: gtk/gtkfilesystemwin32.c:820
+#: gtk/gtkfilesystemunix.c:1005 gtk/gtkfilesystemwin32.c:777
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Neuspešno snimanje obeleživača (%s)"
 
-#: gtk/gtkfilesystemwin32.c:976
+#: gtk/gtkfilesystemwin32.c:933
 msgid "This file system does not support icons for everything"
 msgstr "Ovaj sistem datoteka ne podržava ikone za sve"
 
@@ -1387,7 +1380,7 @@ msgstr "_Gama vrednost"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1559
+#: gtk/gtkiconfactory.c:1563
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Greška pri učitavanju ikonice: %s"
@@ -1514,6 +1507,14 @@ msgstr "default:LTR"
 #, c-format
 msgid "Page %u"
 msgstr "List %u"
+
+#: gtk/gtkradiotoolbutton.c:89
+msgid "Group"
+msgstr "Grupa"
+
+#: gtk/gtkradiotoolbutton.c:90
+msgid "The radio tool button whose group this button belongs to."
+msgstr "Dugme radio alatke čijoj grupi ovo dugme pripada."
 
 #: gtk/gtkrc.c:2380
 #, c-format
@@ -1692,127 +1693,131 @@ msgid "_Right"
 msgstr "_Desno"
 
 #: gtk/gtkstock.c:310
+msgid "_Network"
+msgstr "_Mreža"
+
+#: gtk/gtkstock.c:311
 msgid "_New"
 msgstr "_Novo"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:312
 msgid "_No"
 msgstr "_Ne"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:313
 msgid "_OK"
 msgstr "U _redu"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:314
 msgid "_Open"
 msgstr "_Otvori"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:315
 msgid "_Paste"
 msgstr "Ub_aci"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:316
 msgid "_Preferences"
 msgstr "_Postavke"
 
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:317
 msgid "_Print"
 msgstr "_Štampaj"
 
-#: gtk/gtkstock.c:317
+#: gtk/gtkstock.c:318
 msgid "Print Pre_view"
 msgstr "Pre_gled pred štampu"
 
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:319
 msgid "_Properties"
 msgstr "_Osobine"
 
-#: gtk/gtkstock.c:319
+#: gtk/gtkstock.c:320
 msgid "_Quit"
 msgstr "_Izađi"
 
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:321
 msgid "_Redo"
 msgstr "_Ponovi"
 
-#: gtk/gtkstock.c:321
+#: gtk/gtkstock.c:322
 msgid "_Refresh"
 msgstr "_Osveži"
 
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:323
 msgid "_Remove"
 msgstr "_Ukloni"
 
-#: gtk/gtkstock.c:323
+#: gtk/gtkstock.c:324
 msgid "_Revert"
 msgstr "_Vrati"
 
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:325
 msgid "_Save"
 msgstr "_Sačuvaj"
 
-#: gtk/gtkstock.c:325
+#: gtk/gtkstock.c:326
 msgid "Save _As"
 msgstr "Sačuvaj _kao"
 
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:327
 msgid "_Color"
 msgstr "_Boja"
 
-#: gtk/gtkstock.c:327
+#: gtk/gtkstock.c:328
 msgid "_Font"
 msgstr "_Pismo"
 
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:329
 msgid "_Ascending"
 msgstr "_Rastući"
 
-#: gtk/gtkstock.c:329
+#: gtk/gtkstock.c:330
 msgid "_Descending"
 msgstr "_Opadajući"
 
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:331
 msgid "_Spell Check"
 msgstr "_Provera pravopisa"
 
-#: gtk/gtkstock.c:331
+#: gtk/gtkstock.c:332
 msgid "_Stop"
 msgstr "_Zaustavi"
 
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:333
 msgid "_Strikethrough"
 msgstr "_Precrtaj"
 
-#: gtk/gtkstock.c:333
+#: gtk/gtkstock.c:334
 msgid "_Undelete"
 msgstr "_Povrati"
 
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:335
 msgid "_Underline"
 msgstr "_Podvuci"
 
 # OVO NISTA NE VALJA!!!
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:336
 msgid "_Undo"
 msgstr "_Opozovi"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:337
 msgid "_Yes"
 msgstr "_Da"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:338
 msgid "Zoom _100%"
 msgstr "Uvećanje _100%"
 
-#: gtk/gtkstock.c:338
+#: gtk/gtkstock.c:339
 msgid "Zoom to _Fit"
 msgstr "Uvećaj da _pasuje"
 
-#: gtk/gtkstock.c:339
+#: gtk/gtkstock.c:340
 msgid "Zoom _In"
 msgstr "U_većaj"
 
-#: gtk/gtkstock.c:340
+#: gtk/gtkstock.c:341
 msgid "Zoom _Out"
 msgstr "U_manji"
 
@@ -1938,3 +1943,9 @@ msgstr "X način unosa (XIM)"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Ne mogu da saznam podatke o datoteci „%s“: %s"
+
+#~ msgid "This file system does not support icons"
+#~ msgstr "Ovaj sistem datoteka ne podržava ikone"
+
+#~ msgid "This file system does not support bookmarks"
+#~ msgstr "Ovaj sistem datoteka ne podržava obeleživače"

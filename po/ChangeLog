@@ -1,3 +1,9 @@
+2004-02-01  Danilo Šegan  <dsegan@gmx.net>
+
+	* sr.po, sr@Latn.po: Updated Serbian translation.
+
+	* POTFILES.in: Added missing files.
+
 2004-02-01  Christian Neumair  <chris@gnome-de.org>
 
 	* de.po: Updated German translation.
