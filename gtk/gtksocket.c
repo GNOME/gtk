@@ -38,7 +38,7 @@
 
 #include "x11/gdkx.h"
 
-#include "xembed.h"
+#include "gtkxembed.h"
 
 typedef struct _GtkSocketPrivate GtkSocketPrivate;
 
@@ -86,12 +86,6 @@ static GdkFilterReturn gtk_socket_filter_func (GdkXEvent       *gdk_xevent,
 					       GdkEvent        *event,
 					       gpointer         data);
 
-static void     send_xembed_message (GtkSocket     *socket,
-				     glong          message,
-				     glong          detail,
-				     glong          data1,
-				     glong          data2,
-				     guint32        time);
 static gboolean xembed_get_info     (GdkWindow     *gdk_window,
 				     unsigned long *version,
 				     unsigned long *flags);
@@ -690,16 +684,11 @@ socket_update_focus_in (GtkSocket *socket)
       socket->focus_in = focus_in;
 
       if (focus_in)
-	{
-	  send_xembed_message (socket, XEMBED_FOCUS_IN, XEMBED_FOCUS_CURRENT, 0, 0,
-			       gtk_get_current_event_time ());
-	}
+	_gtk_xembed_send_focus_message (socket->plug_window,
+					XEMBED_FOCUS_IN, XEMBED_FOCUS_CURRENT);
       else
-	{
-	  send_xembed_message (socket, XEMBED_FOCUS_OUT, 0, 0, 0,
-			       gtk_get_current_event_time ());
-      
-	}
+	_gtk_xembed_send_message (socket->plug_window,
+				  XEMBED_FOCUS_OUT, 0, 0, 0);
     }
 }
 
@@ -720,10 +709,9 @@ socket_update_active (GtkSocket *socket)
     {
       socket->active = active;
 
-      send_xembed_message (socket,
-			   active ? XEMBED_WINDOW_ACTIVATE : XEMBED_WINDOW_DEACTIVATE,
-			   0, 0, 0,
-			   gtk_get_current_event_time ());
+      _gtk_xembed_send_message (socket->plug_window,
+				active ? XEMBED_WINDOW_ACTIVATE : XEMBED_WINDOW_DEACTIVATE,
+				0, 0, 0);
     }
 }
 
@@ -773,9 +761,9 @@ gtk_socket_grab_notify (GtkWidget *widget,
   GtkSocket *socket = GTK_SOCKET (widget);
 
   if (!socket->same_app)
-    send_xembed_message (GTK_SOCKET (widget),
-			 was_grabbed ? XEMBED_MODALITY_OFF : XEMBED_MODALITY_ON,
-			 0, 0, 0, gtk_get_current_event_time ());
+    _gtk_xembed_send_message (GTK_SOCKET (widget)->plug_window,
+			      was_grabbed ? XEMBED_MODALITY_OFF : XEMBED_MODALITY_ON,
+			      0, 0, 0);
 }
 
 static gboolean
@@ -868,8 +856,8 @@ gtk_socket_focus (GtkWidget *widget, GtkDirectionType direction)
 	  break;
 	}
       
-      send_xembed_message (socket, XEMBED_FOCUS_IN, detail, 0, 0,
-			   gtk_get_current_event_time ());
+      _gtk_xembed_send_focus_message (socket->plug_window,
+				      XEMBED_FOCUS_IN, detail);
 
       gtk_socket_claim_focus (socket, FALSE);
  
@@ -1017,7 +1005,7 @@ gtk_socket_add_window (GtkSocket        *socket,
       socket->xembed_version = -1;
       if (xembed_get_info (socket->plug_window, &version, &flags))
 	{
-	  socket->xembed_version = version;
+	  socket->xembed_version = MIN (GTK_XEMBED_PROTOCOL_VERSION, version);
 	  socket->is_mapped = (flags & XEMBED_MAPPED) != 0;
 	}
       else
@@ -1045,8 +1033,10 @@ gtk_socket_add_window (GtkSocket        *socket,
       if (toplevel && GTK_IS_WINDOW (toplevel))
 	gtk_window_add_embedded_xid (GTK_WINDOW (toplevel), xid);
 
-      send_xembed_message (socket, XEMBED_EMBEDDED_NOTIFY, 0, 0, 0,
-			   gtk_get_current_event_time ());
+      _gtk_xembed_send_message (socket->plug_window,
+				XEMBED_EMBEDDED_NOTIFY, 0,
+				GDK_WINDOW_XWINDOW (widget->window),
+				socket->xembed_version);
       socket_update_active (socket);
       socket_update_focus_in (socket);
 
@@ -1055,42 +1045,6 @@ gtk_socket_add_window (GtkSocket        *socket,
 
   if (socket->plug_window)
     g_signal_emit (socket, socket_signals[PLUG_ADDED], 0);
-}
-
-
-static void
-send_xembed_message (GtkSocket *socket,
-		     glong      message,
-		     glong      detail,
-		     glong      data1,
-		     glong      data2,
-		     guint32    time)
-{
-  GTK_NOTE(PLUGSOCKET,
-	 g_message ("GtkSocket: Sending XEMBED message of type %ld", message));
-  
-  if (socket->plug_window)
-    {
-      GdkDisplay *display = gtk_widget_get_display (GTK_WIDGET (socket));
-      XEvent xevent;
-
-      xevent.xclient.window = GDK_WINDOW_XWINDOW (socket->plug_window);
-      xevent.xclient.type = ClientMessage;
-      xevent.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_XEMBED");
-      xevent.xclient.format = 32;
-      xevent.xclient.data.l[0] = time;
-      xevent.xclient.data.l[1] = message;
-      xevent.xclient.data.l[2] = detail;
-      xevent.xclient.data.l[3] = data1;
-      xevent.xclient.data.l[4] = data2;
-
-      gdk_error_trap_push ();
-      XSendEvent (GDK_DISPLAY_XDISPLAY (display),
-		  GDK_WINDOW_XWINDOW (socket->plug_window),
-		  False, NoEventMask, &xevent);
-      gdk_display_sync (display);
-      gdk_error_trap_pop ();
-    }
 }
 
 static gboolean
@@ -1146,15 +1100,80 @@ xembed_get_info (GdkWindow     *window,
 }
 
 static void
-handle_xembed_message (GtkSocket *socket,
-		       glong      message,
-		       glong      detail,
-		       glong      data1,
-		       glong      data2,
-		       guint32    time)
+advance_toplevel_focus (GtkSocket        *socket,
+			GtkDirectionType  direction)
+{
+  GtkBin *bin;
+  GtkWindow *window;
+  GtkContainer *container;
+  GtkWidget *toplevel;
+  GtkWidget *old_focus_child;
+  GtkWidget *parent;
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
+  if (!toplevel)
+    return;
+
+  if (!GTK_WIDGET_TOPLEVEL (toplevel) || GTK_IS_PLUG (toplevel))
+    {
+      gtk_widget_child_focus (toplevel,direction);
+      return;
+    }
+
+  container = GTK_CONTAINER (toplevel);
+  window = GTK_WINDOW (toplevel);
+  bin = GTK_BIN (toplevel);
+
+  /* This is a copy of gtk_window_focus(), modified so that we
+   * can detect wrap-around.
+   */
+  old_focus_child = container->focus_child;
+  
+  if (old_focus_child)
+    {
+      if (gtk_widget_child_focus (old_focus_child, direction))
+	return;
+
+      /* We are allowed exactly one wrap-around per sequence of focus
+       * events
+       */
+      if (_gtk_xembed_get_focus_wrapped ())
+	return;
+      else
+	_gtk_xembed_set_focus_wrapped ();
+    }
+
+  if (window->focus_widget)
+    {
+      /* Wrapped off the end, clear the focus setting for the toplevel */
+      parent = window->focus_widget->parent;
+      while (parent)
+	{
+	  gtk_container_set_focus_child (GTK_CONTAINER (parent), NULL);
+	  parent = GTK_WIDGET (parent)->parent;
+	}
+      
+      gtk_window_set_focus (GTK_WINDOW (container), NULL);
+    }
+
+  /* Now try to focus the first widget in the window */
+  if (bin->child)
+    {
+      if (gtk_widget_child_focus (bin->child, direction))
+        return;
+    }
+}
+
+static void
+handle_xembed_message (GtkSocket        *socket,
+		       XEmbedMessageType message,
+		       glong             detail,
+		       glong             data1,
+		       glong             data2,
+		       guint32           time)
 {
   GTK_NOTE (PLUGSOCKET,
-	    g_message ("GtkSocket: Message of type %ld received", message));
+	    g_message ("GtkSocket: Message of type %d received", message));
   
   switch (message)
     {
@@ -1165,7 +1184,7 @@ handle_xembed_message (GtkSocket *socket,
     case XEMBED_MODALITY_OFF:
     case XEMBED_FOCUS_IN:
     case XEMBED_FOCUS_OUT:
-      g_warning ("GtkSocket: Invalid _XEMBED message of type %ld received", message);
+      g_warning ("GtkSocket: Invalid _XEMBED message of type %d received", message);
       break;
       
     case XEMBED_REQUEST_FOCUS:
@@ -1174,16 +1193,10 @@ handle_xembed_message (GtkSocket *socket,
 
     case XEMBED_FOCUS_NEXT:
     case XEMBED_FOCUS_PREV:
-      {
-	GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
-	if (toplevel)
-	  {
-	    gtk_widget_child_focus (toplevel,
-                                    (message == XEMBED_FOCUS_NEXT ?
-                                     GTK_DIR_TAB_FORWARD : GTK_DIR_TAB_BACKWARD));
-	  }
-	break;
-      }
+      advance_toplevel_focus (socket,
+			      (message == XEMBED_FOCUS_NEXT ?
+			       GTK_DIR_TAB_FORWARD : GTK_DIR_TAB_BACKWARD));
+      break;
       
     case XEMBED_GTK_GRAB_KEY:
       add_grabbed_key (socket, data1, data2);
@@ -1198,7 +1211,7 @@ handle_xembed_message (GtkSocket *socket,
       
     default:
       GTK_NOTE (PLUGSOCKET,
-		g_message ("GtkSocket: Ignoring unknown _XEMBED message of type %ld", message));
+		g_message ("GtkSocket: Ignoring unknown _XEMBED message of type %d", message));
       break;
     }
 }
@@ -1250,13 +1263,14 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
     case ClientMessage:
       if (xevent->xclient.message_type == gdk_x11_get_xatom_by_name_for_display (display, "_XEMBED"))
 	{
+	  _gtk_xembed_push_message (xevent);
 	  handle_xembed_message (socket,
 				 xevent->xclient.data.l[1],
 				 xevent->xclient.data.l[2],
 				 xevent->xclient.data.l[3],
 				 xevent->xclient.data.l[4],
 				 xevent->xclient.data.l[0]);
-	  
+	  _gtk_xembed_pop_message ();
 	  
 	  return_val = GDK_FILTER_REMOVE;
 	}

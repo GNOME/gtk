@@ -33,7 +33,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "x11/gdkx.h"
 
-#include "xembed.h"
+#include "gtkxembed.h"
 
 static void            gtk_plug_class_init            (GtkPlugClass     *klass);
 static void            gtk_plug_init                  (GtkPlug          *plug);
@@ -61,12 +61,6 @@ static GdkFilterReturn gtk_plug_filter_func           (GdkXEvent        *gdk_xev
 						       gpointer          data);
 
 static void handle_modality_off        (GtkPlug       *plug);
-static void send_xembed_message        (GtkPlug       *plug,
-					glong          message,
-					glong          detail,
-					glong          data1,
-					glong          data2,
-					guint32        time);
 static void xembed_set_info            (GdkWindow     *window,
 					unsigned long  flags);
 
@@ -698,8 +692,8 @@ gtk_plug_set_focus (GtkWindow *window,
 
   if (focus && !window->has_toplevel_focus)
     {
-      send_xembed_message (plug, XEMBED_REQUEST_FOCUS, 0, 0, 0,
-			   gtk_get_current_event_time ());
+      _gtk_xembed_send_message (plug->socket_window,
+				XEMBED_REQUEST_FOCUS, 0, 0, 0);
     }
 }
 
@@ -741,9 +735,8 @@ add_grabbed_key (gpointer key, gpointer val, gpointer data)
   if (!plug->grabbed_keys ||
       !g_hash_table_lookup (plug->grabbed_keys, grabbed_key))
     {
-      send_xembed_message (plug, XEMBED_GTK_GRAB_KEY, 0, 
-			   grabbed_key->accelerator_key, grabbed_key->accelerator_mods,
-			   gtk_get_current_event_time ());
+      _gtk_xembed_send_message (plug->socket_window, XEMBED_GTK_GRAB_KEY, 0, 
+				grabbed_key->accelerator_key, grabbed_key->accelerator_mods);
     }
 }
 
@@ -753,9 +746,8 @@ add_grabbed_key_always (gpointer key, gpointer val, gpointer data)
   GrabbedKey *grabbed_key = key;
   GtkPlug *plug = data;
 
-  send_xembed_message (plug, XEMBED_GTK_GRAB_KEY, 0, 
-		       grabbed_key->accelerator_key, grabbed_key->accelerator_mods,
-		       gtk_get_current_event_time ());
+  _gtk_xembed_send_message (plug->socket_window, XEMBED_GTK_GRAB_KEY, 0, 
+			    grabbed_key->accelerator_key, grabbed_key->accelerator_mods);
 }
 
 static void
@@ -767,9 +759,8 @@ remove_grabbed_key (gpointer key, gpointer val, gpointer data)
   if (!plug->grabbed_keys ||
       !g_hash_table_lookup (plug->grabbed_keys, grabbed_key))
     {
-      send_xembed_message (plug, XEMBED_GTK_UNGRAB_KEY, 0, 
-			   grabbed_key->accelerator_key, grabbed_key->accelerator_mods,
-			   gtk_get_current_event_time ());
+      _gtk_xembed_send_message (plug->socket_window, XEMBED_GTK_UNGRAB_KEY, 0, 
+				grabbed_key->accelerator_key, grabbed_key->accelerator_mods);
     }
 }
 
@@ -812,6 +803,29 @@ gtk_plug_keys_changed (GtkWindow *window)
     }
 }
 
+static void
+focus_to_parent (GtkPlug          *plug,
+		 GtkDirectionType  direction)
+{
+  XEmbedMessageType message = XEMBED_FOCUS_PREV; /* Quiet GCC */
+  
+  switch (direction)
+    {
+    case GTK_DIR_UP:
+    case GTK_DIR_LEFT:
+    case GTK_DIR_TAB_BACKWARD:
+      message = XEMBED_FOCUS_PREV;
+      break;
+    case GTK_DIR_DOWN:
+    case GTK_DIR_RIGHT:
+    case GTK_DIR_TAB_FORWARD:
+      message = XEMBED_FOCUS_NEXT;
+      break;
+    }
+  
+  _gtk_xembed_send_focus_message (plug->socket_window, message, 0);
+}
+
 static gboolean
 gtk_plug_focus (GtkWidget        *widget,
 		GtkDirectionType  direction)
@@ -841,39 +855,17 @@ gtk_plug_focus (GtkWidget        *widget,
 	    }
 	  
 	  gtk_window_set_focus (GTK_WINDOW (container), NULL);
-
-	  if (!GTK_CONTAINER (window)->focus_child)
-	    {
-	      gint message = -1;
-
-	      switch (direction)
-		{
-		case GTK_DIR_UP:
-		case GTK_DIR_LEFT:
-		case GTK_DIR_TAB_BACKWARD:
-		  message = XEMBED_FOCUS_PREV;
-		  break;
-		case GTK_DIR_DOWN:
-		case GTK_DIR_RIGHT:
-		case GTK_DIR_TAB_FORWARD:
-		  message = XEMBED_FOCUS_NEXT;
-		  break;
-		}
-	      
-	      send_xembed_message (plug, message, 0, 0, 0,
-				   gtk_get_current_event_time ());
-	    }
 	}
-
-      return FALSE;
     }
   else
     {
       /* Try to focus the first widget in the window */
-      
       if (bin->child && gtk_widget_child_focus (bin->child, direction))
         return TRUE;
     }
+
+  if (!GTK_CONTAINER (window)->focus_child)
+    focus_to_parent (plug, direction);
 
   return FALSE;
 }
@@ -888,47 +880,12 @@ gtk_plug_check_resize (GtkContainer *container)
 }
 
 static void
-send_xembed_message (GtkPlug *plug,
-		     glong      message,
-		     glong      detail,
-		     glong      data1,
-		     glong      data2,
-		     guint32    time)
-{
-  if (plug->socket_window)
-    {
-      GdkDisplay *display = gdk_drawable_get_display (plug->socket_window);
-      XEvent xevent;
-
-      GTK_NOTE(PLUGSOCKET,
-	       g_message ("GtkPlug: Sending XEMBED message of type %ld", message));
-
-      xevent.xclient.window = GDK_WINDOW_XWINDOW (plug->socket_window);
-      xevent.xclient.type = ClientMessage;
-      xevent.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_XEMBED");
-      xevent.xclient.format = 32;
-      xevent.xclient.data.l[0] = time;
-      xevent.xclient.data.l[1] = message;
-      xevent.xclient.data.l[2] = detail;
-      xevent.xclient.data.l[3] = data1;
-      xevent.xclient.data.l[4] = data2;
-
-      gdk_error_trap_push ();
-      XSendEvent (GDK_WINDOW_XDISPLAY(plug->socket_window),
-		  GDK_WINDOW_XWINDOW (plug->socket_window),
-		  False, NoEventMask, &xevent);
-      gdk_display_sync (display);
-      gdk_error_trap_pop ();
-    }
-}
-
-static void
 focus_first_last (GtkPlug          *plug,
 		  GtkDirectionType  direction)
 {
   GtkWindow *window = GTK_WINDOW (plug);
   GtkWidget *parent;
-  
+
   if (window->focus_widget)
     {
       parent = window->focus_widget->parent;
@@ -977,7 +934,7 @@ xembed_set_info (GdkWindow     *window,
 
   Atom xembed_info_atom = gdk_x11_get_xatom_by_name_for_display (display, "_XEMBED_INFO");
 
-  buffer[1] = 0;		/* Protocol version */
+  buffer[1] = GTK_XEMBED_PROTOCOL_VERSION;
   buffer[1] = flags;
 
   XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
@@ -988,17 +945,17 @@ xembed_set_info (GdkWindow     *window,
 }
 
 static void
-handle_xembed_message (GtkPlug   *plug,
-		       glong      message,
-		       glong      detail,
-		       glong      data1,
-		       glong      data2,
-		       guint32    time)
+handle_xembed_message (GtkPlug           *plug,
+		       XEmbedMessageType  message,
+		       glong              detail,
+		       glong              data1,
+		       glong              data2,
+		       guint32            time)
 {
   GtkWindow *window = GTK_WINDOW (plug);
-  
+
   GTK_NOTE (PLUGSOCKET,
-	    g_message ("GtkPlug: Message of type %ld received", message));
+	    g_message ("GtkPlug: Message of type %d received", message));
   
   switch (message)
     {
@@ -1044,12 +1001,12 @@ handle_xembed_message (GtkPlug   *plug,
     case XEMBED_REQUEST_FOCUS:
     case XEMBED_FOCUS_NEXT:
     case XEMBED_FOCUS_PREV:
-      g_warning ("GtkPlug: Invalid _XEMBED message of type %ld received", message);
+      g_warning ("GtkPlug: Invalid _XEMBED message of type %d received", message);
       break;
       
     default:
       GTK_NOTE(PLUGSOCKET,
-	       g_message ("GtkPlug: Ignoring unknown _XEMBED message of type %ld", message));
+	       g_message ("GtkPlug: Ignoring unknown _XEMBED message of type %d", message));
       break;
     }
 }
@@ -1071,14 +1028,15 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
     case ClientMessage:
       if (xevent->xclient.message_type == gdk_x11_get_xatom_by_name_for_display (display, "_XEMBED"))
 	{
+	  _gtk_xembed_push_message (xevent);
 	  handle_xembed_message (plug,
 				 xevent->xclient.data.l[1],
 				 xevent->xclient.data.l[2],
 				 xevent->xclient.data.l[3],
 				 xevent->xclient.data.l[4],
 				 xevent->xclient.data.l[0]);
+	  _gtk_xembed_pop_message ();
 				 
-
 	  return GDK_FILTER_REMOVE;
 	}
       else if (xevent->xclient.message_type == gdk_x11_get_xatom_by_name_for_display (display, "WM_DELETE_WINDOW"))

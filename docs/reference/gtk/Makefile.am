@@ -49,6 +49,7 @@ IGNORE_HFILES=			\
 	gtktexttypes.h		\
 	gtktextutil.h		\
 	gtktypebuiltins.h	\
+	gtkxembed.h		\
 	xembed.h
 
 # Images to copy into HTML directory

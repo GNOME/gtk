@@ -409,6 +409,8 @@ gtk_c_sources = @STRIP_BEGIN@   \
 gtk_plug_c_sources = @STRIP_BEGIN@   \
 	gtkplug.c		\
 	gtksocket.c		\
+	gtkxembed.c		\
+	gtkxembed.h		\
 @STRIP_END@
 
 # we use our own built_sources variable rules to avoid automake's
