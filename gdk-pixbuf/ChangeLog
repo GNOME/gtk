@@ -1,3 +1,9 @@
+Mon Nov 15 17:18:28 1999  George Lebl <jirka@5z.com>
+
+	* src/testpixbuf-drawable.c: use includes from the current directory
+	  rather then from the system include directory as gdk-pixbuf
+	  includes are not yet installed when this is compiled.
+
 1999-11-13  Cody Russell  <bratsche@dfw.net>
 	* src/testpixbuf-drawable.c: Added a test program for drawable
 	code.

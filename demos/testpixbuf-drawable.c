@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
-#include <gdk-pixbuf/gdk-pixbuf-drawable.h>
+#include "gdk-pixbuf.h"
+#include "gdk-pixbuf-drawable.h"
 
 void close_app(GtkWidget *widget, gpointer data)
 {
