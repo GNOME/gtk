@@ -2840,9 +2840,18 @@ size_allocate_columns (GtkCList * clist)
 	  gint width;
 
 	  if (clist->column[i].width_set)
-	    width = clist->column[i].width;
+	    {
+	      width = clist->column[i].width;
+	    }
 	  else
-	    width = gdk_string_width (GTK_WIDGET (clist)->style->font, clist->column[i].title);
+	    {
+	      if (clist->column[i].title)
+		width = gdk_string_width (GTK_WIDGET (clist)->style->font, 
+					  clist->column[i].title);
+	      else
+		width = 0;
+	    }
+
 	  clist->column[i].area.width = MAX (width,
 					     clist->clist_window_width -
 					     xoffset - (2 * (CELL_SPACING + COLUMN_INSET)));
