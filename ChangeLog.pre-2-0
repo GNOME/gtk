@@ -1,3 +1,8 @@
+Fri Aug 10 16:55:53 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwindow.c (gtk_window_set_policy): coalesce multiple
+	property notifies.
+
 2001-08-07  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkfilesel.c (open_ref_dir): fix a typo.
