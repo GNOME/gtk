@@ -11,7 +11,7 @@ gdk_get_display_arg_name
 gdk_set_locale
 gdk_set_sm_client_id
 gdk_exit
-
+gdk_notify_startup_complete
 
 <SUBSECTION>
 gdk_get_program_class
@@ -147,6 +147,9 @@ gdk_display_get_type
 GDK_DISPLAY_CLASS
 GDK_IS_DISPLAY_CLASS
 GDK_DISPLAY_GET_CLASS
+
+<SUBSECTION Private>
+gdk_display_open_default_libgtk_only
 </SECTION>
 
 <SECTION>

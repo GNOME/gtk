@@ -1,3 +1,10 @@
+2002-11-10  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdk-sections.txt: gdk_display_open_default_libgtk_only
+	and gdk_notify_startup_complete.
+
+	* gtk/gtk-sections.txt: Add gtk_window_set_auto_startup_notification.
+
 2002-11-07  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdk.types: Add gdk_display_manager_get_type.
