@@ -4813,17 +4813,19 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
   gint y0, y1;
 
   g_return_if_fail (text_view->vadjustment != NULL);
-
-  cancel_pending_scroll (text_view);
   
   adj = text_view->vadjustment;
 
   /* Make sure we start from the current cursor position, even
-   * if it was offscreen.
+   * if it was offscreen, but don't queue more scrolls if we're
+   * already behind.
    */
-  gtk_text_view_scroll_mark_onscreen (text_view,
-				      gtk_text_buffer_get_mark (get_buffer (text_view),
-								"insert"));
+  if (text_view->pending_scroll)
+    cancel_pending_scroll (text_view);
+  else
+    gtk_text_view_scroll_mark_onscreen (text_view,
+					gtk_text_buffer_get_mark (get_buffer (text_view),
+								  "insert"));
   
 /* Validate the region that will be brought into view by the cursor motion
    */
@@ -4897,16 +4899,18 @@ gtk_text_view_scroll_hpages (GtkTextView *text_view,
   
   g_return_if_fail (text_view->hadjustment != NULL);
 
-  cancel_pending_scroll (text_view);
-  
   adj = text_view->hadjustment;
 
   /* Make sure we start from the current cursor position, even
-   * if it was offscreen.
+   * if it was offscreen, but don't queue more scrolls if we're
+   * already behind.
    */
-  gtk_text_view_scroll_mark_onscreen (text_view,
-				      gtk_text_buffer_get_mark (get_buffer (text_view),
-								"insert"));
+  if (text_view->pending_scroll)
+    cancel_pending_scroll (text_view);
+  else
+    gtk_text_view_scroll_mark_onscreen (text_view,
+					gtk_text_buffer_get_mark (get_buffer (text_view),
+								  "insert"));
   
   /* Validate the line that we're moving within.
    */

@@ -3,6 +3,9 @@
 	* gtk/gtktextview.c (gtk_text_view_allocate_children): Make
 	sure anchored children get size allocated, even if the layout
 	is valid.  (#122323, Andrew E. Makeev)
+	(gtk_text_view_scroll_pages): 
+	(gtk_text_view_scroll_hpages): Don't scroll to cursor position
+	if we already have pending scrolls. Bandaid fix for #78513.
 
 Mon Apr 19 17:59:17 2004  Owen Taylor  <otaylor@redhat.com>
 
