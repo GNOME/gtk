@@ -9,7 +9,7 @@ AC_DEFUN(AM_PATH_GTK,
 dnl Get the cflags and libraries from the gtk-config script
 dnl
   AC_CHECK_PROG(GTK_CONFIG, gtk-config, gtk-config, no)
-  min_gtk_version=ifelse([$1], ,0.99.6,$1)
+  min_gtk_version=ifelse([$1], ,0.99.7,$1)
   AC_MSG_CHECKING(for GTK - version >= $min_gtk_version)
   no_gtk=""
   if test "$GTK_CONFIG" != "no" ; then
