@@ -345,6 +345,10 @@ void     gtk_text_layout_get_line_yrange      (GtkTextLayout     *layout,
                                                const GtkTextIter *iter,
                                                gint              *y,
                                                gint              *height);
+void     _gtk_text_layout_get_line_xrange     (GtkTextLayout     *layout,
+                                               const GtkTextIter *iter,
+                                               gint              *x,
+                                               gint              *width);
 void     gtk_text_layout_get_cursor_locations (GtkTextLayout     *layout,
                                                GtkTextIter       *iter,
                                                GdkRectangle      *strong_pos,

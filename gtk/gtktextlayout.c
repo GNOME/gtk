@@ -2249,6 +2249,45 @@ gtk_text_layout_get_line_yrange (GtkTextLayout     *layout,
     }
 }
 
+/**
+ * _gtk_text_layout_get_line_xrange:
+ * @layout: a #GtkTextLayout
+ * @iter:   a #GtkTextIter
+ * @x:      location to store the top of the paragraph in pixels,
+ *          or %NULL.
+ * @width  location to store the height of the paragraph in pixels,
+ *          or %NULL.
+ *
+ * Find the range of X coordinates for the paragraph containing
+ * the given iter. Private for 2.0 due to API freeze, could
+ * be made public for 2.2.
+ **/
+void
+_gtk_text_layout_get_line_xrange (GtkTextLayout     *layout,
+                                  const GtkTextIter *iter,
+                                  gint              *x,
+                                  gint              *width)
+{
+  GtkTextLine *line;
+
+  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
+  g_return_if_fail (_gtk_text_iter_get_btree (iter) == _gtk_text_buffer_get_btree (layout->buffer));
+
+  line = _gtk_text_iter_get_text_line (iter);
+
+  if (x)
+    *x = 0; /* FIXME This is wrong; should represent the first available cursor position */
+  
+  if (width)
+    {
+      GtkTextLineData *line_data = _gtk_text_line_get_data (line, layout);
+      if (line_data)
+        *width = line_data->width;
+      else
+        *width = 0;
+    }
+}
+
 void
 gtk_text_layout_get_iter_location (GtkTextLayout     *layout,
                                    const GtkTextIter *iter,

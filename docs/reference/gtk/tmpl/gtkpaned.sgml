@@ -95,6 +95,13 @@ parameters. This is equivalent to
 @child: the child to add
 
 
+<!-- ##### MACRO gtk_paned_handle_size ##### -->
+<para>
+Old name for gtk_paned_set_handle_size().
+</para>
+
+
+
 <!-- ##### MACRO gtk_paned_gutter_size ##### -->
 <para>
 Old name for gtk_paned_set_gutter_size().

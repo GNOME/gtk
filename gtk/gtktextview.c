@@ -109,6 +109,7 @@ enum
   SET_SCROLL_ADJUSTMENTS,
   POPULATE_POPUP,
   MOVE_CURSOR,
+  PAGE_HORIZONTALLY,
   SET_ANCHOR,
   INSERT_AT_CURSOR,
   DELETE_FROM_CURSOR,
@@ -223,12 +224,17 @@ static void gtk_text_view_set_scroll_adjustments (GtkTextView   *text_view,
                                                   GtkAdjustment *vadj);
 static void gtk_text_view_popup_menu             (GtkWidget     *widget);
 
-static void gtk_text_view_move_cursor      (GtkTextView           *text_view,
-                                            GtkMovementStep        step,
-                                            gint                   count,
-                                            gboolean               extend_selection);
+static void gtk_text_view_move_cursor       (GtkTextView           *text_view,
+                                             GtkMovementStep        step,
+                                             gint                   count,
+                                             gboolean               extend_selection);
+static void gtk_text_view_page_horizontally (GtkTextView          *text_view,
+                                             gint                  count,
+                                             gboolean              extend_selection);
 static void gtk_text_view_set_anchor       (GtkTextView           *text_view);
 static void gtk_text_view_scroll_pages     (GtkTextView           *text_view,
+                                            gint                   count);
+static void gtk_text_view_scroll_hpages    (GtkTextView           *text_view,
                                             gint                   count);
 static void gtk_text_view_insert_at_cursor (GtkTextView           *text_view,
                                             const gchar           *str);
@@ -508,6 +514,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   container_class->forall = gtk_text_view_forall;
 
   klass->move_cursor = gtk_text_view_move_cursor;
+  klass->page_horizontally = gtk_text_view_page_horizontally;
   klass->set_anchor = gtk_text_view_set_anchor;
   klass->insert_at_cursor = gtk_text_view_insert_at_cursor;
   klass->delete_from_cursor = gtk_text_view_delete_from_cursor;
@@ -649,6 +656,14 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                     _gtk_marshal_VOID__ENUM_INT_BOOLEAN,
                     GTK_TYPE_NONE, 3, GTK_TYPE_MOVEMENT_STEP, GTK_TYPE_INT, GTK_TYPE_BOOL);
 
+  signals[PAGE_HORIZONTALLY] =
+    gtk_signal_new ("page_horizontally",
+                    GTK_RUN_LAST | GTK_RUN_ACTION,
+                    GTK_CLASS_TYPE (object_class),
+                    GTK_SIGNAL_OFFSET (GtkTextViewClass, page_horizontally),
+                    _gtk_marshal_VOID__INT_BOOLEAN,
+                    GTK_TYPE_NONE, 2, GTK_TYPE_INT, GTK_TYPE_BOOL);
+  
   signals[SET_ANCHOR] =
     gtk_signal_new ("set_anchor",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
@@ -735,7 +750,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    */
 
   binding_set = gtk_binding_set_by_class (klass);
-
+  
   /* Moving the insertion point */
   add_move_binding (binding_set, GDK_Right, 0,
                     GTK_MOVEMENT_VISUAL_POSITIONS, 1);
@@ -845,6 +860,46 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 
   add_move_binding (binding_set, GDK_KP_Page_Down, 0,
                     GTK_MOVEMENT_PAGES, 1);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Page_Up, GDK_CONTROL_MASK,
+                                "page_horizontally", 2,
+                                GTK_TYPE_INT, -1,
+                                GTK_TYPE_BOOL, FALSE);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Page_Up, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "page_horizontally", 2,
+                                GTK_TYPE_INT, -1,
+                                GTK_TYPE_BOOL, TRUE);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Up, GDK_CONTROL_MASK,
+                                "page_horizontally", 2,
+                                GTK_TYPE_INT, -1,
+                                GTK_TYPE_BOOL, FALSE);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Up, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "page_horizontally", 2,
+                                GTK_TYPE_INT, -1,
+                                GTK_TYPE_BOOL, TRUE);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Page_Down, GDK_CONTROL_MASK,
+                                "page_horizontally", 2,
+                                GTK_TYPE_INT, 1,
+                                GTK_TYPE_BOOL, FALSE);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Page_Down, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "page_horizontally", 2,
+                                GTK_TYPE_INT, 1,
+                                GTK_TYPE_BOOL, TRUE);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Down, GDK_CONTROL_MASK,
+                                "page_horizontally", 2,
+                                GTK_TYPE_INT, 1,
+                                GTK_TYPE_BOOL, FALSE);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Down, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "page_horizontally", 2,
+                                GTK_TYPE_INT, 1,
+                                GTK_TYPE_BOOL, TRUE);
   
   /* Setting the cut/paste/copy anchor */
   gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_CONTROL_MASK,
@@ -4329,11 +4384,16 @@ gtk_text_view_move_iter_by_lines (GtkTextView *text_view,
     }
 }
 
+/* FIXME when we are unfrozen and can change GtkMovementStep,
+ * fix this
+ */
+#define PAGE_HORIZONTALLY_HACK_VALUE 57
+
 static void
-gtk_text_view_move_cursor (GtkTextView     *text_view,
-                           GtkMovementStep  step,
-                           gint             count,
-                           gboolean         extend_selection)
+gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
+                                    GtkMovementStep  step,
+                                    gint             count,
+                                    gboolean         extend_selection)
 {
   GtkTextIter insert;
   GtkTextIter newplace;
@@ -4345,6 +4405,12 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
   if (step == GTK_MOVEMENT_PAGES)
     {
       gtk_text_view_scroll_pages (text_view, count);
+      gtk_text_view_pend_cursor_blink (text_view);
+      return;
+    }
+  else if (step == PAGE_HORIZONTALLY_HACK_VALUE)
+    {
+      gtk_text_view_scroll_hpages (text_view, count);
       gtk_text_view_pend_cursor_blink (text_view);
       return;
     }
@@ -4413,7 +4479,7 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
       else if (count < 0)
         gtk_text_buffer_get_iter_at_offset (get_buffer (text_view), &newplace, 0);
       break;
-
+      
     default:
       break;
     }
@@ -4440,6 +4506,24 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
     }
 
   gtk_text_view_pend_cursor_blink (text_view);
+}
+
+static void
+gtk_text_view_move_cursor (GtkTextView     *text_view,
+                           GtkMovementStep  step,
+                           gint             count,
+                           gboolean         extend_selection)
+{
+  gtk_text_view_move_cursor_internal (text_view, step, count, extend_selection);
+}
+
+static void
+gtk_text_view_page_horizontally (GtkTextView     *text_view,
+                                 gint             count,
+                                 gboolean         extend_selection)
+{
+  gtk_text_view_move_cursor_internal (text_view, PAGE_HORIZONTALLY_HACK_VALUE,
+                                      count, extend_selection);
 }
 
 static void
@@ -4518,6 +4602,77 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
 
       gtk_text_view_set_virtual_cursor_pos (text_view, cursor_x_pos, cursor_y_pos);
     }
+  
+  /* Adjust to have the cursor _entirely_ onscreen, move_mark_onscreen
+   * only guarantees 1 pixel onscreen.
+   */
+  DV(g_print (G_STRLOC": scrolling onscreen\n"));
+  gtk_text_view_scroll_mark_onscreen (text_view,
+                                      gtk_text_buffer_get_mark (get_buffer (text_view),
+                                                                "insert"));
+}
+
+static void
+gtk_text_view_scroll_hpages (GtkTextView *text_view,
+                             gint         count)
+{
+  gdouble newval;
+  gdouble oldval;
+  GtkAdjustment *adj;
+  gint cursor_x_pos, cursor_y_pos;
+  GtkTextIter new_insert;
+  gint y, height;
+  gint x, width;
+  
+  g_return_if_fail (text_view->hadjustment != NULL);
+
+  adj = text_view->hadjustment;
+
+  /* Validate the line that we're moving within.
+   */
+  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
+                                    &new_insert,
+                                    gtk_text_buffer_get_mark (get_buffer (text_view), "insert"));
+  gtk_text_layout_get_line_yrange (text_view->layout, &new_insert, &y, &height);
+  gtk_text_layout_validate_yrange (text_view->layout, &new_insert, y, y + height);
+  /* FIXME do we need to update the adjustment ranges here? */
+  
+  if (count < 0 && adj->value <= (adj->lower + 1e-12))
+    {
+      /* already at far left, just be sure we are at offset 0 */
+      gtk_text_iter_set_line_offset (&new_insert, 0);
+      gtk_text_buffer_place_cursor (get_buffer (text_view), &new_insert);
+    }
+  else if (count > 0 && adj->value >= (adj->upper - adj->page_size - 1e-12))
+    {
+      /* already at far right, just be sure we are at the end */
+      gtk_text_iter_forward_to_line_end (&new_insert);
+      gtk_text_buffer_place_cursor (get_buffer (text_view), &new_insert);
+    }
+  else
+    {
+      gtk_text_view_get_virtual_cursor_pos (text_view, &cursor_x_pos, &cursor_y_pos);
+
+      newval = adj->value;
+      oldval = adj->value;
+  
+      newval += count * adj->page_increment;
+
+      set_adjustment_clamped (adj, newval);
+      cursor_x_pos += adj->value - oldval;
+
+      gtk_text_layout_get_iter_at_pixel (text_view->layout, &new_insert, cursor_x_pos, cursor_y_pos);
+      clamp_iter_onscreen (text_view, &new_insert);
+      gtk_text_buffer_place_cursor (get_buffer (text_view), &new_insert);
+
+      gtk_text_view_set_virtual_cursor_pos (text_view, cursor_x_pos, cursor_y_pos);
+    }
+
+  /*  FIXME for lines shorter than the overall widget width, this results in a
+   *  "bounce" effect as we scroll to the right of the widget, then scroll
+   *  back to get the end of the line onscreen.
+   *      http://bugzilla.gnome.org/show_bug.cgi?id=68963
+   */
   
   /* Adjust to have the cursor _entirely_ onscreen, move_mark_onscreen
    * only guarantees 1 pixel onscreen.
