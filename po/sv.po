@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2003-10-04 21:43+0200\n"
-"PO-Revision-Date: 2003-10-04 21:44+0200\n"
+"POT-Creation-Date: 2003-10-06 02:50+0200\n"
+"PO-Revision-Date: 2003-10-06 02:52+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2004,20 +2004,19 @@ msgstr "Radbrytningsbredd för utläggning av objekten i ett rutnät"
 
 #: gtk/gtkcombobox.c:351
 msgid "Row span column"
-msgstr "Radmellanrum"
+msgstr "Radspannskolumn"
 
 #: gtk/gtkcombobox.c:352
 msgid "TreeModel column containing the row span values"
-msgstr ""
+msgstr "TreeModel-kolumn som innehåller radspannsvärden"
 
 #: gtk/gtkcombobox.c:361
-#, fuzzy
 msgid "Column span column"
-msgstr "Kolumnmellanrum"
+msgstr "Kolumnspannskolumn"
 
 #: gtk/gtkcombobox.c:362
 msgid "TreeModel column containing the column span values"
-msgstr ""
+msgstr "TreeModel-kolumn som innehåller kolumnspannsvärden"
 
 #: gtk/gtkcombobox.c:371
 msgid "Active item"
@@ -2253,7 +2252,7 @@ msgstr "_Infoga Unicode-styrtecken"
 
 #: gtk/gtkentrycompletion.c:191
 msgid "Completion Model"
-msgstr ""
+msgstr "Ifyllningsmodell"
 
 #: gtk/gtkentrycompletion.c:192
 msgid "The model to find matches in"
@@ -2273,9 +2272,11 @@ msgstr "Synligt fönster"
 
 #: gtk/gtkeventbox.c:120
 msgid ""
-" Whether the event box is visible, as opposed to invisible and only used to "
+"Whether the event box is visible, as opposed to invisible and only used to "
 "trap events."
 msgstr ""
+"Huruvida händelserutan är synlig istället för osynlig och endast använd för "
+"att fånga händelser."
 
 #: gtk/gtkeventbox.c:126
 msgid "Above child"
@@ -2286,35 +2287,32 @@ msgid ""
 "Whether the event-trapping window of the eventbox is above the window of the "
 "child widget as opposed to below it."
 msgstr ""
+"Huruvida händelserutans händelsefångande fönster är över barnwidgetens "
+"fönster istället för under det."
 
 #: gtk/gtkexpander.c:186
 msgid "Expanded"
 msgstr "Expanderad"
 
 #: gtk/gtkexpander.c:187
-#, fuzzy
 msgid "Whether the expander has been opened to reveal the child widget"
-msgstr "Huruvida widgeten kan vara standardwidgeten"
+msgstr "Huruvida expanderaren har öppnats för att avslöja barnwidgeten"
 
 #: gtk/gtkexpander.c:195
-#, fuzzy
 msgid "Text of the expander's label"
-msgstr "Text på ramens etikett"
+msgstr "Text på expanderarens etikett"
 
 #: gtk/gtkexpander.c:211
-#, fuzzy
 msgid "Space to put between the label and the child"
-msgstr ""
-"Extra utrymme att placera mellan barnet och dess grannar, i bildpunkter"
+msgstr "Utrymme att placera mellan etiketten och barnet"
 
 #: gtk/gtkexpander.c:220 gtk/gtkframe.c:169 gtk/gtktoolbutton.c:193
 msgid "Label widget"
 msgstr "Etikettwidget"
 
 #: gtk/gtkexpander.c:221
-#, fuzzy
 msgid "A widget to display in place of the usual expander label"
-msgstr "En widget att visa istället för den vanliga rametiketten"
+msgstr "En widget att visa istället för den vanliga expanderaretiketten"
 
 #: gtk/gtkexpander.c:227 gtk/gtktreeview.c:607
 msgid "Expander Size"
@@ -2325,9 +2323,8 @@ msgid "Size of the expander arrow"
 msgstr "Storlek på expanderarpilen"
 
 #: gtk/gtkexpander.c:237
-#, fuzzy
 msgid "Spacing around expander arrow"
-msgstr "Mellanrum runt indikator"
+msgstr "Mellanrum runt expanderarpil"
 
 #: gtk/gtkfilesel.c:556 gtk/gtkimage.c:167
 msgid "Filename"
@@ -3623,7 +3620,7 @@ msgstr "Genom kant"
 # Förslag mottages tacksamt
 #: gtk/gtkrange.c:314
 msgid "Spacing between thumb/steppers and outer trough bevel"
-msgstr "Bredd mellan steg och yttre genom avfasning"
+msgstr "Mellanrum mellan steg och yttre genom avfasning"
 
 #: gtk/gtkrange.c:321
 msgid "Stepper Size"
@@ -3991,13 +3988,12 @@ msgid "Reads the current value, or sets a new value"
 msgstr "Läser aktuellt värde, eller ställer in ett nytt värde"
 
 #: gtk/gtkspinbutton.c:311
-#, fuzzy
 msgid "Style of bevel around the spin button"
-msgstr "Stil på avfasning runt innehållet"
+msgstr "Stil på avfasning runt spinnknappen"
 
 #: gtk/gtkstatusbar.c:167
 msgid "Has Resize Grip"
-msgstr ""
+msgstr "Har handtag för storleksändring"
 
 #: gtk/gtkstatusbar.c:168
 #, fuzzy
@@ -5717,6 +5713,13 @@ msgstr "Vietnamesisk (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "X-inmatningsmetod"
+
+#~ msgid ""
+#~ " Whether the event box is visible, as opposed to invisible and only used "
+#~ "to trap events."
+#~ msgstr ""
+#~ "Huruvida händelserutan är synlig, i motsats till osynlig och endast "
+#~ "använd för att fånga händelser."
 
 #~ msgid "calendar:week_start:1"
 #~ msgstr "calendar:week_start:1"
