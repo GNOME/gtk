@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.3\n"
-"POT-Creation-Date: 2001-11-23 15:47-0500\n"
-"PO-Revision-Date: 2001-11-11 14:07+0100\n"
+"POT-Creation-Date: 2001-12-02 17:35+0100\n"
+"PO-Revision-Date: 2001-12-02 17:36+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <no@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -116,15 +116,15 @@ msgstr ""
 "Intern feil: Modul for lasting av bilder '%s' feilet ved start av "
 "bildelasting, men ga ingen årsak for feilen"
 
-#: gdk-pixbuf/io-bmp.c:255
+#: gdk-pixbuf/io-bmp.c:267
 msgid "BMP image has unsupported header size"
 msgstr "BMP-bilde har ustøttet headerstørrelse"
 
-#: gdk-pixbuf/io-bmp.c:278 gdk-pixbuf/io-bmp.c:300
+#: gdk-pixbuf/io-bmp.c:292 gdk-pixbuf/io-bmp.c:315
 msgid "BMP image has bogus header data"
 msgstr "BMP-bilde har ugyldige data i header"
 
-#: gdk-pixbuf/io-bmp.c:325
+#: gdk-pixbuf/io-bmp.c:341
 msgid "Not enough memory to load bitmap image"
 msgstr "Ikke nok minne til å laste bitkart-bilde"
 
@@ -257,15 +257,15 @@ msgstr "Fatal feil under lesing av PNG-bildefil: %s"
 #: gdk-pixbuf/io-png.c:751
 msgid ""
 "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
-msgstr ""
+msgstr "Nøkler for PNG tEXt-biter må være mellom 1 og 79 tegn."
 
 #: gdk-pixbuf/io-png.c:759
 msgid "Keys for PNG tEXt chunks must be ASCII characters."
-msgstr ""
+msgstr "Nøkler for PNG tEXt-biter må bestå av ASCII-tegn."
 
 #: gdk-pixbuf/io-png.c:780
 msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
-msgstr ""
+msgstr "Verdi for PNG tEXt-biter kan ikke konverteres til ISO-8859-1-koding."
 
 #: gdk-pixbuf/io-png.c:845
 msgid "Insufficient memory to save PNG file"
@@ -424,19 +424,18 @@ msgstr "Korrupt header i bilde"
 msgid "Image format unknown"
 msgstr "Ukjent bildeformat"
 
-#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:458
+#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
 msgid "Image pixel data corrupt"
 msgstr "Korrupt pikseldata i bilde"
 
-#: gdk-pixbuf/gdk-pixdata.c:404
+#: gdk-pixbuf/gdk-pixdata.c:403
 #, c-format
 msgid "failed to allocate image buffer of %u bytes"
 msgstr "kunne ikke allokere buffer for bilde på %u bytes"
 
 #: gtk/gtkaccellabel.c:122
-#, fuzzy
 msgid "Accelerator Closure"
-msgstr "Akselleratorobjekt"
+msgstr "Lukking av aksellerator"
 
 #: gtk/gtkaccellabel.c:123
 #, fuzzy
@@ -444,9 +443,8 @@ msgid "The closure to be monitored for accelerator changes"
 msgstr "Objektet som overvåkes av denne akselleratoretiketten"
 
 #: gtk/gtkaccellabel.c:129
-#, fuzzy
 msgid "Accelerator Widget"
-msgstr "Akselleratorobjekt"
+msgstr "Akselleratorwidget"
 
 #: gtk/gtkaccellabel.c:130
 #, fuzzy
@@ -462,6 +460,8 @@ msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
 msgstr ""
+"Horisontal posisjon for barn i tilgjengelig område. 0.0 er venstrejustert, "
+"1.0 er høyrejustert"
 
 #: gtk/gtkalignment.c:112
 msgid "Vertical alignment"
@@ -472,6 +472,8 @@ msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
 msgstr ""
+"Vertikal plassering av barn i tilgjengelig område. 0.0 er øverst, 1.0 er "
+"nederst"
 
 #: gtk/gtkalignment.c:121
 msgid "Horizontal scale"
@@ -563,11 +565,11 @@ msgstr "Internt breddefyll for barn"
 
 #: gtk/gtkbbox.c:134
 msgid "Amount to increase child's size on either side"
-msgstr ""
+msgstr "Økning av størrelse på barn på hver side"
 
 #: gtk/gtkbbox.c:142
 msgid "Child internal height padding"
-msgstr ""
+msgstr "Fyll for barns interne høyde"
 
 #: gtk/gtkbbox.c:143
 msgid "Amount to increase child's size on the top and bottom"
@@ -609,75 +611,75 @@ msgstr "Homogen"
 msgid "Whether the children should all be the same size."
 msgstr "La alle barn være av samme størrelse."
 
-#: gtk/gtkbutton.c:188 gtk/gtkframe.c:125 gtk/gtklabel.c:282
+#: gtk/gtkbutton.c:191 gtk/gtkframe.c:125 gtk/gtklabel.c:282
 msgid "Label"
 msgstr "Etikett"
 
-#: gtk/gtkbutton.c:189
+#: gtk/gtkbutton.c:192
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget."
 msgstr ""
 
-#: gtk/gtkbutton.c:196 gtk/gtklabel.c:303
+#: gtk/gtkbutton.c:199 gtk/gtklabel.c:303
 msgid "Use underline"
 msgstr "Bruk understreking"
 
-#: gtk/gtkbutton.c:197 gtk/gtklabel.c:304
+#: gtk/gtkbutton.c:200 gtk/gtklabel.c:304
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
 msgstr ""
 
-#: gtk/gtkbutton.c:204
+#: gtk/gtkbutton.c:207
 msgid "Use stock"
 msgstr "Bruk lager"
 
-#: gtk/gtkbutton.c:205
+#: gtk/gtkbutton.c:208
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 
-#: gtk/gtkbutton.c:212
+#: gtk/gtkbutton.c:215
 msgid "Border relief"
 msgstr ""
 
-#: gtk/gtkbutton.c:213
+#: gtk/gtkbutton.c:216
 msgid "The border relief style."
 msgstr ""
 
-#: gtk/gtkbutton.c:264
+#: gtk/gtkbutton.c:267
 msgid "Default Spacing"
 msgstr "Standard avstand"
 
-#: gtk/gtkbutton.c:265
+#: gtk/gtkbutton.c:268
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr ""
 
-#: gtk/gtkbutton.c:271
+#: gtk/gtkbutton.c:274
 msgid "Default Outside Spacing"
 msgstr ""
 
-#: gtk/gtkbutton.c:272
+#: gtk/gtkbutton.c:275
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr ""
 
-#: gtk/gtkbutton.c:277
+#: gtk/gtkbutton.c:280
 msgid "Child X Displacement"
 msgstr ""
 
-#: gtk/gtkbutton.c:278
+#: gtk/gtkbutton.c:281
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 
-#: gtk/gtkbutton.c:285
+#: gtk/gtkbutton.c:288
 msgid "Child Y Displacement"
 msgstr ""
 
-#: gtk/gtkbutton.c:286
+#: gtk/gtkbutton.c:289
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
@@ -769,6 +771,25 @@ msgstr "Pixbuf-objekt"
 #: gtk/gtkcellrendererpixbuf.c:105
 msgid "The pixbuf to render."
 msgstr "Pixbuf som skal rendres."
+
+#: gtk/gtkcellrendererpixbuf.c:113
+#, fuzzy
+msgid "Pixbuf Expander Open"
+msgstr "pixbuf xfyll"
+
+#: gtk/gtkcellrendererpixbuf.c:114
+#, fuzzy
+msgid "Pixbuf for open expander."
+msgstr "Pixbuf som skal rendres."
+
+#: gtk/gtkcellrendererpixbuf.c:122
+#, fuzzy
+msgid "Pixbuf Expander Closed"
+msgstr "pixbuf xfyll"
+
+#: gtk/gtkcellrendererpixbuf.c:123
+msgid "Pixbuf for closed expander."
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:506 gtk/gtkprogressbar.c:207
 msgid "Text"
@@ -2020,17 +2041,16 @@ msgid "Message Type"
 msgstr ""
 
 #: gtk/gtkmessagedialog.c:114
-#, fuzzy
 msgid "The type of message"
-msgstr "Tekst for etikett."
+msgstr "Type melding"
 
 #: gtk/gtkmessagedialog.c:121
 msgid "Message Buttons"
-msgstr ""
+msgstr "Meldingsknapper"
 
 #: gtk/gtkmessagedialog.c:122
 msgid "The buttons shown in the message dialog"
-msgstr ""
+msgstr "Knappene som vises i meldingsdialogen"
 
 #: gtk/gtkmisc.c:97
 msgid "X align"
@@ -2144,7 +2164,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr ""
 
-#: gtk/gtknotebook.c:2240 gtk/gtknotebook.c:4470
+#: gtk/gtknotebook.c:2283 gtk/gtknotebook.c:4513
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
@@ -3883,9 +3903,6 @@ msgstr "X-inndatametode"
 
 #~ msgid "The y-align of the pixbuf."
 #~ msgstr "Y-justering for pixbuf."
-
-#~ msgid "pixbuf xpad"
-#~ msgstr "pixbuf xfyll"
 
 #~ msgid "The xpad of the pixbuf."
 #~ msgstr "X-fyll for pixbuf."
