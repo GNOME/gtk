@@ -1,5 +1,8 @@
 2004-08-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* pixops/pixops.c: Make scaling and compositing functions handle
+	edge pixels consistently.  (#111922, Brian Cameron)
+
 	* pixops/pixops-internal.h: 
 	* pixops/pixops.c:
 	* pixops/*.S: underscore prefix the mmx implementations, in order
