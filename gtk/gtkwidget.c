@@ -4255,8 +4255,8 @@ gtk_widget_set_double_buffered (GtkWidget *widget,
  *   when it is allocated to a new size. Otherwise, only the
  *   new portion of the widget will be redrawn.
  *
- * Sets whether a when a widgets size allocation changes, the entire
- * widget is queued for drawing. By default, this setting is %TRUE and
+ * Sets whether the entire widget is queued for drawing when its size 
+ * allocation changes. By default, this setting is %TRUE and
  * the entire widget is redrawn on every size change. If your widget
  * leaves the upper left unchanged when made bigger, turning this
  * setting on will improve performance.

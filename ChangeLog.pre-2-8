@@ -1,3 +1,8 @@
+2005-04-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_set_redraw_on_allocate): Improve 
+	the wording of the doc comment.  (#172422, Vincent Untz)
+
 2005-04-04  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstyle.c (gtk_default_draw_expander): Covert expander
