@@ -901,7 +901,8 @@ gdk_pixbuf__jpeg_image_save (FILE          *f,
        }
        
        /* finish off */
-       jpeg_finish_compress (&cinfo);   
+       jpeg_finish_compress (&cinfo);
+       jpeg_destroy_compress(&cinfo);
        g_free (buf);
        return TRUE;
 }

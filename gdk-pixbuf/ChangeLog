@@ -1,3 +1,8 @@
+Thu Oct  3 18:25:57 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* io-jpeg.c (gdk_pixbuf__jpeg_image_save): 
+	Fix memory leak. (#94399)
+
 Tue Oct  1 17:35:43 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdkpixdata.c: Patch from Andy Wingo to always 
