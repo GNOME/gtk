@@ -2560,7 +2560,7 @@ gtk_ui_manager_ensure_update (GtkUIManager *self)
 }
 
 static gboolean
-dirty_traverse_func (GNode   *node, 
+dirty_traverse_func (GNode   *node,
 		     gpointer data)
 {
   NODE_INFO (node)->dirty = TRUE;
@@ -2570,25 +2570,25 @@ dirty_traverse_func (GNode   *node,
 static void
 dirty_all_nodes (GtkUIManager *self)
 {
-  g_node_traverse (self->private_data->root_node, 
+  g_node_traverse (self->private_data->root_node,
 		   G_PRE_ORDER, G_TRAVERSE_ALL, -1,
 		   dirty_traverse_func, NULL);
   queue_update (self);
 }
 
 static const gchar *open_tag_format[] = {
-  "%*s<UNDECIDED>\n",
-  "%*s<ui>\n",
-  "%*s<menubar name=\"%s\">\n",  
-  "%*s<menu name=\"%s\" action=\"%s\">\n",
-  "%*s<toolbar name=\"%s\">\n",
-  "%*s<placeholder name=\"%s\">\n",
-  "%*s<placeholder name=\"%s\">\n",
-  "%*s<popup name=\"%s\">\n",
-  "%*s<menuitem name=\"%s\" action=\"%s\"/>\n", 
-  "%*s<toolitem name=\"%s\" action=\"%s\"/>\n", 
-  "%*s<separator name=\"%s\"/>\n",
-  "%*s<accelerator name=\"%s\" action=\"%s\"/>\n",
+  "%*s<UNDECIDED",
+  "%*s<ui",
+  "%*s<menubar",
+  "%*s<menu",
+  "%*s<toolbar",
+  "%*s<placeholder",
+  "%*s<placeholder",
+  "%*s<popup",
+  "%*s<menuitem",
+  "%*s<toolitem",
+  "%*s<separator",
+  "%*s<accelerator"
 };
 
 static const gchar *close_tag_format[] = {
@@ -2600,34 +2600,42 @@ static const gchar *close_tag_format[] = {
   "%*s</placeholder>\n",
   "%*s</placeholder>\n",
   "%*s</popup>\n",
-  "",
-  "",
-  "",
-  "",
+  NULL,
+  NULL,
+  NULL,
+  NULL
 };
 
 static void
-print_node (GtkUIManager *self, 
-	    GNode        *node, 
+print_node (GtkUIManager *self,
+	    GNode        *node,
 	    gint          indent_level,
 	    GString      *buffer)
 {
-  Node *mnode;
+  Node  *mnode;
   GNode *child;
 
   mnode = node->data;
 
   g_string_append_printf (buffer, open_tag_format[mnode->type],
-			  indent_level, "",
-			  mnode->name, 
-			  g_quark_to_string (mnode->action_name));
-
-  for (child = node->children; child != NULL; child = child->next) 
-    print_node (self, child, indent_level + 2, buffer);
-
-  g_string_append_printf (buffer, close_tag_format[mnode->type],
 			  indent_level, "");
 
+  if (mnode->name)
+    g_string_append_printf (buffer, " name=\"%s\"", mnode->name);
+
+  if (mnode->action_name)
+    g_string_append_printf (buffer, " action=\"%s\"",
+                            g_quark_to_string (mnode->action_name));
+
+  g_string_append (buffer,
+                   close_tag_format[mnode->type] ? ">\n" : "/>\n");
+
+  for (child = node->children; child != NULL; child = child->next)
+    print_node (self, child, indent_level + 2, buffer);
+
+  if (close_tag_format[mnode->type])
+    g_string_append_printf (buffer, close_tag_format[mnode->type],
+                            indent_level, "");
 }
 
 /**
