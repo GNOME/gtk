@@ -204,16 +204,10 @@ gtk_init (int	 *argc,
 
   if (argc && argv)
     {
-      gint i;
+      gint i, j, k;
       
       for (i = 1; i < *argc;)
 	{
-	  if ((*argv)[i] == NULL)
-	    {
-	      i += 1;
-	      continue;
-	    }
-
 	  if (strcmp ("--gtk-debug", (*argv)[i]) == 0)
 	    {
 	      (*argv)[i] = NULL;
@@ -241,6 +235,21 @@ gtk_init (int	 *argc,
 		}
 	    }
 	  i += 1;
+	}
+
+      for (i = 1; i < *argc; i++)
+	{
+	  for (k = i; k < *argc; k++)
+	    if ((*argv)[k] != NULL)
+	      break;
+	  
+	  if (k > i)
+	    {
+	      k -= i;
+	      for (j = i + k; j < *argc; j++)
+		(*argv)[j-k] = (*argv)[j];
+	      *argc -= k;
+	    }
 	}
     }
 

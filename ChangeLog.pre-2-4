@@ -1,3 +1,7 @@
+Sat Mar 14 02:12:44 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmain.c gdk/gdk.c: Don't leave NULL's in argv.
+
 Sat Mar 14 01:36:51 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk-config.in: Added -I $exec_prefix/glib/include to cflags

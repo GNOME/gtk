@@ -311,12 +311,6 @@ gdk_init (int    *argc,
 
       for (i = 1; i < *argc;)
 	{
-	  if ((*argv)[i] == NULL)
-	    {
-	      i += 1;
-	      continue;
-	    }
-	  
 #ifdef G_ENABLE_DEBUG	  
 	  if (strcmp ("--gdk-debug", (*argv)[i]) == 0)
 	    {
