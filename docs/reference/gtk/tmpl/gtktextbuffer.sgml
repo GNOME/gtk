@@ -23,12 +23,6 @@ types related to the text widget and how they work together.
 #GtkTextView, #GtkTextIter, #GtkTextMark
 </para>
 
-<!-- ##### STRUCT GtkTextBTree ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### FUNCTION gtk_text_buffer_new ##### -->
 <para>
 
@@ -441,18 +435,7 @@ types related to the text widget and how they work together.
 @Returns: 
 
 
-<!-- ##### SIGNAL GtkTextBuffer::insert-text ##### -->
-<para>
-
-</para>
-
-@textbuffer: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-@arg4: 
-
-<!-- ##### SIGNAL GtkTextBuffer::delete-text ##### -->
+<!-- ##### SIGNAL GtkTextBuffer::apply-tag ##### -->
 <para>
 
 </para>
@@ -469,12 +452,34 @@ types related to the text widget and how they work together.
 
 @textbuffer: the object which received the signal.
 
-<!-- ##### SIGNAL GtkTextBuffer::modified-changed ##### -->
+<!-- ##### SIGNAL GtkTextBuffer::delete-text ##### -->
 <para>
 
 </para>
 
 @textbuffer: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL GtkTextBuffer::insert-text ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+@arg4: 
+
+<!-- ##### SIGNAL GtkTextBuffer::mark-deleted ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+@arg1: 
 
 <!-- ##### SIGNAL GtkTextBuffer::mark-set ##### -->
 <para>
@@ -485,23 +490,12 @@ types related to the text widget and how they work together.
 @arg1: 
 @arg2: 
 
-<!-- ##### SIGNAL GtkTextBuffer::mark-deleted ##### -->
+<!-- ##### SIGNAL GtkTextBuffer::modified-changed ##### -->
 <para>
 
 </para>
 
 @textbuffer: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkTextBuffer::apply-tag ##### -->
-<para>
-
-</para>
-
-@textbuffer: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
 
 <!-- ##### SIGNAL GtkTextBuffer::remove-tag ##### -->
 <para>

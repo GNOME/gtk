@@ -14,3 +14,62 @@ Initialization and Versions
 
 </para>
 
+<!-- ##### FUNCTION gdk_pixbuf_init ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_pixbuf_preinit ##### -->
+<para>
+
+</para>
+
+@app: 
+@modinfo: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_postinit ##### -->
+<para>
+
+</para>
+
+@app: 
+@modinfo: 
+
+
+<!-- ##### VARIABLE gdk_pixbuf_version ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO GDK_PIXBUF_VERSION ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_PIXBUF_MAJOR ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_PIXBUF_MINOR ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_PIXBUF_MICRO ##### -->
+<para>
+
+</para>
+
+
+

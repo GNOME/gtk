@@ -175,6 +175,12 @@ types that GTK+ understands.
 @Returns: 
 
 
+<!-- ##### VARIABLE gdk_core_pointer ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### FUNCTION gdk_device_set_source ##### -->
 <para>
 

@@ -17,3 +17,47 @@ Utility and miscellaneous convenience functions.
     #GdkPixbuf
   </para>
 
+<!-- ##### FUNCTION gdk_pixbuf_add_alpha ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@substitute_color: 
+@r: 
+@g: 
+@b: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_copy_area ##### -->
+<para>
+
+</para>
+
+@src_pixbuf: 
+@src_x: 
+@src_y: 
+@width: 
+@height: 
+@dest_pixbuf: 
+@dest_x: 
+@dest_y: <!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
+
+
+<!-- ##### FUNCTION gdk_pixbuf_saturate_and_pixelate ##### -->
+<para>
+
+</para>
+
+@src: 
+@dest: 
+@saturation: 
+@pixelate: 
+
+

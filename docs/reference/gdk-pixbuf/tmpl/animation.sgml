@@ -18,3 +18,147 @@ Animations as multi-frame structures.
     #GdkPixbufLoader
   </para>
 
+<!-- ##### ENUM GdkPixbufFrameAction ##### -->
+  <para>
+    Each animation frame can have several things happen to it when the
+    next frame is displayed.  The #GdkPixbufFrameAction determines
+    this.  These are essentially the overlay modes supported by GIF
+    animations.
+  </para>
+
+@GDK_PIXBUF_FRAME_RETAIN: The previous image should remain displayed,
+and will potentially be occluded by the new frame.
+@GDK_PIXBUF_FRAME_DISPOSE: The animation will be reverted to the state
+before the frame was shown.
+@GDK_PIXBUF_FRAME_REVERT: The animation will be reverted to the first
+frame.
+
+<!-- ##### STRUCT GdkPixbufFrame ##### -->
+  <para>
+    This structure describes a frame in a #GdkPixbufAnimation.  Each
+    frame consists of a #GdkPixbuf, an offset of the frame within the
+    animation's bounding box, a duration, and an overlay mode or
+    action.
+  </para>
+
+
+<!-- ##### STRUCT GdkPixbufAnimation ##### -->
+  <para>
+    This structure describes an animation, which is represented as a
+    list of #GdkPixbufFrame structures.
+  </para>
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_new_from_file ##### -->
+<para>
+
+</para>
+
+@filename: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_ref ##### -->
+<para>
+
+</para>
+
+@animation: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_unref ##### -->
+<para>
+
+</para>
+
+@animation: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_get_frames ##### -->
+<para>
+
+</para>
+
+@animation: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_get_width ##### -->
+<para>
+
+</para>
+
+@animation: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_get_num_frames ##### -->
+<para>
+
+</para>
+
+@animation: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_get_height ##### -->
+<para>
+
+</para>
+
+@animation: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_frame_get_pixbuf ##### -->
+<para>
+
+</para>
+
+@frame: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_frame_get_action ##### -->
+<para>
+
+</para>
+
+@frame: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_frame_get_y_offset ##### -->
+<para>
+
+</para>
+
+@frame: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_frame_get_delay_time ##### -->
+<para>
+
+</para>
+
+@frame: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_frame_get_x_offset ##### -->
+<para>
+
+</para>
+
+@frame: 
+@Returns: <!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
+
+

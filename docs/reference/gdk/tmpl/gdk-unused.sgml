@@ -1,34 +1,8 @@
-<!-- ##### FUNCTION gdk_input_set_mode ##### -->
+<!-- ##### SECTION ./tmpl/gdkregion.sgml:See_Also ##### -->
 <para>
-Enables or disables a device, and determines how the
-device maps onto the screen.
+
 </para>
 
-@deviceid: the device to configure.
-@mode: the new mode.
-@Returns: %TRUE if the device supports the given mode, otherwise 
-          %FALSE and the device's mode is unchanged.
-
-<!-- ##### FUNCTION gdk_input_set_key ##### -->
-<para>
-Sets the key event generated when a macro button is pressed.
-</para>
-
-@deviceid: the device to configure.
-@index: the index of the macro button.
-@keyval: the key value for the #GdkKeypressEvent to generate.
-         (a value of 0 means no event will be generated.)
-@modifiers: the modifier field for the generated 
-            #GdkKeyPressEvent.
-
-<!-- ##### FUNCTION gdk_regions_intersect ##### -->
-<para>
-Returns the intersection of two regions.
-</para>
-
-@source1: a #GdkRegion.
-@source2: a #GdkRegion.
-@Returns: the intersection of @source1 and @source2.
 
 <!-- ##### FUNCTION gdk_regions_xor ##### -->
 <para>
@@ -42,32 +16,21 @@ but which are not in both.
 @Returns: the difference between the union and the intersection of @source1
 and @source2.
 
-<!-- ##### FUNCTION gdk_regions_subtract ##### -->
+<!-- ##### FUNCTION gdk_input_motion_events ##### -->
 <para>
-Subtracts one region from another.
-The result is a region containing all the pixels which are in @source1, but
-which are not in @source2.
+Retrieves the motion history for a given device/window pair.
 </para>
 
-@source1: a #GdkRegion.
-@source2: a #GdkRegion to subtract from @source1.
-@Returns: @source1 - @source2.
+@window: a #GdkWindow.
+@deviceid: the device for which to retrieve motion history.
+@start: the start time.
+@stop: the stop time.
+@nevents_return: location to store the number of events returned.
+@Returns: a newly allocated array containing all the events
+          from @start to @stop. This array should be freed
+          with g_free() when you are finished using it.
 
-<!-- ##### FUNCTION gdk_input_list_devices ##### -->
-<para>
-Lists all available input devices, along with their
-configuration information.
-</para>
-
-@Returns: A #GList of #GdkDeviceInfo structures. This list
-          is internal data of GTK+ and should not be modified 
-          or freed.
-
-<!-- ##### SECTION ./tmpl/gdkregion.sgml:Short_Description ##### -->
-
-
-
-<!-- ##### SECTION ./tmpl/input_methods.sgml.sgml:See_Also ##### -->
+<!-- ##### SECTION ./tmpl/gdkregion.sgml:Long_Description ##### -->
 <para>
 
 </para>
@@ -76,29 +39,6 @@ configuration information.
 <!-- ##### SECTION ./tmpl/input_methods.sgml.sgml:Short_Description ##### -->
 
 
-
-<!-- ##### MACRO GDK_CORE_POINTER ##### -->
-<para>
-This macro contains an integer value representing
-the device ID for the core pointer device.
-</para>
-
-
-<!-- ##### VARIABLE gdk_threads_mutex ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### FUNCTION gdk_input_set_axes ##### -->
-<para>
-Sets the mapping of the axes (valuators) of a device
-onto the predefined valuator types that GTK+ understands.
-</para>
-
-@deviceid: the device to configure.
-@axes: an array of GdkAxisUse. This length of this array
-       must match the number of axes for the device.
 
 <!-- ##### STRUCT GdkDeviceInfo ##### -->
 <para>
@@ -124,11 +64,47 @@ device. It has the following fields:
        which describe what key press events are generated
        for each macro button.
 
-<!-- ##### SECTION ./tmpl/gdkregion.sgml:Title ##### -->
-Points, Rectangles and Regions
+<!-- ##### SECTION ./tmpl/input_methods.sgml.sgml:Title ##### -->
+Pango Interaction
 
 
-<!-- ##### SECTION ./tmpl/input_methods.sgml.sgml:Long_Description ##### -->
+<!-- ##### FUNCTION gdk_regions_union ##### -->
+<para>
+Returns the union of two regions.
+This is all pixels in either of @source1 or @source2.
+</para>
+
+@source1: a #GdkRegion.
+@source2: a #GdkRegion.
+@Returns: the union of @source1 and @source2.
+
+<!-- ##### SECTION ./tmpl/gdkregion.sgml:Short_Description ##### -->
+
+
+
+<!-- ##### FUNCTION gdk_input_set_key ##### -->
+<para>
+Sets the key event generated when a macro button is pressed.
+</para>
+
+@deviceid: the device to configure.
+@index: the index of the macro button.
+@keyval: the key value for the #GdkKeypressEvent to generate.
+         (a value of 0 means no event will be generated.)
+@modifiers: the modifier field for the generated 
+            #GdkKeyPressEvent.
+
+<!-- ##### FUNCTION gdk_input_list_devices ##### -->
+<para>
+Lists all available input devices, along with their
+configuration information.
+</para>
+
+@Returns: A #GList of #GdkDeviceInfo structures. This list
+          is internal data of GTK+ and should not be modified 
+          or freed.
+
+<!-- ##### SECTION ./tmpl/input_methods.sgml.sgml:See_Also ##### -->
 <para>
 
 </para>
@@ -142,51 +118,16 @@ Points, Rectangles and Regions
 @GDK_PIXBUF_ALPHA_BILEVEL: 
 @GDK_PIXBUF_ALPHA_FULL: 
 
-<!-- ##### FUNCTION gdk_input_motion_events ##### -->
+<!-- ##### FUNCTION gdk_regions_subtract ##### -->
 <para>
-Retrieves the motion history for a given device/window pair.
-</para>
-
-@window: a #GdkWindow.
-@deviceid: the device for which to retrieve motion history.
-@start: the start time.
-@stop: the stop time.
-@nevents_return: location to store the number of events returned.
-@Returns: a newly allocated array containing all the events
-          from @start to @stop. This array should be freed
-          with g_free() when you are finished using it.
-
-<!-- ##### VARIABLE gdk_core_pointer ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SECTION ./tmpl/gdkregion.sgml:See_Also ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SECTION ./tmpl/input_methods.sgml.sgml:Title ##### -->
-Pango Interaction
-
-
-<!-- ##### SECTION ./tmpl/gdkregion.sgml:Long_Description ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### FUNCTION gdk_regions_union ##### -->
-<para>
-Returns the union of two regions.
-This is all pixels in either of @source1 or @source2.
+Subtracts one region from another.
+The result is a region containing all the pixels which are in @source1, but
+which are not in @source2.
 </para>
 
 @source1: a #GdkRegion.
-@source2: a #GdkRegion.
-@Returns: the union of @source1 and @source2.
+@source2: a #GdkRegion to subtract from @source1.
+@Returns: @source1 - @source2.
 
 <!-- ##### FUNCTION gdk_input_window_get_pointer ##### -->
 <para>
@@ -205,6 +146,23 @@ they will be ignored.
 @ytilt: location to store current tilt in the y direction.
 @mask: location to store the current modifier state.
 
+<!-- ##### MACRO GDK_CORE_POINTER ##### -->
+<para>
+This macro contains an integer value representing
+the device ID for the core pointer device.
+</para>
+
+
+<!-- ##### FUNCTION gdk_input_set_axes ##### -->
+<para>
+Sets the mapping of the axes (valuators) of a device
+onto the predefined valuator types that GTK+ understands.
+</para>
+
+@deviceid: the device to configure.
+@axes: an array of GdkAxisUse. This length of this array
+       must match the number of axes for the device.
+
 <!-- ##### FUNCTION gdk_input_set_source ##### -->
 <para>
 Sets the source type for a device.
@@ -212,4 +170,34 @@ Sets the source type for a device.
 
 @deviceid: the device to configure
 @source: the new source type.
+
+<!-- ##### SECTION ./tmpl/gdkregion.sgml:Title ##### -->
+Points, Rectangles and Regions
+
+
+<!-- ##### FUNCTION gdk_regions_intersect ##### -->
+<para>
+Returns the intersection of two regions.
+</para>
+
+@source1: a #GdkRegion.
+@source2: a #GdkRegion.
+@Returns: the intersection of @source1 and @source2.
+
+<!-- ##### FUNCTION gdk_input_set_mode ##### -->
+<para>
+Enables or disables a device, and determines how the
+device maps onto the screen.
+</para>
+
+@deviceid: the device to configure.
+@mode: the new mode.
+@Returns: %TRUE if the device supports the given mode, otherwise 
+          %FALSE and the device's mode is unchanged.
+
+<!-- ##### SECTION ./tmpl/input_methods.sgml.sgml:Long_Description ##### -->
+<para>
+
+</para>
+
 

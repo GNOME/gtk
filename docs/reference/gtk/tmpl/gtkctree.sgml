@@ -1167,6 +1167,41 @@ criteria etc.
 @show_stub: 
 
 
+<!-- ##### SIGNAL GtkCTree::change-focus-row-expansion ##### -->
+<para>
+The row which has the focus is either collapsed or expanded
+or toggled.
+</para>
+
+@ctree: the object which received the signal.
+@expansion: What is being done.
+
+<!-- ##### SIGNAL GtkCTree::tree-collapse ##### -->
+<para>
+Emitted when a node is collapsed.
+</para>
+
+@ctree: the object which received the signal.
+@node: 
+
+<!-- ##### SIGNAL GtkCTree::tree-expand ##### -->
+<para>
+Emitted when a node is expanded.
+</para>
+
+@ctree: the object which received the signal.
+@node: 
+
+<!-- ##### SIGNAL GtkCTree::tree-move ##### -->
+<para>
+Emitted when a node is moved.
+</para>
+
+@ctree: the object which received the signal.
+@node: The node that is moved.
+@new_parent: The new parent of the node.
+@new_sibling: The new sibling of the node.
+
 <!-- ##### SIGNAL GtkCTree::tree-select-row ##### -->
 <para>
 Emitted when a row is selected.
@@ -1184,41 +1219,6 @@ Emitted when a node is unselected.
 @ctree: the object which received the signal.
 @node: The node  corresponding to the selected row.
 @column: 
-
-<!-- ##### SIGNAL GtkCTree::tree-expand ##### -->
-<para>
-Emitted when a node is expanded.
-</para>
-
-@ctree: the object which received the signal.
-@node: 
-
-<!-- ##### SIGNAL GtkCTree::tree-collapse ##### -->
-<para>
-Emitted when a node is collapsed.
-</para>
-
-@ctree: the object which received the signal.
-@node: 
-
-<!-- ##### SIGNAL GtkCTree::tree-move ##### -->
-<para>
-Emitted when a node is moved.
-</para>
-
-@ctree: the object which received the signal.
-@node: The node that is moved.
-@new_parent: The new parent of the node.
-@new_sibling: The new sibling of the node.
-
-<!-- ##### SIGNAL GtkCTree::change-focus-row-expansion ##### -->
-<para>
-The row which has the focus is either collapsed or expanded
-or toggled.
-</para>
-
-@ctree: the object which received the signal.
-@expansion: What is being done.
 
 <!-- ##### ARG GtkCTree:n_columns ##### -->
 <para>

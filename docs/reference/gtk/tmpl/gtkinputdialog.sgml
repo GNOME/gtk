@@ -41,16 +41,6 @@ Creates a new #GtkInputDialog.
 @Returns: the new #GtkInputDialog.
 
 
-<!-- ##### SIGNAL GtkInputDialog::enable-device ##### -->
-<para>
-This signal is emitted when the user changes the 
-mode of a device from #GDK_MODE_DISABLED to a 
-#GDK_MODE_SCREEN or #GDK_MODE_WINDOW.
-</para>
-
-@inputdialog: the object which received the signal.
-@deviceid: The ID of the newly enabled device.
-
 <!-- ##### SIGNAL GtkInputDialog::disable-device ##### -->
 <para>
 This signal is emitted when the user changes the 
@@ -60,4 +50,14 @@ to #GDK_MODE_ENABLED.
 
 @inputdialog: the object which received the signal.
 @deviceid: The ID of the newly disabled device.
+
+<!-- ##### SIGNAL GtkInputDialog::enable-device ##### -->
+<para>
+This signal is emitted when the user changes the 
+mode of a device from #GDK_MODE_DISABLED to a 
+#GDK_MODE_SCREEN or #GDK_MODE_WINDOW.
+</para>
+
+@inputdialog: the object which received the signal.
+@deviceid: The ID of the newly enabled device.
 

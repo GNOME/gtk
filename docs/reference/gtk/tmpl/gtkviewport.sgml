@@ -75,6 +75,15 @@ GtkViewport
 @type: 
 
 
+<!-- ##### SIGNAL GtkViewport::set-scroll-adjustments ##### -->
+<para>
+
+</para>
+
+@viewport: the object which received the signal.
+@arg1: 
+@arg2: 
+
 <!-- ##### ARG GtkViewport:hadjustment ##### -->
 <para>
 

@@ -20,6 +20,7 @@ IGNORE_HFILES=			\
 	gtkhsv.h		\
 	gtkimcontextsimple.h	\
 	gtkintl.h		\
+	gtkmarshal.h		\
 	gtkprivate.h		\
 	gtktextbtree.h		\
 	gtktextchild.h		\

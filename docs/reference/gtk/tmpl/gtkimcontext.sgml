@@ -65,7 +65,15 @@ GtkIMContext
 @context: 
 
 
-<!-- ##### SIGNAL GtkIMContext::preedit-start ##### -->
+<!-- ##### SIGNAL GtkIMContext::commit ##### -->
+<para>
+
+</para>
+
+@imcontext: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkIMContext::preedit-changed ##### -->
 <para>
 
 </para>
@@ -79,18 +87,10 @@ GtkIMContext
 
 @imcontext: the object which received the signal.
 
-<!-- ##### SIGNAL GtkIMContext::preedit-changed ##### -->
+<!-- ##### SIGNAL GtkIMContext::preedit-start ##### -->
 <para>
 
 </para>
 
 @imcontext: the object which received the signal.
-
-<!-- ##### SIGNAL GtkIMContext::commit ##### -->
-<para>
-
-</para>
-
-@imcontext: the object which received the signal.
-@arg1: 
 

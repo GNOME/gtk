@@ -66,49 +66,7 @@ Deselects the item, by emitting the item's "deselect" signal.
 @list_item: a #GtkListItem.
 
 
-<!-- ##### SIGNAL GtkListItem::toggle-focus-row ##### -->
-<para>
-
-</para>
-
-@listitem: the object which received the signal.
-
-<!-- ##### SIGNAL GtkListItem::select-all ##### -->
-<para>
-
-</para>
-
-@listitem: the object which received the signal.
-
-<!-- ##### SIGNAL GtkListItem::unselect-all ##### -->
-<para>
-
-</para>
-
-@listitem: the object which received the signal.
-
-<!-- ##### SIGNAL GtkListItem::undo-selection ##### -->
-<para>
-
-</para>
-
-@listitem: the object which received the signal.
-
-<!-- ##### SIGNAL GtkListItem::start-selection ##### -->
-<para>
-
-</para>
-
-@listitem: the object which received the signal.
-
 <!-- ##### SIGNAL GtkListItem::end-selection ##### -->
-<para>
-
-</para>
-
-@listitem: the object which received the signal.
-
-<!-- ##### SIGNAL GtkListItem::toggle-add-mode ##### -->
 <para>
 
 </para>
@@ -125,6 +83,15 @@ Deselects the item, by emitting the item's "deselect" signal.
 @position: 
 @auto_start_selection: 
 
+<!-- ##### SIGNAL GtkListItem::scroll-horizontal ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+@scroll_type: 
+@position: 
+
 <!-- ##### SIGNAL GtkListItem::scroll-vertical ##### -->
 <para>
 
@@ -134,12 +101,45 @@ Deselects the item, by emitting the item's "deselect" signal.
 @scroll_type: 
 @position: 
 
-<!-- ##### SIGNAL GtkListItem::scroll-horizontal ##### -->
+<!-- ##### SIGNAL GtkListItem::select-all ##### -->
 <para>
 
 </para>
 
 @listitem: the object which received the signal.
-@scroll_type: 
-@position: 
+
+<!-- ##### SIGNAL GtkListItem::start-selection ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkListItem::toggle-add-mode ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkListItem::toggle-focus-row ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkListItem::undo-selection ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkListItem::unselect-all ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
 

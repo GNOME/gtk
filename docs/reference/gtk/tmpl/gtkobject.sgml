@@ -210,7 +210,7 @@ there own references, if they believe they are nearly primary
 ownership of the object.
 GTK_CONNECTED: refers to whether are signals are connected to this
 object.
-@GTK_CONNECTED: 
+@GTK_RESERVED: 
 @GTK_CONSTRUCTED: refers to whether the arguments for this object are
 ready.
 

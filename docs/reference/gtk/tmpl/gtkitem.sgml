@@ -46,16 +46,16 @@ Emits the "toggle" signal on the given item.
 @item: a #GtkItem.
 
 
-<!-- ##### SIGNAL GtkItem::select ##### -->
+<!-- ##### SIGNAL GtkItem::deselect ##### -->
 <para>
-Emitted when the item is selected.
+Emitted when the item is deselected.
 </para>
 
 @item: the object which received the signal.
 
-<!-- ##### SIGNAL GtkItem::deselect ##### -->
+<!-- ##### SIGNAL GtkItem::select ##### -->
 <para>
-Emitted when the item is deselected.
+Emitted when the item is selected.
 </para>
 
 @item: the object which received the signal.

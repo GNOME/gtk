@@ -1988,12 +1988,7 @@ gtk_text_buffer_get_iter_at_mark
 gtk_text_buffer_get_tags
 gtk_text_buffer_modified
 gtk_text_buffer_set_modified
-gtk_text_buffer_set_clipboard_contents
-gtk_text_buffer_get_clipboard_contents
-gtk_text_buffer_paste_primary_selection
 gtk_text_buffer_delete_selection
-gtk_text_buffer_cut
-gtk_text_buffer_copy
 gtk_text_buffer_paste_clipboard
 gtk_text_buffer_get_selection_bounds
 <SUBSECTION Standard>
@@ -2074,8 +2069,6 @@ gtk_text_iter_spew
 GtkTextMark
 gtk_text_mark_set_visible
 gtk_text_mark_is_visible
-gtk_text_mark_ref
-gtk_text_mark_unref
 gtk_text_mark_get_deleted
 </SECTION>
 
@@ -2084,7 +2077,6 @@ gtk_text_mark_get_deleted
 GtkTextTag
 GtkTextBTreeNode
 GtkTextTagTable
-GtkTextTabArray
 GtkWrapMode
 GtkTextAttributes
 <TITLE>GtkTextTag</TITLE>
@@ -2941,6 +2933,26 @@ gtk_selection_request
 </SECTION>
 
 <SECTION>
+<FILE>gtkclipboard</FILE>
+<TITLE>Clipboards</TITLE>
+GtkClipboard
+GtkClipboardReceivedFunc
+GtkClipboardTextReceivedFunc
+GtkClipboardGetFunc
+GtkClipboardClearFunc
+gtk_clipboard_get
+gtk_clipboard_set_with_data
+gtk_clipboard_set_with_owner
+gtk_clipboard_get_owner
+gtk_clipboard_clear
+gtk_clipboard_set_text
+gtk_clipboard_request_contents
+gtk_clipboard_request_text
+gtk_clipboard_wait_for_contents
+gtk_clipboard_wait_for_text
+</SECTION>
+
+<SECTION>
 <FILE>gtkdnd</FILE>
 <TITLE>Drag and Drop</TITLE>
 GtkDestDefaults
@@ -2976,7 +2988,6 @@ GTK_SIGNAL_OFFSET
 GtkSignalMarshal
 GtkSignalDestroy
 GtkEmissionHook
-GtkSignalQuery
 GtkSignalRunType
 gtk_signal_init
 gtk_signal_new
@@ -2987,8 +2998,6 @@ gtk_signal_emit
 gtk_signal_emit_by_name
 gtk_signal_emitv
 gtk_signal_emitv_by_name
-gtk_signal_n_emissions
-gtk_signal_n_emissions_by_name
 gtk_signal_emit_stop
 gtk_signal_emit_stop_by_name
 gtk_signal_connect
@@ -3012,70 +3021,9 @@ gtk_signal_handler_pending_by_func
 gtk_signal_handler_pending_by_id
 gtk_signal_handlers_destroy
 gtk_signal_set_funcs
-gtk_signal_query
 gtk_signal_add_emission_hook
 gtk_signal_add_emission_hook_full
 gtk_signal_remove_emission_hook
-</SECTION>
-
-<SECTION>
-<FILE>gtkmarshal</FILE>
-<TITLE>Signal Marshallers</TITLE>
-gtk_signal_default_marshaller
-
-<SUBSECTION Private>
-gtk_marshal_BOOL__POINTER_INT_INT_UINT
-gtk_marshal_BOOL__POINTER_STRING_STRING_POINTER
-gtk_marshal_ENUM__ENUM
-gtk_marshal_NONE__BOXED
-gtk_marshal_NONE__ENUM
-gtk_marshal_NONE__ENUM_FLOAT
-gtk_marshal_NONE__ENUM_FLOAT_BOOL
-gtk_marshal_NONE__OBJECT
-gtk_marshal_NONE__POINTER_STRING_STRING
-gtk_marshal_NONE__POINTER_UINT
-gtk_marshal_NONE__POINTER_UINT_ENUM
-gtk_marshal_NONE__POINTER_POINTER_UINT_UINT
-gtk_marshal_NONE__POINTER_INT_INT_POINTER_UINT_UINT
-gtk_marshal_NONE__POINTER_UINT_UINT
-gtk_marshal_NONE__STRING
-gtk_marshal_NONE__STRING_INT_POINTER
-gtk_marshal_NONE__UINT
-gtk_marshal_NONE__UINT_POINTER_UINT_ENUM_ENUM_POINTER
-gtk_marshal_NONE__UINT_POINTER_UINT_UINT_ENUM
-gtk_marshal_NONE__UINT_STRING
-gtk_marshal_BOOL__NONE
-gtk_marshal_BOOL__POINTER
-gtk_marshal_BOOL__POINTER_INT_INT
-gtk_marshal_BOOL__POINTER_INT_INT_INT
-gtk_marshal_BOOL__POINTER_POINTER_INT_INT
-gtk_marshal_BOOL__POINTER_POINTER_POINTER_POINTER
-gtk_marshal_INT__INT
-gtk_marshal_INT__POINTER
-gtk_marshal_INT__POINTER_CHAR_CHAR
-gtk_marshal_NONE__BOOL
-gtk_marshal_NONE__INT
-gtk_marshal_NONE__INT_FLOAT
-gtk_marshal_NONE__INT_FLOAT_BOOL
-gtk_marshal_NONE__INT_INT
-gtk_marshal_NONE__INT_INT_POINTER
-gtk_marshal_NONE__INT_POINTER
-gtk_marshal_NONE__INT_POINTER_INT_INT_INT
-gtk_marshal_NONE__INT_POINTER_INT_INT_INT_POINTER
-gtk_marshal_NONE__NONE
-gtk_marshal_NONE__POINTER
-gtk_marshal_NONE__POINTER_INT
-gtk_marshal_NONE__POINTER_INT_INT
-gtk_marshal_NONE__POINTER_INT_INT_POINTER_INT_INT
-gtk_marshal_NONE__POINTER_INT_POINTER
-gtk_marshal_NONE__POINTER_POINTER
-gtk_marshal_NONE__POINTER_POINTER_INT_INT
-gtk_marshal_NONE__POINTER_POINTER_POINTER
-gtk_marshal_INT__OBJECT_BOXED_POINTER
-gtk_marshal_INT__POINTER_POINTER_POINTER
-gtk_marshal_NONE__POINTER_POINTER_INT
-gtk_marshal_NONE__STRING_POINTER
-gtk_marshal_NONE__INT_INT_INT
 </SECTION>
 
 <SECTION>

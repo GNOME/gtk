@@ -107,21 +107,6 @@ Returns the current relief style of the given #GtkButton.
 @Returns: The current #GtkReliefStyle
 
 
-<!-- ##### SIGNAL GtkButton::pressed ##### -->
-<para>
-Emitted when the button is initially pressed.
-</para>
-
-@button: the object which received the signal.
-
-<!-- ##### SIGNAL GtkButton::released ##### -->
-<para>
-Emitted when a button which is pressed is released, no matter where the
-mouse cursor is.
-</para>
-
-@button: the object which received the signal.
-
 <!-- ##### SIGNAL GtkButton::clicked ##### -->
 <para>
 Emitted when a button clicked on by the mouse and the cursor stays on the
@@ -141,6 +126,21 @@ Emitted when the mouse cursor enters the region of the button.
 <!-- ##### SIGNAL GtkButton::leave ##### -->
 <para>
 Emitted when the mouse cursor leaves the region of the button.
+</para>
+
+@button: the object which received the signal.
+
+<!-- ##### SIGNAL GtkButton::pressed ##### -->
+<para>
+Emitted when the button is initially pressed.
+</para>
+
+@button: the object which received the signal.
+
+<!-- ##### SIGNAL GtkButton::released ##### -->
+<para>
+Emitted when a button which is pressed is released, no matter where the
+mouse cursor is.
 </para>
 
 @button: the object which received the signal.

@@ -215,6 +215,15 @@ Returns the character at the given index within the #GtkText widget.
 @index: the number of characters from the upper left corner
 
 
+<!-- ##### SIGNAL GtkText::set-scroll-adjustments ##### -->
+<para>
+
+</para>
+
+@text: the object which received the signal.
+@arg1: 
+@arg2: 
+
 <!-- ##### ARG GtkText:hadjustment ##### -->
 <para>
 Used by the #GtkText widget to keep track of the size of it's horizontal

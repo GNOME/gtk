@@ -348,14 +348,6 @@ GtkContainer
 @container: the object which received the signal.
 @widget: 
 
-<!-- ##### SIGNAL GtkContainer::remove ##### -->
-<para>
-
-</para>
-
-@container: the object which received the signal.
-@widget: 
-
 <!-- ##### SIGNAL GtkContainer::check-resize ##### -->
 <para>
 
@@ -371,6 +363,14 @@ GtkContainer
 @container: the object which received the signal.
 @direction: 
 @Returns: 
+
+<!-- ##### SIGNAL GtkContainer::remove ##### -->
+<para>
+
+</para>
+
+@container: the object which received the signal.
+@widget: 
 
 <!-- ##### SIGNAL GtkContainer::set-focus-child ##### -->
 <para>

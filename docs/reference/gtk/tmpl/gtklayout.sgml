@@ -114,3 +114,12 @@ GtkLayout
 @adjustment: 
 
 
+<!-- ##### SIGNAL GtkLayout::set-scroll-adjustments ##### -->
+<para>
+
+</para>
+
+@layout: the object which received the signal.
+@arg1: 
+@arg2: 
+

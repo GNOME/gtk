@@ -55,7 +55,6 @@ types related to the text widget and how they work together.
 
 @refcount: 
 @appearance: 
-@relief: 
 @justify: 
 @direction: 
 @font_desc: 

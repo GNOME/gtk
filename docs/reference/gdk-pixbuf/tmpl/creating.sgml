@@ -43,3 +43,68 @@ Creating a pixbuf from image data that is already in memory.
     gdk_pixbuf_finalize().
   </para>
 
+<!-- ##### FUNCTION gdk_pixbuf_new ##### -->
+<para>
+
+</para>
+
+@colorspace: 
+@has_alpha: 
+@bits_per_sample: 
+@width: 
+@height: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_new_from_data ##### -->
+<para>
+
+</para>
+
+@data: 
+@colorspace: 
+@has_alpha: 
+@bits_per_sample: 
+@width: 
+@height: 
+@rowstride: 
+@destroy_fn: 
+@destroy_fn_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_new_from_xpm_data ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_new_from_inline ##### -->
+<para>
+
+</para>
+
+@inline_pixbuf: 
+@copy_pixels: 
+@length: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_copy ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: <!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
+
+

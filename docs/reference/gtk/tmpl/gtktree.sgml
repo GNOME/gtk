@@ -271,13 +271,6 @@ Removes the item @child from the #GtkTree @tree.
 @child: A pointer to the #GtkWidget that is to be removed from the tree.
 
 
-<!-- ##### SIGNAL GtkTree::selection-changed ##### -->
-<para>
-This signal is emitted by the root tree whenever the selection changes.
-</para>
-
-@tree: the object which received the signal.
-
 <!-- ##### SIGNAL GtkTree::select-child ##### -->
 <para>
 This signal is emitted by @tree whenever @widget is about to be selected.
@@ -285,6 +278,13 @@ This signal is emitted by @tree whenever @widget is about to be selected.
 
 @tree: the object which received the signal.
 @widget: The child that is about to be selected.
+
+<!-- ##### SIGNAL GtkTree::selection-changed ##### -->
+<para>
+This signal is emitted by the root tree whenever the selection changes.
+</para>
+
+@tree: the object which received the signal.
 
 <!-- ##### SIGNAL GtkTree::unselect-child ##### -->
 <para>

@@ -12,29 +12,71 @@ Debugging
 </para>
 
 
-<!-- ##### SECTION ./tmpl/gtkclipboard.sgml:See_Also ##### -->
+<!-- ##### SECTION ./tmpl/gtkmarshal.sgml:Long_Description ##### -->
+<refsect2>
+<title>What are Signal Marshallers?</title>
 <para>
-<variablelist>
-
-<varlistentry>
-<term>#GtkSelection</term>
-<listitem><para>@GtkClipboard provides a high-level wrapper around the
-	    lower level routines that deal with X selections. It is
-	    also possibly to directly manipulate the X selections,
-	    though it is seldom necessary to do so.</para></listitem>
-</varlistentry>
-
-</variablelist>
+Marshals are functions which all have the same prototype:
+they take a #GtkObject, a #GtkSignalFunc, a #gpointer,
+and an array of argument values.
+The functions are names gtk_marshall_RETURNTYPE__PARAMTYPE1_PARAMTYPE2....
 </para>
-
-
-<!-- ##### FUNCTION gtk_clipboard_get ##### -->
 <para>
-
+They then call a native function:  the GtkObject is the first
+parameter passed in.  The arguments are passed in the native
+calling convention:  chars, shorts, ints, longs may be packed
+on the stack, or tucked in registers:  it doesn't matter
+because the same calling convention will be generated
+inside the gtkmarshal code as is expected where you define
+your handlers.
 </para>
+<para>
+So the function named:
+<programlisting>
+gtk_marshal_BOOL__POINTER_INT_INT_UINT(GtkObject*, GtkSignalFunc, gpointer, GtkArg*);
+</programlisting>
+will call the #GtkSignalFunc assuming it was a function with signature:
+<programlisting>
+gboolean sigfunc(gpointer,gint,gint,guint);
+</programlisting>
+</para>
+</refsect2>
+<refsect2>
+<title>Writing Custom Marshals</title>
+<para>
+Marshals are primarily used as arguments to gtk_signal_new().
+Sometimes, you may find that a marshaller you need isn't available
+in the standard list.  Then you have to write your own.
+</para>
+<para>
+If you wish to define a signal with a new type of argument list.
+Suppose you want 2 pointers and 2 integers.
+You would write:
+<programlisting>
+typedef int (*GtkSignal_INT__POINTER_POINTER_INT_INT)(
+			gpointer, gpointer, gint, gint
+);
 
-@selection: 
-@Returns: 
+void marshal_INT__POINTER_POINTER_INT_INT(GtkObject*    object,
+					   GtkSignalFunc func,
+					   gpointer      func_data,
+                                           GtkArg*       args)
+{
+	GtkSignal_NONE__POINTER_POINTER_INT_INT rfunc;
+	gint* return_val;
+	return_val = GTK_RETLOC_INT(args[4]);
+	rfunc = (GtkSignal_INT__POINTER_POINTER_INT_INT)func;
+	*return_val = (*rfunc)(object,
+                               GTK_VALUE_POINTER(args[0]),
+                               GTK_VALUE_POINTER(args[1]),
+                               GTK_VALUE_INT(args[2]),
+                               GTK_VALUE_INT(args[3]),
+                               func_data);
+}
+</programlisting>
+</para>
+</refsect2>
+
 
 <!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:Short_Description ##### -->
 
@@ -133,6 +175,10 @@ will be shown, or NULL to show all charsets.
 
 @container: 
 
+<!-- ##### SECTION ./tmpl/gtkmarshal.sgml:Title ##### -->
+Signal Marshallers
+
+
 <!-- ##### SECTION ./tmpl/gtkenums.sgml.sgml:Long_Description ##### -->
 <para>
 
@@ -174,6 +220,39 @@ A structure used to return values from @gtk_type_query.
 @func_data: 
 @args: 
 
+<!-- ##### USER_FUNCTION GtkSignalMarshal ##### -->
+<para>
+This is currently a hack left in for a scheme wrapper library.
+It may be removed.
+</para>
+<para>
+Don't use it.
+</para>
+
+@object: The object which emits the signal.
+@data: The user data associated with the hook.
+@nparams: The number of parameters to the function.
+@args: The actual values of the arguments.
+@arg_types: The types of the arguments.
+@return_type: The type of the return value from the function
+or #GTK_TYPE_NONE for no return value.
+
+<!-- ##### FUNCTION gtk_signal_add_emission_hook_full ##### -->
+<para>
+Add an emission hook for a type of signal, for any object.
+(with control of what happens when the hook is
+destroyed).
+</para>
+
+@signal_id: the type of signal add the hook for.
+@hook_func: the function to invoke to handle the hook.
+@data: the user data passed in to hook_func.
+@destroy: a function to invoke when the hook is destroyed,
+to clean up any allocation done just for this
+signal handler.
+@Returns: the id (that you may pass as a parameter
+to gtk_signal_remove_emission_hook()).
+
 <!-- ##### FUNCTION gtk_text_buffer_paste_primary_selection ##### -->
 <para>
 
@@ -195,19 +274,6 @@ A structure used to return values from @gtk_type_query.
 @func_data: 
 @args: 
 
-<!-- ##### FUNCTION gtk_clipboard_set_with_data ##### -->
-<para>
-
-</para>
-
-@clipboard: 
-@targets: 
-@n_targets: 
-@get_func: 
-@clear_func: 
-@user_data: 
-@Returns: 
-
 <!-- ##### SIGNAL GtkTextView::copy-text ##### -->
 <para>
 
@@ -224,34 +290,6 @@ A structure used to return values from @gtk_type_query.
 @iter: 
 @x: 
 @y: 
-
-<!-- ##### USER_FUNCTION GtkClipboardReceivedFunc ##### -->
-<para>
-    A function to be called when the results of gtk_clipboard_request_text()
-    are received, or when the request fails.
-</para>
-
-@clipboard: the #GtkClipboard
-@selection_data: a #GtkSelectionData containing the data was received.
-                 If retrieving the data failed, then then length field
-                 of @selection_data will be negative.
-@data: the @user_data supplied to gtk_clipboard_request_contents().
-
-<!-- ##### FUNCTION gtk_clipboard_clear ##### -->
-<para>
-
-</para>
-
-@clipboard: 
-
-<!-- ##### FUNCTION gtk_clipboard_wait_for_contents ##### -->
-<para>
-
-</para>
-
-@clipboard: 
-@target: 
-@Returns: 
 
 <!-- ##### SECTION ./tmpl/gtkenums.sgml.sgml:Short_Description ##### -->
 
@@ -408,17 +446,6 @@ Convert a gtk type into its sequence number
 </para>
 
 
-<!-- ##### USER_FUNCTION GtkClipboardClearFunc ##### -->
-<para>
-A function that will be called when the contents of the clipboard are changed
-or cleared. Once this has called, the @user_data_or_owner argument
-will not be used again.
-</para>
-
-@clipboard: the #GtkClipboard
-@user_data_or_owner: the @user_data argument passed to gtk_clipboard_set_with_data(), or
-                     the @owner argument passed to gtk_clipboard_set_owner()
-
 <!-- ##### MACRO GTK_WIDGET_IS_OFFSCREEN ##### -->
 <para>
 
@@ -497,72 +524,6 @@ Deprecated.
 @func: 
 @func_data: 
 @args: 
-
-<!-- ##### SECTION ./tmpl/gtkclipboard.sgml:Long_Description ##### -->
-  <para>
-    The #GtkClipboard object represents a clipboard of data shared
-    between different processes or between different widgets in
-    the same process. Each clipboard is identified by a name encoded as a
-    #GdkAtom. (Conversion to and from strings can be done with
-    gdk_atom_intern() and gdk_atom_name().) The default clipboard
-    corresponds to the CLIPBOARD atom; another commonly used clipboard
-    is the PRIMARY clipboard, which, in X, traditionally contains
-    the currently selected text. 
-  </para>
-  <para>
-    To support having a number of different formats on the clipboard
-    at the same time, the clipboard mechanism allows providing
-    callbacks instead of the actual data.  When you set the contents
-    of the clipboard, you can either supply the data directly (via
-    functions like gtk_clipboard_set_text()), or you can supply a
-    callback to be called at a later time when the data is needed (via
-    gtk_clipboard_set_with_data() or gtk_clipboard_set_with_owner().)
-    Providing a callback also avoids having to make copies of the data
-    when it is not needed.
-  </para>
-  <para>
-    gtk_clipboard_set_with_data() and gtk_clipboard_set_with_owner()
-    are quite similar; the choice between the two depends mostly on
-    which is more convenient in a particular situation.
-    The former is most useful when you want to have a blob of data
-    with callbacks to convert it into the various data types that you
-    advertise. When the @clear_func you provided is called, you
-    simply free the data blob. The latter is more useful when the
-    contents of clipboard reflect the internal state of a @GObject
-    (As an example, for the PRIMARY clipboard, when an entry widget
-    provides the clipboard's contents the contents are simply the
-    text within the selected region.) If the contents change, the
-    entry widget can call gtk_clipboard_set_with_owner() to update
-    the timestamp for clipboard ownership, without having to worry
-    about @clear_func being called.
-  </para>
-  <para>
-    Requesting the data from the clipboard is essentially
-    asynchronous. If the contents of the clipboard are provided within
-    the same process, then a direct function call will be made to
-    retrieve the data, but if they are provided by another process,
-    then the data needs to be retrieved from the other process, which
-    may take some time. To avoid blocking the user interface, the call
-    to request the selection, gtk_clipboard_request_contents() takes a
-    callback that will be called when the contents are received (or
-    when the request fails.) If you don't want to deal with providing
-    a separate callback, you can also use gtk_clipboard_wait_for_contents().
-    What this does is run the Glib main loop recursively waiting for
-    the contents. This can simplify the code flow, but you still have
-    to be aware that other callbacks in your program can be called
-    while this recursive mainloop is running.
-  </para>
-  <para>
-    Along with the functions to get the clipboard contents as an
-    arbitrary data chunk, there are also functions to retrieve
-    it as text, gtk_clipboard_request_text() and
-    gtk_clipboard_wait_for_text(). These functions take care of
-    determining which formats are advertised by the clipboard
-    provider, asking for the clipboard in the best available format
-    and converting the results into the UTF-8 encoding. (The standard
-    form for representing strings in GTK+.)
-  </para>
-
 
 <!-- ##### SECTION ./tmpl/gtkdebug.sgml:See_Also ##### -->
 <para>
@@ -703,10 +664,6 @@ Get the number of signals defined by this object.
 @subfactory: 
 @path: 
 
-<!-- ##### SECTION ./tmpl/gtkclipboard.sgml:Short_Description ##### -->
-Storing data on Clipboards.
-
-
 <!-- ##### FUNCTION gtk_type_children_types ##### -->
 <para>
 Return the pointer to the type's children's types.
@@ -769,6 +726,22 @@ The first structured enumerated type value.
 </para>
 
 
+<!-- ##### STRUCT GtkSignalQuery ##### -->
+<para>
+This structure contains all the information about a particular
+signal:  its name, the type it affects, the signature of the handlers,
+and its unique identifying integer.
+</para>
+
+@object_type: 
+@signal_id: 
+@signal_name: 
+@is_user_signal: 
+@signal_flags: 
+@return_val: 
+@nparams: 
+@params: 
+
 <!-- ##### FUNCTION gtk_type_describe_tree ##### -->
 <para>
 Given a @type, describe all of its children, and their children.  Only
@@ -777,16 +750,6 @@ show the size if @show_size is true.
 
 @type: GtkType
 @show_size: gboolean
-
-<!-- ##### FUNCTION gtk_clipboard_request_contents ##### -->
-<para>
-
-</para>
-
-@clipboard: 
-@target: 
-@callback: 
-@user_data: 
 
 <!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_INT_INT_INT ##### -->
 <para>
@@ -797,14 +760,6 @@ show the size if @show_size is true.
 @func: 
 @func_data: 
 @args: 
-
-<!-- ##### FUNCTION gtk_clipboard_get_owner ##### -->
-<para>
-
-</para>
-
-@clipboard: 
-@Returns: 
 
 <!-- ##### SECTION ./tmpl/gtkdebug.sgml:Long_Description ##### -->
 <para>
@@ -871,10 +826,6 @@ will be shown, or NULL to show all spacings.
 @charsets: a NULL-terminated array of strings containing charset names which
 will be shown, or NULL to show all charsets.
 
-<!-- ##### SECTION ./tmpl/gtkclipboard.sgml:Title ##### -->
-Clipboards
-
-
 <!-- ##### SIGNAL GtkTextView::delete-text ##### -->
 <para>
 
@@ -905,11 +856,22 @@ Combine a fundemantal type and a sequence number to create a gtk type.
 @parent_t: 
 @seqno: 
 
+<!-- ##### SECTION ./tmpl/gtkmarshal.sgml:Short_Description ##### -->
+Functions to adapt C structures to native calling convention.
+
+
 <!-- ##### MACRO GTK_TYPE_FLAT_LAST ##### -->
 <para>
 The last "flat" (no struct) enumerated type value.
 </para>
 
+
+<!-- ##### FUNCTION gtk_text_mark_unref ##### -->
+<para>
+
+</para>
+
+@mark: 
 
 <!-- ##### FUNCTION gtk_marshal_NONE__POINTER ##### -->
 <para>
@@ -931,6 +893,17 @@ The last "flat" (no struct) enumerated type value.
 @func_data: 
 @args: 
 
+<!-- ##### FUNCTION gtk_signal_handlers_destroy ##### -->
+<para>
+Destroy all the signal handlers connected to an object.
+This is done automatically when the object is destroyed.
+</para>
+<para>
+This function is labeled private.
+</para>
+
+@object: the object whose signal handlers should be destroyed.
+
 <!-- ##### FUNCTION gtk_text_iter_in_region ##### -->
 <para>
 
@@ -948,19 +921,6 @@ Get the varargs type associated with @foreign_type
 
 @foreign_type: GtkType
 @Returns: GtkType
-
-<!-- ##### FUNCTION gtk_clipboard_wait_for_text ##### -->
-<para>
-
-</para>
-
-@clipboard: 
-@Returns: <!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gtk-docs.sgml" "book" "refsect2" "")
-End:
--->
 
 <!-- ##### STRUCT GtkMenuFactory ##### -->
 <para>
@@ -1020,19 +980,6 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_FOREIGN
 @GTK_DEBUG_DND: 
 @GTK_DEBUG_PLUGSOCKET: 
 
-<!-- ##### FUNCTION gtk_clipboard_set_with_owner ##### -->
-<para>
-
-</para>
-
-@clipboard: 
-@targets: 
-@n_targets: 
-@get_func: 
-@clear_func: 
-@owner: 
-@Returns: 
-
 <!-- ##### FUNCTION gtk_menu_factory_remove_paths ##### -->
 <para>
 
@@ -1077,6 +1024,18 @@ Hide the name of gtk_identifier_get_type
 
 </para>
 
+
+<!-- ##### FUNCTION gtk_signal_handler_pending_by_id ##### -->
+<para>
+Returns whether a connection id is valid (and optionally not blocked).
+</para>
+
+@object: the object to search for the desired handler.
+@handler_id: the connection id.
+@may_be_blocked: whether it is acceptable to return a blocked
+handler.
+@Returns: TRUE if the signal exists and wasn't blocked,
+unless #may_be_blocked was specified.  FALSE otherwise.
 
 <!-- ##### MACRO GTK_PRIVATE_FLAGS ##### -->
 <para>
@@ -1204,6 +1163,20 @@ is enabled.
 @func_data: 
 @args: 
 
+<!-- ##### SECTION ./tmpl/gtkmarshal.sgml:See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkSignal</term>
+<listitem><para>The signal handling functions (of which marshallers are 
+really an implementation detail).</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+
 <!-- ##### MACRO GTK_WIDGET_RESIZE_NEEDED ##### -->
 <para>
 
@@ -1261,6 +1234,12 @@ The first "flat" (no struct) enumerated type value.
 
 @buffer: 
 
+<!-- ##### MACRO gtk_signal_default_marshaller ##### -->
+<para>
+A marshaller that returns void and takes no extra parameters.
+</para>
+
+
 <!-- ##### STRUCT GtkTextTabArray ##### -->
 <para>
 
@@ -1272,17 +1251,6 @@ The first "flat" (no struct) enumerated type value.
 
 </para>
 
-
-<!-- ##### USER_FUNCTION GtkClipboardTextReceivedFunc ##### -->
-<para>
-    A function to be called when the results of gtk_clipboard_request_text()
-    are received, or when the request fails.
-</para>
-
-@clipboard: the #GtkClipboard
-@text: the text received, as a UTF-8 encoded string, or %NULL
-            if retrieving the data failed.
-@data: the @user_data supplied to gtk_clipboard_request_text().
 
 <!-- ##### MACRO GTK_WIDGET_HAS_SHAPE_MASK ##### -->
 <para>
@@ -1298,6 +1266,14 @@ The first "flat" (no struct) enumerated type value.
 
 @buffer: 
 @time: 
+
+<!-- ##### FUNCTION gtk_text_mark_ref ##### -->
+<para>
+
+</para>
+
+@mark: 
+@Returns: 
 
 <!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT ##### -->
 <para>
@@ -1365,27 +1341,6 @@ make sure that it's okay to cast @type_object into a @cast_type.
 @func_data: 
 @args: 
 
-<!-- ##### USER_FUNCTION GtkClipboardGetFunc ##### -->
-<para>
-A function that will be called to provide the contents of the selection.
-If multiple types of data were advertised, the requested type can
-be determined from the @info parameter or by checking the target field
-of @selection_data. If the data could succesfully be converted into
-then it should be stored into the @selection_data object by
-calling gtk_selection_data_set() (or related functions such
-as gtk_seletion_data_get().) If no data is set, the requestor
-will be informed that the attempt to get the data failed.    
-</para>
-
-@clipboard: the #GtkClipboard
-@selection_data: a #GtkSelectionData argument in which the requested
-                     data should be stored.
-@info: the info field corresponding to the requested
-                     target from the #GtkTargetEntry array passed to
-                     gtk_clipboard_set_with_data() or gtk_clipboard_set_with_owner().
-@user_data_or_owner: the @user_data argument passed to gtk_clipboard_set_with_data(), or
-                     the @owner argument passed to gtk_clipboard_set_owner()
-
 <!-- ##### MACRO gtk_marshal_NONE__OBJECT ##### -->
 <para>
 
@@ -1398,15 +1353,6 @@ will be informed that the attempt to get the data failed.
 </para>
 
 
-<!-- ##### FUNCTION gtk_clipboard_set_text ##### -->
-<para>
-
-</para>
-
-@clipboard: 
-@text: 
-@len: 
-
 <!-- ##### FUNCTION gtk_type_set_varargs_type ##### -->
 <para>
 Set the varargs type for a fundamental type @foreign_type.
@@ -1415,12 +1361,6 @@ Set the varargs type for a fundamental type @foreign_type.
 @foreign_type: Must be a GtkType with a sequence number of zero.  Must not be a
 fundamental type.
 @varargs_type: Must be a GtkType which is either structured or flag, or NONE.
-
-<!-- ##### STRUCT GtkClipboard ##### -->
-<para>
-
-</para>
-
 
 <!-- ##### FUNCTION gtk_type_check_class_cast ##### -->
 <para>
@@ -1438,6 +1378,25 @@ sure that it's okay to cast something of that @klass into a @cast_type.
 </para>
 
 @factory: 
+
+<!-- ##### FUNCTION gtk_signal_n_emissions ##### -->
+<para>
+Find out the recursion depth of emissions for a particular type
+of signal and object.  (So it will
+always return 0 or 1 if #GTK_RUN_NO_RECURSE is specified)
+This is a way to avoid recursion:  you can see if
+you are currently running in that signal handler and emit it only
+if you are.
+</para>
+<para>Another way to look at it is that this number increases
+by one when #gtk_signal_emit(), et al, are called,
+and decreases by one when #gtk_signal_emit() returns.
+</para>
+
+@object: the object with the signal handler.
+@signal_id: the signal id.
+@Returns: the recursion depth of emissions of this signal for this
+object.
 
 <!-- ##### FUNCTION gtk_text_buffer_insert_pixmap ##### -->
 <para>
@@ -1485,6 +1444,21 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_ARGS
 @entries: 
 @nentries: 
 
+<!-- ##### FUNCTION gtk_signal_set_funcs ##### -->
+<para>
+These set default functions to call when the user didn't
+supply a function when connecting.  (These are rarely
+used, and probably only for language bindings)
+</para>
+<para>
+By default, there are no such functions.
+</para>
+
+@marshal_func: the function to invoke on every handlers for which there
+isn't a function pointer.  May be NULL.
+@destroy_func: the function to invoke when each hook is destroyed.
+May be NULL.
+
 <!-- ##### FUNCTION gtk_im_context_simple_new ##### -->
 <para>
 
@@ -1527,6 +1501,24 @@ Return NULL if anything goes wrong.
 @type: GtkType
 @Returns: gpointer to the klass.
 
+<!-- ##### USER_FUNCTION GtkSignalDestroy ##### -->
+<para>
+A function which you can use to clean up when the
+signal handler is destroyed.
+</para>
+<para>
+For example, if your handler requires a few variables
+that you made into a struct and allocated (using g_new()
+or something), then you will probably want to free
+it as soon as the hook is destroyed.  This will
+allow you to do that. (For this in particular
+it is convenient to pass g_free() as a #GtkSignalDestroy
+function).
+</para>
+
+@data: The user data associated with the hook that is being
+destroyed.
+
 <!-- ##### FUNCTION gtk_window_set_default ##### -->
 <para>
 
@@ -1534,15 +1526,6 @@ Return NULL if anything goes wrong.
 
 @window: 
 @defaultw: 
-
-<!-- ##### FUNCTION gtk_clipboard_request_text ##### -->
-<para>
-
-</para>
-
-@clipboard: 
-@callback: 
-@user_data: 
 
 <!-- ##### FUNCTION gtk_marshal_NONE__INT ##### -->
 <para>
@@ -1635,6 +1618,28 @@ Return NULL if anything goes wrong.
 Internal function.
 </para>
 
+
+<!-- ##### FUNCTION gtk_signal_query ##### -->
+<para>
+Obtain information about a signal.
+</para>
+
+@signal_id: the signal type identifier.
+@Returns: a pointer to a GtkSignalQuery structure
+which contains all the information, or NULL.
+The pointer is allocated just for you:  you must g_free() it.
+
+<!-- ##### FUNCTION gtk_signal_n_emissions_by_name ##### -->
+<para>
+Find out the recursion depth of emissions for a particular type
+of signal and object.  Just like gtk_signal_n_emissions()
+except it will lookup the signal id for you.
+</para>
+
+@object: the object with the signal handler.
+@name: the signal name.
+@Returns: the recursion depth of emissions of this signal for this
+object.
 
 <!-- ##### SECTION ./tmpl/gtkenums.sgml.sgml:See_Also ##### -->
 <para>
@@ -1735,4 +1740,10 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_CALLBACK
 @GTK_TEXT_SCROLL_TO_BOTTOM: 
 @GTK_TEXT_SCROLL_PAGE_DOWN: 
 @GTK_TEXT_SCROLL_PAGE_UP: 
+
+<!-- ##### STRUCT GtkTextBTree ##### -->
+<para>
+
+</para>
+
 

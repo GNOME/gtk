@@ -332,13 +332,6 @@ effect if a drag selection is not active.
 @list: the list widget.
 
 
-<!-- ##### SIGNAL GtkList::selection-changed ##### -->
-<para>
-The selection of the widget has just changed.
-</para>
-
-@list: the object which received the signal.
-
 <!-- ##### SIGNAL GtkList::select-child ##### -->
 <para>
 The child @widget has just been selected.
@@ -346,6 +339,13 @@ The child @widget has just been selected.
 
 @list: the object which received the signal.
 @widget: the newly selected child.
+
+<!-- ##### SIGNAL GtkList::selection-changed ##### -->
+<para>
+The selection of the widget has just changed.
+</para>
+
+@list: the object which received the signal.
 
 <!-- ##### SIGNAL GtkList::unselect-child ##### -->
 <para>

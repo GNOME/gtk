@@ -521,6 +521,8 @@ types related to the text widget and how they work together.
 @str: 
 @visible_only: 
 @slice: 
+@match_start: 
+@match_end: 
 @Returns: 
 
 

@@ -212,15 +212,10 @@ Define a function pointer.
 @args: GtkArg*
 
 
-<!-- ##### USER_FUNCTION GtkSignalMarshaller ##### -->
+<!-- ##### TYPEDEF GtkSignalMarshaller ##### -->
 <para>
 Define a function pointer.
 </para>
-
-@object: GtkObject*
-@func: GtkSignalFunc
-@func_data: gpointer
-@args: GtkArg*
 
 
 <!-- ##### USER_FUNCTION GtkArgGetFunc ##### -->

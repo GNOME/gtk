@@ -109,15 +109,6 @@ Forces the removal of a message from a statusbar's stack. The exact context_id a
 @message_id: a message identifier, as returned by gtk_statusbar_push().
 
 
-<!-- ##### SIGNAL GtkStatusbar::text-pushed ##### -->
-<para>
-Is emitted whenever a new message gets pushed onto a statusbar's stack.
-</para>
-
-@statusbar: the object which received the signal.
-@context_id: the context id of the relevant message/statusbar.
-@text: the message that was pushed.
-
 <!-- ##### SIGNAL GtkStatusbar::text-popped ##### -->
 <para>
 Is emitted whenever a new message is popped off a statusbar's stack.
@@ -126,4 +117,13 @@ Is emitted whenever a new message is popped off a statusbar's stack.
 @statusbar: the object which received the signal.
 @context_id: the context id of the relevant message/statusbar.
 @text: the message that was just popped.
+
+<!-- ##### SIGNAL GtkStatusbar::text-pushed ##### -->
+<para>
+Is emitted whenever a new message gets pushed onto a statusbar's stack.
+</para>
+
+@statusbar: the object which received the signal.
+@context_id: the context id of the relevant message/statusbar.
+@text: the message that was pushed.
 

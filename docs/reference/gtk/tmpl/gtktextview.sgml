@@ -164,30 +164,19 @@ types related to the text widget and how they work together.
 @location: 
 
 
-<!-- ##### SIGNAL GtkTextView::move ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-
-<!-- ##### SIGNAL GtkTextView::set-anchor ##### -->
+<!-- ##### SIGNAL GtkTextView::copy-clipboard ##### -->
 <para>
 
 </para>
 
 @textview: the object which received the signal.
 
-<!-- ##### SIGNAL GtkTextView::insert ##### -->
+<!-- ##### SIGNAL GtkTextView::cut-clipboard ##### -->
 <para>
 
 </para>
 
 @textview: the object which received the signal.
-@arg1: 
 
 <!-- ##### SIGNAL GtkTextView::delete ##### -->
 <para>
@@ -198,19 +187,23 @@ types related to the text widget and how they work together.
 @arg1: 
 @arg2: 
 
-<!-- ##### SIGNAL GtkTextView::cut-clipboard ##### -->
+<!-- ##### SIGNAL GtkTextView::insert ##### -->
 <para>
 
 </para>
 
 @textview: the object which received the signal.
+@arg1: 
 
-<!-- ##### SIGNAL GtkTextView::copy-clipboard ##### -->
+<!-- ##### SIGNAL GtkTextView::move ##### -->
 <para>
 
 </para>
 
 @textview: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
 
 <!-- ##### SIGNAL GtkTextView::paste-clipboard ##### -->
 <para>
@@ -219,7 +212,7 @@ types related to the text widget and how they work together.
 
 @textview: the object which received the signal.
 
-<!-- ##### SIGNAL GtkTextView::toggle-overwrite ##### -->
+<!-- ##### SIGNAL GtkTextView::set-anchor ##### -->
 <para>
 
 </para>
@@ -234,6 +227,13 @@ types related to the text widget and how they work together.
 @textview: the object which received the signal.
 @arg1: 
 @arg2: 
+
+<!-- ##### SIGNAL GtkTextView::toggle-overwrite ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
 
 <!-- ##### ARG GtkTextView:height_lines ##### -->
 <para>

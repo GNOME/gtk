@@ -264,6 +264,17 @@ widget or not.
   in the widget.
 
 
+<!-- ##### SIGNAL GtkEditable::activate ##### -->
+<para>
+Indicates that the user has activated the widget
+in some fashion. Generally, this will be done
+with a keystroke. (The default binding for this
+action is Return for #GtkEntry and
+Control-Return for #GtkText.)
+</para>
+
+@editable: the object which received the signal.
+
 <!-- ##### SIGNAL GtkEditable::changed ##### -->
 <para>
 Indicates that the user has changed the contents
@@ -271,6 +282,40 @@ of the widget.
 </para>
 
 @editable: the object which received the signal.
+
+<!-- ##### SIGNAL GtkEditable::copy-clipboard ##### -->
+<para>
+An action signal. Causes the characters in the current selection to
+be copied to the clipboard.
+</para>
+
+@editable: the object which received the signal.
+
+<!-- ##### SIGNAL GtkEditable::cut-clipboard ##### -->
+<para>
+An action signal. Causes the characters in the current
+selection to be copied to the clipboard and then deleted from
+the widget.
+</para>
+
+@editable: the object which received the signal.
+
+<!-- ##### SIGNAL GtkEditable::delete-text ##### -->
+<para>
+This signal is emitted when text is deleted from
+the widget by the user. The default handler for
+this signal will normally be responsible for inserting
+the text, so by connecting to this signal and then
+stopping the signal with gtk_signal_emit_stop(), it
+is possible to modify the inserted text, or prevent
+it from being inserted entirely. The @start_pos
+and @end_pos parameters are interpreted as for
+gtk_editable_delete_text()
+</para>
+
+@editable: the object which received the signal.
+@start_pos: the starting position.
+@end_pos: the end position.
 
 <!-- ##### SIGNAL GtkEditable::insert-text ##### -->
 <para>
@@ -291,103 +336,9 @@ it from being inserted entirely.
            emission is finished, it should point after   
            the newly inserted text.
 
-<!-- ##### SIGNAL GtkEditable::delete-text ##### -->
-<para>
-This signal is emitted when text is deleted from
-the widget by the user. The default handler for
-this signal will normally be responsible for inserting
-the text, so by connecting to this signal and then
-stopping the signal with gtk_signal_emit_stop(), it
-is possible to modify the inserted text, or prevent
-it from being inserted entirely. The @start_pos
-and @end_pos parameters are interpreted as for
-gtk_editable_delete_text()
-</para>
-
-@editable: the object which received the signal.
-@start_pos: the starting position.
-@end_pos: the end position.
-
-<!-- ##### SIGNAL GtkEditable::activate ##### -->
-<para>
-Indicates that the user has activated the widget
-in some fashion. Generally, this will be done
-with a keystroke. (The default binding for this
-action is Return for #GtkEntry and
-Control-Return for #GtkText.)
-</para>
-
-@editable: the object which received the signal.
-
-<!-- ##### SIGNAL GtkEditable::set-editable ##### -->
-<para>
-Determines if the user can edit the text in the editable
-widget or not. This is meant to be overriden by 
-child classes and should not generally useful to
-applications.
-</para>
-
-@editable: the object which received the signal.
-@is_editable: %TRUE if the user is allowed to edit the text
-  in the widget.
-
-<!-- ##### SIGNAL GtkEditable::move-cursor ##### -->
-<para>
-An action signal. Move the cursor position.
-</para>
-
-@editable: the object which received the signal.
-@x: horizontal distance to move the cursor.
-@y: vertical distance to move the cursor.
-
-<!-- ##### SIGNAL GtkEditable::move-word ##### -->
-<para>
-An action signal. Move the cursor by words.
-</para>
-
-@editable: the object which received the signal.
-@num_words: The number of words to move the
-cursor. (Can be negative).
-
-<!-- ##### SIGNAL GtkEditable::move-page ##### -->
-<para>
-An action signal. Move the cursor by pages.
-</para>
-
-@editable: the object which received the signal.
-@x: Number of pages to move the cursor horizontally.
-@y: Number of pages to move the cursor vertically.
-
-<!-- ##### SIGNAL GtkEditable::move-to-row ##### -->
-<para>
-An action signal. Move the cursor to the given row.
-</para>
-
-@editable: the object which received the signal.
-@row: the row to move to. (A negative value indicates 
-      the last row)
-
-<!-- ##### SIGNAL GtkEditable::move-to-column ##### -->
-<para>
-An action signal. Move the cursor to the given column.
-</para>
-
-@editable: the object which received the signal.
-@column: the column to move to. (A negative value indicates
-         the last column)
-
 <!-- ##### SIGNAL GtkEditable::kill-char ##### -->
 <para>
 An action signal. Delete a single character.
-</para>
-
-@editable: the object which received the signal.
-@direction: the direction in which to delete. Positive
-   indicates forward deletion, negative, backwards deletion.
-
-<!-- ##### SIGNAL GtkEditable::kill-word ##### -->
-<para>
-An action signal. Delete a single word.
 </para>
 
 @editable: the object which received the signal.
@@ -403,22 +354,59 @@ An action signal. Delete a single line.
 @direction: the direction in which to delete. Positive
    indicates forward deletion, negative, backwards deletion.
 
-<!-- ##### SIGNAL GtkEditable::cut-clipboard ##### -->
+<!-- ##### SIGNAL GtkEditable::kill-word ##### -->
 <para>
-An action signal. Causes the characters in the current
-selection to be copied to the clipboard and then deleted from
-the widget.
+An action signal. Delete a single word.
 </para>
 
 @editable: the object which received the signal.
+@direction: the direction in which to delete. Positive
+   indicates forward deletion, negative, backwards deletion.
 
-<!-- ##### SIGNAL GtkEditable::copy-clipboard ##### -->
+<!-- ##### SIGNAL GtkEditable::move-cursor ##### -->
 <para>
-An action signal. Causes the characters in the current selection to
-be copied to the clipboard.
+An action signal. Move the cursor position.
 </para>
 
 @editable: the object which received the signal.
+@x: horizontal distance to move the cursor.
+@y: vertical distance to move the cursor.
+
+<!-- ##### SIGNAL GtkEditable::move-page ##### -->
+<para>
+An action signal. Move the cursor by pages.
+</para>
+
+@editable: the object which received the signal.
+@x: Number of pages to move the cursor horizontally.
+@y: Number of pages to move the cursor vertically.
+
+<!-- ##### SIGNAL GtkEditable::move-to-column ##### -->
+<para>
+An action signal. Move the cursor to the given column.
+</para>
+
+@editable: the object which received the signal.
+@column: the column to move to. (A negative value indicates
+         the last column)
+
+<!-- ##### SIGNAL GtkEditable::move-to-row ##### -->
+<para>
+An action signal. Move the cursor to the given row.
+</para>
+
+@editable: the object which received the signal.
+@row: the row to move to. (A negative value indicates 
+      the last row)
+
+<!-- ##### SIGNAL GtkEditable::move-word ##### -->
+<para>
+An action signal. Move the cursor by words.
+</para>
+
+@editable: the object which received the signal.
+@num_words: The number of words to move the
+cursor. (Can be negative).
 
 <!-- ##### SIGNAL GtkEditable::paste-clipboard ##### -->
 <para>
@@ -428,6 +416,18 @@ position.
 </para>
 
 @editable: the object which received the signal.
+
+<!-- ##### SIGNAL GtkEditable::set-editable ##### -->
+<para>
+Determines if the user can edit the text in the editable
+widget or not. This is meant to be overriden by 
+child classes and should not generally useful to
+applications.
+</para>
+
+@editable: the object which received the signal.
+@is_editable: %TRUE if the user is allowed to edit the text
+  in the widget.
 
 <!-- ##### ARG GtkEditable:text_position ##### -->
 <para>

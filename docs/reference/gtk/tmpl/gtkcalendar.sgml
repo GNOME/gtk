@@ -188,14 +188,6 @@ gtk_calendar_freeze() are displayed.
 @calendar: a #GtkCalendar.
 
 
-<!-- ##### SIGNAL GtkCalendar::month-changed ##### -->
-<para>
-Emitted when the user clicks a button to change the selected month on a
-calendar.
-</para>
-
-@calendar: the object which received the signal.
-
 <!-- ##### SIGNAL GtkCalendar::day-selected ##### -->
 <para>
 Emitted when the user selects a day.
@@ -210,9 +202,10 @@ Emitted when the user selects a day.
 
 @calendar: the object which received the signal.
 
-<!-- ##### SIGNAL GtkCalendar::prev-month ##### -->
+<!-- ##### SIGNAL GtkCalendar::month-changed ##### -->
 <para>
-
+Emitted when the user clicks a button to change the selected month on a
+calendar.
 </para>
 
 @calendar: the object which received the signal.
@@ -224,14 +217,21 @@ Emitted when the user selects a day.
 
 @calendar: the object which received the signal.
 
-<!-- ##### SIGNAL GtkCalendar::prev-year ##### -->
+<!-- ##### SIGNAL GtkCalendar::next-year ##### -->
 <para>
 
 </para>
 
 @calendar: the object which received the signal.
 
-<!-- ##### SIGNAL GtkCalendar::next-year ##### -->
+<!-- ##### SIGNAL GtkCalendar::prev-month ##### -->
+<para>
+
+</para>
+
+@calendar: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCalendar::prev-year ##### -->
 <para>
 
 </para>

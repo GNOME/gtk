@@ -144,30 +144,6 @@ An enumeration representing directional movements within a menu.
 @GTK_MENU_DIR_NEXT: 
 @GTK_MENU_DIR_PREV: 
 
-<!-- ##### SIGNAL GtkMenuShell::deactivate ##### -->
-<para>
-This signal is emitted when a menu shell is deactivated.
-</para>
-
-@menushell: the object which received the signal.
-
-<!-- ##### SIGNAL GtkMenuShell::selection-done ##### -->
-<para>
-This signal is emitted when a selection has been completed within a menu
-shell.
-</para>
-
-@menushell: the object which received the signal.
-
-<!-- ##### SIGNAL GtkMenuShell::move-current ##### -->
-<para>
-An action signal which moves the current menu item in the direction 
-specified by @direction.
-</para>
-
-@menushell: the object which received the signal.
-@direction: the direction to move.
-
 <!-- ##### SIGNAL GtkMenuShell::activate-current ##### -->
 <para>
 An action signal that activates the current menu item within the menu
@@ -181,6 +157,30 @@ shell.
 <para>
 An action signal which cancels the selection within the menu shell.
 Causes the GtkMenuShell::selection-done signal to be emitted.
+</para>
+
+@menushell: the object which received the signal.
+
+<!-- ##### SIGNAL GtkMenuShell::deactivate ##### -->
+<para>
+This signal is emitted when a menu shell is deactivated.
+</para>
+
+@menushell: the object which received the signal.
+
+<!-- ##### SIGNAL GtkMenuShell::move-current ##### -->
+<para>
+An action signal which moves the current menu item in the direction 
+specified by @direction.
+</para>
+
+@menushell: the object which received the signal.
+@direction: the direction to move.
+
+<!-- ##### SIGNAL GtkMenuShell::selection-done ##### -->
+<para>
+This signal is emitted when a selection has been completed within a menu
+shell.
 </para>
 
 @menushell: the object which received the signal.
