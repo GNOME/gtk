@@ -1,13 +1,13 @@
 # This is the Hungarian locale definition for Gtk+.
 # Copyright (C) 1998 Free Software Foundation, Inc.
-# Shooby Ban <bansz@szif.hu>, 1999.
+# Szabolcs BAN <shooby@gnome.hu>, 1999.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2\n"
 "POT-Creation-Date: 1999-08-30 19:01+0200\n"
-"PO-Revision-Date: 1999-11-24 19:15+0100\n"
-"Last-Translator: Shooby Ban <bansz@szif.hu>\n"
+"PO-Revision-Date: 2000-05-10 13:52+0100\n"
+"Last-Translator: Szabolcs BAN <shooby@gnome.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-2\n"
