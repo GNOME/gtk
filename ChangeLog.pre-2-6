@@ -1,3 +1,8 @@
+Sun Mar 15 22:44:33 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_button_release): for now reverted
+	the last change, since it broke click-select-click menus for gimp.
+
 Sun Mar 15 20:13:42 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkmain.c (gtk_quit_destructor): removed the ugly check whether

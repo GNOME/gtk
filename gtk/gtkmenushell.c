@@ -303,7 +303,7 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
 	  menu_shell->active = TRUE;
 	}
       menu_shell->button = event->button;
-
+      
       menu_item = gtk_get_event_widget ((GdkEvent*) event);
 
       if (!GTK_WIDGET_IS_SENSITIVE (menu_item))
@@ -350,8 +350,9 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
   menu_shell = GTK_MENU_SHELL (widget);
   if (menu_shell->active)
     {
-      if (event->button != menu_shell->button)
+      if (menu_shell->button && (event->button != menu_shell->button))
 	{
+	  menu_shell->button = 0;
 	  if (menu_shell->parent_menu_shell)
 	    gtk_widget_event (menu_shell->parent_menu_shell, (GdkEvent*) event);
 	  return TRUE;
