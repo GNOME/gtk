@@ -2110,9 +2110,12 @@ update_node (GtkUIManager *self,
 	  menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
 	  siblings = gtk_container_get_children (GTK_CONTAINER (menu));
 	  if (siblings != NULL && GTK_IS_TEAROFF_MENU_ITEM (siblings->data))
-	    g_object_set (G_OBJECT (siblings->data), 
-			  "visible", self->private_data->add_tearoffs && !in_popup, 
-			  NULL);
+	    {
+	      if (self->private_data->add_tearoffs && !in_popup)
+		gtk_widget_show (GTK_WIDGET (siblings->data));
+	      else
+		gtk_widget_hide (GTK_WIDGET (siblings->data));
+	    }
 	  g_list_free (siblings);
 	}
       
@@ -2207,9 +2210,12 @@ update_node (GtkUIManager *self,
 	menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
 	siblings = gtk_container_get_children (GTK_CONTAINER (menu));
 	if (siblings != NULL && GTK_IS_TEAROFF_MENU_ITEM (siblings->data))
-	  g_object_set (G_OBJECT (siblings->data), 
-			"visible", self->private_data->add_tearoffs && !in_popup, 
-			NULL);
+	  {
+	    if (self->private_data->add_tearoffs && !in_popup)
+	      gtk_widget_show (GTK_WIDGET (siblings->data));
+	    else
+	      gtk_widget_hide (GTK_WIDGET (siblings->data));
+	  }
 	g_list_free (siblings);
       }
       break;

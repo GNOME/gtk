@@ -194,13 +194,22 @@ gtk_clipboard_finalize (GObject *object)
 {
   GtkClipboard *clipboard;
   GtkWidget *clipboard_widget;
+  GSList *clipboards;
 
   clipboard = GTK_CLIPBOARD (object);
+
+  clipboards = g_object_get_data (G_OBJECT (clipboard->display), "gtk-clipboard-list");
+  if (g_slist_index (clipboards, clipboard) >= 0)
+    g_warning ("GtkClipboard prematurely finalized");
 
   clipboard_widget = get_clipboard_widget (clipboard->display);
   
   clipboard_unset (clipboard);
   
+  clipboards = g_object_get_data (G_OBJECT (clipboard->display), "gtk-clipboard-list");
+  clipboards = g_slist_remove (clipboards, clipboard);
+  g_object_set_data (G_OBJECT (clipboard->display), "gtk-clipboard-list", clipboards);
+
   if (g_main_loop_is_running (clipboard->store_loop))
     {
       g_main_loop_quit (clipboard->store_loop);
@@ -227,10 +236,9 @@ clipboard_display_closed (GdkDisplay   *display,
 
   clipboards = g_object_get_data (G_OBJECT (display), "gtk-clipboard-list");
   g_object_run_dispose (G_OBJECT (clipboard));
-  g_object_unref (clipboard);
   clipboards = g_slist_remove (clipboards, clipboard);
-  
   g_object_set_data (G_OBJECT (display), "gtk-clipboard-list", clipboards);
+  g_object_unref (clipboard);
 }
 
 /**
@@ -268,8 +276,9 @@ clipboard_display_closed (GdkDisplay   *display,
  * Return value: the appropriate clipboard object. If no
  *             clipboard already exists, a new one will
  *             be created. Once a clipboard object has
- *             been created, it is persistent for all time and
- *             cannot be freed.
+ *             been created, it is persistent and, since
+ *             it is owned by GTK+, must not be freed or
+ *             unrefd.
  *
  * Since: 2.2
  **/
@@ -295,8 +304,9 @@ gtk_clipboard_get_for_display (GdkDisplay *display,
  * Return value: the appropriate clipboard object. If no
  *             clipboard already exists, a new one will
  *             be created. Once a clipboard object has
- *             been created, it is persistent for all time and
- *             cannot be freed.
+ *             been created, it is persistent and, since
+ *             it is owned by GTK+, must not be freed or
+ *             unrefd.
  **/
 GtkClipboard *
 gtk_clipboard_get (GdkAtom selection)

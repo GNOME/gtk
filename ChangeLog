@@ -1,5 +1,15 @@
 2004-11-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkuimanager.c (update_node): Remove two more places
+	where we were unconditionally setting "visible", causing
+	unnecessary notifications.
+
+	* gtk/gtkclipboard.c (gtk_clipboard_get_for_display): 
+	(gtk_clipboard_get): Clarify the docs.  (#156638, Torsten 
+	Schoenfeld)
+	(gtk_clipboard_finalize): Warn if the clipboard is still in
+	its displays clipboard list.
+
 	Considerably speed up GtkUIManager, by changing the semantics
 	of the dirty flag. It is now propagated up the tree, and
 	update_node() doesn't descend into clean subtrees.  (#143668,
@@ -44,7 +54,7 @@ Thu Nov 11 11:34:32 2004  Jonathan Blandford  <jrb@redhat.com>
 	by leaving room for the resize grip.  (#157778, Christian Persch)
 
 	* gdk/linux-fb/*: Fix many sparse warnings.  (#157253,
-	Kjartan Maraas.
+	Kjartan Maraas).
 	
 	* NEWS: Updates
 
