@@ -129,7 +129,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   parent_class = gtk_type_class (gtk_container_get_type ());
 
-  gtk_object_add_arg_type ("GtkButton::label", GTK_TYPE_STRING, ARG_LABEL);
+  gtk_object_add_arg_type ("GtkButton::label", GTK_TYPE_STRING, GTK_ARG_WRITABLE, ARG_LABEL);
 
   button_signals[PRESSED] =
     gtk_signal_new ("pressed",

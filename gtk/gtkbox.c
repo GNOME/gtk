@@ -86,8 +86,8 @@ gtk_box_class_init (GtkBoxClass *class)
 
   parent_class = gtk_type_class (gtk_container_get_type ());
 
-  gtk_object_add_arg_type ("GtkBox::spacing", GTK_TYPE_INT, ARG_SPACING);
-  gtk_object_add_arg_type ("GtkBox::homogeneous", GTK_TYPE_BOOL, ARG_HOMOGENEOUS);
+  gtk_object_add_arg_type ("GtkBox::spacing", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_SPACING);
+  gtk_object_add_arg_type ("GtkBox::homogeneous", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HOMOGENEOUS);
 
   widget_class->map = gtk_box_map;
   widget_class->unmap = gtk_box_unmap;

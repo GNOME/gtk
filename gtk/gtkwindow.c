@@ -151,12 +151,12 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   parent_class = gtk_type_class (gtk_bin_get_type ());
 
-  gtk_object_add_arg_type ("GtkWindow::type", GTK_TYPE_WINDOW_TYPE, ARG_TYPE);
-  gtk_object_add_arg_type ("GtkWindow::title", GTK_TYPE_STRING, ARG_TITLE);
-  gtk_object_add_arg_type ("GtkWindow::auto_shrink", GTK_TYPE_BOOL, ARG_AUTO_SHRINK);
-  gtk_object_add_arg_type ("GtkWindow::allow_shrink", GTK_TYPE_BOOL, ARG_ALLOW_SHRINK);
-  gtk_object_add_arg_type ("GtkWindow::allow_grow", GTK_TYPE_BOOL, ARG_ALLOW_GROW);
-  gtk_object_add_arg_type ("GtkWindow::window_position", GTK_TYPE_ENUM, ARG_WIN_POS);
+  gtk_object_add_arg_type ("GtkWindow::type", GTK_TYPE_WINDOW_TYPE, GTK_ARG_READWRITE, ARG_TYPE);
+  gtk_object_add_arg_type ("GtkWindow::title", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_TITLE);
+  gtk_object_add_arg_type ("GtkWindow::auto_shrink", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_AUTO_SHRINK);
+  gtk_object_add_arg_type ("GtkWindow::allow_shrink", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ALLOW_SHRINK);
+  gtk_object_add_arg_type ("GtkWindow::allow_grow", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ALLOW_GROW);
+  gtk_object_add_arg_type ("GtkWindow::window_position", GTK_TYPE_ENUM, GTK_ARG_READWRITE, ARG_WIN_POS);
 
   window_signals[MOVE_RESIZE] =
     gtk_signal_new ("move_resize",
@@ -715,23 +715,26 @@ gtk_window_configure_event (GtkWidget         *widget,
       !GTK_WIDGET_MAPPED (window->bin.child))
     gtk_widget_map (window->bin.child);
 
-  if (window->resize_count > 1)
-    window->resize_count -= 1;
-  else
+  if (window->resize_count > 0)
     {
-      if ((window->auto_shrink &&
-	   ((event->width != widget->requisition.width) ||
-	    (event->height != widget->requisition.height))) ||
-	  (event->width < widget->requisition.width) ||
-	  (event->height < widget->requisition.height))
+      window->resize_count -= 1;
+
+      if ((window->resize_count == 0) &&
+	  ((event->width != widget->requisition.width) ||
+	   (event->height != widget->requisition.height)))
 	{
 	  window->resize_count = 1;
 	  gdk_window_resize (widget->window,
 			     widget->requisition.width,
 			     widget->requisition.height);
+	  /*
+	  printf ("configure-event resize:  %d!=%d (%d) %d!=%d (%d)\n",
+		  event->width, widget->requisition.width,
+		  event->width != widget->requisition.width,
+		  event->height, widget->requisition.height,
+		  event->height != widget->requisition.height);
+		  */
 	}
-      else
-	window->resize_count = 0;
     }
   
   window->handling_resize = FALSE;
@@ -1063,6 +1066,11 @@ gtk_real_window_move_resize (GtkWindow *window,
 	  gdk_window_resize (widget->window,
 			     widget->requisition.width,
 			     widget->requisition.height);
+	  /*
+	  printf ("move-resize resize: %d %d\n",
+		  width != widget->requisition.width,
+		  height != widget->requisition.height);
+		  */
 	}
     }
   else

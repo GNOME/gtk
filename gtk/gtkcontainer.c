@@ -139,10 +139,10 @@ gtk_container_class_init (GtkContainerClass *class)
   widget_class = (GtkWidgetClass*) class;
   parent_class = gtk_type_class (gtk_widget_get_type ());
   
-  gtk_object_add_arg_type ("GtkContainer::border_width", GTK_TYPE_LONG, ARG_BORDER_WIDTH);
-  gtk_object_add_arg_type ("GtkContainer::auto_resize", GTK_TYPE_BOOL, ARG_AUTO_RESIZE);
-  gtk_object_add_arg_type ("GtkContainer::block_resize", GTK_TYPE_BOOL, ARG_BLOCK_RESIZE);
-  gtk_object_add_arg_type ("GtkContainer::child", GTK_TYPE_WIDGET, ARG_CHILD);
+  gtk_object_add_arg_type ("GtkContainer::border_width", GTK_TYPE_LONG, GTK_ARG_READWRITE, ARG_BORDER_WIDTH);
+  gtk_object_add_arg_type ("GtkContainer::auto_resize", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_AUTO_RESIZE);
+  gtk_object_add_arg_type ("GtkContainer::block_resize", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_BLOCK_RESIZE);
+  gtk_object_add_arg_type ("GtkContainer::child", GTK_TYPE_WIDGET, GTK_ARG_WRITABLE, ARG_CHILD);
 
   container_signals[ADD] =
     gtk_signal_new ("add",

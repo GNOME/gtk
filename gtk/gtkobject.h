@@ -65,18 +65,28 @@ extern "C" {
 #define GTK_OBJECT_TYPE(obj)              (GTK_OBJECT (obj)->klass->type)
 #define GTK_OBJECT_SIGNALS(obj)           (GTK_OBJECT (obj)->klass->signals)
 #define GTK_OBJECT_NSIGNALS(obj)          (GTK_OBJECT (obj)->klass->nsignals)
-
+    
 /* GtkObject only uses the first 4 bits of the flags field.
  * GtkWidget uses the remaining bits. Though this is a kinda nasty
  * break up, it does make the size of GtkWidget smaller.
  */
 enum
- {
-   GTK_DESTROYED         = 1 << 0,
-   GTK_FLOATING          = 1 << 1,
-   GTK_RESERVED_1        = 1 << 2,
-   GTK_RESERVED_2        = 1 << 3
- };
+{
+  GTK_DESTROYED         = 1 << 0,
+  GTK_FLOATING          = 1 << 1,
+  GTK_RESERVED_1        = 1 << 2,
+  GTK_RESERVED_2        = 1 << 3
+};
+  
+/* GtkArg access bits for gtk_object_add_arg_type
+ */
+enum
+{
+  GTK_ARG_READABLE	= 1 << 0,
+  GTK_ARG_WRITABLE	= 1 << 1,
+};
+#define GTK_ARG_READWRITE	(GTK_ARG_READABLE | GTK_ARG_WRITABLE)
+
 
 /* Macros for extracting the object_flags from GtkObject.
  */
@@ -236,15 +246,19 @@ void	gtk_object_setv		(GtkObject	*object,
 
 /* Allocate a GtkArg array of size nargs that hold the
  * names and types of the args that can be used with
- * gtk_object_set/gtk_object_get.
+ * gtk_object_set/gtk_object_get. if (*acess_masks!=NULL)
+ * the pointer will be set to point to a newly allocated
+ * guint array that holds the access masks of the args.
  * It is the callers response to do a
- * g_free (returned_args).
+ * g_free (returned_args); g_free (*acess_masks).
  */
 GtkArg* gtk_object_query_args   (GtkType	class_type,
+				 guint		**acess_masks,
 				 guint          *nargs);
 
 void	gtk_object_add_arg_type	(const gchar	*arg_name,
 				 GtkType	arg_type,
+				 guint		access_mask,
 				 guint		arg_id);
 
 GtkType	gtk_object_get_arg_type	(const gchar	*arg_name);

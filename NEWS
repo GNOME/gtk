@@ -5,14 +5,17 @@ Forthcoming Changes for GTK+ 0.99.4:
 * Additions on the signal code for querying information about certain signals,
   and pending handlers of signals.
 * Support for user signals, and major changes to internal signal handler
-  handling for proper removal and invokation of after signals.
-* GtkTooltips became a true descendant of GtkObject.
+  handling for proper signal removal and invokation of after signals.
+* GtkTooltips became a true descendant of GtkObject and facilitates an
+  extra tip string which can be used as e.g. an index into context help.
 * Split up of the widget/object flags into a private and a public portion,
   consult docs/widget_system.txt on this.
 * Support for hot keys on gtk programs via gtk_key_snooper_install().
 * Reimplementation of the *_interp functions as *_full functions to provide
   simple callback functions as well.
 * Idle functions are now prioritized.
+* Many enhancements to GtkNotebook.
+* Access masks for widget arguments (GTK_ARG_READABLE/GTK_ARG_WRITABLE).
 * Clean ups and many many bug fixes by a lot of people all over the place.
 * New, long and descriptive ChangeLog entries for bored readers ;)
 

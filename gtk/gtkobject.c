@@ -54,6 +54,7 @@ struct _GtkArgInfo
   char *name;
   GtkType type;
   GtkType class_type;
+  guint access_mask;
   guint arg_id;
   guint seq_id;
 };
@@ -172,9 +173,18 @@ gtk_object_class_init (GtkObjectClass *class)
   class->nsignals = 0;
   class->n_args = 0;
 
-  gtk_object_add_arg_type ("GtkObject::user_data", GTK_TYPE_POINTER, ARG_USER_DATA);
-  gtk_object_add_arg_type ("GtkObject::signal", GTK_TYPE_SIGNAL, ARG_SIGNAL);
-  gtk_object_add_arg_type ("GtkObject::object_signal", GTK_TYPE_SIGNAL, ARG_OBJECT_SIGNAL);
+  gtk_object_add_arg_type ("GtkObject::user_data",
+			   GTK_TYPE_POINTER,
+			   GTK_ARG_READWRITE,
+			   ARG_USER_DATA);
+  gtk_object_add_arg_type ("GtkObject::signal",
+			   GTK_TYPE_SIGNAL,
+			   GTK_ARG_WRITABLE,
+			   ARG_SIGNAL);
+  gtk_object_add_arg_type ("GtkObject::object_signal",
+			   GTK_TYPE_SIGNAL,
+			   GTK_ARG_WRITABLE,
+			   ARG_OBJECT_SIGNAL);
 
   object_signals[DESTROY] =
     gtk_signal_new ("destroy",
@@ -653,6 +663,13 @@ gtk_object_getv (GtkObject           *object,
 	  g_free (lookup_name);
 	  continue;
 	}
+      else if (!info->access_mask & GTK_ARG_READABLE)
+	{
+	  g_warning ("arg is not supplied for read-access: \"%s\"\n", lookup_name);
+	  args[i].type = GTK_TYPE_INVALID;
+	  g_free (lookup_name);
+	  continue;
+	}
       else
 	g_free (lookup_name);
 
@@ -693,11 +710,14 @@ gtk_query_arg_foreach (gpointer key,
 
 GtkArg*
 gtk_object_query_args (GtkType	class_type,
+		       guint	**access_masks,
 		       guint    *nargs)
 {
   GtkArg *args;
   GtkQueryArgData query_data;
 
+  if (access_masks)
+    *access_masks = NULL;
   g_return_val_if_fail (nargs != NULL, NULL);
   *nargs = 0;
   g_return_val_if_fail (gtk_type_is_a (class_type, gtk_object_get_type ()), NULL);
@@ -730,6 +750,8 @@ gtk_object_query_args (GtkType	class_type,
 
       args = g_new0 (GtkArg, len);
       *nargs = len;
+      if (access_masks)
+	*access_masks = g_new (guint, len);
 
       do
 	{
@@ -742,6 +764,8 @@ gtk_object_query_args (GtkType	class_type,
 
 	  args[info->seq_id - 1].type = info->type;
 	  args[info->seq_id - 1].name = info->name;
+	  if (access_masks)
+	    (*access_masks)[info->seq_id - 1] = info->access_mask;
 	}
       while (list);
 
@@ -840,6 +864,11 @@ gtk_object_setv (GtkObject *object,
 	  g_warning ("invalid arg for %s: \"%s\"\n", gtk_type_name (object->klass->type), lookup_name);
 	  arg_ok = FALSE;
 	}
+      else if (!info->access_mask & GTK_ARG_WRITABLE)
+	{
+	  g_warning ("arg is not supplied for write-access: \"%s\"\n", lookup_name);
+	  arg_ok = FALSE;
+	}
       
       g_free (lookup_name);
 
@@ -861,6 +890,7 @@ gtk_object_setv (GtkObject *object,
 void
 gtk_object_add_arg_type (const char *arg_name,
 			 GtkType     arg_type,
+			 guint	     access_mask,
 			 guint	     arg_id)
 {
   GtkArgInfo *info;
@@ -868,7 +898,10 @@ gtk_object_add_arg_type (const char *arg_name,
   gchar *arg_part;
   GtkType class_type;
 
+  g_return_if_fail (arg_name != NULL);
+  g_return_if_fail (arg_type > GTK_TYPE_NONE);
   g_return_if_fail (arg_id > 0);
+  g_return_if_fail ((access_mask & GTK_ARG_READWRITE) != 0);
   
   arg_part = strchr (arg_name, ':');
   if (!arg_part || (arg_part[0] != ':') || (arg_part[1] != ':'))
@@ -891,6 +924,7 @@ gtk_object_add_arg_type (const char *arg_name,
   info->name = g_strdup (arg_name);
   info->type = arg_type;
   info->class_type = class_type;
+  info->access_mask = access_mask & (GTK_ARG_READABLE | GTK_ARG_WRITABLE);
   info->arg_id = arg_id;
   info->seq_id = ++((GtkObjectClass*) gtk_type_class (class_type))->n_args;
 

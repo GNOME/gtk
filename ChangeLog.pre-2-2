@@ -1,3 +1,36 @@
+Thu Feb 19 06:56:52 1998  Tim Janik  <timj@gimp.org>
+
+        * gtkbox.c:
+        * gtkbutton.c:
+        * gtkcontainer.c:
+        * gtkframe.c:
+        * gtklabel.c:
+        * gtkobject.c:
+        * gtkwidget.c:
+        * gtkwindow.c:
+        present the argument access masks on their announcement.
+
+        * gtk/gtkobject.h:
+        * gtk/gtkobject.c:
+        (gtk_object_add_arg_type): take an additional argument describing
+        the access mask of the new arg. this can be of GTK_ARG_READABLE,
+        GTK_ARG_WRITABLE or GTK_ARG_READWRITE (the latter is an alias for
+        the two previous ones).
+        (gtk_object_query_args): provide an access_mask array if desired.
+
+        * gtk/gtkwidget.c (gtk_widget_real_realize):
+        realized the assumtion that widget is a NO_WINDOW widget
+        in actuall code.
+
+        * gtkwindow.c:
+        slight changes to gtk_window_configure_event that will make
+        the resizing behaviour a little less odd.
+        sigh, for some (buggy) reason, there are still container resizes
+        triggered by manual resizing to very small window sizes.
+        the cointainer resizes will cause gtk_real_window_move_resize to
+        be invoked, which makes the app look like it wants to fight the users
+        resizing action. ;(
+
 Thu Feb 19 01:11:48 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* configure.in         gdk/gdk.[ch]         gdk/gdkcc.c 

@@ -277,21 +277,21 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   
   parent_class = gtk_type_class (gtk_object_get_type ());
   
-  gtk_object_add_arg_type ("GtkWidget::x", GTK_TYPE_INT, ARG_X);
-  gtk_object_add_arg_type ("GtkWidget::y", GTK_TYPE_INT, ARG_Y);
-  gtk_object_add_arg_type ("GtkWidget::width", GTK_TYPE_INT, ARG_WIDTH);
-  gtk_object_add_arg_type ("GtkWidget::height", GTK_TYPE_INT, ARG_HEIGHT);
-  gtk_object_add_arg_type ("GtkWidget::visible", GTK_TYPE_BOOL, ARG_VISIBLE);
-  gtk_object_add_arg_type ("GtkWidget::sensitive", GTK_TYPE_BOOL, ARG_SENSITIVE);
-  gtk_object_add_arg_type ("GtkWidget::can_focus", GTK_TYPE_BOOL, ARG_CAN_FOCUS);
-  gtk_object_add_arg_type ("GtkWidget::has_focus", GTK_TYPE_BOOL, ARG_HAS_FOCUS);
-  gtk_object_add_arg_type ("GtkWidget::can_default", GTK_TYPE_BOOL, ARG_CAN_DEFAULT);
-  gtk_object_add_arg_type ("GtkWidget::has_default", GTK_TYPE_BOOL, ARG_HAS_DEFAULT);
-  gtk_object_add_arg_type ("GtkWidget::events", GTK_TYPE_GDK_EVENT_MASK, ARG_EVENTS);
-  gtk_object_add_arg_type ("GtkWidget::extension_events", GTK_TYPE_GDK_EVENT_MASK, ARG_EXTENSION_EVENTS);
-  gtk_object_add_arg_type ("GtkWidget::name", GTK_TYPE_STRING, ARG_NAME);
-  gtk_object_add_arg_type ("GtkWidget::style", GTK_TYPE_STYLE, ARG_STYLE);
-  gtk_object_add_arg_type ("GtkWidget::parent", GTK_TYPE_CONTAINER, ARG_PARENT);
+  gtk_object_add_arg_type ("GtkWidget::x", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_X);
+  gtk_object_add_arg_type ("GtkWidget::y", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_Y);
+  gtk_object_add_arg_type ("GtkWidget::width", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_WIDTH);
+  gtk_object_add_arg_type ("GtkWidget::height", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_HEIGHT);
+  gtk_object_add_arg_type ("GtkWidget::visible", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_VISIBLE);
+  gtk_object_add_arg_type ("GtkWidget::sensitive", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_SENSITIVE);
+  gtk_object_add_arg_type ("GtkWidget::can_focus", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_CAN_FOCUS);
+  gtk_object_add_arg_type ("GtkWidget::has_focus", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HAS_FOCUS);
+  gtk_object_add_arg_type ("GtkWidget::can_default", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_CAN_DEFAULT);
+  gtk_object_add_arg_type ("GtkWidget::has_default", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HAS_DEFAULT);
+  gtk_object_add_arg_type ("GtkWidget::events", GTK_TYPE_GDK_EVENT_MASK, GTK_ARG_READWRITE, ARG_EVENTS);
+  gtk_object_add_arg_type ("GtkWidget::extension_events", GTK_TYPE_GDK_EVENT_MASK, GTK_ARG_READWRITE, ARG_EXTENSION_EVENTS);
+  gtk_object_add_arg_type ("GtkWidget::name", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_NAME);
+  gtk_object_add_arg_type ("GtkWidget::style", GTK_TYPE_STYLE, GTK_ARG_READWRITE, ARG_STYLE);
+  gtk_object_add_arg_type ("GtkWidget::parent", GTK_TYPE_CONTAINER, GTK_ARG_READWRITE, ARG_PARENT);
   
   widget_signals[SHOW] =
     gtk_signal_new ("show",
@@ -3337,6 +3337,7 @@ gtk_widget_real_realize (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_WIDGET_NO_WINDOW (widget));
   
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
   if (widget->parent)
