@@ -1,5 +1,7 @@
 2004-12-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserbutton.c: Add missing includes.
+
 	* configure.in: Require glib 2.6.0 for 
 	g_filename_display_basename.
 

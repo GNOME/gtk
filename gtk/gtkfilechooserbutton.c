@@ -33,6 +33,8 @@
 #include "gtkalias.h"
 #include "gtkintl.h"
 #include "gtkbutton.h"
+#include "gtkcelllayout.h"
+#include "gtkcellrendererpixbuf.h"
 #include "gtkcombobox.h"
 #include "gtkdnd.h"
 #include "gtkicontheme.h"
