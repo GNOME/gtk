@@ -282,10 +282,13 @@ enum
   TARGET_STRING,
   TARGET_TEXT,
   TARGET_COMPOUND_TEXT,
-  TARGET_UTF8_STRING
+  TARGET_UTF8_STRING,
+  TARGET_TEXT_BUFFER_CONTENTS
 };
 
 static GtkTargetEntry target_table[] = {
+  { "GTK_TEXT_BUFFER_CONTENTS", GTK_TARGET_SAME_APP,
+    TARGET_TEXT_BUFFER_CONTENTS },
   { "UTF8_STRING", 0, TARGET_UTF8_STRING },
   { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT },
   { "TEXT", 0, TARGET_TEXT },
@@ -3371,7 +3374,8 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
   text_view->drag_start_x = -1;
   text_view->drag_start_y = -1;
 
-  target_list = gtk_target_list_new (target_table, G_N_ELEMENTS (target_table));
+  target_list = gtk_target_list_new (target_table,
+                                     G_N_ELEMENTS (target_table));
 
   context = gtk_drag_begin (GTK_WIDGET (text_view), target_list,
                             GDK_ACTION_COPY | GDK_ACTION_MOVE,
@@ -3413,25 +3417,40 @@ gtk_text_view_drag_data_get (GtkWidget        *widget,
                              guint             info,
                              guint             time)
 {
-  gchar *str;
-  GtkTextIter start;
-  GtkTextIter end;
   GtkTextView *text_view;
 
   text_view = GTK_TEXT_VIEW (widget);
 
-  str = NULL;
-
-  if (gtk_text_buffer_get_selection_bounds (get_buffer (text_view), &start, &end))
+  if (selection_data->target == gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE))
     {
-      /* Extract the selected text */
-      str = gtk_text_iter_get_visible_text (&start, &end);
+      GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
+
+      gtk_selection_data_set (selection_data,
+                              gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE),
+                              8, /* bytes */
+                              (void*)&buffer,
+                              sizeof (buffer));
     }
-
-  if (str)
+  else
     {
-      gtk_selection_data_set_text (selection_data, str);
-      g_free (str);
+      gchar *str;
+      GtkTextIter start;
+      GtkTextIter end;
+      
+      str = NULL;
+
+      if (gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
+                                                &start, &end))
+        {
+          /* Extract the selected text */
+          str = gtk_text_iter_get_visible_text (&start, &end);
+        }
+
+      if (str)
+        {
+          gtk_selection_data_set_text (selection_data, str);
+          g_free (str);
+        }
     }
 }
 
@@ -3560,6 +3579,24 @@ gtk_text_view_drag_drop (GtkWidget        *widget,
 }
 
 static void
+insert_text_data (GtkTextView      *text_view,
+                  GtkTextIter      *drop_point,
+                  GtkSelectionData *selection_data)
+{
+  gchar *str;
+  
+  str = gtk_selection_data_get_text (selection_data);
+  
+  if (str)
+    {
+      gtk_text_buffer_insert_interactive (get_buffer (text_view),
+                                          drop_point, str, -1,
+                                          text_view->editable);
+      g_free (str);
+    }
+}
+
+static void
 gtk_text_view_drag_data_received (GtkWidget        *widget,
                                   GdkDragContext   *context,
                                   gint              x,
@@ -3571,7 +3608,6 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
   GtkTextIter drop_point;
   GtkTextView *text_view;
   GtkTextMark *drag_target_mark;
-  gchar *str;
 
   text_view = GTK_TEXT_VIEW (widget);
 
@@ -3585,15 +3621,50 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
                                     &drop_point,
                                     drag_target_mark);
 
-  str = gtk_selection_data_get_text (selection_data);
-
-  if (str)
+  if (selection_data->target == gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE))
     {
-      gtk_text_buffer_insert_interactive (get_buffer (text_view),
-                                          &drop_point, str, -1,
-                                          text_view->editable);
-      g_free (str);
+      GtkTextBuffer *src_buffer = NULL;
+      GtkTextIter start, end;
+      gboolean copy_tags = TRUE;
+      
+      if (selection_data->length != sizeof (src_buffer))
+        return;
+          
+      memcpy (&src_buffer, selection_data->data, sizeof (src_buffer));
+
+      if (src_buffer == NULL)
+        return;
+  
+      g_return_if_fail (GTK_IS_TEXT_BUFFER (src_buffer));
+
+      if (gtk_text_buffer_get_tag_table (src_buffer) !=
+          gtk_text_buffer_get_tag_table (get_buffer (text_view)))
+        copy_tags = FALSE;
+
+      if (gtk_text_buffer_get_selection_bounds (src_buffer,
+                                                &start,
+                                                &end))
+        {
+          if (copy_tags)
+            gtk_text_buffer_insert_range_interactive (get_buffer (text_view),
+                                                      &drop_point,
+                                                      &start,
+                                                      &end,
+                                                      text_view->editable);
+          else
+            {
+              gchar *str;
+
+              str = gtk_text_iter_get_visible_text (&start, &end);
+              gtk_text_buffer_insert_interactive (get_buffer (text_view),
+                                                  &drop_point, str, -1,
+                                                  text_view->editable);
+              g_free (str);
+            }
+        }
     }
+  else
+    insert_text_data (text_view, &drop_point, selection_data);
 }
 
 static GtkAdjustment*
