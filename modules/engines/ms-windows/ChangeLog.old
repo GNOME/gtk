@@ -1,3 +1,7 @@
+2003-10-23  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/xp_theme_defs.h: Update to include definitions for my latest work
+	
 2003-10-22  Raymond Penners  <raymond@dotsphinx.com>
 
 	* src/*.[ch]: Code formatting & XP constants renaming.

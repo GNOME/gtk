@@ -141,6 +141,20 @@ typedef HANDLE HTHEME;
 #define GLPS_CLOSED 1
 #define GLPS_OPENED 2
 
+#define MP_MENUITEM 1
+#define MP_SEPARATOR 6
+#define MS_NORMAL 1
+#define MS_SELECTED 2
+#define MS_DEMOTED 3
+
+#define SP_PANE 1
+#define SP_GRIPPER 2
+
+#define TMT_CAPTIONFONT 801
+#define TMT_MENUFONT 803
+#define TMT_STATUSFONT 804
+#define TMT_MSGBOXFONT 805
+
 #if UXTHEME_HAS_LINES
 
 #error unknown/undocumented uxtheme values
