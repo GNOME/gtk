@@ -1,3 +1,10 @@
+Wed May  2 17:26:22 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c gdk/x11/gdkwindow-x11.c: Always
+	trap errors around calls to XSetInputFocus since we have
+	no way of knowing reliably whether we are viewable or
+	not. (#53947)
+
 Tue May  1 09:21:23 2001  Jonathan Blandford  <jrb@webwynk.net>
 
 	* gtk/gtktreeview.c (gtk_tree_view_button_release_drag_column):

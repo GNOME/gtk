@@ -1487,8 +1487,16 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
       GdkWindow *win = event->any.window;
       Window focus_win = GDK_WINDOW_IMPL_X11(((GdkWindowObject *)win)->impl)->focus_window;
 
-      XSetInputFocus (GDK_WINDOW_XDISPLAY (win), focus_win,
-		      RevertToParent, xevent->xclient.data.l[1]);
+      /* There is no way of knowing reliably whether we are viewable so we need
+       * to trap errors so we don't cause a BadMatch.
+       */
+      gdk_error_trap_push ();
+      XSetInputFocus (GDK_WINDOW_XDISPLAY (win),
+		      focus_win,
+		      RevertToParent,
+		      xevent->xclient.data.l[1]);
+      XSync (GDK_WINDOW_XDISPLAY (win), False);
+      gdk_error_trap_pop ();
     }
   else if ((Atom) xevent->xclient.data.l[0] == gdk_atom_intern ("_NET_WM_PING", FALSE))
     {

@@ -1120,10 +1120,17 @@ gdk_window_focus (GdkWindow *window,
   else
     {
       XRaiseWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
+
+      /* There is no way of knowing reliably whether we are viewable so we need
+       * to trap errors so we don't cause a BadMatch.
+       */
+      gdk_error_trap_push ();
       XSetInputFocus (GDK_WINDOW_XDISPLAY (window),
                       GDK_WINDOW_XWINDOW (window),
                       RevertToNone,
                       timestamp);
+      XSync (GDK_WINDOW_XDISPLAY (window), False);
+      gdk_error_trap_pop ();
     }
 }
 
