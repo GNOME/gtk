@@ -25,7 +25,36 @@ The #GtkInvisible-struct struct contains no public fields.
 </para>
 
 
+<!-- ##### FUNCTION gtk_invisible_new_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_invisible_set_screen ##### -->
+<para>
+
+</para>
+
+@invisible: 
+@screen: 
+
+
+<!-- ##### FUNCTION gtk_invisible_get_screen ##### -->
+<para>
+
+</para>
+
+@invisible: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_invisible_new ##### -->
+<caution><para> gtk_invisible_new() is not multihead safe use 
+gtk_invisible_new_for_screen() instead </para></caution>
 <para>
 Creates a new #GtkInvisible.
 </para>

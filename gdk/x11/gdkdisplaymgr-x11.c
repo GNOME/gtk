@@ -91,6 +91,16 @@ gdk_display_manager_get_default_display (GdkDisplayManager * display_mgr)
   return display_mgr->default_display;
 }
 
+/**
+ * gdk_display_manager_get_display_count:
+ * @display_mgr : a #GdkDisplayManager object
+ * can be retrieved with gdk_get_display_manager().
+ *
+ * Returns the number of #GdkDisplay currently opened by the application.
+ * 
+ * Returns: the number of #GdkDisplay currently opened.
+ */
+
 gint
 gdk_display_manager_get_display_count (GdkDisplayManager * display_mgr)
 {

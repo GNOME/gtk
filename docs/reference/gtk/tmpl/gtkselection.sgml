@@ -148,7 +148,21 @@ Look up a given target in a #GtkTargetList
 @Returns: %TRUE if the target was found, otherwise %FALSE
 
 
+<!-- ##### FUNCTION gtk_selection_owner_set_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@widget: 
+@selection: 
+@time: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_selection_owner_set ##### -->
+<caution><para> gtk_selection_owner_set() is not multihead safe use 
+gtk_selection_owner_set_for_display() instead </para></caution>
 <para>
 Claim ownership of a given selection for a particular widget,
 or, if @widget is %NULL, release ownership of the selection.

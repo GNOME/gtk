@@ -63,18 +63,65 @@ gdk_display_class_init (GdkDisplayClass * klass)
   parent_class = g_type_class_peek_parent (klass);
 }
 
+/**
+ * gdk_display_new:
+ * @argc : Address of the argc parameter of your main function. 
+ *         Changed if any arguments were handled. 
+ * @argv : Address of the argv parameter of main. Any parameters 
+ *	   understood by gdk_display_new are stripped before return. 
+ * @display_name:  the X server connection name 
+ * ie. "<hostname>:<XserverNumber>.<ScreenNumber>"
+ *
+ * Attempts to create and initialize a new connection to 
+ * the X server @display_name
+ * 
+ * Returns: a #GdkDisplay if successful, NULL otherwise.
+ */
 GdkDisplay *
-gdk_display_new (gchar * display_name)
+gdk_display_new (int argc, char **argv, char *display_name)
 {
-  return gdk_display_manager_open_display (_gdk_display_manager, display_name);
+  GdkDisplay *display = NULL;
+  GdkScreen *screen = NULL;
+  
+  display = _gdk_windowing_init_check_for_display (argc,argv,display_name);
+  if (!display)
+    return NULL;
+  
+  screen = gdk_display_get_default_screen (display);
+  
+  _gdk_visual_init (screen);
+  _gdk_windowing_window_init (screen);
+  _gdk_windowing_image_init (display);
+  _gdk_events_init (display);
+  _gdk_input_init (display);
+  _gdk_dnd_init (display);
+  
+  return display;
 }
 
-gchar *
+/**
+ * gdk_display_get_name:
+ * @display: a #GdkDisplay
+ *
+ * Returns a display name.
+ * 
+ * Returns: a string representing the display name.
+ */
+G_CONST_RETURN gchar *
 gdk_display_get_name (GdkDisplay * display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   return GDK_DISPLAY_GET_CLASS (display)->get_display_name (display);
 }
+
+/**
+ * gdk_display_get_n_screens:
+ * @display: a #GdkDisplay
+ *
+ * Returns the number of screen managed by the @display.
+ * 
+ * Returns: number of screens.
+ */
 
 gint
 gdk_display_get_n_screens (GdkDisplay * display)
@@ -83,6 +130,16 @@ gdk_display_get_n_screens (GdkDisplay * display)
   return GDK_DISPLAY_GET_CLASS (display)->get_n_screens (display);
 }
 
+/**
+ * gdk_display_get_screen:
+ * @display: a #GdkDisplay
+ * @screen_num: the screen number
+ *
+ * Initializes a #GdkScreen for the @display
+ * 
+ * Returns: a #GdkScreen.
+ */
+
 GdkScreen *
 gdk_display_get_screen (GdkDisplay * display, gint screen_num)
 {
@@ -90,12 +147,28 @@ gdk_display_get_screen (GdkDisplay * display, gint screen_num)
   return GDK_DISPLAY_GET_CLASS (display)->get_screen (display, screen_num);
 }
 
+/**
+ * gdk_display_get_default_screen:
+ * @display: a #GdkDisplay
+ *
+ * Returns the default #GdkScreen for @display
+ * 
+ * Returns: a #GdkScreen.
+ */
+
 GdkScreen *
 gdk_display_get_default_screen (GdkDisplay * display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   return GDK_DISPLAY_GET_CLASS (display)->get_default_screen (display);
 }
+
+/**
+ * gdk_display_close:
+ * @display: a #GdkDisplay
+ *
+ * Closes and cleanup the resources used by the @display
+ */
 
 void
 gdk_display_close (GdkDisplay *display)

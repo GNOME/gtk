@@ -4355,14 +4355,14 @@ gtk_widget_get_child_visible (GtkWidget *widget)
  * gtk_widget_get_screen:
  * @widget: a #GtkWidget
  * 
- * Get the %GdkScreen from the toplevel window associated with
+ * Get the #GdkScreen from the toplevel window associated with
  * this widget. This function can only be called after the widget
  * has been added to a widget heirarchy with a toplevel window
  * at the top. In general, you should only create screen specific
  * resources when a widget has been realized, and you should
  * free those resources when the widget is unrealized.
  * 
- * Return value: the %GdkScreen from the toplevel for this widget.
+ * Return value: the #GdkScreen for the toplevel for this widget.
  **/
 GdkScreen*
 gtk_widget_get_screen (GtkWidget *widget)
@@ -4399,10 +4399,10 @@ gtk_widget_get_screen (GtkWidget *widget)
  * gtk_widget_has_screen:
  * @widget: a #GtkWidget
  * 
- * check if the %GdkScreen from the toplevel window is associated with
+ * Checks if there is a #GdkScreen is associated with
  * this widget.  
  * 
- * Return value: the %gboolean 
+ * Return value: the #gboolean 
  **/
 
 gboolean
@@ -4437,14 +4437,14 @@ gtk_widget_has_screen (GtkWidget *widget)
  * gtk_widget_get_display:
  * @widget: a #GtkWidget
  * 
- * Get the %GdkDisplay for the toplevel window associated with
+ * Get the #GdkDisplay for the toplevel window associated with
  * this widget. This function can only be called after the widget
- * has been added to a widget heirarchy with a toplevel window
+ * has been added to a widget hierarchy with a toplevel #GtkWindow
  * at the top. In general, you should only create display specific
  * resources when a widget has been realized, and you should
  * free those resources when the widget is unrealized.
  * 
- * Return value: the %GdkDisplay for the toplevel for this widget.
+ * Return value: the #GdkDisplay for the toplevel for this widget.
  **/
 GdkDisplay*
 gtk_widget_get_display (GtkWidget *widget)
@@ -4459,14 +4459,14 @@ gtk_widget_get_display (GtkWidget *widget)
  * gtk_widget_get_root_window:
  * @widget: a #GtkWidget
  * 
- * Get the %GdkWindow root window for the toplevel window associated with
+ * Get the #GdkWindow root window for the toplevel window associated with
  * this widget. This function can only be called after the widget
- * has been added to a widget heirarchy with a toplevel window
+ * has been added to a widget heirarchy with a toplevel #GtkWindow
  * at the top. In general, you should only create display specific
  * resources when a widget has been realized, and you should
  * free those resources when the widget is unrealized.
  * 
- * Return value: the %GdkWindow for the toplevel for this widget.
+ * Return value: the #GdkWindow root window for the toplevel for this widget.
  **/
 
 GdkWindow*

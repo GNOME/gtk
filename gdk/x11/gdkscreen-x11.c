@@ -209,6 +209,14 @@ gdk_X11_screen_get_window_at_pointer (GdkScreen *screen,
   return window;
 }
 
+/**
+ * gdk_x11_screen_get_root_xwindow:
+ * @screen : a #GdkScreen.
+ *
+ * Returns the X Window ID for the root window of @screen.
+ *
+ * Returns: the root X window ID. 
+ */
 Window   
 gdk_x11_screen_get_root_xwindow  (GdkScreen   *screen)
 {

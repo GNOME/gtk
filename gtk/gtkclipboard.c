@@ -41,7 +41,6 @@ typedef struct _RequestTextInfo RequestTextInfo;
 struct _GtkClipboard 
 {
   GdkAtom selection;
-  GdkDisplay *display;
 
   GtkClipboardGetFunc get_func;
   GtkClipboardClearFunc clear_func;
@@ -51,6 +50,7 @@ struct _GtkClipboard
   guint32 timestamp;
 
   gboolean have_selection;
+  GdkDisplay *display;
 };
 
 struct _RequestContentsInfo
@@ -87,6 +87,8 @@ static GQuark clipboards_owned_key_id = 0;
   
 /**
  * gtk_clipboard_get_for_display:
+ * @display: a #GdkDisplay which identifies on which display
+ *	     the clipboard is to be retrieved or created
  * @selection: a #GdkAtom which identifies the clipboard
  *             to use. A value of %GDK_NONE here is the
  *             same as gdk_atom_intern ("CLIPBOARD", FALSE),
@@ -865,7 +867,14 @@ gtk_clipboard_wait_for_text (GtkClipboard *clipboard)
 
   return results.data;
 }
-
+/**
+ * gtk_clipboard_get_display:
+ * @clipboard: a #GtkClipboard
+ *
+ * Returns the #GdkDisplay associated with the #GtkClipboard
+ *
+ * Return value: the #GdkDisplay associated with the #GtkClipboard
+ **/
 GdkDisplay *
 gtk_clipboard_get_display (GtkClipboard *clipboard)
 {

@@ -181,7 +181,7 @@ static void          gtk_drag_get_event_actions (GdkEvent        *event,
 					         GdkDragAction   *possible_actions);
 static GdkCursor *   gtk_drag_get_cursor         (GdkDragAction   action,
 						  GdkScreen      *screen);
-static GtkWidget    *gtk_drag_get_ipc_widget     (GdkDisplay	 *display);
+static GtkWidget    *gtk_drag_get_ipc_widget     (GdkScreen	 *screen);
 static void          gtk_drag_release_ipc_widget (GtkWidget      *widget);
 
 static gboolean      gtk_drag_highlight_expose   (GtkWidget      *widget,
@@ -366,10 +366,10 @@ static const gint n_drag_cursors = sizeof (drag_cursors) / sizeof (drag_cursors[
  *************************************************************/
 
 static GtkWidget *
-gtk_drag_get_ipc_widget (GdkDisplay *display)
+gtk_drag_get_ipc_widget (GdkScreen *screen)
 {
   GtkWidget *result;
-  GSList *drag_widgets = g_object_get_data (G_OBJECT (display), 
+  GSList *drag_widgets = g_object_get_data (G_OBJECT (screen), 
 					    "gtk-dnd-ipc-widgets");
   
   if (drag_widgets)
@@ -377,13 +377,13 @@ gtk_drag_get_ipc_widget (GdkDisplay *display)
       GSList *tmp = drag_widgets;
       result = drag_widgets->data;
       drag_widgets = drag_widgets->next;
-      g_object_set_data (G_OBJECT (display), "gtk-dnd-ipc-widgets",
+      g_object_set_data (G_OBJECT (screen), "gtk-dnd-ipc-widgets",
 			 drag_widgets);
       g_slist_free_1 (tmp);
     }
   else
     {
-      result = gtk_invisible_new_for_screen (gdk_display_get_default_screen (display));
+      result = gtk_invisible_new_for_screen (screen);
       gtk_widget_show (result);
     }
 
@@ -401,11 +401,11 @@ gtk_drag_get_ipc_widget (GdkDisplay *display)
 static void
 gtk_drag_release_ipc_widget (GtkWidget *widget)
 {
-  GdkDisplay *display = gtk_widget_get_display (widget);
-  GSList *drag_widgets = g_object_get_data (G_OBJECT (display),
+  GdkScreen *screen = gtk_widget_get_display (widget);
+  GSList *drag_widgets = g_object_get_data (G_OBJECT (screen),
 					    "gtk-dnd-ipc-widgets");
   drag_widgets = g_slist_prepend (drag_widgets, widget);
-  g_object_set_data (G_OBJECT (display), "gtk-dnd-ipc-widgets",
+  g_object_set_data (G_OBJECT (screen), "gtk-dnd-ipc-widgets",
 		     drag_widgets);
 }
 
@@ -613,7 +613,7 @@ gtk_drag_get_data (GtkWidget      *widget,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (context != NULL);
 
-  selection_widget = gtk_drag_get_ipc_widget (gtk_widget_get_display (widget));
+  selection_widget = gtk_drag_get_ipc_widget (gtk_widget_get_screen (widget));
 
   gdk_drag_context_ref (context);
   gtk_widget_ref (widget);
@@ -700,8 +700,8 @@ gtk_drag_finish (GdkDragContext *context,
 
   if (target != GDK_NONE)
     {
-      GtkWidget *selection_widget = 
-	      gtk_drag_get_ipc_widget (gdk_drawable_get_display (context->source_window));
+      GtkWidget *selection_widget = gtk_drag_get_ipc_widget 
+	(gdk_drawable_get_screen (context->source_window));
 
       gdk_drag_context_ref (context);
       
@@ -1356,7 +1356,7 @@ gtk_drag_proxy_begin (GtkWidget       *widget,
       dest_info->proxy_source = NULL;
     }
   
-  ipc_widget = gtk_drag_get_ipc_widget (gtk_widget_get_display (widget));
+  ipc_widget = gtk_drag_get_ipc_widget (gtk_widget_get_screen (widget));
   context = gdk_drag_begin (ipc_widget->window,
 			    dest_info->context->targets);
 
@@ -1770,7 +1770,7 @@ gtk_drag_begin (GtkWidget         *widget,
       tmp_list = tmp_list->prev;
     }
 
-  ipc_widget = gtk_drag_get_ipc_widget (gtk_widget_get_display (widget));
+  ipc_widget = gtk_drag_get_ipc_widget (gtk_widget_get_screen (widget));
   source_widgets = g_slist_prepend (source_widgets, ipc_widget);
 
   context = gdk_drag_begin (ipc_widget->window, targets);

@@ -800,7 +800,12 @@ _gtk_rc_init (void)
   
   gtk_rc_reparse_all_for_settings (gtk_settings_get_for_screen (gdk_get_default_screen ()), TRUE);
 }
-
+/** gtk_rc_parse_string_for_screen:
+ * @screen: a #GdkScreen.
+ * @rc_string: a string to parse. 
+ * 
+ * Parse resource information directly from a string.
+ */
 void
 gtk_rc_parse_string_for_screen (GdkScreen   *screen,
 				const gchar *rc_string)
@@ -907,6 +912,13 @@ gtk_rc_parse_file (GtkRcContext *context,
   context->default_priority = saved_priority;
 }
 
+/**
+ * gtk_rc_parse_for_screen:
+ * @screen : the #GdkScreen on which the ??? (GtkRcContext) is located.
+ * @filename : the filename of a file to parse.
+ *
+ * Parse a given resource file.
+ **/   
 void
 gtk_rc_parse_for_screen (GdkScreen   *screen,
 			 const gchar *filename)

@@ -166,6 +166,16 @@ get_xkb (GdkKeymapX11 *keymap_x11)
  * XkbSetDetectableAutorepeat. If FALSE, we'll fall back
  * to checking the next event with XPending().
  */
+
+/** 
+ * gdk_keymap_get_for_display :
+ * @display : the #GdkDisplay.
+ *
+ * Returns the GdkKeymap attached to @display.
+ *
+ * Returns : the GdkKeymap attached to @display.
+ */
+
 GdkKeymap*
 gdk_keymap_get_for_display (GdkDisplay *display)
 {

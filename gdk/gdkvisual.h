@@ -49,7 +49,6 @@ typedef enum
 struct _GdkVisual
 {
   GObject parent_instance;
-  GdkScreen *screen;
   
   GdkVisualType type;
   gint depth;
@@ -68,6 +67,8 @@ struct _GdkVisual
   guint32 blue_mask;
   gint blue_shift;
   gint blue_prec;
+  
+  GdkScreen *screen;  
 };
 
 GType         gdk_visual_get_type	      (void);

@@ -2420,7 +2420,14 @@ gtk_menu_hide_all (GtkWidget *widget)
   /* Hide children, but not self. */
   gtk_container_foreach (GTK_CONTAINER (widget), (GtkCallback) gtk_widget_hide_all, NULL);
 }
-
+/**
+ * gtk_menu_set_screen:
+ * @menu: a #GtkMenu.
+ * @screen: a #GtkScreen.
+ *
+ * Sets the #GtkScreen on which the GtkMenu will be displayed.
+ * This function can only be called before @menu is realized.
+ **/
 void
 gtk_menu_set_screen (GtkMenu *menu, 
 		     GdkScreen *screen)

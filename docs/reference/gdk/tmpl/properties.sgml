@@ -51,6 +51,8 @@ in the Xlib API.
 
 
 <!-- ##### FUNCTION gdk_text_property_to_text_list ##### -->
+<caution><para> gdk_text_property_to_text_list() is not multihead safe use 
+gdk_text_property_to_text_list_for_display() instead </para></caution>
 <para>
 Convert a text string from the encoding as it is stored in
 a property into an array of strings in the encoding of
@@ -72,6 +74,20 @@ the null-separated elements of the original text string.)
           if the conversion failed.
 
 
+<!-- ##### FUNCTION gdk_text_property_to_text_list_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@encoding: 
+@format: 
+@text: 
+@length: 
+@list: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_free_text_list ##### -->
 <para>
 Free the array of strings created by
@@ -82,7 +98,23 @@ gdk_text_property_to_text_list().
        a call to gdk_text_property_to_text_list().
 
 
+<!-- ##### FUNCTION gdk_text_property_to_utf8_list_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@encoding: 
+@format: 
+@text: 
+@length: 
+@list: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_text_property_to_utf8_list ##### -->
+<caution><para> gdk_text_property_to_utf8_list() is not multihead safe use 
+gdk_text_property_to_utf8_list_for_display() instead </para></caution>
 <para>
 
 </para>
@@ -96,6 +128,8 @@ gdk_text_property_to_text_list().
 
 
 <!-- ##### FUNCTION gdk_string_to_compound_text ##### -->
+<caution><para> gdk_string_to_compound_text() is not multihead safe use 
+gdk_string_to_compound_text_for_display() instead </para></caution>
 <para>
 Convert a string from the encoding of the current locale 
 into a form suitable for storing in a window property.
@@ -107,6 +141,20 @@ into a form suitable for storing in a window property.
 @ctext: location to store newly allocated data for the property.
 @length: location to store the length of @ctext in items.
 @Returns: 0 upon sucess, non-zero upon failure.
+
+
+<!-- ##### FUNCTION gdk_string_to_compound_text_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@str: 
+@encoding: 
+@format: 
+@ctext: 
+@length: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_free_compound_text ##### -->
@@ -127,10 +175,26 @@ Free the data returned from gdk_string_to_compound_text().
 
 
 <!-- ##### FUNCTION gdk_utf8_to_compound_text ##### -->
+<caution><para> gdk_utf8_to_compound_text() is not multihead safe use 
+gdk_utf8_to_compound_text_for_display() instead </para></caution>
 <para>
 
 </para>
 
+@str: 
+@encoding: 
+@format: 
+@ctext: 
+@length: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_utf8_to_compound_text_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
 @str: 
 @encoding: 
 @format: 

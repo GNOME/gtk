@@ -69,7 +69,15 @@ gdk_xid_table_remove_for_display (GdkDisplay  *display,
 
   g_hash_table_remove (display_impl->xid_ht, &xid);
 }
-
+/** 
+ * gdk_xid_table_lookup_for_display:
+ * @display : the #GdkDisplay.
+ * @xid : an X id.
+ *
+ * Returns the Gdk object associated with the given X id.
+ *
+ * Returns: an GdkObject associated with the given X id.
+ */
 gpointer
 gdk_xid_table_lookup_for_display (GdkDisplay  *display,
 				  XID	       xid)
@@ -85,24 +93,6 @@ gdk_xid_table_lookup_for_display (GdkDisplay  *display,
     data = g_hash_table_lookup (display_impl->xid_ht, &xid);
   
   return data;
-}
-
-gpointer
-gdk_xid_table_lookup_for_all_displays (XID xid)
-{
-  GdkDisplay *tmp_display;
-  gpointer return_val = NULL;
-  GSList *tmp_iter = gdk_x11_display_manager_get_open_displays(gdk_get_display_manager ());
-  
-  while (tmp_iter)
-    {
-      tmp_display = GDK_DISPLAY (tmp_iter->data);
-      return_val = gdk_xid_table_lookup_for_display (tmp_display, xid);
-      if (return_val)
-	return return_val;
-      tmp_iter = tmp_iter->next;
-    }
-  return FALSE;
 }
 
 #ifndef GDK_MULTIHEAD_SAFE

@@ -34,7 +34,19 @@ inside the first applications window.
 </para>
 
 
+<!-- ##### FUNCTION gtk_plug_construct_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@plug: 
+@socket_id: 
+
+
 <!-- ##### FUNCTION gtk_plug_construct ##### -->
+<caution><para> gtk_plug_construct() is not multihead safe use 
+gtk_plug_construct_for_display() instead </para></caution>
 <para>
 Finish the creation of a #GtkPlug widget. This function
 will generally only be used by classes deriving
@@ -45,7 +57,19 @@ from #GtkPlug.
 @socket_id: the XID of the socket's window.
 
 
+<!-- ##### FUNCTION gtk_plug_new_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@socket_id: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_plug_new ##### -->
+<caution><para> gtk_plug_new() is not multihead safe use 
+gtk_plug_new_for_display() instead </para></caution>
 <para>
 Create a new plug widget inside the #GtkSocket identified
 by @socket_id.

@@ -14,7 +14,18 @@ Pango Interaction
 
 </para>
 
+<!-- ##### FUNCTION gdk_pango_context_get_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_pango_context_get ##### -->
+<caution><para> gdk_pango_context_get() is not multihead safe use 
+gdk_pango_context_get_for_screen() instead </para></caution>
 <para>
 
 </para>

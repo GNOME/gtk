@@ -743,6 +743,15 @@ gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
   x11_dst_gc->fg_pixel = x11_src_gc->fg_pixel;
 }
 
+/**
+ * gdk_gc_get_screen:
+ * @gc : the #GdkGC.
+ *
+ * Returns the #GdkScreen on which @gc is defined
+ *
+ * Returns : the corresponding #GdkScreen.
+ */
+
 GdkScreen *  
 gdk_gc_get_screen (GdkGC *gc)
 {

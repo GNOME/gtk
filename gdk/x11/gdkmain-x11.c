@@ -588,6 +588,19 @@ gdk_set_sm_client_id (const gchar* sm_client_id)
 }
 #endif
 
+/**
+ * gdk_set_sm_client_id_for_display:
+ * @display: the #GdkDisplay where the SM_CLIENT_ID is to be set.
+ * @sm_client_id: specifies the client id assigned to us by the 
+ * session manager or NULL to remove the property.
+ *
+ *   Set the SM_CLIENT_ID property on the WM_CLIENT_LEADER window
+ *   so that the window manager can save our state using the
+ *   X11R6 ICCCM session management protocol. A NULL value should 
+ *   be set following disconnection from the session manager to
+ *   remove the SM_CLIENT_ID property.
+ */
+
 void
 gdk_set_sm_client_id_for_display (GdkDisplay *display,
 				  const gchar * sm_client_id)
@@ -758,6 +771,15 @@ gdk_get_display (void)
   return gdk_display_get_name (gdk_get_default_display ());
 }
 #endif
+
+/** 
+ * gdk_get_display_arg_name:
+ *
+ * Returns if defined a string representing the display name 
+ * specified in the command line arguments. NULL otherwise.
+ *
+ * Returns : a string if defined, NULL otherwise.
+ */
 
 gchar *
 gdk_get_display_arg_name (void)

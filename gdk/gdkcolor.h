@@ -46,9 +46,9 @@ struct _GdkColormap
 
   /*< private >*/
   GdkVisual *visual;
-  GdkScreen *screen;
   
   gpointer windowing_data;
+  GdkScreen *screen;
 };
 
 struct _GdkColormapClass

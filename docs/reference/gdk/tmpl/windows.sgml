@@ -274,6 +274,15 @@ Deprecated equivalent of g_object_unref()
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_window_set_screen ##### -->
+<para>
+
+</para>
+
+@window: 
+@screen: 
+
+
 <!-- ##### FUNCTION gdk_window_at_pointer ##### -->
 <para>
 
@@ -1183,10 +1192,21 @@ Deprecated equivalent of gdk_drawable_get_type().
 @GDK_FUNC_CLOSE: 
 
 <!-- ##### FUNCTION gdk_window_get_toplevels ##### -->
+<caution><para> gdk_window_get_toplevels() is not multihead safe use 
+gdk_window_get_toplevels_for_screen() instead </para></caution>
 <para>
 
 </para>
 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_toplevels_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
 @Returns: 
 
 

@@ -681,7 +681,8 @@ gdk_window_new (GdkWindow     *parent,
 }
 
 /**
- * gdk_window_foreign_new:
+ * gdk_window_foreign_new_for_display:
+ * @display: the #GdkDisplay where the window handle comes from.
  * @anid: a native window handle.
  * 
  * Wraps a native window in a #GdkWindow.
@@ -4781,6 +4782,13 @@ gdk_window_begin_move_drag (GdkWindow *window,
     emulate_move_drag (window, button, root_x, root_y, timestamp);
 }
 
+/**
+ * gdk_window_set_screen:
+ * @window: the #GdkWindow.
+ * @screen: the #GdkScreen to be assigned to @window.
+ *
+ * Assigns a screen to non realized #GdkWindow.
+ */ 
 void
 gdk_window_set_screen (GdkWindow *window,
 		       GdkScreen *screen)

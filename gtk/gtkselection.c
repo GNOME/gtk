@@ -294,17 +294,18 @@ gtk_target_list_find (GtkTargetList *list,
   return FALSE;
 }
 
-/*************************************************************
+/**
  * gtk_selection_owner_set_for_display:
- *     Claim ownership of a selection.
- *   arguments:
- *     display:	        display where the selection is set 
- *     widget:		new selection owner
- *     selection:	which selection
- *     time:		time (use GDK_CURRENT_TIME only if necessary)
+ * @display: the #Gdkdisplay where the selection is set 
+ * @widget: new selection owner (a #GdkWidget).
+ * @selection: an interned atom representing the selection to claim.
+ * @time: timestamp (use GDK_CURRENT_TIME only if necessary)
  *
- *   results:
- *************************************************************/
+ * Claim ownership of a given selection for a particular widget, or,
+ * if widget is NULL, release ownership of the selection.
+ *
+ * Return value: TRUE if the operation succeeded 
+ */
 gboolean gtk_selection_owner_set_for_display (GdkDisplay   *display,
 					      GtkWidget    *widget,
 					      GdkAtom       selection,

@@ -114,7 +114,6 @@ struct _GdkDrawableClass
   GdkColormap* (*get_colormap)	(GdkDrawable  *drawable);
   GdkVisual*   (*get_visual)	(GdkDrawable  *drawable);
   GdkScreen*   (*get_screen)	(GdkDrawable  *drawable);
-  GdkDisplay*  (*get_display)	(GdkDrawable  *drawable);
 
   GdkImage*    (*get_image)  (GdkDrawable  *drawable,
                               gint          x,

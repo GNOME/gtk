@@ -28,11 +28,12 @@ The standard cursors available.
 </para>
 
 
-<!-- ##### FUNCTION gdk_cursor_new ##### -->
+<!-- ##### FUNCTION gdk_cursor_new_for_screen ##### -->
 <para>
 
 </para>
 
+@screen: 
 @cursor_type: 
 @Returns: 
 
@@ -90,6 +91,15 @@ The color does not have to be allocated first.
 @Returns: a new #GdkCursor.
 
 
+<!-- ##### FUNCTION gdk_cursor_get_screen ##### -->
+<para>
+
+</para>
+
+@cursor: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_cursor_ref ##### -->
 <para>
 
@@ -114,5 +124,16 @@ Destroys a cursor, freeing any resources allocated for it.
 
 <!-- # Unused Parameters # -->
 @cursor: a #GdkCursor.
+
+
+<!-- ##### FUNCTION gdk_cursor_new ##### -->
+<caution><para> gdk_cursor_new() is not multihead safe use 
+gdk_cursor_new_for_screen() instead </para></caution>
+<para>
+
+</para>
+
+@cursor_type: 
+@Returns: 
 
 

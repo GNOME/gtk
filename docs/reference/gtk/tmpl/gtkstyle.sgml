@@ -212,6 +212,16 @@ Styles
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_style_get_font_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@style: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_draw_hline ##### -->
 <para>
 

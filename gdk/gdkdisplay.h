@@ -51,26 +51,27 @@ struct _GdkDisplayClass
 {
   GObjectClass parent_class;
   
-  gchar *     (*get_display_name)   (GdkDisplay *display);
-  gint        (*get_n_screens)      (GdkDisplay *display);
-  GdkScreen * (*get_screen)         (GdkDisplay *display,
-				     gint        screen_num);
-  GdkScreen * (*get_default_screen) (GdkDisplay *display);
+  G_CONST_RETURN gchar *     (*get_display_name)   (GdkDisplay *display);
+  gint			     (*get_n_screens)      (GdkDisplay *display);
+  GdkScreen *		     (*get_screen)         (GdkDisplay *display,
+						    gint        screen_num);
+  GdkScreen *		     (*get_default_screen) (GdkDisplay *display);
 };
 
 GType       gdk_display_get_type           (void);
-GdkDisplay *gdk_display_init_new           (int          argc,
+GdkDisplay *gdk_display_new	           (int          argc,
 					    char       **argv,
 					    char        *display_name);
-GdkDisplay *gdk_display_new                (gchar       *display_name);
-gchar *     gdk_display_get_name           (GdkDisplay  *display);
+G_CONST_RETURN gchar * gdk_display_get_name (GdkDisplay  *display);
 gint        gdk_display_get_n_screens      (GdkDisplay  *display);
 GdkScreen * gdk_display_get_screen         (GdkDisplay  *display,
 					    gint         screen_num);
 GdkScreen * gdk_display_get_default_screen (GdkDisplay  *display);
+#ifndef GDK_DISABLE_DEPRECATED
 void        gdk_display_set_use_xshm       (GdkDisplay  *display,
 					    gboolean     use_xshm);
 gboolean    gdk_display_get_use_xshm       (GdkDisplay  *display);
+#endif
 void        gdk_display_pointer_ungrab     (GdkDisplay  *display,
 					    guint32      time);
 void        gdk_display_keyboard_ungrab    (GdkDisplay  *display,

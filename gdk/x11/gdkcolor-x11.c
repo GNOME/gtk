@@ -307,6 +307,14 @@ gdk_colormap_sync (GdkColormap *colormap,
   g_free (xpalette);
 }
 		   
+/**
+ * gdk_colormap_get_system_for_screen:
+ * @screen : the #GdkScreen where the #GdkColormap is located
+ *
+ * Returns the system's default colormap
+ *
+ * Returns : the screens' default colormap
+ */
 
 GdkColormap *
 gdk_colormap_get_system_for_screen (GdkScreen * screen)

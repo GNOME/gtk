@@ -6911,7 +6911,7 @@ void screen_display_check (GtkWidget *widget, ScreenDisplaySelection *data)
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (data->radio_dpy)))
     {
       display_name = g_strdup (gtk_entry_get_text (data->entry));
-      display = gdk_display_init_new (0, NULL, (char *)display_name);
+      display = gdk_display_new (0, NULL, (char *)display_name);
       
       if (!display)
 	{
@@ -10004,7 +10004,9 @@ query_properties (GtkButton *button,
 
 
   if (!data->cursor)
-    data->cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)), GDK_TARGET);
+    data->cursor =
+      gdk_cursor_new_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)),
+				 GDK_TARGET);
   
   failure = gdk_pointer_grab (GTK_WIDGET (button)->window,
 			      TRUE,

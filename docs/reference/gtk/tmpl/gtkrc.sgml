@@ -672,6 +672,15 @@ statement in a RC file.
 @pattern: the pattern
 
 
+<!-- ##### FUNCTION gtk_rc_parse_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@filename: 
+
+
 <!-- ##### FUNCTION gtk_rc_parse ##### -->
 <para>
 Parse a given resource file.
@@ -680,12 +689,30 @@ Parse a given resource file.
 @filename: the filename of a file to parse.
 
 
+<!-- ##### FUNCTION gtk_rc_parse_string_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@rc_string: 
+
+
 <!-- ##### FUNCTION gtk_rc_parse_string ##### -->
 <para>
 Parse resource information directly from a string.
 </para>
 
 @rc_string: a string to parse.
+
+
+<!-- ##### FUNCTION gtk_rc_reparse_all_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_rc_reparse_all ##### -->

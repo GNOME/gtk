@@ -29,6 +29,24 @@ GtkWindow
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_window_set_screen ##### -->
+<para>
+
+</para>
+
+@window: 
+@screen: 
+
+
+<!-- ##### FUNCTION gtk_window_get_screen ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_window_set_title ##### -->
 <para>
 

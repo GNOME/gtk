@@ -1161,6 +1161,9 @@ GTK_INPUT_DIALOG_GET_CLASS
 <FILE>gtkinvisible</FILE>
 <TITLE>GtkInvisible</TITLE>
 GtkInvisible
+gtk_invisible_new_for_screen
+gtk_invisible_set_screen
+gtk_invisible_get_screen
 gtk_invisible_new
 <SUBSECTION Standard>
 GTK_INVISIBLE
@@ -1378,6 +1381,7 @@ gtk_menu_append
 gtk_menu_prepend
 gtk_menu_insert
 gtk_menu_reorder_child
+gtk_menu_set_screen
 gtk_menu_popup
 gtk_menu_set_accel_group
 gtk_menu_get_accel_group
@@ -1685,7 +1689,9 @@ GTK_PIXMAP_GET_CLASS
 <FILE>gtkplug</FILE>
 GtkPlug
 <TITLE>GtkPlug</TITLE>
+gtk_plug_construct_for_display
 gtk_plug_construct
+gtk_plug_new_for_display
 gtk_plug_new
 gtk_plug_get_id
 <SUBSECTION Standard>
@@ -1981,6 +1987,7 @@ gtk_separator_menu_item_get_type
 GtkSettings
 GtkSettingsClass
 GtkSettingsValue
+gtk_settings_get_for_screen
 gtk_settings_get_default
 gtk_settings_install_property
 gtk_settings_install_property_parser
@@ -3341,7 +3348,10 @@ gtk_widget_set_colormap
 gtk_widget_get_visual
 gtk_widget_get_events
 gtk_widget_get_pointer
-gtk_widget_is_ancestor
+gtk_widget_get_display
+gtk_widget_get_root_window
+gtk_widget_get_screen
+gtk_widget_has_screen
 gtk_widget_hide_on_delete
 gtk_widget_set_style
 gtk_widget_set_rc_style
@@ -3430,6 +3440,8 @@ GTK_WIDGET_GET_CLASS
 <TITLE>GtkWindow</TITLE>
 GtkWindow
 gtk_window_new
+gtk_window_set_screen
+gtk_window_get_screen
 gtk_window_set_title
 gtk_window_set_wmclass
 gtk_window_set_policy
@@ -3660,6 +3672,7 @@ gtk_style_apply_default_background
 gtk_style_apply_default_pixmap
 gtk_style_lookup_icon_set
 gtk_style_render_icon
+gtk_style_get_font_for_display
 gtk_draw_hline
 gtk_draw_vline
 gtk_draw_shadow
@@ -3748,8 +3761,11 @@ gtk_rc_get_style_by_paths
 gtk_rc_add_widget_name_style
 gtk_rc_add_widget_class_style
 gtk_rc_add_class_style
+gtk_rc_parse_for_screen
 gtk_rc_parse
+gtk_rc_parse_string_for_screen
 gtk_rc_parse_string
+gtk_rc_reparse_all_for_screen
 gtk_rc_reparse_all
 gtk_rc_reparse_all_for_settings
 gtk_rc_add_default_file
@@ -3837,6 +3853,7 @@ gtk_target_list_add
 gtk_target_list_add_table
 gtk_target_list_remove
 gtk_target_list_find
+gtk_selection_owner_set_for_display
 gtk_selection_owner_set
 gtk_selection_add_target
 gtk_selection_add_targets
@@ -3864,10 +3881,12 @@ GtkClipboardReceivedFunc
 GtkClipboardTextReceivedFunc
 GtkClipboardGetFunc
 GtkClipboardClearFunc
+gtk_clipboard_get_for_display
 gtk_clipboard_get
 gtk_clipboard_set_with_data
 gtk_clipboard_set_with_owner
 gtk_clipboard_get_owner
+gtk_clipboard_get_display
 gtk_clipboard_clear
 gtk_clipboard_set_text
 gtk_clipboard_request_contents

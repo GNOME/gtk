@@ -133,7 +133,7 @@ main (int argc, char *argv[])
       if (!strcmp (screen2_name, ""))
 	g_print ("No display name, reverting to default display\n");
 
-      dpy2 = gdk_display_init_new (0, NULL, screen2_name);
+      dpy2 = gdk_display_new (0, NULL, screen2_name);
       if (dpy2)
 	{
 	  scr2 = gdk_display_get_default_screen (dpy2);

@@ -144,7 +144,15 @@ gtk_invisible_destroy (GtkObject *object)
       gtk_widget_unref (GTK_WIDGET (invisible));
     }
 }
-
+/**
+ * gtk_invisible_new_for_screen:
+ * @screen: a #GdkScreen which identifies on which
+ *	    the new #GtkInvisible will be created.
+ *
+ * Creates a new #GtkInvisible object for a specified screen
+ *
+ * Return value: a newly created #GtkInvisible object
+ **/
 GtkWidget* 
 gtk_invisible_new_for_screen (GdkScreen *screen)
 {
@@ -169,16 +177,36 @@ gtk_invisible_new (void)
 
   return result;
 }
-
+/**
+ * gtk_invisible_set_screen:
+ * @invisible: a #GtkInvisible.
+ * @screen: a #GdkScreen.
+ *
+ * Sets the #GdkScreen where the #GtkInvisible object will be displayed.
+ * This function has to be called before the @invisible
+ * object is realized otherwise it will fail.
+ **/ 
 void
 gtk_invisible_set_screen (GtkInvisible *invisible,
 			  GdkScreen    *screen)
 {
   g_return_if_fail (GTK_IS_INVISIBLE (invisible));
   g_return_if_fail (GDK_IS_SCREEN (screen));
+  if (GTK_WIDGET_REALIZED (invisible))
+    {
+      g_warning ("Trying to change the window's screen while widget is visible");
+      return;
+    }
   invisible->screen = screen;
 }
-
+/**
+ * gtk_invisible_get_screen:
+ * @invisible: a #GtkInvisible.
+ *
+ * Returns the #GdkScreen object associated with @invisible
+ *
+ * Return value : the associated #GdkScreen.
+ **/
 GdkScreen *
 gtk_invisible_get_screen (GtkInvisible *invisible)
 {

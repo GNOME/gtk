@@ -310,6 +310,16 @@ _gdk_visual_init (GdkScreen *screen)
   screen_impl->nvisuals = nvisuals;
   screen_impl->visual_initialised = TRUE;
 }
+/**
+ * gdk_visual_get_best_depth_for_screen:
+ * @screen : the relevant #GdkScreen.
+ * 
+ * Get the best available depth for the @screen.  "Best"
+ * means "largest," i.e. 32 preferred over 24 preferred over 8 bits
+ * per pixel.
+ * 
+ * Return value: best available depth
+ **/
 
 gint
 gdk_visual_get_best_depth_for_screen (GdkScreen * screen)
@@ -335,6 +345,15 @@ gdk_visual_get_best_depth (void)
   return gdk_visual_get_best_depth_for_screen (gdk_get_default_screen ());
 }
 #endif
+/**
+ * gdk_visual_get_best_type_for_screen:
+ * @screen : the relevant #GdkScreen.
+ *
+ * Return the best available visual type (the one with the most
+ * colors) for @screen.
+ * 
+ * Return value: best visual type
+ **/
 
 GdkVisualType
 gdk_visual_get_best_type_for_screen (GdkScreen * screen)
@@ -360,6 +379,16 @@ gdk_visual_get_best_type (void)
   return gdk_visual_get_best_type_for_screen (gdk_get_default_screen ());
 }
 #endif
+/**
+ * gdk_visual_get_system_for_screen:
+ * @screen : the relevant #GdkScreen.
+ * 
+ * Get the default or system visual for @screen.
+ * This is the visual for the root window of the display.
+ * The return value should not be freed.
+ * 
+ * Return value: system visual
+ **/
 
 GdkVisual *
 gdk_visual_get_system_for_screen (GdkScreen * screen)
@@ -386,6 +415,15 @@ gdk_visual_get_system (void)
   return gdk_visual_get_system_for_screen (gdk_get_default_screen ());
 }
 #endif
+/**
+ * gdk_visual_get_best_for_screen:
+ * @screen : the relevant #GdkScreen
+ *
+ * Get the visual with the most available colors for @screen.
+ * The return value should not be freed.
+ * 
+ * Return value: best visual
+ **/
 
 GdkVisual *
 gdk_visual_get_best_for_screen (GdkScreen * screen)
@@ -408,6 +446,18 @@ gdk_visual_get_best (void)
   return gdk_visual_get_best_for_screen (gdk_get_default_screen ());
 }
 #endif
+/**
+ * gdk_visual_get_best_with_depth_for_screen:
+ * @screen : the relevant #GdkScreen.
+ * @depth: a bit depth
+ * 
+ * Get the best visual with depth @depth for @screen.
+ * Color visuals and visuals with mutable colormaps are preferred
+ * over grayscale or fixed-colormap visuals. The return value should not
+ * be freed. %NULL may be returned if no visual supports @depth.
+ * 
+ * Return value: best visual for the given depth
+ **/
 
 GdkVisual *
 gdk_visual_get_best_with_depth_for_screen (GdkScreen *screen,
@@ -448,6 +498,18 @@ gdk_visual_get_best_with_depth (gint depth)
   return gdk_visual_get_best_with_depth_for_screen (gdk_get_default_screen (), depth);
 }
 #endif
+/**
+ * gdk_visual_get_best_with_type_for_screen:
+ * @screen : the relevant #GdkScreen.
+ * @visual_type: a visual type
+ *
+ * Get the best visual of the given @visual_type for @screen.
+ * Visuals with higher color depths are considered better. The return value
+ * should not be freed. %NULL may be returned if no visual has type
+ * @visual_type.
+ * 
+ * Return value: best visual of the given type
+ **/
 
 GdkVisual *
 gdk_visual_get_best_with_type_for_screen (GdkScreen     *screen,
@@ -472,6 +534,17 @@ gdk_visual_get_best_with_type_for_screen (GdkScreen     *screen,
 }
 
 #ifndef GDK_MULTIHEAD_SAFE
+/**
+ * gdk_visual_get_best_with_type:
+ * @visual_type: a visual type
+ *
+ * Get the best visual of the given @visual_type for the default GDK display.
+ * Visuals with higher color depths are considered better. The return value
+ * should not be freed. %NULL may be returned if no visual has type
+ * @visual_type.
+ * 
+ * Return value: best visual of the given type
+ **/
 GdkVisual*
 gdk_visual_get_best_with_type (GdkVisualType visual_type)
 {
@@ -481,7 +554,8 @@ gdk_visual_get_best_with_type (GdkVisualType visual_type)
 }
 #endif
 /**
- * gdk_visual_get_best_with_both:
+ * gdk_visual_get_best_with_both_for_screen:
+ * @screen : the relevant #GdkScreen.
  * @depth: a bit depth
  * @visual_type: a visual type
  *
@@ -515,6 +589,15 @@ gdk_visual_get_best_with_both_for_screen (GdkScreen    *screen,
 }
 
 #ifndef GDK_MULTIHEAD_SAFE
+/**
+ * gdk_visual_get_best_with_both:
+ * @depth: a bit depth
+ * @visual_type: a visual type
+ *
+ * Combines gdk_visual_get_best_with_depth() and gdk_visual_get_best_with_type().
+ * 
+ * Return value: best visual with both @depth and @visual_type, or %NULL if none
+ **/
 GdkVisual*
 gdk_visual_get_best_with_both (gint          depth,
 			       GdkVisualType visual_type)
@@ -526,6 +609,20 @@ gdk_visual_get_best_with_both (gint          depth,
 						   visual_type);
 }
 #endif
+/**
+ * gdk_query_depths_for_screen:
+ * @screen : the relevant #GdkScreen.
+ * @depths: return location for available depths 
+ * @count: return location for number of available depths
+ *
+ * This function returns the available bit depths for @screen
+ * It's equivalent to listing the visuals
+ * (gdk_list_visuals_for_screen()) and then looking at the depth 
+ * field in each visual, removing duplicates.
+ * 
+ * The array returned by this function should not be freed.
+ * 
+ **/
 
 void
 gdk_query_depths_for_screen (GdkScreen  *screen,
@@ -561,6 +658,21 @@ gdk_query_depths  (gint **depths,
 }
 #endif
 
+/**
+ * gdk_query_visual_types_for_screen :
+ * @screen : the relevant #GdkScreen.
+ * @visual_types: return location for the available visual types
+ * @count: return location for the number of available visual types
+ *
+ * This function returns the available visual types for the default
+ * display. It's equivalent to listing the visuals
+ * (gdk_list_visuals_for_screen()) and then looking at the type field in each
+ * visual, removing duplicates.
+ * 
+ * The array returned by this function should not be freed.
+ * 
+ **/
+
 void
 gdk_query_visual_types_for_screen (GdkScreen      *screen,
 				   GdkVisualType **visual_types,
@@ -594,6 +706,19 @@ gdk_query_visual_types (GdkVisualType **visual_types,
   gdk_query_visual_types_for_screen (gdk_get_default_screen (), visual_types, count);
 }
 #endif
+/**
+ * gdk_list_visuals_for_screen:
+ *  @screen : the relevant #GdkScreen.
+ *  
+ * Lists the available visuals for the specified @screen.
+ * A visual describes a hardware image data format.
+ * For example, a visual might support 24-bit color, or 8-bit color,
+ * and might expect pixels to be in a certain format.
+ *
+ * Call g_list_free() on the return value when you're finished with it.
+ * 
+ * Return value: a list of visuals; the list must be freed, but not its contents
+ **/
 
 GList *
 gdk_list_visuals_for_screen (GdkScreen *screen)
@@ -657,6 +782,15 @@ gdk_visual_lookup (Visual *xvisual)
 }
 #endif
 
+/**
+ * gdkx_visual_get_for_screen:
+ * @screen: a #GdkScreen.
+ * @xvisualid: an X Visual ID.
+ *
+ * Returns a #GdkVisual from and X Visual id.
+ *
+ * Returns: a #GdkVisual.
+ */
 GdkVisual *
 gdkx_visual_get_for_screen (GdkScreen *screen,
 			    VisualID   xvisualid)

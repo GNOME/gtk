@@ -77,7 +77,22 @@ compatibility with older programs.
 </para>
 
 
+<!-- ##### FUNCTION gdk_selection_owner_set_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@owner: 
+@selection: 
+@time: 
+@send_event: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_selection_owner_set ##### -->
+<caution><para> gdk_selection_owner_set() is not multihead safe use 
+gdk_selection_owner_set_for_display() instead </para></caution>
 <para>
 Set the owner of the given selection.
 </para>
@@ -96,7 +111,19 @@ Set the owner of the given selection.
           changed to @owner, otherwise %FALSE.
 
 
+<!-- ##### FUNCTION gdk_selection_owner_get_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@selection: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_selection_owner_get ##### -->
+<caution><para> gdk_selection_owner_get() is not multihead safe use 
+gdk_selection_owner_get_for_display() instead </para></caution>
 <para>
 Determine the owner of the given selection.
 </para>
@@ -147,7 +174,22 @@ data in response to a call to gdk_selection_convert()
 @Returns: the length of the retrieved data.
 
 
+<!-- ##### FUNCTION gdk_selection_send_notify_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@requestor: 
+@selection: 
+@target: 
+@property: 
+@time: 
+
+
 <!-- ##### FUNCTION gdk_selection_send_notify ##### -->
+<caution><para> gdk_selection_send_notify() is not multihead safe use 
+gdk_selection_send_notify_for_display() instead </para></caution>
 <para>
 Send a response to SelectionRequest event.
 </para>

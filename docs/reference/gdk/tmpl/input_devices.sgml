@@ -174,7 +174,18 @@ types that GTK+ understands.
 @GDK_AXIS_WHEEL: 
 @GDK_AXIS_LAST: a constant equal to the numerically highest axis value.
 
+<!-- ##### FUNCTION gdk_devices_list_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_devices_list ##### -->
+<caution><para> gdk_devices_list() is not multihead safe use 
+gdk_devices_list_for_display() instead </para></caution>
 <para>
 
 </para>

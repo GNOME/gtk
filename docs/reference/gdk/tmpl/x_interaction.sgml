@@ -206,7 +206,19 @@ Another name for GDK_DRAWABLE_XID().
 
 
 
+<!-- ##### FUNCTION gdkx_visual_get_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@xvisualid: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdkx_visual_get ##### -->
+<caution><para> gdkx_visual_get() is not multihead safe use 
+gdkx_visual_get_for_screen() instead </para></caution>
 <para>
 Returns a #GdkVisual corresponding to a X visual.
 </para>
@@ -236,16 +248,40 @@ Returns a #GdkColormap corresponding to a X colormap.
 @dpy: 
 
 
-<!-- ##### FUNCTION gdk_pixmap_foreign_new ##### -->
+<!-- ##### FUNCTION gdk_pixmap_foreign_new_for_screen ##### -->
 <para>
 
 </para>
 
+@screen: 
+@anid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixmap_foreign_new ##### -->
+<caution><para> gdk_pixmap_foreign_new() is not multihead safe use 
+gdk_pixmap_foreign_new_for_screen() instead </para></caution>
+<para>
+
+</para>
+
+@anid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_foreign_new_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
 @anid: 
 @Returns: 
 
 
 <!-- ##### FUNCTION gdk_window_foreign_new ##### -->
+<caution><para> gdk_window_foreign_new() is not multihead safe use 
+gdk_window_foreign_new_for_display() instead </para></caution>
 <para>
 
 </para>
@@ -254,7 +290,39 @@ Returns a #GdkColormap corresponding to a X colormap.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_xid_table_lookup_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@xid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_lookup_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@anid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixmap_lookup_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@anid: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_xid_table_lookup ##### -->
+<caution><para> gdk_xid_table_lookup() is not multihead safe use 
+gdk_xid_table_lookup_for_display() instead </para></caution>
 <para>
 Returns the Gdk object associated with the given X id.
 </para>
@@ -265,6 +333,8 @@ a #GdkWindow or a #GdkFont.
 
 
 <!-- ##### FUNCTION gdk_window_lookup ##### -->
+<caution><para> gdk_window_lookup() is not multihead safe use 
+gdk_window_lookup_for_display() instead </para></caution>
 <para>
 Obtains the #GdkWindow for the given Xlib window ID, or %NULL if no #GdkWindow has
 been created for @xid.
@@ -277,6 +347,8 @@ been created for @xid.
 
 
 <!-- ##### FUNCTION gdk_pixmap_lookup ##### -->
+<caution><para> gdk_pixmap_lookup() is not multihead safe use 
+gdk_pixmap_lookup_for_display() instead </para></caution>
 <para>
 Obtains the #GdkPixmap for the given Xlib pixmap ID, or %NULL if no #GdkPixmap has
 been created for @xid.
@@ -288,7 +360,27 @@ been created for @xid.
 @xid: Xlib pixmap ID
 
 
+<!-- ##### FUNCTION gdk_pixmap_get_screen ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### MACRO gdk_font_lookup_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@xid: 
+
+
 <!-- ##### MACRO gdk_font_lookup ##### -->
+<caution><para> gdk_font_lookup() is not multihead safe use 
+gdk_font_lookup_for_display() instead </para></caution>
 <para>
 Obtains the #GdkFont for the given Xlib pixmap ID, or %NULL if no #GdkPixmap has
 been created for @xid.
@@ -306,7 +398,19 @@ been created for @xid.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_net_wm_supports_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@property: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_net_wm_supports ##### -->
+<caution><para> gdk_net_wm_supports() is not multihead safe use 
+gdk_net_wm_supports_for_screen() instead </para></caution>
 <para>
 
 </para>
@@ -414,6 +518,15 @@ Returns the X GC of a #GdkGC.
 
 @gc: a #GdkGC.
 @Returns: an Xlib <type>GC</type>.
+
+
+<!-- ##### FUNCTION gdk_x11_screen_get_root_xwindow ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_x11_get_default_root_xwindow ##### -->

@@ -2762,6 +2762,15 @@ fundamental type.
 @width: 
 @height: 
 
+<!-- ##### FUNCTION gtk_widget_is_ancestor ##### -->
+<para>
+
+</para>
+
+@widget: 
+@ancestor: 
+@Returns: 
+
 <!-- ##### FUNCTION gtk_widget_pop_style ##### -->
 <para>
 

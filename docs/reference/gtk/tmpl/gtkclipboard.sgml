@@ -149,7 +149,19 @@ will not be used again.
                      the @owner argument passed to gtk_clipboard_set_owner()
 
 
+<!-- ##### FUNCTION gtk_clipboard_get_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@selection: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_clipboard_get ##### -->
+<caution><para> gtk_clipboard_get() is not multihead safe use 
+gtk_clipboard_get_for_display() instead </para></caution>
 <para>
 
 </para>
@@ -187,6 +199,15 @@ will not be used again.
 
 
 <!-- ##### FUNCTION gtk_clipboard_get_owner ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clipboard_get_display ##### -->
 <para>
 
 </para>

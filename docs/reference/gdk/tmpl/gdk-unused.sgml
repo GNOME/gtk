@@ -1,3 +1,23 @@
+<!-- ##### SECTION ./tmpl/Multihead.sgml:Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/Multihead.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/Multihead.sgml:Short_Description ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/Multihead.sgml:Title ##### -->
+Multihead Support
+
+
 <!-- ##### SECTION ./tmpl/color_contexts.sgml:Long_Description ##### -->
 <para>
 The #GdkColorContext type is used for allocating groups of colors.
@@ -136,6 +156,26 @@ support for internationalized text input.
 
 <!-- ##### SECTION ./tmpl/input_methods.sgml:Title ##### -->
 Input Methods
+
+
+<!-- ##### SECTION ./tmpl/screen-display.sgml:Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/screen-display.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/screen-display.sgml:Short_Description ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/screen-display.sgml:Title ##### -->
+Screen & Display
 
 
 <!-- ##### MACRO GDK_CORE_POINTER ##### -->
@@ -569,6 +609,50 @@ status information, so the application does not need to do anything.
 
 </para>
 
+
+<!-- ##### FUNCTION gdk_cursor_get_display ##### -->
+<para>
+
+</para>
+
+@cursor: 
+@Returns: 
+
+<!-- ##### FUNCTION gdk_cursor_new_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@cursor_type: 
+@Returns: 
+
+<!-- ##### FUNCTION gdk_display_init_new ##### -->
+<para>
+
+</para>
+
+@argc: 
+@argv: 
+@display_name: 
+@Returns: 
+
+<!-- ##### FUNCTION gdk_display_manager_get_default_display ##### -->
+<para>
+
+</para>
+
+@display_mgr: 
+@Returns: 
+
+<!-- ##### FUNCTION gdk_display_manager_open_display ##### -->
+<para>
+
+</para>
+
+@display_mgr: 
+@display_name: 
+@Returns: 
 
 <!-- ##### VARIABLE gdk_display_name ##### -->
 <para>

@@ -34,7 +34,18 @@ GtkSettings
 @origin: 
 @value: 
 
+<!-- ##### FUNCTION gtk_settings_get_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_settings_get_default ##### -->
+<caution><para>gtk_settings_get_default() is not multihead safe use 
+gtk_settings_get_default_for_screen() instead </para></caution>
 <para>
 
 </para>

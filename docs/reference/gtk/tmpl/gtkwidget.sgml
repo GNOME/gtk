@@ -800,13 +800,39 @@ GtkWidget
 @y: 
 
 
-<!-- ##### FUNCTION gtk_widget_is_ancestor ##### -->
+<!-- ##### FUNCTION gtk_widget_get_display ##### -->
 <para>
 
 </para>
 
 @widget: 
-@ancestor: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_root_window ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_screen ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_has_screen ##### -->
+<para>
+
+</para>
+
+@widget: 
 @Returns: 
 
 

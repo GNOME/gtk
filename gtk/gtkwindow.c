@@ -5154,6 +5154,15 @@ gtk_window_begin_move_drag  (GtkWindow *window,
                               timestamp);
 }
 
+/** 
+ * gtk_window_set_screen:
+ * @window: a #GtkWindow.
+ * @screen: a #GtkScreen.
+ *
+ * Sets the #GdkScreen where the @window will be displayed.
+ * This function has to be called before the @window
+ * object is realized otherwise it will fail.
+ */
 void
 gtk_window_set_screen (GtkWindow *window,
 		       GdkScreen *screen)
@@ -5169,7 +5178,14 @@ gtk_window_set_screen (GtkWindow *window,
   
   window->screen = screen;
 }
-
+/** 
+ * gtk_window_get_screen:
+ * @window: a #GtkWindow.
+ *
+ * Returns the #GdkScreen associated with @window.
+ *
+ * Return value: a #GdkScreen.
+ */
 GdkScreen*
 gtk_window_get_screen (GtkWindow *window)
 {

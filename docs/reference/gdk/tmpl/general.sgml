@@ -77,7 +77,18 @@ locale.
 @Returns: the resulting locale.
 
 
+<!-- ##### FUNCTION gdk_set_sm_client_id_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@sm_client_id: 
+
+
 <!-- ##### FUNCTION gdk_set_sm_client_id ##### -->
+<caution><para> gdk_set_sm_client_id() is not multihead safe use 
+gdk_set_sm_client_id_for_display() instead </para></caution>
 <para>
 Sets the SM_CLIENT_ID property on the application's leader window so that
 the window manager can save the application's state using the X11R6 ICCCM

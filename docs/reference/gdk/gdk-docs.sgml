@@ -22,6 +22,9 @@
 <!entity gdk-Cursors SYSTEM "sgml/cursors.sgml">
 <!entity gdk-Input SYSTEM "sgml/input.sgml">
 <!entity gdk-Drag-and-Drop SYSTEM "sgml/dnd.sgml">
+<!entity gdk-Multihead SYSTEM "sgml/multihead.sgml">
+<!entity gdk-Screen SYSTEM "sgml/gdkscreen.sgml">
+<!entity gdk-Display SYSTEM "sgml/gdkdisplay.sgml">
 <!entity gdk-X-Window-System-Interaction SYSTEM "sgml/x_interaction.sgml">
 ]>
 
@@ -30,7 +33,7 @@
     <title>GDK Reference Manual</title>
   </bookinfo>
 
-  <reference id="reference">
+  <chapter id="reference" role="no-toc">
     <title>API Reference</title>
     &gdk-General;
 
@@ -69,6 +72,11 @@
 
     &gdk-Pango-Interaction;
 
+      
+    &gdk-Multihead;
+    &gdk-Screen;
+    &gdk-Display;
+    
     &gdk-X-Window-System-Interaction;
-  </reference>
+  </chapter>
 </book>

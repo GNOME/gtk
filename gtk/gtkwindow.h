@@ -67,7 +67,6 @@ struct _GtkWindow
   GtkWindow *transient_parent;
   GtkWindowGeometryInfo *geometry_info;
   GdkWindow *frame;
-  GdkScreen *screen;
   GtkWindowGroup *group;
 
   guint16 configure_request_count;
@@ -107,7 +106,7 @@ struct _GtkWindow
   guint frame_bottom;
   
   GdkModifierType mnemonic_modifier;
-  gpointer gtk_reserved1;	/* For future GdkScreen * */
+  GdkScreen      *screen;
 };
 
 struct _GtkWindowClass

@@ -24,11 +24,26 @@
 #include "gdkinternals.h"
 #include "gdkdisplaymgr.h"
 
+/**
+ * gdk_get_default_display:
+ *
+ * Gets a #GdkDisplay describing the current default display
+ * 
+ * Returns: a #GdkDisplay.
+ */
+
 GdkDisplay *
 gdk_get_default_display (void)
 {
   return gdk_display_manager_get_default_display (_gdk_display_manager);
 }
+/**
+ * gdk_get_default_screen:
+ *
+ * Gets a #GdkScreen describing the current default screen
+ * 
+ * Returns: a #GdkScreen.
+ */
 
 GdkScreen *
 gdk_get_default_screen (void)
@@ -36,6 +51,14 @@ gdk_get_default_screen (void)
   GdkDisplay *display = gdk_get_default_display ();
   return gdk_display_get_default_screen (display);
 }
+
+/**
+ * gdk_get_display_manager:
+ *
+ * Gets the #GdkDisplayManager describing the current display/screen settings 
+ * 
+ * Returns: a #GdkDisplayManager.
+ */
 
 GdkDisplayManager *
 gdk_get_display_manager (void)

@@ -324,7 +324,19 @@ are currently:
 @GDK_FONT_FONT: 
 @GDK_FONT_FONTSET: 
 
+<!-- ##### FUNCTION gdk_font_load_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@font_name: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_font_load ##### -->
+<caution><para> gdk_font_load() is not multihead safe use 
+gdk_font_load_for_display() instead </para></caution>
 <para>
 Loads a font.
 </para>
@@ -340,7 +352,19 @@ assumptions about the initial reference count.
 @Returns: a #GdkFont, or NULL if the font could not be loaded.
 
 
+<!-- ##### FUNCTION gdk_fontset_load_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@fontset_name: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_fontset_load ##### -->
+<caution><para> gdk_fontset_load() is not multihead safe use 
+gdk_fontset_load_for_display() instead </para></caution>
 <para>
 Loads a fontset.
 </para>
@@ -356,7 +380,19 @@ assumptions about the initial reference count.
 @Returns: a #GdkFont, or NULL if the fontset could not be loaded.
 
 
+<!-- ##### FUNCTION gdk_font_from_description_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@font_desc: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_font_from_description ##### -->
+<caution><para> gdk_font_from_description() is not multihead safe use 
+gdk_font_from_description_for_display() instead </para></caution>
 <para>
 
 </para>
@@ -402,6 +438,15 @@ not currently work correctly for fontsets.
 @fonta: a #GdkFont.
 @fontb: another #GdkFont.
 @Returns: %TRUE if the fonts are equal.
+
+
+<!-- ##### FUNCTION gdk_font_get_display ##### -->
+<para>
+
+</para>
+
+@font: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_string_extents ##### -->

@@ -141,6 +141,15 @@ Moves a #GtkMenuItem to a new position within the #GtkMenu.
 0 to n-1.
 
 
+<!-- ##### FUNCTION gtk_menu_set_screen ##### -->
+<para>
+
+</para>
+
+@menu: 
+@screen: 
+
+
 <!-- ##### FUNCTION gtk_menu_popup ##### -->
 <para>
 Displays a menu and makes it available for selection.  Applications can use

@@ -405,7 +405,18 @@ private colormap.
 @min_colors: The minimum number of colors accepted.
 
 
+<!-- ##### FUNCTION gdk_rgb_get_visual_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_rgb_get_visual ##### -->
+<caution><para> gdk_rgb_get_visual() is not multihead safe use 
+gdk_rgb_get_visual_for_screen() instead </para></caution>
 <para>
 Gets a "preferred visual" chosen by GdkRgb. In previous versions of
 GDK, this was the only visual GdkRgb could use for rendering. In
@@ -417,7 +428,18 @@ drawables with any visual.
 @Returns: The #GdkVisual chosen by GdkRgb.
 
 
+<!-- ##### FUNCTION gdk_rgb_get_colormap_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_rgb_get_colormap ##### -->
+<caution><para> gdk_rgb_get_colormap() is not multihead safe use 
+gdk_rgb_get_colormap_for_screen() instead </para></caution>
 <para>
 
 </para>

@@ -38,7 +38,7 @@ static void       gdk_x11_display_impl_class_init         (GdkDisplayImplX11Clas
 static gint       gdk_x11_display_impl_get_n_screens      (GdkDisplay             *display);
 static GdkScreen *gdk_x11_display_impl_get_screen         (GdkDisplay             *display,
 							   gint                    screen_num);
-static char *     gdk_x11_display_impl_get_display_name   (GdkDisplay             *display);
+G_CONST_RETURN static char *     gdk_x11_display_impl_get_display_name   (GdkDisplay             *display);
 static GdkScreen *gdk_x11_display_impl_get_default_screen (GdkDisplay             *display);
 static void	  gdk_x11_display_impl_finalize		  (GObject		  *object);
 
@@ -142,7 +142,7 @@ _gdk_x11_display_impl_display_new (gchar * display_name)
 }
 
 
-static gchar *
+static G_CONST_RETURN gchar *
 gdk_x11_display_impl_get_display_name (GdkDisplay * display)
 {
   GdkDisplayImplX11 *display_impl;
@@ -235,6 +235,19 @@ gdk_x11_display_is_root_window (GdkDisplay *display,
   return FALSE;
 }
 
+/**
+ * gdk_display_set_use_xshm:
+ * @display : a #GdkDisplay.
+ * @use_xshm : TRUE if use of the MIT shared memory extension should be 
+ * attempted.
+ *
+ * Sets whether the use of the MIT shared memory extension should 
+ * be attempted. This function is mainly for internal use. 
+ * It is only safe for an application to set this to FALSE,
+ * since if it is set to TRUE and the server does not support 
+ * the extension it may cause warning messages to be output.
+ *
+ */
 void
 gdk_display_set_use_xshm (GdkDisplay * display, gboolean use_xshm)
 {
@@ -242,12 +255,33 @@ gdk_display_set_use_xshm (GdkDisplay * display, gboolean use_xshm)
   GDK_DISPLAY_IMPL_X11 (display)->gdk_use_xshm = use_xshm;
 }
 
+/**
+ * gdk_display_get_use_xshm:
+ * @display : a #GdkDisplay.
+ *
+ * Returns TRUE if GDK will attempt to use the MIT-SHM
+ * shared memory extension.
+ *
+ * The shared memory extension is used for GdkImage, and
+ * consequently for GdkRGB. It enables much faster drawing 
+ * by communicating with the X server through SYSV shared
+ * memory calls. However, it can only be used if the X client 
+ * and server are on the same machine and the server supports it.
+ * Returns : TRUE if use of the MIT shared memory extension will be attempted.
+ */
 gboolean
 gdk_display_get_use_xshm (GdkDisplay * display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
   return GDK_DISPLAY_IMPL_X11 (display)->gdk_use_xshm;
 }
+/**
+ * gdk_display_pointer_ungrab:
+ * @display : a #GdkDisplay.
+ * @time : a timestap (e.g. GDK_CURRENT_TIME).
+ *
+ * Release any pointer grab.
+ */
 
 void
 gdk_display_pointer_ungrab (GdkDisplay * display, guint32 time)
@@ -258,6 +292,14 @@ gdk_display_pointer_ungrab (GdkDisplay * display, guint32 time)
   XUngrabPointer (GDK_DISPLAY_XDISPLAY (display), time);
   GDK_DISPLAY_IMPL_X11 (display)->gdk_xgrab_window = NULL;
 }
+/**
+ * gdk_display_pointer_is_grabbed :
+ * @display : a #GdkDisplay
+ *
+ * Test if the pointer is grabbed.
+ *
+ * Returns : TRUE if an active X pointer grab is in effect
+ */
 
 gboolean
 gdk_display_pointer_is_grabbed (GdkDisplay * display)
@@ -266,19 +308,40 @@ gdk_display_pointer_is_grabbed (GdkDisplay * display)
   return (GDK_DISPLAY_IMPL_X11 (display)->gdk_xgrab_window != NULL);
 }
 
+/**
+ * gdk_display_keyboard_ungrab:
+ * @display : a #GdkDisplay.
+ * @time : a timestap (e.g #GDK_CURRENT_TIME).
+ *
+ * Release any keyboard grab
+ */
+
 void
 gdk_display_keyboard_ungrab (GdkDisplay * display, guint32 time)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
   XUngrabKeyboard (GDK_DISPLAY_XDISPLAY (display), time);
 }
-
+/**
+ * gdk_display_beep:
+ * @display: a #GdkDisplay
+ *
+ * Emits a short beep on @display
+ *
+ */
 void
 gdk_display_beep (GdkDisplay * display)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
   XBell (GDK_DISPLAY_XDISPLAY (display), 0);
 }
+
+/**
+ * gdk_display_sync :
+ * @display : a #GdkDisplay
+ *
+ * Flushes all the pending X calls
+ */
 
 void
 gdk_display_sync (GdkDisplay * display)
@@ -311,28 +374,6 @@ gdk_x11_display_ungrab (GdkDisplay *display)
   --display_impl->grab_count;
   if (display_impl->grab_count == 0)
     XUngrabServer (display_impl->xdisplay);
-}
-
-GdkDisplay *
-gdk_display_init_new (int argc, char **argv, char *display_name)
-{
-  GdkDisplay *display = NULL;
-  GdkScreen *screen = NULL;
-  
-  display = _gdk_windowing_init_check_for_display (argc,argv,display_name);
-  if (!display)
-    return NULL;
-  
-  screen = gdk_display_get_default_screen (display);
-  
-  _gdk_visual_init (screen);
-  _gdk_windowing_window_init (screen);
-  _gdk_windowing_image_init (display);
-  _gdk_events_init (display);
-  _gdk_input_init (display);
-  _gdk_dnd_init (display);
-  
-  return display;
 }
 
 static void	  

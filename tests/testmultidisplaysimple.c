@@ -22,7 +22,7 @@ main (int argc, char *argv[])
 
   gtk_init (&argc, &argv);
   /* Crude test insert 2nd machine name here */
-  dpy2 = gdk_display_init_new (0, NULL, "diabolo:0.0");
+  dpy2 = gdk_display_new (0, NULL, "diabolo:0.0");
   if(!dpy2)
   {
     printf ("impossible to open display aborting\n");

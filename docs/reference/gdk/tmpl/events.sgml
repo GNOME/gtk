@@ -298,8 +298,20 @@ all GDK events.
 gdk_event_handler_set().
 
 
-<!-- ##### FUNCTION gdk_event_send_client_message ##### -->
+<!-- ##### FUNCTION gdk_event_send_client_message_for_display ##### -->
 <para>
+
+</para>
+
+@display: 
+@event: 
+@xid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_event_send_client_message ##### -->
+<caution><para> gdk_event_send_client_message() is not multihead safe use 
+gdk_event_send_client_message_for_display() instead </para></caution><para>
 Sends an X ClientMessage event to a given window.
 </para>
 <para>
@@ -312,7 +324,18 @@ though the amount of data is limited to 20 bytes.
 @Returns: non-zero on success.
 
 
+<!-- ##### FUNCTION gdk_event_send_clientmessage_toall_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@event: 
+
+
 <!-- ##### FUNCTION gdk_event_send_clientmessage_toall ##### -->
+<caution><para> gdk_event_send_clientmessage_toall() is not multihead safe use 
+gdk_event_send_clientmessage_toall_for_screen() instead </para></caution>
 <para>
 Sends an X ClientMessage event to all toplevel windows.
 </para>
@@ -326,7 +349,20 @@ to all children of the root window.
 @event: the #GdkEvent to send, which should be a #GdkEventClient.
 
 
+<!-- ##### FUNCTION gdk_add_client_message_filter_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@message_type: 
+@func: 
+@data: 
+
+
 <!-- ##### FUNCTION gdk_add_client_message_filter ##### -->
+<caution><para> gdk_add_client_message_filter() is not multihead safe use 
+gdk_add_client_message_filter_for_display() instead </para></caution>
 <para>
 Adds a filter to be called when X ClientMessage events are received.
 </para>
@@ -354,6 +390,17 @@ Note that GTK+ must be compiled with debugging enabled, i.e. using the
 </para>
 
 @show_events: TRUE to output event debugging information.
+
+
+<!-- ##### FUNCTION gdk_setting_get_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@name: 
+@value: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_setting_get ##### -->

@@ -142,7 +142,6 @@ static void   gdk_window_real_get_size  (GdkDrawable     *drawable,
 static GdkVisual*   gdk_window_real_get_visual   (GdkDrawable *drawable);
 static gint         gdk_window_real_get_depth    (GdkDrawable *drawable);
 static GdkScreen*   gdk_window_real_get_screen   (GdkDrawable *drawable);
-static GdkDisplay*  gdk_window_real_get_display  (GdkDrawable *drawable);
 static void         gdk_window_real_set_colormap (GdkDrawable *drawable,
                                              GdkColormap *cmap);
 static GdkColormap* gdk_window_real_get_colormap (GdkDrawable *drawable);
@@ -229,7 +228,6 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->draw_image = gdk_window_draw_image;
   drawable_class->get_depth = gdk_window_real_get_depth;
   drawable_class->get_screen = gdk_window_real_get_screen;
-  drawable_class->get_display = gdk_window_real_get_display;
   drawable_class->get_size = gdk_window_real_get_size;
   drawable_class->set_colormap = gdk_window_real_set_colormap;
   drawable_class->get_colormap = gdk_window_real_get_colormap;
@@ -681,9 +679,10 @@ gdk_window_remove_filter (GdkWindow     *window,
 }
 
 /**
- * gdk_window_get_toplevels:
+ * gdk_window_get_toplevels_for_screen:
+ * @screen : The #GdkScreen where the toplevels are located.
  * 
- * Obtains a list of all toplevel windows known to GDK.
+ * Obtains a list of all toplevel windows known to GDK on the screen @screen.
  * A toplevel window is a child of the root window (see
  * gdk_get_default_root_window()).
  *
@@ -1923,12 +1922,6 @@ static GdkScreen*
 gdk_window_real_get_screen (GdkDrawable *drawable)
 {
   return gdk_drawable_get_screen (GDK_WINDOW_OBJECT (drawable)->impl);
-}
-
-static GdkDisplay*
-gdk_window_real_get_display (GdkDrawable *drawable)
-{
-  return gdk_drawable_get_display (GDK_WINDOW_OBJECT (drawable)->impl);
 }
 
 static void

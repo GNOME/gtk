@@ -122,13 +122,6 @@ Window        gdk_get_client_window      (Display  *display,
 /* Return the Gdk* for a particular XID */
 gpointer      gdk_xid_table_lookup_for_display (GdkDisplay *display,
 						XID         xid);
-gpointer      gdk_xid_table_lookup_for_all_displays (XID xid);
-
-#define gdk_window_lookup_for_all_displays(xid) \
-	((GdkWindow*) gdk_xid_table_lookup_for_all_displays(xid))
-#define gdk_pixmap_lookup_for_all_displays(xid)  \
-	((GdkPixmap*) gdk_xid_table_lookup_for_all_displays(xid))
-
 guint32       gdk_x11_get_server_time  (GdkWindow       *window);
 
 /* returns TRUE if we support the given WM spec feature */

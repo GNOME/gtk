@@ -3588,6 +3588,18 @@ gdk_rgb_get_colormap (void)
 }
 #endif
 
+/**
+ * gdk_rgb_get_colormap_for_screen:
+ * @screen : a #GdkScreen.
+ * 
+ * Returns the preferred colormap for rendering image data.  Not a
+ * very useful function; historically, GDK could only render RGB image
+ * data to one colormap and visual, but in the current version it can
+ * render to any colormap and visual. So there's no need to call this
+ * function.
+ * 
+ * Return value: the preferred colormap
+ **/
 GdkColormap *
 gdk_rgb_get_colormap_for_screen (GdkScreen *screen)
 {
@@ -3604,6 +3616,18 @@ gdk_rgb_get_colormap_for_screen (GdkScreen *screen)
   return cmap;
 }
 
+/**
+ * gdk_rgb_get_visual_for_screen:
+ * @screen : a #GdkScreen.
+ * 
+ * Returns the preferred visual for rendering image data.  Not a
+ * very useful function; historically, GDK could only render RGB image
+ * data to one colormap and visual, but in the current version it can
+ * render to any colormap and visual. So there's no need to call this
+ * function.
+ * 
+ * Return value: the preferred visual. 
+ **/
 GdkVisual *
 gdk_rgb_get_visual_for_screen (GdkScreen *screen)
 {

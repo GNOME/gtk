@@ -72,7 +72,6 @@ pixel_from_rgb (GdkVisual *visual,
 </figure>
 
 @parent_instance: inherited portion from #GObject
-@screen: 
 @type: The type of this visual.
 @depth: The number of bits per pixel.
 @byte_order: The byte-order for this visual.
@@ -109,6 +108,7 @@ pixel_from_rgb (GdkVisual *visual,
     <structfield>blue_prec</structfield> give an alternate presentation
     of the information in <structfield>blue_mask</structfield>.
 @blue_prec: See above.
+@screen: 
 
 <!-- ##### ENUM GdkVisualType ##### -->
 <para>
@@ -146,7 +146,105 @@ for storing pixel values in memory.
 first. For instance, the 32-bit value 0xffeecc would be stored
 in memory as 0x00, 0xcc, 0xee, 0xff.
 
+<!-- ##### FUNCTION gdk_query_depths_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@depths: 
+@count: 
+
+
+<!-- ##### FUNCTION gdk_query_visual_types_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@visual_types: 
+@count: 
+
+
+<!-- ##### FUNCTION gdk_list_visuals_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_visual_get_best_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_visual_get_best_depth_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_visual_get_best_type_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_visual_get_system_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_visual_get_best_with_depth_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@depth: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_visual_get_best_with_type_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@visual_type: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_visual_get_best_with_both_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@depth: 
+@visual_type: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_query_depths ##### -->
+<caution><para>gdk_query_depths() is not multihead safe use 
+gdk_query_depths_for_screen() instead </para></caution>
 <para>
 
 </para>
@@ -156,7 +254,11 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 
 
 <!-- ##### FUNCTION gdk_query_visual_types ##### -->
+<caution><para> gdk_query_visual_types() is not multihead safe use 
+ gdk_query_visual_types_for_screen() instead </para></caution>
 <para>
+<caution><para> () gdk_query_depths is not multihead safe use 
+ () instead </para></caution>
 
 </para>
 
@@ -165,6 +267,18 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 
 
 <!-- ##### FUNCTION gdk_list_visuals ##### -->
+<caution><para> gdk_list_visuals() is not multihead safe use 
+gdk_list_visuals_for_screen() instead </para></caution>
+ <para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_visual_get_best ##### -->
+<caution><para> gdk_visual_get_best() is not multihead safe use 
+gdk_visual_get_best_for_screen() instead </para></caution>
 <para>
 
 </para>
@@ -173,6 +287,8 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 
 
 <!-- ##### FUNCTION gdk_visual_get_best_depth ##### -->
+<caution><para> gdk_visual_get_best_depth() is not multihead safe use 
+ gdk_visual_get_best_depth_for_screen() instead </para></caution>
 <para>
 
 </para>
@@ -181,6 +297,8 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 
 
 <!-- ##### FUNCTION gdk_visual_get_best_type ##### -->
+<caution><para> gdk_visual_get_best_type() is not multihead safe use 
+gdk_visual_get_best_type_for_screen() instead </para></caution>
 <para>
 
 </para>
@@ -189,14 +307,8 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 
 
 <!-- ##### FUNCTION gdk_visual_get_system ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_visual_get_best ##### -->
+<caution><para> gdk_visual_get_system() is not multihead safe use 
+gdk_visual_get_system_for_screen() instead </para></caution>
 <para>
 
 </para>
@@ -205,6 +317,8 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 
 
 <!-- ##### FUNCTION gdk_visual_get_best_with_depth ##### -->
+<caution><para> gdk_visual_get_best_with_depth() is not multihead safe use 
+gdk_visual_get_best_with_depth_for_screen() instead </para></caution>
 <para>
 
 </para>
@@ -214,6 +328,8 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 
 
 <!-- ##### FUNCTION gdk_visual_get_best_with_type ##### -->
+<caution><para> gdk_visual_get_best_with_type() is not multihead safe use 
+gdk_visual_get_best_with_type_for_screen() instead </para></caution>
 <para>
 
 </para>
@@ -223,6 +339,8 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 
 
 <!-- ##### FUNCTION gdk_visual_get_best_with_both ##### -->
+<caution><para> gdk_visual_get_best_with_both() is not multihead safe use 
+gdk_visual_get_best_with_both_for_screen() instead </para></caution>
 <para>
 
 </para>

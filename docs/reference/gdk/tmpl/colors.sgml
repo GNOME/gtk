@@ -143,7 +143,18 @@ resulting reference count is zero, destroys the colormap.
 @cmap: a #GdkColormap.
 
 
+<!-- ##### FUNCTION gdk_colormap_get_system_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_colormap_get_system ##### -->
+<caution><para> gdk_colormap_get_system() is not multihead safe use 
+gdk_colormap_get_system_for_screen() instead </para></caution>
 <para>
 Returns the system's default colormap.
 </para>

@@ -7,6 +7,7 @@
 gdk_init
 gdk_init_check
 gdk_set_locale
+gdk_set_sm_client_id_for_display
 gdk_set_sm_client_id
 gdk_exit
 
@@ -204,7 +205,9 @@ gdk_rgb_find_color
 <SUBSECTION>
 gdk_rgb_set_install
 gdk_rgb_set_min_colors
+gdk_rgb_get_visual_for_screen
 gdk_rgb_get_visual
+gdk_rgb_get_colormap_for_screen
 gdk_rgb_get_colormap
 gdk_rgb_get_cmap
 gdk_rgb_ditherable
@@ -227,6 +230,95 @@ gdk_pixbuf_get_from_image
 </SECTION>
 
 <SECTION>
+<TITLE>Multihead Support</TITLE>
+<FILE>multihead</FILE>
+<SUBSECTION>
+GdkDisplayManager
+gdk_get_default_display
+gdk_get_default_screen
+gdk_get_display_manager
+gdk_display_manager_get_display_count
+
+<SUBSECTION Private>
+gdk_display_manager_get_default_display
+gdk_display_manager_open_display
+GDK_DISPLAY_MANAGER_CLASS
+GDK_IS_DISPLAY_MANAGER_CLASS
+GdkDisplayManagerClass
+GDK_DISPLAY_MANAGER_GET_CLASS
+GDK_DISPLAY_MANAGER
+GDK_IS_DISPLAY_MANAGER
+gdk_display_manager_get_type
+GDK_DRAWABLE_SCREEN
+GDK_WINDOW_DISPLAY
+GDK_GC_DISPLAY
+GDK_DRAWABLE_DISPLAY
+GDK_WINDOW_XROOTWIN
+GDK_PIXMAP_SCREEN
+GDK_WINDOW_SCREEN
+GDK_DRAWABLE_XROOTWIN
+GDK_TYPE_DISPLAY_MANAGER
+GDK_PIXMAP_DISPLAY
+GDK_PIXMAP_XROOTWIN
+</SECTION>
+
+<SECTION>
+<TITLE>GdkScreen</TITLE>
+<FILE>gdkscreen</FILE>
+<SUBSECTION>
+GdkScreen
+gdk_screen_get_width
+gdk_screen_get_default_colormap
+gdk_screen_close
+gdk_screen_get_root_window
+gdk_screen_set_default_colormap
+gdk_screen_get_height_mm
+gdk_screen_get_number
+gdk_screen_get_width_mm
+gdk_screen_get_height
+gdk_screen_get_display
+gdk_screen_get_window_at_pointer
+<SUBSECTION Private>
+GDK_IS_SCREEN
+GDK_SCREEN_CLASS
+GDK_SCREEN_GET_CLASS
+GDK_TYPE_SCREEN
+GDK_IS_SCREEN_CLASS
+GDK_SCREEN
+gdk_screen_get_type
+
+</SECTION>
+
+<SECTION>
+<TITLE>GdkDisplay</TITLE>
+<FILE>gdkdisplay</FILE>
+<SUBSECTION>
+GdkDisplay
+gdk_display_new
+gdk_display_pointer_ungrab
+gdk_display_pointer_is_grabbed
+gdk_display_keyboard_ungrab
+gdk_display_get_screen
+gdk_display_get_default_screen
+gdk_display_close
+gdk_display_beep
+gdk_display_sync
+gdk_display_get_n_screens
+gdk_display_get_name
+gdk_get_display_arg_name
+gdk_display_get_use_xshm
+gdk_display_set_use_xshm
+
+<SUBSECTION Private>
+GDK_DISPLAY_GET_CLASS
+GDK_DISPLAY_CLASS
+GDK_IS_DISPLAY
+GdkDisplay
+GDK_IS_DISPLAY_CLASS
+GDK_TYPE_DISPLAY
+</SECTION>
+
+<SECTION>
 <TITLE>Colormaps and Colors</TITLE>
 <FILE>colors</FILE>
 GdkColor
@@ -234,6 +326,7 @@ GdkColormap
 gdk_colormap_new
 gdk_colormap_ref
 gdk_colormap_unref
+gdk_colormap_get_system_for_screen
 gdk_colormap_get_system
 gdk_colormap_get_system_size
 gdk_colormap_change
@@ -275,13 +368,17 @@ gdk_color_get_type
 <FILE>fonts</FILE>
 GdkFont
 GdkFontType
+gdk_font_load_for_display
 gdk_font_load
+gdk_fontset_load_for_display
 gdk_fontset_load
+gdk_font_from_description_for_display
 gdk_font_from_description
 gdk_font_ref
 gdk_font_unref
 gdk_font_id
 gdk_font_equal
+gdk_font_get_display
 
 <SUBSECTION>
 gdk_string_extents
@@ -321,6 +418,8 @@ gdk_font_get_type
 <FILE>drawing</FILE>
 GdkDrawable
 GdkDrawableClass
+gdk_drawable_get_screen
+gdk_drawable_get_display
 gdk_drawable_ref
 gdk_drawable_unref
 gdk_drawable_set_data
@@ -395,6 +494,7 @@ gdk_gc_set_rgb_bg_color
 gdk_gc_set_font
 gdk_gc_set_function
 gdk_gc_set_fill
+gdk_gc_get_screen
 GdkFill
 gdk_gc_set_tile
 gdk_gc_set_stipple
@@ -441,14 +541,25 @@ GDK_TYPE_SUBWINDOW_MODE
 GdkVisual
 GdkVisualType
 GdkByteOrder
+gdk_query_depths_for_screen
+gdk_query_visual_types_for_screen
+gdk_list_visuals_for_screen
+gdk_visual_get_best_for_screen
+gdk_visual_get_best_depth_for_screen
+gdk_visual_get_best_type_for_screen
+gdk_visual_get_system_for_screen
+gdk_visual_get_best_with_depth_for_screen
+gdk_visual_get_best_with_type_for_screen
+gdk_visual_get_best_with_both_for_screen
+
+<SUBSECTION>
 gdk_query_depths
 gdk_query_visual_types
 gdk_list_visuals
-
+gdk_visual_get_best
 gdk_visual_get_best_depth
 gdk_visual_get_best_type
 gdk_visual_get_system
-gdk_visual_get_best
 gdk_visual_get_best_with_depth
 gdk_visual_get_best_with_type
 gdk_visual_get_best_with_both
@@ -488,6 +599,7 @@ gdk_window_destroy
 gdk_window_ref
 gdk_window_unref
 gdk_window_get_window_type
+gdk_window_set_screen
 gdk_window_at_pointer
 gdk_window_show
 gdk_window_show_unraised
@@ -589,6 +701,7 @@ GdkWMDecoration
 gdk_window_set_functions
 GdkWMFunction
 gdk_window_get_toplevels
+gdk_window_get_toplevels_for_screen
 gdk_get_default_root_window
 
 
@@ -629,10 +742,13 @@ GdkWindowObjectClass
 GdkSelection
 GdkSelectionType
 GdkTarget
+gdk_selection_owner_set_for_display
 gdk_selection_owner_set
+gdk_selection_owner_get_for_display
 gdk_selection_owner_get
 gdk_selection_convert
 gdk_selection_property_get
+gdk_selection_send_notify_for_display
 gdk_selection_send_notify
 
 <SUBSECTION Standard>
@@ -647,12 +763,16 @@ GDK_TYPE_TARGET
 GdkAtom
 GDK_NONE
 gdk_text_property_to_text_list
+gdk_text_property_to_text_list_for_display
 gdk_free_text_list
+gdk_text_property_to_utf8_list_for_display
 gdk_text_property_to_utf8_list
 gdk_string_to_compound_text
+gdk_string_to_compound_text_for_display
 gdk_free_compound_text
 gdk_utf8_to_string_target
 gdk_utf8_to_compound_text
+gdk_utf8_to_compound_text_for_display
 gdk_atom_intern
 gdk_atom_name
 gdk_property_get
@@ -667,6 +787,7 @@ GDK_TYPE_PROP_MODE
 <SECTION>
 <TITLE>Pango Interaction</TITLE>
 <FILE>pango_interaction</FILE>
+gdk_pango_context_get_for_screen
 gdk_pango_context_get
 gdk_pango_context_set_colormap
 GdkPangoAttrEmbossed
@@ -742,6 +863,7 @@ GdkKeymap
 GdkKeymapClass
 GdkKeymapKey
 GdkKeyInfo
+gdk_keymap_get_for_display
 gdk_keymap_get_default
 gdk_keymap_lookup_key
 gdk_keymap_translate_keyboard_state
@@ -783,6 +905,7 @@ GdkInputMode
 GdkDeviceKey
 GdkDeviceAxis
 GdkAxisUse
+gdk_devices_list_for_display
 gdk_devices_list
 gdk_core_pointer
 gdk_device_set_source
@@ -848,8 +971,11 @@ gdk_event_handler_set
 GdkEventFunc
 
 <SUBSECTION>
+gdk_event_send_client_message_for_display
 gdk_event_send_client_message
+gdk_event_send_clientmessage_toall_for_screen
 gdk_event_send_clientmessage_toall
+gdk_add_client_message_filter_for_display
 gdk_add_client_message_filter
 
 <SUBSECTION>
@@ -857,6 +983,7 @@ gdk_get_show_events
 gdk_set_show_events
 
 <SUBSECTION>
+gdk_setting_get_for_screen
 gdk_setting_get
 
 <SUBSECTION Standard>
@@ -918,11 +1045,13 @@ gdk_event_get_type
 <FILE>cursors</FILE>
 GdkCursor
 GdkCursorType
-gdk_cursor_new
+gdk_cursor_new_for_screen
 gdk_cursor_new_from_pixmap
+gdk_cursor_get_screen
 gdk_cursor_ref
 gdk_cursor_unref
 gdk_cursor_destroy
+gdk_cursor_new
 
 <SUBSECTION Standard>
 GDK_TYPE_CURSOR_TYPE
@@ -1011,16 +1140,25 @@ gdk_display_name
 gdk_leader_window
 gdk_selection_property
 gdk_progclass
+gdkx_visual_get_for_screen
 gdkx_visual_get
 gdkx_colormap_get
 gdk_get_client_window
+gdk_pixmap_foreign_new_for_screen
 gdk_pixmap_foreign_new
+gdk_window_foreign_new_for_display
 gdk_window_foreign_new
+gdk_xid_table_lookup_for_display
+gdk_window_lookup_for_display
+gdk_pixmap_lookup_for_display
 gdk_xid_table_lookup
 gdk_window_lookup
 gdk_pixmap_lookup
+gdk_pixmap_get_screen
+gdk_font_lookup_for_display
 gdk_font_lookup
 gdk_x11_get_server_time
+gdk_net_wm_supports_for_screen
 gdk_net_wm_supports
 gdk_x11_colormap_get_xcolormap
 gdk_x11_colormap_get_xdisplay
@@ -1033,6 +1171,7 @@ gdk_x11_font_get_xdisplay
 gdk_x11_font_get_xfont
 gdk_x11_gc_get_xdisplay
 gdk_x11_gc_get_xgc
+gdk_x11_screen_get_root_xwindow
 gdk_x11_get_default_root_xwindow
 gdk_x11_get_default_screen
 gdk_x11_get_default_xdisplay
@@ -1056,6 +1195,7 @@ GdkFontPrivateX
 GdkImagePrivateX11
 GdkVisualPrivate
 gdk_display
+gdk_display_get_type
 gdk_root_window
 GDK_HAVE_WCHAR_H
 GDK_HAVE_WCTYPE_H

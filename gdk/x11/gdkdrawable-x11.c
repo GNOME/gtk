@@ -197,7 +197,6 @@ gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
 
   drawable_class->get_depth = gdk_x11_get_depth;
   drawable_class->get_screen = gdk_x11_get_screen;
-  drawable_class->get_display = gdk_x11_get_display;
   drawable_class->get_visual = gdk_x11_get_visual;
   
   drawable_class->get_image = _gdk_x11_get_image;

@@ -103,6 +103,15 @@ gdk_devices_list (void)
 }
 #endif
 
+/**
+ * gdk_devices_list_for_display:
+ * @display : the #GdkDisplay where the #GdkDevice are attached.
+ *
+ * Returns a list of #GdkDevice attached to @display.
+ *
+ * Returns: the #GList of #GdkDevice attached to @display.
+ */
+
 GList * 
 gdk_devices_list_for_display (GdkDisplay *display)
 {

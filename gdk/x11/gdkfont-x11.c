@@ -88,6 +88,15 @@ gdk_fontset_name_hash_get (GdkDisplay *display)
   return result;
 }
 
+/** 
+ * gdk_font_get_display:
+ * @font : the #GdkFont.
+ *
+ * Returns the #GdkDisplay against which the @font is defined
+ *
+ * Returns : the corresponding #GdkDisplay.
+ */
+
 GdkDisplay* 
 gdk_font_get_display (GdkFont* font)
 {

@@ -35,7 +35,8 @@
 #include <gdk/gdkinternals.h>
 
 /**
- * gdk_cursor_new:
+ * gdk_cursor_new_for_screen:
+ * @screen: the #GdkScreen where the cursor will be defined
  * @cursor_type: cursor to create
  * 
  * Creates a new cursor from the set of builtin cursors.
@@ -56,7 +57,7 @@
  * Return value: a new #GdkCursor
  **/
 GdkCursor*
-gdk_cursor_new_for_screen (GdkScreen* screen,
+gdk_cursor_new_for_screen (GdkScreen *screen,
 			   GdkCursorType cursor_type)
 {
   GdkCursorPrivate *private;
@@ -76,6 +77,28 @@ gdk_cursor_new_for_screen (GdkScreen* screen,
   return cursor;
 }
 #ifndef GDK_MULTIHEAD_SAFE
+/**
+ * gdk_cursor_new:
+ * @cursor_type: cursor to create
+ * 
+ * Creates a new cursor from the set of builtin cursors.
+ * Some useful ones are: #GDK_RIGHT_PTR (right-facing arrow),
+ * #GDK_CROSSHAIR (crosshair), #GDK_IBEAM (I-beam), #GDK_WATCH (busy),
+ * #GDK_FLEUR (for moving objects), #GDK_HAND (a pointing hand),
+ * #GDK_LEFT_SIDE (resize left side), #GDK_RIGHT_SIDE (resize right side),
+ * #GDK_TOP_LEFT_CORNER (resize northwest corner), #GDK_TOP_RIGHT_CORNER (resize
+ * northeast corner), #GDK_BOTTOM_LEFT_CORNER (resize southwest corner),
+ * #GDK_BOTTOM_RIGHT_CORNER (resize southeast corner),
+ * #GDK_TOP_SIDE (resize top side), #GDK_BOTTOM (resize bottom side),
+ * #GDK_SB_H_DOUBLE_ARROW (move vertical splitter),
+ * #GDK_SB_V_DOUBLE_ARROW (move horizontal splitter).
+ *
+ * To make the cursor invisible, use gdk_cursor_new_from_pixmap() to create
+ * a cursor with no pixels in it.
+ * 
+ * Return value: a new #GdkCursor
+ */
+
 GdkCursor*
 gdk_cursor_new (GdkCursorType cursor_type)
 {
@@ -145,7 +168,7 @@ _gdk_cursor_destroy (GdkCursor *cursor)
 }
 
 Display *
-gdk_x11_cursor_get_xdisplay (GdkCursor *cursor)
+gdk_x11_cursor_get_xscreen (GdkCursor *cursor)
 {
   g_return_val_if_fail (cursor != NULL, NULL);
 
@@ -159,6 +182,15 @@ gdk_x11_cursor_get_xcursor (GdkCursor *cursor)
 
   return ((GdkCursorPrivate *)cursor)->xcursor;
 }
+
+/** 
+ * gdk_cursor_get_screen:
+ * @cursor : a #GdkCursor.
+ *
+ * Returns the screen on which the GdkCursor is defined
+ *
+ * Returns : the #GdkScreen associated to @cursor
+ */
 
 GdkScreen *
 gdk_cursor_get_screen (GdkCursor *cursor)

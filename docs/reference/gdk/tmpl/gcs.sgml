@@ -366,6 +366,15 @@ Set the fill mode for a graphics context.
 @fill: the new fill mode.
 
 
+<!-- ##### FUNCTION gdk_gc_get_screen ##### -->
+<para>
+
+</para>
+
+@gc: 
+@Returns: 
+
+
 <!-- ##### ENUM GdkFill ##### -->
 <para>
 Determines how primitives are drawn.

@@ -322,6 +322,19 @@ gdk_event_apply_filters (XEvent *xevent,
   return GDK_FILTER_CONTINUE;
 }
 
+/**
+ * gdk_add_client_message_filter_for_display:
+ * @display : a #GdkDisplay where to send to display to
+ * @message_type : the type of ClientMessage events to receive.
+ *   This will be checked against the @message_type field 
+ *   of the XClientMessage event struct.
+ * @func: the function to call to process the event.
+ * @data: user data to pass to @func.
+ *
+ * Adds a filter to be called when X ClientMessage events are received.
+ *
+ */ 
+
 void 
 gdk_add_client_message_filter_for_display (GdkDisplay   *display,
 					   GdkAtom       message_type,
@@ -1900,6 +1913,20 @@ gdk_event_send_client_message (GdkEvent *event, guint32 xid)
 }
 #endif
 
+/**
+ * gdk_event_send_client_message_for_display :
+ * @display : the #GdkDisplay where the message is to be sent.
+ * @event : the #GdkEvent to send, which should be a #GdkEventClient.
+ * @xid : the X window to send the X ClientMessage event to.
+ *
+ * Sends an X ClientMessage event to a given window.
+ *
+ * This could be used for communicating between different applications,
+ * though the amount of data is limited to 20 bytes.
+ *
+ * Returns : non-zero on success.
+ */
+
 gboolean
 gdk_event_send_client_message_for_display (GdkDisplay *display,
 					   GdkEvent *event,
@@ -2022,6 +2049,19 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
 
   _gdk_error_warnings = old_warnings;
 }
+
+/**
+ * gdk_event_send_clientmessage_toall_for_screen :
+ * @screen : the #GdkScreen where the event will be broadcasted.
+ * @event : the #GdkEvent.
+ *
+ * Sends an X ClientMessage event to all toplevel windows.
+ *
+ * Toplevel windows are determined by checking for the WM_STATE property, 
+ * as described in the Inter-Client Communication Conventions Manual (ICCCM).
+ * If no windows are found with the WM_STATE property set, the message is 
+ * sent to all children of the root window.
+ */
 
 void
 gdk_event_send_clientmessage_toall_for_screen (GdkScreen *screen, 
@@ -2146,8 +2186,9 @@ typedef struct
   
 
 /**
- * gdk_net_wm_supports:
- * @property: a property atom
+ * gdk_net_wm_supports_for_screen:
+ * @screen : the relevant #GdkScreen.
+ * @property: a property atom.
  * 
  * This function is specific to the X11 backend of GDK, and indicates
  * whether the window manager supports a certain hint from the
@@ -2353,7 +2394,16 @@ gdk_setting_get (const gchar *name,
 }
 #endif
 
-
+/**
+ * gdk_setting_get_for_screen:
+ * @screen : the #GdkScreen where the setting is located
+ * @name : the name of the setting
+ * @value : returns its value if the call succeeds.
+ *
+ * Retrieve the setting @name value on the #GdkScreen @screen.
+ *
+ * Returns : TRUE is the setting exists, FALSE otherwise.
+ */
 gboolean
 gdk_setting_get_for_screen (GdkScreen   *screen,
 			    const gchar *name,

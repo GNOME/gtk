@@ -240,6 +240,15 @@ gtk_settings_constructor (GType			 type,
   return object;
 }
 
+/**
+ * gtk_settings_get_for_screen:
+ * @screen : a #GdkScreen.
+ * 
+ * Retrieves or creates a GtkSettings for the given #GdkScreen
+ * @screen.
+ *
+ * Return value: #GtkSettings object.
+ */
 GtkSettings*
 gtk_settings_get_for_screen (GdkScreen *screen)
 {

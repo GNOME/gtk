@@ -111,7 +111,18 @@ gdk_keymap_translate_keyboard_state() just to get the keyval.
 @group: 
 @level: 
 
+<!-- ##### FUNCTION gdk_keymap_get_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_keymap_get_default ##### -->
+<caution><para> gdk_keymap_get_default() is not multihead safe use 
+gdk_keymap_get_for_display() instead </para></caution>
 <para>
 
 </para>
