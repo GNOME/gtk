@@ -182,6 +182,7 @@ struct _CompletionDirEntry
 {
   gboolean is_dir;
   gchar *entry_name;
+  gchar *sort_key;
 };
 
 struct _CompletionUserDir
@@ -2688,7 +2689,10 @@ free_dir_sent (CompletionDirSent* sent)
 {
   gint i;
   for (i = 0; i < sent->entry_count; i++)
-    g_free (sent->entries[i].entry_name);
+    {
+      g_free (sent->entries[i].entry_name);
+      g_free (sent->entries[i].sort_key);
+    }
   g_free (sent->entries);
   g_free (sent);
 }
@@ -3079,6 +3083,8 @@ open_new_dir (gchar       *dir_name,
 	  continue;
 	}
       g_clear_error (&error);
+      
+      sent->entries[n_entries].sort_key = g_utf8_collate_key (sent->entries[n_entries].entry_name, -1);
       
       g_string_assign (path, sys_dir_name);
       if (path->str[path->len-1] != G_DIR_SEPARATOR)
@@ -3924,8 +3930,9 @@ static gint
 compare_cmpl_dir (const void *a,
 		  const void *b)
 {
-  return compare_filenames ((((CompletionDirEntry*)a))->entry_name,
-			    (((CompletionDirEntry*)b))->entry_name);
+  
+  return strcmp (((CompletionDirEntry*)a)->sort_key,
+		 (((CompletionDirEntry*)b))->sort_key);
 }
 
 static gint
