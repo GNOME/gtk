@@ -981,6 +981,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 			      gpointer		      callback_data,
 			      guint		      callback_type)
 {
+  GtkOptionMenu *option_menu = NULL;
   GtkWidget *parent;
   GtkWidget *widget;
   GSList *radio_group;
@@ -1077,6 +1078,14 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
     }
   g_free (parent_path);
 
+  if (GTK_IS_OPTION_MENU (parent))
+    {
+      option_menu = GTK_OPTION_MENU (parent);
+      if (!option_menu->menu)
+	gtk_option_menu_set_menu (option_menu, gtk_widget_new (GTK_TYPE_MENU, NULL));
+      parent = option_menu->menu;
+    }
+			      
   g_return_if_fail (GTK_IS_CONTAINER (parent));
 
   widget = gtk_widget_new (type,
@@ -1085,6 +1094,8 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 						    type_id != quark_type_title),
 			   "GtkWidget::parent", parent,
 			   NULL);
+  if (option_menu && !option_menu->menu_item)
+    gtk_option_menu_set_history (option_menu, 0);
 
   if (type == GTK_TYPE_RADIO_MENU_ITEM)
     gtk_radio_menu_item_set_group (GTK_RADIO_MENU_ITEM (widget), radio_group);

@@ -1,3 +1,9 @@
+Wed Jul 21 08:21:40 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_create_item): special case
+	option menus here as they are not derived from menu shell, assure that
+	the option menu has a menu we can add items to.
+
 Tue Jul 20 23:29:48 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtknotebook.c (gtk_notebook_page_allocate): convert allocation->
