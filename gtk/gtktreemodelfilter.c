@@ -2458,6 +2458,11 @@ gtk_tree_model_filter_get_model (GtkTreeModelFilter *filter)
  * function should return %TRUE if the given row should be visible and
  * %FALSE otherwise.
  *
+ * If the condition calculated by the function changes over time (e.g. because
+ * it depends on some global parameters), you must call 
+ * gtk_tree_model_filter_refilter() to keep the visibility information of 
+ * the model uptodate.
+ *
  * Since: 2.4
  */
 void

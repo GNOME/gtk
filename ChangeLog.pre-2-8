@@ -1,3 +1,9 @@
+2005-03-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_set_visible_func): 
+	Document the need to refilter if parameters of the visibility function
+	change.  (#169516, Olivier Sessink)	
+
 Mon Mar 28 15:13:42 2005  Søren Sandmann  <sandmann@redhat.com>
 
 	* gdk/gdkwindow.c (gdk_window_invalidate_maybe_recurse): Don't
