@@ -6,8 +6,7 @@ A visible column in a #GtkTreeView widget
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-The GtkTreeViewColumn object is a visible column in a #GtkTreeView
-widget.  It determines the geometry, type 
+The GtkTreeViewColumn object is a visible column in a #GtkTreeView widget.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->

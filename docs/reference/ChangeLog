@@ -1,3 +1,8 @@
+Wed Jan 28 22:51:41 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtktreeviewcolumn.sgml: Remove unfinished sentence, until
+	jrb finds time to write a real description.
+
 Wed Jan 28 21:46:55 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/tmpl/event_structs.sgml: Fix a header name misspelling.  
