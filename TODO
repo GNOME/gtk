@@ -2,9 +2,6 @@ TODO BEFORE GTK 1.0
 -------------------
 
 Bugs:
- * pasting into a GtkEntry that already has a very long string,
-   causes the app to hang.
- 
  * scrolled windows get cought in an endless reallocation loop under
    certain (rare) circumstances.
 
@@ -51,7 +48,7 @@ Bugs:
 
  * Change bitfields to guints from enums for C++ ?
 
- * Force paned window handle to be kept on screen
+ * Expose events aren't being generated correctly for DND demo
 
 Additions:
  * GScanner: it might be good to ues stdio and getch() instead of 1-character

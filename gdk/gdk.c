@@ -3842,6 +3842,9 @@ _g_mbtowc (wchar_t *wstr, const char *str, size_t len)
   wcs[0] = (wchar_t) NULL;
   mbs[0] = '\0';
 
+  /* The last argument isn't a mistake. The X locale code trims
+   *  the input string to the length of the output string!
+   */
   len = _Xmbstowcs (wcs, str, (len<MB_CUR_MAX)? len:MB_CUR_MAX);
   if (len < 1)
     return len;

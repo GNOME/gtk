@@ -1,3 +1,18 @@
+Sun Mar 22 16:25:46 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmain.c (gtk_init): fixes to locale checks
+
+	* gtk/testgtk.c (create_dnd): Create the dnd icons separately
+	  to avoid strange interactions with shapes demo.
+
+	* gtk/gtkentry.[ch]: 
+	  - Limit the length of the text to 2048 to prevent long delays
+	  - Fix problems with buffer overruns
+	  - Draw only the onscreen portion of the text to prevent wrapping
+	    of shorts in the X drawing code.
+	  - Keep track of character positions and x-offsets to speed
+	    up algorithms.
+
 Sun Mar 22 11:37:51 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* gtk/gtkcolorsel.c: 

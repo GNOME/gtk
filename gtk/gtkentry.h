@@ -48,10 +48,21 @@ struct _GtkEntry
   guint16 text_size;
   guint16 text_length;
   guint16 text_max_length;
-  gint16  scroll_offset;
+  gint    scroll_offset;
   guint   visible : 1;
   guint32 timer;
   guint   button;
+
+  /* The total number of characters (not bytes) in the entry */
+  guint nchars;
+
+  /* The byte offset of each character 
+   *  (including the last insertion position) */
+  guint16 *char_pos;
+
+  /* The x-offset of each character (including the last insertion position)
+   * only valid when the widget is realized */
+  gint *char_offset;
 };
 
 struct _GtkEntryClass

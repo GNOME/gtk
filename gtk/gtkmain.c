@@ -266,18 +266,18 @@ gtk_init (int	 *argc,
    */
 
   current_locale = g_strdup(setlocale (LC_CTYPE, NULL));
-  setlocale (LC_CTYPE, "C");
 
 #ifdef X_LOCALE
-  if ((strcmp (current_locale, "C")) && (!strcmp (current_locale, "POSIX")))
+  if ((strcmp (current_locale, "C")) && (strcmp (current_locale, "POSIX")))
     gtk_use_mb = TRUE;
   else
 #endif
     {
+      setlocale (LC_CTYPE, "C");
       gtk_use_mb = (mblen ("\xc0", MB_CUR_MAX) == 1);
+      setlocale (LC_CTYPE, current_locale);
     }
 
-  setlocale (LC_CTYPE, current_locale);
   g_free (current_locale);
 
   GTK_NOTE(MISC, g_print("%s multi-byte string functions.\n", 

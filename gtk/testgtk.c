@@ -23,12 +23,12 @@
 
 #include "circles.xbm"
 
-/* Variables used by the Drag/Drop and Shape Window demos */
-static GtkWidget *modeller = NULL;
-static GtkWidget *sheets = NULL;
-static GtkWidget *rings = NULL;
-void create_shapes(void);
-
+GtkWidget *shape_create_icon (char     *xpm_file,
+			      gint      x,
+			      gint      y,
+			      gint      px,
+			      gint      py,
+			      gint      window_type);
 
 /* macro, structure and variables used by tree window demos */
 #define DEFAULT_NUMBER_OF_ITEM  3
@@ -4264,16 +4264,40 @@ create_dnd ()
   char *possible_drag_types[] = {"text/plain"};
   char *accepted_drop_types[] = {"text/plain"};
 
-  if(!modeller)
-    create_shapes();
+  static GtkWidget *drag_icon = NULL;
+  static GtkWidget *drop_icon = NULL;
 
   if (!window)
     {
       GdkPoint hotspot = {5,5};
       
-      gdk_dnd_set_drag_shape(modeller->window,
+      if (!drag_icon)
+	{
+	  drag_icon = shape_create_icon ("Modeller.xpm",
+					 440, 140, 0,0, GTK_WINDOW_POPUP);
+	  
+	  gtk_signal_connect (GTK_OBJECT (drag_icon), "destroy",
+			      GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			      &drag_icon);
+
+	  gtk_widget_hide (drag_icon);
+	}
+      
+      if (!drop_icon)
+	{
+	  drop_icon = shape_create_icon ("3DRings.xpm",
+					 440, 140, 0,0, GTK_WINDOW_POPUP);
+	  
+	  gtk_signal_connect (GTK_OBJECT (drop_icon), "destroy",
+			      GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			      &drop_icon);
+
+	  gtk_widget_hide (drop_icon);
+	}
+
+      gdk_dnd_set_drag_shape(drag_icon->window,
 			     &hotspot,
-			     rings->window,
+			     drop_icon->window,
 			     &hotspot);
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -4371,8 +4395,6 @@ create_dnd ()
       gtk_widget_grab_default (button);
       gtk_widget_show (button);
     }
-
-  gtk_widget_hide(modeller); gtk_widget_hide(rings);
 
   if (!GTK_WIDGET_VISIBLE (window))
     gtk_widget_show (window);
@@ -4494,13 +4516,18 @@ shape_create_icon (char     *xpm_file,
 
   gtk_widget_set_uposition (window, x, y);
   gtk_widget_show (window);
-
+  
   return window;
 }
 
 void 
 create_shapes ()
 {
+  /* Variables used by the Drag/Drop and Shape Window demos */
+  static GtkWidget *modeller = NULL;
+  static GtkWidget *sheets = NULL;
+  static GtkWidget *rings = NULL;
+
   root_win = gdk_window_foreign_new (GDK_ROOT_WINDOW ());
 
   if (!modeller)

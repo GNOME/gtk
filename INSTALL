@@ -26,11 +26,34 @@ for which your operating system has the worst support for the
 --with-locale option.
 
 
-Note for using XIM support with kinput2
----------------------------------------
+Notes for using XIM support for Japanese input
+----------------------------------------------
 
-There is a bug in older versions of kinput2 that will cause 
+* There is a bug in older versions of kinput2 that will cause 
 GTK to hang when destroying a text entry. The latest versions
 of kinput is available from:
 
   ftp://ftp.sra.co.jp/pub/x11/kinput2
+
+* The locale information file for the ja_JP EUC locale
+distributed with some recent versions of X11 specifies to
+use the C library multibyte functions. Unless your C library
+has support for Japanese locales, this is incorrect, and
+will cause problems for GTK's internationalization.
+
+(In particular, this occurs with GNU libc 2.0 and 2.1, in which the
+multibyte functions always translate to and from UTF-8; but the
+problem may occur for other C libraries, and other operating systems
+as well.)
+
+To fix this, change the line:
+
+use_stdc_env		True
+
+to 
+
+use_stdc_env		False
+
+in the file /usr/X11R6/lib/X11/locale/ja_JP/XLC_LOCALE.
+
+
