@@ -5,6 +5,8 @@ Overview of Changes from GTK+ 2.5.2 to GTK+ 2.5.3
  - Keynav improvements [Jonathan Blandford]
  - Make position of pathbar down button stable [Jonathan]
  - Make autocompletion less annoying in save mode [Owen Taylor]
+* GtkFileChooserButton
+ - Allow mnemonic activation [Dennis Cranston, James M. Cape]
 * GtkComboBox
  - Work without a model [Mariano Suarez-Alvarez
 * GtkTreeView
@@ -34,7 +36,7 @@ Overview of Changes from GTK+ 2.5.2 to GTK+ 2.5.3
  - Add ms-windows (Wimp) theme engine [Raymond Penners, Dom Lachowicz,
    Havoc Pennington]
  - Fix loading of input modules on Win32 [Kazuki IWAMOTO]
- - Build fixes [Tor Lillqvist]
+ - Build fixes [Tor Lillqvist, Robert]
 * Other bug fixes [Hans Petter Jonsson, Tim Janik, Manish Singh,
  Soeren Sandmann, Bill Haneman, Padraig O'Briain, Olexi Avramchenko,
  Jonathan, Frederic Croszat, Matthias, Christian Persch, Felipe Heidrich,

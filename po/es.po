@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-15 23:52+0200\n"
+"POT-Creation-Date: 2004-09-19 00:26-0400\n"
 "PO-Revision-Date: 2004-09-16 00:00+0200\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
@@ -41,7 +41,8 @@ msgstr "El archivo de imagen «%s» no contiene datos"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:209 gdk-pixbuf/gdk-pixbuf-io.c:840
 #: gdk-pixbuf/gdk-pixbuf-io.c:990 tests/testfilechooser.c:237
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "No se ha podido cargar la imagen «%s»: el motivo es desconocido, "
 "probablemente el archivo gráfico esté corrupto"
@@ -77,7 +78,8 @@ msgstr "El tipo de imagen «%s» no está soportado"
 #: gdk-pixbuf/gdk-pixbuf-io.c:672
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "No se ha podido reconocer el formato del archivo de imagen del archivo «%s»"
+msgstr ""
+"No se ha podido reconocer el formato del archivo de imagen del archivo «%s»"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:680
 msgid "Unrecognized image file format"
@@ -351,7 +353,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:909
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "La calidad JPEG debe ser un valor entre 0 y 100; el valor «%d» no está "
 "permitido."
@@ -455,7 +458,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Error fatal leyendo el archivo gráfico PNG: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Las claves para los bloques text de PNG debe tener al menos entre 1 y un "
 "máximo de 79 caracteres."
@@ -468,8 +472,8 @@ msgstr "Las claves para los bloques text de PNG deben ser caracteres ASCII."
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
-"El valor del bloque texto %s de PNG no puede ser convertido a la codificación "
-"ISO-8859-1."
+"El valor del bloque texto %s de PNG no puede ser convertido a la "
+"codificación ISO-8859-1."
 
 #: gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
@@ -505,7 +509,9 @@ msgstr "El valor máximo de color en el archivo PNM es demasiado alto"
 
 #: gdk-pixbuf/io-pnm.c:396
 msgid "Cannot handle PNM files with maximum color values greater than 255"
-msgstr "No se pueden manipular archivos PNM con el valor de color máximo mayor que 255"
+msgstr ""
+"No se pueden manipular archivos PNM con el valor de color máximo mayor que "
+"255"
 
 #: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
 msgid "Raw PNM image type is invalid"
@@ -535,7 +541,8 @@ msgstr "No se puede asignar memoria para cargar la imagen PNM"
 
 #: gdk-pixbuf/io-pnm.c:820
 msgid "Insufficient memory to load PNM context struct"
-msgstr "No hay memoria suficiente para cargar la estructura de contexto del PNM"
+msgstr ""
+"No hay memoria suficiente para cargar la estructura de contexto del PNM"
 
 #: gdk-pixbuf/io-pnm.c:871
 msgid "Unexpected end of PNM image data"
@@ -628,7 +635,8 @@ msgstr "El formato de imagen Targa"
 
 #: gdk-pixbuf/io-tiff.c:177
 msgid "Could not get image width (bad TIFF file)"
-msgstr "No se ha podido obtener el ancho de la imagen (archivo TIFF incorrecto)"
+msgstr ""
+"No se ha podido obtener el ancho de la imagen (archivo TIFF incorrecto)"
 
 #: gdk-pixbuf/io-tiff.c:184
 msgid "Could not get image height (bad TIFF file)"
@@ -735,13 +743,14 @@ msgstr "No se puede leer el mapa de color de XPM"
 
 #: gdk-pixbuf/io-xpm.c:1524
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr "No se ha podido escribir en el archivo temporal al cargar la imagen XPM"
+msgstr ""
+"No se ha podido escribir en el archivo temporal al cargar la imagen XPM"
 
 #: gdk-pixbuf/io-xpm.c:1559
 msgid "The XPM image format"
 msgstr "El formato de imagen XPM"
 
-#: gtk/gtkaboutdialog.c:216 gtk/gtkaboutdialog.c:1724
+#: gtk/gtkaboutdialog.c:216 gtk/gtkaboutdialog.c:1722
 msgid "License"
 msgstr "Licencia"
 
@@ -759,28 +768,28 @@ msgstr "_Créditos"
 msgid "_License"
 msgstr "_Licencia"
 
-#: gtk/gtkaboutdialog.c:541
+#: gtk/gtkaboutdialog.c:538
 #, c-format
 msgid "About %s"
 msgstr "Acerca de %s"
 
-#: gtk/gtkaboutdialog.c:1662
+#: gtk/gtkaboutdialog.c:1659
 msgid "Credits"
 msgstr "Créditos"
 
-#: gtk/gtkaboutdialog.c:1687
+#: gtk/gtkaboutdialog.c:1684
 msgid "Written by"
 msgstr "Escrito por"
 
-#: gtk/gtkaboutdialog.c:1690
+#: gtk/gtkaboutdialog.c:1687
 msgid "Documented by"
 msgstr "Documentado por"
 
-#: gtk/gtkaboutdialog.c:1701
+#: gtk/gtkaboutdialog.c:1699
 msgid "Translated by"
 msgstr "Traducido por"
 
-#: gtk/gtkaboutdialog.c:1705
+#: gtk/gtkaboutdialog.c:1703
 msgid "Artwork by"
 msgstr "Arte por"
 
@@ -977,7 +986,7 @@ msgstr ""
 "No se pudo añadir marcador para %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:828 gtk/gtkfilechooserdefault.c:5570
+#: gtk/gtkfilechooserdefault.c:828 gtk/gtkfilechooserdefault.c:5600
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1029,7 +1038,8 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:2474
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
-msgstr "No se pudo añadir marcador para %s porque es un nombre de ruta inválido."
+msgstr ""
+"No se pudo añadir marcador para %s porque es un nombre de ruta inválido."
 
 #: gtk/gtkfilechooserdefault.c:2654
 msgid "Shortcuts"
@@ -1093,62 +1103,63 @@ msgstr "Guardar en una _carpeta:"
 msgid "Create in _folder:"
 msgstr "Crear en _carpeta:"
 
-#: gtk/gtkfilechooserdefault.c:4206
+#: gtk/gtkfilechooserdefault.c:4210
 msgid "Cannot change to folder because it is not local"
 msgstr "No se pudo cambiar a la carpeta porque no es local"
 
-#: gtk/gtkfilechooserdefault.c:4349
+#: gtk/gtkfilechooserdefault.c:4354
 msgid "Could not find the path"
 msgstr "No se ha podido encontrar la ruta"
 
-#: gtk/gtkfilechooserdefault.c:4710
+#: gtk/gtkfilechooserdefault.c:4715
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "el enlace %s no existe"
 
-#: gtk/gtkfilechooserdefault.c:5383
+#: gtk/gtkfilechooserdefault.c:5413
 msgid "Type name of new folder"
 msgstr "Nombre del tipo de la carpeta nueva"
 
-#: gtk/gtkfilechooserdefault.c:5412
+#: gtk/gtkfilechooserdefault.c:5442
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:5414
+#: gtk/gtkfilechooserdefault.c:5444
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5416
+#: gtk/gtkfilechooserdefault.c:5446
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5418
+#: gtk/gtkfilechooserdefault.c:5448
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5463
+#: gtk/gtkfilechooserdefault.c:5493
 msgid "Today"
 msgstr "Hoy"
 
-#: gtk/gtkfilechooserdefault.c:5465
+#: gtk/gtkfilechooserdefault.c:5495
 msgid "Yesterday"
 msgstr "Ayer"
 
-#: gtk/gtkfilechooserdefault.c:5476
+#: gtk/gtkfilechooserdefault.c:5506
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: gtk/gtkfilechooserdefault.c:5531
+#: gtk/gtkfilechooserdefault.c:5561
 msgid "Cannot change to the folder you specified as it is an invalid path."
-msgstr "No se pudo cambiar a la carpeta que especificó porque es una ruta inválida."
+msgstr ""
+"No se pudo cambiar a la carpeta que especificó porque es una ruta inválida."
 
-#: gtk/gtkfilechooserdefault.c:5608
+#: gtk/gtkfilechooserdefault.c:5638
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1157,15 +1168,15 @@ msgstr ""
 "No se pudo seleccionar %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5647
+#: gtk/gtkfilechooserdefault.c:5677
 msgid "Open Location"
 msgstr "Abrir dirección"
 
-#: gtk/gtkfilechooserdefault.c:5654
+#: gtk/gtkfilechooserdefault.c:5684
 msgid "Save in Location"
 msgstr "Guardar en ubicación"
 
-#: gtk/gtkfilechooserdefault.c:5673
+#: gtk/gtkfilechooserdefault.c:5703
 msgid "_Location:"
 msgstr "_Dirección:"
 
@@ -1211,7 +1222,8 @@ msgstr "_Renombrar archivo"
 
 #: gtk/gtkfilesel.c:1440
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "El nombre de la carpeta «%s» contiene símbolos que no están permitidos en "
 "los nombres de archivos"
@@ -1227,7 +1239,8 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1443 gtk/gtkfilesel.c:1679
 msgid "You probably used symbols not allowed in filenames."
-msgstr "Probablemente ha empleado símbolos no permitidos en nombres de archivo."
+msgstr ""
+"Probablemente ha empleado símbolos no permitidos en nombres de archivo."
 
 #: gtk/gtkfilesel.c:1451
 #, c-format
@@ -1565,42 +1578,42 @@ msgstr "(desconocido)"
 msgid "clear"
 msgstr "limpiar"
 
-#: gtk/gtklabel.c:3417
+#: gtk/gtklabel.c:3427
 msgid "Select All"
 msgstr "Seleccionar todo"
 
-#: gtk/gtklabel.c:3427
+#: gtk/gtklabel.c:3437
 msgid "Input Methods"
 msgstr "Métodos de entrada"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:405
+#: gtk/gtkmain.c:406
 msgid "Load additional GTK+ modules"
 msgstr "Cargar módulos adicionales GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:406
+#: gtk/gtkmain.c:407
 msgid "MODULES"
 msgstr "MODULOS"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:408
+#: gtk/gtkmain.c:409
 msgid "Make all warnings fatal"
 msgstr "Hacer todas las advertencias fatales"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:411
+#: gtk/gtkmain.c:412
 msgid "GTK+ debugging flags to set"
 msgstr "Flags de depuración GTK+ a establecer"
 
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:412 gtk/gtkmain.c:415
+#: gtk/gtkmain.c:413 gtk/gtkmain.c:416
 msgid "FLAGS"
 msgstr "FLAGS"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:414
+#: gtk/gtkmain.c:415
 msgid "GTK+ debugging flags to unset"
 msgstr "Flags de depuración GTK+ a quitar"
 
@@ -1609,15 +1622,15 @@ msgstr "Flags de depuración GTK+ a quitar"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:480
+#: gtk/gtkmain.c:481
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:548
+#: gtk/gtkmain.c:549
 msgid "GTK+ Options"
 msgstr "Opciones GTK+"
 
-#: gtk/gtkmain.c:548
+#: gtk/gtkmain.c:549
 msgid "Show GTK+ Options"
 msgstr "Mostrar opciones GTL+"
 
@@ -2138,4 +2151,3 @@ msgstr "No se ha podido obtener información para el archivo «%s» : %s"
 
 #~ msgid "This file system does not support icons"
 #~ msgstr "Este sistema de archivo no soporta iconos"
-

@@ -140,13 +140,14 @@ main (int argc, char *argv[])
   hbox = gtk_hbox_new (FALSE, 12);
   gtk_container_add (GTK_CONTAINER (group_box), hbox);
 
-  label = gtk_label_new ("Open:");
+  label = gtk_label_new_with_mnemonic ("_Open:");
   gtk_size_group_add_widget (GTK_SIZE_GROUP (label_group), label);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
   chooser = gtk_file_chooser_button_new_with_backend ("Select A File - testfilechooserbutton",
 						      "gtk+");
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), chooser);
   g_signal_connect (chooser, "current-folder-changed",
 		    G_CALLBACK (chooser_current_folder_changed_cb), NULL);
   g_signal_connect (chooser, "selection-changed", G_CALLBACK (chooser_selection_changed_cb), NULL);

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-25 01:44-0400\n"
+"POT-Creation-Date: 2004-09-19 00:27-0400\n"
 "PO-Revision-Date: 2004-02-13 13:29+0300\n"
 "Last-Translator: Dmitry G. Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
@@ -222,7 +222,7 @@ msgstr "Чувствительный"
 msgid "Whether the action is enabled."
 msgstr "Включено ли действие "
 
-#: gtk/gtkaction.c:289 gtk/gtkactiongroup.c:149 gtk/gtktreeview.c:577
+#: gtk/gtkaction.c:289 gtk/gtkactiongroup.c:149 gtk/gtktreeview.c:579
 #: gtk/gtktreeviewcolumn.c:225 gtk/gtkwidget.c:443
 msgid "Visible"
 msgstr "Видимый"
@@ -503,7 +503,7 @@ msgstr "Интервал"
 msgid "The amount of space between children"
 msgstr "Расстояние между вложенными элементами"
 
-#: gtk/gtkbox.c:140 gtk/gtknotebook.c:473 gtk/gtktoolbar.c:538
+#: gtk/gtkbox.c:140 gtk/gtknotebook.c:473 gtk/gtktoolbar.c:541
 msgid "Homogeneous"
 msgstr "Гомогенность"
 
@@ -511,7 +511,7 @@ msgstr "Гомогенность"
 msgid "Whether the children should all be the same size"
 msgstr "Должны ли все вложенные элементы иметь одинаковый размер"
 
-#: gtk/gtkbox.c:148 gtk/gtkpreview.c:133 gtk/gtktoolbar.c:530
+#: gtk/gtkbox.c:148 gtk/gtkpreview.c:133 gtk/gtktoolbar.c:533
 #: gtk/gtktreeviewcolumn.c:306
 msgid "Expand"
 msgstr "Расширяемость"
@@ -1759,11 +1759,11 @@ msgstr "Виджет \"Метка\""
 msgid "A widget to display in place of the usual expander label"
 msgstr "Виджет, который будет отображаться вместо обычной метки расширителя"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:699
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:701
 msgid "Expander Size"
 msgstr "Размер расширителя"
 
-#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:700
+#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:702
 msgid "Size of the expander arrow"
 msgstr "Размер расширяющей стрелки"
 
@@ -1852,11 +1852,11 @@ msgstr "Показывать скрытые"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Должны ли показываться скрытые файлы и папки "
 
-#: gtk/gtkfilechooserdefault.c:575
+#: gtk/gtkfilechooserdefault.c:581
 msgid "Default file chooser backend"
 msgstr "Исходный движок для диалога выбора файлов"
 
-#: gtk/gtkfilechooserdefault.c:576
+#: gtk/gtkfilechooserdefault.c:582
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Наименование исходного движка виджета GtkFileChooser"
 
@@ -1997,7 +1997,7 @@ msgid "A widget to display in place of the usual frame label"
 msgstr "Виджет, который будет отображаться вместо обычной метки рамки"
 
 #: gtk/gtkhandlebox.c:207 gtk/gtkmenubar.c:157 gtk/gtkstatusbar.c:201
-#: gtk/gtktoolbar.c:579 gtk/gtkviewport.c:152
+#: gtk/gtktoolbar.c:582 gtk/gtkviewport.c:152
 msgid "Shadow type"
 msgstr "Тип тени"
 
@@ -2354,7 +2354,7 @@ msgstr ""
 msgid "Style of bevel around the menubar"
 msgstr "Стиль скоса вокруг строки меню"
 
-#: gtk/gtkmenubar.c:165 gtk/gtktoolbar.c:555
+#: gtk/gtkmenubar.c:165 gtk/gtktoolbar.c:558
 msgid "Internal padding"
 msgstr "Внутреннее дополнение"
 
@@ -2717,7 +2717,7 @@ msgstr ""
 "Число между 0,0 и 1,0, указывающее вертикальное выравнивание текста в "
 "индикаторе прогресса"
 
-#: gtk/gtkprogressbar.c:143 gtk/gtkrange.c:294 gtk/gtkspinbutton.c:242
+#: gtk/gtkprogressbar.c:143 gtk/gtkrange.c:334 gtk/gtkspinbutton.c:242
 msgid "Adjustment"
 msgstr "Подгонка"
 
@@ -2726,7 +2726,7 @@ msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr ""
 "Компонент GtkAdjustment, связанный с индикатором прогремма (Устаревший)"
 
-#: gtk/gtkprogressbar.c:151 gtk/gtktoolbar.c:504
+#: gtk/gtkprogressbar.c:151 gtk/gtktoolbar.c:507
 msgid "Orientation"
 msgstr "Ориентация"
 
@@ -2825,78 +2825,78 @@ msgstr "Радио-действие, группе которого принад�
 msgid "The radio button whose group this widget belongs to."
 msgstr "Радио-кнопка, группе которого принадлежит этот виджет."
 
-#: gtk/gtkrange.c:285
+#: gtk/gtkrange.c:325
 msgid "Update policy"
 msgstr "Метод обновления"
 
-#: gtk/gtkrange.c:286
+#: gtk/gtkrange.c:326
 msgid "How the range should be updated on the screen"
 msgstr "Как диапазон должен обновляться на экране"
 
-#: gtk/gtkrange.c:295
+#: gtk/gtkrange.c:335
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr ""
 "Объект GtkAdjustment, где хранится текущее значение этого объекта типа "
 "\"диапазон\""
 
-#: gtk/gtkrange.c:302
+#: gtk/gtkrange.c:342
 msgid "Inverted"
 msgstr "Инвертированное"
 
-#: gtk/gtkrange.c:303
+#: gtk/gtkrange.c:343
 msgid "Invert direction slider moves to increase range value"
 msgstr "Инвертировать области, отмеченной ползунками, для увеличения диапазона"
 
-#: gtk/gtkrange.c:309
+#: gtk/gtkrange.c:349
 msgid "Slider Width"
 msgstr "Ширина полосы прокрутки"
 
-#: gtk/gtkrange.c:310
+#: gtk/gtkrange.c:350
 msgid "Width of scrollbar or scale thumb"
 msgstr "Ширина полосы прокрутки или указателя масштаба"
 
-#: gtk/gtkrange.c:317
+#: gtk/gtkrange.c:357
 msgid "Trough Border"
 msgstr "Граница направляющей"
 
-#: gtk/gtkrange.c:318
+#: gtk/gtkrange.c:358
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr ""
 "Расстояние между указателем/кнопками перемещения и внешней границей "
 "направляющей"
 
-#: gtk/gtkrange.c:325
+#: gtk/gtkrange.c:365
 msgid "Stepper Size"
 msgstr "Размер кнопки перемещения"
 
-#: gtk/gtkrange.c:326
+#: gtk/gtkrange.c:366
 msgid "Length of step buttons at ends"
 msgstr "Длина кнопок перемещения от края до края"
 
-#: gtk/gtkrange.c:333
+#: gtk/gtkrange.c:373
 msgid "Stepper Spacing"
 msgstr "Расстояние между кнопками перемещения"
 
-#: gtk/gtkrange.c:334
+#: gtk/gtkrange.c:374
 msgid "Spacing between step buttons and thumb"
 msgstr "Расстояние между кнопками перемещения и указателем"
 
-#: gtk/gtkrange.c:341
+#: gtk/gtkrange.c:381
 msgid "Arrow X Displacement"
 msgstr "Горизонтальное смещение стрелки"
 
-#: gtk/gtkrange.c:342
+#: gtk/gtkrange.c:382
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 "Насколько стрелка будет перемещаться в горизонтальном направлении при "
 "нажатии кнопки"
 
-#: gtk/gtkrange.c:349
+#: gtk/gtkrange.c:389
 msgid "Arrow Y Displacement"
 msgstr "Вертикальное смещение стрелки"
 
-#: gtk/gtkrange.c:350
+#: gtk/gtkrange.c:390
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
@@ -3002,11 +3002,11 @@ msgstr ""
 "Отображать вторую кнопку со стрелкой вперед на противоположной стороне "
 "полосы прокрутки"
 
-#: gtk/gtkscrolledwindow.c:238 gtk/gtktext.c:603 gtk/gtktreeview.c:561
+#: gtk/gtkscrolledwindow.c:238 gtk/gtktext.c:603 gtk/gtktreeview.c:563
 msgid "Horizontal Adjustment"
 msgstr "Выравнивание по горизонтали"
 
-#: gtk/gtkscrolledwindow.c:245 gtk/gtktext.c:611 gtk/gtktreeview.c:569
+#: gtk/gtkscrolledwindow.c:245 gtk/gtktext.c:611 gtk/gtktreeview.c:571
 msgid "Vertical Adjustment"
 msgstr "Выравнивание по вертикали"
 
@@ -3059,11 +3059,11 @@ msgstr "Рисовать"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Будут ли разделители нарисованы или будут пустыми"
 
-#: gtk/gtksettings.c:263
+#: gtk/gtksettings.c:267
 msgid "Double Click Time"
 msgstr "Интервал двойного щелчка"
 
-#: gtk/gtksettings.c:264
+#: gtk/gtksettings.c:268
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -3071,11 +3071,11 @@ msgstr ""
 "Максимальное время между двумя щелчками, при котором они считаются двойным "
 "щелчком (в милисекундах)"
 
-#: gtk/gtksettings.c:271
+#: gtk/gtksettings.c:275
 msgid "Double Click Distance"
 msgstr "Расстояние двойного щелчка"
 
-#: gtk/gtksettings.c:272
+#: gtk/gtksettings.c:276
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -3083,27 +3083,27 @@ msgstr ""
 "Максимальное расстояние между двумя щелчками, при котором они считаются "
 "двойным щелчком (в пикселях)"
 
-#: gtk/gtksettings.c:279
+#: gtk/gtksettings.c:283
 msgid "Cursor Blink"
 msgstr "Мигающий курсор"
 
-#: gtk/gtksettings.c:280
+#: gtk/gtksettings.c:284
 msgid "Whether the cursor should blink"
 msgstr "Должен ли курсор мигать"
 
-#: gtk/gtksettings.c:287
+#: gtk/gtksettings.c:291
 msgid "Cursor Blink Time"
 msgstr "Частота мигания курсора"
 
-#: gtk/gtksettings.c:288
+#: gtk/gtksettings.c:292
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Длина цикла мигания курсора в миллисекундах"
 
-#: gtk/gtksettings.c:295
+#: gtk/gtksettings.c:299
 msgid "Split Cursor"
 msgstr "Разделить курсор"
 
-#: gtk/gtksettings.c:296
+#: gtk/gtksettings.c:300
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -3111,103 +3111,111 @@ msgstr ""
 "Будут ли отображаться два курсора для смешанного справа-налево и слева-"
 "направо текста"
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:307
 msgid "Theme Name"
 msgstr "Название темы"
 
-#: gtk/gtksettings.c:304
+#: gtk/gtksettings.c:308
 msgid "Name of theme RC file to load"
 msgstr "Название файла RC тему для загрузки"
 
-#: gtk/gtksettings.c:311
+#: gtk/gtksettings.c:315
 msgid "Icon Theme Name"
 msgstr "Наименование темы значков"
 
-#: gtk/gtksettings.c:312
+#: gtk/gtksettings.c:316
 msgid "Name of icon theme to use"
 msgstr "Наименование испольуемой темы значков"
 
-#: gtk/gtksettings.c:320
+#: gtk/gtksettings.c:324
 msgid "Key Theme Name"
 msgstr "Наименование ключевой темы"
 
-#: gtk/gtksettings.c:321
+#: gtk/gtksettings.c:325
 msgid "Name of key theme RC file to load"
 msgstr "Имя RC-файла с ключевой темой, который нужно загрузить"
 
-#: gtk/gtksettings.c:329
+#: gtk/gtksettings.c:333
 msgid "Menu bar accelerator"
 msgstr "Клавиша вызова строки меню"
 
-#: gtk/gtksettings.c:330
+#: gtk/gtksettings.c:334
 msgid "Keybinding to activate the menu bar"
 msgstr "Клавиша предназначенная для вызова строки меню"
 
-#: gtk/gtksettings.c:338
+#: gtk/gtksettings.c:342
 msgid "Drag threshold"
 msgstr "Порог перетаскивания"
 
-#: gtk/gtksettings.c:339
+#: gtk/gtksettings.c:343
 msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 "Число точек растра, на которое может сместиться курсор до перетаскивания"
 
-#: gtk/gtksettings.c:347
+#: gtk/gtksettings.c:351
 msgid "Font Name"
 msgstr "Наименование шрифта"
 
-#: gtk/gtksettings.c:348
+#: gtk/gtksettings.c:352
 msgid "Name of default font to use"
 msgstr "Наименование исходного шрифта"
 
-#: gtk/gtksettings.c:356
+#: gtk/gtksettings.c:360
 msgid "Icon Sizes"
 msgstr "Размеры значков"
 
-#: gtk/gtksettings.c:357
+#: gtk/gtksettings.c:361
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
 msgstr "Список размеров значков (gtk-menu=16,16;gtk-button=20,20..."
 
-#: gtk/gtksettings.c:366
+#: gtk/gtksettings.c:369
+msgid "GTK Modules"
+msgstr ""
+
+#: gtk/gtksettings.c:370
+msgid "List of currently active GTK modules"
+msgstr ""
+
+#: gtk/gtksettings.c:379
 msgid "Xft Antialias"
 msgstr "Сглаживание через Xft"
 
-#: gtk/gtksettings.c:367
+#: gtk/gtksettings.c:380
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Сглаживать ли шрифты через Xft; 0=нет, 1=да, -1=исходное значение"
 
-#: gtk/gtksettings.c:376
+#: gtk/gtksettings.c:389
 msgid "Xft Hinting"
 msgstr "Хинтовать через Xft"
 
-#: gtk/gtksettings.c:377
+#: gtk/gtksettings.c:390
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Хинтовать ли шрифты через Xft; 0=нет, 1=да, -1=исходное значение"
 
-#: gtk/gtksettings.c:386
+#: gtk/gtksettings.c:399
 msgid "Xft Hint Style"
 msgstr "Стиль хинтования"
 
-#: gtk/gtksettings.c:387
+#: gtk/gtksettings.c:400
 msgid "What degree of hinting to use; none, slight, medium, or full"
 msgstr ""
 "Какой уровень хинтования использовать; никакого (none), слабый (slight), "
 "средний (medium) или полный (full)"
 
-#: gtk/gtksettings.c:396
+#: gtk/gtksettings.c:409
 msgid "Xft RGBA"
 msgstr "Субпиксельное сглаживание"
 
-#: gtk/gtksettings.c:397
+#: gtk/gtksettings.c:410
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr ""
 "Тип субпиксельного сглаживания; отсутствует (none), rgb, bgr, vrgb, vbgr"
 
-#: gtk/gtksettings.c:406
+#: gtk/gtksettings.c:419
 msgid "Xft DPI"
 msgstr "Разрешение"
 
-#: gtk/gtksettings.c:407
+#: gtk/gtksettings.c:420
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 "Разрешение, в 1024 * точек/дюйм. -1 для использования исходного значения"
@@ -3819,84 +3827,84 @@ msgstr "Рисовать индикатор"
 msgid "If the toggle part of the button is displayed"
 msgstr "Если отображена переключающая часть кнопки"
 
-#: gtk/gtktoolbar.c:505
+#: gtk/gtktoolbar.c:508
 msgid "The orientation of the toolbar"
 msgstr "Ориентация панели инструментов"
 
-#: gtk/gtktoolbar.c:513
+#: gtk/gtktoolbar.c:516
 msgid "Toolbar Style"
 msgstr "Стиль панели инструментов"
 
-#: gtk/gtktoolbar.c:514
+#: gtk/gtktoolbar.c:517
 msgid "How to draw the toolbar"
 msgstr "Как рисовать панель инструментов"
 
-#: gtk/gtktoolbar.c:521
+#: gtk/gtktoolbar.c:524
 msgid "Show Arrow"
 msgstr "Показывать стрелку"
 
-#: gtk/gtktoolbar.c:522
+#: gtk/gtktoolbar.c:525
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "Показвать ли стрелку, если панель инструментов не помещается"
 
-#: gtk/gtktoolbar.c:531
+#: gtk/gtktoolbar.c:534
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 "Должны ли элементы расширяться при увеличении размера панели инструментов"
 
-#: gtk/gtktoolbar.c:539
+#: gtk/gtktoolbar.c:542
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr ""
 "Должны ли элементы иметь одинаковый размер, как другие гомогенные элементы"
 
-#: gtk/gtktoolbar.c:546
+#: gtk/gtktoolbar.c:549
 msgid "Spacer size"
 msgstr "Размер разделителя"
 
-#: gtk/gtktoolbar.c:547
+#: gtk/gtktoolbar.c:550
 msgid "Size of spacers"
 msgstr "Размер разделителей"
 
-#: gtk/gtktoolbar.c:556
+#: gtk/gtktoolbar.c:559
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Расстояние между тенью панели инструментов и кнопками"
 
-#: gtk/gtktoolbar.c:564
+#: gtk/gtktoolbar.c:567
 msgid "Space style"
 msgstr "Стиль разделителя"
 
-#: gtk/gtktoolbar.c:565
+#: gtk/gtktoolbar.c:568
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Будут ли разделители вертикальными линиями или просто пустыми"
 
-#: gtk/gtktoolbar.c:572
+#: gtk/gtktoolbar.c:575
 msgid "Button relief"
 msgstr "Рельеф кнопки"
 
-#: gtk/gtktoolbar.c:573
+#: gtk/gtktoolbar.c:576
 msgid "Type of bevel around toolbar buttons"
 msgstr "Тип скоса вокруг кнопок панели инструментов"
 
-#: gtk/gtktoolbar.c:580
+#: gtk/gtktoolbar.c:583
 msgid "Style of bevel around the toolbar"
 msgstr "Стиль скоса вокруг панели инструментов"
 
-#: gtk/gtktoolbar.c:586
+#: gtk/gtktoolbar.c:589
 msgid "Toolbar style"
 msgstr "Стиль панели инструментов"
 
-#: gtk/gtktoolbar.c:587
+#: gtk/gtktoolbar.c:590
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Будет ли на панели инструментов по умолчанию только текст, текст и значки, "
 "только значки и т. д."
 
-#: gtk/gtktoolbar.c:593
+#: gtk/gtktoolbar.c:596
 msgid "Toolbar icon size"
 msgstr "Размер пиктограмм панели инструментов"
 
-#: gtk/gtktoolbar.c:594
+#: gtk/gtktoolbar.c:597
 msgid "Size of icons in default toolbars"
 msgstr "Размер пиктограмм в панели инструментов по умолчанию"
 
@@ -3948,152 +3956,152 @@ msgstr "Модель TreeModelSort"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Модель для сортировки TreeModelSort"
 
-#: gtk/gtktreeview.c:553
+#: gtk/gtktreeview.c:555
 msgid "TreeView Model"
 msgstr "Модель TreeView"
 
-#: gtk/gtktreeview.c:554
+#: gtk/gtktreeview.c:556
 msgid "The model for the tree view"
 msgstr "Модель для просмотра в виде дерева"
 
-#: gtk/gtktreeview.c:562
+#: gtk/gtktreeview.c:564
 msgid "Horizontal Adjustment for the widget"
 msgstr "Горизонтальное выравнивание элемента управления"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:572
 msgid "Vertical Adjustment for the widget"
 msgstr "Вертикальное выравнивание элемента управления"
 
-#: gtk/gtktreeview.c:578
+#: gtk/gtktreeview.c:580
 msgid "Show the column header buttons"
 msgstr "Показывать кнопки заголовков столбцов"
 
-#: gtk/gtktreeview.c:585
+#: gtk/gtktreeview.c:587
 msgid "Headers Clickable"
 msgstr "Заголовки чувствительны к нажатиям"
 
-#: gtk/gtktreeview.c:586
+#: gtk/gtktreeview.c:588
 msgid "Column headers respond to click events"
 msgstr "Заголовки столбцов чувствительны к нажатиям"
 
-#: gtk/gtktreeview.c:593
+#: gtk/gtktreeview.c:595
 msgid "Expander Column"
 msgstr "Расширяемая колонка"
 
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:596
 msgid "Set the column for the expander column"
 msgstr "Задать колонку для расширяемой колонки"
 
-#: gtk/gtktreeview.c:601 gtk/gtktreeviewcolumn.c:341
+#: gtk/gtktreeview.c:603 gtk/gtktreeviewcolumn.c:341
 msgid "Reorderable"
 msgstr "Переставляемые"
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:604
 msgid "View is reorderable"
 msgstr "Элементы просмотра можно перегруппировывать"
 
-#: gtk/gtktreeview.c:609
+#: gtk/gtktreeview.c:611
 msgid "Rules Hint"
 msgstr "Подсказка для правил"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:612
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Задать подсказку для процессора тем для окрашивания строк в разные цвета"
 
-#: gtk/gtktreeview.c:617
+#: gtk/gtktreeview.c:619
 msgid "Enable Search"
 msgstr "Разрешён поиск"
 
-#: gtk/gtktreeview.c:618
+#: gtk/gtktreeview.c:620
 msgid "View allows user to search through columns interactively"
 msgstr ""
 "Просмотр позволяет пользователю выполнять поиск по колонкам в интерактивном "
 "режиме"
 
-#: gtk/gtktreeview.c:625
+#: gtk/gtktreeview.c:627
 msgid "Search Column"
 msgstr "Найти столбец"
 
-#: gtk/gtktreeview.c:626
+#: gtk/gtktreeview.c:628
 msgid "Model column to search through when searching through code"
 msgstr "Столбец-эталон, по которому следует выполнять поиск при поиске по коду"
 
-#: gtk/gtktreeview.c:646
+#: gtk/gtktreeview.c:648
 msgid "Fixed Height Mode"
 msgstr "Режим фиксированной высота"
 
-#: gtk/gtktreeview.c:647
+#: gtk/gtktreeview.c:649
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 "Ускоряет виджет GtkTreeView, так как предполагается, что все строки имеют "
 "одинаковую высоту"
 
-#: gtk/gtktreeview.c:667
+#: gtk/gtktreeview.c:669
 msgid "Hover Selection"
 msgstr ""
 
-#: gtk/gtktreeview.c:668
+#: gtk/gtktreeview.c:670
 #, fuzzy
 msgid "Whether the selection should follow the pointer"
 msgstr "Должен ли диалог иметь управление прозрачностью"
 
-#: gtk/gtktreeview.c:687
+#: gtk/gtktreeview.c:689
 #, fuzzy
 msgid "Hover Expand"
 msgstr "Расширяемость"
 
-#: gtk/gtktreeview.c:688
+#: gtk/gtktreeview.c:690
 #, fuzzy
 msgid ""
 "Whether rows should be expanded/collaped when the pointer moves over them"
 msgstr "Должно ли окно быть обработано менеджером окон"
 
-#: gtk/gtktreeview.c:708
+#: gtk/gtktreeview.c:710
 msgid "Vertical Separator Width"
 msgstr "Ширина вертикального разделителя"
 
-#: gtk/gtktreeview.c:709
+#: gtk/gtktreeview.c:711
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Вертикальный пробел между ячейками.  Должен быть четным числом"
 
-#: gtk/gtktreeview.c:717
+#: gtk/gtktreeview.c:719
 msgid "Horizontal Separator Width"
 msgstr "Ширина горизонтального разделителя"
 
-#: gtk/gtktreeview.c:718
+#: gtk/gtktreeview.c:720
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Горизонтальный пробел между ячейками.  Должен быть четным числом"
 
-#: gtk/gtktreeview.c:726
+#: gtk/gtktreeview.c:728
 msgid "Allow Rules"
 msgstr "Разрешить правила"
 
-#: gtk/gtktreeview.c:727
+#: gtk/gtktreeview.c:729
 msgid "Allow drawing of alternating color rows"
 msgstr "Разрешить окраску строк в разный цвет"
 
-#: gtk/gtktreeview.c:733
+#: gtk/gtktreeview.c:735
 msgid "Indent Expanders"
 msgstr "Отступ расширителя"
 
-#: gtk/gtktreeview.c:734
+#: gtk/gtktreeview.c:736
 msgid "Make the expanders indented"
 msgstr "Создает отступы в расширяемых объектах"
 
-#: gtk/gtktreeview.c:740
+#: gtk/gtktreeview.c:742
 msgid "Even Row Color"
 msgstr "Цвет чётных рядов"
 
-#: gtk/gtktreeview.c:741
+#: gtk/gtktreeview.c:743
 msgid "Color to use for even rows"
 msgstr "Цвет для чётных рядов"
 
-#: gtk/gtktreeview.c:747
+#: gtk/gtktreeview.c:749
 msgid "Odd Row Color"
 msgstr "Цвет нечётных рядов"
 
-#: gtk/gtktreeview.c:748
+#: gtk/gtktreeview.c:750
 msgid "Color to use for odd rows"
 msgstr "Цвет для нечётных рядов"
 

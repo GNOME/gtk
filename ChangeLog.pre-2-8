@@ -1,3 +1,25 @@
+2004-09-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.5.3 ===
+
+2004-09-18  Matthias Clasen  <mclasen@redhat.com>
+
+	Make GtkFileChooserButton activatable via mnemonics.
+	(#152925, Dennis Cranston, patch by James M. Cape)
+
+	* gtk/gtkfilechooserbutton.c: Add a ::mnemonic-activate signal
+	and a suitable default handler.
+
+	* tests/testfilechooserbutton.c: Add a mnemonic.
+
+2004-09-18  Matthias Clasen  <mclasen@redhat.com>
+
+	Fix win32 build errors.  (#153032, #153028, Robert Ögren)
+
+	* gdk/win32/gdkmain-win32.c: Make it compile.  
+
+	* gtk/gtkmain.c: Include glib.h.  
+
 2004-09-18  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from 2.4:
@@ -10,8 +32,8 @@
 
 	* gtk/gtkentry.c: (gtk_entry_completion_key_press):
 
-        Make numeric pad enter activate the selected completion
-        entry. Fix bug 143486 reported by Edd Dumbill.
+	Make numeric pad enter activate the selected completion
+	entry. Fix bug 143486 reported by Edd Dumbill.
 
 2004-09-17  Matthias Clasen  <mclasen@redhat.com>
 

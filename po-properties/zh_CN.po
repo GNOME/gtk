@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-25 01:44-0400\n"
+"POT-Creation-Date: 2004-09-19 00:27-0400\n"
 "PO-Revision-Date: 2004-03-12 23:09+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -210,7 +210,7 @@ msgstr "敏感"
 msgid "Whether the action is enabled."
 msgstr "动作是否启用。"
 
-#: gtk/gtkaction.c:289 gtk/gtkactiongroup.c:149 gtk/gtktreeview.c:577
+#: gtk/gtkaction.c:289 gtk/gtkactiongroup.c:149 gtk/gtktreeview.c:579
 #: gtk/gtktreeviewcolumn.c:225 gtk/gtkwidget.c:443
 msgid "Visible"
 msgstr "可见"
@@ -473,7 +473,7 @@ msgstr "间距"
 msgid "The amount of space between children"
 msgstr "子部件间的间距总和"
 
-#: gtk/gtkbox.c:140 gtk/gtknotebook.c:473 gtk/gtktoolbar.c:538
+#: gtk/gtkbox.c:140 gtk/gtknotebook.c:473 gtk/gtktoolbar.c:541
 msgid "Homogeneous"
 msgstr "统一大小"
 
@@ -481,7 +481,7 @@ msgstr "统一大小"
 msgid "Whether the children should all be the same size"
 msgstr "子部件是否使用统一大小"
 
-#: gtk/gtkbox.c:148 gtk/gtkpreview.c:133 gtk/gtktoolbar.c:530
+#: gtk/gtkbox.c:148 gtk/gtkpreview.c:133 gtk/gtktoolbar.c:533
 #: gtk/gtktreeviewcolumn.c:306
 msgid "Expand"
 msgstr "展开"
@@ -1687,11 +1687,11 @@ msgstr "标签部件"
 msgid "A widget to display in place of the usual expander label"
 msgstr "在通常的扩展器标签的位置显示的部件"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:699
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:701
 msgid "Expander Size"
 msgstr "扩展器大小"
 
-#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:700
+#: gtk/gtkexpander.c:248 gtk/gtktreeview.c:702
 msgid "Size of the expander arrow"
 msgstr "扩展器箭头的大小"
 
@@ -1780,11 +1780,11 @@ msgstr "显示隐藏文件"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "是否显示隐藏的文件或文件夹。"
 
-#: gtk/gtkfilechooserdefault.c:575
+#: gtk/gtkfilechooserdefault.c:581
 msgid "Default file chooser backend"
 msgstr "默认文件选择器后端"
 
-#: gtk/gtkfilechooserdefault.c:576
+#: gtk/gtkfilechooserdefault.c:582
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "默认要使用的 GtkFileChooser 后端名称"
 
@@ -1925,7 +1925,7 @@ msgid "A widget to display in place of the usual frame label"
 msgstr "在通常的框架标签的位置显示的部件"
 
 #: gtk/gtkhandlebox.c:207 gtk/gtkmenubar.c:157 gtk/gtkstatusbar.c:201
-#: gtk/gtktoolbar.c:579 gtk/gtkviewport.c:152
+#: gtk/gtktoolbar.c:582 gtk/gtkviewport.c:152
 msgid "Shadow type"
 msgstr "阴影类型"
 
@@ -2262,7 +2262,7 @@ msgstr "在隐藏子菜单前鼠标指针必须远离子菜单的最短时间"
 msgid "Style of bevel around the menubar"
 msgstr "菜单栏的周围的立体样式"
 
-#: gtk/gtkmenubar.c:165 gtk/gtktoolbar.c:555
+#: gtk/gtkmenubar.c:165 gtk/gtktoolbar.c:558
 msgid "Internal padding"
 msgstr "内部留空"
 
@@ -2604,7 +2604,7 @@ msgid ""
 "in the progress widget"
 msgstr "一个0.0与1.0之间的数值来表示在进度部件中文字的垂直排列"
 
-#: gtk/gtkprogressbar.c:143 gtk/gtkrange.c:294 gtk/gtkspinbutton.c:242
+#: gtk/gtkprogressbar.c:143 gtk/gtkrange.c:334 gtk/gtkspinbutton.c:242
 msgid "Adjustment"
 msgstr "调整部件"
 
@@ -2612,7 +2612,7 @@ msgstr "调整部件"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "连接到进度条的 GtkAdjustment 部件(不赞成使用)"
 
-#: gtk/gtkprogressbar.c:151 gtk/gtktoolbar.c:504
+#: gtk/gtkprogressbar.c:151 gtk/gtktoolbar.c:507
 msgid "Orientation"
 msgstr "方向"
 
@@ -2702,72 +2702,72 @@ msgstr "此动作所属组的单选按钮。"
 msgid "The radio button whose group this widget belongs to."
 msgstr "此部件所属组的单选按钮"
 
-#: gtk/gtkrange.c:285
+#: gtk/gtkrange.c:325
 msgid "Update policy"
 msgstr "更新策略"
 
-#: gtk/gtkrange.c:286
+#: gtk/gtkrange.c:326
 msgid "How the range should be updated on the screen"
 msgstr "范围应该如何在屏幕上更新"
 
-#: gtk/gtkrange.c:295
+#: gtk/gtkrange.c:335
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "包含此范围对象当前值的 GtkAdjustment"
 
-#: gtk/gtkrange.c:302
+#: gtk/gtkrange.c:342
 msgid "Inverted"
 msgstr "反转"
 
-#: gtk/gtkrange.c:303
+#: gtk/gtkrange.c:343
 msgid "Invert direction slider moves to increase range value"
 msgstr "反向滑块移动增加范围值"
 
-#: gtk/gtkrange.c:309
+#: gtk/gtkrange.c:349
 msgid "Slider Width"
 msgstr "滑块宽度"
 
-#: gtk/gtkrange.c:310
+#: gtk/gtkrange.c:350
 msgid "Width of scrollbar or scale thumb"
 msgstr "滚动条或刻度块的宽度"
 
-#: gtk/gtkrange.c:317
+#: gtk/gtkrange.c:357
 msgid "Trough Border"
 msgstr "滑槽边框"
 
-#: gtk/gtkrange.c:318
+#: gtk/gtkrange.c:358
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "刻度/指示器和外部滑槽之间的间距"
 
-#: gtk/gtkrange.c:325
+#: gtk/gtkrange.c:365
 msgid "Stepper Size"
 msgstr "指示器大小"
 
-#: gtk/gtkrange.c:326
+#: gtk/gtkrange.c:366
 msgid "Length of step buttons at ends"
 msgstr "步进按钮最终的长度"
 
-#: gtk/gtkrange.c:333
+#: gtk/gtkrange.c:373
 msgid "Stepper Spacing"
 msgstr "指示器间距"
 
-#: gtk/gtkrange.c:334
+#: gtk/gtkrange.c:374
 msgid "Spacing between step buttons and thumb"
 msgstr "步进按钮和刻度之间的间距"
 
-#: gtk/gtkrange.c:341
+#: gtk/gtkrange.c:381
 msgid "Arrow X Displacement"
 msgstr "箭头水平位移"
 
-#: gtk/gtkrange.c:342
+#: gtk/gtkrange.c:382
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr "当按钮被按下时，要将箭头在水平方向上移动的距离"
 
-#: gtk/gtkrange.c:349
+#: gtk/gtkrange.c:389
 msgid "Arrow Y Displacement"
 msgstr "箭头垂直位移"
 
-#: gtk/gtkrange.c:350
+#: gtk/gtkrange.c:390
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "当按钮被按下时，要将箭头在垂直方向上移动的距离"
@@ -2866,11 +2866,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "在滚动条的另外一端显示第二个正向指示器"
 
-#: gtk/gtkscrolledwindow.c:238 gtk/gtktext.c:603 gtk/gtktreeview.c:561
+#: gtk/gtkscrolledwindow.c:238 gtk/gtktext.c:603 gtk/gtktreeview.c:563
 msgid "Horizontal Adjustment"
 msgstr "水平调整"
 
-#: gtk/gtkscrolledwindow.c:245 gtk/gtktext.c:611 gtk/gtktreeview.c:569
+#: gtk/gtkscrolledwindow.c:245 gtk/gtktext.c:611 gtk/gtktreeview.c:571
 msgid "Vertical Adjustment"
 msgstr "垂直调整"
 
@@ -2922,145 +2922,153 @@ msgstr "绘制"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "是要绘制分隔线，还是只是空白"
 
-#: gtk/gtksettings.c:263
+#: gtk/gtksettings.c:267
 msgid "Double Click Time"
 msgstr "双击间隔时间"
 
-#: gtk/gtksettings.c:264
+#: gtk/gtksettings.c:268
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
 msgstr "把两次单击鼠标视作双击所允许的最大时间间隔(以毫秒计)"
 
-#: gtk/gtksettings.c:271
+#: gtk/gtksettings.c:275
 msgid "Double Click Distance"
 msgstr "双击距离"
 
-#: gtk/gtksettings.c:272
+#: gtk/gtksettings.c:276
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
 msgstr "把两次单击鼠标视作双击所允许的最大距离(以像素计)"
 
-#: gtk/gtksettings.c:279
+#: gtk/gtksettings.c:283
 msgid "Cursor Blink"
 msgstr "光标闪烁"
 
-#: gtk/gtksettings.c:280
+#: gtk/gtksettings.c:284
 msgid "Whether the cursor should blink"
 msgstr "光标是否闪烁"
 
-#: gtk/gtksettings.c:287
+#: gtk/gtksettings.c:291
 msgid "Cursor Blink Time"
 msgstr "光标闪烁间隔时间"
 
-#: gtk/gtksettings.c:288
+#: gtk/gtksettings.c:292
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "光标闪烁的周期，以毫秒计"
 
-#: gtk/gtksettings.c:295
+#: gtk/gtksettings.c:299
 msgid "Split Cursor"
 msgstr "分开光标"
 
-#: gtk/gtksettings.c:296
+#: gtk/gtksettings.c:300
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
 msgstr "当左至右和右至左的文字混合出现时是否应显示两个光标"
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:307
 msgid "Theme Name"
 msgstr "主题名称"
 
-#: gtk/gtksettings.c:304
+#: gtk/gtksettings.c:308
 msgid "Name of theme RC file to load"
 msgstr "要载入的布景主题文件名"
 
-#: gtk/gtksettings.c:311
+#: gtk/gtksettings.c:315
 msgid "Icon Theme Name"
 msgstr "图标主题名称"
 
-#: gtk/gtksettings.c:312
+#: gtk/gtksettings.c:316
 msgid "Name of icon theme to use"
 msgstr "要使用的图标主体名称"
 
-#: gtk/gtksettings.c:320
+#: gtk/gtksettings.c:324
 msgid "Key Theme Name"
 msgstr "关键主题名称"
 
-#: gtk/gtksettings.c:321
+#: gtk/gtksettings.c:325
 msgid "Name of key theme RC file to load"
 msgstr "要载入的关键主题文件名"
 
-#: gtk/gtksettings.c:329
+#: gtk/gtksettings.c:333
 msgid "Menu bar accelerator"
 msgstr "菜单栏快捷键"
 
-#: gtk/gtksettings.c:330
+#: gtk/gtksettings.c:334
 msgid "Keybinding to activate the menu bar"
 msgstr "激活菜单栏的键盘关联"
 
-#: gtk/gtksettings.c:338
+#: gtk/gtksettings.c:342
 msgid "Drag threshold"
 msgstr "拖动阀值"
 
-#: gtk/gtksettings.c:339
+#: gtk/gtksettings.c:343
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "光标在拖动前要移动的像素数"
 
-#: gtk/gtksettings.c:347
+#: gtk/gtksettings.c:351
 msgid "Font Name"
 msgstr "字体名称"
 
-#: gtk/gtksettings.c:348
+#: gtk/gtksettings.c:352
 msgid "Name of default font to use"
 msgstr "要使用的默认字体的名称"
 
-#: gtk/gtksettings.c:356
+#: gtk/gtksettings.c:360
 msgid "Icon Sizes"
 msgstr "图标大小"
 
-#: gtk/gtksettings.c:357
+#: gtk/gtksettings.c:361
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
 msgstr "图标大小的列表(gtk-menu=16,16;gtk-button=20,20..."
 
-#: gtk/gtksettings.c:366
+#: gtk/gtksettings.c:369
+msgid "GTK Modules"
+msgstr ""
+
+#: gtk/gtksettings.c:370
+msgid "List of currently active GTK modules"
+msgstr ""
+
+#: gtk/gtksettings.c:379
 msgid "Xft Antialias"
 msgstr "Xft 边缘平滑"
 
-#: gtk/gtksettings.c:367
+#: gtk/gtksettings.c:380
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "是否要对 Xft 字体边缘平滑；0=否，1=是，-1=默认"
 
-#: gtk/gtksettings.c:376
+#: gtk/gtksettings.c:389
 msgid "Xft Hinting"
 msgstr "Xft 微调"
 
-#: gtk/gtksettings.c:377
+#: gtk/gtksettings.c:390
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "是否要对 Xft 字体微调；0=否，1=是，-1=默认"
 
-#: gtk/gtksettings.c:386
+#: gtk/gtksettings.c:399
 msgid "Xft Hint Style"
 msgstr "Xft 微调样式"
 
-#: gtk/gtksettings.c:387
+#: gtk/gtksettings.c:400
 msgid "What degree of hinting to use; none, slight, medium, or full"
 msgstr "要使用的微调程度；无、轻微、中等或完全"
 
-#: gtk/gtksettings.c:396
+#: gtk/gtksettings.c:409
 msgid "Xft RGBA"
 msgstr "Xft RGBA"
 
-#: gtk/gtksettings.c:397
+#: gtk/gtksettings.c:410
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "次像素平滑的类型；无、rgb、bgr、vrgb、vbgr"
 
-#: gtk/gtksettings.c:406
+#: gtk/gtksettings.c:419
 msgid "Xft DPI"
 msgstr "Xft DPI"
 
-#: gtk/gtksettings.c:407
+#: gtk/gtksettings.c:420
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr "Xft 的解析度，以 1024*每英寸点数为单位。-1 代表使用默认值"
 
@@ -3643,80 +3651,80 @@ msgstr "绘制指示器"
 msgid "If the toggle part of the button is displayed"
 msgstr "是否显示按钮的切换标志"
 
-#: gtk/gtktoolbar.c:505
+#: gtk/gtktoolbar.c:508
 msgid "The orientation of the toolbar"
 msgstr "工具栏方向"
 
-#: gtk/gtktoolbar.c:513
+#: gtk/gtktoolbar.c:516
 msgid "Toolbar Style"
 msgstr "工具栏风格"
 
-#: gtk/gtktoolbar.c:514
+#: gtk/gtktoolbar.c:517
 msgid "How to draw the toolbar"
 msgstr "如何绘制工具栏"
 
-#: gtk/gtktoolbar.c:521
+#: gtk/gtktoolbar.c:524
 msgid "Show Arrow"
 msgstr "显示箭头"
 
-#: gtk/gtktoolbar.c:522
+#: gtk/gtktoolbar.c:525
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "工具栏显示不下时是否要显示箭头"
 
-#: gtk/gtktoolbar.c:531
+#: gtk/gtktoolbar.c:534
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "子部件是否在工具栏增长时获得额外空间"
 
-#: gtk/gtktoolbar.c:539
+#: gtk/gtktoolbar.c:542
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "同类子部件是否使用统一大小"
 
-#: gtk/gtktoolbar.c:546
+#: gtk/gtktoolbar.c:549
 msgid "Spacer size"
 msgstr "间隔大小"
 
-#: gtk/gtktoolbar.c:547
+#: gtk/gtktoolbar.c:550
 msgid "Size of spacers"
 msgstr "工具栏上间隔的大小"
 
-#: gtk/gtktoolbar.c:556
+#: gtk/gtktoolbar.c:559
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "工具栏阴影与按钮之间的间距"
 
-#: gtk/gtktoolbar.c:564
+#: gtk/gtktoolbar.c:567
 msgid "Space style"
 msgstr "间隔风格"
 
-#: gtk/gtktoolbar.c:565
+#: gtk/gtktoolbar.c:568
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "间隔为垂直线或只是空白"
 
-#: gtk/gtktoolbar.c:572
+#: gtk/gtktoolbar.c:575
 msgid "Button relief"
 msgstr "按钮浮雕"
 
-#: gtk/gtktoolbar.c:573
+#: gtk/gtktoolbar.c:576
 msgid "Type of bevel around toolbar buttons"
 msgstr "工具栏按钮周围的立体效果类型"
 
-#: gtk/gtktoolbar.c:580
+#: gtk/gtktoolbar.c:583
 msgid "Style of bevel around the toolbar"
 msgstr "工具栏周围的立体效果样式"
 
-#: gtk/gtktoolbar.c:586
+#: gtk/gtktoolbar.c:589
 msgid "Toolbar style"
 msgstr "工具栏风格"
 
-#: gtk/gtktoolbar.c:587
+#: gtk/gtktoolbar.c:590
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr "默认工具栏是只有文字，文字和图标，还是只有图标，等等"
 
-#: gtk/gtktoolbar.c:593
+#: gtk/gtktoolbar.c:596
 msgid "Toolbar icon size"
 msgstr "工具栏图标大小"
 
-#: gtk/gtktoolbar.c:594
+#: gtk/gtktoolbar.c:597
 msgid "Size of icons in default toolbars"
 msgstr "默认工具栏上的图标大小"
 
@@ -3766,147 +3774,147 @@ msgstr "TreeModelSort 模型"
 msgid "The model for the TreeModelSort to sort"
 msgstr "TreeModelSort 排序的模型"
 
-#: gtk/gtktreeview.c:553
+#: gtk/gtktreeview.c:555
 msgid "TreeView Model"
 msgstr "树形视图模型"
 
-#: gtk/gtktreeview.c:554
+#: gtk/gtktreeview.c:556
 msgid "The model for the tree view"
 msgstr "树形视图的模型"
 
-#: gtk/gtktreeview.c:562
+#: gtk/gtktreeview.c:564
 msgid "Horizontal Adjustment for the widget"
 msgstr "部件的水平调整"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:572
 msgid "Vertical Adjustment for the widget"
 msgstr "部件的垂直调整"
 
-#: gtk/gtktreeview.c:578
+#: gtk/gtktreeview.c:580
 msgid "Show the column header buttons"
 msgstr "显示列"
 
-#: gtk/gtktreeview.c:585
+#: gtk/gtktreeview.c:587
 msgid "Headers Clickable"
 msgstr "列首可点击"
 
-#: gtk/gtktreeview.c:586
+#: gtk/gtktreeview.c:588
 msgid "Column headers respond to click events"
 msgstr "列首响应鼠标点击事件"
 
-#: gtk/gtktreeview.c:593
+#: gtk/gtktreeview.c:595
 msgid "Expander Column"
 msgstr "扩展器列"
 
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:596
 msgid "Set the column for the expander column"
 msgstr "设置扩展器列"
 
-#: gtk/gtktreeview.c:601 gtk/gtktreeviewcolumn.c:341
+#: gtk/gtktreeview.c:603 gtk/gtktreeviewcolumn.c:341
 msgid "Reorderable"
 msgstr "可重新排列"
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:604
 msgid "View is reorderable"
 msgstr "视图可以重新排列"
 
-#: gtk/gtktreeview.c:609
+#: gtk/gtktreeview.c:611
 msgid "Rules Hint"
 msgstr "规则提示"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:612
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "为主题引擎设置以不同颜色绘制行的提示"
 
-#: gtk/gtktreeview.c:617
+#: gtk/gtktreeview.c:619
 msgid "Enable Search"
 msgstr "启用搜索"
 
-#: gtk/gtktreeview.c:618
+#: gtk/gtktreeview.c:620
 msgid "View allows user to search through columns interactively"
 msgstr "视图允许用户在列中交互搜索"
 
-#: gtk/gtktreeview.c:625
+#: gtk/gtktreeview.c:627
 msgid "Search Column"
 msgstr "搜索列"
 
-#: gtk/gtktreeview.c:626
+#: gtk/gtktreeview.c:628
 msgid "Model column to search through when searching through code"
 msgstr "用代码搜索时通过搜索列的模型"
 
-#: gtk/gtktreeview.c:646
+#: gtk/gtktreeview.c:648
 msgid "Fixed Height Mode"
 msgstr "固定高度模式"
 
-#: gtk/gtktreeview.c:647
+#: gtk/gtktreeview.c:649
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "加速 GtkTreeView，假定全部行的高度都相同"
 
-#: gtk/gtktreeview.c:667
+#: gtk/gtktreeview.c:669
 msgid "Hover Selection"
 msgstr ""
 
-#: gtk/gtktreeview.c:668
+#: gtk/gtktreeview.c:670
 #, fuzzy
 msgid "Whether the selection should follow the pointer"
 msgstr "颜色选择器是否允许设置透明度"
 
-#: gtk/gtktreeview.c:687
+#: gtk/gtktreeview.c:689
 #, fuzzy
 msgid "Hover Expand"
 msgstr "展开"
 
-#: gtk/gtktreeview.c:688
+#: gtk/gtktreeview.c:690
 #, fuzzy
 msgid ""
 "Whether rows should be expanded/collaped when the pointer moves over them"
 msgstr "窗口是否要由窗口管理器装饰"
 
-#: gtk/gtktreeview.c:708
+#: gtk/gtktreeview.c:710
 msgid "Vertical Separator Width"
 msgstr "垂直分隔符宽度"
 
-#: gtk/gtktreeview.c:709
+#: gtk/gtktreeview.c:711
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "单元格之间的垂直空间。必须是偶数"
 
-#: gtk/gtktreeview.c:717
+#: gtk/gtktreeview.c:719
 msgid "Horizontal Separator Width"
 msgstr "水平分隔符宽度"
 
-#: gtk/gtktreeview.c:718
+#: gtk/gtktreeview.c:720
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "单元格之间的水平控件。必须是偶数"
 
-#: gtk/gtktreeview.c:726
+#: gtk/gtktreeview.c:728
 msgid "Allow Rules"
 msgstr "允许规则"
 
-#: gtk/gtktreeview.c:727
+#: gtk/gtktreeview.c:729
 msgid "Allow drawing of alternating color rows"
 msgstr "允许绘制颜色交替变化的行"
 
-#: gtk/gtktreeview.c:733
+#: gtk/gtktreeview.c:735
 msgid "Indent Expanders"
 msgstr "缩进扩展器"
 
-#: gtk/gtktreeview.c:734
+#: gtk/gtktreeview.c:736
 msgid "Make the expanders indented"
 msgstr "扩展器进行缩进"
 
-#: gtk/gtktreeview.c:740
+#: gtk/gtktreeview.c:742
 msgid "Even Row Color"
 msgstr "偶数行颜色"
 
-#: gtk/gtktreeview.c:741
+#: gtk/gtktreeview.c:743
 msgid "Color to use for even rows"
 msgstr "偶数行所使用的颜色"
 
-#: gtk/gtktreeview.c:747
+#: gtk/gtktreeview.c:749
 msgid "Odd Row Color"
 msgstr "奇数行颜色"
 
-#: gtk/gtktreeview.c:748
+#: gtk/gtktreeview.c:750
 msgid "Color to use for odd rows"
 msgstr "奇数行所使用的颜色"
 

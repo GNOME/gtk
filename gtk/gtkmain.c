@@ -26,6 +26,7 @@
 
 #include <config.h>
 
+#include <glib.h>
 #include "gdkconfig.h"
 
 #include <locale.h>

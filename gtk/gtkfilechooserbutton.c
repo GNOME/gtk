@@ -137,6 +137,8 @@ static void     gtk_file_chooser_button_drag_data_received (GtkWidget        *wi
 							    guint             drag_time);
 static void     gtk_file_chooser_button_show_all           (GtkWidget        *widget);
 static void     gtk_file_chooser_button_hide_all           (GtkWidget        *widget);
+static gboolean gtk_file_chooser_button_mnemonic_activate  (GtkWidget        *widget,
+							    gboolean          group_cycling);
 
 /* Child Widget Callbacks */
 static void     dialog_update_preview_cb                   (GtkFileChooser   *dialog,
@@ -210,6 +212,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   widget_class->drag_data_received = gtk_file_chooser_button_drag_data_received;
   widget_class->show_all = gtk_file_chooser_button_show_all;
   widget_class->hide_all = gtk_file_chooser_button_hide_all;
+  widget_class->mnemonic_activate = gtk_file_chooser_button_mnemonic_activate;
 
   g_object_class_install_property (gobject_class, PROP_DIALOG,
 				   g_param_spec_object ("dialog",
@@ -570,6 +573,30 @@ static void
 gtk_file_chooser_button_hide_all (GtkWidget *widget)
 {
   gtk_widget_hide (widget);
+}
+
+
+static gboolean
+gtk_file_chooser_button_mnemonic_activate (GtkWidget *widget,
+					   gboolean   group_cycling)
+{
+  GtkFileChooserButton *button;
+
+  button = GTK_FILE_CHOOSER_BUTTON (widget);
+
+  switch (gtk_file_chooser_get_action (GTK_FILE_CHOOSER (button->priv->dialog)))
+    {
+    case GTK_FILE_CHOOSER_ACTION_OPEN:
+    case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
+      gtk_widget_grab_focus (button->priv->button);
+      break;
+    case GTK_FILE_CHOOSER_ACTION_SAVE:
+    case GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER:
+      gtk_widget_grab_focus (button->priv->entry);
+      break;
+    }
+
+  return TRUE;
 }
 
 

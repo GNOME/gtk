@@ -1,3 +1,7 @@
+2004-09-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.5.3 ===
+
 2004-09-17  Raphael Higino  <raphaelh@cvs.gnome.org>
 
 	* pt_BR.po: Updated Brazilian Portuguese translation.
@@ -13,7 +17,7 @@
 
 2004-09-05  Marius Andreiana <marius galuna.ro>
 
-        * ro.po: updated
+	* ro.po: updated
 
 2004-09-01  Adam Weinberger  <adamw@gnome.org>
 

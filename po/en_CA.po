@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-01 23:34-0400\n"
+"POT-Creation-Date: 2004-09-19 00:26-0400\n"
 "PO-Revision-Date: 2004-09-01 03:57-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
@@ -257,12 +257,12 @@ msgstr "GIF image was truncated or incomplete."
 msgid "The GIF image format"
 msgstr "The GIF image format"
 
-#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:332
-#: gdk-pixbuf/io-ico.c:395 gdk-pixbuf/io-ico.c:425
+#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:340
+#: gdk-pixbuf/io-ico.c:403 gdk-pixbuf/io-ico.c:433
 msgid "Not enough memory to load icon"
 msgstr "Not enough memory to load icon"
 
-#: gdk-pixbuf/io-ico.c:256
+#: gdk-pixbuf/io-ico.c:256 gdk-pixbuf/io-ico.c:330
 msgid "Invalid header in icon"
 msgstr "Invalid header in icon"
 
@@ -274,32 +274,32 @@ msgstr "Icon has zero width"
 msgid "Icon has zero height"
 msgstr "Icon has zero height"
 
-#: gdk-pixbuf/io-ico.c:347
+#: gdk-pixbuf/io-ico.c:355
 msgid "Compressed icons are not supported"
 msgstr "Compressed icons are not supported"
 
-#: gdk-pixbuf/io-ico.c:380
+#: gdk-pixbuf/io-ico.c:388
 msgid "Unsupported icon type"
 msgstr "Unsupported icon type"
 
-#: gdk-pixbuf/io-ico.c:474
+#: gdk-pixbuf/io-ico.c:482
 msgid "Not enough memory to load ICO file"
 msgstr "Not enough memory to load ICO file"
 
-#: gdk-pixbuf/io-ico.c:939
+#: gdk-pixbuf/io-ico.c:947
 msgid "Image too large to be saved as ICO"
 msgstr "Image too large to be saved as ICO"
 
-#: gdk-pixbuf/io-ico.c:950
+#: gdk-pixbuf/io-ico.c:958
 msgid "Cursor hotspot outside image"
 msgstr "Cursor hotspot outside image"
 
-#: gdk-pixbuf/io-ico.c:973
+#: gdk-pixbuf/io-ico.c:981
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
 msgstr "Unsupported depth for ICO file: %d"
 
-#: gdk-pixbuf/io-ico.c:1202
+#: gdk-pixbuf/io-ico.c:1210
 msgid "The ICO image format"
 msgstr "The ICO image format"
 
@@ -321,12 +321,12 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Unsupported JPEG colour space (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:941
-#: gdk-pixbuf/io-jpeg.c:950
+#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:943
+#: gdk-pixbuf/io-jpeg.c:952
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Couldn't allocate memory for loading JPEG file"
 
-#: gdk-pixbuf/io-jpeg.c:893
+#: gdk-pixbuf/io-jpeg.c:894
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -335,14 +335,14 @@ msgstr ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 
-#: gdk-pixbuf/io-jpeg.c:908
+#: gdk-pixbuf/io-jpeg.c:909
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 
-#: gdk-pixbuf/io-jpeg.c:1069
+#: gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
 msgstr "The JPEG image format"
 
@@ -451,7 +451,8 @@ msgstr "Keys for PNG text chunks must be ASCII characters."
 #: gdk-pixbuf/io-png.c:854
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+msgstr ""
+"Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 
 #: gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
@@ -696,30 +697,30 @@ msgid "XPM file has image height <= 0"
 msgstr "XPM file has image height <= 0"
 
 #: gdk-pixbuf/io-xpm.c:1253
-msgid "XPM file has invalid number of colors"
-msgstr "XPM file has invalid number of colours"
-
-#: gdk-pixbuf/io-xpm.c:1261
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM has invalid number of chars per pixel"
 
-#: gdk-pixbuf/io-xpm.c:1279
-msgid "Cannot read XPM colormap"
-msgstr "Cannot read XPM colourmap"
+#: gdk-pixbuf/io-xpm.c:1260
+msgid "XPM file has invalid number of colors"
+msgstr "XPM file has invalid number of colours"
 
-#: gdk-pixbuf/io-xpm.c:1317
+#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "Cannot allocate memory for loading XPM image"
 
-#: gdk-pixbuf/io-xpm.c:1508
+#: gdk-pixbuf/io-xpm.c:1295
+msgid "Cannot read XPM colormap"
+msgstr "Cannot read XPM colourmap"
+
+#: gdk-pixbuf/io-xpm.c:1524
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Failed to write to temporary file when loading XPM image"
 
-#: gdk-pixbuf/io-xpm.c:1543
+#: gdk-pixbuf/io-xpm.c:1559
 msgid "The XPM image format"
 msgstr "The XPM image format"
 
-#: gtk/gtkaboutdialog.c:216 gtk/gtkaboutdialog.c:1724
+#: gtk/gtkaboutdialog.c:216 gtk/gtkaboutdialog.c:1722
 msgid "License"
 msgstr "Licence"
 
@@ -737,28 +738,28 @@ msgstr "_Credits"
 msgid "_License"
 msgstr "_Licence"
 
-#: gtk/gtkaboutdialog.c:541
+#: gtk/gtkaboutdialog.c:538
 #, c-format
 msgid "About %s"
 msgstr "About %s"
 
-#: gtk/gtkaboutdialog.c:1662
+#: gtk/gtkaboutdialog.c:1659
 msgid "Credits"
 msgstr "Credits"
 
-#: gtk/gtkaboutdialog.c:1687
+#: gtk/gtkaboutdialog.c:1684
 msgid "Written by"
 msgstr "Written by"
 
-#: gtk/gtkaboutdialog.c:1690
+#: gtk/gtkaboutdialog.c:1687
 msgid "Documented by"
 msgstr "Documented by"
 
-#: gtk/gtkaboutdialog.c:1701
+#: gtk/gtkaboutdialog.c:1699
 msgid "Translated by"
 msgstr "Translated by"
 
-#: gtk/gtkaboutdialog.c:1705
+#: gtk/gtkaboutdialog.c:1703
 msgid "Artwork by"
 msgstr "Artwork by"
 
@@ -954,7 +955,7 @@ msgstr ""
 "Could not add a bookmark for %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:828 gtk/gtkfilechooserdefault.c:5570
+#: gtk/gtkfilechooserdefault.c:828 gtk/gtkfilechooserdefault.c:5600
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1070,62 +1071,62 @@ msgstr "Save in _folder:"
 msgid "Create in _folder:"
 msgstr "Create in _folder:"
 
-#: gtk/gtkfilechooserdefault.c:4206
+#: gtk/gtkfilechooserdefault.c:4210
 msgid "Cannot change to folder because it is not local"
 msgstr "Cannot change to folder because it is not local"
 
-#: gtk/gtkfilechooserdefault.c:4349
+#: gtk/gtkfilechooserdefault.c:4354
 msgid "Could not find the path"
 msgstr "Could not find the path"
 
-#: gtk/gtkfilechooserdefault.c:4710
+#: gtk/gtkfilechooserdefault.c:4715
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "shortcut %s does not exist"
 
-#: gtk/gtkfilechooserdefault.c:5383
+#: gtk/gtkfilechooserdefault.c:5413
 msgid "Type name of new folder"
 msgstr "Type name of new folder"
 
-#: gtk/gtkfilechooserdefault.c:5412
+#: gtk/gtkfilechooserdefault.c:5442
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:5414
+#: gtk/gtkfilechooserdefault.c:5444
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5416
+#: gtk/gtkfilechooserdefault.c:5446
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5418
+#: gtk/gtkfilechooserdefault.c:5448
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5463
+#: gtk/gtkfilechooserdefault.c:5493
 msgid "Today"
 msgstr "Today"
 
-#: gtk/gtkfilechooserdefault.c:5465
+#: gtk/gtkfilechooserdefault.c:5495
 msgid "Yesterday"
 msgstr "Yesterday"
 
-#: gtk/gtkfilechooserdefault.c:5476
+#: gtk/gtkfilechooserdefault.c:5506
 msgid "Unknown"
 msgstr "Unknown"
 
-#: gtk/gtkfilechooserdefault.c:5531
+#: gtk/gtkfilechooserdefault.c:5561
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "Cannot change to the folder you specified as it is an invalid path."
 
-#: gtk/gtkfilechooserdefault.c:5608
+#: gtk/gtkfilechooserdefault.c:5638
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1134,15 +1135,15 @@ msgstr ""
 "Could not select %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5647
+#: gtk/gtkfilechooserdefault.c:5677
 msgid "Open Location"
 msgstr "Open Location"
 
-#: gtk/gtkfilechooserdefault.c:5654
+#: gtk/gtkfilechooserdefault.c:5684
 msgid "Save in Location"
 msgstr "Save in Location"
 
-#: gtk/gtkfilechooserdefault.c:5673
+#: gtk/gtkfilechooserdefault.c:5703
 msgid "_Location:"
 msgstr "_Location:"
 
@@ -1535,22 +1536,61 @@ msgstr "(unknown)"
 msgid "clear"
 msgstr "clear"
 
-#: gtk/gtklabel.c:3417
+#: gtk/gtklabel.c:3427
 msgid "Select All"
 msgstr "Select All"
 
-#: gtk/gtklabel.c:3427
+#: gtk/gtklabel.c:3437
 msgid "Input Methods"
 msgstr "Input Methods"
+
+#. Description of --gtk-module=MODULES in --help output
+#: gtk/gtkmain.c:406
+msgid "Load additional GTK+ modules"
+msgstr ""
+
+#. Placeholder in --gtk-module=MODULES in --help output
+#: gtk/gtkmain.c:407
+msgid "MODULES"
+msgstr ""
+
+#. Description of --g-fatal-warnings in --help output
+#: gtk/gtkmain.c:409
+msgid "Make all warnings fatal"
+msgstr ""
+
+#. Description of --gtk-debug=FLAGS in --help output
+#: gtk/gtkmain.c:412
+msgid "GTK+ debugging flags to set"
+msgstr ""
+
+#. Placeholder in --gtk-debug=FLAGS in --help output
+#. Placeholder in --gtk-no-debug=FLAGS in --help output
+#: gtk/gtkmain.c:413 gtk/gtkmain.c:416
+msgid "FLAGS"
+msgstr ""
+
+#. Description of --gtk-no-debug=FLAGS in --help output
+#: gtk/gtkmain.c:415
+msgid "GTK+ debugging flags to unset"
+msgstr ""
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:533
+#: gtk/gtkmain.c:481
 msgid "default:LTR"
 msgstr "default:LTR"
+
+#: gtk/gtkmain.c:549
+msgid "GTK+ Options"
+msgstr ""
+
+#: gtk/gtkmain.c:549
+msgid "Show GTK+ Options"
+msgstr ""
 
 #: gtk/gtknotebook.c:2712 gtk/gtknotebook.c:5060
 #, c-format

@@ -54,7 +54,7 @@
 static gboolean gdk_synchronize = FALSE;
 
 GOptionEntry _gdk_windowing_args[] = {
-  { "sync", 0, 0, G_OPTION_ARG_NONE, &_gdk_synchronize, 
+  { "sync", 0, 0, G_OPTION_ARG_NONE, &gdk_synchronize, 
     /* Description of --sync in --help output */              N_("Don't batch GDI requests"), NULL },
   { "no-wintab", 0, 0, G_OPTION_ARG_NONE, &_gdk_input_ignore_wintab, 
     /* Description of --no-wintab in --help output */         N_("Don't use the Wintab API for tablet support [default]"), NULL },
