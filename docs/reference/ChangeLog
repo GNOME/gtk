@@ -1,3 +1,8 @@
+2004-07-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: 
+	* gtk/gtk-docs.sgml: Add GtkCellRendererCombo.
+
 2004-07-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add gtk_parse_args.

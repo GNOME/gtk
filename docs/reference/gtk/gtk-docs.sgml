@@ -129,6 +129,7 @@
 <!ENTITY GtkCellLayout SYSTEM "xml/gtkcelllayout.xml">
 <!ENTITY GtkCellRenderer SYSTEM "xml/gtkcellrenderer.xml">
 <!ENTITY GtkCellEditable SYSTEM "xml/gtkcelleditable.xml">
+<!ENTITY GtkCellRendererCombo SYSTEM "xml/gtkcellrenderercombo.xml">
 <!ENTITY GtkCellRendererPixbuf SYSTEM "xml/gtkcellrendererpixbuf.xml">
 <!ENTITY GtkCellRendererProgress SYSTEM "xml/gtkcellrendererprogress.xml">
 <!ENTITY GtkCellRendererText SYSTEM "xml/gtkcellrenderertext.xml">
@@ -386,6 +387,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkCellLayout;
         &GtkCellRenderer;
         &GtkCellEditable;
+        &GtkCellRendererCombo;
         &GtkCellRendererPixbuf;
         &GtkCellRendererProgress;
         &GtkCellRendererText;

@@ -4043,6 +4043,22 @@ gtk_cell_editable_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkcellrenderercombo</FILE>
+<TITLE>GtkCellRendererCombo</TITLE>
+GtkCellRendererCombo
+gtk_cell_renderer_combo_new
+<SUBSECTION Standard>
+GTK_TYPE_CELL_RENDERER_COMBO
+GTK_CELL_RENDERER_COMBO
+GTK_CELL_RENDERER_COMBO_CLASS
+GTK_IS_CELL_RENDERER_COMBO
+GTK_IS_CELL_RENDERER_COMBO_CLASS
+GTK_CELL_RENDERER_COMBO_GET_CLASS
+<SUBSECTION Private>
+gtk_cell_renderer_combo_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkcellrendererpixbuf</FILE>
 <TITLE>GtkCellRendererPixbuf</TITLE>
 GtkCellRendererPixbuf
