@@ -1,3 +1,18 @@
+Tue Mar  2 14:38:23 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_model_row_inserted):
+	If the model was empty before, select the first inserted
+	item.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_model_row_deleted):
+	Fix up the logic for the new row to select.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_class_init):
+	Rename "appearance" property to "appears-as-list".
+
+	* tests/testcombochange.c tests/Makefile.am: Test case
+	for combos and dynamically changing models.
+
 Tue Mar  2 15:19:52 2004  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c

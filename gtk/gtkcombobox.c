@@ -473,9 +473,9 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                      G_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boolean ("appearance",
-                                                                 P_("ComboBox appareance"),
-                                                                 P_("ComboBox appearance, where TRUE means Windows-style."),
+                                           g_param_spec_boolean ("appears-as-list",
+                                                                 P_("Appears as list"),
+                                                                 P_("Whether combobox dropdowns should look like lists rather than menus"),
                                                                  FALSE,
                                                                  G_PARAM_READWRITE));
 
@@ -598,7 +598,7 @@ gtk_combo_box_style_set (GtkWidget *widget,
     return;
 
   gtk_widget_style_get (widget,
-                        "appearance", &appearance,
+                        "appears-as-list", &appearance,
                         NULL);
 
   /* TRUE is windows style */
@@ -1807,12 +1807,16 @@ gtk_combo_box_model_row_inserted (GtkTreeModel     *model,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
   gint index = gtk_tree_path_get_indices (path)[0];
-  
+  gint items = gtk_tree_model_iter_n_children (model, NULL);
+
   if (combo_box->priv->active_item >= index)
     combo_box->priv->active_item++;
       
   if (!combo_box->priv->tree_view)
     gtk_combo_box_menu_row_inserted (model, path, iter, user_data);
+
+  if (items == 1)
+    gtk_combo_box_set_active (combo_box, 0);
 }
 
 static void
@@ -1823,20 +1827,22 @@ gtk_combo_box_model_row_deleted (GtkTreeModel     *model,
   GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
   gint index = gtk_tree_path_get_indices (path)[0];
 
+  if (!combo_box->priv->tree_view)
+    gtk_combo_box_menu_row_deleted (model, path, user_data);
+  
   if (index == combo_box->priv->active_item)
     {
       gint items = gtk_tree_model_iter_n_children (model, NULL);
 
       if (items == 0)
-	  gtk_combo_box_set_active (combo_box, -1);
+	gtk_combo_box_set_active (combo_box, -1);
+      else if (index == items)
+	gtk_combo_box_set_active (combo_box, index - 1);
       else
-	  gtk_combo_box_set_active (combo_box, (index + 1) % items);
+	gtk_combo_box_set_active (combo_box, index);
     }
   else if (combo_box->priv->active_item > index)
     combo_box->priv->active_item--;
-
-  if (!combo_box->priv->tree_view)
-    gtk_combo_box_menu_row_deleted (model, path, user_data);
 }
 
 static void
@@ -1850,12 +1856,7 @@ gtk_combo_box_model_rows_reordered (GtkTreeModel    *model,
   gint items = gtk_tree_model_iter_n_children (model, NULL);
   gint i;
 
-  for (i = 0; i < items; i++)
-    if (new_order[i] == combo_box->priv->active_item)
-      {
-	combo_box->priv->active_item = i;
-	break;
-      }
+  combo_box->priv->active_item = new_order[combo_box->priv->active_item];
 
   if (!combo_box->priv->tree_view)
     gtk_combo_box_menu_rows_reordered (model, path, iter, new_order, user_data);

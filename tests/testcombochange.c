@@ -1,0 +1,271 @@
+#include <gtk/gtk.h>
+#include <stdarg.h>
+
+GtkWidget *text_view;
+GtkListStore *model;
+GArray *contents;
+
+static char next_value = 'A';
+
+static void
+test_init ()
+{
+  if (g_file_test ("../gdk-pixbuf/libpixbufloader-pnm.la",
+		   G_FILE_TEST_EXISTS))
+    {
+      g_setenv ("GDK_PIXBUF_MODULE_FILE", "../gdk-pixbuf/gdk-pixbuf.loaders", TRUE);
+      g_setenv ("GTK_IM_MODULE_FILE", "../modules/input/gtk.immodules", TRUE);
+    }
+}
+
+static void
+log (const char *fmt,
+     ...)
+{
+  GtkTextBuffer *buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
+  GtkTextIter iter;
+  va_list vap;
+  char *msg;
+  GString *order_string;
+  GtkTextMark *tmp_mark;
+  int i;
+
+  va_start (vap, fmt);
+  
+  msg = g_strdup_vprintf (fmt, vap);
+
+  gtk_text_buffer_get_end_iter (buffer, &iter);
+  gtk_text_buffer_insert (buffer, &iter, msg, -1);
+
+  order_string = g_string_new ("\n  ");
+  for (i = 0; i < contents->len; i++)
+    {
+      if (i)
+	g_string_append_c (order_string, ' ');
+      g_string_append_c (order_string, g_array_index (contents, char, i));
+    }
+  g_string_append_c (order_string, '\n');
+  gtk_text_buffer_insert (buffer, &iter, order_string->str, -1);
+  g_string_free (order_string, TRUE);
+
+  tmp_mark = gtk_text_buffer_create_mark (buffer, NULL, &iter, FALSE);
+  gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW (text_view), tmp_mark);
+  gtk_text_buffer_delete_mark (buffer, tmp_mark);
+
+  g_free (msg);
+}
+
+static GtkWidget *
+align_button_new (const char *text)
+{
+  GtkWidget *button = gtk_button_new ();
+  GtkWidget *label = gtk_label_new (text);
+
+  gtk_container_add (GTK_CONTAINER (button), label);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+
+  return button;
+}
+
+static GtkWidget *
+create_combo (const char *name,
+	      gboolean is_list)
+{
+  GtkCellRenderer *cell_renderer;
+  GtkWidget *combo;
+  char *rc_string;
+  
+  rc_string = g_strdup_printf ("style \"%s-style\" {\n"
+			       "  GtkComboBox::appears-as-list = %d\n"
+			       "}\n"
+			       "\n"
+			       "widget \"*.%s\" style \"%s-style\"",
+			       name, is_list, name, name);
+  gtk_rc_parse_string (rc_string);
+  g_free (rc_string);
+
+  combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (model));
+  cell_renderer = gtk_cell_renderer_text_new ();
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), cell_renderer, TRUE);
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), cell_renderer,
+				  "text", 0, NULL);
+
+  gtk_widget_set_name (combo, name);
+  
+  return combo;
+}
+
+static void
+on_insert (void)
+{
+  GtkTreeIter iter;
+  
+  int insert_pos;
+  char new_value[2];
+
+  new_value[0] = next_value++;
+  new_value[1] = '\0';
+
+  if (next_value > 'Z')
+    next_value = 'A';
+  
+  if (contents->len)
+    insert_pos = g_random_int_range (0, contents->len + 1);
+  else
+    insert_pos = 0;
+  
+  gtk_list_store_insert (model, &iter, insert_pos);
+  gtk_list_store_set (model, &iter, 0, new_value, -1);
+
+  g_array_insert_val (contents, insert_pos, new_value);
+
+  log ("Inserted '%c' at position %d", new_value[0], insert_pos);
+}
+
+static void
+on_delete (void)
+{
+  GtkTreeIter iter;
+  
+  int delete_pos;
+  char old_val;
+
+  if (!contents->len)
+    return;
+  
+  delete_pos = g_random_int_range (0, contents->len);
+  gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (model), &iter, NULL, delete_pos);
+  
+  gtk_list_store_remove (model, &iter);
+
+  old_val = g_array_index (contents, char, delete_pos);
+  g_array_remove_index (contents, delete_pos);
+  log ("Deleted '%c' from position %d", old_val, delete_pos);
+}
+
+static void
+on_reorder (void)
+{
+  GArray *new_contents = g_array_new (FALSE, FALSE, sizeof (char));
+  gint *shuffle_array = g_new (int, contents->len);
+  gint *shuffle_array_inverse = g_new (int, contents->len);
+  gint i;
+
+  for (i = 0; i < contents->len; i++)
+    shuffle_array[i] = i;
+
+  for (i = 0; i < contents->len - 1; i++)
+    {
+      gint pos = g_random_int_range (i, contents->len);
+      gint tmp;
+      
+      tmp = shuffle_array[i];
+      shuffle_array[i] = shuffle_array[pos];
+      shuffle_array[pos] = tmp;
+    }
+
+  gtk_list_store_reorder (model, shuffle_array);
+
+  for (i = 0; i < contents->len; i++)
+    shuffle_array_inverse[shuffle_array[i]] = i;
+  
+  for (i = 0; i < contents->len; i++)
+    g_array_append_val (new_contents,
+			g_array_index (contents, char, shuffle_array_inverse[i]));
+  g_array_free (contents, TRUE);
+  contents = new_contents;
+
+  log ("Reordered array");
+    
+  g_free (shuffle_array);
+  g_free (shuffle_array_inverse);
+}
+
+int
+main (int argc, char **argv)
+{
+  GtkWidget *dialog;
+  GtkWidget *scrolled_window;
+  GtkWidget *hbox;
+  GtkWidget *button_vbox;
+  GtkWidget *combo_vbox;
+  GtkWidget *button;
+  GtkWidget *menu_combo;
+  GtkWidget *alignment;
+  GtkWidget *label;
+  GtkWidget *list_combo;
+  
+  test_init ();
+
+  gtk_init (&argc, &argv);
+
+  model = gtk_list_store_new (1, G_TYPE_STRING);
+  contents = g_array_new (FALSE, FALSE, sizeof (char));
+  
+  dialog = gtk_dialog_new_with_buttons ("GtkComboBox model changes",
+					NULL, GTK_DIALOG_NO_SEPARATOR,
+					GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+					NULL);
+  
+  hbox = gtk_hbox_new (FALSE, 12);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox), 12);
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox, TRUE, TRUE, 0);
+
+  combo_vbox = gtk_vbox_new (FALSE, 8);
+  gtk_box_pack_start (GTK_BOX (hbox), combo_vbox, FALSE, FALSE, 0);
+
+  label = gtk_label_new (NULL);
+  gtk_label_set_markup (GTK_LABEL (label), "<b>Menu mode</b>");
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_box_pack_start (GTK_BOX (combo_vbox), label, FALSE, FALSE, 0);
+
+  alignment = g_object_new (GTK_TYPE_ALIGNMENT, "left-padding", 12, NULL);
+  gtk_box_pack_start (GTK_BOX (combo_vbox), alignment, FALSE, FALSE, 0);
+
+  menu_combo = create_combo ("menu-combo", FALSE);
+  gtk_container_add (GTK_CONTAINER (alignment), menu_combo);
+
+  label = gtk_label_new (NULL);
+  gtk_label_set_markup (GTK_LABEL (label), "<b>List mode</b>");
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_box_pack_start (GTK_BOX (combo_vbox), label, FALSE, FALSE, 0);
+
+  alignment = g_object_new (GTK_TYPE_ALIGNMENT, "left-padding", 12, NULL);
+  gtk_box_pack_start (GTK_BOX (combo_vbox), alignment, FALSE, FALSE, 0);
+
+  list_combo = create_combo ("list-combo", TRUE);
+  gtk_container_add (GTK_CONTAINER (alignment), list_combo);
+
+  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+  gtk_box_pack_start (GTK_BOX (hbox), scrolled_window, TRUE, TRUE, 0);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+
+  text_view = gtk_text_view_new ();
+  gtk_text_view_set_editable (GTK_TEXT_VIEW (text_view), FALSE);
+  gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (text_view), FALSE);
+
+  gtk_container_add (GTK_CONTAINER (scrolled_window), text_view);
+
+  button_vbox = gtk_vbox_new (FALSE, 8);
+  gtk_box_pack_start (GTK_BOX (hbox), button_vbox, FALSE, FALSE, 0);
+  
+  gtk_window_set_default_size (GTK_WINDOW (dialog), 500, 300);
+
+  button = align_button_new ("Insert");
+  gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE, FALSE, 0);
+  g_signal_connect (button, "clicked", G_CALLBACK (on_insert), NULL);
+  
+  button = align_button_new ("Delete");
+  gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE, FALSE, 0);
+  g_signal_connect (button, "clicked", G_CALLBACK (on_delete), NULL);
+
+  button = align_button_new ("Reorder");
+  gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE, FALSE, 0);
+  g_signal_connect (button, "clicked", G_CALLBACK (on_reorder), NULL);
+
+  gtk_widget_show_all (dialog);
+  gtk_dialog_run (GTK_DIALOG (dialog));
+
+  return 0;
+}
