@@ -1,3 +1,7 @@
+Thu May 27 00:12:44 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_size_request): Fix a typo.
+
 2004-05-26  Robert Ögren  <gtk@roboros.com>
 
 	* gdk/win32/gdkinput-win32.c (_gdk_input_other_event): Send key

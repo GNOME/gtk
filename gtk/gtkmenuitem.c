@@ -502,7 +502,7 @@ gtk_menu_item_size_request (GtkWidget      *widget,
   g_return_if_fail (requisition != NULL);
 
   gtk_widget_style_get (widget,
- 			"horizontal padding", &horizontal_padding,
+ 			"horizontal_padding", &horizontal_padding,
 			NULL);
   
   bin = GTK_BIN (widget);
