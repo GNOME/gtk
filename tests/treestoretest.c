@@ -261,7 +261,7 @@ main (int argc, char *argv[])
 {
   gtk_init (&argc, &argv);
 
-  model = gtk_tree_store_new_with_values (2, G_TYPE_STRING, G_TYPE_STRING);
+  model = gtk_tree_store_new_with_types (2, G_TYPE_STRING, G_TYPE_STRING);
   
   make_window ();
   make_window ();

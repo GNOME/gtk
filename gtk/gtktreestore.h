@@ -70,7 +70,7 @@ struct _GtkTreeStoreClass
 GtkType       gtk_tree_store_get_type        (void);
 GtkTreeStore *gtk_tree_store_new             (void);
 
-GtkTreeStore *gtk_tree_store_new_with_values (gint          n_columns,
+GtkTreeStore *gtk_tree_store_new_with_types  (gint          n_columns,
 					      ...);
 void          gtk_tree_store_set_n_columns   (GtkTreeStore *tree_store,
 					      gint          n_columns);

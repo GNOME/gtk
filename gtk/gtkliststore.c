@@ -40,6 +40,8 @@ static void         gtk_list_store_class_init      (GtkListStoreClass *class);
 static void         gtk_list_store_tree_model_init (GtkTreeModelIface *iface);
 static guint        gtk_list_store_get_flags       (GtkTreeModel      *tree_model);
 static gint         gtk_list_store_get_n_columns   (GtkTreeModel      *tree_model);
+static GType        gtk_list_store_get_column_type (GtkTreeModel      *tree_model,
+						    gint               index);
 static gboolean     gtk_list_store_get_iter        (GtkTreeModel      *tree_model,
 						    GtkTreeIter       *iter,
 						    GtkTreePath       *path);
@@ -115,36 +117,36 @@ gtk_list_store_class_init (GtkListStoreClass *class)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkListStoreClass, changed),
-                    gtk_marshal_VOID__POINTER_POINTER,
-                    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_POINTER,
-		    GTK_TYPE_POINTER);
+                    gtk_marshal_VOID__BOXED_BOXED,
+                    G_TYPE_NONE, 2,
+		    GTK_TYPE_TREE_PATH,
+		    GTK_TYPE_TREE_ITER);
   list_store_signals[INSERTED] =
     gtk_signal_new ("inserted",
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkListStoreClass, inserted),
-                    gtk_marshal_VOID__POINTER_POINTER,
-                    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_POINTER,
-		    GTK_TYPE_POINTER);
+                    gtk_marshal_VOID__BOXED_BOXED,
+                    G_TYPE_NONE, 2,
+		    GTK_TYPE_TREE_PATH,
+		    GTK_TYPE_TREE_ITER);
   list_store_signals[CHILD_TOGGLED] =
     gtk_signal_new ("child_toggled",
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkListStoreClass, child_toggled),
-                    gtk_marshal_VOID__POINTER_POINTER,
-                    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_POINTER,
-		    GTK_TYPE_POINTER);
+                    gtk_marshal_VOID__BOXED_BOXED,
+                    G_TYPE_NONE, 2,
+		    GTK_TYPE_TREE_PATH,
+		    GTK_TYPE_TREE_ITER);
   list_store_signals[DELETED] =
     gtk_signal_new ("deleted",
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkListStoreClass, deleted),
-                    gtk_marshal_VOID__POINTER,
-                    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_POINTER);
+                    gtk_marshal_VOID__BOXED,
+                    G_TYPE_NONE, 1,
+		    GTK_TYPE_TREE_PATH);
 
 
   gtk_object_class_add_signals (object_class, list_store_signals, LAST_SIGNAL);
@@ -155,6 +157,7 @@ gtk_list_store_tree_model_init (GtkTreeModelIface *iface)
 {
   iface->get_flags = gtk_list_store_get_flags;
   iface->get_n_columns = gtk_list_store_get_n_columns;
+  iface->get_column_type = gtk_list_store_get_column_type;
   iface->get_iter = gtk_list_store_get_iter;
   iface->get_path = gtk_list_store_get_path;
   iface->get_value = gtk_list_store_get_value;
@@ -258,6 +261,17 @@ gtk_list_store_get_n_columns (GtkTreeModel *tree_model)
   g_return_val_if_fail (GTK_IS_LIST_STORE (tree_model), 0);
 
   return GTK_LIST_STORE (tree_model)->n_columns;
+}
+
+static GType
+gtk_list_store_get_column_type (GtkTreeModel *tree_model,
+				gint          index)
+{
+  g_return_val_if_fail (GTK_IS_LIST_STORE (tree_model), G_TYPE_INVALID);
+  g_return_val_if_fail (index < GTK_LIST_STORE (tree_model)->n_columns &&
+			index >= 0, G_TYPE_INVALID);
+
+  return GTK_LIST_STORE (tree_model)->column_headers[index];
 }
 
 static gboolean
@@ -643,7 +657,6 @@ gtk_list_store_append (GtkListStore *list_store,
   g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
-  g_return_if_fail (G_SLIST (iter)->next == NULL);
 
   iter->stamp = list_store->stamp;
   iter->tree_node = g_slist_alloc ();

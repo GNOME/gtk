@@ -1,3 +1,19 @@
+Fri Nov 10 12:10:34 2000  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkliststore.c (gtk_model_simple_class_init): use the new
+	BOXED marshallers.
+
+	* gtk/gtkliststore.c (gtk_list_store_get_column_type): Add this.
+	(gtk_list_store_class_init): use the new BOXED marshallers.
+
+	* gtk/gtktreestore.c (gtk_tree_store_new_with_types): change
+	new_with_values to new_with_types.
+	(gtk_tree_store_get_column_type): add this.
+	(gtk_tree_store_class_init): use the new BOXED marshallers.
+
+	* gtk/gtkmarshal.list: Added a number of BOXED marshallers to
+	mirror some POINTER marshallers.
+
 Thu Nov  9 11:23:22 2000  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.h (struct _GtkTreeIter): added more fields to

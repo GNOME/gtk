@@ -135,36 +135,36 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkModelSimpleClass, changed),
-                    gtk_marshal_VOID__POINTER_POINTER,
-                    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_POINTER,
-		    GTK_TYPE_POINTER);
+                    gtk_marshal_VOID__BOXED_BOXED,
+                    G_TYPE_NONE, 2,
+		    GTK_TYPE_TREE_PATH,
+		    GTK_TYPE_TREE_ITER);
   model_simple_signals[INSERTED] =
     gtk_signal_new ("inserted",
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkModelSimpleClass, inserted),
-                    gtk_marshal_VOID__POINTER_POINTER,
-                    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_POINTER,
-		    GTK_TYPE_POINTER);
+                    gtk_marshal_VOID__BOXED_BOXED,
+                    G_TYPE_NONE, 2,
+		    GTK_TYPE_TREE_PATH,
+		    GTK_TYPE_TREE_ITER);
   model_simple_signals[CHILD_TOGGLED] =
     gtk_signal_new ("child_toggled",
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkModelSimpleClass, child_toggled),
-                    gtk_marshal_VOID__POINTER_POINTER,
-                    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_POINTER,
-		    GTK_TYPE_POINTER);
+                    gtk_marshal_VOID__BOXED_BOXED,
+                    G_TYPE_NONE, 2,
+		    GTK_TYPE_TREE_PATH,
+		    GTK_TYPE_TREE_ITER);
   model_simple_signals[DELETED] =
     gtk_signal_new ("deleted",
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkModelSimpleClass, deleted),
-                    gtk_marshal_VOID__POINTER,
-                    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_POINTER);
+                    gtk_marshal_VOID__BOXED,
+                    G_TYPE_NONE, 1,
+		    GTK_TYPE_TREE_PATH);
 
   model_simple_signals[GET_N_COLUMNS] =
     gtk_signal_new ("get_n_columns",
@@ -172,93 +172,94 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
                     GTK_CLASS_TYPE (object_class),
                     0,
                     gtk_marshal_INT__VOID,
-                    GTK_TYPE_INT, 0);
+                    G_TYPE_INT, 0);
   model_simple_signals[GET_COLUMN_TYPE] =
     gtk_signal_new ("get_column_type",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     0,
                     gtk_marshal_INT__INT,
-                    GTK_TYPE_INT, 1,
-		    GTK_TYPE_INT);
+                    G_TYPE_INT, 1,
+		    G_TYPE_INT);
   model_simple_signals[GET_ITER] =
     gtk_signal_new ("get_iter",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     0,
-                    gtk_marshal_BOOLEAN__POINTER_POINTER,
-                    GTK_TYPE_BOOL, 2,
-		    GTK_TYPE_POINTER,
-		    GTK_TYPE_POINTER);
+                    gtk_marshal_BOOLEAN__BOXED_BOXED,
+                    G_TYPE_BOOLEAN, 2,
+		    GTK_TYPE_TREE_ITER,
+		    GTK_TYPE_TREE_PATH);
   model_simple_signals[GET_PATH] =
     gtk_signal_new ("get_path",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     0,
-                    gtk_marshal_POINTER__POINTER,
-                    GTK_TYPE_POINTER, 1,
-		    GTK_TYPE_POINTER);
+                    gtk_marshal_BOXED__BOXED,
+                    GTK_TYPE_TREE_PATH, 1,
+		    GTK_TYPE_TREE_ITER);
   model_simple_signals[GET_VALUE] =
     gtk_signal_new ("get_value",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     0,
-                    gtk_marshal_VOID__POINTER_INT_POINTER,
-                    GTK_TYPE_NONE, 3,
-		    GTK_TYPE_POINTER,
-		    GTK_TYPE_INT,
-		    GTK_TYPE_POINTER);
+                    gtk_marshal_VOID__BOXED_INT_POINTER,
+                    G_TYPE_NONE, 3,
+		    GTK_TYPE_TREE_ITER,
+		    G_TYPE_INT,
+		    G_TYPE_POINTER);
   model_simple_signals[ITER_NEXT] =
     gtk_signal_new ("iter_next",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     0,
-                    gtk_marshal_BOOLEAN__POINTER,
-                    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_POINTER);
+                    gtk_marshal_BOOLEAN__BOXED,
+                    G_TYPE_BOOLEAN, 1,
+		    GTK_TYPE_TREE_ITER);
   model_simple_signals[ITER_CHILDREN] =
     gtk_signal_new ("iter_children",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     0,
-                    gtk_marshal_BOOLEAN__POINTER_POINTER,
-                    GTK_TYPE_POINTER, 2,
-		    GTK_TYPE_POINTER,
-		    GTK_TYPE_POINTER);
+                    gtk_marshal_BOOLEAN__BOXED_BOXED,
+                    G_TYPE_BOOLEAN, 2,
+		    GTK_TYPE_TREE_ITER,
+		    GTK_TYPE_TREE_ITER);
   model_simple_signals[ITER_HAS_CHILD] =
     gtk_signal_new ("iter_has_child",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     0,
-                    gtk_marshal_BOOLEAN__POINTER,
-                    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_POINTER);
+                    gtk_marshal_BOOLEAN__BOXED,
+                    G_TYPE_BOOLEAN, 1,
+		    GTK_TYPE_TREE_ITER);
   model_simple_signals[ITER_N_CHILDREN] =
     gtk_signal_new ("iter_n_children",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     0,
-                    gtk_marshal_INT__POINTER,
-                    GTK_TYPE_INT, 1,
-		    GTK_TYPE_POINTER);
+                    gtk_marshal_INT__BOXED,
+                    G_TYPE_INT, 1,
+		    GTK_TYPE_TREE_ITER);
   model_simple_signals[ITER_NTH_CHILD] =
     gtk_signal_new ("node_nth_child",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     0,
-                    gtk_marshal_BOOLEAN__POINTER_POINTER_INT,
-                    GTK_TYPE_BOOL, 2,
-		    GTK_TYPE_POINTER,
-		    GTK_TYPE_POINTER);
+                    gtk_marshal_BOOLEAN__BOXED_BOXED_INT,
+                    GTK_TYPE_BOOL, 3,
+		    GTK_TYPE_TREE_ITER,
+		    GTK_TYPE_TREE_ITER,
+		    G_TYPE_INT);
   model_simple_signals[ITER_PARENT] =
     gtk_signal_new ("node_parent",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     0,
-                    gtk_marshal_BOOLEAN__POINTER_POINTER,
-                    GTK_TYPE_BOOL, 2,
-		    GTK_TYPE_POINTER,
-		    GTK_TYPE_POINTER);
+                    gtk_marshal_BOOLEAN__BOXED_BOXED,
+                    G_TYPE_BOOLEAN, 2,
+		    GTK_TYPE_TREE_ITER,
+		    GTK_TYPE_TREE_ITER);
 
   gtk_object_class_add_signals (object_class, model_simple_signals, LAST_SIGNAL);
 }
