@@ -198,13 +198,16 @@ gdk_window_impl_x11_get_colormap (GdkDrawable *drawable)
       drawable_impl->colormap == NULL)
     {
       XWindowAttributes window_attributes;
+      GdkVisual *visual;
 
       XGetWindowAttributes (GDK_SCREEN_XDISPLAY (drawable_impl->screen),
                             drawable_impl->xid,
                             &window_attributes);
-      drawable_impl->colormap =
-	gdk_x11_colormap_foreign_new (gdk_drawable_get_visual (drawable),
-				      window_attributes.colormap);
+
+      visual = gdk_x11_screen_lookup_visual (drawable_impl->screen,
+					     window_attributes.visual->visualid);
+      drawable_impl->colormap = gdk_x11_colormap_foreign_new (visual,
+							      window_attributes.colormap);
     }
   
   return drawable_impl->colormap;
@@ -302,9 +305,11 @@ _gdk_windowing_window_init (GdkScreen * screen)
   draw_impl->screen = screen;
   draw_impl->xid = screen_x11->xroot_window;
   draw_impl->wrapper = GDK_DRAWABLE (private);
+  draw_impl->colormap = gdk_screen_get_system_colormap (screen);
   
   private->window_type = GDK_WINDOW_ROOT;
   private->depth = depth;
+  
   impl->width = width;
   impl->height = height;
   

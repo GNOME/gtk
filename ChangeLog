@@ -1,3 +1,12 @@
+Tue Sep 24 19:45:55 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_impl_x11_get_colormap): 
+	Look up the visual as well as the colormap, since calling
+	gdk_drawable_get_visual() causes infinite recursion.
+
+	* gdk/x11/gdkwindow-x11.c (_gdk_windowing_window_init): 
+	Set the colormap for the root window.
+
 Tue Sep 24 15:35:42 2002  HideToshi Tajima  <hidetoshi.tajima@sun.com>
 
 	disable/enable preedit/status in GtkIMContextXIM (#59076)
