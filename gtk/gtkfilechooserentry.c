@@ -207,6 +207,9 @@ gtk_file_chooser_entry_finalize (GObject *object)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (object);
 
+  if (chooser_entry->sorting_idle)
+    g_source_remove (chooser_entry->sorting_idle);
+
   if (chooser_entry->completion_store)
     g_object_unref (chooser_entry->completion_store);
 

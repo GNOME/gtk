@@ -1,3 +1,9 @@
+2004-10-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserentry.c (gtk_file_chooser_entry_finalize): 
+	Prevent a crash if the entry is finalized before the sorting
+	idle is removed, noticed by Frederic Crozat.
+
 2004-09-29  Abel Cheung  <maddog@linuxhall.org>
 
 	* configure.in: Added "ang" to ALL_LINGUAS.
