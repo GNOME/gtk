@@ -69,6 +69,9 @@ gxid_LDADD = \
 
 BUILT_SOURCES = gdkcursors.h gdkkeysyms.h
 
+# cause the built sources to be rebuild when possible, even with --include-deps
+$(libgdk_la_SOURCES): $(BUILT_SOURCES)
+
 EXTRA_DIST = makecursors.awk makekeysyms.awk
 
 gdkcursors.h:
