@@ -1,3 +1,8 @@
+2000-05-17  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtklayout.c (gtk_layout_map): Remove references to
+	OFFSCREEN, as it is no longer necessary.
+
 Wed May 17 10:52:12 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcolorsel.c: Patch from David Santiago
