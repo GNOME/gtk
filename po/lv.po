@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "POT-Creation-Date: 2002-08-22 05:09+0200\n"
-"PO-Revision-Date: 2002-08-28 13:01+0200\n"
+"PO-Revision-Date: 2002-08-31 08:37+0200\n"
 "Last-Translator: Artis Trops <hornet@navigators.lv>\n"
 "Language-Team: Latvian <ll10nt@os.lv>\n"
 "MIME-Version: 1.0\n"
@@ -677,7 +677,7 @@ msgstr "Horizontālā centrēšana"
 
 #: gtk/gtkalignment.c:103
 msgid "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is right aligned"
-msgstr "Horizontālā atvasinājuma pozīcija pieejamajā telpā. 0.0 ir pa kreisi centrēts, 1.0 pa labi centrēts"
+msgstr "Horizontālā bērna pozīcija pieejamajā telpā. 0.0 ir pa kreisi centrēts, 1.0 pa labi centrēts"
 
 #: gtk/gtkalignment.c:112
 msgid "Vertical alignment"
@@ -685,7 +685,7 @@ msgstr "Vertikālā centrāšana"
 
 #: gtk/gtkalignment.c:113
 msgid "Vertical position of child in available space. 0.0 is top aligned, 1.0 is bottom aligned"
-msgstr "Vertikālā atvasinājuma pozīcija pieejamajā telpā. 0.0 ir pret augšu centrēts, 1.0 pret apakšu centrēts"
+msgstr "Vertikālā bērna pozīcija pieejamajā telpā. 0.0 ir pret augšu centrēts, 1.0 pret apakšu centrēts"
 
 #: gtk/gtkalignment.c:121
 msgid "Horizontal scale"
@@ -693,7 +693,7 @@ msgstr "Horizontālais mērogs"
 
 #: gtk/gtkalignment.c:122
 msgid "If available horizontal space is bigger than needed for the child, how much of it to use for the child. 0.0 means none, 1.0 means all"
-msgstr "Ja pieejamā horizontālā telpa ir lielāka nekā nepieciešams atvasinājumam, cik daudz no tās lietot atvasinājumam. 0.0 nozīmē necik, 1.0 nozīmē visu."
+msgstr "Ja pieejamā horizontālā telpa ir lielāka nekā nepieciešams bērnam, cik daudz no tās lietot bērnam. 0.0 nozīmē necik, 1.0 nozīmē visu."
 
 #: gtk/gtkalignment.c:130
 msgid "Vertical scale"
@@ -701,7 +701,7 @@ msgstr "Vertikālais mērogs"
 
 #: gtk/gtkalignment.c:131
 msgid "If available vertical space is bigger than needed for the child, how much of it to use for the child. 0.0 means none, 1.0 means all"
-msgstr "Ja pieejamā vertikālā telpa ir lielāka nekā nepieciešams atvasinājumam, cik daudz no tās lietot atvasinājumam. 0.0 nozīmē necik, 1.0 nozīmē visu."
+msgstr "Ja pieejamā vertikālā telpa ir lielāka nekā nepieciešams bērnam, cik daudz no tās lietot bērnam. 0.0 nozīmē necik, 1.0 nozīmē visu."
 
 #: gtk/gtkarrow.c:98
 msgid "Arrow direction"
@@ -725,7 +725,7 @@ msgstr "Horizontālā Centrēšana"
 
 #: gtk/gtkaspectframe.c:108
 msgid "X alignment of the child"
-msgstr "Atvasinājuma X cenrēšana"
+msgstr "Bērna X cenrēšana"
 
 #: gtk/gtkaspectframe.c:114
 msgid "Vertical Alignment"
@@ -733,7 +733,7 @@ msgstr "Vertikālā Centrēšana"
 
 #: gtk/gtkaspectframe.c:115
 msgid "Y alignment of the child"
-msgstr "Atvasinājuma Y centrēšana"
+msgstr "Bērna Y centrēšana"
 
 #: gtk/gtkaspectframe.c:121
 msgid "Ratio"
@@ -741,19 +741,19 @@ msgstr "Proporcija"
 
 #: gtk/gtkaspectframe.c:122
 msgid "Aspect ratio if obey_child is FALSE"
-msgstr "Skata proporcija, ja pakļauties_atvasinājumam ir APLAMS"
+msgstr "Skata proporcija, ja obey_child ir APLAMS"
 
 #: gtk/gtkaspectframe.c:128
 msgid "Obey child"
-msgstr "Pakļauties atvasinājumam"
+msgstr "Pakļauties bērnam"
 
 #: gtk/gtkaspectframe.c:129
 msgid "Force aspect ratio to match that of the frame's child"
-msgstr "Likt skata proporcijai sakrist ar to, kas rāmja atvasinājumam"
+msgstr "Likt skata proporcijai sakrist ar to, kas rāmja bērnam"
 
 #: gtk/gtkbbox.c:115
 msgid "Minimum child width"
-msgstr "Minimālais atvasinājuma platums"
+msgstr "Minimālais bērna platums"
 
 #: gtk/gtkbbox.c:116
 msgid "Minimum width of buttons inside the box"
@@ -761,7 +761,7 @@ msgstr "Minimālais pogu platums kastītē"
 
 #: gtk/gtkbbox.c:124
 msgid "Minimum child height"
-msgstr "Minimālais atvasinājuma augstums"
+msgstr "Minimālais bērna augstums"
 
 #: gtk/gtkbbox.c:125
 msgid "Minimum height of buttons inside the box"
@@ -769,19 +769,19 @@ msgstr "Minimālais pogu augstums kastītē"
 
 #: gtk/gtkbbox.c:133
 msgid "Child internal width padding"
-msgstr "Atvasinājuma iekšējā platuma papildināšana"
+msgstr "Bērna iekšējā platuma papildināšana"
 
 #: gtk/gtkbbox.c:134
 msgid "Amount to increase child's size on either side"
-msgstr "Apmērs, par kādu palielināt atvasinājuma izmēru uz katru pusi"
+msgstr "Apmērs, par kādu palielināt bērna izmēru uz katru pusi"
 
 #: gtk/gtkbbox.c:142
 msgid "Child internal height padding"
-msgstr "Atvasinājuma iekšējā augstuma papildināšana"
+msgstr "Bērna iekšējā augstuma papildināšana"
 
 #: gtk/gtkbbox.c:143
 msgid "Amount to increase child's size on the top and bottom"
-msgstr "Apmērs, par kādu palielināt atvasinājuma izmēru uz augšu un apakšu"
+msgstr "Apmērs, par kādu palielināt bērna izmēru uz augšu un apakšu"
 
 #: gtk/gtkbbox.c:151
 msgid "Layout style"
@@ -797,7 +797,7 @@ msgstr "Sekundārs"
 
 #: gtk/gtkbbox.c:161
 msgid "If TRUE, the child appears in a secondary group of children, suitable for, e.g., help buttons."
-msgstr "Ja PATIESS, atvasinājums parādās sekundārajā atvasinājumu grupā, piemērots, piem., palīdzības pogām."
+msgstr "Ja PATIESS, bērns parādās sekundārajā atvasinājumu grupā, piemērots, piem., palīdzības pogām."
 
 #: gtk/gtkbox.c:125
 msgid "Spacing"
@@ -805,7 +805,7 @@ msgstr "Atstarpe"
 
 #: gtk/gtkbox.c:126
 msgid "The amount of space between children."
-msgstr "Atstarpes lielums starp atvasinājumiem."
+msgstr "Atstarpes lielums starp bērniem."
 
 #: gtk/gtkbox.c:135
 #: gtk/gtknotebook.c:434
@@ -814,7 +814,7 @@ msgstr "Viendabīgs"
 
 #: gtk/gtkbox.c:136
 msgid "Whether the children should all be the same size."
-msgstr "Vai visiem atvasinājumiem jabūt pēc viena izmēra."
+msgstr "Vai visiem bērniem jabūt pēc viena izmēra."
 
 #: gtk/gtkbutton.c:189
 #: gtk/gtkframe.c:125
@@ -870,19 +870,19 @@ msgstr "Papildus vieta, ko atvēlēt CAN_DEFAULT pogām, kas vienmēr tiek zīm�
 
 #: gtk/gtkbutton.c:278
 msgid "Child X Displacement"
-msgstr "Atvasinājuma X Pārvietošana"
+msgstr "Bērna X Pārvietošana"
 
 #: gtk/gtkbutton.c:279
 msgid "How far in the x direction to move the child when the button is depressed"
-msgstr "Cik tālu x virzienā pārvietot atvasinājumu, kad poga tiek nospiesta"
+msgstr "Cik tālu x virzienā pārvietot bērnu, kad poga tiek nospiesta"
 
 #: gtk/gtkbutton.c:286
 msgid "Child Y Displacement"
-msgstr "Atvasinājuma Y Pārvietošana"
+msgstr "Bērna Y Pārvietošana"
 
 #: gtk/gtkbutton.c:287
 msgid "How far in the y direction to move the child when the button is depressed"
-msgstr "Cik tālu y virzienā pārvietot atvasinājumu, kad poga tiek nospiesta"
+msgstr "Cik tālu y virzienā pārvietot bērnu, kad poga tiek nospiesta"
 
 #: gtk/gtkcellrenderer.c:103
 msgid "mode"
@@ -954,7 +954,7 @@ msgstr "Ir Paplašinātājs"
 
 #: gtk/gtkcellrenderer.c:189
 msgid "Row has children."
-msgstr "Rindai ir atvasinājumi."
+msgstr "Rindai ir bērni."
 
 #: gtk/gtkcellrenderer.c:198
 msgid "Is Expanded"
@@ -1089,12 +1089,12 @@ msgstr "Fonta apraksts kā PangoFontDescription struktūra"
 #: gtk/gtkcellrenderertext.c:255
 #: gtk/gtktexttag.c:302
 msgid "Font family"
-msgstr "Fonta ģimene"
+msgstr "Fonta saime"
 
 #: gtk/gtkcellrenderertext.c:256
 #: gtk/gtktexttag.c:303
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
-msgstr "Fonta ģimenes nosaukums, piem., Sans, Helvetica, Times, Monospace"
+msgstr "Fonta saimes nosaukums, piem., Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:263
 #: gtk/gtkcellrenderertext.c:264
@@ -1214,12 +1214,12 @@ msgstr "Vai šis tags ietekmē teksta rediģējamību"
 #: gtk/gtkcellrenderertext.c:372
 #: gtk/gtktexttag.c:536
 msgid "Font family set"
-msgstr "Fonta ģimenes iestādījums"
+msgstr "Fonta saimess iestādījums"
 
 #: gtk/gtkcellrenderertext.c:373
 #: gtk/gtktexttag.c:537
 msgid "Whether this tag affects the font family"
-msgstr "Vai šis tags ietekmē fonta ģimeni"
+msgstr "Vai šis tags ietekmē fonta saimi"
 
 #: gtk/gtkcellrenderertext.c:376
 #: gtk/gtktexttag.c:540
@@ -1557,15 +1557,15 @@ msgstr "Ietvara platums"
 
 #: gtk/gtkcontainer.c:209
 msgid "The width of the empty border outside the containers children."
-msgstr "Tukšās robežas platums ārpus saturētāja atvasinājumiem."
+msgstr "Tukšās robežas platums ārpus saturētāja bērniem."
 
 #: gtk/gtkcontainer.c:217
 msgid "Child"
-msgstr "Aatvasinājums"
+msgstr "Bērns"
 
 #: gtk/gtkcontainer.c:218
 msgid "Can be used to add a new child to the container."
-msgstr "Var tikt lietots, lai pievienotu jaunu atvasinājumu pie saturētāja."
+msgstr "Var tikt lietots, lai pievienotu jaunu bērnu pie saturētāja."
 
 #: gtk/gtkcurve.c:121
 msgid "Curve type"
@@ -1958,7 +1958,7 @@ msgstr "X pozīcija"
 #: gtk/gtkfixed.c:121
 #: gtk/gtklayout.c:604
 msgid "X position of child widget"
-msgstr "Atvasinājuma logdaļas X pozīcija"
+msgstr "Bērna logdaļas X pozīcija"
 
 #: gtk/gtkfixed.c:130
 #: gtk/gtklayout.c:613
@@ -1968,7 +1968,7 @@ msgstr "Y pozīcija"
 #: gtk/gtkfixed.c:131
 #: gtk/gtklayout.c:614
 msgid "Y position of child widget"
-msgstr "Atvasinājuma logdaļas Y pozīcija"
+msgstr "Bērna logdaļas Y pozīcija"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
@@ -1998,7 +1998,7 @@ msgstr "Teksts, ko parādīt, lai demonstrētu izvēlēto fontu."
 
 #: gtk/gtkfontsel.c:327
 msgid "_Family:"
-msgstr "_Ģimene:"
+msgstr "_Saime:"
 
 #: gtk/gtkfontsel.c:333
 msgid "_Style:"
@@ -2084,7 +2084,7 @@ msgstr "Roktura pozīcija"
 
 #: gtk/gtkhandlebox.c:202
 msgid "Position of the handle relative to the child widget."
-msgstr "Roktura pozīcija attiecībā pret atvasinājuma logdaļu."
+msgstr "Roktura pozīcija attiecībā pret bērna logdaļu."
 
 #: gtk/gtkhandlebox.c:210
 msgid "Snap edge"
@@ -2184,7 +2184,7 @@ msgstr "Attēla logdaļa"
 
 #: gtk/gtkimagemenuitem.c:125
 msgid "Child widget to appear next to the menu text"
-msgstr "Atvasinājuma logdaļa, kurai jāparādās blakus izvēlnes tekstam"
+msgstr "Bērna logdaļa, kurai jāparādās blakus izvēlnes tekstam"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:184
@@ -4070,11 +4070,11 @@ msgstr "Logdaļas nosaukums"
 
 #: gtk/gtkwidget.c:397
 msgid "Parent widget"
-msgstr "Pirmavota logdaļa"
+msgstr "Vecāka logdaļa"
 
 #: gtk/gtkwidget.c:398
 msgid "The parent widget of this widget. Must be a Container widget."
-msgstr "Pirmavota logdaļa šai logdaļai. Jābūt Saturētāja logdaļai."
+msgstr "Vecāka logdaļa šai logdaļai. Jābūt Saturētāja logdaļai."
 
 #: gtk/gtkwidget.c:405
 msgid "Width request"
@@ -4154,7 +4154,7 @@ msgstr "Ja PATIESS, logdaļa saņems noklusēto darbību, kad tā tiek fokusēta
 
 #: gtk/gtkwidget.c:479
 msgid "Composite child"
-msgstr "Jauktais atvasinājums"
+msgstr "Jauktais bērns"
 
 #: gtk/gtkwidget.c:480
 msgid "Whether the widget is part of a composite widget"
@@ -4311,11 +4311,11 @@ msgstr "Noklusētais loga augstums, ko izmanto, kad pirmo reizi parāda logu."
 
 #: gtk/gtkwindow.c:491
 msgid "Destroy with Parent"
-msgstr "Iznīcināt ar Pirmavotu"
+msgstr "Iznīcināt ar Vecāku"
 
 #: gtk/gtkwindow.c:492
 msgid "If this window should be destroyed when the parent is destroyed"
-msgstr "Vai šis logs būtu jāiznīcina, kad tiek iznīcināts pirmavots"
+msgstr "Vai šis logs būtu jāiznīcina, kad tiek iznīcināts vecāks"
 
 #: gtk/gtkwindow.c:499
 msgid "Icon"
