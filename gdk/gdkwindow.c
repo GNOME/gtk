@@ -608,7 +608,8 @@ gdk_window_peek_children (GdkWindow *window)
  * Adds an event filter to @window, allowing you to intercept events
  * before they reach GDK. This is a low-level operation and makes it
  * easy to break GDK and/or GTK+, so you have to know what you're
- * doing.
+ * doing. Pass %NULL for @window to get all events for all windows,
+ * instead of events for a specific window.
  * 
  **/
 void          
