@@ -1,3 +1,8 @@
+1999-12-07  Martin Baulig  <martin@home-of-linux.org>
+
+	* gdk-pixbuf/Makefile.am (testpixbuf_LDADD): Conditionally
+	include $(GNOME_LIBS) here.
+
 1999-12-05  Arjan van de Ven <arjan@fenrus.demon.nl>
 
 	Added missing "include <string.h>" to:
