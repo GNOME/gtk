@@ -10,7 +10,7 @@ Tue Feb 19 22:10:59 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_class_init): remove key bindings
 	for C-f and C-b, let treeview search use C-f (instead of C-s)
-	(#61886)
+	(#61866)
 
 	* gtk/gtkrc.key.emacs: add some GtkTreeView bindings
 
