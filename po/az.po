@@ -1,95 +1,89 @@
-# Translation into the walloon language.
-#
-# Si vos voloz donner on c�p di spale pol rato�rnaedje di Gnome (ou des
-# �tes libes programes) sicrijhoz-mu a l' adresse emile
-# <srtxg@chanae.alphanet.ch>; nos avans co br�mint di l' ovraedje a f�.
-#
-# Copyright (C) 1999 Free Software Foundation, Inc.
-# Pablo Saratxaga <pablo@mandrakesoft.com> 1999-2000
-# Lucyin Mahin, 2000
+# GTK doysyesinin Azəri türkçəsinə tərcüməsi
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# Vasif Ismailoglu MD <azerb_linux@hotmail.com>, 2000.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.2.7\n"
-"POT-Creation-Date: 2000-11-25 15:44+0100\n"
-"PO-Revision-Date: 1999-02-07 17:37+0100\n"
-"Last-Translator: Pablo Saratxaga <pablo@mandrakesoft.com>\n"
-"Language-Team: walon <linux-wa@chanae.alphanet.ch>\n"
+"Project-Id-Version: gtk+12 1.2.9\n"
+"POT-Creation-Date: 2000-12-06 16:39+0100\n"
+"PO-Revision-Date: 2000-12-04 20:25+0200\n"
+"Last-Translator: Vasif Ismailoglu MD <azerb_linux@hotmail.com>\n"
+"Language-Team: Azerbaijani turkish \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=iso-8859-9e\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:221
 msgid "Hue:"
-msgstr "Tinte:"
+msgstr "Çöhrə:"
 
 #: gtk/gtkcolorsel.c:222
 msgid "Saturation:"
-msgstr "Saturaedje:"
+msgstr "Doyqunluq:"
 
 #: gtk/gtkcolorsel.c:223
 msgid "Value:"
-msgstr "Loumance:"
+msgstr "Qiymət:"
 
 #: gtk/gtkcolorsel.c:224
 msgid "Red:"
-msgstr "Rodje:"
+msgstr "Qırmızı"
 
 #: gtk/gtkcolorsel.c:225
 msgid "Green:"
-msgstr "Vert:"
+msgstr "Yaşıl:"
 
 #: gtk/gtkcolorsel.c:226
 msgid "Blue:"
-msgstr "Bleu:"
+msgstr "Göy:"
 
 #: gtk/gtkcolorsel.c:227
 msgid "Opacity:"
-msgstr "Zeroveyaedje:"
+msgstr "Matlıq:"
 
 #. The OK button
 #: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3492
 #: gtk/gtkgamma.c:416
 msgid "OK"
-msgstr "I Va"
+msgstr "OLDU"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:856
 #: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3505
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
-msgstr "Rinonc�"
+msgstr "Ləǧv et"
 
 #: gtk/gtkcolorsel.c:1738
 msgid "Help"
-msgstr "Aidance"
+msgstr "Kömək"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:418
 msgid "Directories"
-msgstr "Ridants"
+msgstr "Qovluqlar"
 
 #. The files clist
 #: gtk/gtkfilesel.c:437
 msgid "Files"
-msgstr "Fitch�s"
+msgstr "Dosyelər"
 
 #: gtk/gtkfilesel.c:507 gtk/gtkfilesel.c:1466
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Dji n' sai lere li ridant: %s"
+msgstr "Qovluq oxuna bilmir: %s"
 
 #: gtk/gtkfilesel.c:539
 msgid "Create Dir"
-msgstr "F� on Ridant"
+msgstr "Qovluq yarat"
 
 #: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:925
 msgid "Delete File"
-msgstr "Disfacer li fitch�"
+msgstr "Dosyeyi Sil"
 
 #: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1029
 msgid "Rename File"
-msgstr "Rlomer li fitch�"
+msgstr "Dosye Adını Dəyişdir"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -98,167 +92,167 @@ msgstr "Rlomer li fitch�"
 #.
 #: gtk/gtkfilesel.c:722
 msgid "Error"
-msgstr "Aroke"
+msgstr "Xəta"
 
 #. close button
 #: gtk/gtkfilesel.c:745 gtk/gtkinputdialog.c:354
 msgid "Close"
-msgstr "Cl�re"
+msgstr "Qapat"
 
 #: gtk/gtkfilesel.c:820
 msgid "Create Directory"
-msgstr "F� on Ridant"
+msgstr "Qovluq Yarat"
 
 #: gtk/gtkfilesel.c:834
 msgid "Directory name:"
-msgstr "No do ridant:"
+msgstr "Qovluq Adı:"
 
 #. buttons
 #: gtk/gtkfilesel.c:847
 msgid "Create"
-msgstr "F�"
+msgstr "Yarat"
 
 #. buttons
 #: gtk/gtkfilesel.c:947
 msgid "Delete"
-msgstr "Disfacer"
+msgstr "Sil"
 
 #. buttons
 #: gtk/gtkfilesel.c:1062
 msgid "Rename"
-msgstr "Rlomer"
+msgstr "Təzədən Adlandır"
 
 #: gtk/gtkfilesel.c:1445
 msgid "Selection: "
-msgstr "Tch�ze: "
+msgstr "Seçki:"
 
 #: gtk/gtkfontsel.c:210
 msgid "Foundry:"
-msgstr "Fondeu:"
+msgstr "Sahibi:"
 
 #: gtk/gtkfontsel.c:211
 msgid "Family:"
-msgstr "Famile:"
+msgstr "Ailə:"
 
 #: gtk/gtkfontsel.c:212
 msgid "Weight:"
-msgstr "Pwed:"
+msgstr "Uzunluq:"
 
 #: gtk/gtkfontsel.c:213
 msgid "Slant:"
-msgstr "Clintchaedje"
+msgstr "Meyil:"
 
 #: gtk/gtkfontsel.c:214
 msgid "Set Width:"
-msgstr "L�rdjeu:"
+msgstr "Uzunluǧunu Göstər:"
 
 #: gtk/gtkfontsel.c:215
 msgid "Add Style:"
-msgstr "St�le di Rawete:"
+msgstr "Tərz Əlavə Et:"
 
 #: gtk/gtkfontsel.c:216
 msgid "Pixel Size:"
-msgstr "Grandeu � Picsels:"
+msgstr "Piksel Böyüklüyü:"
 
 #: gtk/gtkfontsel.c:217
 msgid "Point Size:"
-msgstr "Grandeu � Ponts:"
+msgstr "Nöqtə Böyüklüyü:"
 
 #: gtk/gtkfontsel.c:218
 msgid "Resolution X:"
-msgstr "Spexheu x:"
+msgstr "X Rezolyusiyası:"
 
 #: gtk/gtkfontsel.c:219
 msgid "Resolution Y:"
-msgstr "Spexheu y:"
+msgstr "Y Rezolyusiyası:"
 
 #: gtk/gtkfontsel.c:220
 msgid "Spacing:"
-msgstr "Espa�mint:"
+msgstr "Aralıq:"
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
-msgstr "Emetrinne l�rdjeu"
+msgstr "Ortalama Uzunluq:"
 
 #: gtk/gtkfontsel.c:222
 msgid "Charset:"
-msgstr "Ec�daedje:"
+msgstr "Kodlama:"
 
 #. Number of internationalized titles here must match number
 #. of NULL initializers above
 #: gtk/gtkfontsel.c:459
 msgid "Font Property"
-msgstr "Pr�piet�s del fonte"
+msgstr "YazıTipi Xüsusiyyətləri"
 
 #: gtk/gtkfontsel.c:460
 msgid "Requested Value"
-msgstr "Valixhance dimand�ye"
+msgstr "İstənilən Qiymət"
 
 #: gtk/gtkfontsel.c:461
 msgid "Actual Value"
-msgstr "Vraiye valixhance"
+msgstr "Həqiqi Qiymət"
 
 #: gtk/gtkfontsel.c:494
 msgid "Font"
-msgstr "Fonte"
+msgstr "YazıTipi"
 
 #: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2181 gtk/gtkfontsel.c:2411
 msgid "Font:"
-msgstr "Fonte:"
+msgstr "YazıTipi:"
 
 #: gtk/gtkfontsel.c:509
 msgid "Font Style:"
-msgstr "St�le del fonte:"
+msgstr "YazıTipi Tərzi:"
 
 #: gtk/gtkfontsel.c:514
 msgid "Size:"
-msgstr "Grandeu:"
+msgstr "Böyüklük:"
 
 #: gtk/gtkfontsel.c:646 gtk/gtkfontsel.c:868
 msgid "Reset Filter"
-msgstr "Rinonder passete"
+msgstr "Süzgəci Sıfırla"
 
 #: gtk/gtkfontsel.c:660
 msgid "Metric:"
-msgstr "Metrike:"
+msgstr "Metrik:"
 
 #: gtk/gtkfontsel.c:664
 msgid "Points"
-msgstr "Ponts"
+msgstr "Nöqtəvi:"
 
 #: gtk/gtkfontsel.c:671
 msgid "Pixels"
-msgstr "Picsels"
+msgstr "Piksel"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:687
 msgid "Preview:"
-msgstr "Vey divant:"
+msgstr "İlk Baxış:"
 
 #: gtk/gtkfontsel.c:716
 msgid "Font Information"
-msgstr "Inform�cion sol Fonte"
+msgstr "YazıTipi Mə'lumatı"
 
 #: gtk/gtkfontsel.c:749
 msgid "Requested Font Name:"
-msgstr "No del fonte dimand�ye:"
+msgstr "İstənən YazıTipi Adı:"
 
 #: gtk/gtkfontsel.c:760
 msgid "Actual Font Name:"
-msgstr "Vrai no del fonte:"
+msgstr "Həqiqi YazıTipi Adı:"
 
 #: gtk/gtkfontsel.c:771
 #, c-format
 msgid "%i fonts available with a total of %i styles."
-msgstr "%i fontes avou on tot� di %i st�les."
+msgstr "%i tərzdə %i qədər yazıtipi vardır."
 
 #: gtk/gtkfontsel.c:786
 msgid "Filter"
-msgstr "Passete"
+msgstr "Süzgəc:"
 
 #: gtk/gtkfontsel.c:799
 msgid "Font Types:"
-msgstr "S�rtes di Fontes:"
+msgstr "YazıTipi Növləri:"
 
 #: gtk/gtkfontsel.c:807
 msgid "Bitmap"
@@ -266,11 +260,11 @@ msgstr "Bitmap"
 
 #: gtk/gtkfontsel.c:813
 msgid "Scalable"
-msgstr "Vectori�"
+msgstr "Şkalalı"
 
 #: gtk/gtkfontsel.c:819
 msgid "Scaled Bitmap"
-msgstr "Bitmap al sch�le"
+msgstr "Şkalalı Bitmap"
 
 #: gtk/gtkfontsel.c:890
 msgid "*"
@@ -279,31 +273,31 @@ msgstr "*"
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1215
 msgid "(nil)"
-msgstr "(nole)"
+msgstr "(nil)"
 
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
-msgstr "norm�les"
+msgstr "sıravi"
 
 #: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1973
 msgid "italic"
-msgstr "clintcheyes"
+msgstr "italik"
 
 #: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1974
 msgid "oblique"
-msgstr "oblikes"
+msgstr "meylli"
 
 #: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1975
 msgid "reverse italic"
-msgstr "clintcheyes � rvier"
+msgstr "tərs italik"
 
 #: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1976
 msgid "reverse oblique"
-msgstr "oblikes � rvier"
+msgstr "tərs meylli"
 
 #: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1977
 msgid "other"
-msgstr "�te"
+msgstr "başqa"
 
 #: gtk/gtkfontsel.c:1231
 msgid "[M]"
@@ -315,105 +309,105 @@ msgstr "[C]"
 
 #: gtk/gtkfontsel.c:1793
 msgid "The selected font is not available."
-msgstr "Vos n' avoz n�n li fonte ki vos avoz tchwezi"
+msgstr "Seçilən yazıtipləri müsaid deyil."
 
 #: gtk/gtkfontsel.c:1799
 msgid "The selected font is not a valid font."
-msgstr "Li fonte ki vos avoz tchwezi n' est n�n val�be"
+msgstr "Seçilən yazıtipi keçərli yazıtipi deyildir."
 
 #: gtk/gtkfontsel.c:1857
 msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr ""
-"Ci fonte est ec�d�ye so 2 octets, �t mutw� pout n�n esse h�yn�ye comuf�t"
+msgstr "Bu 2 baytlıq yazıtipidir ve düzgün nümayiş etdirilə bilməz."
 
 #: gtk/gtkfontsel.c:1961 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
-msgstr "(n�n cnoxhou)"
+msgstr "(namə'lum)"
 
 #: gtk/gtkfontsel.c:1972
 msgid "roman"
-msgstr "romane"
+msgstr "roman"
 
 #: gtk/gtkfontsel.c:1984
 msgid "proportional"
-msgstr "prop�rcionel"
+msgstr "proporsiyonel"
 
 #: gtk/gtkfontsel.c:1985
 msgid "monospaced"
-msgstr "d' esp��mint eg�l"
+msgstr "tək boşluqlu"
 
 #: gtk/gtkfontsel.c:1986
 msgid "char cell"
-msgstr "caracteres-bloc"
+msgstr "xarakter hüceyəsi"
 
 #: gtk/gtkfontsel.c:2186
 msgid "Font: (Filter Applied)"
-msgstr "Fonte: (passete eploy�)"
+msgstr "Yazıtipi: (Süzülmüş)"
 
 #: gtk/gtkfontsel.c:2662
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "MAX_FONTS pass�. Sacwant�s fontes pol�t manker"
+msgstr ""
+"MAX_FONTS tapılmadı. Bə'zi yazıtipləri dəyəsən mövcud deyillər."
 
 #: gtk/gtkfontsel.c:3499
 msgid "Apply"
-msgstr "Mete �n o�ve"
+msgstr "Əlavə Et"
 
 #: gtk/gtkfontsel.c:3521
 msgid "Font Selection"
-msgstr "Tchwezi les fontes"
+msgstr "Yazıtipi seçkisi"
 
 #: gtk/gtkgamma.c:396
 msgid "Gamma"
-msgstr "Gamma"
+msgstr "Qamma"
 
 #: gtk/gtkgamma.c:403
 msgid "Gamma value"
-msgstr "Valixhance Gamma"
+msgstr "Qamma qiyməti"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:200
 msgid "Input"
-msgstr "Intr�ye"
+msgstr "Giriş"
 
 #: gtk/gtkinputdialog.c:208
 msgid "No input devices"
-msgstr "Nole �ndjin d' intr�ye"
+msgstr "Giriş avadanlıqları yoxdur"
 
 #: gtk/gtkinputdialog.c:237
 msgid "Device:"
-msgstr "�ndjin:"
+msgstr "Avadanlıq:"
 
 #: gtk/gtkinputdialog.c:253
 msgid "Disabled"
-msgstr "Essoct�"
+msgstr "Passivləşdirilmiş"
 
 #: gtk/gtkinputdialog.c:261
 msgid "Screen"
-msgstr "Waitro�le"
+msgstr "Ekran"
 
 #: gtk/gtkinputdialog.c:269
 msgid "Window"
-msgstr "Purnea"
+msgstr "Pəncərə"
 
 #: gtk/gtkinputdialog.c:277
 msgid "Mode: "
-msgstr "M�de: "
+msgstr "Mod:"
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:307
 msgid "Axes"
-msgstr "Assis"
+msgstr "Oxlar"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:323
 msgid "Keys"
-msgstr "Tapes"
+msgstr "Düymələr"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
 #: gtk/gtkinputdialog.c:345
 msgid "Save"
-msgstr "Schaper"
+msgstr "Qeyd Et"
 
 #: gtk/gtkinputdialog.c:500
 msgid "X"
@@ -425,77 +419,50 @@ msgstr "Y"
 
 #: gtk/gtkinputdialog.c:502
 msgid "Pressure"
-msgstr "Tch�ke"
+msgstr "Təzyiq"
 
 #: gtk/gtkinputdialog.c:503
 msgid "X Tilt"
-msgstr "Limite X"
+msgstr "X Tilt"
 
 #: gtk/gtkinputdialog.c:504
 msgid "Y Tilt"
-msgstr "Limite Y"
+msgstr "Y Tilt"
 
 #: gtk/gtkinputdialog.c:544
 msgid "none"
-msgstr "nole"
+msgstr "heç biri"
 
 #: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
 msgid "(disabled)"
-msgstr "(essoct�)"
+msgstr "(passivləşdirilmiş)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:692
 msgid "clear"
-msgstr "nety�"
+msgstr "təmizlə"
 
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
-msgstr "P�dje %u"
+msgstr "Səhifə %u"
 
 #: gtk/gtkrc.c:1702
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
-"Dji n' pout n�n trover on fitch� im�dje � pixmap_path: \"%s\" al roye %d"
+"Pixmap_path dəki rəsm dosyesinin yeri tapıla bilmir: \"%s\" xətt %d"
 
 #: gtk/gtkrc.c:1705
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Dji n' pout n�n trover on fitch� im�dje � pixmap_path: \"%s\""
+msgstr "Pixmap_path dəki rəsm dosyesinin yeri tapıla bilmir:  \"%s\""
 
 #: gtk/gtkthemes.c:79
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Dji n' pout n�n trover on module tcherdj�ve � module_path: \"%s\","
+msgstr "Module_path dəki modulun yeri tapıla bilmir: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
-msgstr "--- Nole Racsegne ---"
-
-#~ msgid "heavy"
-#~ msgstr "pezantes"
-
-#~ msgid "extrabold"
-#~ msgstr "foirt cr�sses"
-
-#~ msgid "bold"
-#~ msgstr "cr�sses"
-
-#~ msgid "demibold"
-#~ msgstr "demi cr�sses"
-
-#~ msgid "medium"
-#~ msgstr "moy�nes"
-
-#~ msgid "normal"
-#~ msgstr "miernowes"
-
-#~ msgid "light"
-#~ msgstr "ledj�res"
-
-#~ msgid "extralight"
-#~ msgstr "foirt ledj�res"
-
-#~ msgid "thin"
-#~ msgstr "tenes"
+msgstr "--- Qeyd Yoxdur ---"
