@@ -230,21 +230,3 @@ gdk_color_get_type (void)
 					     FALSE);
   return our_type;
 }
-
-/* We define this here to avoid having to create a new .C file just for this
- * function. The rest of GdkVisual is platform-specific
- */
-GType
-gdk_visual_get_type (void)
-{
-  static GType our_type = 0;
-  
-  if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GdkVisual",
-					     NULL,
-					     (GBoxedCopyFunc)gdk_visual_ref,
-					     (GBoxedFreeFunc)gdk_visual_unref,
-					     TRUE);
-  return our_type;
-}
-

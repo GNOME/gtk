@@ -38,6 +38,7 @@
 #include <X11/extensions/XInput.h>
 #endif
 
+
 typedef struct _GdkAxisInfo    GdkAxisInfo;
 typedef struct _GdkDevicePrivate GdkDevicePrivate;
 typedef struct _GdkInputWindow GdkInputWindow;
@@ -94,6 +95,11 @@ struct _GdkDevicePrivate
 #endif /* !XINPUT_NONE */
 };
 
+struct _GdkDeviceClass
+{
+  GObjectClass parent_class;
+};
+
 struct _GdkInputWindow
 {
   /* gdk window */
@@ -114,6 +120,8 @@ struct _GdkInputWindow
   gint grabbed;
 };
 
+
+
 /* Global data */
 
 #define GDK_IS_CORE(d) (((GdkDevice *)(d)) == gdk_core_pointer)
@@ -132,6 +140,7 @@ GdkInputWindow *gdk_input_window_find        (GdkWindow *window);
 void            gdk_input_window_destroy     (GdkWindow *window);
 GdkTimeCoord ** _gdk_device_allocate_history (GdkDevice *device,
 					      gint       n_events);
+void            _gdk_init_input_core         (void);
 
 /* The following functions are provided by each implementation
  * (xfree, gxi, and none)

@@ -1016,32 +1016,3 @@ gdk_event_get_type (void)
 					     FALSE);
   return our_type;
 }
-
-/* These functions are defined here to avoid a new C file, as GdkDevice is
- * platform specific. (similar to how gdk_visual_get_type() is in gdkcolor.c)
- */
-GdkDevice *
-gdk_device_ref (GdkDevice *device)
-{
-  return device;
-}
-
-void
-gdk_device_unref (GdkDevice *device)
-{
-  return;
-}
-
-GType
-gdk_device_get_type (void)
-{
-  static GType our_type = 0;
-  
-  if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GdkDevice",
-					     NULL,
-					     (GBoxedCopyFunc)gdk_device_ref,
-					     (GBoxedFreeFunc)gdk_device_unref,
-					     TRUE);
-  return our_type;
-}

@@ -33,6 +33,7 @@ static void gdk_input_check_proximity (void);
 void 
 gdk_input_init(void)
 {
+  _gdk_init_input_core ();
   gdk_input_ignore_core = FALSE;
   gdk_input_common_init(FALSE);
 }

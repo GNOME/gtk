@@ -7,7 +7,14 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define GDK_TYPE_VISUAL gdk_visual_get_type ()
+#define GDK_TYPE_VISUAL              (gdk_visual_get_type ())
+#define GDK_VISUAL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_VISUAL, GdkVisual))
+#define GDK_VISUAL_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_VISUAL, GdkVisualClass))
+#define GDK_IS_VISUAL(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_VISUAL))
+#define GDK_IS_VISUAL_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_VISUAL))
+#define GDK_VISUAL_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_VISUAL, GdkVisualClass))
+
+typedef struct _GdkVisualClass    GdkVisualClass;
 
 /* Types of visuals.
  *   StaticGray:
@@ -41,6 +48,8 @@ typedef enum
  */
 struct _GdkVisual
 {
+  GObject parent_instance;
+  
   GdkVisualType type;
   gint depth;
   GdkByteOrder byte_order;
@@ -71,9 +80,10 @@ GdkVisual*    gdk_visual_get_best_with_type  (GdkVisualType  visual_type);
 GdkVisual*    gdk_visual_get_best_with_both  (gint	     depth,
 					      GdkVisualType  visual_type);
 
-/* Actually, these are no-ops... */
-GdkVisual* gdk_visual_ref (GdkVisual *visual);
-void	   gdk_visual_unref (GdkVisual *visual);
+#ifndef GTK_DISABLE_DEPRECATED
+#define gdk_visual_ref(v) g_object_ref(v)
+#define gdk_visual_unref(v) g_object_unref(v)
+#endif
 
 void gdk_query_depths	    (gint	    **depths,
 			     gint	     *count);

@@ -36,10 +36,10 @@
 #include <gdk/x11/gdkwindow-x11.h>
 #include <gdk/x11/gdkpixmap-x11.h>
 
-typedef struct _GdkColormapPrivateX11 GdkColormapPrivateX11;
+typedef struct _GdkColormapPrivateX11  GdkColormapPrivateX11;
 typedef struct _GdkCursorPrivate       GdkCursorPrivate;
 typedef struct _GdkFontPrivateX        GdkFontPrivateX;
-typedef struct _GdkImagePrivateX11    GdkImagePrivateX11;
+typedef struct _GdkImagePrivateX11     GdkImagePrivateX11;
 typedef struct _GdkVisualPrivate       GdkVisualPrivate;
 
 struct _GdkCursorPrivate
@@ -64,6 +64,11 @@ struct _GdkVisualPrivate
 {
   GdkVisual visual;
   Visual *xvisual;
+};
+
+struct _GdkVisualClass
+{
+  GObjectClass parent_class;
 };
 
 struct _GdkColormapPrivateX11

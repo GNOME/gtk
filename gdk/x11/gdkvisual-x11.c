@@ -41,7 +41,7 @@ static gboolean gdk_visual_equal          (Visual    *a,
 
 
 static GdkVisualPrivate *system_visual;
-static GdkVisualPrivate *visuals;
+static GdkVisualPrivate **visuals;
 static gint nvisuals;
 
 static gint available_depths[7];
@@ -66,6 +66,48 @@ static const gchar* visual_names[] =
 
 static GHashTable *visual_hash = NULL;
 
+static void
+gdk_visual_finalize (GObject *object)
+{
+  g_error ("A GdkVisual object was finalized. This should not happen");
+}
+
+static void
+gdk_visual_class_init (GObjectClass *class)
+{
+  class->finalize = gdk_visual_finalize;
+}
+
+
+GType
+gdk_visual_get_type (void)
+{
+  static GType object_type = 0;
+
+  if (!object_type)
+    {
+      static const GTypeInfo object_info =
+      {
+        sizeof (GdkVisualClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gdk_visual_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GdkVisualPrivate),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) NULL,
+      };
+      
+      object_type = g_type_register_static (G_TYPE_OBJECT,
+                                            "GdkVisual",
+                                            &object_info, 0);
+    }
+  
+  return object_type;
+}
+
+
 void
 gdk_visual_init (void)
 {
@@ -85,14 +127,17 @@ gdk_visual_init (void)
 
   XVisualInfo *visual_list;
   XVisualInfo visual_template;
-  GdkVisualPrivate temp_visual;
+  GdkVisualPrivate *temp_visual;
   Visual *default_xvisual;
   int nxvisuals;
   int i, j;
 
   visual_template.screen = gdk_screen;
   visual_list = XGetVisualInfo (gdk_display, VisualScreenMask, &visual_template, &nxvisuals);
-  visuals = g_new (GdkVisualPrivate, nxvisuals);
+  
+  visuals = g_new (GdkVisualPrivate *, nxvisuals);
+  for (i = 0; i < nxvisuals; i++)
+    visuals[i] = g_object_new (GDK_TYPE_VISUAL, NULL);
 
   default_xvisual = DefaultVisual (gdk_display, gdk_screen);
 
@@ -108,64 +153,64 @@ gdk_visual_init (void)
 #endif /* __cplusplus */
 	    {
 	    case StaticGray:
-	      visuals[nvisuals].visual.type = GDK_VISUAL_STATIC_GRAY;
+	      visuals[nvisuals]->visual.type = GDK_VISUAL_STATIC_GRAY;
 	      break;
 	    case GrayScale:
-	      visuals[nvisuals].visual.type = GDK_VISUAL_GRAYSCALE;
+	      visuals[nvisuals]->visual.type = GDK_VISUAL_GRAYSCALE;
 	      break;
 	    case StaticColor:
-	      visuals[nvisuals].visual.type = GDK_VISUAL_STATIC_COLOR;
+	      visuals[nvisuals]->visual.type = GDK_VISUAL_STATIC_COLOR;
 	      break;
 	    case PseudoColor:
-	      visuals[nvisuals].visual.type = GDK_VISUAL_PSEUDO_COLOR;
+	      visuals[nvisuals]->visual.type = GDK_VISUAL_PSEUDO_COLOR;
 	      break;
 	    case TrueColor:
-	      visuals[nvisuals].visual.type = GDK_VISUAL_TRUE_COLOR;
+	      visuals[nvisuals]->visual.type = GDK_VISUAL_TRUE_COLOR;
 	      break;
 	    case DirectColor:
-	      visuals[nvisuals].visual.type = GDK_VISUAL_DIRECT_COLOR;
+	      visuals[nvisuals]->visual.type = GDK_VISUAL_DIRECT_COLOR;
 	      break;
 	    }
 
-	  visuals[nvisuals].visual.depth = visual_list[i].depth;
-	  visuals[nvisuals].visual.byte_order =
+	  visuals[nvisuals]->visual.depth = visual_list[i].depth;
+	  visuals[nvisuals]->visual.byte_order =
 	    (ImageByteOrder(gdk_display) == LSBFirst) ?
 	    GDK_LSB_FIRST : GDK_MSB_FIRST;
-	  visuals[nvisuals].visual.red_mask = visual_list[i].red_mask;
-	  visuals[nvisuals].visual.green_mask = visual_list[i].green_mask;
-	  visuals[nvisuals].visual.blue_mask = visual_list[i].blue_mask;
-	  visuals[nvisuals].visual.colormap_size = visual_list[i].colormap_size;
-	  visuals[nvisuals].visual.bits_per_rgb = visual_list[i].bits_per_rgb;
-	  visuals[nvisuals].xvisual = visual_list[i].visual;
+	  visuals[nvisuals]->visual.red_mask = visual_list[i].red_mask;
+	  visuals[nvisuals]->visual.green_mask = visual_list[i].green_mask;
+	  visuals[nvisuals]->visual.blue_mask = visual_list[i].blue_mask;
+	  visuals[nvisuals]->visual.colormap_size = visual_list[i].colormap_size;
+	  visuals[nvisuals]->visual.bits_per_rgb = visual_list[i].bits_per_rgb;
+	  visuals[nvisuals]->xvisual = visual_list[i].visual;
 
-	  if ((visuals[nvisuals].visual.type == GDK_VISUAL_TRUE_COLOR) ||
-	      (visuals[nvisuals].visual.type == GDK_VISUAL_DIRECT_COLOR))
+	  if ((visuals[nvisuals]->visual.type == GDK_VISUAL_TRUE_COLOR) ||
+	      (visuals[nvisuals]->visual.type == GDK_VISUAL_DIRECT_COLOR))
 	    {
-	      gdk_visual_decompose_mask (visuals[nvisuals].visual.red_mask,
-					 &visuals[nvisuals].visual.red_shift,
-					 &visuals[nvisuals].visual.red_prec);
+	      gdk_visual_decompose_mask (visuals[nvisuals]->visual.red_mask,
+					 &visuals[nvisuals]->visual.red_shift,
+					 &visuals[nvisuals]->visual.red_prec);
 
-	      gdk_visual_decompose_mask (visuals[nvisuals].visual.green_mask,
-					 &visuals[nvisuals].visual.green_shift,
-					 &visuals[nvisuals].visual.green_prec);
+	      gdk_visual_decompose_mask (visuals[nvisuals]->visual.green_mask,
+					 &visuals[nvisuals]->visual.green_shift,
+					 &visuals[nvisuals]->visual.green_prec);
 
-	      gdk_visual_decompose_mask (visuals[nvisuals].visual.blue_mask,
-					 &visuals[nvisuals].visual.blue_shift,
-					 &visuals[nvisuals].visual.blue_prec);
+	      gdk_visual_decompose_mask (visuals[nvisuals]->visual.blue_mask,
+					 &visuals[nvisuals]->visual.blue_shift,
+					 &visuals[nvisuals]->visual.blue_prec);
 	    }
 	  else
 	    {
-	      visuals[nvisuals].visual.red_mask = 0;
-	      visuals[nvisuals].visual.red_shift = 0;
-	      visuals[nvisuals].visual.red_prec = 0;
+	      visuals[nvisuals]->visual.red_mask = 0;
+	      visuals[nvisuals]->visual.red_shift = 0;
+	      visuals[nvisuals]->visual.red_prec = 0;
 
-	      visuals[nvisuals].visual.green_mask = 0;
-	      visuals[nvisuals].visual.green_shift = 0;
-	      visuals[nvisuals].visual.green_prec = 0;
+	      visuals[nvisuals]->visual.green_mask = 0;
+	      visuals[nvisuals]->visual.green_shift = 0;
+	      visuals[nvisuals]->visual.green_prec = 0;
 
-	      visuals[nvisuals].visual.blue_mask = 0;
-	      visuals[nvisuals].visual.blue_shift = 0;
-	      visuals[nvisuals].visual.blue_prec = 0;
+	      visuals[nvisuals]->visual.blue_mask = 0;
+	      visuals[nvisuals]->visual.blue_shift = 0;
+	      visuals[nvisuals]->visual.blue_prec = 0;
 	    }
 
 	  nvisuals += 1;
@@ -179,27 +224,27 @@ gdk_visual_init (void)
     {
       for (j = i+1; j < nvisuals; j++)
 	{
-	  if (visuals[j].visual.depth >= visuals[i].visual.depth)
+	  if (visuals[j]->visual.depth >= visuals[i]->visual.depth)
 	    {
-	      if ((visuals[j].visual.depth == 8) && (visuals[i].visual.depth == 8))
+	      if ((visuals[j]->visual.depth == 8) && (visuals[i]->visual.depth == 8))
 		{
-		  if (visuals[j].visual.type == GDK_VISUAL_PSEUDO_COLOR)
+		  if (visuals[j]->visual.type == GDK_VISUAL_PSEUDO_COLOR)
 		    {
 		      temp_visual = visuals[j];
 		      visuals[j] = visuals[i];
 		      visuals[i] = temp_visual;
 		    }
-		  else if ((visuals[i].visual.type != GDK_VISUAL_PSEUDO_COLOR) &&
-			   visuals[j].visual.type > visuals[i].visual.type)
+		  else if ((visuals[i]->visual.type != GDK_VISUAL_PSEUDO_COLOR) &&
+			   visuals[j]->visual.type > visuals[i]->visual.type)
 		    {
 		      temp_visual = visuals[j];
 		      visuals[j] = visuals[i];
 		      visuals[i] = temp_visual;
 		    }
 		}
-	      else if ((visuals[j].visual.depth > visuals[i].visual.depth) ||
-		       ((visuals[j].visual.depth == visuals[i].visual.depth) &&
-			(visuals[j].visual.type > visuals[i].visual.type)))
+	      else if ((visuals[j]->visual.depth > visuals[i]->visual.depth) ||
+		       ((visuals[j]->visual.depth == visuals[i]->visual.depth) &&
+			(visuals[j]->visual.type > visuals[i]->visual.type)))
 		{
 		  temp_visual = visuals[j];
 		  visuals[j] = visuals[i];
@@ -210,9 +255,9 @@ gdk_visual_init (void)
     }
 
   for (i = 0; i < nvisuals; i++)
-    if (default_xvisual->visualid == visuals[i].xvisual->visualid)
+    if (default_xvisual->visualid == visuals[i]->xvisual->visualid)
       {
-	system_visual = &visuals[i];
+	system_visual = visuals[i];
 	break;
       }
 
@@ -220,8 +265,8 @@ gdk_visual_init (void)
   if (gdk_debug_flags & GDK_DEBUG_MISC)
     for (i = 0; i < nvisuals; i++)
       g_message ("visual: %s: %d",
-		 visual_names[visuals[i].visual.type],
-		 visuals[i].visual.depth);
+		 visual_names[visuals[i]->visual.type],
+		 visuals[i]->visual.depth);
 #endif /* G_ENABLE_DEBUG */
 
   navailable_depths = 0;
@@ -229,9 +274,9 @@ gdk_visual_init (void)
     {
       for (j = 0; j < nvisuals; j++)
 	{
-	  if (visuals[j].visual.depth == possible_depths[i])
+	  if (visuals[j]->visual.depth == possible_depths[i])
 	    {
-	      available_depths[navailable_depths++] = visuals[j].visual.depth;
+	      available_depths[navailable_depths++] = visuals[j]->visual.depth;
 	      break;
 	    }
 	}
@@ -245,31 +290,19 @@ gdk_visual_init (void)
     {
       for (j = 0; j < nvisuals; j++)
 	{
-	  if (visuals[j].visual.type == possible_types[i])
+	  if (visuals[j]->visual.type == possible_types[i])
 	    {
-	      available_types[navailable_types++] = visuals[j].visual.type;
+	      available_types[navailable_types++] = visuals[j]->visual.type;
 	      break;
 	    }
 	}
     }
 
   for (i = 0; i < nvisuals; i++)
-    gdk_visual_add ((GdkVisual*) &visuals[i]);
+    gdk_visual_add ((GdkVisual*) visuals[i]);
 
   if (npossible_types == 0)
     g_error ("unable to find a usable visual type");
-}
-
-GdkVisual*
-gdk_visual_ref (GdkVisual *visual)
-{
-  return visual;
-}
-
-void
-gdk_visual_unref (GdkVisual *visual)
-{
-  return;
 }
 
 gint
@@ -293,7 +326,7 @@ gdk_visual_get_system (void)
 GdkVisual*
 gdk_visual_get_best (void)
 {
-  return ((GdkVisual*) &(visuals[0]));
+  return ((GdkVisual*) visuals[0]);
 }
 
 GdkVisual*
@@ -304,9 +337,9 @@ gdk_visual_get_best_with_depth (gint depth)
 
   return_val = NULL;
   for (i = 0; i < nvisuals; i++)
-    if (depth == visuals[i].visual.depth)
+    if (depth == visuals[i]->visual.depth)
       {
-	return_val = (GdkVisual*) &(visuals[i]);
+	return_val = (GdkVisual*) visuals[i];
 	break;
       }
 
@@ -321,9 +354,9 @@ gdk_visual_get_best_with_type (GdkVisualType visual_type)
 
   return_val = NULL;
   for (i = 0; i < nvisuals; i++)
-    if (visual_type == visuals[i].visual.type)
+    if (visual_type == visuals[i]->visual.type)
       {
-	return_val = (GdkVisual*) &(visuals[i]);
+	return_val = (GdkVisual*) visuals[i];
 	break;
       }
 
@@ -339,10 +372,10 @@ gdk_visual_get_best_with_both (gint          depth,
 
   return_val = NULL;
   for (i = 0; i < nvisuals; i++)
-    if ((depth == visuals[i].visual.depth) &&
-	(visual_type == visuals[i].visual.type))
+    if ((depth == visuals[i]->visual.depth) &&
+	(visual_type == visuals[i]->visual.type))
       {
-	return_val = (GdkVisual*) &(visuals[i]);
+	return_val = (GdkVisual*) visuals[i];
 	break;
       }
 
@@ -373,7 +406,7 @@ gdk_list_visuals (void)
 
   list = NULL;
   for (i = 0; i < nvisuals; ++i)
-    list = g_list_append (list, (gpointer) &visuals[i]);
+    list = g_list_append (list, (gpointer) visuals[i]);
 
   return list;
 }
@@ -397,8 +430,8 @@ gdkx_visual_get (VisualID xvisualid)
   int i;
 
   for (i = 0; i < nvisuals; i++)
-    if (xvisualid == visuals[i].xvisual->visualid)
-      return (GdkVisual*) &visuals[i];
+    if (xvisualid == visuals[i]->xvisual->visualid)
+      return (GdkVisual*) visuals[i];
 
   return NULL;
 }

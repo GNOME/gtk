@@ -96,7 +96,7 @@ gdk_input_device_new (XDeviceInfo *device, gint include_core)
   XAnyClassPtr class;
   gint i,j;
 
-  gdkdev = g_new(GdkDevicePrivate,1);
+  gdkdev = g_object_new (GDK_TYPE_DEVICE_PRIVATE, 1);
 
   gdkdev->deviceid = device->id;
   if (device->name[0])
@@ -245,7 +245,7 @@ gdk_input_device_new (XDeviceInfo *device, gint include_core)
     g_free (gdkdev->info.keys);
   if (gdkdev->info.axes)
     g_free (gdkdev->info.axes);
-  g_free (gdkdev);
+  g_object_unref (gdkdev);
   
   return NULL;
 }

@@ -29,6 +29,7 @@
 void
 gdk_input_init (void)
 {
+  _gdk_init_input_core ();
   gdk_input_devices = g_list_append (NULL, gdk_core_pointer);
 
   gdk_input_ignore_core = FALSE;

@@ -1,3 +1,21 @@
+2001-06-29  Alex Larsson  <alexl@redhat.com>
+
+	* gdk/gdkvisual.h:
+	* gdk/gdkcolor.c:
+	* gdk/x11/gdkx.h:
+	* gdk/x11/gdkvisual-x11.c:
+	Convert GdkVisual to a GObject.
+
+	* gdk/gdkinput.h:
+	* gdk/gdkevents.c:
+	* gdk/x11/gdkinputprivate.h:
+	* gdk/x11/gdkinput-gxi.c:
+	* gdk/x11/gdkinput-none.c:
+	* gdk/x11/gdkinput-x11.c:
+	* gdk/x11/gdkinput-xfree.c:
+	* gdk/x11/gdkinput.c:
+	Convert GdkDevice to a GObject.
+
 Fri Jun 29 22:13:28 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreestore.c (gtk_tree_store_new): changed new_with_types
