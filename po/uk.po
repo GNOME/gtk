@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "POT-Creation-Date: 2003-02-28 15:23+0200\n"
-"PO-Revision-Date: 2003-02-28 14:09--500\n"
+"PO-Revision-Date: 2003-02-28 14:47--500\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -3694,7 +3694,7 @@ msgstr "Горизонтальний відступ"
 
 #: gtk/gtktable.c:245
 msgid "Extra space to put between the child and its left and right neighbors, in pixels"
-msgstr ""
+msgstr "Додатковий проміжок, в точках, між вкладеним елементом і елементами, що знаходяться лівоч і праворуч від нього"
 
 #: gtk/gtktable.c:251
 msgid "Vertical padding"
@@ -3702,7 +3702,7 @@ msgstr "Вертикальний відступ"
 
 #: gtk/gtktable.c:252
 msgid "Extra space to put between the child and its upper and lower neighbors, in pixels"
-msgstr ""
+msgstr "Додатковий проміжок, в точках, між вкладеним елементом і елементами, що знаходяться під і над ним"
 
 #: gtk/gtktext.c:602
 msgid "Horizontal adjustment for the text widget"
@@ -3742,7 +3742,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:196
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
-msgstr ""
+msgstr "Наза, що використовуватиметься для посилань на текстовий тег. NULL для безіменних тегів."
 
 #: gtk/gtktexttag.c:214
 msgid "Background color as a (possibly unallocated) GdkColor"
@@ -3754,15 +3754,15 @@ msgstr "Повна висота тла"
 
 #: gtk/gtktexttag.c:222
 msgid "Whether the background color fills the entire line height or only the height of the tagged characters"
-msgstr ""
+msgstr "Буде колір тла застосовано на всю висоту, чи лише на висоту символів, відзначених тегами."
 
 #: gtk/gtktexttag.c:230
 msgid "Background stipple mask"
-msgstr ""
+msgstr "Візерункова маска тла"
 
 #: gtk/gtktexttag.c:231
 msgid "Bitmap to use as a mask when drawing the text background"
-msgstr ""
+msgstr "Бітова мапа, що буде використана в якості маски під час малювання тла тексту"
 
 #: gtk/gtktexttag.c:248
 msgid "Foreground color as a (possibly unallocated) GdkColor"
@@ -3770,11 +3770,11 @@ msgstr "Колір переднього плану у вигляді, можли
 
 #: gtk/gtktexttag.c:256
 msgid "Foreground stipple mask"
-msgstr ""
+msgstr "Візерункова мапа тексту"
 
 #: gtk/gtktexttag.c:257
 msgid "Bitmap to use as a mask when drawing the text foreground"
-msgstr ""
+msgstr "Бітова мапа, що буде використана в якості маски під час малювання переднього плану тексту"
 
 #: gtk/gtktexttag.c:264
 msgid "Text direction"
