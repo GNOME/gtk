@@ -393,8 +393,6 @@ CLEANFILES += xgen-gmc
 
 EXTRA_DIST =			\
         gdk-pixbuf-csource.1    \
-	makefile.mingw		\
-	makefile.mingw.in	\
 	makefile.msc		\
 	gdk_pixbuf.def		\
 	gdk_pixbuf.rc		\
@@ -438,7 +436,7 @@ install-data-local: install-ms-lib install-libtool-import-lib
 all-local: gdk-pixbuf.loaders
 
 gdk-pixbuf.loaders: $(loader_LTLIBRARIES) gdk-pixbuf-query-loaders
-	if find . -name 'libpixbufloader-*.so' | grep 'so' > /dev/null ; then \
+	if find . -name 'libpixbufloader-*.@SOEXT@' | grep '@SOEXT@' > /dev/null ; then \
           echo "Writing a gdk-pixbuf.loader file to use when running examples before installing gdk-pixbuf."; \
 	  GDK_PIXBUF_MODULEDIR=.libs $(top_builddir)/gdk-pixbuf/gdk-pixbuf-query-loaders > ./gdk-pixbuf.loaders ;\
 	else \

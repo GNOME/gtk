@@ -40,7 +40,6 @@ SUBDIRS=rc
 
 EXTRA_DIST = \
 	bdfcursor.c \
-	makefile.mingw	\
 	makefile.msc	\
 	libie55uuid.la	\
 	libwntab32x.la

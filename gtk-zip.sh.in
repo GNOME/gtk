@@ -10,9 +10,9 @@ rm $ZIP
 zip -r $ZIP -@ <<EOF
 COPYING.LIB-2
 etc/gtk-2.0
-lib/libgdk_pixbuf-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
-lib/libgdk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
-lib/libgtk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
+lib/libgdk_pixbuf-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
+lib/libgdk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
+lib/libgtk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
 EOF
 
 zip $ZIP lib/gtk-2.0/@GTK_BINARY_VERSION@/loaders/*.dll lib/gtk-2.0/@GTK_BINARY_VERSION@/immodules/*.dll
@@ -25,13 +25,14 @@ rm $DEVZIP
 zip -r $DEVZIP -@ <<EOF
 include/gtk-2.0
 bin/gdk-pixbuf-csource.exe
+bin/gdk-pixbuf-query-loaders.exe
 man/man1/gdk-pixbuf-csource.1
-lib/libgdk_pixbuf-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.dll.a
-lib/gdk_pixbuf-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.lib
-lib/libgdk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.dll.a
-lib/gdk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.lib
-lib/libgtk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.dll.a
-lib/gtk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.lib
+lib/libgdk_pixbuf-@GTK_API_VERSION@.dll.a
+lib/gdk_pixbuf-@GTK_API_VERSION@.lib
+lib/libgdk-win32-@GTK_API_VERSION@.dll.a
+lib/gdk-win32-@GTK_API_VERSION@.lib
+lib/libgtk-win32-@GTK_API_VERSION@.dll.a
+lib/gtk-win32-@GTK_API_VERSION@.lib
 lib/gtk-2.0/include
 lib/pkgconfig/gdk-pixbuf-2.0.pc
 lib/pkgconfig/gdk-2.0.pc

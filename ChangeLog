@@ -1,3 +1,42 @@
+2003-01-05  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk-zip.sh.in: Use correct DLL and import library names, with
+	GTK_API_VERSION in name, not GTK_MAJOR_VERSION.GTK_MINOR_VERSION.
+	(DEVZIP): Add gdk-pixbuf-query-loaders.exe.
+
+	* configure.in: Improve check for dimm.h.
+
+	* configure.in: Set SOEXT to 'so' on Unix, 'dll' on Win32. Used in
+	gdk-pixbuf/Makefile.am.
+
+	* gdk-pixbuf/makefile.mingw.in
+	* gdk-pixbuf/pixops/makefile.mingw.in
+	* gdk/makefile.mingw.in
+	* gdk/win32/makefile.mingw.in
+	* gtk/makefile.mingw.in: Remove. Not maintained anyway.
+
+	* gdk-pixbuf/Makefile.am
+	* gdk-pixbuf/pixops/Makefile.am
+	* gdk/Makefile.am
+	* gdk/win32/Makefile.am
+	* gtk/Makefile.am
+	* configure.in: Remove makefile.mingw{,.in} from here, too.
+	
+	* README.win32: Updates. Don't mention the now removed
+	makefile.mingw files.
+
+	* gdk/gdk.def
+	* gtk/gtk.def: Add a couple of missing entries.
+
+	* gdk/gdkkeynames.c: Include <string.h> for strcmp() and memcpy().
+
+	* gdk/win32/gdkevents-win32.c: Move dimm.h header clash workaround
+	earlier.
+
+	* gdk/win32/rc/Makefile.am: Add hack to help
+	build/win32/lt-compile-resource decide which kind of libtool
+	object file to produce.
+
 2003-01-05  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextview.c (gtk_text_view_move_cursor_internal): Make

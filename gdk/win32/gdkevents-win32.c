@@ -36,7 +36,15 @@
 /* Do use SetCapture, it works now. Thanks to jpe@archaeopteryx.com */
 #define USE_SETCAPTURE 1
 
+#include "config.h"
+
 #include <glib/gprintf.h>
+
+#if defined (__GNUC__) && defined (HAVE_DIMM_H)
+/* The w32api imm.h clashes a bit with the IE5.5 dimm.h */
+# define IMEMENUITEMINFOA hidden_IMEMENUITEMINFOA
+# define IMEMENUITEMINFOW hidden_IMEMENUITEMINFOW
+#endif
 
 #include "gdk.h"
 #include "gdkprivate-win32.h"
@@ -49,12 +57,6 @@
 #endif
 
 #include <objbase.h>
-
-#if defined (__GNUC__) && defined (HAVE_DIMM_H)
-/* The w32api imm.h clashes a bit with the IE5.5 dimm.h */
-# define IMEMENUITEMINFOA hidden_IMEMENUITEMINFOA
-# define IMEMENUITEMINFOW hidden_IMEMENUITEMINFOW
-#endif
 
 #include <imm.h>
 

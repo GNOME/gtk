@@ -149,13 +149,16 @@ case "$host" in
   *-*-mingw*)
     os_win32=yes
     MATH_LIB=
+    SOEXT=dll
     ;;
   *)
     os_win32=no
+    SOEXT=so
     ;;
 esac
 AC_MSG_RESULT([$os_win32])
 AM_CONDITIONAL(OS_WIN32, test "$os_win32" = "yes")
+AC_SUBST(SOEXT)
 
 if test "$os_win32" = "yes"; then
   AC_CHECK_PROG(ms_librarian, lib.exe, yes, no)
@@ -470,13 +473,15 @@ if test "${with_ie55+set}" = set && test $with_ie55 != no; then
   AC_MSG_CHECKING([for dimm.h])
   saved_CFLAGS="$CFLAGS"
   CFLAGS="$CFLAGS -idirafter $with_ie55/Include"
-  AC_TRY_COMPILE([#include <windows.h>
-#include <objbase.h>
+  AC_TRY_COMPILE([[/* The w32api imm.h clashes a bit with the IE5.5 dimm.h */
 #ifdef __GNUC__
-/* The w32api imm.h clashes a bit with the IE5.5 dimm.h */
 #define IMEMENUITEMINFOA hidden_IMEMENUITEMINFOA
 #define IMEMENUITEMINFOW hidden_IMEMENUITEMINFOW
+#endif
+#include <windows.h>
+#include <objbase.h>
 #include <imm.h>
+#ifdef __GNUC__
 #undef IMEMENUITEMINFOA
 #undef IMEMENUITEMINFOW
 #endif
@@ -1609,21 +1614,16 @@ docs/reference/gtk/version.xml
 docs/faq/Makefile
 docs/tutorial/Makefile
 gdk-pixbuf/Makefile
-gdk-pixbuf/makefile.mingw
 gdk-pixbuf/gdk_pixbuf.rc
 gdk-pixbuf/gdk-pixbuf-features.h
 gdk-pixbuf/pixops/Makefile
-gdk-pixbuf/pixops/makefile.mingw
 gdk/Makefile
-gdk/makefile.mingw
 gdk/x11/Makefile
 gdk/win32/Makefile
-gdk/win32/makefile.mingw
 gdk/win32/rc/Makefile
 gdk/win32/rc/gdk.rc
 gdk/linux-fb/Makefile
 gtk/Makefile
-gtk/makefile.mingw
 gtk/makefile.msc
 gtk/gtkversion.h
 gtk/gtk-win32.rc

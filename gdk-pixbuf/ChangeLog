@@ -1,3 +1,9 @@
+2003-01-05  Tor Lillqvist  <tml@iki.fi>
+
+	* Makefile.am (gdk-pixbuf.loaders): Use @SOEXT@ in the find command.
+
+	* gdk_pixbuf.def: Add gdk_pixbuf_loader_set_size.
+
 2003-01-03  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-io.c (gdk_pixbuf_new_from_xpm_data): Don't crash if

@@ -7,8 +7,6 @@ EXTRA_DIST =			\
 	gdkconfig.h.win32 	\
 	gdk.def 		\
 	gdkmarshalers.list	\
-	makefile.mingw 		\
-	makefile.mingw.in 	\
 	makeenums.pl		\
 	makefile.msc
 

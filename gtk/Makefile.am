@@ -619,8 +619,6 @@ EXTRA_DIST += @STRIP_BEGIN@ 	\
 	gtkrc.default		\
 	gtkrc.key.default	\
 	gtkrc.key.emacs		\
-	makefile.mingw		\
-	makefile.mingw.in	\
 	makefile.msc		\
 	makefile.msc.in		\
 @STRIP_END@

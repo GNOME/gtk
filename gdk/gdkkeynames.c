@@ -26,6 +26,7 @@
 
 #include <glib/gprintf.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "gdkkeysyms.h"
 #include "gdkinternals.h"

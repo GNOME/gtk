@@ -2095,6 +2095,7 @@ EXPORTS
 	gtk_window_begin_move_drag
 	gtk_window_begin_resize_drag
 	gtk_window_deiconify
+	gtk_window_fullscreen
 	gtk_window_get_decorated
 	gtk_window_get_default_icon_list
 	gtk_window_get_default_size
@@ -2159,6 +2160,7 @@ EXPORTS
 	gtk_window_set_wmclass
 	gtk_window_stick
 	gtk_window_type_get_type
+	gtk_window_unfullscreen
 	gtk_window_unmaximize
 	gtk_window_unstick
 	gtk_wrap_mode_get_type
