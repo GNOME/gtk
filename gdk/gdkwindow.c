@@ -1185,8 +1185,11 @@ gdk_window_get_visual (GdkWindow *window)
   XWindowAttributes window_attributes;
    
   g_return_val_if_fail (window != NULL, NULL);
-  
+
   window_private = (GdkWindowPrivate*) window;
+  /* Huh? ->parent is never set for a pixmap. We should just return
+   * null immeditately
+   */
   while (window_private && (window_private->window_type == GDK_WINDOW_PIXMAP))
     window_private = (GdkWindowPrivate*) window_private->parent;
   
@@ -1210,14 +1213,23 @@ GdkColormap*
 gdk_window_get_colormap (GdkWindow *window)
 {
   GdkWindowPrivate *window_private;
+  XWindowAttributes window_attributes;
   
   g_return_val_if_fail (window != NULL, NULL);
-  
   window_private = (GdkWindowPrivate*) window;
-  
+
+  g_return_val_if_fail (window_private->window_type != GDK_WINDOW_PIXMAP, NULL);
   if (!window_private->destroyed)
     {
-      return window_private->colormap;
+      if (window_private->window_type == GDK_WINDOW_FOREIGN)
+	{
+	  XGetWindowAttributes (window_private->xdisplay,
+				window_private->xwindow,
+				&window_attributes);
+	  return gdk_colormap_lookup (window_attributes.colormap);
+	 }
+       else
+	 return window_private->colormap;
     }
   
   return NULL;
