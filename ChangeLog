@@ -7,6 +7,13 @@
 
 	* gtk/gtk.def: Add a couple of missing entry points. (#63585)
 
+	* gtk/gtkimmodule.c (correct_libdir_prefix): New function, used on
+	Windows to turn build-time paths from a gtk.immodules distributed
+	as part of a binary package into runtime ones in the
+	end-user-chosen installation directory.
+	(gtk_im_module_init): Use it for module path and domain
+	directory.
+
 2001-11-02  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkrc.c (gtk_rc_make_default_dir): Fix typo: extraneous

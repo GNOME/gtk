@@ -719,7 +719,6 @@ EXPORTS
 	gtk_im_context_simple_new
 	gtk_im_module_get_type
 	gtk_im_multicontext_append_menuitems
-	gtk_im_multicontext_commit_cb
 	gtk_im_multicontext_get_type
 	gtk_im_multicontext_new
 	gtk_image_get
@@ -1256,10 +1255,8 @@ EXPORTS
 	gtk_selection_data_free
 	gtk_selection_data_get_targets
 	gtk_selection_data_get_text
-	gtk_selection_data_get_tree_row
 	gtk_selection_data_set
 	gtk_selection_data_set_text
-	gtk_selection_data_set_tree_row
 	gtk_selection_data_targets_include_text
 	gtk_selection_incr_event
 	gtk_selection_notify
@@ -1721,6 +1718,7 @@ EXPORTS
 	gtk_tree_drag_source_drag_data_delete
 	gtk_tree_drag_source_drag_data_get
 	gtk_tree_drag_source_get_type
+	gtk_tree_get_row_drag_data
 	gtk_tree_get_type
 	gtk_tree_insert
 	gtk_tree_item_collapse
@@ -1816,6 +1814,7 @@ EXPORTS
 	gtk_tree_selection_unselect_all
 	gtk_tree_selection_unselect_iter
 	gtk_tree_selection_unselect_path
+	gtk_tree_set_row_drag_data
 	gtk_tree_set_selection_mode
 	gtk_tree_set_view_lines
 	gtk_tree_set_view_mode
@@ -1848,7 +1847,6 @@ EXPORTS
 	gtk_tree_view_collapse_row
 	gtk_tree_view_column_add_attribute
 	gtk_tree_view_column_cell_draw_focus
-	gtk_tree_view_column_cell_event
 	gtk_tree_view_column_cell_focus
 	gtk_tree_view_column_cell_get_size
 	gtk_tree_view_column_cell_is_visible

@@ -33,6 +33,7 @@
 #include <pango/pango-utils.h>
 #include "gtkimmodule.h"
 #include "gtkimcontextsimple.h"
+#include "gtkprivate.h"
 #include "gtkrc.h"
 #include "config.h"
 #include "gtkintl.h"
@@ -222,6 +223,28 @@ add_module (GtkIMModule *module, GSList *infos)
   modules_list = g_slist_prepend (modules_list, module);
 }
 
+#ifdef G_OS_WIN32
+static void
+correct_libdir_prefix (gchar **path)
+{
+  if (strncmp (*path, GTK_LIBDIR, strlen (GTK_LIBDIR)) == 0)
+    {
+      /* This is an entry put there by make install on the
+       * packager's system. On Windows a prebuilt GTK+
+       * package can be installed in a random
+       * location. The gtk.immodules file distributed in
+       * such a package contains paths from the package
+       * builder's machine. Replace the path with the real
+       * one on this machine.
+       */
+      gchar *tem = *path;
+      *path = g_strconcat (GTK_LIBDIR, tem + strlen (GTK_LIBDIR), NULL);
+      g_free (tem);
+    }
+}
+#endif
+
+
 static void
 gtk_im_module_init ()
 {
@@ -280,6 +303,9 @@ gtk_im_module_init ()
 	    }
 
 	  module->path = g_strdup (tmp_buf->str);
+#ifdef G_OS_WIN32
+	  correct_libdir_prefix (&module->path);
+#endif
 	  g_type_module_set_name (G_TYPE_MODULE (module), module->path);
 	}
       else
@@ -303,6 +329,9 @@ gtk_im_module_init ()
 	  if (!pango_scan_string (&p, tmp_buf))
 	    goto context_error;
 	  info->domain_dirname = g_strdup (tmp_buf->str);
+#ifdef G_OS_WIN32
+	  correct_libdir_prefix (&info->domain_dirname);
+#endif
 
 	  if (!pango_scan_string (&p, tmp_buf))
 	    goto context_error;
