@@ -46,7 +46,7 @@ struct _GtkPreviewProp
 
 static void   gtk_preview_class_init    (GtkPreviewClass  *klass);
 static void   gtk_preview_init          (GtkPreview       *preview);
-static void   gtk_preview_destroy       (GtkObject        *object);
+static void   gtk_preview_finalize      (GtkObject        *object);
 static void   gtk_preview_realize       (GtkWidget        *widget);
 static void   gtk_preview_unrealize     (GtkWidget        *widget);
 static gint   gtk_preview_expose        (GtkWidget        *widget,
@@ -162,7 +162,7 @@ gtk_preview_class_init (GtkPreviewClass *klass)
   parent_class = gtk_type_class (gtk_widget_get_type ());
   preview_class = klass;
 
-  object_class->destroy = gtk_preview_destroy;
+  object_class->finalize = gtk_preview_finalize;
 
   widget_class->realize = gtk_preview_realize;
   widget_class->unrealize = gtk_preview_unrealize;
@@ -636,7 +636,7 @@ gtk_preview_get_info ()
 
 
 static void
-gtk_preview_destroy (GtkObject *object)
+gtk_preview_finalize (GtkObject *object)
 {
   GtkPreview *preview;
 
@@ -648,8 +648,7 @@ gtk_preview_destroy (GtkObject *object)
     g_free (preview->buffer);
   preview->type = (GtkPreviewType) -1;
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 static void

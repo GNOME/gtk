@@ -273,7 +273,9 @@ gtk_tree_item_init (GtkTreeItem *tree_item)
 	gtk_container_add(GTK_CONTAINER(eventbox), pixmapwid);
       gtk_widget_show(pixmapwid);
       tree_item->plus_pix_widget = pixmapwid;
-
+      gtk_widget_ref (tree_item->plus_pix_widget);
+      gtk_object_sink (GTK_OBJECT (tree_item->plus_pix_widget));
+      
       /* create pixmap for button '-' */
 #ifndef WITH_BITMAP
       pixmapwid = gtk_pixmap_new (pixmap_minus, mask);
@@ -284,7 +286,9 @@ gtk_tree_item_init (GtkTreeItem *tree_item)
 	gtk_container_add(GTK_CONTAINER(eventbox), pixmapwid);
       gtk_widget_show(pixmapwid);
       tree_item->minus_pix_widget = pixmapwid;
-
+      gtk_widget_ref (tree_item->minus_pix_widget);
+      gtk_object_sink (GTK_OBJECT (tree_item->minus_pix_widget));
+      
       gtk_widget_set_parent(eventbox, GTK_WIDGET(tree_item));
     } else
       tree_item->pixmaps_box = NULL;
@@ -887,19 +891,39 @@ gtk_tree_item_destroy (GtkObject *object)
   /* free sub tree if it exist */
   if((child = item->subtree)) 
     {
-      child->parent = NULL; 
-      gtk_object_unref (GTK_OBJECT (child));
+      gtk_widget_ref (child);
+      gtk_widget_unparent (child);
       gtk_widget_destroy (child);
+      gtk_widget_unref (child);
+      item->subtree = NULL;
     }
 
   /* free pixmaps box */
   if((child = item->pixmaps_box))
     {
-      child->parent = NULL; 
-      gtk_object_unref (GTK_OBJECT (child));
+      gtk_widget_ref (child);
+      gtk_widget_unparent (child);
       gtk_widget_destroy (child);
+      gtk_widget_unref (child);
+      item->pixmaps_box = NULL;
     }
 
+  /* destroy plus pixmap */
+  if (item->plus_pix_widget)
+    {
+      gtk_widget_destroy (item->plus_pix_widget);
+      gtk_widget_unref (item->plus_pix_widget);
+      item->plus_pix_widget = NULL;
+    }
+
+  /* destroy minus pixmap */
+  if (item->minus_pix_widget)
+    {
+      gtk_widget_destroy (item->minus_pix_widget);
+      gtk_widget_unref (item->minus_pix_widget);
+      item->minus_pix_widget = NULL;
+    }
+  
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 

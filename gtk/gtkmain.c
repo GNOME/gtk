@@ -368,21 +368,17 @@ gtk_main_iteration_do (gboolean blocking)
 	  break;
 	  
 	case GDK_DELETE:
- 	  gtk_object_ref (GTK_OBJECT (event_widget));
+ 	  gtk_widget_ref (event_widget);
 	  if (gtk_widget_event (event_widget, event))
-	    {
-	      gtk_object_unref (GTK_OBJECT (event_widget));
-	      gtk_widget_destroy (event_widget);
-	    }
-	  else
-	    gtk_object_unref (GTK_OBJECT (event_widget));
+	    gtk_widget_destroy (event_widget);
+ 	  gtk_widget_unref (event_widget);
 	  break;
 	  
 	case GDK_DESTROY:
- 	  gtk_object_ref (GTK_OBJECT (event_widget));
+ 	  gtk_widget_ref (event_widget);
 	  gtk_widget_event (event_widget, event);
- 	  gtk_object_unref (GTK_OBJECT (event_widget));
 	  gtk_widget_destroy (event_widget);
+ 	  gtk_widget_unref (event_widget);
 	  break;
 	  
 	case GDK_PROPERTY_NOTIFY:
@@ -494,11 +490,12 @@ gtk_grab_add (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
 
-  if (!GTK_WIDGET_HAS_GRAB (widget) && !GTK_OBJECT_NEED_DESTROY (widget))
+  if (!GTK_WIDGET_HAS_GRAB (widget))
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_GRAB);
-
+      
       grabs = g_slist_prepend (grabs, widget);
+      gtk_widget_ref (widget);
     }
 }
 
@@ -512,6 +509,7 @@ gtk_grab_remove (GtkWidget *widget)
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_GRAB);
 
       grabs = g_slist_remove (grabs, widget);
+      gtk_widget_unref (widget);
     }
 }
 
@@ -885,7 +883,10 @@ GtkWidget*
 gtk_get_event_widget (GdkEvent *event)
 {
   GtkWidget *widget;
-  gdk_window_get_user_data (event->any.window, (void**) &widget);
+
+  widget = NULL;
+  if (event->any.window)
+    gdk_window_get_user_data (event->any.window, (void**) &widget);
   
   return widget;
 }
@@ -1117,8 +1118,6 @@ gtk_propagate_event (GtkWidget *widget,
 {
   GtkWidget *parent;
   gint handled_event;
-  gint parent_old_value;
-  gint old_value;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (event != NULL);
@@ -1134,62 +1133,21 @@ gtk_propagate_event (GtkWidget *widget,
        *  for that window.
        */
       parent = gtk_widget_get_ancestor (widget, gtk_window_get_type ());
-      if (parent && GTK_WIDGET_IS_SENSITIVE (parent))
-	{
-	  parent_old_value = GTK_OBJECT_IN_CALL (parent);
-	  GTK_OBJECT_SET_FLAGS (parent, GTK_IN_CALL);
-	  
-	  handled_event = gtk_widget_event (parent, event);
-	  
-	  if (!parent_old_value)
-	    GTK_OBJECT_UNSET_FLAGS (parent, GTK_IN_CALL);
-	  
-	  if (GTK_OBJECT_NEED_DESTROY (parent) && !GTK_OBJECT_IN_CALL (parent))
-	    {
-	      gtk_object_destroy (GTK_OBJECT (parent));
-	      return;
-	    }
-	}
+      if (parent && GTK_WIDGET_IS_SENSITIVE (parent)
+	  && gtk_widget_event (parent, event))
+	return;
     }
   
-  if (!handled_event)
+  /* Other events get propagated up the widget tree
+   *  so that parents can see the button and motion
+   *  events of the children.
+   */
+  while (!handled_event && widget)
     {
-      old_value = GTK_OBJECT_IN_CALL (widget);
-      GTK_OBJECT_SET_FLAGS (widget, GTK_IN_CALL);
-      
-      /* Other events get propagated up the widget tree
-       *  so that parents can see the button and motion
-       *  events of the children.
-       */
-      parent = widget;
-      while (parent)
-	{
-	  parent_old_value = GTK_OBJECT_IN_CALL (parent);
-	  GTK_OBJECT_SET_FLAGS (parent, GTK_IN_CALL);
-	  
-	  handled_event = (!GTK_WIDGET_IS_SENSITIVE (parent) ||
-			   gtk_widget_event (parent, event));
-	  
-	  if (!parent_old_value)
-	    GTK_OBJECT_UNSET_FLAGS (parent, GTK_IN_CALL);
-	  
-	  if (handled_event)
-	    break;
-	  
-	  if (GTK_OBJECT_NEED_DESTROY (parent) && !GTK_OBJECT_IN_CALL (parent))
-	    {
-	      gtk_object_destroy (GTK_OBJECT (parent));
-	      break;
-	    }
-	  
-	  parent = parent->parent;
-	}
-      
-      if (!old_value)
-	GTK_OBJECT_UNSET_FLAGS (widget, GTK_IN_CALL);
-      
-      if (GTK_OBJECT_NEED_DESTROY (widget) && !GTK_OBJECT_IN_CALL (widget))
-	gtk_object_destroy (GTK_OBJECT (widget));
+      parent = widget->parent;
+      handled_event = (!GTK_WIDGET_IS_SENSITIVE (widget) ||
+		       gtk_widget_event (widget, event));
+      widget = parent;
     }
 }
 

@@ -20,7 +20,6 @@
 
 static void gtk_bin_class_init (GtkBinClass    *klass);
 static void gtk_bin_init       (GtkBin         *bin);
-static void gtk_bin_destroy    (GtkObject      *object);
 static void gtk_bin_map        (GtkWidget      *widget);
 static void gtk_bin_unmap      (GtkWidget      *widget);
 static void gtk_bin_draw       (GtkWidget      *widget,
@@ -76,8 +75,6 @@ gtk_bin_class_init (GtkBinClass *class)
 
   parent_class = gtk_type_class (gtk_container_get_type ());
 
-  object_class->destroy = gtk_bin_destroy;
-
   widget_class->map = gtk_bin_map;
   widget_class->unmap = gtk_bin_unmap;
   widget_class->draw = gtk_bin_draw;
@@ -96,27 +93,6 @@ gtk_bin_init (GtkBin *bin)
   bin->child = NULL;
 }
 
-
-static void
-gtk_bin_destroy (GtkObject *object)
-{
-  GtkBin *bin;
-
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_BIN (object));
-
-  bin = GTK_BIN (object);
-
-  if (bin->child)
-    {
-      bin->child->parent = NULL;
-      gtk_object_unref (GTK_OBJECT (bin->child));
-      gtk_widget_destroy (bin->child);
-    }
-
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
-}
 
 static void
 gtk_bin_map (GtkWidget *widget)
@@ -261,7 +237,6 @@ gtk_bin_remove (GtkContainer *container,
   if (bin->child == widget)
     {
       gtk_widget_unparent (widget);
-
       bin->child = NULL;
 
       if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (container))

@@ -35,7 +35,6 @@ typedef void (*GtkNotebookSignal) (GtkObject *object,
 
 static void gtk_notebook_class_init     (GtkNotebookClass *klass);
 static void gtk_notebook_init           (GtkNotebook      *notebook);
-static void gtk_notebook_destroy        (GtkObject        *object);
 static void gtk_notebook_map            (GtkWidget        *widget);
 static void gtk_notebook_unmap          (GtkWidget        *widget);
 static void gtk_notebook_realize        (GtkWidget        *widget);
@@ -128,8 +127,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                     GTK_TYPE_POINTER);
 
   gtk_object_class_add_signals (object_class, notebook_signals, LAST_SIGNAL);
-
-  object_class->destroy = gtk_notebook_destroy;
 
   widget_class->map = gtk_notebook_map;
   widget_class->unmap = gtk_notebook_unmap;
@@ -270,7 +267,10 @@ gtk_notebook_remove_page (GtkNotebook *notebook,
 	gtk_notebook_prev_page (notebook);
       if (notebook->cur_page == page)
 	notebook->cur_page = NULL;
-
+      
+      gtk_widget_unparent (page->child);
+      gtk_widget_unparent (page->tab_label);
+      
       notebook->children = g_list_remove_link (notebook->children, tmp_list);
       g_list_free (tmp_list);
       g_free (page);
@@ -433,42 +433,6 @@ gtk_notebook_set_show_border (GtkNotebook *notebook,
 }
 
 static void
-gtk_notebook_destroy (GtkObject *object)
-{
-  GtkNotebook *notebook;
-  GtkNotebookPage *page;
-  GList *children;
-
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_NOTEBOOK (object));
-
-  notebook = GTK_NOTEBOOK (object);
-
-  children = notebook->children;
-  while (children)
-    {
-      page = children->data;
-      children = children->next;
-
-      page->child->parent = NULL;
-      page->tab_label->parent = NULL;
-
-      gtk_object_unref (GTK_OBJECT (page->child));
-      gtk_object_unref (GTK_OBJECT (page->tab_label));
-
-      gtk_widget_destroy (page->child);
-      gtk_widget_destroy (page->tab_label);
-
-      g_free (page);
-    }
-
-  g_list_free (notebook->children);
-
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
-}
-
-static void
 gtk_notebook_map (GtkWidget *widget)
 {
   GtkNotebook *notebook;
@@ -552,6 +516,7 @@ gtk_notebook_unrealize (GtkWidget *widget)
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
 
   gtk_style_detach (widget->style);
+  gdk_window_set_user_data (widget->window, NULL);
   gdk_window_destroy (widget->window);
   widget->window = NULL;
 }

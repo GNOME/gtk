@@ -52,8 +52,8 @@
 #define MARK_OFFSET(mark)           ((mark)->offset)
 #define MARK_PROPERTY_LENGTH(mark)  (MARK_CURRENT_PROPERTY(mark)->length)
 #define MARK_CURRENT_FONT(mark)     (((TextProperty*)(mark)->property->data)->font->gdk_font)
-#define MARK_CURRENT_FORE(mark)     (((TextProperty*)(mark)->property->data)->fore_color)
-#define MARK_CURRENT_BACK(mark)     (((TextProperty*)(mark)->property->data)->back_color)
+#define MARK_CURRENT_FORE(mark)     (&((TextProperty*)(mark)->property->data)->fore_color)
+#define MARK_CURRENT_BACK(mark)     (&((TextProperty*)(mark)->property->data)->back_color)
 #define MARK_CURRENT_TEXT_FONT(m)   (((TextProperty*)(m)->property->data)->font)
 #define TEXT_INDEX(t, index)        ((index) < (t)->gap_position ? (t)->text[index] : \
 				     (t)->text[(index) + (t)->gap_size])
@@ -104,10 +104,10 @@ struct _TextProperty
   TextFont* font;
 
   /* Background Color. */
-  GdkColor* back_color;
+  GdkColor back_color;
 
   /* Foreground Color. */
-  GdkColor* fore_color;
+  GdkColor fore_color;
 
   /* Length of this property. */
   guint length;
@@ -152,7 +152,7 @@ struct _LineParams
 
 static void  gtk_text_class_init     (GtkTextClass   *klass);
 static void  gtk_text_init           (GtkText        *text);
-static void  gtk_text_destroy        (GtkObject      *object);
+static void  gtk_text_finalize       (GtkObject      *object);
 static void  gtk_text_realize        (GtkWidget      *widget);
 static void  gtk_text_unrealize      (GtkWidget      *widget);
 static void  gtk_text_draw_focus     (GtkWidget      *widget);
@@ -346,7 +346,7 @@ gtk_text_class_init (GtkTextClass *class)
 
   parent_class = gtk_type_class (gtk_widget_get_type ());
 
-  object_class->destroy = gtk_text_destroy;
+  object_class->finalize = gtk_text_finalize;
 
   widget_class->realize = gtk_text_realize;
   widget_class->unrealize = gtk_text_unrealize;
@@ -443,7 +443,8 @@ gtk_text_set_adjustments (GtkText       *text,
     {
       text->hadj = hadj;
       gtk_object_ref (GTK_OBJECT (text->hadj));
-
+      gtk_object_sink (GTK_OBJECT (text->hadj));
+      
       gtk_signal_connect (GTK_OBJECT (text->hadj), "changed",
 			  (GtkSignalFunc) gtk_text_adjustment,
 			  text);
@@ -459,7 +460,8 @@ gtk_text_set_adjustments (GtkText       *text,
     {
       text->vadj = vadj;
       gtk_object_ref (GTK_OBJECT (text->vadj));
-
+      gtk_object_sink (GTK_OBJECT (text->vadj));
+      
       gtk_signal_connect (GTK_OBJECT (text->vadj), "changed",
 			  (GtkSignalFunc) gtk_text_adjustment,
 			  text);
@@ -538,10 +540,11 @@ gtk_text_insert (GtkText    *text,
 
   g_assert (GTK_WIDGET_REALIZED (text));
 
-  /* back may be NULL, fore may not. */
   if (fore == NULL)
     fore = &text->widget.style->fg[GTK_STATE_NORMAL];
-
+  if (back == NULL)
+    back = &text->widget.style->bg[GTK_STATE_NORMAL];
+  
   /* This must be because we need to have the style set up. */
   g_assert (GTK_WIDGET_REALIZED(text));
 
@@ -603,13 +606,20 @@ gtk_text_forward_delete (GtkText *text,
 }
 
 static void
-gtk_text_destroy (GtkObject *object)
+gtk_text_finalize (GtkObject *object)
 {
+  GtkText *text;
+
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_TEXT (object));
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  text = (GtkText *)object;
+  if (text->hadj)
+    gtk_object_unref (GTK_OBJECT (text->hadj));
+  if (text->vadj)
+    gtk_object_unref (GTK_OBJECT (text->vadj));
+
+  GTK_OBJECT_CLASS(parent_class)->finalize (object);
 }
 
 static void
@@ -694,7 +704,9 @@ gtk_text_unrealize (GtkWidget *widget)
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
 
   gtk_style_detach (widget->style);
+  gdk_window_set_user_data (widget->window, NULL);
   gdk_window_destroy (widget->window);
+  gdk_window_set_user_data (text->text_area, NULL);
   gdk_window_destroy (text->text_area);
   gdk_gc_destroy (text->gc);
 
@@ -1723,8 +1735,8 @@ static gint
 text_properties_equal (TextProperty* prop, GdkFont* font, GdkColor *fore, GdkColor *back)
 {
   return prop->font == get_text_font(font) &&
-         (fore == prop->fore_color || gdk_color_equal(prop->fore_color, fore)) &&
-         (back == prop->back_color || (back && prop->back_color && gdk_color_equal(prop->back_color, back)));
+    gdk_color_equal(&prop->fore_color, fore) &&
+    gdk_color_equal(&prop->back_color, back);
 }
 
 static TextProperty*
@@ -1743,8 +1755,9 @@ new_text_property (GdkFont* font, GdkColor* fore, GdkColor* back, guint length)
   prop = g_chunk_new(TextProperty, text_property_chunk);
 
   prop->font = get_text_font (font);
-  prop->fore_color = fore;
-  prop->back_color = back;
+  prop->fore_color = *fore;
+  if (back)
+    prop->back_color = *back;
   prop->length = length;
 
   return prop;

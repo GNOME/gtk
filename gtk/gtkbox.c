@@ -31,7 +31,6 @@ static void gtk_box_get_arg    (GtkBox         *box,
 static void gtk_box_set_arg    (GtkBox         *box,
 				GtkArg         *arg,
 				guint           arg_id);
-static void gtk_box_destroy    (GtkObject      *object);
 static void gtk_box_map        (GtkWidget      *widget);
 static void gtk_box_unmap      (GtkWidget      *widget);
 static void gtk_box_draw       (GtkWidget      *widget,
@@ -89,8 +88,6 @@ gtk_box_class_init (GtkBoxClass *class)
 
   gtk_object_add_arg_type ("GtkBox::spacing", GTK_TYPE_INT, ARG_SPACING);
   gtk_object_add_arg_type ("GtkBox::homogeneous", GTK_TYPE_BOOL, ARG_HOMOGENEOUS);
-
-  object_class->destroy = gtk_box_destroy;
 
   widget_class->map = gtk_box_map;
   widget_class->unmap = gtk_box_unmap;
@@ -417,37 +414,6 @@ gtk_box_set_child_packing (GtkBox               *box,
       if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (box))
 	gtk_widget_queue_resize (child);
     }
-}
-
-
-static void
-gtk_box_destroy (GtkObject *object)
-{
-  GtkBox *box;
-  GtkBoxChild *child;
-  GList *children;
-
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_BOX (object));
-
-  box = GTK_BOX (object);
-
-  children = box->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      child->widget->parent = NULL;
-      gtk_object_unref (GTK_OBJECT (child->widget));
-      gtk_widget_destroy (child->widget);
-      g_free (child);
-    }
-
-  g_list_free (box->children);
-
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
 static void

@@ -64,6 +64,10 @@ GtkObject* gtk_adjustment_new        (gfloat              value,
 				      gfloat              step_increment,
 				      gfloat              page_increment,
 				      gfloat              page_size);
+void       gtk_adjustment_set_value  (GtkAdjustment      *adjustment,
+				      gfloat              value);
+
+
 
 
 #ifdef __cplusplus

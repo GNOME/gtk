@@ -109,7 +109,7 @@ static void gtk_color_selection_rgb_updater       (GtkWidget         *widget,
 static void gtk_color_selection_opacity_updater   (GtkWidget         *widget,
                                                    gpointer           data);
 static void gtk_color_selection_realize           (GtkWidget         *widget);
-static void gtk_color_selection_destroy           (GtkObject         *object);
+static void gtk_color_selection_finalize          (GtkObject         *object);
 static void gtk_color_selection_color_changed     (GtkColorSelection *colorsel);
 static void gtk_color_selection_update_input      (GtkWidget         *scale,
                                                    GtkWidget         *entry,
@@ -158,8 +158,6 @@ static void gtk_color_selection_hsv_to_rgb        (gdouble  h, gdouble  s, gdoub
 				                   gdouble *r, gdouble *g, gdouble *b);
 static void gtk_color_selection_rgb_to_hsv        (gdouble  r, gdouble  g, gdouble  b,
 				                   gdouble *h, gdouble *s, gdouble *v);
-
-static void gtk_color_selection_dialog_destroy    (GtkObject *object);
 
 
 static GtkVBoxClass *color_selection_parent_class = NULL;
@@ -229,7 +227,7 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
 
   gtk_object_class_add_signals (object_class, color_selection_signals, LAST_SIGNAL);
 
-  object_class->destroy = gtk_color_selection_destroy;
+  object_class->finalize = gtk_color_selection_finalize;
 
   widget_class->realize = gtk_color_selection_realize;
 }
@@ -515,7 +513,7 @@ gtk_color_selection_realize (GtkWidget         *widget)
 }
 
 static void
-gtk_color_selection_destroy (GtkObject *object)
+gtk_color_selection_finalize (GtkObject *object)
 {
   GtkColorSelection *colorsel;
 
@@ -531,8 +529,7 @@ gtk_color_selection_destroy (GtkObject *object)
   if (colorsel->sample_buf != NULL)
     g_free (colorsel->sample_buf);
 
-  if (GTK_OBJECT_CLASS (color_selection_parent_class)->destroy)
-    (*GTK_OBJECT_CLASS (color_selection_parent_class)->destroy) (object);
+  (*GTK_OBJECT_CLASS (color_selection_parent_class)->finalize) (object);
 }
 
 static void
@@ -1423,8 +1420,6 @@ gtk_color_selection_dialog_class_init (GtkColorSelectionDialogClass *klass)
   object_class = (GtkObjectClass*) klass;
 
   color_selection_dialog_parent_class = gtk_type_class (gtk_window_get_type ());
-
-  object_class->destroy = gtk_color_selection_dialog_destroy;
 }
 
 static void
@@ -1476,19 +1471,4 @@ gtk_color_selection_dialog_new (const gchar *title)
   gtk_window_set_title (GTK_WINDOW (colorseldiag), title);
 
   return GTK_WIDGET (colorseldiag);
-}
-
-static void
-gtk_color_selection_dialog_destroy (GtkObject *object)
-{
-  GtkColorSelectionDialog *colorseldiag;
-
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_COLOR_SELECTION_DIALOG (object));
-
-  colorseldiag = GTK_COLOR_SELECTION_DIALOG (object);
-
-
-  if (GTK_OBJECT_CLASS (color_selection_dialog_parent_class)->destroy)
-    (*GTK_OBJECT_CLASS (color_selection_dialog_parent_class)->destroy) (object);
 }

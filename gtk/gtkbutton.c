@@ -48,7 +48,6 @@ static void gtk_button_init           (GtkButton        *button);
 static void gtk_button_set_arg        (GtkButton        *button,
 				       GtkArg           *arg,
 				       guint		 arg_id);
-static void gtk_button_destroy        (GtkObject        *object);
 static void gtk_button_map            (GtkWidget        *widget);
 static void gtk_button_unmap          (GtkWidget        *widget);
 static void gtk_button_realize        (GtkWidget        *widget);
@@ -170,8 +169,6 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   gtk_object_class_add_signals (object_class, button_signals, LAST_SIGNAL);
 
-  object_class->destroy = gtk_button_destroy;
-
   widget_class->activate_signal = button_signals[CLICKED];
   widget_class->map = gtk_button_map;
   widget_class->unmap = gtk_button_unmap;
@@ -223,7 +220,10 @@ gtk_button_set_arg (GtkButton *button,
       gtk_container_disable_resize (GTK_CONTAINER (button));
       
       if (button->child)
-	gtk_widget_destroy (button->child);
+	{
+	  gtk_widget_unparent (button->child);
+	  button->child = NULL;
+	}
       
       label = gtk_label_new (GTK_VALUE_STRING(*arg));
       gtk_widget_show (label);
@@ -287,27 +287,6 @@ void
 gtk_button_leave (GtkButton *button)
 {
   gtk_signal_emit (GTK_OBJECT (button), button_signals[LEAVE]);
-}
-
-static void
-gtk_button_destroy (GtkObject *object)
-{
-  GtkButton *button;
-
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_BUTTON (object));
-
-  button = GTK_BUTTON (object);
-
-  if (button->child)
-    {
-      button->child->parent = NULL;
-      gtk_object_unref (GTK_OBJECT (button->child));
-      gtk_widget_destroy (button->child);
-    }
-
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
 static void

@@ -45,7 +45,7 @@ static gint curve_type_changed_signal = 0;
 /* forward declarations: */
 static void gtk_curve_class_init (GtkCurveClass *class);
 static void gtk_curve_init (GtkCurve *curve);
-static void gtk_curve_destroy (GtkObject *object);
+static void gtk_curve_finalize (GtkObject *object);
 
 
 guint
@@ -86,7 +86,7 @@ gtk_curve_class_init (GtkCurveClass *class)
 		    gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
   gtk_object_class_add_signals (object_class, &curve_type_changed_signal, 1);
 
-  object_class->destroy = gtk_curve_destroy;
+  object_class->finalize = gtk_curve_finalize;
 }
 
 static void
@@ -842,7 +842,7 @@ gtk_curve_new (void)
 }
 
 static void
-gtk_curve_destroy (GtkObject *object)
+gtk_curve_finalize (GtkObject *object)
 {
   GtkCurve *curve;
 
@@ -857,6 +857,5 @@ gtk_curve_destroy (GtkObject *object)
   if (curve->ctlpoint)
     g_free (curve->ctlpoint);
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (*GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  (*GTK_OBJECT_CLASS (parent_class)->finalize) (object);
 }

@@ -64,7 +64,7 @@ static void gtk_entry_marshal_signal_2     (GtkObject         *object,
 
 static void gtk_entry_class_init          (GtkEntryClass     *klass);
 static void gtk_entry_init                (GtkEntry          *entry);
-static void gtk_entry_destroy             (GtkObject         *object);
+static void gtk_entry_finalize            (GtkObject         *object);
 static void gtk_entry_realize             (GtkWidget         *widget);
 static void gtk_entry_unrealize           (GtkWidget         *widget);
 static void gtk_entry_draw_focus          (GtkWidget         *widget);
@@ -289,7 +289,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 
   gtk_object_class_add_signals (object_class, entry_signals, LAST_SIGNAL);
 
-  object_class->destroy = gtk_entry_destroy;
+  object_class->finalize = gtk_entry_finalize;
 
   widget_class->realize = gtk_entry_realize;
   widget_class->unrealize = gtk_entry_unrealize;
@@ -521,7 +521,7 @@ gtk_entry_marshal_signal_2 (GtkObject      *object,
 }
 
 static void
-gtk_entry_destroy (GtkObject *object)
+gtk_entry_finalize (GtkObject *object)
 {
   GtkEntry *entry;
 
@@ -548,8 +548,7 @@ gtk_entry_destroy (GtkObject *object)
   if (entry->backing_pixmap)
     gdk_pixmap_unref (entry->backing_pixmap);
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 static void
@@ -682,7 +681,7 @@ gtk_entry_unrealize (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ENTRY (widget));
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED);
+  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
   entry = GTK_ENTRY (widget);
 
   gtk_style_detach (widget->style);

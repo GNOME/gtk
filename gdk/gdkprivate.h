@@ -58,8 +58,8 @@ struct _GdkWindowPrivate
   guint16 width;
   guint16 height;
   guint8 resize_count;
-  guint8 ref_count;
   guint8 window_type;
+  guint ref_count;
   guint destroyed : 2;
   guint dnd_drag_enabled : 1,
     dnd_drag_datashow : 1,
@@ -104,6 +104,7 @@ struct _GdkGCPrivate
   GdkGC gc;
   GC xgc;
   Display *xdisplay;
+  guint ref_count;
 };
 
 struct _GdkColormapPrivate
@@ -114,7 +115,7 @@ struct _GdkColormapPrivate
   GdkVisual *visual;
   gint private_val;
   gint next_color;
-  gint ref_count;
+  guint ref_count;
 };
 
 struct _GdkVisualPrivate
@@ -130,7 +131,7 @@ struct _GdkFontPrivate
   /* generic pointer point to XFontStruct or XFontSet */
   gpointer xfont;
   Display *xdisplay;
-  gint ref_count;
+  guint ref_count;
 };
 
 struct _GdkCursorPrivate

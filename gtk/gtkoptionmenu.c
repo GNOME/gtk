@@ -145,21 +145,23 @@ gtk_option_menu_set_menu (GtkOptionMenu *option_menu,
   g_return_if_fail (menu != NULL);
   g_return_if_fail (GTK_IS_MENU (menu));
 
-  gtk_option_menu_remove_menu (option_menu);
+  if (option_menu->menu != menu)
+    {
+      gtk_option_menu_remove_menu (option_menu);
+      option_menu->menu = menu;
+      gtk_widget_ref (option_menu->menu);
 
-  option_menu->menu = menu;
-  gtk_object_ref (GTK_OBJECT (option_menu->menu));
+      gtk_option_menu_calc_size (option_menu);
 
-  gtk_option_menu_calc_size (option_menu);
+      gtk_signal_connect (GTK_OBJECT (option_menu->menu), "deactivate",
+			  (GtkSignalFunc) gtk_option_menu_deactivate,
+			  option_menu);
 
-  gtk_signal_connect (GTK_OBJECT (option_menu->menu), "deactivate",
-		      (GtkSignalFunc) gtk_option_menu_deactivate,
-		      option_menu);
+      if (GTK_WIDGET (option_menu)->parent)
+	gtk_widget_queue_resize (GTK_WIDGET (option_menu));
 
-  if (GTK_WIDGET (option_menu)->parent)
-    gtk_widget_queue_resize (GTK_WIDGET (option_menu));
-
-  gtk_option_menu_update_contents (option_menu);
+      gtk_option_menu_update_contents (option_menu);
+    }
 }
 
 void
@@ -174,7 +176,7 @@ gtk_option_menu_remove_menu (GtkOptionMenu *option_menu)
       gtk_signal_disconnect_by_data (GTK_OBJECT (option_menu->menu),
 				     option_menu);
 
-      gtk_object_unref (GTK_OBJECT (option_menu->menu));
+      gtk_widget_unref (option_menu->menu);
       option_menu->menu = NULL;
     }
 }
@@ -212,11 +214,13 @@ gtk_option_menu_destroy (GtkObject *object)
 
   option_menu = GTK_OPTION_MENU (object);
 
-  gtk_option_menu_remove_contents (option_menu);
+  /* gtk_option_menu_remove_contents (option_menu);
+   */
   if (option_menu->menu)
     {
-      gtk_object_unref (GTK_OBJECT (option_menu->menu));
       gtk_widget_destroy (option_menu->menu);
+      gtk_widget_unref (option_menu->menu);
+      option_menu->menu = NULL;
     }
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)

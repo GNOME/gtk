@@ -71,6 +71,7 @@ static void gtk_container_marshal_signal_4 (GtkObject      *object,
 
 static void gtk_container_class_init        (GtkContainerClass *klass);
 static void gtk_container_init              (GtkContainer      *container);
+static void gtk_container_destroy           (GtkObject         *object);
 static void gtk_container_get_arg           (GtkContainer      *container,
 					     GtkArg            *arg,
 					     guint		arg_id);
@@ -101,6 +102,7 @@ static void gtk_container_hide_all          (GtkWidget         *widget);
 
 static gint container_signals[LAST_SIGNAL] = { 0 };
 
+static GtkWidgetClass *parent_class = NULL;
 
 guint
 gtk_container_get_type ()
@@ -134,7 +136,8 @@ gtk_container_class_init (GtkContainerClass *class)
 
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
-
+  parent_class = gtk_type_class (gtk_widget_get_type ());
+  
   gtk_object_add_arg_type ("GtkContainer::border_width", GTK_TYPE_LONG, ARG_BORDER_WIDTH);
   gtk_object_add_arg_type ("GtkContainer::auto_resize", GTK_TYPE_BOOL, ARG_AUTO_RESIZE);
   gtk_object_add_arg_type ("GtkContainer::block_resize", GTK_TYPE_BOOL, ARG_BLOCK_RESIZE);
@@ -182,10 +185,12 @@ gtk_container_class_init (GtkContainerClass *class)
                     GTK_TYPE_DIRECTION_TYPE);
 
   gtk_object_class_add_signals (object_class, container_signals, LAST_SIGNAL);
-
+  
+  object_class->destroy = gtk_container_destroy;
+  
   /* Other container classes should overwrite show_all and hide_all,
-     unless they make all their children accessable
-     through gtk_container_foreach.
+   * for the purpose of showing internal children also, which are not
+   * accessable through gtk_container_foreach.
   */
   widget_class->show_all = gtk_container_show_all;
   widget_class->hide_all = gtk_container_hide_all;  
@@ -202,6 +207,29 @@ gtk_container_init (GtkContainer *container)
   container->auto_resize = TRUE;
   container->need_resize = FALSE;
   container->block_resize = FALSE;
+  container->resize_widgets = NULL;
+}
+
+static void
+gtk_container_destroy (GtkObject *object)
+{
+  GSList *node;
+  
+  for (node = GTK_CONTAINER (object)->resize_widgets; node; node = node->next)
+    {
+      GtkWidget *child;
+      
+      child = (GtkWidget*) node->data;
+      GTK_WIDGET_UNSET_FLAGS (child, GTK_RESIZE_NEEDED);
+    }
+  g_slist_free (GTK_CONTAINER (object)->resize_widgets);
+  GTK_CONTAINER (object)->resize_widgets = NULL;
+  
+  gtk_container_foreach (GTK_CONTAINER (object),
+			 (GtkCallback) gtk_widget_destroy, NULL);
+  
+  if (GTK_OBJECT_CLASS (parent_class)->destroy)
+    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
 static void
@@ -330,7 +358,7 @@ gtk_container_unblock_resize (GtkContainer *container)
 {
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
-
+  
   container->block_resize = FALSE;
 }
 
@@ -338,12 +366,12 @@ gint
 gtk_container_need_resize (GtkContainer *container)
 {
   gint return_val;
-
+  
   g_return_val_if_fail (container != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CONTAINER (container), FALSE);
-
+  
   return_val = FALSE;
-
+  
   if (!container->block_resize)
     {
       if (container->auto_resize)
@@ -353,7 +381,7 @@ gtk_container_need_resize (GtkContainer *container)
       else
 	container->need_resize = TRUE;
     }
-
+  
   return return_val;
 }
 
@@ -367,12 +395,56 @@ gtk_container_foreach (GtkContainer *container,
                    callback, callback_data);
 }
 
+typedef struct _GtkForeachData	GtkForeachData;
+struct _GtkForeachData
+{
+  GtkObject         *container;
+  GtkCallbackMarshal callback;
+  gpointer           callback_data;
+};
+
+static void
+gtk_container_foreach_unmarshal (GtkWidget *child,
+				 gpointer data)
+{
+  GtkForeachData *fdata = (GtkForeachData*) data;
+  GtkArg args[2];
+  
+  /* first argument */
+  args[0].name = NULL;
+  args[0].type = GTK_OBJECT(child)->klass->type;
+  GTK_VALUE_OBJECT(args[0]) = GTK_OBJECT (child);
+  
+  /* location for return value */
+  args[1].name = NULL;
+  args[1].type = GTK_TYPE_NONE;
+  
+  fdata->callback (fdata->container, fdata->callback_data, 1, args);
+}
+
+void
+gtk_container_foreach_interp (GtkContainer       *container,
+			      GtkCallbackMarshal  callback,
+			      gpointer            callback_data,
+			      GtkDestroyNotify    notify)
+{
+  GtkForeachData fdata;
+  
+  fdata.container     = GTK_OBJECT (container);
+  fdata.callback      = callback;
+  fdata.callback_data = callback_data;
+  
+  gtk_container_foreach (container, gtk_container_foreach_unmarshal, &fdata);
+  
+  notify (callback_data);
+}
+
 gint
 gtk_container_focus (GtkContainer     *container,
 		     GtkDirectionType  direction)
 {
   gint return_val;
-
+  
   gtk_signal_emit (GTK_OBJECT (container),
                    container_signals[FOCUS],
                    direction, &return_val);

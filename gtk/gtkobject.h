@@ -35,9 +35,9 @@ extern "C" {
  */
 enum
 {
-  GTK_NEED_DESTROY      = 1 << 0,
-  GTK_BEING_DESTROYED   = 1 << 1,
-  GTK_IN_CALL           = 1 << 2
+  GTK_FLOATING          = 1 << 0,
+  GTK_RESERVED_1        = 1 << 1,
+  GTK_RESERVED_2        = 1 << 2
 };
 
 
@@ -75,9 +75,7 @@ enum
  */
 #define GTK_OBJECT_CLASS(klass)           GTK_CHECK_CLASS_CAST (klass, gtk_object_get_type (), GtkObjectClass)
 #define GTK_OBJECT_FLAGS(obj)             (GTK_OBJECT (obj)->flags)
-#define GTK_OBJECT_NEED_DESTROY(obj)      (GTK_OBJECT_FLAGS (obj) & GTK_NEED_DESTROY)
-#define GTK_OBJECT_BEING_DESTROYED(obj)   (GTK_OBJECT_FLAGS (obj) & GTK_BEING_DESTROYED)
-#define GTK_OBJECT_IN_CALL(obj)           (GTK_OBJECT_FLAGS (obj) & GTK_IN_CALL)
+#define GTK_OBJECT_FLOATING(obj)          (GTK_OBJECT_FLAGS (obj) & GTK_FLOATING)
 #define GTK_OBJECT_DESTROY(obj)           (GTK_OBJECT (obj)->klass->destroy)
 #define GTK_OBJECT_TYPE(obj)              (GTK_OBJECT (obj)->klass->type)
 #define GTK_OBJECT_SIGNALS(obj)           (GTK_OBJECT (obj)->klass->signals)
@@ -108,11 +106,10 @@ struct _GtkObject
    */
   guint32 flags;
 
-  /* 16 bit reference count. "gtk_object_destroy" actually only
-   *  destroys an object when its ref count is 0. (Decrementing
-   *  a reference count of 0 is defined as a no-op).
+  /* reference count.
+   * refer to the file REFCOUNTING on this issue.
    */
-  guint16 ref_count;
+  guint ref_count;
 
   /* A pointer to the objects class. This will actually point to
    *  the derived objects class struct (which will be derived from
@@ -146,6 +143,10 @@ struct _GtkObjectClass
    */
   gint nsignals;
 
+  /* The number of arguments per class.
+   */
+  guint n_args;
+
   /* The destroy function for objects. In one way ore another
    *  this is defined for all objects. If an object class overrides
    *  this method in order to perform class specific destruction
@@ -155,9 +156,7 @@ struct _GtkObjectClass
    */
   void (* destroy) (GtkObject *object);
 
-  /* The number of arguments per class.
-   */
-  guint n_args;
+  void (* finalize) (GtkObject *object);
 };
 
 
@@ -199,9 +198,18 @@ GtkObject*	gtk_object_newv		(guint		type,
 					 guint		nargs,
 					 GtkArg		*args);
 
-void	gtk_object_ref		(GtkObject	*object);
+void gtk_object_ref       (GtkObject        *object);
+void gtk_object_unref     (GtkObject        *object);
+void gtk_object_sink      (GtkObject        *object);
 
-void	gtk_object_unref	(GtkObject	*object);
+void gtk_object_weakref   (GtkObject        *object,
+			   GtkDestroyNotify  notify,
+			   gpointer          data);
+void gtk_object_weakunref (GtkObject        *object,
+			   GtkDestroyNotify  notify,
+			   gpointer          data);
+
+void gtk_object_destroy	  (GtkObject *object);
 
 /* gtk_object_getv() sets an arguments type and value, or just
  * its type to GTK_TYPE_INVALID.
@@ -238,17 +246,6 @@ void	gtk_object_add_arg_type	(const gchar	*arg_name,
 				 guint		arg_id);
 
 GtkType	gtk_object_get_arg_type	(const gchar	*arg_name);
-
-/* Emit the "destroy" signal for "object". Normally it is
- *  permissible to emit a signal for an object instead of
- *  calling the corresponding convenience routine, however
- *  "gtk_object_destroy" should be called instead of emitting
- *  the signal manually as it checks to see if the object is
- *  currently handling another signal emittion (very likely)
- *  and sets the GTK_NEED_DESTROY flag which tells the object
- *  to be destroyed when it is done handling the signal emittion.
- */
-void gtk_object_destroy	(GtkObject *object);
 
 /* Set 'data' to the "object_data" field of the object. The
  *  data is indexed by the "key". If there is already data

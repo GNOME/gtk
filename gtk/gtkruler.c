@@ -197,6 +197,7 @@ gtk_ruler_unrealize (GtkWidget *widget)
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
 
   gtk_style_detach (widget->style);
+  gdk_window_set_user_data (widget->window, NULL);
   gdk_window_destroy (widget->window);
   widget->window = NULL;
 

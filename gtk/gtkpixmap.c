@@ -23,7 +23,7 @@ static void gtk_pixmap_class_init (GtkPixmapClass  *klass);
 static void gtk_pixmap_init       (GtkPixmap       *pixmap);
 static gint gtk_pixmap_expose     (GtkWidget       *widget,
 				   GdkEventExpose  *event);
-static void gtk_pixmap_destroy    (GtkObject       *object);
+static void gtk_pixmap_finalize   (GtkObject       *object);
 
 static GtkWidgetClass *parent_class;
 
@@ -61,7 +61,7 @@ gtk_pixmap_class_init (GtkPixmapClass *class)
   widget_class = (GtkWidgetClass*) class;
   parent_class = gtk_type_class (gtk_widget_get_type ());
 
-  object_class->destroy = gtk_pixmap_destroy;
+  object_class->finalize = gtk_pixmap_finalize;
   widget_class->expose_event = gtk_pixmap_expose;
 }
 
@@ -90,11 +90,10 @@ gtk_pixmap_new (GdkPixmap *val,
 }
 
 static void
-gtk_pixmap_destroy (GtkObject *object)
+gtk_pixmap_finalize (GtkObject *object)
 {
   gtk_pixmap_set (GTK_PIXMAP (object), NULL, NULL);
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 void

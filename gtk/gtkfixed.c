@@ -20,7 +20,6 @@
 
 static void gtk_fixed_class_init    (GtkFixedClass    *klass);
 static void gtk_fixed_init          (GtkFixed         *fixed);
-static void gtk_fixed_destroy       (GtkObject        *object);
 static void gtk_fixed_map           (GtkWidget        *widget);
 static void gtk_fixed_unmap         (GtkWidget        *widget);
 static void gtk_fixed_realize       (GtkWidget        *widget);
@@ -83,8 +82,6 @@ gtk_fixed_class_init (GtkFixedClass *class)
   container_class = (GtkContainerClass*) class;
 
   parent_class = gtk_type_class (gtk_container_get_type ());
-
-  object_class->destroy = gtk_fixed_destroy;
 
   widget_class->map = gtk_fixed_map;
   widget_class->unmap = gtk_fixed_unmap;
@@ -182,36 +179,6 @@ gtk_fixed_move (GtkFixed       *fixed,
 }
 
 static void
-gtk_fixed_destroy (GtkObject *object)
-{
-  GtkFixed *fixed;
-  GtkFixedChild *child;
-  GList *children;
-
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_FIXED (object));
-
-  fixed = GTK_FIXED (object);
-
-  children = fixed->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      child->widget->parent = NULL;
-      gtk_object_unref (GTK_OBJECT (child->widget));
-      gtk_widget_destroy (child->widget);
-      g_free (child);
-    }
-
-  g_list_free (fixed->children);
-
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
-}
-
-static void
 gtk_fixed_map (GtkWidget *widget)
 {
   GtkFixed *fixed;
@@ -288,6 +255,7 @@ gtk_fixed_unrealize (GtkWidget *widget)
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
 
   gtk_style_detach (widget->style);
+  gdk_window_set_user_data (widget->window, NULL);
   gdk_window_destroy (widget->window);
   widget->window = NULL;
 }

@@ -189,7 +189,7 @@ gtk_toolbar_destroy (GtkObject *object)
 
   toolbar = GTK_TOOLBAR (object);
 
-  gtk_tooltips_unref (toolbar->tooltips);
+  gtk_object_unref (GTK_OBJECT (toolbar->tooltips));
 
   for (children = toolbar->children; children; children = children->next)
     {

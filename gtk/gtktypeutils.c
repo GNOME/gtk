@@ -311,6 +311,27 @@ gtk_type_set_arg (GtkObject *object,
     (* node->type_info.arg_set_func) (object, arg, arg_id);
 }
 
+GtkArg*
+gtk_arg_copy (GtkArg         *src_arg,
+	      GtkArg         *dest_arg)
+{
+  g_return_val_if_fail (src_arg != NULL, NULL);
+
+  if (!dest_arg)
+    {
+      dest_arg = g_new0 (GtkArg, 1);
+      dest_arg->name = src_arg->name;
+    }
+
+  dest_arg->type = src_arg->type;
+  dest_arg->d = src_arg->d;
+
+  if (src_arg->type == GTK_TYPE_STRING)
+    dest_arg->d.string_data = g_strdup (src_arg->d.string_data);
+
+  return dest_arg;
+}
+
 static void
 gtk_type_insert (GtkType        parent_type,
 		 GtkType        type,

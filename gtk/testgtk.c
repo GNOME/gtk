@@ -29,6 +29,15 @@ destroy_window (GtkWidget  *widget,
 }
 
 void
+destroy_tooltips (GtkWidget *widget, GtkWindow **window)
+{
+  GtkTooltips *tt = gtk_object_get_data (GTK_OBJECT (*window), "tooltips");
+  gtk_object_unref (GTK_OBJECT (tt));
+  
+  *window = NULL;
+}
+
+void
 button_window (GtkWidget *widget,
 	       GtkWidget *button)
 {
@@ -53,10 +62,10 @@ create_buttons ()
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  GTK_SIGNAL_FUNC(destroy_window),
+			  GTK_SIGNAL_FUNC (destroy_window),
 			  &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			  GTK_SIGNAL_FUNC(destroy_window),
+			  GTK_SIGNAL_FUNC (gtk_true),
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "buttons");
@@ -1028,17 +1037,18 @@ create_tooltips ()
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-                          GTK_SIGNAL_FUNC(destroy_window),
+                          GTK_SIGNAL_FUNC (destroy_tooltips),
                           &window);
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-                          GTK_SIGNAL_FUNC(destroy_window),
+                          GTK_SIGNAL_FUNC (gtk_true),
                           &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "tooltips");
       gtk_container_border_width (GTK_CONTAINER (window), 0);
 
       tooltips=gtk_tooltips_new();
-
+      gtk_object_set_data (GTK_OBJECT (window), "tooltips", tooltips);
+      
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
       gtk_widget_show (box1);
@@ -1438,14 +1448,6 @@ list_remove (GtkWidget *widget,
   clear_list = g_list_reverse (clear_list);
 
   gtk_list_remove_items (GTK_LIST (list), clear_list);
-
-  tmp_list = clear_list;
-
-  while (tmp_list)
-    {
-      gtk_widget_destroy (GTK_WIDGET (tmp_list->data));
-      tmp_list = tmp_list->next;
-    }
 
   g_list_free (clear_list);
 }
@@ -3829,9 +3831,10 @@ create_test ()
  * Main Window and Exit
  */
 void
-do_exit ()
+do_exit (GtkWidget *widget, GtkWidget *window)
 {
-  gtk_exit (0);
+  gtk_widget_destroy (window);
+  gtk_main_quit ();
 }
 
 void
@@ -3942,7 +3945,8 @@ create_main_window ()
 
   button = gtk_button_new_with_label ("close");
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      GTK_SIGNAL_FUNC(do_exit), NULL);
+		      GTK_SIGNAL_FUNC (do_exit),
+		      window);
   gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
   GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
   gtk_widget_grab_default (button);

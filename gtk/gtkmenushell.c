@@ -33,7 +33,6 @@ enum {
 
 static void gtk_menu_shell_class_init        (GtkMenuShellClass *klass);
 static void gtk_menu_shell_init              (GtkMenuShell      *menu_shell);
-static void gtk_menu_shell_destroy           (GtkObject         *object);
 static void gtk_menu_shell_map               (GtkWidget         *widget);
 static void gtk_menu_shell_realize           (GtkWidget         *widget);
 static gint gtk_menu_shell_button_press      (GtkWidget         *widget,
@@ -106,8 +105,6 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 		    GTK_TYPE_NONE, 0);
 
   gtk_object_class_add_signals (object_class, menu_shell_signals, LAST_SIGNAL);
-
-  object_class->destroy = gtk_menu_shell_destroy;
 
   widget_class->map = gtk_menu_shell_map;
   widget_class->realize = gtk_menu_shell_realize;
@@ -218,35 +215,6 @@ gtk_menu_shell_deactivate (GtkMenuShell *menu_shell)
 }
 
 static void
-gtk_menu_shell_destroy (GtkObject *object)
-{
-  GtkMenuShell *menu_shell;
-  GtkWidget *child;
-  GList *children;
-
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_MENU_SHELL (object));
-
-  menu_shell = GTK_MENU_SHELL (object);
-
-  children = menu_shell->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      child->parent = NULL;
-      gtk_object_unref (GTK_OBJECT (child));
-      gtk_widget_destroy (child);
-    }
-
-  g_list_free (menu_shell->children);
-
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
-}
-
-static void
 gtk_menu_shell_map (GtkWidget *widget)
 {
   GtkMenuShell *menu_shell;
@@ -335,14 +303,15 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
       menu_shell->active = TRUE;
 
       menu_item = gtk_get_event_widget ((GdkEvent*) event);
-      if (GTK_IS_MENU_ITEM (menu_item) && gtk_menu_shell_is_item (menu_shell, menu_item))
+      if (menu_item && GTK_IS_MENU_ITEM (menu_item) &&
+	  gtk_menu_shell_is_item (menu_shell, menu_item))
 	{
 	  if ((menu_item->parent == widget) &&
 	      (menu_item != menu_shell->active_menu_item))
 	    {
 	      if (menu_shell->active_menu_item)
 		gtk_menu_item_deselect (GTK_MENU_ITEM (menu_shell->active_menu_item));
-
+	      
 	      menu_shell->active_menu_item = menu_item;
 	      gtk_menu_item_set_placement (GTK_MENU_ITEM (menu_shell->active_menu_item),
 					   MENU_SHELL_CLASS (menu_shell)->submenu_placement);
@@ -353,7 +322,7 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
 	{
 	  gtk_menu_shell_deactivate (menu_shell);
 	}
-
+      
       if (menu_shell->active)
 	menu_shell->button = event->button;
     }
@@ -451,7 +420,7 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
     {
       menu_item = gtk_get_event_widget ((GdkEvent*) event);
 
-      if (!GTK_WIDGET_IS_SENSITIVE (menu_item))
+      if (!menu_item || !GTK_WIDGET_IS_SENSITIVE (menu_item))
 	return TRUE;
 
       if ((menu_item->parent == widget) &&
@@ -496,7 +465,7 @@ gtk_menu_shell_leave_notify (GtkWidget        *widget,
       menu_shell = GTK_MENU_SHELL (widget);
       event_widget = gtk_get_event_widget ((GdkEvent*) event);
 
-      if (!GTK_IS_MENU_ITEM (event_widget))
+      if (!event_widget || !GTK_IS_MENU_ITEM (event_widget))
 	return TRUE;
 
       menu_item = GTK_MENU_ITEM (event_widget);
@@ -541,18 +510,20 @@ gtk_menu_shell_remove (GtkContainer *container,
 		       GtkWidget    *widget)
 {
   GtkMenuShell *menu_shell;
-
+  gint was_visible;
+  
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_MENU_SHELL (container));
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (widget));
-
-  gtk_widget_unparent (widget);
-
+  
+  was_visible = GTK_WIDGET_VISIBLE (widget);
   menu_shell = GTK_MENU_SHELL (container);
   menu_shell->children = g_list_remove (menu_shell->children, widget);
-
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (container))
+  
+  gtk_widget_unparent (widget);
+  
+  if (was_visible && GTK_WIDGET_VISIBLE (container))
     gtk_widget_queue_resize (GTK_WIDGET (container));
 }
 

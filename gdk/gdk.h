@@ -300,6 +300,8 @@ GdkGC* gdk_gc_new                 (GdkWindow        *window);
 GdkGC* gdk_gc_new_with_values     (GdkWindow        *window,
 				   GdkGCValues      *values,
 				   GdkGCValuesMask   values_mask);
+GdkGC* gdk_gc_ref                 (GdkGC            *gc);
+void   gdk_gc_unref               (GdkGC            *gc);
 void   gdk_gc_destroy             (GdkGC            *gc);
 void   gdk_gc_get_values          (GdkGC            *gc,
 				   GdkGCValues      *values);

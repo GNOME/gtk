@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -69,10 +69,10 @@ extern GtkType gtk_type_builtins[];
 /* General Types */
 
 #define GTK_TYPE_MAKE(ft, seqno) (((seqno)<<8)|ft)
-#define GTK_FUNDAMENTAL_TYPE(t)  ((GtkFundamentalType)((t)&0xFF))
-#define GTK_TYPE_SEQNO(t)        ((t)>0xFF? (t)>>8:(t))
+#define GTK_FUNDAMENTAL_TYPE(t)	 ((GtkFundamentalType)((t)&0xFF))
+#define GTK_TYPE_SEQNO(t)	 ((t)>0xFF? (t)>>8:(t))
 
-typedef struct _GtkArg         GtkArg;
+typedef struct _GtkArg	       GtkArg;
 typedef struct _GtkObject      GtkObject;   /* forward declaration of object type */
 typedef struct _GtkTypeInfo    GtkTypeInfo;
 
@@ -129,40 +129,40 @@ struct _GtkArg
   } d;
 };
 
-#define GTK_VALUE_CHAR(a)       ((a).d.char_data)
-#define GTK_VALUE_BOOL(a)       ((a).d.bool_data)
-#define GTK_VALUE_INT(a)        ((a).d.int_data)
-#define GTK_VALUE_UINT(a)       ((a).d.uint_data)
-#define GTK_VALUE_LONG(a)       ((a).d.long_data)
-#define GTK_VALUE_ULONG(a)      ((a).d.ulong_data)
-#define GTK_VALUE_FLOAT(a)      ((a).d.float_data)
-#define GTK_VALUE_DOUBLE(a)     ((a).d.double_data)
-#define GTK_VALUE_STRING(a)     ((a).d.string_data)
-#define GTK_VALUE_ENUM(a)       ((a).d.int_data)
-#define GTK_VALUE_FLAGS(a)      ((a).d.int_data)
-#define GTK_VALUE_BOXED(a)      ((a).d.pointer_data)
-#define GTK_VALUE_FOREIGN(a)    ((a).d.foreign_data)
-#define GTK_VALUE_CALLBACK(a)   ((a).d.callback_data)
-#define GTK_VALUE_ARGS(a)       ((a).d.args_data)
-#define GTK_VALUE_OBJECT(a)     ((a).d.object_data)
-#define GTK_VALUE_POINTER(a)    ((a).d.pointer_data)
-#define GTK_VALUE_SIGNAL(a)     ((a).d.signal_data)
+#define GTK_VALUE_CHAR(a)	((a).d.char_data)
+#define GTK_VALUE_BOOL(a)	((a).d.bool_data)
+#define GTK_VALUE_INT(a)	((a).d.int_data)
+#define GTK_VALUE_UINT(a)	((a).d.uint_data)
+#define GTK_VALUE_LONG(a)	((a).d.long_data)
+#define GTK_VALUE_ULONG(a)	((a).d.ulong_data)
+#define GTK_VALUE_FLOAT(a)	((a).d.float_data)
+#define GTK_VALUE_DOUBLE(a)	((a).d.double_data)
+#define GTK_VALUE_STRING(a)	((a).d.string_data)
+#define GTK_VALUE_ENUM(a)	((a).d.int_data)
+#define GTK_VALUE_FLAGS(a)	((a).d.int_data)
+#define GTK_VALUE_BOXED(a)	((a).d.pointer_data)
+#define GTK_VALUE_FOREIGN(a)	((a).d.foreign_data)
+#define GTK_VALUE_CALLBACK(a)	((a).d.callback_data)
+#define GTK_VALUE_ARGS(a)	((a).d.args_data)
+#define GTK_VALUE_OBJECT(a)	((a).d.object_data)
+#define GTK_VALUE_POINTER(a)	((a).d.pointer_data)
+#define GTK_VALUE_SIGNAL(a)	((a).d.signal_data)
 #define GTK_VALUE_C_CALLBACK(a) ((a).d.c_callback_data)
 
-#define GTK_RETLOC_CHAR(a)      ((gchar*)(a).d.pointer_data)
-#define GTK_RETLOC_BOOL(a)      ((gint*)(a).d.pointer_data)
-#define GTK_RETLOC_INT(a)       ((gint*)(a).d.pointer_data)
-#define GTK_RETLOC_UINT(a)      ((guint*)(a).d.pointer_data)
-#define GTK_RETLOC_LONG(a)      ((glong*)(a).d.pointer_data)
-#define GTK_RETLOC_ULONG(a)     ((gulong*)(a).d.pointer_data)
-#define GTK_RETLOC_FLOAT(a)     ((gfloat*)(a).d.pointer_data)
-#define GTK_RETLOC_DOUBLE(a)    ((gdouble*)(a).d.pointer_data)
-#define GTK_RETLOC_STRING(a)    ((gchar**)(a).d.pointer_data)
-#define GTK_RETLOC_ENUM(a)      ((gint*)(a).d.pointer_data)
-#define GTK_RETLOC_FLAGS(a)     ((gint*)(a).d.pointer_data)
-#define GTK_RETLOC_BOXED(a)     ((gpointer*)(a).d.pointer_data)
-#define GTK_RETLOC_OBJECT(a)    ((GtkObject**)(a).d.pointer_data)
-#define GTK_RETLOC_POINTER(a)   ((gpointer*)(a).d.pointer_data)
+#define GTK_RETLOC_CHAR(a)	((gchar*)(a).d.pointer_data)
+#define GTK_RETLOC_BOOL(a)	((gint*)(a).d.pointer_data)
+#define GTK_RETLOC_INT(a)	((gint*)(a).d.pointer_data)
+#define GTK_RETLOC_UINT(a)	((guint*)(a).d.pointer_data)
+#define GTK_RETLOC_LONG(a)	((glong*)(a).d.pointer_data)
+#define GTK_RETLOC_ULONG(a)	((gulong*)(a).d.pointer_data)
+#define GTK_RETLOC_FLOAT(a)	((gfloat*)(a).d.pointer_data)
+#define GTK_RETLOC_DOUBLE(a)	((gdouble*)(a).d.pointer_data)
+#define GTK_RETLOC_STRING(a)	((gchar**)(a).d.pointer_data)
+#define GTK_RETLOC_ENUM(a)	((gint*)(a).d.pointer_data)
+#define GTK_RETLOC_FLAGS(a)	((gint*)(a).d.pointer_data)
+#define GTK_RETLOC_BOXED(a)	((gpointer*)(a).d.pointer_data)
+#define GTK_RETLOC_OBJECT(a)	((GtkObject**)(a).d.pointer_data)
+#define GTK_RETLOC_POINTER(a)	((gpointer*)(a).d.pointer_data)
 
 struct _GtkTypeInfo
 {
@@ -176,27 +176,30 @@ struct _GtkTypeInfo
 };
 
 
-void     gtk_type_init              (void);
-GtkType  gtk_type_unique            (guint        parent_type,
+void	 gtk_type_init		    (void);
+GtkType	 gtk_type_unique	    (guint	  parent_type,
 				     GtkTypeInfo *type_info);
-gchar*   gtk_type_name              (guint        type);
-GtkType  gtk_type_from_name         (const gchar *name);
-GtkType  gtk_type_parent            (GtkType      type);
-gpointer gtk_type_class             (GtkType      type);
-gpointer gtk_type_new               (GtkType      type);
-void     gtk_type_describe_heritage (GtkType      type);
-void     gtk_type_describe_tree     (GtkType      type,
-				     gint         show_size);
-gint     gtk_type_is_a              (GtkType      type,
-				     GtkType      is_a_type);
-void	 gtk_type_get_arg           (GtkObject   *object,
-				     GtkType      type,
-				     GtkArg      *arg,
+gchar*	 gtk_type_name		    (guint	  type);
+GtkType	 gtk_type_from_name	    (const gchar *name);
+GtkType	 gtk_type_parent	    (GtkType	  type);
+gpointer gtk_type_class		    (GtkType	  type);
+gpointer gtk_type_new		    (GtkType	  type);
+void	 gtk_type_describe_heritage (GtkType	  type);
+void	 gtk_type_describe_tree	    (GtkType	  type,
+				     gint	  show_size);
+gint	 gtk_type_is_a		    (GtkType	  type,
+				     GtkType	  is_a_type);
+void	 gtk_type_get_arg	    (GtkObject	 *object,
+				     GtkType	  type,
+				     GtkArg	 *arg,
 				     guint	  arg_id);
-void     gtk_type_set_arg           (GtkObject   *object,
-				     GtkType      type,
-				     GtkArg      *arg,
+void	 gtk_type_set_arg	    (GtkObject	 *object,
+				     GtkType	  type,
+				     GtkArg	 *arg,
 				     guint	  arg_id);
+GtkArg*	 gtk_arg_copy		    (GtkArg	 *src_arg,
+				     GtkArg	 *dest_arg);
+
 
 
 #ifdef __cplusplus

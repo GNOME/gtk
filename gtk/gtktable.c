@@ -20,7 +20,7 @@
 
 static void gtk_table_class_init    (GtkTableClass  *klass);
 static void gtk_table_init          (GtkTable       *table);
-static void gtk_table_destroy       (GtkObject      *object);
+static void gtk_table_finalize      (GtkObject      *object);
 static void gtk_table_map           (GtkWidget      *widget);
 static void gtk_table_unmap         (GtkWidget      *widget);
 static void gtk_table_draw          (GtkWidget      *widget,
@@ -89,7 +89,7 @@ gtk_table_class_init (GtkTableClass *class)
 
   parent_class = gtk_type_class (gtk_container_get_type ());
 
-  object_class->destroy = gtk_table_destroy;
+  object_class->finalize = gtk_table_finalize;
 
   widget_class->map = gtk_table_map;
   widget_class->unmap = gtk_table_unmap;
@@ -179,8 +179,6 @@ gtk_table_new (gint rows,
 static void
 gtk_table_expand_cols (GtkTable *table, int new_max)
 {
-  int i;
-  
   table->cols = g_realloc (table->cols, new_max * sizeof (GtkTableRowCol));
   gtk_table_init_cols (table, table->ncols, new_max);
   table->ncols = new_max;
@@ -189,8 +187,6 @@ gtk_table_expand_cols (GtkTable *table, int new_max)
 static void
 gtk_table_expand_rows (GtkTable *table, int new_max)
 {
-  int i;
-  
   table->rows = g_realloc (table->rows, new_max * sizeof (GtkTableRowCol));
   gtk_table_init_rows (table, table->nrows, new_max);
   table->nrows = new_max;
@@ -209,7 +205,6 @@ gtk_table_attach (GtkTable  *table,
 		  gint       ypadding)
 {
   GtkTableChild *table_child;
-  int resize = 0;
   
   g_return_if_fail (table != NULL);
   g_return_if_fail (GTK_IS_TABLE (table));
@@ -348,35 +343,19 @@ gtk_table_set_col_spacings (GtkTable *table,
 
 
 static void
-gtk_table_destroy (GtkObject *object)
+gtk_table_finalize (GtkObject *object)
 {
   GtkTable *table;
-  GtkTableChild *child;
-  GList *children;
 
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_TABLE (object));
 
   table = GTK_TABLE (object);
 
-  children = table->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      child->widget->parent = NULL;
-      gtk_object_unref (GTK_OBJECT (child->widget));
-      gtk_widget_destroy (child->widget);
-      g_free (child);
-    }
-
-  g_list_free (table->children);
   g_free (table->rows);
   g_free (table->cols);
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 static void

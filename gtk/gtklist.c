@@ -181,6 +181,40 @@ gtk_list_new ()
   return GTK_WIDGET (gtk_type_new (gtk_list_get_type ()));
 }
 
+static void
+gtk_list_destroy (GtkObject *object)
+{
+  GList *node;
+
+  GtkList *list = GTK_LIST (object);
+
+  for (node = list->children; node; node = node->next)
+    {
+      GtkWidget *child;
+
+      child = (GtkWidget *)node->data;
+      gtk_widget_ref (child);
+      gtk_widget_unparent (child);
+      gtk_widget_destroy (child);
+      gtk_widget_unref (child);
+    }
+  g_list_free (list->children);
+  list->children = NULL;
+
+  for (node = list->selection; node; node = node->next)
+    {
+      GtkWidget *child;
+
+      child = (GtkWidget *)node->data;
+      gtk_widget_unref (child);
+    }
+  g_list_free (list->selection);
+  list->selection = NULL;
+
+  if (GTK_OBJECT_CLASS (parent_class)->destroy)
+    (*GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+}
+
 void
 gtk_list_insert_items (GtkList *list,
 		       GList   *items,
@@ -387,12 +421,13 @@ gtk_list_clear_items (GtkList *list,
 	    {
 	      selection_changed = TRUE;
 	      list->selection = g_list_remove (list->selection, widget);
+	      gtk_widget_unref (widget);
 	    }
 
 	  /* list->children = g_list_remove (list->children, widget); */
 	  /* gtk_widget_unparent (widget); */
 
-	  gtk_widget_destroy (widget);
+	  gtk_widget_unparent (widget);
 	}
 
       if (list->children && !list->selection &&
@@ -487,36 +522,6 @@ gtk_list_set_selection_mode (GtkList          *list,
   list->selection_mode = mode;
 }
 
-
-static void
-gtk_list_destroy (GtkObject *object)
-{
-  GtkList *list;
-  GtkWidget *child;
-  GList *children;
-
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_LIST (object));
-
-  list = GTK_LIST (object);
-
-  children = list->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      child->parent = NULL;
-      gtk_object_unref (GTK_OBJECT (child));
-      gtk_widget_destroy (child);
-    }
-
-  g_list_free (list->children);
-  g_list_free (list->selection);
-
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
-}
 
 static void
 gtk_list_map (GtkWidget *widget)
@@ -674,7 +679,10 @@ gtk_list_button_press (GtkWidget      *widget,
 
   list = GTK_LIST (widget);
   item = gtk_get_event_widget ((GdkEvent*) event);
-
+  
+  if (!item)
+    return FALSE;
+  
   while (!gtk_type_is_a (GTK_WIDGET_TYPE (item), gtk_list_item_get_type ()))
     item = item->parent;
 
@@ -811,9 +819,7 @@ gtk_list_add (GtkContainer *container,
   list->children = g_list_append (list->children, widget);
 
   if (!list->selection && (list->selection_mode == GTK_SELECTION_BROWSE))
-    {
-      gtk_list_select_child (list, widget);
-    }
+    gtk_list_select_child (list, widget);
 
   if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (container))
     gtk_widget_queue_resize (widget);
@@ -890,11 +896,12 @@ gtk_real_list_select_child (GtkList   *list,
 	  if (tmp_item != child)
 	    {
 	      gtk_list_item_deselect (GTK_LIST_ITEM (tmp_item));
-
+	      
 	      tmp_list = selection;
 	      selection = selection->next;
 
 	      list->selection = g_list_remove_link (list->selection, tmp_list);
+	      gtk_widget_unref (GTK_WIDGET (tmp_item));
 
 	      g_list_free (tmp_list);
 	    }
@@ -906,11 +913,13 @@ gtk_real_list_select_child (GtkList   *list,
 	{
 	  gtk_list_item_select (GTK_LIST_ITEM (child));
 	  list->selection = g_list_prepend (list->selection, child);
+	  gtk_widget_ref (child);
 	}
       else if (child->state == GTK_STATE_SELECTED)
 	{
 	  gtk_list_item_deselect (GTK_LIST_ITEM (child));
 	  list->selection = g_list_remove (list->selection, child);
+	  gtk_widget_unref (child);
 	}
 
       gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
@@ -926,11 +935,12 @@ gtk_real_list_select_child (GtkList   *list,
 	  if (tmp_item != child)
 	    {
 	      gtk_list_item_deselect (GTK_LIST_ITEM (tmp_item));
-
+	      
 	      tmp_list = selection;
 	      selection = selection->next;
 
 	      list->selection = g_list_remove_link (list->selection, tmp_list);
+	      gtk_widget_unref (GTK_WIDGET (tmp_item));
 
 	      g_list_free (tmp_list);
 	    }
@@ -942,6 +952,7 @@ gtk_real_list_select_child (GtkList   *list,
 	{
 	  gtk_list_item_select (GTK_LIST_ITEM (child));
 	  list->selection = g_list_prepend (list->selection, child);
+	  gtk_widget_ref (child);
 	  gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
 	}
       break;
@@ -951,12 +962,14 @@ gtk_real_list_select_child (GtkList   *list,
 	{
 	  gtk_list_item_select (GTK_LIST_ITEM (child));
 	  list->selection = g_list_prepend (list->selection, child);
+	  gtk_widget_ref (child);
 	  gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
 	}
       else if (child->state == GTK_STATE_SELECTED)
 	{
 	  gtk_list_item_deselect (GTK_LIST_ITEM (child));
 	  list->selection = g_list_remove (list->selection, child);
+	  gtk_widget_unref (child);
 	  gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
 	}
       break;
@@ -984,6 +997,7 @@ gtk_real_list_unselect_child (GtkList   *list,
 	{
 	  gtk_list_item_deselect (GTK_LIST_ITEM (child));
 	  list->selection = g_list_remove (list->selection, child);
+	  gtk_widget_unref (child);
 	  gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
 	}
       break;

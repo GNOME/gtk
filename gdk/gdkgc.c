@@ -50,6 +50,7 @@ gdk_gc_new_with_values (GdkWindow       *window,
 
   xwindow = window_private->xwindow;
   private->xdisplay = window_private->xdisplay;
+  private->ref_count = 1;
 
   xvalues.function = GXcopy;
   xvalues.fill_style = FillSolid;
@@ -220,15 +221,35 @@ gdk_gc_new_with_values (GdkWindow       *window,
 void
 gdk_gc_destroy (GdkGC *gc)
 {
-  GdkGCPrivate *private;
+  gdk_gc_unref (gc);
+}
 
+GdkGC *
+gdk_gc_ref (GdkGC *gc)
+{
+  GdkGCPrivate *private = (GdkGCPrivate*) gc;
+
+  g_return_val_if_fail (gc != NULL, NULL);
+  private->ref_count += 1;
+
+  return gc;
+}
+
+void
+gdk_gc_unref (GdkGC *gc)
+{
+  GdkGCPrivate *private = (GdkGCPrivate*) gc;
+  
   g_return_if_fail (gc != NULL);
-
-  private = (GdkGCPrivate*) gc;
-  XFreeGC (private->xdisplay, private->xgc);
-
-  memset (gc, 0, sizeof (GdkGCPrivate));
-  g_free (gc);
+  
+  if (private->ref_count > 1)
+    private->ref_count -= 1;
+  else
+    {
+      XFreeGC (private->xdisplay, private->xgc);
+      memset (gc, 0, sizeof (GdkGCPrivate));
+      g_free (gc);
+    }
 }
 
 void

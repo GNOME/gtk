@@ -117,3 +117,15 @@ gtk_adjustment_new (gfloat value,
 
   return GTK_OBJECT (adjustment);
 }
+
+void
+gtk_adjustment_set_value (GtkAdjustment        *adjustment,
+			  gfloat                value)
+{
+  g_return_if_fail (adjustment != NULL);
+  g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+
+  adjustment->value = CLAMP (value, adjustment->lower, adjustment->upper);
+
+  gtk_signal_emit_by_name (GTK_OBJECT (adjustment), "value_changed");
+}

@@ -97,6 +97,8 @@ void       gtk_window_remove_accelerator_table (GtkWindow           *window,
 						GtkAcceleratorTable *table);
 void       gtk_window_position                 (GtkWindow           *window,
 						GtkWindowPosition    position);
+gint	   gtk_window_activate_focus	       (GtkWindow           *window);
+gint	   gtk_window_activate_default	       (GtkWindow           *window);
 
 
 #ifdef __cplusplus

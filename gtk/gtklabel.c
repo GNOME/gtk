@@ -33,7 +33,7 @@ static void gtk_label_set_arg	   (GtkLabel       *label,
 static void gtk_label_get_arg	   (GtkLabel       *label,
 				    GtkArg         *arg,
 				    guint           arg_id);
-static void gtk_label_destroy      (GtkObject      *object);
+static void gtk_label_finalize     (GtkObject      *object);
 static void gtk_label_size_request (GtkWidget      *widget,
 				    GtkRequisition *requisition);
 static gint gtk_label_expose       (GtkWidget      *widget,
@@ -81,15 +81,16 @@ gtk_label_class_init (GtkLabelClass *class)
   gtk_object_add_arg_type ("GtkLabel::label", GTK_TYPE_STRING, ARG_LABEL);
   gtk_object_add_arg_type ("GtkLabel::justify", GTK_TYPE_ENUM, ARG_JUSTIFY);
 
-  object_class->destroy = gtk_label_destroy;
+  object_class->finalize = gtk_label_finalize;
 
   widget_class->size_request = gtk_label_size_request;
   widget_class->expose_event = gtk_label_expose;
 }
 
-static void gtk_label_set_arg      (GtkLabel       *label,
-				    GtkArg         *arg,
-				    guint           arg_id)
+static void
+gtk_label_set_arg (GtkLabel       *label,
+		   GtkArg         *arg,
+		   guint           arg_id)
 {
   switch (arg_id)
     {
@@ -219,24 +220,19 @@ gtk_label_get (GtkLabel  *label,
 
 
 static void
-gtk_label_destroy (GtkObject *object)
+gtk_label_finalize (GtkObject *object)
 {
   GtkLabel *label;
-
+  
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_LABEL (object));
-
+  
   label = GTK_LABEL (object);
-
-  if (GTK_WIDGET (object)->parent &&
-      GTK_WIDGET_MAPPED (object))
-    gtk_widget_unmap (GTK_WIDGET (object));
-
+  
   g_free (label->label);
   g_slist_free (label->row);
-
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  
+  (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 static void

@@ -78,7 +78,7 @@ static void gtk_input_dialog_class_init (GtkInputDialogClass *klass);
 static void gtk_input_dialog_init (GtkInputDialog *inputd);
 static GdkDeviceInfo *gtk_input_dialog_get_device_info(guint32 deviceid);
 static void gtk_input_dialog_set_device(GtkWidget *widget, gpointer data);
-static void gtk_input_dialog_destroy (GtkObject *object);
+static void gtk_input_dialog_finalize (GtkObject *object);
 static void gtk_input_dialog_set_mapping_mode(GtkWidget *w,
 					      gpointer data);
 static void gtk_input_dialog_set_axis(GtkWidget *widget, gpointer data);
@@ -180,7 +180,7 @@ gtk_input_dialog_class_init (GtkInputDialogClass *klass)
 				LAST_SIGNAL);
 
 
-  object_class->destroy = gtk_input_dialog_destroy;
+  object_class->finalize = gtk_input_dialog_finalize;
   klass->enable_device = NULL;
   klass->disable_device = NULL;
 }
@@ -401,14 +401,13 @@ gtk_input_dialog_set_device(GtkWidget *widget, gpointer data)
 }
 
 static void
-gtk_input_dialog_destroy (GtkObject *object)
+gtk_input_dialog_finalize (GtkObject *object)
 {
   /*  GtkInputDialog *inputd = GTK_INPUT_DIALOG (object); */
 
   /* Clean up ? */
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 static void

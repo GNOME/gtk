@@ -33,8 +33,8 @@ typedef void (*GtkTreeSignal) (GtkObject *object,
 			       gpointer   data);
 
 
-static void gtk_tree_class_init (GtkTreeClass *klass);
-static void gtk_tree_init       (GtkTree      *tree);
+static void gtk_tree_class_init      (GtkTreeClass   *klass);
+static void gtk_tree_init            (GtkTree        *tree);
 static void gtk_tree_destroy         (GtkObject      *object);
 static void gtk_tree_map             (GtkWidget      *widget);
 static void gtk_tree_unmap           (GtkWidget      *widget);
@@ -388,16 +388,24 @@ gtk_tree_destroy (GtkObject *object)
     {
       child = children->data;
       children = children->next;
-
-      child->parent = NULL;
-      gtk_object_unref (GTK_OBJECT (child));
+      
+      gtk_widget_ref (child);
+      gtk_widget_unparent (child);
       gtk_widget_destroy (child);
+      gtk_widget_unref (child);
     }
 
   g_list_free (tree->children);
+  tree->children = NULL;
 
-  if(tree->root_tree == NULL)
-    g_list_free (tree->selection);
+  if (tree->root_tree == tree)
+    {
+      GList *node;
+      for (node = tree->selection; node; node = node->next)
+	gtk_widget_unref ((GtkWidget *)node->data);
+      g_list_free (tree->selection);
+      tree->selection = NULL;
+    }
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
@@ -626,7 +634,7 @@ gtk_tree_remove (GtkContainer *container,
   item_list->data = widget;
   
   gtk_tree_remove_items (GTK_TREE (container), item_list);
-  
+
   g_list_free (item_list);
 }
 
@@ -675,6 +683,7 @@ gtk_tree_remove_items (GtkTree *tree,
 	    gtk_widget_unmap (GTK_TREE_ITEM(widget)->subtree);
 
 	  gtk_widget_unparent (GTK_TREE_ITEM(widget)->subtree);
+	  GTK_TREE_ITEM(widget)->subtree = NULL;
 	}
 
       /* remove really widget for this item */
@@ -891,7 +900,7 @@ gtk_real_tree_select_child (GtkTree   *tree,
   g_return_if_fail (GTK_IS_TREE_ITEM (child));
 
   root_selection = tree->root_tree->selection;
-
+  
   switch (tree->root_tree->selection_mode)
     {
     case GTK_SELECTION_SINGLE:
@@ -911,7 +920,8 @@ gtk_real_tree_select_child (GtkTree   *tree,
 	      selection = selection->next;
 
 	      root_selection = g_list_remove_link (root_selection, tmp_list);
-
+	      gtk_widget_unref (tmp_item);
+	      
 	      g_list_free (tmp_list);
 	    }
 	  else
@@ -922,14 +932,16 @@ gtk_real_tree_select_child (GtkTree   *tree,
 	{
 	  gtk_tree_item_select (GTK_TREE_ITEM (child));
 	  root_selection = g_list_prepend (root_selection, child);
+	  gtk_widget_ref (child);
 	}
       else if (child->state == GTK_STATE_SELECTED)
 	{
 	  gtk_tree_item_deselect (GTK_TREE_ITEM (child));
 	  root_selection = g_list_remove (root_selection, child);
+	  gtk_widget_unref (child);
 	}
 
-      tree->root_tree->selection= root_selection;
+      tree->root_tree->selection = root_selection;
 
       gtk_signal_emit (GTK_OBJECT (tree->root_tree), 
 		       tree_signals[SELECTION_CHANGED]);
@@ -949,6 +961,7 @@ gtk_real_tree_select_child (GtkTree   *tree,
 	      selection = selection->next;
 
 	      root_selection = g_list_remove_link (root_selection, tmp_list);
+	      gtk_widget_unref (tmp_item);
 
 	      g_list_free (tmp_list);
 	    }
@@ -956,13 +969,14 @@ gtk_real_tree_select_child (GtkTree   *tree,
 	    selection = selection->next;
 	}
 
-      tree->root_tree->selection= root_selection;
+      tree->root_tree->selection = root_selection;
 
       if (child->state == GTK_STATE_NORMAL)
 	{
 	  gtk_tree_item_select (GTK_TREE_ITEM (child));
 	  root_selection = g_list_prepend (root_selection, child);
-	  tree->root_tree->selection= root_selection;
+	  gtk_widget_ref (child);
+	  tree->root_tree->selection = root_selection;
 	  gtk_signal_emit (GTK_OBJECT (tree->root_tree), 
 			   tree_signals[SELECTION_CHANGED]);
 	}
@@ -973,7 +987,8 @@ gtk_real_tree_select_child (GtkTree   *tree,
 	{
 	  gtk_tree_item_select (GTK_TREE_ITEM (child));
 	  root_selection = g_list_prepend (root_selection, child);
-	  tree->root_tree->selection= root_selection;
+	  gtk_widget_ref (child);
+	  tree->root_tree->selection = root_selection;
 	  gtk_signal_emit (GTK_OBJECT (tree->root_tree), 
 			   tree_signals[SELECTION_CHANGED]);
 	}
@@ -981,7 +996,8 @@ gtk_real_tree_select_child (GtkTree   *tree,
 	{
 	  gtk_tree_item_deselect (GTK_TREE_ITEM (child));
 	  root_selection = g_list_remove (root_selection, child);
-	  tree->root_tree->selection= root_selection;
+	  gtk_widget_unref (child);
+	  tree->root_tree->selection = root_selection;
 	  gtk_signal_emit (GTK_OBJECT (tree->root_tree), 
 			   tree_signals[SELECTION_CHANGED]);
 	}
@@ -1012,6 +1028,7 @@ gtk_real_tree_unselect_child (GtkTree   *tree,
 	  GtkTree* root_tree = GTK_TREE_ROOT_TREE(tree);
 	  gtk_tree_item_deselect (GTK_TREE_ITEM (child));
 	  root_tree->selection = g_list_remove (root_tree->selection, child);
+	  gtk_widget_unref (child);
 	  gtk_signal_emit (GTK_OBJECT (tree->root_tree), 
 			   tree_signals[SELECTION_CHANGED]);
 	}

@@ -19,24 +19,35 @@
 #define __GTK_TOOLTIPS_H__
 
 #include <gdk/gdk.h>
+#include <gtk/gtkdata.h>
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
+#define GTK_TOOLTIPS(obj)          GTK_CHECK_CAST (obj, gtk_tooltips_get_type (), GtkTooltips)
+#define GTK_TOOLTIPS_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_tooltips_get_type (), GtkTooltipsClass)
+#define GTK_IS_TOOLTIPS(obj)       GTK_CHECK_TYPE (obj, gtk_tooltips_get_type ())
 
-typedef struct
+typedef struct _GtkTooltips      GtkTooltips;
+typedef struct _GtkTooltipsClass GtkTooltipsClass;
+typedef struct _GtkTooltipsData  GtkTooltipsData;
+
+struct _GtkTooltipsData
 {
+  GtkTooltips *tooltips;
   GtkWidget *widget;
   gchar *tips_text;
   GdkFont *font;
   gint width;
   GList *row;
-} GtkTooltipsData;
+};
 
-typedef struct
+struct _GtkTooltips
 {
+  GtkData data;
+
   GtkWidget *tip_window;
   GtkTooltipsData *active_widget;
   GList *widget_list;
@@ -51,30 +62,26 @@ typedef struct
   gint delay;
   gint timer_tag;
   gint timer_active;
+};
 
-  gint ref_count;
-} GtkTooltips;
+struct _GtkTooltipsClass
+{
+  GtkDataClass parent_class;
+};
 
-
+GtkType      gtk_tooltips_get_type   (void);
 GtkTooltips* gtk_tooltips_new        (void);
-GtkTooltips* gtk_tooltips_ref        (GtkTooltips *tooltips);
-void         gtk_tooltips_unref      (GtkTooltips *tooltips);
 
 void         gtk_tooltips_enable     (GtkTooltips *tooltips);
-
 void         gtk_tooltips_disable    (GtkTooltips *tooltips);
-
 void         gtk_tooltips_set_delay  (GtkTooltips *tooltips,
                                       gint         delay);
-
 void         gtk_tooltips_set_tips   (GtkTooltips *tooltips,
                                       GtkWidget   *widget,
                                       const gchar *tips_text);
-
 void         gtk_tooltips_set_colors (GtkTooltips *tooltips,
                                       GdkColor    *background,
                                       GdkColor    *foreground);
-
 
 #ifdef __cplusplus
 }

@@ -47,6 +47,11 @@ struct _GtkContainer
   guint auto_resize : 1;
   guint need_resize : 1;
   guint block_resize : 1;
+
+
+  /* The list of children that requested a resize
+   */
+  GSList *resize_widgets;
 };
 
 struct _GtkContainerClass
@@ -82,6 +87,10 @@ gint   gtk_container_need_resize    (GtkContainer     *container);
 void   gtk_container_foreach        (GtkContainer     *container,
 				     GtkCallback       callback,
 				     gpointer          callback_data);
+void   gtk_container_foreach_interp (GtkContainer     *container,
+                                     GtkCallbackMarshal callback,
+                                     gpointer          callback_data,
+				     GtkDestroyNotify  notify);
 gint   gtk_container_focus          (GtkContainer     *container,
 				     GtkDirectionType  direction);
 GList* gtk_container_children       (GtkContainer     *container);

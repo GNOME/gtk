@@ -165,7 +165,7 @@ gtk_style_new ()
   GtkStyle *style;
   gint i;
 
-  style = g_new (GtkStyle, 1);
+  style = g_new0 (GtkStyle, 1);
 
   if (!default_font)
     default_font =
@@ -721,7 +721,7 @@ gtk_style_new_from_key (GtkStyleKey *key)
 
   if (!style)
     {
-      style = g_new (GtkStyle, 1);
+      style = g_new0 (GtkStyle, 1);
 
       style->ref_count = 1;
       style->attach_count = 0;

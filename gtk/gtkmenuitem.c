@@ -197,8 +197,9 @@ gtk_menu_item_destroy (GtkObject *object)
 
   if (menu_item->submenu)
     {
-      gtk_object_unref (GTK_OBJECT (menu_item->submenu));
-      /* gtk_widget_destroy (menu_item->submenu); */
+      gtk_widget_destroy (menu_item->submenu);
+      gtk_widget_unref (menu_item->submenu);
+      menu_item->submenu = NULL;
     }
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
@@ -217,11 +218,11 @@ gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
       if (menu_item->submenu)
 	{
 	  g_return_if_fail (!GTK_WIDGET_VISIBLE (menu_item->submenu));
-	  gtk_object_unref (GTK_OBJECT (menu_item->submenu));
+	  gtk_widget_unref (menu_item->submenu);
 	}
       menu_item->submenu = submenu;
       if (menu_item->submenu)
-	gtk_object_ref (GTK_OBJECT (menu_item->submenu));
+	gtk_widget_ref (menu_item->submenu);
 
       if (GTK_WIDGET (menu_item)->parent)
 	gtk_widget_queue_resize (GTK_WIDGET (menu_item));

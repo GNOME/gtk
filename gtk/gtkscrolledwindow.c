@@ -25,6 +25,7 @@
 static void gtk_scrolled_window_class_init         (GtkScrolledWindowClass *klass);
 static void gtk_scrolled_window_init               (GtkScrolledWindow      *scrolled_window);
 static void gtk_scrolled_window_destroy            (GtkObject              *object);
+static void gtk_scrolled_window_finalize           (GtkObject              *object);
 static void gtk_scrolled_window_map                (GtkWidget              *widget);
 static void gtk_scrolled_window_unmap              (GtkWidget              *widget);
 static void gtk_scrolled_window_draw               (GtkWidget              *widget,
@@ -87,6 +88,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   parent_class = gtk_type_class (gtk_container_get_type ());
 
   object_class->destroy = gtk_scrolled_window_destroy;
+  object_class->finalize = gtk_scrolled_window_finalize;
 
   widget_class->map = gtk_scrolled_window_map;
   widget_class->unmap = gtk_scrolled_window_unmap;
@@ -141,7 +143,11 @@ gtk_scrolled_window_new (GtkAdjustment *hadjustment,
   gtk_widget_show (scrolled_window->viewport);
   gtk_widget_show (scrolled_window->hscrollbar);
   gtk_widget_show (scrolled_window->vscrollbar);
-
+  
+  gtk_widget_ref (scrolled_window->viewport);
+  gtk_widget_ref (scrolled_window->hscrollbar);
+  gtk_widget_ref (scrolled_window->vscrollbar);
+  
   return GTK_WIDGET (scrolled_window);
 }
 
@@ -199,6 +205,17 @@ gtk_scrolled_window_destroy (GtkObject *object)
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+}
+
+static void
+gtk_scrolled_window_finalize (GtkObject *object)
+{
+  GtkScrolledWindow *scrolled_window;
+
+  scrolled_window = GTK_SCROLLED_WINDOW (object);
+  gtk_widget_unref (scrolled_window->viewport);
+  gtk_widget_unref (scrolled_window->hscrollbar);
+  gtk_widget_unref (scrolled_window->vscrollbar);
 }
 
 static void
@@ -421,7 +438,16 @@ gtk_scrolled_window_remove (GtkContainer *container,
   g_return_if_fail (widget != NULL);
 
   scrolled_window = GTK_SCROLLED_WINDOW (container);
-  gtk_container_remove (GTK_CONTAINER (scrolled_window->viewport), widget);
+
+  if (scrolled_window->viewport == widget ||
+      scrolled_window->hscrollbar == widget ||
+      scrolled_window->vscrollbar == widget)
+    {
+      /* this happens during destroy */
+      gtk_widget_unparent (widget);
+    }
+  else
+    gtk_container_remove (GTK_CONTAINER (scrolled_window->viewport), widget);
 }
 
 static void

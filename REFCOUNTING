@@ -7,10 +7,14 @@ functions that follow these conventions:
   *_new:      Create a new structure with a reference count of 1.
   *_ref:      Increase ref count by one.
   *_unref:    Decrease ref count by one.  If the count drops to zero,
-              free the memory.  No user visible actions should take place,
-              like destryoing windows, etc.
+              run aprropriate finalization code and free the memory.
+              No user visible actions should take place, like
+              destryoing windows, etc.
 
-Some structures also provide a *_destroy function.
+Some structures also provide a *_destroy function, but it is generally
+unrelated to freeing the memory.  `Destroying' merely renders an
+object `unusable'.  But as long as there are references to it, it will
+stick around.
 
 GdkWindow
 ---------
@@ -28,7 +32,7 @@ ref_count is updated accordingly.
 
 You can call gdk_window_destroy more than once on a particular
 GdkWindow, it will only be destroyed when it hasn't been yet.  The
-ref_count is *always* decremented, tho.
+ref_count is *always* decremented, tho. Be careful.
  
 GdkPixmap
 ---------
@@ -86,7 +90,112 @@ There is no gtk_style_destroy function.
 GtkObject
 ---------
 
-This one is the most tricky and I'm still meditating over it.
+GtkObjects follow the usual ref_counting strategy, but with a twist.
+
+They are created with a ref_count of 1.  GtkObjects are able able to
+run finalization code when the ref_count drops to zero but you cannot
+register arbitrary signal handlers to run at finalization time.
+
+There is also the old gtk_object_destroy function and the "destroy"
+signal but they are somewhat independent from finalization.  Just as
+stated at the top of this text, gtk_object_destroy merely renders an
+object unusable.  When the object is a container widget for example,
+it unrealizes that widget, removes all children and disconnects all
+signal handlers.  The finalization code is different, it would for
+example free associated memory for text strings and release the
+attached style.
+
+[This is the biggest change.  Every widget must be revised to have a
+ proper "destroy" function, etc.  Such a destroy function must be able
+ to be called any number of times and generally leave the widget in a
+ minimal but consistent state.  The "finalization" function is new and
+ should perform last-minute cleanup actions.  It can assume that the
+ "destroy" function has been called as the last function on this
+ widget.
+
+ Essentially, the old "destroy" function has been split into a
+ "finalize" plus a "destroy" function.]
+
+It is not possible to create GtkObjects with a ref_count of 0 (as it
+is done now) because the first ref/unref pair will destroy it
+unintentionally.
+
+To be mostly backward compatible with existing practice, a GtkObject
+leads a more complicated life than the other reference counted structures.
+
+When a GtkObject is created, it starts out in a special state called
+"floating" (this is the twist).  This means that it is alive and has a
+reference to it, but the `owner' of this reference is not known.
+There are certain `potential owners' that will adopt a floating
+GtkObject.  For GtkWidgets the most common adopters are the parent
+widget.
+
+When you want to adopt a possibly floating GtkObject, you call
+gtk_object_sink on it.  This clears the floating state of the
+GtkObject and decrements the ref_count by one, if it has been floating
+previously.  Once the floating state has been cleared, it will never
+be set again.
+
+All widgets that are part of the display are linked into a
+parent/child tree.  The link from the parent to a child is reflected
+in the ref_count of the child, but the link from the child to the
+parent is not reflected in the ref_count of the parent.
+
+Like a GtkObject, a GtkWidget is created with a ref_count of 1 and
+initially flagged as `floating'.  As soon as it is added as a child to
+a parent, the `floating' flag is cleared and never will be set again.
+Not even when it is later unparented.  The act of clearing the
+`floating' flag also decrements the ref_count of the widget by one.
+
+When the widget is unparented, its underlying GdkWindow is destroyed
+(when it has one), it loses its reference from the parent and
+naturally the ref_count is decremented.
+
+It is considered a bug if a widget still has a GdkWindow when it is
+being freed.
+
+Toplevel widgets, which don't have a `natural' parent, are adopted by
+a special widget, maybe a GtkDisplay or GtkScreen.  This special
+parent of all toplevel widgets is never freed.  The toplevel widgets
+are added to this parent as soon as they are created. [Maybe this
+special widget will only exist conceptually because toplevel widgets
+are identified by parent == NULL through-out the code.]
+
+So, the typical career of a GtkWindow and the GtkButton that sits in
+it looks like this:
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  // window is created with ref_count == 1.  It is not flagged as
+  // `floating' because it has already been added to the special
+  // parent of all toplevel widgets.
+
+  button = gtk_button_new_with_label ("Yo!");
+
+  // button->ref_count == 1 and it is flagged as `floating'.
+
+  gtk_container_add (window, button);
+
+  // button->ref_count still == 1, but it is no longer `floating'.
+
+  gtk_widget_show (button);
+  gtk_widget_show (window);
+
+  // The widgets get their GdkWindows, nothing significant happens to
+  // the ref_counts.
+
+Then, when the user wants to get rid of the window:
+
+  gtk_widget_destroy (window);
+
+  // The GdkWindow of `window' and all its child GdkWindows are
+  // destroyed.
+
+  // window is removed from its (conceptual) parent and its ref_count
+  // drops to zero.  The destroy code of `window' destroyes `button'.
+
+  // The destriction of the button removes it from its parent, the
+  // button->ref_count drops to zero and the button is freed, too.
 
 
 - Marius Vollmer <mvo@zagadka.ping.de>

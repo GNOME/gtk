@@ -455,10 +455,7 @@ gtk_gamma_curve_destroy (GtkObject *object)
   c = GTK_GAMMA_CURVE (object);
 
   if (c->gamma_dialog)
-    {
-      gtk_widget_destroy (c->gamma_dialog);
-      c->gamma_dialog = 0;
-    }
+    gtk_widget_destroy (c->gamma_dialog);
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);

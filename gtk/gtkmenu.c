@@ -108,15 +108,18 @@ gtk_menu_class_init (GtkMenuClass *class)
 static void
 gtk_menu_init (GtkMenu *menu)
 {
-  GTK_WIDGET_SET_FLAGS (menu, GTK_ANCHORED);
+  GTK_WIDGET_SET_FLAGS (menu, GTK_ANCHORED | GTK_TOPLEVEL);
 
   menu->parent_menu_item = NULL;
   menu->old_active_menu_item = NULL;
   menu->accelerator_table = NULL;
   menu->position_func = NULL;
   menu->position_func_data = NULL;
-
+  
   GTK_MENU_SHELL (menu)->menu_flag = TRUE;
+  
+  /* gtk_container_add (gtk_root, GTK_WIDGET (menu)); */
+  gtk_widget_set_parent (GTK_WIDGET (menu), NULL);
 }
 
 GtkWidget*

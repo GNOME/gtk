@@ -30,7 +30,7 @@
 
 static void gtk_range_class_init               (GtkRangeClass    *klass);
 static void gtk_range_init                     (GtkRange         *range);
-static void gtk_range_destroy                  (GtkObject        *object);
+static void gtk_range_finalize                 (GtkObject        *object);
 static void gtk_range_draw                     (GtkWidget        *widget,
 						GdkRectangle     *area);
 static void gtk_range_draw_focus               (GtkWidget        *widget);
@@ -111,7 +111,7 @@ gtk_range_class_init (GtkRangeClass *class)
 
   parent_class = gtk_type_class (gtk_widget_get_type ());
 
-  object_class->destroy = gtk_range_destroy;
+  object_class->finalize = gtk_range_finalize;
 
   widget_class->draw = gtk_range_draw;
   widget_class->draw_focus = gtk_range_draw_focus;
@@ -208,6 +208,8 @@ gtk_range_set_adjustment (GtkRange      *range,
       if (adjustment)
 	{
 	  gtk_object_ref (GTK_OBJECT (adjustment));
+	  gtk_object_sink (GTK_OBJECT (adjustment));
+
 	  gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
 			      (GtkSignalFunc) gtk_range_adjustment_changed,
 			      (gpointer) range);
@@ -586,7 +588,7 @@ gtk_range_calc_value (GtkRange *range,
 
 
 static void
-gtk_range_destroy (GtkObject *object)
+gtk_range_finalize (GtkObject *object)
 {
   GtkRange *range;
 
@@ -598,8 +600,7 @@ gtk_range_destroy (GtkObject *object)
   if (range->adjustment)
     gtk_object_unref (GTK_OBJECT (range->adjustment));
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 static void
@@ -648,16 +649,31 @@ gtk_range_unrealize (GtkWidget *widget)
   gtk_style_detach (widget->style);
 
   if (range->slider)
-    gdk_window_destroy (range->slider);
+    {
+      gdk_window_set_user_data (range->slider, NULL);
+      gdk_window_destroy (range->slider);
+    }
   if (range->trough)
-    gdk_window_destroy (range->trough);
+    {
+      gdk_window_set_user_data (range->trough, NULL);
+      gdk_window_destroy (range->trough);
+    }
   if (range->step_forw)
-    gdk_window_destroy (range->step_forw);
+    {
+      gdk_window_set_user_data (range->step_forw, NULL);
+      gdk_window_destroy (range->step_forw);
+    }
   if (range->step_back)
-    gdk_window_destroy (range->step_back);
+    {
+      gdk_window_set_user_data (range->step_back, NULL);
+      gdk_window_destroy (range->step_back);
+    }
   if (widget->window)
-    gdk_window_destroy (widget->window);
-
+    {
+      gdk_window_set_user_data (widget->window, NULL);
+      gdk_window_destroy (widget->window);
+    }
+  
   range->slider = NULL;
   range->trough = NULL;
   range->step_forw = NULL;

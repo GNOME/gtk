@@ -20,7 +20,6 @@
 
 static void gtk_paned_class_init (GtkPanedClass    *klass);
 static void gtk_paned_init       (GtkPaned         *paned);
-static void gtk_paned_destroy    (GtkObject      *object);
 static void gtk_paned_realize    (GtkWidget *widget);
 static void gtk_paned_map        (GtkWidget      *widget);
 static void gtk_paned_unmap      (GtkWidget      *widget);
@@ -76,8 +75,6 @@ gtk_paned_class_init (GtkPanedClass *class)
 
   parent_class = gtk_type_class (gtk_container_get_type ());
 
-  object_class->destroy = gtk_paned_destroy;
-
   widget_class->realize = gtk_paned_realize;
   widget_class->map = gtk_paned_map;
   widget_class->unmap = gtk_paned_unmap;
@@ -108,33 +105,6 @@ gtk_paned_init (GtkPaned *paned)
   paned->handle_ypos = -1;
 }
 
-
-static void
-gtk_paned_destroy (GtkObject *object)
-{
-  GtkPaned *paned;
-
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_PANED (object));
-
-  paned = GTK_PANED (object);
-
-  if (paned->child1)
-    {
-      paned->child1->parent = NULL;
-      gtk_object_unref (GTK_OBJECT (paned->child1));
-      gtk_widget_destroy (paned->child1);
-    }
-  if (paned->child2)
-    {
-      paned->child2->parent = NULL;
-      gtk_object_unref (GTK_OBJECT (paned->child2));
-      gtk_widget_destroy (paned->child2);
-    }
-
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
-}
 
 static void
 gtk_paned_realize (GtkWidget *widget)
@@ -174,6 +144,7 @@ gtk_paned_realize (GtkWidget *widget)
   gdk_window_raise (paned->handle);
 
   widget->window = gtk_widget_get_parent_window (widget);
+  gdk_window_ref (widget->window);
   widget->style = gtk_style_attach (widget->style, widget->window);
 
   gtk_style_set_background (widget->style, paned->handle, GTK_STATE_NORMAL);
@@ -249,13 +220,18 @@ gtk_paned_unrealize (GtkWidget *widget)
 
   if (paned->handle)
     {
+      gdk_window_set_user_data (paned->handle, NULL);
       gdk_window_destroy (paned->handle);
+      paned->handle = NULL;
       gdk_cursor_destroy (paned->cursor);
+      paned->cursor = NULL;
     }
 
-  paned->handle = NULL;
-  paned->cursor = NULL;
-  widget->window = NULL;
+  if (widget->window)
+    {
+      gdk_window_unref (widget->window);
+      widget->window = NULL;
+    }
 }
 
 static gint

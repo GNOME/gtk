@@ -401,6 +401,7 @@ gtk_selection_remove_all (GtkWidget *widget)
 
   selection_handlers = gtk_object_get_data (GTK_OBJECT (widget),
 					    gtk_selection_handler_key);
+  gtk_object_remove_data (GTK_OBJECT (widget), gtk_selection_handler_key);
 
   tmp_list = selection_handlers;
   while (tmp_list)

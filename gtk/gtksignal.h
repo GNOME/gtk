@@ -76,10 +76,10 @@ gint   gtk_signal_newv                    (const gchar         *name,
 gint   gtk_signal_lookup                  (const gchar         *name,
 					   gint                 object_type);
 gchar* gtk_signal_name                    (gint                 signal_num);
-gint   gtk_signal_emit                    (GtkObject           *object,
+void   gtk_signal_emit                    (GtkObject           *object,
 					   gint                 signal_type,
 					   ...);
-gint   gtk_signal_emit_by_name            (GtkObject           *object,
+void   gtk_signal_emit_by_name            (GtkObject           *object,
 					   const gchar         *name,
 					   ...);
 void   gtk_signal_emit_stop               (GtkObject           *object,

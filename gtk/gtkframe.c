@@ -35,7 +35,7 @@ static void gtk_frame_set_arg       (GtkFrame       *frame,
 static void gtk_frame_get_arg       (GtkFrame       *frame,
 				     GtkArg         *arg,
 				     guint           arg_id);
-static void gtk_frame_destroy       (GtkObject      *object);
+static void gtk_frame_finalize      (GtkObject      *object);
 static void gtk_frame_paint         (GtkWidget      *widget,
 				     GdkRectangle   *area);
 static void gtk_frame_draw          (GtkWidget      *widget,
@@ -91,7 +91,7 @@ gtk_frame_class_init (GtkFrameClass *class)
   gtk_object_add_arg_type ("GtkFrame::label_yalign", GTK_TYPE_DOUBLE, ARG_LABEL_YALIGN);
   gtk_object_add_arg_type ("GtkFrame::shadow", GTK_TYPE_ENUM, ARG_SHADOW);
 
-  object_class->destroy = gtk_frame_destroy;
+  object_class->finalize = gtk_frame_finalize;
 
   widget_class->draw = gtk_frame_draw;
   widget_class->expose_event = gtk_frame_expose;
@@ -279,7 +279,7 @@ gtk_frame_set_shadow_type (GtkFrame      *frame,
 
 
 static void
-gtk_frame_destroy (GtkObject *object)
+gtk_frame_finalize (GtkObject *object)
 {
   GtkFrame *frame;
 
@@ -291,8 +291,7 @@ gtk_frame_destroy (GtkObject *object)
   if (frame->label)
     g_free (frame->label);
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 static void

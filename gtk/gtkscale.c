@@ -25,7 +25,6 @@
 
 static void gtk_scale_class_init      (GtkScaleClass *klass);
 static void gtk_scale_init            (GtkScale      *scale);
-static void gtk_scale_destroy         (GtkObject     *object);
 static void gtk_scale_draw_background (GtkRange      *range);
 
 
@@ -66,8 +65,6 @@ gtk_scale_class_init (GtkScaleClass *class)
   range_class = (GtkRangeClass*) class;
 
   parent_class = gtk_type_class (gtk_range_get_type ());
-
-  object_class->destroy = gtk_scale_destroy;
 
   range_class->draw_background = gtk_scale_draw_background;
 
@@ -205,20 +202,6 @@ gtk_scale_draw_value (GtkScale *scale)
     (* SCALE_CLASS (scale)->draw_value) (scale);
 }
 
-
-static void
-gtk_scale_destroy (GtkObject *object)
-{
-  GtkRange *range;
-
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_SCALE (object));
-
-  range = GTK_RANGE (object);
-
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
-}
 
 static void
 gtk_scale_draw_background (GtkRange *range)

@@ -21,6 +21,7 @@
 
 static void gtk_viewport_class_init               (GtkViewportClass *klass);
 static void gtk_viewport_init                     (GtkViewport      *viewport);
+static void gtk_viewport_finalize                 (GtkObject        *object);
 static void gtk_viewport_map                      (GtkWidget        *widget);
 static void gtk_viewport_unmap                    (GtkWidget        *widget);
 static void gtk_viewport_realize                  (GtkWidget        *widget);
@@ -42,6 +43,8 @@ static void gtk_viewport_adjustment_changed       (GtkAdjustment    *adjustment,
 						   gpointer          data);
 static void gtk_viewport_adjustment_value_changed (GtkAdjustment    *adjustment,
 						   gpointer          data);
+
+static GtkBinClass *parent_class;
 
 guint
 gtk_viewport_get_type ()
@@ -70,12 +73,17 @@ gtk_viewport_get_type ()
 static void
 gtk_viewport_class_init (GtkViewportClass *class)
 {
+  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
+  object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
+  parent_class = (GtkBinClass*) gtk_type_class (gtk_bin_get_type ());
 
+  object_class->finalize = gtk_viewport_finalize;
+  
   widget_class->map = gtk_viewport_map;
   widget_class->unmap = gtk_viewport_unmap;
   widget_class->realize = gtk_viewport_realize;
@@ -122,6 +130,17 @@ gtk_viewport_new (GtkAdjustment *hadjustment,
   return GTK_WIDGET (viewport);
 }
 
+static void
+gtk_viewport_finalize (GtkObject *object)
+{
+  GtkViewport *viewport = GTK_VIEWPORT (object);
+
+  gtk_object_unref (GTK_OBJECT (viewport->hadjustment));
+  gtk_object_unref (GTK_OBJECT (viewport->vadjustment));
+
+  GTK_OBJECT_CLASS(parent_class)->finalize (object);
+}
+
 GtkAdjustment*
 gtk_viewport_get_hadjustment (GtkViewport *viewport)
 {
@@ -159,7 +178,8 @@ gtk_viewport_set_hadjustment (GtkViewport   *viewport,
 
       viewport->hadjustment = adjustment;
       gtk_object_ref (GTK_OBJECT (viewport->hadjustment));
-
+      gtk_object_sink (GTK_OBJECT (viewport->hadjustment));
+      
       gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
 			  (GtkSignalFunc) gtk_viewport_adjustment_changed,
 			  (gpointer) viewport);
@@ -190,6 +210,7 @@ gtk_viewport_set_vadjustment (GtkViewport   *viewport,
 
       viewport->vadjustment = adjustment;
       gtk_object_ref (GTK_OBJECT (viewport->vadjustment));
+      gtk_object_sink (GTK_OBJECT (viewport->vadjustment));
       
       gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
 			  (GtkSignalFunc) gtk_viewport_adjustment_changed,
@@ -328,8 +349,11 @@ gtk_viewport_unrealize (GtkWidget *widget)
 
   gtk_style_detach (widget->style);
 
+  gdk_window_set_user_data (widget->window, NULL);
   gdk_window_destroy (widget->window);
+  gdk_window_set_user_data (viewport->view_window, NULL);
   gdk_window_destroy (viewport->view_window);
+  gdk_window_set_user_data (viewport->bin_window, NULL);
   gdk_window_destroy (viewport->bin_window);
 
   widget->window = NULL;

@@ -158,6 +158,7 @@ gtk_misc_realize (GtkWidget *widget)
   if (GTK_WIDGET_NO_WINDOW (widget))
     {
       widget->window = gtk_widget_get_parent_window (widget);
+      gdk_window_ref (widget->window);
       widget->style = gtk_style_attach (widget->style, widget->window);
     }
   else

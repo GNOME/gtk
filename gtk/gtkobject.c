@@ -17,9 +17,11 @@
  */
 #include <stdarg.h>
 #include <string.h>
+#include <stdio.h>
 #include "gtkobject.h"
 #include "gtksignal.h"
 
+#define	GTK_OBJECT_DEBUG 1
 
 #define OBJECT_DATA_ID_CHUNK  1024
 
@@ -64,15 +66,17 @@ static void           gtk_object_set_arg       (GtkObject      *object,
 static void           gtk_object_get_arg       (GtkObject      *object,
 						GtkArg         *arg,
 						guint		arg_id);
-static void           gtk_real_object_destroy  (GtkObject      *object);
+static void           gtk_object_real_destroy  (GtkObject      *object);
+static void           gtk_object_finalize      (GtkObject      *object);
+static void           gtk_object_notify_weaks  (GtkObject      *object);
 static void           gtk_object_data_init     (void);
 static GtkObjectData* gtk_object_data_new      (void);
 static void           gtk_object_data_destroy  (GtkObjectData  *odata);
 static guint*         gtk_object_data_id_alloc (void);
+
 GtkArg*               gtk_object_collect_args  (guint   *nargs,
 						va_list  args1,
 						va_list  args2);
-
 
 static gint object_signals[LAST_SIGNAL] = { 0 };
 
@@ -88,13 +92,35 @@ static GHashTable *arg_info_ht = NULL;
 static const char *user_data_key = "user_data";
 
 
+#ifdef	GTK_OBJECT_DEBUG
+static int obj_count = 0;
+static GSList *living_objs = NULL;
+
+static void
+gtk_object_debug (void)
+{
+  GSList *node;
+  
+  printf ("%d living objects\n", obj_count);
+  for (node = living_objs; node; node = node->next)
+    {
+      GtkObject *obj = (GtkObject *)node->data;
+      /*
+	printf ("%p: %s %d %s\n",
+	obj, gtk_type_name (GTK_OBJECT_TYPE (obj)),
+	obj->ref_count,
+	GTK_OBJECT_FLOATING (obj)? "floating" : "");
+	*/
+    }
+}
+#endif	GTK_OBJECT_DEBUG
+
 /*****************************************
- * gtk_object_get_type:
+ * gtk_object_init_type:
  *
  *   arguments:
  *
  *   results:
- *     The type identifier for GtkObject's
  *****************************************/
 
 void
@@ -114,6 +140,10 @@ gtk_object_init_type ()
 
   object_type = gtk_type_unique (0, &object_info);
   g_assert (object_type == GTK_TYPE_OBJECT);
+
+#ifdef	GTK_OBJECT_DEBUG
+  ATEXIT (gtk_object_debug);
+#endif	GTK_OBJECT_DEBUG
 }
 
 GtkType
@@ -151,7 +181,8 @@ gtk_object_class_init (GtkObjectClass *class)
 
   gtk_object_class_add_signals (class, object_signals, LAST_SIGNAL);
 
-  class->destroy = gtk_real_object_destroy;
+  class->destroy = gtk_object_real_destroy;
+  class->finalize = gtk_object_finalize;
 }
 
 /*****************************************
@@ -165,13 +196,18 @@ gtk_object_class_init (GtkObjectClass *class)
 static void
 gtk_object_init (GtkObject *object)
 {
-  object->flags = 0;
-  object->ref_count = 0;
+  object->flags = GTK_FLOATING;
+  object->ref_count = 1;
   object->object_data = NULL;
+
+#ifdef	GTK_OBJECT_DEBUG
+  obj_count++;
+  living_objs = g_slist_prepend (living_objs, object);
+#endif	GTK_OBJECT_DEBUG
 }
 
 /*****************************************
- * gtk_object_arg:
+ * gtk_object_set_arg:
  *
  *   arguments:
  *
@@ -213,6 +249,14 @@ gtk_object_set_arg (GtkObject *object,
       break;
     }
 }
+
+/*****************************************
+ * gtk_object_get_arg:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
 
 static void
 gtk_object_get_arg (GtkObject *object,
@@ -345,9 +389,201 @@ gtk_object_unref (GtkObject *object)
 {
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
-
+  
+  if (object->ref_count == 1)
+    gtk_object_destroy (object);
+  
   if (object->ref_count > 0)
     object->ref_count -= 1;
+  
+  if (object->ref_count == 0)
+    {
+      obj_count--;
+      
+#ifdef	GTK_OBJECT_DEBUG
+      g_assert (g_slist_find (living_objs, object));
+      living_objs = g_slist_remove (living_objs, object);
+      /*
+	fprintf (stderr, "finalizing %p %s\n", object, gtk_type_name (object->klass->type));
+	*/
+#endif	GTK_OBJECT_DEBUG
+      
+      object->klass->finalize (object);
+    }
+}
+
+/*****************************************
+ * gtk_object_finalize:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+static void
+gtk_object_finalize (GtkObject *object)
+{
+  GtkObjectData *odata;
+  
+  gtk_object_notify_weaks (object);
+  
+  if (object->object_data)
+    {
+      odata = object->object_data;
+      while (odata->next)
+	odata = odata->next;
+      
+      odata->next = object_data_free_list;
+      object_data_free_list = object->object_data;
+      object->object_data = NULL;
+    }
+  
+  g_free (object);
+}
+
+/*****************************************
+ * gtk_object_sink:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+void
+gtk_object_sink (GtkObject *object)
+{
+  if (GTK_OBJECT_FLOATING (object))
+    {
+      GTK_OBJECT_UNSET_FLAGS (object, GTK_FLOATING);
+      gtk_object_unref (object);
+    }
+}
+
+/*****************************************
+ * gtk_object_destroy:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+void
+gtk_object_destroy (GtkObject *object)
+{
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_OBJECT (object));
+
+  gtk_signal_emit (object, object_signals[DESTROY]);
+}
+
+/*****************************************
+ * gtk_object_real_destroy:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+static void
+gtk_object_real_destroy (GtkObject *object)
+{
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_OBJECT (object));
+
+  gtk_signal_handlers_destroy (object);
+
+  /* object->klass = gtk_type_class (gtk_destroyed_get_type ()); */
+}
+
+/*****************************************
+ * Weak references.
+ *
+ * Weak refs are very similar to the old "destroy" signal.  They allow
+ * one to register a callback that is called when the weakly
+ * referenced object is destroyed.
+ *  
+ * They are not implemented as a signal because they really are
+ * special and need to be used with great care.  Unlike signals, who
+ * should be able to execute any code whatsoever.
+ * 
+ * A weakref callback is not allowed to retain a reference to the
+ * object.  In fact, the object is no longer there at all when it is
+ * called.
+ * 
+ * A weakref callback is called atmost once.
+ *
+ *****************************************/
+
+typedef struct _GtkWeakRef	GtkWeakRef;
+
+struct _GtkWeakRef
+{
+  GtkWeakRef	   *next;
+  GtkDestroyNotify  notify;
+  gpointer          data;
+};
+
+static const gchar *weakrefs_key = "weakrefs";
+
+void
+gtk_object_weakref (GtkObject        *object,
+		    GtkDestroyNotify  notify,
+		    gpointer          data)
+{
+  GtkWeakRef *weak;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (notify != NULL);
+  g_return_if_fail (GTK_IS_OBJECT (object));
+
+  weak = g_new (GtkWeakRef, 1);
+  weak->next = gtk_object_get_data (object, weakrefs_key);
+  weak->notify = notify;
+  weak->data = data;
+  gtk_object_set_data (object, weakrefs_key, weak);
+}
+
+void
+gtk_object_weakunref (GtkObject        *object,
+		      GtkDestroyNotify  notify,
+		      gpointer          data)
+{
+  GtkWeakRef *weaks, *w, **wp;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_OBJECT (object));
+
+  weaks = gtk_object_get_data (object, weakrefs_key);
+  for (wp = &weaks; *wp; wp = &(*wp)->next)
+    {
+      w = *wp;
+      if (w->notify == notify && w->data == data)
+	{
+	  if (w == weaks)
+	    gtk_object_set_data (object, weakrefs_key, w->next);
+	  else
+	    *wp = w->next;
+	  g_free (w);
+	  return;
+	}
+    }
+}
+
+static void
+gtk_object_notify_weaks (GtkObject *object)
+{
+  GtkWeakRef *w1, *w2;
+
+  w1 = gtk_object_get_data (object, weakrefs_key);
+  gtk_object_set_data (object, weakrefs_key, NULL);
+
+  while (w1)
+    {
+      w1->notify (w1->data);
+      w2 = w1->next;
+      g_free (w1);
+      w1 = w2;
+    }
 }
 
 /*****************************************
@@ -743,33 +979,6 @@ gtk_object_get_arg_type (const char *arg_name)
 }
 
 /*****************************************
- * gtk_object_destroy:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-void
-gtk_object_destroy (GtkObject *object)
-{
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_OBJECT (object));
-
-  if ((object->ref_count > 0) || GTK_OBJECT_IN_CALL (object))
-    {
-      GTK_OBJECT_SET_FLAGS (object, GTK_NEED_DESTROY);
-    }
-  else
-    {
-      GTK_OBJECT_UNSET_FLAGS (object, GTK_NEED_DESTROY);
-      GTK_OBJECT_SET_FLAGS (object, GTK_BEING_DESTROYED);
-
-      gtk_signal_emit (object, object_signals[DESTROY]);
-    }
-}
-
-/*****************************************
  * gtk_object_set_data:
  *
  *   arguments:
@@ -983,37 +1192,6 @@ gtk_object_check_class_cast (GtkObjectClass *klass,
 	       gtk_type_name (cast_type));
 
   return klass;
-}
-
-/*****************************************
- * gtk_real_object_destroy:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static void
-gtk_real_object_destroy (GtkObject *object)
-{
-  GtkObjectData *odata;
-
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_OBJECT (object));
-
-  gtk_signal_handlers_destroy (object);
-
-  if (object->object_data)
-    {
-      odata = object->object_data;
-      while (odata->next)
-	odata = odata->next;
-
-      odata->next = object_data_free_list;
-      object_data_free_list = object->object_data;
-    }
-
-  g_free (object);
 }
 
 /*****************************************
