@@ -64,7 +64,7 @@ enum
  * correctly - set if either mblen("\xc0", MB_CUR_MAX) == 1 in the
  * C locale, or were using X's mb functions. (-DX_LOCALE && locale != C)
  */
-extern gboolean gtk_use_mb;
+extern gint gtk_use_mb;
 
 #ifdef __cplusplus
 }

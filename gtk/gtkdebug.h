@@ -35,7 +35,7 @@ typedef enum {
 
 #else /* !G_ENABLE_DEBUG */
 
-#define GTK_NOTE
+#define GTK_NOTE(type, action)
       
 #endif /* G_ENABLE_DEBUG */
 

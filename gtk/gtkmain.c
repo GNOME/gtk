@@ -35,6 +35,7 @@
 #include "gtkprivate.h"
 #include "gdk/gdki18n.h"
 #include "../config.h"
+#include "gtkdebug.h"
 
 
 /* Private type definitions
@@ -174,12 +175,9 @@ static GDebugKey gtk_debug_keys[] = {
 
 static const guint gtk_ndebug_keys = sizeof (gtk_debug_keys) / sizeof (GDebugKey);
 
-gboolean gtk_use_mb = -1;
-
 #endif /* G_ENABLE_DEBUG */
 
-
-
+gint gtk_use_mb = -1;
 
 void
 gtk_init (int	 *argc,
@@ -281,7 +279,7 @@ gtk_init (int	 *argc,
 
   setlocale (LC_CTYPE, current_locale);
 
-  GTK_NOTE (MISC, g_print("%s multi-byte string functions.\n", 
+  GTK_NOTE(MISC, g_print("%s multi-byte string functions.\n", 
 			  gtk_use_mb ? "Using" : "Not using"));
 
   /* Initialize the default visual and colormap to be
