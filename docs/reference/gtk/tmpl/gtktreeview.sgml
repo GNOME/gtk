@@ -2,16 +2,17 @@
 GtkTreeView
 
 <!-- ##### SECTION Short_Description ##### -->
-
+A widget for displaying both trees and lists.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+Widget that displays any object that implements the <link
+linkend="GtkTreeModel>GtkTreeModel</link> interface.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+#GtkTreeViewColumn, #GtkTreeSelection, #GtkTreeDnd, #GtkTreeMode, #GtkTreeSortable, #GtkTreeModelSort, #GtkListStore, #GtkTreeStore, #GtkCellRenderer, #GtkCellEditable, #GtkCellRendererPixbuf, #GtkCellRendererText, #GtkCellRendererToggle
 </para>
 
 <!-- ##### STRUCT GtkTreeView ##### -->
@@ -22,7 +23,7 @@ GtkTreeView
 
 <!-- ##### ENUM GtkTreeViewDropPosition ##### -->
 <para>
-
+An enum for determining where a dropped row goes.
 </para>
 
 @GTK_TREE_VIEW_DROP_BEFORE: 
@@ -32,31 +33,39 @@ GtkTreeView
 
 <!-- ##### STRUCT GtkTreeViewPrivate ##### -->
 <para>
-
+A private struct for internal use only.  The definition of this
+structure is not publically available.
 </para>
 
 
 <!-- ##### USER_FUNCTION GtkTreeViewColumnDropFunc ##### -->
 <para>
-
+Function type for determining whether @column can be dropped in a
+particular spot (as determined by @prev_column and @next_column).  In
+left to right locales, @prev_column is on the left of the potential drop
+spot, and @next_column is on the right.  In right to left mode, this is
+reversed.  This function should return %TRUE if the spot is a valid drop
+spot.  Please note that returning %TRUE does not actually indicate that
+the column drop was made, but is meant only to indicate a possible drop
+spot to the user.
 </para>
 
-@tree_view: 
-@column: 
-@prev_column: 
-@next_column: 
-@data: 
-@Returns: 
+@tree_view: A #GtkTreeView
+@column: The #GtkTreeViewColumn being dragged
+@prev_column: A #GtkTreeViewColumn on one side of @column
+@next_column: A #GtkTreeViewColumn on the other side of @column
+@data: user data
+@Returns: %TRUE, if #column can be dropped in this spot
 
 
 <!-- ##### USER_FUNCTION GtkTreeViewMappingFunc ##### -->
 <para>
-
+Function used for #gtk_tree_view_map_expanded_rows.
 </para>
 
-@tree_view: 
-@path: 
-@user_data: 
+@tree_view: A #GtkTreeView
+@path: The path that's expanded
+@user_data: user data
 
 
 <!-- ##### USER_FUNCTION GtkTreeViewSearchEqualFunc ##### -->
