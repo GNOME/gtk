@@ -45,7 +45,6 @@
 #include "gtksizegroup.h"
 #include "gtkstock.h"
 #include "gtktable.h"
-#include "gtktoolbar.h"
 #include "gtktoolbutton.h"
 #include "gtktreeview.h"
 #include "gtktreemodelsort.h"
@@ -97,13 +96,10 @@ struct _GtkFileChooserDefault
   GtkFilePath *current_folder;
   GtkFilePath *preview_path;
 
-  GtkToolItem *up_button;
-  GtkToolItem *filter_separator;
-  GtkToolItem *filter_item;
+  GtkWidget *up_button;
 
   GtkWidget *preview_frame;
 
-  GtkWidget *toolbar;
   GtkWidget *filter_combo;
   GtkWidget *folder_label;
   GtkWidget *tree_scrollwin;
@@ -241,6 +237,11 @@ static void list_row_activated         (GtkTreeView           *tree_view,
 					GtkFileChooserDefault *impl);
 static void entry_activate             (GtkEntry              *entry,
 					GtkFileChooserDefault *impl);
+
+static void add_bookmark_button_clicked_cb    (GtkButton             *button,
+					       GtkFileChooserDefault *impl);
+static void remove_bookmark_button_clicked_cb (GtkButton             *button,
+					       GtkFileChooserDefault *impl);
 
 static void tree_name_data_func (GtkTreeViewColumn *tree_column,
 				 GtkCellRenderer   *cell,
@@ -818,8 +819,8 @@ create_shortcuts_model (GtkFileChooserDefault *impl)
 
 /* Callback used when the "Up" toolbar button is clicked */
 static void
-toolbar_up_cb (GtkToolButton         *button,
-	       GtkFileChooserDefault *impl)
+up_button_cb (GtkToolButton         *button,
+	      GtkFileChooserDefault *impl)
 {
   GtkFilePath *parent_path;
   GError *error;
@@ -840,71 +841,89 @@ toolbar_up_cb (GtkToolButton         *button,
 		  error);
 }
 
-/* Appends an item to the toolbar */
-static GtkToolItem *
-toolbar_add_item (GtkFileChooserDefault *impl,
-		  const char            *stock_id,
-		  GCallback              callback)
-{
-  GtkToolItem *item;
-
-  item = gtk_tool_button_new_from_stock (stock_id);
-  g_signal_connect (item, "clicked", callback, impl);
-  gtk_toolbar_insert (GTK_TOOLBAR (impl->toolbar), item, -1);
-  gtk_widget_show (GTK_WIDGET (item));
-
-  return item;
-}
-
 /* Creates the widgets for the filter combo box */
 static GtkWidget *
 filter_create (GtkFileChooserDefault *impl)
 {
-  GtkWidget *alignment;
-  GtkWidget *hbox;
-  GtkWidget *label;
-
-  alignment = gtk_alignment_new (0.0, 0.5, 0.0, 1.0);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 0, 0, 12, 0);
-  gtk_widget_show (alignment);
-
-  hbox = gtk_hbox_new (FALSE, 12);
-  gtk_container_add (GTK_CONTAINER (alignment), hbox);
-  gtk_widget_show (hbox);
-
-  label = gtk_label_new_with_mnemonic (_("Files of _type:"));
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-  gtk_widget_show (label);
-
   impl->filter_combo = gtk_combo_box_new_text ();
-  gtk_box_pack_start (GTK_BOX (hbox), impl->filter_combo, FALSE, FALSE, 0);
-  gtk_widget_show (impl->filter_combo);
-
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), impl->filter_combo);
-
   g_signal_connect (impl->filter_combo, "changed",
 		    G_CALLBACK (filter_combo_changed), impl);
 
-  return alignment;
+  return impl->filter_combo;
 }
 
-/* Creates the toolbar widget */
+static GtkWidget *
+toolbar_button_new (GtkFileChooserDefault *impl,
+		    const char *text,
+		    const char *stock_id,
+		    gboolean    sensitive,
+		    GCallback   callback)
+{
+  GtkWidget *button;
+  GtkWidget *hbox;
+  GtkWidget *widget;
+
+  button = gtk_button_new ();
+
+  hbox = gtk_hbox_new (FALSE, 2);
+  gtk_container_add (GTK_CONTAINER (button), hbox);
+
+  widget = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
+
+  widget = gtk_label_new (text);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
+
+  gtk_widget_set_sensitive (button, sensitive);
+  g_signal_connect (button, "clicked", callback, impl);
+
+  return button;
+}
+
+/* Creates the widgets in the toolbar */
 static GtkWidget *
 toolbar_create (GtkFileChooserDefault *impl)
 {
-  impl->toolbar = gtk_toolbar_new ();
-  gtk_toolbar_set_style (GTK_TOOLBAR (impl->toolbar), GTK_TOOLBAR_ICONS);
+  GtkWidget *hbox;
 
-  impl->up_button = toolbar_add_item (impl, GTK_STOCK_GO_UP, G_CALLBACK (toolbar_up_cb));
+  hbox = gtk_hbox_new (FALSE, 12);
 
-  impl->filter_separator = gtk_separator_tool_item_new ();
-  gtk_toolbar_insert (GTK_TOOLBAR (impl->toolbar), impl->filter_separator, -1);
+  /* Add bookmark button */
 
-  impl->filter_item = gtk_tool_item_new ();
-  gtk_container_add (GTK_CONTAINER (impl->filter_item), filter_create (impl));
-  gtk_toolbar_insert (GTK_TOOLBAR (impl->toolbar), impl->filter_item, -1);
+  impl->add_bookmark_button = toolbar_button_new (impl,
+						  _("Add"),
+						  GTK_STOCK_ADD,
+						  FALSE,
+						  G_CALLBACK (add_bookmark_button_clicked_cb));
+  gtk_box_pack_start (GTK_BOX (hbox), impl->add_bookmark_button, FALSE, FALSE, 0);
 
-  return impl->toolbar;
+  /* Remove bookmark button */
+
+  impl->remove_bookmark_button = toolbar_button_new (impl,
+						     _("Remove"),
+						     GTK_STOCK_REMOVE,
+						     FALSE,
+						     G_CALLBACK (remove_bookmark_button_clicked_cb));
+  gtk_box_pack_start (GTK_BOX (hbox), impl->remove_bookmark_button, FALSE, FALSE, 0);
+
+  /* Up button */
+
+  impl->up_button = toolbar_button_new (impl,
+					_("Up"),
+					GTK_STOCK_GO_UP,
+					FALSE,
+					G_CALLBACK (up_button_cb));
+  gtk_box_pack_start (GTK_BOX (hbox), impl->up_button, FALSE, FALSE, 0);
+
+  /* Current folder label */
+
+  impl->folder_label = gtk_label_new (NULL);
+  gtk_misc_set_alignment (GTK_MISC (impl->folder_label), 0.0, 0.5);
+  gtk_box_pack_start (GTK_BOX (hbox), impl->folder_label, FALSE, FALSE, 0);
+
+  gtk_widget_show_all (hbox);
+
+  return hbox;
 }
 
 /* Sets the sensitivity of the toolbar buttons */
@@ -1310,49 +1329,6 @@ create_shortcuts_tree (GtkFileChooserDefault *impl)
   return impl->shortcuts_scrollwin;
 }
 
-static GtkWidget *
-create_shortcuts_buttons (GtkFileChooserDefault *impl)
-{
-  GtkWidget *hbox;
-  GtkWidget *hbox2;
-  GtkWidget *widget;
-  GtkWidget *image;
-
-  hbox = gtk_hbox_new (FALSE, 12);
-  gtk_widget_show (hbox);
-
-  /* "Add bookmark" */
-
-  impl->add_bookmark_button = gtk_button_new ();
-
-  hbox2 = gtk_hbox_new (FALSE, 2);
-  gtk_container_add (GTK_CONTAINER (impl->add_bookmark_button), hbox2);
-  widget = gtk_image_new_from_stock (GTK_STOCK_ADD, GTK_ICON_SIZE_BUTTON);
-  gtk_box_pack_start (GTK_BOX (hbox2), widget, FALSE, FALSE, 0);
-  widget = gtk_label_new (_("Add bookmark"));
-  gtk_box_pack_start (GTK_BOX (hbox2), widget, FALSE, FALSE, 0);
-  gtk_widget_show_all (impl->add_bookmark_button);
-
-  g_signal_connect (impl->add_bookmark_button, "clicked",
-		    G_CALLBACK (add_bookmark_button_clicked_cb), impl);
-  gtk_box_pack_start (GTK_BOX (hbox), impl->add_bookmark_button, FALSE, FALSE, 0);
-  gtk_widget_set_sensitive (impl->add_bookmark_button, FALSE);
-  gtk_widget_show (impl->add_bookmark_button);
-
-  /* "Remove bookmark" */
-
-  impl->remove_bookmark_button = gtk_button_new ();
-  g_signal_connect (impl->remove_bookmark_button, "clicked",
-		    G_CALLBACK (remove_bookmark_button_clicked_cb), impl);
-  image = gtk_image_new_from_stock (GTK_STOCK_DELETE, GTK_ICON_SIZE_BUTTON);
-  gtk_container_add (GTK_CONTAINER (impl->remove_bookmark_button), image);
-  gtk_widget_set_sensitive (impl->remove_bookmark_button, FALSE);
-  gtk_box_pack_start (GTK_BOX (hbox), impl->remove_bookmark_button, FALSE, FALSE, 0);
-  gtk_widget_show_all (impl->remove_bookmark_button);
-
-  return hbox;
-}
-
 /* Creates the widgets for the file list */
 static GtkWidget *
 create_file_list (GtkFileChooserDefault *impl)
@@ -1430,17 +1406,19 @@ create_file_list (GtkFileChooserDefault *impl)
 }
 
 static GtkWidget *
-create_filename_entry (GtkFileChooserDefault *impl)
+create_filename_entry_and_filter_combo (GtkFileChooserDefault *impl)
 {
   GtkWidget *hbox;
-  GtkWidget *label;
+  GtkWidget *widget;
 
   hbox = gtk_hbox_new (FALSE, 12);
   gtk_widget_show (hbox);
 
-  label = gtk_label_new_with_mnemonic (_("_Location:"));
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-  gtk_widget_show (label);
+  /* Label and entry */
+
+  widget = gtk_label_new_with_mnemonic (_("_Filename:"));
+  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
+  gtk_widget_show (widget);
 
   impl->entry = _gtk_file_chooser_entry_new ();
   gtk_entry_set_activates_default (GTK_ENTRY (impl->entry), TRUE);
@@ -1452,7 +1430,12 @@ create_filename_entry (GtkFileChooserDefault *impl)
   gtk_box_pack_start (GTK_BOX (hbox), impl->entry, TRUE, TRUE, 0);
   gtk_widget_show (impl->entry);
 
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), impl->entry);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (widget), impl->entry);
+
+  /* Filter combo */
+
+  widget = filter_create (impl);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
 
   return hbox;
 }
@@ -1464,14 +1447,12 @@ gtk_file_chooser_default_constructor (GType                  type,
 {
   GtkFileChooserDefault *impl;
   GObject *object;
-  GtkWidget *table;
+  GtkWidget *vbox;
   GtkWidget *hpaned;
-  GtkWidget *entry_widget;
   GtkWidget *widget;
   GList *focus_chain;
   GtkWidget *hbox;
-  GtkWidget *vbox;
-  GtkSizeGroup *size_group;
+  GtkWidget *entry_widget;
 
   object = parent_class->constructor (type,
 				      n_construct_properties,
@@ -1485,61 +1466,29 @@ gtk_file_chooser_default_constructor (GType                  type,
   /* Toolbar */
   widget = toolbar_create (impl);
   gtk_box_pack_start (GTK_BOX (impl), widget, FALSE, FALSE, 0);
-  gtk_widget_show (widget);
 
-  /* Basic table */
+  /* Basic box */
 
-  table = gtk_table_new (2, 2, FALSE);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 12);
-  gtk_box_pack_start (GTK_BOX (impl), table, TRUE, TRUE, 0);
-  gtk_widget_show (table);
-
-  /* Current folder label */
-
-  impl->folder_label = gtk_label_new (NULL);
-  gtk_misc_set_alignment (GTK_MISC (impl->folder_label), 0.0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), impl->folder_label,
-		    0, 1,                   0, 1,
-		    GTK_EXPAND | GTK_FILL,  0,
-		    0,                      0);
-  gtk_widget_show (impl->folder_label);
+  vbox = gtk_vbox_new (FALSE, 12);
+  gtk_box_pack_start (GTK_BOX (impl), vbox, TRUE, TRUE, 0);
+  gtk_widget_show (vbox);
 
   /* Paned widget */
 
   hpaned = gtk_hpaned_new ();
-  gtk_table_attach (GTK_TABLE (table), hpaned,
-		    0, 1,                   1, 2,
-		    GTK_EXPAND | GTK_FILL,  GTK_EXPAND | GTK_FILL,
-		    0,                      0);
+  gtk_box_pack_start (GTK_BOX (vbox), hpaned, TRUE, TRUE, 0);
   gtk_paned_set_position (GTK_PANED (hpaned), 200); /* FIXME: this sucks */
   gtk_widget_show (hpaned);
 
   /* Shortcuts list */
 
-  vbox = gtk_vbox_new (FALSE, 12);
-  gtk_paned_add1 (GTK_PANED (hpaned), vbox);
-  gtk_widget_show (vbox);
-
   widget = create_shortcuts_tree (impl);
-  gtk_box_pack_start (GTK_BOX (vbox), widget, TRUE, TRUE, 0);
-  gtk_widget_show (widget);
-
-  widget = create_shortcuts_buttons (impl);
-  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
-  gtk_widget_show (widget);
-
-  size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
-  gtk_size_group_add_widget (size_group, widget);
+  gtk_paned_pack1 (GTK_PANED (hpaned), widget, FALSE, FALSE);
 
   /* Folder tree */
 
-  vbox = gtk_vbox_new (FALSE, 12);
-  gtk_paned_add2 (GTK_PANED (hpaned), vbox);
-  gtk_widget_show (vbox);
-
   hbox = gtk_hbox_new (FALSE, 12);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
+  gtk_paned_pack2 (GTK_PANED (hpaned), hbox, TRUE, FALSE);
   gtk_widget_show (hbox);
 
   widget = create_folder_tree (impl);
@@ -1550,29 +1499,22 @@ gtk_file_chooser_default_constructor (GType                  type,
   widget = create_file_list (impl);
   gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
 
-  /* Location/filename entry */
-
-  entry_widget = create_filename_entry (impl);
-  gtk_box_pack_start (GTK_BOX (vbox), entry_widget, FALSE, FALSE, 0);
-
-  gtk_size_group_add_widget (size_group, entry_widget);
-  g_object_unref (size_group);
-
   /* Preview */
 
   impl->preview_frame = gtk_frame_new (_("Preview"));
-  gtk_table_attach (GTK_TABLE (table), impl->preview_frame,
-		    1, 2,                   0, 2,
-		    0,                      GTK_EXPAND | GTK_FILL,
-		    0,                      0);
+  gtk_box_pack_start (GTK_BOX (hbox), impl->preview_frame, FALSE, FALSE, 0);
   /* Don't show preview frame initially */
+
+  /* Filename entry and filter combo */
+
+  entry_widget = create_filename_entry_and_filter_combo (impl);
+  gtk_box_pack_start (GTK_BOX (vbox), entry_widget, FALSE, FALSE, 0);
 
   /* Make the entry the first widget in the focus chain
    */
   focus_chain = g_list_append (NULL, entry_widget);
   focus_chain = g_list_append (focus_chain, hpaned);
-  focus_chain = g_list_append (focus_chain, impl->preview_frame);
-  gtk_container_set_focus_chain (GTK_CONTAINER (table), focus_chain);
+  gtk_container_set_focus_chain (GTK_CONTAINER (vbox), focus_chain);
   g_list_free (focus_chain);
     
   gtk_widget_pop_composite_child ();
@@ -2258,15 +2200,9 @@ toolbar_show_filters (GtkFileChooserDefault *impl,
 		      gboolean               show)
 {
   if (show)
-    {
-      gtk_widget_show (GTK_WIDGET (impl->filter_separator));
-      gtk_widget_show (GTK_WIDGET (impl->filter_item));
-    }
+    gtk_widget_show (impl->filter_combo);
   else
-    {
-      gtk_widget_hide (GTK_WIDGET (impl->filter_separator));
-      gtk_widget_hide (GTK_WIDGET (impl->filter_item));
-    }
+    gtk_widget_hide (impl->filter_combo);
 }  
 
 static void

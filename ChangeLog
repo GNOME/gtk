@@ -1,3 +1,16 @@
+2004-01-05  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (toolbar_button_new): New helper
+	function.
+	(toolbar_create): Do not use a toolbar widget, just an hbox
+	instead.  Add the bookmarks buttons and the current folder label
+	here.
+	(create_filename_entry_and_filter_combo): Create the filter combo
+	here.
+	(filter_create): Don't show the filter combo initially.
+	(up_button_cb): Renamed from toolbar_up_cb().
+	(create_shortcuts_buttons): Removed.
+
 2004-01-05  Murray Cumming  <murrayc@usa.net>
 
 	* gdk/gdkimage.h: Added <public> documentation to the struct, as
