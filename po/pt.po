@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.12\n"
-"POT-Creation-Date: 1999-02-16 14:28-0600\n"
-"PO-Revision-Date: 1999-01-09 12:09+00:00\n"
+"POT-Creation-Date: 1999-02-17 01:10+0000\n"
+"PO-Revision-Date: 1999-02-17 01:20+00:00\n"
 "Last-Translator: Nuno Ferreira <nmrf@rnl.ist.utl.pt>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -123,9 +123,8 @@ msgid "Rename"
 msgstr "Renomear"
 
 #: gtk/gtkfilesel.c:1432
-#, fuzzy
 msgid "Selection: "
-msgstr "Selecção de Fonte"
+msgstr "Selecção: "
 
 #: gtk/gtkfontsel.c:203
 msgid "Foundry:"
@@ -133,31 +132,31 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:204
 msgid "Family:"
-msgstr ""
+msgstr "Família:"
 
 #: gtk/gtkfontsel.c:205
 msgid "Weight:"
-msgstr ""
+msgstr "Peso:"
 
 #: gtk/gtkfontsel.c:206
 msgid "Slant:"
-msgstr ""
+msgstr "Inclinação:"
 
 #: gtk/gtkfontsel.c:207
 msgid "Set Width:"
-msgstr ""
+msgstr "Espaçamento:"
 
 #: gtk/gtkfontsel.c:208
 msgid "Add Style:"
-msgstr ""
+msgstr "Adicionar Estilo:"
 
 #: gtk/gtkfontsel.c:209
 msgid "Pixel Size:"
-msgstr ""
+msgstr "Tamanho em Pixeis:"
 
 #: gtk/gtkfontsel.c:210
 msgid "Point Size:"
-msgstr ""
+msgstr "Tamanho em Pontos:"
 
 #: gtk/gtkfontsel.c:211
 msgid "Resolution X:"
@@ -177,13 +176,13 @@ msgstr "Largura Média:"
 
 #: gtk/gtkfontsel.c:215
 msgid "Charset:"
-msgstr ""
+msgstr "Charset:"
 
 #. Number of internationalized titles here must match number
 #. of NULL initializers above
 #: gtk/gtkfontsel.c:452
 msgid "Font Property"
-msgstr ""
+msgstr "Propriedade da Fonte"
 
 #: gtk/gtkfontsel.c:453
 msgid "Requested Value"
@@ -203,11 +202,11 @@ msgstr "Fonte:"
 
 #: gtk/gtkfontsel.c:502
 msgid "Font Style:"
-msgstr ""
+msgstr "Estilo de Fonte:"
 
 #: gtk/gtkfontsel.c:507
 msgid "Size:"
-msgstr ""
+msgstr "Tamanho:"
 
 #: gtk/gtkfontsel.c:639 gtk/gtkfontsel.c:861
 msgid "Reset Filter"
@@ -257,15 +256,15 @@ msgstr "Tipos de Fonte:"
 
 #: gtk/gtkfontsel.c:800
 msgid "Bitmap"
-msgstr ""
+msgstr "Imagem"
 
 #: gtk/gtkfontsel.c:806
 msgid "Scalable"
-msgstr ""
+msgstr "Escalável"
 
 #: gtk/gtkfontsel.c:812
 msgid "Scaled Bitmap"
-msgstr ""
+msgstr "Bitmap Escalado"
 
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1208
@@ -326,7 +325,7 @@ msgstr "proporcional"
 
 #: gtk/gtkfontsel.c:1950
 msgid "monospaced"
-msgstr ""
+msgstr "monoespaçada"
 
 #: gtk/gtkfontsel.c:1951
 msgid "char cell"
@@ -371,11 +370,11 @@ msgstr "Dispositivo:"
 
 #: gtk/gtkinputdialog.c:245
 msgid "Disabled"
-msgstr ""
+msgstr "Inactivo"
 
 #: gtk/gtkinputdialog.c:253
 msgid "Screen"
-msgstr ""
+msgstr "Ecrã"
 
 #: gtk/gtkinputdialog.c:261
 msgid "Window"
@@ -388,7 +387,7 @@ msgstr "Modo: "
 #. The axis listbox
 #: gtk/gtkinputdialog.c:299
 msgid "Axes"
-msgstr ""
+msgstr "Eixos"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:315
@@ -427,7 +426,7 @@ msgstr "nenhum"
 
 #: gtk/gtkinputdialog.c:570 gtk/gtkinputdialog.c:606
 msgid "(disabled)"
-msgstr ""
+msgstr "(inactivo)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:684
