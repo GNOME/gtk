@@ -12397,7 +12397,7 @@ gtk_tree_view_stop_editing (GtkTreeView *tree_view,
 
 
 /**
- * Gtk_tree_view_set_hover_selection:
+ * gtk_tree_view_set_hover_selection:
  * @tree_view: a #GtkTreeView
  * @hover: %TRUE to enable hover selection mode
  *
