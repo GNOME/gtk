@@ -1,6 +1,6 @@
 # Tamil translation of Gtk+.po.
 # Copyright (C) 2001 Free Software Foundation, Inc.
-# <>, 2001.
+# Dinesh Nadarajah <n_dinesh@yahoo.com>, 2001.
 # 
 msgid ""
 msgstr ""
@@ -8,9 +8,9 @@ msgstr ""
 "POT-Creation-Date: 2001-05-19 01:20+0200\n"
 "PO-Revision-Date: 2001-06-14 20:14-0500\n"
 "Last-Translator: Dinesh Nadarajah <n_dinesh@yahoo.com>\n"
-"Language-Team: (null)\n"
+"Language-Team: Tamil\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-15\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:221
