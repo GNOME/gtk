@@ -13,6 +13,7 @@ demos =						\
 	drawingarea.c				\
 	editable_cells.c			\
 	entry_completion.c			\
+	expander.c  				\
 	hypertext.c				\
 	images.c				\
 	list_store.c				\

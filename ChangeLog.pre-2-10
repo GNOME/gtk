@@ -1,3 +1,9 @@
+2004-04-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* demos/gtk-demo/expander.c (do_expander): A new demo.
+
+	* demos/gtk-demo/Makefile.am (demos): Add expander.c.
+
 2004-04-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_allocate_children): Make
