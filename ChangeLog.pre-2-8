@@ -1,3 +1,16 @@
+Mon Feb 19 14:20:36 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkrgb.c (gdk_rgb_convert_555_br): Fix incorrect
+	mask. (#51039, fix from Martin Maierhofer)
+
+Fri Feb 16 20:09:42 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkctree.c (gtk_ctree_class_init): Add bindings
+	for unshifted + and shifted = for non-us keyboards.
+	Make <Control>+ and <Control>- work as well as 
+	<Control>KP_Plus, <Control>KP_Minus for recursive
+	open/close. (#2682, René Seindal)
+	
 Fri Feb 16 18:50:59 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenushell.c (gtk_real_menu_shell_cancel): Unset
