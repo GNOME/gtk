@@ -1532,7 +1532,19 @@ gtk_text_iter_is_end (const GtkTextIter *iter)
 
   check_invariants (iter);
 
-  return _gtk_text_line_is_last (real->line, real->tree);
+  if (!_gtk_text_line_contains_end_iter (real->line, real->tree))
+    return FALSE;
+
+  /* Now we need the segments validated */
+  real = gtk_text_iter_make_real (iter);
+
+  if (real == NULL)
+    return FALSE;
+  
+  return _gtk_text_btree_is_end (real->tree, real->line,
+                                 real->segment,
+                                 real->segment_byte_offset,
+                                 real->segment_char_offset);
 }
 
 /**
@@ -1701,18 +1713,23 @@ gtk_text_iter_get_attributes (const GtkTextIter  *iter,
 /* The return value of this indicates WHETHER WE MOVED.
  * The return value of public functions indicates
  * (MOVEMENT OCCURRED && NEW ITER IS DEREFERENCEABLE)
+ *
+ * This function will not change the iterator if
+ * it's already on the last (end iter) line, i.e. it
+ * won't move to the end of the last line.
  */
 static gboolean
 forward_line_leaving_caches_unmodified (GtkTextRealIter *real)
 {
-  GtkTextLine *new_line;
-
-  new_line = _gtk_text_line_next (real->line);
-
-  g_assert (new_line != real->line);
-
-  if (new_line != NULL)
+  if (!_gtk_text_line_contains_end_iter (real->line, real->tree))
     {
+      GtkTextLine *new_line;
+      
+      new_line = _gtk_text_line_next (real->line);
+      g_assert (new_line);
+      g_assert (new_line != real->line);
+      g_assert (!_gtk_text_line_is_last (new_line, real->tree));
+      
       real->line = new_line;
 
       real->line_byte_offset = 0;
@@ -1731,24 +1748,11 @@ forward_line_leaving_caches_unmodified (GtkTextRealIter *real)
     }
   else
     {
-      /* There is no way to move forward; we were already
-         at the "end" index. (the end index is the last
-         line pointer, segment_byte_offset of 0) */
-
-      g_assert (real->line_char_offset == 0 ||
-                real->line_byte_offset == 0);
-
-      /* The only indexable segment allowed on the bogus
-         line at the end is a single char segment containing
-         a newline. */
-      if (real->segments_changed_stamp ==
-          _gtk_text_btree_get_segments_changed_stamp (real->tree))
-        {
-          g_assert (real->segment->type == &gtk_text_char_type);
-          g_assert (real->segment->char_count == 1);
-        }
-      /* We leave real->line as-is */
-
+      /* There is no way to move forward a line; we were already at
+       * the line containing the end iterator.
+       * However we may not be at the end iterator itself.
+       */
+      
       return FALSE;
     }
 }
@@ -1950,6 +1954,8 @@ _gtk_text_iter_forward_indexable_segment (GtkTextIter *iter)
         {
           /* End of buffer */
 
+          g_assert (gtk_text_iter_is_end (iter));
+          
           check_invariants (iter);
 
           return FALSE;
@@ -2442,6 +2448,11 @@ gtk_text_iter_forward_line (GtkTextIter *iter)
     }
   else
     {
+      /* On the last line, move to end of it */
+      
+      if (!gtk_text_iter_is_end (iter))
+        gtk_text_iter_forward_to_end (iter);
+      
       check_invariants (iter);
       return FALSE;
     }
@@ -2789,7 +2800,9 @@ test_log_attrs (const GtkTextIter *iter,
 
   offset = gtk_text_iter_get_line_offset (iter);
 
-  g_assert (char_len > 0);
+  /* char_len may be 0 and attrs will be NULL if so, if
+   * iter is the end iter and the last line is empty
+   */
   
   if (offset < char_len)
     result = (* func) (attrs, offset, 0, char_len);
@@ -2814,8 +2827,10 @@ find_line_log_attrs (const GtkTextIter *iter,
                                                iter, &char_len);      
 
   offset = gtk_text_iter_get_line_offset (iter);
-  
-  g_assert (char_len > 0);
+
+  /* char_len may be 0 and attrs will be NULL if so, if
+   * iter is the end iter and the last line is empty
+   */
   
   if (offset < char_len)
     result = (* func) (attrs, offset, 0, char_len, found_offset,
@@ -3734,7 +3749,7 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
 
   current_line = real->line;
   next_line = _gtk_text_line_next_could_contain_tag (current_line,
-                                                    real->tree, tag);
+                                                     real->tree, tag);
 
   while (_gtk_text_iter_forward_indexable_segment (iter))
     {
@@ -3756,8 +3771,8 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
 
           current_line = real->line;
           next_line = _gtk_text_line_next_could_contain_tag (current_line,
-                                                            real->tree,
-                                                            tag);
+                                                             real->tree,
+                                                             tag);
         }
 
       if (gtk_text_iter_toggles_tag (iter, tag))
@@ -5175,5 +5190,8 @@ _gtk_text_iter_check (const GtkTextIter *iter)
             g_error ("wrong char index was cached");
         }
     }
+
+  if (_gtk_text_line_is_last (real->line, real->tree))
+    g_error ("Iterator was on last line (past the end iterator)");
 }
 

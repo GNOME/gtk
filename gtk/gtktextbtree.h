@@ -23,6 +23,11 @@ guint _gtk_text_btree_get_chars_changed_stamp    (GtkTextBTree *tree);
 guint _gtk_text_btree_get_segments_changed_stamp (GtkTextBTree *tree);
 void  _gtk_text_btree_segments_changed           (GtkTextBTree *tree);
 
+gboolean _gtk_text_btree_is_end (GtkTextBTree       *tree,
+                                 GtkTextLine        *line,
+                                 GtkTextLineSegment *seg,
+                                 int                 byte_index,
+                                 int                 char_offset);
 
 /* Indexable segment mutation */
 
@@ -82,6 +87,7 @@ void _gtk_text_btree_tag (const GtkTextIter *start,
 GtkTextLine * _gtk_text_btree_get_line          (GtkTextBTree      *tree,
                                                  gint               line_number,
                                                  gint              *real_line_number);
+GtkTextLine * _gtk_text_btree_get_end_iter_line (GtkTextBTree      *tree);
 GtkTextLine * _gtk_text_btree_get_line_at_char  (GtkTextBTree      *tree,
                                                  gint               char_index,
                                                  gint              *line_start_index,
@@ -205,9 +211,12 @@ gboolean            _gtk_text_line_byte_has_tag               (GtkTextLine      
                                                                GtkTextBTree        *tree,
                                                                gint                 byte_in_line,
                                                                GtkTextTag          *tag);
-gboolean            _gtk_text_line_is_last                    (GtkTextLine  *line,
-                                                               GtkTextBTree *tree);
+gboolean            _gtk_text_line_is_last                    (GtkTextLine         *line,
+                                                               GtkTextBTree        *tree);
+gboolean            _gtk_text_line_contains_end_iter          (GtkTextLine         *line,
+                                                               GtkTextBTree        *tree);
 GtkTextLine *       _gtk_text_line_next                       (GtkTextLine         *line);
+GtkTextLine *       _gtk_text_line_next_excluding_last        (GtkTextLine         *line);
 GtkTextLine *       _gtk_text_line_previous                   (GtkTextLine         *line);
 void                _gtk_text_line_add_data                   (GtkTextLine         *line,
                                                                GtkTextLineData     *data);

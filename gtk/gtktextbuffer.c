@@ -407,11 +407,8 @@ gtk_text_buffer_get_tag_table (GtkTextBuffer  *buffer)
  * @text: UTF-8 text to insert
  * @len: length of @text in bytes
  *
- * Deletes current contents of @buffer, and inserts @text instead.  If
- * @text doesn't end with a newline, a newline is added;
- * #GtkTextBuffer contents must always end with a newline. If @text
- * ends with a newline, the new buffer contents will be exactly
- * @text. If @len is -1, @text must be nul-terminated.
+ * Deletes current contents of @buffer, and inserts @text instead. If
+ * @len is -1, @text must be nul-terminated. @text must be valid UTF-8.
  **/
 void
 gtk_text_buffer_set_text (GtkTextBuffer *buffer,
@@ -425,12 +422,6 @@ gtk_text_buffer_set_text (GtkTextBuffer *buffer,
 
   if (len < 0)
     len = strlen (text);
-
-  /* Chop newline, since the buffer will already have one
-   * in it.
-   */
-  if (len > 0 && text[len-1] == '\n')
-    len -= 1;
 
   gtk_text_buffer_get_bounds (buffer, &start, &end);
 
@@ -1135,14 +1126,6 @@ gtk_text_buffer_emit_delete (GtkTextBuffer *buffer,
 
   gtk_text_iter_order (start, end);
 
-  /* Somewhat annoyingly, if you try to delete the final newline
-   * the BTree will put it back; which means you can't deduce the
-   * final contents of the buffer purely by monitoring insert/delete
-   * signals on the buffer. But if you delete the final newline, any
-   * tags on the newline will go away, oddly. See comment in
-   * gtktextbtree.c. This is all sort of annoying, but really hard
-   * to fix.
-   */
   g_signal_emit (G_OBJECT (buffer),
                  signals[DELETE_RANGE],
                  0,
@@ -1162,11 +1145,6 @@ gtk_text_buffer_emit_delete (GtkTextBuffer *buffer,
  * buffer is modified, all outstanding iterators become invalid after
  * calling this function; however, the @start and @end will be
  * re-initialized to point to the location where text was deleted.
- *
- * Note that the final newline in the buffer may not be deleted; a
- * #GtkTextBuffer always contains at least one newline.  You can
- * safely include the final newline in the range [@start,@end) but it
- * won't be affected by the deletion.
  *
  **/
 void
@@ -1529,14 +1507,15 @@ gtk_text_buffer_mark_set (GtkTextBuffer     *buffer,
                           GtkTextMark       *mark)
 {
   /* IMO this should NOT work like insert_text and delete_range,
-     where the real action happens in the default handler.
-
-     The reason is that the default handler would be _required_,
-     i.e. the whole widget would start breaking and segfaulting
-     if the default handler didn't get run. So you can't really
-     override the default handler or stop the emission; that is,
-     this signal is purely for notification, and not to allow users
-     to modify the default behavior. */
+   * where the real action happens in the default handler.
+   * 
+   * The reason is that the default handler would be _required_,
+   * i.e. the whole widget would start breaking and segfaulting if the
+   * default handler didn't get run. So you can't really override the
+   * default handler or stop the emission; that is, this signal is
+   * purely for notification, and not to allow users to modify the
+   * default behavior.
+   */
 
   g_object_ref (G_OBJECT (mark));
 
@@ -2701,8 +2680,6 @@ clipboard_get_contents_cb (GtkClipboard     *clipboard,
       GtkTextIter start, end;
       
       gtk_text_buffer_get_bounds (contents, &start, &end);
-      /* strip off the trailing newline, it isn't part of the text that was cut */
-      gtk_text_iter_backward_char (&end);
       
       str = gtk_text_iter_get_visible_text (&start, &end);
       gtk_selection_data_set_text (selection_data, str);
@@ -3466,8 +3443,16 @@ _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
   
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
   g_return_val_if_fail (anywhere_in_line != NULL, NULL);
-  g_return_val_if_fail (!gtk_text_iter_is_end (anywhere_in_line), NULL);
 
+  /* special-case for empty last line in buffer */
+  if (gtk_text_iter_is_end (anywhere_in_line) &&
+      gtk_text_iter_get_line_offset (anywhere_in_line) == 0)
+    {
+      if (char_len)
+        *char_len = 0;
+      return NULL;
+    }
+  
   /* FIXME we also need to recompute log attrs if the language tag at
    * the start of a paragraph changes
    */

@@ -102,6 +102,14 @@ between the old and new positions).
 </footnote>
 </para>
 
+<para>
+Text buffers always contain at least one line, but may be empty (that is,
+buffers can contain zero characters). The last line in the text buffer never
+ends in a line separator (such as newline); the other lines in the buffer always
+end in a line separator. Line separators count as characters when computing
+character counts and character offsets.
+</para>
+
 </refsect1>
 
 

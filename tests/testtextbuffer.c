@@ -2,6 +2,7 @@
 
 
 #include <stdio.h>
+#include <string.h>
 
 #include <gtk/gtk.h>
 #include "../gtk/gtktexttypes.h" /* Private header, for UNKNOWN_CHAR */
@@ -28,7 +29,8 @@ main (int argc, char** argv)
   int n;
   gunichar ch;
   GtkTextIter start, end;
-
+  gchar *text;
+  
   gtk_init (&argc, &argv);
 
   /* Check UTF8 unknown char thing */
@@ -49,12 +51,34 @@ main (int argc, char** argv)
     g_error ("%d lines, expected 1", n);
 
   n = gtk_text_buffer_get_char_count (buffer);
-  if (n != 1)
-    g_error ("%d chars, expected 1", n);
+  if (n != 0)
+    g_error ("%d chars, expected 0", n);
 
   /* Run gruesome alien test suite on buffer */
   run_tests (buffer);
 
+  /* Check set/get text */
+  gtk_text_buffer_set_text (buffer, "Hello", -1);
+  if (gtk_text_buffer_get_char_count (buffer) != g_utf8_strlen ("Hello", -1))
+    g_error ("Wrong number of chars (%d not %d)",
+             gtk_text_buffer_get_char_count (buffer),
+             (int) g_utf8_strlen ("Hello", -1));
+  gtk_text_buffer_get_bounds (buffer, &start, &end);
+  text = gtk_text_buffer_get_text (buffer, &start, &end, TRUE);
+  if (strcmp (text, "Hello") != 0)
+    g_error ("Got '%s' as buffer contents", text);
+  g_free (text);
+
+  gtk_text_buffer_set_text (buffer, "", -1);
+
+  n = gtk_text_buffer_get_line_count (buffer);
+  if (n != 1)
+    g_error ("%d lines, expected 1", n);
+
+  n = gtk_text_buffer_get_char_count (buffer);
+  if (n != 0)
+    g_error ("%d chars, expected 0", n);
+  
   /* Put stuff in the buffer */
 
   fill_buffer (buffer);
@@ -73,8 +97,8 @@ main (int argc, char** argv)
     g_error ("%d lines, expected 1", n);
 
   n = gtk_text_buffer_get_char_count (buffer);
-  if (n != 1)
-    g_error ("%d chars, expected 1", n);
+  if (n != 0)
+    g_error ("%d chars, expected 0", n);
 
   run_tests (buffer);
 

@@ -185,22 +185,32 @@ struct _GtkTextBTree {
   guint tag_changed_handler;
   guint tag_removed_handler;
   /* Incremented when a segment with a byte size > 0
-     is added to or removed from the tree (i.e. the
-     length of a line may have changed, and lines may
-     have been added or removed). This invalidates
-     all outstanding iterators.
-  */
+   * is added to or removed from the tree (i.e. the
+   * length of a line may have changed, and lines may
+   * have been added or removed). This invalidates
+   * all outstanding iterators.
+   */
   guint chars_changed_stamp;
   /* Incremented when any segments are added or deleted;
-     this makes outstanding iterators recalculate their
-     pointed-to segment and segment offset.
-  */
+   * this makes outstanding iterators recalculate their
+   * pointed-to segment and segment offset.
+   */
   guint segments_changed_stamp;
 
+  /* Cache the last line in the buffer */
+  GtkTextLine *last_line;
+  guint last_line_stamp;
+
+  /* Cache the next-to-last line in the buffer,
+   * containing the end iterator
+   */
   GtkTextLine *end_iter_line;
-
+  GtkTextLineSegment *end_iter_segment;
+  int end_iter_segment_byte_index;
+  int end_iter_segment_char_offset;
   guint end_iter_line_stamp;
-
+  guint end_iter_segment_stamp;
+  
   GHashTable *child_anchor_table;
 };
 
@@ -409,9 +419,15 @@ _gtk_text_btree_new (GtkTextTagTable *table,
   tree->chars_changed_stamp = g_random_int ();
   tree->segments_changed_stamp = g_random_int ();
 
-  tree->end_iter_line_stamp = tree->chars_changed_stamp - 1;
-  tree->end_iter_line = NULL;
+  tree->last_line_stamp = tree->chars_changed_stamp - 1;
+  tree->last_line = NULL;
 
+  tree->end_iter_line_stamp = tree->chars_changed_stamp - 1;
+  tree->end_iter_segment_stamp = tree->segments_changed_stamp - 1;
+  tree->end_iter_line = NULL;
+  tree->end_iter_segment_byte_index = 0;
+  tree->end_iter_segment_char_offset = 0;
+  
   g_object_ref (G_OBJECT (tree->table));
 
   tree->tag_changed_handler = g_signal_connect (G_OBJECT (tree->table),
@@ -570,6 +586,7 @@ _gtk_text_btree_delete (GtkTextIter *start,
     _gtk_text_btree_check (tree);
   
   {
+    /* FIXME this code should no longer be required */
     /*
      * The code below is ugly, but it's needed to make sure there
      * is always a dummy empty line at the end of the text.  If the
@@ -1904,10 +1921,19 @@ _gtk_text_btree_get_line (GtkTextBTree *tree,
 }
 
 GtkTextLine*
+_gtk_text_btree_get_end_iter_line (GtkTextBTree *tree)
+{
+  return
+    _gtk_text_btree_get_line (tree,
+                              _gtk_text_btree_line_count (tree) - 1,
+                              NULL);
+}
+
+GtkTextLine*
 _gtk_text_btree_get_line_at_char (GtkTextBTree      *tree,
-                                 gint                char_index,
-                                 gint               *line_start_index,
-                                 gint               *real_char_index)
+                                  gint               char_index,
+                                  gint              *line_start_index,
+                                  gint              *real_char_index)
 {
   GtkTextBTreeNode *node;
   GtkTextLine *line;
@@ -1918,10 +1944,13 @@ _gtk_text_btree_get_line_at_char (GtkTextBTree      *tree,
 
   node = tree->root_node;
 
-  /* Clamp to valid indexes (-1 is magic for "highest index") */
-  if (char_index < 0 || char_index >= node->num_chars)
+  /* Clamp to valid indexes (-1 is magic for "highest index"),
+   * node->num_chars includes the two newlines that aren't really
+   * in the buffer.
+   */
+  if (char_index < 0 || char_index >= (node->num_chars - 1))
     {
-      char_index = node->num_chars - 1;
+      char_index = node->num_chars - 2;
     }
 
   *real_char_index = char_index;
@@ -2242,8 +2271,10 @@ _gtk_text_btree_line_count (GtkTextBTree *tree)
 gint
 _gtk_text_btree_char_count (GtkTextBTree *tree)
 {
-  /* Exclude newline in bogus last line */
-  return tree->root_node->num_chars - 1;
+  /* Exclude newline in bogus last line and the
+   * one in the last line that is after the end iterator
+   */
+  return tree->root_node->num_chars - 2;
 }
 
 #define LOTSA_TAGS 1000
@@ -3137,6 +3168,88 @@ _gtk_text_line_is_last (GtkTextLine *line,
   return line == get_last_line (tree);
 }
 
+static void
+ensure_end_iter_line (GtkTextBTree *tree)
+{
+  if (tree->end_iter_line_stamp != tree->chars_changed_stamp)
+    {
+      int n_lines;
+      int real_line;
+
+      /* n_lines is without the magic line at the end */
+      n_lines = _gtk_text_btree_line_count (tree);
+ 
+      g_assert (n_lines >= 1);
+
+      tree->end_iter_line = _gtk_text_btree_get_line (tree, n_lines - 1, &real_line);
+      
+      tree->end_iter_line_stamp = tree->chars_changed_stamp;
+    }
+}
+
+static void
+ensure_end_iter_segment (GtkTextBTree *tree)
+{
+  if (tree->end_iter_segment_stamp != tree->segments_changed_stamp)
+    {
+      GtkTextLineSegment *seg;
+      GtkTextLineSegment *last_with_chars;
+
+      ensure_end_iter_line (tree);
+
+      last_with_chars = NULL;
+      
+      seg = tree->end_iter_line->segments;
+      while (seg != NULL)
+        {
+          if (seg->char_count > 0)
+            last_with_chars = seg;
+          seg = seg->next;
+        }
+
+      tree->end_iter_segment = last_with_chars;
+
+      /* We know the last char in the last line is '\n' */
+      tree->end_iter_segment_byte_index = last_with_chars->byte_count - 1;
+      tree->end_iter_segment_char_offset = last_with_chars->char_count - 1;
+      
+      tree->end_iter_segment_stamp = tree->segments_changed_stamp;
+    }
+}
+
+gboolean
+_gtk_text_line_contains_end_iter (GtkTextLine  *line,
+                                  GtkTextBTree *tree)
+{
+  ensure_end_iter_line (tree);
+
+  return line == tree->end_iter_line;
+}
+
+gboolean
+_gtk_text_btree_is_end (GtkTextBTree       *tree,
+                        GtkTextLine        *line,
+                        GtkTextLineSegment *seg,
+                        int                 byte_index,
+                        int                 char_offset)
+{
+  g_return_val_if_fail (byte_index >= 0 || char_offset >= 0, FALSE);
+  
+  /* Do this first to avoid walking segments in most cases */
+  if (!_gtk_text_line_contains_end_iter (line, tree))
+    return FALSE;
+
+  ensure_end_iter_segment (tree);
+
+  if (seg != tree->end_iter_segment)
+    return FALSE;
+
+  if (byte_index >= 0)
+    return byte_index == tree->end_iter_segment_byte_index;
+  else
+    return char_offset == tree->end_iter_segment_char_offset;
+}
+
 GtkTextLine*
 _gtk_text_line_next (GtkTextLine *line)
 {
@@ -3170,6 +3283,23 @@ _gtk_text_line_next (GtkTextLine *line)
 
       return node->children.line;
     }
+}
+
+GtkTextLine*
+_gtk_text_line_next_excluding_last (GtkTextLine *line)
+{
+  GtkTextLine *next;
+  
+  next = _gtk_text_line_next (line);
+
+  /* If we were on the end iter line, we can't go to
+   * the last line
+   */
+  if (next && next->next == NULL && /* these checks are optimization only */
+      _gtk_text_line_next (next) == NULL)
+    return NULL;
+
+  return next;
 }
 
 GtkTextLine*
@@ -3950,9 +4080,9 @@ node_compare (GtkTextBTreeNode *lhs,
 
 /* remember that tag == NULL means "any tag" */
 GtkTextLine*
-_gtk_text_line_next_could_contain_tag (GtkTextLine *line,
-                                      GtkTextBTree *tree,
-                                      GtkTextTag  *tag)
+_gtk_text_line_next_could_contain_tag (GtkTextLine  *line,
+                                       GtkTextBTree *tree,
+                                       GtkTextTag   *tag)
 {
   GtkTextBTreeNode *node;
   GtkTextTagInfo *info;
@@ -3968,17 +4098,17 @@ _gtk_text_line_next_could_contain_tag (GtkTextLine *line,
       /* Right now we can only offer linear-search if the user wants
        * to know about any tag toggle at all.
        */
-      return _gtk_text_line_next (line);
+      return _gtk_text_line_next_excluding_last (line);
     }
 
   /* Our tag summaries only have node precision, not line
-     precision. This means that if any line under a node could contain a
-     tag, then any of the others could also contain a tag.
-
-     In the future we could have some mechanism to keep track of how
-     many toggles we've found under a node so far, since we have a
-     count of toggles under the node. But for now I'm going with KISS.
-  */
+   * precision. This means that if any line under a node could contain a
+   * tag, then any of the others could also contain a tag.
+   * 
+   * In the future we could have some mechanism to keep track of how
+   * many toggles we've found under a node so far, since we have a
+   * count of toggles under the node. But for now I'm going with KISS.
+   */
 
   /* return same-node line, if any. */
   if (line->next)
@@ -4330,7 +4460,7 @@ summary_list_destroy (Summary *summary)
 static GtkTextLine*
 get_last_line (GtkTextBTree *tree)
 {
-  if (tree->end_iter_line_stamp != tree->chars_changed_stamp)
+  if (tree->last_line_stamp != tree->chars_changed_stamp)
     {
       gint n_lines;
       GtkTextLine *line;
@@ -4342,11 +4472,11 @@ get_last_line (GtkTextBTree *tree)
 
       line = _gtk_text_btree_get_line (tree, n_lines, &real_line);
 
-      tree->end_iter_line_stamp = tree->chars_changed_stamp;
-      tree->end_iter_line = line;
+      tree->last_line_stamp = tree->chars_changed_stamp;
+      tree->last_line = line;
     }
 
-  return tree->end_iter_line;
+  return tree->last_line;
 }
 
 /*

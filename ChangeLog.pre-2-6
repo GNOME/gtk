@@ -1,3 +1,13 @@
+2001-09-24  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextiter.c, gtk/gtktextbuffer.c, gtk/gtktextbtree.c,
+	gtktextlayout.c:
+	Get rid of the newline-that-could-not-be-deleted; buffers may 
+	now be zero-length. Much easier to fix than expected, once 
+	I figured out the right way to do it. However, there are 
+	various subtle bugs introduced by this that will have to get 
+	sorted out. Please use bugzilla.
+
 Mon Sep 24 15:09:08 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_move_resize): Don't wait for a

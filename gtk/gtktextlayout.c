@@ -578,13 +578,11 @@ gtk_text_layout_get_lines (GtkTextLayout *layout,
   /* -1 since bottom_y is one past */
   last_btree_line =
     _gtk_text_btree_find_line_by_y (_gtk_text_buffer_get_btree (layout->buffer),
-                                   layout, bottom_y - 1, NULL);
+                                    layout, bottom_y - 1, NULL);
 
   if (!last_btree_line)
     last_btree_line =
-      _gtk_text_btree_get_line (_gtk_text_buffer_get_btree (layout->buffer),
-                               _gtk_text_btree_line_count (_gtk_text_buffer_get_btree (layout->buffer)) - 1,
-                               NULL);
+      _gtk_text_btree_get_end_iter_line (_gtk_text_buffer_get_btree (layout->buffer));
 
   g_assert (last_btree_line != NULL);
 
@@ -596,7 +594,7 @@ gtk_text_layout_get_lines (GtkTextLayout *layout,
       if (line == last_btree_line)
         break;
 
-      line = _gtk_text_line_next (line);
+      line = _gtk_text_line_next_excluding_last (line);
     }
 
   retval = g_slist_reverse (retval);
@@ -722,7 +720,7 @@ gtk_text_layout_real_invalidate (GtkTextLayout *layout,
       if (line == last_line)
         break;
 
-      line = _gtk_text_line_next (line);
+      line = _gtk_text_line_next_excluding_last (line);
     }
 
   gtk_text_layout_invalidated (layout);
@@ -862,7 +860,7 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
         }
 
       seen += line_data->height;
-      line = _gtk_text_line_next (line);
+      line = _gtk_text_line_next_excluding_last (line);
     }
 
   /* If we found and validated any invalid lines, update size and
@@ -2005,6 +2003,9 @@ line_display_index_to_iter (GtkTextLayout      *layout,
 			    gint                index,
 			    gint                trailing)
 {
+  g_return_if_fail (!_gtk_text_line_is_last (display->line,
+                                             _gtk_text_buffer_get_btree (layout->buffer)));
+  
   if (index >= display->insert_index + layout->preedit_len)
     index -= layout->preedit_len;
   else if (index > display->insert_index)
@@ -2066,8 +2067,8 @@ get_line_at_y (GtkTextLayout *layout,
                                          layout, y, line_top);
   if (*line == NULL)
     {
-      *line = _gtk_text_btree_get_line (_gtk_text_buffer_get_btree (layout->buffer),
-                                       _gtk_text_btree_line_count (_gtk_text_buffer_get_btree (layout->buffer)) - 1, NULL);
+      *line = _gtk_text_btree_get_end_iter_line (_gtk_text_buffer_get_btree (layout->buffer));
+      
       if (line_top)
         *line_top =
           _gtk_text_btree_find_line_top (_gtk_text_buffer_get_btree (layout->buffer),
@@ -2306,9 +2307,8 @@ find_display_line_below (GtkTextLayout *layout,
   if (!line)
     {
       line =
-        _gtk_text_btree_get_line (_gtk_text_buffer_get_btree (layout->buffer),
-                                 _gtk_text_btree_line_count (_gtk_text_buffer_get_btree (layout->buffer)) - 1,
-                                 NULL);
+        _gtk_text_btree_get_end_iter_line (_gtk_text_buffer_get_btree (layout->buffer));
+
       line_top =
         _gtk_text_btree_find_line_top (_gtk_text_buffer_get_btree (layout->buffer),
                                       line, layout);
@@ -2346,7 +2346,7 @@ find_display_line_below (GtkTextLayout *layout,
       line_top += display->bottom_margin;
       gtk_text_layout_free_line_display (layout, display);
 
-      next = _gtk_text_line_next (line);
+      next = _gtk_text_line_next_excluding_last (line);
       if (!next)
         found_line = line;
 
@@ -2374,8 +2374,8 @@ find_display_line_above (GtkTextLayout *layout,
   line = _gtk_text_btree_find_line_by_y (_gtk_text_buffer_get_btree (layout->buffer), layout, y, &line_top);
   if (!line)
     {
-      line = _gtk_text_btree_get_line (_gtk_text_buffer_get_btree (layout->buffer),
-                                      _gtk_text_btree_line_count (_gtk_text_buffer_get_btree (layout->buffer)) - 1, NULL);
+      line = _gtk_text_btree_get_end_iter_line (_gtk_text_buffer_get_btree (layout->buffer));
+      
       line_top = _gtk_text_btree_find_line_top (_gtk_text_buffer_get_btree (layout->buffer), line, layout);
     }
 
@@ -2658,7 +2658,7 @@ gtk_text_layout_move_iter_to_next_line (GtkTextLayout *layout,
       
       gtk_text_layout_free_line_display (layout, display);
 
-      line = _gtk_text_line_next (line);
+      line = _gtk_text_line_next_excluding_last (line);
     }
 
   return
@@ -2939,7 +2939,7 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
         }
       else if (new_index > byte_count)
         {
-          line = _gtk_text_line_next (line);
+          line = _gtk_text_line_next_excluding_last (line);
           if (!line)
             goto done;
 
