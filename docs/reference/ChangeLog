@@ -1,3 +1,10 @@
+2003-08-26  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Rename GtkMenuMerge to GtkUIManager
+	* gtk/gtk-docs.sgml: Adjust.
+	* gtk/tmpl/gtkuimanager.sgml: New template.
+	* gtk/tmpl/gtkmenumerge.sgml: Removed.
+
 2003-08-24  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkmenumerge.sgml: 

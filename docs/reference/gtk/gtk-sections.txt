@@ -1714,30 +1714,30 @@ gtk_menu_item_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkmenumerge</FILE>
-<TITLE>GtkMenuMerge</TITLE>
-GtkMenuMerge
-gtk_menu_merge_new
-gtk_menu_merge_insert_action_group
-gtk_menu_merge_remove_action_group
-gtk_menu_merge_get_action_groups
-gtk_menu_merge_get_accel_group
-gtk_menu_merge_get_widget
-gtk_menu_merge_add_ui_from_string
-gtk_menu_merge_add_ui_from_file
-gtk_menu_merge_remove_ui
-gtk_menu_merge_get_ui
+<FILE>gtkuimanager</FILE>
+<TITLE>GtkUIManager</TITLE>
+GtkUIManager
+gtk_ui_manager_new
+gtk_ui_manager_insert_action_group
+gtk_ui_manager_remove_action_group
+gtk_ui_manager_get_action_groups
+gtk_ui_manager_get_accel_group
+gtk_ui_manager_get_widget
+gtk_ui_manager_add_ui_from_string
+gtk_ui_manager_add_ui_from_file
+gtk_ui_manager_remove_ui
+gtk_ui_manager_get_ui
 <SUBSECTION Standard>
-GTK_TYPE_MENU_MERGE
-GTK_MENU_MERGE
-GTK_MENU_MERGE_CLASS
-GTK_IS_MENU_MERGE
-GTK_IS_MENU_MERGE_CLASS
-GTK_MENU_MERGE_GET_CLASS
-GtkMenuMergeClass
+GTK_TYPE_UI_MANAGER
+GTK_UI_MANAGER
+GTK_UI_MANAGER_CLASS
+GTK_IS_UI_MANAGER
+GTK_IS_UI_MANAGER_CLASS
+GTK_UI_MANAGER_GET_CLASS
+GtkUIManagerClass
 <SUBSECTION Private>
-gtk_menu_merge_get_type
-GtkMenuMergePrivate
+gtk_ui_manager_get_type
+GtkUIManagerPrivate
 </SECTION>
 
 <SECTION>

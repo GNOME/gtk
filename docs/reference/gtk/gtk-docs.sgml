@@ -61,7 +61,6 @@
 <!ENTITY GtkMenu SYSTEM "xml/gtkmenu.xml">
 <!ENTITY GtkMenuBar SYSTEM "xml/gtkmenubar.xml">
 <!ENTITY GtkMenuItem SYSTEM "xml/gtkmenuitem.xml">
-<!ENTITY GtkMenuMerge SYSTEM "xml/gtkmenumerge.xml">
 <!ENTITY GtkMenuShell SYSTEM "xml/gtkmenushell.xml">
 <!ENTITY GtkMessageDialog SYSTEM "xml/gtkmessagedialog.xml">
 <!ENTITY GtkMisc SYSTEM "xml/gtkmisc.xml">
@@ -116,6 +115,7 @@
 <!ENTITY GtkTreeStore SYSTEM "xml/gtktreestore.xml">
 <!ENTITY GtkTreeViewColumn SYSTEM "xml/gtktreeviewcolumn.xml">
 <!ENTITY GtkTreeView SYSTEM "xml/gtktreeview.xml">
+<!ENTITY GtkUIManager SYSTEM "xml/gtkuimanager.xml">
 <!ENTITY GtkCellRenderer SYSTEM "xml/gtkcellrenderer.xml">
 <!ENTITY GtkCellEditable SYSTEM "xml/gtkcelleditable.xml">
 <!ENTITY GtkCellRendererPixbuf SYSTEM "xml/gtkcellrendererpixbuf.xml">
@@ -399,7 +399,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
  
     <chapter id="Actions">
       <title>Action-based menus and toolbars</title>
-        &GtkMenuMerge;
+        &GtkUIManager;
         &GtkActionGroup;
         &GtkAction;
         &GtkToggleAction;

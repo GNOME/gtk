@@ -1,0 +1,122 @@
+<!-- ##### SECTION Title ##### -->
+GtkUIManager
+
+<!-- ##### SECTION Short_Description ##### -->
+constructing menus and toolbars from an XML description
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+A #GtkUIManager constructs a user interface (menus and toolbars) from
+one or more UI definitions, which reference actions from one or ore 
+action groups.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkUIManager ##### -->
+<para>
+
+</para>
+
+@parent: 
+
+<!-- ##### FUNCTION gtk_ui_manager_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_ui_manager_insert_action_group ##### -->
+<para>
+
+</para>
+
+@self: 
+@action_group: 
+@pos: 
+
+
+<!-- ##### FUNCTION gtk_ui_manager_remove_action_group ##### -->
+<para>
+
+</para>
+
+@self: 
+@action_group: 
+
+
+<!-- ##### FUNCTION gtk_ui_manager_get_action_groups ##### -->
+<para>
+
+</para>
+
+@self: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_ui_manager_get_accel_group ##### -->
+<para>
+
+</para>
+
+@self: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_ui_manager_get_widget ##### -->
+<para>
+
+</para>
+
+@self: 
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_ui_manager_add_ui_from_string ##### -->
+<para>
+
+</para>
+
+@self: 
+@buffer: 
+@length: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_ui_manager_add_ui_from_file ##### -->
+<para>
+
+</para>
+
+@self: 
+@filename: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_ui_manager_remove_ui ##### -->
+<para>
+
+</para>
+
+@self: 
+@merge_id: 
+
+
+<!-- ##### FUNCTION gtk_ui_manager_get_ui ##### -->
+<para>
+
+</para>
+
+@self: 
+@Returns: 
+
+
