@@ -1971,12 +1971,12 @@ gtk_widget_clip_rect (GtkWidget *widget,
       
       if (rect->x < 0)
 	{
-	  rect->width = (width > -rect->x) ? width + rect->x : 0;
+	  rect->width = (rect->width > -rect->x) ? rect->width + rect->x : 0;
 	  rect->x = 0;
 	}
       if (rect->y < 0)
 	{
-	  rect->height = (height > -rect->y) ? width + rect->y : 0;
+	  rect->height = (rect->height > -rect->y) ? rect->width + rect->y : 0;
 	  rect->y = 0;
 	}
       if (rect->x + rect->width > width)

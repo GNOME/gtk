@@ -636,7 +636,7 @@ static gint
 gtk_button_expose (GtkWidget      *widget,
 		   GdkEventExpose *event)
 {
-  GtkButton *button;
+  GtkButton *bin;
   GdkEventExpose child_event;
 
   g_return_val_if_fail (widget != NULL, FALSE);
@@ -645,14 +645,14 @@ gtk_button_expose (GtkWidget      *widget,
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      button = GTK_BUTTON (widget);
+      bin = GTK_BIN (widget);
       
       gtk_button_paint (widget, &event->area);
 
       child_event = *event;
-      if (GTK_BIN (button)->child && GTK_WIDGET_NO_WINDOW (GTK_BIN (button)->child) &&
-	  gtk_widget_intersect (GTK_BIN (button)->child, &event->area, &child_event.area))
-	gtk_widget_event (GTK_BIN (button)->child, (GdkEvent*) &child_event);
+      if (bin->child && GTK_WIDGET_NO_WINDOW (bin->child) &&
+	  gtk_widget_intersect (bin->child, &event->area, &child_event.area))
+	gtk_widget_event (bin->child, (GdkEvent*) &child_event);
     }
 
   return FALSE;
