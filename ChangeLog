@@ -1,3 +1,16 @@
+2001-03-19  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkiconfactory.c: Make GtkIconSource an opaque datatype, and
+	add a bunch of accessor functions. This is because we have
+	reasonable expectations of extending what fields it contains in
+	the future.
+
+	* gtk/gtkstyle.c (gtk_default_render_icon): adapt to icon source
+	changes
+
+	* gtk/gtkrc.c (gtk_rc_parse_icon_source): fix to use new
+	GtkIconSource	
+
 Mon Mar 19 15:53:36 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkitemfactory.c gtk/testgtk.c: Handle quoting of / with \; properly

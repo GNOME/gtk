@@ -3044,20 +3044,12 @@ gtk_rc_parse_stock_id (GScanner	 *scanner,
   return G_TOKEN_NONE;
 }
 
-static void
-cleanup_source (GtkIconSource *source)
-{
-  g_free (source->filename);
-}
-
 static guint
 gtk_rc_parse_icon_source (GScanner	 *scanner,
                           GtkIconSet     *icon_set)
 {
   guint token;
-  GtkIconSource source = { NULL, NULL,
-                           0, 0, 0,
-                           TRUE, TRUE, TRUE };
+  GtkIconSource *source;
   
   token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_LEFT_CURLY)
@@ -3067,20 +3059,22 @@ gtk_rc_parse_icon_source (GScanner	 *scanner,
   
   if (token != G_TOKEN_STRING)
     return G_TOKEN_STRING;
-  
-  source.filename = g_strdup (scanner->value.v_string);
+
+  source = gtk_icon_source_new ();
+
+  gtk_icon_source_set_filename (source, scanner->value.v_string);
   
   token = g_scanner_get_next_token (scanner);
 
   if (token == G_TOKEN_RIGHT_CURLY)
     {
-      gtk_icon_set_add_source (icon_set, &source);
-      cleanup_source (&source);
+      gtk_icon_set_add_source (icon_set, source);
+      gtk_icon_source_free (source);
       return G_TOKEN_NONE;
     }  
   else if (token != G_TOKEN_COMMA)
     {
-      cleanup_source (&source);
+      gtk_icon_source_free (source);
       return G_TOKEN_COMMA;
     }
 
@@ -3091,20 +3085,20 @@ gtk_rc_parse_icon_source (GScanner	 *scanner,
   switch (token)
     {
     case GTK_RC_TOKEN_RTL:
-      source.any_direction = FALSE;
-      source.direction = GTK_TEXT_DIR_RTL;
+      gtk_icon_source_set_direction_wildcarded (source, FALSE);
+      gtk_icon_source_set_direction (source, GTK_TEXT_DIR_RTL);
       break;
 
     case GTK_RC_TOKEN_LTR:
-      source.any_direction = FALSE;
-      source.direction = GTK_TEXT_DIR_LTR;
+      gtk_icon_source_set_direction_wildcarded (source, FALSE);
+      gtk_icon_source_set_direction (source, GTK_TEXT_DIR_LTR);
       break;
       
     case '*':
       break;
       
     default:
-      cleanup_source (&source);
+      gtk_icon_source_free (source);
       return GTK_RC_TOKEN_RTL;
       break;
     }
@@ -3113,13 +3107,13 @@ gtk_rc_parse_icon_source (GScanner	 *scanner,
 
   if (token == G_TOKEN_RIGHT_CURLY)
     {
-      gtk_icon_set_add_source (icon_set, &source);
-      cleanup_source (&source);
+      gtk_icon_set_add_source (icon_set, source);
+      gtk_icon_source_free (source);
       return G_TOKEN_NONE;
     }  
   else if (token != G_TOKEN_COMMA)
     {
-      cleanup_source (&source);
+      gtk_icon_source_free (source);
       return G_TOKEN_COMMA;
     }
 
@@ -3130,36 +3124,36 @@ gtk_rc_parse_icon_source (GScanner	 *scanner,
   switch (token)
     {
     case GTK_RC_TOKEN_NORMAL:
-      source.any_state = FALSE;
-      source.state = GTK_STATE_NORMAL;
+      gtk_icon_source_set_state_wildcarded (source, FALSE);
+      gtk_icon_source_set_state (source, GTK_STATE_NORMAL);
       break;
 
     case GTK_RC_TOKEN_PRELIGHT:
-      source.any_state = FALSE;
-      source.state = GTK_STATE_PRELIGHT;
+      gtk_icon_source_set_state_wildcarded (source, FALSE);
+      gtk_icon_source_set_state (source, GTK_STATE_PRELIGHT);
       break;
       
 
     case GTK_RC_TOKEN_INSENSITIVE:
-      source.any_state = FALSE;
-      source.state = GTK_STATE_INSENSITIVE;
+      gtk_icon_source_set_state_wildcarded (source, FALSE);
+      gtk_icon_source_set_state (source, GTK_STATE_INSENSITIVE);
       break;
 
     case GTK_RC_TOKEN_ACTIVE:
-      source.any_state = FALSE;
-      source.state = GTK_STATE_ACTIVE;
+      gtk_icon_source_set_state_wildcarded (source, FALSE);
+      gtk_icon_source_set_state (source, GTK_STATE_ACTIVE);
       break;
 
     case GTK_RC_TOKEN_SELECTED:
-      source.any_state = FALSE;
-      source.state = GTK_STATE_SELECTED;
+      gtk_icon_source_set_state_wildcarded (source, FALSE);
+      gtk_icon_source_set_state (source, GTK_STATE_SELECTED);
       break;
 
     case '*':
       break;
       
     default:
-      cleanup_source (&source);
+      gtk_icon_source_free (source);
       return GTK_RC_TOKEN_PRELIGHT;
       break;
     }  
@@ -3168,13 +3162,13 @@ gtk_rc_parse_icon_source (GScanner	 *scanner,
 
   if (token == G_TOKEN_RIGHT_CURLY)
     {
-      gtk_icon_set_add_source (icon_set, &source);
-      cleanup_source (&source);
+      gtk_icon_set_add_source (icon_set, source);
+      gtk_icon_source_free (source);
       return G_TOKEN_NONE;
     }
   else if (token != G_TOKEN_COMMA)
     {
-      cleanup_source (&source);
+      gtk_icon_source_free (source);
       return G_TOKEN_COMMA;
     }
   
@@ -3188,7 +3182,7 @@ gtk_rc_parse_icon_source (GScanner	 *scanner,
       
       if (token != G_TOKEN_STRING)
         {
-          cleanup_source (&source);
+          gtk_icon_source_free (source);
           return G_TOKEN_STRING;
         }
 
@@ -3196,8 +3190,8 @@ gtk_rc_parse_icon_source (GScanner	 *scanner,
 
       if (size != GTK_ICON_SIZE_INVALID)
         {
-          source.size = size;
-          source.any_size = FALSE;
+          gtk_icon_source_set_size_wildcarded (source, FALSE);
+          gtk_icon_source_set_size (source, size);
         }
     }
 
@@ -3206,13 +3200,13 @@ gtk_rc_parse_icon_source (GScanner	 *scanner,
   token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_RIGHT_CURLY)
     {
-      cleanup_source (&source);
+      gtk_icon_source_free (source);
       return G_TOKEN_RIGHT_CURLY;
     }
 
-  gtk_icon_set_add_source (icon_set, &source);
+  gtk_icon_set_add_source (icon_set, source);
 
-  cleanup_source (&source);
+  gtk_icon_source_free (source);
   
   return G_TOKEN_NONE;
 }

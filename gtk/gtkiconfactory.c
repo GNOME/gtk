@@ -33,6 +33,28 @@
 #include <ctype.h>
 #include <string.h>
 
+struct _GtkIconSource
+{
+  /* Either filename or pixbuf can be NULL. If both are non-NULL,
+   * the pixbuf is assumed to be the already-loaded contents of the
+   * file.
+   */
+  gchar *filename;
+  GdkPixbuf *pixbuf;
+
+  GtkTextDirection direction;
+  GtkStateType state;
+  GtkIconSize size;
+
+  /* If TRUE, then the parameter is wildcarded, and the above
+   * fields should be ignored. If FALSE, the parameter is
+   * specified, and the above fields should be valid.
+   */
+  guint any_direction : 1;
+  guint any_state : 1;
+  guint any_size : 1;
+};
+
 /* FIXME use a better icon for this */
 #define MISSING_IMAGE_INLINE dialog_error
 
@@ -700,7 +722,11 @@ gtk_icon_set_new (void)
  * gtk_icon_set_new_from_pixbuf:
  * @pixbuf: a #GdkPixbuf
  * 
- * Creates a new #GtkIconSet seeded with @pixbuf.
+ * Creates a new #GtkIconSet with @pixbuf as the default/fallback
+ * source image. If you don't add any additional #GtkIconSource to the
+ * icon set, all variants of the icon will be created from @pixbuf,
+ * using scaling, pixelation, etc. as required to adjust the icon size
+ * or make the icon look insensitive/prelighted.
  * 
  * Return value: a new #GtkIconSet
  **/
@@ -866,10 +892,10 @@ find_and_prep_icon_source (GtkIconSet       *icon_set,
       
       g_assert (source->filename);
 
-      if (*source->filename != G_DIR_SEPARATOR)
-        full = gtk_rc_find_pixmap_in_path (NULL, source->filename);
-      else
+      if (g_path_is_absolute (source->filename))
         full = g_strdup (source->filename);
+      else
+        full = gtk_rc_find_pixmap_in_path (NULL, source->filename);
 
       error = NULL;
       source->pixbuf = gdk_pixbuf_new_from_file (full, &error);
@@ -927,12 +953,13 @@ get_fallback_image (void)
  * @detail: detail to pass to the theme engine, or %NULL
  * 
  * Renders an icon using gtk_style_render_icon(). In most cases,
- * gtk_widget_render_icon() is better, since it automatically
- * provides most of the arguments from the current widget settings.
- * A %NULL return value is possible if an icon file fails to load
- * or the like.
+ * gtk_widget_render_icon() is better, since it automatically provides
+ * most of the arguments from the current widget settings.  This
+ * function never returns %NULL; if the icon can't be rendered
+ * (perhaps because an image file fails to load), a default "missing
+ * image" icon will be returned instead.
  * 
- * Return value: a #GdkPixbuf to be displayed, or %NULL
+ * Return value: a #GdkPixbuf to be displayed
  **/
 GdkPixbuf*
 gtk_icon_set_render_icon (GtkIconSet        *icon_set,
@@ -1025,7 +1052,26 @@ icon_source_compare (gconstpointer ap, gconstpointer bp)
  * scaled, made to look insensitive, etc. in
  * gtk_icon_set_render_icon(), but #GtkIconSet needs base images to
  * work with. The base images and when to use them are described by
- * #GtkIconSource.
+ * a #GtkIconSource.
+ * 
+ * This function copies @source, so you can reuse the same source immediately
+ * without affecting the icon set.
+ *
+ * An example of when you'd use this function: a web browser's "Back
+ * to Previous Page" icon might point in a different direction in
+ * Hebrew and in English; it might look different when insensitive;
+ * and it might change size depending on toolbar mode (small/large
+ * icons). So a single icon set would contain all those variants of
+ * the icon, and you might add a separate source for each one.
+ *
+ * You should nearly always add a "default" icon source with all
+ * fields wildcarded, which will be used as a fallback if no more
+ * specific source matches. #GtkIconSet always prefers more specific
+ * icon sources to more generic icon sources. The order in which you
+ * add the sources to the icon set does not matter.
+ *
+ * gtk_icon_set_new_from_pixbuf() creates a new icon set with a
+ * default icon source based on the given pixbuf.
  * 
  **/
 void
@@ -1045,6 +1091,58 @@ gtk_icon_set_add_source (GtkIconSet *icon_set,
   icon_set->sources = g_slist_insert_sorted (icon_set->sources,
                                              gtk_icon_source_copy (source),
                                              icon_source_compare);
+}
+
+/**
+ * gtk_icon_source_new:
+ * 
+ * Creates a new #GtkIconSource. A #GtkIconSource contains a #GdkPixbuf (or
+ * image filename) that serves as the base image for one or more of the
+ * icons in a #GtkIconSet, along with a specification for which icons in the
+ * icon set will be based on that pixbuf or image file. An icon set contains
+ * a set of icons that represent "the same" logical concept in different states,
+ * different global text directions, and different sizes.
+ * 
+ * So for example a web browser's "Back to Previous Page" icon might
+ * point in a different direction in Hebrew and in English; it might
+ * look different when insensitive; and it might change size depending
+ * on toolbar mode (small/large icons). So a single icon set would
+ * contain all those variants of the icon. #GtkIconSet contains a list
+ * of #GtkIconSource from which it can derive specific icon variants in
+ * the set. 
+ *
+ * In the simplest case, #GtkIconSet contains one source pixbuf from
+ * which it derives all variants. The convenience function
+ * gtk_icon_set_new_from_pixbuf() handles this case; if you only have
+ * one source pixbuf, just use that function.
+ *
+ * If you want to use a different base pixbuf for different icon
+ * variants, you create multiple icon sources, mark which variants
+ * they'll be used to create, and add them to the icon set with
+ * gtk_icon_set_add_source().
+ *
+ * By default, the icon source has all parameters wildcarded. That is,
+ * the icon source will be used as the base icon for any desired text
+ * direction, widget state, or icon size.
+ * 
+ * Return value: a new #GtkIconSource
+ **/
+GtkIconSource*
+gtk_icon_source_new (void)
+{
+  GtkIconSource *src;
+  
+  src = g_new0 (GtkIconSource, 1);
+
+  src->direction = GTK_TEXT_DIR_NONE;
+  src->size = GTK_ICON_SIZE_INVALID;
+  src->state = GTK_STATE_NORMAL;
+  
+  src->any_direction = TRUE;
+  src->any_state = TRUE;
+  src->any_size = TRUE;
+  
+  return src;
 }
 
 /**
@@ -1091,6 +1189,345 @@ gtk_icon_source_free (GtkIconSource *source)
     g_object_unref (G_OBJECT (source->pixbuf));
 
   g_free (source);
+}
+
+/**
+ * gtk_icon_source_set_filename:
+ * @source: a #GtkIconSource
+ * @filename: image file to use
+ *
+ * Sets the name of an image file to use as a base image when creating icon
+ * variants for #GtkIconSet. If the filename is absolute, GTK+ will
+ * attempt to open the exact file given. If the filename is relative,
+ * GTK+ will search for it in the "pixmap path" which can be configured
+ * by users in their gtkrc files or specified as part of a theme's gtkrc
+ * file. See #GtkRcStyle for information on gtkrc files.
+ * 
+ **/
+void
+gtk_icon_source_set_filename             (GtkIconSource *source,
+                                          const gchar   *filename)
+{
+  g_return_if_fail (source != NULL);
+
+  if (source->filename == filename)
+    return;
+  
+  if (source->filename)
+    g_free (source->filename);
+
+  source->filename = g_strdup (filename);  
+}
+
+/**
+ * gtk_icon_source_set_pixbuf:
+ * @source: a #GtkIconSource
+ * @pixbuf: pixbuf to use as a source
+ *
+ * Sets a pixbuf to use as a base image when creating icon variants
+ * for #GtkIconSet. If an icon source has both a filename and a pixbuf
+ * set, the pixbuf will take priority.
+ * 
+ **/
+void
+gtk_icon_source_set_pixbuf (GtkIconSource *source,
+                            GdkPixbuf     *pixbuf)
+{
+  g_return_if_fail (source != NULL);
+
+  if (pixbuf)
+    g_object_ref (G_OBJECT (pixbuf));
+
+  if (source->pixbuf)
+    g_object_unref (G_OBJECT (source->pixbuf));
+
+  source->pixbuf = pixbuf;
+}
+
+/**
+ * gtk_icon_source_get_filename:
+ * @source: a #GtkIconSource
+ * 
+ * Retrieves the source filename, or %NULL if none is set.  The
+ * filename is not a copy, and should not be modified or expected to
+ * persist beyond the lifetime of the icon source.
+ * 
+ * Return value: image filename
+ **/
+G_CONST_RETURN gchar*
+gtk_icon_source_get_filename (const GtkIconSource *source)
+{
+  g_return_val_if_fail (source != NULL, NULL);
+  
+  return source->filename;
+}
+
+/**
+ * gtk_icon_source_get_pixbuf:
+ * @source: a #GtkIconSource
+ * 
+ * Retrieves the source pixbuf, or %NULL if none is set.
+ * The reference count on the pixbuf is not incremented.
+ * 
+ * Return value: source pixbuf
+ **/
+GdkPixbuf*
+gtk_icon_source_get_pixbuf (const GtkIconSource *source)
+{
+  g_return_val_if_fail (source != NULL, NULL);
+  
+  return source->pixbuf;
+}
+
+/**
+ * gtk_icon_source_set_direction_wildcarded:
+ * @source: a #GtkIconSource
+ * @setting: %TRUE to wildcard the text direction
+ *
+ * If the text direction is wildcarded, this source can be used
+ * as the base image for an icon in any #GtkTextDirection.
+ * If the text direction is not wildcarded, then the
+ * text direction the icon source applies to should be set
+ * with gtk_icon_source_set_direction(), and the icon source
+ * will only be used with that text direction.
+ *
+ * #GtkIconSet prefers non-wildcarded sources (exact matches) over
+ * wildcarded sources, and will use an exact match when possible.
+ * 
+ **/
+void
+gtk_icon_source_set_direction_wildcarded (GtkIconSource *source,
+                                          gboolean       setting)
+{
+  g_return_if_fail (source != NULL);
+
+  source->any_direction = setting != FALSE;
+}
+
+/**
+ * gtk_icon_source_set_state_wildcarded:
+ * @source: a #GtkIconSource
+ * @setting: %TRUE to wildcard the widget state
+ *
+ * If the widget state is wildcarded, this source can be used as the
+ * base image for an icon in any #GtkStateType.  If the widget state
+ * is not wildcarded, then the state the source applies to should be
+ * set with gtk_icon_source_set_state() and the icon source will
+ * only be used with that specific state.
+ *
+ * #GtkIconSet prefers non-wildcarded sources (exact matches) over
+ * wildcarded sources, and will use an exact match when possible.
+ *
+ * #GtkIconSet will normally transform wildcarded source images to
+ * produce an appropriate icon for a given state, for example
+ * lightening an image on prelight, but will not modify source images
+ * that match exactly.
+ **/
+void
+gtk_icon_source_set_state_wildcarded (GtkIconSource *source,
+                                      gboolean       setting)
+{
+  g_return_if_fail (source != NULL);
+
+  source->any_state = setting != FALSE;
+}
+
+
+/**
+ * gtk_icon_source_set_size_wildcarded:
+ * @source: a #GtkIconSource
+ * @setting: %TRUE to wildcard the widget state
+ *
+ * If the icon size is wildcarded, this source can be used as the base
+ * image for an icon of any size.  If the size is not wildcarded, then
+ * the size the source applies to should be set with
+ * gtk_icon_source_set_size() and the icon source will only be used
+ * with that specific size.
+ *
+ * #GtkIconSet prefers non-wildcarded sources (exact matches) over
+ * wildcarded sources, and will use an exact match when possible.
+ *
+ * #GtkIconSet will normally scale wildcarded source images to produce
+ * an appropriate icon at a given size, but will not change the size
+ * of source images that match exactly.
+ **/
+void
+gtk_icon_source_set_size_wildcarded (GtkIconSource *source,
+                                     gboolean       setting)
+{
+  g_return_if_fail (source != NULL);
+
+  source->any_size = setting != FALSE;  
+}
+
+/**
+ * gtk_icon_source_get_size_wildcarded:
+ * @source: a #GtkIconSource
+ * 
+ * Gets the value set by gtk_icon_source_set_size_wildcarded().
+ * 
+ * Return value: %TRUE if this icon source is a base for any icon size variant
+ **/
+gboolean
+gtk_icon_source_get_size_wildcarded (const GtkIconSource *source)
+{
+  g_return_val_if_fail (source != NULL, TRUE);
+  
+  return source->any_size;
+}
+
+/**
+ * gtk_icon_source_get_state_wildcarded:
+ * @source: a #GtkIconSource
+ * 
+ * Gets the value set by gtk_icon_source_set_state_wildcarded().
+ * 
+ * Return value: %TRUE if this icon source is a base for any widget state variant
+ **/
+gboolean
+gtk_icon_source_get_state_wildcarded (const GtkIconSource *source)
+{
+  g_return_val_if_fail (source != NULL, TRUE);
+
+  return source->any_state;
+}
+
+/**
+ * gtk_icon_source_get_direction_wildcarded:
+ * @source: a #GtkIconSource
+ * 
+ * Gets the value set by gtk_icon_source_set_direction_wildcarded().
+ * 
+ * Return value: %TRUE if this icon source is a base for any text direction variant
+ **/
+gboolean
+gtk_icon_source_get_direction_wildcarded (const GtkIconSource *source)
+{
+  g_return_val_if_fail (source != NULL, TRUE);
+
+  return source->any_direction;
+}
+
+/**
+ * gtk_icon_source_set_direction:
+ * @source: a #GtkIconSource
+ * @direction: text direction this source applies to
+ *
+ * Sets the text direction this icon source is intended to be used
+ * with.
+ * 
+ * Setting the text direction on an icon source makes no difference
+ * if the text direction is wildcarded. Therefore, you should usually
+ * call gtk_icon_source_set_direction_wildcarded() to un-wildcard it
+ * in addition to calling this function.
+ * 
+ **/
+void
+gtk_icon_source_set_direction (GtkIconSource   *source,
+                               GtkTextDirection direction)
+{
+  g_return_if_fail (source != NULL);
+
+  source->direction = direction;
+}
+
+/**
+ * gtk_icon_source_set_state:
+ * @source: a #GtkIconSource
+ * @state: widget state this source applies to
+ *
+ * Sets the widget state this icon source is intended to be used
+ * with.
+ * 
+ * Setting the widget state on an icon source makes no difference
+ * if the state is wildcarded. Therefore, you should usually
+ * call gtk_icon_source_set_state_wildcarded() to un-wildcard it
+ * in addition to calling this function.
+ * 
+ **/
+void
+gtk_icon_source_set_state (GtkIconSource *source,
+                           GtkStateType   state)
+{
+  g_return_if_fail (source != NULL);
+
+  source->state = state;
+}
+
+/**
+ * gtk_icon_source_set_size:
+ * @source: a #GtkIconSource
+ * @size: icon size this source applies to
+ *
+ * Sets the icon size this icon source is intended to be used
+ * with.
+ * 
+ * Setting the icon size on an icon source makes no difference
+ * if the size is wildcarded. Therefore, you should usually
+ * call gtk_icon_source_set_size_wildcarded() to un-wildcard it
+ * in addition to calling this function.
+ * 
+ **/
+void
+gtk_icon_source_set_size (GtkIconSource *source,
+                          GtkIconSize    size)
+{
+  g_return_if_fail (source != NULL);
+
+  source->size = size;
+}
+
+/**
+ * gtk_icon_source_get_direction:
+ * @source: a #GtkIconSource
+ * 
+ * Obtains the text direction this icon source applies to. The return
+ * value is only useful/meaningful if the text direction is NOT
+ * wildcarded.
+ * 
+ * Return value: text direction this source matches
+ **/
+GtkTextDirection
+gtk_icon_source_get_direction (const GtkIconSource *source)
+{
+  g_return_val_if_fail (source != NULL, 0);
+
+  return source->direction;
+}
+
+/**
+ * gtk_icon_source_get_state:
+ * @source: a #GtkIconSource
+ * 
+ * Obtains the widget state this icon source applies to. The return
+ * value is only useful/meaningful if the widget state is NOT
+ * wildcarded.
+ * 
+ * Return value: widget state this source matches
+ **/
+GtkStateType
+gtk_icon_source_get_state (const GtkIconSource *source)
+{
+  g_return_val_if_fail (source != NULL, 0);
+
+  return source->state;
+}
+
+/**
+ * gtk_icon_source_get_size:
+ * @source: a #GtkIconSource
+ * 
+ * Obtains the icon size this source applies to. The return value
+ * is only useful/meaningful if the icon size is NOT wildcarded.
+ * 
+ * Return value: icon size this source matches.
+ **/
+GtkIconSize
+gtk_icon_source_get_size (const GtkIconSource *source)
+{
+  g_return_val_if_fail (source != NULL, 0);
+
+  return source->size;
 }
 
 /* Note that the logical maximum is 20 per GtkTextDirection, so we could

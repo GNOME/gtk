@@ -445,6 +445,24 @@ The position of the cursor.
 </para>
 
 
+<!-- ##### USER_FUNCTION GtkEmissionHook ##### -->
+<para>
+A simple function pointer to get invoked when the
+signal is emitted.  This allows you tie a hook to the signal type,
+so that it will trap all emissions of that signal, from any object.
+</para>
+<para>
+You may not attach these to signals created with the
+#GTK_RUN_NO_HOOKS flag.
+</para>
+
+@object: 
+@signal_id: 
+@n_params: 
+@params: 
+@data: 
+@Returns: 
+
 <!-- ##### ENUM GtkFontFilterType ##### -->
 <para>
 A set of bit flags used to specify the filter being set
@@ -1038,6 +1056,20 @@ Internal function.
 
 @ruler: the gtkruler
 
+<!-- ##### FUNCTION gtk_signal_add_emission_hook ##### -->
+<para>
+Add an emission hook for a type of signal, for any object.
+</para>
+
+@signal_id: the type of signal to hook for.
+@hook_func: the function to invoke to handle the emission hook.
+@data: the user data passed in to hook_func.
+@Returns: the id (that you may pass as a parameter
+to gtk_signal_remove_emission_hook()).
+@i: 
+@h: 
+@d: 
+
 <!-- ##### FUNCTION gtk_signal_add_emission_hook_full ##### -->
 <para>
 Add an emission hook for a type of signal, for any object.
@@ -1076,6 +1108,12 @@ This function is labeled private.
 </para>
 
 @object: the object whose signal handlers should be destroyed.
+
+<!-- ##### FUNCTION gtk_signal_init ##### -->
+<para>
+
+</para>
+
 
 <!-- ##### FUNCTION gtk_signal_n_emissions ##### -->
 <para>
@@ -1117,6 +1155,16 @@ Obtain information about a signal.
 @Returns: a pointer to a GtkSignalQuery structure
 which contains all the information, or NULL.
 The pointer is allocated just for you:  you must g_free() it.
+
+<!-- ##### FUNCTION gtk_signal_remove_emission_hook ##### -->
+<para>
+Delete an emission hook. (see gtk_signal_add_emission_hook())
+</para>
+
+@signal_id: the id of the signal type.
+@hook_id: the id of the emission handler, returned by add_emission_hook().
+@i: 
+@h: 
 
 <!-- ##### FUNCTION gtk_signal_set_funcs ##### -->
 <para>

@@ -117,34 +117,41 @@ GdkPixbuf*  gtk_icon_set_render_icon     (GtkIconSet      *icon_set,
 void           gtk_icon_set_add_source   (GtkIconSet          *icon_set,
                                           const GtkIconSource *source);
 
-/* INTERNAL */
+
+GtkIconSource* gtk_icon_source_new                      (void);
+GtkIconSource* gtk_icon_source_copy                     (const GtkIconSource *source);
+void           gtk_icon_source_free                     (GtkIconSource       *source);
+
+void           gtk_icon_source_set_filename             (GtkIconSource       *source,
+                                                         const gchar         *filename);
+void           gtk_icon_source_set_pixbuf               (GtkIconSource       *source,
+                                                         GdkPixbuf           *pixbuf);
+
+G_CONST_RETURN gchar* gtk_icon_source_get_filename (const GtkIconSource *source);
+GdkPixbuf*            gtk_icon_source_get_pixbuf   (const GtkIconSource *source);
+
+void             gtk_icon_source_set_direction_wildcarded (GtkIconSource       *source,
+                                                           gboolean             setting);
+void             gtk_icon_source_set_state_wildcarded     (GtkIconSource       *source,
+                                                           gboolean             setting);
+void             gtk_icon_source_set_size_wildcarded      (GtkIconSource       *source,
+                                                           gboolean             setting);
+gboolean         gtk_icon_source_get_size_wildcarded      (const GtkIconSource *source);
+gboolean         gtk_icon_source_get_state_wildcarded     (const GtkIconSource *source);
+gboolean         gtk_icon_source_get_direction_wildcarded (const GtkIconSource *source);
+void             gtk_icon_source_set_direction            (GtkIconSource       *source,
+                                                           GtkTextDirection     direction);
+void             gtk_icon_source_set_state                (GtkIconSource       *source,
+                                                           GtkStateType         state);
+void             gtk_icon_source_set_size                 (GtkIconSource       *source,
+                                                           GtkIconSize          size);
+GtkTextDirection gtk_icon_source_get_direction            (const GtkIconSource *source);
+GtkStateType     gtk_icon_source_get_state                (const GtkIconSource *source);
+GtkIconSize      gtk_icon_source_get_size                 (const GtkIconSource *source);
+
+
+/* ignore this */
 void _gtk_icon_set_invalidate_caches (void);
-
-struct _GtkIconSource
-{
-  /* Either filename or pixbuf can be NULL. If both are non-NULL,
-   * the pixbuf is assumed to be the already-loaded contents of the
-   * file.
-   */
-  gchar *filename;
-  GdkPixbuf *pixbuf;
-
-  GtkTextDirection direction;
-  GtkStateType state;
-  GtkIconSize size;
-
-  /* If TRUE, then the parameter is wildcarded, and the above
-   * fields should be ignored. If FALSE, the parameter is
-   * specified, and the above fields should be valid.
-   */
-  guint any_direction : 1;
-  guint any_state : 1;
-  guint any_size : 1;
-};
-
-
-GtkIconSource* gtk_icon_source_copy    (const GtkIconSource *source);
-void           gtk_icon_source_free    (GtkIconSource       *source);
 
 #ifdef __cplusplus
 }

@@ -37,14 +37,6 @@ looking up the icon to use for a given stock ID.
 
 </para>
 
-@filename: 
-@pixbuf: 
-@direction: 
-@state: 
-@size: 
-@any_direction: 
-@any_state: 
-@any_size: 
 
 <!-- ##### STRUCT GtkIconFactory ##### -->
 <para>

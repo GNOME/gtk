@@ -1547,13 +1547,16 @@ gtk_default_render_icon (GtkStyle            *style,
   gint height = 1;
   GdkPixbuf *scaled;
   GdkPixbuf *stated;
+  GdkPixbuf *base_pixbuf;
 
   /* Oddly, style can be NULL in this function, because
    * GtkIconSet can be used without a style and if so
    * it uses this function.
    */
-  
-  g_return_val_if_fail (source->pixbuf != NULL, NULL);
+
+  base_pixbuf = gtk_icon_source_get_pixbuf (source);
+
+  g_return_val_if_fail (base_pixbuf != NULL, NULL);
   
   if (!gtk_icon_size_lookup (size, &width, &height))
     {
@@ -1564,13 +1567,13 @@ gtk_default_render_icon (GtkStyle            *style,
   /* If the size was wildcarded, then scale; otherwise, leave it
    * alone.
    */
-  if (source->any_size)
-    scaled = scale_or_ref (source->pixbuf, width, height);
+  if (gtk_icon_source_get_size_wildcarded (source))
+    scaled = scale_or_ref (base_pixbuf, width, height);
   else
-    scaled = GDK_PIXBUF (g_object_ref (G_OBJECT (source->pixbuf)));
+    scaled = GDK_PIXBUF (g_object_ref (G_OBJECT (base_pixbuf)));
 
   /* If the state was wildcarded, then generate a state. */
-  if (source->any_state)
+  if (gtk_icon_source_get_state_wildcarded (source))
     {
       if (state == GTK_STATE_INSENSITIVE)
         {
