@@ -1,4 +1,7 @@
-Fri Jan 21 16:16:29 2000  Owen Taylor  <otaylor@redhat.com>
+Fri Jan 21 16:29:28 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.[ch] docs/Changes-1.4.txt: Make the @detail argument
+	for the GtkStyleClass vtable const.
 
 	* gtk/gtkitemfactory.[ch] docs/Changes-1.4.txt: Make GtkPrintFunc
 	take a const string argument like GtkTranslateFunc. This will

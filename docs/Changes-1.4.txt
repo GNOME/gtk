@@ -7,3 +7,5 @@ Incompatible Changes from GTK+-1.2 to GTK+-1.4:
 - The signature for GtkPrintFunc (used for gtk_item_factory_dump_items)
   has been changed to take a 'const gchar *' instead of 'gchar *', to
   match what we do for glib, and other similar cases.
+
+- The detail arguments in the GtkStyleClass structure are now 'const gchar *'.
