@@ -1,4 +1,12 @@
-Sun Jul  6 11:56:48 2003  Owen Taylor  <otaylor@redhat.com>
+Sun Jul  6 13:00:20 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (_gtk_drag_source_handle_event)
+	* gtk/gtkdnd.c (gtk_drag_begin_internal):  Remove use
+	of GDK_POINTER_MOTION_HINT_MASK.
+
+	* gtk/gtkdnd.c (gtk_drag_update_idle): Move updating
+	of the drag into an idle as a superior form of 
+	expose compression.
 
 	* gtk/gtkdnd.c (gtk_drag_begin_internal): Move default icon
 	creation here, so that we have an icon at the start

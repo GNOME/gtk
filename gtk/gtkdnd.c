@@ -89,7 +89,7 @@ struct _GtkDragSourceInfo
   gint button;			  /* mouse button starting drag */
 
   GtkDragStatus      status;	  /* drag status */
-  GdkEvent          *last_event;  /* motion event waiting for response */
+  GdkEvent          *last_event;  /* pending event */
 
   gint               start_x, start_y; /* Initial position */
   gint               cur_x, cur_y;     /* Current Position */
@@ -100,6 +100,7 @@ struct _GtkDragSourceInfo
   
   GtkDragDestInfo   *proxy_dest;  /* Set if this is a proxy drag */
 
+  guint              update_idle;      /* Idle function to update the drag */
   guint              drop_timeout;     /* Timeout for aborting drop */
   guint              destroy_icon : 1; /* If true, destroy icon_window
       				        */
@@ -250,6 +251,8 @@ static void gtk_drag_selection_get             (GtkWidget         *widget,
 static gint gtk_drag_anim_timeout              (gpointer           data);
 static void gtk_drag_remove_icon               (GtkDragSourceInfo *info);
 static void gtk_drag_source_info_destroy       (GtkDragSourceInfo *info);
+static void gtk_drag_add_update_idle           (GtkDragSourceInfo *info);
+
 static void gtk_drag_update                    (GtkDragSourceInfo *info,
 						GdkScreen         *screen,
 						gint               x_root,
@@ -1843,7 +1846,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
     time = gdk_event_get_time (event);
 
   if (gdk_pointer_grab (ipc_widget->window, FALSE,
-			GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
+			GDK_POINTER_MOTION_MASK |
 			GDK_BUTTON_RELEASE_MASK, NULL,
 			cursor, time) != 0)
     {
@@ -2302,8 +2305,6 @@ gtk_drag_update_icon (GtkDragSourceInfo *info)
 	gdk_window_raise (icon_window->window);
       else
 	gtk_widget_show (icon_window);
-
-      gdk_window_process_all_updates ();      
     }
 }
 
@@ -2678,7 +2679,6 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
 	      {
 		gdk_pointer_grab (widget->window, FALSE,
 				  GDK_POINTER_MOTION_MASK |
-				  GDK_POINTER_MOTION_HINT_MASK |
 				  GDK_BUTTON_RELEASE_MASK,
 				  NULL,
 				  cursor, info->grab_time);
@@ -2686,12 +2686,7 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
 	      }
 	    
 	    if (info->last_event)
-	      {
-		gtk_drag_update (info,
-				 info->cur_screen, info->cur_x, info->cur_y,
-				 info->last_event);
-		info->last_event = NULL;
-	      }
+	      gtk_drag_add_update_idle (info);
 	  }
       }
       break;
@@ -3140,64 +3135,38 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
   g_free (info);
 }
 
-/*************************************************************
- * gtk_drag_update:
- *     Function to update the status of the drag when the
- *     cursor moves or the modifier changes
- *   arguments:
- *     info: DragSourceInfo for the drag
- *     x_root, y_root: position of darg
- *     event: The event that triggered this call
- *   results:
- *************************************************************/
-
-static void
-gtk_drag_update (GtkDragSourceInfo *info,
-		 GdkScreen         *screen,
-		 gint               x_root,
-		 gint               y_root,
-		 GdkEvent          *event)
+static gboolean
+gtk_drag_update_idle (gpointer data)
 {
-  GdkDragAction action;
-  GdkDragAction possible_actions;
+  GtkDragSourceInfo *info = data;
   GdkWindow *dest_window;
   GdkDragProtocol protocol;
   GdkAtom selection;
-  guint32 time = gtk_drag_get_event_time (event);
 
-  gtk_drag_get_event_actions (event,
+  GdkDragAction action;
+  GdkDragAction possible_actions;
+  guint32 time;
+
+  info->update_idle = 0;
+    
+  time = gtk_drag_get_event_time (info->last_event);
+  gtk_drag_get_event_actions (info->last_event,
 			      info->button, 
 			      info->possible_actions,
 			      &action, &possible_actions);
-  info->cur_screen = screen;
-  info->cur_x = x_root;
-  info->cur_y = y_root;
-
   gtk_drag_update_icon (info);
   gdk_drag_find_window_for_screen (info->context,
 				   info->icon_window ? info->icon_window->window : NULL,
-				   screen, x_root, y_root,
+				   info->cur_screen, info->cur_x, info->cur_y,
 				   &dest_window, &protocol);
   
-  if (gdk_drag_motion (info->context, dest_window, protocol,
-		       x_root, y_root, action, 
-		       possible_actions,
-		       time))
+  if (!gdk_drag_motion (info->context, dest_window, protocol,
+			info->cur_x, info->cur_y, action, 
+			possible_actions,
+			time))
     {
-      if (info->last_event != event) /* Paranoia, should not happen */
-	{
-	  if (info->last_event)
-	    gdk_event_free ((GdkEvent *)info->last_event);
-	  info->last_event = gdk_event_copy ((GdkEvent *)event);
-	}
-    }
-  else
-    {
-      if (info->last_event)
-	{
-	  gdk_event_free ((GdkEvent *)info->last_event);
-	  info->last_event = NULL;
-	}
+      gdk_event_free ((GdkEvent *)info->last_event);
+      info->last_event = NULL;
     }
   
   if (dest_window)
@@ -3206,6 +3175,49 @@ gtk_drag_update (GtkDragSourceInfo *info,
   selection = gdk_drag_get_selection (info->context);
   if (selection)
     gtk_drag_source_check_selection (info, selection, time);
+
+  return FALSE;
+}
+
+static void
+gtk_drag_add_update_idle (GtkDragSourceInfo *info)
+{
+  /* We use an idle lowerthan GDK_PRIORITY_REDRAW so that exposes
+   * from the last move can catch up before we move again.
+   */
+  if (!info->update_idle)
+    info->update_idle = g_idle_add_full (GDK_PRIORITY_REDRAW + 5,
+					 gtk_drag_update_idle,
+					 info,
+					 NULL);
+}
+
+/**
+ * gtk_drag_update:
+ * @info: DragSourceInfo for the drag
+ * @screen: new screen
+ * @x_root: new X position 
+ * @y_root: new y position
+ * @event: event received requiring update
+ * 
+ * Updates the status of the drag; called when the
+ * cursor moves or the modifier changes
+ **/
+static void
+gtk_drag_update (GtkDragSourceInfo *info,
+		 GdkScreen         *screen,
+		 gint               x_root,
+		 gint               y_root,
+		 GdkEvent          *event)
+{
+  info->cur_screen = screen;
+  info->cur_x = x_root;
+  info->cur_y = y_root;
+  if (info->last_event)
+    gdk_event_free ((GdkEvent *)info->last_event);
+  info->last_event = gdk_event_copy ((GdkEvent *)event);
+
+  gtk_drag_add_update_idle (info);
 }
 
 /*************************************************************
@@ -3225,6 +3237,18 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
   GtkWidget *source_widget = info->widget;
   GdkDisplay *display = gtk_widget_get_display (source_widget);
 
+  if (info->update_idle)
+    {
+      g_source_remove (info->update_idle);
+      info->update_idle = 0;
+    }
+  
+  if (info->last_event)
+    {
+      gdk_event_free (info->last_event);
+      info->last_event = NULL;
+    }
+  
   info->have_grab = FALSE;
   
   gdk_display_pointer_ungrab (display, time);
