@@ -1,3 +1,11 @@
+2002-11-25  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (print_event_state,
+	print_window_state, print_event): Enclose in #ifdef
+	G_ENABLE_DEBUG, as they use functions only available with
+	G_ENABLE_DEBUG, and are called only when G_ENABLE_DEBUG. (#99494,
+	Arnaud Charlet)
+
 Mon Nov 25 16:58:27 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkwindow-x11.c: Use _NET_WM_WINDOW_TYPE_SPLASH,
