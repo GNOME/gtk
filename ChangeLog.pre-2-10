@@ -1,3 +1,16 @@
+Tue Oct 16 17:04:44 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c: Rename ACTIVATE_MNEMONIC enum to
+	MNEMONIC_ACTIVATE; signal was changed a long time
+	ago.
+
+	* gdk/x11/gdkim-x11.c (_gdk_x11_initialize_locale): 
+	Fix wrong return statement. (Reported by HideToshi
+	Tajima and others.)
+
+	* gtk/gtklabel.h (struct _GtkLabelClass): Remove
+	left over select_all vfunc.
+
 Tue Oct 16 15:50:03 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_translate_coordinates): Add

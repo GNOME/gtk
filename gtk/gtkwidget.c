@@ -71,7 +71,7 @@ enum {
   CHILD_NOTIFY,
   ADD_ACCELERATOR,
   REMOVE_ACCELERATOR,
-  ACTIVATE_MNEMONIC,
+  MNEMONIC_ACTIVATE,
   GRAB_FOCUS,
   FOCUS,
   EVENT,
@@ -623,7 +623,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[REMOVE_ACCELERATOR] =
     gtk_accel_group_create_remove (GTK_CLASS_TYPE (object_class), GTK_RUN_LAST,
 				   GTK_SIGNAL_OFFSET (GtkWidgetClass, remove_accelerator));
-  widget_signals[ACTIVATE_MNEMONIC] =
+  widget_signals[MNEMONIC_ACTIVATE] =
     g_signal_new ("mnemonic_activate",
                   GTK_CLASS_TYPE (object_class),
                   GTK_RUN_LAST,
@@ -2652,7 +2652,7 @@ gtk_widget_mnemonic_activate (GtkWidget *widget,
     handled = TRUE;
   else
     gtk_signal_emit (GTK_OBJECT (widget),
-		     widget_signals[ACTIVATE_MNEMONIC],
+		     widget_signals[MNEMONIC_ACTIVATE],
 		     group_cycling,
 		     &handled);
   return handled;

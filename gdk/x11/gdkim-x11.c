@@ -94,7 +94,7 @@ _gdk_x11_initialize_locale (void)
 	    g_message ("%s multi-byte string functions.", 
 		       gdk_use_mb ? "Using" : "Not using"));
   
-  return current_locale;
+  return;
 }
 
 gchar*
