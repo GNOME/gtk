@@ -9,6 +9,7 @@
 # translation of gtk+.HEAD.he.po to Hebrew
 # translation of gtk+.HEAD.he.po to Hebrew
 # translation of gtk+.HEAD.he.po to Hebrew
+# translation of gtk+.HEAD.he.po to Hebrew
 # Hebrew Translation for GTK+ - תרגום עברי ל-
 # Copyright (C) 2000,2002 Free Software Foundation, Inc.
 # Tzafrir Cohen <tzafrir@technion.ac.il>, 2000.
@@ -17,14 +18,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
-"POT-Creation-Date: 2002-12-02 20:45-0500\n"
-"PO-Revision-Date: 2002-11-30 22:24+0200\n"
+"POT-Creation-Date: 2002-12-07 06:12+0100\n"
+"PO-Revision-Date: 2002-12-07 10:05+0200\n"
 "Last-Translator: Gil 'Dolfin' Osher <dolfin@rpg.org.il>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.0beta2\n"
+"X-Generator: KBabel 1.0\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:703
 #, c-format
@@ -38,8 +39,7 @@ msgstr "התמונה '%s' לא מכילה מידע"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:197 gdk-pixbuf/gdk-pixbuf-io.c:747
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "נכשל בפתיחת התמונה '%s': הסיבה איננה ידועה, כנראה קובץ תמונה פגום"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:225
@@ -285,8 +285,7 @@ msgstr "שגיאה בפיענוח קובץ תמונת JPEG (%s)"
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
-msgstr ""
-"אין מספיק זיכרון לטעינת התמונה, נסה לסגור מספר יישומים כדי לפנות זיכרון"
+msgstr "אין מספיק זיכרון לטעינת התמונה, נסה לסגור מספר יישומים כדי לפנות זיכרון"
 
 #: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:744
 #, c-format
@@ -302,13 +301,11 @@ msgstr "לא ניתן להקצות זכרון לטעינת קובץ JPEG"
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
-msgstr ""
-"איכות קובץ JPEG חייבת להיות בין 0 ל 100, הערך '%s' לא יכול להיות מפורש."
+msgstr "איכות קובץ JPEG חייבת להיות בין 0 ל 100, הערך '%s' לא יכול להיות מפורש."
 
 #: gdk-pixbuf/io-jpeg.c:827
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "איכות קובץ JPEG חייבת להיות בין 0 ל 100, הערך '%d' אינו מורשה."
 
 #: gdk-pixbuf/io-jpeg.c:940
@@ -363,8 +360,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "שגיאה חמורה בקריאת קובץ PNG: %s"
 
 #: gdk-pixbuf/io-png.c:771
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:779
@@ -373,8 +369,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-png.c:812
 #, c-format
-msgid ""
-"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:919
@@ -981,8 +976,7 @@ msgid "Use stock"
 msgstr "השתמש במחסנית"
 
 #: gtk/gtkbutton.c:206
-msgid ""
-"If set, the label is used to pick a stock item instead of being displayed"
+msgid "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "אם נקבע, התוית תשמש לבחירת פריט מחסנית במקום להיות מוצגת"
 
 #: gtk/gtkbutton.c:213
@@ -1016,8 +1010,7 @@ msgid "Child X Displacement"
 msgstr "העברת ילד X"
 
 #: gtk/gtkbutton.c:285
-msgid ""
-"How far in the x direction to move the child when the button is depressed"
+msgid "How far in the x direction to move the child when the button is depressed"
 msgstr "כמה רחוק בכיוון ה X להזיז את הילד כאשר הכפתור נלחץ"
 
 #: gtk/gtkbutton.c:292
@@ -1025,8 +1018,7 @@ msgid "Child Y Displacement"
 msgstr "העברת ילד Y"
 
 #: gtk/gtkbutton.c:293
-msgid ""
-"How far in the y direction to move the child when the button is depressed"
+msgid "How far in the y direction to move the child when the button is depressed"
 msgstr "כמה רחוק בכיוון ה Y להזיז את הילד כאשר הכפתור נלחץ"
 
 #: gtk/gtkcellrenderer.c:116
@@ -1313,8 +1305,7 @@ msgid "Rise"
 msgstr "שיפוע"
 
 #: gtk/gtkcellrenderertext.c:333
-msgid ""
-"Offset of text above the baseline (below the baseline if rise is negative)"
+msgid "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr "הטיית המלל מעל הקו הבסיסי (מתחת לקו הבסיסי השיפוע הוא שלילי)"
 
 #: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:463
@@ -1450,7 +1441,7 @@ msgid "Inconsistent state"
 msgstr "מצב לא עקבי"
 
 #: gtk/gtkcellrenderertoggle.c:142
-msgid "The inconsistent stae of the button"
+msgid "The inconsistent state of the button"
 msgstr "המצב הלא עקבי של הכפתור"
 
 #: gtk/gtkcellrenderertoggle.c:150
@@ -1514,8 +1505,7 @@ msgstr ""
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
-msgstr ""
-"הצבע שבחרת. אתה יכול לגרור צבע זה לערך פלטה כדי לשמור אותו לשימוש בעתיד."
+msgstr "הצבע שבחרת. אתה יכול לגרור צבע זה לערך פלטה כדי לשמור אותו לשימוש בעתיד."
 
 #: gtk/gtkcolorsel.c:926
 msgid "_Save color here"
@@ -1769,7 +1759,7 @@ msgstr "לתיבת דו-שיח זו יש קו מפריד מעל כפתוריה"
 
 #: gtk/gtkdialog.c:153
 msgid "Content area border"
-msgstr ""
+msgstr "גבולות אזור תוכן"
 
 #: gtk/gtkdialog.c:154
 msgid "Width of border around the main dialog area"
@@ -1804,8 +1794,7 @@ msgid "Selection Bound"
 msgstr ""
 
 #: gtk/gtkentry.c:447 gtk/gtklabel.c:379
-msgid ""
-"The position of the opposite end of the selection from the cursor in chars"
+msgid "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 
 #: gtk/gtkentry.c:457
@@ -1874,7 +1863,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:525
 msgid "The contents of the entry"
-msgstr ""
+msgstr "התכנים של הערך"
 
 #: gtk/gtkentry.c:756
 msgid "Select on focus"
@@ -1973,8 +1962,7 @@ msgstr "_שנה שם קובץ"
 
 #: gtk/gtkfilesel.c:1390
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "התיקייה בשם \"%s\" מכילה סמלים שאינם מותרים בשמות קבצים"
 
 #: gtk/gtkfilesel.c:1392
@@ -2170,7 +2158,7 @@ msgstr "בחירת גופן"
 
 #: gtk/gtkframe.c:126
 msgid "Text of the frame's label"
-msgstr ""
+msgstr "מלל תוית המסגרת"
 
 #: gtk/gtkframe.c:133
 msgid "Label xalign"
@@ -2202,7 +2190,7 @@ msgstr ""
 
 #: gtk/gtkframe.c:169
 msgid "Label widget"
-msgstr ""
+msgstr "פריט תוית"
 
 #: gtk/gtkframe.c:170
 msgid "A widget to display in place of the usual frame label"
@@ -2549,8 +2537,7 @@ msgid "Can change accelerators"
 msgstr "יכול לשנות מאיצים"
 
 #: gtk/gtkmenu.c:320
-msgid ""
-"Whether menu accelerators can be changed by pressing a key over the menu item"
+msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 
 #: gtk/gtkmenu.c:325
@@ -2558,8 +2545,7 @@ msgid "Delay before submenus appear"
 msgstr "השהייה לפני שתת-תפריטים מופיעים"
 
 #: gtk/gtkmenu.c:326
-msgid ""
-"Minimum time the pointer must stay over a menu item before the submenu appear"
+msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 
 #: gtk/gtkmenu.c:333
@@ -2637,8 +2623,7 @@ msgid "X pad"
 msgstr ""
 
 #: gtk/gtkmisc.c:119
-msgid ""
-"The amount of space to add on the left and right of the widget, in pixels"
+msgid "The amount of space to add on the left and right of the widget, in pixels"
 msgstr ""
 
 #: gtk/gtkmisc.c:128
@@ -2646,8 +2631,7 @@ msgid "Y pad"
 msgstr ""
 
 #: gtk/gtkmisc.c:129
-msgid ""
-"The amount of space to add on the top and bottom of the widget, in pixels"
+msgid "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr ""
 
 #: gtk/gtknotebook.c:371
@@ -2786,8 +2770,7 @@ msgid "Spacing around indicator"
 msgstr ""
 
 #: gtk/gtkpaned.c:219
-msgid ""
-"Position of paned separator in pixels (0 means all the way to the left/top)"
+msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 
 #: gtk/gtkpaned.c:227
@@ -2807,8 +2790,7 @@ msgid "Width of handle"
 msgstr ""
 
 #: gtk/gtkpreview.c:133
-msgid ""
-"Whether the preview widget should take up the entire space it is allocated"
+msgid "Whether the preview widget should take up the entire space it is allocated"
 msgstr ""
 
 #: gtk/gtkprogress.c:127
@@ -2987,8 +2969,7 @@ msgid "Arrow X Displacement"
 msgstr ""
 
 #: gtk/gtkrange.c:332
-msgid ""
-"How far in the x direction to move the arrow when the button is depressed"
+msgid "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 
 #: gtk/gtkrange.c:339
@@ -2996,8 +2977,7 @@ msgid "Arrow Y Displacement"
 msgstr ""
 
 #: gtk/gtkrange.c:340
-msgid ""
-"How far in the y direction to move the arrow when the button is depressed"
+msgid "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 
 #: gtk/gtkrc.c:2354
@@ -3120,8 +3100,7 @@ msgid "Secondary backward stepper"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:114
-msgid ""
-"Display a second backward arrow button on the opposite end of the scrollbar"
+msgid "Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:121
@@ -3129,8 +3108,7 @@ msgid "Secondary forward stepper"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:122
-msgid ""
-"Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:525
@@ -3189,8 +3167,7 @@ msgstr "זמן לחיצה כפולה"
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
-msgstr ""
-"זמן מקסימלי המורשה בין שתי לחיצות כדי שהם יחשבו כלחיצה כפולה (במילי שניות)"
+msgstr "זמן מקסימלי המורשה בין שתי לחיצות כדי שהם יחשבו כלחיצה כפולה (במילי שניות)"
 
 #: gtk/gtksettings.c:175
 msgid "Cursor Blink"
@@ -3323,8 +3300,7 @@ msgid "Update Policy"
 msgstr "מדיניות עדכון"
 
 #: gtk/gtkspinbutton.c:293
-msgid ""
-"Whether the spin button should update always, or only when the value is legal"
+msgid "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:301
@@ -3909,8 +3885,7 @@ msgid "Wrap mode"
 msgstr "מצב גלישה"
 
 #: gtk/gtktexttag.c:481 gtk/gtktextview.c:575
-msgid ""
-"Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 
 #: gtk/gtktexttag.c:490 gtk/gtktextview.c:622
@@ -4187,8 +4162,7 @@ msgid "Toolbar style"
 msgstr ""
 
 #: gtk/gtktoolbar.c:290
-msgid ""
-"Whether default toolbars have text only, text and icons, icons only, etc."
+msgid "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 
 #: gtk/gtktoolbar.c:296
@@ -4719,8 +4693,7 @@ msgid "Default Height"
 msgstr "גובה ברירת מחדל"
 
 #: gtk/gtkwindow.c:527
-msgid ""
-"The default height of the window, used when initially showing the window"
+msgid "The default height of the window, used when initially showing the window"
 msgstr ""
 
 #: gtk/gtkwindow.c:536
@@ -4882,3 +4855,4 @@ msgstr ""
 #, fuzzy
 #~ msgid "He_x Value:"
 #~ msgstr "ערך הקס':"
+
