@@ -1,3 +1,7 @@
+Tue Mar  1 13:53:56 2005  Manish Singh  <yosh@gimp.org>
+
+	* gtk/xdgmime/xdgmime.[ch]: revert previous change, maintain ABI.
+
 2005-03-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmenutoolbutton.c (button_state_changed_cb): 
