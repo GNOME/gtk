@@ -363,7 +363,7 @@ void	gtk_trace_referencing	(GtkObject   *object,
 				 guint	      dummy,
 				 guint	      line,
 				 gboolean     do_ref);
-#if	G_ENABLE_DEBUG
+#ifdef	G_ENABLE_DEBUG
 #  define gtk_object_ref(o)   G_STMT_START{gtk_trace_referencing((o),G_GNUC_PRETTY_FUNCTION,0,__LINE__,1);}G_STMT_END
 #  define gtk_object_unref(o) G_STMT_START{gtk_trace_referencing((o),G_GNUC_PRETTY_FUNCTION,0,__LINE__,0);}G_STMT_END
 #endif	/* G_ENABLE_DEBUG */

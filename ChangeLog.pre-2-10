@@ -1,3 +1,8 @@
+2001-03-22  Darin Adler  <darin@eazel.com>
+
+	* gtk/gtkobject.h: Fixed #if G_ENABLE_DEBUG that
+	was supposed to be #ifdef G_ENABLE_DEBUG.
+
 Thu Mar 15 15:23:11 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* NEWS: Updated
