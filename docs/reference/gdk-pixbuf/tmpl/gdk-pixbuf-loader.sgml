@@ -2,12 +2,13 @@
 GdkPixbufLoader
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Application-driven image loading.
 
 <!-- ##### SECTION Long_Description ##### -->
-<para>
-
-</para>
+  <para>
+    #GdkPIxbufLoader provides a way for applications to drive the
+    process of loading an image.  
+  </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
@@ -83,3 +84,9 @@ GdkPixbufLoader
 
 @gdkpixbufloader: the object which received the signal.
 
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
