@@ -68,7 +68,8 @@ struct _GtkColorSelection
 
   GtkWidget *wheel_area;
   GtkWidget *value_area;
-  GtkWidget *sample_area, *sample_area_eb;
+  GtkWidget *sample_area;
+  GtkWidget *sample_area_eb;
 
   GtkWidget *scales[8];
   GtkWidget *entries[8];

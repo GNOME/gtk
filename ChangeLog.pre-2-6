@@ -1,3 +1,13 @@
+Fri Nov 28 01:26:55 1997  Tim Janik  <timj@psynet.net>
+
+	* gtk/gtkwindow.c (gtk_window_show): propagate a size_request before
+	the initial window creations (prevents windows with size of -1x-1).
+
+	* gtk/gtkmain.c (gtk_main_level): new function to determine
+	the current recursion level of gtkmain().
+	(gtk_true) (gtk_false): new functions implemented as a convenience
+	for signals that just need a handler with the appropriate return value.
+
 Tue Nov 25 1997 Owen Taylor <owt1@cornell.edu>
 	gdk.c: Fix so that "other_events" are actually generated
 

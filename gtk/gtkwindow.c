@@ -416,6 +416,7 @@ gtk_window_show (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WINDOW (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
+  gtk_container_need_resize (GTK_CONTAINER (widget));
   gtk_widget_map (widget);
 }
 

@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -28,7 +28,7 @@
 #include "gdk/gdkx.h"
 
 
-#define WIDGET_CLASS(w)  GTK_WIDGET_CLASS (GTK_OBJECT (w)->klass)
+#define WIDGET_CLASS(w)	 GTK_WIDGET_CLASS (GTK_OBJECT (w)->klass)
 
 
 enum {
@@ -84,8 +84,8 @@ typedef void (*GtkWidgetSignal1) (GtkObject *object,
 				  gpointer   data);
 typedef gint (*GtkWidgetSignal2) (GtkObject *object,
 				  gpointer   arg1,
-				  gchar      arg2,
-				  gchar      arg3,
+				  gchar	     arg2,
+				  gchar	     arg3,
 				  gpointer   data);
 typedef void (*GtkWidgetSignal3) (GtkObject *object,
 				  gpointer   arg1,
@@ -95,64 +95,64 @@ typedef gint (*GtkWidgetSignal4) (GtkObject *object,
 				  gpointer   data);
 
 
-static void gtk_widget_marshal_signal_1 (GtkObject      *object,
-					 GtkSignalFunc   func,
-					 gpointer        func_data,
-					 GtkArg         *args);
-static void gtk_widget_marshal_signal_2 (GtkObject      *object,
-					 GtkSignalFunc   func,
-					 gpointer        func_data,
-					 GtkArg         *args);
-static void gtk_widget_marshal_signal_3 (GtkObject      *object,
-					 GtkSignalFunc   func,
-					 gpointer        func_data,
-					 GtkArg         *args);
-static void gtk_widget_marshal_signal_4 (GtkObject      *object,
-					 GtkSignalFunc   func,
-					 gpointer        func_data,
-					 GtkArg         *args);
+static void gtk_widget_marshal_signal_1 (GtkObject	*object,
+					 GtkSignalFunc	 func,
+					 gpointer	 func_data,
+					 GtkArg		*args);
+static void gtk_widget_marshal_signal_2 (GtkObject	*object,
+					 GtkSignalFunc	 func,
+					 gpointer	 func_data,
+					 GtkArg		*args);
+static void gtk_widget_marshal_signal_3 (GtkObject	*object,
+					 GtkSignalFunc	 func,
+					 gpointer	 func_data,
+					 GtkArg		*args);
+static void gtk_widget_marshal_signal_4 (GtkObject	*object,
+					 GtkSignalFunc	 func,
+					 gpointer	 func_data,
+					 GtkArg		*args);
 
-static void gtk_widget_class_init                (GtkWidgetClass    *klass);
-static void gtk_widget_init                      (GtkWidget         *widget);
-static void gtk_widget_arg                       (GtkWidget         *widget,
-						  GtkArg            *arg);
-static void gtk_real_widget_destroy              (GtkObject         *object);
-static void gtk_real_widget_show                 (GtkWidget         *widget);
-static void gtk_real_widget_hide                 (GtkWidget         *widget);
-static void gtk_real_widget_map                  (GtkWidget         *widget);
-static void gtk_real_widget_unmap                (GtkWidget         *widget);
-static void gtk_real_widget_realize              (GtkWidget         *widget);
-static void gtk_real_widget_unrealize            (GtkWidget         *widget);
-static void gtk_real_widget_draw                 (GtkWidget         *widget,
-						  GdkRectangle      *area);
-static gint gtk_real_widget_queue_draw           (GtkWidget         *widget);
-static gint gtk_real_widget_queue_resize         (GtkWidget         *widget);
-static void gtk_real_widget_size_allocate        (GtkWidget         *widget,
-						  GtkAllocation     *allocation);
+static void gtk_widget_class_init		 (GtkWidgetClass    *klass);
+static void gtk_widget_init			 (GtkWidget	    *widget);
+static void gtk_widget_arg			 (GtkWidget	    *widget,
+						  GtkArg	    *arg);
+static void gtk_real_widget_destroy		 (GtkObject	    *object);
+static void gtk_real_widget_show		 (GtkWidget	    *widget);
+static void gtk_real_widget_hide		 (GtkWidget	    *widget);
+static void gtk_real_widget_map			 (GtkWidget	    *widget);
+static void gtk_real_widget_unmap		 (GtkWidget	    *widget);
+static void gtk_real_widget_realize		 (GtkWidget	    *widget);
+static void gtk_real_widget_unrealize		 (GtkWidget	    *widget);
+static void gtk_real_widget_draw		 (GtkWidget	    *widget,
+						  GdkRectangle	    *area);
+static gint gtk_real_widget_queue_draw		 (GtkWidget	    *widget);
+static gint gtk_real_widget_queue_resize	 (GtkWidget	    *widget);
+static void gtk_real_widget_size_allocate	 (GtkWidget	    *widget,
+						  GtkAllocation	    *allocation);
 
 static GdkColormap* gtk_widget_peek_colormap (void);
 static GdkVisual*   gtk_widget_peek_visual   (void);
 static GtkStyle*    gtk_widget_peek_style    (void);
 
 static void gtk_widget_set_parent_sensitive  (GtkWidget *widget,
-					      gpointer   client_data);
+					      gpointer	 client_data);
 static void gtk_widget_propagate_restore     (GtkWidget *widget,
-					      gpointer   client_data);
-static void gtk_widget_propagate_state       (GtkWidget *widget,
-					      gpointer   client_data);
+					      gpointer	 client_data);
+static void gtk_widget_propagate_state	     (GtkWidget *widget,
+					      gpointer	 client_data);
 static void gtk_widget_draw_children_recurse (GtkWidget *widget,
-					      gpointer   client_data);
+					      gpointer	 client_data);
 static void gtk_widget_set_style_internal    (GtkWidget *widget,
-					      GtkStyle  *style);
+					      GtkStyle	*style);
 static void gtk_widget_set_style_recurse     (GtkWidget *widget,
-					      gpointer   client_data);
+					      gpointer	 client_data);
 
-extern GtkArg* gtk_object_collect_args (gint    *nargs,
-					va_list  args1,
-					va_list  args2);
+extern GtkArg* gtk_object_collect_args (gint	*nargs,
+					va_list	 args1,
+					va_list	 args2);
 
 static GtkWidgetAuxInfo* gtk_widget_aux_info_new     (void);
-static void              gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info);
+static void		 gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info);
 
 static GtkObjectClass *parent_class = NULL;
 static gint widget_signals[LAST_SIGNAL] = { 0 };
@@ -191,7 +191,7 @@ guint
 gtk_widget_get_type ()
 {
   static guint widget_type = 0;
-
+  
   if (!widget_type)
     {
       GtkTypeInfo widget_info =
@@ -203,10 +203,10 @@ gtk_widget_get_type ()
 	(GtkObjectInitFunc) gtk_widget_init,
 	(GtkArgFunc) gtk_widget_arg,
       };
-
+      
       widget_type = gtk_type_unique (gtk_object_get_type (), &widget_info);
     }
-
+  
   return widget_type;
 }
 
@@ -222,11 +222,11 @@ static void
 gtk_widget_class_init (GtkWidgetClass *klass)
 {
   GtkObjectClass *object_class;
-
+  
   object_class = (GtkObjectClass*) klass;
-
+  
   parent_class = gtk_type_class (gtk_object_get_type ());
-
+  
   gtk_object_add_arg_type ("GtkWidget::x", GTK_TYPE_INT);
   gtk_object_add_arg_type ("GtkWidget::y", GTK_TYPE_INT);
   gtk_object_add_arg_type ("GtkWidget::width", GTK_TYPE_INT);
@@ -238,7 +238,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   gtk_object_add_arg_type ("GtkWidget::name", GTK_TYPE_STRING);
   gtk_object_add_arg_type ("GtkWidget::style", GTK_TYPE_STYLE);
   gtk_object_add_arg_type ("GtkWidget::parent", GTK_TYPE_CONTAINER);
-
+  
   widget_signals[SHOW] =
     gtk_signal_new ("show",
 		    GTK_RUN_FIRST,
@@ -577,11 +577,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    gtk_widget_marshal_signal_4,
 		    GTK_TYPE_BOOL, 1,
 		    GTK_TYPE_GDK_EVENT);
-
+  
   gtk_object_class_add_signals (object_class, widget_signals, LAST_SIGNAL);
-
+  
   object_class->destroy = gtk_real_widget_destroy;
-
+  
   klass->activate_signal = 0;
   klass->show = gtk_real_widget_show;
   klass->hide = gtk_real_widget_hide;
@@ -637,7 +637,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
 static void
 gtk_widget_arg (GtkWidget *widget,
-		GtkArg    *arg)
+		GtkArg	  *arg)
 {
   if (strcmp (arg->name, "x") == 0)
     {
@@ -658,9 +658,9 @@ gtk_widget_arg (GtkWidget *widget,
   else if (strcmp (arg->name, "visible") == 0)
     {
       if (GTK_VALUE_BOOL(*arg))
-  	gtk_widget_show (widget);
+	gtk_widget_show (widget);
       else
-  	gtk_widget_hide (widget);
+	gtk_widget_hide (widget);
     }
   else if (strcmp (arg->name, "sensitive") == 0)
     {
@@ -701,7 +701,7 @@ gtk_widget_init (GtkWidget *widget)
 {
   GdkColormap *colormap;
   GdkVisual *visual;
-
+  
   GTK_OBJECT_FLAGS (widget) = GTK_SENSITIVE | GTK_PARENT_SENSITIVE;
   widget->state = GTK_STATE_NORMAL;
   widget->saved_state = GTK_STATE_NORMAL;
@@ -714,16 +714,16 @@ gtk_widget_init (GtkWidget *widget)
   widget->allocation.height = 1;
   widget->window = NULL;
   widget->parent = NULL;
-
+  
   widget->style = gtk_widget_peek_style ();
   gtk_style_ref (widget->style);
-
+  
   colormap = gtk_widget_peek_colormap ();
   visual = gtk_widget_peek_visual ();
-
+  
   if (colormap != gtk_widget_get_default_colormap ())
     gtk_object_set_data (GTK_OBJECT (widget), colormap_key, colormap);
-
+  
   if (visual != gtk_widget_get_default_visual ())
     gtk_object_set_data (GTK_OBJECT (widget), visual_key, visual);
 }
@@ -745,21 +745,21 @@ gtk_widget_new (guint type,
   gint nargs;
   va_list args1;
   va_list args2;
-
+  
   g_return_val_if_fail (gtk_type_is_a (type, gtk_widget_get_type ()), NULL);
-
+  
   obj = gtk_type_new (type);
-
+  
   va_start (args1, type);
   va_start (args2, type);
-
+  
   args = gtk_object_collect_args (&nargs, args1, args2);
   gtk_object_setv (obj, nargs, args);
   g_free (args);
-
+  
   va_end (args1);
   va_end (args2);
-
+  
   return GTK_WIDGET (obj);
 }
 
@@ -772,12 +772,12 @@ gtk_widget_new (guint type,
  *****************************************/
 
 GtkWidget*
-gtk_widget_newv (guint   type,
-		 gint    nargs,
+gtk_widget_newv (guint	 type,
+		 gint	 nargs,
 		 GtkArg *args)
 {
   g_return_val_if_fail (gtk_type_is_a (type, gtk_widget_get_type ()), NULL);
-
+  
   return GTK_WIDGET (gtk_object_newv (type, nargs, args));
 }
 
@@ -797,16 +797,16 @@ gtk_widget_set (GtkWidget *widget,
   gint nargs;
   va_list args1;
   va_list args2;
-
+  
   g_return_if_fail (widget != NULL);
-
+  
   va_start (args1, widget);
   va_start (args2, widget);
-
+  
   args = gtk_object_collect_args (&nargs, args1, args2);
   gtk_object_setv (GTK_OBJECT (widget), nargs, args);
   g_free (args);
-
+  
   va_end (args1);
   va_end (args2);
 }
@@ -821,8 +821,8 @@ gtk_widget_set (GtkWidget *widget,
 
 void
 gtk_widget_setv (GtkWidget *widget,
-		 gint       nargs,
-		 GtkArg    *args)
+		 gint	    nargs,
+		 GtkArg	   *args)
 {
   gtk_object_setv (GTK_OBJECT (widget), nargs, args);
 }
@@ -843,7 +843,7 @@ gtk_widget_destroy (GtkWidget *widget)
   gint tag;
   
   g_return_if_fail (widget != NULL);
-
+  
   if (GTK_WIDGET_REDRAW_PENDING (widget))
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_REDRAW_PENDING);
@@ -861,47 +861,47 @@ gtk_widget_destroy (GtkWidget *widget)
       tag = (gint) gtk_object_get_data (GTK_OBJECT (widget), resize_handler_key);
       gtk_idle_remove (tag);
       gtk_object_set_data (GTK_OBJECT (widget), resize_handler_key, (gpointer) 0);
-
+      
       resize_widgets = gtk_object_get_data (GTK_OBJECT (widget), resize_widgets_key);
-
+      
       tmp_list = resize_widgets;
       while (tmp_list)
-        {
-          GtkWidget *child;
-          
-          child = tmp_list->data;
-          tmp_list = tmp_list->next;
-          
-          /* referencing needed? */
-          GTK_WIDGET_UNSET_FLAGS (child, GTK_RESIZE_NEEDED);
-          gtk_object_unref (GTK_OBJECT (child));
-        }
+	{
+	  GtkWidget *child;
+	  
+	  child = tmp_list->data;
+	  tmp_list = tmp_list->next;
+	  
+	  /* referencing needed? */
+	  GTK_WIDGET_UNSET_FLAGS (child, GTK_RESIZE_NEEDED);
+	  gtk_object_unref (GTK_OBJECT (child));
+	}
       
       if (resize_widgets)
-        {
-          gtk_object_set_data (GTK_OBJECT (widget), resize_widgets_key, NULL);
-          g_slist_free (resize_widgets);
-        }
+	{
+	  gtk_object_set_data (GTK_OBJECT (widget), resize_widgets_key, NULL);
+	  g_slist_free (resize_widgets);
+	}
     }
   
   if (GTK_WIDGET_RESIZE_NEEDED (widget))
     {
       GtkWidget *toplevel;
-
+      
       toplevel = gtk_widget_get_toplevel (widget);
       resize_widgets = gtk_object_get_data (GTK_OBJECT (toplevel), resize_widgets_key);
-
+      
       if (resize_widgets)
-        {
-          resize_widgets = g_slist_remove (resize_widgets, widget);
-          GTK_WIDGET_UNSET_FLAGS (widget, GTK_RESIZE_NEEDED);
-          gtk_object_unref (GTK_OBJECT (widget));
-
-          gtk_object_set_data (GTK_OBJECT (toplevel), resize_widgets_key, resize_widgets);
-        }
+	{
+	  resize_widgets = g_slist_remove (resize_widgets, widget);
+	  GTK_WIDGET_UNSET_FLAGS (widget, GTK_RESIZE_NEEDED);
+	  gtk_object_unref (GTK_OBJECT (widget));
+	  
+	  gtk_object_set_data (GTK_OBJECT (toplevel), resize_widgets_key, resize_widgets);
+	}
     }
-
-
+  
+  
   if (widget->parent)
     {
       if (!GTK_OBJECT_BEING_DESTROYED (widget->parent))
@@ -914,8 +914,8 @@ gtk_widget_destroy (GtkWidget *widget)
 
 /*****************************************
  * gtk_widget_unparent: do any cleanup necessary necessary before
- *                      setting parent = NULL. In particular, remove
- *                      the focus properly.
+ *			setting parent = NULL. In particular, remove
+ *			the focus properly.
  *
  *   arguments:
  *
@@ -927,21 +927,21 @@ gtk_widget_unparent (GtkWidget *widget)
 {
   GtkWidget *toplevel;
   GtkWidget *child;
-
+  
   g_return_if_fail (widget != NULL);
-
+  
   toplevel = gtk_widget_get_toplevel (widget);
   if (GTK_IS_WINDOW (toplevel))
     {
       child = GTK_WINDOW (toplevel)->focus_widget;
-
+      
       while (child && child != widget)
 	child = child->parent;
-
+      
       if (child == widget)
 	gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);
     }
-
+  
   if (widget->window &&
       GTK_WIDGET_NO_WINDOW (widget) &&
       GTK_WIDGET_DRAWABLE (widget))
@@ -950,9 +950,9 @@ gtk_widget_unparent (GtkWidget *widget)
 			   widget->allocation.y,
 			   widget->allocation.width,
 			   widget->allocation.height);
-
+  
   widget->parent = NULL;
-
+  
   gtk_object_unref (GTK_OBJECT (widget));
 }
 
@@ -968,7 +968,7 @@ void
 gtk_widget_show (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
-
+  
   if (!GTK_WIDGET_VISIBLE (widget))
     gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SHOW]);
 }
@@ -985,7 +985,7 @@ void
 gtk_widget_hide (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
-
+  
   if (GTK_WIDGET_VISIBLE (widget))
     gtk_signal_emit (GTK_OBJECT (widget), widget_signals[HIDE]);
 }
@@ -1002,12 +1002,12 @@ void
 gtk_widget_map (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
-
+  
   if (!GTK_WIDGET_MAPPED (widget))
     {
       if (!GTK_WIDGET_REALIZED (widget))
 	gtk_widget_realize (widget);
-
+      
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[MAP]);
     }
 }
@@ -1024,7 +1024,7 @@ void
 gtk_widget_unmap (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
-
+  
   if (GTK_WIDGET_MAPPED (widget))
     gtk_signal_emit (GTK_OBJECT (widget), widget_signals[UNMAP]);
 }
@@ -1044,16 +1044,16 @@ gtk_widget_realize (GtkWidget *widget)
   gint events;
   GdkExtensionMode mode;
   GtkWidgetShapeInfo *shape_info;
-
+  
   g_return_if_fail (widget != NULL);
-
+  
   if (!GTK_WIDGET_REALIZED (widget))
     {
       /*
-      if (GTK_IS_CONTAINER (widget) && !GTK_WIDGET_NO_WINDOW (widget))
-	g_print ("%s\n", gtk_type_name (GTK_WIDGET_TYPE (widget)));
-	*/
-
+	if (GTK_IS_CONTAINER (widget) && !GTK_WIDGET_NO_WINDOW (widget))
+	  g_print ("%s\n", gtk_type_name (GTK_WIDGET_TYPE (widget)));
+      */
+      
       if (widget->parent && !GTK_WIDGET_REALIZED (widget->parent))
 	gtk_widget_realize (widget->parent);
       
@@ -1063,12 +1063,12 @@ gtk_widget_realize (GtkWidget *widget)
 	  if (new_style != widget->style)
 	    gtk_widget_set_style_internal (widget, new_style);
 	}
-
+      
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[REALIZE]);
-
+      
       if (GTK_WIDGET_HAS_SHAPE_MASK(widget))
 	{
- 	  shape_info = gtk_object_get_data (GTK_OBJECT (widget),
+	  shape_info = gtk_object_get_data (GTK_OBJECT (widget),
 					    shape_info_key);
 	  g_assert (shape_info != 0);
 	  gdk_window_shape_combine_mask (widget->window,
@@ -1076,7 +1076,7 @@ gtk_widget_realize (GtkWidget *widget)
 					 shape_info->offset_x,
 					 shape_info->offset_y);
 	}
-
+      
       if (!GTK_WIDGET_NO_WINDOW (widget))
 	{
 	  mode = gtk_widget_get_extension_events (widget);
@@ -1102,7 +1102,7 @@ void
 gtk_widget_unrealize (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
-
+  
   if (GTK_WIDGET_REALIZED (widget))
     gtk_signal_emit (GTK_OBJECT (widget), widget_signals[UNREALIZE]);
 }
@@ -1120,9 +1120,9 @@ gtk_widget_queue_draw (GtkWidget *widget)
 {
   GtkWidget *parent;
   gint tag;
-
+  
   g_return_if_fail (widget != NULL);
-
+  
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       /* We queue the redraw if:
@@ -1136,7 +1136,7 @@ gtk_widget_queue_draw (GtkWidget *widget)
 	    return;
 	  parent = parent->parent;
 	}
-
+      
       GTK_WIDGET_SET_FLAGS (widget, GTK_REDRAW_PENDING);
       gtk_object_ref (GTK_OBJECT (widget));
       tag = gtk_idle_add ((GtkFunction) gtk_real_widget_queue_draw, widget);
@@ -1158,9 +1158,9 @@ gtk_widget_queue_resize (GtkWidget *widget)
   GtkWidget *toplevel;
   GSList *resize_widgets;
   gint tag;
-
+  
   g_return_if_fail (widget != NULL);
-
+  
   toplevel = gtk_widget_get_toplevel (widget);
   if (GTK_WIDGET_ANCHORED (toplevel))
     {
@@ -1173,7 +1173,7 @@ gtk_widget_queue_resize (GtkWidget *widget)
 	      tag = gtk_idle_add ((GtkFunction) gtk_real_widget_queue_resize, toplevel);
 	      gtk_object_set_data (GTK_OBJECT (toplevel), resize_handler_key, (gpointer) tag);
 	    }
-
+	  
 	  resize_widgets = gtk_object_get_data (GTK_OBJECT (toplevel), resize_widgets_key);
 	  if (g_slist_find (resize_widgets, widget) == NULL)
 	    {
@@ -1205,9 +1205,9 @@ gtk_widget_draw (GtkWidget    *widget,
 		 GdkRectangle *area)
 {
   GdkRectangle temp_area;
-
+  
   g_return_if_fail (widget != NULL);
-
+  
   if (GTK_WIDGET_DRAWABLE (widget) &&
       !GTK_WIDGET_REDRAW_PENDING (widget))
     {
@@ -1223,12 +1223,12 @@ gtk_widget_draw (GtkWidget    *widget,
 	      temp_area.x = 0;
 	      temp_area.y = 0;
 	    }
-
+	  
 	  temp_area.width = widget->allocation.width;
 	  temp_area.height = widget->allocation.height;
 	  area = &temp_area;
 	}
-
+      
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[DRAW], area);
     }
 }
@@ -1245,7 +1245,7 @@ void
 gtk_widget_draw_focus (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
-
+  
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[DRAW_FOCUS]);
 }
 
@@ -1261,7 +1261,7 @@ void
 gtk_widget_draw_default (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
-
+  
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[DRAW_DEFAULT]);
 }
 
@@ -1277,7 +1277,7 @@ void
 gtk_widget_draw_children (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
-
+  
   if (GTK_IS_CONTAINER (widget))
     gtk_container_foreach (GTK_CONTAINER (widget),
 			   gtk_widget_draw_children_recurse,
@@ -1293,13 +1293,13 @@ gtk_widget_draw_children (GtkWidget *widget)
  *****************************************/
 
 void
-gtk_widget_size_request (GtkWidget      *widget,
+gtk_widget_size_request (GtkWidget	*widget,
 			 GtkRequisition *requisition)
 {
   GtkWidgetAuxInfo *aux_info;
-
+  
   g_return_if_fail (widget != NULL);
-
+  
   if (gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SIZE_REQUEST], requisition))
     {
       aux_info = gtk_object_get_data (GTK_OBJECT (widget), aux_info_key);
@@ -1322,17 +1322,17 @@ gtk_widget_size_request (GtkWidget      *widget,
  *****************************************/
 
 void
-gtk_widget_size_allocate (GtkWidget     *widget,
+gtk_widget_size_allocate (GtkWidget	*widget,
 			  GtkAllocation *allocation)
 {
   GtkWidgetAuxInfo *aux_info;
   GtkAllocation real_allocation;
-
+  
   g_return_if_fail (widget != NULL);
-
+  
   real_allocation = *allocation;
   aux_info = gtk_object_get_data (GTK_OBJECT (widget), aux_info_key);
-
+  
   if (aux_info)
     {
       if (aux_info->x != -1)
@@ -1340,7 +1340,7 @@ gtk_widget_size_allocate (GtkWidget     *widget,
       if (aux_info->y != -1)
 	real_allocation.y = aux_info->y;
     }
-
+  
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SIZE_ALLOCATE], &real_allocation);
 }
 
@@ -1353,16 +1353,16 @@ gtk_widget_size_allocate (GtkWidget     *widget,
  *****************************************/
 
 void
-gtk_widget_install_accelerator (GtkWidget           *widget,
+gtk_widget_install_accelerator (GtkWidget	    *widget,
 				GtkAcceleratorTable *table,
-				const gchar         *signal_name,
-				gchar                key,
-				guint8               modifiers)
+				const gchar	    *signal_name,
+				gchar		     key,
+				guint8		     modifiers)
 {
   gint return_val;
-
+  
   g_return_if_fail (widget != NULL);
-
+  
   return_val = TRUE;
   if (gtk_signal_emit (GTK_OBJECT (widget), widget_signals[INSTALL_ACCELERATOR],
 		       signal_name, key, modifiers, &return_val) && return_val)
@@ -1378,12 +1378,12 @@ gtk_widget_install_accelerator (GtkWidget           *widget,
  *****************************************/
 
 void
-gtk_widget_remove_accelerator (GtkWidget           *widget,
+gtk_widget_remove_accelerator (GtkWidget	   *widget,
 			       GtkAcceleratorTable *table,
-			       const gchar         *signal_name)
+			       const gchar	   *signal_name)
 {
   g_return_if_fail (widget != NULL);
-
+  
   if (gtk_signal_emit (GTK_OBJECT (widget), widget_signals[REMOVE_ACCELERATOR], signal_name))
     gtk_accelerator_table_remove (table, GTK_OBJECT (widget), signal_name);
 }
@@ -1402,15 +1402,15 @@ gtk_widget_event (GtkWidget *widget,
 {
   gint return_val;
   gint signal_num;
-
+  
   g_return_val_if_fail (widget != NULL, FALSE);
-
+  
   return_val = FALSE;
   if (gtk_signal_emit (GTK_OBJECT (widget), widget_signals[EVENT], event, &return_val))
     {
       if (return_val)
 	return TRUE;
-
+      
       switch (event->type)
 	{
 	case GDK_NOTHING:
@@ -1503,11 +1503,11 @@ gtk_widget_event (GtkWidget *widget,
 	  g_warning ("could not determine signal number for event: %d", event->type);
 	  return return_val;
 	}
-
+      
       if (signal_num != -1)
 	gtk_signal_emit (GTK_OBJECT (widget), widget_signals[signal_num], event, &return_val);
     }
-
+  
   return return_val;
 }
 
@@ -1524,7 +1524,7 @@ gtk_widget_activate (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
+  
   if (WIDGET_CLASS (widget)->activate_signal)
     gtk_signal_emit (GTK_OBJECT (widget), WIDGET_CLASS (widget)->activate_signal);
 }
@@ -1544,12 +1544,12 @@ gtk_widget_reparent (GtkWidget *widget,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (new_parent != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (new_parent));
-
+  
   if (widget->parent != new_parent)
     {
       gtk_container_remove (GTK_CONTAINER (widget->parent), widget);
       gtk_container_add (GTK_CONTAINER (new_parent), widget);
-
+      
       if (GTK_WIDGET_REALIZED (widget))
 	{
 	  if (GTK_WIDGET_REALIZED (new_parent) && !GTK_WIDGET_NO_WINDOW (widget))
@@ -1562,19 +1562,19 @@ gtk_widget_reparent (GtkWidget *widget,
 	      if (!GTK_WIDGET_NO_WINDOW (widget))
 		gdk_window_destroy (widget->window);
 	      widget->window = NULL;
-
+	      
 	      if (GTK_WIDGET_REALIZED (new_parent))
 		gtk_widget_realize (widget);
 	      if (GTK_WIDGET_MAPPED (new_parent))
 		gtk_widget_map (widget);
 	    }
 	}
-
+      
       if (!GTK_WIDGET_REALIZED (widget) && GTK_WIDGET_REALIZED (new_parent))
 	gtk_widget_realize (widget);
       if (!GTK_WIDGET_MAPPED (widget) && GTK_WIDGET_MAPPED (new_parent))
 	gtk_widget_map (widget);
-
+      
       gtk_widget_queue_resize (widget);
     }
 }
@@ -1589,11 +1589,11 @@ gtk_widget_reparent (GtkWidget *widget,
 
 void
 gtk_widget_popup (GtkWidget *widget,
-		  gint       x,
-		  gint       y)
+		  gint	     x,
+		  gint	     y)
 {
   g_return_if_fail (widget != NULL);
-
+  
   if (!GTK_WIDGET_VISIBLE (widget))
     {
       if (!GTK_WIDGET_REALIZED (widget))
@@ -1613,30 +1613,30 @@ gtk_widget_popup (GtkWidget *widget,
  *****************************************/
 
 gint
-gtk_widget_intersect (GtkWidget    *widget,
+gtk_widget_intersect (GtkWidget	   *widget,
 		      GdkRectangle *area,
 		      GdkRectangle *intersection)
 {
   GdkRectangle *dest;
   GdkRectangle tmp;
   gint return_val;
-
+  
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (area != NULL, FALSE);
-
+  
   if (intersection)
     dest = intersection;
   else
     dest = &tmp;
-
+  
   return_val = gdk_rectangle_intersect ((GdkRectangle*) &widget->allocation, area, dest);
-
+  
   if (return_val && intersection && !GTK_WIDGET_NO_WINDOW (widget))
     {
       intersection->x -= widget->allocation.x;
       intersection->y -= widget->allocation.y;
     }
-
+  
   return return_val;
 }
 
@@ -1647,9 +1647,9 @@ gtk_widget_basic (GtkWidget *widget)
   GList *children;
   GList *tmp_list;
   gint return_val;
-
+  
   g_return_val_if_fail (widget != NULL, FALSE);
-
+  
   if (!GTK_WIDGET_BASIC (widget))
     return FALSE;
   else if (GTK_IS_CONTAINER (widget))
@@ -1659,7 +1659,7 @@ gtk_widget_basic (GtkWidget *widget)
 	{
 	  return_val = TRUE;
 	  tmp_list = children;
-
+	  
 	  while (tmp_list)
 	    {
 	      if (!gtk_widget_basic (GTK_WIDGET (tmp_list->data)))
@@ -1667,15 +1667,15 @@ gtk_widget_basic (GtkWidget *widget)
 		  return_val = FALSE;
 		  break;
 		}
-
+	      
 	      tmp_list = tmp_list->next;
 	    }
-
+	  
 	  g_list_free (children);
 	  return return_val;
 	}
     }
-
+  
   return TRUE;
 }
 
@@ -1694,20 +1694,20 @@ gtk_widget_grab_focus (GtkWidget *widget)
   GtkWidget *window;
   GtkWidget *child;
   gint window_type;
-
+  
   g_return_if_fail (widget != NULL);
-
+  
   window_type = gtk_window_get_type ();
   window = widget->parent;
   child = widget;
-
+  
   while (window && !gtk_type_is_a (GTK_WIDGET_TYPE (window), window_type))
     {
       GTK_CONTAINER (window)->focus_child = child;
       child = window;
       window = window->parent;
     }
-
+  
   if (window && gtk_type_is_a (GTK_WIDGET_TYPE (window), window_type))
     {
       GTK_CONTAINER (window)->focus_child = child;
@@ -1728,16 +1728,16 @@ gtk_widget_grab_default (GtkWidget *widget)
 {
   GtkWidget *window;
   gint window_type;
-
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_WIDGET_CAN_DEFAULT (widget));
-
+  
   window_type = gtk_window_get_type ();
   window = widget->parent;
-
+  
   while (window && !gtk_type_is_a (GTK_WIDGET_TYPE (window), window_type))
     window = window->parent;
-
+  
   if (window && gtk_type_is_a (GTK_WIDGET_TYPE (window), window_type))
     gtk_window_set_default (GTK_WINDOW (window), widget);
 }
@@ -1754,7 +1754,7 @@ void
 gtk_widget_restore_state (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
-
+  
   widget->state = widget->saved_state;
   if (gtk_signal_emit (GTK_OBJECT (widget), widget_signals[STATE_CHANGED]))
     {
@@ -1774,17 +1774,17 @@ gtk_widget_restore_state (GtkWidget *widget)
  *****************************************/
 
 void
-gtk_widget_set_name (GtkWidget   *widget,
+gtk_widget_set_name (GtkWidget	 *widget,
 		     const gchar *name)
 {
   GtkStyle *new_style;
-
+  
   g_return_if_fail (widget != NULL);
-
+  
   if (widget->name)
     g_free (widget->name);
   widget->name = g_strdup (name);
-
+  
   if (!GTK_WIDGET_USER_STYLE (widget))
     {
       new_style = gtk_rc_get_style (widget);
@@ -1804,7 +1804,7 @@ gchar*
 gtk_widget_get_name (GtkWidget *widget)
 {
   g_return_val_if_fail (widget != NULL, NULL);
-
+  
   if (widget->name)
     return widget->name;
   return gtk_type_name (GTK_WIDGET_TYPE (widget));
@@ -1819,20 +1819,20 @@ gtk_widget_get_name (GtkWidget *widget)
  *****************************************/
 
 void
-gtk_widget_set_state (GtkWidget    *widget,
+gtk_widget_set_state (GtkWidget	   *widget,
 		      GtkStateType  state)
 {
   g_return_if_fail (widget != NULL);
-
+  
   if (widget->state != state)
     {
       widget->saved_state = widget->state;
       widget->state = state;
-
+      
       if (!gtk_signal_emit (GTK_OBJECT (widget), widget_signals[STATE_CHANGED]))
 	return;
     }
-
+  
   if (GTK_IS_CONTAINER (widget))
     gtk_container_foreach (GTK_CONTAINER (widget),
 			   gtk_widget_propagate_state,
@@ -1849,15 +1849,15 @@ gtk_widget_set_state (GtkWidget    *widget,
 
 void
 gtk_widget_set_sensitive (GtkWidget *widget,
-			  gint       sensitive)
+			  gint	     sensitive)
 {
   GtkWidget *window;
   gint old_val;
-
+  
   g_return_if_fail (widget != NULL);
-
+  
   old_val = GTK_WIDGET_IS_SENSITIVE (widget);
-
+  
   if (sensitive)
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_SENSITIVE);
@@ -1865,7 +1865,7 @@ gtk_widget_set_sensitive (GtkWidget *widget,
   else
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_SENSITIVE);
-
+      
       if (GTK_WIDGET_HAS_FOCUS (widget))
 	{
 	  window = gtk_widget_get_ancestor (widget, gtk_window_get_type ());
@@ -1873,12 +1873,12 @@ gtk_widget_set_sensitive (GtkWidget *widget,
 	    gtk_window_set_focus (GTK_WINDOW (window), NULL);
 	}
     }
-
+  
   if (GTK_IS_CONTAINER (widget))
     gtk_container_foreach (GTK_CONTAINER (widget),
 			   gtk_widget_set_parent_sensitive,
 			   &sensitive);
-
+  
   if (old_val != GTK_WIDGET_IS_SENSITIVE (widget))
     gtk_widget_queue_draw (widget);
 }
@@ -1897,24 +1897,24 @@ gtk_widget_set_parent (GtkWidget *widget,
 {
   GtkStyle *style;
   gint sensitive;
-
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (parent != NULL);
-
+  
   gtk_object_ref (GTK_OBJECT (widget));
-
+  
   widget->parent = parent;
-
+  
   sensitive = GTK_WIDGET_IS_SENSITIVE (parent);
   gtk_widget_set_parent_sensitive (widget, &sensitive);
-
+  
   if ((widget->parent->state != GTK_STATE_NORMAL) &&
       (widget->parent->state != widget->state))
     gtk_widget_set_state (widget, widget->parent->state);
-
+  
   while (parent->parent != NULL)
     parent = parent->parent;
-
+  
   if (GTK_WIDGET_ANCHORED (parent))
     {
       if (!GTK_WIDGET_USER_STYLE (widget))
@@ -1923,7 +1923,7 @@ gtk_widget_set_parent (GtkWidget *widget,
 	  if (style != widget->style)
 	    gtk_widget_set_style_internal (widget, style);
 	}
-
+      
       if (GTK_IS_CONTAINER (widget))
 	gtk_container_foreach (GTK_CONTAINER (widget),
 			       gtk_widget_set_style_recurse,
@@ -1941,10 +1941,10 @@ gtk_widget_set_parent (GtkWidget *widget,
 
 void
 gtk_widget_set_style (GtkWidget *widget,
-		      GtkStyle  *style)
+		      GtkStyle	*style)
 {
   g_return_if_fail (widget != NULL);
-
+  
   GTK_WIDGET_SET_FLAGS (widget, GTK_USER_STYLE);
   gtk_widget_set_style_internal (widget, style);
 }
@@ -1959,32 +1959,32 @@ gtk_widget_set_style (GtkWidget *widget,
 
 void
 gtk_widget_set_uposition (GtkWidget *widget,
-			  gint       x,
-			  gint       y)
+			  gint	     x,
+			  gint	     y)
 {
   GtkWidgetAuxInfo *aux_info;
-
+  
   g_return_if_fail (widget != NULL);
-
+  
   aux_info = gtk_object_get_data (GTK_OBJECT (widget), aux_info_key);
   if (!aux_info)
     {
       aux_info = gtk_widget_aux_info_new ();
       gtk_object_set_data (GTK_OBJECT (widget), aux_info_key, aux_info);
     }
-
+  
   if (x > -2)
     aux_info->x = x;
   if (y > -2)
     aux_info->y = y;
-
+  
   if (GTK_WIDGET_REALIZED (widget) && GTK_IS_WINDOW (widget) &&
       (aux_info->x != -1) && (aux_info->y != -1))
     {
       gdk_window_set_hints (widget->window, aux_info->x, aux_info->y, 0, 0, 0, 0, GDK_HINT_POS);
       gdk_window_move (widget->window, aux_info->x, aux_info->y);
     }
-
+  
   if (GTK_WIDGET_VISIBLE (widget) && widget->parent)
     gtk_widget_size_allocate (widget, &widget->allocation);
 }
@@ -1999,25 +1999,25 @@ gtk_widget_set_uposition (GtkWidget *widget,
 
 void
 gtk_widget_set_usize (GtkWidget *widget,
-		      gint       width,
-		      gint       height)
+		      gint	 width,
+		      gint	 height)
 {
   GtkWidgetAuxInfo *aux_info;
-
+  
   g_return_if_fail (widget != NULL);
-
+  
   aux_info = gtk_object_get_data (GTK_OBJECT (widget), aux_info_key);
   if (!aux_info)
     {
       aux_info = gtk_widget_aux_info_new ();
       gtk_object_set_data (GTK_OBJECT (widget), aux_info_key, aux_info);
     }
-
+  
   if (width > -1)
     aux_info->width = width;
   if (height > -1)
     aux_info->height = height;
-
+  
   if (GTK_WIDGET_VISIBLE (widget))
     gtk_widget_queue_resize (widget);
 }
@@ -2032,21 +2032,21 @@ gtk_widget_set_usize (GtkWidget *widget,
 
 void
 gtk_widget_set_events (GtkWidget *widget,
-		       gint       events)
+		       gint	  events)
 {
   gint *eventp;
-
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (!GTK_WIDGET_NO_WINDOW (widget));
   g_return_if_fail (!GTK_WIDGET_REALIZED (widget));
-
+  
   eventp = gtk_object_get_data (GTK_OBJECT (widget), event_key);
-
+  
   if (events)
     {
       if (!eventp)
 	eventp = g_new (gint, 1);
-
+      
       *eventp = events;
       gtk_object_set_data (GTK_OBJECT (widget), event_key, eventp);
     }
@@ -2054,7 +2054,7 @@ gtk_widget_set_events (GtkWidget *widget,
     {
       if (eventp)
 	g_free (eventp);
-
+      
       gtk_object_remove_data (GTK_OBJECT (widget), event_key);
     }
 }
@@ -2072,14 +2072,14 @@ gtk_widget_set_extension_events (GtkWidget *widget,
 				 GdkExtensionMode mode)
 {
   GdkExtensionMode *modep;
-
+  
   g_return_if_fail (widget != NULL);
-
+  
   modep = gtk_object_get_data (GTK_OBJECT (widget), extension_event_key);
-
+  
   if (!modep)
     modep = g_new (GdkExtensionMode, 1);
-
+  
   *modep = mode;
   gtk_object_set_data (GTK_OBJECT (widget), extension_event_key, modep);
 }
@@ -2097,10 +2097,10 @@ GtkWidget*
 gtk_widget_get_toplevel (GtkWidget *widget)
 {
   g_return_val_if_fail (widget != NULL, NULL);
-
+  
   while (widget->parent)
     widget = widget->parent;
-
+  
   return widget;
 }
 
@@ -2114,16 +2114,16 @@ gtk_widget_get_toplevel (GtkWidget *widget)
 
 GtkWidget*
 gtk_widget_get_ancestor (GtkWidget *widget,
-			 gint       type)
+			 gint	    type)
 {
   g_return_val_if_fail (widget != NULL, NULL);
-
+  
   while (widget && !gtk_type_is_a (GTK_WIDGET_TYPE (widget), type))
     widget = widget->parent;
-
+  
   if (!(widget && gtk_type_is_a (GTK_WIDGET_TYPE (widget), type)))
     return NULL;
-
+  
   return widget;
 }
 
@@ -2139,9 +2139,9 @@ GdkColormap*
 gtk_widget_get_colormap (GtkWidget *widget)
 {
   GdkColormap *colormap;
-
+  
   g_return_val_if_fail (widget != NULL, NULL);
-
+  
   if (!widget->window)
     {
       colormap = gtk_object_get_data (GTK_OBJECT (widget), colormap_key);
@@ -2149,7 +2149,7 @@ gtk_widget_get_colormap (GtkWidget *widget)
 	return colormap;
       return gtk_widget_get_default_colormap ();
     }
-
+  
   return gdk_window_get_colormap (widget->window);
 }
 
@@ -2165,9 +2165,9 @@ GdkVisual*
 gtk_widget_get_visual (GtkWidget *widget)
 {
   GdkVisual *visual;
-
+  
   g_return_val_if_fail (widget != NULL, NULL);
-
+  
   if (!widget->window)
     {
       visual = gtk_object_get_data (GTK_OBJECT (widget), visual_key);
@@ -2175,7 +2175,7 @@ gtk_widget_get_visual (GtkWidget *widget)
 	return visual;
       return gtk_widget_get_default_visual ();
     }
-
+  
   return gdk_window_get_visual (widget->window);
 }
 
@@ -2191,7 +2191,7 @@ GtkStyle*
 gtk_widget_get_style (GtkWidget *widget)
 {
   g_return_val_if_fail (widget != NULL, NULL);
-
+  
   return widget->style;
 }
 
@@ -2207,13 +2207,13 @@ gint
 gtk_widget_get_events (GtkWidget *widget)
 {
   gint *events;
-
+  
   g_return_val_if_fail (widget != NULL, 0);
-
+  
   events = gtk_object_get_data (GTK_OBJECT (widget), event_key);
   if (events)
     return *events;
-
+  
   return 0;
 }
 
@@ -2229,13 +2229,13 @@ GdkExtensionMode
 gtk_widget_get_extension_events (GtkWidget *widget)
 {
   GdkExtensionMode *mode;
-
+  
   g_return_val_if_fail (widget != NULL, 0);
-
+  
   mode = gtk_object_get_data (GTK_OBJECT (widget), extension_event_key);
   if (mode)
     return *mode;
-
+  
   return 0;
 }
 
@@ -2249,20 +2249,20 @@ gtk_widget_get_extension_events (GtkWidget *widget)
 
 void
 gtk_widget_get_pointer (GtkWidget *widget,
-			gint      *x,
-			gint      *y)
+			gint	  *x,
+			gint	  *y)
 {
   g_return_if_fail (widget != NULL);
-
+  
   if (x)
     *x = -1;
   if (y)
     *y = -1;
-
+  
   if (GTK_WIDGET_REALIZED (widget))
     {
       gdk_window_get_pointer (widget->window, x, y, NULL);
-
+      
       if (GTK_WIDGET_NO_WINDOW (widget))
 	{
 	  if (x)
@@ -2287,14 +2287,14 @@ gtk_widget_is_ancestor (GtkWidget *widget,
 {
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (ancestor != NULL, FALSE);
-
+  
   while (widget)
     {
       if (widget->parent == ancestor)
 	return TRUE;
       widget = widget->parent;
     }
-
+  
   return FALSE;
 }
 
@@ -2312,7 +2312,7 @@ gtk_widget_is_child (GtkWidget *widget,
 {
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (child != NULL, FALSE);
-
+  
   return (child->parent == widget);
 }
 
@@ -2371,7 +2371,7 @@ void
 gtk_widget_pop_colormap ()
 {
   GSList *tmp;
-
+  
   if (colormap_stack)
     {
       tmp = colormap_stack;
@@ -2392,7 +2392,7 @@ void
 gtk_widget_pop_visual ()
 {
   GSList *tmp;
-
+  
   if (visual_stack)
     {
       tmp = visual_stack;
@@ -2413,7 +2413,7 @@ void
 gtk_widget_pop_style ()
 {
   GSList *tmp;
-
+  
   if (style_stack)
     {
       tmp = style_stack;
@@ -2466,32 +2466,34 @@ gtk_widget_set_default_style (GtkStyle *style)
 {
   if (default_style)
     gtk_style_unref (default_style);
-
+  
   default_style = style;
   gtk_style_ref (default_style);
 }
 
 /* Basically, send a message to all toplevel windows telling them
-   that a new _GTK_STYLE_COLORS property is available on the root
-   window */
+ * that a new _GTK_STYLE_COLORS property is available on the root
+ * window
+ */
 void
-gtk_widget_propagate_default_style(void)
+gtk_widget_propagate_default_style (void)
 {
   GdkEventClient sev;
   int i;
-
+  
   /* Set the property on the root window */
-  gdk_property_change(GDK_ROOT_PARENT(),
-		      gdk_atom_intern("_GTK_DEFAULT_COLORS", FALSE),
-		      GDK_NONE, 8*sizeof(gushort),
-		      GDK_PROP_MODE_REPLACE,
-		      (guchar *)gtk_widget_get_default_style(),
-		      GTK_STYLE_NUM_STYLECOLORS() * sizeof(GdkColor));
-
-  for(i = 0; i < 5; i++) sev.data.l[i] = 0;
+  gdk_property_change (GDK_ROOT_PARENT(),
+		       gdk_atom_intern("_GTK_DEFAULT_COLORS", FALSE),
+		       GDK_NONE, 8*sizeof(gushort),
+		       GDK_PROP_MODE_REPLACE,
+		       (guchar *)gtk_widget_get_default_style(),
+		       GTK_STYLE_NUM_STYLECOLORS() * sizeof(GdkColor));
+  
+  for (i = 0; i < 5; i++)
+    sev.data.l[i] = 0;
   sev.data_format = 32;
-  sev.message_type = gdk_atom_intern("_GTK_STYLE_CHANGED", FALSE);
-  gdk_event_send_clientmessage_toall((GdkEvent *)&sev);
+  sev.message_type = gdk_atom_intern ("_GTK_STYLE_CHANGED", FALSE);
+  gdk_event_send_clientmessage_toall ((GdkEvent *) &sev);
 }
 
 /*****************************************
@@ -2507,7 +2509,7 @@ gtk_widget_get_default_colormap ()
 {
   if (!default_colormap)
     default_colormap = gdk_colormap_get_system ();
-
+  
   return default_colormap;
 }
 
@@ -2524,7 +2526,7 @@ gtk_widget_get_default_visual ()
 {
   if (!default_visual)
     default_visual = gdk_visual_get_system ();
-
+  
   return default_visual;
 }
 
@@ -2544,7 +2546,7 @@ gtk_widget_get_default_style ()
       default_style = gtk_style_new ();
       gtk_style_ref (default_style);
     }
-
+  
   return default_style;
 }
 
@@ -2558,15 +2560,15 @@ gtk_widget_get_default_style ()
  *****************************************/
 
 static void
-gtk_widget_marshal_signal_1 (GtkObject      *object,
+gtk_widget_marshal_signal_1 (GtkObject	    *object,
 			     GtkSignalFunc   func,
-			     gpointer        func_data,
-			     GtkArg         *args)
+			     gpointer	     func_data,
+			     GtkArg	    *args)
 {
   GtkWidgetSignal1 rfunc;
-
+  
   rfunc = (GtkWidgetSignal1) func;
-
+  
   (* rfunc) (object, GTK_VALUE_POINTER (args[0]), func_data);
 }
 
@@ -2579,17 +2581,17 @@ gtk_widget_marshal_signal_1 (GtkObject      *object,
  *****************************************/
 
 static void
-gtk_widget_marshal_signal_2 (GtkObject      *object,
+gtk_widget_marshal_signal_2 (GtkObject	    *object,
 			     GtkSignalFunc   func,
-			     gpointer        func_data,
-			     GtkArg         *args)
+			     gpointer	     func_data,
+			     GtkArg	    *args)
 {
   GtkWidgetSignal2 rfunc;
   gint *return_val;
-
+  
   rfunc = (GtkWidgetSignal2) func;
   return_val = GTK_RETLOC_BOOL (args[3]);
-
+  
   *return_val = (* rfunc) (object, GTK_VALUE_STRING (args[0]),
 			   GTK_VALUE_CHAR (args[1]), GTK_VALUE_INT (args[2]),
 			   func_data);
@@ -2604,15 +2606,15 @@ gtk_widget_marshal_signal_2 (GtkObject      *object,
  *****************************************/
 
 static void
-gtk_widget_marshal_signal_3 (GtkObject      *object,
+gtk_widget_marshal_signal_3 (GtkObject	    *object,
 			     GtkSignalFunc   func,
-			     gpointer        func_data,
-			     GtkArg         *args)
+			     gpointer	     func_data,
+			     GtkArg	    *args)
 {
   GtkWidgetSignal3 rfunc;
-
+  
   rfunc = (GtkWidgetSignal3) func;
-
+  
   (* rfunc) (object, GTK_VALUE_STRING (args[0]), func_data);
 }
 
@@ -2625,17 +2627,17 @@ gtk_widget_marshal_signal_3 (GtkObject      *object,
  *****************************************/
 
 static void
-gtk_widget_marshal_signal_4 (GtkObject      *object,
+gtk_widget_marshal_signal_4 (GtkObject	    *object,
 			     GtkSignalFunc   func,
-			     gpointer        func_data,
-			     GtkArg         *args)
+			     gpointer	     func_data,
+			     GtkArg	    *args)
 {
   GtkWidgetSignal4 rfunc;
   gint *return_val;
-
+  
   rfunc = (GtkWidgetSignal4) func;
   return_val = GTK_RETLOC_BOOL (args[1]);
-
+  
   *return_val = (* rfunc) (object, GTK_VALUE_BOXED (args[0]), func_data);
 }
 
@@ -2654,45 +2656,45 @@ gtk_real_widget_destroy (GtkObject *object)
   GtkWidgetAuxInfo *aux_info;
   gint *events;
   GdkExtensionMode *mode;
-
+  
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_WIDGET (object));
-
+  
   widget = GTK_WIDGET (object);
-
+  
   if (GTK_WIDGET_REDRAW_PENDING (widget))
     g_warning ("redraw pending\n");
   if (GTK_WIDGET_RESIZE_PENDING (widget))
     g_warning ("resize pending\n");
   if (GTK_WIDGET_RESIZE_NEEDED (widget))
     g_warning ("resize needed\n");
-
+  
   gtk_grab_remove (widget);
-
+  
   gtk_selection_remove_all (widget);
-
+  
   if (widget->name)
     g_free (widget->name);
-
+  
   aux_info = gtk_object_get_data (GTK_OBJECT (widget), aux_info_key);
   if (aux_info)
     {
       gtk_widget_aux_info_destroy (aux_info);
       gtk_object_remove_data (GTK_OBJECT (widget), aux_info_key);
     }
-
+  
   events = gtk_object_get_data (GTK_OBJECT (object), event_key);
   if (events)
     g_free (events);
-
+  
   mode = gtk_object_get_data (GTK_OBJECT (object), extension_event_key);
   if (mode)
     g_free (mode);
-
+  
   if (GTK_WIDGET_REALIZED (widget))
     gtk_widget_unrealize (widget);
   gtk_style_unref (widget->style);
-
+  
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
@@ -2710,15 +2712,15 @@ gtk_real_widget_show (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
+  
   if (!GTK_WIDGET_VISIBLE (widget))
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
-
+      
       if (widget->parent)
 	{
 	  gtk_widget_queue_resize (widget);
-
+	  
 	  if (GTK_WIDGET_MAPPED (widget->parent))
 	    gtk_widget_map (widget);
 	}
@@ -2738,14 +2740,14 @@ gtk_real_widget_hide (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
+  
   if (GTK_WIDGET_VISIBLE (widget))
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_VISIBLE);
-
+      
       if (GTK_WIDGET_MAPPED (widget))
 	gtk_widget_unmap (widget);
-
+      
       if (widget->parent)
 	gtk_widget_queue_resize (widget);
     }
@@ -2764,11 +2766,11 @@ gtk_real_widget_map (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
+  
   if (GTK_WIDGET_REALIZED (widget) && !GTK_WIDGET_MAPPED (widget))
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
-
+      
       if (!GTK_WIDGET_NO_WINDOW (widget))
 	gdk_window_show (widget->window);
       else
@@ -2789,11 +2791,11 @@ gtk_real_widget_unmap (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
+  
   if (GTK_WIDGET_MAPPED (widget))
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
-
+      
       if (GTK_WIDGET_NO_WINDOW (widget))
 	gdk_window_clear_area (widget->window,
 			       widget->allocation.x,
@@ -2818,7 +2820,7 @@ gtk_real_widget_realize (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
+  
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
   if(widget->parent)
     widget->window = widget->parent->window;
@@ -2838,9 +2840,9 @@ gtk_real_widget_unrealize (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
+  
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
-
+  
   gtk_style_detach (widget->style);
   if (!GTK_WIDGET_NO_WINDOW (widget))
     {
@@ -2859,21 +2861,21 @@ gtk_real_widget_unrealize (GtkWidget *widget)
  *****************************************/
 
 static void
-gtk_real_widget_draw (GtkWidget    *widget,
+gtk_real_widget_draw (GtkWidget	   *widget,
 		      GdkRectangle *area)
 {
   GdkEventExpose event;
-
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (area != NULL);
-
+  
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       event.type = GDK_EXPOSE;
       event.window = widget->window;
       event.area = *area;
-
+      
       gtk_widget_event (widget, (GdkEvent*) &event);
     }
 }
@@ -2891,16 +2893,16 @@ gtk_real_widget_queue_draw (GtkWidget *widget)
 {
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
+  
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_REDRAW_PENDING);
-
+  
   gtk_object_unref (GTK_OBJECT (widget));
   if (GTK_OBJECT_NEED_DESTROY (widget) &&
       (GTK_OBJECT (widget)->ref_count == 0))
     gtk_widget_destroy (widget);
   else
     gtk_widget_draw (widget, NULL);
-
+  
   return FALSE;
 }
 
@@ -2917,12 +2919,12 @@ gtk_real_widget_queue_resize (GtkWidget *widget)
 {
   GSList *resize_widgets;
   GSList *tmp_list;
-
+  
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
+  
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_RESIZE_PENDING);
-
+  
   gtk_object_unref (GTK_OBJECT (widget));
   if (GTK_OBJECT_NEED_DESTROY (widget) &&
       (GTK_OBJECT (widget)->ref_count == 0))
@@ -2932,7 +2934,7 @@ gtk_real_widget_queue_resize (GtkWidget *widget)
   else
     {
       gtk_container_need_resize (GTK_CONTAINER (widget));
-
+      
       if (!GTK_WIDGET_RESIZE_PENDING (widget))
 	{
 	  resize_widgets = gtk_object_get_data (GTK_OBJECT (widget), resize_widgets_key);
@@ -2957,7 +2959,7 @@ gtk_real_widget_queue_resize (GtkWidget *widget)
 	    }
 	}
     }
-
+  
   return FALSE;
 }
 
@@ -2975,7 +2977,7 @@ gtk_real_widget_size_allocate (GtkWidget     *widget,
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
+  
   if (GTK_WIDGET_NO_WINDOW (widget) &&
       GTK_WIDGET_MAPPED (widget) &&
       ((widget->allocation.x != allocation->x) ||
@@ -2989,9 +2991,9 @@ gtk_real_widget_size_allocate (GtkWidget     *widget,
 			   widget->allocation.y,
 			   widget->allocation.width,
 			   widget->allocation.height);
-
+  
   widget->allocation = *allocation;
-
+  
   if (GTK_WIDGET_REALIZED (widget) &&
       !GTK_WIDGET_NO_WINDOW (widget))
     gdk_window_move_resize (widget->window,
@@ -3062,12 +3064,12 @@ gtk_widget_set_parent_sensitive (GtkWidget *widget,
 {
   GtkWidget *window;
   gint *sensitive;
-
+  
   sensitive = client_data;
   if (*sensitive)
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_PARENT_SENSITIVE);
-
+      
       if (GTK_IS_CONTAINER (widget) && GTK_WIDGET_SENSITIVE (widget))
 	gtk_container_foreach (GTK_CONTAINER (widget),
 			       gtk_widget_set_parent_sensitive,
@@ -3076,14 +3078,14 @@ gtk_widget_set_parent_sensitive (GtkWidget *widget,
   else
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_PARENT_SENSITIVE);
-
+      
       if (GTK_WIDGET_HAS_FOCUS (widget))
 	{
 	  window = gtk_widget_get_ancestor (widget, gtk_window_get_type ());
 	  if (window)
 	    gtk_window_set_focus (GTK_WINDOW (window), NULL);
 	}
-
+      
       if (GTK_IS_CONTAINER (widget))
 	gtk_container_foreach (GTK_CONTAINER (widget),
 			       gtk_widget_set_parent_sensitive,
@@ -3101,7 +3103,7 @@ gtk_widget_set_parent_sensitive (GtkWidget *widget,
 
 static void
 gtk_widget_propagate_restore (GtkWidget *widget,
-			      gpointer   client_data)
+			      gpointer	 client_data)
 {
   gtk_widget_restore_state (widget);
 }
@@ -3119,7 +3121,7 @@ gtk_widget_propagate_state (GtkWidget *widget,
 			    gpointer   client_data)
 {
   GtkStateType *state;
-
+  
   state = (GtkStateType*) client_data;
   gtk_widget_set_state (widget, *state);
 }
@@ -3150,30 +3152,30 @@ gtk_widget_draw_children_recurse (GtkWidget *widget,
 
 static void
 gtk_widget_set_style_internal (GtkWidget *widget,
-			       GtkStyle  *style)
+			       GtkStyle	 *style)
 {
   GtkRequisition old_requisition;
-
+  
   g_return_if_fail (widget != NULL);
-
+  
   if (widget->style != style)
     {
       if (GTK_WIDGET_REALIZED (widget))
 	gtk_style_detach (widget->style);
-
+      
       gtk_style_unref (widget->style);
-
+      
       widget->style = style;
       gtk_style_ref (widget->style);
-
+      
       if (GTK_WIDGET_REALIZED (widget))
 	widget->style = gtk_style_attach (widget->style, widget->window);
-
+      
       if (widget->parent)
 	{
 	  old_requisition = widget->requisition;
 	  gtk_widget_size_request (widget, &widget->requisition);
-
+	  
 	  if ((old_requisition.width != widget->requisition.width) ||
 	      (old_requisition.height != widget->requisition.height))
 	    gtk_widget_queue_resize (widget);
@@ -3193,14 +3195,14 @@ gtk_widget_set_style_internal (GtkWidget *widget,
 
 static void
 gtk_widget_set_style_recurse (GtkWidget *widget,
-			      gpointer   client_data)
+			      gpointer	 client_data)
 {
   GtkStyle *style;
-
+  
   style = gtk_rc_get_style (widget);
   if (style != widget->style)
     gtk_widget_set_style_internal (widget, style);
-
+  
   if (GTK_IS_CONTAINER (widget))
     gtk_container_foreach (GTK_CONTAINER (widget),
 			   gtk_widget_set_style_recurse,
@@ -3219,19 +3221,19 @@ static GtkWidgetAuxInfo*
 gtk_widget_aux_info_new ()
 {
   GtkWidgetAuxInfo *aux_info;
-
+  
   if (!aux_info_mem_chunk)
     aux_info_mem_chunk = g_mem_chunk_new ("widget aux info mem chunk",
 					  sizeof (GtkWidgetAuxInfo),
 					  1024, G_ALLOC_AND_FREE);
-
+  
   aux_info = g_chunk_new (GtkWidgetAuxInfo, aux_info_mem_chunk);
-
+  
   aux_info->x = -1;
   aux_info->y = -1;
   aux_info->width = 0;
   aux_info->height = 0;
-
+  
   return aux_info;
 }
 
@@ -3247,7 +3249,7 @@ static void
 gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info)
 {
   g_return_if_fail (aux_info != NULL);
-
+  
   g_mem_chunk_free (aux_info_mem_chunk, aux_info);
 }
 
@@ -3264,16 +3266,16 @@ gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info)
 void
 gtk_widget_shape_combine_mask (GtkWidget *widget,
 			       GdkBitmap *shape_mask,
-			       gint       offset_x,
-			       gint       offset_y)
+			       gint	  offset_x,
+			       gint	  offset_y)
 {
   GtkWidgetShapeInfo* shape_info;
-
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (shape_mask != NULL);
   /*  set_shape doesn't work on widgets without gdk window */
   g_return_if_fail (!GTK_WIDGET_NO_WINDOW (widget));
-
+  
   /*
    * remember shape mask for later gtk_widget_realize's
    */
@@ -3287,7 +3289,7 @@ gtk_widget_shape_combine_mask (GtkWidget *widget,
   shape_info->offset_x = offset_x;
   shape_info->offset_y = offset_y;
   GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_SHAPE_MASK);
-
+  
   /* 
    * set shape if widget has a gdk window allready.
    * otherwise the shape is scheduled to be set by gtk_widget_realize.
@@ -3300,7 +3302,7 @@ gtk_widget_shape_combine_mask (GtkWidget *widget,
 
 /*****************************************
  * gtk_widget_dnd_drag_add:
- *   when you get a DRAG_ENTER event, you can use this           
+ *   when you get a DRAG_ENTER event, you can use this		 
  *   to tell Gtk ofother widgets that are to be dragged as well
  *
  *   arguments:
@@ -3318,7 +3320,7 @@ gtk_widget_dnd_drag_add (GtkWidget *widget)
  *   widget and also let Gtk know what data types will be accepted
  *   use MIME type naming,plus tacking "URL:" on the front for link 
  *   dragging
- *             
+ *	       
  *
  *   arguments:
  *
@@ -3326,15 +3328,15 @@ gtk_widget_dnd_drag_add (GtkWidget *widget)
  *****************************************/
 void
 gtk_widget_dnd_drag_set (GtkWidget   *widget,
-			 guint8       drag_enable,
-			 gchar      **type_accept_list,
-			 guint        numtypes)
+			 guint8	      drag_enable,
+			 gchar	    **type_accept_list,
+			 guint	      numtypes)
 {
   g_return_if_fail(widget != NULL);
-
+  
   if (!widget->window)
     gtk_widget_realize (widget);
-
+  
   g_return_if_fail (widget->window != NULL);
   gdk_window_dnd_drag_set (widget->window,
 			   drag_enable,
@@ -3351,16 +3353,16 @@ gtk_widget_dnd_drag_set (GtkWidget   *widget,
  *****************************************/
 void
 gtk_widget_dnd_drop_set (GtkWidget   *widget,
-			 guint8       drop_enable,
-			 gchar      **type_accept_list,
-			 guint        numtypes,
-			 guint8       is_destructive_operation)
+			 guint8	      drop_enable,
+			 gchar	    **type_accept_list,
+			 guint	      numtypes,
+			 guint8	      is_destructive_operation)
 {
   g_return_if_fail(widget != NULL);
-
+  
   if (!widget->window)
     gtk_widget_realize (widget);
-
+  
   g_return_if_fail (widget->window != NULL);
   gdk_window_dnd_drop_set (widget->window,
 			   drop_enable,
@@ -3380,11 +3382,10 @@ void
 gtk_widget_dnd_data_set (GtkWidget   *widget,
 			 GdkEvent    *event,
 			 gpointer     data,
-			 gulong       data_numbytes)
+			 gulong	      data_numbytes)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (widget->window != NULL);
-
+  
   gdk_window_dnd_data_set (widget->window, event, data, data_numbytes);
 }
-

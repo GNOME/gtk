@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -30,42 +30,43 @@ extern "C" {
 
 /* Initialization, exit, mainloop and miscellaneous routines
  */
-void       gtk_init              (int          *argc,
-				  char       ***argv);
-void       gtk_exit              (gint          error_code);
-gchar*     gtk_set_locale        (void);
-void       gtk_main              (void);
-void       gtk_main_quit         (void);
-gint       gtk_main_iteration    (void);
+void	   gtk_init		 (int	       *argc,
+				  char	     ***argv);
+void	   gtk_exit		 (gint		error_code);
+gchar*	   gtk_set_locale	 (void);
+void	   gtk_main		 (void);
+guint	   gtk_main_level	 (void);
+void	   gtk_main_quit	 (void);
+gint	   gtk_main_iteration	 (void);
 
 gint	   gtk_true		 (void);
 gint	   gtk_false		 (void);
 
-void       gtk_grab_add          (GtkWidget     *widget);
-void       gtk_grab_remove       (GtkWidget     *widget);
+void	   gtk_grab_add		 (GtkWidget	*widget);
+void	   gtk_grab_remove	 (GtkWidget	*widget);
 
-void       gtk_init_add          (GtkFunction    function,
-				  gpointer       data);
+void	   gtk_init_add		 (GtkFunction	 function,
+				  gpointer	 data);
 
-gint       gtk_timeout_add         (guint32        interval,
-                                    GtkFunction    function,
-                                    gpointer       data);
-gint       gtk_timeout_add_interp  (guint32        interval,
-                                    GtkCallbackMarshal function,
-                                    gpointer       data,
-                                    GtkDestroyNotify notify);
-void       gtk_timeout_remove      (gint           tag);
+gint	   gtk_timeout_add	   (guint32	   interval,
+				    GtkFunction	   function,
+				    gpointer	   data);
+gint	   gtk_timeout_add_interp  (guint32	   interval,
+				    GtkCallbackMarshal function,
+				    gpointer	   data,
+				    GtkDestroyNotify notify);
+void	   gtk_timeout_remove	   (gint	   tag);
 
-gint       gtk_idle_add            (GtkFunction    function,
-                                    gpointer       data);
-gint       gtk_idle_add_interp     (GtkCallbackMarshal function,
-                                    gpointer           data,
-                                    GtkDestroyNotify   destroy);
-void       gtk_idle_remove         (gint           tag);
-void       gtk_idle_remove_by_data (gpointer     data);
+gint	   gtk_idle_add		   (GtkFunction	   function,
+				    gpointer	   data);
+gint	   gtk_idle_add_interp	   (GtkCallbackMarshal function,
+				    gpointer	       data,
+				    GtkDestroyNotify   destroy);
+void	   gtk_idle_remove	   (gint	   tag);
+void	   gtk_idle_remove_by_data (gpointer	 data);
 
-void       gtk_get_current_event (GdkEvent      *event);
-GtkWidget* gtk_get_event_widget  (GdkEvent      *event);
+void	   gtk_get_current_event (GdkEvent	*event);
+GtkWidget* gtk_get_event_widget	 (GdkEvent	*event);
 
 
 #ifdef __cplusplus
