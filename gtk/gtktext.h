@@ -30,7 +30,7 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkadjustment.h>
-#include <gtk/gtkeditable.h>
+#include <gtk/gtkoldeditable.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -64,7 +64,7 @@ struct _GtkPropertyMark
 
 struct _GtkText
 {
-  GtkEditable editable;
+  GtkOldEditable old_editable;
 
   GdkWindow *text_area;
 
@@ -169,7 +169,7 @@ struct _GtkText
 
 struct _GtkTextClass
 {
-  GtkEditableClass parent_class;
+  GtkOldEditableClass parent_class;
 
   void  (*set_scroll_adjustments)   (GtkText	    *text,
 				     GtkAdjustment  *hadjustment,
