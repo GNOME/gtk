@@ -34,6 +34,7 @@ enum
 {
   PROP_0,
   PROP_VISIBLE,
+  PROP_RESIZABLE,
   PROP_WIDTH,
   PROP_SIZING,
   PROP_FIXED_WIDTH,
@@ -175,6 +176,14 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                                          G_PARAM_READABLE | G_PARAM_WRITABLE));
   
   g_object_class_install_property (object_class,
+                                   PROP_RESIZABLE,
+                                   g_param_spec_boolean ("resizable",
+							 _("Resizable"),
+							 _("Column is user-resizable"),
+                                                         FALSE,
+                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
                                    PROP_WIDTH,
                                    g_param_spec_int ("width",
 						     _("Width"),
@@ -295,6 +304,7 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
   tree_column->max_width = -1;
   tree_column->column_type = GTK_TREE_VIEW_COLUMN_GROW_ONLY;
   tree_column->visible = TRUE;
+  tree_column->resizable = FALSE;
   tree_column->clickable = FALSE;
   tree_column->dirty = TRUE;
   tree_column->sort_order = GTK_SORT_ASCENDING;
@@ -666,7 +676,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
 	  gtk_widget_show_now (tree_column->button);
 	  if (tree_column->window)
 	    {
-	      if (tree_column->column_type == GTK_TREE_VIEW_COLUMN_RESIZABLE)
+	      if (tree_column->resizable)
 		{
 		  gdk_window_show (tree_column->window);
 		  gdk_window_raise (tree_column->window);
@@ -1409,6 +1419,34 @@ gtk_tree_view_column_get_visible (GtkTreeViewColumn *tree_column)
   return tree_column->visible;
 }
 
+void
+gtk_tree_view_column_set_resizable (GtkTreeViewColumn *tree_column,
+				    gboolean           resizable)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+
+  resizable = !! resizable;
+
+  if (tree_column->resizable == resizable)
+    return;
+
+  if (resizable && tree_column->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE)
+    gtk_tree_view_column_set_sizing (tree_column, GTK_TREE_VIEW_COLUMN_GROW_ONLY);
+
+  gtk_tree_view_column_update_button (tree_column);
+
+  g_object_notify (G_OBJECT (tree_column), "resizable");
+}
+
+gboolean
+gtk_tree_view_column_get_resizable (GtkTreeViewColumn *tree_column)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), FALSE);
+
+  return tree_column->resizable;
+}
+
+
 /**
  * gtk_tree_view_column_set_sizing:
  * @tree_column: A #GtkTreeViewColumn.
@@ -1425,16 +1463,23 @@ gtk_tree_view_column_set_sizing (GtkTreeViewColumn       *tree_column,
   if (type == tree_column->column_type)
     return;
 
+  if (type == GTK_TREE_VIEW_COLUMN_AUTOSIZE)
+    gtk_tree_view_column_set_resizable (tree_column, FALSE);
+
+#if 0
+  /* I was clearly on crack when I wrote this.  I'm not sure what's supposed to
+   * be below so I'll leave it until I figure it out.
+   */
   if (tree_column->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE &&
       tree_column->requested_width != -1)
     {
       gtk_tree_view_column_set_sizing (tree_column, tree_column->requested_width);
     }
+#endif
   tree_column->column_type = type;
 
   gtk_tree_view_column_update_button (tree_column);
 
-  if (type != GTK_TREE_VIEW_COLUMN_AUTOSIZE)
   g_object_notify (G_OBJECT (tree_column), "sizing");
 }
 

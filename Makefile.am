@@ -143,17 +143,17 @@ DISTCLEANFILES =				\
 	gtk+-$(GDKTARGET)-2.0-uninstalled.pc	\
 	gdk-$(GDKTARGET)-2.0-uninstalled.pc
 
-## symlink gdk-2.0.pc and gtk+-2.0.pc to default target for the platform 
+## copy the default target for this platform to gdk-2.0.pc and gtk+-2.0.pc
 DEFAULT_GDKTARGET=x11
 install-data-hook:
 	(cd $(DESTDIR)$(pkgconfigdir) && \
 	 test -e gdk-$(DEFAULT_GDKTARGET)-2.0.pc && \
 	 test -e gtk+-$(DEFAULT_GDKTARGET)-2.0.pc && \
-	 cp -f gdk-$(DEFAULT_GDKTARGET)-2.0.pc gdk-2.0.pc && \
-	 cp -f gtk+-$(DEFAULT_GDKTARGET)-2.0.pc gtk+-2.0.pc) || \
+	 rm -f gdk-2.0.pc && cp -f gdk-$(DEFAULT_GDKTARGET)-2.0.pc gdk-2.0.pc && \
+	 rm -f gtk+-2.0.pc && cp -f gtk+-$(DEFAULT_GDKTARGET)-2.0.pc gtk+-2.0.pc) || \
 	(cd $(DESTDIR)$(pkgconfigdir) && \
-	 cp -f gdk-$(GDKTARGET)-2.0.pc gdk-2.0.pc && \
-	 cp -f gtk+-$(GDKTARGET)-2.0.pc gtk+-2.0.pc)
+	 rm -f gdk-2.0.pc && cp -f gdk-$(GDKTARGET)-2.0.pc gdk-2.0.pc && \
+	 rm -f gtk+-2.0.pc && cp -f gtk+-$(GDKTARGET)-2.0.pc gtk+-2.0.pc)
 
 dist-hook: gtk+.spec
 	if test -e $(srcdir)/INSTALL.in && test -e $(srcdir)/README.in ; then \

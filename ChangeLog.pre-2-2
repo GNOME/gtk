@@ -1,3 +1,17 @@
+Mon Nov 19 15:30:51 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_class_init): Add a
+	"resizable" property, to get rid of the
+	GTK_TREE_VIEW_COLUMN_RESIZABLE sizing flag.
+	(gtk_tree_view_column_set_resizable): New function to set resizable.
+	(gtk_tree_view_column_set_resizable): getter.
+
+	* tests/testtreecolumns.c (add_clicked): modify for above change.
+
+	* Makefile.am (install-data-hook): remove old .pc files before
+	installing the new one.  We used to symlink this, and it will
+	break old installs.
+
 2001-11-19  Havoc Pennington  <hp@pobox.com>
 
 	* tests/testtext.c (fill_example_buffer): put in a test for

@@ -1151,7 +1151,7 @@ gtk_tree_view_map_buttons (GtkTreeView *tree_view)
 	  column = list->data;
 	  if (column->visible == FALSE)
 	    continue;
-	  if (column->column_type == GTK_TREE_VIEW_COLUMN_RESIZABLE)
+	  if (column->resizable)
 	    {
 	      gdk_window_raise (column->window);
 	      gdk_window_show (column->window);
@@ -1746,7 +1746,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
     {
       column = list->data;
       if (event->window == column->window &&
-	  column->column_type == GTK_TREE_VIEW_COLUMN_RESIZABLE &&
+	  column->resizable &&
 	  column->window)
 	{
 	  gpointer drag_data;
