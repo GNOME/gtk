@@ -1,3 +1,8 @@
+Wed Jan  7 21:42:49 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkaccelmap.c (gtk_accel_map_lock_path): Fix grammar of 
+	docs.
+
 2004-01-07  Jan Arne Petersen  <jpetersen@uni-bonn.de>
 
 	* gtk/gtkfilechooserdefault.c: (shortcuts_insert_path),
