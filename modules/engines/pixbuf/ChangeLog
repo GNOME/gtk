@@ -1,3 +1,9 @@
+Thu Feb  7 00:21:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* pixbuf-render.c (pixbuf_render): Add gradient
+	rendering -- if the source width/height is zero,
+	render a gradient from the surrounding values.
+
 Mon Jan 28 15:34:43 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* pixbuf-render.c (compute_hint): Fix hint computation

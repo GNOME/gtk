@@ -28,6 +28,145 @@
 GCache *pixbuf_cache = NULL;
 
 static GdkPixbuf *
+bilinear_gradient (GdkPixbuf    *src,
+		   gint          src_x,
+		   gint          src_y,
+		   gint          width,
+		   gint          height)
+{
+  guint n_channels = gdk_pixbuf_get_n_channels (src);
+  guint src_rowstride = gdk_pixbuf_get_rowstride (src);
+  guchar *src_pixels = gdk_pixbuf_get_pixels (src);
+  guchar *p1, *p2, *p3, *p4;
+  guint dest_rowstride;
+  guchar *dest_pixels;
+  GdkPixbuf *result;
+  int i, j, k;
+
+  p1 = src_pixels + (src_y - 1) * src_rowstride + (src_x - 1) * n_channels;
+  p2 = p1 + n_channels;
+  p3 = src_pixels + src_y * src_rowstride + (src_x - 1) * n_channels;
+  p4 = p3 + n_channels;
+
+  result = gdk_pixbuf_new (GDK_COLORSPACE_RGB, n_channels == 4, 8,
+			   width, height);
+  dest_rowstride = gdk_pixbuf_get_rowstride (result);
+  dest_pixels = gdk_pixbuf_get_pixels (result);
+
+  for (i = 0; i < height; i++)
+    {
+      guchar *p = dest_pixels + dest_rowstride *i;
+      guint v[4];
+      gint dv[4];
+
+      for (k = 0; k < n_channels; k++)
+	{
+	  guint start = ((height - i) * p1[k] + (1 + i) * p3[k]) / (height + 1);
+	  guint end = ((height -  i) * p2[k] + (1 + i) * p4[k]) / (height + 1);
+
+	  dv[k] = (((gint)end - (gint)start) << 16) / (width + 1);
+	  v[k] = (start << 16) + dv[k] + 0x8000;
+	}
+
+      for (j = width; j; j--)
+	{
+	  for (k = 0; k < n_channels; k++)
+	    {
+	      *(p++) = v[k] >> 16;
+	      v[k] += dv[k];
+	    }
+	}
+    }
+
+  return result;
+}
+
+static GdkPixbuf *
+horizontal_gradient (GdkPixbuf    *src,
+		     gint          src_x,
+		     gint          src_y,
+		     gint          width,
+		     gint          height)
+{
+  guint n_channels = gdk_pixbuf_get_n_channels (src);
+  guint src_rowstride = gdk_pixbuf_get_rowstride (src);
+  guchar *src_pixels = gdk_pixbuf_get_pixels (src);
+  guint dest_rowstride;
+  guchar *dest_pixels;
+  GdkPixbuf *result;
+  int i, j, k;
+
+  result = gdk_pixbuf_new (GDK_COLORSPACE_RGB, n_channels == 4, 8,
+			   width, height);
+  dest_rowstride = gdk_pixbuf_get_rowstride (result);
+  dest_pixels = gdk_pixbuf_get_pixels (result);
+
+  for (i = 0; i < height; i++)
+    {
+      guchar *p = dest_pixels + dest_rowstride *i;
+      guchar *p1 = src_pixels + (src_y + i) * src_rowstride + (src_x - 1) * n_channels;
+      guchar *p2 = p1 + n_channels;
+
+      guint v[4];
+      gint dv[4];
+
+      for (k = 0; k < n_channels; k++)
+	{
+	  dv[k] = (((gint)p2[k] - (gint)p1[k]) << 16) / (width + 1);
+	  v[k] = (p1[k] << 16) + dv[k] + 0x8000;
+	}
+      
+      for (j = width; j; j--)
+	{
+	  for (k = 0; k < n_channels; k++)
+	    {
+	      *(p++) = v[k] >> 16;
+	      v[k] += dv[k];
+	    }
+	}
+    }
+
+  return result;
+}
+
+static GdkPixbuf *
+vertical_gradient (GdkPixbuf    *src,
+		   gint          src_x,
+		   gint          src_y,
+		   gint          width,
+		   gint          height)
+{
+  guint n_channels = gdk_pixbuf_get_n_channels (src);
+  guint src_rowstride = gdk_pixbuf_get_rowstride (src);
+  guchar *src_pixels = gdk_pixbuf_get_pixels (src);
+  guchar *top_pixels, *bottom_pixels;
+  guint dest_rowstride;
+  guchar *dest_pixels;
+  GdkPixbuf *result;
+  int i, j;
+
+  top_pixels = src_pixels + (src_y - 1) * src_rowstride + (src_x) * n_channels;
+  bottom_pixels = top_pixels + src_rowstride;
+
+  result = gdk_pixbuf_new (GDK_COLORSPACE_RGB, n_channels == 4, 8,
+			   width, height);
+  dest_rowstride = gdk_pixbuf_get_rowstride (result);
+  dest_pixels = gdk_pixbuf_get_pixels (result);
+
+  for (i = 0; i < height; i++)
+    {
+      guchar *p = dest_pixels + dest_rowstride *i;
+      guchar *p1 = top_pixels;
+      guchar *p2 = bottom_pixels;
+
+      for (j = width * n_channels; j; j--)
+	*(p++) = ((height - i) * *(p1++) + (1 + i) * *(p2++)) / (height + 1);
+    }
+
+  return result;
+}
+
+static GdkPixbuf *
 replicate_single (GdkPixbuf    *src,
 		  gint          src_x,
 		  gint          src_y,
@@ -200,6 +339,27 @@ pixbuf_render (GdkPixbuf    *src,
 
       x_offset = src_x + rect.x - dest_x;
       y_offset = src_y + rect.y - dest_y;
+    }
+  else if (src_width == 0 && src_height == 0)
+    {
+      tmp_pixbuf = bilinear_gradient (src, src_x, src_y, dest_width, dest_height);      
+      
+      x_offset = rect.x - dest_x;
+      y_offset = rect.y - dest_y;
+    }
+  else if (src_width == 0 && dest_height == src_height)
+    {
+      tmp_pixbuf = horizontal_gradient (src, src_x, src_y, dest_width, dest_height);      
+      
+      x_offset = rect.x - dest_x;
+      y_offset = rect.y - dest_y;
+    }
+  else if (src_height == 0 && dest_width == src_width)
+    {
+      tmp_pixbuf = vertical_gradient (src, src_x, src_y, dest_width, dest_height);
+      
+      x_offset = rect.x - dest_x;
+      y_offset = rect.y - dest_y;
     }
   else if ((hints & THEME_CONSTANT_COLS) && (hints & THEME_CONSTANT_ROWS))
     {
@@ -388,17 +548,22 @@ theme_pixbuf_compute_hints (ThemePixbuf *theme_pb)
   gint width = gdk_pixbuf_get_width (theme_pb->pixbuf);
   gint height = gdk_pixbuf_get_height (theme_pb->pixbuf);
 
-  if (theme_pb->border_left + theme_pb->border_right >= width ||
-      theme_pb->border_top + theme_pb->border_bottom >= height)
+  if (theme_pb->border_left + theme_pb->border_right > width ||
+      theme_pb->border_top + theme_pb->border_bottom > height)
     {
       g_warning ("Invalid borders specified for theme pixmap:\n"
 		 "        %s,\n"
-		 "there must be at least one pixel not in the border both horizontally\n"
-		 "and vertically", theme_pb->filename);
-      if (theme_pb->border_left + theme_pb->border_right >= width)
-	theme_pb->border_left = theme_pb->border_right = width / 2 + 1 - (width % 2);
-      if (theme_pb->border_bottom + theme_pb->border_top >= height)
-	theme_pb->border_bottom = theme_pb->border_top = height / 2 + 1 - (height % 2);
+		 "borders don't fit within the image", theme_pb->filename);
+      if (theme_pb->border_left + theme_pb->border_right > width)
+	{
+	  theme_pb->border_left = width / 2;
+	  theme_pb->border_right = (width + 1) / 2;
+	}
+      if (theme_pb->border_bottom + theme_pb->border_top > height)
+	{
+	  theme_pb->border_top = height / 2;
+	  theme_pb->border_bottom = (height + 1) / 2;
+	}
     }
   
   for (i = 0; i < 3; i++)
