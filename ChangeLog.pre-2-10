@@ -1,3 +1,8 @@
+Fri Dec 12 00:12:01 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkrange.c (gtk_range_scroll): Fix direction of 
+	steppers in inverted scrollbars.  (#129084, Olexiy Avramchenko)
+
 2003-12-09  Noah Levitt  <nlevitt@columbia.edu>
 
 	* gdk/gdkkeysyms.h:
