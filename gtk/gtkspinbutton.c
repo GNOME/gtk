@@ -560,21 +560,34 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
 
   if (GTK_WIDGET_DRAWABLE (spin_button))
     {
-      if (spin_button->in_child == arrow)
-        {
-          if (spin_button->click_child == arrow)
-            state_type = GTK_STATE_ACTIVE;
-          else
-            state_type = GTK_STATE_PRELIGHT;
-        }
+      if (!spin_button->wrap &&
+	  (((arrow == GTK_ARROW_UP &&
+	  (spin_button->adjustment->upper - spin_button->adjustment->value
+	   <= EPSILON))) ||
+	  ((arrow == GTK_ARROW_DOWN &&
+	  (spin_button->adjustment->value - spin_button->adjustment->lower
+	   <= EPSILON)))))
+	{
+	  shadow_type = GTK_SHADOW_ETCHED_IN;
+	  state_type = GTK_STATE_NORMAL;
+	}
       else
-        state_type = GTK_STATE_NORMAL;
-
-      if (spin_button->click_child == arrow)
-        shadow_type = GTK_SHADOW_IN;
-      else
-        shadow_type = GTK_SHADOW_OUT;
-
+	{
+	  if (spin_button->in_child == arrow)
+	    {
+	      if (spin_button->click_child == arrow)
+		state_type = GTK_STATE_ACTIVE;
+	      else
+		state_type = GTK_STATE_PRELIGHT;
+	    }
+	  else
+	    state_type = GTK_STATE_NORMAL;
+	  
+	  if (spin_button->click_child == arrow)
+	    shadow_type = GTK_SHADOW_IN;
+	  else
+	    shadow_type = GTK_SHADOW_OUT;
+	}
       if (arrow == GTK_ARROW_UP)
 	{
 	  if (spin_button->shadow_type != GTK_SHADOW_NONE)

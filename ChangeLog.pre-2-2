@@ -1,3 +1,8 @@
+Sun Dec  6 14:27:35 1998  Stefan Jeske  <stefan@gtk.org>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_draw_arrow): Grey out
+	arrows if wrap == FALSE and interval borders are reached.
+
 Sat Dec  5 21:07:09 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkaspectframe.c (gtk_aspect_frame_size_allocate): Fixed
