@@ -33,16 +33,11 @@ Alternative 1 also generates Microsoft import libraries (.lib), if you
 have lib.exe available. It might also work for cross-compilation from
 Unix.
 
-There are hand-written makefiles for mingw (look for makefile.mingw in
-various directories), but those haven't been kept up-to-date, and
-probably won't work without editing. Sorry. If you make them work
-again, by all means do submit patches.
-
 Note that I use method 1 myself. Hans Breuer has been taking care of
 the MSVC makefiles. At times, we disagree a bit about various issues,
-and the makefile.msc files might not produce identically named DLLs
-and import libraries as the "autoconfiscated" makefiles and libtool
-do.
+and for instance the makefile.msc files will not produce identically
+named DLLs and import libraries as the "autoconfiscated" makefiles and
+libtool do. If this bothers you, you will have to fix the makefiles.
 
 Using GTK+ on Win32
 ===================
