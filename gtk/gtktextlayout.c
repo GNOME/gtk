@@ -1415,9 +1415,9 @@ add_cursor (GtkTextLayout      *layout,
 
   cursor = g_new (GtkTextCursorDisplay, 1);
 
-  cursor->x = strong_pos.x / PANGO_SCALE;
-  cursor->y = strong_pos.y / PANGO_SCALE;
-  cursor->height = strong_pos.height / PANGO_SCALE;
+  cursor->x = PANGO_PIXELS (strong_pos.x);
+  cursor->y = PANGO_PIXELS (strong_pos.y);
+  cursor->height = PANGO_PIXELS (strong_pos.height);
   cursor->is_strong = TRUE;
   display->cursors = g_slist_prepend (display->cursors, cursor);
 
@@ -1429,9 +1429,9 @@ add_cursor (GtkTextLayout      *layout,
 
       cursor = g_new (GtkTextCursorDisplay, 1);
 
-      cursor->x = weak_pos.x / PANGO_SCALE;
-      cursor->y = weak_pos.y / PANGO_SCALE;
-      cursor->height = weak_pos.height / PANGO_SCALE;
+      cursor->x = PANGO_PIXELS (weak_pos.x);
+      cursor->y = PANGO_PIXELS (weak_pos.y);
+      cursor->height = PANGO_PIXELS (weak_pos.height);
       cursor->is_strong = FALSE;
       cursor->is_weak = TRUE;
       display->cursors = g_slist_prepend (display->cursors, cursor);
@@ -1510,6 +1510,9 @@ add_preedit_attrs (GtkTextLayout     *layout,
 	    case PANGO_ATTR_STRIKETHROUGH:
 	      appearance.strikethrough = ((PangoAttrInt *)attr)->value;
 	      break;
+            case PANGO_ATTR_RISE:
+              appearance.rise = ((PangoAttrInt *)attr)->value;
+              break;
 	    default:
 	      break;
 	    }

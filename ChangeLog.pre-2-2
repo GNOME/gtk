@@ -1,5 +1,10 @@
 2000-11-14  Havoc Pennington  <hp@pobox.com>
 
+	* gtk/gtktextlayout.c (add_cursor): use PANGO_PIXELS() to convert
+	to pixels
+
+2000-11-14  Havoc Pennington  <hp@pobox.com>
+
 	* gtk/testtextbuffer.c (fill_buffer): change "offset" to "rise"
 
 	* gtk/gtktexttypes.h (GTK_TEXT_UNKNOWN_CHAR): Add macro for
