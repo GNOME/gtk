@@ -2986,8 +2986,9 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   text_view->hadjustment->upper = MAX (SCREEN_WIDTH (text_view),
                                        text_view->width);
   gtk_adjustment_changed (text_view->hadjustment);
-  set_adjustment_clamped (text_view->hadjustment, 
-			  text_view->hadjustment->upper - text_view->hadjustment->page_size);
+
+  if (text_view->hadjustment->value > text_view->hadjustment->upper - text_view->hadjustment->page_size)
+    gtk_adjustment_set_value (text_view->hadjustment, MAX (0, text_view->hadjustment->upper - text_view->hadjustment->page_size));
 
   text_view->vadjustment->page_size = SCREEN_HEIGHT (text_view);
   text_view->vadjustment->page_increment = SCREEN_HEIGHT (text_view) * 0.9;
