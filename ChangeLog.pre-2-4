@@ -1,3 +1,21 @@
+Wed Jul  8 15:31:28 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkbutton.c: handle GTK_RELIEF_HALF, which was introduced to
+	keep either GTK_STATE_NORMAL for relief buttons (GTK_RELIEF_NONE) or
+	to still honour GTK_WIDGET_STATE(), e.g. for coloured buttons
+	(GTK_RELIEF_HALF).
+	(gtk_button_paint): set the background for prelighted buttons with
+	GTK_STATE_NORMAL only if GTK_RELIEF_NONE.
+ 	(gtk_button_draw_focus): if GTK_RELIEF_NONE, use GTK_STATE_NORMAL for
+	the shadow type (otherwise we get strange shadows for coloured buttons).
+	(gtk_button_set_relief): queue a redraw after changing
+	the relief.
+	(gtk_button_class_init): 
+	(gtk_button_set_arg): 
+	(gtk_button_get_arg): added object argument "GtkButton::relief".
+
+	* gtk/gtkenums.h (enum): added GTK_RELIEF_HALF.
+
 Mon Jul  6 18:30:48 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkbutton.h:

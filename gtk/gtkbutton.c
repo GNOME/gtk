@@ -39,7 +39,8 @@ enum {
 };
 enum {
   ARG_0,
-  ARG_LABEL
+  ARG_LABEL,
+  ARG_RELIEF
 };
 
 
@@ -132,6 +133,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   parent_class = gtk_type_class (GTK_TYPE_BIN);
 
   gtk_object_add_arg_type ("GtkButton::label", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL);
+  gtk_object_add_arg_type ("GtkButton::relief", GTK_TYPE_RELIEF_STYLE, GTK_ARG_READWRITE, ARG_RELIEF);
 
   button_signals[PRESSED] =
     gtk_signal_new ("pressed",
@@ -243,6 +245,9 @@ gtk_button_set_arg (GtkObject *object,
 
       gtk_container_add (GTK_CONTAINER (button), label);
       break;
+    case ARG_RELIEF:
+      gtk_button_set_relief (button, GTK_VALUE_ENUM (*arg));
+      break;
     default:
       break;
     }
@@ -264,6 +269,9 @@ gtk_button_get_arg (GtkObject *object,
 	GTK_VALUE_STRING (*arg) = g_strdup (GTK_LABEL (GTK_BIN (button)->child)->label);
       else
 	GTK_VALUE_STRING (*arg) = NULL;
+      break;
+    case ARG_RELIEF:
+      GTK_VALUE_ENUM (*arg) = gtk_button_get_relief (button);
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
@@ -331,10 +339,11 @@ gtk_button_set_relief (GtkButton *button,
   g_return_if_fail (GTK_IS_BUTTON (button));
 
   button->relief = newrelief;
+  gtk_widget_queue_draw (GTK_WIDGET (button));
 }
 
 GtkReliefStyle
-gtk_button_get_relief(GtkButton *button)
+gtk_button_get_relief (GtkButton *button)
 {
   g_return_val_if_fail (button != NULL, GTK_RELIEF_NORMAL);
   g_return_val_if_fail (GTK_IS_BUTTON (button), GTK_RELIEF_NORMAL);
@@ -531,8 +540,9 @@ gtk_button_paint (GtkWidget    *widget,
       if (gdk_rectangle_intersect (area, &restrict_area, &new_area))
 	{
 	  if ((GTK_WIDGET_STATE (widget) == GTK_STATE_PRELIGHT) &&
-	      (GTK_BUTTON (widget)->relief == GTK_RELIEF_NONE))
-	    gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+	      (GTK_BUTTON (widget)->relief != GTK_RELIEF_NORMAL))
+	    gtk_style_set_background (widget->style, widget->window,
+				      GTK_BUTTON (widget)->relief == GTK_RELIEF_NONE ? GTK_STATE_NORMAL : GTK_WIDGET_STATE (widget));
 	  else
 	    gtk_style_set_background (widget->style, widget->window, GTK_WIDGET_STATE (widget));
 	  gdk_window_clear_area (widget->window,
@@ -678,7 +688,8 @@ gtk_button_draw_focus (GtkWidget *widget)
 	   (GTK_WIDGET_STATE (widget) != GTK_STATE_INSENSITIVE)))
 	{
 	  gtk_draw_shadow (widget->style, widget->window,
-			   GTK_WIDGET_STATE (widget), shadow_type,
+			   button->relief == GTK_RELIEF_NONE ? GTK_STATE_NORMAL : GTK_WIDGET_STATE (widget),
+			   shadow_type,
 			   x, y, width, height);
 	}
 
@@ -712,7 +723,8 @@ gtk_button_draw_default (GtkWidget *widget)
       width = widget->allocation.width - GTK_CONTAINER (widget)->border_width * 2;
       height = widget->allocation.height - GTK_CONTAINER (widget)->border_width * 2;
 
-      if (GTK_WIDGET_HAS_DEFAULT (widget) && gtk_button_get_relief (GTK_BUTTON (widget)) == GTK_RELIEF_NORMAL)
+      if (GTK_WIDGET_HAS_DEFAULT (widget) &&
+	  GTK_BUTTON (widget)->relief == GTK_RELIEF_NORMAL)
 	{
 	  gtk_draw_shadow (widget->style, widget->window,
 			   GTK_STATE_NORMAL, GTK_SHADOW_IN,

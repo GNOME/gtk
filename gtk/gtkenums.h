@@ -179,6 +179,7 @@ typedef enum
 typedef enum
 {
   GTK_RELIEF_NORMAL,
+  GTK_RELIEF_HALF,
   GTK_RELIEF_NONE
 } GtkReliefStyle;
 

@@ -142,6 +142,7 @@ static GtkEnumValue _gtk_preview_type_values[] = {
 };
 static GtkEnumValue _gtk_relief_style_values[] = {
   { GTK_RELIEF_NORMAL, "GTK_RELIEF_NORMAL", "normal" },
+  { GTK_RELIEF_HALF, "GTK_RELIEF_HALF", "half" },
   { GTK_RELIEF_NONE, "GTK_RELIEF_NONE", "none" },
   { 0, NULL, NULL }
 };
