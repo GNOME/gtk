@@ -1,3 +1,14 @@
+Tue Sep 10 09:47:52 2002  HideToshi Tajima  <hidetoshi.tajima@sun.com>
+
+	* modules/input/gtkimcontextxim.c
+	(get_im): modify a warning when XSetLocaleModifiers() fails, and
+	add a warning when XOpenIM() fails
+	(gtk_im_context_xim_filter_keypress): use XLookupString when xic
+	is not available. (#90661)
+	(gtk_im_context_xim_get_ic, gtk_im_with_preedit,
+	gtk_im_without_preeedit): filter key release events only when
+	input methods ask for (#81759)
+
 Tue Sep 10 11:11:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/linux-fb/*: Patch from Eric Warmonhoven to

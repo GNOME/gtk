@@ -71,6 +71,7 @@ struct _GtkIMContextXIM
   XIMCallback status_draw_callback;
 
   XIC ic;
+  gboolean filter_key_release;
 
   guint use_preedit : 1;
   guint status_visible : 1;

@@ -213,10 +213,13 @@ get_im (GdkDisplay *display,
   if (XSupportsLocale ())
     {
       if (!XSetLocaleModifiers (""))
-	g_warning ("can not set locale modifiers");
+	g_warning ("Unable to set locale modifiers with XSetLocaleModifiers()");
       
       im = XOpenIM (GDK_DISPLAY_XDISPLAY (display), NULL, NULL, NULL);
       
+      if (!im)
+	g_warning ("Unable to open XIM input method, falling back to XLookupString()");
+
       if (im)
 	{
 	  info = g_new (GtkXIMInfo, 1);
@@ -256,6 +259,7 @@ static void
 gtk_im_context_xim_init (GtkIMContextXIM *im_context_xim)
 {
   im_context_xim->use_preedit = TRUE;
+  im_context_xim->filter_key_release = FALSE;
 }
 
 static void
@@ -361,7 +365,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
 
   XKeyPressedEvent xevent;
 
-  if (!ic)
+  if (event->type == GDK_KEY_RELEASE && !context_xim->filter_key_release)
     return FALSE;
 
   xevent.type = (event->type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
@@ -382,7 +386,13 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
     return TRUE;
   
  again:
-  num_bytes = XmbLookupString (ic, &xevent, buffer, buffer_size, &keysym, &status);
+  if (ic)
+    num_bytes = XmbLookupString (ic, &xevent, buffer, buffer_size, &keysym, &status);
+  else
+    {
+      num_bytes = XLookupString (&xevent, buffer, buffer_size, &keysym, NULL);
+      status = XLookupBoth;
+    }
 
   if (status == XBufferOverflow)
     {
@@ -848,86 +858,109 @@ status_draw_callback (XIC      xic,
 }
 
 static XIC
-gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
+get_ic_with_preedit (GtkIMContextXIM *context_xim)
 {
+  XIC xic = 0;
   const char *name1 = NULL;
   XVaNestedList list1 = NULL;
   const char *name2 = NULL;
   XVaNestedList list2 = NULL;
 
-  if (!context_xim->ic && context_xim->client_window)
+  if ((context_xim->im_info->style & PREEDIT_MASK) == XIMPreeditCallbacks)
     {
-      if (!context_xim->use_preedit)
-	{
-	  context_xim->ic = XCreateIC (context_xim->im_info->im,
-				       XNInputStyle, XIMPreeditNothing | XIMStatusNothing,
-				       XNClientWindow, GDK_DRAWABLE_XID (context_xim->client_window),
-				       NULL);
-	  return context_xim->ic;
-	}
-
-      if ((context_xim->im_info->style & PREEDIT_MASK) == XIMPreeditCallbacks)
-	{
-	  context_xim->preedit_start_callback.client_data = (XPointer)context_xim;
-	  context_xim->preedit_start_callback.callback = (XIMProc)preedit_start_callback;
-	  context_xim->preedit_done_callback.client_data = (XPointer)context_xim;
-	  context_xim->preedit_done_callback.callback = (XIMProc)preedit_done_callback;
-	  context_xim->preedit_draw_callback.client_data = (XPointer)context_xim;
-	  context_xim->preedit_draw_callback.callback = (XIMProc)preedit_draw_callback;
-	  context_xim->preedit_caret_callback.client_data = (XPointer)context_xim;
-	  context_xim->preedit_caret_callback.callback = (XIMProc)preedit_caret_callback;
-	  
-	  name1 = XNPreeditAttributes;
-	  list1 = XVaCreateNestedList (0,
-				       XNPreeditStartCallback, &context_xim->preedit_start_callback,
-				       XNPreeditDoneCallback, &context_xim->preedit_done_callback,
-				       XNPreeditDrawCallback, &context_xim->preedit_draw_callback,
-				       XNPreeditCaretCallback, &context_xim->preedit_caret_callback,
-				       NULL);
-	}
-
-      if ((context_xim->im_info->style & STATUS_MASK) == XIMStatusCallbacks)
-	{
-	  XVaNestedList status_attrs;
-	  
-	  context_xim->status_start_callback.client_data = (XPointer)context_xim;
-	  context_xim->status_start_callback.callback = (XIMProc)status_start_callback;
-	  context_xim->status_done_callback.client_data = (XPointer)context_xim;
-	  context_xim->status_done_callback.callback = (XIMProc)status_done_callback;
-	  context_xim->status_draw_callback.client_data = (XPointer)context_xim;
-	  context_xim->status_draw_callback.callback = (XIMProc)status_draw_callback;
-	  
-	  status_attrs = XVaCreateNestedList (0,
-					      XNStatusStartCallback, &context_xim->status_start_callback,
-					      XNStatusDoneCallback, &context_xim->status_done_callback,
-					      XNStatusDrawCallback, &context_xim->status_draw_callback,
-					      NULL);
-	  
-	  if (name1 == NULL)
-	    {
-	      name1 = XNStatusAttributes;
-	      list1 = status_attrs;
-	    }
-	  else
-	    {
-	      name2 = XNStatusAttributes;
-	      list2 = status_attrs;
-	    }
-	}
-
-      context_xim->ic = XCreateIC (context_xim->im_info->im,
-				   XNInputStyle, context_xim->im_info->style,
-				   XNClientWindow, GDK_DRAWABLE_XID (context_xim->client_window),
-				   name1, list1,
-				   name2, list2,
+      context_xim->preedit_start_callback.client_data = (XPointer)context_xim;
+      context_xim->preedit_start_callback.callback = (XIMProc)preedit_start_callback;
+      context_xim->preedit_done_callback.client_data = (XPointer)context_xim;
+      context_xim->preedit_done_callback.callback = (XIMProc)preedit_done_callback;
+      context_xim->preedit_draw_callback.client_data = (XPointer)context_xim;
+      context_xim->preedit_draw_callback.callback = (XIMProc)preedit_draw_callback;
+      context_xim->preedit_caret_callback.client_data = (XPointer)context_xim;
+      context_xim->preedit_caret_callback.callback = (XIMProc)preedit_caret_callback;
+      name1 = XNPreeditAttributes;
+      list1 = XVaCreateNestedList (0,
+				   XNPreeditStartCallback, &context_xim->preedit_start_callback,
+				   XNPreeditDoneCallback, &context_xim->preedit_done_callback,
+				   XNPreeditDrawCallback, &context_xim->preedit_draw_callback,
+				   XNPreeditCaretCallback, &context_xim->preedit_caret_callback,
 				   NULL);
-      
-      if (list1)
-	XFree (list1);
-      if (list2)
-	XFree (list2);
     }
 
+  if ((context_xim->im_info->style & STATUS_MASK) == XIMStatusCallbacks)
+    {
+      XVaNestedList status_attrs;
+
+      context_xim->status_start_callback.client_data = (XPointer)context_xim;
+      context_xim->status_start_callback.callback = (XIMProc)status_start_callback;
+      context_xim->status_done_callback.client_data = (XPointer)context_xim;
+      context_xim->status_done_callback.callback = (XIMProc)status_done_callback;
+      context_xim->status_draw_callback.client_data = (XPointer)context_xim;
+      context_xim->status_draw_callback.callback = (XIMProc)status_draw_callback;
+	  
+      status_attrs = XVaCreateNestedList (0,
+					  XNStatusStartCallback, &context_xim->status_start_callback,
+					  XNStatusDoneCallback, &context_xim->status_done_callback,
+					  XNStatusDrawCallback, &context_xim->status_draw_callback,
+					  NULL);
+      if (name1 == NULL)
+	{
+	  name1 = XNStatusAttributes;
+	  list1 = status_attrs;
+	}
+      else
+	{
+	  name2 = XNStatusAttributes;
+	  list2 = status_attrs;
+	}
+    }
+
+  xic = XCreateIC (context_xim->im_info->im,
+		   XNInputStyle, context_xim->im_info->style,
+		   XNClientWindow, GDK_DRAWABLE_XID (context_xim->client_window),
+		   name1, list1,
+		   name2, list2,
+		   NULL);
+  if (list1)
+    XFree (list1);
+  if (list2)
+    XFree (list2);
+  
+  return xic;
+}
+
+static XIC
+get_ic_without_preedit (GtkIMContextXIM *context_xim)
+{
+  return XCreateIC (context_xim->im_info->im,
+		    XNInputStyle, XIMPreeditNothing | XIMStatusNothing,
+		    XNClientWindow, GDK_DRAWABLE_XID (context_xim->client_window),
+		    NULL);
+}
+
+static XIC
+gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
+{
+  if (!context_xim->ic && context_xim->im_info)
+    {
+      if (!context_xim->use_preedit)
+	context_xim->ic = get_ic_without_preedit (context_xim);
+      else
+	context_xim->ic = get_ic_with_preedit (context_xim);
+
+      if (context_xim->ic)
+	{
+	  /* Don't filter key released events with XFilterEvents unless
+	   * input methods ask for. This is a workaround for Solaris input
+	   * method bug in C and European locales. It doubles each key
+	   * stroke if both key pressed and released events are filtered.
+	   * (bugzilla #81759)
+	   */
+	  gulong mask = 0;
+	  XGetICValues (context_xim->ic,
+			XNFilterEvents, &mask,
+			NULL);
+	  context_xim->filter_key_release = (mask & KeyReleaseMask);
+	}
+    }
   return context_xim->ic;
 }
 
