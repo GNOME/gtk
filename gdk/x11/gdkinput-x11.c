@@ -436,20 +436,22 @@ gdk_input_common_init(gint include_core)
   for (loop = 0; loop < num_extensions &&
 	 (strcmp(extensions[loop], "XInputExtension") != 0); loop++);
   XFreeExtensionList(extensions);
-  if (loop == num_extensions)	/* XInput extension not found */
-    return FALSE;
-
-  gdk_input_devices = 0;
-  devices = XListInputDevices(display, &num_devices);
-  
-  for(loop=0; loop<num_devices; loop++)
+  gdk_input_devices = NULL;
+  if (loop < num_extensions)
     {
-      GdkDevicePrivate *gdkdev = gdk_input_device_new(&devices[loop],
+      /* XInput extension found */
+
+      devices = XListInputDevices(display, &num_devices);
+  
+      for(loop=0; loop<num_devices; loop++)
+	{
+	  GdkDevicePrivate *gdkdev = gdk_input_device_new(&devices[loop],
 						      include_core);
-      if (gdkdev)
-	gdk_input_devices = g_list_append(gdk_input_devices, gdkdev);
+	  if (gdkdev)
+	    gdk_input_devices = g_list_append(gdk_input_devices, gdkdev);
+	}
+      XFreeDeviceList(devices);
     }
-  XFreeDeviceList(devices);
 
   gdk_input_devices = g_list_append (gdk_input_devices, &gdk_input_core_info);
 

@@ -1,3 +1,9 @@
+Fri Nov 27 11:41:27 1998  Raph Levien  <raph@gimp.org>
+
+	* gdk/gdkinputcommon.h (gdk_input_common_init): Fixed it so that
+	it still includes the core pointer in gdk_input_devices even
+	if the XInput extension is not present in the X server.
+
 Fri Nov 27 12:17:15 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.[ch] (gtk_drag_get_source_widget): New function to
