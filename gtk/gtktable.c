@@ -796,6 +796,7 @@ gtk_table_size_allocate_init (GtkTable *table)
       table->cols[col].need_shrink = TRUE;
       table->cols[col].expand = FALSE;
       table->cols[col].shrink = TRUE;
+      table->cols[col].empty = TRUE;
     }
   for (row = 0; row < table->nrows; row++)
     {
@@ -804,6 +805,7 @@ gtk_table_size_allocate_init (GtkTable *table)
       table->rows[row].need_shrink = TRUE;
       table->rows[row].expand = FALSE;
       table->rows[row].shrink = TRUE;
+      table->rows[row].empty = TRUE;
     }
 
   /* Loop over all the children and adjust the row and col values
@@ -826,6 +828,8 @@ gtk_table_size_allocate_init (GtkTable *table)
 
               if (!child->xshrink)
                 table->cols[child->left_attach].shrink = FALSE;
+
+ 	      table->cols[child->left_attach].empty = FALSE;
             }
 
           if (child->top_attach == (child->bottom_attach - 1))
@@ -835,6 +839,8 @@ gtk_table_size_allocate_init (GtkTable *table)
 
               if (!child->yshrink)
                 table->rows[child->top_attach].shrink = FALSE;
+
+	      table->rows[child->top_attach].empty = FALSE;
             }
         }
     }
@@ -852,6 +858,9 @@ gtk_table_size_allocate_init (GtkTable *table)
         {
           if (child->left_attach != (child->right_attach - 1))
             {
+ 	      for (col = child->left_attach; col < child->right_attach; col++)
+ 		table->cols[col].empty = FALSE;
+ 
               if (child->xexpand)
                 {
                   has_expand = FALSE;
@@ -885,6 +894,9 @@ gtk_table_size_allocate_init (GtkTable *table)
 
           if (child->top_attach != (child->bottom_attach - 1))
             {
+ 	      for (row = child->top_attach; row < child->bottom_attach; row++)
+ 		table->rows[row].empty = FALSE;
+ 
               if (child->yexpand)
                 {
                   has_expand = FALSE;
@@ -923,10 +935,18 @@ gtk_table_size_allocate_init (GtkTable *table)
    */
   for (col = 0; col < table->ncols; col++)
     {
-      if (table->cols[col].need_expand)
-        table->cols[col].expand = TRUE;
-      if (!table->cols[col].need_shrink)
-        table->cols[col].shrink = FALSE;
+      if (table->cols[col].empty)
+ 	{
+ 	  table->cols[col].expand = FALSE;
+ 	  table->cols[col].shrink = FALSE;
+ 	}
+      else
+ 	{
+ 	  if (table->cols[col].need_expand)
+ 	    table->cols[col].expand = TRUE;
+ 	  if (!table->cols[col].need_shrink)
+ 	    table->cols[col].shrink = FALSE;
+ 	}
     }
 
   /* Loop over the rows and set the expand and shrink values
@@ -934,10 +954,18 @@ gtk_table_size_allocate_init (GtkTable *table)
    */
   for (row = 0; row < table->nrows; row++)
     {
-      if (table->rows[row].need_expand)
-        table->rows[row].expand = TRUE;
-      if (!table->rows[row].need_shrink)
-        table->rows[row].shrink = FALSE;
+      if (table->rows[row].empty)
+ 	{
+ 	  table->rows[row].expand = FALSE;
+ 	  table->rows[row].shrink = FALSE;
+ 	}
+      else
+	{
+	  if (table->rows[row].need_expand)
+	    table->rows[row].expand = TRUE;
+	  if (!table->rows[row].need_shrink)
+	    table->rows[row].shrink = FALSE;
+	}
     }
 }
 
