@@ -109,12 +109,9 @@ static void
 gtk_bin_add (GtkContainer *container,
 	     GtkWidget    *child)
 {
-  GtkBin *bin;
+  GtkBin *bin = GTK_BIN (container);
 
-  g_return_if_fail (GTK_IS_BIN (container));
   g_return_if_fail (GTK_IS_WIDGET (child));
-
-  bin = GTK_BIN (container);
 
   if (bin->child != NULL)
     {
@@ -136,13 +133,10 @@ static void
 gtk_bin_remove (GtkContainer *container,
 		GtkWidget    *child)
 {
-  GtkBin *bin;
+  GtkBin *bin = GTK_BIN (container);
   gboolean widget_was_visible;
 
-  g_return_if_fail (GTK_IS_BIN (container));
   g_return_if_fail (GTK_IS_WIDGET (child));
-
-  bin = GTK_BIN (container);
   g_return_if_fail (bin->child == child);
 
   widget_was_visible = GTK_WIDGET_VISIBLE (child);
@@ -163,12 +157,9 @@ gtk_bin_forall (GtkContainer *container,
 		GtkCallback   callback,
 		gpointer      callback_data)
 {
-  GtkBin *bin;
+  GtkBin *bin = GTK_BIN (container);
 
-  g_return_if_fail (GTK_IS_BIN (container));
   g_return_if_fail (callback != NULL);
-
-  bin = GTK_BIN (container);
 
   if (bin->child)
     (* callback) (bin->child, callback_data);

@@ -182,11 +182,7 @@ static void
 gtk_image_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 					 gint        *requisition)
 {
-  GtkImageMenuItem *image_menu_item;
-  
-  g_return_if_fail (GTK_IS_IMAGE_MENU_ITEM (menu_item));
-
-  image_menu_item = GTK_IMAGE_MENU_ITEM (menu_item);
+  GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (menu_item);
 
   if (image_menu_item->image)
     *requisition = image_menu_item->image->requisition.width;
@@ -269,11 +265,7 @@ gtk_image_menu_item_forall (GtkContainer   *container,
                             GtkCallback     callback,
                             gpointer        callback_data)
 {
-  GtkImageMenuItem *image_menu_item;
-
-  g_return_if_fail (GTK_IS_IMAGE_MENU_ITEM (container));
-
-  image_menu_item = GTK_IMAGE_MENU_ITEM (container);
+  GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (container);
   
   (* GTK_CONTAINER_CLASS (parent_class)->forall) (container,
                                                   include_internals,

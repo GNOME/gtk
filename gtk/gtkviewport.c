@@ -466,8 +466,6 @@ gtk_viewport_realize (GtkWidget *widget)
   gint event_mask;
   gint border_width;
 
-  g_return_if_fail (GTK_IS_VIEWPORT (widget));
-
   border_width = GTK_CONTAINER (widget)->border_width;
 
   bin = GTK_BIN (widget);
@@ -545,11 +543,7 @@ gtk_viewport_realize (GtkWidget *widget)
 static void
 gtk_viewport_unrealize (GtkWidget *widget)
 {
-  GtkViewport *viewport;
-
-  g_return_if_fail (GTK_IS_VIEWPORT (widget));
-
-  viewport = GTK_VIEWPORT (widget);
+  GtkViewport *viewport = GTK_VIEWPORT (widget);
 
   gdk_window_set_user_data (viewport->view_window, NULL);
   gdk_window_destroy (viewport->view_window);
@@ -590,9 +584,6 @@ gtk_viewport_expose (GtkWidget      *widget,
   GtkBin *bin;
   GdkEventExpose child_event;
 
-  g_return_val_if_fail (GTK_IS_VIEWPORT (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       viewport = GTK_VIEWPORT (widget);
@@ -624,8 +615,7 @@ gtk_viewport_add (GtkContainer *container,
 {
   GtkBin *bin;
 
-  g_return_if_fail (GTK_IS_VIEWPORT (container));
-  g_return_if_fail (child != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (child));
 
   bin = GTK_BIN (container);
   g_return_if_fail (bin->child == NULL);
@@ -642,9 +632,6 @@ gtk_viewport_size_request (GtkWidget      *widget,
   GtkViewport *viewport;
   GtkBin *bin;
   GtkRequisition child_requisition;
-
-  g_return_if_fail (GTK_IS_VIEWPORT (widget));
-  g_return_if_fail (requisition != NULL);
 
   viewport = GTK_VIEWPORT (widget);
   bin = GTK_BIN (widget);
@@ -788,7 +775,7 @@ gtk_viewport_adjustment_changed (GtkAdjustment *adjustment,
 {
   GtkViewport *viewport;
 
-  g_return_if_fail (adjustment != NULL);
+  g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
   g_return_if_fail (GTK_IS_VIEWPORT (data));
 
   viewport = GTK_VIEWPORT (data);
@@ -802,7 +789,7 @@ gtk_viewport_adjustment_value_changed (GtkAdjustment *adjustment,
   GtkBin *bin;
   GtkAllocation child_allocation;
 
-  g_return_if_fail (adjustment != NULL);
+  g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
   g_return_if_fail (GTK_IS_VIEWPORT (data));
 
   viewport = GTK_VIEWPORT (data);

@@ -92,7 +92,7 @@ gtk_event_box_init (GtkEventBox *event_box)
 GtkWidget*
 gtk_event_box_new (void)
 {
-  return GTK_WIDGET ( gtk_type_new (gtk_event_box_get_type ()));
+  return GTK_WIDGET (gtk_type_new (gtk_event_box_get_type ()));
 }
 
 static void
@@ -101,8 +101,6 @@ gtk_event_box_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
   gint border_width;
-
-  g_return_if_fail (GTK_IS_EVENT_BOX (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
@@ -137,12 +135,7 @@ static void
 gtk_event_box_size_request (GtkWidget      *widget,
 			    GtkRequisition *requisition)
 {
-  GtkBin *bin;
-
-  g_return_if_fail (GTK_IS_EVENT_BOX (widget));
-  g_return_if_fail (requisition != NULL);
-
-  bin = GTK_BIN (widget);
+  GtkBin *bin = GTK_BIN (widget);
 
   requisition->width = GTK_CONTAINER (widget)->border_width * 2;
   requisition->height = GTK_CONTAINER (widget)->border_width * 2;
@@ -164,9 +157,6 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
 {
   GtkBin *bin;
   GtkAllocation child_allocation;
-
-  g_return_if_fail (GTK_IS_EVENT_BOX (widget));
-  g_return_if_fail (allocation != NULL);
 
   widget->allocation = *allocation;
   bin = GTK_BIN (widget);
@@ -205,9 +195,6 @@ static gint
 gtk_event_box_expose (GtkWidget      *widget,
 		     GdkEventExpose *event)
 {
-  g_return_val_if_fail (GTK_IS_EVENT_BOX (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       gtk_event_box_paint (widget, &event->area);

@@ -1,3 +1,8 @@
+2002-01-30  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/*.c: Remove excess g_return_if_fail calls from static
+	and virtual functions. 
+	
 2002-01-30  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkstyle.c (gtk_default_render_icon): Allow a -1 icon size.

@@ -1014,8 +1014,6 @@ gtk_calendar_realize (GtkWidget *widget)
   gint attributes_mask;
   GdkGCValues values;
 
-  g_return_if_fail (GTK_IS_CALENDAR (widget));
-  
   calendar = GTK_CALENDAR (widget);
   private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
   
@@ -1087,8 +1085,6 @@ gtk_calendar_unrealize (GtkWidget *widget)
   GtkCalendar *calendar;
   GtkCalendarPrivateData *private_data;
   gint i;
-  
-  g_return_if_fail (GTK_IS_CALENDAR (widget));
   
   calendar = GTK_CALENDAR (widget);
   private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
@@ -1313,9 +1309,6 @@ gtk_calendar_size_allocate (GtkWidget	  *widget,
   GtkCalendar *calendar;
   GtkCalendarPrivateData *private_data;
   
-  g_return_if_fail (GTK_IS_CALENDAR (widget));
-  g_return_if_fail (allocation != NULL);
-  
   widget->allocation = *allocation;
   
   calendar = GTK_CALENDAR (widget);
@@ -1408,10 +1401,6 @@ gtk_calendar_expose (GtkWidget	    *widget,
   GtkCalendar *calendar;
   GtkCalendarPrivateData *private_data;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_CALENDAR (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-  
   calendar = GTK_CALENDAR (widget);
   private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
   
@@ -2086,7 +2075,6 @@ gtk_calendar_select_month (GtkCalendar *calendar,
 			   guint	month,
 			   guint	year)
 {
-  g_return_val_if_fail (calendar != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CALENDAR (calendar), FALSE);
   g_return_val_if_fail (month <= 11, FALSE);
   
@@ -2158,7 +2146,6 @@ gboolean
 gtk_calendar_mark_day (GtkCalendar *calendar,
 		       guint	    day)
 {
-  g_return_val_if_fail (calendar != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CALENDAR (calendar), FALSE);
   
   if (day >= 1 && day <= 31 && calendar->marked_date[day-1] == FALSE)
@@ -2178,7 +2165,6 @@ gboolean
 gtk_calendar_unmark_day (GtkCalendar *calendar,
 			 guint	      day)
 {
-  g_return_val_if_fail (calendar != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CALENDAR (calendar), FALSE);
   
   if (day >= 1 && day <= 31 && calendar->marked_date[day-1] == TRUE)
@@ -2221,10 +2207,6 @@ gtk_calendar_button_press (GtkWidget	  *widget,
   GtkCalendarPrivateData *private_data;
   gint x, y;
   void (* action_func) (GtkCalendar *);
-  
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_CALENDAR (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
   
   calendar = GTK_CALENDAR (widget);
   private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
@@ -2302,9 +2284,6 @@ gtk_calendar_enter_notify (GtkWidget	    *widget,
   GtkCalendar *calendar;
   GtkCalendarPrivateData *private_data;
   
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-  
   calendar = GTK_CALENDAR (widget);
   private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
   
@@ -2343,9 +2322,6 @@ gtk_calendar_leave_notify (GtkWidget	    *widget,
   GtkCalendarPrivateData *private_data;
   gint row;
   gint col;
-  
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
   
   calendar = GTK_CALENDAR (widget);
   private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
@@ -2397,8 +2373,6 @@ gtk_calendar_paint_arrow (GtkWidget *widget,
   GtkCalendar *calendar;
   gint state;
   gint width, height;
-  
-  g_return_if_fail (widget != NULL);
   
   calendar = GTK_CALENDAR (widget);
   private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
@@ -2476,8 +2450,6 @@ gtk_calendar_set_background (GtkWidget *widget)
   GtkCalendarPrivateData *private_data;
   gint i;
   
-  g_return_if_fail (GTK_IS_CALENDAR (widget));
-  
   calendar = GTK_CALENDAR (widget);
   private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
 
@@ -2511,8 +2483,6 @@ static void
 gtk_calendar_style_set (GtkWidget *widget,
 			GtkStyle  *previous_style)
 {
-  g_return_if_fail (GTK_IS_CALENDAR (widget));
-  
   if (previous_style && GTK_WIDGET_REALIZED (widget))
     gtk_calendar_set_background(widget);
 }
@@ -2521,8 +2491,6 @@ static void
 gtk_calendar_state_changed (GtkWidget	   *widget,
 			    GtkStateType    previous_state)
 {
-  g_return_if_fail (GTK_IS_CALENDAR (widget));
-  
   gtk_calendar_set_background (widget);
 }
 
@@ -2545,10 +2513,6 @@ gtk_calendar_key_press (GtkWidget   *widget,
   gint old_focus_row;
   gint old_focus_col;
   gint row, col, day;
-
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_CALENDAR (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
   
   calendar = GTK_CALENDAR (widget);
   return_val = FALSE;

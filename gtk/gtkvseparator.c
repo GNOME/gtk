@@ -86,9 +86,6 @@ static gint
 gtk_vseparator_expose (GtkWidget      *widget,
 		       GdkEventExpose *event)
 {
-  g_return_val_if_fail (GTK_IS_VSEPARATOR (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
   if (GTK_WIDGET_DRAWABLE (widget))
     gtk_paint_vline (widget->style, widget->window, GTK_STATE_NORMAL,
 		     &event->area, widget, "vseparator",

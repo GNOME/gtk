@@ -234,10 +234,6 @@ gtk_arrow_expose (GtkWidget      *widget,
   gint extent;
   gfloat xalign;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_ARROW (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       arrow = GTK_ARROW (widget);

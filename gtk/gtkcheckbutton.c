@@ -214,12 +214,7 @@ static void
 gtk_check_button_size_request (GtkWidget      *widget,
 			       GtkRequisition *requisition)
 {
-  GtkToggleButton *toggle_button;
-  
-  g_return_if_fail (GTK_IS_CHECK_BUTTON (widget));
-  g_return_if_fail (requisition != NULL);
-  
-  toggle_button = GTK_TOGGLE_BUTTON (widget);
+  GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (widget);
   
   if (toggle_button->draw_indicator)
     {
@@ -271,9 +266,6 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
   GtkButton *button;
   GtkAllocation child_allocation;
 
-  g_return_if_fail (GTK_IS_CHECK_BUTTON (widget));
-  g_return_if_fail (allocation != NULL);
-  
   button = GTK_BUTTON (widget);
   check_button = GTK_CHECK_BUTTON (widget);
   toggle_button = GTK_TOGGLE_BUTTON (widget);
@@ -335,10 +327,6 @@ gtk_check_button_expose (GtkWidget      *widget,
   GtkToggleButton *toggle_button;
   GtkBin *bin;
   
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_CHECK_BUTTON (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-  
   check_button = GTK_CHECK_BUTTON (widget);
   toggle_button = GTK_TOGGLE_BUTTON (widget);
   bin = GTK_BIN (widget);
@@ -394,8 +382,6 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
   gint focus_pad;
   gboolean interior_focus;
   GdkWindow *window;
-  
-  g_return_if_fail (GTK_IS_CHECK_BUTTON (check_button));
   
   widget = GTK_WIDGET (check_button);
   toggle_button = GTK_TOGGLE_BUTTON (check_button);

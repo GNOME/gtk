@@ -661,11 +661,7 @@ should_invert (GtkRange *range)
 static void
 gtk_range_finalize (GObject *object)
 {
-  GtkRange *range;
-
-  g_return_if_fail (GTK_IS_RANGE (object));
-
-  range = GTK_RANGE (object);
+  GtkRange *range = GTK_RANGE (object);
 
   g_free (range->layout);
 
@@ -675,11 +671,7 @@ gtk_range_finalize (GObject *object)
 static void
 gtk_range_destroy (GtkObject *object)
 {
-  GtkRange *range;
-
-  g_return_if_fail (GTK_IS_RANGE (object));
-
-  range = GTK_RANGE (object);
+  GtkRange *range = GTK_RANGE (object);
 
   gtk_range_remove_step_timer (range);
   gtk_range_remove_update_timer (range);
@@ -782,11 +774,7 @@ gtk_range_realize (GtkWidget *widget)
 static void
 gtk_range_unrealize (GtkWidget *widget)
 {
-  GtkRange *range;
-
-  g_return_if_fail (GTK_IS_RANGE (widget));
-
-  range = GTK_RANGE (widget);
+  GtkRange *range = GTK_RANGE (widget);
 
   gtk_range_remove_step_timer (range);
   gtk_range_remove_update_timer (range);
@@ -878,9 +866,6 @@ gtk_range_expose (GtkWidget      *widget,
   GtkStateType state;
   GdkRectangle expose_area;	/* Relative to widget->allocation */
   GdkRectangle area;
-
-  g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
 
   range = GTK_RANGE (widget);
 
@@ -1106,12 +1091,7 @@ static gint
 gtk_range_button_press (GtkWidget      *widget,
 			GdkEventButton *event)
 {
-  GtkRange *range;
-
-  g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  range = GTK_RANGE (widget);
+  GtkRange *range = GTK_RANGE (widget);
   
   if (!GTK_WIDGET_HAS_FOCUS (widget))
     gtk_widget_grab_focus (widget);
@@ -1259,12 +1239,7 @@ static gint
 gtk_range_button_release (GtkWidget      *widget,
 			  GdkEventButton *event)
 {
-  GtkRange *range;
-
-  g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  range = GTK_RANGE (widget);
+  GtkRange *range = GTK_RANGE (widget);
 
   range->layout->mouse_x = event->x;
   range->layout->mouse_y = event->y;
@@ -1311,12 +1286,7 @@ static gint
 gtk_range_scroll_event (GtkWidget      *widget,
 			GdkEventScroll *event)
 {
-  GtkRange *range;
-
-  g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  range = GTK_RANGE (widget);
+  GtkRange *range = GTK_RANGE (widget);
 
   if (GTK_WIDGET_REALIZED (range))
     {
@@ -1346,9 +1316,6 @@ gtk_range_motion_notify (GtkWidget      *widget,
   GtkRange *range;
   gint x, y;
 
-  g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
   range = GTK_RANGE (widget);
 
   gdk_window_get_pointer (range->event_window, &x, &y, NULL);
@@ -1370,12 +1337,7 @@ static gint
 gtk_range_enter_notify (GtkWidget        *widget,
 			GdkEventCrossing *event)
 {
-  GtkRange *range;
-
-  g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  range = GTK_RANGE (widget);
+  GtkRange *range = GTK_RANGE (widget);
 
   range->layout->mouse_x = event->x;
   range->layout->mouse_y = event->y;
@@ -1390,12 +1352,7 @@ static gint
 gtk_range_leave_notify (GtkWidget        *widget,
 			GdkEventCrossing *event)
 {
-  GtkRange *range;
-
-  g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  range = GTK_RANGE (widget);
+  GtkRange *range = GTK_RANGE (widget);
 
   range->layout->mouse_x = -1;
   range->layout->mouse_y = -1;
@@ -1410,12 +1367,7 @@ static void
 gtk_range_adjustment_changed (GtkAdjustment *adjustment,
 			      gpointer       data)
 {
-  GtkRange *range;
-
-  g_return_if_fail (adjustment != NULL);
-  g_return_if_fail (data != NULL);
-
-  range = GTK_RANGE (data);
+  GtkRange *range = GTK_RANGE (data);
 
   range->need_recalc = TRUE;
   gtk_widget_queue_draw (GTK_WIDGET (range));
@@ -1433,12 +1385,7 @@ static void
 gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
 				    gpointer       data)
 {
-  GtkRange *range;
-
-  g_return_if_fail (adjustment != NULL);
-  g_return_if_fail (data != NULL);
-
-  range = GTK_RANGE (data);
+  GtkRange *range = GTK_RANGE (data);
 
   range->need_recalc = TRUE;
 
@@ -1462,11 +1409,7 @@ static void
 gtk_range_style_set (GtkWidget *widget,
                      GtkStyle  *previous_style)
 {
-  GtkRange *range;
-
-  g_return_if_fail (GTK_IS_RANGE (widget));
-
-  range = GTK_RANGE (widget);
+  GtkRange *range = GTK_RANGE (widget);
 
   range->need_recalc = TRUE;
 

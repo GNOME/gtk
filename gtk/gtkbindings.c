@@ -548,7 +548,6 @@ gtk_binding_set_activate (GtkBindingSet	 *binding_set,
   GtkBindingEntry *entry;
   
   g_return_val_if_fail (binding_set != NULL, FALSE);
-  g_return_val_if_fail (object != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_OBJECT (object), FALSE);
   
   keyval = gdk_keyval_to_lower (keyval);
@@ -926,7 +925,6 @@ gtk_bindings_activate (GtkObject      *object,
   GtkWidget *widget;
   gboolean handled = FALSE;
 
-  g_return_val_if_fail (object != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_OBJECT (object), FALSE);
 
   if (!GTK_IS_WIDGET (object))

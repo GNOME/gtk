@@ -188,7 +188,7 @@ gtk_fixed_put (GtkFixed       *fixed,
   GtkFixedChild *child_info;
 
   g_return_if_fail (GTK_IS_FIXED (fixed));
-  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (fixed));
 
   child_info = g_new (GtkFixedChild, 1);
   child_info->widget = widget;
@@ -244,10 +244,6 @@ gtk_fixed_move (GtkFixed       *fixed,
                 gint            x,
                 gint            y)
 {
-  g_return_if_fail (GTK_IS_FIXED (fixed));
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (widget->parent == GTK_WIDGET (fixed));
-
   gtk_fixed_move_internal (fixed, widget, TRUE, x, TRUE, y);
 }
 
@@ -309,8 +305,6 @@ gtk_fixed_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (GTK_IS_FIXED (widget));
-
   if (GTK_WIDGET_NO_WINDOW (widget))
     GTK_WIDGET_CLASS (parent_class)->realize (widget);
   else
@@ -347,9 +341,6 @@ gtk_fixed_size_request (GtkWidget      *widget,
   GtkFixedChild *child;
   GList *children;
   GtkRequisition child_requisition;
-
-  g_return_if_fail (GTK_IS_FIXED (widget));
-  g_return_if_fail (requisition != NULL);
 
   fixed = GTK_FIXED (widget);
   requisition->width = 0;
@@ -388,9 +379,6 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
   GtkRequisition child_requisition;
   GList *children;
   guint16 border_width;
-
-  g_return_if_fail (GTK_IS_FIXED(widget));
-  g_return_if_fail (allocation != NULL);
 
   fixed = GTK_FIXED (widget);
 
@@ -437,9 +425,6 @@ static void
 gtk_fixed_add (GtkContainer *container,
 	       GtkWidget    *widget)
 {
-  g_return_if_fail (GTK_IS_FIXED (container));
-  g_return_if_fail (widget != NULL);
-
   gtk_fixed_put (GTK_FIXED (container), widget, 0, 0);
 }
 
@@ -450,9 +435,6 @@ gtk_fixed_remove (GtkContainer *container,
   GtkFixed *fixed;
   GtkFixedChild *child;
   GList *children;
-
-  g_return_if_fail (GTK_IS_FIXED (container));
-  g_return_if_fail (widget != NULL);
 
   fixed = GTK_FIXED (container);
 
@@ -491,7 +473,6 @@ gtk_fixed_forall (GtkContainer *container,
   GtkFixedChild *child;
   GList *children;
 
-  g_return_if_fail (GTK_IS_FIXED (container));
   g_return_if_fail (callback != NULL);
 
   fixed = GTK_FIXED (container);

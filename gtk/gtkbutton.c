@@ -595,8 +595,6 @@ gtk_button_realize (GtkWidget *widget)
   gint attributes_mask;
   gint border_width;
 
-  g_return_if_fail (GTK_IS_BUTTON (widget));
-
   button = GTK_BUTTON (widget);
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
@@ -908,10 +906,6 @@ static gboolean
 gtk_button_expose (GtkWidget      *widget,
 		   GdkEventExpose *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_BUTTON (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       GtkButton *button = GTK_BUTTON (widget);
@@ -933,10 +927,6 @@ gtk_button_button_press (GtkWidget      *widget,
 {
   GtkButton *button;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_BUTTON (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
   if (event->type == GDK_BUTTON_PRESS)
     {
       button = GTK_BUTTON (widget);
@@ -956,10 +946,6 @@ gtk_button_button_release (GtkWidget      *widget,
 			   GdkEventButton *event)
 {
   GtkButton *button;
-
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_BUTTON (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
 
   if (event->button == 1)
     {
@@ -994,10 +980,6 @@ gtk_button_enter_notify (GtkWidget        *widget,
   GtkButton *button;
   GtkWidget *event_widget;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_BUTTON (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
   button = GTK_BUTTON (widget);
   event_widget = gtk_get_event_widget ((GdkEvent*) event);
 
@@ -1017,10 +999,6 @@ gtk_button_leave_notify (GtkWidget        *widget,
 {
   GtkButton *button;
   GtkWidget *event_widget;
-
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_BUTTON (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
 
   button = GTK_BUTTON (widget);
   event_widget = gtk_get_event_widget ((GdkEvent*) event);
@@ -1079,8 +1057,6 @@ gtk_real_button_activate (GtkButton *button)
 {
   GtkWidget *widget = GTK_WIDGET (button);
   
-  g_return_if_fail (GTK_IS_BUTTON (button));
-
   if (GTK_WIDGET_REALIZED (button) && !button->activate_timeout)
     {
       if (gdk_keyboard_grab (button->event_window, TRUE,

@@ -223,8 +223,6 @@ gtk_paned_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (GTK_IS_PANED (widget));
-
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
   paned = GTK_PANED (widget);
 
@@ -259,11 +257,7 @@ gtk_paned_realize (GtkWidget *widget)
 static void
 gtk_paned_unrealize (GtkWidget *widget)
 {
-  GtkPaned *paned;
-
-  g_return_if_fail (GTK_IS_PANED (widget));
-
-  paned = GTK_PANED (widget);
+  GtkPaned *paned = GTK_PANED (widget);
 
   if (paned->xor_gc)
     {
@@ -287,8 +281,6 @@ gtk_paned_map (GtkWidget *widget)
 {
   GtkPaned *paned = GTK_PANED (widget);
 
-  g_return_if_fail (GTK_IS_PANED (widget));
-
   gdk_window_show (paned->handle);
 
   GTK_WIDGET_CLASS (parent_class)->map (widget);
@@ -299,8 +291,6 @@ gtk_paned_unmap (GtkWidget *widget)
 {
   GtkPaned *paned = GTK_PANED (widget);
     
-  g_return_if_fail (GTK_IS_PANED (widget));
-
   gdk_window_hide (paned->handle);
 
   GTK_WIDGET_CLASS (parent_class)->unmap (widget);
@@ -311,8 +301,6 @@ gtk_paned_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
   GtkPaned *paned = GTK_PANED (widget);
-
-  g_return_val_if_fail (GTK_IS_PANED (widget), FALSE);
 
   if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget) &&
       paned->child1 && GTK_WIDGET_VISIBLE (paned->child1) &&
@@ -406,14 +394,13 @@ gtk_paned_add (GtkContainer *container,
   GtkPaned *paned;
 
   g_return_if_fail (GTK_IS_PANED (container));
-  g_return_if_fail (widget != NULL);
 
   paned = GTK_PANED (container);
 
   if (!paned->child1)
-    gtk_paned_add1 (GTK_PANED (container), widget);
+    gtk_paned_add1 (paned, widget);
   else if (!paned->child2)
-    gtk_paned_add2 (GTK_PANED (container), widget);
+    gtk_paned_add2 (paned, widget);
 }
 
 static void
@@ -422,9 +409,6 @@ gtk_paned_remove (GtkContainer *container,
 {
   GtkPaned *paned;
   gboolean was_visible;
-
-  g_return_if_fail (GTK_IS_PANED (container));
-  g_return_if_fail (widget != NULL);
 
   paned = GTK_PANED (container);
   was_visible = GTK_WIDGET_VISIBLE (widget);
@@ -457,7 +441,6 @@ gtk_paned_forall (GtkContainer *container,
 {
   GtkPaned *paned;
 
-  g_return_if_fail (GTK_IS_PANED (container));
   g_return_if_fail (callback != NULL);
 
   paned = GTK_PANED (container);

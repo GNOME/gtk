@@ -143,10 +143,6 @@ gtk_vbutton_box_size_request (GtkWidget      *widget,
   gint spacing;
   GtkButtonBoxStyle layout;
   
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_VBUTTON_BOX (widget));
-  g_return_if_fail (requisition != NULL);
-
   box = GTK_BOX (widget);
   bbox = GTK_BUTTON_BOX (widget);
 
@@ -216,10 +212,6 @@ gtk_vbutton_box_size_allocate (GtkWidget     *widget,
   GtkButtonBoxStyle layout;
   gint spacing;
   
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_VBUTTON_BOX (widget));
-  g_return_if_fail (allocation != NULL);
-
   base_box = GTK_BOX (widget);
   box = GTK_BUTTON_BOX (widget);
   hbox = GTK_VBUTTON_BOX (widget);

@@ -125,8 +125,6 @@ gtk_invisible_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (GTK_IS_INVISIBLE (widget));
-
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
   attributes.x = -100;
@@ -156,8 +154,6 @@ gtk_invisible_style_set (GtkWidget *widget,
 static void
 gtk_invisible_show (GtkWidget *widget)
 {
-  g_return_if_fail (widget != NULL);
-
   GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
   gtk_widget_map (widget);
 }

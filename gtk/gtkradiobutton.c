@@ -315,8 +315,6 @@ gtk_radio_button_destroy (GtkObject *object)
   GtkRadioButton *tmp_button;
   GSList *tmp_list;
 
-  g_return_if_fail (GTK_IS_RADIO_BUTTON (object));
-
   radio_button = GTK_RADIO_BUTTON (object);
 
   radio_button->group = g_slist_remove (radio_button->group, radio_button);
@@ -498,8 +496,6 @@ gtk_radio_button_clicked (GtkButton *button)
   gint toggled;
   gboolean depressed;
 
-  g_return_if_fail (GTK_IS_RADIO_BUTTON (button));
-
   radio_button = GTK_RADIO_BUTTON (button);
   toggle_button = GTK_TOGGLE_BUTTON (button);
   toggled = FALSE;
@@ -590,8 +586,6 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   gint focus_width;
   gint focus_pad;
   gboolean interior_focus;
-
-  g_return_if_fail (GTK_IS_RADIO_BUTTON (check_button));
 
   if (GTK_WIDGET_VISIBLE (check_button) && GTK_WIDGET_MAPPED (check_button))
     {

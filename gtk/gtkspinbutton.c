@@ -447,8 +447,6 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 static void
 gtk_spin_button_finalize (GObject *object)
 {
-  g_return_if_fail (GTK_IS_SPIN_BUTTON (object));
-
   gtk_object_unref (GTK_OBJECT (GTK_SPIN_BUTTON (object)->adjustment));
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -465,8 +463,6 @@ gtk_spin_button_destroy (GtkObject *object)
 static void
 gtk_spin_button_map (GtkWidget *widget)
 {
-  g_return_if_fail (GTK_IS_SPIN_BUTTON (widget));
-
   if (GTK_WIDGET_REALIZED (widget) && !GTK_WIDGET_MAPPED (widget))
     {
       GTK_WIDGET_CLASS (parent_class)->map (widget);
@@ -477,8 +473,6 @@ gtk_spin_button_map (GtkWidget *widget)
 static void
 gtk_spin_button_unmap (GtkWidget *widget)
 {
-  g_return_if_fail (GTK_IS_SPIN_BUTTON (widget));
-
   if (GTK_WIDGET_MAPPED (widget))
     {
       gdk_window_hide (GTK_SPIN_BUTTON (widget)->panel);
@@ -496,8 +490,6 @@ gtk_spin_button_realize (GtkWidget *widget)
   gint return_val;
   gint arrow_size;
 
-  g_return_if_fail (GTK_IS_SPIN_BUTTON (widget));
-  
   spin_button = GTK_SPIN_BUTTON (widget);
   arrow_size = spin_button_get_arrow_size (spin_button);
 
@@ -544,11 +536,7 @@ gtk_spin_button_realize (GtkWidget *widget)
 static void
 gtk_spin_button_unrealize (GtkWidget *widget)
 {
-  GtkSpinButton *spin;
-
-  g_return_if_fail (GTK_IS_SPIN_BUTTON (widget));
-
-  spin = GTK_SPIN_BUTTON (widget);
+  GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
 
   GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
 
@@ -590,9 +578,6 @@ gtk_spin_button_size_request (GtkWidget      *widget,
   GtkEntry *entry;
   GtkSpinButton *spin_button;
   gint arrow_size;
-
-  g_return_if_fail (requisition != NULL);
-  g_return_if_fail (GTK_IS_SPIN_BUTTON (widget));
 
   entry = GTK_ENTRY (widget);
   spin_button = GTK_SPIN_BUTTON (widget);
@@ -660,9 +645,6 @@ gtk_spin_button_size_allocate (GtkWidget     *widget,
   GtkAllocation child_allocation;
   gint arrow_size;
 
-  g_return_if_fail (GTK_IS_SPIN_BUTTON (widget));
-  g_return_if_fail (allocation != NULL);
-
   spin = GTK_SPIN_BUTTON (widget);
   arrow_size = spin_button_get_arrow_size (spin);
 
@@ -704,9 +686,6 @@ gtk_spin_button_expose (GtkWidget      *widget,
 {
   GtkSpinButton *spin;
   gint arrow_size;
-
-  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
 
   spin = GTK_SPIN_BUTTON (widget);
   arrow_size = spin_button_get_arrow_size (spin);
@@ -840,12 +819,7 @@ static gint
 gtk_spin_button_enter_notify (GtkWidget        *widget,
 			      GdkEventCrossing *event)
 {
-  GtkSpinButton *spin;
-
-  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  spin = GTK_SPIN_BUTTON (widget);
+  GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
 
   if (event->window == spin->panel)
     {
@@ -874,12 +848,7 @@ static gint
 gtk_spin_button_leave_notify (GtkWidget        *widget,
 			      GdkEventCrossing *event)
 {
-  GtkSpinButton *spin;
-
-  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  spin = GTK_SPIN_BUTTON (widget);
+  GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
 
   if (event->window == spin->panel && spin->click_child == 2)
     {
@@ -901,9 +870,6 @@ static gint
 gtk_spin_button_focus_out (GtkWidget     *widget,
 			   GdkEventFocus *event)
 {
-  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
   if (GTK_ENTRY (widget)->editable)
     gtk_spin_button_update (GTK_SPIN_BUTTON (widget));
 
@@ -930,12 +896,7 @@ static gint
 gtk_spin_button_scroll (GtkWidget      *widget,
 			GdkEventScroll *event)
 {
-  GtkSpinButton *spin;
-
-  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  spin = GTK_SPIN_BUTTON (widget);
+  GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
 
   if (event->direction == GDK_SCROLL_UP)
     {
@@ -956,7 +917,7 @@ gtk_spin_button_scroll (GtkWidget      *widget,
 }
 
 static void
-gtk_spin_button_stop_spinning(GtkSpinButton *spin)
+gtk_spin_button_stop_spinning (GtkSpinButton *spin)
 {
   if (spin->timer)
     {
@@ -995,12 +956,7 @@ static gint
 gtk_spin_button_button_press (GtkWidget      *widget,
 			      GdkEventButton *event)
 {
-  GtkSpinButton *spin;
-
-  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  spin = GTK_SPIN_BUTTON (widget);
+  GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
 
   if (!spin->button)
     {
@@ -1045,9 +1001,6 @@ gtk_spin_button_button_release (GtkWidget      *widget,
 {
   GtkSpinButton *spin;
   gint arrow_size;
-
-  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
 
   spin = GTK_SPIN_BUTTON (widget);
   arrow_size = spin_button_get_arrow_size (spin);
@@ -1100,13 +1053,8 @@ static gint
 gtk_spin_button_motion_notify (GtkWidget      *widget,
 			       GdkEventMotion *event)
 {
-  GtkSpinButton *spin;
+  GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
 
-  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  spin = GTK_SPIN_BUTTON (widget);
-  
   if (spin->button)
     return FALSE;
 
@@ -1187,8 +1135,6 @@ gtk_spin_button_value_changed (GtkAdjustment *adjustment,
 {
   gint return_val;
 
-  g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
-
   return_val = FALSE;
   gtk_signal_emit (GTK_OBJECT (spin_button), spinbutton_signals[OUTPUT],
 		   &return_val);
@@ -1212,9 +1158,6 @@ gtk_spin_button_key_press (GtkWidget     *widget,
   gint key;
   gboolean key_repeat = FALSE;
   gboolean retval = FALSE;
-  
-  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
   
   spin = GTK_SPIN_BUTTON (widget);
   key = event->keyval;
@@ -1333,11 +1276,7 @@ static gint
 gtk_spin_button_key_release (GtkWidget   *widget,
 			     GdkEventKey *event)
 {
-  GtkSpinButton *spin;
-
-  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (widget), FALSE);
-
-  spin = GTK_SPIN_BUTTON (widget);
+  GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
   
   spin->ev_time = event->time;
   return TRUE;
@@ -1464,8 +1403,6 @@ gtk_spin_button_real_spin (GtkSpinButton *spin_button,
 {
   GtkAdjustment *adj;
   gdouble new_value = 0.0;
-
-  g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
   
   adj = spin_button->adjustment;
 
