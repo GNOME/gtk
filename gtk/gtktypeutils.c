@@ -50,7 +50,7 @@ struct _GtkTypeNode
     node_var = NULL; \
 }
 
-static void  gtk_type_class_init		(GtkTypeNode *node);
+static void  gtk_type_class_init		(GtkType      type);
 static guint gtk_type_name_hash			(const char  *key);
 static gint  gtk_type_name_compare		(const char  *a,
 						 const char  *b);
@@ -243,8 +243,12 @@ gtk_type_parent_class (GtkType type)
 
       if (node)
 	{
-	  if (!node->klass)
-	    gtk_type_class_init (node);
+          if (!node->klass)
+	    {
+	      type = node->type;
+	      gtk_type_class_init (type);
+	      LOOKUP_TYPE_NODE (node, type);
+	    }
 
 	  return node->klass;
 	}
@@ -262,7 +266,11 @@ gtk_type_class (GtkType type)
   g_return_val_if_fail (node != NULL, NULL);
 
   if (!node->klass)
-    gtk_type_class_init (node);
+    {
+      type = node->type;
+      gtk_type_class_init (type);
+      LOOKUP_TYPE_NODE (node, type);
+    }
 
   return node->klass;
 }
@@ -453,8 +461,13 @@ gtk_arg_copy (GtkArg         *src_arg,
 }
 
 static void
-gtk_type_class_init (GtkTypeNode *node)
+gtk_type_class_init (GtkType type)
 {
+  GtkTypeNode *node;
+
+  /* we need to relookup nodes everytime we called an external function */
+  LOOKUP_TYPE_NODE (node, type);
+  
   if (!node->klass && node->type_info.class_size)
     {
       node->klass = g_new0 (guchar, node->type_info.class_size);
@@ -465,7 +478,11 @@ gtk_type_class_init (GtkTypeNode *node)
 
 	  LOOKUP_TYPE_NODE (parent, node->parent_type);
 	  if (!parent->klass)
-	    gtk_type_class_init (parent);
+	    {
+	      gtk_type_class_init (parent->type);
+	      LOOKUP_TYPE_NODE (node, type);
+	      LOOKUP_TYPE_NODE (parent, node->parent_type);
+	    }
 
 	  if (parent->klass)
 	    memcpy (node->klass, parent->klass, parent->type_info.class_size);
@@ -475,9 +492,6 @@ gtk_type_class_init (GtkTypeNode *node)
 	{
 	  GtkObjectClass *object_class;
 
-	  /* FIXME: this initialization needs to be done through
-	   * a function pointer someday.
-	   */
 	  g_assert (node->type_info.class_size >= sizeof (GtkObjectClass));
 	  
 	  object_class = node->klass;
