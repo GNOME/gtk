@@ -282,7 +282,7 @@ gtk_rc_append_default_module_path(void)
   gint n;
 
   for (n = 0; module_path[n]; n++) ;
-  if (n >= GTK_RC_MAX_MODULE_PATHS - 1)
+  if (n >= GTK_RC_MAX_MODULE_PATHS - 2)
     return;
   
   var = getenv("GTK_EXE_PREFIX");
@@ -290,15 +290,12 @@ gtk_rc_append_default_module_path(void)
     path = g_strdup_printf("%s%s", var, "/lib/gtk/themes/engines");
   else
     path = g_strdup_printf("%s%s", GTK_LIBDIR, "/gtk/themes/engines");
-  module_path[n++] = g_strdup(path);
-  g_free(path);
+  module_path[n++] = path;
 
   var = g_get_home_dir ();
   if (var)
-    path = g_strdup_printf("%s%s", var, "/.gtk/lib/themes/engines");
-  module_path[n++] = g_strdup(path);
+    module_path[n++] = g_strdup_printf("%s%s", var, "/.gtk/lib/themes/engines");
   module_path[n] = NULL;
-  g_free(path);
 }
 
 static void
@@ -333,9 +330,13 @@ gtk_rc_add_initial_default_files (void)
       gtk_rc_add_default_file (str);
       g_free (str);
 
-      str = g_strdup_printf ("%s%s", g_get_home_dir (), "/.gtkrc");
-      gtk_rc_add_default_file (str);
-      g_free (str);
+      var = g_get_home_dir ();
+      if (var)
+	{
+	  str = g_strdup_printf ("%s%s", var, "/.gtkrc");
+	  gtk_rc_add_default_file (str);
+	  g_free (str);
+	}
     }
 }
 

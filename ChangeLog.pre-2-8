@@ -1,3 +1,11 @@
+Thu Mar 15 01:05:49 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_add_initial_default_files): Fix 
+	problem in testing the result of g_get_home_dir(),
+	and test the result of g_get_home_dir() in another
+	place for consistency. (#51833). Also fix off-by-one
+	error in check against GTK_RC_MAX_MODULE_PATHS.
+
 Thu Mar 15 00:41:47 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcalender.c gtk/gtkcombo.c gtk/gtkeditable.c
