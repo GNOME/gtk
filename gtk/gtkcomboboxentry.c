@@ -51,7 +51,8 @@ static void gtk_combo_box_entry_active_changed   (GtkComboBox           *combo_b
                                                   gpointer               user_data);
 static void gtk_combo_box_entry_contents_changed (GtkEntry              *entry,
                                                   gpointer               user_data);
-
+static gboolean gtk_combo_box_entry_mnemonic_activate (GtkWidget        *entry,
+						       gboolean          group_cycling);
 
 enum
 {
@@ -93,10 +94,14 @@ static void
 gtk_combo_box_entry_class_init (GtkComboBoxEntryClass *klass)
 {
   GObjectClass *object_class;
+  GtkWidgetClass *widget_class;
 
   object_class = (GObjectClass *)klass;
   object_class->set_property = gtk_combo_box_entry_set_property;
   object_class->get_property = gtk_combo_box_entry_get_property;
+
+  widget_class = (GtkWidgetClass *)klass;
+  widget_class->mnemonic_activate = gtk_combo_box_entry_mnemonic_activate;
 
   g_object_class_install_property (object_class,
                                    PROP_TEXT_COLUMN,
@@ -320,4 +325,15 @@ gtk_combo_box_entry_get_text_column (GtkComboBoxEntry *entry_box)
   g_return_val_if_fail (GTK_IS_COMBO_BOX_ENTRY (entry_box), 0);
 
   return entry_box->priv->text_column;
+}
+
+static gboolean
+gtk_combo_box_entry_mnemonic_activate (GtkWidget *widget,
+				       gboolean   group_cycling)
+{
+  GtkComboBoxEntry *entry_box = GTK_COMBO_BOX_ENTRY (widget);
+
+  gtk_widget_grab_focus (entry_box->priv->entry);
+
+  return TRUE;
 }

@@ -2834,7 +2834,7 @@ gtk_combo_box_mnemonic_activate (GtkWidget *widget,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
 
-  gtk_widget_grab_focus (combo_box->priv->tree_view);
+  gtk_widget_grab_focus (combo_box->priv->button);
 
   return TRUE;
 }

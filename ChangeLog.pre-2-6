@@ -1,3 +1,11 @@
+Fri Feb  6 00:15:38 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_mnemonic_activate): 
+	Support mnemonic_activate here as well.
+	
+	* gtk/gtkcombobox.c (gtk_combo_box_mnemonic_activate): Focus
+	the button, not the tree_view.
+
 Thu Feb  5 23:48:19 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_mnemonic_activate): Add this
