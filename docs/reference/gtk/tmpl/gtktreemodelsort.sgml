@@ -20,6 +20,11 @@ A wrapper which makes an underlying tree model sortable
 </para>
 
 
+<!-- ##### ARG GtkTreeModelSort:model ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_tree_model_sort_new_with_model ##### -->
 <para>
 
@@ -107,9 +112,4 @@ A wrapper which makes an underlying tree model sortable
 @iter: 
 @Returns: 
 
-
-<!-- ##### ARG GtkTreeModelSort:model ##### -->
-<para>
-
-</para>
 

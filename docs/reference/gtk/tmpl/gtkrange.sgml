@@ -20,6 +20,77 @@ Base class for widgets which visualize an adjustment
 </para>
 
 
+<!-- ##### SIGNAL GtkRange::adjust-bounds ##### -->
+<para>
+
+</para>
+
+@range: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkRange::move-slider ##### -->
+<para>
+Virtual function that moves the slider. Used for keybindings.
+</para>
+
+@range: the #GtkRange
+@arg1: 
+<!-- # Unused Parameters # -->
+@step: how to move the slider
+@arg2: 
+
+<!-- ##### SIGNAL GtkRange::value-changed ##### -->
+<para>
+Emitted when the range value changes.
+</para>
+
+@range: the #GtkRange
+
+<!-- ##### ARG GtkRange:adjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:inverted ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:update-policy ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:arrow-displacement-x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:arrow-displacement-y ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:slider-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:stepper-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:stepper-spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:trough-border ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_range_get_adjustment ##### -->
 <para>
 
@@ -111,75 +182,4 @@ Base class for widgets which visualize an adjustment
 @range: 
 @value: 
 
-
-<!-- ##### SIGNAL GtkRange::adjust-bounds ##### -->
-<para>
-
-</para>
-
-@range: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkRange::move-slider ##### -->
-<para>
-Virtual function that moves the slider. Used for keybindings.
-</para>
-
-@range: the #GtkRange
-@arg1: 
-<!-- # Unused Parameters # -->
-@step: how to move the slider
-@arg2: 
-
-<!-- ##### SIGNAL GtkRange::value-changed ##### -->
-<para>
-Emitted when the range value changes.
-</para>
-
-@range: the #GtkRange
-
-<!-- ##### ARG GtkRange:adjustment ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkRange:inverted ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkRange:update-policy ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkRange:arrow-displacement-x ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkRange:arrow-displacement-y ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkRange:slider-width ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkRange:stepper-size ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkRange:stepper-spacing ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkRange:trough-border ##### -->
-<para>
-
-</para>
 

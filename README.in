@@ -62,31 +62,13 @@ Release notes
   from the library, on others not. In no case can applications
   use these private symbols.
 
-* GTK+-2.2 can be build either with Pango-1.0 and version 1 of
-  the Xft library or Pango-1.2 and version 2 of the Xft library
-  (Xft is used to to display anti-aliased fonts) By default, GTK+ and 
-  Pango are built so that applications will not have explicit dependencies 
-  on either version of Xft. To make sure that your application will be 
-  binary compatible with future versions of GTK+:
-
-    - Do not configure Pango or GTK+ with the --enable-static or
-      --enable-explicit-deps options, since they will cause dependencies 
-      on the particular version of Xft.
-
-    - Do not use Xft version 1 directly in your applications.
+* GTK+-2.3 now requires version 2 of Xft; old fashioned core X
+  fonts are no longer supported.
 
 * There is a bug in the Xft library in XFree86-4.1 and possibly previous
   versions that causes random crashes when using the Pango Xft
   backend. If you want to use Xft fonts, you should upgrade to
-  XFree86-4.2.
-
-* Xft support is on by default when using Xft2 but off by
-  default when using Xft1. To change this default, set the
-  variable GDK_USE_XFT to '1' or '0'. For instance, to 
-  turn on Xft fonts when Xft1.
-
-   GDK_USE_XFT=1
-   export GDK_USE_XFT
+  at least XFree86-4.2.
 
 * The gdk_pixbuf_xlib library included in the contrib/ directory of GTK+
   is provided on a as-is basis and has not been tested at all. No

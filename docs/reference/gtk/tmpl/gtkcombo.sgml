@@ -106,6 +106,31 @@ an application.)
 @entry: 
 @list: 
 
+<!-- ##### ARG GtkCombo:allow-empty ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCombo:case-sensitive ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCombo:enable-arrow-keys ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCombo:enable-arrows-always ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCombo:value-in-list ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_combo_new ##### -->
 <para>
 Creates a new #GtkCombo.
@@ -194,29 +219,4 @@ instead.
 
 @combo: a #GtkCombo.
 
-
-<!-- ##### ARG GtkCombo:allow-empty ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCombo:case-sensitive ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCombo:enable-arrow-keys ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCombo:enable-arrows-always ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCombo:value-in-list ##### -->
-<para>
-
-</para>
 

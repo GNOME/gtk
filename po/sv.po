@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2003-10-07 01:24+0200\n"
+"POT-Creation-Date: 2003-10-24 16:15-0400\n"
 "PO-Revision-Date: 2003-10-07 01:25+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -1031,7 +1031,7 @@ msgstr "Mellanrum"
 msgid "The amount of space between children"
 msgstr "Mängden mellanrum mellan barn"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:457
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:465
 msgid "Homogeneous"
 msgstr "Homogena"
 
@@ -1039,7 +1039,7 @@ msgstr "Homogena"
 msgid "Whether the children should all be the same size"
 msgstr "Huruvida barnen allihop ska vara av samma storlek"
 
-#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:449
+#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:457
 #: gtk/gtktreeviewcolumn.c:291
 msgid "Expand"
 msgstr "Expandera"
@@ -1711,7 +1711,7 @@ msgstr "Radiotillstånd"
 msgid "Draw the toggle button as a radio button"
 msgstr "Rita växlingsknappen som en radioknapp"
 
-#: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:197
+#: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:199
 msgid "Indicator Size"
 msgstr "Indikatorstorlek"
 
@@ -1719,7 +1719,7 @@ msgstr "Indikatorstorlek"
 msgid "Size of check or radio indicator"
 msgstr "Storlek på kryss- eller radioindikator"
 
-#: gtk/gtkcheckbutton.c:106 gtk/gtkexpander.c:236 gtk/gtkoptionmenu.c:203
+#: gtk/gtkcheckbutton.c:106 gtk/gtkexpander.c:236 gtk/gtkoptionmenu.c:205
 msgid "Indicator Spacing"
 msgstr "Indikatormellanrum"
 
@@ -1988,59 +1988,59 @@ msgstr "Värde i lista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Huruvida angivna värden redan måste finnas i listan"
 
-#: gtk/gtkcombobox.c:333
+#: gtk/gtkcombobox.c:335
 msgid "ComboBox model"
 msgstr "ComboBox-modell"
 
-#: gtk/gtkcombobox.c:334
+#: gtk/gtkcombobox.c:336
 msgid "The model for the combo box"
 msgstr "Modellen för comboboxen"
 
-#: gtk/gtkcombobox.c:341
+#: gtk/gtkcombobox.c:343
 msgid "Wrap width"
 msgstr "Radbrytningsbredd"
 
-#: gtk/gtkcombobox.c:342
+#: gtk/gtkcombobox.c:344
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Radbrytningsbredd för utläggning av objekten i ett rutnät"
 
-#: gtk/gtkcombobox.c:351
+#: gtk/gtkcombobox.c:353
 msgid "Row span column"
 msgstr "Radspannskolumn"
 
-#: gtk/gtkcombobox.c:352
+#: gtk/gtkcombobox.c:354
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel-kolumn som innehåller radspannsvärden"
 
-#: gtk/gtkcombobox.c:361
+#: gtk/gtkcombobox.c:363
 msgid "Column span column"
 msgstr "Kolumnspannskolumn"
 
-#: gtk/gtkcombobox.c:362
+#: gtk/gtkcombobox.c:364
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel-kolumn som innehåller kolumnspannsvärden"
 
-#: gtk/gtkcombobox.c:371
+#: gtk/gtkcombobox.c:373
 msgid "Active item"
 msgstr "Aktivt objekt"
 
-#: gtk/gtkcombobox.c:372
+#: gtk/gtkcombobox.c:374
 msgid "The item which is currently active"
 msgstr "Det objekt som är aktivt för tillfället"
 
-#: gtk/gtkcombobox.c:380
+#: gtk/gtkcombobox.c:382
 msgid "ComboBox appareance"
 msgstr "ComboBox-utseende"
 
-#: gtk/gtkcombobox.c:381
+#: gtk/gtkcombobox.c:383
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "ComboBox-utseende, där SANT betyder av Windows-typ."
 
-#: gtk/gtkcomboboxentry.c:104
+#: gtk/gtkcomboboxentry.c:106
 msgid "Text Column"
 msgstr "Textkolumn"
 
-#: gtk/gtkcomboboxentry.c:105
+#: gtk/gtkcomboboxentry.c:107
 msgid "A column in the data source model to get the strings from"
 msgstr "En kolumn i datakällmodellen att hämta strängar från"
 
@@ -2240,31 +2240,31 @@ msgstr "Markera vid fokus"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Huruvida ett fälts innehåll markeras då fältet får fokus"
 
-#: gtk/gtkentry.c:4059 gtk/gtktextview.c:6875
+#: gtk/gtkentry.c:4079 gtk/gtktextview.c:6875
 msgid "Select _All"
 msgstr "Markera _allt"
 
-#: gtk/gtkentry.c:4069 gtk/gtktextview.c:6885
+#: gtk/gtkentry.c:4089 gtk/gtktextview.c:6885
 msgid "Input _Methods"
 msgstr "Inmatnings_metoder"
 
-#: gtk/gtkentry.c:4079 gtk/gtktextview.c:6896
+#: gtk/gtkentry.c:4099 gtk/gtktextview.c:6896
 msgid "_Insert Unicode Control Character"
 msgstr "_Infoga Unicode-styrtecken"
 
-#: gtk/gtkentrycompletion.c:191
+#: gtk/gtkentrycompletion.c:193
 msgid "Completion Model"
 msgstr "Ifyllningsmodell"
 
-#: gtk/gtkentrycompletion.c:192
+#: gtk/gtkentrycompletion.c:194
 msgid "The model to find matches in"
 msgstr "Modellen för att hitta träffar"
 
-#: gtk/gtkentrycompletion.c:198
+#: gtk/gtkentrycompletion.c:200
 msgid "Minimum Key Length"
 msgstr "Minsta nyckellängd"
 
-#: gtk/gtkentrycompletion.c:199
+#: gtk/gtkentrycompletion.c:201
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minsta längd på söknyckeln för att hitta träffar"
 
@@ -2328,52 +2328,52 @@ msgstr "Storlek på expanderarpilen"
 msgid "Spacing around expander arrow"
 msgstr "Mellanrum runt expanderarpil"
 
-#: gtk/gtkfilesel.c:556 gtk/gtkimage.c:167
+#: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "Filnamn"
 
-#: gtk/gtkfilesel.c:557
+#: gtk/gtkfilesel.c:560
 msgid "The currently selected filename"
 msgstr "Det filnamn som är valt för tillfället"
 
-#: gtk/gtkfilesel.c:563
+#: gtk/gtkfilesel.c:566
 msgid "Show file operations"
 msgstr "Visa filoperationer"
 
-#: gtk/gtkfilesel.c:564
+#: gtk/gtkfilesel.c:567
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Huruvida knappar för skapande/manipulering av filer ska visas"
 
-#: gtk/gtkfilesel.c:571
+#: gtk/gtkfilesel.c:574
 msgid "Select multiple"
 msgstr "Välj flera"
 
-#: gtk/gtkfilesel.c:572
+#: gtk/gtkfilesel.c:575
 msgid "Whether to allow multiple files to be selected"
 msgstr "Huruvida flera filer kan väljas"
 
-#: gtk/gtkfilesel.c:727
+#: gtk/gtkfilesel.c:730
 msgid "Folders"
 msgstr "Mappar"
 
-#: gtk/gtkfilesel.c:731
+#: gtk/gtkfilesel.c:734
 msgid "Fol_ders"
 msgstr "_Mappar"
 
-#: gtk/gtkfilesel.c:763
+#: gtk/gtkfilesel.c:766
 msgid "Files"
 msgstr "Filer"
 
-#: gtk/gtkfilesel.c:767
+#: gtk/gtkfilesel.c:770
 msgid "_Files"
 msgstr "_Filer"
 
-#: gtk/gtkfilesel.c:850 gtk/gtkfilesel.c:2240
+#: gtk/gtkfilesel.c:853 gtk/gtkfilesel.c:2243
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Mappen är oläsbar: %s"
 
-#: gtk/gtkfilesel.c:981
+#: gtk/gtkfilesel.c:984
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2384,25 +2384,25 @@ msgstr ""
 "tillgänglig för detta program.\n"
 "Är du säker på att du vill välja den?"
 
-#: gtk/gtkfilesel.c:1112
+#: gtk/gtkfilesel.c:1115
 msgid "_New Folder"
 msgstr "_Ny mapp"
 
-#: gtk/gtkfilesel.c:1123
+#: gtk/gtkfilesel.c:1126
 msgid "De_lete File"
 msgstr "_Ta bort fil"
 
-#: gtk/gtkfilesel.c:1134
+#: gtk/gtkfilesel.c:1137
 msgid "_Rename File"
 msgstr "_Byt namn på fil"
 
-#: gtk/gtkfilesel.c:1436
+#: gtk/gtkfilesel.c:1439
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Mappnamnet \"%s\" innehåller tecken som inte är tillåtna i filnamn"
 
-#: gtk/gtkfilesel.c:1438
+#: gtk/gtkfilesel.c:1441
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2411,33 +2411,33 @@ msgstr ""
 "Fel vid skapande av mappen \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1439 gtk/gtkfilesel.c:1675
+#: gtk/gtkfilesel.c:1442 gtk/gtkfilesel.c:1678
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Du använde troligen tecken som inte är tillåtna i filnamn."
 
-#: gtk/gtkfilesel.c:1447
+#: gtk/gtkfilesel.c:1450
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Fel vid skapande av mappen \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1481
+#: gtk/gtkfilesel.c:1484
 msgid "New Folder"
 msgstr "Ny mapp"
 
-#: gtk/gtkfilesel.c:1496
+#: gtk/gtkfilesel.c:1499
 msgid "_Folder name:"
 msgstr "_Mappnamn:"
 
-#: gtk/gtkfilesel.c:1520
+#: gtk/gtkfilesel.c:1523
 msgid "C_reate"
 msgstr "S_kapa"
 
-#: gtk/gtkfilesel.c:1563
+#: gtk/gtkfilesel.c:1566
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Filnamnet \"%s\" innehåller tecken som inte är tillåtna i filnamn"
 
-#: gtk/gtkfilesel.c:1566
+#: gtk/gtkfilesel.c:1569
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2446,30 +2446,30 @@ msgstr ""
 "Fel vid borttagning av filen \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1568 gtk/gtkfilesel.c:1689
+#: gtk/gtkfilesel.c:1571 gtk/gtkfilesel.c:1692
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Det innehåller troligen tecken som inte är tillåtna i filnamn."
 
-#: gtk/gtkfilesel.c:1577
+#: gtk/gtkfilesel.c:1580
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Fel vid borttagning av filen \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1620
+#: gtk/gtkfilesel.c:1623
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Verkligen ta bort filen \"%s\"?"
 
-#: gtk/gtkfilesel.c:1625
+#: gtk/gtkfilesel.c:1628
 msgid "Delete File"
 msgstr "Ta bort fil"
 
-#: gtk/gtkfilesel.c:1671 gtk/gtkfilesel.c:1685
+#: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Filnamnet \"%s\" innehåller tecken som inte är tillåtna i filnamn"
 
-#: gtk/gtkfilesel.c:1673
+#: gtk/gtkfilesel.c:1676
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2478,7 +2478,7 @@ msgstr ""
 "Fel vid byte av namn på filen till \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1687
+#: gtk/gtkfilesel.c:1690
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2487,29 +2487,29 @@ msgstr ""
 "Fel vid byte av namn på filen \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1697
+#: gtk/gtkfilesel.c:1700
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Fel vid byte av namn på filen \"%s\" till \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1744
+#: gtk/gtkfilesel.c:1747
 msgid "Rename File"
 msgstr "Byt namn på fil"
 
-#: gtk/gtkfilesel.c:1759
+#: gtk/gtkfilesel.c:1762
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Byt namn på filen \"%s\" till:"
 
-#: gtk/gtkfilesel.c:1788
+#: gtk/gtkfilesel.c:1791
 msgid "_Rename"
 msgstr "_Byt namn"
 
-#: gtk/gtkfilesel.c:2220
+#: gtk/gtkfilesel.c:2223
 msgid "_Selection: "
 msgstr "_Markering: "
 
-#: gtk/gtkfilesel.c:3136
+#: gtk/gtkfilesel.c:3139
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2518,15 +2518,15 @@ msgstr ""
 "Filnamnet \"%s\" kunde inte konverteras till UTF-8 (prova att ställa in "
 "miljövariabeln G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3139
+#: gtk/gtkfilesel.c:3142
 msgid "Invalid UTF-8"
 msgstr "Ogiltig UTF-8"
 
-#: gtk/gtkfilesel.c:4016
+#: gtk/gtkfilesel.c:4019
 msgid "Name too long"
 msgstr "Namnet är för långt"
 
-#: gtk/gtkfilesel.c:4018
+#: gtk/gtkfilesel.c:4021
 msgid "Couldn't convert filename"
 msgstr "Kunde inte konvertera filnamn"
 
@@ -2691,7 +2691,7 @@ msgid "_Gamma value"
 msgstr "_Gammavärde"
 
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
-#: gtk/gtktoolbar.c:506 gtk/gtkviewport.c:150
+#: gtk/gtktoolbar.c:514 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Skuggtyp"
 
@@ -2828,82 +2828,82 @@ msgstr "Bildwidget att visa vid sidan om menytexten"
 msgid "Default"
 msgstr "Standard"
 
-#: gtk/gtkinputdialog.c:230
+#: gtk/gtkinputdialog.c:233
 msgid "Input"
 msgstr "Inmatning"
 
-#: gtk/gtkinputdialog.c:239
+#: gtk/gtkinputdialog.c:242
 msgid "No input devices"
 msgstr "Inga inmatningsenheter"
 
-#: gtk/gtkinputdialog.c:251
+#: gtk/gtkinputdialog.c:254
 msgid "_Device:"
 msgstr "_Enhet:"
 
-#: gtk/gtkinputdialog.c:268
+#: gtk/gtkinputdialog.c:271
 msgid "Disabled"
 msgstr "Avstängd"
 
-#: gtk/gtkinputdialog.c:275 gtk/gtkinvisible.c:114 gtk/gtkwindow.c:562
+#: gtk/gtkinputdialog.c:278 gtk/gtkinvisible.c:114 gtk/gtkwindow.c:562
 msgid "Screen"
 msgstr "Mask"
 
-#: gtk/gtkinputdialog.c:282
+#: gtk/gtkinputdialog.c:285
 msgid "Window"
 msgstr "Fönster"
 
-#: gtk/gtkinputdialog.c:289
+#: gtk/gtkinputdialog.c:292
 msgid "_Mode: "
 msgstr "_Läge: "
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:320
+#: gtk/gtkinputdialog.c:323
 msgid "_Axes"
 msgstr "_Axlar"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:337
+#: gtk/gtkinputdialog.c:340
 msgid "_Keys"
 msgstr "_Tangenter"
 
-#: gtk/gtkinputdialog.c:557
+#: gtk/gtkinputdialog.c:560
 msgid "X"
 msgstr "X"
 
-#: gtk/gtkinputdialog.c:558
+#: gtk/gtkinputdialog.c:561
 msgid "Y"
 msgstr "Y"
 
-#: gtk/gtkinputdialog.c:559
+#: gtk/gtkinputdialog.c:562
 msgid "Pressure"
 msgstr "Tryck"
 
-#: gtk/gtkinputdialog.c:560
+#: gtk/gtkinputdialog.c:563
 msgid "X Tilt"
 msgstr "X-lutning"
 
-#: gtk/gtkinputdialog.c:561
+#: gtk/gtkinputdialog.c:564
 msgid "Y Tilt"
 msgstr "Y-lutning"
 
-#: gtk/gtkinputdialog.c:562
+#: gtk/gtkinputdialog.c:565
 msgid "Wheel"
 msgstr "Hjul"
 
-#: gtk/gtkinputdialog.c:602
+#: gtk/gtkinputdialog.c:605
 msgid "none"
 msgstr "inget"
 
-#: gtk/gtkinputdialog.c:638 gtk/gtkinputdialog.c:674
+#: gtk/gtkinputdialog.c:641 gtk/gtkinputdialog.c:677
 msgid "(disabled)"
 msgstr "(avstängd)"
 
-#: gtk/gtkinputdialog.c:667
+#: gtk/gtkinputdialog.c:670
 msgid "(unknown)"
 msgstr "(okänd)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:754
+#: gtk/gtkinputdialog.c:757
 msgid "clear"
 msgstr "töm"
 
@@ -3143,7 +3143,7 @@ msgstr "Tiden innan en undermeny ska döljas när pekaren rör sig mot undermeny
 msgid "Style of bevel around the menubar"
 msgstr "Stil på avfasning runt menyraden"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:482
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:490
 msgid "Internal padding"
 msgstr "Intern utfyllnad"
 
@@ -3376,19 +3376,19 @@ msgstr "Visa standardknappen med framåtpil"
 msgid "Page %u"
 msgstr "Sida %u"
 
-#: gtk/gtkoptionmenu.c:190
+#: gtk/gtkoptionmenu.c:192
 msgid "Menu"
 msgstr "Meny"
 
-#: gtk/gtkoptionmenu.c:191
+#: gtk/gtkoptionmenu.c:193
 msgid "The menu of options"
 msgstr "Alternativmenyn"
 
-#: gtk/gtkoptionmenu.c:198
+#: gtk/gtkoptionmenu.c:200
 msgid "Size of dropdown indicator"
 msgstr "Storlek på nedfällningsindikator"
 
-#: gtk/gtkoptionmenu.c:204
+#: gtk/gtkoptionmenu.c:206
 msgid "Spacing around indicator"
 msgstr "Mellanrum runt indikator"
 
@@ -3492,7 +3492,7 @@ msgstr "Justering"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "GtkAdjustment ansluten till förloppsmätaren (föråldrat)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:423
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:431
 msgid "Orientation"
 msgstr "Orientering"
 
@@ -4841,90 +4841,90 @@ msgstr "Rita indikator"
 msgid "If the toggle part of the button is displayed"
 msgstr "Om växlingsdelen av knappen visas"
 
-#: gtk/gtktoolbar.c:424
+#: gtk/gtktoolbar.c:432
 msgid "The orientation of the toolbar"
 msgstr "Orienteringen på verktygsraden"
 
-#: gtk/gtktoolbar.c:432
+#: gtk/gtktoolbar.c:440
 msgid "Toolbar Style"
 msgstr "Stil på verktygsrad"
 
-#: gtk/gtktoolbar.c:433
+#: gtk/gtktoolbar.c:441
 msgid "How to draw the toolbar"
 msgstr "Hur verktygsraden ska ritas"
 
-#: gtk/gtktoolbar.c:440
+#: gtk/gtktoolbar.c:448
 msgid "Show Arrow"
 msgstr "Visa pil"
 
-#: gtk/gtktoolbar.c:441
+#: gtk/gtktoolbar.c:449
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "Om en pil ska visas om verktygsraden inte passar"
 
-#: gtk/gtktoolbar.c:450
+#: gtk/gtktoolbar.c:458
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "Huruvida objektet ska få extra utrymme när verktygsraden växer"
 
-#: gtk/gtktoolbar.c:458
+#: gtk/gtktoolbar.c:466
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "Huruvida objektet ska vara av samma storlek som andra liknande objekt"
 
-#: gtk/gtktoolbar.c:465
+#: gtk/gtktoolbar.c:473
 msgid "Pack End"
 msgstr "Packningsslut"
 
-#: gtk/gtktoolbar.c:466
+#: gtk/gtktoolbar.c:474
 msgid "Whether the item is positioned at the end of the toolbar"
 msgstr "Huruvida objektet är placerat i slutet på verktygsraden"
 
-#: gtk/gtktoolbar.c:473
+#: gtk/gtktoolbar.c:481
 msgid "Spacer size"
 msgstr "Storlek på utfyllnad"
 
-#: gtk/gtktoolbar.c:474
+#: gtk/gtktoolbar.c:482
 msgid "Size of spacers"
 msgstr "Storlek på utfyllnad"
 
-#: gtk/gtktoolbar.c:483
+#: gtk/gtktoolbar.c:491
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Mängden kantmellanrum mellan skuggan från verktygsraden och knapparna"
 
-#: gtk/gtktoolbar.c:491
+#: gtk/gtktoolbar.c:499
 msgid "Space style"
 msgstr "Stil på utfyllnad"
 
-#: gtk/gtktoolbar.c:492
+#: gtk/gtktoolbar.c:500
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Huruvida utfyllnad är vertikala linjer eller enbart tomt"
 
-#: gtk/gtktoolbar.c:499
+#: gtk/gtktoolbar.c:507
 msgid "Button relief"
 msgstr "Knapprelief"
 
-#: gtk/gtktoolbar.c:500
+#: gtk/gtktoolbar.c:508
 msgid "Type of bevel around toolbar buttons"
 msgstr "Typ av avfasning runt verktygsradsknappar"
 
-#: gtk/gtktoolbar.c:507
+#: gtk/gtktoolbar.c:515
 msgid "Style of bevel around the toolbar"
 msgstr "Stil på avfasning runt verktygsraden"
 
-#: gtk/gtktoolbar.c:513
+#: gtk/gtktoolbar.c:521
 msgid "Toolbar style"
 msgstr "Stil på verktygsrad"
 
-#: gtk/gtktoolbar.c:514
+#: gtk/gtktoolbar.c:522
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Huruvida standardverktygsrader endast har text, text och ikoner, endast "
 "ikoner, osv."
 
-#: gtk/gtktoolbar.c:520
+#: gtk/gtktoolbar.c:528
 msgid "Toolbar icon size"
 msgstr "Ikonstorlek på verktygsrad"
 
-#: gtk/gtktoolbar.c:521
+#: gtk/gtktoolbar.c:529
 msgid "Size of icons in default toolbars"
 msgstr "Storlek på ikoner i standardverktygsrader"
 
@@ -5247,7 +5247,7 @@ msgstr "Oväntad starttagg \"%s\" på rad %d tecken %d"
 msgid "Unexpected character data on line %d char %d"
 msgstr "Oväntade teckendata på rad %d tecken %d"
 
-#: gtk/gtkuimanager.c:1916
+#: gtk/gtkuimanager.c:1918
 msgid "Empty"
 msgstr "Tom"
 

@@ -19,7 +19,11 @@ GtkComboBoxEntry
 
 </para>
 
-@parent_instance: 
+
+<!-- ##### ARG GtkComboBoxEntry:text-column ##### -->
+<para>
+
+</para>
 
 <!-- ##### FUNCTION gtk_combo_box_entry_new ##### -->
 <para>

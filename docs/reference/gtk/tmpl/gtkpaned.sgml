@@ -73,6 +73,82 @@ gtk_widget_set_size_request (frame2, 50, -1);
 </para>
 
 
+<!-- ##### SIGNAL GtkPaned::accept-position ##### -->
+<para>
+
+</para>
+
+@paned: the object which received the signal.
+@Returns: 
+
+<!-- ##### SIGNAL GtkPaned::cancel-position ##### -->
+<para>
+
+</para>
+
+@paned: the object which received the signal.
+@Returns: 
+
+<!-- ##### SIGNAL GtkPaned::cycle-child-focus ##### -->
+<para>
+
+</para>
+
+@paned: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkPaned::cycle-handle-focus ##### -->
+<para>
+
+</para>
+
+@paned: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkPaned::move-handle ##### -->
+<para>
+
+</para>
+
+@paned: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkPaned::toggle-handle-focus ##### -->
+<para>
+
+</para>
+
+@paned: the object which received the signal.
+@Returns: 
+
+<!-- ##### ARG GtkPaned:position ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPaned:position-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPaned:resize ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPaned:shrink ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPaned:handle-size ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_paned_add1 ##### -->
 <para>
 Adds a child to the top or left pane with
@@ -153,80 +229,4 @@ gutter (the area between the two panes). It does nothing now.
 @paned: 
 @Returns: 
 
-
-<!-- ##### SIGNAL GtkPaned::accept-position ##### -->
-<para>
-
-</para>
-
-@paned: the object which received the signal.
-@Returns: 
-
-<!-- ##### SIGNAL GtkPaned::cancel-position ##### -->
-<para>
-
-</para>
-
-@paned: the object which received the signal.
-@Returns: 
-
-<!-- ##### SIGNAL GtkPaned::cycle-child-focus ##### -->
-<para>
-
-</para>
-
-@paned: the object which received the signal.
-@arg1: 
-@Returns: 
-
-<!-- ##### SIGNAL GtkPaned::cycle-handle-focus ##### -->
-<para>
-
-</para>
-
-@paned: the object which received the signal.
-@arg1: 
-@Returns: 
-
-<!-- ##### SIGNAL GtkPaned::move-handle ##### -->
-<para>
-
-</para>
-
-@paned: the object which received the signal.
-@arg1: 
-@Returns: 
-
-<!-- ##### SIGNAL GtkPaned::toggle-handle-focus ##### -->
-<para>
-
-</para>
-
-@paned: the object which received the signal.
-@Returns: 
-
-<!-- ##### ARG GtkPaned:position ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkPaned:position-set ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkPaned:resize ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkPaned:shrink ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkPaned:handle-size ##### -->
-<para>
-
-</para>
 

@@ -60,6 +60,26 @@ in pixels.</entry>
 </para>
 
 
+<!-- ##### ARG GtkMisc:xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMisc:xpad ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMisc:yalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMisc:ypad ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_misc_set_alignment ##### -->
 <para>
 Sets the alignment of the widget.
@@ -101,24 +121,4 @@ in pixels.
 @xpad: 
 @ypad: 
 
-
-<!-- ##### ARG GtkMisc:xalign ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMisc:xpad ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMisc:yalign ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMisc:ypad ##### -->
-<para>
-
-</para>
 

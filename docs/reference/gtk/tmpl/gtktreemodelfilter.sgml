@@ -19,7 +19,16 @@ GtkTreeModelFilter
 
 </para>
 
-@parent: 
+
+<!-- ##### ARG GtkTreeModelFilter:child-model ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeModelFilter:virtual-root ##### -->
+<para>
+
+</para>
 
 <!-- ##### USER_FUNCTION GtkTreeModelFilterVisibleFunc ##### -->
 <para>

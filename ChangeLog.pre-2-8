@@ -1,3 +1,15 @@
+Fri Oct 24 16:54:04 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* === Released 2.3.0 ===
+
+	* configure.in: Remove a stray comma.
+
+	* README.in: Fix a few notes about Xft 1 and pango-1.0.
+
+	* NEWS: Finish updates for 2.3.0.
+
+	* po/Makefile.in.in: Update to latest GLib version.
+
 Fri Oct 24 20:31:35 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkcellview.[ch], gtk/gtkcellviewmenuitem.[ch],

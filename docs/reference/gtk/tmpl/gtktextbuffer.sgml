@@ -29,6 +29,115 @@ types related to the text widget and how they work together.
 </para>
 
 
+<!-- ##### SIGNAL GtkTextBuffer::apply-tag ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL GtkTextBuffer::begin-user-action ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextBuffer::changed ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextBuffer::delete-range ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTextBuffer::end-user-action ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextBuffer::insert-child-anchor ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTextBuffer::insert-pixbuf ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTextBuffer::insert-text ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+<!-- # Unused Parameters # -->
+@arg4: 
+
+<!-- ##### SIGNAL GtkTextBuffer::mark-deleted ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkTextBuffer::mark-set ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTextBuffer::modified-changed ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextBuffer::remove-tag ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### ARG GtkTextBuffer:tag-table ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_text_buffer_new ##### -->
 <para>
 
@@ -627,113 +736,4 @@ types related to the text widget and how they work together.
 @buffer: 
 @clipboard: 
 
-
-<!-- ##### SIGNAL GtkTextBuffer::apply-tag ##### -->
-<para>
-
-</para>
-
-@textbuffer: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-
-<!-- ##### SIGNAL GtkTextBuffer::begin-user-action ##### -->
-<para>
-
-</para>
-
-@textbuffer: the object which received the signal.
-
-<!-- ##### SIGNAL GtkTextBuffer::changed ##### -->
-<para>
-
-</para>
-
-@textbuffer: the object which received the signal.
-
-<!-- ##### SIGNAL GtkTextBuffer::delete-range ##### -->
-<para>
-
-</para>
-
-@textbuffer: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkTextBuffer::end-user-action ##### -->
-<para>
-
-</para>
-
-@textbuffer: the object which received the signal.
-
-<!-- ##### SIGNAL GtkTextBuffer::insert-child-anchor ##### -->
-<para>
-
-</para>
-
-@textbuffer: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkTextBuffer::insert-pixbuf ##### -->
-<para>
-
-</para>
-
-@textbuffer: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkTextBuffer::insert-text ##### -->
-<para>
-
-</para>
-
-@textbuffer: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-<!-- # Unused Parameters # -->
-@arg4: 
-
-<!-- ##### SIGNAL GtkTextBuffer::mark-deleted ##### -->
-<para>
-
-</para>
-
-@textbuffer: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkTextBuffer::mark-set ##### -->
-<para>
-
-</para>
-
-@textbuffer: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkTextBuffer::modified-changed ##### -->
-<para>
-
-</para>
-
-@textbuffer: the object which received the signal.
-
-<!-- ##### SIGNAL GtkTextBuffer::remove-tag ##### -->
-<para>
-
-</para>
-
-@textbuffer: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-
-<!-- ##### ARG GtkTextBuffer:tag-table ##### -->
-<para>
-
-</para>
 

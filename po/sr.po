@@ -8,14 +8,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-10-07 13:11+0200\n"
+"POT-Creation-Date: 2003-10-24 16:15-0400\n"
 "PO-Revision-Date: 2003-10-07 13:20+0200\n"
 "Last-Translator: Данило Шеган <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:712
 #: gdk-pixbuf/gdk-pixbuf-io.c:845
@@ -1060,7 +1060,7 @@ msgstr "Размаци"
 msgid "The amount of space between children"
 msgstr "Количина размака међу садржаним елементима"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:457
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:465
 msgid "Homogeneous"
 msgstr "Једнообразно"
 
@@ -1068,7 +1068,7 @@ msgstr "Једнообразно"
 msgid "Whether the children should all be the same size"
 msgstr "Да ли сви садржани елементи треба да буду исте величине"
 
-#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:449
+#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:457
 #: gtk/gtktreeviewcolumn.c:291
 msgid "Expand"
 msgstr "Рашири"
@@ -1728,7 +1728,7 @@ msgstr "Стање једноизборника"
 msgid "Draw the toggle button as a radio button"
 msgstr "Исцртај жабицу као једноизборник"
 
-#: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:197
+#: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:199
 msgid "Indicator Size"
 msgstr "Величина показатеља"
 
@@ -1736,7 +1736,7 @@ msgstr "Величина показатеља"
 msgid "Size of check or radio indicator"
 msgstr "Величина показатеља означавања или једноизборника"
 
-#: gtk/gtkcheckbutton.c:106 gtk/gtkexpander.c:236 gtk/gtkoptionmenu.c:203
+#: gtk/gtkcheckbutton.c:106 gtk/gtkexpander.c:236 gtk/gtkoptionmenu.c:205
 msgid "Indicator Spacing"
 msgstr "Размаци показатеља"
 
@@ -2010,59 +2010,59 @@ msgstr "Вредност са списка"
 msgid "Whether entered values must already be present in the list"
 msgstr "Да ли унете вредности морају већ бити присутне на списку"
 
-#: gtk/gtkcombobox.c:333
+#: gtk/gtkcombobox.c:335
 msgid "ComboBox model"
 msgstr "Модел падајуће листе"
 
-#: gtk/gtkcombobox.c:334
+#: gtk/gtkcombobox.c:336
 msgid "The model for the combo box"
 msgstr "Модел за падајућу листу"
 
-#: gtk/gtkcombobox.c:341
+#: gtk/gtkcombobox.c:343
 msgid "Wrap width"
 msgstr "Ширина за прелом"
 
-#: gtk/gtkcombobox.c:342
+#: gtk/gtkcombobox.c:344
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Ширина за прелом при распоређивању ставки у мрежи"
 
-#: gtk/gtkcombobox.c:351
+#: gtk/gtkcombobox.c:353
 msgid "Row span column"
 msgstr "Ред обухвата колону"
 
-#: gtk/gtkcombobox.c:352
+#: gtk/gtkcombobox.c:354
 msgid "TreeModel column containing the row span values"
 msgstr "Модел колоне дрвета који садржи вредности обухватања редова"
 
-#: gtk/gtkcombobox.c:361
+#: gtk/gtkcombobox.c:363
 msgid "Column span column"
 msgstr "Колона обухвата колону"
 
-#: gtk/gtkcombobox.c:362
+#: gtk/gtkcombobox.c:364
 msgid "TreeModel column containing the column span values"
 msgstr "Модел колоне дрвета који садржи вредности обухватања колона"
 
-#: gtk/gtkcombobox.c:371
+#: gtk/gtkcombobox.c:373
 msgid "Active item"
 msgstr "Активна ставка"
 
-#: gtk/gtkcombobox.c:372
+#: gtk/gtkcombobox.c:374
 msgid "The item which is currently active"
 msgstr "Ставка која је тренутно активна"
 
-#: gtk/gtkcombobox.c:380
+#: gtk/gtkcombobox.c:382
 msgid "ComboBox appareance"
 msgstr "Изглед падајуће листе"
 
-#: gtk/gtkcombobox.c:381
+#: gtk/gtkcombobox.c:383
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "Изглед падајуће листе, ако је постављено означава Windows стил."
 
-#: gtk/gtkcomboboxentry.c:104
+#: gtk/gtkcomboboxentry.c:106
 msgid "Text Column"
 msgstr "Текстуална колона"
 
-#: gtk/gtkcomboboxentry.c:105
+#: gtk/gtkcomboboxentry.c:107
 msgid "A column in the data source model to get the strings from"
 msgstr "Колона у моделу извора података из којег се извлаче ниске"
 
@@ -2259,31 +2259,31 @@ msgstr "Изабери кад је у жижи"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Да ли изабрати садржај када поље пређе у жижу"
 
-#: gtk/gtkentry.c:4059 gtk/gtktextview.c:6875
+#: gtk/gtkentry.c:4079 gtk/gtktextview.c:6875
 msgid "Select _All"
 msgstr "Изабери _све"
 
-#: gtk/gtkentry.c:4069 gtk/gtktextview.c:6885
+#: gtk/gtkentry.c:4089 gtk/gtktextview.c:6885
 msgid "Input _Methods"
 msgstr "Начини уноса"
 
-#: gtk/gtkentry.c:4079 gtk/gtktextview.c:6896
+#: gtk/gtkentry.c:4099 gtk/gtktextview.c:6896
 msgid "_Insert Unicode Control Character"
 msgstr "_Убацити Уникод контролни знак"
 
-#: gtk/gtkentrycompletion.c:191
+#: gtk/gtkentrycompletion.c:193
 msgid "Completion Model"
 msgstr "Модел допуњавања"
 
-#: gtk/gtkentrycompletion.c:192
+#: gtk/gtkentrycompletion.c:194
 msgid "The model to find matches in"
 msgstr "Модел по којем се траже поклапања"
 
-#: gtk/gtkentrycompletion.c:198
+#: gtk/gtkentrycompletion.c:200
 msgid "Minimum Key Length"
 msgstr "Најмања дужина кључа"
 
-#: gtk/gtkentrycompletion.c:199
+#: gtk/gtkentrycompletion.c:201
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Најмања дужина кључа за претрагу ради налажења поклапања"
 
@@ -2348,52 +2348,52 @@ msgstr "Величина стрелице за гранање"
 msgid "Spacing around expander arrow"
 msgstr "Размаци око стрелица за гранање"
 
-#: gtk/gtkfilesel.c:556 gtk/gtkimage.c:167
+#: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "Име датотеке"
 
-#: gtk/gtkfilesel.c:557
+#: gtk/gtkfilesel.c:560
 msgid "The currently selected filename"
 msgstr "Тренутно изабрано име датотеке"
 
-#: gtk/gtkfilesel.c:563
+#: gtk/gtkfilesel.c:566
 msgid "Show file operations"
 msgstr "Прикажи операције са датотекама"
 
-#: gtk/gtkfilesel.c:564
+#: gtk/gtkfilesel.c:567
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Да ли приказати дугмиће за прављење/баратање датотекама"
 
-#: gtk/gtkfilesel.c:571
+#: gtk/gtkfilesel.c:574
 msgid "Select multiple"
 msgstr "Изабери више"
 
-#: gtk/gtkfilesel.c:572
+#: gtk/gtkfilesel.c:575
 msgid "Whether to allow multiple files to be selected"
 msgstr "Да ли дозволити избор више датотека"
 
-#: gtk/gtkfilesel.c:727
+#: gtk/gtkfilesel.c:730
 msgid "Folders"
 msgstr "Директоријуми"
 
-#: gtk/gtkfilesel.c:731
+#: gtk/gtkfilesel.c:734
 msgid "Fol_ders"
 msgstr "_Директоријуми"
 
-#: gtk/gtkfilesel.c:763
+#: gtk/gtkfilesel.c:766
 msgid "Files"
 msgstr "Датотеке"
 
-#: gtk/gtkfilesel.c:767
+#: gtk/gtkfilesel.c:770
 msgid "_Files"
 msgstr "Дато_теке"
 
-#: gtk/gtkfilesel.c:850 gtk/gtkfilesel.c:2240
+#: gtk/gtkfilesel.c:853 gtk/gtkfilesel.c:2243
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Директоријум нечитљив: %s"
 
-#: gtk/gtkfilesel.c:981
+#: gtk/gtkfilesel.c:984
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2404,26 +2404,26 @@ msgstr ""
 "доступна овом програму.\n"
 "Да ли сте сигурни да желите да је изаберете?"
 
-#: gtk/gtkfilesel.c:1112
+#: gtk/gtkfilesel.c:1115
 msgid "_New Folder"
 msgstr "_Нови директоријум"
 
-#: gtk/gtkfilesel.c:1123
+#: gtk/gtkfilesel.c:1126
 msgid "De_lete File"
 msgstr "_Обриши датотеку"
 
-#: gtk/gtkfilesel.c:1134
+#: gtk/gtkfilesel.c:1137
 msgid "_Rename File"
 msgstr "_Преименуј датотеку"
 
-#: gtk/gtkfilesel.c:1436
+#: gtk/gtkfilesel.c:1439
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Име директоријума „%s“ садржи симболе који нису дозвољени у именима датотека"
 
-#: gtk/gtkfilesel.c:1438
+#: gtk/gtkfilesel.c:1441
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2432,34 +2432,34 @@ msgstr ""
 "Грешка при образовању директоријума „%s“: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1439 gtk/gtkfilesel.c:1675
+#: gtk/gtkfilesel.c:1442 gtk/gtkfilesel.c:1678
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Вероватно сте користили недозвољене симболе у имену."
 
-#: gtk/gtkfilesel.c:1447
+#: gtk/gtkfilesel.c:1450
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Грешка при образовању директоријума „%s“: %s\n"
 
-#: gtk/gtkfilesel.c:1481
+#: gtk/gtkfilesel.c:1484
 msgid "New Folder"
 msgstr "Нови директоријум"
 
-#: gtk/gtkfilesel.c:1496
+#: gtk/gtkfilesel.c:1499
 msgid "_Folder name:"
 msgstr "_Име директоријума:"
 
-#: gtk/gtkfilesel.c:1520
+#: gtk/gtkfilesel.c:1523
 msgid "C_reate"
 msgstr "_Образуј"
 
-#: gtk/gtkfilesel.c:1563
+#: gtk/gtkfilesel.c:1566
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Име датотеке „%s“ садржи симболе који су недозвољени у именима датотека"
 
-#: gtk/gtkfilesel.c:1566
+#: gtk/gtkfilesel.c:1569
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2468,30 +2468,30 @@ msgstr ""
 "Грешка при брисању датотеке „%s“: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1568 gtk/gtkfilesel.c:1689
+#: gtk/gtkfilesel.c:1571 gtk/gtkfilesel.c:1692
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Вероватно садржи симболе недозвољене у именима датотека."
 
-#: gtk/gtkfilesel.c:1577
+#: gtk/gtkfilesel.c:1580
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Грешка при брисању датотеке „%s“: %s"
 
-#: gtk/gtkfilesel.c:1620
+#: gtk/gtkfilesel.c:1623
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Заиста обрисати датотеку „%s“?"
 
-#: gtk/gtkfilesel.c:1625
+#: gtk/gtkfilesel.c:1628
 msgid "Delete File"
 msgstr "Обриши датотеку"
 
-#: gtk/gtkfilesel.c:1671 gtk/gtkfilesel.c:1685
+#: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Име датотеке „%s“ садржи симболе који су недозвољени у именима"
 
-#: gtk/gtkfilesel.c:1673
+#: gtk/gtkfilesel.c:1676
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2500,7 +2500,7 @@ msgstr ""
 "Грешка при преименовању датотеке у „%s“: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1687
+#: gtk/gtkfilesel.c:1690
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2509,29 +2509,29 @@ msgstr ""
 "Грешка при преименовању датотеке „%s“: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1697
+#: gtk/gtkfilesel.c:1700
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Грешка при преименовању датотеке „%s“ у „%s“: %s"
 
-#: gtk/gtkfilesel.c:1744
+#: gtk/gtkfilesel.c:1747
 msgid "Rename File"
 msgstr "Применуј датотеку"
 
-#: gtk/gtkfilesel.c:1759
+#: gtk/gtkfilesel.c:1762
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Преименовати датотеку „%s“ у:"
 
-#: gtk/gtkfilesel.c:1788
+#: gtk/gtkfilesel.c:1791
 msgid "_Rename"
 msgstr "_Преименуј"
 
-#: gtk/gtkfilesel.c:2220
+#: gtk/gtkfilesel.c:2223
 msgid "_Selection: "
 msgstr "_Избор: "
 
-#: gtk/gtkfilesel.c:3136
+#: gtk/gtkfilesel.c:3139
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2540,15 +2540,15 @@ msgstr ""
 "Име датотеке „%s“ се не може претворити у УТФ-8 (покушајте поставити "
 "променљиву окружења G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3139
+#: gtk/gtkfilesel.c:3142
 msgid "Invalid UTF-8"
 msgstr "Неисправан УТФ-8"
 
-#: gtk/gtkfilesel.c:4016
+#: gtk/gtkfilesel.c:4019
 msgid "Name too long"
 msgstr "Предугачко име"
 
-#: gtk/gtkfilesel.c:4018
+#: gtk/gtkfilesel.c:4021
 msgid "Couldn't convert filename"
 msgstr "Не може претворити име датотеке"
 
@@ -2713,7 +2713,7 @@ msgid "_Gamma value"
 msgstr "_Гама вредност"
 
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
-#: gtk/gtktoolbar.c:506 gtk/gtkviewport.c:150
+#: gtk/gtktoolbar.c:514 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Врста сенке"
 
@@ -2848,82 +2848,82 @@ msgstr "Садржани елемент који се појављује пор�
 msgid "Default"
 msgstr "Подразумевано"
 
-#: gtk/gtkinputdialog.c:230
+#: gtk/gtkinputdialog.c:233
 msgid "Input"
 msgstr "Унос"
 
-#: gtk/gtkinputdialog.c:239
+#: gtk/gtkinputdialog.c:242
 msgid "No input devices"
 msgstr "Нема улазних уређаја"
 
-#: gtk/gtkinputdialog.c:251
+#: gtk/gtkinputdialog.c:254
 msgid "_Device:"
 msgstr "_Уређај:"
 
-#: gtk/gtkinputdialog.c:268
+#: gtk/gtkinputdialog.c:271
 msgid "Disabled"
 msgstr "Онемогућено"
 
-#: gtk/gtkinputdialog.c:275 gtk/gtkinvisible.c:114 gtk/gtkwindow.c:562
+#: gtk/gtkinputdialog.c:278 gtk/gtkinvisible.c:114 gtk/gtkwindow.c:562
 msgid "Screen"
 msgstr "Екран"
 
-#: gtk/gtkinputdialog.c:282
+#: gtk/gtkinputdialog.c:285
 msgid "Window"
 msgstr "Прозор"
 
-#: gtk/gtkinputdialog.c:289
+#: gtk/gtkinputdialog.c:292
 msgid "_Mode: "
 msgstr "_Мод: "
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:320
+#: gtk/gtkinputdialog.c:323
 msgid "_Axes"
 msgstr "_Осе"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:337
+#: gtk/gtkinputdialog.c:340
 msgid "_Keys"
 msgstr "_Тастери"
 
-#: gtk/gtkinputdialog.c:557
+#: gtk/gtkinputdialog.c:560
 msgid "X"
 msgstr "X"
 
-#: gtk/gtkinputdialog.c:558
+#: gtk/gtkinputdialog.c:561
 msgid "Y"
 msgstr "Y"
 
-#: gtk/gtkinputdialog.c:559
+#: gtk/gtkinputdialog.c:562
 msgid "Pressure"
 msgstr "Притисак"
 
-#: gtk/gtkinputdialog.c:560
+#: gtk/gtkinputdialog.c:563
 msgid "X Tilt"
 msgstr "X нагиб"
 
-#: gtk/gtkinputdialog.c:561
+#: gtk/gtkinputdialog.c:564
 msgid "Y Tilt"
 msgstr "Y нагиб"
 
-#: gtk/gtkinputdialog.c:562
+#: gtk/gtkinputdialog.c:565
 msgid "Wheel"
 msgstr "Точкић"
 
-#: gtk/gtkinputdialog.c:602
+#: gtk/gtkinputdialog.c:605
 msgid "none"
 msgstr "ништа"
 
-#: gtk/gtkinputdialog.c:638 gtk/gtkinputdialog.c:674
+#: gtk/gtkinputdialog.c:641 gtk/gtkinputdialog.c:677
 msgid "(disabled)"
 msgstr "(онемогућено)"
 
-#: gtk/gtkinputdialog.c:667
+#: gtk/gtkinputdialog.c:670
 msgid "(unknown)"
 msgstr "(непознато)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:754
+#: gtk/gtkinputdialog.c:757
 msgid "clear"
 msgstr "очистити"
 
@@ -3157,7 +3157,7 @@ msgstr "Време пре скривања подменија када се по
 msgid "Style of bevel around the menubar"
 msgstr "Стил удубљења око мени линије"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:482
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:490
 msgid "Internal padding"
 msgstr "Унутрашња попуна"
 
@@ -3388,19 +3388,19 @@ msgstr "Прикажи обично дугме са стрелицом унап�
 msgid "Page %u"
 msgstr "Лист %u"
 
-#: gtk/gtkoptionmenu.c:190
+#: gtk/gtkoptionmenu.c:192
 msgid "Menu"
 msgstr "Мени"
 
-#: gtk/gtkoptionmenu.c:191
+#: gtk/gtkoptionmenu.c:193
 msgid "The menu of options"
 msgstr "Мени могућности"
 
-#: gtk/gtkoptionmenu.c:198
+#: gtk/gtkoptionmenu.c:200
 msgid "Size of dropdown indicator"
 msgstr "Величина падајућег показатеља"
 
-#: gtk/gtkoptionmenu.c:204
+#: gtk/gtkoptionmenu.c:206
 msgid "Spacing around indicator"
 msgstr "Размаци око показатеља"
 
@@ -3505,7 +3505,7 @@ msgstr "Поправка"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "GtkAdjustment везан за елемент за приказ напретка (превазиђено)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:423
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:431
 msgid "Orientation"
 msgstr "Правац пружања"
 
@@ -4851,92 +4851,92 @@ msgstr "Приказ показатеља"
 msgid "If the toggle part of the button is displayed"
 msgstr "Да ли се приказује показатељ жабице"
 
-#: gtk/gtktoolbar.c:424
+#: gtk/gtktoolbar.c:432
 msgid "The orientation of the toolbar"
 msgstr "Правац пружања линије са алаткама"
 
-#: gtk/gtktoolbar.c:432
+#: gtk/gtktoolbar.c:440
 msgid "Toolbar Style"
 msgstr "Стил линије са алаткама"
 
-#: gtk/gtktoolbar.c:433
+#: gtk/gtktoolbar.c:441
 msgid "How to draw the toolbar"
 msgstr "Како исцртати линију са алаткама"
 
-#: gtk/gtktoolbar.c:440
+#: gtk/gtktoolbar.c:448
 msgid "Show Arrow"
 msgstr "Прикажи стрелицу"
 
-#: gtk/gtktoolbar.c:441
+#: gtk/gtktoolbar.c:449
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "Да ли треба да прикаже стрелицу уколико не стане линија са алаткама"
 
-#: gtk/gtktoolbar.c:450
+#: gtk/gtktoolbar.c:458
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 "Да ли ставка треба да добије додатни простор када расте линија са алаткама"
 
-#: gtk/gtktoolbar.c:458
+#: gtk/gtktoolbar.c:466
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr ""
 "Да ли ставка треба да буде исте величине као и остале једнообразне ставке"
 
-#: gtk/gtktoolbar.c:465
+#: gtk/gtktoolbar.c:473
 msgid "Pack End"
 msgstr "Стави на крај"
 
-#: gtk/gtktoolbar.c:466
+#: gtk/gtktoolbar.c:474
 msgid "Whether the item is positioned at the end of the toolbar"
 msgstr "Да ли се ставка смешта на крај линије са алаткама"
 
-#: gtk/gtktoolbar.c:473
+#: gtk/gtktoolbar.c:481
 msgid "Spacer size"
 msgstr "Величина размака"
 
-#: gtk/gtktoolbar.c:474
+#: gtk/gtktoolbar.c:482
 msgid "Size of spacers"
 msgstr "Величина размака"
 
-#: gtk/gtktoolbar.c:483
+#: gtk/gtktoolbar.c:491
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Количина ивичног размака између сенке линије са алатима и дугмића"
 
-#: gtk/gtktoolbar.c:491
+#: gtk/gtktoolbar.c:499
 msgid "Space style"
 msgstr "Стил размака"
 
-#: gtk/gtktoolbar.c:492
+#: gtk/gtktoolbar.c:500
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Да ли су размаци усправне линије или само празнине"
 
-#: gtk/gtktoolbar.c:499
+#: gtk/gtktoolbar.c:507
 msgid "Button relief"
 msgstr "Ивица дугмића"
 
-#: gtk/gtktoolbar.c:500
+#: gtk/gtktoolbar.c:508
 msgid "Type of bevel around toolbar buttons"
 msgstr "Врста удубљења око дугмића на линији са алаткама"
 
-#: gtk/gtktoolbar.c:507
+#: gtk/gtktoolbar.c:515
 msgid "Style of bevel around the toolbar"
 msgstr "Врста удубљења око линије са алаткама"
 
-#: gtk/gtktoolbar.c:513
+#: gtk/gtktoolbar.c:521
 msgid "Toolbar style"
 msgstr "Начин приказа линије са алаткама"
 
-#: gtk/gtktoolbar.c:514
+#: gtk/gtktoolbar.c:522
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Да ли уобичајене линије са алаткама имају само текст, текст и иконе, само "
 "иконе, итд."
 
-#: gtk/gtktoolbar.c:520
+#: gtk/gtktoolbar.c:528
 msgid "Toolbar icon size"
 msgstr "Величина икона за алатке"
 
-#: gtk/gtktoolbar.c:521
+#: gtk/gtktoolbar.c:529
 msgid "Size of icons in default toolbars"
 msgstr "Величина икона за уобичајене линије са алаткама"
 
@@ -5258,7 +5258,7 @@ msgstr "Неочекивана почетна ознака „%s“ у %d. ре�
 msgid "Unexpected character data on line %d char %d"
 msgstr "Неочекивани знаковни подаци у %d. реду, %d. знак"
 
-#: gtk/gtkuimanager.c:1916
+#: gtk/gtkuimanager.c:1918
 msgid "Empty"
 msgstr "Празно"
 

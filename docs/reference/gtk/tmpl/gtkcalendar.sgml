@@ -65,6 +65,91 @@ are 0-11) while <structfield>selected_day</structfield> is one-based
 </note>
 
 
+<!-- ##### SIGNAL GtkCalendar::day-selected ##### -->
+<para>
+Emitted when the user selects a day.
+</para>
+
+@calendar: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCalendar::day-selected-double-click ##### -->
+<para>
+
+</para>
+
+@calendar: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCalendar::month-changed ##### -->
+<para>
+Emitted when the user clicks a button to change the selected month on a
+calendar.
+</para>
+
+@calendar: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCalendar::next-month ##### -->
+<para>
+
+</para>
+
+@calendar: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCalendar::next-year ##### -->
+<para>
+
+</para>
+
+@calendar: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCalendar::prev-month ##### -->
+<para>
+
+</para>
+
+@calendar: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCalendar::prev-year ##### -->
+<para>
+
+</para>
+
+@calendar: the object which received the signal.
+
+<!-- ##### ARG GtkCalendar:day ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:month ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:no-month-change ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:show-day-names ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:show-heading ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:show-week-numbers ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:year ##### -->
+<para>
+
+</para>
+
 <!-- ##### ENUM GtkCalendarDisplayOptions ##### -->
 <para>
 These options can be used to influence the display and behaviour of a #GtkCalendar.
@@ -190,89 +275,4 @@ gtk_calendar_freeze() are displayed.
 
 @calendar: a #GtkCalendar.
 
-
-<!-- ##### SIGNAL GtkCalendar::day-selected ##### -->
-<para>
-Emitted when the user selects a day.
-</para>
-
-@calendar: the object which received the signal.
-
-<!-- ##### SIGNAL GtkCalendar::day-selected-double-click ##### -->
-<para>
-
-</para>
-
-@calendar: the object which received the signal.
-
-<!-- ##### SIGNAL GtkCalendar::month-changed ##### -->
-<para>
-Emitted when the user clicks a button to change the selected month on a
-calendar.
-</para>
-
-@calendar: the object which received the signal.
-
-<!-- ##### SIGNAL GtkCalendar::next-month ##### -->
-<para>
-
-</para>
-
-@calendar: the object which received the signal.
-
-<!-- ##### SIGNAL GtkCalendar::next-year ##### -->
-<para>
-
-</para>
-
-@calendar: the object which received the signal.
-
-<!-- ##### SIGNAL GtkCalendar::prev-month ##### -->
-<para>
-
-</para>
-
-@calendar: the object which received the signal.
-
-<!-- ##### SIGNAL GtkCalendar::prev-year ##### -->
-<para>
-
-</para>
-
-@calendar: the object which received the signal.
-
-<!-- ##### ARG GtkCalendar:day ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCalendar:month ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCalendar:no-month-change ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCalendar:show-day-names ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCalendar:show-heading ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCalendar:show-week-numbers ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCalendar:year ##### -->
-<para>
-
-</para>
 

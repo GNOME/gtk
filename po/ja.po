@@ -10,14 +10,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-10-05 21:03+0900\n"
+"POT-Creation-Date: 2003-10-24 16:15-0400\n"
 "PO-Revision-Date: 2003-10-05 22:47+0900\n"
 "Last-Translator: KAMAGASAKO Masatoshi <emerald@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:712
 #: gdk-pixbuf/gdk-pixbuf-io.c:845
@@ -811,7 +811,10 @@ msgstr "重要か"
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
-msgstr "このアクションを重要と見なすかどうかを表します。TRUE の場合、このアクションのツールアイテム・プロキシは GTK_TOOLBAR_BOTH_HORIZ モードでテキストを表示します。"
+msgstr ""
+"このアクションを重要と見なすかどうかを表します。TRUE の場合、このアクションの"
+"ツールアイテム・プロキシは GTK_TOOLBAR_BOTH_HORIZ モードでテキストを表示しま"
+"す。"
 
 #: gtk/gtkaction.c:228
 msgid "Hide if empty"
@@ -1028,7 +1031,7 @@ msgstr "間隔"
 msgid "The amount of space between children"
 msgstr "子ウィジェットと子ウィジェットの間におく空白の大きさ"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:457
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:465
 msgid "Homogeneous"
 msgstr "均一"
 
@@ -1036,7 +1039,7 @@ msgstr "均一"
 msgid "Whether the children should all be the same size"
 msgstr "全ての子ウィジェットを同じ大きさにするかどうか"
 
-#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:449
+#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:457
 #: gtk/gtktreeviewcolumn.c:291
 msgid "Expand"
 msgstr "展張"
@@ -1695,7 +1698,7 @@ msgstr "ラジオ・ボタンの状態"
 msgid "Draw the toggle button as a radio button"
 msgstr "トグル・ボタンをラジオ・ボタンとして描画する"
 
-#: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:197
+#: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:199
 msgid "Indicator Size"
 msgstr "表示サイズ"
 
@@ -1703,7 +1706,7 @@ msgstr "表示サイズ"
 msgid "Size of check or radio indicator"
 msgstr "チェック・ボタンまたはラジオ・ボタンの表示部の大きさ"
 
-#: gtk/gtkcheckbutton.c:106 gtk/gtkexpander.c:236 gtk/gtkoptionmenu.c:203
+#: gtk/gtkcheckbutton.c:106 gtk/gtkexpander.c:236 gtk/gtkoptionmenu.c:205
 msgid "Indicator Spacing"
 msgstr "表示部の間隔"
 
@@ -1970,59 +1973,59 @@ msgstr "リストの値"
 msgid "Whether entered values must already be present in the list"
 msgstr "入力した値がリストの中に既に存在しているかどうか"
 
-#: gtk/gtkcombobox.c:333
+#: gtk/gtkcombobox.c:335
 msgid "ComboBox model"
 msgstr "ComboBox モデル"
 
-#: gtk/gtkcombobox.c:334
+#: gtk/gtkcombobox.c:336
 msgid "The model for the combo box"
 msgstr "コンボ・ボックスに使用するモデル"
 
-#: gtk/gtkcombobox.c:341
+#: gtk/gtkcombobox.c:343
 msgid "Wrap width"
 msgstr "折り返し幅"
 
-#: gtk/gtkcombobox.c:342
+#: gtk/gtkcombobox.c:344
 msgid "Wrap width for layouting the items in a grid"
 msgstr "グリッドに項目をレイアウトするための折り返し幅"
 
-#: gtk/gtkcombobox.c:351
+#: gtk/gtkcombobox.c:353
 msgid "Row span column"
 msgstr "行間隔を持つ列"
 
-#: gtk/gtkcombobox.c:352
+#: gtk/gtkcombobox.c:354
 msgid "TreeModel column containing the row span values"
 msgstr "行の間隔の値を保持している TreeModel の列"
 
-#: gtk/gtkcombobox.c:361
+#: gtk/gtkcombobox.c:363
 msgid "Column span column"
 msgstr "列間隔を持つ列"
 
-#: gtk/gtkcombobox.c:362
+#: gtk/gtkcombobox.c:364
 msgid "TreeModel column containing the column span values"
 msgstr "列の間隔の値を保持している TreeModel の列"
 
-#: gtk/gtkcombobox.c:371
+#: gtk/gtkcombobox.c:373
 msgid "Active item"
 msgstr "有効な項目"
 
-#: gtk/gtkcombobox.c:372
+#: gtk/gtkcombobox.c:374
 msgid "The item which is currently active"
 msgstr "現在アクティブな項目"
 
-#: gtk/gtkcombobox.c:380
+#: gtk/gtkcombobox.c:382
 msgid "ComboBox appareance"
 msgstr "ComboBox の外観"
 
-#: gtk/gtkcombobox.c:381
+#: gtk/gtkcombobox.c:383
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "ComboBox の外観です。TRUE の場合は Windows スタイルになります。"
 
-#: gtk/gtkcomboboxentry.c:104
+#: gtk/gtkcomboboxentry.c:106
 msgid "Text Column"
 msgstr "テキスト列"
 
-#: gtk/gtkcomboboxentry.c:105
+#: gtk/gtkcomboboxentry.c:107
 msgid "A column in the data source model to get the strings from"
 msgstr "文字列を取得する先のデータ・ソース・モデル中の列"
 
@@ -2219,31 +2222,31 @@ msgstr "フォーカス部の選択"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "エントリにフォーカスが当たった際にその内容を選択するかどうか"
 
-#: gtk/gtkentry.c:4059 gtk/gtktextview.c:6875
+#: gtk/gtkentry.c:4079 gtk/gtktextview.c:6875
 msgid "Select _All"
 msgstr "すべて選択(_A)"
 
-#: gtk/gtkentry.c:4069 gtk/gtktextview.c:6885
+#: gtk/gtkentry.c:4089 gtk/gtktextview.c:6885
 msgid "Input _Methods"
 msgstr "入力メソッド(_M)"
 
-#: gtk/gtkentry.c:4079 gtk/gtktextview.c:6896
+#: gtk/gtkentry.c:4099 gtk/gtktextview.c:6896
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode 制御文字の挿入(_I)"
 
-#: gtk/gtkentrycompletion.c:191
+#: gtk/gtkentrycompletion.c:193
 msgid "Completion Model"
 msgstr "補完モデル"
 
-#: gtk/gtkentrycompletion.c:192
+#: gtk/gtkentrycompletion.c:194
 msgid "The model to find matches in"
 msgstr "検索に使用するモデル"
 
-#: gtk/gtkentrycompletion.c:198
+#: gtk/gtkentrycompletion.c:200
 msgid "Minimum Key Length"
 msgstr "キーの最小の長さ"
 
-#: gtk/gtkentrycompletion.c:199
+#: gtk/gtkentrycompletion.c:201
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "検索するために必要なキーの最小の長さ"
 
@@ -2252,10 +2255,13 @@ msgid "Visible Window"
 msgstr "可視ウィンドウ"
 
 #: gtk/gtkeventbox.c:120
+#, fuzzy
 msgid ""
-" Whether the event box is visible, as opposed to invisible and only used to "
+"Whether the event box is visible, as opposed to invisible and only used to "
 "trap events."
-msgstr "イベント・ボックスが可視かどうか設定します。不可視の逆で、トラップ・イベントにのみ使用されます。"
+msgstr ""
+"イベント・ボックスが可視かどうか設定します。不可視の逆で、トラップ・イベント"
+"にのみ使用されます。"
 
 #: gtk/gtkeventbox.c:126
 msgid "Above child"
@@ -2265,7 +2271,9 @@ msgstr "子ウィジェットの上"
 msgid ""
 "Whether the event-trapping window of the eventbox is above the window of the "
 "child widget as opposed to below it."
-msgstr "イベントボックスのイベント・トラップ・ウィンドウを、子ウィジェットの下ではなく上に表示するかどうか設定します。"
+msgstr ""
+"イベントボックスのイベント・トラップ・ウィンドウを、子ウィジェットの下ではな"
+"く上に表示するかどうか設定します。"
 
 #: gtk/gtkexpander.c:186
 msgid "Expanded"
@@ -2303,52 +2311,52 @@ msgstr "展張矢印の大きさ"
 msgid "Spacing around expander arrow"
 msgstr "展張矢印の周りの間隔"
 
-#: gtk/gtkfilesel.c:556 gtk/gtkimage.c:167
+#: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "ファイル名"
 
-#: gtk/gtkfilesel.c:557
+#: gtk/gtkfilesel.c:560
 msgid "The currently selected filename"
 msgstr "現在選択されているファイル名"
 
-#: gtk/gtkfilesel.c:563
+#: gtk/gtkfilesel.c:566
 msgid "Show file operations"
 msgstr "ファイル操作の表示"
 
-#: gtk/gtkfilesel.c:564
+#: gtk/gtkfilesel.c:567
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "ファイルの作成やファイル操作のボタンを表示するかどうか"
 
-#: gtk/gtkfilesel.c:571
+#: gtk/gtkfilesel.c:574
 msgid "Select multiple"
 msgstr "複数のファイルの選択"
 
-#: gtk/gtkfilesel.c:572
+#: gtk/gtkfilesel.c:575
 msgid "Whether to allow multiple files to be selected"
 msgstr "複数のファイルを選択できるようにするかどうか"
 
-#: gtk/gtkfilesel.c:727
+#: gtk/gtkfilesel.c:730
 msgid "Folders"
 msgstr "フォルダ"
 
-#: gtk/gtkfilesel.c:731
+#: gtk/gtkfilesel.c:734
 msgid "Fol_ders"
 msgstr "フォルダ(_D)"
 
-#: gtk/gtkfilesel.c:763
+#: gtk/gtkfilesel.c:766
 msgid "Files"
 msgstr "ファイル"
 
-#: gtk/gtkfilesel.c:767
+#: gtk/gtkfilesel.c:770
 msgid "_Files"
 msgstr "ファイル(_F)"
 
-#: gtk/gtkfilesel.c:850 gtk/gtkfilesel.c:2240
+#: gtk/gtkfilesel.c:853 gtk/gtkfilesel.c:2243
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "読めないフォルダ: %s"
 
-#: gtk/gtkfilesel.c:981
+#: gtk/gtkfilesel.c:984
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2359,25 +2367,25 @@ msgstr ""
 "ん。\n"
 "本当に選択しますか？"
 
-#: gtk/gtkfilesel.c:1112
+#: gtk/gtkfilesel.c:1115
 msgid "_New Folder"
 msgstr "新しいフォルダ(_N)"
 
-#: gtk/gtkfilesel.c:1123
+#: gtk/gtkfilesel.c:1126
 msgid "De_lete File"
 msgstr "ファイルの削除(_L)"
 
-#: gtk/gtkfilesel.c:1134
+#: gtk/gtkfilesel.c:1137
 msgid "_Rename File"
 msgstr "ファイル名の変更(_R)"
 
-#: gtk/gtkfilesel.c:1436
+#: gtk/gtkfilesel.c:1439
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "フォルダ名 \"%s\" にファイル名として利用できない文字が含まれています"
 
-#: gtk/gtkfilesel.c:1438
+#: gtk/gtkfilesel.c:1441
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2386,33 +2394,33 @@ msgstr ""
 "フォルダ \"%s\" の作成中にエラー: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1439 gtk/gtkfilesel.c:1675
+#: gtk/gtkfilesel.c:1442 gtk/gtkfilesel.c:1678
 msgid "You probably used symbols not allowed in filenames."
 msgstr "おそらくファイル名として利用できない文字が含まれています"
 
-#: gtk/gtkfilesel.c:1447
+#: gtk/gtkfilesel.c:1450
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "フォルダ \"%s\" の作成中にエラー: %s\n"
 
-#: gtk/gtkfilesel.c:1481
+#: gtk/gtkfilesel.c:1484
 msgid "New Folder"
 msgstr "新しいフォルダ"
 
-#: gtk/gtkfilesel.c:1496
+#: gtk/gtkfilesel.c:1499
 msgid "_Folder name:"
 msgstr "フォルダ名(_F):"
 
-#: gtk/gtkfilesel.c:1520
+#: gtk/gtkfilesel.c:1523
 msgid "C_reate"
 msgstr "作成(_R)"
 
-#: gtk/gtkfilesel.c:1563
+#: gtk/gtkfilesel.c:1566
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ファイル名 \"%s\" にファイル名として利用できない文字が含まれています"
 
-#: gtk/gtkfilesel.c:1566
+#: gtk/gtkfilesel.c:1569
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2421,30 +2429,30 @@ msgstr ""
 "ファイル \"%s\" の削除中にエラー: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1568 gtk/gtkfilesel.c:1689
+#: gtk/gtkfilesel.c:1571 gtk/gtkfilesel.c:1692
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "おそらくファイル名として利用できない文字が含まれています"
 
-#: gtk/gtkfilesel.c:1577
+#: gtk/gtkfilesel.c:1580
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "ファイル \"%s\" の削除中にエラー: %s"
 
-#: gtk/gtkfilesel.c:1620
+#: gtk/gtkfilesel.c:1623
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "本当にファイル \"%s\" を削除してもよろしいですか？"
 
-#: gtk/gtkfilesel.c:1625
+#: gtk/gtkfilesel.c:1628
 msgid "Delete File"
 msgstr "ファイル削除"
 
-#: gtk/gtkfilesel.c:1671 gtk/gtkfilesel.c:1685
+#: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ファイル名 \"%s\" にはファイル名として利用できない文字が含まれています"
 
-#: gtk/gtkfilesel.c:1673
+#: gtk/gtkfilesel.c:1676
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2453,7 +2461,7 @@ msgstr ""
 "ファイル名を \"%s\" へ変更する際にエラー: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1687
+#: gtk/gtkfilesel.c:1690
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2462,29 +2470,29 @@ msgstr ""
 "ファイル名 \"%s\" を変更する際にエラー: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1697
+#: gtk/gtkfilesel.c:1700
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "ファイル名 \"%s\" を \"%s\" に変更する際にエラー: %s"
 
-#: gtk/gtkfilesel.c:1744
+#: gtk/gtkfilesel.c:1747
 msgid "Rename File"
 msgstr "ファイル名の変更"
 
-#: gtk/gtkfilesel.c:1759
+#: gtk/gtkfilesel.c:1762
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "ファイル '%s' の名前の変更:"
 
-#: gtk/gtkfilesel.c:1788
+#: gtk/gtkfilesel.c:1791
 msgid "_Rename"
 msgstr "ファイル名の変更(_R)"
 
-#: gtk/gtkfilesel.c:2220
+#: gtk/gtkfilesel.c:2223
 msgid "_Selection: "
 msgstr "選択範囲(_S): "
 
-#: gtk/gtkfilesel.c:3136
+#: gtk/gtkfilesel.c:3139
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2493,15 +2501,15 @@ msgstr ""
 "ファイル名 \"%s\" を UTF-8 に変換できませんでした (環境変数 "
 "$G_BROKEN_FILENAMES の設定を試して下さい): %s"
 
-#: gtk/gtkfilesel.c:3139
+#: gtk/gtkfilesel.c:3142
 msgid "Invalid UTF-8"
 msgstr "無効な UTF-8 コードです"
 
-#: gtk/gtkfilesel.c:4016
+#: gtk/gtkfilesel.c:4019
 msgid "Name too long"
 msgstr "名前が長すぎます"
 
-#: gtk/gtkfilesel.c:4018
+#: gtk/gtkfilesel.c:4021
 msgid "Couldn't convert filename"
 msgstr "ファイル名を変換できませんでした"
 
@@ -2666,7 +2674,7 @@ msgid "_Gamma value"
 msgstr "ガンマ値(_G)"
 
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
-#: gtk/gtktoolbar.c:506 gtk/gtkviewport.c:150
+#: gtk/gtktoolbar.c:514 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "影の種類"
 
@@ -2803,82 +2811,82 @@ msgstr "メニューのテキストの隣に表示する子ウィジェット"
 msgid "Default"
 msgstr "デフォルト"
 
-#: gtk/gtkinputdialog.c:230
+#: gtk/gtkinputdialog.c:233
 msgid "Input"
 msgstr "入力"
 
-#: gtk/gtkinputdialog.c:239
+#: gtk/gtkinputdialog.c:242
 msgid "No input devices"
 msgstr "入力デバイスがありません"
 
-#: gtk/gtkinputdialog.c:251
+#: gtk/gtkinputdialog.c:254
 msgid "_Device:"
 msgstr "デバイス(_D):"
 
-#: gtk/gtkinputdialog.c:268
+#: gtk/gtkinputdialog.c:271
 msgid "Disabled"
 msgstr "無効"
 
-#: gtk/gtkinputdialog.c:275 gtk/gtkinvisible.c:114 gtk/gtkwindow.c:562
+#: gtk/gtkinputdialog.c:278 gtk/gtkinvisible.c:114 gtk/gtkwindow.c:562
 msgid "Screen"
 msgstr "画面"
 
-#: gtk/gtkinputdialog.c:282
+#: gtk/gtkinputdialog.c:285
 msgid "Window"
 msgstr "ウィンドウ"
 
-#: gtk/gtkinputdialog.c:289
+#: gtk/gtkinputdialog.c:292
 msgid "_Mode: "
 msgstr "モード(_M): "
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:320
+#: gtk/gtkinputdialog.c:323
 msgid "_Axes"
 msgstr "軸(_A)"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:337
+#: gtk/gtkinputdialog.c:340
 msgid "_Keys"
 msgstr "キー(_K)"
 
-#: gtk/gtkinputdialog.c:557
+#: gtk/gtkinputdialog.c:560
 msgid "X"
 msgstr "X"
 
-#: gtk/gtkinputdialog.c:558
+#: gtk/gtkinputdialog.c:561
 msgid "Y"
 msgstr "Y"
 
-#: gtk/gtkinputdialog.c:559
+#: gtk/gtkinputdialog.c:562
 msgid "Pressure"
 msgstr "圧力"
 
-#: gtk/gtkinputdialog.c:560
+#: gtk/gtkinputdialog.c:563
 msgid "X Tilt"
 msgstr "X 傾き"
 
-#: gtk/gtkinputdialog.c:561
+#: gtk/gtkinputdialog.c:564
 msgid "Y Tilt"
 msgstr "Y 傾き"
 
-#: gtk/gtkinputdialog.c:562
+#: gtk/gtkinputdialog.c:565
 msgid "Wheel"
 msgstr "ホイール"
 
-#: gtk/gtkinputdialog.c:602
+#: gtk/gtkinputdialog.c:605
 msgid "none"
 msgstr "無し"
 
-#: gtk/gtkinputdialog.c:638 gtk/gtkinputdialog.c:674
+#: gtk/gtkinputdialog.c:641 gtk/gtkinputdialog.c:677
 msgid "(disabled)"
 msgstr "(無効)"
 
-#: gtk/gtkinputdialog.c:667
+#: gtk/gtkinputdialog.c:670
 msgid "(unknown)"
 msgstr "(不明)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:754
+#: gtk/gtkinputdialog.c:757
 msgid "clear"
 msgstr "クリア"
 
@@ -3115,7 +3123,7 @@ msgstr ""
 msgid "Style of bevel around the menubar"
 msgstr "メニューバーの周囲にあるベベルのスタイル"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:482
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:490
 msgid "Internal padding"
 msgstr "内部パディング"
 
@@ -3344,19 +3352,19 @@ msgstr "標準的な前方矢印ボタンを表示する"
 msgid "Page %u"
 msgstr "ページ %u"
 
-#: gtk/gtkoptionmenu.c:190
+#: gtk/gtkoptionmenu.c:192
 msgid "Menu"
 msgstr "メニュー"
 
-#: gtk/gtkoptionmenu.c:191
+#: gtk/gtkoptionmenu.c:193
 msgid "The menu of options"
 msgstr "オプション・メニュー"
 
-#: gtk/gtkoptionmenu.c:198
+#: gtk/gtkoptionmenu.c:200
 msgid "Size of dropdown indicator"
 msgstr "ドロップダウン表示する表示部の大きさ"
 
-#: gtk/gtkoptionmenu.c:204
+#: gtk/gtkoptionmenu.c:206
 msgid "Spacing around indicator"
 msgstr "表示部の枠の間隔"
 
@@ -3456,7 +3464,7 @@ msgstr "調整"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "プログレス・バーに接続する GtkAdjustment (破棄)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:423
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:431
 msgid "Orientation"
 msgstr "向き"
 
@@ -3528,7 +3536,9 @@ msgstr "値"
 msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
-msgstr "このアクションがそのグループの現在のアクションのときに、gtk_radio_action_get_current_value() によって返される値です。"
+msgstr ""
+"このアクションがそのグループの現在のアクションのときに、"
+"gtk_radio_action_get_current_value() によって返される値です。"
 
 #: gtk/gtkradiobutton.c:109
 msgid "Group"
@@ -4268,7 +4278,8 @@ msgid "Right attachment"
 msgstr "右アタッチ"
 
 #: gtk/gtktable.c:210
-msgid "the column number to attach the right side of a child widget to"
+#, fuzzy
+msgid "The column number to attach the right side of a child widget to"
 msgstr "子ウィジェットの右側にアタッチする列番号"
 
 #: gtk/gtktable.c:216
@@ -4760,7 +4771,8 @@ msgstr "ラジオ・アクションと同じプロキシを作成する"
 
 #: gtk/gtktoggleaction.c:130
 msgid "Whether the proxies for this action look like radio action proxies"
-msgstr "このアクションのプロキシをラジオボタンのアクション・プロキシにするかどうか"
+msgstr ""
+"このアクションのプロキシをラジオボタンのアクション・プロキシにするかどうか"
 
 #: gtk/gtktogglebutton.c:133
 msgid "If the toggle button should be pressed in or not"
@@ -4778,91 +4790,91 @@ msgstr "表示部の描画"
 msgid "If the toggle part of the button is displayed"
 msgstr "ボタンのトグル部分を表示するかどうか"
 
-#: gtk/gtktoolbar.c:424
+#: gtk/gtktoolbar.c:432
 msgid "The orientation of the toolbar"
 msgstr "ツールバーの向き"
 
-#: gtk/gtktoolbar.c:432
+#: gtk/gtktoolbar.c:440
 msgid "Toolbar Style"
 msgstr "ツールバーのスタイル"
 
-#: gtk/gtktoolbar.c:433
+#: gtk/gtktoolbar.c:441
 msgid "How to draw the toolbar"
 msgstr "ツールバーの描画方法"
 
-#: gtk/gtktoolbar.c:440
+#: gtk/gtktoolbar.c:448
 msgid "Show Arrow"
 msgstr "矢印の表示"
 
-#: gtk/gtktoolbar.c:441
+#: gtk/gtktoolbar.c:449
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "ツールバーがフィットしないときに、矢印を表示すべきかどうか"
 
-#: gtk/gtktoolbar.c:450
+#: gtk/gtktoolbar.c:458
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 "ツールバーが大きくなった際にアイテムも余白のスペースを受け取るべきかどうか"
 
-#: gtk/gtktoolbar.c:458
+#: gtk/gtktoolbar.c:466
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "すべての同種のアイテムを同じ大きさにするべきかどうか"
 
-#: gtk/gtktoolbar.c:465
+#: gtk/gtktoolbar.c:473
 msgid "Pack End"
 msgstr "末尾を埋める"
 
-#: gtk/gtktoolbar.c:466
+#: gtk/gtktoolbar.c:474
 msgid "Whether the item is positioned at the end of the toolbar"
 msgstr "アイテムがツールバーの末尾に位置すべきかどうか"
 
-#: gtk/gtktoolbar.c:473
+#: gtk/gtktoolbar.c:481
 msgid "Spacer size"
 msgstr "スペーサのサイズ"
 
-#: gtk/gtktoolbar.c:474
+#: gtk/gtktoolbar.c:482
 msgid "Size of spacers"
 msgstr "スペーサの大きさ"
 
-#: gtk/gtktoolbar.c:483
+#: gtk/gtktoolbar.c:491
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "ツールバーの影とボタンの間にある境界線の領域の大きさ"
 
-#: gtk/gtktoolbar.c:491
+#: gtk/gtktoolbar.c:499
 msgid "Space style"
 msgstr "スペースのスタイル"
 
-#: gtk/gtktoolbar.c:492
+#: gtk/gtktoolbar.c:500
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "スペーサは垂直線か単なる空白か"
 
-#: gtk/gtktoolbar.c:499
+#: gtk/gtktoolbar.c:507
 msgid "Button relief"
 msgstr "ボタンのレリーフ"
 
-#: gtk/gtktoolbar.c:500
+#: gtk/gtktoolbar.c:508
 msgid "Type of bevel around toolbar buttons"
 msgstr "ツールバーボタンの周りの縁取りの種類"
 
-#: gtk/gtktoolbar.c:507
+#: gtk/gtktoolbar.c:515
 msgid "Style of bevel around the toolbar"
 msgstr "ツールバー周りのに縁取りのスタイル"
 
-#: gtk/gtktoolbar.c:513
+#: gtk/gtktoolbar.c:521
 msgid "Toolbar style"
 msgstr "ツールバーのスタイル"
 
-#: gtk/gtktoolbar.c:514
+#: gtk/gtktoolbar.c:522
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "デフォルトのツールバーはラベルのみか、ラベルとアイコンか、アイコンのみかどう"
 "か"
 
-#: gtk/gtktoolbar.c:520
+#: gtk/gtktoolbar.c:528
 msgid "Toolbar icon size"
 msgstr "ツールバーのアイコン・サイズ"
 
-#: gtk/gtktoolbar.c:521
+#: gtk/gtktoolbar.c:529
 msgid "Size of icons in default toolbars"
 msgstr "デフォルトのツールバーに配置するアイコンの大きさ"
 
@@ -4874,7 +4886,9 @@ msgstr "項目に表示するテキスト"
 msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
-msgstr "セットすると、ラベル・プロパティ上の下線の次にある文字がオーバーフロー・メニューのアクセラレータ・キーのニーモニックとして使用される"
+msgstr ""
+"セットすると、ラベル・プロパティ上の下線の次にある文字がオーバーフロー・メ"
+"ニューのアクセラレータ・キーのニーモニックとして使用される"
 
 #: gtk/gtktoolbutton.c:194
 msgid "Widget to use as the item label"
@@ -4920,7 +4934,9 @@ msgstr "ツールバーが水平の場合、項目を表示するかどうか"
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
-msgstr "ツールバーの項目を重要と見なすかどうか。TRUE の場合、ツールバーのボタンは GTK_TOOLBAR_BOTH_HORIZ モードで表示されます。"
+msgstr ""
+"ツールバーの項目を重要と見なすかどうか。TRUE の場合、ツールバーのボタンは "
+"GTK_TOOLBAR_BOTH_HORIZ モードで表示されます。"
 
 #: gtk/gtktreemodelsort.c:306
 msgid "TreeModelSort Model"
@@ -5177,7 +5193,7 @@ msgstr "%2$d 行目 %3$d 文字目の予想外の開始タグ '%1$s'"
 msgid "Unexpected character data on line %d char %d"
 msgstr "%d 行目 %d 文字目の予想外の文字データ"
 
-#: gtk/gtkuimanager.c:1916
+#: gtk/gtkuimanager.c:1918
 msgid "Empty"
 msgstr "空"
 

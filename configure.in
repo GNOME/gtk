@@ -1122,7 +1122,7 @@ if test "x$gdktarget" = "xx11"; then
   # Check for shaped window extension
 
   AC_CHECK_LIB(Xext, XShapeCombineMask,
-      [GTK_ADD_LIB(x_extra_libs,Xext),
+      [GTK_ADD_LIB(x_extra_libs,Xext)
        AC_DEFINE(HAVE_SHAPE_EXT)],
       ,
       $x_libs_for_checks)

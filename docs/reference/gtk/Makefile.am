@@ -175,6 +175,13 @@ HTML_IMAGES = \
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk-pixbuf/html --extra-dir=../gdk/html
 
+include $(top_srcdir)/gtk-doc.make
+
+# Other files to distribute
+EXTRA_DIST += version.xml.in
+
+########################################################################
+
 man_MANS = gtk-query-immodules-2.0.1 
 
 if ENABLE_MAN
@@ -184,7 +191,10 @@ if ENABLE_MAN
 
 endif
 
-include $(top_srcdir)/gtk-doc.make
+BUILT_EXTRA_DIST = $(man_MANS)
 
-# Other files to distribute
-EXTRA_DIST += version.xml.in
+dist-hook-local: $(BUILT_EXTRA_DIST)
+	files='$(BUILT_EXTRA_DIST)';				\
+	for f in $$files; do					\
+	  if test -f $$f; then d=.; else d=$(srcdir); fi;	\
+	  cp $$d/$$f $(distdir) || exit 1; done

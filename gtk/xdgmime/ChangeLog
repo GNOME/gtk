@@ -1,3 +1,8 @@
+Fri Oct 24 16:54:57 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am (libxdgmime_la_SOURCES): Add .h files to 
+	SOURCES.
+
 Fri Oct 24 16:02:32 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* *.[ch]: Relicense to be dual AFL/LGPL (and thus also

@@ -83,6 +83,54 @@ should be accessed using the functions below.
 </para>
 
 
+<!-- ##### SIGNAL GtkMenu::move-scroll ##### -->
+<para>
+
+</para>
+
+@menu: the object which received the signal.
+@arg1: 
+
+<!-- ##### ARG GtkMenu:tearoff-title ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:bottom-attach ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:left-attach ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:right-attach ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:top-attach ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:horizontal-offset ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:vertical-offset ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:vertical-padding ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_menu_new ##### -->
 <para>
 Creates a new #GtkMenu.
@@ -148,6 +196,19 @@ Moves a #GtkMenuItem to a new position within the #GtkMenu.
 @child: the #GtkMenuItem to move.
 @position: the new position to place @child.  Positions are numbered from 
 0 to n-1.
+
+
+<!-- ##### FUNCTION gtk_menu_attach ##### -->
+<para>
+
+</para>
+
+@menu: 
+@child: 
+@left_attach: 
+@right_attach: 
+@top_attach: 
+@bottom_attach: 
 
 
 <!-- ##### FUNCTION gtk_menu_popup ##### -->
@@ -326,52 +387,4 @@ will be called when the menu is later detached from the widget.
 @attach_widget: the #GtkWidget that the menu is being detached from.
 @menu: the #GtkMenu being detached.
 
-
-<!-- ##### SIGNAL GtkMenu::move-scroll ##### -->
-<para>
-
-</para>
-
-@menu: the object which received the signal.
-@arg1: 
-
-<!-- ##### ARG GtkMenu:tearoff-title ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMenu:bottom-attach ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMenu:left-attach ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMenu:right-attach ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMenu:top-attach ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMenu:horizontal-offset ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMenu:vertical-offset ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMenu:vertical-padding ##### -->
-<para>
-
-</para>
 

@@ -296,6 +296,18 @@ Indicated the relief to be drawn around a #GtkButton.
 @GTK_RESIZE_QUEUE: 
 @GTK_RESIZE_IMMEDIATE: 
 
+<!-- ##### ENUM GtkScrollStep ##### -->
+<para>
+
+</para>
+
+@GTK_SCROLL_STEPS: 
+@GTK_SCROLL_PAGES: 
+@GTK_SCROLL_ENDS: 
+@GTK_SCROLL_HORIZONTAL_STEPS: 
+@GTK_SCROLL_HORIZONTAL_PAGES: 
+@GTK_SCROLL_HORIZONTAL_ENDS: 
+
 <!-- ##### ENUM GtkScrollType ##### -->
 <para>
 

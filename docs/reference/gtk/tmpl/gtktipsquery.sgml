@@ -47,56 +47,6 @@ should be accessed using the functions below.
 </para>
 
 
-<!-- ##### FUNCTION gtk_tips_query_new ##### -->
-<para>
-Creates a new #GtkTipsQuery.
-</para>
-
-@Returns: a new #GtkTipsQuery.
-
-
-<!-- ##### FUNCTION gtk_tips_query_start_query ##### -->
-<para>
-Starts a query.
-The #GtkTipsQuery widget will take control of the mouse and as the mouse
-moves it will display the tooltip of the widget beneath the mouse.
-</para>
-
-@tips_query: a #GtkTipsQuery.
-
-
-<!-- ##### FUNCTION gtk_tips_query_stop_query ##### -->
-<para>
-Stops a query.
-</para>
-
-@tips_query: a #GtkTipsQuery.
-
-
-<!-- ##### FUNCTION gtk_tips_query_set_caller ##### -->
-<para>
-Sets the widget which initiates the query, usually a button.
-If the @caller is selected while the query is running, the query is
-automatically stopped.
-</para>
-
-@tips_query: a #GtkTipsQuery.
-@caller: the widget which initiates the query.
-
-
-<!-- ##### FUNCTION gtk_tips_query_set_labels ##### -->
-<para>
-Sets the text to display when the query is not in effect,
-and the text to display when the query is in effect but the widget beneath
-the pointer has no tooltip.
-</para>
-
-@tips_query: a #GtkTipsQuery.
-@label_inactive: the text to display when the query is not running.
-@label_no_tip: the text to display when the query is running but the widget
-beneath the pointer has no tooltip.
-
-
 <!-- ##### SIGNAL GtkTipsQuery::start-query ##### -->
 <para>
 Emitted when the query is started.
@@ -157,4 +107,54 @@ effect.
 The text to display in the #GtkTipsQuery widget when the query is running
 and the widget that the pointer is over has no tooltip.
 </para>
+
+<!-- ##### FUNCTION gtk_tips_query_new ##### -->
+<para>
+Creates a new #GtkTipsQuery.
+</para>
+
+@Returns: a new #GtkTipsQuery.
+
+
+<!-- ##### FUNCTION gtk_tips_query_start_query ##### -->
+<para>
+Starts a query.
+The #GtkTipsQuery widget will take control of the mouse and as the mouse
+moves it will display the tooltip of the widget beneath the mouse.
+</para>
+
+@tips_query: a #GtkTipsQuery.
+
+
+<!-- ##### FUNCTION gtk_tips_query_stop_query ##### -->
+<para>
+Stops a query.
+</para>
+
+@tips_query: a #GtkTipsQuery.
+
+
+<!-- ##### FUNCTION gtk_tips_query_set_caller ##### -->
+<para>
+Sets the widget which initiates the query, usually a button.
+If the @caller is selected while the query is running, the query is
+automatically stopped.
+</para>
+
+@tips_query: a #GtkTipsQuery.
+@caller: the widget which initiates the query.
+
+
+<!-- ##### FUNCTION gtk_tips_query_set_labels ##### -->
+<para>
+Sets the text to display when the query is not in effect,
+and the text to display when the query is in effect but the widget beneath
+the pointer has no tooltip.
+</para>
+
+@tips_query: a #GtkTipsQuery.
+@label_inactive: the text to display when the query is not running.
+@label_no_tip: the text to display when the query is running but the widget
+beneath the pointer has no tooltip.
+
 

@@ -19,7 +19,43 @@ GtkComboBox
 
 </para>
 
-@parent_instance: 
+
+<!-- ##### SIGNAL GtkComboBox::changed ##### -->
+<para>
+
+</para>
+
+@combobox: the object which received the signal.
+
+<!-- ##### ARG GtkComboBox:active ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:column-span-column ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:model ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:row-span-column ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:wrap-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:appearance ##### -->
+<para>
+
+</para>
 
 <!-- ##### FUNCTION gtk_combo_box_new ##### -->
 <para>

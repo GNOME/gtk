@@ -1276,7 +1276,7 @@ gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
 	   * stroke if both key pressed and released events are filtered.
 	   * (bugzilla #81759)
 	   */
-	  guint32 mask = 0;
+	  guint32 mask = 0xaaaaaaaa;
 	  XGetICValues (xic,
 			XNFilterEvents, &mask,
 			NULL);

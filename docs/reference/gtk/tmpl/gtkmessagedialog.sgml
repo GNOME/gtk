@@ -64,6 +64,21 @@ You might do a non-modal #GtkMessageDialog as follows:
 </para>
 
 
+<!-- ##### ARG GtkMessageDialog:buttons ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMessageDialog:message-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMessageDialog:message-border ##### -->
+<para>
+
+</para>
+
 <!-- ##### ENUM GtkMessageType ##### -->
 <para>
 The type of message being displayed in the dialog.
@@ -115,19 +130,4 @@ then call gtk_dialog_add_buttons().
 @Varargs: 
 @Returns: 
 
-
-<!-- ##### ARG GtkMessageDialog:buttons ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMessageDialog:message-type ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMessageDialog:message-border ##### -->
-<para>
-
-</para>
 

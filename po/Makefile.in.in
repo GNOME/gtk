@@ -9,8 +9,11 @@
 # - Modified by Owen Taylor <otaylor@redhat.com> to use GETTEXT_PACKAGE
 #   instead of PACKAGE and to look for po2tbl in ./ not in intl/
 #
+# - Modified by jacob berkman <jacob@ximian.com> to install
+#   Makefile.in.in and po2tbl.sed.in for use with glib-gettextize
 
 GETTEXT_PACKAGE = @GETTEXT_PACKAGE@
+PACKAGE = @PACKAGE@
 VERSION = @VERSION@
 
 SHELL = /bin/sh
@@ -26,7 +29,7 @@ datadir = @datadir@
 libdir = @libdir@
 localedir = $(libdir)/locale
 gnulocaledir = $(datadir)/locale
-gettextsrcdir = $(datadir)/gettext/po
+gettextsrcdir = $(datadir)/glib-2.0/gettext/po
 subdir = po
 
 INSTALL = @INSTALL@
@@ -48,11 +51,11 @@ INCLUDES = -I.. -I$(top_srcdir)/intl
 
 COMPILE = $(CC) -c $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $(XCFLAGS)
 
-SOURCES = cat-id-tbl.c
+SOURCES = 
 POFILES = @POFILES@
 GMOFILES = @GMOFILES@
 DISTFILES = ChangeLog Makefile.in.in POTFILES.in $(GETTEXT_PACKAGE).pot \
-stamp-cat-id $(POFILES) $(GMOFILES) $(SOURCES)
+$(POFILES) $(GMOFILES) $(SOURCES)
 
 POTFILES = \
 
@@ -84,7 +87,7 @@ INSTOBJEXT = @INSTOBJEXT@
 
 all: all-@USE_NLS@
 
-all-yes: cat-id-tbl.c $(CATALOGS)
+all-yes: $(CATALOGS)
 all-no:
 
 $(srcdir)/$(GETTEXT_PACKAGE).pot: $(POTFILES)
@@ -94,21 +97,6 @@ $(srcdir)/$(GETTEXT_PACKAGE).pot: $(POTFILES)
 	&& test ! -f $(GETTEXT_PACKAGE).po \
 	   || ( rm -f $(srcdir)/$(GETTEXT_PACKAGE).pot \
 		&& mv $(GETTEXT_PACKAGE).po $(srcdir)/$(GETTEXT_PACKAGE).pot )
-
-$(srcdir)/cat-id-tbl.c: stamp-cat-id; @:
-$(srcdir)/stamp-cat-id: $(GETTEXT_PACKAGE).pot
-	rm -f cat-id-tbl.tmp
-	sed -f ./po2tbl.sed $(srcdir)/$(GETTEXT_PACKAGE).pot \
-		| sed -e "s/@GETTEXT_PACKAGE NAME@/$(GETTEXT_PACKAGE)/" > cat-id-tbl.tmp
-	if cmp -s cat-id-tbl.tmp $(srcdir)/cat-id-tbl.c; then \
-	  rm cat-id-tbl.tmp; \
-	else \
-	  echo cat-id-tbl.c changed; \
-	  rm -f $(srcdir)/cat-id-tbl.c; \
-	  mv cat-id-tbl.tmp $(srcdir)/cat-id-tbl.c; \
-	fi
-	cd $(srcdir) && rm -f stamp-cat-id && echo timestamp > stamp-cat-id
-
 
 install: install-exec install-data
 install-exec:
@@ -156,7 +144,7 @@ install-data-yes: all
 	    fi; \
 	  fi; \
 	done
-	if test "$(GETTEXT_PACKAGE)" = "gettext"; then \
+	if test "$(PACKAGE)" = "glib"; then \
 	  if test -r "$(MKINSTALLDIRS)"; then \
 	    $(MKINSTALLDIRS) $(DESTDIR)$(gettextsrcdir); \
 	  else \
@@ -181,11 +169,11 @@ uninstall:
 	  rm -f $(DESTDIR)$(gnulocaledir)/$$lang/LC_MESSAGES/$(GETTEXT_PACKAGE)$(INSTOBJEXT); \
 	  rm -f $(DESTDIR)$(gnulocaledir)/$$lang/LC_MESSAGES/$(GETTEXT_PACKAGE)$(INSTOBJEXT).m; \
 	done
-	rm -f $(DESTDIR)$(gettextsrcdir)/po-Makefile.in.in
+	if test "$(PACKAGE)" = "glib"; then \
+	  rm -f $(DESTDIR)$(gettextsrcdir)/Makefile.in.in; \
+	fi
 
 check: all
-
-cat-id-tbl.o: ../intl/libgettext.h
 
 dvi info tags TAGS ID:
 
@@ -196,7 +184,7 @@ mostlyclean:
 clean: mostlyclean
 
 distclean: clean
-	rm -f Makefile Makefile.in POTFILES *.mo *.msg *.cat *.cat.m po2tbl.sed
+	rm -f Makefile Makefile.in POTFILES *.mo *.msg *.cat *.cat.m
 
 maintainer-clean: distclean
 	@echo "This command is intended for maintainers to use;"
@@ -213,22 +201,34 @@ dist distdir: update-po $(DISTFILES)
 
 update-po: Makefile
 	$(MAKE) $(GETTEXT_PACKAGE).pot
+	tmpdir=`pwd`; \
 	cd $(srcdir); \
 	catalogs='$(CATALOGS)'; \
 	for cat in $$catalogs; do \
 	  cat=`basename $$cat`; \
 	  lang=`echo $$cat | sed 's/\$(CATOBJEXT)$$//'`; \
-	  mv $$lang.po $$lang.old.po; \
 	  echo "$$lang:"; \
-	  if $(MSGMERGE) $$lang.old.po $(GETTEXT_PACKAGE).pot -o $$lang.po; then \
-	    rm -f $$lang.old.po; \
+	  if $(MSGMERGE) $$lang.po $(GETTEXT_PACKAGE).pot -o $$tmpdir/$$lang.new.po; then \
+	    if cmp $$lang.po $$tmpdir/$$lang.new.po >/dev/null 2>&1; then \
+	      rm -f $$tmpdir/$$lang.new.po; \
+            else \
+	      if mv -f $$tmpdir/$$lang.new.po $$lang.po; then \
+	        :; \
+	      else \
+	        echo "msgmerge for $$lang.po failed: cannot move $$tmpdir/$$lang.new.po to $$lang.po" 1>&2; \
+	        rm -f $$tmpdir/$$lang.new.po; \
+	        exit 1; \
+	      fi; \
+	    fi; \
 	  else \
 	    echo "msgmerge for $$cat failed!"; \
-	    rm -f $$lang.po; \
-	    mv $$lang.old.po $$lang.po; \
+	    rm -f $$tmpdir/$$lang.new.po; \
 	  fi; \
 	done
 
+# POTFILES is created from POTFILES.in by stripping comments, empty lines
+# and Intltool tags (enclosed in square brackets), and appending a full
+# relative path to them
 POTFILES: POTFILES.in
 	( if test 'x$(srcdir)' != 'x.'; then \
 	    posrcprefix='$(top_srcdir)/'; \
@@ -236,8 +236,10 @@ POTFILES: POTFILES.in
 	    posrcprefix="../"; \
 	  fi; \
 	  rm -f $@-t $@ \
-	    && (sed -e '/^#/d' -e '/^[ 	]*$$/d' \
-		    -e "s@.*@	$$posrcprefix& \\\\@" < $(srcdir)/$@.in \
+	    && (sed -e '/^#/d' 						\
+		    -e "s/^\[.*\] +//" 					\
+		    -e '/^[ 	]*$$/d' 				\
+		    -e "s@.*@	$$posrcprefix& \\\\@" < $(srcdir)/$@.in	\
 		| sed -e '$$s/\\$$//') > $@-t \
 	    && chmod a-w $@-t \
 	    && mv $@-t $@ )

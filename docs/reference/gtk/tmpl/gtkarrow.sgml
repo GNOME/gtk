@@ -57,6 +57,16 @@ an application.)
 </para>
 
 
+<!-- ##### ARG GtkArrow:arrow-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkArrow:shadow-type ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_arrow_new ##### -->
 <para>
 Creates a new arrow widget.
@@ -76,14 +86,4 @@ Sets the direction and style of the #GtkArrow, @arrow.
 @arrow_type: a valid #GtkArrowType.
 @shadow_type: a valid #GtkShadowType.
 
-
-<!-- ##### ARG GtkArrow:arrow-type ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkArrow:shadow-type ##### -->
-<para>
-
-</para>
 

@@ -19,7 +19,34 @@ GtkEntryCompletion
 
 </para>
 
-@parent_instance: 
+
+<!-- ##### SIGNAL GtkEntryCompletion::action-activated ##### -->
+<para>
+
+</para>
+
+@entrycompletion: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkEntryCompletion::match-selected ##### -->
+<para>
+
+</para>
+
+@entrycompletion: the object which received the signal.
+@arg1: 
+@arg2: 
+@Returns: 
+
+<!-- ##### ARG GtkEntryCompletion:minimum-key-length ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntryCompletion:model ##### -->
+<para>
+
+</para>
 
 <!-- ##### USER_FUNCTION GtkEntryCompletionMatchFunc ##### -->
 <para>
