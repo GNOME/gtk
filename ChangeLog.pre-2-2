@@ -1,3 +1,20 @@
+Mon Apr 23 18:57:03 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtksocket.c (gtk_socket_filter_func): add missing '}' that
+	got munched by #endif.
+
+	* gtk/Makefile.am (gtk_plug_c_sources): add missing '\'
+
+	* gtk/gtktreeview.c: Refactored code to clean up a number of
+	events.
+
+	* gtk/gtktreemodel.c (gtk_tree_path_compare): Switched return
+	values to make consistent with other functions.  Spotted by Jeff
+	Franks <jcf@tpg.com.au>.
+
+	* gtk/gtktreeview.h (struct _GtkTreeViewClass): Fixes to signal
+	declaration spotted by Jeff Franks <jcf@tpg.com.au>.
+
 2001-04-23  Sven Neumann  <sven@gimp.org>
 
 	* gtk/Makefile.am

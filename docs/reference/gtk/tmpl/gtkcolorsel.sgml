@@ -64,42 +64,6 @@ time.
 @policy: a #GtkUpdateType value indicating the desired policy.
 
 
-<!-- ##### FUNCTION gtk_color_selection_set_use_opacity ##### -->
-<para>
-
-</para>
-
-@colorsel: 
-@use_opacity: 
-
-
-<!-- ##### FUNCTION gtk_color_selection_get_use_opacity ##### -->
-<para>
-
-</para>
-
-@colorsel: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_color_selection_set_use_palette ##### -->
-<para>
-
-</para>
-
-@colorsel: 
-@use_palette: 
-
-
-<!-- ##### FUNCTION gtk_color_selection_get_use_palette ##### -->
-<para>
-
-</para>
-
-@colorsel: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_color_selection_set_color ##### -->
 <para>
 Sets the color in the #GtkColorSelection.  The widgets are updated
@@ -121,33 +85,17 @@ Retrieve the currently selected color value.
 blue, and opacity.
 
 
-<!-- ##### FUNCTION gtk_color_selection_set_old_color ##### -->
-<para>
-
-</para>
-
-@colorsel: 
-@color: 
-
-
-<!-- ##### FUNCTION gtk_color_selection_get_old_color ##### -->
-<para>
-
-</para>
-
-@colorsel: 
-@color: 
-
-
 <!-- ##### FUNCTION gtk_color_selection_set_palette_color ##### -->
 <para>
 
 </para>
 
 @colorsel: 
+@index: 
+@color: 
+<!-- # Unused Parameters # -->
 @x: 
 @y: 
-@color: 
 
 
 <!-- ##### FUNCTION gtk_color_selection_get_palette_color ##### -->
@@ -156,10 +104,12 @@ blue, and opacity.
 </para>
 
 @colorsel: 
-@x: 
-@y: 
+@index: 
 @color: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@x: 
+@y: 
 
 
 <!-- ##### FUNCTION gtk_color_selection_unset_palette_color ##### -->
@@ -168,6 +118,8 @@ blue, and opacity.
 </para>
 
 @colorsel: 
+@index: 
+<!-- # Unused Parameters # -->
 @x: 
 @y: 
 

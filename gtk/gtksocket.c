@@ -1086,7 +1086,8 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 			      GDK_WINDOW_XWINDOW (toplevel->window),
 			      RevertToParent, CurrentTime); /* FIXME? */
 	    }
-#endif	  	}
+#endif
+	}
       return_val = GDK_FILTER_REMOVE;
       break;
     case FocusOut:

@@ -70,15 +70,6 @@ struct _GtkTreeViewChild
 };
 
 
-typedef struct _GtkTreeViewColumnReorder GtkTreeViewColumnReorder;
-struct _GtkTreeViewColumnReorder
-{
-  gint left_align;
-  gint right_align;
-  GtkTreeViewColumn *left_column;
-  GtkTreeViewColumn *right_column;
-};
-
 enum
 {
   ROW_ACTIVATED,
@@ -268,6 +259,7 @@ static gboolean gtk_tree_view_maybe_begin_dragging_row (GtkTreeView      *tree_v
                                                         GdkEventMotion   *event);
 static void     _gtk_tree_view_update_col_width    (GtkTreeView      *tree_view);
 
+static void     gtk_tree_view_column_reorder_remove_draw (GtkTreeViewColumnReorder *reorder);
 
 static GtkContainerClass *parent_class = NULL;
 static guint tree_view_signals[LAST_SIGNAL] = { 0 };
@@ -1649,7 +1641,7 @@ gtk_tree_view_column_button_expose (GtkWidget      *button,
 		     button->allocation.width - 2,
 		     button->allocation.height);
       gdk_draw_line (button->window,
-		     button->style->white_gc,
+		     button->style->bg_gc[GTK_STATE_SELECTED],
 		     button->allocation.width - 1, 0,
 		     button->allocation.width - 1,
 		     button->allocation.height);
@@ -1664,7 +1656,7 @@ gtk_tree_view_column_button_expose (GtkWidget      *button,
 		     1, 0,
 		     1, button->allocation.height);
       gdk_draw_line (button->window,
-		     button->style->white_gc,
+		     button->style->bg_gc[GTK_STATE_SELECTED],
 		     0, 0,
 		     0, button->allocation.height);
     }
@@ -1672,9 +1664,74 @@ gtk_tree_view_column_button_expose (GtkWidget      *button,
   return FALSE;
 }
 
+/* Motion Event */
 static gboolean
-gtk_tree_view_motion (GtkWidget      *widget,
-		      GdkEventMotion *event)
+gtk_tree_view_motion_resize_column (GtkWidget      *widget,
+				    GdkEventMotion *event)
+{
+  gint x;
+  gint new_width;
+
+  if (event->is_hint || event->window != widget->window)
+    gtk_widget_get_pointer (widget, &x, NULL);
+  else
+    x = event->x;
+
+  new_width = gtk_tree_view_new_column_width (GTK_TREE_VIEW (widget),
+					      GTK_TREE_VIEW (widget)->priv->drag_pos, &x);
+  if (x != GTK_TREE_VIEW (widget)->priv->x_drag)
+    gtk_tree_view_column_set_width (gtk_tree_view_get_column (GTK_TREE_VIEW (widget), GTK_TREE_VIEW (widget)->priv->drag_pos), new_width);
+
+  /* FIXME: Do we need to scroll */
+  _gtk_tree_view_update_size (GTK_TREE_VIEW (widget));
+  return FALSE;
+}
+
+static gboolean
+gtk_tree_view_motion_drag_column (GtkWidget      *widget,
+				  GdkEventMotion *event)
+{
+  GtkTreeView *tree_view = (GtkTreeView *) widget;
+  GtkTreeViewColumn *column = tree_view->priv->drag_column;
+  GtkTreeViewColumnReorder *reorder = NULL;
+  GList *list;
+  gint x, y;
+
+  if (column == NULL)
+    return FALSE;
+
+  if (event->window != tree_view->priv->drag_window)
+    return FALSE;
+
+  gdk_window_get_position (tree_view->priv->drag_window, &x, &y);
+  x = CLAMP (x + (gint)event->x - column->drag_x, 0,
+	     MAX (tree_view->priv->width, GTK_WIDGET (tree_view)->allocation.width) - column->button->allocation.width);
+
+  gdk_window_move (tree_view->priv->drag_window, x, y);
+  
+  gdk_window_get_position (tree_view->priv->drag_window, &x, NULL);
+  x += (gint)event->x;
+  for (list = tree_view->priv->column_drag_info; list; list = list->next)
+    {
+      reorder = (GtkTreeViewColumnReorder *) list->data;
+      if (x >= reorder->left_align && x < reorder->right_align)
+	break;
+      reorder = NULL;
+    }
+
+  if (reorder && reorder == tree_view->priv->cur_reorder)
+    return TRUE;
+
+  gtk_tree_view_column_reorder_remove_draw (reorder);
+      
+  tree_view->priv->cur_reorder = reorder;
+
+  return TRUE;
+}
+
+static gboolean
+gtk_tree_view_motion_bin_window (GtkWidget      *widget,
+				 GdkEventMotion *event)
 {
   GtkTreeView *tree_view;
   GtkRBTree *tree;
@@ -1684,46 +1741,6 @@ gtk_tree_view_motion (GtkWidget      *widget,
   GtkRBNode *old_prelight_node;
 
   tree_view = (GtkTreeView *) widget;
-
-  if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IN_COLUMN_RESIZE))
-    {
-      gint x;
-      gint new_width;
-
-      if (event->is_hint || event->window != widget->window)
-	gtk_widget_get_pointer (widget, &x, NULL);
-      else
-	x = event->x;
-
-      new_width = gtk_tree_view_new_column_width (GTK_TREE_VIEW (widget), tree_view->priv->drag_pos, &x);
-      if (x != tree_view->priv->x_drag)
-	{
-	  gtk_tree_view_column_set_width (gtk_tree_view_get_column (GTK_TREE_VIEW (widget), tree_view->priv->drag_pos), new_width);
-	}
-
-      /* FIXME: Do we need to scroll */
-      _gtk_tree_view_update_size (GTK_TREE_VIEW (widget));
-      return FALSE;
-    }
-
-  if (event->window == tree_view->priv->drag_window)
-    {
-      GtkTreeViewColumn *column = tree_view->priv->drag_column;
-      gint x, y;
-
-      if (column == NULL)
-	return FALSE;
-      gdk_window_get_position (tree_view->priv->drag_window, &x, &y);
-      x = CLAMP (x + (gint)event->x - column->drag_x, 0,
-		 MAX (tree_view->priv->width, GTK_WIDGET (tree_view)->allocation.width) - column->button->allocation.width);
-
-      gdk_window_move (tree_view->priv->drag_window, x, y);
-      return TRUE;
-    }
-  
-  /* Sanity check it */
-  if (event->window != tree_view->priv->bin_window)
-    return FALSE;
 
   if (tree_view->priv->tree == NULL)
     return FALSE;
@@ -1769,6 +1786,27 @@ gtk_tree_view_motion (GtkWidget      *widget,
     }
 
   return TRUE;
+}
+
+static gboolean
+gtk_tree_view_motion (GtkWidget      *widget,
+		      GdkEventMotion *event)
+{
+  GtkTreeView *tree_view;
+
+  tree_view = (GtkTreeView *) widget;
+
+  if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IN_COLUMN_RESIZE))
+    return gtk_tree_view_motion_resize_column (widget, event);
+
+  /* Drag column */
+  if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IN_COLUMN_DRAG))
+    gtk_tree_view_motion_drag_column (widget, event);
+
+  /* Sanity check it */
+  if (event->window == tree_view->priv->bin_window)
+    return gtk_tree_view_motion_bin_window (widget, event);
+  return FALSE;
 }
 
 /* FIXME Is this function necessary? Can I get an enter_notify event
@@ -2063,6 +2101,10 @@ gtk_tree_view_button_release (GtkWidget      *widget,
       tree_view->priv->drag_column = NULL;
       gtk_widget_queue_resize (GTK_WIDGET (tree_view));
       gdk_window_hide (tree_view->priv->drag_window);
+
+      g_list_foreach (tree_view->priv->column_drag_info, (GFunc) g_free, NULL);
+      g_list_free (tree_view->priv->column_drag_info);
+      tree_view->priv->column_drag_info = NULL;
 
       return TRUE;
     }
@@ -2827,6 +2869,14 @@ gtk_tree_view_forall (GtkContainer *container,
     }
 }
 
+/**
+ * gtk_tree_view_row_activated:
+ * @tree_view: A #GtkTreeView
+ * @path: The #GtkTreePath to be activated.
+ * @column: The #GtkTreeViewColumn to be activated.
+ * 
+ * Activates the cell determined by @path and @column.
+ **/
 void
 gtk_tree_view_row_activated (GtkTreeView       *tree_view,
 			     GtkTreePath       *path,
@@ -2834,14 +2884,23 @@ gtk_tree_view_row_activated (GtkTreeView       *tree_view,
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
+  /* FIXME: Actually activate the path internally, not just emit the signal */
   g_signal_emit (G_OBJECT(tree_view), tree_view_signals[ROW_ACTIVATED], 0, path, column);
 }
 
 
+/**
+ * gtk_tree_view_map_expanded_rows:
+ * @tree_view: A #GtkTreeView
+ * @func: A function to be called
+ * @data: User data to be passed to the function.
+ * 
+ * Calls @func on all expanded rows.
+ **/
 void
-gtk_tree_view_map_open_rows (GtkTreeView            *tree_view,
-			     GtkTreeViewMappingFunc  func,
-			     gpointer                data)
+gtk_tree_view_map_expanded_rows (GtkTreeView            *tree_view,
+				 GtkTreeViewMappingFunc  func,
+				 gpointer                data)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (func != NULL);
@@ -3672,36 +3731,113 @@ gtk_tree_view_unref_tree (GtkTreeView *tree_view,
   gtk_tree_path_free (path);
 }
 
+static void
+gtk_tree_view_set_column_drag_info (GtkTreeView       *tree_view,
+				    GtkTreeViewColumn *column)
+{
+  GtkTreeViewColumn *left_column;
+  GtkTreeViewColumn *cur_column;
+  GtkTreeViewColumnReorder *reorder;
+
+  GList *tmp_list;
+  gint left;
+
+  /* We want to precalculate the motion list such that we know what column slots
+   * are available.
+   */
+  left_column = NULL;
+
+  /* First, identify all possible drop spots */
+  tmp_list = tree_view->priv->columns;
+
+  while (GTK_TREE_VIEW_COLUMN (tmp_list->data) != column)
+    {
+      g_assert (tmp_list);
+
+      cur_column = GTK_TREE_VIEW_COLUMN (tmp_list->data);
+      tmp_list = tmp_list->next;
+
+      if (cur_column->visible == FALSE)
+	continue;
+
+      reorder = g_new (GtkTreeViewColumnReorder, 1);
+      reorder->left_column = left_column;
+      left_column = reorder->right_column = cur_column;
+
+      tree_view->priv->column_drag_info = g_list_append (tree_view->priv->column_drag_info, reorder);
+    }
+
+  tmp_list = tmp_list->next;
+
+  /* Find the next visible column */
+  while (tmp_list != NULL && ! GTK_TREE_VIEW_COLUMN (tmp_list->data)->visible)
+    tmp_list = tmp_list->next;
+
+  if (tmp_list == NULL)
+    goto done;
+
+  left_column = GTK_TREE_VIEW_COLUMN (tmp_list->data);
+  tmp_list = tmp_list->next;
+
+  while (tmp_list)
+    {
+      cur_column = GTK_TREE_VIEW_COLUMN (tmp_list->data);
+      tmp_list = tmp_list->next;
+
+      if (cur_column->visible == FALSE)
+	continue;
+
+      reorder = g_new (GtkTreeViewColumnReorder, 1);
+      reorder->left_column = left_column;
+      left_column = reorder->right_column = cur_column;
+
+      tree_view->priv->column_drag_info = g_list_append (tree_view->priv->column_drag_info, reorder);
+    }
+
+  /* Add the last one */
+  reorder = g_new (GtkTreeViewColumnReorder, 1);
+  reorder->left_column = left_column;
+  reorder->right_column = NULL;
+  tree_view->priv->column_drag_info = g_list_append (tree_view->priv->column_drag_info, reorder);
+
+ done:
+  /* Now we want to fill in the ranges for the columns, now that we've isolated them */
+  left = - TREE_VIEW_COLUMN_DRAG_DEAD_MULTIPLIER (tree_view);
+
+  for (tmp_list = tree_view->priv->column_drag_info; tmp_list; tmp_list = tmp_list->next)
+    {
+      reorder = (GtkTreeViewColumnReorder *) tmp_list->data;
+
+      reorder->left_align = left;
+      if (tmp_list->next != NULL)
+	{
+	  g_assert (tmp_list->next->data);
+	  left = reorder->right_align = (reorder->right_column->button->allocation.x +
+					 reorder->right_column->button->allocation.width +
+					 ((GtkTreeViewColumnReorder *)tmp_list->next->data)->left_column->button->allocation.x)/2;
+	}
+      else
+	{
+	  gint width;
+
+	  gdk_window_get_size (tree_view->priv->header_window, &width, NULL);
+	  reorder->right_align = width + TREE_VIEW_COLUMN_DRAG_DEAD_MULTIPLIER (tree_view);
+	}
+    }
+}
+
 void
 _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 				  GtkTreeViewColumn *column)
 {
   GdkEvent send_event;
-  GList *list = NULL;
-  GList *tmp_list;
-  gint left, right;
-  GtkTreeViewColumn *left_column;
-  GtkTreeViewColumn *right_column;
 
-  /* We want to precalculate the motion list such that we know what column slots
-   * are available.
-   */
-  left = 0;
-  left_column = NULL;
+  g_return_if_fail (tree_view->priv->column_drag_info == NULL);
 
-  for (tmp_list = tree_view->priv->columns; tmp_list; tmp_list = tmp_list->next)
-    {
-      GtkTreeViewColumnReorder *reorder;
+  gtk_tree_view_set_column_drag_info (tree_view, column);
 
-      if (GTK_TREE_VIEW_COLUMN (tmp_list->data)->visible == FALSE)
-	continue;
-
-      right_column = tmp_list->data;
-      reorder = g_new (GtkTreeViewColumnReorder, 1);
-      reorder->left_align = left;
-    }
-  /*  if (list == NULL)
-      return;*/
+  if (tree_view->priv->column_drag_info == NULL)
+    return;
 
   if (tree_view->priv->drag_window == NULL)
     {
@@ -3765,6 +3901,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   while (gtk_events_pending ())
     gtk_main_iteration ();
 
+  GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_IN_COLUMN_DRAG);
   gdk_pointer_grab (tree_view->priv->drag_window,
 		    FALSE,
 		    GDK_POINTER_MOTION_MASK|GDK_BUTTON_RELEASE_MASK,
@@ -4707,6 +4844,15 @@ gtk_tree_view_set_expander_column (GtkTreeView *tree_view,
     }
 }
 
+/**
+ * gtk_tree_view_get_expander_column:
+ * @tree_view: 
+ * 
+ * Returns the offset of the column that is the current expander column.  This
+ * column has the expander arrow drawn next to it.
+ * 
+ * Return value: The offset of the expander column.
+ **/
 gint
 gtk_tree_view_get_expander_column (GtkTreeView *tree_view)
 {
@@ -6702,3 +6848,67 @@ gtk_tree_view_drag_data_received (GtkWidget        *widget,
   /* drop dest_row */
   set_dest_row (context, NULL, NULL);
 }
+
+
+/* GtkTreeViewColumnReorder functions
+ */
+
+static GtkTreeViewColumnReorder *
+gtk_tree_view_column_reorder_new (void)
+{
+  return g_new (GtkTreeViewColumnReorder, 1);
+}
+
+static void
+gtk_tree_view_column_reorder_free (GtkTreeViewColumnReorder *reorder)
+{
+  g_free (reorder);
+}
+
+static void
+gtk_tree_view_column_reorder_begin_draw (GtkTreeViewColumnReorder *reorder)
+{
+  if (reorder == NULL)
+    return;
+
+  if (reorder->right_column)
+    {
+      gtk_widget_queue_draw (reorder->right_column->button);
+      g_signal_handlers_disconnect_matched (G_OBJECT (reorder->right_column->button),
+					    G_SIGNAL_MATCH_FUNC,
+					    0, 0, NULL,
+					    gtk_tree_view_column_button_expose,
+					    NULL);
+    }
+  if (reorder->left_column)
+    {
+      gtk_widget_queue_draw (reorder->left_column->button);
+      g_signal_handlers_disconnect_matched (G_OBJECT (reorder->left_column->button),
+					    G_SIGNAL_MATCH_FUNC,
+					    0, 0, NULL,
+					    gtk_tree_view_column_button_expose,
+					    NULL);
+    }
+}
+
+static void
+gtk_tree_view_column_reorder_remove_draw (GtkTreeViewColumnReorder *reorder)
+{
+  if (reorder->left_column)
+    {
+      gtk_signal_connect_after (GTK_OBJECT (reorder->left_column->button),
+				"expose_event",
+				(GtkSignalFunc) gtk_tree_view_column_button_expose,
+				GINT_TO_POINTER (TRUE));
+      gtk_widget_queue_draw (reorder->left_column->button);
+    }
+  if (reorder->right_column)
+    {
+      gtk_signal_connect_after (GTK_OBJECT (reorder->right_column->button),
+				"expose_event",
+				(GtkSignalFunc) gtk_tree_view_column_button_expose,
+				GINT_TO_POINTER (FALSE));
+      gtk_widget_queue_draw (reorder->right_column->button);
+    }
+}
+

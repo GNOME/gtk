@@ -764,7 +764,7 @@ gtk_tree_selection_real_select_range (GtkTreeSelection *selection,
 
   switch (gtk_tree_path_compare (start_path, end_path))
     {
-    case -1:
+    case 1:
       _gtk_tree_view_find_node (selection->tree_view,
 				end_path,
 				&start_tree,
@@ -782,7 +782,7 @@ gtk_tree_selection_real_select_range (GtkTreeSelection *selection,
       end_tree = start_tree;
       end_node = start_node;
       break;
-    case 1:
+    case -1:
       _gtk_tree_view_find_node (selection->tree_view,
 				start_path,
 				&start_tree,

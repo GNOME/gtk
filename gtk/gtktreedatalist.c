@@ -103,6 +103,7 @@ _gtk_tree_data_list_check_type (GType type)
   return FALSE;
 }
 
+
 void
 _gtk_tree_data_list_node_to_value (GtkTreeDataList *list,
 				   GType            type,

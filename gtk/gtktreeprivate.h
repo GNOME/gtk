@@ -46,6 +46,7 @@ extern "C" {
 #define TREE_VIEW_VERTICAL_SEPARATOR 2
 #define TREE_VIEW_HORIZONTAL_SEPARATOR 0
 
+  
 #define TREE_VIEW_DRAG_WIDTH 6
 
 typedef enum
@@ -56,7 +57,8 @@ typedef enum
   GTK_TREE_VIEW_ARROW_PRELIT = 1 << 3,
   GTK_TREE_VIEW_HEADERS_VISIBLE = 1 << 4,
   GTK_TREE_VIEW_DRAW_KEYFOCUS = 1 << 5,
-  GTK_TREE_VIEW_MODEL_SETUP = 1 << 6
+  GTK_TREE_VIEW_MODEL_SETUP = 1 << 6,
+  GTK_TREE_VIEW_IN_COLUMN_DRAG = 1 << 7,
 } GtkTreeViewFlags;
 
 #define GTK_TREE_VIEW_SET_FLAG(tree_view, flag)   G_STMT_START{ (tree_view->priv->flags|=flag); }G_STMT_END
@@ -65,6 +67,20 @@ typedef enum
 #define TREE_VIEW_HEADER_HEIGHT(tree_view)        (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_HEADERS_VISIBLE)?tree_view->priv->header_height:0)
 #define TREE_VIEW_COLUMN_WIDTH(column)             (CLAMP (column->width, (column->min_width!=-1)?column->min_width:column->width, (column->max_width!=-1)?column->max_width:column->width))
 #define TREE_VIEW_DRAW_EXPANDERS(tree_view)       (!GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IS_LIST)&&GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_SHOW_EXPANDERS))
+
+ /* This lovely little value is used to determine how far away from the title bar
+  * you can move the mouse and still have a column drag work.
+  */
+#define TREE_VIEW_COLUMN_DRAG_DEAD_MULTIPLIER(tree_view) (10*TREE_VIEW_HEADER_HEIGHT(tree_view))
+
+typedef struct _GtkTreeViewColumnReorder GtkTreeViewColumnReorder;
+struct _GtkTreeViewColumnReorder
+{
+  gint left_align;
+  gint right_align;
+  GtkTreeViewColumn *left_column;
+  GtkTreeViewColumn *right_column;
+};
 
 struct _GtkTreeViewPrivate
 {
@@ -118,8 +134,10 @@ struct _GtkTreeViewPrivate
   gint n_columns;
   GList *columns;
   gint header_height;
+
   GtkTreeViewColumnDropFunc *column_drop_func;
   GList *column_drag_info;
+  GtkTreeViewColumnReorder *cur_reorder;
 
   /* Scroll timeout (e.g. during dnd) */
   guint scroll_timeout;

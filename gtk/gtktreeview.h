@@ -65,18 +65,18 @@ struct _GtkTreeViewClass
 {
   GtkContainerClass parent_class;
 
-  void (* set_scroll_adjustments) (GtkTreeView       *tree_view,
-				   GtkAdjustment     *hadjustment,
-				   GtkAdjustment     *vadjustment);
-  void (* row_activated)          (GtkTreeView       *tree_view,
-				   GtkTreeViewColumn *column);
-  gint (* expand_row)             (GtkTreeView       *tree_view,
-				   GtkTreeIter       *iter,
-				   GtkTreePath       *path);
-  gint (* collapse_row)           (GtkTreeView       *tree_view,
-				   GtkTreeIter       *iter,
-				   GtkTreePath       *path);
-  
+  void     (* set_scroll_adjustments) (GtkTreeView       *tree_view,
+				       GtkAdjustment     *hadjustment,
+				       GtkAdjustment     *vadjustment);
+  void     (* row_activated)          (GtkTreeView       *tree_view,
+				       GtkTreePath       *path,
+				       GtkTreeViewColumn *column);
+  gboolean (* expand_row)             (GtkTreeView       *tree_view,
+				       GtkTreeIter       *iter,
+				       GtkTreePath       *path);
+  gboolean (* collapse_row)           (GtkTreeView       *tree_view,
+				       GtkTreeIter       *iter,
+				       GtkTreePath       *path);
 };
 
 
@@ -172,7 +172,7 @@ gboolean               gtk_tree_view_collapse_row                  (GtkTreeView 
 void                   gtk_tree_view_row_activated                 (GtkTreeView        *tree_view,
 								    GtkTreePath        *path,
 								    GtkTreeViewColumn  *column);
-void                   gtk_tree_view_map_open_rows                 (GtkTreeView        *tree_view,
+void                   gtk_tree_view_map_expanded_rows             (GtkTreeView        *tree_view,
 								    GtkTreeViewMappingFunc func,
 								    gpointer            data);
 

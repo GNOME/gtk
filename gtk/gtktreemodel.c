@@ -350,8 +350,8 @@ gtk_tree_path_copy (GtkTreePath *path)
  * @a: A #GtkTreePath.
  * @b: A #GtkTreePath to compare with.
  *
- * Compares two paths.  If @a appears before @b in a tree, then 1, is returned.
- * If @b appears before @a, then -1 is returned.  If the two nodes are equal,
+ * Compares two paths.  If @a appears before @b in a tree, then -1, is returned.
+ * If @b appears before @a, then 1 is returned.  If the two nodes are equal,
  * then 0 is returned.
  *
  * Return value: The relative positions of @a and @b
@@ -371,12 +371,12 @@ gtk_tree_path_compare (const GtkTreePath *a,
     {
       if (a->indices[p] == b->indices[q])
 	continue;
-      return (a->indices[p] < b->indices[q]?1:-1);
+      return (a->indices[p] < b->indices[q]?-1:1);
     }
   while (++p < a->depth && ++q < b->depth);
   if (a->depth == b->depth)
     return 0;
-  return (a->depth < b->depth?1:-1);
+  return (a->depth < b->depth?-1:1);
 }
 
 /**

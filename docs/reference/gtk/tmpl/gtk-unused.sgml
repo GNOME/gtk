@@ -839,6 +839,38 @@ normally be used to create a #GtkCList widget.  Use gtk_clist_new() instead.
 of the columns.  There should be enough strings in the array for
 the number of columns specified.
 
+<!-- ##### FUNCTION gtk_color_selection_get_old_color ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@color: 
+
+<!-- ##### FUNCTION gtk_color_selection_get_use_opacity ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_color_selection_get_use_palette ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_color_selection_set_old_color ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@color: 
+
 <!-- ##### FUNCTION gtk_color_selection_set_opacity ##### -->
 <para>
 Controls whether opacity can be set with the #GtkColorSelection.
@@ -851,6 +883,22 @@ the gtk_color_selection_get_color() function.
 @colorsel: a #GtkColorSelection.
 @use_opacity: a boolean indicating whether the opacity selection
 is enabled.
+
+<!-- ##### FUNCTION gtk_color_selection_set_use_opacity ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@use_opacity: 
+
+<!-- ##### FUNCTION gtk_color_selection_set_use_palette ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@use_palette: 
 
 <!-- ##### FUNCTION gtk_ctree_construct ##### -->
 <para>

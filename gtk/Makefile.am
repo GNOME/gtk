@@ -363,7 +363,7 @@ gtk_c_sources = @STRIP_BEGIN@   \
 if USE_X11
 gtk_plug_c_sources = @STRIP_BEGIN@   \
 	gtkplug.c		\
-	gtksocket.c
+	gtksocket.c		\
 @STRIP_END@
 endif
 
