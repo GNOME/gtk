@@ -1,3 +1,9 @@
+2005-03-30  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkevents-win32.c (build_pointer_event_state): The
+	state field should represent the state before the event, like on
+	X11. (#169753)
+
 2005-03-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_set_visible_func): 
