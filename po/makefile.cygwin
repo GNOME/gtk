@@ -1,0 +1,127 @@
+## Makefile for compiling UTF-8 message catalogs on Win32 with cygwin
+##
+## Use: make -f makefile.cygwin install
+## To convert the clear-text message catalogs to binary form (.gmo)
+## files in the UTF-8 encoding of Unicode that GIMP wants,
+## you will need: - native2ascii from the JDK 
+##		  - msgfmt from GNU gettext
+
+# This file is included from other po directories, too.
+# They should define their own PACKAGE and LOCALEDIR macros
+
+ifndef PACKAGE
+PACKAGE = gtk+
+endif
+ifndef LOCALEDIR
+LOCALEDIR = /WINDOWS/$(PACKAGE)/locale
+endif
+
+# uk (Ukrainian) is skipped, as native2ascii doesn't know the KOI8_U 
+# encoding, sigh
+LANGUAGES= $(basename $(basename .Big5,$(wildcard $(addsuffix .po,ca cs da de el es et eu fi fr ga gl hr hu it ja ko nl no pl pt pt_BR ru sk sl sv wa zh_TW.Big5))))
+
+################################################################
+
+all : $(addsuffix .gmo,$(LANGUAGES))
+
+install : all
+	mkdir -p $(addsuffix /LC_MESSAGES,$(addprefix $(LOCALEDIR)/,$(LANGUAGES)))
+	for l in $(LANGUAGES); do cp $$l.gmo $(LOCALEDIR)/$$l/LC_MESSAGES/$(PACKAGE).mo; done
+
+.SUFFIXES: .po .jpo .utf8 .gmo
+
+.utf8.gmo:
+	msgfmt -o $@ $<
+
+.jpo.utf8:
+	native2ascii -encoding UTF8 -reverse $< $@
+
+ca.jpo: ca.po
+	native2ascii -encoding 8859_1 ca.po ca.jpo
+
+cs.jpo: cs.po
+	native2ascii -encoding 8859_2 cs.po cs.jpo
+
+da.jpo: da.po
+	native2ascii -encoding 8859_1 da.po da.jpo
+
+de.jpo: de.po
+	native2ascii -encoding 8859_1 de.po de.jpo
+
+el.jpo: el.po
+	native2ascii -encoding 8859_7 el.po el.jpo
+
+es.jpo: es.po
+	native2ascii -encoding 8859_1 es.po es.jpo
+
+et.jpo: et.po
+	native2ascii -encoding 8859_1 et.po et.jpo
+
+eu.jpo: eu.po
+	native2ascii -encoding 8859_1 eu.po eu.jpo
+
+fi.jpo: fi.po
+	native2ascii -encoding 8859_1 fi.po fi.jpo
+
+fr.jpo: fr.po
+	native2ascii -encoding 8859_1 fr.po fr.jpo
+
+ga.jpo: ga.po
+	native2ascii -encoding 8859_1 ga.po ga.jpo
+
+gl.jpo: gl.po
+	native2ascii -encoding 8859_1 gl.po gl.jpo
+
+hr.jpo: hr.po
+	native2ascii -encoding 8859_2 hr.po hr.jpo
+
+hu.jpo: hu.po
+	native2ascii -encoding 8859_2 hu.po hu.jpo
+
+it.jpo: it.po
+	native2ascii -encoding 8859_2 it.po it.jpo
+
+ja.jpo: ja.po
+	native2ascii -encoding EUC-JP ja.po ja.jpo
+
+ko.jpo: ko.po
+	native2ascii -encoding EUC-KR ko.po ko.jpo
+
+nl.jpo: nl.po
+	native2ascii -encoding 8859_1 nl.po nl.jpo
+
+no.jpo: no.po
+	native2ascii -encoding 8859_1 no.po no.jpo
+
+pl.jpo: pl.po
+	native2ascii -encoding 8859_2 pl.po pl.jpo
+
+pt.jpo: pt.po
+	native2ascii -encoding 8859_1 pt.po pt.jpo
+
+pt_BR.jpo: pt_BR.po
+	native2ascii -encoding 8859_1 pt_BR.po pt_BR.jpo
+
+ru.jpo: ru.po
+	native2ascii -encoding KOI8_R ru.po ru.jpo
+
+sk.jpo: sk.po
+	native2ascii -encoding 8859_2 sk.po sk.jpo
+
+sl.jpo: sl.po
+	native2ascii -encoding 8859_2 sl.po sl.jpo
+
+sv.jpo: sv.po
+	native2ascii -encoding 8859_1 sv.po sv.jpo
+
+#uk.jpo: uk.po
+#	native2ascii -encoding KOI8_U uk.po uk.jpo
+
+wa.jpo: wa.po
+	native2ascii -encoding 8859_1 wa.po wa.jpo
+
+zh_TW.jpo: zh_TW.Big5.po
+	native2ascii -encoding Big5 zh_TW.Big5.po zh_TW.jpo
+
+clean:
+	-rm *.jpo *.utf8 *.gmo
