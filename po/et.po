@@ -6,20 +6,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
-"POT-Creation-Date: 2002-05-23 17:08-0400\n"
-"PO-Revision-Date: 2002-04-03 01:44+0300\n"
+"POT-Creation-Date: 2002-06-04 20:15+0300\n"
+"PO-Revision-Date: 2002-06-04 20:26+0300\n"
 "Last-Translator: Tõivo Leedjärv <toivo@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:581
+#: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:585
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:591
+#: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:595
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr ""
@@ -29,7 +29,7 @@ msgstr ""
 msgid "Don't know how to load the animation in file '%s'"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:636
+#: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:640
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -42,53 +42,53 @@ msgid ""
 "animation file"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:354
-#, fuzzy, c-format
+#: gdk-pixbuf/gdk-pixbuf-io.c:358
+#, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr "Ei leia moodulit otsingurajalt 'module_path': \"%s\","
+msgstr "Ei saa piltide laadimise moodulit laadida: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:373
+#: gdk-pixbuf/gdk-pixbuf-io.c:377
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:490 gdk-pixbuf/gdk-pixbuf-io.c:516
+#: gdk-pixbuf/gdk-pixbuf-io.c:494 gdk-pixbuf/gdk-pixbuf-io.c:520
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:538
+#: gdk-pixbuf/gdk-pixbuf-io.c:542
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:544
+#: gdk-pixbuf/gdk-pixbuf-io.c:548
 msgid "Unrecognized image file format"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:614
+#: gdk-pixbuf/gdk-pixbuf-io.c:618
 #, c-format
 msgid "Don't know how to load the image in file '%s'"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:647
+#: gdk-pixbuf/gdk-pixbuf-io.c:651
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:752
+#: gdk-pixbuf/gdk-pixbuf-io.c:756
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:859
+#: gdk-pixbuf/gdk-pixbuf-io.c:863
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:880
+#: gdk-pixbuf/gdk-pixbuf-io.c:884
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -563,15 +563,15 @@ msgstr ""
 msgid "Couldn't save the rest"
 msgstr ""
 
-#: gdk-pixbuf/io-xbm.c:283
+#: gdk-pixbuf/io-xbm.c:284
 msgid "Invalid XBM file"
 msgstr ""
 
-#: gdk-pixbuf/io-xbm.c:293
+#: gdk-pixbuf/io-xbm.c:294
 msgid "Insufficient memory to load XBM image file"
 msgstr ""
 
-#: gdk-pixbuf/io-xbm.c:427
+#: gdk-pixbuf/io-xbm.c:429
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr ""
 
@@ -614,7 +614,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:116
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -623,7 +623,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:122
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -632,7 +632,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:128
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #: gtk/gtkaccellabel.c:136
 msgid "Accelerator Closure"
@@ -771,9 +771,8 @@ msgid "Amount to increase child's size on the top and bottom"
 msgstr ""
 
 #: gtk/gtkbbox.c:151
-#, fuzzy
 msgid "Layout style"
-msgstr "Stiil:"
+msgstr ""
 
 #: gtk/gtkbbox.c:152
 msgid ""
@@ -792,9 +791,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkbox.c:125
-#, fuzzy
 msgid "Spacing"
-msgstr "Täheruum:"
+msgstr ""
 
 #: gtk/gtkbox.c:126
 msgid "The amount of space between children."
@@ -846,9 +844,8 @@ msgid "The border relief style."
 msgstr ""
 
 #: gtk/gtkbutton.c:265
-#, fuzzy
 msgid "Default Spacing"
-msgstr "Täheruum:"
+msgstr ""
 
 #: gtk/gtkbutton.c:266
 msgid "Extra space to add for CAN_DEFAULT buttons"
@@ -1044,9 +1041,8 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:230 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
 #: gtk/gtktextview.c:568
-#, fuzzy
 msgid "Editable"
-msgstr "(välja lülitatud)"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:231 gtk/gtktexttag.c:278 gtk/gtktextview.c:569
 msgid "Whether the text can be modified by the user"
@@ -1099,18 +1095,16 @@ msgid "Font size"
 msgstr "Kirjasuurus"
 
 #: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:368
-#, fuzzy
 msgid "Font points"
-msgstr "Kirjatüübid:"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:369
 msgid "Font size in points"
-msgstr ""
+msgstr "Kirja suurus punktides"
 
 #: gtk/gtkcellrenderertext.c:320 gtk/gtktexttag.c:358 gtk/gtktexttag.c:359
-#, fuzzy
 msgid "Font scale"
-msgstr "Stiil:"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:321
 msgid "Font scaling factor"
@@ -1174,9 +1168,8 @@ msgid "Whether this tag affects the font family"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:376 gtk/gtktexttag.c:540
-#, fuzzy
 msgid "Font style set"
-msgstr "Stiil:"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:541
 msgid "Whether this tag affects the font style"
@@ -1255,9 +1248,8 @@ msgid "The toggle state of the button"
 msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:139
-#, fuzzy
 msgid "Activatable"
-msgstr "Skaleeritav"
+msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:140
 msgid "The toggle button can be activated"
@@ -1371,6 +1363,8 @@ msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
+"Vali oma soovitud värv välimiselt ringilt. Kasutades sisemist kolmnurka, "
+"vali värvi heledus või tumedus."
 
 #: gtk/gtkcolorsel.c:1812
 msgid ""
@@ -1443,6 +1437,8 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
+"Siia võid sisestada HTML-stiilis kuueteistkümnendarvuna värvi väärtuse, või "
+"värvi inglisekeelse nimetuse (näiteks 'orange')."
 
 #: gtk/gtkcolorsel.c:1889
 msgid "_Palette"
@@ -1514,9 +1510,8 @@ msgid "Can be used to add a new child to the container."
 msgstr ""
 
 #: gtk/gtkcurve.c:121
-#, fuzzy
 msgid "Curve type"
-msgstr "Loo"
+msgstr ""
 
 #: gtk/gtkcurve.c:122
 msgid "Is this curve linear, spline interpolated, or free-form"
@@ -1595,9 +1590,8 @@ msgid "The current position of the insertion cursor in chars."
 msgstr ""
 
 #: gtk/gtkentry.c:445 gtk/gtklabel.c:368
-#, fuzzy
 msgid "Selection Bound"
-msgstr "Valik: "
+msgstr ""
 
 #: gtk/gtkentry.c:446 gtk/gtklabel.c:369
 msgid ""
@@ -1673,9 +1667,8 @@ msgid "The contents of the entry"
 msgstr ""
 
 #: gtk/gtkentry.c:728
-#, fuzzy
 msgid "Select on focus"
-msgstr "Valik: "
+msgstr ""
 
 #: gtk/gtkentry.c:729
 msgid "Whether to select the contents of an entry when it is focused."
@@ -1710,9 +1703,8 @@ msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr ""
 
 #: gtk/gtkfilesel.c:551
-#, fuzzy
 msgid "Select multiple"
-msgstr "Vali kõik"
+msgstr ""
 
 #: gtk/gtkfilesel.c:552
 msgid "Whether to allow multiple files to be selected."
@@ -2046,9 +2038,8 @@ msgid "A GdkPixbuf to display."
 msgstr ""
 
 #: gtk/gtkimage.c:137
-#, fuzzy
 msgid "Pixmap"
-msgstr "Bitmap"
+msgstr ""
 
 #: gtk/gtkimage.c:138
 msgid "A GdkPixmap to display."
@@ -2148,21 +2139,18 @@ msgid "Window"
 msgstr "Aken"
 
 #: gtk/gtkinputdialog.c:262
-#, fuzzy
 msgid "_Mode: "
-msgstr "Tüüp: "
+msgstr ""
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:293
-#, fuzzy
 msgid "_Axes"
-msgstr "Teljed"
+msgstr "_Teljed"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:309
-#, fuzzy
 msgid "_Keys"
-msgstr "Klahvid"
+msgstr "_Klahvid"
 
 #: gtk/gtkinputdialog.c:474
 msgid "X"
@@ -2251,9 +2239,8 @@ msgid "If set, wrap lines if the text becomes too wide."
 msgstr ""
 
 #: gtk/gtklabel.c:333
-#, fuzzy
 msgid "Selectable"
-msgstr "Skaleeritav"
+msgstr ""
 
 #: gtk/gtklabel.c:334
 msgid "Whether the label text can be selected with the mouse."
@@ -2316,21 +2303,21 @@ msgstr ""
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:191
+#: gtk/gtkmenu.c:194
 msgid "Tearoff Title"
 msgstr ""
 
-#: gtk/gtkmenu.c:192
+#: gtk/gtkmenu.c:195
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off."
 msgstr ""
 
-#: gtk/gtkmenu.c:260
+#: gtk/gtkmenu.c:264
 msgid "Can change accelerators"
 msgstr ""
 
-#: gtk/gtkmenu.c:261
+#: gtk/gtkmenu.c:265
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu "
 "item."
@@ -2463,9 +2450,8 @@ msgid "Whether the border should be shown or not"
 msgstr ""
 
 #: gtk/gtknotebook.c:420
-#, fuzzy
 msgid "Scrollable"
-msgstr "Skaleeritav"
+msgstr ""
 
 #: gtk/gtknotebook.c:421
 msgid "If TRUE, scroll arrows are added if there are to many tabs to fit"
@@ -2516,9 +2502,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkpaned.c:217
-#, fuzzy
 msgid "Position Set"
-msgstr "Punktisuurus:"
+msgstr ""
 
 #: gtk/gtkpaned.c:218
 msgid "TRUE if the Position property should be used"
@@ -2634,9 +2619,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkprogressbar.c:187
-#, fuzzy
 msgid "Fraction"
-msgstr "Küllastatus:"
+msgstr ""
 
 #: gtk/gtkprogressbar.c:188
 msgid "The fraction of total work that has been completed"
@@ -2675,9 +2659,8 @@ msgid "Invert direction slider moves to increase range value"
 msgstr ""
 
 #: gtk/gtkrange.c:297
-#, fuzzy
 msgid "Slider Width"
-msgstr "Laius:"
+msgstr ""
 
 #: gtk/gtkrange.c:298
 msgid "Width of scrollbar or scale thumb"
@@ -2700,9 +2683,8 @@ msgid "Length of step buttons at ends"
 msgstr ""
 
 #: gtk/gtkrange.c:321
-#, fuzzy
 msgid "Stepper Spacing"
-msgstr "Täheruum:"
+msgstr ""
 
 #: gtk/gtkrange.c:322
 msgid "Spacing between step buttons and thumb"
@@ -2742,9 +2724,8 @@ msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
 
 #: gtk/gtkruler.c:118
-#, fuzzy
 msgid "Lower"
-msgstr "muu"
+msgstr ""
 
 #: gtk/gtkruler.c:119
 msgid "Lower limit of ruler"
@@ -2763,9 +2744,8 @@ msgid "Position of mark on the ruler"
 msgstr ""
 
 #: gtk/gtkruler.c:148
-#, fuzzy
 msgid "Max Size"
-msgstr "Suurus pikslites:"
+msgstr ""
 
 #: gtk/gtkruler.c:149
 msgid "Maximum size of the ruler"
@@ -2780,9 +2760,8 @@ msgid "The number of decimal places that are displayed in the value"
 msgstr ""
 
 #: gtk/gtkscale.c:165
-#, fuzzy
 msgid "Draw Value"
-msgstr "Tegelik väärtus"
+msgstr ""
 
 #: gtk/gtkscale.c:166
 msgid "Whether the current value is displayed as a string next to the slider"
@@ -2971,18 +2950,16 @@ msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 
 #: gtk/gtksettings.c:215
-#, fuzzy
 msgid "Font Name"
 msgstr "Kirjatüübi nimi"
 
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
-msgstr ""
+msgstr "Vaikimisi kasutatava kirjatüübi nimi"
 
 #: gtk/gtksizegroup.c:242
-#, fuzzy
 msgid "Mode"
-msgstr "Tüüp: "
+msgstr ""
 
 #: gtk/gtksizegroup.c:243
 msgid ""
@@ -3042,9 +3019,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkspinbutton.c:298
-#, fuzzy
 msgid "Value"
-msgstr "Heledus:"
+msgstr ""
 
 #: gtk/gtkspinbutton.c:299
 msgid "Reads the current value, or sets a new value"
@@ -3172,11 +3148,11 @@ msgstr "_Abi"
 
 #: gtk/gtkstock.c:299
 msgid "_Home"
-msgstr ""
+msgstr "_Kodu"
 
 #: gtk/gtkstock.c:300
 msgid "_Index"
-msgstr ""
+msgstr "_Indeks"
 
 #: gtk/gtkstock.c:301
 msgid "_Italic"
@@ -3187,14 +3163,12 @@ msgid "_Jump to"
 msgstr ""
 
 #: gtk/gtkstock.c:303
-#, fuzzy
 msgid "_Center"
-msgstr "Loo"
+msgstr ""
 
 #: gtk/gtkstock.c:304
-#, fuzzy
 msgid "_Fill"
-msgstr "Failid"
+msgstr "_Täida"
 
 #: gtk/gtkstock.c:305
 msgid "_Left"
@@ -3290,7 +3264,7 @@ msgstr ""
 
 #: gtk/gtkstock.c:328
 msgid "_Stop"
-msgstr "_Seiska"
+msgstr "_Peata"
 
 #: gtk/gtkstock.c:329
 msgid "_Strikethrough"
@@ -3345,9 +3319,8 @@ msgid "The number of columns in the table"
 msgstr ""
 
 #: gtk/gtktable.c:174
-#, fuzzy
 msgid "Row spacing"
-msgstr "Täheruum:"
+msgstr ""
 
 #: gtk/gtktable.c:175
 msgid "The amount of space between two consecutive rows"
@@ -3428,9 +3401,8 @@ msgid "Bitmap to use as a mask when drawing the text foreground"
 msgstr ""
 
 #: gtk/gtktexttag.c:268
-#, fuzzy
 msgid "Text direction"
-msgstr "Loo uus kataloog"
+msgstr ""
 
 #: gtk/gtktexttag.c:269
 msgid "Text direction, e.g. right-to-left or left-to-right"
@@ -4030,9 +4002,8 @@ msgid "Determines how the shadowed box around the viewport is drawn."
 msgstr ""
 
 #: gtk/gtkwidget.c:390
-#, fuzzy
 msgid "Widget name"
-msgstr "Kataloogi nimi:"
+msgstr ""
 
 #: gtk/gtkwidget.c:391
 msgid "The name of the widget"
@@ -4135,9 +4106,8 @@ msgid "Whether the widget is part of a composite widget"
 msgstr ""
 
 #: gtk/gtkwidget.c:486
-#, fuzzy
 msgid "Style"
-msgstr "Lisastiil:"
+msgstr ""
 
 #: gtk/gtkwidget.c:487
 msgid ""
