@@ -13,6 +13,8 @@ endif
 
 GIF_LIB = libpixbuf-gif.la
 
+RAS_LIB = libpixbuf-ras.la
+
 if HAVE_TIFF
 TIFF_LIB =	libpixbuf-tiff.la
 endif
@@ -23,6 +25,7 @@ libexec_LTLIBRARIES =		\
 	$(PNG_LIB)	\
 	$(JPEG_LIB)	\
 	$(GIF_LIB)	\
+	$(RAS_LIB)	\
 	$(XPM_LIB)	\
 	$(TIFF_LIB)
 
@@ -86,6 +89,13 @@ libpixbuf_xpm_la_LDFLAGS = -avoid-version -module
 libpixbuf_gif_la_SOURCES = io-gif.c
 libpixbuf_gif_la_LDFLAGS = -avoid-version -module
 libpixbuf_gif_la_LIBADD =
+
+#
+# The RAS loader
+#
+libpixbuf_ras_la_SOURCES = io-ras.c
+libpixbuf_ras_la_LDFLAGS = -avoid-version -module
+libpixbuf_ras_la_LIBADD =
 
 #
 # The TIFF loader
