@@ -593,16 +593,31 @@ gdk_input_gxi_grab_pointer (GdkWindow *     window,
 {
   GdkInputWindow *input_window, *new_window;
   GList *tmp_list;
+  GdkDevicePrivate *gdkdev;
+  GList *tmp_list;
 
   tmp_list = gdk_input_windows;
   while (tmp_list)
     {
       input_window = (GdkInputWindow *)tmp_list->data;
-      if (input_window->grabbed)
-	return AlreadyGrabbed;
 
       if (input_window->window == window)
 	new_window = input_window;
+      else (input_window->grabbed)
+	input_window->grabbed = FALSE;
+
+      tmp_list = gdk_input_devices;
+      while (tmp_list)
+	{
+	  gdkdev = (GdkDevicePrivate *)tmp_list->data;
+	  if (gdkdev->info.deviceid != GDK_CORE_POINTER && 
+	      gdkdev->xdevice &&
+	      (gdkdev->button_state != 0))
+	    gdkdev->button_state = 0;
+	  
+	  tmp_list = tmp_list->next;
+	}
+      
       
       tmp_list = tmp_list->next;
     }

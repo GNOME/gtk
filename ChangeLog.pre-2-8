@@ -1,3 +1,11 @@
+Sat Sep  5 16:01:19 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdkinputxfree.h gdk/gdk.c gdk/gdkinputgxi.h:
+	When the pointer is grabbed on an input window,
+	either explicitely, or through press-grab, and
+	then grabbed on a non-input window, ungrab the
+	devices.
+
 Thu Sep  3 19:45:34 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkthemes.c: Use g_module instead of dlopen();
@@ -25,6 +33,7 @@ Mon Aug 31 15:33:13 1998  Owen Taylor  <otaylor@redhat.com>
 	non-themes branch. (This does break bin compat
 	within the themes branch.)
 
+>>>>>>> 1.554.2.31
 Sun Aug 30 16:48:27 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtklabel.c (gtk_label_set): Eliminate a 

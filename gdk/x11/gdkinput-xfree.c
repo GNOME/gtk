@@ -257,6 +257,7 @@ gdk_input_xfree_grab_pointer (GdkWindow *     window,
 			      guint32         time)
 {
   GdkInputWindow *input_window, *new_window;
+  gboolean need_ungrab;
   GdkDevicePrivate *gdkdev;
   GList *tmp_list;
   XEventClass event_classes[GDK_MAX_DEVICE_CLASSES];
@@ -265,47 +266,70 @@ gdk_input_xfree_grab_pointer (GdkWindow *     window,
 
   tmp_list = gdk_input_windows;
   new_window = NULL;
+  need_ungrab = FALSE;
+
   while (tmp_list)
     {
       input_window = (GdkInputWindow *)tmp_list->data;
-      if (input_window->grabbed)
-	return AlreadyGrabbed;
 
       if (input_window->window == window)
 	new_window = input_window;
-      
-      tmp_list = tmp_list->next;
-    }
-  
-  g_return_val_if_fail (new_window != NULL, Success); /* shouldn't happen */
-  
-  new_window->grabbed = TRUE;
-
-  tmp_list = gdk_input_devices;
-  while (tmp_list)
-    {
-      gdkdev = (GdkDevicePrivate *)tmp_list->data;
-      if (gdkdev->info.deviceid != GDK_CORE_POINTER &&
-	  gdkdev->xdevice)
+      else if (input_window->grabbed)
 	{
-	  gdk_input_common_find_events (window, gdkdev,
-					event_mask,
-					event_classes, &num_classes);
-
-	  result = XGrabDevice( GDK_DISPLAY(), gdkdev->xdevice,
-				GDK_WINDOW_XWINDOW (window),
-				owner_events, num_classes, event_classes,
-				GrabModeAsync, GrabModeAsync, time);
-
-	  /* FIXME: if failure occurs on something other than the first
-	     device, things will be badly inconsistent */
-	  if (result != Success)
-	    return result;
+	  input_window->grabbed = FALSE;
+	  need_ungrab = TRUE;
 	}
+
       tmp_list = tmp_list->next;
     }
-  
+
+  if (new_window)
+    {
+      new_window->grabbed = TRUE;
+      
+      tmp_list = gdk_input_devices;
+      while (tmp_list)
+	{
+	  gdkdev = (GdkDevicePrivate *)tmp_list->data;
+	  if (gdkdev->info.deviceid != GDK_CORE_POINTER &&
+	      gdkdev->xdevice)
+	    {
+	      gdk_input_common_find_events (window, gdkdev,
+					    event_mask,
+					    event_classes, &num_classes);
+	      
+	      result = XGrabDevice( GDK_DISPLAY(), gdkdev->xdevice,
+				    GDK_WINDOW_XWINDOW (window),
+				    owner_events, num_classes, event_classes,
+				    GrabModeAsync, GrabModeAsync, time);
+	      
+	      /* FIXME: if failure occurs on something other than the first
+		 device, things will be badly inconsistent */
+	      if (result != Success)
+		return result;
+	    }
+	  tmp_list = tmp_list->next;
+	}
+    }
+  else
+    { 
+      tmp_list = gdk_input_devices;
+      while (tmp_list)
+	{
+	  gdkdev = (GdkDevicePrivate *)tmp_list->data;
+	  if (gdkdev->info.deviceid != GDK_CORE_POINTER && gdkdev->xdevice &&
+	      ((gdkdev->button_state != 0) || need_ungrab))
+	    {
+	      XUngrabDevice( gdk_display, gdkdev->xdevice, time);
+	      gdkdev->button_state = 0;
+	    }
+	  
+	  tmp_list = tmp_list->next;
+	}
+    }
+
   return Success;
+      
 }
 
 static void 
