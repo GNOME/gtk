@@ -1,3 +1,8 @@
+2002-10-19  Jeremy Katz  <katzj@redhat.com>
+
+	* configure.in: make configure checks for Xrandr and Xinerama
+	extensions less noisy (#95858)
+
 Fri Oct 18 16:47:02 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (translate_key_event): Handle

@@ -1117,7 +1117,8 @@ if test "x$gdktarget" = "xx11"; then
 		  fi
 		  AC_DEFINE(HAVE_XFREE_XINERAMA)
 		  AC_DEFINE(HAVE_XINERAMA), 
-		  use_xfree_xinerama=no)],
+		  use_xfree_xinerama=no,
+                  [#include <X11/Xlib.h>])],
 	      use_xfree_xinerama=no, -lXext $x_libs_for_checks)
 	  AC_MSG_CHECKING(for Xinerama support on XFree86)
 	  AC_MSG_RESULT($use_xfree_xinerama);	    
@@ -1186,8 +1187,8 @@ if test "x$gdktarget" = "xx11"; then
 	      x_extra_libs="-lXrender $x_extra_libs"
 	  fi
 	  x_extra_libs="-lXrandr $x_extra_libs"
-	  AC_DEFINE(HAVE_RANDR, 1, Have the Xrandr extension library))],
-       :,
+	  AC_DEFINE(HAVE_RANDR, 1, Have the Xrandr extension library),
+	  :, [#include <X11/Xlib.h>])], : ,
        $X_LIBS -lXrandr -lXrender -lX11 $X_EXTRA_LIBS)
 
   # Xshm checks
