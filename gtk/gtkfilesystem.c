@@ -146,6 +146,9 @@ gtk_file_info_set_display_name (GtkFileInfo *info,
 {
   g_return_if_fail (info != NULL);
 
+  if (display_name == info->display_name)
+    return;
+
   if (info->display_name)
     g_free (info->display_name);
   if (info->display_key)

@@ -872,6 +872,22 @@ shortcuts_unselect_all (GtkFileChooserDefault *impl)
   gtk_tree_selection_unselect_all (selection);
 }
 
+/* Returns whether a path is a folder */
+static gboolean
+check_is_folder (GtkFileSystem *file_system, const GtkFilePath *path, GError **error)
+{
+  GtkFileFolder *folder;
+
+  folder = gtk_file_system_get_folder (file_system, path,
+				       GTK_FILE_INFO_DISPLAY_NAME,
+				       error);
+  if (!folder)
+    return FALSE;
+
+  g_object_unref (folder);
+  return TRUE;
+}
+
 /* Convenience function to get the display name and icon info for a path */
 static GtkFileInfo *
 get_file_info (GtkFileSystem *file_system, const GtkFilePath *path, gboolean name_only, GError **error)
@@ -930,18 +946,21 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
     }
   else
     {
-      /* Always check to make sure that the directory exists. */
-      GtkFileInfo *info = get_file_info (impl->file_system, path, FALSE, error);
-
-      if (info == NULL)
+      if (!check_is_folder (impl->file_system, path, error))
 	return FALSE;
 
       if (label)
 	label_copy = g_strdup (label);
       else
-	label_copy = g_strdup (gtk_file_info_get_display_name (info));
+	{
+	  GtkFileInfo *info = get_file_info (impl->file_system, path, TRUE, error);
 
-      gtk_file_info_free (info);
+	  if (!info)
+	    return FALSE;
+
+	  label_copy = g_strdup (gtk_file_info_get_display_name (info));
+	  gtk_file_info_free (info);
+	}
 
       data = gtk_file_path_copy (path);
       pixbuf = gtk_file_system_render_icon (impl->file_system, path, GTK_WIDGET (impl),
@@ -1991,7 +2010,7 @@ shortcuts_drag_outside_idle_cb (GtkFileChooserDefault *impl)
   shortcuts_cancel_drag_outside_idle (impl);
   return FALSE;
 }
-			 
+
 /* GtkWidget::drag-leave handler for the shortcuts list.  We unhighlight the
  * drop position.
  */
@@ -2810,6 +2829,8 @@ browse_widgets_create (GtkFileChooserDefault *impl)
   widget = file_pane_create (impl, size_group);
   gtk_paned_pack2 (GTK_PANED (hpaned), widget, TRUE, FALSE);
 
+  g_object_unref (size_group);
+
   /* Alignment to hold custom widget */
   impl->browse_extra_align = gtk_alignment_new (0.0, .5, 1.0, 1.0);
   gtk_box_pack_start (GTK_BOX (vbox), impl->browse_extra_align, FALSE, FALSE, 0);
@@ -3561,13 +3582,10 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
 					     GError           **error)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
-  GtkFileInfo *info;
 
   /* Test validity of path here.  */
-  info = get_file_info (impl->file_system, path, FALSE, error);
-  if (!info)
+  if (!check_is_folder (impl->file_system, path, error))
     return FALSE;
-  gtk_file_info_free (info);
 
   if (!_gtk_path_bar_set_path (GTK_PATH_BAR (impl->browse_path_bar), path, error))
     return FALSE;
@@ -3946,6 +3964,10 @@ gtk_file_chooser_default_add_shortcut_folder (GtkFileChooser    *chooser,
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
   gboolean result;
   int pos;
+
+  /* Test validity of path here.  */
+  if (!check_is_folder (impl->file_system, path, error))
+    return FALSE;
 
   pos = shortcuts_get_pos_for_shortcut_folder (impl, impl->num_shortcuts);
 

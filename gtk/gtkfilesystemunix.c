@@ -34,9 +34,12 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <time.h>
 
 #define BOOKMARKS_FILENAME ".gtk-bookmarks"
 #define BOOKMARKS_TMP_FILENAME ".gtk-bookmarks-XXXXXX"
+
+#define FOLDER_CACHE_LIFETIME 2 /* seconds */
 
 typedef struct _GtkFileSystemUnixClass GtkFileSystemUnixClass;
 
@@ -59,6 +62,7 @@ struct _GtkFileSystemUnix
 /* Icon type, supplemented by MIME type
  */
 typedef enum {
+  ICON_UNDECIDED,
   ICON_NONE,
   ICON_REGULAR,	/* Use mime type for icon */
   ICON_BLOCK_DEVICE,
@@ -93,7 +97,22 @@ struct _GtkFileFolderUnix
   GtkFileSystemUnix *system_unix;
   GtkFileInfoType types;
   gchar *filename;
+  GHashTable *stat_info;
+  unsigned int have_stat : 1;
+  unsigned int have_mime_type : 1;
+  time_t asof;
 };
+
+struct stat_info_entry {
+  struct stat statbuf;
+  char *mime_type;
+  IconType icon_type;
+};
+
+static const GtkFileInfoType STAT_NEEDED_MASK = (GTK_FILE_INFO_IS_FOLDER |
+						 GTK_FILE_INFO_IS_HIDDEN |
+						 GTK_FILE_INFO_MODIFICATION_TIME |
+						 GTK_FILE_INFO_SIZE);
 
 static GObjectClass *system_parent_class;
 static GObjectClass *folder_parent_class;
@@ -187,9 +206,11 @@ static gboolean     gtk_file_folder_unix_list_children (GtkFileFolder  *folder,
 static GtkFilePath *filename_to_path   (const gchar       *filename);
 
 static gboolean     filename_is_root  (const char       *filename);
-static GtkFileInfo *filename_get_info (const gchar      *filename,
-				       GtkFileInfoType   types,
-				       GError          **error);
+
+static gboolean fill_in_names (GtkFileFolderUnix *folder_unix, GError **error);
+static gboolean fill_in_stats (GtkFileFolderUnix *folder_unix, GError **error);
+static gboolean fill_in_mime_type (GtkFileFolderUnix *folder_unix, GError **error);
+
 static char *       get_parent_dir    (const char       *filename);
 
 /*
@@ -346,6 +367,7 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
   GtkFileFolderUnix *folder_unix;
   const char *filename;
   char *filename_copy;
+  time_t now = time (NULL);
 
   system_unix = GTK_FILE_SYSTEM_UNIX (file_system);
 
@@ -359,8 +381,19 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
   if (folder_unix)
     {
       g_free (filename_copy);
+      if (now - folder_unix->asof >= FOLDER_CACHE_LIFETIME &&
+	  folder_unix->stat_info)
+	{
+	  g_print ("Cleaning out cached directory %s\n", filename);
+	  g_hash_table_destroy (folder_unix->stat_info);
+	  folder_unix->stat_info = NULL;
+	  folder_unix->have_mime_type = FALSE;
+	  folder_unix->have_stat = FALSE;
+	}
+
+      g_object_ref (folder_unix);
       folder_unix->types |= types;
-      return g_object_ref (folder_unix);
+      types = folder_unix->types;
     }
   else
     {
@@ -368,12 +401,26 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
 	{
 	  int save_errno = errno;
 	  gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
-	  g_set_error (error,
-		       GTK_FILE_SYSTEM_ERROR,
-		       GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-		       _("error getting information for '%s': %s"),
-		       filename_utf8 ? filename_utf8 : "???",
-		       g_strerror (save_errno));
+
+	  /* If g_file_test() returned FALSE but not due to an error, it means
+	   * that the filename is not a directory.
+	   */
+	  if (save_errno == 0)
+	    /* ENOTDIR */
+	    g_set_error (error,
+			 GTK_FILE_SYSTEM_ERROR,
+			 GTK_FILE_SYSTEM_ERROR_NOT_FOLDER,
+			 _("%s: %s"),
+			 filename_utf8 ? filename_utf8 : "???",
+			 g_strerror (ENOTDIR));
+	  else
+	    g_set_error (error,
+			 GTK_FILE_SYSTEM_ERROR,
+			 GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
+			 _("error getting information for '%s': %s"),
+			 filename_utf8 ? filename_utf8 : "???",
+			 g_strerror (save_errno));
+
 	  g_free (filename_utf8);
 	  g_free (filename_copy);
 	  return NULL;
@@ -383,11 +430,28 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
       folder_unix->system_unix = system_unix;
       folder_unix->filename = filename_copy;
       folder_unix->types = types;
+      folder_unix->stat_info = NULL;
+      folder_unix->asof = now;
+      folder_unix->have_mime_type = FALSE;
+      folder_unix->have_stat = FALSE;
 
-      g_hash_table_insert (system_unix->folder_hash, folder_unix->filename, folder_unix);
-
-      return GTK_FILE_FOLDER (folder_unix);
+      g_hash_table_insert (system_unix->folder_hash,
+			   folder_unix->filename,
+			   folder_unix);
     }
+
+  if ((types & STAT_NEEDED_MASK) && !fill_in_stats (folder_unix, error))
+    {
+      g_object_unref (folder_unix);
+      return NULL;
+    }
+  if ((types & GTK_FILE_INFO_MIME_TYPE) && !fill_in_mime_type (folder_unix, error))
+    {
+      g_object_unref (folder_unix);
+      return NULL;
+    }
+
+  return GTK_FILE_FOLDER (folder_unix);
 }
 
 static gboolean
@@ -490,11 +554,29 @@ gtk_file_system_unix_volume_get_display_name (GtkFileSystem       *file_system,
 }
 
 static IconType
+get_icon_type_from_stat (struct stat *statp)
+{
+  if (S_ISBLK (statp->st_mode))
+    return ICON_BLOCK_DEVICE;
+  else if (S_ISLNK (statp->st_mode))
+    return ICON_BROKEN_SYMBOLIC_LINK; /* See get_icon_type */
+  else if (S_ISCHR (statp->st_mode))
+    return ICON_CHARACTER_DEVICE;
+  else if (S_ISDIR (statp->st_mode))
+    return ICON_DIRECTORY;
+  else if (S_ISFIFO (statp->st_mode))
+    return  ICON_FIFO;
+  else if (S_ISSOCK (statp->st_mode))
+    return ICON_SOCKET;
+  else
+    return ICON_REGULAR;
+}
+
+static IconType
 get_icon_type (const char *filename,
 	       GError    **error)
 {
   struct stat statbuf;
-  IconType icon_type;
 
   /* If stat fails, try to fall back to lstat to catch broken links
    */
@@ -516,33 +598,7 @@ get_icon_type (const char *filename,
 	}
     }
 
-  if (S_ISBLK (statbuf.st_mode))
-    icon_type = ICON_BLOCK_DEVICE;
-  else if (S_ISLNK (statbuf.st_mode))
-    icon_type = ICON_BROKEN_SYMBOLIC_LINK; /* See above */
-  else if (S_ISCHR (statbuf.st_mode))
-    icon_type = ICON_CHARACTER_DEVICE;
-  else if (S_ISDIR (statbuf.st_mode))
-    icon_type = ICON_DIRECTORY;
-  else if (S_ISFIFO (statbuf.st_mode))
-    icon_type =  ICON_FIFO;
-  else if (S_ISSOCK (statbuf.st_mode))
-    icon_type = ICON_SOCKET;
-  else
-    {
-      icon_type = ICON_REGULAR;
-
-#if 0
-      if ((types & GTK_FILE_INFO_ICON) && icon_type == GTK_FILE_ICON_REGULAR &&
-	  (statbuf.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)) &&
-	  (strcmp (mime_type, XDG_MIME_TYPE_UNKNOWN) == 0 ||
-	   strcmp (mime_type, "application/x-executable") == 0 ||
-	   strcmp (mime_type, "application/x-shellscript") == 0))
-	gtk_file_info_set_icon_type (info, GTK_FILE_ICON_EXECUTABLE);
-#endif
-    }
-
-  return icon_type;
+  return get_icon_type_from_stat (&statbuf);
 }
 
 typedef struct
@@ -913,10 +969,51 @@ gtk_file_system_unix_render_icon (GtkFileSystem     *file_system,
 {
   const char *filename;
   IconType icon_type;
-  const char *mime_type;
+  const char *mime_type = NULL;
+  char *dirname;
+  GtkFileSystemUnix *system_unix;
+  GtkFileFolderUnix *folder_unix;
 
+  system_unix = GTK_FILE_SYSTEM_UNIX (file_system);
   filename = gtk_file_path_get_string (path);
-  icon_type = get_icon_type (filename, error);
+  dirname = g_path_get_dirname (filename);
+  folder_unix = g_hash_table_lookup (system_unix->folder_hash, dirname);
+  g_free (dirname);
+
+  if (folder_unix)
+    {
+      char *basename;
+      struct stat_info_entry *entry;
+
+      if (!fill_in_stats (folder_unix, error))
+	return NULL;
+
+      basename = g_path_get_basename (filename);
+      entry = g_hash_table_lookup (folder_unix->stat_info, basename);
+      g_free (basename);
+      if (entry)
+	{
+	  if (entry->icon_type == ICON_UNDECIDED)
+	    entry->icon_type = get_icon_type_from_stat (&entry->statbuf);
+	  icon_type = entry->icon_type;
+	  if (icon_type == ICON_REGULAR)
+	    {
+	      (void)fill_in_mime_type (folder_unix, NULL);
+	      mime_type = entry->mime_type;
+	    }
+	}
+      else
+	icon_type = ICON_NONE;
+    }
+  else
+    {
+      g_print ("No folder open for %s\n", filename);
+
+      icon_type = get_icon_type (filename, error);
+      if (icon_type == ICON_REGULAR)
+	mime_type = xdg_mime_get_mime_type_for_file (filename);
+    }
+
 
   /* FIXME: this function should not return NULL without setting the GError; we
    * should perhaps provide a "never fails" generic stock icon for when all else
@@ -961,7 +1058,6 @@ gtk_file_system_unix_render_icon (GtkFileSystem     *file_system,
       return get_cached_icon (widget, name, pixel_size);
     }
 
-  mime_type = xdg_mime_get_mime_type_for_file (filename);
   if (mime_type)
     {
       const char *separator;
@@ -1359,20 +1455,29 @@ gtk_file_folder_unix_finalize (GObject *object)
 
   g_hash_table_remove (folder_unix->system_unix->folder_hash, folder_unix->filename);
 
+  if (folder_unix->stat_info)
+    {
+      g_print ("Releasing information for directory %s\n", folder_unix->filename);
+      g_hash_table_destroy (folder_unix->stat_info);
+    }
+
   g_free (folder_unix->filename);
 
   folder_parent_class->finalize (object);
 }
 
 static GtkFileInfo *
-gtk_file_folder_unix_get_info (GtkFileFolder  *folder,
-			       const GtkFilePath    *path,
-			       GError        **error)
+gtk_file_folder_unix_get_info (GtkFileFolder      *folder,
+			       const GtkFilePath  *path,
+			       GError            **error)
 {
   GtkFileFolderUnix *folder_unix = GTK_FILE_FOLDER_UNIX (folder);
   GtkFileInfo *info;
-  gchar *dirname;
+  gchar *dirname, *basename;
   const char *filename;
+  struct stat_info_entry *entry;
+  gboolean file_must_exist;
+  GtkFileInfoType types;
 
   filename = gtk_file_path_get_string (path);
   g_return_val_if_fail (filename != NULL, NULL);
@@ -1382,9 +1487,68 @@ gtk_file_folder_unix_get_info (GtkFileFolder  *folder,
   g_return_val_if_fail (strcmp (dirname, folder_unix->filename) == 0, NULL);
   g_free (dirname);
 
-  info = filename_get_info (filename, folder_unix->types, error);
+  basename = g_path_get_basename (filename);
+  types = folder_unix->types;
+  file_must_exist = (types & ~GTK_FILE_INFO_DISPLAY_NAME) != 0;
+  entry = file_must_exist
+    ? g_hash_table_lookup (folder_unix->stat_info, basename)
+    : NULL;
+  /* basename freed later.  */
+
+  if (!file_must_exist || entry)
+    {
+      info = gtk_file_info_new ();
+    }
+  else
+    {
+      gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+      g_set_error (error,
+		   GTK_FILE_SYSTEM_ERROR,
+		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
+		   _("error getting information for '%s'"),
+		   filename_utf8 ? filename_utf8 : "???");
+      g_free (filename_utf8);
+      info = NULL;
+      types = 0;
+    }
+
+  if (types & GTK_FILE_INFO_DISPLAY_NAME)
+    {
+      gchar *display_name = g_filename_to_utf8 (basename, -1, NULL, NULL, NULL);
+      if (!display_name)
+	display_name = g_strescape (basename, NULL);
+      
+      gtk_file_info_set_display_name (info, display_name);
+      
+      g_free (display_name);
+    }
+  
+  if (types & GTK_FILE_INFO_IS_HIDDEN)
+    gtk_file_info_set_is_hidden (info, basename[0] == '.');
+
+  if (types & GTK_FILE_INFO_IS_FOLDER)
+    gtk_file_info_set_is_folder (info, S_ISDIR (entry->statbuf.st_mode));
+
+  if (types & GTK_FILE_INFO_MIME_TYPE)
+    gtk_file_info_set_mime_type (info, entry->mime_type);
+
+  if (types & GTK_FILE_INFO_MODIFICATION_TIME)
+    gtk_file_info_set_modification_time (info, entry->statbuf.st_mtime);
+
+  if (types & GTK_FILE_INFO_SIZE)
+    gtk_file_info_set_size (info, (gint64)entry->statbuf.st_size);
+
+  g_free (basename);
 
   return info;
+}
+
+
+static void
+cb_list_children (gpointer key, gpointer value, gpointer user_data)
+{
+  GSList **children = user_data;
+  *children = g_slist_prepend (*children, key);
 }
 
 static gboolean
@@ -1393,132 +1557,149 @@ gtk_file_folder_unix_list_children (GtkFileFolder  *folder,
 				    GError        **error)
 {
   GtkFileFolderUnix *folder_unix = GTK_FILE_FOLDER_UNIX (folder);
-  GError *tmp_error = NULL;
-  GDir *dir;
+  GSList *l;
+
+  if (!fill_in_names (folder_unix, error))
+    return FALSE;
 
   *children = NULL;
 
-  dir = g_dir_open (folder_unix->filename, 0, &tmp_error);
+  /* Get the list of basenames.  */
+  g_hash_table_foreach (folder_unix->stat_info, cb_list_children, children);
+
+  /* Turn basenames into GFilePaths.  */
+  for (l = *children; l; l = l->next)
+    {
+      const char *basename = l->data;
+      char *fullname = g_build_filename (folder_unix->filename, basename, NULL);
+      l->data = filename_to_path (fullname);
+      g_free (fullname);
+    }
+  return TRUE;
+}
+
+
+static void
+free_stat_info_entry (struct stat_info_entry *entry)
+{
+  g_free (entry->mime_type);
+  g_free (entry);
+}
+
+static gboolean
+fill_in_names (GtkFileFolderUnix *folder_unix, GError **error)
+{
+  GDir *dir;
+
+  if (folder_unix->stat_info)
+    return TRUE;
+
+  g_print ("Reading directory %s\n", folder_unix->filename);
+
+  folder_unix->stat_info = g_hash_table_new_full (g_str_hash, g_str_equal,
+						  (GDestroyNotify)g_free,
+						  (GDestroyNotify)free_stat_info_entry);
+  dir = g_dir_open (folder_unix->filename, 0, error);
   if (!dir)
     {
+      int save_errno = errno;
+      gchar *filename_utf8 = g_filename_to_utf8 (folder_unix->filename, -1, NULL, NULL, NULL);
       g_set_error (error,
 		   GTK_FILE_SYSTEM_ERROR,
 		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-		   "%s",
-		   tmp_error->message);
-
-      g_error_free (tmp_error);
-
+		   _("error getting information for '%s': %s"),
+		   filename_utf8 ? filename_utf8 : "???",
+		   g_strerror (save_errno));
+      g_free (filename_utf8);
       return FALSE;
     }
 
   while (TRUE)
     {
-      const gchar *filename = g_dir_read_name (dir);
-      gchar *fullname;
-
-      if (!filename)
+      const gchar *basename = g_dir_read_name (dir);
+      if (!basename)
 	break;
 
-      fullname = g_build_filename (folder_unix->filename, filename, NULL);
-      *children = g_slist_prepend (*children, filename_to_path (fullname));
-      g_free (fullname);
+      g_hash_table_insert (folder_unix->stat_info,
+			   g_strdup (basename),
+			   g_new0 (struct stat_info_entry, 1));
     }
 
   g_dir_close (dir);
 
-  *children = g_slist_reverse (*children);
-
+  folder_unix->asof = time (NULL);
   return TRUE;
 }
 
-static GtkFileInfo *
-filename_get_info (const gchar     *filename,
-		   GtkFileInfoType  types,
-		   GError         **error)
+static gboolean
+cb_fill_in_stats (gpointer key, gpointer value, gpointer user_data)
 {
-  GtkFileInfo *info;
-  struct stat statbuf;
-  gboolean do_stat = (types & (GTK_FILE_INFO_IS_FOLDER |
-			       GTK_FILE_INFO_IS_HIDDEN |
-			       GTK_FILE_INFO_MODIFICATION_TIME |
-			       GTK_FILE_INFO_SIZE));
+  const char *basename = key;
+  struct stat_info_entry *entry = value;
+  GtkFileFolderUnix *folder_unix = user_data;
+  char *fullname = g_build_filename (folder_unix->filename, basename, NULL);
+  gboolean result;
 
-  /* If stat fails, try to fall back to lstat to catch broken links
-   */
-  if (do_stat && stat (filename, &statbuf) != 0)
-    {
-      if (errno != ENOENT || lstat (filename, &statbuf) != 0)
-	{
-	  int save_errno = errno;
-	  gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
-	  g_set_error (error,
-		       GTK_FILE_SYSTEM_ERROR,
-		       GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-		       _("error getting information for '%s': %s"),
-		       filename_utf8 ? filename_utf8 : "???",
-		       g_strerror (save_errno));
-	  g_free (filename_utf8);
-
-	  return NULL;
-	}
-    }
-
-  info = gtk_file_info_new ();
-
-  if (filename_is_root (filename))
-    {
-      if (types & GTK_FILE_INFO_DISPLAY_NAME)
-	gtk_file_info_set_display_name (info, "/");
-
-      if (types & GTK_FILE_INFO_IS_HIDDEN)
-	gtk_file_info_set_is_hidden (info, FALSE);
-    }
+  if (stat (fullname, &entry->statbuf) == -1 &&
+      (errno != ENOENT || lstat (fullname, &entry->statbuf) == -1))
+    result = TRUE;  /* Couldn't stat -- remove from hash.  */
   else
-    {
-      gchar *basename = g_path_get_basename (filename);
+    result = FALSE;
 
-      if (types & GTK_FILE_INFO_DISPLAY_NAME)
-	{
-	  gchar *display_name = g_filename_to_utf8 (basename, -1, NULL, NULL, NULL);
-	  if (!display_name)
-	    display_name = g_strescape (basename, NULL);
+  g_free (fullname);
+  return result;
+}
 
-	  gtk_file_info_set_display_name (info, display_name);
 
-	  g_free (display_name);
-	}
+static gboolean
+fill_in_stats (GtkFileFolderUnix *folder_unix, GError **error)
+{
+  if (folder_unix->have_stat)
+    return TRUE;
 
-      if (types & GTK_FILE_INFO_IS_HIDDEN)
-	{
-	  gtk_file_info_set_is_hidden (info, basename[0] == '.');
-	}
+  if (!fill_in_names (folder_unix, error))
+    return FALSE;
 
-      g_free (basename);
-    }
+  g_print ("Stating directory %s\n", folder_unix->filename);
+  g_hash_table_foreach_remove (folder_unix->stat_info,
+			       cb_fill_in_stats,
+			       folder_unix);
 
-  if (types & GTK_FILE_INFO_IS_FOLDER)
-    {
-      gtk_file_info_set_is_folder (info, S_ISDIR (statbuf.st_mode));
-   }
+  folder_unix->have_stat = TRUE;
+  return TRUE;
+}
 
-  if (types & GTK_FILE_INFO_MIME_TYPE)
-    {
-      const char *mime_type = xdg_mime_get_mime_type_for_file (filename);
-      gtk_file_info_set_mime_type (info, mime_type);
-    }
 
-  if (types & GTK_FILE_INFO_MODIFICATION_TIME)
-    {
-      gtk_file_info_set_modification_time (info, statbuf.st_mtime);
-    }
+static gboolean
+cb_fill_in_mime_type (gpointer key, gpointer value, gpointer user_data)
+{
+  const char *basename = key;
+  struct stat_info_entry *entry = value;
+  GtkFileFolderUnix *folder_unix = user_data;
+  char *fullname = g_build_filename (folder_unix->filename, basename, NULL);
 
-  if (types & GTK_FILE_INFO_SIZE)
-    {
-      gtk_file_info_set_size (info, (gint64)statbuf.st_size);
-    }
+  /* FIXME: Should not need to re-stat.  */
+  const char *mime_type = xdg_mime_get_mime_type_for_file (fullname);
+  entry->mime_type = g_strdup (mime_type);
 
-  return info;
+  g_free (fullname);
+  /* FIXME: free on NULL?  */
+  return FALSE;
+}
+
+static gboolean
+fill_in_mime_type (GtkFileFolderUnix *folder_unix, GError **error)
+{
+  if (folder_unix->have_mime_type)
+    return TRUE;
+
+  g_print ("Getting mime types for directory %s\n", folder_unix->filename);
+  g_hash_table_foreach_remove (folder_unix->stat_info,
+			       cb_fill_in_mime_type,
+			       folder_unix);
+
+  folder_unix->have_mime_type = TRUE;
+  return TRUE;
 }
 
 static GtkFilePath *

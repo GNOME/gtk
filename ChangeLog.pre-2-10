@@ -1,3 +1,32 @@
+2004-03-14  Federico Mena Quintero  <federico@ximian.com>
+
+	Fixes #136185, patch by Morten Welinder, with some changes.
+
+	* gtk/gtkfilechooserdefault.c (check_is_folder): New helper function.
+	(shortcuts_insert_path): Check the path first with check_is_folder().
+	(gtk_file_chooser_default_set_current_folder): Likewise.
+	(gtk_file_chooser_default_add_shortcut_folder): Likewise.
+	(browse_widgets_create): Unref the size group.
+
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_get_folder):
+	Handle the case where the file exists but it is not a directory.
+	(IconType): Add value for ICON_UNDECIDED.
+	(struct stat_info_entry): New structure to hold a file's struct
+	stat, its MIME type and its icon type.
+	(struct _GtkFileFolderUnix): Added a hash of struct
+	stat_info_entry, and flags to remember which info types we've read
+	so far.
+	(get_icon_type): Use a helper function for the icons-from-stat
+	types.
+	(gtk_file_system_unix_render_icon): Use the cached file info.
+	(gtk_file_folder_unix_get_info): Put the info in the cache.
+	(gtk_file_system_unix_get_folder): Create the cache of file info
+	structures.
+
+	* gtk/gtkfilesystem.c (gtk_file_info_set_display_name): Handle the
+	case where display_name is the same as the existing
+	info->display_name.
+
 Sun Mar 14 19:26:48 2004  Owen Taylor  <otaylor@redhat.com>
 
 	#136672, reported by Christian Persch; fixes based
