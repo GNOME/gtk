@@ -1,3 +1,11 @@
+Tue Jan 18 10:55:47 2005  Søren Sandmann  <sandmann@redhat.com>
+
+	* gtk/gtkstyle.c (gtk_default_draw_handle): Check for NULL detail
+	and NULL widget.
+
+	* gtk/gtkstyle.c (gtk_default_draw_box): Check for NULL detail and
+	NULL widget.  (#164477, Michael Natterer)
+
 2005-01-18  Matthias Clasen  <mclasen@redhat.com>
 
 	Avoid X errors when running against servers which
