@@ -4274,7 +4274,7 @@ msgstr "Vrsta obrobe okoli gumbov orodjarne"
 
 #: gtk/gtktoolbar.c:285
 msgid "Style of bevel around the toolbar"
-msgstr "Slog obrobe okoli oxrodjarne"
+msgstr "Slog obrobe okoli orodjarne"
 
 #: gtk/gtktoolbar.c:291
 msgid "Toolbar style"
