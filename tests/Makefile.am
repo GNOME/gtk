@@ -65,6 +65,7 @@ noinst_PROGRAMS =			\
 	pixbuf-lowmem			\
 	pixbuf-randomly-modified	\
 	pixbuf-random			\
+	pixbuf-threads			\
 	testmerge			\
 	testactions
 
@@ -143,6 +144,7 @@ pixbuf_read_LDADD = $(LDADDS)
 pixbuf_lowmem_LDADD = $(LDADDS)
 pixbuf_randomly_modified_LDADD = $(LDADDS)
 pixbuf_random_LDADD = $(LDADDS)
+pixbuf_threads_LDADD = $(LDADDS) $(GTHREAD_LIBS)
 testmerge_LDADD = $(LDADDS)
 testactions_LDADD = $(LDADDS)
 

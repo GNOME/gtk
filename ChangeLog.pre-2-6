@@ -1,3 +1,10 @@
+2004-11-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/Makefile.am: Add pixbuf-threads
+
+	* tests/pixbuf-threads.c: Test loading images in multiple
+	threads.
+
 2004-11-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Check for uxtheme.h  (#157967, J. Ali Harlow)
