@@ -299,14 +299,17 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
       
       if (GTK_BIN (button)->child && GTK_WIDGET_VISIBLE (GTK_BIN (button)->child))
 	{
+	  GtkRequisition child_requisition;
  	  gint border_width = GTK_CONTAINER (widget)->border_width;
+
+	  gtk_widget_get_child_requisition (GTK_BIN (button)->child, &child_requisition);
  
-	  child_allocation.width = MIN (GTK_BIN (button)->child->requisition.width,
+	  child_allocation.width = MIN (child_requisition.width,
 					allocation->width -
 					((border_width + focus_width + focus_pad) * 2
 					 + indicator_size + indicator_spacing * 3));
 
-	  child_allocation.height = MIN (GTK_BIN (button)->child->requisition.height,
+	  child_allocation.height = MIN (child_requisition.height,
 					 allocation->height - (border_width + focus_width + focus_pad) * 2);
 	  child_allocation.x = (border_width + indicator_size + indicator_spacing * 3 +
 				widget->allocation.x + focus_width + focus_pad);

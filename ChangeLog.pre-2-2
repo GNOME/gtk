@@ -1,3 +1,10 @@
+Tue Jan  8 14:19:43 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcheckbutton.c (gtk_check_button_size_allocate): 
+	Fix problem where child->requisition was accessed
+	directly instead of calling get_child_requisition()
+	(#68199, Damon Chaplin)
+
 2001-01-08  James Henstridge  <james@daa.com.au>
 
 	* gtk/gtkstyle.c: add trailing */ on doc comment.
