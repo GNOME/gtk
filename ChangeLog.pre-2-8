@@ -1,3 +1,18 @@
+Tue Feb 17 05:41:31 1998  Tim Janik  <timj@gimp.org>
+
+        * gtk/gtkcheckbutton.c:
+        * gtk/gtkradiobutton.c:
+        * gtk/gtktogglebutton.c:
+          applied patch to fix draw_indicator behaviour from Lars Hamann
+          and Stefan Jeske.
+
+        * gtk/gtkmain.h:
+        * gtk/gtkmain.c (gtk_grab_get_current): new function
+          that returns the current grab widget or NULL.
+
+        * gdk/gdkwindow.c (gdk_window_shape_combine_mask): remove
+          shape mask if mask==NULL (provided by Stefan Wille).
+
 Tue Feb 17 00:06:26 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkpaned.c, gtk/gtk[hv]paned.c: (gtk-fortier-980215-0)

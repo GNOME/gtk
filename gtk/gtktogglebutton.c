@@ -181,15 +181,15 @@ gtk_toggle_button_draw_focus (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (widget));
 
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget))
+  if  (GTK_WIDGET_DRAWABLE (widget))
     {
       button = GTK_BUTTON (widget);
       toggle_button = GTK_TOGGLE_BUTTON (widget);
 
       x = 0;
       y = 0;
-      width = widget->allocation.width;
-      height = widget->allocation.height;
+      width = widget->allocation.width  - GTK_CONTAINER (widget)->border_width * 2;
+      height = widget->allocation.height  - GTK_CONTAINER (widget)->border_width * 2;
 
       if (GTK_WIDGET_CAN_DEFAULT (widget))
         {

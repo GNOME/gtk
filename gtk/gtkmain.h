@@ -51,20 +51,21 @@ gint	   gtk_main_iteration	 (void);
 /* gtk_main_iteration() calls gtk_main_iteration_do(TRUE) */
 gint	   gtk_main_iteration_do (gboolean blocking);
 
-gint	   gtk_true		 (void);
-gint	   gtk_false		 (void);
+gint	   gtk_true		   (void);
+gint	   gtk_false		   (void);
 
-void	   gtk_grab_add		 (GtkWidget	*widget);
-void	   gtk_grab_remove	 (GtkWidget	*widget);
+void	   gtk_grab_add		   (GtkWidget	*widget);
+GtkWidget* gtk_grab_get_current	   (void);
+void	   gtk_grab_remove	   (GtkWidget	*widget);
 
-void	   gtk_init_add		 (GtkFunction	 function,
-				  gpointer	 data);
+void	   gtk_init_add		   (GtkFunction	 function,
+				    gpointer	 data);
 
-gint       gtk_timeout_add_full   (guint32            interval,
-				   GtkFunction        function,
-				   GtkCallbackMarshal marshal,
-				   gpointer           data,
-				   GtkDestroyNotify   destroy);
+gint       gtk_timeout_add_full    (guint32            interval,
+				    GtkFunction        function,
+				    GtkCallbackMarshal marshal,
+				    gpointer           data,
+				    GtkDestroyNotify   destroy);
 gint	   gtk_timeout_add	   (guint32	   interval,
 				    GtkFunction	   function,
 				    gpointer	   data);

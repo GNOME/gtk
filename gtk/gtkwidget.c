@@ -3728,20 +3728,17 @@ gtk_widget_shape_combine_mask (GtkWidget *widget,
     {
       GTK_PRIVATE_UNSET_FLAG (widget, GTK_HAS_SHAPE_MASK);
       
+      if (widget->window)
+	gdk_window_shape_combine_mask (widget->window, NULL, 0, 0);
+      
       shape_info = gtk_object_get_data (GTK_OBJECT (widget), shape_info_key);
       gtk_object_remove_data (GTK_OBJECT (widget), shape_info_key);
       g_free (shape_info);
-
-      if (widget->window)
-	{
-	  /* FIXME: we need gdk code here that removes the shape from a window
-	   */
-	}
     }
   else
     {
       GTK_PRIVATE_SET_FLAG (widget, GTK_HAS_SHAPE_MASK);
-
+      
       shape_info = gtk_object_get_data (GTK_OBJECT (widget), shape_info_key);
       if (!shape_info)
 	{

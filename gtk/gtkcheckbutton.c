@@ -157,25 +157,30 @@ static void
 gtk_check_button_draw_focus (GtkWidget *widget)
 {
   GtkCheckButton *check_button;
-
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_CHECK_BUTTON (widget));
-
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget))
+  
+  if (GTK_WIDGET_DRAWABLE (widget))
     {
       check_button = GTK_CHECK_BUTTON (widget);
       if (check_button->toggle_button.draw_indicator)
 	{
+	  gint border_width;
+	  
+	  border_width = GTK_CONTAINER (widget)->border_width;
 	  if (GTK_WIDGET_HAS_FOCUS (widget))
 	    gdk_draw_rectangle (widget->window,
-				widget->style->black_gc, FALSE, 0, 0,
-				widget->allocation.width - 1,
-				widget->allocation.height - 1);
+				widget->style->black_gc, FALSE,
+				border_width, border_width,
+				widget->allocation.width - 2 * border_width - 1,
+				widget->allocation.height - 2 * border_width - 1);
 	  else
 	    gdk_draw_rectangle (widget->window,
-				widget->style->bg_gc[GTK_STATE_NORMAL], FALSE, 0, 0,
-				widget->allocation.width - 1,
-				widget->allocation.height - 1);
+				widget->style->bg_gc[GTK_STATE_NORMAL], FALSE,
+				border_width, border_width,
+				widget->allocation.width - 2 * border_width - 1,
+				widget->allocation.height - 2 * border_width - 1);
 	}
       else
 	{
@@ -322,6 +327,8 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
   GtkToggleButton *toggle_button;
   GtkStateType state_type;
   GtkShadowType shadow_type;
+  GdkRectangle restrict_area;
+  GdkRectangle new_area;
   gint width, height;
   gint x, y;
 
@@ -338,9 +345,18 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
 	  (state_type != GTK_STATE_PRELIGHT))
 	state_type = GTK_STATE_NORMAL;
 
-      gtk_style_set_background (widget->style, widget->window, state_type);
-      gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
+      restrict_area.x = GTK_CONTAINER (widget)->border_width;
+      restrict_area.y = restrict_area.x;
+      restrict_area.width = widget->allocation.width - restrict_area.x * 2;
+      restrict_area.height = widget->allocation.height - restrict_area.x * 2;
 
+      if (gdk_rectangle_intersect (area, &restrict_area, &new_area))
+	{
+	  gtk_style_set_background (widget->style, widget->window, state_type);
+	  gdk_window_clear_area (widget->window, new_area.x, new_area.y,
+				 new_area.width, new_area.height);
+	}
+      
       x = CHECK_BUTTON_CLASS (widget)->indicator_spacing + GTK_CONTAINER (widget)->border_width;
       y = (widget->allocation.height - CHECK_BUTTON_CLASS (widget)->indicator_size) / 2;
       width = CHECK_BUTTON_CLASS (widget)->indicator_size;

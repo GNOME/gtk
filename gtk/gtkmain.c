@@ -514,6 +514,14 @@ gtk_grab_add (GtkWidget *widget)
     }
 }
 
+GtkWidget*
+gtk_grab_get_current (void)
+{
+  if (grabs)
+    return GTK_WIDGET (grabs->data);
+  return NULL;
+}
+
 void
 gtk_grab_remove (GtkWidget *widget)
 {

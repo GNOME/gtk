@@ -270,6 +270,8 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   GtkToggleButton *toggle_button;
   GtkStateType state_type;
   GtkShadowType shadow_type;
+  GdkRectangle restrict_area;
+  GdkRectangle new_area;
   GdkPoint pts[4];
   gint width, height;
   gint x, y;
@@ -288,9 +290,18 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 	  (state_type != GTK_STATE_PRELIGHT))
 	state_type = GTK_STATE_NORMAL;
 
-      gtk_style_set_background (widget->style, widget->window, state_type);
-      gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
+      restrict_area.x = GTK_CONTAINER (widget)->border_width;
+      restrict_area.y = restrict_area.x;
+      restrict_area.width = widget->allocation.width - restrict_area.x * 2;
+      restrict_area.height = widget->allocation.height - restrict_area.x * 2;
 
+      if (gdk_rectangle_intersect (area, &restrict_area, &new_area))
+	{
+	  gtk_style_set_background (widget->style, widget->window, state_type);
+	  gdk_window_clear_area (widget->window, new_area.x, new_area.y,
+				 new_area.width, new_area.height);
+	}
+      
       x = CHECK_BUTTON_CLASS (widget)->indicator_spacing + GTK_CONTAINER (widget)->border_width;
       y = (widget->allocation.height - CHECK_BUTTON_CLASS (widget)->indicator_size) / 2;
       width = CHECK_BUTTON_CLASS (widget)->indicator_size;

@@ -1255,21 +1255,33 @@ gdk_window_shape_combine_mask (GdkWindow *window,
 			       gint x, gint y)
 {
   GdkWindowPrivate *window_private;
-  GdkWindowPrivate *pixmap_private;
+  Pixmap pixmap;
 
   g_return_if_fail (window != NULL);
-  g_return_if_fail (mask != NULL);
 
   window_private = (GdkWindowPrivate*) window;
-  pixmap_private = (GdkWindowPrivate*) mask;
   if (window_private->destroyed)
     return;
-	
+
+  if (mask)
+    {
+      GdkWindowPrivate *pixmap_private;
+
+      pixmap_private = (GdkWindowPrivate*) mask;
+      pixmap = (Pixmap) pixmap_private->xwindow;
+    }
+  else
+    {
+      x = 0;
+      y = 0;
+      pixmap = None;
+    }
+
   XShapeCombineMask  (window_private->xdisplay,
 		      window_private->xwindow,
 		      ShapeBounding,
-		      x, y, /* offset */
-		      (Pixmap)pixmap_private->xwindow,
+		      x, y,
+		      pixmap,
 		      ShapeSet);
 }
 
