@@ -4644,6 +4644,20 @@ gtk_clist_unmap (GtkWidget *widget)
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 
+      if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist))
+	{
+	  remove_grab (clist);
+
+	  if (clist->anchor != -1 &&
+	      clist->selection_mode == GTK_SELECTION_EXTENDED)
+	    GTK_CLIST_CLASS_FW (widget)->resync_selection (clist, NULL);
+
+	  clist->click_cell.row = -1;
+	  clist->click_cell.column = -1;
+	  clist->drag_button = 0;
+	  GTK_CLIST_UNSET_FLAG (clist, CLIST_IN_DRAG);
+	}
+
       for (i = 0; i < clist->columns; i++)
 	if (clist->column[i].window)
 	  gdk_window_hide (clist->column[i].window);
@@ -4864,13 +4878,14 @@ gtk_clist_button_press (GtkWidget      *widget,
 				   GDK_POINTER_MOTION_HINT_MASK |
 				   GDK_BUTTON_RELEASE_MASK);
 
+	      if (gdk_pointer_grab (clist->clist_window, FALSE, mask,
+				    NULL, NULL, event->time))
+		return FALSE;
+	      gtk_grab_add (widget);
+
 	      clist->click_cell.row = row;
 	      clist->click_cell.column = column;
-		  
 	      clist->drag_button = event->button;
-	      gdk_pointer_grab (clist->clist_window, FALSE, mask,
-				NULL, NULL, event->time);
-	      gtk_grab_add (widget);
 	    }
 	  else
 	    {
@@ -5004,11 +5019,13 @@ gtk_clist_button_press (GtkWidget      *widget,
       {
 	gpointer drag_data;
 
-	gdk_pointer_grab (clist->column[i].window, FALSE,
-			  GDK_POINTER_MOTION_HINT_MASK |
-			  GDK_BUTTON1_MOTION_MASK |
-			  GDK_BUTTON_RELEASE_MASK,
-			  NULL, NULL, event->time);
+	if (gdk_pointer_grab (clist->column[i].window, FALSE,
+			      GDK_POINTER_MOTION_HINT_MASK |
+			      GDK_BUTTON1_MOTION_MASK |
+			      GDK_BUTTON_RELEASE_MASK,
+			      NULL, NULL, event->time))
+	  return FALSE;
+
 	gtk_grab_add (widget);
 	GTK_CLIST_SET_FLAG (clist, CLIST_IN_DRAG);
 
@@ -7043,10 +7060,11 @@ vertical_timeout (GtkCList *clist)
 static void
 remove_grab (GtkCList *clist)
 {
-  if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist))
+  if (GTK_WIDGET_HAS_GRAB (clist))
     {
       gtk_grab_remove (GTK_WIDGET (clist));
-      gdk_pointer_ungrab (GDK_CURRENT_TIME);
+      if (gdk_pointer_is_grabbed ())
+	gdk_pointer_ungrab (GDK_CURRENT_TIME);
     }
 
   if (clist->htimer)

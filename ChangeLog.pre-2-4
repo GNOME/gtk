@@ -1,3 +1,9 @@
+Mon Jan 18 22:54:11 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_button_press): only call grab_add
+	if pointer_grab succeeds.
+	(gtk_clist_unmap): remove pointer/widget grabs if needed.
+
 Mon Jan 18 15:46:14 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_init): Initialize
