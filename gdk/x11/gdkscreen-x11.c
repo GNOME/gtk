@@ -540,25 +540,56 @@ init_xinerama_support (GdkScreen * screen)
 #ifdef G_ENABLE_DEBUG
   if (_gdk_debug_flags & GDK_DEBUG_XINERAMA)
     {
-      /* Fake Xinerama mode by splitting the screen into 4 monitors */
+      /* Fake Xinerama mode by splitting the screen into 4 monitors.
+       * Also draw a little cross to make the monitor boundaries visible.
+       */
+      XSetWindowAttributes atts;
+      Window win;
+      gint w, h;
+
+      w = WidthOfScreen (screen_x11->xscreen);
+      h = HeightOfScreen (screen_x11->xscreen);
       screen_x11->num_monitors = 4;
       screen_x11->monitors = g_new0 (GdkRectangle, 4);
       screen_x11->monitors[0].x = 0;
       screen_x11->monitors[0].y = 0;
-      screen_x11->monitors[0].width = WidthOfScreen (screen_x11->xscreen) / 2;
-      screen_x11->monitors[0].height = HeightOfScreen (screen_x11->xscreen) / 2;
-      screen_x11->monitors[1].x = WidthOfScreen (screen_x11->xscreen) / 2;
+      screen_x11->monitors[0].width = w / 2;
+      screen_x11->monitors[0].height = h / 2;
+      screen_x11->monitors[1].x = w / 2;
       screen_x11->monitors[1].y = 0;
-      screen_x11->monitors[1].width = WidthOfScreen (screen_x11->xscreen) / 2;
-      screen_x11->monitors[1].height = HeightOfScreen (screen_x11->xscreen) / 2;
+      screen_x11->monitors[1].width = w / 2;
+      screen_x11->monitors[1].height = h / 2;
       screen_x11->monitors[2].x = 0;
-      screen_x11->monitors[2].y = HeightOfScreen (screen_x11->xscreen) / 2;
-      screen_x11->monitors[2].width = WidthOfScreen (screen_x11->xscreen) / 2;
-      screen_x11->monitors[2].height = HeightOfScreen (screen_x11->xscreen) / 2;
-      screen_x11->monitors[3].x = WidthOfScreen (screen_x11->xscreen) / 2;
-      screen_x11->monitors[3].y = HeightOfScreen (screen_x11->xscreen) / 2;
-      screen_x11->monitors[3].width = WidthOfScreen (screen_x11->xscreen) / 2;
-      screen_x11->monitors[3].height = HeightOfScreen (screen_x11->xscreen) / 2;
+      screen_x11->monitors[2].y = h / 2;
+      screen_x11->monitors[2].width = w / 2;
+      screen_x11->monitors[2].height = h / 2;
+      screen_x11->monitors[3].x = w / 2;
+      screen_x11->monitors[3].y = h / 2;
+      screen_x11->monitors[3].width = w / 2;
+      screen_x11->monitors[3].height = h / 2;
+      atts.override_redirect = 1;
+      atts.background_pixel = WhitePixel(GDK_SCREEN_XDISPLAY (screen), 
+					 screen_x11->screen_num);
+      win = XCreateWindow(GDK_SCREEN_XDISPLAY (screen), 
+			  screen_x11->xroot_window, 0, h / 2, w, 1, 0, 
+			  DefaultDepth(GDK_SCREEN_XDISPLAY (screen), 
+				       screen_x11->screen_num),
+			  InputOutput, 
+			  DefaultVisual(GDK_SCREEN_XDISPLAY (screen), 
+					screen_x11->screen_num),
+			  CWOverrideRedirect|CWBackPixel, 
+			  &atts);
+      XMapRaised(GDK_SCREEN_XDISPLAY (screen), win); 
+      win = XCreateWindow(GDK_SCREEN_XDISPLAY (screen), 
+			  screen_x11->xroot_window, w/2 , 0, 1, h, 0, 
+			  DefaultDepth(GDK_SCREEN_XDISPLAY (screen), 
+				       screen_x11->screen_num),
+			  InputOutput, 
+			  DefaultVisual(GDK_SCREEN_XDISPLAY (screen), 
+					screen_x11->screen_num),
+			  CWOverrideRedirect|CWBackPixel, 
+			  &atts);
+      XMapRaised(GDK_SCREEN_XDISPLAY (screen), win); 
     }
   else
 #endif

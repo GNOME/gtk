@@ -1,3 +1,8 @@
+Fri Nov 21 01:57:21 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkscreen-x11.c (init_xinerama_support): Make monitor
+	boundaries visible in fake Xinerama mode.
+
 Thu Nov 20 15:41:56 2003  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkmenu.c (gtk_menu_set_tearoff_state): cast to GTK_WIDGET()
