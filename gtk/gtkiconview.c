@@ -26,7 +26,8 @@
 #include <gtk/gtkmain.h>
 #include <gtk/gtksignal.h>
 
-#include "eggintl.h"
+#include <glib/gi18n.h>
+
 #include "eggmarshalers.h"
 
 #define MINIMUM_ICON_ITEM_WIDTH 100
@@ -1935,7 +1936,8 @@ egg_icon_list_queue_draw_item (EggIconList     *icon_list,
   rect.width = item->width;
   rect.height = item->height;
 
-  gdk_window_invalidate_rect (icon_list->priv->bin_window, &rect, TRUE);
+  if (icon_list->priv->bin_window)
+    gdk_window_invalidate_rect (icon_list->priv->bin_window, &rect, TRUE);
 }
 
 static gboolean
@@ -2653,14 +2655,6 @@ egg_icon_list_get_items (EggIconList *icon_list)
   g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), NULL);
 
   return icon_list->priv->items;
-}
-
-EggIconList *
-egg_icon_list_item_get_icon_list (EggIconListItem *item)
-{
-  g_return_val_if_fail (item != NULL, NULL);
-
-  return item->icon_list;
 }
 
 static void
