@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-04 00:16+0900\n"
-"PO-Revision-Date: 2004-11-04 00:14+0900\n"
+"POT-Creation-Date: 2004-11-04 02:05+0900\n"
+"PO-Revision-Date: 2004-11-04 02:03+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -1144,20 +1144,20 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:2024
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
-msgstr "フォルダ '%s' をブックマークへ追加する"
+msgstr "フォルダ '%s' をブックマークへ追加します"
 
 #: gtk/gtkfilechooserdefault.c:2065
 msgid "Add the current folder to the bookmarks"
-msgstr "このフォルダをブックマークへ追加する"
+msgstr "このフォルダをブックマークへ追加します"
 
 #: gtk/gtkfilechooserdefault.c:2067
 msgid "Add the selected folders to the bookmarks"
-msgstr "指定したフォルダをブックマークへ追加する"
+msgstr "指定したフォルダをブックマークへ追加します"
 
 #: gtk/gtkfilechooserdefault.c:2107
 #, c-format
 msgid "Remove the bookmark '%s'"
-msgstr "ブックマーク '%s' を削除する"
+msgstr "ブックマーク '%s' を削除します"
 
 #: gtk/gtkfilechooserdefault.c:2512
 #, c-format
