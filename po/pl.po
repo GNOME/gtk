@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "POT-Creation-Date: 2002-01-07 21:47+0100\n"
-"PO-Revision-Date: 2002-01-08 19:05+0100\n"
+"PO-Revision-Date: 2002-01-28 03:02+0100\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -126,11 +126,11 @@ msgstr "Obraz BMP zawiera nagłówek o nieobsługiwanym rozmiarze"
 
 #: gdk-pixbuf/io-bmp.c:1 gdk-pixbuf/io-bmp.c:1
 msgid "BMP image has bogus header data"
-msgstr ""
+msgstr "Obraz BMP posiada błędne dane nagłówka"
 
 #: gdk-pixbuf/io-bmp.c:1
 msgid "Not enough memory to load bitmap image"
-msgstr ""
+msgstr "Brak wystarczającej ilości pamięci do załadowania pliku bitmapy"
 
 #: gdk-pixbuf/io-gif.c:1
 #, c-format
@@ -140,6 +140,7 @@ msgstr "Błąd przy odczycie obrazu GIF: %s"
 #: gdk-pixbuf/io-gif.c:1 gdk-pixbuf/io-gif.c:1 gdk-pixbuf/io-gif.c:1
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
+"Plik GIF nie zawiera wszystkich wymaganych informacji (może został obcięty?)"
 
 #: gdk-pixbuf/io-gif.c:1
 #, c-format
@@ -152,7 +153,7 @@ msgstr "Ten obraz jest niezrozumiały dla modułu odczytującego obrazy GIF"
 
 #: gdk-pixbuf/io-gif.c:1
 msgid "Bad code encountered"
-msgstr ""
+msgstr "Napotkano błędny kod"
 
 #: gdk-pixbuf/io-gif.c:1
 msgid "Circular table entry in GIF file"
@@ -192,12 +193,12 @@ msgstr ""
 
 #: gdk-pixbuf/io-gif.c:1
 msgid "GIF image was truncated or incomplete."
-msgstr ""
+msgstr "Plik GIF został obcięty lub jest niekompletny."
 
 #: gdk-pixbuf/io-jpeg.c:1
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr ""
+msgstr "Błąd przy interpretacji pliku z obrazem JPEG (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:1
 msgid ""
@@ -241,6 +242,8 @@ msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
+"Brak pamięci na przechowanie obrazu o wymiarach %ld na %ld punktów; spróbuj "
+"zmniejszyć zapotrzebowanie na pamięć kończąć pewne aplikacje"
 
 #: gdk-pixbuf/io-png.c:1
 msgid "Fatal error reading PNG image file"
@@ -464,7 +467,7 @@ msgstr ""
 
 #: gtk/gtkalignment.c:1
 msgid "Horizontal scale"
-msgstr ""
+msgstr "Skala pozioma"
 
 #: gtk/gtkalignment.c:1
 msgid ""
@@ -474,7 +477,7 @@ msgstr ""
 
 #: gtk/gtkalignment.c:1
 msgid "Vertical scale"
-msgstr ""
+msgstr "Skala pionowa"
 
 #: gtk/gtkalignment.c:1
 msgid ""
@@ -484,11 +487,11 @@ msgstr ""
 
 #: gtk/gtkarrow.c:1
 msgid "Arrow direction"
-msgstr ""
+msgstr "Kierunek strzałki"
 
 #: gtk/gtkarrow.c:1
 msgid "The direction the arrow should point"
-msgstr ""
+msgstr "Kierunek w jakim ma być skierowana strzałka"
 
 #: gtk/gtkarrow.c:1
 msgid "Arrow shadow"
@@ -496,7 +499,7 @@ msgstr "Cień strzałki"
 
 #: gtk/gtkarrow.c:1
 msgid "Appearance of the shadow surrounding the arrow"
-msgstr ""
+msgstr "Wygląd cienia otaczającego strzałkę"
 
 #: gtk/gtkaspectframe.c:1
 msgid "Horizontal Alignment"
@@ -504,7 +507,7 @@ msgstr "Wyrównanie poziome"
 
 #: gtk/gtkaspectframe.c:1
 msgid "X alignment of the child"
-msgstr ""
+msgstr "Poziome wyrównanie widgetu potomnego"
 
 #: gtk/gtkaspectframe.c:1
 msgid "Vertical Alignment"
@@ -512,7 +515,7 @@ msgstr "Wyrównanie pionowe"
 
 #: gtk/gtkaspectframe.c:1
 msgid "Y alignment of the child"
-msgstr ""
+msgstr "Poziome wyrównanie widgetu potomnego"
 
 #: gtk/gtkaspectframe.c:1
 msgid "Ratio"
@@ -536,7 +539,7 @@ msgstr "Minimalna szerokość widgetu potomnego"
 
 #: gtk/gtkbbox.c:1
 msgid "Minimum width of buttons inside the box"
-msgstr ""
+msgstr "Minimalna szerokość przycisków w skrzynce"
 
 #: gtk/gtkbbox.c:1
 msgid "Minimum child height"
@@ -544,7 +547,7 @@ msgstr "Minimalna wysokość widgetu potomnego"
 
 #: gtk/gtkbbox.c:1
 msgid "Minimum height of buttons inside the box"
-msgstr ""
+msgstr "Minimalna wysokość przycisków w skrzynce"
 
 #: gtk/gtkbbox.c:1
 msgid "Child internal width padding"
@@ -592,7 +595,7 @@ msgstr "Ilość miejsca pomiędzy widgetami potomnymi."
 
 #: gtk/gtkbox.c:1 gtk/gtknotebook.c:1
 msgid "Homogeneous"
-msgstr ""
+msgstr "Jednorodny"
 
 #: gtk/gtkbox.c:1
 msgid "Whether the children should all be the same size."
@@ -726,7 +729,7 @@ msgstr "szerokość"
 
 #: gtk/gtkcellrenderer.c:1
 msgid "The fixed width."
-msgstr ""
+msgstr "Ustalona szerokość."
 
 #: gtk/gtkcellrenderer.c:1
 msgid "height"
@@ -734,7 +737,7 @@ msgstr "wysokość"
 
 #: gtk/gtkcellrenderer.c:1
 msgid "The fixed height."
-msgstr ""
+msgstr "Ustalona wysokość."
 
 #: gtk/gtkcellrenderer.c:1
 msgid "Is Expander"
@@ -839,7 +842,7 @@ msgstr "Modyfikowalny"
 
 #: gtk/gtkcellrenderertext.c:1 gtk/gtktexttag.c:1 gtk/gtktextview.c:1
 msgid "Whether the text can be modified by the user"
-msgstr ""
+msgstr "Określa, czy tekst może być modyfikowany przez użytkownika"
 
 #: gtk/gtkcellrenderertext.c:1 gtk/gtkcellrenderertext.c:1
 #: gtk/gtkfontsel.c:1 gtk/gtktexttag.c:1 gtk/gtktexttag.c:1
@@ -901,7 +904,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:1
 msgid "Font scaling factor"
-msgstr ""
+msgstr "Współczynnik skalowania czcionki"
 
 #: gtk/gtkcellrenderertext.c:1 gtk/gtktexttag.c:1
 msgid "Rise"
@@ -1118,14 +1121,16 @@ msgstr ""
 #: gtk/gtkcolorsel.c:1
 msgid "Whether the color selector should allow setting opacity"
 msgstr ""
+"Określa, czy przy wyborze koloru powinna być możliwość określenia jego "
+"nieprzepuszczalności"
 
 #: gtk/gtkcolorsel.c:1
 msgid "Has palette"
-msgstr ""
+msgstr "Ma paletę"
 
 #: gtk/gtkcolorsel.c:1
 msgid "Whether a palette should be used"
-msgstr ""
+msgstr "Określa, czy powinna być użyta paleta"
 
 #: gtk/gtkcolorsel.c:1
 msgid "Current Color"
@@ -1142,6 +1147,8 @@ msgstr ""
 #: gtk/gtkcolorsel.c:1
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
+"Bieżąca wartość nieprzepuszczalności (0 - w pełni przezroczysty, 65535 - w "
+"pełni nieprzepuszczalny)"
 
 #: gtk/gtkcolorsel.c:1
 msgid "Custom palette"
@@ -1149,7 +1156,7 @@ msgstr "Paleta użytkownika"
 
 #: gtk/gtkcolorsel.c:1
 msgid "Palette to use in the color selector"
-msgstr ""
+msgstr "Paleta używana przy wyborze koloru"
 
 #: gtk/gtkcolorsel.c:1
 msgid ""
@@ -1213,7 +1220,7 @@ msgstr "Ilość niebieskiego światła w kolorze."
 
 #: gtk/gtkcolorsel.c:1
 msgid "_Opacity:"
-msgstr "_Przepuszczalność:"
+msgstr "_Nieprzepuszczalność:"
 
 #: gtk/gtkcolorsel.c:1
 msgid "Transparency of the currently-selected color."
@@ -1260,7 +1267,7 @@ msgstr ""
 
 #: gtk/gtkcombo.c:1
 msgid "Allow empty"
-msgstr ""
+msgstr "Dopuszczanie pustych"
 
 #: gtk/gtkcombo.c:1
 msgid "Whether an empty value may be entered in this field"
@@ -1268,23 +1275,23 @@ msgstr ""
 
 #: gtk/gtkcombo.c:1
 msgid "Value in list"
-msgstr ""
+msgstr "Wartość na liście"
 
 #: gtk/gtkcombo.c:1
 msgid "Whether entered values must already be present in the list"
-msgstr ""
+msgstr "Określa, czy wprowadzane wartości muszą już znajdować się na liście"
 
 #: gtk/gtkcontainer.c:1
 msgid "Resize mode"
-msgstr ""
+msgstr "Tryb zmiany rozmiaru"
 
 #: gtk/gtkcontainer.c:1
 msgid "Specify how resize events are handled"
-msgstr ""
+msgstr "Określa, jak obsługiwane są zdarzenia zmiany rozmiaru"
 
 #: gtk/gtkcontainer.c:1
 msgid "Border width"
-msgstr ""
+msgstr "Szerokość krawędzi"
 
 #: gtk/gtkcontainer.c:1
 msgid "The width of the empty border outside the containers children."
@@ -1419,7 +1426,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:1
 msgid "Invisible character"
-msgstr ""
+msgstr "Niewidoczny znak"
 
 #: gtk/gtkentry.c:1
 msgid "The character to use when masking entry contents (in \"password mode\")"
@@ -1485,11 +1492,13 @@ msgstr "Aktualnie wybrana nazwa pliku."
 
 #: gtk/gtkfilesel.c:1
 msgid "Show file operations"
-msgstr ""
+msgstr "Wyświetlanie operacji na plikach"
 
 #: gtk/gtkfilesel.c:1
 msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr ""
+"Określa, czy powinny być wyświetlane przyciski, pozwalające na wykonywanie "
+"operacji na plikach."
 
 #. The directories clist
 #: gtk/gtkfilesel.c:1
@@ -1711,7 +1720,7 @@ msgstr ""
 
 #: gtk/gtkframe.c:1
 msgid "The vertical alignment of the label."
-msgstr ""
+msgstr "Wyrównanie pionowe etykiety."
 
 #: gtk/gtkframe.c:1 gtk/gtkhandlebox.c:1
 msgid "Deprecated property, use shadow_type instead."
@@ -1756,11 +1765,11 @@ msgstr ""
 
 #: gtk/gtkhandlebox.c:1
 msgid "Handle position"
-msgstr ""
+msgstr "Położenie uchwytu"
 
 #: gtk/gtkhandlebox.c:1
 msgid "Position of the handle relative to the child widget."
-msgstr ""
+msgstr "Położenie uchwytu względem widgetu pochodnego."
 
 #: gtk/gtkhandlebox.c:1
 msgid "Snap edge"
@@ -1880,7 +1889,7 @@ msgstr "wyczyść"
 
 #: gtk/gtklabel.c:1
 msgid "The text of the label."
-msgstr ""
+msgstr "Tekst etykiety."
 
 #: gtk/gtklabel.c:1
 msgid "A list of style attributes to apply to the text of the label."
@@ -1953,7 +1962,7 @@ msgstr "Pozycja X"
 
 #: gtk/gtklayout.c:1
 msgid "X position of child widget"
-msgstr ""
+msgstr "Poziome położenie widgetu potomnego"
 
 #: gtk/gtklayout.c:1
 msgid "Y position"
@@ -1961,7 +1970,7 @@ msgstr "Pozycja Y"
 
 #: gtk/gtklayout.c:1
 msgid "Y position of child widget"
-msgstr ""
+msgstr "Pionowe położenie widgetu potomnego"
 
 #: gtk/gtklayout.c:1 gtk/gtkviewport.c:1
 msgid "Horizontal adjustment"
@@ -2002,7 +2011,7 @@ msgstr ""
 #.
 #: gtk/gtkmain.c:1
 msgid "default:LTR"
-msgstr ""
+msgstr "default:LTR"
 
 #: gtk/gtkmenubar.c:1
 msgid "Style of bevel around the menubar"
@@ -2010,7 +2019,7 @@ msgstr ""
 
 #: gtk/gtkmenubar.c:1 gtk/gtktoolbar.c:1
 msgid "Internal padding"
-msgstr ""
+msgstr "Wewnętrzna wyściółka"
 
 #: gtk/gtkmenubar.c:1
 msgid "Amount of border space between the menubar shadow and the menu items"
@@ -2026,19 +2035,19 @@ msgstr ""
 
 #: gtk/gtkmessagedialog.c:1
 msgid "Message Type"
-msgstr ""
+msgstr "Typ komunikatu"
 
 #: gtk/gtkmessagedialog.c:1
 msgid "The type of message"
-msgstr ""
+msgstr "Typ komunikatu"
 
 #: gtk/gtkmessagedialog.c:1
 msgid "Message Buttons"
-msgstr ""
+msgstr "Przyciski komunikatu"
 
 #: gtk/gtkmessagedialog.c:1
 msgid "The buttons shown in the message dialog"
-msgstr ""
+msgstr "Przyciski wyświetlane w oknie komunikatu"
 
 #: gtk/gtkmisc.c:1
 msgid "X align"
@@ -2159,7 +2168,7 @@ msgstr "Strona %u"
 
 #: gtk/gtkoptionmenu.c:1
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 #: gtk/gtkoptionmenu.c:1
 msgid "The menu of options"
@@ -2192,11 +2201,11 @@ msgstr ""
 
 #: gtk/gtkpaned.c:1
 msgid "Handle Size"
-msgstr ""
+msgstr "Rozmiar uchwytu"
 
 #: gtk/gtkpaned.c:1
 msgid "Width of handle"
-msgstr ""
+msgstr "Szerokość uchwytu"
 
 #: gtk/gtkrc.c:1
 #, c-format
@@ -2542,7 +2551,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:1
 msgid "Theme Name"
-msgstr ""
+msgstr "Nazwa tematu"
 
 #: gtk/gtksettings.c:1
 msgid "Name of theme RC file to load"
@@ -3815,6 +3824,8 @@ msgstr ""
 #: gtk/gtkwindow.c:1
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr ""
+"Określenie czy to okno powinno być zamknięte w momencie zamknięcia okna "
+"nadrzędnego"
 
 #: glade/glade_menu_editor.c:1
 msgid "Icon"
@@ -3847,7 +3858,7 @@ msgstr ""
 #. ID
 #: modules/input/imipa.c:1
 msgid "IPA"
-msgstr ""
+msgstr "IPA"
 
 #. ID
 #: modules/input/imthai-broken.c:1
