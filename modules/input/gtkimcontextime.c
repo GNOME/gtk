@@ -312,6 +312,9 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
   if (event->type == GDK_KEY_RELEASE)
     return FALSE;
 
+  if (event->state & GDK_CONTROL_MASK)
+    return FALSE;
+
   context_ime = GTK_IM_CONTEXT_IME (context);
 
   if (!context_ime->focus)
@@ -971,6 +974,7 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
               {
                 g_signal_emit_by_name (context, "commit", utf8str);
                 g_free (utf8str);
+		retval = TRUE;
               }
           }
 
