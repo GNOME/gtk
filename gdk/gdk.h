@@ -20,6 +20,8 @@
 
 
 #include <gdk/gdktypes.h>
+#include <gdk/gdki18n.h>
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -540,6 +542,15 @@ void       gdk_selection_send_notify (guint32       requestor,
 				      GdkAtom       property,
 				      guint32       time);
 
+gint 	   gdk_text_property_to_text_list (GdkAtom encoding, gint format,
+                          	     	   guchar *text, gint length,
+					   gchar ***list);
+void	   gdk_free_text_list 		  (gchar **list);
+gint       gdk_string_to_compound_text 	  (gchar *str,
+                             		   GdkAtom *encoding, gint *format,
+			            	   guchar **ctext, gint *length);
+void	   gdk_free_compound_text	  (guchar *ctext);
+
 /* Properties
  */
 GdkAtom gdk_atom_intern     (const gchar *atom_name,
@@ -588,6 +599,10 @@ gint gdk_input_set_mode 	            (guint32 deviceid,
 					     GdkInputMode mode);
 void gdk_input_set_axes	                    (guint32 deviceid,
 					     GdkAxisUse *axes);
+void gdk_input_set_key                      (guint32 deviceid,
+                                             guint   index,
+                                             guint   keyval,
+                                             GdkModifierType modifiers);
 void gdk_input_window_get_pointer     (GdkWindow       *window,
 				       guint32         deviceid,
 				       gdouble         *x,
@@ -602,6 +617,28 @@ GdkTimeCoord *gdk_input_motion_events (GdkWindow *window,
 				       guint32 start,
 				       guint32 stop,
 				       gint *nevents_return);
+
+#ifdef USE_XIM
+/* International Input Method Support Functions
+ */
+
+gint   gdk_im_ready 		(void);
+
+void   gdk_im_begin		(GdkIC ic, GdkWindow* window);
+void   gdk_im_end		(void);
+GdkIMStyle gdk_im_decide_style 	(GdkIMStyle supported_style);
+GdkIMStyle gdk_im_set_best_style (GdkIMStyle best_allowed_style);
+GdkIC  gdk_ic_new		(GdkWindow* client_window,
+				 GdkWindow* focus_window,
+				 GdkIMStyle style, ...);
+void   gdk_ic_destroy		(GdkIC ic);
+void   gdk_ic_set_values	(GdkIC ic, ...);
+void   gdk_ic_get_values	(GdkIC ic, ...);
+void   gdk_ic_set_attr		(GdkIC ic, const char *target, ...);
+void   gdk_ic_get_attr		(GdkIC ic, const char *target, ...);
+GdkEventMask gdk_ic_get_events  (GdkIC ic);
+
+#endif /* USE_XIM */
 
 /* Miscellaneous */
 void gdk_event_send_clientmessage_toall(GdkEvent *event);

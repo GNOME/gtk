@@ -1,3 +1,53 @@
+Tue Nov 25 1997 Owen Taylor <owt1@cornell.edu>
+	gdk.c: Fix so that "other_events" are actually generated
+
+Tue Nov 25 1997 Owen Taylor <owt1@cornell.edu>
+	Patches to support internationalized input by:
+	  Takashi Matsuda <matsu@arch.comp.kyutech.ac.jp>
+	  TANAKA Shinya <shinya@race.u-tokyo.ac.jp>
+
+	From the README:
+	
+	Feature:
+	  Followings are the main feature of this patch.
+	    * support XIM protocol.
+	    * GtkEntry widget support Over-The-Spot and Root style input.
+	    * input style is configurable by command-line option.
+
+	Furthermore, this patch includes several changes which are useful 
+	  without XIM too.
+	
+	    * copy and paste with other clients by compound text.
+	    * Window title can be specified by multi byte string.
+
+	configure.in: 
+	  Added --with-locale and --enable-xim options
+	gdk/Makefile.am:
+	gdk/gdki18n.h [new file]
+	  Multibyte string manipulation functions
+	gdk/gdk.c
+	gdk/gdk.h
+	gdk/gdkprivate.h
+          Input method and context handling functions
+	  Command line options to control input methods
+	  Changes to KeyPress handling to support input methods
+	  Fixes to not return events for destroyed windows
+	gdk/gdkselection.c
+	  Text property handling functions
+	gdk/gdkwindow.c
+	  Set window title by multibyte string
+	gtk/gtkentry.c
+          Support for using an input context for XIM input.
+	  Cut and paste using compound text.
+	  Improvements to pasting (no longer replace the active selection
+	    with itself OWT)
+	gtk/gtkselection.c
+	  fix to send selection clear events to the right owner
+	gtk/testgtkrc
+	  Added a default fontset that will allow international characters
+	INSTALL
+	  Some rudimentary documentation about the new configuration options.
+	
 Mon Nov 24 1997 Owen Taylor <owt1@cornell.edu>
 	gtk/gtkaspectframe.c:
 	Some minor improvements to rounding in aspectframes.

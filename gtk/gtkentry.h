@@ -52,6 +52,9 @@ struct _GtkEntry
   guint   have_selection : 1;
   guint   visible : 1;
   guint32 timer;
+#ifdef USE_XIM
+  GdkIC   ic;
+#endif
 };
 
 struct _GtkEntryClass

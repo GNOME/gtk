@@ -241,7 +241,7 @@ gtk_selection_owner_set (GtkWidget *widget,
 	  event.selection = selection;
 	  event.time = time;
 
-	  gtk_widget_event (widget, (GdkEvent *) &event);
+	  gtk_widget_event (old_owner, (GdkEvent *) &event);
 	}
       return TRUE;
     }

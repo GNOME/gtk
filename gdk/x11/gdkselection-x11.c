@@ -20,6 +20,7 @@
 #include <string.h>
 #include "gdk.h"
 #include "gdkprivate.h"
+#include "gdkx.h"
 
 
 gint
@@ -165,4 +166,72 @@ gdk_selection_send_notify (guint32  requestor,
   xevent.time = time;
 
   XSendEvent (gdk_display, requestor, False, NoEventMask, (XEvent*) &xevent);
+}
+
+gint
+gdk_text_property_to_text_list (GdkAtom encoding, gint format, 
+			     guchar *text, gint length,
+			     gchar ***list)
+{
+  XTextProperty property;
+  gint count = 0;
+  gint res;
+
+  if (!list) 
+    return 0;
+
+  property.value = text;
+  property.encoding = encoding;
+  property.format = format;
+  property.nitems = length;
+  res = XmbTextPropertyToTextList (GDK_DISPLAY(), &property, list, &count);
+
+  if (res == XNoMemory || res == XLocaleNotSupported || 
+      res == XConverterNotFound)
+    return 0;
+  else
+    return count;
+}
+
+void
+gdk_free_text_list (gchar **list)
+{
+  XFreeStringList (list);
+}
+
+gint
+gdk_string_to_compound_text (gchar *str,
+			     GdkAtom *encoding, gint *format,
+			     guchar **ctext, gint *length)
+{
+  gint res;
+  XTextProperty property;
+
+  res = XmbTextListToTextProperty (GDK_DISPLAY(), 
+				   &str, 1, XCompoundTextStyle,
+                               	   &property);
+  if (res != Success)
+    {
+      property.encoding = None;
+      property.format = None;
+      property.value = NULL;
+      property.nitems = 0;
+    }
+
+  if (encoding)
+    *encoding = property.encoding;
+  if (format)
+    *format = property.format;
+  if (ctext)
+    *ctext = property.value;
+  if (length)
+    *length = property.nitems;
+
+  return res;
+}
+
+void gdk_free_compound_text (guchar *ctext)
+{
+  if (ctext)
+    XFree (ctext);
 }

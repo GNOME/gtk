@@ -148,6 +148,19 @@ struct _GdkDndGlobals {
 };
 typedef struct _GdkDndGlobals GdkDndGlobals;
 
+
+#ifdef USE_XIM
+
+struct _GdkICPrivate 
+{
+  XIC xic;
+  GdkIMStyle style;
+};
+typedef struct _GdkICPrivate GdkICPrivate;
+
+#endif /* USE_XIM */
+
+
 void gdk_window_init (void);
 void gdk_visual_init (void);
 

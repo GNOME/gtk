@@ -86,7 +86,6 @@ gdk_window_new (GdkWindow     *parent,
   long xattributes_mask;
   XSizeHints size_hints;
   XWMHints wm_hints;
-  XTextProperty text_property;
   XClassHint *class_hint;
   int x, y, depth;
   unsigned int class;
@@ -262,12 +261,10 @@ gdk_window_new (GdkWindow     *parent,
   else
     title = gdk_progname;
 
-  if (XStringListToTextProperty (&title, 1, &text_property))
-    {
-      XSetWMName (private->xdisplay, private->xwindow, &text_property);
-      XSetWMIconName (private->xdisplay, private->xwindow, &text_property);
-      XFree (text_property.value);
-    }
+  XmbSetWMProperties (private->xdisplay, private->xwindow,
+                      title, title,
+                      NULL, 0,
+                      NULL, NULL, NULL);
 
   if (attributes_mask & GDK_WA_WMCLASS)
     {
@@ -734,8 +731,8 @@ gdk_window_set_title (GdkWindow   *window,
   g_return_if_fail (window != NULL);
 
   private = (GdkWindowPrivate*) window;
-  XStoreName (private->xdisplay, private->xwindow, title);
-  XSetIconName (private->xdisplay, private->xwindow, title);
+  XmbSetWMProperties (private->xdisplay, private->xwindow,
+                      title, title, NULL, 0, NULL, NULL, NULL);
 }
 
 void

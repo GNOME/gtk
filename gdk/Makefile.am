@@ -14,6 +14,11 @@ libgdk_la_SOURCES = \
 	gdkglobals.c	\
 	gdkimage.c	\
 	gdkinput.c	\
+	gdkinput.h	\
+	gdkinputnone.h  \
+	gdkinputcommon.h\
+	gdkinputgxi.h	\
+	gdkinputxfree.h	\
 	gdkpixmap.c	\
 	gdkproperty.c	\
 	gdkrectangle.c	\
@@ -21,6 +26,8 @@ libgdk_la_SOURCES = \
 	gdkvisual.c	\
 	gdkwindow.c	\
 	gdkxid.c 	\
+	gxid_lib.h	\
+	gxid_proto.h	\
         gxid_lib.c
 ## this last one is ifdef'd out unless XINPUT_GXI is defined
 ## It's easier than trying to get automake to handle compiling
@@ -29,16 +36,10 @@ libgdk_la_SOURCES = \
 gdkinclude_HEADERS = \
 	gdk.h		\
 	gdkcursors.h	\
+ 	gdki18n.h	\
 	gdkkeysyms.h	\
 	gdkprivate.h	\
 	gdktypes.h	\
-	gdkinput.h	\
-	gdkinputnone.h  \
-	gdkinputcommon.h\
-	gdkinputgxi.h	\
-	gdkinputxfree.h	\
-	gxid_lib.h	\
-	gxid_proto.h	\
 	gdkx.h
 
 libgdk_la_LDFLAGS = -version-info 1:0:0 \

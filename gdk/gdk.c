@@ -17,13 +17,16 @@
  */
 #include "../config.h"
 
+#include <X11/Xlocale.h>
 #include <ctype.h>
-#include <locale.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
+#ifdef USE_XIM
+#include <stdarg.h>
+#endif
 
 #ifdef HAVE_SYS_SELECT_H
 #include <sys/select.h>
@@ -35,10 +38,17 @@
 #include <X11/Xos.h>
 #include <X11/Xutil.h>
 #include <X11/Xmu/WinUtil.h>
+#ifdef USE_XIM
+#include <X11/Xresource.h>
+#endif
 #include <X11/cursorfont.h>
 #include "gdk.h"
 #include "gdkprivate.h"
 #include "gdkinput.h"
+#ifdef USE_XIM
+#include "gdkx.h"
+#include "gdkkeysyms.h"
+#endif
 
 
 #ifndef X_GETTIMEOFDAY
@@ -120,6 +130,15 @@ static int          gdk_x_io_error               (Display     *display);
 static RETSIGTYPE   gdk_signal                   (int          signum);
 
 
+#ifdef USE_XIM
+static GdkIM  gdk_im_get		(void);
+static gint   gdk_im_open		(XrmDatabase db,
+					 gchar* res_name,
+					 gchar* rec_class);
+static void   gdk_im_close		(void);
+static void   gdk_ic_cleanup 		(void);
+#endif /* USE_XIM */
+
 /* Private variable declarations
  */
 static int initialized = 0;                         /* 1 if the library is initialized,
@@ -177,6 +196,17 @@ static GdkWindow *button_window[2];                 /* The last 2 windows to rec
 						     */
 static guint button_number[2];                      /* The last 2 buttons to be pressed.
 						     */
+
+#ifdef USE_XIM
+static gint xim_using;				/* using XIM Protocol if TRUE */
+static GdkIM xim_im;				/* global IM */
+static XIMStyles* xim_styles;			/* im supports these styles */
+static XIMStyle xim_best_allowed_style;
+static GdkICPrivate *xim_ic;			/* currently using IC */
+static GdkWindow* xim_window;			/* currently using Widow */
+static GList* xim_ic_list;
+
+#endif
 
 #define OTHER_XEVENT_BUFSIZE 4
 static XEvent other_xevent[OTHER_XEVENT_BUFSIZE];   /* XEvents passed along to user  */
@@ -326,6 +356,41 @@ gdk_init (int    *argc,
 		}
 	    }
 #endif
+#ifdef USE_XIM
+	  else if (strcmp ("--xim-preedit", (*argv)[i]) == 0)
+	    {
+	      if ((i + 1) < *argc)
+		{
+		  (*argv)[i++] = NULL;
+		  if (strcmp ("none", (*argv)[i]) == 0)
+		    gdk_im_set_best_style (GdkIMPreeditNone);
+		  else if (strcmp ("nothing", (*argv)[i]) == 0)
+		    gdk_im_set_best_style (GdkIMPreeditNothing);
+		  else if (strcmp ("area", (*argv)[i]) == 0)
+		    gdk_im_set_best_style (GdkIMPreeditArea);
+		  else if (strcmp ("position", (*argv)[i]) == 0)
+		    gdk_im_set_best_style (GdkIMPreeditPosition);
+		  else if (strcmp ("callbacks", (*argv)[i]) == 0)
+		    gdk_im_set_best_style (GdkIMPreeditCallbacks);
+		}
+	    }
+	  else if (strcmp ("--xim-status", (*argv)[i]) == 0)
+	    {
+	      if ((i + 1) < *argc)
+		{
+		  (*argv)[i++] = NULL;
+		  if (strcmp ("none", (*argv)[i]) == 0)
+		    gdk_im_set_best_style (GdkIMStatusNone);
+		  else if (strcmp ("nothing", (*argv)[i]) == 0)
+		    gdk_im_set_best_style (GdkIMStatusNothing);
+		  else if (strcmp ("area", (*argv)[i]) == 0)
+		    gdk_im_set_best_style (GdkIMStatusArea);
+		  else if (strcmp ("callbacks", (*argv)[i]) == 0)
+		    gdk_im_set_best_style (GdkIMStatusCallbacks);
+		}
+	    }
+#endif
+
 	  i += 1;
 	}
 
@@ -417,6 +482,23 @@ gdk_init (int    *argc,
   gdk_window_init ();
   gdk_image_init ();
   gdk_input_init ();
+
+#ifdef USE_XIM
+  /* initialize XIM Protocol variables */
+  xim_using = FALSE;
+  xim_im = NULL;
+  xim_styles = NULL;
+  if (!(xim_best_allowed_style & GdkIMPreeditMask))
+    gdk_im_set_best_style (GdkIMPreeditCallbacks);
+  if (!(xim_best_allowed_style & GdkIMStatusMask))
+    gdk_im_set_best_style (GdkIMStatusCallbacks);
+  xim_ic = NULL;
+  xim_window = (GdkWindow*)NULL;
+
+  gdk_im_open (NULL, NULL, NULL);
+  if (gdk_im_get () == NULL)
+    g_warning ("unable to open input method.");
+#endif
 
   initialized = 1;
 }
@@ -623,7 +705,20 @@ gdk_event_get (GdkEvent     *event,
 	  /* If we get here we can rest assurred that an event
 	   *  has occurred. Read it.
 	   */
+#ifdef USE_XIM
+          gint filter_status;
+	  if (xim_using && xim_window)
+	    do
+	      {		/* dont dispatch events used by IM */
+	        XNextEvent (gdk_display, &xevent);
+		filter_status = XFilterEvent (&xevent, 
+					      GDK_WINDOW_XWINDOW (xim_window));
+	      } while (filter_status == True);
+	  else
+	    XNextEvent (gdk_display, &xevent);
+#else
 	  XNextEvent (gdk_display, &xevent);
+#endif
 
 	  event->any.send_event = xevent.xany.send_event;
 
@@ -1370,7 +1465,12 @@ gdk_event_translate (GdkEvent *event,
   GdkWindowPrivate *window_private;
   XComposeStatus compose;
   int charcount;
+#ifdef USE_XIM
+  static gchar* buf = NULL;
+  static gint buf_len= 0;
+#else
   char buf[16];
+#endif
   gint return_val;
 
   /* Are static variables used for this purpose thread-safe? */
@@ -1421,24 +1521,78 @@ gdk_event_translate (GdkEvent *event,
     case KeyPress:
       /* Lookup the string corresponding to the given keysym.
        */
+#ifdef USE_XIM
+      if (buf_len == 0) 
+        {
+	  buf_len = 128;
+	  buf = g_new (gchar, buf_len);
+	}
+      if (xim_using == TRUE && xim_ic)
+	{
+	  Status status;
+	  
+	  /* Clear keyval. Depending on status, may not be set */
+	  event->key.keyval = GDK_VoidSymbol;
+	  charcount = XmbLookupString(xim_ic->xic,
+				      &xevent->xkey, buf, buf_len-1,
+				      (KeySym*) &event->key.keyval,
+				      &status);
+	  if (status == XBufferOverflow)
+	    {                     /* retry */
+	      /* alloc adequate size of buffer */
+	      if (gdk_debug_level >= 1)
+		g_print("XIM: overflow(required %i)\n", charcount);
+
+	      while (buf_len <= charcount)
+		buf_len *= 2;
+	      buf = (gchar *) g_realloc (buf, buf_len);
+	     
+	      charcount = XmbLookupString (xim_ic->xic,
+					   &xevent->xkey, buf, buf_len-1,
+					   (KeySym*) &event->key.keyval,
+					   &status);
+	    }
+	  if (status == XLookupNone)
+	    {
+	      return_val = FALSE;
+	      break;
+	    }
+	}
+      else
+	charcount = XLookupString (&xevent->xkey, buf, buf_len,
+				   (KeySym*) &event->key.keyval,
+				   &compose);
+#else
       charcount = XLookupString (&xevent->xkey, buf, 16,
 				 (KeySym*) &event->key.keyval,
 				 &compose);
+#endif
+      if (charcount > 0 && buf[charcount-1] == '\0')
+	charcount --;
+      else
+	buf[charcount] = '\0';
 
       /* Print debugging info.
        */
       if (gdk_show_events)
-	g_print ("key press:\t\twindow: %ld  key: %12s  %d\n",
-		 xevent->xkey.window - base_id,
-		 XKeysymToString (event->key.keyval),
-		 event->key.keyval);
+	{
+	  g_print ("key press:\twindow: %ld  key: %12s  %d\n",
+		   xevent->xkey.window - base_id,
+		   event->key.keyval ? XKeysymToString (event->key.keyval) : "(none)",
+		   event->key.keyval);
+	  if (charcount > 0)
+	    g_print ("\t\tlength: %4d string: \"%s\"\n",
+		     charcount, buf);
+	}
 
       event->key.type = GDK_KEY_PRESS;
       event->key.window = window;
       event->key.time = xevent->xkey.time;
       event->key.state = (GdkModifierType) xevent->xkey.state;
+      event->key.string = buf;
+      event->key.length = charcount;
 
-      return_val = !window_private->destroyed;
+      return_val = window_private && !window_private->destroyed;
       break;
 
     case KeyRelease:
@@ -1460,8 +1614,10 @@ gdk_event_translate (GdkEvent *event,
       event->key.window = window;
       event->key.time = xevent->xkey.time;
       event->key.state = (GdkModifierType) xevent->xkey.state;
+      event->key.length = 0;
+      event->key.string = NULL;
 
-      return_val = !window_private->destroyed;
+      return_val = window_private && !window_private->destroyed;
       break;
 
     case ButtonPress:
@@ -1563,7 +1719,7 @@ gdk_event_translate (GdkEvent *event,
 				    CWEventMask, &dnd_setwinattr);
 	}
       }
-      return_val = window_private?(!window_private->destroyed):FALSE;
+      return_val = window_private && !window_private->destroyed;
       break;
 
     case ButtonRelease:
@@ -1632,7 +1788,7 @@ gdk_event_translate (GdkEvent *event,
 	dnd_drag_dropzone.width = dnd_drag_dropzone.height = 0;
 	dnd_drag_curwin = None;
       }
-      return_val = window ? (!window_private->destroyed) : FALSE;
+      return_val = window_private && !window_private->destroyed;
       break;
 
     case MotionNotify:
@@ -1728,7 +1884,7 @@ gdk_event_translate (GdkEvent *event,
 	  return_val = FALSE;
 	}
       else
-      return_val = window?(!window_private->destroyed):FALSE;
+      return_val = window_private && !window_private->destroyed;
       break;
 
     case EnterNotify:
@@ -1789,7 +1945,7 @@ gdk_event_translate (GdkEvent *event,
 	  XUngrabPointer(gdk_display, CurrentTime);
 	}
 
-      return_val = (window ? !window_private->destroyed : FALSE);
+      return_val = window_private && !window_private->destroyed;
       break;
 
     case LeaveNotify:
@@ -1839,7 +1995,7 @@ gdk_event_translate (GdkEvent *event,
 		       gdk_dnd.gdk_cursor_dragdefault, CurrentTime);
 	  gdk_dnd.drag_really = 1;
       }
-      return_val = window ? (!window_private->destroyed) : FALSE;
+      return_val = window_private && !window_private->destroyed;
       break;
 
     case FocusIn:
@@ -1853,7 +2009,7 @@ gdk_event_translate (GdkEvent *event,
       event->focus_change.window = window;
       event->focus_change.in = TRUE;
 
-      return_val = !window_private->destroyed;
+      return_val = window_private && !window_private->destroyed;
       break;
 
     case FocusOut:
@@ -1867,7 +2023,7 @@ gdk_event_translate (GdkEvent *event,
       event->focus_change.window = window;
       event->focus_change.in = FALSE;
 
-      return_val = !window_private->destroyed;
+      return_val = window_private && !window_private->destroyed;
       break;
 
     case KeymapNotify:
@@ -1896,7 +2052,7 @@ gdk_event_translate (GdkEvent *event,
       event->expose.area.height = xevent->xexpose.height;
       event->expose.count = xevent->xexpose.count;
 
-      return_val = !window_private->destroyed;
+      return_val = window_private && !window_private->destroyed;
       break;
 
     case GraphicsExpose:
@@ -1914,7 +2070,7 @@ gdk_event_translate (GdkEvent *event,
       event->expose.area.height = xevent->xgraphicsexpose.height;
       event->expose.count = xevent->xexpose.count;
 
-      return_val = !window_private->destroyed;
+      return_val = window_private && !window_private->destroyed;
       break;
 
     case NoExpose:
@@ -1972,7 +2128,7 @@ gdk_event_translate (GdkEvent *event,
       received_destroy_notify = TRUE;
       window_to_destroy = window;
 
-      return_val = !window_private->destroyed;
+      return_val = window_private && !window_private->destroyed;
       break;
 
     case UnmapNotify:
@@ -1985,7 +2141,7 @@ gdk_event_translate (GdkEvent *event,
       event->any.type = GDK_UNMAP;
       event->any.window = window;
 
-      return_val = !window_private->destroyed;
+      return_val = window_private && !window_private->destroyed;
       break;
 
     case MapNotify:
@@ -1998,7 +2154,7 @@ gdk_event_translate (GdkEvent *event,
       event->any.type = GDK_MAP;
       event->any.window = window;
 
-      return_val = !window_private->destroyed;
+      return_val = window_private && !window_private->destroyed;
       break;
 
     case ReparentNotify:
@@ -2025,30 +2181,32 @@ gdk_event_translate (GdkEvent *event,
 		 xevent->xconfigure.x, xevent->xconfigure.y,
 		 xevent->xconfigure.width, xevent->xconfigure.height);
 
-      if (window_private &&
-	  (window_private->extension_events != 0) &&
-	  gdk_input_vtable.configure_event)
-	gdk_input_vtable.configure_event (&xevent->xconfigure, window);
-
-      if ((window_private->window_type != GDK_WINDOW_CHILD) &&
-	  ((window_private->width != xevent->xconfigure.width) ||
-	   (window_private->height != xevent->xconfigure.height)))
+      if (window_private)
 	{
-	  event->configure.type = GDK_CONFIGURE;
-	  event->configure.window = window;
-	  event->configure.x = xevent->xconfigure.x;
-	  event->configure.y = xevent->xconfigure.y;
-	  event->configure.width = xevent->xconfigure.width;
-	  event->configure.height = xevent->xconfigure.height;
+	  if ((window_private->extension_events != 0) &&
+	      gdk_input_vtable.configure_event)
+	    gdk_input_vtable.configure_event (&xevent->xconfigure, window);
 
-	  window_private->x = xevent->xconfigure.x;
-	  window_private->y = xevent->xconfigure.y;
-	  window_private->width = xevent->xconfigure.width;
-	  window_private->height = xevent->xconfigure.height;
-	  if (window_private->resize_count > 1)
-	    window_private->resize_count -= 1;
+	  if ((window_private->window_type != GDK_WINDOW_CHILD) &&
+	      ((window_private->width != xevent->xconfigure.width) ||
+	       (window_private->height != xevent->xconfigure.height)))
+	    {
+	      event->configure.type = GDK_CONFIGURE;
+	      event->configure.window = window;
+	      event->configure.x = xevent->xconfigure.x;
+	      event->configure.y = xevent->xconfigure.y;
+	      event->configure.width = xevent->xconfigure.width;
+	      event->configure.height = xevent->xconfigure.height;
 
-	  return_val = !window_private->destroyed;
+	      window_private->x = xevent->xconfigure.x;
+	      window_private->y = xevent->xconfigure.y;
+	      window_private->width = xevent->xconfigure.width;
+	      window_private->height = xevent->xconfigure.height;
+	      if (window_private->resize_count > 1)
+		window_private->resize_count -= 1;
+
+	      return_val = !window_private->destroyed;
+	    }
 	}
       break;
 
@@ -2065,7 +2223,7 @@ gdk_event_translate (GdkEvent *event,
       event->property.time = xevent->xproperty.time;
       event->property.state = xevent->xproperty.state;
 
-      return_val = !window_private->destroyed;
+      return_val = window_private && !window_private->destroyed;
       break;
 
     case SelectionClear:
@@ -2078,7 +2236,7 @@ gdk_event_translate (GdkEvent *event,
       event->selection.selection = xevent->xselectionclear.selection;
       event->selection.time = xevent->xselectionclear.time;
 
-      return_val = !((GdkWindowPrivate*) window)->destroyed;
+      return_val = window_private && !window_private->destroyed;
       break;
 
     case SelectionRequest:
@@ -2094,7 +2252,7 @@ gdk_event_translate (GdkEvent *event,
       event->selection.requestor = xevent->xselectionrequest.requestor;
       event->selection.time = xevent->xselectionrequest.time;
 
-      return_val = !((GdkWindowPrivate*) window)->destroyed;
+      return_val = window_private && !window_private->destroyed;
       break;
 
     case SelectionNotify:
@@ -2110,7 +2268,7 @@ gdk_event_translate (GdkEvent *event,
       event->selection.property = xevent->xselection.property;
       event->selection.time = xevent->xselection.time;
 
-      return_val = !((GdkWindowPrivate*) window)->destroyed;
+      return_val = window_private && !window_private->destroyed;
       break;
 
     case ColormapNotify:
@@ -2157,7 +2315,7 @@ gdk_event_translate (GdkEvent *event,
 	      event->any.type = GDK_DELETE;
 	      event->any.window = window;
 
-	      return_val = !window_private->destroyed;
+	      return_val = window_private && !window_private->destroyed;
 	    }
 	  else if ((Atom) xevent->xclient.data.l[0] == gdk_wm_take_focus)
 	    {
@@ -2353,6 +2511,8 @@ gdk_event_translate (GdkEvent *event,
 	  (window_private->extension_events != 0) &&
 	  gdk_input_vtable.other_event)
 	return_val = gdk_input_vtable.other_event(event, xevent, window);
+      else
+	return_val = -1;
 
       if (return_val < 0)	/* not an XInput event, convert */
 	{
@@ -2363,8 +2523,9 @@ gdk_event_translate (GdkEvent *event,
 	  other_xevent_i = (other_xevent_i+1) % OTHER_XEVENT_BUFSIZE;
 	  return_val = TRUE;
 	}
+      else
+	return_val = return_val && !window_private->destroyed;
 
-      return_val = return_val && !window_private->destroyed;
       break;
     }
 
@@ -2424,6 +2585,12 @@ gdk_exit_func ()
 {
   if (initialized)
     {
+#ifdef USE_XIM
+      /* cleanup IC */
+      gdk_ic_cleanup ();
+      /* close IM */
+      gdk_im_close ();
+#endif
       gdk_image_exit ();
       gdk_input_exit ();
       gdk_key_repeat_restore ();
@@ -2614,6 +2781,446 @@ gdk_dnd_drag_enter (Window dest)
 
     }
 }
+
+
+#ifdef USE_XIM
+
+/*
+ *--------------------------------------------------------------
+ * gdk_im_begin
+ *
+ *   Begin using input method with XIM Protocol(X11R6 standard)
+ *
+ * Arguments:
+ *   "ic" is the "Input Context" which is created by gtk_ic_new.
+ *   The input area is specified with "window".
+ *
+ * Results:
+ *   The gdk's event handling routine is switched to XIM based routine.
+ *   XIM based routine uses XFilterEvent to get rid of events used by IM,
+ *   and uses XmbLookupString instead of XLookupString.
+ *
+ * Side effects:
+ *
+ *--------------------------------------------------------------
+ */
+
+void gdk_im_begin (GdkIC ic, GdkWindow* window)
+{
+  GdkEventMask event;
+  GdkICPrivate *private;
+  Window xwin;
+
+  g_return_if_fail (ic != NULL);
+  g_return_if_fail (window);
+
+  private = (GdkICPrivate *) ic;
+
+  xim_using = TRUE;
+  xim_ic = private;
+  xim_window = window;
+  if (gdk_im_ready())
+    {
+      XGetICValues (private->xic, XNFocusWindow, &xwin, NULL);
+      if (xwin != GDK_WINDOW_XWINDOW(window))
+        XSetICValues (private->xic, XNFocusWindow, 
+		      GDK_WINDOW_XWINDOW(window), NULL);
+      if (private != xim_ic)
+	XSetICFocus (private->xic);
+    }
+}
+
+/*
+ *--------------------------------------------------------------
+ * gdk_im_end
+ *
+ *   End using input method with XIM Protocol(X11R6 standard)
+ *
+ * Arguments:
+ *
+ * Results:
+ *   The gdk's event handling routine is switched to normal routine.
+ *   User should call this function before ic and window will be destroyed.
+ *
+ * Side effects:
+ *
+ *--------------------------------------------------------------
+ */
+
+void gdk_im_end (void)
+{
+  xim_using = FALSE;
+  xim_ic = NULL;
+  xim_window = NULL;
+}
+
+static GdkIM gdk_im_get (void)
+{
+  return xim_im;
+}
+
+static GdkIMStyle 
+gdk_im_choose_better_style (GdkIMStyle style1, GdkIMStyle style2) 
+{
+  GdkIMStyle s1, s2, u;
+
+  if (style1 == 0) return style2;
+  if (style2 == 0) return style1;
+  if ((style1 & (GdkIMPreeditMask | GdkIMStatusMask))
+    	== (style2 & (GdkIMPreeditMask | GdkIMStatusMask)))
+    return style1;
+
+  s1 = style1 & GdkIMPreeditMask;
+  s2 = style2 & GdkIMPreeditMask;
+  u = s1 | s2;
+  if (s1 != s2) {
+    if (u & GdkIMPreeditCallbacks)
+      return (s1 == GdkIMPreeditCallbacks)? style1:style2;
+    else if (u & GdkIMPreeditPosition)
+      return (s1 == GdkIMPreeditPosition)? style1:style2;
+    else if (u & GdkIMPreeditArea)
+      return (s1 == GdkIMPreeditArea)? style1:style2;
+    else if (u & GdkIMPreeditNothing)
+      return (s1 == GdkIMPreeditNothing)? style1:style2;
+  } else {
+    s1 = style1 & GdkIMStatusMask;
+    s2 = style2 & GdkIMStatusMask;
+    u = s1 | s2;
+    if ( u & GdkIMStatusCallbacks)
+      return (s1 == GdkIMStatusCallbacks)? style1:style2;
+    else if ( u & GdkIMStatusArea)
+      return (s1 == GdkIMStatusArea)? style1:style2;
+    else if ( u & GdkIMStatusNothing)
+      return (s1 == GdkIMStatusNothing)? style1:style2;
+    else if ( u & GdkIMStatusNone)
+      return (s1 == GdkIMStatusNone)? style1:style2;
+  }
+}
+
+GdkIMStyle
+gdk_im_decide_style (GdkIMStyle supported_style)
+{
+  gint i;
+  GdkIMStyle style, tmp;
+
+  g_return_val_if_fail (xim_styles != NULL, 0);
+
+  style = 0;
+  for (i=0; i<xim_styles->count_styles; i++)
+    {
+      tmp = xim_styles->supported_styles[i];
+      if (tmp == (tmp & supported_style & xim_best_allowed_style))
+	style = gdk_im_choose_better_style (style, tmp);
+    }
+  return style;
+}
+
+GdkIMStyle
+gdk_im_set_best_style (GdkIMStyle style)
+{
+  if (style & GdkIMPreeditMask)
+    {
+      xim_best_allowed_style &= ~GdkIMPreeditMask;
+
+      xim_best_allowed_style |= GdkIMPreeditNone;
+      if (!(style & GdkIMPreeditNone))
+	{
+	  xim_best_allowed_style |= GdkIMPreeditNothing;
+	  if (!(style & GdkIMPreeditNothing))
+	    {
+	      xim_best_allowed_style |= GdkIMPreeditArea;
+	      if (!(style & GdkIMPreeditArea))
+		{
+		  xim_best_allowed_style |= GdkIMPreeditPosition;
+		  if (!(style & GdkIMPreeditPosition))
+		    xim_best_allowed_style |= GdkIMPreeditCallbacks;
+		}
+	    }
+	}
+    }
+  if (style & GdkIMStatusMask)
+    {
+      xim_best_allowed_style &= ~GdkIMStatusMask;
+
+      xim_best_allowed_style |= GdkIMStatusNone;
+      if (!(style & GdkIMStatusNone))
+	{
+	  xim_best_allowed_style |= GdkIMStatusNothing;
+	  if (!(style & GdkIMStatusNothing))
+	    {
+	      xim_best_allowed_style |= GdkIMStatusArea;
+	      if (!(style & GdkIMStatusArea))
+		xim_best_allowed_style |= GdkIMStatusCallbacks;
+	    }
+	}
+    }
+  
+  return xim_best_allowed_style;
+}
+
+static gint gdk_im_open (XrmDatabase db, gchar* res_name, gchar* res_class)
+{
+  XIMStyle style;
+  int i;
+
+  xim_im = XOpenIM (GDK_DISPLAY(), db, res_name, res_class);
+  if (xim_im == NULL)
+    {
+      g_warning ("Don\'t open IM.");
+      return FALSE;
+    }
+  XGetIMValues (xim_im, XNQueryInputStyle, &xim_styles, NULL, NULL);
+
+  return TRUE;
+}
+
+static void gdk_im_close (void)
+{
+  if (xim_im)
+    {
+      XCloseIM (xim_im);
+      xim_im = NULL;
+    }
+  if (xim_styles)
+    {
+      XFree (xim_styles);
+      xim_styles = NULL;
+    }
+}
+
+gint gdk_im_ready (void)
+{
+  return (xim_im != NULL);
+}
+
+GdkIC gdk_ic_new (GdkWindow* client_window,
+                  GdkWindow* focus_window,
+		  GdkIMStyle style, ...)
+{
+  va_list list;
+  GdkICPrivate *private;
+  XVaNestedList preedit_attr;
+
+  g_return_val_if_fail (client_window != NULL, NULL);
+  g_return_val_if_fail (focus_window != NULL, NULL);
+  g_return_val_if_fail (gdk_im_ready(), NULL);
+
+  private = g_new (GdkICPrivate, 1);
+
+  va_start (list, style);
+  preedit_attr =  (XVaNestedList) & (va_arg (list, void *));
+  va_end (list);
+
+  private->style = gdk_im_decide_style (style);
+  if (private->style != style)
+    {
+      g_warning ("can not create input context with specified input style.");
+      g_free (private);
+      return NULL;
+    }
+
+  private->xic = XCreateIC(gdk_im_get (),
+  		 	XNInputStyle,   style,
+		      	XNClientWindow, GDK_WINDOW_XWINDOW (client_window),
+		      	XNFocusWindow,  GDK_WINDOW_XWINDOW (focus_window),
+		      	preedit_attr? XNPreeditAttributes : NULL, preedit_attr,
+		      	NULL);
+  if (!private->xic)
+    {
+      g_free (private);
+      return NULL;
+    }
+
+  xim_ic_list = g_list_append (xim_ic_list, private);
+  return private;
+}
+
+void gdk_ic_destroy (GdkIC ic)
+{
+  GdkICPrivate *private;
+
+  g_return_if_fail (ic != NULL);
+  
+  private = (GdkICPrivate *) ic;
+
+  if (xim_ic == private)
+    gdk_im_end ();
+
+  XDestroyIC (private->xic);
+  xim_ic_list = g_list_remove (xim_ic_list, private);
+}
+
+GdkIMStyle
+gdk_ic_get_style (GdkIC ic)
+{
+  GdkICPrivate *private;
+
+  g_return_val_if_fail (ic != NULL, 0);
+
+  private = (GdkICPrivate *) ic;
+
+  return private->style;
+}
+
+void 
+gdk_ic_set_values (GdkIC ic, ...)
+{
+  va_list list;
+  XVaNestedList args;
+  GdkICPrivate *private;
+
+  g_return_if_fail (ic != NULL);
+
+  private = (GdkICPrivate *) ic;
+
+  va_start (list, ic);
+  args =  (XVaNestedList) & (va_arg (list, void *));
+  va_end (list);
+
+  XSetICValues (private->xic, XNVaNestedList, args, NULL);
+}
+
+void 
+gdk_ic_get_values (GdkIC ic, ...)
+{
+  va_list list;
+  XVaNestedList args;
+  GdkICPrivate *private;
+
+  g_return_if_fail (ic != NULL);
+
+  private = (GdkICPrivate *) ic;
+
+  va_start (list, ic);
+  args =  (XVaNestedList) & (va_arg (list, void *));
+  va_end (list);
+
+  XGetICValues (private->xic, XNVaNestedList, args, NULL);
+}
+
+void gdk_ic_set_attr (GdkIC ic, const char *target, ...)
+{
+  va_list list;
+  XVaNestedList attr;
+  GdkICPrivate *private;
+
+  g_return_if_fail (ic != NULL);
+  g_return_if_fail (target != NULL);
+
+  private = (GdkICPrivate *) ic;
+
+  va_start (list, target);
+  attr =  (XVaNestedList) & (va_arg (list, void *));
+  va_end (list);
+
+  XSetICValues (private->xic, target, attr, NULL);
+}
+
+void gdk_ic_get_attr (GdkIC ic, const char *target, ...)
+{
+  va_list list;
+  XVaNestedList attr;
+  GdkICPrivate *private;
+
+  g_return_if_fail (ic != NULL);
+  g_return_if_fail (target != NULL);
+
+  private = (GdkICPrivate *) ic;
+
+  va_start (list, target);
+  attr =  (XVaNestedList) & (va_arg (list, void *));
+  va_end (list);
+
+  XGetICValues (private->xic, target, attr, NULL);
+}
+
+GdkEventMask 
+gdk_ic_get_events (GdkIC ic)
+{
+  GdkEventMask mask;
+  glong xmask;
+  glong bit;
+  GdkICPrivate *private;
+  gint i;
+
+  /*  From gdkwindow.c  */
+  extern int nevent_masks;
+  extern int event_mask_table[];
+
+  g_return_val_if_fail (ic != NULL, 0);
+
+  private = (GdkICPrivate *) ic;
+
+  XGetICValues (private->xic, XNFilterEvents, &xmask, NULL);
+
+  mask = 0;
+  for (i=0, bit=2; i < nevent_masks; i++, bit <<= 1)
+    if (xmask & event_mask_table [i])
+      {
+	mask |= bit;
+	xmask &= ~ event_mask_table [i];
+      }
+
+  if (xmask)
+    g_warning ("ic requires the events not supported by the application (%04x)", xmask);
+  
+  return mask;
+}
+
+static void gdk_ic_cleanup (void)
+{
+  GList* node;
+  gint destroyed;
+  GdkICPrivate *private;
+
+  destroyed = 0;
+  for (node = xim_ic_list; node != NULL; node = node->next)
+    {
+      if (node->data)
+       {
+	 private = (GdkICPrivate *) (node->data);
+         XDestroyIC (private->xic);
+	 g_free (private);
+         destroyed++;
+       }
+    }
+  if (gdk_debug_level >= 1 && destroyed > 0)
+    {
+      g_warning ("Cleanuped %i IC\n", destroyed);
+    }
+  g_list_free(xim_ic_list);
+  xim_ic_list = NULL;
+}
+
+#ifdef X_LOCALE
+
+gint
+_g_mbtowc (wchar_t *wstr, const char *str, size_t len)
+{
+  static wchar_t wcs[MB_CUR_MAX + 1];
+  static gchar mbs[MB_CUR_MAX + 1];
+
+  wcs[0] = (wchar_t) NULL;
+  mbs[0] = '\0';
+
+  len = _Xmbstowcs (wcs, str, (len<MB_CUR_MAX)? len:MB_CUR_MAX);
+  if (len < 1)
+    return len;
+  else if (wcs[0] == (wchar_t) NULL)
+    return -1;
+
+  len = _Xwctomb (mbs, wcs[0]);
+  if (mbs[0] == '\0')
+    return -1;
+  if (wstr)
+    *wstr = wcs[0];
+
+  return len;
+}
+
+#endif /* X_LOCALE */
+
+#endif /* USE_XIM */
 
 static void
 gdk_dnd_drag_leave (Window dest)

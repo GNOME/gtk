@@ -1,0 +1,36 @@
+The 'configure' script can be given a number of options to
+enable and disable various features. For a complete list,
+type:
+  ./configure --help
+
+*  --enable-xim            support XIM [default=yes]
+
+Specifying --disable-xim will disable support for entering
+internationalized text using X Input Methods. This will give
+some slight savings in speed and memory use and might be necessary
+with older versions of X.
+
+* --with-locale=LOCALE    locale name you want to use
+
+The --with-locale options is used to determine if your operating
+system has support for the locale you will be using. If not, X's built
+in locale support will be used.
+
+Because of bugs in autoconf, it is necessary to specify this option
+even if your LANG environment variable is correctly set.
+
+This option does not determine which locale GTK will use at
+runtime. That will be determined from the usual environment variables.
+If you will be using multiple locales with GTK, specify the one
+for which your operating system has the worst support for the 
+--with-locale option.
+
+
+Note for using XIM support with kinput2
+---------------------------------------
+
+There is a bug in older versions of kinput2 that will cause 
+GTK to hang when destroying a text entry. The latest versions
+of kinput is available from:
+
+  ftp://ftp.sra.co.jp/pub/x11/kinput2

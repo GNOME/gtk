@@ -17,11 +17,18 @@
  */
 #include <ctype.h>
 #include <string.h>
+#ifdef USE_XIM
+#include "gdk/gdkx.h"
+#endif
 #include "gdk/gdkkeysyms.h"
 #include "gtkentry.h"
 #include "gtkmain.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
+
+#ifdef USE_XIM
+#include "gdk/gdkx.h"
+#endif
 
 #define MIN_ENTRY_WIDTH  150
 #define DRAW_TIMEOUT     20
@@ -115,6 +122,7 @@ static void gtk_real_entry_delete_text    (GtkEntry          *entry,
 					   gint               start_pos,
 					   gint               end_pos);
 
+static gint move_backward_character	  (gchar *str, gint index);
 static void gtk_move_forward_character    (GtkEntry          *entry);
 static void gtk_move_backward_character   (GtkEntry          *entry);
 static void gtk_move_forward_word         (GtkEntry          *entry);
@@ -137,6 +145,8 @@ static void gtk_select_region             (GtkEntry          *entry,
 
 static GtkWidgetClass *parent_class = NULL;
 static gint entry_signals[LAST_SIGNAL] = { 0 };
+static GdkAtom ctext_atom = GDK_NONE;
+static GdkAtom text_atom = GDK_NONE;
 
 static GtkTextFunction control_keys[26] =
 {
@@ -147,7 +157,7 @@ static GtkTextFunction control_keys[26] =
   gtk_move_end_of_line,          /* e */
   gtk_move_forward_character,    /* f */
   NULL,                          /* g */
-  NULL,                          /* h */
+  gtk_delete_backward_character, /* h */
   NULL,                          /* i */
   NULL,                          /* j */
   gtk_delete_to_line_end,        /* k */
@@ -302,8 +312,6 @@ gtk_entry_class_init (GtkEntryClass *class)
 static void
 gtk_entry_init (GtkEntry *entry)
 {
-  static GdkAtom text_atom = GDK_NONE;
-
   GTK_WIDGET_SET_FLAGS (entry, GTK_CAN_FOCUS);
 
   entry->text_area = NULL;
@@ -318,6 +326,10 @@ gtk_entry_init (GtkEntry *entry)
   entry->timer = 0;
   entry->visible = 1;
 
+#ifdef USE_XIM
+  entry->ic = NULL;
+#endif
+
   gtk_selection_add_handler (GTK_WIDGET(entry), GDK_SELECTION_PRIMARY,
 			     GDK_TARGET_STRING, gtk_entry_selection_handler,
 			     NULL, NULL);
@@ -327,6 +339,14 @@ gtk_entry_init (GtkEntry *entry)
 
   gtk_selection_add_handler (GTK_WIDGET(entry), GDK_SELECTION_PRIMARY,
 			     text_atom,
+			     gtk_entry_selection_handler,
+			     NULL, NULL);
+
+  if (!ctext_atom)
+    ctext_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
+
+  gtk_selection_add_handler (GTK_WIDGET(entry), GDK_SELECTION_PRIMARY,
+			     ctext_atom,
 			     gtk_entry_selection_handler,
 			     NULL, NULL);
 }
@@ -468,8 +488,13 @@ gtk_entry_destroy (GtkObject *object)
 
   entry = GTK_ENTRY (object);
 
-  if (entry->have_selection)
-    gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY, GDK_CURRENT_TIME);
+#ifdef USE_XIM
+  if (entry->ic)
+    {
+      gdk_ic_destroy (entry->ic);
+      entry->ic = NULL;
+    }
+#endif
 
   if (entry->timer)
     gtk_timeout_remove (entry->timer);
@@ -530,6 +555,74 @@ gtk_entry_realize (GtkWidget *widget)
 
   gdk_window_set_background (widget->window, &widget->style->white);
   gdk_window_set_background (entry->text_area, &widget->style->white);
+
+#ifdef USE_XIM
+  if (gdk_im_ready ())
+    {
+      GdkPoint spot;
+      GdkRectangle rect;
+      gint width, height;
+      GdkEventMask mask;
+      GdkIMStyle style;
+      GdkIMStyle supported_style = GdkIMPreeditNone | GdkIMPreeditNothing |
+			GdkIMPreeditPosition |
+			GdkIMStatusNone | GdkIMStatusNothing;
+
+      if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
+	supported_style &= ~GdkIMPreeditPosition;
+
+      style = gdk_im_decide_style (supported_style);
+      switch (style & GdkIMPreeditMask)
+	{
+	case GdkIMPreeditPosition:
+	  if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
+	    {
+	      g_warning ("over-the-spot style requires fontset");
+	      break;
+	    }
+	  gdk_window_get_size (entry->text_area, &width, &height);
+	  rect.x = 0;
+	  rect.y = 0;
+	  rect.width = width;
+	  rect.height = height;
+	  spot.x = 0;
+	  spot.y = height;
+	  entry->ic = gdk_ic_new (entry->text_area, entry->text_area,
+  			       style,
+			       "spotLocation", &spot,
+			       "area", &rect,
+			       "fontSet", GDK_FONT_XFONT (widget->style->font),
+			       NULL);
+	  break;
+	default:
+	  entry->ic = gdk_ic_new (entry->text_area, entry->text_area,
+				  style, NULL);
+	}
+     
+      if (entry->ic == NULL)
+	g_warning ("Can't create input context.");
+      else
+	{
+	  GdkColormap *colormap;
+
+	  mask = gdk_window_get_events (entry->text_area);
+	  mask |= gdk_ic_get_events (entry->ic);
+	  gdk_window_set_events (entry->text_area, mask);
+
+	  if ((colormap = gtk_widget_get_colormap (widget)) !=
+	    	gtk_widget_get_default_colormap ())
+	    {
+	      gdk_ic_set_attr (entry->ic, "preeditAttributes",
+	      		       "colorMap", GDK_COLORMAP_XCOLORMAP (colormap),
+			       NULL);
+	    }
+	  gdk_ic_set_attr (entry->ic,"preeditAttributes",
+		     "foreground", widget->style->fg[GTK_STATE_NORMAL].pixel,
+		     "background", widget->style->white.pixel,
+		     NULL);
+	}
+    }
+#endif
 
   gdk_window_show (entry->text_area);
 }
@@ -646,6 +739,20 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 
       entry->scroll_offset = 0;
       gtk_entry_adjust_scroll (entry);
+#ifdef USE_XIM
+      if (entry->ic && (gdk_ic_get_style (entry->ic) & GdkIMPreeditPosition))
+	{
+	  gint width, height;
+	  GdkRectangle rect;
+
+	  gdk_window_get_size (entry->text_area, &width, &height);
+	  rect.x = 0;
+	  rect.y = 0;
+	  rect.width = width;
+	  rect.height = height;
+	  gdk_ic_set_attr (entry->ic, "preeditAttributes", "area", &rect, NULL);
+	}
+#endif
     }
 }
 
@@ -695,6 +802,9 @@ gtk_entry_button_press (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_ENTRY (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
+  if (ctext_atom == GDK_NONE)
+    ctext_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
+
   entry = GTK_ENTRY (widget);
   if (!GTK_WIDGET_HAS_FOCUS (widget))
     gtk_widget_grab_focus (widget);
@@ -730,10 +840,11 @@ gtk_entry_button_press (GtkWidget      *widget,
     {
       if (event->button == 2)
 	{
-	  if (entry->selection_start_pos == entry->selection_end_pos)
+	  if (entry->selection_start_pos == entry->selection_end_pos ||
+	      entry->have_selection)
 	    entry->current_pos = gtk_entry_position (entry, event->x + entry->scroll_offset);
 	  gtk_selection_convert (widget, GDK_SELECTION_PRIMARY,
-				 GDK_TARGET_STRING, event->time);
+				 ctext_atom, event->time);
 	}
       else
 	{
@@ -938,10 +1049,13 @@ gtk_entry_key_press (GtkWidget   *widget,
       return_val = TRUE;
       gtk_signal_emit (GTK_OBJECT (entry), entry_signals[ACTIVATE]);
       break;
+    /* The next two keys should not be inserted literally. Any others ??? */
+    case GDK_Tab:
+    case GDK_Escape:
+      break;
     default:
       if ((event->keyval >= 0x20) && (event->keyval <= 0xFF))
 	{
-	  return_val = TRUE;
 	  key = event->keyval;
 
 	  if (event->state & GDK_CONTROL_MASK)
@@ -950,7 +1064,11 @@ gtk_entry_key_press (GtkWidget   *widget,
 		key -= 'A' - 'a';
 
 	      if ((key >= 'a') && (key <= 'z') && control_keys[key - 'a'])
-		(* control_keys[key - 'a']) (entry);
+		{
+		  (* control_keys[key - 'a']) (entry);
+		  return_val = TRUE;
+		}
+	      break;
 	    }
 	  else if (event->state & GDK_MOD1_MASK)
 	    {
@@ -958,17 +1076,22 @@ gtk_entry_key_press (GtkWidget   *widget,
 		key -= 'A' - 'a';
 
 	      if ((key >= 'a') && (key <= 'z') && alt_keys[key - 'a'])
-		(* alt_keys[key - 'a']) (entry);
+		{
+		  (* alt_keys[key - 'a']) (entry);
+		  return_val = TRUE;
+		}
+	      break;
 	    }
-	  else
-	    {
-	      tmp = (gchar) key;
-	      gtk_delete_selection (entry);
+	}
+      if (event->length > 0)
+	{
+	  gtk_delete_selection (entry);
 
-	      tmp_pos = entry->current_pos;
-	      gtk_entry_insert_text (entry, &tmp, 1, &tmp_pos);
-	      entry->current_pos = tmp_pos;
-	    }
+	  tmp_pos = entry->current_pos;
+	  gtk_entry_insert_text (entry, event->string, event->length, &tmp_pos);
+	  entry->current_pos = tmp_pos;
+
+	  return_val = TRUE;
 	}
       break;
     }
@@ -1009,6 +1132,11 @@ gtk_entry_focus_in (GtkWidget     *widget,
   GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_draw_focus (widget);
 
+#ifdef USE_XIM
+  if (GTK_ENTRY(widget)->ic)
+    gdk_im_begin (GTK_ENTRY(widget)->ic, GTK_ENTRY(widget)->text_area);
+#endif
+
   return FALSE;
 }
 
@@ -1023,6 +1151,10 @@ gtk_entry_focus_out (GtkWidget     *widget,
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_draw_focus (widget);
 
+#ifdef USE_XIM
+  gdk_im_end ();
+#endif
+
   return FALSE;
 }
 
@@ -1035,6 +1167,10 @@ gtk_entry_selection_clear (GtkWidget         *widget,
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_ENTRY (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
+
+  /* Let the selection handling code know that the selection
+   * has been changed, since we've overriden the default handler */
+  gtk_selection_clear (widget, event);
 
   entry = GTK_ENTRY (widget);
 
@@ -1064,11 +1200,33 @@ gtk_entry_selection_handler (GtkWidget        *widget,
   selection_start_pos = MIN (entry->selection_start_pos, entry->selection_end_pos);
   selection_end_pos = MAX (entry->selection_start_pos, entry->selection_end_pos);
 
-  gtk_selection_data_set (selection_data,
-			  GDK_SELECTION_TYPE_STRING,
-			  8*sizeof(gchar),
-			  &entry->text[selection_start_pos],
-			  selection_end_pos - selection_start_pos);
+  if (selection_data->target == GDK_SELECTION_TYPE_STRING)
+    {
+      gtk_selection_data_set (selection_data,
+                              GDK_SELECTION_TYPE_STRING,
+                              8*sizeof(gchar),
+                              &entry->text[selection_start_pos],
+                              selection_end_pos - selection_start_pos);
+    }
+  else if (selection_data->target == text_atom ||
+           selection_data->target == ctext_atom)
+    {
+      gchar *str;
+      gint length;
+      gchar c;
+      GdkAtom encoding;
+      gint format;
+      guchar *text;
+
+      length = selection_end_pos - selection_start_pos; 
+      c = entry->text[selection_end_pos];
+      entry->text[selection_end_pos] = '\0';
+      str = entry->text + selection_start_pos;
+      gdk_string_to_compound_text (str, &encoding, &format, &text, &length);
+      gtk_selection_data_set (selection_data, encoding, format, text, length);
+      gdk_free_compound_text (text);
+      entry->text[selection_end_pos] = c;
+    }
 }
 
 static void
@@ -1077,42 +1235,78 @@ gtk_entry_selection_received  (GtkWidget         *widget,
 {
   GtkEntry *entry;
   gint reselect;
+  gint old_pos;
   gint tmp_pos;
+  enum {INVALID, STRING, CTEXT} type;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ENTRY (widget));
 
   entry = GTK_ENTRY (widget);
 
-  if (selection_data->length < 0)
-    return ;
+  if (selection_data->type == GDK_TARGET_STRING)
+    type = STRING;
+  else if (selection_data->type == ctext_atom)
+    type = CTEXT;
+  else
+    type = INVALID;
 
-  if (selection_data->target == GDK_TARGET_STRING)
+  if (type == INVALID || selection_data->length < 0)
     {
-      reselect = FALSE;
-      if (entry->selection_start_pos != entry->selection_end_pos)
-	{
-	  reselect = TRUE;
-	  gtk_delete_selection (entry);
-	}
+    /* avoid infinite loop */
+    if (selection_data->target != GDK_TARGET_STRING)
+      gtk_selection_convert (widget, GDK_SELECTION_PRIMARY,
+			     GDK_TARGET_STRING, GDK_CURRENT_TIME);
+    return;
+  }
 
-      tmp_pos = entry->current_pos;
+  reselect = FALSE;
+  if ((entry->selection_start_pos != entry->selection_end_pos) && 
+      !entry->have_selection)
+    {
+      reselect = TRUE;
+      gtk_delete_selection (entry);
+    }
 
+  tmp_pos = old_pos = entry->current_pos;
+
+  switch (type)
+    {
+    case STRING:
       selection_data->data[selection_data->length] = 0;
       gtk_entry_insert_text (entry, selection_data->data,
 			     strlen (selection_data->data), &tmp_pos);
-
-      if (reselect)
-	{
-	  reselect = entry->have_selection;
-	  gtk_select_region (entry, entry->current_pos, tmp_pos);
-	  entry->have_selection = reselect;
-	}
-
       entry->current_pos = tmp_pos;
+      break;
+    case CTEXT:
+      {
+	gchar **list;
+	gint count;
+	gint i;
 
-      gtk_entry_queue_draw (entry);
+	count = gdk_text_property_to_text_list (selection_data->type,
+						selection_data->format, 
+	      					selection_data->data,
+						selection_data->length,
+						&list);
+	for (i=0; i<count; i++) 
+	  {
+	    gtk_entry_insert_text (entry, list[i], strlen (list[i]), &tmp_pos);
+	    entry->current_pos = tmp_pos;
+	  }
+	if (count > 0)
+	  gdk_free_text_list (list);
+      }
+      break;
     }
+
+  if (reselect)
+    {
+      gtk_select_region (entry, old_pos, entry->current_pos);
+      entry->have_selection = FALSE;
+    }
+
+  gtk_entry_queue_draw (entry);
 }
 
 static void
@@ -1239,8 +1433,19 @@ gtk_entry_draw_cursor (GtkEntry *entry)
       else
 	gc = widget->style->white_gc;
 
-      gdk_window_get_size (entry->text_area, &text_area_height, NULL);
+      gdk_window_get_size (entry->text_area, NULL, &text_area_height);
       gdk_draw_line (entry->text_area, gc, xoffset, 0, xoffset, text_area_height);
+#ifdef USE_XIM
+      if (gdk_im_ready() && entry->ic && 
+	  gdk_ic_get_style (entry->ic) & GdkIMPreeditPosition)
+	{
+	  GdkPoint spot;
+
+	  spot.x = xoffset;
+	  spot.y = (text_area_height + (widget->style->font->ascent - widget->style->font->descent) + 1) / 2;
+	  gdk_ic_set_attr (entry->ic, "preeditAttributes", "spotLocation", &spot, NULL);
+	}
+#endif 
     }
 }
 
@@ -1276,6 +1481,7 @@ gtk_entry_position (GtkEntry *entry,
   gint char_width;
   gint sum;
   gint i;
+  gint len;
 
   g_return_val_if_fail (entry != NULL, 0);
   g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
@@ -1285,9 +1491,14 @@ gtk_entry_position (GtkEntry *entry,
 
   if (x > sum)
     {
-      for (; i < entry->text_length; i++)
+      for (; i < entry->text_length; i+=len)
 	{
-	  char_width = gdk_char_width (GTK_WIDGET (entry)->style->font, entry->text[i]);
+	  len = mblen (entry->text+i, MB_CUR_MAX);
+	  /* character not supported in current locale is included */
+	  if (len < 1) 
+	    len = 1;
+	  char_width = gdk_text_width (GTK_WIDGET (entry)->style->font, 
+	  			       entry->text + i, len);
 
 	  if (x < (sum + char_width / 2))
 	    break;
@@ -1405,6 +1616,11 @@ gtk_real_entry_insert_text (GtkEntry *entry,
   end_pos = start_pos + new_text_length;
   last_pos = new_text_length + entry->text_length;
 
+  if (entry->selection_start_pos >= *position)
+    entry->selection_start_pos += new_text_length;
+  if (entry->selection_end_pos >= *position)
+    entry->selection_end_pos += new_text_length;
+
   while (last_pos >= entry->text_size)
     gtk_entry_grow_text (entry);
 
@@ -1452,7 +1668,13 @@ gtk_real_entry_delete_text (GtkEntry *entry,
 static void
 gtk_move_forward_character (GtkEntry *entry)
 {
-  entry->current_pos += 1;
+  gint len;
+
+  if (entry->current_pos < entry->text_length)
+    {
+      len = mblen (entry->text+entry->current_pos, MB_CUR_MAX);
+      entry->current_pos += (len>0)? len:1;
+    }
   if (entry->current_pos > entry->text_length)
     entry->current_pos = entry->text_length;
 
@@ -1460,12 +1682,37 @@ gtk_move_forward_character (GtkEntry *entry)
   entry->selection_end_pos = 0;
 }
 
+static gint
+move_backward_character (gchar *str, gint index)
+{
+  gint i;
+  gint len;
+
+  if (index <= 0)
+    return -1;
+  for (i=0,len=0; i<index; i+=len)
+    {
+      len = mblen (str+i, MB_CUR_MAX);
+      if (len<1)
+	return i;
+    }
+  return i-len;
+}
+
 static void
 gtk_move_backward_character (GtkEntry *entry)
 {
-  entry->current_pos -= 1;
-  if (entry->current_pos < 0)
-    entry->current_pos = 0;
+  gint i;
+  gint diff = 0;
+  /* this routine is correct only if string is state-independent-encoded */
+
+  if (0 < entry->current_pos)
+    {
+      entry->current_pos = move_backward_character (entry->text,
+      						    entry->current_pos);
+      if (entry->current_pos < 0)
+	entry->current_pos = 0;
+    }
 
   entry->selection_start_pos = 0;
   entry->selection_end_pos = 0;
@@ -1476,20 +1723,29 @@ gtk_move_forward_word (GtkEntry *entry)
 {
   gchar *text;
   gint i;
+  wchar_t c;
+  gint len;
 
   if (entry->text)
     {
       text = entry->text;
       i = entry->current_pos;
 
-      if (!((text[i] == '_') || isalnum (text[i])))
-        for (; i < entry->text_length; i++)
-          if ((text[i] == '_') || isalnum (text[i]))
-            break;
-
-      for (; i < entry->text_length; i++)
-        if (!((text[i] == '_') || isalnum (text[i])))
-	  break;
+      len = mbtowc (&c, text+i, MB_CUR_MAX);
+      if (!(!isascii(c) || c == '_' || iswalnum (c)))
+	for (; i < entry->text_length; i+=len)
+	  {
+	    len = mbtowc (&c, text+i, MB_CUR_MAX);
+	    if (len < 1 || !isascii(c) || c == '_' || iswalnum (c))
+	      break;
+	  }
+  
+      for (; i < entry->text_length; i+=len)
+	{
+	  len = mbtowc (&c, text+i, MB_CUR_MAX);
+	  if (len < 1 || !(!isascii(c) || c == '_' || iswalnum (c)))
+	    break;
+	}
 
       entry->current_pos = i;
       if (entry->current_pos > entry->text_length)
@@ -1505,6 +1761,8 @@ gtk_move_backward_word (GtkEntry *entry)
 {
   gchar *text;
   gint i;
+  wchar_t c;
+  gint len;
 
   if (entry->text)
     {
@@ -1517,17 +1775,24 @@ gtk_move_backward_word (GtkEntry *entry)
 	  return;
 	}
 
-      if (!((text[i] == '_') || isalnum (text[i])))
-        for (; i >= 0; i--)
-          if ((text[i] == '_') || isalnum (text[i]))
-            break;
+      len = mbtowc (&c, text+i, MB_CUR_MAX);
+      if (!(!isascii(c) || (c == '_') || iswalnum (c)))
+        for (; i >= 0; i=move_backward_character(text, i))
+	  {
+	    len = mbtowc (&c, text+i, MB_CUR_MAX);
+	    if (!isascii(c) || (c == '_') || iswalnum (c))
+	      break;
+	  }
 
-      for (; i >= 0; i--)
-        if (!((text[i] == '_') || isalnum (text[i])))
-          {
-            i += 1;
-            break;
-          }
+      for (; i >= 0; i=move_backward_character(text, i))
+	{
+	  len = mbtowc (&c, text+i, MB_CUR_MAX);
+	  if (!(!isascii(c) || (c == '_') || iswalnum (c)))
+	    {
+	      i += len;
+	      break;
+	    }
+	}
 
       entry->current_pos = i;
       if (entry->current_pos < 0)
