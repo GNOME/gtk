@@ -91,6 +91,8 @@ if test -z "$ACLOCAL_FLAGS"; then
 	done
 fi
 
+rm -rf autom4te.cache
+
 $ACLOCAL $ACLOCAL_FLAGS || exit $?
 
 libtoolize --force || exit $?

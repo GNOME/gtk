@@ -1,3 +1,8 @@
+Fri Nov 19 14:52:42 2004  Manish Singh  <yosh@gimp.org>
+
+	* autogen.sh: rm autom4te.cache, since it might interfere with
+	differing autoconf versions.
+
 2004-11-19  Christian Rose  <menthos@menthos.com>
 
 	* configure.in: Added "rw" to ALL_LINGUAS.
