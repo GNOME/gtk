@@ -1,3 +1,7 @@
+Mon Jan 27 16:38:13 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Remove SOEXT stuff; it doesn't work portably.
+
 Mon Jan 27 22:45:15 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreestore.c (gtk_tree_store_move): don't handle b if
