@@ -7,8 +7,8 @@ static GtkWidget* create_prop_editor (GObject *object);
 /* This custom model is to test custom model use. */
 
 #define GTK_TYPE_MODEL_TYPES			(gtk_tree_model_types_get_type ())
-#define GTK_TREE_MODEL_TYPES(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_MODEL_TYPES, GtkTreeModelTypes))
-#define GTK_TREE_MODEL_TYPES_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_MODEL_TYPES, GtkTreeModelTypesClass))
+#define GTK_TREE_MODEL_TYPES(obj)		(GTK_CHECK_CAST ((obj), GTK_TYPE_MODEL_TYPES, GtkTreeModelTypes))
+#define GTK_TREE_MODEL_TYPES_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_MODEL_TYPES, GtkTreeModelTypesClass))
 #define GTK_IS_TREE_MODEL_TYPES(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_MODEL_TYPES))
 #define GTK_IS_TREE_MODEL_TYPES_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((obj), GTK_TYPE_MODEL_TYPES))
 
@@ -245,7 +245,7 @@ main (int    argc,
 
       ++i;
     }
-
+  gtk_widget_show_all (menu);
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);

@@ -1,3 +1,14 @@
+Mon Jan  8 14:06:29 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* tests/testtreeview.c (main): Show menu items before adding to
+	option menu.
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_model): Keep the columns
+	around if we kill them.
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_cell_data):
+	Return if we pass in a NULL model.
+
 2001-01-08  Havoc Pennington  <hp@redhat.com>
 
 	* tests/testtreeview.c: hack on this some

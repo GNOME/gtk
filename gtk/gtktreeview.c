@@ -2729,8 +2729,9 @@ _gtk_tree_view_set_size (GtkTreeView     *tree_view,
   
   if (tree_view->priv->model == NULL)
     {
-      tree_view->priv->width = 1;
-      tree_view->priv->height = 1;
+      tree_view->priv->width = width;
+      tree_view->priv->height = height;
+      gtk_widget_queue_draw (GTK_WIDGET (tree_view));
       return;
     }
   if (width == -1)
@@ -2942,6 +2943,9 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 
   if (tree_view->priv->model != NULL)
     {
+
+      /* No longer do this. */
+#if 0
       for (list = tree_view->priv->columns; list; list = list->next)
 	{
 	  column = list->data;
@@ -2952,6 +2956,7 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 	      gdk_window_destroy (column->window);
 	    }
 	}
+#endif
       if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_MODEL_SETUP))
 	{
 	  gtk_signal_disconnect_by_func (GTK_OBJECT (tree_view->priv->model),
@@ -2968,9 +2973,10 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 					 tree_view);
 	  _gtk_rbtree_free (tree_view->priv->tree);
 	}
-
+#if 0
       g_list_free (tree_view->priv->columns);
       tree_view->priv->columns = NULL;
+#endif
       GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_MODEL_SETUP);
     }
 
@@ -2978,8 +2984,6 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
   if (model == NULL)
     {
       tree_view->priv->tree = NULL;
-      tree_view->priv->n_columns = 0;
-      tree_view->priv->columns = NULL;
       if (GTK_WIDGET_REALIZED (tree_view))
 	_gtk_tree_view_set_size (tree_view, 0, 0);
       return;
