@@ -99,6 +99,8 @@ struct _GtkTextPendingScroll
   
 enum
 {
+  SET_SCROLL_ADJUSTMENTS,
+  POPULATE_POPUP,
   MOVE_CURSOR,
   SET_ANCHOR,
   INSERT_AT_CURSOR,
@@ -107,7 +109,6 @@ enum
   COPY_CLIPBOARD,
   PASTE_CLIPBOARD,
   TOGGLE_OVERWRITE,
-  SET_SCROLL_ADJUSTMENTS,
   LAST_SIGNAL
 };
 
@@ -207,6 +208,7 @@ static void     gtk_text_view_drag_data_received (GtkWidget        *widget,
 static void gtk_text_view_set_scroll_adjustments (GtkTextView   *text_view,
                                                   GtkAdjustment *hadj,
                                                   GtkAdjustment *vadj);
+static void gtk_text_view_popup_menu             (GtkWidget     *widget);
 
 static void gtk_text_view_move_cursor      (GtkTextView           *text_view,
                                             GtkMovementStep        step,
@@ -270,7 +272,7 @@ static void gtk_text_view_set_virtual_cursor_pos (GtkTextView       *text_view,
 static GtkAdjustment* get_hadjustment            (GtkTextView       *text_view);
 static GtkAdjustment* get_vadjustment            (GtkTextView       *text_view);
 
-static void gtk_text_view_popup_menu             (GtkTextView       *text_view,
+static void gtk_text_view_do_popup               (GtkTextView       *text_view,
 						  GdkEventButton    *event);
 
 static void gtk_text_view_queue_scroll           (GtkTextView   *text_view,
@@ -473,6 +475,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->drag_drop = gtk_text_view_drag_drop;
   widget_class->drag_data_received = gtk_text_view_drag_data_received;
 
+  widget_class->popup_menu = gtk_text_view_popup_menu;
+  
   container_class->add = gtk_text_view_add;
   container_class->remove = gtk_text_view_remove;
   container_class->forall = gtk_text_view_forall;
@@ -592,6 +596,14 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                     GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
   widget_class->set_scroll_adjustments_signal = signals[SET_SCROLL_ADJUSTMENTS];
 
+  signals[POPULATE_POPUP] =
+    gtk_signal_new ("populate_popup",
+                    GTK_RUN_LAST,
+                    GTK_CLASS_TYPE (object_class),
+                    GTK_SIGNAL_OFFSET (GtkTextViewClass, populate_popup),
+                    gtk_marshal_VOID__OBJECT,
+                    GTK_TYPE_NONE, 1, GTK_TYPE_MENU);
+  
   /*
    * Key bindings
    */
@@ -3044,7 +3056,7 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
         }
       else if (event->button == 3)
         {
-	  gtk_text_view_popup_menu (text_view, event);
+	  gtk_text_view_do_popup (text_view, event);
         }
     }
   else if ((event->type == GDK_2BUTTON_PRESS ||
@@ -4866,7 +4878,8 @@ static void
 append_action_signal (GtkTextView  *text_view,
 		      GtkWidget    *menu,
 		      const gchar  *label,
-		      const gchar  *signal)
+		      const gchar  *signal,
+                      gboolean      sensitive)
 {
   GtkWidget *menuitem = gtk_menu_item_new_with_label (label);
 
@@ -4874,6 +4887,8 @@ append_action_signal (GtkTextView  *text_view,
   gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
 		      GTK_SIGNAL_FUNC (activate_cb), text_view);
 
+  gtk_widget_set_sensitive (menuitem, sensitive);
+  
   gtk_widget_show (menuitem);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 }
@@ -4886,37 +4901,127 @@ popup_menu_detach (GtkWidget *attach_widget,
 }
 
 static void
-gtk_text_view_popup_menu (GtkTextView    *text_view,
-			  GdkEventButton *event)
+popup_position_func (GtkMenu   *menu,
+                     gint      *x,
+                     gint      *y,
+                     gboolean  *push_in,
+                     gpointer	user_data)
 {
-  if (!text_view->popup_menu)
+  GtkTextView *text_view;
+  GtkWidget *widget;
+  GdkRectangle cursor_rect;
+  GdkRectangle onscreen_rect;
+  gint root_x, root_y;
+  GtkTextIter iter;
+  GtkRequisition req;      
+  
+  text_view = GTK_TEXT_VIEW (user_data);
+  widget = GTK_WIDGET (text_view);
+  
+  g_return_if_fail (GTK_WIDGET_REALIZED (text_view));
+
+  gdk_window_get_origin (widget->window, &root_x, &root_y);
+
+  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
+                                    &iter,
+                                    gtk_text_buffer_get_insert (get_buffer (text_view)));
+
+  gtk_text_view_get_iter_location (text_view,
+                                   &iter,
+                                   &cursor_rect);
+
+  gtk_text_view_get_visible_rect (text_view, &onscreen_rect);
+  
+  gtk_widget_size_request (text_view->popup_menu, &req);
+
+  /* can't use rectangle_intersect since cursor rect can have 0 width */
+  if (cursor_rect.x >= onscreen_rect.x &&
+      cursor_rect.x < onscreen_rect.x + onscreen_rect.width &&
+      cursor_rect.y >= onscreen_rect.y &&
+      cursor_rect.y < onscreen_rect.y + onscreen_rect.height)
+    {    
+      gtk_text_view_buffer_to_window_coords (text_view,
+                                             GTK_TEXT_WINDOW_WIDGET,
+                                             cursor_rect.x, cursor_rect.y,
+                                             &cursor_rect.x, &cursor_rect.y);
+
+      *x = root_x + cursor_rect.x + cursor_rect.width;
+      *y = root_y + cursor_rect.y + cursor_rect.height;
+    }
+  else
     {
-      GtkWidget *menuitem;
-
-      text_view->popup_menu = gtk_menu_new ();
-
-      gtk_menu_attach_to_widget (GTK_MENU (text_view->popup_menu),
-				 GTK_WIDGET (text_view),
-				 popup_menu_detach);
-
-      append_action_signal (text_view, text_view->popup_menu, _("Cut"), "cut_clipboard");
-      append_action_signal (text_view, text_view->popup_menu, _("Copy"), "copy_clipboard");
-      append_action_signal (text_view, text_view->popup_menu, _("Paste"), "paste_clipboard");
-
-      menuitem = gtk_separator_menu_item_new ();
-      gtk_widget_show (menuitem);
-      gtk_menu_shell_append (GTK_MENU_SHELL (text_view->popup_menu), menuitem);
-
-      gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (text_view->im_context),
-					    GTK_MENU_SHELL (text_view->popup_menu));
+      /* Just center the menu, since cursor is offscreen. */      
+      *x = root_x + (widget->allocation.width / 2 - req.width / 2);
+      *y = root_y + (widget->allocation.height / 2 - req.height / 2);      
     }
 
-  gtk_menu_popup (GTK_MENU (text_view->popup_menu), NULL, NULL,
-		  NULL, NULL,
-		  event->button, event->time);
+  /* Ensure sanity */
+  *x = CLAMP (*x, root_x, (root_x + widget->allocation.width));
+  *y = CLAMP (*y, root_y, (root_y + widget->allocation.height));
+
+  *x = CLAMP (*x, 0, MAX (0, gdk_screen_width () - req.width));
+  *y = CLAMP (*y, 0, MAX (0, gdk_screen_height () - req.height));
 }
 
+static void
+gtk_text_view_do_popup (GtkTextView    *text_view,
+                        GdkEventButton *event)
+{
+  GtkWidget *menuitem;
+  GtkWidget *submenu;
+  gboolean have_selection;
+  
+  if (text_view->popup_menu)
+    gtk_widget_destroy (text_view->popup_menu);
+  
+  text_view->popup_menu = gtk_menu_new ();
 
+  gtk_menu_attach_to_widget (GTK_MENU (text_view->popup_menu),
+                             GTK_WIDGET (text_view),
+                             popup_menu_detach);
+
+  have_selection = gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
+                                                         NULL, NULL);
+  
+  append_action_signal (text_view, text_view->popup_menu, _("Cut"), "cut_clipboard",
+                        have_selection);
+  append_action_signal (text_view, text_view->popup_menu, _("Copy"), "copy_clipboard",
+                        have_selection);
+  append_action_signal (text_view, text_view->popup_menu, _("Paste"), "paste_clipboard",
+                        TRUE);
+
+  menuitem = gtk_separator_menu_item_new ();
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (text_view->popup_menu), menuitem);
+      
+  menuitem = gtk_menu_item_new_with_label (_("Input Methods"));
+  gtk_widget_show (menuitem);
+  submenu = gtk_menu_new ();
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
+  gtk_menu_shell_append (GTK_MENU_SHELL (text_view->popup_menu), menuitem);
+
+  gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (text_view->im_context),
+                                        GTK_MENU_SHELL (submenu));
+
+  gtk_signal_emit (GTK_OBJECT (text_view),
+                   signals[POPULATE_POPUP],
+                   text_view->popup_menu);
+  
+  if (event)
+    gtk_menu_popup (GTK_MENU (text_view->popup_menu), NULL, NULL,
+                    NULL, NULL,
+                    event->button, event->time);
+  else
+    gtk_menu_popup (GTK_MENU (text_view->popup_menu), NULL, NULL,
+                    popup_position_func, text_view,
+                    0, gtk_get_current_event_time ());
+}
+
+static void
+gtk_text_view_popup_menu (GtkWidget *widget)
+{
+  gtk_text_view_do_popup (GTK_TEXT_VIEW (widget), NULL);  
+}
 
 /* Child GdkWindows */
 

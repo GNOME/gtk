@@ -28,7 +28,7 @@
 #include "gtksignal.h"
 #include "gtkimmulticontext.h"
 #include "gtkimmodule.h"
-#include "gtkmenuitem.h"
+#include "gtkradiomenuitem.h"
 
 static void     gtk_im_multicontext_class_init         (GtkIMMulticontextClass  *class);
 static void     gtk_im_multicontext_init               (GtkIMMulticontext       *im_multicontext);
@@ -341,6 +341,7 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
 {
   const GtkIMContextInfo **contexts;
   gint n_contexts, i;
+  GSList *group = NULL;
   
   _gtk_im_module_list (&contexts, &n_contexts);
 
@@ -348,8 +349,17 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
     {
       GtkWidget *menuitem;
 
-      menuitem = gtk_menu_item_new_with_label (contexts[i]->context_name);
-
+      menuitem = gtk_radio_menu_item_new_with_label (group,
+                                                     contexts[i]->context_name);
+      
+      if ((global_context_id == NULL && group == NULL) ||
+          (global_context_id &&
+           strcmp (contexts[i]->context_id, global_context_id) == 0))
+        gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem),
+                                        TRUE);
+      
+      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menuitem));
+      
       gtk_object_set_data (GTK_OBJECT (menuitem), "gtk-context-id",
 			   (char *)contexts[i]->context_id);
       gtk_signal_connect (GTK_OBJECT (menuitem), "activate",

@@ -377,8 +377,11 @@ struct _GtkWidgetClass
 				    GtkSelectionData   *selection_data,
 				    guint               info,
 				    guint               time);
+
+  /* Signals used only for keybindings */
+  void (* popup_menu)              (GtkWidget          *widget);
   
-  /* Padding for future expandsion */
+  /* Padding for future expansion */
   GtkFunction pad1;
   GtkFunction pad2;
   GtkFunction pad3;

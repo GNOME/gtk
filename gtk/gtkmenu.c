@@ -518,7 +518,6 @@ gtk_menu_popup (GtkMenu		    *menu,
       if ((current_event->type != GDK_BUTTON_PRESS) &&
 	  (current_event->type != GDK_ENTER_NOTIFY))
 	menu_shell->ignore_enter = TRUE;
-      gdk_event_free (current_event);
     }
 
   if (menu->torn_off)
@@ -541,6 +540,24 @@ gtk_menu_popup (GtkMenu		    *menu,
    */
   gtk_widget_show (GTK_WIDGET (menu));
   gtk_widget_show (menu->toplevel);
+
+  if (current_event)
+    {
+      /* Also, if we're popping up from a key event, select the first
+       * item in the menu. Bad hack, but no better way to do it
+       * in current menu framework.
+       */
+      if (current_event->type == GDK_KEY_PRESS &&
+          GTK_MENU_SHELL (menu)->children)
+        {
+          gtk_menu_shell_select_item (GTK_MENU_SHELL (menu),
+                                      GTK_MENU_SHELL (menu)->children->data);
+        }
+      
+      gdk_event_free (current_event);
+    }
+  
+  gtk_menu_scroll_to (menu, menu->scroll_offset);
 
   /* Find the last viewable ancestor, and make an X grab on it
    */
@@ -576,14 +593,12 @@ gtk_menu_popup (GtkMenu		    *menu,
 			     NULL, NULL, activate_time) == 0))
 	{
 	  if (gdk_keyboard_grab (xgrab_shell->window, TRUE,
-			      activate_time) == 0)
+                                 activate_time) == 0)
 	    GTK_MENU_SHELL (xgrab_shell)->have_xgrab = TRUE;
 	  else
 	    gdk_pointer_ungrab (activate_time);
 	}
     }
-
-  gtk_menu_scroll_to (menu, menu->scroll_offset);
 
   gtk_grab_add (GTK_WIDGET (menu));
 }

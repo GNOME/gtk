@@ -477,7 +477,7 @@ gtk_text_buffer_emit_insert (GtkTextBuffer *buffer,
   if (len < 0)
     len = strlen (text);
 
-  g_assert (g_utf8_validate (text, len, NULL));
+  g_return_if_fail (g_utf8_validate (text, len, NULL));
   
   if (len > 0)
     {

@@ -390,7 +390,7 @@ setup_tag (GtkTextTag *tag)
 {
   g_signal_connect_data (G_OBJECT (tag),
                          "event",
-                         tag_event_handler,
+                         G_CALLBACK (tag_event_handler),
                          NULL, NULL, FALSE, FALSE);
 }
 
@@ -1419,7 +1419,7 @@ create_buffer (void)
     }
   
   buffer->invisible_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL,
-                                                      "invisible", TRUE);
+                                                      "invisible", TRUE, NULL);
   
   buffer->not_editable_tag =
     gtk_text_buffer_create_tag (buffer->buffer, NULL,

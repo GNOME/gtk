@@ -31,6 +31,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkimcontext.h>
+#include <gtk/gtkmenu.h>
 #include <pango/pango.h>
 
 #ifdef __cplusplus
@@ -118,6 +119,10 @@ struct _GtkEntryClass
 		    	     gint            start_pos,
 			     gint            end_pos);
 
+  /* Hook to customize right-click popup */
+  void (* populate_popup)   (GtkEntry       *entry,
+                             GtkMenu        *menu);
+  
   /* Action signals
    */
   void (* activate)           (GtkEntry       *entry);

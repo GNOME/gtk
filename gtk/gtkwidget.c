@@ -40,6 +40,7 @@
 #include "gdk/gdk.h"
 #include "gdk/gdkprivate.h" /* Used in gtk_reset_shapes_recurse to avoid copy */
 #include "gobject/gvaluecollector.h"
+#include "gdk/gdkkeysyms.h"
 
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
@@ -101,6 +102,7 @@ enum {
   NO_EXPOSE_EVENT,
   VISIBILITY_NOTIFY_EVENT,
   WINDOW_STATE_EVENT,
+  POPUP_MENU,
   LAST_SIGNAL
 };
 
@@ -281,6 +283,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkObjectClass *object_class = GTK_OBJECT_CLASS (klass);
+  GtkBindingSet *binding_set;
   
   parent_class = gtk_type_class (GTK_TYPE_OBJECT);
 
@@ -811,6 +814,21 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                     gtk_marshal_BOOLEAN__BOXED,
 		    GTK_TYPE_BOOL, 1,
 		    GTK_TYPE_GDK_EVENT);
+  widget_signals[POPUP_MENU] =
+    gtk_signal_new ("popup_menu",
+		    GTK_RUN_LAST | GTK_RUN_ACTION,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, popup_menu),
+                    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  
+  binding_set = gtk_binding_set_by_class (klass);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_F10, GDK_SHIFT_MASK,
+                                "popup_menu", 0);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Menu, 0,
+                                "popup_menu", 0);  
 }
 
 static void

@@ -1,3 +1,40 @@
+Wed Mar 28 19:20:43 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/testtext.c (create_buffer): Add missing NULL on
+	valist.
+
+	* gtk/gtkcheckmenuitem.c (gtk_check_menu_item_class_init): Fix
+	c-n-p problem with INCONSISTENT property.
+
+        [ Patch from Havoc Pennington  <hp@redhat.com> ]
+
+	* gtk/gtkentry.h (struct _GtkEntryClass): add same populate_popup
+	hook.
+
+	* gtk/gtktextview.h (struct _GtkTextViewClass): add populate_popup
+	signal as a hook for extending the default popup menu
+
+	* gtk/gtkimmulticontext.c (gtk_im_multicontext_append_menuitems):
+	use radio menu items for the input method menuitems
+
+	* gtk/gtkimcontextsimple.c (check_hex): do better validation of 
+	inserted unicode from Ctrl-Shift-hex input method
+
+	* gtk/gtktextbtree.c (_gtk_text_btree_insert): remove utf8
+	validatation here, already done at GtkTextBuffer level.
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): add binding set, add
+	popup_menu run action signal and Shift+F10 and Menu keybindings.
+
+	* gtk/gtkentry.c: implement a default handler for popup_menu
+
+	* gtk/gtktextview.c: implement a default handler for popup_menu
+
+	* gtk/gtkmenu.c (gtk_menu_popup): select first item if popup is
+	from a key event
+	
+	* gtk/gtklabel.c: remove "trailer" cruft
+
 Wed Mar 28 17:27:12 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkrbtree.c (_gtk_rbtree_reorder): new function to

@@ -827,7 +827,9 @@ gtk_im_context_simple_commit_char (GtkIMContext *context,
   gint len;
 
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
-      
+
+  g_return_if_fail (g_unichar_validate (ch));
+  
   len = g_unichar_to_utf8 (ch, buf);
   buf[len] = '\0';
 
@@ -981,12 +983,10 @@ check_hex (GtkIMContextSimple *context_simple,
     }
   else
     g_string_free (str, TRUE);
-  
-  if (n > 0xFFFF)
-    return FALSE; /* too many digits */
 
-  if (n == 0)
-    return FALSE; /* don't insert nul bytes */
+  /* don't allow invalid Unicode or nul bytes */
+  if (n == 0 || !g_unichar_validate (n))
+    return FALSE;
   
   context_simple->tentative_match = n;
   context_simple->tentative_match_len = n_compose;

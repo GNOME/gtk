@@ -58,6 +58,7 @@ enum {
   DELETE_TEXT,
   CHANGED,
   ACTIVATE,
+  POPULATE_POPUP,
   MOVE_CURSOR,
   INSERT_AT_CURSOR,
   DELETE_FROM_CURSOR,
@@ -207,6 +208,7 @@ static void gtk_entry_copy_clipboard     (GtkEntry        *entry);
 static void gtk_entry_paste_clipboard    (GtkEntry        *entry);
 static void gtk_entry_toggle_overwrite   (GtkEntry        *entry);
 static void gtk_entry_real_activate      (GtkEntry        *entry);
+static void gtk_entry_popup_menu         (GtkWidget      *widget);
 
 /* IM Context Callbacks
  */
@@ -248,7 +250,7 @@ static char *       gtk_entry_get_public_chars         (GtkEntry       *entry,
 static void         gtk_entry_paste                    (GtkEntry       *entry,
 							GdkAtom         selection);
 static void         gtk_entry_update_primary_selection (GtkEntry       *entry);
-static void         gtk_entry_popup_menu               (GtkEntry       *entry,
+static void         gtk_entry_do_popup                 (GtkEntry       *entry,
 							GdkEventButton *event);
 static gboolean     gtk_entry_activate_mnemonic        (GtkWidget     *widget,
 							gboolean       group_cycling);
@@ -351,6 +353,8 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->drag_data_get = gtk_entry_drag_data_get;
   widget_class->drag_data_delete = gtk_entry_drag_data_delete;
 
+  widget_class->popup_menu = gtk_entry_popup_menu;
+  
   class->insert_text = gtk_entry_real_insert_text;
   class->delete_text = gtk_entry_real_delete_text;
   class->move_cursor = gtk_entry_move_cursor;
@@ -456,6 +460,14 @@ gtk_entry_class_init (GtkEntryClass *class)
 		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
 
+  signals[POPULATE_POPUP] =
+    gtk_signal_new ("populate_popup",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkEntryClass, populate_popup),
+		    gtk_marshal_VOID__OBJECT,
+		    GTK_TYPE_NONE, 1, GTK_TYPE_MENU);
+  
  /* Action signals */
   
   signals[ACTIVATE] =
@@ -1312,7 +1324,7 @@ gtk_entry_button_press (GtkWidget      *widget,
     }
   else if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
     {
-      gtk_entry_popup_menu (entry, event);
+      gtk_entry_do_popup (entry, event);
       entry->button = 0;	/* Don't wait for release, since the menu will gtk_grab_add */
 
       return TRUE;
@@ -3149,7 +3161,8 @@ static void
 append_action_signal (GtkEntry     *entry,
 		      GtkWidget    *menu,
 		      const gchar  *label,
-		      const gchar  *signal)
+		      const gchar  *signal,
+                      gboolean      sensitive)
 {
   GtkWidget *menuitem = gtk_menu_item_new_with_label (label);
 
@@ -3157,6 +3170,8 @@ append_action_signal (GtkEntry     *entry,
   gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
 		      GTK_SIGNAL_FUNC (activate_cb), entry);
 
+  gtk_widget_set_sensitive (menuitem, sensitive);
+  
   gtk_widget_show (menuitem);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 }
@@ -3169,34 +3184,91 @@ popup_menu_detach (GtkWidget *attach_widget,
 }
 
 static void
-gtk_entry_popup_menu (GtkEntry       *entry,
-		      GdkEventButton *event)
+popup_position_func (GtkMenu   *menu,
+                     gint      *x,
+                     gint      *y,
+                     gboolean  *push_in,
+                     gpointer	user_data)
 {
-  if (!entry->popup_menu)
-    {
-      GtkWidget *menuitem;
+  GtkEntry *entry;
+  GtkWidget *widget;
+  GtkRequisition req;
+  
+  entry = GTK_ENTRY (user_data);  
+  widget = GTK_WIDGET (entry);
+  
+  g_return_if_fail (GTK_WIDGET_REALIZED (entry));
+
+  gdk_window_get_origin (widget->window, x, y);      
+
+  gtk_widget_size_request (entry->popup_menu, &req);
+  
+  *x += widget->allocation.width / 2;
+  *y += widget->allocation.height;
+
+  *x = CLAMP (*x, 0, MAX (0, gdk_screen_width () - req.width));
+  *y = CLAMP (*y, 0, MAX (0, gdk_screen_height () - req.height));
+}
+
+static void
+gtk_entry_do_popup (GtkEntry       *entry,
+                    GdkEventButton *event)
+{
+
+  GtkWidget *menuitem;
+  GtkWidget *submenu;
+  gboolean have_selection;
+
+  if (entry->popup_menu)
+    gtk_widget_destroy (entry->popup_menu);
+  
+  entry->popup_menu = gtk_menu_new ();
+
+  gtk_menu_attach_to_widget (GTK_MENU (entry->popup_menu),
+                             GTK_WIDGET (entry),
+                             popup_menu_detach);
+
+  have_selection = entry->current_pos != entry->selection_bound;
+  
+  append_action_signal (entry, entry->popup_menu, _("Cut"), "cut_clipboard",
+                        have_selection);
+  append_action_signal (entry, entry->popup_menu, _("Copy"), "copy_clipboard",
+                        have_selection);
+  append_action_signal (entry, entry->popup_menu, _("Paste"), "paste_clipboard",
+                        TRUE);
+
+  menuitem = gtk_separator_menu_item_new ();
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
       
-      entry->popup_menu = gtk_menu_new ();
+  menuitem = gtk_menu_item_new_with_label (_("Input Methods"));
+  gtk_widget_show (menuitem);
+  submenu = gtk_menu_new ();
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
 
-      gtk_menu_attach_to_widget (GTK_MENU (entry->popup_menu),
-				 GTK_WIDGET (entry),
-				 popup_menu_detach);
+  gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
+      
+  gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (entry->im_context),
+                                        GTK_MENU_SHELL (submenu));
 
-      append_action_signal (entry, entry->popup_menu, _("Cut"), "cut_clipboard");
-      append_action_signal (entry, entry->popup_menu, _("Copy"), "copy_clipboard");
-      append_action_signal (entry, entry->popup_menu, _("Paste"), "paste_clipboard");
+  gtk_signal_emit (GTK_OBJECT (entry),
+                   signals[POPULATE_POPUP],
+                   entry->popup_menu);
+  
+  if (event)
+    gtk_menu_popup (GTK_MENU (entry->popup_menu), NULL, NULL,
+                    NULL, NULL,
+                    event->button, event->time);
+  else
+    gtk_menu_popup (GTK_MENU (entry->popup_menu), NULL, NULL,
+                    popup_position_func, entry,
+                    0, gtk_get_current_event_time ());
+}
 
-      menuitem = gtk_separator_menu_item_new ();
-      gtk_widget_show (menuitem);
-      gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
-
-      gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (entry->im_context),
-					    GTK_MENU_SHELL (entry->popup_menu));
-    }
-
-  gtk_menu_popup (GTK_MENU (entry->popup_menu), NULL, NULL,
-		  NULL, NULL,
-		  event->button, event->time);
+static void
+gtk_entry_popup_menu (GtkWidget *widget)
+{
+  gtk_entry_do_popup (GTK_ENTRY (widget), NULL);
 }
 
 static void

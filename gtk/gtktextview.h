@@ -30,6 +30,7 @@
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkimcontext.h>
 #include <gtk/gtktextbuffer.h>
+#include <gtk/gtkmenu.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -148,6 +149,13 @@ struct _GtkTextViewClass
 {
   GtkContainerClass parent_class;
 
+  void (* set_scroll_adjustments)   (GtkTextView    *text_view,
+                                     GtkAdjustment  *hadjustment,
+                                     GtkAdjustment  *vadjustment);
+
+  void (* populate_popup)           (GtkTextView    *text_view,
+                                     GtkMenu        *menu);
+  
   /* These are all RUN_ACTION signals for keybindings */
 
   /* move insertion point */
@@ -171,9 +179,6 @@ struct _GtkTextViewClass
   void (* paste_clipboard) (GtkTextView *text_view);
   /* overwrite */
   void (* toggle_overwrite) (GtkTextView *text_view);
-  void (* set_scroll_adjustments)   (GtkTextView    *text_view,
-                                     GtkAdjustment  *hadjustment,
-                                     GtkAdjustment  *vadjustment);
 };
 
 GtkType        gtk_text_view_get_type              (void) G_GNUC_CONST;

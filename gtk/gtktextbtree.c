@@ -959,8 +959,6 @@ _gtk_text_btree_insert (GtkTextIter *iter,
   /* Invalidate all iterators */
   chars_changed (tree);
   segments_changed (tree);
-
-  g_assert (g_utf8_validate (text, len, NULL));
   
   /*
    * Chop the text up into lines and create a new segment for
