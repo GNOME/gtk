@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk2\n"
+"Project-Id-Version: gtk+ 2.2\n"
 "POT-Creation-Date: 2003-05-04 23:02+0100\n"
-"PO-Revision-Date: 2003-06-01 01:25+0100\n"
+"PO-Revision-Date: 2003-06-02 02:01+0100\n"
 "Last-Translator: Dafydd Harries <daf@parnassus.ath.cx>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
 "MIME-Version: 1.0\n"
@@ -1686,13 +1686,16 @@ msgstr "Galluogi saethau wastad"
 msgid "Obsolete property, ignored"
 msgstr "Priodoledd anarferedig y anwybyddir"
 
+# EFALLAI
 #: gtk/gtkcombo.c:157
 msgid "Case sensitive"
-msgstr ""
+msgstr "Gwahaniaethir priflythrennau"
 
+# EFALLAI
 #: gtk/gtkcombo.c:158
 msgid "Whether list item matching is case sensitive"
-msgstr ""
+msgstr "A ydy prif lythrennau yn wahanol i lythrennau bach wrth gyweddu "
+"eitemau rhestr"
 
 #: gtk/gtkcombo.c:165
 msgid "Allow empty"
@@ -2251,13 +2254,16 @@ msgstr "Safle'r ddolen yn berthynol i'r teclyn plentyn"
 # EFALLAI
 #: gtk/gtkhandlebox.c:220
 msgid "Snap edge"
-msgstr "Snapio ymylau"
+msgstr "Ymylon snapio"
 
+# EFALLAI
 #: gtk/gtkhandlebox.c:221
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr ""
+"Ochr y blwch dolen sydd wedi ei cyfateb a'r pwynt docio er mwyn docio'r "
+"blwch dolen"
 
 # EFALLAI
 #: gtk/gtkhandlebox.c:229
@@ -2360,6 +2366,10 @@ msgstr "Teclyn delwedd"
 #: gtk/gtkimagemenuitem.c:125
 msgid "Child widget to appear next to the menu text"
 msgstr "Teclyn plentyn i ymddangos nesaf i destun y dewislen"
+
+#: gtk/gtkimmodule.c:419
+msgid "Default"
+msgstr "Rhagosodiad"
 
 #: gtk/gtkinputdialog.c:230
 msgid "Input"
@@ -2981,9 +2991,10 @@ msgid "Group"
 msgstr "Grŵp"
 
 # TRWSIO
+# EFALLAI
 #: gtk/gtkradiobutton.c:110
 msgid "The radio button whose group this widget belongs."
-msgstr ""
+msgstr "Y botwm radio sydd berchen y grwp mae'r teclyn yma biau ati."
 
 #: gtk/gtkrange.c:275
 msgid "Update policy"
@@ -3002,9 +3013,11 @@ msgstr "Y GtkAdjustment sy'n cynnwys gwerth cyfredol y gwrthrych cyfwng hwn"
 msgid "Inverted"
 msgstr "Gwrthdroi"
 
+# EFALLAI
 #: gtk/gtkrange.c:293
 msgid "Invert direction slider moves to increase range value"
-msgstr ""
+msgstr "Gwrthdroi'r cyfeiriad mae'r llithrwr yn symud er mwyn cynyddu gwerth "
+"y cyfwng"
 
 #: gtk/gtkrange.c:299
 msgid "Slider Width"
@@ -3025,15 +3038,15 @@ msgstr ""
 
 #: gtk/gtkrange.c:315
 msgid "Stepper Size"
-msgstr ""
+msgstr "Maint Camydd"
 
 #: gtk/gtkrange.c:316
 msgid "Length of step buttons at ends"
-msgstr ""
+msgstr "Maint y botymau camu ger yr ymylau"
 
 #: gtk/gtkrange.c:323
 msgid "Stepper Spacing"
-msgstr ""
+msgstr "Bylchu Camydd"
 
 #: gtk/gtkrange.c:324
 msgid "Spacing between step buttons and thumb"
@@ -3041,7 +3054,7 @@ msgstr ""
 
 #: gtk/gtkrange.c:331
 msgid "Arrow X Displacement"
-msgstr ""
+msgstr "Dadleoliad X y Saeth"
 
 #: gtk/gtkrange.c:332
 msgid ""
@@ -3051,7 +3064,7 @@ msgstr ""
 
 #: gtk/gtkrange.c:339
 msgid "Arrow Y Displacement"
-msgstr ""
+msgstr "Dadleoliad Y y Saeth"
 
 #: gtk/gtkrange.c:340
 msgid ""
@@ -3135,9 +3148,10 @@ msgstr "Y safle lle dangosir y gwerth cyfredol"
 msgid "Slider Length"
 msgstr "Hyd y Llithrwr"
 
+# EFALLAI
 #: gtk/gtkscale.c:183
 msgid "Length of scale's slider"
-msgstr ""
+msgstr "Hyd llithrwr y graddfa"
 
 #: gtk/gtkscale.c:191
 msgid "Value spacing"
@@ -3161,11 +3175,11 @@ msgstr "Maint llithrwr gosodedig"
 
 #: gtk/gtkscrollbar.c:90
 msgid "Don't change slider size, just lock it to the minimum length"
-msgstr ""
+msgstr "Peidio newid maint y llithrwr ond ei gloi at y hyd lleiaf"
 
 #: gtk/gtkscrollbar.c:97
 msgid "Backward stepper"
-msgstr ""
+msgstr "Camydd tuag yn ôl"
 
 #: gtk/gtkscrollbar.c:98
 msgid "Display the standard backward arrow button"
@@ -3173,7 +3187,7 @@ msgstr "Dangos y saeth tuag yn ôl safonol"
 
 #: gtk/gtkscrollbar.c:105
 msgid "Forward stepper"
-msgstr ""
+msgstr "Camydd tuag ymalen"
 
 #: gtk/gtkscrollbar.c:106
 msgid "Display the standard forward arrow button"
@@ -3181,7 +3195,7 @@ msgstr "Dangod y saeth tuag ymlaen safonol"
 
 #: gtk/gtkscrollbar.c:113
 msgid "Secondary backward stepper"
-msgstr ""
+msgstr "Camydd tuag yn ôl eilaidd"
 
 #: gtk/gtkscrollbar.c:114
 msgid ""
@@ -3190,12 +3204,13 @@ msgstr ""
 
 #: gtk/gtkscrollbar.c:121
 msgid "Secondary forward stepper"
-msgstr ""
+msgstr "Camydd tuag ymalen eilaidd"
 
 #: gtk/gtkscrollbar.c:122
 msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
+"Dangod botwm tuag ymlaen eilaidd ar ochr cyferbyn y bar sgrolio"
 
 #: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:527
 msgid "Horizontal Adjustment"
@@ -3236,7 +3251,7 @@ msgstr "Math Cysgod"
 
 #: gtk/gtkscrolledwindow.c:275
 msgid "Style of bevel around the contents"
-msgstr ""
+msgstr "Arddull y befel o amgylch y cynnwys"
 
 #: gtk/gtkscrolledwindow.c:282
 msgid "Scrollbar spacing"
@@ -3298,11 +3313,12 @@ msgstr "Enw'r ffeil RC thema i'w lwytho"
 
 #: gtk/gtksettings.c:208
 msgid "Key Theme Name"
-msgstr ""
+msgstr "Enw'r Thema Allweddol"
 
+# EFALLAI
 #: gtk/gtksettings.c:209
 msgid "Name of key theme RC file to load"
-msgstr ""
+msgstr "Enw ffeil RC thema allweddol i'w lwytho"
 
 #: gtk/gtksettings.c:217
 msgid "Menu bar accelerator"
@@ -3341,31 +3357,35 @@ msgstr "Rhestr meintiau eiconau (gtk-menu=16,16;gtk-button=20,20..."
 msgid "Mode"
 msgstr "Modd"
 
+# EFALLAI
 #: gtk/gtksizegroup.c:242
 msgid ""
 "The directions in which the size group effects the requested sizes of its "
 "component widgets"
 msgstr ""
+"Y cyfeiriad mae'r grŵp maint yn effeithio ar ofynnion maint ei declynnau "
+"cyfansawdd"
 
 #: gtk/gtkspinbutton.c:241
 msgid "The adjustment that holds the value of the spinbutton"
-msgstr ""
+msgstr "Yr addasydd sy'n dal gwerth y botwm troelli"
 
 #: gtk/gtkspinbutton.c:248
 msgid "Climb Rate"
-msgstr ""
+msgstr "Cyfradd Dringo"
 
 #: gtk/gtkspinbutton.c:249
 msgid "The acceleration rate when you hold down a button"
-msgstr ""
+msgstr "Y cyfradd cyflymnu pan rydych yn dal botwm i lawr"
 
 #: gtk/gtkspinbutton.c:259
 msgid "The number of decimal places to display"
 msgstr "Y nifer o lefydd degol i'w dangos"
 
+# EFALLAI
 #: gtk/gtkspinbutton.c:268
 msgid "Snap to Ticks"
-msgstr ""
+msgstr "Snapio at Diciau"
 
 #: gtk/gtkspinbutton.c:269
 msgid ""
@@ -3397,6 +3417,8 @@ msgstr "Polisi Diwddaru"
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
+"A ddylai'r botwm troelli ddiweddaru wastad, neu dim ond pan mae'r gwerth "
+"yn ddilys"
 
 #: gtk/gtkspinbutton.c:301
 msgid "Value"
@@ -3408,7 +3430,7 @@ msgstr "Darllen y gwerth cyfredol, neu osod gwerth newydd"
 
 #: gtk/gtkstatusbar.c:162
 msgid "Style of bevel around the statusbar text"
-msgstr ""
+msgstr "Arddull y befel o amgylch testun y bar statws"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:267
@@ -3729,29 +3751,29 @@ msgstr "Os TRUE mae hyn yn golygu fod celloedd y tabl oll yr un lled/ucher"
 # EFALLAI
 #: gtk/gtktable.c:202
 msgid "Left attachment"
-msgstr "Cysylltiad chwith"
+msgstr "Clymiad chwith"
 
 #: gtk/gtktable.c:203
 msgid "The column number to attach the left side of the child to"
-msgstr ""
+msgstr "Rhif y golofn i glymu ochr chwith y plentyn iddi"
 
 # EFALLAI
 #: gtk/gtktable.c:209
 msgid "Right attachment"
-msgstr "Cysylltiad de"
+msgstr "Clymiad de"
 
 #: gtk/gtktable.c:210
 msgid "the column number to attach the right side of a child widget to"
-msgstr ""
+msgstr "Rhif y golofn i glymu ochr de y plentyn iddi"
 
 # EFALLAI
 #: gtk/gtktable.c:216
 msgid "Top attachment"
-msgstr "Cysylltiad brig"
+msgstr "Clwm brig"
 
 #: gtk/gtktable.c:217
 msgid "The row number to attach the top of a child widget to"
-msgstr ""
+msgstr "Rhif y rhes i glymu brig y plentyn iddi"
 
 # EFALLAI
 #: gtk/gtktable.c:223
@@ -3760,7 +3782,7 @@ msgstr "Cysylltiad gwaelod"
 
 #: gtk/gtktable.c:224
 msgid "The row number to attach the bottom of the child to"
-msgstr ""
+msgstr "Rhif y rhes i glymu gwaelod y plentyn iddi"
 
 #: gtk/gtktable.c:230
 msgid "Horizontal options"
@@ -3768,7 +3790,7 @@ msgstr "Opsiynnau llorweddol"
 
 #: gtk/gtktable.c:231
 msgid "Options specifying the horizontal behaviour of the child"
-msgstr ""
+msgstr "Opsiynnau yn penodi ymddygiad llorweddol y plentyn"
 
 #: gtk/gtktable.c:237
 msgid "Vertical options"
@@ -3776,7 +3798,7 @@ msgstr "Opsiynnau fertigol"
 
 #: gtk/gtktable.c:238
 msgid "Options specifying the vertical behaviour of the child"
-msgstr ""
+msgstr "Opsiynnau ym penodi ymddygiad fertigol y plentyn"
 
 #: gtk/gtktable.c:244
 msgid "Horizontal padding"
@@ -3787,6 +3809,8 @@ msgid ""
 "Extra space to put between the child and its left and right neighbors, in "
 "pixels"
 msgstr ""
+"Lle ychwannegol i'w roi rhwng y plentyn a'i gymdogion i'r chwith ac i'r "
+"dde, mewn picseli"
 
 #: gtk/gtktable.c:251
 msgid "Vertical padding"
@@ -3797,14 +3821,16 @@ msgid ""
 "Extra space to put between the child and its upper and lower neighbors, in "
 "pixels"
 msgstr ""
+"Lle ychwannegol i'w roi rhwng y plentyn a'i gymdogion uwchben ac islaw, "
+"mewn picseli"
 
 #: gtk/gtktext.c:602
 msgid "Horizontal adjustment for the text widget"
-msgstr ""
+msgstr "Yr addasydd llorweddol ar gyfer y teclyn testun"
 
 #: gtk/gtktext.c:610
 msgid "Vertical adjustment for the text widget"
-msgstr ""
+msgstr "Yr addasydd fertigol ar gyfer y teclyn testun"
 
 #: gtk/gtktext.c:617
 msgid "Line Wrap"
@@ -3845,7 +3871,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:221
 msgid "Background full height"
-msgstr ""
+msgstr "Cefndir uchder llawn"
 
 #: gtk/gtktexttag.c:222
 msgid ""
@@ -3877,17 +3903,18 @@ msgstr ""
 msgid "Text direction"
 msgstr "Cyfeiriad y testun"
 
+# TRWSIO
 #: gtk/gtktexttag.c:265
 msgid "Text direction, e.g. right-to-left or left-to-right"
-msgstr ""
+msgstr "Cyfeiriad y testun, h.y. de-i'r-chwith neu chwit-i'r-de"
 
 #: gtk/gtktexttag.c:282
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr ""
+msgstr "Disgrifiad ffont fel llinyn, e.e. \"Sans Italic 12\""
 
 #: gtk/gtktexttag.c:307
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
-msgstr ""
+msgstr "Arddull ffont fel PangoStyle, e.e. PANGO_STYLE_ITALIC"
 
 #: gtk/gtktexttag.c:316
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
@@ -3957,7 +3984,8 @@ msgstr "Faint i fewnoli'r parafraff, mewn picseli"
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in pixels"
-msgstr ""
+msgstr "Atred y testun uwchben y llinell sail (islaw y llinell sail os "
+"mae'r esgyniad yn negyddol)"
 
 #: gtk/gtktexttag.c:433
 msgid "Pixels above lines"
@@ -3965,7 +3993,7 @@ msgstr "Picseli uwchben llinellau"
 
 #: gtk/gtktexttag.c:434 gtk/gtktextview.c:541
 msgid "Pixels of blank space above paragraphs"
-msgstr ""
+msgstr "Picseli o le gwag uwchben paragraffau"
 
 #: gtk/gtktexttag.c:443
 msgid "Pixels below lines"
@@ -3973,7 +4001,7 @@ msgstr "Picseli islaw llinellau"
 
 #: gtk/gtktexttag.c:444 gtk/gtktextview.c:551
 msgid "Pixels of blank space below paragraphs"
-msgstr ""
+msgstr "Picseli o le gwag islaw paragraffau"
 
 #: gtk/gtktexttag.c:453
 msgid "Pixels inside wrap"
@@ -3981,7 +4009,7 @@ msgstr "Picseli o fewn amlap"
 
 #: gtk/gtktexttag.c:454 gtk/gtktextview.c:561
 msgid "Pixels of blank space between wrapped lines in a paragraph"
-msgstr ""
+msgstr "Picseli o le gwag rhwng llinellau wedi eu amlapio o fewn paragraff"
 
 #: gtk/gtktexttag.c:480
 msgid "Wrap mode"
@@ -3991,6 +4019,8 @@ msgstr "Modd amlapio"
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
+"A ddylid amlapio llneallau erioed, ger ffiniau geiriau, neu ger ffiniau "
+"nodau"
 
 #: gtk/gtktexttag.c:490 gtk/gtktextview.c:626
 msgid "Tabs"
@@ -4006,7 +4036,7 @@ msgstr "Anweladwy"
 
 #: gtk/gtktexttag.c:499
 msgid "Whether this text is hidden. Not implemented in GTK 2.0"
-msgstr ""
+msgstr "A ydy'r testun yma wedi ei guddio. Ni gynhelir yn GTK 2.0"
 
 #: gtk/gtktexttag.c:512
 msgid "Background full height set"
@@ -4014,7 +4044,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:513
 msgid "Whether this tag affects background height"
-msgstr ""
+msgstr "A ydy'r tag hwn yn affeithio ar uchder y cefndir"
 
 #: gtk/gtktexttag.c:516
 msgid "Background stipple set"
@@ -4034,19 +4064,20 @@ msgstr ""
 
 #: gtk/gtktexttag.c:560
 msgid "Justification set"
-msgstr ""
+msgstr "Gosod unioniad"
 
 #: gtk/gtktexttag.c:561
 msgid "Whether this tag affects paragraph justification"
-msgstr ""
+msgstr "A ydy'r tag hwn yn affeithio unioniad paragraffau"
 
 #: gtk/gtktexttag.c:564
 msgid "Language set"
-msgstr ""
+msgstr "Gosod iaith"
 
+# EFALLAI
 #: gtk/gtktexttag.c:565
 msgid "Whether this tag affects the language the text is rendered as"
-msgstr ""
+msgstr "A ydy'r tag hwn yn affiethio iaith fe lunir y testun yma fel"
 
 #: gtk/gtktexttag.c:568
 msgid "Left margin set"
@@ -4058,31 +4089,32 @@ msgstr ""
 
 #: gtk/gtktexttag.c:572
 msgid "Indent set"
-msgstr ""
+msgstr "Gosod mewnloiad"
 
 #: gtk/gtktexttag.c:573
 msgid "Whether this tag affects indentation"
-msgstr ""
+msgstr "A ydy'r tag hwn yn effeithio ar fewnoliad"
 
 #: gtk/gtktexttag.c:580
 msgid "Pixels above lines set"
-msgstr ""
+msgstr "Gosod picseli uwchben llinellau"
 
 #: gtk/gtktexttag.c:581 gtk/gtktexttag.c:585
 msgid "Whether this tag affects the number of pixels above lines"
-msgstr ""
+msgstr "A ydy'r tag hwn yn effeithio ar y nifer o bicseli uwchben llinellau"
 
 #: gtk/gtktexttag.c:584
 msgid "Pixels below lines set"
-msgstr ""
+msgstr "Gosod picseli islaw llinellau"
 
 #: gtk/gtktexttag.c:588
 msgid "Pixels inside wrap set"
-msgstr ""
+msgstr "Gosod picseli o fewn amlap"
 
 #: gtk/gtktexttag.c:589
 msgid "Whether this tag affects the number of pixels between wrapped lines"
-msgstr ""
+msgstr "A ydy'r tag hwn yn affeithio ar y nifer o bicseli rhwng llinellau "
+"wedi'i amlapio"
 
 #: gtk/gtktexttag.c:596
 msgid "Right margin set"
@@ -4094,11 +4126,11 @@ msgstr ""
 
 #: gtk/gtktexttag.c:604
 msgid "Wrap mode set"
-msgstr ""
+msgstr "Gosod modd amlapio"
 
 #: gtk/gtktexttag.c:605
 msgid "Whether this tag affects line wrap mode"
-msgstr ""
+msgstr "A ydy'r tag hwn yn affeithio ar y modd amlapio llinellau"
 
 #: gtk/gtktexttag.c:608
 msgid "Tabs set"
@@ -4110,11 +4142,11 @@ msgstr "A ydy'r tag yma'n affeithio tabiau"
 
 #: gtk/gtktexttag.c:612
 msgid "Invisible set"
-msgstr ""
+msgstr "Gosod gwelededd"
 
 #: gtk/gtktexttag.c:613
 msgid "Whether this tag affects text visibility"
-msgstr ""
+msgstr "A ydy'r tag hwn yn affeithio ar welededd y testun"
 
 #: gtk/gtktextutil.c:46
 msgid "LRM _Left-to-right mark"
@@ -4186,7 +4218,7 @@ msgstr "Cyrchydd Gweladwy"
 
 #: gtk/gtktextview.c:635
 msgid "If the insertion cursor is shown"
-msgstr ""
+msgstr "Dagngos y cyrchydd mewnosod"
 
 #: gtk/gtktextview.c:6534
 msgid "Input _Methods"
@@ -4230,23 +4262,23 @@ msgstr "Sut i arlunio'r bar offer"
 
 #: gtk/gtktoolbar.c:249
 msgid "Spacer size"
-msgstr ""
+msgstr "Maint bylchydd"
 
 #: gtk/gtktoolbar.c:250
 msgid "Size of spacers"
-msgstr ""
+msgstr "Maint y bylchwyr"
 
 #: gtk/gtktoolbar.c:259
 msgid "Amount of border space between the toolbar shadow and the buttons"
-msgstr ""
+msgstr "Faint o le border rhwng cysgod y bar offer a'r botymau"
 
 #: gtk/gtktoolbar.c:267
 msgid "Space style"
-msgstr ""
+msgstr "Arddull bylchu"
 
 #: gtk/gtktoolbar.c:268
 msgid "Whether spacers are vertical lines or just blank"
-msgstr ""
+msgstr "A ydy bylchwyr yn linellau fertigon neu'n wag"
 
 #: gtk/gtktoolbar.c:276
 msgid "Button relief"
@@ -4268,6 +4300,8 @@ msgstr "Arddull bar offer"
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
+"A oes gan fariau offer rhagosodedig destun yn uynig, testun ac eiconau, "
+"eiconau'n unig, a.y.y.b."
 
 #: gtk/gtktoolbar.c:298
 msgid "Toolbar icon size"
@@ -4275,7 +4309,7 @@ msgstr "Maint eiconau bar offer"
 
 #: gtk/gtktoolbar.c:299
 msgid "Size of icons in default toolbars"
-msgstr ""
+msgstr "<aomt eiconau mewn bariau offer rhagosodedig"
 
 #: gtk/gtktreemodelsort.c:306
 msgid "TreeModelSort Model"
@@ -4289,17 +4323,20 @@ msgstr ""
 msgid "TreeView Model"
 msgstr ""
 
+# EFALLAI (golwg?)
 #: gtk/gtktreeview.c:520
 msgid "The model for the tree view"
-msgstr ""
+msgstr "Y model ar gyfer y golwg coeden"
 
+# EFALLAI
 #: gtk/gtktreeview.c:528
 msgid "Horizontal Adjustment for the widget"
-msgstr ""
+msgstr "Addasydd Llorweddol ar gyfer y teclyn"
 
+# EFALLAI
 #: gtk/gtktreeview.c:536
 msgid "Vertical Adjustment for the widget"
-msgstr ""
+msgstr "Addasydd Llorweddol ar gyfer y teclyn"
 
 #: gtk/gtktreeview.c:543 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:433
 msgid "Visible"
@@ -4307,11 +4344,11 @@ msgstr "Gweladwy"
 
 #: gtk/gtktreeview.c:544
 msgid "Show the column header buttons"
-msgstr ""
+msgstr "Dangod botymau pennawd colofnau"
 
 #: gtk/gtktreeview.c:551
 msgid "Headers Clickable"
-msgstr ""
+msgstr "Pennawdau Gellir Eu Clicio"
 
 #: gtk/gtktreeview.c:552
 msgid "Column headers respond to click events"
@@ -4319,27 +4356,31 @@ msgstr ""
 
 #: gtk/gtktreeview.c:559
 msgid "Expander Column"
-msgstr ""
+msgstr "Colofn Ehangu"
 
 #: gtk/gtktreeview.c:560
 msgid "Set the column for the expander column"
-msgstr ""
+msgstr "Gosod y colofn ar gyfer y colofn ehangu"
 
 #: gtk/gtktreeview.c:567 gtk/gtktreeviewcolumn.c:284
 msgid "Reorderable"
 msgstr "Gellir Aildrefnu"
 
+# EFALLAI (golwg?)
 #: gtk/gtktreeview.c:568
 msgid "View is reorderable"
-msgstr ""
+msgstr "Gellir aildrefnu'r golwg"
 
+# EFALLAI
 #: gtk/gtktreeview.c:575
 msgid "Rules Hint"
-msgstr ""
+msgstr "Awgrym Rheolau"
 
+# EFALLAI
 #: gtk/gtktreeview.c:576
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
-msgstr ""
+msgstr "Gosod awgrym i'r peiriant thema er mwyn arlunio rhesi mewn lliw "
+"gwahanol bob yn ail"
 
 #: gtk/gtktreeview.c:583
 msgid "Enable Search"
@@ -4363,27 +4404,28 @@ msgstr "Maint yr Ehangwr"
 
 #: gtk/gtktreeview.c:606
 msgid "Size of the expander arrow"
-msgstr ""
+msgstr "Maint y saeth ehangu"
 
 #: gtk/gtktreeview.c:614
 msgid "Vertical Separator Width"
-msgstr ""
+msgstr "Maint Gwahanydd Fertigol"
 
 #: gtk/gtktreeview.c:615
 msgid "Vertical space between cells.  Must be an even number"
-msgstr ""
+msgstr "Gofod fertigol rhwng celloedd. Rhaid ei fod yn rhif eilaidd."
 
 #: gtk/gtktreeview.c:623
 msgid "Horizontal Separator Width"
-msgstr ""
+msgstr "Lled Gwahanydd Llorweddol"
 
 #: gtk/gtktreeview.c:624
 msgid "Horizontal space between cells.  Must be an even number"
-msgstr ""
+msgstr "Gofod llorweddol rhwng celloed. Rhaid ei fod yn rhif eilaidd."
 
+# EFALLAI
 #: gtk/gtktreeview.c:632
 msgid "Allow Rules"
-msgstr ""
+msgstr "Caniatau Rheolau"
 
 #: gtk/gtktreeview.c:633
 msgid "Allow drawing of alternating color rows"
@@ -4391,51 +4433,55 @@ msgstr ""
 
 #: gtk/gtktreeview.c:639
 msgid "Indent Expanders"
-msgstr ""
+msgstr "Mewnoli Ehangwyr"
 
 #: gtk/gtktreeview.c:640
 msgid "Make the expanders indented"
-msgstr ""
+msgstr "Mewnoli ehangwyr"
 
 #: gtk/gtktreeview.c:646
 msgid "Even Row Color"
-msgstr ""
+msgstr "Lliw Rhesi Eilrifol"
 
 #: gtk/gtktreeview.c:647
 msgid "Color to use for even rows"
-msgstr ""
+msgstr "Y lliw i'w ddefnyddio ar gyfer rhesi eilrifol"
 
 #: gtk/gtktreeview.c:653
 msgid "Odd Row Color"
-msgstr ""
+msgstr "Lliw Rhesi Odrifol"
 
 #: gtk/gtktreeview.c:654
 msgid "Color to use for odd rows"
-msgstr ""
+msgstr "Y lliw i'w ddefnyddio ar gyfer rhesi odrifol"
 
 #: gtk/gtktreeviewcolumn.c:186
 msgid "Whether to display the column"
 msgstr "A ddylid dangos y colofn"
 
+# EFALLAI
 #: gtk/gtktreeviewcolumn.c:193 gtk/gtkwindow.c:491
 msgid "Resizable"
-msgstr ""
+msgstr "Ailfeintadwy"
 
+# EFALLAI
 #: gtk/gtktreeviewcolumn.c:194
 msgid "Column is user-resizable"
-msgstr ""
+msgstr "Gall y defnyddiwr ailfeintio'r golofn"
 
 #: gtk/gtktreeviewcolumn.c:202
 msgid "Current width of the column"
 msgstr "Lled cyfredol y colofn"
 
+# EFALLAI
 #: gtk/gtktreeviewcolumn.c:210
 msgid "Sizing"
-msgstr ""
+msgstr "Meintio"
 
+# EFALLAI
 #: gtk/gtktreeviewcolumn.c:211
 msgid "Resize mode of the column"
-msgstr ""
+msgstr "Modd ailfeintio'r golofn"
 
 #: gtk/gtktreeviewcolumn.c:219
 msgid "Fixed Width"
@@ -4485,7 +4531,7 @@ msgstr "Teclyn"
 
 #: gtk/gtktreeviewcolumn.c:267
 msgid "Widget to put in column header button instead of column title"
-msgstr ""
+msgstr "Y teclyn i'w roi ym motwm pennawd y colofn yn lle teitl y golofn"
 
 #: gtk/gtktreeviewcolumn.c:274
 msgid "Alignment"
@@ -4493,7 +4539,7 @@ msgstr "Cyfuniad"
 
 #: gtk/gtktreeviewcolumn.c:275
 msgid "X Alignment of the column header text or widget"
-msgstr ""
+msgstr "Cyfuniad X teclyn neu destun pennawd y golofn"
 
 #: gtk/gtktreeviewcolumn.c:285
 msgid "Whether the column can be reordered around the headers"
@@ -4501,19 +4547,20 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:292
 msgid "Sort indicator"
-msgstr ""
+msgstr "Dangosydd trefnu"
 
 #: gtk/gtktreeviewcolumn.c:293
 msgid "Whether to show a sort indicator"
-msgstr ""
+msgstr "A ddylid dangos dangosydd trefnu"
 
+# EFALLAI
 #: gtk/gtktreeviewcolumn.c:300
 msgid "Sort order"
-msgstr ""
+msgstr "Cyfeiriad trefnu"
 
 #: gtk/gtktreeviewcolumn.c:301
 msgid "Sort direction the sort indicator should indicate"
-msgstr ""
+msgstr "Y cyfeiriad trefnu dylai'r dangosydd trefnu ddangos"
 
 #: gtk/gtkviewport.c:135
 msgid ""
