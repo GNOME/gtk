@@ -301,7 +301,7 @@ void
 gtk_text_buffer_init (GtkTextBuffer *buffer)
 {
   buffer->clipboard_contents = NULL;
-  buffer->clipboard_display = DEFAULT_GDK_DISPLAY;
+  buffer->clipboard_display = gdk_get_default_display();
 }
 
 /**

@@ -570,7 +570,7 @@ GList *
 gdk_window_get_toplevels (void)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_window_get_toplevels_for_screen instead\n"));
-  return gdk_window_get_toplevels_for_screen(DEFAULT_GDK_SCREEN);
+  return gdk_window_get_toplevels_for_screen(gdk_get_default_screen());
 }
 
 /*************************************************************

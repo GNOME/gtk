@@ -125,7 +125,7 @@ gchar *
 gdk_wcstombs (const GdkWChar *src)
 {
   gchar *mbstr;
-  GdkDisplay *display = DEFAULT_GDK_DISPLAY;
+  GdkDisplay *display = gdk_get_default_display();
   GDK_NOTE(MULTIHEAD, g_message("Don't use gdk_wcstombs for multihead\n"));
 
   if (gdk_use_mb) {
@@ -186,7 +186,7 @@ gdk_wcstombs (const GdkWChar *src)
 gint
 gdk_mbstowcs (GdkWChar *dest, const gchar *src, gint dest_max)
 {
-  GdkDisplay *display = DEFAULT_GDK_DISPLAY;
+  GdkDisplay *display = gdk_get_default_display();
   GDK_NOTE(MULTIHEAD,g_message("Don't use gdk_mbstowcs for multihead\n"));
   if (gdk_use_mb) {
     XTextProperty tpr;

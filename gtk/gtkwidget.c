@@ -1288,7 +1288,7 @@ gtk_widget_init (GtkWidget *widget)
   widget->allocation.height = 1;
   widget->window = NULL;
   widget->parent = NULL;
-  widget->screen = DEFAULT_GDK_SCREEN;
+  widget->screen = gdk_get_default_screen();
   GTK_WIDGET_SET_FLAGS (widget,
 			GTK_SENSITIVE |
 			GTK_PARENT_SENSITIVE |
@@ -3931,7 +3931,7 @@ gtk_widget_get_default_style (void)
 {
   GTK_NOTE(MULTIHEAD, 
 	   g_message("Use gtk_widget_get_default_style_for_display instead\n"));
-  return gtk_widget_get_default_style_for_display(DEFAULT_GDK_DISPLAY);
+  return gtk_widget_get_default_style_for_display(gdk_get_default_display());
 }
 
 void
@@ -4872,7 +4872,7 @@ gtk_widget_get_default_colormap (void)
 {
   GTK_NOTE (MISC,
 	    g_message("don't use for multihead !!")); 
-  return gdk_screen_get_default_colormap(DEFAULT_GDK_SCREEN);
+  return gdk_screen_get_default_colormap(gdk_get_default_screen());
 }
 
 /**

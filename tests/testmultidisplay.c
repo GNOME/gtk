@@ -50,7 +50,7 @@ void make_selection_dialog(GdkScreen *screen,
   
   if(!screen)
      screen = gdk_display_get_default_screen(
-		    gdk_display_manager_get_default(dpy_mgr));
+	       gdk_display_manager_get_default(gdk_get_display_manager ()));
   
   window = g_object_connect (gtk_widget_new (gtk_window_get_type (),
 					     "screen", screen,

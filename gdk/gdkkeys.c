@@ -102,7 +102,7 @@ gdk_keymap_get_default (void)
   static GdkKeymap *keymap = NULL;
 
   if (keymap == NULL)
-    keymap = gdk_keymap_new(DEFAULT_GDK_DISPLAY);
+    keymap = gdk_keymap_new(gdk_get_default_display());
 
   return keymap;
 }

@@ -129,10 +129,10 @@ _gdk_windowing_init_check_for_display (int argc, char **argv, char *display_name
   XSetErrorHandler (gdk_x_error);
   XSetIOErrorHandler (gdk_x_io_error);
 
-  if (!dpy_mgr) {
-    dpy_mgr = g_object_new (gdk_display_manager_type (), NULL);
+  if (!gdk_display_manager) {
+    gdk_display_manager = g_object_new (gdk_display_manager_type (), NULL);
   }
-  display = GDK_DISPLAY_MGR_GET_CLASS (dpy_mgr)->open_display (dpy_mgr, display_name);
+  display = GDK_DISPLAY_MGR_GET_CLASS (gdk_display_manager)->open_display (gdk_display_manager, display_name);
   if(!display)
     return NULL;
   dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
@@ -262,14 +262,14 @@ void
 gdk_set_use_xshm (gboolean use_xshm)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_use_xshm_set instead\n"));
-  gdk_display_use_xshm_set (DEFAULT_GDK_DISPLAY,use_xshm);
+  gdk_display_use_xshm_set (gdk_get_default_display(),use_xshm);
 }
 
 gboolean
 gdk_get_use_xshm (void)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_use_xshm_get instead\n"));
-  return gdk_display_use_xshm_get (DEFAULT_GDK_DISPLAY);
+  return gdk_display_use_xshm_get (gdk_get_default_display());
 }
 
 static GdkGrabStatus
@@ -406,7 +406,7 @@ void
 gdk_pointer_ungrab (guint32 time)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_pointer_ungrab instead\n"));
-  gdk_display_pointer_ungrab (DEFAULT_GDK_DISPLAY,time);
+  gdk_display_pointer_ungrab (gdk_get_default_display(),time);
 }
 
 /*
@@ -428,7 +428,7 @@ gboolean
 gdk_pointer_is_grabbed (void)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_is_pointer_grabbed instead\n"));
-  return gdk_display_is_pointer_grabbed (DEFAULT_GDK_DISPLAY);
+  return gdk_display_is_pointer_grabbed (gdk_get_default_display());
 }
 
 
@@ -495,7 +495,7 @@ void
 gdk_keyboard_ungrab (guint32 time)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_keyboard_ungrab instead\n"));	 
-  gdk_display_keyboard_ungrab (DEFAULT_GDK_DISPLAY,time);
+  gdk_display_keyboard_ungrab (gdk_get_default_display(),time);
 }
 
 /*
@@ -517,7 +517,7 @@ gint
 gdk_screen_width (void)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_screen_get_width instead\n"));  
-  return gdk_screen_get_width (DEFAULT_GDK_SCREEN);
+  return gdk_screen_get_width (gdk_get_default_screen());
 }
 
 /*
@@ -539,7 +539,7 @@ gint
 gdk_screen_height (void)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_screen_get_height instead\n"));
-  return gdk_screen_get_height (DEFAULT_GDK_SCREEN);
+  return gdk_screen_get_height (gdk_get_default_screen());
 }
 
 
@@ -563,7 +563,7 @@ gint
 gdk_screen_width_mm (void)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_screen_get_width_mm instead\n"));
-  return gdk_screen_get_width_mm (DEFAULT_GDK_SCREEN);
+  return gdk_screen_get_width_mm (gdk_get_default_screen());
 }
 
 /*
@@ -585,7 +585,7 @@ gint
 gdk_screen_height_mm (void)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_screen_get_height_mm instead\n"));
-  return gdk_screen_get_height_mm(DEFAULT_GDK_SCREEN);
+  return gdk_screen_get_height_mm(gdk_get_default_screen());
 }
 
 /*
@@ -614,7 +614,7 @@ void
 gdk_set_sm_client_id (const gchar* sm_client_id)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_set_sm_client_id_for_screen instead\n"));
-  gdk_set_sm_client_id_for_screen(DEFAULT_GDK_SCREEN,sm_client_id);
+  gdk_set_sm_client_id_for_screen(gdk_get_default_screen(),sm_client_id);
 }
 
 void
@@ -659,14 +659,14 @@ void
 gdk_key_repeat_disable (void)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_key_repeat_disable_for_display instead\n"));
-  gdk_key_repeat_disable_for_display (DEFAULT_GDK_DISPLAY);
+  gdk_key_repeat_disable_for_display (gdk_get_default_display());
 }
 
 void
 gdk_key_repeat_restore (void)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_key_repeat_restore_for_display instead\n"));	
-  gdk_key_repeat_restore_for_display(DEFAULT_GDK_DISPLAY);
+  gdk_key_repeat_restore_for_display(gdk_get_default_display());
 }
 
 */
@@ -676,7 +676,7 @@ void
 gdk_beep (void)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_beep instead\n"));
-  gdk_display_beep (DEFAULT_GDK_DISPLAY);
+  gdk_display_beep (gdk_get_default_display());
 }
 
 /* close all open display */
@@ -684,7 +684,7 @@ gdk_beep (void)
 void
 gdk_windowing_exit (void)
 {
-  GSList * tmp = dpy_mgr->open_displays;
+  GSList * tmp = gdk_display_manager->open_displays;
     
   while(tmp != NULL){
 	  pango_x_shutdown_display(GDK_DISPLAY_XDISPLAY(tmp->data));
@@ -814,7 +814,7 @@ gchar *
 gdk_get_display (void)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_x11_display_impl_get_display_name instead\n"));
-  return gdk_x11_display_impl_get_display_name(DEFAULT_GDK_DISPLAY);
+  return gdk_x11_display_impl_get_display_name(gdk_get_default_display());
 }
 
 gchar *

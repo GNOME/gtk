@@ -265,7 +265,7 @@ gdk_visual_get_best_depth (void)
 {
   GDK_NOTE(MULTIHEAD,
 	   g_message("Use gdk_visual_get_best_depth_for_screen instead\n"));
-  return gdk_visual_get_best_depth_for_screen(DEFAULT_GDK_SCREEN);
+  return gdk_visual_get_best_depth_for_screen(gdk_get_default_screen());
 }
 GdkVisualType
 gdk_visual_get_best_type_for_screen (GdkScreen * scr)
@@ -277,7 +277,7 @@ gdk_visual_get_best_type (void)
 {
   GDK_NOTE(MULTIHEAD,
 	   g_message("Use gdk_visual_get_best_type_for_screen instead\n"));
-  return gdk_visual_get_best_type_for_screen(DEFAULT_GDK_SCREEN);
+  return gdk_visual_get_best_type_for_screen(gdk_get_default_screen());
 }
 GdkVisual *
 gdk_visual_get_system_for_screen (GdkScreen * scr)
@@ -289,7 +289,7 @@ gdk_visual_get_system (void)
 {
   GDK_NOTE(MULTIHEAD,
 	   g_message("Use gdk_visual_get_system_for_screen instead\n"));
-  return gdk_visual_get_system_for_screen(DEFAULT_GDK_SCREEN);
+  return gdk_visual_get_system_for_screen(gdk_get_default_screen());
 }
 GdkVisual *
 gdk_visual_get_best_for_screen (GdkScreen * scr)
@@ -299,7 +299,7 @@ gdk_visual_get_best_for_screen (GdkScreen * scr)
 GdkVisual*
 gdk_visual_get_best (void)
 {
-  return gdk_visual_get_best_for_screen(DEFAULT_GDK_SCREEN);
+  return gdk_visual_get_best_for_screen(gdk_get_default_screen());
 }
 GdkVisual *
 gdk_visual_get_best_with_depth_for_screen (GdkScreen * scr, gint depth)
@@ -320,7 +320,7 @@ gdk_visual_get_best_with_depth_for_screen (GdkScreen * scr, gint depth)
 GdkVisual*
 gdk_visual_get_best_with_depth (gint depth)
 {
-  return gdk_visual_get_best_with_depth_for_screen(DEFAULT_GDK_SCREEN, depth);
+  return gdk_visual_get_best_with_depth_for_screen(gdk_get_default_screen(), depth);
 }
 GdkVisual *
 gdk_visual_get_best_with_type_for_screen (GdkScreen * scr,
@@ -345,7 +345,7 @@ gdk_visual_get_best_with_type (GdkVisualType visual_type)
 {
   GDK_NOTE(MULTIHEAD,
 	   g_message("Use gdk_visual_get_best_with_type_for_screen instead\n"));	
-  return gdk_visual_get_best_with_type_for_screen(DEFAULT_GDK_SCREEN, visual_type);
+  return gdk_visual_get_best_with_type_for_screen(gdk_get_default_screen(), visual_type);
 }
 GdkVisual *
 gdk_visual_get_best_with_both_for_screen (GdkScreen * scr,
@@ -373,7 +373,7 @@ gdk_visual_get_best_with_both (gint          depth,
 {
   GDK_NOTE(MULTIHEAD,
 	   g_message("Use gdk_visual_get_best_with_both_for_screen instead\n"));	
-  return gdk_visual_get_best_with_both_for_screen(DEFAULT_GDK_SCREEN,
+  return gdk_visual_get_best_with_both_for_screen(gdk_get_default_screen(),
 						  depth,
 						  visual_type);
 }
@@ -391,7 +391,7 @@ gdk_query_depths  (gint **depths,
 {
   GDK_NOTE(MULTIHEAD,
 	   g_message("Use gdk_query_depths_for_screen instead\n"));
-  gdk_query_depths_for_screen(DEFAULT_GDK_SCREEN, depths, count);
+  gdk_query_depths_for_screen(gdk_get_default_screen(), depths, count);
 }
 void
 gdk_query_visual_types_for_screen (GdkScreen * scr,
@@ -408,7 +408,7 @@ gdk_query_visual_types (GdkVisualType **visual_types,
 {
   GDK_NOTE(MULTIHEAD,
 	   g_message("Use gdk_query_visual_types_for_screen instead\n"));
-  gdk_query_visual_types_for_screen(DEFAULT_GDK_SCREEN, visual_types, count);
+  gdk_query_visual_types_for_screen(gdk_get_default_screen(), visual_types, count);
 }
 
 GList *
@@ -428,7 +428,7 @@ gdk_list_visuals_for_screen (GdkScreen * scr)
 GList*
 gdk_list_visuals (void)
 {
- return gdk_list_visuals_for_screen(DEFAULT_GDK_SCREEN);
+ return gdk_list_visuals_for_screen(gdk_get_default_screen());
 }
 
 GdkVisual *
@@ -449,7 +449,7 @@ GdkVisual*
 gdk_visual_lookup (Visual *xvisual)
 {
   GDK_NOTE(MULTIHEAD, g_message("Use gdk_visual_lookup_for_screen instead\n"));
-  return gdk_visual_lookup_for_screen(DEFAULT_GDK_SCREEN, xvisual);
+  return gdk_visual_lookup_for_screen(gdk_get_default_screen(), xvisual);
 }
 
 GdkVisual *
@@ -469,7 +469,7 @@ GdkVisual*
 gdkx_visual_get (VisualID xvisualid)
 {
   GDK_NOTE(MULTIHEAD, g_message("Use gdkx_visual_get_for_screen instead\n"));
-  return gdkx_visual_get_for_screen(DEFAULT_GDK_SCREEN, xvisualid);
+  return gdkx_visual_get_for_screen(gdk_get_default_screen(), xvisualid);
 }
 
 

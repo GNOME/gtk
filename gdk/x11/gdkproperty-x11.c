@@ -40,7 +40,7 @@ GdkAtom
 gdk_atom_intern (const gchar *atom_name, gboolean only_if_exists)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_atom instead\n"));
-  return gdk_display_atom (DEFAULT_GDK_DISPLAY, atom_name, only_if_exists);
+  return gdk_display_atom (gdk_get_default_display(), atom_name, only_if_exists);
 
 }
 
@@ -48,7 +48,7 @@ gchar*
 gdk_atom_name (GdkAtom atom)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_atom_name instead\n"));
-  return gdk_display_atom_name (DEFAULT_GDK_DISPLAY, atom);	
+  return gdk_display_atom_name (gdk_get_default_display(), atom);	
 
 }
 

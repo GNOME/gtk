@@ -158,7 +158,7 @@ extern Window		 gdk_xroot_window;
 extern gint		 gdk_screen;*/
 extern gchar		*gdk_display_name;
 /*extern Window		 gdk_leader_window;*/
-extern GdkDisplayManager *dpy_mgr;
+extern GdkDisplayManager *gdk_display_manager;
 
 extern Atom		 gdk_selection_property;
 

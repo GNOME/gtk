@@ -620,7 +620,7 @@ gdk_window_new (GdkWindow     *parent,
     screen = GDK_WINDOW_SCREEN(parent);  
   else{
     GDK_NOTE(MULTIHEAD, g_message("Use gdk_window_new_for_screen instead instead\n"));
-    screen = DEFAULT_GDK_SCREEN;
+    screen = gdk_get_default_screen();
   }
   return gdk_window_new_for_screen(screen, 
 				   parent,
@@ -684,7 +684,7 @@ gdk_window_foreign_new_for_display (GdkDisplay * display,
      try to match a GdkScreen to root 
    */
   draw_impl->screen =
-    gdk_x11_display_manager_get_screen_for_root (dpy_mgr, root);
+    gdk_x11_display_manager_get_screen_for_root (gdk_display_manager, root);
   g_assert (draw_impl->screen != NULL);
 
   private->x = attrs.x;
@@ -712,7 +712,7 @@ gdk_window_foreign_new_for_display (GdkDisplay * display,
 GdkWindow *
 gdk_window_foreign_new (GdkNativeWindow anid)
 {
-  return gdk_window_foreign_new_for_display(DEFAULT_GDK_DISPLAY, anid);
+  return gdk_window_foreign_new_for_display(gdk_get_default_display(), anid);
 }
 
 void
@@ -1771,7 +1771,7 @@ gdk_window_get_geometry (GdkWindow *window,
   {
     GDK_NOTE(MULTIHEAD, 
 	     g_message("Window needs to be defined to be multisafe\n"));
-    window = GDK_SCREEN_IMPL_X11 (DEFAULT_GDK_SCREEN)->root_window;
+    window = GDK_SCREEN_IMPL_X11 (gdk_get_default_screen())->root_window;
   }
 
   if (!GDK_WINDOW_DESTROYED (window)) {
@@ -2036,7 +2036,7 @@ gdk_window_get_pointer (GdkWindow       *window,
   {
     GDK_NOTE(MULTIHEAD, 
 	     g_message("window arg is need for multihead safe operation\n"));
-    window = GDK_SCREEN_IMPL_X11 (DEFAULT_GDK_SCREEN)->root_window;
+    window = GDK_SCREEN_IMPL_X11 (gdk_get_default_screen())->root_window;
   }
 
   _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
@@ -2066,7 +2066,7 @@ gdk_window_at_pointer (gint *win_x,
 {
   GDK_NOTE(MULTIHEAD,
 	   g_message("Use gdk_screen_get_window_at_pointer instead\n"));
-  return gdk_screen_get_window_at_pointer(DEFAULT_GDK_SCREEN,win_x,win_y);
+  return gdk_screen_get_window_at_pointer(gdk_get_default_screen(),win_x,win_y);
 }
 
 GdkEventMask  
@@ -3493,7 +3493,7 @@ gdk_window_xid_at_coords (gint     x,
 			  GList   *excludes,
 			  gboolean excl_child)
 {
- return gdk_window_xid_at_coords_for_screen (x, y, excludes, excl_child,DEFAULT_GDK_SCREEN);
+ return gdk_window_xid_at_coords_for_screen (x, y, excludes, excl_child,gdk_get_default_screen());
 }
 
 

@@ -346,15 +346,15 @@ GdkColormap*
 gdk_colormap_get_system (void)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_colormap_get_system_for_screen instead\n"));
-  return gdk_colormap_get_system_for_screen(DEFAULT_GDK_SCREEN);
+  return gdk_colormap_get_system_for_screen(gdk_get_default_screen());
 }
 
 gint
 gdk_colormap_get_system_size (void)
 {
   GDK_NOTE(MULTIHEAD, g_message(" Use the DisplayCells X call instead\n"));
-  return DisplayCells (GDK_SCREEN_XDISPLAY (DEFAULT_GDK_SCREEN),
-		       GDK_SCREEN_IMPL_X11 (DEFAULT_GDK_SCREEN)->scr_num);
+  return DisplayCells (GDK_SCREEN_XDISPLAY (gdk_get_default_screen()),
+		       GDK_SCREEN_IMPL_X11 (gdk_get_default_screen())->scr_num);
 }
 
 void
@@ -475,38 +475,7 @@ gdk_colors_alloc (GdkColormap   *colormap,
   return return_val != 0;
 }
 
-gboolean
-gdk_color_parse_for_screen (const gchar * spec, GdkColor * color,
-			    GdkScreen * screen)
-{
-  Colormap xcolormap;
-  XColor xcolor;
-  gboolean return_val;
 
-  g_return_val_if_fail (spec != NULL, FALSE);
-  g_return_val_if_fail (color != NULL, FALSE);
-
-  xcolormap = DefaultColormap (GDK_SCREEN_XDISPLAY (screen),
-			       GDK_SCREEN_IMPL_X11 (screen)->scr_num);
-
-  if (XParseColor (GDK_SCREEN_XDISPLAY (screen), xcolormap, spec, &xcolor)) {
-    return_val = TRUE;
-    color->red = xcolor.red;
-    color->green = xcolor.green;
-    color->blue = xcolor.blue;
-  }
-  else
-    return_val = FALSE;
-
-  return return_val;
-}
-
-gboolean
-gdk_color_parse (const gchar *spec,
-		 GdkColor *color)
-{
-  return gdk_color_parse_for_screen(spec,color,DEFAULT_GDK_SCREEN);
-}
 
 /* This is almost identical to gdk_colormap_free_colors.
  * Keep them in sync!

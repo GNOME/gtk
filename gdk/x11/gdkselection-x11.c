@@ -156,7 +156,7 @@ gdk_selection_owner_set (GdkWindow *owner,
 			 gboolean   send_event)
 {
  GDK_NOTE(MULTIHEAD,g_message("Use gdk_selection_owner_set_for_display instead\n"));
- return gdk_selection_owner_set_for_display(DEFAULT_GDK_DISPLAY,owner,
+ return gdk_selection_owner_set_for_display(gdk_get_default_display(),owner,
 					    selection,time,send_event);
 }
 GdkWindow *
@@ -175,7 +175,7 @@ GdkWindow*
 gdk_selection_owner_get (GdkAtom selection)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_selection_owner_get_for_display instead\n"));
-  return gdk_selection_owner_get_for_display(DEFAULT_GDK_DISPLAY,selection);
+  return gdk_selection_owner_get_for_display(gdk_get_default_display(),selection);
 }
 
 void
@@ -301,7 +301,7 @@ gdk_selection_send_notify (guint32  requestor,
 {
     GDK_NOTE(MULTIHEAD,
 	     g_message("Use gdk_selection_send_notify_for_display instead\n"));
-    gdk_selection_send_notify_for_display(DEFAULT_GDK_DISPLAY,requestor,
+    gdk_selection_send_notify_for_display(gdk_get_default_display(),requestor,
 					  selection,target,property,time);
 }
 gint
@@ -341,7 +341,7 @@ gdk_text_property_to_text_list (GdkAtom       encoding,
 				gchar      ***list)
 {
   GDK_NOTE(MULTIHEAD, g_message(" Use gdk_text_property_to_text_list_for_display instead\n"));
-  return gdk_text_property_to_text_list_for_display(DEFAULT_GDK_DISPLAY,encoding,
+  return gdk_text_property_to_text_list_for_display(gdk_get_default_display(),encoding,
 						    format,text,length,list);
 }
 
@@ -518,7 +518,7 @@ gdk_text_property_to_utf8_list (GdkAtom        encoding,
 {
   GDK_NOTE(MULTIHEAD, 
 	   g_message("Use gdk_text_property_to_utf8_list_for_display instead\n"));
-  return gdk_text_property_to_utf8_list_for_display (DEFAULT_GDK_DISPLAY,encoding,
+  return gdk_text_property_to_utf8_list_for_display (gdk_get_default_display(),encoding,
 						     format,text,length,list);
 }
 
@@ -562,7 +562,7 @@ gdk_string_to_compound_text (const gchar *str,
 {
   GDK_NOTE(MULTIHEAD, 
 	   g_message("Use gdk_string_to_compound_text_for_display instead\n"));
-  return gdk_string_to_compound_text_for_display(DEFAULT_GDK_DISPLAY,
+  return gdk_string_to_compound_text_for_display(gdk_get_default_display(),
 						 str,
 						 encoding,
 						 format,

@@ -139,7 +139,7 @@ gtk_clipboard_get_for_display (GdkDisplay *display, GdkAtom selection)
 GtkClipboard *
 gtk_clipboard_get (GdkAtom selection)
 {
-  return gtk_clipboard_get_for_display (DEFAULT_GDK_DISPLAY, selection);
+  return gtk_clipboard_get_for_display (gdk_get_default_display(), selection);
 
 }
 

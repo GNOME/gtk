@@ -41,7 +41,13 @@ GdkDisplay *	gdk_display_manager_get_default	    (GdkDisplayManager * dpy_mgr);
 GdkDisplay *	gdk_display_manager_open_display    (GdkDisplayManager * dpy_mgr,
 						     gchar *display_name);
 gint		gdk_display_num_display		    (GdkDisplayManager * dpy_mgr);
-#define DEFAULT_GDK_DISPLAY GDK_DISPLAY_MGR_GET_CLASS(dpy_mgr)->get_default(dpy_mgr)
+
+GdkDisplay *	gdk_get_default_display		    (void);
+GdkScreen  *	gdk_get_default_screen		    (void);
+GdkDisplayManager * gdk_get_display_manager	    (void);
+
+
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

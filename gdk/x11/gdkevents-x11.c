@@ -1719,7 +1719,7 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
   gboolean send = FALSE;
   gboolean found = FALSE;
   int i;
-  GdkDisplay *dpy = gdk_x11_display_manager_get_display(dpy_mgr,xev->xany.display);
+  GdkDisplay *dpy = gdk_x11_display_manager_get_display(gdk_display_manager,xev->xany.display);
 
   gdk_error_warnings = FALSE;
   gdk_error_code = 0;
@@ -1815,7 +1815,7 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
 void
 gdk_flush (void)
 {
-  GSList *tmp_dpy_list = dpy_mgr->open_displays;
+  GSList *tmp_dpy_list = gdk_display_manager->open_displays;
   while(tmp_dpy_list != NULL){
     XSync (GDK_DISPLAY_IMPL_X11(tmp_dpy_list->data)->xdisplay, False);
     tmp_dpy_list = g_slist_next(tmp_dpy_list);
@@ -1829,7 +1829,7 @@ timestamp_predicate (Display *display,
 		     XPointer arg)
 {
   Window xwindow = GPOINTER_TO_UINT (arg);
-  GdkDisplayImplX11 * dpy_impl = GDK_DISPLAY_IMPL_X11(gdk_x11_display_manager_get_display(dpy_mgr,display));
+  GdkDisplayImplX11 * dpy_impl = GDK_DISPLAY_IMPL_X11(gdk_x11_display_manager_get_display(gdk_display_manager,display));
 
   if (xevent->type == PropertyNotify &&
       xevent->xproperty.window == xwindow &&
@@ -1962,7 +1962,7 @@ gdk_net_wm_supports_for_screen (GdkScreen * screen, GdkAtom property)
 gboolean
 gdk_net_wm_supports (GdkAtom property)
 {
-  return gdk_net_wm_supports_for_screen (DEFAULT_GDK_SCREEN, property);
+  return gdk_net_wm_supports_for_screen (gdk_get_default_screen(), property);
 }
 
 

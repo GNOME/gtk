@@ -53,14 +53,14 @@
 static inline void
 update_keyrange (void)
 {
-    update_keyrange_for_display(DEFAULT_GDK_DISPLAY);
+    update_keyrange_for_display(gdk_get_default_display());
 }
 */
 /* not needed with multihead display 
 static XkbDescPtr
 get_xkb (void)
 {	
-  return get_xkb_for_display(DEFAULT_GDK_DISPLAY);
+  return get_xkb_for_display(gdk_get_default_display());
 }
 */
 /*

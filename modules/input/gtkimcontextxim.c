@@ -186,7 +186,8 @@ get_im (const char *locale)
       if (!XSetLocaleModifiers (""))
 	g_warning ("can not set locale modifiers");
       
-      im = XOpenIM (GDK_DISPLAY_IMPL_X11(DEFAULT_GDK_DISPLAY)->xdisplay, NULL, NULL, NULL);
+      im = XOpenIM (GDK_DISPLAY_IMPL_X11(gdk_get_default_display ())->xdisplay,
+		    NULL, NULL, NULL);
       
       if (im)
 	{

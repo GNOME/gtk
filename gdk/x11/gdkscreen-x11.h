@@ -61,7 +61,7 @@ extern "C"
   GType gdk_X11_screen_impl_get_type ();
 
 
-#define DEFAULT_X_SCREEN    GDK_SCREEN_IMPL_X11(DEFAULT_GDK_SCREEN)->xscreen
+#define DEFAULT_X_SCREEN    GDK_SCREEN_IMPL_X11(gdk_get_default_screen())->xscreen
 #define DEFAULT_GDK_SCREEN_IMPL_X11_FOR_DISPLAY(display)  GDK_SCREEN_IMPL_X11(GDK_DISPLAY_GET_CLASS(display)->get_default_screen(display))
 #define GDK_SCREEN_XDISPLAY(scr)  (GDK_SCREEN_IMPL_X11(scr)->xdisplay)
 #define GDK_SCREEN_XROOTWIN(scr)  (GDK_SCREEN_IMPL_X11(scr)->xroot_window)

@@ -209,7 +209,7 @@ GtkTargetList *
 gtk_target_list_new (const GtkTargetEntry *targets,
 		     guint                 ntargets)
 {
-  return gtk_target_list_new_for_display (DEFAULT_GDK_DISPLAY, targets, ntargets);
+  return gtk_target_list_new_for_display (gdk_get_default_display(), targets, ntargets);
 
 }
 
@@ -290,7 +290,7 @@ gtk_target_list_add_table (GtkTargetList        *list,
 			   guint                 ntargets)
 {
     g_message("Use gtk_target_list_add_table_for_display instead\n");
-    gtk_target_list_add_table_for_display (DEFAULT_GDK_DISPLAY, list, targets, ntargets);
+    gtk_target_list_add_table_for_display (gdk_get_default_display(), list, targets, ntargets);
 
 }
 
@@ -453,7 +453,7 @@ gtk_selection_owner_set (GtkWidget *widget,
 			 GdkAtom    selection,
 			 guint32    time)
 {
- return gtk_selection_owner_set_for_display (DEFAULT_GDK_DISPLAY,
+ return gtk_selection_owner_set_for_display (gdk_get_default_display(),
 					     widget,
 					     selection,
 					     time);

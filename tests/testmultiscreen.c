@@ -21,7 +21,7 @@ main (int argc, char *argv[])
   GdkDisplay *dpy;
   gtk_init (&argc, &argv);
 
-  dpy = gdk_display_manager_get_default(dpy_mgr);
+  dpy = gdk_display_manager_get_default(gdk_get_display_manager ());
   num_screen = gdk_display_get_n_screens(dpy);
   displayname = gdk_display_get_name(dpy);
   if(num_screen <= 1)

@@ -903,7 +903,7 @@ gulong
 gdk_rgb_xpixel_from_rgb (guint32 rgb)
 {
   GDK_NOTE(MULTIHEAD,g_message(" Use gdk_rgb_xpixel_from_rgb_for_screen instead\n"));
-  return gdk_rgb_xpixel_from_rgb_for_screen(DEFAULT_GDK_SCREEN,rgb);
+  return gdk_rgb_xpixel_from_rgb_for_screen(gdk_get_default_screen(),rgb);
 }
 
 void
@@ -3576,7 +3576,7 @@ gdk_rgb_get_colormap (void)
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_rgb_get_colormap_for_screen instead\n"));
   if (!cmap)
     {
-      GdkRgbInfo *image_info = gdk_rgb_create_info (gdk_rgb_choose_visual (DEFAULT_GDK_SCREEN), NULL);
+      GdkRgbInfo *image_info = gdk_rgb_create_info (gdk_rgb_choose_visual (gdk_get_default_screen()), NULL);
       cmap = image_info->cmap;
     }
 
@@ -3605,5 +3605,5 @@ GdkVisual *
 gdk_rgb_get_visual (void)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_rgb_get_colormap_for_screen instead\n"));
-  return gdk_rgb_get_visual_for_screen(DEFAULT_GDK_SCREEN);
+  return gdk_rgb_get_visual_for_screen(gdk_get_default_screen());
 }

@@ -44,7 +44,6 @@ struct _GdkScreenClass
 						 gint * win_x,
 						 gint * win_y);
 };
-#define DEFAULT_GDK_SCREEN  (GDK_DISPLAY_GET_CLASS(DEFAULT_GDK_DISPLAY)->get_default_screen(DEFAULT_GDK_DISPLAY))
 GType 		    gdk_screen_get_type	(void);
 GdkScreen *	    gdk_screen_ref	(GdkScreen * screen);
 void		    gdk_screen_unref	(GdkScreen * screen);

@@ -58,7 +58,7 @@ GdkCursor*
 gdk_cursor_new (GdkCursorType cursor_type)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_cursor_new_for_screen instead\n"));
-  return gdk_cursor_new_for_screen (DEFAULT_GDK_SCREEN, cursor_type);
+  return gdk_cursor_new_for_screen (gdk_get_default_screen(), cursor_type);
 
 }
 

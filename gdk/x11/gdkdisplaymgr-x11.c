@@ -114,7 +114,7 @@ GdkDisplay * gdk_x11_display_manager_get_display (GdkDisplayManager * dpy_mgr,Di
 
 GdkDisplayImplX11 * gdk_lookup_xdisplay(Display *dpy)
 {
-    return GDK_DISPLAY_IMPL_X11(gdk_x11_display_manager_get_display(dpy_mgr,dpy));
+    return GDK_DISPLAY_IMPL_X11(gdk_x11_display_manager_get_display(gdk_display_manager, dpy));
 }
 
 

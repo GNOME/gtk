@@ -148,7 +148,7 @@ GType		gdk_x11_display_impl_get_type();
 gboolean	gdk_x11_display_impl_is_root_window(GdkDisplay *dpy, Window xroot_window);
 
 
-#define DEFAULT_X_DISPLAY   GDK_DISPLAY_IMPL_X11(DEFAULT_GDK_DISPLAY)->xdisplay
+#define DEFAULT_X_DISPLAY   GDK_DISPLAY_IMPL_X11(gdk_get_default_display())->xdisplay
 #define GDK_DISPLAY_XDISPLAY(dpy)  (GDK_DISPLAY_IMPL_X11(dpy)->xdisplay)
 
 #ifdef __cplusplus

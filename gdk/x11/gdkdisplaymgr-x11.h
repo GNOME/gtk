@@ -21,7 +21,7 @@ GdkDisplayImplX11 * gdk_lookup_xdisplay(Display *dpy);
 
 
 
-/*#define DEFAULT_GDK_DISPLAY gdk_x11_display_manager_get_default(dpy_mgr)*/
+/*#define gdk_get_default_display gdk_x11_display_manager_get_default(dpy_mgr)*/
 
 #ifdef __cplusplus
 }

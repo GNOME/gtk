@@ -453,7 +453,7 @@ gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf  *pixbuf,
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_pixbuf_render_pixmap_and_mask_for_screen instead\n"));
   gdk_pixbuf_render_pixmap_and_mask_for_screen(pixbuf,
-					       DEFAULT_GDK_SCREEN,
+					       gdk_get_default_screen(),
 					       pixmap_return,
 					       mask_return,
 					       alpha_threshold);

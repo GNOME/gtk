@@ -205,7 +205,7 @@ GdkFont*
 gdk_font_load (const gchar *font_name)
 {  
    GDK_NOTE(MULTIHEAD,g_message("Use gdk_font_load_for_display instead\n"));
-   return gdk_font_load_for_display (DEFAULT_GDK_DISPLAY, font_name);
+   return gdk_font_load_for_display (gdk_get_default_display(), font_name);
 }
 
 char *
@@ -302,7 +302,7 @@ gdk_font_from_description (PangoFontDescription *font_desc)
 {
   GDK_NOTE(MULTIHEAD, 
     g_message("Use gdk_font_from_description_for_display or Pango ! instead\n"));
-  return gdk_font_from_description_for_display(DEFAULT_GDK_DISPLAY,font_desc);
+  return gdk_font_from_description_for_display(gdk_get_default_display(),font_desc);
 }
 
 GdkFont *
@@ -372,7 +372,7 @@ GdkFont*
 gdk_fontset_load (const gchar *fontset_name)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_fontset_load_for_display instead\n"));
-  return gdk_fontset_load_for_display(DEFAULT_GDK_DISPLAY, fontset_name);
+  return gdk_fontset_load_for_display(gdk_get_default_display(), fontset_name);
 }
 
 void

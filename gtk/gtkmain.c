@@ -486,8 +486,8 @@ gtk_init_check (int	 *argc,
    *  used in creating widgets. (We want to use the system
    *  defaults so as to be nice to the colormap).
    */
-  gtk_visual = gdk_visual_get_system_for_screen (DEFAULT_GDK_SCREEN);
-  gtk_colormap = gdk_colormap_get_system_for_screen (DEFAULT_GDK_SCREEN);
+  gtk_visual = gdk_visual_get_system_for_screen (gdk_get_default_screen());
+  gtk_colormap = gdk_colormap_get_system_for_screen (gdk_get_default_screen());
 
   gtk_type_init (0);
   gtk_rc_init ();

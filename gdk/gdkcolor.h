@@ -93,9 +93,6 @@ GdkVisual *gdk_colormap_get_visual (GdkColormap *colormap);
      
 GdkColor *gdk_color_copy  (const GdkColor *color);
 void      gdk_color_free  (GdkColor       *color);
-gboolean  gdk_color_parse_for_screen (const gchar * spec, 
-				      GdkColor * color,
-				      GdkScreen * screen);
 gint      gdk_color_parse (const gchar    *spec,
 			   GdkColor       *color);
 guint     gdk_color_hash  (const GdkColor *colora);

@@ -683,7 +683,7 @@ GtkStyle*
 gtk_style_new (void)
 {
   GTK_NOTE(MULTIHEAD, g_message("Use gtk_style_new_for_display instead\n"));
-  return gtk_style_new_for_display(DEFAULT_GDK_DISPLAY);
+  return gtk_style_new_for_display(gdk_get_default_display());
 }
 
 /*************************************************************
