@@ -4413,9 +4413,6 @@ msgstr "Vietnamita (VIQR)"
 msgid "X Input Method"
 msgstr "Método de Entrada X"
 
-#~ msgid "Insufficient memory to load TGA image"
-#~ msgstr "Memória insuficiente para carregar arquivo TGA"
-
 #~ msgid "Directories"
 #~ msgstr "Directórios"
 

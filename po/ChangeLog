@@ -1,3 +1,8 @@
+2002-06-10  Daniel Elstner  <daniel.elstner@gmx.net>
+
+	* pt_BR.po: Remove duplicated message.  Although it was
+	commented, my gettext (0.11.2) didn't like it.
+
 2002-06-08  Christophe Merlet  <christophe@merlet.net>
 
 	* fr.po: Updated French translation.
