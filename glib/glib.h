@@ -625,12 +625,13 @@ void g_print   (gchar *format, ...);
 
 /* Utility functions
  */
-gchar*	g_strdup    (const gchar *str);
-gchar*	g_strconcat (const gchar *string1, ...); /* NULL terminated */
-gdouble g_strtod    (const gchar *nptr, gchar **endptr);
-gchar*	g_strerror  (gint errnum);
-gchar*	g_strsignal (gint signum);
-gint    g_snprintf  (gchar *str, gulong n, gchar const *fmt, ...);
+gchar*	g_strdup     (const gchar *str);
+gchar*	g_strconcat  (const gchar *string1, ...); /* NULL terminated */
+gdouble g_strtod     (const gchar *nptr, gchar **endptr);
+gchar*	g_strerror   (gint errnum);
+gchar*	g_strsignal  (gint signum);
+gint    g_strcasecmp (const guchar *s1, const guchar *s2);
+gint    g_snprintf   (gchar *str, gulong n, gchar const *fmt, ...);
 
 
 /* We make the assumption that if memmove isn't available, then

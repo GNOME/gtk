@@ -18,6 +18,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "gtkobject.h"
 #include "gtksignal.h"
 

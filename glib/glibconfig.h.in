@@ -65,6 +65,9 @@
 /* Define if you have the vsnprintf function.  */
 #undef HAVE_VSNPRINTF
 
+/* Define if you have the strcasecmp function.  */
+#undef HAVE_STRCASECMP
+
 /* Define if you have the <float.h> header file.  */
 #undef HAVE_FLOAT_H
 

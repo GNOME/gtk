@@ -1,3 +1,8 @@
+Fri Jan 30 23:57:17 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* added and autoconfigured in a new utility function
+	g_strcasecmp
+
 Wed Jan 28 23:53:27 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* glist.c
