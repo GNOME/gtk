@@ -1,3 +1,10 @@
+Mon Nov 24 04:05:15 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkradiotoolbutton.[ch]
+	(gtk_radio_tool_button_new_from_widget): Make this function take a
+	GtkRadioToolButton instead of a GtkWidget. (#127729, Murray
+	Cumming)
+
 Mon Nov 24 02:34:00 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c: remove variables in_dnd and leaving_dnd

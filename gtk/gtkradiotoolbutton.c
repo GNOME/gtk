@@ -136,7 +136,7 @@ gtk_radio_tool_button_new_from_stock (GSList      *group,
  * Since: 2.4
  **/
 GtkToolItem *
-gtk_radio_tool_button_new_from_widget (GtkWidget   *group)
+gtk_radio_tool_button_new_from_widget (GtkRadioToolButton *group)
 {
   GSList *list = NULL;
   
