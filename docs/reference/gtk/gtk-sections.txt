@@ -685,6 +685,7 @@ gtk_combo_box_append_text
 gtk_combo_box_insert_text
 gtk_combo_box_prepend_text
 gtk_combo_box_remove_text
+gtk_combo_box_get_active_text
 gtk_combo_box_popup
 gtk_combo_box_popdown
 <SUBSECTION Standard>

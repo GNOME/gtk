@@ -1,3 +1,7 @@
+Wed May  5 23:46:19 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_combo_box_get_active_text().
+
 Wed May  5 23:12:36 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add 
