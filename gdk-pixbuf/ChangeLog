@@ -1,7 +1,8 @@
 2001-01-18  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk-pixbuf-io.c (get_libdir): (Win32) Use the new
-	g_win32_get_package_installation_subdirectory() function.
+	g_win32_get_package_installation_subdirectory() function.  No need
+	to include windows.h.
 	(gtk_win32_get_installation_directory): Remove this then.
 
 2001-01-01  Havoc Pennington  <hp@redhat.com>
