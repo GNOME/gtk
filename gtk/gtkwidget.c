@@ -2205,6 +2205,8 @@ gtk_widget_idle_draw (gpointer cb_data)
 
   while (widget_list)
     {
+      GSList *tmp_list;
+      
       widget = widget_list->data;
       draw_data_list = gtk_object_get_data_by_id (GTK_OBJECT (widget),
 						  draw_data_tmp_key_id);
@@ -2212,17 +2214,18 @@ gtk_widget_idle_draw (gpointer cb_data)
 				 draw_data_tmp_key_id,
 				 NULL);
 
-      while (draw_data_list)
+      tmp_list = draw_data_list;
+      while (tmp_list)
 	{
-	  GtkDrawData *data = draw_data_list->data;
+	  GtkDrawData *data = tmp_list->data;
 	  if ((data->rect.width != 0) || (data->rect.height != 0))
 	    gtk_widget_draw (widget, &data->rect);
 	  
-	  if (draw_data_list->next)
-	    draw_data_list = draw_data_list->next;
+	  if (tmp_list->next)
+	    tmp_list = tmp_list->next;
 	  else
 	    {
-	      draw_data_list->next = draw_data_free_list;
+	      tmp_list->next = draw_data_free_list;
 	      draw_data_free_list = draw_data_list;
 	      break;
 	    }
