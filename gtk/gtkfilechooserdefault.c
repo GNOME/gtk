@@ -5119,11 +5119,16 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 
       selection_check (impl, &num_selected, &all_files, &all_folders);
 
-      if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
-	  || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+      if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
 	{
-	  if (num_selected > 0)
-	    return TRUE;
+	  if (num_selected != 1) 	 
+	    return TRUE; /* zero means current folder; more than one means use the whole selection */ 	 
+	  else if (current_focus != impl->browse_files_tree_view) 	 
+	    {
+	      /* a single folder is selected and a button was clicked */
+	      switch_to_selected_folder (impl); 	 
+	      return TRUE;
+	    }
 	}
 
       if (num_selected == 0)
