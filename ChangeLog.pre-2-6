@@ -1,3 +1,9 @@
+Thu Jun  5 19:24:33 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_expose): Subtract off
+	twice the border width from the width/height, not
+	1x the border width. (#106336, Rodney Dawes)
+
 Thu Jun  5 15:33:38 2003  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtktextlayout.c (gtk_text_layout_move_iter_to_next_line):
