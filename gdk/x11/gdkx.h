@@ -53,6 +53,8 @@ Display *gdk_x11_gc_get_xdisplay          (GdkGC       *gc);
 GC       gdk_x11_gc_get_xgc               (GdkGC       *gc);
 Screen * gdk_x11_screen_get_xscreen       (GdkScreen   *screen);
 int      gdk_x11_screen_get_screen_number (GdkScreen   *screen);
+void     gdk_x11_window_set_user_time     (GdkWindow   *window,
+					   guint32      timestamp);
 
 const char* gdk_x11_screen_get_window_manager_name (GdkScreen *screen);
 

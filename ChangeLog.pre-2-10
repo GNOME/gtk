@@ -1,5 +1,7 @@
 2004-10-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkx.h: Declare gdk_x11_window_set_user_time here.
+
 	* gtk/gtktreeview.c (gtk_tree_view_grab_notify): Don't start a 
 	drag if we loose the grab.
 

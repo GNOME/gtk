@@ -110,6 +110,8 @@ gdk_wm_decoration_get_type
 gdk_wm_function_get_type
 gdk_pointer_grab_info_libgtk_only
 gdk_keyboard_grab_info_libgtk_only
+gdk_add_option_entries_libgtk_only
+gdk_pre_parse_libgtk_only
 </SECTION>
 
 <SECTION>

@@ -1,5 +1,7 @@
 2004-10-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdk-sections.txt: Add some missing functions.
+
 	* gtk/running.sgml: Update list of supported debug flags.
 
 2004-10-06  Matthias Clasen  <mclasen@redhat.com>
