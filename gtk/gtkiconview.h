@@ -69,8 +69,10 @@ struct _EggIconListClass
 				      gint              count);
 };
 
-GType         egg_icon_list_get_type          (void);
-GtkWidget *   egg_icon_list_new               (void);
+GType      egg_icon_list_get_type       (void);
+GtkWidget *egg_icon_list_new            (void);
+GtkWidget *egg_icon_list_new_with_model (GtkTreeModel *model);
+
 void          egg_icon_list_set_model         (EggIconList  *icon_list,
 					       GtkTreeModel *model);
 GtkTreeModel *egg_icon_list_get_model         (EggIconList  *icon_list);

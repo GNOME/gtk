@@ -1892,16 +1892,6 @@ egg_icon_list_set_cursor_item (EggIconList     *icon_list,
   egg_icon_list_queue_draw_item (icon_list, item);
 }
 
-/* Public API */
-GtkWidget *
-egg_icon_list_new (void)
-{
-  EggIconList *icon_list;
-
-  icon_list = g_object_new (EGG_TYPE_ICON_LIST, NULL);
-
-  return GTK_WIDGET (icon_list);
-}
 
 static EggIconListItem *
 egg_icon_list_item_new (void)
@@ -1917,7 +1907,7 @@ egg_icon_list_item_new (void)
   return item;
 }
 
-void
+static void
 egg_icon_list_item_ref (EggIconListItem *item)
 {
   g_return_if_fail (item != NULL);
@@ -1925,7 +1915,7 @@ egg_icon_list_item_ref (EggIconListItem *item)
   item->ref_count += 1;
 }
 
-void
+static void
 egg_icon_list_item_unref (EggIconListItem *item)
 {
   g_return_if_fail (item != NULL);
@@ -2036,72 +2026,8 @@ egg_icon_list_get_item_at_pos (EggIconList *icon_list,
   return NULL;
 }
 
-GtkTreePath *
-egg_icon_list_get_path_at_pos (EggIconList *icon_list,
-			       gint         x,
-			       gint         y)
-{
-  EggIconListItem *item;
-  GtkTreePath *path;
-  
-  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), NULL);
-
-  item = egg_icon_list_get_item_at_pos (icon_list, x, y);
-
-  if (!item)
-    return NULL;
-
-  path = gtk_tree_path_new_from_indices (item->index, -1);
-
-  return path;
-}
-
-void
-egg_icon_list_selected_foreach (EggIconList           *icon_list,
-				EggIconListForeachFunc func,
-				gpointer               data)
-{
-  GList *list;
-
-  
-  for (list = icon_list->priv->items; list; list = list->next)
-    {
-      EggIconListItem *item = list->data;
-      GtkTreePath *path = gtk_tree_path_new_from_indices (item->index, -1);
-
-      if (item->selected)
-	(* func) (icon_list, path, data);
-
-      gtk_tree_path_free (path);
-    }
-}
 
 
-void
-egg_icon_list_set_selection_mode (EggIconList      *icon_list,
-				  GtkSelectionMode  mode)
-{
-  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
-
-  if (mode == icon_list->priv->selection_mode)
-    return;
-  
-  if (mode == GTK_SELECTION_NONE ||
-      icon_list->priv->selection_mode == GTK_SELECTION_MULTIPLE)
-    egg_icon_list_unselect_all (icon_list);
-  
-  icon_list->priv->selection_mode = mode;
-
-  g_object_notify (G_OBJECT (icon_list), "selection_mode");
-}
-
-GtkSelectionMode
-egg_icon_list_get_selection_mode (EggIconList *icon_list)
-{
-  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), GTK_SELECTION_SINGLE);
-
-  return icon_list->priv->selection_mode;
-}
 
 static void
 egg_icon_list_select_item (EggIconList      *icon_list,
@@ -2125,35 +2051,6 @@ egg_icon_list_select_item (EggIconList      *icon_list,
   egg_icon_list_queue_draw_item (icon_list, item);
 }
 
-void
-egg_icon_list_select_path (EggIconList *icon_list,
-			   GtkTreePath *path)
-{
-  EggIconListItem *item;
-  
-  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
-  g_return_if_fail (path != NULL);
-
-  item = g_list_nth (icon_list->priv->items,
-		     gtk_tree_path_get_indices(path)[0])->data;
-
-  egg_icon_list_select_item (icon_list, item);
-}
-
-void
-egg_icon_list_unselect_path (EggIconList *icon_list,
-			     GtkTreePath *path)
-{
-  EggIconListItem *item;
-  
-  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
-  g_return_if_fail (path != NULL);
-
-  item = g_list_nth (icon_list->priv->items,
-		     gtk_tree_path_get_indices(path)[0])->data;
-
-  egg_icon_list_unselect_item (icon_list, item);
-}
 
 static void
 egg_icon_list_unselect_item (EggIconList      *icon_list,
@@ -2174,69 +2071,6 @@ egg_icon_list_unselect_item (EggIconList      *icon_list,
   g_signal_emit (icon_list, icon_list_signals[SELECTION_CHANGED], 0);
 
   egg_icon_list_queue_draw_item (icon_list, item);
-}
-
-gboolean
-egg_icon_list_path_is_selected (EggIconList *icon_list,
-				GtkTreePath *path)
-{
-  EggIconListItem *item;
-  
-  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), FALSE);
-  g_return_val_if_fail (path != NULL, FALSE);
-  
-  item = g_list_nth (icon_list->priv->items,
-		     gtk_tree_path_get_indices(path)[0])->data;
-  
-  return item->selected;
-}
-
-
-void
-egg_icon_list_unselect_all (EggIconList *icon_list)
-{
-  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
-
-  egg_icon_list_unselect_all_internal (icon_list, TRUE);
-}
-
-void
-egg_icon_list_select_all (EggIconList *icon_list)
-{
-  GList *items;
-  gboolean dirty = FALSE;
-  
-  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
-
-  for (items = icon_list->priv->items; items; items = items->next)
-    {
-      EggIconListItem *item = items->data;
-      
-      if (!item->selected)
-	{
-	  dirty = TRUE;
-	  item->selected = TRUE;
-	  egg_icon_list_queue_draw_item (icon_list, item);
-	}
-    }
-
-  if (dirty)
-    g_signal_emit (icon_list, icon_list_signals[SELECTION_CHANGED], 0);
-}
-
-void
-egg_icon_list_item_activated (EggIconList      *icon_list,
-			      GtkTreePath      *path)
-{
-  g_signal_emit (G_OBJECT (icon_list), icon_list_signals[ITEM_ACTIVATED], 0, path);
-}
-
-GList *
-egg_icon_list_get_items (EggIconList *icon_list)
-{
-  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), NULL);
-
-  return icon_list->priv->items;
 }
 
 static void
@@ -2381,210 +2215,6 @@ egg_icon_list_build_items (EggIconList *icon_list)
     } while (gtk_tree_model_iter_next (icon_list->priv->model, &iter));
 
   icon_list->priv->items = g_list_reverse (items);
-}
-
-void
-egg_icon_list_set_model (EggIconList *icon_list,
-			 GtkTreeModel *model)
-{
-  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
-
-  if (model != NULL)
-    g_return_if_fail (GTK_IS_TREE_MODEL (model));
-  
-  if (icon_list->priv->model == model)
-    return;
-
-  if (model)
-    {
-      GType pixbuf_column_type, text_column_type;
-      
-      g_return_if_fail (gtk_tree_model_get_flags (model) & GTK_TREE_MODEL_LIST_ONLY);
-
-      if (icon_list->priv->pixbuf_column != -1)
-	{
-	  pixbuf_column_type = gtk_tree_model_get_column_type (icon_list->priv->model,
-							       icon_list->priv->pixbuf_column);	  
-
-	  g_return_if_fail (pixbuf_column_type == GDK_TYPE_PIXBUF);
-	}
-
-      if (icon_list->priv->text_column != -1)
-	{
-	  text_column_type = gtk_tree_model_get_column_type (icon_list->priv->model,
-							     icon_list->priv->pixbuf_column);	  
-
-	  g_return_if_fail (text_column_type == G_TYPE_STRING);
-	}
-      
-    }
-  
-  if (icon_list->priv->model)
-    {
-      g_signal_handlers_disconnect_by_func (icon_list->priv->model,
-					    egg_icon_list_row_changed,
-					    icon_list);
-      g_signal_handlers_disconnect_by_func (icon_list->priv->model,
-					    egg_icon_list_row_inserted,
-					    icon_list);
-      g_signal_handlers_disconnect_by_func (icon_list->priv->model,
-					    egg_icon_list_row_deleted,
-					    icon_list);
-      g_signal_handlers_disconnect_by_func (icon_list->priv->model,
-					    egg_icon_list_rows_reordered,
-					    icon_list);
-
-      g_object_unref (icon_list->priv->model);
-      
-      g_list_foreach (icon_list->priv->items, (GFunc)egg_icon_list_item_unref, NULL);
-      g_list_free (icon_list->priv->items);
-      icon_list->priv->items = NULL;
-    }
-
-  icon_list->priv->model = model;
-
-  if (icon_list->priv->model)
-    {
-      g_object_ref (icon_list->priv->model);
-      g_signal_connect (icon_list->priv->model,
-			"row_changed",
-			G_CALLBACK (egg_icon_list_row_changed),
-			icon_list);
-      g_signal_connect (icon_list->priv->model,
-			"row_inserted",
-			G_CALLBACK (egg_icon_list_row_inserted),
-			icon_list);
-      g_signal_connect (icon_list->priv->model,
-			"row_deleted",
-			G_CALLBACK (egg_icon_list_row_deleted),
-			icon_list);
-      g_signal_connect (icon_list->priv->model,
-			"rows_reordered",
-			G_CALLBACK (egg_icon_list_rows_reordered),
-			icon_list);
-
-      egg_icon_list_build_items (icon_list);
-    }
-}
-
-GtkTreeModel *
-egg_icon_list_get_model (EggIconList *icon_list)
-{
-  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), NULL);
-
-  return icon_list->priv->model;
-}
-
-void
-egg_icon_list_set_text_column (EggIconList *icon_list,
-			       int          column)
-{
-  if (column == icon_list->priv->text_column)
-    return;
-  
-  if (column == -1)
-    icon_list->priv->text_column = -1;
-  else
-    {
-      if (icon_list->priv->model != NULL)
-	{
-	  GType column_type;
-	  
-	  column_type = gtk_tree_model_get_column_type (icon_list->priv->model, column);
-
-	  g_return_if_fail (column_type == G_TYPE_STRING);
-	}
-      
-      icon_list->priv->text_column = column;
-    }
-
-  egg_icon_list_invalidate_sizes (icon_list);
-  egg_icon_list_queue_layout (icon_list);
-  
-  g_object_notify (G_OBJECT (icon_list), "text_column");
-}
-
-gint
-egg_icon_list_get_text_column (EggIconList  *icon_list)
-{
-  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), -1);
-
-  return icon_list->priv->text_column;
-}
-
-void
-egg_icon_list_set_markup_column (EggIconList *icon_list,
-				 int          column)
-{
-  if (column == icon_list->priv->markup_column)
-    return;
-  
-  if (column == -1)
-    icon_list->priv->markup_column = -1;
-  else
-    {
-      if (icon_list->priv->model != NULL)
-	{
-	  GType column_type;
-	  
-	  column_type = gtk_tree_model_get_column_type (icon_list->priv->model, column);
-
-	  g_return_if_fail (column_type == G_TYPE_STRING);
-	}
-      
-      icon_list->priv->markup_column = column;
-    }
-
-  egg_icon_list_invalidate_sizes (icon_list);
-  egg_icon_list_queue_layout (icon_list);
-  
-  g_object_notify (G_OBJECT (icon_list), "markup_column");
-}
-
-gint
-egg_icon_list_get_markup_column (EggIconList  *icon_list)
-{
-  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), -1);
-
-  return icon_list->priv->markup_column;
-}
-
-void
-egg_icon_list_set_pixbuf_column (EggIconList *icon_list,
-				 int          column)
-{
-  if (column == icon_list->priv->pixbuf_column)
-    return;
-  
-  if (column == -1)
-    icon_list->priv->pixbuf_column = -1;
-  else
-    {
-      if (icon_list->priv->model != NULL)
-	{
-	  GType column_type;
-	  
-	  column_type = gtk_tree_model_get_column_type (icon_list->priv->model, column);
-
-	  g_return_if_fail (column_type == GDK_TYPE_PIXBUF);
-	}
-      
-      icon_list->priv->pixbuf_column = column;
-    }
-
-  egg_icon_list_invalidate_sizes (icon_list);
-  egg_icon_list_queue_layout (icon_list);
-  
-  g_object_notify (G_OBJECT (icon_list), "pixbuf_column");
-  
-}
-
-gint
-egg_icon_list_get_pixbuf_column (EggIconList  *icon_list)
-{
-  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), -1);
-
-  return icon_list->priv->pixbuf_column;
 }
 
 static void
@@ -3002,3 +2632,571 @@ egg_icon_list_scroll_to_item (EggIconList     *icon_list,
     }
 }
 
+/* Public API */
+
+
+/**
+ * egg_icon_list_new:
+ * 
+ * Creates a new #EggIconList widget
+ * 
+ * Return value: A newly created #EggIconList widget
+ **/
+GtkWidget *
+egg_icon_list_new (void)
+{
+  return g_object_new (EGG_TYPE_ICON_LIST, NULL);
+}
+
+/**
+ * egg_icon_list_new_with_model:
+ * @model: The model.
+ * 
+ * Creates a new #EggIconList widget with the model initialized @model.
+ * 
+ * Return value: A newly created #EggIconList widget.
+ *
+ * Since: 2.6 
+ **/
+GtkWidget *
+egg_icon_list_new_with_model (GtkTreeModel *model)
+{
+  return g_object_new (EGG_TYPE_ICON_LIST, "model", model, NULL);
+}
+
+
+/**
+ * egg_icon_list_get_path_at_pos:
+ * @icon_list: A #EggIconList.
+ * @x: The x position to be identified.
+ * @y: The y position to be identified
+ * 
+ * Finds the path at the point (@x, @y), relative to widget coordinates.
+ * 
+ * Return value: The #GtkTreePath corresponding to the icon or %NULL
+ * if no icon exists at that coordinate.
+ *
+ * Since: 2.6 
+ **/
+GtkTreePath *
+egg_icon_list_get_path_at_pos (EggIconList *icon_list,
+			       gint         x,
+			       gint         y)
+{
+  EggIconListItem *item;
+  GtkTreePath *path;
+  
+  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), NULL);
+
+  item = egg_icon_list_get_item_at_pos (icon_list, x, y);
+
+  if (!item)
+    return NULL;
+
+  path = gtk_tree_path_new_from_indices (item->index, -1);
+
+  return path;
+}
+
+/**
+ * egg_icon_list_selected_foreach:
+ * @icon_list: A #EggIconList.
+ * @func: The funcion to call for each selected icon.
+ * @data: User data to pass to the function.
+ * 
+ * Calls a function for each selected icon. Note that the tree or
+ * selection cannot be modified from within this function.
+ *
+ * Since: 2.6 
+ **/
+void
+egg_icon_list_selected_foreach (EggIconList           *icon_list,
+				EggIconListForeachFunc func,
+				gpointer               data)
+{
+  GList *list;
+  
+  for (list = icon_list->priv->items; list; list = list->next)
+    {
+      EggIconListItem *item = list->data;
+      GtkTreePath *path = gtk_tree_path_new_from_indices (item->index, -1);
+
+      if (item->selected)
+	(* func) (icon_list, path, data);
+
+      gtk_tree_path_free (path);
+    }
+}
+
+/**
+ * egg_icon_list_set_selection_mode:
+ * @icon_list: A #EggIconList.
+ * @mode: The selection mode
+ * 
+ * Sets the selection mode of the @icon_list.
+ *
+ * Since: 2.6 
+ **/
+void
+egg_icon_list_set_selection_mode (EggIconList      *icon_list,
+				  GtkSelectionMode  mode)
+{
+  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
+
+  if (mode == icon_list->priv->selection_mode)
+    return;
+  
+  if (mode == GTK_SELECTION_NONE ||
+      icon_list->priv->selection_mode == GTK_SELECTION_MULTIPLE)
+    egg_icon_list_unselect_all (icon_list);
+  
+  icon_list->priv->selection_mode = mode;
+
+  g_object_notify (G_OBJECT (icon_list), "selection_mode");
+}
+
+/**
+ * egg_icon_list_get_selection_mode:
+ * @icon_list: A #EggIconList.
+ * 
+ * Sets the selection mode of the @icon_list.
+ *
+ * Return value: the current selection mode
+ *
+ * Since: 2.6 
+ **/
+GtkSelectionMode
+egg_icon_list_get_selection_mode (EggIconList *icon_list)
+{
+  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), GTK_SELECTION_SINGLE);
+
+  return icon_list->priv->selection_mode;
+}
+
+/**
+ * egg_icon_list_set_model:
+ * @icon_list: A #EggIconList.
+ * @model: The model.
+ *
+ * Sets the model for a #EggIconList.  If the @icon_list already has a model
+ * set, it will remove it before setting the new model.  If @model is %NULL, then
+ * it will unset the old model.
+ *
+ * Since: 2.6 
+ **/
+void
+egg_icon_list_set_model (EggIconList *icon_list,
+			 GtkTreeModel *model)
+{
+  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
+
+  if (model != NULL)
+    g_return_if_fail (GTK_IS_TREE_MODEL (model));
+  
+  if (icon_list->priv->model == model)
+    return;
+
+  if (model)
+    {
+      GType pixbuf_column_type, text_column_type;
+      
+      g_return_if_fail (gtk_tree_model_get_flags (model) & GTK_TREE_MODEL_LIST_ONLY);
+
+      if (icon_list->priv->pixbuf_column != -1)
+	{
+	  pixbuf_column_type = gtk_tree_model_get_column_type (icon_list->priv->model,
+							       icon_list->priv->pixbuf_column);	  
+
+	  g_return_if_fail (pixbuf_column_type == GDK_TYPE_PIXBUF);
+	}
+
+      if (icon_list->priv->text_column != -1)
+	{
+	  text_column_type = gtk_tree_model_get_column_type (icon_list->priv->model,
+							     icon_list->priv->pixbuf_column);	  
+
+	  g_return_if_fail (text_column_type == G_TYPE_STRING);
+	}
+      
+    }
+  
+  if (icon_list->priv->model)
+    {
+      g_signal_handlers_disconnect_by_func (icon_list->priv->model,
+					    egg_icon_list_row_changed,
+					    icon_list);
+      g_signal_handlers_disconnect_by_func (icon_list->priv->model,
+					    egg_icon_list_row_inserted,
+					    icon_list);
+      g_signal_handlers_disconnect_by_func (icon_list->priv->model,
+					    egg_icon_list_row_deleted,
+					    icon_list);
+      g_signal_handlers_disconnect_by_func (icon_list->priv->model,
+					    egg_icon_list_rows_reordered,
+					    icon_list);
+
+      g_object_unref (icon_list->priv->model);
+      
+      g_list_foreach (icon_list->priv->items, (GFunc)egg_icon_list_item_unref, NULL);
+      g_list_free (icon_list->priv->items);
+      icon_list->priv->items = NULL;
+    }
+
+  icon_list->priv->model = model;
+
+  if (icon_list->priv->model)
+    {
+      g_object_ref (icon_list->priv->model);
+      g_signal_connect (icon_list->priv->model,
+			"row_changed",
+			G_CALLBACK (egg_icon_list_row_changed),
+			icon_list);
+      g_signal_connect (icon_list->priv->model,
+			"row_inserted",
+			G_CALLBACK (egg_icon_list_row_inserted),
+			icon_list);
+      g_signal_connect (icon_list->priv->model,
+			"row_deleted",
+			G_CALLBACK (egg_icon_list_row_deleted),
+			icon_list);
+      g_signal_connect (icon_list->priv->model,
+			"rows_reordered",
+			G_CALLBACK (egg_icon_list_rows_reordered),
+			icon_list);
+
+      egg_icon_list_build_items (icon_list);
+    }
+}
+
+/**
+ * egg_icon_list_get_model:
+ * @icon_list: a #EggIconList
+ *
+ * Returns the model the #EggIconList is based on.  Returns %NULL if the
+ * model is unset.
+ *
+ * Return value: A #GtkTreeModel, or %NULL if none is currently being used.
+ *
+ * Since: 2.6 
+ **/
+GtkTreeModel *
+egg_icon_list_get_model (EggIconList *icon_list)
+{
+  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), NULL);
+
+  return icon_list->priv->model;
+}
+
+/**
+ * egg_icon_list_set_text_column:
+ * @icon_list: A #EggIconList.
+ * @column: A column in the currently used model.
+ * 
+ * Sets the column with text for @icon_list to be @column. The text
+ * column must be of type #G_TYPE_STRING.
+ *
+ * Since: 2.6 
+ **/
+void
+egg_icon_list_set_text_column (EggIconList *icon_list,
+			       int          column)
+{
+  if (column == icon_list->priv->text_column)
+    return;
+  
+  if (column == -1)
+    icon_list->priv->text_column = -1;
+  else
+    {
+      if (icon_list->priv->model != NULL)
+	{
+	  GType column_type;
+	  
+	  column_type = gtk_tree_model_get_column_type (icon_list->priv->model, column);
+
+	  g_return_if_fail (column_type == G_TYPE_STRING);
+	}
+      
+      icon_list->priv->text_column = column;
+    }
+
+  egg_icon_list_invalidate_sizes (icon_list);
+  egg_icon_list_queue_layout (icon_list);
+  
+  g_object_notify (G_OBJECT (icon_list), "text_column");
+}
+
+/**
+ * egg_icon_list_get_text_column:
+ * @icon_list: A #EggIconList.
+ *
+ * Returns the column with text for @icon_list.
+ *
+ * Returns: the text column, or -1 if it's unset.
+ *
+ * Since: 2.6
+ */
+gint
+egg_icon_list_get_text_column (EggIconList  *icon_list)
+{
+  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), -1);
+
+  return icon_list->priv->text_column;
+}
+
+/**
+ * egg_icon_list_set_markup_column:
+ * @icon_list: A #EggIconList.
+ * @column: A column in the currently used model.
+ * 
+ * Sets the column with markup information for @icon_list to be
+ * @column. The markup column must be of type #G_TYPE_STRING.
+ * If the markup column is set to something, it overrides
+ * the text column set by #egg_icon_list_set_text_column.
+ *
+ * Since: 2.6
+ **/
+void
+egg_icon_list_set_markup_column (EggIconList *icon_list,
+				 int          column)
+{
+  if (column == icon_list->priv->markup_column)
+    return;
+  
+  if (column == -1)
+    icon_list->priv->markup_column = -1;
+  else
+    {
+      if (icon_list->priv->model != NULL)
+	{
+	  GType column_type;
+	  
+	  column_type = gtk_tree_model_get_column_type (icon_list->priv->model, column);
+
+	  g_return_if_fail (column_type == G_TYPE_STRING);
+	}
+      
+      icon_list->priv->markup_column = column;
+    }
+
+  egg_icon_list_invalidate_sizes (icon_list);
+  egg_icon_list_queue_layout (icon_list);
+  
+  g_object_notify (G_OBJECT (icon_list), "markup_column");
+}
+
+/**
+ * egg_icon_list_get_markup_column:
+ * @icon_list: A #EggIconList.
+ *
+ * Returns the column with markup text for @icon_list.
+ *
+ * Returns: the markup column, or -1 if it's unset.
+ *
+ * Since: 2.6
+ */
+gint
+egg_icon_list_get_markup_column (EggIconList  *icon_list)
+{
+  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), -1);
+
+  return icon_list->priv->markup_column;
+}
+
+/**
+ * egg_icon_list_set_pixbuf_column:
+ * @icon_list: A #EggIconList.
+ * @column: A column in the currently used model.
+ * 
+ * Sets the column with pixbufs for @icon_list to be @column. The pixbuf
+ * column must be of type #GDK_TYPE_PIXBUF
+ *
+ * Since: 2.6 
+ **/
+void
+egg_icon_list_set_pixbuf_column (EggIconList *icon_list,
+				 int          column)
+{
+  if (column == icon_list->priv->pixbuf_column)
+    return;
+  
+  if (column == -1)
+    icon_list->priv->pixbuf_column = -1;
+  else
+    {
+      if (icon_list->priv->model != NULL)
+	{
+	  GType column_type;
+	  
+	  column_type = gtk_tree_model_get_column_type (icon_list->priv->model, column);
+
+	  g_return_if_fail (column_type == GDK_TYPE_PIXBUF);
+	}
+      
+      icon_list->priv->pixbuf_column = column;
+    }
+
+  egg_icon_list_invalidate_sizes (icon_list);
+  egg_icon_list_queue_layout (icon_list);
+  
+  g_object_notify (G_OBJECT (icon_list), "pixbuf_column");
+  
+}
+
+/**
+ * egg_icon_list_get_pixbuf_column:
+ * @icon_list: A #EggIconList.
+ *
+ * Returns the column with pixbufs for @icon_list.
+ *
+ * Returns: the pixbuf column, or -1 if it's unset.
+ *
+ * Since: 2.6
+ */
+gint
+egg_icon_list_get_pixbuf_column (EggIconList  *icon_list)
+{
+  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), -1);
+
+  return icon_list->priv->pixbuf_column;
+}
+
+/**
+ * egg_icon_list_select_path:
+ * @icon_list: A #EggIconList.
+ * @path: The #GtkTreePath to be selected.
+ * 
+ * Selects the row at @path.
+ **/
+void
+egg_icon_list_select_path (EggIconList *icon_list,
+			   GtkTreePath *path)
+{
+  EggIconListItem *item;
+  
+  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
+  g_return_if_fail (icon_list->priv->model != NULL);
+  g_return_if_fail (path != NULL);
+
+  item = g_list_nth (icon_list->priv->items,
+		     gtk_tree_path_get_indices(path)[0])->data;
+
+  if (!item)
+    return;
+  
+  egg_icon_list_select_item (icon_list, item);
+}
+
+/**
+ * egg_icon_list_unselect_path:
+ * @icon_list: A #EggIconList.
+ * @path: The #GtkTreePath to be unselected.
+ * 
+ * Unselects the row at @path.
+ **/
+void
+egg_icon_list_unselect_path (EggIconList *icon_list,
+			     GtkTreePath *path)
+{
+  EggIconListItem *item;
+  
+  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
+  g_return_if_fail (icon_list->priv->model != NULL);
+  g_return_if_fail (path != NULL);
+
+  item = g_list_nth (icon_list->priv->items,
+		     gtk_tree_path_get_indices(path)[0])->data;
+
+  if (!item)
+    return;
+  
+  egg_icon_list_unselect_item (icon_list, item);
+}
+
+/**
+ * egg_icon_list_select_all:
+ * @icon_list: A #EggIconList.
+ * 
+ * Selects all the icons. @icon_list must has its selection mode set
+ * to #GTK_SELECTION_MULTIPLE.
+ **/
+void
+egg_icon_list_select_all (EggIconList *icon_list)
+{
+  GList *items;
+  gboolean dirty = FALSE;
+  
+  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
+
+  for (items = icon_list->priv->items; items; items = items->next)
+    {
+      EggIconListItem *item = items->data;
+      
+      if (!item->selected)
+	{
+	  dirty = TRUE;
+	  item->selected = TRUE;
+	  egg_icon_list_queue_draw_item (icon_list, item);
+	}
+    }
+
+  if (dirty)
+    g_signal_emit (icon_list, icon_list_signals[SELECTION_CHANGED], 0);
+}
+
+/**
+ * egg_icon_list_unselect_all:
+ * @icon_list: A #EggIconList.
+ * 
+ * Unselects all the icons.
+ **/
+void
+egg_icon_list_unselect_all (EggIconList *icon_list)
+{
+  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
+
+  egg_icon_list_unselect_all_internal (icon_list, TRUE);
+}
+
+/**
+ * egg_icon_list_path_is_selected:
+ * @icon_list: A #EggIconList.
+ * @path: A #GtkTreePath to check selection on.
+ * 
+ * Returns %TRUE if the icon pointed to by @path is currently
+ * selected. If @icon does not point to a valid location, %FALSE is returned.
+ * 
+ * Return value: %TRUE if @path is selected.
+ **/
+gboolean
+egg_icon_list_path_is_selected (EggIconList *icon_list,
+				GtkTreePath *path)
+{
+  EggIconListItem *item;
+  
+  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), FALSE);
+  g_return_val_if_fail (icon_list->priv->model != NULL, FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+  
+  item = g_list_nth (icon_list->priv->items,
+		     gtk_tree_path_get_indices(path)[0])->data;
+
+  if (!item)
+    return FALSE;
+  
+  return item->selected;
+}
+
+/**
+ * egg_icon_list_item_activated:
+ * @icon_list: A #EggIconLis
+ * @path: The #GtkTreePath to be activated
+ * 
+ * Activates the item determined by @path.
+ **/
+void
+egg_icon_list_item_activated (EggIconList      *icon_list,
+			      GtkTreePath      *path)
+{
+  g_signal_emit (G_OBJECT (icon_list), icon_list_signals[ITEM_ACTIVATED], 0, path);
+}
