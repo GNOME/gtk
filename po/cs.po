@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-23 04:53+0100\n"
-"PO-Revision-Date: 2004-01-23 17:31+0100\n"
+"POT-Creation-Date: 2004-01-24 04:50+0100\n"
+"PO-Revision-Date: 2004-01-26 23:05+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -365,7 +365,7 @@ msgstr "Obrázek má nulovou šířku a/nebo výšku"
 
 #: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:679
 msgid "Image has unsupported bpp"
-msgstr "Obrázek nepodporované bpp"
+msgstr "Obrázek má nepodporované bpp"
 
 #: gdk-pixbuf/io-pcx.c:623 gdk-pixbuf/io-pcx.c:631
 #, c-format
@@ -775,7 +775,7 @@ msgstr "calendar:MY"
 #.
 #: gtk/gtkcalendar.c:719
 msgid "calendar:week_start:0"
-msgstr "calendar:week-start:1"
+msgstr "calendar:week_start:1"
 
 #: gtk/gtkcolorbutton.c:219 gtk/gtkcolorbutton.c:573
 msgid "Pick a Color"
@@ -942,7 +942,7 @@ msgstr ""
 "Nemohu přidat záložku pro %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2917
+#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2937
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1023,7 +1023,7 @@ msgstr "Velikost"
 
 #: gtk/gtkfilechooserdefault.c:1490
 msgid "Modified"
-msgstr "Upraveno"
+msgstr "Změněn"
 
 #. Label and entry
 #: gtk/gtkfilechooserdefault.c:1513
@@ -1036,21 +1036,21 @@ msgid "Preview"
 msgstr "Náhled"
 
 #. Change the current folder label
-#: gtk/gtkfilechooserdefault.c:2118
+#: gtk/gtkfilechooserdefault.c:2130
 #, c-format
 msgid "Current folder: %s"
 msgstr "Aktuální adresář: %s"
 
-#: gtk/gtkfilechooserdefault.c:2521
+#: gtk/gtkfilechooserdefault.c:2533
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "zkratka %s neexistuje"
 
-#: gtk/gtkfilechooserdefault.c:3063
+#: gtk/gtkfilechooserdefault.c:3083
 msgid "Type name of new folder"
 msgstr "Napište název nového adresáře"
 
-#: gtk/gtkfilechooserdefault.c:3090
+#: gtk/gtkfilechooserdefault.c:3110
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1058,34 +1058,34 @@ msgstr[0] "%d bajt"
 msgstr[1] "%d bajty"
 msgstr[2] "%d bajtů"
 
-#: gtk/gtkfilechooserdefault.c:3092
+#: gtk/gtkfilechooserdefault.c:3112
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:3094
+#: gtk/gtkfilechooserdefault.c:3114
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:3096
+#: gtk/gtkfilechooserdefault.c:3116
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:3141
+#: gtk/gtkfilechooserdefault.c:3161
 msgid "Today"
 msgstr "Dnes"
 
-#: gtk/gtkfilechooserdefault.c:3143
+#: gtk/gtkfilechooserdefault.c:3163
 msgid "Yesterday"
 msgstr "Včera"
 
-#: gtk/gtkfilechooserdefault.c:3151
+#: gtk/gtkfilechooserdefault.c:3171
 msgid "%d/%b/%Y"
 msgstr "%d. %b %Y"
 
-#: gtk/gtkfilechooserdefault.c:3154
+#: gtk/gtkfilechooserdefault.c:3174
 msgid "Unknown"
 msgstr "Neznámé"
 
@@ -1127,7 +1127,7 @@ msgstr "_Nový adresář"
 
 #: gtk/gtkfilesel.c:1126
 msgid "De_lete File"
-msgstr "O_dstranit soubor"
+msgstr "_Odstranit soubor"
 
 #: gtk/gtkfilesel.c:1137
 msgid "_Rename File"
@@ -1904,9 +1904,9 @@ msgstr "Vietnamsky (VIQR)"
 #. ID
 #: modules/input/imxim.c:27
 msgid "X Input Method"
-msgstr "Metoda vstupu X"
+msgstr "Vstupní metoda X"
 
 #: tests/testfilechooser.c:185
 #, c-format
 msgid "Could not get information for file '%s': %s"
-msgstr "Nemohu získat ifnrmace o soubour '%s': %s"
+msgstr "Nemohu získat informace o souboru '%s': %s"
