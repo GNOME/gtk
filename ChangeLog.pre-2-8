@@ -1,5 +1,8 @@
 2003-07-23  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkcolorsel.c (gtk_color_selection_init): Make the hue 
+	spinbutton wrap.  (#118097, John Darrington)
+
 	* docs/faq/gtk-faq.sgml: Mention Xnest as a way to debug GTK+ apps. 
 
 2003-07-20  Hans Breuer  <hans@breuer.org>
