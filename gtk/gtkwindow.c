@@ -3500,6 +3500,8 @@ gtk_window_destroy (GtkObject *object)
 {
   GtkWindow *window = GTK_WINDOW (object);
   
+  toplevel_list = g_slist_remove (toplevel_list, window);
+
   if (window->transient_parent)
     gtk_window_set_transient_for (window, NULL);
 
@@ -3550,8 +3552,6 @@ static void
 gtk_window_finalize (GObject *object)
 {
   GtkWindow *window = GTK_WINDOW (object);
-
-  toplevel_list = g_slist_remove (toplevel_list, window);
 
   g_free (window->title);
   g_free (window->wmclass_name);

@@ -1,3 +1,11 @@
+Sat Mar 13 15:19:17 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_destroy): Remove
+	the window from the toplevel_list here rather in destroy.
+	While this is theoretically speaking wrong, it fits
+	in better with the current reality that destroyed
+	widgets are not reusable. (#126808, Michael Natterer)
+
 Sat Mar 13 21:47:47 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcellview.c (gtk_cell_view_expose): Don't do anything
