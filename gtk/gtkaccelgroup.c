@@ -714,7 +714,7 @@ gtk_accel_group_from_accel_closure (GClosure *closure)
 
   g_return_val_if_fail (closure != NULL, NULL);
 
-  /* a few remarks on wat we do here. in general, we need a way to reverse lookup
+  /* a few remarks on what we do here. in general, we need a way to reverse lookup
    * accel_groups from closures that are being used in accel groups. this could
    * be done e.g via a hashtable. it is however cheaper (memory wise) to just
    * use the invalidation notifier on the closure itself (which we need to install

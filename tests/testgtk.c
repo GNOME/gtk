@@ -3433,6 +3433,83 @@ create_item_factory (void)
     gtk_widget_destroy (window);
 }
 
+static GtkWidget *
+accel_button_new (GtkAccelGroup *accel_group,
+		  const gchar   *text,
+		  const gchar   *accel)
+{
+  guint keyval;
+  GdkModifierType modifiers;
+  GtkWidget *button;
+  GtkWidget *label;
+
+  gtk_accelerator_parse (accel, &keyval, &modifiers);
+  g_assert (keyval);
+
+  button = gtk_button_new ();
+  gtk_widget_add_accelerator (button, "activate", accel_group,
+			      keyval, modifiers, GTK_ACCEL_VISIBLE | GTK_ACCEL_LOCKED);
+
+  label = gtk_accel_label_new (text);
+  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (label), button);
+  gtk_widget_show (label);
+  
+  gtk_container_add (GTK_CONTAINER (button), label);
+
+  return button;
+}
+
+static void
+create_key_lookup (void)
+{
+  static GtkWidget *window = NULL;
+  
+  if (!window)
+    {
+      GtkAccelGroup *accel_group = gtk_accel_group_new ();
+      GtkWidget *button;
+      
+      window = gtk_dialog_new_with_buttons ("Key Lookup", NULL, 0,
+					    GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+					    NULL);
+
+      /* We have to expand it so the accel labels will draw their labels
+       */
+      gtk_window_set_default_size (GTK_WINDOW (window), 300, -1);
+      
+      gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
+      
+      button = gtk_button_new_with_mnemonic ("Button 1 (_a)");
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      button = gtk_button_new_with_mnemonic ("Button 2 (_A)");
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      button = gtk_button_new_with_mnemonic ("Button 3 (_ф)");
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      button = gtk_button_new_with_mnemonic ("Button 4 (_Ф)");
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      button = gtk_button_new_with_mnemonic ("Button 6 (_b)");
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      button = accel_button_new (accel_group, "Button 7", "<Alt><Shift>b");
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      button = accel_button_new (accel_group, "Button 8", "<Alt>d");
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      button = accel_button_new (accel_group, "Button 9", "<Alt>Cyrillic_ve");
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      button = gtk_button_new_with_mnemonic ("Button 10 (_1)");
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      button = gtk_button_new_with_mnemonic ("Button 11 (_!)");
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      
+      g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
+      g_signal_connect (window, "response", G_CALLBACK (gtk_object_destroy), NULL);
+
+      gtk_widget_show_all (window);
+    }
+  else
+    gtk_widget_destroy (window);
+}
+
+
 /*
  create_modal_window
  */
@@ -11350,6 +11427,7 @@ struct {
   { "image from drawable", create_get_image },
   { "image", create_image },
   { "item factory", create_item_factory },
+  { "key lookup", create_key_lookup },
   { "labels", create_labels },
   { "layout", create_layout },
   { "list", create_list },

@@ -61,7 +61,7 @@ struct _GdkFBKeyboardDevice {
 					guint               *keyval,
 					gint                *effective_group,
 					gint                *level,
-					GdkModifierType     *unused_modifiers);
+					GdkModifierType     *consumed_modifiers);
   gboolean (*get_entries_for_keyval)   (GdkFBKeyboard       *kb,
 					guint                keyval,
 					GdkKeymapKey       **keys,
@@ -89,7 +89,7 @@ static gboolean xlate_translate       (GdkFBKeyboard       *kb,
 				       guint               *keyval,
 				       gint                *effective_group,
 				       gint                *level,
-				       GdkModifierType     *unused_modifiers);
+				       GdkModifierType     *consumed_modifiers);
 static gboolean xlate_get_for_keyval  (GdkFBKeyboard       *kb,
 				       guint                keyval,
 				       GdkKeymapKey       **keys,
@@ -111,7 +111,7 @@ static gboolean raw_translate       (GdkFBKeyboard       *kb,
 				     guint               *keyval,
 				     gint                *effective_group,
 				     gint                *level,
-				     GdkModifierType     *unused_modifiers);
+				     GdkModifierType     *consumed_modifiers);
 static gboolean raw_get_for_keyval  (GdkFBKeyboard       *kb,
 				     guint                keyval,
 				     GdkKeymapKey       **keys,
@@ -335,13 +335,13 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * @keyval: return location for keyval
  * @effective_group: return location for effective group
  * @level: return location for level
- * @unused_modifiers: return location for modifiers that didn't affect the group or level
+ * @consumed_modifiers: return location for modifiers that were used to determine the group or level
  * 
  *
  * Translates the contents of a #GdkEventKey into a keyval, effective
- * group, and level. Modifiers that didn't affect the translation and
- * are thus available for application use are returned in
- * @unused_modifiers.  See gdk_keyval_get_keys() for an explanation of
+ * group, and level. Modifiers that affected the translation and
+ * are thus unavailable for application use are returned in
+ * @consumed_modifiers.  See gdk_keyval_get_keys() for an explanation of
  * groups and levels.  The @effective_group is the group that was
  * actually used for the translation; some keys such as Enter are not
  * affected by the active keyboard group. The @level is derived from
@@ -358,7 +358,7 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
                                      guint           *keyval,
                                      gint            *effective_group,
                                      gint            *level,
-                                     GdkModifierType *unused_modifiers)
+                                     GdkModifierType *consumed_modifiers)
 {
   g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
   g_return_val_if_fail (group < 4, FALSE);
@@ -370,7 +370,7 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 							 keyval,
 							 effective_group,
 							 level,
-							 unused_modifiers);
+							 consumed_modifiers);
 }
 
 static void
@@ -934,7 +934,7 @@ xlate_translate (GdkFBKeyboard       *kb,
 		 guint               *keyval,
 		 gint                *effective_group,
 		 gint                *level,
-		 GdkModifierType     *unused_modifiers)
+		 GdkModifierType     *consumed_modifiers)
 {
   g_warning ("xlate_translate() NIY");
   return FALSE;
@@ -1445,7 +1445,7 @@ raw_translate (GdkFBKeyboard       *kb,
 		 guint               *keyval,
 		 gint                *effective_group,
 		 gint                *level,
-		 GdkModifierType     *unused_modifiers)
+		 GdkModifierType     *consumed_modifiers)
 {
   g_warning ("raw_translate() NIY");
   return FALSE;

@@ -29,7 +29,9 @@
 
 #include <string.h>
 #include <stdarg.h>
+#include <gdkkeysyms.h>
 #include "gtkbindings.h"
+#include "gtkkeyhash.h"
 #include "gtksignal.h"
 #include "gtkwidget.h"
 #include "gtkrc.h"
@@ -49,6 +51,7 @@ typedef struct {
 
 /* --- variables --- */
 static GHashTable	*binding_entry_hash_table = NULL;
+static GSList           *binding_key_hashes = NULL;
 static GSList		*binding_set_list = NULL;
 static const gchar	*key_class_binding_set = "gtk-class-binding-set";
 static GQuark		 key_id_class_binding_set = 0;
@@ -107,11 +110,81 @@ binding_entries_compare (gconstpointer  a,
   return (ea->keyval == eb->keyval && ea->modifiers == eb->modifiers);
 }
 
+static void
+binding_key_hash_insert_entry (GtkKeyHash      *key_hash,
+			       GtkBindingEntry *entry)
+{
+  guint keyval = entry->keyval;
+  
+  /* We store lowercased accelerators. To deal with this, if <Shift>
+   * was specified, uppercase.
+   */
+  if (entry->modifiers & GDK_SHIFT_MASK)
+    {
+      if (keyval == GDK_Tab)
+	keyval = GDK_ISO_Left_Tab;
+      else
+	keyval = gdk_keyval_to_upper (keyval);
+    }
+  
+  _gtk_key_hash_add_entry (key_hash, keyval, entry->modifiers & ~GDK_RELEASE_MASK, entry);
+}
+
+static void
+binding_key_hash_destroy (gpointer data)
+{
+  GtkKeyHash *key_hash = data;
+  
+  binding_key_hashes = g_slist_remove (binding_key_hashes, key_hash);
+  _gtk_key_hash_free (key_hash);
+}
+
+static void
+insert_entries_into_key_hash (gpointer key,
+			      gpointer value,
+			      gpointer data)
+{
+  GtkKeyHash *key_hash = data;
+  GtkBindingEntry *entry = value;
+
+  for (; entry; entry = entry->hash_next)
+    binding_key_hash_insert_entry (key_hash, entry);
+}
+
+static GtkKeyHash *
+binding_key_hash_for_keymap (GdkKeymap *keymap)
+{
+  static GQuark key_hash_quark = 0;
+  GtkKeyHash *key_hash;
+
+  if (!key_hash_quark)
+    key_hash_quark = g_quark_from_static_string ("gtk-binding-key-hash");
+  
+  key_hash = g_object_get_qdata (G_OBJECT (keymap), key_hash_quark);
+
+  if (!key_hash)
+    {
+      key_hash = _gtk_key_hash_new (keymap, NULL);
+      g_object_set_qdata_full (G_OBJECT (keymap), key_hash_quark, key_hash, binding_key_hash_destroy);
+
+      if (binding_entry_hash_table)
+	g_hash_table_foreach (binding_entry_hash_table,
+			      insert_entries_into_key_hash,
+			      key_hash);
+
+      binding_key_hashes = g_slist_prepend (binding_key_hashes, key_hash);
+    }
+
+  return key_hash;
+}
+
+
 static GtkBindingEntry*
 binding_entry_new (GtkBindingSet  *binding_set,
 		   guint           keyval,
 		   GdkModifierType modifiers)
 {
+  GSList *tmp_list;
   GtkBindingEntry *entry;
   
   if (!binding_entry_hash_table)
@@ -132,6 +205,12 @@ binding_entry_new (GtkBindingSet  *binding_set,
   if (entry->hash_next)
     g_hash_table_remove (binding_entry_hash_table, entry->hash_next);
   g_hash_table_insert (binding_entry_hash_table, entry, entry);
+
+  for (tmp_list = binding_key_hashes; tmp_list; tmp_list = tmp_list->next)
+    {
+      GtkKeyHash *key_hash = tmp_list->data;
+      binding_key_hash_insert_entry (key_hash, entry);
+    }
   
   return entry;
 }
@@ -167,6 +246,7 @@ binding_entry_destroy (GtkBindingEntry *entry)
   register GtkBindingEntry *tmp;
   GtkBindingEntry *begin;
   register GtkBindingEntry *last;
+  GSList *tmp_list;
 
   /* unlink from binding set
    */
@@ -214,25 +294,16 @@ binding_entry_destroy (GtkBindingEntry *entry)
       g_hash_table_insert (binding_entry_hash_table, begin, begin);
     }
 
+  for (tmp_list = binding_key_hashes; tmp_list; tmp_list = tmp_list->next)
+    {
+      GtkKeyHash *key_hash = tmp_list->data;
+      _gtk_key_hash_remove_entry (key_hash, entry);
+    }
+
   entry->destroyed = TRUE;
 
   if (!entry->in_emission)
     binding_entry_free (entry);
-}
-
-static GtkBindingEntry*
-binding_ht_lookup_list (guint           keyval,
-			GdkModifierType modifiers)
-{
-  GtkBindingEntry lookup_entry = { 0 };
-  
-  if (!binding_entry_hash_table)
-    return NULL;
-  
-  lookup_entry.keyval = keyval;
-  lookup_entry.modifiers = modifiers;
-  
-  return g_hash_table_lookup (binding_entry_hash_table, &lookup_entry);
 }
 
 static GtkBindingEntry*
@@ -835,7 +906,7 @@ gtk_binding_set_add_path (GtkBindingSet	     *binding_set,
     }
 }
 
-static inline gboolean
+static gboolean
 binding_match_activate (GSList          *pspec_list,
 			GtkObject	*object,
 			guint	         path_length,
@@ -877,20 +948,25 @@ gtk_binding_pattern_compare (gconstpointer new_pattern,
   return np->seq_id < ep->seq_id;
 }
 
-static inline GSList*
-gtk_binding_entries_sort_patterns (GtkBindingEntry    *entries,
-				   GtkPathType         path_id)
+static GSList*
+gtk_binding_entries_sort_patterns (GSList      *entries,
+				   GtkPathType  path_id,
+				   gboolean     is_release)
 {
   GSList *patterns;
 
   patterns = NULL;
-  while (entries)
+  for (; entries; entries = entries->next)
     {
-      register GtkBindingSet *binding_set;
+      GtkBindingEntry *entry = entries->data;
+      GtkBindingSet *binding_set;
       GSList *slist = NULL;
 
-      binding_set = entries->binding_set;
-      binding_set->current = entries;
+      if (is_release != ((entry->modifiers & GDK_RELEASE_MASK) != 0))
+	continue;
+
+      binding_set = entry->binding_set;
+      binding_set->current = entry;
 
       switch (path_id)
 	{
@@ -912,34 +988,18 @@ gtk_binding_entries_sort_patterns (GtkBindingEntry    *entries,
 	  pspec = slist->data;
 	  patterns = g_slist_insert_sorted (patterns, pspec, gtk_binding_pattern_compare);
 	}
-
-      entries = entries->hash_next;
     }
 
   return patterns;
 }
-      
 
-gboolean
-gtk_bindings_activate (GtkObject      *object,
-		       guint           keyval,
-		       GdkModifierType modifiers)
+static gboolean
+gtk_bindings_activate_list (GtkObject *object,
+			    GSList    *entries,
+			    gboolean   is_release)
 {
-  GtkBindingEntry *entries;
-  GtkWidget *widget;
+  GtkWidget *widget = GTK_WIDGET (object);
   gboolean handled = FALSE;
-
-  g_return_val_if_fail (GTK_IS_OBJECT (object), FALSE);
-
-  if (!GTK_IS_WIDGET (object))
-    return FALSE;
-
-  widget = GTK_WIDGET (object);
-
-  keyval = gdk_keyval_to_lower (keyval);
-  modifiers = modifiers & BINDING_MOD_MASK ();
-
-  entries = binding_ht_lookup_list (keyval, modifiers);
 
   if (!entries)
     return FALSE;
@@ -951,7 +1011,7 @@ gtk_bindings_activate (GtkObject      *object,
       GSList *patterns;
 
       gtk_widget_path (widget, &path_length, &path, &path_reversed);
-      patterns = gtk_binding_entries_sort_patterns (entries, GTK_PATH_WIDGET);
+      patterns = gtk_binding_entries_sort_patterns (entries, GTK_PATH_WIDGET, is_release);
       handled = binding_match_activate (patterns, object, path_length, path, path_reversed);
       g_slist_free (patterns);
       g_free (path);
@@ -965,7 +1025,7 @@ gtk_bindings_activate (GtkObject      *object,
       GSList *patterns;
 
       gtk_widget_class_path (widget, &path_length, &path, &path_reversed);
-      patterns = gtk_binding_entries_sort_patterns (entries, GTK_PATH_WIDGET_CLASS);
+      patterns = gtk_binding_entries_sort_patterns (entries, GTK_PATH_WIDGET_CLASS, is_release);
       handled = binding_match_activate (patterns, object, path_length, path, path_reversed);
       g_slist_free (patterns);
       g_free (path);
@@ -977,7 +1037,7 @@ gtk_bindings_activate (GtkObject      *object,
       GSList *patterns;
       GtkType class_type;
       
-      patterns = gtk_binding_entries_sort_patterns (entries, GTK_PATH_CLASS);
+      patterns = gtk_binding_entries_sort_patterns (entries, GTK_PATH_CLASS, is_release);
       class_type = GTK_OBJECT_TYPE (object);
       while (class_type && !handled)
 	{
@@ -996,6 +1056,71 @@ gtk_bindings_activate (GtkObject      *object,
 	}
       g_slist_free (patterns);
     }
+
+  return handled;
+}
+
+gboolean
+gtk_bindings_activate (GtkObject      *object,
+		       guint	       keyval,
+		       GdkModifierType modifiers)
+{
+  GSList *entries = NULL;
+  GtkKeyHash *key_hash;
+  gboolean handled = FALSE;
+  gboolean is_release;
+
+  g_return_val_if_fail (GTK_IS_OBJECT (object), FALSE);
+
+  if (!GTK_IS_WIDGET (object))
+    return FALSE;
+
+  is_release = (BINDING_MOD_MASK () & GDK_RELEASE_MASK) != 0;
+  modifiers = modifiers & BINDING_MOD_MASK () & ~GDK_RELEASE_MASK;
+
+  key_hash = binding_key_hash_for_keymap (gdk_keymap_get_default ());
+  entries = _gtk_key_hash_lookup_keyval (key_hash, keyval, modifiers);
+
+  handled = gtk_bindings_activate_list (object, entries, is_release);
+
+  g_slist_free (entries);
+
+  return handled;
+}
+
+/**
+ * _gtk_bindings_activate_event:
+ * @object: a #GtkObject (generally must be a widget)
+ * @event: a #GdkEventKey
+ * 
+ * Looks up key bindings for @object to find one matching
+ * @event, and if one was found, activate it.
+ * 
+ * Return value: %TRUE if a matching key binding was found
+ **/
+gboolean
+_gtk_bindings_activate_event (GtkObject      *object,
+			      GdkEventKey    *event)
+{
+  GSList *entries = NULL;
+  GtkKeyHash *key_hash;
+  gboolean handled = FALSE;
+
+  g_return_val_if_fail (GTK_IS_OBJECT (object), FALSE);
+
+  if (!GTK_IS_WIDGET (object))
+    return FALSE;
+
+  key_hash = binding_key_hash_for_keymap (gdk_keymap_get_default ());
+  entries = _gtk_key_hash_lookup (key_hash,
+				  event->hardware_keycode,
+				  event->state & BINDING_MOD_MASK () & ~GDK_RELEASE_MASK,
+				  event->group);
+  
+  handled = gtk_bindings_activate_list (object, entries,
+					event->type == GDK_KEY_RELEASE);
+
+  g_slist_free (entries);
 
   return handled;
 }

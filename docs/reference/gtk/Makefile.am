@@ -33,6 +33,7 @@ IGNORE_HFILES=			\
 	gtkhsv.h		\
 	gtkimmodule.h		\
 	gtkintl.h		\
+	gtkkeyhash.h		\
 	gtkmarshal.h		\
 	gtkprivate.h		\
 	gtktreeprivate.h	\

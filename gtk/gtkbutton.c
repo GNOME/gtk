@@ -253,7 +253,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 		    GTK_TYPE_NONE, 0);
   button_signals[ACTIVATE] =
     gtk_signal_new ("activate",
-                    GTK_RUN_FIRST,
+                    GTK_RUN_FIRST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkButtonClass, activate),
                     _gtk_marshal_VOID__VOID,

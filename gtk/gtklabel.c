@@ -1827,7 +1827,7 @@ gtk_label_set_uline_text_internal (GtkLabel    *label,
 	    {
 	      *pattern_dest++ = '_';
 	      if (accel_key == GDK_VoidSymbol)
-		accel_key = gdk_keyval_to_lower (c);
+		accel_key = gdk_keyval_to_lower (gdk_unicode_to_keyval (c));
 	    }
 
 	  while (src < next_src)

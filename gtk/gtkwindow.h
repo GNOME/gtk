@@ -125,7 +125,8 @@ struct _GtkWindowClass
   void     (* activate_focus)          (GtkWindow       *window);
   void     (* activate_default)        (GtkWindow       *window);
   void     (* move_focus)              (GtkWindow       *window,
-                                        GtkDirectionType direction);  
+                                        GtkDirectionType direction);
+  
   void	   (*keys_changed)	       (GtkWindow	*window);
 };
 

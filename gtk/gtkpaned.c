@@ -145,9 +145,6 @@ add_tab_bindings (GtkBindingSet    *binding_set,
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, modifiers,
                                 "cycle_handle_focus", 1,
                                 G_TYPE_BOOLEAN, reverse);
-  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Left_Tab, modifiers,
-                                "cycle_handle_focus", 1,
-                                G_TYPE_BOOLEAN, reverse);
 }
 
 static void

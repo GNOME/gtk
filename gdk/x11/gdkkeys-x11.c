@@ -735,13 +735,13 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
  * @keyval: return location for keyval
  * @effective_group: return location for effective group
  * @level: return location for level
- * @unused_modifiers: return location for modifiers that didn't affect the group or level
+ * @consumed_modifiers: return location for modifiers that were used to determine the group or level
  * 
  *
  * Translates the contents of a #GdkEventKey into a keyval, effective
- * group, and level. Modifiers that didn't affect the translation and
- * are thus available for application use are returned in
- * @unused_modifiers.  See gdk_keyval_get_keys() for an explanation of
+ * group, and level. Modifiers that affected the translation and
+ * are thus unavailable for application use are returned in
+ * @consumed_modifiers.  See gdk_keyval_get_keys() for an explanation of
  * groups and levels.  The @effective_group is the group that was
  * actually used for the translation; some keys such as Enter are not
  * affected by the active keyboard group. The @level is derived from
@@ -758,9 +758,10 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
                                      guint           *keyval,
                                      gint            *effective_group,
                                      gint            *level,
-                                     GdkModifierType *unused_modifiers)
+                                     GdkModifierType *consumed_modifiers)
 {
   KeySym tmp_keyval = NoSymbol;
+  guint tmp_modifiers;
 
   g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
   g_return_val_if_fail (group < 4, FALSE);
@@ -771,8 +772,8 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
     *effective_group = 0;
   if (level)
     *level = 0;
-  if (unused_modifiers)
-    *unused_modifiers = state;
+  if (consumed_modifiers)
+    *consumed_modifiers = 0;
 
   update_keyrange ();
   
@@ -792,13 +793,18 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
       MyEnhancedXkbTranslateKeyCode (xkb,
                                      hardware_keycode,
                                      state,
-                                     unused_modifiers,
+                                     &tmp_modifiers,
                                      &tmp_keyval,
                                      effective_group,
                                      level);
 
-      if (keyval)
-        *keyval = tmp_keyval;
+      if (state & ~tmp_modifiers & LockMask)
+	tmp_keyval = gdk_keyval_to_upper (tmp_keyval);
+
+      /* We need to augment the consumed modifiers with LockMask, since
+       * we handle that ourselves, and also with the group bits
+       */
+      tmp_modifiers |= LockMask | 1 << 13 | 1 << 14;
     }
   else
 #endif
@@ -819,14 +825,7 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
       tmp_keyval = XKeycodeToKeysym (gdk_display, hardware_keycode,
                                      group * keysyms_per_keycode + shift_level);
       
-      if (keyval)
-        *keyval = tmp_keyval;
-
-      if (unused_modifiers)
-        {
-          *unused_modifiers = state;
-          *unused_modifiers &= ~(GDK_SHIFT_MASK | GDK_LOCK_MASK | group_switch_mask);
-        }
+      tmp_modifiers = GDK_SHIFT_MASK | GDK_LOCK_MASK | group_switch_mask;
       
       if (effective_group)
         *effective_group = (state & group_switch_mask) ? 1 : 0;
@@ -834,6 +833,23 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
       if (level)
         *level = shift_level;
     }
+
+  /* GDK_ISO_Left_Tab, as usually configured through XKB, really messes
+   * up the whole idea of "consumed modifiers" because shift is consumed.
+   * However, <shift>Tab is not _consistently_ GDK_ISO_Left_Tab, so people
+   * can't bind to GDK_ISO_Left_Tab instead. So, we force consistency here.
+   */
+  if (tmp_keyval == GDK_Tab && (tmp_modifiers & GDK_SHIFT_MASK == 0))
+    {
+      tmp_keyval = GDK_ISO_Left_Tab;
+      tmp_modifiers |= GDK_SHIFT_MASK;
+    }
+
+  if (consumed_modifiers)
+    *consumed_modifiers = tmp_modifiers;
+				
+  if (keyval)
+    *keyval = tmp_keyval;
 
   return tmp_keyval != NoSymbol;
 }

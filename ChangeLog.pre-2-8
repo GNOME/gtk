@@ -1,3 +1,45 @@
+Wed Feb 20 14:26:47 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkkeyhash.[ch]: Implement "fuzzy" key binding lookups;
+	allow matches on key and level but not group. Also, implement 
+	ignoring "consumed modifiers correctly."
+
+	* gtk/gtkaccelgroup.c gtk/gtkbindings.c: Convert to using
+	GtkKeyHash.
+	
+	* gtk/gtkdebug.h gtk/gtkmain.c: Support GTK_DEBUG=keybindings
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Fill in
+	the group for key release events as well as key press events.
+
+	* gdk/gdkkeys.h gdk/x11/gdkkeys-x11.c (gdk_keymap_translate_keyboard_state): 
+	Rename unused_modifiers to consumed_modifiers, make the docs and
+	non-Xkb implementation match the Xkb implementation.
+
+	* gdk/linux-fb/gdkkeyboard-fb.c gdk/win32/gdkkeys-win32.c: Propagate
+	doc and parameter name changes.
+
+	* gdk/x11/gdkkeys-x11.c (gdk_keymap_translate_keyboard_state):
+	XkbTranslateKeyCode doesn't handle LockMask, we need to handle
+	it ourselves.
+
+	* gdk/x11/gdkkeys-x11.c (gdk_keymap_translate_keyboard_state): Force
+	<Shift>Tab to give GDK_ISO_Left_Tab, since we need consistency
+	to allow dealing with ISO_Left_Tab.
+	
+	* gtk/gtkwindow.c gtk/gtktextview.c gtk/gtkscrolledwindow.c
+	gtk/gtkpaned.c gtk/gtkcombo.c  gtk/gtknotebook.c:
+	Remove inappropriate uses of GDK_ISO_Left_Tab. (GDK_ISO_Left_Tab
+	or <Shift>Tab both are equivalent as a binding specifier.)
+
+	* gtk/gtkbutton.c (gtk_button_class_init): Make ::activate
+	GTK_RUN_ACTION, so you can bind an accelerator to it.
+
+	* gtk/gtklabel.c (gtk_label_set_uline_text_internal): Call 
+	gdk_unicode_to_keyval on the mnemonic character.
+
+	* tests/testgtk.c: Add a test for the new fuzzy key binding matching.
+
 2002-02-21  jacob berkman  <jacob@ximian.com>
 
 	* gtk/theme-bits/Makefile.am (EXTRA_DIST): inconsitent files are

@@ -1,3 +1,7 @@
+Thu Feb 21 12:11:42 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am (IGNORE_HFILES): Add gtkkeyhash.h
+
 2002-02-20  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtk-sections.txt

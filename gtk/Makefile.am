@@ -308,6 +308,8 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkinvisible.c		\
 	gtkitem.c		\
 	gtkitemfactory.c	\
+	gtkkeyhash.c		\
+	gtkkeyhash.h		\
 	gtklabel.c		\
 	gtklayout.c		\
 	gtklist.c		\

@@ -35,6 +35,7 @@
 #include "gtkwindow.h"
 #include "gtkwindow-decorate.h"
 #include "gtkbindings.h"
+#include "gtkkeyhash.h"
 #include "gtkmain.h"
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
@@ -174,6 +175,7 @@ static void gtk_window_real_activate_default (GtkWindow         *window);
 static void gtk_window_real_activate_focus   (GtkWindow         *window);
 static void gtk_window_move_focus            (GtkWindow         *window,
                                               GtkDirectionType   dir);
+static void gtk_window_keys_changed          (GtkWindow         *window);
 static void gtk_window_read_rcfiles       (GtkWidget         *widget,
 					   GdkEventClient    *event);
 static void gtk_window_paint              (GtkWidget         *widget,
@@ -222,7 +224,12 @@ static void     gtk_window_set_default_size_internal (GtkWindow    *window,
 
 static void     gtk_window_realize_icon               (GtkWindow    *window);
 static void     gtk_window_unrealize_icon             (GtkWindow    *window);
-static void	gtk_window_notify_keys_changed      (GtkWindow    *window);
+
+static void        gtk_window_notify_keys_changed (GtkWindow   *window);
+static gboolean    gtk_window_activate_key        (GtkWindow   *window,
+						   GdkEventKey *event);
+static GtkKeyHash *gtk_window_get_key_hash        (GtkWindow   *window);
+static void        gtk_window_free_key_hash       (GtkWindow   *window);
 
 static GSList      *toplevel_list = NULL;
 static GHashTable  *mnemonic_hash_table = NULL;
@@ -308,9 +315,6 @@ add_tab_bindings (GtkBindingSet    *binding_set,
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, modifiers,
                                 "move_focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Left_Tab, modifiers,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
 }
 
 static void
@@ -388,7 +392,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   klass->activate_default = gtk_window_real_activate_default;
   klass->activate_focus = gtk_window_real_activate_focus;
   klass->move_focus = gtk_window_move_focus;
-  klass->keys_changed = NULL;
+  klass->keys_changed = gtk_window_keys_changed;
   
   /* Construct */
   g_object_class_install_property (gobject_class,
@@ -2901,7 +2905,9 @@ gtk_window_destroy (GtkObject *object)
   if (window->group)
     gtk_window_group_remove_window (window->group, window);
 
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+   gtk_window_free_key_hash (window);
+
+   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 static gboolean
@@ -3525,13 +3531,10 @@ gtk_window_key_press_event (GtkWidget   *widget,
 
   handled = FALSE;
 
+  /* Check for mnemonics and accelerators
+   */
   if (!handled)
-    handled = gtk_window_mnemonic_activate (window,
-					    event->keyval,
-					    event->state);
-
-  if (!handled)
-    handled = gtk_accel_groups_activate (G_OBJECT (window), event->keyval, event->state);
+    handled = gtk_window_activate_key (window, event);
 
   if (!handled)
     {
@@ -5675,4 +5678,184 @@ gtk_window_parse_geometry (GtkWindow   *window,
     }
   
   return result != 0;
+}
+
+typedef void (*GtkWindowKeysForeach) (GtkWindow      *window,
+				      guint           keyval,
+				      GdkModifierType modifiers,
+				      gboolean        is_mnemonic,
+				      gpointer        data);
+
+static void
+gtk_window_mnemonic_hash_foreach (gpointer key,
+				  gpointer value,
+				  gpointer data)
+{
+  struct {
+    GtkWindow *window;
+    GtkWindowKeysForeach func;
+    gpointer func_data;
+  } *info = data;
+
+  GtkWindowMnemonic *mnemonic = value;
+
+  if (mnemonic->window == info->window)
+    (*info->func) (info->window, mnemonic->keyval, info->window->mnemonic_modifier, TRUE, info->func_data);
+}
+
+static void
+gtk_window_keys_foreach (GtkWindow           *window,
+			 GtkWindowKeysForeach func,
+			 gpointer             func_data)
+{
+  GSList *groups;
+
+  struct {
+    GtkWindow *window;
+    GtkWindowKeysForeach func;
+    gpointer func_data;
+  } info;
+
+  info.window = window;
+  info.func = func;
+  info.func_data = func_data;
+
+  g_hash_table_foreach (mnemonic_hash_table,
+			gtk_window_mnemonic_hash_foreach,
+			&info);
+
+  groups = gtk_accel_groups_from_object (G_OBJECT (window));
+  while (groups)
+    {
+      GtkAccelGroup *group = groups->data;
+      gint i;
+
+      for (i = 0; i < group->n_accels; i++)
+	{
+	  GtkAccelKey *key = &group->priv_accels[i].key;
+	  
+	  if (key->accel_key)
+	    (*func) (window, key->accel_key, key->accel_mods, FALSE, func_data);
+	}
+      
+      groups = groups->next;
+    }
+}
+
+static void
+gtk_window_keys_changed (GtkWindow *window)
+{
+  gtk_window_free_key_hash (window);
+  gtk_window_get_key_hash (window);
+}
+
+typedef struct _GtkWindowKeyEntry GtkWindowKeyEntry;
+
+struct _GtkWindowKeyEntry
+{
+  guint keyval;
+  guint modifiers;
+  gboolean is_mnemonic;
+};
+
+static void
+add_to_key_hash (GtkWindow      *window,
+		 guint           keyval,
+		 GdkModifierType modifiers,
+		 gboolean        is_mnemonic,
+		 gpointer        data)
+{
+  GtkKeyHash *key_hash = data;
+
+  GtkWindowKeyEntry *entry = g_new (GtkWindowKeyEntry, 1);
+
+  entry->keyval = keyval;
+  entry->modifiers = modifiers;
+  entry->is_mnemonic = is_mnemonic;
+
+  /* GtkAccelGroup stores lowercased accelerators. To deal
+   * with this, if <Shift> was specified, uppercase.
+   */
+  if (modifiers & GDK_SHIFT_MASK)
+    {
+      if (keyval == GDK_Tab)
+	keyval = GDK_ISO_Left_Tab;
+      else
+	keyval = gdk_keyval_to_upper (keyval);
+    }
+  
+  _gtk_key_hash_add_entry (key_hash, keyval, entry->modifiers, entry);
+}
+
+static GtkKeyHash *
+gtk_window_get_key_hash (GtkWindow *window)
+{
+  GtkKeyHash *key_hash = g_object_get_data (G_OBJECT (window), "gtk-window-key-hash");
+  if (key_hash)
+    return key_hash;
+  
+  key_hash = _gtk_key_hash_new (gdk_keymap_get_default(), (GDestroyNotify)g_free);
+  gtk_window_keys_foreach (window, add_to_key_hash, key_hash);
+  g_object_set_data (G_OBJECT (window), "gtk-window-key-hash", key_hash);
+
+  return key_hash;
+}
+
+static void
+gtk_window_free_key_hash (GtkWindow *window)
+{
+  GtkKeyHash *key_hash = g_object_get_data (G_OBJECT (window), "gtk-window-key-hash");
+  if (key_hash)
+    {
+      _gtk_key_hash_free (key_hash);
+      g_object_set_data (G_OBJECT (window), "gtk-window-key-hash", NULL);
+    }
+}
+
+static gboolean
+gtk_window_activate_key (GtkWindow   *window,
+			 GdkEventKey *event)
+{
+  GtkKeyHash *key_hash = g_object_get_data (G_OBJECT (window), "gtk-window-key-hash");
+  GtkWindowKeyEntry *found_entry = NULL;
+
+  if (!key_hash)
+    {
+      gtk_window_keys_changed (window);
+      key_hash = g_object_get_data (G_OBJECT (window), "gtk-window-key-hash");
+    }
+  
+  if (key_hash)
+    {
+      GSList *entries = _gtk_key_hash_lookup (key_hash,
+					      event->hardware_keycode,
+					      event->state & gtk_accelerator_get_default_mod_mask (),
+					      event->group);
+      GSList *tmp_list;
+
+      for (tmp_list = entries; tmp_list; tmp_list = tmp_list->next)
+	{
+	  GtkWindowKeyEntry *entry = tmp_list->data;
+	  if (entry->is_mnemonic)
+	    {
+	      found_entry = entry;
+	      break;
+	    }
+	}
+      
+      if (!found_entry && entries)
+	found_entry = entries->data;
+
+      g_slist_free (entries);
+    }
+
+  if (found_entry)
+    {
+      if (found_entry->is_mnemonic)
+	return gtk_window_mnemonic_activate (window, found_entry->keyval, found_entry->modifiers);
+      else
+	return gtk_accel_groups_activate (G_OBJECT (window), found_entry->keyval, found_entry->modifiers);
+    }
+  else
+    return FALSE;
 }

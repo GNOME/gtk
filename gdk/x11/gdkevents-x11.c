@@ -679,6 +679,8 @@ gdk_event_translate (GdkEvent *event,
       event->key.length = 0;
       event->key.string = NULL;
       
+      event->key.group = (xevent->xkey.state & KEYBOARD_GROUP_MASK) >> KEYBOARD_GROUP_SHIFT;
+
       break;
       
     case ButtonPress:

@@ -2871,9 +2871,7 @@ gtk_widget_real_key_press_event (GtkWidget         *widget,
   gboolean handled = FALSE;
 
   if (!handled)
-    handled = gtk_bindings_activate (GTK_OBJECT (widget),
-				     event->keyval,
-				     event->state);
+    handled = _gtk_bindings_activate_event (GTK_OBJECT (widget), event);
 
   return handled;
 }
@@ -2885,9 +2883,7 @@ gtk_widget_real_key_release_event (GtkWidget         *widget,
   gboolean handled = FALSE;
 
   if (!handled)
-    handled = gtk_bindings_activate (GTK_OBJECT (widget),
-				     event->keyval,
-				     event->state | GDK_RELEASE_MASK);
+    handled = _gtk_bindings_activate_event (GTK_OBJECT (widget), event);
 
   return handled;
 }

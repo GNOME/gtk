@@ -155,7 +155,8 @@ static const GDebugKey gtk_debug_keys[] = {
   {"plugsocket", GTK_DEBUG_PLUGSOCKET},
   {"text", GTK_DEBUG_TEXT},
   {"tree", GTK_DEBUG_TREE},
-  {"updates", GTK_DEBUG_UPDATES}
+  {"updates", GTK_DEBUG_UPDATES},
+  {"keybindings", GTK_DEBUG_KEYBINDINGS}
 };
 
 static const guint gtk_ndebug_keys = sizeof (gtk_debug_keys) / sizeof (GDebugKey);

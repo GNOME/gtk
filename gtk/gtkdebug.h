@@ -27,16 +27,17 @@
 #ifndef __GTK_DEBUG_H__
 #define __GTK_DEBUG_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+#include <glib.h>
+
+G_BEGIN_DECLS
 
 typedef enum {
-  GTK_DEBUG_MISC       = 1 << 0,
-  GTK_DEBUG_PLUGSOCKET = 1 << 1,
-  GTK_DEBUG_TEXT       = 1 << 2,
-  GTK_DEBUG_TREE       = 1 << 3,
-  GTK_DEBUG_UPDATES    = 1 << 4
+  GTK_DEBUG_MISC        = 1 << 0,
+  GTK_DEBUG_PLUGSOCKET  = 1 << 1,
+  GTK_DEBUG_TEXT        = 1 << 2,
+  GTK_DEBUG_TREE        = 1 << 3,
+  GTK_DEBUG_UPDATES     = 1 << 4,
+  GTK_DEBUG_KEYBINDINGS = 1 << 5
 } GtkDebugFlag;
 
 #ifdef G_ENABLE_DEBUG
@@ -63,9 +64,6 @@ typedef enum {
 
 GTKVAR guint gtk_debug_flags;
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_DEBUG_H__ */

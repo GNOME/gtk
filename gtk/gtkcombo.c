@@ -199,7 +199,6 @@ gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * com
 
   /* completion */
   if ((event->keyval == GDK_Tab ||
-       event->keyval == GDK_ISO_Left_Tab ||
        event->keyval == GDK_KP_Tab) &&
       (event->state & GDK_MOD1_MASK)) 
     {

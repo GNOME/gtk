@@ -88,7 +88,7 @@ gboolean       gdk_keymap_translate_keyboard_state (GdkKeymap           *keymap,
 						    guint               *keyval,
 						    gint                *effective_group,
 						    gint                *level,
-						    GdkModifierType     *unused_modifiers);
+						    GdkModifierType     *consumed_modifiers);
 gboolean       gdk_keymap_get_entries_for_keyval   (GdkKeymap           *keymap,
 						    guint                keyval,
 						    GdkKeymapKey       **keys,
