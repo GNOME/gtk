@@ -937,7 +937,7 @@ gtk_clist_init (GtkCList *clist)
 void
 gtk_clist_construct (GtkCList *clist,
 		     gint      columns,
-		     gchar    *titles[])
+		     const gchar *titles[])
 {
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CLIST (clist));
@@ -1008,7 +1008,7 @@ gtk_clist_new (gint columns)
  
 GtkWidget*
 gtk_clist_new_with_titles (gint   columns,
-			   gchar *titles[])
+			   const gchar *titles[])
 {
   GtkWidget *widget;
 
@@ -2522,8 +2522,8 @@ cell_size_request (GtkCList       *clist,
  *   gtk_clist_clear
  */
 gint
-gtk_clist_prepend (GtkCList *clist,
-		   gchar    *text[])
+gtk_clist_prepend (GtkCList    *clist,
+		   const gchar *text[])
 {
   g_return_val_if_fail (clist != NULL, -1);
   g_return_val_if_fail (GTK_IS_CLIST (clist), -1);
@@ -2533,8 +2533,8 @@ gtk_clist_prepend (GtkCList *clist,
 }
 
 gint
-gtk_clist_append (GtkCList *clist,
-		  gchar    *text[])
+gtk_clist_append (GtkCList    *clist,
+		  const gchar *text[])
 {
   g_return_val_if_fail (clist != NULL, -1);
   g_return_val_if_fail (GTK_IS_CLIST (clist), -1);
@@ -2544,9 +2544,9 @@ gtk_clist_append (GtkCList *clist,
 }
 
 gint
-gtk_clist_insert (GtkCList *clist,
-		  gint      row,
-		  gchar    *text[])
+gtk_clist_insert (GtkCList    *clist,
+		  gint         row,
+		  const gchar *text[])
 {
   g_return_val_if_fail (clist != NULL, -1);
   g_return_val_if_fail (GTK_IS_CLIST (clist), -1);

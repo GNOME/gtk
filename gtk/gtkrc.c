@@ -1359,7 +1359,7 @@ gtk_rc_parse_bg_pixmap (GScanner   *scanner,
 
 gchar*
 gtk_rc_find_pixmap_in_path (GScanner *scanner,
-			    gchar    *pixmap_file)
+			    const gchar *pixmap_file)
 {
   gint i;
   gint fd;
@@ -1392,7 +1392,7 @@ gtk_rc_find_pixmap_in_path (GScanner *scanner,
 
 gchar*
 gtk_rc_find_module_in_path (GScanner *scanner,
-			    gchar    *module_file)
+			    const gchar *module_file)
 {
   gint i;
   gint fd;

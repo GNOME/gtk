@@ -3880,10 +3880,10 @@ ctree_is_hot_spot (GtkCTree     *ctree,
  ***********************************************************/
 
 void
-gtk_ctree_construct (GtkCTree *ctree,
-		     gint      columns, 
-		     gint      tree_column,
-		     gchar    *titles[])
+gtk_ctree_construct (GtkCTree    *ctree,
+		     gint         columns, 
+		     gint         tree_column,
+		     const gchar *titles[])
 {
   GtkCList *clist;
 
@@ -3911,9 +3911,9 @@ gtk_ctree_construct (GtkCTree *ctree,
 }
 
 GtkWidget *
-gtk_ctree_new_with_titles (gint   columns, 
-			   gint   tree_column,
-			   gchar *titles[])
+gtk_ctree_new_with_titles (gint         columns, 
+			   gint         tree_column,
+			   const gchar *titles[])
 {
   GtkWidget *widget;
 

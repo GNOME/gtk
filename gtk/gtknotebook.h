@@ -179,7 +179,7 @@ void gtk_notebook_set_tab_label           (GtkNotebook *notebook,
 					   GtkWidget   *tab_label);
 void gtk_notebook_set_tab_label_text      (GtkNotebook *notebook,
 					   GtkWidget   *child,
-					   gchar       *tab_text);
+					   const gchar *tab_text);
 GtkWidget * gtk_notebook_query_menu_label (GtkNotebook *notebook,
 					   GtkWidget   *child);
 void gtk_notebook_set_menu_label          (GtkNotebook *notebook,
@@ -187,7 +187,7 @@ void gtk_notebook_set_menu_label          (GtkNotebook *notebook,
 					   GtkWidget   *menu_label);
 void gtk_notebook_set_menu_label_text     (GtkNotebook *notebook,
 					   GtkWidget   *child,
-					   gchar       *menu_text);
+					   const gchar *menu_text);
 void gtk_notebook_query_tab_label_packing (GtkNotebook *notebook,
 					   GtkWidget   *child,
 					   gboolean    *expand,

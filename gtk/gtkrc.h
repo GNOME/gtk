@@ -83,10 +83,10 @@ void	  gtk_rc_set_image_loader(GtkImageLoader loader);
 GdkPixmap *gtk_rc_load_image (GdkColormap *colormap,
 			      GdkColor    *transparent_color,
 			      const gchar *filename);
-gchar      *gtk_rc_find_pixmap_in_path (GScanner *scanner,
-					gchar    *pixmap_file);
+gchar      *gtk_rc_find_pixmap_in_path (GScanner    *scanner,
+					const gchar *pixmap_file);
 gchar      *gtk_rc_find_module_in_path (GScanner *scanner,
-					gchar    *module_file);
+					const gchar *module_file);
 gchar      *gtk_rc_get_theme_dir(void);
 gchar      *gtk_rc_get_module_dir(void);
 

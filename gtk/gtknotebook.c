@@ -3925,7 +3925,7 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
 void
 gtk_notebook_set_tab_label_text (GtkNotebook *notebook,
 				 GtkWidget   *child,
-				 gchar       *tab_text)
+				 const gchar *tab_text)
 {
   GtkWidget *tab_label = NULL;
 
@@ -4000,7 +4000,7 @@ gtk_notebook_set_menu_label (GtkNotebook *notebook,
 void
 gtk_notebook_set_menu_label_text (GtkNotebook *notebook,
 				  GtkWidget   *child,
-				  gchar       *menu_text)
+				  const gchar *menu_text)
 {
   GtkWidget *menu_label = NULL;
 
