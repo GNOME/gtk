@@ -3,9 +3,9 @@ style "default"
   fg[NORMAL] = "#ffffff"
   fg[PRELIGHT] = "#ffffff"
   bg_pixmap[NORMAL]      = "triangle_background.png"
-#  bg_pixmap[NORMAL]    = "bc.xpm"
-  bg_pixmap[PRELIGHT]    = "bc-light.xpm"
-  bg_pixmap[ACTIVE]      = "bc-dark.xpm"  bg_pixmap[INSENSITIVE] = "bc.xpm"
+#  bg_pixmap[NORMAL]    = "bc.png"
+  bg_pixmap[PRELIGHT]    = "bc-light.png"
+  bg_pixmap[ACTIVE]      = "bc-dark.png"  bg_pixmap[INSENSITIVE] = "bc.png"
 }
 
 class "GtkWidget" style "default"
