@@ -2004,7 +2004,8 @@ get_better_cursor_x (GtkEntry *entry,
   gboolean split_cursor;
   
   PangoLayout *layout = gtk_entry_ensure_layout (entry, TRUE);
-  gint index = g_utf8_offset_to_pointer (entry->text, offset) - entry->text;
+  const gchar *text = pango_layout_get_text (layout);
+  gint index = g_utf8_offset_to_pointer (text, offset) - text;
   
   PangoRectangle strong_pos, weak_pos;
   
@@ -2826,9 +2827,12 @@ gtk_entry_find_position (GtkEntry *entry,
   gint index;
   gint pos;
   gboolean trailing;
-  gint cursor_index = g_utf8_offset_to_pointer (entry->text, entry->current_pos) - entry->text;
+  const gchar *text;
+  gint cursor_index;
   
   layout = gtk_entry_ensure_layout (entry, TRUE);
+  text = pango_layout_get_text (layout);
+  cursor_index = g_utf8_offset_to_pointer (text, entry->current_pos) - text;
   
   line = pango_layout_get_lines (layout)->data;
   pango_layout_line_x_to_index (line, x * PANGO_SCALE, &index, &trailing);
@@ -2844,7 +2848,7 @@ gtk_entry_find_position (GtkEntry *entry,
 	}
     }
 
-  pos = g_utf8_pointer_to_offset (entry->text, entry->text + index);
+  pos = g_utf8_pointer_to_offset (text, text + index);
   pos += trailing;
 
   return pos;
@@ -2856,30 +2860,49 @@ gtk_entry_get_cursor_locations (GtkEntry   *entry,
 				gint       *strong_x,
 				gint       *weak_x)
 {
-  PangoLayout *layout = gtk_entry_ensure_layout (entry, TRUE);
-  const gchar *text;
-  PangoRectangle strong_pos, weak_pos;
-  gint index;
-  
-  if (type == CURSOR_STANDARD)
+  if (!entry->visible && !entry->invisible_char)
     {
-      text = pango_layout_get_text (layout);
-      index = g_utf8_offset_to_pointer (text, entry->current_pos + entry->preedit_cursor) - text;
-    }
-  else /* type == CURSOR_DND */
-    {
-      index = g_utf8_offset_to_pointer (entry->text, entry->dnd_position) - entry->text;
-      if (entry->dnd_position > entry->current_pos)
-	index += entry->preedit_length;
-    }
+      if (strong_x)
+	*strong_x = 0;
       
-  pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
+      if (weak_x)
+	*weak_x = 0;
+    }
+  else
+    {
+      PangoLayout *layout = gtk_entry_ensure_layout (entry, TRUE);
+      const gchar *text = pango_layout_get_text (layout);
+      PangoRectangle strong_pos, weak_pos;
+      gint index;
+  
+      if (type == CURSOR_STANDARD)
+	{
+	  index = g_utf8_offset_to_pointer (text, entry->current_pos + entry->preedit_cursor) - text;
+	}
+      else /* type == CURSOR_DND */
+	{
+	  index = g_utf8_offset_to_pointer (text, entry->dnd_position) - text;
 
-  if (strong_x)
-    *strong_x = strong_pos.x / PANGO_SCALE;
-
-  if (weak_x)
-    *weak_x = weak_pos.x / PANGO_SCALE;
+	  if (entry->dnd_position > entry->current_pos)
+	    {
+	      if (entry->visible)
+		index += entry->preedit_length;
+	      else
+		{
+		  gint preedit_len_chars = g_utf8_strlen (text, -1) - entry->text_length;
+		  index += preedit_len_chars * g_unichar_to_utf8 (entry->invisible_char, NULL);
+		}
+	    }
+	}
+      
+      pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
+      
+      if (strong_x)
+	*strong_x = strong_pos.x / PANGO_SCALE;
+      
+      if (weak_x)
+	*weak_x = weak_pos.x / PANGO_SCALE;
+    }
 }
 
 static void
@@ -3015,7 +3038,7 @@ gtk_entry_move_visually (GtkEntry *entry,
       index = new_index;
       
       while (new_trailing--)
-	index = g_utf8_next_char (entry->text + new_index) - entry->text;
+	index = g_utf8_next_char (text + new_index) - text;
     }
   
   return g_utf8_pointer_to_offset (text, text + index);
@@ -3167,8 +3190,8 @@ gtk_entry_select_line (GtkEntry *entry)
 }
 
 /*
- * Like gtk_editable_get_chars, but if the editable is not
- * visible, return asterisks; also convert result to UTF-8.
+ * Like gtk_editable_get_chars, but handle not-visible entries
+ * correctly.
  */
 static char *    
 gtk_entry_get_public_chars (GtkEntry *entry,
@@ -3180,20 +3203,14 @@ gtk_entry_get_public_chars (GtkEntry *entry,
   
   if (entry->visible)
     return gtk_editable_get_chars (GTK_EDITABLE (entry), start, end);
+  else if (!entry->invisible_char)
+    return g_strdup ("");
   else
     {
-      gchar *str;
-      gint i;
-      gint n_chars = end - start;
-       
-      str = g_malloc (n_chars + 1);
-      for (i = 0; i < n_chars; i++)
-	str[i] = '*';
-      str[i] = '\0';
-      
-      return str;
+      GString *str = g_string_new (NULL);
+      append_char (str, entry->invisible_char, end - start);
+      return g_string_free (str, FALSE);
     }
-
 }
 
 static void
@@ -3708,11 +3725,15 @@ gint
 gtk_entry_layout_index_to_text_index (GtkEntry *entry,
                                       gint      layout_index)
 {
+  PangoLayout *layout;
+  const gchar *text;
   gint cursor_index;
   
   g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
 
-  cursor_index = g_utf8_offset_to_pointer (entry->text, entry->current_pos) - entry->text;
+  layout = gtk_entry_ensure_layout (entry, TRUE);
+  text = pango_layout_get_text (layout);
+  cursor_index = g_utf8_offset_to_pointer (text, entry->current_pos) - text;
   
   if (layout_index >= cursor_index && entry->preedit_length)
     {
@@ -3740,10 +3761,14 @@ gint
 gtk_entry_text_index_to_layout_index (GtkEntry *entry,
                                       gint      text_index)
 {
+  PangoLayout *layout;
+  const gchar *text;
   gint cursor_index;
   g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
 
-  cursor_index = g_utf8_offset_to_pointer (entry->text, entry->current_pos) - entry->text;
+  layout = gtk_entry_ensure_layout (entry, TRUE);
+  text = pango_layout_get_text (layout);
+  cursor_index = g_utf8_offset_to_pointer (text, entry->current_pos) - text;
   
   if (text_index > cursor_index)
     text_index += entry->preedit_length;

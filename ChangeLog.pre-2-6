@@ -1,3 +1,15 @@
+Mon Oct 21 14:04:39 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_get_public_chars): Return
+	"" for entry->invisible_char == 0, otherwise N copies
+	of entry->invisible_char. (#95486, Vitaly Tishkov)
+
+	* gtk/gtkentry.c: Fix a bunch of places where entry->text
+	instead of layout->text was being used for computation
+	of offsets/indices in the layout. Using layout->text
+	is necessary because when the entry is invisible, it
+	doesn't correspond to entry->text.
+
 Sun Oct 20 23:58:03 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtkmenu.c, gtkmenubar.c, gtkmenuitem.c, gtkmenushell.c,
