@@ -1,7 +1,8 @@
 
 lib_LTLIBRARIES = 		\
 	libgdk-pixbuf.la	\
-	libpixbuf-png.la
+	libpixbuf-png.la	\
+	libpixbuf-jpeg.la
 
 #
 # The GdkPixBuf library
@@ -20,3 +21,10 @@ libgdk_pixbufinclude_HEADERS =	\
 #
 libpixbuf_png_la_SOURCES = 	\
 	io-png.c
+
+#
+# The JPEG loader
+#
+libpixbuf_jpeg_la_SOURCES =	\
+	io-jpeg.c
+
