@@ -1,3 +1,8 @@
+1998-05-04  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* configure.in: Added $x_libs in the other_libraries field in the
+	check for XShapeCombineMask.
+
 Sat May  2 23:14:34 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkcurve.c (gtk_curve_graph_events): Ignore

@@ -124,7 +124,9 @@ AC_CHECK_LIB(Xext, XShapeCombineMask,
       if test -z "`echo $x_libs | grep "\-lXext" 2> /dev/null`"; then
            $x_libs="-lXext $x_libs"
       fi
-      AC_DEFINE(HAVE_SHAPE_EXT))
+      AC_DEFINE(HAVE_SHAPE_EXT),
+      ,
+      $x_libs)
 
 x_cflags="$X_CFLAGS"
 x_ldflags="$X_LDFLAGS $X_LIBS"
