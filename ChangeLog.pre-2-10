@@ -1,3 +1,35 @@
+2005-03-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdkkeyuni.c
+	* gdk/gdkpixbuf-drawable.c
+	* gdk/gdkrgb.c
+	* gdk/x11/gdkdnd-x11.c
+	* gdk/x11/gdkevents-x11.c
+	* gdk/x11/gdkproperty-x11.c
+	* gdk/x11/gdkvisual-x11.c
+	* gdk-pixbuf/gdk-pixbuf.c
+	* gtk/gtkaction.c
+	* gtk/gtkbindings.c
+	* gtk/gtkcolorbutton.c
+	* gtk/gtkcombo.c
+	* gtk/gtkcontainer.c
+	* gtk/gtkfilechooserdefault.c
+	* gtk/gtkfilesel.c
+	* gtk/gtkgamma.c
+	* gtk/gtkiconview.c
+	* gtk/gtkinputdialog.c
+	* gtk/gtkitemfactory.c
+	* gtk/gtkmenu.c
+	* gtk/gtktextview.c
+	* gtk/gtktooltips.c
+	* gtk/gtktreedatalist.c
+	* gtk/gtkuimanager.c
+	* gtk/tree_minus.xpm
+	* gtk/tree_plus.xpm
+	* gtk/xdgmime/xdgmime.c
+	* gtk/xdgmime/xdgmime.h: 
+	Move constant data to .rodata.
+
 2005-02-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaction.c (connect_proxy): Improve the handling

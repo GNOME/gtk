@@ -135,7 +135,7 @@ static void gtk_color_button_drag_data_received (GtkWidget        *widget,
 static gpointer parent_class = NULL;
 static guint color_button_signals[LAST_SIGNAL] = { 0 };
 
-static GtkTargetEntry drop_types[] = { { "application/x-color", 0, 0 } };
+static const GtkTargetEntry drop_types[] = { { "application/x-color", 0, 0 } };
 
 GType
 gtk_color_button_get_type (void)

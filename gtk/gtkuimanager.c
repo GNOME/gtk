@@ -2686,7 +2686,7 @@ mark_node_dirty (GNode *node)
     NODE_INFO (p)->dirty = TRUE;  
 }
 
-static const gchar *open_tag_format[] = {
+static const gchar *const open_tag_format[] = {
   "%*s<UNDECIDED",
   "%*s<ui",
   "%*s<menubar",
@@ -2701,7 +2701,7 @@ static const gchar *open_tag_format[] = {
   "%*s<accelerator"
 };
 
-static const gchar *close_tag_format[] = {
+static const gchar *const close_tag_format[] = {
   "%*s</UNDECIDED>\n",
   "%*s</ui>\n",
   "%*s</menubar>\n",

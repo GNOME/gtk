@@ -49,7 +49,7 @@
 #include "gtkframe.h"
 #include "gtkintl.h"
 
-const gchar *gtk_combo_string_key = "gtk-combo-string-value";
+const gchar gtk_combo_string_key[] = "gtk-combo-string-value";
 
 #define COMBO_LIST_MAX_HEIGHT	(400)
 #define	EMPTY_LIST_HEIGHT	(15)

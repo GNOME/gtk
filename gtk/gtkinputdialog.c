@@ -556,7 +556,7 @@ gtk_input_dialog_set_axis (GtkWidget *w,
 static void
 gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDevice *info)
 {
-  static const char *axis_use_strings[GDK_AXIS_LAST] =
+  static const char *const axis_use_strings[GDK_AXIS_LAST] =
   {
     "",
     N_("X"),

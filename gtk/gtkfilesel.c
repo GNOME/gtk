@@ -1068,7 +1068,7 @@ file_selection_setup_dnd (GtkFileSelection *filesel)
   static const GtkTargetEntry drop_types[] = {
     { "text/uri-list", 0, TARGET_URILIST}
   };
-  static gint n_drop_types = sizeof(drop_types)/sizeof(drop_types[0]);
+  static const gint n_drop_types = sizeof(drop_types)/sizeof(drop_types[0]);
   static const GtkTargetEntry drag_types[] = {
     { "text/uri-list", 0, TARGET_URILIST},
     { "UTF8_STRING", 0, TARGET_UTF8_STRING },
@@ -1076,7 +1076,7 @@ file_selection_setup_dnd (GtkFileSelection *filesel)
     { "TEXT",   0, 0 }, 
     { "COMPOUND_TEXT", 0, 0 }
   };
-  static gint n_drag_types = sizeof(drag_types)/sizeof(drag_types[0]);
+  static const gint n_drag_types = sizeof(drag_types)/sizeof(drag_types[0]);
 
   gtk_drag_dest_set (GTK_WIDGET (filesel),
 		     GTK_DEST_DEFAULT_ALL,
@@ -3207,7 +3207,7 @@ check_dir (gchar       *dir_name,
    */
 
   static struct {
-    gchar *name;
+    const gchar *name;
     gboolean present;
     struct stat statbuf;
   } no_stat_dirs[] = {

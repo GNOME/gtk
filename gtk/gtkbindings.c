@@ -54,7 +54,7 @@ typedef struct {
 static GHashTable	*binding_entry_hash_table = NULL;
 static GSList           *binding_key_hashes = NULL;
 static GSList		*binding_set_list = NULL;
-static const gchar	*key_class_binding_set = "gtk-class-binding-set";
+static const gchar	 key_class_binding_set[] = "gtk-class-binding-set";
 static GQuark		 key_id_class_binding_set = 0;
 
 

@@ -3895,13 +3895,13 @@ typedef struct
   guint action_idle_handler;
 } GtkIconViewItemAccessible;
 
-static const gchar *gtk_icon_view_item_accessible_action_names[] = 
+static const gchar *const gtk_icon_view_item_accessible_action_names[] = 
 {
   "activate",
   NULL
 };
 
-static const gchar *gtk_icon_view_item_accessible_action_descriptions[] =
+static const gchar *const gtk_icon_view_item_accessible_action_descriptions[] =
 {
   "Activate item",
   NULL
@@ -5977,7 +5977,7 @@ gtk_icon_view_accessible_get_type (void)
         (GInterfaceFinalizeFunc) NULL,
         NULL
       };
-      static GInterfaceInfo atk_selection_info = 
+      static const GInterfaceInfo atk_selection_info = 
       {
         (GInterfaceInitFunc) gtk_icon_view_accessible_selection_interface_init,
         (GInterfaceFinalizeFunc) NULL,

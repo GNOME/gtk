@@ -10,7 +10,7 @@
  * is smallish. It would save about ~1000 bytes total.
  */
 
-static struct {
+static const struct {
   unsigned short keysym;
   unsigned short ucs;
 } gdk_keysym_to_unicode_tab[] = {
@@ -872,7 +872,7 @@ gdk_keyval_to_unicode (guint keyval)
   return 0;
 }
 
-static struct {
+static const struct {
   unsigned short keysym;
   unsigned short ucs;
 } gdk_unicode_to_keysym_tab[] = {
