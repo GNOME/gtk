@@ -2,7 +2,7 @@
 <book>
 
 <bookinfo>
-  <date>October 27th 2002</date>
+  <date>January 23rd 2003</date>
   <title>GTK+ FAQ</title>
   <authorgroup>
     <author>
@@ -142,7 +142,7 @@ oriented features.</quote></para>
 
 <para>GTK+ == Gimp Toolkit</para>
 <para>GDK == GTK+ Drawing Kit</para>
-<para>GLib == G Libray</para>
+<para>GLib == G Library</para>
 
 </sect1>
 
