@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-02 17:21-0500\n"
-"PO-Revision-Date: 2004-03-01 13:38+0100\n"
+"POT-Creation-Date: 2004-03-06 02:52+0100\n"
+"PO-Revision-Date: 2004-03-06 02:53+0100\n"
 "Last-Translator: Александар Урошевић <urke@users.sourceforge.net>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -1321,53 +1321,53 @@ msgstr "Вредност са списка"
 msgid "Whether entered values must already be present in the list"
 msgstr "Да ли унете вредности морају већ бити присутне на списку"
 
-#: gtk/gtkcombobox.c:430
+#: gtk/gtkcombobox.c:451
 msgid "ComboBox model"
 msgstr "Модел падајуће листе"
 
-#: gtk/gtkcombobox.c:431
+#: gtk/gtkcombobox.c:452
 msgid "The model for the combo box"
 msgstr "Модел за падајућу листу"
 
-#: gtk/gtkcombobox.c:438
+#: gtk/gtkcombobox.c:459
 msgid "Wrap width"
 msgstr "Ширина за прелом"
 
-#: gtk/gtkcombobox.c:439
+#: gtk/gtkcombobox.c:460
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Ширина за прелом при распоређивању ставки у мрежи"
 
-#: gtk/gtkcombobox.c:448
+#: gtk/gtkcombobox.c:469
 msgid "Row span column"
 msgstr "Ред обухвата колону"
 
-#: gtk/gtkcombobox.c:449
+#: gtk/gtkcombobox.c:470
 msgid "TreeModel column containing the row span values"
 msgstr "Модел колоне стабла који садржи вредности обухватања редова"
 
-#: gtk/gtkcombobox.c:458
+#: gtk/gtkcombobox.c:479
 msgid "Column span column"
 msgstr "Колона обухвата колону"
 
-#: gtk/gtkcombobox.c:459
+#: gtk/gtkcombobox.c:480
 msgid "TreeModel column containing the column span values"
 msgstr "Модел колоне стабла који садржи вредности обухватања колона"
 
-#: gtk/gtkcombobox.c:468
+#: gtk/gtkcombobox.c:489
 msgid "Active item"
 msgstr "Активна ставка"
 
-#: gtk/gtkcombobox.c:469
+#: gtk/gtkcombobox.c:490
 msgid "The item which is currently active"
 msgstr "Ставка која је тренутно активна"
 
-#: gtk/gtkcombobox.c:477
+#: gtk/gtkcombobox.c:498
 msgid "Appears as list"
-msgstr ""
+msgstr "Изгледа као списак"
 
-#: gtk/gtkcombobox.c:478
+#: gtk/gtkcombobox.c:499
 msgid "Whether combobox dropdowns should look like lists rather than menus"
-msgstr ""
+msgstr "Да ли падајућа поља за унос изгледају као спискови уместо као менији"
 
 #: gtk/gtkcomboboxentry.c:109
 msgid "Text Column"
@@ -1749,14 +1749,13 @@ msgstr "Прикажи сакривене"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Да ли се приказују сакривене датотеке и директоријуми"
 
-#: gtk/gtkfilechooserdefault.c:473
+#: gtk/gtkfilechooserdefault.c:477
 msgid "Default file chooser backend"
-msgstr ""
+msgstr "Подразумевана подршка за избор датотека"
 
-#: gtk/gtkfilechooserdefault.c:474
-#, fuzzy
+#: gtk/gtkfilechooserdefault.c:478
 msgid "Name of the GtkFileChooser backend to use by default"
-msgstr "Име машинерије за систем датотека који ће се користити"
+msgstr "Име подршке коју подразумевано користи GtkFileChooser"
 
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
 msgid "Filename"
