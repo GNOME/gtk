@@ -213,13 +213,13 @@ LIBS="$LIBS -lm"
 AC_TRY_RUN([#include <math.h>
              int main (void) { return (log(1) != log(1.)); }],
      AC_MSG_RESULT(none needed),
-     gtk_save_CFLAGS=$CFLAGS
+     gtk_save_CFLAGS="$CFLAGS"
      CFLAGS="$CFLAGS -std1"
      AC_TRY_RUN([#include <math.h>
 	         int main (void) { return (log(1) != log(1.)); }],
          AC_MSG_RESULT(-std1),
          AC_MSG_RESULT()
-         CFLAGS=$gtk_save_CFLAGS
+         CFLAGS="$gtk_save_CFLAGS"
          AC_MSG_WARN(
                 [No ANSI prototypes found in library. (-std1 didn't work.)]),
 	 true
@@ -248,12 +248,12 @@ dnl NeXTStep cc seems to need this
 AC_MSG_CHECKING([for extra flags for POSIX compliance])
 AC_TRY_COMPILE([#include <dirent.h>], [DIR *dir;],
   AC_MSG_RESULT(none needed),
-  gtk_save_CFLAGS=$CFLAGS
+  gtk_save_CFLAGS="$CFLAGS"
   CFLAGS="$CFLAGS -posix"
   AC_TRY_COMPILE([#include <dirent.h>], [DIR *dir;],
     AC_MSG_RESULT(-posix),
     AC_MSG_RESULT()
-    CFLAGS=$gtk_save_CFLAGS
+    CFLAGS="$gtk_save_CFLAGS"
     AC_MSG_WARN([Could not determine POSIX flag. (-posix didn't work.)])))
 
 if test x$with_glib = xyes ; then
@@ -323,6 +323,9 @@ AC_CHECK_HEADERS(dirent.h, AC_DEFINE(HAVE_DIRENT_H))
 AC_CHECK_HEADERS(pwd.h, AC_DEFINE(HAVE_PWD_H))
 AC_CHECK_HEADERS(sys/time.h, AC_DEFINE(HAVE_SYS_TIME_H))
 
+saved_cflags="$CFLAGS"
+saved_ldflags="$LDFLAGS"
+
 if test "x$gdktarget" = "xx11"; then
   # Find the X11 include and library directories
   AC_PATH_X
@@ -331,9 +334,6 @@ if test "x$gdktarget" = "xx11"; then
   if test "x$x_includes" = "x"; then
     x_includes="/usr/include"
   fi
-
-  saved_cflags="$CFLAGS"
-  saved_ldflags="$LDFLAGS"
 
   CFLAGS="$CFLAGS $X_CFLAGS"
   LDFLAGS="$LDFLAGS $X_LDFLAGS $X_LIBS"
@@ -457,6 +457,8 @@ if test "x$gdktarget" = "xx11"; then
   #gtktargetlib = "libgtk-x11.la"
 
   AM_CONDITIONAL(USE_X11, true)
+else
+  AM_CONDITIONAL(USE_X11, false)
 fi
 
 if test "x$gdktarget" = "xnanox"; then
@@ -467,8 +469,8 @@ if test "x$gdktarget" = "xnanox"; then
   more_libs="-lnano-X"
   more_includes=
 
-  gdktargetlib = "libgdk-nanox.la"
-  gtktargetlib = "libgtk-nanox.la"
+  gdktargetlib="libgdk-nanox.la"
+  gtktargetlib="libgtk-nanox.la"
 
   with_xinput=no
   AC_DEFINE(XINPUT_NONE)
@@ -478,6 +480,8 @@ if test "x$gdktarget" = "xnanox"; then
   x_libs=
   xinput_progs=
   AM_CONDITIONAL(USE_NANOX, true)
+else
+  AM_CONDITIONAL(USE_NANOX, false)
 fi
 
 if test "x$gdktarget" = "xlinux-fb"; then
@@ -486,8 +490,8 @@ if test "x$gdktarget" = "xlinux-fb"; then
   more_libs=
   more_includes=
 
-  gdktargetlib = "libgdk-linux-fb.la"
-  gtktargetlib = "libgtk-linux-fb.la"
+  gdktargetlib="libgdk-linux-fb.la"
+  gtktargetlib="libgtk-linux-fb.la"
 
   with_xinput=no
   AC_DEFINE(XINPUT_NONE)
@@ -498,6 +502,8 @@ if test "x$gdktarget" = "xlinux-fb"; then
   xinput_progs=
   
   AM_CONDITIONAL(USE_LINUX_FB, true)
+else
+  AM_CONDITIONAL(USE_LINUX_FB, false)
 fi
 
 #

@@ -1,3 +1,6 @@
+Thu Jun  8 15:44:42 2000  Elliot Lee <sopwith@redhat.com>
+	* configure.in: Save cflags for all backends, not just X11.
+
 Wed Jun  7 15:44:42 2000  Elliot Lee <sopwith@redhat.com>
 	* configure.in: Use $PANGO_CONFIG instead of pango-config
 
