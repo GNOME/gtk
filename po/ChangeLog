@@ -1,3 +1,7 @@
+2003-07-11  Matthias Clasen  <maclas@gmx.de>
+
+	* POTFILES.in: Add gtkcolorbutton.c and gtkfontbutton.c.
+
 2003-07-07  Pablo Saratxaga  <pablo@mandrakesoft.com>
 
 	* wa.po: Updated Walloon file

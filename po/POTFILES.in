@@ -35,6 +35,7 @@ gtk/gtkcellrenderertext.c
 gtk/gtkcellrenderertoggle.c
 gtk/gtkcheckbutton.c
 gtk/gtkcheckmenuitem.c
+gtk/gtkcolorbutton.c
 gtk/gtkcolorsel.c
 gtk/gtkcolorseldialog.c
 gtk/gtkcombo.c
@@ -45,6 +46,7 @@ gtk/gtkentry.c
 gtk/gtkentrycompletion.c
 gtk/gtkfilesel.c
 gtk/gtkfixed.c
+gtk/gtkfontbutton.c
 gtk/gtkfontsel.c
 gtk/gtkframe.c
 gtk/gtkgamma.c
