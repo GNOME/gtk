@@ -4212,8 +4212,13 @@ gtk_combo_box_get_active (GtkComboBox *combo_box)
     {
       GtkTreePath *path;
       path = gtk_tree_row_reference_get_path (combo_box->priv->active_row);
-      result = gtk_tree_path_get_indices (path)[0];
-      gtk_tree_path_free (path);
+      if (path == NULL)
+	result = -1;
+      else
+	{
+	  result = gtk_tree_path_get_indices (path)[0];
+	  gtk_tree_path_free (path);
+	}
     }
   else
     result = -1;

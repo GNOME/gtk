@@ -1,3 +1,9 @@
+2004-11-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_get_active): Don't crash 
+	if the active_row reference has become invalid.  (#157156,
+	Christophe Fergeau)
+	
 2004-11-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_activate_key_after): As
