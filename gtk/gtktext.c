@@ -3202,20 +3202,17 @@ remove_cache_line (GtkText* text, GList* member)
 {
   GList *list;
 
+  if (member == NULL)
+    return NULL;
+
   if (member == text->line_start_cache)
-    {
-      if (text->line_start_cache)
-	text->line_start_cache = text->line_start_cache->next;
-    }
+    text->line_start_cache = text->line_start_cache->next;
 
   if (member->prev)
-    {
-      list = member->prev;
-  
-      list->next = member->next;
-      if (list->next)
-	list->next->prev = list;
-    }
+    member->prev->next = member->next;
+
+  if (member->next)
+    member->next->prev = member->prev;
 
   list = member->next;
   
