@@ -120,6 +120,8 @@ _gdk_windowing_init (gint    *argc,
 
   _gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
 
+  _wm_transient_for = gdk_atom_intern ("WM_TRANSIENT_FOR", FALSE);
+
   _gdk_win32_selection_init ();
 }
 

@@ -499,6 +499,8 @@ extern GdkAtom		 _gdk_ole2_dnd;
 
 extern GdkAtom		 _gdk_selection_property;
 
+extern GdkAtom		 _wm_transient_for;
+
 extern DWORD		 _windows_version;
 #define IS_WIN_NT()      (_windows_version < 0x80000000)
 
