@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 00:22-0400\n"
+"POT-Creation-Date: 2004-07-12 14:05+0200\n"
 "PO-Revision-Date: 2004-04-16 17:59+0200\n"
 "Last-Translator: Alessio Dessì <alessiodessi@tiscali.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -924,15 +924,15 @@ msgstr "Anello del colore"
 msgid "Color Selection"
 msgstr "Selezione colore"
 
-#: gtk/gtkentry.c:4300 gtk/gtktextview.c:6933
+#: gtk/gtkentry.c:4312 gtk/gtktextview.c:6933
 msgid "Select _All"
 msgstr "_Seleziona tutto"
 
-#: gtk/gtkentry.c:4310 gtk/gtktextview.c:6943
+#: gtk/gtkentry.c:4322 gtk/gtktextview.c:6943
 msgid "Input _Methods"
 msgstr "_Metodi di input"
 
-#: gtk/gtkentry.c:4320 gtk/gtktextview.c:6954
+#: gtk/gtkentry.c:4332 gtk/gtktextview.c:6954
 msgid "_Insert Unicode Control Character"
 msgstr "_Inserisci carattere di controllo unicode"
 
@@ -1360,9 +1360,9 @@ msgid "Filesystem"
 msgstr "File system"
 
 #: gtk/gtkfilesystemunix.c:731
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "Impossibile ottenere informazioni per il file «%s»: %s"
+msgstr "Impossibile ottenere un'icona dello stock per %s"
 
 #: gtk/gtkfilesystemunix.c:826
 #, c-format
@@ -1618,7 +1618,7 @@ msgstr "_Grassetto"
 
 #: gtk/gtkstock.c:296
 msgid "_Cancel"
-msgstr "_Annulla"
+msgstr "_Cancella"
 
 #: gtk/gtkstock.c:297
 msgid "_CD-Rom"
