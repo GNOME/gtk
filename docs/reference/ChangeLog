@@ -1,5 +1,9 @@
 2002-10-11  Matthias Clasen  <maclas@gmx.de>
 
+	* gdk/gdk-sections.txt: Add some missing symbols.
+
+	* gdk/Makefile.am (IGNORE_HFILES): Add gdkintl.h and gdkmarshalers.h.
+
 	* gtk/gtk-sections.txt: Add some missing symbols.
 
 2002-10-04  Matthias Clasen  <maclas@gmx.de>
