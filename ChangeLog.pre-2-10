@@ -1,3 +1,8 @@
+2005-04-05  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkvisual-win32.c (_gdk_visual_init): Don't force
+	24bpp GdkVisual on 32bpp displays. (#140706)
+
 Mon Apr  4 19:13:23 2005  Jonathan Blandford  <jrb@redhat.com>
 
 	Fix for #172319, Tristan Van Berkom:
