@@ -1,3 +1,8 @@
+Fri Jun 27 03:56:59 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* io-gif-animation.c (gdk_pixbuf_gif_anim_frame_composite): Make
+	it compile with C89 compilers.
+
 2003-06-23  Matthias Clasen  <maclas@gmx.de>
 
 	* io-gif.c (gif_get_frame_info): Remove the pointless refusal to load images with dubious 

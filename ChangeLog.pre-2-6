@@ -1,3 +1,9 @@
+Thu Jun 26 21:41:16 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktreeviewcolumn.c
+	(gtk_tree_view_column_cell_set_cell_data): only set "is_expander"
+	and "is_expanded" if the new value is different fromt he old one.
+
 Wed Jun 25 18:59:15 BST 2003  Tony Gale <gale@gtk.org>
 
 	* docs/faq/gtk-faq.sgml: Fix typos. Update

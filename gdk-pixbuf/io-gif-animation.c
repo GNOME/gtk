@@ -439,11 +439,13 @@ gdk_pixbuf_gif_anim_frame_composite (GdkPixbufGifAnim *gif_anim,
                                 f->need_recomposite = FALSE;
                         } else {
                                 GdkPixbufFrame *prev_frame;
+                                gint prev_clipped_width;
+                                gint prev_clipped_height;
                                 
                                 prev_frame = tmp->prev->data;
 
-                                gint prev_clipped_width = MIN (gif_anim->width - prev_frame->x_offset, gdk_pixbuf_get_width (prev_frame->pixbuf));
-                                gint prev_clipped_height = MIN (gif_anim->height - prev_frame->y_offset, gdk_pixbuf_get_height (prev_frame->pixbuf));
+                                prev_clipped_width = MIN (gif_anim->width - prev_frame->x_offset, gdk_pixbuf_get_width (prev_frame->pixbuf));
+                                prev_clipped_height = MIN (gif_anim->height - prev_frame->y_offset, gdk_pixbuf_get_height (prev_frame->pixbuf));
 
                                 /* Init f->composited with what we should have after the previous
                                  * frame

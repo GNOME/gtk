@@ -2368,7 +2368,12 @@ gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
       list = info->attributes;
 
       g_object_freeze_notify (cell);
-      g_object_set (cell, "is_expander", is_expander, "is_expanded", is_expanded, NULL);
+
+      if (info->cell->is_expander != is_expander)
+	g_object_set (cell, "is_expander", is_expander, NULL);
+
+      if (info->cell->is_expanded != is_expanded)
+	g_object_set (cell, "is_expanded", is_expanded, NULL);
 
       while (list && list->next)
 	{
