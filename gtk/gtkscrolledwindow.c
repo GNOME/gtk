@@ -69,7 +69,7 @@
 
 #define SCROLLBAR_SPACING(w) (GTK_SCROLLED_WINDOW_GET_CLASS (w)->scrollbar_spacing)
 
-#define DEFAULT_SCROLLBAR_SPACING  3
+#define DEFAULT_SCROLLBAR_SPACING  0
 
 enum {
   PROP_0,

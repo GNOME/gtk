@@ -29,6 +29,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtkmenubar.h"
 #include "gtkmenuitem.h"
 #include "gtksettings.h"
@@ -52,7 +53,16 @@ static gint gtk_menu_bar_expose        (GtkWidget       *widget,
 					GdkEventExpose  *event);
 static void gtk_menu_bar_hierarchy_changed (GtkWidget   *widget,
 					    GtkWidget   *old_toplevel);
+static void gtk_menu_bar_cycle_focus       (GtkMenuBar        *menubar,
+                                            GtkDirectionType   dir);
 static GtkShadowType get_shadow_type   (GtkMenuBar      *menubar);
+
+enum {
+  CYCLE_FOCUS,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
 
 static GtkMenuShellClass *parent_class = NULL;
 
@@ -81,6 +91,35 @@ gtk_menu_bar_get_type (void)
   return menu_bar_type;
 }
 
+static guint
+binding_signal_new (const gchar	       *signal_name,
+		    GType		itype,
+		    GSignalFlags	signal_flags,
+		    GCallback           handler,
+		    GSignalAccumulator  accumulator,
+		    gpointer		accu_data,
+		    GSignalCMarshaller  c_marshaller,
+		    GType		return_type,
+		    guint		n_params,
+		    ...)
+{
+  va_list args;
+  guint signal_id;
+
+  g_return_val_if_fail (signal_name != NULL, 0);
+  
+  va_start (args, n_params);
+
+  signal_id = g_signal_new_valist (signal_name, itype, signal_flags,
+                                   g_cclosure_new (handler, NULL, NULL),
+				   accumulator, accu_data, c_marshaller,
+                                   return_type, n_params, args);
+
+  va_end (args);
+ 
+  return signal_id;
+}
+
 static void
 gtk_menu_bar_class_init (GtkMenuBarClass *class)
 {
@@ -102,6 +141,16 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
   widget_class->hierarchy_changed = gtk_menu_bar_hierarchy_changed;
   
   menu_shell_class->submenu_placement = GTK_TOP_BOTTOM;
+
+  signals[CYCLE_FOCUS] =
+    binding_signal_new ("cycle_focus",
+			G_OBJECT_CLASS_TYPE (object_class),
+			G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
+			G_CALLBACK (gtk_menu_bar_cycle_focus),
+			NULL, NULL,
+			_gtk_marshal_VOID__ENUM,
+			GTK_TYPE_NONE, 1,
+			GTK_TYPE_DIRECTION_TYPE);
 
   binding_set = gtk_binding_set_by_class (class);
   gtk_binding_entry_add_signal (binding_set,
@@ -144,6 +193,22 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 				"move_current", 1,
 				GTK_TYPE_MENU_DIRECTION_TYPE,
 				GTK_MENU_DIR_CHILD);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_Tab, GDK_CONTROL_MASK,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KP_Tab, GDK_CONTROL_MASK,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_Tab, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KP_Tab, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_enum ("shadow_type",
@@ -365,6 +430,19 @@ gtk_menu_bar_expose (GtkWidget      *widget,
   return FALSE;
 }
 
+static GList *
+get_menu_bars (GtkWindow *window)
+{
+  return g_object_get_data (G_OBJECT (window), "gtk-menu-bar-list");
+}
+
+static void
+set_menu_bars (GtkWindow *window,
+	       GList     *menubars)
+{
+  g_object_set_data (G_OBJECT (window), "gtk-menu-bar-list", menubars);
+}
+
 static gboolean
 window_key_press_handler (GtkWidget   *widget,
                           GdkEventKey *event,
@@ -396,19 +474,23 @@ window_key_press_handler (GtkWidget   *widget,
           ((event->state & gtk_accelerator_get_default_mod_mask ()) ==
 	   (mods & gtk_accelerator_get_default_mod_mask ())))
         {
-          GtkMenuBar *menubar;
-          GtkMenuShell *menushell;
-          
-          menubar = GTK_MENU_BAR (data);
-          menushell = GTK_MENU_SHELL (menubar);
+	  GList *menubars = get_menu_bars (GTK_WINDOW (widget));
 
-          if (menushell->children)
-            {
-              gtk_signal_emit_by_name (GTK_OBJECT (menushell->children->data),
-                                       "activate_item");
-              
-              retval = TRUE;
-            }
+	  menubars = _gtk_container_focus_sort (GTK_CONTAINER (widget), menubars,
+						GTK_DIR_TAB_FORWARD, NULL);
+	  if (menubars)
+	    {
+	      GtkMenuShell *menushell = GTK_MENU_SHELL (menubars->data);
+
+	      if (menushell->children)
+		{
+		  gtk_signal_emit_by_name (GTK_OBJECT (menushell->children->data),
+					   "activate_item");
+		  retval = TRUE;
+		}
+	      
+	      g_list_free (menubars);
+	    }
         }
 
       g_free (accel);
@@ -421,34 +503,38 @@ static void
 add_to_window (GtkWindow  *window,
                GtkMenuBar *menubar)
 {
-  GtkMenuBar *old_menubar;
+  GList *menubars = get_menu_bars (window);
 
-  old_menubar = g_object_get_data (G_OBJECT (window),
-                                   "gtk-menu-bar");
-  
-  if (old_menubar)
-    return; /* ignore this case; app programmer on crack, but
-             * shouldn't spew stuff, just don't support the accel
-             * for menubar #2
-             */
+  if (!menubars)
+    {
+      g_signal_connect (G_OBJECT (window),
+			"key_press_event",
+			G_CALLBACK (window_key_press_handler),
+			NULL);
+    }
 
-  g_object_set_data (G_OBJECT (window),
-                     "gtk-menu-bar",
-                     menubar);
-
-  g_signal_connect (G_OBJECT (window),
-		    "key_press_event",
-		    G_CALLBACK (window_key_press_handler),
-		    menubar);
+  set_menu_bars (window, g_list_prepend (menubars, menubar));
 }
 
 static void
 remove_from_window (GtkWindow  *window,
                     GtkMenuBar *menubar)
 {
-  g_signal_handlers_disconnect_by_func (G_OBJECT (window),
-                                        G_CALLBACK (window_key_press_handler),
-                                        menubar);
+  GList *menubars = get_menu_bars (window);
+
+  menubars = g_object_get_data (G_OBJECT (window),
+				    "gtk-menu-bar-list");
+
+  menubars = g_list_remove (menubars, menubar);
+
+  if (!menubars)
+    {
+      g_signal_handlers_disconnect_by_func (G_OBJECT (window),
+					    G_CALLBACK (window_key_press_handler),
+					    NULL);
+    }
+
+  set_menu_bars (window, menubars);
 }
 
 static void
@@ -467,6 +553,46 @@ gtk_menu_bar_hierarchy_changed (GtkWidget *widget,
   
   if (GTK_WIDGET_TOPLEVEL (toplevel))
     add_to_window (GTK_WINDOW (toplevel), menubar);
+}
+
+static void
+gtk_menu_bar_cycle_focus (GtkMenuBar       *menubar,
+			  GtkDirectionType  dir)
+{
+  GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (menubar));
+
+  if (GTK_WIDGET_TOPLEVEL (toplevel))
+    {
+      GList *menubars = get_menu_bars (GTK_WINDOW (toplevel));
+      GList *current;
+      GtkMenuBar *new;
+
+      menubars = _gtk_container_focus_sort (GTK_CONTAINER (toplevel), menubars,
+					    dir, GTK_WIDGET (menubar));
+
+      if (menubars)
+	{
+	  current = g_list_find (menubars, menubar);
+	  if (current && current->next)
+	    new = current->next->data;
+	  else
+	    new = menubars->data;
+	  
+	  if (new != menubar)
+	    {
+	      GtkMenuShell *new_menushell = GTK_MENU_SHELL (new);
+
+	      if (new_menushell->children)
+		{
+		  g_signal_emit_by_name (menubar, "cancel", 0);
+		  gtk_signal_emit_by_name (GTK_OBJECT (new_menushell->children->data),
+					   "activate_item");
+		}
+	    }
+	}
+	  
+      g_list_free (menubars);
+    }
 }
 
 static GtkShadowType

@@ -558,6 +558,9 @@ gtk_menu_shell_key_press (GtkWidget	*widget,
   if (GTK_IS_WINDOW (toplevel) &&
       _gtk_window_activate_key (GTK_WINDOW (toplevel), event))
     return TRUE;
+
+  if (menu_shell->parent_menu_shell)
+    return gtk_widget_event (menu_shell->parent_menu_shell, (GdkEvent *)event);
   
   return FALSE;
 }

@@ -95,6 +95,8 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
  */
 
 #ifndef HAVE_XCONVERTCASE
+#include "gdkkeysyms.h"
+
 /* compatibility function from X11R6.3, since XConvertCase is not
  * supplied by X11R5.
  */

@@ -809,14 +809,20 @@ static gint
 gtk_menu_item_select_timeout (gpointer data)
 {
   GtkMenuItem *menu_item;
+  GtkWidget *parent;
   
   GDK_THREADS_ENTER ();
 
   menu_item = GTK_MENU_ITEM (data);
-  
-  gtk_menu_item_popup_submenu (data);
-  if (menu_item->timer_from_keypress && menu_item->submenu)
-    GTK_MENU_SHELL (menu_item->submenu)->ignore_enter = TRUE;
+
+  parent = GTK_WIDGET (menu_item)->parent;
+
+  if (parent && GTK_IS_MENU_SHELL (parent) && GTK_MENU_SHELL (parent)->active)
+    {
+      gtk_menu_item_popup_submenu (data);
+      if (menu_item->timer_from_keypress && menu_item->submenu)
+	GTK_MENU_SHELL (menu_item->submenu)->ignore_enter = TRUE;
+    }
 
   GDK_THREADS_LEAVE ();
 

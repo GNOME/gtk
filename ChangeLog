@@ -1,3 +1,24 @@
+Thu Feb 28 19:55:01 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkkeys.c: include gdkkeysysms.h if
+	compiling gdk_keyval_convert_case.
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_cycle_focus): Implement
+	<Control>Tab <Control><Shift>Tab to cycle between
+	all menu bars in a toplevel once one is up.
+
+	* tests/testgtk.c: Add a second menubar, this
+	example is already full of crack anyways.
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_key_press): Padd
+	unhandled events up to the parent menu shell.
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_select_timeout): Only
+	pop up the menu if the parent menu shell is still active.
+
+	* gtk/gtkcontainer.[ch] (_gtk_container_focus_sort): Add a
+	old_focus argument, export privately.
+
 2002-02-28  Darin Adler  <darin@bentspoon.com>
 
 	* gtk/gtkfilesel.c: (open_new_dir): Add missing NULL check.

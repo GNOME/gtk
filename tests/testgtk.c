@@ -3109,6 +3109,17 @@ create_menus (void)
       gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
       gtk_widget_show (menuitem);
       
+      menubar = gtk_menu_bar_new ();
+      gtk_box_pack_start (GTK_BOX (box1), menubar, FALSE, TRUE, 0);
+      gtk_widget_show (menubar);
+      
+      menu = create_menu (2, 10, TRUE);
+      
+      menuitem = gtk_menu_item_new_with_label ("Second menu bar");
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
+      gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
+      gtk_widget_show (menuitem);
+      
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
