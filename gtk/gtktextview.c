@@ -290,6 +290,8 @@ static void gtk_text_view_queue_scroll           (GtkTextView   *text_view,
 static gboolean gtk_text_view_flush_scroll       (GtkTextView *text_view);
 static void     gtk_text_view_update_adjustments (GtkTextView *text_view);
 
+static void gtk_text_view_update_im_spot_location (GtkTextView *text_view);
+
 /* Container methods */
 static void gtk_text_view_add    (GtkContainer *container,
                                   GtkWidget    *child);
@@ -1601,6 +1603,24 @@ gtk_text_view_update_layout_width (GtkTextView *text_view)
 
   gtk_text_layout_set_screen_width (text_view->layout,
                                     SCREEN_WIDTH (text_view));
+}
+
+static void
+gtk_text_view_update_im_spot_location (GtkTextView *text_view)
+{
+  GdkRectangle area;
+  gint cursor_x_pos, cursor_y_pos;
+
+  if (text_view->layout == NULL)
+    return;
+  
+  gtk_text_view_get_virtual_cursor_pos (text_view, &cursor_x_pos, &cursor_y_pos);
+
+  area.x = cursor_x_pos;
+  area.y = cursor_y_pos;
+  area.width = area.height = 0;
+
+  gtk_im_context_set_cursor_location (text_view->im_context, &area);
 }
 
 /**
@@ -4653,6 +4673,7 @@ gtk_text_view_reset_im_context (GtkTextView *text_view)
     {
       text_view->need_im_reset = FALSE;
       gtk_im_context_reset (text_view->im_context);
+      gtk_text_view_update_im_spot_location (text_view);
     }
 }
 
@@ -5185,6 +5206,8 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
       g_source_remove (text_view->first_validate_idle);
       text_view->first_validate_idle = 0;
     }
+
+  gtk_text_view_update_im_spot_location (text_view);
   
   DV(g_print(">End scroll offset changed handler ("G_STRLOC")\n"));
 }

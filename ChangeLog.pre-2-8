@@ -1,5 +1,10 @@
 2001-10-23  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextview.c (gtk_text_view_update_im_spot_location): 
+	Update IM spot location at appropriate times, #50626
+
+2001-10-23  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextview.c (gtk_text_view_grab_focus): scroll to cursor
 	on grab focus, unless it's caused by button click, #59708
 
