@@ -1499,13 +1499,21 @@ gtk_combo_box_menu_destroy (GtkComboBox *combo_box)
   if (combo_box->priv->cell_view)
     {
       gtk_widget_unparent (combo_box->priv->arrow);
+      combo_box->priv->arrow = NULL;
+
       gtk_widget_unparent (combo_box->priv->separator);
+      combo_box->priv->separator = NULL;
+
       gtk_widget_unparent (combo_box->priv->button);
+      combo_box->priv->button = NULL;
     }
   else
     {
       /* will destroy the arrow too */
       gtk_widget_unparent (combo_box->priv->button);
+
+      combo_box->priv->button = NULL;
+      combo_box->priv->arrow = NULL;
     }
 
   /* changing the popup window will unref the menu and the childs */
@@ -1836,6 +1844,7 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
   combo_box->priv->arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
   gtk_container_add (GTK_CONTAINER (combo_box->priv->button),
                      combo_box->priv->arrow);
+  combo_box->priv->separator = NULL;
   gtk_widget_show_all (combo_box->priv->button);
 
   if (combo_box->priv->cell_view)
@@ -1937,6 +1946,8 @@ gtk_combo_box_list_destroy (GtkComboBox *combo_box)
    * last unref on button will destroy the arrow
    */
   gtk_widget_unparent (combo_box->priv->button);
+  combo_box->priv->button = NULL;
+  combo_box->priv->arrow = NULL;
 
   if (combo_box->priv->cell_view)
     {
@@ -1945,9 +1956,11 @@ gtk_combo_box_list_destroy (GtkComboBox *combo_box)
                     NULL);
 
       gtk_widget_unparent (combo_box->priv->cell_view_frame);
+      combo_box->priv->cell_view_frame = NULL;
     }
 
   gtk_widget_destroy (combo_box->priv->tree_view);
+
   combo_box->priv->tree_view = NULL;
   combo_box->priv->popup_widget = NULL;
 }

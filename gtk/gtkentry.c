@@ -4532,10 +4532,10 @@ keyval_is_cursor_move (guint keyval)
   if (keyval == GDK_Down || keyval == GDK_KP_Down)
     return TRUE;
 
-  if (keyval == GDK_Home || keyval == GDK_KP_Home)
+  if (keyval == GDK_Page_Up)
     return TRUE;
 
-  if (keyval == GDK_End || keyval == GDK_KP_End)
+  if (keyval == GDK_Page_Down)
     return TRUE;
 
   return FALSE;
@@ -4573,9 +4573,10 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
           if (completion->priv->current_selected > matches + actions - 1)
             completion->priv->current_selected = matches + actions - 1;
         }
-      else if (event->keyval == GDK_Home || event->keyval == GDK_KP_Home)
-        completion->priv->current_selected = -1;
-      else if (event->keyval == GDK_End || event->keyval == GDK_KP_End)
+      else if (event->keyval == GDK_Page_Up)
+        completion->priv->current_selected = 0;
+
+      else if (event->keyval == GDK_Page_Down)
         completion->priv->current_selected = matches + actions - 1;
 
       if (completion->priv->current_selected < 0)
