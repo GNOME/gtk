@@ -51,9 +51,9 @@ struct _GdkImage
   guint16       bits_per_pixel; /* read only. bits per pixel */
   gpointer	mem;
 
-  GdkColormap  *colormap;
+  GdkColormap  *colormap; /* read only. */
   
-  gpointer windowing_data;
+  gpointer windowing_data; /* read only. */
 };
 
 struct _GdkImageClass
