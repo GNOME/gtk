@@ -5,12 +5,12 @@
 # <srtxg@chanae.alphanet.ch>; nos avans co bråmint di l' ovraedje a fé.
 #
 # Copyright (C) 1999 Free Software Foundation, Inc.
-# Pablo Saratxaga <srtxg@chanae.alphanet.ch> 1999
+# Pablo Saratxaga <srtxg@chanae.alphanet.ch> 1999-2000
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2000-02-03 23:51+0100\n"
+"POT-Creation-Date: 2000-03-13 21:43+0100\n"
 "PO-Revision-Date: 1999-02-07 17:37+0100\n"
 "Last-Translator: Pablo Saratxaga <srtxg@chanae.alphanet.ch>\n"
 "Language-Team: walon <linux-wa@chanae.alphanet.ch>\n"
@@ -47,15 +47,15 @@ msgid "Opacity:"
 msgstr "Zeroveyaedje:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3763
-#: gtk/gtkgamma.c:416
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:565 gtk/gtkfontsel.c:3763
+#: gtk/gtkgamma.c:415
 msgid "OK"
 msgstr "I Va"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:961
-#: gtk/gtkfilesel.c:1065 gtk/gtkfilesel.c:1180 gtk/gtkfontsel.c:3776
-#: gtk/gtkgamma.c:424
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:572 gtk/gtkfilesel.c:956
+#: gtk/gtkfilesel.c:1060 gtk/gtkfilesel.c:1175 gtk/gtkfontsel.c:3776
+#: gtk/gtkgamma.c:423
 msgid "Cancel"
 msgstr "Rinoncî"
 
@@ -64,29 +64,29 @@ msgid "Help"
 msgstr "Aide"
 
 #. The directories clist
-#: gtk/gtkfilesel.c:520
+#: gtk/gtkfilesel.c:514
 msgid "Directories"
 msgstr "Ridants"
 
 #. The files clist
-#: gtk/gtkfilesel.c:539
+#: gtk/gtkfilesel.c:533
 msgid "Files"
 msgstr "Fitchîs"
 
-#: gtk/gtkfilesel.c:609 gtk/gtkfilesel.c:1644
+#: gtk/gtkfilesel.c:603 gtk/gtkfilesel.c:1642
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Dji n' sai lere li ridant: %s"
 
-#: gtk/gtkfilesel.c:641
+#: gtk/gtkfilesel.c:635
 msgid "Create Dir"
 msgstr "Fé on Ridant"
 
-#: gtk/gtkfilesel.c:652 gtk/gtkfilesel.c:1034
+#: gtk/gtkfilesel.c:646 gtk/gtkfilesel.c:1029
 msgid "Delete File"
 msgstr "Rafacer li fitchî"
 
-#: gtk/gtkfilesel.c:663 gtk/gtkfilesel.c:1138
+#: gtk/gtkfilesel.c:657 gtk/gtkfilesel.c:1133
 msgid "Rename File"
 msgstr "Rlomer li fitchî"
 
@@ -95,39 +95,39 @@ msgstr "Rlomer li fitchî"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:827
+#: gtk/gtkfilesel.c:822
 msgid "Error"
 msgstr "Aroke"
 
 #. close button
-#: gtk/gtkfilesel.c:850 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:845 gtk/gtkinputdialog.c:354
 msgid "Close"
 msgstr "Cloyu"
 
-#: gtk/gtkfilesel.c:925
+#: gtk/gtkfilesel.c:920
 msgid "Create Directory"
 msgstr "Fé on Ridant"
 
-#: gtk/gtkfilesel.c:939
+#: gtk/gtkfilesel.c:934
 msgid "Directory name:"
 msgstr "No do ridant:"
 
 #. buttons
-#: gtk/gtkfilesel.c:952
+#: gtk/gtkfilesel.c:947
 msgid "Create"
 msgstr "Fé"
 
 #. buttons
-#: gtk/gtkfilesel.c:1056
+#: gtk/gtkfilesel.c:1051
 msgid "Delete"
 msgstr "Rafacer"
 
 #. buttons
-#: gtk/gtkfilesel.c:1171
+#: gtk/gtkfilesel.c:1166
 msgid "Rename"
 msgstr "Rlomer"
 
-#: gtk/gtkfilesel.c:1623
+#: gtk/gtkfilesel.c:1621
 msgid "Selection: "
 msgstr "Tchûze: "
 
@@ -397,11 +397,11 @@ msgstr "Mete èn oûve"
 msgid "Font Selection"
 msgstr "Tchwezi les fontes"
 
-#: gtk/gtkgamma.c:396
+#: gtk/gtkgamma.c:395
 msgid "Gamma"
 msgstr "Gamma"
 
-#: gtk/gtkgamma.c:403
+#: gtk/gtkgamma.c:402
 msgid "Gamma value"
 msgstr "Valixhance Gamma"
 

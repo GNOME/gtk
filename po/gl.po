@@ -4,7 +4,7 @@
 # vai mira-la páxina do noso grupo:  http://www.ctv.es/USERS/jtarrio/trans
 #
 # Copyright (C) 1999 Jesus Bravo Alvarez
-# Jesus Bravo Alvarez <jba@pobox.com>, 1999.
+# Jesus Bravo Alvarez <jba@pobox.com>, 1999-2000.
 #
 # First Version: 1999-08-30 18:49+0200
 # Based on es.po by Pablo Saratxaga <srtxg@chanae.alphanet.ch>
@@ -13,7 +13,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2000-02-03 23:51+0100\n"
+"POT-Creation-Date: 2000-03-13 21:43+0100\n"
 "PO-Revision-Date: 2000-01-02 13:19+0100\n"
 "Last-Translator: Jesus Bravo Alvarez <jba@pobox.com>\n"
 "Language-Team: Galician <gpul-traduccion@ceu.fi.udc.es>\n"
@@ -50,15 +50,15 @@ msgid "Opacity:"
 msgstr "Opacidade:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3763
-#: gtk/gtkgamma.c:416
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:565 gtk/gtkfontsel.c:3763
+#: gtk/gtkgamma.c:415
 msgid "OK"
 msgstr "Aceptar"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:961
-#: gtk/gtkfilesel.c:1065 gtk/gtkfilesel.c:1180 gtk/gtkfontsel.c:3776
-#: gtk/gtkgamma.c:424
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:572 gtk/gtkfilesel.c:956
+#: gtk/gtkfilesel.c:1060 gtk/gtkfilesel.c:1175 gtk/gtkfontsel.c:3776
+#: gtk/gtkgamma.c:423
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -67,29 +67,29 @@ msgid "Help"
 msgstr "Axuda"
 
 #. The directories clist
-#: gtk/gtkfilesel.c:520
+#: gtk/gtkfilesel.c:514
 msgid "Directories"
 msgstr "Directorios"
 
 #. The files clist
-#: gtk/gtkfilesel.c:539
+#: gtk/gtkfilesel.c:533
 msgid "Files"
 msgstr "Ficheiros"
 
-#: gtk/gtkfilesel.c:609 gtk/gtkfilesel.c:1644
+#: gtk/gtkfilesel.c:603 gtk/gtkfilesel.c:1642
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Directorio ilexible: %s"
 
-#: gtk/gtkfilesel.c:641
+#: gtk/gtkfilesel.c:635
 msgid "Create Dir"
 msgstr "Crear Directorio"
 
-#: gtk/gtkfilesel.c:652 gtk/gtkfilesel.c:1034
+#: gtk/gtkfilesel.c:646 gtk/gtkfilesel.c:1029
 msgid "Delete File"
 msgstr "Borrar Ficheiro"
 
-#: gtk/gtkfilesel.c:663 gtk/gtkfilesel.c:1138
+#: gtk/gtkfilesel.c:657 gtk/gtkfilesel.c:1133
 msgid "Rename File"
 msgstr "Renomear Ficheiro"
 
@@ -98,39 +98,39 @@ msgstr "Renomear Ficheiro"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:827
+#: gtk/gtkfilesel.c:822
 msgid "Error"
 msgstr "Erro"
 
 #. close button
-#: gtk/gtkfilesel.c:850 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:845 gtk/gtkinputdialog.c:354
 msgid "Close"
 msgstr "Pechar"
 
-#: gtk/gtkfilesel.c:925
+#: gtk/gtkfilesel.c:920
 msgid "Create Directory"
 msgstr "Crear Directorio"
 
-#: gtk/gtkfilesel.c:939
+#: gtk/gtkfilesel.c:934
 msgid "Directory name:"
 msgstr "Nome do Directorio:"
 
 #. buttons
-#: gtk/gtkfilesel.c:952
+#: gtk/gtkfilesel.c:947
 msgid "Create"
 msgstr "Crear"
 
 #. buttons
-#: gtk/gtkfilesel.c:1056
+#: gtk/gtkfilesel.c:1051
 msgid "Delete"
 msgstr "Borrar"
 
 #. buttons
-#: gtk/gtkfilesel.c:1171
+#: gtk/gtkfilesel.c:1166
 msgid "Rename"
 msgstr "Renomear"
 
-#: gtk/gtkfilesel.c:1623
+#: gtk/gtkfilesel.c:1621
 msgid "Selection: "
 msgstr "Selección: "
 
@@ -399,11 +399,11 @@ msgstr "Aplicar"
 msgid "Font Selection"
 msgstr "Selección de Fonte"
 
-#: gtk/gtkgamma.c:396
+#: gtk/gtkgamma.c:395
 msgid "Gamma"
 msgstr "Gamma"
 
-#: gtk/gtkgamma.c:403
+#: gtk/gtkgamma.c:402
 msgid "Gamma value"
 msgstr "Valor gamma"
 

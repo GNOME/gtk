@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2000-02-03 23:51+0100\n"
+"POT-Creation-Date: 2000-03-13 21:43+0100\n"
 "PO-Revision-Date: 1999-12-08 17:14+01:00\n"
 "Last-Translator: Birger Langkjer <birger.langkjer@image.dk>\n"
 "Language-Team: Danish <sslug-locale@sslug.dk>\n"
@@ -42,15 +42,15 @@ msgid "Opacity:"
 msgstr "Gennemsigtighed:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3763
-#: gtk/gtkgamma.c:416
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:565 gtk/gtkfontsel.c:3763
+#: gtk/gtkgamma.c:415
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:961
-#: gtk/gtkfilesel.c:1065 gtk/gtkfilesel.c:1180 gtk/gtkfontsel.c:3776
-#: gtk/gtkgamma.c:424
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:572 gtk/gtkfilesel.c:956
+#: gtk/gtkfilesel.c:1060 gtk/gtkfilesel.c:1175 gtk/gtkfontsel.c:3776
+#: gtk/gtkgamma.c:423
 msgid "Cancel"
 msgstr "Annullér"
 
@@ -59,29 +59,29 @@ msgid "Help"
 msgstr "Hjælp"
 
 #. The directories clist
-#: gtk/gtkfilesel.c:520
+#: gtk/gtkfilesel.c:514
 msgid "Directories"
 msgstr "Mapper"
 
 #. The files clist
-#: gtk/gtkfilesel.c:539
+#: gtk/gtkfilesel.c:533
 msgid "Files"
 msgstr "Filer"
 
-#: gtk/gtkfilesel.c:609 gtk/gtkfilesel.c:1644
+#: gtk/gtkfilesel.c:603 gtk/gtkfilesel.c:1642
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Mappen er ulæselig: %s"
 
-#: gtk/gtkfilesel.c:641
+#: gtk/gtkfilesel.c:635
 msgid "Create Dir"
 msgstr "Opret mappe"
 
-#: gtk/gtkfilesel.c:652 gtk/gtkfilesel.c:1034
+#: gtk/gtkfilesel.c:646 gtk/gtkfilesel.c:1029
 msgid "Delete File"
 msgstr "Slet fil"
 
-#: gtk/gtkfilesel.c:663 gtk/gtkfilesel.c:1138
+#: gtk/gtkfilesel.c:657 gtk/gtkfilesel.c:1133
 msgid "Rename File"
 msgstr "Omdøb fil"
 
@@ -90,39 +90,39 @@ msgstr "Omdøb fil"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:827
+#: gtk/gtkfilesel.c:822
 msgid "Error"
 msgstr "Fejl"
 
 #. close button
-#: gtk/gtkfilesel.c:850 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:845 gtk/gtkinputdialog.c:354
 msgid "Close"
 msgstr "Luk"
 
-#: gtk/gtkfilesel.c:925
+#: gtk/gtkfilesel.c:920
 msgid "Create Directory"
 msgstr "Opret mappe"
 
-#: gtk/gtkfilesel.c:939
+#: gtk/gtkfilesel.c:934
 msgid "Directory name:"
 msgstr "Mappenavn:"
 
 #. buttons
-#: gtk/gtkfilesel.c:952
+#: gtk/gtkfilesel.c:947
 msgid "Create"
 msgstr "Opret"
 
 #. buttons
-#: gtk/gtkfilesel.c:1056
+#: gtk/gtkfilesel.c:1051
 msgid "Delete"
 msgstr "Slet"
 
 #. buttons
-#: gtk/gtkfilesel.c:1171
+#: gtk/gtkfilesel.c:1166
 msgid "Rename"
 msgstr "Omdøb"
 
-#: gtk/gtkfilesel.c:1623
+#: gtk/gtkfilesel.c:1621
 msgid "Selection: "
 msgstr "Valg: "
 
@@ -391,11 +391,11 @@ msgstr "Anvend"
 msgid "Font Selection"
 msgstr "Skrifttypevalg"
 
-#: gtk/gtkgamma.c:396
+#: gtk/gtkgamma.c:395
 msgid "Gamma"
 msgstr "Gamma"
 
-#: gtk/gtkgamma.c:403
+#: gtk/gtkgamma.c:402
 msgid "Gamma value"
 msgstr "Gamma-værdi"
 

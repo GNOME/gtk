@@ -2,13 +2,13 @@
 # KTranslator Generated File
 # This is the Croatian locale translation for GTK+.
 # Copyright (C) 1999 Tomislav Vujec & friends
-# Tomislav Vujec <tvujec@carnet.hr>, 1999.
+# Tomislav Vujec <tvujec@carnet.hr>, 1999-2000.
 #
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.2.0\n"
-"POT-Creation-Date: 2000-02-03 23:51+0100\n"
+"Project-Id-Version: gtk+ 1.3.0\n"
+"POT-Creation-Date: 2000-03-13 21:43+0100\n"
 "PO-Revision-Date: Tue Jan 11 2000 16:35:38+0200\n"
 "Last-Translator: Vladimir Vuksan <vuksan@veus.hr>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
@@ -46,15 +46,15 @@ msgid "Opacity:"
 msgstr "Prozirnost:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3763
-#: gtk/gtkgamma.c:416
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:565 gtk/gtkfontsel.c:3763
+#: gtk/gtkgamma.c:415
 msgid "OK"
 msgstr "U redu"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:961
-#: gtk/gtkfilesel.c:1065 gtk/gtkfilesel.c:1180 gtk/gtkfontsel.c:3776
-#: gtk/gtkgamma.c:424
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:572 gtk/gtkfilesel.c:956
+#: gtk/gtkfilesel.c:1060 gtk/gtkfilesel.c:1175 gtk/gtkfontsel.c:3776
+#: gtk/gtkgamma.c:423
 msgid "Cancel"
 msgstr "Poni¹ti"
 
@@ -63,29 +63,29 @@ msgid "Help"
 msgstr "Pomoæ"
 
 #. The directories clist
-#: gtk/gtkfilesel.c:520
+#: gtk/gtkfilesel.c:514
 msgid "Directories"
 msgstr "Direktoriji"
 
 #. The files clist
-#: gtk/gtkfilesel.c:539
+#: gtk/gtkfilesel.c:533
 msgid "Files"
 msgstr "Datoteke"
 
-#: gtk/gtkfilesel.c:609 gtk/gtkfilesel.c:1644
+#: gtk/gtkfilesel.c:603 gtk/gtkfilesel.c:1642
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Neèitljiv direktorij: %s"
 
-#: gtk/gtkfilesel.c:641
+#: gtk/gtkfilesel.c:635
 msgid "Create Dir"
 msgstr "Napravi direktorij"
 
-#: gtk/gtkfilesel.c:652 gtk/gtkfilesel.c:1034
+#: gtk/gtkfilesel.c:646 gtk/gtkfilesel.c:1029
 msgid "Delete File"
 msgstr "Obri¹i datoteku"
 
-#: gtk/gtkfilesel.c:663 gtk/gtkfilesel.c:1138
+#: gtk/gtkfilesel.c:657 gtk/gtkfilesel.c:1133
 msgid "Rename File"
 msgstr "Promijeni ime datoteci"
 
@@ -94,39 +94,39 @@ msgstr "Promijeni ime datoteci"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:827
+#: gtk/gtkfilesel.c:822
 msgid "Error"
 msgstr "Gre¹ka"
 
 #. close button
-#: gtk/gtkfilesel.c:850 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:845 gtk/gtkinputdialog.c:354
 msgid "Close"
 msgstr "Zatvori"
 
-#: gtk/gtkfilesel.c:925
+#: gtk/gtkfilesel.c:920
 msgid "Create Directory"
 msgstr "Napravi direktorij"
 
-#: gtk/gtkfilesel.c:939
+#: gtk/gtkfilesel.c:934
 msgid "Directory name:"
 msgstr "Ime direktorija:"
 
 #. buttons
-#: gtk/gtkfilesel.c:952
+#: gtk/gtkfilesel.c:947
 msgid "Create"
 msgstr "Napravi"
 
 #. buttons
-#: gtk/gtkfilesel.c:1056
+#: gtk/gtkfilesel.c:1051
 msgid "Delete"
 msgstr "Obri¹i"
 
 #. buttons
-#: gtk/gtkfilesel.c:1171
+#: gtk/gtkfilesel.c:1166
 msgid "Rename"
 msgstr "Promijeni ime"
 
-#: gtk/gtkfilesel.c:1623
+#: gtk/gtkfilesel.c:1621
 msgid "Selection: "
 msgstr "Izbor: "
 
@@ -395,11 +395,11 @@ msgstr "Primijeni"
 msgid "Font Selection"
 msgstr "Izbor pisma"
 
-#: gtk/gtkgamma.c:396
+#: gtk/gtkgamma.c:395
 msgid "Gamma"
 msgstr "Gama"
 
-#: gtk/gtkgamma.c:403
+#: gtk/gtkgamma.c:402
 msgid "Gamma value"
 msgstr "Gama vrijednost"
 
