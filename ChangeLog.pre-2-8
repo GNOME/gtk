@@ -1,3 +1,13 @@
+Sat Feb  2 16:43:31 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_popup): To get around the fact
+	that we may have a owner_events = FALSE grab in effect
+	when we pop up a window, make a temporary grab on a
+	different window, then grab on the real window. Fixes
+	a problem where if a context menu popped up under the 
+	cursor, the first item would be stuck unselected.
+	(#59812, reported by Arnaud Charlet.)
+
 2002-02-02  Peter Williams  <peterw@ximian.com>
 
 	* gtk/Makefile.am (install-data-local): Install gtkrc.default

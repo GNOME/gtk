@@ -136,6 +136,9 @@ static void gtk_menu_remove         (GtkContainer      *menu,
 
 static void gtk_menu_update_title   (GtkMenu           *menu);
 
+static void       menu_grab_transfer_window_destroy (GtkMenu *menu);
+static GdkWindow *menu_grab_transfer_window_get     (GtkMenu *menu);
+
 static void _gtk_menu_refresh_accel_paths (GtkMenu *menu,
 					   gboolean group_changed);
 
@@ -594,6 +597,29 @@ gtk_menu_tearoff_bg_copy (GtkMenu *menu)
     }
 }
 
+static gboolean
+popup_grab_on_window (GdkWindow *window,
+		      guint32    activate_time)
+{
+  if ((gdk_pointer_grab (window, TRUE,
+			 GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+			 GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
+			 GDK_POINTER_MOTION_MASK,
+			 NULL, NULL, activate_time) == 0))
+    {
+      if (gdk_keyboard_grab (window, TRUE,
+			     activate_time) == 0)
+	return TRUE;
+      else
+	{
+	  gdk_pointer_ungrab (activate_time);
+	  return FALSE;
+	}
+    }
+
+  return FALSE;
+}
+
 void
 gtk_menu_popup (GtkMenu		    *menu,
 		GtkWidget	    *parent_menu_shell,
@@ -615,6 +641,72 @@ gtk_menu_popup (GtkMenu		    *menu,
   menu_shell = GTK_MENU_SHELL (menu);
   
   menu_shell->parent_menu_shell = parent_menu_shell;
+
+  /* Find the last viewable ancestor, and make an X grab on it
+   */
+  parent = GTK_WIDGET (menu);
+  xgrab_shell = NULL;
+  while (parent)
+    {
+      gboolean viewable = TRUE;
+      GtkWidget *tmp = parent;
+      
+      while (tmp)
+	{
+	  if (!GTK_WIDGET_MAPPED (tmp))
+	    {
+	      viewable = FALSE;
+	      break;
+	    }
+	  tmp = tmp->parent;
+	}
+      
+      if (viewable)
+	xgrab_shell = parent;
+      
+      parent = GTK_MENU_SHELL (parent)->parent_menu_shell;
+    }
+
+  /* We want to receive events generated when we map the menu; unfortunately,
+   * since there is probably already an implicit grab in place from the
+   * button that the user used to pop up the menu, we won't receive then --
+   * in particular, the EnterNotify when the menu pops up under the pointer.
+   *
+   * If we are grabbing on a parent menu shell, no problem; just grab on
+   * that menu shell first before popping up the window with owner_events = TRUE.
+   *
+   * When grabbing on the menu itself, things get more convuluted - we
+   * we do an explicit grab on a specially created window with
+   * owner_events = TRUE, which we override further down with a grab
+   * on the menu. (We can't grab on the menu until it is mapped; we
+   * probably could just leave the grab on the other window, with a
+   * little reorganization of the code in gtkmenu*).
+   */
+  if (xgrab_shell == widget)
+    {
+      if (popup_grab_on_window (xgrab_shell->window, activate_time))
+	GTK_MENU_SHELL (xgrab_shell)->have_xgrab = TRUE;
+    }
+  else
+    {
+      GdkWindow *transfer_window;
+
+      xgrab_shell = widget;
+      transfer_window = menu_grab_transfer_window_get (menu);
+      if (popup_grab_on_window (transfer_window, activate_time))
+	GTK_MENU_SHELL (xgrab_shell)->have_xgrab = TRUE;
+    }
+
+  if (!GTK_MENU_SHELL (xgrab_shell)->have_xgrab)
+    {
+      /* We failed to make our pointer/keyboard grab. Rather than leaving the user
+       * with a stuck up window, we just abort here. Presumably the user will
+       * try again.
+       */
+      menu_shell->parent_menu_shell = NULL;
+      return;
+    }
+
   menu_shell->active = TRUE;
   menu_shell->button = button;
 
@@ -654,46 +746,8 @@ gtk_menu_popup (GtkMenu		    *menu,
 
   gtk_menu_scroll_to (menu, menu->scroll_offset);
 
-  /* Find the last viewable ancestor, and make an X grab on it
-   */
-  parent = GTK_WIDGET (menu);
-  xgrab_shell = NULL;
-  while (parent)
-    {
-      gboolean viewable = TRUE;
-      GtkWidget *tmp = parent;
-      
-      while (tmp)
-	{
-	  if (!GTK_WIDGET_MAPPED (tmp))
-	    {
-	      viewable = FALSE;
-	      break;
-	    }
-	  tmp = tmp->parent;
-	}
-      
-      if (viewable)
-	xgrab_shell = parent;
-      
-      parent = GTK_MENU_SHELL (parent)->parent_menu_shell;
-    }
-  
-  if (xgrab_shell && (!GTK_MENU_SHELL (xgrab_shell)->have_xgrab))
-    {
-      if ((gdk_pointer_grab (xgrab_shell->window, TRUE,
-			     GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-			     GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
-			     GDK_POINTER_MOTION_MASK,
-			     NULL, NULL, activate_time) == 0))
-	{
-	  if (gdk_keyboard_grab (xgrab_shell->window, TRUE,
-                                 activate_time) == 0)
-	    GTK_MENU_SHELL (xgrab_shell)->have_xgrab = TRUE;
-	  else
-	    gdk_pointer_ungrab (activate_time);
-	}
-    }
+  if (xgrab_shell == widget)
+    popup_grab_on_window (widget->window, activate_time); /* Should always succeed */
 
   gtk_grab_add (GTK_WIDGET (menu));
 }
@@ -766,6 +820,8 @@ gtk_menu_popdown (GtkMenu *menu)
 
   menu_shell->have_xgrab = FALSE;
   gtk_grab_remove (GTK_WIDGET (menu));
+
+  menu_grab_transfer_window_destroy (menu);
 }
 
 GtkWidget*
@@ -1241,6 +1297,51 @@ gtk_menu_realize (GtkWidget *widget)
   gdk_window_show (menu->view_window);
 }
 
+/* See notes in gtk_menu_popup() for information about the "grab transfer window"
+ */
+static GdkWindow *
+menu_grab_transfer_window_get (GtkMenu *menu)
+{
+  GdkWindow *window = g_object_get_data (G_OBJECT (menu), "gtk-menu-transfer-window");
+  if (!window)
+    {
+      GdkWindowAttr attributes;
+      gint attributes_mask;
+      
+      attributes.x = -100;
+      attributes.y = -100;
+      attributes.width = 10;
+      attributes.height = 10;
+      attributes.window_type = GDK_WINDOW_TEMP;
+      attributes.wclass = GDK_INPUT_ONLY;
+      attributes.override_redirect = TRUE;
+      attributes.event_mask = 0;
+
+      attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
+      
+      window = gdk_window_new (NULL, &attributes, attributes_mask);
+      gdk_window_set_user_data (window, menu);
+
+      gdk_window_show (window);
+
+      g_object_set_data (G_OBJECT (menu), "gtk-menu-transfer-window", window);
+    }
+
+  return window;
+}
+
+static void
+menu_grab_transfer_window_destroy (GtkMenu *menu)
+{
+  GdkWindow *window = g_object_get_data (G_OBJECT (menu), "gtk-menu-transfer-window");
+  if (window)
+    {
+      gdk_window_set_user_data (window, NULL);
+      gdk_window_destroy (window);
+      g_object_set_data (G_OBJECT (menu), "gtk-menu-transfer-window", NULL);
+    }
+}
+
 static void
 gtk_menu_unrealize (GtkWidget *widget)
 {
@@ -1249,6 +1350,8 @@ gtk_menu_unrealize (GtkWidget *widget)
   g_return_if_fail (GTK_IS_MENU (widget));
 
   menu = GTK_MENU (widget);
+
+  menu_grab_transfer_window_destroy (menu);
 
   gdk_window_set_user_data (menu->view_window, NULL);
   gdk_window_destroy (menu->view_window);
