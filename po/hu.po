@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 13:26-0500\n"
-"PO-Revision-Date: 2005-01-15 12:39+0100\n"
+"POT-Creation-Date: 2005-02-05 07:13+0100\n"
+"PO-Revision-Date: 2005-02-05 11:27+0100\n"
 "Last-Translator: Laszlo Dvornik <dvornik@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
 "MIME-Version: 1.0\n"
@@ -58,8 +58,8 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
-"A(z) %s képbetöltő-modul nem exportálja a megfelelő interfészt, talán "
-"egymásik GTK verzióból van?"
+"A(z) %s képbetöltő-modul nem exportálja a megfelelő felületet, talán egy "
+"másik GTK verzióból van?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:628 gdk-pixbuf/gdk-pixbuf-io.c:680
 #, c-format
@@ -1542,9 +1542,9 @@ msgid "'%s' does not exist in the bookmarks list"
 msgstr "\"%s\" nem létezik a könyvjelzők listájában"
 
 #: gtk/gtkfilesystemunix.c:1699
-#, fuzzy, c-format
+#, c-format
 msgid "Error getting information for '/': %s"
-msgstr "Hiba a(z) \"%s\" számára való információszerzés közben: %s"
+msgstr "Hiba a '/' számára való információszerzés közben: %s"
 
 #: gtk/gtkfontbutton.c:178 gtk/gtkfontbutton.c:295
 msgid "Pick a Font"
@@ -2211,6 +2211,3 @@ msgstr "X Input Method"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nem lehet információt szerezni a(z) '%s' fájlról: %s"
-
-#~ msgid "Error getting information for '%s'"
-#~ msgstr "Hiba a(z) \"%s\" számára való információszerzés közben"

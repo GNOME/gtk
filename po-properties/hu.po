@@ -1,15 +1,15 @@
 # Hungarian translation of gtk+-properties.
-# Copyright (C) 2004 Free Software Foundation, Inc.
+# Copyright (C) 2004, 2005 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+-properties package.
-# Laszlo Dvornik <dvornik@gnome.hu>, 2004.
 # Gabor Kelemen <kelemeng@gnome.hu>, 2004.
+# Laszlo Dvornik <dvornik@gnome.hu>, 2004, 2005.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 13:26-0500\n"
-"PO-Revision-Date: 2004-11-21 15:31+0100\n"
+"POT-Creation-Date: 2005-02-05 07:14+0100\n"
+"PO-Revision-Date: 2005-02-05 11:38+0100\n"
 "Last-Translator: Laszlo Dvornik <dvornik@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
 "MIME-Version: 1.0\n"
@@ -2173,14 +2173,12 @@ msgid "The model for the icon view"
 msgstr ""
 
 #: gtk/gtkiconview.c:415
-#, fuzzy
 msgid "Number of columns"
-msgstr "Csatornák száma"
+msgstr "Oszlopok száma"
 
 #: gtk/gtkiconview.c:416
-#, fuzzy
 msgid "Number of columns to display"
-msgstr "A táblázat oszlopainak száma"
+msgstr "A megjelenítendő oszlopok száma"
 
 #: gtk/gtkiconview.c:433
 msgid "Width for each item"
@@ -2195,27 +2193,24 @@ msgid "Space which is inserted between cells of an item"
 msgstr ""
 
 #: gtk/gtkiconview.c:465
-#, fuzzy
 msgid "Row Spacing"
-msgstr "Térköz"
+msgstr "Sorköz"
 
 #: gtk/gtkiconview.c:466
 msgid "Space which is inserted between grid rows"
 msgstr ""
 
 #: gtk/gtkiconview.c:481
-#, fuzzy
 msgid "Column Spacing"
-msgstr "Térköz"
+msgstr "Oszlopköz"
 
 #: gtk/gtkiconview.c:482
 msgid "Space which is inserted between grid column"
 msgstr ""
 
 #: gtk/gtkiconview.c:497
-#, fuzzy
 msgid "Margin"
-msgstr "Bal oldali margó"
+msgstr "Margó"
 
 #: gtk/gtkiconview.c:498
 msgid "Space which is inserted at the edges of the icon view"
@@ -2260,7 +2255,7 @@ msgstr "Kép"
 
 #: gtk/gtkimage.c:167
 msgid "A GdkPixmap to display"
-msgstr ""
+msgstr "A megjelenítendő GdkPixmap"
 
 #: gtk/gtkimage.c:174
 msgid "Image"
@@ -2268,7 +2263,7 @@ msgstr "Kép"
 
 #: gtk/gtkimage.c:175
 msgid "A GdkImage to display"
-msgstr ""
+msgstr "A megjelenítendő GdkImage"
 
 #: gtk/gtkimage.c:182
 msgid "Mask"
@@ -2288,11 +2283,11 @@ msgstr "A megjelenítendő alapértelmezett kép alap azonosítója"
 
 #: gtk/gtkimage.c:207
 msgid "Icon set"
-msgstr ""
+msgstr "Ikonkészlet"
 
 #: gtk/gtkimage.c:208
 msgid "Icon set to display"
-msgstr ""
+msgstr "A megjelenítendő ikonkészlet"
 
 #: gtk/gtkimage.c:215
 msgid "Icon size"
@@ -2434,9 +2429,8 @@ msgid "Angle at which the label is rotated"
 msgstr ""
 
 #: gtk/gtklabel.c:513
-#, fuzzy
 msgid "Maximum Width In Characters"
-msgstr "Maximális szélesség"
+msgstr "Maximális szélesség karakterben"
 
 #: gtk/gtklabel.c:514
 msgid "The desired maximum width of the label, in characters"
@@ -4748,6 +4742,3 @@ msgstr ""
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr ""
-
-#~ msgid "Whether the browse dialog is visible or not."
-#~ msgstr "Látható legyen-e a böngészés párbeszédablak."
