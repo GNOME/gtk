@@ -1,3 +1,15 @@
+Fri Feb  7 04:49:46 2003  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkobject.c: remove quark_user_data usage in
+	gtk_object_{g|s}et_user_data(). fixes get_user_data()
+	returning NULL for user_data set through property interface.
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_create_item): don't put out
+	warnings if a pixbuf couldn't be retrieved, since (a) this doesn't
+	need to be a programming error (in case of loaded data), (b) it breaks
+	with 2.0 behaviour where extra magic could be used to create empty
+	images. don't attempt to retrieve pixbufs from NULL extra_data.
+
 2003-02-06  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkvisual-x11.c (gdk_visual_get_best_with_depth): Return

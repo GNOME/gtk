@@ -1076,22 +1076,17 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
     gtk_radio_menu_item_set_group (GTK_RADIO_MENU_ITEM (widget), radio_group);
   if (type_id == quark_type_image_item)
     {
-      GError *error = NULL;
       GdkPixbuf *pixbuf = NULL;
-
       image = NULL;
-      pixbuf = gdk_pixbuf_new_from_inline (-1,
-					   entry->extra_data,
-					   FALSE,
-					   &error);
-      if (pixbuf)
-	image = gtk_image_new_from_pixbuf (pixbuf);
-      else
+      if (entry->extra_data)
 	{
-	  g_warning ("Error loading menu image: %s", error->message);
-	  g_error_free (error);
+	  pixbuf = gdk_pixbuf_new_from_inline (-1,
+					       entry->extra_data,
+					       FALSE,
+					       NULL);
+	  if (pixbuf)
+	    image = gtk_image_new_from_pixbuf (pixbuf);
 	}
-	    
       if (image)
 	{
 	  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (widget), image);

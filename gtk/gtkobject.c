@@ -63,7 +63,6 @@ static void       gtk_object_notify_weaks        (GtkObject      *object);
 
 static gpointer    parent_class = NULL;
 static guint       object_signals[LAST_SIGNAL] = { 0 };
-static GQuark      quark_user_data = 0;
 static GQuark      quark_weakrefs = 0;
 
 
@@ -717,10 +716,7 @@ gtk_object_set_user_data (GtkObject *object,
 {
   g_return_if_fail (GTK_IS_OBJECT (object));
 
-  if (!quark_user_data)
-    quark_user_data = g_quark_from_static_string ("user_data");
-
-  g_datalist_id_set_data (&G_OBJECT (object)->qdata, quark_user_data, data);
+  g_object_set_data (G_OBJECT (object), "user_data", data);
 }
 
 gpointer
@@ -728,7 +724,7 @@ gtk_object_get_user_data (GtkObject *object)
 {
   g_return_val_if_fail (GTK_IS_OBJECT (object), NULL);
 
-  return g_datalist_id_get_data (&G_OBJECT (object)->qdata, quark_user_data);
+  return g_object_get_data (G_OBJECT (object), "user_data");
 }
 
 GtkObject*
