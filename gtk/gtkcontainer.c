@@ -300,10 +300,10 @@ gtk_container_add_with_args (GtkContainer      *container,
       gchar *error;
       
       va_start (var_args, widget);
-      error = gtk_object_args_collect (GTK_OBJECT_TYPE (container),
-				       &arg_list,
-				       &info_list,
-				       &var_args);
+      error = gtk_container_child_args_collect (GTK_OBJECT_TYPE (container),
+						&arg_list,
+						&info_list,
+						&var_args);
       va_end (var_args);
 
       if (error)
@@ -418,10 +418,10 @@ gtk_container_child_set (GtkContainer      *container,
   g_return_if_fail (child->parent != NULL);
 
   va_start (var_args, child);
-  error = gtk_object_args_collect (GTK_OBJECT_TYPE (container),
-				   &arg_list,
-				   &info_list,
-				   &var_args);
+  error = gtk_container_child_args_collect (GTK_OBJECT_TYPE (container),
+					    &arg_list,
+					    &info_list,
+					    &var_args);
   va_end (var_args);
 
   if (error)
@@ -475,6 +475,7 @@ gtk_container_arg_set (GtkContainer *container,
 	  return;
 	}
     }
+  g_return_if_fail (info->arg_flags & GTK_ARG_CHILD_ARG);
   
   if (! (info->arg_flags & GTK_ARG_WRITABLE))
     {
@@ -525,6 +526,7 @@ gtk_container_arg_get (GtkContainer *container,
 	  return;
 	}
     }
+  g_return_if_fail (info->arg_flags & GTK_ARG_CHILD_ARG);
   
   if (! (info->arg_flags & GTK_ARG_READABLE))
     {

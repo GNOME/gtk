@@ -1,3 +1,10 @@
+Fri Jul 10 05:51:44 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcontainer.c:
+ 	(gtk_container_add_with_args): collect the arguments with
+ 	gtk_container_child_args_collect, not through gtk_object_args_collect.
+	(gtk_container_child_set): likewise.
+
 Fri Jul 10 04:20:35 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktypeutils.h: 
