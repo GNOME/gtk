@@ -85,8 +85,9 @@ gdk_window_xid_at(Window base, gint bx, gint by, gint x, gint y)
 		  return child;
 	       }
 	  }
+	XFree(list);
      }
-   return 0;
+   return base;
 }
 
 /* 
@@ -116,6 +117,7 @@ gdk_window_xid_at_coords(gint x, gint y, GList *excludes)
    private=(GdkWindowPrivate*)window;
    disp=private->xdisplay;
    root=private->xwindow;
+   XGrabServer(disp);
    if (!XQueryTree(disp,root,&root_win,&parent_win,&list,&num))
      return root;
    if (list)
@@ -128,6 +130,7 @@ gdk_window_xid_at_coords(gint x, gint y, GList *excludes)
 		    {
 		       if (!g_list_find(excludes,(gpointer)child))
 			 {
+			    XUngrabServer(disp);
 			    XFree(list);
 			    return child;
 			 }
@@ -135,11 +138,13 @@ gdk_window_xid_at_coords(gint x, gint y, GList *excludes)
 		  else
 		    {
 		       XFree(list);
+		       XUngrabServer(disp);
 		       return child;
 		    }
 	       }
 	  }
      }
+   XUngrabServer(disp);
    return root;
 }
 
