@@ -1,3 +1,19 @@
+Mon Aug  5 15:04:59 2002  Owen Taylor  <otaylor@redhat.com>
+
+	More fixes for warnings reported by David L. Cooper II
+
+	* gtk/gtkaccelmap.c (accel_map_parse_accel_path): Use
+	GdkModifierType for accel_mods. (#85856)
+
+	* gdk/gdkdisplay.h (struct _GdkDisplay): Make button_number
+	signed, since we use -1 as an 'unset' value. (#85854)
+
+	* gdk/x11/xsettings-client.c (parse_settings): Suppress
+	a warning (#85853)
+
+	* gdk/x11/gdkfont-x11.c (gdk_font_charset_for_locale): Fix
+	accidental trailing ';'. (#85846)
+
 Mon Aug  5 14:50:13 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkitemfactory.h: Add a note that yes, we do know
