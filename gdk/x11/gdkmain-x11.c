@@ -158,39 +158,6 @@ _gdk_windowing_init_check_for_display (int argc, char **argv, char *display_name
 		   gdk_x11_get_real_atom_by_name (display, "_NET_WM_PID"),
 		   XA_CARDINAL, 32, PropModeReplace, (guchar *) & pid, 1);
 
-  display_impl->gdk_wm_delete_window =
-    gdk_x11_get_real_atom_by_name (display, "WM_DELETE_WINDOW");
-
-  display_impl->gdk_wm_take_focus =
-    gdk_x11_get_real_atom_by_name (display, "WM_TAKE_FOCUS");
-
-  display_impl->gdk_wm_protocols =
-    gdk_x11_get_real_atom_by_name (display, "WM_PROTOCOLS");
-
-  display_impl->gdk_wm_window_protocols[0] = display_impl->gdk_wm_delete_window;
-  display_impl->gdk_wm_window_protocols[1] = display_impl->gdk_wm_take_focus;
-  display_impl->gdk_wm_window_protocols[2] =
-    gdk_x11_get_real_atom_by_name (display, "_NET_WM_PING");
-
-  display_impl->gdk_selection_property =
-    gdk_x11_get_real_atom_by_name (display, "GDK_SELECTION");
-
-  display_impl->wm_state_atom =
-    gdk_x11_get_real_atom_by_name (display, "_NET_WM_STATE");
-
-  display_impl->wm_desktop_atom =
-    gdk_x11_get_real_atom_by_name (display, "_NET_WM_DESKTOP");
-
-  display_impl->timestamp_prop_atom =
-    gdk_x11_get_real_atom_by_name (display, "GDK_TIMESTAMP_PROP");
-
-  display_impl->wmspec_check_atom =
-    gdk_x11_get_real_atom_by_name (display, "_NET_SUPPORTING_WM_CHECK");
-
-  display_impl->wmspec_supported_atom =
-    gdk_x11_get_real_atom_by_name (display, "_NET_SUPPORTED");
-
-
 #ifdef HAVE_XKB
   {
     gint xkb_major = XkbMajorVersion;

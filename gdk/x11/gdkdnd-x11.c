@@ -861,7 +861,7 @@ motif_drag_window_filter (GdkXEvent *xevent,
 			  gpointer data)
 {
   XEvent *xev = (XEvent *)xevent;
-  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (event->any.window)); 
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (event->any.window));  GdkDisplay *display = GDK_WINDOW_DISPLAY (event->any.window); 
 
   switch (xev->xany.type)
     {
@@ -871,9 +871,9 @@ motif_drag_window_filter (GdkXEvent *xevent,
       break;
     case PropertyNotify:
       if (display_impl->motif_target_lists &&
-	  display_impl->motif_drag_targets_atom &&
-	  (xev->xproperty.atom == display_impl->motif_drag_targets_atom))
-	motif_read_target_table (GDK_WINDOW_DISPLAY (event->any.window));
+	  (xev->xproperty.atom == 
+	   gdk_x11_get_real_atom_by_name (display, "_MOTIF_DRAG_TARGETS")))
+	motif_read_target_table (display);
       break;
     }
   return GDK_FILTER_REMOVE;
@@ -890,7 +890,7 @@ motif_lookup_drag_window (GdkDisplay *display,
   guchar *data;
 
   XGetWindowProperty (lookup_xdisplay, DefaultRootWindow (lookup_xdisplay),
-		      GDK_DISPLAY_IMPL_X11 (display)->motif_drag_window_atom,
+		      gdk_x11_get_real_atom_by_name (display, "_MOTIF_DRAG_WINDOW"),
 		      0, 1, FALSE,
 		      XA_WINDOW, &type, &format, &nitems, &bytes_after,
 		      &data);
@@ -920,9 +920,7 @@ motif_find_drag_window (GdkDisplay *display,
   
   if (!display_impl->motif_drag_window)
     {
-      if (!display_impl->motif_drag_window_atom)
-	display_impl->motif_drag_window_atom = 
-		gdk_x11_get_real_atom_by_name (display, "_MOTIF_DRAG_WINDOW");
+      Atom motif_drag_window_atom = gdk_x11_get_real_atom_by_name (display, "_MOTIF_DRAG_WINDOW");
 
       display_impl->motif_drag_window = motif_lookup_drag_window (display, display_impl->xdisplay);
       
@@ -954,9 +952,9 @@ motif_find_drag_window (GdkDisplay *display,
 			g_message ("Created drag window %#lx\n", display_impl->motif_drag_window));
 	      
 	      XChangeProperty (persistant_xdisplay, DefaultRootWindow (persistant_xdisplay),
-			       display_impl->motif_drag_window_atom, XA_WINDOW,
+			       motif_drag_window_atom, XA_WINDOW,
 			       32, PropModeReplace,
-			       (guchar *)&display_impl->motif_drag_window_atom, 1);
+			       (guchar *)&motif_drag_window_atom, 1);
 
 	    }
 	  XUngrabServer (persistant_xdisplay);
@@ -987,9 +985,7 @@ motif_read_target_table (GdkDisplay *display)
   gint format;
   gint i, j;
   GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
-  
-  if (!display_impl->motif_drag_targets_atom)
-    display_impl->motif_drag_targets_atom = gdk_x11_get_real_atom_by_name (display, "_MOTIF_DRAG_TARGETS");
+  Atom motif_drag_targets_atom = gdk_x11_get_real_atom_by_name (display, "_MOTIF_DRAG_TARGETS");
 
   if (display_impl->motif_target_lists)
     {
@@ -1010,9 +1006,9 @@ motif_read_target_table (GdkDisplay *display)
 
       gdk_error_trap_push ();
       XGetWindowProperty (display_impl->xdisplay, display_impl->motif_drag_window, 
-			  display_impl->motif_drag_targets_atom,
+			  motif_drag_targets_atom,
 			  0, (sizeof(MotifTargetTableHeader)+3)/4, FALSE,
-			  display_impl->motif_drag_targets_atom, 
+			  motif_drag_targets_atom, 
 			  &type, &format, &nitems, &bytes_after,
 			  (guchar **)&header);
 
@@ -1024,11 +1020,11 @@ motif_read_target_table (GdkDisplay *display)
 
       gdk_error_trap_push ();
       XGetWindowProperty (display_impl->xdisplay, display_impl->motif_drag_window, 
-		          display_impl->motif_drag_targets_atom,
+		          motif_drag_targets_atom,
 			  (sizeof(MotifTargetTableHeader)+3)/4, 
 			  (header->total_size + 3)/4 - (sizeof(MotifTargetTableHeader) + 3)/4,
 			  FALSE,
-			  display_impl->motif_drag_targets_atom, &type, &format, &nitems, 
+			  motif_drag_targets_atom, &type, &format, &nitems, 
 			  &bytes_after, &target_bytes);
       
       if (gdk_error_trap_pop () || (format != 8) || (bytes_after != 0) || 
@@ -1232,8 +1228,8 @@ motif_add_to_target_table (GdkDisplay *display,
 	    }
 
 	  XChangeProperty (display_impl->xdisplay, display_impl->motif_drag_window,
-			   display_impl->motif_drag_targets_atom,
-			   display_impl->motif_drag_targets_atom,
+			   gdk_x11_get_real_atom_by_name (display, "_MOTIF_DRAG_TARGETS"),
+			   gdk_x11_get_real_atom_by_name (display, "_MOTIF_DRAG_TARGETS"),
 			   8, PropModeReplace,
 			   data, total_size);
 	}
@@ -3313,7 +3309,7 @@ gdk_drop_reply (GdkDragContext   *context,
       MOTIF_XCLIENT_SHORT (&xev, 2) = private->last_x;
       MOTIF_XCLIENT_SHORT (&xev, 3) = private->last_y;
       
-      gdk_send_xevent_for_display (GDK_DRAWABLE_XDISPLAY (context->source_window),
+      gdk_send_xevent_for_display (GDK_DRAWABLE_DISPLAY (context->source_window),
 				   GDK_DRAWABLE_XID (context->source_window),
 				   FALSE, 0, &xev);
     }

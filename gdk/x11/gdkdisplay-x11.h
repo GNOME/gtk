@@ -52,20 +52,6 @@ struct _GdkDisplayImplX11
 
   gint grab_count;
 
-  /* Display wide Atoms */
-
-  Atom gdk_wm_delete_window;
-  Atom gdk_wm_take_focus;
-  Atom gdk_wm_protocols;
-  Atom gdk_wm_window_protocols[3];
-  Atom gdk_selection_property;
-  Atom wm_client_leader_atom;
-  Atom wm_state_atom;
-  Atom wm_desktop_atom;
-  Atom wmspec_check_atom;
-  Atom wmspec_supported_atom;
-  Atom timestamp_prop_atom;
-
   /* Keyboard related information */
 
   gint xkb_event_type;
@@ -92,10 +78,8 @@ struct _GdkDisplayImplX11
 
   /* data needed for MOTIF DnD */
 
-  Atom motif_drag_window_atom;
   Window motif_drag_window;
   GdkWindow *motif_drag_gdk_window;
-  Atom motif_drag_targets_atom;
   GList **motif_target_lists;
   gint motif_n_target_lists;
 

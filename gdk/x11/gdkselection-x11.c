@@ -215,7 +215,7 @@ gdk_selection_convert (GdkWindow *requestor,
   XConvertSelection (GDK_WINDOW_XDISPLAY (requestor),
 		     gdk_x11_get_real_atom (display, selection),
 		     gdk_x11_get_real_atom (display, target),
-		     display_impl->gdk_selection_property, 
+		     gdk_x11_get_real_atom_by_name (display, "GDK_SELECTION"), 
 		     GDK_WINDOW_XID (requestor), time);
 }
 
@@ -231,12 +231,12 @@ gdk_selection_property_get (GdkWindow  *requestor,
   GdkAtom prop_type;
   gint prop_format;
   guchar *t = NULL;
-  GdkDisplayImplX11 *display_impl; 
+  GdkDisplay *display; 
 
   g_return_val_if_fail (requestor != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (requestor), 0);
   
-  display_impl = GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (requestor));
+  display = GDK_WINDOW_DISPLAY (requestor);
 
   /* If retrieved chunks are typically small, (and the ICCCM says the
      should be) it would be a win to try first with a buffer of
@@ -248,12 +248,13 @@ gdk_selection_property_get (GdkWindow  *requestor,
   t = NULL;
   XGetWindowProperty (GDK_WINDOW_XDISPLAY (requestor),
 		      GDK_WINDOW_XID (requestor),
-		      display_impl->gdk_selection_property, 0, 0, False,
-		      AnyPropertyType, &prop_type, &prop_format,
-		      &nitems, &nbytes, &t);
+		      gdk_x11_get_real_atom_by_name (display,
+						     "GDK_SELECTION"),
+		      0, 0, False, AnyPropertyType, &prop_type, 
+		      &prop_format, &nitems, &nbytes, &t);
 
   if (ret_type)
-    *ret_type = gdk_x11_get_virtual_atom (GDK_WINDOW_DISPLAY (requestor), prop_type);
+    *ret_type = gdk_x11_get_virtual_atom (display, prop_type);
   if (ret_format)
     *ret_format = prop_format;
 
@@ -279,7 +280,8 @@ gdk_selection_property_get (GdkWindow  *requestor,
      Otherwise there's no guarantee we'll win the race ... */
   XGetWindowProperty (GDK_DRAWABLE_XDISPLAY (requestor),
 		      GDK_DRAWABLE_XID (requestor),
-		      display_impl->gdk_selection_property, 0, (nbytes + 3) / 4, False,
+		      gdk_x11_get_real_atom_by_name (display, "GDK_SELECTION"),
+		      0, (nbytes + 3) / 4, False,
 		      AnyPropertyType, &prop_type, &prop_format,
 		      &nitems, &nbytes, &t);
 
@@ -295,7 +297,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
 	  
 	  num_atom = (length - 1) / sizeof (GdkAtom);
 	  for (i=0; i < num_atom; i++)
-	    atoms_dest[i] = gdk_x11_get_virtual_atom (GDK_DRAWABLE_DISPLAY (requestor), atoms[i]);
+	    atoms_dest[i] = gdk_x11_get_virtual_atom (display, atoms[i]);
 	}
       else
 	{

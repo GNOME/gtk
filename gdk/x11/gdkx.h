@@ -147,7 +147,6 @@ GType gdk_gc_x11_get_type (void);
 #define GDK_WINDOW_XWINDOW    GDK_DRAWABLE_XID
 
 extern gchar		*gdk_display_name;
-extern Atom		 gdk_selection_property;
 extern gchar		*gdk_progclass;
 
 GdkVisual* gdkx_visual_get_for_screen (GdkScreen *screen,

@@ -545,8 +545,16 @@ gdk_window_new (GdkWindow     *parent,
       XSetTransientForHint (xdisplay, xid, xparent);
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP:
-      XSetWMProtocols (xdisplay, xid,
-		       GDK_DISPLAY_IMPL_X11 (screen_impl->display)->gdk_wm_window_protocols, 3);
+	{
+	  Atom wm_window_protocols[3];
+	  wm_window_protocols[0] = gdk_x11_get_real_atom_by_name (screen_impl->display,
+								  "WM_DELETE_WINDOW");
+	  wm_window_protocols[1] = gdk_x11_get_real_atom_by_name (screen_impl->display,
+								  "WM_TAKE_FOCUS");
+	  wm_window_protocols[2] = gdk_x11_get_real_atom_by_name (screen_impl->display, 
+								  "_NET_WM_PING");
+	  XSetWMProtocols (xdisplay, xid, wm_window_protocols, 3);
+	}
       break;
     case GDK_WINDOW_CHILD:
       if ((attributes->wclass == GDK_INPUT_OUTPUT) &&
@@ -587,7 +595,7 @@ gdk_window_new (GdkWindow     *parent,
   
   wm_hints.flags = StateHint | WindowGroupHint;
   wm_hints.window_group =
-    GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window))->leader_window;
+    GDK_DISPLAY_IMPL_X11 (screen_impl->display)->leader_window;
   wm_hints.input = True;
   wm_hints.initial_state = NormalState;
   
@@ -599,16 +607,12 @@ gdk_window_new (GdkWindow     *parent,
   
   XSetWMHints (xdisplay, xid, &wm_hints);
   
-  if (!GDK_DISPLAY_IMPL_X11 (screen_impl->display)->wm_client_leader_atom)
-    GDK_DISPLAY_IMPL_X11 (screen_impl->display)->wm_client_leader_atom =
-      gdk_x11_get_real_atom_by_name (screen_impl->display, "WM_CLIENT_LEADER");
-
-
   XChangeProperty (xdisplay, 
 		   xid, 
-		   GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window))->wm_client_leader_atom,
+		   gdk_x11_get_real_atom_by_name (screen_impl->display,
+						  "WM_CLIENT_LEADER"),
 		   XA_WINDOW, 32, PropModeReplace,
-		   (guchar *) &GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window))->leader_window,
+		   (guchar *) &GDK_DISPLAY_IMPL_X11 (screen_impl->display)->leader_window,
 		   1);
   
   if (attributes_mask & GDK_WA_TITLE)
@@ -737,11 +741,13 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 	  
 	  xevent.type = ClientMessage;
 	  xevent.window = GDK_WINDOW_XID (window);
-	  xevent.message_type =
-	    GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window))->gdk_wm_protocols;
+	  xevent.message_type = 
+	    gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY (window), 
+					   "WM_PROTOCOLS");
 	  xevent.format = 32;
 	  xevent.data.l[0] =
-	    GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window))->gdk_wm_delete_window;
+	    gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY (window), 
+					   "WM_DELETE_WINDOW");
 	  xevent.data.l[1] = CurrentTime;
 	  
 	  XSendEvent (GDK_WINDOW_XDISPLAY (window),
@@ -1126,10 +1132,17 @@ gdk_window_reparent (GdkWindow *window,
       /* Now a toplevel */
       if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
 	{
+	  Atom wm_window_protocols[3];
+	  wm_window_protocols[0] = gdk_x11_get_real_atom_by_name (display, 
+								      "WM_DELETE_WINDOW");
+	  wm_window_protocols[1] = gdk_x11_get_real_atom_by_name (display,
+								  "WM_TAKE_FOCUS");
+	  wm_window_protocols[2] = gdk_x11_get_real_atom_by_name (display, 
+								  "_NET_WM_PING");
 	  GDK_WINDOW_TYPE (window) = GDK_WINDOW_TOPLEVEL;
 	  XSetWMProtocols (GDK_WINDOW_XDISPLAY (window),
 			   GDK_WINDOW_XID (window),
-			   GDK_DISPLAY_IMPL_X11 (display)->gdk_wm_window_protocols, 3);
+			   wm_window_protocols, 3);
 	}
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_CHILD:

@@ -263,14 +263,6 @@ gdk_display_sync (GdkDisplay * display)
   XSync (GDK_DISPLAY_XDISPLAY (display), False);
 }
 
-GdkAtom   
-gdk_display_get_selection_property (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), None);
-  return gdk_x11_get_virtual_atom (display, 
-				   GDK_DISPLAY_IMPL_X11 (display)->gdk_selection_property);
-}
-
 void
 gdk_x11_display_grab (GdkDisplay *display)
 { 
