@@ -5,7 +5,6 @@
  * might be helpful.
  */
 
-#include <config.h>
 #include <gtk/gtk.h>
 #include <string.h>
 #include "demo-common.h"

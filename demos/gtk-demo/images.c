@@ -12,7 +12,6 @@
  * application binary can be self-contained.
  */
 
-#include <config.h>
 #include <gtk/gtk.h>
 #include <stdio.h>
 #include <errno.h>

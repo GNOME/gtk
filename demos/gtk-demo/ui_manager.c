@@ -4,7 +4,6 @@
  * from an array of actions and a description of the menu hierarchy.
  */
 
-#include <config.h>
 #include <gtk/gtk.h>
 
 static void

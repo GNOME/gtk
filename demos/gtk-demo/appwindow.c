@@ -3,7 +3,6 @@
  * Demonstrates a typical application window, with menubar, toolbar, statusbar.
  */
 
-#include <config.h>
 #include <gtk/gtk.h>
 #include "demo-common.h"
 

@@ -4,7 +4,6 @@
  * copy and paste text to and from the clipboard.
  */
 
-#include <config.h>
 #include <gtk/gtk.h>
 #include <string.h>
 
