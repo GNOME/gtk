@@ -30,6 +30,8 @@ expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
   GdkPixbuf *dest;
 
+  gdk_window_set_back_pixmap (widget->window, NULL, FALSE);
+  
   dest = gdk_pixbuf_new (ART_PIX_RGB, FALSE, 8, event->area.width, event->area.height);
 
   if (pixbuf->art_pixbuf->has_alpha || overall_alpha != 255)

@@ -1,5 +1,13 @@
 2000-01-05  Owen Taylor  <otaylor@redhat.com>
 
+	* gdk-pixbuf/pixops/README: Added a README with a TODO
+	and some explainations of the algorithms.
+
+	* gdk-pixbuf/testpixbuf-scale.c: Set a background pixmap of None
+	to reduce flashing when resizing.
+
+2000-01-05  Owen Taylor  <otaylor@redhat.com>
+
 	* gdk-pixbuf/pixops/: Directory full of pixel data scaling
 	code that will eventually migrate into libart.
 
