@@ -518,6 +518,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_signal_connect (GTK_OBJECT (filesel->dir_list), "select_row",
 		      (GtkSignalFunc) gtk_file_selection_dir_button, 
 		      (gpointer) filesel);
+  gtk_clist_set_column_auto_resize (GTK_CLIST (filesel->dir_list), 0, TRUE);
   gtk_clist_column_titles_passive (GTK_CLIST (filesel->dir_list));
 
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
@@ -537,6 +538,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_signal_connect (GTK_OBJECT (filesel->file_list), "select_row",
 		      (GtkSignalFunc) gtk_file_selection_file_button, 
 		      (gpointer) filesel);
+  gtk_clist_set_column_auto_resize (GTK_CLIST (filesel->file_list), 0, TRUE);
   gtk_clist_column_titles_passive (GTK_CLIST (filesel->file_list));
 
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
@@ -1470,15 +1472,12 @@ gtk_file_selection_populate (GtkFileSelection *fs,
   CompletionState *cmpl_state;
   PossibleCompletion* poss;
   gchar* filename;
-  gint row;
   gchar* rem_path = rel_path;
   gchar* sel_text;
   gchar* text[2];
   gint did_recurse = FALSE;
   gint possible_count = 0;
   gint selection_index = -1;
-  gint file_list_width;
-  gint dir_list_width;
   
   g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
@@ -1503,16 +1502,10 @@ gtk_file_selection_populate (GtkFileSelection *fs,
   /* Set the dir_list to include ./ and ../ */
   text[1] = NULL;
   text[0] = "." G_DIR_SEPARATOR_S;
-  row = gtk_clist_append (GTK_CLIST (fs->dir_list), text);
+  gtk_clist_append (GTK_CLIST (fs->dir_list), text);
 
   text[0] = ".." G_DIR_SEPARATOR_S;
-  row = gtk_clist_append (GTK_CLIST (fs->dir_list), text);
-
-  /*reset the max widths of the lists*/
-  dir_list_width = gdk_string_width(fs->dir_list->style->font,".." G_DIR_SEPARATOR_S);
-  gtk_clist_set_column_width(GTK_CLIST(fs->dir_list),0,dir_list_width);
-  file_list_width = 1;
-  gtk_clist_set_column_width(GTK_CLIST(fs->file_list),0,file_list_width);
+  gtk_clist_append (GTK_CLIST (fs->dir_list), text);
 
   while (poss)
     {
@@ -1528,29 +1521,11 @@ gtk_file_selection_populate (GtkFileSelection *fs,
             {
               if (strcmp (filename, "." G_DIR_SEPARATOR_S) != 0 &&
                   strcmp (filename, ".." G_DIR_SEPARATOR_S) != 0)
-		{
-		  int width = gdk_string_width(fs->dir_list->style->font,
-					       filename);
-		  row = gtk_clist_append (GTK_CLIST (fs->dir_list), text);
-		  if(width > dir_list_width)
-		    {
-		      dir_list_width = width;
-		      gtk_clist_set_column_width(GTK_CLIST(fs->dir_list),0,
-						 width);
-		    }
- 		}
+		gtk_clist_append (GTK_CLIST (fs->dir_list), text);
 	    }
           else
 	    {
-	      int width = gdk_string_width(fs->file_list->style->font,
-				           filename);
-	      row = gtk_clist_append (GTK_CLIST (fs->file_list), text);
-	      if(width > file_list_width)
-	        {
-	          file_list_width = width;
-	          gtk_clist_set_column_width(GTK_CLIST(fs->file_list),0,
-					     width);
-	        }
+	      gtk_clist_append (GTK_CLIST (fs->file_list), text);
             }
 	}
 

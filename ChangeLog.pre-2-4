@@ -1,3 +1,31 @@
+Mon May 22 19:23:59 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_init):
+	Use gtk_clist_set_column_auto_resize() to remove need
+	need for manual column width computations.
+
+Mon May 22 18:50:26 2000  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtktooltips.[ch]: Replace custom drawing with a GtkLabel, 
+	ensuring Pango correctness, and considerably simplifying the
+	code.
+	
+	* gtk/gtklabel.c gtk[hv]scale.c: 1000 => PANGO_SCALE.
+
+	* gtk/gtklabel.c (gtk_label_size_request): Fixed incorrect
+	getting of numbers of lines.
+
+	* gtk/gtklabel.c (gtk_label_size_request): Set the requisition
+	to the actual requested width of the lable, not to the wrap
+	width we set.
+
+	* gtk/gtktextchild.h: Remove extraneous include of gtk/gtk.h.
+
+	* gtk/gtktextbtree.c gtk/gtktextbuffer.c gtk/gtktextlayout.c
+	  gtk/gtktextview.c gtk/gtktextview.[ch]: Fix up includes.
+
+	* gtk/gtkprogressbar.c: Pangoize.
+
 Mon May 22 15:47:30 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_get_first_para_iter): Encapsulate
