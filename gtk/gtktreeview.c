@@ -11263,6 +11263,12 @@ gtk_tree_view_start_editing (GtkTreeView *tree_view,
 			       tree_view->priv->focus_column,
 			       &cell_area);
 
+  if (gtk_tree_view_is_expander_column (tree_view, tree_view->priv->focus_column) && TREE_VIEW_DRAW_EXPANDERS (tree_view))
+    {
+      cell_area.x += tree_view->priv->expander_size;
+      cell_area.width -= tree_view->priv->expander_size;
+    }
+
   if (_gtk_tree_view_column_cell_event (tree_view->priv->focus_column,
 					&editable_widget,
 					NULL,
