@@ -419,8 +419,8 @@ void	  gdk_event_handler_set 	(GdkEventFunc    func,
 					 gpointer        data,
 					 GDestroyNotify  notify);
 
-void	  gdk_set_show_events		(gint		 show_events);
-gint	  gdk_get_show_events		(void);
+void	  gdk_set_show_events		(gboolean	 show_events);
+gboolean  gdk_get_show_events		(void);
 
 /*
  * The following function adds a global filter for all client

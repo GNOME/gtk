@@ -73,7 +73,7 @@ gdk_input_set_source (guint32 deviceid, GdkInputSource source)
   gdkdev->info.source = source;
 }
 
-gint
+gboolean
 gdk_input_set_mode (guint32 deviceid, GdkInputMode mode)
 {
   if (deviceid == GDK_CORE_POINTER)

@@ -147,7 +147,6 @@ void	   gtk_menu_detach		  (GtkMenu	       *menu);
  */
 GtkWidget* gtk_menu_get_attach_widget	  (GtkMenu	       *menu);
 
-void	   gtk_menu_detach		  (GtkMenu	       *menu);
 void       gtk_menu_set_tearoff_state     (GtkMenu             *menu,
 					   gboolean             torn_off);
 

@@ -47,6 +47,7 @@
 #  define gdk_iswalnum(c) iswalnum(c)
 #  define gdk_iswspace(c) iswspace(c)
 #else
+#  include <ctype.h>
 #  define gdk_iswalnum(c) ((wchar_t)(c) <= 0xFF && isalnum(c))
 #  define gdk_iswspace(c) ((wchar_t)(c) <= 0xFF && isspace(c))
 #endif

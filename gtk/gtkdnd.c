@@ -553,6 +553,17 @@ gtk_drag_get_event_actions (GdkEvent *event,
 	    *suggested_action = GDK_ACTION_LINK;
 	}
     }
+  else
+    {
+      *possible_actions = actions;
+      
+      if (actions & GDK_ACTION_COPY)
+	*suggested_action =  GDK_ACTION_COPY;
+      else if (actions & GDK_ACTION_MOVE)
+	*suggested_action = GDK_ACTION_MOVE;
+      else if (actions & GDK_ACTION_LINK)
+	*suggested_action = GDK_ACTION_LINK;
+    }
   
   return;
 }
@@ -1680,13 +1691,12 @@ gtk_drag_begin (GtkWidget         *widget,
   gtk_drag_get_event_actions (event, info->button, actions,
 			      &suggested_action, &possible_actions);
   
-  if (event)
-    info->cursor = gtk_drag_get_cursor (suggested_action);
+  info->cursor = gtk_drag_get_cursor (suggested_action);
 
   /* Set cur_x, cur_y here so if the "drag_begin" signal shows
    * the drag icon, it will be in the right place
    */
-  if (event->type == GDK_MOTION_NOTIFY)
+  if (event && event->type == GDK_MOTION_NOTIFY)
     {
       info->cur_x = event->motion.x_root;
       info->cur_y = event->motion.y_root;
@@ -1703,7 +1713,7 @@ gtk_drag_begin (GtkWidget         *widget,
   gtk_signal_emit_by_name (GTK_OBJECT (widget), "drag_begin",
 			   info->context);
   
-  if (event->type == GDK_MOTION_NOTIFY)
+  if (event && event->type == GDK_MOTION_NOTIFY)
     gtk_drag_motion_cb (info->ipc_widget, (GdkEventMotion *)event, info);
 
   info->start_x = info->cur_x;

@@ -1,3 +1,389 @@
+Mon Mar 13 18:37:55 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdnd.c: Fix a bunch of cases where XGetWindowProperty()
+	is called without trapping X errors.
+
+Fri Feb 25 10:48:53 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.*: Fix problem where stray '"' characters found their
+	way into the fontset lists.
+
+Tue Feb 22 08:52:52 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkthemes.h: add extern "C" scope.
+
+Mon Feb 21 20:16:42 2000  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c: applied  patch from Guy Harris <guy@netapp.com>
+	to make appends to the list constant. (gtk-guy-990901-0.patch)
+
+Mon Feb 14 22:50:10 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.c (gtk_type_init): use g_str_hash() and g_str_equal()
+	for the typename hash table.
+
+Mon Feb 14 15:01:23 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkpaned.c (gtk_paned_compute_position): Add some sanity checks
+	to make sure we never divide by zero. 
+	(Problem pointed out by Michal Jaegermann <michal@ellpspace.math.ualberta.ca>)
+
+Mon Feb 14 12:29:38 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfontsel.c: Apply patch from
+	SHIRASAKI Yasuhiro <yasuhiro@awa.tohoku.ac.jp> to make font selector work a little
+	better with 2-byte fonts. (Load a fontset instead of a font for two byte fonts.)
+
+	Also, some cleanups in atom handling.
+
+Sun Feb 13 08:02:21 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksocket.c (gtk_socket_class_init): parent class is GtkContainer,
+	not GtkWidget.
+
+Fri Feb 11 02:19:32 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkhpaned.c (gtk_hpaned_size_allocate): 
+	* gtk/gtkvpaned.c (gtk_vpaned_size_allocate): 
+	* gtk/gtkpaned.c (gtk_paned_compute_position): had to squeeze some
+	more guint wrap-around bugs before going to bed.
+
+Thu Feb 10 16:16:35 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_size_allocate): guard against
+	guint wrap arounds in allocation.width.
+
+	* gtk/gtktable.c (gtk_table_size_allocate_pass1): repeat shrinking
+	process untill we fit the allocation given.
+
+Tue Feb  8 09:38:29 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c:
+	(gtk_widget_unrealize): guard widget access with ref/unref
+	around signal emission.
+	(gtk_widget_hide): same here, but also check its destroyed
+	state before queueing a resize.
+
+Tue Feb  8 03:05:55 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkstyle.c (gtk_style_new): use gtk_default_prelight_bg instead
+	of gtk_default_insensitive_bg as insensitive base color.
+
+	* gtk/gtktext.c (gtk_text_style_set): set the background color according
+	to the widget's state.
+	(gtk_text_realize): same here.
+	(gtk_text_state_changed): same here.
+	(draw_bg_rect): compare background color against base[] from
+	GTK_WIDGET_STATE (text) not GTK_STATE_NORMAL.
+
+Mon Feb  7 04:01:55 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (gtk_main_do_event): ignore delete events when
+	grabs are active, unless a delete event is send to the toplevel
+	of the currently grab holding widget.
+
+Sun Feb  6 10:13:15 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkctree.c (gtk_ctree_drag_data_received): Remove
+	debugging g_print's.
+
+Fri Feb  4 15:54:54 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_size_request): Don't
+	ever make the scrolled-window requisition ever depend on the 
+	visibility state of the scrollbars for the AUTOMATIC policy. 
+	This breaks the	GTK+ requisition model, and causes loops.
+
+Fri Feb  4 15:09:12 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c (gtk_style_new): Set the charset explicitely for
+	the default font to avoid problems with XFree86-4.0 where the
+	default charset is iso10646-1, not iso8859-1.
+
+Thu Feb  3 14:58:48 PST 2000 Manish Singh <yosh@gimp.org>
+
+	* acinclude.m4
+	* config.guess
+	* config.sub
+	* ltconfig
+	* ltmain.sh: upgrade to libtool 1.3.4 (bugfix only release)
+
+	* gtk/Makefile.am: minor cosmetic consistency tweak
+
+Thu Feb  3 14:46:01 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_button_release): Set
+	the activate_time to 0, so that we handle a quick
+	press/release press/release properly and don't suppress
+	the second release. (Red Hat bug #7545)
+
+Wed Feb  2 22:25:17 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkctree.c (row_delete):
+	(gtk_ctree_node_set_row_data_full): fixed very evil reentrancy
+	bugs with destruction notifier, *always* update internal
+	structures *before* calling user code.
+
+Sun Jan 30 20:10:52 2000  Lars Hamann  <lars@gtk.org>
+
+	A few more fixes for bug #5487, #2051, #2677.
+	* gtk/gtkclist.c : 
+	(gtk_clist_button_press):  Reset clist->anchor to -1 if event->type is
+ 	not GDK_BUTTON_PRESS.
+	(resync_selection): resync only if selection_mode is
+	GTK_SELECTION_EXTENDED
+	* gtk/gtkctree.c (resync_selection): same here
+
+Sun Jan 30 12:29:20 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.h gtk/gtkmenu.h: Removed duplicate prototypes for
+	gdk_drag_get_selection() and gtk_menu_detach().
+
+	[ From Jeroen Ruigrok/Asmodai ]
+
+Sat Jan 29 10:11:56 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_size_request): 
+	page->tab_label can be NULL.
+
+2000-01-25  Havoc Pennington  <hp@pobox.com>
+	
+	* gdk/gdkwindow.c (gdk_window_set_back_pixmap): parent_relative
+	arg is boolean
+
+	* gdk/gdkselection.c (gdk_selection_owner_set): return boolean
+
+	* gdk/gdkrectangle.c (gdk_rectangle_intersect): return boolean
+
+	* gdk/gdkproperty.c (gdk_property_get): return boolean
+
+	* gdk/gdkinput.c (gdk_input_set_mode): return boolean
+
+	* gdk/gdkim.c (gdk_im_ready): return boolean
+
+	* gdk/gdkgc.c (gdk_gc_set_exposures): gboolean arg
+
+	* gdk/gdkfont.c (gdk_font_equal): return gboolean (mild
+	glib clash, should fix glib)
+
+	* gdk/gdkevents.c (gdk_set_show_events): take gboolean arg
+	(gdk_get_show_events): return gboolean, and canonicalize 
+	to TRUE/FALSE
+
+	* gdk/gdkcolor.c (gdk_colormap_new): gboolean flag whether the
+	colormap is private
+	(gdk_colors_alloc): gboolean whether to be contiguous
+	(gdk_color_equal): return gboolean since we are a predicate
+	and not a qsort() (this looks semi-wrong due to glib breakage,
+	IMO glib should be fixed)
+	
+	* gdk/gdk.c (gdk_set_use_xshm): take gboolean arg
+	(gdk_get_use_xshm): return gboolean
+	(gdk_pointer_is_grabbed): return gboolean
+
+	* gdk/gdk.h: Change prototypes to match all the above changes,
+	and re-run egtk-format-protos as required.
+
+Fri Jan 28 12:28:17 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkctree.c (resync_selection): 
+	* gtk/gtkclist.c (resync_selection):
+
+	Return immediately if clist->drag_pos < 0. This is a workaround
+	for the corrupt state that the clist gets into when a
+	GDK_2BUTTON_PRESS occurs. See note in gtk_clist_button_press().
+
+	Bug #5487, #2051, #2677; fix suggested by David Helder and T. Alexander Popiel.
+	
+	* gtk/gtknotebook.c (gtk_notebook_size_request): Fix uninitialized
+	variable from recent commit.
+
+Thu Jan 27 15:22:09 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_begin): Fix stupid typo in last commit.
+
+Thu Jan 27 18:00:55 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/Makefile.am: prefix all autogenerated source that get build in
+	$(srcdir) with $(srcdir)/, so make doesn't assume they got generted
+	in builddir. since we subsequently cd into srcdir for autogeneration,
+	the paths have to be stripped from the target file names, thusly we
+	use $(@F) as target names now.
+	put a comment about configure.in's --disable-rebuilds option,
+	which can be used for non-writable source directories, for development
+	setups though, srcdir has to be *writable*.
+
+hu Jan 27 00:15:03 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_begin gtk_drag_get_event_actions):
+	  Finish the job of allowing event to be NULL.
+	  (Fixes bug #4283, reported by Chris Blizzard)
+
+	* gtk/gtkentry.c (entry_adjust_scroll): When calculating
+	  things so that the cursor appears on screen, properly
+	  take into account INNER_BORDER.
+	  (Fixes bug #4754, reported by Antonio Campos)
+
+Wed Jan 26 23:12:28 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_map): Don't
+	  show the tab_label unless it itself is visible.
+
+	  gtk/gtknotebook.c (gtk_notebook_size_request):
+	  Do a better job of making sure that the visibility
+	  of the tab label corresponds to whether it should
+	  be mapped or not.
+
+Wed Jan 26 21:17:03 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_position):
+	  Use the requisition, not the allocation, since the
+	  allocation has not necessarily been computed yet.
+	  (Pointed out by Eugene Osintsev)
+
+Wed Jan 26 19:44:25 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c (gtk_style_new): Dont' set
+	  style/base[GTK_STATE_INSENSITIVE] both to
+	  gtk_default_insensitive_bg!
+	  (Bug #2187, reported by Jonathan Blandford)
+
+	* gtk/gtkaccelgroup.c (gtk_accelerator_valid):
+	  Add Alt_L, Alt_R to list of invalid accelerators.
+	  (Bug #3736, reported by Vlad Harchev)
+
+Wed Jan 26 19:01:56 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (open_ref_dir): Fix several
+	bugs which occured after an attempt to open 
+	invalid home directory left cmpl_state->reference_dir == NULL.
+
+	 - completion on files in home directory didn't work
+	 - completion on an empty string caused  segfault
+
+	 (Bug #3768, reported by Steve Ratcliffe)
+
+	* gtk/gtkscale.c (gtk_scale_get_value_width): Fix
+	cut and paste error that was causing scales to
+	be incorrectly positioned.
+	(Bug #2956,
+	 patch from Steve Ratcliffe <steve@parabola.demon.co.uk>)
+
+2000-01-27  Shirasaki Yasuhiro  <yasuhiro@gnome.gr.jp>
+
+	* acinclude.m4 (AM_GTK_WITH_NLS): Add -lintl to libs
+	when checking for dcgettext, if we've found we needed
+	it for dgettext.
++
+Wed Jan 26 18:06:07 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_queue_clear_area): Ignore
+	queue_clear on NO_WINDOW widgets during a reparent,
+	since at that point the window and widget heirarchies
+	are out of sync. This stops crashing in some cases
+	(the scrolled window reparent test, for instance), and
+	_probably_ won't cause drawing errors.
+
+	* gtk/testgtk.c: Make the reparenting-a-scrolled-window
+	test do what it was supposed to do and be robust against
+	window closings, etc. (Bug #2443)
+
+Wed Jan 26 16:56:54 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c: Fix return values on mouse events.
+	(Bug #2686, Sky <seb_sky@yahoo.com>)
+
+	* gtk/genmarshal.pl: Fix up handling of FOREIGN.
+	(pointed out by George Lebl)
+
+ 	* gdk/gdkcolor.c (gdk_color_copy): Made const-safe.
+	(From Ettore Perazzoli  <ettore@helixcode.com>)
+ 
+Mon Jan 24 10:44:48 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcalendar.c (gtk_calendar_main_button): Handle
+	clicks between rows or outside calender area correctly.
+	(Patch from Damon Chaplin)
+
+	* gtk/gtkclist.c (gtk_clist_set_row_data_full): 
+	* gtk/gtkctree.c (gtk_ctree_node_set_row_data_full): 
+	  Call destroy function when overwriting existing data. 
+	  (Pointed out by Damon Chaplin)
+
+Tue Jan 25 09:55:41 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c: Remove useless #include of <X11/Xmu/WinUtil.h>,
+	  which was causing problems on various systems with Xmu.
+	  This hasn't been needed for a very long time.
+	  (Fixes #1185 3167)
+
+Sun Jan 23 22:27:36 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdki18n.h: Include <ctype.h> when defining
+	  gdk_isw* in terms of is* as a fallback.
+	  (Bug #4106 - Dan Winship <danw@MIT.EDU>)
+
+Sun Jan 23 22:12:36 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkviewport.c (gtk_viewport_size_allocate): Don't
+	  realize the widget when it is size allocated!
+	  (old, old bug)
+
+	* gtk/gtkviewport.c (gtk_viewport_adjustment_value_changed):
+	  Removed unused call to gdk_window_get_size() that
+	  showed up when the above was fixed.
+
+Sat Jan 22 15:44:30 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_reparent): Correctly
+	  fix up widget->window when the widget is a
+	  NO_WINDOW container widget.
+
+Sat Jan 22 12:40:48 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkpixmap.c (gdk_pixmap_seek_string): Rewrite
+	  to account for the fact that feof() does _not_ 
+	  return TRUE on errors, and thus avoid infinite loops
+	  when trying to use gdk_pixmap_create_from_xpm()
+	  on unreadable values.
+
+Fri Jan 21 18:32:43 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaspectframe.h (struct _GtkAspectFrame): s/gint/gboolean/.
+
+Fri Jan 21 16:24:08 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkgc.c (gdk_gc_set_dashes): Change from
+	  gdk_gc_set_dashes to take gint8 instead of gchar to
+	  make it clearer that it is _not_ a NULL terminated string.
+
+	* gdk/gdk.h gdk/gdkfont.c gdk/gdkgc.c gdk/gdkselection.c
+	  gdk/gdkwindow.c gtk/gtkprogress.[ch] gtk/gtkthemes.[ch]
+	  gtk/gtktreeitem.[ch] gtk/gtkwidget.[ch]: Constify string
+	  arguments.
+
+Thu Dec 30 04:51:05 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkvscale.c (gtk_vscale_pos_background): 
+	* gtk/gtkhscale.c (gtk_hscale_pos_background): when calculating the
+	background size relative to our allocation, guard against small
+	allocations, we may have not yet been size allocated.
+
+Thu Dec  2 10:59:14 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdnd.c (xdnd_check_dest): Allow version >= 3,
+	not just version == 3. We implement all 3 + most of 4 - 
+	(we don't support matching text/plain;charset=iso-8859-1
+	to a dest that expects text/plain). We'll still advertise
+	3 to be safe, but any client implementing version >= 3
+	must interoperate with 3.
+	
+Tue Mar 14 11:53:31 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktooltips.[ch] (struct _GtkTooltips): Remove foreground,
+	background and gc members, add a warning in gtk_tooltips_set_color()
+	indicating that this function is deprecated.
+
 Thu Mar  9 22:10:56 GMT 2000  Tony Gale <gale@gtk.org>
 
 	* docs/gtkfaq.sgml: FAQ Update:

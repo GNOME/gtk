@@ -241,7 +241,7 @@ void	      gdk_window_set_background	 (GdkWindow	  *window,
 					  GdkColor	  *color);
 void	      gdk_window_set_back_pixmap (GdkWindow	  *window,
 					  GdkPixmap	  *pixmap,
-					  gint		   parent_relative);
+					  gboolean	   parent_relative);
 void	      gdk_window_set_cursor	 (GdkWindow	  *window,
 					  GdkCursor	  *cursor);
 void	      gdk_window_get_user_data	 (GdkWindow	  *window,
@@ -280,7 +280,7 @@ void	      gdk_window_set_icon	 (GdkWindow	  *window,
 					  GdkPixmap	  *pixmap,
 					  GdkBitmap	  *mask);
 void	      gdk_window_set_icon_name	 (GdkWindow	  *window, 
-					  gchar		  *name);
+					  const gchar	  *name);
 void	      gdk_window_set_group	 (GdkWindow	  *window, 
 					  GdkWindow	  *leader);
 void	      gdk_window_set_decorations (GdkWindow	  *window,

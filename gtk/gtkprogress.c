@@ -604,7 +604,7 @@ gtk_progress_set_text_alignment (GtkProgress *progress,
 
 void
 gtk_progress_set_format_string (GtkProgress *progress,
-				gchar       *format)
+				const gchar *format)
 {
   g_return_if_fail (progress != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (progress));

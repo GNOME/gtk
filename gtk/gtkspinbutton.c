@@ -509,7 +509,8 @@ gtk_spin_button_size_allocate (GtkWidget     *widget,
   g_return_if_fail (allocation != NULL);
 
   child_allocation = *allocation;
-  child_allocation.width -= ARROW_SIZE + 2 * widget->style->klass->xthickness;
+  if (child_allocation.width > ARROW_SIZE + 2 * widget->style->klass->xthickness)
+    child_allocation.width -= ARROW_SIZE + 2 * widget->style->klass->xthickness;
 
   GTK_WIDGET_CLASS (parent_class)->size_allocate (widget, &child_allocation);
 

@@ -2488,32 +2488,6 @@ create_item_factory (void)
 }
 
 /*
- * GtkScrolledWindow
- */
-
-static void
-scrolled_windows_remove (GtkWidget *widget, GtkWidget *scrollwin)
-{
-  static GtkWidget *parent = NULL;
-  static GtkWidget *float_parent;
-
-  if (parent)
-    {
-      gtk_widget_reparent (scrollwin, parent);
-      gtk_widget_destroy (float_parent);
-      float_parent = NULL;
-      parent = NULL;
-    }
-  else
-    {
-      parent = widget->parent;
-      float_parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      gtk_widget_reparent (scrollwin, float_parent);
-      gtk_widget_show (float_parent);
-    }
-}
-
-/*
  create_modal_window
  */
 
@@ -2644,6 +2618,63 @@ create_modal_window (void)
  * GtkScrolledWindow
  */
 
+static GtkWidget *sw_parent = NULL;
+static GtkWidget *sw_float_parent;
+static guint sw_destroyed_handler = 0;
+
+static gboolean
+scrolled_windows_delete_cb (GtkWidget *widget, GdkEventAny *event, GtkWidget *scrollwin)
+{
+  gtk_widget_reparent (scrollwin, sw_parent);
+  
+  gtk_signal_disconnect (GTK_OBJECT (sw_parent), sw_destroyed_handler);
+  sw_float_parent = NULL;
+  sw_parent = NULL;
+  sw_destroyed_handler = 0;
+
+  return FALSE;
+}
+
+static void
+scrolled_windows_destroy_cb (GtkWidget *widget, GtkWidget *scrollwin)
+{
+  gtk_widget_destroy (sw_float_parent);
+
+  sw_float_parent = NULL;
+  sw_parent = NULL;
+  sw_destroyed_handler = 0;
+}
+
+static void
+scrolled_windows_remove (GtkWidget *widget, GtkWidget *scrollwin)
+{
+  if (sw_parent)
+    {
+      gtk_widget_reparent (scrollwin, sw_parent);
+      gtk_widget_destroy (sw_float_parent);
+
+      gtk_signal_disconnect (GTK_OBJECT (sw_parent), sw_destroyed_handler);
+      sw_float_parent = NULL;
+      sw_parent = NULL;
+      sw_destroyed_handler = 0;
+    }
+  else
+    {
+      sw_parent = scrollwin->parent;
+      sw_float_parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_default_size (GTK_WINDOW (sw_float_parent), 200, 200);
+      
+      gtk_widget_reparent (scrollwin, sw_float_parent);
+      gtk_widget_show (sw_float_parent);
+
+      sw_destroyed_handler =
+	gtk_signal_connect (GTK_OBJECT (sw_parent), "destroy",
+			    GTK_SIGNAL_FUNC (scrolled_windows_destroy_cb), scrollwin);
+      gtk_signal_connect (GTK_OBJECT (sw_float_parent), "delete_event",
+			  GTK_SIGNAL_FUNC (scrolled_windows_delete_cb), scrollwin);
+    }
+}
+
 static void
 create_scrolled_windows (void)
 {
@@ -2696,7 +2727,7 @@ create_scrolled_windows (void)
 	  }
 
 
-      button = gtk_button_new_with_label ("close");
+      button = gtk_button_new_with_label ("Close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));
@@ -2706,10 +2737,10 @@ create_scrolled_windows (void)
       gtk_widget_grab_default (button);
       gtk_widget_show (button);
 
-      button = gtk_button_new_with_label ("remove");
-      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 GTK_SIGNAL_FUNC(scrolled_windows_remove),
-				 GTK_OBJECT (scrolled_window));
+      button = gtk_button_new_with_label ("Reparent Out");
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC(scrolled_windows_remove),
+			  scrolled_window);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);

@@ -75,7 +75,7 @@ struct _GtkTreeItemClass
 
 GtkType    gtk_tree_item_get_type       (void);
 GtkWidget* gtk_tree_item_new            (void);
-GtkWidget* gtk_tree_item_new_with_label (gchar       *label);
+GtkWidget* gtk_tree_item_new_with_label (const gchar *label);
 void       gtk_tree_item_set_subtree    (GtkTreeItem *tree_item,
 					 GtkWidget   *subtree);
 void       gtk_tree_item_remove_subtree (GtkTreeItem *tree_item);

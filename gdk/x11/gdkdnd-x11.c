@@ -950,6 +950,7 @@ motif_read_target_table (void)
       guchar *p;
       gboolean success = FALSE;
 
+      gdk_error_trap_push ();
       XGetWindowProperty (gdk_display, motif_drag_window, 
 			  motif_drag_targets_atom,
 			  0, (sizeof(MotifTargetTableHeader)+3)/4, FALSE,
@@ -957,12 +958,13 @@ motif_read_target_table (void)
 			  &type, &format, &nitems, &bytes_after,
 			  (guchar **)&header);
 
-      if ((format != 8) || (nitems < sizeof (MotifTargetTableHeader)))
+      if (gdk_error_trap_pop () || (format != 8) || (nitems < sizeof (MotifTargetTableHeader)))
 	goto error;
 
       header->n_lists = card16_to_host (header->n_lists, header->byte_order);
       header->total_size = card32_to_host (header->total_size, header->byte_order);
 
+      gdk_error_trap_push ();
       XGetWindowProperty (gdk_display, motif_drag_window, motif_drag_targets_atom,
 			  (sizeof(MotifTargetTableHeader)+3)/4, 
 			  (header->total_size + 3)/4 - (sizeof(MotifTargetTableHeader) + 3)/4,
@@ -970,7 +972,7 @@ motif_read_target_table (void)
 			  motif_drag_targets_atom, &type, &format, &nitems, 
 			  &bytes_after, &target_bytes);
       
-      if ((format != 8) || (bytes_after != 0) || 
+      if (gdk_error_trap_pop () || (format != 8) || (bytes_after != 0) || 
 	  (nitems != header->total_size - sizeof(MotifTargetTableHeader)))
 	  goto error;
 
@@ -1294,29 +1296,33 @@ motif_check_dest (Window win)
   if (!motif_drag_receiver_info_atom)
     motif_drag_receiver_info_atom = gdk_atom_intern ("_MOTIF_DRAG_RECEIVER_INFO", FALSE);
 
+  gdk_error_trap_push ();
   XGetWindowProperty (gdk_display, win, 
 		      motif_drag_receiver_info_atom, 
 		      0, (sizeof(*info)+3)/4, False, AnyPropertyType,
 		      &type, &format, &nitems, &after, 
 		      (guchar **)&info);
-  
-  if (type != None)
-    {
-      if ((format == 8) && (nitems == sizeof(*info)))
-	{
-	  if ((info->protocol_version == 0) &&
-	      ((info->protocol_style == XmDRAG_PREFER_PREREGISTER) ||
-	       (info->protocol_style == XmDRAG_PREFER_DYNAMIC) ||
-	       (info->protocol_style == XmDRAG_DYNAMIC)))
-	    retval = TRUE;
-	}
-      else
-	{
-	  GDK_NOTE (DND, 
-		    g_warning ("Invalid Motif drag receiver property on window %ld\n", win));
-	}
 
-      XFree (info);
+  if (gdk_error_trap_pop() == 0)
+    {
+      if (type != None)
+	{
+	  if ((format == 8) && (nitems == sizeof(*info)))
+	    {
+	      if ((info->protocol_version == 0) &&
+		  ((info->protocol_style == XmDRAG_PREFER_PREREGISTER) ||
+		   (info->protocol_style == XmDRAG_PREFER_DYNAMIC) ||
+		   (info->protocol_style == XmDRAG_DYNAMIC)))
+		retval = TRUE;
+	    }
+	  else
+	    {
+	      GDK_NOTE (DND, 
+			g_warning ("Invalid Motif drag receiver property on window %ld\n", win));
+	    }
+	  
+	  XFree (info);
+	}
     }
 
   return retval ? win : GDK_NONE;
@@ -1475,13 +1481,14 @@ motif_read_initiator_info (Window source_window,
   if (!motif_drag_initiator_info)
     motif_drag_initiator_info = gdk_atom_intern ("_MOTIF_DRAG_INITIATOR_INFO", FALSE);
 
+  gdk_error_trap_push ();
   XGetWindowProperty (gdk_display, source_window, atom,
 		      0, sizeof(*initiator_info), FALSE,
 		      motif_drag_initiator_info, 
 		      &type, &format, &nitems, &bytes_after,
 		      (guchar **)&initiator_info);
 
-  if ((format != 8) || (nitems != sizeof (MotifDragInitiatorInfo)) || (bytes_after != 0))
+  if (gdk_error_trap_pop () || (format != 8) || (nitems != sizeof (MotifDragInitiatorInfo)) || (bytes_after != 0))
     {
       g_warning ("Error reading initiator info\n");
       return FALSE;
@@ -2308,7 +2315,7 @@ xdnd_check_dest (Window win)
 	{
 	  if ((format == 32) && (nitems == 1))
 	    {
-	      if (*version == 3)
+	      if (*version >= 3)
 		retval = TRUE;
 	    }
 	  else
@@ -2511,13 +2518,14 @@ xdnd_enter_filter (GdkXEvent *xev,
   new_context->targets = NULL;
   if (get_types)
     {
+      gdk_error_trap_push ();
       XGetWindowProperty (GDK_DRAWABLE_XDISPLAY (event->any.window), 
 			  source_window, 
 			  gdk_atom_intern ("XdndTypeList", FALSE), 0, 65536,
 			  False, XA_ATOM, &type, &format, &nitems,
 			  &after, (guchar **)&data);
 
-      if ((format != 32) || (type != XA_ATOM))
+      if (gdk_error_trap_pop () || (format != 32) || (type != XA_ATOM))
 	{
 	  gdk_drag_context_unref (new_context);
 	  return GDK_FILTER_REMOVE;
@@ -2779,10 +2787,12 @@ gdk_drag_get_protocol (guint32          xid,
       if (xid == gdk_root_window)
 	rootwin = TRUE;
 
+      gdk_error_warnings = 0;
+      
       if (!rootwin)
 	{
 	  gdk_error_code = 0;
-	  
+
 	  XGetWindowProperty (gdk_display, xid,
 			      gdk_atom_intern ("ENLIGHTENMENT_DESKTOP", FALSE),
 			      0, 0, False, AnyPropertyType,

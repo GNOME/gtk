@@ -43,7 +43,7 @@ static GHashTable *colormap_hash = NULL;
 
 GdkColormap*
 gdk_colormap_new (GdkVisual *visual,
-		  gint       private_cmap)
+		  gboolean   private_cmap)
 {
   GdkColormap *colormap;
   GdkColormapPrivateX *private;
@@ -344,7 +344,7 @@ gdk_colormap_change (GdkColormap *colormap,
 
 gboolean
 gdk_colors_alloc (GdkColormap   *colormap,
-		  gint           contiguous,
+		  gboolean       contiguous,
 		  gulong        *planes,
 		  gint           nplanes,
 		  gulong        *pixels,

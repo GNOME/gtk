@@ -32,6 +32,12 @@
 #include <gtk/gtkstyle.h>
 #include <gtk/gtkwidget.h>
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+
 struct _GtkThemeEngine {
   /* Fill in engine_data pointer in a GtkRcStyle by parsing contents
    * of brackets. Returns G_TOKEN_NONE if succesfull, otherwise returns
@@ -77,19 +83,11 @@ struct _GtkThemeEngine {
 			  GtkStateType  state_type);
 };
 
-GtkThemeEngine *gtk_theme_engine_get   (gchar          *name);
+GtkThemeEngine *gtk_theme_engine_get   (const gchar    *name);
 void            gtk_theme_engine_ref   (GtkThemeEngine *engine);
 void            gtk_theme_engine_unref (GtkThemeEngine *engine);
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
 
-/* Initialization, exit, mainloop and miscellaneous routines
- */
-void	   gtk_themes_init	 (int	       *argc,
-				  char	     ***argv);
-void	   gtk_themes_exit	 (gint		error_code);
 
 #ifdef __cplusplus
 }

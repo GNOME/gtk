@@ -42,7 +42,7 @@ typedef enum
 gboolean   gdk_selection_owner_set (GdkWindow	 *owner,
 				    GdkAtom	  selection,
 				    guint32	  time,
-				    gint	  send_event);
+				    gboolean      send_event);
 GdkWindow* gdk_selection_owner_get (GdkAtom	  selection);
 void	   gdk_selection_convert   (GdkWindow	 *requestor,
 				    GdkAtom	  selection,

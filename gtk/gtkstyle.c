@@ -405,7 +405,7 @@ gtk_style_new (void)
   if (!default_font)
     {
       default_font =
-	gdk_font_load ("-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*");
+	gdk_font_load ("-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-iso8859-1");
       if (!default_font)
 	default_font = gdk_font_load ("fixed");
       if (!default_font)
@@ -450,8 +450,8 @@ gtk_style_new (void)
       style->base[i] = style->white;
     }
   
-  style->base[GTK_STATE_INSENSITIVE] = gtk_default_insensitive_bg;
-  style->text[GTK_STATE_INSENSITIVE] = gtk_default_insensitive_bg;
+  style->base[GTK_STATE_INSENSITIVE] = gtk_default_prelight_bg;
+  style->text[GTK_STATE_INSENSITIVE] = gtk_default_insensitive_fg;
   
   for (i = 0; i < 5; i++)
     style->bg_pixmap[i] = NULL;

@@ -65,7 +65,7 @@ static void gen_8_3_dll_name(gchar *name, gchar *fullname)
 #endif
 
 GtkThemeEngine*
-gtk_theme_engine_get (gchar *name)
+gtk_theme_engine_get (const gchar *name)
 {
   GtkThemeEnginePrivate *result;
   

@@ -122,6 +122,12 @@ LIST_WIDTH (GtkCList * clist)
   return 0;
 }
 
+/* returns the GList item for the nth row */
+#define	ROW_ELEMENT(clist, row)	(((row) == (clist)->rows - 1) ? \
+				 (clist)->row_list_end : \
+				 g_list_nth ((clist)->row_list, (row)))
+
+
 #define GTK_CLIST_CLASS_FW(_widget_) GTK_CLIST_CLASS (((GtkObject*) (_widget_))->klass)
 
 /* redraw the list if it's not frozen */
@@ -2174,7 +2180,7 @@ gtk_clist_get_cell_type (GtkCList *clist,
   if (column < 0 || column >= clist->columns)
     return -1;
 
-  clist_row = (g_list_nth (clist->row_list, row))->data;
+  clist_row = ROW_ELEMENT (clist, row)->data;
 
   return clist_row->cell[column].type;
 }
@@ -2195,7 +2201,7 @@ gtk_clist_set_text (GtkCList    *clist,
   if (column < 0 || column >= clist->columns)
     return;
 
-  clist_row = (g_list_nth (clist->row_list, row))->data;
+  clist_row = ROW_ELEMENT (clist, row)->data;
 
   /* if text is null, then the cell is empty */
   GTK_CLIST_CLASS_FW (clist)->set_cell_contents
@@ -2225,7 +2231,7 @@ gtk_clist_get_text (GtkCList  *clist,
   if (column < 0 || column >= clist->columns)
     return 0;
 
-  clist_row = (g_list_nth (clist->row_list, row))->data;
+  clist_row = ROW_ELEMENT (clist, row)->data;
 
   if (clist_row->cell[column].type != GTK_CELL_TEXT)
     return 0;
@@ -2253,7 +2259,7 @@ gtk_clist_set_pixmap (GtkCList  *clist,
   if (column < 0 || column >= clist->columns)
     return;
 
-  clist_row = (g_list_nth (clist->row_list, row))->data;
+  clist_row = ROW_ELEMENT (clist, row)->data;
   
   gdk_pixmap_ref (pixmap);
   
@@ -2287,7 +2293,7 @@ gtk_clist_get_pixmap (GtkCList   *clist,
   if (column < 0 || column >= clist->columns)
     return 0;
 
-  clist_row = (g_list_nth (clist->row_list, row))->data;
+  clist_row = ROW_ELEMENT (clist, row)->data;
 
   if (clist_row->cell[column].type != GTK_CELL_PIXMAP)
     return 0;
@@ -2321,7 +2327,7 @@ gtk_clist_set_pixtext (GtkCList    *clist,
   if (column < 0 || column >= clist->columns)
     return;
 
-  clist_row = (g_list_nth (clist->row_list, row))->data;
+  clist_row = ROW_ELEMENT (clist, row)->data;
   
   gdk_pixmap_ref (pixmap);
   if (mask) gdk_pixmap_ref (mask);
@@ -2355,7 +2361,7 @@ gtk_clist_get_pixtext (GtkCList   *clist,
   if (column < 0 || column >= clist->columns)
     return 0;
 
-  clist_row = (g_list_nth (clist->row_list, row))->data;
+  clist_row = ROW_ELEMENT (clist, row)->data;
 
   if (clist_row->cell[column].type != GTK_CELL_PIXTEXT)
     return 0;
@@ -2391,7 +2397,7 @@ gtk_clist_set_shift (GtkCList *clist,
   if (column < 0 || column >= clist->columns)
     return;
 
-  clist_row = (g_list_nth (clist->row_list, row))->data;
+  clist_row = ROW_ELEMENT (clist, row)->data;
 
   if (clist->column[column].auto_resize &&
       !GTK_CLIST_AUTO_RESIZE_BLOCKED(clist))
@@ -2729,7 +2735,7 @@ real_remove_row (GtkCList *clist,
   was_selected = 0;
 
   /* get the row we're going to delete */
-  list = g_list_nth (clist->row_list, row);
+  list = ROW_ELEMENT (clist, row);
   g_assert (list != NULL);
   clist_row = list->data;
 
@@ -2856,7 +2862,7 @@ real_row_move (GtkCList *clist,
   gtk_clist_freeze (clist);
 
   /* unlink source row */
-  clist_row = g_list_nth_data (clist->row_list, source_row);
+  clist_row = ROW_ELEMENT (clist, source_row)->data;
   if (source_row == clist->rows - 1)
     clist->row_list_end = clist->row_list_end->prev;
   clist->row_list = g_list_remove (clist->row_list, clist_row);
@@ -3013,7 +3019,11 @@ gtk_clist_set_row_data_full (GtkCList         *clist,
   if (row < 0 || row > (clist->rows - 1))
     return;
 
-  clist_row = (g_list_nth (clist->row_list, row))->data;
+  clist_row = ROW_ELEMENT (clist, row)->data;
+
+  if (clist_row->destroy)
+    clist_row->destroy (clist_row->data);
+  
   clist_row->data = data;
   clist_row->destroy = destroy;
 }
@@ -3030,7 +3040,7 @@ gtk_clist_get_row_data (GtkCList *clist,
   if (row < 0 || row > (clist->rows - 1))
     return NULL;
 
-  clist_row = (g_list_nth (clist->row_list, row))->data;
+  clist_row = ROW_ELEMENT (clist, row)->data;
   return clist_row->data;
 }
 
@@ -3139,7 +3149,7 @@ gtk_clist_set_foreground (GtkCList *clist,
   if (row < 0 || row >= clist->rows)
     return;
 
-  clist_row = (g_list_nth (clist->row_list, row))->data;
+  clist_row = ROW_ELEMENT (clist, row)->data;
 
   if (color)
     {
@@ -3169,7 +3179,7 @@ gtk_clist_set_background (GtkCList *clist,
   if (row < 0 || row >= clist->rows)
     return;
 
-  clist_row = (g_list_nth (clist->row_list, row))->data;
+  clist_row = ROW_ELEMENT (clist, row)->data;
 
   if (color)
     {
@@ -3210,7 +3220,7 @@ gtk_clist_set_cell_style (GtkCList *clist,
   if (column < 0 || column >= clist->columns)
     return;
 
-  clist_row = (g_list_nth (clist->row_list, row))->data;
+  clist_row = ROW_ELEMENT (clist, row)->data;
 
   if (clist_row->cell[column].style == style)
     return;
@@ -3262,7 +3272,7 @@ gtk_clist_get_cell_style (GtkCList *clist,
   if (row < 0 || row >= clist->rows || column < 0 || column >= clist->columns)
     return NULL;
 
-  clist_row = (g_list_nth (clist->row_list, row))->data;
+  clist_row = ROW_ELEMENT (clist, row)->data;
 
   return clist_row->cell[column].style;
 }
@@ -3283,7 +3293,7 @@ gtk_clist_set_row_style (GtkCList *clist,
   if (row < 0 || row >= clist->rows)
     return;
 
-  clist_row = (g_list_nth (clist->row_list, row))->data;
+  clist_row = ROW_ELEMENT (clist, row)->data;
 
   if (clist_row->style == style)
     return;
@@ -3345,7 +3355,7 @@ gtk_clist_get_row_style (GtkCList *clist,
   if (row < 0 || row >= clist->rows)
     return NULL;
 
-  clist_row = (g_list_nth (clist->row_list, row))->data;
+  clist_row = ROW_ELEMENT (clist, row)->data;
 
   return clist_row->style;
 }
@@ -3372,7 +3382,7 @@ gtk_clist_set_selectable (GtkCList *clist,
   if (row < 0 || row >= clist->rows)
     return;
 
-  clist_row = (g_list_nth (clist->row_list, row))->data;
+  clist_row = ROW_ELEMENT (clist, row)->data;
 
   if (selectable == clist_row->selectable)
     return;
@@ -3403,7 +3413,7 @@ gtk_clist_get_selectable (GtkCList *clist,
   if (row < 0 || row >= clist->rows)
     return FALSE;
 
-  return GTK_CLIST_ROW (g_list_nth (clist->row_list, row))->selectable;
+  return GTK_CLIST_ROW (ROW_ELEMENT (clist, row))->selectable;
 }
 
 void
@@ -3510,7 +3520,7 @@ toggle_row (GtkCList *clist,
     case GTK_SELECTION_EXTENDED:
     case GTK_SELECTION_MULTIPLE:
     case GTK_SELECTION_SINGLE:
-      clist_row = g_list_nth (clist->row_list, row)->data;
+      clist_row = ROW_ELEMENT (clist, row)->data;
 
       if (!clist_row)
 	return;
@@ -3534,7 +3544,7 @@ fake_toggle_row (GtkCList *clist,
 {
   GList *work;
 
-  work = g_list_nth (clist->row_list, row);
+  work = ROW_ELEMENT (clist, row);
 
   if (!work || !GTK_CLIST_ROW (work)->selectable)
     return;
@@ -3659,7 +3669,7 @@ real_select_row (GtkCList *clist,
       break;
     }
 
-  clist_row = (g_list_nth (clist->row_list, row))->data;
+  clist_row = ROW_ELEMENT (clist, row)->data;
 
   if (clist_row->state != GTK_STATE_NORMAL || !clist_row->selectable)
     return;
@@ -3694,7 +3704,7 @@ real_unselect_row (GtkCList *clist,
   if (row < 0 || row > (clist->rows - 1))
     return;
 
-  clist_row = (g_list_nth (clist->row_list, row))->data;
+  clist_row = ROW_ELEMENT (clist, row)->data;
 
   if (clist_row->state == GTK_STATE_SELECTED)
     {
@@ -3816,7 +3826,7 @@ fake_unselect_all (GtkCList *clist,
   GList *work;
   gint i;
 
-  if (row >= 0 && (work = g_list_nth (clist->row_list, row)))
+  if (row >= 0 && (work = ROW_ELEMENT (clist, row)))
     {
       if (GTK_CLIST_ROW (work)->state == GTK_STATE_NORMAL &&
 	  GTK_CLIST_ROW (work)->selectable)
@@ -3833,7 +3843,7 @@ fake_unselect_all (GtkCList *clist,
   clist->undo_selection = clist->selection;
   clist->selection = NULL;
   clist->selection_end = NULL;
-  
+
   for (list = clist->undo_selection; list; list = list->next)
     {
       if ((i = GPOINTER_TO_INT (list->data)) == row ||
@@ -3860,8 +3870,7 @@ real_undo_selection (GtkCList *clist)
       clist->selection_mode != GTK_SELECTION_EXTENDED)
     return;
 
-  if (clist->anchor >= 0)
-    GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
+  GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
 
   if (!(clist->undo_selection || clist->undo_unselection))
     {
@@ -3943,7 +3952,10 @@ resync_selection (GtkCList *clist,
   GList *list;
   GtkCListRow *clist_row;
 
-  if (clist->anchor < 0)
+  if (clist->selection_mode != GTK_SELECTION_EXTENDED)
+    return;
+
+  if (clist->anchor < 0 || clist->drag_pos < 0)
     return;
 
   gtk_clist_freeze (clist);
@@ -4221,10 +4233,9 @@ end_selection (GtkCList *clist)
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CLIST (clist));
 
-  if ((gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_FOCUS(clist)) ||
-      clist->anchor == -1)
+  if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_FOCUS(clist))
     return;
-  
+
   GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
 }
 
@@ -4281,8 +4292,7 @@ sync_selection (GtkCList *clist,
 	clist->focus_row = clist->rows - 1;
     }
 
-  if (clist->selection_mode == GTK_SELECTION_BROWSE && clist->anchor != -1)
-    GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
+  GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
 
   g_list_free (clist->undo_selection);
   g_list_free (clist->undo_unselection);
@@ -4687,9 +4697,7 @@ gtk_clist_unmap (GtkWidget *widget)
 	{
 	  remove_grab (clist);
 
-	  if (clist->anchor != -1 &&
-	      clist->selection_mode == GTK_SELECTION_EXTENDED)
-	    GTK_CLIST_CLASS_FW (widget)->resync_selection (clist, NULL);
+	  GTK_CLIST_CLASS_FW (widget)->resync_selection (clist, NULL);
 
 	  clist->click_cell.row = -1;
 	  clist->click_cell.column = -1;
@@ -4989,9 +4997,12 @@ gtk_clist_button_press (GtkWidget      *widget,
 		case GTK_SELECTION_SINGLE:
 		case GTK_SELECTION_MULTIPLE:
 		  if (event->type != GDK_BUTTON_PRESS)
-		    gtk_signal_emit (GTK_OBJECT (clist),
-				     clist_signals[SELECT_ROW],
-				     row, column, event);
+		    {
+		      gtk_signal_emit (GTK_OBJECT (clist),
+				       clist_signals[SELECT_ROW],
+				       row, column, event);
+		      clist->anchor = -1;
+		    }
 		  else
 		    clist->anchor = row;
 		  break;
@@ -5661,7 +5672,7 @@ draw_row (GtkCList     *clist,
   /* if the function is passed the pointer to the row instead of null,
    * it avoids this expensive lookup */
   if (!clist_row)
-    clist_row = (g_list_nth (clist->row_list, row))->data;
+    clist_row = ROW_ELEMENT (clist, row)->data;
 
   /* rectangle of the entire row */
   row_rectangle.x = 0;
@@ -5675,7 +5686,7 @@ draw_row (GtkCList     *clist,
   cell_rectangle.width = row_rectangle.width;
   cell_rectangle.height = CELL_SPACING;
 
-  /* rectangle used to clip drawing operations, it's y and height
+  /* rectangle used to clip drawing operations, its y and height
    * positions only need to be set once, so we set them once here. 
    * the x and width are set withing the drawing loop below once per
    * column */
@@ -5938,7 +5949,7 @@ draw_rows (GtkCList     *clist,
   if (clist->rows == first_row)
     first_row--;
 
-  list = g_list_nth (clist->row_list, first_row);
+  list = ROW_ELEMENT (clist, first_row);
   i = first_row;
   while (list)
     {
@@ -6682,8 +6693,7 @@ gtk_clist_focus_out (GtkWidget     *widget,
   
   clist = GTK_CLIST (widget);
 
-  if (clist->anchor != -1 && clist->selection_mode == GTK_SELECTION_EXTENDED)
-    GTK_CLIST_CLASS_FW (widget)->resync_selection (clist, (GdkEvent *) event);
+  GTK_CLIST_CLASS_FW (widget)->resync_selection (clist, (GdkEvent *) event);
 
   return FALSE;
 }
@@ -7877,9 +7887,7 @@ gtk_clist_set_button_actions (GtkCList *clist,
 	  clist->drag_button = 0;
 	}
 
-      if (clist->anchor >= 0 &&
-	  clist->selection_mode == GTK_SELECTION_EXTENDED)
-	GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
+      GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
 
       clist->button_actions[button] = button_actions;
     }

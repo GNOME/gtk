@@ -1518,9 +1518,11 @@ gtk_widget_hide (GtkWidget *widget)
   
   if (GTK_WIDGET_VISIBLE (widget))
     {
+      gtk_widget_ref (widget);
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[HIDE]);
-      if (!GTK_WIDGET_TOPLEVEL (widget))
+      if (!GTK_WIDGET_TOPLEVEL (widget) && !GTK_OBJECT_DESTROYED (widget))
 	gtk_widget_queue_resize (widget);
+      gtk_widget_unref (widget);
     }
 }
 
@@ -1703,8 +1705,10 @@ gtk_widget_unrealize (GtkWidget *widget)
 
   if (GTK_WIDGET_REALIZED (widget))
     {
+      gtk_widget_ref (widget);
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[UNREALIZE]);
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
+      gtk_widget_unref (widget);
     }
 }
 
@@ -1860,6 +1864,19 @@ gtk_widget_queue_clear_area (GtkWidget *widget,
 
   if (GTK_WIDGET_NO_WINDOW (widget))
     {
+      /* The following deals with the fact that while we are in
+       * a reparent, the widget and window heirarchies
+       * may be different, and the redraw queing code will be utterly
+       * screwed by that. 
+       *
+       * So, continuing at this point is a bad idea, and returning is
+       * generally harmless. (More redraws will be queued then necessary
+       * for a reparent in any case.) This can go away, when we
+       * make reparent simply ref/remove/add/unref.
+       */
+      if (GTK_WIDGET_IN_REPARENT (widget))
+	return;
+
       parent = widget;
       while (parent && GTK_WIDGET_NO_WINDOW (parent))
 	parent = parent->parent;
@@ -2981,32 +2998,8 @@ gtk_widget_reparent (GtkWidget *widget,
 	{
 	  GTK_PRIVATE_UNSET_FLAG (widget, GTK_IN_REPARENT);
 	  
-	  /* OK, now fix up the widget's window. (And that for any
-	   * children, if the widget is NO_WINDOW and a container) 
-	   */
-	  if (GTK_WIDGET_NO_WINDOW (widget))
-    	    {
-	      if (GTK_IS_CONTAINER (widget))
-		gtk_container_forall (GTK_CONTAINER (widget),
-				      gtk_widget_reparent_container_child,
-				      gtk_widget_get_parent_window (widget));
-	      else
-		{
-		  GdkWindow *parent_window;
-		  
-		  parent_window = gtk_widget_get_parent_window (widget);
-		  if (parent_window != widget->window)
-		    {
-		      if (widget->window)
-			gdk_window_unref (widget->window);
-		      widget->window = parent_window;
-		      if (widget->window)
-			gdk_window_ref (widget->window);
-		    }
-		}
-	    }
-	  else
-	    gdk_window_reparent (widget->window, gtk_widget_get_parent_window (widget), 0, 0);
+	  gtk_widget_reparent_container_child (widget,
+					       gtk_widget_get_parent_window (widget));
 	}
     }
 }
@@ -4202,8 +4195,8 @@ gtk_widget_is_ancestor (GtkWidget *widget,
 static GQuark quark_composite_name = 0;
 
 void
-gtk_widget_set_composite_name (GtkWidget *widget,
-			       gchar     *name)
+gtk_widget_set_composite_name (GtkWidget   *widget,
+			       const gchar *name)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));

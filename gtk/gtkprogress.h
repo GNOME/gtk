@@ -81,7 +81,7 @@ void       gtk_progress_set_text_alignment  (GtkProgress   *progress,
 					     gfloat         x_align,
 					     gfloat         y_align);
 void       gtk_progress_set_format_string   (GtkProgress   *progress,
-					     gchar         *format);
+					     const gchar   *format);
 void       gtk_progress_set_adjustment      (GtkProgress   *progress,
 					     GtkAdjustment *adjustment);
 void       gtk_progress_configure           (GtkProgress   *progress,

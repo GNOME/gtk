@@ -41,7 +41,7 @@ gdk_rectangle_union (GdkRectangle *src1,
   dest->height = MAX (src1->y + src1->height, src2->y + src2->height) - dest->y;
 }
 
-gint
+gboolean
 gdk_rectangle_intersect (GdkRectangle *src1,
 			 GdkRectangle *src2,
 			 GdkRectangle *dest)

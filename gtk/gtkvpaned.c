@@ -149,16 +149,16 @@ gtk_vpaned_size_allocate (GtkWidget     *widget,
   GtkRequisition child2_requisition;
   GtkAllocation child1_allocation;
   GtkAllocation child2_allocation;
-  guint16 border_width;
+  gint border_width;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_VPANED (widget));
   g_return_if_fail (allocation != NULL);
-
+  
   widget->allocation = *allocation;
-
   paned = GTK_PANED (widget);
   border_width = GTK_CONTAINER (widget)->border_width;
+  gutter_size = paned->gutter_size;
 
   if (paned->child1)
     gtk_widget_get_child_requisition (paned->child1, &child1_requisition);
@@ -169,19 +169,19 @@ gtk_vpaned_size_allocate (GtkWidget     *widget,
     gtk_widget_get_child_requisition (paned->child2, &child2_requisition);
   else
     child2_requisition.height = 0;
-
-  gtk_paned_compute_position(paned,
-			     widget->allocation.height
-			       - paned->handle_size
-			       - 2 * border_width,
-			     child1_requisition.height,
-			     child2_requisition.height);
+    
+  gtk_paned_compute_position (paned,
+			      MAX (1, (gint) widget->allocation.height
+				   - (gint) paned->handle_size
+				   - 2 * border_width),
+			      child1_requisition.height,
+			      child2_requisition.height);
 
   /* Move the handle before the children so we don't get extra expose events */
 
   paned->handle_xpos = border_width;
   paned->handle_ypos = paned->child1_size + border_width;
-  paned->handle_width = widget->allocation.width - 2 * border_width;
+  paned->handle_width = MAX (1, (gint) widget->allocation.width - 2 * border_width);
   paned->handle_height = paned->handle_size;
 
   if (GTK_WIDGET_REALIZED(widget))
@@ -198,7 +198,7 @@ gtk_vpaned_size_allocate (GtkWidget     *widget,
 			      paned->handle_size);
     }
 
-  child1_allocation.width = child2_allocation.width =  MAX(1, (gint) allocation->width - border_width * 2);
+  child1_allocation.width = child2_allocation.width = MAX (1, (gint) allocation->width - border_width * 2);
   child1_allocation.height = paned->child1_size;
   child1_allocation.x = child2_allocation.x = border_width;
   child1_allocation.y = border_width;

@@ -588,7 +588,7 @@ void       gtk_widget_modify_style      (GtkWidget      *widget,
  * the returned name is newly allocated.
  */
 void   gtk_widget_set_composite_name	(GtkWidget	*widget,
-					 gchar     	*name);
+					 const gchar   	*name);
 gchar* gtk_widget_get_composite_name	(GtkWidget	*widget);
      
 /* Descend recursively and set rc-style on all widgets without user styles */

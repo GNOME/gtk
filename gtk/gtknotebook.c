@@ -514,8 +514,8 @@ gtk_notebook_map (GtkWidget *widget)
 	  page = children->data;
 	  children = children->next;
 
-	  if (page->tab_label && 
-	      GTK_WIDGET_VISIBLE (page->child) && 
+	  if (page->tab_label &&
+	      GTK_WIDGET_VISIBLE (page->tab_label) &&
 	      !GTK_WIDGET_MAPPED (page->tab_label))
 	    gtk_widget_map (page->tab_label);
 	}
@@ -801,6 +801,17 @@ gtk_notebook_size_request (GtkWidget      *widget,
 						    TAB_OVERLAP);
 		  break;
 		}
+	    }
+	}
+      else
+	{
+	  for (children = notebook->children; children;
+	       children = children->next)
+	    {
+	      page = children->data;
+	      
+	      if (page->tab_label && GTK_WIDGET_VISIBLE (page->tab_label))
+		gtk_widget_hide (page->tab_label);
 	    }
 	}
     }

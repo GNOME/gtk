@@ -212,21 +212,23 @@ gdk_pixmap_seek_string (FILE  *infile,
 {
   char instr[1024];
 
-  while (!feof (infile))
+  while (1)
     {
-      fscanf (infile, "%1023s", instr);
+      if (fscanf (infile, "%1023s", instr) != 1)
+	return FALSE;
+	  
       if (skip_comments == TRUE && strcmp (instr, "/*") == 0)
         {
-          fscanf (infile, "%1023s", instr);
-          while (!feof (infile) && strcmp (instr, "*/") != 0)
-            fscanf (infile, "%1023s", instr);
-          fscanf(infile, "%1023s", instr);
+	  do
+	    {
+	      if (fscanf (infile, "%1023s", instr) != 1)
+		return FALSE;
+	    }
+	  while (strcmp (instr, "*/") != 0);
         }
-      if (strcmp (instr, str)==0)
+      else if (strcmp (instr, str) == 0)
         return TRUE;
     }
-
-  return FALSE;
 }
 
 static gint

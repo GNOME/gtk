@@ -2055,8 +2055,7 @@ gtk_ctree_link (GtkCTree     *ctree,
 
   if (update_focus_row && clist->selection_mode == GTK_SELECTION_EXTENDED)
     {
-      if (clist->anchor != -1)
-	GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
+      GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
       
       g_list_free (clist->undo_selection);
       g_list_free (clist->undo_unselection);
@@ -2201,8 +2200,7 @@ gtk_ctree_unlink (GtkCTree     *ctree,
   
   if (update_focus_row && clist->selection_mode == GTK_SELECTION_EXTENDED)
     {
-      if (clist->anchor != -1)
-	GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
+      GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
       
       g_list_free (clist->undo_selection);
       g_list_free (clist->undo_unselection);
@@ -2384,8 +2382,7 @@ real_tree_move (GtkCTree     *ctree,
 
   if (clist->selection_mode == GTK_SELECTION_EXTENDED)
     {
-      if (clist->anchor != -1)
-	GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
+      GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
       
       g_list_free (clist->undo_selection);
       g_list_free (clist->undo_unselection);
@@ -2501,8 +2498,7 @@ real_tree_expand (GtkCTree     *ctree,
 
   clist = GTK_CLIST (ctree);
   
-  if (clist->selection_mode == GTK_SELECTION_EXTENDED && clist->anchor >= 0)
-    GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
+  GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
 
   GTK_CTREE_ROW (node)->expanded = TRUE;
   level = GTK_CTREE_ROW (node)->level;
@@ -2647,8 +2643,7 @@ real_tree_collapse (GtkCTree     *ctree,
 
   clist = GTK_CLIST (ctree);
 
-  if (clist->selection_mode == GTK_SELECTION_EXTENDED && clist->anchor >= 0)
-    GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
+  GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
   
   GTK_CTREE_ROW (node)->expanded = FALSE;
   level = GTK_CTREE_ROW (node)->level;
@@ -3248,7 +3243,15 @@ row_delete (GtkCTree    *ctree,
     }
 
   if (ctree_row->row.destroy)
-    ctree_row->row.destroy (ctree_row->row.data);
+    {
+      GtkDestroyNotify dnotify = ctree_row->row.destroy;
+      gpointer ddata = ctree_row->row.data;
+
+      ctree_row->row.destroy = NULL;
+      ctree_row->row.data = NULL;
+
+      dnotify (ddata);
+    }
 
   g_mem_chunk_free (clist->cell_mem_chunk, ctree_row->row.cell);
   g_mem_chunk_free (clist->row_mem_chunk, ctree_row);
@@ -4571,8 +4574,7 @@ gtk_ctree_real_select_recursive (GtkCTree     *ctree,
 
   if (clist->selection_mode == GTK_SELECTION_EXTENDED)
     {
-      if (clist->anchor != -1)
-	GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
+      GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
       
       g_list_free (clist->undo_selection);
       g_list_free (clist->undo_unselection);
@@ -5180,12 +5182,21 @@ gtk_ctree_node_set_row_data_full (GtkCTree         *ctree,
 				  gpointer          data,
 				  GtkDestroyNotify  destroy)
 {
+  GtkDestroyNotify dnotify;
+  gpointer ddata;
+  
   g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
 
+  dnotify = GTK_CTREE_ROW (node)->row.destroy;
+  ddata = GTK_CTREE_ROW (node)->row.data;
+  
   GTK_CTREE_ROW (node)->row.data = data;
   GTK_CTREE_ROW (node)->row.destroy = destroy;
+
+  if (dnotify)
+    dnotify (ddata);
 }
 
 gpointer
@@ -5501,8 +5512,7 @@ gtk_ctree_sort_recursive (GtkCTree     *ctree,
 
   if (clist->selection_mode == GTK_SELECTION_EXTENDED)
     {
-      if (clist->anchor != -1)
-	GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
+      GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
       
       g_list_free (clist->undo_selection);
       g_list_free (clist->undo_unselection);
@@ -5550,8 +5560,7 @@ gtk_ctree_sort_node (GtkCTree     *ctree,
 
   if (clist->selection_mode == GTK_SELECTION_EXTENDED)
     {
-      if (clist->anchor != -1)
-	GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
+      GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
       
       g_list_free (clist->undo_selection);
       g_list_free (clist->undo_unselection);
@@ -5633,7 +5642,10 @@ resync_selection (GtkCList *clist, GdkEvent *event)
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CTREE (clist));
 
-  if (clist->anchor < 0)
+  if (clist->selection_mode != GTK_SELECTION_EXTENDED)
+    return;
+
+  if (clist->anchor < 0 || clist->drag_pos < 0)
     return;
 
   ctree = GTK_CTREE (clist);
@@ -6108,7 +6120,6 @@ gtk_ctree_drag_data_received (GtkWidget        *widget,
 	    case GTK_CLIST_DRAG_NONE:
 	      break;
 	    case GTK_CLIST_DRAG_INTO:
-	      g_print ("drag into\n");
 	      if (check_drag (ctree, source_node, dest_node,
 			      dest_info.insert_pos))
 		gtk_ctree_move (ctree, source_node, dest_node,
@@ -6116,7 +6127,6 @@ gtk_ctree_drag_data_received (GtkWidget        *widget,
 	      g_dataset_remove_data (context, "gtk-clist-drag-dest");
 	      break;
 	    case GTK_CLIST_DRAG_BEFORE:
-	      g_print ("drag before\n");
 	      if (check_drag (ctree, source_node, dest_node,
 			      dest_info.insert_pos))
 		gtk_ctree_move (ctree, source_node,
@@ -6124,7 +6134,6 @@ gtk_ctree_drag_data_received (GtkWidget        *widget,
 	      g_dataset_remove_data (context, "gtk-clist-drag-dest");
 	      break;
 	    case GTK_CLIST_DRAG_AFTER:
-	      g_print ("drag after\n");
 	      if (check_drag (ctree, source_node, dest_node,
 			      dest_info.insert_pos))
 		gtk_ctree_move (ctree, source_node,

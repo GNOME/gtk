@@ -134,7 +134,7 @@ gdk_font_load (const gchar *font_name)
 }
 
 GdkFont*
-gdk_fontset_load (gchar *fontset_name)
+gdk_fontset_load (const gchar *fontset_name)
 {
   GdkFont *font;
   GdkFontPrivateX *private;
@@ -276,7 +276,7 @@ gdk_font_id (const GdkFont *font)
     }
 }
 
-gint
+gboolean
 gdk_font_equal (const GdkFont *fonta,
                 const GdkFont *fontb)
 {

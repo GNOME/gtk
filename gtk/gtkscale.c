@@ -307,7 +307,7 @@ gtk_scale_get_value_width (GtkScale *scale)
         digits = 13;
 
       i = 0;
-      if (range->adjustment->lower < 0)
+      if (range->adjustment->upper < 0)
         buffer[i++] = '-';
       for (j = 0; j < digits; j++)
         buffer[i++] = '0';

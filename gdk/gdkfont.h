@@ -25,11 +25,11 @@ struct _GdkFont
 };
 
 GdkFont* gdk_font_load	    (const gchar    *font_name);
-GdkFont* gdk_fontset_load   (gchar          *fontset_name);
+GdkFont* gdk_fontset_load   (const gchar    *fontset_name);
 GdkFont* gdk_font_ref	    (GdkFont        *font);
 void	 gdk_font_unref	    (GdkFont        *font);
 gint	 gdk_font_id	    (const GdkFont  *font);
-gint	 gdk_font_equal	    (const GdkFont  *fonta,
+gboolean gdk_font_equal	    (const GdkFont  *fonta,
 			     const GdkFont  *fontb);
 
 gint	 gdk_string_width   (GdkFont        *font,

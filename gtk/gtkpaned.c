@@ -535,24 +535,25 @@ gtk_paned_compute_position(GtkPaned *paned,
 
   paned->max_position = allocation;
   if (!paned->child2_shrink)
-    paned->max_position -= child2_req;
+    paned->max_position = MAX (1, paned->max_position - child2_req);
 
   if (!paned->position_set)
     {
       if (paned->child1_resize && !paned->child2_resize)
-	paned->child1_size = allocation - child2_req;
+	paned->child1_size = MAX (1, allocation - child2_req);
       else if (!paned->child1_resize && paned->child2_resize)
 	paned->child1_size = child1_req;
+      else if (child1_req + child2_req != 0)
+	paned->child1_size = allocation * ((gdouble)child1_req / (child1_req + child2_req));
       else
-	paned->child1_size = allocation * ((gdouble) child1_req /
-					   (child1_req + child2_req));
+	paned->child1_size = allocation * 0.5;
     }
   else
     {
       /* If the position was set before the initial allocation.
-       * (paned->last_allocation < 0) just clamp it and leave it.
+       * (paned->last_allocation <= 0) just clamp it and leave it.
        */
-      if (paned->last_allocation >= 0)
+      if (paned->last_allocation > 0)
 	{
 	  if (paned->child1_resize && !paned->child2_resize)
 	    paned->child1_size += allocation - paned->last_allocation;

@@ -36,6 +36,8 @@
 
 #define MIN_ENTRY_WIDTH  150
 #define DRAW_TIMEOUT     20
+
+/* If you are going to change this, see the note in entry_adjust_scroll */
 #define INNER_BORDER     2
 
 enum {
@@ -907,6 +909,8 @@ gtk_entry_button_press (GtkWidget      *widget,
 	default:
 	  break;
 	}
+
+      return TRUE;
     }
   else if (event->type == GDK_BUTTON_PRESS)
     {
@@ -930,6 +934,8 @@ gtk_entry_button_press (GtkWidget      *widget,
 	  if (gdk_selection_owner_get (GDK_SELECTION_PRIMARY) == widget->window)
 	    gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY, event->time);
 	}
+
+      return TRUE;
     }
 
   return FALSE;
@@ -973,10 +979,14 @@ gtk_entry_button_release (GtkWidget      *widget,
 	  if (gdk_selection_owner_get (GDK_SELECTION_PRIMARY) == widget->window)
 	    gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY, event->time);
 	}
+
+      return TRUE;
     }
   else if (event->button == 3)
     {
       gtk_grab_remove (widget);
+
+      return TRUE;
     }
 
   return FALSE;
@@ -1007,7 +1017,7 @@ gtk_entry_motion_notify (GtkWidget      *widget,
   entry_adjust_scroll (entry);
   gtk_entry_queue_draw (entry);
 
-  return FALSE;
+  return TRUE;
 }
 
 static gint
@@ -1580,6 +1590,7 @@ entry_adjust_scroll (GtkEntry *entry)
     return;
 
   gdk_window_get_size (entry->text_area, &text_area_width, NULL);
+  text_area_width -= 2 * INNER_BORDER;
 
   /* Display as much text as we can */
   max_offset = MAX(0, entry->char_offset[entry->text_length] - text_area_width);
@@ -1587,14 +1598,23 @@ entry_adjust_scroll (GtkEntry *entry)
   if (entry->scroll_offset > max_offset)
     entry->scroll_offset = max_offset;
 
-  /* And make sure cursor is on screen */
+  /* And make sure cursor is on screen. Note that the cursor is
+   * actually drawn one pixel into the INNER_BORDER space on
+   * the right, when the scroll is at the utmost right. This
+   * looks better to to me than confining the cursor inside the
+   * border entirely, though it means that the cursor gets one
+   * pixel closer to the the edge of the widget on the right than
+   * on the left. This might need changing if one changed
+   * INNER_BORDER from 2 to 1, as one would do on a
+   * small-screen-real-estate display.
+   */
   xoffset = entry->char_offset[GTK_EDITABLE(entry)->current_pos];
   xoffset -= entry->scroll_offset;
 
   if (xoffset < 0)
     entry->scroll_offset += xoffset;
   else if (xoffset > text_area_width)
-    entry->scroll_offset += xoffset - text_area_width + 1;
+    entry->scroll_offset += xoffset - text_area_width;
 
   gtk_widget_queue_draw (GTK_WIDGET (entry));
 }

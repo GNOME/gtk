@@ -1998,20 +1998,6 @@ open_ref_dir(gchar* text_to_complete,
   if (FALSE)
     ;
 #endif
-  else if (g_path_is_absolute (text_to_complete) || !cmpl_state->reference_dir)
-    {
-      char *root;
-      int rootlen;
-
-      rootlen = g_path_skip_root (text_to_complete) - text_to_complete;
-      root = g_malloc (rootlen + 1);
-      memcpy (root, text_to_complete, rootlen);
-      root[rootlen] = '\0';
-      new_dir = open_dir (root, cmpl_state);
-      if (new_dir)
-	*remaining_text = g_path_skip_root (text_to_complete);
-      g_free (root);
-    }
 #ifdef HAVE_PWD_H
   else if (text_to_complete[0] == '~')
     {
@@ -2030,6 +2016,45 @@ open_ref_dir(gchar* text_to_complete,
 	}
     }
 #endif
+  else if (g_path_is_absolute (text_to_complete) || !cmpl_state->reference_dir)
+    {
+      gchar *tmp = g_strdup(text_to_complete);
+      gchar *p;
+
+      p = tmp;
+      while (*p && *p != '*' && *p != '?')
+	p++;
+
+      *p = '\0';
+      p = strrchr(tmp, G_DIR_SEPARATOR);
+      if (p)
+	{
+	  if (p == tmp)
+	    p++;
+      
+	  *p = '\0';
+
+	  new_dir = open_dir(tmp, cmpl_state);
+
+	  if(new_dir)
+	    *remaining_text = text_to_complete + 
+	      ((p == tmp + 1) ? (p - tmp) : (p + 1 - tmp));
+	}
+      else
+	{
+	  /* If no possible candidates, use the cwd */
+	  gchar *curdir = g_get_current_dir ();
+	  
+	  new_dir = open_dir(curdir, cmpl_state);
+
+	  if (new_dir)
+	    *remaining_text = text_to_complete;
+
+	  g_free (curdir);
+	}
+
+      g_free (tmp);
+    }
   else
     {
       *remaining_text = text_to_complete;

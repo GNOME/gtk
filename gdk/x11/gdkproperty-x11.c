@@ -91,7 +91,7 @@ gdk_atom_name (GdkAtom atom)
     }
 }
 
-gint
+gboolean
 gdk_property_get (GdkWindow   *window,
 		  GdkAtom      property,
 		  GdkAtom      type,
@@ -190,13 +190,13 @@ gdk_property_get (GdkWindow   *window,
 }
 
 void
-gdk_property_change (GdkWindow   *window,
-		     GdkAtom      property,
-		     GdkAtom      type,
-		     gint         format,
-		     GdkPropMode  mode,
-		     guchar      *data,
-		     gint         nelements)
+gdk_property_change (GdkWindow    *window,
+		     GdkAtom       property,
+		     GdkAtom       type,
+		     gint          format,
+		     GdkPropMode   mode,
+		     const guchar *data,
+		     gint          nelements)
 {
   Display *xdisplay;
   Window xwindow;
@@ -219,7 +219,7 @@ gdk_property_change (GdkWindow   *window,
     }
 
   XChangeProperty (xdisplay, xwindow, property, type,
-		   format, mode, data, nelements);
+		   format, mode, (guchar *)data, nelements);
 }
 
 void

@@ -149,17 +149,16 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
   GtkRequisition child2_requisition;
   GtkAllocation child1_allocation;
   GtkAllocation child2_allocation;
-  guint16 border_width;
+  gint border_width;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_HPANED (widget));
   g_return_if_fail (allocation != NULL);
 
   widget->allocation = *allocation;
-
   paned = GTK_PANED (widget);
   border_width = GTK_CONTAINER (paned)->border_width;
-
+  
   if (paned->child1)
     gtk_widget_get_child_requisition (paned->child1, &child1_requisition);
   else
@@ -171,9 +170,9 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
     child2_requisition.width = 0;
 
   gtk_paned_compute_position (paned,
-			      widget->allocation.width
-			        - paned->handle_size
-			        - 2 * border_width,
+			      MAX (1, (gint) widget->allocation.width
+				      - (gint) paned->handle_size
+				   - 2 * border_width),
 			      child1_requisition.width,
 			      child2_requisition.width);
 
@@ -182,7 +181,7 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
   paned->handle_xpos = paned->child1_size + border_width;
   paned->handle_ypos = border_width;
   paned->handle_width = paned->handle_size;
-  paned->handle_height = widget->allocation.height - 2 * border_width;
+  paned->handle_height = MAX (1, (gint) widget->allocation.height - 2 * border_width);
 
   if (GTK_WIDGET_REALIZED (widget))
     {
@@ -202,7 +201,7 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
   child1_allocation.width = paned->child1_size;
   child1_allocation.x = border_width;
   child1_allocation.y = child2_allocation.y = border_width;
-
+  
   child2_allocation.x = child1_allocation.x + child1_allocation.width +  paned->handle_width;
   child2_allocation.width = MAX (1, (gint) allocation->width - child2_allocation.x - border_width);
 

@@ -100,9 +100,6 @@ gtk_tooltips_init (GtkTooltips *tooltips)
   tooltips->tip_window = NULL;
   tooltips->active_tips_data = NULL;
   tooltips->tips_data_list = NULL;
-  tooltips->gc = NULL;
-  tooltips->foreground = NULL;
-  tooltips->background = NULL;
   
   tooltips->delay = DEFAULT_DELAY;
   tooltips->enabled = TRUE;
@@ -167,12 +164,6 @@ gtk_tooltips_destroy (GtkObject *object)
 
   if (tooltips->tip_window)
     gtk_widget_destroy (tooltips->tip_window);
-
-  if (tooltips->gc != NULL)
-    {
-      gdk_gc_destroy (tooltips->gc);
-      tooltips->gc = NULL;
-    }
 }
 
 void
@@ -398,10 +389,8 @@ gtk_tooltips_set_colors (GtkTooltips *tooltips,
 {
   g_return_if_fail (tooltips != NULL);
 
-  if (background != NULL)
-    tooltips->foreground = foreground;
-  if (foreground != NULL)
-    tooltips->background = background;
+  g_warning ("gtk_tooltips_set_colors is deprecated and does nothing.\n"
+	     "The colors for tooltips are now taken from the style.");
 }
 
 static gint

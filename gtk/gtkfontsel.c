@@ -1760,6 +1760,7 @@ gtk_font_selection_load_font (GtkFontSelection *fontsel)
 {
   GdkFont *font;
   gchar *fontname, *label_text;
+  XFontStruct *xfs;
   
   if (fontsel->font)
     gdk_font_unref (fontsel->font);
@@ -1777,6 +1778,16 @@ gtk_font_selection_load_font (GtkFontSelection *fontsel)
 #endif
 #ifndef GDK_WINDOWING_WIN32
       font = gdk_font_load (fontname);
+      xfs = GDK_FONT_XFONT(font);
+      if (xfs->min_byte1 != 0 || xfs->max_byte1 != 0)
+	{
+	  gchar *tmp_name;
+	  
+	  gdk_font_unref (font);
+	  tmp_name = g_strconcat (fontname, ",*", NULL);
+	  font = gdk_fontset_load (tmp_name);
+	  g_free(tmp_name);
+	}
 #else
       /* Load as a fontset so that gtkentry uses wide chars for it */
       font = gdk_fontset_load (fontname);
@@ -1927,30 +1938,41 @@ gtk_font_selection_show_font_info (GtkFontSelection *fontsel)
 #ifdef GDK_WINDOWING_X11
   if (fontsel->font)
     {
-      font_atom = XInternAtom(GDK_DISPLAY(), "FONT", True);
-      if (font_atom != None)
+      font_atom = gdk_atom_intern ("FONT", FALSE);
+
+      if (fontsel->font->type == GDK_FONT_FONTSET)
+	{
+	  XFontStruct **font_structs;
+	  gint num_fonts;
+	  gchar **font_names;
+	  
+	  num_fonts = XFontsOfFontSet (GDK_FONT_XFONT(fontsel->font),
+				       &font_structs, &font_names);
+	  status = XGetFontProperty(font_structs[0], font_atom, &atom);
+	}
+      else
 	{
 	  status = XGetFontProperty(GDK_FONT_XFONT(fontsel->font), font_atom,
 				    &atom);
-	  if (status == True)
+	}
+
+      if (status == True)
+	{
+	  name = gdk_atom_name (atom);
+	  gtk_entry_set_text (GTK_ENTRY (fontsel->actual_font_name), name);
+	  
+	  for (i = 0; i < GTK_XLFD_NUM_FIELDS; i++)
 	    {
-	      name = XGetAtomName(GDK_DISPLAY(), atom);
-	      gtk_entry_set_text(GTK_ENTRY(fontsel->actual_font_name), name);
-	      
-	      for (i = 0; i < GTK_XLFD_NUM_FIELDS; i++)
-		{
-		  field = gtk_font_selection_get_xlfd_field (name, i,
-							     field_buffer);
-		  if (i == XLFD_SLANT)
-		    field = gtk_font_selection_expand_slant_code(field);
-		  else if (i == XLFD_SPACING)
-		    field = gtk_font_selection_expand_spacing_code(field);
-		  gtk_clist_set_text(GTK_CLIST(fontsel->info_clist), i, 2,
-				     field ? field : "");
-		}
-	      shown_actual_fields = TRUE;
-	      XFree(name);
+	      field = gtk_font_selection_get_xlfd_field (name, i, field_buffer);
+	      if (i == XLFD_SLANT)
+		field = gtk_font_selection_expand_slant_code(field);
+	      else if (i == XLFD_SPACING)
+		field = gtk_font_selection_expand_spacing_code(field);
+	      gtk_clist_set_text(GTK_CLIST(fontsel->info_clist), i, 2,
+				 field ? field : "");
 	    }
+	  shown_actual_fields = TRUE;
+	  g_free (name);
 	}
     }
 #elif defined (GDK_WINDOWING_WIN32)

@@ -462,7 +462,7 @@ gdk_event_get_time (GdkEvent *event)
  */
 
 void
-gdk_set_show_events (gint show_events)
+gdk_set_show_events (gboolean show_events)
 {
   if (show_events)
     gdk_debug_flags |= GDK_DEBUG_EVENTS;
@@ -470,10 +470,10 @@ gdk_set_show_events (gint show_events)
     gdk_debug_flags &= ~GDK_DEBUG_EVENTS;
 }
 
-gint
+gboolean
 gdk_get_show_events (void)
 {
-  return gdk_debug_flags & GDK_DEBUG_EVENTS;
+  return (gdk_debug_flags & GDK_DEBUG_EVENTS) != 0;
 }
 
 static void

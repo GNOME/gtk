@@ -859,7 +859,7 @@ gtk_toolbar_insert_widget (GtkToolbar *toolbar,
 			      position);
 }
 
-GtkWidget *
+GtkWidget*
 gtk_toolbar_append_element (GtkToolbar          *toolbar,
 			    GtkToolbarChildType  type,
 			    GtkWidget           *widget,

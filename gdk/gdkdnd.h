@@ -91,8 +91,6 @@ void            gdk_drag_drop        (GdkDragContext *context,
 void            gdk_drag_abort       (GdkDragContext *context,
 				      guint32         time);
 
-GdkAtom       gdk_drag_get_selection (GdkDragContext *context);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

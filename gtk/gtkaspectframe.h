@@ -55,7 +55,7 @@ struct _GtkAspectFrame
   gfloat xalign;
   gfloat yalign;
   gfloat ratio;
-  gint obey_child;
+  gboolean obey_child;
 
   GtkAllocation center_allocation;
 };
@@ -71,7 +71,7 @@ GtkWidget* gtk_aspect_frame_new        (const gchar     *label,
 					gfloat           xalign,
 					gfloat           yalign,
 					gfloat           ratio,
-					gint             obey_child);
+					gboolean         obey_child);
 void       gtk_aspect_frame_set        (GtkAspectFrame  *aspect_frame,
 					gfloat           xalign,
 					gfloat           yalign,

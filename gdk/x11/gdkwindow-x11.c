@@ -1069,7 +1069,7 @@ gdk_window_set_background (GdkWindow *window,
 void
 gdk_window_set_back_pixmap (GdkWindow *window,
 			    GdkPixmap *pixmap,
-			    gint       parent_relative)
+			    gboolean   parent_relative)
 {
   Pixmap xpixmap;
   
@@ -1643,8 +1643,8 @@ gdk_window_set_icon (GdkWindow *window,
 }
 
 void          
-gdk_window_set_icon_name (GdkWindow *window, 
-			  gchar *    name)
+gdk_window_set_icon_name (GdkWindow   *window, 
+			  const gchar *name)
 {
   XTextProperty property;
   gint res;

@@ -1357,21 +1357,32 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
 	      }
 	}
       
-      /* Check to see if we were allocated less width than we requested.
+      /* Check to see if we were allocated less width than we requested,
+       * then shrink until we fit the size give.
        */
-      if ((width > real_width) && (nshrink >= 1))
+      if (width > real_width)
 	{
-	  width = width - real_width;
-	  
-	  for (col = 0; col < table->ncols; col++)
-	    if (table->cols[col].shrink)
-	      {
-		extra = width / nshrink;
-		table->cols[col].allocation = MAX (1, (gint)table->cols[col].allocation - extra);
-		
-		width -= extra;
-		nshrink -= 1;
-	      }
+	  gint total_nshrink = nshrink;
+
+	  extra = width - real_width;
+	  while (total_nshrink > 0 && extra > 0)
+	    {
+	      nshrink = total_nshrink;
+	      for (col = 0; col < table->ncols; col++)
+		if (table->cols[col].shrink)
+		  {
+		    gint allocation = table->cols[col].allocation;
+
+		    table->cols[col].allocation = MAX (1, (gint) table->cols[col].allocation - extra / nshrink);
+		    extra -= allocation - table->cols[col].allocation;
+		    nshrink -= 1;
+		    if (table->cols[col].allocation < 2)
+		      {
+			total_nshrink -= 1;
+			table->cols[col].shrink = FALSE;
+		      }
+		  }
+	    }
 	}
     }
   
@@ -1436,20 +1447,31 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
 	}
       
       /* Check to see if we were allocated less height than we requested.
+       * then shrink until we fit the size give.
        */
-      if ((height > real_height) && (nshrink >= 1))
+      if (height > real_height)
 	{
-	  height = height - real_height;
+	  gint total_nshrink = nshrink;
 	  
-	  for (row = 0; row < table->nrows; row++)
-	    if (table->rows[row].shrink)
-	      {
-		extra = height / nshrink;
-		table->rows[row].allocation = MAX (1, (gint)table->rows[row].allocation - extra);
-		
-		height -= extra;
-		nshrink -= 1;
-	      }
+	  extra = height - real_height;
+	  while (total_nshrink > 0 && extra > 0)
+	    {
+	      nshrink = total_nshrink;
+	      for (row = 0; row < table->nrows; row++)
+		if (table->rows[row].shrink)
+		  {
+		    gint allocation = table->rows[row].allocation;
+		    
+		    table->rows[row].allocation = MAX (1, (gint) table->rows[row].allocation - extra / nshrink);
+		    extra -= allocation - table->rows[row].allocation;
+		    nshrink -= 1;
+		    if (table->rows[row].allocation < 2)
+		      {
+			total_nshrink -= 1;
+			table->rows[row].shrink = FALSE;
+		      }
+		  }
+	    }
 	}
     }
 }

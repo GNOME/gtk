@@ -70,9 +70,9 @@ void      gdk_error_trap_push           (void);
 gint      gdk_error_trap_pop            (void);
 
 
-void	  gdk_set_use_xshm		(gint		 use_xshm);
+void	  gdk_set_use_xshm		(gboolean	 use_xshm);
 
-gint	  gdk_get_use_xshm		(void);
+gboolean  gdk_get_use_xshm		(void);
 gchar*	  gdk_get_display		(void);
 
 gint gdk_input_add_full	  (gint		     source,
@@ -86,20 +86,18 @@ gint gdk_input_add	  (gint		     source,
 			   gpointer	     data);
 void gdk_input_remove	  (gint		     tag);
 
-gint gdk_pointer_grab	(GdkWindow      *window,
-			 gint		 owner_events,
-			 GdkEventMask	 event_mask,
-			 GdkWindow	*confine_to,
-			 GdkCursor	*cursor,
-			 guint32	 time);
-void gdk_pointer_ungrab (guint32	 time);
-
-gint gdk_keyboard_grab	 (GdkWindow	*window,
-			  gint		 owner_events,
-			  guint32	 time);
-void gdk_keyboard_ungrab (guint32	 time);
-
-gint gdk_pointer_is_grabbed (void);
+gint     gdk_pointer_grab       (GdkWindow    *window,
+				 gboolean      owner_events,
+				 GdkEventMask  event_mask,
+				 GdkWindow    *confine_to,
+				 GdkCursor    *cursor,
+				 guint32       time);
+void     gdk_pointer_ungrab     (guint32       time);
+gint     gdk_keyboard_grab      (GdkWindow    *window,
+				 gboolean      owner_events,
+				 guint32       time);
+void     gdk_keyboard_ungrab    (guint32       time);
+gboolean gdk_pointer_is_grabbed (void);
 
 gint gdk_screen_width  (void);
 gint gdk_screen_height (void);
@@ -115,12 +113,12 @@ void gdk_key_repeat_restore (void);
 
 /* Rectangle utilities
  */
-gint gdk_rectangle_intersect (GdkRectangle *src1,
-			      GdkRectangle *src2,
-			      GdkRectangle *dest);
-void gdk_rectangle_union     (GdkRectangle *src1,
-			      GdkRectangle *src2,
-			      GdkRectangle *dest);
+gboolean gdk_rectangle_intersect (GdkRectangle *src1,
+				  GdkRectangle *src2,
+				  GdkRectangle *dest);
+void     gdk_rectangle_union     (GdkRectangle *src1,
+				  GdkRectangle *src2,
+				  GdkRectangle *dest);
 
 /* Conversion functions between wide char and multibyte strings. 
  */

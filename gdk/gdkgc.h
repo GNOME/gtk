@@ -219,7 +219,7 @@ void   gdk_gc_set_line_attributes (GdkGC	    *gc,
 				   GdkJoinStyle	     join_style);
 void   gdk_gc_set_dashes          (GdkGC            *gc,
 				   gint	             dash_offset,
-				   gchar             dash_list[],
+				   gint8             dash_list[],
 				   gint              n);
 void   gdk_gc_copy		  (GdkGC	     *dst_gc,
 				   GdkGC	     *src_gc);

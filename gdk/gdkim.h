@@ -96,7 +96,7 @@ struct _GdkICAttr
   GdkColormap *status_colormap;
 };
 
-gint         gdk_im_ready	   (void);
+gboolean     gdk_im_ready	   (void);
 
 void         gdk_im_begin	   (GdkIC               *ic, 
 				    GdkWindow           *window);

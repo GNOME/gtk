@@ -722,8 +722,8 @@ gtk_main_do_event (GdkEvent *event)
       
     case GDK_DELETE:
       gtk_widget_ref (event_widget);
-      if (!gtk_widget_event (event_widget, event) &&
-	  !GTK_OBJECT_DESTROYED (event_widget))
+      if ((!grabs || gtk_widget_get_toplevel (grabs->data) == event_widget) &&
+	  !gtk_widget_event (event_widget, event))
 	gtk_widget_destroy (event_widget);
       gtk_widget_unref (event_widget);
       break;

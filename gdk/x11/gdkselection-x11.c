@@ -34,11 +34,11 @@
 #include "gdkx.h"
 
 
-gint
+gboolean
 gdk_selection_owner_set (GdkWindow *owner,
 			 GdkAtom    selection,
 			 guint32    time,
-			 gint       send_event)
+			 gboolean   send_event)
 {
   Display *xdisplay;
   Window xwindow;
@@ -187,9 +187,11 @@ gdk_selection_send_notify (guint32  requestor,
 }
 
 gint
-gdk_text_property_to_text_list (GdkAtom encoding, gint format, 
-			     guchar *text, gint length,
-			     gchar ***list)
+gdk_text_property_to_text_list (GdkAtom       encoding,
+				gint          format, 
+				const guchar *text,
+				gint          length,
+				gchar      ***list)
 {
   XTextProperty property;
   gint count = 0;
@@ -198,7 +200,7 @@ gdk_text_property_to_text_list (GdkAtom encoding, gint format,
   if (!list) 
     return 0;
 
-  property.value = text;
+  property.value = (guchar *)text;
   property.encoding = encoding;
   property.format = format;
   property.nitems = length;
@@ -220,15 +222,17 @@ gdk_free_text_list (gchar **list)
 }
 
 gint
-gdk_string_to_compound_text (gchar *str,
-			     GdkAtom *encoding, gint *format,
-			     guchar **ctext, gint *length)
+gdk_string_to_compound_text (const gchar *str,
+			     GdkAtom     *encoding,
+			     gint        *format,
+			     guchar     **ctext,
+			     gint        *length)
 {
   gint res;
   XTextProperty property;
 
   res = XmbTextListToTextProperty (GDK_DISPLAY(), 
-				   &str, 1, XCompoundTextStyle,
+				   (char **)&str, 1, XCompoundTextStyle,
                                	   &property);
   if (res != Success)
     {

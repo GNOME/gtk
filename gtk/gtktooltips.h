@@ -67,10 +67,6 @@ struct _GtkTooltips
   GtkTooltipsData *active_tips_data;
   GList *tips_data_list;
 
-  GdkGC *gc;
-  GdkColor *foreground;
-  GdkColor *background;
-
   guint   delay : 30;
   guint	  enabled : 1;
   gint	  timer_tag;

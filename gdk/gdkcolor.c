@@ -101,7 +101,7 @@ gdk_colors_store (GdkColormap   *colormap,
 static GMemChunk *color_chunk;
 
 GdkColor*
-gdk_color_copy (GdkColor *color)
+gdk_color_copy (const GdkColor *color)
 {
   GdkColor *new_color;
   
@@ -221,7 +221,7 @@ gdk_color_hash (const GdkColor *colora)
 	  (colora->blue >> 6));
 }
 
-gint
+gboolean
 gdk_color_equal (const GdkColor *colora,
 		 const GdkColor *colorb)
 {

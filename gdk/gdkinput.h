@@ -73,34 +73,33 @@ struct _GdkTimeCoord
   gdouble ytilt;
 };
 
-GList *gdk_input_list_devices		    (void);
-void gdk_input_set_extension_events	    (GdkWindow *window,
-					     gint mask,
-					     GdkExtensionMode mode);
-void gdk_input_set_source		    (guint32 deviceid,
-					     GdkInputSource source);
-gint gdk_input_set_mode			    (guint32 deviceid,
-					     GdkInputMode mode);
-void gdk_input_set_axes			    (guint32 deviceid,
-					     GdkAxisUse *axes);
-void gdk_input_set_key			    (guint32 deviceid,
-					     guint   index,
-					     guint   keyval,
-					     GdkModifierType modifiers);
-void gdk_input_window_get_pointer     (GdkWindow       *window,
-				       guint32	       deviceid,
-				       gdouble	       *x,
-				       gdouble	       *y,
-				       gdouble	       *pressure,
-				       gdouble	       *xtilt,
-				       gdouble	       *ytilt,
-				       GdkModifierType *mask);
-
-GdkTimeCoord *gdk_input_motion_events (GdkWindow *window,
-				       guint32 deviceid,
-				       guint32 start,
-				       guint32 stop,
-				       gint *nevents_return);
+GList *       gdk_input_list_devices         (void);
+void          gdk_input_set_extension_events (GdkWindow        *window,
+					      gint              mask,
+					      GdkExtensionMode  mode);
+void          gdk_input_set_source           (guint32           deviceid,
+					      GdkInputSource    source);
+gboolean      gdk_input_set_mode             (guint32           deviceid,
+					      GdkInputMode      mode);
+void          gdk_input_set_axes             (guint32           deviceid,
+					      GdkAxisUse       *axes);
+void          gdk_input_set_key              (guint32           deviceid,
+					      guint             index,
+					      guint             keyval,
+					      GdkModifierType   modifiers);
+void          gdk_input_window_get_pointer   (GdkWindow        *window,
+					      guint32           deviceid,
+					      gdouble          *x,
+					      gdouble          *y,
+					      gdouble          *pressure,
+					      gdouble          *xtilt,
+					      gdouble          *ytilt,
+					      GdkModifierType  *mask);
+GdkTimeCoord *gdk_input_motion_events        (GdkWindow        *window,
+					      guint32           deviceid,
+					      guint32           start,
+					      guint32           stop,
+					      gint             *nevents_return);
 
 #ifdef __cplusplus
 }

@@ -294,7 +294,7 @@ gdk_gc_set_line_attributes (GdkGC	*gc,
 void
 gdk_gc_set_dashes (GdkGC *gc,
 		   gint	  dash_offset,
-		   gchar  dash_list[],
+		   gint8  dash_list[],
 		   gint   n)
 {
   g_return_if_fail (gc != NULL);
