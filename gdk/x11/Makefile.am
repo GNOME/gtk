@@ -88,4 +88,7 @@ EXTRA_DIST = 			\
 	gdkinput-x11.c		\
 	gdkinput-xfree.c	\
 	gdkinput-gxi.c		\
-	gdkinput-none.c
+	gdkinput-none.c		\
+	gxid_lib.c		\
+	gxid_lib.h		\
+	gxid_proto.h

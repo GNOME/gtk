@@ -1,3 +1,8 @@
+Tue Sep 24 06:39:36 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/Makefile.am: Add the gxid_* files to
+	EXTRA_DIST (#90511, Zenith Lau)
+
 Thu Aug  8 16:58:22 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkspinbutton.c (gtk_spin_button_real_change_value): 
