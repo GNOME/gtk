@@ -1,3 +1,10 @@
+Thu Mar  7 10:31:57 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_timer): Fix problem where
+	there were two copies of the "do an arrow step" code, 
+	one correct for rotated notebooks, one not. (#73855,
+	Thomas Leonard.)
+
 Wed Mar  6 23:20:51 2002  Jonathan Blandford  <jrb@redhat.com>
 and			  Kristian Rietveld  <kris@gtk.org>
 

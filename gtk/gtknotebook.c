@@ -1449,6 +1449,27 @@ gtk_notebook_get_arrow (GtkNotebook *notebook,
   return 0;
 }
 
+static void
+gtk_notebook_do_arrow (GtkNotebook    *notebook,
+		       GtkArrowType    arrow)
+{
+  GtkWidget *widget = GTK_WIDGET (notebook);
+  GtkDirectionType dir;
+  
+  if (!notebook->focus_tab ||
+      gtk_notebook_search_page (notebook, notebook->focus_tab,
+				arrow == GTK_ARROW_LEFT ? STEP_PREV : STEP_NEXT,
+				TRUE))
+    {
+      if (notebook->tab_pos == GTK_POS_LEFT ||
+	  notebook->tab_pos == GTK_POS_RIGHT)
+	dir = (arrow == GTK_ARROW_LEFT) ? GTK_DIR_UP : GTK_DIR_DOWN;
+      else
+	dir = (arrow == GTK_ARROW_LEFT) ? GTK_DIR_LEFT : GTK_DIR_RIGHT;
+      gtk_widget_child_focus (widget, dir);
+    }
+}
+
 static gboolean
 gtk_notebook_arrow_button_press (GtkNotebook    *notebook,
 				 GtkArrowType    arrow,
@@ -1464,19 +1485,7 @@ gtk_notebook_arrow_button_press (GtkNotebook    *notebook,
   
   if (event->button == 1)
     {
-      GtkDirectionType dir;
-      if (!notebook->focus_tab ||
-	  gtk_notebook_search_page (notebook, notebook->focus_tab,
-				    arrow == GTK_ARROW_LEFT ? STEP_PREV : STEP_NEXT,
-				    TRUE))
-	{
-	  if (notebook->tab_pos == GTK_POS_LEFT ||
-	      notebook->tab_pos == GTK_POS_RIGHT)
-	    dir = (arrow == GTK_ARROW_LEFT) ? GTK_DIR_UP : GTK_DIR_DOWN;
-	  else
-	    dir = (arrow == GTK_ARROW_LEFT) ? GTK_DIR_LEFT : GTK_DIR_RIGHT;
-	  gtk_widget_child_focus (widget, dir);
-	}
+      gtk_notebook_do_arrow (notebook, arrow);
       
       if (!notebook->timer)
 	{
@@ -2293,23 +2302,11 @@ gtk_notebook_timer (GtkNotebook *notebook)
   gboolean retval = FALSE;
 
   GDK_THREADS_ENTER ();
-  
+
   if (notebook->timer)
     {
-      if (notebook->click_child == GTK_ARROW_LEFT)
-	{
-	  if (!notebook->focus_tab ||
-	      gtk_notebook_search_page (notebook, notebook->focus_tab,
-					STEP_PREV, TRUE))
-	    gtk_widget_child_focus (GTK_WIDGET (notebook), GTK_DIR_LEFT);
-	}
-      else if (notebook->click_child == GTK_ARROW_RIGHT)
-	{
-	  if (!notebook->focus_tab ||
-	      gtk_notebook_search_page (notebook, notebook->focus_tab,
-					STEP_NEXT, TRUE))
-	    gtk_widget_child_focus (GTK_WIDGET (notebook), GTK_DIR_RIGHT);
-	}
+      gtk_notebook_do_arrow (notebook, notebook->click_child);
+
       if (notebook->need_timer) 
 	{
 	  notebook->need_timer = FALSE;
