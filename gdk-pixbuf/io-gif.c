@@ -616,7 +616,7 @@ lzw_read_byte (GifContext *context)
 		incode = code;
 
 		if (code >= context->lzw_max_code) {
-                        CHECK_LZWP_SP ();
+                        CHECK_LZW_SP ();
 			*(context->lzw_sp)++ = context->lzw_firstcode;
 			code = context->lzw_oldcode;
 		}
@@ -629,7 +629,7 @@ lzw_read_byte (GifContext *context)
                                              _("Bad code encountered"));
 				return -2;
                         }
-                        CHECK_LZWP_SP ();
+                        CHECK_LZW_SP ();
 			*(context->lzw_sp)++ = context->lzw_table[1][code];
 
 			if (code == context->lzw_table[0][code]) {
@@ -642,7 +642,7 @@ lzw_read_byte (GifContext *context)
 			code = context->lzw_table[0][code];
 		}
 
-                CHECK_LZWP_SP ();
+                CHECK_LZW_SP ();
 		*(context->lzw_sp)++ = context->lzw_firstcode = context->lzw_table[1][code];
 
 		if ((code = context->lzw_max_code) < (1 << MAX_LZW_BITS)) {
