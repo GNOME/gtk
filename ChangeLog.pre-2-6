@@ -1,3 +1,10 @@
+Sun Feb 21 17:14:44 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_set_geometry_hints): Always
+	 set the max width or height to at least 1, since 0 
+	 triggers bugs in some window managers. (The window 
+	"pops out" of the frame in fvwm)
+
 Sun Feb 21 16:16:22 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkscrolledwindow.c gdk/gdkfont.c gdk/gdkim.c:

@@ -1115,8 +1115,8 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
   if (geom_mask & GDK_HINT_MAX_SIZE)
     {
       size_hints.flags |= PMaxSize;
-      size_hints.max_width = geometry->max_width;
-      size_hints.max_height = geometry->max_height;
+      size_hints.max_width = MAX (geometry->max_width, 1);
+      size_hints.max_height = MAX (geometry->max_height, 1);
     }
   
   if (geom_mask & GDK_HINT_BASE_SIZE)
