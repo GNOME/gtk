@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-13 09:03+0100\n"
-"PO-Revision-Date: 2004-01-13 09:56+0100\n"
+"POT-Creation-Date: 2004-01-15 00:31+0100\n"
+"PO-Revision-Date: 2004-01-15 00:33+0100\n"
 "Last-Translator: Danilo Šegan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -979,7 +979,9 @@ msgstr "Grupa akcija"
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
-msgstr "GtkActionGroup sa kojom je ovaj GtkAction povezan, ili NULL (za unutrašnju upotrebu)."
+msgstr ""
+"GtkActionGroup sa kojom je ovaj GtkAction povezan, ili NULL (za unutrašnju "
+"upotrebu)."
 
 #: gtk/gtkactiongroup.c:134
 msgid "A name for the action group."
@@ -4018,11 +4020,11 @@ msgstr ""
 msgid "Text to be displayed in the progress bar"
 msgstr "Tekst koji se prikazuje u elementu napretka"
 
-#: gtk/gtkradioaction.c:137
+#: gtk/gtkradioaction.c:138
 msgid "The value"
 msgstr "Vrednost"
 
-#: gtk/gtkradioaction.c:138
+#: gtk/gtkradioaction.c:139
 msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
@@ -4030,9 +4032,13 @@ msgstr ""
 "Vrednost koju vraća gtk_radio_action_get_current_value() kada je ova akcija "
 "tekuća akcija svoje grupe."
 
-#: gtk/gtkradiobutton.c:109
+#: gtk/gtkradioaction.c:155 gtk/gtkradiobutton.c:109
 msgid "Group"
 msgstr "Grupa"
+
+#: gtk/gtkradioaction.c:156
+msgid "The radio action whose group this action belongs."
+msgstr "Akcija jednoizbornika čijoj grupi ova akcija pripada."
 
 #: gtk/gtkradiobutton.c:110
 msgid "The radio button whose group this widget belongs."
