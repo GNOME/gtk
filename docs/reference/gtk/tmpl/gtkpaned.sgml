@@ -32,7 +32,7 @@ Each child has two options that can be set,
 #GtkPaned is resized, that child will expand
 or shrink along with the paned widget. If @shrink
 is true, then when that child can be made smaller
-than it's requisition by the user. Setting @shrink
+than its requisition by the user. Setting @shrink
 to %FALSE allows the application to set a minimum
 size. If @resize is false for both children, then
 this is treated as if @resize is true for both

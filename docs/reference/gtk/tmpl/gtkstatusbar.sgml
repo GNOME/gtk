@@ -33,7 +33,7 @@ Status bars are created using gtk_statusbar_new().
 Messages are added to the bar's stack with gtk_statusbar_push().
 </para>
 <para>
-The message at the top of the stack can be removed using gtk_statusbar_pop(). A message can be removed from anywhere in the stack if it's message_id was recorded at the time it was added. This is done using gtk_statusbar_remove().
+The message at the top of the stack can be removed using gtk_statusbar_pop(). A message can be removed from anywhere in the stack if its message_id was recorded at the time it was added. This is done using gtk_statusbar_remove().
 </para>
 
 <!-- ##### SECTION See_Also ##### -->

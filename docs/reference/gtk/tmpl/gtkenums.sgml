@@ -58,7 +58,7 @@ Used to indicate the direction in which a #GtkArrow should point.
 
 <!-- ##### ENUM GtkAttachOptions ##### -->
 <para>
-Denotes the expansion properties that a widget will have when it (or it's
+Denotes the expansion properties that a widget will have when it (or its
 parent) is resized.
 </para>
 

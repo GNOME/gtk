@@ -7,7 +7,7 @@ A choice from multiple check buttons.
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 A single radio button performs the same basic function as a #GtkCheckButton,
-as it's position in the object hierarchy reflects. It is only when multiple
+as its position in the object hierarchy reflects. It is only when multiple
 radio buttons are grouped together that they become a different user
 interface component in their own right.</para>
 <para>

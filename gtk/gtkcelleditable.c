@@ -102,7 +102,7 @@ gtk_cell_editable_start_editing (GtkCellEditable *cell_editable,
  * @cell_editable: A #GtkTreeEditable
  * 
  * Emits the "editing_done" signal.  This signal is a sign for the cell renderer
- * to update it's value from the cell.
+ * to update its value from the cell.
  **/
 void
 gtk_cell_editable_editing_done (GtkCellEditable *cell_editable)

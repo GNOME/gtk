@@ -1,3 +1,9 @@
+2003-04-07  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcelleditable.c, gtk/gtkfixed.c, gtk/gtktreemodel.c,
+	gtk/gtktreeselection.c, gtk/gtktreeview.c: Fix numerous
+	misspellings of possessive "its".  (#110027, Doug Quale)
+
 2003-04-03  Matthias Clasen  <maclas@gmx.de>
 
 	* demos/gtk-demo/main.c (demo_find_file): Only use files from the
