@@ -210,6 +210,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/button.png					\
 	$(srcdir)/images/check-button.png				\
 	$(srcdir)/images/color-button.png				\
+	$(srcdir)/images/combo-box.png					\
 	$(srcdir)/images/combo-box-entry.png				\
 	$(srcdir)/images/entry.png					\
 	$(srcdir)/images/file-button.png				\

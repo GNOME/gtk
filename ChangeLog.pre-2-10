@@ -1,3 +1,7 @@
+2004-11-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* docs/tools/widgets.c: Add a combo box.
+
 2004-11-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcolorsel.c (key_press): Implement keynav for the color

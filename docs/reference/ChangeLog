@@ -1,3 +1,10 @@
+2004-11-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/images/combo-box.png: New image
+
+	* gtk/visual_index.xml: 
+	* gtk/Makefile.am (HTML_IMAGES): Add combo-box.png
+
 Sat Nov 20 16:01:51 2004  Owen Taylor  <otaylor@redhat.com>
 
         * gdk/gdk-sections.txt gdk/gdk.types : Update for GdkPangoRenderer

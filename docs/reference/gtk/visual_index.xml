@@ -11,6 +11,9 @@
   <link linkend="GtkColorButton">
     <inlinegraphic fileref="color-button.png" format="PNG"></inlinegraphic>
   </link>
+  <link linkend="GtkComboBox">
+    <inlinegraphic fileref="combo-box.png" format="PNG"></inlinegraphic>
+  </link>
   <link linkend="GtkComboBoxEntry">
     <inlinegraphic fileref="combo-box-entry.png" format="PNG"></inlinegraphic>
   </link>

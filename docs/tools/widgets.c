@@ -261,12 +261,36 @@ create_combo_box_entry (void)
   GtkWidget *widget;
   GtkWidget *align;
   
+  gtk_rc_parse_string ("style \"combo-box-entry-style\" {\n"
+		       "  GtkComboBox::appears-as-list = 1\n"
+		       "}\n"
+		       "widget_class \"GtkComboBoxEntry\" style \"combo-box-entry-style\"\n" );
   widget = gtk_combo_box_entry_new_text ();
   gtk_entry_set_text (GTK_ENTRY (GTK_BIN (widget)->child), "Combo Box Entry");
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), widget);
 
   return new_widget_info ("combo-box-entry", align, SMALL);
+}
+
+static WidgetInfo *
+create_combo_box (void)
+{
+  GtkWidget *widget;
+  GtkWidget *align;
+  
+  gtk_rc_parse_string ("style \"combo-box-style\" {\n"
+		       "  GtkComboBox::appears-as-list = 0\n"
+		       "}\n"
+		       "widget_class \"GtkComboBox\" style \"combo-box-style\"\n" );
+
+  widget = gtk_combo_box_new_text ();
+  gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Combo Box");
+  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_container_add (GTK_CONTAINER (align), widget);
+
+  return new_widget_info ("combo-box", align, SMALL);
 }
 
 static WidgetInfo *
@@ -759,6 +783,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_button ());
   retval = g_list_prepend (retval, create_check_button ());
   retval = g_list_prepend (retval, create_color_button ());
+  retval = g_list_prepend (retval, create_combo_box ());
   retval = g_list_prepend (retval, create_combo_box_entry ());
   retval = g_list_prepend (retval, create_entry ());
   retval = g_list_prepend (retval, create_file_button ());
