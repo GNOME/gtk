@@ -265,11 +265,11 @@ static void
 gdk_x11_drawable_update_picture_clip (GdkDrawable *drawable,
 				      GdkGC       *gc)
 {
-  GdkGCX11 *gc_private = GDK_GC_X11 (gc);  
+  GdkGCX11 *gc_private = gc ? GDK_GC_X11 (gc) : NULL;
   GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
   Picture picture = gdk_x11_drawable_get_picture (drawable);
 
-  if (gc_private->clip_region)
+  if (gc && gc_private->clip_region)
     {
       GdkRegionBox *boxes = gc_private->clip_region->rects;
       gint n_boxes = gc_private->clip_region->numRects;
@@ -1127,7 +1127,7 @@ draw_with_images (GdkDrawable       *drawable,
 	  image = _gdk_image_get_scratch (width1, height1, 32, &xs0, &ys0);
 	  
 	  convert_to_format (src_rgb + y0 * src_rowstride + 4 * x0, src_rowstride,
-			     image->mem + ys0 * image->bpl + 4 * xs0, image->bpl,
+			     image->mem + ys0 * image->bpl + xs0 * image->bpp, image->bpl,
 			     format_type, image->byte_order, 
 			     width1, height1);
 
@@ -1238,9 +1238,9 @@ draw_with_pixmaps (GdkDrawable       *drawable,
 	  image = _gdk_image_get_scratch (width1, height1, 32, &xs0, &ys0);
 	  if (!get_shm_pixmap_for_image (xdisplay, image, format, mask_format, &pix, &pict, &mask))
 	    return FALSE;
-	  
+
 	  convert_to_format (src_rgb + y0 * src_rowstride + 4 * x0, src_rowstride,
-			     image->mem + ys0 * image->bpl + 4 * xs0, image->bpl,
+			     image->mem + ys0 * image->bpl + xs0 * image->bpp, image->bpl,
 			     format_type, image->byte_order, 
 			     width1, height1);
 
@@ -1290,9 +1290,11 @@ gdk_x11_draw_pixbuf (GdkDrawable     *drawable,
       return;
     }
 
+  gdk_x11_drawable_update_picture_clip (drawable, gc);
+
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
 
-#ifdef USE_SHM  
+#ifdef USE_SHM
   if (use_pixmaps)
     {
       if (!draw_with_pixmaps (drawable, gc,

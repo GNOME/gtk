@@ -1,3 +1,14 @@
+Mon Jan  7 22:19:32 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdrawable-x11.c (draw_with_pixmaps): Fix a
+	problem where were the offset into the image was passed
+	into convert_to_format() wrong.
+
+	* gdk/x11/gdkdrawable-x11.c (gdk_x11_draw_pixbuf): Call
+	gdk_x11_drawable_update_picture_clip () before using
+	the picture; allow update_picture_clip() to take a NULL gc
+	to mean no clipping.
+
 2002-01-07  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtksocket.c (gtk_socket_get_id): Doc typo fix. (#68172)
