@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.2.x\n"
-"POT-Creation-Date: 2003-06-09 16:30-0400\n"
-"PO-Revision-Date: 2003-03-05 10:29+0530\n"
+"Project-Id-Version:gtk+.gtk-2-2\n"
+"POT-Creation-Date: 2003-06-06 04:52+0200\n"
+"PO-Revision-Date: 2003-07-05 10:29+0530\n"
 "Last-Translator: FSF-India <locale@gnu.org.in>\n"
 "Language-Team: Malayalam <locale@gnu.org.in>\n"
 "MIME-Version: 1.0\n"
@@ -110,9 +110,9 @@ msgid "Image pixel data corrupt"
 msgstr "ഛായാതലവാചകം തെറ്റ്"
 
 #: gdk-pixbuf/gdk-pixdata.c:402
-#, fuzzy, c-format
+#, c-format
 msgid "failed to allocate image buffer of %u bytes"
-msgstr "%s ചിത്രം നിറയ്‌ക്കുന്നതില്‌ പരാജയം : %s"
+msgstr " ചിത്രം നിറയ്‌ക്കുന്നതില്‌ പരാജയം :%u "
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -1008,10 +1008,9 @@ msgid "Child X Displacement"
 msgstr "അമ്പ് X മാറ്റിസ്ഥാപിക്കുക‌"
 
 #: gtk/gtkbutton.c:285
-#, fuzzy
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
-msgstr "പുറത്താക്കല് മൊട്ടില് ക്ളിക്ക് ചെയ്യുമ്പോള് പ്രവ‍ര്ത്തിക്കേണ്ട കല്പ്പന"
+msgstr ""
 
 #: gtk/gtkbutton.c:292
 #, fuzzy
@@ -1019,10 +1018,9 @@ msgid "Child Y Displacement"
 msgstr "അമ്പ് Y മാറ്റിസ്ഥാപിക്കുക‌"
 
 #: gtk/gtkbutton.c:293
-#, fuzzy
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
-msgstr "പുറത്താക്കല് മൊട്ടില് ക്ളിക്ക് ചെയ്യുമ്പോള് പ്രവ‍ര്ത്തിക്കേണ്ട കല്പ്പന"
+msgstr ""
 
 #: gtk/gtkcellrenderer.c:116
 msgid "mode"
@@ -1183,7 +1181,7 @@ msgstr "വിശദവിവരങ്ങള്"
 msgid "Render detail to pass to the theme engine"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:175 gtk/gtkentry.c:527 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:175 gtk/gtkentry.c:524 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "വാചകം"
 
@@ -1239,7 +1237,7 @@ msgstr "പുരോതല നിറം"
 msgid "Foreground color as a GdkColor"
 msgstr "പശ്ചാത്തല നിറം ഒരു GdkColor പോലെ"
 
-#: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:459 gtk/gtktexttag.c:273
+#: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:456 gtk/gtktexttag.c:273
 #: gtk/gtktextview.c:576
 msgid "Editable"
 msgstr "ചിട്ടപ്പെടുത്തിയ"
@@ -1255,9 +1253,8 @@ msgid "Font"
 msgstr "അക്ഷരരൂപം"
 
 #: gtk/gtkcellrenderertext.c:241
-#, fuzzy
 msgid "Font description as a string"
-msgstr "പശ്ചാത്തല നിറം പോലെ"
+msgstr "അച്ചിന്റെ വിവരണം"
 
 #: gtk/gtkcellrenderertext.c:249 gtk/gtktexttag.c:290
 msgid "Font description as a PangoFontDescription struct"
@@ -1326,9 +1323,8 @@ msgid "Strikethrough"
 msgstr "കുറുകെ വരയ്‌ക്കുക"
 
 #: gtk/gtkcellrenderertext.c:344 gtk/gtktexttag.c:464
-#, fuzzy
 msgid "Whether to strike through the text"
-msgstr "ഈ ചെറുജാലകം കുറുകെയുള്ള വരയെ ബാധിക്കുന്നുണ്ടോ"
+msgstr "വാചകത്തിന‌് കുറുകെ വരക്കണോ?"
 
 #: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:471
 msgid "Underline"
@@ -1794,114 +1790,113 @@ msgstr "പ്രവൃത്തിതലത്തിന്റെ അതിര�
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 
-#: gtk/gtkentry.c:439 gtk/gtklabel.c:368
+#: gtk/gtkentry.c:436 gtk/gtklabel.c:368
 msgid "Cursor Position"
 msgstr "സൂചികാസ്ഥാനം"
 
-#: gtk/gtkentry.c:440 gtk/gtklabel.c:369
+#: gtk/gtkentry.c:437 gtk/gtklabel.c:369
 #, fuzzy
 msgid "The current position of the insertion cursor in chars"
 msgstr "ആയുധപ്പട്ടയുടെ അഭിവിന്യാസം"
 
-#: gtk/gtkentry.c:449 gtk/gtklabel.c:378
+#: gtk/gtkentry.c:446 gtk/gtklabel.c:378
 msgid "Selection Bound"
 msgstr "തെരഞ്ഞെടുക്കല്‌ പരിധി"
 
-#: gtk/gtkentry.c:450 gtk/gtklabel.c:379
+#: gtk/gtkentry.c:447 gtk/gtklabel.c:379
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 
-#: gtk/gtkentry.c:460
+#: gtk/gtkentry.c:457
 #, fuzzy
 msgid "Whether the entry contents can be edited"
 msgstr "തലവാചകം ക്ളിക്ക് ചെയ്യാവുന്നതാണോ"
 
-#: gtk/gtkentry.c:467
+#: gtk/gtkentry.c:464
 msgid "Maximum length"
 msgstr "ഏറ്റവും കൂടിയ നീളം‌"
 
-#: gtk/gtkentry.c:468
+#: gtk/gtkentry.c:465
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 
-#: gtk/gtkentry.c:476
+#: gtk/gtkentry.c:473
 msgid "Visibility"
 msgstr "ദൃശ്യമായ"
 
-#: gtk/gtkentry.c:477
+#: gtk/gtkentry.c:474
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
 
-#: gtk/gtkentry.c:484
+#: gtk/gtkentry.c:481
 msgid "Has Frame"
 msgstr "ചട്ടക്കൂട് ഉണ്ടെങ്കില്‌"
 
-#: gtk/gtkentry.c:485
+#: gtk/gtkentry.c:482
 msgid "FALSE removes outside bevel from entry"
 msgstr ""
 
-#: gtk/gtkentry.c:492
+#: gtk/gtkentry.c:489
 msgid "Invisible character"
 msgstr "അദൃശ്യമായ അക്ഷരം"
 
-#: gtk/gtkentry.c:493
+#: gtk/gtkentry.c:490
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 
-#: gtk/gtkentry.c:500
+#: gtk/gtkentry.c:497
 msgid "Activates default"
 msgstr "സ്വതേയുള്ളതിനെ സജ്ജമാക്കുക"
 
-#: gtk/gtkentry.c:501
+#: gtk/gtkentry.c:498
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr ""
 
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:504
 msgid "Width in chars"
 msgstr "വീതി അക്ഷരങ്ങളില്‌"
 
-#: gtk/gtkentry.c:508
+#: gtk/gtkentry.c:505
 msgid "Number of characters to leave space for in the entry"
 msgstr ""
 
-#: gtk/gtkentry.c:517
+#: gtk/gtkentry.c:514
 #, fuzzy
 msgid "Scroll offset"
 msgstr "നിരക്കിനീക്കാവുന്ന"
 
-#: gtk/gtkentry.c:518
+#: gtk/gtkentry.c:515
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 
-#: gtk/gtkentry.c:528
+#: gtk/gtkentry.c:525
 msgid "The contents of the entry"
 msgstr "ചേ‌ര്ക്കുന്നതിന്റെ ഉള്ളടക്കം"
 
-#: gtk/gtkentry.c:759
+#: gtk/gtkentry.c:756
 msgid "Select on focus"
 msgstr "സ്ഥാനം തെരഞ്ഞെടുക്കൂ"
 
-#: gtk/gtkentry.c:760
+#: gtk/gtkentry.c:757
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 
-#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6621
+#: gtk/gtkentry.c:3980 gtk/gtklabel.c:3222 gtk/gtktextview.c:6621
 msgid "Select All"
 msgstr "എല്ലാം തെരഞ്ഞെടുക്കുക"
 
-#: gtk/gtkentry.c:4003 gtk/gtklabel.c:3232
+#: gtk/gtkentry.c:3990 gtk/gtklabel.c:3232
 msgid "Input Methods"
 msgstr "നിവേശക രീതി"
 
-#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6640
-#, fuzzy
+#: gtk/gtkentry.c:4000 gtk/gtktextview.c:6640
 msgid "_Insert Unicode control character"
-msgstr "പ്രത്യേകാക്ഷരങ്ങള്‍ ഉള്‍പ്പെടുത്തുക"
+msgstr ""
 
 #: gtk/gtkfilesel.c:551 gtk/gtkimage.c:167
 msgid "Filename"
@@ -2342,9 +2337,8 @@ msgid "Child widget to appear next to the menu text"
 msgstr ""
 
 #: gtk/gtkimmodule.c:419
-#, fuzzy
 msgid "Default"
-msgstr "സ്വതേയുള്ള വീതി"
+msgstr "സ്വതേ"
 
 #: gtk/gtkinputdialog.c:230
 msgid "Input"
@@ -2540,7 +2534,7 @@ msgstr "രൂപരേഖയുടെ ഉയരം"
 #.
 #: gtk/gtkmain.c:806
 msgid "default:LTR"
-msgstr "default:LTR"
+msgstr "സ്വതേയുള്ള:LTR"
 
 #: gtk/gtkmenu.c:263
 msgid "Tearoff Title"
@@ -2783,7 +2777,7 @@ msgstr "ചെറുജാലകം ദൃശ്യമാക്കേണ്ട�
 msgid "Tab pack type"
 msgstr "ടാബ് പാക് തരം"
 
-#: gtk/gtknotebook.c:2473 gtk/gtknotebook.c:4820
+#: gtk/gtknotebook.c:2475 gtk/gtknotebook.c:4822
 #, c-format
 msgid "Page %u"
 msgstr "താള് :%u"
@@ -2934,9 +2928,8 @@ msgid "The fraction of total work that has been completed"
 msgstr ""
 
 #: gtk/gtkprogressbar.c:208
-#, fuzzy
 msgid "Pulse Step"
-msgstr "ഇടവേള കീ"
+msgstr ""
 
 #: gtk/gtkprogressbar.c:209
 msgid "The fraction of total progress to move the bouncing block when pulsed"
@@ -3016,20 +3009,18 @@ msgid "Arrow X Displacement"
 msgstr "അമ്പ് X മാറ്റിസ്ഥാപിക്കുക‌"
 
 #: gtk/gtkrange.c:338
-#, fuzzy
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
-msgstr "പുറത്താക്കല് മൊട്ടില് ക്ളിക്ക് ചെയ്യുമ്പോള് പ്രവ‍ര്ത്തിക്കേണ്ട കല്പ്പന"
+msgstr ""
 
 #: gtk/gtkrange.c:345
 msgid "Arrow Y Displacement"
 msgstr "അമ്പ് Y മാറ്റിസ്ഥാപിക്കുക‌"
 
 #: gtk/gtkrange.c:346
-#, fuzzy
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
-msgstr "പുറത്താക്കല് മൊട്ടില് ക്ളിക്ക് ചെയ്യുമ്പോള് പ്രവ‍ര്ത്തിക്കേണ്ട കല്പ്പന"
+msgstr ""
 
 #: gtk/gtkrc.c:2376
 #, c-format
@@ -3037,9 +3028,9 @@ msgid "Unable to find include file: \"%s\""
 msgstr "രചനയുള്‌പ്പെടെ കണ്ടെത്താന്‌ കഴിഞ്ഞില്ല: \"%s\""
 
 #: gtk/gtkrc.c:3018 gtk/gtkrc.c:3021
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "%s ചിത്രം ലഭിക്കുന്നതില്‌ പരാജയം : %s"
+msgstr "ചിത്രം ലഭിക്കുന്നതില്‌ പരാജയം : %s"
 
 #: gtk/gtkrc.c:3456
 #, c-format
@@ -3167,11 +3158,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
-#: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:528
+#: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:527
 msgid "Horizontal Adjustment"
 msgstr "തിരശ്ചീന ക്രമീകരണം"
 
-#: gtk/gtkscrolledwindow.c:242 gtk/gtktext.c:609 gtk/gtktreeview.c:536
+#: gtk/gtkscrolledwindow.c:242 gtk/gtktext.c:609 gtk/gtktreeview.c:535
 msgid "Vertical Adjustment"
 msgstr "ലംബ ക്രമീകരണം"
 
@@ -4228,7 +4219,6 @@ msgid "Button relief"
 msgstr "മൊട്ടിന്റെ വ്യക്തത"
 
 #: gtk/gtktoolbar.c:277
-#, fuzzy
 msgid "Type of bevel around toolbar buttons"
 msgstr "ആയുധപ്പട്ടയുടെ അഭിവിന്യാസം"
 
@@ -4263,134 +4253,134 @@ msgstr "വൃക്ഷകാഴ്ചാരീതി"
 msgid "The model for the TreeModelSort to sort"
 msgstr "വൃക്ഷകാഴ്ചയുടെ മാതൃക"
 
-#: gtk/gtktreeview.c:520
+#: gtk/gtktreeview.c:519
 msgid "TreeView Model"
 msgstr "വൃക്ഷകാഴ്ചാരീതി"
 
-#: gtk/gtktreeview.c:521
+#: gtk/gtktreeview.c:520
 msgid "The model for the tree view"
 msgstr "വൃക്ഷകാഴ്ചയുടെ മാതൃക"
 
-#: gtk/gtktreeview.c:529
+#: gtk/gtktreeview.c:528
 #, fuzzy
 msgid "Horizontal Adjustment for the widget"
 msgstr "ലംബ നീക്ക്‍പോക്ക്"
 
-#: gtk/gtktreeview.c:537
+#: gtk/gtktreeview.c:536
 #, fuzzy
 msgid "Vertical Adjustment for the widget"
 msgstr "ലംബ നീക്ക്‍പോക്ക്"
 
-#: gtk/gtktreeview.c:544 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:433
+#: gtk/gtktreeview.c:543 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:433
 msgid "Visible"
 msgstr "ദൃശ്യമായ"
 
-#: gtk/gtktreeview.c:545
+#: gtk/gtktreeview.c:544
 msgid "Show the column header buttons"
 msgstr "നിര തലവാചകമൊട്ടുകള് കാണിക്കുക"
 
-#: gtk/gtktreeview.c:552
+#: gtk/gtktreeview.c:551
 msgid "Headers Clickable"
 msgstr "തലാവചകങ്ങള്‌ ക്ളിക്ക് ചെയ്യാവുന്നത്"
 
-#: gtk/gtktreeview.c:553
+#: gtk/gtktreeview.c:552
 msgid "Column headers respond to click events"
 msgstr ""
 
-#: gtk/gtktreeview.c:560
+#: gtk/gtktreeview.c:559
 msgid "Expander Column"
 msgstr "വികസിതനിര"
 
-#: gtk/gtktreeview.c:561
+#: gtk/gtktreeview.c:560
 #, fuzzy
 msgid "Set the column for the expander column"
 msgstr "നിര തലവാചകമൊട്ടുകള് കാണിക്കുക"
 
-#: gtk/gtktreeview.c:568 gtk/gtktreeviewcolumn.c:284
+#: gtk/gtktreeview.c:567 gtk/gtktreeviewcolumn.c:284
 msgid "Reorderable"
 msgstr "പുനക്രമീകരിക്കാവുന്നത്"
 
-#: gtk/gtktreeview.c:569
+#: gtk/gtktreeview.c:568
 msgid "View is reorderable"
 msgstr "പുനക്രമീകരിക്കാവുന്ന രീതിയില്‌ കാണിക്കുക"
 
-#: gtk/gtktreeview.c:576
+#: gtk/gtktreeview.c:575
 msgid "Rules Hint"
 msgstr ""
 
-#: gtk/gtktreeview.c:577
+#: gtk/gtktreeview.c:576
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 
-#: gtk/gtktreeview.c:584
+#: gtk/gtktreeview.c:583
 msgid "Enable Search"
 msgstr "തെരച്ചില്‌ സജീവമാക്കുക"
 
-#: gtk/gtktreeview.c:585
+#: gtk/gtktreeview.c:584
 msgid "View allows user to search through columns interactively"
 msgstr ""
 
-#: gtk/gtktreeview.c:592
+#: gtk/gtktreeview.c:591
 msgid "Search Column"
 msgstr "നിര പരതൂ"
 
-#: gtk/gtktreeview.c:593
+#: gtk/gtktreeview.c:592
 msgid "Model column to search through when searching through code"
 msgstr ""
 
-#: gtk/gtktreeview.c:606
+#: gtk/gtktreeview.c:605
 msgid "Expander Size"
 msgstr "വികസിതരൂപം"
 
-#: gtk/gtktreeview.c:607
+#: gtk/gtktreeview.c:606
 msgid "Size of the expander arrow"
 msgstr ""
 
-#: gtk/gtktreeview.c:615
+#: gtk/gtktreeview.c:614
 msgid "Vertical Separator Width"
 msgstr "ലംബ വേ‌ര്തിരിവിന്റെ വീതി"
 
-#: gtk/gtktreeview.c:616
+#: gtk/gtktreeview.c:615
 msgid "Vertical space between cells.  Must be an even number"
 msgstr ""
 
-#: gtk/gtktreeview.c:624
+#: gtk/gtktreeview.c:623
 msgid "Horizontal Separator Width"
 msgstr "തിരശ്ചീന വേ‌ര്തിരിവിന്റെ വീതി"
 
-#: gtk/gtktreeview.c:625
+#: gtk/gtktreeview.c:624
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr ""
 
-#: gtk/gtktreeview.c:633
+#: gtk/gtktreeview.c:632
 msgid "Allow Rules"
 msgstr "നിയമങ്ങള്‌ അനുവദിക്കുക"
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:633
 msgid "Allow drawing of alternating color rows"
 msgstr ""
 
-#: gtk/gtktreeview.c:640
+#: gtk/gtktreeview.c:639
 msgid "Indent Expanders"
 msgstr "വികസിതം"
 
-#: gtk/gtktreeview.c:641
+#: gtk/gtktreeview.c:640
 msgid "Make the expanders indented"
 msgstr ""
 
-#: gtk/gtktreeview.c:647
+#: gtk/gtktreeview.c:646
 msgid "Even Row Color"
 msgstr "ഇരട്ടനിരയുടെ വ‌‌‌ര്ണങ്ങള്‌"
 
-#: gtk/gtktreeview.c:648
+#: gtk/gtktreeview.c:647
 msgid "Color to use for even rows"
 msgstr "ഇരട്ടനിരകള്‌ക്ക് ഉപയോഗിക്കേണ്ട വ‌ര്ണം"
 
-#: gtk/gtktreeview.c:654
+#: gtk/gtktreeview.c:653
 msgid "Odd Row Color"
 msgstr "ഒറ്റനിര വ‌ര്ണം"
 
-#: gtk/gtktreeview.c:655
+#: gtk/gtktreeview.c:654
 msgid "Color to use for odd rows"
 msgstr "ഒറ്റനിരയുടെ ഉപയോഗിക്കേണ്ട വ‌ര്ണം"
 
@@ -4683,9 +4673,8 @@ msgid "Focus line dash pattern"
 msgstr "ഘടന മായ്‍ക്കാന്‌ കഴിയില്ല"
 
 #: gtk/gtkwidget.c:1113
-#, fuzzy
 msgid "Dash pattern used to draw the focus indicator"
-msgstr "ക്രമീകരണ സൂചകം ദൃശ്യമാക്കേണ്ടതു‌ണ്ടോ"
+msgstr ""
 
 #: gtk/gtkwidget.c:1118
 msgid "Focus padding"
@@ -4900,19 +4889,19 @@ msgstr "വിയറ്റ്നാമീസ് (VIQR)"
 msgid "X Input Method"
 msgstr "X നിവേശക രീതി"
 
-#: modules/input/gtkimcontextxim.c:263
+#: modules/input/gtkimcontextxim.c:265
 msgid "IM Preedit style"
 msgstr "IM ചിട്ടപ്പെടുത്തുന്നതിന‌് മുമ്പുള്ള ശൈലി"
 
-#: modules/input/gtkimcontextxim.c:264
+#: modules/input/gtkimcontextxim.c:266
 #, fuzzy
 msgid "How to draw the input method preedit string"
 msgstr "അവസ്ഥാപ്പട്ടയുടെ നിവേശകരീതി എങ്ങനെ വര‌യ്‌ക്കാം"
 
-#: modules/input/gtkimcontextxim.c:272
+#: modules/input/gtkimcontextxim.c:274
 msgid "IM Status style"
 msgstr "IM അവസ്ഥാശൈലി"
 
-#: modules/input/gtkimcontextxim.c:273
+#: modules/input/gtkimcontextxim.c:275
 msgid "How to draw the input method statusbar"
 msgstr "അവസ്ഥാപ്പട്ടയുടെ നിവേശകരീതി എങ്ങനെ വര‌യ്‌ക്കാം"
