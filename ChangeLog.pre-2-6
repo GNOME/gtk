@@ -1,3 +1,9 @@
+2004-03-10  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (list_mtime_data_func): Use an
+	untranslatable "%x" for dates, rather than a custom format.  Fixes
+	#136357.
+
 2004-03-10  Morten Welinder  <terra@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c

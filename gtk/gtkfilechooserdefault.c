@@ -4180,8 +4180,7 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
       if (days_diff > 1 && days_diff < 7)
 	format = "%A"; /* Days from last week */
       else
-	/* FIXME: Get the right format for the locale */
-	format = _("%d/%b/%Y"); /* Any other date */
+	format = "%x"; /* Any other date */
 
       if (g_date_strftime (buf, sizeof (buf), format, &mtime) == 0)
 	strcpy (buf, _("Unknown"));
