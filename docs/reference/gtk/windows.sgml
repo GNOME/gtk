@@ -111,7 +111,7 @@ in 256 color mode.
 </formalpara>
 
 <formalpara>
-<title><envar>PRETEND_WIN9X</envar></title>
+<title><envar>G_WIN32_PRETEND_WIN9X</envar></title>
 
 <para>
 Only use the Windows 9x API.

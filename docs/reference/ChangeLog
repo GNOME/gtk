@@ -1,5 +1,7 @@
 2004-10-31  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/windows.sgml: s/PRETEND_WIN9X/G_WIN32_PRETEND_WIN9X/.
+
 	* gtk/tmpl/gtktreemodel.sgml: Small correction for
 	gtk_tree_path_new_root().  (#156956, Vincent Untz)
 
