@@ -1,3 +1,14 @@
+Wed Jun  4 18:27:44 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcheckbutton.c (gtk_real_check_button_draw_indicator): 
+	gtk/gtkradiobutton.c (gtk_radio_button_draw_indicator): 
+	Use GTK_WIDGET_IS_SENSITIVE(), not GTK_WIDGET_SENSITIVE
+	(#92548, Tim Evans)
+
+	* gtk/gtkcheckmenuitem.c (gtk_real_check_menu_item_draw_indicator)
+	gtk/gtkradiomenuitem.c (gtk_radio_menu_item_draw_indicator): If
+	Use state_type = STATE_INSENSITIVE for insensitive menu items.
+
 Wed Jun  4 21:25:35 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.
