@@ -8169,7 +8169,7 @@ void create_layout (void)
 	  {
 	    sprintf(buf, "Button %d, %d", i, j);
 	    if ((i + j) % 2)
-	      // button = gtk_button_new_with_label (buf);
+	      /* button = gtk_button_new_with_label (buf); */
 	      button = gtk_combo_new();
 	    else
 	      button = gtk_label_new (buf);

@@ -2891,7 +2891,7 @@ real_row_move (GtkCList *clist,
 	list->data = GINT_TO_POINTER (dest_row);
       else if (first <= GPOINTER_TO_INT (list->data) &&
 	       last >= GPOINTER_TO_INT (list->data))
-	list->data += d;
+	list->data = GINT_TO_POINTER (GPOINTER_TO_INT (list->data) + d);
     }
   
   if (clist->focus_row == source_row)

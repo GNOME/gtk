@@ -57,7 +57,7 @@ struct _GtkSignal
   guint		      function_offset;
   GtkSignalMarshaller marshaller;
   GtkType	      return_val;
-  GtkSignalRunType    signal_flags : 16;
+  guint		      signal_flags : 16;
   guint		      nparams : 16;
   GtkType	     *params;
   GHookList	     *hook_list;

@@ -27,7 +27,7 @@
 
 enum {
   ARG_0,
-  ARG_ADJUSTMENT,
+  ARG_ADJUSTMENT
 };
 
 static void gtk_hscale_class_init    (GtkHScaleClass *klass);

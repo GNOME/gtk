@@ -1,3 +1,16 @@
+Thu Dec 10 20:48:19 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkclist.c: avoid void pointer math
+
+	* gtk/gtkhscale.c
+	* gtk/gtkhscrollbar.c
+	* gtk/gtkvscale.c
+	* gtk/gtkvscrollbar.c: removed trailing , from enums
+
+	* gtk/gtksignal.c: can't use enums as a bitfield type, use guint
+
+	* gtk/testgtk.c: removed C++ comment added by owenpoo
+
 Thu Dec 10 21:48:34 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.[ch]: Added gtk_drag_source_unset()
