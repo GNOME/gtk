@@ -1,3 +1,17 @@
+Sun Mar  7 17:38:03 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkbutton.c (gtk_button_class_init): actually use
+	gtk_button_add.
+
+	* gtk/gtkfilechooserdefault.c (error_building_filename_dialog):
+	use the uri, not the path, #136317
+	(renderer_edited_cb): ditto
+	(shortcuts_add_bookmark_from_path): ditto
+	(remove_bookmark_button_clicked_cb): ditto
+	(gtk_file_chooser_default_remove_shortcut): ditto
+	(update_from_entry): ditto
+	(up_folder_handler): ditto
+
 Sun Mar  7 16:07:08 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_init): set

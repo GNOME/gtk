@@ -196,6 +196,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->leave_notify_event = gtk_button_leave_notify;
 
   container_class->child_type = gtk_button_child_type;
+  container_class->add = gtk_button_add;
 
   klass->pressed = gtk_real_button_pressed;
   klass->released = gtk_real_button_released;

@@ -641,13 +641,15 @@ error_building_filename_dialog (GtkFileChooserDefault *impl,
 				const char            *file_part,
 				GError                *error)
 {
+  char *uri;
   char *msg;
 
+  uri = gtk_file_system_path_to_uri (impl->file_system, base_path);
   msg = g_strdup_printf (_("Could not build file name from '%s' and '%s':\n%s"),
-			 gtk_file_path_get_string (base_path),
-			 file_part,
+			 uri, file_part,
 			 error->message);
   error_message (impl, msg);
+  g_free (uri);
   g_free (msg);
   g_error_free (error);
 }
@@ -1277,9 +1279,11 @@ renderer_edited_cb (GtkCellRendererText   *cell_renderer_text,
 
   error = NULL;
   if (!gtk_file_system_create_folder (impl->file_system, file_path, &error))
-    error_dialog (impl,
-		  _("Could not create folder %s:\n%s"),
-		  file_path, error);
+    {
+      error_dialog (impl,
+		    _("Could not create folder %s:\n%s"),
+		    file_path, error);
+    }
 
   gtk_file_path_free (file_path);
 
@@ -1427,10 +1431,13 @@ shortcuts_add_bookmark_from_path (GtkFileChooserDefault *impl,
   else if (!gtk_file_info_get_is_folder (info))
     {
       char *msg;
+      char *uri;
 
+      uri = gtk_file_system_path_to_uri (impl->file_system, path);
       msg = g_strdup_printf (_("Could not add bookmark for %s because it is not a folder."),
-			     gtk_file_path_get_string (path));
+			     uri);
       error_message (impl, msg);
+      g_free (uri);
       g_free (msg);
     }
   else
@@ -1504,10 +1511,12 @@ remove_bookmark_button_clicked_cb (GtkButton *button,
 
       error = NULL;
       if (!gtk_file_system_remove_bookmark (impl->file_system, path, &error))
-	error_dialog (impl,
-		      _("Could not remove bookmark for %s:\n%s"),
-		      path,
-		      error);
+	{
+	  error_dialog (impl,
+			_("Could not remove bookmark for %s:\n%s"),
+			path,
+			error);
+	}
     }
 }
 
@@ -3251,6 +3260,7 @@ gtk_file_chooser_default_remove_shortcut_folder (GtkFileChooser    *chooser,
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
   int pos;
   GtkTreeIter iter;
+  char *uri;
   int i;
 
   if (impl->num_shortcuts == 0)
@@ -3282,11 +3292,13 @@ gtk_file_chooser_default_remove_shortcut_folder (GtkFileChooser    *chooser,
 
  out:
 
+  uri = gtk_file_system_path_to_uri (impl->file_system, path);
   g_set_error (error,
 	       GTK_FILE_CHOOSER_ERROR,
 	       GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
 	       _("shortcut %s does not exist"),
-	       gtk_file_path_get_string (path));
+	       uri);
+  g_free (uri);
 
   return FALSE;
 }
@@ -4043,12 +4055,14 @@ update_from_entry (GtkFileChooserDefault *impl,
       if (!subfolder_path)
 	{
 	  char *msg;
+	  char *uri;
 
+	  uri = gtk_file_system_path_to_uri (impl->file_system, folder_path);
 	  msg = g_strdup_printf (_("Could not build file name from '%s' and '%s':\n%s"),
-				 gtk_file_path_get_string (folder_path),
-				 file_part,
+				 uri, file_part,
 				 error->message);
 	  error_message (impl, msg);
+	  g_free (uri);
 	  g_free (msg);
 	  g_object_unref (folder);
 	  return;
@@ -4081,10 +4095,11 @@ update_from_entry (GtkFileChooserDefault *impl,
 
 	  error = NULL;
 	  if (!_gtk_file_chooser_select_path (GTK_FILE_CHOOSER (impl), subfolder_path, &error))
-	    error_dialog (impl,
-			  _("Could not select %s:\n%s"),
-			  subfolder_path,
-			  error);
+	    {
+	      error_dialog (impl,
+			    _("Could not select %s:\n%s"),
+			    subfolder_path, error);
+	    }
 	}
 
       g_object_unref (folder);
@@ -4156,10 +4171,11 @@ up_folder_handler (GtkFileChooserDefault *impl)
 	}
     }
   else
-    error_dialog (impl,
-		  _("Could not go to the parent folder of %s:\n%s"),
-		  impl->current_folder,
-		  error);
+    {
+      error_dialog (impl,
+		    _("Could not go to the parent folder of %s:\n%s"),
+		    impl->current_folder, error);
+    }
 }
 
 /* Handler for the "home-folder" keybinding signal */
