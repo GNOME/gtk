@@ -1,3 +1,10 @@
+Sat Nov  2 08:41:47 2002  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/tmpl/gtktreestore.sgml: clean up the wording.
+
+	* gtk/tmpl/gtkliststore.sgml: Add an example and clean up the
+	wording.
+
 2002-11-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/tmpl/fonts.sgml: 
