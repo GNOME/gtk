@@ -328,16 +328,36 @@ gdk_pixdata_from_pixbuf (GdkPixdata      *pixdata,
     {
       guint pad, n_bytes = rowstride * height;
       guint8 *img_buffer_end, *data;
+      GdkPixbuf *buf = NULL;
 
+      if (n_bytes % bpp != 0) 
+	{
+	  rowstride = pixbuf->width * bpp;
+	  n_bytes = rowstride * height;
+	  data = g_malloc (n_bytes);
+	  buf = gdk_pixbuf_new_from_data (data,
+					  GDK_COLORSPACE_RGB,
+					  pixbuf->has_alpha, 8,
+					  pixbuf->width,
+					  pixbuf->height,
+					  rowstride,
+					  NULL, NULL);
+	  gdk_pixbuf_copy_area (pixbuf, 0, 0, pixbuf->width, pixbuf->height,
+				buf, 0, 0);
+	}
+      else
+	buf = pixbuf;
       pad = rowstride;
       pad = MAX (pad, 130 + n_bytes / 127);
       data = g_new (guint8, pad + n_bytes);
       free_me = data;
       img_buffer = data;
       img_buffer_end = rl_encode_rgbx (img_buffer,
-				       pixbuf->pixels, pixbuf->pixels + n_bytes,
+				       buf->pixels, buf->pixels + n_bytes,
 				       bpp);
       length = img_buffer_end - img_buffer;
+      if (buf != pixbuf)
+	g_object_unref (buf);
     }
   else
     {

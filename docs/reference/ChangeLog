@@ -1,3 +1,8 @@
+2004-08-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf/gdk-pixbuf-csource.xml: Document bugs of
+	the runlength encoder.
+
 Tue Aug 24 02:28:21 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-docs.sgml: Include visual index.

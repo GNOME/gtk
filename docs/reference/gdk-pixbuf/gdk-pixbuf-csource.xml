@@ -154,7 +154,9 @@ Gtk+ distribution, available from <ulink url="http://www.gtk.org">www.gtk.org</u
 
 <refsect1><title>Bugs</title>
 <para>
-None known yet.
+The runlength encoder gets out of sync with the pixel boundaries, since
+it includes the rowstride padding in the encoded stream. Furthermore, it
+generates pixbufs with suboptimal rowstride in some cases.
 </para>
 </refsect1>
 
