@@ -1,3 +1,14 @@
+Mon Jan 29 15:22:51 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_remove): When removing an
+	item from a menu, check to see if it matches 
+	menu->old_active_menu_item, and if so, unref and clear
+	old_active_menu_item (Patch from Pavel Cisler)
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_remove): Unset 
+	menu_shell->active_menu_item, if it is the child being
+	removed. (Patch based on that of Gene Ragan, #50337)
+
 2001-01-03  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/gdkwindow.c:
