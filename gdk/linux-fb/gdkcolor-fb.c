@@ -37,6 +37,7 @@
 static gint  gdk_colormap_match_color (GdkColormap *cmap,
 				       GdkColor    *color,
 				       const gchar *available);
+static void  gdk_fb_color_round_to_hw (GdkColor *color);
 
 static gpointer parent_class;
 
@@ -112,6 +113,7 @@ gdk_colormap_new (GdkVisual *visual,
 		  gint       private_cmap)
 {
   GdkColormap *colormap;
+  GdkColormap *system;
   GdkColormapPrivateFB *private;
   GdkFBDisplay *fbd;
   int i;
@@ -140,6 +142,9 @@ gdk_colormap_new (GdkVisual *visual,
       
       private->hash = g_hash_table_new ((GHashFunc) gdk_color_hash,
 					(GEqualFunc) gdk_color_equal);
+
+      system = gdk_colormap_get_system ();
+      memcpy (colormap->colors, system->colors, colormap->size * sizeof (GdkColor));
       
       if (private_cmap)
 	{
@@ -212,24 +217,44 @@ gdk_colormap_get_system (void)
 
   if (!colormap)
     {
-      guint16 red[256], green[256], blue[256];
-      struct fb_cmap fbc = {0, 256};
-      int i, r, g, b;
+      GdkColormapPrivateFB *private;
       GdkVisual *visual = gdk_visual_get_system ();
+      int i, r, g, b;
+      
+      colormap = g_object_new (gdk_colormap_get_type (), NULL);
+      private = GDK_COLORMAP_PRIVATE_DATA (colormap);
 
-      if (visual->type == GDK_VISUAL_GRAYSCALE
-	 || visual->type ==  GDK_VISUAL_PSEUDO_COLOR)
+      colormap->visual = visual;
+      private->hash = NULL;
+      
+      colormap->size = visual->colormap_size;
+      colormap->colors = NULL;
+      
+      switch (visual->type)
 	{
-	  fbc.red = red;
-	  fbc.green = green;
-	  fbc.blue = blue;
+	case GDK_VISUAL_STATIC_GRAY:
+	case GDK_VISUAL_STATIC_COLOR:
+	case GDK_VISUAL_GRAYSCALE:
+	case GDK_VISUAL_PSEUDO_COLOR:
+	  private->info = g_new0 (GdkColorInfo, colormap->size);
+	  colormap->colors = g_new (GdkColor, colormap->size);
+	  
+	  private->hash = g_hash_table_new ((GHashFunc) gdk_color_hash,
+					    (GEqualFunc) gdk_color_equal);
 	  switch(visual->type)
 	    {
 	    case GDK_VISUAL_GRAYSCALE:
-	      for(i = 0; i < 256; i++)
-		red[i] = green[i] = blue[i] = i << 8;
+	      for(i = 0; i < 256; i++) {
+		colormap->colors[i].red = 
+		  colormap->colors[i].green =
+		  colormap->colors[i].blue = i << 8;
+		gdk_fb_color_round_to_hw (&colormap->colors[i]);
+	      }
 	      i--;
-	      red[i] = green[i] = blue[i] = 65535; /* Make it a true white */
+	      colormap->colors[i].red = 
+		colormap->colors[i].green =
+		colormap->colors[i].blue = 65535; /* Make it a true white */
+	      gdk_fb_color_round_to_hw (&colormap->colors[i]);
 	      break;
 	    case GDK_VISUAL_PSEUDO_COLOR:
 	      /* Color cube stolen from gdkrgb upon advice from Owen */
@@ -237,30 +262,58 @@ gdk_colormap_get_system (void)
 		for(g = 0; g < 6; g++)
 		  for(b = 0; b < 6; b++)
 		    {
-		      red[i] = r * 65535 / 5;
-		      green[i] = g * 65535 / 5;
-		      blue[i] = b * 65535 / 5;
+		      colormap->colors[i].red = r * 65535 / 5;
+		      colormap->colors[i].green = g * 65535 / 5;
+		      colormap->colors[i].blue = b * 65535 / 5;
+		      gdk_fb_color_round_to_hw (&colormap->colors[i]);
 		      i++;
 		    }
 	      g_assert (i == 216);
-
-	  /* Fill in remaining space with grays */
+	      /* Fill in remaining space with grays */
 	      for(i = 216; i < 256; i++)
 		{
-		  red[i] = green[i] = blue[i] =
-		    (i - 216) * 40;
+		  colormap->colors[i].red = 
+		    colormap->colors[i].green =
+		    colormap->colors[i].blue = (i - 216) * 40;
+		  gdk_fb_color_round_to_hw (&colormap->colors[i]);
 		}
 	      /* Real white */
-	      red[255] = green[255] = blue[255] = 65535;
+	      colormap->colors[255].red = 
+		  colormap->colors[255].green =
+		  colormap->colors[255].blue = 65535;
+	      gdk_fb_color_round_to_hw (&colormap->colors[255]);
+
 	      break;
 	    default:
 	      break;
 	    }
-
-	  ioctl (gdk_display->fd, FBIOPUTCMAP, &fbc);
+	  break;
+	case GDK_VISUAL_DIRECT_COLOR:
+	  g_error("NYI");
+	  break;
+	default:
+	  g_assert_not_reached ();
+	case GDK_VISUAL_TRUE_COLOR:
+	  break;
 	}
-
-      colormap = gdk_colormap_new (visual, TRUE);
+      
+      /* Lock all colors for the system colormap
+       * on pseudocolor visuals. The AA text rendering
+       * takes to many colors otherwise.
+       */
+      if ((visual->type == GDK_VISUAL_GRAYSCALE) ||
+	  (visual->type == GDK_VISUAL_PSEUDO_COLOR))
+	{
+	  for(i = 0; i < 256; i++)
+	    {
+	      colormap->colors[i].pixel = i;
+	      private->info[i].ref_count = 1;
+	      g_hash_table_insert (private->hash,
+				   &colormap->colors[i],
+				   &colormap->colors[i]);
+	    }
+	}
+      gdk_colormap_change (colormap, colormap->size);
     }
 
   return colormap;
@@ -443,6 +496,23 @@ gdk_colormap_free_colors (GdkColormap *colormap,
  * Color allocation *
  ********************/
 
+static void
+gdk_fb_color_round_to_hw (GdkColor *color)
+{
+  guint rmask, gmask, bmask, len;
+
+  len = gdk_display->modeinfo.red.length;
+  rmask = ((1 << len) - 1) << (16-len);
+  len = gdk_display->modeinfo.green.length;
+  gmask = ((1 << len) - 1) << (16-len);
+  len = gdk_display->modeinfo.blue.length;
+  bmask = ((1 << len) - 1) << (16-len);
+  
+  color->red &=rmask;
+  color->green &=gmask;
+  color->blue &=bmask;
+}
+
 /* Try to allocate a single color using XAllocColor. If it succeeds,
  * cache the result in our colormap, and store in ret.
  */
@@ -461,23 +531,30 @@ gdk_colormap_alloc1 (GdkColormap *colormap,
     return FALSE;
 
   *ret = *color;
-  if (!color->red && !color->green && !color->blue) /* black */
+  
+  gdk_fb_color_round_to_hw (ret);
+
+  for (i = 0; i<colormap->size; i++)
     {
-      ret->pixel = 0;
-      private->info[ret->pixel].ref_count++;
-      return TRUE;
+      if (!(private->info[i].flags && GDK_COLOR_WRITEABLE) &&
+	  (ret->red == colormap->colors[i].red) &&
+	  (ret->green == colormap->colors[i].green) &&
+	  (ret->blue == colormap->colors[i].blue))
+	{
+	  ret->pixel = i;
+	  colormap->colors[i].pixel = i;
+	  if (private->info[i].ref_count == 0)
+	    g_hash_table_insert (private->hash,
+				 &colormap->colors[ret->pixel],
+				 &colormap->colors[ret->pixel]);
+	  private->info[i].ref_count++;
+	  return TRUE;
+	}
     }
 
-  if (color->red == 65535 && color->green == 65535 && color->blue == 65535) /* white */
+  for (i = 0; i<colormap->size; i++)
     {
-      ret->pixel = 255;
-      private->info[ret->pixel].ref_count++;
-      return TRUE;
-    }
-
-  for (i = 1; i < (colormap->size - 1); i++)
-    {
-      if (!private->info[i].ref_count)
+      if (private->info[i].ref_count==0)
 	{
 	  guint16 red = color->red, green = color->green, blue = color->blue;
 	  struct fb_cmap fbc;
@@ -499,7 +576,7 @@ gdk_colormap_alloc1 (GdkColormap *colormap,
 	  return TRUE;
 	}
     }
-
+      
   return FALSE;
 }
 
@@ -700,7 +777,10 @@ gdk_color_change (GdkColormap *colormap,
     case GDK_VISUAL_GRAYSCALE:
       color->red = color->green = color->blue = (color->red + color->green + color->blue)/3;
 
+      /* Fall through */
     case GDK_VISUAL_PSEUDO_COLOR:
+      colormap->colors[color->pixel] = *color;
+      
       fbc.start = color->pixel;
       fbc.red = &color->red;
       fbc.green = &color->green;
@@ -753,7 +833,7 @@ gdk_colormap_match_color (GdkColormap *cmap,
   return index;
 }
 
-gint
+gboolean
 gdk_colors_alloc (GdkColormap	*colormap,
 		  gboolean 	 contiguous,
 		  gulong	*planes,
@@ -761,7 +841,45 @@ gdk_colors_alloc (GdkColormap	*colormap,
 		  gulong	*pixels,
 		  gint		 npixels)
 {
-  return 0;
+  GdkColormapPrivateFB *private;
+  gint found, i, col;
+
+  g_return_val_if_fail (colormap != NULL, FALSE);
+
+  private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+  
+  if (nplanes > 0)
+    return 0;
+
+  found = 0;
+  for (i = 1; i < colormap->size; i++)
+    {
+      if (private->info[i].ref_count == 0)
+	{
+	  found++;
+	  if (found >= npixels)
+	    break;
+	}
+    }
+
+  if (found < npixels)
+    return FALSE;
+
+  col = 0;
+  for (i = 1; i < colormap->size; i++)
+    {
+      if (private->info[i].ref_count == 0)
+	{
+	  pixels[col++] = i;
+	  private->info[i].ref_count++;
+	  private->info[i].flags |= GDK_COLOR_WRITEABLE;
+	  if (col == npixels)
+	    return TRUE;
+	}
+    }
+
+  g_assert_not_reached ();
+  return FALSE;
 }
 
 void
@@ -770,4 +888,31 @@ gdk_colors_free	(GdkColormap	*colormap,
 		 gint		 npixels,
 		 gulong	 	 planes)
 {
+  GdkColormapPrivateFB *private;
+  gint i, pixel;
+
+  g_return_if_fail (colormap != NULL);
+
+  if ((colormap->visual->type != GDK_VISUAL_PSEUDO_COLOR) &&
+      (colormap->visual->type != GDK_VISUAL_GRAYSCALE))
+    return;
+  
+  private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+  
+  for (i = 0; i < npixels; i++)
+    {
+      pixel = pixels[i];
+      
+      if (private->info[pixel].ref_count)
+	{
+	  private->info[pixel].ref_count--;
+
+	  if (private->info[pixel].ref_count == 0)
+	    {
+	      if (!(private->info[pixel].flags & GDK_COLOR_WRITEABLE))
+		g_hash_table_remove (private->hash, &colormap->colors[pixel]);
+	      private->info[pixel].flags = 0;
+	    }
+	}
+    }
 }

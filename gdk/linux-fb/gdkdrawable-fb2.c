@@ -952,7 +952,8 @@ gdk_fb_draw_image (GdkDrawable *drawable,
   fbd.drawable_data.height = fbd.drawable_data.lim_y = image->height;
   fbd.drawable_data.depth = image->depth;
   fbd.drawable_data.window_type = GDK_DRAWABLE_PIXMAP;
-
+  fbd.drawable_data.colormap = gdk_colormap_get_system ();
+  
   gdk_fb_draw_drawable_2 (drawable, gc, (GdkPixmap *)&fbd, xsrc, ysrc, xdest, ydest, width, height, TRUE, TRUE);
 }
 
