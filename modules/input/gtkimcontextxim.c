@@ -320,7 +320,7 @@ get_im (GdkWindow *client_window,
       if (im)
 	{
 	  info = g_new (GtkXIMInfo, 1);
-	  open_ims = g_slist_prepend (open_ims, im);
+	  open_ims = g_slist_prepend (open_ims, info);
 
 	  info->display = display;
 	  info->locale = g_strdup (locale);
