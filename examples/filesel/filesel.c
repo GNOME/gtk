@@ -1,4 +1,5 @@
 
+#include <config.h>
 #include <gtk/gtk.h>
 
 /* Get the selected filename and print it to the console */

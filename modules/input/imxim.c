@@ -17,6 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
 #include "gtk/gtkintl.h"
 #include "gtk/gtkimmodule.h"
 #include "gtkimcontextxim.h"

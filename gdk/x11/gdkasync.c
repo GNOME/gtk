@@ -43,6 +43,7 @@ used in advertising or otherwise to promote the sale, use or other dealings
 in this Software without prior written authorization from The Open Group.
 
 */
+#include <config.h>
 #include <X11/Xlibint.h>
 #include "gdkasync.h"
 #include "gdkx.h"

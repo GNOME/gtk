@@ -29,6 +29,7 @@
  *                    Owen Taylor, 13 December 2002;
  */
 
+#include <config.h>
 #include <string.h>
 
 #include <glib.h>

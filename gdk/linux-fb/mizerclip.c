@@ -42,6 +42,7 @@ SOFTWARE.
 
 ******************************************************************/
 
+#include <config.h>
 #include "mi.h"
 #include "miline.h"
 

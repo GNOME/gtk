@@ -24,6 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <config.h>
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkradiobutton.h"

@@ -20,6 +20,7 @@
  *
  * Author:  Owen Taylor, Red Hat, Inc.
  */
+#include <config.h>
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>

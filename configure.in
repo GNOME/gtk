@@ -137,6 +137,9 @@ fi
 
 AM_PROG_LIBTOOL
 
+# Make sure we use 64-bit versions of various file stuff.
+AC_SYS_LARGEFILE
+
 AM_PROG_AS
 
 dnl Initialize maintainer mode

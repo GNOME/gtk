@@ -3,6 +3,7 @@
  * The Button Box widgets are used to arrange buttons with padding.
  */
 
+#include <config.h>
 #include <gtk/gtk.h>
 
 static GtkWidget *

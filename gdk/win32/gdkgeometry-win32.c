@@ -29,6 +29,7 @@
  * and Hans Breuer <hans@breuer.org>
  */
 
+#include <config.h>
 #include "gdk.h"		/* For gdk_rectangle_intersect */
 #include "gdkregion.h"
 #include "gdkregion-generic.h"

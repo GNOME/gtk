@@ -20,6 +20,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
 #include "gtkcellrendererseptext.h"
 
 static void gtk_cell_renderer_sep_get_size (GtkCellRenderer *cell,

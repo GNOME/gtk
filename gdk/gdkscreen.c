@@ -21,6 +21,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
 #include "gdk.h"		/* For gdk_rectangle_intersect() */
 #include "gdkcolor.h"
 #include "gdkwindow.h"

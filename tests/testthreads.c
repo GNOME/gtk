@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <gtk/gtk.h>
-#include "config.h"
+#include <config.h>
 
 #ifdef USE_PTHREADS
 #include <pthread.h>

@@ -75,6 +75,7 @@
  */
 
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
+#include <config.h>
 #include "gtktextdisplay.h"
 /* DO NOT go putting private headers in here. This file should only
  * use the semi-public headers, as with gtktextview.c.

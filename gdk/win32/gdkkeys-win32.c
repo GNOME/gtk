@@ -36,7 +36,7 @@
 #include "gdkinternals.h"
 #include "gdkkeysyms.h"
 
-#include "config.h"
+#include <config.h>
 
 guint _gdk_keymap_serial = 0;
 gboolean _gdk_keyboard_has_altgr = FALSE;

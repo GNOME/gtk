@@ -21,10 +21,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
+
 #include <stdlib.h>
 #include <string.h>
 
-#include <config.h>
 #include <glib.h>
 #include "gdkscreen.h"
 #include "gdkscreen-x11.h"

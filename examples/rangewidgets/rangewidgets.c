@@ -1,4 +1,5 @@
 
+#include <config.h>
 #include <gtk/gtk.h>
 
 GtkWidget *hscale, *vscale;

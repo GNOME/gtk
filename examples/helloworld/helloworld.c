@@ -1,4 +1,5 @@
 
+#include <config.h>
 #include <gtk/gtk.h>
 
 /* This is a callback function. The data arguments are ignored

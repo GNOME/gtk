@@ -24,6 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <config.h>
 #include "gdkwindow.h"
 #include "gdkinternals.h"
 #include "gdk.h"		/* For gdk_rectangle_union() */

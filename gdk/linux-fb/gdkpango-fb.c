@@ -1,3 +1,4 @@
+#include <config.h>
 #include <glib.h>
 #include "gdkprivate-fb.h"
 #include "gdkpango.h"

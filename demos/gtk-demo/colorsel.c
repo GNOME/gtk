@@ -5,6 +5,7 @@
  *
  */
 
+#include <config.h>
 #include <gtk/gtk.h>
 
 static GtkWidget *window = NULL;

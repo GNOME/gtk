@@ -3,6 +3,7 @@
  * Dialog widgets are used to pop up a transient window for user feedback.
  */
 
+#include <config.h>
 #include <gtk/gtk.h>
 
 static GtkWidget *window = NULL;

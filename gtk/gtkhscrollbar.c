@@ -25,6 +25,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <config.h>
 #include "gtkhscrollbar.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkintl.h"

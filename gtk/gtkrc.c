@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <locale.h>
 #ifdef HAVE_UNISTD_H

@@ -20,6 +20,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
 #include "gtkradiotoolbutton.h"
 #include "gtkradiobutton.h"
 #include "gtkintl.h"

@@ -47,6 +47,7 @@
  *
  */
 
+#include <config.h>
 #include "gtkmain.h"
 #include "gtktexttag.h"
 #include "gtktexttypes.h"

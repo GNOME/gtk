@@ -24,6 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <config.h>
 #include "gtkhpaned.h"
 
 static void     gtk_hpaned_class_init     (GtkHPanedClass *klass);

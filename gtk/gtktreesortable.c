@@ -18,6 +18,7 @@
  */
 
 
+#include <config.h>
 #include "gtktreesortable.h"
 #include "gtkmarshalers.h"
 

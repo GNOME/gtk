@@ -51,6 +51,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <config.h>
 #include <stdarg.h>
 #include <string.h>
 #include "gdk.h"

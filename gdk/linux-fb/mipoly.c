@@ -51,6 +51,7 @@ SOFTWARE.
  *  to the appropriate routine to actually scan convert the
  *  polygon.
  */
+#include <config.h>
 #include "mi.h"
 
 extern gboolean miFillGeneralPoly(

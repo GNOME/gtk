@@ -44,6 +44,7 @@ SOFTWARE.
 
 /* $TOG: mispans.c /main/7 1998/02/09 14:48:44 kaleb $ */
 
+#include <config.h>
 #include "mi.h"
 #include "mispans.h"
 #include <string.h>		/* for memmove */

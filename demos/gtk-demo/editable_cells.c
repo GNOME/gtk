@@ -6,6 +6,7 @@
  *
  */
 
+#include <config.h>
 #include <gtk/gtk.h>
 #include <string.h>
 #include <stdlib.h>

@@ -1,4 +1,5 @@
 
+#include <config.h>
 #include <gtk/gtk.h>
 
 #define EVENT_METHOD(i, x) GTK_WIDGET_GET_CLASS(i)->x

@@ -17,6 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
 #include "gdkprivate-win32.h"
 #include "gdkscreen.h"
 #include "gdkpango.h"

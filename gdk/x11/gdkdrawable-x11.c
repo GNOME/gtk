@@ -24,10 +24,10 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <config.h>
+
 #include "gdkx.h"
 #include "gdkregion-generic.h"
-
-#include <config.h>
 
 #include <pango/pangoxft.h>
 

@@ -24,11 +24,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <config.h>
+
 #include <stdio.h>
 
 #include "gdktypes.h"
 #include "gdkprivate.h"
-#include "config.h"
 
 guint               _gdk_debug_flags = 0;
 gint                _gdk_error_code = 0;

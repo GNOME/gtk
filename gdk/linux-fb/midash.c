@@ -42,6 +42,7 @@ SOFTWARE.
 ******************************************************************/
 /* $TOG: midash.c /main/14 1998/02/09 14:46:34 kaleb $ */
 
+#include <config.h>
 #include "mi.h"
 
 static miDashPtr CheckDashStorage();

@@ -13,6 +13,7 @@
  * into a table, you would not include the GTK_FILL flag.
  */
 
+#include <config.h>
 #include <gtk/gtk.h>
 
 static GtkWidget *window = NULL;

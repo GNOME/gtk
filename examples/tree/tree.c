@@ -1,5 +1,6 @@
 
 #define GTK_ENABLE_BROKEN
+#include <config.h>
 #include <gtk/gtk.h>
 
 /* for all the GtkItem:: and GtkTreeItem:: signals */

@@ -25,7 +25,7 @@
  */
 
 #include "gdk.h"
-#include "config.h"
+#include <config.h>
 
 #include "gdkwindow.h"
 #include "gdkinputprivate.h"

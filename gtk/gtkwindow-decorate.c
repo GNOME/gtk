@@ -21,6 +21,7 @@
  * Authors: Alexander Larsson <alexl@redhat.com>
  */
 
+#include <config.h>
 #include "gtkprivate.h"
 #include "gtkwindow.h"
 #include "gtkmain.h"

@@ -18,6 +18,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
 #include "gdkdisplay.h"
 #include "gdkscreen.h"
 #include "gdkcursor.h"

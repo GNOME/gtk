@@ -30,6 +30,7 @@
 #undef GDK_DISABLE_DEPRECATED
 #undef GTK_DISABLE_DEPRECATED
 
+#include <config.h>
 #include <math.h>
 #include "gtkcontainer.h"
 #include "gtkpixmap.h"

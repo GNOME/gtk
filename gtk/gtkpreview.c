@@ -27,7 +27,7 @@
 #undef GDK_DISABLE_DEPRECATED
 #undef GTK_DISABLE_DEPRECATED
 
-#include "config.h"
+#include <config.h>
 
 #include <math.h>
 #include <string.h>

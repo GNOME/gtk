@@ -24,6 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#include <config.h>
 #include <string.h>
 
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API

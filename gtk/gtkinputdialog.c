@@ -32,6 +32,7 @@
  */
 
 
+#include <config.h>
 #include <glib/gprintf.h>
 #include <stdlib.h>
 #include "gdk/gdkkeysyms.h"

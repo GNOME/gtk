@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#include <config.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -38,8 +40,6 @@
 #include "gdkinternals.h"
 #include "gdkdisplay-x11.h"
 #include "gdkkeysyms.h"
-
-#include "config.h"
 
 #ifdef HAVE_XKB
 #include <X11/XKBlib.h>

@@ -1,6 +1,6 @@
+#include <config.h>
 #include <math.h>
 #include <glib.h>
-#include "config.h"
 
 #include "pixops.h"
 #include "pixops-internal.h"

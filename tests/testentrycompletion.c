@@ -1,4 +1,5 @@
 
+#include <config.h>
 #include <gtk/gtk.h>
 
 /* Don't copy this bad example; inline RGB data is always a better

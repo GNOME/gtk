@@ -25,7 +25,7 @@
  */
 
 #include <stdlib.h>
-#include "config.h"
+#include <config.h>
 
 #include "gdkprivate-fb.h"
 #include "gdkinput.h"

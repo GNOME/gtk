@@ -24,6 +24,9 @@
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
+
+#include <config.h>
+
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,7 +37,6 @@
 #include "gtkimmodule.h"
 #include "gtkimcontextsimple.h"
 #include "gtkrc.h"
-#include "config.h"
 #include "gtkintl.h"
 
 /* Do *not* include "gtkprivate.h" in this file. If you do, the

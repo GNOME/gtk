@@ -1,4 +1,5 @@
 
+#include <config.h>
 #include "gtktexttagtable.h"
 #include "gtkmarshalers.h"
 #include "gtktextbuffer.h" /* just for the lame notify_will_remove_tag hack */

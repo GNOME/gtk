@@ -42,6 +42,7 @@ SOFTWARE.
 
 ******************************************************************/
 /* $TOG: mipolyutil.c /main/6 1998/02/09 14:48:12 kaleb $ */
+#include <config.h>
 #include <limits.h>
 #include "mi.h"
 #include "miscanfill.h"

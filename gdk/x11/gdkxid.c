@@ -24,6 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <config.h>
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
 #include <stdio.h>

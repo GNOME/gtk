@@ -31,6 +31,7 @@
 
 #undef GTK_DISABLE_DEPRECATED
 
+#include <config.h>
 #include "gtkarrow.h"
 #include "gtktoolbar.h"
 #include "gtkradiotoolbutton.h"

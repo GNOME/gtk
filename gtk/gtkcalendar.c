@@ -29,7 +29,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "config.h"
+#include <config.h>
 
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>

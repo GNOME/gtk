@@ -20,6 +20,7 @@
  * do not use it.
  */
 
+#include <config.h>
 #include "gtktreedatalist.h"
 #include <string.h>
 static GMemChunk *tree_chunk = NULL;

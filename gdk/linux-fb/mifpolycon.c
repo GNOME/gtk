@@ -41,6 +41,7 @@ SOFTWARE.
 
 ******************************************************************/
 /* $TOG: mifpolycon.c /main/13 1998/02/09 14:47:05 kaleb $ */
+#include <config.h>
 #include <math.h>
 #include "mi.h"
 #include "mifpoly.h"

@@ -26,6 +26,7 @@
 
 #undef GTK_DISABLE_DEPRECATED
 
+#include <config.h>
 #include <stdio.h>
 #include <string.h>
 #define GTK_ENABLE_BROKEN

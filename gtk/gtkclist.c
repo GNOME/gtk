@@ -28,9 +28,11 @@
 #undef GDK_DISABLE_DEPRECATED
 #undef GTK_DISABLE_DEPRECATED
 
+#include <config.h>
+
 #include <stdlib.h>
 #include <string.h>
-#include "config.h"
+
 #include "gtkmain.h"
 #include "gtkclist.h"
 #include "gtkbindings.h"

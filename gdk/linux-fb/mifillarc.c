@@ -25,6 +25,7 @@ Author:  Bob Scheifler, MIT X Consortium
 
 /* $TOG: mifillarc.c /main/20 1998/02/09 14:46:52 kaleb $ */
 
+#include <config.h>
 #include <math.h>
 #include "mi.h"
 #include "mifillarc.h"

@@ -29,24 +29,13 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <config.h>
 #include <math.h>
-
-#if HAVE_CONFIG_H
-#  include <config.h>
-#  if STDC_HEADERS
-#    include <stdio.h>
-#    include <stdlib.h>
-#    include <string.h>
-#  endif
-#else
-#  include <stdio.h>
-#  include <stdlib.h>
-#endif
-
+#include <stdlib.h>
+#include <string.h>
 
 #define ENABLE_GRAYSCALE
 
-#include "config.h"
 #include "gdkprivate.h"
 #include "gdkinternals.h"	/* _gdk_windowing_get_bits_for_depth() */
 

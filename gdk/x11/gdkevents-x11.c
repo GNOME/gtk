@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <config.h>
+
 #include "gdk.h"
 #include "gdkprivate-x11.h"
 #include "gdkinternals.h"
@@ -36,12 +38,7 @@
 
 #include "xsettings-client.h"
 
-#if HAVE_CONFIG_H
-#  include <config.h>
-#  if STDC_HEADERS
-#    include <string.h>
-#  endif
-#endif
+#include <string.h>
 
 #include "gdkinputprivate.h"
 

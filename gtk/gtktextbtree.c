@@ -53,6 +53,7 @@
  */
 
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
+#include <config.h>
 #include "gtktextbtree.h"
 #include <string.h>
 #include <stdlib.h>

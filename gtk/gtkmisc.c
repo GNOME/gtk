@@ -24,6 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <config.h>
 #include "gtkcontainer.h"
 #include "gtkmisc.h"
 #include "gtkintl.h"

@@ -24,6 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#include <config.h>
 #include "gtkseparatormenuitem.h"
 
 G_DEFINE_TYPE(GtkSeparatorMenuItem, gtk_separator_menu_item, GTK_TYPE_MENU_ITEM);

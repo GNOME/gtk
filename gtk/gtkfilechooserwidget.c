@@ -18,6 +18,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
 #include "gtkfilechooserwidget.h"
 #include "gtkfilechooserdefault.h"
 #include "gtkfilechooserutils.h"

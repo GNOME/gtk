@@ -37,6 +37,7 @@
  * we warned you and we're not liable for any head injuries.
  */
 
+#include <config.h>
 #include <string.h>
 
 #include "gtktreemodelsort.h"

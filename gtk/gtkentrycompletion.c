@@ -17,6 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
 #include "gtkentrycompletion.h"
 #include "gtkentryprivate.h"
 #include "gtkcelllayout.h"

@@ -43,6 +43,7 @@ SOFTWARE.
 ******************************************************************/
 /* $TOG: mizerline.c /main/18 1998/02/09 14:49:45 kaleb $ */
 
+#include <config.h>
 #include "mi.h"
 #include "miline.h"
 

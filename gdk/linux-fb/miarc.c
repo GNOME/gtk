@@ -48,6 +48,7 @@ SOFTWARE.
 #define _XOPEN_SOURCE_EXTENDED	/* to get prototype for cbrt on some systems */
 #define _XOPEN_SOURCE     	/* to get prototype for hypot on some systems */
 
+#include <config.h>
 #include <string.h>		/* memmove */
 #include <limits.h>
 

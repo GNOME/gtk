@@ -11,6 +11,7 @@
  * each side of each widget.
  */
 
+#include <config.h>
 #include <gtk/gtk.h>
 
 void

@@ -129,6 +129,7 @@
  * unless the user has a _really_ huge screen.
  */
 
+#include <config.h>
 #include "gdk.h"		/* For gdk_rectangle_intersect */
 #include "gdkprivate-x11.h"
 #include "gdkx.h"

@@ -1,4 +1,4 @@
-#include "config.h"
+#include <config.h>
 
 #include <string.h>
 #include <sys/types.h>
@@ -300,31 +300,69 @@ update_preview_cb (GtkFileChooser *chooser)
 }
 
 static void
+set_current_folder (GtkFileChooser *chooser,
+		    const char     *name)
+{
+  if (!gtk_file_chooser_set_current_folder (chooser, name))
+    {
+      GtkWidget *dialog;
+
+      dialog = gtk_message_dialog_new (GTK_WINDOW (chooser),
+				       GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+				       GTK_MESSAGE_ERROR,
+				       GTK_BUTTONS_CLOSE,
+				       "Could not set the folder to %s",
+				       name);
+      gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy (dialog);
+    }
+}
+
+static void
 set_folder_nonexistent_cb (GtkButton      *button,
 			   GtkFileChooser *chooser)
 {
-  gtk_file_chooser_set_current_folder (chooser, "/nonexistent");
+  set_current_folder (chooser, "/nonexistent");
 }
 
 static void
 set_folder_existing_nonexistent_cb (GtkButton      *button,
 				    GtkFileChooser *chooser)
 {
-  gtk_file_chooser_set_current_folder (chooser, "/usr/nonexistent");
+  set_current_folder (chooser, "/usr/nonexistent");
+}
+
+static void
+set_filename (GtkFileChooser *chooser,
+	      const char     *name)
+{
+  if (!gtk_file_chooser_set_filename (chooser, name))
+    {
+      GtkWidget *dialog;
+
+      dialog = gtk_message_dialog_new (GTK_WINDOW (chooser),
+				       GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+				       GTK_MESSAGE_ERROR,
+				       GTK_BUTTONS_CLOSE,
+				       "Could not select %s",
+				       name);
+      gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy (dialog);
+    }
 }
 
 static void
 set_filename_nonexistent_cb (GtkButton      *button,
 			     GtkFileChooser *chooser)
 {
-  gtk_file_chooser_set_filename (chooser, "/nonexistent");
+  set_filename (chooser, "/nonexistent");
 }
 
 static void
 set_filename_existing_nonexistent_cb (GtkButton      *button,
 				      GtkFileChooser *chooser)
 {
-  gtk_file_chooser_set_filename (chooser, "/usr/nonexistent");
+  set_filename (chooser, "/usr/nonexistent");
 }
 
 int

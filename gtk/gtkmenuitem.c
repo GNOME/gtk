@@ -26,6 +26,7 @@
 
 #define GTK_MENU_INTERNALS
 
+#include <config.h>
 #include <string.h>
 #include "gtkaccellabel.h"
 #include "gtkmain.h"

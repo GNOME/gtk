@@ -39,7 +39,7 @@
  * not have TrackMouseEvent at all (?) --hb
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib/gprintf.h>
 

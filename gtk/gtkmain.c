@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <config.h>
+
 #include "gdkconfig.h"
 
 #include <locale.h>
@@ -48,7 +50,6 @@
 
 #include <pango/pango-utils.h>	/* For pango_split_file_list */
 
-#include "config.h"
 #include "gtkintl.h"
 
 #include "gtkaccelmap.h"

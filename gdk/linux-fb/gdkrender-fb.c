@@ -1,4 +1,4 @@
-#include "config.h"
+#include <config.h>
 #include "gdkprivate-fb.h"
 #include <string.h>
 #include <signal.h>

@@ -31,7 +31,7 @@
  * be in x11/gdkinput-x11.c.
  */
 
-#include "config.h"
+#include <config.h>
 
 #include "gdkdisplay.h"
 #include "gdkinput.h"

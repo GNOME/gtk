@@ -25,6 +25,7 @@
  */
 
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
+#include <config.h>
 #include "gtktextiter.h"
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"

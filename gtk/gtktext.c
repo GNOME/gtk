@@ -27,6 +27,7 @@
 #undef GDK_DISABLE_DEPRECATED
 #undef GTK_DISABLE_DEPRECATED
 
+#include <config.h>
 #include <ctype.h>
 #include <string.h>
 #include "gdk/gdkkeysyms.h"

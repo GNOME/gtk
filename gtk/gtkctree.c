@@ -31,6 +31,7 @@
 #undef GDK_DISABLE_DEPRECATED
 #undef GTK_DISABLE_DEPRECATED
 
+#include <config.h>
 #include <stdlib.h>
 #include "gtkctree.h"
 #include "gtkbindings.h"

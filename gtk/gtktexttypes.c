@@ -1,3 +1,4 @@
+#include <config.h>
 #include "gtktexttypes.h"
 
 /* These are used to represent embedded non-character objects

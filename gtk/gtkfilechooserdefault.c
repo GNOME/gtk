@@ -18,6 +18,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
 #include "gdk/gdkkeysyms.h"
 #include "gtkalignment.h"
 #include "gtkbindings.h"
@@ -3051,14 +3052,9 @@ gtk_file_chooser_default_select_path (GtkFileChooser    *chooser,
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
   GtkFilePath *parent_path;
-  GError *err;
 
-  err = NULL;
-  if (!gtk_file_system_get_parent (impl->file_system, path, &parent_path, &err))
-    {
-      g_propagate_error (error, err);
-      return FALSE;
-    }
+  if (!gtk_file_system_get_parent (impl->file_system, path, &parent_path, error))
+    return FALSE;
 
   if (!parent_path)
     return _gtk_file_chooser_set_current_folder_path (chooser, path, error);

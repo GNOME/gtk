@@ -24,6 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <config.h>
 #include "gtkcheckmenuitem.h"
 #include "gtkaccellabel.h"
 #include "gtkintl.h"

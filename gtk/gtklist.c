@@ -26,6 +26,7 @@
 
 #undef GTK_DISABLE_DEPRECATED
 
+#include <config.h>
 #include <string.h> /* memset */
 
 #include "gtklist.h"

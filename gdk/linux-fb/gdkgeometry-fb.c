@@ -1,3 +1,4 @@
+#include <config.h>
 #include "gdkprivate-fb.h"
 
 void

@@ -1,3 +1,4 @@
+#include <config.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <glib/gprintf.h>
 #include <stdlib.h>

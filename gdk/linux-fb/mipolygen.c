@@ -41,6 +41,7 @@ SOFTWARE.
 
 ******************************************************************/
 /* $TOG: mipolygen.c /main/9 1998/02/09 14:47:51 kaleb $ */
+#include <config.h>
 #include "mi.h"
 #include "mipoly.h"
 

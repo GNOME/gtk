@@ -26,6 +26,7 @@
 
 #undef GTK_DISABLE_DEPRECATED
 
+#include <config.h>
 #include "gtkbindings.h"
 #include "gtklabel.h"
 #include "gtklistitem.h"

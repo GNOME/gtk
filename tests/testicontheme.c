@@ -1,3 +1,4 @@
+#include <config.h>
 #include <gtk/gtkicontheme.h>
 #include <stdlib.h>
 #include <string.h>

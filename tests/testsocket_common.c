@@ -1,5 +1,6 @@
 #undef GTK_DISABLE_DEPRECATED
 
+#include <config.h>
 #include "x11/gdkx.h"
 #include <gtk/gtk.h>
 

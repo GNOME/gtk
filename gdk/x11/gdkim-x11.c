@@ -24,8 +24,11 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <config.h>
+
 #include <locale.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "gdkx.h"
 #include "gdk.h"		/* For gdk_flush() */
@@ -33,13 +36,6 @@
 #include "gdkpixmap.h"
 #include "gdkinternals.h"
 #include "gdkdisplay-x11.h"
-
-#if HAVE_CONFIG_H
-#  include <config.h>
-#  if STDC_HEADERS
-#    include <string.h>
-#  endif
-#endif
 
 
 /* If this variable is FALSE, it indicates that we should
