@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.1.x\n"
-"POT-Creation-Date: 2003-02-06 12:07+0100\n"
-"PO-Revision-Date: 2003-02-07 04:55+0100\n"
+"POT-Creation-Date: 2003-02-25 20:21+0100\n"
+"PO-Revision-Date: 2003-02-22 23:52+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -446,8 +446,7 @@ msgstr "Nalezen předčasný konec souboru"
 #: gdk-pixbuf/io-pnm.c:742 gdk-pixbuf/io-pnm.c:962
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr ""
-"Nezpracované (raw) formáty PNM vyžadují přesně jednu mezeru před náhledovými "
-"daty"
+"Nezpracované (raw) formáty PNM vyžadují přesně jednu mezeru před daty obrázku"
 
 #: gdk-pixbuf/io-pnm.c:769
 msgid "Can't allocate memory for loading PNM image"
@@ -489,114 +488,114 @@ msgstr "Nedostatek paměti pro načtení obrázku ve formátu RAS"
 msgid "The Sun raster image format"
 msgstr "Formát obrázku Sun raster"
 
-#: gdk-pixbuf/io-tga.c:159
+#: gdk-pixbuf/io-tga.c:157
 msgid "Can't allocate memory for IOBuffer struct"
 msgstr "Nepodařilo se alokovat paměť pro strukturu IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:178
+#: gdk-pixbuf/io-tga.c:176
 msgid "Can't allocate memory for IOBuffer data"
 msgstr "Nepodařilo se alokovat paměť pro data IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:189
+#: gdk-pixbuf/io-tga.c:187
 msgid "Can't realloc IOBuffer data"
 msgstr "Nepodařilo se změnit alokaci dat pro IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:219
+#: gdk-pixbuf/io-tga.c:217
 msgid "Can't allocate temporary IOBuffer data"
 msgstr "Nepodařilo se alokovat dočasné data pro IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:283
+#: gdk-pixbuf/io-tga.c:281
 msgid "fread() failed -- premature end-of-file probably encountered"
 msgstr "fread() selhala - asi byl nalezen předčasný konec souboru"
 
-#: gdk-pixbuf/io-tga.c:293
+#: gdk-pixbuf/io-tga.c:291
 msgid "fseek() failed -- premature end-of-file probably encountered"
 msgstr "fseek() selhala - asi byl nalezen předčasný konec souboru"
 
-#: gdk-pixbuf/io-tga.c:326
+#: gdk-pixbuf/io-tga.c:324
 msgid "Can't allocate new pixbuf"
 msgstr "Nepodařilo se alokovat nový buffer pro obrázek"
 
-#: gdk-pixbuf/io-tga.c:639
+#: gdk-pixbuf/io-tga.c:637
 msgid "Can't allocate colormap structure"
 msgstr "Nepodařilo se alokovat strukturu pro barevnou mapu"
 
-#: gdk-pixbuf/io-tga.c:646
+#: gdk-pixbuf/io-tga.c:644
 msgid "Can't allocate colormap entries"
 msgstr "Nepodařilo se alokovat položky barevné mapy"
 
-#: gdk-pixbuf/io-tga.c:668
+#: gdk-pixbuf/io-tga.c:666
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Neočekávaná barevná hloubka pro položky barevné mapy"
 
-#: gdk-pixbuf/io-tga.c:686
+#: gdk-pixbuf/io-tga.c:684
 msgid "Can't allocate TGA header memory"
 msgstr "Nepodařilo se alokovat paměť pro hlavičku obrázku ve formátu TGA"
 
-#: gdk-pixbuf/io-tga.c:719
+#: gdk-pixbuf/io-tga.c:717
 msgid "TGA image has invalid dimensions"
 msgstr "Obrázek ve formátu TGA má neplatné rozměry"
 
-#: gdk-pixbuf/io-tga.c:725
+#: gdk-pixbuf/io-tga.c:723
 msgid "TGA image comment length is too long"
 msgstr "Komentář obrázku ve formátu TGA je příliš dlouhý"
 
-#: gdk-pixbuf/io-tga.c:734 gdk-pixbuf/io-tga.c:743 gdk-pixbuf/io-tga.c:753
-#: gdk-pixbuf/io-tga.c:763 gdk-pixbuf/io-tga.c:770
+#: gdk-pixbuf/io-tga.c:732 gdk-pixbuf/io-tga.c:741 gdk-pixbuf/io-tga.c:751
+#: gdk-pixbuf/io-tga.c:761 gdk-pixbuf/io-tga.c:768
 msgid "TGA image type not supported"
 msgstr "Typ obrázku ve formátu TGA není podporovaný"
 
-#: gdk-pixbuf/io-tga.c:816
+#: gdk-pixbuf/io-tga.c:814
 msgid "Can't allocate memory for TGA context struct"
 msgstr "Nepodařilo se alokovat paměť pro kontextovou strukturu formátu TGA"
 
-#: gdk-pixbuf/io-tga.c:880
+#: gdk-pixbuf/io-tga.c:878
 msgid "Excess data in file"
 msgstr "V souboru jsou data navíc"
 
-#: gdk-pixbuf/io-tga.c:926
+#: gdk-pixbuf/io-tga.c:924
 msgid "Can't allocate memory for TGA header"
 msgstr "Nepodařilo se alokovat paměť pro hlavičku formátu TGA"
 
-#: gdk-pixbuf/io-tga.c:936
+#: gdk-pixbuf/io-tga.c:934
 msgid "Too big value in the infolen field of TGA header."
 msgstr "Příliš velká hodnota v poli infolen hlavičky formátu TGA."
 
-#: gdk-pixbuf/io-tga.c:960
+#: gdk-pixbuf/io-tga.c:958
 msgid "Can't allocate memory for TGA cmap temporary buffer"
 msgstr "Nepodařilo se alokovat paměť pro dočasný buffer TGA cmap"
 
-#: gdk-pixbuf/io-tga.c:972
+#: gdk-pixbuf/io-tga.c:970
 msgid "Can't allocate memory for TGA colormap struct"
 msgstr "Nepodařilo se alokovat paměť pro strukturu barevné mapy formátu TGA"
 
-#: gdk-pixbuf/io-tga.c:981
+#: gdk-pixbuf/io-tga.c:979
 msgid "Can't allocate memory for TGA colormap entries"
 msgstr "Nepodařilo se alokovat paměť pro položky barevné mapy formátu TGA"
 
-#: gdk-pixbuf/io-tga.c:991
+#: gdk-pixbuf/io-tga.c:989
 msgid "Unexpected bitdepth for TGA colormap"
 msgstr "Neočekávaná barevná hloubka pro barevnou mapu formátu TGA"
 
-#: gdk-pixbuf/io-tga.c:1032
+#: gdk-pixbuf/io-tga.c:1030
 msgid "Pseudo-Color image without colormap"
 msgstr "Obrázek s pseudo-barvami bez barevné mapy"
 
-#: gdk-pixbuf/io-tga.c:1039
+#: gdk-pixbuf/io-tga.c:1037
 msgid "Can't seek to image offset -- end-of-file probably encountered"
 msgstr ""
 "Nepodařilo se změnit pozici v souboru - asi bylo dosaženo předčasného konce "
 "souboru"
 
-#: gdk-pixbuf/io-tga.c:1053 gdk-pixbuf/io-tga.c:1155 gdk-pixbuf/io-tga.c:1225
+#: gdk-pixbuf/io-tga.c:1051 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1223
 msgid "Can't allocate pixbuf"
 msgstr "Nepodařilo se alokovat buffer pro obrázek"
 
-#: gdk-pixbuf/io-tga.c:1295 gdk-pixbuf/io-tga.c:1324
+#: gdk-pixbuf/io-tga.c:1293 gdk-pixbuf/io-tga.c:1322
 msgid "Unsupported TGA image type"
 msgstr "Nepodporovaný typ obrázku ve formátu TGA"
 
-#: gdk-pixbuf/io-tga.c:1370
+#: gdk-pixbuf/io-tga.c:1368
 msgid "The Targa image format"
 msgstr "Formát obrázku Targa"
 
@@ -936,7 +935,7 @@ msgstr "Homogenní"
 
 #: gtk/gtkbox.c:139
 msgid "Whether the children should all be the same size"
-msgstr "Zda-li má mít každý potomek stejnou velikost"
+msgstr "Jestli má mít každý potomek stejnou velikost"
 
 #: gtk/gtkbox.c:146 gtk/gtkpreview.c:132
 msgid "Expand"
@@ -944,7 +943,7 @@ msgstr "Expandovat"
 
 #: gtk/gtkbox.c:147
 msgid "Whether the child should receive extra space when the parent grows"
-msgstr "Zda-li má potomek obdržet místo navíc, pokud se rodič zvětší"
+msgstr "Jestli má potomek obdržet místo navíc, pokud se rodič zvětší"
 
 #: gtk/gtkbox.c:153
 msgid "Fill"
@@ -955,7 +954,7 @@ msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 msgstr ""
-"Zda-li má být prostor navíc poskytnutý potomku přidělen tomuto potomku nebo "
+"Jestli má být prostor navíc poskytnutý potomku přidělen tomuto potomku nebo "
 "jako doplnění"
 
 #: gtk/gtkbox.c:160
@@ -975,7 +974,7 @@ msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr ""
-"GtkPackType udávající, zda-li má být potomek sbalen vzhledem k počátku nebo "
+"GtkPackType udávající, zdali má být potomek sbalen vzhledem k počátku nebo "
 "konci rodiče"
 
 #: gtk/gtkbox.c:174 gtk/gtknotebook.c:466 gtk/gtkpaned.c:218
@@ -1931,15 +1930,15 @@ msgstr "Vybrat při fokusu"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Zda se má obsah položky vybrat, pokud získá fokus"
 
-#: gtk/gtkentry.c:3957 gtk/gtklabel.c:3222
+#: gtk/gtkentry.c:3980 gtk/gtklabel.c:3222 gtk/gtktextview.c:6574
 msgid "Select All"
 msgstr "Vybrat vše"
 
-#: gtk/gtkentry.c:3967 gtk/gtklabel.c:3232
+#: gtk/gtkentry.c:3990 gtk/gtklabel.c:3232
 msgid "Input Methods"
 msgstr "Metody vstupu"
 
-#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6543
+#: gtk/gtkentry.c:4000 gtk/gtktextview.c:6593
 msgid "_Insert Unicode control character"
 msgstr "_Vložit řídící znak Unicode"
 
@@ -2296,7 +2295,7 @@ msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
 msgstr ""
-"Zda-li se má použít hodnota vlastnosti Okraje pro přitahování nebo hodnota "
+"Jestli se má použít hodnota vlastnosti Okraje pro přitahování nebo hodnota "
 "odvozená z vlastnosti Pozice ovládací části"
 
 #. Remove this icon source so we don't keep trying to
@@ -2813,7 +2812,7 @@ msgstr "Rozbalit záložku"
 
 #: gtk/gtknotebook.c:474
 msgid "Whether to expand the childs tab or not"
-msgstr "Zda-li se mají rozbalovat záložky potomků"
+msgstr "Jestli se mají rozbalovat záložky potomků"
 
 #: gtk/gtknotebook.c:480
 msgid "Tab fill"
@@ -2821,7 +2820,7 @@ msgstr "Vyplnění záložkami"
 
 #: gtk/gtknotebook.c:481
 msgid "Wheather the childs tab should fill the allocated area or not"
-msgstr "Zda-li by měly záložky potomků vyplnit přidělený prostor"
+msgstr "Jestli by měly záložky potomků vyplnit přidělený prostor"
 
 #: gtk/gtknotebook.c:487
 msgid "Tab pack type"
@@ -4169,7 +4168,7 @@ msgstr "PDF Směrované formátování _pop"
 
 #: gtk/gtktextutil.c:53
 msgid "ZWS _Zero width space"
-msgstr "ZWS _Nulová šířka mezery"
+msgstr "ZWS Mezera _nulové šířky"
 
 #: gtk/gtktextutil.c:54
 msgid "ZWJ Zero width _joiner"
@@ -4211,7 +4210,7 @@ msgstr "Viditelný kurzor"
 msgid "If the insertion cursor is shown"
 msgstr "Zda je zobrazený kurzor pro vkládání"
 
-#: gtk/gtktextview.c:6534
+#: gtk/gtktextview.c:6584
 msgid "Input _Methods"
 msgstr "Vstupní _metody"
 
@@ -4642,7 +4641,7 @@ msgstr "Je fokus"
 
 #: gtk/gtkwidget.c:469
 msgid "Whether the widget is the focus widget within the toplevel"
-msgstr "Zda-li je prvek prvkem fokusu v rámci nejvyšší úrovně"
+msgstr "Jestli je prvek prvkem fokusu v rámci nejvyšší úrovně"
 
 #: gtk/gtkwidget.c:475
 msgid "Can default"
@@ -4868,7 +4867,7 @@ msgstr "Je aktivní"
 
 #: gtk/gtkwindow.c:561
 msgid "Whether the toplevel is the current active window"
-msgstr "Zda-li je prvek na nejvyšší úrovni aktuální aktivní okno"
+msgstr "Jestli je prvek na nejvyšší úrovni aktuální aktivní okno"
 
 #: gtk/gtkwindow.c:568
 msgid "Focus in Toplevel"
@@ -4876,7 +4875,7 @@ msgstr "Fokus na nejvyšší úrovni"
 
 #: gtk/gtkwindow.c:569
 msgid "Whether the input focus is within this GtkWindow"
-msgstr "Zda-li je vstupní fokus uvnitř tohoto GtkWindow"
+msgstr "Jestli je vstupní fokus uvnitř tohoto GtkWindow"
 
 #: gtk/gtkwindow.c:576
 msgid "Type hint"
@@ -4967,10 +4966,9 @@ msgstr "Styl stavu IM"
 msgid "How to draw the input method statusbar"
 msgstr "Jak kreslit stavovou lištu vstupní metody"
 
-#~ msgid ""
-#~ "Whether the arrow keys work, even if the entry contents are not in the "
-#~ "list"
-#~ msgstr "Zda mají šipky fungovat, i když obsah položky není v seznamu"
+msgid ""
+"Whether the arrow keys work, even if the entry contents are not in the list"
+msgstr "Zda mají šipky fungovat, i když obsah položky není v seznamu"
 
-#~ msgid "Language engine code to use for rendering the text"
-#~ msgstr "Kód jazyka použitý pro vykreslení textu"
+msgid "Language engine code to use for rendering the text"
+msgstr "Kód jazyka použitý pro vykreslení textu"
