@@ -94,6 +94,7 @@ static void gtk_notebook_get_arg	     (GtkObject        *object,
 static void gtk_notebook_map                 (GtkWidget        *widget);
 static void gtk_notebook_unmap               (GtkWidget        *widget);
 static void gtk_notebook_realize             (GtkWidget        *widget);
+static void gtk_notebook_unrealize           (GtkWidget        *widget);
 static void gtk_notebook_size_request        (GtkWidget        *widget,
 					      GtkRequisition   *requisition);
 static void gtk_notebook_size_allocate       (GtkWidget        *widget,
@@ -284,6 +285,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->map = gtk_notebook_map;
   widget_class->unmap = gtk_notebook_unmap;
   widget_class->realize = gtk_notebook_realize;
+  widget_class->unrealize = gtk_notebook_unrealize;
   widget_class->size_request = gtk_notebook_size_request;
   widget_class->size_allocate = gtk_notebook_size_allocate;
   widget_class->draw = gtk_notebook_draw;
@@ -562,6 +564,29 @@ gtk_notebook_realize (GtkWidget *widget)
   gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
   if (notebook->scrollable)
     gtk_notebook_panel_realize (notebook);
+}
+
+static void
+gtk_notebook_unrealize (GtkWidget *widget)
+{
+  GtkNotebook *notebook;
+  GdkWindowAttr attributes;
+  gint attributes_mask;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_NOTEBOOK (widget));
+
+  notebook = GTK_NOTEBOOK (widget);
+
+  if (notebook->panel)
+    {
+      gdk_window_set_user_data (notebook->panel, NULL);
+      gdk_window_destroy (notebook->panel);
+      notebook->panel = NULL;
+    }
+
+  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
 
 static void
@@ -3969,6 +3994,7 @@ gtk_notebook_set_scrollable (GtkNotebook *notebook,
 	    }
 	  else if (notebook->panel)
 	    {
+	      gdk_window_set_user_data (notebook->panel, NULL);
 	      gdk_window_destroy (notebook->panel);
 	      notebook->panel = NULL;
 	    }

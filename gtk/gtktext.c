@@ -4827,15 +4827,15 @@ expand_scratch_buffer (GtkText* text, guint len)
       
       if (text->use_wchar)
         {
-	  if (text->scratch_buffer.wc)
+	  if (!text->scratch_buffer.wc)
 	    text->scratch_buffer.wc = g_new (GdkWChar, i);
 	  else
 	    text->scratch_buffer.wc = g_realloc (text->scratch_buffer.wc,
-					      i*sizeof (GdkWChar));
+						 i * sizeof (GdkWChar));
         }
       else
         {
-	  if (text->scratch_buffer.ch)
+	  if (!text->scratch_buffer.ch)
 	    text->scratch_buffer.ch = g_new (guchar, i);
 	  else
 	    text->scratch_buffer.ch = g_realloc (text->scratch_buffer.ch, i);
