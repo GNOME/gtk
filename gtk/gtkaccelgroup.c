@@ -97,6 +97,19 @@ gtk_accel_group_class_init (GtkAccelGroupClass *class)
   object_class->finalize = gtk_accel_group_finalize;
 
   class->accel_changed = NULL;
+
+  /**
+   * GtkAccelGroup::accel-activate:
+   * @accel_group: the #GtkAccelGroup which received the signal
+   * @acceleratable: the object on which the accelerator was activated
+   * @keyval: the accelerator keyval
+   * @modifier: the modifier combination of the accelerator
+   *
+   * The accel-activate signal is an implementation detail of
+   * #GtkAccelGroup and not meant to be used by applications.
+   * 
+   * Returns: %TRUE if the accelerator was activated
+   */
   signal_accel_activate =
     g_signal_new ("accel_activate",
 		  G_OBJECT_CLASS_TYPE (class),
@@ -108,6 +121,20 @@ gtk_accel_group_class_init (GtkAccelGroupClass *class)
 		  G_TYPE_OBJECT,
 		  G_TYPE_UINT,
 		  GDK_TYPE_MODIFIER_TYPE);
+  /**
+   * GtkAccelGroup::accel-changed:
+   * @accel_group: the #GtkAccelGroup which received the signal
+   * @keyval: the accelerator keyval
+   * @modifier: the modifier combination of the accelerator
+   * @accel_closure: the #GClosure of the accelerator
+   *
+   * The accel-changed signal is emitted when a #GtkAccelGroupEntry
+   * is added to or removed from the accel group. 
+   *
+   * Widgets like #GtkAccelLabel which display an associated 
+   * accelerator should connect to this signal, and rebuild 
+   * their visual representation if the @accel_closure is theirs.
+   */
   signal_accel_changed =
     g_signal_new ("accel_changed",
 		  G_OBJECT_CLASS_TYPE (class),
