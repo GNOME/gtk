@@ -1,3 +1,8 @@
+2002-01-22 Padraig O'Briain <padraig.obriain@sun.com>
+
+	* gtk/gtktreestore.c (gtk_tree_store_iter_children):
+	Update last change to prevent core dump
+
 Mon Jan 21 01:21:54 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreestore.c: add some more stamp checks (pointed out
