@@ -1,3 +1,8 @@
+Sun Nov 28 12:11:21 2004  Manish Singh  <yosh@gimp.org>
+
+	* makegdkpixbufalias.pl: ytpo fix, so attributes are really
+	propagated.
+
 2004-11-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf.symbols: 

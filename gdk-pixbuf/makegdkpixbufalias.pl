@@ -91,7 +91,7 @@ while (<>) {
   }
   
   print <<EOF
-extern __typeof ($str) $alias __attribute((visibility("hidden")))$attribute;
+extern __typeof ($str) $alias __attribute((visibility("hidden")))$attributes;
 extern __typeof ($str) $str __attribute((alias("$alias"), visibility("default")));
 \#define $str $alias
 
