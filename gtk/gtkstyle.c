@@ -2560,8 +2560,6 @@ static void gtk_default_draw_entry   (GtkStyle      *style,
    else if (height == -1)
      gdk_window_get_size (window, NULL, &height);
    
-   if (area)
-     gdk_gc_set_clip_rectangle (style->base_gc[state_type], area);
    if (!strcmp("selected",detail))
      {
         gdk_draw_rectangle (window,

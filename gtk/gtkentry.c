@@ -1270,7 +1270,8 @@ gtk_entry_draw_text (GtkEntry *entry)
 
       if (!entry->text)
 	{	  
-	  gdk_window_clear (entry->text_area);
+	  gtk_paint_entry(widget->style, entry->text_area,GTK_WIDGET_STATE(widget),
+			     NULL, widget, "entry_bg", 0, 0, -1, -1);
 	  if (editable->editable)
 	    gtk_entry_draw_cursor (entry);
 	  return;
@@ -1298,7 +1299,6 @@ gtk_entry_draw_text (GtkEntry *entry)
        else
 	 {
 	    drawable = entry->text_area;
-	    gdk_window_clear (entry->text_area);
 	 }
        gtk_paint_entry (widget->style, drawable, 
 			GTK_WIDGET_STATE(widget), 
@@ -2331,9 +2331,7 @@ gtk_entry_style_set	(GtkWidget      *widget,
     }
 
   if (GTK_WIDGET_DRAWABLE (widget))
-    gdk_window_clear (widget->window);
-
-   gtk_widget_queue_draw(widget);
+    gtk_widget_queue_clear(widget);
 }
 
 static void
@@ -2350,5 +2348,5 @@ gtk_entry_state_changed (GtkWidget      *widget,
     }
 
   if (GTK_WIDGET_DRAWABLE (widget))
-    gdk_window_clear (widget->window);
+    gtk_widget_queue_clear(widget);
 }

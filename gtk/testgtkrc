@@ -19,13 +19,30 @@ pixmap_path ".:/home/raster/themes"
 
 style "default"
 {
-#  font = "-adobe-helvetica-medium-r-normal--8-*-*-*-*-*-*-*"
+  font = "-*-helvetica-medium-r-normal--8-*-*-*-*-*-*-*"
 #  bg_pixmap[NORMAL] = "marble.xpm"
+#  engine "motif" 
+#  {
+#  }
+# bg[NORMAL] = { 0.75, 0.75, 0.75 }
+#  bg[PRELIGHT] = { 0.75, 0.75, 0.75 }
+}
 
-  engine "win95" 
-  {
-  }
-  
+style "menu"
+{
+#  fg[PRELIGHT] = { 1.0, 1.0, 1.0 }
+}
+
+style "list"
+{
+#   bg[NORMAL] = { 0.9, 0.9, 0.9 }
+#   bg[PRELIGHT] = { 0.9, 0.9, 0.9 }
+}
+
+#widget_class "GtkMenuItem" style "menu"
+#widget_class "GtkCTree" style "list"
+#widget_class "GtkCList" style "list"
+
 #  engine "th" 
 #    { 
 #      image 
@@ -44,7 +61,7 @@ style "default"
 #	shadow      = OUT
 #      }
 #    }
-}
+#}
 
 style "window"
 {
@@ -53,8 +70,8 @@ style "window"
 
 style "scale"
 {
-  fg[NORMAL] = { 1.0, 0, 0 }
-  bg[PRELIGHT] = { 1.0, 1.0, 0 }
+#  fg[NORMAL] = { 1.0, 0, 0 }
+#  bg[PRELIGHT] = { 1.0, 1.0, 0 }
 #  bg_pixmap[NORMAL] = "<parent>"
 }
 
@@ -71,54 +88,54 @@ style "button"
 
 style "toggle_button" = "button"
 {
-  fg[NORMAL] = { 1.0, 0, 0 }
-  fg[ACTIVE] = { 1.0, 0, 0 }
+#  fg[NORMAL] = { 1.0, 0, 0 }
+#  fg[ACTIVE] = { 1.0, 0, 0 }
 #  bg_pixmap[NORMAL] = "<parent>"
 }
 
 style "text"
 {
-  bg_pixmap[NORMAL] = "marble.xpm"
-  text[NORMAL] = { 0.2, 0.2, 1.0 }
-  fg[NORMAL] = { 1.0, 1.0, 1.0 }
-  base[NORMAL] = { 0.0, 0.0, 0.0 }
+#  bg_pixmap[NORMAL] = "marble.xpm"
+#  text[NORMAL] = { 0.2, 0.2, 1.0 }
+#  fg[NORMAL] = { 1.0, 1.0, 1.0 }
+#  base[NORMAL] = { 0.0, 0.0, 0.0 }
 }
 
 style "slider"
 {
-  fg[NORMAL] = { 1.0, 1.0, 1.0 }
-  bg[NORMAL] = { 0.0, 0.0, 1.0 }
-  bg[ACTIVE] = { 0.0 ,0.0, 0.5 }
-  bg[PRELIGHT] = { 0.75 ,0.75, 1.0 }
+#  fg[NORMAL] = { 1.0, 1.0, 1.0 }
+#  bg[NORMAL] = { 0.0, 0.0, 1.0 }
+#  bg[ACTIVE] = { 0.0 ,0.0, 0.5 }
+#  bg[PRELIGHT] = { 0.75 ,0.75, 1.0 }
 }
 
 style "ruler"
 {
-  font = '-adobe-helvetica-medium-r-normal--*-80-*-*-*-*-*-*'
+#  font = '-adobe-helvetica-medium-r-normal--*-80-*-*-*-*-*-*'
 }
 
 style "curve"
 {
-  fg[NORMAL] = { 58000, 0, 0 }			# red
+#  fg[NORMAL] = { 58000, 0, 0 }			# red
 }
 
 style "red-bar"
 {
-  bg[PRELIGHT] = { 0.95, .55, 0.55 }
+#  bg[PRELIGHT] = { 0.95, .55, 0.55 }
 }
 
 # override testgtk2, introduce the green color in the button list
 style 'button_list' = 'button'
 {
 #  font = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
-  bg[PRELIGHT] = { 0, 0.75, 0x00 }
+#  bg[PRELIGHT] = { 0, 0.75, 0x00 }
 }
 widget "main window.*GtkScrolledWindow.*GtkButton*" style "button_list"
 
 # common default
 class "GtkWidget" style "default"
 
-#class "GtkScrollbar" style "red-bar"
+class "GtkScrollbar" style "red-bar"
 
 widget_class "GtkWindow" style "window"
 widget_class "GtkDialog" style "window"

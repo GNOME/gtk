@@ -176,6 +176,8 @@ struct _GtkCList
   gint drag_pos;
   gint htimer;
   gint vtimer;
+  
+  GdkWindow *dummy_window;
 };
 
 struct _GtkCListClass

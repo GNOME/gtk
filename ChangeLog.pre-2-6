@@ -1,3 +1,7 @@
+Fri Jul 31 19:45:12 EDT 1998 The Rasterman <raster@redhat.com>
+	* hopefulyl fixed problem wiht togglebuttons acting like
+          radiobuttons in gtktogglebutton.c
+
 Thu Jul 30 23:36:46 EDT 1998 The Rasterman <raster@redhat.com>
 	* fixed another drawing buglet in the frame drawing code (actually
 	  in the clearing code but anyway in gtkstyle.c)

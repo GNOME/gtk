@@ -450,6 +450,14 @@ draw_shadow (GtkStyle      *style,
       break;
     }
   
+  gdk_gc_set_clip_rectangle (gc1, NULL);
+  gdk_gc_set_clip_rectangle (gc2, NULL);
+  if ((shadow_type == GTK_SHADOW_IN) ||
+      (shadow_type == GTK_SHADOW_OUT))
+    {
+      gdk_gc_set_clip_rectangle (style->black_gc, NULL);
+      gdk_gc_set_clip_rectangle (style->bg_gc[state_type], NULL);
+    }
   if (area)
     {
       gdk_gc_set_clip_rectangle (gc1, area);
@@ -1223,6 +1231,8 @@ draw_check   (GtkStyle      *style,
   GdkGC *gc2;
   gint xx, yy, ww, hh;
   
+  printf("%p %s %i %i\n", detail, detail, width, height);
+
   gc2 = style->light_gc[GTK_STATE_NORMAL];
   gc1 = style->black_gc;
   
@@ -1231,10 +1241,33 @@ draw_check   (GtkStyle      *style,
       gdk_gc_set_clip_rectangle (gc1, area);
       gdk_gc_set_clip_rectangle (gc2, area);
     }
-  gdk_draw_rectangle (window, gc1, TRUE,
+  gdk_draw_rectangle (window, gc2, TRUE,
 		      x, y, width, height);
   if (shadow_type == GTK_SHADOW_IN)
     {
+      xx = x + 1;
+      yy = y + 1;
+      ww = width - 2;
+      hh = height - 2;
+      
+      gdk_draw_line(window, gc1, 
+		    xx + ww - 1, yy,
+		    xx + (ww / 3), yy + hh - 3);
+      gdk_draw_line(window, gc1, 
+		    xx, yy + (2 * hh / 3) - 2,
+		    xx + (ww / 3), yy + hh - 3);
+      gdk_draw_line(window, gc1, 
+		    xx + ww - 1, yy + 1,
+		    xx + (ww / 3), yy + hh - 2);
+      gdk_draw_line(window, gc1, 
+		    xx, yy + (2 * hh / 3) - 1,
+		    xx + (ww / 3), yy + hh - 2);
+      gdk_draw_line(window, gc1, 
+		    xx + ww - 1, yy + 2,
+		    xx + (ww / 3), yy + hh - 1);
+      gdk_draw_line(window, gc1, 
+		    xx, yy + (2 * hh / 3),
+		    xx + (ww / 3), yy + hh - 1);
     }
   
   if (area)
@@ -1243,7 +1276,9 @@ draw_check   (GtkStyle      *style,
       gdk_gc_set_clip_rectangle (gc2, NULL);
     }
   gtk_paint_shadow (style, window, state_type, GTK_SHADOW_IN, area, widget, detail,
-		    x, y, width, height);
+		    x - style->klass->xthickness, y - style->klass->ythickness, 
+		    width + 2 * style->klass->xthickness, 
+		    height + 2 * style->klass->ythickness);
 }
 
 void
@@ -1259,8 +1294,53 @@ draw_option  (GtkStyle      *style,
 	      gint           width,
 	      gint           height)
 {
-   gtk_paint_diamond (style, window, state_type, shadow_type, area, widget,
-		                        detail, x, y, width, height);
+  GdkGC *gc1;
+  GdkGC *gc2;
+  GdkGC *gc3;
+  GdkGC *gc4;
+  
+  x -= 1;
+  y -= 1;
+  width += 2;
+  height += 2;
+ 
+  gc1 = style->light_gc[GTK_STATE_NORMAL];
+  gc2 = style->bg_gc[GTK_STATE_NORMAL];
+  gc3 = style->dark_gc[GTK_STATE_NORMAL];
+  gc4 = style->black_gc;
+  
+  if (area)
+    {
+      gdk_gc_set_clip_rectangle (gc1, area);
+      gdk_gc_set_clip_rectangle (gc2, area);
+      gdk_gc_set_clip_rectangle (gc3, area);
+      gdk_gc_set_clip_rectangle (gc4, area);
+    }
+  
+  gdk_draw_arc (window, gc3, FALSE, x, y, width, height, 45*64 , 225 * 64);
+  gdk_draw_arc (window, gc3, TRUE, x, y, width, height, 45*64 , 225 * 64);
+  gdk_draw_arc (window, gc1, FALSE, x, y, width, height, 225*64 , 180 * 64);
+  gdk_draw_arc (window, gc1, TRUE, x, y, width, height, 225*64 , 180 * 64);
+  gdk_draw_arc (window, gc4, FALSE, x + 1, y + 1, width - 2, height - 2, 45*64 , 225 * 64);
+  gdk_draw_arc (window, gc4, TRUE, x + 1, y + 1, width - 2, height - 2, 45*64 , 225 * 64);
+  gdk_draw_arc (window, gc2, FALSE, x + 1, y + 1, width - 2, height - 2, 225*64 , 180 * 64);
+  gdk_draw_arc (window, gc2, TRUE, x + 1, y + 1, width - 2, height - 2, 225*64 , 180 * 64);
+  gdk_draw_arc (window, gc1, FALSE, x + 2, y + 2, width - 4, height - 4, 0 , 360 * 64);
+  gdk_draw_arc (window, gc1, TRUE, x + 2, y + 2, width - 4, height - 4, 0 , 360 * 64);
+
+  if (shadow_type == GTK_SHADOW_IN)
+    {  
+      gdk_draw_arc (window, gc4, FALSE, x + 4, y + 4, width - 8, height - 8, 0 , 360 * 64);
+      gdk_draw_arc (window, gc4, TRUE, x + 4, y + 4, width - 8, height - 8, 0 , 360 * 64);
+    }
+  
+  if (area)
+    {
+      gdk_gc_set_clip_rectangle (gc1, NULL);
+      gdk_gc_set_clip_rectangle (gc2, NULL);
+      gdk_gc_set_clip_rectangle (gc3, NULL);
+      gdk_gc_set_clip_rectangle (gc4, NULL);
+    }
 }
 
 void
@@ -1671,15 +1751,15 @@ draw_handle  (GtkStyle      *style,
   
   gdk_gc_set_clip_rectangle (light_gc, &dest);
   gdk_gc_set_clip_rectangle (dark_gc, &dest);
-  
-  for (yy = y + ythick; yy < (y + height - ythick); yy += 3)
-    for (xx = x + xthick; xx < (x + width - xthick); xx += 6)
+
+  yy = y + ythick;
+  for (xx = x + xthick; xx < (x + width - xthick); xx += 6)
     {
-      gdk_draw_point (window, light_gc, xx, yy);
-      gdk_draw_point (window, dark_gc, xx + 1, yy + 1);
-      
-      gdk_draw_point (window, light_gc, xx + 3, yy + 1);
-      gdk_draw_point (window, dark_gc, xx + 4, yy + 2);
+      gdk_draw_line (window, light_gc, xx, yy, xx, yy + height - ythick);
+      gdk_draw_line (window, dark_gc, xx + 1, yy, xx + 1, yy + height - ythick);
+
+      gdk_draw_line (window, light_gc, xx + 3, yy, xx + 3, yy + height - ythick);
+      gdk_draw_line (window, dark_gc, xx + 4, yy, xx + 4, yy + height - ythick);
     }
   gdk_gc_set_clip_rectangle (light_gc, NULL);
   gdk_gc_set_clip_rectangle (dark_gc, NULL);
