@@ -11,7 +11,8 @@ They appear in the <structfield>keyval</structfield> field of the
 #GdkEventKey structure, which is passed to signal handlers for the
 "key-press-event" and "key-release-event" signals.
 The complete list of key values can be found in the &lt;gdk/gdkkeysyms.h&gt;
-header file.
+header file. &lt;gdk/gdkkeysyms.h&gt; is not included in &lt;gtk/gtk.h&gt;, 
+it must be included independently, because the file is quite large.
 </para>
 <para>
 Key values can be converted into a string representation using
@@ -22,6 +23,55 @@ is provided by gdk_keyval_from_name().
 The case of key values can be determined using gdk_keyval_is_upper() and
 gdk_keyval_is_lower(). Key values can be converted to upper or lower case
 using gdk_keyval_to_upper() and gdk_keyval_to_lower().
+</para>
+<para>
+When it makes sense, key values can be converted to and from 
+Unicode characters with gdk_keyval_to_unicode() and gdk_unicode_to_keyval().
+</para>
+
+<para>
+One #GdkKeymap object exists for each user display. GTK 2 supports only one
+display, so gdk_keymap_get_default() returns the singleton #GdkKeymap.  A keymap
+is a mapping from #GdkKeymapKey to key values. You can think of a #GdkKeymapKey
+as a representation of a symbol printed on a physical keyboard key. That is, it
+contains three pieces of information. First, it contains the hardware keycode;
+this is an identifying number for a physical key. Second, it contains the
+<firstterm>level</firstterm> of the key. The level indicates which symbol on the
+key will be used, in a vertical direction. So on a standard US keyboard, the key
+with the number "1" on it also has the exclamation point ("!") character on
+it. The level indicates whether to use the "1" or the "!" symbol.  The letter
+keys are considered to have a lowercase letter at level 0, and an uppercase
+letter at level 1, though only the uppercase letter is printed.  Third, the
+#GdkKeymapKey contains a group; groups are not used on standard US keyboards,
+but are used in many other countries. On a keyboard with groups, there can be 3
+or 4 symbols printed on a single key. The group indicates movement in a
+horizontal direction. Usually groups are used for two different languages.  In
+group 0, a key might have two English characters, and in group 1 it might have
+two Hebrew characters. The Hebrew characters will be printed on the key next to
+the English characters.
+</para>
+
+<para>
+In order to use a keymap to interpret a key event, it's necessary to first
+convert the keyboard state into an effective group and level. This is done via a
+set of rules that varies widely according to type of keyboard and user
+configuration. The function gdk_keymap_translate_keyboard_state() accepts a
+keyboard state -- consisting of hardware keycode pressed, active modifiers, and
+active group -- applies the appropriate rules, and returns the group/level to be
+used to index the keymap, along with the modifiers which did not affect the
+group and level. i.e. it returns "unconsumed modifiers." The keyboard group may
+differ from the effective group used for keymap lookups because some keys don't
+have multiple groups - e.g. the Enter key is always in group 0 regardless of
+keyboard state.
+</para>
+
+<para>
+Note that gdk_keymap_translate_keyboard_state() also returns the keyval, i.e. it
+goes ahead and performs the keymap lookup in addition to telling you which
+effective group/level values were used for the lookup.  #GdkEventKey already
+contains this keyval, however, so you don't normally need to call
+gdk_keymap_translate_keyboard_state() just to get the keyval.
+
 </para>
 
 <!-- ##### SECTION See_Also ##### -->

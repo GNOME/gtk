@@ -1,3 +1,7 @@
+2001-03-22  Havoc Pennington  <hp@redhat.com>
+
+	* gdk/tmpl/keys.sgml: docs on GdkKeymap
+
 2001-03-16  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtk-docs.sgml: remove GtkData entity usage
