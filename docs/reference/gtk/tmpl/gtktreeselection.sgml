@@ -142,6 +142,25 @@ selected rows.  It will be called on every selected row in the view.
 @data: 
 
 
+<!-- ##### FUNCTION gtk_tree_selection_get_selected_rows ##### -->
+<para>
+
+</para>
+
+@selection: 
+@model: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_selection_count_selected_rows ##### -->
+<para>
+
+</para>
+
+@selection: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_tree_selection_select_path ##### -->
 <para>
 
@@ -215,6 +234,16 @@ selected rows.  It will be called on every selected row in the view.
 
 
 <!-- ##### FUNCTION gtk_tree_selection_select_range ##### -->
+<para>
+
+</para>
+
+@selection: 
+@start_path: 
+@end_path: 
+
+
+<!-- ##### FUNCTION gtk_tree_selection_unselect_range ##### -->
 <para>
 
 </para>

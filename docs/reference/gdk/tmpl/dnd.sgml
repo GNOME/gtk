@@ -96,6 +96,20 @@ This function is called by the drag source to obtain the
 @protocol: location to store the DND protocol in.
 
 
+<!-- ##### FUNCTION gdk_drag_find_window_for_screen ##### -->
+<para>
+
+</para>
+
+@context: 
+@drag_window: 
+@screen: 
+@x_root: 
+@y_root: 
+@dest_window: 
+@protocol: 
+
+
 <!-- ##### FUNCTION gdk_drag_context_ref ##### -->
 <para>
 Deprecated function; use g_object_ref() instead.

@@ -58,8 +58,8 @@ gtk_widget_set_size_request (hpaned, 200 + GTK_PANED (hpaned)->gutter_size, -1);
 gtk_paned_pack1 (GTK_PANED (hpaned), frame1, TRUE, FALSE);
 gtk_widget_set_size_request (frame1, 50, -1);
 
-gtk_paned_pack2 (GTK_PANED (hpaned), frame1, FALSE, FALSE);
-gtk_widget_set_size_request (frame1, 50, -1);
+gtk_paned_pack2 (GTK_PANED (hpaned), frame2, FALSE, FALSE);
+gtk_widget_set_size_request (frame2, 50, -1);
 </programlisting>
 </example>
 

@@ -914,6 +914,16 @@ they will be ignored.
 
 @screen: 
 
+<!-- ##### FUNCTION gdk_screen_get_window_at_pointer ##### -->
+<para>
+
+</para>
+
+@screen: 
+@win_x: 
+@win_y: 
+@Returns: 
+
 <!-- ##### FUNCTION gdk_screen_use_virtual_screen ##### -->
 <para>
 

@@ -417,6 +417,35 @@ Obtains the #GdkFont for the given Xlib font ID on @display, or %NULL if no
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_x11_screen_get_window_manager_name ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_screen_lookup_visual ##### -->
+<para>
+
+</para>
+
+@screen: 
+@xvisualid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_colormap_foreign_new ##### -->
+<para>
+
+</para>
+
+@visual: 
+@xcolormap: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_x11_colormap_get_xcolormap ##### -->
 <para>
 Returns the X colormap belonging to a #GdkColormap.
@@ -462,6 +491,22 @@ Returns the display of a #GdkCursor.
 
 @display: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_display_grab ##### -->
+<para>
+
+</para>
+
+@display: 
+
+
+<!-- ##### FUNCTION gdk_x11_display_ungrab ##### -->
+<para>
+
+</para>
+
+@display: 
 
 
 <!-- ##### FUNCTION gdk_x11_drawable_get_xdisplay ##### -->

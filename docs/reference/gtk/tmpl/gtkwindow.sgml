@@ -403,6 +403,22 @@ Deprecated alias for gtk_window_set_position().
 @window: 
 
 
+<!-- ##### FUNCTION gtk_window_fullscreen ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_unfullscreen ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
 <!-- ##### FUNCTION gtk_window_begin_resize_drag ##### -->
 <para>
 
@@ -483,6 +499,24 @@ Deprecated alias for gtk_window_set_position().
 
 @window: 
 @hint: 
+
+
+<!-- ##### FUNCTION gtk_window_set_skip_taskbar_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_window_set_skip_pager_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
 
 
 <!-- ##### FUNCTION gtk_window_get_decorated ##### -->
@@ -637,6 +671,24 @@ Deprecated alias for gtk_window_set_position().
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_window_get_skip_taskbar_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_skip_pager_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_window_move ##### -->
 <para>
 
@@ -683,6 +735,16 @@ Deprecated alias for gtk_window_set_position().
 @list: 
 
 
+<!-- ##### FUNCTION gtk_window_set_default_icon_from_file ##### -->
+<para>
+
+</para>
+
+@filename: 
+@err: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_window_set_icon ##### -->
 <para>
 
@@ -699,6 +761,17 @@ Deprecated alias for gtk_window_set_position().
 
 @window: 
 @list: 
+
+
+<!-- ##### FUNCTION gtk_window_set_icon_from_file ##### -->
+<para>
+
+</para>
+
+@window: 
+@filename: 
+@err: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_decorated_window_init ##### -->

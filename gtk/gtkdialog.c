@@ -869,10 +869,10 @@ run_destroy_handler (GtkDialog *dialog, gpointer data)
  * @dialog: a #GtkDialog
  * 
  * Blocks in a recursive main loop until the @dialog either emits the
- * response signal, or is destroyed. If the dialog is destroyed,
- * gtk_dialog_run() returns #GTK_RESPONSE_NONE. Otherwise, it returns
- * the response ID from the "response" signal emission. Before
- * entering the recursive main loop, gtk_dialog_run() calls
+ * response signal, or is destroyed. If the dialog is destroyed during the call
+ * to gtk_dialog_run(), gtk_dialog_returns #GTK_RESPONSE_NONE.
+ * Otherwise, it returns the response ID from the "response" signal emission.
+ * Before entering the recursive main loop, gtk_dialog_run() calls
  * gtk_widget_show() on the dialog for you. Note that you still
  * need to show any children of the dialog yourself.
  *

@@ -131,6 +131,9 @@ field.</entry>
 </tbody></tgroup></informaltable>
 </para>
 
+@children: 
+@spacing: 
+@homogeneous: 
 
 <!-- ##### STRUCT GtkBoxChild ##### -->
 <para>

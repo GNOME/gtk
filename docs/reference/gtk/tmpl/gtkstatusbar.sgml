@@ -51,6 +51,15 @@ The message at the top of the stack can be removed using gtk_statusbar_pop(). A 
 Contains private data that should be modified with the functions described below.
 </para>
 
+@parent_widget: 
+@frame: 
+@label: 
+@messages: 
+@keys: 
+@seq_context_id: 
+@seq_message_id: 
+@grip_window: 
+@has_resize_grip: 
 
 <!-- ##### FUNCTION gtk_statusbar_new ##### -->
 <para>
@@ -119,27 +128,4 @@ Returns whether the statusbar has a resize grip.
 @statusbar: a #GtkStatusBar.
 @Returns: %TRUE if the statusbar has a resize grip.
 
-
-<!-- ##### SIGNAL GtkStatusbar::text-popped ##### -->
-<para>
-Is emitted whenever a new message is popped off a statusbar's stack.
-</para>
-
-@statusbar: the object which received the signal.
-@context_id: the context id of the relevant message/statusbar.
-@text: the message that was just popped.
-
-<!-- ##### SIGNAL GtkStatusbar::text-pushed ##### -->
-<para>
-Is emitted whenever a new message gets pushed onto a statusbar's stack.
-</para>
-
-@statusbar: the object which received the signal.
-@context_id: the context id of the relevant message/statusbar.
-@text: the message that was pushed.
-
-<!-- ##### ARG GtkStatusbar:shadow-type ##### -->
-<para>
-
-</para>
 

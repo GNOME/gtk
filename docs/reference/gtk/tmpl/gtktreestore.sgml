@@ -173,3 +173,43 @@ GtkTreeStore
 @tree_store: 
 
 
+<!-- ##### FUNCTION gtk_tree_store_iter_is_valid ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_reorder ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@parent: 
+@new_order: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_swap ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@a: 
+@b: 
+
+
+<!-- ##### FUNCTION gtk_tree_store_move ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@position: 
+
+

@@ -244,6 +244,15 @@ gtk_notebook_set_current_page() instead.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_notebook_get_n_pages ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_notebook_get_tab_label ##### -->
 <para>
 </para>

@@ -289,6 +289,14 @@ cleaned from any arguments that GTK+ handles itself.
 @argv: Points to the argument vector.
 
 
+<!-- ##### USER_FUNCTION GtkModuleDisplayInitFunc ##### -->
+<para>
+
+</para>
+
+@display: 
+
+
 <!-- ##### FUNCTION gtk_true ##### -->
 <para>
 All this function does it to return %TRUE. This can be useful for example

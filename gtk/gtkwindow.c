@@ -2116,7 +2116,9 @@ gtk_window_set_geometry_hints (GtkWindow       *window,
  * managers</link> allow GTK+ to disable these decorations, creating a
  * borderless window. If you set the decorated property to %FALSE
  * using this function, GTK+ will do its best to convince the window
- * manager not to decorate the window.
+ * manager not to decorate the window. Depending on the system, this
+ * function may not have any effect when called on a window that is
+ * already visible, so you should call it before calling gtk_window_show().
  *
  * On Windows, this function always works, since there's no window manager
  * policy involved.

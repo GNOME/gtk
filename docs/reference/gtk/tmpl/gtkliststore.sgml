@@ -167,3 +167,42 @@ drop</link> interfaces.
 @list_store: 
 
 
+<!-- ##### FUNCTION gtk_list_store_iter_is_valid ##### -->
+<para>
+
+</para>
+
+@list_store: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_list_store_reorder ##### -->
+<para>
+
+</para>
+
+@store: 
+@new_order: 
+
+
+<!-- ##### FUNCTION gtk_list_store_swap ##### -->
+<para>
+
+</para>
+
+@store: 
+@a: 
+@b: 
+
+
+<!-- ##### FUNCTION gtk_list_store_move ##### -->
+<para>
+
+</para>
+
+@store: 
+@iter: 
+@position: 
+
+

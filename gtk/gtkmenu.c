@@ -684,6 +684,32 @@ popup_grab_on_window (GdkWindow *window,
   return FALSE;
 }
 
+/**
+ * gtk_menu_popup:
+ * @menu: a #GtkMenu.
+ * @parent_menu_shell: the menu shell containing the triggering menu item, or %NULL
+ * @parent_menu_item: the menu item whose activation triggered the popup, or %NULL
+ * @func: a user supplied function used to position the menu, or %NULL
+ * @data: user supplied data to be passed to @func.
+ * @button: the mouse button which was pressed to initiate the event.
+ * @activate_time: the time at which the activation event occurred.
+ *
+ * Displays a menu and makes it available for selection.  Applications can use
+ * this function to display context-sensitive menus, and will typically supply
+ * %NULL for the @parent_menu_shell, @parent_menu_item, @func and @data 
+ * parameters. The default menu positioning function will position the menu
+ * at the current mouse cursor position.
+ *
+ * The @button parameter should be the mouse button pressed to initiate
+ * the menu popup. If the menu popup was initiated by something other than
+ * a mouse button press, such as a mouse button release or a keypress,
+ * @button should be 0.
+ *
+ * The @activate_time parameter should be the time stamp of the event that
+ * initiated the popup. If such an event is not available, use
+ * gtk_get_current_event_time() instead.
+ *
+ */
 void
 gtk_menu_popup (GtkMenu		    *menu,
 		GtkWidget	    *parent_menu_shell,

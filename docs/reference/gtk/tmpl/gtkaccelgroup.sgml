@@ -98,6 +98,17 @@ Deprecated equivalent of g_object_unref().
 @Returns: 
 
 
+<!-- ##### USER_FUNCTION GtkAccelGroupFindFunc ##### -->
+<para>
+
+</para>
+
+@key: 
+@closure: 
+@data: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_accel_group_disconnect ##### -->
 <para>
 

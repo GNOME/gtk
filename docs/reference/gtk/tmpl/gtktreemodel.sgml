@@ -125,7 +125,7 @@ the second is much more common, as you often get paths from callbacks.
   parent_iter = iter;
   gtk_tree_model_get_nth_child (model, &amp;iter, &amp;parent_iter, 2);
   parent_iter = iter;
-  gtk_tree_model_get_nth_child (model, &amp;iter, NULL, 5);
+  gtk_tree_model_get_nth_child (model, &amp;iter, &amp;parent_iter, 5);
 }
 </programlisting>
 </example>
@@ -288,6 +288,16 @@ section.
 </para>
 
 @path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_path_new_from_indices ##### -->
+<para>
+
+</para>
+
+@first_index: 
+@Varargs: 
 @Returns: 
 
 
@@ -480,6 +490,15 @@ versions of GTK+.
 </para>
 
 @reference: 
+
+
+<!-- ##### FUNCTION gtk_tree_row_reference_copy ##### -->
+<para>
+
+</para>
+
+@reference: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_tree_row_reference_inserted ##### -->
@@ -682,6 +701,16 @@ versions of GTK+.
 @tree_model: 
 @iter: 
 @child: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_get_string_from_iter ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
 @Returns: 
 
 

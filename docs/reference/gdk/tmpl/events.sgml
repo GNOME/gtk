@@ -183,6 +183,15 @@ is given in the <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
 @event: 
 
 
+<!-- ##### FUNCTION gdk_event_new ##### -->
+<para>
+
+</para>
+
+@type: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_event_copy ##### -->
 <para>
 </para>
@@ -321,6 +330,24 @@ gdk_event_handler_set().
 </para>
 
 @show_events: 
+
+
+<!-- ##### FUNCTION gdk_event_set_screen ##### -->
+<para>
+
+</para>
+
+@event: 
+@screen: 
+
+
+<!-- ##### FUNCTION gdk_event_get_screen ##### -->
+<para>
+
+</para>
+
+@event: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_setting_get ##### -->

@@ -377,6 +377,18 @@ Function used for #gtk_tree_view_map_expanded_rows.
 @start_editing: 
 
 
+<!-- ##### FUNCTION gtk_tree_view_set_cursor_on_cell ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@focus_column: 
+@focus_cell: 
+@start_editing: 
+
+
 <!-- ##### FUNCTION gtk_tree_view_get_cursor ##### -->
 <para>
 
@@ -411,6 +423,15 @@ Function used for #gtk_tree_view_map_expanded_rows.
 </para>
 
 @tree_view: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_expand_to_path ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_expand_row ##### -->

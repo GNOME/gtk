@@ -204,6 +204,25 @@ lines.
 @npoints: the size of the @points array.
 
 
+<!-- ##### FUNCTION gdk_draw_pixbuf ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@pixbuf: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+@dither: 
+@x_dither: 
+@y_dither: 
+
+
 <!-- ##### FUNCTION gdk_draw_segments ##### -->
 <para>
 Draws a number of unconnected lines.

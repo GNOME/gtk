@@ -87,6 +87,15 @@ Application-driven progressive image loading.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_pixbuf_loader_get_format ##### -->
+<para>
+
+</para>
+
+@loader: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_pixbuf_loader_write ##### -->
 <para>
 

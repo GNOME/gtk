@@ -471,6 +471,15 @@ calling gtk_tree_view_column_set_cell_data_func()
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_tree_view_column_focus_cell ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@cell: 
+
+
 <!-- ##### SIGNAL GtkTreeViewColumn::clicked ##### -->
 <para>
 

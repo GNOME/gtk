@@ -401,6 +401,22 @@ Deprecated equivalent of g_object_unref()
 @window: 
 
 
+<!-- ##### FUNCTION gdk_window_fullscreen ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_unfullscreen ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
 <!-- ##### FUNCTION gdk_window_move ##### -->
 <para>
 
@@ -930,6 +946,24 @@ Deprecated equivalent to gdk_drawable_set_colormap()
 
 @window: 
 @hint: 
+
+
+<!-- ##### FUNCTION gdk_window_set_skip_taskbar_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@skips_taskbar: 
+
+
+<!-- ##### FUNCTION gdk_window_set_skip_pager_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@skips_pager: 
 
 
 <!-- ##### FUNCTION gdk_window_get_position ##### -->

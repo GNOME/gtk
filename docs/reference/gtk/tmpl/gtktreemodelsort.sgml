@@ -98,6 +98,16 @@ GtkTreeModelSort
 @tree_model_sort: 
 
 
+<!-- ##### FUNCTION gtk_tree_model_sort_iter_is_valid ##### -->
+<para>
+
+</para>
+
+@tree_model_sort: 
+@iter: 
+@Returns: 
+
+
 <!-- ##### ARG GtkTreeModelSort:model ##### -->
 <para>
 

@@ -151,6 +151,13 @@ The "Close" item.
 
 
 
+<!-- ##### MACRO GTK_STOCK_COLOR_PICKER ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### MACRO GTK_STOCK_CONVERT ##### -->
 <para>
 The "Convert" item.

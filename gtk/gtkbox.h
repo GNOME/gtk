@@ -52,7 +52,8 @@ typedef struct _GtkBoxChild   GtkBoxChild;
 struct _GtkBox
 {
   GtkContainer container;
-  
+
+  /*< public >*/
   GList *children;
   gint16 spacing;
   guint homogeneous : 1;

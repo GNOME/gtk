@@ -1464,10 +1464,22 @@ ifactory_delete_popup_data (GtkObject	   *object,
  * @ifactory: a #GtkItemFactory of type #GTK_TYPE_MENU (see gtk_item_factory_new())
  * @x: the x position 
  * @y: the y position
- * @mouse_button: the mouse button which was pressed to initiate this action
- * @time: a timestamp for this action
+ * @mouse_button: the mouse button which was pressed to initiate the popup
+ * @time: the time at which the activation event occurred
  *
  * Pops up the menu constructed from the item factory at (@x, @y).
+ *
+ * The @mouse_button parameter should be the mouse button pressed to initiate
+ * the menu popup. If the menu popup was initiated by something other than
+ * a mouse button press, such as a mouse button release or a keypress,
+ * @mouse_button should be 0.
+ *
+ * The @time parameter should be the time stamp of the event that
+ * initiated the popup. If such an event is not available, use
+ * gtk_get_current_event_time() instead.
+ *
+ * The operation of the @mouse_button and the @time parameter is the same
+ * as the @button and @activation_time parameters for gtk_menu_popup().
  */
 void
 gtk_item_factory_popup (GtkItemFactory		*ifactory,
@@ -1487,12 +1499,24 @@ gtk_item_factory_popup (GtkItemFactory		*ifactory,
  *  the menu is unposted
  * @x: the x position 
  * @y: the y position
- * @mouse_button: the mouse button which was pressed to initiate this action
- * @time: a timestamp for this action
+ * @mouse_button: the mouse button which was pressed to initiate the popup
+ * @time: the time at which the activation event occurred
  *
  * Pops up the menu constructed from the item factory at (@x, @y). Callbacks
  * can access the @popup_data while the menu is posted via 
  * gtk_item_factory_popup_data() and gtk_item_factory_popup_data_from_widget().
+ *
+ * The @mouse_button parameter should be the mouse button pressed to initiate
+ * the menu popup. If the menu popup was initiated by something other than
+ * a mouse button press, such as a mouse button release or a keypress,
+ * @mouse_button should be 0.
+ *
+ * The @time parameter should be the time stamp of the event that
+ * initiated the popup. If such an event is not available, use
+ * gtk_get_current_event_time() instead.
+ *
+ * The operation of the @mouse_button and the @time parameters is the same
+ * as the @button and @activation_time parameters for gtk_menu_popup().
  */
 void
 gtk_item_factory_popup_with_data (GtkItemFactory	*ifactory,

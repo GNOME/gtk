@@ -119,17 +119,6 @@ when GDK gets multihead support.
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_screen_get_window_at_pointer ##### -->
-<para>
-
-</para>
-
-@screen: 
-@win_x: 
-@win_y: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gdk_screen_get_width ##### -->
 <para>
 
@@ -176,6 +165,15 @@ when GDK gets multihead support.
 
 
 <!-- ##### FUNCTION gdk_screen_get_toplevel_windows ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_make_display_name ##### -->
 <para>
 
 </para>

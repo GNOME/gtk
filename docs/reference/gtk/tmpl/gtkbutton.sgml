@@ -29,7 +29,8 @@ This should not be accessed directly.  Use the accessor functions below.
 
 <!-- ##### FUNCTION gtk_button_new ##### -->
 <para>
-Creates a new #GtkButton widget.
+Creates a new #GtkButton widget. To add a child widget to the button,
+use gtk_container_add().
 </para>
 
 @Returns: The newly created #GtkButton widget.

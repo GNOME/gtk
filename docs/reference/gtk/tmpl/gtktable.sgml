@@ -135,8 +135,8 @@ and row numbers of the table. (Columns and rows are indexed from zero).
 @child: The widget to add.
 @left_attach: the column number to attach the left side of a child widget to.
 @right_attach: the column number to attach the right side of a child widget to.
-@top_attach: the row number to attach the left side of a child widget to.
-@bottom_attach: the column number to attach the right side of a child widget to.
+@top_attach: the row number to attach the top of a child widget to.
+@bottom_attach: the column number to attach the bottom of a child widget to.
 @xoptions: Used to specify the properties of the child widget when the table is resized.
 @yoptions: The same as xoptions, except this field determines behaviour of vertical resizing.
 @xpadding: An integer value specifying the padding on the left and right of the widget being added to the table.

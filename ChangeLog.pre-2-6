@@ -1,4 +1,19 @@
-Sun Oct 13 17:41:53 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+Sun Oct 13 18:50:14 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtkmenu.c, gtkmenu.sgml, gtkitemfactory.c, gdkwindow.c,
+	gtkwindow.c, gtkpaned.sgml, gtkdialog.c, gtkbox.h, gtkbutton.sgml,
+	gtktreemodel.sgml,gtktable.sgml, gtktable.c:
+
+	Documentation fixes.
+
+	#85719, #90759, #95169, Owen Taylor;
+	#89221, Yao Zhang, Matthias Clasen;
+	#95592, Joost Faassen;
+	#92637, Vitaly Tishkov;
+	#94616, Ben Martin;
+	#94772, sbaillie@bigpond.net.au;
+
+Oct 13 17:41:53 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkwidget.c (gtk_widget_queue_clear_area): Don't invalidate
 	a widget if it or one of its ancestors isn't mapped.

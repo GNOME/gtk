@@ -402,14 +402,13 @@ _gdk_window_destroy (GdkWindow *window,
  * gdk_window_destroy:
  * @window: a #GdkWindow
  *
- * Destroys @window (destroys the server-side resource associated with
- * @window).  Memory allocated for @window may not be freed until all
- * references to @window are dropped. All children of @window are also
- * destroyed.
+ * Destroys the window system resources associated with @window and decrements @window's
+ * reference count. The window system resources for all children of @window are also
+ * destroyed, but the children's reference counts are not decremented.
  *
- * There's normally no need to use this function, window are automatically
- * destroyed when their reference count reaches 0.
- * 
+ * Note that a window will not be destroyed automatically when its reference count
+ * reaches zero. You must call this function yourself before that happens.
+ *
  **/
 void
 gdk_window_destroy (GdkWindow *window)
