@@ -1,5 +1,8 @@
 2005-01-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* docs/tutorial/gtk-tut.sgml: Some updates for the drawing
+	section.  (#161414, Robert Ancell)
+
 	* docs/tutorial/gtk-tut.sgml: Make it build.
 
 	* gtk/gtkdialog.c (gtk_dialog_run): Some clarification
