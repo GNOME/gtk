@@ -1,3 +1,13 @@
+Tue Sep  1 10:53:52 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkprogress.c (gtk_progress_finalize): Unref
+	the adjustment.
+
+	* gtk/gtkmenu.c: Modified reference counting so
+	that the reference count from the toplevel that
+	the menu creates to the menu is invisible to the
+	application.
+
 Mon Aug 31 21:36:31 1998  Raph Levien  <raph@gimp.org>
 
 	* gdk/gdkrgb.c (gdk_rgb_select_conv): Improved the 24bpp

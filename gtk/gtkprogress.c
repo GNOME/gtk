@@ -146,6 +146,8 @@ gtk_progress_finalize (GtkObject *object)
 
   progress = GTK_PROGRESS (object);
 
+  gtk_object_unref (GTK_OBJECT (GTK_PROGRESS (object)->adjustment));
+  
   if (progress->offscreen_pixmap)
     gdk_pixmap_unref (progress->offscreen_pixmap);
 
