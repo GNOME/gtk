@@ -371,11 +371,14 @@ gdk_gc_set_font (GdkGC   *gc,
   g_return_if_fail (gc != NULL);
   g_return_if_fail (font != NULL);
 
-  gc_private = (GdkGCPrivate*) gc;
-  font_private = (GdkFontPrivate*) font;
-
-  XSetFont (gc_private->xdisplay, gc_private->xgc,
-	    ((XFontStruct *) font_private->xfont)->fid);
+  if (font->type == GDK_FONT_FONT)
+    {
+      gc_private = (GdkGCPrivate*) gc;
+      font_private = (GdkFontPrivate*) font;
+      
+      XSetFont (gc_private->xdisplay, gc_private->xgc,
+		((XFontStruct *) font_private->xfont)->fid);
+    }
 }
 
 void

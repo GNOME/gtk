@@ -1,3 +1,6 @@
+Thu Dec 4 1997 Owen Taylor <owt1@cornell.edu>
+	* gdk/gdkgc.c: Ignore gdk_gc_set_font if font is a fontset.
+
 Wed Dec 3 1997 Jay Painter <jpaint@serv.net>
 	* gtk/gtkstyle.c: fixed a problem introduced recently in 
 	gtk_style_detach witch crashed script_fu.
