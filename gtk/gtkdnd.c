@@ -114,9 +114,9 @@ struct _GtkDragDestSite
   GdkDragAction      actions;
   GdkWindow         *proxy_window;
   GdkDragProtocol    proxy_protocol;
-  gboolean           do_proxy : 1;
-  gboolean           proxy_coords : 1;
-  gboolean           have_drag : 1;
+  guint              do_proxy : 1;
+  guint              proxy_coords : 1;
+  guint              have_drag : 1;
 };
   
 struct _GtkDragDestInfo 
@@ -125,9 +125,9 @@ struct _GtkDragDestInfo
   GdkDragContext    *context;	   /* Drag context */
   GtkDragSourceInfo *proxy_source; /* Set if this is a proxy drag */
   GtkSelectionData  *proxy_data;   /* Set while retrieving proxied data */
-  gboolean           dropped : 1;     /* Set after we receive a drop */
+  guint              dropped : 1;     /* Set after we receive a drop */
   guint32            proxy_drop_time; /* Timestamp for proxied drop */
-  gboolean           proxy_drop_wait : 1; /* Set if we are waiting for a
+  guint              proxy_drop_wait : 1; /* Set if we are waiting for a
 					   * status reply before sending
 					   * a proxied drop on.
 					   */

@@ -1,3 +1,22 @@
+2003-05-27  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwindow-decorate.c: 
+	* gtk/gtktreeprivate.h: 
+	* gtk/gtkdnd.c: 
+	* gdk/win32/gdkwindow-win32.h: 
+	* gdk/linux-fb/gdkprivate-fb.h: 
+	* gdk/linux-fb/gdkkeyboard-fb.c: Remove dubious bitfields of
+	unspecified signedness.  (#112919, Morten Welinder)
+
+	* gtk/queryimmodules.c (escape_string): 
+	* gtk/gtktextbtree.c (_gtk_text_btree_get_text): 
+	* gtk/gtksettings.c (_gtk_settings_parse_convert): 
+	* gtk/gtkrc.c (gtk_rc_parse_assignment): 
+	* gtk/gtkinputdialog.c (gtk_input_dialog_set_key): 
+	* gdk/x11/gdkdisplay-x11.c (escape_for_xmessage): Replace all 
+	occurances of g_string_new ("") by g_string_new (NULL). (#106975,
+	Morten Welinder) 
+
 2003-05-27  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk-zip.sh.in: Only include the Default and Emacs themes' gtkrc
