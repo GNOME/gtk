@@ -8,9 +8,9 @@ edit and then convert again to UTF-8 to commit, please see the
 scripts in gnome-i18n/UTF-8, for example
 
   export ENCODING_TO=ISO-8895-15
-  potoutf.sh fi.po
-  emacs fi.po
   utftopo fi.po
+  emacs fi.po
+  potoutf.sh fi.po
   cvs commit fi.po
 
 If you need help with this, ask, but please don't commit

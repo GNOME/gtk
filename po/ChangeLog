@@ -1,8 +1,12 @@
+2001-08-20  Sven Neumann  <sven@gimp.org>
+
+	* README.translators: corrected usage of conversion scripts, the
+	order of how to apply them was inverted.
+
 2001-08-19  Fatih Demir <kabalak@gtranslator.org>
 
 	* ta.po: Committed updated Tamil translation by
 		
-
 2001-08-12  Fatih Demir <kabalak@gtranslator.org>
 
 	* tr.po: Updated Turkish translation by Mehmet.
