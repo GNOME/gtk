@@ -1,3 +1,8 @@
+Thu Dec 27 18:12:55 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkproperty-x11.c (gdk_property_get): Fix
+	problem where retrieved atoms weren't properly returned.
+
 2002-01-03  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtktextview.c (gtk_text_view_key_press_event): When
@@ -36,7 +41,6 @@ Wed Jan  2 23:09:06 2002  Tim Janik  <timj@gtk.org>
 
 	* gtk/Makefile.am (LDFLAGS): automake still doesn't support
 	libsomething_la_LDFLAGS, so fix the build again
-
 
 2002-01-01  Havoc Pennington  <hp@pobox.com>
 

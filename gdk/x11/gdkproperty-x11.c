@@ -392,7 +392,7 @@ gdk_property_get (GdkWindow   *window,
 	  GdkAtom *ret_atoms = g_new (GdkAtom, ret_nitems);
 	  Atom *xatoms = (Atom *)ret_data;
 
-	  data = (guchar *)ret_atoms;
+	  *data = (guchar *)ret_atoms;
 
 	  for (i = 0; i < ret_nitems; i++)
 	    ret_atoms[i] = gdk_x11_xatom_to_atom (xatoms[i]);
