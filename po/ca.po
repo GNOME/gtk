@@ -7,10 +7,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.6.2\n"
+"Project-Id-Version: gtk+ 2.6.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-17 11:03+0100\n"
-"PO-Revision-Date: 2005-01-29 15:01+0100\n"
+"POT-Creation-Date: 2005-03-04 09:51+0100\n"
+"PO-Revision-Date: 2005-03-04 10:12+0100\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -199,7 +199,15 @@ msgstr "La imatge BMP conté dades de capçalera errònies"
 msgid "Topdown BMP images cannot be compressed"
 msgstr "No es poden comprimir les imatges BMP «topdown»"
 
-#: ../gdk-pixbuf/io-bmp.c:1154
+#: ../gdk-pixbuf/io-bmp.c:1181
+msgid "Couldn't allocate memory for saving BMP file"
+msgstr "No s'ha pogut obtenir memòria per a desar el fitxer BMP"
+
+#: ../gdk-pixbuf/io-bmp.c:1222
+msgid "Couldn't write to BMP file"
+msgstr "No s'ha pogut escriure al fitxer BMP"
+
+#: ../gdk-pixbuf/io-bmp.c:1271
 msgid "The BMP image format"
 msgstr "El format d'imatge BMP"
 
@@ -208,8 +216,8 @@ msgstr "El format d'imatge BMP"
 msgid "Failure reading GIF: %s"
 msgstr "No s'ha pogut llegir el GIF: %s"
 
-#: ../gdk-pixbuf/io-gif.c:492 ../gdk-pixbuf/io-gif.c:1435
-#: ../gdk-pixbuf/io-gif.c:1596
+#: ../gdk-pixbuf/io-gif.c:492 ../gdk-pixbuf/io-gif.c:1463
+#: ../gdk-pixbuf/io-gif.c:1624
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 "Al fitxer GIF li falten algunes dades (potser s'han truncat d'alguna manera)"
@@ -235,25 +243,29 @@ msgstr "S'ha trobat un codi incorrecte"
 msgid "Circular table entry in GIF file"
 msgstr "Entrada de taula circular al fitxer GIF"
 
-#: ../gdk-pixbuf/io-gif.c:862 ../gdk-pixbuf/io-gif.c:1423
-#: ../gdk-pixbuf/io-gif.c:1469 ../gdk-pixbuf/io-gif.c:1584
+#: ../gdk-pixbuf/io-gif.c:862 ../gdk-pixbuf/io-gif.c:1451
+#: ../gdk-pixbuf/io-gif.c:1497 ../gdk-pixbuf/io-gif.c:1612
 msgid "Not enough memory to load GIF file"
 msgstr "No hi ha memòria suficient per carregar el fitxer GIF"
 
-#: ../gdk-pixbuf/io-gif.c:1088
+#: ../gdk-pixbuf/io-gif.c:947
+msgid "Not enough memory to composite a frame in GIF file"
+msgstr "No hi ha memòria suficient per a composar un marc al fitxer GIF"
+
+#: ../gdk-pixbuf/io-gif.c:1116
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "La imatge GIF és corrupta (la compressió LZW és incorrecte)"
 
-#: ../gdk-pixbuf/io-gif.c:1138
+#: ../gdk-pixbuf/io-gif.c:1166
 msgid "File does not appear to be a GIF file"
 msgstr "El fitxer no sembla ser un fitxer GIF"
 
-#: ../gdk-pixbuf/io-gif.c:1150
+#: ../gdk-pixbuf/io-gif.c:1178
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "No s'ha implementat la versió %s del format del fitxer GIF"
 
-#: ../gdk-pixbuf/io-gif.c:1259
+#: ../gdk-pixbuf/io-gif.c:1287
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -261,11 +273,11 @@ msgstr ""
 "La imatge GIF no té mapa de color global, i un marc de dins no té mapa de "
 "color local."
 
-#: ../gdk-pixbuf/io-gif.c:1491
+#: ../gdk-pixbuf/io-gif.c:1519
 msgid "GIF image was truncated or incomplete."
 msgstr "Imatge GIF truncada o incompleta."
 
-#: ../gdk-pixbuf/io-gif.c:1643
+#: ../gdk-pixbuf/io-gif.c:1671
 msgid "The GIF image format"
 msgstr "El format d'imatge GIF"
 
@@ -709,36 +721,40 @@ msgstr "El format d'imatge XBM"
 msgid "No XPM header found"
 msgstr "No s'ha trobat la capçalera XPM"
 
-#: ../gdk-pixbuf/io-xpm.c:1237
+#: ../gdk-pixbuf/io-xpm.c:1238
+msgid "Invalid XPM header"
+msgstr "La capçalera XPM no és vàlida"
+
+#: ../gdk-pixbuf/io-xpm.c:1246
 msgid "XPM file has image width <= 0"
 msgstr "El fitxer XPM té una amplada d'imatge <=0"
 
-#: ../gdk-pixbuf/io-xpm.c:1245
+#: ../gdk-pixbuf/io-xpm.c:1254
 msgid "XPM file has image height <= 0"
 msgstr "El fitxer XPM té una alçada d'imatge <=0"
 
-#: ../gdk-pixbuf/io-xpm.c:1253
+#: ../gdk-pixbuf/io-xpm.c:1262
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM té un nombre de caràcters per píxel invàlid"
 
-#: ../gdk-pixbuf/io-xpm.c:1260
+#: ../gdk-pixbuf/io-xpm.c:1269
 msgid "XPM file has invalid number of colors"
 msgstr "El fitxer XPM té un nombre de colors no vàlid"
 
-#: ../gdk-pixbuf/io-xpm.c:1272 ../gdk-pixbuf/io-xpm.c:1281
-#: ../gdk-pixbuf/io-xpm.c:1333
+#: ../gdk-pixbuf/io-xpm.c:1281 ../gdk-pixbuf/io-xpm.c:1290
+#: ../gdk-pixbuf/io-xpm.c:1342
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "No es pot obtenir memòria per a carregar la imatge XPM"
 
-#: ../gdk-pixbuf/io-xpm.c:1295
+#: ../gdk-pixbuf/io-xpm.c:1304
 msgid "Cannot read XPM colormap"
 msgstr "No es pot llegir el mapa de color d'XPM"
 
-#: ../gdk-pixbuf/io-xpm.c:1524
+#: ../gdk-pixbuf/io-xpm.c:1533
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "No s'ha pogut escriure al fitxer temporal en carregar la imatge XPM"
 
-#: ../gdk-pixbuf/io-xpm.c:1559
+#: ../gdk-pixbuf/io-xpm.c:1568
 msgid "The XPM image format"
 msgstr "El format d'imatge XPM"
 
@@ -835,46 +851,46 @@ msgstr "COLORS"
 msgid "Make X calls synchronous"
 msgstr "Fes les crides a X sincronitzades"
 
-#: ../gtk/gtkaboutdialog.c:268 ../gtk/gtkaboutdialog.c:2014
+#: ../gtk/gtkaboutdialog.c:269 ../gtk/gtkaboutdialog.c:2022
 msgid "License"
 msgstr "Llicència"
 
-#: ../gtk/gtkaboutdialog.c:269
+#: ../gtk/gtkaboutdialog.c:270
 msgid "The license of the program"
 msgstr "La llicència del programa"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:489
-msgid "_Credits"
-msgstr "_Crèdits"
+#: ../gtk/gtkaboutdialog.c:490
+msgid "C_redits"
+msgstr "C_rèdits"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:498
+#: ../gtk/gtkaboutdialog.c:499
 msgid "_License"
 msgstr "_Llicència"
 
-#: ../gtk/gtkaboutdialog.c:720
+#: ../gtk/gtkaboutdialog.c:728
 #, c-format
 msgid "About %s"
 msgstr "Quant a %s"
 
-#: ../gtk/gtkaboutdialog.c:1942
+#: ../gtk/gtkaboutdialog.c:1950
 msgid "Credits"
 msgstr "Crèdits"
 
-#: ../gtk/gtkaboutdialog.c:1968
+#: ../gtk/gtkaboutdialog.c:1976
 msgid "Written by"
 msgstr "Escrit per"
 
-#: ../gtk/gtkaboutdialog.c:1971
+#: ../gtk/gtkaboutdialog.c:1979
 msgid "Documented by"
 msgstr "Documentat per"
 
-#: ../gtk/gtkaboutdialog.c:1983
+#: ../gtk/gtkaboutdialog.c:1991
 msgid "Translated by"
 msgstr "Traduït per"
 
-#: ../gtk/gtkaboutdialog.c:1987
+#: ../gtk/gtkaboutdialog.c:1995
 msgid "Artwork by"
 msgstr "Art per"
 
@@ -914,7 +930,7 @@ msgstr "Alt"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: ../gtk/gtkcalendar.c:700
+#: ../gtk/gtkcalendar.c:703
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -922,14 +938,15 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:710
+#: ../gtk/gtkcalendar.c:717
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
-#: ../gtk/gtkcellrendererprogress.c:235 ../gtk/gtkcellrendererprogress.c:293
+#. do not translate the part before the |
+#: ../gtk/gtkcellrendererprogress.c:236 ../gtk/gtkcellrendererprogress.c:294
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "etiqueta de la barra de progrés|%d %%"
+msgstr "%d %%"
 
 #: ../gtk/gtkcolorbutton.c:220 ../gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
@@ -939,7 +956,7 @@ msgstr "Trieu un color"
 msgid "Received invalid color data\n"
 msgstr "S'han rebut dades de color invàlides\n"
 
-#: ../gtk/gtkcolorsel.c:576
+#: ../gtk/gtkcolorsel.c:568
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -950,7 +967,7 @@ msgstr ""
 "seleccionar-lo com a actual per portar-lo a l'altra banda de la gamma de "
 "colors."
 
-#: ../gtk/gtkcolorsel.c:581
+#: ../gtk/gtkcolorsel.c:573
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -958,11 +975,11 @@ msgstr ""
 "El color que heu escollit. Podeu arrossegar aquest color cap a una paleta i "
 "desar-lo per a utilitzar-lo més endavant."
 
-#: ../gtk/gtkcolorsel.c:942
+#: ../gtk/gtkcolorsel.c:934
 msgid "_Save color here"
 msgstr "_Desa el color aquí"
 
-#: ../gtk/gtkcolorsel.c:1147
+#: ../gtk/gtkcolorsel.c:1139
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -971,7 +988,7 @@ msgstr ""
 "Per a canviar aquesta entrada, arrossegueu una gamma de colors aquí o "
 "cliqueu-hi amb el botó dret i seleccioneu \"Desa el color aquí.\""
 
-#: ../gtk/gtkcolorsel.c:1913
+#: ../gtk/gtkcolorsel.c:1896
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -979,7 +996,7 @@ msgstr ""
 "Seleccioneu el color que vulgueu de l'anell extern. Seleccioneu la foscor o "
 "la claror del color utilitzant el triangle intern."
 
-#: ../gtk/gtkcolorsel.c:1938
+#: ../gtk/gtkcolorsel.c:1921
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -987,67 +1004,67 @@ msgstr ""
 "Feu clic al selector de color, llavors cliqueu on vulgueu de la vostra "
 "pantalla per seleccionar el seu color."
 
-#: ../gtk/gtkcolorsel.c:1947
+#: ../gtk/gtkcolorsel.c:1930
 msgid "_Hue:"
 msgstr "_Matís:"
 
-#: ../gtk/gtkcolorsel.c:1948
+#: ../gtk/gtkcolorsel.c:1931
 msgid "Position on the color wheel."
 msgstr "Posició a la roda de colors."
 
-#: ../gtk/gtkcolorsel.c:1950
+#: ../gtk/gtkcolorsel.c:1933
 msgid "_Saturation:"
 msgstr "_Saturació:"
 
-#: ../gtk/gtkcolorsel.c:1951
+#: ../gtk/gtkcolorsel.c:1934
 msgid "\"Deepness\" of the color."
 msgstr "«Profunditat» del color."
 
-#: ../gtk/gtkcolorsel.c:1952
+#: ../gtk/gtkcolorsel.c:1935
 msgid "_Value:"
 msgstr "_Valor:"
 
-#: ../gtk/gtkcolorsel.c:1953
+#: ../gtk/gtkcolorsel.c:1936
 msgid "Brightness of the color."
 msgstr "Brillantor del color"
 
-#: ../gtk/gtkcolorsel.c:1954
+#: ../gtk/gtkcolorsel.c:1937
 msgid "_Red:"
 msgstr "_Vermell:"
 
-#: ../gtk/gtkcolorsel.c:1955
+#: ../gtk/gtkcolorsel.c:1938
 msgid "Amount of red light in the color."
 msgstr "Quantitat de llum vermella en el color."
 
-#: ../gtk/gtkcolorsel.c:1956
+#: ../gtk/gtkcolorsel.c:1939
 msgid "_Green:"
 msgstr "_Verd:"
 
-#: ../gtk/gtkcolorsel.c:1957
+#: ../gtk/gtkcolorsel.c:1940
 msgid "Amount of green light in the color."
 msgstr "Quantitat de llum verda en el color."
 
-#: ../gtk/gtkcolorsel.c:1958
+#: ../gtk/gtkcolorsel.c:1941
 msgid "_Blue:"
 msgstr "_Blau:"
 
-#: ../gtk/gtkcolorsel.c:1959
+#: ../gtk/gtkcolorsel.c:1942
 msgid "Amount of blue light in the color."
 msgstr "Quantitat de llum blava en el color."
 
-#: ../gtk/gtkcolorsel.c:1962
+#: ../gtk/gtkcolorsel.c:1945
 msgid "_Opacity:"
 msgstr "_Opacitat:"
 
-#: ../gtk/gtkcolorsel.c:1970 ../gtk/gtkcolorsel.c:1981
+#: ../gtk/gtkcolorsel.c:1953 ../gtk/gtkcolorsel.c:1964
 msgid "Transparency of the color."
 msgstr "Transparència del color."
 
-#: ../gtk/gtkcolorsel.c:1988
+#: ../gtk/gtkcolorsel.c:1971
 msgid "Color _Name:"
 msgstr "_Nom de color:"
 
-#: ../gtk/gtkcolorsel.c:2003
+#: ../gtk/gtkcolorsel.c:1986
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1055,11 +1072,11 @@ msgstr ""
 "Podeu introduir un valor de color hexadecimal a l'estil HTML, o simplement "
 "el nom d'un color (com 'orange')"
 
-#: ../gtk/gtkcolorsel.c:2022
+#: ../gtk/gtkcolorsel.c:2005
 msgid "_Palette"
 msgstr "_Paleta"
 
-#: ../gtk/gtkcolorsel.c:2054
+#: ../gtk/gtkcolorsel.c:2037
 msgid "Color Wheel"
 msgstr "Roda de colors"
 
@@ -1169,7 +1186,7 @@ msgstr "Dreceres"
 msgid "Folder"
 msgstr "Carpeta"
 
-#: ../gtk/gtkfilechooserdefault.c:2979 ../gtk/gtkstock.c:295
+#: ../gtk/gtkfilechooserdefault.c:2979 ../gtk/gtkstock.c:317
 msgid "_Add"
 msgstr "_Afegeix"
 
@@ -1177,7 +1194,7 @@ msgstr "_Afegeix"
 msgid "Add the selected folder to the bookmarks"
 msgstr "Afegeix la carpeta seleccionada a les adreces d'interès"
 
-#: ../gtk/gtkfilechooserdefault.c:2991 ../gtk/gtkstock.c:352
+#: ../gtk/gtkfilechooserdefault.c:2991 ../gtk/gtkstock.c:395
 msgid "_Remove"
 msgstr "_Suprimeix"
 
@@ -1223,100 +1240,100 @@ msgid "Create Fo_lder"
 msgstr "Crea una ca_rpeta"
 
 #. Name entry
-#: ../gtk/gtkfilechooserdefault.c:3502
+#: ../gtk/gtkfilechooserdefault.c:3505
 msgid "_Name:"
 msgstr "_Nom:"
 
-#: ../gtk/gtkfilechooserdefault.c:3542
+#: ../gtk/gtkfilechooserdefault.c:3545
 msgid "_Browse for other folders"
 msgstr "Na_vega per unes altres carpetes"
 
-#: ../gtk/gtkfilechooserdefault.c:3792
+#: ../gtk/gtkfilechooserdefault.c:3795
 msgid "Save in _folder:"
 msgstr "De_sa en la carpeta:"
 
-#: ../gtk/gtkfilechooserdefault.c:3794
+#: ../gtk/gtkfilechooserdefault.c:3797
 msgid "Create in _folder:"
 msgstr "Crea en la _carpeta:"
 
-#: ../gtk/gtkfilechooserdefault.c:4734
+#: ../gtk/gtkfilechooserdefault.c:4737
 msgid "Cannot change to folder because it is not local"
 msgstr "No es pot canviar a la carpeta perquè no és local"
 
-#: ../gtk/gtkfilechooserdefault.c:5249
+#: ../gtk/gtkfilechooserdefault.c:5253
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "La drecera %s no existeix"
 
-#: ../gtk/gtkfilechooserdefault.c:5713
+#: ../gtk/gtkfilechooserdefault.c:5717
 #, c-format
 msgid "Could not mount %s"
 msgstr "No s'ha pogut muntar %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6006
+#: ../gtk/gtkfilechooserdefault.c:6010
 msgid "Type name of new folder"
 msgstr "Nom del tipus de la nova carpeta"
 
-#: ../gtk/gtkfilechooserdefault.c:6048
+#: ../gtk/gtkfilechooserdefault.c:6052
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d octet"
 msgstr[1] "%d octets"
 
-#: ../gtk/gtkfilechooserdefault.c:6050
+#: ../gtk/gtkfilechooserdefault.c:6054
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f KB"
 
-#: ../gtk/gtkfilechooserdefault.c:6052
+#: ../gtk/gtkfilechooserdefault.c:6056
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f MB"
 
-#: ../gtk/gtkfilechooserdefault.c:6054
+#: ../gtk/gtkfilechooserdefault.c:6058
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f GB"
 
-#: ../gtk/gtkfilechooserdefault.c:6106
+#: ../gtk/gtkfilechooserdefault.c:6110
 msgid "Today"
 msgstr "Avui"
 
-#: ../gtk/gtkfilechooserdefault.c:6108
+#: ../gtk/gtkfilechooserdefault.c:6112
 msgid "Yesterday"
 msgstr "Ahir"
 
-#: ../gtk/gtkfilechooserdefault.c:6119
+#: ../gtk/gtkfilechooserdefault.c:6123
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: ../gtk/gtkfilechooserdefault.c:6189
+#: ../gtk/gtkfilechooserdefault.c:6193
 msgid "Cannot change folder"
 msgstr "No es pot canviar de carpeta"
 
-#: ../gtk/gtkfilechooserdefault.c:6190
+#: ../gtk/gtkfilechooserdefault.c:6194
 msgid "The folder you specified is an invalid path."
 msgstr "La carpeta que heu especificat és un camí invàlid."
 
-#: ../gtk/gtkfilechooserdefault.c:6229
+#: ../gtk/gtkfilechooserdefault.c:6233
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "No s'ha pogut construir el nom del fitxer des de «%s» i «%s»"
 
-#: ../gtk/gtkfilechooserdefault.c:6265
+#: ../gtk/gtkfilechooserdefault.c:6269
 msgid "Could not select item"
 msgstr "No s'ha pogut seleccionar l'element"
 
-#: ../gtk/gtkfilechooserdefault.c:6305
+#: ../gtk/gtkfilechooserdefault.c:6309
 msgid "Open Location"
 msgstr "Obre una ubicació"
 
-#: ../gtk/gtkfilechooserdefault.c:6312
+#: ../gtk/gtkfilechooserdefault.c:6316
 msgid "Save in Location"
 msgstr "Desa en una ubicació"
 
-#: ../gtk/gtkfilechooserdefault.c:6336
+#: ../gtk/gtkfilechooserdefault.c:6340
 msgid "_Location:"
 msgstr "_Ubicació:"
 
@@ -1558,6 +1575,16 @@ msgstr "«%s» no existeix a la llista d'adreces d'interès"
 msgid "Error getting information for '/': %s"
 msgstr "S'ha produït un error en obtenir informació per a «/»: %s"
 
+#: ../gtk/gtkfilesystemwin32.c:611
+#, c-format
+msgid "Network Drive (%s)"
+msgstr "Unitat de xarxa (%s)"
+
+#: ../gtk/gtkfilesystemwin32.c:626
+#, c-format
+msgid "%s (%s)"
+msgstr "%s (%s)"
+
 #: ../gtk/gtkfontbutton.c:178 ../gtk/gtkfontbutton.c:295
 msgid "Pick a Font"
 msgstr "Trieu un tipus de lletra"
@@ -1715,7 +1742,7 @@ msgstr "(desconegut)"
 msgid "clear"
 msgstr "neteja"
 
-#: ../gtk/gtklabel.c:3931
+#: ../gtk/gtklabel.c:3934
 msgid "Select All"
 msgstr "Selecciona-ho tot"
 
@@ -1794,317 +1821,345 @@ msgstr ""
 "L'element de camí del mapa de píxels: \"%s\" ha de ser absolut, %s, línia %d"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: ../gtk/gtkstock.c:286
+#: ../gtk/gtkstock.c:308
 msgid "Information"
 msgstr "Informació"
 
-#: ../gtk/gtkstock.c:287
+#: ../gtk/gtkstock.c:309
 msgid "Warning"
 msgstr "Advertència"
 
-#: ../gtk/gtkstock.c:288
+#: ../gtk/gtkstock.c:310
 msgid "Error"
 msgstr "Error"
 
-#: ../gtk/gtkstock.c:289
+#: ../gtk/gtkstock.c:311
 msgid "Question"
 msgstr "Pregunta"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: ../gtk/gtkstock.c:294
+#: ../gtk/gtkstock.c:316
 msgid "_About"
 msgstr "_Quant a"
 
-#: ../gtk/gtkstock.c:296
+#: ../gtk/gtkstock.c:318
 msgid "_Apply"
 msgstr "_Aplica"
 
-#: ../gtk/gtkstock.c:297
+#: ../gtk/gtkstock.c:319
 msgid "_Bold"
 msgstr "_Negreta"
 
 #
-#: ../gtk/gtkstock.c:298
+#: ../gtk/gtkstock.c:320
 msgid "_Cancel"
 msgstr "_Cancel·la"
 
 #
-#: ../gtk/gtkstock.c:299
+#: ../gtk/gtkstock.c:321
 msgid "_CD-Rom"
 msgstr "_CD-ROM"
 
-#: ../gtk/gtkstock.c:300
+#: ../gtk/gtkstock.c:322
 msgid "_Clear"
 msgstr "_Neteja"
 
-#: ../gtk/gtkstock.c:301
+#: ../gtk/gtkstock.c:323
 msgid "_Close"
 msgstr "_Tanca"
 
-#: ../gtk/gtkstock.c:302
+#: ../gtk/gtkstock.c:324
 msgid "_Convert"
 msgstr "_Converteix"
 
-#: ../gtk/gtkstock.c:303
+#: ../gtk/gtkstock.c:325
 msgid "_Copy"
 msgstr "_Copia"
 
-#: ../gtk/gtkstock.c:304
+#: ../gtk/gtkstock.c:326
 msgid "Cu_t"
 msgstr "Re_talla"
 
-#: ../gtk/gtkstock.c:305
+#: ../gtk/gtkstock.c:327
 msgid "_Delete"
 msgstr "_Suprimeix"
 
-#: ../gtk/gtkstock.c:306
+#: ../gtk/gtkstock.c:328
 msgid "_Execute"
 msgstr "_Executa"
 
-#: ../gtk/gtkstock.c:307
+#: ../gtk/gtkstock.c:329
 msgid "_Edit"
 msgstr "_Edita"
 
-#: ../gtk/gtkstock.c:308
+#: ../gtk/gtkstock.c:330
 msgid "_Find"
 msgstr "_Cerca"
 
-#: ../gtk/gtkstock.c:309
+#: ../gtk/gtkstock.c:331
 msgid "Find and _Replace"
 msgstr "Cerca i _reemplaça"
 
-#: ../gtk/gtkstock.c:310
+#: ../gtk/gtkstock.c:332
 msgid "_Floppy"
 msgstr "_Disquet"
 
-#: ../gtk/gtkstock.c:311
-msgid "_Bottom"
-msgstr "_Al final"
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:334
+msgid "Navigation|_Bottom"
+msgstr ""
 
-#: ../gtk/gtkstock.c:312
-msgid "_First"
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:336
+msgid "Navigation|_First"
 msgstr "_Primer"
 
-#: ../gtk/gtkstock.c:313
-msgid "_Last"
-msgstr "Ú_ltim"
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:338
+msgid "Navigation|_Last"
+msgstr "_Últim"
 
-#: ../gtk/gtkstock.c:314
-msgid "_Top"
-msgstr "A_munt"
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:340
+msgid "Navigation|_Top"
+msgstr ""
 
-#: ../gtk/gtkstock.c:315
-msgid "_Back"
-msgstr "_Endarrere"
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:342
+msgid "Navigation|_Back"
+msgstr ""
 
-#: ../gtk/gtkstock.c:316
-msgid "_Down"
-msgstr "A _baix"
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:344
+msgid "Navigation|_Down"
+msgstr ""
 
-#: ../gtk/gtkstock.c:317 ../gtk/gtkstock.c:331
-msgid "_Forward"
-msgstr "E_ndavant"
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:346
+msgid "Navigation|_Forward"
+msgstr ""
 
-#: ../gtk/gtkstock.c:318
-msgid "_Up"
-msgstr "A _dalt"
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:348
+msgid "Navigation|_Up"
+msgstr ""
 
-#: ../gtk/gtkstock.c:319
+#: ../gtk/gtkstock.c:349
 msgid "_Harddisk"
 msgstr "_Disc dur"
 
 #
-#: ../gtk/gtkstock.c:320
+#: ../gtk/gtkstock.c:350
 msgid "_Help"
 msgstr "A_juda"
 
-#: ../gtk/gtkstock.c:321
+#: ../gtk/gtkstock.c:351
 msgid "_Home"
 msgstr "_Inici"
 
-#: ../gtk/gtkstock.c:322
+#: ../gtk/gtkstock.c:352
 msgid "Increase Indent"
 msgstr "Augmenta el sagnat"
 
-#: ../gtk/gtkstock.c:323
+#: ../gtk/gtkstock.c:353
 msgid "Decrease Indent"
 msgstr "Disminueix el sagnat"
 
-#: ../gtk/gtkstock.c:324
+#: ../gtk/gtkstock.c:354
 msgid "_Index"
 msgstr "Índe_x"
 
-#: ../gtk/gtkstock.c:325
+#: ../gtk/gtkstock.c:355
 msgid "_Italic"
 msgstr "_Cursiva"
 
-#: ../gtk/gtkstock.c:326
+#: ../gtk/gtkstock.c:356
 msgid "_Jump to"
 msgstr "_Vés a"
 
-#: ../gtk/gtkstock.c:327
-msgid "_Center"
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:358
+msgid "Justify|_Center"
 msgstr "_Centra"
 
-#: ../gtk/gtkstock.c:328
-msgid "_Fill"
-msgstr "_Omple"
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:360
+msgid "Justify|_Fill"
+msgstr ""
 
-#: ../gtk/gtkstock.c:329
-msgid "_Left"
-msgstr "_Esquerra"
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:362
+msgid "Justify|_Left"
+msgstr "_Esquerre"
 
-#: ../gtk/gtkstock.c:330
-msgid "_Right"
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:364
+msgid "Justify|_Right"
 msgstr "_Dreta"
 
-#: ../gtk/gtkstock.c:332
-msgid "_Next"
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:367
+msgid "Media|_Forward"
+msgstr "E_ndavant"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:369
+msgid "Media|_Next"
 msgstr "_Següent"
 
-#: ../gtk/gtkstock.c:333
-msgid "P_ause"
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:371
+msgid "Media|P_ause"
 msgstr "P_ausa"
 
-#: ../gtk/gtkstock.c:334
-msgid "_Play"
-msgstr "_Reprodueix"
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:373
+msgid "Media|_Play"
+msgstr "Re_produeix"
 
-#: ../gtk/gtkstock.c:335
-msgid "Pre_vious"
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:375
+msgid "Media|Pre_vious"
 msgstr "An_terior"
 
-#: ../gtk/gtkstock.c:336
-msgid "_Record"
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:377
+msgid "Media|_Record"
 msgstr "En_registra"
 
-#: ../gtk/gtkstock.c:337
-msgid "R_ewind"
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:379
+msgid "Media|R_ewind"
 msgstr "R_ebobina"
 
-#: ../gtk/gtkstock.c:338 ../gtk/gtkstock.c:361
-msgid "_Stop"
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:381
+msgid "Media|_Stop"
 msgstr "_Atura"
 
-#: ../gtk/gtkstock.c:339
+#: ../gtk/gtkstock.c:382
 msgid "_Network"
 msgstr "_Xarxa"
 
-#: ../gtk/gtkstock.c:340
+#: ../gtk/gtkstock.c:383
 msgid "_New"
 msgstr "_Nou"
 
-#: ../gtk/gtkstock.c:341
+#: ../gtk/gtkstock.c:384
 msgid "_No"
 msgstr "_No"
 
-#: ../gtk/gtkstock.c:342
+#: ../gtk/gtkstock.c:385
 msgid "_OK"
 msgstr "_D'acord"
 
-#: ../gtk/gtkstock.c:343
+#: ../gtk/gtkstock.c:386
 msgid "_Open"
 msgstr "_Obre"
 
-#: ../gtk/gtkstock.c:344
+#: ../gtk/gtkstock.c:387
 msgid "_Paste"
 msgstr "_Enganxa"
 
-#: ../gtk/gtkstock.c:345
+#: ../gtk/gtkstock.c:388
 msgid "_Preferences"
 msgstr "_Preferències"
 
-#: ../gtk/gtkstock.c:346
+#: ../gtk/gtkstock.c:389
 msgid "_Print"
 msgstr "_Imprimeix"
 
-#: ../gtk/gtkstock.c:347
+#: ../gtk/gtkstock.c:390
 msgid "Print Pre_view"
 msgstr "Pre_visualitza la impressió"
 
-#: ../gtk/gtkstock.c:348
+#: ../gtk/gtkstock.c:391
 msgid "_Properties"
 msgstr "_Propietats"
 
-#: ../gtk/gtkstock.c:349
+#: ../gtk/gtkstock.c:392
 msgid "_Quit"
 msgstr "_Surt"
 
-#: ../gtk/gtkstock.c:350
+#: ../gtk/gtkstock.c:393
 msgid "_Redo"
 msgstr "_Refés"
 
-#: ../gtk/gtkstock.c:351
+#: ../gtk/gtkstock.c:394
 msgid "_Refresh"
 msgstr "_Actualitza"
 
-#: ../gtk/gtkstock.c:353
+#: ../gtk/gtkstock.c:396
 msgid "_Revert"
 msgstr "_Restaura"
 
-#: ../gtk/gtkstock.c:354
+#: ../gtk/gtkstock.c:397
 msgid "_Save"
 msgstr "_Desa"
 
-#: ../gtk/gtkstock.c:355
+#: ../gtk/gtkstock.c:398
 msgid "Save _As"
 msgstr "_Anomena i desa"
 
-#: ../gtk/gtkstock.c:356
+#: ../gtk/gtkstock.c:399
 msgid "_Color"
 msgstr "_Color"
 
-#: ../gtk/gtkstock.c:357
+#: ../gtk/gtkstock.c:400
 msgid "_Font"
 msgstr "_Tipus de lletra"
 
-#: ../gtk/gtkstock.c:358
+#: ../gtk/gtkstock.c:401
 msgid "_Ascending"
 msgstr "_Ascendent"
 
-#: ../gtk/gtkstock.c:359
+#: ../gtk/gtkstock.c:402
 msgid "_Descending"
 msgstr "_Descendent"
 
-#: ../gtk/gtkstock.c:360
+#: ../gtk/gtkstock.c:403
 msgid "_Spell Check"
 msgstr "_Revisa l'ortografia"
 
-#: ../gtk/gtkstock.c:362
+#: ../gtk/gtkstock.c:404
+msgid "_Stop"
+msgstr "_Atura"
+
+#: ../gtk/gtkstock.c:405
 msgid "_Strikethrough"
 msgstr "_Ratlla"
 
-#: ../gtk/gtkstock.c:363
+#: ../gtk/gtkstock.c:406
 msgid "_Undelete"
 msgstr "Rec_upera"
 
-#: ../gtk/gtkstock.c:364
+#: ../gtk/gtkstock.c:407
 msgid "_Underline"
 msgstr "S_ubratlla"
 
-#: ../gtk/gtkstock.c:365
+#: ../gtk/gtkstock.c:408
 msgid "_Undo"
 msgstr "_Desfés"
 
-#: ../gtk/gtkstock.c:366
+#: ../gtk/gtkstock.c:409
 msgid "_Yes"
 msgstr "_Sí"
 
-#: ../gtk/gtkstock.c:367
+#: ../gtk/gtkstock.c:410
 msgid "_Normal Size"
 msgstr "Mida _normal"
 
-#: ../gtk/gtkstock.c:368
+#: ../gtk/gtkstock.c:411
 msgid "Best _Fit"
 msgstr "Millor a_just"
 
-#: ../gtk/gtkstock.c:369
+#: ../gtk/gtkstock.c:412
 msgid "Zoom _In"
 msgstr "_Amplia"
 
-#: ../gtk/gtkstock.c:370
+#: ../gtk/gtkstock.c:413
 msgid "Zoom _Out"
 msgstr "_Redueix"
 
@@ -2157,23 +2212,23 @@ msgstr "No s'ha trobat el motor de tema al module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "-- Cap consell --"
 
-#: ../gtk/gtkuimanager.c:1132
+#: ../gtk/gtkuimanager.c:1143
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "No es coneix l'atribut «%s» a la línia %d, caràcter %d"
 
-#: ../gtk/gtkuimanager.c:1332
+#: ../gtk/gtkuimanager.c:1345
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr ""
 "S'ha trobat una etiqueta d'inici «%s» inesperada a la línia %d, caràcter %d"
 
-#: ../gtk/gtkuimanager.c:1417
+#: ../gtk/gtkuimanager.c:1430
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "S'han trobat dades de caràcter inesperades a la línia %d, caràcter %d"
 
-#: ../gtk/gtkuimanager.c:2209
+#: ../gtk/gtkuimanager.c:2222
 msgid "Empty"
 msgstr "Buit"
 
@@ -2231,3 +2286,33 @@ msgstr "Mètode d'entrada d'X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "No s'ha pogut obtenir informació per al fitxer «%s»: %s"
+
+#~ msgid "_Credits"
+#~ msgstr "_Crèdits"
+
+#~ msgid "_Bottom"
+#~ msgstr "_Al final"
+
+#~ msgid "_First"
+#~ msgstr "_Primer"
+
+#~ msgid "_Last"
+#~ msgstr "Ú_ltim"
+
+#~ msgid "_Top"
+#~ msgstr "A_munt"
+
+#~ msgid "_Back"
+#~ msgstr "_Endarrere"
+
+#~ msgid "_Down"
+#~ msgstr "A _baix"
+
+#~ msgid "_Up"
+#~ msgstr "A _dalt"
+
+#~ msgid "_Fill"
+#~ msgstr "_Omple"
+
+#~ msgid "_Left"
+#~ msgstr "_Esquerra"
