@@ -4003,8 +4003,8 @@ create_expander_affine (gdouble affine[6],
   gdouble width;
   gdouble height;
 
-  width = expander_size / 4;
-  height = expander_size / 2;
+  width = expander_size / 4.0;
+  height = expander_size / 2.0;
   
   s = sin (degrees * G_PI / 180.0);
   c = cos (degrees * G_PI / 180.0);

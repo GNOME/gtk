@@ -1,3 +1,8 @@
+2001-08-17  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/gtkstyle.c (create_expander_affine): Divide with floating
+	point numbers so that the result will be floating point.
+
 2001-08-16  Matthias Clasen  <matthiasc@waldgeist.poet.de>
 
 	* tests/testgtk.c (create_handle_box): 
