@@ -29,6 +29,7 @@
 
 
 #include <gdk/gdk.h>
+#include <gtk/gtkaboutdialog.h>
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkaccellabel.h>
 #include <gtk/gtkaccelmap.h>

@@ -1,5 +1,12 @@
 2004-07-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaboutdialog.h: 
+	* gtk/gtkaboutdialog.c: New widget: GtkAboutDialog.
+
+	* gtk/Makefile.am (gtk_public_h_sources, gtk_c_sources): 
+	* gtk/gtk.h: Add GtkAboutDialog. (#109435, Paolo Borelli,
+	patch by Matthias Clasen)
+
 	* gtk/gtkrc.c (_gtk_rc_init): Apply the gtk-default-menu-item-style 
 	to cell view menu items as well.  (#147405, John Cupitt)
 

@@ -98,6 +98,7 @@ libtool_opts =							\
 # by configure)
 gtk_public_h_sources =          \
 	gtk.h			\
+	gtkaboutdialog.h	\
 	gtkaccelgroup.h		\
 	gtkaccellabel.h		\
 	gtkaccelmap.h		\
@@ -303,6 +304,7 @@ gtk_private_h_sources =         \
 # GTK+ C sources to build the library from
 gtk_c_sources =                 \
 	fnmatch.c		\
+	gtkaboutdialog.c	\
 	gtkaccelgroup.c		\
 	gtkaccellabel.c		\
 	gtkaccelmap.c		\
