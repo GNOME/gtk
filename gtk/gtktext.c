@@ -159,6 +159,7 @@ struct _LineParams
 static void  gtk_text_class_init     (GtkTextClass   *klass);
 static void  gtk_text_init           (GtkText        *text);
 static void  gtk_text_destroy        (GtkObject      *object);
+static void  gtk_text_finalize       (GtkObject      *object);
 static void  gtk_text_realize        (GtkWidget      *widget);
 static void  gtk_text_unrealize      (GtkWidget      *widget);
 static void  gtk_text_style_set	     (GtkWidget      *widget,
@@ -274,6 +275,7 @@ static void scroll_int  (GtkText* text, gint diff);
 static void process_exposes (GtkText *text);
 
 /* Cache Management. */
+static void   free_cache        (GtkText* text);
 static GList* remove_cache_line (GtkText* text, GList* list);
 
 /* Key Motion. */
@@ -460,6 +462,7 @@ gtk_text_class_init (GtkTextClass *class)
   parent_class = gtk_type_class (gtk_editable_get_type ());
 
   object_class->destroy = gtk_text_destroy;
+  object_class->finalize = gtk_text_finalize;
 
   widget_class->realize = gtk_text_realize;
   widget_class->unrealize = gtk_text_unrealize;
@@ -934,6 +937,38 @@ gtk_text_destroy (GtkObject *object)
 }
 
 static void
+gtk_text_finalize (GtkObject *object)
+{
+  GtkText *text;
+  GList *tmp_list;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_TEXT (object));
+
+  text = (GtkText *)object;
+
+  /* Clean up the internal structures */
+  g_free (text->text);
+  free_cache (text);
+
+  tmp_list = text->text_properties;
+  while (tmp_list)
+    {
+      g_mem_chunk_free (text_property_chunk, tmp_list->data);
+      tmp_list = tmp_list->next;
+    }
+  
+  g_list_free (text->text_properties);
+
+  if (text->scratch_buffer)
+    g_free (text->scratch_buffer);
+
+  g_list_free (text->tab_stops);
+  
+  GTK_OBJECT_CLASS(parent_class)->finalize (object);
+}
+
+static void
 gtk_text_realize (GtkWidget *widget)
 {
   GtkText *text;
@@ -1112,6 +1147,9 @@ gtk_text_unrealize (GtkWidget *widget)
 
   gdk_gc_destroy (text->gc);
   text->gc = NULL;
+
+  gdk_pixmap_unref (text->line_wrap_bitmap);
+  gdk_pixmap_unref (text->line_arrow_bitmap);
 
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);

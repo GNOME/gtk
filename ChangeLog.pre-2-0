@@ -1,3 +1,45 @@
+Mon Jun 15 16:29:45 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdktypes.h gdk/gdkprivate.h gtk/gtk*.h 
+	  gtk/Makefile.am gtk/makenums.pl 
+
+	Removed out the G_ENUM/FLAGS mechanism in favor
+	of a perl script that parses the standard headers
+	(with occasional /*< nick=foo >*/ style overrides)
+	and extracts the enumerations.
+
+	  gtk/maketypes.awk: Small improvments to the
+	  translation of names. (Avoid splitting gc into
+	  g_c_.)
+	
+Mon Jun 15 16:25:44 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtk.h gtk/gtkfontsel.[ch]: 
+	Damon Chaplin's <DAChaplin@email.msn.com> Font selection widget.
+	
+Mon Jun 15 15:58:34 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkentry.c:
+	- Restored gtk_entry_adjust_scroll to static 
+	- Changed text positioning code so that we always
+	  display as large a portion of the text as possible.
+
+Mon Jun 15 15:42:12 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtktext.c (gtk_text_finalize): Free internal
+	structures of text widget. Also, unreference pixmaps
+	when unrealizing.
+	
+Sat Jun 13 19:14:39 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdkinputcommon.h (gdk_input_device_new): Change
+	3.3.1 bug workaround to number keys starting at 1.
+
+Sat Jun 13 11:56:57 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* docs/gtk_tut.sgml: Fixed urls for complete example
+	source for scribble+widget-writing examples.
+
 Sat Jun 13 11:48:26 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gdk/gdkpixmap.c (gdk_pixmap_extract_color): 

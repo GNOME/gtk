@@ -32,6 +32,7 @@ libgtk_1_1_la_SOURCES = \
 	gtkeventbox.c		\
 	gtkfilesel.c		\
 	gtkfixed.c		\
+	gtkfontsel.c            \
 	gtkframe.c		\
 	gtkgamma.c		\
 	gtkgc.c			\
@@ -134,6 +135,7 @@ gtkinclude_HEADERS = \
 	gtkfeatures.h		\
 	gtkfilesel.h		\
 	gtkfixed.h		\
+	gtkfontsel.h		\
 	gtkframe.h		\
 	gtkgamma.h		\
 	gtkgc.h			\
@@ -212,9 +214,10 @@ auto-files:
 	make $(srcdir)/gtktypebuiltins.h
 
 # generate gtk.defs file from gtk-boxed.defs and gcc -E
-$(srcdir)/gtk.defs: @MAINT@ makeenums.awk makeenums.h gtk-boxed.defs
-	$(COMPILE) -E -DG_CODE_GENERATION $(srcdir)/makeenums.h $(CFLAGS) | \
-	  awk -f $(srcdir)/makeenums.awk - defs > $@
+$(srcdir)/gtk.defs: @MAINT@ makeenums.pl gtk-boxed.defs
+	srcdir=$(srcdir) \
+	  perl $(srcdir)/makeenums.pl defs $(srcdir)/gtk*.h \
+               $(top_srcdir)/gdk/gdk*.h > $@
 	cat $(srcdir)/gtk-boxed.defs >> $@
 
 # generate type identifier header (GTK_TYPE_WIDGET_FLAGS)
@@ -229,10 +232,11 @@ $(srcdir)/gtktypebuiltins_vars.c: @MAINT@ $(srcdir)/gtk.defs maketypes.awk
 $(srcdir)/gtktypebuiltins_ids.c: @MAINT@ $(srcdir)/gtk.defs maketypes.awk
 	awk -f $(srcdir)/maketypes.awk $(srcdir)/gtk.defs entries > $@
 
-# generate enum value arrays from gcc -E
-$(srcdir)/gtktypebuiltins_evals.c: @MAINT@ makeenums.awk makeenums.h $(srcdir)/gtk.defs
-	$(COMPILE) -E -DG_CODE_GENERATION $(srcdir)/makeenums.h $(CFLAGS) | \
-	  awk -f $(srcdir)/makeenums.awk - arrays > $@
+# generate enum value arrays
+$(srcdir)/gtktypebuiltins_evals.c: @MAINT@ makeenums.pl $(srcdir)/gtk.defs
+	srcdir=$(srcdir) \
+	  perl $(srcdir)/makeenums.pl arrays $(srcdir)/gtk*.h \
+               $(top_srcdir)/gdk/gdk*.h > $@
 
 # special remake rules
 #$(srcdir)/gtk.defs: @MAINT@ $(srcdir)/makeenums.awk

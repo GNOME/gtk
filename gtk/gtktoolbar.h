@@ -39,16 +39,15 @@ extern "C" {
 #define GTK_TOOLBAR_CLASS(klass) GTK_CHECK_CLASS_CAST (klass, gtk_toolbar_get_type (), GtkToolbarClass)
 #define GTK_IS_TOOLBAR(obj)      GTK_CHECK_TYPE (obj, gtk_toolbar_get_type ())
 
-enum _GtkToolbarChildType
+typedef enum
 {
   GTK_TOOLBAR_CHILD_SPACE,
   GTK_TOOLBAR_CHILD_BUTTON,
   GTK_TOOLBAR_CHILD_TOGGLEBUTTON,
   GTK_TOOLBAR_CHILD_RADIOBUTTON,
   GTK_TOOLBAR_CHILD_WIDGET
-};
+} GtkToolbarChildType;
 
-typedef enum   _GtkToolbarChildType  GtkToolbarChildType;
 typedef struct _GtkToolbarChild      GtkToolbarChild;
 typedef struct _GtkToolbar           GtkToolbar;
 typedef struct _GtkToolbarClass      GtkToolbarClass;

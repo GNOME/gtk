@@ -50,6 +50,7 @@
 #include <gtk/gtkfeatures.h>
 #include <gtk/gtkfilesel.h>
 #include <gtk/gtkfixed.h>
+#include <gtk/gtkfontsel.h>
 #include <gtk/gtkframe.h>
 #include <gtk/gtkgamma.h>
 #include <gtk/gtkgc.h>

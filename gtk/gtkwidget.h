@@ -37,22 +37,21 @@ extern "C" {
  */
 typedef enum
 {
-  G_NV (GTK_TOPLEVEL,		toplevel,		1 <<  4),
-  G_NV (GTK_NO_WINDOW,		no-window,		1 <<  5),
-  G_NV (GTK_REALIZED,		realized,		1 <<  6),
-  G_NV (GTK_MAPPED,		mapped,			1 <<  7),
-  G_NV (GTK_VISIBLE,		visible,		1 <<  8),
-  G_NV (GTK_SENSITIVE,		sensitive,		1 <<  9),
-  G_NV (GTK_PARENT_SENSITIVE,	parent-sensitive,	1 << 10),
-  G_NV (GTK_CAN_FOCUS,		can-focus,		1 << 11),
-  G_NV (GTK_HAS_FOCUS,		has-focus,		1 << 12),
-  G_NV (GTK_CAN_DEFAULT,	can-default,		1 << 13),
-  G_NV (GTK_HAS_DEFAULT,	has-default,		1 << 14),
-  G_NV (GTK_HAS_GRAB,		has-grab,		1 << 15),
-  G_NV (GTK_RC_STYLE,		rc-style,		1 << 16),
-  G_NV (GTK_BASIC,		basic,			1 << 17)
-} G_FLAGS (GtkWidgetFlags);
-
+  GTK_TOPLEVEL         = 1 << 4,
+  GTK_NO_WINDOW        = 1 << 5,
+  GTK_REALIZED         = 1 << 6,
+  GTK_MAPPED           = 1 << 7,
+  GTK_VISIBLE          = 1 << 8,
+  GTK_SENSITIVE        = 1 << 9,
+  GTK_PARENT_SENSITIVE = 1 << 10,
+  GTK_CAN_FOCUS        = 1 << 11,
+  GTK_HAS_FOCUS        = 1 << 12,
+  GTK_CAN_DEFAULT      = 1 << 13,
+  GTK_HAS_DEFAULT      = 1 << 14,
+  GTK_HAS_GRAB	       = 1 << 15,
+  GTK_RC_STYLE	       = 1 << 16,
+  GTK_BASIC	       = 1 << 17
+} GtkWidgetFlags;
 
 /* Macro for casting a pointer to a GtkWidget or GtkWidgetClass pointer.
  * Macros for testing whether `widget' or `klass' are of type GTK_TYPE_WIDGET.

@@ -4337,7 +4337,7 @@ void
 file_selection_ok (GtkWidget        *w,
 		   GtkFileSelection *fs)
 {
-  g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
+  g_print ("%s\n", gtk_file_selection_get_filename (fs));
   gtk_widget_destroy (GTK_WIDGET (fs));
 }
 
@@ -4384,6 +4384,43 @@ create_file_selection (void)
 
       
       
+    }
+  
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show (window);
+  else
+    gtk_widget_destroy (window);
+}
+
+void
+font_selection_ok (GtkWidget        *w,
+		   GtkFontSelection *fs)
+{
+  g_print ("%s\n", gtk_font_selection_get_font_name (fs));
+  gtk_widget_destroy (GTK_WIDGET (fs));
+}
+
+void
+create_font_selection (void)
+{
+  static GtkWidget *window = NULL;
+
+  if (!window)
+    {
+      window = gtk_font_selection_dialog_new ("Font Selection Dialog");
+
+      gtk_window_position (GTK_WINDOW (window), GTK_WIN_POS_MOUSE);
+
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			  &window);
+
+      gtk_signal_connect (GTK_OBJECT (GTK_FONT_SELECTION_DIALOG (window)->ok_button),
+			  "clicked", GTK_SIGNAL_FUNC(font_selection_ok),
+			  GTK_FONT_SELECTION_DIALOG (window)->fontsel);
+      gtk_signal_connect_object (GTK_OBJECT (GTK_FONT_SELECTION_DIALOG (window)->cancel_button),
+				 "clicked", GTK_SIGNAL_FUNC(gtk_widget_destroy),
+				 GTK_OBJECT (window));
     }
   
   if (!GTK_WIDGET_VISIBLE (window))
@@ -6664,6 +6701,7 @@ create_main_window (void)
       { "dnd", create_dnd },
       { "entry", create_entry },
       { "file selection", create_file_selection },
+      { "font selection", create_font_selection },
       { "gamma curve", create_gamma_curve },
       { "handle box", create_handle_box },
       { "list", create_list },

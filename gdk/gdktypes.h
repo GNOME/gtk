@@ -35,7 +35,6 @@
 
 #ifdef __cplusplus
 extern "C" {
-#pragma }
 #endif /* __cplusplus */
 
 
@@ -116,14 +115,14 @@ typedef void*			  GdkIM;
  */
 typedef enum
 {
-  G_SV (GDK_WINDOW_ROOT,	root),
-  G_SV (GDK_WINDOW_TOPLEVEL,	toplevel),
-  G_SV (GDK_WINDOW_CHILD,	child),
-  G_SV (GDK_WINDOW_DIALOG,	dialog),
-  G_SV (GDK_WINDOW_TEMP,	temp),
-  G_SV (GDK_WINDOW_PIXMAP,	pixmap),
-  G_SV (GDK_WINDOW_FOREIGN,	foreign)
-} G_ENUM (GdkWindowType);
+  GDK_WINDOW_ROOT,
+  GDK_WINDOW_TOPLEVEL,
+  GDK_WINDOW_CHILD,
+  GDK_WINDOW_DIALOG,
+  GDK_WINDOW_TEMP,
+  GDK_WINDOW_PIXMAP,
+  GDK_WINDOW_FOREIGN
+} GdkWindowType;
 
 /* Classes of windows.
  *   InputOutput: Almost every window should be of this type. Such windows
@@ -136,9 +135,9 @@ typedef enum
  */
 typedef enum
 {
-  G_SV (GDK_INPUT_OUTPUT,	input-output),
-  G_SV (GDK_INPUT_ONLY,		input-only)
-} G_ENUM (GdkWindowClass);
+  GDK_INPUT_OUTPUT,
+  GDK_INPUT_ONLY
+} GdkWindowClass;
 
 /* Types of images.
  *   Normal: Normal X image type. These are slow as they involve passing
@@ -152,10 +151,10 @@ typedef enum
  */
 typedef enum
 {
-  G_SV (GDK_IMAGE_NORMAL,	normal),
-  G_SV (GDK_IMAGE_SHARED,	shared),
-  G_SV (GDK_IMAGE_FASTEST,	fastest)
-} G_ENUM (GdkImageType);
+  GDK_IMAGE_NORMAL,
+  GDK_IMAGE_SHARED,
+  GDK_IMAGE_FASTEST
+} GdkImageType;
 
 /* Types of visuals.
  *   StaticGray:
@@ -167,13 +166,13 @@ typedef enum
  */
 typedef enum
 {
-  G_SV (GDK_VISUAL_STATIC_GRAY,		static-gray),
-  G_SV (GDK_VISUAL_GRAYSCALE,		grayscale),
-  G_SV (GDK_VISUAL_STATIC_COLOR,	static-color),
-  G_SV (GDK_VISUAL_PSEUDO_COLOR,	pseudo-color),
-  G_SV (GDK_VISUAL_TRUE_COLOR,		true-color),
-  G_SV (GDK_VISUAL_DIRECT_COLOR,	direct-color)
-} G_ENUM (GdkVisualType);
+  GDK_VISUAL_STATIC_GRAY,
+  GDK_VISUAL_GRAYSCALE,
+  GDK_VISUAL_STATIC_COLOR,
+  GDK_VISUAL_PSEUDO_COLOR,
+  GDK_VISUAL_TRUE_COLOR,
+  GDK_VISUAL_DIRECT_COLOR
+} GdkVisualType;
 
 /* Types of font.
  *   GDK_FONT_FONT: the font is an XFontStruct.
@@ -181,9 +180,9 @@ typedef enum
  */
 typedef enum
 {
-  G_SV (GDK_FONT_FONT,		font),
-  G_SV (GDK_FONT_FONTSET,	fontset)
-} G_ENUM (GdkFontType);
+  GDK_FONT_FONT,
+  GDK_FONT_FONTSET
+} GdkFontType;
 
 /* Window attribute mask values.
  *   GDK_WA_TITLE: The "title" field is valid.
@@ -195,24 +194,24 @@ typedef enum
  */
 typedef enum
 {
-  G_NV (GDK_WA_TITLE,		title,		1 << 1),
-  G_NV (GDK_WA_X,		x,		1 << 2),
-  G_NV (GDK_WA_Y,		y,		1 << 3),
-  G_NV (GDK_WA_CURSOR,		cursor,		1 << 4),
-  G_NV (GDK_WA_COLORMAP,	colormap,	1 << 5),
-  G_NV (GDK_WA_VISUAL,		visual,		1 << 6),
-  G_NV (GDK_WA_WMCLASS,		wmclass,	1 << 7),
-  G_NV (GDK_WA_NOREDIR,		noredir,	1 << 8)
-} G_FLAGS (GdkWindowAttributesType);
+  GDK_WA_TITLE	  = 1 << 1,
+  GDK_WA_X	  = 1 << 2,
+  GDK_WA_Y	  = 1 << 3,
+  GDK_WA_CURSOR	  = 1 << 4,
+  GDK_WA_COLORMAP = 1 << 5,
+  GDK_WA_VISUAL	  = 1 << 6,
+  GDK_WA_WMCLASS  = 1 << 7,
+  GDK_WA_NOREDIR  = 1 << 8
+} GdkWindowAttributesType;
 
 /* Size restriction enumeration.
  */
 typedef enum
 {
-  G_NV (GDK_HINT_POS,		pos,		1 << 0),
-  G_NV (GDK_HINT_MIN_SIZE,	min-size,	1 << 1),
-  G_NV (GDK_HINT_MAX_SIZE,	max-size,	1 << 2)
-} G_FLAGS (GdkWindowHints);
+  GDK_HINT_POS	     = 1 << 0,
+  GDK_HINT_MIN_SIZE  = 1 << 1,
+  GDK_HINT_MAX_SIZE  = 1 << 2
+} GdkWindowHints;
 
 /* GC function types.
  *   Copy: Overwrites destination pixels with the source pixels.
@@ -221,10 +220,10 @@ typedef enum
  */
 typedef enum
 {
-  G_SV (GDK_COPY,	copy),
-  G_SV (GDK_INVERT,	invert),
-  G_SV (GDK_XOR,	xor)
-} G_ENUM (GdkFunction);
+  GDK_COPY,
+  GDK_INVERT,
+  GDK_XOR
+} GdkFunction;
 
 /* GC fill types.
  *  Solid:
@@ -234,11 +233,11 @@ typedef enum
  */
 typedef enum
 {
-  G_SV (GDK_SOLID,		solid),
-  G_SV (GDK_TILED,		tiled),
-  G_SV (GDK_STIPPLED,		stippled),
-  G_SV (GDK_OPAQUE_STIPPLED,	opaque-stippled)
-} G_ENUM (GdkFill);
+  GDK_SOLID,
+  GDK_TILED,
+  GDK_STIPPLED,
+  GDK_OPAQUE_STIPPLED
+} GdkFill;
 
 /* GC fill rule for polygons
  *  EvenOddRule
@@ -246,9 +245,9 @@ typedef enum
  */
 typedef enum
 {
-  G_SV (GDK_EVEN_ODD_RULE,	even-odd-rule),
-  G_SV (GDK_WINDING_RULE,	winding-rule)
-} G_ENUM (GdkFillRule);
+  GDK_EVEN_ODD_RULE,
+  GDK_WINDING_RULE
+} GdkFillRule;
 
 /* GC line styles
  *  Solid:
@@ -257,10 +256,10 @@ typedef enum
  */
 typedef enum
 {
-  G_SV (GDK_LINE_SOLID,		solid),
-  G_SV (GDK_LINE_ON_OFF_DASH,	on-off-dash),
-  G_SV (GDK_LINE_DOUBLE_DASH,	double-dash)
-} G_ENUM (GdkLineStyle);
+  GDK_LINE_SOLID,
+  GDK_LINE_ON_OFF_DASH,
+  GDK_LINE_DOUBLE_DASH
+} GdkLineStyle;
 
 /* GC cap styles
  *  CapNotLast:
@@ -270,11 +269,11 @@ typedef enum
  */
 typedef enum
 {
-  G_SV (GDK_CAP_NOT_LAST,	not-last),
-  G_SV (GDK_CAP_BUTT,		butt),
-  G_SV (GDK_CAP_ROUND,		round),
-  G_SV (GDK_CAP_PROJECTING,	projecting)
-} G_ENUM (GdkCapStyle);
+  GDK_CAP_NOT_LAST,
+  GDK_CAP_BUTT,
+  GDK_CAP_ROUND,
+  GDK_CAP_PROJECTING
+} GdkCapStyle;
 
 /* GC join styles
  *  JoinMiter:
@@ -283,10 +282,10 @@ typedef enum
  */
 typedef enum
 {
-  G_SV (GDK_JOIN_MITER,	miter),
-  G_SV (GDK_JOIN_ROUND,	round),
-  G_SV (GDK_JOIN_BEVEL,	bevel)
-} G_ENUM (GdkJoinStyle);
+  GDK_JOIN_MITER,
+  GDK_JOIN_ROUND,
+  GDK_JOIN_BEVEL
+} GdkJoinStyle;
 
 /* Cursor types.
  */
@@ -298,18 +297,16 @@ typedef enum
 } GdkCursorType;
 
 typedef enum {
-  G_SV (GDK_FILTER_CONTINUE,	continue),  /* Event not handled,
-					     * continue processesing */
-  G_SV (GDK_FILTER_TRANSLATE,	translate), /* Translated event stored */
-  G_SV (GDK_FILTER_REMOVE,	remove)	    /* Terminate processing,
-					     * removing event */
-} G_ENUM (GdkFilterReturn);
+  GDK_FILTER_CONTINUE,	  /* Event not handled, continue processesing */
+  GDK_FILTER_TRANSLATE,	  /* Translated event stored */
+  GDK_FILTER_REMOVE	  /* Terminate processing, removing event */
+} GdkFilterReturn;
 
 typedef enum {
-  G_SV (GDK_VISIBILITY_UNOBSCURED,	unobscured),
-  G_SV (GDK_VISIBILITY_PARTIAL,		partial),
-  G_SV (GDK_VISIBILITY_FULLY_OBSCURED,	fully-obscured)
-} G_ENUM (GdkVisibilityState);
+  GDK_VISIBILITY_UNOBSCURED,
+  GDK_VISIBILITY_PARTIAL,
+  GDK_VISIBILITY_FULLY_OBSCURED
+} GdkVisibilityState;
 
 /* Event types.
  *   Nothing: No event occurred.
@@ -335,68 +332,67 @@ typedef enum {
  */
 typedef enum
 {
-  G_NV (GDK_NOTHING,		NOTHING,	-1),
-  G_NV (GDK_DELETE,		delete,		 0),
-  G_NV (GDK_DESTROY,		destroy,	 1),
-  G_NV (GDK_EXPOSE,		expose,		 2),
-  G_NV (GDK_MOTION_NOTIFY,	motion-notify,	 3),
-  G_NV (GDK_BUTTON_PRESS,	button-press,	 4),
-  G_NV (GDK_2BUTTON_PRESS,	2button-press,	 5),
-  G_NV (GDK_3BUTTON_PRESS,	3button-press,	 6),
-  G_NV (GDK_BUTTON_RELEASE,	button-release,	 7),
-  G_NV (GDK_KEY_PRESS,		key-press,	 8),
-  G_NV (GDK_KEY_RELEASE,	key-release,	 9),
-  G_NV (GDK_ENTER_NOTIFY,	enter-notify,	 10),
-  G_NV (GDK_LEAVE_NOTIFY,	leave-notify,	 11),
-  G_NV (GDK_FOCUS_CHANGE,	focus-change,	 12),
-  G_NV (GDK_CONFIGURE,		configure,	 13),
-  G_NV (GDK_MAP,		map,		 14),
-  G_NV (GDK_UNMAP,		unmap,		 15),
-  G_NV (GDK_PROPERTY_NOTIFY,	property-notify, 16),
-  G_NV (GDK_SELECTION_CLEAR,	selection-clear, 17),
-  G_NV (GDK_SELECTION_REQUEST,	selection-request,18),
-  G_NV (GDK_SELECTION_NOTIFY,	selection-notify,19),
-  G_NV (GDK_PROXIMITY_IN,	proximity-in,	 20),
-  G_NV (GDK_PROXIMITY_OUT,	proximity-out,	 21),
-  G_NV (GDK_DRAG_BEGIN,		drag-begin,	 22),
-  G_NV (GDK_DRAG_REQUEST,	drag-request,	 23),
-  G_NV (GDK_DROP_ENTER,		drop-enter,	 24),
-  G_NV (GDK_DROP_LEAVE,		drop-leave,	 25),
-  G_NV (GDK_DROP_DATA_AVAIL,	drop-data-avail, 26),
-  G_NV (GDK_CLIENT_EVENT,	client-event,	 27),
-  G_NV (GDK_VISIBILITY_NOTIFY,	visibility-notify, 28),
-  G_NV (GDK_NO_EXPOSE,		no-expose,	 29),
-  G_NV (GDK_OTHER_EVENT,	other-event,	 9999)	/* Deprecated, use
-							 * filters instead */
-} G_ENUM (GdkEventType);
+  GDK_NOTHING		= -1,
+  GDK_DELETE		= 0,
+  GDK_DESTROY		= 1,
+  GDK_EXPOSE		= 2,
+  GDK_MOTION_NOTIFY	= 3,
+  GDK_BUTTON_PRESS	= 4,
+  GDK_2BUTTON_PRESS	= 5,
+  GDK_3BUTTON_PRESS	= 6,
+  GDK_BUTTON_RELEASE	= 7,
+  GDK_KEY_PRESS		= 8,
+  GDK_KEY_RELEASE	= 9,
+  GDK_ENTER_NOTIFY	= 10,
+  GDK_LEAVE_NOTIFY	= 11,
+  GDK_FOCUS_CHANGE	= 12,
+  GDK_CONFIGURE		= 13,
+  GDK_MAP		= 14,
+  GDK_UNMAP		= 15,
+  GDK_PROPERTY_NOTIFY	= 16,
+  GDK_SELECTION_CLEAR	= 17,
+  GDK_SELECTION_REQUEST = 18,
+  GDK_SELECTION_NOTIFY	= 19,
+  GDK_PROXIMITY_IN	= 20,
+  GDK_PROXIMITY_OUT	= 21,
+  GDK_DRAG_BEGIN	= 22,
+  GDK_DRAG_REQUEST	= 23,
+  GDK_DROP_ENTER	= 24,
+  GDK_DROP_LEAVE	= 25,
+  GDK_DROP_DATA_AVAIL	= 26,
+  GDK_CLIENT_EVENT	= 27,
+  GDK_VISIBILITY_NOTIFY = 28,
+  GDK_NO_EXPOSE		= 29,
+  GDK_OTHER_EVENT	= 9999	/* Deprecated, use filters instead */
+} GdkEventType;
 
 /* Event masks. (Used to select what types of events a window
  *  will receive).
  */
 typedef enum
 {
-  G_NV (GDK_EXPOSURE_MASK,		exposure-mask,		1 << 1),
-  G_NV (GDK_POINTER_MOTION_MASK,	pointer-motion-mask,	1 << 2),
-  G_NV (GDK_POINTER_MOTION_HINT_MASK,	pointer-motion-hint-mask, 1 << 3),
-  G_NV (GDK_BUTTON_MOTION_MASK,		button-motion-mask,	1 << 4),
-  G_NV (GDK_BUTTON1_MOTION_MASK,	button1-motion-mask,	1 << 5),
-  G_NV (GDK_BUTTON2_MOTION_MASK,	button2-motion-mask,	1 << 6),
-  G_NV (GDK_BUTTON3_MOTION_MASK,	button3-motion-mask,	1 << 7),
-  G_NV (GDK_BUTTON_PRESS_MASK,		button-press-mask,	1 << 8),
-  G_NV (GDK_BUTTON_RELEASE_MASK,	button-release-mask,	1 << 9),
-  G_NV (GDK_KEY_PRESS_MASK,		key-press-mask,		1 << 10),
-  G_NV (GDK_KEY_RELEASE_MASK,		key-release-mask,	1 << 11),
-  G_NV (GDK_ENTER_NOTIFY_MASK,		enter-notify-mask,	1 << 12),
-  G_NV (GDK_LEAVE_NOTIFY_MASK,		leave-notify-mask,	1 << 13),
-  G_NV (GDK_FOCUS_CHANGE_MASK,		focus-change-mask,	1 << 14),
-  G_NV (GDK_STRUCTURE_MASK,		structure-mask,		1 << 15),
-  G_NV (GDK_PROPERTY_CHANGE_MASK,	property-change-mask,	1 << 16),
-  G_NV (GDK_VISIBILITY_NOTIFY_MASK,	visibility-notify-mask,	1 << 17),
-  G_NV (GDK_PROXIMITY_IN_MASK,		proximity-in-mask,	1 << 18),
-  G_NV (GDK_PROXIMITY_OUT_MASK,		proximity-out-mask,	1 << 19),
-  G_NV (GDK_SUBSTRUCTURE_MASK,		substructure-mask,	1 << 20),
-  G_NV (GDK_ALL_EVENTS_MASK,		all-events-mask,	0x0FFFFF)
-} G_FLAGS (GdkEventMask);
+  GDK_EXPOSURE_MASK		= 1 << 1,
+  GDK_POINTER_MOTION_MASK	= 1 << 2,
+  GDK_POINTER_MOTION_HINT_MASK	= 1 << 3,
+  GDK_BUTTON_MOTION_MASK	= 1 << 4,
+  GDK_BUTTON1_MOTION_MASK	= 1 << 5,
+  GDK_BUTTON2_MOTION_MASK	= 1 << 6,
+  GDK_BUTTON3_MOTION_MASK	= 1 << 7,
+  GDK_BUTTON_PRESS_MASK		= 1 << 8,
+  GDK_BUTTON_RELEASE_MASK	= 1 << 9,
+  GDK_KEY_PRESS_MASK		= 1 << 10,
+  GDK_KEY_RELEASE_MASK		= 1 << 11,
+  GDK_ENTER_NOTIFY_MASK		= 1 << 12,
+  GDK_LEAVE_NOTIFY_MASK		= 1 << 13,
+  GDK_FOCUS_CHANGE_MASK		= 1 << 14,
+  GDK_STRUCTURE_MASK		= 1 << 15,
+  GDK_PROPERTY_CHANGE_MASK	= 1 << 16,
+  GDK_VISIBILITY_NOTIFY_MASK	= 1 << 17,
+  GDK_PROXIMITY_IN_MASK		= 1 << 18,
+  GDK_PROXIMITY_OUT_MASK	= 1 << 19,
+  GDK_SUBSTRUCTURE_MASK		= 1 << 20,
+  GDK_ALL_EVENTS_MASK		= 0x0FFFFF
+} GdkEventMask;
 
 /* Types of enter/leave notifications.
  *   Ancestor:
@@ -408,13 +404,13 @@ typedef enum
  */
 typedef enum
 {
-  G_NV (GDK_NOTIFY_ANCESTOR,		ancestor,		0),
-  G_NV (GDK_NOTIFY_VIRTUAL,		virtual,		1),
-  G_NV (GDK_NOTIFY_INFERIOR,		inferior,		2),
-  G_NV (GDK_NOTIFY_NONLINEAR,		nonlinear,		3),
-  G_NV (GDK_NOTIFY_NONLINEAR_VIRTUAL,	nonlinear-virtual,	4),
-  G_NV (GDK_NOTIFY_UNKNOWN,		unknown,		5)
-} G_ENUM (GdkNotifyType);
+  GDK_NOTIFY_ANCESTOR		= 0,
+  GDK_NOTIFY_VIRTUAL		= 1,
+  GDK_NOTIFY_INFERIOR		= 2,
+  GDK_NOTIFY_NONLINEAR		= 3,
+  GDK_NOTIFY_NONLINEAR_VIRTUAL	= 4,
+  GDK_NOTIFY_UNKNOWN		= 5
+} GdkNotifyType;
 
 /* Enter/leave event modes.
  *   NotifyNormal
@@ -423,188 +419,188 @@ typedef enum
  */
 typedef enum
 {
-  G_SV (GDK_CROSSING_NORMAL,	crossing-normal),
-  G_SV (GDK_CROSSING_GRAB,	crossing-grab),
-  G_SV (GDK_CROSSING_UNGRAB,	crossing-ungrab)
-} G_ENUM (GdkCrossingMode);
+  GDK_CROSSING_NORMAL,
+  GDK_CROSSING_GRAB,
+  GDK_CROSSING_UNGRAB
+} GdkCrossingMode;
 
 /* Types of modifiers.
  */
 typedef enum
 {
-  G_NV (GDK_SHIFT_MASK,		shift-mask,	1 << 0),
-  G_NV (GDK_LOCK_MASK,		lock-mask,	1 << 1),
-  G_NV (GDK_CONTROL_MASK,	control-mask,	1 << 2),
-  G_NV (GDK_MOD1_MASK,		mod1-mask,	1 << 3),
-  G_NV (GDK_MOD2_MASK,		mod2-mask,	1 << 4),
-  G_NV (GDK_MOD3_MASK,		mod3-mask,	1 << 5),
-  G_NV (GDK_MOD4_MASK,		mod4-mask,	1 << 6),
-  G_NV (GDK_MOD5_MASK,		mod5-mask,	1 << 7),
-  G_NV (GDK_BUTTON1_MASK,	button1-mask,	1 << 8),
-  G_NV (GDK_BUTTON2_MASK,	button2-mask,	1 << 9),
-  G_NV (GDK_BUTTON3_MASK,	button3-mask,	1 << 10),
-  G_NV (GDK_BUTTON4_MASK,	button4-mask,	1 << 11),
-  G_NV (GDK_BUTTON5_MASK,	button5-mask,	1 << 12),
-  G_NV (GDK_MODIFIER_MASK,	modifier-mask,	0x1fff)
-} G_FLAGS (GdkModifierType);
+  GDK_SHIFT_MASK    = 1 << 0,
+  GDK_LOCK_MASK	    = 1 << 1,
+  GDK_CONTROL_MASK  = 1 << 2,
+  GDK_MOD1_MASK	    = 1 << 3,
+  GDK_MOD2_MASK	    = 1 << 4,
+  GDK_MOD3_MASK	    = 1 << 5,
+  GDK_MOD4_MASK	    = 1 << 6,
+  GDK_MOD5_MASK	    = 1 << 7,
+  GDK_BUTTON1_MASK  = 1 << 8,
+  GDK_BUTTON2_MASK  = 1 << 9,
+  GDK_BUTTON3_MASK  = 1 << 10,
+  GDK_BUTTON4_MASK  = 1 << 11,
+  GDK_BUTTON5_MASK  = 1 << 12,
+  GDK_MODIFIER_MASK = 0x1fff
+} GdkModifierType;
 
 typedef enum
 {
-  G_NV (GDK_CLIP_BY_CHILDREN,	clip-by-children,	0),
-  G_NV (GDK_INCLUDE_INFERIORS,	include-inferiors,	1)
-} G_ENUM (GdkSubwindowMode);
+  GDK_CLIP_BY_CHILDREN	= 0,
+  GDK_INCLUDE_INFERIORS = 1
+} GdkSubwindowMode;
 
 typedef enum
 {
-  G_NV (GDK_INPUT_READ,		read,		1 << 0),
-  G_NV (GDK_INPUT_WRITE,	write,		1 << 1),
-  G_NV (GDK_INPUT_EXCEPTION,	exception,	1 << 2)
-} G_FLAGS (GdkInputCondition);
+  GDK_INPUT_READ       = 1 << 0,
+  GDK_INPUT_WRITE      = 1 << 1,
+  GDK_INPUT_EXCEPTION  = 1 << 2
+} GdkInputCondition;
 
 typedef enum
 {
-  G_NV (GDK_OK,			ok,		 0),
-  G_NV (GDK_ERROR,		error,		-1),
-  G_NV (GDK_ERROR_PARAM,	error-param,	-2),
-  G_NV (GDK_ERROR_FILE,		error-file,	-3),
-  G_NV (GDK_ERROR_MEM,		error-mem,	-4)
-} G_ENUM (GdkStatus);
+  GDK_OK	  = 0,
+  GDK_ERROR	  = -1,
+  GDK_ERROR_PARAM = -2,
+  GDK_ERROR_FILE  = -3,
+  GDK_ERROR_MEM	  = -4
+} GdkStatus;
 
 typedef enum
 {
-  G_SV (GDK_LSB_FIRST,	lsb-first),
-  G_SV (GDK_MSB_FIRST,	msb-first)
-} G_ENUM (GdkByteOrder);
+  GDK_LSB_FIRST,
+  GDK_MSB_FIRST
+} GdkByteOrder;
 
 typedef enum
 {
-  G_NV (GDK_GC_FOREGROUND,	foreground,	1 << 0),
-  G_NV (GDK_GC_BACKGROUND,	background,	1 << 1),
-  G_NV (GDK_GC_FONT,		font,		1 << 2),
-  G_NV (GDK_GC_FUNCTION,	function,	1 << 3),
-  G_NV (GDK_GC_FILL,		fill,		1 << 4),
-  G_NV (GDK_GC_TILE,		tile,		1 << 5),
-  G_NV (GDK_GC_STIPPLE,		stipple,	1 << 6),
-  G_NV (GDK_GC_CLIP_MASK,	clip-mask,	1 << 7),
-  G_NV (GDK_GC_SUBWINDOW,	subwindow,	1 << 8),
-  G_NV (GDK_GC_TS_X_ORIGIN,	ts-x-origin,	1 << 9),
-  G_NV (GDK_GC_TS_Y_ORIGIN,	ts-y-origin,	1 << 10),
-  G_NV (GDK_GC_CLIP_X_ORIGIN,	clip-x-origin,	1 << 11),
-  G_NV (GDK_GC_CLIP_Y_ORIGIN,	clip-y-origin,	1 << 12),
-  G_NV (GDK_GC_EXPOSURES,	exposures,	1 << 13),
-  G_NV (GDK_GC_LINE_WIDTH,	line-width,	1 << 14),
-  G_NV (GDK_GC_LINE_STYLE,	line-style,	1 << 15),
-  G_NV (GDK_GC_CAP_STYLE,	cap-style,	1 << 16),
-  G_NV (GDK_GC_JOIN_STYLE,	join-style,	1 << 17)
-} G_FLAGS (GdkGCValuesMask);
+  GDK_GC_FOREGROUND    = 1 << 0,
+  GDK_GC_BACKGROUND    = 1 << 1,
+  GDK_GC_FONT	       = 1 << 2,
+  GDK_GC_FUNCTION      = 1 << 3,
+  GDK_GC_FILL	       = 1 << 4,
+  GDK_GC_TILE	       = 1 << 5,
+  GDK_GC_STIPPLE       = 1 << 6,
+  GDK_GC_CLIP_MASK     = 1 << 7,
+  GDK_GC_SUBWINDOW     = 1 << 8,
+  GDK_GC_TS_X_ORIGIN   = 1 << 9,
+  GDK_GC_TS_Y_ORIGIN   = 1 << 10,
+  GDK_GC_CLIP_X_ORIGIN = 1 << 11,
+  GDK_GC_CLIP_Y_ORIGIN = 1 << 12,
+  GDK_GC_EXPOSURES     = 1 << 13,
+  GDK_GC_LINE_WIDTH    = 1 << 14,
+  GDK_GC_LINE_STYLE    = 1 << 15,
+  GDK_GC_CAP_STYLE     = 1 << 16,
+  GDK_GC_JOIN_STYLE    = 1 << 17
+} GdkGCValuesMask;
 
 typedef enum
 {
-  G_NV (GDK_SELECTION_PRIMARY,		primary,	1),
-  G_NV (GDK_SELECTION_SECONDARY,	secondary,	2)
-} G_ENUM (GdkSelection);
+  GDK_SELECTION_PRIMARY = 1,
+  GDK_SELECTION_SECONDARY = 2
+} GdkSelection;
 
 typedef enum
 {
-  G_SV (GDK_PROPERTY_NEW_VALUE,	new-value),
-  G_SV (GDK_PROPERTY_DELETE,	delete)
-} G_ENUM (GdkPropertyState);
+  GDK_PROPERTY_NEW_VALUE,
+  GDK_PROPERTY_DELETE
+} GdkPropertyState;
 
 typedef enum
 {
-  G_SV (GDK_PROP_MODE_REPLACE,	replace),
-  G_SV (GDK_PROP_MODE_PREPEND,	prepend),
-  G_SV (GDK_PROP_MODE_APPEND,	append)
-} G_ENUM (GdkPropMode);
+  GDK_PROP_MODE_REPLACE,
+  GDK_PROP_MODE_PREPEND,
+  GDK_PROP_MODE_APPEND
+} GdkPropMode;
 
 /* These definitions are for version 1 of the OffiX D&D protocol,
    taken from <OffiX/DragAndDropTypes.h> */
 typedef enum
 {
-  G_NV (GDK_DNDTYPE_NOTDND,	NOTDND,		-1),
-  G_NV (GDK_DNDTYPE_UNKNOWN,	UNKNOWN,	0),
-  G_NV (GDK_DNDTYPE_RAWDATA,	RAWDATA,	1),
-  G_NV (GDK_DNDTYPE_FILE,	FILE,		2),
-  G_NV (GDK_DNDTYPE_FILES,	FILES,		3),
-  G_NV (GDK_DNDTYPE_TEXT,	text,		4),
-  G_NV (GDK_DNDTYPE_DIR,	dir,		5),
-  G_NV (GDK_DNDTYPE_LINK,	link,		6),
-  G_NV (GDK_DNDTYPE_EXE,	exe,		7),
-  G_NV (GDK_DNDTYPE_URL,	url,		8),
-  G_NV (GDK_DNDTYPE_MIME,	mime,		9),
-  G_NV (GDK_DNDTYPE_END,	end,		10)
-} G_ENUM (GdkDndType);
+  GDK_DNDTYPE_NOTDND = -1,
+  GDK_DNDTYPE_UNKNOWN = 0,
+  GDK_DNDTYPE_RAWDATA = 1,
+  GDK_DNDTYPE_FILE = 2,
+  GDK_DNDTYPE_FILES = 3,
+  GDK_DNDTYPE_TEXT = 4,
+  GDK_DNDTYPE_DIR = 5,
+  GDK_DNDTYPE_LINK = 6,
+  GDK_DNDTYPE_EXE = 7,
+  GDK_DNDTYPE_URL = 8,
+  GDK_DNDTYPE_MIME = 9,
+  GDK_DNDTYPE_END = 10
+} GdkDndType;
 
 /* Enums for XInput support */
 
 typedef enum
 {
-  G_SV (GDK_SOURCE_MOUSE,	mouse),
-  G_SV (GDK_SOURCE_PEN,		pen),
-  G_SV (GDK_SOURCE_ERASER,	eraser),
-  G_SV (GDK_SOURCE_CURSOR,	cursor)
-} G_ENUM (GdkInputSource);
+  GDK_SOURCE_MOUSE,
+  GDK_SOURCE_PEN,
+  GDK_SOURCE_ERASER,
+  GDK_SOURCE_CURSOR
+} GdkInputSource;
 
 typedef enum
 {
-  G_SV (GDK_MODE_DISABLED,	disabled),
-  G_SV (GDK_MODE_SCREEN,	screen),
-  G_SV (GDK_MODE_WINDOW,	window)
-} G_ENUM (GdkInputMode);
+  GDK_MODE_DISABLED,
+  GDK_MODE_SCREEN,
+  GDK_MODE_WINDOW
+} GdkInputMode;
 
 typedef enum
 {
-  G_SV (GDK_AXIS_IGNORE,	ignore),
-  G_SV (GDK_AXIS_X,		x),
-  G_SV (GDK_AXIS_Y,		y),
-  G_SV (GDK_AXIS_PRESSURE,	pressure),
-  G_SV (GDK_AXIS_XTILT,		xtilt),
-  G_SV (GDK_AXIS_YTILT,		ytilt),
-  G_SV (GDK_AXIS_LAST,		last)
-} G_ENUM (GdkAxisUse);
+  GDK_AXIS_IGNORE,
+  GDK_AXIS_X,
+  GDK_AXIS_Y,
+  GDK_AXIS_PRESSURE,
+  GDK_AXIS_XTILT,
+  GDK_AXIS_YTILT,
+  GDK_AXIS_LAST
+} GdkAxisUse;
 
 /* The next two types define enums for predefined atoms relating
- * to selections. In general, one will need to use gdk_intern_atom
- */
-typedef enum
-{
-  G_NV (GDK_TARGET_BITMAP,	bitmap,		5),
-  G_NV (GDK_TARGET_COLORMAP,	colormap,	7),
-  G_NV (GDK_TARGET_DRAWABLE,	drawable,	17),
-  G_NV (GDK_TARGET_PIXMAP,	pixmap,		20),
-  G_NV (GDK_TARGET_STRING,	string,		31)
-} G_ENUM (GdkTarget);
+   to selections. In general, one will need to use gdk_intern_atom */
 
 typedef enum
 {
-  G_NV (GDK_SELECTION_TYPE_ATOM,	atom,		4),
-  G_NV (GDK_SELECTION_TYPE_BITMAP,	bitmap,		5),
-  G_NV (GDK_SELECTION_TYPE_COLORMAP,	colormap,	7),
-  G_NV (GDK_SELECTION_TYPE_DRAWABLE,	drawable,	17),
-  G_NV (GDK_SELECTION_TYPE_INTEGER,	integer,	19),
-  G_NV (GDK_SELECTION_TYPE_PIXMAP,	pixmap,		20),
-  G_NV (GDK_SELECTION_TYPE_WINDOW,	window,		33),
-  G_NV (GDK_SELECTION_TYPE_STRING,	string,		31)
-} G_ENUM (GdkSelectionType);
+  GDK_TARGET_BITMAP = 5,
+  GDK_TARGET_COLORMAP = 7,
+  GDK_TARGET_DRAWABLE = 17,
+  GDK_TARGET_PIXMAP = 20,
+  GDK_TARGET_STRING = 31
+} GdkTarget;
 
 typedef enum
 {
-  G_SV (GDK_EXTENSION_EVENTS_NONE,	none),
-  G_SV (GDK_EXTENSION_EVENTS_ALL,	all),
-  G_SV (GDK_EXTENSION_EVENTS_CURSOR,	cursor)
-} G_ENUM (GdkExtensionMode);
+  GDK_SELECTION_TYPE_ATOM = 4,
+  GDK_SELECTION_TYPE_BITMAP = 5,
+  GDK_SELECTION_TYPE_COLORMAP = 7,
+  GDK_SELECTION_TYPE_DRAWABLE = 17,
+  GDK_SELECTION_TYPE_INTEGER = 19,
+  GDK_SELECTION_TYPE_PIXMAP = 20,
+  GDK_SELECTION_TYPE_WINDOW = 33,
+  GDK_SELECTION_TYPE_STRING = 31
+} GdkSelectionType;
 
 typedef enum
 {
-  GdkIMPreeditArea	= 0x0001L,
-  GdkIMPreeditCallbacks = 0x0002L,
-  GdkIMPreeditPosition	= 0x0004L,
-  GdkIMPreeditNothing	= 0x0008L,
-  GdkIMPreeditNone	= 0x0010L,
-  GdkIMStatusArea	= 0x0100L,
-  GdkIMStatusCallbacks	= 0x0200L,
-  GdkIMStatusNothing	= 0x0400L,
-  GdkIMStatusNone	= 0x0800L
+  GDK_EXTENSION_EVENTS_NONE,
+  GDK_EXTENSION_EVENTS_ALL,
+  GDK_EXTENSION_EVENTS_CURSOR
+} GdkExtensionMode;
+
+typedef enum			/*< flags >*/
+{
+  GdkIMPreeditArea	= 0x0001L, /*< nick=preedit-area >*/
+  GdkIMPreeditCallbacks = 0x0002L, /*< nick=preedit-callbacks >*/
+  GdkIMPreeditPosition	= 0x0004L, /*< nick=preedit-position >*/
+  GdkIMPreeditNothing	= 0x0008L, /*< nick=preedit-nothing >*/
+  GdkIMPreeditNone	= 0x0010L, /*< nick=preedit-none >*/
+  GdkIMStatusArea	= 0x0100L, /*< nick=status-area >*/
+  GdkIMStatusCallbacks	= 0x0200L, /*< nick=status-callbacks >*/
+  GdkIMStatusNothing	= 0x0400L, /*< nick=status-nothing >*/
+  GdkIMStatusNone	= 0x0800L  /*< nick=status-none >*/
 } GdkIMStyle;
 
 /* The next two enumeration values current match the
@@ -614,24 +610,24 @@ typedef enum
  */
 typedef enum
 {
-  G_NV (GDK_DECOR_ALL,		all,		1 << 0),
-  G_NV (GDK_DECOR_BORDER,	border,		1 << 1),
-  G_NV (GDK_DECOR_RESIZEH,	resizeh,	1 << 2),
-  G_NV (GDK_DECOR_TITLE,	title,		1 << 3),
-  G_NV (GDK_DECOR_MENU,		menu,		1 << 4),
-  G_NV (GDK_DECOR_MINIMIZE,	minimize,	1 << 5),
-  G_NV (GDK_DECOR_MAXIMIZE,	maximize,	1 << 6)
-} G_FLAGS (GdkWMDecoration);
+  GDK_DECOR_ALL		= 1 << 0,
+  GDK_DECOR_BORDER	= 1 << 1,
+  GDK_DECOR_RESIZEH	= 1 << 2,
+  GDK_DECOR_TITLE	= 1 << 3,
+  GDK_DECOR_MENU	= 1 << 4,
+  GDK_DECOR_MINIMIZE	= 1 << 5,
+  GDK_DECOR_MAXIMIZE	= 1 << 6
+} GdkWMDecoration;
 
 typedef enum
 {
-  G_NV (GDK_FUNC_ALL,		all,		1 << 0),
-  G_NV (GDK_FUNC_RESIZE,	resize,		1 << 1),
-  G_NV (GDK_FUNC_MOVE,		move,		1 << 2),
-  G_NV (GDK_FUNC_MINIMIZE,	minimize,	1 << 3),
-  G_NV (GDK_FUNC_MAXIMIZE,	maximize,	1 << 4),
-  G_NV (GDK_FUNC_CLOSE,		close,		1 << 5)
-} G_FLAGS (GdkWMFunction);
+  GDK_FUNC_ALL		= 1 << 0,
+  GDK_FUNC_RESIZE	= 1 << 1,
+  GDK_FUNC_MOVE		= 1 << 2,
+  GDK_FUNC_MINIMIZE	= 1 << 3,
+  GDK_FUNC_MAXIMIZE	= 1 << 4,
+  GDK_FUNC_CLOSE	= 1 << 5
+} GdkWMFunction;
 
 #define GdkIMPreeditMask \
 	( GdkIMPreeditArea     | GdkIMPreeditCallbacks | \
@@ -660,13 +656,13 @@ typedef void (*GdkDestroyNotify) (gpointer data);
 
 typedef enum
 {
-  G_SV (GDK_CC_MODE_UNDEFINED,	undefined),
-  G_SV (GDK_CC_MODE_BW,		bw),
-  G_SV (GDK_CC_MODE_STD_CMAP,	std-cmap),
-  G_SV (GDK_CC_MODE_TRUE,	true),
-  G_SV (GDK_CC_MODE_MY_GRAY,	my-gray),
-  G_SV (GDK_CC_MODE_PALETTE,	palette)
-} G_ENUM (GdkColorContextMode);
+  GDK_CC_MODE_UNDEFINED,
+  GDK_CC_MODE_BW,
+  GDK_CC_MODE_STD_CMAP,
+  GDK_CC_MODE_TRUE,
+  GDK_CC_MODE_MY_GRAY,
+  GDK_CC_MODE_PALETTE
+} GdkColorContextMode;
 
 /* Types of overlapping between a rectangle and a region
  * GDK_OVERLAP_RECTANGLE_IN: rectangle is in region
@@ -676,10 +672,10 @@ typedef enum
 
 typedef enum
 {
-  G_SV (GDK_OVERLAP_RECTANGLE_IN,	in),
-  G_SV (GDK_OVERLAP_RECTANGLE_OUT,	out),
-  G_SV (GDK_OVERLAP_RECTANGLE_PART,	part)
-} G_ENUM (GdkOverlapType);
+  GDK_OVERLAP_RECTANGLE_IN,
+  GDK_OVERLAP_RECTANGLE_OUT,
+  GDK_OVERLAP_RECTANGLE_PART
+} GdkOverlapType;
 
 /* The color type.
  *   A color consists of red, green and blue values in the
@@ -701,7 +697,7 @@ struct _GdkColor
  */
 struct _GdkColormap
 {
-  gint	    size;
+  gint      size;
   GdkColor *colors;
 };
 
@@ -724,15 +720,15 @@ struct _GdkVisual
   GdkByteOrder byte_order;
   gint colormap_size;
   gint bits_per_rgb;
-  
+
   guint32 red_mask;
   gint red_shift;
   gint red_prec;
-  
+
   guint32 green_mask;
   gint green_shift;
   gint green_prec;
-  
+
   guint32 blue_mask;
   gint blue_shift;
   gint blue_prec;
@@ -846,47 +842,47 @@ struct _GdkColorContext
 {
   GdkVisual *visual;
   GdkColormap *colormap;
-  
+
   gint num_colors;		/* available no. of colors in colormap */
   gint max_colors;		/* maximum no. of colors */
   gint num_allocated;		/* no. of allocated colors */
-  
+
   GdkColorContextMode mode;
   gint need_to_free_colormap;
   GdkAtom std_cmap_atom;
-  
+
   gulong *clut;			/* color look-up table */
   GdkColor *cmap;		/* colormap */
-  
+
   GHashTable *color_hash;	/* hash table of allocated colors */
   GdkColor *palette;		/* preallocated palette */
   gint num_palette;		/* size of palette */
-  
+
   GdkColorContextDither *fast_dither;	/* fast dither matrix */
-  
+
   struct
   {
     gint red;
     gint green;
     gint blue;
   } shifts;
-  
+
   struct
   {
     gulong red;
     gulong green;
     gulong blue;
   } masks;
-  
+
   struct
   {
     gint red;
     gint green;
     gint blue;
   } bits;
-  
+
   gulong max_entry;
-  
+
   gulong black_pixel;
   gulong white_pixel;
 };
@@ -1101,7 +1097,7 @@ struct _GdkEventDragRequest
   guint8 isdrop; /* This gdk event can be generated by a couple of
 		    X events - this lets the app know whether the
 		    drop really occurred or we just set the data */
-  
+
   GdkPoint drop_coords;
   gchar *data_type;
   guint32 timestamp;

@@ -43,41 +43,30 @@ typedef struct _GtkPacker           GtkPacker;
 typedef struct _GtkPackerClass      GtkPackerClass;
 typedef struct _GtkPackerChild      GtkPackerChild;
 
-typedef enum
-{
-  G_NV (GTK_PACK_EXPAND,	pack-expand,	1 << 0),
-  G_NV (GTK_FILL_X,		fill-x,		1 << 1),
-  G_NV (GTK_FILL_Y,		fill-y,		1 << 2)
-} G_FLAGS (GtkPackerOptions);
+typedef enum {
+    GTK_PACK_EXPAND   = 1 << 0,	/*< nick=expand >*/
+    GTK_FILL_X        = 1 << 1,
+    GTK_FILL_Y        = 1 << 2
+} GtkPackerOptions;
 
-typedef enum
-{
-  G_SV (GTK_SIDE_TOP,		top),
-  G_SV (GTK_SIDE_BOTTOM,	bottom),
-  G_SV (GTK_SIDE_LEFT,		left),
-  G_SV (GTK_SIDE_RIGHT,		right)
-} G_ENUM (GtkSideType);
+typedef enum {
+    GTK_SIDE_TOP,
+    GTK_SIDE_BOTTOM,
+    GTK_SIDE_LEFT,
+    GTK_SIDE_RIGHT
+} GtkSideType;
 
-typedef enum
-{
-  G_SV (GTK_ANCHOR_CENTER,	center),
-  G_SV (GTK_ANCHOR_NORTH,	north),
-  G_SV (GTK_ANCHOR_NORTH_WEST,	north-west),
-  G_SV (GTK_ANCHOR_NORTH_EAST,	north-east),
-  G_SV (GTK_ANCHOR_SOUTH,	south),
-  G_SV (GTK_ANCHOR_SOUTH_WEST,	south-west),
-  G_SV (GTK_ANCHOR_SOUTH_EAST,	south-east),
-  G_SV (GTK_ANCHOR_WEST,	west),
-  G_SV (GTK_ANCHOR_EAST,	east),
-  GTK_ANCHOR_N		=	GTK_ANCHOR_NORTH,
-  GTK_ANCHOR_NW		=	GTK_ANCHOR_NORTH_WEST,
-  GTK_ANCHOR_NE		=	GTK_ANCHOR_NORTH_EAST,
-  GTK_ANCHOR_S		=	GTK_ANCHOR_SOUTH,
-  GTK_ANCHOR_SW		=	GTK_ANCHOR_SOUTH_WEST,
-  GTK_ANCHOR_SE		=	GTK_ANCHOR_SOUTH_EAST,
-  GTK_ANCHOR_W		=	GTK_ANCHOR_WEST,
-  GTK_ANCHOR_E		=	GTK_ANCHOR_EAST
-} G_ENUM (GtkAnchorType);
+typedef enum {
+    GTK_ANCHOR_CENTER,
+    GTK_ANCHOR_N,
+    GTK_ANCHOR_NW,
+    GTK_ANCHOR_NE,
+    GTK_ANCHOR_S,
+    GTK_ANCHOR_SW,
+    GTK_ANCHOR_SE,
+    GTK_ANCHOR_W,
+    GTK_ANCHOR_E
+} GtkAnchorType;
 
 struct _GtkPackerChild
 {

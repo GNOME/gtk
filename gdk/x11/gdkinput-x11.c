@@ -186,7 +186,7 @@ gdk_input_device_new(XDeviceInfo *device, gint include_core)
 	  if ((xki->min_keycode == 8) && (xki->max_keycode == 32))
 	    {
 	      gdkdev->info.num_keys = 32;
-	      gdkdev->min_keycode = 0;
+	      gdkdev->min_keycode = 1;
 	    }
 	  else
 	    {

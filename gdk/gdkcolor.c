@@ -328,7 +328,7 @@ gdk_colors_store (GdkColormap   *colormap,
   gdk_colormap_change (colormap, ncolors);
 }
 
-gint
+gboolean
 gdk_colors_alloc (GdkColormap   *colormap,
 		  gint           contiguous,
 		  gulong        *planes,
@@ -467,13 +467,13 @@ gdk_color_black (GdkColormap *colormap,
   return return_val;
 }
 
-gint
+gboolean
 gdk_color_parse (const gchar *spec,
 		 GdkColor *color)
 {
   Colormap xcolormap;
   XColor xcolor;
-  gint return_val;
+  gboolean return_val;
 
   g_return_val_if_fail (spec != NULL, FALSE);
   g_return_val_if_fail (color != NULL, FALSE);
@@ -493,7 +493,7 @@ gdk_color_parse (const gchar *spec,
   return return_val;
 }
 
-gint
+gboolean
 gdk_color_alloc (GdkColormap *colormap,
 		 GdkColor    *color)
 {
@@ -501,7 +501,7 @@ gdk_color_alloc (GdkColormap *colormap,
   GdkVisual *visual;
   XColor xcolor;
   gchar *available = NULL;
-  gint return_val;
+  gboolean return_val;
   gint i, index;
 
   g_return_val_if_fail (colormap != NULL, FALSE);
@@ -622,7 +622,7 @@ gdk_color_alloc (GdkColormap *colormap,
   return return_val;
 }
 
-gint
+gboolean
 gdk_color_change (GdkColormap *colormap,
 		  GdkColor    *color)
 {

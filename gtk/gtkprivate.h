@@ -30,19 +30,18 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-
 /* The private flags that are used in the private_flags member of GtkWidget.
  */
 typedef enum
 {
-  G_NV (PRIVATE_GTK_USER_STYLE,		user-style,	1 <<  0),
-  G_NV (PRIVATE_GTK_REDRAW_PENDING,	redraw-pending,	1 <<  1),
-  G_NV (PRIVATE_GTK_RESIZE_PENDING,	resize-pending,	1 <<  2),
-  G_NV (PRIVATE_GTK_RESIZE_NEEDED,	resize-needed,	1 <<  3),
-  G_NV (PRIVATE_GTK_LEAVE_PENDING,	leave-pending,	1 <<  4),
-  G_NV (PRIVATE_GTK_HAS_SHAPE_MASK,	has-shape-mask,	1 <<  5),
-  G_NV (PRIVATE_GTK_IN_REPARENT,	in-reparent,	1 <<  6)
-} G_FLAGS (GtkPrivateFlags);
+  PRIVATE_GTK_USER_STYLE	= 1 <<  0,
+  PRIVATE_GTK_REDRAW_PENDING	= 1 <<  1,
+  PRIVATE_GTK_RESIZE_PENDING	= 1 <<  2,
+  PRIVATE_GTK_RESIZE_NEEDED	= 1 <<  3,
+  PRIVATE_GTK_LEAVE_PENDING	= 1 <<  4,
+  PRIVATE_GTK_HAS_SHAPE_MASK	= 1 <<  5,
+  PRIVATE_GTK_IN_REPARENT       = 1 <<  6
+} GtkPrivateFlags;
 
 /* Macros for extracting a widgets private_flags from GtkWidget.
  */

@@ -24,10 +24,10 @@ extern "C" {
 #endif /* __cplusplus */
 
 typedef enum {
-  G_NV (GTK_DEBUG_OBJECTS,	objects,	1 << 0),
-  G_NV (GTK_DEBUG_MISC,		misc,		1 << 1),
-  G_NV (GTK_DEBUG_SIGNALS,	signals,	1 << 2)
-} G_FLAGS (GtkDebugFlag);
+  GTK_DEBUG_OBJECTS = 1 << 0,
+  GTK_DEBUG_MISC    = 1 << 1,
+  GTK_DEBUG_SIGNALS = 1 << 2
+} GtkDebugFlag;
 
 #ifdef G_ENABLE_DEBUG
 

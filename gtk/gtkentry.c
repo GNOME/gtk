@@ -72,7 +72,7 @@ static void gtk_entry_queue_draw          (GtkEntry          *entry);
 static gint gtk_entry_timer               (gpointer           data);
 static gint gtk_entry_position            (GtkEntry          *entry,
 					   gint               x);
-       void gtk_entry_adjust_scroll       (GtkEntry          *entry);
+static void gtk_entry_adjust_scroll       (GtkEntry          *entry);
 static void gtk_entry_grow_text           (GtkEntry          *entry);
 static void gtk_entry_insert_text         (GtkEditable       *editable,
 					   const gchar       *new_text,
@@ -651,7 +651,6 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 {
   GtkEntry *entry;
   GtkEditable *editable;
-  gint offset;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ENTRY (widget));
@@ -672,14 +671,6 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 			      widget->style->klass->ythickness + INNER_BORDER,
 			      allocation->width - (widget->style->klass->xthickness + INNER_BORDER) * 2,
 			      widget->requisition.height - (widget->style->klass->ythickness + INNER_BORDER) * 2);
-
-      /* Display as much text as we can */
-      offset = MAX(0, entry->char_offset[entry->nchars] - 
-	           (allocation->width -
-	               (widget->style->klass->xthickness + INNER_BORDER) * 2));
-
-      if (entry->scroll_offset > offset)
-	entry->scroll_offset = offset;
 
       /* And make sure the cursor is on screen */
       gtk_entry_adjust_scroll (entry);
@@ -1398,12 +1389,12 @@ gtk_entry_find_position (GtkEntry *entry,
   gint end = entry->nchars;
   gint half;
 
+  if (x <= 0)
+    return 0;
   if (x >= entry->char_offset[end])
     return end;
-  if (x < 0)
-    return 0;
   
-  /* invariant - char_pos[start] <= x < char_pos[end] */
+  /* invariant - char_offset[start] <= x < char_offset[end] */
 
   while (start != end)
     {
@@ -1429,7 +1420,7 @@ gtk_entry_position (GtkEntry *entry,
 void
 gtk_entry_adjust_scroll (GtkEntry *entry)
 {
-  gint xoffset;
+  gint xoffset, max_offset;
   gint text_area_width;
 
   g_return_if_fail (entry != NULL);
@@ -1440,6 +1431,13 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
 
   gdk_window_get_size (entry->text_area, &text_area_width, NULL);
 
+  /* Display as much text as we can */
+  max_offset = MAX(0, entry->char_offset[entry->nchars] - text_area_width);
+
+  if (entry->scroll_offset > max_offset)
+    entry->scroll_offset = max_offset;
+
+  /* And make sure cursor is on screen */
   xoffset = entry->char_offset[gtk_entry_find_char (entry, GTK_EDITABLE(entry)->current_pos)];
   xoffset -= entry->scroll_offset;
 
@@ -2155,6 +2153,7 @@ gtk_entry_style_set	(GtkWidget      *widget,
       scroll_char = gtk_entry_find_position (entry, entry->scroll_offset);
       gtk_entry_recompute_offsets (GTK_ENTRY (widget));
       entry->scroll_offset = entry->char_offset[scroll_char];
+      gtk_entry_adjust_scroll (entry);
 
       gdk_window_set_background (widget->window, &widget->style->base[GTK_STATE_NORMAL]);
       gdk_window_set_background (entry->text_area, &widget->style->base[GTK_STATE_NORMAL]);

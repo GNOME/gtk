@@ -7593,8 +7593,8 @@ other people can benefit. The best place to do this is probably the
 Complete sources for the example widgets are available at the place you 
 got this tutorial, or from:
 
-<htmlurl url="http://www.msc.cornell.edu/~otaylor/gtk-gimp/tutorial"
-name="http://www.msc.cornell.edu/~otaylor/gtk-gimp/tutorial">
+<htmlurl url="http://www.gtk.org/~otaylor/gtk/tutorial/"
+name="http://www.gtk.org/~otaylor/gtk/tutorial/">
 
 
 <!-- ----------------------------------------------------------------- -->
@@ -9465,8 +9465,8 @@ mundane details like creating the main window. The complete
 source code is available from the location from which you got
 this tutorial, or from:
 
-<htmlurl url="http://www.msc.cornell.edu/~otaylor/gtk-gimp/tutorial"
-name="http://www.msc.cornell.edu/~otaylor/gtk-gimp/tutorial">
+<htmlurl url="http://www.gtk.org/~otaylor/gtk/tutorial/"
+name="http://www.gtk.org/~otaylor/gtk/tutorial/">
 
 
 <!-- ----------------------------------------------------------------- -->
@@ -9799,8 +9799,8 @@ That completes the changes to ``XInputize'' our program. As with
 the first version, the complete source is available at the location
 from which you got this tutorial, or from:
 
-<htmlurl url="http://www.msc.cornell.edu/~otaylor/gtk-gimp/tutorial"
-name="http://www.msc.cornell.edu/~otaylor/gtk-gimp/tutorial">
+<htmlurl url="http://www.gtk.org/~otaylor/gtk/tutorial/"
+name="http://www.gtk.org/~otaylor/gtk/tutorial/">
 
 
 <sect2> Further sophistications <label id="sec_Further_Sophistications">

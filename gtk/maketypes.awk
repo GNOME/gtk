@@ -37,22 +37,17 @@ function set_type (set_type_1)
   type_counter += 1;
   type_name = set_type_1;
   type_macro = "GTK_TYPE";
-  type_ident = "";
-  for (i = 0; i < length (type_name); i++)
-    {
-      ch = substr (type_name, i + 1, 1);
-      Ch = toupper (ch);
-      if (Ch == ch)
-	{
-	  type_macro = type_macro "_" Ch;
-	  type_ident = type_ident "_" tolower (ch);
-	}
-      else
-	{
-	  type_macro = type_macro Ch;
-	  type_ident = type_ident ch;
-	}
-    }
+
+  tmp = type_name
+  gsub ("[A-Z][a-z]", "_&", tmp);
+# OK, the following is ridiculous. But easier than writing a loop
+  gsub ("[a-z]", "&@", tmp);
+  gsub ("@[A-Z]", "@&", tmp);
+  gsub ("@@", "_", tmp);
+  gsub ("@", "", tmp);
+  type_macro = type_macro toupper (tmp);
+  type_ident = tolower (tmp);
+
   sub ("^GTK_TYPE_GTK_", "GTK_TYPE_", type_macro);
 }
 
