@@ -33,6 +33,10 @@
 <!ENTITY GtkEntryCompletion SYSTEM "xml/gtkentrycompletion.xml">
 <!ENTITY GtkEventBox SYSTEM "xml/gtkeventbox.xml">
 <!ENTITY GtkExpander SYSTEM "xml/gtkexpander.xml">
+<!ENTITY GtkFileChooser SYSTEM "xml/gtkfilechooser.xml">
+<!ENTITY GtkFileChooserDialog SYSTEM "xml/gtkfilechooserdialog.xml">
+<!ENTITY GtkFileChooserWidget SYSTEM "xml/gtkfilechooserwidget.xml">
+<!ENTITY GtkFileFilter SYSTEM "xml/gtkfilefilter.xml">
 <!ENTITY GtkFileSelection SYSTEM "xml/gtkfilesel.xml">
 <!ENTITY GtkFixed SYSTEM "xml/gtkfixed.xml">
 <!ENTITY GtkFontButton SYSTEM "xml/gtkfontbutton.xml">
@@ -385,14 +389,12 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
 
     <chapter id="MenusAndCombos">
       <title>Menus, Combo Box, Toolbar</title>
-        &GtkCombo;
 	&GtkComboBox;
 	&GtkComboBoxEntry;
         &GtkMenu;
         &GtkMenuBar;
         &GtkMenuItem;
         &GtkMenuShell;
-        &GtkOptionMenu;
 	&GtkImageMenuItem;
         &GtkRadioMenuItem;
         &GtkCheckMenuItem;      
@@ -421,6 +423,10 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkColorSelection;
         &GtkColorSelectionDialog;
         &GtkFileSelection;
+	&GtkFileChooser;
+	&GtkFileChooserDialog;
+	&GtkFileChooserWidget;
+	&GtkFileFilter;
         &GtkFontButton;
         &GtkFontSelection;
         &GtkFontSelectionDialog;
@@ -509,6 +515,8 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
 
     <chapter id="DeprecatedObjects">
       <title>Deprecated</title>
+        &GtkCombo;
+        &GtkOptionMenu;
         &GtkItemFactory;
         &GtkCList;      
         &GtkCTree;

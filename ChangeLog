@@ -1,3 +1,7 @@
+Thu Oct 23 22:33:47 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkfilefilter.c (gtk_file_filter_new): Fix doc markup.
+
 Thu Oct 23 21:49:05 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* NEWS: Remove a few duplicates, group the menu changes.

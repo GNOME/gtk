@@ -152,7 +152,7 @@ gtk_file_filter_finalize (GObject  *object)
  * <informalexample><programlisting>
  * GtkFileFilter *filter = gtk_file_filter_new ();
  * gtk_file_filter_add_pattern (filter, "*");
- * </programlisting></programlisting>
+ * </programlisting></informalexample>
  * 
  * Return value: a new #GtkFileFilter
  **/

@@ -1,3 +1,9 @@
+Thu Oct 23 22:41:02 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-docs.sgml: Move GtkCombo and GtkOptionMenu to
+	the "Deprecated" chapter. Add GtkFileChooser, GtkFileChooserDialog,
+	GtkFileChooseWidget and GtkFileFilter.
+
 2003-10-23  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtk.types: Added gtk_file_chooser_get_type,
