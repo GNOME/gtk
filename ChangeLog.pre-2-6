@@ -1,5 +1,10 @@
 2004-12-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcellview.c (gtk_cell_view_set_background_color): Queue
+	a redraw.  (#160679, Damon Chaplin)
+
+2004-12-07  Matthias Clasen  <mclasen@redhat.com>
+
 	* docs/tools/widgets.h (enum): Add an ASIS widget size.
 
 	* docs/tools/widgets.c (get_all_widgets): Add file chooser,

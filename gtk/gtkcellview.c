@@ -1096,6 +1096,8 @@ gtk_cell_view_set_background_color (GtkCellView    *cell_view,
           g_object_notify (G_OBJECT (cell_view), "background_set");
         }
     }
+
+  gtk_widget_queue_draw (GTK_WIDGET (cellview));
 }
 
 /**
