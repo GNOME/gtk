@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-02-26 11:39+0100\n"
-"PO-Revision-Date: 2002-02-26 11:39+0100\n"
+"POT-Creation-Date: 2002-02-27 01:28+0100\n"
+"PO-Revision-Date: 2002-02-27 01:28+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -962,7 +962,7 @@ msgstr "Pixbuf-expanderare stängd"
 msgid "Pixbuf for closed expander."
 msgstr "Pixbuf för närmaste expanderare."
 
-#: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:521 gtk/gtkprogressbar.c:207
+#: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
 msgid "Text"
 msgstr "Text"
 
@@ -1018,7 +1018,7 @@ msgstr "Förgrundsfärg"
 msgid "Foreground color as a GdkColor"
 msgstr "Förgrundsfärg som en GdkColor"
 
-#: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:453 gtk/gtktexttag.c:277
+#: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
 #: gtk/gtktextview.c:566
 msgid "Editable"
 msgstr "Redigerbar"
@@ -1308,47 +1308,47 @@ msgstr ""
 "denna post kan du dra ett färgprov hit eller högerklicka och välja \"Spara "
 "färg här\"."
 
-#: gtk/gtkcolorsel.c:1698
+#: gtk/gtkcolorsel.c:1704
 msgid "Has Opacity Control"
 msgstr "Har opacitetskontoll"
 
-#: gtk/gtkcolorsel.c:1699
+#: gtk/gtkcolorsel.c:1705
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Huruvida färgväljaren ska tillåta inställning av opacitet"
 
-#: gtk/gtkcolorsel.c:1705
+#: gtk/gtkcolorsel.c:1711
 msgid "Has palette"
 msgstr "Har palett"
 
-#: gtk/gtkcolorsel.c:1706
+#: gtk/gtkcolorsel.c:1712
 msgid "Whether a palette should be used"
 msgstr "Huruvida en palett ska användas"
 
-#: gtk/gtkcolorsel.c:1712
+#: gtk/gtkcolorsel.c:1718
 msgid "Current Color"
 msgstr "Aktuell färg"
 
-#: gtk/gtkcolorsel.c:1713
+#: gtk/gtkcolorsel.c:1719
 msgid "The current color"
 msgstr "Den aktuella färgen"
 
-#: gtk/gtkcolorsel.c:1719
+#: gtk/gtkcolorsel.c:1725
 msgid "Current Alpha"
 msgstr "Aktuellt alfavärde"
 
-#: gtk/gtkcolorsel.c:1720
+#: gtk/gtkcolorsel.c:1726
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "Aktuellt opacitetsvärde (0 är helt transparent, 65535 helt opakt)"
 
-#: gtk/gtkcolorsel.c:1733
+#: gtk/gtkcolorsel.c:1739
 msgid "Custom palette"
 msgstr "Anpassad palett"
 
-#: gtk/gtkcolorsel.c:1734
+#: gtk/gtkcolorsel.c:1740
 msgid "Palette to use in the color selector"
 msgstr "Palett att använda i färgväljaren"
 
-#: gtk/gtkcolorsel.c:1778
+#: gtk/gtkcolorsel.c:1784
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1356,7 +1356,7 @@ msgstr ""
 "Välj den färg som du vill ha från den yttre ringen. Välj mörkheten eller "
 "ljusheten på den färgen genom att använda den inre triangeln."
 
-#: gtk/gtkcolorsel.c:1806
+#: gtk/gtkcolorsel.c:1812
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1364,67 +1364,67 @@ msgstr ""
 "Klicka på pipetten, och klicka sedan på en färg någonstans på din skärm för "
 "att välja den färgen."
 
-#: gtk/gtkcolorsel.c:1815
+#: gtk/gtkcolorsel.c:1821
 msgid "_Hue:"
 msgstr "_Nyans:"
 
-#: gtk/gtkcolorsel.c:1816
+#: gtk/gtkcolorsel.c:1822
 msgid "Position on the color wheel."
 msgstr "Position på färghjulet."
 
-#: gtk/gtkcolorsel.c:1817
+#: gtk/gtkcolorsel.c:1823
 msgid "_Saturation:"
 msgstr "_Mättnad"
 
-#: gtk/gtkcolorsel.c:1818
+#: gtk/gtkcolorsel.c:1824
 msgid "\"Deepness\" of the color."
 msgstr "\"Djup\" på färgen."
 
-#: gtk/gtkcolorsel.c:1819
+#: gtk/gtkcolorsel.c:1825
 msgid "_Value:"
 msgstr "_Värde:"
 
-#: gtk/gtkcolorsel.c:1820
+#: gtk/gtkcolorsel.c:1826
 msgid "Brightness of the color."
 msgstr "Ljushet på färgen."
 
-#: gtk/gtkcolorsel.c:1821
+#: gtk/gtkcolorsel.c:1827
 msgid "_Red:"
 msgstr "_Röd:"
 
-#: gtk/gtkcolorsel.c:1822
+#: gtk/gtkcolorsel.c:1828
 msgid "Amount of red light in the color."
 msgstr "Mängd rött ljus i färgen."
 
-#: gtk/gtkcolorsel.c:1823
+#: gtk/gtkcolorsel.c:1829
 msgid "_Green:"
 msgstr "_Grön:"
 
-#: gtk/gtkcolorsel.c:1824
+#: gtk/gtkcolorsel.c:1830
 msgid "Amount of green light in the color."
 msgstr "Mängd grönt ljus i färgen."
 
-#: gtk/gtkcolorsel.c:1825
+#: gtk/gtkcolorsel.c:1831
 msgid "_Blue:"
 msgstr "_Blå:"
 
-#: gtk/gtkcolorsel.c:1826
+#: gtk/gtkcolorsel.c:1832
 msgid "Amount of blue light in the color."
 msgstr "Mängd blått ljus i bilden."
 
-#: gtk/gtkcolorsel.c:1829
+#: gtk/gtkcolorsel.c:1835
 msgid "_Opacity:"
 msgstr "_Opacitet:"
 
-#: gtk/gtkcolorsel.c:1837
+#: gtk/gtkcolorsel.c:1843
 msgid "Transparency of the currently-selected color."
 msgstr "Genomskinlighet på den färg som är vald för tillfället."
 
-#: gtk/gtkcolorsel.c:1852
+#: gtk/gtkcolorsel.c:1858
 msgid "Color _Name:"
 msgstr "Färg_namn:"
 
-#: gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorsel.c:1870
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1432,7 +1432,7 @@ msgstr ""
 "Du kan ange ett hexadecimalt färgvärde i HTML-stil, eller helt enkelt ange "
 "ett engelskt namn på färgen som exempelvis \"orange\" i detta fält."
 
-#: gtk/gtkcolorsel.c:1883
+#: gtk/gtkcolorsel.c:1889
 msgid "_Palette"
 msgstr "_Palett"
 
@@ -1492,7 +1492,7 @@ msgstr "Kantbredd"
 
 #: gtk/gtkcontainer.c:212
 msgid "The width of the empty border outside the containers children."
-msgstr "Bredden på den tomma kanten utanför containerns barn."
+msgstr "Bredden på den tomma kanten utanför behållarens barn."
 
 #: gtk/gtkcontainer.c:220
 msgid "Child"
@@ -1500,7 +1500,7 @@ msgstr "Barn"
 
 #: gtk/gtkcontainer.c:221
 msgid "Can be used to add a new child to the container."
-msgstr "Kan användas för att lägga till ett nytt barn till containern."
+msgstr "Kan användas för att lägga till ett nytt barn till behållaren."
 
 #: gtk/gtkcurve.c:121
 msgid "Curve type"
@@ -1574,41 +1574,41 @@ msgstr "Kant på åtgärdsutrymme"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Bredd på kanten runt knapputrymmet runt nederkanten på dialogen"
 
-#: gtk/gtkentry.c:433 gtk/gtklabel.c:359
+#: gtk/gtkentry.c:435 gtk/gtklabel.c:359
 msgid "Cursor Position"
 msgstr "Markörposition"
 
-#: gtk/gtkentry.c:434 gtk/gtklabel.c:360
+#: gtk/gtkentry.c:436 gtk/gtklabel.c:360
 msgid "The current position of the insertion cursor in chars."
 msgstr "Den aktuella positionen på insättningspekaren i tecken."
 
-#: gtk/gtkentry.c:443 gtk/gtklabel.c:369
+#: gtk/gtkentry.c:445 gtk/gtklabel.c:369
 msgid "Selection Bound"
 msgstr "Markeringsgräns"
 
-#: gtk/gtkentry.c:444 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:446 gtk/gtklabel.c:370
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars."
 msgstr ""
 "Positionen för den motsatta änden av markeringen från markören i tecken."
 
-#: gtk/gtkentry.c:454
+#: gtk/gtkentry.c:456
 msgid "Whether the entry contents can be edited"
 msgstr "Huruvida fältets innehåll kan redigeras"
 
-#: gtk/gtkentry.c:461
+#: gtk/gtkentry.c:463
 msgid "Maximum length"
 msgstr "Maxlängd"
 
-#: gtk/gtkentry.c:462
+#: gtk/gtkentry.c:464
 msgid "Maximum number of characters for this entry"
 msgstr "Det maximala antalet tecken i fältet"
 
-#: gtk/gtkentry.c:470
+#: gtk/gtkentry.c:472
 msgid "Visibility"
 msgstr "Synlighet"
 
-#: gtk/gtkentry.c:471
+#: gtk/gtkentry.c:473
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1616,28 +1616,28 @@ msgstr ""
 "FALSKT visar det \"osynliga tecknet\" istället för den verkliga texten "
 "(lösenordsläge)"
 
-#: gtk/gtkentry.c:478
+#: gtk/gtkentry.c:480
 msgid "Has Frame"
 msgstr "Har ram"
 
-#: gtk/gtkentry.c:479
+#: gtk/gtkentry.c:481
 msgid "FALSE removes outside bevel from entry."
 msgstr "FALSKT tar bort den yttre avfasningen från fältet."
 
-#: gtk/gtkentry.c:486
+#: gtk/gtkentry.c:488
 msgid "Invisible character"
 msgstr "Osynligt tecken"
 
-#: gtk/gtkentry.c:487
+#: gtk/gtkentry.c:489
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Tecknet att använda när fältets innehåll ska maskeras (i \"lösenordsläge\")"
 
-#: gtk/gtkentry.c:494
+#: gtk/gtkentry.c:496
 msgid "Activates default"
 msgstr "Aktiverar standard"
 
-#: gtk/gtkentry.c:495
+#: gtk/gtkentry.c:497
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed."
@@ -1645,44 +1645,44 @@ msgstr ""
 "Huruvida standardwidgeten ska aktiveras (som exempelvis standardknappen i "
 "ett dialogfönster) när Enter trycks ner."
 
-#: gtk/gtkentry.c:501
+#: gtk/gtkentry.c:503
 msgid "Width in chars"
 msgstr "Bredd i tecken"
 
-#: gtk/gtkentry.c:502
+#: gtk/gtkentry.c:504
 msgid "Number of characters to leave space for in the entry."
 msgstr "Antal tecken som ska lämnas plats till i fältet."
 
-#: gtk/gtkentry.c:511
+#: gtk/gtkentry.c:513
 msgid "Scroll offset"
 msgstr "Rullningsoffset"
 
-#: gtk/gtkentry.c:512
+#: gtk/gtkentry.c:514
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 "Antalet bildpunkter i posten som är rullad utanför skärmen till vänster"
 
-#: gtk/gtkentry.c:522
+#: gtk/gtkentry.c:524
 msgid "The contents of the entry"
 msgstr "Innehållet i fältet"
 
-#: gtk/gtkentry.c:726
+#: gtk/gtkentry.c:728
 msgid "Select on focus"
 msgstr "Markera vid fokus"
 
-#: gtk/gtkentry.c:727
+#: gtk/gtkentry.c:729
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Huruvida ett fälts innehåll markeras då fältet får fokus."
 
-#: gtk/gtkentry.c:3809 gtk/gtklabel.c:3211
+#: gtk/gtkentry.c:3834 gtk/gtklabel.c:3211
 msgid "Select All"
 msgstr "Markera allt"
 
-#: gtk/gtkentry.c:3819 gtk/gtklabel.c:3221
+#: gtk/gtkentry.c:3844 gtk/gtklabel.c:3221
 msgid "Input Methods"
 msgstr "Inmatningsmetoder"
 
-#: gtk/gtkentry.c:3829 gtk/gtktextview.c:6360
+#: gtk/gtkentry.c:3854 gtk/gtktextview.c:6360
 msgid "_Insert Unicode control character"
 msgstr "_Infoga Unicode-styrtecken"
 
@@ -1996,7 +1996,7 @@ msgstr "Skuggtyp"
 
 #: gtk/gtkhandlebox.c:193
 msgid "Appearance of the shadow that surrounds the container."
-msgstr "Utseende på skuggan som omger containern."
+msgstr "Utseende på skuggan som omger behållaren."
 
 #: gtk/gtkhandlebox.c:201
 msgid "Handle position"
@@ -2602,7 +2602,7 @@ msgstr ""
 "Ett tal mellan 0.0 och 1.0 som anger den vertikala justeringen av texten i "
 "förloppswidgeten"
 
-#: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:280 gtk/gtkspinbutton.c:237
+#: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:282 gtk/gtkspinbutton.c:237
 msgid "Adjustment"
 msgstr "Justering"
 
@@ -2678,61 +2678,79 @@ msgstr ""
 msgid "Text to be displayed in the progress bar"
 msgstr "Text att visa i förloppsmätaren"
 
-#: gtk/gtkrange.c:271
+#: gtk/gtkrange.c:273
 msgid "Update policy"
 msgstr "Uppdateringspolicy"
 
-#: gtk/gtkrange.c:272
+#: gtk/gtkrange.c:274
 msgid "How the range should be updated on the screen"
 msgstr "Hur intervallet ska uppdateras på skärmen"
 
-#: gtk/gtkrange.c:281
+#: gtk/gtkrange.c:283
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr ""
 "GtkAdjustment som innehåller det aktuella värdet på detta intervallobjekt"
 
-#: gtk/gtkrange.c:288
+#: gtk/gtkrange.c:290
 msgid "Inverted"
 msgstr "Inverterad"
 
-#: gtk/gtkrange.c:289
+#: gtk/gtkrange.c:291
 msgid "Invert direction slider moves to increase range value"
 msgstr ""
 "Invertera riktningen som rullningslisten flyttar sig för att öka "
 "intervallvärdet"
 
-#: gtk/gtkrange.c:295
+#: gtk/gtkrange.c:297
 msgid "Slider Width"
 msgstr "Bredd på rullningslist"
 
-#: gtk/gtkrange.c:296
+#: gtk/gtkrange.c:298
 msgid "Width of scrollbar or scale thumb"
 msgstr "Bredd på rullningslisten eller skalning"
 
-#: gtk/gtkrange.c:303
+#: gtk/gtkrange.c:305
 msgid "Trough Border"
 msgstr "Genom kant"
 
 # Förslag mottages tacksamt
-#: gtk/gtkrange.c:304
+#: gtk/gtkrange.c:306
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Bredd mellan steg och yttre genom avfasning"
 
-#: gtk/gtkrange.c:311
+#: gtk/gtkrange.c:313
 msgid "Stepper Size"
 msgstr "Stegstorlek"
 
-#: gtk/gtkrange.c:312
+#: gtk/gtkrange.c:314
 msgid "Length of step buttons at ends"
 msgstr "Längd på stegknappar vid ändarna"
 
-#: gtk/gtkrange.c:319
+#: gtk/gtkrange.c:321
 msgid "Stepper Spacing"
 msgstr "Stegmellanrum"
 
-#: gtk/gtkrange.c:320
+#: gtk/gtkrange.c:322
 msgid "Spacing between step buttons and thumb"
 msgstr "Mellanrum mellan stegknappar och steg"
+
+#: gtk/gtkrange.c:329
+msgid "Arrow X Displacement"
+msgstr "X-förflyttning av pil"
+
+#: gtk/gtkrange.c:330
+msgid ""
+"How far in the x direction to move the arrow when the button is depressed"
+msgstr "Hur långt bort i x-riktingen pilen ska flyttas då knappen trycks ned"
+
+#: gtk/gtkrange.c:337
+msgid "Arrow Y Displacement"
+msgstr "Y-förflyttning av pil"
+
+#: gtk/gtkrange.c:338
+msgid ""
+"How far in the y direction to move the arrow when the button is depressed"
+msgstr "Hur långt bort i y-riktningen pilen ska flyttas då knappen trycks ned"
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
@@ -4036,7 +4054,7 @@ msgstr "Förälderwidget"
 
 #: gtk/gtkwidget.c:400
 msgid "The parent widget of this widget. Must be a Container widget."
-msgstr "Förälderwidgeten till denna widget. Måste vara en containerwidget."
+msgstr "Förälderwidgeten till denna widget. Måste vara en behållarwidget."
 
 #: gtk/gtkwidget.c:407
 msgid "Width request"
