@@ -105,7 +105,7 @@ static void     gtk_entry_completion_selection_changed   (GtkTreeSelection      
 
 static void     gtk_entry_completion_insert_action       (GtkEntryCompletion      *completion,
                                                           gint                     index,
-                                                          gchar                   *string,
+                                                          const gchar             *string,
                                                           gboolean                 markup);
 static void     gtk_entry_completion_action_data_func    (GtkTreeViewColumn       *tree_column,
                                                           GtkCellRenderer         *cell,
@@ -870,7 +870,7 @@ gtk_entry_completion_complete (GtkEntryCompletion *completion)
 static void
 gtk_entry_completion_insert_action (GtkEntryCompletion *completion,
                                     gint                index,
-                                    gchar              *string,
+                                    const gchar        *string,
                                     gboolean            markup)
 {
   GtkTreeIter iter;
@@ -910,7 +910,7 @@ gtk_entry_completion_insert_action (GtkEntryCompletion *completion,
 void
 gtk_entry_completion_insert_action_text (GtkEntryCompletion *completion,
                                          gint                index,
-                                         gchar              *text)
+                                         const gchar        *text)
 {
   g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
   g_return_if_fail (text != NULL);
@@ -932,7 +932,7 @@ gtk_entry_completion_insert_action_text (GtkEntryCompletion *completion,
 void
 gtk_entry_completion_insert_action_markup (GtkEntryCompletion *completion,
                                            gint                index,
-                                           gchar              *markup)
+                                           const gchar        *markup)
 {
   g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
   g_return_if_fail (markup != NULL);

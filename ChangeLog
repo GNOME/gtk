@@ -1,3 +1,11 @@
+Sat Oct 11 15:47:03 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkentrycompletion.[ch] (gtk_entry_completion_insert_action),
+	(gtk_entry_completion_insert_action_text),
+	(gtk_entry_completion_insert_action_markup): the gchar* parameters
+	should be const (pointed out by both Marco Pesenti Gritti and
+	Murray Cumming (#124356).
+
 Sat Oct 11 15:37:19 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_size_allocate): for the custom

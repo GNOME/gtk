@@ -87,10 +87,10 @@ void                gtk_entry_completion_complete               (GtkEntryComplet
 
 void                gtk_entry_completion_insert_action_text     (GtkEntryCompletion          *completion,
                                                                  gint                         index,
-                                                                 gchar                       *text);
+                                                                 const gchar                 *text);
 void                gtk_entry_completion_insert_action_markup   (GtkEntryCompletion          *completion,
                                                                  gint                         index,
-                                                                 gchar                       *markup);
+                                                                 const gchar                 *markup);
 void                gtk_entry_completion_delete_action          (GtkEntryCompletion          *completion,
                                                                  gint                         index);
 
