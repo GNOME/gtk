@@ -2725,7 +2725,7 @@ gtk_window_set_default_icon_list (GList *list)
  *
  * Sets an icon to be used as fallback for windows that haven't
  * had gtk_window_set_icon_list() called on them from a file
- * on disk. Warns on failure if @error is %NULL.
+ * on disk. Warns on failure if @err is %NULL.
  *
  * Returns: %TRUE if setting the icon succeeded.
  **/

@@ -1195,8 +1195,8 @@ icon_size_lookup_intern (GtkSettings *settings,
  * @height: location to store icon height
  *
  * Obtains the pixel size of a semantic icon size, possibly
- * modified by user preferences for a particular #GtkSettings
- * Normally @size would be
+ * modified by user preferences for a particular 
+ * #GtkSettings. Normally @size would be
  * #GTK_ICON_SIZE_MENU, #GTK_ICON_SIZE_BUTTON, etc.  This function
  * isn't normally needed, gtk_widget_render_icon() is the usual
  * way to get an icon for rendering, then just look at the size of

@@ -1,3 +1,13 @@
+2002-10-29  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkiconfactory.c (gtk_icon_size_lookup_for_settings): 
+	* gtk/gtkfilesel.c (gtk_file_selection_get_selections): Doc
+	comment fixes.  (#97136, #97125, Vitaly Tishkov)
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_get_selected_rows): 
+	* gtk/gtkwindow.c (gtk_window_set_default_icon_from_file): Doc
+	comment fixes.  (#95829, #96818, Vitaly Tishkov)
+
 Tue Oct 29 20:39:16 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkmenu.c: Change NAVIGATION_REGION_OVERSHOOT back to 50,

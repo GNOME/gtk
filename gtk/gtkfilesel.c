@@ -2399,8 +2399,8 @@ maybe_clear_entry:
  * in the file list. The first file in the list is equivalent to what
  * gtk_file_selection_get_filename() would return.
  *
- * The filenames are in the encoding of g_filename_from_utf8, which may or may
- * not be the same as that used by GTK+ (UTF-8). To convert to UTF-8, call
+ * The filenames are in the encoding of g_filename_from_utf8(), which may or 
+ * may not be the same as that used by GTK+ (UTF-8). To convert to UTF-8, call
  * g_filename_to_utf8() on each string.
  *
  * Return value: a newly-allocated %NULL-terminated array of strings. Use
