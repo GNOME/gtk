@@ -1,3 +1,7 @@
+2001-09-22  Hans Breuer  <hans@breuer.org>
+
+	* gtk/gtkmenu.h : fix compat macros for gtk_menu_<prepend|insert>
+
 Sat Sep 22 16:50:34 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* gtk/gtktexttag.c (gtk_text_tag_set_property): (case PROP_WEIGHT):
