@@ -112,7 +112,6 @@ void gdk_display_set_double_click_time (GdkDisplay  *display,
 void gdk_display_set_sm_client_id      (GdkDisplay  *display,
 					const gchar *sm_client_id);
 
-void        gdk_set_default_display (GdkDisplay *display);
 GdkDisplay *gdk_display_get_default (void);
 
 GdkDevice  *gdk_display_get_core_pointer (GdkDisplay *display);

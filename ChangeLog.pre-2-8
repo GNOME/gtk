@@ -1,3 +1,10 @@
+Fri Sep  6 15:59:54 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdisplay.h: Remove unused prototype for 
+	gdk_set_default_display 
+	(=> gdk_display_manager_set_default_display)
+	(#90616, Matthias Clasen)
+
 Fri Sep  6 15:35:01 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkgc.c (gdk_gc_new_with_values): Only set
