@@ -1,3 +1,12 @@
+2000-10-28  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkrc.c (gtk_rc_append_default_module_path): Make sure not
+	to get a double directory separator in case the home directory
+	ends with one. This would cause trouble especially on Windows,
+	where the path will be confused with the syntax for an an UNC
+	(network share) path \\server\share\path.
+	(gtk_rc_add_initial_default_files): Ditto.
+
 Sat Oct 28 02:33:09 2000  Robert Brady  <robert@suse.co.uk>
 
 	* gtk/gtkmarshal.list: add new marshallers for GtkTextView.

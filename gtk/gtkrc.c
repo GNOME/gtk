@@ -364,11 +364,19 @@ gtk_rc_append_default_module_path(void)
   var = g_get_home_dir ();
   if (var)
     {
-#ifndef G_OS_WIN32
-      path = g_strdup_printf ("%s%s", var, "/.gtk-2.0/" GTK_VERSION "/engines");
-#else
-      path = g_strdup_printf ("%s%s", var, "\\_gtk\\themes\\engines");
-#endif
+      gchar *sep;
+      /* Don't duplicate the directory separator, causes trouble at
+       * least on Windows.
+       */
+      if (var[strlen (var) -1] != G_DIR_SEPARATOR)
+	sep = G_DIR_SEPARATOR_S;
+      else
+	sep = "";
+      /* This produces something like ~/.gtk-2.0/2.0/engines */
+      path = g_strdup_printf ("%s%s%s", var, sep,
+			      ".gtk-2.0" G_DIR_SEPARATOR_S
+			      GTK_VERSION G_DIR_SEPARATOR_S
+			      "engines");
       module_path[n++] = path;
     }
   module_path[n] = NULL;
@@ -414,7 +422,12 @@ gtk_rc_add_initial_default_files (void)
       var = g_get_home_dir ();
       if (var)
 	{
-	  str = g_strdup_printf ("%s" G_DIR_SEPARATOR_S ".gtkrc-2.0", var);
+	  gchar *sep;
+	  if (var[strlen (var) -1] != G_DIR_SEPARATOR)
+	    sep = G_DIR_SEPARATOR_S;
+	  else
+	    sep = "";
+	  str = g_strdup_printf ("%s%s.gtkrc-2.0", var, sep);
 	  gtk_rc_add_default_file (str);
 	  g_free (str);
 	}
