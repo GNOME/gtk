@@ -84,7 +84,8 @@ enum {
   PROP_0,
   PROP_ORIENTATION,
   PROP_TOOLBAR_STYLE,
-  PROP_SHOW_ARROW
+  PROP_SHOW_ARROW,
+  PROP_TOOLTIPS
 };
 
 /* Child properties */
@@ -526,6 +527,22 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 							 TRUE,
 							 GTK_PARAM_READWRITE));
   
+
+  /**
+   * GtkToolbar:tooltips:
+   * 
+   * If the tooltips of the toolbar should be active or not.
+   * 
+   * Since: 2.8
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_TOOLTIPS,
+				   g_param_spec_boolean ("tooltips",
+							 P_("Tooltips"),
+							 P_("If the tooltips of the toolbar should be active or not"),
+							 TRUE,
+							 GTK_PARAM_READWRITE));
+  
   /* child properties */
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_EXPAND,
@@ -690,6 +707,9 @@ gtk_toolbar_set_property (GObject      *object,
     case PROP_SHOW_ARROW:
       gtk_toolbar_set_show_arrow (toolbar, g_value_get_boolean (value));
       break;
+    case PROP_TOOLTIPS:
+      gtk_toolbar_set_tooltips (toolbar, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -715,6 +735,9 @@ gtk_toolbar_get_property (GObject    *object,
       break;
     case PROP_SHOW_ARROW:
       g_value_set_boolean (value, priv->show_arrow);
+      break;
+    case PROP_TOOLTIPS:
+      g_value_set_boolean (value, gtk_toolbar_get_tooltips (toolbar));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2824,6 +2847,8 @@ gtk_toolbar_set_tooltips (GtkToolbar *toolbar,
     gtk_tooltips_enable (toolbar->tooltips);
   else
     gtk_tooltips_disable (toolbar->tooltips);
+
+  g_object_notify (G_OBJECT (toolbar), "tooltips");
 }
 
 /**
