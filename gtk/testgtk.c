@@ -1257,6 +1257,9 @@ create_menus ()
     gtk_widget_destroy (window);
 }
 
+/*
+ * GtkScrolledWindow
+ */
 void
 create_scrolled_windows ()
 {
@@ -1325,6 +1328,9 @@ create_scrolled_windows ()
     gtk_widget_destroy (window);
 }
 
+/*
+ * GtkEntry
+ */
 void
 create_entry ()
 {
@@ -1395,6 +1401,9 @@ create_entry ()
     gtk_widget_destroy (window); */
 }
 
+/*
+ * GtkList
+ */
 void
 list_add (GtkWidget *widget,
 	  GtkWidget *list)
@@ -1558,6 +1567,96 @@ create_list ()
     gtk_widget_destroy (window);
 }
 
+/*
+ * GtkCList
+ */
+#define TESTGTK_CLIST_COLUMNS 7
+static gint clist_rows = 0;
+static gint clist_selected_row = 0;
+
+void
+add1000_clist (GtkWidget *widget, gpointer data)
+{
+  gint i;
+  char text[TESTGTK_CLIST_COLUMNS][50];
+  char *texts[TESTGTK_CLIST_COLUMNS];
+
+  for (i = 0; i < TESTGTK_CLIST_COLUMNS; i++)
+    {
+      texts[i] = text[i];
+      sprintf (text[i], "Column %d", i);
+    }
+  
+  sprintf (text[1], "Right");
+  sprintf (text[2], "Center");
+  
+  gtk_clist_freeze (GTK_CLIST (data));
+  for (i = 0; i < 1000; i++)
+    {
+      sprintf (text[0], "Row %d", clist_rows++);
+      gtk_clist_append (GTK_CLIST (data), texts);
+    }
+  gtk_clist_thaw (GTK_CLIST (data));
+
+}
+
+void
+add10000_clist (GtkWidget *widget, gpointer data)
+{
+  gint i;
+  char text[TESTGTK_CLIST_COLUMNS][50];
+  char *texts[TESTGTK_CLIST_COLUMNS];
+
+  for (i = 0; i < TESTGTK_CLIST_COLUMNS; i++)
+    {
+      texts[i] = text[i];
+      sprintf (text[i], "Column %d", i);
+    }
+  
+  sprintf (text[1], "Right");
+  sprintf (text[2], "Center");
+  
+  gtk_clist_freeze (GTK_CLIST (data));
+  for (i = 0; i < 10000; i++)
+    {
+      sprintf (text[0], "Row %d", clist_rows++);
+      gtk_clist_append (GTK_CLIST (data), texts);
+    }
+  gtk_clist_thaw (GTK_CLIST (data));
+
+}
+
+void
+clear_clist (GtkWidget *widget, gpointer data)
+{
+  gtk_clist_clear (GTK_CLIST (data));
+  clist_rows = 0;
+}
+
+void
+remove_row_clist (GtkWidget *widget, gpointer data)
+{
+  gtk_clist_remove (GTK_CLIST (data), clist_selected_row);
+  clist_rows--;
+}
+
+void
+select_clist (GtkWidget *widget,
+	      gint row, 
+	      gint column, 
+	      GdkEventButton *bevent)
+{
+  gint button = 0;
+
+  if (bevent)
+    button = bevent->button;
+
+  g_print ("GtkCList Selection: row %d column %d button %d\n", 
+	   row, column, button);
+
+  clist_selected_row = row;
+}
+
 void
 create_clist ()
 {
@@ -1574,7 +1673,9 @@ create_clist ()
     "Title 5",
     "Title 6"
   };
-  static int columns = sizeof (titles) / sizeof (titles[0]);
+
+  char text[TESTGTK_CLIST_COLUMNS][50];
+  char *texts[TESTGTK_CLIST_COLUMNS];
 
   GtkWidget *box1;
   GtkWidget *box2;
@@ -1603,29 +1704,98 @@ create_clist ()
       gtk_widget_show (box1);
 
 
+      box2 = gtk_hbox_new (FALSE, 10);
+      gtk_container_border_width (GTK_CONTAINER (box2), 10);
+      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
+      gtk_widget_show (box2);
+
+      /* create this here so we have a pointer to throw at the 
+       * button callbacks -- more is done with it later */
+      clist = gtk_clist_new (TESTGTK_CLIST_COLUMNS, titles);
+
+      button = gtk_button_new_with_label ("Add 1,000 Rows");
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+
+      gtk_signal_connect (GTK_OBJECT (button),
+                          "clicked",
+                          (GtkSignalFunc) add1000_clist,
+                          (gpointer) clist);
+
+      gtk_widget_show (button);
+
+
+      button = gtk_button_new_with_label ("Add 10,000 Rows");
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+
+      gtk_signal_connect (GTK_OBJECT (button),
+                          "clicked",
+                          (GtkSignalFunc) add10000_clist,
+                          (gpointer) clist);
+
+      gtk_widget_show (button);
+
+      button = gtk_button_new_with_label ("Clear List");
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+
+      gtk_signal_connect (GTK_OBJECT (button),
+                          "clicked",
+                          (GtkSignalFunc) clear_clist,
+                          (gpointer) clist);
+
+      gtk_widget_show (button);
+
+      button = gtk_button_new_with_label ("Remove Row");
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+
+      gtk_signal_connect (GTK_OBJECT (button),
+                          "clicked",
+                          (GtkSignalFunc) remove_row_clist,
+                          (gpointer) clist);
+
+      gtk_widget_show (button);
+
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
       gtk_widget_show (box2);
 
 
-      clist = gtk_clist_new (columns, titles);
-
+      /* 
+       * the rest of the clist configuration
+       */
       gtk_clist_set_row_height (GTK_CLIST (clist), 20);
       
-      for (i = 0; i < columns; i++)
-	gtk_clist_set_column_width (GTK_CLIST (clist), i, 50);
+      gtk_signal_connect (GTK_OBJECT (clist), 
+			  "select_row",
+			  (GtkSignalFunc) select_clist, 
+			  NULL);
+
+      gtk_clist_set_column_width (GTK_CLIST (clist), 0, 100);
+
+      for (i = 1; i < TESTGTK_CLIST_COLUMNS; i++)
+	gtk_clist_set_column_width (GTK_CLIST (clist), i, 80);
 
       gtk_clist_set_selection_mode (GTK_CLIST (clist), GTK_SELECTION_BROWSE);
 
       gtk_clist_set_policy (GTK_CLIST (clist), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
       gtk_clist_set_column_justification (GTK_CLIST (clist), 1, GTK_JUSTIFY_RIGHT);
-      gtk_clist_set_column_justification (GTK_CLIST (clist), 2, GTK_JUSTIFY_RIGHT);
+      gtk_clist_set_column_justification (GTK_CLIST (clist), 2, GTK_JUSTIFY_CENTER);
+      
+      for (i = 0; i < TESTGTK_CLIST_COLUMNS; i++)
+	{
+	  texts[i] = text[i];
+	  sprintf (text[i], "Column %d", i);
+	}
+
+      sprintf (text[1], "Right");
+      sprintf (text[2], "Center");
 
       for (i = 0; i < 100; i++)
-	gtk_clist_append (GTK_CLIST (clist), titles);
-
+	{
+	  sprintf (text[0], "Row %d", clist_rows++);
+	  gtk_clist_append (GTK_CLIST (clist), texts);
+	}
 
       gtk_container_border_width (GTK_CONTAINER (clist), 5);
       gtk_box_pack_start (GTK_BOX (box2), clist, TRUE, TRUE, 0);
@@ -1660,6 +1830,9 @@ create_clist ()
 
 }
 
+/*
+ * GtkColorSelect
+ */
 void
 color_selection_ok (GtkWidget               *w,
                     GtkColorSelectionDialog *cs)
@@ -2412,6 +2585,7 @@ create_dnd ()
   GtkWidget *frame;
   GtkWidget *button;
   GtkWidget *separator;
+
   /* For clarity... */
   char *possible_drag_types[] = {"text/plain"};
   char *accepted_drop_types[] = {"text/plain"};

@@ -1,3 +1,6 @@
+Sat Jan  3 15:39:45 PST 1998 Jay Painter <jpaint@serv.net>
+	* gtk/testgtk.c: better CList test
+
 Sat Jan  3 11:09:51 CST 1998 Shawn T. Amundson <amundson@gimp.org>
 
 	* gtk/gtkscrolledwindow.c: initialize scrollbar_spacing
