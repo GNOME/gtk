@@ -72,6 +72,11 @@ style "curve"
   fg[NORMAL] = { 58000, 0, 0 }			# red
 }
 
+style "red-bar"
+{
+  bg[PRELIGHT] = { 0.95, .55, 0.55 }
+}
+
 # override testgtk2, introduce the green color in the button list
 style 'button_list' = 'button'
 {
@@ -80,7 +85,11 @@ style 'button_list' = 'button'
 }
 widget "main window.*GtkScrolledWindow.*GtkButton*" style "button_list"
 
-widget_class "*" style "default"
+# common default
+class "GtkWidget" style "default"
+
+class "GtkScrollbar" style "red-bar"
+
 widget_class "GtkWindow" style "window"
 widget_class "GtkDialog" style "window"
 widget_class "GtkFileSelection" style "window"

@@ -26,6 +26,7 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
@@ -38,9 +39,14 @@ void	  gtk_rc_add_widget_name_style	(GtkStyle    *style,
 					 const gchar *pattern);
 void	  gtk_rc_add_widget_class_style (GtkStyle    *style,
 					 const gchar *pattern);
+void	  gtk_rc_add_class_style	(GtkStyle    *style,
+					 const gchar *pattern);
+
+
 
 /* Tell gtkrc to use a custom routine to load images specified in rc files instead of
-   the default xpm-only loader */
+ *   the default xpm-only loader
+ */
 typedef  GdkPixmap * (*GtkImageLoader) (GdkWindow   *window,
 					GdkColormap *colormap,
 					GdkBitmap  **mask,
