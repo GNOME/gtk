@@ -1,3 +1,9 @@
+2005-01-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtksocket.sgml:
+	* gtk/tmpl/gtkplug.sgml: Add note on limited
+	availability.  (#164347, Roger Light)
+
 2005-01-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdk-sections.txt: Add gdk_x11_display_get_user_time.

@@ -16,6 +16,13 @@ Any widgets contained in the #GtkPlug then will appear
 inside the first applications window.
 </para>
 
+<note>
+<para>
+The #GtkPlug and #GtkSocket widgets are currently not available 
+on all platforms supported by GTK+.
+</para>
+</note>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 <variablelist>
