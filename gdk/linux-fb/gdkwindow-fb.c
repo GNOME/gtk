@@ -455,13 +455,13 @@ gdk_fb_redraw_all (void)
 
 /* Focus follows pointer */
 GdkWindow *
-gdk_fb_window_find_focus (void)
+_gdk_fb_window_find_focus (GdkWindow *window_with_mouse)
 {
   if (_gdk_fb_keyboard_grab_window)
     return _gdk_fb_keyboard_grab_window;
-  else if (gdk_fb_window_containing_pointer)
+  else if (window_with_mouse)
     {
-      GdkWindowObject *priv = (GdkWindowObject *)gdk_fb_window_containing_pointer;
+      GdkWindowObject *priv = (GdkWindowObject *)window_with_mouse;
       while (priv != (GdkWindowObject *)gdk_parent_root)
 	{
 	  if ((priv->parent == (GdkWindowObject *)gdk_parent_root) && priv->mapped)
@@ -473,6 +473,32 @@ gdk_fb_window_find_focus (void)
   return gdk_parent_root;
 }
 
+GdkWindow *
+gdk_fb_window_find_focus (void)
+{
+  return _gdk_fb_window_find_focus (gdk_fb_window_containing_pointer);
+}
+
+
+static void
+gdk_fb_send_focus_change (GdkWindow *old_window_containing_pointer,
+			  GdkWindow *new_window_containing_pointer)
+{
+  GdkEventFocus *event;
+  GdkWindow *old_win, *new_win;
+  old_win = _gdk_fb_window_find_focus (old_window_containing_pointer);
+  new_win = _gdk_fb_window_find_focus (new_window_containing_pointer);
+
+  if (old_win != new_win)
+    {
+      event = (GdkEventFocus *)gdk_event_make (old_win, GDK_FOCUS_CHANGE, TRUE);
+      if (event)
+	event->in = FALSE;
+      event = (GdkEventFocus *)gdk_event_make (new_win, GDK_FOCUS_CHANGE, TRUE);
+      if (event)
+	event->in = TRUE;
+    }
+}
 
 static GdkWindow *
 gdk_fb_find_common_ancestor (GdkWindow *win1,
@@ -679,6 +705,7 @@ gdk_fb_window_send_crossing_events (GdkWindow *dest,
   if ((mode != GDK_CROSSING_GRAB) &&
       (b != gdk_fb_window_containing_pointer))
     {
+      gdk_fb_send_focus_change (gdk_fb_window_containing_pointer, b);
       gdk_window_unref (gdk_fb_window_containing_pointer);
       gdk_fb_window_containing_pointer = gdk_window_ref (b);
     }
