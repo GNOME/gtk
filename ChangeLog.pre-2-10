@@ -1,3 +1,9 @@
+2004-11-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_cell_layout_pack_end): 
+	Add the ComboCellInfo to the list.  (#157528, Carlos Garnacho
+	Parro)
+
 2004-11-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_menu_button_state_changed):

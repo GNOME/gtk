@@ -3631,6 +3631,8 @@ gtk_combo_box_cell_layout_pack_end (GtkCellLayout   *layout,
   info->expand = expand;
   info->pack = GTK_PACK_END;
 
+  combo_box->priv->cells = g_slist_append (combo_box->priv->cells, info);
+
   if (combo_box->priv->cell_view)
     gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (combo_box->priv->cell_view),
                               cell, expand);
