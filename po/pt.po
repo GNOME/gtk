@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3\n"
-"POT-Creation-Date: 2002-07-31 16:57-0400\n"
-"PO-Revision-Date: 2002-06-16 01:54+0100\n"
+"POT-Creation-Date: 2002-08-05 02:24+0100\n"
+"PO-Revision-Date: 2002-08-05 02:25+0100\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -434,9 +434,8 @@ msgid "RAS image has unknown type"
 msgstr "Imagem RAS tem formato desconhecido"
 
 #: gdk-pixbuf/io-ras.c:188
-#, fuzzy
 msgid "unsupported RAS image variation"
-msgstr "Tipo de imagem TGA não suportado"
+msgstr "variação de imagem RAS não suportado"
 
 #: gdk-pixbuf/io-ras.c:203 gdk-pixbuf/io-ras.c:223
 msgid "Not enough memory to load RAS image"
@@ -576,9 +575,8 @@ msgid "Failed to load RGB data from TIFF file"
 msgstr "Falha no carregamento de dados RGB do ficheiro TIFF"
 
 #: gdk-pixbuf/io-tiff.c:266
-#, fuzzy
 msgid "Unsupported TIFF variant"
-msgstr "Tipo de imagem TGA não suportado"
+msgstr "Variante TIFF não suportada"
 
 #: gdk-pixbuf/io-tiff.c:336
 msgid "Failed to open TIFF image"
