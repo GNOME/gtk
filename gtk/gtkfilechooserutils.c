@@ -67,56 +67,36 @@ static void           delegate_update_preview         (GtkFileChooser    *choose
 void
 _gtk_file_chooser_install_properties (GObjectClass *klass)
 {
-  g_object_class_install_property (klass,
-				   GTK_FILE_CHOOSER_PROP_ACTION,
-				   g_param_spec_override ("action",
-							  GTK_TYPE_FILE_CHOOSER_ACTION,
-							  G_PARAM_READWRITE));
-  g_object_class_install_property (klass,
-				   GTK_FILE_CHOOSER_PROP_FILE_SYSTEM,
-				   g_param_spec_override ("file-system",
-							  GTK_TYPE_FILE_SYSTEM,
-							  G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
-  g_object_class_install_property (klass,
-				   GTK_FILE_CHOOSER_PROP_FILTER,
-				   g_param_spec_override ("filter",
-							  GTK_TYPE_FILE_FILTER,
-							  G_PARAM_READWRITE));
-  g_object_class_install_property (klass,
-				   GTK_FILE_CHOOSER_PROP_FOLDER_MODE,
-				   g_param_spec_override ("folder-mode",
-							  G_TYPE_BOOLEAN,
-							  G_PARAM_READWRITE));
-  g_object_class_install_property (klass,
-				   GTK_FILE_CHOOSER_PROP_LOCAL_ONLY,
-				   g_param_spec_override ("local-only",
-							  G_TYPE_BOOLEAN,
-							  G_PARAM_READWRITE));
-  g_object_class_install_property (klass,
-				   GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET,
-				   g_param_spec_override ("preview-widget",
-							  GTK_TYPE_WIDGET,
-							  G_PARAM_READWRITE));
-  g_object_class_install_property (klass,
-				   GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET_ACTIVE,
-				   g_param_spec_override ("preview-widget-active",
-							  G_TYPE_BOOLEAN,
-							  G_PARAM_READWRITE));
-  g_object_class_install_property (klass,
-				   GTK_FILE_CHOOSER_PROP_EXTRA_WIDGET,
-				   g_param_spec_override ("extra-widget",
-							  GTK_TYPE_WIDGET,
-							  G_PARAM_READWRITE));
-  g_object_class_install_property (klass,
-				   GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE,
-				   g_param_spec_override ("select-multiple",
-							  G_TYPE_BOOLEAN,
-							  G_PARAM_READWRITE));
-  g_object_class_install_property (klass,
-				   GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN,
-				   g_param_spec_override ("show-hidden",
-							  G_TYPE_BOOLEAN,
-							  G_PARAM_READWRITE));
+  g_object_class_override_property (klass,
+				    GTK_FILE_CHOOSER_PROP_ACTION,
+				    "action");
+  g_object_class_override_property (klass,
+				    GTK_FILE_CHOOSER_PROP_EXTRA_WIDGET,
+				    "extra-widget");
+  g_object_class_override_property (klass,
+				    GTK_FILE_CHOOSER_PROP_FILE_SYSTEM,
+				    "file-system");
+  g_object_class_override_property (klass,
+				    GTK_FILE_CHOOSER_PROP_FILTER,
+				    "filter");
+  g_object_class_override_property (klass,
+				    GTK_FILE_CHOOSER_PROP_FOLDER_MODE,
+				    "folder-mode");
+  g_object_class_override_property (klass,
+				    GTK_FILE_CHOOSER_PROP_LOCAL_ONLY,
+				    "local-only");
+  g_object_class_override_property (klass,
+				    GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET,
+				    "preview-widget");
+  g_object_class_override_property (klass,
+				    GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET_ACTIVE,
+				    "preview-widget-active");
+  g_object_class_override_property (klass,
+				    GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE,
+				    "select-multiple");
+  g_object_class_override_property (klass,
+				    GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN,
+				    "show-hidden");
 }
 
 /**
