@@ -1,3 +1,7 @@
+2003-04-07  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtktypeutils.sgml: Add some deprecation info.
+
 2003-04-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkmessagedialog.sgml: Fix formatting of examples.
