@@ -114,7 +114,6 @@ static void                 gtk_about_dialog_set_property   (GObject            
 							     guint               prop_id,
 							     const GValue       *value,
 							     GParamSpec         *pspec);
-static void                 gtk_about_dialog_destroy        (GtkObject          *object);
 static void                 update_name_version             (GtkAboutDialog     *about);
 static GtkIconSet *         icon_set_new_from_pixbufs       (GList              *pixbufs);
 static void                 activate_url                    (GtkWidget          *widget,
@@ -180,7 +179,6 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   object_class->get_property = gtk_about_dialog_get_property;
 
   object_class->finalize = gtk_about_dialog_finalize;
-  ((GtkObjectClass *)klass)->destroy = gtk_about_dialog_destroy;
 
   g_object_class_install_property (object_class,
 				   PROP_NAME,
@@ -402,26 +400,6 @@ gtk_about_dialog_finalize (GObject *object)
   gdk_cursor_unref (priv->regular_cursor);
 
   G_OBJECT_CLASS (gtk_about_dialog_parent_class)->finalize (object);
-}
-
-static void
-gtk_about_dialog_destroy (GtkObject *object)
-{
-  GtkAboutDialog *about = GTK_ABOUT_DIALOG (object);
-  GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->private_data;
-
-  if (priv->credits_dialog)
-    {
-      gtk_widget_destroy (priv->credits_dialog);
-      priv->credits_dialog = NULL;
-    }
-  if (priv->license_dialog)
-    {
-      gtk_widget_destroy (priv->license_dialog);
-      priv->license_dialog = NULL;
-    }
-
-  GTK_OBJECT_CLASS (gtk_about_dialog_parent_class)->destroy (object);
 }
 
 static void
@@ -1786,6 +1764,27 @@ display_license_dialog (GtkWidget *button,
   gtk_widget_show_all (dialog);
 }
 
+static void 
+close_cb (GtkAboutDialog *about)
+{
+  GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->private_data;
+
+  if (priv->license_dialog != NULL)
+    {
+      gtk_widget_destroy (priv->license_dialog);
+      priv->license_dialog = NULL;
+    }
+
+  if (priv->credits_dialog != NULL)
+    {
+      gtk_widget_destroy (priv->credits_dialog);
+      priv->credits_dialog = NULL;
+    }
+
+  gtk_widget_hide (GTK_WIDGET (about));
+  
+}
+
 /**
  * gtk_about_dialog_new:
  *
@@ -1807,7 +1806,7 @@ gtk_about_dialog_new (void)
   /* Close dialog on user response */
   g_signal_connect (G_OBJECT (dialog),
                     "response",
-                    G_CALLBACK (gtk_widget_hide),
+                    G_CALLBACK (close_cb),
                     NULL);
 
   return GTK_WIDGET (dialog);
