@@ -2594,7 +2594,8 @@ draw_rows (GtkCList * clist,
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CLIST (clist));
 
-  if (clist->row_height == 0)
+  if (clist->row_height == 0 ||
+      !GTK_WIDGET_DRAWABLE (clist))
     return;
 
   if (area)
