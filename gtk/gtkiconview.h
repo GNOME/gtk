@@ -30,9 +30,7 @@ G_BEGIN_DECLS
 #define EGG_IS_ICON_LIST_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), EGG_TYPE_ICON_LIST))
 #define EGG_ICON_LIST_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), EGG_TYPE_ICON_LIST, EggIconListClass))
 
-#define EGG_TYPE_ICON_LIST_ITEM         (egg_icon_list_item_get_type ())
-#define EGG_ICON_LIST_ITEM(obj)		(GTK_CHECK_CAST ((obj), EGG_TYPE_ICON_LIST_ITEM, EggIconListItem))
-#define EGG_IS_ICON_LIST_ITEM(obj)	(GTK_CHECK_TYPE ((obj), EGG_TYPE_ICON_LIST_ITEM))
+#define EGG_TYPE_ICON_LIST_ITEM		(egg_icon_list_item_get_type ())
 
 typedef struct _EggIconList           EggIconList;
 typedef struct _EggIconListClass      EggIconListClass;
@@ -84,6 +82,8 @@ GtkWidget *egg_icon_list_new           (void);
 
 EggIconListItem *     egg_icon_list_item_new           (GdkPixbuf                  *icon,
 							const gchar                *label);
+void                  egg_icon_list_item_ref           (EggIconListItem            *item);
+void                  egg_icon_list_item_unref         (EggIconListItem            *item);
 void                  egg_icon_list_item_set_data      (EggIconListItem            *item,
 							gpointer                    data);
 void                  egg_icon_list_item_set_data_full (EggIconListItem            *item,
@@ -108,6 +108,7 @@ void                  egg_icon_list_insert_item_after  (EggIconList             
 							EggIconListItem            *item);
 void                  egg_icon_list_remove_item        (EggIconList                *icon_list,
 							EggIconListItem            *item);
+void                  egg_icon_list_clear              (EggIconList                *icon_list);
 EggIconListItem *     egg_icon_list_get_item_at_pos    (EggIconList                *icon_list,
 							gint                        x,
 							gint                        y);

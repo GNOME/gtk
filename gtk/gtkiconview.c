@@ -37,13 +37,16 @@
 
 struct _EggIconListItem
 {
-  GObject parent;
+  gint ref_count;
   
   EggIconList *icon_list;
   char *label;
   GdkPixbuf *icon;
 
   GList *list;
+
+  gpointer user_data;
+  GDestroyNotify destroy_notify;
   
   /* Bounding boxes */
   gint x, y;
@@ -221,52 +224,22 @@ static void     egg_icon_list_calculate_item_size         (EggIconList *icon_lis
 static void     rubberbanding                             (gpointer                 data);
 
 
-/* EggIconListItem functions */
-static void egg_icon_list_item_class_init   (GObjectClass    *klass);
-static void egg_icon_list_item_init         (EggIconListItem *item);
-static void egg_icon_list_item_finalize     (GObject         *object);
-static void egg_icon_list_item_set_property (GObject         *object,
-					     guint            prop_id,
-					     const GValue    *value,
-					     GParamSpec      *pspec);
-static void egg_icon_list_item_get_property (GObject         *object,
-					     guint            prop_id,
-					     GValue          *value,
-					     GParamSpec      *pspec);
-
-
-
-
 static void     egg_icon_list_item_invalidate_size        (EggIconListItem         *item);
 
 static GtkContainerClass *parent_class = NULL;
-static GObjectClass *item_parent_class = NULL;
 static guint icon_list_signals[LAST_SIGNAL] = { 0 };
 
 GType
 egg_icon_list_item_get_type (void)
 {
-  static GType object_type = 0;
+  static GType boxed_type = 0;
 
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-	{
-	  sizeof (GObjectClass),
-	  NULL,		/* base_init */
-	  NULL,		/* base_finalize */
-	  (GClassInitFunc) egg_icon_list_item_class_init,
-	  NULL,		/* class_finalize */
-	  NULL,		/* class_data */
-	  sizeof (EggIconListItem),
-	  0,              /* n_preallocs */
-	  (GInstanceInitFunc) egg_icon_list_item_init
-	};
+  if (!boxed_type)
+    boxed_type = g_boxed_type_register_static ("EggIconListItem",
+					       (GBoxedCopyFunc) egg_icon_list_item_ref,
+					       (GBoxedFreeFunc) egg_icon_list_item_unref);
 
-      object_type = g_type_register_static (G_TYPE_OBJECT, "EggIconListItem", &object_info, 0);
-    }
-
-  return object_type;
+  return boxed_type;
 }
 
 GType
@@ -421,7 +394,7 @@ egg_icon_list_class_init (EggIconListClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (EggIconListClass, item_activated),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__OBJECT,
+		  g_cclosure_marshal_VOID__BOXED,
 		  G_TYPE_NONE, 1,
 		  EGG_TYPE_ICON_LIST_ITEM);
 
@@ -440,7 +413,7 @@ egg_icon_list_class_init (EggIconListClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (EggIconListClass, item_added),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__OBJECT,
+		  g_cclosure_marshal_VOID__BOXED,
 		  G_TYPE_NONE, 1, EGG_TYPE_ICON_LIST_ITEM);
 
   icon_list_signals[ITEM_REMOVED] =
@@ -449,7 +422,7 @@ egg_icon_list_class_init (EggIconListClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (EggIconListClass, item_removed),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__OBJECT,
+		  g_cclosure_marshal_VOID__BOXED,
 		  G_TYPE_NONE, 1, EGG_TYPE_ICON_LIST_ITEM);
   
   icon_list_signals[SELECT_ALL] =
@@ -510,6 +483,7 @@ egg_icon_list_init (EggIconList *icon_list)
   icon_list->priv->press_start_x = -1;
   icon_list->priv->press_start_y = -1;
   icon_list->priv->layout = gtk_widget_create_pango_layout (GTK_WIDGET (icon_list), NULL);
+  pango_layout_set_wrap (icon_list->priv->layout, PANGO_WRAP_CHAR);
   
   egg_icon_list_set_adjustments (icon_list, NULL, NULL);
 }
@@ -706,14 +680,14 @@ egg_icon_list_size_allocate (GtkWidget      *widget,
   icon_list->priv->hadjustment->step_increment = allocation->width * 0.1;
   icon_list->priv->hadjustment->lower = 0;
   icon_list->priv->hadjustment->upper = MAX (allocation->width, icon_list->priv->width);
-  g_signal_emit_by_name (icon_list->priv->hadjustment, "changed");
+  gtk_adjustment_changed (icon_list->priv->hadjustment);
 
   icon_list->priv->vadjustment->page_size = allocation->height;
   icon_list->priv->vadjustment->page_increment = allocation->height * 0.9;
   icon_list->priv->vadjustment->step_increment = allocation->width * 0.1;
   icon_list->priv->vadjustment->lower = 0;
   icon_list->priv->vadjustment->upper = MAX (allocation->height, icon_list->priv->height);
-  g_signal_emit_by_name (icon_list->priv->hadjustment, "changed");
+  gtk_adjustment_changed (icon_list->priv->vadjustment);
 
   egg_icon_list_layout (icon_list);
 }
@@ -1056,6 +1030,7 @@ egg_icon_list_insert_item_sorted (EggIconList      *icon_list,
   item->list = list;
   item->icon_list = icon_list;
   list->data = item;
+  egg_icon_list_item_ref (item);
   
   if (!icon_list->priv->items)
     {
@@ -1282,7 +1257,7 @@ egg_icon_list_set_adjustments (EggIconList   *icon_list,
 			       GtkAdjustment *vadj)
 {
   gboolean need_adjust = FALSE;
-  
+
   if (hadj)
     g_return_if_fail (GTK_IS_ADJUSTMENT (hadj));
   else
@@ -1485,21 +1460,21 @@ egg_icon_list_set_adjustment_upper (GtkAdjustment *adj,
 {
   if (upper != adj->upper)
     {
-      gdouble min = MAX (0., upper - adj->page_size);
+      gdouble min = MAX (0.0, upper - adj->page_size);
       gboolean value_changed = FALSE;
       
       adj->upper = upper;
-      
+
       if (adj->value > min)
 	{
 	  adj->value = min;
 	  value_changed = TRUE;
 	}
       
-      g_signal_emit_by_name (adj, "changed");
+      gtk_adjustment_changed (adj);
       
       if (value_changed)
-	g_signal_emit_by_name (adj, "value_changed");
+	gtk_adjustment_value_changed (adj);
     }
 }
 
@@ -1530,7 +1505,6 @@ egg_icon_list_layout (EggIconList *icon_list)
     {
       icon_list->priv->width = maximum_width;
     }
-
   y += bottom_margin;
   
   if (y != icon_list->priv->height)
@@ -1555,63 +1529,6 @@ egg_icon_list_layout (EggIconList *icon_list)
     }
 
   gtk_widget_queue_draw (GTK_WIDGET (icon_list));
-}
-
-
-static void
-egg_icon_list_item_init (EggIconListItem *item)
-{
-  item->width = -1;
-  item->height = -1;
-}
-
-static void
-egg_icon_list_item_class_init (GObjectClass *klass)
-{
-  item_parent_class = g_type_class_peek_parent (klass);
-
-  klass->finalize = egg_icon_list_item_finalize;;
-  klass->set_property = egg_icon_list_item_set_property;
-  klass->get_property = egg_icon_list_item_get_property;
-
-  /* Properties */
-  g_object_class_install_property (klass,
-				   PROP_LABEL,
-				   g_param_spec_string ("label",
-							_("Icon item label"),
-							_("The label of the icon item"),
-							NULL,
-							G_PARAM_READWRITE));
-
-}
-
-static void
-egg_icon_list_item_set_property (GObject         *object,
-				 guint            prop_id,
-				 const GValue    *value,
-				 GParamSpec      *pspec)
-{
-}
-
-static void
-egg_icon_list_item_get_property (GObject         *object,
-				 guint            prop_id,
-				 GValue          *value,
-				 GParamSpec      *pspec)
-{
-}
-
-static void
-egg_icon_list_item_finalize (GObject *object)
-{
-  EggIconListItem *item;
-
-  item = EGG_ICON_LIST_ITEM (object);
-  
-  g_free (item->label);
-  g_object_unref (item->icon);
-  
-  (G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 /* Creates or updates the pango layout and calculates the size */
@@ -1899,12 +1816,39 @@ egg_icon_list_item_new (GdkPixbuf   *icon,
 {
   EggIconListItem *item;
 
-  item = g_object_new (EGG_TYPE_ICON_LIST_ITEM, NULL);
-  
+  item = g_new0 (EggIconListItem, 1);
+
+  item->ref_count = 1;
+  item->width = -1;
+  item->height = -1;
   item->label = g_strdup (label);
   item->icon = g_object_ref (icon);
   
   return item;
+}
+
+void
+egg_icon_list_item_ref (EggIconListItem *item)
+{
+  g_return_if_fail (item != NULL);
+
+  item->ref_count += 1;
+}
+
+void
+egg_icon_list_item_unref (EggIconListItem *item)
+{
+  g_return_if_fail (item != NULL);
+
+  item->ref_count -= 1;
+
+  if (item->ref_count == 0)
+    {
+      g_free (item->label);
+      g_object_unref (item->icon);
+      g_free (item);
+    }
+  
 }
 
 void
@@ -1919,17 +1863,21 @@ egg_icon_list_item_set_data_full (EggIconListItem  *item,
 				  gpointer          data, 
 				  GDestroyNotify    destroy_notify)
 {
-  g_return_if_fail (EGG_IS_ICON_LIST_ITEM (item));
+  g_return_if_fail (item != NULL);
 
-  g_object_set_data_full (G_OBJECT (item), ICON_LIST_ITEM_DATA, data, destroy_notify);
+  if (item->destroy_notify)
+    item->destroy_notify (item->user_data);
+
+  item->destroy_notify = destroy_notify;
+  item->user_data = data;
 }
 
 gpointer
 egg_icon_list_item_get_data (EggIconListItem *item)
 {
-  g_return_val_if_fail (EGG_IS_ICON_LIST_ITEM (item), NULL);
-
-  return g_object_get_data (G_OBJECT (item), ICON_LIST_ITEM_DATA);
+  g_return_val_if_fail (item != NULL, NULL);
+  
+  return item->user_data;
 }
 
 void
@@ -2006,7 +1954,7 @@ egg_icon_list_append_item (EggIconList     *icon_list,
   item->list = list;
   item->icon_list = icon_list;
   list->data = item;
-  g_object_ref (item);
+  egg_icon_list_item_ref (item);
   
   if (icon_list->priv->last_item)
     {
@@ -2042,7 +1990,7 @@ egg_icon_list_prepend_item (EggIconList      *icon_list,
   item->list = list;
   item->icon_list = icon_list;
   list->data = item;
-  g_object_ref (item);
+  egg_icon_list_item_ref (item);
   
   if (icon_list->priv->last_item == NULL)
     icon_list->priv->last_item = list;
@@ -2089,7 +2037,7 @@ egg_icon_list_insert_item_before (EggIconList      *icon_list,
   item->list = list;
   item->icon_list = icon_list;
   list->data = item;
-  g_object_ref (item);
+  egg_icon_list_item_ref (item);
   
   list->prev = sibling->list->prev;
   list->next = sibling->list;
@@ -2136,7 +2084,7 @@ egg_icon_list_insert_item_after  (EggIconList      *icon_list,
   item->list = list;
   item->icon_list = icon_list;
   list->data = item;
-  g_object_ref (item);
+  egg_icon_list_item_ref (item);
   
   list->next = sibling->list->next;
   list->prev = sibling->list;
@@ -2190,17 +2138,38 @@ egg_icon_list_remove_item (EggIconList      *icon_list,
       g_signal_emit (icon_list, icon_list_signals[SELECTION_CHANGED], 0);
     }
 
+#if 0
   if (icon_list->priv->cursor_item == item)
     g_error ("FIXME: Move to first focused item");
-
+#endif
+  
   if (icon_list->priv->last_single_clicked == item)
     icon_list->priv->last_single_clicked = NULL;
   
-  g_object_unref (item);
+  egg_icon_list_item_unref (item);
   
   egg_icon_list_queue_layout (icon_list);
 }
 
+void
+egg_icon_list_clear (EggIconList *icon_list)
+{
+  GList *items, *p;
+
+  g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
+  
+  items = g_list_copy (icon_list->priv->items);
+  p = items;
+  while (items)
+    {
+      EggIconListItem *item = items->data;
+
+      egg_icon_list_remove_item (icon_list, item);
+      items = items->next;
+    }
+
+  g_list_free (p);
+}
 
 EggIconListItem *
 egg_icon_list_get_item_at_pos (EggIconList *icon_list,
@@ -2482,7 +2451,7 @@ egg_icon_list_get_items (EggIconList *icon_list)
 EggIconList *
 egg_icon_list_item_get_icon_list (EggIconListItem *item)
 {
-  g_return_val_if_fail (EGG_IS_ICON_LIST_ITEM (item), NULL);
+  g_return_val_if_fail (item != NULL, NULL);
 
   return item->icon_list;
 }
