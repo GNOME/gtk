@@ -410,7 +410,7 @@ hex digits, or they can be specified as a triplet
 <literal>{ <replaceable>r</replaceable>, <replaceable>g</replaceable>,
 <replaceable>b</replaceable>}</literal>, where <literal>r</literal>,
 <literal>g</literal> and <literal>b</literal> are either integers in 
-the range 0-65635 or floats in the range 0.0-1.0.
+the range 0-65535 or floats in the range 0.0-1.0.
 </para>
 
 <para>
