@@ -1,3 +1,7 @@
+Wed Oct 18 11:01:12 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am gdk-pixbuf/Makefile.am: Fix typo
+
 2000-10-20  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtk-sections.txt: Add dialog docs
