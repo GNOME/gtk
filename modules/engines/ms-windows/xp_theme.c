@@ -672,10 +672,10 @@ xp_theme_is_drawable (XpThemeElement element)
   if (is_theme_active_func)
     {
       gboolean active = (*is_theme_active_func) ();
-      // A bit of a hack, but it at least detects theme
-      // switches between XP and classic looks on systems
-      // using older GTK+ version (2.2.0-?) that do not
-      // support theme switch detection (gdk_window_add_filter).
+      /* A bit of a hack, but it at least detects theme
+	 switches between XP and classic looks on systems
+	 using older GTK+ version (2.2.0-?) that do not
+	 support theme switch detection (gdk_window_add_filter). */
       if (active != was_theming_active)
         {
           xp_theme_reset ();
