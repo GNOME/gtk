@@ -1201,8 +1201,10 @@ gtk_tree_view_column_setup_sort_column_id_callback (GtkTreeViewColumn *tree_colu
 	{
 	  gtk_tree_view_column_set_sort_indicator (tree_column, TRUE);
 	  gtk_tree_view_column_set_sort_order (tree_column, real_order);
-
-	  return;
+	}
+      else 
+	{
+	  gtk_tree_view_column_set_sort_indicator (tree_column, FALSE);
 	}
     }
 }
