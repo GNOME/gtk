@@ -1,5 +1,10 @@
 2001-02-17  Havoc Pennington  <hp@pobox.com>
 
+	* gtk/gtkalignment.c (gtk_alignment_class_init): clean this up a
+	bit.
+
+2001-02-17  Havoc Pennington  <hp@pobox.com>
+
 	* gtk/gtklabel.c (gtk_label_ensure_layout): fix screwup with
 	shadowed variables that had broken size request in some cases,
 	leading to bogus tooltips (#50996)

@@ -84,55 +84,57 @@ gtk_alignment_get_type (void)
 static void
 gtk_alignment_class_init (GtkAlignmentClass *class)
 {
+  GObjectClass *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
+  gobject_class = (GObjectClass*) class;
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
-
-  g_object_class_install_property(G_OBJECT_CLASS(object_class),
-				  PROP_XALIGN,
-				  g_param_spec_float("xalign",
-						     _("Horizontal alignment"),
-						     _("Value between 0.0 and 1.0 to indicate X alignment"),
-						     0.0,
-						     1.0,
-						     0.5,
-						     G_PARAM_READABLE | G_PARAM_WRITABLE));
-   
-  g_object_class_install_property(G_OBJECT_CLASS(object_class),
-				  PROP_YALIGN,
-				  g_param_spec_float("yalign",
-						     _("Vertical alignment"),
-						     _("Value between 0.0 and 1.0 to indicate Y alignment"),
-						     0.0,
-						     1.0,
-						      0.5,
-						     G_PARAM_READABLE | G_PARAM_WRITABLE));
-  g_object_class_install_property(G_OBJECT_CLASS(object_class),
-				  PROP_XSCALE,
-				  g_param_spec_float("xscale",
-						     _("Horizontal scale"),
-						     _("Value between 0.0 and 1.0 to indicate X scale"),
-						     0.0,
-						     1.0,
-						     0.5,
-						     G_PARAM_READABLE | G_PARAM_WRITABLE));
-  g_object_class_install_property(G_OBJECT_CLASS(object_class),
-				  PROP_YSCALE,
-				  g_param_spec_float("yscale",
-						     _("Vertical scale"),
-						     _("Value between 0.0 and 1.0 to indicate Y scale"),
-						     0.0,
-						     1.0,
-						     0.5,
-						     G_PARAM_READABLE | G_PARAM_WRITABLE));
-   
-  G_OBJECT_CLASS(object_class)->set_property = gtk_alignment_set_property;
-  G_OBJECT_CLASS(object_class)->get_property = gtk_alignment_get_property;
+  
+  gobject_class->set_property = gtk_alignment_set_property;
+  gobject_class->get_property = gtk_alignment_get_property;
 
   widget_class->size_request = gtk_alignment_size_request;
   widget_class->size_allocate = gtk_alignment_size_allocate;
+  
+  g_object_class_install_property (gobject_class,
+                                   PROP_XALIGN,
+                                   g_param_spec_float("xalign",
+                                                      _("Horizontal alignment"),
+                                                      _("Value between 0.0 and 1.0 to indicate X alignment"),
+                                                      0.0,
+                                                      1.0,
+                                                      0.5,
+                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
+   
+  g_object_class_install_property (gobject_class,
+                                   PROP_YALIGN,
+                                   g_param_spec_float("yalign",
+                                                      _("Vertical alignment"),
+                                                      _("Value between 0.0 and 1.0 to indicate Y alignment"),
+                                                      0.0,
+                                                      1.0,
+						      0.5,
+                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_XSCALE,
+                                   g_param_spec_float("xscale",
+                                                      _("Horizontal scale"),
+                                                      _("Value between 0.0 and 1.0 to indicate X scale"),
+                                                      0.0,
+                                                      1.0,
+                                                      0.5,
+                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_YSCALE,
+                                   g_param_spec_float("yscale",
+                                                      _("Vertical scale"),
+                                                      _("Value between 0.0 and 1.0 to indicate Y scale"),
+                                                      0.0,
+                                                      1.0,
+                                                      0.5,
+                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
 }
 
 static void
