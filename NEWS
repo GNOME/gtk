@@ -1,3 +1,88 @@
+Overview of Changes from GTK+ 2.4.1 to GTK+ 2.5.0
+=================================================
+* New widgets: 
+ - GtkIconView [Anders Carlsson]
+ - GtkAboutDialog [Matthias Clasen]
+* GtkFileChooser
+ - change to newly-created folders [Federico Mena Quintero]
+ - always show icons [Federico]
+ - bug fixes [Federico, Christian Neumair, Alex Roitman]
+* GtkComboBox, GtkComboBoxEntry
+ - add missing getters and some more convience API [Matthias, 
+  Christian Neumeir, Oliver Andrieu]
+ - improve placement and sizing of popups [Matthias]
+ - support insensitive items [Matthias]
+ - support separators [Matthias]
+ - handle empty or unset models better [Mariano Suarez-Alvarez]
+ - bug fixes [Matthias, Jonathan Blandford, Oliver Andrieu, Paul 
+   Pongonyshev, Christian Persch]
+* GtkEntryCompletion
+ - ignore enter events when the window pops up under the 
+   pointer [Anders]
+ - bug fixes [Matthias]
+* GtkUIManager
+ - fix signal registration [Michael Natterer]
+ - make generated XML parseable [Sven Neumann]
+ - fix get_widget to return menus [Matthias]
+* GtkTreeView
+ - hover-selection mode [Matthias]
+ - support insensitive cells [Matthias]
+ - support separators [Matthias]
+ - make entry context menu work in editable text cells [Owen Taylor, 
+  Kristian Rietveld]
+ - make DND work with treeviews in modal dialogs [Federico]
+ - make empty treeviews focusable [Federico]
+ - new GtkCellRendererProgress [Matthias, Tommi Komulainen, 
+  Christian Persch]
+ - new GtkCellRendererCombo [Matthias]
+ - bug fixes [Matthias, Federico]
+* GtkNotebook
+ - allow to change tabs with the mouse wheel [Gabriel de Perthuis]
+* GtkWindow
+ - support named themed window icons [Matthias, Calum Benson]
+* New stock icons: file, directory, about, edit, connect, disconnect,
+  and media player icons for forward, next, pause, play, previous,
+  record, rewind and stop
+* GDK
+ - support do-not-focus-on-map hint [Elijah Newren]
+ - fix RGBA cursors [Michael Natterer]
+* gdk-pixbuf
+ - reorganize headers [Matthias, Jeff Franks, Havoc Pennington]
+ - flag to mark loaded images as scalable [Dom Lachowicz]
+ - license information for loaders [Matthias]
+ - simple multiple-of-90° rotation support [Matthias]
+ - allow to disable loaders [Matthias]
+ - bug fixes [Kouichirou Hiratsuka, Sven Neumann, Brian Cameron,
+  Manish Singh, Morten Welinder]
+* X11 selections 
+ - make incremental transfer of MULTIPLE work [Matthias]
+ - don't do incremental transfer in 4k chunks [Matthias]
+ - add selection ownership change notification [Matthias]
+ - support text/plain targets [Matthias]
+* Win32 
+ - bug fixes [Hans Breuer, John Ehresman, Tor Lillqvist, 
+  Robert Ögren, Benoît Carpentier, J. Ali Harlow, Laurent Sansonetti]
+* Performance improvements
+ - predict exposes for override-redirect windows [Soeren Sandmann]
+ - unset the background when mapping or unmapping windows [Soeren]
+ - support the update counter spec for smoother resizing [Soeren]
+* Misc bug fixes [Matthias, Owen, Soeren, Anders, Padraig O'Briain, 
+  Crispin Flowerday, Michal Pasternak, Scott Tsai, Morten Welinder,
+  Michael Natterer, Dmd Ljungmark, Sven Neumann, Billy Biggs, 
+  Mark McLoughlin, Sam Stephenson, John Finlay, David Hawthorne, 
+  Kent Sandvik, Davyd Madeley, Alexander Winston, Jean-François Wauthy, 
+  Jeff Franks, Philip Kendall, Baris Cicek Yevgen Muntyan, 
+  Bastien Nocera, Tim Janik, John Ehresman, Theppitak Karoonboonyanan, 
+  Nickolay V. Shmyrev, William Jon McCann, Paolo Maggi, Lorenzo Gil 
+  Sanchez, Jan-Marek Glogowski, Pawel Salek, Felipe Heidrich, Dmitry 
+  M. Shatrov, Alex Larsson, Michael Hallendal, Scott Bronson, Kjartan 
+  Maraas, Damien Carbery, Elke Meier]
+* Doc improvements [Matthias, Federico, Owen, Steve Chaplin, Tommi 
+  Komulainen, Bastien Nocera, Billy Biggs, Sampo Nurmentaus, Steffen 
+  Röcker, Doug Quale, Oliver Andrieu]
+* Updated translations (bg,lt,ne,tk,wa)
+
+
 Overview of Changes from GTK+ 2.4.0 to GTK+ 2.4.1
 =================================================
 * GtkFileChooser
