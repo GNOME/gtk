@@ -2334,7 +2334,8 @@ gtk_drag_source_info_destroy (gpointer data)
 
   if (info->widget)
     gtk_widget_unref (info->widget);
-  
+
+  gtk_signal_disconnect_by_data (GTK_OBJECT (info->ipc_widget), info);
   gtk_selection_remove_all (info->ipc_widget);
   gtk_object_set_data (GTK_OBJECT (info->ipc_widget), "gtk-info", NULL);
   source_widgets = g_slist_remove (source_widgets, info->ipc_widget);
@@ -2459,7 +2460,12 @@ gtk_drag_button_release_cb (GtkWidget      *widget,
     }
 
   gtk_grab_remove (widget);
-  gtk_signal_disconnect_by_data (GTK_OBJECT (widget), info);
+  gtk_signal_disconnect_by_func (GTK_OBJECT (widget), 
+				 GTK_SIGNAL_FUNC (gtk_drag_button_release_cb),
+				 info);
+  gtk_signal_disconnect_by_func (GTK_OBJECT (widget), 
+				 GTK_SIGNAL_FUNC (gtk_drag_motion_cb),
+				 info);
 
   /* Send on a release pair to the the original 
    * widget to convince it to release its grab. We need to

@@ -1,3 +1,8 @@
+Mon Jan 11 10:45:28 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c: Only remove handlers for motion/button_release
+	at drop, remove "selection_get" handler later.
+
 Mon Jan 11 13:31:49 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktypeutils.[hc]: removed Paolo Molaro's type creation hooks
