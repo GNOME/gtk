@@ -7,14 +7,13 @@
 <title>GTK+ FAQ
 
 <!-- NOTE: Use only one author tag, otherwise sgml2txt barfs - TRG --> 
-<author>Nathan Froyd, Tony Gale, Shawn T. Amundson.
+<author>Nathan Froyd, Tony Gale, Shawn T. Amundson, Emmanuel Deloget
 
-<date>July 6th 1998
+<date>July 14th 1999
 
-<abstract>
-This document is intended to answer questions that are likely to be 
-frequently asked by programmers using GTK+ or people who are just
-looking at using GTK+.  
+<abstract> This document is intended to answer questions that are likely to be 
+frequently asked by programmers using GTK+ or people who are just looking at 
+using GTK+. 
 </abstract>
 
 <!-- Table of contents -->
@@ -24,6 +23,25 @@ looking at using GTK+.
 
 <!-- ***************************************************************** -->
 <sect>General Information
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Before anything else: the greetings
+<p>
+The FAQ authors want to thank:
+<itemize>
+<item>Havoc Pennington
+<item>Eric Mouw
+<item>Owen Taylor
+<item>Tim Janik
+<item>Thomas Mailund Jensen
+<item>Joe Pfeiffer
+<item>Andy Kahn
+<item>Federico Mena Quintero
+<item>Damon Chaplin
+<item>and all the members of the GTK+ lists
+</itemize>
+If we forgot you, please email us !
+Thanks again (I know, it's really short :)
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Authors
@@ -89,9 +107,6 @@ by going to
 <htmlurl url="http://www.gtk.org/" 
 name="http://www.gtk.org/">.
 
-The Tutorial and FAQ can also be found at
-<htmlurl url="http://www.geocities.com/ResearchTriangle/Lab/4299/"
-name="http://www.geocities.com/ResearchTriangle/Lab/4299/">.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Is there a mailing list (or mailing list archive) for GTK+?
@@ -110,7 +125,9 @@ email message to <htmlurl url="mailto:gtk-list-request@redhat.com"
 name="gtk-list-request@redhat.com">
 with <em>subscribe</em> in the <bf>subject</bf>.
 <p>
-A searchable archive of the mailing list can be found at <htmlurl url="http://archive.redhat.com/gtk-list" name="http://archive.redhat.com/gtk-list">
+A searchable archive of the mailing list can be found at 
+<htmlurl url="http://archive.redhat.com/gtk-list" 
+name="http://archive.redhat.com/gtk-list">
 </itemize>
 <!-- ----------------------------------------------------------------- -->
 <sect1>The gtk-list hasn't had any traffic for days, is it dead?
@@ -130,34 +147,57 @@ that case, the best place to post questions is to the GTK+ mailing list.
 Bug reports should be sent to the GTK+ mailing list.
 
 <!-- ----------------------------------------------------------------- -->
+<sect1>Is there a Windows version of GTK+?
+<p>
+There is an on going port of GTK+ to the Windows platform which is
+making impressive progress.
+
+See <htmlurl url="http://www.iki.fi/tml/gimp/win32"
+name="http://www.iki.fi/tml/gimp/win32"> for more information.
+
+<!-- ----------------------------------------------------------------- -->
 <sect1>What applications have been written with GTK+?
 <p>
-Some applications which use GTK+ are:
+A list of some GTK+ based application can be found on the GTK+ web
+server at <htmlurl url="http://www.gtk.org/apps/" 
+name="http://www.gtk.org/apps/"> and contains more than 350 applications.
+
+Some of these are:
 <itemize>
-<item>GIMP (<htmlurl url="http://www.XCF.Berkeley.EDU/~gimp/" 
-                  name="http://www.XCF.Berkeley.EDU/~gimp/"> ), 
-      an image manipulation program
-<item>Gsumi (<htmlurl url="http://www.msc.cornell.edu/~otaylor/gsumi/gsumi.html" 
-                  name="http://www.msc.cornell.edu/~otaylor/gsumi/gsumi.html">),
-      a fun B+W doodling program with XInput support.
+<item>GIMP (<htmlurl url="http://www.gimp.org/" 
+                  name="http://www.gimp.org/">), 
+        an image manipulation program
+<item>AbiWord (<htmlurl url="http://www.abisource.com/" 
+        name="http://www.abisource.com/">),
+        a professional word processor
 <item>GUBI (<htmlurl url="http://www.SoftHome.net/pub/users/timj/gubi/index.htm"
             name="http://www.SoftHome.net/pub/users/timj/gubi/index.htm">),
-      a user interface builder
-<item>Gzilla (<htmlurl url="http://www.levien.com/gzilla/" name="http://www.levien.com/gzilla/">),
-      a web browser
-<item>SANE (<htmlurl url="http://www.azstarnet.com/~axplinux/sane/" name="http://www.azstarnet.com/~axplinux/sane/"> ),
-      a universal scanner interface
-<item>XQF (<htmlurl url="http://www.botik.ru/~roma/quake/" name="http://www.botik.ru/~roma/quake/">),
-      a QuakeWorld/Quake2 server browser and launcher
-<item>ElectricEyes (<htmlurl url="http://www.labs.redhat.com/ee.shtml" name="http://www.labs.redhat.com/ee.shtml">),
-      an image viewer that aims to be a free replacement for xv
-<item>GPK - the General Proxy Kit (<htmlurl url="http://www.humanfactor.com/gpk/" name="http://www.humanfactor.com/gpk/">),
-      an add-on library to permit thread-safe access to GTK+
-<item>GCK - the General Convenience Kit (<htmlurl url="http://www.ii.uib.no/~tomb/gck.html" name="http://www.ii.uib.no/~tomb/gck.html">),
-      miscellaneous functions intended to ease color handling, UI construction,
-      vector operations, and math functions
-<item>GDK Imlib (<htmlurl url="http://www.labs.redhat.com/imlib/" name="http://www.labs.redhat.com/imlib/">),
-      a fast image loading and manipulation library for GDK      
+        a user interface builder
+<item>Gzilla (<htmlurl url="http://www.levien.com/gzilla/" 
+        name="http://www.levien.com/gzilla/">),
+        a web browser
+<item>SANE (<htmlurl url="http://www.azstarnet.com/~axplinux/sane/" 
+        name="http://www.azstarnet.com/~axplinux/sane/"> ),
+        a universal scanner interface
+<item>XQF (<htmlurl url="http://www.botik.ru/~roma/quake/" 
+        name="http://www.botik.ru/~roma/quake/">),
+        a QuakeWorld/Quake2 server browser and launcher
+<item>ElectricEyes (<htmlurl url="http://www.labs.redhat.com/ee.shtml" 
+        name="http://www.labs.redhat.com/ee.shtml">),
+        an image viewer that aims to be a free replacement for xv
+<item>GPK - the General Proxy Kit (<htmlurl url="http://www.humanfactor.com/gpk/" 
+        name="http://www.humanfactor.com/gpk/">),
+        an add-on library to permit thread-safe access to GTK+
+<item>GCK - the General Convenience Kit (<htmlurl url="http://www.ii.uib.no/~tomb/gck.html" 
+        name="http://www.ii.uib.no/~tomb/gck.html">),
+        miscellaneous functions intended to ease color handling, UI construction,
+        vector operations, and math functions
+<item>GDK Imlib (<htmlurl url="http://www.labs.redhat.com/imlib/" 
+        name="http://www.labs.redhat.com/imlib/">),
+        a fast image loading and manipulation library for GDK
+<item>Glade (<htmlurl url="http://glade.pn.org/"
+        name="http://glade.pn.org/">),
+        a GTK+ based RAD tool which produces GTK+ applications
 </itemize>
 <p>
 In addition to the above, the GNOME project (<htmlurl url="http://www.gnome.org"
@@ -166,21 +206,20 @@ is using GTK+ to build a free desktop for Linux. Many more programs can be found
 there.
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>I'm looking for an application to write in GTK+. How about an IRC client?
+<sect1>I'm looking for an application to write in GTK+. How about an IRC client? 
 <p> 
 
-Ask on gtk-list for suggestions. There are at least four IRC
-clients already under development.
+Ask on gtk-list for suggestions. There are at least three IRC
+clients already under development (probably more in fact. The server at
+<htmlurl url="http://www.forcix.cx/irc-clients.html"
+name="http://www.forcix.cx/irc-clients.html"> list a bunch of them).
 
 <itemize>
 <item>girc. (Included with GNOME)
 <item>Bezerk (<htmlurl url="http://www.gtk.org/~trog/"
                        name="http://www.gtk.org/~trog/">)
-<item>gsirc. (Location?)
-<item>Gnirc. (<htmlurl url="http://www.imaginet.fr/~dramboz/gnirc"
-                       name="http://www.imaginet.fr/~dramboz/gnirc">)
+<item>gsirc. (In the gnome CVS tree)
 </itemize>
-
 
 <!-- ***************************************************************** -->
 <sect>How to find, configure, install, and troubleshoot GTK+
@@ -200,7 +239,21 @@ The canonical site is:
 <verb>
 ftp://ftp.gtk.org/pub/gtk
 </verb>
-Of course, any mirrors of ftp.gtk.org should have the latest version, too.
+This site tends to get busy around the time of a new GTK+ release
+so try and use one of the mirror sites that are listed in
+<htmlurl url="ftp://ftp.gtk.org/etc/mirrors"
+name="ftp://ftp.gtk.org/etc/mirrors">
+
+Here's a few mirror sites to get you started:
+<itemize>
+<item>Africa - ftp://ftp.is.co.za/applications/gimp/
+<item>Australia - ftp://ftp.au.gimp.org/pub/gimp/
+<item>Finland - ftp://ftp.funet.fi/pub/sci/graphics/packages/gimp
+<item>Germany - ftp://infosoc.uni-koeln.de/pub/ftp.gimp.org/
+<item>Japan - ftp://SunSITE.sut.ac.jp/pub/archives/packages/gimp/
+<item>UK - ftp://ftp.flirble.org/pub/X/gimp/
+<item>US - ftp://ftp.insync.net/pub/mirrors/ftp.gimp.org/
+</itemize>
 
 <sect1>How do I configure/compile GTK+?
 <p>
@@ -269,8 +322,8 @@ and reinstall gtk+.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>When compiling programs with GTK+, I get compiler error messages about not being able to find <tt/"glibconfig.h"/.
-
-<p> The header file "glibconfig.h" was moved to the directory
+<p>
+The header file "glibconfig.h" was moved to the directory
 $exec_prefix/lib/glib/include/. $exec_prefix is the
 directory that was specified by giving the --exec-prefix
 flags to ./configure when compiling GTK+. It defaults to 
@@ -307,13 +360,13 @@ setenv CPPFLAGS "-I/usr/local/include/glib/include"
 (Substitute the appropriate value of $exec_prefix for /usr/local.)
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>When installing The GIMP, configure reports that it can't find GTK.
+<sect1>When installing a GTK+ application, configure reports that it can't find GTK.
 <p>
 There are several common reasons for this:
 <itemize>
 <item>You have an old version of GTK installed somewhere. RedHat 5.0, for 
-example, installs an older copy of GTK that will not work with the latest 
-versions of GIMP. You should remove this old copy, but note that in the case
+example, installs an older copy of GTK that may not work with the latest 
+applications. You should remove this old copy, but note that in the case
 of RedHat 5.0 this will break the <tt/control-panel/ applications.
 <P>
 <item><tt/gtk-config/ (or another component of GTK) isn't in your path, or
@@ -321,10 +374,8 @@ there is an old version on your system. Type:
 <verb>
 gtk-config --version
 </verb>
-to check for both of these. This should return a value of at least 0.99.8
-for things to work properly with GIMP 0.99.23. If it returns a value
-different from what you expect, then you have an old version of GTK on
-your system.
+to check for both of these. If it returns a value different from what
+you expect, then you have an old version of GTK on your system.
 <P>
 <item>The ./configure script can't find the GTK libraries. As ./configure
 compiles various test programs, it needs to be able to find the GTK
@@ -344,7 +395,7 @@ config.log. If the compilation is successful, try executing it.
 <!-- ----------------------------------------------------------------- -->
 <sect1>Whats this CVS thing that everyone keeps talking about, and how do I access it?
 <p>
-CVS is the Concurent Version System and is a very popular mean of 
+CVS is the Concurent Version System and is a very popular means of 
 version control for software projects. It is designed to allow multiple 
 authors to be able to simultanously operate on the same source tree. 
 This source tree is centrally maintained, but each developer has a
@@ -365,7 +416,8 @@ using the following steps:
 <itemize>
 <item> In a bourne shell descendant (e.g. bash) type:
 <verb>
-export CVSROOT=':pserver:anonymous@anoncvs.gimp.org:/debian/home/gnomecvs'
+CVSROOT=':pserver:anonymous@anoncvs.gnome.org:/cvs/gnome'
+export CVSROOT
 </verb>
 <item>Next, the first time the source tree is checked out, a cvs login 
 is needed. 
@@ -374,7 +426,8 @@ cvs login
 </verb>
 This will ask you for a password. There is no password for cvs.gimp.org, 
 so just enter a carriage return. 
-<item>To get the tree and place it in a subdir of your current working directory, issue the command: 
+<item>To get the tree and place it in a subdir of your current working
+directory, issue the command: 
 <verb>
 cvs -z3 get gtk+
 </verb>
@@ -390,8 +443,8 @@ cvs -z3 get glib
 <!-- ----------------------------------------------------------------- -->
 <sect1>How can I contribute to GTK+?
 <p>
-It's simple.  If something doesn't work like you think it should in a program,
-check the documentation to make sure you're not missing something.  If it is a
+It's simple. If something doesn't work like you think it should in a program,
+check the documentation to make sure you're not missing something. If it is a
 true bug or missing feature, track it down in the GTK+ source, change it, 
 and then generate a patch in the form of a 'context diff'. This can be done
 using a command such as <tt/diff -ru &lt;oldfile&gt; &lt;newfile&gt;/. 
@@ -434,85 +487,110 @@ be put off if your patch didn't make it first time round.
 <sect1>What is the policy on incorporating new widgets into the library?
 <p>
 This is up to the authors, so you will have to ask them once you
-are done with your widget.  As a general guideline, widgets that are 
+are done with your widget. As a general guideline, widgets that are 
 generally useful, work, and are not a disgrace to the widget set will 
 gladly be included.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Is anyone working on bindings for languages other than C?
 <p>
-Yes. There is 
+The GTK+ home page (<htmlurl url="http://www.gtk.org/" 
+name="http://www.gtk.org/">) presents a list of GTK+ bindings.
+
 <itemize>
-<item>a C++ wrapper for GTK+ called gtk--. You can find the home page at:
-<htmlurl url="http://www.cs.tut.fi/~p150650/gtk/gtk--.html"
-name="http://www.cs.tut.fi/~p150650/gtk/gtk--.html">. 
-The FTP site is 
-<htmlurl url="ftp://ftp.gtk.org/pub/gtk/gtk--"
-name="ftp://ftp.gtk.org/pub/gtk/gtk--">.
+<item>There are several C++ wrappers for GTK+.
+  <itemize>
+  
+  <item>the gtk-- package, which is a very small wrapper for GTK+.
+  You can find the home page at:
+  <htmlurl url="http://www.cs.tut.fi/~p150650/gtk/gtk--.html"
+  name="http://www.cs.tut.fi/~p150650/gtk/gtk--.html">. 
+  The FTP site is 
+  <htmlurl url="ftp://ftp.gtk.org/pub/gtk/gtk--"
+  name="ftp://ftp.gtk.org/pub/gtk/gtk--">.
+  
+  <item>the VDK package, which was built as the base package of a GTK+
+  application Borland-like builder. The home page can be found at
+  <htmlurl url="www.guest.net/homepages/mmotta/VDKHome" 
+  name="www.guest.net/homepages/mmotta/VDKHome">.
+
+  <item>The wxWindows/Gtk package, a free C++ library for cross-platform 
+  GUI development. The home page of this package is
+  <htmlurl url="http://www.freiburg.linux.de/~wxxt/"
+  name="http://www.freiburg.linux.de/~wxxt/">.
+
+  </itemize> 
 <p>
 
-<item>There are two Objective-c bindings currently in development:
+<item>There are three known Objective-c bindings currently in development:
 
- <itemize>
+  <itemize>
 
- <item>The <htmlurl url="http://www.gnome.org/" name="GNOME project's"> package
- of choice is obgtk. Objgtk is based on the Object class and is maintained by
- <htmlurl url="mailto:sopwith@cuc.edu" name="Elliot Lee">. Apparently, objgtk
- is being accepted as the `standard' Objective-C binding for GTK+.
+  <item>The <htmlurl url="http://www.gnome.org/" name="GNOME project's"> package
+  of choice is objgtk. Objgtk is based on the Object class and is maintained by
+  <htmlurl url="mailto:sopwith@cuc.edu" name="Elliot Lee">. Apparently, objgtk
+  is being accepted as the `standard' Objective-C binding for GTK+.
 
- <item>If you are more inclined towards the 
- <htmlurl url="http://www.gnustep.org/" name="GNUstep project">,
- you may want to check out GTKKit by 
- <htmlurl url="mailto:helge@mdlink.de" name="Helge He&szlig;">.
- The intention is to setup a GTK+ binding using the FoundationKit. 
- GTKKit includes nicities like writing a XML-type template file to 
- construct a GTK+ interface.
+  <item>If you are more inclined towards the 
+  <htmlurl url="http://www.gnustep.org/" name="GNUstep project">,
+  you may want to check out GTKKit by 
+  <htmlurl url="mailto:helge@mdlink.de" name="Helge He&szlig;">.
+  The intention is to setup a GTK+ binding using the FoundationKit. 
+  GTKKit includes nicities like writing a XML-type template file to 
+  construct a GTK+ interface.
+
+  <item>The GToolKit package, which can be found at
+  <htmlurl url="ftp://ftp.gtk.org/pub/gtk/objc-gtoolkit/" 
+  name="ftp://ftp.gtk.org/pub/gtk/objc-gtoolkit/">.
 
  </itemize> 
 <p>               
 <item>Perl bindings
-<htmlurl url="ftp://ftp.gtk.org/pub/gtk/perl"
-name="ftp://ftp.gtk.org/pub/gtk/perl">
+  <htmlurl url="ftp://ftp.gtk.org/pub/gtk/perl"
+  name="ftp://ftp.gtk.org/pub/gtk/perl">
 <P>
 <item>Guile bindings. The home page is at
-<htmlurl url="http://www.ping.de/sites/zagadka/guile-gtk"
-name="http://www.ping.de/sites/zagadka/guile-gtk">.
-By the way, Guile is the GNU Project's implemention of R4RS Scheme (the
-standard). If you like Scheme, you may want to take a look at this.
+  <htmlurl url="http://www.ping.de/sites/zagadka/guile-gtk"
+  name="http://www.ping.de/sites/zagadka/guile-gtk">.
+  By the way, Guile is the GNU Project's implemention of R4RS Scheme (the
+  standard). If you like Scheme, you may want to take a look at this.
 <p>
 
 <item>David Monniaux reports:
-<quote>I've started a gtk-O'Caml binding system.
-The basics of the system, including callbacks, work fine.
+  <quote>I've started a gtk-O'Caml binding system.
+  The basics of the system, including callbacks, work fine.
 
-The current development is in
-<htmlurl url="http://www.ens-lyon.fr/~dmonniau/arcs"
-name="http://www.ens-lyon.fr/~dmonniau/arcs">
-</quote>
+  The current development is in
+  <htmlurl url="http://www.ens-lyon.fr/~dmonniau/arcs"
+  name="http://www.ens-lyon.fr/~dmonniau/arcs">
+  </quote>
 
-<item>
-Several python bindings have been done:
+<item> Several python bindings have been done:
 <p>
-<itemize>
-<item>pygtk is at 
-<htmlurl url="http://www.daa.com.au/~james/pygtk" 
-name="http://www.daa.com.au/~james/pygtk"> and 
-<htmlurl url="ftp://ftp.gtk.org/pub/gtk/python"
-name="ftp://ftp.gtk.org/pub/gtk/python">
-<item>python-gtk is at
-<htmlurl url="http://www.ucalgary.ca/~nascheme/python-gtk" 
-name="http://www.ucalgary.ca/~nascheme/python-gtk">
-</itemize>
+  <itemize>
+  <item>pygtk is at 
+  <htmlurl url="http://www.daa.com.au/~james/pygtk" 
+  name="http://www.daa.com.au/~james/pygtk"> and 
+  <htmlurl url="ftp://ftp.gtk.org/pub/gtk/python"
+  name="ftp://ftp.gtk.org/pub/gtk/python">
+
+  <item>python-gtk is at
+  <htmlurl url="http://www.ucalgary.ca/~nascheme/python-gtk" 
+  name="http://www.ucalgary.ca/~nascheme/python-gtk">
+  </itemize>
 <p>
-<item>
-There's a OpenGL/Mesa widget available for GTK+. Grab it at
-<htmlurl url="http://www.sakuranet.or.jp/~aozasa/shige/doc/comp/gtk/gtkGL/files-en.html" 
-name="http://www.sakuranet.or.jp/~aozasa/shige/doc/comp/gtk/gtkGL/files-en.html">
+<item>There's are a couple of OpenGL/Mesa widgets available for
+GTK+. I suggest you start at
+  <htmlurl url="http://www.student.oulu.fi/~jlof/gtkglarea/index.html" 
+  name="http://www.student.oulu.fi/~jlof/gtkglarea/index.html">
+<p>
+<item>Last, there are a lot of other language bindings for languages such as 
+  Eiffel, TOM, Pascal, Pike, etc.
 
 </itemize>
 
 <!-- ***************************************************************** -->
-<sect>Development with GTK+
+<sect>Development with GTK+: the begining
 <!-- ***************************************************************** -->
 <!-- ----------------------------------------------------------------- -->
 <sect1>How do I get started?
@@ -529,9 +607,159 @@ GTK+ widgets you should look at the file gtk/testgtk.c (and associated
 source files) within the GTK+ distribution. Looking at these exmaples will
 give you a good grounding on what the widgets can do.
 
+<!-- ----------------------------------------------------------------- -->
+<sect1>I tried to compile a small <tt/Hello World/ of mine, but it failed. Any clue?
+<p>
+Since you are good at coding, we will not deal with compile time error here :).
+
+The classic command line to compile a GTK+ based program is
+
+<verb>
+gcc -o myprg [c files list] `gtk-config --cflags --libs`
+</verb>
+
+You should notice the backquote character which is used in this command line.
+A common mistake when you start a GTK+ based development is to use quote 
+instead of backquotes. If you do so, the compiler will complain about an 
+unknown file called 'gtk-config --cflags --libs'. The text in
+backquotes is an instruction to your shell to substitute the output of
+executing this text into the command line.
+
+The command line above ensure that:
+<itemize>
+
+  <item>the correct C compiler flags will be used to compile the program
+        (including the complete C header directory list)
+
+  <item>your program will be linked with the needed libraries.
+
+</itemize>
+
+<sect1>What about using the <tt/make/ utility?
+<p>
+This is a sample makefile which compile a GTK+ based program:
+
+<tscreen><verb>
+# basic GTK+ app makefile
+SOURCES = myprg.c foo.c bar.c
+OBJS    = ${SOURCES:.c=.o}
+CFLAGS  = `gtk-config --cflags`
+LDADD   = `gtk-config --libs`
+CC      = gcc
+PACKAGE = myprg
+
+all : ${OBJS}
+        ${CC} -o ${PACKAGE} ${OBJS} ${LDADD}
+
+.c.o:
+        ${CC} ${CFLAGS} -c $<
+
+# end of file
+</verb></tscreen>
+
+For more information about the <tt/make/ utility, you should read either the
+related man page or the relevant info file.
+
+<sect1>I use the backquote stuff in my makefiles, but my make process failed.
+<p>
+The backquote construction seems to not be accepted by some old <tt/make/
+utilities. If you use one of these, the make process will probably fail.
+In order to have the backquote syntax working again, you should use the
+GNU make utility (get it on the GNU ftp server at
+<htmlurl url="ftp://ftp.gnu.org/" name="ftp://ftp.gnu.org/">).
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>I want to add some configure stuff, how could I do this?
+<p>
+To use autoconf/automake, you must first install the relevant packages. These
+are:
+
+<itemize>
+  <item>the m4 preprocessor v1.4 or better
+  <item>autoconf v2.13 or better
+  <item>automake v1.4 or better
+</itemize>
+
+You'll find these packages on the GNU main ftp server (<htmlurl 
+url="ftp://ftp.gnu.org/" name="ftp://ftp.gnu.org/">) or on any GNU mirror.
+
+In order to use the powerfull autoconf/automake scheme, you must create
+a configure.in which may look like:
+
+<tscreen><verb>
+dnl Process this file with autoconf to produce a configure script.
+dnl configure.in for a GTK+ based program
+
+AC_INIT(myprg.c)dnl
+AM_INIT_AUTOMAKE(mypkbname,0.0.1)dnl
+AM_CONFIG_HEADER(config.h)dnl
+
+dnl Checks for programs.
+AC_PROG_CC dnl check for the c compiler
+dnl you should add CFLAGS="" here, 'cos it is set to -g by PROG_CC
+
+dnl Checks for libraries.
+AM_PATH_GTK(1.2.0,,AC_MSG_ERROR(mypkgname 0.1 needs GTK))dnl
+
+AC_OUTPUT(
+	Makefile
+)dnl
+</verb></tscreen>
+
+You must add a Makefile.am file:
+
+<tscreen><verb>
+bin_PROGRAMS    = myprg
+myprg_SOURCES   = myprg.c foo.c bar.c
+INCLUDES        = @GTK_CFLAGS@
+LDADD           = @GTK_LIBS@
+CLEANFILES      = *~
+DISTCLEANFILES  = .deps/*.P
+</verb></tscreen>
+
+then, to use these, simply type the following commands:
+
+<verb>
+aclocal
+autoheader
+autoconf
+automake --add-missing --include-deps --foreign 
+</verb>
+
+For further informations, you should look at the autoconf and the automake
+documentation (the shipped info files are really easy to understand, and there
+are plenty of web resources that deal with autoconf and/or automake).
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>I try to debug my GTK+ application with gdb, but it hangs my X server when I hit some breakpoint. Any Idea ?
+<p>
+From Federico Mena Quintero:
+<quote>
+X is not locked up.  It is likely that you are hitting a breakpoint
+inside a callback that is called from a place in Gtk that has a mouse
+grab.
+<P>
+Run your program with the "--sync" option; it will make it easier to
+debug. Also, you may want to use the console for running the
+debugger, and just let the program run in another console with the X
+server.
+</quote>
+
+Eric Mouw had another solution:
+<quote>
+An old terminal connected to an otherwise unused serial port is also great
+for debugging X programs. Old vt100/vt220 terminals are dirt cheap but a
+bit hard to get (here in The Netherlands, YMMV).
+</quote>
+
+<!-- ***************************************************************** -->
+<sect>Development with GTK+: the programming part
+<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1>What widgets are in GTK?
 <p>
 The GTK+ Tutorial lists the following widgets:
+
 <verb>
   GtkObject
    +GtkData
@@ -619,6 +847,54 @@ The GTK+ Tutorial lists the following widgets:
 <!-- ----------------------------------------------------------------- -->
 <sect1>Is GTK+ thread safe? How do I write multi-threaded GTK+ applications?
 <p>
+The GLib library can be used in a thread-safe mode by calling
+g_thread_init() before making any other GLib calls. In this mode GLib
+automatically locks all internal data structures as needed.  This
+does not mean that two threads can simultaneously access, for
+example, a single hash table, but they can access two different hash
+tables simultaneously. If two different threads need to access the
+same hash table, the application is responsible for locking
+itself.
+
+When GLib is intialized to be thread-safe, GTK+ is
+<em>thread aware</em>. There is a single global lock
+that you must acquire with gdk_threads_enter() before
+making any GDK calls, and release with gdk_threads_leave()
+afterwards.
+
+A minimal main program for a threaded GTK+ application
+looks like:
+
+<verb>
+int
+main (int argc, char *argv[])
+{
+  GtkWidget *window;
+
+  g_thread_init(NULL);
+  gtk_init(&amp;argc, &amp;argv);
+
+  window = create_window();
+  gtk_widget_show(window);
+
+  gdk_threads_enter();
+  gtk_main();
+  gdk_threads_leave();
+
+  return(0);
+}
+</verb>
+
+Callbacks require a bit of attention. Callbacks from GTK+
+(signals) are made within the GTK+ lock. However callbacks
+from GLib (timeouts, IO callbacks, and idle functions)
+are made outside of the GTK+ lock. So, within a signal
+handler you do not need to call gdk_threads_enter(), but
+within the other types of callbacks, you do.
+
+<!-- This is the old answer - TRG
+
+
 Although GTK+, like many X toolkits, isn't thread safe, this does
 not prohibit the development of multi-threaded applications with
 GTK+. 
@@ -641,17 +917,17 @@ make any X calls without first acquiring this mutex.
 Note that this is a little effort, but it allows you to be
 potentially more efficient than a completely thread safe GTK+. You
 get to decide the granularity of the thread locking. You also have to
-make sure that the thread that calls gtk_main is holding the lock when
-it calls gtk_main.
+make sure that the thread that calls <tt/gtk_main()/ is holding the lock when
+it calls <tt/gtk_main()/.
 
 The next thing to worry about is that since you were holding the
-global mutex when you entered gtk_main, all callbacks will also be
+global mutex when you entered <tt/gtk_main()/, all callbacks will also be
 holding it. This means that the callback must release it if it's
 going to call any other code that might reacquire it. Otherwise
 you'll get deadlock. Also, you must be holding the mutex when you
 finally return from the callback. 
 
-In order to allow threads other than the one calling gtk_main to
+In order to allow threads other than the one calling <tt/gtk_main/ to
 get access to the mutex, we also need to register a work function
 with GTK that allows us to release the mutex periodically.
 
@@ -666,68 +942,8 @@ and it also might make GTK+ substantially less efficient if not handled
 carefully.
 
 Regardless, it's especially not a priority since relatively good
-workarounds exist.
+workarounds exist. -->
 
-<!-- ----------------------------------------------------------------- -->
-<sect1>How can I prevent redrawing and resizing while I change multiple widgets?
-<p> 
-Use gtk_container_disable_resize and gtk_container_enable_resize around the 
-code where you are changing a lot of stuff. This will result in much faster 
-speed since it will prevent resizing of the entire widget hierarchy. 
-
-<!-- ----------------------------------------------------------------- -->
-<sect1>How do I catch a double click event (in a list widget, for example)?
-<p>
-Tim Janik wrote to gtk-list (slightly modified):
-
-Define a signal handler:
-
-<tscreen><verb>
-gint
-signal_handler_event(GtkWiget *widget, GdkEvenButton *event, gpointer func_data)
-{
-  if (GTK_IS_LIST_ITEM(widget) &&
-       (event->type==GDK_2BUTTON_PRESS ||
-        event->type==GDK_3BUTTON_PRESS) ) {
-    printf("I feel %s clicked on button %d\",
-           event->type==GDK_2BUTTON_PRESS ? "double" : "triple",
-           event->button);
-  }
-
-  return FALSE;
-}
-</verb></tscreen>
-
-And connect the handler to your object:
-
-<tscreen><verb>
-{
-  /* list, list item init stuff */     
-
-  gtk_signal_connect(GTK_OBJECT(list_item),
-                     "button_press_event",
-                     GTK_SIGNAL_FUNC(signal_handler_event),
-                     NULL);
-
-  /* and/or */
-
-  gtk_signal_connect(GTK_OBJECT(list_item),
-                     "button_release_event",
-                     GTK_SIGNAL_FUNC(signal_handler_event),
-                     NULL);
-
-  /* something else */
-}
-</verb></tscreen>
-
-and, Owen Taylor wrote:
-
-Note that a single button press will be received beforehand, and
-if you are doing this for a button, you will therefore also get a
-"clicked" signal for the button. (This is going to be true for
-any toolkit, since computers aren't good at reading one's
-mind.)
-                                       
 <!-- ----------------------------------------------------------------- -->
 <sect1>How do I find out about the selection of a GtkList?
 <p>
@@ -830,6 +1046,121 @@ To get known about the selection:
         printf("\n");
 }
 </verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How can I prevent redrawing and resizing while I change multiple widgets?
+<p>
+Old versions of GTK+ used to provide the <tt/gtk_container_enable_resize()/ and
+<tt/gtk_container_disable_resize()/ functions to enable or disable the resize while
+modifying widgets.
+
+In the current version of GTK+, there is no more need for these functions, 
+since GTK+ will only resize widget during idle.
+
+<!-- XXX should we get rid of this one ? -->
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I catch a double click event (in a list widget, for example)?
+<p>
+Tim Janik wrote to gtk-list (slightly modified):
+
+Define a signal handler:
+
+<tscreen><verb>
+gint
+signal_handler_event(GtkWiget *widget, GdkEvenButton *event, gpointer func_data)
+{
+  if (GTK_IS_LIST_ITEM(widget) &&
+       (event->type==GDK_2BUTTON_PRESS ||
+        event->type==GDK_3BUTTON_PRESS) ) {
+    printf("I feel %s clicked on button %d\",
+           event->type==GDK_2BUTTON_PRESS ? "double" : "triple",
+           event->button);
+  }
+
+  return FALSE;
+}
+</verb></tscreen>
+
+And connect the handler to your object:
+
+<tscreen><verb>
+{
+  /* list, list item init stuff */     
+
+  gtk_signal_connect(GTK_OBJECT(list_item),
+                     "button_press_event",
+                     GTK_SIGNAL_FUNC(signal_handler_event),
+                     NULL);
+
+  /* and/or */
+
+  gtk_signal_connect(GTK_OBJECT(list_item),
+                     "button_release_event",
+                     GTK_SIGNAL_FUNC(signal_handler_event),
+                     NULL);
+
+  /* something else */
+}
+</verb></tscreen>
+
+and, Owen Taylor wrote:
+
+Note that a single button press will be received beforehand, and
+if you are doing this for a button, you will therefore also get a
+"clicked" signal for the button. (This is going to be true for
+any toolkit, since computers aren't good at reading one's
+mind.)
+                                       
+<!-- ----------------------------------------------------------------- -->
+<sect1>By the way, what are the differences between signals and events?
+<p>
+First of all, Havoc Pennington gives a rather complete description of the
+differences between events and signals in his free book (two chapters can
+be found at <htmlurl url="http://www106.pair.com/rhp/sample_chapters.html"
+name="http://www106.pair.com/rhp/sample_chapters.html">).
+
+Moreover, Havoc posted this to the <tt/gtk-list/
+<quote>
+  Events are a stream of messages received from the X server. They drive the
+  Gtk main loop; which more or less amounts to "wait for events, process
+  them" (not exactly, it is really more general than that and can wait on
+  many different input streams at once). Events are a Gdk/Xlib concept.
+<P>
+  Signals are a feature of GtkObject and its subclasses. They have nothing
+  to do with any input stream; really a signal is just a way to keep a list
+  of callbacks around and invoke them ("emit" the signal). There are lots of
+  details and extra features of course. Signals are emitted by object
+  instances, and are entirely unrelated to the Gtk main loop.
+  Conventionally, signals are emitted "when something changes" about the
+  object emitting the signal.
+<P>
+  Signals and events only come together because GtkWidget happens to emit
+  signals when it gets events. This is purely a convenience, so you can
+  connect callbacks to be invoked when a particular widget receives a
+  particular event. There is nothing about this that makes signals and
+  events inherently related concepts, any more than emitting a signal when
+  you click a button makes button clicking and signals related concepts.
+</quote>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>I have my signal connected to the the (whatever) event, but it seems I don't catch it. What's wrong?
+<p>
+There is some special initialisation to do in order to catch some 
+particular events. In fact, you must set the correct event mask bit of your
+widget before getting some particular events.
+
+For example, 
+
+<tscreen><verb>
+  gtk_widget_add_events(window, GDK_KEY_RELEASE_MASK);
+</verb></tscreen>
+
+lets you catch the key release events. If you want to catch every events,
+simply us the GDK_ALL_EVENTS_MASK event mask.
+
+All the event masks are defined in the <tt/gdktypes.h/ file.
+
 <!-- ----------------------------------------------------------------- -->
 <sect1>Is it possible to get some text displayed which is truncated to fit inside its allocation? 
 <p>
@@ -862,25 +1193,6 @@ copy gtkviewport.c and strip out the adjustment and shadow
 functionality (perhaps you could call it GtkClipper).
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>Why don't the contents of a button move when the button is pressed? Here's a patch to make it work that way...
-<p>
-From: Peter Mattis
-
-The reason buttons don't move their child down and to the right when
-they are depressed is because I don't think that's what is happening
-visually. My view of buttons is that you are looking at them straight
-on. That is, the user interface lies in a plane and you're above it
-looking straight at it. When a button gets pressed it moves directly
-away from you. To be absolutely correct I guess the child should
-actually shrink a tiny amount. But I don't see why the child should
-shift down and to the left. Remember, the child is supposed to be
-attached to the buttons surface. Its not good for it to appear like
-the child is slipping on the surface of the button.
-
-On a more practical note, I did implement this at one point and
-determined it didn't look good and removed it.
-     
-<!-- ----------------------------------------------------------------- -->
 <sect1>How can I define a separation line in a menu? 
 <p>
 See the <htmlurl url="http://www.gtk.org/tutorial/"
@@ -895,27 +1207,75 @@ gtk_widget_show(menuitem);
 </verb></tscreen>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>How can I right justify a menu, such as Help, when using the MenuFactory? 
+<sect1>How can I right justify a menu, such as Help? 
 <p>
-Use something like the following:
+Depending on if you use the MenuFactory or not, there are two ways to proceed.
+With the MenuFactory, use something like the following:
 
 <tscreen><verb>
 menu_path = gtk_menu_factory_find (factory,  "<MyApp>/Help");
 gtk_menu_item_right_justify(menu_path->widget);
 </verb></tscreen>
+
+If you do not use the MenuFactory, you should simply use:
+
+<tscreen><verb>
+gtk_menu_item_right_justify(my_menu_item);
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I add some underlined accelerators to menu items?
+<p>
+Damon Chaplin, the technical force behind the Glade project, provided the
+following code sample (this code is an output from Glade). It creates a
+small <tt/File/ menu item with only one child (<tt/New/). The F in <tt/File/ 
+and the N in <tt/New/ are underlined, and the relevant accelerators are 
+created.
+
+<tscreen><verb>
+  menubar1 = gtk_menu_bar_new ();
+  gtk_object_set_data (GTK_OBJECT (window1), "menubar1", menubar1);
+  gtk_widget_show (menubar1);
+  gtk_box_pack_start (GTK_BOX (vbox1), menubar1, FALSE, FALSE, 0);
+
+  file1 = gtk_menu_item_new_with_label ("");
+  tmp_key = gtk_label_parse_uline (GTK_LABEL (GTK_BIN (file1)->child),
+                                   _("_File"));
+  gtk_widget_add_accelerator (file1, "activate_item", accel_group,
+                              tmp_key, GDK_MOD1_MASK, 0);
+  gtk_object_set_data (GTK_OBJECT (window1), "file1", file1);
+  gtk_widget_show (file1);
+  gtk_container_add (GTK_CONTAINER (menubar1), file1);
+
+  file1_menu = gtk_menu_new ();
+  file1_menu_accels = gtk_menu_ensure_uline_accel_group (GTK_MENU (file1_menu));
+  gtk_object_set_data (GTK_OBJECT (window1), "file1_menu", file1_menu);
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (file1), file1_menu);
+
+  new1 = gtk_menu_item_new_with_label ("");
+  tmp_key = gtk_label_parse_uline (GTK_LABEL (GTK_BIN (new1)->child),
+                                   _("_New"));
+  gtk_widget_add_accelerator (new1, "activate_item", file1_menu_accels,
+                              tmp_key, 0, 0);
+  gtk_object_set_data (GTK_OBJECT (window1), "new1", new1);
+  gtk_widget_show (new1);
+  gtk_container_add (GTK_CONTAINER (file1_menu), new1);
+</verb></tscreen>
+
 <!-- ----------------------------------------------------------------- -->
 <sect1>How do I make my window modal? / How do I make a single window active?
 <p>
-After you create your window, do gtk_grab_add(my_window). And after 
-closing the window do gtk_grab_remove(my_window).
+After you create your window, do <tt/gtk_grab_add(my_window)/. And after 
+closing the window do <tt/gtk_grab_remove(my_window)/.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Why doesn't my widget (e.g. progressbar) update?
 <p>
 
 You are probably doing all the changes within a function 
-without returning control to gtk_main. Most drawing updates are only 
-placed on a queue, which is processed within gtk_main. You can
+without returning control to <tt/gtk_main()/. This may be the case if you do some 
+lengthy calculation in your code. Most drawing updates are only 
+placed on a queue, which is processed within <tt/gtk_main()/. You can
 force the drawing queue to be processed using something like:
 
 <tscreen><verb>
@@ -929,18 +1289,330 @@ What the above snippet does is run all pending events and high priority
 idle functions, then return immediately (the drawing is done in a 
 high priority idle function).
 
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I attach data to some GTK+ object/widget?
+<p>
+First of all, the attached data is stored in the object_data field of a 
+GtkObject. The type of this field is GData, which is defined in glib.h. 
+So you should read the gdataset.c file in your glib source directory very 
+carefully.
+
+There are two (easy) ways to attach some data to a gtk object. 
+Using <tt/gtk_object_set_data()/ and <tt/gtk_object_get_data()/ seems to be the 
+most common way to do this, as it provides a powerfull interface 
+to connect objects and data.
+
+<tscreen><verb>
+void gtk_object_set_data(GtkObject *object, const gchar *key, gpointer data);
+gpointer gtk_object_get_data(GtkObject *object, const gchar *key);
+</verb></tscreen>
+
+Since a short example is better than any lengthy speech:
+
+<tscreen><verb>
+struct my_struct	p1,p2,*result;
+GtkWidget		*w;
+
+gtk_object_set_data(GTK_OBJECT(w),"p1 data",(gpointer)&amp;p1);
+gtk_object_set_data(GTK_OBJECT(w),"p2 data",(gpointer)&amp;p2);
+
+result = gtk_object_get_data(GTK_OBJECT(w),"p1 data");
+</verb></tscreen>
+
+The <tt/gtk_object_set_user_data()/ and <tt/gtk_object_get_user_data()/
+functions does exactly the same thing
+as the functions above, but does not let you specify the "key" parameter.
+Instead, it uses a standard "user_data" key. Note that the use of these
+functions is deprecated in 1.2. They only provide a compatibility mode 
+with some old gtk packages.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I remove the data I have attached to an object?
+<p>
+When attaching the data to the object, you can use the 
+<tt/gtk_object_set_data_full()/
+function. The three first arguments of the function are the same as in
+<tt/gtk_object_set_data()/. The fourth one is a pointer to a callback function
+which is called when the data is destroyed. The data is destroyed when
+you:
+
+<itemize>
+<item> destroy the object
+<item> replace the data with a new one (with the same key)
+<item> replace the data with NULL (with the same key)
+</itemize>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I right (or otherwise) justify a label?
+<p>
+Are you sure you want to <em>justify</em> the labels?  The label class contains 
+the <tt/gtk_label_set_justify()/ function that is used to control the 
+justification of a multi-line label.
+
+What you probably want is to set the <em>alignment</em> of the label, ie right 
+align it, center it or left align it. If you want to do this, you 
+should use:
+
+<tscreen><verb>
+void gtk_misc_set_alignment     (GtkMisc *misc,
+                                gfloat xalign,
+                                gfloat yalign);
+</verb></tscreen>
+
+where the <tt/xalign/ and <tt/yalign/ values are floats in [0.00;1.00].
+
+<tscreen><verb>
+GtkWidget       *label;
+
+/* horizontal : left align, vertical : top */
+gtk_misc_set_alignment(GTK_MISK(label), 0.0f, 0.0f);
+
+/* horizontal : centered, vertical : centered */
+gtk_misc_set_alignment(GTK_MISK(label), 0.5f, 0.5f);
+
+/* horizontal : right align, vertical : bottom */
+gtk_misc_set_alignment(GTK_MISK(label), 1.0f, 1.0f);
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How could I get any widget position?
+<p>
+As Tim Janik pointed out, there are different cases, and each case requires
+a different solution.
+
+<itemize>
+<item>  If you want the position of a widget relative to its parent, you should
+        use <tt/widget->allocate.x/ and <tt/widget->allocate.y/.
+<item>  If you want the position of a window relative to the X root window,
+        you should use <tt/gdk_window_get_geometry()/ or 
+        <tt/gdk_window_get_origin()/.
+<item>  Last but not least, if you want to get a Window Manager frame position,
+        you should use <tt/gdk_window_get_deskrelative_origin()/.
+</itemize>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I set the position/size of a widget/window?
+<p>
+The <tt/gtk_widget_set_uposition()/ function is used to set the
+position of any widget.
+
+The <tt/gtk_widget_set_usize()/ function is used to set the
+size of a widget. In order to use all the features that are provided by
+this function when it acts on a window, you may want to use the
+<tt/gtk_window_set_policy/ function. The definition of this function
+is the following:
+
+<tscreen><verb>
+void        gtk_window_set_policy           (GtkWindow *window,
+                                             gint allow_shrink,
+                                             gint allow_grow,
+                                             gint auto_shrink);
+</verb></tscreen>
+
+<tt/Auto_shrink/ will automatically shrink the window when the
+requested size of the child widgets goes below the current size of the
+window. <tt/Allow_shrink/ will give the user the authorisation to
+make the window smaller that it should normally be. <tt/Allow_grow/
+will give the user will have the ability to make the window
+bigger. The default values for these parameters are:
+
+<tscreen><verb>
+allow_shrink = FALSE
+allow_grow   = TRUE
+auto_shrink  = FALSE
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I add a popup menu to my GTK+ application?
+<p>
+The <tt/menu/ example in the examples/menu directory of the GTK+ distribution
+implements a popup menu with this technique :
+
+<tscreen><verb>
+static gint button_press (GtkWidget *widget, GdkEvent *event)
+{
+
+    if (event->type == GDK_BUTTON_PRESS) {
+        GdkEventButton *bevent = (GdkEventButton *) event; 
+        gtk_menu_popup (GTK_MENU(widget), NULL, NULL, NULL, NULL,
+                        bevent->button, bevent->time);
+        /* Tell calling code that we have handled this event; the buck
+         * stops here. */
+        return TRUE;
+    }
+
+    /* Tell calling code that we have not handled this event; pass it on. */
+    return FALSE;
+}
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I disable or enable a widget, such as a button?
+<p>
+To disable (or to enable) a widget, use the <tt/gtk_widget_set_sensitive()/
+function. The first parameter is you widget pointer. The second parameter
+is a boolean value: when this value is TRUE, the widget is enabled.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I set the cursor position in a GtkText object?
+<p>
+Notice that the response is valid for any object that inherits from the 
+GtkEditable class.
+
+Are you sure that you want to move the cursor position? Most of the time,
+while the cursor position is good, the insertion point does not match the
+cursor position. If this apply to what you really want, then you should use
+the <tt/gtk_text_set_point()/ function. If you want to set the insertion point
+at the current cursor position, use the following:
+
+<tscreen><verb>
+  gtk_text_set_point(GTK_TEXT(text),
+      gtk_editable_get_position(GTK_EDITABLE(text)));
+</verb></tscreen>
+
+If you want the insertion point to follow the cursor at all time, you
+should probably catch the button press event, and then move the
+insertion point. Be careful : you'll have to catch it after the widget 
+has changed the cursor position though. Thomas Mailund Jensen proposed the
+following code:
+
+<tscreen><verb>
+static void
+insert_bar (GtkWidget *text)
+{
+  /* jump to cursor mark */
+  gtk_text_set_point (GTK_TEXT (text),
+      gtk_editable_get_position (GTK_EDITABLE  (text)));
+
+  gtk_text_insert (GTK_TEXT (text), NULL, NULL, NULL,
+     "bar", strlen ("bar"));
+}
+
+int
+main (int argc, char *argv[])
+{
+  GtkWidget *window, *text;
+
+  gtk_init (&amp;argc, &amp;argv);
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  text = gtk_text_new (NULL, NULL);
+  gtk_text_set_editable (GTK_TEXT (text), TRUE);
+  gtk_container_add (GTK_CONTAINER (window), text);
+
+  /* connect after everything else */
+  gtk_signal_connect_after (GTK_OBJECT(text), "button_press_event",
+    GTK_SIGNAL_FUNC (insert_bar), NULL);
+
+  gtk_widget_show_all(window);
+  gtk_main();
+
+  return 0;
+}
+</verb></tscreen>
+
+Now, if you really want to change the cursor position, you should use the
+<tt/gtk_editable_set_position()/ function.
+
+<!-- ***************************************************************** -->
+<sect>Development with GTK+: misc questions
+<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
+<sect1>Why do this strange 'x io error' occur when I <tt/fork()/ in my GTK+ app?
+<p>
+This is not really a GTK+ problem, and the problem is not related to <tt/fork()/
+too. If the 'x io error' occurs then you probably use the <tt/exit()/ function
+in order to exit from the child process.
+
+When GDK opens an X display, it creates a socket file descriptor. When you use
+the <tt/exit()/ function, you implicitly close all the open file descriptors,
+and the underlying X library really doesn't like this.
+
+The right function to use here is <tt/_exit()/. 
+
+Eric Mouw gave the following piece of code about the fork()/exit() problem
+(slightly modified)
+
+<tscreen><verb>
+  int pid = fork();
+
+  if(pid==-1)
+    {
+      perror("fork");
+      exit(-1);
+    }
+  else if(pid==0) /* child */
+    {
+      retval=system("a command"); /* can use exec* functions here */
+      _exit(retval);  /* notice _exit() instead of exit() */
+    }
+  else /* parent */
+    {
+      for(;;)
+        {
+          if(waitpid(pid, &amp;status, WNOHANG) == pid)
+            {
+              waitpid(pid, &amp;status, WUNTRACED); /* anti zombie code */
+              break;
+            }
+        }
+
+      return(WEXITSTATUS(status));
+    }
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>I can't add more than (something like) 2000 chars in a GtkEntry. What's wrong?
+<p>
+There is now a known problem in the GtkEntry widget. In the
+<tt/gtk_entry_insert_text()/ function, the following lines limit
+the number of chars in the entry to 2047.
+
+<tscreen><verb>
+  /* The algorithms here will work as long as, the text size (a
+   * multiple of 2), fits into a guint16 but we specify a shorter
+   * maximum length so that if the user pastes a very long text, there
+   * is not a long hang from the slow X_LOCALE functions.  */
+
+  if (entry->text_max_length == 0)
+    max_length = 2047;
+  else
+    max_length = MIN (2047, entry->text_max_length);
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Why don't the contents of a button move when the button is pressed? Here's a patch to make it work that way...
+<p>
+From: Peter Mattis
+
+<quote>
+The reason buttons don't move their child down and to the right when
+they are depressed is because I don't think that's what is happening
+visually. My view of buttons is that you are looking at them straight
+on. That is, the user interface lies in a plane and you're above it
+looking straight at it. When a button gets pressed it moves directly
+away from you. To be absolutely correct I guess the child should
+actually shrink a tiny amount. But I don't see why the child should
+shift down and to the left. Remember, the child is supposed to be
+attached to the buttons surface. Its not good for it to appear like
+the child is slipping on the surface of the button.
+<P>
+On a more practical note, I did implement this at one point and
+determined it didn't look good and removed it.
+</quote>     
+
 <!-- ***************************************************************** -->
 <sect>About gdk
 <!-- ***************************************************************** -->
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>What is gdk?
+<sect1>What is GDK?
 <p>
-gdk is basically a wrapper around the standard Xlib function calls. If you are
-at all familiar with Xlib, a lot of the functions in gdk will require little 
-or no getting used to. All functions are written to provide an easy way 
-to access Xlib functions in an easier an slightly more intuitive manner. 
-In addition, since gdk uses glib (see below), it will be more portable 
+GDK is basically a wrapper around the standard Xlib function calls. If you are
+at all familiar with Xlib, a lot of the functions in GDK will require little 
+or no getting used to. All functions are written to provide an way 
+to access Xlib functions in an easier and slightly more intuitive manner. 
+In addition, since GDK uses GLib (see below), it will be more portable 
 and safer to use on multiple platforms.
 
 <!-- Examples, anybody? I've been mulling some over. NF -->
@@ -1001,13 +1673,13 @@ should look something like this:
 </tscreen>
 
 <!-- ***************************************************************** -->
-<sect>About glib
+<sect>About GLib
 <!-- ***************************************************************** -->
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>What is glib?
+<sect1>What is GLib?
 <p>
-glib is a library of useful functions and definitions available for use 
+GLib is a library of useful functions and definitions available for use 
 when creating GDK and GTK applications. It provides replacements for some
 standard libc functions, such as malloc, which are buggy on some systems.
 <p>
@@ -1021,30 +1693,82 @@ It also provides routines for handling:
 <item>Error Functions
 </itemize>
 
-<!-- Some Examples might be useful here! NF -->         
-
 <!-- ----------------------------------------------------------------- -->
-<sect1>Why use g_print, g_malloc, g_strdup and fellow glib functions ?  
+<sect1>How can I use the doubly linked lists?
+<p>
+The GList object is defined as:
+
+<tscreen><verb>
+typedef struct _GList GList;
+
+struct _GList
+{
+  gpointer data;
+  GList *next;
+  GList *prev;
+};
+</verb></tscreen>
+
+To use the GList objects, simply :
+
+<tscreen><verb>
+GList   *list = NULL;
+GList   *listrunner;
+gint    array[] = { 1, 2, 3, 4, 5, 6 };
+gint    pos;
+gint    *value;
+
+/* add data to the list */
+for (pos=0;pos < sizeof array; pos++) {
+  list = g_list_append(list, (gpointer)&amp;array[pos]);
+}
+
+/* run through the list */
+listrunner = g_list_first(list);
+while (listrunner) {
+  value = (gint *)listrunner->data;
+  printf("%d\n", *value);
+  listrunner = g_list_next(listrunner);
+}
+
+/* removing datas from the list */
+listrunner = g_list_first(list);
+list = g_list_remove_link(list, listrunner);
+list = g_list_remove(list, &amp;array[4]);
+</verb></tscreen>
+
+The same code is usable with singly linked lists (GSList objects) by replacing
+g_list_* functions with the relevant g_slist_* ones (g_slist_append, 
+g_slist_remove, ...). Just remember that since you can't go backward in a singly
+linked list, there is no g_slist_first function - you'll need to keep a 
+reference on the first node of the list.
+
+<!-- Some Examples might be useful here! NF -->
+<!-- I believe it should be better :) ED -->
+<!-- Linked lists are pretty standard data structures - don't want to
+     over do it - TRG -->
+<!-- ----------------------------------------------------------------- -->
+<sect1>Why use g_print, g_malloc, g_strdup and fellow glib functions?  
 <p>
 Thanks to Tim Janik who wrote to gtk-list: (slightly modified)
 <quote>
 Regarding g_malloc(), g_free() and siblings, these functions are much safer
-than thier libc equivalences.  For example, g_free() just returns if called 
-with NULL.  Also, if USE_DMALLOC is defined, the definition for these 
+than their libc equivalents. For example, g_free() just returns if called 
+with NULL. Also, if USE_DMALLOC is defined, the definition for these 
 functions changes (in glib.h) to use MALLOC(), FREE() etc...  If MEM_PROFILE
 or MEM_CHECK are defined, there are even small statistics made counting
 the used block sizes (shown by g_mem_profile() / g_mem_check()).
-<p>
+<P>
 Considering the fact that glib provides an interface for memory chunks
 to save space if you have lots of blocks that are always the same size
 and to mark them ALLOC_ONLY if needed, it is just straight forward to
 create a small saver (debug able) wrapper around the normal malloc/free
 stuff as well - just like gdk covers Xlib. ;)
-<p>
+<P>
 Using g_error() and g_warning() inside of applications like the GIMP
 that fully rely on gtk even gives the opportunity to pop up a window
 showing the messages inside of a gtk window with your own handler
-(by using g_set_error_handler()) along the lines of gtk_print()
+(by using g_set_error_handler()) along the lines of <tt/gtk_print()/
 (inside of gtkmain.c).
 </quote>
 
@@ -1056,27 +1780,36 @@ an e-mail message with the exact text you think should be included (question and
 answer).  With your help, this document can grow and become more useful!
 
 This document is maintained by Nathan Froyd 
-<htmlurl url="mailto:maestrox@geocities.com" name="&lt;maestrox@geocities.com&gt;">
-and Tony Gale <htmlurl url="mailto:gale@gimp.org" name="&lt;gale@gimp.org&gt;">. 
-This FAQ was created by Shawn T. Amundson <htmlurl url="mailto:amundson@gimp.org" 
-name="&lt;amundson@gimp.org&gt;">who continues to provide support.
+<htmlurl url="mailto:maestrox@geocities.com" 
+name="&lt;maestrox@geocities.com&gt;">,
+Tony Gale <htmlurl url="mailto:gale@gimp.org" 
+name="&lt;gale@gimp.org&gt;"> and 
+Emmanuel Deloget <htmlurl url="mailto:pixel@epita.fr"
+name="&lt;pixel@epita.fr&gt;">.
+This FAQ was created by Shawn T. Amundson 
+<htmlurl url="mailto:amundson@gimp.org" 
+name="&lt;amundson@gimp.org&gt;"> who continues to provide support.
 
-The GTK+ FAQ is Copyright (C) 1997,1998 by Shawn T. Amundson, Nathan Froyd and Tony Gale.
+The GTK+ FAQ is Copyright (C) 1997,1998, 1999 by Shawn T. Amundson, 
+Nathan Froyd and Tony Gale, Emmanuel Deloget.
 
-Permission is granted to make and distribute verbatim copies of this manual provided the 
-copyright notice and this permission notice are preserved on all copies.
+Permission is granted to make and distribute verbatim copies of 
+this manual provided the copyright notice and this permission notice 
+are preserved on all copies.
 
-Permission is granted to copy and distribute modified versions of this document under the conditions 
-for verbatim copying, provided that this copyright notice is included exactly as in the original, 
-and that the entire resulting derived work is distributed under the terms of a permission 
-notice identical to this one.
+Permission is granted to copy and distribute modified versions of 
+this document under the conditions for verbatim copying, provided 
+that this copyright notice is included exactly as in the original, 
+and that the entire resulting derived work is distributed under 
+the terms of a permission notice identical to this one.
 
-Permission is granted to copy and distribute translations of this document into another language, 
-under the above conditions for modified versions.
+Permission is granted to copy and distribute translations of 
+this document into another language,  under the above conditions 
+for modified versions.
 
-If you are intending to incorporate this document into a published work, please contact one of
-the maintainers, and we will make an effort to ensure that you have the most up to date 
-information available.
+If you are intending to incorporate this document into a published work, 
+please contact one of the maintainers, and we will make an effort to ensure 
+that you have the most up to date information available.
 
 There is no guarentee that this document lives up to its intended
 purpose.  This is simply provided as a free resource.  As such,
