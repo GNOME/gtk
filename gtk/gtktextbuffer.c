@@ -2172,24 +2172,40 @@ pre_paste_prep (ClipboardRequest *request_data,
                 GtkTextIter      *insert_point)
 {
   GtkTextBuffer *buffer = request_data->buffer;
+  
+  get_paste_point (buffer, insert_point, TRUE);
 
+  /* If we're going to replace the selection, we insert before it to
+   * avoid messing it up, then we delete the selection after inserting.
+   */
   if (request_data->replace_selection)
     {
       GtkTextIter start, end;
       
       if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
+        *insert_point = start;
+    }
+}
+
+static void
+post_paste_cleanup (ClipboardRequest *request_data)
+{
+  if (request_data->replace_selection)
+    {
+      GtkTextIter start, end;
+      
+      if (gtk_text_buffer_get_selection_bounds (request_data->buffer,
+                                                &start, &end))
         {
           if (request_data->interactive)
-            gtk_text_buffer_delete_interactive (buffer,
+            gtk_text_buffer_delete_interactive (request_data->buffer,
                                                 &start,
                                                 &end,
                                                 request_data->default_editable);
           else
-            gtk_text_buffer_delete (buffer, &start, &end);
+            gtk_text_buffer_delete (request_data->buffer, &start, &end);
         }
     }
-      
-  get_paste_point (buffer, insert_point, TRUE);
 }
 
 /* Called when we request a paste and receive the text data
@@ -2214,6 +2230,8 @@ clipboard_text_received (GtkClipboard *clipboard,
       else
         gtk_text_buffer_insert (buffer, &insert_point,
                                 str, -1);
+
+      post_paste_cleanup (request_data);
     }
 
   g_object_unref (G_OBJECT (buffer));
@@ -2253,6 +2271,33 @@ selection_data_get_buffer (GtkSelectionData *selection_data,
   return src_buffer;
 }
 
+#if 0
+/* These are pretty handy functions; maybe something like them
+ * should be in the public API. Also, there are other places in this
+ * file where they could be used.
+ */
+static gpointer
+save_iter (const GtkTextIter *iter,
+           gboolean           left_gravity)
+{
+  return gtk_text_buffer_create_mark (gtk_text_iter_get_buffer (iter),
+                                      NULL,
+                                      iter,
+                                      TRUE);
+}
+
+static void
+restore_iter (const GtkTextIter *iter,
+              gpointer           save_id)
+{
+  gtk_text_buffer_get_iter_at_mark (gtk_text_mark_get_buffer (save_id),
+                                    (GtkTextIter*) iter,
+                                    save_id);
+  gtk_text_buffer_delete_mark (gtk_text_mark_get_buffer (save_id),
+                               save_id);
+}
+#endif
+
 static void
 paste_from_buffer (ClipboardRequest    *request_data,
                    GtkTextBuffer       *src_buffer,
@@ -2274,6 +2319,8 @@ paste_from_buffer (ClipboardRequest    *request_data,
                                          end,
                                          request_data->interactive);
     }
+
+  post_paste_cleanup (request_data);
       
   g_object_unref (G_OBJECT (src_buffer));
 }
@@ -2392,13 +2439,14 @@ paste (GtkTextBuffer *buffer,
    * replace the selection with the new text, otherwise, you
    * simply insert the new text at the point where the click
    * occured, unselecting any selected text. The replace_selection
-   * flag toggles this behavior. FIXME set the flag based on something.
+   * flag toggles this behavior.
    */
   data->replace_selection = FALSE;
   
   get_paste_point (buffer, &paste_point, FALSE);
   if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end) &&
-      gtk_text_iter_in_range (&paste_point, &start, &end))
+      (gtk_text_iter_in_range (&paste_point, &start, &end) ||
+       gtk_text_iter_equal (&paste_point, &end)))
     data->replace_selection = TRUE;
 
   if (is_clipboard)

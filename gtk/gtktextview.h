@@ -87,7 +87,9 @@ struct _GtkTextView
   guint overwrite_mode : 1;
   guint cursor_visible : 1;
   guint  need_im_reset : 1;	/* If we have reset the IM since the last character entered */
-
+  /* just selected a word or line via double/triple click */
+  guint just_selected_element : 1;
+  
   GtkTextWindow *text_window;
   GtkTextWindow *left_window;
   GtkTextWindow *right_window;
@@ -226,6 +228,19 @@ void gtk_text_view_set_text_window_size   (GtkTextView       *text_view,
                                            gint               width,
                                            gint               height);
 
+gboolean gtk_text_view_forward_display_line           (GtkTextView       *text_view,
+                                                       GtkTextIter       *iter);
+gboolean gtk_text_view_backward_display_line          (GtkTextView       *text_view,
+                                                       GtkTextIter       *iter);
+gboolean gtk_text_view_forward_display_line_end       (GtkTextView       *text_view,
+                                                       GtkTextIter       *iter);
+gboolean gtk_text_view_backward_display_line_start    (GtkTextView       *text_view,
+                                                       GtkTextIter       *iter);
+gboolean gtk_text_view_starts_display_line            (GtkTextView       *text_view,
+                                                       const GtkTextIter *iter);
+gboolean gtk_text_view_move_visually                  (GtkTextView       *text_view,
+                                                       GtkTextIter       *iter,
+                                                       gint               count);
 
 /* Adding child widgets */
 void gtk_text_view_add_child_at_anchor (GtkTextView          *text_view,

@@ -2637,7 +2637,69 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 	  gtk_text_view_popup_menu (text_view, event);
         }
     }
+  else if ((event->type == GDK_2BUTTON_PRESS ||
+            event->type == GDK_3BUTTON_PRESS) &&
+           event->button == 1)
+    {
+      GtkTextIter start, end;
 
+      /* End the selection drag, otherwise we'd clear the new
+       * word/line selection on button release
+       */
+      gtk_text_view_end_selection_drag (text_view, event);
+
+      gtk_text_layout_get_iter_at_pixel (text_view->layout,
+                                         &start,
+                                         event->x + text_view->xoffset,
+                                         event->y + text_view->yoffset); 
+
+      end = start;
+      
+      if (event->type == GDK_2BUTTON_PRESS)
+        {
+          if (gtk_text_iter_inside_word (&start))
+            {
+              if (!gtk_text_iter_starts_word (&start))
+                gtk_text_iter_backward_word_start (&start);
+              
+              if (!gtk_text_iter_ends_word (&end))
+                gtk_text_iter_forward_word_end (&end);
+            }
+        }
+      else if (event->type == GDK_3BUTTON_PRESS)
+        {
+          if (gtk_text_view_starts_display_line (text_view, &start))
+            {
+              /* If on a display line boundary, we assume the user
+               * clicked off the end of a line and we therefore select
+               * the line before the boundary.
+               */
+              gtk_text_view_backward_display_line_start (text_view, &start);
+            }
+          else
+            {
+              /* start isn't on the start of a line, so we move it to the
+               * start, and move end to the end unless it's already there.
+               */
+              gtk_text_view_backward_display_line_start (text_view, &start);
+
+              if (!gtk_text_view_starts_display_line (text_view, &end))
+                gtk_text_view_forward_display_line_end (text_view, &end);
+            }
+        }
+
+      gtk_text_buffer_move_mark (get_buffer (text_view),
+                                 gtk_text_buffer_get_selection_bound (get_buffer (text_view)),
+                                 &start);
+      gtk_text_buffer_move_mark (get_buffer (text_view),
+                                 gtk_text_buffer_get_insert (get_buffer (text_view)),
+                                 &end);
+
+      text_view->just_selected_element = TRUE;
+      
+      return TRUE;
+    }
+  
   return FALSE;
 }
 
@@ -2661,6 +2723,11 @@ gtk_text_view_button_release_event (GtkWidget *widget, GdkEventButton *event)
 
       if (gtk_text_view_end_selection_drag (GTK_TEXT_VIEW (widget), event))
         return TRUE;
+      else if (text_view->just_selected_element)
+        {
+          text_view->just_selected_element = FALSE;
+          return FALSE;
+        }
       else
         {
           /* Unselect everything; probably we were dragging, or clicked
@@ -5454,6 +5521,83 @@ gtk_text_view_move_child          (GtkTextView          *text_view,
 
   if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (text_view))
     gtk_widget_queue_resize (child);
+}
+
+
+
+/* Iterator operations */
+
+gboolean
+gtk_text_view_forward_display_line (GtkTextView *text_view,
+                                    GtkTextIter *iter)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  gtk_text_view_ensure_layout (text_view);
+
+  return gtk_text_layout_move_iter_to_next_line (text_view->layout, iter);
+}
+
+gboolean
+gtk_text_view_backward_display_line (GtkTextView *text_view,
+                                     GtkTextIter *iter)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  gtk_text_view_ensure_layout (text_view);
+
+  return gtk_text_layout_move_iter_to_previous_line (text_view->layout, iter);
+}
+
+gboolean
+gtk_text_view_forward_display_line_end (GtkTextView *text_view,
+                                        GtkTextIter *iter)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  gtk_text_view_ensure_layout (text_view);
+
+  return gtk_text_layout_move_iter_to_line_end (text_view->layout, iter, 1);
+}
+
+gboolean
+gtk_text_view_backward_display_line_start (GtkTextView *text_view,
+                                           GtkTextIter *iter)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  gtk_text_view_ensure_layout (text_view);
+
+  return gtk_text_layout_move_iter_to_line_end (text_view->layout, iter, -1);
+}
+
+gboolean
+gtk_text_view_starts_display_line (GtkTextView       *text_view,
+                                   const GtkTextIter *iter)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  gtk_text_view_ensure_layout (text_view);
+
+  return gtk_text_layout_iter_starts_line (text_view->layout, iter);
+}
+
+gboolean
+gtk_text_view_move_visually (GtkTextView *text_view,
+                             GtkTextIter *iter,
+                             gint         count)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  gtk_text_view_ensure_layout (text_view);
+
+  return gtk_text_layout_move_iter_visually (text_view->layout, iter, count);
 }
 
 

@@ -2368,19 +2368,24 @@ find_word_end_func (PangoLogAttr *attrs,
 {
   ++offset; /* We always go to the NEXT word end */
 
-  /* Find start of next word */
+  /* Find end of next word */
   while (offset < min_offset + len &&
-         !attrs[offset].is_word_stop)
-    ++offset;
-
-  /* Find end */
-  while (offset < min_offset + len &&
-         !attrs[offset].is_white)
+         !attrs[offset].is_word_end)
     ++offset;
 
   *found_offset = offset;
 
   return offset < min_offset + len;
+}
+
+static gboolean
+is_word_end_func (PangoLogAttr *attrs,
+                  gint          offset,
+                  gint          min_offset,
+                  gint          len,
+                  gint         *found_offset)
+{
+  return attrs[offset].is_word_end;
 }
 
 static gboolean
@@ -2392,14 +2397,9 @@ find_word_start_func (PangoLogAttr *attrs,
 {
   --offset; /* We always go to the NEXT word start */
 
-  /* Find end of prev word */
+  /* Find start of prev word */
   while (offset >= min_offset &&
-         attrs[offset].is_white)
-    --offset;
-
-  /* Find start */
-  while (offset >= min_offset &&
-         !attrs[offset].is_word_stop)
+         !attrs[offset].is_word_start)
     --offset;
 
   *found_offset = offset;
@@ -2407,31 +2407,53 @@ find_word_start_func (PangoLogAttr *attrs,
   return offset >= min_offset;
 }
 
-/* FIXME this function is very, very gratuitously slow */
 static gboolean
-find_by_log_attrs (GtkTextIter *iter,
-                   FindLogAttrFunc func,
-                   gboolean forward)
+is_word_start_func (PangoLogAttr *attrs,
+                    gint          offset,
+                    gint          min_offset,
+                    gint          len,
+                    gint         *found_offset)
 {
-  GtkTextIter orig;
+  return attrs[offset].is_word_start;
+}
+
+static gboolean
+inside_word_func (PangoLogAttr *attrs,
+                  gint          offset,
+                  gint          min_offset,
+                  gint          len,
+                  gint         *found_offset)
+{
+  /* Find next word start or end */
+  while (offset >= min_offset &&
+         !(attrs[offset].is_word_start || attrs[offset].is_word_end))
+    --offset;
+
+  return attrs[offset].is_word_start;
+}
+
+static gboolean
+test_log_attrs (GtkTextIter       *iter,
+                FindLogAttrFunc    func,
+                gint              *found_offset)
+{
   GtkTextIter start;
   GtkTextIter end;
   gchar *paragraph;
   gint char_len, byte_len;
   PangoLogAttr *attrs;
   int offset;
-  gboolean found = FALSE;
+  gboolean result = FALSE;
 
   g_return_val_if_fail (iter != NULL, FALSE);
 
-  orig = *iter;
   start = *iter;
   end = *iter;
 
   gtk_text_iter_set_line_offset (&start, 0);
-  gtk_text_iter_forward_to_newline (&end);
+  gtk_text_iter_forward_line (&end);
 
-  paragraph = gtk_text_iter_get_text (&start, &end);
+  paragraph = gtk_text_iter_get_slice (&start, &end);
   char_len = g_utf8_strlen (paragraph, -1);
   byte_len = strlen (paragraph);
 
@@ -2451,13 +2473,32 @@ find_by_log_attrs (GtkTextIter *iter,
 
       g_free (lang);
 
-      found = (* func) (attrs, offset, 0, char_len, &offset);
+      result = (* func) (attrs, offset, 0, char_len, found_offset);
 
       g_free (attrs);
     }
 
   g_free (paragraph);
 
+  return result;
+}
+
+/* FIXME this function is very, very gratuitously slow */
+static gboolean
+find_by_log_attrs (GtkTextIter    *iter,
+                   FindLogAttrFunc func,
+                   gboolean        forward)
+{
+  GtkTextIter orig;
+  gint offset = 0;
+  gboolean found = FALSE;
+
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  orig = *iter;
+
+  found = test_log_attrs (iter, func, &offset);
+  
   if (!found)
     {
       if (forward)
@@ -2502,7 +2543,7 @@ gtk_text_iter_backward_word_start (GtkTextIter      *iter)
  */
 gboolean
 gtk_text_iter_forward_word_ends (GtkTextIter      *iter,
-                                 gint               count)
+                                 gint              count)
 {
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (count > 0, FALSE);
@@ -2538,6 +2579,25 @@ gtk_text_iter_backward_word_starts (GtkTextIter      *iter,
       --count;
     }
   return TRUE;
+}
+
+
+gboolean
+gtk_text_iter_starts_word (const GtkTextIter *iter)
+{
+  return test_log_attrs (iter, is_word_start_func, NULL);
+}
+
+gboolean
+gtk_text_iter_ends_word (const GtkTextIter *iter)
+{
+  return test_log_attrs (iter, is_word_end_func, NULL);
+}
+
+gboolean
+gtk_text_iter_inside_word (const GtkTextIter *iter)
+{
+  return test_log_attrs (iter, inside_word_func, NULL);
 }
 
 void

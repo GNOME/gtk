@@ -796,7 +796,9 @@ gtk_text_layout_draw (GtkTextLayout *layout,
 
       current_y += line_display->height;
       gtk_text_layout_free_line_display (layout, line_display);
-
+      render_state->last_appearance = NULL;
+      render_state->last_bg_appearance = NULL;
+      
       tmp_list = g_slist_next (tmp_list);
     }
 

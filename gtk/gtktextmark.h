@@ -81,12 +81,14 @@ struct _GtkTextMarkClass
 
 GType        gtk_text_mark_get_type   (void) G_GNUC_CONST;
 
-void         gtk_text_mark_set_visible (GtkTextMark *mark,
-                                        gboolean     setting);
-gboolean     gtk_text_mark_get_visible (GtkTextMark *mark);
+void           gtk_text_mark_set_visible (GtkTextMark *mark,
+                                          gboolean     setting);
+gboolean       gtk_text_mark_get_visible (GtkTextMark *mark);
+
 /* FIXME gconst */
-const char  *gtk_text_mark_get_name    (GtkTextMark *mark);
-gboolean     gtk_text_mark_get_deleted (GtkTextMark *mark);
+const char  *  gtk_text_mark_get_name    (GtkTextMark *mark);
+gboolean       gtk_text_mark_get_deleted (GtkTextMark *mark);
+GtkTextBuffer* gtk_text_mark_get_buffer  (GtkTextMark *mark);
 
 
 #ifdef __cplusplus

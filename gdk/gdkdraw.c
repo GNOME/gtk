@@ -486,9 +486,12 @@ gdk_drawable_get_image (GdkDrawable *drawable,
   g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
   g_return_val_if_fail (x >= 0, NULL);
   g_return_val_if_fail (y >= 0, NULL);
-  g_return_val_if_fail (width >= 0, NULL);
-  g_return_val_if_fail (height >= 0, NULL);
 
+  if (width < 0 || height < 0)
+    gdk_drawable_get_size (drawable,
+                           width < 0 ? &width : NULL,
+                           height < 0 ? &height : NULL);
+  
   composite =
     GDK_DRAWABLE_GET_CLASS (drawable)->get_composite_drawable (drawable,
                                                                x, y,

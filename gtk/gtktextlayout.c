@@ -2209,7 +2209,6 @@ find_display_line_below (GtkTextLayout *layout,
   while (line && !found_line)
     {
       GtkTextLineDisplay *display = gtk_text_layout_get_line_display (layout, line, FALSE);
-      gint byte_index = 0;
       PangoLayoutIter *layout_iter;
 
       layout_iter = pango_layout_get_iter (display->layout);
@@ -2221,7 +2220,7 @@ find_display_line_below (GtkTextLayout *layout,
           gint first_y, last_y;
           PangoLayoutLine *layout_line = pango_layout_iter_get_line (layout_iter);
 
-          found_byte = byte_index;
+          found_byte = layout_line->start_index;
           
           if (line_top >= y)
             {
@@ -2231,8 +2230,6 @@ find_display_line_below (GtkTextLayout *layout,
 
           pango_layout_iter_get_line_yrange (layout_iter, &first_y, &last_y);
           line_top += (last_y - first_y) / PANGO_SCALE;
-
-          byte_index += layout_line->length;
         }
       while (pango_layout_iter_next_line (layout_iter));
 
@@ -2278,8 +2275,6 @@ find_display_line_above (GtkTextLayout *layout,
     {
       GtkTextLineDisplay *display = gtk_text_layout_get_line_display (layout, line, FALSE);
       PangoRectangle logical_rect;
-
-      gint byte_index = 0;
       PangoLayoutIter *layout_iter;
       gint tmp_top;
 
@@ -2296,7 +2291,7 @@ find_display_line_above (GtkTextLayout *layout,
           gint first_y, last_y;
           PangoLayoutLine *layout_line = pango_layout_iter_get_line (layout_iter);
 
-          found_byte = byte_index;
+          found_byte = layout_line->start_index;
 
           pango_layout_iter_get_line_yrange (layout_iter, &first_y, &last_y);
           
@@ -2305,11 +2300,8 @@ find_display_line_above (GtkTextLayout *layout,
           if (tmp_top < y)
             {
               found_line = line;
-              found_byte = byte_index;
               goto done;
             }
-
-          byte_index += layout_line->length;
         }
       while (pango_layout_iter_next_line (layout_iter));
 
@@ -2383,7 +2375,7 @@ gtk_text_layout_clamp_iter_to_vrange (GtkTextLayout *layout,
  * Move the iterator to the beginning of the previous line. The lines
  * of a wrapped paragraph are treated as distinct for this operation.
  **/
-void
+gboolean
 gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
                                             GtkTextIter   *iter)
 {
@@ -2392,11 +2384,14 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
   gint line_byte;
   GSList *tmp_list;
   PangoLayoutLine *layout_line;
+  GtkTextIter orig;
+  
+  g_return_val_if_fail (layout != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
 
-  g_return_if_fail (layout != NULL);
-  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
-  g_return_if_fail (iter != NULL);
-
+  orig = *iter;
+  
   line = gtk_text_iter_get_text_line (iter);
   display = gtk_text_layout_get_line_display (layout, line, FALSE);
   line_byte = line_display_iter_to_index (layout, display, iter);
@@ -2410,49 +2405,49 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
 
       if (prev_line)
         {
-          gint byte_offset = 0;
-
           gtk_text_layout_free_line_display (layout, display);
           display = gtk_text_layout_get_line_display (layout, prev_line, FALSE);
 
- 	  tmp_list = pango_layout_get_lines (display->layout);
-
+          tmp_list = pango_layout_get_lines (display->layout);
+          
           while (tmp_list->next)
             {
               layout_line = tmp_list->data;
               tmp_list = tmp_list->next;
-
-              byte_offset += layout_line->length;
             }
 
- 	  line_display_index_to_iter (layout, display, iter, byte_offset, 0);
+          line_display_index_to_iter (layout, display, iter,
+                                      layout_line->start_index + layout_line->length, 0);
         }
       else
  	line_display_index_to_iter (layout, display, iter, 0, 0);
     }
   else
     {
-      gint prev_offset = 0;
-      gint byte_offset = layout_line->length;
+      gint prev_offset = layout_line->start_index;
 
       tmp_list = tmp_list->next;
       while (tmp_list)
         {
           layout_line = tmp_list->data;
 
-          if (line_byte < byte_offset + layout_line->length || !tmp_list->next)
+          if (line_byte < layout_line->start_index + layout_line->length ||
+              !tmp_list->next)
             {
  	      line_display_index_to_iter (layout, display, iter, prev_offset, 0);
               break;
             }
 
-          prev_offset = byte_offset;
-          byte_offset += layout_line->length;
+          prev_offset = layout_line->start_index;
           tmp_list = tmp_list->next;
         }
     }
 
   gtk_text_layout_free_line_display (layout, display);
+
+  return
+    !gtk_text_iter_equal (iter, &orig) &&
+    !gtk_text_iter_is_last (iter);
 }
 
 /**
@@ -2464,27 +2459,28 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
  * lines of a wrapped paragraph are treated as distinct for
  * this operation.
  **/
-void
+gboolean
 gtk_text_layout_move_iter_to_next_line (GtkTextLayout *layout,
                                         GtkTextIter   *iter)
 {
   GtkTextLine *line;
   GtkTextLineDisplay *display;
   gint line_byte;
-
+  GtkTextIter orig;
   gboolean found = FALSE;
   gboolean found_after = FALSE;
   gboolean first = TRUE;
 
-  g_return_if_fail (layout != NULL);
-  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
-  g_return_if_fail (iter != NULL);
+  g_return_val_if_fail (layout != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
 
+  orig = *iter;
+  
   line = gtk_text_iter_get_text_line (iter);
 
   while (line && !found_after)
     {
-      gint byte_offset = 0;
       GSList *tmp_list;
 
       display = gtk_text_layout_get_line_display (layout, line, FALSE);
@@ -2504,13 +2500,13 @@ gtk_text_layout_move_iter_to_next_line (GtkTextLayout *layout,
 
           if (found)
             {
-	      line_display_index_to_iter (layout, display, iter, byte_offset, 0);
+	      line_display_index_to_iter (layout, display, iter,
+                                          layout_line->start_index, 0);
               found_after = TRUE;
             }
-          else if (line_byte < byte_offset + layout_line->length || !tmp_list->next)
+          else if (line_byte < layout_line->start_index + layout_line->length || !tmp_list->next)
             found = TRUE;
-
-          byte_offset += layout_line->length;
+          
           tmp_list = tmp_list->next;
         }
 
@@ -2518,6 +2514,10 @@ gtk_text_layout_move_iter_to_next_line (GtkTextLayout *layout,
 
       line = gtk_text_line_next (line);
     }
+
+  return
+    !gtk_text_iter_equal (iter, &orig) &&
+    !gtk_text_iter_is_last (iter);
 }
 
 /**
@@ -2528,7 +2528,7 @@ gtk_text_layout_move_iter_to_next_line (GtkTextLayout *layout,
  *
  * Move to the beginning or end of a display line.
  **/
-void
+gboolean
 gtk_text_layout_move_iter_to_line_end (GtkTextLayout *layout,
                                        GtkTextIter   *iter,
                                        gint           direction)
@@ -2536,13 +2536,15 @@ gtk_text_layout_move_iter_to_line_end (GtkTextLayout *layout,
   GtkTextLine *line;
   GtkTextLineDisplay *display;
   gint line_byte;
-  gint byte_offset = 0;
   GSList *tmp_list;
+  GtkTextIter orig;
+  
+  g_return_val_if_fail (layout != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
 
-  g_return_if_fail (layout != NULL);
-  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
-  g_return_if_fail (iter != NULL);
-
+  orig = *iter;
+  
   line = gtk_text_iter_get_text_line (iter);
   display = gtk_text_layout_get_line_display (layout, line, FALSE);
   line_byte = line_display_iter_to_index (layout, display, iter);
@@ -2552,10 +2554,10 @@ gtk_text_layout_move_iter_to_line_end (GtkTextLayout *layout,
     {
       PangoLayoutLine *layout_line = tmp_list->data;
 
-      if (line_byte < byte_offset + layout_line->length || !tmp_list->next)
+      if (line_byte < layout_line->start_index + layout_line->length || !tmp_list->next)
         {
  	  line_display_index_to_iter (layout, display, iter,
- 				      direction < 0 ? byte_offset : byte_offset + layout_line->length,
+ 				      direction < 0 ? layout_line->start_index : layout_line->start_index + layout_line->length,
  				      0);
 
           /* FIXME: As a bad hack, we move back one position when we
@@ -2567,12 +2569,66 @@ gtk_text_layout_move_iter_to_line_end (GtkTextLayout *layout,
 
           break;
         }
-
-      byte_offset += layout_line->length;
+      
       tmp_list = tmp_list->next;
     }
 
   gtk_text_layout_free_line_display (layout, display);
+
+  return
+    !gtk_text_iter_equal (iter, &orig) &&
+    !gtk_text_iter_is_last (iter);
+}
+
+
+/**
+ * gtk_text_layout_iter_starts_line:
+ * @layout: a #GtkTextLayout
+ * @iter: iterator to test
+ *
+ * Tests whether an iterator is at the start of a display line.
+ **/
+gboolean
+gtk_text_layout_iter_starts_line (GtkTextLayout       *layout,
+                                  const GtkTextIter   *iter)
+{
+  GtkTextLine *line;
+  GtkTextLineDisplay *display;
+  gint line_byte;
+  GSList *tmp_list;
+  
+  g_return_val_if_fail (layout != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  line = gtk_text_iter_get_text_line (iter);
+  display = gtk_text_layout_get_line_display (layout, line, FALSE);
+  line_byte = line_display_iter_to_index (layout, display, iter);
+
+  tmp_list = pango_layout_get_lines (display->layout);
+  while (tmp_list)
+    {
+      PangoLayoutLine *layout_line = tmp_list->data;
+
+      if (line_byte < layout_line->start_index + layout_line->length ||
+          !tmp_list->next)
+        {
+          /* We're located on this line of the para delimiters before
+           * it
+           */
+          gtk_text_layout_free_line_display (layout, display);
+          
+          if (line_byte == layout_line->start_index)
+            return TRUE;
+          else
+            return FALSE;
+        }
+      
+      tmp_list = tmp_list->next;
+    }
+
+  g_assert_not_reached ();
+  return FALSE;
 }
 
 /**
@@ -2593,7 +2649,6 @@ gtk_text_layout_move_iter_to_x (GtkTextLayout *layout,
   GtkTextLine *line;
   GtkTextLineDisplay *display;
   gint line_byte;
-  gint byte_offset = 0;
   PangoLayoutIter *layout_iter;
   
   g_return_if_fail (layout != NULL);
@@ -2611,7 +2666,7 @@ gtk_text_layout_move_iter_to_x (GtkTextLayout *layout,
     {
       PangoLayoutLine *layout_line = pango_layout_iter_get_line (layout_iter);
 
-      if (line_byte < byte_offset + layout_line->length ||
+      if (line_byte < layout_line->start_index + layout_line->length ||
           pango_layout_iter_at_last_line (layout_iter))
         {
           PangoRectangle logical_rect;
@@ -2628,8 +2683,6 @@ gtk_text_layout_move_iter_to_x (GtkTextLayout *layout,
 
           break;
         }
-
-      byte_offset += layout_line->length;
     }
   while (pango_layout_iter_next_line (layout_iter));
 
@@ -2657,16 +2710,19 @@ gtk_text_layout_move_iter_to_x (GtkTextLayout *layout,
  * is moved off of the end of a run.
  **/
 
-void
+gboolean
 gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
                                     GtkTextIter   *iter,
                                     gint           count)
 {
   GtkTextLineDisplay *display = NULL;
+  GtkTextIter orig;
+  
+  g_return_val_if_fail (layout != NULL, FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
 
-  g_return_if_fail (layout != NULL);
-  g_return_if_fail (iter != NULL);
-
+  orig = *iter;
+  
   while (count != 0)
     {
       GtkTextLine *line = gtk_text_iter_get_text_line (iter);
@@ -2715,8 +2771,8 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
           line = gtk_text_line_previous (line);
 
           if (!line)
-            return;
-
+            goto done;
+          
  	  gtk_text_layout_free_line_display (layout, display);
  	  display = gtk_text_layout_get_line_display (layout, line, FALSE);
           new_index = gtk_text_line_byte_count (line);
@@ -2725,7 +2781,7 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
         {
           line = gtk_text_line_next (line);
           if (!line)
-            return;
+            goto done;
 
  	  gtk_text_layout_free_line_display (layout, display);
  	  display = gtk_text_layout_get_line_display (layout, line, FALSE);
@@ -2738,6 +2794,12 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
     }
 
   gtk_text_layout_free_line_display (layout, display);
+
+ done:
+  
+  return
+    !gtk_text_iter_equal (iter, &orig) &&
+    !gtk_text_iter_is_last (iter);
 }
 
 void

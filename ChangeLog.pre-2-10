@@ -1,4 +1,40 @@
-2000-12-01    <alexl@redhat.com>
+2000-11-30  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextdisplay.c (gtk_text_layout_draw): don't create
+	dangling pointers to the appearance attributes from the 
+	line display
+
+	* gdk/gdkdraw.c (gdk_drawable_get_image): allow negative
+	width/height to mean "full width/height of drawable"
+
+ 	* gtk/gtktextview.h, gtk/gtktextview.c: Implement double/triple
+	click to select word/line
+	
+	* gtk/gtktextiter.c (test_log_attrs): include paragraph delimiters 
+	when getting log attrs. Get a slice, so that pixmaps and stuff
+	are properly handled.
+
+	* gtk/gtktextbuffer.c (paste): Fix pasting to work properly if you
+	paste into the selection (replaces selection now, previously
+	crashed or added to selection). Reveals longstanding btree bug -
+	select multiple lines, middle-click on the selection, boom. This
+	isn't related to my changes though.
+
+	* gtk/gtkentry.c (gtk_entry_move_forward_word): Update to reflect
+	PangoLogAttrs changes
+	(gtk_entry_move_backward_word): ditto
+
+        * gtk/gtktextlayout.h, gtk/gtktextlayout.c: Make the iter motion
+ 	functions return bool whether the iter moved onto a
+ 	dereferenceable position.
+ 
+ 	* gtk/gtktextview.h, gtk/gtktextview.c: Add a bunch of public
+ 	functions for motion in terms of display lines.
+
+	* gtk/gtktextmark.c (gtk_text_mark_get_buffer): Add function to
+	get the buffer a mark is inside
+	
+2000-12-01  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/Makefile.am:
 	* modules/linux-fb/Makefile.am:

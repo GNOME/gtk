@@ -179,7 +179,7 @@ gtk_text_mark_get_deleted (GtkTextMark *mark)
 {
   GtkTextLineSegment *seg;
 
-  g_return_val_if_fail (mark != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_TEXT_MARK (mark), FALSE);
 
   seg = mark->segment;
 
@@ -187,6 +187,30 @@ gtk_text_mark_get_deleted (GtkTextMark *mark)
     return TRUE;
 
   return seg->body.mark.tree == NULL;
+}
+
+/**
+ * gtk_text_mark_get_buffer:
+ * @mark: a #GtkTextMark
+ * 
+ * Gets the buffer this mark is located inside,
+ * or NULL if the mark is deleted.
+ * 
+ * Return value: the mark's #GtkTextBuffer
+ **/
+GtkTextBuffer*
+gtk_text_mark_get_buffer (GtkTextMark *mark)
+{
+  GtkTextLineSegment *seg;
+
+  g_return_val_if_fail (GTK_IS_TEXT_MARK (mark), FALSE);
+
+  seg = mark->segment;
+
+  if (seg->body.mark.tree == NULL)
+    return NULL;
+  else
+    return gtk_text_btree_get_buffer (seg->body.mark.tree);
 }
 
 /*

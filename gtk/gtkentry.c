@@ -2111,19 +2111,11 @@ gtk_entry_move_forward_word (GtkEntry *entry,
       gint n_attrs;
 
       pango_layout_get_log_attrs (layout, &log_attrs, &n_attrs);
-
-      /* Advance over white space */
-      while (new_pos < n_attrs && log_attrs[new_pos].is_white)
-	new_pos++;
       
-      /* Find the next word beginning */
+      /* Find the next word end */
       new_pos++;
-      while (new_pos < n_attrs && !log_attrs[new_pos].is_word_stop)
+      while (new_pos < n_attrs && !log_attrs[new_pos].is_word_end)
 	new_pos++;
-
-      /* Back up over white space */
-      while (new_pos > 0 && log_attrs[new_pos - 1].is_white)
-	new_pos--;
 
       g_free (log_attrs);
       g_object_unref (G_OBJECT (layout));
@@ -2155,7 +2147,7 @@ gtk_entry_move_backward_word (GtkEntry *entry,
       new_pos = start - 1;
 
       /* Find the previous word beginning */
-      while (new_pos > 0 && !log_attrs[new_pos].is_word_stop)
+      while (new_pos > 0 && !log_attrs[new_pos].is_word_start)
 	new_pos--;
 
       g_free (log_attrs);

@@ -339,20 +339,22 @@ gboolean gtk_text_layout_clamp_iter_to_vrange (GtkTextLayout     *layout,
                                                gint               top,
                                                gint               bottom);
 
-void gtk_text_layout_move_iter_to_line_end      (GtkTextLayout *layout,
-                                                 GtkTextIter   *iter,
-                                                 gint           direction);
-void gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
-                                                 GtkTextIter   *iter);
-void gtk_text_layout_move_iter_to_next_line     (GtkTextLayout *layout,
-                                                 GtkTextIter   *iter);
-void gtk_text_layout_move_iter_to_x             (GtkTextLayout *layout,
-                                                 GtkTextIter   *iter,
-                                                 gint           x);
-void gtk_text_layout_move_iter_visually         (GtkTextLayout *layout,
-                                                 GtkTextIter   *iter,
-                                                 gint           count);
+gboolean gtk_text_layout_move_iter_to_line_end      (GtkTextLayout *layout,
+                                                     GtkTextIter   *iter,
+                                                     gint           direction);
+gboolean gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
+                                                     GtkTextIter   *iter);
+gboolean gtk_text_layout_move_iter_to_next_line     (GtkTextLayout *layout,
+                                                     GtkTextIter   *iter);
+void     gtk_text_layout_move_iter_to_x             (GtkTextLayout *layout,
+                                                     GtkTextIter   *iter,
+                                                     gint           x);
+gboolean gtk_text_layout_move_iter_visually         (GtkTextLayout *layout,
+                                                     GtkTextIter   *iter,
+                                                     gint           count);
 
+gboolean gtk_text_layout_iter_starts_line           (GtkTextLayout       *layout,
+                                                     const GtkTextIter   *iter);
 
 /* Don't use these. Use gtk_text_view_add_child_at_anchor().
  * These functions are defined in gtktextchild.c, but here
