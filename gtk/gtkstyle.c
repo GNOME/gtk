@@ -5832,6 +5832,7 @@ gtk_paint_hline (GtkStyle      *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_hline != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
   
   GTK_STYLE_GET_CLASS (style)->draw_hline (style, window, state_type, area, widget, detail, x1, x2, y);
 }
@@ -5864,6 +5865,7 @@ gtk_paint_vline (GtkStyle      *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_vline != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
   
   GTK_STYLE_GET_CLASS (style)->draw_vline (style, window, state_type, area, widget, detail, y1_, y2_, x);
 }
@@ -5900,6 +5902,7 @@ gtk_paint_shadow (GtkStyle     *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_shadow != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
   
   GTK_STYLE_GET_CLASS (style)->draw_shadow (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
@@ -5933,6 +5936,7 @@ gtk_paint_polygon (GtkStyle      *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_polygon != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
   
   GTK_STYLE_GET_CLASS (style)->draw_polygon (style, window, state_type, shadow_type, area, widget, detail, points, npoints, fill);
 }
@@ -5973,6 +5977,7 @@ gtk_paint_arrow (GtkStyle      *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_arrow != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
   
   GTK_STYLE_GET_CLASS (style)->draw_arrow (style, window, state_type, shadow_type, area, widget, detail, arrow_type, fill, x, y, width, height);
 }
@@ -6009,6 +6014,7 @@ gtk_paint_diamond (GtkStyle      *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_diamond != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
   
   GTK_STYLE_GET_CLASS (style)->draw_diamond (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
@@ -6042,6 +6048,7 @@ gtk_paint_string (GtkStyle      *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_string != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
   
   GTK_STYLE_GET_CLASS (style)->draw_string (style, window, state_type, area, widget, detail, x, y, string);
 }
@@ -6077,6 +6084,7 @@ gtk_paint_box (GtkStyle      *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_box != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
   
   GTK_STYLE_GET_CLASS (style)->draw_box (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
@@ -6112,6 +6120,7 @@ gtk_paint_flat_box (GtkStyle      *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_flat_box != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
   
   GTK_STYLE_GET_CLASS (style)->draw_flat_box (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
@@ -6148,6 +6157,7 @@ gtk_paint_check (GtkStyle      *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_check != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
   
   GTK_STYLE_GET_CLASS (style)->draw_check (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
@@ -6184,6 +6194,7 @@ gtk_paint_option (GtkStyle      *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_option != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
   
   GTK_STYLE_GET_CLASS (style)->draw_option (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
@@ -6220,6 +6231,7 @@ gtk_paint_tab (GtkStyle      *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_tab != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
   
   GTK_STYLE_GET_CLASS (style)->draw_tab (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
 }
@@ -6263,6 +6275,7 @@ gtk_paint_shadow_gap (GtkStyle       *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_shadow_gap != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
   
   GTK_STYLE_GET_CLASS (style)->draw_shadow_gap (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, gap_side, gap_x, gap_width);
 }
@@ -6306,6 +6319,7 @@ gtk_paint_box_gap (GtkStyle       *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_box_gap != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
   
   GTK_STYLE_GET_CLASS (style)->draw_box_gap (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, gap_side, gap_x, gap_width);
 }
@@ -6343,6 +6357,7 @@ gtk_paint_extension (GtkStyle       *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_extension != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
   
   GTK_STYLE_GET_CLASS (style)->draw_extension (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, gap_side);
 }
@@ -6377,6 +6392,7 @@ gtk_paint_focus (GtkStyle      *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_focus != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
   
   GTK_STYLE_GET_CLASS (style)->draw_focus (style, window, state_type, area, widget, detail, x, y, width, height);
 }
@@ -6397,6 +6413,7 @@ gtk_paint_slider (GtkStyle      *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_slider != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
   
   GTK_STYLE_GET_CLASS (style)->draw_slider (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, orientation);
 }
@@ -6434,6 +6451,7 @@ gtk_paint_handle (GtkStyle      *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_handle != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
   
   GTK_STYLE_GET_CLASS (style)->draw_handle (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, orientation);
 }
@@ -6465,6 +6483,7 @@ gtk_paint_expander (GtkStyle        *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_expander != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
   
   GTK_STYLE_GET_CLASS (style)->draw_expander (style, window, state_type, area,
                                               widget, detail, x, y, expander_style);
@@ -6484,6 +6503,7 @@ gtk_paint_layout (GtkStyle        *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_layout != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
   
   GTK_STYLE_GET_CLASS (style)->draw_layout (style, window, state_type, use_text, area,
                                             widget, detail, x, y, layout);
@@ -6522,6 +6542,7 @@ gtk_paint_resize_grip (GtkStyle      *style,
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_resize_grip != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   GTK_STYLE_GET_CLASS (style)->draw_resize_grip (style, window, state_type,
                                                  area, widget, detail,

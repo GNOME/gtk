@@ -1,3 +1,11 @@
+Thu Feb 24 14:20:16 2005  Søren Sandmann  <sandmann@redhat.com>
+
+	* gtk/gtkstyle.c: Add
+
+	g_return_if_fail (style->depth == gdk_drawable_get_depth(window));
+
+	all over the place.
+
 2005-02-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c: Consistently use gtk_tree_row_reference_valid().
