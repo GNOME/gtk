@@ -1,3 +1,8 @@
+Wed Feb 18 02:03:47 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_class_init): Document some
+	peculiarities of the ::delete_range signal.  (#132135, Grant Gayed)
+
 Wed Feb 18 01:44:59 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	GC caching, bug #125645 (based on patch by Brian Cameron)

@@ -219,6 +219,19 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
                   GTK_TYPE_TEXT_CHILD_ANCHOR);
   
+  /**
+   * GtkTextBuffer::delete_range:
+   * @buffer: the object which received the signal.
+   * @start: the start of the range to be deleted
+   * @end: the end of the range to be deleted
+   *
+   * The ::delete_range signal is emitted to delete a range from 
+   * a #GtkTextBuffer. Note that your handler must not invalidate the
+   * @start and @end iters (or has to revalidate them), if it runs before the 
+   * default handler. There is no need to keep the iters valid in handlers
+   * which run after the default handler (see g_signal_connect_after()), but
+   * those don't have access to the deleted text.
+   */
   signals[DELETE_RANGE] =
     g_signal_new ("delete_range",
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -1344,7 +1357,8 @@ gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
                                             start_iter, TRUE);
   end_mark = gtk_text_buffer_create_mark (buffer, NULL,
                                           end_iter, FALSE);
-  iter = *start_iter;
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, start_mark);
 
   current_state = gtk_text_iter_editable (&iter, default_editable);
 
