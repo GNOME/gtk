@@ -26,7 +26,7 @@ static GtkRBNode *_gtk_rbnode_new                (GtkRBTree  *tree,
 static void       _gtk_rbnode_free               (GtkRBNode  *node);
 static void       _gtk_rbnode_rotate_left        (GtkRBTree  *tree,
 						  GtkRBNode  *node);
-static void       _gtk_rbnode_rotate_left        (GtkRBTree  *tree,
+static void       _gtk_rbnode_rotate_right       (GtkRBTree  *tree,
 						  GtkRBNode  *node);
 static void       _gtk_rbtree_insert_fixup       (GtkRBTree  *tree,
 						  GtkRBNode  *node);
@@ -207,6 +207,23 @@ _gtk_rbnode_rotate_left (GtkRBTree *tree,
     (right->left?right->left->parity:0) +
     (right->right?right->right->parity:0) +
     (right->children?right->children->root->parity:0);
+
+  if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_DESCENDANTS_INVALID))
+    {
+      if ((! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID)) &&
+	  (node->right != tree->nil && ! GTK_RBNODE_FLAG_SET (node->right, GTK_RBNODE_DESCENDANTS_INVALID)) &&
+	  (node->left != tree->nil && ! GTK_RBNODE_FLAG_SET (node->left, GTK_RBNODE_DESCENDANTS_INVALID)) &&
+	  (node->children && GTK_RBNODE_FLAG_SET (node->children->root, GTK_RBNODE_DESCENDANTS_INVALID)))
+	GTK_RBNODE_UNSET_FLAG (node, GTK_RBNODE_DESCENDANTS_INVALID);
+    }
+  if (GTK_RBNODE_FLAG_SET (right, GTK_RBNODE_DESCENDANTS_INVALID))
+    {
+      if ((! GTK_RBNODE_FLAG_SET (right, GTK_RBNODE_INVALID)) &&
+	  (right->right != tree->nil && ! GTK_RBNODE_FLAG_SET (right->right, GTK_RBNODE_DESCENDANTS_INVALID)) &&
+	  (right->left != tree->nil && ! GTK_RBNODE_FLAG_SET (right->left, GTK_RBNODE_DESCENDANTS_INVALID)) &&
+	  (right->children && GTK_RBNODE_FLAG_SET (right->children->root, GTK_RBNODE_DESCENDANTS_INVALID)))
+	GTK_RBNODE_UNSET_FLAG (right, GTK_RBNODE_DESCENDANTS_INVALID);
+    }
 }
 
 static void
@@ -282,6 +299,23 @@ _gtk_rbnode_rotate_right (GtkRBTree *tree,
     (left->left?left->left->parity:0) +
     (left->right?left->right->parity:0) +
     (left->children?left->children->root->parity:0);
+
+  if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_DESCENDANTS_INVALID))
+    {
+      if ((! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID)) &&
+	  (node->right != tree->nil && ! GTK_RBNODE_FLAG_SET (node->right, GTK_RBNODE_DESCENDANTS_INVALID)) &&
+	  (node->left != tree->nil && ! GTK_RBNODE_FLAG_SET (node->left, GTK_RBNODE_DESCENDANTS_INVALID)) &&
+	  (node->children && GTK_RBNODE_FLAG_SET (node->children->root, GTK_RBNODE_DESCENDANTS_INVALID)))
+	GTK_RBNODE_UNSET_FLAG (node, GTK_RBNODE_DESCENDANTS_INVALID);
+    }
+  if (GTK_RBNODE_FLAG_SET (left, GTK_RBNODE_DESCENDANTS_INVALID))
+    {
+      if ((! GTK_RBNODE_FLAG_SET (left, GTK_RBNODE_INVALID)) &&
+	  (left->right != tree->nil && ! GTK_RBNODE_FLAG_SET (left->right, GTK_RBNODE_DESCENDANTS_INVALID)) &&
+	  (left->left != tree->nil && ! GTK_RBNODE_FLAG_SET (left->left, GTK_RBNODE_DESCENDANTS_INVALID)) &&
+	  (left->children && GTK_RBNODE_FLAG_SET (left->children->root, GTK_RBNODE_DESCENDANTS_INVALID)))
+	GTK_RBNODE_UNSET_FLAG (left, GTK_RBNODE_DESCENDANTS_INVALID);
+    }
 }
 
 static void
@@ -712,6 +746,56 @@ _gtk_rbtree_node_set_height (GtkRBTree *tree,
 	  tmp_tree = tmp_tree->parent_tree;
 	}
     }
+}
+
+void
+_gtk_rbtree_node_mark_invalid (GtkRBTree *tree,
+			       GtkRBNode *node)
+{
+  if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID))
+    return;
+
+  GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_INVALID);
+  do
+    {
+      if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_DESCENDANTS_INVALID))
+	return;
+      GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_DESCENDANTS_INVALID);
+      node = node->parent;
+      if (node == NULL)
+	{
+	  node = tree->parent_node;
+	  tree = tree->parent_tree;
+	}
+    }
+  while (node);
+}
+
+void
+_gtk_rbtree_node_mark_valid (GtkRBTree *tree,
+			     GtkRBNode *node)
+{
+  if (! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID))
+    return;
+
+  GTK_RBNODE_UNSET_FLAG (node, GTK_RBNODE_INVALID);
+  do
+    {
+      if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
+	  (node->children && GTK_RBNODE_FLAG_SET (node->children->root, GTK_RBNODE_DESCENDANTS_INVALID)) ||
+	  (node->left && GTK_RBNODE_FLAG_SET (node->left, GTK_RBNODE_DESCENDANTS_INVALID)) ||
+	  (node->right && GTK_RBNODE_FLAG_SET (node->right, GTK_RBNODE_DESCENDANTS_INVALID)))
+	return;
+	  
+      GTK_RBNODE_UNSET_FLAG (node, GTK_RBNODE_DESCENDANTS_INVALID);
+      node = node->parent;
+      if (node == NULL)
+	{
+	  node = tree->parent_node;
+	  tree = tree->parent_tree;
+	}
+    }
+  while (node);
 }
 
 typedef struct _GtkRBReorder

@@ -360,13 +360,13 @@ static void     gtk_tree_view_search_move               (GtkWidget        *windo
 							 gboolean          up);
 static gboolean gtk_tree_view_search_equal_func         (GtkTreeModel     *model,
 							 gint              column,
-							 gchar            *key,
+							 const gchar      *key,
 							 GtkTreeIter      *iter,
 							 gpointer          search_data);
 static gboolean gtk_tree_view_search_iter               (GtkTreeModel     *model,
 							 GtkTreeSelection *selection,
 							 GtkTreeIter      *iter,
-							 gchar            *text,
+							 const gchar      *text,
 							 gint             *count,
 							 gint              n);
 static void     gtk_tree_view_search_init               (GtkWidget        *entry,
@@ -2978,7 +2978,41 @@ gtk_tree_view_focus_out (GtkWidget     *widget,
   return FALSE;
 }
 
+/* Incremental Reflow */
+#if 0
+static void
+validate_visible_area (GtkTreeView *tree_view)
+{
 
+}
+
+static gboolean
+validate_rows_handler (GtkTreeView *tree_view)
+{
+  g_assert (tree_view);
+
+  g_return_val_if_fail (tree_view->priv->tree != NULL, TRUE);
+
+  if (! GTK_RBNODE_FLAG_SET (tree_view->priv->tree->root, GTK_RBNODE_DESCENDANTS_INVALID))
+    return TRUE;
+
+
+  return TRUE;
+}
+
+static gboolean
+presize_handler_callback (gpointer data)
+{
+
+  return TRUE;
+}
+
+static void
+install_presize_handler (GtkTreeView *tree_view)
+{
+
+}
+#endif
 /* Drag-and-drop */
 
 static void
@@ -4480,7 +4514,7 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
   if (free_path)
     gtk_tree_path_free (path);
 }
-
+#include "gtktreemodelsort.h"
 static void
 gtk_tree_view_row_has_child_toggled (GtkTreeModel *model,
 				     GtkTreePath  *path,
@@ -9042,7 +9076,7 @@ gtk_tree_view_search_move (GtkWidget   *window,
 static gboolean
 gtk_tree_view_search_equal_func (GtkTreeModel *model,
 				 gint          column,
-				 gchar        *key,
+				 const gchar  *key,
 				 GtkTreeIter  *iter,
 				 gpointer      search_data)
 {
@@ -9078,7 +9112,7 @@ static gboolean
 gtk_tree_view_search_iter (GtkTreeModel     *model,
 			   GtkTreeSelection *selection,
 			   GtkTreeIter      *iter,
-			   gchar            *text,
+			   const gchar      *text,
 			   gint             *count,
 			   gint              n)
 {
@@ -9195,7 +9229,7 @@ gtk_tree_view_search_init (GtkWidget   *entry,
   gint *selected_iter;
   gint len;
   gint count = 0;
-  gchar *text;
+  const gchar *text;
   GtkWidget *window;
   GtkTreeIter iter;
   GtkTreeModel *model;

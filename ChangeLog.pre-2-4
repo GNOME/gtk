@@ -1,3 +1,27 @@
+Thu Oct 25 16:27:29 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkrbtree.c (_gtk_rbnode_rotate_left): Add support for
+	invalid nodes.
+	 (_gtk_rbnode_rotate_right): Ditto.
+	 (_gtk_rbtree_node_mark_invalid): New function.
+	 (_gtk_rbtree_node_mark_valid): New function.
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_class_init): We're a
+	GObject, not a GtkObject.
+	(gtk_tree_model_sort_row_has_child_toggled): Rewrote to be more
+	correct.
+	(gtk_tree_model_sort_row_deleted): ditto.
+	(gtk_tree_model_sort_{un,}ref_node): Fix.
+
+	* gtk/gtktreeview.c: Protean incremental reflow support (commented
+	out)
+
+	* gtk/gtktreeview.h (GtkTreeViewSearchEqualFunc): change char *key
+	to const char *key.
+
+	* gtk/gtktreemodel.c (gtk_tree_row_reference_unref_path_helper):
+	Important 1 line fix to fix a lot of refcounting woes.
+
 2001-10-25  Matt Wilson  <msw@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_destroy): call

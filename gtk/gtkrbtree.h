@@ -36,7 +36,9 @@ typedef enum
   GTK_RBNODE_IS_PRELIT = 1 << 4,
   GTK_RBNODE_IS_SEMI_COLLAPSED = 1 << 5,
   GTK_RBNODE_IS_SEMI_EXPANDED = 1 << 6,
-  GTK_RBNODE_NON_COLORS = GTK_RBNODE_IS_PARENT | GTK_RBNODE_IS_SELECTED | GTK_RBNODE_IS_PRELIT | GTK_RBNODE_IS_SEMI_COLLAPSED | GTK_RBNODE_IS_SEMI_EXPANDED
+  GTK_RBNODE_INVALID = 1 << 7,
+  GTK_RBNODE_DESCENDANTS_INVALID = 1 << 8,
+  GTK_RBNODE_NON_COLORS = GTK_RBNODE_IS_PARENT | GTK_RBNODE_IS_SELECTED | GTK_RBNODE_IS_PRELIT | GTK_RBNODE_IS_SEMI_COLLAPSED | GTK_RBNODE_IS_SEMI_EXPANDED | GTK_RBNODE_INVALID | GTK_RBNODE_DESCENDANTS_INVALID
 } GtkRBNodeColor;
 
 typedef struct _GtkRBTree GtkRBTree;
@@ -121,6 +123,10 @@ GtkRBNode *_gtk_rbtree_find_count       (GtkRBTree              *tree,
 void       _gtk_rbtree_node_set_height  (GtkRBTree              *tree,
 					 GtkRBNode              *node,
 					 gint                    height);
+void       _gtk_rbtree_node_mark_invalid(GtkRBTree              *tree,
+					 GtkRBNode              *node);
+void       _gtk_rbtree_node_mark_valid  (GtkRBTree              *tree,
+					 GtkRBNode              *node);
 gint       _gtk_rbtree_node_find_offset (GtkRBTree              *tree,
 					 GtkRBNode              *node);
 gint       _gtk_rbtree_node_find_parity (GtkRBTree              *tree,

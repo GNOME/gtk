@@ -1403,7 +1403,7 @@ gtk_tree_row_reference_unref_path_helper (GtkTreePath  *path,
   if (path->depth == depth)
     return;
 
-  gtk_tree_model_iter_nth_child (model, &iter, NULL, path->indices[depth]);
+  gtk_tree_model_iter_nth_child (model, &iter, parent_iter, path->indices[depth]);
   gtk_tree_row_reference_unref_path_helper (path, model, &iter, depth + 1, free_last);
   gtk_tree_model_unref_node (model, &iter);
 }
