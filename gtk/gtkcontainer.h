@@ -62,6 +62,7 @@ struct _GtkContainer
   guint need_resize : 1;
   guint resize_mode : 2;
   guint reallocate_redraws : 1;
+  guint has_focus_chain : 1;
   
   /* The list of children that requested a resize
    */
@@ -133,6 +134,10 @@ gboolean gtk_container_focus        (GtkContainer       *container,
 void     gtk_container_propagate_expose (GtkContainer   *container,
 					 GtkWidget      *child,
 					 GdkEventExpose *event);
+
+void     gtk_container_set_focus_chain  (GtkContainer   *container,
+                                         GList          *focusable_widgets);
+void     gtk_container_unset_focus_chain (GtkContainer  *container);
 
 /* Widget-level methods */
 

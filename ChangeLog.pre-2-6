@@ -1,3 +1,9 @@
+2001-03-22  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkcontainer.c (gtk_container_set_focus_chain): 
+	(gtk_container_unset_focus_chain): Add ability to override the 
+	focus chain for a container explicitly
+
 Thu Mar 22 13:01:44 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtklabel.[hc]: some cleanups, fixed mnemonic_widget handling,

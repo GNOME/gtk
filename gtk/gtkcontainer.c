@@ -42,6 +42,7 @@ enum {
   SET_FOCUS_CHILD,
   LAST_SIGNAL
 };
+
 enum {
   ARG_0,
   ARG_BORDER_WIDTH,
@@ -626,6 +627,12 @@ gtk_container_destroy (GtkObject *object)
     gtk_container_dequeue_resize_handler (container);
   if (container->resize_widgets)
     gtk_container_clear_resize_widgets (container);
+
+  /* do this before walking child widgets, to avoid
+   * removing children from focus chain one by one.
+   */
+  if (container->has_focus_chain)
+    gtk_container_unset_focus_chain (container);
   
   gtk_container_foreach (container, (GtkCallback) gtk_widget_destroy, NULL);
   
@@ -1415,13 +1422,48 @@ gtk_container_real_set_focus_child (GtkContainer     *container,
     }
 }
 
+static GList*
+get_focus_chain (GtkContainer *container)
+{
+  GList *chain;
+  
+  chain = g_object_get_data (G_OBJECT (container), "gtk-container-focus-chain");
+
+  return chain;
+}
+
+static GList*
+filter_unfocusable (GtkContainer *container,
+                    GList        *list)
+{
+  GList *tmp_list;
+  GList *tmp_list2;
+  
+  tmp_list = list;
+  while (tmp_list)
+    {
+      if (GTK_WIDGET_IS_SENSITIVE (tmp_list->data) &&
+          GTK_WIDGET_DRAWABLE (tmp_list->data) &&
+          (GTK_IS_CONTAINER (tmp_list->data) || GTK_WIDGET_CAN_FOCUS (tmp_list->data)))
+        tmp_list = tmp_list->next;
+      else
+        {
+          tmp_list2 = tmp_list;
+          tmp_list = tmp_list->next;
+          
+          list = g_list_remove_link (list, tmp_list2);
+          g_list_free_1 (tmp_list2);
+        }
+    }
+
+  return list;
+}
+
 static gboolean
 gtk_container_real_focus (GtkContainer     *container,
 			  GtkDirectionType  direction)
 {
   GList *children;
-  GList *tmp_list;
-  GList *tmp_list2;
   gint return_val;
 
   g_return_val_if_fail (container != NULL, FALSE);
@@ -1445,41 +1487,44 @@ gtk_container_real_focus (GtkContainer     *container,
     }
   else
     {
-      /* Get a list of the containers children
+      /* Get a list of the containers children, allowing focus
+       * chain to override.
        */
-      children = NULL;
-      gtk_container_forall (container,
-			    gtk_container_children_callback,
-			    &children);
-      children = g_list_reverse (children);
-      /* children = gtk_container_children (container); */
+      if (container->has_focus_chain)
+        {
+          GList *chain;
+
+          chain = get_focus_chain (container);
+
+          children = g_list_copy (chain);
+        }
+      else
+        {
+          children = NULL;
+          gtk_container_forall (container,
+                                gtk_container_children_callback,
+                                &children);
+          children = g_list_reverse (children);
+        }
 
       if (children)
 	{
 	  /* Remove any children which are inappropriate for focus movement
 	   */
-	  tmp_list = children;
-	  while (tmp_list)
-	    {
-	      if (GTK_WIDGET_IS_SENSITIVE (tmp_list->data) &&
-		  GTK_WIDGET_DRAWABLE (tmp_list->data) &&
-		  (GTK_IS_CONTAINER (tmp_list->data) || GTK_WIDGET_CAN_FOCUS (tmp_list->data)))
-		tmp_list = tmp_list->next;
-	      else
-		{
-		  tmp_list2 = tmp_list;
-		  tmp_list = tmp_list->next;
-		  
-		  children = g_list_remove_link (children, tmp_list2);
-		  g_list_free_1 (tmp_list2);
-		}
-	    }
-
+          children = filter_unfocusable (container, children);
+          
 	  switch (direction)
 	    {
 	    case GTK_DIR_TAB_FORWARD:
 	    case GTK_DIR_TAB_BACKWARD:
-	      return_val = gtk_container_focus_tab (container, children, direction);
+              if (container->has_focus_chain)
+                {
+                  if (direction == GTK_DIR_TAB_BACKWARD)
+                    children = g_list_reverse (children);
+                  return_val = gtk_container_focus_move (container, children, direction);
+                }
+              else
+                return_val = gtk_container_focus_tab (container, children, direction);
 	      break;
 	    case GTK_DIR_UP:
 	    case GTK_DIR_DOWN:
@@ -1864,7 +1909,7 @@ gtk_container_focus_move (GtkContainer     *container,
 
       if (!child)
 	continue;
-
+      
       if (focus_child)
         {
           if (focus_child == child)
@@ -1877,7 +1922,8 @@ gtk_container_focus_move (GtkContainer     *container,
 		  return TRUE;
             }
         }
-      else if (GTK_WIDGET_DRAWABLE (child))
+      else if (GTK_WIDGET_DRAWABLE (child) &&
+               gtk_widget_is_ancestor (child, GTK_WIDGET (container)))
         {
 	  if (GTK_IS_CONTAINER (child))
             {
@@ -1904,6 +1950,108 @@ gtk_container_children_callback (GtkWidget *widget,
 
   children = (GList**) client_data;
   *children = g_list_prepend (*children, widget);
+}
+
+
+/* Hack-around */
+#define g_signal_handlers_disconnect_by_func(obj, func, data) g_signal_handlers_disconnect_matched (obj, G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, 0, 0, NULL, func, data)
+
+static void
+chain_widget_destroyed (GtkWidget *widget,
+                        gpointer   user_data)
+{
+  GtkContainer *container;
+  GList *chain;
+  
+  container = GTK_CONTAINER (user_data);
+
+  chain = g_object_get_data (G_OBJECT (container),
+                             "gtk-container-focus-chain");
+
+  chain = g_list_remove (chain, widget);
+
+  g_signal_handlers_disconnect_by_func (G_OBJECT (widget),
+                                        chain_widget_destroyed,
+                                        user_data);
+  
+  g_object_set_data (G_OBJECT (container),
+                     "gtk-container-focus-chain",
+                     chain);  
+}
+
+void
+gtk_container_set_focus_chain (GtkContainer *container,
+                               GList        *focusable_widgets)
+{
+  GList *chain;
+  GList *tmp_list;
+  
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  
+  if (container->has_focus_chain)
+    gtk_container_unset_focus_chain (container);
+
+  container->has_focus_chain = TRUE;
+  
+  chain = NULL;
+  tmp_list = focusable_widgets;
+  while (tmp_list != NULL)
+    {
+      g_return_if_fail (GTK_IS_WIDGET (tmp_list->data));
+      
+      /* In principle each widget in the chain should be a descendant
+       * of the container, but we don't want to check that here, it's
+       * expensive and also it's allowed to set the focus chain before
+       * you pack the widgets, or have a widget in the chain that isn't
+       * always packed. So we check for ancestor during actual traversal.
+       */
+
+      chain = g_list_prepend (chain, tmp_list->data);
+
+      gtk_signal_connect (GTK_OBJECT (tmp_list->data),
+                          "destroy",
+                          GTK_SIGNAL_FUNC (chain_widget_destroyed),
+                          container);
+      
+      tmp_list = g_list_next (tmp_list);
+    }
+
+  chain = g_list_reverse (chain);
+  
+  g_object_set_data (G_OBJECT (container),
+                     "gtk-container-focus-chain",
+                     chain);
+}
+
+void
+gtk_container_unset_focus_chain (GtkContainer  *container)
+{  
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+
+  if (container->has_focus_chain)
+    {
+      GList *chain;
+      GList *tmp_list;
+      
+      chain = get_focus_chain (container);
+      
+      container->has_focus_chain = FALSE;
+      
+      g_object_set_data (G_OBJECT (container), "gtk-container-focus-chain",
+                         NULL);
+
+      tmp_list = chain;
+      while (tmp_list != NULL)
+        {
+          g_signal_handlers_disconnect_by_func (G_OBJECT (tmp_list->data),
+                                                chain_widget_destroyed,
+                                                container);
+          
+          tmp_list = g_list_next (tmp_list);
+        }
+
+      g_list_free (chain);
+    }
 }
 
 void

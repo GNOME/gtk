@@ -6216,6 +6216,116 @@ create_flipping (void)
 }
 
 /*
+ * Focus test
+ */
+
+static GtkWidget*
+make_focus_table (GList **list)
+{
+  GtkWidget *table;
+  gint i, j;
+  
+  table = gtk_table_new (5, 5, FALSE);
+
+  i = 0;
+  j = 0;
+
+  while (i < 5)
+    {
+      j = 0;
+      while (j < 5)
+        {
+          GtkWidget *widget;
+          
+          if ((i + j) % 2)
+            widget = gtk_entry_new ();
+          else
+            widget = gtk_button_new_with_label ("Foo");
+
+          *list = g_list_prepend (*list, widget);
+          
+          gtk_table_attach (GTK_TABLE (table),
+                            widget,
+                            i, i + 1,
+                            j, j + 1,
+                            GTK_EXPAND | GTK_FILL,
+                            GTK_EXPAND | GTK_FILL,
+                            5, 5);
+          
+          ++j;
+        }
+
+      ++i;
+    }
+
+  *list = g_list_reverse (*list);
+  
+  return table;
+}
+
+static void
+create_focus (void)
+{
+  static GtkWidget *window = NULL;
+
+  if (!window)
+    {
+      GtkWidget *table;
+      GtkWidget *frame;
+      GList *list = NULL;
+      GList *first = NULL, *second = NULL, *tmp_list = NULL;
+      gint i;
+      
+      window = gtk_dialog_new_with_buttons ("Keyboard focus navigation",
+                                            NULL, 0,
+                                            GTK_STOCK_BUTTON_CLOSE,
+                                            GTK_RESPONSE_NONE,
+                                            NULL);
+
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+			  &window);
+
+      gtk_signal_connect (GTK_OBJECT (window), "response",
+                          GTK_SIGNAL_FUNC (gtk_widget_destroy),
+                          NULL);
+      
+      gtk_window_set_title (GTK_WINDOW (window), "Keyboard Focus Navigation");
+
+      frame = gtk_frame_new ("Weird tab focus chain");
+
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
+			  frame, TRUE, TRUE, 0);
+      
+      table = make_focus_table (&list);
+
+      gtk_container_add (GTK_CONTAINER (frame), table);
+
+      gtk_container_set_focus_chain (GTK_CONTAINER (table),
+                                     list);
+
+      g_list_free (list);
+      
+      frame = gtk_frame_new ("Default tab focus chain");
+
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
+			  frame, TRUE, TRUE, 0);
+
+      list = NULL;
+      table = make_focus_table (&list);
+
+      g_list_free (list);
+      
+      gtk_container_add (GTK_CONTAINER (frame), table);      
+    }
+  
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show_all (window);
+  else
+    gtk_widget_destroy (window);
+}
+
+/*
  * GtkFontSelection
  */
 
@@ -9705,6 +9815,7 @@ create_main_window (void)
       { "event watcher", create_event_watcher },
       { "file selection", create_file_selection },
       { "flipping", create_flipping },
+      { "focus", create_focus },
       { "font selection", create_font_selection },
       { "gamma curve", create_gamma_curve },
       { "handle box", create_handle_box },
