@@ -1077,7 +1077,6 @@ start_spinning (GtkSpinButton *spin,
   g_return_if_fail (click_child == GTK_ARROW_UP || click_child == GTK_ARROW_DOWN);
   
   spin->click_child = click_child;
-  gtk_spin_button_real_spin (spin, click_child == GTK_ARROW_UP ? step : -step);
   
   if (!spin->timer)
     {
@@ -1087,6 +1086,7 @@ start_spinning (GtkSpinButton *spin,
 				   (GSourceFunc) gtk_spin_button_timer, 
 				   (gpointer) spin);
     }
+  gtk_spin_button_real_spin (spin, click_child == GTK_ARROW_UP ? step : -step);
 
   spin_button_redraw (spin);
 }
