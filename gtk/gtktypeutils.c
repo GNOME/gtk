@@ -562,17 +562,6 @@ gtk_type_class_init (GtkTypeNode *node)
 	  object_class->signals = NULL;
 	  object_class->nsignals = 0;
 	  object_class->n_args = 0;
-	  
-	  if (gtk_type_is_a (node->type, GTK_TYPE_CONTAINER))
-	    {
-	      GtkContainerClass *container_class;
-
-	      container_class = (GtkContainerClass*) object_class;
-	      
-	      g_assert (node->type_info.class_size >= sizeof (GtkContainerClass));
-	      
-	      container_class->n_args = 0;
-	    }
 	}
       
       /* class_init_func is used as data pointer for
