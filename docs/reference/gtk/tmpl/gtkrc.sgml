@@ -226,7 +226,7 @@ elements are:
        <para>
          Sets the color used for the background of widgets displaying
          editable text. This color is used for the background
-         of, among others, #GtkText, #GtkEntry, #GtkList, and #GtkClist.
+         of, among others, #GtkText, #GtkEntry, #GtkList, and #GtkCList.
        </para>
      </listitem>
   </varlistentry>
@@ -303,6 +303,14 @@ settings</replaceable> }</literal></term>
      <listitem>
        <para>
         Defines the engine to be used when drawing with this style.
+       </para>
+     </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal><replaceable>class</replaceable>::<replaceable>property</replaceable> = <replaceable>value</replaceable></literal></term>
+     <listitem>
+       <para>
+        Sets a style property for a widget class.
        </para>
      </listitem>
   </varlistentry>

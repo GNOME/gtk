@@ -1,3 +1,13 @@
+2002-11-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkfilesel.sgml: The label is "Folders" now, not
+	"Directories".  (#97224, Vitaly Tishkov)
+
+2002-10-29  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkrc.sgml: Fix a link. Add (minimal) docs for setting
+	style properties from rc files. More needed !!
+
 Wed Oct 30 16:50:42 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/running.sgml: Document --screen.

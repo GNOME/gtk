@@ -148,7 +148,7 @@ Creates a new file selection dialog box. By default it will contain a #GtkTreeVi
 <para>
 Will attempt to match @pattern to a valid filenames or subdirectories in the current directory. If a match can be made, the matched filename will appear in the text entry field of the file selection dialog.
 If a partial match can be made, the "Files" list will contain those
-file names which have been partially matched, and the "Directories"
+file names which have been partially matched, and the "Folders"
 list those directories which have been partially matched.
 </para>
 
@@ -199,17 +199,17 @@ Hides the file operation buttons that normally appear at the top of the dialog. 
 @Returns: 
 
 
-<!-- ##### ARG GtkFileSelection:show-fileops ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkFileSelection:filename ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkFileSelection:select-multiple ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileSelection:show-fileops ##### -->
 <para>
 
 </para>
