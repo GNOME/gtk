@@ -1158,6 +1158,7 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
 			    GtkAllocation *allocation)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+  gint vis_pages = 0;
 
   widget->allocation = *allocation;
   if (GTK_WIDGET_REALIZED (widget))
@@ -1220,10 +1221,20 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
 	  children = children->next;
 	  
 	  if (GTK_WIDGET_VISIBLE (page->child))
-	    gtk_widget_size_allocate (page->child, &child_allocation);
+	    {
+	      gtk_widget_size_allocate (page->child, &child_allocation);
+	      vis_pages++;
+	    }
 	}
 
       gtk_notebook_pages_allocate (notebook);
+    }
+
+  if ((vis_pages != 0) != notebook->have_visible_child)
+    {
+      notebook->have_visible_child = (vis_pages != 0);
+      if (notebook->show_tabs)
+	gtk_widget_queue_draw (widget);
     }
 }
 
@@ -2118,6 +2129,9 @@ gtk_notebook_redraw_tabs (GtkNotebook *notebook)
 	redraw_rect.width += widget->style->xthickness;
       break;
     }
+
+  redraw_rect.x += widget->allocation.x;
+  redraw_rect.y += widget->allocation.y;
 
   gdk_window_invalidate_rect (widget->window, &redraw_rect, TRUE);
 }
