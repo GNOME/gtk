@@ -57,14 +57,14 @@ struct _GtkHandleBox
   guint		  in_drag : 1;
   guint		  shrink_on_detach : 1;
 
+  gint            snap_edge : 3; /* -1 == unset */
+  
   /* Variables used during a drag
    */
-  gint dragoff_x, dragoff_y; /* offset from event->root_x/y and
-			      * attach point on float */
   gint deskoff_x, deskoff_y; /* Offset between root relative coordinates
 			      * and deskrelative coordinates */
-  gint attach_x, attach_y;   /* Root relative-coordinates of attach
-			      * point on widget->window */
+  GtkAllocation   attach_allocation;
+  GtkAllocation   float_allocation;
 };
 
 struct _GtkHandleBoxClass
@@ -78,10 +78,15 @@ struct _GtkHandleBoxClass
 };
 
 
-guint          gtk_handle_box_get_type        (void);
-GtkWidget*     gtk_handle_box_new             (void);
-void           gtk_handle_box_set_shadow_type (GtkHandleBox    *handle_box,
-                                               GtkShadowType    type);
+guint       gtk_handle_box_get_type        (void);
+GtkWidget*  gtk_handle_box_new             (void);
+void        gtk_handle_box_set_shadow_type      (GtkHandleBox    *handle_box,
+                                                 GtkShadowType    type);
+void        gtk_handle_box_set_handle_position  (GtkHandleBox    *handle_box,
+					         GtkPositionType  position);
+void        gtk_handle_box_set_snap_edge        (GtkHandleBox    *handle_box,
+						 GtkPositionType  edge);
+
 
 
 #ifdef __cplusplus

@@ -1,3 +1,41 @@
+Thu Feb 11 18:43:12 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbindings.c (gtk_binding_set_add_path): When
+	  we find a match, stop searching. (Because we
+	  assume pspec != NULL in the search).
+
+Wed Feb 10 01:18:22 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_draw_ghost): Fix
+	  up painting of "ghosts".
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_button_changed): 
+	  Add double-click reattachment.
+
+	* gtk/gtkhandlebox.c: Grab on widget->window,
+	  not on handlebox->bin_window. This means we don't 
+	  have to worry about ungrabbing while reparenting.
+
+	  Don't make a GTK+ grab - that wasn't necessary.
+
+	* gtk/gtkhandlebox.c: Only compute the root -> desk
+	  offset once, when starting the drag, instead
+	  of continuously. This should solve the *Bad Window*
+	  errors that were occurring because of race conditions
+	  with the WM.
+	  
+	* gtk/gtkhandlebox.c: Completely reworked the 
+	  the logic of reattachment. We introduce the 
+	  concept of the "snap edge", which is an edge
+	  that needs to be aligned for reattachmed.
+	  We set a reasonable default from 
+	  handlebox->handle_position, but an application
+	  might want to change this in some circumstances.
+
+	* gtk/gtkhandlebox.[ch]: Add settors:
+            gtk_handle_box_set_handle_position  ();
+            gtk_handle_box_set_snap_edge        ();
+
 Mon Feb 15 11:13:01 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_set_focus): 

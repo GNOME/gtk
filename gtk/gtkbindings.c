@@ -762,6 +762,7 @@ gtk_binding_set_add_path (GtkBindingSet	     *binding_set,
 	  gtk_pattern_spec_free_segs (pspec);
 	  g_free (pspec);
 	  pspec = NULL;
+	  break;
 	}
     }
   if (pspec)
