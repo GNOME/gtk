@@ -1,3 +1,8 @@
+Wed Dec 17 23:16:45 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): fix compile warning.
+	(#122727, patch from Kjartan Maraas).
+
 Wed Dec 17 21:23:01 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Yay! Fixed height mode! Hooray! (Part 2 of #80868).

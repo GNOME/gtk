@@ -2214,7 +2214,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       /* Save press to possibly begin a drag
        */
       grab_widget = gtk_grab_get_current ();
-      if ((grab_widget == NULL || grab_widget == GTK_WIDGET (tree_view)) &&
+      if ((grab_widget == NULL || grab_widget == widget) &&
           !column_handled_click &&
 	  tree_view->priv->pressed_button < 0)
         {
