@@ -1024,16 +1024,23 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   if (!parent)
     {
       GtkItemFactoryEntry pentry;
+      gchar *ppath, *p;
 
-      pentry.path = parent_path;
+      ppath = g_strdup (entry->path);
+      p = strrchr (ppath, '/');
+      g_return_if_fail (p != NULL);
+      *p = 0;
+      pentry.path = ppath;
       pentry.accelerator = NULL;
       pentry.callback = NULL;
       pentry.callback_action = 0;
       pentry.item_type = "<Branch>";
 
       gtk_item_factory_create_item (ifactory, &pentry, NULL, 1);
+      g_free (ppath);
 
       parent = gtk_item_factory_get_widget (ifactory, parent_path);
+      g_return_if_fail (parent != NULL);
     }
   g_free (parent_path);
 

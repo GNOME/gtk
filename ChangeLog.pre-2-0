@@ -1,3 +1,10 @@
+Tue Feb 23 17:52:37 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_create_item): fix implicit
+	branch creation, we need the *real* parent path for this and
+	gtk_item_factory_parse_path() only returns the parent path with "_?"
+	stripped off.
+
 1999-02-23  Pavel Machek  <pavel@artax.karlin.mff.cuni.cz>
 
 	* gtk/gtkentry.c (gtk_entry_finalize): trivial bugfix
