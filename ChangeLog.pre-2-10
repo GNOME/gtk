@@ -1,3 +1,8 @@
+Sun Sep 14 15:49:00 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c (toolbar_item_is_homogeneous): Unref the
+	PangoFontMetrics. Patch from Steve Chaplin (#122257).
+
 2003-09-14  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkwindow-win32.c (show_window_internal): Remove

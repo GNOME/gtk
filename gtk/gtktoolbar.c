@@ -638,6 +638,8 @@ toolbar_item_is_homogeneous (GtkToolbar  *toolbar,
 				       widget->style->font_desc,
 				       pango_context_get_language (context));
   char_width = pango_font_metrics_get_approximate_char_width (metrics);
+  pango_font_metrics_unref (metrics);
+      
   max_homogeneous_pixels = PANGO_PIXELS (MAX_HOMOGENEOUS_N_CHARS * char_width);
   
   result = gtk_tool_item_get_homogeneous (item) && !GTK_IS_SEPARATOR_TOOL_ITEM (item);
