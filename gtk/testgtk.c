@@ -1023,36 +1023,46 @@ create_statusbar (void)
 			       "label", "push something",
 			       "visible", TRUE,
 			       "parent", box2,
-			       "signal::clicked", statusbar_push, statusbar,
 			       NULL);
+      g_object_set (G_OBJECT (button),
+		    "signal::clicked", statusbar_push, statusbar,
+		    NULL);
 
       button = gtk_widget_new (gtk_button_get_type (),
 			       "label", "pop",
 			       "visible", TRUE,
 			       "parent", box2,
-			       "signal_after::clicked", statusbar_pop, statusbar,
 			       NULL);
+      g_object_set (G_OBJECT (button),
+		    "signal_after::clicked", statusbar_pop, statusbar,
+		    NULL);
 
       button = gtk_widget_new (gtk_button_get_type (),
 			       "label", "steal #4",
 			       "visible", TRUE,
 			       "parent", box2,
-			       "signal_after::clicked", statusbar_steal, statusbar,
 			       NULL);
+      g_object_set (G_OBJECT (button),
+		    "signal_after::clicked", statusbar_steal, statusbar,
+		    NULL);
 
       button = gtk_widget_new (gtk_button_get_type (),
 			       "label", "dump stack",
 			       "visible", TRUE,
 			       "parent", box2,
-			       "object_signal::clicked", statusbar_dump_stack, statusbar,
 			       NULL);
+      g_object_set (G_OBJECT (button),
+		    "swapped_signal::clicked", statusbar_dump_stack, statusbar,
+		    NULL);
 
       button = gtk_widget_new (gtk_button_get_type (),
 			       "label", "test contexts",
 			       "visible", TRUE,
 			       "parent", box2,
-			       "object_signal_after::clicked", statusbar_contexts, statusbar,
 			       NULL);
+      g_object_set (G_OBJECT (button),
+		    "swapped_signal_after::clicked", statusbar_contexts, statusbar,
+		    NULL);
 
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
@@ -2543,8 +2553,10 @@ create_tooltips (void)
 			"GtkButton::label", "[?]",
 			"GtkWidget::visible", TRUE,
 			"GtkWidget::parent", box3,
-			"GtkObject::object_signal::clicked", gtk_tips_query_start_query, tips_query,
 			NULL);
+      g_object_set (G_OBJECT (button),
+		    "swapped_signal::clicked", gtk_tips_query_start_query, tips_query,
+		    NULL);
       gtk_box_set_child_packing (GTK_BOX (box3), button, FALSE, FALSE, 0, GTK_PACK_START);
       gtk_tooltips_set_tip (tooltips,
 			    button,

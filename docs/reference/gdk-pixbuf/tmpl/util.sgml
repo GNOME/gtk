@@ -1,21 +1,20 @@
 <!-- ##### SECTION Title ##### -->
-Utilities
+util
 
 <!-- ##### SECTION Short_Description ##### -->
-Utility and miscellaneous convenience functions.
+
 
 <!-- ##### SECTION Long_Description ##### -->
-  <para>
-    These functions provide miscellaneous utilities for manipulating
-    pixbufs.  The pixel data in pixbufs may of course be manipulated
-    directly by applications, but several common operations can be
-    performed by these functions instead.
-  </para>
+<para>
+
+</para>
+
 
 <!-- ##### SECTION See_Also ##### -->
-  <para>
-    #GdkPixbuf
-  </para>
+<para>
+
+</para>
+
 
 <!-- ##### FUNCTION gdk_pixbuf_add_alpha ##### -->
 <para>
@@ -42,12 +41,7 @@ Utility and miscellaneous convenience functions.
 @height: 
 @dest_pixbuf: 
 @dest_x: 
-@dest_y: <!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
-End:
--->
+@dest_y: 
 
 
 <!-- ##### FUNCTION gdk_pixbuf_saturate_and_pixelate ##### -->

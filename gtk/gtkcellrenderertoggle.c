@@ -26,16 +26,16 @@
 #endif
 
 
-static void gtk_cell_renderer_toggle_get_param  (GObject                    *object,
-						 guint                       param_id,
-						 GValue                     *value,
-						 GParamSpec                 *pspec,
-						 const gchar                *trailer);
-static void gtk_cell_renderer_toggle_set_param  (GObject                    *object,
-						 guint                       param_id,
-						 GValue                     *value,
-						 GParamSpec                 *pspec,
-						 const gchar                *trailer);
+static void gtk_cell_renderer_toggle_get_property  (GObject                    *object,
+						    guint                       param_id,
+						    GValue                     *value,
+						    GParamSpec                 *pspec,
+						    const gchar                *trailer);
+static void gtk_cell_renderer_toggle_set_property  (GObject                    *object,
+						    guint                       param_id,
+						    const GValue               *value,
+						    GParamSpec                 *pspec,
+						    const gchar                *trailer);
 static void gtk_cell_renderer_toggle_init       (GtkCellRendererToggle      *celltext);
 static void gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class);
 static void gtk_cell_renderer_toggle_get_size   (GtkCellRenderer            *cell,
@@ -116,30 +116,30 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS (class);
 
-  object_class->get_param = gtk_cell_renderer_toggle_get_param;
-  object_class->set_param = gtk_cell_renderer_toggle_set_param;
+  object_class->get_property = gtk_cell_renderer_toggle_get_property;
+  object_class->set_property = gtk_cell_renderer_toggle_set_property;
 
   cell_class->get_size = gtk_cell_renderer_toggle_get_size;
   cell_class->render = gtk_cell_renderer_toggle_render;
   cell_class->event = gtk_cell_renderer_toggle_event;
-
-  g_object_class_install_param (object_class,
-				PROP_STATE,
-				g_param_spec_boolean ("state",
-						      _("Toggle state"),
-						      _("The toggle-state of the button."),
-						      FALSE,
-						      G_PARAM_READABLE |
-						      G_PARAM_WRITABLE));
-
-  g_object_class_install_param (object_class,
-				PROP_RADIO,
-				g_param_spec_boolean ("radio",
-						      _("Radio state"),
-						      _("Draw the toggle button as a radio button."),
-						      FALSE,
-						      G_PARAM_READABLE |
-						      G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_STATE,
+				   g_param_spec_boolean ("state",
+							 _("Toggle state"),
+							 _("The toggle-state of the button."),
+							 FALSE,
+							 G_PARAM_READABLE |
+							 G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_RADIO,
+				   g_param_spec_boolean ("radio",
+							 _("Radio state"),
+							 _("Draw the toggle button as a radio button."),
+							 FALSE,
+							 G_PARAM_READABLE |
+							 G_PARAM_WRITABLE));
 
 
   toggle_cell_signals[TOGGLED] =
@@ -155,14 +155,14 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 }
 
 static void
-gtk_cell_renderer_toggle_get_param (GObject     *object,
-				    guint        param_id,
-				    GValue      *value,
-				    GParamSpec  *pspec,
-				    const gchar *trailer)
+gtk_cell_renderer_toggle_get_property (GObject     *object,
+				       guint        param_id,
+				       GValue      *value,
+				       GParamSpec  *pspec,
+				       const gchar *trailer)
 {
   GtkCellRendererToggle *celltoggle = GTK_CELL_RENDERER_TOGGLE (object);
-
+  
   switch (param_id)
     {
     case PROP_STATE:
@@ -174,20 +174,21 @@ gtk_cell_renderer_toggle_get_param (GObject     *object,
       g_value_set_boolean (value, celltoggle->radio);
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
     }
 }
 
 
 static void
-gtk_cell_renderer_toggle_set_param (GObject     *object,
-				    guint        param_id,
-				    GValue      *value,
-				    GParamSpec  *pspec,
-				    const gchar *trailer)
+gtk_cell_renderer_toggle_set_property (GObject      *object,
+				       guint         param_id,
+				       const GValue *value,
+				       GParamSpec   *pspec,
+				       const gchar  *trailer)
 {
   GtkCellRendererToggle *celltoggle = GTK_CELL_RENDERER_TOGGLE (object);
-
+  
   switch (param_id)
     {
     case PROP_STATE:
@@ -197,6 +198,7 @@ gtk_cell_renderer_toggle_set_param (GObject     *object,
       celltoggle->radio = g_value_get_boolean (value);
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
     }
 }

@@ -1,52 +1,40 @@
 <!-- ##### SECTION Title ##### -->
-Animations
+animation
 
 <!-- ##### SECTION Short_Description ##### -->
-Animations as multi-frame structures.
+
 
 <!-- ##### SECTION Long_Description ##### -->
-  <para>
-    The &gdk-pixbuf; library provides a simple mechanism to load and
-    represent animations, primarily animated GIF files.  Animations
-    are represented as lists of #GdkPixbufFrame structures.  Each
-    frame structure contains a #GdkPixbuf structure and information
-    about the frame's overlay mode and duration.
-  </para>
+<para>
+
+</para>
+
 
 <!-- ##### SECTION See_Also ##### -->
-  <para>
-    #GdkPixbufLoader
-  </para>
+<para>
+
+</para>
+
 
 <!-- ##### ENUM GdkPixbufFrameAction ##### -->
-  <para>
-    Each animation frame can have several things happen to it when the
-    next frame is displayed.  The #GdkPixbufFrameAction determines
-    this.  These are essentially the overlay modes supported by GIF
-    animations.
-  </para>
+<para>
 
-@GDK_PIXBUF_FRAME_RETAIN: The previous image should remain displayed,
-and will potentially be occluded by the new frame.
-@GDK_PIXBUF_FRAME_DISPOSE: The animation will be reverted to the state
-before the frame was shown.
-@GDK_PIXBUF_FRAME_REVERT: The animation will be reverted to the first
-frame.
+</para>
+
+@GDK_PIXBUF_FRAME_RETAIN: 
+@GDK_PIXBUF_FRAME_DISPOSE: 
+@GDK_PIXBUF_FRAME_REVERT: 
 
 <!-- ##### STRUCT GdkPixbufFrame ##### -->
-  <para>
-    This structure describes a frame in a #GdkPixbufAnimation.  Each
-    frame consists of a #GdkPixbuf, an offset of the frame within the
-    animation's bounding box, a duration, and an overlay mode or
-    action.
-  </para>
+<para>
+
+</para>
 
 
 <!-- ##### STRUCT GdkPixbufAnimation ##### -->
-  <para>
-    This structure describes an animation, which is represented as a
-    list of #GdkPixbufFrame structures.
-  </para>
+<para>
+
+</para>
 
 
 <!-- ##### FUNCTION gdk_pixbuf_animation_new_from_file ##### -->
@@ -154,11 +142,6 @@ frame.
 </para>
 
 @frame: 
-@Returns: <!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
-End:
--->
+@Returns: 
 
 

@@ -1,26 +1,20 @@
 <!-- ##### SECTION Title ##### -->
-&gdk-pixbuf; Xlib initialization
+gdk-pixbuf-xlib-init
 
 <!-- ##### SECTION Short_Description ##### -->
-Initializing the &gdk-pixbuf; Xlib library.
+
 
 <!-- ##### SECTION Long_Description ##### -->
-  <para>
-    In addition to the normal Gdk-specific functions, the &gdk-pixbuf;
-    package provides a small library that lets Xlib-only applications
-    use #GdkPixbuf structures and render them to X drawables.  The
-    functions in this section are used to initialize the &gdk-pixbuf;
-    Xlib library.  This library must be initialized near the beginning
-    or the program or before calling any of the other &gdk-pixbuf;
-    Xlib functions; it cannot be initialized automatically since
-    Xlib-only applications do not call gdk_rgb_init() like GNOME
-    applications do.
-  </para>
+<para>
+
+</para>
+
 
 <!-- ##### SECTION See_Also ##### -->
-  <para>
-    XlibRGB
-  </para>
+<para>
+
+</para>
+
 
 <!-- ##### FUNCTION gdk_pixbuf_xlib_init ##### -->
 <para>
@@ -38,11 +32,6 @@ Initializing the &gdk-pixbuf; Xlib library.
 
 @display: 
 @screen_num: 
-@prefDepth: <!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
-End:
--->
+@prefDepth: 
 
 

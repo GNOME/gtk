@@ -27,16 +27,16 @@
 static void gtk_cell_renderer_text_init       (GtkCellRendererText      *celltext);
 static void gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class);
 
-static void gtk_cell_renderer_text_get_param  (GObject                  *object,
-					       guint                     param_id,
-					       GValue                   *value,
-					       GParamSpec               *pspec,
-					       const gchar              *trailer);
-static void gtk_cell_renderer_text_set_param  (GObject                  *object,
-					       guint                     param_id,
-					       GValue                   *value,
-					       GParamSpec               *pspec,
-					       const gchar              *trailer);
+static void gtk_cell_renderer_text_get_property  (GObject                  *object,
+						  guint                     param_id,
+						  GValue                   *value,
+						  GParamSpec               *pspec,
+						  const gchar              *trailer);
+static void gtk_cell_renderer_text_set_property  (GObject                  *object,
+						  guint                     param_id,
+						  const GValue             *value,
+						  GParamSpec               *pspec,
+						  const gchar              *trailer);
 static void gtk_cell_renderer_text_get_size   (GtkCellRenderer          *cell,
 					       GtkWidget                *widget,
 					       gint                     *width,
@@ -108,95 +108,95 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS (class);
 
-  object_class->get_param = gtk_cell_renderer_text_get_param;
-  object_class->set_param = gtk_cell_renderer_text_set_param;
+  object_class->get_property = gtk_cell_renderer_text_get_property;
+  object_class->set_property = gtk_cell_renderer_text_set_property;
 
   cell_class->get_size = gtk_cell_renderer_text_get_size;
   cell_class->render = gtk_cell_renderer_text_render;
-
-  g_object_class_install_param (object_class,
- 				PROP_TEXT,
-				g_param_spec_string ("text",
-						     _("Text String"),
-						     _("The text of the renderer."),
-						     "",
-						     G_PARAM_READABLE |
-						     G_PARAM_WRITABLE));
-
-  g_object_class_install_param (object_class,
- 				PROP_FONT,
-				g_param_spec_string ("font",
-						     _("Font String"),
-						     _("The string of the font."),
-						     "",
-						     G_PARAM_WRITABLE));
-
-  g_object_class_install_param (object_class,
- 				PROP_BACKGROUND,
-				g_param_spec_string ("background",
-						     _("Background Color string"),
-						     _("The color for the background of the text."),
-						     "white",
-						     G_PARAM_WRITABLE));
-
-  g_object_class_install_param (object_class,
- 				PROP_FOREGROUND,
-				g_param_spec_string ("foreground",
-						     _("Foreground Color string"),
-						     _("The color for the background of the text."),
-						     "black",
-						     G_PARAM_WRITABLE));
-
-  g_object_class_install_param (object_class,
- 				PROP_STRIKETHROUGH,
-				g_param_spec_boolean ("strikethrough",
-						      _("Strikethrough"),
-						      _("Draw a line through the text."),
-						      FALSE,
-						      G_PARAM_READABLE |
-						      G_PARAM_WRITABLE));
-
-  g_object_class_install_param (object_class,
- 				PROP_UNDERLINE,
-				g_param_spec_boolean ("underline",
-						      _("Underline"),
-						      _("Underline the text."),
-						      FALSE,
-						      G_PARAM_READABLE |
-						      G_PARAM_WRITABLE));
-
-  g_object_class_install_param (object_class,
- 				PROP_EDITABLE,
-				g_param_spec_boolean ("editable",
-						      _("Editable"),
-						      _("Make the text editable."),
-						      FALSE,
-						      G_PARAM_READABLE |
-						      G_PARAM_WRITABLE));
-
-  g_object_class_install_param (object_class,
- 				PROP_ITALIC,
-				g_param_spec_boolean ("italic",
-						      _("Italic"),
-						      _("Make the text italic."),
-						      FALSE,
-						      G_PARAM_WRITABLE));
-
-  g_object_class_install_param (object_class,
- 				PROP_BOLD,
-				g_param_spec_boolean ("bold",
-						      _("Bold"),
-						      _("Make the text bold."),
-						      FALSE,
-						      G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_TEXT,
+				   g_param_spec_string ("text",
+							_("Text String"),
+							_("The text of the renderer."),
+							"",
+							G_PARAM_READABLE |
+							G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_FONT,
+				   g_param_spec_string ("font",
+							_("Font String"),
+							_("The string of the font."),
+							"",
+							G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_BACKGROUND,
+				   g_param_spec_string ("background",
+							_("Background Color string"),
+							_("The color for the background of the text."),
+							"white",
+							G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_FOREGROUND,
+				   g_param_spec_string ("foreground",
+							_("Foreground Color string"),
+							_("The color for the background of the text."),
+							"black",
+							G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_STRIKETHROUGH,
+				   g_param_spec_boolean ("strikethrough",
+							 _("Strikethrough"),
+							 _("Draw a line through the text."),
+							 FALSE,
+							 G_PARAM_READABLE |
+							 G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_UNDERLINE,
+				   g_param_spec_boolean ("underline",
+							 _("Underline"),
+							 _("Underline the text."),
+							 FALSE,
+							 G_PARAM_READABLE |
+							 G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_EDITABLE,
+				   g_param_spec_boolean ("editable",
+							 _("Editable"),
+							 _("Make the text editable."),
+							 FALSE,
+							 G_PARAM_READABLE |
+							 G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_ITALIC,
+				   g_param_spec_boolean ("italic",
+							 _("Italic"),
+							 _("Make the text italic."),
+							 FALSE,
+							 G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_BOLD,
+				   g_param_spec_boolean ("bold",
+							 _("Bold"),
+							 _("Make the text bold."),
+							 FALSE,
+							 G_PARAM_WRITABLE));
 }
 
 static void
-gtk_cell_renderer_text_get_param (GObject        *object,
-				  guint           param_id,
-				  GValue         *value,
-				  GParamSpec     *pspec,
-				  const gchar    *trailer)
+gtk_cell_renderer_text_get_property (GObject        *object,
+				     guint           param_id,
+				     GValue         *value,
+				     GParamSpec     *pspec,
+				     const gchar    *trailer)
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (object);
   PangoAttrIterator *attr_iter;
@@ -224,17 +224,18 @@ gtk_cell_renderer_text_get_param (GObject        *object,
       g_value_set_boolean (value, celltext->editable);
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
     }
 }
 
 
 static void
-gtk_cell_renderer_text_set_param (GObject     *object,
-				  guint        param_id,
-				  GValue      *value,
-				  GParamSpec  *pspec,
-				  const gchar *trailer)
+gtk_cell_renderer_text_set_property (GObject      *object,
+				     guint         param_id,
+				     const GValue *value,
+				     GParamSpec   *pspec,
+				     const gchar  *trailer)
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (object);
 
@@ -332,6 +333,7 @@ gtk_cell_renderer_text_set_param (GObject     *object,
 			      attribute);
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
     }
 }

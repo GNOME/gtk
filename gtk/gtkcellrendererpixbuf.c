@@ -25,16 +25,16 @@
 #endif
 
 
-static void gtk_cell_renderer_pixbuf_get_param  (GObject                    *object,
-						 guint                       param_id,
-						 GValue                     *value,
-						 GParamSpec                 *pspec,
-						 const gchar                *trailer);
-static void gtk_cell_renderer_pixbuf_set_param  (GObject                    *object,
-						 guint                       param_id,
-						 GValue                     *value,
-						 GParamSpec                 *pspec,
-						 const gchar                *trailer);
+static void gtk_cell_renderer_pixbuf_get_property  (GObject                    *object,
+						    guint                       param_id,
+						    GValue                     *value,
+						    GParamSpec                 *pspec,
+						    const gchar                *trailer);
+static void gtk_cell_renderer_pixbuf_set_property  (GObject                    *object,
+						    guint                       param_id,
+						    const GValue               *value,
+						    GParamSpec                 *pspec,
+						    const gchar                *trailer);
 static void gtk_cell_renderer_pixbuf_init       (GtkCellRendererPixbuf      *celltext);
 static void gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class);
 static void gtk_cell_renderer_pixbuf_get_size   (GtkCellRenderer            *cell,
@@ -93,65 +93,67 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 	GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS (class);
 
-	object_class->get_param = gtk_cell_renderer_pixbuf_get_param;
-	object_class->set_param = gtk_cell_renderer_pixbuf_set_param;
+	object_class->get_property = gtk_cell_renderer_pixbuf_get_property;
+	object_class->set_property = gtk_cell_renderer_pixbuf_set_property;
 
 	cell_class->get_size = gtk_cell_renderer_pixbuf_get_size;
 	cell_class->render = gtk_cell_renderer_pixbuf_render;
 
-	g_object_class_install_param (object_class,
-				      PROP_PIXBUF,
-				      g_param_spec_object ("pixbuf",
-							   _("Pixbuf Object"),
-							   _("The pixbuf to render."),
-							   GDK_TYPE_PIXBUF,
-							   G_PARAM_READABLE |
-							   G_PARAM_WRITABLE));
+	g_object_class_install_property (object_class,
+					 PROP_PIXBUF,
+					 g_param_spec_object ("pixbuf",
+							      _("Pixbuf Object"),
+							      _("The pixbuf to render."),
+							      GDK_TYPE_PIXBUF,
+							      G_PARAM_READABLE |
+							      G_PARAM_WRITABLE));
 }
 
 static void
-gtk_cell_renderer_pixbuf_get_param (GObject        *object,
-				    guint           param_id,
-				    GValue         *value,
-				    GParamSpec     *pspec,
-				    const gchar    *trailer)
+gtk_cell_renderer_pixbuf_get_property (GObject        *object,
+				       guint           param_id,
+				       GValue         *value,
+				       GParamSpec     *pspec,
+				       const gchar    *trailer)
 {
-	GtkCellRendererPixbuf *cellpixbuf = GTK_CELL_RENDERER_PIXBUF (object);
-
-	switch (param_id)
-	{
-	case PROP_PIXBUF:
-		g_value_init (value, G_TYPE_OBJECT);
-		g_value_set_object (value, G_OBJECT (cellpixbuf->pixbuf));
-		break;
-	default:
-		break;
-	}
+  GtkCellRendererPixbuf *cellpixbuf = GTK_CELL_RENDERER_PIXBUF (object);
+  
+  switch (param_id)
+    {
+    case PROP_PIXBUF:
+      g_value_init (value, G_TYPE_OBJECT);
+      g_value_set_object (value, G_OBJECT (cellpixbuf->pixbuf));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+      break;
+    }
 }
 
 
 static void
-gtk_cell_renderer_pixbuf_set_param (GObject     *object,
-				    guint        param_id,
-				    GValue      *value,
-				    GParamSpec  *pspec,
-				    const gchar *trailer)
+gtk_cell_renderer_pixbuf_set_property (GObject      *object,
+				       guint         param_id,
+				       const GValue *value,
+				       GParamSpec   *pspec,
+				       const gchar  *trailer)
 {
-	GdkPixbuf *pixbuf;
-	GtkCellRendererPixbuf *cellpixbuf = GTK_CELL_RENDERER_PIXBUF (object);
-
-	switch (param_id)
-	{
-	case PROP_PIXBUF:
-		pixbuf = GDK_PIXBUF (g_value_get_object (value));
-		g_object_ref (G_OBJECT (pixbuf));
-		if (cellpixbuf->pixbuf)
-			g_object_unref (G_OBJECT (cellpixbuf->pixbuf));
-		cellpixbuf->pixbuf = pixbuf;
-		break;
-	default:
-		break;
-	}
+  GdkPixbuf *pixbuf;
+  GtkCellRendererPixbuf *cellpixbuf = GTK_CELL_RENDERER_PIXBUF (object);
+  
+  switch (param_id)
+    {
+    case PROP_PIXBUF:
+      pixbuf = GDK_PIXBUF (g_value_get_object (value));
+      g_object_ref (G_OBJECT (pixbuf));
+      if (cellpixbuf->pixbuf)
+	g_object_unref (G_OBJECT (cellpixbuf->pixbuf));
+      cellpixbuf->pixbuf = pixbuf;
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+      break;
+    }
 }
 
 GtkCellRenderer *

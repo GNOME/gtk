@@ -1,3 +1,22 @@
+Tue Dec 12 08:24:42 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/testgtk.c:
+	(create_tooltips): 
+	(create_statusbar): get rid of object_signal:: GtkObject argument uses,
+	use GObject swapped_signal:: properties instead.
+
+	* gtk/gtkcellrenderertoggle.c: 
+	* gtk/gtkcellrenderertextpixbuf.c: 
+	* gtk/gtkcellrenderertext.c: 
+	* gtk/gtkcellrendererpixbuf.c: 
+	* gtk/gtkcellrenderer.c:
+	* gtk/gtktreeviewcolumn.c: s/[sg]et_param/[sg]et_property/, fixed
+	missing warnings for invalid property ids, install properties
+	with g_object_class_install_property() now.
+	
+	* gtk/gtksignal.c:
+	(gtk_signal_emit): let g_signal_emit_valist() collect the values for us.
+	
 Wed Oct 25 14:17:43 2000  Owen Taylor  <otaylor@redhat.com>
 	
 	* gtk/gtkwidget.[ch] (gtk_widget_is_focus): Add a function

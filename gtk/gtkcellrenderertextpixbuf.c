@@ -35,16 +35,16 @@ enum {
 };
 
 
-static void gtk_cell_renderer_text_pixbuf_get_param  (GObject                        *object,
-						      guint                           param_id,
-						      GValue                         *value,
-						      GParamSpec                     *pspec,
-						      const gchar                    *trailer);
-static void gtk_cell_renderer_text_pixbuf_set_param  (GObject                        *object,
-						      guint                           param_id,
-						      GValue                         *value,
-						      GParamSpec                     *pspec,
-						      const gchar                    *trailer);
+static void gtk_cell_renderer_text_pixbuf_get_property  (GObject                        *object,
+							 guint                           param_id,
+							 GValue                         *value,
+							 GParamSpec                     *pspec,
+							 const gchar                    *trailer);
+static void gtk_cell_renderer_text_pixbuf_set_property  (GObject                        *object,
+							 guint                           param_id,
+							 const GValue                   *value,
+							 GParamSpec                     *pspec,
+							 const gchar                    *trailer);
 static void gtk_cell_renderer_text_pixbuf_init       (GtkCellRendererTextPixbuf      *celltextpixbuf);
 static void gtk_cell_renderer_text_pixbuf_class_init (GtkCellRendererTextPixbufClass *class);
 static void gtk_cell_renderer_text_pixbuf_get_size   (GtkCellRenderer                *cell,
@@ -104,162 +104,164 @@ gtk_cell_renderer_text_pixbuf_class_init (GtkCellRendererTextPixbufClass *class)
 
   parent_class = g_type_class_peek_parent (class);
 
-  object_class->get_param = gtk_cell_renderer_text_pixbuf_get_param;
-  object_class->set_param = gtk_cell_renderer_text_pixbuf_set_param;
+  object_class->get_property = gtk_cell_renderer_text_pixbuf_get_property;
+  object_class->set_property = gtk_cell_renderer_text_pixbuf_set_property;
 
   cell_class->get_size = gtk_cell_renderer_text_pixbuf_get_size;
   cell_class->render = gtk_cell_renderer_text_pixbuf_render;
-
-  g_object_class_install_param (object_class,
- 				PROP_PIXBUF_POS,
-				g_param_spec_int ("pixbufpos",
-						  _("Pixbuf location"),
-						  _("The relative location of the pixbuf to the text."),
-						  GTK_POS_LEFT,
-						  GTK_POS_BOTTOM,
-						  GTK_POS_LEFT,
-						  G_PARAM_READABLE |
-						  G_PARAM_WRITABLE));
-
-  g_object_class_install_param (object_class,
- 				PROP_PIXBUF,
-				g_param_spec_object ("pixbuf",
-						     _("Pixbuf Object"),
-						     _("The pixbuf to render."),
-						     GDK_TYPE_PIXBUF,
+  
+  g_object_class_install_property (object_class,
+				   PROP_PIXBUF_POS,
+				   g_param_spec_int ("pixbufpos",
+						     _("Pixbuf location"),
+						     _("The relative location of the pixbuf to the text."),
+						     GTK_POS_LEFT,
+						     GTK_POS_BOTTOM,
+						     GTK_POS_LEFT,
 						     G_PARAM_READABLE |
 						     G_PARAM_WRITABLE));
-
-  g_object_class_install_param (object_class,
-				PROP_PIXBUF_XALIGN,
-				g_param_spec_float ("pixbuf xalign",
-						    _("pixbuf xalign"),
-						    _("The x-align of the pixbuf."),
-						    0.0,
-						    1.0,
-						    0.0,
-						    G_PARAM_READABLE |
-						    G_PARAM_WRITABLE));
-
-  g_object_class_install_param (object_class,
-				PROP_PIXBUF_YALIGN,
-				g_param_spec_float ("pixbuf yalign",
-						    _("pixbuf yalign"),
-						    _("The y-align of the pixbuf."),
-						    0.0,
-						    1.0,
-						    0.5,
-						    G_PARAM_READABLE |
-						    G_PARAM_WRITABLE));
-
-  g_object_class_install_param (object_class,
-				PROP_PIXBUF_XPAD,
-				g_param_spec_uint ("pixbuf xpad",
-						   _("pixbuf xpad"),
-						   _("The xpad of the pixbuf."),
-						   0,
-						   100,
-						   2,
-						   G_PARAM_READABLE |
-						   G_PARAM_WRITABLE));
-
-  g_object_class_install_param (object_class,
-				PROP_PIXBUF_YPAD,
-				g_param_spec_uint ("pixbuf ypad",
-						   _("pixbuf ypad"),
-						   _("The ypad of the pixbuf."),
-						   0,
-						   100,
-						   2,
-						   G_PARAM_READABLE |
-						   G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_PIXBUF,
+				   g_param_spec_object ("pixbuf",
+							_("Pixbuf Object"),
+							_("The pixbuf to render."),
+							GDK_TYPE_PIXBUF,
+							G_PARAM_READABLE |
+							G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_PIXBUF_XALIGN,
+				   g_param_spec_float ("pixbuf xalign",
+						       _("pixbuf xalign"),
+						       _("The x-align of the pixbuf."),
+						       0.0,
+						       1.0,
+						       0.0,
+						       G_PARAM_READABLE |
+						       G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_PIXBUF_YALIGN,
+				   g_param_spec_float ("pixbuf yalign",
+						       _("pixbuf yalign"),
+						       _("The y-align of the pixbuf."),
+						       0.0,
+						       1.0,
+						       0.5,
+						       G_PARAM_READABLE |
+						       G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_PIXBUF_XPAD,
+				   g_param_spec_uint ("pixbuf xpad",
+						      _("pixbuf xpad"),
+						      _("The xpad of the pixbuf."),
+						      0,
+						      100,
+						      2,
+						      G_PARAM_READABLE |
+						      G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_PIXBUF_YPAD,
+				   g_param_spec_uint ("pixbuf ypad",
+						      _("pixbuf ypad"),
+						      _("The ypad of the pixbuf."),
+						      0,
+						      100,
+						      2,
+						      G_PARAM_READABLE |
+						      G_PARAM_WRITABLE));
 }
 
 static void
-gtk_cell_renderer_text_pixbuf_get_param (GObject     *object,
-					 guint        param_id,
-					 GValue      *value,
-					 GParamSpec  *pspec,
-					 const gchar *trailer)
+gtk_cell_renderer_text_pixbuf_get_property (GObject     *object,
+					    guint        param_id,
+					    GValue      *value,
+					    GParamSpec  *pspec,
+					    const gchar *trailer)
 {
   GtkCellRendererTextPixbuf *celltextpixbuf = GTK_CELL_RENDERER_TEXT_PIXBUF (object);
-
+  
   switch (param_id)
     {
     case PROP_PIXBUF_POS:
       g_value_set_int (value, celltextpixbuf->pixbuf_pos);
       break;
     case PROP_PIXBUF:
-      g_object_get_param (G_OBJECT (celltextpixbuf->pixbuf),
-			  "pixbuf",
-			  value);
+      g_object_get_property (G_OBJECT (celltextpixbuf->pixbuf),
+			     "pixbuf",
+			     value);
       break;
     case PROP_PIXBUF_XALIGN:
-      g_object_get_param (G_OBJECT (celltextpixbuf->pixbuf),
-			  "xalign",
-			  value);
+      g_object_get_property (G_OBJECT (celltextpixbuf->pixbuf),
+			     "xalign",
+			     value);
       break;
     case PROP_PIXBUF_YALIGN:
-      g_object_get_param (G_OBJECT (celltextpixbuf->pixbuf),
-			  "yalign",
-			  value);
+      g_object_get_property (G_OBJECT (celltextpixbuf->pixbuf),
+			     "yalign",
+			     value);
       break;
     case PROP_PIXBUF_XPAD:
-      g_object_get_param (G_OBJECT (celltextpixbuf->pixbuf),
-			  "xpad",
-			  value);
+      g_object_get_property (G_OBJECT (celltextpixbuf->pixbuf),
+			     "xpad",
+			     value);
       break;
     case PROP_PIXBUF_YPAD:
-      g_object_get_param (G_OBJECT (celltextpixbuf->pixbuf),
-			  "ypad",
-			  value);
+      g_object_get_property (G_OBJECT (celltextpixbuf->pixbuf),
+			     "ypad",
+			     value);
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
     }
 }
 
 
 static void
-gtk_cell_renderer_text_pixbuf_set_param (GObject     *object,
-					 guint        param_id,
-					 GValue      *value,
-					 GParamSpec  *pspec,
-					 const gchar *trailer)
+gtk_cell_renderer_text_pixbuf_set_property (GObject      *object,
+					    guint         param_id,
+					    const GValue *value,
+					    GParamSpec   *pspec,
+					    const gchar  *trailer)
 {
   GtkCellRendererTextPixbuf *celltextpixbuf = GTK_CELL_RENDERER_TEXT_PIXBUF (object);
-
+  
   switch (param_id)
     {
     case PROP_PIXBUF:
-      g_object_set_param (G_OBJECT (celltextpixbuf->pixbuf),
-			  "pixbuf",
-			  value);
+      g_object_set_property (G_OBJECT (celltextpixbuf->pixbuf),
+			     "pixbuf",
+			     value);
       break;
     case PROP_PIXBUF_POS:
       celltextpixbuf->pixbuf_pos = g_value_get_int (value);
       break;
     case PROP_PIXBUF_XALIGN:
-      g_object_set_param (G_OBJECT (celltextpixbuf->pixbuf),
-			  "xalign",
-			  value);
+      g_object_set_property (G_OBJECT (celltextpixbuf->pixbuf),
+			     "xalign",
+			     value);
       break;
     case PROP_PIXBUF_YALIGN:
-      g_object_set_param (G_OBJECT (celltextpixbuf->pixbuf),
-			  "yalign",
-			  value);
+      g_object_set_property (G_OBJECT (celltextpixbuf->pixbuf),
+			     "yalign",
+			     value);
       break;
     case PROP_PIXBUF_XPAD:
-      g_object_set_param (G_OBJECT (celltextpixbuf->pixbuf),
-			  "xpad",
-			  value);
+      g_object_set_property (G_OBJECT (celltextpixbuf->pixbuf),
+			     "xpad",
+			     value);
       break;
     case PROP_PIXBUF_YPAD:
-      g_object_set_param (G_OBJECT (celltextpixbuf->pixbuf),
-			  "ypad",
-			  value);
+      g_object_set_property (G_OBJECT (celltextpixbuf->pixbuf),
+			     "ypad",
+			     value);
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
     }
 }

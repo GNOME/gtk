@@ -44,7 +44,7 @@ gtk_signal_newv (const gchar         *name,
   
   g_return_val_if_fail (n_params < SIGNAL_MAX_PARAMS, 0);
   
-  closure = g_signal_type_closure_new (object_type, function_offset);
+  closure = g_signal_type_cclosure_new (object_type, function_offset);
   
   return g_signal_newv (name, object_type, signal_flags, closure, NULL, marshaller, return_val, n_params, params);
 }
@@ -309,7 +309,7 @@ gtk_signal_emitv (GtkObject *object,
   
   g_signal_query (signal_id, &query);
   g_return_if_fail (query.signal_id != 0);
-  g_return_if_fail (g_type_conforms_to (GTK_OBJECT_TYPE (object), query.itype));
+  g_return_if_fail (g_type_is_a (GTK_OBJECT_TYPE (object), query.itype));
   g_return_if_fail (query.n_params < SIGNAL_MAX_PARAMS);
   if (query.n_params > 0)
     g_return_if_fail (args != NULL);
@@ -401,6 +401,7 @@ gtk_signal_collect_args (GtkArg        *args,
   return failed;
 }
 
+#if 0
 void
 gtk_signal_emit (GtkObject *object,
 		 guint      signal_id,
@@ -427,6 +428,21 @@ gtk_signal_emit (GtkObject *object,
   
   if (!abort)
     gtk_signal_emitv (object, signal_id, args);
+}
+#endif
+
+void
+gtk_signal_emit (GtkObject *object,
+		 guint      signal_id,
+		 ...)
+{
+  va_list var_args;
+  
+  g_return_if_fail (GTK_IS_OBJECT (object));
+
+  va_start (var_args, signal_id);
+  g_signal_emit_valist (G_OBJECT (object), signal_id, 0, var_args);
+  va_end (var_args);
 }
 
 void

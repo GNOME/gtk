@@ -25,16 +25,16 @@
 
 static void gtk_cell_renderer_init       (GtkCellRenderer      *cell);
 static void gtk_cell_renderer_class_init (GtkCellRendererClass *class);
-static void gtk_cell_renderer_get_param  (GObject              *object,
-					  guint                 param_id,
-					  GValue               *value,
-					  GParamSpec           *pspec,
-					  const gchar          *trailer);
-static void gtk_cell_renderer_set_param  (GObject              *object,
-					  guint                 param_id,
-					  GValue               *value,
-					  GParamSpec           *pspec,
-					  const gchar          *trailer);
+static void gtk_cell_renderer_get_property  (GObject              *object,
+					     guint                 param_id,
+					     GValue               *value,
+					     GParamSpec           *pspec,
+					     const gchar          *trailer);
+static void gtk_cell_renderer_set_property  (GObject              *object,
+					     guint                 param_id,
+					     const GValue         *value,
+					     GParamSpec           *pspec,
+					     const gchar          *trailer);
 
 
 enum {
@@ -86,64 +86,64 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
-  object_class->get_param = gtk_cell_renderer_get_param;
-  object_class->set_param = gtk_cell_renderer_set_param;
+  object_class->get_property = gtk_cell_renderer_get_property;
+  object_class->set_property = gtk_cell_renderer_set_property;
 
   class->render = NULL;
   class->get_size = NULL;
 
-
-  g_object_class_install_param (object_class,
-				PROP_XALIGN,
-				g_param_spec_float ("xalign",
-						    _("xalign"),
-						    _("The x-align."),
-						    0.0,
-						    1.0,
-						    0.0,
-						    G_PARAM_READABLE |
-						    G_PARAM_WRITABLE));
-
-  g_object_class_install_param (object_class,
-				PROP_YALIGN,
-				g_param_spec_float ("yalign",
-						    _("yalign"),
-						    _("The y-align."),
-						    0.0,
-						    1.0,
-						    0.5,
-						    G_PARAM_READABLE |
-						    G_PARAM_WRITABLE));
-
-  g_object_class_install_param (object_class,
-				PROP_XPAD,
-				g_param_spec_uint ("xpad",
-						   _("xpad"),
-						   _("The xpad."),
-						   0,
-						   100,
-						   2,
-						   G_PARAM_READABLE |
-						   G_PARAM_WRITABLE));
-
-  g_object_class_install_param (object_class,
-				PROP_YPAD,
-				g_param_spec_uint ("ypad",
-						   _("ypad"),
-						   _("The ypad."),
-						   0,
-						   100,
-						   2,
-						   G_PARAM_READABLE |
-						   G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_XALIGN,
+				   g_param_spec_float ("xalign",
+						       _("xalign"),
+						       _("The x-align."),
+						       0.0,
+						       1.0,
+						       0.0,
+						       G_PARAM_READABLE |
+						       G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_YALIGN,
+				   g_param_spec_float ("yalign",
+						       _("yalign"),
+						       _("The y-align."),
+						       0.0,
+						       1.0,
+						       0.5,
+						       G_PARAM_READABLE |
+						       G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_XPAD,
+				   g_param_spec_uint ("xpad",
+						      _("xpad"),
+						      _("The xpad."),
+						      0,
+						      100,
+						      2,
+						      G_PARAM_READABLE |
+						      G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_YPAD,
+				   g_param_spec_uint ("ypad",
+						      _("ypad"),
+						      _("The ypad."),
+						      0,
+						      100,
+						      2,
+						      G_PARAM_READABLE |
+						      G_PARAM_WRITABLE));
 }
 
 static void
-gtk_cell_renderer_get_param (GObject     *object,
-			     guint        param_id,
-			     GValue      *value,
-			     GParamSpec  *pspec,
-			     const gchar *trailer)
+gtk_cell_renderer_get_property (GObject     *object,
+				guint        param_id,
+				GValue      *value,
+				GParamSpec  *pspec,
+				const gchar *trailer)
 {
   GtkCellRenderer *cell = GTK_CELL_RENDERER (object);
 
@@ -166,17 +166,18 @@ gtk_cell_renderer_get_param (GObject     *object,
       g_value_set_float (value, cell->ypad);
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
     }
 
 }
 
 static void
-gtk_cell_renderer_set_param (GObject     *object,
-			     guint        param_id,
-			     GValue      *value,
-			     GParamSpec  *pspec,
-			     const gchar *trailer)
+gtk_cell_renderer_set_property (GObject      *object,
+				guint         param_id,
+				const GValue *value,
+				GParamSpec   *pspec,
+				const gchar  *trailer)
 {
   GtkCellRenderer *cell = GTK_CELL_RENDERER (object);
 
@@ -195,6 +196,7 @@ gtk_cell_renderer_set_param (GObject     *object,
       cell->ypad = g_value_get_int (value);
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
     }
 }
