@@ -217,7 +217,7 @@ allocate_scratch_images (GdkScratchImageInfo *info,
 	  gint j;
 	  
 	  for (j = 0; j < i; j++)
-	    g_object_unref (info->static_image[i]);
+	    g_object_unref (info->static_image[j]);
 	  
 	  return FALSE;
 	}
