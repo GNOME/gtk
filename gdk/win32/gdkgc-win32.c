@@ -614,7 +614,7 @@ gdk_win32_gc_set_dashes (GdkGC *gc,
       return;
     }
   
-  win32_gc->pen_style = PS_COSMETIC; /* ??? */
+  win32_gc->pen_style &= ~PS_STYLE_MASK;
   switch (n)
     {
     case 2:
@@ -627,7 +627,7 @@ gdk_win32_gc_set_dashes (GdkGC *gc,
       else
         {
           win32_gc->pen_style |= PS_DOT;
-          GDK_NOTE (GC, g_print ("gdk_win32_gc_set_dashes: PS_DOT (%d,%d)\n", 
+          GDK_NOTE (GC, g_print ("gdk_win32_gc_set_dashes: PS_DOT (%d,%d)\n",
 				 dash_list[0], dash_list[1]));
         }
       break;

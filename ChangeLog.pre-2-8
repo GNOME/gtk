@@ -1,3 +1,11 @@
+2002-03-22  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkgc-win32.c (gdk_win32_gc_set_dashes): Don't clear
+	all of the pen_style, just the PS_STYLE_MASK. Seems to fix #74441,
+	but that is just the special case of one-pixel wide one-pixel
+	on-off dotted lines. To fully implement generic X11 style dashed
+	lines a major rewrite would be needed.
+
 2002-03-21  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkaccelgroup.c (gtk_accelerator_valid): Trivial typo
