@@ -1,3 +1,13 @@
+Mon Jun  9 16:18:11 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_button_press): Back
+	out event->window test - it wasn't needed because
+	of the call to get_widget_coordinates().
+
+	* gtk/gtknotebook.c (gtk_notebook_button_press): Remove
+	call to gtk_widget_grab_focus() when not clicking on
+	any tabs. (Real fix for #114534)
+
 Sun Jun  8 22:03:09 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* tests/testdnd.c: Use application/x-rootwindow-drop for
@@ -879,6 +889,9 @@ Mon Apr  7 19:43:15 2003  Owen Taylor  <otaylor@redhat.com>
 
  	* gdk/x11/gdkwindow-x11.c (_gdk_windowing_window_at_pointer):
  	Use gdk_x11_display_grab/ungrab.
+
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): Initialize
+	use_xshm to TRUE so SHM gets used when present.
  
 2003-04-07  Matthias Clasen  <maclas@gmx.de>
 
