@@ -2871,6 +2871,7 @@ gtk_clist_swap_rows (GtkCList *clist,
   
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CLIST (clist));
+  g_return_if_fail (row1 != row2);
 
   if (GTK_CLIST_AUTO_SORT (clist))
     return;
@@ -2885,7 +2886,7 @@ gtk_clist_swap_rows (GtkCList *clist,
   last = MAX (row1, row2);
 
   link1 = g_list_nth (clist->row_list, first);
-  link2 = g_list_nth (link1, row2 - row1);
+  link2 = g_list_nth (link1, last - first);
 
   swap = link1->data;
   link1->data = link2->data;
@@ -2896,8 +2897,7 @@ gtk_clist_swap_rows (GtkCList *clist,
     {
       if (GPOINTER_TO_INT (list->data) == row1)
 	list->data = GINT_TO_POINTER (row2);
-      
-      if (GPOINTER_TO_INT (list->data) == row2)
+      else if (GPOINTER_TO_INT (list->data) == row2)
 	list->data = GINT_TO_POINTER (row1);
       
       list = list->next;
@@ -2905,13 +2905,13 @@ gtk_clist_swap_rows (GtkCList *clist,
   
   if (!GTK_CLIST_FROZEN (clist))
     {
-      if (gtk_clist_row_is_visible (clist, row1) != GTK_VISIBILITY_NONE)
+      if (gtk_clist_row_is_visible (clist, last) != GTK_VISIBILITY_NONE)
 	GTK_CLIST_CLASS_FW (clist)->draw_row
-	  (clist, NULL, row1, GTK_CLIST_ROW (link2));
+	  (clist, NULL, last, GTK_CLIST_ROW (link2));
 
-      if (gtk_clist_row_is_visible (clist, row2) != GTK_VISIBILITY_NONE)
+      if (gtk_clist_row_is_visible (clist, first) != GTK_VISIBILITY_NONE)
 	GTK_CLIST_CLASS_FW (clist)->draw_row
-	  (clist, NULL, row2, GTK_CLIST_ROW (link1));
+	  (clist, NULL, first, GTK_CLIST_ROW (link1));
     }
 }
 

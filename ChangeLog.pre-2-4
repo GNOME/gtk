@@ -1,3 +1,10 @@
+1998-11-23  Jeff Garzik  <jgarzik@pobox.com>
+
+	* gtk/gtkclist.c: (gtk_clist_swap_rows):  Bugfix from
+	Brandon Long <blong@fiction.net> - do the right thing with first
+	and last, which are the absolute values of row arguments row1
+	and row2.
+
 Mon Nov 23 04:24:55 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk/gtkprogress.c: (gtk_progress_set_adjustment): make a saner
