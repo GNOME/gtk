@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 1999-01-28 00:37-0600\n"
+"POT-Creation-Date: 1999-01-29 01:04-0500\n"
 "PO-Revision-Date: 1999-01-21 21:51 EST\n"
 "Last-Translator: Sergey Panov <sipan@mit.edu>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -56,7 +56,7 @@ msgstr "Отменить"
 
 #: gtk/gtkcolorsel.c:1655
 msgid "Help"
-msgstr "Помощь"
+msgstr "Справка"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:410
@@ -317,7 +317,7 @@ msgstr "(неизвестен)"
 
 #: gtk/gtkfontsel.c:1937
 msgid "roman"
-msgstr "романский"
+msgstr "прямой"
 
 #: gtk/gtkfontsel.c:1949
 msgid "proportional"
