@@ -54,6 +54,7 @@ struct _GtkCheckMenuItem
   
   guint active : 1;
   guint always_show_toggle : 1;
+  guint inconsistent : 1;
 };
 
 struct _GtkCheckMenuItemClass
@@ -74,6 +75,10 @@ void	   gtk_check_menu_item_set_active      (GtkCheckMenuItem *check_menu_item,
 void	   gtk_check_menu_item_set_show_toggle (GtkCheckMenuItem *menu_item,
 						gboolean	  always);
 void	   gtk_check_menu_item_toggled	       (GtkCheckMenuItem *check_menu_item);
+
+void       gtk_check_menu_item_set_inconsistent (GtkCheckMenuItem *check_menu_item,
+                                                 gboolean          setting);
+gboolean   gtk_check_menu_item_get_inconsistent (GtkCheckMenuItem *check_menu_item);
 
 
 #ifdef __cplusplus

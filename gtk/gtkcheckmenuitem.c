@@ -173,6 +173,52 @@ gtk_check_menu_item_toggled (GtkCheckMenuItem *check_menu_item)
   gtk_signal_emit (GTK_OBJECT (check_menu_item), check_menu_item_signals[TOGGLED]);
 }
 
+/**
+ * gtk_check_menu_item_set_inconsistent:
+ * @check_menu_item: a #GtkCheckMenuItem
+ * @setting: %TRUE to display an "inconsistent" third state check
+ *
+ * If the user has selected a range of elements (such as some text or
+ * spreadsheet cells) that are affected by a boolean setting, and the
+ * current values in that range are inconsistent, you may want to
+ * display the check in an "in between" state. This function turns on
+ * "in between" display.  Normally you would turn off the inconsistent
+ * state again if the user explicitly selects a setting. This has to be
+ * done manually, gtk_check_menu_item_set_inconsistent() only affects
+ * visual appearance, it doesn't affect the semantics of the widget.
+ * 
+ **/
+void
+gtk_check_menu_item_set_inconsistent (GtkCheckMenuItem *check_menu_item,
+                                      gboolean          setting)
+{
+  g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item));
+  
+  setting = setting != FALSE;
+
+  if (setting != check_menu_item->inconsistent)
+    {
+      check_menu_item->inconsistent = setting;
+      gtk_widget_queue_draw (GTK_WIDGET (check_menu_item));
+    }
+}
+
+/**
+ * gtk_check_menu_item_get_inconsistent:
+ * @check_menu_item: a #GtkCheckMenuItem
+ * 
+ * Retrieves the value set by gtk_check_menu_item_set_inconsistent().
+ * 
+ * Return value: %TRUE if inconsistent
+ **/
+gboolean
+gtk_check_menu_item_get_inconsistent (GtkCheckMenuItem *check_menu_item)
+{
+  g_return_val_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item), FALSE);
+
+  return check_menu_item->inconsistent;
+}
+
 static void
 gtk_check_menu_item_init (GtkCheckMenuItem *check_menu_item)
 {
@@ -265,7 +311,14 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 		  (state_type == GTK_STATE_PRELIGHT))
 		shadow_type = GTK_SHADOW_OUT;
 	    }
-	  
+
+          if (check_menu_item->inconsistent)
+            {
+              shadow_type = GTK_SHADOW_ETCHED_IN;
+              if (state_type == GTK_STATE_ACTIVE)
+                state_type = GTK_STATE_NORMAL;
+            }
+              
 	  gtk_paint_check (widget->style, widget->window,
 			   state_type, shadow_type,
 			   area, widget, "check",

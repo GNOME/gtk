@@ -316,6 +316,10 @@ create_toggle_buttons (void)
       button = gtk_toggle_button_new_with_label ("button3");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
+      button = gtk_toggle_button_new_with_label ("inconsistent");
+      gtk_toggle_button_set_inconsistent (GTK_TOGGLE_BUTTON (button), TRUE);
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+      
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
@@ -378,6 +382,10 @@ create_check_buttons (void)
       button = gtk_check_button_new_with_label ("button3");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
+      button = gtk_check_button_new_with_label ("inconsistent");
+      gtk_toggle_button_set_inconsistent (GTK_TOGGLE_BUTTON (button), TRUE);
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+      
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
@@ -445,6 +453,12 @@ create_radio_buttons (void)
 		 "button3");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
+      button = gtk_radio_button_new_with_label (
+                 gtk_radio_button_group (GTK_RADIO_BUTTON (button)),
+		 "inconsistent");
+      gtk_toggle_button_set_inconsistent (GTK_TOGGLE_BUTTON (button), TRUE);
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+      
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
@@ -2788,14 +2802,21 @@ create_menu (gint depth, gint length, gboolean tearoff)
   for (i = 0, j = 1; i < length; i++, j++)
     {
       sprintf (buf, "item %2d - %d", depth, j);
+
       menuitem = gtk_radio_menu_item_new_with_label (group, buf);
       group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menuitem));
+
       if (depth % 2)
 	gtk_check_menu_item_set_show_toggle (GTK_CHECK_MENU_ITEM (menuitem), TRUE);
+
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);
       if (i == 3)
 	gtk_widget_set_sensitive (menuitem, FALSE);
+
+      if (i == 5)
+        gtk_check_menu_item_set_inconsistent (GTK_CHECK_MENU_ITEM (menuitem),
+                                              TRUE);
 
       if (i < 5)
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (depth - 1, 5,  TRUE));

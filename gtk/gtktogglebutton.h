@@ -54,6 +54,7 @@ struct _GtkToggleButton
 
   guint active : 1;
   guint draw_indicator : 1;
+  guint inconsistent : 1;
   
   GdkWindow *event_window;
 };
@@ -76,6 +77,9 @@ void       gtk_toggle_button_set_active     (GtkToggleButton *toggle_button,
 gboolean   gtk_toggle_button_get_active	    (GtkToggleButton *toggle_button);
 void       gtk_toggle_button_toggled        (GtkToggleButton *toggle_button);
 
+void       gtk_toggle_button_set_inconsistent (GtkToggleButton *toggle_button,
+                                               gboolean         setting);
+gboolean   gtk_toggle_button_get_inconsistent (GtkToggleButton *toggle_button);
 
 #ifdef __cplusplus
 }

@@ -298,6 +298,9 @@ gtk_radio_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 	  else
 	    shadow_type = GTK_SHADOW_OUT;
 
+          if (check_menu_item->inconsistent)
+            shadow_type = GTK_SHADOW_ETCHED_IN;
+          
 	  gtk_paint_option (widget->style, widget->window,
 			    state_type, shadow_type,
 			    area, widget, "option",

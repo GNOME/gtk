@@ -416,6 +416,9 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 	shadow_type = GTK_SHADOW_IN;
       else
 	shadow_type = GTK_SHADOW_OUT;
+
+      if (GTK_TOGGLE_BUTTON (widget)->inconsistent)
+        shadow_type = GTK_SHADOW_ETCHED_IN;
       
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
 	x = widget->allocation.x + widget->allocation.width - (width + x - widget->allocation.x);

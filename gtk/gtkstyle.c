@@ -2229,6 +2229,18 @@ gtk_default_draw_diamond (GtkStyle      *style,
 {
   gint half_width;
   gint half_height;
+  GdkGC *outer_nw = NULL;
+  GdkGC *outer_ne = NULL;
+  GdkGC *outer_sw = NULL;
+  GdkGC *outer_se = NULL;
+  GdkGC *middle_nw = NULL;
+  GdkGC *middle_ne = NULL;
+  GdkGC *middle_sw = NULL;
+  GdkGC *middle_se = NULL;
+  GdkGC *inner_nw = NULL;
+  GdkGC *inner_ne = NULL;
+  GdkGC *inner_sw = NULL;
+  GdkGC *inner_se = NULL;
   
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (window != NULL);
@@ -2250,89 +2262,91 @@ gtk_default_draw_diamond (GtkStyle      *style,
       gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
       gdk_gc_set_clip_rectangle (style->black_gc, area);
     }
+  
   switch (shadow_type)
     {
     case GTK_SHADOW_IN:
-      gdk_draw_line (window, style->bg_gc[state_type],
-                     x + 2, y + half_height,
-                     x + half_width, y + height - 2);
-      gdk_draw_line (window, style->bg_gc[state_type],
-                     x + half_width, y + height - 2,
-                     x + width - 2, y + half_height);
-      gdk_draw_line (window, style->light_gc[state_type],
-                     x + 1, y + half_height,
-                     x + half_width, y + height - 1);
-      gdk_draw_line (window, style->light_gc[state_type],
-                     x + half_width, y + height - 1,
-                     x + width - 1, y + half_height);
-      gdk_draw_line (window, style->light_gc[state_type],
-                     x, y + half_height,
-                     x + half_width, y + height);
-      gdk_draw_line (window, style->light_gc[state_type],
-                     x + half_width, y + height,
-                     x + width, y + half_height);
-      
-      gdk_draw_line (window, style->black_gc,
-                     x + 2, y + half_height,
-                     x + half_width, y + 2);
-      gdk_draw_line (window, style->black_gc,
-                     x + half_width, y + 2,
-                     x + width - 2, y + half_height);
-      gdk_draw_line (window, style->dark_gc[state_type],
-                     x + 1, y + half_height,
-                     x + half_width, y + 1);
-      gdk_draw_line (window, style->dark_gc[state_type],
-                     x + half_width, y + 1,
-                     x + width - 1, y + half_height);
-      gdk_draw_line (window, style->dark_gc[state_type],
-                     x, y + half_height,
-                     x + half_width, y);
-      gdk_draw_line (window, style->dark_gc[state_type],
-                     x + half_width, y,
-                     x + width, y + half_height);
+      inner_sw = inner_se = style->bg_gc[state_type];
+      middle_sw = middle_se = style->light_gc[state_type];
+      outer_sw = outer_se = style->light_gc[state_type];
+      inner_nw = inner_ne = style->black_gc;
+      middle_nw = middle_ne = style->dark_gc[state_type];
+      outer_nw = outer_ne = style->dark_gc[state_type];
       break;
+          
     case GTK_SHADOW_OUT:
-      gdk_draw_line (window, style->dark_gc[state_type],
-                     x + 2, y + half_height,
-                     x + half_width, y + height - 2);
-      gdk_draw_line (window, style->dark_gc[state_type],
-                     x + half_width, y + height - 2,
-                     x + width - 2, y + half_height);
-      gdk_draw_line (window, style->dark_gc[state_type],
-                     x + 1, y + half_height,
-                     x + half_width, y + height - 1);
-      gdk_draw_line (window, style->dark_gc[state_type],
-                     x + half_width, y + height - 1,
-                     x + width - 1, y + half_height);
-      gdk_draw_line (window, style->black_gc,
-                     x, y + half_height,
-                     x + half_width, y + height);
-      gdk_draw_line (window, style->black_gc,
-                     x + half_width, y + height,
-                     x + width, y + half_height);
-      
-      gdk_draw_line (window, style->bg_gc[state_type],
-                     x + 2, y + half_height,
-                     x + half_width, y + 2);
-      gdk_draw_line (window, style->bg_gc[state_type],
-                     x + half_width, y + 2,
-                     x + width - 2, y + half_height);
-      gdk_draw_line (window, style->light_gc[state_type],
-                     x + 1, y + half_height,
-                     x + half_width, y + 1);
-      gdk_draw_line (window, style->light_gc[state_type],
-                     x + half_width, y + 1,
-                     x + width - 1, y + half_height);
-      gdk_draw_line (window, style->light_gc[state_type],
-                     x, y + half_height,
-                     x + half_width, y);
-      gdk_draw_line (window, style->light_gc[state_type],
-                     x + half_width, y,
-                     x + width, y + half_height);
+      inner_sw = inner_se = style->dark_gc[state_type];
+      middle_sw = middle_se = style->dark_gc[state_type];
+      outer_sw = outer_se = style->black_gc;
+      inner_nw = inner_ne = style->bg_gc[state_type];
+      middle_nw = middle_ne = style->light_gc[state_type];
+      outer_nw = outer_ne = style->light_gc[state_type];
       break;
+
+    case GTK_SHADOW_ETCHED_IN:
+      inner_sw = inner_se = style->bg_gc[state_type];
+      middle_sw = middle_se = style->dark_gc[state_type];
+      outer_sw = outer_se = style->light_gc[state_type];
+      inner_nw = inner_ne = style->bg_gc[state_type];
+      middle_nw = middle_ne = style->light_gc[state_type];
+      outer_nw = outer_ne = style->dark_gc[state_type];
+      break;
+
+    case GTK_SHADOW_ETCHED_OUT:
+      inner_sw = inner_se = style->bg_gc[state_type];
+      middle_sw = middle_se = style->light_gc[state_type];
+      outer_sw = outer_se = style->dark_gc[state_type];
+      inner_nw = inner_ne = style->bg_gc[state_type];
+      middle_nw = middle_ne = style->dark_gc[state_type];
+      outer_nw = outer_ne = style->light_gc[state_type];
+      break;
+      
     default:
+
       break;
     }
+
+  if (inner_sw)
+    {
+      gdk_draw_line (window, inner_sw,
+                     x + 2, y + half_height,
+                     x + half_width, y + height - 2);
+      gdk_draw_line (window, inner_se,
+                     x + half_width, y + height - 2,
+                     x + width - 2, y + half_height);
+      gdk_draw_line (window, middle_sw,
+                     x + 1, y + half_height,
+                     x + half_width, y + height - 1);
+      gdk_draw_line (window, middle_se,
+                     x + half_width, y + height - 1,
+                     x + width - 1, y + half_height);
+      gdk_draw_line (window, outer_sw,
+                     x, y + half_height,
+                     x + half_width, y + height);
+      gdk_draw_line (window, outer_se,
+                     x + half_width, y + height,
+                     x + width, y + half_height);
+  
+      gdk_draw_line (window, inner_nw,
+                     x + 2, y + half_height,
+                     x + half_width, y + 2);
+      gdk_draw_line (window, inner_ne,
+                     x + half_width, y + 2,
+                     x + width - 2, y + half_height);
+      gdk_draw_line (window, middle_nw,
+                     x + 1, y + half_height,
+                     x + half_width, y + 1);
+      gdk_draw_line (window, middle_ne,
+                     x + half_width, y + 1,
+                     x + width - 1, y + half_height);
+      gdk_draw_line (window, outer_nw,
+                     x, y + half_height,
+                     x + half_width, y);
+      gdk_draw_line (window, outer_ne,
+                     x + half_width, y,
+                     x + width, y + half_height);
+    }
+  
   if (area)
     {
       gdk_gc_set_clip_rectangle (style->light_gc[state_type], NULL);

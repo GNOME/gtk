@@ -1,3 +1,36 @@
+2001-02-19  Havoc Pennington  <hp@redhat.com>
+
+	* gdk/gdkcolor.h: test was backward, so deprecated functions were
+	excluded by default
+
+	* gtk/gtkstyle.c (gtk_default_draw_diamond): draw etched in/out,
+	clean up the old code a bit
+
+	* gtk/gtkradiobutton.c (gtk_radio_button_draw_indicator): draw
+	inconsistent state
+
+	* gtk/gtkradiomenuitem.c (gtk_radio_menu_item_draw_indicator):
+	draw inconsistent state
+
+	* gtk/testgtk.c (create_toggle_buttons): add test for inconsistent
+	(create_menu): add inconsistent test
+
+	* gtk/gtkcheckmenuitem.c (gtk_check_menu_item_set_inconsistent):
+	new function
+	(gtk_check_menu_item_get_inconsistent): new function
+	(gtk_real_check_menu_item_draw_indicator): draw the inconsistent
+	state (using etched in for now)
+
+	* gtk/gtkcheckbutton.c (gtk_real_check_button_draw_indicator):
+	draw inconsistent state
+
+	* gtk/gtktogglebutton.c (gtk_toggle_button_set_inconsistent): new
+	function, used when the user has selected a range of stuff in
+	different states
+	(gtk_toggle_button_get_inconsistent): accessor for that
+	(gtk_toggle_button_paint): draw inconsistent state (etched in?
+	don't know what else to do)
+
 2001-02-19  Hans Breuer <hans@breuer.org>
 
 	* gtk/gtk.def : updated exported symbols

@@ -305,6 +305,51 @@ gtk_toggle_button_toggled (GtkToggleButton *toggle_button)
   gtk_signal_emit (GTK_OBJECT (toggle_button), toggle_button_signals[TOGGLED]);
 }
 
+/**
+ * gtk_toggle_button_set_inconsistent:
+ * @toggle_button: a #GtkToggleButton
+ * @setting: %TRUE if state is inconsistent
+ *
+ * If the user has selected a range of elements (such as some text or
+ * spreadsheet cells) that are affected by a toggle button, and the
+ * current values in that range are inconsistent, you may want to
+ * display the toggle in an "in between" state. This function turns on
+ * "in between" display.  Normally you would turn off the inconsistent
+ * state again if the user toggles the toggle button. This has to be
+ * done manually, gtk_toggle_button_set_inconsistent() only affects
+ * visual appearance, it doesn't affect the semantics of the button.
+ * 
+ **/
+void
+gtk_toggle_button_set_inconsistent (GtkToggleButton *toggle_button,
+                                    gboolean         setting)
+{
+  g_return_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button));
+  
+  setting = setting != FALSE;
+
+  if (setting != toggle_button->inconsistent)
+    {
+      toggle_button->inconsistent = setting;
+      gtk_widget_queue_draw (GTK_WIDGET (toggle_button));
+    }
+}
+
+/**
+ * gtk_toggle_button_get_inconsistent:
+ * @toggle_button: a #GtkToggleButton
+ * 
+ * Gets the value set by gtk_toggle_button_set_inconsistent().
+ * 
+ * Return value: %TRUE if the button is displayed as inconsistent, %FALSE otherwise
+ **/
+gboolean
+gtk_toggle_button_get_inconsistent (GtkToggleButton *toggle_button)
+{
+  g_return_val_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button), FALSE);
+
+  return toggle_button->inconsistent;
+}
 
 static void
 gtk_toggle_button_paint (GtkWidget    *widget,
@@ -313,6 +358,7 @@ gtk_toggle_button_paint (GtkWidget    *widget,
   GtkButton *button;
   GtkToggleButton *toggle_button;
   GtkShadowType shadow_type;
+  GtkStateType state_type;
   gint width, height;
   gint x, y;
 
@@ -356,9 +402,17 @@ gtk_toggle_button_paint (GtkWidget    *widget,
 	  height -= 2;
 	}
 
-      if ((GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE) ||
+      state_type = GTK_WIDGET_STATE (widget);
+      
+      if (toggle_button->inconsistent)
+        {
+          if (state_type == GTK_STATE_ACTIVE)
+            state_type = GTK_STATE_NORMAL;
+          shadow_type = GTK_SHADOW_ETCHED_IN;
+        }
+      else if ((GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE) ||
 	  toggle_button->active)
-	shadow_type = GTK_SHADOW_IN;
+        shadow_type = GTK_SHADOW_IN;
       else
 	shadow_type = GTK_SHADOW_OUT;
       
@@ -366,7 +420,7 @@ gtk_toggle_button_paint (GtkWidget    *widget,
 	  (GTK_WIDGET_STATE(widget) != GTK_STATE_NORMAL &&
 	   GTK_WIDGET_STATE(widget) != GTK_STATE_INSENSITIVE))
 	gtk_paint_box (widget->style, widget->window,
-		       GTK_WIDGET_STATE (widget),
+                       state_type,
 		       shadow_type, area, widget, "togglebutton",
 		       x, y, width, height);
       
