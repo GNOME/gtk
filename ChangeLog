@@ -1,3 +1,8 @@
+Sun Apr 25 15:36:02 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbutton.c (gtk_tool_button_set_label_widget): Fix
+	cut'n'paste-o from previous commit. (#141046, Torsten Schoenfeld).
+
 2004-04-24  Theppitak Karoonboonyanan  <thep@linux.thai.net>
 
 	Patch to add support for string conversion callbacks to

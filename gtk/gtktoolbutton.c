@@ -890,10 +890,10 @@ gtk_tool_button_set_label_widget (GtkToolButton *button,
     {
       if (button->priv->label_widget)
 	{
-	  if (button->priv->icon_widget->parent)
+	  if (button->priv->label_widget->parent)
 	    {
-	      gtk_container_remove (GTK_CONTAINER (button->priv->icon_widget->parent),
-				    button->priv->icon_widget);
+	      gtk_container_remove (GTK_CONTAINER (button->priv->label_widget->parent),
+				    button->priv->label_widget);
 	    }
 	  
 	  g_object_unref (button->priv->label_widget);
