@@ -298,7 +298,6 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
       if (!menu_shell->active)
 	{
 	  gtk_grab_add (GTK_WIDGET (widget));
-	  GTK_WIDGET_SET_FLAGS (widget, GTK_EXCLUSIVE_GRAB);
 	  menu_shell->have_grab = TRUE;
 	  menu_shell->active = TRUE;
 	}
@@ -579,7 +578,6 @@ gtk_real_menu_shell_deactivate (GtkMenuShell *menu_shell)
 	{
 	  menu_shell->have_grab = FALSE;
 	  gtk_grab_remove (GTK_WIDGET (menu_shell));
-	  GTK_WIDGET_UNSET_FLAGS (menu_shell, GTK_EXCLUSIVE_GRAB);
 	}
       if (menu_shell->have_xgrab)
 	{
