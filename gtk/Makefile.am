@@ -429,8 +429,9 @@ gtk.defs gtkmarshal.h gtktypebuiltins.h:          # never add deps here
 # srcdir to be writable, passing --disable-rebuilds to
 # ../configure will supress all autogeneration rules.
 $(srcdir)/stamp-gtk.defs: @REBUILD@ gtk.defs gtk-boxed.defs $(gtk_public_h_sources)
-	cd $(srcdir) \
-	&& glib-mkenums --comments ";; @comment@" \
+	cwd=`pwd` \
+	&& cd $(srcdir) \
+	&& $$cwd/@GLIB_MKENUMS@ --comments ";; @comment@" \
 			--fprod "; enumerations from \"@filename@\"\n " \
 	                --vhead "(define-@type@ @EnumName@" \
 	                --vprod "   (@valuenick@ @VALUENAME@)" \
@@ -441,35 +442,38 @@ $(srcdir)/stamp-gtk.defs: @REBUILD@ gtk.defs gtk-boxed.defs $(gtk_public_h_sourc
 	&& rm -f xgen-gdef \
 	&& echo timestamp > $(@F)
 $(srcdir)/stamp-gtkmarshal.h: @REBUILD@ gtkmarshal.list gtkmarshal.h
-	cd $(srcdir) \
-	&& glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --header >> xgen-gmh \
+	cwd=`pwd` \
+	&& cd $(srcdir) \
+	&& $$cwd/@GLIB_GENMARSHAL@ --prefix=gtk_marshal gtkmarshal.list --header >> xgen-gmh \
 	&& (cmp -s xgen-gmh gtkmarshal.h || cp xgen-gmh gtkmarshal.h) \
 	&& rm -f xgen-gmh xgen-gmh~ \
 	&& echo timestamp > $(@F)
 $(srcdir)/gtkmarshal.c: @REBUILD@ $(srcdir)/stamp-gtkmarshal.h
-	cd $(srcdir) \
-	&& glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --body >> xgen-gmc \
-	&& cp xgen-gmc gtkmarshal.c \
+	cwd=`pwd` \
+	&& cd $(srcdir) \
+	&& $$cwd/@GLIB_GENMARSHAL@ --prefix=gtk_marshal gtkmarshal.list --body >> xgen-gmc \
+	&& cp xgen-gmc $(srcdir)/gtkmarshal.c \
 	&& rm -f xgen-gmc xgen-gmc~
-$(srcdir)/stamp-gtktypebuiltins.h: @REBUILD@ maketypes.awk stamp-gtk.defs gtktypebuiltins.h
+$(srcdir)/stamp-gtktypebuiltins.h: @REBUILD@ maketypes.awk $(srcdir)/stamp-gtk.defs gtktypebuiltins.h
 	cd $(srcdir) \
 	&& LC_ALL=C $(AWK) -f maketypes.awk gtk.defs macros > xgen-gtbh \
 	&& (cmp -s xgen-gtbh gtktypebuiltins.h || cp xgen-gtbh gtktypebuiltins.h) \
 	&& rm -f xgen-gtbh \
 	&& echo timestamp > $(@F)
-$(srcdir)/gtktypebuiltins_vars.c: @REBUILD@ maketypes.awk stamp-gtk.defs
+$(srcdir)/gtktypebuiltins_vars.c: @REBUILD@ maketypes.awk $(srcdir)/stamp-gtk.defs
 	cd $(srcdir) \
 	&& LC_ALL=C $(AWK) -f maketypes.awk gtk.defs variables > xgen-gtbvc \
 	&& cp xgen-gtbvc $(@F) \
 	&& rm -f xgen-gtbvc
-$(srcdir)/gtktypebuiltins_ids.c: @REBUILD@ maketypes.awk stamp-gtk.defs
+$(srcdir)/gtktypebuiltins_ids.c: @REBUILD@ maketypes.awk $(srcdir)/stamp-gtk.defs
 	cd $(srcdir) \
 	&& LC_ALL=C $(AWK) -f maketypes.awk gtk.defs entries > xgen-gtbic \
 	&& cp xgen-gtbic $(@F) \
 	&& rm -f xgen-gtbic
 $(srcdir)/gtktypebuiltins_evals.c: @REBUILD@ $(gtk_public_h_sources)
-	cd $(srcdir) \
-	&& glib-mkenums \
+	cwd=`pwd` \
+	&& cd $(srcdir) \
+	&& $$cwd/@GLIB_MKENUMS@ \
 			--fprod "\n/* enumerations from \"@filename@\" */" \
 			--vhead "static const GtkEnumValue _@enum_name@_values[] = {" \
 			--vprod "  { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \

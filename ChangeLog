@@ -1,3 +1,21 @@
+2001-06-07  Havoc Pennington  <hp@redhat.com>
+
+	* tests/Makefile.am: add missing -I flag
+
+	* gtk/Makefile.am: use @GLIB_MKENUMS@, @GLIB_GENMARSHAL@, etc.
+
+	* configure.in: use pkg-config to see if GModule is
+	supported; fix to properly turn on included loaders 
+	when GModule isn't supported; don't use AC_CHECK_LIB 
+	when libs are not installed yet
+
+	* autogen.sh: add support for AUTOGEN_SUBDIR_MODE
+
+	* Makefile.am (SUBDIRS): add m4macros subdir
+
+	* gtk/Makefile.am: $(srcdir)/foo targets must be $(srcdir)/foo in
+	dependencies also.
+
 Wed Jun  6 19:31:11 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_model): fix silly bug

@@ -3,6 +3,7 @@
 INCLUDES = @STRIP_BEGIN@ \
 	-I$(top_srcdir) 				\
 	-I$(top_builddir)/gdk				\
+	-I$(top_srcdir)/gdk				\
 	-DGTK_DISABLE_COMPAT_H				\
 	@GTK_DEBUG_FLAGS@				\
 	@GTK_DEP_CFLAGS@				\

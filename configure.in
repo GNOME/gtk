@@ -404,23 +404,11 @@ if test x$with_modules = xno; then
 else
     AC_MSG_RESULT(yes)
     AC_MSG_CHECKING(whether dynamic modules work)
-    oLIBS="$LIBS"
-    oCFLAGS="$CFLAGS"
-    CFLAGS="$GLIB_CFLAGS"
-    LIBS="$GLIB_LIBS"
-    AC_TRY_RUN([
-    #include <glib.h>
-    #include <gmodule.h>
-    main ()
-    {
-    	if (g_module_supported ())
-    	    exit (0);
-    	else
-    	    exit (1);
-    }
-    ], dynworks=true)
-    LIBS="$oLIBS"
-    CFLAGS="$oCFLAGS"
+    ## for loop is to strip newline 
+    tmp=`pkg-config --variable=gmodule_supported gmodule-2.0`
+    for I in $tmp; do
+        dynworks=$I
+    done
 fi
 
 dnl Now we check to see if our libtool supports shared lib deps
@@ -524,6 +512,15 @@ AM_CONDITIONAL(BUILD_DYNAMIC_MODULES, $dynworks)
 AC_MSG_CHECKING(pixbuf loaders to build)
 
 AC_ARG_WITH(included_loaders, [  --with-included-loaders=LOADER1,LOADER2,... Build the specified loaders into gdk-pixbuf (only used if module loading disabled)])
+
+if $dynworks; then 
+        :
+else
+   ## if the option was specified, leave it; otherwise disable included loaders
+   if test x$with_included_loaders = xno; then
+           with_included_loaders=yes
+   fi
+fi
 
 all_loaders="png,bmp,wbmp,gif,ico,jpeg,pnm,ras,tiff,xpm"
 included_loaders=""
@@ -651,16 +648,21 @@ if test "x$gdktarget" = "xx11"; then
     PANGO_PACKAGES="pangox"
     have_xft=false
   fi
+
   AM_CONDITIONAL(HAVE_XFT, $have_xft)
 
   x_libs="`$PKG_CONFIG --libs $PANGO_PACKAGES`"
   x_cflags="`$PKG_CONFIG --cflags $PANGO_PACKAGES`"
   x_extra_libs=
 
-  # Sanity check for the X11 library
-  AC_CHECK_LIB(X11, XOpenDisplay, :,
-    AC_MSG_ERROR([*** libX11 not found. Check 'config.log' for more details.]),
-    $x_libs)
+  if $PKG_CONFIG --uninstalled $PANGO_PACKAGES; then
+      :
+  else  
+      # Sanity check for the X11 library
+      AC_CHECK_LIB(X11, XOpenDisplay, :,
+            AC_MSG_ERROR([*** libX11 not found. Check 'config.log' for more details.]),
+            $x_libs)
+  fi
 
   if test "x$enable_shm" = "xyes"; then
     # Check for the Xext library (needed for XShm extention)
@@ -883,9 +885,13 @@ fi
 
 CFLAGS="$CFLAGS $PANGO_CFLAGS"
 
-AC_CHECK_LIB(pango, pango_context_new, :, AC_MSG_ERROR([
+if $PKG_CONFIG --uninstalled $PANGO_PACKAGES; then
+        :
+else
+        AC_CHECK_LIB(pango, pango_context_new, :, AC_MSG_ERROR([
 *** Can't link to Pango. Pango is required to build
 *** GTK+. For more information see http://www.pango.org]), $PANGO_LIBS)
+fi
 
 CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"
@@ -919,10 +925,13 @@ else
 ])
 fi
 
-AC_CHECK_LIB(atk, atk_object_get_type, : , AC_MSG_ERROR([
-*** Cannot link to Accessibility Toolkit. Accessibility Toolkit is required
-*** to build GTK+]), $ATK_LIBS $GLIB_LIBS)
-
+if $PKG_CONFIG --uninstalled $ATK_PACKAGES; then
+        :
+else
+        AC_CHECK_LIB(atk, atk_object_get_type, : , AC_MSG_ERROR([
+                *** Cannot link to Accessibility Toolkit. Accessibility Toolkit is required
+                *** to build GTK+]), $ATK_LIBS $GLIB_LIBS)
+fi
 
 GTK_PACKAGES=atk
 GTK_EXTRA_LIBS=
@@ -1091,6 +1100,9 @@ Makefile
 gdk-pixbuf-2.0.pc
 gdk-2.0.pc
 gtk+-2.0.pc
+gdk-pixbuf-2.0-uninstalled.pc
+gdk-2.0-uninstalled.pc
+gtk+-2.0-uninstalled.pc
 po/Makefile.in
 build/Makefile
 build/win32/Makefile

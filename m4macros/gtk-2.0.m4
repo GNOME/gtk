@@ -22,21 +22,34 @@ AC_ARG_ENABLE(gtktest, [  --disable-gtktest       Do not try to compile and run 
       esac
   done
 
-  min_gtk_version=ifelse([$1], ,1.3.3,$1)
-  AC_MSG_CHECKING(for GTK+ - version >= $min_gtk_version)
-
   no_gtk=""
 
   AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
 
   if test x$PKG_CONFIG != xno ; then
-    if pkg-config --atleast-pkgconfig-version 0.5 ; then
+    if pkg-config --atleast-pkgconfig-version 0.7 ; then
       :
     else
-      echo *** pkg-config too old; version 0.5 or better required.
+      echo *** pkg-config too old; version 0.7 or better required.
       no_gtk=yes
       PKG_CONFIG=no
     fi
+  fi
+
+  ## don't try to run the test against uninstalled libtool libs
+  if $PKG_CONFIG --uninstalled $pkg_config_args; then
+        echo "Will use uninstalled version of GTK+ found in PKG_CONFIG_PATH"
+        enable_gtktest=no
+  fi
+
+  min_gtk_version=ifelse([$1], ,1.3.3,$1)
+  AC_MSG_CHECKING(for GTK+ - version >= $min_gtk_version)
+
+
+  if $PKG_CONFIG --atleast-version $min_gtk_version $pkg_config_args; then
+        :
+  else
+        no_gtk = yes
   fi
 
   if test x"$no_gtk" = x ; then
