@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-02-24 19:38-0500\n"
-"PO-Revision-Date: 2004-02-23 18:28-0500\n"
+"PO-Revision-Date: 2004-02-29 22:19-0500\n"
 "Last-Translator: Adam Weinberger <adamw@FreeBSD.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: gdk-pixbuf/gdk-pixbuf.c:100
 msgid "Number of Channels"
@@ -629,9 +629,8 @@ msgid "Show button images"
 msgstr ""
 
 #: gtk/gtkbutton.c:376
-#, fuzzy
 msgid "Whether stock icons should be shown in buttons"
-msgstr "Whether tabs should be shown or not"
+msgstr "Whether stock icons should be shown in buttons"
 
 #: gtk/gtkcalendar.c:464
 msgid "Year"
@@ -1984,14 +1983,12 @@ msgid "Child widget to appear next to the menu text"
 msgstr "Child widget to appear next to the menu text"
 
 #: gtk/gtkimagemenuitem.c:143
-#, fuzzy
 msgid "Show menu images"
-msgstr "Show Week Numbers"
+msgstr "Show menu images"
 
 #: gtk/gtkimagemenuitem.c:144
-#, fuzzy
 msgid "Whether images should be shown in menus"
-msgstr "Whether tabs should be shown or not"
+msgstr "Whether images should be shown in menus"
 
 #: gtk/gtkinvisible.c:114 gtk/gtkwindow.c:542
 msgid "Screen"
@@ -3789,7 +3786,7 @@ msgstr "Rules Hint"
 
 #: gtk/gtktreeview.c:584
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
-msgstr "Set a hint to the theme engine to draw rows in alternating colors"
+msgstr "Set a hint to the theme engine to draw rows in alternating colours"
 
 #: gtk/gtktreeview.c:591
 msgid "Enable Search"
@@ -4394,3 +4391,4 @@ msgstr "IM Status style"
 #: modules/input/gtkimcontextxim.c:335
 msgid "How to draw the input method statusbar"
 msgstr "How to draw the input method statusbar"
+

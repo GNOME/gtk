@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-02-24 19:38-0500\n"
-"PO-Revision-Date: 2004-02-24 09:30-0500\n"
+"PO-Revision-Date: 2004-02-29 23:15-0500\n"
 "Last-Translator: Adam Weinberger <adamw@FreeBSD.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:736
 #: gdk-pixbuf/gdk-pixbuf-io.c:869 tests/testfilechooser.c:198
@@ -145,9 +145,7 @@ msgstr "Image pixel data corrupt"
 #: gdk-pixbuf/gdk-pixdata.c:402
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "failed to allocate image buffer of %u byte"
-msgstr[1] "failed to allocate image buffer of %u bytes"
+msgstr "failed to allocate image buffer of %u byte"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -1011,9 +1009,8 @@ msgstr "Modified"
 
 #. Create Folder
 #: gtk/gtkfilechooserdefault.c:1732
-#, fuzzy
 msgid "Create _Folder"
-msgstr "New Folder"
+msgstr "Create _Folder"
 
 #. Preview
 #: gtk/gtkfilechooserdefault.c:1760
@@ -1022,19 +1019,17 @@ msgstr "Preview"
 
 #. Name entry
 #: gtk/gtkfilechooserdefault.c:1807
-#, fuzzy
 msgid "_Name:"
-msgstr "Colour _Name:"
+msgstr "_Name:"
 
 #. Folder combo
 #: gtk/gtkfilechooserdefault.c:1826
-#, fuzzy
 msgid "Save in _Folder:"
-msgstr "New Folder"
+msgstr "Save in _Folder:"
 
 #: gtk/gtkfilechooserdefault.c:1845
 msgid "_Browse for other folders"
-msgstr ""
+msgstr "_Browse for other folders"
 
 #: gtk/gtkfilechooserdefault.c:2883
 #, c-format
@@ -1048,9 +1043,7 @@ msgstr "Type name of new folder"
 #: gtk/gtkfilechooserdefault.c:3359
 #, c-format
 msgid "%d byte"
-msgid_plural "%d bytes"
-msgstr[0] "%d byte"
-msgstr[1] "%d bytes"
+msgstr "%d byte"
 
 #: gtk/gtkfilechooserdefault.c:3361
 #, c-format
@@ -1084,18 +1077,16 @@ msgid "Unknown"
 msgstr "Unknown"
 
 #: gtk/gtkfilechooserdefault.c:3464
-#, fuzzy
 msgid "Cannot change to the folder you specified as it is an invalid path."
-msgstr "Could not add a bookmark for %s because it is an invalid path name."
+msgstr "Cannot change to the folder you specified as it is an invalid path."
 
 #: gtk/gtkfilechooserdefault.c:3556
 msgid "Open Location"
-msgstr ""
+msgstr "Open Location"
 
 #: gtk/gtkfilechooserdefault.c:3571
-#, fuzzy
 msgid "_Location:"
-msgstr "_Selection: "
+msgstr "_Location:"
 
 #: gtk/gtkfilechooserdefault.c:3605
 #, c-format
