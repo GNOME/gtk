@@ -11,7 +11,7 @@ Fri Feb 18 14:37:29 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkevents.h (enum): Fix up GDK_ALL_EVENTS_MASK.
 
-	Patch from Anders Carlsson  <andersca@picard.andersnet> to add
+	Patch from Anders Carlsson  <andersca@gnu.org> to add
 	a scroll event.
 
  	* gtk/testgtk.c (scroll_test_scroll): Added an example of mouse wheel
