@@ -1,3 +1,8 @@
+2003-01-05  Tor Lillqvist  <tml@iki.fi>
+
+	* queryloaders.c (query_module): [Win32] Change backslahses into
+	slashes in path.
+
 2003-01-04  Tor Lillqvist  <tml@iki.fi>
 
 	* Makefile.am (gdk-pixbuf.loaders): Use @SOEXT@ in the find command.

@@ -78,6 +78,19 @@ query_module (const char *dir, const char *file)
 	    g_module_symbol (module, "fill_info", (gpointer *) &fill_info) &&
 	    g_module_symbol (module, "fill_vtable", (gpointer *) &fill_vtable)) {
 		GdkPixbufFormat *info;
+#ifdef G_OS_WIN32
+		/* Replace backslashes in path with forward slashes, so that
+		 * it reads in without problems.
+		 */
+		{
+			char *p = path;
+			while (*p) {
+				if (*p == '\\')
+					*p = '/';
+				p++;
+			}
+		}
+#endif	
 		g_printf("\"%s\"\n", path);
 		info = g_new0 (GdkPixbufFormat, 1);
 		(*fill_info) (info);
