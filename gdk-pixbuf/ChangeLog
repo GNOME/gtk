@@ -1,3 +1,8 @@
+2000-03-31  Mark Crichton  <crichton@gimp.org>
+
+	* gdk-pixbuf/gdk-pixbuf.c: Added gdk_pixbuf_get_refcount
+	and gdk_pixbuf_get_artpixbuf accessor functions.
+
 2000-03-29  Federico Mena Quintero  <federico@helixcode.com>
 
 	* gdk-pixbuf/gdk-pixbuf.c (gdk_pixbuf_get_has_alpha): Return

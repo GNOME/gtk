@@ -295,6 +295,41 @@ gdk_pixbuf_get_rowstride (GdkPixbuf *pixbuf)
 	return pixbuf->art_pixbuf->rowstride;
 }
 
+/**
+ * gdk_pixbuf_get_ref:
+ * @pixbuf: A pixbuf.
+ *
+ * Gets the refcount of a pixbuf.
+ *
+ * Return value: The refcount of the @pixbuf argument.
+ **/
+gint
+gdk_pixbuf_get_ref (GdkPixbuf *pixbuf)
+{
+        g_return_val_if_fail (pixbuf != NULL, -1);
+        g_return_val_if_fail (pixbuf->ref_count > 0, -1);
+
+        return (pixbuf->ref_count);
+}
+
+/**
+ * gdk_pixbuf_get_artpixbuf:
+ * @pixbuf: A pixbuf.
+ *
+ * Queries a pointer to the ArtPixBuf data of a pixbuf.
+ *
+ * Return value: A pointer to the pixbuf's ArtPixBuf.
+ **/
+ArtPixBuf *
+gdk_pixbuf_get_artpixbuf (GdkPixbuf *pixbuf)
+{
+        g_return_val_if_fail (pixbuf != NULL, NULL);
+        g_assert (pixbuf->art_pixbuf != NULL);
+
+        return pixbuf->art_pixbuf;
+}
+
+
 /* General initialization hooks */
 const guint gdk_pixbuf_major_version=GDK_PIXBUF_MAJOR,
   gdk_pixbuf_minor_version=GDK_PIXBUF_MINOR,

@@ -94,6 +94,9 @@ guchar      *gdk_pixbuf_get_pixels          (GdkPixbuf *pixbuf);
 int          gdk_pixbuf_get_width           (GdkPixbuf *pixbuf);
 int          gdk_pixbuf_get_height          (GdkPixbuf *pixbuf);
 int          gdk_pixbuf_get_rowstride       (GdkPixbuf *pixbuf);
+gint         gdk_pixbuf_get_ref             (GdkPixbuf *pixbuf);
+ArtPixBuf   *gdk_pixbuf_get_artpixbuf       (GdkPixbuf *pixbuf);
+
 
 /* Reference counting */
 
