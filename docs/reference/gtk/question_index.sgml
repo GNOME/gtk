@@ -617,6 +617,48 @@ background of the event box.
 
 <qandaentry>
 <question><para>
+How do I change the font of a widget?
+</para></question>
+
+<answer><para>
+This has several possible answers, depending on what exactly you want to
+achieve. One option is <link
+linkend="gtk-widget-modify-font">gtk_widget_modify_font()</link>. Note that this function can be used to change only the font size, as in the following example:
+<programlisting>
+ PangoFontDesc *font_desc = pango_font_description_new ();
+ pango_font_description_set_size (font_desc, 40);
+ gtk_widget_modify_font (widget, font);
+ pango_font_description_free (font_desc);
+</programlisting>
+</para>
+<para>
+If you want to make the text of a label larger, you can use <link
+linkend="gtk-label-set-markup">gtk_label_set_markup()</link>:
+<programlisting>
+gtk_label_set_markup (label, "&lt;big&gt;big text&lt;/big&gt;");
+</programlisting>
+This is preferred for many apps because it's a relative size to the 
+user's chosen font size. See <link 
+linkend="g-markup-escape-text">g_markup_escape_text()</link> 
+if you are constructing such strings on the fly.
+</para>
+<para>
+You can also change the font of a widget by putting
+<programlisting>
+ gtk-font-name = "Sans 30"
+</programlisting>
+in a resource file and parsing it with <link
+linkend="gtk-rc-add-default-file">gtk_rc_add_default_file()</link>.
+The advantage of a resource file is that users can then override the
+font you've chosen. See
+<link linkend="gtk-Resource-Files">GTK+ resource files</link> for more
+discussion. 
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question><para>
 How do I disable/ghost/desensitize a widget?
 </para></question>
 
