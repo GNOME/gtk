@@ -133,6 +133,7 @@ static void   gtk_entry_get_property (GObject         *object,
 				      GValue          *value,
 				      GParamSpec      *pspec);
 static void   gtk_entry_finalize             (GObject          *object);
+static void   gtk_entry_destroy              (GtkObject        *object);
 
 /* GtkWidget methods
  */
@@ -405,9 +406,11 @@ gtk_entry_class_init (GtkEntryClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class;
+  GtkObjectClass *gtk_object_class;
   GtkBindingSet *binding_set;
 
   widget_class = (GtkWidgetClass*) class;
+  gtk_object_class = (GtkObjectClass *)class;
   parent_class = g_type_class_peek_parent (class);
 
   gobject_class->finalize = gtk_entry_finalize;
@@ -441,6 +444,8 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->drag_data_delete = gtk_entry_drag_data_delete;
 
   widget_class->popup_menu = gtk_entry_popup_menu;
+
+  gtk_object_class->destroy = gtk_entry_destroy;
 
   class->move_cursor = gtk_entry_move_cursor;
   class->insert_at_cursor = gtk_entry_insert_at_cursor;
@@ -971,6 +976,36 @@ gtk_entry_init (GtkEntry *entry)
 		    G_CALLBACK (gtk_entry_delete_surrounding_cb), entry);
 }
 
+/*
+ * Overwrite a memory that might contain sensitive information.
+ */
+static void
+trash_area (gchar *area, gsize len)
+{
+  volatile gchar *varea = (volatile gchar *)area;
+  while (len-- > 0)
+    *varea++ = 0;
+}
+
+static void
+gtk_entry_destroy (GtkObject *object)
+{
+  GtkEntry *entry = GTK_ENTRY (object);
+
+  entry->n_bytes = 0;
+  entry->current_pos = entry->selection_bound = entry->text_length = 0;
+  gtk_entry_reset_im_context (entry);
+  gtk_entry_reset_layout (entry);
+
+  if (!entry->visible)
+    {
+      /* We want to trash the text here because the entry might be leaked.  */
+      trash_area (entry->text, strlen (entry->text));
+    }
+
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+}
+
 static void
 gtk_entry_finalize (GObject *object)
 {
@@ -992,8 +1027,12 @@ gtk_entry_finalize (GObject *object)
   entry->text_size = 0;
 
   if (entry->text)
-    g_free (entry->text);
-  entry->text = NULL;
+    {
+      if (!entry->visible)
+	trash_area (entry->text, strlen (entry->text));
+      g_free (entry->text);
+      entry->text = NULL;
+    }
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -1822,8 +1861,11 @@ gtk_entry_insert_text (GtkEditable *editable,
 
   text[new_text_length] = '\0';
   strncpy (text, new_text, new_text_length);
-  
+
   g_signal_emit_by_name (editable, "insert_text", text, new_text_length, position);
+
+  if (!entry->visible)
+    trash_area (text, new_text_length);
 
   if (new_text_length > 63)
     g_free (text);
@@ -2024,6 +2066,8 @@ gtk_entry_real_insert_text (GtkEditable *editable,
 
   if (new_text_length + entry->n_bytes + 1 > entry->text_size)
     {
+      gsize prev_size = entry->text_size;
+
       while (new_text_length + entry->n_bytes + 1 > entry->text_size)
 	{
 	  if (entry->text_size == 0)
@@ -2047,7 +2091,17 @@ gtk_entry_real_insert_text (GtkEditable *editable,
 	    }
 	}
 
-      entry->text = g_realloc (entry->text, entry->text_size);
+      if (entry->visible)
+	entry->text = g_realloc (entry->text, entry->text_size);
+      else
+	{
+	  /* Same thing, just slower and without leaving stuff in memory.  */
+	  gchar *et_new = g_malloc (entry->text_size);
+	  memcpy (et_new, entry->text, MIN (prev_size, entry->text_size));
+	  trash_area (entry->text, prev_size);
+	  g_free (entry->text);
+	  entry->text = et_new;
+	}
     }
 
   index = g_utf8_offset_to_pointer (entry->text, *position) - entry->text;
@@ -2097,6 +2151,13 @@ gtk_entry_real_delete_text (GtkEditable *editable,
       g_memmove (entry->text + start_index, entry->text + end_index, entry->n_bytes + 1 - end_index);
       entry->text_length -= (end_pos - start_pos);
       entry->n_bytes -= (end_index - start_index);
+
+      /* In password-mode, make sure we don't leave anything sensitive after
+       * the terminating zero.  Note, that the terminating zero already trashed
+       * one byte.
+       */
+      if (!entry->visible)
+	trash_area (entry->text + entry->n_bytes + 1, end_index - start_index - 1);
       
       current_pos = entry->current_pos;
       if (current_pos > start_pos)
@@ -2706,7 +2767,12 @@ gtk_entry_create_layout (GtkEntry *entry,
     {
       PangoDirection pango_dir;
       
-      pango_dir = pango_find_base_dir (entry->text, entry->n_bytes);
+      if (entry->visible)
+	pango_dir = pango_find_base_dir (entry->text, entry->n_bytes);
+
+      else
+	pango_dir = PANGO_DIRECTION_NEUTRAL;
+
       if (pango_dir == PANGO_DIRECTION_NEUTRAL)
         {
           if (GTK_WIDGET_HAS_FOCUS (widget))
