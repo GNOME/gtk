@@ -110,7 +110,7 @@ gtk_cell_renderer_text_pixbuf_class_init (GtkCellRendererTextPixbufClass *class)
   
   g_object_class_install_property (object_class,
 				   PROP_PIXBUF_POS,
-				   g_param_spec_int ("pixbufpos",
+				   g_param_spec_int ("pixbuf_pos",
 						     _("Pixbuf location"),
 						     _("The relative location of the pixbuf to the text."),
 						     GTK_POS_LEFT,

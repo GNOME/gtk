@@ -1,3 +1,14 @@
+2001-04-12  Anders Carlsson  <andersca@codefactory.se>
+
+	* gtk/gtkcellrenderertextpixbuf.c (gtk_cell_renderer_text_pixbuf_class_init): It's pixbuf_pos,
+	not pixbufpos.
+
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_render): Fix small typo.
+
+	* gtk/gtkcellrenderer.c (gtk_cell_renderer_get_property): xpad and ypad
+	are unsigned insts, therefore use g_value_set_uint.
+	(gtk_cell_renderer_set_property): Likewise, use g_value_get_uint.
+
 Sun Apr  8 05:36:06 2001  Jonathan Blandford  <jrb@webwynk.net>
 
 	* gtk/gtktextview.c (gtk_text_view_class_init): fix a fixme.

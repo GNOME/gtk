@@ -245,7 +245,7 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer    *cell,
 
   gtk_cell_renderer_pixbuf_get_size (cell, widget, cell_area,
 				     &pix_rect.x,
-				     &pix_rect.x,
+				     &pix_rect.y,
 				     &pix_rect.width,
 				     &pix_rect.height);
   pix_rect.x += cell_area->x;
