@@ -73,9 +73,9 @@ typedef enum
  *    #GDK_PIXDATA_HEADER_LENGTH + length of @pixel_data. 
  * @pixdata_type: information about colorspace, sample width and 
  *    encoding, in a #GdkPixdataType. 
- * @rowstride: padding used in @pixel_data or 0 to indicate no padding.
- * @width: the width.
- * @height: the height.
+ * @rowstride: Distance in bytes between rows.
+ * @width: Width of the image in pixels.
+ * @height: Height of the image in pixels.
  * @pixel_data: @width x @height pixels, encoded according to @pixdata_type
  *   and @rowstride.
  *
@@ -90,7 +90,7 @@ struct _GdkPixdata
 			 * GDK_PIXDATA_HEADER_LENGTH + pixel_data length
 			 */
   guint32 pixdata_type; /* GdkPixdataType */
-  guint32 rowstride;    /* maybe 0 to indicate non-padded data */
+  guint32 rowstride;
   guint32 width;
   guint32 height;
   guint8 *pixel_data;
