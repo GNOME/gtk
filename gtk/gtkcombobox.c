@@ -2511,6 +2511,7 @@ gtk_combo_box_menu_fill_level (GtkComboBox *combo_box,
 				  "gtk-combo-box-item-path",
 				  gtk_tree_row_reference_new (model, path),
 				  (GDestroyNotify)gtk_tree_row_reference_free);
+	  gtk_tree_path_free (path);
 	}
       else
 	{
