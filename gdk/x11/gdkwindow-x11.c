@@ -2596,8 +2596,44 @@ gdk_window_get_frame_extents (GdkWindow    *window,
     }
 }
 
+void
+_gdk_windowing_get_pointer (GdkDisplay       *display,
+			    GdkScreen       **screen,
+			    gint             *x,
+			    gint             *y,
+			    GdkModifierType  *mask)
+{
+  GdkScreen *default_screen;
+  Window root = None;
+  Window child;
+  int rootx, rooty;
+  int winx;
+  int winy;
+  unsigned int xmask;
+
+  if (display->closed)
+    return;
+
+  default_screen = gdk_display_get_default_screen (display);
+  
+  XQueryPointer (GDK_SCREEN_XDISPLAY (default_screen),
+		 GDK_SCREEN_XROOTWIN (default_screen),
+		 &root, &child, &rootx, &rooty, &winx, &winy, &xmask);
+  
+  if (root != None)
+    {
+      GdkWindow *gdk_root = gdk_window_lookup_for_display (display, root);
+      *screen = gdk_drawable_get_screen (gdk_root);
+    }
+  
+  *x = rootx;
+  *y = rooty;
+  *mask = xmask;
+}
+
 GdkWindow*
-_gdk_windowing_window_get_pointer (GdkWindow       *window,
+_gdk_windowing_window_get_pointer (GdkDisplay      *display,
+				   GdkWindow       *window,
 				   gint            *x,
 				   gint            *y,
 				   GdkModifierType *mask)
@@ -2613,13 +2649,6 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
 
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
   
-  if (!window)
-    {
-      GDK_NOTE (MULTIHEAD,
-		g_message ("_gdk_windowing_window_get_pointer(): window arg is need for multihead safe operation"));
-      window = gdk_screen_get_root_window (gdk_screen_get_default ());
-    }
-  
   _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
 
   return_val = NULL;
@@ -2632,34 +2661,48 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
 	return_val = gdk_window_lookup_for_display (GDK_WINDOW_DISPLAY (window), child);
     }
   
-  if (x)
-    *x = winx + xoffset;
-  if (y)
-    *y = winy + yoffset;
-  if (mask)
-    *mask = xmask;
+  *x = winx + xoffset;
+  *y = winy + yoffset;
+  *mask = xmask;
   
   return return_val;
 }
 
 GdkWindow*
-_gdk_windowing_window_at_pointer (GdkScreen *screen,
-                                  gint      *win_x,
-				  gint      *win_y)
+_gdk_windowing_window_at_pointer (GdkDisplay *display,
+                                  gint       *win_x,
+				  gint       *win_y)
 {
   GdkWindow *window;
+  GdkScreen *screen;
   Window root;
   Window xwindow;
+  Window child;
   Window xwindow_last = 0;
   Display *xdisplay;
   int rootx = -1, rooty = -1;
   int winx, winy;
   unsigned int xmask;
 
+  screen = gdk_display_get_default_screen (display);
+  
   xwindow = GDK_SCREEN_XROOTWIN (screen);
   xdisplay = GDK_SCREEN_XDISPLAY (screen);
 
+  /* This function really only works if the mouse pointer is held still
+   * during its operation. If it moves from one leaf window to another
+   * than we'll end up with inaccurate values for win_x, win_y
+   * and the result.
+   */
   XGrabServer (xdisplay);
+  XQueryPointer (xdisplay, xwindow,
+		 &root, &child, &rootx, &rooty, &winx, &winy, &xmask);
+
+  if (root == xwindow)
+    xwindow = child;
+  else
+    xwindow = root;
+  
   while (xwindow)
     {
       xwindow_last = xwindow;
@@ -2670,10 +2713,8 @@ _gdk_windowing_window_at_pointer (GdkScreen *screen,
 
   window = gdk_window_lookup_for_display (GDK_SCREEN_DISPLAY(screen),
 					  xwindow_last);
-  if (win_x)
-    *win_x = window ? winx : -1;
-  if (win_y)
-    *win_y = window ? winy : -1;
+  *win_x = window ? winx : -1;
+  *win_y = window ? winy : -1;
 
   return window;
 }

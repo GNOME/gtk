@@ -207,7 +207,7 @@ struct _GdkPointerHooks
 			           gint	           *x,
 			           gint   	   *y,
 			           GdkModifierType *mask);
-  GdkWindow* (*window_at_pointer) (GdkScreen       *screen, /* unused for now*/
+  GdkWindow* (*window_at_pointer) (GdkScreen       *screen, /* unused */
                                    gint            *win_x,
                                    gint            *win_y);
 };
@@ -551,7 +551,9 @@ void gdk_window_get_internal_paint_info (GdkWindow    *window,
 					 gint         *x_offset,
 					 gint         *y_offset);
 
+#ifndef GDK_MULTIHEAD_SAFE
 GdkPointerHooks *gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks);   
+#endif /* GDK_MULTIHEAD_SAFE */
 
 GdkWindow *gdk_get_default_root_window (void);
 

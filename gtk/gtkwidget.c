@@ -5554,7 +5554,7 @@ gtk_widget_pop_composite_child (void)
 void
 gtk_widget_push_colormap (GdkColormap *cmap)
 {
-  g_return_if_fail (GDK_IS_COLORMAP (cmap));
+  g_return_if_fail (!cmap || GDK_IS_COLORMAP (cmap));
 
   colormap_stack = g_slist_prepend (colormap_stack, cmap);
 }

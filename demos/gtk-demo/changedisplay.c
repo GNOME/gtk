@@ -70,12 +70,12 @@ enum
 /* Finds the toplevel window under the mouse pointer, if any.
  */
 static GtkWidget *
-find_toplevel_at_pointer (GdkScreen *screen)
+find_toplevel_at_pointer (GdkDisplay *display)
 {
   GdkWindow *pointer_window;
   GtkWidget *widget = NULL;
 
-  pointer_window = gdk_screen_get_window_at_pointer (screen, NULL, NULL);
+  pointer_window = gdk_display_get_window_at_pointer (display, NULL, NULL);
 
   /* The user data field of a GdkWindow is used to store a pointer
    * to the widget that created it.
@@ -142,7 +142,7 @@ query_for_toplevel (GdkScreen  *screen,
       while (!clicked)
 	g_main_context_iteration (NULL, TRUE);
       
-      toplevel = find_toplevel_at_pointer (screen);
+      toplevel = find_toplevel_at_pointer (gdk_screen_get_display (screen));
       if (toplevel == popup)
 	toplevel = NULL;
     }

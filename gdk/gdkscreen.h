@@ -64,9 +64,6 @@ GdkVisual *  gdk_screen_get_rgb_visual        (GdkScreen   *screen);
 GdkWindow *  gdk_screen_get_root_window       (GdkScreen   *screen);
 GdkDisplay * gdk_screen_get_display           (GdkScreen   *screen);
 gint         gdk_screen_get_number            (GdkScreen   *screen);
-GdkWindow *  gdk_screen_get_window_at_pointer (GdkScreen   *screen,
-					       gint        *win_x,
-					       gint        *win_y);
 gint         gdk_screen_get_width             (GdkScreen   *screen);
 gint         gdk_screen_get_height            (GdkScreen   *screen);
 gint         gdk_screen_get_width_mm          (GdkScreen   *screen);

@@ -1140,7 +1140,7 @@ make_picker_cursor (GdkScreen *screen)
 }
 
 static void
-grab_color_at_mouse (GtkWidget *invisible,
+grab_color_at_mouse (GdkScreen *screen,
 		     gint       x_root,
 		     gint       y_root,
 		     gpointer   data)
@@ -1150,8 +1150,8 @@ grab_color_at_mouse (GtkWidget *invisible,
   GtkColorSelection *colorsel = data;
   ColorSelectionPrivate *priv;
   GdkColor color;
-  GdkColormap *colormap = gdk_screen_get_system_colormap (gtk_widget_get_screen (invisible));
-  GdkWindow *root_window = gdk_screen_get_root_window (gtk_widget_get_screen (invisible));
+  GdkColormap *colormap = gdk_screen_get_system_colormap (screen);
+  GdkWindow *root_window = gdk_screen_get_root_window (screen);
   
   priv = colorsel->private_data;
   
@@ -1196,7 +1196,8 @@ mouse_motion (GtkWidget      *invisible,
 	      GdkEventMotion *event,
 	      gpointer        data)
 {
-  grab_color_at_mouse (invisible, event->x_root, event->y_root, data); 
+  grab_color_at_mouse (gdk_event_get_screen ((GdkEvent *)event),
+		       event->x_root, event->y_root, data); 
 }
 
 static gboolean
@@ -1211,7 +1212,8 @@ mouse_release (GtkWidget      *invisible,
   if (event->button != 1)
     return FALSE;
 
-  grab_color_at_mouse (invisible, event->x_root, event->y_root, data);
+  grab_color_at_mouse (gdk_event_get_screen ((GdkEvent *)event),
+		       event->x_root, event->y_root, data);
 
   shutdown_eyedropper (GTK_WIDGET (data));
   

@@ -1,3 +1,36 @@
+Mon Oct  7 15:10:00 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdisplay.[ch] gdk/gdkinternals.h 
+	gdk/gdkwindow.[ch] gdk/linux-fb/gdkwindow-fb.c 
+	gdk/win32/gdkwindow-win32.c gdk/x11/gdkwindow-x11.c:
+
+	- Replace GdkPointerHooks with a multihead-safe 
+	  GdkDisplayPointerHooks, leave GdkPointerHooks
+	  around for singlehead.
+	- Add gdk_display_get_pointer() to get the pointer
+	  location with the screen it is on.
+
+	* gdk/gdk.def gdk/gdkdisplay.[ch] gdk/gdkscreen.[ch]:
+	Change gdk_screen_get_window_at_pointer() to
+	gdk_display_get_window_at_pointer().
+
+	* gtk/gtktreeview.c demos/gtk-demo/changedisplay.c
+	tests/testgtk.c: Use gdk_display_get_window_at_pointer(), 
+	not gdk_screen_get_window_at_pointer().
+
+	* gtk/gtkcolorsel.c: Fix grabbing color to be multihead
+	safe.
+
+	* gtk/gtkwidget.c: Allow gtk_widget_push_colormap (NULL).
+	since it is useful for writing code that doesn't
+	know the dcurrent state but needs a clean colormap.
+
+	* gtk/gtkrc.c: When loading the settings for a particular
+	screen, only reset toplevels on that screen.
+
+	* gtk/gtkiconfactory.h: Fix #ifdef GTK_MULTIHEAD_SAFE
+	that should have been #ifndef GTK_MULTIHEAD_SAFE.
+
 Mon Oct  7 11:59:33 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkliststore.[ch] gtk/gtktreedatalist.[ch] gtk/gtktreednd.c

@@ -167,8 +167,6 @@ extern GDestroyNotify _gdk_event_notify;
 extern GSList    *_gdk_displays;
 extern gchar     *_gdk_display_name;
 
-extern const GdkPointerHooks *_gdk_current_pointer_hooks;
-
 void      _gdk_events_queue  (GdkDisplay *display);
 GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
 
@@ -252,13 +250,19 @@ void     _gdk_windowing_window_clear_area_e     (GdkWindow  *window,
 						 gint        width,
 						 gint        height);
 
-GdkWindow* _gdk_windowing_window_at_pointer  (GdkScreen       *screen,
-                                              gint            *win_x,
-					      gint            *win_y);
-GdkWindow* _gdk_windowing_window_get_pointer (GdkWindow       *window,
-					      gint            *x,
-					      gint            *y,
-					      GdkModifierType *mask);
+void       _gdk_windowing_get_pointer        (GdkDisplay       *display,
+					      GdkScreen       **screen,
+					      gint             *x,
+					      gint             *y,
+					      GdkModifierType  *mask);
+GdkWindow* _gdk_windowing_window_get_pointer (GdkDisplay       *display,
+					      GdkWindow        *window,
+					      gint             *x,
+					      gint             *y,
+					      GdkModifierType  *mask);
+GdkWindow* _gdk_windowing_window_at_pointer  (GdkDisplay       *display,
+					      gint             *win_x,
+					      gint             *win_y);
 
 /* Return the number of bits-per-pixel for images of the specified depth. */
 gint _gdk_windowing_get_bits_for_depth (GdkDisplay *display,

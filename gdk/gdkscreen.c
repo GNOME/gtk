@@ -221,24 +221,3 @@ gdk_screen_height_mm (void)
 {
   return gdk_screen_get_height_mm (gdk_screen_get_default ());
 }
-
-/**
- * gdk_screen_get_window_at_pointer:
- * @screen: a #GdkScreen
- * @win_x: return location for origin of the window under the pointer
- * @win_y: return location for origin of the window under the pointer
- * 
- * Obtains the window underneath the mouse pointer, returning the location
- * of that window in @win_x, @win_y for @screen. Returns %NULL if the window 
- * under the mouse pointer is not known to GDK (for example, belongs to
- * another application).
- * 
- * Returns: the window under the mouse pointer, or %NULL
- **/
-GdkWindow *
-gdk_screen_get_window_at_pointer (GdkScreen *screen,
-				  gint      *win_x,
-				  gint      *win_y)
-{
-  return _gdk_current_pointer_hooks->window_at_pointer (screen, win_x, win_y);
-}

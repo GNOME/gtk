@@ -1631,26 +1631,18 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
   int winy = 0;
   int x_int, y_int;
   gint shape_dx, shape_dy;
-  GdkModifierType my_mask;
   GdkRegion *shape;
 
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
   
-  if (!window)
-    window = _gdk_parent_root;
-  
   gdk_window_get_root_origin (window, &x_int, &y_int);
-  gdk_fb_mouse_get_info (&winx, &winy, &my_mask);
+  gdk_fb_mouse_get_info (&winx, &winy, mask);
 
   winx -= x_int;
   winy -= y_int;
 
-  if (x)
-    *x = winx;
-  if (y)
-    *y = winy;
-  if (mask)
-    *mask = my_mask;
+  *x = winx;
+  *y = winy;
   
   return_val = NULL;
   
@@ -1704,10 +1696,24 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
   return return_val;
 }
 
+void
+_gdk_windowing_get_pointer (GdkDisplay       *display,
+			    GdkScreen       **screen,
+			    gint             *x,
+			    gint             *y,
+			    GdkModifierType  *mask)
+{
+  GdkScreen *default_screen = gdk_display_get_default_screen (display);
+  GdkWindow *root_window = gdk_screen_get_root_window (screen);
+  
+  *screen = default_screen;
+  _gdk_windowing_window_get_pointer (root_window, x, y, mask);
+}
+
 GdkWindow*
-_gdk_windowing_window_at_pointer (GdkScreen *screen,
-				  gint      *win_x,
-				  gint      *win_y)
+_gdk_windowing_window_at_pointer (GdkDisplay *display,
+				  gint       *win_x,
+				  gint       *win_y)
 {
   gint rx, ry;
   GdkWindow *retval = gdk_window_get_pointer (NULL, win_x, win_y, NULL);
@@ -1715,10 +1721,8 @@ _gdk_windowing_window_at_pointer (GdkScreen *screen,
   if (retval)
     {
       gdk_window_get_origin (retval, &ry, &rx);
-      if (win_x)
-	(*win_x) -= rx;
-      if (win_y)
-	(*win_y) -= ry;
+      (*win_x) -= rx;
+      (*win_y) -= ry;
     }
 
   return retval;

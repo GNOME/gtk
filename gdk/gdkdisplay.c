@@ -38,10 +38,52 @@ static void gdk_display_init       (GdkDisplay      *display);
 static void gdk_display_dispose    (GObject         *object);
 static void gdk_display_finalize   (GObject         *object);
 
+
+void       singlehead_get_pointer        (GdkDisplay       *display,
+					  GdkScreen       **screen,
+					  gint             *x,
+					  gint             *y,
+					  GdkModifierType  *mask);
+GdkWindow* singlehead_window_get_pointer (GdkDisplay       *display,
+					  GdkWindow        *window,
+					  gint             *x,
+					  gint             *y,
+					  GdkModifierType  *mask);
+GdkWindow* singlehead_window_at_pointer  (GdkDisplay       *display,
+					  gint             *win_x,
+					  gint             *win_y);
+
+GdkWindow* singlehead_default_window_get_pointer (GdkWindow       *window,
+						  gint            *x,
+						  gint            *y,
+						  GdkModifierType *mask);
+GdkWindow* singlehead_default_window_at_pointer  (GdkScreen       *screen,
+						  gint            *win_x,
+						  gint            *win_y);
+
 static guint signals[LAST_SIGNAL] = { 0 };
 
 static GObjectClass *parent_class;
 static char *gdk_sm_client_id;
+
+static const GdkDisplayPointerHooks default_pointer_hooks = {
+  _gdk_windowing_get_pointer,
+  _gdk_windowing_window_get_pointer,
+  _gdk_windowing_window_at_pointer
+};
+
+static const GdkDisplayPointerHooks singlehead_pointer_hooks = {
+  singlehead_get_pointer,
+  singlehead_window_get_pointer,
+  singlehead_window_at_pointer
+};
+
+static const GdkPointerHooks singlehead_default_pointer_hooks = {
+  singlehead_default_window_get_pointer,
+  singlehead_default_window_at_pointer
+};
+
+static const GdkPointerHooks *singlehead_current_pointer_hooks = &singlehead_default_pointer_hooks;
 
 GType
 gdk_display_get_type (void)
@@ -101,6 +143,8 @@ gdk_display_init (GdkDisplay *display)
   display->button_number[0] = display->button_number[1] = -1;
 
   display->double_click_time = 250;
+
+  display->pointer_hooks = &default_pointer_hooks;
 }
 
 static void
@@ -379,3 +423,191 @@ _gdk_get_sm_client_id (void)
 {
   return gdk_sm_client_id;
 }
+
+/**
+ * gdk_display_get_pointer:
+ * @display: a #GdkDisplay
+ * @screen: location to store the screen that the
+ *          cursor is on, or %NULL.
+ * @x: location to store root window X coordinate of pointer, or %NULL.
+ * @y: location to store root window Y coordinate of pointer, or %NULL.
+ * @mask: location to store current modifier mask, or %NULL
+ * 
+ * Gets the current location of the pointer and the current modifier
+ * mask for a given display.
+ **/
+void
+gdk_display_get_pointer (GdkDisplay      *display,
+			 GdkScreen      **screen,
+			 gint            *x,
+			 gint            *y,
+			 GdkModifierType *mask)
+{
+  GdkScreen *tmp_screen;
+  gint tmp_x, tmp_y;
+  GdkModifierType tmp_mask;
+  
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  display->pointer_hooks->get_pointer (display, &tmp_screen, &tmp_x, &tmp_y, &tmp_mask);
+
+  if (screen)
+    *screen = tmp_screen;
+  if (x)
+    *x = tmp_x;
+  if (y)
+    *y = tmp_y;
+  if (mask)
+    *mask = tmp_mask;
+}
+
+/**
+ * gdk_display_get_window_at_pointer:
+ * @display: a #GdkDisplay
+ * @win_x: return location for origin of the window under the pointer
+ * @win_y: return location for origin of the window under the pointer
+ * 
+ * Obtains the window underneath the mouse pointer, returning the location
+ * of that window in @win_x, @win_y for @screen. Returns %NULL if the window 
+ * under the mouse pointer is not known to GDK (for example, belongs to
+ * another application).
+ * 
+ * Returns: the window under the mouse pointer, or %NULL
+ **/
+GdkWindow *
+gdk_display_get_window_at_pointer (GdkDisplay *display,
+				   gint       *win_x,
+				   gint       *win_y)
+{
+  gint tmp_x, tmp_y;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  
+  return display->pointer_hooks->window_at_pointer (display, &tmp_x, &tmp_y);
+
+  if (win_x)
+    *win_x = tmp_x;
+  if (win_y)
+    *win_y = tmp_y;
+}
+
+/**
+ * gdk_display_set_pointer_hooks:
+ * @new_hooks: a table of pointers to functions for getting
+ *   quantities related to the current pointer position,
+ *   or %NULL to restore the default table.
+ * 
+ * This function allows for hooking into the operation
+ * of getting the current location of the pointer on a particular
+ * display. This is only useful for such low-level tools as an
+ * event recorder. Applications should never have any
+ * reason to use this facility.
+ *
+ * Return value: the previous pointer hook table
+ **/
+GdkDisplayPointerHooks *
+gdk_display_set_pointer_hooks (GdkDisplay                   *display,
+			       const GdkDisplayPointerHooks *new_hooks)
+{
+  const GdkDisplayPointerHooks *result;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  result = display->pointer_hooks;
+
+  if (new_hooks)
+    display->pointer_hooks = new_hooks;
+  else
+    display->pointer_hooks = &default_pointer_hooks;
+
+  return (GdkDisplayPointerHooks *)result;
+}
+
+void
+singlehead_get_pointer (GdkDisplay       *display,
+			GdkScreen       **screen,
+			gint             *x,
+			gint             *y,
+			GdkModifierType  *mask)
+{
+  GdkScreen *default_screen = gdk_display_get_default_screen (display);
+  GdkWindow *root_window = gdk_screen_get_root_window (default_screen);
+
+  *screen = default_screen;
+
+  singlehead_current_pointer_hooks->get_pointer (root_window, x, y, mask);
+}
+
+GdkWindow*
+singlehead_window_get_pointer (GdkDisplay       *display,
+			       GdkWindow        *window,
+			       gint             *x,
+			       gint             *y,
+			       GdkModifierType  *mask)
+{
+  return singlehead_current_pointer_hooks->get_pointer (window, x, y, mask);
+}
+
+GdkWindow*
+singlehead_window_at_pointer   (GdkDisplay *display,
+				gint       *win_x,
+				gint       *win_y)
+{
+  GdkScreen *default_screen = gdk_display_get_default_screen (display);
+
+  return singlehead_current_pointer_hooks->window_at_pointer (default_screen,
+							      win_x, win_y);
+}
+
+GdkWindow*
+singlehead_default_window_get_pointer (GdkWindow       *window,
+				       gint            *x,
+				       gint            *y,
+				       GdkModifierType *mask)
+{
+  return _gdk_windowing_window_get_pointer (gdk_drawable_get_display (window),
+					    window, x, y, mask);
+}
+
+GdkWindow*
+singlehead_default_window_at_pointer  (GdkScreen       *screen,
+				       gint            *win_x,
+				       gint            *win_y)
+{
+  return _gdk_windowing_window_at_pointer (gdk_screen_get_display (screen),
+					   win_x, win_y);
+}
+
+/**
+ * gdk_set_pointer_hooks:
+ * @new_hooks: a table of pointers to functions for getting
+ *   quantities related to the current pointer position,
+ *   or %NULL to restore the default table.
+ * 
+ * This function allows for hooking into the operation
+ * of getting the current location of the pointer. This
+ * is only useful for such low-level tools as an
+ * event recorder. Applications should never have any
+ * reason to use this facility.
+ *
+ * This function is not multihead safe. For multihead operation,
+ * see gdk_display_set_pointer_hooks().
+ * 
+ * Return value: the previous pointer hook table
+ **/
+GdkPointerHooks *
+gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks)
+{
+  const GdkPointerHooks *result = singlehead_current_pointer_hooks;
+
+  if (new_hooks)
+    singlehead_current_pointer_hooks = new_hooks;
+  else
+    singlehead_current_pointer_hooks = &singlehead_default_pointer_hooks;
+
+  gdk_display_set_pointer_hooks (gdk_display_get_default (),
+				 &singlehead_pointer_hooks);
+  
+  return (GdkPointerHooks *)result;
+}
+
+

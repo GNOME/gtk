@@ -62,6 +62,7 @@ EXPORTS
 	gdk_display_get_n_screens
 	gdk_display_get_screen
 	gdk_display_get_type
+	gdk_display_get_window_at_pointer
 	gdk_display_keyboard_ungrab
 	gdk_display_pointer_is_grabbed
 	gdk_display_pointer_ungrab
@@ -335,7 +336,6 @@ EXPORTS
 	gdk_screen_get_system_colormap
 	gdk_screen_get_type
 	gdk_screen_get_width
-	gdk_screen_get_window_at_pointer
 	gdk_screen_height
 	gdk_screen_height_mm
 	gdk_screen_set_default_colormap

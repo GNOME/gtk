@@ -1280,8 +1280,11 @@ gtk_rc_reset_widgets (GtkSettings *settings)
   
   for (list = toplevels; list; list = list->next)
     {
-      gtk_widget_reset_rc_styles (list->data);
-      gtk_widget_unref (list->data);
+      if (gtk_widget_get_screen (list->data) == settings->screen)
+	{
+	  gtk_widget_reset_rc_styles (list->data);
+	  gtk_widget_unref (list->data);
+	}
     }
   g_list_free (toplevels);
 }

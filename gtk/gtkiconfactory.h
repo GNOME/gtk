@@ -88,7 +88,7 @@ GtkIconSet* gtk_icon_factory_lookup_default  (const gchar     *stock_id);
  * size from the rendered pixbuf, not from here.
  */
 
-#ifdef GTK_MULTIHEAD_SAFE
+#ifndef GTK_MULTIHEAD_SAFE
 gboolean gtk_icon_size_lookup              (GtkIconSize  size,
 					    gint        *width,
 					    gint        *height);

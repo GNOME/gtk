@@ -1831,21 +1831,17 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
   GdkWindow *return_val;
   POINT screen_point, point;
   HWND hwnd, hwndc;
+  BYTE kbd[256];
 
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
   
-  if (!window)
-    window = _gdk_parent_root;
-
   return_val = NULL;
   GetCursorPos (&screen_point);
   point = screen_point;
   ScreenToClient (GDK_WINDOW_HWND (window), &point);
 
-  if (x)
-    *x = point.x;
-  if (y)
-    *y = point.y;
+  *x = point.x;
+  *y = point.y;
 
   hwnd = WindowFromPoint (point);
   if (hwnd != NULL)
@@ -1870,35 +1866,44 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
   else
     return_val = NULL;
       
-  if (mask)
-    {
-      BYTE kbd[256];
-
-      GetKeyboardState (kbd);
-      *mask = 0;
-      if (kbd[VK_SHIFT] & 0x80)
-	*mask |= GDK_SHIFT_MASK;
-      if (kbd[VK_CAPITAL] & 0x80)
-	*mask |= GDK_LOCK_MASK;
-      if (kbd[VK_CONTROL] & 0x80)
-	*mask |= GDK_CONTROL_MASK;
-      if (kbd[VK_MENU] & 0x80)
-	*mask |= GDK_MOD1_MASK;
-      if (kbd[VK_LBUTTON] & 0x80)
-	*mask |= GDK_BUTTON1_MASK;
-      if (kbd[VK_MBUTTON] & 0x80)
-	*mask |= GDK_BUTTON2_MASK;
-      if (kbd[VK_RBUTTON] & 0x80)
-	*mask |= GDK_BUTTON3_MASK;
-    }
+  GetKeyboardState (kbd);
+  *mask = 0;
+  if (kbd[VK_SHIFT] & 0x80)
+    *mask |= GDK_SHIFT_MASK;
+  if (kbd[VK_CAPITAL] & 0x80)
+    *mask |= GDK_LOCK_MASK;
+  if (kbd[VK_CONTROL] & 0x80)
+    *mask |= GDK_CONTROL_MASK;
+  if (kbd[VK_MENU] & 0x80)
+    *mask |= GDK_MOD1_MASK;
+  if (kbd[VK_LBUTTON] & 0x80)
+    *mask |= GDK_BUTTON1_MASK;
+  if (kbd[VK_MBUTTON] & 0x80)
+    *mask |= GDK_BUTTON2_MASK;
+  if (kbd[VK_RBUTTON] & 0x80)
+    *mask |= GDK_BUTTON3_MASK;
   
   return return_val;
 }
 
+void
+_gdk_windowing_get_pointer (GdkDisplay       *display,
+			    GdkScreen       **screen,
+			    gint             *x,
+			    gint             *y,
+			    GdkModifierType  *mask)
+{
+  GdkScreen *default_screen = gdk_display_get_default_screen (display);
+  GdkWindow *root_window = gdk_screen_get_root_window (screen);
+  
+  *screen = default_screen;
+  _gdk_windowing_window_get_pointer (root_window, x, y, mask);
+}
+
 GdkWindow*
-_gdk_windowing_window_at_pointer (GdkScreen *screen,
-				  gint      *win_x,
-				  gint      *win_y)
+_gdk_windowing_window_at_pointer (GdkDisplay *display,
+				  gint       *win_x,
+				  gint       *win_y)
 {
   GdkWindow *window;
   POINT point, pointc;
@@ -1912,10 +1917,8 @@ _gdk_windowing_window_at_pointer (GdkScreen *screen,
   if (hwnd == NULL)
     {
       window = _gdk_parent_root;
-      if (win_x)
-	*win_x = pointc.x;
-      if (win_y)
-	*win_y = pointc.y;
+      *win_x = pointc.x;
+      *win_y = pointc.y;
       return window;
     }
       
@@ -1932,10 +1935,8 @@ _gdk_windowing_window_at_pointer (GdkScreen *screen,
   if (window && (win_x || win_y))
     {
       GetClientRect (hwnd, &rect);
-      if (win_x)
-	*win_x = point.x - rect.left;
-      if (win_y)
-	*win_y = point.y - rect.top;
+      *win_x = point.x - rect.left;
+      *win_y = point.y - rect.top;
     }
 
   GDK_NOTE (MISC, g_print ("gdk_window_at_pointer: +%ld+%ld %p%s\n",

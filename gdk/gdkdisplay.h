@@ -31,6 +31,7 @@
 G_BEGIN_DECLS
 
 typedef struct _GdkDisplayClass GdkDisplayClass;
+typedef struct _GdkDisplayPointerHooks GdkDisplayPointerHooks;
 
 #define GDK_TYPE_DISPLAY              (gdk_display_get_type ())
 #define GDK_DISPLAY_OBJECT(object)    (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DISPLAY, GdkDisplay))
@@ -58,6 +59,8 @@ struct _GdkDisplay
   guint double_click_time;	/* Maximum time between clicks in msecs */
   GdkDevice *core_pointer;	/* Core pointer device */
 
+  const GdkDisplayPointerHooks *pointer_hooks; /* Current hooks for querying pointer */
+  
   guint closed : 1;		/* Whether this display has been closed */
 };
 
@@ -75,6 +78,23 @@ struct _GdkDisplayClass
   /* Signals */
   void (*closed) (GdkDisplay *display,
 		  gboolean    is_error);
+};
+
+struct _GdkDisplayPointerHooks
+{
+  void (*get_pointer)              (GdkDisplay      *display,
+				    GdkScreen      **screen,
+				    gint            *x,
+				    gint            *y,
+				    GdkModifierType *mask);
+  GdkWindow* (*window_get_pointer) (GdkDisplay      *display,
+				    GdkWindow       *window,
+				    gint            *x,
+				    gint            *y,
+				    GdkModifierType *mask);
+  GdkWindow* (*window_at_pointer)  (GdkDisplay      *display,
+				    gint            *win_x,
+				    gint            *win_y);
 };
 
 GType       gdk_display_get_type (void);
@@ -113,6 +133,18 @@ void gdk_display_set_double_click_time (GdkDisplay  *display,
 GdkDisplay *gdk_display_get_default (void);
 
 GdkDevice  *gdk_display_get_core_pointer (GdkDisplay *display);
+
+void             gdk_display_get_pointer           (GdkDisplay             *display,
+						    GdkScreen             **screen,
+						    gint                   *x,
+						    gint                   *y,
+						    GdkModifierType        *mask);
+GdkWindow *      gdk_display_get_window_at_pointer (GdkDisplay             *display,
+						    gint                   *win_x,
+						    gint                   *win_y);
+
+GdkDisplayPointerHooks *gdk_display_set_pointer_hooks (GdkDisplay                   *display,
+						       const GdkDisplayPointerHooks *new_hooks);
 
 G_END_DECLS
 
