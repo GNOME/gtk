@@ -42,10 +42,6 @@ typedef struct _GdkFontPrivateX        GdkFontPrivateX;
 typedef struct _GdkImagePrivateX11    GdkImagePrivateX11;
 typedef struct _GdkVisualPrivate       GdkVisualPrivate;
 
-#ifdef USE_XIM
-typedef struct _GdkICPrivate        GdkICPrivate;
-#endif /* USE_XIM */
-
 struct _GdkCursorPrivate
 {
   GdkCursor cursor;
@@ -87,18 +83,6 @@ struct _GdkImagePrivateX11
   Display *xdisplay;
   gpointer x_shm_info;
 };
-
-
-#ifdef USE_XIM
-
-struct _GdkICPrivate
-{
-  XIC xic;
-  GdkICAttr *attr;
-  GdkICAttributesType mask;
-};
-
-#endif /* USE_XIM */
 
 
 typedef struct _GdkGCX11      GdkGCX11;

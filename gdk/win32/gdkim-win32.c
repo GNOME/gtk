@@ -30,7 +30,6 @@
 #include <string.h>
 #include <locale.h>
 
-#include "gdkim.h"
 #include "gdkpixmap.h"
 #include "gdkinternals.h"
 #include "gdki18n.h"
@@ -56,90 +55,6 @@ gdk_set_locale (void)
     g_warning ("locale not supported by C library");
   
   return g_win32_getlocale ();
-}
-
-void 
-gdk_im_begin (GdkIC *ic, GdkWindow* window)
-{
-}
-
-void 
-gdk_im_end (void)
-{
-}
-
-GdkIMStyle
-gdk_im_decide_style (GdkIMStyle supported_style)
-{
-  return GDK_IM_PREEDIT_NONE | GDK_IM_STATUS_NONE;
-}
-
-GdkIMStyle
-gdk_im_set_best_style (GdkIMStyle style)
-{
-  return GDK_IM_PREEDIT_NONE | GDK_IM_STATUS_NONE;
-}
-
-gint 
-gdk_im_ready (void)
-{
-  return FALSE;
-}
-
-GdkIC * 
-gdk_ic_new (GdkICAttr *attr, GdkICAttributesType mask)
-{
-  return NULL;
-}
-
-void 
-gdk_ic_destroy (GdkIC *ic)
-{
-}
-
-GdkIMStyle
-gdk_ic_get_style (GdkIC *ic)
-{
-  return GDK_IM_PREEDIT_NONE | GDK_IM_STATUS_NONE;
-}
-
-GdkICAttr*
-gdk_ic_attr_new (void)
-{
-  return NULL;
-}
-
-void
-gdk_ic_attr_destroy (GdkICAttr *attr)
-{
-}
-
-void 
-gdk_ic_set_values (GdkIC *ic, ...)
-{
-}
-
-void 
-gdk_ic_get_values (GdkIC *ic, ...)
-{
-}
-
-GdkICAttributesType 
-gdk_ic_set_attr (GdkIC *ic, GdkICAttr *attr, GdkICAttributesType mask)
-{
-  return 0;
-}
-
-GdkICAttributesType 
-gdk_ic_get_attr (GdkIC *ic, GdkICAttr *attr, GdkICAttributesType mask)
-{
-  return 0;
-}
-
-GdkEventMask 
-gdk_ic_get_events (GdkIC *ic)
-{
-  return 0;
 }
 
 /*

@@ -110,34 +110,6 @@ static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);
 
 #endif /* G_ENABLE_DEBUG */
 
-static void
-gdk_arg_xim_preedit_cb (const gchar *arg, const gchar *value, gpointer cb_data)
-{
-  if (strcmp ("none", value) == 0)
-    gdk_im_set_best_style (GDK_IM_PREEDIT_NONE);
-  else if (strcmp ("nothing", value) == 0)
-    gdk_im_set_best_style (GDK_IM_PREEDIT_NOTHING);
-  else if (strcmp ("area", value) == 0)
-    gdk_im_set_best_style (GDK_IM_PREEDIT_AREA);
-  else if (strcmp ("position", value) == 0)
-    gdk_im_set_best_style (GDK_IM_PREEDIT_POSITION);
-  else if (strcmp ("callbacks", value) == 0)
-    gdk_im_set_best_style (GDK_IM_PREEDIT_CALLBACKS);
-}
-
-static void
-gdk_arg_xim_status_cb (const gchar *arg, const gchar *value, gpointer cb_data)
-{
-  if (strcmp ("none", value) == 0)
-    gdk_im_set_best_style (GDK_IM_STATUS_NONE);
-  else if (strcmp ("nothing", value) == 0)
-    gdk_im_set_best_style (GDK_IM_STATUS_NOTHING);
-  else if (strcmp ("area", value) == 0)
-    gdk_im_set_best_style (GDK_IM_STATUS_AREA);
-  else if (strcmp ("callbacks", value) == 0)
-    gdk_im_set_best_style (GDK_IM_STATUS_CALLBACKS);
-}
-
 GdkArgDesc _gdk_windowing_args[] = {
   { "display",     GDK_ARG_STRING,   &gdk_display_name,    (GdkArgFunc)NULL   },
   { "sync",        GDK_ARG_BOOL,     &gdk_synchronize,     (GdkArgFunc)NULL   },
@@ -145,8 +117,6 @@ GdkArgDesc _gdk_windowing_args[] = {
   { "class",       GDK_ARG_STRING,   &gdk_progclass,       (GdkArgFunc)NULL   },
   { "gxid-host",   GDK_ARG_STRING,   &gdk_input_gxid_host, (GdkArgFunc)NULL   },
   { "gxid-port",   GDK_ARG_INT,      &gdk_input_gxid_port, (GdkArgFunc)NULL   },
-  { "xim-preedit", GDK_ARG_CALLBACK, NULL,                 gdk_arg_xim_preedit_cb },
-  { "xim-status",  GDK_ARG_CALLBACK, NULL,                 gdk_arg_xim_status_cb  },
   { NULL }
 };
 

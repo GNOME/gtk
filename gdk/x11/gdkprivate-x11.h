@@ -106,16 +106,12 @@ extern GdkWindowObject *gdk_xgrab_window;  /* Window that currently holds the
 					    * x pointer grab
 					    */
 
-#ifdef USE_XIM
-extern GdkICPrivate *gdk_xim_ic;		/* currently using IC */
-extern GdkWindow *gdk_xim_window;	        /* currently using Window */
-#endif /* USE_XIM */
-
 /* Used to detect not-up-to-date keymap */
 extern guint _gdk_keymap_serial;
 
 #ifdef HAVE_XKB
 extern gboolean _gdk_use_xkb;
+extern gboolean _gdk_have_xkb_autorepeat;
 #endif
 
 /* Whether we were able to turn on detectable-autorepeat using

@@ -340,10 +340,6 @@ gdk_init_check (int    *argc,
   gdk_input_init ();
   gdk_dnd_init ();
 
-#ifdef USE_XIM
-  gdk_im_open ();
-#endif
-  
   gdk_initialized = 1;
 
   return TRUE;
@@ -424,12 +420,6 @@ gdk_exit_func (void)
   
   if (gdk_initialized)
     {
-#ifdef USE_XIM
-      /* cleanup IC */
-      gdk_ic_cleanup ();
-      /* close IM */
-      gdk_im_close ();
-#endif
       gdk_image_exit ();
       gdk_input_exit ();
       gdk_key_repeat_restore ();

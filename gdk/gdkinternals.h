@@ -125,13 +125,6 @@ void gdk_synthesize_window_state (GdkWindow     *window,
  * Interfaces used by windowing code *
  *************************************/
 
-#ifdef USE_XIM
-/* XIM support */
-gint   gdk_im_open		 (void);
-void   gdk_im_close		 (void);
-void   gdk_ic_cleanup		 (void);
-#endif /* USE_XIM */
-
 void       _gdk_window_destroy           (GdkWindow   *window,
 					  gboolean     foreign_destroy);
 void       _gdk_window_clear_update_area (GdkWindow   *window);

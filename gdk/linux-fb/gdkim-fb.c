@@ -97,90 +97,6 @@ gdk_set_locale (void)
   return current_locale;
 }
 
-void 
-gdk_im_begin (GdkIC *ic, GdkWindow* window)
-{
-}
-
-void 
-gdk_im_end (void)
-{
-}
-
-GdkIMStyle
-gdk_im_decide_style (GdkIMStyle supported_style)
-{
-  return GDK_IM_PREEDIT_NONE | GDK_IM_STATUS_NONE;
-}
-
-GdkIMStyle
-gdk_im_set_best_style (GdkIMStyle style)
-{
-  return GDK_IM_PREEDIT_NONE | GDK_IM_STATUS_NONE;
-}
-
-gint 
-gdk_im_ready (void)
-{
-  return FALSE;
-}
-
-gint
-gdk_im_open(void)
-{
-  return TRUE;
-}
-
-void
-gdk_im_close(void)
-{
-}
-
-GdkIC * 
-gdk_ic_new (GdkICAttr *attr, GdkICAttributesType mask)
-{
-  return NULL;
-}
-
-void 
-gdk_ic_destroy (GdkIC *ic)
-{
-}
-
-GdkIMStyle
-gdk_ic_get_style (GdkIC *ic)
-{
-  return GDK_IM_PREEDIT_NONE | GDK_IM_STATUS_NONE;
-}
-
-void 
-gdk_ic_set_values (GdkIC *ic, ...)
-{
-}
-
-void 
-gdk_ic_get_values (GdkIC *ic, ...)
-{
-}
-
-GdkICAttributesType 
-gdk_ic_set_attr (GdkIC *ic, GdkICAttr *attr, GdkICAttributesType mask)
-{
-  return 0;
-}
-
-GdkICAttributesType 
-gdk_ic_get_attr (GdkIC *ic, GdkICAttr *attr, GdkICAttributesType mask)
-{
-  return 0;
-}
-
-GdkEventMask 
-gdk_ic_get_events (GdkIC *ic)
-{
-  return 0;
-}
-
 /*
  * gdk_wcstombs 
  *
@@ -224,19 +140,4 @@ gdk_mbstowcs (GdkWChar *dest, const gchar *src, gint dest_max)
     dest[i] = src[i];
 
   return i;
-}
-
-void
-gdk_ic_cleanup(void)
-{
-}
-
-GdkICAttr*   gdk_ic_attr_new       (void)
-{
-  return NULL;
-}
-
-void
-gdk_ic_attr_destroy   (GdkICAttr *attr)
-{
 }

@@ -1342,71 +1342,6 @@ gtk_text_realize (GtkWidget *widget)
   gdk_gc_set_exposures (text->gc, TRUE);
   gdk_gc_set_foreground (text->gc, &widget->style->text[GTK_STATE_NORMAL]);
   
-#ifdef USE_XIM
-  if (gdk_im_ready () && (old_editable->ic_attr = gdk_ic_attr_new ()) != NULL)
-    {
-      gint width, height;
-      GdkColormap *colormap;
-      GdkEventMask mask;
-      GdkICAttr *attr = old_editable->ic_attr;
-      GdkICAttributesType attrmask = GDK_IC_ALL_REQ;
-      GdkIMStyle style;
-      GdkIMStyle supported_style = GDK_IM_PREEDIT_NONE | 
-	                           GDK_IM_PREEDIT_NOTHING |
-	                           GDK_IM_PREEDIT_POSITION |
-	                           GDK_IM_STATUS_NONE |
-	                           GDK_IM_STATUS_NOTHING;
-      
-      if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
-	supported_style &= ~GDK_IM_PREEDIT_POSITION;
-      
-      attr->style = style = gdk_im_decide_style (supported_style);
-      attr->client_window = text->text_area;
-
-      if ((colormap = gtk_widget_get_colormap (widget)) !=
-	  gtk_widget_get_default_colormap ())
-	{
-	  attrmask |= GDK_IC_PREEDIT_COLORMAP;
-	  attr->preedit_colormap = colormap;
-	}
-
-      switch (style & GDK_IM_PREEDIT_MASK)
-	{
-	case GDK_IM_PREEDIT_POSITION:
-	  if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
-	    {
-	      g_warning ("over-the-spot style requires fontset");
-	      break;
-	    }
-
-	  attrmask |= GDK_IC_PREEDIT_POSITION_REQ;
-	  gdk_window_get_size (text->text_area, &width, &height);
-	  attr->spot_location.x = 0;
-	  attr->spot_location.y = height;
-	  attr->preedit_area.x = 0;
-	  attr->preedit_area.y = 0;
-	  attr->preedit_area.width = width;
-	  attr->preedit_area.height = height;
-	  attr->preedit_fontset = widget->style->font;
-	  
-	  break;
-	}
-      old_editable->ic = gdk_ic_new (attr, attrmask);
-      
-      if (old_editable->ic == NULL)
-	g_warning ("Can't create input context.");
-      else
-	{
-	  mask = gdk_window_get_events (text->text_area);
-	  mask |= gdk_ic_get_events (old_editable->ic);
-	  gdk_window_set_events (text->text_area, mask);
-	  
-	  if (GTK_WIDGET_HAS_FOCUS (widget))
-	    gdk_im_begin (old_editable->ic, text->text_area);
-	}
-    }
-#endif
-
   realize_properties (text);
   gdk_window_show (text->text_area);
   init_properties (text);
@@ -1467,19 +1402,6 @@ gtk_text_unrealize (GtkWidget *widget)
   g_return_if_fail (GTK_IS_TEXT (widget));
   
   text = GTK_TEXT (widget);
-
-#ifdef USE_XIM
-  if (GTK_OLD_EDITABLE (widget)->ic)
-    {
-      gdk_ic_destroy (GTK_OLD_EDITABLE (widget)->ic);
-      GTK_OLD_EDITABLE (widget)->ic = NULL;
-    }
-  if (GTK_OLD_EDITABLE (widget)->ic_attr)
-    {
-      gdk_ic_attr_destroy (GTK_OLD_EDITABLE (widget)->ic_attr);
-      GTK_OLD_EDITABLE (widget)->ic_attr = NULL;
-    }
-#endif
 
   gdk_window_set_user_data (text->text_area, NULL);
   gdk_window_destroy (text->text_area);
@@ -1661,20 +1583,6 @@ gtk_text_size_allocate (GtkWidget     *widget,
 							  (gint)TEXT_BORDER_ROOM) * 2),
 			      MAX (1, (gint)widget->allocation.height - (gint)(widget->style->ythickness +
 							   (gint)TEXT_BORDER_ROOM) * 2));
-      
-#ifdef USE_XIM
-      if (old_editable->ic && (gdk_ic_get_style (old_editable->ic) & GDK_IM_PREEDIT_POSITION))
-	{
-	  gint width, height;
-	  
-	  gdk_window_get_size (text->text_area, &width, &height);
-	  old_editable->ic_attr->preedit_area.width = width;
-	  old_editable->ic_attr->preedit_area.height = height;
-
-	  gdk_ic_set_attr (old_editable->ic,
-	      		   old_editable->ic_attr, GDK_IC_PREEDIT_AREA);
-	}
-#endif
       
       recompute_geometry (text);
     }
@@ -2232,11 +2140,6 @@ gtk_text_focus_in (GtkWidget     *widget,
   
   TDEBUG (("in gtk_text_focus_in\n"));
   
-#ifdef USE_XIM
-  if (GTK_OLD_EDITABLE (widget)->ic)
-    gdk_im_begin (GTK_OLD_EDITABLE (widget)->ic, GTK_TEXT(widget)->text_area);
-#endif
-  
   return (* GTK_WIDGET_CLASS (parent_class)->focus_in_event) (widget, event);
 }
 
@@ -2250,10 +2153,6 @@ gtk_text_focus_out (GtkWidget     *widget,
   
   TDEBUG (("in gtk_text_focus_out\n"));
   
-#ifdef USE_XIM
-  gdk_im_end ();
-#endif
-
   return (* GTK_WIDGET_CLASS (parent_class)->focus_out_event) (widget, event);
 }
 
@@ -3742,30 +3641,6 @@ find_cursor_at_line (GtkText* text, const LineParams* start_line, gint pixel_hei
     text->cursor_char = 0;
   else
     text->cursor_char = ch;
-    
-#ifdef USE_XIM
-  if (GTK_WIDGET_HAS_FOCUS(text) && gdk_im_ready() && old_editable->ic && 
-      (gdk_ic_get_style (old_editable->ic) & GDK_IM_PREEDIT_POSITION))
-    {
-      GdkICAttributesType mask = GDK_IC_SPOT_LOCATION |
-				 GDK_IC_PREEDIT_FOREGROUND |
-				 GDK_IC_PREEDIT_BACKGROUND;
-
-      old_editable->ic_attr->spot_location.x = text->cursor_pos_x;
-      old_editable->ic_attr->spot_location.y
-	= text->cursor_pos_y - text->cursor_char_offset;
-      old_editable->ic_attr->preedit_foreground = *MARK_CURRENT_FORE (text, &mark);
-      old_editable->ic_attr->preedit_background = *MARK_CURRENT_BACK (text, &mark);
-
-      if (MARK_CURRENT_FONT (text, &mark)->type == GDK_FONT_FONTSET)
-	{
-	  mask |= GDK_IC_PREEDIT_FONTSET;
-	  old_editable->ic_attr->preedit_fontset = MARK_CURRENT_FONT (text, &mark);
-	}
-      
-      gdk_ic_set_attr (old_editable->ic, old_editable->ic_attr, mask);
-    }
-#endif 
 }
 
 static void

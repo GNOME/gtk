@@ -1,3 +1,13 @@
+Wed Mar  7 20:47:41 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c gtk/gtkoldeditable.[ch] gdk/gdk.[ch]
+	gdk/Makefile.am gdk/x11/Makefile.am gdk/x11/gdkevents-x11.c 
+	gdk/x11/gdkglobals-x11.c gdk/x11/gdkprivate-x11.c
+	gdk/x11/gdkx.h gdk/x11/gdkim-x11.c: Remove old XIM code.
+
+	* gdk/win32/gdkim-win32.c gdk/linux-fb/gdkim-fb.c: Remove
+	gdk_im/gdk_ic.
+
 2001-03-09  Hans Breuer  <hans@breuer.org>
 
 	* gdk/gdk.def : updated

@@ -433,10 +433,6 @@ gtk_old_editable_init (GtkOldEditable *old_editable)
   old_editable->visible = 1;
   old_editable->clipboard_text = NULL;
 
-#ifdef USE_XIM
-  old_editable->ic = NULL;
-#endif
-
   gtk_selection_add_targets (GTK_WIDGET (old_editable), GDK_SELECTION_PRIMARY,
 			     targets, G_N_ELEMENTS (targets));
 }

@@ -45,9 +45,6 @@ gchar            *gdk_progclass = NULL;
 gboolean          gdk_null_window_warnings = TRUE;
 
 gboolean          gdk_xim_using;  	        /* using XIM Protocol if TRUE */
-#ifdef USE_XIM
-GdkICPrivate     *gdk_xim_ic;		/* currently using IC */
-#endif /* USE_XIM */
 GdkWindow        *gdk_xim_window;		/* currently using Widow */
 
 GdkWindowObject *gdk_xgrab_window = NULL;  /* Window that currently holds the

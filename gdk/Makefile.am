@@ -62,7 +62,6 @@ gdk_public_h_sources = @STRIP_BEGIN@ \
 	gdkgc.h		\
 	gdkkeysyms.h	\
 	gdki18n.h	\
-	gdkim.h		\
 	gdkimage.h	\
 	gdkinput.h	\
 	gdkkeys.h	\

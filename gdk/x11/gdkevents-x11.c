@@ -397,12 +397,7 @@ gdk_event_translate (GdkEvent *event,
   static XComposeStatus compose;
   KeySym keysym;
   int charcount;
-#ifdef USE_XIM
-  static gchar* buf = NULL;
-  static gint buf_len= 0;
-#else
   char buf[16];
-#endif
   gint return_val;
   gint xoffset, yoffset;
   
@@ -471,41 +466,6 @@ gdk_event_translate (GdkEvent *event,
 	}
     }
 
-#ifdef USE_XIM
-  if (window == NULL && gdk_xim_window && xevent->type == KeyPress &&
-      !GDK_WINDOW_DESTROYED (gdk_xim_window))
-    {
-      /*
-       * If user presses a key in Preedit or Status window, keypress event
-       * is sometimes sent to these windows. These windows are not managed
-       * by GDK, so we redirect KeyPress event to xim_window.
-       *
-       * If someone want to use the window whitch is not managed by GDK
-       * and want to get KeyPress event, he/she must register the filter
-       * function to gdk_default_filters to intercept the event.
-       */
-
-      GdkFilterReturn result;
-
-      window = gdk_xim_window;
-      window_private = (GdkWindowObject *) window;
-      gdk_window_ref (window);
-      event->any.window = window;
-
-      GDK_NOTE (XIM,
-	g_message ("KeyPress event is redirected to xim_window: %#lx",
-	  	   xevent->xany.window));
-
-      result = gdk_event_apply_filters (xevent, event,
-	  				window_private->filters);
-      if (result != GDK_FILTER_CONTINUE)
-	{
-	  return_val = (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
-	  goto done;
-	}
-    }
-#endif
-
   /* We do a "manual" conversion of the XEvent to a
    *  GdkEvent. The structures are mostly the same so
    *  the conversion is fairly straightforward. We also
@@ -531,49 +491,8 @@ gdk_event_translate (GdkEvent *event,
       /* Lookup the string corresponding to the given keysym.
        */
 
-#ifdef USE_XIM
-      if (buf_len == 0) 
-	{
-	  buf_len = 128;
-	  buf = g_new (gchar, buf_len);
-	}
-      keysym = GDK_VoidSymbol;
-      
-      if (gdk_xim_ic && gdk_xim_ic->xic)
-	{
-	  Status status;
-	  
-	  /* Clear keyval. Depending on status, may not be set */
-	  charcount = XmbLookupString(gdk_xim_ic->xic,
-				      &xevent->xkey, buf, buf_len-1,
-				      &keysym, &status);
-	  if (status == XBufferOverflow)
-	    {			  /* retry */
-	      /* alloc adequate size of buffer */
-	      GDK_NOTE (XIM,
-			g_message("XIM: overflow (required %i)", charcount));
-	      
-	      while (buf_len <= charcount)
-		buf_len *= 2;
-	      buf = (gchar *) g_realloc (buf, buf_len);
-	      
-	      charcount = XmbLookupString (gdk_xim_ic->xic,
-					   &xevent->xkey, buf, buf_len-1,
-					   &keysym, &status);
-	    }
-	  if (status == XLookupNone)
-	    {
-	      return_val = FALSE;
-	      break;
-	    }
-	}
-      else
-	charcount = XLookupString (&xevent->xkey, buf, buf_len,
-				   &keysym, &compose);
-#else
       charcount = XLookupString (&xevent->xkey, buf, 16,
 				 &keysym, &compose);
-#endif
       event->key.keyval = keysym;
       event->key.hardware_keycode = xevent->xkey.keycode;
       
@@ -631,13 +550,6 @@ gdk_event_translate (GdkEvent *event,
 	    break;
 	}
       
-#ifdef USE_XIM
-      if (buf_len == 0) 
-	{
-	  buf_len = 128;
-	  buf = g_new (gchar, buf_len);
-	}
-#endif
       keysym = GDK_VoidSymbol;
       charcount = XLookupString (&xevent->xkey, buf, 16,
 				 &keysym, &compose);
@@ -1476,26 +1388,7 @@ gdk_events_queue (void)
 
   while (!gdk_event_queue_find_first() && XPending (gdk_display))
     {
-#ifdef USE_XIM
-      Window w = None;
-      
       XNextEvent (gdk_display, &xevent);
-      if (gdk_xim_window)
- 	switch (xevent.type)
- 	  {
- 	  case KeyPress:
- 	  case KeyRelease:
- 	  case ButtonPress:
- 	  case ButtonRelease:
- 	    w = GDK_WINDOW_XWINDOW (gdk_xim_window);
- 	    break;
- 	  }
-
-      if (XFilterEvent (&xevent, w))
-	continue;
-#else
-      XNextEvent (gdk_display, &xevent);
-#endif
 
       switch (xevent.type)
 	{
