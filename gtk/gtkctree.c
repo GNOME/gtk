@@ -3239,7 +3239,8 @@ tree_select (GtkCTree     *ctree,
 	     GtkCTreeNode *node, 
 	     gpointer      data)
 {
-  if (node && GTK_CTREE_ROW (node)->row.state != GTK_STATE_SELECTED)
+  if (node && GTK_CTREE_ROW (node)->row.state != GTK_STATE_SELECTED &&
+      GTK_CTREE_ROW (node)->row.selectable)
     gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_SELECT_ROW],
 		     node, -1);
 }
@@ -3315,11 +3316,12 @@ row_new (GtkCTree *ctree)
 
   GTK_CELL_PIXTEXT (ctree_row->row.cell[ctree->tree_column])->text = NULL;
 
-  ctree_row->row.fg_set  = FALSE;
-  ctree_row->row.bg_set  = FALSE;
-  ctree_row->row.state   = GTK_STATE_NORMAL;
-  ctree_row->row.data    = NULL;
-  ctree_row->row.destroy = NULL;
+  ctree_row->row.fg_set     = FALSE;
+  ctree_row->row.bg_set     = FALSE;
+  ctree_row->row.selectable = TRUE;
+  ctree_row->row.state      = GTK_STATE_NORMAL;
+  ctree_row->row.data       = NULL;
+  ctree_row->row.destroy    = NULL;
 
   ctree_row->level         = 0;
   ctree_row->expanded      = FALSE;
@@ -3379,7 +3381,8 @@ real_select_row (GtkCList *clist,
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CTREE (clist));
   
-  if ((node = g_list_nth (clist->row_list, row)))
+  if ((node = g_list_nth (clist->row_list, row)) &&
+      GTK_CTREE_ROW (node)->row.selectable)
     gtk_signal_emit (GTK_OBJECT (clist), ctree_signals[TREE_SELECT_ROW],
 		     node, column);
 }
@@ -3413,7 +3416,8 @@ real_tree_select (GtkCTree     *ctree,
   g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
-  if (!node || GTK_CTREE_ROW (node)->row.state == GTK_STATE_SELECTED)
+  if (!node || GTK_CTREE_ROW (node)->row.state == GTK_STATE_SELECTED ||
+      !GTK_CTREE_ROW (node)->row.selectable)
     return;
 
   clist = GTK_CLIST (ctree);
@@ -3502,13 +3506,14 @@ tree_toggle_selection (GtkCTree     *ctree,
       if (node && GTK_CTREE_ROW (node)->row.state == GTK_STATE_SELECTED)
 	gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_UNSELECT_ROW], 
 			 node, column);
-      else if (node)
+      else if (node && GTK_CTREE_ROW (node)->row.selectable)
 	gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_SELECT_ROW], 
 			 node, column);
       break;
 
     case GTK_SELECTION_BROWSE:
-      if (node && GTK_CTREE_ROW (node)->row.state == GTK_STATE_NORMAL)
+      if (node && GTK_CTREE_ROW (node)->row.state == GTK_STATE_NORMAL &&
+	  GTK_CTREE_ROW (node)->row.selectable)
 	gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_SELECT_ROW], 
 			 node, column);
       break;
@@ -3523,7 +3528,8 @@ select_row_recursive (GtkCTree     *ctree,
 		      GtkCTreeNode *node, 
 		      gpointer      data)
 {
-  if (!node || GTK_CTREE_ROW (node)->row.state == GTK_STATE_SELECTED)
+  if (!node || GTK_CTREE_ROW (node)->row.state == GTK_STATE_SELECTED ||
+      !GTK_CTREE_ROW (node)->row.selectable)
     return;
 
   GTK_CLIST (ctree)->undo_unselection = 
@@ -4553,8 +4559,9 @@ gtk_ctree_select (GtkCTree     *ctree,
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
 
-  gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_SELECT_ROW],
-		   node, -1);
+  if (GTK_CTREE_ROW (node)->row.selectable)
+    gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_SELECT_ROW],
+		     node, -1);
 }
 
 void
@@ -4797,6 +4804,60 @@ gtk_ctree_node_set_shift (GtkCTree     *ctree,
   GTK_CTREE_ROW (node)->row.cell[column].horizontal = horizontal;
 
   tree_draw_node (ctree, node);
+}
+
+void
+gtk_ctree_node_set_selectable (GtkCTree     *ctree,
+			       GtkCTreeNode *node,
+			       gboolean     selectable)
+{
+  g_return_if_fail (ctree != NULL);
+  g_return_if_fail (GTK_IS_CTREE (ctree));
+  g_return_if_fail (node != NULL);
+
+  if (selectable == GTK_CTREE_ROW (node)->row.selectable)
+    return;
+
+  GTK_CTREE_ROW (node)->row.selectable = selectable;
+
+  if (!selectable && GTK_CTREE_ROW (node)->row.state == GTK_STATE_SELECTED)
+    {
+      GtkCList *clist;
+
+      clist = GTK_CLIST (ctree);
+
+      if (clist->anchor >= 0 &&
+	  clist->selection_mode == GTK_SELECTION_EXTENDED)
+	{
+	  if ((gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_FOCUS (clist)))
+	    {
+	      GTK_CLIST_UNSET_FLAG (clist, CLIST_DRAG_SELECTION);
+	      gtk_grab_remove (GTK_WIDGET (clist));
+	      gdk_pointer_ungrab (GDK_CURRENT_TIME);
+	      if (clist->htimer)
+		{
+		  gtk_timeout_remove (clist->htimer);
+		  clist->htimer = 0;
+		}
+	      if (clist->vtimer)
+		{
+		  gtk_timeout_remove (clist->vtimer);
+		  clist->vtimer = 0;
+		}
+	    }
+	  GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
+	}
+      gtk_ctree_unselect (ctree, node);
+    }      
+}
+
+gboolean
+gtk_ctree_node_get_selectable (GtkCTree     *ctree,
+			       GtkCTreeNode *node)
+{
+  g_return_val_if_fail (node != NULL, FALSE);
+
+  return GTK_CTREE_ROW (node)->row.selectable;
 }
 
 GtkCellType 
@@ -5327,7 +5388,8 @@ fake_unselect_all (GtkCList *clist,
 
   if (row >= 0 && (focus_node = g_list_nth (clist->row_list, row)))
     {
-      if (GTK_CTREE_ROW (focus_node)->row.state == GTK_STATE_NORMAL)
+      if (GTK_CTREE_ROW (focus_node)->row.state == GTK_STATE_NORMAL &&
+	  GTK_CTREE_ROW (focus_node)->row.selectable)
 	{
 	  GTK_CTREE_ROW (focus_node)->row.state = GTK_STATE_SELECTED;
 	  
@@ -5410,7 +5472,7 @@ resync_selection (GtkCList *clist, GdkEvent *event)
 	      if (row >= i && row <= e)
 		unselect = FALSE;
 	    }
-	  if (unselect)
+	  if (unselect && GTK_CTREE_ROW (node)->row.selectable)
 	    {
 	      GTK_CTREE_ROW (node)->row.state = GTK_STATE_SELECTED;
 	      gtk_ctree_unselect (ctree, node);
@@ -5423,21 +5485,24 @@ resync_selection (GtkCList *clist, GdkEvent *event)
 
   for (node = GTK_CTREE_NODE (g_list_nth (clist->row_list, i)); i <= e;
        i++, node = GTK_CTREE_NODE_NEXT (node))
-    if (g_list_find (clist->selection, node))
+    if (GTK_CTREE_ROW (node)->row.selectable)
       {
-	if (GTK_CTREE_ROW (node)->row.state == GTK_STATE_NORMAL)
+	if (g_list_find (clist->selection, node))
 	  {
-	    GTK_CTREE_ROW (node)->row.state = GTK_STATE_SELECTED;
-	    gtk_ctree_unselect (ctree, node);
-	    clist->undo_selection = g_list_prepend (clist->undo_selection,
-						    node);
+	    if (GTK_CTREE_ROW (node)->row.state == GTK_STATE_NORMAL)
+	      {
+		GTK_CTREE_ROW (node)->row.state = GTK_STATE_SELECTED;
+		gtk_ctree_unselect (ctree, node);
+		clist->undo_selection = g_list_prepend (clist->undo_selection,
+							node);
+	      }
 	  }
-      }
-    else if (GTK_CTREE_ROW (node)->row.state == GTK_STATE_SELECTED)
-      {
-	GTK_CTREE_ROW (node)->row.state = GTK_STATE_NORMAL;
-	clist->undo_unselection = g_list_prepend (clist->undo_unselection,
-						  node);
+	else if (GTK_CTREE_ROW (node)->row.state == GTK_STATE_SELECTED)
+	  {
+	    GTK_CTREE_ROW (node)->row.state = GTK_STATE_NORMAL;
+	    clist->undo_unselection = g_list_prepend (clist->undo_unselection,
+						      node);
+	  }
       }
 
   for (list = clist->undo_unselection; list; list = list->next)
@@ -5471,10 +5536,12 @@ real_undo_selection (GtkCList *clist)
   ctree = GTK_CTREE (clist);
 
   for (work = clist->undo_selection; work; work = work->next)
-    gtk_ctree_select (ctree, GTK_CTREE_NODE (work->data));
+    if (GTK_CTREE_ROW (work->data)->row.selectable)
+      gtk_ctree_select (ctree, GTK_CTREE_NODE (work->data));
 
   for (work = clist->undo_unselection; work; work = work->next)
-    gtk_ctree_unselect (ctree, GTK_CTREE_NODE (work->data));
+    if (GTK_CTREE_ROW (work->data)->row.selectable)
+      gtk_ctree_unselect (ctree, GTK_CTREE_NODE (work->data));
 
   if (GTK_WIDGET_HAS_FOCUS (clist) && clist->focus_row != clist->undo_anchor)
     {

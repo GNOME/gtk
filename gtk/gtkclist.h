@@ -275,8 +275,9 @@ struct _GtkCListRow
   gpointer data;
   GtkDestroyNotify destroy;
   
-  gint fg_set : 1;
-  gint bg_set : 1;
+  gint fg_set     : 1;
+  gint bg_set     : 1;
+  gint selectable : 1;
 };
 
 /* Cell Structures */
@@ -517,6 +518,13 @@ void gtk_clist_set_shift (GtkCList *clist,
 			  gint      column,
 			  gint      vertical,
 			  gint      horizontal);
+
+/* set/get selectable flag of a single row */
+void gtk_clist_set_selectable (GtkCList *clist,
+			       gint      row,
+			       gboolean  selectable);
+gboolean gtk_clist_get_selectable (GtkCList *clist,
+				   gint      row);
 
 /* append returns the index of the row you just added, making
  * it easier to append and modify a row

@@ -321,6 +321,11 @@ void gtk_ctree_node_set_shift                    (GtkCTree     *ctree,
 						  gint          column,
 						  gint          vertical,
 						  gint          horizontal);
+void gtk_ctree_node_set_selectable               (GtkCTree     *ctree,
+						  GtkCTreeNode *node,
+						  gboolean      selectable);
+gboolean gtk_ctree_node_get_selectable           (GtkCTree     *ctree,
+						  GtkCTreeNode *node);
 GtkCellType gtk_ctree_node_get_cell_type         (GtkCTree     *ctree,
 						  GtkCTreeNode *node,
 						  gint          column);

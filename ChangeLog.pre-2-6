@@ -1,3 +1,13 @@
+Fri Sep 11 15:25:10 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_set_selectable): new function
+	to set/unset the selectable flag of a single row.
+	(gtk_clist_get_selectable): new function 
+	to get the state of the selectable flag
+
+	* gtk/gtkctree.c (gtk_ctree_node_set_selectable)
+	(gtk_ctree_node_get_selectable): clist analogons
+	
 Thu Sep 10 17:04:03 1998  Raph Levien  <raph@gimp.org>
 
 	* gtk/testrgb.c (testrgb_rgb_test): Small changes to the test
