@@ -66,22 +66,21 @@ static void
 gtk_tree_model_base_init (gpointer g_class)
 {
   static gboolean initted = FALSE;
-#if 0
+
   if (! initted)
     {
       g_signal_newc ("changed",
 		     GTK_TYPE_TREE_MODEL,
-		     G_SIGNAL_RUN_FIRST,
+		     G_SIGNAL_RUN_LAST,
 		     G_STRUCT_OFFSET (GtkTreeModelIface, changed),
 		     NULL,
 		     gtk_marshal_VOID__BOXED_BOXED,
 		     G_TYPE_NONE, 2,
 		     GTK_TYPE_TREE_PATH,
 		     GTK_TYPE_TREE_ITER);
-
       g_signal_newc ("inserted",
 		     GTK_TYPE_TREE_MODEL,
-		     G_SIGNAL_RUN_FIRST,
+		     G_SIGNAL_RUN_LAST,
 		     G_STRUCT_OFFSET (GtkTreeModelIface, inserted),
 		     NULL,
 		     gtk_marshal_VOID__BOXED_BOXED,
@@ -90,7 +89,7 @@ gtk_tree_model_base_init (gpointer g_class)
 		     GTK_TYPE_TREE_ITER);
       g_signal_newc ("child_toggled",
 		     GTK_TYPE_TREE_MODEL,
-		     G_SIGNAL_RUN_FIRST,
+		     G_SIGNAL_RUN_LAST,
 		     G_STRUCT_OFFSET (GtkTreeModelIface, child_toggled),
 		     NULL,
 		     gtk_marshal_VOID__BOXED_BOXED,
@@ -99,16 +98,14 @@ gtk_tree_model_base_init (gpointer g_class)
 		     GTK_TYPE_TREE_ITER);
       g_signal_newc ("deleted",
 		     GTK_TYPE_TREE_MODEL,
-		     G_SIGNAL_RUN_FIRST,
+		     G_SIGNAL_RUN_LAST,
 		     G_STRUCT_OFFSET (GtkTreeModelIface, deleted),
 		     NULL,
-		     gtk_marshal_VOID__BOXED_BOXED,
+		     gtk_marshal_VOID__BOXED,
 		     G_TYPE_NONE, 1,
 		     GTK_TYPE_TREE_PATH);
-
       initted = TRUE;
     }
-#endif
 }
 
 /**

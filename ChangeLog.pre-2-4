@@ -1,3 +1,15 @@
+Wed Feb 21 15:41:34 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreestore.c: removed signals.  Moved to inherit from
+	GObject instead of GtkObject.
+
+	* gtk/gtkliststore.c: ditto.
+
+	* gtk/gtktreemodelsort.c: ditto.
+
+	* gtk/gtktreemodel.c (gtk_tree_model_base_init): moved signals to
+	GtkTreeModelIface, instead of in each model.
+
 2001-02-21  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextbuffer.c (gtk_text_buffer_insert_child_anchor):

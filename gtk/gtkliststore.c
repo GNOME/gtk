@@ -27,16 +27,6 @@
 
 #define G_SLIST(x) ((GSList *) x)
 
-enum {
-  CHANGED,
-  INSERTED,
-  CHILD_TOGGLED,
-  DELETED,
-  LAST_SIGNAL
-};
-
-static guint list_store_signals[LAST_SIGNAL] = { 0 };
-
 static void         gtk_list_store_init            (GtkListStore      *list_store);
 static void         gtk_list_store_class_init      (GtkListStoreClass *class);
 static void         gtk_list_store_tree_model_init (GtkTreeModelIface *iface);
@@ -98,7 +88,7 @@ validate_list_store (GtkListStore *list_store)
 GtkType
 gtk_list_store_get_type (void)
 {
-  static GtkType list_store_type = 0;
+  static GType list_store_type = 0;
 
   if (!list_store_type)
     {
@@ -136,7 +126,7 @@ gtk_list_store_get_type (void)
 	NULL
       };
       
-      list_store_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkListStore", &list_store_info, 0);
+      list_store_type = g_type_register_static (G_TYPE_OBJECT, "GtkListStore", &list_store_info, 0);
       g_type_add_interface_static (list_store_type,
 				   GTK_TYPE_TREE_MODEL,
 				   &tree_model_info);
@@ -154,45 +144,9 @@ gtk_list_store_get_type (void)
 static void
 gtk_list_store_class_init (GtkListStoreClass *class)
 {
-  GtkObjectClass *object_class;
+  GObjectClass *object_class;
 
-  object_class = (GtkObjectClass*) class;
-
-  list_store_signals[CHANGED] =
-    gtk_signal_new ("changed",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkListStoreClass, changed),
-                    gtk_marshal_VOID__BOXED_BOXED,
-                    G_TYPE_NONE, 2,
-		    GTK_TYPE_TREE_PATH,
-		    GTK_TYPE_TREE_ITER);
-  list_store_signals[INSERTED] =
-    gtk_signal_new ("inserted",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkListStoreClass, inserted),
-                    gtk_marshal_VOID__BOXED_BOXED,
-                    G_TYPE_NONE, 2,
-		    GTK_TYPE_TREE_PATH,
-		    GTK_TYPE_TREE_ITER);
-  list_store_signals[CHILD_TOGGLED] =
-    gtk_signal_new ("child_toggled",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkListStoreClass, child_toggled),
-                    gtk_marshal_VOID__BOXED_BOXED,
-                    G_TYPE_NONE, 2,
-		    GTK_TYPE_TREE_PATH,
-		    GTK_TYPE_TREE_ITER);
-  list_store_signals[DELETED] =
-    gtk_signal_new ("deleted",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkListStoreClass, deleted),
-                    gtk_marshal_VOID__BOXED,
-                    G_TYPE_NONE, 1,
-		    GTK_TYPE_TREE_PATH);
+  object_class = (GObjectClass*) class;
 }
 
 static void
@@ -250,7 +204,7 @@ gtk_list_store_init (GtkListStore *list_store)
 GtkListStore *
 gtk_list_store_new (void)
 {
-  return GTK_LIST_STORE (gtk_type_new (gtk_list_store_get_type ()));
+  return GTK_LIST_STORE (g_object_new (gtk_list_store_get_type (), NULL));
 }
 
 /**
@@ -583,9 +537,9 @@ gtk_list_store_set_cell (GtkListStore *list_store,
       if (column == 0)
 	{
 	  _gtk_tree_data_list_value_to_node (list, value);
-	  gtk_signal_emit_by_name (GTK_OBJECT (list_store),
-				   "changed",
-				   NULL, iter);
+	  g_signal_emit_by_name (G_OBJECT (list_store),
+				 "changed",
+				 NULL, iter);
 	  return;
 	}
 
@@ -613,7 +567,7 @@ gtk_list_store_set_cell (GtkListStore *list_store,
       column --;
     }
   _gtk_tree_data_list_value_to_node (list, value);
-  gtk_signal_emit_by_name (GTK_OBJECT (list_store),
+  g_signal_emit_by_name (G_OBJECT (list_store),
 			   "changed",
 			   NULL, iter);
 }
@@ -790,7 +744,7 @@ gtk_list_store_remove (GtkListStore *list_store,
 
   validate_list_store (list_store);  
   
-  gtk_signal_emit_by_name (GTK_OBJECT (list_store),
+  g_signal_emit_by_name (G_OBJECT (list_store),
 			   "deleted",
 			   path);
   gtk_tree_path_free (path);
@@ -865,7 +819,7 @@ gtk_list_store_insert (GtkListStore *list_store,
   
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, position);
-  gtk_signal_emit_by_name (GTK_OBJECT (list_store),
+  g_signal_emit_by_name (G_OBJECT (list_store),
 			   "inserted",
 			   path, iter);
   gtk_tree_path_free (path);
@@ -946,7 +900,7 @@ gtk_list_store_insert_before (GtkListStore *list_store,
   
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, i);
-  gtk_signal_emit_by_name (GTK_OBJECT (list_store),
+  g_signal_emit_by_name (G_OBJECT (list_store),
 			   "inserted",
 			   path, iter);
   gtk_tree_path_free (path);
@@ -1000,7 +954,7 @@ gtk_list_store_insert_after (GtkListStore *list_store,
   
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, i);
-  gtk_signal_emit_by_name (GTK_OBJECT (list_store),
+  g_signal_emit_by_name (G_OBJECT (list_store),
 			   "inserted",
 			   path, iter);
   gtk_tree_path_free (path);
@@ -1041,7 +995,7 @@ gtk_list_store_prepend (GtkListStore *list_store,
   
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, 0);
-  gtk_signal_emit_by_name (GTK_OBJECT (list_store),
+  g_signal_emit_by_name (G_OBJECT (list_store),
 			   "inserted",
 			   path, iter);
   gtk_tree_path_free (path);
@@ -1084,7 +1038,7 @@ gtk_list_store_append (GtkListStore *list_store,
   
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, i);
-  gtk_signal_emit_by_name (GTK_OBJECT (list_store),
+  g_signal_emit_by_name (G_OBJECT (list_store),
 			   "inserted",
 			   path, iter);
   gtk_tree_path_free (path);
@@ -1230,7 +1184,7 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
           
           G_SLIST (dest_iter.user_data)->data = copy_head;
           
-          gtk_signal_emit_by_name (GTK_OBJECT (tree_model),
+          g_signal_emit_by_name (G_OBJECT (tree_model),
                                    "changed",
                                    NULL, &dest_iter);
         }

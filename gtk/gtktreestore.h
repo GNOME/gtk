@@ -38,7 +38,7 @@ typedef struct _GtkTreeStoreClass  GtkTreeStoreClass;
 
 struct _GtkTreeStore
 {
-  GtkObject parent;
+  GObject parent;
 
   gint stamp;
   gpointer root;
@@ -49,7 +49,7 @@ struct _GtkTreeStore
 
 struct _GtkTreeStoreClass
 {
-  GtkObjectClass parent_class;
+  GObjectClass parent_class;
 
   /* signals */
   /* Will be moved into the GtkTreeModelIface eventually */

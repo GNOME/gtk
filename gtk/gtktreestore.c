@@ -27,17 +27,6 @@
 
 #define G_NODE(node) ((GNode *)node)
 
-enum {
-  CHANGED,
-  INSERTED,
-  CHILD_TOGGLED,
-  DELETED,
-  LAST_SIGNAL
-};
-
-static guint tree_store_signals[LAST_SIGNAL] = { 0 };
-
-
 static void         gtk_tree_store_init            (GtkTreeStore      *tree_store);
 static void         gtk_tree_store_class_init      (GtkTreeStoreClass *tree_store_class);
 static void         gtk_tree_store_tree_model_init (GtkTreeModelIface *iface);
@@ -100,7 +89,7 @@ validate_tree (GtkTreeStore *tree_store)
 GtkType
 gtk_tree_store_get_type (void)
 {
-  static GtkType tree_store_type = 0;
+  static GType tree_store_type = 0;
 
   if (!tree_store_type)
     {
@@ -138,7 +127,7 @@ gtk_tree_store_get_type (void)
 	NULL
       };
       
-      tree_store_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkTreeStore", &tree_store_info, 0);
+      tree_store_type = g_type_register_static (G_TYPE_OBJECT, "GtkTreeStore", &tree_store_info, 0);
 
       g_type_add_interface_static (tree_store_type,
 				   GTK_TYPE_TREE_MODEL,
@@ -160,45 +149,10 @@ gtk_tree_store_get_type (void)
 static void
 gtk_tree_store_class_init (GtkTreeStoreClass *tree_store_class)
 {
-  GtkObjectClass *object_class;
+  GObjectClass *object_class;
 
-  object_class = (GtkObjectClass *) tree_store_class;
+  object_class = (GObjectClass *) tree_store_class;
 
-  tree_store_signals[CHANGED] =
-    gtk_signal_new ("changed",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTreeStoreClass, changed),
-                    gtk_marshal_VOID__BOXED_BOXED,
-                    G_TYPE_NONE, 2,
-		    GTK_TYPE_TREE_PATH,
-		    GTK_TYPE_TREE_ITER);
-  tree_store_signals[INSERTED] =
-    gtk_signal_new ("inserted",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTreeStoreClass, inserted),
-                    gtk_marshal_VOID__BOXED_BOXED,
-                    G_TYPE_NONE, 2,
-		    GTK_TYPE_TREE_PATH,
-		    GTK_TYPE_TREE_ITER);
-  tree_store_signals[CHILD_TOGGLED] =
-    gtk_signal_new ("child_toggled",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTreeStoreClass, child_toggled),
-                    gtk_marshal_VOID__BOXED_BOXED,
-                    G_TYPE_NONE, 2,
-		    GTK_TYPE_TREE_PATH,
-		    GTK_TYPE_TREE_ITER);
-  tree_store_signals[DELETED] =
-    gtk_signal_new ("deleted",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTreeStoreClass, deleted),
-                    gtk_marshal_VOID__BOXED,
-                    G_TYPE_NONE, 1,
-		    GTK_TYPE_TREE_PATH);
 }
 
 static void
@@ -241,7 +195,7 @@ gtk_tree_store_init (GtkTreeStore *tree_store)
 GtkTreeStore *
 gtk_tree_store_new (void)
 {
-  return GTK_TREE_STORE (gtk_type_new (gtk_tree_store_get_type ()));
+  return GTK_TREE_STORE (g_object_new (gtk_tree_store_get_type (), NULL));
 }
 
 GtkTreeStore *
@@ -591,9 +545,9 @@ gtk_tree_store_set_cell (GtkTreeStore *tree_store,
       if (column == 0)
 	{
 	  _gtk_tree_data_list_value_to_node (list, value);
-	  gtk_signal_emit_by_name (GTK_OBJECT (tree_store),
-				   "changed",
-				   NULL, iter);
+	  g_signal_emit_by_name (G_OBJECT (tree_store),
+				 "changed",
+				 NULL, iter);
 	  return;
 	}
 
@@ -621,7 +575,7 @@ gtk_tree_store_set_cell (GtkTreeStore *tree_store,
       column --;
     }
   _gtk_tree_data_list_value_to_node (list, value);
-  gtk_signal_emit_by_name (GTK_OBJECT (tree_store),
+  g_signal_emit_by_name (G_OBJECT (tree_store),
 			   "changed",
 			   NULL, iter);
 }
@@ -732,14 +686,14 @@ gtk_tree_store_remove (GtkTreeStore *model,
   g_node_destroy (G_NODE (iter->user_data));
 
   model->stamp++;
-  gtk_signal_emit_by_name (GTK_OBJECT (model),
+  g_signal_emit_by_name (G_OBJECT (model),
 			   "deleted",
 			   path);
   if (parent != G_NODE (model->root) && parent->children == NULL)
     {
       gtk_tree_path_up (path);
       
-      gtk_signal_emit_by_name (GTK_OBJECT (model),
+      g_signal_emit_by_name (G_OBJECT (model),
 			       "child_toggled",
 			       path,
 			       parent);
@@ -769,7 +723,7 @@ gtk_tree_store_insert (GtkTreeStore *model,
   g_node_insert (parent_node, position, G_NODE (iter->user_data));
   
   path = gtk_tree_store_get_path (GTK_TREE_MODEL (model), iter);
-  gtk_signal_emit_by_name (GTK_OBJECT (model),
+  g_signal_emit_by_name (G_OBJECT (model),
 			   "inserted",
 			   path, iter);
   gtk_tree_path_free (path);
@@ -814,7 +768,7 @@ gtk_tree_store_insert_before (GtkTreeStore *model,
   iter->user_data = new_node;
   
   path = gtk_tree_store_get_path (GTK_TREE_MODEL (model), iter);
-  gtk_signal_emit_by_name (GTK_OBJECT (model),
+  g_signal_emit_by_name (G_OBJECT (model),
 			   "inserted",
 			   path, iter);
   gtk_tree_path_free (path);
@@ -860,7 +814,7 @@ gtk_tree_store_insert_after (GtkTreeStore *model,
   iter->user_data = new_node;
   
   path = gtk_tree_store_get_path (GTK_TREE_MODEL (model), iter);
-  gtk_signal_emit_by_name (GTK_OBJECT (model),
+  g_signal_emit_by_name (G_OBJECT (model),
 			   "inserted",
 			   path, iter);
   gtk_tree_path_free (path);
@@ -896,7 +850,7 @@ gtk_tree_store_prepend (GtkTreeStore *model,
       if (parent_node != model->root)
 	{
 	  path = gtk_tree_store_get_path (GTK_TREE_MODEL (model), parent);
-	  gtk_signal_emit_by_name (GTK_OBJECT (model),
+	  g_signal_emit_by_name (G_OBJECT (model),
 				   "child_toggled",
 				   path,
 				   parent);
@@ -906,7 +860,7 @@ gtk_tree_store_prepend (GtkTreeStore *model,
 	{
 	  path = gtk_tree_store_get_path (GTK_TREE_MODEL (model), iter);
 	}
-      gtk_signal_emit_by_name (GTK_OBJECT (model),
+      g_signal_emit_by_name (G_OBJECT (model),
 			       "inserted",
 			       path,
 			       iter);
@@ -948,7 +902,7 @@ gtk_tree_store_append (GtkTreeStore *model,
       if (parent_node != model->root)
 	{
 	  path = gtk_tree_store_get_path (GTK_TREE_MODEL (model), parent);
-	  gtk_signal_emit_by_name (GTK_OBJECT (model),
+	  g_signal_emit_by_name (G_OBJECT (model),
 				   "child_toggled",
 				   path,
 				   parent);
@@ -959,7 +913,7 @@ gtk_tree_store_append (GtkTreeStore *model,
 	  path = gtk_tree_store_get_path (GTK_TREE_MODEL (model), iter);
 	}
       
-      gtk_signal_emit_by_name (GTK_OBJECT (model),
+      g_signal_emit_by_name (G_OBJECT (model),
 			       "inserted",
 			       path,
 			       iter);
@@ -1083,7 +1037,7 @@ copy_node_data (GtkTreeStore *tree_store,
           
   G_NODE (dest_iter->user_data)->data = copy_head;
 
-  gtk_signal_emit_by_name (GTK_OBJECT (tree_store),
+  g_signal_emit_by_name (G_OBJECT (tree_store),
                            "changed",
                            NULL, dest_iter);
 }

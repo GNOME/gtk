@@ -37,7 +37,7 @@ typedef struct _GtkListStoreClass  GtkListStoreClass;
 
 struct _GtkListStore
 {
-  GtkObject parent;
+  GObject parent;
 
   /*< private >*/
   gint stamp;
@@ -50,7 +50,7 @@ struct _GtkListStore
 
 struct _GtkListStoreClass
 {
-  GtkObjectClass parent_class;
+  GObjectClass parent_class;
 
   /* signals */
   /* Will be moved into the GtkTreeModelIface eventually */

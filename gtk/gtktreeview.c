@@ -3557,22 +3557,22 @@ gtk_tree_view_setup_model (GtkTreeView *tree_view)
 
   tree_view->priv->tree = _gtk_rbtree_new ();
 
-  gtk_signal_connect (GTK_OBJECT (tree_view->priv->model),
-		      "changed",
-		      gtk_tree_view_changed,
-		      tree_view);
-  gtk_signal_connect (GTK_OBJECT (tree_view->priv->model),
-		      "inserted",
-		      gtk_tree_view_inserted,
-		      tree_view);
-  gtk_signal_connect (GTK_OBJECT (tree_view->priv->model),
-		      "child_toggled",
-		      gtk_tree_view_child_toggled,
-		      tree_view);
-  gtk_signal_connect (GTK_OBJECT (tree_view->priv->model),
-		      "deleted",
-		      gtk_tree_view_deleted,
-		      tree_view);
+  g_signal_connect (tree_view->priv->model,
+		    "changed",
+		    gtk_tree_view_changed,
+		    tree_view);
+  g_signal_connect (tree_view->priv->model,
+		    "inserted",
+		    gtk_tree_view_inserted,
+		    tree_view);
+  g_signal_connect (tree_view->priv->model,
+		    "child_toggled",
+		    gtk_tree_view_child_toggled,
+		    tree_view);
+  g_signal_connect (tree_view->priv->model,
+		    "deleted",
+		    gtk_tree_view_deleted,
+		    tree_view);
 
   if (tree_view->priv->columns == NULL)
     return;

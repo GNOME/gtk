@@ -40,7 +40,7 @@ typedef gint (* GValueCompareFunc) (const GValue *a,
 
 struct _GtkTreeModelSort
 {
-  GtkObject parent;
+  GObject parent;
 
   /* < private > */
   gpointer root;
@@ -49,11 +49,16 @@ struct _GtkTreeModelSort
   GtkTreeModel *child_model;
   gint sort_col;
   GValueCompareFunc func;
+
+  guint changed_id;
+  guint inserted_id;
+  guint child_toggled_id;
+  guint deleted_id;
 };
 
 struct _GtkTreeModelSortClass
 {
-  GtkObjectClass parent_class;
+  GObjectClass parent_class;
 
   /* signals */
   /* Will be moved into the GtkTreeModelIface eventually */

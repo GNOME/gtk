@@ -28,14 +28,6 @@
 #include "gtksignal.h"
 #include <string.h>
 
-enum {
-  CHANGED,
-  INSERTED,
-  CHILD_TOGGLED,
-  DELETED,
-  LAST_SIGNAL
-};
-
 typedef struct _SortElt SortElt;
 struct _SortElt
 {
@@ -53,8 +45,6 @@ struct _SortData
   gint sort_col;
   GValueCompareFunc func;
 };
-
-static guint tree_model_sort_signals[LAST_SIGNAL] = { 0 };
 
 
 #define get_array(e,t) ((GArray *)((e)->parent?(e)->parent->children:GTK_TREE_MODEL_SORT(t)->root))
@@ -134,10 +124,10 @@ static gint         g_value_int_compare_func              (const GValue     *a,
 
 
 
-GtkType
+GType
 gtk_tree_model_sort_get_type (void)
 {
-  static GtkType tree_model_sort_type = 0;
+  static GType tree_model_sort_type = 0;
 
   if (!tree_model_sort_type)
     {
@@ -161,7 +151,7 @@ gtk_tree_model_sort_get_type (void)
 	NULL
       };
 
-      tree_model_sort_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkTreeModelSort", &tree_model_sort_info, 0);
+      tree_model_sort_type = g_type_register_static (G_TYPE_OBJECT, "GtkTreeModelSort", &tree_model_sort_info, 0);
       g_type_add_interface_static (tree_model_sort_type,
 				   GTK_TYPE_TREE_MODEL,
 				   &tree_model_info);
@@ -178,42 +168,6 @@ gtk_tree_model_sort_class_init (GtkTreeModelSortClass *tree_model_sort_class)
   object_class = (GObjectClass *) tree_model_sort_class;
 
   object_class->finalize = gtk_tree_model_sort_finalize;
-
-  tree_model_sort_signals[CHANGED] =
-    gtk_signal_new ("changed",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTreeModelSortClass, changed),
-                    gtk_marshal_VOID__POINTER_POINTER,
-                    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_POINTER,
-		    GTK_TYPE_POINTER);
-  tree_model_sort_signals[INSERTED] =
-    gtk_signal_new ("inserted",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTreeModelSortClass, inserted),
-                    gtk_marshal_VOID__POINTER_POINTER,
-                    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_POINTER,
-		    GTK_TYPE_POINTER);
-  tree_model_sort_signals[CHILD_TOGGLED] =
-    gtk_signal_new ("child_toggled",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTreeModelSortClass, child_toggled),
-                    gtk_marshal_VOID__POINTER_POINTER,
-                    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_POINTER,
-		    GTK_TYPE_POINTER);
-  tree_model_sort_signals[DELETED] =
-    gtk_signal_new ("deleted",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTreeModelSortClass, deleted),
-                    gtk_marshal_VOID__POINTER,
-                    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_POINTER);
 }
 
 static void
@@ -243,7 +197,7 @@ gtk_tree_model_sort_init (GtkTreeModelSort *tree_model_sort)
 GtkTreeModel *
 gtk_tree_model_sort_new (void)
 {
-  return GTK_TREE_MODEL (gtk_type_new (gtk_tree_model_sort_get_type ()));
+  return GTK_TREE_MODEL (g_object_new (gtk_tree_model_sort_get_type (), NULL));
 }
 
 GtkTreeModel *
@@ -281,18 +235,14 @@ gtk_tree_model_sort_set_model (GtkTreeModelSort *tree_model_sort,
 
   if (tree_model_sort->child_model)
     {
-      gtk_signal_disconnect_by_func (GTK_OBJECT (tree_model_sort->child_model),
-				     gtk_tree_model_sort_changed,
-				     tree_model_sort);
-      gtk_signal_disconnect_by_func (GTK_OBJECT (tree_model_sort->child_model),
-				     gtk_tree_model_sort_inserted,
-				     tree_model_sort);
-      gtk_signal_disconnect_by_func (GTK_OBJECT (tree_model_sort->child_model),
-				     gtk_tree_model_sort_child_toggled,
-				     tree_model_sort);
-      gtk_signal_disconnect_by_func (GTK_OBJECT (tree_model_sort->child_model),
-				     gtk_tree_model_sort_deleted,
-				     tree_model_sort);
+      g_signal_handler_disconnect (G_OBJECT (tree_model_sort->child_model),
+				   tree_model_sort->changed_id);
+      g_signal_handler_disconnect (G_OBJECT (tree_model_sort->child_model),
+				   tree_model_sort->inserted_id);
+      g_signal_handler_disconnect (G_OBJECT (tree_model_sort->child_model),
+				   tree_model_sort->child_toggled_id);
+      g_signal_handler_disconnect (G_OBJECT (tree_model_sort->child_model),
+				   tree_model_sort->deleted_id);
 
       g_object_unref (G_OBJECT (tree_model_sort->child_model));
     }
@@ -301,19 +251,23 @@ gtk_tree_model_sort_set_model (GtkTreeModelSort *tree_model_sort,
 
   if (child_model)
     {
-      gtk_signal_connect (GTK_OBJECT (child_model),
+      tree_model_sort->changed_id =
+	g_signal_connect (child_model,
 			  "changed",
 			  gtk_tree_model_sort_changed,
 			  tree_model_sort);
-      gtk_signal_connect (GTK_OBJECT (child_model),
+      tree_model_sort->inserted_id = 
+	g_signal_connect (child_model,
 			  "inserted",
 			  gtk_tree_model_sort_inserted,
 			  tree_model_sort);
-      gtk_signal_connect (GTK_OBJECT (child_model),
+      tree_model_sort->child_toggled_id = 
+	g_signal_connect (child_model,
 			  "child_toggled",
 			  gtk_tree_model_sort_child_toggled,
 			  tree_model_sort);
-      gtk_signal_connect (GTK_OBJECT (child_model),
+      tree_model_sort->deleted_id =
+	g_signal_connect (child_model,
 			  "deleted",
 			  gtk_tree_model_sort_deleted,
 			  tree_model_sort);
@@ -420,7 +374,7 @@ gtk_tree_model_sort_changed (GtkTreeModel *s_model,
 						 (GtkTreeIter *) elt,
 						 TRUE);
 
-  gtk_signal_emit_by_name (GTK_OBJECT (data), "changed", path, &iter);
+  g_signal_emit_by_name (G_OBJECT (data), "changed", path, &iter);
 
   gtk_tree_path_free (path);
   if (free_s_path)
@@ -533,7 +487,7 @@ gtk_tree_model_sort_inserted (GtkTreeModel *s_model,
     return;
 
   gtk_tree_model_get_iter (GTK_TREE_MODEL (data), &iter, path);
-  gtk_signal_emit_by_name (GTK_OBJECT (data), "inserted", path, &iter);
+  g_signal_emit_by_name (G_OBJECT (data), "inserted", path, &iter);
   gtk_tree_path_free (path);
 }
 
@@ -566,7 +520,7 @@ gtk_tree_model_sort_child_toggled (GtkTreeModel *s_model,
   if (path == NULL)
     return;
   gtk_tree_model_get_iter (GTK_TREE_MODEL (data), &iter, path);
-  gtk_signal_emit_by_name (GTK_OBJECT (data),
+  g_signal_emit_by_name (G_OBJECT (data),
 			   "child_toggled",
 			   path, &iter);
   gtk_tree_path_free (path);
@@ -625,7 +579,7 @@ gtk_tree_model_sort_deleted (GtkTreeModel *s_model,
     }
 
   tree_model_sort->stamp++;
-  gtk_signal_emit_by_name (GTK_OBJECT (data), "deleted", path);
+  g_signal_emit_by_name (G_OBJECT (data), "deleted", path);
   gtk_tree_path_free (path);
 }
 
