@@ -1,3 +1,16 @@
+Fri Feb  4 14:16:31 2005  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkaccelgroup.c (substitute_underscores): remove unused
+	function.
+
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_render):
+	Add some extra parens for bitop order of operations disambiguiation.
+
+	* gtk/gtkstock.c: Fix const confusion, make our own copy of the 
+	domain when setting a translate function.
+
+	* tests/testcombo.c: removed unused variable.
+
 2005-02-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkstock.c (gtk_stock_lookup): Handle item->translation_domain

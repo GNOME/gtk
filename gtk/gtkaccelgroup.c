@@ -1186,19 +1186,6 @@ gtk_accelerator_name (guint           accelerator_key,
   return accelerator;
 }
 
-/* Underscores in key names are better displayed as spaces
- * E.g., Page_Up should be "Page Up"
- */
-static void
-substitute_underscores (char *str)
-{
-  char *p;
-
-  for (p = str; *p; p++)
-    if (*p == '_')
-      *p = ' ';
-}
-
 /**
  * gtk_accelerator_get_label:
  * @accelerator_key:  accelerator keyval

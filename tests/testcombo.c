@@ -884,7 +884,6 @@ main (int argc, char **argv)
         GtkCellRenderer *renderer;
         GdkPixbuf *pixbuf;
         GtkTreeModel *model;
-        GValue value = {0, };
 	GtkTreePath *path;
 	GtkTreeIter iter;
 	

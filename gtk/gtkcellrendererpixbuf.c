@@ -575,11 +575,11 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
      pixbuf = invisible;
     }
   else if (priv->follow_state && 
-	   (flags & (GTK_CELL_RENDERER_SELECTED|GTK_CELL_RENDERER_PRELIT) != 0))
+	   (flags & (GTK_CELL_RENDERER_SELECTED|GTK_CELL_RENDERER_PRELIT)) != 0)
     {
       GtkStateType state;
 
-      if (flags & GTK_CELL_RENDERER_SELECTED != 0)
+      if ((flags & GTK_CELL_RENDERER_SELECTED) != 0)
 	{
 	  if (GTK_WIDGET_HAS_FOCUS (widget))
 	    state = GTK_STATE_SELECTED;

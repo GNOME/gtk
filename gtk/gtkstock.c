@@ -436,9 +436,12 @@ gtk_stock_set_translate_func (const gchar      *domain,
 			      GtkDestroyNotify  notify)
 {
   GtkStockTranslateFunc *translate;
-  
+  gchar *domainname;
+ 
+  domainname = g_strdup (domain);
+
   translate = (GtkStockTranslateFunc *) 
-    g_hash_table_lookup (translate_hash, domain);
+    g_hash_table_lookup (translate_hash, domainname);
 
   if (translate)
     {
@@ -452,14 +455,16 @@ gtk_stock_set_translate_func (const gchar      *domain,
   translate->data = data;
   translate->notify = notify;
       
-  g_hash_table_insert (translate_hash, domain, translate);
+  g_hash_table_insert (translate_hash, domainname, translate);
 }
 
 static gchar *
 sgettext_swapped (const gchar *msgid, 
-		  const gchar *domainname)
+		  gpointer     data)
 {
-  return g_strip_context (msgid, dgettext (domainname, msgid));
+  gchar *domainname = data;
+
+  return (gchar *)g_strip_context (msgid, dgettext (domainname, msgid));
 }
 
 
@@ -475,7 +480,8 @@ init_stock_hash (void)
 
   if (translate_hash == NULL)
     {
-      translate_hash = g_hash_table_new (g_str_hash, g_str_equal);
+      translate_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
+	                                      g_free, NULL);
 
       gtk_stock_set_translate_func (GETTEXT_PACKAGE, 
 				    sgettext_swapped,
