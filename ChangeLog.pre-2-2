@@ -1,3 +1,9 @@
+Wed Oct 10 01:19:04 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_iter_is_selected):
+	new function, #61923
+	(gtk_tree_selection_path_is_selected): Ditto
+
 Tue Oct  9 17:40:24 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreestore.c (gtk_tree_store_finalize): We're a gobject,

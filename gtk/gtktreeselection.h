@@ -95,6 +95,10 @@ void             gtk_tree_selection_select_iter         (GtkTreeSelection       
 							 GtkTreeIter                 *iter);
 void             gtk_tree_selection_unselect_iter       (GtkTreeSelection            *selection,
 							 GtkTreeIter                 *iter);
+gboolean         gtk_tree_selection_path_is_selected    (GtkTreeSelection            *selection,
+							 GtkTreePath                 *path);
+gboolean         gtk_tree_selection_iter_is_selected    (GtkTreeSelection            *selection,
+							 GtkTreeIter                 *iter);
 void             gtk_tree_selection_select_all          (GtkTreeSelection            *selection);
 void             gtk_tree_selection_unselect_all        (GtkTreeSelection            *selection);
 void             gtk_tree_selection_select_range        (GtkTreeSelection            *selection,
