@@ -464,7 +464,6 @@ Mon Aug  5 17:01:30 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/linux-fb/Makefile.am: Remove LDFLAGS setting.
 
->>>>>>> 1.3338.2.155
 2002-08-01  Sven Neumann  <sven@gimp.org>
 
 	* gdk/gdkrgb.c: trivial changes to some debug code so it compiles
