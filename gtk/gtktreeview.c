@@ -6795,7 +6795,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   GtkAllocation allocation;
   gint x, y, width, height;
   GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (tree_view));
-  GdkDisplay *display = gtk_screen_get_display (screen);
+  GdkDisplay *display = gdk_screen_get_display (screen);
 
   g_return_if_fail (tree_view->priv->column_drag_info == NULL);
 

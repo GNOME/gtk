@@ -1,3 +1,7 @@
+Tue Jun 18 19:30:25 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktreeview.c: Typo fix.
+
 Tue Jun 18 19:11:51 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdisplay.[ch] gdk/gdkevents.c gdk/gdkinput.h 
