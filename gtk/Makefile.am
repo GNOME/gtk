@@ -320,45 +320,44 @@ EXTRA_DIST += $(gtk_built_sources) $(gtk_built_public_sources) $(gtk_extra_sourc
 #
 # rules to generate built sources
 #
+# setup autogeneration dependancies
 gen_sources = xgen-gdef xgen-gtbh xgen-gtbvc xgen-gtbic xgen-gtbec xgen-gmh xgen-gmc
 CLEANFILES += $(gen_sources)
 COPYING: $(gtk_built_public_sources) $(gtk_built_sources)
 $(OBJECTS): COPYING 	# this is our oldest-source-stamp
-gtk.defs: @REBUILD@ # stamp-gtk.defs
-	-test -e "$(srcdir)/$@" || touch $(srcdir)/gtk.defs
-stamp-gtk.defs: @REBUILD@ makeenums.pl gtk-boxed.defs $(gtk_public_h_sources) $(gdk_headers)
+# initial creation of the real stamp-* files
+gtk.defs gtkmarshal.h gtktypebuiltins.h:          # never add deps here
+	-test -e "$(srcdir)/$@" || touch $(srcdir)/$@
+# normal autogeneration rules
+stamp-gtk.defs: @REBUILD@ makeenums.pl gtk.defs gtk-boxed.defs $(gtk_public_h_sources) $(gdk_headers)
 	cd $(srcdir) \
 	&& $(PERL) makeenums.pl defs $(gtk_public_h_sources) $(gdk_headers) > xgen-gdef \
 	&& cat gtk-boxed.defs >> xgen-gdef \
 	&& (cmp -s xgen-gdef gtk.defs || cp xgen-gdef gtk.defs) \
 	&& rm -f xgen-gdef \
 	&& echo timestamp > $@
-gtkmarshal.h: @REBUILD@ # stamp-gtkmarshal.h
-	-test -e "$(srcdir)/$@" || touch $(srcdir)/gtkmarshal.h
-stamp-gtkmarshal.h: @REBUILD@ gtkmarshal.h
-gtkmarshal.c stamp-gtkmarshal.h: @REBUILD@ genmarshal.pl gtkmarshal.list
+gtkmarshal.c: stamp-gtkmarshal.h
+gtkmarshal.c stamp-gtkmarshal.h: @REBUILD@ genmarshal.pl gtkmarshal.list gtkmarshal.h
 	cd $(srcdir) \
 	&& $(PERL) genmarshal.pl gtkmarshal.list xgen-gmh xgen-gmc \
 	&& (test -z "$(INDENT)" || $(INDENT) xgen-gmh) \
 	&& (test -z "$(INDENT)" || $(INDENT) xgen-gmc) \
 	&& cp xgen-gmc gtkmarshal.c \
 	&& (cmp -s xgen-gmh gtkmarshal.h || cp xgen-gmh gtkmarshal.h) \
-	&& rm -f xgen-gmh xgen-gmc \
+	&& rm -f xgen-gmh xgen-gmc xgen-gmh~ xgen-gmc~ \
 	&& echo timestamp > stamp-gtkmarshal.h
-gtktypebuiltins.h: @REBUILD@ # stamp-gtktypebuiltins.h
-	-test -e "$(srcdir)/$@" || touch $(srcdir)/gtktypebuiltins.h
-stamp-gtktypebuiltins.h: @REBUILD@ maketypes.awk gtk.defs gtktypebuiltins.h
+stamp-gtktypebuiltins.h: @REBUILD@ maketypes.awk stamp-gtk.defs gtktypebuiltins.h
 	cd $(srcdir) \
 	&& $(AWK) -f maketypes.awk gtk.defs macros > xgen-gtbh \
 	&& (cmp -s xgen-gtbh gtktypebuiltins.h || cp xgen-gtbh gtktypebuiltins.h) \
 	&& rm -f xgen-gtbh \
 	&& echo timestamp > $@
-gtktypebuiltins_vars.c: @REBUILD@ maketypes.awk gtk.defs
+gtktypebuiltins_vars.c: @REBUILD@ maketypes.awk stamp-gtk.defs
 	cd $(srcdir) \
 	&& $(AWK) -f maketypes.awk gtk.defs variables > xgen-gtbvc \
 	&& cp xgen-gtbvc $@ \
 	&& rm -f xgen-gtbvc
-gtktypebuiltins_ids.c: @REBUILD@ maketypes.awk gtk.defs
+gtktypebuiltins_ids.c: @REBUILD@ maketypes.awk stamp-gtk.defs
 	cd $(srcdir) \
 	&& $(AWK) -f maketypes.awk gtk.defs entries > xgen-gtbic \
 	&& cp xgen-gtbic $@ \

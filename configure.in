@@ -29,10 +29,10 @@ AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
 #
 GTK_MAJOR_VERSION=1
 GTK_MINOR_VERSION=2
-GTK_MICRO_VERSION=4
-GTK_INTERFACE_AGE=2
-GTK_BINARY_AGE=4
-GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
+GTK_MICRO_VERSION=5
+GTK_INTERFACE_AGE=0
+GTK_BINARY_AGE=5
+GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION-pre1
 dnl
 AC_DIVERT_POP()dnl
 
@@ -159,7 +159,7 @@ AC_CHECK_PROG(INDENT, indent, indent)
 REBUILD=\#
 if test "x$enable_rebuilds" = "xyes" && \
      test -n "$PERL" && \
-     $PERL -e 'exit !($] >= 5.002)' > /dev/null && \
+     $PERL -e 'exit !($] >= 5.002)' > /dev/null 2>&1 && \
      test -n "$AWK" ; then
   REBUILD=
 fi
