@@ -1,3 +1,9 @@
+2000-02-26  Federico Mena Quintero  <federico@helixcode.com>
+
+	* README: We don't require libgif/ungif nor libXpm.
+
+	* NEWS: This was outdated, so updated it.
+
 2000-02-25  Federico Mena Quintero  <federico@helixcode.com>
 
 	* gdk-pixbuf.m4: Use the correct name for
