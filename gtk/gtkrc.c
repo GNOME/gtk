@@ -236,6 +236,10 @@ gtk_rc_append_default_module_path(void)
   gchar *var, *path;
   gint n;
 
+  for (n = 0; module_path[n]; n++) ;
+  if (n >= GTK_RC_MAX_MODULE_PATHS - 1)
+    return;
+  
   var = getenv("GTK_INSTALL_PREFIX");
   if (var)
     {
@@ -247,10 +251,14 @@ gtk_rc_append_default_module_path(void)
       path = g_malloc(strlen(GTK_INSTALL_PREFIX) + strlen("/lib/gtk/themes/engines") +1);
       sprintf(path, "%s%s", GTK_INSTALL_PREFIX, "/lib/gtk/themes/engines");
     }
-  
-  for (n = 0; module_path[n]; n++) ;
-  if (n >= GTK_RC_MAX_MODULE_PATHS - 1)
-    return;
+  module_path[n++] = g_strdup(path);
+  g_free(path);
+  var = getenv("HOME");
+  if (var)
+    {
+      path = g_malloc(strlen(var) + strlen(".gtk/lib/themes/engines") +1);
+      sprintf(path, "%s%s", var, ".gtk/lib/themes/engines");
+    }
   module_path[n++] = g_strdup(path);
   module_path[n] = NULL;
   g_free(path);

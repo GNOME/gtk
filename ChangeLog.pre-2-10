@@ -1,4 +1,8 @@
 Thu Aug 20 18:27:29 EDT 1998 The Rasterman <raster@redhat.com>
+	* added ~/.gtk/lib/themes/engines/ to the defautl searchpath for
+	  gtk theme engines
+	
+Thu Aug 20 18:27:29 EDT 1998 The Rasterman <raster@redhat.com>
 	* made gtkrc scanner append dir that gtkrc is read from to pixmap path.
 	
 Mon Aug 10 23:03:55 1998  The Rasterman <raster@redhat.com>
