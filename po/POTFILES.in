@@ -17,6 +17,7 @@ gdk-pixbuf/io-tiff.c
 gdk-pixbuf/io-wbmp.c
 gdk-pixbuf/io-xbm.c
 gdk-pixbuf/io-xpm.c
+gdk/gdkdisplaymanager.c
 gtk/gtkaccellabel.c
 gtk/gtkalignment.c
 gtk/gtkarrow.c

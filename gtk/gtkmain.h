@@ -54,11 +54,12 @@ extern "C" {
 
 #endif /* GTK_DISABLE_DEPRECATED */
 
-typedef void	(*GtkModuleInitFunc)	(gint		*argc,
-					 gchar	      ***argv);
-typedef gint	(*GtkKeySnoopFunc)	(GtkWidget	*grab_widget,
-					 GdkEventKey	*event,
-					 gpointer	 func_data);
+typedef void	(*GtkModuleInitFunc)        (gint	  *argc,
+				             gchar      ***argv);
+typedef void	(*GtkModuleDisplayInitFunc) (GdkDisplay   *display);
+typedef gint	(*GtkKeySnoopFunc)	    (GtkWidget	  *grab_widget,
+					     GdkEventKey  *event,
+					     gpointer	   func_data);
 
 /* Gtk version.
  */

@@ -39,6 +39,7 @@
 #include <gdk/gdkimage.h>
 #include <gdk/gdkinput.h>
 #include <gdk/gdkkeys.h>
+#include <gdk/gdkdisplaymanager.h>
 #include <gdk/gdkpango.h>
 #include <gdk/gdkpixbuf.h>
 #include <gdk/gdkpixmap.h>

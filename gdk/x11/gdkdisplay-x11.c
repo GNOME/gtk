@@ -199,7 +199,8 @@ gdk_open_display (const gchar *display_name)
   _gdk_input_init (display);
   _gdk_dnd_init (display);
 
-  g_signal_emit_by_name (gdk_library_get(), "display_opened", display);
+  g_signal_emit_by_name (gdk_display_manager_get(),
+			 "display_opened", display);
 
   return display;
 }

@@ -2830,6 +2830,15 @@ Creates a border around the arrows of a #GtkSpinButton. The type of border is de
 
 @Returns: 
 
+<!-- ##### FUNCTION gtk_style_get_font_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@style: 
+@Returns: 
+
 <!-- ##### FUNCTION gtk_text_buffer_paste_primary ##### -->
 <para>
 

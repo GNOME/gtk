@@ -106,27 +106,15 @@ functions such as g_signal_connect().
 
 <!-- ##### FUNCTION gtk_init ##### -->
 <para>
-Call this function before using any other GTK+ functions in your GUI
-applications.  It will initialize everything needed to operate the toolkit and
-parses some standard command line options. <parameter>argc</parameter> and 
-<parameter>argv</parameter> are adjusted accordingly so your own code will 
-never see those standard arguments.
 </para>
 
 <note>
 <para>
-This function will terminate your program if it was unable to initialize 
-the GUI for some reason. If you want your program to fall back to a 
-textual interface you want to call gtk_init_check() instead.
 </para>
 </note>
 
-@argc: Address of the <parameter>argc</parameter> parameter of your 
-<function>main</function> function. Changed if any arguments were 
-handled.
-@argv: Address of the <parameter>argv</parameter> parameter of 
-<function>main()</function>. Any parameters understood by gtk_init() 
-are stripped before return.
+@argc: 
+@argv: 
 
 
 <!-- ##### FUNCTION gtk_init_check ##### -->
@@ -144,8 +132,7 @@ with the user - for example a curses or command line interface.
 <function>main()</function> function.
 @argv: A reference to the <parameter>argv</parameter> of the 
 <function>main()</function> function.
-@Returns: %TRUE if the GUI has been successfully initialized, 
-%FALSE otherwise.
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_exit ##### -->

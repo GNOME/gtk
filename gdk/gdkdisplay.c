@@ -31,8 +31,6 @@ static void gdk_display_class_init (GdkDisplayClass *class);
 static void gdk_display_init       (GdkDisplay      *display);
 static void gdk_display_finalize   (GObject         *object);
 
-static GdkDisplay *default_display = NULL;
-
 static GObjectClass *parent_class;
 
 GType
@@ -90,8 +88,9 @@ gdk_display_finalize (GObject *object)
   
   _gdk_displays = g_slist_remove (_gdk_displays, display);
 
-  if (default_display == display)
-    default_display = NULL;
+  if (gdk_get_default_display() == display)
+    gdk_display_manager_set_default_display (gdk_display_manager_get(),
+					     NULL);
   
   parent_class->finalize (object);
 }
@@ -107,62 +106,6 @@ gdk_display_close (GdkDisplay *display)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
   g_object_unref (G_OBJECT (display));
-}
-
-/**
- * gdk_set_default_display:
- * @display: a #GdkDisplay
- * 
- * Sets @display as the default display.
- **/
-void
-gdk_set_default_display (GdkDisplay *display)
-{
-  default_display = display;
-
-  _gdk_windowing_set_default_display (display);
-}
-
-/**
- * gdk_get_default_display:
- *
- * Gets the default #GdkDisplay. 
- * 
- * Returns: a #GdkDisplay, or %NULL if there is no default
- *   display.
- */
-GdkDisplay *
-gdk_get_default_display (void)
-{
-  return default_display;
-}
-
-/**
- * gdk_get_default_screen:
- *
- * Gets the default screen for the default display. (See
- * gdk_get_default_display ()).
- * 
- * Returns: a #GdkScreen.
- */
-GdkScreen *
-gdk_get_default_screen (void)
-{
-  return gdk_display_get_default_screen (gdk_get_default_display ());
-}
-
-/**
- * gdk_list_displays:
- *
- * List all currently open displays.
- * 
- * Return value: a newly allocated #GSList of #GdkDisplay objects.
- *  Free this list with g_slist_free() when you are done with it.
- **/
-GSList *
-gdk_list_displays (void)
-{
-  return g_slist_copy (_gdk_displays);
 }
 
 /**

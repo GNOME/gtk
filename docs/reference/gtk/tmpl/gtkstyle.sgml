@@ -179,16 +179,6 @@ Returns whether the style is attached to a window.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_style_get_font_for_display ##### -->
-<para>
-
-</para>
-
-@display: 
-@style: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_style_set_font ##### -->
 <para>
 

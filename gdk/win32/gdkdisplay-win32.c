@@ -51,6 +51,9 @@ gdk_open_display (const gchar *display_name)
   _gdk_input_init ();
   _gdk_dnd_init ();
 
+  g_signal_emit_by_name (gdk_display_manager_get (),
+			 "display_opened", _gdk_display);
+
   return _gdk_display;
 }
 

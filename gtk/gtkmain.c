@@ -70,6 +70,7 @@ typedef struct _GtkInitFunction		 GtkInitFunction;
 typedef struct _GtkQuitFunction		 GtkQuitFunction;
 typedef struct _GtkClosure	         GtkClosure;
 typedef struct _GtkKeySnooperData	 GtkKeySnooperData;
+typedef struct _GtkModuleInfo            GtkModuleInfo;
 
 struct _GtkInitFunction
 {
@@ -101,6 +102,12 @@ struct _GtkKeySnooperData
   guint id;
 };
 
+struct _GtkModuleInfo
+{
+  GtkModuleInitFunc init_func;
+  GtkModuleDisplayInitFunc display_init_func;
+};
+
 static gint  gtk_quit_invoke_function	 (GtkQuitFunction    *quitf);
 static void  gtk_quit_destroy		 (GtkQuitFunction    *quitf);
 static gint  gtk_invoke_key_snoopers	 (GtkWidget	     *grab_widget,
@@ -126,6 +133,13 @@ const guint gtk_minor_version = GTK_MINOR_VERSION;
 const guint gtk_micro_version = GTK_MICRO_VERSION;
 const guint gtk_binary_age = GTK_BINARY_AGE;
 const guint gtk_interface_age = GTK_INTERFACE_AGE;
+
+static GSList *gtk_modules;
+
+/* Saved argc,argv for delayed module initialization
+ */
+static gint    gtk_argc = 0;
+static gchar **gtk_argv = NULL;
 
 static guint gtk_main_loop_level = 0;
 static gint gtk_initialized = FALSE;
@@ -466,10 +480,11 @@ find_module (const gchar *name)
 }
 
 static GSList *
-load_module (GSList      *gtk_modules,
+load_module (GSList      *module_list,
 	     const gchar *name)
 {
   GtkModuleInitFunc modinit_func = NULL;
+  GtkModuleInfo *info;
   GModule *module = NULL;
   
   if (g_module_supported ())
@@ -479,11 +494,16 @@ load_module (GSList      *gtk_modules,
 	  g_module_symbol (module, "gtk_module_init", (gpointer *) &modinit_func) &&
 	  modinit_func)
 	{
-	  if (!g_slist_find (gtk_modules, (gconstpointer) modinit_func))
+	  if (!g_slist_find (module_list, (gconstpointer) modinit_func))
 	    {
 	      g_module_make_resident (module);
-	      gtk_modules = g_slist_prepend (gtk_modules,
-					     (gpointer) modinit_func);
+	      info = g_new (GtkModuleInfo, 1);
+
+	      info->init_func = modinit_func;
+	      g_module_symbol (module, "gtk_module_display_init",
+			       (gpointer *) &info->display_init_func);
+	      
+	      module_list = g_slist_prepend (module_list, info);
 	    }
 	  else
 	    {
@@ -501,24 +521,24 @@ load_module (GSList      *gtk_modules,
 	g_module_close (module);
     }
   
-  return gtk_modules;
+  return module_list;
 }
 
 static GSList *
 load_modules (const char *module_str)
 {
   gchar **module_names = pango_split_file_list (module_str);
-  GSList *gtk_modules = NULL;
+  GSList *module_list = NULL;
   gint i;
   
   for (i = 0; module_names[i]; i++)
-    gtk_modules = load_module (gtk_modules, module_names[i]);
+    module_list = load_module (module_list, module_names[i]);
   
-  gtk_modules = g_slist_reverse (gtk_modules);
+  module_list = g_slist_reverse (module_list);
   
   g_strfreev (module_names);
 
-  return gtk_modules;
+  return module_list;
 }
 
 static gboolean do_setlocale = TRUE;
@@ -545,13 +565,75 @@ gtk_disable_setlocale (void)
 
 #undef gtk_init_check
 
+static void
+default_display_notify_cb (GdkDisplayManager *display_manager)
+{
+  GSList *slist;
+
+  /* Initialize non-multihead-aware modules when the
+   * default display is first set to a non-NULL value.
+   */
+  static gboolean initialized = FALSE;
+
+  if (!gdk_get_default_display () || initialized)
+    return;
+
+  initialized = TRUE;
+
+  for (slist = gtk_modules; slist; slist = slist->next)
+    {
+      if (slist->data)
+	{
+	  GtkModuleInfo *info = slist->data;
+
+	  if (!info->display_init_func)
+	    info->init_func (&gtk_argc, &gtk_argv);
+	}
+    }
+}
+
+static void
+display_opened_cb (GdkDisplayManager *display_manager,
+		   GdkDisplay        *display)
+{
+  GSList *slist;
+  
+  for (slist = gtk_modules; slist; slist = slist->next)
+    {
+      if (slist->data)
+	{
+	  GtkModuleInfo *info = slist->data;
+
+	  if (info->display_init_func)
+	    info->display_init_func (display);
+	}
+    }
+}
+
+/**
+ * gdk_parse_args:
+ * @argc: the number of command line arguments.
+ * @argv: the array of command line arguments.
+ * 
+ * Parses command line arguments, and initializes global
+ * attributes of GTK+, but does not actually open a connection
+ * to a display. (See gdk_open_display(), gdk_get_display_arg_name())
+ *
+ * Any arguments used by GTK or GDK are removed from the array and
+ * @argc and @argv are updated accordingly.
+ *
+ * You shouldn't call this function explicitely if you are using
+ * gtk_init(), or gtk_init_check().
+ *
+ * Return value: %TRUE if initialization succeeded, otherwise %FALSE.
+ **/
 gboolean
-gtk_init_check (int	 *argc,
-		char   ***argv)
+gtk_parse_args (int    *argc,
+		char ***argv)
 {
   GString *gtk_modules_string = NULL;
-  GSList *gtk_modules = NULL;
   GSList *slist;
+  GdkDisplayManager *display_manager;
   const gchar *env_string;
 
   if (gtk_initialized)
@@ -572,13 +654,8 @@ gtk_init_check (int	 *argc,
       if (!setlocale (LC_ALL, ""))
 	g_warning ("Locale not supported by C library.\n\tUsing the fallback 'C' locale.");
     }
-  
-  /* Initialize "gdk". We pass along the 'argc' and 'argv'
-   *  parameters as they contain information that GDK uses
-   */
-  if (!gdk_init_check (argc, argv))
-    return FALSE;
 
+  gdk_parse_args (argc, argv);
   gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
   
 #ifdef G_ENABLE_DEBUG
@@ -697,6 +774,11 @@ gtk_init_check (int	 *argc,
 	      *argc -= k;
 	    }
 	}
+
+      gtk_argv = g_malloc ((gtk_argc + 1) * sizeof (char*));
+      for (i = 0; i < gtk_argc; i++)
+	gtk_argv[i] = g_strdup ((*argv)[i]);
+      gtk_argv[gtk_argc] = NULL;
     }
 
   if (gtk_debug_flags & GTK_DEBUG_UPDATES)
@@ -738,25 +820,97 @@ gtk_init_check (int	 *argc,
    */
   gtk_initialized = TRUE;
 
-  /* initialize gtk modules
+  display_manager = gdk_display_manager_get ();
+  g_signal_connect (display_manager, "notify::default-display",
+		    G_CALLBACK (default_display_notify_cb), NULL);
+  g_signal_connect (display_manager, "display-opened",
+		    G_CALLBACK (display_opened_cb), NULL);
+
+  /* initialize multhead aware gtk modules; for other modules,
+   * we wait until we have a display open;
    */
   for (slist = gtk_modules; slist; slist = slist->next)
     {
       if (slist->data)
 	{
-	  GtkModuleInitFunc modinit;
-	  
-	  modinit = (GtkModuleInitFunc) slist->data;
-	  modinit (argc, argv);
+	  GtkModuleInfo *info = slist->data;
+
+	  if (info->display_init_func)
+	    info->init_func (argc, argv);
 	}
     }
-  g_slist_free (gtk_modules);
   
   return TRUE;
 }
 
+#undef gtk_init_check
+
+/**
+ * gtk_init_check:
+ * @argc: Address of the <parameter>argc</parameter> parameter of your 
+ *   <function>main()</function> function. Changed if any arguments were 
+ *   handled.
+ * @argv: Address of the <parameter>argv</parameter> parameter of 
+ *   <function>main()</function>. Any parameters understood by gtk_init() 
+ *   are stripped before return.
+ * 
+ * This function does the same work as gtk_init() with only 
+ * a single change: It does not terminate the program if the GUI can't be 
+ * initialized. Instead it returns %FALSE on failure.
+ *
+ * This way the application can fall back to some other means of communication 
+ * with the user - for example a curses or command line interface.
+ * 
+ * Return value: %TRUE if the GUI has been successfully initialized, 
+ *               %FALSE otherwise.
+ **/
+gboolean
+gtk_init_check (int	 *argc,
+		char   ***argv)
+{
+  GdkDisplay *display;
+  
+  if (!gtk_parse_args (argc, argv))
+    return FALSE;
+
+  if (gdk_get_default_display ())
+    return TRUE;
+
+  display = gdk_open_display (gdk_get_display_arg_name ());
+
+  if (display)
+    {
+      gdk_display_manager_set_default_display (gdk_display_manager_get (),
+					       display);
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
+
 #undef gtk_init
 
+/**
+ * gtk_init_check:
+ * @argc: Address of the <parameter>argc</parameter> parameter of your 
+ *   <function>main()</function> function. Changed if any arguments were 
+ *   handled.
+ * @argv: Address of the <parameter>argv</parameter> parameter of 
+ *   <function>main()</function>. Any parameters understood by gtk_init() 
+ *   are stripped before return.
+ * 
+ * Call this function before using any other GTK+ functions in your GUI
+ * applications.  It will initialize everything needed to operate the toolkit and
+ * parses some standard command line options. <parameter>argc</parameter> and 
+ * <parameter>argv</parameter> are adjusted accordingly so your own code will 
+ * never see those standard arguments.
+ *
+ * <note><para>
+ * This function will terminate your program if it was unable to initialize 
+ * the GUI for some reason. If you want your program to fall back to a 
+ * textual interface you want to call gtk_init_check() instead.
+ * </para></note>
+ **/
 void
 gtk_init (int *argc, char ***argv)
 {

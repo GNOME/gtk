@@ -287,7 +287,7 @@ gdk_parse_args (int    *argc,
   gint i;
 
   if (gdk_initialized)
-    return TRUE;
+    return;
 
   gdk_initialized = TRUE;
 
@@ -399,7 +399,8 @@ gdk_init_check (int    *argc,
 
   if (display)
     {
-      gdk_set_default_display (display);
+      gdk_display_manager_set_default_display (gdk_display_manager_get (),
+					       display);
       return TRUE;
     }
   else

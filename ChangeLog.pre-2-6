@@ -1,3 +1,28 @@
+Thu Jun 20 16:49:00 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdisplaymanager.[ch] gdk/gdk.[ch] gdk/gdkdisplay.c 
+	gdk/gdkinternals.h gdk/x11/gdkdisplay-x11.c 
+	gdk/win32/gdkdisplay-win32.c: Add a singleton object that
+	we can use to get notification when displays 
+	appear / disappear or the default display changes.
+
+	gdk_set_default_display() => gdk_display_manager_set_default_display()
+	gdk_list_displays() => gdk_display_manager_list_displays().
+	(#85696)
+
+	* gdk/Makefile.am gdk/gdkmarshalers.list: Add marshaler
+	generation.
+
+	* gdk/gdkintl.h: Add this.
+
+	* gtk/gtkmain.c: Add gtk_parse_args() that initializes
+	GTK+ without opening a display.
+
+	* gtk/gtkmain.c: Set things up so if a module
+	exports gtk_module_init() and gtk_module_display_init(), 
+	then we treat it as multihead aware, otherwise, 
+	we only initialize it after the default display is set.
+
 Thu Jun 20 15:53:21 2002  Owen Taylor  <otaylor@redhat.com>
 
 	Patch from Erwann Chenede.
