@@ -1,5 +1,8 @@
 2004-09-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/queryimmodules.c (escape_string): Copy code from queryloaders.c
+	which turns backslashes in slashes on win32.  (#152608, Kazuki IWAMOTO)
+
 	* gtk/gtktreeview.c (gtk_tree_view_focus_to_cursor): Set the cursor
 	to the first selected row instead of always to the first row if there
 	is no cursor.  (#143270, Jean Bréfort)

@@ -60,6 +60,14 @@ escape_string (const char *str)
 	case '\"':
 	  g_string_append (result, "\\\"");
 	  break;
+#ifdef G_OS_WIN32
+		/* Replace backslashes in path with forward slashes, so that
+		 * it reads in without problems.
+		 */
+	case '\\':
+	  g_string_append (result, "/");
+	  break;
+#endif	
 	default:
 	  g_string_append_c (result, c);
 	}
