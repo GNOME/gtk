@@ -1,3 +1,12 @@
+Mon Jun  9 21:01:16 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_process_action):
+	Remove the weird dx logic, get all cell_area and background_area
+	calculations right. Not sure what was up with it before. (Fixes
+	#110989, testcase from Vasco Alexandre da Silva Costa).
+
+	* NEWS: Updated for this bug.
+
 Sun Jun  8 23:43:47 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* NEWS: Updated.

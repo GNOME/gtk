@@ -43,6 +43,8 @@ Overview of Changes in GTK+ 2.2.2
  - Fix prelighting [Sven Neumann]
  - Set drag cursor earlier to allow apps to override [Daniel Elstner]
  - Speed up insertions into GtkTreeModelSort [Owen, Jonathan Blandford]
+ - Get background/cell area handling right in GtkTreeViewColumn [Vasco
+   Alexandre da Silva Costa]
  - Bug fixes [Benjamin Bayart, Jonathan Blandford, Peter Bloomfield, 
    Dave Cook, Felipe Heidrich, Richard Hult, Markus Lausser, Michael Natterer,
    Mariano Suarez-Alvarez, Owen]
