@@ -70,7 +70,7 @@ endif
 LDFLAGS = @STRIP_BEGIN@ 					\
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) 	\
 	-export-dynamic 					\
-	-rpath @prefix@/lib 					\
+	-rpath $(libdir) 					\
 	$(no_undefined)						\
 	@LIBTOOL_EXPORT_OPTIONS@				\
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la		\
@@ -147,41 +147,20 @@ gdk_c_sources = @STRIP_BEGIN@ 	\
 #
 # setup GDK sources and their dependancies
 #
-extra = @gdktargetlib@
 
-if USE_X11
-libgdk_x11_includedir = $(includedir)/gtk-2.0/gdk
+gdkincludedir = $(includedir)/gtk-2.0/gdk
+gdkinclude_HEADERS = $(gdk_headers)
 
-libgdk_x11_1_3_la_LIBADD = \
-	$(gtarget)/libgdk-$(gtarget).la	
-
-libgdk_x11_include_HEADERS = $(gdk_headers)
 libgdk_x11_1_3_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c
-endif
-
-if USE_LINUX_FB
-libgdk_linux_fb_includedir = $(includedir)/gtk-2.0/gdk
-
-libgdk_linux_fb_1_3_la_LIBADD = \
-	$(gtarget)/libgdk-$(gtarget).la	
-
-libgdk_linux_fb_include_HEADERS = $(gdk_headers)
 libgdk_linux_fb_1_3_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c
-endif
-
-if USE_WIN32
-libgdk_win32_includedir = $(includedir)/gtk-2.0/gdk
-
-libgdk_win32_1_3_la_LIBADD = \
-	$(gtarget)/libgdk-$(gtarget).la $(wintab_lib) $(ie55uuid_lib)
-
-libgdk_win32_include_HEADERS = $(gdk_headers)
 libgdk_win32_1_3_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c
 
-endif
+libgdk_x11_1_3_la_LIBADD = x11/libgdk-x11.la	
+libgdk_linux_fb_1_3_la_LIBADD = linux-fb/libgdk-linux-fb.la	
+libgdk_win32_1_3_la_LIBADD = \
+	win32/libgdk-win32.la $(wintab_lib) $(ie55uuid_lib)
 
-# now define the real one to workaround automake's mishandling
-lib_LTLIBRARIES = $(extra)
+lib_LTLIBRARIES = $(gdktargetlib)
 
 EXTRA_LTLIBRARIES = libgdk-x11-1.3.la libgdk-linux-fb-1.3.la libgdk-win32-1.3.la
 

@@ -1,3 +1,14 @@
+2002-01-17  Raja R Harinath  <harinath@cs.umn.edu>
+
+	Simplify Makefiles. 
+	<URL: http://bugzilla.gnome.org/show_bug.cgi?id=68969>
+	* gdk/Makefile.am: Remove use of automake conditionals to pick
+	library to build.
+	* gtk/Makefile.am: Likewise.
+	
+	* gdk/Makefile.am (LDFLAGS): Use $(libdir), not @prefix@/lib.
+	* gtk/Makefile.am (LDFLAGS): Likewise.
+
 Thu Jan 17 20:13:14 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_redraw_tabs): Fix
