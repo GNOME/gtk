@@ -35,7 +35,8 @@ enum {
   PROP_LOWER,
   PROP_UPPER,
   PROP_POSITION,
-  PROP_MAX_SIZE
+  PROP_MAX_SIZE,
+  PROP_METRIC
 };
 
 static void gtk_ruler_class_init    (GtkRulerClass  *klass);
@@ -154,6 +155,14 @@ gtk_ruler_class_init (GtkRulerClass *class)
 							G_MAXDOUBLE,
 							0.0,
 							GTK_PARAM_READWRITE));  
+  g_object_class_install_property (gobject_class,
+                                   PROP_METRIC,
+                                   g_param_spec_enum ("metric",
+						      P_("Metric"),
+						      P_("The metric used for the ruler"),
+						      GTK_TYPE_METRIC_TYPE, 
+						      GTK_PIXELS,
+						      GTK_PARAM_READWRITE));  
 }
 
 static void
@@ -197,6 +206,12 @@ gtk_ruler_set_property (GObject      *object,
       gtk_ruler_set_range (ruler, ruler->lower, ruler->upper,
 			   ruler->position,  g_value_get_double (value));
       break;
+    case PROP_METRIC:
+      gtk_ruler_set_metric (ruler, g_value_get_enum (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
     }
 }
 
@@ -222,6 +237,9 @@ gtk_ruler_get_property (GObject      *object,
     case PROP_MAX_SIZE:
       g_value_set_double (value, ruler->max_size);
       break;
+    case PROP_METRIC:
+      g_value_set_enum (value, gtk_ruler_get_metric (ruler));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -238,6 +256,8 @@ gtk_ruler_set_metric (GtkRuler      *ruler,
 
   if (GTK_WIDGET_DRAWABLE (ruler))
     gtk_widget_queue_draw (GTK_WIDGET (ruler));
+
+  g_object_notify (G_OBJECT (ruler), "metric");
 }
 
 /**

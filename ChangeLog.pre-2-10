@@ -1,5 +1,7 @@
 2005-04-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkruler.c: Add a "metric" property.
+
 	* gtk/gtkradiomenuitem.c: Add a "group" property like
 	the one found in radio buttons.
 
