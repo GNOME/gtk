@@ -1,5 +1,7 @@
 Thu Jan 22 18:58:44 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
 
+	* gdk/gdkcc.c: Switched the file to GNU indentation, for consistency.
+
 	* gdk/gdktypes.h (struct _GdkColorContext): Picky, picky... fix
 	two lines with wrong indentation :-)
 
