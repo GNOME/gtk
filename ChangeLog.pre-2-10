@@ -1,3 +1,9 @@
+Tue Jul  6 00:29:03 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.c (do_updates): 
+	(do_updates_idle): Only call GDK_THREADS_ENTER() / _LEAVE() 
+	when called from an idle handler.  (#145429, Jan-Marek Glogowski)
+
 Mon Jul  5 23:47:38 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkfilechooserutils.c (delegate_notify): Use

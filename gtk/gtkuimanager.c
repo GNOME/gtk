@@ -2495,10 +2495,18 @@ update_node (GtkUIManager *self,
 }
 
 static gboolean
-do_updates (GtkUIManager *self)
+do_updates_idle (GtkUIManager *self)
 {
   GDK_THREADS_ENTER ();
+  do_updates (self);
+  GDK_THREADS_LEAVE ();
 
+  return FALSE;
+}
+
+static gboolean
+do_updates (GtkUIManager *self)
+{
   /* this function needs to check through the tree for dirty nodes.
    * For such nodes, it needs to do the following:
    *
@@ -2515,8 +2523,6 @@ do_updates (GtkUIManager *self)
 
   self->private_data->update_tag = 0;
 
-  GDK_THREADS_LEAVE ();
-
   return FALSE;
 }
 
@@ -2526,7 +2532,8 @@ queue_update (GtkUIManager *self)
   if (self->private_data->update_tag != 0)
     return;
 
-  self->private_data->update_tag = g_idle_add ((GSourceFunc)do_updates, self);
+  self->private_data->update_tag = g_idle_add ((GSourceFunc)do_updates_idle, 
+					       self);
 }
 
 
