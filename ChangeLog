@@ -1,3 +1,10 @@
+Wed Nov  5 22:49:36 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkmenu.c (gtk_menu_set_tearoff_state): Set torn off 
+	menus to be transient for the toplevel they were torn off from.
+	(gtk_menu_get_toplevel): Auxiliary function to find the
+	toplevel of a menu.  (#54775, Jon-Kare Hellan)
+
 Wed Nov  5 21:07:58 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkpaned.c (gtk_paned_class_init): Add readonly properties

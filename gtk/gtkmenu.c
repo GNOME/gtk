@@ -1554,6 +1554,28 @@ gtk_menu_update_title (GtkMenu *menu)
     }
 }
 
+static GtkWidget*
+gtk_menu_get_toplevel (GtkWidget *menu)
+{
+  GtkWidget *attach, *toplevel;
+
+  attach = gtk_menu_get_attach_widget (GTK_MENU (menu));
+
+  if (GTK_IS_MENU_ITEM (attach))
+    attach = attach->parent;
+
+  if (GTK_IS_MENU (attach))
+    return gtk_menu_get_toplevel (attach->parent);
+  else if (GTK_IS_WIDGET (attach))
+    {
+      toplevel = gtk_widget_get_toplevel (attach->parent);
+      if (GTK_WIDGET_TOPLEVEL (toplevel)) 
+	return toplevel;
+    }
+
+  return NULL;
+}
+
 void       
 gtk_menu_set_tearoff_state (GtkMenu  *menu,
 			    gboolean  torn_off)
@@ -1574,12 +1596,15 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 
 	  if (!menu->tearoff_window)
 	    {
+	      GtkWidget *toplevel;
+
 	      menu->tearoff_window = gtk_widget_new (GTK_TYPE_WINDOW,
 						     "type", GTK_WINDOW_TOPLEVEL,
 						     "screen", gtk_widget_get_screen (menu->toplevel),
 						     "app_paintable", TRUE,
 						     NULL);
 
+	      
 	      gtk_window_set_type_hint (GTK_WINDOW (menu->tearoff_window),
 					GDK_WINDOW_TYPE_HINT_MENU);
 	      gtk_window_set_mnemonic_modifier (GTK_WINDOW (menu->tearoff_window), 0);
@@ -1591,6 +1616,11 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	      gtk_menu_update_title (menu);
 
 	      gtk_widget_realize (menu->tearoff_window);
+
+	      toplevel = gtk_menu_get_toplevel (GTK_WIDGET (menu));
+	      if (toplevel != NULL)
+		gtk_window_set_transient_for (GTK_WINDOW (menu->tearoff_window),
+					      GTK_WINDOW (toplevel));
 	      
 	      menu->tearoff_hbox = gtk_hbox_new (FALSE, FALSE);
 	      gtk_container_add (GTK_CONTAINER (menu->tearoff_window), menu->tearoff_hbox);
