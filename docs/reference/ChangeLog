@@ -1,3 +1,7 @@
+2002-11-21  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkcombo.sgml: Fix typo in example code.  (#99078)
+
 Sun Nov 17 15:42:08 2002  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/tmpl/gtkliststore.sgml: add more to the docs.

@@ -60,7 +60,7 @@ items.</title>
 
   arrow = gtk_arrow_new (GTK_ARROW_RIGHT, GTK_SHADOW_OUT);
   gtk_widget_show (arrow);
-  gtk_box_pack_start (GTK_BOX (hbox), pixmap, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), arrow, FALSE, FALSE, 0);
 
   label = gtk_label_new ("First Item");
   gtk_widget_show (label);
