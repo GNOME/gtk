@@ -26,6 +26,7 @@ typedef enum {
   GDK_DRAG_PROTO_NONE,		  /* Not a valid drag window */
   GDK_DRAG_PROTO_WIN32_DROPFILES, /* The simple WM_DROPFILES dnd */
   GDK_DRAG_PROTO_OLE2,		  /* The complex OLE2 dnd (not implemented) */
+  GDK_DRAG_PROTO_LOCAL            /* Intra-app */
 } GdkDragProtocol;
 
 /* Structure that holds information about a drag in progress.

@@ -86,19 +86,24 @@ gdk_selection_owner_set (GdkWindow *owner,
   GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
 	     g_print ("gdk_selection_owner_set: %#x %#x (%s)\n",
-		      (owner ? GDK_DRAWABLE_XID (owner) : 0),
-		      selection, sel_name),
+		      (owner ? (guint) GDK_DRAWABLE_XID (owner) : 0),
+		      (guint) selection, sel_name),
 	     g_free (sel_name)));
 
   if (selection != gdk_clipboard_atom)
-    return FALSE;
+    {
+      if (!owner)
+        return FALSE;
+      gdk_sel_prop_store (owner, selection, 0, 0, 0);
+      return TRUE;
+    }
 
   if (owner != NULL)
     xwindow = GDK_DRAWABLE_XID (owner);
   else
     xwindow = NULL;
 
-  GDK_NOTE (DND, g_print ("...OpenClipboard(%#x)\n", xwindow));
+  GDK_NOTE (DND, g_print ("...OpenClipboard(%#x)\n", (guint) xwindow));
   if (!OpenClipboard (xwindow))
     {
       WIN32_API_FAILED ("OpenClipboard");
@@ -134,21 +139,50 @@ gdk_selection_owner_set (GdkWindow *owner,
   return TRUE;
 }
 
+/* callback for g_hash_table_for_each */
+typedef struct {
+  GdkAtom atom;
+  HWND    hwnd;
+} SelectionAndHwnd;
+
+static void
+window_from_selection (gpointer key,
+		       gpointer value,
+		       gpointer user_data)
+{
+  GdkSelProp *selprop = (GdkSelProp *)value;  
+  SelectionAndHwnd *sah = (SelectionAndHwnd *) user_data;
+
+  if (selprop->type == sah->atom)
+    sah->hwnd = *(HWND *) key;
+}
+
 GdkWindow*
 gdk_selection_owner_get (GdkAtom selection)
 {
   GdkWindow *window;
   gchar *sel_name;
 
-#if 1
+#if 0
   /* XXX Hmm, gtk selections seem to work best with this. This causes
    * gtk to always get the clipboard contents from Windows, and not
    * from the editable's own stashed-away copy.
    */
   return NULL;
 #else
+  /* HB: The above is no longer true with recent changes to get
+   * inter-app drag&drop working ...
+   */
   if (selection != gdk_clipboard_atom)
-    window = NULL;
+    {
+      SelectionAndHwnd sah;
+      sah.atom = selection;
+      sah.hwnd = 0;
+ 
+      g_hash_table_foreach (sel_prop_table, window_from_selection, &sah);
+
+      window = gdk_xid_table_lookup (sah.hwnd);
+    }
   else
     window = gdk_window_lookup (GetClipboardOwner ());
 
@@ -157,8 +191,8 @@ gdk_selection_owner_get (GdkAtom selection)
   GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
 	     g_print ("gdk_selection_owner_get: %#x (%s) = %#x\n",
-		      selection, sel_name,
-		      (window ? GDK_DRAWABLE_XID (window) : 0)),
+		      (guint) selection, sel_name,
+		      (window ? (guint) GDK_DRAWABLE_XID (window) : 0)),
 	     g_free (sel_name)));
 
   return window;
@@ -171,7 +205,6 @@ gdk_selection_convert (GdkWindow *requestor,
 		       guint32    time)
 {
   HGLOBAL hdata;
-  GdkSelProp *prop;
   guchar *ptr, *data, *datap, *p;
   guint i, length, slength;
   gchar *sel_name, *tgt_name;
@@ -184,7 +217,9 @@ gdk_selection_convert (GdkWindow *requestor,
 	    (sel_name = gdk_atom_name (selection),
 	     tgt_name = gdk_atom_name (target),
 	     g_print ("gdk_selection_convert: %#x %#x (%s) %#x (%s)\n",
-		      GDK_DRAWABLE_XID (requestor), selection, sel_name, target, tgt_name),
+		      (guint) GDK_DRAWABLE_XID (requestor),
+		      (guint) selection, sel_name,
+		      (guint) target, tgt_name),
 	     g_free (sel_name),
 	     g_free (tgt_name)));
 
@@ -291,7 +326,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
     return 0;
   
   GDK_NOTE (DND, g_print ("gdk_selection_property_get: %#x",
-			   GDK_DRAWABLE_XID (requestor)));
+			   (guint) GDK_DRAWABLE_XID (requestor)));
 
   prop = g_hash_table_lookup (sel_prop_table, &GDK_DRAWABLE_XID (requestor));
 
@@ -319,7 +354,7 @@ gdk_selection_property_delete (GdkWindow *window)
   GdkSelProp *prop;
   
   GDK_NOTE (DND, g_print ("gdk_selection_property_delete: %#x",
-			   GDK_DRAWABLE_XID (window)));
+			   (guint) GDK_DRAWABLE_XID (window)));
 
   prop = g_hash_table_lookup (sel_prop_table, &GDK_DRAWABLE_XID (window));
   if (prop != NULL)
@@ -346,9 +381,9 @@ gdk_selection_send_notify (guint32  requestor,
 	     prop_name = gdk_atom_name (property),
 	     g_print ("gdk_selection_send_notify: %#x %#x (%s) %#x (%s) %#x (%s)\n",
 		      requestor,
-		      selection, sel_name,
-		      target, tgt_name,
-		      property, prop_name),
+		      (guint) selection, sel_name,
+		      (guint) target, tgt_name,
+		      (guint) property, prop_name),
 	     g_free (sel_name),
 	     g_free (tgt_name),
 	     g_free (prop_name)));
@@ -367,7 +402,7 @@ gdk_selection_send_notify (guint32  requestor,
    * always return NULL, it works. Sigh.
    */
 
-  SendMessage ((HWND) requestor, gdk_selection_clear_msg, selection, 0);
+  SendMessage ((HWND) requestor, gdk_selection_clear_msg, selection, target);
 }
 
 gint

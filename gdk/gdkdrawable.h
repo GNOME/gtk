@@ -120,7 +120,7 @@ void            gdk_drawable_set_data     (GdkDrawable    *drawable,
 					   const gchar    *key,
 					   gpointer	  data,
 					   GDestroyNotify  destroy_func);
-void            gdk_drawable_get_data     (GdkDrawable    *drawable,
+gpointer        gdk_drawable_get_data     (GdkDrawable    *drawable,
 					   const gchar    *key);
 
 void            gdk_drawable_get_size     (GdkWindow	  *drawable,
