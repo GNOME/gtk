@@ -1,3 +1,8 @@
+2001-03-26  Alexander Larsson  <alla@lysator.liu.se>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_get_filename):
+	Fixed bug that returned NULL if a filename was selected.
+
 2001-03-24  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkthemes.c (gtk_theme_engine_load): improve error message

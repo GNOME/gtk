@@ -868,7 +868,7 @@ gtk_file_selection_get_filename (GtkFileSelection *filesel)
   if (text)
     {
       sys_filename = g_filename_from_utf8 (cmpl_completion_fullname (text, filesel->cmpl_state), -1, NULL, NULL, NULL);
-      if (sys_filename)
+      if (!sys_filename)
 	return nothing;
       strncpy (something, sys_filename, sizeof (something));
       g_free (sys_filename);
