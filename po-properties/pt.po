@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.6\n"
 "Report-Msgid-Bugs-To: Duarte Loreto <happyguy_pt@hotmail.com>\n"
-"POT-Creation-Date: 2004-02-05 23:01+0000\n"
-"PO-Revision-Date: 2004-02-05 23:05+0000\n"
+"POT-Creation-Date: 2004-02-18 22:57+0000\n"
+"PO-Revision-Date: 2004-02-18 23:00+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -237,6 +237,54 @@ msgstr "Se o grupo de acção está ou não activo."
 #: gtk/gtkactiongroup.c:149
 msgid "Whether the action group is visible."
 msgstr "Se o grupo de acção está ou não visível."
+
+#: gtk/gtkadjustment.c:106 gtk/gtkspinbutton.c:301
+msgid "Value"
+msgstr "Valor"
+
+#: gtk/gtkadjustment.c:107
+msgid "The value of the adjustment"
+msgstr "O valor do ajustamento"
+
+#: gtk/gtkadjustment.c:116
+msgid "Minimum Value"
+msgstr "Valor Mínimo"
+
+#: gtk/gtkadjustment.c:117
+msgid "The minimum value of the adjustment"
+msgstr "O valor mínimo do ajustamento"
+
+#: gtk/gtkadjustment.c:126
+msgid "Maximum Value"
+msgstr "Valor Máximo"
+
+#: gtk/gtkadjustment.c:127
+msgid "The maximum value of the adjustment"
+msgstr "O valor máximo do ajustamento"
+
+#: gtk/gtkadjustment.c:136
+msgid "Step Increment"
+msgstr "Intervalo de Incremento"
+
+#: gtk/gtkadjustment.c:137
+msgid "The step increment of the adjustment"
+msgstr "O intervalo de incremento do ajustamento"
+
+#: gtk/gtkadjustment.c:146
+msgid "Page Increment"
+msgstr "Incremento de Página"
+
+#: gtk/gtkadjustment.c:147
+msgid "The page increment of the adjustment"
+msgstr "O incremento de página do ajustamento"
+
+#: gtk/gtkadjustment.c:156
+msgid "Page Size"
+msgstr "Tamanho da Página"
+
+#: gtk/gtkadjustment.c:157
+msgid "The page size of the adjustment"
+msgstr "O tamanho da página do ajustamento"
 
 #: gtk/gtkalignment.c:116
 msgid "Horizontal alignment"
@@ -783,14 +831,14 @@ msgid "Size"
 msgstr "Tamanho"
 
 #: gtk/gtkcellrendererpixbuf.c:169
-msgid "The size of the rendered icon"
-msgstr "O tamanho do ícone renderizado"
+msgid "The GtkIconSize value that specifies the size of the rendered icon"
+msgstr "O valor GtkIconSize que especifica o tamanho do ícone renderizado"
 
-#: gtk/gtkcellrendererpixbuf.c:177
+#: gtk/gtkcellrendererpixbuf.c:178
 msgid "Detail"
 msgstr "Detalhe"
 
-#: gtk/gtkcellrendererpixbuf.c:178
+#: gtk/gtkcellrendererpixbuf.c:179
 msgid "Render detail to pass to the theme engine"
 msgstr "Detalhe de renderização a passar ao motor de temas"
 
@@ -1313,11 +1361,11 @@ msgstr ""
 "Aparência da caixa de selecção única, onde VERDADEIRO significa estilo-"
 "Windows."
 
-#: gtk/gtkcomboboxentry.c:104
+#: gtk/gtkcomboboxentry.c:109
 msgid "Text Column"
 msgstr "Coluna de Texto"
 
-#: gtk/gtkcomboboxentry.c:105
+#: gtk/gtkcomboboxentry.c:110
 msgid "A column in the data source model to get the strings from"
 msgstr "Uma coluna no modelo de fonte de dados de onde obter as expressões"
 
@@ -2168,37 +2216,38 @@ msgstr "Atraso antes de mostrar menus de queda"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Atraso antes apresentar os submenus da barra de menus"
 
-#: gtk/gtkmessagedialog.c:106
+#: gtk/gtkmessagedialog.c:109
 msgid "Image/label border"
 msgstr "Margem da imagem/etiqueta"
 
-#: gtk/gtkmessagedialog.c:107
+#: gtk/gtkmessagedialog.c:110
 msgid "Width of border around the label and image in the message dialog"
 msgstr "Largura da margem em torno da etiqueta e imagem no diálogo de mensagem"
 
-#: gtk/gtkmessagedialog.c:122
+#: gtk/gtkmessagedialog.c:125
 msgid "Use separator"
 msgstr "Utilizar separador"
 
-#: gtk/gtkmessagedialog.c:123
+#: gtk/gtkmessagedialog.c:126
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
 msgstr ""
-"Se colocar ou não um separador entre o texto e os botões do diálogo de mensagem"
+"Se colocar ou não um separador entre o texto e os botões do diálogo de "
+"mensagem"
 
-#: gtk/gtkmessagedialog.c:129
+#: gtk/gtkmessagedialog.c:132
 msgid "Message Type"
 msgstr "Tipo de Mensagem"
 
-#: gtk/gtkmessagedialog.c:130
+#: gtk/gtkmessagedialog.c:133
 msgid "The type of message"
 msgstr "O tipo de mensagem"
 
-#: gtk/gtkmessagedialog.c:137
+#: gtk/gtkmessagedialog.c:140
 msgid "Message Buttons"
 msgstr "Botões de Mensagem"
 
-#: gtk/gtkmessagedialog.c:138
+#: gtk/gtkmessagedialog.c:141
 msgid "The buttons shown in the message dialog"
 msgstr "Os botões apresentados no diálogo de mensagem"
 
@@ -2724,45 +2773,45 @@ msgstr "Tamanho Máx"
 msgid "Maximum size of the ruler"
 msgstr "Tamanho máximo da régua"
 
-#: gtk/gtkscale.c:156 gtk/gtkspinbutton.c:258
+#: gtk/gtkscale.c:170 gtk/gtkspinbutton.c:258
 msgid "Digits"
 msgstr "Dígitos"
 
-#: gtk/gtkscale.c:157
+#: gtk/gtkscale.c:171
 msgid "The number of decimal places that are displayed in the value"
 msgstr "O número de casas decimais que são apresentadas no valor"
 
-#: gtk/gtkscale.c:166
+#: gtk/gtkscale.c:180
 msgid "Draw Value"
 msgstr "Mostrar Valor"
 
-#: gtk/gtkscale.c:167
+#: gtk/gtkscale.c:181
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
 "Se o valor actual é ou não apresentado como texto ao lado da barra de "
 "rolamento"
 
-#: gtk/gtkscale.c:174
+#: gtk/gtkscale.c:188
 msgid "Value Position"
 msgstr "Posição do Valor"
 
-#: gtk/gtkscale.c:175
+#: gtk/gtkscale.c:189
 msgid "The position in which the current value is displayed"
 msgstr "A posição onde é apresentado o valor actual"
 
-#: gtk/gtkscale.c:182
+#: gtk/gtkscale.c:196
 msgid "Slider Length"
 msgstr "Comprimento de Rolamento"
 
-#: gtk/gtkscale.c:183
+#: gtk/gtkscale.c:197
 msgid "Length of scale's slider"
 msgstr "Comprimento da escala de rolamento"
 
-#: gtk/gtkscale.c:191
+#: gtk/gtkscale.c:205
 msgid "Value spacing"
 msgstr "Espaçamento do valor"
 
-#: gtk/gtkscale.c:192
+#: gtk/gtkscale.c:206
 msgid "Space between value text and the slider/trough area"
 msgstr "Espaço entre o texto de valor e a área da barra de rolamento/indicador"
 
@@ -3029,10 +3078,6 @@ msgid ""
 msgstr ""
 "Se o botão giratório deverá actualizar-se sempre ou apenas quando o valor é "
 "válido"
-
-#: gtk/gtkspinbutton.c:301
-msgid "Value"
-msgstr "Valor"
 
 #: gtk/gtkspinbutton.c:302
 msgid "Reads the current value, or sets a new value"
