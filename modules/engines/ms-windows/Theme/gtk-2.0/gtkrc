@@ -1,5 +1,5 @@
-# TODO: we should probably obtain these from a Win32 IconMetrics struct
-gtk-icon-sizes="gtk-menu=12,12:gtk-small-toolbar=12,12:gtk-large-toolbar=16,16:gtk-dnd=32,32"
+gtk-icon-sizes="gtk-menu=14,14:gtk-small-toolbar=16,16:gtk-large-toolbar=24,24:gtk-dnd=32,32"
+gtk-toolbar-icon-size=large-toolbar
 gtk-button-images=0
 
 style "msw-default"
