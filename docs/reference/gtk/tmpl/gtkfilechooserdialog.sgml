@@ -2,7 +2,7 @@
 GtkFileChooserDialog
 
 <!-- ##### SECTION Short_Description ##### -->
-A file chooser dialog, suitable for "File/Open" or "File/Save" commands.
+A file chooser dialog, suitable for "File/Open" or "File/Save" commands
 
 <!-- ##### SECTION Long_Description ##### -->
     <para>

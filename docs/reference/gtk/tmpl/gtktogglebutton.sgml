@@ -2,7 +2,7 @@
 GtkToggleButton
 
 <!-- ##### SECTION Short_Description ##### -->
-create buttons which retain their state.
+Create buttons which retain their state
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

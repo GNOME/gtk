@@ -2,7 +2,7 @@
 GtkImageMenuItem
 
 <!-- ##### SECTION Short_Description ##### -->
-a menu item with an icon.
+A menu item with an icon
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

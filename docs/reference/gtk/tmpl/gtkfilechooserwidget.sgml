@@ -2,7 +2,7 @@
 GtkFileChooserWidget
 
 <!-- ##### SECTION Short_Description ##### -->
-File chooser widget that can be embedded in other widgets.
+File chooser widget that can be embedded in other widgets
 
 <!-- ##### SECTION Long_Description ##### -->
     <para>

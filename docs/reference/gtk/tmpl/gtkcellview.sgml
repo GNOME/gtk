@@ -2,7 +2,7 @@
 GtkCellView
 
 <!-- ##### SECTION Short_Description ##### -->
-
+A widget displaying a single row of a GtkTreeModel
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

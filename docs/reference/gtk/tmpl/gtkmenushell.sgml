@@ -2,7 +2,7 @@
 GtkMenuShell
 
 <!-- ##### SECTION Short_Description ##### -->
-a base class for menu objects.
+A base class for menu objects
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

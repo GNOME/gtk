@@ -2,7 +2,7 @@
 GtkStatusbar
 
 <!-- ##### SECTION Short_Description ##### -->
-report messages of minor importance to the user.
+Report messages of minor importance to the user
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

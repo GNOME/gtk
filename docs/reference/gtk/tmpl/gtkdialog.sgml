@@ -2,15 +2,14 @@
 GtkDialog
 
 <!-- ##### SECTION Short_Description ##### -->
-
-create popup windows.
+Create popup windows
 
 <!-- ##### SECTION Long_Description ##### -->
 
 <para>
 Dialog boxes are a convenient way to prompt the user for a small amount of
-input, eg. to display a message, ask a question, or anything else that does not
-require extensive effort on the user's part.
+input, e.g. to display a message, ask a question, or anything else that does 
+not require extensive effort on the user's part.
 </para>
 
 <para>

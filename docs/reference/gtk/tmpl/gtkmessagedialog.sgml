@@ -2,8 +2,7 @@
 GtkMessageDialog
 
 <!-- ##### SECTION Short_Description ##### -->
-
-convenient message window
+A convenient message window
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

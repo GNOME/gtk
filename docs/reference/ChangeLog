@@ -1,5 +1,8 @@
 2004-10-11  Matthias Clasen  <matthias@localhost.localdomain>
 
+	* gtk/tmpl/*.sgml: Make the short descriptions a bit more
+	consistent.
+
 	* gtk/images/image.png:
 	* gtk/images/scales.png:
 	* gtk/images/statusbar.png: New images.

@@ -2,7 +2,7 @@
 GtkTreeView
 
 <!-- ##### SECTION Short_Description ##### -->
-A widget for displaying both trees and lists.
+A widget for displaying both trees and lists
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

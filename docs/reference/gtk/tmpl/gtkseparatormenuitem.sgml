@@ -2,7 +2,7 @@
 GtkSeparatorMenuItem
 
 <!-- ##### SECTION Short_Description ##### -->
-a separator used in menus.
+A separator used in menus
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

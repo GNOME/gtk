@@ -2,7 +2,7 @@
 GtkFontSelectionDialog
 
 <!-- ##### SECTION Short_Description ##### -->
-a dialog box for selecting fonts.
+A dialog box for selecting fonts
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

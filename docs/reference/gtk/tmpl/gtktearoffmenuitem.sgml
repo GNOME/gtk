@@ -2,11 +2,11 @@
 GtkTearoffMenuItem
 
 <!-- ##### SECTION Short_Description ##### -->
-a menu item used to tear off and reattach its menu.
+A menu item used to tear off and reattach its menu
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-a #GtkTearoffMenuItem is a special #GtkMenuItem which is used to
+A #GtkTearoffMenuItem is a special #GtkMenuItem which is used to
 tear off and reattach its menu.
 </para>
 

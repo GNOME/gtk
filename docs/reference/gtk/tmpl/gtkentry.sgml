@@ -2,7 +2,7 @@
 GtkEntry
 
 <!-- ##### SECTION Short_Description ##### -->
-a single line text entry field.
+A single line text entry field
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

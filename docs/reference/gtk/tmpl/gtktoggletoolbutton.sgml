@@ -2,7 +2,7 @@
 GtkToggleToolButton
 
 <!-- ##### SECTION Short_Description ##### -->
-A #GtkToolItem containing a toggle button.
+A GtkToolItem containing a toggle button
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -2,7 +2,7 @@
 GtkRadioToolButton
 
 <!-- ##### SECTION Short_Description ##### -->
-A toolbar item that contains a radio button.
+A toolbar item that contains a radio button
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

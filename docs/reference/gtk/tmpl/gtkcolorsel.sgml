@@ -2,7 +2,7 @@
 GtkColorSelection
 
 <!-- ##### SECTION Short_Description ##### -->
-a widget used to select a color.
+A widget used to select a color
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

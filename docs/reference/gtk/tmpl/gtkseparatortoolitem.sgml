@@ -2,7 +2,7 @@
 GtkSeparatorToolItem
 
 <!-- ##### SECTION Short_Description ##### -->
-A toolbar item that separates groups of other toolbar items.
+A toolbar item that separates groups of other toolbar items
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

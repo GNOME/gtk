@@ -2,7 +2,7 @@
 GtkCheckButton
 
 <!-- ##### SECTION Short_Description ##### -->
-create widgets with a discrete toggle button.
+Create widgets with a discrete toggle button
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

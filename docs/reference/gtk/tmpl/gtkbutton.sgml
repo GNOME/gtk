@@ -2,7 +2,7 @@
 GtkButton
 
 <!-- ##### SECTION Short_Description ##### -->
-A widget that creates a signal when clicked on.
+A widget that creates a signal when clicked on
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

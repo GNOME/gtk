@@ -2,7 +2,7 @@
 GtkColorSelectionDialog
 
 <!-- ##### SECTION Short_Description ##### -->
-a standard dialog box for selecting a color.
+A standard dialog box for selecting a color
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -2,8 +2,7 @@
 GtkToolItem
 
 <!-- ##### SECTION Short_Description ##### -->
-#GtkToolItem is the base class of widgets that can be added to
-#GtkToolbar.
+The base class of widgets that can be added to GtkToolbar
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

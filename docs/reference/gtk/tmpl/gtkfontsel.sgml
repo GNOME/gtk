@@ -2,7 +2,7 @@
 GtkFontSelection
 
 <!-- ##### SECTION Short_Description ##### -->
-a widget for selecting fonts.
+A widget for selecting fonts
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

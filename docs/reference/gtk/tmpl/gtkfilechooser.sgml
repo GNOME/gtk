@@ -2,7 +2,7 @@
 GtkFileChooser
 
 <!-- ##### SECTION Short_Description ##### -->
-File chooser interface used by #GtkFileChooserWidget and #GtkFileChooserDialog.
+File chooser interface used by GtkFileChooserWidget and GtkFileChooserDialog
 
 <!-- ##### SECTION Long_Description ##### -->
     <para>

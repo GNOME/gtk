@@ -2,7 +2,7 @@
 GtkProgressBar
 
 <!-- ##### SECTION Short_Description ##### -->
-a widget which indicates progress visually.
+A widget which indicates progress visually
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

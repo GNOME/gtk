@@ -2,7 +2,7 @@
 GtkAction
 
 <!-- ##### SECTION Short_Description ##### -->
-an action which can be triggered by a menu or toolbar item
+An action which can be triggered by a menu or toolbar item
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

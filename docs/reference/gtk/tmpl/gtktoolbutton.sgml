@@ -2,7 +2,7 @@
 GtkToolButton
 
 <!-- ##### SECTION Short_Description ##### -->
-A #GtkToolItem subclass that displays buttons
+A GtkToolItem subclass that displays buttons
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

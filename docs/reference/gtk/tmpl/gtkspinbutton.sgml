@@ -2,7 +2,7 @@
 GtkSpinButton
 
 <!-- ##### SECTION Short_Description ##### -->
-retrieve an integer or floating-point number from the user.
+Retrieve an integer or floating-point number from the user
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

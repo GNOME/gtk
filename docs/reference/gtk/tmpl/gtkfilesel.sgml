@@ -2,7 +2,7 @@
 GtkFileSelection
 
 <!-- ##### SECTION Short_Description ##### -->
-prompt the user for a file or directory name.
+Prompt the user for a file or directory name
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -2,7 +2,7 @@
 GtkUIManager
 
 <!-- ##### SECTION Short_Description ##### -->
-constructing menus and toolbars from an XML description
+Constructing menus and toolbars from an XML description
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

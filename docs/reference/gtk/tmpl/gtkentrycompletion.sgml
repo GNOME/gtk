@@ -2,7 +2,7 @@
 GtkEntryCompletion
 
 <!-- ##### SECTION Short_Description ##### -->
-completion functionality for GtkEntry
+Completion functionality for GtkEntry
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -2,7 +2,7 @@
 GtkRadioAction
 
 <!-- ##### SECTION Short_Description ##### -->
-an action of which only one in a group can be active
+An action of which only one in a group can be active
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

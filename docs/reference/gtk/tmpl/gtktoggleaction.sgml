@@ -2,7 +2,7 @@
 GtkToggleAction
 
 <!-- ##### SECTION Short_Description ##### -->
-an action which can be toggled between two states
+An action which can be toggled between two states
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

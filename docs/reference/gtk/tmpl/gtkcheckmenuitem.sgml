@@ -2,7 +2,7 @@
 GtkCheckMenuItem
 
 <!-- ##### SECTION Short_Description ##### -->
-a menu item with a check box.
+A menu item with a check box
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
