@@ -1,3 +1,9 @@
+Wed Mar 20 12:35:22 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_grab_default): Remove
+	leftover notification of has-default. (#75508, Jacob
+	Berkman.)
+
 Wed Mar 20 12:27:07 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkaccelgroup.c (gtk_accelerator_valid): Allow

@@ -3499,10 +3499,7 @@ gtk_widget_grab_default (GtkWidget *widget)
   window = gtk_widget_get_toplevel (widget);
   
   if (window && GTK_WIDGET_TOPLEVEL (window))
-    {
-       gtk_window_set_default (GTK_WINDOW (window), widget);
-       g_object_notify (G_OBJECT (widget), "has_default");
-    }
+    gtk_window_set_default (GTK_WINDOW (window), widget);
   else
     g_warning (G_STRLOC ": widget not within a GtkWindow");
 }
