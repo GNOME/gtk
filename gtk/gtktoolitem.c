@@ -76,6 +76,8 @@ static void gtk_tool_item_get_property (GObject         *object,
 					guint            prop_id,
 					GValue          *value,
 					GParamSpec      *pspec);
+static void gtk_tool_item_property_notify (GObject      *object,
+					   GParamSpec   *pspec);
 static void gtk_tool_item_realize       (GtkWidget      *widget);
 static void gtk_tool_item_unrealize     (GtkWidget      *widget);
 static void gtk_tool_item_map           (GtkWidget      *widget);
@@ -136,6 +138,7 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
   object_class->set_property = gtk_tool_item_set_property;
   object_class->get_property = gtk_tool_item_get_property;
   object_class->finalize = gtk_tool_item_finalize;
+  object_class->notify = gtk_tool_item_property_notify;
 
   widget_class->realize       = gtk_tool_item_realize;
   widget_class->unrealize     = gtk_tool_item_unrealize;
@@ -335,6 +338,17 @@ gtk_tool_item_get_property (GObject    *object,
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
+}
+
+static void
+gtk_tool_item_property_notify (GObject    *object,
+			       GParamSpec *pspec)
+{
+  GtkToolItem *tool_item = GTK_TOOL_ITEM (object);
+
+  if (tool_item->priv->menu_item && strcmp (pspec->name, "sensitive") == 0)
+    gtk_widget_set_sensitive (tool_item->priv->menu_item,
+			      GTK_WIDGET_SENSITIVE (tool_item));
 }
 
 static void
@@ -1059,6 +1073,9 @@ gtk_tool_item_set_proxy_menu_item (GtkToolItem *tool_item,
 	{
 	  g_object_ref (menu_item);
 	  gtk_object_sink (GTK_OBJECT (menu_item));
+
+	  gtk_widget_set_sensitive (menu_item,
+				    GTK_WIDGET_SENSITIVE (tool_item));
 	}
       
       tool_item->priv->menu_item = menu_item;

@@ -1,5 +1,12 @@
 2004-02-20  Michael Meeks  <michael@ximian.com>
 
+	* gtk/gtktoolitem.c (gtk_tool_item_property_notify): impl.
+	(gtk_tool_item_class_init): hook it up.
+	(gtk_tool_item_set_proxy_menu_item): synchronize sensitivity.
+
+	* gtk/gtktoolbutton.c (gtk_tool_button_property_notify):
+	chain to parent, fix strcmp bug.
+
 	* tests/testtoolbar.c (main): re-arrange widgets to allow
 	more overflowing toolbar goodness.
 

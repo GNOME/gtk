@@ -442,8 +442,11 @@ static void
 gtk_tool_button_property_notify (GObject          *object,
 				 GParamSpec       *pspec)
 {
-  if (strcmp (pspec->name, "is_important"))
+  if (strcmp (pspec->name, "is-important") == 0)
     gtk_tool_button_construct_contents (GTK_TOOL_ITEM (object));
+
+  if (parent_class->notify)
+    parent_class->notify (object, pspec);
 }
 
 static void
