@@ -127,24 +127,6 @@ void create_floating_spin_button(void) {
 <structfield>entry</structfield> is the #GtkEntry part of the #GtkSpinButton widget, and can be used accordingly. All other fields contain private data and should only be modified using the functions below.
 </para>
 
-@entry: 
-@adjustment: 
-@panel: 
-@shadow_type: 
-@timer: 
-@ev_time: 
-@climb_rate: 
-@timer_step: 
-@update_policy: 
-@in_child: 
-@click_child: 
-@button: 
-@need_timer: 
-@timer_calls: 
-@digits: 
-@numeric: 
-@wrap: 
-@snap_to_ticks: 
 
 <!-- ##### ENUM GtkSpinButtonUpdatePolicy ##### -->
 <para>

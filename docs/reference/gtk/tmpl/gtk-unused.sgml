@@ -1,3 +1,209 @@
+<!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:Title ##### -->
+Menu Factory
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### STRUCT GtkMenuFactory ##### -->
+<para>
+
+</para>
+
+@path: 
+@type: 
+@accel_group: 
+@widget: 
+@subfactories: 
+
+<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### MACRO gtk_marshal_NONE__UINT_STRING ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_FLOAT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT_POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_marshal_INT__POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_menu_factory_find ##### -->
+<para>
+
+</para>
+
+@factory: 
+@path: 
+@Returns: 
+
+<!-- ##### MACRO gtk_marshal_NONE__ENUM_FLOAT_BOOL ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO gtk_marshal_NONE__POINTER_STRING_STRING ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_POINTER_INT_INT_INT_POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### MACRO gtk_marshal_NONE__UINT_POINTER_UINT_ENUM_ENUM_POINTER ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ENUM GtkMenuFactoryType ##### -->
+<para>
+
+</para>
+
+@GTK_MENU_FACTORY_MENU: 
+@GTK_MENU_FACTORY_MENU_BAR: 
+@GTK_MENU_FACTORY_OPTION_MENU: 
+
+<!-- ##### FUNCTION gtk_marshal_INT__POINTER_CHAR_CHAR ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT_INT_POINTER_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_FLOAT_BOOL ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### MACRO gtk_marshal_NONE__BOXED ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_menu_factory_add_entries ##### -->
+<para>
+
+</para>
+
+@factory: 
+@entries: 
+@nentries: 
+
+<!-- ##### STRUCT GtkMenuPath ##### -->
+<para>
+
+</para>
+
+@path: 
+@widget: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### MACRO gtk_marshal_NONE__UINT_POINTER_UINT_UINT_ENUM ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ARG GtkPreview:expand ##### -->
 <para>
 Determines the way that the the preview widget behaves
@@ -5,6 +211,215 @@ when the size it is allocated is larger than the requested
 size. See gtk_preview_set_expand().
 </para>
 
+
+<!-- ##### MACRO gtk_marshal_NONE__STRING_INT_POINTER ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO gtk_marshal_NONE__POINTER_INT_INT_POINTER_UINT_UINT ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_INT_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:Short_Description ##### -->
+
+
+
+<!-- ##### MACRO gtk_marshal_BOOL__POINTER_STRING_STRING_POINTER ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO gtk_marshal_NONE__ENUM_FLOAT ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### MACRO gtk_marshal_NONE__POINTER_POINTER_UINT_UINT ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_menu_factory_remove_paths ##### -->
+<para>
+
+</para>
+
+@factory: 
+@paths: 
+@npaths: 
+
+<!-- ##### FUNCTION gtk_menu_factory_destroy ##### -->
+<para>
+
+</para>
+
+@factory: 
+
+<!-- ##### MACRO gtk_marshal_BOOL__POINTER_INT_INT_UINT ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_marshal_INT__INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### MACRO gtk_marshal_ENUM__ENUM ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_POINTER_INT_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### MACRO GTK_NOTE ##### -->
+<para>
+
+</para>
+
+@type: 
+@action: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### MACRO gtk_marshal_NONE__POINTER_UINT ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_POINTER_POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__BOOL ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_POINTER_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_POINTER_POINTER_POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### MACRO gtk_marshal_NONE__OBJECT ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ENUM GtkDebugFlag ##### -->
+<para>
+
+</para>
+
+@GTK_DEBUG_OBJECTS: 
+@GTK_DEBUG_MISC: 
+@GTK_DEBUG_SIGNALS: 
+@GTK_DEBUG_DND: 
+@GTK_DEBUG_PLUGSOCKET: 
 
 <!-- ##### ARG GtkHandleBox:snap_edge ##### -->
 <para>
@@ -19,6 +434,196 @@ the torn-off window. See gtk_handle_box_set_snap_edge().
 <!-- ##### ARG GtkHandleBox:handle_position ##### -->
 <para>
 Determines the side of the handlebox where the handle is drawn.
+</para>
+
+
+<!-- ##### MACRO gtk_marshal_NONE__STRING ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO gtk_marshal_NONE__UINT ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO gtk_marshal_NONE__ENUM ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__C_CALLBACK_C_CALLBACK ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_menu_factory_new ##### -->
+<para>
+
+</para>
+
+@type: 
+@Returns: 
+
+<!-- ##### SECTION ./tmpl/gtkdebug.sgml:Short_Description ##### -->
+
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_INT_POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_marshal_NONE__C_CALLBACK ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_POINTER_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_menu_factory_remove_entries ##### -->
+<para>
+
+</para>
+
+@factory: 
+@entries: 
+@nentries: 
+
+<!-- ##### SECTION ./tmpl/gtkdebug.sgml:Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### USER_FUNCTION GtkMenuCallback ##### -->
+<para>
+
+</para>
+
+@widget: 
+@user_data: 
+
+<!-- ##### VARIABLE gtk_debug_flags ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_menu_factory_remove_subfactory ##### -->
+<para>
+
+</para>
+
+@factory: 
+@subfactory: 
+@path: 
+
+<!-- ##### SECTION ./tmpl/gtkdebug.sgml:Title ##### -->
+Debugging
+
+
+<!-- ##### FUNCTION gtk_ruler_draw_pos ##### -->
+<para>
+
+</para>
+
+@ruler: the gtkruler
+
+<!-- ##### MACRO gtk_marshal_NONE__POINTER_UINT_UINT ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkdebug.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO gtk_marshal_NONE__POINTER_UINT_ENUM ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__NONE ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_marshal_BOOL__NONE ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+<!-- ##### FUNCTION gtk_menu_factory_add_subfactory ##### -->
+<para>
+
+</para>
+
+@factory: 
+@subfactory: 
+@path: 
+
+<!-- ##### STRUCT GtkMenuEntry ##### -->
+<para>
+
+</para>
+
+@path: 
+@accelerator: 
+@callback: 
+@callback_data: 
+@widget: 
+
+<!-- ##### FUNCTION gtk_ruler_draw_ticks ##### -->
+<para>
+
+</para>
+
+@ruler: the gtkruler
+
+<!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:Long_Description ##### -->
+<para>
+
 </para>
 
 

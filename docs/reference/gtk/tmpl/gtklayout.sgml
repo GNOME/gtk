@@ -19,20 +19,6 @@ GtkLayout
 
 </para>
 
-@container: 
-@children: 
-@width: 
-@height: 
-@xoffset: 
-@yoffset: 
-@hadjustment: 
-@vadjustment: 
-@bin_window: 
-@visibility: 
-@configure_serial: 
-@scroll_x: 
-@scroll_y: 
-@freeze_count: 
 
 <!-- ##### FUNCTION gtk_layout_new ##### -->
 <para>

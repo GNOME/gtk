@@ -19,14 +19,6 @@ GtkProgress
 
 </para>
 
-@widget: 
-@adjustment: 
-@offscreen_pixmap: 
-@format: 
-@x_align: 
-@y_align: 
-@show_text: 
-@activity_mode: 
 
 <!-- ##### FUNCTION gtk_progress_set_show_text ##### -->
 <para>

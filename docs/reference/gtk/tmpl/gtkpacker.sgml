@@ -19,14 +19,6 @@ GtkPacker
 
 </para>
 
-@parent: 
-@children: 
-@spacing: 
-@default_border_width: 
-@default_pad_x: 
-@default_pad_y: 
-@default_i_pad_x: 
-@default_i_pad_y: 
 
 <!-- ##### ENUM GtkPackerOptions ##### -->
 <para>

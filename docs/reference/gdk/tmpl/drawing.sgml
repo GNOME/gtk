@@ -160,7 +160,7 @@ the ellipse to be drawn.
 @height: the height of the bounding rectangle.
 @angle1: the start angle of the arc, relative to the 3 o'clock position,
 counter-clockwise, in 1/64ths of a degree.
-@angle2: the end angle of the arc, similar to @angle1.
+@angle2: the end angle of the arc, in the same units as @angle1.
 
 
 <!-- ##### FUNCTION gdk_draw_polygon ##### -->
@@ -184,7 +184,7 @@ Draws a string of characters in the given font or fontset.
 
 @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
 @font: a #GdkFont.
-q@gc: a #GdkGC.
+@gc: a #GdkGC.
 @x: the x coordinate of the left edge of the text.
 @y: the y coordinate of the baseline of the text.
 @string: the string of characters to draw.

@@ -51,37 +51,6 @@ The #GtkFontSelection struct contains private data only, and should
 only be accessed using the functions below.
 </para>
 
-@notebook: 
-@main_vbox: 
-@font_label: 
-@font_entry: 
-@font_clist: 
-@font_style_entry: 
-@font_style_clist: 
-@size_entry: 
-@size_clist: 
-@pixels_button: 
-@points_button: 
-@filter_button: 
-@preview_entry: 
-@message_label: 
-@info_vbox: 
-@info_clist: 
-@requested_font_name: 
-@actual_font_name: 
-@filter_vbox: 
-@type_bitmaps_button: 
-@type_scalable_button: 
-@type_scaled_bitmaps_button: 
-@filter_clists: 
-@font: 
-@font_index: 
-@style: 
-@metric: 
-@size: 
-@selected_size: 
-@property_values: 
-@filters: 
 
 <!-- ##### FUNCTION gtk_font_selection_new ##### -->
 <para>

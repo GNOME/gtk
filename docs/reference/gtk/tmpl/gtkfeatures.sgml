@@ -1,12 +1,14 @@
 <!-- ##### SECTION Title ##### -->
-Feature Test Macros
+Version Information
 
 <!-- ##### SECTION Short_Description ##### -->
-
+variables and functions to check the GTK+ version.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+This section describes the variables and functions available to test the
+version of the GTK+ library in use.
+FIXME: probably merge with other general stuff.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -16,19 +18,22 @@ Feature Test Macros
 
 <!-- ##### VARIABLE gtk_major_version ##### -->
 <para>
-
+The major version number of the GTK+ library.
+(e.g. in GTK+ version 1.2.5 this is 1.)
 </para>
 
 
 <!-- ##### VARIABLE gtk_minor_version ##### -->
 <para>
-
+The minor version number of the GTK+ library.
+(e.g. in GTK+ version 1.2.5 this is 2.)
 </para>
 
 
 <!-- ##### VARIABLE gtk_micro_version ##### -->
 <para>
-
+The micro version number of the GTK+ library.
+(e.g. in GTK+ version 1.2.5 this is 5.)
 </para>
 
 
@@ -46,12 +51,13 @@ Feature Test Macros
 
 <!-- ##### FUNCTION gtk_check_version ##### -->
 <para>
-
+Checks that the GTK+ library in use is compatable with the given version.
 </para>
 
-@required_major: 
-@required_minor: 
-@required_micro: 
-@Returns: 
+@required_major: the required major version.
+@required_minor: the required major version.
+@required_micro: the required major version.
+@Returns: NULL if the GTK+ library is compatable with the given version, or
+a string describing the version mismatch.
 
 

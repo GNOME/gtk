@@ -21,7 +21,6 @@ a handle. See #GtkPaned for details.
 <para>
 </para>
 
-@paned: 
 
 <!-- ##### FUNCTION gtk_hpaned_new ##### -->
 <para>

@@ -40,16 +40,16 @@ void create_file_selection(void) {
    
    file_selector = gtk_file_selection_new("Please select a file for editing.");
    
-   gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION(file_selector)->ok_button)),
+   gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION(file_selector)->ok_button),
    			   "clicked", GTK_SIGNAL_FUNC (store_filename), NULL);
    			   
    /* Ensure that the dialog box is destroyed when the user clicks a button. */
    
-   gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION(file_selector)->ok_button)),
+   gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION(file_selector)->ok_button),
    					  "clicked", GTK_SIGNAL_FUNC (gtk_widget_destroy),
    					  (gpointer) file_selector);
 
-   gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION(file_selector)->cancel_button)),
+   gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION(file_selector)->cancel_button),
    					  "clicked", GTK_SIGNAL_FUNC (gtk_widget_destroy),
    					  (gpointer) file_selector);
    
@@ -110,27 +110,6 @@ The #GtkFileSelection struct contains the following #GtkWidget fields:
 
 </para>
 
-@window: 
-@dir_list: 
-@file_list: 
-@selection_entry: 
-@selection_text: 
-@main_vbox: 
-@ok_button: 
-@cancel_button: 
-@help_button: 
-@history_pulldown: 
-@history_menu: 
-@history_list: 
-@fileop_dialog: 
-@fileop_entry: 
-@fileop_file: 
-@cmpl_state: 
-@fileop_c_dir: 
-@fileop_del_file: 
-@fileop_ren_file: 
-@button_area: 
-@action_area: 
 
 <!-- ##### FUNCTION gtk_file_selection_new ##### -->
 <para>

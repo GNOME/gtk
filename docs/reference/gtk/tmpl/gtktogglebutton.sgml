@@ -78,10 +78,6 @@ void make_toggles(void) {
 The #GtkToggleButton struct contains private data only, and should be manipulated using the functions below.
 </para>
 
-@button: 
-@active: 
-@draw_indicator: 
-@event_window: 
 
 <!-- ##### FUNCTION gtk_toggle_button_new ##### -->
 <para>

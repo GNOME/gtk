@@ -27,7 +27,6 @@ The #GtkVScale-struct struct contains private data only, and
 should be accessed using the functions below.
 </para>
 
-@scale: 
 
 <!-- ##### FUNCTION gtk_vscale_new ##### -->
 <para>

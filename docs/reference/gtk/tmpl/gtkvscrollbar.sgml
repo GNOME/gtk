@@ -17,14 +17,12 @@ will be created you. See #GtkAdjustment for details.
 
 </para>
 
-
 <!-- ##### STRUCT GtkVScrollbar ##### -->
 <para>
 The #GtkVScrollbar struct contains private data and should be accessed
 using the functions below.
 </para>
 
-@scrollbar: 
 
 <!-- ##### FUNCTION gtk_vscrollbar_new ##### -->
 <para>

@@ -19,14 +19,6 @@ GtkItemFactory
 
 </para>
 
-@object: 
-@path: 
-@accel_group: 
-@widget: 
-@items: 
-@translate_func: 
-@translate_data: 
-@translate_notify: 
 
 <!-- ##### USER_FUNCTION GtkPrintFunc ##### -->
 <para>

@@ -19,9 +19,6 @@ The #GtkMenuBar is a subclass of #GtkMenuShell which contains one to many #GtkMe
 The #GtkMenuBar struct contains the following fields. (These fields should be considered read-only.  They should never be set by an application.)
 </para>
 
-@menu_shell: the #GtkMenuShell container
-@shadow_type: the GtkShadowType to use
-
 <!-- ##### FUNCTION gtk_menu_bar_new ##### -->
 <para>
 Creates the new #GtkMenuBar

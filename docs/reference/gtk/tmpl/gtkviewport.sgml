@@ -19,12 +19,6 @@ GtkViewport
 
 </para>
 
-@bin: 
-@shadow_type: 
-@view_window: 
-@bin_window: 
-@hadjustment: 
-@vadjustment: 
 
 <!-- ##### FUNCTION gtk_viewport_new ##### -->
 <para>

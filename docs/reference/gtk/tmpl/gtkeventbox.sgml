@@ -22,7 +22,6 @@ The #GtkEventBox-struct struct contains private data only, and
 should be accessed using the functions below.
 </para>
 
-@bin: 
 
 <!-- ##### FUNCTION gtk_event_box_new ##### -->
 <para>

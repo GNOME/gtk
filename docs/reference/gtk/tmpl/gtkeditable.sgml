@@ -91,16 +91,10 @@ editable by the user.</entry>
 </tbody></tgroup></informaltable>
 </para>
 
-@widget: 
 @current_pos: 
 @selection_start_pos: 
 @selection_end_pos: 
 @has_selection: 
-@editable: 
-@visible: 
-@ic: 
-@ic_attr: 
-@clipboard_text: 
 
 <!-- ##### USER_FUNCTION GtkTextFunction ##### -->
 <para>

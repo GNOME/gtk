@@ -101,16 +101,6 @@ never be set by an application.)
 </tbody></tgroup></informaltable>
 </para>
 
-@container: 
-@request_width: 
-@request_height: 
-@current_width: 
-@current_height: 
-@plug_window: 
-@same_app: 
-@focus_in: 
-@have_size: 
-@need_map: 
 
 <!-- ##### FUNCTION gtk_socket_new ##### -->
 <para>

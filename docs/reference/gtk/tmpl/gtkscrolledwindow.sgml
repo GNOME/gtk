@@ -49,14 +49,6 @@ There are no public fields in the #GtkScrolledWindow struct; it should
 only be accessed using the functions below.
 </para>
 
-@container: 
-@hscrollbar: 
-@vscrollbar: 
-@hscrollbar_policy: 
-@vscrollbar_policy: 
-@hscrollbar_visible: 
-@vscrollbar_visible: 
-@window_placement: 
 
 <!-- ##### FUNCTION gtk_scrolled_window_new ##### -->
 <para>

@@ -19,27 +19,6 @@ GtkNotebook
 
 </para>
 
-@container: 
-@cur_page: 
-@children: 
-@first_tab: 
-@focus_tab: 
-@menu: 
-@panel: 
-@timer: 
-@tab_hborder: 
-@tab_vborder: 
-@show_tabs: 
-@homogeneous: 
-@show_border: 
-@tab_pos: 
-@scrollable: 
-@in_child: 
-@click_child: 
-@button: 
-@need_timer: 
-@child_has_focus: 
-@have_visible_child: 
 
 <!-- ##### MACRO GTK_NOTEBOOK_PAGE ##### -->
 <para>

@@ -72,26 +72,8 @@ gtk_widget_set_usize (frame1, 50, -1);
 <para>
 </para>
 
-@container: 
-@child1: 
-@child2: 
-@handle: 
-@groove_rectangle: 
-@xor_gc: 
 @handle_size: 
 @gutter_size: 
-@child1_size: 
-@last_allocation: 
-@min_position: 
-@max_position: 
-@position_set: 
-@in_drag: 
-@child1_shrink: 
-@child1_resize: 
-@child2_shrink: 
-@child2_resize: 
-@handle_xpos: 
-@handle_ypos: 
 
 <!-- ##### FUNCTION gtk_paned_add1 ##### -->
 <para>

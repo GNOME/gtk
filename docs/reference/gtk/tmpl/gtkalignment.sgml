@@ -33,11 +33,6 @@ The #GtkAlignment-struct struct contains private data only, and should
 be accessed using the functions below.
 </para>
 
-@bin: 
-@xalign: 
-@yalign: 
-@xscale: 
-@yscale: 
 
 <!-- ##### FUNCTION gtk_alignment_new ##### -->
 <para>

@@ -25,12 +25,6 @@ a frame around the child. The frame will be
 
 </para>
 
-@frame: 
-@xalign: 
-@yalign: 
-@ratio: 
-@obey_child: 
-@center_allocation: 
 
 <!-- ##### FUNCTION gtk_aspect_frame_new ##### -->
 <para>

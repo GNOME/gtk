@@ -19,17 +19,6 @@ GtkMenuItem
 
 </para>
 
-@item: 
-@submenu: 
-@accelerator_signal: 
-@toggle_size: 
-@accelerator_width: 
-@show_toggle_indicator: 
-@show_submenu_indicator: 
-@submenu_placement: 
-@submenu_direction: 
-@right_justify: 
-@timer: 
 
 <!-- ##### FUNCTION gtk_menu_item_new ##### -->
 <para>

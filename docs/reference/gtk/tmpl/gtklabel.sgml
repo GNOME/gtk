@@ -23,14 +23,6 @@ This should not be accessed directly.  Use the accessor functions as
 described below.
 </para>
 
-@misc: 
-@label: 
-@label_wc: 
-@pattern: 
-@words: 
-@max_width: 
-@jtype: 
-@wrap: 
 
 <!-- ##### STRUCT GtkLabelWord ##### -->
 <para>

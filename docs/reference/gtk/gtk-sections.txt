@@ -378,12 +378,12 @@ GTK_COLOR_SELECTION_DIALOG_CLASS
 GtkCombo
 <TITLE>GtkCombo</TITLE>
 gtk_combo_new
+gtk_combo_set_popdown_strings
 gtk_combo_set_value_in_list
 gtk_combo_set_use_arrows
 gtk_combo_set_use_arrows_always
 gtk_combo_set_case_sensitive
 gtk_combo_set_item_string
-gtk_combo_set_popdown_strings
 gtk_combo_disable_activate
 <SUBSECTION Standard>
 GTK_COMBO
@@ -2505,23 +2505,6 @@ gtk_drag_dest_handle_event
 
 
 <SECTION>
-<FILE>gtkmenufactory</FILE>
-<TITLE>Menu Factory</TITLE>
-GtkMenuCallback
-GtkMenuEntry
-GtkMenuPath
-GtkMenuFactory
-gtk_menu_factory_new
-gtk_menu_factory_destroy
-gtk_menu_factory_add_entries
-gtk_menu_factory_add_subfactory
-gtk_menu_factory_remove_paths
-gtk_menu_factory_remove_entries
-gtk_menu_factory_remove_subfactory
-gtk_menu_factory_find
-</SECTION>
-
-<SECTION>
 <FILE>gtksignal</FILE>
 <TITLE>Signals</TITLE>
 GTK_SIGNAL_OFFSET
@@ -2529,6 +2512,7 @@ GtkSignalMarshal
 GtkSignalDestroy
 GtkEmissionHook
 GtkSignalQuery
+GtkSignalRunType
 gtk_signal_init
 gtk_signal_new
 gtk_signal_newv
@@ -2547,8 +2531,8 @@ gtk_signal_connect_after
 gtk_signal_connect_object
 gtk_signal_connect_object_after
 gtk_signal_connect_full
-gtk_signal_connect_object_while_alive
 gtk_signal_connect_while_alive
+gtk_signal_connect_object_while_alive
 gtk_signal_disconnect
 gtk_signal_disconnect_by_func
 gtk_signal_disconnect_by_data
@@ -2573,6 +2557,8 @@ gtk_signal_remove_emission_hook
 <FILE>gtkmarshal</FILE>
 <TITLE>Signal Marshallers</TITLE>
 gtk_signal_default_marshaller
+
+<SUBSECTION Private>
 gtk_marshal_BOOL__POINTER_INT_INT_UINT
 gtk_marshal_BOOL__POINTER_STRING_STRING_POINTER
 gtk_marshal_ENUM__ENUM
@@ -2902,7 +2888,6 @@ GtkCurveType
 GtkDirectionType
 GtkJustification
 GtkMatchType
-GtkMenuFactoryType
 GtkMetricType
 GtkOrientation
 GtkPackType
@@ -2913,7 +2898,6 @@ GtkPositionType
 GtkPreviewType
 GtkReliefStyle
 GtkResizeMode
-GtkSignalRunType
 GtkScrollType
 GtkSelectionMode
 GtkShadowType
@@ -2927,14 +2911,6 @@ GtkVisibility
 GtkWindowPosition
 GtkWindowType
 GtkSortType
-</SECTION>
-
-<SECTION>
-<FILE>gtkdebug</FILE>
-<TITLE>Debugging</TITLE>
-GtkDebugFlag
-gtk_debug_flags
-GTK_NOTE
 </SECTION>
 
 <SECTION>
@@ -2952,5 +2928,24 @@ GTK_WIDGET_IN_REPARENT
 GTK_WIDGET_IS_OFFSCREEN
 GTK_PRIVATE_SET_FLAG
 GTK_PRIVATE_UNSET_FLAG
+
+<SUBSECTION Private>
+GtkMenuCallback
+GtkMenuEntry
+GtkMenuPath
+GtkMenuFactory
+GtkMenuFactoryType
+gtk_menu_factory_new
+gtk_menu_factory_destroy
+gtk_menu_factory_add_entries
+gtk_menu_factory_add_subfactory
+gtk_menu_factory_remove_paths
+gtk_menu_factory_remove_entries
+gtk_menu_factory_remove_subfactory
+gtk_menu_factory_find
+
+GtkDebugFlag
+gtk_debug_flags
+GTK_NOTE
 </SECTION>
 

@@ -56,9 +56,6 @@ an application.)
 </tbody></tgroup></informaltable>
 </para>
 
-@misc: 
-@arrow_type: 
-@shadow_type: 
 
 <!-- ##### FUNCTION gtk_arrow_new ##### -->
 <para>

@@ -49,13 +49,6 @@ The message at the top of the stack can be removed using gtk_statusbar_pop(). A 
 Contains private data that should be modified with the functions described below.
 </para>
 
-@parent_widget: 
-@frame: 
-@label: 
-@messages: 
-@keys: 
-@seq_context_id: 
-@seq_message_id: 
 
 <!-- ##### STRUCT GtkStatusbarMsg ##### -->
 <para>

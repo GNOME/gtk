@@ -19,15 +19,6 @@ GtkProgressBar
 
 </para>
 
-@progress: 
-@bar_style: 
-@orientation: 
-@blocks: 
-@in_block: 
-@activity_pos: 
-@activity_step: 
-@activity_blocks: 
-@activity_dir: 
 
 <!-- ##### ENUM GtkProgressBarStyle ##### -->
 <para>

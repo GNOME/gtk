@@ -57,26 +57,6 @@ All of these fields should be considered read only, and everything in this
 struct should only be modified using the functions provided below.
 </para>
 
-@widget: 
-@header_style: 
-@label_style: 
-@month: 
-@year: 
-@selected_day: 
-@day_month: 
-@day: 
-@num_marked_dates: 
-@marked_date: 
-@display_flags: 
-@marked_date_color: 
-@gc: 
-@xor_gc: 
-@focus_row: 
-@focus_col: 
-@highlight_row: 
-@highlight_col: 
-@private_data: 
-@grow_space: 
 
 <!-- ##### ENUM GtkCalendarDisplayOptions ##### -->
 <para>

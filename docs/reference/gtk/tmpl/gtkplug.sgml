@@ -33,9 +33,6 @@ inside the first applications window.
 
 </para>
 
-@window: 
-@socket_window: 
-@same_app: 
 
 <!-- ##### FUNCTION gtk_plug_construct ##### -->
 <para>

@@ -78,16 +78,6 @@ Information about the tooltip (if any) associated with an arbitrary widget can b
 <para>Holds information about a group of tooltips. Fields should be changed using the functions provided, rather than directly accessing the struct's members.
 </para>
 
-@data: 
-@tip_window: 
-@active_tips_data: 
-@tips_data_list: 
-@gc: 
-@foreground: 
-@background: 
-@delay: 
-@enabled: 
-@timer_tag: 
 
 <!-- ##### STRUCT GtkTooltipsData ##### -->
 <para>

@@ -19,22 +19,6 @@ GtkWindow
 
 </para>
 
-@bin: 
-@title: 
-@wmclass_name: 
-@wmclass_class: 
-@type: 
-@focus_widget: 
-@default_widget: 
-@transient_parent: 
-@resize_count: 
-@allow_shrink: 
-@allow_grow: 
-@auto_shrink: 
-@handling_resize: 
-@position: 
-@use_uposition: 
-@modal: 
 
 <!-- ##### FUNCTION gtk_window_new ##### -->
 <para>

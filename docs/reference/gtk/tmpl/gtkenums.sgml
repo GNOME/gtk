@@ -107,15 +107,6 @@ Standard Enumerations
 @GTK_MATCH_EXACT: 
 @GTK_MATCH_LAST: 
 
-<!-- ##### ENUM GtkMenuFactoryType ##### -->
-<para>
-
-</para>
-
-@GTK_MENU_FACTORY_MENU: 
-@GTK_MENU_FACTORY_MENU_BAR: 
-@GTK_MENU_FACTORY_OPTION_MENU: 
-
 <!-- ##### ENUM GtkMetricType ##### -->
 <para>
 
@@ -223,18 +214,6 @@ contains grayscale or red-green-blue data.
 @GTK_RESIZE_PARENT: 
 @GTK_RESIZE_QUEUE: 
 @GTK_RESIZE_IMMEDIATE: 
-
-<!-- ##### ENUM GtkSignalRunType ##### -->
-<para>
-
-</para>
-
-@GTK_RUN_FIRST: 
-@GTK_RUN_LAST: 
-@GTK_RUN_BOTH: 
-@GTK_RUN_NO_RECURSE: 
-@GTK_RUN_ACTION: 
-@GTK_RUN_NO_HOOKS: 
 
 <!-- ##### ENUM GtkScrollType ##### -->
 <para>

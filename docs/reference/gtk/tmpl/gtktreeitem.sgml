@@ -19,11 +19,6 @@ GtkTreeItem
 
 </para>
 
-@item: 
-@subtree: 
-@pixmaps_box: 
-@pixmaps: 
-@expanded: 
 
 <!-- ##### MACRO GTK_TREE_ITEM_SUBTREE ##### -->
 <para>

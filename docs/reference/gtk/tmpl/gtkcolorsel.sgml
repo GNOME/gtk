@@ -19,26 +19,6 @@ GtkColorSelection
 
 </para>
 
-@vbox: 
-@wheel_area: 
-@value_area: 
-@sample_area: 
-@sample_area_eb: 
-@scales: 
-@entries: 
-@opacity_label: 
-@wheel_gc: 
-@value_gc: 
-@sample_gc: 
-@policy: 
-@use_opacity: 
-@timer_active: 
-@timer_tag: 
-@values: 
-@old_values: 
-@wheel_buf: 
-@value_buf: 
-@sample_buf: 
 
 <!-- ##### FUNCTION gtk_color_selection_new ##### -->
 <para>

@@ -2,481 +2,89 @@
 Signal Marshallers
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Functions to adapt C structures to native calling convention.
 
 <!-- ##### SECTION Long_Description ##### -->
+<refsect2>
+<title>What are Signal Marshallers?</title>
 <para>
+Marshals are functions which all have the same prototype:
+they take a #GtkObject, a #GtkSignalFunc, a #gpointer,
+and an array of argument values.
+The functions are names gtk_marshall_RETURNTYPE__PARAMTYPE1_PARAMTYPE2....
+</para>
+<para>
+They then call a native function:  the GtkObject is the first
+parameter passed in.  The arguments are passed in the native
+calling convention:  chars, shorts, ints, longs may be packed
+on the stack, or tucked in registers:  it doesn't matter
+because the same calling convention will be generated
+inside the gtkmarshal code as is expected where you define
+your handlers.
+</para>
+<para>
+So the function named:
+<programlisting>
+gtk_marshal_BOOL__POINTER_INT_INT_UINT(GtkObject*, GtkSignalFunc, gpointer, GtkArg*);
+</programlisting>
+will call the #GtkSignalFunc assuming it was a function with signature:
+<programlisting>
+gboolean sigfunc(gpointer,gint,gint,guint);
+</programlisting>
+</para>
+</refsect2>
+<refsect2>
+<title>Writing Custom Marshals</title>
+<para>
+Marshals are primarily used as arguments to gtk_signal_new().
+Sometimes, you may find that a marshaller you need isn't available
+in the standard list.  Then you have to write your own.
+</para>
+<para>
+If you wish to define a signal with a new type of argument list.
+Suppose you want 2 pointers and 2 integers.
+You would write:
+<programlisting>
+typedef int (*GtkSignal_INT__POINTER_POINTER_INT_INT)(
+			gpointer, gpointer, gint, gint
+);
 
+void marshal_INT__POINTER_POINTER_INT_INT(GtkObject*    object,
+					   GtkSignalFunc func,
+					   gpointer      func_data,
+                                           GtkArg*       args)
+{
+	GtkSignal_NONE__POINTER_POINTER_INT_INT rfunc;
+	gint* return_val;
+	return_val = GTK_RETLOC_INT(args[4]);
+	rfunc = (GtkSignal_INT__POINTER_POINTER_INT_INT)func;
+	*return_val = (*rfunc)(object,
+                               GTK_VALUE_POINTER(args[0]),
+                               GTK_VALUE_POINTER(args[1]),
+                               GTK_VALUE_INT(args[2]),
+                               GTK_VALUE_INT(args[3]),
+                               func_data);
+}
+</programlisting>
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
+<variablelist>
 
+<varlistentry>
+<term>#GtkSignal</term>
+<listitem><para>The signal handling functions (of which marshallers are 
+really an implementation detail).</para></listitem>
+</varlistentry>
+
+</variablelist>
 </para>
 
 <!-- ##### MACRO gtk_signal_default_marshaller ##### -->
 <para>
-
+A marshaller that returns void and takes no extra parameters.
 </para>
 
-
-
-<!-- ##### MACRO gtk_marshal_BOOL__POINTER_INT_INT_UINT ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO gtk_marshal_BOOL__POINTER_STRING_STRING_POINTER ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO gtk_marshal_ENUM__ENUM ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO gtk_marshal_NONE__BOXED ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO gtk_marshal_NONE__ENUM ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO gtk_marshal_NONE__ENUM_FLOAT ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO gtk_marshal_NONE__ENUM_FLOAT_BOOL ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO gtk_marshal_NONE__OBJECT ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO gtk_marshal_NONE__POINTER_STRING_STRING ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO gtk_marshal_NONE__POINTER_UINT ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO gtk_marshal_NONE__POINTER_UINT_ENUM ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO gtk_marshal_NONE__POINTER_POINTER_UINT_UINT ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO gtk_marshal_NONE__POINTER_INT_INT_POINTER_UINT_UINT ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO gtk_marshal_NONE__POINTER_UINT_UINT ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO gtk_marshal_NONE__STRING ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO gtk_marshal_NONE__STRING_INT_POINTER ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO gtk_marshal_NONE__UINT ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO gtk_marshal_NONE__UINT_POINTER_UINT_ENUM_ENUM_POINTER ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO gtk_marshal_NONE__UINT_POINTER_UINT_UINT_ENUM ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO gtk_marshal_NONE__UINT_STRING ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### FUNCTION gtk_marshal_BOOL__NONE ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_INT_INT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_INT_INT_INT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_POINTER_INT_INT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_POINTER_POINTER_POINTER ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_INT__INT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_INT__POINTER ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_INT__POINTER_CHAR_CHAR ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__BOOL ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__C_CALLBACK ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__C_CALLBACK_C_CALLBACK ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__INT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__INT_FLOAT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__INT_FLOAT_BOOL ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__INT_INT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__INT_INT_POINTER ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__INT_POINTER ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__INT_POINTER_INT_INT_INT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__INT_POINTER_INT_INT_INT_POINTER ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__NONE ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__POINTER ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT_INT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT_INT_POINTER_INT_INT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT_POINTER ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_POINTER ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_POINTER_INT_INT ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_POINTER_POINTER ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
 
 

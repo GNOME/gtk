@@ -19,21 +19,6 @@ GtkList
 
 </para>
 
-@container: 
-@children: 
-@selection: 
-@undo_selection: 
-@undo_unselection: 
-@last_focus_child: 
-@undo_focus_child: 
-@htimer: 
-@vtimer: 
-@anchor: 
-@drag_pos: 
-@anchor_state: 
-@selection_mode: 
-@drag_selection: 
-@add_mode: 
 
 <!-- ##### FUNCTION gtk_list_new ##### -->
 <para>

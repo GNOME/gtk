@@ -27,9 +27,6 @@ This struct contain private data only and should be accessed by the functions
 below.
 </para>
 
-@misc: 
-@image: 
-@mask: 
 
 <!-- ##### FUNCTION gtk_image_new ##### -->
 <para>

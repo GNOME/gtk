@@ -82,15 +82,6 @@ The #GtkMenu-struct struct contains private data only, and
 should be accessed using the functions below.
 </para>
 
-@menu_shell: 
-@parent_menu_item: 
-@old_active_menu_item: 
-@accel_group: 
-@position_func: 
-@position_func_data: 
-@toplevel: 
-@tearoff_window: 
-@torn_off: 
 
 <!-- ##### FUNCTION gtk_menu_new ##### -->
 <para>

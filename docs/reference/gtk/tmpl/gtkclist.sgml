@@ -19,52 +19,6 @@ GtkCList
 
 </para>
 
-@container: 
-@flags: 
-@row_mem_chunk: 
-@cell_mem_chunk: 
-@freeze_count: 
-@internal_allocation: 
-@rows: 
-@row_center_offset: 
-@row_height: 
-@row_list: 
-@row_list_end: 
-@columns: 
-@column_title_area: 
-@title_window: 
-@column: 
-@clist_window: 
-@clist_window_width: 
-@clist_window_height: 
-@hoffset: 
-@voffset: 
-@shadow_type: 
-@selection_mode: 
-@selection: 
-@selection_end: 
-@undo_selection: 
-@undo_unselection: 
-@undo_anchor: 
-@button_actions: 
-@drag_button: 
-@click_cell: 
-@hadjustment: 
-@vadjustment: 
-@xor_gc: 
-@fg_gc: 
-@bg_gc: 
-@cursor_drag: 
-@x_drag: 
-@focus_row: 
-@anchor: 
-@anchor_state: 
-@drag_pos: 
-@htimer: 
-@vtimer: 
-@sort_type: 
-@compare: 
-@sort_column: 
 
 <!-- ##### ENUM GtkCellType ##### -->
 <para>

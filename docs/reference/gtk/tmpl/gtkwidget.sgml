@@ -19,16 +19,6 @@ GtkWidget
 
 </para>
 
-@object: 
-@private_flags: 
-@state: 
-@saved_state: 
-@name: 
-@style: 
-@requisition: 
-@allocation: 
-@window: 
-@parent: 
 
 <!-- ##### ENUM GtkWidgetFlags ##### -->
 <para>

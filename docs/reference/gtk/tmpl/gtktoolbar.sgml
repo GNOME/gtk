@@ -40,17 +40,6 @@ Widgets can be visibily grouped by adding gaps between widgets using gtk_toolbar
 <structfield>orientation</structfield>
 </para>
 
-@container: 
-@num_children: 
-@children: 
-@orientation: 
-@style: 
-@space_size: 
-@space_style: 
-@tooltips: 
-@button_maxw: 
-@button_maxh: 
-@relief: 
 
 <!-- ##### ENUM GtkToolbarChildType ##### -->
 <para>

@@ -40,9 +40,6 @@ slider.</entry>
 </tbody></tgroup></informaltable>
 </para>
 
-@range: 
-@draw_value: 
-@value_pos: 
 
 <!-- ##### FUNCTION gtk_scale_set_digits ##### -->
 <para>

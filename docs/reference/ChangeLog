@@ -1,3 +1,55 @@
+1999-09-22  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gtk/tmpl/*.sgml: ran make templates, to fix problems with structs.
+
+	* gtk/gtk-sections.txt: rearranged GtkCombo section.
+
+	* gtk/tmpl/gtkvseparator.sgml: 
+	* gtk/tmpl/gtkhseparator.sgml: 
+	* gtk/tmpl/gtkgc.sgml: 
+	* gtk/tmpl/gtkfeatures.sgml: 
+	* gtk/tmpl/gtktipsquery.sgml: 
+	* gtk/tmpl/gtkitem.sgml: 
+	* gtk/tmpl/gtkinvisible.sgml: 
+	* gtk/tmpl/gtkgamma.sgml: 
+	* gtk/tmpl/gtkdata.sgml: 
+	* gtk/tmpl/gtkcurve.sgml: 
+	* gtk/tmpl/gtkcombo.sgml: 
+	* gtk/tmpl/gtkaccellabel.sgml: documented.
+
+1999-09-20  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gtk/gtk-docs.sgml: added role="no-toc" to the GTK+ Widgets & Objects
+	chapter since we've created our own special contents page.
+
+1999-09-19  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gtk/tmpl/gtkmarshal.sgml: 
+	* gtk/tmpl/gtksignal.sgml: new sections from 
+         David Benson <daveb@idealab.com>.
+
+	* gtk/gtk-sections.txt: rearranged signal sections, and made most
+	marshallers private. Moved GtkSignalRunType to signals section.
+
+	* gtk/tmpl/gtkradiobutton.sgml: new section from Lee Mallabone.
+
+1999-09-17  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gtk/gtk-docs.sgml: removed menu factory and debugging sections.
+
+	* gtk/gtk-sections.txt: made menu factory stuff private since it is
+	deprecated. Also made debugging stuff private since it is only useful
+	within GTK+.
+
+1999-09-14  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gtk/tmpl/gtkfilesel.sgml: fixed mismatched parentheses.
+
+1999-09-02  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gdk/tmpl/event_structs.sgml: 
+	* gdk/tmpl/drawing.sgml: minor fixes.
+
 1999-09-20  David C. Mason  <dcm@redhat.com>
 
 	* gtk/tmpl/gtkimage.sgml: first pass at gtkimage... not complete

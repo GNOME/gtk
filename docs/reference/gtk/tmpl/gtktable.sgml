@@ -54,15 +54,6 @@ The GtkTable structure holds the data for the actual table itself.
 <structfield>nrows</structfield> and <structfield>ncols</structfield> are 16bit integers storing the number of rows and columns the table has. 
 </para>
 
-@container: 
-@children: 
-@rows: 
-@cols: 
-@nrows: 
-@ncols: 
-@column_spacing: 
-@row_spacing: 
-@homogeneous: 
 
 <!-- ##### STRUCT GtkTableChild ##### -->
 <para>

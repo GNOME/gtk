@@ -19,10 +19,6 @@ GtkObject
 
 </para>
 
-@klass: 
-@flags: 
-@ref_count: 
-@object_data: 
 
 <!-- ##### MACRO GTK_OBJECT_TYPE ##### -->
 <para>

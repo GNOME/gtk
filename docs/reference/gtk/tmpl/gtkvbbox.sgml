@@ -19,7 +19,6 @@ GtkVButtonBox
 
 </para>
 
-@button_box: 
 
 <!-- ##### FUNCTION gtk_vbutton_box_new ##### -->
 <para>

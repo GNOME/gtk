@@ -193,3 +193,10 @@ box.
 This is an internally used function and should never be called from an
 application.
 </para>
+
+@widget: 
+@nvis_children: 
+@width: 
+@height: 
+
+

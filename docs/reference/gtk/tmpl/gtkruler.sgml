@@ -25,17 +25,6 @@ All distances are in 1/72nd's of an inch. (According to Adobe thats a point, but
 points are really 1/72.27 in.)
 </para>
 
-@widget:
-@backing_store: 
-@non_gr_exp_gc: 
-@metric: 
-@xsrc: 
-@ysrc: 
-@slider_size: 
-@lower: 
-@upper: 
-@position: 
-@max_size: 
 
 <!-- ##### STRUCT GtkRulerMetric ##### -->
 <para>
@@ -65,25 +54,9 @@ This sets the range of the ruler using gfloat lower, gfloat upper, gfloat positi
 </para>
 
 @ruler: the gtkruler
-@lower:the upper limit of the ruler
-@upper:the lower limit of the ruler
-@position:the mark on the ruler 
-@max_size:the maximum size of the ruler 
-
-
-<!-- ##### FUNCTION gtk_ruler_draw_ticks ##### -->
-<para>
-
-</para>
-
-@ruler: the gtkruler
-
-
-<!-- ##### FUNCTION gtk_ruler_draw_pos ##### -->
-<para>
-
-</para>
-
-@ruler: the gtkruler
+@lower: the upper limit of the ruler
+@upper: the lower limit of the ruler
+@position: the mark on the ruler
+@max_size: the maximum size of the ruler
 
 

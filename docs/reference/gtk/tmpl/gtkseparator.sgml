@@ -20,5 +20,4 @@ subclasses #GtkHSeparator and #GtkVSeparator.
 The #GtkSeparator-struct struct contains private data only.
 </para>
 
-@widget: 
 

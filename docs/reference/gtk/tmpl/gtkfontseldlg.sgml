@@ -71,15 +71,6 @@ The #GtkFontSelectionDialog struct contains private data only, and should
 only be accessed using the functions below.
 </para>
 
-@window: 
-@fontsel: 
-@main_vbox: 
-@action_area: 
-@ok_button: 
-@apply_button: 
-@cancel_button: 
-@dialog_width: 
-@auto_resize: 
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_new ##### -->
 <para>

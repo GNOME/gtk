@@ -30,22 +30,6 @@ position is visible.
 The #GtkEntry-struct struct contains only private data.
 </para>
 
-@editable: 
-@text_area: 
-@backing_pixmap: 
-@cursor: 
-@text: 
-@text_size: 
-@text_length: 
-@text_max_length: 
-@scroll_offset: 
-@visible: 
-@timer: 
-@button: 
-@char_offset: 
-@text_mb: 
-@text_mb_dirty: 
-@use_wchar: 
 
 <!-- ##### FUNCTION gtk_entry_new ##### -->
 <para>

@@ -26,11 +26,6 @@ the #GtkLabel.
 This should not be accessed directly.  Use the accessor functions below.
 </para>
 
-@bin: 
-@child: 
-@in_button: 
-@button_down: 
-@relief: 
 
 <!-- ##### FUNCTION gtk_button_new ##### -->
 <para>

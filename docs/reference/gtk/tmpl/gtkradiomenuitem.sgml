@@ -19,8 +19,6 @@ GtkRadioMenuItem
 
 </para>
 
-@check_menu_item: 
-@group: 
 
 <!-- ##### FUNCTION gtk_radio_menu_item_new ##### -->
 <para>

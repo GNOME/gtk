@@ -59,11 +59,6 @@ in pixels.</entry>
 </tbody></tgroup></informaltable>
 </para>
 
-@widget: 
-@xalign: 
-@yalign: 
-@xpad: 
-@ypad: 
 
 <!-- ##### FUNCTION gtk_misc_set_alignment ##### -->
 <para>

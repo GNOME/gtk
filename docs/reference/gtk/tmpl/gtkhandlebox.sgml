@@ -76,20 +76,6 @@ child is attached or detached.</entry>
 
 </para>
 
-@bin: 
-@bin_window: 
-@float_window: 
-@shadow_type: 
-@handle_position: 
-@float_window_mapped: 
-@child_detached: 
-@in_drag: 
-@shrink_on_detach: 
-@snap_edge: 
-@deskoff_x: 
-@deskoff_y: 
-@attach_allocation: 
-@float_allocation: 
 
 <!-- ##### FUNCTION gtk_handle_box_new ##### -->
 <para>

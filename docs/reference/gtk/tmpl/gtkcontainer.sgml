@@ -19,12 +19,6 @@ GtkContainer
 
 </para>
 
-@widget: 
-@focus_child: 
-@border_width: 
-@need_resize: 
-@resize_mode: 
-@resize_widgets: 
 
 <!-- ##### MACRO GTK_IS_RESIZE_CONTAINER ##### -->
 <para>

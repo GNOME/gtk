@@ -19,26 +19,6 @@ GtkRange
 
 </para>
 
-@widget: 
-@trough: 
-@slider: 
-@step_forw: 
-@step_back: 
-@x_click_point: 
-@y_click_point: 
-@button: 
-@digits: 
-@policy: 
-@scroll_type: 
-@in_child: 
-@click_child: 
-@need_timer: 
-@timer: 
-@old_value: 
-@old_lower: 
-@old_upper: 
-@old_page_size: 
-@adjustment: 
 
 <!-- ##### FUNCTION gtk_range_get_adjustment ##### -->
 <para>

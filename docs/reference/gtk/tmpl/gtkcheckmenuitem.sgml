@@ -40,9 +40,6 @@ an application.)
 </tbody></tgroup></informaltable>
 </para>
 
-@menu_item: 
-@active: 
-@always_show_toggle: 
 
 <!-- ##### FUNCTION gtk_check_menu_item_new ##### -->
 <para>

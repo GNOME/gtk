@@ -102,14 +102,12 @@
 <!entity gtk-Keyboard-Accelerators SYSTEM "sgml/gtkaccelgroup.sgml">
 <!entity gtk-Selections SYSTEM "sgml/gtkselection.sgml">
 <!entity gtk-Drag-and-Drop SYSTEM "sgml/gtkdnd.sgml">
-<!entity gtk-Menu-Factory SYSTEM "sgml/gtkmenufactory.sgml">
 <!entity gtk-Signals SYSTEM "sgml/gtksignal.sgml">
 <!entity gtk-Signal-Marshallers SYSTEM "sgml/gtkmarshal.sgml">
 <!entity gtk-Object-Properties SYSTEM "sgml/gtkarg.sgml">
 <!entity gtk-Types SYSTEM "sgml/gtktypeutils.sgml">
 <!entity gtk-Bindings SYSTEM "sgml/gtkbindings.sgml">
 <!entity gtk-Standard-Enumerations SYSTEM "sgml/gtkenums.sgml">
-<!entity gtk-Debugging SYSTEM "sgml/gtkdebug.sgml">
 <!entity gtk-Private-Information SYSTEM "sgml/gtkprivate.sgml">
 
 <!entity index-Object-Tree SYSTEM "sgml/tree_index.sgml">
@@ -168,7 +166,6 @@ An advanced widget set.
 </varlistentry>
 </variablelist>
     </para>
-
     &gtk-General;
     &gtk-Feature-Test-Macros;
     &gtk-Graphics-Contexts;
@@ -178,18 +175,16 @@ An advanced widget set.
     &gtk-Keyboard-Accelerators;
     &gtk-Selections;
     &gtk-Drag-and-Drop;
-    &gtk-Menu-Factory;
     &gtk-Signals;
     &gtk-Signal-Marshallers;
     &gtk-Object-Properties;
     &gtk-Types;
     &gtk-Bindings;
     &gtk-Standard-Enumerations;
-    &gtk-Debugging;
     &gtk-Private-Information;
   </chapter>
 
-  <chapter id="gtkobjects">
+  <chapter id="gtkobjects" role="no-toc">
     <title>GTK+ Widgets and Objects</title>
     &index-Objects-Grouped;
 

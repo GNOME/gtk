@@ -2,11 +2,20 @@
 GtkGammaCurve
 
 <!-- ##### SECTION Short_Description ##### -->
-
+a subclass of #GtkCurve for editing gamma curves.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+The #GtkGammaCurve widget is a subclass of #GtkCurve specifically for
+editing gamma curves, which are used in graphics applications such as the
+Gimp.
+</para>
+<para>
+The #GammaCurve widget shows a curve which the user can edit with the mouse
+just like a #GtkCurve widget. On the right of the curve it also displays
+5 buttons, 3 of which change between the 3 curve modes (spline, linear and
+free), and the other 2 set the curve to a particular gamma value, or reset it
+to a straight line.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -16,22 +25,16 @@ GtkGammaCurve
 
 <!-- ##### STRUCT GtkGammaCurve ##### -->
 <para>
-
+The #GtkGammaCurve-struct struct contains private data only, and
+should be accessed using the functions below.
 </para>
 
-@vbox: 
-@table: 
-@curve: 
-@button: 
-@gamma: 
-@gamma_dialog: 
-@gamma_text: 
 
 <!-- ##### FUNCTION gtk_gamma_curve_new ##### -->
 <para>
-
+Creates a new #GtkGammaCurve.
 </para>
 
-@Returns: 
+@Returns: a new #GtkGammaCurve.
 
 

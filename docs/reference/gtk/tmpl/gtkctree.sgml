@@ -74,15 +74,6 @@ node.</entry>
 </tbody></tgroup></informaltable>
 </para>
 
-@clist: 
-@lines_gc: 
-@tree_indent: 
-@tree_spacing: 
-@tree_column: 
-@line_style: 
-@expander_style: 
-@show_stub: 
-@drag_compare: 
 
 <!-- ##### MACRO GTK_CTREE_ROW ##### -->
 <para>

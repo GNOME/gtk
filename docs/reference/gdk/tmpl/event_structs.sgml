@@ -94,7 +94,7 @@ Any event can safely be cast to a #GdkEventAny to access these fields.
 <para>
 Used for button press and button release events. The
 <structfield>type</structfield> field will be one of %GDK_BUTTON_PRESS,
-%GDK_2BUTTON_PRESS, GDK_3BUTTON_PRESS, and GDK_BUTTON_RELEASE.
+%GDK_2BUTTON_PRESS, %GDK_3BUTTON_PRESS, and %GDK_BUTTON_RELEASE.
 </para>
 <para>
 Double and treble-clicks result in a sequence of events being received.
@@ -128,7 +128,8 @@ is inserted after the third click. The order of the events is:
 @type: the type of the event.
 @window: the window which received the event.
 @send_event: TRUE if the event was sent explicitly (e.g. using XSendEvent).
-@time: the time of the event in milliseconds. This wraps around every 50 days.
+@time: the time of the event in milliseconds. This wraps around roughly every
+50 days.
 @x: the x coordinate of the mouse relative to the window.
 @y: the y coordinate of the mouse relative to the window.
 @pressure: the pressure of the button press, intended for input devices such

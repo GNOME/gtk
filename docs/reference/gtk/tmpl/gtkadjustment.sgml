@@ -78,13 +78,6 @@ In a #GtkScrollbar this is the size of the area which is currently visible.
 
 </para>
 
-@data: 
-@lower: 
-@upper: 
-@value: 
-@step_increment: 
-@page_increment: 
-@page_size: 
 
 <!-- ##### FUNCTION gtk_adjustment_new ##### -->
 <para>

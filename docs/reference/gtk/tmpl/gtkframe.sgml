@@ -23,13 +23,6 @@ label can be controlled with gtk_frame_set_label_align().
 
 </para>
 
-@bin: 
-@label: 
-@shadow_type: 
-@label_width: 
-@label_height: 
-@label_xalign: 
-@label_yalign: 
 
 <!-- ##### FUNCTION gtk_frame_new ##### -->
 <para>

@@ -2,11 +2,19 @@
 GtkData
 
 <!-- ##### SECTION Short_Description ##### -->
-
+abstract base class for objects containing data.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+The #GtkData object is a very simple object intended to be used as a base
+class for objects which contain data (i.e. the 'Model' in the object-oriented
+Model/View/Controller framework).
+</para>
+<para>
+Currently it is not very useful since all it provides is a "disconnect" signal.
+This signal could be emitted by a #GtkData subclass to notify any 'Views'
+that they should disconnect from the #GtkData (the 'Model'), possibly just
+before the #GtkData is destroyed.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -16,14 +24,14 @@ GtkData
 
 <!-- ##### STRUCT GtkData ##### -->
 <para>
-
+The #GtkData-struct struct contains no public fields.
 </para>
 
-@object: 
 
 <!-- ##### SIGNAL GtkData::disconnect ##### -->
 <para>
-
+Emitted to notify any views on the #GtkData object to disconnect from it,
+possibly because the #GtkData object is about to be destroyed.
 </para>
 
 @data: the object which received the signal.

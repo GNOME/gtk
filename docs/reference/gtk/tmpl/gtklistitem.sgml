@@ -19,7 +19,6 @@ GtkListItem
 
 </para>
 
-@item: 
 
 <!-- ##### FUNCTION gtk_list_item_new ##### -->
 <para>

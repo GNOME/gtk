@@ -32,16 +32,6 @@ immediately.
 <para>
 </para>
 
-@dialog: 
-@axis_list: 
-@axis_listbox: 
-@mode_optionmenu: 
-@close_button: 
-@save_button: 
-@axis_items: 
-@current_device: 
-@keys_list: 
-@keys_listbox: 
 
 <!-- ##### FUNCTION gtk_input_dialog_new ##### -->
 <para>

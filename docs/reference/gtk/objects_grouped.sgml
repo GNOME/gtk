@@ -30,7 +30,6 @@
     <link linkend="GtkViewport">GtkViewport</link>
     <link linkend="GtkEventBox">GtkEventBox</link>
     <link linkend="GtkAlignment">GtkAlignment</link>
-    <link linkend="GtkInvisible">GtkInvisible</link>
     <link linkend="GtkHButtonBox">GtkHButtonBox</link>
     <link linkend="GtkVButtonBox">GtkVButtonBox</link>
     <link linkend="GtkHPaned">GtkHPaned</link>
@@ -125,6 +124,7 @@
 <emphasis>Misc. Objects</emphasis>
     <link linkend="GtkAdjustment">GtkAdjustment</link>
     <link linkend="GtkItemFactory">GtkItemFactory</link>
+    <link linkend="GtkInvisible">GtkInvisible</link>
 </literallayout></entry>
 </row>
 </tbody></tgroup></informaltable>

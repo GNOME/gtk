@@ -37,17 +37,6 @@ struct _GtkTree
 </programlisting>
 </para>
 
-@container: 
-@children: 
-@root_tree: 
-@tree_owner: 
-@selection: 
-@level: 
-@indent_value: 
-@current_indent: 
-@selection_mode: 
-@view_mode: 
-@view_line: 
 
 <!-- ##### MACRO GTK_IS_ROOT_TREE ##### -->
 <para>

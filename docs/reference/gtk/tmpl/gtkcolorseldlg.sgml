@@ -19,13 +19,6 @@ GtkColorSelectionDialog
 
 </para>
 
-@window: 
-@colorsel: 
-@main_vbox: 
-@ok_button: 
-@reset_button: 
-@cancel_button: 
-@help_button: 
 
 <!-- ##### FUNCTION gtk_color_selection_dialog_new ##### -->
 <para>

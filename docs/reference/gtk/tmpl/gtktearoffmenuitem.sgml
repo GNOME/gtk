@@ -42,8 +42,6 @@ The #GtkTearoffMenuItem-struct struct contains private data only, and
 should be accessed using the functions below.
 </para>
 
-@menu_item: 
-@torn_off: 
 
 <!-- ##### FUNCTION gtk_tearoff_menu_item_new ##### -->
 <para>

@@ -29,11 +29,6 @@ The #GtkPixmap-struct struct contains private data only, and
 should be accessed using the functions below.
 </para>
 
-@misc: 
-@pixmap: 
-@mask: 
-@pixmap_insensitive: 
-@build_insensitive: 
 
 <!-- ##### FUNCTION gtk_pixmap_new ##### -->
 <para>

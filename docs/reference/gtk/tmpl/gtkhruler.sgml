@@ -19,14 +19,12 @@ rulers.
 
 </para>
 
-
 <!-- ##### STRUCT GtkHRuler ##### -->
 <para>
 The #GtkHRuler struct contains private data and should be accessed
 with the functions below.
 </para>
 
-@ruler: 
 
 <!-- ##### FUNCTION gtk_hruler_new ##### -->
 <para>

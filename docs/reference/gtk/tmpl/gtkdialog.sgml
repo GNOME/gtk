@@ -101,9 +101,6 @@ gtk_window_set_title(). See the #GtkWindow section for more).
 <structfield>action_area</structfield> is a #GtkHBox packed below the dividing #GtkHSeparator in the dialog. It is treated exactly the same as any other #GtkHBox.
 </para>
 
-@window: 
-@vbox: 
-@action_area: 
 
 <!-- ##### STRUCT GtkDialogButton ##### -->
 <para>

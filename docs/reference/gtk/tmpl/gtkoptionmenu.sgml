@@ -21,11 +21,6 @@ The #GtkOptionMenu-struct struct contains private data only, and
 should be accessed using the functions below.
 </para>
 
-@button: 
-@menu: 
-@menu_item: 
-@width: 
-@height: 
 
 <!-- ##### FUNCTION gtk_option_menu_new ##### -->
 <para>

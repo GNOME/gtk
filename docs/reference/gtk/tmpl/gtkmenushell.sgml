@@ -40,18 +40,6 @@ an application.)
 </tbody></tgroup></informaltable>
 </para>
 
-@container: 
-@children: 
-@active_menu_item: 
-@parent_menu_shell: 
-@active: 
-@have_grab: 
-@have_xgrab: 
-@button: 
-@ignore_leave: 
-@menu_flag: 
-@ignore_enter: 
-@activate_time: 
 
 <!-- ##### FUNCTION gtk_menu_shell_append ##### -->
 <para>

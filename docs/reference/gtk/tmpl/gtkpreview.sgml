@@ -28,15 +28,6 @@ The #GtkPreview-struct struct contains private data only, and
 should be accessed using the functions below.
 </para>
 
-@widget: 
-@buffer: 
-@buffer_width: 
-@buffer_height: 
-@bpp: 
-@rowstride: 
-@dither: 
-@type: 
-@expand: 
 
 <!-- ##### STRUCT GtkPreviewInfo ##### -->
 <para>

@@ -42,13 +42,6 @@ at widget creation.</entry>
 
 </para>
 
-@editable: 
-@text_area: 
-@hadj: 
-@vadj: 
-@gc: 
-@line_wrap_bitmap: 
-@line_arrow_bitmap: 
 
 <!-- ##### STRUCT GtkTextFont ##### -->
 <para>

@@ -19,14 +19,12 @@ rulers.
 
 </para>
 
-
 <!-- ##### STRUCT GtkVRuler ##### -->
 <para>
 The #GtkVRuler struct contains private data and should be accessed
 using the functions below. 
 </para>
 
-@ruler: 
 
 <!-- ##### FUNCTION gtk_vruler_new ##### -->
 <para>

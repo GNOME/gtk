@@ -17,14 +17,12 @@ case one will be created you. See #GtkAdjustment for details.
 
 </para>
 
-
 <!-- ##### STRUCT GtkHScrollbar ##### -->
 <para>
 The #GtkHScrollbar struct contains private data and should be accessed
 unsing the functions below.
 </para>
 
-@scrollbar: 
 
 <!-- ##### FUNCTION gtk_hscrollbar_new ##### -->
 <para>

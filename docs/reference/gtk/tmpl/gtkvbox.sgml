@@ -33,7 +33,6 @@ All children are allocated the same width.
 <!-- ##### STRUCT GtkVBox ##### -->
 
 
-@box: 
 
 <!-- ##### FUNCTION gtk_vbox_new ##### -->
 <para>
