@@ -1,3 +1,11 @@
+Tue Oct 15 09:54:54 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/gtkimcontextxim.c (get_im): Initialize
+	info->ics to NULL. (Hidetoshi Tajima.)  
+
+	* modules/input/gtkimcontextxim.c (status_window_get): 
+	Call set_resizable on the window, not on the structure.
+
 Mon Oct 14 19:17:34 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* === Released 2.1.1 ===

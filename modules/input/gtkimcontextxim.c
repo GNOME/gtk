@@ -370,6 +370,7 @@ get_im (GdkWindow *client_window,
 	  info->settings = NULL;
 	  info->preedit_set = 0;
 	  info->status_set = 0;
+	  info->ics = NULL;
 
 	  setup_im (info);
 
@@ -1244,7 +1245,7 @@ status_window_get (GtkIMContextXIM *context_xim,
 
   window = status_window->window;
 
-  gtk_window_set_resizable (GTK_WINDOW (status_window), FALSE);
+  gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
   gtk_widget_set_app_paintable (window, TRUE);
 
   status_label = gtk_label_new ("");
