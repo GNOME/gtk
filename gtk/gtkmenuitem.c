@@ -545,6 +545,7 @@ gtk_real_menu_item_select (GtkItem *item)
 					    menu_item);
       else
 	gtk_menu_item_select_timeout (menu_item);
+      if(event) gdk_event_free(event);
     }
   
   gtk_widget_set_state (GTK_WIDGET (menu_item), GTK_STATE_PRELIGHT);
@@ -577,6 +578,7 @@ gtk_real_menu_item_deselect (GtkItem *item)
       etime = event ? gdk_event_get_time (event) : GDK_CURRENT_TIME;
       if (etime > last_submenu_deselect_time)
 	last_submenu_deselect_time = etime;
+      if(event) gdk_event_free(event);
     }
 
   gtk_widget_set_state (GTK_WIDGET (menu_item), GTK_STATE_NORMAL);

@@ -776,6 +776,7 @@ static guint32
 gtk_editable_get_event_time (GtkEditable *editable)
 {
   GdkEvent *event;
+  guint32 tm = GDK_CURRENT_TIME;
   
   event = gtk_get_current_event();
   
@@ -783,32 +784,33 @@ gtk_editable_get_event_time (GtkEditable *editable)
     switch (event->type)
       {
       case GDK_MOTION_NOTIFY:
-	return event->motion.time;
+	tm = event->motion.time; break;
       case GDK_BUTTON_PRESS:
       case GDK_2BUTTON_PRESS:
       case GDK_3BUTTON_PRESS:
       case GDK_BUTTON_RELEASE:
-	return event->button.time;
+	tm = event->button.time; break;
       case GDK_KEY_PRESS:
       case GDK_KEY_RELEASE:
-	return event->key.time;
+	tm = event->key.time; break;
       case GDK_ENTER_NOTIFY:
       case GDK_LEAVE_NOTIFY:
-	return event->crossing.time;
+	tm = event->crossing.time; break;
       case GDK_PROPERTY_NOTIFY:
-	return event->property.time;
+	tm = event->property.time; break;
       case GDK_SELECTION_CLEAR:
       case GDK_SELECTION_REQUEST:
       case GDK_SELECTION_NOTIFY:
-	return event->selection.time;
+	tm = event->selection.time; break;
       case GDK_PROXIMITY_IN:
       case GDK_PROXIMITY_OUT:
-	return event->proximity.time;
+	tm = event->proximity.time; break;
       default:			/* use current time */
 	break;
       }
+  gdk_event_free(event);
   
-  return GDK_CURRENT_TIME;
+  return tm;
 }
 
 void

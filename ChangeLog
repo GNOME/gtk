@@ -1,3 +1,8 @@
+Tue Jan 05 21:18:00 1999  George Lebl  <jirka@5z.com>
+
+	* gtk/gtkmenu.c,gtk/gtkmenuitem.c,gtk/gtkeditable.c: free the
+	  event that was returned to us by gtk_get_current_event
+
 Tue Jan  5 19:01:18 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcolorsel.c (gtk_color_selection_dialog_init): Push
