@@ -7,7 +7,7 @@
 	* gtk/gtkhpaned.c (gtk_hpaned_expose): Add an expose handler
 
 	* gtk/gtknotebook.c (gtk_notebook_draw_tab): put in a temporary 
-	hack to avoid infinite loops (queue draw instead of draw) - 
+	hack to avoid infinite loops (synthetic expose event) - 
 	Owen has more appropriate fixes in a branch he'll check in later.
 
 	* gtk/gtktextiter.c (gtk_text_iter_ends_line): handle paragraph
