@@ -198,6 +198,114 @@ can be defined as:
 </qandaentry>
 
 <qandaentry>
+<question>
+<para>
+How do I use non-ASCII characters in GTK+ programs ?
+</para>
+</question>
+
+<answer>
+<para>
+GTK+ uses <ulink url="http://www.unicode.org">Unicode</ulink> (more exactly 
+UTF-8) for all text. UTF-8 encodes each Unicode codepoint as a
+	      sequence of one to six bytes and has a number of nice
+	      properties which make it a good choice for working with Unicode
+	      text in C programs:
+<itemizedlist>
+<listitem><para>
+ASCII characters are encoded by their familiar ASCII codepoints.
+</para></listitem>
+<listitem><para>
+ASCII characters never appear as part of any other character.
+</para></listitem>
+<listitem><para>
+The zero byte doesn't occur as part of a character, so that UTF-8 strings can
+		    be manipulated with the usual C library functions for
+		    handling zero-terminated strings.
+</para></listitem>
+</itemizedlist>
+More information about Unicode and UTF-8 can be found in the 
+<ulink url="http://www.cl.cam.ac.uk/~mgk25/unicode.html">UTF-8 and Unicode FAQ for Unix/Linux</ulink>.
+GLib provides functions for converting strings between UTF-8 and other
+	      encodings, see 
+<link linkend="g-locale-to-utf8">g_locale_to_utf8()</link> and <link
+		linkend="g-convert">g_convert()</link>.
+</para>
+<para>
+Text coming from external sources (e.g. files or user input), has to be
+	      converted to UTF-8 before being handed over to GTK+. The
+	      following example writes the content of a IS0-8859-1 encoded text
+	      file to <literal>stdout</literal>:
+<informalexample><programlisting>
+gchar *text, *utf8_text;
+gsize length;
+GError *error = NULL;
+
+if (g_file_get_contents (filename, &amp;text, &amp;length, NULL)) 
+  {
+     utf8_text = g_convert (text, length, "UTF-8", "ISO-8859-1", 
+                            NULL, NULL, &amp;error);
+     if (error != NULL)
+       {
+         fprintf ("Couldn't convert file &percnt;s to UTF-8\n", filename);
+         g_error_free (error);
+       }
+     else
+       g_print (utf8_text);
+  }
+else 
+  fprintf (stderr, "Unable to read file %percnt;s\n", filename);
+</programlisting></informalexample>
+</para>
+<para>
+For string literals in the source code, there are several alternatives for
+	      handling non-ASCII content:
+<variablelist>
+<varlistentry><term>direct UTF-8</term>
+<listitem><para>
+If your editor and compiler are capable of handling UTF-8 encoded sources,
+it is very convenient to simply use UTF-8 for string literals, since it allows
+you to edit the strings in "wysiwyg". Note that choosing this option may 
+reduce the portability of your code.  
+</para></listitem>
+</varlistentry>
+
+<varlistentry><term>escaped UTF-8</term>
+<listitem><para>
+Even if your toolchain can't handle UTF-8 directly, you can still encode string
+literals in UTF-8 by using octal or hexadecimal escapes like 
+<literal>\212</literal> or <literal>\xa8</literal> to
+encode each byte. This is portable, but modifying the escaped strings is not
+very convenient. Be careful when mixing hexadecimal escapes with ordinary text;
+<literal>"\xa8abcd"</literal> is a string of length 1 !
+</para></listitem>
+</varlistentry>
+
+<varlistentry><term>runtime conversion</term>
+<listitem><para>
+If the string literals can be represented in an encoding which your toolchain
+can handle (e.g. IS0-8859-1), you can write your source files in that encoding
+and use <link linkend="g-convert">g_convert()</link> to convert the strings to 
+UTF-8 at runtime. Note that this has some runtime overhead, so you may want to
+move the conversion out of inner loops.
+</para></listitem>
+</varlistentry>
+</variablelist>
+Here is an example showing the three approaches using the copyright sign 
+&copy; which has Unicode and ISO-8859-1 codepoint 169 and is represented in
+UTF-8 by the two bytes 194, 169:
+<informalexample><programlisting>
+g_print ("direct UTF-8: &copy;");
+g_print ("escaped UTF-8: \302\251");
+text = g_convert ("runtime conversion: &copy;", -1, "ISO-8859-1", "UTF-8", NULL, NULL, NULL);
+g_print(text);
+g_free (text);
+</programlisting></informalexample>
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
 <question><para>
 How do I use GTK+ with C++?
 </para></question>
@@ -290,7 +398,100 @@ To load an image or animation file asynchronously (without blocking), use
 
 </qandaentry>
 
+<qandaentry>
+<question><para>
+How do I draw text ?
+</para></question>
 
+<answer>
+<para>
+To draw a piece of text, use a Pango layout and 
+<link linkend="gdk-draw-layout">gdk_draw_layout()</link>, 
+using code like the following:
+<informalexample>
+<programlisting>
+ layout = gtk_widget_create_pango_layout (widget, text);
+ fontdesc = pango_font_description_from_string ("Luxi Mono 12");
+ pango_layout_set_font_description (layout, fontdesc); 
+ gdk_draw_layout (..., layout);
+ pango_font_description_free (fontdesc);
+ g_object_unref (layout);
+</programlisting>
+</informalexample>
+Do not use the deprecated <link linkend="GdkFont">GdkFont</link> and <link linkend="gdk-draw-text">gdk_draw_text()</link>.
+</para>
+
+<para>
+See also the "Text Handling in GTK 2" section of 
+<ulink url="http://developer.gnome.org/dotplan/porting/">Porting applications 
+to the GNOME 2.0 platform</ulink>.
+</para>
+</answer>
+
+</qandaentry>
+
+<qandaentry>
+<question>
+<para>
+How do I measure the size of a piece of text ?
+</para>
+</question>
+
+<answer>
+<para>
+To obtain the size of a piece of text, use a Pango layout and 
+<link
+		linkend="pango-layout-get-pixel-size">pango_layout_get_pixel_size()</link>, 
+using code like the following:
+<informalexample>
+<programlisting>
+ layout = gtk_widget_create_pango_layout (widget, text);
+ fontdesc = pango_font_description_from_string ("Luxi Mono 12");
+ pango_layout_set_font_description (layout, fontdesc); 
+ pango_layout_get_pixel_size (layout, &amp;width, &amp;height);
+ pango_font_description_free (fontdesc);
+ g_object_unref (layout);
+</programlisting>
+</informalexample>
+Do not use the deprecated function <link linkend="gdk-text-width">gdk_text_width()</link>.
+</para>
+
+<para>
+See also the "Text Handling in GTK 2" section of 
+<ulink url="http://developer.gnome.org/dotplan/porting/">Porting applications 
+to the GNOME 2.0 platform</ulink>.
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para>
+How do I make a text view scroll to the end of the buffer automatically ?
+</para>
+</question>
+
+<answer>
+<para>
+The "insert" <link linkend="GtkTextMark">mark</link> marks the insertion point
+where <link linkend="gtk-text-buffer-insert">gtk_text_buffer_insert()</link>
+inserts new text into the buffer. The text is inserted 
+<emphasis>before</emphasis> the "insert" mark, so that it generally stays 
+at the end of the buffer. If it gets explicitly moved to some other position, 
+e.g. when the user selects some text, 
+use <link linkend="gtk-text-buffer-move-mark">gtk_text_buffer_move_mark()</link>
+to set it to the desired location before inserting more text. 
+The "insert" mark of a buffer can be obtained with <link
+linkend="gtk-text-buffer-get-insert">gtk_text_buffer_get_insert()</link>.
+</para>
+
+<para> 
+To ensure that the end of the buffer remains visible, use
+<link
+		linkend="gtk-text-view-scroll-to-mark">gtk_text_view_scroll_to_mark()</link> to scroll to the "insert" mark after inserting new text.
+</para>
+</answer>
+</qandaentry>
 </qandadiv>
 
 <qandadiv><title>Which widget should I use...</title>
@@ -459,6 +660,20 @@ or <link
 </para></answer>
 </qandaentry>
 
+<qandaentry>
+<question><para>
+How do I make a text widget display its complete contents in a specific font?
+</para></question>
+
+<answer><para>
+If you use <link
+	      linkend="gtk-text-buffer-insert-with-tags">gtk_text_buffer_insert_with_tags()</link> with appropriate tags to select the font, the inserted text will have the desired appearance, but text typed in by the user before or after the tagged block will appear in the default style. 
+</para>
+<para>
+To ensure that all text has the desired appearance, use <link
+		linkend="gtk-widget-modify-font">gtk_widget_modify_font()</link> to change the default font for the widget.
+</para></answer>
+</qandaentry>
 </qandadiv>
 
 
@@ -541,6 +756,88 @@ Both the <link
 linkend="gtk-tree-model-get">gtk_tree_model_get()</link>.
 </para>
 </answer>
+</qandaentry>
+
+<qandaentry>
+<question><para>
+How do I change the way that numbers are formatted by <link linkend="GtkTreeView">GtkTreeView</link>?
+</para></question>
+<answer><para>
+Use <link linkend="gtk-tree-view-insert-column-with-data-func">gtk_tree_view_insert_column_with_data_func()</link> 
+or <link linkend="gtk-tree-view-column-set-cell-data-func">gtk_tree_view_column_set_cell_data_func()</link>
+and do the conversion from number to string yourself (with, say, 
+<link linkend="g-strdup-printf">g_strdup_printf()</link>).
+</para>
+
+<para>
+The following example demonstrates this:
+<informalexample><programlisting>
+enum 
+{
+  DOUBLE_COLUMN,
+  N_COLUMNS
+};
+
+GtkListStore *mycolumns;
+GtkTreeView *treeview;
+
+void 
+my_cell_double_to_text (GtkTreeViewColumn *tree_column,
+	                GtkCellRenderer   *cell, 
+                        GtkTreeModel      *tree_model,
+	                GtkTreeIter       *iter, 
+                        gpointer           data)
+{
+  GtkCellRendererText *cell_text = (GtkCellRendererText *)cell;
+  gdouble d;
+  gchar *text;
+
+  /* Get the double value from the model. */
+  gtk_tree_model_get (tree_model, iter, (gint)data, &amp;d, -1);
+  /* Now we can format the value ourselves. */
+  text = g_strdup_printf ("&percnt;.2f", d);
+  g_object_set (cell, "text", text, NULL);
+  g_free (text);
+}
+
+void 
+set_up_new_columns (GtkTreeView *myview)
+{
+  GtkCellRendererText *renderer;
+  GtkTreeViewColumn *column;
+  GtkListStore *mycolumns;
+
+  /* Create the data model and associate it with the given TreeView */
+  mycolumns = gtk_list_store_new (N_COLUMNS, G_TYPE_DOUBLE);
+  gtk_tree_view_set_model (myview, GTK_TREE_MODEL (mycolumns));
+
+  /* Create a GtkCellRendererText */
+  renderer = gtk_cell_renderer_text_new ();
+
+  /* Create a new column that has a title ("Example column"),
+   * uses the above created renderer that will render the double
+   * value into text from the associated model's rows. 
+   */
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_title  (column, "Example column");
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_tree_view_column_pack_start (column, renderer, TRUE);
+
+  /* Append the new column after the GtkTreeView's previous columns. */
+  gtk_tree_view_append_column (GTK_TREE_VIEW (myview), column);
+  /* Since we created the column by hand, we can set it up for our
+   * needs, e.g. set its minimum and maximum width, etc.
+   */
+  /* Set up a custom function that will be called when the column content
+   * is rendered. We use the func_data pointer as an index into our
+   * model. This is convenient when using multi column lists. 
+   */
+  gtk_tree_view_column_set_cell_data_func (column, renderer,
+	                                   my_cell_double_to_text, 
+                                           (gpointer)DOUBLE_COLUMN, NULL);
+}
+</programlisting></informalexample>
+</para></answer>
 </qandaentry>
 
 </qandadiv>
