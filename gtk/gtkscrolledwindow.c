@@ -28,7 +28,6 @@
 #include "gtkbindings.h"
 #include "gtkmarshalers.h"
 #include "gtkscrolledwindow.h"
-#include "gtksignal.h"
 #include "gtkintl.h"
 
 
@@ -138,26 +137,29 @@ static GtkContainerClass *parent_class = NULL;
 
 static guint signals[LAST_SIGNAL] = {0};
 
-GtkType
+GType
 gtk_scrolled_window_get_type (void)
 {
-  static GtkType scrolled_window_type = 0;
+  static GType scrolled_window_type = 0;
 
   if (!scrolled_window_type)
     {
-      static const GtkTypeInfo scrolled_window_info =
+      static const GTypeInfo scrolled_window_info =
       {
-	"GtkScrolledWindow",
-	sizeof (GtkScrolledWindow),
 	sizeof (GtkScrolledWindowClass),
-	(GtkClassInitFunc) gtk_scrolled_window_class_init,
-	(GtkObjectInitFunc) gtk_scrolled_window_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_scrolled_window_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkScrolledWindow),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_scrolled_window_init,
       };
 
-      scrolled_window_type = gtk_type_unique (GTK_TYPE_BIN, &scrolled_window_info);
+      scrolled_window_type =
+	g_type_register_static (GTK_TYPE_BIN, "GtkScrolledWindow",
+				&scrolled_window_info, 0);
     }
 
   return scrolled_window_type;
@@ -207,7 +209,8 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
-  parent_class = gtk_type_class (GTK_TYPE_BIN);
+
+  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->finalize = gtk_scrolled_window_finalize;
   gobject_class->set_property = gtk_scrolled_window_set_property;
@@ -377,7 +380,7 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
       gtk_widget_pop_composite_child ();
 
       gtk_widget_set_parent (scrolled_window->hscrollbar, GTK_WIDGET (scrolled_window));
-      gtk_widget_ref (scrolled_window->hscrollbar);
+      g_object_ref (scrolled_window->hscrollbar);
       gtk_widget_show (scrolled_window->hscrollbar);
     }
   else
@@ -388,17 +391,17 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
       if (old_adjustment == hadjustment)
 	return;
 
-      gtk_signal_disconnect_by_func (GTK_OBJECT (old_adjustment),
-				     GTK_SIGNAL_FUNC (gtk_scrolled_window_adjustment_changed),
-				     scrolled_window);
+      g_signal_handlers_disconnect_by_func (old_adjustment,
+					    gtk_scrolled_window_adjustment_changed,
+					    scrolled_window);
       gtk_range_set_adjustment (GTK_RANGE (scrolled_window->hscrollbar),
 				hadjustment);
     }
   hadjustment = gtk_range_get_adjustment (GTK_RANGE (scrolled_window->hscrollbar));
-  gtk_signal_connect (GTK_OBJECT (hadjustment),
-		      "changed",
-		      GTK_SIGNAL_FUNC (gtk_scrolled_window_adjustment_changed),
-		      scrolled_window);
+  g_signal_connect (hadjustment,
+		    "changed",
+		    G_CALLBACK (gtk_scrolled_window_adjustment_changed),
+		    scrolled_window);
   gtk_scrolled_window_adjustment_changed (hadjustment, scrolled_window);
   
   if (bin->child)
@@ -431,7 +434,7 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
       gtk_widget_pop_composite_child ();
 
       gtk_widget_set_parent (scrolled_window->vscrollbar, GTK_WIDGET (scrolled_window));
-      gtk_widget_ref (scrolled_window->vscrollbar);
+      g_object_ref (scrolled_window->vscrollbar);
       gtk_widget_show (scrolled_window->vscrollbar);
     }
   else
@@ -442,17 +445,17 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
       if (old_adjustment == vadjustment)
 	return;
 
-      gtk_signal_disconnect_by_func (GTK_OBJECT (old_adjustment),
-				     GTK_SIGNAL_FUNC (gtk_scrolled_window_adjustment_changed),
-				     scrolled_window);
+      g_signal_handlers_disconnect_by_func (old_adjustment,
+					    gtk_scrolled_window_adjustment_changed,
+					    scrolled_window);
       gtk_range_set_adjustment (GTK_RANGE (scrolled_window->vscrollbar),
 				vadjustment);
     }
   vadjustment = gtk_range_get_adjustment (GTK_RANGE (scrolled_window->vscrollbar));
-  gtk_signal_connect (GTK_OBJECT (vadjustment),
-		      "changed",
-		      GTK_SIGNAL_FUNC (gtk_scrolled_window_adjustment_changed),
-		      scrolled_window);
+  g_signal_connect (vadjustment,
+		    "changed",
+		    G_CALLBACK (gtk_scrolled_window_adjustment_changed),
+		    scrolled_window);
   gtk_scrolled_window_adjustment_changed (vadjustment, scrolled_window);
 
   if (bin->child)
@@ -583,7 +586,7 @@ gtk_scrolled_window_set_shadow_type (GtkScrolledWindow *scrolled_window,
       scrolled_window->shadow_type = type;
 
       if (GTK_WIDGET_DRAWABLE (scrolled_window))
-	gtk_widget_queue_clear (GTK_WIDGET (scrolled_window));
+	gtk_widget_queue_draw (GTK_WIDGET (scrolled_window));
 
       gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
 
@@ -630,8 +633,8 @@ gtk_scrolled_window_finalize (GObject *object)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (object);
 
-  gtk_widget_unref (scrolled_window->hscrollbar);
-  gtk_widget_unref (scrolled_window->vscrollbar);
+  g_object_unref (scrolled_window->hscrollbar);
+  g_object_unref (scrolled_window->vscrollbar);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -895,7 +898,7 @@ gtk_scrolled_window_move_focus_out (GtkScrolledWindow *scrolled_window,
   g_object_ref (scrolled_window);
   
   scrolled_window->focus_out = TRUE;
-  g_signal_emit_by_name (G_OBJECT (toplevel), "move_focus", direction_type);
+  g_signal_emit_by_name (toplevel, "move_focus", direction_type);
   scrolled_window->focus_out = FALSE;
   
   g_object_unref (scrolled_window);

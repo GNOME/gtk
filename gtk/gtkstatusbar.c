@@ -28,7 +28,6 @@
 #include "gtkframe.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
-#include "gtksignal.h"
 #include "gtkstatusbar.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
@@ -75,26 +74,28 @@ static void     gtk_statusbar_destroy_window (GtkStatusbar      *statusbar);
 static GtkContainerClass *parent_class;
 static guint              statusbar_signals[SIGNAL_LAST] = { 0 };
 
-GtkType      
+GType      
 gtk_statusbar_get_type (void)
 {
-  static GtkType statusbar_type = 0;
+  static GType statusbar_type = 0;
 
   if (!statusbar_type)
     {
-      static const GtkTypeInfo statusbar_info =
+      static const GTypeInfo statusbar_info =
       {
-        "GtkStatusbar",
-        sizeof (GtkStatusbar),
         sizeof (GtkStatusbarClass),
-        (GtkClassInitFunc) gtk_statusbar_class_init,
-        (GtkObjectInitFunc) gtk_statusbar_init,
-        /* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+        (GClassInitFunc) gtk_statusbar_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+        sizeof (GtkStatusbar),
+	0,		/* n_preallocs */
+        (GInstanceInitFunc) gtk_statusbar_init,
       };
 
-      statusbar_type = gtk_type_unique (GTK_TYPE_HBOX, &statusbar_info);
+      statusbar_type = g_type_register_static (GTK_TYPE_HBOX, "GtkStatusBar",
+					       &statusbar_info, 0);
     }
 
   return statusbar_type;
@@ -111,7 +112,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
   widget_class = (GtkWidgetClass *) class;
   container_class = (GtkContainerClass *) class;
 
-  parent_class = gtk_type_class (GTK_TYPE_HBOX);
+  parent_class = g_type_class_peek_parent (class);
   
   object_class->destroy = gtk_statusbar_destroy;
 
@@ -135,23 +136,25 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
   class->text_popped = gtk_statusbar_update;
   
   statusbar_signals[SIGNAL_TEXT_PUSHED] =
-    gtk_signal_new ("text_pushed",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkStatusbarClass, text_pushed),
-		    _gtk_marshal_VOID__UINT_STRING,
-		    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_UINT,
-		    GTK_TYPE_STRING);
+    g_signal_new ("text_pushed",
+		  G_OBJECT_CLASS_TYPE (class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkStatusbarClass, text_pushed),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__UINT_STRING,
+		  G_TYPE_NONE, 2,
+		  G_TYPE_UINT,
+		  G_TYPE_STRING);
   statusbar_signals[SIGNAL_TEXT_POPPED] =
-    gtk_signal_new ("text_popped",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkStatusbarClass, text_popped),
-		    _gtk_marshal_VOID__UINT_STRING,
-		    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_UINT,
-		    GTK_TYPE_STRING);
+    g_signal_new ("text_popped",
+		  G_OBJECT_CLASS_TYPE (class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkStatusbarClass, text_popped),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__UINT_STRING,
+		  G_TYPE_NONE, 2,
+		  G_TYPE_UINT,
+		  G_TYPE_STRING);
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_enum ("shadow_type",
@@ -187,7 +190,7 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
   /* don't expand the size request for the label; if we
    * do that then toplevels weirdly resize
    */
-  gtk_widget_set_usize (statusbar->label, 1, -1);
+  gtk_widget_set_size_request (statusbar->label, 1, -1);
   gtk_container_add (GTK_CONTAINER (statusbar->frame), statusbar->label);
   gtk_widget_show (statusbar->label);
 
@@ -200,7 +203,7 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
 GtkWidget* 
 gtk_statusbar_new (void)
 {
-  return gtk_type_new (GTK_TYPE_STATUSBAR);
+  return g_object_new (GTK_TYPE_STATUSBAR, NULL);
 }
 
 static void
@@ -229,12 +232,12 @@ gtk_statusbar_get_context_id (GtkStatusbar *statusbar,
   /* we need to preserve namespaces on object datas */
   string = g_strconcat ("gtk-status-bar-context:", context_description, NULL);
 
-  id = gtk_object_get_data (GTK_OBJECT (statusbar), string);
+  id = g_object_get_data (G_OBJECT (statusbar), string);
   if (!id)
     {
       id = g_new (guint, 1);
       *id = statusbar->seq_context_id++;
-      gtk_object_set_data_full (GTK_OBJECT (statusbar), string, id, (GtkDestroyNotify) g_free);
+      g_object_set_data_full (G_OBJECT (statusbar), string, id, g_free);
       statusbar->keys = g_slist_prepend (statusbar->keys, string);
     }
   else
@@ -262,10 +265,11 @@ gtk_statusbar_push (GtkStatusbar *statusbar,
 
   statusbar->messages = g_slist_prepend (statusbar->messages, msg);
 
-  gtk_signal_emit (GTK_OBJECT (statusbar),
-		   statusbar_signals[SIGNAL_TEXT_PUSHED],
-		   msg->context_id,
-		   msg->text);
+  g_signal_emit (statusbar,
+		 statusbar_signals[SIGNAL_TEXT_PUSHED],
+		 0,
+		 msg->context_id,
+		 msg->text);
 
   return msg->message_id;
 }
@@ -304,10 +308,11 @@ gtk_statusbar_pop (GtkStatusbar *statusbar,
 
   msg = statusbar->messages ? statusbar->messages->data : NULL;
 
-  gtk_signal_emit (GTK_OBJECT (statusbar),
-		   statusbar_signals[SIGNAL_TEXT_POPPED],
-		   (guint) (msg ? msg->context_id : 0),
-		   msg ? msg->text : NULL);
+  g_signal_emit (statusbar,
+		 statusbar_signals[SIGNAL_TEXT_POPPED],
+		 0,
+		 (guint) (msg ? msg->context_id : 0),
+		 msg ? msg->text : NULL);
 }
 
 void

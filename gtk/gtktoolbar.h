@@ -32,9 +32,11 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkenums.h>
+#include <gtk/gtktooltips.h>
+
+/* Not needed, retained for compatibility -Yosh */
 #include <gtk/gtkpixmap.h>
 #include <gtk/gtksignal.h>
-#include <gtk/gtktooltips.h>
 
 
 #ifdef __cplusplus
@@ -43,11 +45,11 @@ extern "C" {
 
 
 #define GTK_TYPE_TOOLBAR                  (gtk_toolbar_get_type ())
-#define GTK_TOOLBAR(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_TOOLBAR, GtkToolbar))
-#define GTK_TOOLBAR_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TOOLBAR, GtkToolbarClass))
-#define GTK_IS_TOOLBAR(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_TOOLBAR))
-#define GTK_IS_TOOLBAR_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TOOLBAR))
-#define GTK_TOOLBAR_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TOOLBAR, GtkToolbarClass))
+#define GTK_TOOLBAR(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TOOLBAR, GtkToolbar))
+#define GTK_TOOLBAR_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TOOLBAR, GtkToolbarClass))
+#define GTK_IS_TOOLBAR(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TOOLBAR))
+#define GTK_IS_TOOLBAR_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TOOLBAR))
+#define GTK_TOOLBAR_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TOOLBAR, GtkToolbarClass))
 
 
 typedef enum
@@ -116,7 +118,7 @@ struct _GtkToolbarClass
 };
 
 
-GtkType    gtk_toolbar_get_type        (void) G_GNUC_CONST;
+GType      gtk_toolbar_get_type        (void) G_GNUC_CONST;
 GtkWidget* gtk_toolbar_new             (void);
 
 /* Simple button items */

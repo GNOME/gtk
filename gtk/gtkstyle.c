@@ -474,8 +474,7 @@ gtk_style_get_type (void)
         (GInstanceInitFunc) gtk_style_init,
       };
       
-      style_type = g_type_register_static (G_TYPE_OBJECT,
-					   "GtkStyle",
+      style_type = g_type_register_static (G_TYPE_OBJECT, "GtkStyle",
 					   &style_info, 0);
     }
   
@@ -779,7 +778,7 @@ gtk_style_attach (GtkStyle  *style,
   g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
   g_return_val_if_fail (window != NULL, NULL);
   
-  colormap = gdk_window_get_colormap (window);
+  colormap = gdk_drawable_get_colormap (window);
   
   if (!style->styles)
     style->styles = g_slist_append (NULL, style);
@@ -839,7 +838,7 @@ gtk_style_detach (GtkStyle *style)
     {
       GTK_STYLE_GET_CLASS (style)->unrealize (style);
       
-      gdk_colormap_unref (style->colormap);
+      g_object_unref (style->colormap);
       style->colormap = NULL;
 
       if (style->private_font_desc)
@@ -868,7 +867,7 @@ gtk_style_detach (GtkStyle *style)
 GtkStyle*
 gtk_style_ref (GtkStyle *style)
 {
-  return (GtkStyle *) g_object_ref (G_OBJECT (style));
+  return (GtkStyle *) g_object_ref (style);
 }
 
 /**
@@ -880,7 +879,7 @@ gtk_style_ref (GtkStyle *style)
 void
 gtk_style_unref (GtkStyle *style)
 {
-  g_object_unref (G_OBJECT (style));
+  g_object_unref (style);
 }
 
 static void
@@ -890,7 +889,7 @@ gtk_style_realize (GtkStyle    *style,
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GDK_IS_COLORMAP (colormap));
   
-  style->colormap = gdk_colormap_ref (colormap);
+  style->colormap = g_object_ref (colormap);
   style->depth = gdk_colormap_get_visual (colormap)->depth;
 
   GTK_STYLE_GET_CLASS (style)->realize (style);
@@ -1583,8 +1582,7 @@ gtk_style_real_init_from_rc (GtkStyle   *style,
       iter = style->icon_factories;
       while (iter != NULL)
         {
-          g_object_ref (G_OBJECT (iter->data));
-          
+          g_object_ref (iter->data);
           iter = g_slist_next (iter);
         }
     }
@@ -1721,10 +1719,17 @@ gtk_style_real_realize (GtkStyle *style)
       style->text_aa[i].green = (style->text[i].green + style->base[i].green) / 2;
       style->text_aa[i].blue = (style->text[i].blue + style->base[i].blue) / 2;
     }
-  
-  gdk_color_black (style->colormap, &style->black);
-  gdk_color_white (style->colormap, &style->white);
-  
+
+  style->black.red = 0x0000;
+  style->black.green = 0x0000;
+  style->black.blue = 0x0000;
+  gdk_colormap_alloc_color (style->colormap, &style->black, FALSE, TRUE);
+
+  style->white.red = 0xffff;
+  style->white.green = 0xffff;
+  style->white.blue = 0xffff;
+  gdk_colormap_alloc_color (style->colormap, &style->white, FALSE, TRUE);
+
   gc_values_mask = GDK_GC_FOREGROUND;
   
   gc_values.foreground = style->black;
@@ -1740,28 +1745,28 @@ gtk_style_real_realize (GtkStyle *style)
 					     &style->bg[i],
 					     style->rc_style->bg_pixmap_name[i]);
       
-      if (!gdk_color_alloc (style->colormap, &style->fg[i]))
+      if (!gdk_colormap_alloc_color (style->colormap, &style->fg[i], FALSE, TRUE))
         g_warning ("unable to allocate color: ( %d %d %d )",
                    style->fg[i].red, style->fg[i].green, style->fg[i].blue);
-      if (!gdk_color_alloc (style->colormap, &style->bg[i]))
+      if (!gdk_colormap_alloc_color (style->colormap, &style->bg[i], FALSE, TRUE))
         g_warning ("unable to allocate color: ( %d %d %d )",
                    style->bg[i].red, style->bg[i].green, style->bg[i].blue);
-      if (!gdk_color_alloc (style->colormap, &style->light[i]))
+      if (!gdk_colormap_alloc_color (style->colormap, &style->light[i], FALSE, TRUE))
         g_warning ("unable to allocate color: ( %d %d %d )",
                    style->light[i].red, style->light[i].green, style->light[i].blue);
-      if (!gdk_color_alloc (style->colormap, &style->dark[i]))
+      if (!gdk_colormap_alloc_color (style->colormap, &style->dark[i], FALSE, TRUE))
         g_warning ("unable to allocate color: ( %d %d %d )",
                    style->dark[i].red, style->dark[i].green, style->dark[i].blue);
-      if (!gdk_color_alloc (style->colormap, &style->mid[i]))
+      if (!gdk_colormap_alloc_color (style->colormap, &style->mid[i], FALSE, TRUE))
         g_warning ("unable to allocate color: ( %d %d %d )",
                    style->mid[i].red, style->mid[i].green, style->mid[i].blue);
-      if (!gdk_color_alloc (style->colormap, &style->text[i]))
+      if (!gdk_colormap_alloc_color (style->colormap, &style->text[i], FALSE, TRUE))
         g_warning ("unable to allocate color: ( %d %d %d )",
                    style->text[i].red, style->text[i].green, style->text[i].blue);
-      if (!gdk_color_alloc (style->colormap, &style->base[i]))
+      if (!gdk_colormap_alloc_color (style->colormap, &style->base[i], FALSE, TRUE))
         g_warning ("unable to allocate color: ( %d %d %d )",
                    style->base[i].red, style->base[i].green, style->base[i].blue);
-      if (!gdk_color_alloc (style->colormap, &style->text_aa[i]))
+      if (!gdk_colormap_alloc_color (style->colormap, &style->text_aa[i], FALSE, TRUE))
         g_warning ("unable to allocate color: ( %d %d %d )",
                    style->text_aa[i].red, style->text_aa[i].green, style->text_aa[i].blue);
       
@@ -1811,7 +1816,7 @@ gtk_style_real_unrealize (GtkStyle *style)
       gtk_gc_release (style->text_aa_gc[i]);
 
       if (style->bg_pixmap[i] &&  style->bg_pixmap[i] != (GdkPixmap*) GDK_PARENT_RELATIVE)
-	gdk_pixmap_unref (style->bg_pixmap[i]);
+	g_object_unref (style->bg_pixmap[i]);
     }
   
   gdk_colormap_free_colors (style->colormap, style->fg, 5);
@@ -1964,8 +1969,7 @@ scale_or_ref (GdkPixbuf *src,
   if (width == gdk_pixbuf_get_width (src) &&
       height == gdk_pixbuf_get_height (src))
     {
-      gdk_pixbuf_ref (src);
-      return src;
+      return g_object_ref (src);
     }
   else
     {
@@ -2031,7 +2035,7 @@ gtk_default_render_icon (GtkStyle            *style,
   if (size != (GtkIconSize)-1 && gtk_icon_source_get_size_wildcarded (source))
     scaled = scale_or_ref (base_pixbuf, width, height);
   else
-    scaled = GDK_PIXBUF (g_object_ref (G_OBJECT (base_pixbuf)));
+    scaled = g_object_ref (base_pixbuf);
 
   /* If the state was wildcarded, then generate a state. */
   if (gtk_icon_source_get_state_wildcarded (source))
@@ -2043,7 +2047,7 @@ gtk_default_render_icon (GtkStyle            *style,
           gdk_pixbuf_saturate_and_pixelate (scaled, stated,
                                             0.8, TRUE);
           
-          gdk_pixbuf_unref (scaled);
+          g_object_unref (scaled);
         }
       else if (state == GTK_STATE_PRELIGHT)
         {
@@ -2052,7 +2056,7 @@ gtk_default_render_icon (GtkStyle            *style,
           gdk_pixbuf_saturate_and_pixelate (scaled, stated,
                                             1.2, FALSE);
           
-          gdk_pixbuf_unref (scaled);
+          g_object_unref (scaled);
         }
       else
         {
@@ -2071,11 +2075,11 @@ sanitize_size (GdkWindow *window,
 	       gint      *height)
 {
   if ((*width == -1) && (*height == -1))
-    gdk_window_get_size (window, width, height);
+    gdk_drawable_get_size (window, width, height);
   else if (*width == -1)
-    gdk_window_get_size (window, width, NULL);
+    gdk_drawable_get_size (window, width, NULL);
   else if (*height == -1)
-    gdk_window_get_size (window, NULL, height);
+    gdk_drawable_get_size (window, NULL, height);
 }
 
 static GdkBitmap * 
@@ -2285,7 +2289,7 @@ draw_spin_entry_shadow (GtkStyle      *style,
   gint window_width, window_height;
   gboolean focus_inset;
 
-  gdk_window_get_size (window, &window_width, &window_height);
+  gdk_drawable_get_size (window, &window_width, &window_height);
 
   if (width == -1)
     width = window_width;
@@ -3458,7 +3462,7 @@ gtk_default_draw_flat_box (GtkStyle      *style,
 
 
   if (freeme)
-    g_object_unref (G_OBJECT (freeme));
+    g_object_unref (freeme);
 }
 
 static void 
@@ -4850,7 +4854,7 @@ get_insensitive_layout (GdkDrawable *drawable,
   g_slist_free (stippled_ranges);
   
   if (stipple)
-    g_object_unref (G_OBJECT (stipple));
+    g_object_unref (stipple);
 
   return new_layout;
 }
@@ -4885,7 +4889,7 @@ gtk_default_draw_layout (GtkStyle        *style,
       
       gdk_draw_layout (window, gc, x, y, ins);
 
-      g_object_unref (G_OBJECT (ins));
+      g_object_unref (ins);
     }
   else
     {

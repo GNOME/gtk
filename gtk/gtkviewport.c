@@ -24,7 +24,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "gtksignal.h"
 #include "gtkviewport.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
@@ -72,26 +71,28 @@ static void gtk_viewport_style_set                (GtkWidget *widget,
 
 static GtkBinClass *parent_class;
 
-GtkType
+GType
 gtk_viewport_get_type (void)
 {
-  static GtkType viewport_type = 0;
+  static GType viewport_type = 0;
 
   if (!viewport_type)
     {
-      static const GtkTypeInfo viewport_info =
+      static const GTypeInfo viewport_info =
       {
-	"GtkViewport",
-	sizeof (GtkViewport),
 	sizeof (GtkViewportClass),
-	(GtkClassInitFunc) gtk_viewport_class_init,
-	(GtkObjectInitFunc) gtk_viewport_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_viewport_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkViewport),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_viewport_init,
       };
 
-      viewport_type = gtk_type_unique (GTK_TYPE_BIN, &viewport_info);
+      viewport_type = g_type_register_static (GTK_TYPE_BIN, "GtkViewport",
+					      &viewport_info, 0);
     }
 
   return viewport_type;
@@ -109,7 +110,8 @@ gtk_viewport_class_init (GtkViewportClass *class)
   gobject_class = G_OBJECT_CLASS (class);
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
-  parent_class = (GtkBinClass*) gtk_type_class (GTK_TYPE_BIN);
+
+  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->set_property = gtk_viewport_set_property;
   gobject_class->get_property = gtk_viewport_get_property;
@@ -152,12 +154,15 @@ gtk_viewport_class_init (GtkViewportClass *class)
 						      G_PARAM_READWRITE));
 
   widget_class->set_scroll_adjustments_signal =
-    gtk_signal_new ("set_scroll_adjustments",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkViewportClass, set_scroll_adjustments),
-		    _gtk_marshal_VOID__OBJECT_OBJECT,
-		    GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
+    g_signal_new ("set_scroll_adjustments",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkViewportClass, set_scroll_adjustments),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT_OBJECT,
+		  G_TYPE_NONE, 2,
+		  GTK_TYPE_ADJUSTMENT,
+		  GTK_TYPE_ADJUSTMENT);
 }
 
 static void
@@ -259,14 +264,24 @@ gtk_viewport_destroy (GtkObject *object)
 
   if (viewport->hadjustment)
     {
-      gtk_signal_disconnect_by_data (GTK_OBJECT (viewport->hadjustment), viewport);
-      gtk_object_unref (GTK_OBJECT (viewport->hadjustment));
+      g_signal_handlers_disconnect_by_func (viewport->hadjustment,
+					    gtk_viewport_adjustment_changed,
+					    viewport);
+      g_signal_handlers_disconnect_by_func (viewport->hadjustment,
+					    gtk_viewport_adjustment_value_changed,
+					    viewport);
+      g_object_unref (viewport->hadjustment);
       viewport->hadjustment = NULL;
     }
   if (viewport->vadjustment)
     {
-      gtk_signal_disconnect_by_data (GTK_OBJECT (viewport->vadjustment), viewport);
-      gtk_object_unref (GTK_OBJECT (viewport->vadjustment));
+      g_signal_handlers_disconnect_by_func (viewport->vadjustment,
+					    gtk_viewport_adjustment_changed,
+					    viewport);
+      g_signal_handlers_disconnect_by_func (viewport->vadjustment,
+					    gtk_viewport_adjustment_value_changed,
+					    viewport);
+      g_object_unref (viewport->vadjustment);
       viewport->vadjustment = NULL;
     }
 
@@ -328,8 +343,13 @@ gtk_viewport_set_hadjustment (GtkViewport   *viewport,
 
   if (viewport->hadjustment && viewport->hadjustment != adjustment)
     {
-      gtk_signal_disconnect_by_data (GTK_OBJECT (viewport->hadjustment), viewport);
-      gtk_object_unref (GTK_OBJECT (viewport->hadjustment));
+      g_signal_handlers_disconnect_by_func (viewport->hadjustment,
+					    gtk_viewport_adjustment_changed,
+					    viewport);
+      g_signal_handlers_disconnect_by_func (viewport->hadjustment,
+					    gtk_viewport_adjustment_value_changed,
+					    viewport);
+      g_object_unref (viewport->hadjustment);
       viewport->hadjustment = NULL;
     }
 
@@ -340,15 +360,15 @@ gtk_viewport_set_hadjustment (GtkViewport   *viewport,
   if (viewport->hadjustment != adjustment)
     {
       viewport->hadjustment = adjustment;
-      gtk_object_ref (GTK_OBJECT (viewport->hadjustment));
+      g_object_ref (viewport->hadjustment);
       gtk_object_sink (GTK_OBJECT (viewport->hadjustment));
       
-      gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
-			  (GtkSignalFunc) gtk_viewport_adjustment_changed,
-			  (gpointer) viewport);
-      gtk_signal_connect (GTK_OBJECT (adjustment), "value_changed",
-			  (GtkSignalFunc) gtk_viewport_adjustment_value_changed,
-			  (gpointer) viewport);
+      g_signal_connect (adjustment, "changed",
+			G_CALLBACK (gtk_viewport_adjustment_changed),
+			viewport);
+      g_signal_connect (adjustment, "value_changed",
+			G_CALLBACK (gtk_viewport_adjustment_value_changed),
+			viewport);
 
       gtk_viewport_adjustment_changed (adjustment, viewport);
     }
@@ -373,8 +393,13 @@ gtk_viewport_set_vadjustment (GtkViewport   *viewport,
 
   if (viewport->vadjustment && viewport->vadjustment != adjustment)
     {
-      gtk_signal_disconnect_by_data (GTK_OBJECT (viewport->vadjustment), viewport);
-      gtk_object_unref (GTK_OBJECT (viewport->vadjustment));
+      g_signal_handlers_disconnect_by_func (viewport->vadjustment,
+					    gtk_viewport_adjustment_changed,
+					    viewport);
+      g_signal_handlers_disconnect_by_func (viewport->vadjustment,
+					    gtk_viewport_adjustment_value_changed,
+					    viewport);
+      g_object_unref (viewport->vadjustment);
       viewport->vadjustment = NULL;
     }
 
@@ -385,15 +410,15 @@ gtk_viewport_set_vadjustment (GtkViewport   *viewport,
   if (viewport->vadjustment != adjustment)
     {
       viewport->vadjustment = adjustment;
-      gtk_object_ref (GTK_OBJECT (viewport->vadjustment));
+      g_object_ref (viewport->vadjustment);
       gtk_object_sink (GTK_OBJECT (viewport->vadjustment));
       
-      gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
-			  (GtkSignalFunc) gtk_viewport_adjustment_changed,
-			  (gpointer) viewport);
-      gtk_signal_connect (GTK_OBJECT (adjustment), "value_changed",
-			  (GtkSignalFunc) gtk_viewport_adjustment_value_changed,
-			  (gpointer) viewport);
+      g_signal_connect (adjustment, "changed",
+			G_CALLBACK (gtk_viewport_adjustment_changed),
+			viewport);
+      g_signal_connect (adjustment, "value_changed",
+			G_CALLBACK (gtk_viewport_adjustment_value_changed),
+			viewport);
 
       gtk_viewport_adjustment_changed (adjustment, viewport);
     }
@@ -570,9 +595,10 @@ gtk_viewport_paint (GtkWidget    *widget,
     {
       viewport = GTK_VIEWPORT (widget);
 
-      gtk_draw_shadow (widget->style, widget->window,
-		       GTK_STATE_NORMAL, viewport->shadow_type,
-		       0, 0, -1, -1);
+      gtk_paint_shadow (widget->style, widget->window,
+			GTK_STATE_NORMAL, viewport->shadow_type,
+			NULL, widget, "viewport",
+			0, 0, -1, -1);
     }
 }
 
@@ -752,17 +778,17 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (bin->child, &child_allocation);
     }
 
-  gtk_signal_emit_by_name (GTK_OBJECT (viewport->hadjustment), "changed");
-  gtk_signal_emit_by_name (GTK_OBJECT (viewport->vadjustment), "changed");
+  gtk_adjustment_changed (viewport->hadjustment);
+  gtk_adjustment_changed (viewport->vadjustment);
   if (viewport->hadjustment->value != hval)
     {
       viewport->hadjustment->value = hval;
-      gtk_signal_emit_by_name (GTK_OBJECT (viewport->hadjustment), "value_changed");
+      gtk_adjustment_value_changed (viewport->hadjustment);
     }
   if (viewport->vadjustment->value != vval)
     {
       viewport->vadjustment->value = vval;
-      gtk_signal_emit_by_name (GTK_OBJECT (viewport->vadjustment), "value_changed");
+      gtk_adjustment_value_changed (viewport->vadjustment);
     }
 }
 

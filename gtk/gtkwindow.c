@@ -1267,7 +1267,7 @@ gtk_window_remove_accel_group (GtkWindow     *window,
   g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
 
   g_signal_handlers_disconnect_by_func (accel_group,
-					(gpointer) gtk_window_notify_keys_changed,
+					gtk_window_notify_keys_changed,
 					window);
   _gtk_accel_group_detach (accel_group, G_OBJECT (window));
 }
@@ -1628,7 +1628,7 @@ gtk_window_add_embedded_xid (GtkWindow *window, guint xid)
   g_object_set_data_full (G_OBJECT (window), "gtk-embedded", 
 			  embedded_windows,
 			  embedded_windows ?
-			    (GtkDestroyNotify) g_list_free : NULL);
+			    (GDestroyNotify) g_list_free : NULL);
 }
 
 void
@@ -1654,7 +1654,7 @@ gtk_window_remove_embedded_xid (GtkWindow *window, guint xid)
   g_object_set_data_full (G_OBJECT (window), "gtk-embedded",
 			  embedded_windows,
 			  embedded_windows ?
-			    (GtkDestroyNotify) g_list_free : NULL);
+			    (GDestroyNotify) g_list_free : NULL);
 }
 
 void       
@@ -1702,7 +1702,7 @@ disconnect_parent_destroyed (GtkWindow *window)
   if (window->transient_parent)
     {
       g_signal_handlers_disconnect_by_func (window->transient_parent,
-					    G_CALLBACK (parent_destroyed_callback),
+					    parent_destroyed_callback,
 					    window);
     }
 }
@@ -1730,13 +1730,13 @@ gtk_window_unset_transient_for  (GtkWindow *window)
   if (window->transient_parent)
     {
       g_signal_handlers_disconnect_by_func (window->transient_parent,
-					    G_CALLBACK (gtk_window_transient_parent_realized),
+					    gtk_window_transient_parent_realized,
 					    window);
       g_signal_handlers_disconnect_by_func (window->transient_parent,
-					    G_CALLBACK (gtk_window_transient_parent_unrealized),
+					    gtk_window_transient_parent_unrealized,
 					    window);
       g_signal_handlers_disconnect_by_func (window->transient_parent,
-					    G_CALLBACK (gtk_widget_destroyed),
+					    gtk_widget_destroyed,
 					    &window->transient_parent);
 
       if (window->destroy_with_parent)
@@ -2083,7 +2083,7 @@ gtk_window_set_geometry_hints (GtkWindow       *window,
   
   if (info->widget)
     g_signal_handlers_disconnect_by_func (info->widget,
-					  G_CALLBACK (gtk_widget_destroyed),
+					  gtk_widget_destroyed,
 					  &info->widget);
   
   info->widget = geometry_widget;
@@ -3370,7 +3370,7 @@ gtk_window_finalize (GObject *object)
     {
       if (window->geometry_info->widget)
 	g_signal_handlers_disconnect_by_func (window->geometry_info->widget,
-					      G_CALLBACK (gtk_widget_destroyed),
+					      gtk_widget_destroyed,
 					      &window->geometry_info->widget);
       g_free (window->geometry_info);
     }

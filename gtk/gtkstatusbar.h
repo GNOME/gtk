@@ -36,11 +36,11 @@ extern "C" {
 
 
 #define GTK_TYPE_STATUSBAR            (gtk_statusbar_get_type ())
-#define GTK_STATUSBAR(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_STATUSBAR, GtkStatusbar))
-#define GTK_STATUSBAR_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_STATUSBAR, GtkStatusbarClass))
-#define GTK_IS_STATUSBAR(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_STATUSBAR))
-#define GTK_IS_STATUSBAR_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_STATUSBAR))
-#define GTK_STATUSBAR_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_STATUSBAR, GtkStatusbarClass))
+#define GTK_STATUSBAR(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_STATUSBAR, GtkStatusbar))
+#define GTK_STATUSBAR_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_STATUSBAR, GtkStatusbarClass))
+#define GTK_IS_STATUSBAR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_STATUSBAR))
+#define GTK_IS_STATUSBAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_STATUSBAR))
+#define GTK_STATUSBAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_STATUSBAR, GtkStatusbarClass))
 
 
 typedef struct _GtkStatusbar      GtkStatusbar;
@@ -85,7 +85,7 @@ struct _GtkStatusbarClass
 };
 
 
-GtkType    gtk_statusbar_get_type     	(void) G_GNUC_CONST;
+GType      gtk_statusbar_get_type     	(void) G_GNUC_CONST;
 GtkWidget* gtk_statusbar_new          	(void);
 /* If you don't want to use contexts, 0 is a predefined global
  * context_id you can pass to push/pop/remove

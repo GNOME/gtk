@@ -142,26 +142,28 @@ static GtkContainerClass *parent_class;
 static guint toolbar_signals[LAST_SIGNAL] = { 0 };
 
 
-GtkType
+GType
 gtk_toolbar_get_type (void)
 {
-  static GtkType toolbar_type = 0;
+  static GType toolbar_type = 0;
 
   if (!toolbar_type)
     {
-      static const GtkTypeInfo toolbar_info =
+      static const GTypeInfo toolbar_info =
       {
-	"GtkToolbar",
-	sizeof (GtkToolbar),
 	sizeof (GtkToolbarClass),
-	(GtkClassInitFunc) gtk_toolbar_class_init,
-	(GtkObjectInitFunc) gtk_toolbar_init,
-	/* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_toolbar_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkToolbar),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_toolbar_init,
       };
 
-      toolbar_type = gtk_type_unique (gtk_container_get_type (), &toolbar_info);
+      toolbar_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkToolbar",
+					     &toolbar_info, 0);
     }
 
   return toolbar_type;
@@ -180,7 +182,7 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
   widget_class = (GtkWidgetClass *) class;
   container_class = (GtkContainerClass *) class;
 
-  parent_class = gtk_type_class (gtk_container_get_type ());
+  parent_class = g_type_class_peek_parent (class);
 
   object_class->destroy = gtk_toolbar_destroy;
   gobject_class->set_property = gtk_toolbar_set_property;
@@ -202,21 +204,23 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
   class->style_changed = gtk_real_toolbar_style_changed;
 
   toolbar_signals[ORIENTATION_CHANGED] =
-    gtk_signal_new ("orientation_changed",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkToolbarClass, orientation_changed),
-		    _gtk_marshal_VOID__ENUM,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_ORIENTATION);
+    g_signal_new ("orientation_changed",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkToolbarClass, orientation_changed),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__ENUM,
+		  G_TYPE_NONE, 1,
+		  GTK_TYPE_ORIENTATION);
   toolbar_signals[STYLE_CHANGED] =
-    gtk_signal_new ("style_changed",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkToolbarClass, style_changed),
-		    _gtk_marshal_VOID__ENUM,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_TOOLBAR_STYLE);
+    g_signal_new ("style_changed",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkToolbarClass, style_changed),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__ENUM,
+		  G_TYPE_NONE, 1,
+		  GTK_TYPE_TOOLBAR_STYLE);
   
   g_object_class_install_property (gobject_class,
 				   PROP_ORIENTATION,
@@ -341,15 +345,17 @@ toolbar_screen_changed (GtkToolbar *toolbar)
   
   if (settings)
     {
-      toolbar->style_set_connection = g_signal_connect_swapped (settings,
-								"notify::gtk-toolbar-style",
-								G_CALLBACK (style_change_notify),
-								toolbar);
+      toolbar->style_set_connection =
+	g_signal_connect_swapped (settings,
+				  "notify::gtk-toolbar-style",
+				  G_CALLBACK (style_change_notify),
+				  toolbar);
       
-      toolbar->icon_size_connection = g_signal_connect_swapped (settings,
-								"notify::gtk-toolbar-icon-size",
-								G_CALLBACK (icon_size_change_notify),
-								toolbar);
+      toolbar->icon_size_connection =
+	g_signal_connect_swapped (settings,
+				  "notify::gtk-toolbar-icon-size",
+				   G_CALLBACK (icon_size_change_notify),
+				   toolbar);
 
 
       g_object_ref (settings);
@@ -370,7 +376,7 @@ gtk_toolbar_hierarchy_changed (GtkWidget *widget,
   
   if (previous_toplevel)
     g_signal_handlers_disconnect_by_func (previous_toplevel,
-					  (gpointer) toolbar_screen_changed,
+					  toolbar_screen_changed,
 					  widget);
 
   toplevel = gtk_widget_get_toplevel (widget);
@@ -450,7 +456,7 @@ gtk_toolbar_new (void)
 {
   GtkToolbar *toolbar;
 
-  toolbar = gtk_type_new (gtk_toolbar_get_type ());
+  toolbar = g_object_new (GTK_TYPE_TOOLBAR, NULL);
 
   return GTK_WIDGET (toolbar);
 }
@@ -467,7 +473,7 @@ gtk_toolbar_destroy (GtkObject *object)
 
   if (toolbar->tooltips)
     {
-      gtk_object_unref (GTK_OBJECT (toolbar->tooltips));
+      g_object_unref (toolbar->tooltips);
       toolbar->tooltips = NULL;
     }
 
@@ -479,10 +485,10 @@ gtk_toolbar_destroy (GtkObject *object)
 
       if (child->type != GTK_TOOLBAR_CHILD_SPACE)
 	{
-	  gtk_widget_ref (child->widget);
+	  g_object_ref (child->widget);
 	  gtk_widget_unparent (child->widget);
 	  gtk_widget_destroy (child->widget);
-	  gtk_widget_unref (child->widget);
+	  g_object_unref (child->widget);
 	}
 
       g_free (child);
@@ -1422,8 +1428,8 @@ gtk_toolbar_internal_insert_element (GtkToolbar          *toolbar,
       GTK_WIDGET_UNSET_FLAGS (child->widget, GTK_CAN_FOCUS);
 
       if (callback)
-	gtk_signal_connect (GTK_OBJECT (child->widget), "clicked",
-			    callback, user_data);
+	g_signal_connect (child->widget, "clicked",
+			  callback, user_data);
 
       if (toolbar->style == GTK_TOOLBAR_BOTH_HORIZ)
 	  box = gtk_hbox_new (FALSE, 0);
@@ -1486,7 +1492,7 @@ gtk_toolbar_set_orientation (GtkToolbar     *toolbar,
 {
   g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
 
-  gtk_signal_emit (GTK_OBJECT (toolbar), toolbar_signals[ORIENTATION_CHANGED], orientation);
+  g_signal_emit (toolbar, toolbar_signals[ORIENTATION_CHANGED], 0, orientation);
 }
 
 /**
@@ -1513,7 +1519,7 @@ gtk_toolbar_set_style (GtkToolbar      *toolbar,
   g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
 
   toolbar->style_set = TRUE;
-  gtk_signal_emit (GTK_OBJECT (toolbar), toolbar_signals[STYLE_CHANGED], style);
+  g_signal_emit (toolbar, toolbar_signals[STYLE_CHANGED], 0, style);
 }
 
 /**
@@ -1554,7 +1560,7 @@ gtk_toolbar_unset_style (GtkToolbar *toolbar)
                     NULL);
 
       if (style != toolbar->style)
-        gtk_signal_emit (GTK_OBJECT (toolbar), toolbar_signals[STYLE_CHANGED], style);
+        g_signal_emit (toolbar, toolbar_signals[STYLE_CHANGED], 0, style);
       
       toolbar->style_set = FALSE;
     }
@@ -1688,13 +1694,13 @@ gtk_real_toolbar_style_changed (GtkToolbar      *toolbar,
 		{
 		    if (child->icon)
 		    {
-			gtk_object_ref (GTK_OBJECT (child->icon));
+			g_object_ref (child->icon);
 			gtk_container_remove (GTK_CONTAINER (box),
 					      child->icon);
 		    }
 		    if (child->label)
 		    {
-			gtk_object_ref (GTK_OBJECT (child->label));
+			g_object_ref (child->label);
 			gtk_container_remove (GTK_CONTAINER (box),
 					      child->label);
 		    }
@@ -1707,12 +1713,12 @@ gtk_real_toolbar_style_changed (GtkToolbar      *toolbar,
 		    if (child->label)
 		    {
 			gtk_box_pack_end (GTK_BOX (box), child->label, FALSE, FALSE, 0);
-			gtk_object_unref (GTK_OBJECT (child->label));
+			g_object_unref (child->label);
 		    }
 		    if (child->icon)
 		    {
 			gtk_box_pack_end (GTK_BOX (box), child->icon, FALSE, FALSE, 0);
-			gtk_object_unref (GTK_OBJECT (child->icon));
+			g_object_unref (child->icon);
 		    }
 		    gtk_container_add (GTK_CONTAINER (child->widget),
 				       box);
@@ -1732,13 +1738,13 @@ gtk_real_toolbar_style_changed (GtkToolbar      *toolbar,
 		{
 		    if (child->icon)
 		    {
-			gtk_object_ref (GTK_OBJECT (child->icon));
+			g_object_ref (child->icon);
 			gtk_container_remove (GTK_CONTAINER (box),
 					      child->icon);
 		    }
 		    if (child->label)
 		    {
-			gtk_object_ref (GTK_OBJECT (child->label));
+			g_object_ref (child->label);
 			gtk_container_remove (GTK_CONTAINER (box),
 					      child->label);
 		    }
@@ -1751,12 +1757,12 @@ gtk_real_toolbar_style_changed (GtkToolbar      *toolbar,
 		    if (child->label)
 		    {
 			gtk_box_pack_end (GTK_BOX (box), child->label, TRUE, TRUE, 0);
-			gtk_object_unref (GTK_OBJECT (child->label));
+			g_object_unref (child->label);
 		    }
 		    if (child->icon)
 		    {
 			gtk_box_pack_end (GTK_BOX (box), child->icon, FALSE, FALSE, 0);
-			gtk_object_unref (GTK_OBJECT (child->icon));
+			g_object_unref (child->icon);
 		    }
 		    gtk_container_add (GTK_CONTAINER (child->widget), box);
 		    

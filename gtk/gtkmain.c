@@ -56,7 +56,6 @@
 #include "gtkrc.h"
 #include "gtkselection.h"
 #include "gtksettings.h"
-#include "gtksignal.h"
 #include "gtkwidget.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
@@ -1086,7 +1085,7 @@ gtk_main (void)
 
   gtk_main_loop_level++;
   
-  loop = g_main_new (TRUE);
+  loop = g_main_loop_new (NULL, TRUE);
   main_loops = g_slist_prepend (main_loops, loop);
 
   tmp_list = functions = init_functions;
@@ -1102,10 +1101,10 @@ gtk_main (void)
     }
   g_list_free (functions);
 
-  if (g_main_is_running (main_loops->data))
+  if (g_main_loop_is_running (main_loops->data))
     {
       GDK_THREADS_LEAVE ();
-      g_main_run (loop);
+      g_main_loop_run (loop);
       GDK_THREADS_ENTER ();
       gdk_flush ();
     }
@@ -1149,7 +1148,7 @@ gtk_main (void)
 	      
   main_loops = g_slist_remove (main_loops, loop);
 
-  g_main_destroy (loop);
+  g_main_loop_unref (loop);
 
   gtk_main_loop_level--;
 }
@@ -1165,7 +1164,7 @@ gtk_main_quit (void)
 {
   g_return_if_fail (main_loops != NULL);
 
-  g_main_quit (main_loops->data);
+  g_main_loop_quit (main_loops->data);
 }
 
 gint
@@ -1174,7 +1173,7 @@ gtk_events_pending (void)
   gboolean result;
   
   GDK_THREADS_LEAVE ();  
-  result = g_main_pending ();
+  result = g_main_context_pending (NULL);
   GDK_THREADS_ENTER ();
 
   return result;
@@ -1184,11 +1183,11 @@ gboolean
 gtk_main_iteration (void)
 {
   GDK_THREADS_LEAVE ();
-  g_main_iteration (TRUE);
+  g_main_context_iteration (NULL, TRUE);
   GDK_THREADS_ENTER ();
 
   if (main_loops)
-    return !g_main_is_running (main_loops->data);
+    return !g_main_loop_is_running (main_loops->data);
   else
     return TRUE;
 }
@@ -1197,11 +1196,11 @@ gboolean
 gtk_main_iteration_do (gboolean blocking)
 {
   GDK_THREADS_LEAVE ();
-  g_main_iteration (blocking);
+  g_main_context_iteration (NULL, blocking);
   GDK_THREADS_ENTER ();
 
   if (main_loops)
-    return !g_main_is_running (main_loops->data);
+    return !g_main_loop_is_running (main_loops->data);
   else
     return TRUE;
 }
@@ -1445,11 +1444,11 @@ gtk_main_do_event (GdkEvent *event)
       break;
       
     case GDK_DELETE:
-      gtk_widget_ref (event_widget);
+      g_object_ref (event_widget);
       if ((!window_group->grabs || gtk_widget_get_toplevel (window_group->grabs->data) == event_widget) &&
 	  !gtk_widget_event (event_widget, event))
 	gtk_widget_destroy (event_widget);
-      gtk_widget_unref (event_widget);
+      g_object_unref (event_widget);
       break;
       
     case GDK_DESTROY:
@@ -1458,11 +1457,11 @@ gtk_main_do_event (GdkEvent *event)
        */
       if (!event_widget->parent)
 	{
-	  gtk_widget_ref (event_widget);
+	  g_object_ref (event_widget);
 	  if (!gtk_widget_event (event_widget, event) &&
 	      GTK_WIDGET_REALIZED (event_widget))
 	    gtk_widget_destroy (event_widget);
-	  gtk_widget_unref (event_widget);
+	  g_object_unref (event_widget);
 	}
       break;
       
@@ -1613,14 +1612,14 @@ gtk_grab_notify_foreach (GtkWidget *child,
 
   if (was_grabbed != is_grabbed)
     {
-      g_object_ref (G_OBJECT (child));
+      g_object_ref (child);
       
-      gtk_signal_emit_by_name (GTK_OBJECT (child), "grab_notify", was_grabbed);
+      g_signal_emit_by_name (child, "grab_notify", was_grabbed);
       
       if (GTK_IS_CONTAINER (child))
 	gtk_container_foreach (GTK_CONTAINER (child), gtk_grab_notify_foreach, info);
       
-      g_object_unref (G_OBJECT (child));
+      g_object_unref (child);
     }
 }
 
@@ -1679,7 +1678,7 @@ gtk_grab_add (GtkWidget *widget)
 
       was_grabbed = (group->grabs != NULL);
       
-      gtk_widget_ref (widget);
+      g_object_ref (widget);
       group->grabs = g_slist_prepend (group->grabs, widget);
 
       gtk_grab_notify (group, widget, FALSE);
@@ -1712,7 +1711,7 @@ gtk_grab_remove (GtkWidget *widget)
       group = gtk_main_get_window_group (widget);
       group->grabs = g_slist_remove (group->grabs, widget);
       
-      gtk_widget_unref (widget);
+      g_object_unref (widget);
 
       gtk_grab_notify (group, widget, TRUE);
     }
@@ -1848,10 +1847,10 @@ gtk_quit_add_destroy (guint              main_level,
 
   object_p = g_new (GtkObject*, 1);
   *object_p = object;
-  gtk_signal_connect (object,
-		      "destroy",
-		      GTK_SIGNAL_FUNC (gtk_widget_destroyed),
-		      object_p);
+  g_signal_connect (object,
+		    "destroy",
+		    G_CALLBACK (gtk_widget_destroyed),
+		    object_p);
   gtk_quit_add (main_level, (GtkFunction) gtk_quit_destructor, object_p);
 }
 
@@ -1979,7 +1978,7 @@ guint
 gtk_idle_add (GtkFunction function,
 	      gpointer	  data)
 {
-  return g_idle_add_full (GTK_PRIORITY_DEFAULT, function, data, NULL);
+  return g_idle_add_full (G_PRIORITY_DEFAULT_IDLE, function, data, NULL);
 }
 
 guint	    
@@ -2217,7 +2216,7 @@ gtk_propagate_event (GtkWidget *widget,
   
   handled_event = FALSE;
 
-  gtk_widget_ref (widget);
+  g_object_ref (widget);
       
   if ((event->type == GDK_KEY_PRESS) ||
       (event->type == GDK_KEY_RELEASE))
@@ -2264,18 +2263,18 @@ gtk_propagate_event (GtkWidget *widget,
 	  
 	  handled_event = !GTK_WIDGET_IS_SENSITIVE (widget) || gtk_widget_event (widget, event);
 	  tmp = widget->parent;
-	  gtk_widget_unref (widget);
+	  g_object_unref (widget);
 
 	  widget = tmp;
 	  
 	  if (!handled_event && widget)
-	    gtk_widget_ref (widget);
+	    g_object_ref (widget);
 	  else
 	    break;
 	}
     }
   else
-    gtk_widget_unref (widget);
+    g_object_unref (widget);
 }
 
 #if 0

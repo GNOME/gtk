@@ -97,7 +97,8 @@ gtk_settings_get_type (void)
 	(GInstanceInitFunc) gtk_settings_init,
       };
       
-      settings_type = g_type_register_static (G_TYPE_OBJECT, "GtkSettings", &settings_info, 0);
+      settings_type = g_type_register_static (G_TYPE_OBJECT, "GtkSettings",
+					      &settings_info, 0);
     }
   
   return settings_type;
@@ -591,7 +592,7 @@ _gtk_rc_property_parser_from_type (GType type)
 }
 
 void
-gtk_settings_install_property (GParamSpec  *pspec)
+gtk_settings_install_property (GParamSpec *pspec)
 {
   GtkRcPropertyParser parser;
 
@@ -603,8 +604,8 @@ gtk_settings_install_property (GParamSpec  *pspec)
 }
 
 void
-gtk_settings_install_property_parser (GParamSpec         *pspec,
-				      GtkRcPropertyParser parser)
+gtk_settings_install_property_parser (GParamSpec          *pspec,
+				      GtkRcPropertyParser  parser)
 {
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
   g_return_if_fail (parser != NULL);

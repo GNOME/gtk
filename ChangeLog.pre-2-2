@@ -1,3 +1,9 @@
+Tue Oct  8 17:34:26 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkmain.c gtk/gtkscrolledwindow.[ch] gtk/gtksettings.c
+	gtk/gtkstatusbar.[ch] gtk/gtkstyle.c gtk/gtktoolbar.[ch]
+	gtk/gtkviewport.[ch] gtk/gtkwindow.[ch]: Deprecation cleanup
+
 Tue Oct  8 15:25:53 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkhpaned.[ch] gtk/gtkpaned.[ch] gtk/gtkprogress.[ch]
