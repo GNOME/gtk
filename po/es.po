@@ -1,7 +1,3 @@
-# translation of gtk+.HEAD.po to Spanish
-# translation of gtk+.HEAD.po to Spanish
-# translation of gtk+.HEAD.po to Spanish
-# translation of gtk+.HEAD.po to Spanish
 # GTK+'s Spanish translation.
 # Copyright © 1999-2002 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
@@ -11,15 +7,14 @@
 # Germán Poo-Caamaño <gpoo@ubiobio.cl>, 2002.
 # Pablo Gonzalo del Campo <pablodc@bigfoot.com>, 2002-2003.
 # Juan Manuel García Molina <juanma_gm@wanadoo.es>, 2003.
-# Francisco Javier F. Serrador <serrador@arrakis.es>, 2003.
-# Francisco Javier F. Serrador <franciscojavier.fernandez.serrador@hispalinux.es>, 2003.
+#
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-12-08 16:28-0500\n"
-"PO-Revision-Date: 2003-11-11 16:32+0100\n"
+"PO-Revision-Date: 2003-12-11 23:32+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <franciscojavier.fernandez."
 "serrador@hispalinux.es>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
@@ -1961,9 +1956,8 @@ msgid "_Opacity:"
 msgstr "_Opacidad:"
 
 #: gtk/gtkcolorsel.c:1896 gtk/gtkcolorsel.c:1907
-#, fuzzy
 msgid "Transparency of the color."
-msgstr "Transparencia del color actualmente seleccionado."
+msgstr "Transparencia del color."
 
 #: gtk/gtkcolorsel.c:1914
 msgid "Color _Name:"
@@ -2045,22 +2039,18 @@ msgid "Wrap width for layouting the items in a grid"
 msgstr "Ajusta la anchura para distribuir los elementos en una rejilla"
 
 #: gtk/gtkcombobox.c:356
-#, fuzzy
 msgid "Row span column"
 msgstr "Expandir filas a columnas"
 
 #: gtk/gtkcombobox.c:357
-#, fuzzy
 msgid "TreeModel column containing the row span values"
 msgstr "Columna TreeModel que contiene los valores de expansión de la fila"
 
 #: gtk/gtkcombobox.c:366
-#, fuzzy
 msgid "Column span column"
 msgstr "Columna expande columna"
 
 #: gtk/gtkcombobox.c:367
-#, fuzzy
 msgid "TreeModel column containing the column span values"
 msgstr "Columna TreeModel que contiene los valores de expansión de columna"
 
@@ -2339,7 +2329,7 @@ msgstr "Sobre el hijo"
 msgid ""
 "Whether the event-trapping window of the eventbox is above the window of the "
 "child widget as opposed to below it."
-msgstr ""
+msgstr "Indica si la ventana atrapadora de eventos de la caja de eventos está por encima del widget hijo como oposición debajo de ésta."
 
 #: gtk/gtkexpander.c:194
 msgid "Expanded"
@@ -2487,7 +2477,7 @@ msgstr ""
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:420
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not add a bookmark for %s:\n"
 "%s"
@@ -2523,11 +2513,9 @@ msgid "File name"
 msgstr "Nombre de archivo"
 
 #: gtk/gtkfilechooserdefault.c:880
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
-msgstr ""
-"No se pudo añadir marcador para %s:\n"
-"%s"
+msgstr "No se pudo añadir marcador para %s porque no es una carpeta."
 
 #: gtk/gtkfilechooserdefault.c:921
 #, c-format
@@ -2539,11 +2527,9 @@ msgstr ""
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:1051
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
-msgstr ""
-"No se pudo añadir marcador para %s:\n"
-"%s"
+msgstr "No se pudo añadir marcador para %s poqrque es un nombre de ruta inválido."
 
 #: gtk/gtkfilechooserdefault.c:1113
 msgid "Folder"
@@ -2835,9 +2821,8 @@ msgid "error creating directory '%s': %s"
 msgstr "error al crear la carpeta «%s» : %s"
 
 #: gtk/gtkfilesystemunix.c:566
-#, fuzzy
 msgid "This file system does not support icons"
-msgstr "Este sistema de archivo no soporta marcadores"
+msgstr "Este sistema de archivo no soporta iconos"
 
 #: gtk/gtkfilesystemunix.c:579 gtk/gtkfilesystemunix.c:592
 msgid "This file system does not support bookmarks"
@@ -2851,7 +2836,7 @@ msgstr "Error al obtener información para «%s» : %s"
 #: gtk/gtkfilesystemwin32.c:686
 #, c-format
 msgid "Bookmark saving failed (%s)"
-msgstr ""
+msgstr "Se ha producido un error al guardar el marcador (%s)"
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:611
 msgid "X position"
@@ -3155,9 +3140,8 @@ msgid "Input"
 msgstr "Entrada"
 
 #: gtk/gtkinputdialog.c:242
-#, fuzzy
 msgid "No extended input devices"
-msgstr "Ningún dispositivo de entrada"
+msgstr "Ningún dispositivo de entrada extendido"
 
 #: gtk/gtkinputdialog.c:254
 msgid "_Device:"
@@ -3921,7 +3905,7 @@ msgstr "El valor"
 msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
-msgstr ""
+msgstr "El valor devuelto por gtk_radio_action_get_current_value() cuando esta acción es la acción actual de su grupo."
 
 #: gtk/gtkradiobutton.c:109
 msgid "Group"
@@ -5377,7 +5361,7 @@ msgstr ""
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
-msgstr ""
+msgstr "Indica si el elemento de la barra de tareas es considerado importante. Cuando está a TRUE, los botones de la barra de herramientas muestran texto en modo GTK_TOOLBAR_BOTH_HORIZ"
 
 #: gtk/gtktreemodelsort.c:306
 msgid "TreeModelSort Model"
