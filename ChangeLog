@@ -1,3 +1,23 @@
+2004-07-29  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (struct _GtkFileChooserDefault): Add
+	a field for an "add to shortcuts" menu item.
+	(popup_menu_detach_cb): Clear out the field.
+	(file_list_build_popup_menu): Only build the menu here.
+	(file_list_update_popup_menu): Build the menu, then update the
+	sensitivity of its items.
+	(file_list_popup_menu): Use file_list_update_popup_menu().
+	(bookmarks_check_add_sensitivity): Also set the sensitivity of the
+	popup menu item.  Correctly handle the case for a *single* file.
+	Simplify a bit.
+	(bookmarks_add_selected_folder): New helper function; code moved
+	over from add_bookmark_button_clicked_cb().
+	(add_bookmark_button_clicked_cb): Use the function above.
+	(selection_check): Rather than returning a boolean value for
+	emptiness, actually return the number of selected rows.  Also,
+	simplify a bit.
+	(get_selected_path): New helper function.
+
 2004-07-29  Anders Carlsson  <andersca@gnome.org>
 
 	* demos/gtk-demo/Makefile.am:

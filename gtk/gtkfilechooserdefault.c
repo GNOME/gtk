@@ -43,6 +43,7 @@
 #include "gtkiconfactory.h"
 #include "gtkicontheme.h"
 #include "gtkimage.h"
+#include "gtkimagemenuitem.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
@@ -51,6 +52,7 @@
 #include "gtkpathbar.h"
 #include "gtkprivate.h"
 #include "gtkscrolledwindow.h"
+#include "gtkseparatormenuitem.h"
 #include "gtksizegroup.h"
 #include "gtkstock.h"
 #include "gtktable.h"
@@ -108,6 +110,7 @@ struct _GtkFileChooserDefault
   GtkWidget *browse_shortcuts_remove_button;
   GtkWidget *browse_files_tree_view;
   GtkWidget *browse_files_popup_menu;
+  GtkWidget *browse_files_popup_menu_add_shortcut_item;
   GtkWidget *browse_files_popup_menu_hidden_files_item;
   GtkWidget *browse_new_folder_button;
   GtkWidget *browse_path_bar;
@@ -354,6 +357,8 @@ static int shortcuts_get_index (GtkFileChooserDefault *impl,
 				ShortcutsIndex         where);
 static int shortcut_find_position (GtkFileChooserDefault *impl,
 				   const GtkFilePath     *path);
+
+static void bookmarks_check_add_sensitivity (GtkFileChooserDefault *impl);
 
 static void list_selection_changed     (GtkTreeSelection      *tree_selection,
 					GtkFileChooserDefault *impl);
@@ -1756,10 +1761,9 @@ add_bookmark_foreach_cb (GtkTreeModel *model,
   shortcuts_add_bookmark_from_path (impl, file_path, -1);
 }
 
-/* Callback used when the "Add bookmark" button is clicked */
+/* Adds a bookmark from the currently selected item in the file list */
 static void
-add_bookmark_button_clicked_cb (GtkButton *button,
-				GtkFileChooserDefault *impl)
+bookmarks_add_selected_folder (GtkFileChooserDefault *impl)
 {
   GtkTreeSelection *selection;
 
@@ -1771,6 +1775,14 @@ add_bookmark_button_clicked_cb (GtkButton *button,
     gtk_tree_selection_selected_foreach (selection,
 					 add_bookmark_foreach_cb,
 					 impl);
+}
+
+/* Callback used when the "Add bookmark" button is clicked */
+static void
+add_bookmark_button_clicked_cb (GtkButton *button,
+				GtkFileChooserDefault *impl)
+{
+  bookmarks_add_selected_folder (impl);
 }
 
 /* Returns TRUE plus an iter in the shortcuts_model if a row is selected;
@@ -1832,7 +1844,7 @@ remove_bookmark_button_clicked_cb (GtkButton *button,
 
 struct selection_check_closure {
   GtkFileChooserDefault *impl;
-  gboolean empty;
+  int num_selected;
   gboolean all_files;
   gboolean all_folders;
 };
@@ -1850,7 +1862,7 @@ selection_check_foreach_cb (GtkTreeModel *model,
   gboolean is_folder;
 
   closure = data;
-  closure->empty = FALSE;
+  closure->num_selected++;
 
   gtk_tree_model_sort_convert_iter_to_child_iter (closure->impl->sort_model, &child_iter, iter);
 
@@ -1864,52 +1876,71 @@ selection_check_foreach_cb (GtkTreeModel *model,
 /* Checks whether the selected items in the file list are all files or all folders */
 static void
 selection_check (GtkFileChooserDefault *impl,
-		 gboolean              *empty,
+		 int                   *num_selected,
 		 gboolean              *all_files,
 		 gboolean              *all_folders)
 {
   struct selection_check_closure closure;
   GtkTreeSelection *selection;
 
+  closure.impl = impl;
+  closure.num_selected = 0;
+  closure.all_files = TRUE;
+  closure.all_folders = TRUE;
+
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
+  gtk_tree_selection_selected_foreach (selection,
+				       selection_check_foreach_cb,
+				       &closure);
 
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
-      || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-    {
-      if (gtk_tree_selection_count_selected_rows (selection) == 0)
-	closure.empty = TRUE;
-      else
-	{
-	  closure.empty = FALSE;
-	  closure.all_files = FALSE;
-	  closure.all_folders = TRUE;
-	}
-    }
-  else
-    {
-      g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
-		|| impl->action == GTK_FILE_CHOOSER_ACTION_SAVE);
+  g_assert (closure.num_selected == 0 || !(closure.all_files && closure.all_folders));
 
-      closure.impl = impl;
-      closure.empty = TRUE;
-      closure.all_files = TRUE;
-      closure.all_folders = TRUE;
-
-      gtk_tree_selection_selected_foreach (selection,
-					   selection_check_foreach_cb,
-					   &closure);
-    }
-
-  g_assert (closure.empty || !(closure.all_files && closure.all_folders));
-
-  if (empty)
-    *empty = closure.empty;
+  if (num_selected)
+    *num_selected = closure.num_selected;
 
   if (all_files)
     *all_files = closure.all_files;
 
   if (all_folders)
     *all_folders = closure.all_folders;
+}
+
+struct get_selected_path_closure {
+  GtkFileChooserDefault *impl;
+  const GtkFilePath *path;
+};
+
+static void
+get_selected_path_foreach_cb (GtkTreeModel *model,
+			      GtkTreePath  *path,
+			      GtkTreeIter  *iter,
+			      gpointer      data)
+{
+  struct get_selected_path_closure *closure;
+  GtkTreeIter child_iter;
+
+  closure = data;
+
+  gtk_tree_model_sort_convert_iter_to_child_iter (closure->impl->sort_model, &child_iter, iter);
+  closure->path = _gtk_file_system_model_get_path (closure->impl->browse_files_model, &child_iter);
+}
+
+/* Returns a selected path from the file list */
+static const GtkFilePath *
+get_selected_path (GtkFileChooserDefault *impl)
+{
+  struct get_selected_path_closure closure;
+  GtkTreeSelection *selection;
+
+  closure.impl = impl;
+  closure.path = NULL;
+
+  selection =  gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
+  gtk_tree_selection_selected_foreach (selection,
+				       get_selected_path_foreach_cb,
+				       &closure);
+
+  return closure.path;
 }
 
 /* Sensitize the "add bookmark" button if all the selected items are folders, or
@@ -1919,24 +1950,29 @@ selection_check (GtkFileChooserDefault *impl,
 static void
 bookmarks_check_add_sensitivity (GtkFileChooserDefault *impl)
 {
+  int num_selected;
+  gboolean all_folders;
   gboolean active;
-  GtkTreeSelection *selection;
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
+  selection_check (impl, &num_selected, NULL, &all_folders);
 
-  if (gtk_tree_selection_count_selected_rows (selection) == 0)
+  if (num_selected == 0)
     active = (shortcut_find_position (impl, impl->current_folder) == -1);
-  else
+  else if (num_selected == 1)
     {
-      gboolean all_folders;
+      const GtkFilePath *path;
 
-      selection_check (impl, NULL, NULL, &all_folders);
-      active = (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-		impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER ||
-		all_folders);
+      path = get_selected_path (impl);
+      active = all_folders && (shortcut_find_position (impl, path) == -1);
     }
+  else
+    active = all_folders;
 
   gtk_widget_set_sensitive (impl->browse_shortcuts_add_button, active);
+
+  if (impl->browse_files_popup_menu_add_shortcut_item)
+    gtk_widget_set_sensitive (impl->browse_files_popup_menu_add_shortcut_item,
+			      (num_selected == 0) ? FALSE : active);
 }
 
 /* Sets the sensitivity of the "remove bookmark" button depending on whether a
@@ -2696,7 +2732,16 @@ popup_menu_detach_cb (GtkWidget *attach_widget,
   g_assert (GTK_IS_FILE_CHOOSER_DEFAULT (impl));
 
   impl->browse_files_popup_menu = NULL;
+  impl->browse_files_popup_menu_add_shortcut_item = NULL;
   impl->browse_files_popup_menu_hidden_files_item = NULL;
+}
+
+/* Callback used when the "Add to Shortcuts" menu item is activated */
+static void
+add_to_shortcuts_cb (GtkMenuItem           *item,
+		     GtkFileChooserDefault *impl)
+{
+  bookmarks_add_selected_folder (impl);
 }
 
 /* Callback used when the "Show Hidden Files" menu item is toggled */
@@ -2713,22 +2758,47 @@ show_hidden_toggled_cb (GtkCheckMenuItem      *item,
 static void
 file_list_build_popup_menu (GtkFileChooserDefault *impl)
 {
-  if (!impl->browse_files_popup_menu)
-    {
-      impl->browse_files_popup_menu = gtk_menu_new ();
-      gtk_menu_attach_to_widget (GTK_MENU (impl->browse_files_popup_menu),
-				 impl->browse_files_tree_view,
-				 popup_menu_detach_cb);
+  GtkWidget *item;
 
-      impl->browse_files_popup_menu_hidden_files_item =
-	gtk_check_menu_item_new_with_mnemonic (_("Show _Hidden Files"));
-      g_signal_connect (impl->browse_files_popup_menu_hidden_files_item, "toggled",
-			G_CALLBACK (show_hidden_toggled_cb), impl);
+  if (impl->browse_files_popup_menu)
+    return;
 
-      gtk_widget_show (impl->browse_files_popup_menu_hidden_files_item);
-      gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_files_popup_menu),
-			     impl->browse_files_popup_menu_hidden_files_item);
-    }
+  impl->browse_files_popup_menu = gtk_menu_new ();
+  gtk_menu_attach_to_widget (GTK_MENU (impl->browse_files_popup_menu),
+			     impl->browse_files_tree_view,
+			     popup_menu_detach_cb);
+
+  item = gtk_image_menu_item_new_with_mnemonic (_("_Add to Shortcuts"));
+  impl->browse_files_popup_menu_add_shortcut_item = item;
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
+				 gtk_image_new_from_stock (GTK_STOCK_ADD, GTK_ICON_SIZE_MENU));
+  gtk_widget_set_sensitive (item, FALSE);
+  g_signal_connect (item, "activate",
+		    G_CALLBACK (add_to_shortcuts_cb), impl);
+  gtk_widget_show (item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_files_popup_menu), item);
+
+  item = gtk_separator_menu_item_new ();
+  gtk_widget_show (item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_files_popup_menu), item);
+
+  item = gtk_check_menu_item_new_with_mnemonic (_("Show _Hidden Files"));
+  impl->browse_files_popup_menu_hidden_files_item = item;
+  g_signal_connect (item, "toggled",
+		    G_CALLBACK (show_hidden_toggled_cb), impl);
+  gtk_widget_show (item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_files_popup_menu), item);
+}
+
+/* Updates the popup menu for the file list, creating it if necessary */
+static void
+file_list_update_popup_menu (GtkFileChooserDefault *impl)
+{
+  file_list_build_popup_menu (impl);
+
+  /* The sensitivity of the Add to Shortcuts item is set in
+   * bookmarks_check_add_sensitivity()
+   */
 
   g_signal_handlers_block_by_func (impl->browse_files_popup_menu_hidden_files_item,
 				   G_CALLBACK (show_hidden_toggled_cb), impl);
@@ -2774,7 +2844,7 @@ static void
 file_list_popup_menu (GtkFileChooserDefault *impl,
 		      GdkEventButton        *event)
 {
-  file_list_build_popup_menu (impl);
+  file_list_update_popup_menu (impl);
   if (event)
     gtk_menu_popup (GTK_MENU (impl->browse_files_popup_menu),
 		    NULL, NULL, NULL, NULL,
