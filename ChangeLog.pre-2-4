@@ -1,3 +1,8 @@
+Thu Jan 31 18:46:10 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.c (gtk_tree_row_reference_free): unref the
+	model after the last use, not before.
+
 Thu Jan 31 14:50:16 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.default gtk/Makefile.am: Install a Default
