@@ -1,3 +1,10 @@
+Sat Oct 30 09:09:09 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkselection.c (gtk_target_list_remove): Use
+	g_list_remove_link, not g_list_remove.
+
+	[ From Geert Bevin <gbevin@thunderstorms.org> ]
+	
 Sun Oct 24 07:41:40 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkclist.c (real_undo_selection): commented out g_print()

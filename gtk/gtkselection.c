@@ -255,7 +255,7 @@ gtk_target_list_remove (GtkTargetList *list,
 	{
 	  g_free (pair);
 
-	  list->list = g_list_remove (list->list, tmp_list);
+	  list->list = g_list_remove_link (list->list, tmp_list);
 	  g_list_free_1 (tmp_list);
 
 	  return;
