@@ -6,6 +6,9 @@ Mon Nov 15 19:02:07 2004  Manish Singh  <yosh@gimp.org>
 
 2004-11-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkselection.c: Reduce the clipboard timeout from 300
+	seconds to 30 seconds.  (#155428, Billy Biggs)
+
 	* gtk/gtkimagemenuitem.c (gtk_image_menu_item_setting_changed): 
 	* gtk/gtkbutton.c (gtk_button_setting_changed): Really free the
 	list.  (#158422, Morten Welinder)

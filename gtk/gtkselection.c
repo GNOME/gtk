@@ -80,7 +80,7 @@
 #define GTK_SELECTION_MAX_SIZE(display) G_MAXINT
 #endif
 
-#define IDLE_ABORT_TIME 300
+#define IDLE_ABORT_TIME 30
 
 enum {
   INCR,
