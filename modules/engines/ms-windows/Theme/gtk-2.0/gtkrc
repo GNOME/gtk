@@ -7,9 +7,10 @@ style "msw-default"
   GtkWidget::interior_focus = 1
   GtkOptionMenu::indicator_size = { 9, 5 }
   GtkOptionMenu::indicator_spacing = { 7, 5, 2, 2 }
-  GtkToolbar::shadow-type = etched-in
-  GtkHandleBox::shadow-type = etched-in
+  GtkToolbar::shadow-type = none 
+  GtkHandleBox::shadow-type = none 
   GtkSpinButton::shadow-type = in
+  GtkComboBox::add-tearoffs = false
 
   GtkTreeView::allow-rules = 0
   GtkTreeView::expander_size = 11
