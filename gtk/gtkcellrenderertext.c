@@ -447,7 +447,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
 
   ADD_SET_PROP ("language_set", PROP_LANGUAGE_SET,
                 _("Language set"),
-                _("Whether this tag affects the language the text is renderer as"));
+                _("Whether this tag affects the language the text is rendered as"));
 
   text_cell_renderer_signals [EDITED] =
     g_signal_new ("edited",

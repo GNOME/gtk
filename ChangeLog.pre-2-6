@@ -1,3 +1,9 @@
+Sun Dec 21 00:39:50 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_class_init): 
+	Fix the "language_set" blurb.  (#129720, Christian Rose)
+	
+
 Sat Dec 20 22:06:03 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): do not invalidate
