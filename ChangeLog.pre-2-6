@@ -1,5 +1,10 @@
 2004-11-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilefilter.c (gtk_file_filter_filter): Use 
+	xdg_mime_mime_type_subclass() to match mime types. This
+	also gives use wildcard matching. (#143760, #141224, 
+	Tommi Komulainen, David A Knight)
+
 	* gtk/gtkaction.c (_gtk_action_sync_menu_visible): Use 
 	gtk_widget_{hide,show} instead of g_object_set (..."visible"...).
 

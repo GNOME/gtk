@@ -1,5 +1,8 @@
 2004-11-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* xdgmime.c (xdg_mime_mime_type_subclass): Enable matching
+	of supertypes as text/*.
+
 	* Sync from upstream
 
 2004-10-27  Matthias Clasen  <mclasen@redhat.com>

@@ -573,7 +573,7 @@ xdg_mime_media_type_equal (const char *mime_a,
   return 0;
 }
 
-#if 0
+#if 1
 static int
 xdg_mime_is_super_type (const char *mime)
 {
@@ -605,7 +605,10 @@ xdg_mime_mime_type_subclass (const char *mime,
   if (strcmp (umime, ubase) == 0)
     return 1;
 
-#if 0  
+  /* We really want to handle text/* in GtkFileFilter, so we just
+   * turn on the supertype matching
+   */
+#if 1
   /* Handle supertypes */
   if (xdg_mime_is_super_type (ubase) &&
       xdg_mime_media_type_equal (umime, ubase))
