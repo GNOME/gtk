@@ -1,3 +1,8 @@
+Tue Aug 11 00:35:56 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkgc.c gdk/gdktypes.h: Applied gtk-pedersen-980727-0; 
+	  added all logical operations to gc->function.
+
 Sun Aug  9 23:31:59 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c (adjust_scrollbars): Fix for resize bug. Call

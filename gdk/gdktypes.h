@@ -217,12 +217,37 @@ typedef enum
  *   Copy: Overwrites destination pixels with the source pixels.
  *   Invert: Inverts the destination pixels.
  *   Xor: Xor's the destination pixels with the source pixels.
+ *   Clear: set pixels to 0
+ *   And: source AND destination
+ *   And Reverse: source AND (NOT destination)
+ *   And Invert: (NOT source) AND destination
+ *   Noop: destination
+ *   Or: source OR destination
+ *   Nor: (NOT source) AND (NOT destination)
+ *   Equiv: (NOT source) XOR destination
+ *   Xor Reverse: source OR (NOT destination)
+ *   Copy Inverted: NOT source
+ *   Xor Inverted: (NOT source) OR destination
+ *   Nand: (NOT source) OR (NOT destination)
+ *   Set: set pixels to 1
  */
 typedef enum
 {
   GDK_COPY,
   GDK_INVERT,
-  GDK_XOR
+  GDK_XOR,
+  GDK_CLEAR,
+  GDK_AND,
+  GDK_AND_REVERSE,
+  GDK_AND_INVERT,
+  GDK_NOOP,
+  GDK_OR,
+  GDK_EQUIV,
+  GDK_OR_REVERSE,
+  GDK_COPY_INVERT,
+  GDK_OR_INVERT,
+  GDK_NAND,
+  GDK_SET
 } GdkFunction;
 
 /* GC fill types.
