@@ -1,3 +1,13 @@
+Fri Jun 14 15:09:11 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_adjustments):
+	disconnect_by_func instead of disconnect_by_data.  Someone else
+	could use the same data as us.
+
+	* gtk/gtktreeview.c (do_validate_rows): update the adjustment
+	immediately after we update the size.  Fixes some scroll_to bugs.
+	(validate_visible_area): ditto
+
 Fri Jun 14 10:31:59 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (gdk_check_wm_state_changed): 

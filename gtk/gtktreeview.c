@@ -3987,6 +3987,19 @@ validate_visible_area (GtkTreeView *tree_view)
       modify_dy = TRUE;
     }
 
+  if (size_changed)
+    {
+      GtkRequisition requisition;
+      /* We temporarily guess a size, under the assumption that it will be the
+       * same when we get our next size_allocate.  If we don't do this, we'll be
+       * in an inconsistent state if we call top_row_to_dy. */
+      tree_view->priv->hadjustment->upper = MAX (tree_view->priv->hadjustment->upper, (gfloat)requisition.width);
+      tree_view->priv->vadjustment->upper = MAX (tree_view->priv->vadjustment->upper, (gfloat)requisition.height);
+      gtk_adjustment_changed (tree_view->priv->hadjustment);
+      gtk_adjustment_changed (tree_view->priv->vadjustment);
+      gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+    }
+
   /* if we walk backwards at all, then we need to reset our dy. */
   if (modify_dy)
     {
@@ -4016,8 +4029,6 @@ validate_visible_area (GtkTreeView *tree_view)
     {
       tree_view->priv->scroll_to_column = NULL;
     }
-  if (size_changed)
-    gtk_widget_queue_resize (GTK_WIDGET (tree_view));
   if (need_redraw)
     gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 }
@@ -4136,14 +4147,26 @@ do_validate_rows (GtkTreeView *tree_view)
    }
   
  done:
+  if (validated_area)
+    {
+      GtkRequisition requisition;
+      /* We temporarily guess a size, under the assumption that it will be the
+       * same when we get our next size_allocate.  If we don't do this, we'll be
+       * in an inconsistent state when we call top_row_to_dy. */
+      gtk_widget_size_request (GTK_WIDGET (tree_view), &requisition);
+      tree_view->priv->hadjustment->upper = MAX (tree_view->priv->hadjustment->upper, (gfloat)requisition.width);
+      tree_view->priv->vadjustment->upper = MAX (tree_view->priv->vadjustment->upper, (gfloat)requisition.height);
+      gtk_adjustment_changed (tree_view->priv->hadjustment);
+      gtk_adjustment_changed (tree_view->priv->vadjustment);
+      gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+    }
+
   if (gtk_tree_row_reference_valid (tree_view->priv->top_row))
     gtk_tree_view_top_row_to_dy (tree_view);
   else
     gtk_tree_view_dy_to_top_row (tree_view);
 
   if (path) gtk_tree_path_free (path);
-  if (validated_area)
-    gtk_widget_queue_resize (GTK_WIDGET (tree_view));
   if (! retval)
     tree_view->priv->validate_rows_timer = 0;
 
@@ -4311,8 +4334,9 @@ gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view)
   tree_view->priv->dy = _gtk_rbtree_node_find_offset (tree, node);
   tree_view->priv->dy += tree_view->priv->top_row_dy;
   gtk_adjustment_set_value (tree_view->priv->vadjustment,
-			    tree_view->priv->dy);
+			    (gdouble)tree_view->priv->dy);
 }
+
 
 void
 _gtk_tree_view_install_mark_rows_col_dirty (GtkTreeView *tree_view)
@@ -5622,13 +5646,13 @@ gtk_tree_view_set_adjustments (GtkTreeView   *tree_view,
 
   if (tree_view->priv->hadjustment && (tree_view->priv->hadjustment != hadj))
     {
-      gtk_signal_disconnect_by_data (GTK_OBJECT (tree_view->priv->hadjustment), tree_view);
+      gtk_signal_disconnect_by_func (GTK_OBJECT (tree_view->priv->hadjustment), (GtkSignalFunc) gtk_tree_view_adjustment_changed, tree_view);
       gtk_object_unref (GTK_OBJECT (tree_view->priv->hadjustment));
     }
 
   if (tree_view->priv->vadjustment && (tree_view->priv->vadjustment != vadj))
     {
-      gtk_signal_disconnect_by_data (GTK_OBJECT (tree_view->priv->vadjustment), tree_view);
+      gtk_signal_disconnect_by_func (GTK_OBJECT (tree_view->priv->vadjustment), (GtkSignalFunc) gtk_tree_view_adjustment_changed, tree_view);
       gtk_object_unref (GTK_OBJECT (tree_view->priv->vadjustment));
     }
 
@@ -7589,6 +7613,7 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
       gtk_tree_view_dy_to_top_row (tree_view);
       gdk_window_process_updates (tree_view->priv->bin_window, TRUE);
       gdk_window_process_updates (tree_view->priv->header_window, TRUE);
+
     }
 }
 
