@@ -138,7 +138,6 @@ struct _GtkFileChooserDefault
 
   GtkFilePath *current_volume_path;
   GtkFilePath *current_folder;
-  GtkFilePath *lowest_folder;
   GtkFilePath *preview_path;
   char *preview_display_name;
 

@@ -1,3 +1,9 @@
+2004-03-15  Mark McLoughlin  <mark@skynet.ie>
+
+	* gtk/gtkfilechooserdefault.c: remove the unused "lowest_folder"
+	GtkFileChooserDefault member. Leftover from my original patch
+	for bug #136987.
+
 Mon Mar 15 01:50:28 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtkfilechooserentry.c: Rewritten to use the GtkEntryCompletion
