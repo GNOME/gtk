@@ -1,5 +1,10 @@
 2001-06-05  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextiter.c (gtk_text_iter_order): rename from 
+	gtk_text_iter_reorder
+
+2001-06-05  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktoolbar.c (gtk_toolbar_remove_space): new function
 
 2001-06-05  Havoc Pennington  <hp@redhat.com>
