@@ -1,3 +1,10 @@
+Wed Jan 26 21:17:03 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_position):
+	  Use the requisition, not the allocation, since the
+	  allocation has not necessarily been computed yet.
+	  (Pointed out by Eugene Osintsev)
+
 Wed Jan 26 19:44:25 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstyle.c (gtk_style_new): Dont' set

@@ -616,6 +616,7 @@ gtk_option_menu_position (GtkMenu  *menu,
   GtkOptionMenu *option_menu;
   GtkWidget *active;
   GtkWidget *child;
+  GtkRequisition requisition;
   GList *children;
   gint shift_menu;
   gint screen_width;
@@ -630,8 +631,9 @@ gtk_option_menu_position (GtkMenu  *menu,
 
   option_menu = GTK_OPTION_MENU (user_data);
 
-  width = GTK_WIDGET (menu)->allocation.width;
-  height = GTK_WIDGET (menu)->allocation.height;
+  gtk_widget_get_child_requisition (GTK_WIDGET (menu), &requisition);
+  width = requisition.width;
+  height = requisition.height;
 
   active = gtk_menu_get_active (GTK_MENU (option_menu->menu));
   children = GTK_MENU_SHELL (option_menu->menu)->children;
@@ -640,7 +642,10 @@ gtk_option_menu_position (GtkMenu  *menu,
   menu_ypos += GTK_WIDGET (option_menu)->allocation.height / 2 - 2;
 
   if (active != NULL)
-    menu_ypos -= active->requisition.height / 2;
+    {
+      gtk_widget_get_child_requisition (active, &requisition);
+      menu_ypos -= requisition.height / 2;
+    }
 
   while (children)
     {
@@ -650,7 +655,10 @@ gtk_option_menu_position (GtkMenu  *menu,
 	break;
 
       if (GTK_WIDGET_VISIBLE (child))
-	menu_ypos -= child->allocation.height;
+	{
+	  gtk_widget_get_child_requisition (child, &requisition);
+	  menu_ypos -= requisition.height;
+	}
 
       children = children->next;
     }
