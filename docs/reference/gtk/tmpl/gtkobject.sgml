@@ -2,526 +2,916 @@
 GtkObject
 
 <!-- ##### SECTION Short_Description ##### -->
-
+The base class of the Gtk type hierarchy.
 
 <!-- ##### SECTION Long_Description ##### -->
+<refsect2>
+<title>Description</title>
 <para>
-
+GtkObject is the root of the gtk+ type hierarchy.  It serves
+a similar roles as java's Object class.  It is used 
+by the type-casting system to represent the base composite type.
 </para>
+<para>
+Objects have <wordasword>arguments</wordasword> that are
+name/typed-value pairs.  
+They may be readable or writable (or both or neither).
+The special handlers in every object are responsible for
+setting and getting these parameters.
+If the handler for a given argument <emphasis>must</emphasis>
+be called before the object may be used, be sure the
+#GTK_ARG_CONSTRUCT or #GTK_ARG_CONSTRUCT_ONLY flags
+are set;  otherwise they are set only when the user does so.
+</para>
+<para>
+Object also store a simpler association table, sometimes
+called the object_data.  This is just an efficient mapping from
+a fixed set of strings to a gpointer.  This can be used as
+arbitrary extra members.  Notice that each new field name
+allocates a new quark, so it is probably best only to use
+this for fields with fixed names.
+</para>
+<para>
+The primary difference between object_data and arguments is that
+the object defines two functions which set and get each type of argument.
+The object just has a table to store its object data in:  it does not
+receive notice when data changes.
+</para>
+<para>
+Objects are reference counted;  this means that we maintain
+a count of how many references (usually in the form of a pointer)
+are being held to this object.
+To indicate that you reference an object, call gtk_object_ref().
+The object will not be freed until everyone calls 
+gtk_object_unref().
+</para>
+<para>
+In order to reduce the chances of a memory leak, gtk+ defines
+"floating objects".  All objects created with gtk_object_new()
+start out floating with a reference count of 1.
+In order to reduce that initial reference count you should gtk_object_sink()
+them, but usually the parent widget you add the child to will
+sink the object.  
+</para>
+<para>So, because gtk_widget_set_parent() sinks the object from
+gtk_container_add(), there are no memory leaks in this code:
+<informalexample>
+<programlisting>
+	button = gtk_button_new_with_label("Hi Mom!");
+	gtk_container_add(GTK_CONTAINER(window), button);
+	/* Button may not be used anymore since we don't retain a reference
+	 * to it. */
+</programlisting>
+</informalexample>
+Likewise, the following code attaches the same adjustment to two
+ranges:
+<informalexample>
+<programlisting>
+	adjustment = (GtkAdjustment*) gtk_adjustment_new(0,10,0,0,0,0);
+	gtk_range_set_adjustment(range1, adjustment);
+	gtk_range_set_adjustment(range2, adjustment);
+</programlisting>
+</informalexample>
+Note that we could put as many set_adjustments as we like:  cleanup is easy
+because they all retain a reference but only one sinks the initial reference
+count.  If it is possible for "range1" to stop retaining its reference
+then we need to enclose the lines using "adjustment" with ref/unref
+to guarantee the the object won't be deleted:
+<informalexample>
+<programlisting>
+	adjustment = (GtkAdjustment*) gtk_adjustment_new(0,10,0,0,0,0);
+	gtk_object_ref(GTK_OBJECT(adjustment));
+	gtk_range_set_adjustment(range1, adjustment);
+	gtk_range_set_adjustment(range1, another_adjustment);
+	/* With the initial reference, `adjustment' would have
+	 * been deleted as `range1' lost its reference to it. */
+	gtk_range_set_adjustment(range2, adjustment);
+	gtk_object_unref(GTK_OBJECT(adjustment));
+</programlisting>
+</informalexample>
+</para>
+<para>
+Be careful with reference counting:  if two objects reference eachother
+then they will always have at least reference count 1, even if
+there are no other pointers to them.  This means that they
+will never be freed.  More precisely, you must be certain that
+your references <emphasis>never</emphasis> can form cycles.
+</para>
+<para>
+If you find yourself forming cyclic references, perhaps you
+can convert some of them to <wordasword>weak-references</wordasword>.
+A weak-reference is one that holds a pointer to an object,
+but doesn't increase the reference count.  To insure
+the object is valid when the referer tries to use it,
+the referer registers a callback that will be invoked
+after the object has been destroyed (but before its memory is actually
+deallocated).  This callback must prevent the weak-reference from
+being used again.
+</para>
+</refsect2>
+<refsect2>
+<title>Brief Glossary</title>
+<variablelist>
+
+<varlistentry>
+<term>argument</term>
+<listitem><para>
+A typed-variable identified by ObjectType::argument_name.  It may be
+readable, writable, both or none.  For example,
+"GtkButton::label" is a read/write string-valued argument.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>constructed</term>
+<listitem><para>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>destroyed</term>
+<listitem><para>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>finalization</term>
+<listitem><para>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>floating</term>
+<listitem><para>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>object data</term>
+<listitem><para>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>reference count</term>
+<listitem><para>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>weak-reference</term>
+<listitem><para>
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+</refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+GtkType, GtkArg, gtk-signals.
 </para>
 
 <!-- ##### STRUCT GtkObject ##### -->
 <para>
-
+The object itself.  You should never use these members directly-
+instead you the accessing macros.
 </para>
 
+@klass: a pointer to the GtkObjectClass (or deriver) which contains 
+the methods defined by this object.
+@flags: the state of the object: whether it has been constructed
+or destroyed, for example.
+@ref_count: a reference count.  It is incremented when new
+pointers to this object are made, and decremented when the
+pointers are deleted.  When the reference count
+returns to 0, the object is deleted.  By default, objects
+have reference count 0 when created.
+@object_data: 
 
 <!-- ##### MACRO GTK_OBJECT_TYPE ##### -->
 <para>
-
+Get the type of an object.
 </para>
 
-@obj: 
+@obj: the object whose type we wish to get.
 
 
 <!-- ##### MACRO GTK_OBJECT_SIGNALS ##### -->
 <para>
-
+Get the array of signals defined for this object.
 </para>
 
-@obj: 
+@obj: the object to fetch the signals from.
 
 
 <!-- ##### MACRO GTK_OBJECT_NSIGNALS ##### -->
 <para>
-
+Get the number of signals defined by this object.
 </para>
 
-@obj: 
+@obj: the object to query.
 
 
 <!-- ##### ENUM GtkObjectFlags ##### -->
 <para>
-
+Tells about the state of the object.
 </para>
 
-@GTK_DESTROYED: 
-@GTK_FLOATING: 
-@GTK_CONNECTED: 
-@GTK_CONSTRUCTED: 
+@GTK_DESTROYED: the GtkObject has had gtk_object_destroyed() invoked on it
+and is processing the shutdown callback.
+@GTK_FLOATING: whether the object is orphaned.  Objects that take
+strong hold of an object may gtk_object_sink() it, after obtaining
+there own references, if they believe they are nearly primary
+ownership of the object.
+GTK_CONNECTED: refers to whether are signals are connected to this
+object.
+@GTK_CONSTRUCTED: refers to whether the arguments for this object are
+ready.
 
 <!-- ##### MACRO GTK_OBJECT_FLAGS ##### -->
 <para>
-
+Get the #GtkObjectFlags for an object without directly
+accessing its members.
 </para>
 
-@obj: 
+@obj: the object whose flags are returned.
 
 
 <!-- ##### MACRO GTK_OBJECT_DESTROYED ##### -->
 <para>
-
+Test whether a GtkObject has had gtk_object_destroyed() invoked on it.
 </para>
 
-@obj: 
+@obj: the object to examine.
 
 
 <!-- ##### MACRO GTK_OBJECT_FLOATING ##### -->
 <para>
-
+When an object is created, it has an initial reference count
+of 1 and is floating.  <wordasword>Sinking</wordasword> the object 
+refers to decrementing that original reference count.
 </para>
 
-@obj: 
+@obj: the object to examine.
 
 
 <!-- ##### MACRO GTK_OBJECT_CONNECTED ##### -->
 <para>
-
+Test whether a GtkObject has had a signal connected to it.
 </para>
 
-@obj: 
+@obj: the object to examine.
 
 
 <!-- ##### MACRO GTK_OBJECT_CONSTRUCTED ##### -->
 <para>
-
+Test whether a GtkObject's arguments have been prepared.
 </para>
 
-@obj: 
+@obj: the object to examine.
 
 
 <!-- ##### MACRO GTK_OBJECT_SET_FLAGS ##### -->
 <para>
-
+Turn on certain object flags.  (Private)
 </para>
 
-@obj: 
-@flag: 
+@obj: the object to affect.
+@flag: the flags to set.
 
 
 <!-- ##### MACRO GTK_OBJECT_UNSET_FLAGS ##### -->
 <para>
-
+Turn off certain object flags.  (Private)
 </para>
 
-@obj: 
-@flag: 
+@obj: the object to affect.
+@flag: the flags to unset.
 
 
 <!-- ##### ENUM GtkArgFlags ##### -->
 <para>
-
+Possible flags indicating how an argument should be treated.
 </para>
 
-@GTK_ARG_READABLE: 
-@GTK_ARG_WRITABLE: 
-@GTK_ARG_CONSTRUCT: 
-@GTK_ARG_CONSTRUCT_ONLY: 
-@GTK_ARG_CHILD_ARG: 
-@GTK_ARG_MASK: 
-@GTK_ARG_READWRITE: 
+@GTK_ARG_READABLE: the argument is readable. (i.e. can be queried)
+@GTK_ARG_WRITABLE: the argument is writable. (i.e. settable)
+@GTK_ARG_CONSTRUCT: the argument needs construction.
+@GTK_ARG_CONSTRUCT_ONLY: the argument needs construction (and will
+be set once during object creation), but is otherwise cannot be
+set.  Hence this flag is not allowed with #GTK_ARG_WRITABLE,
+and is redundant with #GTK_ARG_CONSTRUCT.
+@GTK_ARG_CHILD_ARG: an argument type that applies to (and may be different for)
+each child.  Used by #GtkContainer.
+@GTK_ARG_MASK: the bitwise-OR of all the flags.
+@GTK_ARG_READWRITE: the argument is readable and writable.
 
 <!-- ##### FUNCTION gtk_object_class_user_signal_new ##### -->
 <para>
-
+Define a signal-handler for a new signal on an already defined
+object.
+</para>
+<para>
+See the signal documentation for more general information.
 </para>
 
-@klass: 
-@name: 
-@signal_flags: 
-@marshaller: 
-@return_val: 
-@nparams: 
-@Varargs: 
-@Returns: 
+@klass: the object class to define the signal for.
+@name: the name of the signal.
+@signal_flags: the default emission behavior for the signal.
+See gtk_signal_new().
+@marshaller: a function that will take an array of GtkArgs
+and invoke the appropriate handler with the normal calling
+conventions.
+@return_val: specify the return-value type for the signal
+(or GTK_TYPE_NONE for no return-value).
+@nparams: specify the number of parameters the signal
+receives from the caller of gtk_signal_emit().
+@Varargs: list of nparams #GtkTypes to pass to the signal handlers.
+@Returns: the signal id.  (See #GtkSignals)
 
 
 <!-- ##### FUNCTION gtk_object_class_user_signal_newv ##### -->
 <para>
-
+Define a signal-handler for a new signal on an already defined
+object.
 </para>
 
-@klass: 
-@name: 
-@signal_flags: 
-@marshaller: 
-@return_val: 
-@nparams: 
-@params: 
-@Returns: 
+@klass: the object class to define the signal for.
+@name: the name of the signal.
+@signal_flags: the default emission behavior for the signal.
+See gtk_signal_new().
+@marshaller: takes a GtkObject, a #GtkSignalFunc, and an array
+of arguments, and invokes the function using the appropriate
+calling conventions.  Usually just select a function
+out of gtkmarshal.h.
+@return_val: specify the return-value type for the signal (possibly
+#GTK_TYPE_NONE).
+@nparams: specify the number of parameters the signal
+receives from the caller of gtk_signal_emit().
+@params: array of #GtkTypes the signal handlers for this signal
+should have in their prototype (of length nparams).
+@Returns: the signal id.  (See #GtkSignals)
 
 
 <!-- ##### FUNCTION gtk_object_new ##### -->
 <para>
-
+Construct an object given its arguments, enumerated in the call to the
+function.
 </para>
 
-@type: 
-@first_arg_name: 
-@Varargs: 
-@Returns: 
+@type: the type identifying this object.  Returned by gtk_type_unique()
+although (for a properly-written object it should be accessible through
+#GTK_TYPE_FOO.)
+@first_arg_name: name of the first argument to set when constructing
+the object.
+@Varargs: the first argument's value, followed by any number of
+name/argument-value pairs, terminated with NULL.
+@Returns: the new GtkObject.
 
 
 <!-- ##### FUNCTION gtk_object_newv ##### -->
 <para>
-
+Construct an object with an array of arguments.
 </para>
 
-@object_type: 
-@n_args: 
-@args: 
-@Returns: 
+@object_type: the type of the object to create.
+@n_args: the number of arguments to set.
+@args: an array of n_args arguments (which are name and value pairs).
+@Returns: the new GtkObject.
 
 
 <!-- ##### FUNCTION gtk_object_constructed ##### -->
 <para>
-
+Mark an allocated object as constructed.
+This is used for situations
+that require precise control of the construction process.
+</para>
+<para>
+This is done when gtk_object_default_construct() is inadequate.
+In #GtkCList the need arises because #GtkCList does construction work that
+must happen <emphasis>after</emphasis> its derivers.  This work
+cannot be done in an initializer function, so an alternate
+constructor is mandatory.  It calls gtk_object_constructed() to
+indicate it has done its job, so that no other constructor will
+be invoked.
+</para>
+<para>
+Normally this function is just automatically run from
+gtk_object_default_construct().
 </para>
 
-@object: 
+@object: object which has been constructed.  This is usually
+done automatically by gtk_object_new() and gtk_object_newv().
 
 
 <!-- ##### FUNCTION gtk_object_default_construct ##### -->
 <para>
-
+This function is called to construct arguments that haven't been initialized
+but have the #GTK_ARG_CONSTRUCT flag set.
+</para>
+<para>
+All number arguments are set to 0.  All pointers and strings
+are set to NULL.
+</para>
+<para>
+Normally invoked by gtk_object_new() automatically; gtk_type_new() can
+be used to bypass it.
 </para>
 
-@object: 
+@object: the object to initialize.
 
 
 <!-- ##### FUNCTION gtk_object_sink ##### -->
 <para>
-
+Decrement the initial count given to the object.
+Additional invocations have no effect.
+</para>
+<para>
+This is designed to free the user from worrying about
+dereferencing an object that they have just created.
+So long as the object is sunk at some point, the reference count
+will be set properly.
+</para>
+<para>
+furthermore it may be sunk multiple times.
+Only the first time will actually dereference.
+</para>
+<para>
+The basic outline is: when you create an object it is floating.
+Setting its parent causes it to be sunk, however its parent
+has obtained a reference, so its reference count is one.
 </para>
 
-@object: 
+@object: the object to sink.
 
 
 <!-- ##### FUNCTION gtk_object_ref ##### -->
 <para>
-
+Increase the reference count of the object.
 </para>
 
-@object: 
+@object: the object to reference.
 
 
 <!-- ##### FUNCTION gtk_object_unref ##### -->
 <para>
-
+Decrease the reference count of an object.  When its reference
+count drops to 0, the object is deleted.
+</para>
+<para>
+If it was not already destroyed, it will be, with gtk_object_destroy(),
+then weak links are notified, then the object-data is freed
+and the memory for the object itself is freed using gtk_type_free().
 </para>
 
-@object: 
+@object: the object to dereference.
 
 
 <!-- ##### FUNCTION gtk_object_weakref ##### -->
 <para>
-
+Adds a weak reference callback to an object.
+</para>
+<para>
+Weak references are a mechanism to safely keep a pointer to
+an object without using the reference counting
+mechansim.  They use a callback function to receive
+notice that the object is about to be freed (aka finalized).
+This happens <emphasis>after</emphasis> the destroy
+callback has been run.
 </para>
 
-@object: 
-@notify: 
-@data: 
+@object: object to weakly reference.
+@notify: callback to invoke before the object is freed.
+@data: extra data to pass to #notify.
 
 
 <!-- ##### FUNCTION gtk_object_weakunref ##### -->
 <para>
-
+Removes a weak reference callback to an object.
 </para>
 
-@object: 
-@notify: 
-@data: 
+@object: object stop weakly referencing.
+@notify: callback to search for.
+@data: data to search for.
 
 
 <!-- ##### FUNCTION gtk_object_destroy ##### -->
 <para>
-
+Calls the object's shutdown handler.
+</para>
+<para>
+The memory for the object itself won't be deleted until
+its reference count drops to 0, though.
+See gtk_object_unref().
 </para>
 
-@object: 
+@object: the object to destroy.
 
 
 <!-- ##### FUNCTION gtk_object_getv ##### -->
 <para>
-
+Gets an array of argument values from an object.
 </para>
 
-@object: 
-@n_args: 
-@args: 
+@object: the object to get arguments from.
+@n_args: the number of arguments to query.
+@args: the arguments to fill in.
 
 
 <!-- ##### FUNCTION gtk_object_set ##### -->
 <para>
-
+This function sets multiple arguments of an object.
+</para>
+<para>
+It takes an object, then a list of name/value pairs
+in a list, followed by NULL.
+</para>
+<para>
+<informalexample>
+<programlisting>
+void set_box_properties(GtkBox* box)
+{
+  gtk_object_set(GTK_OBJECT(box), "homogeneous", TRUE,
+                                  "spacing", 8,
+				  NULL);
+}
+</programlisting>
+</informalexample>
 </para>
 
-@object: 
-@first_arg_name: 
-@Varargs: 
 
+@object: the object whose arguments should be set.
+@first_arg_name: the name of the first argument to set.
+@Varargs: the value of the first argument, followed optionally
+by more name/value pairs, followed by NULL.
 
 <!-- ##### FUNCTION gtk_object_setv ##### -->
 <para>
-
+Set an array of arguments.
 </para>
 
-@object: 
-@n_args: 
-@args: 
+@object: the object whose arguments should be set.
+@n_args: the number of arguments to set.
+@args: the desired values, as an array of #GtkArgs (which contain 
+the names, types, and values of the arguments).
 
 
 <!-- ##### FUNCTION gtk_object_query_args ##### -->
 <para>
-
+Get all the arguments that may be used for a given type.
+</para>
+<para>
+In Java, this type of mechanism is called 
+<wordasword>introspection</wordasword>.  It is used by applications
+like Glade, that have to determine what can be done to an object
+at run-time.
 </para>
 
-@class_type: 
-@arg_flags: 
-@n_args: 
-@Returns: 
+@class_type: the GtkType of the ObjectClass
+(returned from GTK_OBJECT_CLASS(class)-&gt;type for example).
+@arg_flags: if non-NULL, obtains the #GtkArgFlags that apply to
+each argument.  You must g_free() this if you request it.
+@n_args: the number of arguments is returned in this field.
+@Returns: an array of arguments, that you must deallocate with g_free().
 
 
 <!-- ##### FUNCTION gtk_object_set_data ##### -->
 <para>
-
+Each object carries around a table of associations from
+strings to pointers.  This function lets you set an association.
+</para>
+<para>
+If the object already had an association with that name,
+the old association will be destroyed.
 </para>
 
-@object: 
-@key: 
-@data: 
+@object: object containing the associations.
+@key: name of the key.
+@data: data to associate with that key.
 
 
 <!-- ##### FUNCTION gtk_object_set_data_full ##### -->
 <para>
-
+Like gtk_object_set_data() except it adds notification
+for when the association is destroyed, either by
+gtk_object_remove_data() or when the object is destroyed.
 </para>
 
-@object: 
-@key: 
-@data: 
-@destroy: 
+@object: object containing the associations.
+@key: name of the key.
+@data: data to associate with that key.
+@destroy: function to call when the association is destroyed.
 
 
 <!-- ##### FUNCTION gtk_object_remove_data ##### -->
 <para>
-
+Remove a specified datum from the object's data associations (the object_data).
+Subsequent calls to gtk_object_get_data() will return NULL.
+</para>
+<para>
+If you specified a destroy handler with gtk_object_set_data_full(),
+it will be invoked.
 </para>
 
-@object: 
-@key: 
+
+@object: the object maintaining the association.
+@key: name of the key for that association.
 
 
 <!-- ##### FUNCTION gtk_object_get_data ##### -->
 <para>
-
+Get a named field from the object's table of associations (the object_data).
 </para>
 
-@object: 
-@key: 
-@Returns: 
+@object: the object maintaining the associations.
+@key: name of the key for that association.
+@Returns: the data if found, or NULL if no such data exists.
 
 
 <!-- ##### FUNCTION gtk_object_remove_no_notify ##### -->
 <para>
-
+Remove a specified datum from the object's data associations (the object_data),
+without invoking the association's destroy handler.
+</para>
+<para>
+Just like gtk_object_remove_data() except that any destroy handler
+will be ignored.
+Therefore this only affects data set using gtk_object_set_data_full().
 </para>
 
-@object: 
-@key: 
+@object: the object maintaining the association.
+@key: name of the key for that association.
 
 
 <!-- ##### FUNCTION gtk_object_set_user_data ##### -->
 <para>
-
+For convenience, every object offers a generic user data
+pointer.  The function set it.
+</para>
+<para>
+This function is equivalent to:
+<informalexample>
+<programlisting>
+	gtk_object_set_data(object, "user_data", data);
+</programlisting>
+</informalexample>
 </para>
 
-@object: 
-@data: 
+@object: the object whose user data should be set.
+@data: the new value for the user data.
 
 
 <!-- ##### FUNCTION gtk_object_get_user_data ##### -->
 <para>
-
+Get the object's user data pointer.
+</para>
+<para>
+This is intended to be a pointer for your convenience in
+writing applications.
 </para>
 
-@object: 
-@Returns: 
+@object: the object.
+@Returns: the user data field for object.
 
 
 <!-- ##### FUNCTION gtk_object_class_add_signals ##### -->
 <para>
-
+Add an array of signals to a #GtkObjectClass.
+Usually this is called when registering a new type of object.
 </para>
 
-@klass: 
-@signals: 
-@nsignals: 
+@klass: the object class to append signals to.
+@signals: the signals to append.
+@nsignals: the number of signals being appended.
 
 
 <!-- ##### FUNCTION gtk_object_add_arg_type ##### -->
 <para>
-
+Add a new type of argument to an object class.
+Usually this is called when registering a new type of object.
 </para>
 
-@arg_name: 
-@arg_type: 
-@arg_flags: 
-@arg_id: 
+@arg_name: fully qualify object name, for example GtkObject::user_data.
+@arg_type: type of the argument.
+@arg_flags: bitwise-OR of the #GtkArgFlags enum.  (Whether the argument is
+settable or gettable, whether it is set when the object is constructed.)
+@arg_id: an internal number, passed in from here to the "set_arg" and
+"get_arg" handlers of the object.
 
 
 <!-- ##### FUNCTION gtk_object_set_data_by_id ##### -->
 <para>
-
+Just like gtk_object_set_data() except that it takes
+a #GQuark instead of a string, so it is slightly faster.
+</para>
+<para>
+Use gtk_object_data_try_key() and gtk_object_data_force_id()
+to get an id from a string.
 </para>
 
-@object: 
-@data_id: 
-@data: 
+@object: object containing the associations.
+@data_id: quark of the key.
+@data: data to associate with that key.
 
 
 <!-- ##### FUNCTION gtk_object_set_data_by_id_full ##### -->
 <para>
-
+Just like gtk_object_set_data_full() except that it takes
+a #GQuark instead of a string, so it is slightly faster.
+</para>
+<para>
+Use gtk_object_data_try_key() and gtk_object_data_force_id()
+to get an id from a string.
 </para>
 
-@object: 
-@data_id: 
-@data: 
-@destroy: 
+@object: object containing the associations.
+@data_id: quark of the key.
+@data: data to associate with that key.
+@destroy: function to call when the association is destroyed.
 
 
 <!-- ##### FUNCTION gtk_object_get_data_by_id ##### -->
 <para>
-
+Just like gtk_object_get_data() except that it takes
+a #GQuark instead of a string, so it is slightly faster.
+</para>
+<para>
+Use gtk_object_data_try_key() and gtk_object_data_force_id()
+to get an id from a string.
 </para>
 
-@object: 
-@data_id: 
-@Returns: 
+@object: object containing the associations.
+@data_id: quark of the key.
+@Returns: the data if found, or NULL if no such data exists.
 
 
 <!-- ##### FUNCTION gtk_object_remove_data_by_id ##### -->
 <para>
-
+Just like gtk_object_remove_data() except that it takes
+a #GQuark instead of a string, so it is slightly faster.
+</para>
+<para>
+Remove a specified datum from the object's data associations.
+Subsequent calls to gtk_object_get_data() will return NULL.
+</para>
+<para>
+Use gtk_object_data_try_key() and gtk_object_data_force_id()
+to get an id from a string.
 </para>
 
-@object: 
-@data_id: 
+@object: object containing the associations.
+@data_id: quark of the key.
 
 
 <!-- ##### FUNCTION gtk_object_remove_no_notify_by_id ##### -->
 <para>
-
+Just like gtk_object_remove_no_notify() except that it takes
+a #GQuark instead of a string, so it is slightly faster.
+</para>
+<para>
+Use gtk_object_data_try_key() and gtk_object_data_force_id()
+to get an id from a string.
 </para>
 
-@object: 
-@key_id: 
+@object: object containing the associations.
+@data_id: quark of the key.
 
 
 <!-- ##### MACRO gtk_object_data_try_key ##### -->
 <para>
-
+Sees whether a certain quark exists.
+Returns that quark if so.
+</para>
+<para>
+Although this is currently the same as g_quark_try_string(),
+it might someday be different, for example, if GQuarks
+and object data are converted to separate mechanisms,
+so it is good to use this macro.
 </para>
 
 
 
 <!-- ##### MACRO gtk_object_data_force_id ##### -->
 <para>
-
+Makes a quark from a string, possibly allocating a new quark.
+</para>
+<para>
+Although this is currently the same as g_quark_from_string(),
+it might someday be different, for example, if GQuarks
+and object data are converted to separate mechanisms,
+so it is good to use this macro.
 </para>
 
 
 
 <!-- ##### FUNCTION gtk_object_arg_set ##### -->
 <para>
-
+Private function to set an argument and argument info to an object.
 </para>
 
-@object: 
-@arg: 
-@info: 
+@object: the object whose argument should be set.
+@arg: the argument.
+@info: infomation about this type of argument in general.
 
 
 <!-- ##### FUNCTION gtk_object_arg_get ##### -->
 <para>
-
+Private function to get an argument and argument info from an object.
 </para>
 
-@object: 
-@arg: 
-@info: 
+@object: the object whose argument should be retrieved.
+@arg: the argument, for the name on input, the rest is filled on output.
+@info: a #GtkArgInfo structure to optionally fill in.
 
 
 <!-- ##### FUNCTION gtk_object_args_collect ##### -->
 <para>
-
+Private: Gets an array of #GtkArgs from a va_list C structure.
 </para>
+<para>
 
-@object_type: 
-@arg_list_p: 
-@info_list_p: 
-@first_arg_name: 
-@var_args: 
-@Returns: 
+@object_type: the type of object to collect arguments for.
+@arg_list_p: pointer to be filled in with a list of parsed arguments.
+@info_list_p: optional pointer for a returned list #GtkArgInfos.
+@first_arg_name: name of first argument.
+@var_args: value of first argument, followed by more key/value pairs,
+terminated by NULL.
+@Returns: an error message, or NULL on success.
+It is the caller's responsibility to call g_free() in the event of error.
 
 
 <!-- ##### FUNCTION gtk_object_arg_get_info ##### -->
 <para>
-
+Query information about an argument type.
 </para>
 
-@object_type: 
-@arg_name: 
-@info_p: 
-@Returns: 
+@object_type: type of object to query about.
+@arg_name: name of the argument.
+@info_p: pointer to be filled in with a pointer to the GtkArgInfo.
+@Returns: an error message, or NULL on success.
+It is the caller's responsibility to call g_free() in the event of error.
 
 
 <!-- ##### FUNCTION gtk_trace_referencing ##### -->
 <para>
-
+Private: print debugging information while doing a gtk_object_ref() or 
+a gtk_object_unref().
 </para>
 
-@object: 
-@func: 
-@dummy: 
-@line: 
-@do_ref: 
+@object: object to reference or unreference.
+@func: name of caller's function to print (used within macros).
+@dummy: unused.
+@line: line number (used within macros).
+@do_ref: whether to reference or unreference.
 
 
 <!-- ##### SIGNAL GtkObject::destroy ##### -->
 <para>
-
+Indicates that an object is being destroyed.
 </para>
 
 @object: the object which received the signal.
 
 <!-- ##### ARG GtkObject:user_data ##### -->
 <para>
-
+A pointer for convenience when programming applications.
 </para>
 
 <!-- ##### ARG GtkObject:signal ##### -->
 <para>
-
+Setting this with a GtkType of GTK_TYPE_SIGNAL connects
+the signal to the object.
 </para>
 
 <!-- ##### ARG GtkObject:signal_after ##### -->
 <para>
-
+Setting this with a GtkType of GTK_TYPE_SIGNAL connects
+the signal to the object, so that the signal is always run
+after other user handlers and the default handler.
 </para>
 
 <!-- ##### ARG GtkObject:object_signal ##### -->
 <para>
-
+Setting this with a GtkType of GTK_TYPE_SIGNAL connects
+the signal to the object, so that the user data and objects
+and swapped when the signal handler is invoked.
+</para>
+<para>
+This is useful for handlers that are primarily notifying
+other objects and could just invoke an already existing function
+if the parameters were swapped.
+See gtk_signal_connect_object() for more details.
 </para>
 
 <!-- ##### ARG GtkObject:object_signal_after ##### -->
 <para>
-
+Setting this with a GtkType of GTK_TYPE_SIGNAL connects
+the signal to the object, so that the user data and objects
+and swapped when the signal handler is invoked,
+and so that the handler is invoked after all others.
+</para>
+<para>
+See gtk_signal_connect_object_after() for more details.
 </para>
 

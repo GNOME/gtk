@@ -1,3 +1,36 @@
+1999-11-16  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gtk/tmpl/gtkmenubar.sgml: fixed minor error - using <em>.
+
+	* gtk/tmpl/gtknotebook.sgml: 
+	* gtk/tmpl/gtklist.sgml: new sections from
+	Nicolas George <george@clipper.ens.fr>, with help from
+	"Bob Springett"	<bobspringett@claranet.fr>.
+
+	* gtk/tmpl/gtkobject.sgml: 
+	* gtk/tmpl/gtkarg.sgml: new sections from
+	David Benson <daveb@idealab.com>.
+
+	* gtk/tmpl/gtkvbox.sgml: 
+	* gtk/tmpl/gtkhbox.sgml: fixed line endings.
+
+	* gtk/tmpl/gtkvbbox.sgml: update from Lee Mallabone
+	<lee0@callnetuk.com>
+
+	* gdk/tmpl/drawing.sgml: fixed error in gdk_draw_arc() @angle2 param
+	- it is relative to @angle1 rather than from the 3 o'clock position.
+
+	* gtk/tmpl/gtkfontseldlg.sgml: changed enums to use @ fields.
+
+	* gtk/tmpl/gtkcolorsel.sgml: 
+	* gtk/tmpl/gtkcolorseldlg.sgml: 
+	* gtk/tmpl/gtkprogress.sgml: 
+	* gtk/tmpl/gtkprogressbar.sgml: new sections from Tom Martone
+	<tom@martoneconsulting.com>
+
+	* gtk/tmpl/gtkclist.sgml: partially written documentation from
+	Paul Schifferer <isengard@geocities.com> who won't be able to finish it
+
 1999-09-22  Martin Norbäck  <d95mback@dtek.chalmers.se>
 	
 	* gtk/tmpl/gtkclist.sgml: Added information about the sorting functions

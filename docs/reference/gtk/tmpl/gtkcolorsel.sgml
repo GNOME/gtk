@@ -2,11 +2,15 @@
 GtkColorSelection
 
 <!-- ##### SECTION Short_Description ##### -->
-
+a widget used to select a color.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+The #GtkColorSelection is a widget that is used to select 
+a color.  It consists of a color wheel and number of sliders
+and entry boxes for color parameters such as hue, saturation,
+value, red, green, blue, and opacity.  It is found on the standard 
+color selection dialog box #GtkColorSelectionDialog.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -16,57 +20,86 @@ GtkColorSelection
 
 <!-- ##### STRUCT GtkColorSelection ##### -->
 <para>
-
+The #GtkColorSelection-struct struct contains private data only, 
+and should be accessed using the functions below.
 </para>
 
 
 <!-- ##### FUNCTION gtk_color_selection_new ##### -->
 <para>
-
+Create a new #GtkColorSelection.
 </para>
 
-@Returns: 
+@Returns: a #GtkColorSelection.
 
 
 <!-- ##### FUNCTION gtk_color_selection_set_update_policy ##### -->
 <para>
-
+Sets the policy controlling when the color_changed signals are emitted.
+The available policies are:
+<itemizedlist>
+<listitem>
+<para>
+%GTK_UPDATE_CONTINUOUS - signals are sent continuously as the color
+selection changes.
+</para>
+<listitem>
+<para>
+%GTK_UPDATE_DISCONTINUOUS - signals are sent only when the mouse 
+button is released.
+</para>
+<listitem>
+<para>
+%GTK_UPDATE_DELAYED - signals are sent when the mouse button is
+released or when the mouse has been motionless for a period of
+time.
+</para>
+</itemizedlist>
 </para>
 
-@colorsel: 
-@policy: 
+@colorsel: a #GtkColorSelection.
+@policy: a #GtkUpdateType value indicating the desired policy.
 
 
 <!-- ##### FUNCTION gtk_color_selection_set_opacity ##### -->
 <para>
-
+Controls whether opacity can be set with the #GtkColorSelection.
+If this functionality is enabled, the necessary additional widgets
+are added to the #GtkColorSelection and the opacity value can be
+retrieved via the fourth value in the color array returned by
+the gtk_color_selection_get_color() function.
 </para>
 
-@colorsel: 
-@use_opacity: 
+@colorsel: a #GtkColorSelection.
+@use_opacity: a boolean indicating whether the opacity selection
+is enabled.
 
 
 <!-- ##### FUNCTION gtk_color_selection_set_color ##### -->
 <para>
-
+Sets the color in the #GtkColorSelection.  The widgets are updated
+to reflect the new color.
 </para>
 
-@colorsel: 
-@color: 
+@colorsel: a #GtkColorSelection.
+@color: a color array consisting of 4 gfloat values for red, green,
+blue, and opacity.
 
 
 <!-- ##### FUNCTION gtk_color_selection_get_color ##### -->
 <para>
-
+Retrieve the currently selected color value.
 </para>
 
-@colorsel: 
-@color: 
+@colorsel: a #GtkColorSelection
+@color: a color array consisting of 4 gfloat values for red, green,
+blue, and opacity.
 
 
 <!-- ##### SIGNAL GtkColorSelection::color-changed ##### -->
 <para>
-
+This signal is emitted when the color changes in the #GtkColorSelection
+according to its update policy.
 </para>
 
 @colorselection: the object which received the signal.

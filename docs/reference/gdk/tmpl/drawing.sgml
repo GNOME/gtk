@@ -160,7 +160,7 @@ the ellipse to be drawn.
 @height: the height of the bounding rectangle.
 @angle1: the start angle of the arc, relative to the 3 o'clock position,
 counter-clockwise, in 1/64ths of a degree.
-@angle2: the end angle of the arc, in the same units as @angle1.
+@angle2: the end angle of the arc, relative to @angle1, in 1/64ths of a degree.
 
 
 <!-- ##### FUNCTION gdk_draw_polygon ##### -->

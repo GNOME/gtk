@@ -158,63 +158,21 @@ will be shown, or NULL to show all charsets.
 A set of bit flags used to specify the type of fonts shown
 when calling gtk_font_selection_dialog_set_filter() or
 gtk_font_selection_set_filter().
-
-<informaltable pgwide=1 frame="none" role="enum">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
-<tbody>
-
-<row>
-<entry>GTK_FONT_BITMAP</entry>
-<entry>bitmap fonts.</entry>
-</row>
-
-<row>
-<entry>GTK_FONT_SCALABLE</entry>
-<entry>scalable fonts.</entry>
-</row>
-
-<row>
-<entry>GTK_FONT_SCALED_BITMAP</entry>
-<entry>scaled bitmap fonts.</entry>
-</row>
-
-<row>
-<entry>GTK_FONT_ALL</entry>
-<entry>a bitwise combination of all of the above.</entry>
-</row>
-
-</tbody></tgroup></informaltable>
 </para>
 
-@GTK_FONT_BITMAP: 
-@GTK_FONT_SCALABLE: 
-@GTK_FONT_SCALABLE_BITMAP: 
-@GTK_FONT_ALL: 
+@GTK_FONT_BITMAP: bitmap fonts.
+@GTK_FONT_SCALABLE: scalable fonts.
+@GTK_FONT_SCALABLE_BITMAP: scaled bitmap fonts.
+@GTK_FONT_ALL: a bitwise combination of all of the above.
 
 <!-- ##### ENUM GtkFontFilterType ##### -->
 <para>
 A set of bit flags used to specify the filter being set
 when calling gtk_font_selection_dialog_set_filter() or
 gtk_font_selection_set_filter().
-
-<informaltable pgwide=1 frame="none" role="enum">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
-<tbody>
-
-<row>
-<entry>GTK_FONT_FILTER_BASE</entry>
-<entry>the base filter, which can't be changed by the user.</entry>
-</row>
-
-<row>
-<entry>GTK_FONT_FILTER_USER</entry>
-<entry>the user filter, which can be changed from within the 'Filter' page
-of the #GtkFontSelection widget.</entry>
-</row>
-
-</tbody></tgroup></informaltable>
 </para>
 
-@GTK_FONT_FILTER_BASE: 
-@GTK_FONT_FILTER_USER: 
+@GTK_FONT_FILTER_BASE: the base filter, which can't be changed by the user.
+@GTK_FONT_FILTER_USER: the user filter, which can be changed from within the
+'Filter' page of the #GtkFontSelection widget.
 
