@@ -182,15 +182,19 @@ gtk_cell_renderer_set_property (GObject      *object,
     {
     case PROP_XALIGN:
       cell->xalign = g_value_get_float (value);
+      g_object_notify (object, "xalign");
       break;
     case PROP_YALIGN:
       cell->yalign = g_value_get_float (value);
+      g_object_notify (object, "yalign");
       break;
     case PROP_XPAD:
       cell->xpad = g_value_get_int (value);
+      g_object_notify (object, "xpad");
       break;
     case PROP_YPAD:
       cell->ypad = g_value_get_int (value);
+      g_object_notify (object, "ypad");
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);

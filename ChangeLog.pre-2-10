@@ -1,3 +1,20 @@
+Mon Mar  5 14:55:19 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkcellrenderertoggle.c: Apply patch from Lee Mallabone to
+	add object properties.
+
+	* gtk/gtkcellrenderertextpixbuf.c: Apply patch from Lee Mallabone
+	to add object properties.
+
+	* gtk/gtkcellrenderertext.c: Apply patch from Lee Mallabone to add
+	object properties.
+
+	* gtk/gtkcellrendererpixbuf.c: Apply patch from Lee Mallabone to
+	add object properties.
+
+	* gtk/gtkcellrenderer.c: Apply patch from Lee Mallabone to add
+	object properties.
+
 Mon Mar  5 14:38:54 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.c: renamed "child_toggled" to

@@ -185,9 +185,11 @@ gtk_cell_renderer_toggle_set_property (GObject      *object,
     {
     case PROP_ACTIVE:
       celltoggle->active = g_value_get_boolean (value);
+      g_object_notify (G_OBJECT(object), "active");
       break;
     case PROP_RADIO:
       celltoggle->radio = g_value_get_boolean (value);
+      g_object_notify (G_OBJECT(object), "radio");
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);

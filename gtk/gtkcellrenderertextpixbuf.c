@@ -232,29 +232,35 @@ gtk_cell_renderer_text_pixbuf_set_property (GObject      *object,
       g_object_set_property (G_OBJECT (celltextpixbuf->pixbuf),
 			     "pixbuf",
 			     value);
+      g_object_notify (G_OBJECT(object), "pixbuf");
       break;
     case PROP_PIXBUF_POS:
       celltextpixbuf->pixbuf_pos = g_value_get_int (value);
+      g_object_notify (G_OBJECT(object), "pixbuf_pos");
       break;
     case PROP_PIXBUF_XALIGN:
       g_object_set_property (G_OBJECT (celltextpixbuf->pixbuf),
 			     "xalign",
 			     value);
+      g_object_notify (G_OBJECT(object), "pixbuf_xalign");
       break;
     case PROP_PIXBUF_YALIGN:
       g_object_set_property (G_OBJECT (celltextpixbuf->pixbuf),
 			     "yalign",
 			     value);
+      g_object_notify (G_OBJECT(object), "pixbuf_yalign");
       break;
     case PROP_PIXBUF_XPAD:
       g_object_set_property (G_OBJECT (celltextpixbuf->pixbuf),
 			     "xpad",
 			     value);
+      g_object_notify (G_OBJECT(object), "pixbuf_xpad");
       break;
     case PROP_PIXBUF_YPAD:
       g_object_set_property (G_OBJECT (celltextpixbuf->pixbuf),
 			     "ypad",
 			     value);
+      g_object_notify (G_OBJECT(object), "pixbuf_ypad");
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);

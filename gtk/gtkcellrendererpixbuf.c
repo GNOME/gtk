@@ -146,6 +146,7 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       if (cellpixbuf->pixbuf)
 	g_object_unref (G_OBJECT (cellpixbuf->pixbuf));
       cellpixbuf->pixbuf = pixbuf;
+      g_object_notify (object, "pixbuf");
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);

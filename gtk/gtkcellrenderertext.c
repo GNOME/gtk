@@ -666,6 +666,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       if (celltext->text)
         g_free (celltext->text);
       celltext->text = g_strdup (g_value_get_string (value));
+      g_object_notify(G_OBJECT(object), "text");
       break;
       
     case PROP_MARKUP:
@@ -732,10 +733,12 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       break;
 
     case PROP_BACKGROUND_GDK:
+      /* This notifies the GObject itself. */
       set_bg_color (celltext, g_value_get_boxed (value));
       break;
 
     case PROP_FOREGROUND_GDK:
+      /* This notifies the GObject itself. */
       set_fg_color (celltext, g_value_get_boxed (value));
       break;
 
@@ -749,7 +752,13 @@ gtk_cell_renderer_text_set_property (GObject      *object,
         if (name)
           font_desc = pango_font_description_from_string (name);
 
+	/* This function notifies the relevant GObjects itself.
+	 * I'm not sure how useful the notify() on 'font'
+	 * actually is here, but it's here for consistency.
+	 */
         set_font_description (celltext, font_desc);
+	g_object_notify(G_OBJECT(object), "font_desc");
+	g_object_notify(G_OBJECT(object), "font");
         
         if (font_desc)
           pango_font_description_free (font_desc);
@@ -851,50 +860,62 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 
     case PROP_BACKGROUND_SET:
       celltext->background_set = g_value_get_boolean (value);
+      g_object_notify(G_OBJECT(object), "background_set");
       break;
 
     case PROP_FOREGROUND_SET:
       celltext->foreground_set = g_value_get_boolean (value);
+      g_object_notify(G_OBJECT(object), "foreground_set");
       break;
 
     case PROP_FAMILY_SET:
       celltext->family_set = g_value_get_boolean (value);
+      g_object_notify(G_OBJECT(object), "family_set");
       break;
 
     case PROP_STYLE_SET:
       celltext->style_set = g_value_get_boolean (value);
+      g_object_notify(G_OBJECT(object), "style_set");
       break;
 
     case PROP_VARIANT_SET:
       celltext->variant_set = g_value_get_boolean (value);
+      g_object_notify(G_OBJECT(object), "variant_set");
       break;
 
     case PROP_WEIGHT_SET:
       celltext->weight_set = g_value_get_boolean (value);
+      g_object_notify(G_OBJECT(object), "weight_set");
       break;
 
     case PROP_STRETCH_SET:
       celltext->stretch_set = g_value_get_boolean (value);
+      g_object_notify(G_OBJECT(object), "stretch_set");
       break;
 
     case PROP_SIZE_SET:
       celltext->size_set = g_value_get_boolean (value);
+      g_object_notify(G_OBJECT(object), "size_set");
       break;
 
     case PROP_EDITABLE_SET:
       celltext->editable_set = g_value_get_boolean (value);
+      g_object_notify(G_OBJECT(object), "editable_set");
       break;
 
     case PROP_STRIKETHROUGH_SET:
       celltext->strikethrough_set = g_value_get_boolean (value);
+      g_object_notify(G_OBJECT(object), "strikethrough_set");
       break;
 
     case PROP_UNDERLINE_SET:
       celltext->underline_set = g_value_get_boolean (value);
+      g_object_notify(G_OBJECT(object), "underline_set");
       break;
 
-    case  PROP_RISE_SET:
+    case PROP_RISE_SET:
       celltext->rise_set = g_value_get_boolean (value);
+      g_object_notify(G_OBJECT(object), "rise_set");
       break;
 
     default:
