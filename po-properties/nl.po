@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-16 02:09+0100\n"
-"PO-Revision-Date: 2004-02-16 17:40+0100\n"
+"POT-Creation-Date: 2004-02-19 20:24+0100\n"
+"PO-Revision-Date: 2004-02-19 23:13+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -850,7 +850,8 @@ msgstr "Afmeting"
 
 #: gtk/gtkcellrendererpixbuf.c:169
 msgid "The GtkIconSize value that specifies the size of the rendered icon"
-msgstr "De GtkIconSize waarde die de afmeting van het gebruikte pictogram geeft"
+msgstr ""
+"De GtkIconSize waarde die de afmeting van het gebruikte pictogram geeft"
 
 #: gtk/gtkcellrendererpixbuf.c:178
 msgid "Detail"
@@ -1333,54 +1334,54 @@ msgstr "Waarde in lijst"
 msgid "Whether entered values must already be present in the list"
 msgstr "Of ingegeven waardes altijd in de lijst aanwezig moeten zijn"
 
-#: gtk/gtkcombobox.c:346
+#: gtk/gtkcombobox.c:344
 msgid "ComboBox model"
 msgstr "ComboBox model"
 
-#: gtk/gtkcombobox.c:347
+#: gtk/gtkcombobox.c:345
 msgid "The model for the combo box"
 msgstr "Het model voor de combo-box"
 
-#: gtk/gtkcombobox.c:354
+#: gtk/gtkcombobox.c:352
 msgid "Wrap width"
 msgstr "Breedte laten doorlopen"
 
 # grid: netwerk, rooster, raster
 # layouting: indeling
-#: gtk/gtkcombobox.c:355
+#: gtk/gtkcombobox.c:353
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Breedte laten doorlopen om de items in te delen op een rooster"
 
-#: gtk/gtkcombobox.c:364
+#: gtk/gtkcombobox.c:362
 msgid "Row span column"
 msgstr "'Row span' kolom"
 
-#: gtk/gtkcombobox.c:365
+#: gtk/gtkcombobox.c:363
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel-kolom die de 'row span' waarden bevat"
 
-#: gtk/gtkcombobox.c:374
+#: gtk/gtkcombobox.c:372
 msgid "Column span column"
 msgstr "'Column span' kolom"
 
-#: gtk/gtkcombobox.c:375
+#: gtk/gtkcombobox.c:373
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel-kolom die de 'colomn span' waarden bevat"
 
-#: gtk/gtkcombobox.c:384
+#: gtk/gtkcombobox.c:382
 msgid "Active item"
 msgstr "Actieve item"
 
-#: gtk/gtkcombobox.c:385
+#: gtk/gtkcombobox.c:383
 msgid "The item which is currently active"
 msgstr "Het item dat momenteel actief is"
 
 # voorkomen
-#: gtk/gtkcombobox.c:393
+#: gtk/gtkcombobox.c:391
 msgid "ComboBox appareance"
 msgstr "ComboBox uiterlijk"
 
-#: gtk/gtkcombobox.c:394
+#: gtk/gtkcombobox.c:392
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "ComboBox uiterlijk, indien WAAR wordt Windows-stijl gebruikt."
 
@@ -1691,12 +1692,12 @@ msgid "The type of operation that the file selector is performing"
 msgstr "Het soort actie wat de bestandkiezer aan het uitvoeren is"
 
 #: gtk/gtkfilechooser.c:99
-msgid "File System"
-msgstr "Bestandsysteem"
+msgid "File System Backend"
+msgstr "Backend bestandsysteem"
 
 #: gtk/gtkfilechooser.c:100
-msgid "File system object to use"
-msgstr "Te gebruiken bestandsysteemobject"
+msgid "Name of file system backend to use"
+msgstr "Naam van de gebruikte backend voor het bestandsysteem"
 
 #: gtk/gtkfilechooser.c:105
 msgid "Filter"
@@ -4450,3 +4451,6 @@ msgstr "IM statusstijl"
 #: modules/input/gtkimcontextxim.c:335
 msgid "How to draw the input method statusbar"
 msgstr "Hoe de statusbalk voor invoermethode moet worden getekend"
+
+#~ msgid "File system object to use"
+#~ msgstr "Te gebruiken bestandsysteemobject"
