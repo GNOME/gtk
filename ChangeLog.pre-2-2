@@ -1,3 +1,9 @@
+Tue Dec 11 15:25:06 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): Change
+	bin_window to be located at y=TREE_VIEW_HEADER_HEIGHT(tree_view).
+	Makes some flicker while scrolling go away.
+
 2001-12-11  Michael Natterer  <mitch@gimp.org>
 
 	* demos/testpixbuf-save.c: added new keyboard shortcut 'a' which
