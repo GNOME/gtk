@@ -1,3 +1,8 @@
+Thu Mar 21 00:05:14 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_get_background_area),
+	(gtk_tree_view_get_cell_area): fix logic (fixes #74235, #73593)
+
 Wed Mar 20 17:11:51 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c: Patch from Richard Hestilow to fix

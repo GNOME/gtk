@@ -9335,8 +9335,8 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
   if (path)
     {
       /* Get vertical coords */
-      if (_gtk_tree_view_find_node (tree_view, path, &tree, &node) &&
-	  tree != NULL)
+      if (!_gtk_tree_view_find_node (tree_view, path, &tree, &node) &&
+	  tree == NULL)
 	return;
 
       rect->y = CELL_FIRST_PIXEL (tree_view, tree, node, vertical_separator);
@@ -9395,8 +9395,8 @@ gtk_tree_view_get_background_area (GtkTreeView        *tree_view,
     {
       /* Get vertical coords */
 
-      if (_gtk_tree_view_find_node (tree_view, path, &tree, &node) &&
-	  tree != NULL)
+      if (!_gtk_tree_view_find_node (tree_view, path, &tree, &node) &&
+	  tree == NULL)
 	return;
 
       rect->y = BACKGROUND_FIRST_PIXEL (tree_view, tree, node);
