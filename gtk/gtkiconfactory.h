@@ -28,13 +28,12 @@
 #define __GTK_ICON_FACTORY_H__
 
 #include <gdk/gdk.h>
-#include <gtk/gtkstyle.h>
+#include <gtk/gtkrc.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-typedef struct _GtkIconFactory      GtkIconFactory;
 typedef struct _GtkIconFactoryClass GtkIconFactoryClass;
 
 #define GTK_TYPE_ICON_FACTORY              (gtk_icon_factory_get_type ())

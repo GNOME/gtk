@@ -60,6 +60,7 @@
 #include "gtkbindings.h"
 #include "gtkthemes.h"
 #include "gtkintl.h"
+#include "gtkiconfactory.h"
 
 typedef struct _GtkRcSet    GtkRcSet;
 typedef struct _GtkRcNode   GtkRcNode;
@@ -123,6 +124,9 @@ static void        gtk_rc_parse_pixmap_path_string   (gchar           *pix_path)
 static guint       gtk_rc_parse_module_path          (GScanner        *scanner);
 static void        gtk_rc_parse_module_path_string   (gchar           *mod_path);
 static guint       gtk_rc_parse_path_pattern         (GScanner        *scanner);
+static guint       gtk_rc_parse_stock                (GScanner        *scanner,
+                                                      GtkRcStyle      *rc_style,
+                                                      GtkIconFactory  *factory);
 static void        gtk_rc_clear_hash_node            (gpointer         key,
                                                       gpointer         data,
                                                       gpointer         user_data);
@@ -211,6 +215,14 @@ static const struct
   { "highest", GTK_RC_TOKEN_HIGHEST },
   { "engine", GTK_RC_TOKEN_ENGINE },
   { "module_path", GTK_RC_TOKEN_MODULE_PATH },
+  { "stock", GTK_RC_TOKEN_STOCK },
+  { "LTR", GTK_RC_TOKEN_LTR },
+  { "RTL", GTK_RC_TOKEN_RTL },
+  { "MENU", GTK_RC_TOKEN_MENU },
+  { "BUTTON", GTK_RC_TOKEN_BUTTON },
+  { "SMALL_TOOLBAR", GTK_RC_TOKEN_SMALL_TOOLBAR },
+  { "LARGE_TOOLBAR", GTK_RC_TOKEN_LARGE_TOOLBAR },
+  { "DIALOG", GTK_RC_TOKEN_DIALOG }
 };
 
 static const guint n_symbols = sizeof (symbols) / sizeof (symbols[0]);
@@ -860,6 +872,14 @@ gtk_rc_style_finalize (GObject *object)
     }
   g_slist_free (rc_style->rc_style_lists);
 
+  tmp_list1 = rc_style->icon_factories;
+  while (tmp_list1)
+    {
+      g_object_unref (G_OBJECT (tmp_list1->data));
+
+      tmp_list1 = tmp_list1->next;
+    }
+  
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -1321,6 +1341,21 @@ gtk_rc_style_to_style (GtkRcStyle *rc_style)
       rc_style->engine->rc_style_to_style (style, rc_style);
     }
 
+  if (rc_style->icon_factories)
+    {
+      GSList *iter;
+
+      style->icon_factories = g_slist_copy (rc_style->icon_factories);
+      
+      iter = style->icon_factories;
+      while (iter != NULL)
+        {
+          g_object_ref (G_OBJECT (iter->data));
+          
+          iter = g_slist_next (iter);
+        }
+    }
+  
   return style;
 }
 
@@ -1349,7 +1384,8 @@ gtk_rc_init_style (GSList *rc_styles)
       while (tmp_styles)
 	{
 	  GtkRcStyle *rc_style = tmp_styles->data;
-
+          GSList *factories;
+          
 	  for (i=0; i<5; i++)
 	    {
 	      if (!proto_style->bg_pixmap_name[i] && rc_style->bg_pixmap_name[i])
@@ -1394,6 +1430,22 @@ gtk_rc_init_style (GSList *rc_styles)
 	      (proto_style->engine == rc_style->engine))
 	    proto_style->engine->merge_rc_style (proto_style, rc_style);
 
+          factories = g_slist_copy (rc_style->icon_factories);
+          if (factories)
+            {
+              GSList *iter;
+
+              iter = factories;
+              while (iter != NULL)
+                {
+                  g_object_ref (G_OBJECT (iter->data));
+                  iter = g_slist_next (iter);
+                }
+
+              proto_style->icon_factories = g_slist_concat (proto_style->icon_factories,
+                                                            factories);
+            }
+          
 	  /* Point from each rc_style to the list of styles */
 
 	  if (!g_slist_find (rc_style->rc_style_lists, rc_styles))
@@ -1480,6 +1532,7 @@ gtk_rc_parse_style (GScanner *scanner)
   guint token;
   gint insert;
   gint i;
+  GtkIconFactory *our_factory = NULL;
   
   token = g_scanner_get_next_token (scanner);
   if (token != GTK_RC_TOKEN_STYLE)
@@ -1525,6 +1578,8 @@ gtk_rc_parse_style (GScanner *scanner)
       parent_style = gtk_rc_style_find (scanner->value.v_string);
       if (parent_style)
 	{
+          GSList *factories;
+          
 	  for (i = 0; i < 5; i++)
 	    {
 	      rc_style->color_flags[i] = parent_style->color_flags[i];
@@ -1547,6 +1602,14 @@ gtk_rc_parse_style (GScanner *scanner)
 		g_free (rc_style->bg_pixmap_name[i]);
 	      rc_style->bg_pixmap_name[i] = g_strdup (parent_style->bg_pixmap_name[i]);
 	    }
+
+          g_assert (rc_style->icon_factories == NULL);
+          factories = rc_style->icon_factories = g_slist_copy (parent_style->icon_factories);
+          while (factories != NULL)
+            {
+              g_object_ref (G_OBJECT (factories->data));
+              factories = factories->next;
+            }
 	}
     }
   
@@ -1591,6 +1654,15 @@ gtk_rc_parse_style (GScanner *scanner)
 	case GTK_RC_TOKEN_ENGINE:
 	  token = gtk_rc_parse_engine (scanner, rc_style);
 	  break;
+        case GTK_RC_TOKEN_STOCK:
+          if (our_factory == NULL)
+            {
+              our_factory = gtk_icon_factory_new ();
+              rc_style->icon_factories = g_slist_prepend (rc_style->icon_factories,
+                                                          our_factory);
+            }
+          token = gtk_rc_parse_stock (scanner, rc_style, our_factory);
+          break;
 	default:
 	  g_scanner_get_next_token (scanner);
 	  token = G_TOKEN_RIGHT_CURLY;
@@ -2391,6 +2463,263 @@ gtk_rc_parse_path_pattern (GScanner   *scanner)
     }
 
   g_free (pattern);
+  return G_TOKEN_NONE;
+}
+
+static guint
+gtk_rc_parse_stock_id (GScanner	 *scanner,
+                       gchar    **stock_id)
+{
+  guint token;
+  
+  token = g_scanner_get_next_token (scanner);
+  if (token != G_TOKEN_LEFT_BRACE)
+    return G_TOKEN_LEFT_BRACE;
+
+  token = g_scanner_get_next_token (scanner);
+  
+  if (token != G_TOKEN_STRING)
+    return G_TOKEN_STRING;
+  
+  *stock_id = g_strdup (scanner->value.v_string);
+  
+  token = g_scanner_get_next_token (scanner);
+  if (token != G_TOKEN_RIGHT_BRACE)
+    {
+      g_free (*stock_id);
+      return G_TOKEN_RIGHT_BRACE;
+    }
+  
+  return G_TOKEN_NONE;
+}
+
+static guint
+gtk_rc_parse_icon_source (GScanner	 *scanner,
+                          GtkIconSet     *icon_set)
+{
+  guint token;
+  GtkIconSource source = { NULL, NULL,
+                           0, 0, 0,
+                           TRUE, TRUE, TRUE };
+  
+  token = g_scanner_get_next_token (scanner);
+  if (token != G_TOKEN_LEFT_PAREN)
+    return G_TOKEN_LEFT_PAREN;
+
+  token = g_scanner_get_next_token (scanner);
+  
+  if (token != G_TOKEN_STRING)
+    return G_TOKEN_STRING;
+  
+  source.filename = g_strdup (scanner->value.v_string);
+  
+  token = g_scanner_get_next_token (scanner);
+
+  if (token != G_TOKEN_COMMA)
+    {
+      g_free ((gchar*)source.filename);
+      return G_TOKEN_COMMA;
+    }
+
+  /* Get the direction */
+  
+  token = g_scanner_get_next_token (scanner);
+
+  switch (token)
+    {
+    case GTK_RC_TOKEN_RTL:
+      source.any_direction = FALSE;
+      source.direction = GTK_TEXT_DIR_RTL;
+      break;
+
+    case GTK_RC_TOKEN_LTR:
+      source.any_direction = FALSE;
+      source.direction = GTK_TEXT_DIR_LTR;
+      break;
+      
+    case '*':
+      break;
+      
+    default:
+      g_free ((gchar*)source.filename);
+      return GTK_RC_TOKEN_RTL;
+      break;
+    }
+
+  token = g_scanner_get_next_token (scanner);
+
+  if (token != G_TOKEN_COMMA)
+    {
+      g_free ((gchar*)source.filename);
+      return G_TOKEN_COMMA;
+    }
+
+  /* Get the size */
+  
+  token = g_scanner_get_next_token (scanner);
+
+  switch (token)
+    {
+    case GTK_RC_TOKEN_MENU:
+      source.any_size = FALSE;
+      source.size = GTK_ICON_MENU;
+      break;
+
+    case GTK_RC_TOKEN_BUTTON:
+      source.any_size = FALSE;
+      source.size = GTK_ICON_BUTTON;
+      break;
+
+    case GTK_RC_TOKEN_SMALL_TOOLBAR:
+      source.any_size = FALSE;
+      source.size = GTK_ICON_SMALL_TOOLBAR;
+      break;
+
+    case GTK_RC_TOKEN_LARGE_TOOLBAR:
+      source.any_size = FALSE;
+      source.size = GTK_ICON_LARGE_TOOLBAR;
+      break;
+
+    case GTK_RC_TOKEN_DIALOG:
+      source.any_size = FALSE;
+      source.size = GTK_ICON_DIALOG;
+      break;
+
+    case '*':
+      break;
+      
+    default:
+      g_free ((gchar*)source.filename);
+      return GTK_RC_TOKEN_MENU;
+      break;
+    }
+
+  token = g_scanner_get_next_token (scanner);
+  
+  if (token != G_TOKEN_COMMA)
+    {
+      g_free ((gchar*)source.filename);
+      return G_TOKEN_COMMA;
+    }
+
+  /* Get the state */
+  
+  token = g_scanner_get_next_token (scanner);
+
+  switch (token)
+    {
+    case GTK_RC_TOKEN_NORMAL:
+      source.any_state = FALSE;
+      source.state = GTK_STATE_NORMAL;
+      break;
+
+    case GTK_RC_TOKEN_PRELIGHT:
+      source.any_state = FALSE;
+      source.state = GTK_STATE_PRELIGHT;
+      break;
+      
+
+    case GTK_RC_TOKEN_INSENSITIVE:
+      source.any_state = FALSE;
+      source.state = GTK_STATE_INSENSITIVE;
+      break;
+
+    case GTK_RC_TOKEN_ACTIVE:
+      source.any_state = FALSE;
+      source.state = GTK_STATE_ACTIVE;
+      break;
+
+    case GTK_RC_TOKEN_SELECTED:
+      source.any_state = FALSE;
+      source.state = GTK_STATE_SELECTED;
+      break;
+
+    case '*':
+      break;
+      
+    default:
+      g_free ((gchar*)source.filename);
+      return GTK_RC_TOKEN_PRELIGHT;
+      break;
+    }  
+  
+  token = g_scanner_get_next_token (scanner);
+  if (token != G_TOKEN_RIGHT_PAREN)
+    {
+      g_free ((gchar*)source.filename);
+      return G_TOKEN_RIGHT_PAREN;
+    }
+
+  gtk_icon_set_add_source (icon_set, &source);
+  
+  return G_TOKEN_NONE;
+}
+
+static guint
+gtk_rc_parse_stock (GScanner       *scanner,
+                    GtkRcStyle     *rc_style,
+                    GtkIconFactory *factory)
+{
+  GtkIconSet *icon_set = NULL;
+  gchar *stock_id = NULL;
+  guint token;
+  
+  token = g_scanner_get_next_token (scanner);
+  if (token != GTK_RC_TOKEN_STOCK)
+    return GTK_RC_TOKEN_STOCK;
+  
+  token = gtk_rc_parse_stock_id (scanner, &stock_id);
+  if (token != G_TOKEN_NONE)
+    return token;
+  
+  token = g_scanner_get_next_token (scanner);
+  if (token != G_TOKEN_EQUAL_SIGN)
+    {
+      g_free (stock_id);
+      return G_TOKEN_EQUAL_SIGN;
+    }
+
+  token = g_scanner_get_next_token (scanner);
+  if (token != G_TOKEN_LEFT_CURLY)
+    {
+      g_free (stock_id);
+      return G_TOKEN_LEFT_CURLY;
+    }
+
+  token = g_scanner_peek_next_token (scanner);
+  while (token != G_TOKEN_RIGHT_CURLY)
+    {
+      if (icon_set == NULL)
+        icon_set = gtk_icon_set_new ();
+      
+      token = gtk_rc_parse_icon_source (scanner, icon_set);
+      if (token != G_TOKEN_NONE)
+        {
+          g_free (stock_id);
+          gtk_icon_set_unref (icon_set);
+          return token;
+        }
+
+      token = g_scanner_get_next_token (scanner);
+      
+      if (token != G_TOKEN_COMMA &&
+          token != G_TOKEN_RIGHT_CURLY)
+        {
+          g_free (stock_id);
+          gtk_icon_set_unref (icon_set);
+          return G_TOKEN_RIGHT_CURLY;
+        }
+    }
+
+  g_assert (token == G_TOKEN_RIGHT_CURLY);
+  
+  gtk_icon_factory_add (factory,
+                        stock_id,
+                        icon_set);
+
+  gtk_icon_set_unref (icon_set);
+  g_free (stock_id);
+
   return G_TOKEN_NONE;
 }
 

@@ -29,6 +29,16 @@ style "defaultfont"
   font_name = "Sans 12"
 }
 
+style "myicons"
+{
+  stock["Gtk_Warning_Dialog"] = { ("stock-icons/dialog_error.png", 
+        *, 
+        *, 
+        *) }
+}
+
+class "GtkImage" style "myicons"
+
 # common default
 class "GtkWidget" style "defaultfont"
 
