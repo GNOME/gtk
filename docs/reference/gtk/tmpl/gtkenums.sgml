@@ -294,7 +294,7 @@ Indicated the relief to be drawn around a #GtkButton.
 
 @GTK_RESIZE_PARENT: 
 @GTK_RESIZE_QUEUE: 
-@GTK_RESIZE_IMMEDIATE: 
+@GTK_RESIZE_IMMEDIATE: Deprecated.
 
 <!-- ##### ENUM GtkScrollStep ##### -->
 <para>
