@@ -1,3 +1,8 @@
+Tue Jun 18 17:02:48 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk-sections.txt: Fix for cursor screen => display
+	change.
+
 2002-06-03  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkprogress.sgml: 
