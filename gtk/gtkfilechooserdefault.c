@@ -738,6 +738,8 @@ gtk_file_chooser_default_finalize (GObject *object)
 
   g_free (impl->edited_new_text);
 
+  g_object_unref (impl->tooltips);
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 

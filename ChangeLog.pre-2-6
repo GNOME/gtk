@@ -2,6 +2,8 @@
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_remove_rows): Don't
 	get text unnecessarily.  (#155384, Morten Welinder)
+	(gtk_file_chooser_default_finalize): Don't forget to
+	unref the tooltips.  (#155412, Morten Welinder)
 
 2004-10-12  Matthias Clasen  <mclasen@redhat.com>
 
