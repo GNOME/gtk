@@ -100,7 +100,7 @@ static void  gtk_message		 (gchar		     *str);
 static void  gtk_print			 (gchar		     *str);
 
 
-static gint done;
+static gboolean iteration_done = FALSE;
 static guint main_level = 0;
 static gint initialized = FALSE;
 static GdkEvent *next_event = NULL;
@@ -214,10 +214,10 @@ gtk_main ()
   
   g_list_free (functions);
   
-  old_done = done;
+  old_done = iteration_done;
   while (!gtk_main_iteration ())
     ;
-  done = old_done;
+  iteration_done = old_done;
   
   main_level--;
 }
@@ -231,7 +231,7 @@ gtk_main_level (void)
 void
 gtk_main_quit ()
 {
-  done = TRUE;
+  iteration_done = TRUE;
 }
 
 gint
@@ -254,7 +254,7 @@ gtk_main_iteration_do (gboolean blocking)
   GdkEvent *event = NULL;
   GList *tmp_list;
   
-  done = FALSE;
+  iteration_done = FALSE;
   
   /* If this is a recursive call, and there are pending timeouts or
    * idles, finish them, then return immediately to avoid blocking
@@ -263,12 +263,12 @@ gtk_main_iteration_do (gboolean blocking)
   if (current_timeouts)
     {
       gtk_handle_current_timeouts( gdk_time_get());
-      return done;
+      return iteration_done;
     }
   if (current_idles)
     {
       gtk_handle_current_idles();
-      return done;
+      return iteration_done;
     }
   
   /* If there is a valid event in 'next_event' then move it to 'event'
@@ -479,7 +479,7 @@ event_handling_done:
    */
   gtk_handle_timeouts ();
   
-  return done;
+  return iteration_done;
 }
 
 gint

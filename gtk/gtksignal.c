@@ -119,8 +119,8 @@ static void         gtk_params_get             (GtkArg         *params,
 static gint initialize = TRUE;
 static GHashTable *signal_hash_table = NULL;
 static GHashTable *signal_info_hash_table = NULL;
-static gint next_signal = 1;
-static gint next_handler_id = 1;
+static guint next_signal = 1;
+static guint next_handler_id = 1;
 
 static const gchar *handler_key = "gtk-signal-handlers";
 
@@ -600,62 +600,56 @@ gtk_signal_connect_object_while_alive (GtkObject        *object,
 
 void
 gtk_signal_disconnect (GtkObject *object,
-		       gint       anid)
+		       gint       an_id)
 {
-  GtkHandler *tmp;
-  GtkHandler *prev;
+  GtkHandler *handler;
 
   g_return_if_fail (object != NULL);
+  g_return_if_fail (an_id > 0);
 
-  if (initialize)
-    gtk_signal_init ();
+  handler = gtk_object_get_data (object, handler_key);
 
-  prev = NULL;
-  tmp = gtk_object_get_data (object, handler_key);
-
-  while (tmp)
+  while (handler)
     {
-      if (tmp->id == anid)
+      if (handler->id == an_id)
 	{
-	  if (prev)
-	    prev->next = tmp->next;
-	  else
-	    gtk_signal_handler_unref (tmp, object);
+	  handler->id = 0;
+	  handler->blocked = TRUE;
+	  gtk_signal_handler_unref (handler, object);
 	  return;
 	}
-
-      prev = tmp;
-      tmp = tmp->next;
+      handler = handler->next;
     }
 
-  g_warning ("gtk_signal_disconnect(): could not find handler (%d)", anid);
+  g_warning ("gtk_signal_disconnect(): could not find handler (%d)", an_id);
 }
 
 void
 gtk_signal_disconnect_by_data (GtkObject *object,
 			       gpointer   data)
 {
-  GtkHandler *tmp;
-  GtkHandler *next;
+  GtkHandler *handler;
   gint found_one;
-  
+
   g_return_if_fail (object != NULL);
-  
-  if (initialize)
-    gtk_signal_init ();
-  
-  tmp = gtk_object_get_data (object, handler_key);
+
   found_one = FALSE;
-  
-  while (tmp)
+  handler = gtk_object_get_data (object, handler_key);
+
+  while (handler)
     {
-      next = tmp->next;
-      if (tmp->func_data == data)
+      GtkHandler *handler_next;
+
+      handler_next = handler->next;
+      if (handler->func_data == data &&
+	  handler->id > 0)
 	{
 	  found_one = TRUE;
-	  gtk_signal_handler_unref (tmp, object);
+	  handler->id = 0;
+	  handler->blocked = TRUE;
+	  gtk_signal_handler_unref (handler, object);
 	}
-      tmp = next;
+      handler = handler_next;
     }
 
   if (!found_one)
@@ -664,20 +658,18 @@ gtk_signal_disconnect_by_data (GtkObject *object,
 
 void
 gtk_signal_handler_block (GtkObject *object,
-			  gint      anid)
+			  gint       an_id)
 {
   GtkHandler *tmp;
 
   g_return_if_fail (object != NULL);
-
-  if (initialize)
-    gtk_signal_init ();
+  g_return_if_fail (an_id > 0);
 
   tmp = gtk_object_get_data (object, handler_key);
 
   while (tmp)
     {
-      if (tmp->id == anid)
+      if (tmp->id == an_id)
 	{
 	  tmp->blocked = TRUE;
 	  return;
@@ -686,14 +678,14 @@ gtk_signal_handler_block (GtkObject *object,
       tmp = tmp->next;
     }
 
-  g_warning ("gtk_signal_handler_block(): could not find handler (%d)", anid);
+  g_warning ("gtk_signal_handler_block(): could not find handler (%d)", an_id);
 }
 
 void
 gtk_signal_handler_block_by_data (GtkObject *object,
 				  gpointer   data)
 {
-  GtkHandler *tmp;
+  GtkHandler *handler;
   gint found_one;
 
   g_return_if_fail (object != NULL);
@@ -702,17 +694,18 @@ gtk_signal_handler_block_by_data (GtkObject *object,
     gtk_signal_init ();
 
   found_one = FALSE;
-  tmp = gtk_object_get_data (object, handler_key);
+  handler = gtk_object_get_data (object, handler_key);
 
-  while (tmp)
+  while (handler)
     {
-      if (tmp->func_data == data)
+      if (handler->func_data == data &&
+	  handler->id > 0)
 	{
-	  tmp->blocked = TRUE;
 	  found_one = TRUE;
+	  handler->blocked = TRUE;
 	}
 
-      tmp = tmp->next;
+      handler = handler->next;
     }
 
   if (!found_one)
@@ -721,36 +714,37 @@ gtk_signal_handler_block_by_data (GtkObject *object,
 
 void
 gtk_signal_handler_unblock (GtkObject *object,
-			    gint       anid)
+			    gint       an_id)
 {
-  GtkHandler *tmp;
+  GtkHandler *handler;
 
   g_return_if_fail (object != NULL);
+  g_return_if_fail (an_id > 0);
 
   if (initialize)
     gtk_signal_init ();
 
-  tmp = gtk_object_get_data (object, handler_key);
+  handler = gtk_object_get_data (object, handler_key);
 
-  while (tmp)
+  while (handler)
     {
-      if (tmp->id == anid)
+      if (handler->id == an_id)
 	{
-	  tmp->blocked = FALSE;
+	  handler->blocked = FALSE;
 	  return;
 	}
 
-      tmp = tmp->next;
+      handler = handler->next;
     }
 
-  g_warning ("gtk_signal_handler_unblock(): could not find handler (%d)", anid);
+  g_warning ("gtk_signal_handler_unblock(): could not find handler (%d)", an_id);
 }
 
 void
 gtk_signal_handler_unblock_by_data (GtkObject *object,
 				    gpointer   data)
 {
-  GtkHandler *tmp;
+  GtkHandler *handler;
   gint found_one;
 
   g_return_if_fail (object != NULL);
@@ -759,17 +753,18 @@ gtk_signal_handler_unblock_by_data (GtkObject *object,
     gtk_signal_init ();
 
   found_one = FALSE;
-  tmp = gtk_object_get_data (object, handler_key);
+  handler = gtk_object_get_data (object, handler_key);
 
-  while (tmp)
+  while (handler)
     {
-      if (tmp->func_data == data)
+      if (handler->func_data == data &&
+	  handler->id > 0)
 	{
-	  tmp->blocked = FALSE;
 	  found_one = TRUE;
+	  handler->blocked = FALSE;
 	}
 
-      tmp = tmp->next;
+      handler = handler->next;
     }
 
   if (!found_one)
@@ -779,18 +774,27 @@ gtk_signal_handler_unblock_by_data (GtkObject *object,
 void
 gtk_signal_handlers_destroy (GtkObject *object)
 {
-  GtkHandler *list;
   GtkHandler *handler;
 
-  list = gtk_object_get_data (object, handler_key);
-  if (list)
+  /* we make the "optimization" of destroying the first handler in the last
+   * place, since we don't want gtk_signal_handler_unref() to reset the objects
+   * handler_key data on each removal
+   */
+
+  handler = gtk_object_get_data (object, handler_key);
+  if (handler)
     {
-      while (list)
+      handler = handler->next;
+      while (handler)
 	{
-	  handler = list->next;
-	  gtk_signal_handler_unref (list, object);
-	  list = handler;
+	  GtkHandler *next;
+
+	  next = handler->next;
+	  gtk_signal_handler_unref (handler, object);
+	  handler = next;
 	}
+      handler = gtk_object_get_data (object, handler_key);
+      gtk_signal_handler_unref (handler, object);
     }
 }
 
@@ -870,13 +874,14 @@ gtk_signal_handler_new ()
   handler->id = 0;
   handler->ref_count = 1;
   handler->signal_type = 0;
-  handler->object_signal = FALSE;
   handler->blocked = FALSE;
+  handler->object_signal = FALSE;
   handler->after = FALSE;
   handler->no_marshal = FALSE;
   handler->func = NULL;
   handler->func_data = NULL;
   handler->destroy_func = NULL;
+  handler->prev = NULL;
   handler->next = NULL;
 
   return handler;
@@ -892,8 +897,6 @@ static void
 gtk_signal_handler_unref (GtkHandler *handler,
 			  GtkObject  *object)
 {
-  GtkHandler *tmp;
-
   if (!handler->ref_count)
     {
       /* FIXME: i wanna get removed some when (maybe at gtk+-1.0?) */
@@ -909,13 +912,13 @@ gtk_signal_handler_unref (GtkHandler *handler,
       else if (handler->destroy_func)
 	(* handler->destroy_func) (handler->func_data);
 
-      tmp = gtk_object_get_data (object, handler_key);
-      while (tmp && tmp->next != handler)
-	tmp = tmp->next;
-      if (tmp)
-	tmp->next = handler->next;
+
+      if (handler->prev)
+	handler->prev->next = handler->next;
       else
 	gtk_object_set_data (object, handler_key, handler->next);
+      if (handler->next)
+	handler->next->prev = handler->prev;
 
       g_mem_chunk_free (handler_mem_chunk, handler);
     }
@@ -925,42 +928,39 @@ static void
 gtk_signal_handler_insert (GtkObject  *object,
 			   GtkHandler *handler)
 {
-  GtkHandler *start;
   GtkHandler *tmp;
-  GtkHandler *prev;
-
-  start = gtk_object_get_data (object, handler_key);
-  if (!start)
-    {
-      gtk_object_set_data (object, handler_key, handler);
-    }
+  
+  /* FIXME: remove */ g_assert (handler->next == NULL);
+  /* FIXME: remove */ g_assert (handler->prev == NULL);
+  
+  tmp = gtk_object_get_data (object, handler_key);
+  if (!tmp)
+    gtk_object_set_data (object, handler_key, handler);
   else
-    {
-      prev = NULL;
-      tmp = start;
+    while (tmp)
+      {
+	if (tmp->signal_type < handler->signal_type)
+	  {
+	    if (tmp->prev)
+	      {
+		tmp->prev->next = handler;
+		handler->prev = tmp->prev;
+	      }
+	    else
+	      gtk_object_set_data (object, handler_key, handler);
+	    tmp->prev = handler;
+	    handler->next = tmp;
+	    break;
+	  }
 
-      while (tmp)
-	{
-	  if (tmp->signal_type < handler->signal_type)
-	    {
-	      if (prev)
-		prev->next = handler;
-	      else
-		gtk_object_set_data (object, handler_key, handler);
-	      handler->next = tmp;
-	      break;
-	    }
-
-	  if (!tmp->next)
-	    {
-	      tmp->next = handler;
-	      break;
-	    }
-
-	  prev = tmp;
-	  tmp = tmp->next;
-	}
-    }
+	if (!tmp->next)
+	  {
+	    tmp->next = handler;
+	    handler->prev = tmp;
+	    break;
+	  }
+	tmp = tmp->next;
+      }
 }
 
 static void
@@ -1134,9 +1134,7 @@ gtk_signal_connect_by_type (GtkObject       *object,
   handler->func = func;
   handler->func_data = func_data;
   handler->destroy_func = destroy_func;
-
-  if (after)
-    handler->after = TRUE;
+  handler->after = after != FALSE;
   handler->no_marshal = no_marshal;
 
   gtk_signal_handler_insert (object, handler);
@@ -1240,18 +1238,16 @@ gtk_handlers_run (GtkHandler     *handlers,
 		  GtkHandlerInfo *info,
 		  gint            after)
 {
-  GtkHandler *handlers_next;
-  
   while (handlers)
     {
-      /* REMOVE: if (!after) */
+      GtkHandler *handlers_next;
+  
       gtk_signal_handler_ref (handlers);
       
       if (handlers->signal_type != info->signal_type)
 	{
-	  /* REMOVE: if (after) */
 	  gtk_signal_handler_unref (handlers, info->object);
-	  break;
+	  return 0;
 	}
       
       if (!handlers->blocked && (handlers->after == after))
@@ -1281,17 +1277,16 @@ gtk_handlers_run (GtkHandler     *handlers,
 			 info->params,
 			 info->param_types,
 			 info->return_val);
-
+	  
           if (gtk_emission_check (stop_emissions, info->object,
 				  info->signal_type))
 	    {
 	      gtk_emission_remove (&stop_emissions, info->object,
 				   info->signal_type);
-
+	      
 	      if (info->run_type & GTK_RUN_NO_RECURSE)
 		gtk_emission_remove (&restart_emissions, info->object,
 				     info->signal_type);
-	      /* REMOVE: if (after) */
 	      gtk_signal_handler_unref (handlers, info->object);
 	      return DONE;
 	    }
@@ -1301,18 +1296,16 @@ gtk_handlers_run (GtkHandler     *handlers,
 	    {
 	      gtk_emission_remove (&restart_emissions, info->object,
 				   info->signal_type);
-	      /* REMOVE: if (after) */
 	      gtk_signal_handler_unref (handlers, info->object);
 	      return RESTART;
 	    }
 	}
-
+      
       handlers_next = handlers->next;
-      /* if (after) */
-	gtk_signal_handler_unref (handlers, info->object);
+      gtk_signal_handler_unref (handlers, info->object);
       handlers = handlers_next;
     }
-
+  
   return 0;
 }
 

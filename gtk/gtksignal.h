@@ -60,16 +60,17 @@ struct	_GtkSignalQuery
 
 struct _GtkHandler
 {
-  guint16 id;
-  guint16 ref_count;
-  guint16 signal_type;
-  guint object_signal : 1;
+  guint id : 28;
   guint blocked : 1;
+  guint object_signal : 1;
   guint after : 1;
   guint no_marshal : 1;
+  guint16 ref_count;
+  guint16 signal_type;
   GtkSignalFunc func;
   gpointer func_data;
   GtkSignalDestroy destroy_func;
+  GtkHandler *prev;
   GtkHandler *next;
 };
 

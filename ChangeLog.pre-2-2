@@ -1,3 +1,31 @@
+Tue Feb 10 07:12:07 1998  Tim Janik  <timj@gimp.org>
+
+        * gtk/gtksignal.h:
+        * gtk/gtksignal.c:
+        ok, there have been several severe bugs in the signal handler
+        referencing and ->next connection stuff. these bugs caused
+        invokations of handlers that are disconnected and - worse -
+        destroyed already. invokation of *destroyd* handlers mean:
+        anything can be executed , because the handler structure can just
+        as well be realocated.
+        at the cost of an extra ->prev field per handler we should have a
+        reasonable stable system now, because of the various places that
+        can cause a handler to be disconnected (*any* handler invokation can
+        cause *any* or *all* handlers to be disconnected, there is no way
+        around a doubly linked list, actually handler disconnection has never
+        worked correctly because of this.
+        handlers are connected together via a *doubly* linked list now, and it
+        is *not* valid to remove a handler out of this list untill all its
+        references have been droped, i.e. handler->ref_count==0.
+        to prevent emissions of disconnected but still referenced handlers,
+        disconnected handlers are simply marked as blocked and get an id of 0
+        which is an invalid signal handler id.
+        the handler->id has been changed to have 28 significant bits (using
+        alignment gaps), since 65536 (old range: guint16) signal connections
+        (as a total) can easily be reached by complex applications.
+        this whole handler thingy is at least as tedious as writing doubly
+        linked list implementations ;)
+
 Mon Feb  9 23:08:16 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkwidget.c (gtk_widget_unparent): Check for
