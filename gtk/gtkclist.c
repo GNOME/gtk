@@ -2942,13 +2942,17 @@ static gint
 gtk_clist_motion (GtkWidget * widget,
 		  GdkEventMotion * event)
 {
-  gint i, x, y, visible;
   GtkCList *clist;
+  gint i, x, y, visible;
+  gint row;
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CLIST (widget), FALSE);
 
   clist = GTK_CLIST (widget);
+
+  if (!(gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist)))
+    return FALSE;
 
   if (GTK_CLIST_IN_DRAG (clist))
     for (i = 0; i < clist->columns; i++)
@@ -2978,144 +2982,95 @@ gtk_clist_motion (GtkWidget * widget,
 	    }
 	}
 
+      
+  if (event->is_hint || event->window != clist->clist_window)
+    gdk_window_get_pointer (clist->clist_window, &x, &y, NULL);
+
+  /* horizontal autoscrolling */
+  if (LIST_WIDTH (clist) > clist->clist_window_width &&
+      (x < 0 || x >= clist->clist_window_width))
+    {
+      if (clist->htimer)
+	return FALSE;
+
+      clist->htimer = gtk_timeout_add
+	(SCROLL_TIME, (GtkFunction) horizontal_timeout, clist);
+
+      if (!((x < 0 && GTK_RANGE (clist->hscrollbar)->adjustment->value == 0) ||
+	    (x >= clist->clist_window_width &&
+	     GTK_RANGE (clist->hscrollbar)->adjustment->value ==
+	     LIST_WIDTH (clist) - clist->clist_window_width)))
+	{
+	  if (x < 0)
+	    move_horizontal (clist, -1 + (x/2));
+	  else
+	    move_horizontal (clist, 1 + (x - clist->clist_window_width) / 2);
+	}
+    }
+
+  if (GTK_CLIST_IN_DRAG (clist))
+    return FALSE;
+
+  /* vertical autoscrolling */
+  row = ROW_FROM_YPIXEL (clist, y);
+
+  /* don't scroll on last pixel row if it's a cell spacing */
+  if (y == clist->clist_window_height-1 &&
+      y == ROW_TOP_YPIXEL (clist, row-1) + clist->row_height)
+    return FALSE;
+
+  if (LIST_HEIGHT (clist) > clist->clist_window_height &&
+      (y < 0 || y >= clist->clist_window_height))
+    {
+      if (clist->vtimer)
+	return FALSE;
+
+      clist->vtimer = gtk_timeout_add (SCROLL_TIME,
+				       (GtkFunction) vertical_timeout, clist);
+
+      if (GTK_CLIST_DRAG_SELECTION (clist))
+	{
+	  if ((y < 0 && clist->focus_row == 0) ||
+	      (y >= clist->clist_window_height &&
+	       clist->focus_row == clist->rows-1))
+	    return FALSE;
+	}
+    }
+
+  row = CLAMP (row, 0, clist->rows - 1);
+
   if (GTK_CLIST_DRAG_SELECTION (clist))
     {
-      gint row;
-
-      if (event->is_hint || event->window != clist->clist_window)
-	gdk_window_get_pointer (clist->clist_window, &x, &y, NULL);
-
-      /* horizontal autoscrolling */
-      if (LIST_WIDTH (clist) > clist->clist_window_width &&
-	  (x < 0 || x >= clist->clist_window_width))
-	{
-	  if (clist->htimer == 0)
-	    {
-	      clist->htimer = gtk_timeout_add
-		(SCROLL_TIME, (GtkFunction) horizontal_timeout, clist);
-
-	      if (!((x < 0 && GTK_RANGE (clist->hscrollbar)->adjustment->value 
-		   == 0) || (x >= clist->clist_window_width &&
-		  GTK_RANGE (clist->hscrollbar)->adjustment->value ==
-		  LIST_WIDTH (clist) - clist->clist_window_width)))
-		{
-		  if (x < 0)
-		    move_horizontal (clist, -1 + (x/2));
-		  else
-		    move_horizontal (clist, 
-				     1 + (x - clist->clist_window_width) / 2);
-		}
-	    }
-	  else
-	    return FALSE;
-	}
-
-      row = ROW_FROM_YPIXEL (clist, y);
-
-      /* don't scroll on last pixel row if it's a cell spacing */
-      if (y == clist->clist_window_height-1 &&
-	  y == ROW_TOP_YPIXEL (clist, row-1) + clist->row_height)
-	return FALSE;
-
-      /* vertical autoscrolling */
-      if (LIST_HEIGHT (clist) > clist->clist_window_height &&
-	  (y < 0 || y >= clist->clist_window_height))
-	{
-	  if (clist->vtimer == 0)
-	    {
-	      clist->vtimer = gtk_timeout_add (SCROLL_TIME, 
-				  	(GtkFunction) vertical_timeout,
-					 clist);
-
-	      if ((y < 0 && clist->focus_row == 0) || 
-		  (y >= clist->clist_window_height && 
-		   clist->focus_row == clist->rows-1))
-		return FALSE;
-
-	      if (row < 0 && clist->focus_row > 0)
-		{
-		  gtk_clist_draw_focus (widget);
-		  clist->focus_row = 0;
-		  gtk_clist_draw_focus (widget);
-		}
-	      else if (row > clist->rows - 1 && clist->focus_row 
-		       < clist->rows - 1)
-		{
-		  gtk_clist_draw_focus (widget);
-		  clist->focus_row = clist->rows - 1;
-		  gtk_clist_draw_focus (widget);
-		}
-	      else if (row >= 0 && row <= clist->rows - 1)
-		{
-		  gtk_clist_draw_focus (widget);
-		  clist->focus_row = row;
-		  gtk_clist_draw_focus (widget);
-		}
-	      else
-		return FALSE;
-
-	      switch (clist->selection_mode)
-		{
-		case GTK_SELECTION_BROWSE:
-		  select_row (clist, clist->focus_row, -1, (GdkEvent *) event);
-		  break;
-
-		case GTK_SELECTION_EXTENDED:
-		  update_extended_selection (clist, clist->focus_row);
-		  break;
-
-		default:
-		  break;
-		}
-
-	      if (y < 0)
-		move_vertical (clist, row, 0);
-	      else
-		move_vertical (clist, row, 1);
-	    }
-	  else
-	    return FALSE;
-	}
-
       if (row == clist->focus_row)
 	return FALSE;
-      
-      /* dragging inside clist_window */
-      if (row < 0 && clist->focus_row > 0)
-	{
-	  gtk_clist_draw_focus (widget);
-	  clist->focus_row = 0;
-	  gtk_clist_draw_focus (widget);
-	}
-      else if (row > clist->rows-1 && clist->focus_row < clist->rows-1)
-	{
-	  gtk_clist_draw_focus (widget);
-	  clist->focus_row = clist->rows-1;
-	  gtk_clist_draw_focus (widget);
-	}
-      else if (row >= 0 && row <= clist->rows-1)
-	{
-	  gtk_clist_draw_focus (widget);
-	  clist->focus_row = row;
-	  gtk_clist_draw_focus (widget);
-	}
-      else
-	return FALSE;
-      
+
+      gtk_clist_draw_focus (widget);
+      clist->focus_row = row;
+      gtk_clist_draw_focus (widget);
+
       switch (clist->selection_mode)
 	{
+	case GTK_SELECTION_BROWSE:
+	  select_row (clist, clist->focus_row, - 1, (GdkEvent *) event);
+	  break;
+	  
 	case GTK_SELECTION_EXTENDED:
 	  update_extended_selection (clist, clist->focus_row);
-	  return FALSE;
-	  
-	case  GTK_SELECTION_BROWSE:
-	  select_row (clist, clist->focus_row, -1, (GdkEvent *) event);
 	  break;
 	  
 	default:
 	  break;
 	}
-	  
+    }
+  
+  if (y < 0)
+    move_vertical (clist, row, 0);
+  else if (y >= clist->clist_window_height)
+    move_vertical (clist, row, 1);
+  else if (GTK_CLIST_DRAG_SELECTION (clist))
+    {
+      /* dragging inside clist_window */
+
       if (ROW_TOP_YPIXEL(clist, clist->focus_row) + clist->row_height <= 0)
 	gtk_clist_moveto (clist, clist->focus_row, -1, 0, 0);
       else if (ROW_TOP_YPIXEL (clist, clist->focus_row) < 0)

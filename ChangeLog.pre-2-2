@@ -1,3 +1,9 @@
+Wed Jul 29 23:31:50 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_motion): column resize now works with
+	horizontal autoscrolling, GtkCTree's 'reorder ability' now works
+	with horizontal and vertical autoscrolling.
+
 Tue Jul 28 20:32:03 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* gtk/docs/man: new directory
