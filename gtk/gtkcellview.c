@@ -543,6 +543,9 @@ gtk_cell_view_set_cell_data (GtkCellView *cellview)
   g_return_if_fail (cellview->priv->displayed_row != NULL);
 
   path = gtk_tree_row_reference_get_path (cellview->priv->displayed_row);
+  if (!path)
+    return;
+
   gtk_tree_model_get_iter (cellview->priv->model, &iter, path);
   gtk_tree_path_free (path);
 
