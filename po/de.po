@@ -10,8 +10,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.x\n"
-"POT-Creation-Date: 2003-01-06 17:06+0100\n"
-"PO-Revision-Date: 2003-01-06 17:04+0100\n"
+"POT-Creation-Date: 2003-01-13 16:16+0100\n"
+"PO-Revision-Date: 2003-01-13 16:15+0100\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1979,7 +1979,7 @@ msgstr "Alles markieren"
 msgid "Input Methods"
 msgstr "Eingabemethoden"
 
-#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6524
+#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6611
 msgid "_Insert Unicode control character"
 msgstr "Unicode-Steuerzeichen e_infügen"
 
@@ -2635,7 +2635,7 @@ msgstr "Die Höhe des Layouts"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:805
+#: gtk/gtkmain.c:806
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -3697,7 +3697,7 @@ msgstr "_Aktualisieren"
 
 #: gtk/gtkstock.c:319
 msgid "_Remove"
-msgstr "E_ntfernen"
+msgstr "_Entfernen"
 
 #: gtk/gtkstock.c:320
 msgid "_Revert"
@@ -3749,7 +3749,7 @@ msgstr "_Unterstreichen"
 
 #: gtk/gtkstock.c:332
 msgid "_Undo"
-msgstr "_Rückgängig"
+msgstr "_Rückgängig machen"
 
 #: gtk/gtkstock.c:333
 msgid "_Yes"
@@ -4299,7 +4299,7 @@ msgstr "Cursor sichtbar"
 msgid "If the insertion cursor is shown"
 msgstr "Soll der Einfügecursor gezeigt werden?"
 
-#: gtk/gtktextview.c:6515
+#: gtk/gtktextview.c:6602
 msgid "Input _Methods"
 msgstr "Eingabe_methoden"
 
