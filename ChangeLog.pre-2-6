@@ -1,3 +1,7 @@
+Mon Nov 29 16:56:33 2004  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkcellview.h: remove gtk_cell_view_set_cell_data() declaration.
+
 2004-11-29  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from gtk-2-4:
