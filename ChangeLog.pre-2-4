@@ -1,3 +1,9 @@
+Tue Sep 24 04:50:28 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_activate):   
+	Chain up so that entry->activates_default is honored.
+	(#93865, Pieter Penninckx)
+
 2002-09-23  Jacob Berkman  <jacob@ximian.com>
 
 	* gtk/gtkprogress.c (DEFAULT_FORMAT): cpp macros aren't ``;''

@@ -1344,6 +1344,9 @@ gtk_spin_button_activate (GtkEntry *entry)
 {
   if (entry->editable)
     gtk_spin_button_update (GTK_SPIN_BUTTON (entry));
+
+  /* Chain up so that entry->activates_default is honored */
+  parent_class->activate (entry);
 }
 
 static void
