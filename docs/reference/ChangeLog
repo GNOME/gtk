@@ -1,11 +1,9 @@
-2003-12-08  Federico Mena Quintero  <federico@ximian.com>
+Mon Dec  8 12:47:01 2003  Owen Taylor  <otaylor@redhat.com>
 
-	* gtk/migrating-GtkAction.sgml: New chapter about how to migrate
-	from gnome-ui/bonobo-ui/etc. to GtkAction.
+	* gtk/Makefile.am (IGNORE_HFILES): Add xdgmime directory,
+	gtkfilesystemwin32.
 
-	* gtk/gtk-docs.sgml: Integrated the above.
-
-	* gtk/Makefile.am (content_files): Added migrating-GtkAction.sgml.
+	* gtk/gtk-sections.txt: Some updates.
 
 Sun Nov 23 20:59:57 2003  Matthias Clasen  <maclas@gmx.de>
 

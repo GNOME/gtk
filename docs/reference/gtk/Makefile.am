@@ -33,6 +33,7 @@ IGNORE_HFILES=				\
 	gtkfilesystem.h			\
 	gtkfilesystemmodel.h		\
 	gtkfilesystemunix.h		\
+	gtkfilesystemwin32.h		\
 	gtkhsv.h			\
 	gtkiconthemeparser.h		\
 	gtkimmodule.h			\
@@ -54,6 +55,7 @@ IGNORE_HFILES=				\
 	gtktextutil.h			\
 	gtktypebuiltins.h		\
 	gtkxembed.h			\
+	xdgmime				\
 	xembed.h			\
 	gtktoggleactionprivate.h
 
@@ -85,7 +87,6 @@ content_files =					\
 	changes-2.0.sgml			\
 	compiling.sgml				\
 	framebuffer.sgml			\
-	migrating-GtkAction.sgml		\
 	migrating-GtkFileChooser.sgml		\
 	objects_grouped.sgml			\
 	question_index.sgml			\
