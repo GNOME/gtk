@@ -1,3 +1,7 @@
+Tue May 25 21:54:55 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkframe.sgml: Move docs inline.
+
 Wed May 19 23:42:40 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdk-sections.txt: Add the right include for the "X interaction"

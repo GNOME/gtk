@@ -263,6 +263,15 @@ gtk_frame_get_property (GObject         *object,
     }
 }
 
+/**
+ * gtk_frame_new:
+ * @label: the text to use as the label of the frame
+ * 
+ * Creates a new #GtkFrame, with optional label @label.
+ * If @label is %NULL, the label is omitted.
+ * 
+ * Return value: a new #GtkFrame widget
+ **/
 GtkWidget*
 gtk_frame_new (const gchar *label)
 {
@@ -297,6 +306,14 @@ gtk_frame_forall (GtkContainer *container,
     (* callback) (frame->label_widget, callback_data);
 }
 
+/**
+ * gtk_frame_set_label:
+ * @frame: a #GtkFrame
+ * @label: the text to use as the label of the frame
+ * 
+ * Sets the text of the label. If @label is %NULL,
+ * the current label is removed.
+ **/
 void
 gtk_frame_set_label (GtkFrame *frame,
 		     const gchar *label)
@@ -320,7 +337,7 @@ gtk_frame_set_label (GtkFrame *frame,
  * gtk_frame_get_label:
  * @frame: a #GtkFrame
  * 
- * If the frame's label widget is a #GtkLabel, return the
+ * If the frame's label widget is a #GtkLabel, returns the
  * text in the label widget. (The frame will have a #GtkLabel
  * for the label widget if a non-%NULL argument was passed
  * to gtk_frame_new().)
@@ -346,7 +363,7 @@ gtk_frame_get_label (GtkFrame *frame)
  * @frame: a #GtkFrame
  * @label_widget: the new label widget
  * 
- * Set the label widget for the frame. This is the widget that
+ * Sets the label widget for the frame. This is the widget that
  * will appear embedded in the top edge of the frame as a
  * title.
  **/
@@ -404,6 +421,18 @@ gtk_frame_get_label_widget (GtkFrame *frame)
   return frame->label_widget;
 }
 
+/**
+ * gtk_frame_set_label_align:
+ * @frame: a #GtkFrame
+ * @xalign: The position of the label along the top edge
+ *   of the widget. A value of 0.0 represents left alignment;
+ *   1.0 represents right alignment.
+ * @yalign: The y alignment of the label. A value of 0.0 aligns under 
+ *   the frame; 1.0 aligns above the frame.
+ * 
+ * Sets the alignment of the frame widget's label. The
+ * default values for a newly created frame are 0.0 and 0.5.
+ **/
 void
 gtk_frame_set_label_align (GtkFrame *frame,
 			   gfloat    xalign,
@@ -453,6 +482,13 @@ gtk_frame_get_label_align (GtkFrame *frame,
     *yalign = frame->label_yalign;
 }
 
+/**
+ * gtk_frame_set_shadow_type:
+ * @frame: a #GtkFrame
+ * @type: the new #GtkShadowType
+ * 
+ * Sets the shadow type for @frame.
+ **/
 void
 gtk_frame_set_shadow_type (GtkFrame      *frame,
 			   GtkShadowType  type)

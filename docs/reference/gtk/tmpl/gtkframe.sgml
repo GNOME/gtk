@@ -56,8 +56,6 @@ label can be controlled with gtk_frame_set_label_align().
 
 <!-- ##### FUNCTION gtk_frame_new ##### -->
 <para>
-Create a new Frame, with optional label @label.
-If @label is %NULL, the label is omitted.
 </para>
 
 @label: 
@@ -66,9 +64,6 @@ If @label is %NULL, the label is omitted.
 
 <!-- ##### FUNCTION gtk_frame_set_label ##### -->
 <para>
-
-Set the text of the label. If @label is %NULL,
-the current label, if any, is removed.
 </para>
 
 @frame: 
@@ -82,30 +77,23 @@ the current label, if any, is removed.
 
 @frame: 
 @label_widget: 
-<!-- # Unused Parameters # -->
-@title_widget: 
 
 
 <!-- ##### FUNCTION gtk_frame_set_label_align ##### -->
 <para>
-Set the alignment of the Frame widget's label. The
-default value for a newly created Frame is 0.0.
 </para>
 
-@frame: The Frame widget.
-@xalign: The position of the label along the top edge
-  of the widget. A value of 0.0 represents left alignment;
-  1.0 represents right alignment.
-@yalign: The y alignment of the label. Currently ignored.
+@frame:
+@xalign:
+@yalign:
 
 
 <!-- ##### FUNCTION gtk_frame_set_shadow_type ##### -->
 <para>
-Set the shadow type for the Frame widget.
 </para>
 
-@frame: The Frame widget.
-@type: New shadow type.
+@frame:
+@type: 
 
 
 <!-- ##### FUNCTION gtk_frame_get_label ##### -->
