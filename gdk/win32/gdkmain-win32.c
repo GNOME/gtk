@@ -86,14 +86,18 @@ _gdk_windowing_init_check (int    argc,
 
   CoInitialize (NULL);
 
-  gdk_selection_request_msg = RegisterWindowMessage ("gdk-selection-request");
-  gdk_selection_notify_msg = RegisterWindowMessage ("gdk-selection-notify");
-  gdk_selection_clear_msg = RegisterWindowMessage ("gdk-selection-clear");
+  cf_rtf = RegisterClipboardFormat ("Rich Text Format");
+  cf_utf8_string = RegisterClipboardFormat ("UTF8_STRING");
+
+  utf8_string = gdk_atom_intern ("UTF8_STRING", FALSE);
+  compound_text = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
+  text_uri_list = gdk_atom_intern ("text/uri-list", FALSE);
+
+  local_dnd = gdk_atom_intern ("LocalDndSelection", FALSE);
+  gdk_win32_dropfiles = gdk_atom_intern ("DROPFILES_DND", FALSE);
+  gdk_ole2_dnd = gdk_atom_intern ("OLE2_DND", FALSE);
 
   _gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
-  gdk_clipboard_atom = gdk_atom_intern ("CLIPBOARD", FALSE);
-  gdk_win32_dropfiles_atom = gdk_atom_intern ("DROPFILES_DND", FALSE);
-  gdk_ole2_dnd_atom = gdk_atom_intern ("OLE2_DND", FALSE);
 
   _gdk_win32_selection_init ();
 

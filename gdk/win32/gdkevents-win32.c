@@ -840,9 +840,9 @@ build_keypress_event (GdkWindowImplWin32 *impl,
 		      MSG                *msg)
 {
   HIMC himc;
-  gint i, bytecount, ucount, ucleft, len;
-  guchar buf[100], *bp;
-  wchar_t wbuf[100], *wcp;
+  gint i, bytecount, ucount;
+  guchar buf[100];
+  wchar_t wbuf[100];
 
   event->key.type = GDK_KEY_PRESS;
   event->key.time = msg->time;
@@ -889,8 +889,7 @@ build_keypress_event (GdkWindowImplWin32 *impl,
        */
       ucount = MultiByteToWideChar (impl->charset_info.ciACP,
 				    0, buf, bytecount,
-				    wbuf, sizeof (wbuf) / sizeof (wbuf[0]));
-      
+				    wbuf, G_N_ELEMENTS (wbuf));
     }
   if (ucount == 0)
     event->key.keyval = GDK_VoidSymbol;
@@ -911,68 +910,18 @@ build_keypress_event (GdkWindowImplWin32 *impl,
   build_key_event_state (event);
 
   /* Build UTF-8 string */
-  ucleft = ucount;
-  len = 0;
-  wcp = wbuf;
-  while (ucleft-- > 0)
+  if (ucount == 1 && wbuf[0] < 0200)
     {
-      wchar_t c = *wcp++;
-
-      if (c < 0x80)
-	len += 1;
-      else if (c < 0x800)
-	len += 2;
-      else
-	len += 3;
+      event->key.string = g_malloc (2);
+      event->key.string[0] = wbuf[0];
+      event->key.string[1] = '\0';
+      event->key.length = 1;
     }
-
-  event->key.string = g_malloc (len + 1);
-  event->key.length = len;
-  
-  ucleft = ucount;
-  wcp = wbuf;
-  bp = event->key.string;
-  while (ucleft-- > 0)
+  else
     {
-      int first;
-      wchar_t c = *wcp++;
-
-      if (c < 0x80)
-	{
-	  first = 0;
-	  len = 1;
-	}
-      else if (c < 0x800)
-	{
-	  first = 0xc0;
-	  len = 2;
-	}
-      else
-	{
-	  first = 0xe0;
-	  len = 3;
-	}
-
-#if 1      
-      /* Woo-hoo! */
-      switch (len)
-	{
-	case 3: bp[2] = (c & 0x3f) | 0x80; c >>= 6; /* Fall through */
-	case 2: bp[1] = (c & 0x3f) | 0x80; c >>= 6; /* Fall through */
-	case 1: bp[0] = c | first;
-	}
-#else
-      for (i = len - 1; i > 0; --i)
-	{
-	  bp[i] = (c & 0x3f) | 0x80;
-	  c >>= 6;
-	}
-      bp[0] = c | first;
-#endif
-
-      bp += len;
+      event->key.string = _gdk_ucs2_to_utf8 (wbuf, ucount);
+      event->key.length = strlen (event->key.string);
     }
-  *bp = 0;
 }
 
 static void
@@ -1647,55 +1596,7 @@ gdk_event_translate (GdkEvent *event,
   /* to translate coordinates to the internal > 16 bit system */
   _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
 
-  if (msg->message == gdk_selection_notify_msg)
-    {
-      GDK_NOTE (EVENTS, g_print ("gdk_selection_notify_msg: %#lx\n",
-				 (gulong) msg->hwnd));
-
-      event->selection.type = GDK_SELECTION_NOTIFY;
-      event->selection.window = window;
-      event->selection.selection = GDK_POINTER_TO_ATOM (msg->wParam);
-      event->selection.target = GDK_POINTER_TO_ATOM (msg->lParam);
-      event->selection.property = _gdk_selection_property;
-      event->selection.time = msg->time;
-
-      return_val = !GDK_WINDOW_DESTROYED (window);
-
-      goto done;
-    }
-  else if (msg->message == gdk_selection_request_msg)
-    {
-      GDK_NOTE (EVENTS, g_print ("gdk_selection_request_msg: %#lx\n",
-				 (gulong) msg->hwnd));
-
-      event->selection.type = GDK_SELECTION_REQUEST;
-      event->selection.window = window;
-      event->selection.selection = gdk_clipboard_atom;
-      event->selection.target = GDK_TARGET_STRING;
-      event->selection.property = _gdk_selection_property;
-      event->selection.requestor = (guint32) msg->hwnd;
-      event->selection.time = msg->time;
-
-      return_val = !GDK_WINDOW_DESTROYED (window);
-
-      goto done;
-    }
-  else if (msg->message == gdk_selection_clear_msg)
-    {
-      GDK_NOTE (EVENTS, g_print ("gdk_selection_clear_msg: %#lx\n",
-				 (gulong) msg->hwnd));
-
-      event->selection.type = GDK_SELECTION_CLEAR;
-      event->selection.window = window;
-      event->selection.selection = GDK_POINTER_TO_ATOM (msg->wParam);
-      event->selection.target = GDK_POINTER_TO_ATOM (msg->lParam);
-      event->selection.time = msg->time;
-
-      return_val = !GDK_WINDOW_DESTROYED (window);
-
-      goto done;
-    }
-  else if (msg->message == msh_mousewheel_msg)
+  if (msg->message == msh_mousewheel_msg)
     {
       GDK_NOTE (EVENTS, g_print ("MSH_MOUSEWHEEL: %#lx %d\n",
 				 (gulong) msg->hwnd, msg->wParam));

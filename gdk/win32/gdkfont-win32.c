@@ -1907,8 +1907,8 @@ gdk_text_size (GdkFont           *font,
     }
   else
     {
-      if ((wlen = _gdk_win32_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
-	g_warning ("gdk_text_size: _gdk_win32_nmbstowchar_ts failed");
+      if ((wlen = _gdk_utf8_to_ucs2 (wcstr, text, text_length, text_length)) == -1)
+	g_warning ("gdk_text_size: _gdk_utf8_to_ucs2 failed");
       else
 	_gdk_wchar_text_handle (font, wcstr, wlen, gdk_text_size_handler, arg);
     }
@@ -2014,8 +2014,8 @@ gdk_text_extents (GdkFont     *font,
     }
   else
     {
-      if ((wlen = _gdk_win32_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
-	g_warning ("gdk_text_extents: _gdk_win32_nmbstowchar_ts failed");
+      if ((wlen = _gdk_utf8_to_ucs2 (wcstr, text, text_length, text_length)) == -1)
+	g_warning ("gdk_text_extents: _gdk_utf8_to_ucs2 failed");
       else
 	_gdk_wchar_text_handle (font, wcstr, wlen, gdk_text_size_handler, &arg);
     }

@@ -2422,7 +2422,7 @@ gdk_window_stick (GdkWindow *window)
       /* "stick" means stick to all desktops _and_ do not scroll with the
        * viewport. i.e. glue to the monitor glass in all cases.
        */
-      g_warning ("gdk_window_stick (0x%X) ???", GDK_WINDOW_HWND (window));
+      g_warning ("gdk_window_stick (%#x) ???", (guint) GDK_WINDOW_HWND (window));
     }
   else
     {
@@ -2443,7 +2443,7 @@ gdk_window_unstick (GdkWindow *window)
 
   if (GDK_WINDOW_IS_MAPPED (window))
     {
-      g_warning ("gdk_window_unstick (0x%X) ???", GDK_WINDOW_HWND (window));
+      g_warning ("gdk_window_unstick (%#x) ???", (guint) GDK_WINDOW_HWND (window));
     }
   else
     {
@@ -2451,7 +2451,6 @@ gdk_window_unstick (GdkWindow *window)
       gdk_synthesize_window_state (window,
                                    GDK_WINDOW_STATE_STICKY,
                                    0);
-
     }
 }
 
@@ -2555,8 +2554,8 @@ gdk_window_set_type_hint (GdkWindow        *window,
    * XXX ???
    */
   GDK_NOTE (MISC,
-            g_print ("gdk_window_set_type_hint (0x%0X)\n",
-                     GDK_WINDOW_HWND (window)));
+            g_print ("gdk_window_set_type_hint (%#x)\n",
+                     (guint) GDK_WINDOW_HWND (window)));
 }
 
 void

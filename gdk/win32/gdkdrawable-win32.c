@@ -554,8 +554,8 @@ gdk_win32_draw_text (GdkDrawable *drawable,
   else
     {
       wcstr = g_new (wchar_t, text_length);
-      if ((wlen = _gdk_win32_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
-	g_warning ("gdk_win32_draw_text: _gdk_win32_nmbstowchar_ts failed");
+      if ((wlen = _gdk_utf8_to_ucs2 (wcstr, text, text_length, text_length)) == -1)
+	g_warning ("gdk_win32_draw_text: _gdk_utf8_to_ucs2 failed");
       else
 	_gdk_wchar_text_handle (font, wcstr, wlen, gdk_draw_text_handler, &arg);
       g_free (wcstr);

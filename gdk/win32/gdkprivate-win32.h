@@ -374,12 +374,12 @@ GdkImage *_gdk_win32_copy_to_image       (GdkDrawable *drawable,
 					  gint         width,
 					  gint         height);
 
-COLORREF _gdk_win32_colormap_color      (GdkColormap        *colormap,
-				          gulong              pixel);
+COLORREF _gdk_win32_colormap_color       (GdkColormap *colormap,
+				          gulong       pixel);
 
-HRGN	 BitmapToRegion          (HBITMAP hBmp);
+HRGN	 BitmapToRegion                  (HBITMAP hBmp);
 
-gchar  *gdk_font_full_name_get   (GdkFont *font);
+gchar   *gdk_font_full_name_get          (GdkFont *font);
 
 void    _gdk_selection_property_store (GdkWindow *owner,
                                        GdkAtom    type,
@@ -389,10 +389,15 @@ void    _gdk_selection_property_store (GdkWindow *owner,
 
 void    _gdk_selection_property_delete (GdkWindow *);
 
-gint    _gdk_win32_nmbstowchar_ts (wchar_t     *dest,
+void    _gdk_dropfiles_store (gchar *data);
+
+gint    _gdk_utf8_to_ucs2         (wchar_t     *dest,
                                    const gchar *src,
                                    gint         src_len,
                                    gint         dest_max);
+
+gchar  *_gdk_ucs2_to_utf8         (const wchar_t *src,
+				   gint           src_len);
 
 void    _gdk_wchar_text_handle    (GdkFont       *font,
 				   const wchar_t *wcstr,
@@ -441,25 +446,33 @@ void    gdk_win32_gdi_failed        (const gchar *where,
 extern LRESULT CALLBACK _gdk_win32_window_procedure (HWND, UINT, WPARAM, LPARAM);
 
 extern HWND		 gdk_root_window;
-extern gboolean		 gdk_event_func_from_window_proc;
 
 extern HDC		 gdk_display_hdc;
 extern HINSTANCE	 gdk_dll_hinstance;
 extern HINSTANCE	 gdk_app_hmodule;
 
-extern UINT		 gdk_selection_notify_msg;
-extern UINT		 gdk_selection_request_msg;
-extern UINT		 gdk_selection_clear_msg;
-extern GdkAtom		 gdk_clipboard_atom;
-extern GdkAtom		 gdk_win32_dropfiles_atom;
-extern GdkAtom		 gdk_ole2_dnd_atom;
+/* Registered clipboard formats */
+extern WORD		 cf_rtf;
+extern WORD		 cf_utf8_string;
+
+/* GdkAtoms: Targets */
+extern GdkAtom           utf8_string;
+extern GdkAtom		 compound_text;
+extern GdkAtom		 text_uri_list;
+
+/* DND selections */
+extern GdkAtom           local_dnd;
+extern GdkAtom		 gdk_win32_dropfiles;
+extern GdkAtom		 gdk_ole2_dnd;
+
+extern GdkAtom		 _gdk_selection_property;
 
 extern DWORD		 windows_version;
 #define IS_WIN_NT()      (windows_version < 0x80000000)
 
-extern gint		 gdk_input_ignore_wintab;
-
-extern GdkAtom		 _gdk_selection_property;
+/* Options */
+extern gboolean		 gdk_input_ignore_wintab;
+extern gboolean		 gdk_event_func_from_window_proc;
 
 #define IMAGE_PRIVATE_DATA(image) ((GdkImagePrivateWin32 *) GDK_IMAGE (image)->windowing_data)
 

@@ -1,3 +1,97 @@
+2002-01-10  Tor Lillqvist  <tml@iki.fi>
+
+	Apply the same fixes and improvements as to the
+	gtk-1-3-win32-production branch: Bug fixes and cleanup of
+	selection and DND functionality. Still doesn't work as well as the
+	win32-production branch, though, but getting closer.
+
+	After this, need to add Archaeopteryx Software's OLE2 DND support.
+
+	* gdk/win32/gdkselection-win32.c (gdk_selection_owner_set,
+	gdk_selection_send_notify, generate_selection_notify): Don't use
+	SendMessage() to generate events for the same app, instead use
+	gdk_event_put().
+
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkglobals-win32.c
+	* gdk/win32/gdkmain-win32.c
+	* gdk/win32/gdkevents-win32.c: Thus, remove declaration, definition,
+	initialisation and handling of gdk_selection_notify_msg,
+	gdk_selection_request_msg and gdk_selection_clear_msg. 
+
+	* gdk/win32/gdkselection-win32.c (gdk_text_property_to_text_list,
+	gdk_free_text_list, gdk_string_to_compound_text,
+	gdk_free_compound_text): Implement trivially, witrh a text_list
+	always having a single element, and a compound text always
+	consisting of just a single (UTF-8!) string. Let's see how well
+	this works.
+
+	* gdk/win32/gdkselection-win32.c (gdk_selection_convert): Fix
+	non-ASCII paste from the clipboard: Try getting the same formats
+	from the Windows clipboard that gdk_property_change() puts there:
+	CF_UNICODETEXT, UTF8_STRING or CF_TEXT+CF_LOCALE.
+
+	* gdk/win32/gdkproperty-win32.c (gdk_property_change): When
+	storing text on the clipboard, handle non-ASCII text
+	correctly. The logic is as follows:
+
+	If we have only ASCII characters, use CF_TEXT.
+
+	Else, if we are on NT, use CF_UNICODETEXT.
+
+	Else (we are on Win9x), if all the characters are present in the
+	code page of some installed locale, use CF_TEXT and also set
+	CF_LOCALE to that locale.
+
+	Else (still on Win9x) store as RTF. We use a very simple RTF
+	string, just the text, no fonts or other crap, with the non-ASCII
+	characters as Unicode \uN keywords. Additionally, also store the
+	UTF-8 string as such, under the format "UTF8_STRING", so that GDK
+	can also paste from the Clipboard what it has copied there. (Thus
+	no need to implement any RTF parser.)
+	
+	(find_common_locale): New function, implements the search for a
+	locale for case 3 above.
+
+	* gdk/win32/gdkglobals-win32.c: New global variables
+	compound_text, text_uri_list, utf8_string, cf_rtf and
+	cf_utf8_string.
+
+	* gdk/win32/gdkim-win32.c (_gdk_ucs2_to_utf8): New function,
+	converts from a wchar_t string to UTF-8.
+	(_gdk_utf8_to_ucs2): Rename from _gdk_win32_nmbstowchar_ts.
+	(_gdk_utf8_to_wcs): Rename from gdk_nmbstowchar_ts.
+
+	* gdk/win32/gdkevents-win32.c (build_keypress_event): Use
+	_gdk_ucs2_to_utf8().
+
+	* gdk/win32/gdkselection-win32.c: Remove some unnecessary logging.
+
+	* gdk/win32/gdkdnd-win32.c: Plug memory leaks, the
+	gdk_drag_context_ref() was called unnecessarily in a couple of
+	places, meaning drag contexts were never freed. The same memory
+	leaks seem to be present in gdk/linux-fb/gdkselection-fb.c, BTW.
+
+	(gdk_drop_reply): For WIN32_DROPFILES drops, free the temporarily
+	stored file list.
+
+	* gdk/win32/gdkselection-win32.c: Clarify the use of the
+	sel_prop_table. Now it is used only for storing the GDK_SELECTION
+	"properties".
+
+	The file names dropped with WM_DROPFILES -style DND is stored
+	temporarily (between the drop and the target picking them up) in a
+	separate place.
+
+	Have a separate hash table to map selection atoms to owner
+	windows. This used to be quite mixed up.
+
+	(_gdk_dropfiles_store): New function, to store the dropped file
+	list for the drop target to possibly fetch, and clear it
+	afterwards, from gdk_drop_reply().
+
+	(gdk_selection_owner_get): Much simplified now.
+
 2002-01-09  jacob berkman  <jacob@ximian.com>
 
 	* gtk/gtklayout.c (gtk_layout_style_set): set the background of
