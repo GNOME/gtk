@@ -1,3 +1,9 @@
+Thu Dec 18 17:52:56 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_set_property):
+	clear the extra_attrs list if we set "text" after "markup".
+	(Fixes #121933, Federico Mena Quintero).
+
 2003-12-18  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkicontheme.c (gtk_icon_info_get_embedded_rect):

@@ -123,6 +123,7 @@ struct _GtkCellRendererTextPrivate
 {
   guint single_paragraph : 1;
   guint language_set : 1;
+  guint markup_set : 1;
 
   gulong focus_out_id;
   PangoLanguage *language;
@@ -870,6 +871,15 @@ gtk_cell_renderer_text_set_property (GObject      *object,
     case PROP_TEXT:
       if (celltext->text)
         g_free (celltext->text);
+
+      if (priv->markup_set)
+        {
+          if (celltext->extra_attrs)
+            pango_attr_list_unref (celltext->extra_attrs);
+          celltext->extra_attrs = NULL;
+          priv->markup_set = FALSE;
+        }
+
       celltext->text = g_strdup (g_value_get_string (value));
       g_object_notify (object, "text");
       break;
@@ -912,6 +922,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 
 	celltext->text = text;
 	celltext->extra_attrs = attrs;
+        priv->markup_set = TRUE;
       }
       break;
 
