@@ -1,3 +1,8 @@
+2002-01-08  jacob berkman  <jacob@ximian.com>
+
+	* gtk/gtklayout.c (gtk_layout_move_internal): queue a resize on
+	the child rather than the layout. see bug #68263
+
 Tue Jan  8 14:51:19 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkpaned.c (gtk_paned_expose): Don't draw

@@ -374,7 +374,7 @@ gtk_layout_move_internal (GtkLayout       *layout,
   gtk_widget_thaw_child_notify (widget);
   
   if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (layout))
-    gtk_widget_queue_resize (GTK_WIDGET (layout));
+    gtk_widget_queue_resize (GTK_WIDGET (widget));
 }
 
 /**
