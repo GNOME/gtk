@@ -350,7 +350,7 @@ binding_compose_params (GtkObject       *object,
 	  else
 	    {
 	      g_value_init (&tmp_value, G_TYPE_STRING);
-	      g_value_set_static_string (params, args->d.string_data);
+	      g_value_set_static_string (&tmp_value, args->d.string_data);
 	    }
 	  break;
 	default:

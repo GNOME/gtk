@@ -580,10 +580,14 @@ libgtk_target_ldflags = $(gtk_win32_symbols) -lwsock32
 endif
 EXTRA_LTLIBRARIES = libgtk-x11-1.3.la libgtk-linux-fb-1.3.la libgtk-win32-1.3.la
 
-# Install a RC file for the default GTK+ theme
+# Install a RC file for the default GTK+ theme, and key themes
 install-data-local:  install-ms-lib install-libtool-import-lib
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk-2.0
 	$(INSTALL) $(srcdir)/gtkrc.default $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
+	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk-2.0-key
+	$(INSTALL) $(srcdir)/gtkrc.key.default $(DESTDIR)$(datadir)/themes/Default/gtk-2.0-key/gtkrc
+	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Emacs/gtk-2.0-key
+	$(INSTALL) $(srcdir)/gtkrc.key.emacs $(DESTDIR)$(datadir)/themes/Emacs/gtk-2.0-key/gtkrc
 
 uninstall-local: uninstall-ms-lib uninstall-libtool-import-lib
 	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
@@ -627,6 +631,8 @@ EXTRA_DIST += @STRIP_BEGIN@ 	\
 	gtk-win32.rc		\
 	gtk-win32.rc.in		\
 	gtkrc.default		\
+	gtkrc.key.default	\
+	gtkrc.key.emacs		\
 	makefile.mingw		\
 	makefile.mingw.in	\
 	makefile.msc		\

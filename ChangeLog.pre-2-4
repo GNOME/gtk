@@ -1,3 +1,12 @@
+Fri Feb  8 20:24:58 2002  Owen Taylor  <otaylor@redhat.com>
+
+	
+	* gtk/gtkbindings.c (binding_compose_params): Fix problem
+	with string-valued parameters (#70012, Johan Dahlin.)
+
+	* gtk/gtkentry.c (gtk_entry_delete_whitespace): Fix 
+	white space deletion.
+
 Fri Feb  8 21:25:56 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_deleted): fix

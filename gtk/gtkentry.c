@@ -3091,7 +3091,7 @@ gtk_entry_delete_whitespace (GtkEntry *entry)
   while (start > 0 && log_attrs[start-1].is_white)
     start--;
 
-  while (end < n_attrs && log_attrs[start-1].is_white)
+  while (end < n_attrs && log_attrs[end].is_white)
     end++;
 
   g_free (log_attrs);
