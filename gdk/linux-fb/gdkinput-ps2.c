@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 /*
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
@@ -48,7 +49,10 @@ typedef struct {
   GdkWindow *prev_window;
   gboolean button1_pressed, button2_pressed, button3_pressed;
   gboolean click_grab;
-} PS2Mouse;
+
+  guchar fidmour_bytes[5];
+  int fidmour_nbytes;
+} MouseDevice;
 
 typedef struct {
   gint fd, fd_tag, consfd;
@@ -62,9 +66,8 @@ typedef struct {
 static Keyboard * tty_keyboard_open(void);
 static guint keyboard_get_state(Keyboard *k);
 
-PS2Mouse *gdk_fb_ps2mouse = NULL;
+static MouseDevice *gdk_fb_mouse = NULL;
 static Keyboard *keyboard = NULL;
-FILE *debug_out;
 
 static guint multiclick_tag;
 static GdkEvent *multiclick_event = NULL;
@@ -92,7 +95,7 @@ click_event_timeout(gpointer x)
 }
 
 static void
-send_button_event(PS2Mouse *mouse, guint button, gboolean press_event, time_t the_time)
+send_button_event(MouseDevice *mouse, guint button, gboolean press_event, time_t the_time)
 {
   GdkEvent *event;
   gint x, y;
@@ -354,7 +357,7 @@ gdk_fb_get_cursor_rect(GdkRectangle *rect)
 }
 
 static void
-move_pointer(PS2Mouse *mouse, GdkWindow *in_window)
+move_pointer(MouseDevice *mouse, GdkWindow *in_window)
 {
   GdkCursor *the_cursor;
 
@@ -396,7 +399,7 @@ gdk_fb_cursor_reset(void)
 {
   GdkWindow *win = gdk_window_get_pointer(NULL, NULL, NULL, NULL);
 
-  move_pointer(gdk_fb_ps2mouse, win);
+  move_pointer(gdk_fb_mouse, win);
 }
 
 void gdk_fb_window_visibility_crossing(GdkWindow *window, gboolean is_show, gboolean is_grab)
@@ -471,22 +474,227 @@ void gdk_fb_window_visibility_crossing(GdkWindow *window, gboolean is_show, gboo
 	  event->crossing.state = my_mask;
 	}
 
-      if(gdk_fb_ps2mouse->prev_window)
-	gdk_window_unref(gdk_fb_ps2mouse->prev_window);
-      gdk_fb_ps2mouse->prev_window = gdk_window_ref(newwin);
+      if(gdk_fb_mouse->prev_window)
+	gdk_window_unref(gdk_fb_mouse->prev_window);
+      gdk_fb_mouse->prev_window = gdk_window_ref(newwin);
+    }
+}
+
+static void
+handle_mouse_input(MouseDevice *mouse, gboolean got_motion)
+{
+  GdkWindow *mousewin;
+  GdkEvent *event;
+  gint x, y;
+  GdkWindow *win;
+  guint state;
+
+  if(_gdk_fb_pointer_grab_confine)
+    mousewin = _gdk_fb_pointer_grab_confine;
+  else
+    mousewin = gdk_parent_root;
+
+  if(mouse->x < GDK_DRAWABLE_IMPL_FBDATA(mousewin)->llim_x)
+    mouse->x = GDK_DRAWABLE_IMPL_FBDATA(mousewin)->llim_x;
+  else if(mouse->x > (GDK_DRAWABLE_IMPL_FBDATA(mousewin)->lim_x - 1))
+    mouse->x = GDK_DRAWABLE_IMPL_FBDATA(mousewin)->lim_x - 1;
+  if(mouse->y < GDK_DRAWABLE_IMPL_FBDATA(mousewin)->llim_y)
+    mouse->y = GDK_DRAWABLE_IMPL_FBDATA(mousewin)->llim_y;
+  else if(mouse->y > (GDK_DRAWABLE_IMPL_FBDATA(mousewin)->lim_y - 1))
+    mouse->y = GDK_DRAWABLE_IMPL_FBDATA(mousewin)->lim_y - 1;
+
+  if(!got_motion)
+    return;
+
+  win = gdk_window_get_pointer(NULL, NULL, NULL, NULL);
+  move_pointer(mouse, win);
+  if(_gdk_fb_pointer_grab_window_events)
+    win = _gdk_fb_pointer_grab_window_events;
+
+  gdk_window_get_origin(win, &x, &y);
+  x = mouse->x - x;
+  y = mouse->y - y;
+
+
+  state = (mouse->button1_pressed?GDK_BUTTON1_MASK:0)
+    | (mouse->button2_pressed?GDK_BUTTON2_MASK:0)
+    | (mouse->button3_pressed?GDK_BUTTON3_MASK:0)
+    | keyboard_get_state(keyboard);
+
+  event = gdk_event_make (win, GDK_MOTION_NOTIFY, TRUE);
+  if(event)
+    {
+      event->motion.x = x;
+      event->motion.y = y;
+      event->motion.state = state;
+      event->motion.is_hint = FALSE;
+      event->motion.device = gdk_core_pointer;
+      event->motion.x_root = mouse->x;
+      event->motion.y_root = mouse->y;
+    }
+
+  if(win != mouse->prev_window)
+    {
+      GdkEvent *evel;
+
+      if(mouse->prev_window && (evel = gdk_event_make(mouse->prev_window, GDK_LEAVE_NOTIFY, TRUE)))
+	{
+	  evel->crossing.subwindow = gdk_window_ref(win);
+	  evel->crossing.x = x;
+	  evel->crossing.y = y;
+	  evel->crossing.x_root = mouse->x;
+	  evel->crossing.y_root = mouse->y;
+	  evel->crossing.mode = GDK_CROSSING_NORMAL;
+	  evel->crossing.detail = GDK_NOTIFY_UNKNOWN;
+	  evel->crossing.focus = FALSE;
+	  evel->crossing.state = state;
+	}
+
+      evel = gdk_event_make(win, GDK_ENTER_NOTIFY, TRUE);
+      if(evel)
+	{
+	  evel->crossing.subwindow = gdk_window_ref(mouse->prev_window?mouse->prev_window:gdk_parent_root);
+	  evel->crossing.x = x;
+	  evel->crossing.y = y;
+	  evel->crossing.x_root = mouse->x;
+	  evel->crossing.y_root = mouse->y;
+	  evel->crossing.mode = GDK_CROSSING_NORMAL;
+	  evel->crossing.detail = GDK_NOTIFY_UNKNOWN;
+	  evel->crossing.focus = FALSE;
+	  evel->crossing.state = state;
+	}
+
+      if(mouse->prev_window)
+	gdk_window_unref(mouse->prev_window);
+      mouse->prev_window = gdk_window_ref(win);
     }
 }
 
 static gboolean
-handle_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
+pull_fidmour_packet(MouseDevice *mouse, gboolean *btn_down, int *x, int *y)
 {
+  gboolean keep_reading = TRUE;
+
+  while(keep_reading)
+    {
+      int n;
+
+      n = read(mouse->fd, mouse->fidmour_bytes + mouse->fidmour_nbytes, 5 - mouse->fidmour_nbytes);
+      if(n < 0)
+	return FALSE;
+      else if(n == 0)
+	{
+	  g_error("EOF on mouse device!");
+	  g_source_remove(mouse->fd_tag);
+	  return FALSE;
+	}
+
+      mouse->fidmour_nbytes += n;
+
+      n = 0;
+      if(!(mouse->fidmour_bytes[0] & 0x80))
+	{
+	  int i;
+	  /* We haven't received any of the packet yet but there is no header at the beginning */
+	  for(i = 1; i < mouse->fidmour_nbytes; i++)
+	    {
+	      if(mouse->fidmour_bytes[i] & 0x80)
+		{
+		  n = i;
+		  break;
+		}
+	    }
+	}
+      else if(mouse->fidmour_nbytes > 1
+	      && ((mouse->fidmour_bytes[0] & 0x90) == 0x90))
+	{
+	  /* eat the 0x90 and following byte, no clue what it's for */
+	  n = 2;
+	}
+      else if(mouse->fidmour_nbytes == 5)
+	{
+	  switch(mouse->fidmour_bytes[0] & 0x80)
+	    {
+	    case 2:
+	      *btn_down = 0;
+	      break;
+	    case 1:
+	    case 0:
+	      *btn_down = 1;
+	      break;
+	    }
+	  *x = (mouse->fidmour_bytes[1] << 1) + (mouse->fidmour_bytes[2] << 7);
+	  *y = (mouse->fidmour_bytes[3] << 1) + (mouse->fidmour_bytes[4] << 7);
+	  n = 5;
+	  keep_reading = FALSE;
+	}
+
+      if(n)
+	{
+	  memmove(mouse->fidmour_bytes, mouse->fidmour_bytes+n, mouse->fidmour_nbytes-n);
+	  mouse->fidmour_nbytes -= n;
+	}
+    }
+
+  return TRUE;
+}
+
+static gboolean
+handle_input_fidmour(GIOChannel *gioc, GIOCondition cond, gpointer data)
+{
+  MouseDevice *mouse = data;
+  int x, y;
+  gboolean got_motion = FALSE;
+  gboolean btn_down;
+  time_t the_time;
+  GTimeVal tv;
+
+  g_get_current_time(&tv);
+  the_time = tv.tv_sec;
+
+  while(pull_fidmour_packet(mouse, &btn_down, &x, &y))
+    {
+#if 0
+      if(x != mouse->x
+	 || y != mouse->y)
+	got_motion = TRUE;
+      mouse->x = x;
+      mouse->y = y;
+#else
+      g_print("%d at %dx%d\n",
+	      btn_down, x, y);
+      continue;
+#endif
+      
+
+      if(btn_down != mouse->button1_pressed)
+	{
+	  if(got_motion)
+	    {
+	      handle_mouse_input(mouse, TRUE);
+	      got_motion = FALSE;
+	    }
+
+	  mouse->button1_pressed = btn_down;
+	  send_button_event(mouse, 1, btn_down, the_time);
+	}
+    }
+
+  if(got_motion)
+    handle_mouse_input(mouse, TRUE);
+
+  return TRUE;
+}
+
+static gboolean
+handle_input_ps2(GIOChannel *gioc, GIOCondition cond, gpointer data)
+{
+  MouseDevice *mouse = data;
   guchar buf[3];
   int n, left, dx=0, dy=0;
-  PS2Mouse *mouse = data;
   gboolean new_button1, new_button2, new_button3;
   time_t the_time;
   GTimeVal curtime;
-  GdkWindow *mousewin;
   gboolean got_motion = FALSE;
 
   g_get_current_time(&curtime);
@@ -512,6 +720,17 @@ handle_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
       new_button1 = (buf[0] & 1) && 1;
       new_button3 = (buf[0] & 2) && 1;
       new_button2 = (buf[0] & 4) && 1;
+
+      if(got_motion &&
+	 (new_button1 != mouse->button1_pressed
+	  || new_button2 != mouse->button2_pressed
+	  || new_button3 != mouse->button3_pressed))
+	{
+	  /* If a mouse button state changes we need to get correct ordering with enter/leave events,
+	     so push those out via handle_mouse_input */
+	  got_motion = FALSE;
+	  handle_mouse_input(mouse, TRUE);
+	}
 
       if(new_button1 != mouse->button1_pressed)
 	{
@@ -545,136 +764,105 @@ handle_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
       if(dx || dy)
 	got_motion = TRUE;
     }
+
  done_reading_mouse_events:
-
-  if(_gdk_fb_pointer_grab_confine)
-    mousewin = _gdk_fb_pointer_grab_confine;
-  else
-    mousewin = gdk_parent_root;
-
-  if(mouse->x < 0)
-    mouse->x = 0;
-  else if(mouse->x > (GDK_DRAWABLE_IMPL_FBDATA(mousewin)->lim_x - 1))
-    mouse->x = GDK_DRAWABLE_IMPL_FBDATA(mousewin)->lim_x - 1;
-  if(mouse->y < 0)
-    mouse->y = 0;
-  else if(mouse->y > (GDK_DRAWABLE_IMPL_FBDATA(mousewin)->lim_y - 1))
-    mouse->y = GDK_DRAWABLE_IMPL_FBDATA(mousewin)->lim_y - 1;
-
-  if(got_motion) {
-    GdkEvent *event;
-    gint x, y;
-    GdkWindow *win;
-    guint state;
-
-    win = gdk_window_get_pointer(NULL, NULL, NULL, NULL);
-    move_pointer(mouse, win);
-    if(_gdk_fb_pointer_grab_window_events)
-      win = _gdk_fb_pointer_grab_window_events;
-
-    gdk_window_get_origin(win, &x, &y);
-    x = mouse->x - x;
-    y = mouse->y - y;
-
-
-    state = (mouse->button1_pressed?GDK_BUTTON1_MASK:0)
-      | (mouse->button2_pressed?GDK_BUTTON2_MASK:0)
-      | (mouse->button3_pressed?GDK_BUTTON3_MASK:0)
-      | keyboard_get_state(keyboard);
-
-    event = gdk_event_make (win, GDK_MOTION_NOTIFY, TRUE);
-    if(event)
-      {
-	event->motion.x = x;
-	event->motion.y = y;
-	event->motion.state = state;
-	event->motion.is_hint = FALSE;
-	event->motion.device = gdk_core_pointer;
-	event->motion.x_root = mouse->x;
-	event->motion.y_root = mouse->y;
-      }
-
-    if(win != mouse->prev_window)
-      {
-	GdkEvent *evel;
-
-	if(mouse->prev_window && (evel = gdk_event_make(mouse->prev_window, GDK_LEAVE_NOTIFY, TRUE)))
-	  {
-	    evel->crossing.subwindow = gdk_window_ref(win);
-	    evel->crossing.x = x;
-	    evel->crossing.y = y;
-	    evel->crossing.x_root = mouse->x;
-	    evel->crossing.y_root = mouse->y;
-	    evel->crossing.mode = GDK_CROSSING_NORMAL;
-	    evel->crossing.detail = GDK_NOTIFY_UNKNOWN;
-	    evel->crossing.focus = FALSE;
-	    evel->crossing.state = state;
-	  }
-
-	evel = gdk_event_make(win, GDK_ENTER_NOTIFY, TRUE);
-	if(evel)
-	  {
-	    evel->crossing.subwindow = gdk_window_ref(mouse->prev_window?mouse->prev_window:gdk_parent_root);
-	    evel->crossing.x = x;
-	    evel->crossing.y = y;
-	    evel->crossing.x_root = mouse->x;
-	    evel->crossing.y_root = mouse->y;
-	    evel->crossing.mode = GDK_CROSSING_NORMAL;
-	    evel->crossing.detail = GDK_NOTIFY_UNKNOWN;
-	    evel->crossing.focus = FALSE;
-	    evel->crossing.state = state;
-	  }
-
-	if(mouse->prev_window)
-	  gdk_window_unref(mouse->prev_window);
-	mouse->prev_window = gdk_window_ref(win);
-      }
-  }
+  if(got_motion)
+    handle_mouse_input(mouse, TRUE);
 
   return TRUE;
 }
 
-static PS2Mouse *
+static MouseDevice *
 mouse_open(void)
 {
-  PS2Mouse *retval = g_new0(PS2Mouse, 1);
+  MouseDevice *retval = g_new0(MouseDevice, 1);
   guchar buf[7];
   int i = 0;
   GIOChannel *gioc;
+  char *mousedev, *ctmp;
+  int mode;
+  enum { PS2_MOUSE, FIDMOUR_MOUSE, UNKNOWN_MOUSE } type;
 
-  retval->fd = open("/dev/psaux", O_RDWR);
-  if(retval->fd < 0)
+  retval->fd = -1;
+  mode = O_RDWR;
+  ctmp = getenv("GDK_MOUSETYPE");
+  if(ctmp)
     {
-      g_free(retval);
-      return NULL;
-    }
-
-  /* From xf86_Mouse.c */
-  buf[i++] = 230; /* 1:1 scaling */
-  buf[i++] = 244; /* enable mouse */
-  buf[i++] = 243; /* Sample rate */
-  buf[i++] = 200;
-  buf[i++] = 232; /* device resolution */
-  buf[i++] = 1;
-  write(retval->fd, buf, i);
-  if(read(retval->fd, buf, 3) < 0
-     || getenv("GDK_NO_PS2MOUSE")) /* Get rid of misc garbage whatever stuff from mouse */
-    {
-      close(retval->fd);
-      retval->fd = -1;
+      if(!strcmp(ctmp, "fidmour"))
+	type = FIDMOUR_MOUSE;
+      else if(!strcmp(ctmp, "ps2"))
+	type = PS2_MOUSE;
+      else
+	{
+	  g_print("Unknown mouse type %s\n", ctmp);
+	  type = UNKNOWN_MOUSE;
+	}
     }
   else
+    type = PS2_MOUSE;
+
+  switch(type)
     {
+    case PS2_MOUSE:
+      mousedev = "/dev/psaux";
+      mode = O_RDWR;
+      break;
+    case FIDMOUR_MOUSE:
+      mousedev = "/dev/fidmour";
+      mode = O_RDONLY;
+      break;
+    default:
+      goto error;
+      break;
+    }
+
+  ctmp = getenv("GDK_MOUSEDEV");
+  if(ctmp)
+    mousedev = ctmp;
+
+  retval->fd = open(mousedev, mode);
+  if(retval->fd < 0)
+    goto error;
+
+  switch(type)
+    {
+    case PS2_MOUSE:
+      /* From xf86_Mouse.c */
+      buf[i++] = 230; /* 1:1 scaling */
+      buf[i++] = 244; /* enable mouse */
+      buf[i++] = 243; /* Sample rate */
+      buf[i++] = 200;
+      buf[i++] = 232; /* device resolution */
+      buf[i++] = 1;
+      write(retval->fd, buf, i);
+      if(read(retval->fd, buf, 3) < 0)
+	goto error;
       fcntl(retval->fd, F_SETFL, O_RDWR|O_NONBLOCK);
 
       gioc = g_io_channel_unix_new(retval->fd);
-      retval->fd_tag = g_io_add_watch(gioc, G_IO_IN|G_IO_ERR|G_IO_HUP|G_IO_NVAL, handle_input, retval);
+      retval->fd_tag = g_io_add_watch(gioc, G_IO_IN|G_IO_ERR|G_IO_HUP|G_IO_NVAL, handle_input_ps2, retval);
+      break;
+
+    case FIDMOUR_MOUSE:
+      gioc = g_io_channel_unix_new(retval->fd);
+      retval->fd_tag = g_io_add_watch(gioc, G_IO_IN|G_IO_ERR|G_IO_HUP|G_IO_NVAL, handle_input_fidmour, retval);
+      break;
+    default:
+      g_assert_not_reached();
+      break;
     }
 
   retval->x = gdk_display->modeinfo.xres >> 1;
   retval->y = gdk_display->modeinfo.yres >> 1;
 
   return retval;
+
+ error:
+  /* No errors allowed once fd_tag is added */
+  if(retval->fd >= 0)
+    close(retval->fd);
+  g_free(retval);
+  return NULL;
 }
 
 void
@@ -684,18 +872,18 @@ gdk_input_init (void)
 
   gdk_input_ignore_core = FALSE;
 
-  gdk_fb_ps2mouse = mouse_open();
+  gdk_fb_mouse = mouse_open();
 }
 
 void
 gdk_input_ps2_get_mouseinfo(gint *x, gint *y, GdkModifierType *mask)
 {
-  *x = gdk_fb_ps2mouse->x;
-  *y = gdk_fb_ps2mouse->y;
+  *x = gdk_fb_mouse->x;
+  *y = gdk_fb_mouse->y;
   *mask =
-    (gdk_fb_ps2mouse->button1_pressed?GDK_BUTTON1_MASK:0)
-    | (gdk_fb_ps2mouse->button2_pressed?GDK_BUTTON2_MASK:0)
-    | (gdk_fb_ps2mouse->button3_pressed?GDK_BUTTON3_MASK:0)
+    (gdk_fb_mouse->button1_pressed?GDK_BUTTON1_MASK:0)
+    | (gdk_fb_mouse->button2_pressed?GDK_BUTTON2_MASK:0)
+    | (gdk_fb_mouse->button3_pressed?GDK_BUTTON3_MASK:0)
     | keyboard_get_state(keyboard);
 }
 
@@ -1120,8 +1308,6 @@ handle_keyboard_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
 	    {
 	      gint vtnum = trans_table[base_char][0] - GDK_F1 + 1;
 
-	      fprintf(debug_out, "Switching VTs\n");
-
 	      /* Do the whole funky VT switch thing */
 	      ioctl(k->consfd, VT_ACTIVATE, vtnum);
 	      ioctl(k->consfd, VT_WAITACTIVE, k->vtnum);
@@ -1207,8 +1393,6 @@ tty_keyboard_open(void)
 
   ioctl(retval->consfd, VT_ACTIVATE, retval->vtnum);
   ioctl(retval->consfd, VT_WAITACTIVE, retval->vtnum);
-
-  debug_out = fdopen(dup(2), "w");
 
 #if 0
   close(0);
