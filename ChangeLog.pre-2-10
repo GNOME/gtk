@@ -1,3 +1,7 @@
+2003-03-20  Guntupalli Karunakar <karunakar@freedomink.org>
+
+	* configure.in: Added "ml" in ALL_LINGUAS
+
 Sat Mar 15 18:49:27 2003  Manish Singh  <yosh@gimp.org>
                                                                                 
         * gtk/gtkradiomenuitem.h: use GTK_DISABLE_DEPRECATED instead of
