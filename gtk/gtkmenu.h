@@ -119,7 +119,7 @@ GtkWidget* gtk_menu_get_active		  (GtkMenu	       *menu);
 void	   gtk_menu_set_active		  (GtkMenu	       *menu,
 					   guint		index);
 
-/* set/get the acclerator group that holds global accelerators (should
+/* set/get the accelerator group that holds global accelerators (should
  * be added to the corresponding toplevel with gtk_window_add_accel_group().
  */
 void	       gtk_menu_set_accel_group	  (GtkMenu	       *menu,

@@ -1167,7 +1167,7 @@ gtk_menu_position (GtkMenu *menu)
 
   /* We need the requisition to figure out the right place to
    * popup the menu. In fact, we always need to ask here, since
-   * if one a size_request was queued while we weren't popped up,
+   * if a size_request was queued while we weren't popped up,
    * the requisition won't have been recomputed yet.
    */
   gtk_widget_size_request (widget, &requisition);

@@ -177,7 +177,7 @@ struct _GtkArg
 #define GTK_VALUE_POINTER(a)	((a).d.pointer_data)
 #define GTK_VALUE_SIGNAL(a)	((a).d.signal_data)
 
-/* return location macros, these all narow down to
+/* return location macros, these all narrow down to
  * pointer types, because return values need to be
  * passed by reference
  */
