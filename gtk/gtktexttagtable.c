@@ -135,10 +135,21 @@ gtk_text_tag_table_new (void)
 static void
 foreach_unref (GtkTextTag *tag, gpointer data)
 {
+  GSList *tmp;
+  
   /* We don't want to emit the remove signal here; so we just unparent
    * and unref the tag.
    */
 
+  tmp = tag->table->buffers;
+  while (tmp != NULL)
+    {
+      _gtk_text_buffer_notify_will_remove_tag (GTK_TEXT_BUFFER (tmp->data),
+                                               tag);
+      
+      tmp = tmp->next;
+    }
+  
   tag->table = NULL;
   g_object_unref (G_OBJECT (tag));
 }

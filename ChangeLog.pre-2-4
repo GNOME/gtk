@@ -1,3 +1,18 @@
+2002-03-23  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextview.c (gtk_text_view_destroy_layout): disconnect 
+	layout handlers earlier in the function, to avoid possible
+	reentrancy screwups
+	(gtk_text_view_invalidate): Don't install idle handlers if 
+	layout == NULL, otherwise we get problems during finalization 
+	since clearing the buffer invalidates and puts the idle handlers
+	back after we destroy the layout. #74660
+	(gtk_text_view_ensure_layout): Install the validation handlers
+	right after creating the layout.
+
+	* gtk/gtktexttagtable.c (foreach_unref): call
+	_gtk_text_buffer_notify_will_remove_tag(), #75126
+
 2002-03-22  Havoc Pennington  <hp@pobox.com>
 
 	* gdk/x11/gdkfont-x11.c (gdk_fontset_load): add more explanatory

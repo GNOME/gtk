@@ -2431,7 +2431,7 @@ gtk_text_view_finalize (GObject *object)
     text_window_free (text_view->bottom_window);
 
   g_object_unref (G_OBJECT (text_view->im_context));
-
+  
   (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
@@ -3091,6 +3091,10 @@ gtk_text_view_invalidate (GtkTextView *text_view)
                text_view->onscreen_validated));
 
   text_view->onscreen_validated = FALSE;
+
+  /* We'll invalidate when the layout is created */
+  if (text_view->layout == NULL)
+    return;
   
   if (!text_view->first_validate_idle)
     {
@@ -5261,6 +5265,8 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
 
           tmp_list = g_slist_next (tmp_list);
         }
+
+      gtk_text_view_invalidate (text_view);
     }
 }
 
@@ -5297,6 +5303,13 @@ gtk_text_view_destroy_layout (GtkTextView *text_view)
       GSList *tmp_list;
 
       gtk_text_view_remove_validate_idles (text_view);
+
+      g_signal_handlers_disconnect_by_func (G_OBJECT (text_view->layout),
+                                            (gpointer) invalidated_handler,
+					    text_view);
+      g_signal_handlers_disconnect_by_func (G_OBJECT (text_view->layout),
+                                            (gpointer) changed_handler, 
+					    text_view);
       
       /* Remove layout from all anchored children */
       tmp_list = text_view->children;
@@ -5316,12 +5329,6 @@ gtk_text_view_destroy_layout (GtkTextView *text_view)
       gtk_text_view_stop_cursor_blink (text_view);
       gtk_text_view_end_selection_drag (text_view, NULL);
 
-      g_signal_handlers_disconnect_by_func (G_OBJECT (text_view->layout),
-                                            (gpointer) invalidated_handler,
-					    text_view);
-      g_signal_handlers_disconnect_by_func (G_OBJECT (text_view->layout),
-                                            (gpointer) changed_handler, 
-					    text_view);
       g_object_unref (G_OBJECT (text_view->layout));
       text_view->layout = NULL;
     }
