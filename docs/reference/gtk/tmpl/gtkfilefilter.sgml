@@ -14,6 +14,14 @@ gtk_file_filter_add_mime_type()), or by a custom filter function
 </para>
 
 <para>
+Filtering by mime types handles aliasing and subclassing of mime
+types; e.g. a filter for text/plain also matches a file with mime 
+type application/rtf, since application/rtf is a subclass of 
+text/plain. Note that #GtkFileFilter allows wildcards for the 
+subtype of a mime type, so you can e.g. filter for image/*.
+</para>
+
+<para>
 Normally, filters are used by adding them to a #GtkFileChooser,
 see gtk_file_chooser_add_filter(), but it is also possible
 to manually use a filter on a file with gtk_file_filter_filter().
