@@ -51,6 +51,7 @@ libgtk_1_1_la_SOURCES = \
 	gtklist.c		\
 	gtklistitem.c		\
 	gtkmain.c		\
+	gtkmarshal.c		\
 	gtkmenu.c		\
 	gtkmenubar.c		\
 	gtkmenufactory.c	\
@@ -151,6 +152,7 @@ gtkinclude_HEADERS = \
 	gtklist.h		\
 	gtklistitem.h		\
 	gtkmain.h		\
+	gtkmarshal.h		\
 	gtkmenu.h		\
 	gtkmenubar.h		\
 	gtkmenufactory.h	\
@@ -286,3 +288,6 @@ test-debug: testgtk
 	builddir=`pwd`; cd $(top_builddir); top_builddir=`pwd`; \
 	cd $$builddir; cd $(srcdir); \
 	$(SHELL) $$top_builddir/libtool --mode=execute gdb $$builddir/testgtk
+
+gtkmarshal.c gtkmarshal.h: gtkmarshal.list
+	perl $(srcdir)/genmarshal.pl
