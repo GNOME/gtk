@@ -482,26 +482,29 @@ gdk_rgb_score_visual (GdkVisual *visual)
 static void
 gdk_rgb_choose_visual (void)
 {
-  GList *visuals;
+  GList *visuals, *tmp_list;
   guint32 score, best_score;
   GdkVisual *visual, *best_visual;
 
   visuals = gdk_list_visuals ();
+  tmp_list = visuals;
 
-  best_visual = visuals->data;
+  best_visual = tmp_list->data;
   best_score = gdk_rgb_score_visual (best_visual);
-  visuals = visuals->next;
-  while (visuals)
+  tmp_list = tmp_list->next;
+  while (tmp_list)
     {
-      visual = visuals->data;
+      visual = tmp_list->data;
       score = gdk_rgb_score_visual (visual);
       if (score > best_score)
 	{
 	  best_score = score;
 	  best_visual = visual;
 	}
-      visuals = visuals->next;
+      tmp_list = tmp_list->next;
     }
+
+  g_list_free (visuals);
 
   image_info->visual = best_visual;
 }

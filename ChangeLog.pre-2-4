@@ -1,3 +1,9 @@
+Wed May  5 11:38:56 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkrgb.c (gdk_rgb_choose_visual): Free the 
+	return value of gdk_list_visuals(). 
+	(Bug #1193 - Morten Welinder <terra@diku.dk>)
+
 Wed May  5 10:47:54 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in (LIBS): Add $INTLLIBS into $LIBS
