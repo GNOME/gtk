@@ -22,7 +22,6 @@
  */
 
 #include "gtkprivate.h"
-#include "gtksignal.h"
 #include "gtkwindow.h"
 #include "gtkmain.h"
 
@@ -141,26 +140,26 @@ gtk_decorated_window_init (GtkWindow   *window)
   
   gtk_window_set_has_frame (window, TRUE);
 
-  gtk_signal_connect (GTK_OBJECT (window),
-		      "frame_event",
-		      GTK_SIGNAL_FUNC (gtk_decorated_window_frame_event),
-		      window);
-  gtk_signal_connect (GTK_OBJECT (window),
-		      "focus_in_event",
-		      GTK_SIGNAL_FUNC (gtk_decorated_window_focus_change),
-		      window);
-  gtk_signal_connect (GTK_OBJECT (window),
-		      "focus_out_event",
-		      GTK_SIGNAL_FUNC (gtk_decorated_window_focus_change),
-		      window);
-  gtk_signal_connect (GTK_OBJECT (window),
-		      "realize",
-		      GTK_SIGNAL_FUNC (gtk_decorated_window_realize),
-		      window);
-  gtk_signal_connect (GTK_OBJECT (window),
-		      "unrealize",
-		      GTK_SIGNAL_FUNC (gtk_decorated_window_unrealize),
-		      window);
+  g_signal_connect (window,
+		    "frame_event",
+		    G_CALLBACK (gtk_decorated_window_frame_event),
+		    window);
+  g_signal_connect (window,
+		    "focus_in_event",
+		    G_CALLBACK (gtk_decorated_window_focus_change),
+		    window);
+  g_signal_connect (window,
+		    "focus_out_event",
+		    G_CALLBACK (gtk_decorated_window_focus_change),
+		    window);
+  g_signal_connect (window,
+		    "realize",
+		    G_CALLBACK (gtk_decorated_window_realize),
+		    window);
+  g_signal_connect (window,
+		    "unrealize",
+		    G_CALLBACK (gtk_decorated_window_unrealize),
+		    window);
 }
 
 static inline GtkWindowDecoration *
@@ -282,7 +281,7 @@ gtk_decorated_window_unrealize (GtkWindow   *window)
 
   if (deco->title_layout)
     {
-      g_object_unref (G_OBJECT (deco->title_layout));
+      g_object_unref (deco->title_layout);
       deco->title_layout = NULL;
     }
 }
@@ -489,11 +488,11 @@ gtk_decorated_window_button_release (GtkWidget	    *widget,
 	  event.send_event = TRUE;
 
 	    /* Synthesize delete_event */
-	  g_object_ref (G_OBJECT (event.window));
+	  g_object_ref (event.window);
   
-	  gtk_main_do_event ((GdkEvent*)&event);
+	  gtk_main_do_event ((GdkEvent *) &event);
 	  
-	  g_object_unref (G_OBJECT (event.window));
+	  g_object_unref (event.window);
 	}
     }
   

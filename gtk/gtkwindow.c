@@ -31,7 +31,6 @@
 
 #include "gtkprivate.h"
 #include "gtkrc.h"
-#include "gtksignal.h"
 #include "gtkwindow.h"
 #include "gtkwindow-decorate.h"
 #include "gtkbindings.h"
@@ -329,26 +328,28 @@ gtk_window_get_private (GtkWindow *window)
   return private;
 }
 
-GtkType
+GType
 gtk_window_get_type (void)
 {
-  static GtkType window_type = 0;
+  static GType window_type = 0;
 
   if (!window_type)
     {
-      static const GtkTypeInfo window_info =
+      static const GTypeInfo window_info =
       {
-	"GtkWindow",
-	sizeof (GtkWindow),
 	sizeof (GtkWindowClass),
-	(GtkClassInitFunc) gtk_window_class_init,
-	(GtkObjectInitFunc) gtk_window_init,
-        /* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
-	(GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_window_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkWindow),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_window_init,
       };
 
-      window_type = gtk_type_unique (gtk_bin_get_type (), &window_info);
+      window_type = g_type_register_static (GTK_TYPE_BIN, "GtkWindow",
+					    &window_info, 0);
     }
 
   return window_type;
@@ -402,7 +403,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class = (GtkWidgetClass*) klass;
   container_class = (GtkContainerClass*) klass;
   
-  parent_class = gtk_type_class (gtk_bin_get_type ());
+  parent_class = g_type_class_peek_parent (klass);
 
   mnemonic_hash_table = g_hash_table_new (mnemonic_hash, mnemonic_equal);
 
@@ -592,7 +593,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   window_signals[SET_FOCUS] =
     g_signal_new ("set_focus",
-                  G_TYPE_FROM_CLASS (object_class),
+                  G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkWindowClass, set_focus),
                   NULL, NULL,
@@ -602,7 +603,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   
   window_signals[FRAME_EVENT] =
     g_signal_new ("frame_event",
-                  G_TYPE_FROM_CLASS(object_class),
+                  G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWindowClass, frame_event),
                   _gtk_boolean_handled_accumulator, NULL,
@@ -612,9 +613,9 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   window_signals[ACTIVATE_FOCUS] =
     g_signal_new ("activate_focus",
-                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  GTK_SIGNAL_OFFSET (GtkWindowClass, activate_focus),
+                  G_STRUCT_OFFSET (GtkWindowClass, activate_focus),
                   NULL, NULL,
                   _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE,
@@ -622,9 +623,9 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   window_signals[ACTIVATE_DEFAULT] =
     g_signal_new ("activate_default",
-                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  GTK_SIGNAL_OFFSET (GtkWindowClass, activate_default),
+                  G_STRUCT_OFFSET (GtkWindowClass, activate_default),
                   NULL, NULL,
                   _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE,
@@ -632,9 +633,9 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   window_signals[MOVE_FOCUS] =
     g_signal_new ("move_focus",
-                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  GTK_SIGNAL_OFFSET (GtkWindowClass, move_focus),
+                  G_STRUCT_OFFSET (GtkWindowClass, move_focus),
                   NULL, NULL,
                   _gtk_marshal_VOID__ENUM,
                   G_TYPE_NONE,
@@ -643,11 +644,11 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   window_signals[KEYS_CHANGED] =
     g_signal_new ("keys_changed",
-                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_FIRST,
-                  GTK_SIGNAL_OFFSET (GtkWindowClass, keys_changed),
+                  G_STRUCT_OFFSET (GtkWindowClass, keys_changed),
                   NULL, NULL,
-                  gtk_marshal_VOID__VOID,
+                  _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
 
@@ -723,17 +724,17 @@ gtk_window_init (GtkWindow *window)
   if (colormap)
     gtk_widget_set_colormap (GTK_WIDGET (window), colormap);
   
-  gtk_widget_ref (GTK_WIDGET (window));
+  g_object_ref (window);
   gtk_object_sink (GTK_OBJECT (window));
   window->has_user_ref_count = TRUE;
   toplevel_list = g_slist_prepend (toplevel_list, window);
 
   gtk_decorated_window_init (window);
 
-  gtk_signal_connect (GTK_OBJECT (window),
-		      "event",
-		      GTK_SIGNAL_FUNC (gtk_window_event),
-		      NULL);
+  g_signal_connect (window,
+		    "event",
+		    G_CALLBACK (gtk_window_event),
+		    NULL);
 }
 
 static void
@@ -919,7 +920,7 @@ gtk_window_new (GtkWindowType type)
 
   g_return_val_if_fail (type >= GTK_WINDOW_TOPLEVEL && type <= GTK_WINDOW_POPUP, NULL);
 
-  window = gtk_type_new (GTK_TYPE_WINDOW);
+  window = g_object_new (GTK_TYPE_WINDOW, NULL);
 
   window->type = type;
 
@@ -1118,7 +1119,7 @@ _gtk_window_internal_set_focus (GtkWindow *window,
 
   if ((window->focus_widget != focus) ||
       (focus && !GTK_WIDGET_HAS_FOCUS (focus)))
-    gtk_signal_emit (GTK_OBJECT (window), window_signals[SET_FOCUS], focus);
+    g_signal_emit (window, window_signals[SET_FOCUS], 0, focus);
 }
 
 /**
@@ -1617,17 +1618,17 @@ gtk_window_add_embedded_xid (GtkWindow *window, guint xid)
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  embedded_windows = gtk_object_get_data (GTK_OBJECT (window), "gtk-embedded");
+  embedded_windows = g_object_get_data (G_OBJECT (window), "gtk-embedded");
   if (embedded_windows)
-    gtk_object_remove_no_notify_by_id (GTK_OBJECT (window), 
-				       g_quark_from_static_string ("gtk-embedded"));
+    g_object_steal_qdata (G_OBJECT (window), 
+			  g_quark_from_static_string ("gtk-embedded"));
   embedded_windows = g_list_prepend (embedded_windows,
 				     GUINT_TO_POINTER (xid));
 
-  gtk_object_set_data_full (GTK_OBJECT (window), "gtk-embedded", 
-			    embedded_windows,
-			    embedded_windows ?
-			      (GtkDestroyNotify) g_list_free : NULL);
+  g_object_set_data_full (G_OBJECT (window), "gtk-embedded", 
+			  embedded_windows,
+			  embedded_windows ?
+			    (GtkDestroyNotify) g_list_free : NULL);
 }
 
 void
@@ -1638,10 +1639,10 @@ gtk_window_remove_embedded_xid (GtkWindow *window, guint xid)
 
   g_return_if_fail (GTK_IS_WINDOW (window));
   
-  embedded_windows = gtk_object_get_data (GTK_OBJECT (window), "gtk-embedded");
+  embedded_windows = g_object_get_data (G_OBJECT (window), "gtk-embedded");
   if (embedded_windows)
-    gtk_object_remove_no_notify_by_id (GTK_OBJECT (window), 
-				       g_quark_from_static_string ("gtk-embedded"));
+    g_object_steal_qdata (G_OBJECT (window), 
+			  g_quark_from_static_string ("gtk-embedded"));
 
   node = g_list_find (embedded_windows, GUINT_TO_POINTER (xid));
   if (node)
@@ -1650,10 +1651,10 @@ gtk_window_remove_embedded_xid (GtkWindow *window, guint xid)
       g_list_free_1 (node);
     }
   
-  gtk_object_set_data_full (GTK_OBJECT (window), 
-			    "gtk-embedded", embedded_windows,
-			    embedded_windows ?
-			      (GtkDestroyNotify) g_list_free : NULL);
+  g_object_set_data_full (G_OBJECT (window), "gtk-embedded",
+			  embedded_windows,
+			  embedded_windows ?
+			    (GtkDestroyNotify) g_list_free : NULL);
 }
 
 void       
@@ -1688,10 +1689,10 @@ connect_parent_destroyed (GtkWindow *window)
 {
   if (window->transient_parent)
     {
-      gtk_signal_connect (GTK_OBJECT (window->transient_parent),
-                          "destroy",
-                          GTK_SIGNAL_FUNC (parent_destroyed_callback),
-                          window);
+      g_signal_connect (window->transient_parent,
+                        "destroy",
+                        G_CALLBACK (parent_destroyed_callback),
+                        window);
     }  
 }
 
@@ -1700,9 +1701,9 @@ disconnect_parent_destroyed (GtkWindow *window)
 {
   if (window->transient_parent)
     {
-      gtk_signal_disconnect_by_func (GTK_OBJECT (window->transient_parent),
-                                     GTK_SIGNAL_FUNC (parent_destroyed_callback),
-                                     window);
+      g_signal_handlers_disconnect_by_func (window->transient_parent,
+					    G_CALLBACK (parent_destroyed_callback),
+					    window);
     }
 }
 
@@ -1728,15 +1729,15 @@ gtk_window_unset_transient_for  (GtkWindow *window)
 {
   if (window->transient_parent)
     {
-      gtk_signal_disconnect_by_func (GTK_OBJECT (window->transient_parent),
-				     GTK_SIGNAL_FUNC (gtk_window_transient_parent_realized),
-				     window);
-      gtk_signal_disconnect_by_func (GTK_OBJECT (window->transient_parent),
-				     GTK_SIGNAL_FUNC (gtk_window_transient_parent_unrealized),
-				     window);
-      gtk_signal_disconnect_by_func (GTK_OBJECT (window->transient_parent),
-				     GTK_SIGNAL_FUNC (gtk_widget_destroyed),
-				     &window->transient_parent);
+      g_signal_handlers_disconnect_by_func (window->transient_parent,
+					    G_CALLBACK (gtk_window_transient_parent_realized),
+					    window);
+      g_signal_handlers_disconnect_by_func (window->transient_parent,
+					    G_CALLBACK (gtk_window_transient_parent_unrealized),
+					    window);
+      g_signal_handlers_disconnect_by_func (window->transient_parent,
+					    G_CALLBACK (gtk_widget_destroyed),
+					    &window->transient_parent);
 
       if (window->destroy_with_parent)
         disconnect_parent_destroyed (window);
@@ -1787,15 +1788,15 @@ gtk_window_set_transient_for  (GtkWindow *window,
 
   if (parent)
     {
-      gtk_signal_connect (GTK_OBJECT (parent), "destroy",
-			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
-			  &window->transient_parent);
-      gtk_signal_connect (GTK_OBJECT (parent), "realize",
-			  GTK_SIGNAL_FUNC (gtk_window_transient_parent_realized),
-			  window);
-      gtk_signal_connect (GTK_OBJECT (parent), "unrealize",
-			  GTK_SIGNAL_FUNC (gtk_window_transient_parent_unrealized),
-			  window);
+      g_signal_connect (parent, "destroy",
+			G_CALLBACK (gtk_widget_destroyed),
+			&window->transient_parent);
+      g_signal_connect (parent, "realize",
+			G_CALLBACK (gtk_window_transient_parent_realized),
+			window);
+      g_signal_connect (parent, "unrealize",
+			G_CALLBACK (gtk_window_transient_parent_unrealized),
+			window);
       
       window->screen = parent->screen;
 
@@ -2081,15 +2082,15 @@ gtk_window_set_geometry_hints (GtkWindow       *window,
   info = gtk_window_get_geometry_info (window, TRUE);
   
   if (info->widget)
-    gtk_signal_disconnect_by_func (GTK_OBJECT (info->widget),
-				   GTK_SIGNAL_FUNC (gtk_widget_destroyed),
-				   &info->widget);
+    g_signal_handlers_disconnect_by_func (info->widget,
+					  G_CALLBACK (gtk_widget_destroyed),
+					  &info->widget);
   
   info->widget = geometry_widget;
   if (info->widget)
-    gtk_signal_connect (GTK_OBJECT (geometry_widget), "destroy",
-			GTK_SIGNAL_FUNC (gtk_widget_destroyed),
-			&info->widget);
+    g_signal_connect (geometry_widget, "destroy",
+		      G_CALLBACK (gtk_widget_destroyed),
+		      &info->widget);
 
   if (geometry)
     info->geometry = *geometry;
@@ -2248,9 +2249,9 @@ get_pixmap_and_mask (GdkWindow		*window,
       /* Use shared icon pixmap for all windows on this screen.
        */
       if (default_icon_info->pixmap)
-        g_object_ref (G_OBJECT (default_icon_info->pixmap));
+        g_object_ref (default_icon_info->pixmap);
       if (default_icon_info->mask)
-        g_object_ref (G_OBJECT (default_icon_info->mask));
+        g_object_ref (default_icon_info->mask);
 
       *pmap_return = default_icon_info->pixmap;
       *mask_return = default_icon_info->mask;
@@ -2258,9 +2259,9 @@ get_pixmap_and_mask (GdkWindow		*window,
   else if (parent_info && parent_info->icon_pixmap)
     {
       if (parent_info->icon_pixmap)
-        g_object_ref (G_OBJECT (parent_info->icon_pixmap));
+        g_object_ref (parent_info->icon_pixmap);
       if (parent_info->icon_mask)
-        g_object_ref (G_OBJECT (parent_info->icon_mask));
+        g_object_ref (parent_info->icon_mask);
       
       *pmap_return = parent_info->icon_pixmap;
       *mask_return = parent_info->icon_mask;
@@ -2319,9 +2320,9 @@ get_pixmap_and_mask (GdkWindow		*window,
           parent_info->icon_mask = *mask_return;
 
           if (parent_info->icon_pixmap)
-            g_object_ref (G_OBJECT (parent_info->icon_pixmap));
+            g_object_ref (parent_info->icon_pixmap);
           if (parent_info->icon_mask)
-            g_object_ref (G_OBJECT (parent_info->icon_mask));
+            g_object_ref (parent_info->icon_mask);
         }
       else if (is_default_list)
         {
@@ -2418,10 +2419,10 @@ gtk_window_unrealize_icon (GtkWindow *window)
     return;
   
   if (info->icon_pixmap)
-    g_object_unref (G_OBJECT (info->icon_pixmap));
+    g_object_unref (info->icon_pixmap);
 
   if (info->icon_mask)
-    g_object_unref (G_OBJECT (info->icon_mask));
+    g_object_unref (info->icon_mask);
 
   info->icon_pixmap = NULL;
   info->icon_mask = NULL;
@@ -3306,7 +3307,7 @@ gtk_window_destroy (GtkObject *object)
   if (window->has_user_ref_count)
     {
       window->has_user_ref_count = FALSE;
-      gtk_widget_unref (GTK_WIDGET (window));
+      g_object_unref (window);
     }
 
   if (window->group)
@@ -3368,9 +3369,9 @@ gtk_window_finalize (GObject *object)
   if (window->geometry_info)
     {
       if (window->geometry_info->widget)
-	gtk_signal_disconnect_by_func (GTK_OBJECT (window->geometry_info->widget),
-				       GTK_SIGNAL_FUNC (gtk_widget_destroyed),
-				       &window->geometry_info->widget);
+	g_signal_handlers_disconnect_by_func (window->geometry_info->widget,
+					      G_CALLBACK (gtk_widget_destroyed),
+					      &window->geometry_info->widget);
       g_free (window->geometry_info);
     }
 
@@ -3822,9 +3823,9 @@ gtk_window_event (GtkWidget *widget, GdkEvent *event)
 	  (event->type != GDK_KEY_RELEASE) &&
 	  (event->type != GDK_FOCUS_CHANGE))
 	{
-	  gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "event");
+	  g_signal_stop_emission_by_name (widget, "event");
 	  return_val = FALSE;
-	  gtk_signal_emit (GTK_OBJECT (widget), window_signals[FRAME_EVENT], event, &return_val);
+	  g_signal_emit (widget, window_signals[FRAME_EVENT], 0, event, &return_val);
 	  return TRUE;
 	}
       else
@@ -4136,7 +4137,7 @@ gtk_window_read_rcfiles (GtkWidget *widget,
 {
   GList *embedded_windows;
 
-  embedded_windows = gtk_object_get_data (GTK_OBJECT (widget), "gtk-embedded");
+  embedded_windows = g_object_get_data (G_OBJECT (widget), "gtk-embedded");
   if (embedded_windows)
     {
       GdkEventClient sev;
@@ -5896,10 +5897,10 @@ gtk_window_group_class_init (GtkWindowGroupClass *klass)
 {
 }
 
-GtkType
+GType
 gtk_window_group_get_type (void)
 {
-  static GtkType window_group_type = 0;
+  static GType window_group_type = 0;
 
   if (!window_group_type)
     {
@@ -6009,7 +6010,7 @@ gtk_window_group_remove_window (GtkWindowGroup *window_group,
   window_group_cleanup_grabs (window_group, window);
   window->group = NULL;
   
-  g_object_unref (G_OBJECT (window_group));
+  g_object_unref (window_group);
   g_object_unref (window);
 }
 

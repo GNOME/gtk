@@ -40,11 +40,11 @@ extern "C" {
 
 
 #define GTK_TYPE_WINDOW			(gtk_window_get_type ())
-#define GTK_WINDOW(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_WINDOW, GtkWindow))
-#define GTK_WINDOW_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_WINDOW, GtkWindowClass))
-#define GTK_IS_WINDOW(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_WINDOW))
-#define GTK_IS_WINDOW_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WINDOW))
-#define GTK_WINDOW_GET_CLASS(obj)       (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_WINDOW, GtkWindowClass))
+#define GTK_WINDOW(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_WINDOW, GtkWindow))
+#define GTK_WINDOW_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_WINDOW, GtkWindowClass))
+#define GTK_IS_WINDOW(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_WINDOW))
+#define GTK_IS_WINDOW_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WINDOW))
+#define GTK_WINDOW_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_WINDOW, GtkWindowClass))
 
 
 typedef struct _GtkWindow             GtkWindow;
@@ -164,7 +164,7 @@ struct _GtkWindowGroupClass
   void (*_gtk_reserved4) (void);
 };
 
-GtkType    gtk_window_get_type                 (void) G_GNUC_CONST;
+GType      gtk_window_get_type                 (void) G_GNUC_CONST;
 GtkWidget* gtk_window_new                      (GtkWindowType        type);
 void       gtk_window_set_title                (GtkWindow           *window,
 						const gchar         *title);

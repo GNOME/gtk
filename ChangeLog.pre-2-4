@@ -1,3 +1,7 @@
+Tue Oct  1 12:53:44 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkwindow-decorate.c gtkwindow.[ch]: Deprecation cleanup
+
 2002-10-01  jacob berkman  <jacob@ximian.com>
 
 	* gtk/gtkinvisible.c: 
