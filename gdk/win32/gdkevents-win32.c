@@ -3367,6 +3367,16 @@ gdk_event_translate (GdkDisplay *display,
       break;
  
 #ifdef HAVE_WINTAB
+    case WM_ACTIVATE:
+      /* Bring any tablet contexts to the top of the overlap order when
+       * one of our windows is activated.
+       * NOTE: It doesn't seem to work well if it is done in WM_ACTIVATEAPP
+       * instead
+       */
+      if (LOWORD(msg->wParam) != WA_INACTIVE)
+	_gdk_input_set_tablet_active ();
+      break;
+      
       /* Handle WINTAB events here, as we know that gdkinput.c will
        * use the fixed WT_DEFBASE as lcMsgBase, and we thus can use the
        * constants as case labels.

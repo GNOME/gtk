@@ -1,3 +1,16 @@
+2005-02-24  Robert Ögren  <gtk@roboros.com>
+
+	Implement better handling of Wintab tablet context overlap on
+	Win32. (#167298)
+
+	* gdk/win32/gdkinput-win32.c (_gdk_input_set_tablet_active): New
+	function that brings any tablet contexts to the top of the overlap
+	order.
+	* gdk/win32/gdkinput-win32.h: Declare _gdk_input_set_tablet_active ()
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate):
+	Call _gdk_input_set_tablet_active when a window is activated (on
+	WM_ACTIVATE)
+
 2005-02-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_select_path): 
