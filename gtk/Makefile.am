@@ -457,7 +457,7 @@ $(srcdir)/gtkmarshal.c: @REBUILD@ $(srcdir)/stamp-gtkmarshal.h
 	esac;												\
 	cd $(srcdir) \
 	&& $$glib_genmarshal --prefix=gtk_marshal gtkmarshal.list --body >> xgen-gmc \
-	&& cp xgen-gmc $(srcdir)/gtkmarshal.c \
+	&& cp xgen-gmc gtkmarshal.c \
 	&& rm -f xgen-gmc xgen-gmc~
 $(srcdir)/stamp-gtktypebuiltins.h: @REBUILD@ maketypes.awk $(srcdir)/stamp-gtk.defs gtktypebuiltins.h
 	cd $(srcdir) \
