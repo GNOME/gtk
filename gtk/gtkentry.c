@@ -1255,10 +1255,6 @@ gtk_entry_draw_frame (GtkWidget *widget)
   
   if (GTK_WIDGET_HAS_FOCUS (widget) && !interior_focus)
     {
-      gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget), 
-		       NULL, widget, "entry",
-		       0, 0, width, height);
-      
       x += focus_width;
       y += focus_width;
       width -= 2 * focus_width;
@@ -1269,6 +1265,18 @@ gtk_entry_draw_frame (GtkWidget *widget)
 		    GTK_STATE_NORMAL, GTK_SHADOW_IN,
 		    NULL, widget, "entry",
 		    x, y, width, height);
+
+  if (GTK_WIDGET_HAS_FOCUS (widget) && !interior_focus)
+    {
+      x -= focus_width;
+      y -= focus_width;
+      width += 2 * focus_width;
+      height += 2 * focus_width;
+      
+      gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget), 
+		       NULL, widget, "entry",
+		       0, 0, width, height);
+    }
 }
 
 static gint

@@ -1,3 +1,9 @@
+Mon Jan 28 18:25:10 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_draw_frame): Paint focus
+	before shadow to give theme engines a bit more
+	flexibility. (#69857)
+
 Mon Jan 28 16:23:20 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_dy_to_top_row): no longer
@@ -33,6 +39,7 @@ Mon Jan 28 16:23:20 2002  Jonathan Blandford  <jrb@redhat.com>
 	Pass a GtkStateType appropriate to the focussed cell's state
 	to gtk_paint_focus.
 
+>>>>>>> 1.2878
 Mon Jan 28 14:44:40 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_real_select_cursor_row): Only
