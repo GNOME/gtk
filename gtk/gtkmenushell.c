@@ -494,7 +494,17 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
 	    }
 	}
       else
-	deactivate = FALSE;
+	{
+	  /* We only ever want to prevent deactivation on the first
+           * press/release. Setting the time to zero is a bit of a
+	   * hack, since we could be being triggered in the first
+	   * few fractions of a second after a server time wraparound.
+	   * the chances of that happening are ~1/10^6, without
+	   * serious harm if we lose.
+	   */
+	  menu_shell->activate_time = 0;
+	  deactivate = FALSE;
+	}
       
       /* If the button click was very fast, or we ended up on a submenu,
        * leave the menu up
