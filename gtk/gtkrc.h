@@ -76,7 +76,7 @@ struct _GtkRcStyle
   gint ythickness;
 
   /*< private >*/
-  GBSearchArray *rc_properties;
+  GArray *rc_properties;
   
   /* list of RC style lists including this RC style */
   GSList *rc_style_lists;

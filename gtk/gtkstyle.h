@@ -117,7 +117,7 @@ struct _GtkStyle
   GtkRcStyle	 *rc_style;
 
   GSList	 *styles;	  /* of type GtkStyle* */
-  GBSearchArray	 *property_cache;
+  GArray	 *property_cache;
   GSList         *icon_factories; /* of type GtkIconFactory* */
 };
 

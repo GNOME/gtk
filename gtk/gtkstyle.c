@@ -25,6 +25,7 @@
  */
 
 #include <math.h>
+#include <stdlib.h>
 #include <string.h>
 #include "gtkgc.h"
 #include "gtkrc.h"
@@ -563,26 +564,32 @@ gtk_style_class_init (GtkStyleClass *klass)
 }
 
 static void
+clear_property_cache (GtkStyle *style)
+{
+  if (style->property_cache)
+    {
+      guint i;
+
+      for (i = 0; i < style->property_cache->len; i++)
+	{
+	  PropertyValue *node = &g_array_index (style->property_cache, PropertyValue, i);
+
+	  g_param_spec_unref (node->pspec);
+	  g_value_unset (&node->value);
+	}
+      g_array_free (style->property_cache, TRUE);
+      style->property_cache = NULL;
+    }
+}
+
+static void
 gtk_style_finalize (GObject *object)
 {
   GtkStyle *style = GTK_STYLE (object);
 
   g_return_if_fail (style->attach_count == 0);
 
-  if (style->property_cache)
-    {
-      guint i;
-
-      for (i = 0; i < style->property_cache->n_nodes; i++)
-	{
-	  PropertyValue *node = g_bsearch_array_get_nth (style->property_cache, i);
-
-	  g_param_spec_unref (node->pspec);
-	  g_value_unset (&node->value);
-	}
-      g_bsearch_array_destroy (style->property_cache);
-      style->property_cache = NULL;
-    }
+  clear_property_cache (style);
   
   if (style->styles)
     {
@@ -1206,20 +1213,7 @@ gtk_style_real_copy (GtkStyle *style,
     gtk_rc_style_ref (src->rc_style);
 
   /* don't copy, just clear cache */
-  if (style->property_cache)
-    {
-      guint i;
-
-      for (i = 0; i < style->property_cache->n_nodes; i++)
-	{
-	  PropertyValue *node = g_bsearch_array_get_nth (style->property_cache, i);
-
-	  g_param_spec_unref (node->pspec);
-	  g_value_unset (&node->value);
-	}
-      g_bsearch_array_destroy (style->property_cache);
-      style->property_cache = NULL;
-    }
+  clear_property_cache (style);
 }
 
 static void
@@ -1230,20 +1224,7 @@ gtk_style_real_init_from_rc (GtkStyle   *style,
   gint i;
 
   /* cache _should_ be still empty */
-  if (style->property_cache)
-    {
-      guint i;
-
-      for (i = 0; i < style->property_cache->n_nodes; i++)
-	{
-	  PropertyValue *node = g_bsearch_array_get_nth (style->property_cache, i);
-
-	  g_param_spec_unref (node->pspec);
-	  g_value_unset (&node->value);
-	}
-      g_bsearch_array_destroy (style->property_cache);
-      style->property_cache = NULL;
-    }
+  clear_property_cache (style);
 
   if (rc_style->font_desc)
     {
@@ -1297,13 +1278,11 @@ style_property_values_cmp (gconstpointer bsearch_node1,
 {
   const PropertyValue *val1 = bsearch_node1;
   const PropertyValue *val2 = bsearch_node2;
-  gint cmp;
 
-  cmp = G_BSEARCH_ARRAY_CMP (val1->widget_type, val2->widget_type);
-  if (cmp == 0)
-    cmp = G_BSEARCH_ARRAY_CMP (val1->pspec, val2->pspec);
-
-  return cmp;
+  if (val1->widget_type == val2->widget_type)
+    return val1->pspec < val2->pspec ? -1 : val1->pspec == val2->pspec ? 0 : 1;
+  else
+    return val1->widget_type < val2->widget_type ? -1 : 1;
 }
 
 const GValue*
@@ -1314,6 +1293,7 @@ _gtk_style_peek_property_value (GtkStyle           *style,
 {
   PropertyValue *pcache, key = { 0, NULL, { 0, } };
   const GtkRcProperty *rcprop = NULL;
+  guint i;
 
   g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
   g_return_val_if_fail (G_IS_PARAM_SPEC (pspec), NULL);
@@ -1322,15 +1302,24 @@ _gtk_style_peek_property_value (GtkStyle           *style,
 
   /* need value cache array */
   if (!style->property_cache)
-    style->property_cache = g_bsearch_array_new (sizeof (PropertyValue),
-						 style_property_values_cmp,
-						 0);
+    style->property_cache = g_array_new (FALSE, FALSE, sizeof (PropertyValue));
+
   /* lookup, or insert value if not yet present */
   key.widget_type = widget_type;
   key.pspec = pspec;
-  pcache = g_bsearch_array_insert (style->property_cache, &key, FALSE);
-  if (G_VALUE_TYPE (&pcache->value))
+  pcache = bsearch (&key,
+		    style->property_cache->data, style->property_cache->len,
+		    sizeof (PropertyValue), style_property_values_cmp);
+  if (pcache)
     return &pcache->value;
+
+  i = 0;
+  while (i < style->property_cache->len &&
+	 style_property_values_cmp (&key, &g_array_index (style->property_cache, PropertyValue, i)) >= 0)
+    i++;
+
+  g_array_insert_val (style->property_cache, i, key);
+  pcache = &g_array_index (style->property_cache, PropertyValue, i);
 
   /* cache miss, initialize value type, then set contents */
   g_param_spec_ref (pcache->pspec);

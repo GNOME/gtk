@@ -1,3 +1,9 @@
+Sat Sep  8 13:53:09 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.[ch] gtk/gtkstyle.[ch]: Replace uses of GBSearchArray
+	with GArray and bsearch(), to remove dependency on a still
+	evolving interface that we want to keep private to glib/gobject. 
+
 2001-09-08  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_add_attribute):

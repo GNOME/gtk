@@ -1070,14 +1070,14 @@ gtk_rc_style_finalize (GObject *object)
     {
       guint i;
 
-      for (i = 0; i < rc_style->rc_properties->n_nodes; i++)
+      for (i = 0; i < rc_style->rc_properties->len; i++)
 	{
-	  GtkRcProperty *node = g_bsearch_array_get_nth (rc_style->rc_properties, i);
+	  GtkRcProperty *node = &g_array_index (rc_style->rc_properties, GtkRcProperty, i);
 
 	  g_free (node->origin);
 	  g_value_unset (&node->value);
 	}
-      g_bsearch_array_destroy (rc_style->rc_properties);
+      g_array_free (rc_style->rc_properties, TRUE);
       rc_style->rc_properties = NULL;
     }
 
@@ -1154,13 +1154,63 @@ gtk_rc_properties_cmp (gconstpointer bsearch_node1,
 {
   const GtkRcProperty *prop1 = bsearch_node1;
   const GtkRcProperty *prop2 = bsearch_node2;
-  gint cmp;
 
-  cmp = G_BSEARCH_ARRAY_CMP (prop1->type_name, prop2->type_name);
-  if (cmp == 0)
-    cmp = G_BSEARCH_ARRAY_CMP (prop1->property_name, prop2->property_name);
+  if (prop1->type_name == prop2->type_name)
+    return prop1->property_name < prop2->property_name ? -1 : prop1->property_name == prop2->property_name ? 0 : 1;
+  else
+    return prop1->type_name < prop2->type_name ? -1 : 1;
+}
 
-  return cmp;
+static void
+insert_rc_property (GtkRcStyle    *style,
+		    GtkRcProperty *property,
+		    gboolean       replace)
+{
+  guint i;
+  GtkRcProperty *new_property = NULL;
+  GtkRcProperty key = { 0, 0, NULL, { 0, }, };
+
+  key.type_name = property->type_name;
+  key.property_name = property->property_name;
+
+  if (!style->rc_properties)
+    style->rc_properties = g_array_new (FALSE, FALSE, sizeof (GtkRcProperty));
+
+  i = 0;
+  while (i < style->rc_properties->len)
+    {
+      gint cmp = gtk_rc_properties_cmp (&key, &g_array_index (style->rc_properties, GtkRcProperty, i));
+      if (cmp == 0)
+	
+	{
+	  if (replace)
+	    {
+	      new_property = &g_array_index (style->rc_properties, GtkRcProperty, i);
+	      
+	      g_free (new_property->origin);
+	      g_value_unset (&new_property->value);
+	      
+	      *new_property = key;
+	      break;
+	    }
+	  else
+	    return;
+	}
+      else if (cmp > 0)
+	break;
+
+      i++;
+    }
+
+  if (!new_property)
+    {
+      g_array_insert_val (style->rc_properties, i, key);
+      new_property = &g_array_index (style->rc_properties, GtkRcProperty, i);
+    }
+
+  new_property->origin = g_strdup (property->origin);
+  g_value_init (&new_property->value, G_VALUE_TYPE (&property->value));
+  g_value_copy (&property->value, &new_property->value);
 }
 
 static void
@@ -1212,25 +1262,10 @@ gtk_rc_style_real_merge (GtkRcStyle *dest,
     {
       guint i;
 
-      if (!dest->rc_properties)
-	dest->rc_properties = g_bsearch_array_new (sizeof (GtkRcProperty),
-						   gtk_rc_properties_cmp,
-						   0);
-      for (i = 0; i < src->rc_properties->n_nodes; i++)
-	{
-	  GtkRcProperty *node = g_bsearch_array_get_nth (src->rc_properties, i);
-	  GtkRcProperty *prop, key = { 0, 0, NULL, { 0, }, };
-
-	  key.type_name = node->type_name;
-	  key.property_name = node->property_name;
-	  prop = g_bsearch_array_insert (dest->rc_properties, &key, FALSE);
-	  if (!prop->origin)
-	    {
-	      prop->origin = g_strdup (node->origin);
-	      g_value_init (&prop->value, G_VALUE_TYPE (&node->value));
-	      g_value_copy (&node->value, &prop->value);
-	    }
-	}
+      for (i = 0; i < src->rc_properties->len; i++)
+	insert_rc_property (dest,
+			    &g_array_index (src->rc_properties, GtkRcProperty, i),
+			    FALSE);
     }
 }
 
@@ -2317,27 +2352,10 @@ gtk_rc_parse_style (GtkRcContext *context,
 	    {
 	      guint i;
 
-	      if (!rc_style->rc_properties)
-		rc_style->rc_properties = g_bsearch_array_new (sizeof (GtkRcProperty),
-							       gtk_rc_properties_cmp,
-							       0);
-	      for (i = 0; i < parent_style->rc_properties->n_nodes; i++)
-		{
-		  GtkRcProperty *node = g_bsearch_array_get_nth (parent_style->rc_properties, i);
-		  GtkRcProperty *prop, key = { 0, 0, NULL, { 0, }, };
-
-		  key.type_name = node->type_name;
-		  key.property_name = node->property_name;
-		  prop = g_bsearch_array_insert (rc_style->rc_properties, &key, FALSE);
-		  if (prop->origin)
-		    {
-		      g_free (prop->origin);
-		      g_value_unset (&prop->value);
-		    }
-		  prop->origin = g_strdup (node->origin);
-		  g_value_init (&prop->value, G_VALUE_TYPE (&node->value));
-		  g_value_copy (&node->value, &prop->value);
-		}
+	      for (i = 0; i < parent_style->rc_properties->len; i++)
+		insert_rc_property (rc_style,
+				    &g_array_index (parent_style->rc_properties, GtkRcProperty, i),
+				    TRUE);
 	    }
 	  
 	  for (i = 0; i < 5; i++)
@@ -2463,29 +2481,13 @@ gtk_rc_parse_style (GtkRcContext *context,
 	      token = gtk_rc_parse_assignment (scanner, &prop);
 	      if (token == G_TOKEN_NONE)
 		{
-		  GtkRcProperty *tmp;
-
 		  g_return_val_if_fail (prop.origin != NULL && G_VALUE_TYPE (&prop.value) != 0, G_TOKEN_ERROR);
-
-		  if (!rc_style->rc_properties)
-		    rc_style->rc_properties = g_bsearch_array_new (sizeof (GtkRcProperty),
-								   gtk_rc_properties_cmp,
-								   0);
-		  tmp = g_bsearch_array_insert (rc_style->rc_properties, &prop, FALSE);
-		  if (prop.origin != tmp->origin)
-		    {
-		      g_free (tmp->origin);
-		      g_value_unset (&tmp->value);
-		      tmp->origin = prop.origin;
-		      memcpy (&tmp->value, &prop.value, sizeof (prop.value));
-		    }
+		  insert_rc_property (rc_style, &prop, TRUE);
 		}
-	      else
-		{
-		  g_free (prop.origin);
-		  if (G_VALUE_TYPE (&prop.value))
-		    g_value_unset (&prop.value);
-		}
+	      
+	      g_free (prop.origin);
+	      if (G_VALUE_TYPE (&prop.value))
+		g_value_unset (&prop.value);
 	    }
 	  else
 	    {
@@ -2554,7 +2556,9 @@ _gtk_rc_style_lookup_rc_property (GtkRcStyle *rc_style,
       key.type_name = type_name;
       key.property_name = property_name;
 
-      node = g_bsearch_array_lookup (rc_style->rc_properties, &key);
+      node = bsearch (&key,
+		      rc_style->rc_properties->data, rc_style->rc_properties->len,
+		      sizeof (GtkRcProperty), gtk_rc_properties_cmp);
     }
 
   return node;
