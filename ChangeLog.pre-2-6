@@ -1,3 +1,4 @@
+`
 2003-09-02  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdisplay-win32.c (gdk_display_open): Don't call
