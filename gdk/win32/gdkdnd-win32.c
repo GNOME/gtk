@@ -36,7 +36,7 @@
 #include "gdkdnd.h"
 #include "gdkproperty.h"
 #include "gdkprivate.h"
-#include "gdkx.h"
+#include "gdkwin32.h"
 
 #ifdef OLE2_DND
 #include <ole2.h>
@@ -671,7 +671,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
       private = (GdkDragContextPrivate *) context;
       context->protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
       context->is_source = FALSE;
-      context->source_window = (GdkWindow *) gdk_root_parent;
+      context->source_window = gdk_parent_root;
       context->dest_window = event->any.window;
       gdk_window_ref (context->dest_window);
       /* WM_DROPFILES drops are always file names */
@@ -713,8 +713,8 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 	    }
 	  g_string_append (result, "\015\012");
 	}
-      gdk_sel_prop_store ((GdkWindow *) gdk_root_parent,
-			  text_uri_list_atom, 8, result->str, result->len + 1);
+      gdk_sel_prop_store (gdk_parent_root, text_uri_list_atom, 8,
+			  result->str, result->len + 1);
 
       DragFinish (hdrop);
       
@@ -816,7 +816,7 @@ gdk_drag_find_window (GdkDragContext  *context,
   POINT pt;
 
   GDK_NOTE (DND, g_print ("gdk_drag_find_window: %#x +%d+%d\n",
-			  (drag_window ? drag_window_private->xwindow : 0),
+			  (drag_window ? GDK_DRAWABLE_XID (drag_window) : 0),
 			  x_root, y_root));
 
   pt.x = x_root;
@@ -911,7 +911,6 @@ gdk_destroy_filter (GdkXEvent *xev,
 void
 gdk_window_register_dnd (GdkWindow      *window)
 {
-  GdkDrawablePrivate *private = (GdkDrawablePrivate *) window;
 #ifdef OLE2_DND
   target_drag_context *context;
   HRESULT hres;
@@ -919,7 +918,8 @@ gdk_window_register_dnd (GdkWindow      *window)
 
   g_return_if_fail (window != NULL);
 
-  GDK_NOTE (DND, g_print ("gdk_window_register_dnd: %#x\n", private->xwindow));
+  GDK_NOTE (DND, g_print ("gdk_window_register_dnd: %#x\n",
+			  GDK_DRAWABLE_XID (window)));
 
   /* We always claim to accept dropped files, but in fact we might not,
    * of course. This function is called in such a way that it cannot know
@@ -927,7 +927,7 @@ gdk_window_register_dnd (GdkWindow      *window)
    * (in gtk, data of type text/uri-list) or not.
    */
   gdk_window_add_filter (window, gdk_dropfiles_filter, NULL);
-  DragAcceptFiles (private->xwindow, TRUE);
+  DragAcceptFiles (GDK_DRAWABLE_XID (window), TRUE);
 
 #ifdef OLE2_DND
   /* Register for OLE2 d&d */
@@ -937,7 +937,7 @@ gdk_window_register_dnd (GdkWindow      *window)
     g_warning ("gdk_window_register_dnd: CoLockObjectExternal failed");
   else
     {
-      hres = RegisterDragDrop (private->xwindow, &context->idt);
+      hres = RegisterDragDrop (GDK_DRAWABLE_XID (window), &context->idt);
       if (hres == DRAGDROP_E_ALREADYREGISTERED)
 	{
 	  g_print ("DRAGDROP_E_ALREADYREGISTERED\n");

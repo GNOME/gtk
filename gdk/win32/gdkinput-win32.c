@@ -1001,7 +1001,10 @@ gdk_input_win32_other_event (GdkEvent  *event,
   gint x, y;
 
   if (event->any.window != wintab_window)
-    g_warning ("gdk_input_win32_other_event: not wintab_window?");
+    {
+      g_warning ("gdk_input_win32_other_event: not wintab_window?");
+      return FALSE;
+    }
 
 #if USE_SYSCONTEXT
   window = gdk_window_at_pointer (&x, &y);

@@ -27,57 +27,111 @@
 #include "config.h"
 
 #include <math.h>
-
-#include "gdkdrawable.h"
-#include "gdkprivate.h"
-#include "gdkwindow.h"
-#include "gdkx.h"
+#include <glib.h>
 
 #ifndef G_PI
 #define G_PI 3.14159265358979323846
 #endif
 
-/* Manipulation of drawables
- */
-void          
-gdk_drawable_set_data (GdkDrawable   *drawable,
-		       const gchar   *key,
-		       gpointer	      data,
-		       GDestroyNotify destroy_func)
-{
-  g_dataset_set_data_full (drawable, key, data, destroy_func);
-}
+#include "gdkdrawable.h"
+#include "gdkprivate.h"
+#include "gdkwindow.h"
+#include "gdkwin32.h"
 
-void          
-gdk_drawable_get_data (GdkDrawable   *drawable,
-		       const gchar   *key)
-{
-  g_dataset_get_data (drawable, key);
-}
+static void gdk_win32_drawable_destroy   (GdkDrawable     *drawable);
 
-GdkDrawableType
-gdk_drawable_get_type (GdkDrawable *drawable)
-{
-  g_return_val_if_fail (drawable != NULL, (GdkDrawableType) -1);
-  
-  return GDK_DRAWABLE_TYPE (drawable);
-}
+static void gdk_win32_draw_rectangle (GdkDrawable    *drawable,
+				      GdkGC          *gc,
+				      gint            filled,
+				      gint            x,
+				      gint            y,
+				      gint            width,
+				      gint            height);
+static void gdk_win32_draw_arc       (GdkDrawable    *drawable,
+				      GdkGC          *gc,
+				      gint            filled,
+				      gint            x,
+				      gint            y,
+				      gint            width,
+				      gint            height,
+				      gint            angle1,
+				      gint            angle2);
+static void gdk_win32_draw_polygon   (GdkDrawable    *drawable,
+				      GdkGC          *gc,
+				      gint            filled,
+				      GdkPoint       *points,
+				      gint            npoints);
+static void gdk_win32_draw_text      (GdkDrawable    *drawable,
+				      GdkFont        *font,
+				      GdkGC          *gc,
+				      gint            x,
+				      gint            y,
+				      const gchar    *text,
+				      gint            text_length);
+static void gdk_win32_draw_text_wc   (GdkDrawable    *drawable,
+				      GdkFont        *font,
+				      GdkGC          *gc,
+				      gint            x,
+				      gint            y,
+				      const GdkWChar *text,
+				      gint            text_length);
+static void gdk_win32_draw_drawable  (GdkDrawable    *drawable,
+				      GdkGC          *gc,
+				      GdkPixmap      *src,
+				      gint            xsrc,
+				      gint            ysrc,
+				      gint            xdest,
+				      gint            ydest,
+				      gint            width,
+				      gint            height);
+static void gdk_win32_draw_points    (GdkDrawable    *drawable,
+				      GdkGC          *gc,
+				      GdkPoint       *points,
+				      gint            npoints);
+static void gdk_win32_draw_segments  (GdkDrawable    *drawable,
+				      GdkGC          *gc,
+				      GdkSegment     *segs,
+				      gint            nsegs);
+static void gdk_win32_draw_lines     (GdkDrawable    *drawable,
+				      GdkGC          *gc,
+				      GdkPoint       *points,
+				      gint            npoints);
 
-void
-gdk_drawable_get_size (GdkDrawable *drawable,
-		       gint        *width,
-		       gint        *height)
+GdkDrawableClass _gdk_win32_drawable_class = {
+  gdk_win32_drawable_destroy,
+  _gdk_win32_gc_new,
+  gdk_win32_draw_rectangle,
+  gdk_win32_draw_arc,
+  gdk_win32_draw_polygon,
+  gdk_win32_draw_text,
+  gdk_win32_draw_text_wc,
+  gdk_win32_draw_drawable,
+  gdk_win32_draw_points,
+  gdk_win32_draw_segments,
+  gdk_win32_draw_lines
+};
+
+/*****************************************************
+ * Win32 specific implementations of generic functions *
+ *****************************************************/
+
+GdkColormap*
+gdk_drawable_get_colormap (GdkDrawable *drawable)
 {
   GdkDrawablePrivate *drawable_private;
   
-  g_return_if_fail (drawable != NULL);
-  
+  g_return_val_if_fail (drawable != NULL, NULL);
   drawable_private = (GdkDrawablePrivate*) drawable;
+
+  if (!GDK_DRAWABLE_DESTROYED (drawable))
+    {
+      if (drawable_private->colormap == NULL)
+	return gdk_colormap_get_system (); /* XXX ??? */
+      else
+	return drawable_private->colormap;
+    }
   
-  if (width)
-    *width = drawable_private->width;
-  if (height)
-    *height = drawable_private->height;
+  return NULL;
 }
 
 void
@@ -85,13 +139,13 @@ gdk_drawable_set_colormap (GdkDrawable *drawable,
 			   GdkColormap *colormap)
 {
   GdkDrawablePrivate *drawable_private;
-  GdkColormapPrivate *colormap_private;
+  GdkColormapPrivateWin32 *colormap_private;
   
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (colormap != NULL);
   
-  drawable_private = (GdkDrawablePrivate*) drawable;
-  colormap_private = (GdkColormapPrivate*) colormap;
+  drawable_private = (GdkDrawablePrivate *) drawable;
+  colormap_private = (GdkColormapPrivateWin32 *) colormap;
   
   if (!GDK_DRAWABLE_DESTROYED (drawable))
     {
@@ -115,137 +169,33 @@ gdk_drawable_set_colormap (GdkDrawable *drawable,
     }
 }
 
-GdkColormap*
-gdk_drawable_get_colormap (GdkDrawable *drawable)
+/* Drawing
+ */
+static void 
+gdk_win32_drawable_destroy (GdkDrawable *drawable)
 {
-  GdkDrawablePrivate *drawable_private;
   
-  g_return_val_if_fail (drawable != NULL, NULL);
-  drawable_private = (GdkDrawablePrivate*) drawable;
-
-  if (!GDK_DRAWABLE_DESTROYED (drawable))
-    {
-      if (drawable_private->colormap == NULL)
-	return gdk_colormap_get_system (); /* XXX ??? */
-      else
-	return drawable_private->colormap;
-    }
-  
-  return NULL;
 }
 
-GdkVisual*
-gdk_drawable_get_visual (GdkDrawable *drawable)
+static void
+gdk_win32_draw_rectangle (GdkDrawable *drawable,
+			  GdkGC       *gc,
+			  gint         filled,
+			  gint         x,
+			  gint         y,
+			  gint         width,
+			  gint         height)
 {
-  GdkColormap *colormap;
-
-  g_return_val_if_fail (drawable != NULL, NULL);
-
-  colormap = gdk_drawable_get_colormap (drawable);
-  return colormap ? gdk_colormap_get_visual (colormap) : NULL;
-}
-
-void
-gdk_draw_point (GdkDrawable *drawable,
-                GdkGC       *gc,
-                gint         x,
-                gint         y)
-{
-  GdkDrawablePrivate *drawable_private;
-  GdkGCPrivate *gc_private;
-  HDC hdc;
-
-  g_return_if_fail (drawable != NULL);
-  g_return_if_fail (gc != NULL);
-
-  if (GDK_DRAWABLE_DESTROYED (drawable))
-    return;
-  drawable_private = (GdkDrawablePrivate*) drawable;
-  gc_private = (GdkGCPrivate*) gc;
-
-  hdc = gdk_gc_predraw (drawable_private, gc_private);
-
-  /* We use LineTo because SetPixel wants the COLORREF directly,
-   * and doesn't use the current pen, which is what we want.
-   */
-  if (!MoveToEx (hdc, x, y, NULL))
-    g_warning ("gdk_draw_point: MoveToEx failed");
-  if (!LineTo (hdc, x + 1, y))
-    g_warning ("gdk_draw_point: LineTo failed");
-  
-  gdk_gc_postdraw (drawable_private, gc_private);
-}
-
-void
-gdk_draw_line (GdkDrawable *drawable,
-	       GdkGC       *gc,
-	       gint         x1,
-	       gint         y1,
-	       gint         x2,
-	       gint         y2)
-{
-  GdkDrawablePrivate *drawable_private;
-  GdkGCPrivate *gc_private;
-  HDC hdc;
-
-  g_return_if_fail (drawable != NULL);
-  g_return_if_fail (gc != NULL);
-
-  if (GDK_DRAWABLE_DESTROYED (drawable))
-    return;
-  drawable_private = (GdkDrawablePrivate*) drawable;
-  gc_private = (GdkGCPrivate*) gc;
-
-  hdc = gdk_gc_predraw (drawable_private, gc_private);
-    
-  GDK_NOTE (MISC, g_print ("gdk_draw_line: %#x (%d) +%d+%d..+%d+%d\n",
-			   drawable_private->xwindow, gc_private,
-			   x1, y1, x2, y2));
-  
-  MoveToEx (hdc, x1, y1, NULL);
-  if (!LineTo (hdc, x2, y2))
-    g_warning ("gdk_draw_line: LineTo #1 failed");
-  /* LineTo doesn't draw the last point, so if we have a pen width of 1,
-   * we draw the end pixel separately... With wider pens we don't care.
-   * //HB: But the NT developers don't read their API documentation ...
-   */
-  if (gc_private->pen_width == 1 && windows_version > 0x80000000)
-    if (!LineTo (hdc, x2 + 1, y2))
-      g_warning ("gdk_draw_line: LineTo #2 failed");
-  gdk_gc_postdraw (drawable_private, gc_private);
-}
-
-void
-gdk_draw_rectangle (GdkDrawable *drawable,
-		    GdkGC       *gc,
-		    gint         filled,
-		    gint         x,
-		    gint         y,
-		    gint         width,
-		    gint         height)
-{
-  GdkDrawablePrivate *drawable_private;
   GdkGCPrivate *gc_private;
   HDC hdc;
   HGDIOBJ oldpen, oldbrush;
 
-  g_return_if_fail (drawable != NULL);
-  g_return_if_fail (gc != NULL);
-
-  if (GDK_DRAWABLE_DESTROYED (drawable))
-    return;
-  drawable_private = (GdkDrawablePrivate*) drawable;
   gc_private = (GdkGCPrivate*) gc;
 
-  if (width == -1)
-    width = drawable_private->width;
-  if (height == -1)
-    height = drawable_private->height;
-
-  hdc = gdk_gc_predraw (drawable_private, gc_private);
+  hdc = gdk_gc_predraw (drawable, gc_private);
 
   GDK_NOTE (MISC, g_print ("gdk_draw_rectangle: %#x (%d) %s%dx%d@+%d+%d\n",
-			   drawable_private->xwindow,
+			   GDK_DRAWABLE_XID (drawable),
 			   gc_private,
 			   (filled ? "fill " : ""),
 			   width, height, x, y));
@@ -282,45 +232,33 @@ gdk_draw_rectangle (GdkDrawable *drawable,
   else
     SelectObject (hdc, oldbrush);
 
-  gdk_gc_postdraw (drawable_private, gc_private);
+  gdk_gc_postdraw (drawable, gc_private);
 }
 
-void
-gdk_draw_arc (GdkDrawable *drawable,
-	      GdkGC       *gc,
-	      gint         filled,
-	      gint         x,
-	      gint         y,
-	      gint         width,
-	      gint         height,
-	      gint         angle1,
-	      gint         angle2)
+static void
+gdk_win32_draw_arc (GdkDrawable *drawable,
+		    GdkGC       *gc,
+		    gint         filled,
+		    gint         x,
+		    gint         y,
+		    gint         width,
+		    gint         height,
+		    gint         angle1,
+		    gint         angle2)
 {
-  GdkDrawablePrivate *drawable_private;
   GdkGCPrivate *gc_private;
   HDC hdc;
   int nXStartArc, nYStartArc, nXEndArc, nYEndArc;
 
-  g_return_if_fail (drawable != NULL);
-  g_return_if_fail (gc != NULL);
-
-  if (GDK_DRAWABLE_DESTROYED (drawable))
-    return;
-  drawable_private = (GdkDrawablePrivate*) drawable;
   gc_private = (GdkGCPrivate*) gc;
 
-  if (width == -1)
-    width = drawable_private->width;
-  if (height == -1)
-    height = drawable_private->height;
-
   GDK_NOTE (MISC, g_print ("gdk_draw_arc: %#x  %d,%d,%d,%d  %d %d\n",
-			   drawable_private->xwindow,
+			   GDK_DRAWABLE_XID (drawable),
 			   x, y, width, height, angle1, angle2));
 
   if (width != 0 && height != 0 && angle2 != 0)
     {
-      hdc = gdk_gc_predraw (drawable_private, gc_private);
+      hdc = gdk_gc_predraw (drawable, gc_private);
 
       if (angle2 >= 360*64)
 	{
@@ -360,39 +298,32 @@ gdk_draw_arc (GdkDrawable *drawable,
 	  Arc (hdc, x, y, x+width, y+height,
 	       nXStartArc, nYStartArc, nXEndArc, nYEndArc);
 	}
-      gdk_gc_postdraw (drawable_private, gc_private);
+      gdk_gc_postdraw (drawable, gc_private);
     }
 }
 
-void
-gdk_draw_polygon (GdkDrawable *drawable,
-		  GdkGC       *gc,
-		  gint         filled,
-		  GdkPoint    *points,
-		  gint         npoints)
+static void
+gdk_win32_draw_polygon (GdkDrawable *drawable,
+			GdkGC       *gc,
+			gint         filled,
+			GdkPoint    *points,
+			gint         npoints)
 {
-  GdkDrawablePrivate *drawable_private;
   GdkGCPrivate *gc_private;
   HDC hdc;
   POINT *pts;
   int i;
 
-  g_return_if_fail (drawable != NULL);
-  g_return_if_fail (gc != NULL);
-
-  if (GDK_DRAWABLE_DESTROYED (drawable))
-    return;
-  drawable_private = (GdkDrawablePrivate*) drawable;
   gc_private = (GdkGCPrivate*) gc;
 
   GDK_NOTE (MISC, g_print ("gdk_draw_polygon: %#x (%d) %d\n",
-			   drawable_private->xwindow, gc_private,
+			   GDK_DRAWABLE_XID (drawable), gc_private,
 			   npoints));
 
   if (npoints < 2)
     return;
 
-  hdc = gdk_gc_predraw (drawable_private, gc_private);
+  hdc = gdk_gc_predraw (drawable, gc_private);
   pts = g_malloc ((npoints+1) * sizeof (POINT));
 
   for (i = 0; i < npoints; i++)
@@ -419,7 +350,7 @@ gdk_draw_polygon (GdkDrawable *drawable,
 	g_warning ("gdk_draw_polygon: Polyline failed");
     }
   g_free (pts);
-  gdk_gc_postdraw (drawable_private, gc_private);
+  gdk_gc_postdraw (drawable, gc_private);
 }
 
 typedef struct
@@ -427,19 +358,6 @@ typedef struct
   gint x, y;
   HDC hdc;
 } gdk_draw_text_arg;
-
-/* gdk_draw_string
- */
-void
-gdk_draw_string (GdkDrawable *drawable,
-		 GdkFont     *font,
-		 GdkGC       *gc,
-		 gint         x,
-		 gint         y,
-		 const gchar *string)
-{
-  gdk_draw_text (drawable, font, gc, x, y, string, strlen (string));
-}
 
 static void
 gdk_draw_text_handler (GdkWin32SingleFont *singlefont,
@@ -468,28 +386,20 @@ gdk_draw_text_handler (GdkWin32SingleFont *singlefont,
   SelectObject (argp->hdc, oldfont);
 }
 
-/* gdk_draw_text
- *
- */
-void
-gdk_draw_text (GdkDrawable *drawable,
-	       GdkFont     *font,
-	       GdkGC       *gc,
-	       gint         x,
-	       gint         y,
-	       const gchar *text,
-	       gint         text_length)
+static void
+gdk_win32_draw_text (GdkDrawable *drawable,
+		     GdkFont     *font,
+		     GdkGC       *gc,
+		     gint         x,
+		     gint         y,
+		     const gchar *text,
+		     gint         text_length)
 {
-  GdkDrawablePrivate *drawable_private;
   GdkGCPrivate *gc_private;
   wchar_t *wcstr;
   gint wlen;
   gdk_draw_text_arg arg;
 
-  g_return_if_fail (drawable != NULL);
-  g_return_if_fail (font != NULL);
-  g_return_if_fail (gc != NULL);
-  g_return_if_fail (text != NULL);
 
   if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
@@ -499,15 +409,14 @@ gdk_draw_text (GdkDrawable *drawable,
 
   g_assert (font->type == GDK_FONT_FONT || font->type == GDK_FONT_FONTSET);
 
-  drawable_private = (GdkDrawablePrivate*) drawable;
   gc_private = (GdkGCPrivate*) gc;
 
   arg.x = x;
   arg.y = y;
-  arg.hdc = gdk_gc_predraw (drawable_private, gc_private);
+  arg.hdc = gdk_gc_predraw (drawable, gc_private);
 
   GDK_NOTE (MISC, g_print ("gdk_draw_text: %#x (%d,%d) \"%.*s\" (len %d)\n",
-			   drawable_private->xwindow,
+			   GDK_DRAWABLE_XID (drawable),
 			   x, y,
 			   (text_length > 10 ? 10 : text_length),
 			   text, text_length));
@@ -521,28 +430,23 @@ gdk_draw_text (GdkDrawable *drawable,
 
   g_free (wcstr);
 
-  gdk_gc_postdraw (drawable_private, gc_private);
+  gdk_gc_postdraw (drawable, gc_private);
 }
 
-void
-gdk_draw_text_wc (GdkDrawable	 *drawable,
-		  GdkFont	 *font,
-		  GdkGC		 *gc,
-		  gint		  x,
-		  gint		  y,
-		  const GdkWChar *text,
-		  gint		  text_length)
+static void
+gdk_win32_draw_text_wc (GdkDrawable	 *drawable,
+			GdkFont          *font,
+			GdkGC		 *gc,
+			gint		  x,
+			gint		  y,
+			const GdkWChar *text,
+			gint		  text_length)
 {
-  GdkDrawablePrivate *drawable_private;
   GdkGCPrivate *gc_private;
   gint i, wlen;
   wchar_t *wcstr;
   gdk_draw_text_arg arg;
 
-  g_return_if_fail (drawable != NULL);
-  g_return_if_fail (font != NULL);
-  g_return_if_fail (gc != NULL);
-  g_return_if_fail (text != NULL);
 
   if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
@@ -552,15 +456,14 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
 
   g_assert (font->type == GDK_FONT_FONT || font->type == GDK_FONT_FONTSET);
 
-  drawable_private = (GdkDrawablePrivate*) drawable;
   gc_private = (GdkGCPrivate*) gc;
 
   arg.x = x;
   arg.y = y;
-  arg.hdc = gdk_gc_predraw (drawable_private, gc_private);
+  arg.hdc = gdk_gc_predraw (drawable, gc_private);
 
   GDK_NOTE (MISC, g_print ("gdk_draw_text_wc: %#x (%d,%d) len: %d\n",
-			   drawable_private->xwindow,
+			   GDK_DRAWABLE_XID (drawable),
 			   x, y, text_length));
       
   if (sizeof (wchar_t) != sizeof (GdkWChar))
@@ -578,21 +481,20 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
   if (sizeof (wchar_t) != sizeof (GdkWChar))
     g_free (wcstr);
 
-  gdk_gc_postdraw (drawable_private, gc_private);
+  gdk_gc_postdraw (drawable, gc_private);
 }
 
-void
-gdk_draw_pixmap (GdkDrawable *drawable,
-		 GdkGC       *gc,
-		 GdkPixmap   *src,
-		 gint         xsrc,
-		 gint         ysrc,
-		 gint         xdest,
-		 gint         ydest,
-		 gint         width,
-		 gint         height)
+static void
+gdk_win32_draw_drawable (GdkDrawable *drawable,
+			 GdkGC       *gc,
+			 GdkPixmap   *src,
+			 gint         xsrc,
+			 gint         ysrc,
+			 gint         xdest,
+			 gint         ydest,
+			 gint         width,
+			 gint         height)
 {
-  GdkDrawablePrivate *drawable_private;
   GdkDrawablePrivate *src_private;
   GdkGCPrivate *gc_private;
   HDC hdc;
@@ -601,37 +503,25 @@ gdk_draw_pixmap (GdkDrawable *drawable,
   HRGN src_rgn, draw_rgn, outside_rgn;
   RECT r;
 
-  g_return_if_fail (drawable != NULL);
-  g_return_if_fail (src != NULL);
-  g_return_if_fail (gc != NULL);
-
-  if (GDK_DRAWABLE_DESTROYED (drawable) || GDK_DRAWABLE_DESTROYED (src))
-    return;
-  drawable_private = (GdkDrawablePrivate*) drawable;
   src_private = (GdkDrawablePrivate*) src;
   gc_private = (GdkGCPrivate*) gc;
-
-  if (width == -1)
-    width = src_private->width;	/* Or should we subtract xsrc? */
-  if (height == -1)
-    height = src_private->height; /* Ditto? */
 
   GDK_NOTE (MISC, g_print ("gdk_draw_pixmap: dest: %#x "
 			   "src: %#x %dx%d@+%d+%d"
 			   " dest: %#x @+%d+%d\n",
-			   drawable_private->xwindow,
-			   src_private->xwindow,
+			   GDK_DRAWABLE_XID (drawable),
+			   GDK_DRAWABLE_XID (src),
 			   width, height, xsrc, ysrc,
-			   drawable_private->xwindow, xdest, ydest));
+			   GDK_DRAWABLE_XID (drawable), xdest, ydest));
 
-  hdc = gdk_gc_predraw (drawable_private, gc_private);
+  hdc = gdk_gc_predraw (drawable, gc_private);
 
   src_rgn = CreateRectRgn (0, 0, src_private->width + 1, src_private->height + 1);
   draw_rgn = CreateRectRgn (xsrc, ysrc, xsrc + width + 1, ysrc + height + 1);
   SetRectEmpty (&r);
   outside_rgn = CreateRectRgnIndirect (&r);
   
-  if (drawable_private->window_type != GDK_DRAWABLE_PIXMAP)
+  if (GDK_DRAWABLE_TYPE (drawable) != GDK_DRAWABLE_PIXMAP)
     {
       /* If we are drawing on a window, calculate the region that is
        * outside the source pixmap, and invalidate that, causing it to
@@ -645,7 +535,7 @@ gdk_draw_pixmap (GdkDrawable *drawable,
 				    "bbox: %dx%d@+%d+%d\n",
 				    r.right - r.left - 1, r.bottom - r.top - 1,
 				    r.left, r.top)));
-	  InvalidateRgn (drawable_private->xwindow, outside_rgn, TRUE);
+	  InvalidateRgn (GDK_DRAWABLE_XID (drawable), outside_rgn, TRUE);
 	}
     }
 
@@ -685,7 +575,7 @@ gdk_draw_pixmap (GdkDrawable *drawable,
       if ((srcdc = CreateCompatibleDC (hdc)) == NULL)
 	g_warning ("gdk_draw_pixmap: CreateCompatibleDC failed");
       
-      if ((hgdiobj = SelectObject (srcdc, src_private->xwindow)) == NULL)
+      if ((hgdiobj = SelectObject (srcdc, GDK_DRAWABLE_XID (src))) == NULL)
 	g_warning ("gdk_draw_pixmap: SelectObject #1 failed");
       
       if (!BitBlt (hdc, xdest, ydest, width, height,
@@ -700,7 +590,7 @@ gdk_draw_pixmap (GdkDrawable *drawable,
     }
   else
     {
-      if (drawable_private->xwindow == src_private->xwindow)
+      if (GDK_DRAWABLE_XID(drawable) == GDK_DRAWABLE_XID (src))
 	{
 	  /* Blitting inside a window, use ScrollDC */
 	  RECT scrollRect, clipRect, emptyRect;
@@ -722,80 +612,43 @@ gdk_draw_pixmap (GdkDrawable *drawable,
 			 &scrollRect, &clipRect,
 			 updateRgn, NULL))
 	    g_warning ("gdk_draw_pixmap: ScrollDC failed");
-	  if (!InvalidateRgn (drawable_private->xwindow, updateRgn, FALSE))
+	  if (!InvalidateRgn (GDK_DRAWABLE_XID (drawable), updateRgn, FALSE))
 	    g_warning ("gdk_draw_pixmap: InvalidateRgn failed");
-	  if (!UpdateWindow (drawable_private->xwindow))
+	  if (!UpdateWindow (GDK_DRAWABLE_XID (drawable)))
 	    g_warning ("gdk_draw_pixmap: UpdateWindow failed");
 	}
       else
 	{
-	  if ((srcdc = GetDC (src_private->xwindow)) == NULL)
+	  if ((srcdc = GetDC (GDK_DRAWABLE_XID (src))) == NULL)
 	    g_warning ("gdk_draw_pixmap: GetDC failed");
 	  
 	  if (!BitBlt (hdc, xdest, ydest, width, height,
 		       srcdc, xsrc, ysrc, SRCCOPY))
 	    g_warning ("gdk_draw_pixmap: BitBlt failed");
-	  ReleaseDC (src_private->xwindow, srcdc);
+	  ReleaseDC (GDK_DRAWABLE_XID (src), srcdc);
 	}
     }
-  gdk_gc_postdraw (drawable_private, gc_private);
+  gdk_gc_postdraw (drawable, gc_private);
 }
 
-void
-gdk_draw_image (GdkDrawable *drawable,
-		GdkGC       *gc,
-		GdkImage    *image,
-		gint         xsrc,
-		gint         ysrc,
-		gint         xdest,
-		gint         ydest,
-		gint         width,
-		gint         height)
+static void
+gdk_win32_draw_points (GdkDrawable *drawable,
+		       GdkGC       *gc,
+		       GdkPoint    *points,
+		       gint         npoints)
 {
-  GdkImagePrivate *image_private;
-
-  g_return_if_fail (drawable != NULL);
-  g_return_if_fail (image != NULL);
-  g_return_if_fail (gc != NULL);
-
-  image_private = (GdkImagePrivate*) image;
-
-  g_return_if_fail (image_private->image_put != NULL);
-
-  if (width == -1)
-    width = image->width;
-  if (height == -1)
-    height = image->height;
-
-  (* image_private->image_put) (drawable, gc, image, xsrc, ysrc,
-				xdest, ydest, width, height);
-}
-
-void
-gdk_draw_points (GdkDrawable *drawable,
-		 GdkGC       *gc,
-		 GdkPoint    *points,
-		 gint         npoints)
-{
-  GdkDrawablePrivate *drawable_private;
   GdkGCPrivate *gc_private;
   HDC hdc;
   int i;
 
-  g_return_if_fail (drawable != NULL);
-  g_return_if_fail ((points != NULL) && (npoints > 0));
-  g_return_if_fail (gc != NULL);
-
-  if (GDK_DRAWABLE_DESTROYED (drawable))
-    return;
-  drawable_private = (GdkDrawablePrivate*) drawable;
   gc_private = (GdkGCPrivate*) gc;
 
-  hdc = gdk_gc_predraw (drawable_private, gc_private);
+  hdc = gdk_gc_predraw (drawable, gc_private);
   
   GDK_NOTE (MISC, g_print ("gdk_draw_points: %#x destdc: (%d) %#x "
 			   "npoints: %d\n",
-			   drawable_private->xwindow, gc_private, hdc,
+			   GDK_DRAWABLE_XID (drawable),
+			   gc_private, hdc,
 			   npoints));
 
   for (i = 0; i < npoints; i++)
@@ -805,33 +658,22 @@ gdk_draw_points (GdkDrawable *drawable,
       if (!LineTo (hdc, points[i].x + 1, points[i].y))
 	g_warning ("gdk_draw_points: LineTo failed");
     }
-  gdk_gc_postdraw (drawable_private, gc_private);
+  gdk_gc_postdraw (drawable, gc_private);
 }
 
-void
-gdk_draw_segments (GdkDrawable *drawable,
-		   GdkGC       *gc,
-		   GdkSegment  *segs,
-		   gint         nsegs)
+static void
+gdk_win32_draw_segments (GdkDrawable *drawable,
+			 GdkGC       *gc,
+			 GdkSegment  *segs,
+			 gint         nsegs)
 {
-  GdkDrawablePrivate *drawable_private;
   GdkGCPrivate *gc_private;
   HDC hdc;
   int i;
 
-  if (nsegs <= 0)
-    return;
-
-  g_return_if_fail (drawable != NULL);
-  g_return_if_fail (segs != NULL);
-  g_return_if_fail (gc != NULL);
-
-  if (GDK_DRAWABLE_DESTROYED (drawable))
-    return;
-  drawable_private = (GdkDrawablePrivate*) drawable;
   gc_private = (GdkGCPrivate*) gc;
 
-  hdc = gdk_gc_predraw (drawable_private, gc_private);
+  hdc = gdk_gc_predraw (drawable, gc_private);
 
   for (i = 0; i < nsegs; i++)
     {
@@ -841,20 +683,19 @@ gdk_draw_segments (GdkDrawable *drawable,
 	g_warning ("gdk_draw_segments: LineTo #1 failed");
       
       /* Draw end pixel */
-      if (gc_private->pen_width == 1)
+      if (GDK_GC_WIN32DATA (gc)->pen_width == 1)
 	if (!LineTo (hdc, segs[i].x2 + 1, segs[i].y2))
 	  g_warning ("gdk_draw_segments: LineTo #2 failed");
     }
-  gdk_gc_postdraw (drawable_private, gc_private);
+  gdk_gc_postdraw (drawable, gc_private);
 }
 
-void
-gdk_draw_lines (GdkDrawable *drawable,
-		GdkGC       *gc,
-		GdkPoint    *points,
-		gint         npoints)
+static void
+gdk_win32_draw_lines (GdkDrawable *drawable,
+		      GdkGC       *gc,
+		      GdkPoint    *points,
+		      gint         npoints)
 {
-  GdkDrawablePrivate *drawable_private;
   GdkGCPrivate *gc_private;
   HDC hdc;
   POINT *pts;
@@ -863,16 +704,9 @@ gdk_draw_lines (GdkDrawable *drawable,
   if (npoints < 2)
     return;
 
-  g_return_if_fail (drawable != NULL);
-  g_return_if_fail (points != NULL);
-  g_return_if_fail (gc != NULL);
-
-  if (GDK_DRAWABLE_DESTROYED (drawable))
-    return;
-  drawable_private = (GdkDrawablePrivate*) drawable;
   gc_private = (GdkGCPrivate*) gc;
 
-  hdc = gdk_gc_predraw (drawable_private, gc_private);
+  hdc = gdk_gc_predraw (drawable, gc_private);
 #if 1
   pts = g_malloc (npoints * sizeof (POINT));
 
@@ -888,7 +722,7 @@ gdk_draw_lines (GdkDrawable *drawable,
   g_free (pts);
   
   /* Draw end pixel */
-  if (gc_private->pen_width == 1)
+  if (GDK_GC_WIN32DATA (gc)->pen_width == 1)
     {
       MoveToEx (hdc, points[npoints-1].x, points[npoints-1].y, NULL);
       if (!LineTo (hdc, points[npoints-1].x + 1, points[npoints-1].y))
@@ -901,9 +735,13 @@ gdk_draw_lines (GdkDrawable *drawable,
       g_warning ("gdk_draw_lines: LineTo #1 failed");
   
   /* Draw end pixel */
-  if (gc_private->pen_width == 1)
+  /* LineTo doesn't draw the last point, so if we have a pen width of 1,
+   * we draw the end pixel separately... With wider pens we don't care.
+   * //HB: But the NT developers don't read their API documentation ...
+   */
+  if (GDK_GC_WIN32DATA (gc)->pen_width == 1 && windows_version > 0x80000000)
     if (!LineTo (hdc, points[npoints-1].x + 1, points[npoints-1].y))
       g_warning ("gdk_draw_lines: LineTo #2 failed");
 #endif	
-  gdk_gc_postdraw (drawable_private, gc_private);
+  gdk_gc_postdraw (drawable, gc_private);
 }

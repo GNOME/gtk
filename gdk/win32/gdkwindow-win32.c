@@ -121,6 +121,7 @@ gdk_window_init (void)
   gdk_root_parent->drawable.height = height;
   gdk_root_parent->drawable.ref_count = 1;
   gdk_root_parent->drawable.colormap = NULL;
+  gdk_root_parent->parent = NULL;
   gdk_root_parent->children = NULL;
 
   gdk_xid_table_insert (&gdk_root_window, gdk_root_parent);

@@ -899,9 +899,10 @@ gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
 }
 
 HDC
-gdk_gc_predraw (GdkDrawablePrivate *drawable_private,
-		GdkGCPrivate       *gc_private)
+gdk_gc_predraw (GdkDrawable  *drawable,
+		GdkGCPrivate *gc_private)
 {
+  GdkDrawablePrivate *drawable_private = (GdkDrawablePrivate *) drawable;
   GdkColormapPrivate *colormap_private =
     (GdkColormapPrivate *) drawable_private->colormap;
   COLORREF bg;
@@ -912,7 +913,7 @@ gdk_gc_predraw (GdkDrawablePrivate *drawable_private,
 
   g_assert (gc_private->xgc == NULL);
 
-  if (drawable_private->window_type == GDK_DRAWABLE_PIXMAP)
+  if (GDK_DRAWABLE_TYPE (drawable) == GDK_DRAWABLE_PIXMAP)
     {
       if ((gc_private->xgc = CreateCompatibleDC (NULL)) == NULL)
 	g_warning ("gdk_gc_predraw: CreateCompatibleDC failed");
@@ -1082,13 +1083,14 @@ gdk_gc_predraw (GdkDrawablePrivate *drawable_private,
 }
 
 void
-gdk_gc_postdraw (GdkDrawablePrivate *drawable_private,
-		 GdkGCPrivate       *gc_private)
+gdk_gc_postdraw (GdkDrawable  *drawable_private,
+		 GdkGCPrivate *gc_private)
 {
-  HGDIOBJ hpen;
-  HGDIOBJ hbr;
+  GdkDrawablePrivate *drawable_private = (GdkDrawablePrivate *) drawable;
   GdkColormapPrivate *colormap_private =
     (GdkColormapPrivate *) drawable_private->colormap;
+  HGDIOBJ hpen;
+  HGDIOBJ hbr;
 
   if ((hpen = GetCurrentObject (gc_private->xgc, OBJ_PEN)) == NULL)
     g_warning ("gdk_gc_postdraw: GetCurrentObject #1 failed");
@@ -1108,7 +1110,7 @@ gdk_gc_postdraw (GdkDrawablePrivate *drawable_private,
 	g_warning ("gdk_gc_postraw: UnrealizeObject failed");
     }
 #endif
-  if (drawable_private->window_type == GDK_DRAWABLE_PIXMAP)
+  if (GDK_DRAWABLE_TYPE (drawable) == GDK_DRAWABLE_PIXMAP)
     {
       if (!DeleteDC (gc_private->xgc))
 	g_warning ("gdk_gc_postdraw: DeleteDC failed");

@@ -20,7 +20,7 @@
 #include "config.h"
 
 #include "gdkcursor.h"
-#include "gdkprivate.h"
+#include "gdkwin32.h"
 
 static const struct { const char *name; int type; } cursors[] = {
   { "x_cursor", 0 },
@@ -109,7 +109,6 @@ gdk_cursor_new (GdkCursorType cursor_type)
   GdkCursorPrivate *private;
   GdkCursor *cursor;
   HCURSOR xcursor;
-
   int i;
 
   for (i = 0; cursors[i].name != NULL && cursors[i].type != cursor_type; i++)
@@ -235,9 +234,9 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 
   GDK_NOTE (MISC, g_print ("gdk_cursor_new_from_pixmap: "
 			   "%#x (%dx%d) %#x (%dx%d) = %#x (%dx%d)\n",
-			   source_private->xwindow,
+			   GDK_DRAWABLE_XID (source),
 			   source_private->width, source_private->height,
-			   mask_private->xwindow,
+			   GDK_DRAWABLE_XID (mask),
 			   mask_private->width, mask_private->height,
 			   xcursor, cursor_width, cursor_height));
 
