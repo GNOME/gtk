@@ -1,3 +1,9 @@
+1999-11-04  Michael Fulbright  <drmike@redhat.com>
+
+	* src/io-jpeg.c (image_begin_load): Add update_func callback.
+	* src/io-jpeg.c (image_load_increment): Call updated callback when
+	new graphic data decoded.
+
 1999-11-04  Jonathan Blandford  <jrb@redhat.com>
 
 	* src/gdk-pixbuf-loader.c (gdk_pixbuf_loader_update): handle the
@@ -36,7 +42,7 @@
 	* src/Makefile.am (libpixbuf_gif_la_LIBADD): Remove dependency on
 	lib*gif!!!!
 
-1999-11-03  Michael Fulbright  <msf@redhat.com>
+1999-11-03  Michael Fulbright  <drmike@redhat.com>
 
 	* src/io-jpeg.c (image_load_increment): Further removal of
 	bugginess in local buffering code. Handles grayscale jpegs
@@ -307,12 +313,12 @@
 	function.
 	(gdk_pixbuf_loader_write): Use size_t for count.
 
-1999-10-27  Michael Fulbright  <msf@avatar.labs.redhat.com>
+1999-10-27  Michael Fulbright  <drmike@redhat.com>
 
 	* src/gdk-pixbuf-loader.c (gdk_pixbuf_loader_destroy): Fixed
 	logic so we only try to close loader if it wasn't previously closed.
 
-1999-10-27  Michael Fulbright  <msf@redhat.com>
+1999-10-27  Michael Fulbright  <drmike@redhat.com>
 
 	* src/gdk-pixbuf-loader.c: Made sure image_loader struct member of
 	pixbuf_loader properly initialized.

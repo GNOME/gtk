@@ -73,9 +73,10 @@ struct error_handler_data {
 
 /* progressive loader context */
 typedef struct {
-	ModulePreparedNotifyFunc notify_func;
-	gpointer                 notify_user_data;
-
+	ModuleUpdatedNotifyFunc  updated_func;
+	ModulePreparedNotifyFunc prepared_func;
+	gpointer                 user_data;
+	
 	GdkPixbuf                *pixbuf;
 	guchar                   *dptr;   /* current position in pixbuf */
 
@@ -87,7 +88,8 @@ typedef struct {
 } JpegProgContext;
 
 GdkPixbuf *image_load (FILE *f);
-gpointer image_begin_load (ModulePreparedNotifyFunc func, gpointer user_data);
+gpointer image_begin_load (ModulePreparedNotifyFunc func, 
+			   ModuleUpdatedNotifyFunc func2, gpointer user_data);
 void image_stop_load (gpointer context);
 gboolean image_load_increment(gpointer context, guchar *buf, guint size);
 
@@ -151,8 +153,10 @@ image_load (FILE *f)
 	int w, h, i;
 	guchar *pixels = NULL;
 	guchar *dptr;
-	guchar *lines[4]; /* Used to expand rows, via rec_outbuf_height, from the header file:
-			   * "* Usually rec_outbuf_height will be 1 or 2, at most 4."
+	guchar *lines[4]; /* Used to expand rows, via rec_outbuf_height, 
+                           * from the header file: 
+                           * " Usually rec_outbuf_height will be 1 or 2, 
+                           * at most 4."
 			   */
 	guchar **lptr;
 	struct jpeg_decompress_struct cinfo;
@@ -271,14 +275,17 @@ skip_input_data (j_decompress_ptr cinfo, long num_bytes)
  */
 
 gpointer
-image_begin_load (ModulePreparedNotifyFunc func, gpointer user_data)
+image_begin_load (ModulePreparedNotifyFunc prepared_func, 
+		  ModuleUpdatedNotifyFunc  updated_func,
+		  gpointer user_data)
 {
 	JpegProgContext *context;
 	my_source_mgr   *src;
 
 	context = g_new0 (JpegProgContext, 1);
-	context->notify_func = func;
-	context->notify_user_data = user_data;
+	context->prepared_func = prepared_func;
+	context->updated_func  = updated_func;
+	context->user_data = user_data;
 	context->pixbuf = NULL;
 	context->got_header = FALSE;
 	context->did_prescan = FALSE;
@@ -451,10 +458,8 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 			context->dptr = context->pixbuf->art_pixbuf->pixels;
 
 			/* Notify the client that we are ready to go */
-
-			if (context->notify_func)
-				(* context->notify_func) (context->pixbuf,
-							  context->notify_user_data);
+			(* context->prepared_func) (context->pixbuf,
+						    context->user_data);
 
 		} else if (!context->did_prescan) {
 			int rc;
@@ -501,6 +506,14 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 					explode_gray_into_buf (cinfo, lines);
 
 				context->dptr += nlines * context->pixbuf->art_pixbuf->rowstride;
+
+				/* send updated signal */
+				(* context->updated_func) (context->pixbuf,
+						 context->user_data,
+						 0, 
+						 cinfo->output_scanline-1,
+						 cinfo->image_width, 
+						 nlines);
 
 #undef DEBUG_JPEG_PROGRESSIVE
 #ifdef DEBUG_JPEG_PROGRESSIVE
