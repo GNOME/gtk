@@ -80,16 +80,16 @@ pixdata_get_length (const GdkPixdata *pixdata)
 
 /**
  * gdk_pixdata_serialize:
- * @pixdata: A valid GdkPixdata structure to serialize
- * @stream_length_p: Location to store the resulting stream length in
+ * @pixdata: a valid #GdkPixdata structure to serialize.
+ * @stream_length_p: location to store the resulting stream length in.
  *
- * Serialize a #GdkPixdata structure into a byte stream.
- * The byte stream consists of a straight forward write out of the
- * #GdkPixdata fields in network byte order, plus the pixel_data
+ * Serializes a #GdkPixdata structure into a byte stream.
+ * The byte stream consists of a straightforward writeout of the
+ * #GdkPixdata fields in network byte order, plus the @pixel_data
  * bytes the structure points to.
  *
  * Return value: A newly-allocated string containing the serialized
- * GdkPixdata structure
+ * #GdkPixdata structure.
  **/
 guint8* /* free result */
 gdk_pixdata_serialize (const GdkPixdata *pixdata,
@@ -159,21 +159,21 @@ gdk_pixdata_serialize (const GdkPixdata *pixdata,
 
 /**
  * gdk_pixdata_deserialize:
- * @pixdata: A GdkPixdata structure to be filled in
- * @stream_length: Length of the stream used for deserialization
- * @stream: Stream of bytes containing a serialized pixdata structure
- * @error: GError location to indicate failures (maybe NULL to ignore errors)
+ * @pixdata: a #GdkPixdata structure to be filled in.
+ * @stream_length: length of the stream used for deserialization.
+ * @stream: stream of bytes containing a serialized #GdkPixdata structure.
+ * @error: #GError location to indicate failures (maybe %NULL to ignore errors).
  *
- * Deserialize (reconstruct) a #GdkPixdata structure from a byte stream.
- * The byte stream consists of a straight forward write out of the
- * #GdkPixdata fields in network byte order, plus the pixel_data
+ * Deserializes (reconstruct) a #GdkPixdata structure from a byte stream.
+ * The byte stream consists of a straightforward writeout of the
+ * #GdkPixdata fields in network byte order, plus the @pixel_data
  * bytes the structure points to.
- * The pixdata contents are reconstructed byte by byte and are checked
+ * The @pixdata contents are reconstructed byte by byte and are checked
  * for validity. This function may fail with %GDK_PIXBUF_CORRUPT_IMAGE
- * or %GDK_PIXBUF_ERROR_UNKNOWN_TYPE
+ * or %GDK_PIXBUF_ERROR_UNKNOWN_TYPE.
  *
- * Return value: Upon successfull deserialization %TRUE is returned,
- * %FALSE otherwise
+ * Return value: Upon successful deserialization %TRUE is returned,
+ * %FALSE otherwise.
  **/
 gboolean
 gdk_pixdata_deserialize (GdkPixdata   *pixdata,
@@ -290,6 +290,19 @@ rl_encode_rgbx (guint8 *bp,	/* dest buffer */
   return bp;
 }
 
+/**
+ * gdk_pixdata_from_pixbuf:
+ * @pixdata: a #GdkPixdata to fill.
+ * @pixbuf: the data to fill @pixdata with.
+ * @use_rle: whether to use run-length encoding for the pixel data.
+ *
+ * Converts a #GdkPixbuf to a #GdkPixdata. If @use_rle is %TRUE, the
+ * pixel data is run-length encoded into newly-allocated memory and a 
+ * pointer to that memory is returned. 
+ *
+ * Returns: If @ure_rle is %TRUE, a pointer to the newly-allocated memory 
+ *   for the run-length encoded pixel data, otherwise %NULL.
+ **/
 gpointer
 gdk_pixdata_from_pixbuf (GdkPixdata      *pixdata,
 			 const GdkPixbuf *pixbuf,
@@ -345,6 +358,19 @@ gdk_pixdata_from_pixbuf (GdkPixdata      *pixdata,
   return free_me;
 }
 
+/**
+ * gdk_pixbuf_from_pixdata:
+ * @pixdata: a #GdkPixdata to convert into a #GdkPixbuf.
+ * @copy_pixels: whether to copy raw pixel data; run-length encoded
+ *     pixel data is always copied.
+ * @error: location to store possible errors.
+ * 
+ * Converts a #GdkPixdata to a #GdkPixbuf. If @copy_pixels is %TRUE or
+ * if the pixel data is run-length-encoded, the pixel data is copied into
+ * newly-allocated memory; otherwise it is reused.
+ *
+ * Returns: a new #GdkPixbuf.
+ **/
 GdkPixbuf*
 gdk_pixbuf_from_pixdata (const GdkPixdata *pixdata,
 			 gboolean          copy_pixels,
@@ -543,6 +569,22 @@ save_rle_decoder (GString     *gstring,
   APPEND (gstring, "  } } while (0)\n");
 }
 
+/**
+ * gdk_pixdata_to_csource:
+ * @pixdata: a #GdkPixdata to convert to C source.
+ * @name: used for naming generated data structures or macros.
+ * @dump_type: a #GdkPixdataDumpType determining the kind of C
+ *   source to be generated.
+ *
+ * Generates C source code suitable for compiling images directly 
+ * into programs. 
+ *
+ * Gtk+ ships with a program called gdk-pixbuf-csource which offers 
+ * a cmdline interface to this functions.
+ *
+ * Returns: a newly-allocated string containing the C source form
+ *   of @pixdata.
+ **/
 GString*
 gdk_pixdata_to_csource (GdkPixdata        *pixdata,
 			const gchar	  *name,
@@ -790,8 +832,8 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
  * ship a program with images, but don't want to depend on any
  * external files.
  *
- * Gtk+ ships with a program called gdk-pixbuf-csource which allowes
- * for conversion of #GdkPixbufs into such a inline reprentation.
+ * Gtk+ ships with a program called gdk-pixbuf-csource which allows
+ * for conversion of #GdkPixbufs into such a inline representation.
  * In almost all cases, you should pass the --raw flag to
  * gdk-pixbuf-csource. A sample invocation would be:
  *
