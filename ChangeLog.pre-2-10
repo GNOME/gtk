@@ -1,5 +1,8 @@
 2004-11-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/Makefile.am (pixbuf_threads_LDADD): Make pixbuf-threads
+	link.
+
 	* NEWS: Updates
 
 2004-11-12  Matthias Clasen  <mclasen@redhat.com>
