@@ -22,6 +22,14 @@
 
 #include "gtkcellrendererseptext.h"
 
+static void gtk_cell_renderer_sep_get_size (GtkCellRenderer *cell,
+					     GtkWidget       *widget,
+					     GdkRectangle    *cell_area,
+					     gint            *x_offset,
+					     gint            *y_offset,
+					     gint            *width,
+					     gint            *height);
+
 static void gtk_cell_renderer_sep_text_render (GtkCellRenderer      *cell,
 					       GdkWindow            *window,
 					       GtkWidget            *widget,
@@ -41,6 +49,7 @@ gtk_cell_renderer_sep_text_class_init (GtkCellRendererSepTextClass *class)
 
   parent_class = g_type_class_peek_parent (class);
 
+  cell_renderer_class->get_size = gtk_cell_renderer_sep_get_size;
   cell_renderer_class->render = gtk_cell_renderer_sep_text_render;
 }
 
@@ -70,6 +79,43 @@ _gtk_cell_renderer_sep_text_get_type (void)
     }
 
   return cell_type;
+}
+
+static void
+gtk_cell_renderer_sep_get_size (GtkCellRenderer *cell,
+				GtkWidget       *widget,
+				GdkRectangle    *cell_area,
+				gint            *x_offset,
+				gint            *y_offset,
+				gint            *width,
+				gint            *height)
+{
+  GtkCellRendererSepText *st;
+  const char *text;
+
+  st = GTK_CELL_RENDERER_SEP_TEXT (cell);
+
+  text = st->renderer_text.text;
+
+  if (!text)
+    {
+      if (width)
+	*width = cell->xpad * 2 + 1;
+      
+      if (height)
+	*height = cell->ypad * 2 + 1;
+
+      if (x_offset) *x_offset = 0;
+      if (y_offset) *y_offset = 0;
+      if (cell_area)
+	{
+	  
+	}
+    }
+  else
+    {
+      GTK_CELL_RENDERER_CLASS (parent_class)->get_size (cell, widget, cell_area, x_offset, y_offset, width, height);
+    }
 }
 
 static void
