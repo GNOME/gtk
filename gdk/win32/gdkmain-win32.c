@@ -89,6 +89,7 @@ _gdk_windowing_init_check (int    argc,
   gdk_selection_clear_msg = RegisterWindowMessage ("gdk-selection-clear");
 
   gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
+  text_uri_list_atom = gdk_atom_intern ("text/uri-list", FALSE);
   gdk_clipboard_atom = gdk_atom_intern ("CLIPBOARD", FALSE);
   gdk_win32_dropfiles_atom = gdk_atom_intern ("DROPFILES_DND", FALSE);
   gdk_ole2_dnd_atom = gdk_atom_intern ("OLE2_DND", FALSE);

@@ -417,11 +417,7 @@ void    gdk_win32_clear_hdc_cache_for_hwnd (HWND hwnd);
 
 HRGN	BitmapToRegion           (HBITMAP hBmp);
 
-void    gdk_sel_prop_store       (GdkWindow *owner,
-				  GdkAtom    type,
-				  gint       format,
-				  guchar    *data,
-				  gint       length);
+void    gdk_win32_dropfiles_store(gchar     *data);
 
 gint gdk_nmbstowcs               (GdkWChar    *dest,
 				  const gchar *src,
@@ -474,7 +470,6 @@ extern LRESULT CALLBACK gdk_WindowProc (HWND, UINT, WPARAM, LPARAM);
 
 extern GdkDrawableClass  _gdk_win32_drawable_class;
 extern HWND		 gdk_root_window;
-GDKVAR ATOM		 gdk_selection_property;
 GDKVAR gchar		*gdk_progclass;
 extern gboolean		 gdk_event_func_from_window_proc;
 
@@ -485,11 +480,24 @@ extern HINSTANCE	 gdk_ProgInstance;
 extern UINT		 gdk_selection_notify_msg;
 extern UINT		 gdk_selection_request_msg;
 extern UINT		 gdk_selection_clear_msg;
+GDKVAR GdkAtom		 gdk_selection_property;
+extern GdkAtom		 text_uri_list_atom;
 extern GdkAtom		 gdk_clipboard_atom;
 extern GdkAtom		 gdk_win32_dropfiles_atom;
 extern GdkAtom		 gdk_ole2_dnd_atom;
 
+typedef enum {
+  GDK_WIN32_DND_NONE = 0,
+  GDK_WIN32_DND_PENDING = 1,
+  GDK_WIN32_DND_DROPPED = 2,
+  GDK_WIN32_DND_FAILED = 3,
+  GDK_WIN32_DND_DRAGGING = 4,
+} GdkWin32DndState;
+extern GdkWin32DndState  gdk_win32_dnd_target_state;
+extern GdkWin32DndState  gdk_win32_dnd_source_state;
+
 extern DWORD		 windows_version;
+
 #define IS_WIN_NT(dwVersion) (dwVersion < 0x80000000)
 
 #ifdef __cplusplus

@@ -1,3 +1,83 @@
+2002-01-06  Tor Lillqvist  <tml@iki.fi>
+
+	Some bug fixes and cleanup of selection and DND functionality. Now
+	cut&paste inside an application works again. Removed attempts at
+	supporting the X11 PRIMARY selection -style cut&paste, can't be
+	made to work correctly anyway, and is "non-Windowsish".
+
+	There are still things that need to be fixed regarding the
+	clipboard and DND: 
+
+	- Unicode issues. We currently bluntly store UTF-8 text as
+	CF_TEXT, and expect CF_TEXT to be UTF-8. This is very wrong, just
+	try to copy-paste non-ASCII text between a GTK+ app and Notepad,
+	for instance. Instead we should use CF_UNICODETEXT if we are on
+	NT. If on 9x, when storing into the clipboard, check if the string
+	can be represented in a single code page, and in that case use
+	that. Also, store CF_LOCALE data in the clipboard to (indirectly)
+	indicate that code page.
+
+	Problem: How to elegantly check what code page, if any, contains
+	all the Unicode characters in a string? What if there is no such
+	code page, don't store anything then?
+
+	Problem: In order to store CF_LOCALE data, how does one find a
+	language that uses the code page in question? Build a reverse
+	mapping table once, use that?
+
+	- Handling of non-text data in the clipboard. Not that I think any
+	relevant GTK+ application even tries to handle much else than text
+	on the clipboard?
+	
+	- Need to add Archaeopteryx Software's OLE2 DND support.
+	
+	* gdk/win32/gdkdnd-win32.c: Plug memory leaks, the
+	gdk_drag_context_ref() was called unnecessarily in a couple of
+	places, meaning drag contexts were never freed.
+
+	(gdk_drop_reply): For WIN32_DROPFILES drops, free the temporarily
+	stored file list.
+
+	* gdk/win32/gdkproperty-win32.c
+	
+	* gdk/win32/gdkselection-win32.c: Now we don't try to support the
+	X11 PRIMARY selection -style cut&paste at all, it won't fit anyway
+	in the Windows cut&paste model. Only support CLIPBOARD style
+	cut&paste, which matches nicely with Windows Clipboard.
+
+	Clear up the use of the sel_prop_table. Now it is used only for
+	storing the GDK_SELECTION "properties".
+
+	The file names dropped with WM_DROPFILES -style DND is stored
+	temporarily (between the drop and the target picking them up) in a
+	separate place.
+
+	Have a separate hash table to map selection atoms to owner
+	windows. This used to be quite mixed up.
+
+	(sel_prop_store): Now static.
+
+	(gdk_win32_dropfiles_store): New function, to store the dropped
+	file list for the drop target to possibly fetch, and clear it
+	afterwards, from gdk_drop_reply().
+
+	(gdk_selection_owner_get): Much simplified now.
+
+	* gdkprivate-win32.h: Declare gdk_win32_dropfiles_store.
+
+	* gdkglobals-win32.c
+	* gdkmain-win32.c: gdk_selection_property is a GdkAtom, not
+	ATOM. Declare also text_uri_list_atom globally, initialise.
+
+	* gdkwindow-win32.c: Some lint cleanup (ambiguous else, unused
+	variables).
+
+2002-01-01  Tor Lillqvist  <tml@iki.fi>
+
+	* configure.in: Define and substitute GETTEXT_PACKAGE.
+
+	* gtk/gtkfilesel.c: Silence some gcc -Wall warnings.
+
 2001-12-28  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkfont-win32.c: Use G_N_ELEMENTS().

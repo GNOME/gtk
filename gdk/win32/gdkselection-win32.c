@@ -31,8 +31,9 @@
 #include <gdk/gdk.h>
 #include "gdkwin32.h"
 
-/* We emulate the GDK_SELECTION window properties by storing
- * it's data in a per-window hashtable.
+/* We emulate the GDK_SELECTION property of windows (as used in the
+ * X11 backend) by using a hash table from GdkWindows to GdkSelProp
+ * structs.
  */
 
 typedef struct {
@@ -44,34 +45,65 @@ typedef struct {
 
 static GHashTable *sel_prop_table = NULL;
 
+static GdkSelProp *dropfiles_prop = NULL;
+
+/* We store the owner of each selection in this table. Obviously, this only
+ * is valid intra-app, and in fact it is necessary for the intra-app DND to work.
+ */
+static GHashTable *sel_owner_table = NULL;
+
 void
 gdk_win32_selection_init (void)
 {
-  if (sel_prop_table == NULL)
-    sel_prop_table = g_hash_table_new (g_int_hash, g_int_equal);
+  sel_prop_table = g_hash_table_new (NULL, NULL);
+  sel_owner_table = g_hash_table_new (NULL, NULL);
 }
 
-void
-gdk_sel_prop_store (GdkWindow *owner,
-		    GdkAtom    type,
-		    gint       format,
-		    guchar    *data,
-		    gint       length)
+static void
+sel_prop_store (GdkWindow *window,
+		GdkAtom    type,
+		gint       format,
+		guchar    *data,
+		gint       length)
 {
   GdkSelProp *prop;
 
-  prop = g_hash_table_lookup (sel_prop_table, &GDK_DRAWABLE_XID (owner));
+  prop = g_hash_table_lookup (sel_prop_table, GDK_DRAWABLE_XID (window));
   if (prop != NULL)
     {
       g_free (prop->data);
-      g_hash_table_remove (sel_prop_table, &GDK_DRAWABLE_XID (owner));
+      g_hash_table_remove (sel_prop_table, GDK_DRAWABLE_XID (window));
     }
   prop = g_new (GdkSelProp, 1);
   prop->data = data;
   prop->length = length;
   prop->format = format;
   prop->type = type;
-  g_hash_table_insert (sel_prop_table, &GDK_DRAWABLE_XID (owner), prop);
+  g_hash_table_insert (sel_prop_table, GDK_DRAWABLE_XID (window), prop);
+}
+
+void
+gdk_win32_dropfiles_store (gchar *data)
+{
+  if (data != NULL)
+    {
+      g_assert (dropfiles_prop == NULL);
+
+      dropfiles_prop = g_new (GdkSelProp, 1);
+      dropfiles_prop->data = data;
+      dropfiles_prop->length = strlen (data);
+      dropfiles_prop->format = 8;
+      dropfiles_prop->type = text_uri_list_atom;
+    }
+  else
+    {
+      if (dropfiles_prop != NULL)
+	{
+	  g_free (dropfiles_prop->data);
+	  g_free (dropfiles_prop);
+	}
+      dropfiles_prop = NULL;
+    }
 }
 
 gint
@@ -90,14 +122,20 @@ gdk_selection_owner_set (GdkWindow *owner,
 		      (guint) selection, sel_name),
 	     g_free (sel_name)));
 
+  /* We don't support the PRIMARY selection */
+  if (selection == GDK_SELECTION_PRIMARY)
+    return FALSE;
+
   if (selection != gdk_clipboard_atom)
     {
-      if (!owner)
-        return FALSE;
-      gdk_sel_prop_store (owner, selection, 0, 0, 0);
+      if (owner != NULL)
+	g_hash_table_insert (sel_owner_table, selection, GDK_DRAWABLE_XID (owner));
+      else
+	g_hash_table_remove (sel_owner_table, selection);
       return TRUE;
     }
 
+  /* Rest of this function handles the CLIPBOARD selection */
   if (owner != NULL)
     xwindow = GDK_DRAWABLE_XID (owner);
   else
@@ -127,34 +165,18 @@ gdk_selection_owner_set (GdkWindow *owner,
       WIN32_API_FAILED ("CloseClipboard");
       return FALSE;
     }
+
   if (owner != NULL)
     {
       /* Send ourselves an ersatz selection request message so that
        * gdk_property_change will be called to store the clipboard data.
        */
+      GDK_NOTE (DND, g_print ("...sending gdk_selection_request_msg to ourselves\n"));
       SendMessage (xwindow, gdk_selection_request_msg,
 		   selection, 0);
     }
 
   return TRUE;
-}
-
-/* callback for g_hash_table_for_each */
-typedef struct {
-  GdkAtom atom;
-  HWND    hwnd;
-} SelectionAndHwnd;
-
-static void
-window_from_selection (gpointer key,
-		       gpointer value,
-		       gpointer user_data)
-{
-  GdkSelProp *selprop = (GdkSelProp *)value;  
-  SelectionAndHwnd *sah = (SelectionAndHwnd *) user_data;
-
-  if (selprop->type == sah->atom)
-    sah->hwnd = *(HWND *) key;
 }
 
 GdkWindow*
@@ -163,30 +185,18 @@ gdk_selection_owner_get (GdkAtom selection)
   GdkWindow *window;
   gchar *sel_name;
 
-#if 0
-  /* XXX Hmm, gtk selections seem to work best with this. This causes
-   * gtk to always get the clipboard contents from Windows, and not
-   * from the editable's own stashed-away copy.
+  /* Return NULL for PRIMARY because we don't want to support that.
+   *
+   * Also return NULL for CLIPBOARD, because otherwise cut&paste
+   * inside the same application doesn't work. We must pretend to gtk
+   * that we don't have the selection, so that we always fetch it from
+   * the Windows clipboard. See also comments in
+   * gdk_selection_send_notify().
    */
-  return NULL;
-#else
-  /* HB: The above is no longer true with recent changes to get
-   * inter-app drag&drop working ...
-   */
-  if (selection != gdk_clipboard_atom)
-    {
-      SelectionAndHwnd sah;
-      sah.atom = selection;
-      sah.hwnd = 0;
- 
-      g_hash_table_foreach (sel_prop_table, window_from_selection, &sah);
-
-      window = gdk_xid_table_lookup (sah.hwnd);
-    }
-  else
-    window = gdk_window_lookup (GetClipboardOwner ());
-
-#endif
+  if (selection == GDK_SELECTION_PRIMARY ||
+      selection == gdk_clipboard_atom)
+    return NULL;
+  window = gdk_window_lookup (g_hash_table_lookup (sel_owner_table, selection));
 
   GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
@@ -269,9 +279,8 @@ gdk_selection_convert (GdkWindow *requestor,
 		  p++;
 		}
 	      *datap++ = '\0';
-	      gdk_sel_prop_store (requestor, GDK_TARGET_STRING, 8,
-				  data, strlen (data) + 1);
-	      
+	      sel_prop_store (requestor, GDK_TARGET_STRING, 8,
+			      data, strlen (data) + 1);
 	      GlobalUnlock (hdata);
 	    }
 	}
@@ -288,20 +297,14 @@ gdk_selection_convert (GdkWindow *requestor,
     {
       /* This means he wants the names of the dropped files.
        * gdk_dropfiles_filter already has stored the text/uri-list
-       * data, tempoarily on gdk_root_parent's selection "property".
+       * data tempoarily in dropfiles_prop.
        */
-      GdkSelProp *prop;
-
-      prop = g_hash_table_lookup (sel_prop_table,
-				  &GDK_DRAWABLE_XID (gdk_parent_root));
-
-      if (prop != NULL)
+      if (dropfiles_prop != NULL)
 	{
-	  g_hash_table_remove (sel_prop_table,
-			       &GDK_DRAWABLE_XID (gdk_parent_root));
-	  gdk_sel_prop_store (requestor, prop->type, prop->format,
-			      prop->data, prop->length);
-	  g_free (prop);
+	  sel_prop_store (requestor, selection, dropfiles_prop->format,
+			  dropfiles_prop->data, dropfiles_prop->length);
+	  g_free (dropfiles_prop);
+	  dropfiles_prop = NULL;
 	  SendMessage (GDK_DRAWABLE_XID (requestor), gdk_selection_notify_msg, selection, target);
 	}
     }
@@ -328,7 +331,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
   GDK_NOTE (DND, g_print ("gdk_selection_property_get: %#x",
 			   (guint) GDK_DRAWABLE_XID (requestor)));
 
-  prop = g_hash_table_lookup (sel_prop_table, &GDK_DRAWABLE_XID (requestor));
+  prop = g_hash_table_lookup (sel_prop_table, GDK_DRAWABLE_XID (requestor));
 
   if (prop == NULL)
     {
@@ -336,12 +339,15 @@ gdk_selection_property_get (GdkWindow  *requestor,
       *data = NULL;
       return 0;
     }
+
   GDK_NOTE (DND, g_print (": %d bytes\n", prop->length));
   *data = g_malloc (prop->length);
   if (prop->length > 0)
     memmove (*data, prop->data, prop->length);
+
   if (ret_type)
     *ret_type = prop->type;
+
   if (ret_format)
     *ret_format = prop->format;
 
@@ -353,14 +359,14 @@ gdk_selection_property_delete (GdkWindow *window)
 {
   GdkSelProp *prop;
   
-  GDK_NOTE (DND, g_print ("gdk_selection_property_delete: %#x",
+  GDK_NOTE (DND, g_print ("gdk_selection_property_delete: %#x\n",
 			   (guint) GDK_DRAWABLE_XID (window)));
 
-  prop = g_hash_table_lookup (sel_prop_table, &GDK_DRAWABLE_XID (window));
+  prop = g_hash_table_lookup (sel_prop_table, GDK_DRAWABLE_XID (window));
   if (prop != NULL)
     {
       g_free (prop->data);
-      g_hash_table_remove (sel_prop_table, &GDK_DRAWABLE_XID (window));
+      g_hash_table_remove (sel_prop_table, GDK_DRAWABLE_XID (window));
     }
   else
     g_warning ("gdk_selection_property_delete: not found");
@@ -391,15 +397,15 @@ gdk_selection_send_notify (guint32  requestor,
   /* Send ourselves a selection clear message so that gtk thinks we don't
    * have the selection, and will claim it anew when needed, and
    * we thus get a chance to store data in the Windows clipboard.
-   * Otherwise, if a gtkeditable does a copy to clipboard several times
+   * Otherwise, if a gtkeditable does a copy to CLIPBOARD several times
    * only the first one actually gets copied to the Windows clipboard,
-   * as only he first one causes a call to gdk_property_change.
+   * as only the first one causes a call to gdk_property_change().
    *
    * Hmm, there is something fishy with this. Cut and paste inside the
    * same app didn't work, the gtkeditable immediately forgot the
-   * clipboard contents in gtk_editable_selection_clear as a result of
-   * this message. OTOH, when I changed gdk_selection_owner_get to
-   * always return NULL, it works. Sigh.
+   * clipboard contents in gtk_editable_selection_clear() as a result
+   * of this message. OTOH, when I changed gdk_selection_owner_get to
+   * return NULL for CLIPBOARD, it works. Sigh.
    */
 
   SendMessage ((HWND) requestor, gdk_selection_clear_msg, selection, target);

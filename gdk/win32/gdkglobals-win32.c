@@ -38,7 +38,8 @@ UINT		  gdk_selection_clear_msg;
 GdkAtom		  gdk_clipboard_atom;
 GdkAtom		  gdk_win32_dropfiles_atom;
 GdkAtom		  gdk_ole2_dnd_atom;
-ATOM              gdk_selection_property;
+GdkAtom           gdk_selection_property;
+GdkAtom		  text_uri_list_atom;
 gint              gdk_null_window_warnings = TRUE;
 
 DWORD		  windows_version = 0;

@@ -173,7 +173,6 @@ gdk_property_change (GdkWindow    *window,
       for (i = 0; i < nelements; i++)
 	if (data[i] == '\n')
 	  length++;
-#if 1      
       GDK_NOTE (DND, g_print ("...OpenClipboard(%#x)\n",
 			       (guint) GDK_DRAWABLE_XID (window)));
       if (!OpenClipboard (GDK_DRAWABLE_XID (window)))
@@ -181,7 +180,6 @@ gdk_property_change (GdkWindow    *window,
 	  WIN32_API_FAILED ("OpenClipboard");
 	  return;
 	}
-#endif
       hdata = GlobalAlloc (GMEM_MOVEABLE|GMEM_DDESHARE, length + 1);
       ptr = GlobalLock (hdata);
       GDK_NOTE (DND, g_print ("...hdata=%#x, ptr=%p\n", (guint) hdata, ptr));
@@ -198,11 +196,9 @@ gdk_property_change (GdkWindow    *window,
 			       (guint) hdata));
       if (!SetClipboardData(CF_TEXT, hdata))
 	WIN32_API_FAILED ("SetClipboardData");
-#if 1
       GDK_NOTE (DND, g_print ("...CloseClipboard()\n"));
       if (!CloseClipboard ())
 	WIN32_API_FAILED ("CloseClipboard");
-#endif
     }
   else
     g_warning ("gdk_property_change: General case not implemented");

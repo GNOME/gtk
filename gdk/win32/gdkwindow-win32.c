@@ -213,46 +213,46 @@ RegisterGdkClass (GdkDrawableType wtype)
   wcl.hCursor = LoadCursor (NULL, IDC_ARROW); 
   
   switch (wtype)
-  {
+    {
     case GDK_WINDOW_TOPLEVEL:
       if (0 == klassTOPLEVEL)
-      {
-	wcl.lpszClassName = "gdkWindowToplevel";
-
-	ONCE_PER_CLASS();
-	klassTOPLEVEL = RegisterClassEx(&wcl);
-      }
+	{
+	  wcl.lpszClassName = "gdkWindowToplevel";
+	  
+	  ONCE_PER_CLASS();
+	  klassTOPLEVEL = RegisterClassEx(&wcl);
+	}
       klass = klassTOPLEVEL;
       break;
     case GDK_WINDOW_CHILD:
       if (0 == klassCHILD)
-      {
-	wcl.lpszClassName = "gdkWindowChild";
-
-        wcl.style |= CS_PARENTDC; /* MSDN: ... enhances system performance. */
-	ONCE_PER_CLASS();
-	klassCHILD = RegisterClassEx(&wcl);
-      }
+	{
+	  wcl.lpszClassName = "gdkWindowChild";
+	  
+	  wcl.style |= CS_PARENTDC; /* MSDN: ... enhances system performance. */
+	  ONCE_PER_CLASS();
+	  klassCHILD = RegisterClassEx(&wcl);
+	}
       klass = klassCHILD;
       break;
     case GDK_WINDOW_DIALOG:
       if (0 == klassDIALOG)
-      {
-	wcl.lpszClassName = "gdkWindowDialog";
-        wcl.style |= CS_SAVEBITS;
-	ONCE_PER_CLASS();
-	klassDIALOG = RegisterClassEx(&wcl);
-      }
+	{
+	  wcl.lpszClassName = "gdkWindowDialog";
+	  wcl.style |= CS_SAVEBITS;
+	  ONCE_PER_CLASS();
+	  klassDIALOG = RegisterClassEx(&wcl);
+	}
       klass = klassDIALOG;
       break;
     case GDK_WINDOW_TEMP:
       if (0 == klassTEMP)
-      {
-	wcl.lpszClassName = "gdkWindowTemp";
-        wcl.style |= CS_SAVEBITS;
-	ONCE_PER_CLASS();
-	klassTEMP = RegisterClassEx(&wcl);
-      }
+	{
+	  wcl.lpszClassName = "gdkWindowTemp";
+	  wcl.style |= CS_SAVEBITS;
+	  ONCE_PER_CLASS();
+	  klassTEMP = RegisterClassEx(&wcl);
+	}
       klass = klassTEMP;
       break;
     case GDK_WINDOW_ROOT:
@@ -261,8 +261,10 @@ RegisterGdkClass (GdkDrawableType wtype)
     case GDK_DRAWABLE_PIXMAP:
       g_error ("cannot make windows of type GDK_DRAWABLE_PIXMAP (use gdk_pixmap_new)");
       break;
-  }
-
+    default:
+      g_assert_not_reached ();
+    }
+  
   if (klass == 0)
     {
       WIN32_API_FAILED ("RegisterClassEx");
@@ -462,7 +464,7 @@ gdk_window_new (GdkWindow     *parent,
 		     width, height, (x == CW_USEDEFAULT ? -9999 : x), y, 
 		     (guint) xparent,
 		     (guint) GDK_DRAWABLE_XID (window),
-		     GDK_WINDOW_WIN32DATA (window)->input_locale,
+		     (guint) GDK_WINDOW_WIN32DATA (window)->input_locale,
 		     GDK_WINDOW_WIN32DATA (window)->charset_info.ciACP));
 
   g_free (mbtitle);
@@ -1051,8 +1053,6 @@ gdk_window_clear_area (GdkWindow *window,
 		       gint       width,
 		       gint       height)
 {
-  gboolean threaded_gdk = FALSE;
-
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   
@@ -1169,48 +1169,50 @@ gdk_window_set_hints (GdkWindow *window,
   if (flags)
     {
       if (flags & GDK_HINT_POS)
-	if (!GetWindowPlacement (GDK_DRAWABLE_XID (window), &size_hints))
-	  WIN32_API_FAILED ("GetWindowPlacement");
-	else
-	  {
-	    GDK_NOTE (MISC, g_print ("...rcNormalPosition:"
-				     " (%ld,%ld)--(%ld,%ld)\n",
-				     size_hints.rcNormalPosition.left,
-				     size_hints.rcNormalPosition.top,
-				     size_hints.rcNormalPosition.right,
-				     size_hints.rcNormalPosition.bottom));
-	    /* What are the corresponding window coordinates for client
-	     * area coordinates x, y
-	     */
-	    rect.left = x;
-	    rect.top = y;
-	    rect.right = rect.left + 200;	/* dummy */
-	    rect.bottom = rect.top + 200;
-	    dwStyle = GetWindowLong (GDK_DRAWABLE_XID (window), GWL_STYLE);
-	    dwExStyle = GetWindowLong (GDK_DRAWABLE_XID (window), GWL_EXSTYLE);
-	    AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle);
-	    size_hints.flags = 0;
-	    size_hints.showCmd = SW_SHOWNA;
-
-	    /* Set the normal position hint to that location, with unchanged
-	     * width and height.
-	     */
-	    diff = size_hints.rcNormalPosition.left - rect.left;
-	    size_hints.rcNormalPosition.left = rect.left;
-	    size_hints.rcNormalPosition.right -= diff;
-	    diff = size_hints.rcNormalPosition.top - rect.top;
-	    size_hints.rcNormalPosition.top = rect.top;
-	    size_hints.rcNormalPosition.bottom -= diff;
-	    GDK_NOTE (MISC, g_print ("...setting: (%ld,%ld)--(%ld,%ld)\n",
-				     size_hints.rcNormalPosition.left,
-				     size_hints.rcNormalPosition.top,
-				     size_hints.rcNormalPosition.right,
-				     size_hints.rcNormalPosition.bottom));
-	    if (!SetWindowPlacement (GDK_DRAWABLE_XID (window), &size_hints))
-	      WIN32_API_FAILED ("SetWindowPlacement");
-	    GDK_WINDOW_WIN32DATA (window)->hint_x = rect.left;
-	    GDK_WINDOW_WIN32DATA (window)->hint_y = rect.top;
-	  }
+	{
+	  if (!GetWindowPlacement (GDK_DRAWABLE_XID (window), &size_hints))
+	    WIN32_API_FAILED ("GetWindowPlacement");
+	  else
+	    {
+	      GDK_NOTE (MISC, g_print ("...rcNormalPosition:"
+				       " (%ld,%ld)--(%ld,%ld)\n",
+				       size_hints.rcNormalPosition.left,
+				       size_hints.rcNormalPosition.top,
+				       size_hints.rcNormalPosition.right,
+				       size_hints.rcNormalPosition.bottom));
+	      /* What are the corresponding window coordinates for client
+	       * area coordinates x, y
+	       */
+	      rect.left = x;
+	      rect.top = y;
+	      rect.right = rect.left + 200;	/* dummy */
+	      rect.bottom = rect.top + 200;
+	      dwStyle = GetWindowLong (GDK_DRAWABLE_XID (window), GWL_STYLE);
+	      dwExStyle = GetWindowLong (GDK_DRAWABLE_XID (window), GWL_EXSTYLE);
+	      AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle);
+	      size_hints.flags = 0;
+	      size_hints.showCmd = SW_SHOWNA;
+	      
+	      /* Set the normal position hint to that location, with unchanged
+	       * width and height.
+	       */
+	      diff = size_hints.rcNormalPosition.left - rect.left;
+	      size_hints.rcNormalPosition.left = rect.left;
+	      size_hints.rcNormalPosition.right -= diff;
+	      diff = size_hints.rcNormalPosition.top - rect.top;
+	      size_hints.rcNormalPosition.top = rect.top;
+	      size_hints.rcNormalPosition.bottom -= diff;
+	      GDK_NOTE (MISC, g_print ("...setting: (%ld,%ld)--(%ld,%ld)\n",
+				       size_hints.rcNormalPosition.left,
+				       size_hints.rcNormalPosition.top,
+				       size_hints.rcNormalPosition.right,
+				       size_hints.rcNormalPosition.bottom));
+	      if (!SetWindowPlacement (GDK_DRAWABLE_XID (window), &size_hints))
+		WIN32_API_FAILED ("SetWindowPlacement");
+	      GDK_WINDOW_WIN32DATA (window)->hint_x = rect.left;
+	      GDK_WINDOW_WIN32DATA (window)->hint_y = rect.top;
+	    }
+	}
 
       if (flags & GDK_HINT_MIN_SIZE)
 	{
@@ -1270,7 +1272,6 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
   RECT rect;
   DWORD dwStyle;
   DWORD dwExStyle;
-  int diff;
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1335,28 +1336,30 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
   if (geom_mask & GDK_HINT_BASE_SIZE
       && geometry->base_width > 0
       && geometry->base_height > 0)
-    if (!GetWindowPlacement (GDK_DRAWABLE_XID (window), &size_hints))
-      WIN32_API_FAILED ("GetWindowPlacement");
-    else
-      {
-	GDK_NOTE (MISC, g_print ("gdk_window_set_geometry_hints:"
-				 " rcNormalPosition: (%ld,%ld)--(%ld,%ld)\n",
-				 size_hints.rcNormalPosition.left,
-				 size_hints.rcNormalPosition.top,
-				 size_hints.rcNormalPosition.right,
-				 size_hints.rcNormalPosition.bottom));
-	size_hints.rcNormalPosition.right =
-	  size_hints.rcNormalPosition.left + geometry->base_width;
-	size_hints.rcNormalPosition.bottom =
-	  size_hints.rcNormalPosition.top + geometry->base_height;
-	GDK_NOTE (MISC, g_print ("...setting: rcNormal: (%ld,%ld)--(%ld,%ld)\n",
-				 size_hints.rcNormalPosition.left,
-				 size_hints.rcNormalPosition.top,
-				 size_hints.rcNormalPosition.right,
-				 size_hints.rcNormalPosition.bottom));
-	if (!SetWindowPlacement (GDK_DRAWABLE_XID (window), &size_hints))
-	  WIN32_API_FAILED ("SetWindowPlacement");
-      }
+    {
+      if (!GetWindowPlacement (GDK_DRAWABLE_XID (window), &size_hints))
+	WIN32_API_FAILED ("GetWindowPlacement");
+      else
+	{
+	  GDK_NOTE (MISC, g_print ("gdk_window_set_geometry_hints:"
+				   " rcNormalPosition: (%ld,%ld)--(%ld,%ld)\n",
+				   size_hints.rcNormalPosition.left,
+				   size_hints.rcNormalPosition.top,
+				   size_hints.rcNormalPosition.right,
+				   size_hints.rcNormalPosition.bottom));
+	  size_hints.rcNormalPosition.right =
+	    size_hints.rcNormalPosition.left + geometry->base_width;
+	  size_hints.rcNormalPosition.bottom =
+	    size_hints.rcNormalPosition.top + geometry->base_height;
+	  GDK_NOTE (MISC, g_print ("...setting: rcNormal: (%ld,%ld)--(%ld,%ld)\n",
+				   size_hints.rcNormalPosition.left,
+				   size_hints.rcNormalPosition.top,
+				   size_hints.rcNormalPosition.right,
+				   size_hints.rcNormalPosition.bottom));
+	  if (!SetWindowPlacement (GDK_DRAWABLE_XID (window), &size_hints))
+	    WIN32_API_FAILED ("SetWindowPlacement");
+	}
+    }
   
   if (geom_mask & GDK_HINT_RESIZE_INC)
     {
@@ -2064,7 +2067,6 @@ gdk_propagate_shapes (HANDLE   win,
 {
    RECT emptyRect;
    HRGN region, childRegion;
-   RECT rect;
    HWND *list = NULL;
    gint i, num;
 
