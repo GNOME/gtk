@@ -387,8 +387,7 @@ gdk_pixbuf_loader_load_module (GdkPixbufLoader *loader,
                 }
 
 	if (!priv->holds_threadlock) {
-                _gdk_pixbuf_lock (priv->image_module);
-                priv->holds_threadlock = TRUE;
+                priv->holds_threadlock = _gdk_pixbuf_lock (priv->image_module);
         }
 
         priv->context = priv->image_module->begin_load (gdk_pixbuf_loader_size_func,
@@ -745,8 +744,7 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
                 }
   
         priv->closed = TRUE;
-	if (priv->image_module) {
-                g_assert (priv->holds_threadlock);
+	if (priv->image_module && priv->holds_threadlock) {
                 _gdk_pixbuf_unlock (priv->image_module);
                 priv->holds_threadlock = FALSE;
         }

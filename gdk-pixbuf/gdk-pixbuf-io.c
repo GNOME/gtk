@@ -79,12 +79,17 @@ format_check (GdkPixbufModule *module, guchar *buffer, int size)
 G_LOCK_DEFINE_STATIC (init_lock);
 G_LOCK_DEFINE_STATIC (threadunsafe_loader_lock);
 
-void
+gboolean
 _gdk_pixbuf_lock (GdkPixbufModule *image_module)
 {
- 	if (!(image_module->info->flags & GDK_PIXBUF_FORMAT_THREADSAFE)) {
+ 	if (g_threads_got_initialized &&
+	    !(image_module->info->flags & GDK_PIXBUF_FORMAT_THREADSAFE)) {
  		G_LOCK (threadunsafe_loader_lock);
+
+		return TRUE;
  	}
+
+	return FALSE;
 }
  
 void
@@ -460,10 +465,19 @@ _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 			 GError         **error)
 {
 	gboolean ret;
+	gboolean locked = FALSE;
 
-	G_LOCK (init_lock);
+	/* be extra careful, maybe the module initializes
+	 * the thread system
+	 */
+	if (g_threads_got_initialized)
+	{
+		G_LOCK (init_lock);
+		locked = TRUE;
+	}
 	ret = _gdk_pixbuf_load_module_unlocked (image_module, error);
-	G_UNLOCK (init_lock);
+	if (locked)
+		G_UNLOCK (init_lock);
 	return ret;
 }
 
@@ -736,8 +750,9 @@ _gdk_pixbuf_generic_image_load (GdkPixbufModule *module,
 	GdkPixbuf *pixbuf = NULL;
 	GdkPixbufAnimation *animation = NULL;
 	gpointer context;
+	gboolean locked;
 
-	_gdk_pixbuf_lock (module);
+	locked = _gdk_pixbuf_lock (module);
 
 	if (module->load != NULL) {
 		pixbuf = (* module->load) (f, error);
@@ -773,13 +788,13 @@ _gdk_pixbuf_generic_image_load (GdkPixbufModule *module,
 			pixbuf = gdk_pixbuf_animation_get_static_image (animation);
 
 			g_object_ref (pixbuf);
-
 			g_object_unref (animation);
 		}
 	}
 
  out:
-	_gdk_pixbuf_unlock (module);
+	if (locked)
+		_gdk_pixbuf_unlock (module);
 	return pixbuf;
 }
 
@@ -1154,7 +1169,10 @@ gdk_pixbuf_new_from_xpm_data (const char **data)
 	GdkPixbuf *(* load_xpm_data) (const char **data);
 	GdkPixbuf *pixbuf;
         GError *error = NULL;
-	GdkPixbufModule *xpm_module = _gdk_pixbuf_get_named_module ("xpm", &error);
+	GdkPixbufModule *xpm_module;
+	gboolean locked;
+
+	xpm_module = _gdk_pixbuf_get_named_module ("xpm", &error);
 	if (xpm_module == NULL) {
 		g_warning ("Error loading XPM image loader: %s", error->message);
 		g_error_free (error);
@@ -1169,7 +1187,7 @@ gdk_pixbuf_new_from_xpm_data (const char **data)
                 }
         }
 
-	_gdk_pixbuf_lock (xpm_module);
+	locked = _gdk_pixbuf_lock (xpm_module);
 
 	if (xpm_module->load_xpm_data == NULL) {
 		g_warning ("gdk-pixbuf XPM module lacks XPM data capability");
@@ -1178,8 +1196,9 @@ gdk_pixbuf_new_from_xpm_data (const char **data)
 		load_xpm_data = xpm_module->load_xpm_data;
 		pixbuf = (* load_xpm_data) (data);
 	}
-
-	_gdk_pixbuf_unlock (xpm_module);
+	
+	if (locked)
+		_gdk_pixbuf_unlock (xpm_module);
 	return pixbuf;
 }
 
@@ -1250,6 +1269,7 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
 {
 	gboolean ret;
 	GdkPixbufModule *image_module = NULL;       
+	gboolean locked;
 
 	image_module = _gdk_pixbuf_get_named_module (type, error);
 
@@ -1260,7 +1280,7 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
 		if (!_gdk_pixbuf_load_module (image_module, error))
 			return FALSE;
 
-	_gdk_pixbuf_lock (image_module);
+	locked = _gdk_pixbuf_lock (image_module);
 
 	if (image_module->save) {
 		/* save normally */
@@ -1283,7 +1303,8 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
 		ret = FALSE;
 	}
 
-	_gdk_pixbuf_unlock (image_module);
+	if (locked)
+		_gdk_pixbuf_unlock (image_module);
 	return ret;
 }
 
@@ -1304,6 +1325,7 @@ save_to_callback_with_tmp_file (GdkPixbufModule   *image_module,
 	gchar *buf = NULL;
 	gsize n;
 	gchar *filename = NULL;
+	gboolean locked;
 
 	buf = g_try_malloc (TMP_FILE_BUF_SIZE);
 	if (buf == NULL) {
@@ -1326,9 +1348,10 @@ save_to_callback_with_tmp_file (GdkPixbufModule   *image_module,
 		goto end;
 	}
 
-	_gdk_pixbuf_lock (image_module);
+	locked = _gdk_pixbuf_lock (image_module);
 	retval = (image_module->save) (f, pixbuf, keys, values, error);
-	_gdk_pixbuf_unlock (image_module);
+	if (locked)
+		_gdk_pixbuf_unlock (image_module);
 	if (!retval)
 		goto end;
 
@@ -1375,6 +1398,7 @@ gdk_pixbuf_real_save_to_callback (GdkPixbuf         *pixbuf,
 {
 	gboolean ret;
 	GdkPixbufModule *image_module = NULL;       
+	gboolean locked;
 
 	image_module = _gdk_pixbuf_get_named_module (type, error);
 
@@ -1385,7 +1409,7 @@ gdk_pixbuf_real_save_to_callback (GdkPixbuf         *pixbuf,
 		if (!_gdk_pixbuf_load_module (image_module, error))
 			return FALSE;
 
-	_gdk_pixbuf_lock (image_module);
+	locked = _gdk_pixbuf_lock (image_module);
 
 	if (image_module->save_to_callback) {
 		/* save normally */
@@ -1408,7 +1432,8 @@ gdk_pixbuf_real_save_to_callback (GdkPixbuf         *pixbuf,
 		ret = FALSE;
 	}
 
-	_gdk_pixbuf_unlock (image_module);
+	if (locked)
+		_gdk_pixbuf_unlock (image_module);
 	return ret;
 }
 
