@@ -111,8 +111,8 @@ NLS manually to get GTK+ to compile. You can do this
 by specifying the --disable-nls flag when configuring
 GTK+.
 
-Using an uninstalled copy of GLIB
-=================================
+Using an uninstalled copy of GLIB [ Unsupported ]
+=================================================
 
 You can compile GTK+ against a copy of GLIB that you have not
 yet installed. To do this, give the --with-glib=DIR options
@@ -123,6 +123,11 @@ to ./configure. For instance:
 This, however, will not work if you built GLIB with different
 source and build directories.
 
+It is recommended that you install GLIB before compiling
+GTK+. The --with-glib option is not regularly tested
+and may not function correctly. In addition, 
+inter-library dependencies won't be generated when
+using --with-glib=.
 
 Installation directories
 ========================

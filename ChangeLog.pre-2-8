@@ -1,3 +1,10 @@
+Thu Jul  8 11:30:18 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* INSTALL: Indicate that the --with-glib= configure
+	time flag is unsupported.
+
+	* configure.in: Some small fixups for libgno
+
 Wed Jul  7 15:03:30 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmain.c (gtk_events_pending): Unlock around call
