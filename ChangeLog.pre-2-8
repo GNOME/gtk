@@ -1,3 +1,16 @@
+2004-01-25  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkproperty-win32.c (gdk_property_delete): If the
+	WM_TRANSIENT_FOR property is being deleted, set the owner of the
+	window to the root window (i.e., effectively unset it). (#132411)
+
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkglobals-win32.c
+	* gdk/win32/gdkmain-win32.c: Declare, define and initialize
+	_wm_transient_for, a GdkAtom for WM_TRANSIENT_FOR.
+
+	* acconfig.h: Remove HAVE_WINSOCK_H, not used any longer.
+
 Sun Jan 25 15:14:46 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_size_allocate): Base the decision
@@ -4625,7 +4638,7 @@ Mon Aug  4 14:53:46 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkscreen-x11.c (gdk_screen_get_n_monitors): 
 	(gdk_screen_get_monitor_geometry): Improve wording of the docs, avoid
-	the term "virtual screen".  (#119030, Tor Lillquist)
+	the term "virtual screen".  (#119030, Tor Lillqvist)
 
 2003-08-02  Matthias Clasen  <maclas@gmx.de>
 

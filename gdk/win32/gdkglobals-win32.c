@@ -59,6 +59,8 @@ GdkAtom		  _gdk_ole2_dnd;
 
 GdkAtom           _gdk_selection_property;
 
+GdkAtom	          _wm_transient_for;
+
 DWORD		  _windows_version;
 
 gint		  _gdk_input_ignore_wintab = FALSE;

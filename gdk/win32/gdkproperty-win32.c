@@ -265,8 +265,8 @@ gdk_property_change (GdkWindow    *window,
   GDK_NOTE (DND,
 	    (prop_name = gdk_atom_name (property),
 	     type_name = gdk_atom_name (type),
-	     g_print ("gdk_property_change: %#x %#x (%s) %#x (%s) %s %d*%d bytes %.10s\n",
-		      (guint) GDK_WINDOW_HWND (window),
+	     g_print ("gdk_property_change: %p %#x (%s) %#x (%s) %s %d*%d bytes %.10s\n",
+		      GDK_WINDOW_HWND (window),
 		      (guint) property, prop_name,
 		      (guint) type, type_name,
 		      (mode == GDK_PROP_MODE_REPLACE ? "REPLACE" :
@@ -470,15 +470,22 @@ gdk_property_delete (GdkWindow *window,
 
   GDK_NOTE (DND,
 	    (prop_name = gdk_atom_name (property),
-	     g_print ("gdk_property_delete: %#x %#x (%s)\n",
-		      (window ? (guint) GDK_WINDOW_HWND (window) : 0),
+	     g_print ("gdk_property_delete: %p %#x (%s)\n",
+		      GDK_WINDOW_HWND (window),
 		      (guint) property, prop_name),
 	     g_free (prop_name)));
 
   if (property == _gdk_selection_property)
     _gdk_selection_property_delete (window);
+  else if (property == _wm_transient_for)
+    gdk_window_set_transient_for (window, _gdk_parent_root);
   else
-    g_warning ("gdk_property_delete: General case not implemented");
+    {
+      prop_name = gdk_atom_name (property);
+      g_warning ("gdk_property_delete: General case (%s) not implemented",
+		 prop_name);
+      g_free (prop_name);
+    }
 }
 
 gboolean
