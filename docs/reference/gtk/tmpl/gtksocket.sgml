@@ -64,7 +64,7 @@ is running.
 
 <para>
 The communication between a #GtkSocket and a #GtkPlug follows the 
-<ulink url="http://www.freedesktop.org/standards/xembed.html">XEmbed</ulink>
+<ulink url="http://www.freedesktop.org/standards/xembed-spec">XEmbed</ulink>
 protocol. This protocol has also been implemented in other toolkits, e.g.  
 <application>Qt</application>, allowing the same level of integration
 when embedding a <application>Qt</application> widget in GTK or vice versa.</para>
@@ -85,7 +85,7 @@ as between a #GtkPlug and a #GtkSocket.</para>
 </varlistentry>
 
 <varlistentry>
-<term><ulink url="http://www.freedesktop.org/standards/xembed.html">XEmbed</ulink></term>
+<term><ulink url="http://www.freedesktop.org/standards/xembed-spec">XEmbed</ulink></term>
 <listitem><para>the XEmbed Protocol Specification.</para></listitem>
 </varlistentry>
 

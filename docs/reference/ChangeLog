@@ -1,3 +1,11 @@
+Sat Jul  3 23:44:45 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtksocket.sgml: 
+	* gtk/tmpl/gtkicontheme.sgml: 
+	* gtk/building.sgml: 
+	* gdk/tmpl/windows.sgml: Fix links to www.freedesktop.org.  
+	(#145210, Billy Biggs)
+
 Tue Jun 22 21:54:24 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf/composite.dia: 
