@@ -2832,6 +2832,9 @@ gtk_font_selection_get_fonts (void)
   gint num_fonts;
 #elif GDK_WINDOWING == GDK_WINDOWING_WIN32
   LOGFONT logfont;
+#else
+  gint num_fonts = 0;
+  gchar **xfontnames = NULL;
 #endif
   GSList **fontnames;
   gchar *fontname;
