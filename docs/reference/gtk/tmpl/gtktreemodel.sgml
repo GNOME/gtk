@@ -103,7 +103,7 @@ the second is much more common, as you often get paths from callbacks.
 <para>
 <example>
 <title>Acquiring a <structname>GtkTreeIter</structname></title>
-<programlisting><![CDATA[
+<programlisting>
 /* Three ways of getting the iter pointing to the location
  */
 {
@@ -112,22 +112,21 @@ the second is much more common, as you often get paths from callbacks.
   GtkTreeIter parent_iter;
 
   /* get the iterator from a string */
-  gtk_tree_model_get_iter_from_string (model, &iter, "3:2:5");
+  gtk_tree_model_get_iter_from_string (model, &amp;iter, "3:2:5");
 
   /* get the iterator from a path */
   path = gtk_tree_path_new_from_string ("3:2:5");
-  gtk_tree_model_get_iter (model, &iter, path);
+  gtk_tree_model_get_iter (model, &amp;iter, path);
   gtk_tree_path_free (path);
 
 
   /* walk the tree to find the iterator */
-  gtk_tree_model_get_nth_child (model, &iter, NULL, 3);
+  gtk_tree_model_get_nth_child (model, &amp;iter, NULL, 3);
   parent_iter = iter;
-  gtk_tree_model_get_nth_child (model, &iter, &parent_iter, 2);
+  gtk_tree_model_get_nth_child (model, &amp;iter, &amp;parent_iter, 2);
   parent_iter = iter;
-  gtk_tree_model_get_nth_child (model, &iter, NULL, 5);
+  gtk_tree_model_get_nth_child (model, &amp;iter, NULL, 5);
 }
-]]>
 </programlisting>
 </example>
 </para>
@@ -140,7 +139,7 @@ it is specific to the #GtkListStore.  For information on how to write
 such a function, see the #GtkListStore documentation.
 <example>
 <title>Reading data from a <structname>GtkTreeModel</structname></title>
-<programlisting><![CDATA[
+<programlisting>
 enum
 {
   STRING_COLUMN,
@@ -159,7 +158,7 @@ enum
   populate_model (list_store);
 
   /* Get the first iter in the list */
-  if (gtk_tree_model_get_iter_first (model, &iter))
+  if (gtk_tree_model_get_iter_first (model, &amp;iter))
     {
       gint row_count = 0;
 
@@ -169,30 +168,28 @@ enum
           gchar *str_data;
           gint   int_data;
 
-          /* Make sure you terminate calls to gtk_tree_model_get
+          /* Make sure you terminate calls to gtk_tree_model_get(<!>)
            * with a '-1' value
            */
-          gtk_tree_model_get (list_store,
-                              STRING_COLUMN, &str_data,
-                              INT_COLUMN, &int_data,
+          gtk_tree_model_get (list_store, &amp;iter, 
+                              STRING_COLUMN, &amp;str_data,
+                              INT_COLUMN, &amp;int_data,
                               -1);
 
           /* Do something with the data */
-          g_print ("Row %d: (%s,%d)\n", row_count, str_data, int_data);
+          g_print ("Row &percent;d: (&percent;s,&percent;d)\n", row_count, str_data, int_data);
           g_free (str_data);
 
           row_count ++;
         }
-      while (gtk_tree_model_iter_next (model, &iter));
+      while (gtk_tree_model_iter_next (model, &amp;iter));
     }
   else
     {
-      /* As gtk_tree_model_get_iter_first returned FALSE, the list is empty */
+      /* As gtk_tree_model_get_iter_first(<!>) returned FALSE, the list is empty */
       g_print ("Model is empty.\n");
     }
 }
-]]>
-
 </programlisting>
 </example>
 </para>
@@ -794,4 +791,49 @@ versions of GTK+.
 @iter: 
 @new_order: 
 
+
+<!-- ##### SIGNAL GtkTreeModel::row-changed ##### -->
+<para>
+
+</para>
+
+@treemodel: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeModel::row-deleted ##### -->
+<para>
+
+</para>
+
+@treemodel: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkTreeModel::row-has-child-toggled ##### -->
+<para>
+
+</para>
+
+@treemodel: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeModel::row-inserted ##### -->
+<para>
+
+</para>
+
+@treemodel: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTreeModel::rows-reordered ##### -->
+<para>
+
+</para>
+
+@treemodel: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
 

@@ -240,7 +240,9 @@ corresponding flag in #GdkWindowAttributesType.
 
 <!-- ##### STRUCT GdkScreen ##### -->
 <para>
-
+This is a currently just a placeholder typedef for the first argument of 
+the @window_at_pointer function in #GdkPointerHooks. It will be used
+when GDK gets multihead support. 
 </para>
 
 

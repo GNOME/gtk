@@ -1169,7 +1169,6 @@ GtkImageAnimationData
 <FILE>gtkimagemenuitem</FILE>
 <TITLE>GtkImageMenuItem</TITLE>
 GtkImageMenuItem
-GtkImageMenuItemClass
 gtk_image_menu_item_set_image
 gtk_image_menu_item_get_image
 gtk_image_menu_item_new
@@ -1177,6 +1176,7 @@ gtk_image_menu_item_new_from_stock
 gtk_image_menu_item_new_with_label
 gtk_image_menu_item_new_with_mnemonic
 <SUBSECTION Standard>
+GtkImageMenuItemClass
 GTK_IMAGE_MENU_ITEM
 GTK_IMAGE_MENU_ITEM_CLASS
 GTK_IMAGE_MENU_ITEM_GET_CLASS
@@ -2101,7 +2101,6 @@ gtk_separator_menu_item_get_type
 <FILE>gtksettings</FILE>
 <TITLE>GtkSettings</TITLE>
 GtkSettings
-GtkSettingsClass
 GtkSettingsValue
 gtk_settings_get_default
 gtk_settings_install_property
@@ -2116,6 +2115,7 @@ gtk_settings_set_string_property
 gtk_settings_set_long_property
 gtk_settings_set_double_property
 <SUBSECTION Standard>
+GtkSettingsClass
 GTK_IS_SETTINGS
 GTK_IS_SETTINGS_CLASS
 GTK_SETTINGS
@@ -2582,7 +2582,6 @@ gtk_text_view_starts_display_line
 gtk_text_view_move_visually
 gtk_text_view_add_child_at_anchor
 GtkTextChildAnchor
-GtkTextChildAnchorClass
 gtk_text_child_anchor_new
 gtk_text_child_anchor_get_widgets
 gtk_text_child_anchor_get_deleted
@@ -2619,6 +2618,7 @@ GTK_TYPE_TEXT_VIEW
 GTK_TEXT_VIEW_CLASS
 GTK_IS_TEXT_VIEW_CLASS
 GTK_TEXT_VIEW_GET_CLASS
+GtkTextChildAnchorClass
 GTK_TEXT_CHILD_ANCHOR
 GTK_IS_TEXT_CHILD_ANCHOR
 GTK_TYPE_TEXT_CHILD_ANCHOR
@@ -3839,7 +3839,6 @@ gtk_gc_release
 <TITLE>GtkStyle</TITLE>
 GTK_STYLE_ATTACHED
 GtkStyle
-GtkStyleClass
 gtk_style_new
 gtk_style_copy
 gtk_style_attach
@@ -3906,6 +3905,7 @@ GtkRcProperty
 GtkRcPropertyParser
 
 <SUBSECTION Standard>
+GtkStyleClass
 GTK_STYLE
 GTK_IS_STYLE
 GTK_TYPE_STYLE
@@ -3935,7 +3935,6 @@ gtk_theme_engine_get_type
 <FILE>gtkrc</FILE>
 <TITLE>Resource Files</TITLE>
 GtkRcStyle
-GtkRcStyleClass
 GtkRcFlags
 GtkRcTokenType
 gtk_rc_scanner_new
@@ -3966,6 +3965,7 @@ gtk_rc_style_ref
 gtk_rc_style_unref
 
 <SUBSECTION Standard>
+GtkRcStyleClass
 GTK_RC_STYLE
 GTK_IS_RC_STYLE
 GTK_TYPE_RC_STYLE

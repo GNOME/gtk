@@ -1,4 +1,15 @@
+2002-03-12  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/tmpl/windows.sgml: Document GdkScreen.
+
+	* gtk/gtk-sections.txt: Move a few Class structs to Standard sections.
+
 2002-03-11  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtktreemodel.sgml, gtk/tmpl/gtkprogress.sgml,
+	gtk/tmpl/gtksignal.sgml, gtk/tmpl/gtkimage.sgml: Generate proper
+	markup for format strings in examples, also fix an oversight in
+	the GtkTreeModel example.  (#74213)
 
 	* gtk/gtk.types: Add interfaces to get docs on their signals.
 
