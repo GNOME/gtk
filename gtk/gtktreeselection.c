@@ -474,7 +474,7 @@ gtk_tree_selection_get_selected_rows (GtkTreeSelection   *selection,
   do
     {
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
-	list = g_list_append (list, gtk_tree_path_copy (path));
+	list = g_list_prepend (list, gtk_tree_path_copy (path));
 
       if (node->children)
         {
@@ -506,7 +506,8 @@ gtk_tree_selection_get_selected_rows (GtkTreeSelection   *selection,
 		  if (!tree)
 		    {
 		      gtk_tree_path_free (path);
-		      return list;
+
+		      goto done; 
 		    }
 
 		  gtk_tree_path_up (path);
@@ -519,7 +520,8 @@ gtk_tree_selection_get_selected_rows (GtkTreeSelection   *selection,
 
   gtk_tree_path_free (path);
 
-  return list;
+ done:
+  return g_list_reverse (list);
 }
 
 static void
