@@ -1,3 +1,11 @@
+Fri Oct 24 20:31:35 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcellview.[ch], gtk/gtkcellviewmenuitem.[ch],
+	gtk/gtkcombobox.[ch], gtk/gtkcomboboxentry.[ch],
+	gtk/gtktreemodelfilter.[ch]: Fix licensing (I managed to put it
+	under GPL licensing instead of LGPL...). (Fixes #125381, Soeren
+	Sandmann).
+
 Fri Oct 24 20:22:40 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodelfilter.h: add padding to the class structure.
