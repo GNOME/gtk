@@ -782,6 +782,89 @@ gdk_window_destroy_notify (GdkWindow *window)
 }
 
 static void
+get_outer_rect (GdkWindow *window,
+		gint       width,
+		gint       height,
+		RECT      *rect)
+{
+  LONG style, exstyle;
+      
+  style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
+  exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
+      
+  rect->left = rect->top = 0;
+  rect->right = width;
+  rect->bottom = height;
+      
+  API_CALL (AdjustWindowRectEx, (rect, style, FALSE, exstyle));
+}
+
+static void
+adjust_for_gravity_hints (GdkWindowImplWin32 *impl,
+			  RECT               *outer_rect,
+			  gint		     *x,
+			  gint		     *y)
+{
+  if (impl->hint_flags & GDK_HINT_WIN_GRAVITY)
+    {
+      gint orig_x = *x, orig_y = *y;
+
+      switch (impl->hints.win_gravity)
+	{
+	case GDK_GRAVITY_NORTH:
+	case GDK_GRAVITY_CENTER:
+	case GDK_GRAVITY_SOUTH:
+	  *x -= (outer_rect->right - outer_rect->left) / 2;
+	  *x += impl->width / 2;
+	  break;
+	      
+	case GDK_GRAVITY_SOUTH_EAST:
+	case GDK_GRAVITY_EAST:
+	case GDK_GRAVITY_NORTH_EAST:
+	  *x -= outer_rect->right - outer_rect->left;
+	  *x += impl->width;
+	  break;
+
+	case GDK_GRAVITY_STATIC:
+	  *x += outer_rect->left;
+	  break;
+
+	default:
+	  break;
+	}
+
+      switch (impl->hints.win_gravity)
+	{
+	case GDK_GRAVITY_WEST:
+	case GDK_GRAVITY_CENTER:
+	case GDK_GRAVITY_EAST:
+	  *y -= (outer_rect->bottom - outer_rect->top) / 2;
+	  *y += impl->height / 2;
+	  break;
+
+	case GDK_GRAVITY_SOUTH_WEST:
+	case GDK_GRAVITY_SOUTH:
+	case GDK_GRAVITY_SOUTH_EAST:
+	  *y -= outer_rect->bottom - outer_rect->top;
+	  *y += impl->height;
+	  break;
+
+	case GDK_GRAVITY_STATIC:
+	  *y += outer_rect->top;
+	  break;
+
+	default:
+	  break;
+	}
+      GDK_NOTE (MISC,
+		(orig_x != *x || orig_y != *y) ?
+		g_print ("adjust_for_gravity_hints: x: %d->%d, y: %d->%d\n",
+			 orig_x, *x, orig_y, *y)
+		  : (void) 0);
+    }
+}
+
+static void
 show_window_internal (GdkWindow *window,
                       gboolean   raise,
 		      gboolean   deiconify)
@@ -947,21 +1030,27 @@ gdk_window_move (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
   GDK_NOTE (MISC, g_print ("gdk_window_move: %p: +%d+%d\n",
 			   GDK_WINDOW_HWND (window), x, y));
       
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
 
-  if (!GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_TYPE (private) == GDK_WINDOW_CHILD)
+    _gdk_window_move_resize_child (window, x, y, impl->width, impl->height);
+  else
     {
-      if (GDK_WINDOW_TYPE (private) == GDK_WINDOW_CHILD)
-	_gdk_window_move_resize_child (window, x, y,
-					 impl->width, impl->height);
-      else
-	{
-	  API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL, x, y, 0, 0,
-				   SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
-	}
+      RECT outer_rect;
+
+      get_outer_rect (window, impl->width, impl->height, &outer_rect);
+      
+      adjust_for_gravity_hints (impl, &outer_rect, &x, &y);
+
+      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
+			       x, y, 0, 0,
+			       SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
     }
 }
 
@@ -976,6 +1065,9 @@ gdk_window_resize (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
   if (width < 1)
     width = 1;
   if (height < 1)
@@ -986,31 +1078,18 @@ gdk_window_resize (GdkWindow *window,
 
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
   
-  if (!GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_TYPE (private) == GDK_WINDOW_CHILD)
+    _gdk_window_move_resize_child (window, private->x, private->y, width, height);
+  else
     {
-      if (GDK_WINDOW_TYPE (private) == GDK_WINDOW_CHILD)
-	_gdk_window_move_resize_child (window, private->x, private->y,
-				       width, height);
-      else
-	{
-	  RECT rect;
-	  LONG style;
-	  LONG exstyle;
+      RECT outer_rect;
+      get_outer_rect (window, width, height, &outer_rect);
 
-	  style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
-	  exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
-
-	  rect.left = rect.top = 0;
-	  rect.right = width;
-	  rect.bottom = height;
-
-	  API_CALL (AdjustWindowRectEx, (&rect, style, FALSE, exstyle));
-	  
-	  API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
-				   0, 0,
-				   rect.right - rect.left, rect.bottom - rect.top,
-				   SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER));
-	}
+      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
+			       0, 0,
+			       outer_rect.right - outer_rect.left,
+			       outer_rect.bottom - outer_rect.top,
+			       SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER));
       private->resize_count += 1;
     }
 }
@@ -1028,6 +1107,9 @@ gdk_window_move_resize (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
   if (width < 1)
     width = 1;
   if (height < 1)
@@ -1039,30 +1121,21 @@ gdk_window_move_resize (GdkWindow *window,
 			   GDK_WINDOW_HWND (window),
 			   width, height, x, y));
   
-  if (!GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_TYPE (private) == GDK_WINDOW_CHILD)
+    _gdk_window_move_resize_child (window, x, y, width, height);
+  else
     {
-      if (GDK_WINDOW_TYPE (private) == GDK_WINDOW_CHILD)
-	_gdk_window_move_resize_child (window, x, y, width, height);
-      else
-	{
-	  RECT rect;
-	  LONG style;
-	  LONG exstyle;
+      RECT outer_rect;
 
-	  style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
-	  exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
+      get_outer_rect (window, width, height, &outer_rect);
 
-	  rect.left = rect.top = 0;
-	  rect.right = width;
-	  rect.bottom = height;
+      adjust_for_gravity_hints (impl, &outer_rect, &x, &y);
 
-	  API_CALL (AdjustWindowRectEx, (&rect, style, FALSE, exstyle));
-	  
-	  API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
-				   x, y,
-				   rect.right - rect.left, rect.bottom - rect.top,
-				   SWP_NOACTIVATE | SWP_NOZORDER));
-	}
+      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
+			       x, y,
+			       outer_rect.right - outer_rect.left,
+			       outer_rect.bottom - outer_rect.top,
+			       SWP_NOACTIVATE | SWP_NOZORDER));
     }
 }
 
@@ -1228,6 +1301,8 @@ gdk_window_set_hints (GdkWindow *window,
 		      gint       max_height,
 		      gint       flags)
 {
+  /* Note that this function is obsolete */
+
   GdkWindowImplWin32 *impl;
   WINDOWPLACEMENT size_hints;
   RECT rect;
@@ -1302,8 +1377,6 @@ gdk_window_set_hints (GdkWindow *window,
 				       size_hints.rcNormalPosition.bottom));
 	      API_CALL (SetWindowPlacement, (GDK_WINDOW_HWND (window),
 					     &size_hints));
-	      impl->hint_x = rect.left;
-	      impl->hint_y = rect.top;
 	    }
 	}
 
@@ -1325,8 +1398,6 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
   GdkWindowImplWin32 *impl;
   WINDOWPLACEMENT size_hints;
   RECT rect;
-  DWORD dwStyle;
-  DWORD dwExStyle;
   gint new_width = 0, new_height = 0;
   
   g_return_if_fail (window != NULL);
@@ -1342,6 +1413,7 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
   size_hints.length = sizeof (size_hints);
 
   impl->hint_flags = geom_mask;
+  impl->hints = *geometry;
 
   if (geom_mask & GDK_HINT_POS)
     ; /* even the X11 mplementation doesn't care */
@@ -1351,32 +1423,24 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
       GDK_NOTE (MISC, g_print ("... MIN_SIZE: %dx%d\n",
 			       geometry->min_width, geometry->min_height));
 
-      /* Assume size means client area size */
-      rect.left = 0;
-      rect.top = 0;
-      rect.right = geometry->min_width;
-      rect.bottom = geometry->min_height;
-      dwStyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
-      dwExStyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
-      AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle);
-      impl->hint_min_width = rect.right - rect.left;
-      impl->hint_min_height = rect.bottom - rect.top;
-
-      /* Also check if he current size of the window is in bounds */
+      /* Check if the current size of the window is in bounds */
       GetClientRect (GDK_WINDOW_HWND (window), &rect);
 
-      if (rect.right < geometry->min_width
-	  && rect.bottom < geometry->min_height)
+      if (rect.right < geometry->min_width &&
+	  rect.bottom < geometry->min_height)
 	{
-	  new_width = geometry->min_width; new_height = geometry->min_height;
+	  new_width = geometry->min_width;
+	  new_height = geometry->min_height;
 	}
       else if (rect.right < geometry->min_width)
 	{
-	  new_width = geometry->min_width; new_height = rect.bottom;
+	  new_width = geometry->min_width;
+	  new_height = rect.bottom;
 	}
       else if (rect.bottom < geometry->min_height)
 	{
-	  new_width = rect.right; new_height = geometry->min_height;
+	  new_width = rect.right;
+	  new_height = geometry->min_height;
 	}
     }
   
@@ -1385,38 +1449,28 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
       GDK_NOTE (MISC, g_print ("... MAX_SIZE: %dx%d\n",
 			       geometry->max_width, geometry->max_height));
 
-      rect.left = 0;
-      rect.top = 0;
-      rect.right = geometry->max_width;
-      rect.bottom = geometry->max_height;
-      dwStyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
-      dwExStyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
-      /* HB: dont' know why AdjustWindowRectEx is called here, ... */
-      AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle);
-      impl->hint_max_width = rect.right - rect.left;
-      impl->hint_max_height = rect.bottom - rect.top;
-      /* ... but negative sizes are always wrong */
-      if (impl->hint_max_width < 0) impl->hint_max_width = G_MAXSHORT;
-      if (impl->hint_max_height < 0) impl->hint_max_height = G_MAXSHORT;
-
-      /* Again, check if the window is too large currently. */
+      /* Check if the current size of the window is in bounds */
       GetClientRect (GDK_WINDOW_HWND (window), &rect);
-      if (rect.right > geometry->max_width
-	  && rect.bottom > geometry->max_height)
+
+      if (rect.right > geometry->max_width &&
+	  rect.bottom > geometry->max_height)
 	{
-	  new_width = geometry->max_width; new_height = geometry->max_height;
+	  new_width = geometry->max_width;
+	  new_height = geometry->max_height;
 	}
       else if (rect.right > geometry->max_width)
 	{
-	  new_width = geometry->max_width; new_height = rect.bottom;
+	  new_width = geometry->max_width;
+	  new_height = rect.bottom;
 	}
       else if (rect.bottom > geometry->max_height)
 	{
-	  new_width = rect.right; new_height = geometry->max_height;
+	  new_width = rect.right;
+	  new_height = geometry->max_height;
 	}
     }
 
-  /* finally apply new size constraints */
+  /* Apply new size constraints */
   if (new_width != 0 && new_height != 0)
     gdk_window_resize (window, new_width, new_height);
   
@@ -1451,12 +1505,19 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
   
   if (geom_mask & GDK_HINT_RESIZE_INC)
     {
-      /* XXX */
+      GDK_NOTE (MISC, g_print ("... RESIZE_INC: (%d,%d)\n",
+			       geometry->width_inc, geometry->height_inc));
     }
   
   if (geom_mask & GDK_HINT_ASPECT)
     {
-      /* XXX */
+      GDK_NOTE (MISC, g_print ("... ASPECT: %g--%g\n",
+			       geometry->min_aspect, geometry->max_aspect));
+    }
+
+  if (geom_mask & GDK_HINT_WIN_GRAVITY)
+    {
+      GDK_NOTE (MISC, g_print ("... GRAVITY: %d\n", geometry->win_gravity));
     }
 }
 

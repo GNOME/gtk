@@ -79,9 +79,7 @@ struct _GdkWindowImplWin32
 
   /* Window size hints */
   gint hint_flags;
-  gint hint_x, hint_y;
-  gint hint_min_width, hint_min_height;
-  gint hint_max_width, hint_max_height;
+  GdkGeometry hints;
 
   gboolean extension_events_selected;
 };
