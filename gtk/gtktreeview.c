@@ -6207,7 +6207,7 @@ gtk_tree_view_move_cursor_page_up_down (GtkTreeView *tree_view,
     return;
   g_return_if_fail (cursor_node != NULL);
 
-  y = CELL_FIRST_PIXEL (tree_view, cursor_tree, cursor_node, vertical_separator);
+  y = _gtk_rbtree_node_find_offset (cursor_tree, cursor_node);
   y += count * tree_view->priv->vadjustment->page_size;
   y = CLAMP (y, (gint)tree_view->priv->vadjustment->lower,  (gint)tree_view->priv->vadjustment->upper - vertical_separator);
 

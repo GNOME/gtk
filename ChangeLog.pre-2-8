@@ -1,3 +1,9 @@
+Fri Feb  1 00:37:49 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_page_up_down): use
+	y coordinate relative to the tree and not the treeview window
+	(fixes the PgDn/PgUp brokenness)
+
 Fri Feb  1 23:40:31 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_button_press): adjust
