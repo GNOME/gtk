@@ -1,3 +1,9 @@
+Fri Jun 14 10:31:59 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (gdk_check_wm_state_changed): 
+	Ignore state change events for windows that aren't
+	our toplevels. (#84482, Thomas Leonard)
+
 Fri Jun 14 10:00:29 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.c (gdk_window_update_idle): Add

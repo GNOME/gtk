@@ -372,7 +372,8 @@ gdk_check_wm_state_changed (GdkWindow *window)
   GdkWindowState old_state;
   GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
   
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      gdk_window_get_window_type (window) != GDK_WINDOW_TOPLEVEL)
     return;
   
   found_sticky = FALSE;
