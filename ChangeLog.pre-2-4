@@ -1,3 +1,8 @@
+Fri Jul 17 05:30:47 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkentry.c (gtk_entry_key_press): care for the posssibility that
+	someone destroys the entry on the ::activate signal.
+
 Fri Jul 17 01:21:32 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkarrow.c (gtk_arrow_expose): use misc->xpad for x calculation

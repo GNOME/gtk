@@ -1131,7 +1131,12 @@ gtk_entry_key_press (GtkWidget   *widget,
       break;
     }
 
-  if (return_val && (editable->current_pos != initial_pos))
+  /* since we emit signals from within the above code,
+   * the widget might already be destroyed or at least
+   * unrealized.
+   */
+  if (GTK_WIDGET_REALIZED (editable) &&
+      return_val && (editable->current_pos != initial_pos))
     {
       if (extend_selection)
 	{
