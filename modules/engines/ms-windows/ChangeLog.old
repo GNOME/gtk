@@ -1,22 +1,30 @@
+2003-11-19  Raymond Penners  <raymond@dotsphinx.com>
+
+	* === Released 0.5.2 ===
+
 2003-11-14  Dom Lachowicz <cinamod@hotmail.com>
 
-	* src/wimp_style.c: Protect against buffer overflows when grabbing fonts and
-	generating RC strings. Get the Progress and Status widget backgrounds to behave
-	properly on themes like "Brick".
+	* src/wimp_style.c: Protect against buffer overflows when grabbing
+	fonts and generating RC strings. Get the Progress and Status
+	widget backgrounds to behave properly on themes like "Brick".
 	
 2003-11-05  Dom Lachowicz <cinamod@hotmail.com>
 
-	* src/wimp_style.c: Toolbar steppers get drawn ETCHED_IN when pressed now. More 
-	consistent with Win32 behavior.
+	* src/wimp_style.c: Toolbar steppers get drawn ETCHED_IN when
+	pressed now. More consistent with Win32 behavior.
+	
 	* src/Theme/gtk-2.0/gtkrc: Make menubars have shadow=NONE. More
-	consistent with Win32 behavior, though Win32 apps tend to differ in this
-	area. Setup menu and toolbar icon sizes to be compatible with win32
+	consistent with Win32 behavior, though Win32 apps tend to differ
+	in this area. Setup menu and toolbar icon sizes to be compatible
+	with win32
 	
 2003-11-04  Dom Lachowicz <cinamod@hotmail.com>
 
 	* src/xp_theme.c: Move Raymond's scrollbar work into wimp_style.c
-	* src/wimp_style.c: Get the colorations better for other windows schemes, such as brick.
-	Based on some work by Jernej Simonèiè <jernej.simoncic@guest.arnes.si>
+	
+	* src/wimp_style.c: Get the colorations better for other windows
+	schemes, such as brick.  Based on some work by Jernej Simonèiè
+	<jernej.simoncic@guest.arnes.si>
 	
 2003-11-01  Raymond Penners  <raymond@dotsphinx.com>
 
