@@ -1,3 +1,7 @@
+2003-12-05  Paisa Seeluangsawat  <paisa@users.sf.net>
+
+        * configure.in: Added Thai (th) to ALL_LINGUAS.
+
 Sat Dec  6 01:42:04 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkalignment.c (gtk_alignment_size_allocate): Implement
