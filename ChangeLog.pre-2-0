@@ -1,6 +1,6 @@
 Wed May 13 00:53:52 1998  Owen Taylor  <otaylor@gtk.org>
 
-	* gtk/gtktypeutils.c gtk/gtksignal.c: A few more 
+	* gtk/gtktypeutils.c gtk/gtksignal.c gdk/gdkdnd.c: A few more 
 	  GPOINTER_TO_UINT fixes.
 
 	* gtk/gtksignal.c: Include <string.h> for memset.
