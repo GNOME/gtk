@@ -562,9 +562,9 @@ gtk_menu_item_map (GtkWidget *widget)
 {
   GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
   
-  gdk_window_show (menu_item->event_window);
-
   GTK_WIDGET_CLASS (parent_class)->map (widget);
+
+  gdk_window_show (menu_item->event_window);
 }
 
 static void

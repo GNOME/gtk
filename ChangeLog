@@ -1,3 +1,8 @@
+Mon Jan 14 23:21:47 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_map): map event_window after
+	mapping child, so we don't loose events.
+
 2002-01-15  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkaccellabel.h
