@@ -81,7 +81,7 @@
  *
  */
 
-#if 1
+#if 0
 #define DEBUG_VALIDATION_AND_SCROLLING
 #endif
 
