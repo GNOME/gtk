@@ -45,6 +45,7 @@ AC_DEFINE_UNQUOTED(G_COMPILED_WITH_DEBUGGING, "${enable_debug}")
 AC_PROG_CC
 AM_PROG_CC_STDC
 AC_PROG_INSTALL
+AC_PROG_MAKE_SET
 
 if eval "test x$GCC = xyes"; then
   if eval test -z \"`echo "$CFLAGS" | grep "\-Wall" 2> /dev/null`\" ; then
@@ -61,6 +62,38 @@ if eval "test x$GCC = xyes"; then
     fi
   fi
 fi
+
+dnl DU4 native cc currently needs -std1 for ANSI mode (instead of K&R)
+AC_MSG_CHECKING([for extra flags to get ANSI library prototypes])
+glib_save_LIBS=$LIBS
+LIBS="$LIBS -lm"
+AC_TRY_RUN([#include <math.h>
+             int main (void) { return (log(1) != log(1.)); }],
+     AC_MSG_RESULT(none needed),
+     glib_save_CFLAGS=$CFLAGS
+     CFLAGS="$CFLAGS -std1"
+     AC_TRY_RUN([#include <math.h>
+                 int main (void) { return (log(1) != log(1.)); }],
+         AC_MSG_RESULT(-std1),
+         AC_MSG_RESULT()
+         CFLAGS=$glib_save_CFLAGS
+         AC_MSG_WARN(
+                [No ANSI prototypes found in library. (-std1 didn't work.)])
+     )
+)
+LIBS=$glib_save_LIBS
+
+dnl NeXTStep cc seems to need this
+AC_MSG_CHECKING([for extra flags for POSIX compliance])
+AC_TRY_COMPILE([#include <dirent.h>], [DIR *dir;],
+  AC_MSG_RESULT(none needed),
+  glib_save_CFLAGS=$CFLAGS
+  CFLAGS="$CFLAGS -posix"
+  AC_TRY_COMPILE([#include <dirent.h>], [DIR *dir;],
+    AC_MSG_RESULT(-posix),
+    AC_MSG_RESULT()
+    CFLAGS=$glib_save_CFLAGS
+    AC_MSG_WARN([Could not determine POSIX flag. (-posix didn't work.)])))
 
 # Checks for header files.
 AC_HEADER_STDC

@@ -1,3 +1,7 @@
+Wed Sep  9 02:28:49 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* configure.in: added -posix check for NeXTStep
+
 Sun Sep  6 12:35:13 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* glib.h: provide proper ATEXIT behavior on NeXTStep by !atexit
