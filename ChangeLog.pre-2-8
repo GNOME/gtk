@@ -1,3 +1,30 @@
+Wed Oct 10 12:48:38 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (gtk_init_check): Call setlocale (LC_ALL, "").
+	(#60606)
+
+	* gtk/gtkmain.c (gtk_disable_setlocale): Add function
+	to disable calling setlocale (LC_ALL, "").
+
+	* gtk/gtkmain.c (gtk_set_locale): Indicate in the 
+	docs that this function is not typically useful.
+
+	* gdk/x11/{gdkim-x11.c,gdkmain-x11.c,gdkprivate-x11.h}: 
+	Automatically initialize GDK for the current locale
+	on gdk_init(). Don't reset locale to C when
+	XSupportsLocale() fails.
+
+	* gdk/linux-fb/gdkim-fb.c (gdk_set_locale): Remove
+	useless checks for UTF-8 locale breakage that mattered
+	only for X.
+
+	* examples/calendar/calendar.c
+	tests/{testgtk.c,testtext.c,testcalendar.c}: Remove calls to 
+	gtk_set_locale().
+
+	* gtk/gtkiconfactory.c gtk/gtkitemfactory.c:
+	gdk_pixbuf_new_from_stream => gdk_pixbuf_new_from_inline.
+
 Wed Oct 10 21:13:46 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* gtk/gtktreemodel.[ch]: added gtk_tree_model_get_iter_from_string().

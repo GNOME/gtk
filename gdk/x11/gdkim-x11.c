@@ -46,47 +46,35 @@
  */
 static gboolean gdk_use_mb;
 
-/*
- *--------------------------------------------------------------
- * gdk_set_locale
- *
- * Arguments:
- *
- * Results:
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
-gchar*
-gdk_set_locale (void)
+void
+_gdk_x11_initialize_locale (void)
 {
   wchar_t result;
   gchar *current_locale;
+  static char *last_locale = NULL;
 
   gdk_use_mb = FALSE;
 
-  if (!setlocale (LC_ALL,""))
-    g_warning ("locale not supported by C library");
-  
+  current_locale = setlocale (LC_ALL, NULL);
+
+  if (last_locale && strcmp (last_locale, current_locale) == 0)
+    return;
+
+  g_free (last_locale);
+  last_locale = g_strdup (current_locale);
+
   if (!XSupportsLocale ())
-    {
-      g_warning ("locale not supported by Xlib, locale set to C");
-      setlocale (LC_ALL, "C");
-    }
+    g_warning ("locale not supported by Xlib");
   
   if (!XSetLocaleModifiers (""))
     g_warning ("can not set locale modifiers");
-
-  current_locale = setlocale (LC_ALL, NULL);
 
   if ((strcmp (current_locale, "C")) && (strcmp (current_locale, "POSIX")))
     {
       gdk_use_mb = TRUE;
 
 #ifndef X_LOCALE
-      /* Detect GNU libc, where mb == UTF8. Not useful unless it's
+      /* Detect ancient GNU libc, where mb == UTF8. Not useful unless it's
        * really a UTF8 locale. The below still probably will
        * screw up on Greek, Cyrillic, etc, encoded as UTF8.
        */
@@ -107,6 +95,17 @@ gdk_set_locale (void)
 		       gdk_use_mb ? "Using" : "Not using"));
   
   return current_locale;
+}
+
+gchar*
+gdk_set_locale (void)
+{
+  if (!setlocale (LC_ALL,""))
+    g_warning ("locale not supported by C library");
+
+  _gdk_x11_initialize_locale ();
+  
+  return setlocale (LC_ALL, NULL);
 }
 
 /*

@@ -116,6 +116,8 @@ _gdk_windowing_init_check (int argc, char **argv)
   XKeyboardState keyboard_state;
   XClassHint *class_hint;
   guint pid;
+
+  _gdk_x11_initialize_locale ();
   
   XSetErrorHandler (gdk_x_error);
   XSetIOErrorHandler (gdk_x_io_error);

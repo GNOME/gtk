@@ -150,6 +150,8 @@ void     _gdk_keymap_state_changed         (void);
 
 GC _gdk_x11_gc_flush (GdkGC *gc);
 
+void _gdk_x11_initialize_locale (void);
+
 extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern Window		 _gdk_root_window;
 extern gboolean	         _gdk_use_xshm;
