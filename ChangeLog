@@ -1,3 +1,30 @@
+2002-01-28  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkcolor-win32.c (match_color): Don't square the diffs
+	of the colour components before summing, might overflow. Use sum
+	of absolute diffs like in the X11 backend. Rename the max variable
+	to min, as it tracks the minimum sum, not maximum...
+
+	(alloc_color): Mimic XAllocColor() better: do return false if
+	failure, don't just use the closest entry. It's the callers who
+	then search for a best match if necessary.
+
+	(free_colors): If we have freed the last entry or entries in the
+	palette, resize the palette down. Mark unused palette slots in the
+	middle with PC_EXPLICIT so that they won't be matched and realized
+	unnecessarily, worsening the colour flashing. (This is just a
+	hunch, haven't done any actual testing to confirm that this
+	helps.)
+
+	(alloc1, gdk_colormap_alloc_colors): Handle failure from
+	alloc_color() like failure from XAllocColor() in the X11 backend.
+
+	(alloc_private): Fix logic a bit in the case when the colour will
+	fit in the colormap. Set the entry in the colormap's color table,
+	too, if we successfully changes one palette entry.
+
+	(alloc_shared): Typo fix backported from HEAD.
+
 2002-01-27  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdkimage.h: Remove declaration of gdk_image_bitmap_new(),
