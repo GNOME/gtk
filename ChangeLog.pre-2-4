@@ -1,3 +1,10 @@
+2003-09-10  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtksocket.c (gtk_socket_filter_func): Only remove 
+	PropertyNotify events from the stream if they have been handled,
+	in order to enable extending the plug<->socket communication via
+	properties.
+
 Wed Sep 10 01:06:44 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Big TreeView DnD fixage, makes drops on empty models work, makes

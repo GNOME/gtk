@@ -1389,6 +1389,7 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	    {
 	      socket->have_size = FALSE;
 	      gtk_widget_queue_resize (widget);
+	      return_val = GDK_FILTER_REMOVE;
 	    }
 	  else if ((xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "XdndAware")) ||
 	      (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "_MOTIF_DRAG_RECEIVER_INFO")))
@@ -1403,6 +1404,7 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 
 	      gdk_display_sync (display);
 	      gdk_error_trap_pop ();
+	      return_val = GDK_FILTER_REMOVE;
 	    }
 	  else if (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "_XEMBED_INFO"))
 	    {
@@ -1428,9 +1430,8 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 			}
 		    }
 		}
+	      return_val = GDK_FILTER_REMOVE;
 	    }
-		   
-	  return_val = GDK_FILTER_REMOVE;
 	}
       break;
     case ReparentNotify:
