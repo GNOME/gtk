@@ -3,7 +3,7 @@ Sun Feb 10 22:20:46 2002  Kristian Rietveld  <kris@gtk.org>
 	* gtk/gtkliststore.c (gtk_list_store_sort_iter_changed): increase
 	value of new_location by one if cmp_a > 0 and we hit the end of
 	the list and pass NULL instead of a 'NULL-iter' with
-	_rows_reordered
+	_rows_reordered (#71060)
 
 Sun Feb 10 12:32:44 2002  Owen Taylor  <otaylor@redhat.com>
 
