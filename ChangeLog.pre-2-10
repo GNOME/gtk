@@ -1,3 +1,13 @@
+2005-02-01  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix #165770:
+
+	* gtk/gtkfilechooserdefault.c (FALLBACK_ICON_SIZE): Make the
+	fallback size be 16, to be equal to the default for
+	GTK_ICON_SIZE_MENU (in gtkiconfactory.c:init_icon_sizes()).
+	(change_icon_theme): Use GTK_ICON_SIZE_MENU instead of
+	GTK_ICON_SIZE_SMALL_TOOLBAR.
+
 2005-02-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_adjustment_changed): 
