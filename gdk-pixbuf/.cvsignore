@@ -7,4 +7,5 @@ Makefile
 *.lo
 testpixbuf
 testpixbuf-drawable
+testpixbuf-scale
 testanimation

@@ -1,3 +1,17 @@
+2000-01-05  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-pixbuf/pixops/: Directory full of pixel data scaling
+	code that will eventually migrate into libart.
+
+	* configure.in acconfig.h: Add checks for MMX compiler support
+
+	* gdk-pixbuf/gdk-pixbuf.h gdk-pixbuf/gdk-pixbuf-scale.c:
+	Nice wrapper routines for the code in pixops that operate
+	on pixbufs instead of raw data.
+	
+	* gdk-pixbuf/testpixbuf-scale: Test program for scaling
+	routines.
+	
 2000-01-05  Jonathan Blandford  <jrb@redhat.com>
 
 	* doc/tmpl/animation.sgml: Documentation changes.

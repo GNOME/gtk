@@ -27,6 +27,7 @@
 
 #include <libart_lgpl/art_misc.h>
 #include <libart_lgpl/art_pixbuf.h>
+#include <libart_lgpl/art_filterlevel.h>
 #include <gdk/gdk.h>
 
 #ifdef __cplusplus
@@ -161,6 +162,62 @@ GdkPixbuf *gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 					 int src_x, int src_y,
 					 int dest_x, int dest_y,
 					 int width, int height);
+
+/* Scaling */
+
+void gdk_pixbuf_scale           (GdkPixbuf      *src,
+				 GdkPixbuf      *dest,
+				 int             dest_x,
+				 int             dest_y,
+				 int             dest_width,
+				 int             dest_height,
+				 double          offset_x,
+				 double          offset_y,
+				 double          scale_x,
+				 double          scale_y,
+				 ArtFilterLevel  filter_level);
+void gdk_pixbuf_composite       (GdkPixbuf      *src,
+				 GdkPixbuf      *dest,
+				 int             dest_x,
+				 int             dest_y,
+				 int             dest_width,
+				 int             dest_height,
+				 double          offset_x,
+				 double          offset_y,
+				 double          scale_x,
+				 double          scale_y,
+				 ArtFilterLevel  filter_level,
+				 int             overall_alpha);
+void gdk_pixbuf_composite_color (GdkPixbuf      *src,
+				 GdkPixbuf      *dest,
+				 int             dest_x,
+				 int             dest_y,
+				 int             dest_width,
+				 int             dest_height,
+				 double          offset_x,
+				 double          offset_y,
+				 double          scale_x,
+				 double          scale_y,
+				 ArtFilterLevel  filter_level,
+				 int             overall_alpha,
+				 int             check_x,
+				 int             check_y,
+				 int             check_size,
+				 art_u32         color1,
+				 art_u32         color2);
+
+GdkPixbuf *gdk_pixbuf_scale_simple           (GdkPixbuf      *src,
+					      int             dest_width,
+					      int             dest_height,
+					      ArtFilterLevel  filter_level);
+GdkPixbuf *gdk_pixbuf_composite_color_simple (GdkPixbuf      *src,
+					      int             dest_width,
+					      int             dest_height,
+					      ArtFilterLevel  filter_level,
+					      int             overall_alpha,
+					      int             check_size,
+					      art_u32         color1,
+					      art_u32         color2);
 
 /* Animation support */
 
