@@ -1,5 +1,10 @@
 2004-11-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkevents.c (gdk_event_get_root_coords): Handle scroll
+	events.  (#159098, Felipe Heidrich)
+
+2004-11-22  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkmenuitem.c (gtk_menu_item_paint): Make the size of 
 	the arrow depend only on the font size, not on the child 
 	allocation.  (#131345, Morten Welinder)

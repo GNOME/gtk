@@ -730,6 +730,10 @@ gdk_event_get_root_coords (GdkEvent *event,
       x = event->motion.x_root;
       y = event->motion.y_root;
       break;
+    case GDK_SCROLL:
+      x = event->scroll.x_root;
+      y = event->scroll.y_root;
+      break;
     case GDK_BUTTON_PRESS:
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
