@@ -1,3 +1,12 @@
+2001-06-21  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkfont-fb.c (gdk_font_from_description): 
+	Update to new PangoLanguage changes.
+	
+	* gtk/gtkwindow-decorate.c:
+	* gtk/gtkwindow.[ch]:
+	Added setting argument to gtk_window_set_has_frame ()
+	
 Thu Jun 21 13:42:01 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkkeys-x11.c (gdk_keymap_get_direction): Handle

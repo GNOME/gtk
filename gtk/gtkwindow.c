@@ -3115,7 +3115,7 @@ gtk_window_set_has_frame (GtkWindow *window,
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (!GTK_WIDGET_REALIZED (window));
 
-  window->has_frame = setting;
+  window->has_frame = setting != FALSE;
 }
 
 /**
