@@ -151,8 +151,19 @@ gtk_plug_realize (GtkWidget *widget)
   attributes_mask |= (window->title ? GDK_WA_TITLE : 0);
   attributes_mask |= (window->wmclass_name ? GDK_WA_WMCLASS : 0);
 
+  gdk_error_trap_push ();
   widget->window = gdk_window_new (plug->socket_window, 
 				   &attributes, attributes_mask);
+  gdk_flush ();
+  if (gdk_error_trap_pop ()) /* Uh-oh */
+    {
+      gdk_error_trap_push ();
+      gdk_window_destroy (widget->window);
+      gdk_flush ();
+      gdk_error_trap_pop ();
+      widget->window = gdk_window_new (NULL, &attributes, attributes_mask);
+    }
+  
   ((GdkWindowPrivate *)widget->window)->window_type = GDK_WINDOW_TOPLEVEL;
   gdk_window_set_user_data (widget->window, window);
 
@@ -251,10 +262,13 @@ gtk_plug_key_press_event (GtkWidget   *widget,
 	  if (!GTK_CONTAINER (window)->focus_child)
 	    {
 	      gtk_window_set_focus (GTK_WINDOW (widget), NULL);
-	      
+
+	      gdk_error_trap_push ();
 	      XSetInputFocus (GDK_DISPLAY (),
 			      GDK_WINDOW_XWINDOW (plug->socket_window),
 			      RevertToParent, event->time);
+	      gdk_flush ();
+	      gdk_error_trap_pop ();
 
 	      gtk_plug_forward_key_press (plug, event);
 	    }
@@ -288,10 +302,13 @@ gtk_plug_forward_key_press (GtkPlug *plug, GdkEventKey *event)
   xevent.xkey.keycode =  XKeysymToKeycode(GDK_DISPLAY(), 
 					  event->keyval);
   xevent.xkey.same_screen = TRUE; /* FIXME ? */
-  
+
+  gdk_error_trap_push ();
   XSendEvent (gdk_display,
 	      GDK_WINDOW_XWINDOW (plug->socket_window),
 	      False, NoEventMask, &xevent);
+  gdk_flush ();
+  gdk_error_trap_pop ();
 }
 
 /* Copied from Window, Ughh */
@@ -406,8 +423,11 @@ gtk_plug_set_focus (GtkWindow *window,
       xevent.xfocus.mode = EMBEDDED_APP_WANTS_FOCUS;
       xevent.xfocus.detail = FALSE; /* Don't force */
 
+      gdk_error_trap_push ();
       XSendEvent (gdk_display,
 		  GDK_WINDOW_XWINDOW (plug->socket_window),
 		  False, NoEventMask, &xevent);
+      gdk_flush ();
+      gdk_error_trap_pop ();
     }
 }

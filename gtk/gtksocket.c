@@ -135,6 +135,8 @@ gtk_socket_steal (GtkSocket *socket, guint32 id)
   
   socket->plug_window = gdk_window_lookup (id);
 
+  gdk_error_trap_push ();
+  
   if (socket->plug_window && socket->plug_window->user_data)
     {
       /*
@@ -150,6 +152,12 @@ gtk_socket_steal (GtkSocket *socket, guint32 id)
   else
     {
       socket->plug_window = gdk_window_foreign_new (id);
+      if (!socket->plug_window) /* was deleted before we could get it */
+	{
+	  gdk_error_trap_pop ();
+	  return;
+	}
+	
       socket->same_app = FALSE;
       socket->have_size = FALSE;
 
@@ -162,6 +170,10 @@ gtk_socket_steal (GtkSocket *socket, guint32 id)
 
   gdk_window_hide (socket->plug_window);
   gdk_window_reparent (socket->plug_window, widget->window, 0, 0);
+
+  gdk_flush ();
+  gdk_error_trap_pop ();
+  
   socket->need_map = TRUE;
 }
 
@@ -256,6 +268,8 @@ gtk_socket_size_request (GtkWidget      *widget,
     {
       XSizeHints hints;
       long supplied;
+
+      gdk_error_trap_push ();
       
       if (XGetWMNormalHints (GDK_DISPLAY(),
 			     GDK_WINDOW_XWINDOW (socket->plug_window),
@@ -280,6 +294,8 @@ gtk_socket_size_request (GtkWidget      *widget,
 	    }
 	}
       socket->have_size = TRUE;	/* don't check again? */
+
+      gdk_error_trap_pop ();
     }
 
   requisition->width = socket->request_width;
@@ -307,6 +323,8 @@ gtk_socket_size_allocate (GtkWidget     *widget,
 
       if (socket->plug_window)
 	{
+	  gdk_error_trap_push ();
+	  
 	  if (!socket->need_map &&
 	      (allocation->width == socket->current_width) &&
 	      (allocation->height == socket->current_height))
@@ -334,6 +352,8 @@ gtk_socket_size_allocate (GtkWidget     *widget,
 	      socket->need_map = FALSE;
 	    }
 
+	  gdk_flush ();
+	  gdk_error_trap_pop ();
 	}
     }
 }
@@ -346,9 +366,14 @@ gtk_socket_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
   socket = GTK_SOCKET (widget);
 
   if (socket->focus_in && socket->plug_window)
-    XSetInputFocus (GDK_DISPLAY (),
-		    GDK_WINDOW_XWINDOW (socket->plug_window),
-		    RevertToParent, GDK_CURRENT_TIME);
+    {
+      gdk_error_trap_push ();
+      XSetInputFocus (GDK_DISPLAY (),
+		      GDK_WINDOW_XWINDOW (socket->plug_window),
+		      RevertToParent, GDK_CURRENT_TIME);
+      gdk_flush();
+      gdk_error_trap_pop ();
+    }
   
   return TRUE;
 }
@@ -391,9 +416,14 @@ gtk_socket_claim_focus (GtkSocket *socket)
   /* FIXME: we might grab the focus even if we don't have
    * it as an app... (and see _focus_in ()) */
   if (socket->plug_window)
-    XSetInputFocus (GDK_DISPLAY (),
-		    GDK_WINDOW_XWINDOW (socket->plug_window),
-		    RevertToParent, GDK_CURRENT_TIME);
+    {
+      gdk_error_trap_push ();
+      XSetInputFocus (GDK_DISPLAY (),
+		      GDK_WINDOW_XWINDOW (socket->plug_window),
+		      RevertToParent, GDK_CURRENT_TIME);
+      gdk_flush ();
+      gdk_error_trap_pop ();
+    }
 }
 
 static gint 
@@ -448,10 +478,14 @@ gtk_socket_focus (GtkContainer *container, GtkDirectionType direction)
 	  break;
 	}
 
-      
+
+      gdk_error_trap_push ();
       XSendEvent (gdk_display,
 		  GDK_WINDOW_XWINDOW (socket->plug_window),
 		  False, NoEventMask, &xevent);
+      gdk_flush();
+      gdk_error_trap_pop ();
+      
       return TRUE;
     }
   else
@@ -481,10 +515,13 @@ gtk_socket_send_configure_event (GtkSocket *socket)
   event.xconfigure.border_width = 0;
   event.xconfigure.above = None;
   event.xconfigure.override_redirect = False;
-  
+
+  gdk_error_trap_push ();
   XSendEvent (gdk_display,
 	      GDK_WINDOW_XWINDOW (socket->plug_window),
 	      False, NoEventMask, &event);
+  gdk_flush ();
+  gdk_error_trap_pop ();
 }
 
 static void
@@ -497,17 +534,23 @@ gtk_socket_add_window (GtkSocket *socket, guint32 xid)
     {
       GtkWidget *toplevel;
       GdkDragProtocol protocol;
-
-      socket->plug_window = gdk_window_foreign_new (xid);
-      socket->same_app = FALSE;
       
+      socket->plug_window = gdk_window_foreign_new (xid);
+      if (!socket->plug_window) /* Already gone */
+	return;
+	
+      socket->same_app = FALSE;
+
+      gdk_error_trap_push ();
       XSelectInput (GDK_DISPLAY (),
 		    GDK_WINDOW_XWINDOW(socket->plug_window),
 		    StructureNotifyMask | PropertyChangeMask);
-
+      
       if (gdk_drag_get_protocol (xid, &protocol))
 	gtk_drag_dest_set_proxy (GTK_WIDGET (socket), socket->plug_window, 
 				 protocol, TRUE);
+      gdk_flush ();
+      gdk_error_trap_pop ();
 
       gdk_window_add_filter (socket->plug_window, 
 			     gtk_socket_filter_func, socket);
@@ -545,14 +588,15 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 
 	if (!socket->plug_window)
 	  {
-	    g_print("Here!\n");
-
 	    gtk_socket_add_window (socket, xcwe->window);
-	    
+
+	    gdk_error_trap_push ();
 	    gdk_window_move_resize(socket->plug_window,
 				   0, 0,
 				   widget->allocation.width, 
 				   widget->allocation.height);
+	    gdk_flush ();
+	    gdk_error_trap_pop ();
 	
 	    socket->request_width = xcwe->width;
 	    socket->request_height = xcwe->height;
@@ -662,8 +706,11 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	{
 	  GTK_NOTE(PLUGSOCKET,
 		   g_message ("GtkSocket - Map Request"));
-	    
+
+	  gdk_error_trap_push ();
 	  gdk_window_show (socket->plug_window);
+	  gdk_flush ();
+	  gdk_error_trap_pop ();
 
 	  return_val = GDK_FILTER_REMOVE;
 	}
@@ -677,10 +724,13 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	  if ((xevent->xproperty.atom == gdk_atom_intern ("XdndAware", FALSE)) ||
 	      (xevent->xproperty.atom == gdk_atom_intern ("_MOTIF_DRAG_RECEIVER_INFO", FALSE)))
 	    {
+	      gdk_error_trap_push ();
 	      if (gdk_drag_get_protocol (xevent->xproperty.window, &protocol))
 		gtk_drag_dest_set_proxy (GTK_WIDGET (socket),
 					 socket->plug_window,
 					 protocol, TRUE);
+	      gdk_flush ();
+	      gdk_error_trap_pop ();
 	    }
 	  return_val = GDK_FILTER_REMOVE;
 	}

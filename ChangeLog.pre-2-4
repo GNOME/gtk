@@ -1,3 +1,17 @@
+Sun Feb 21 14:21:46 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c: removed debugging statements
+	about embedded XID's. They could have been
+	moved to the new PLUGSOCKET debug key, but they weren't
+	really useful anyways.
+
+	* gdk/gdk.h: Added gdk_error_trap_push/pop to provide
+	a clean interface to the gdk_error_code functionality
+	of trapping X errors.
+
+	* gtk/gtkplug.c gtk/gtksocket.c: Add error
+	traps around accesses to foreign windows.
+
 Sun Feb 21 15:37:25 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwindow.h: marked gtk_window_set_focus, gtk_window_set_default,

@@ -503,18 +503,22 @@ gdk_window_foreign_new (guint32 anid)
   Window root, parent;
   Window *children = NULL;
   guint nchildren;
-  
-  if (!XGetWindowAttributes (gdk_display, anid, &attrs)) {
-    g_warning ("XGetWindowAttributes failed on window ID %d\n", anid);
+  gboolean result;
+
+  gdk_error_trap_push ();
+  result = XGetWindowAttributes (gdk_display, anid, &attrs);
+  if (gdk_error_trap_pop () || !result)
     return NULL;
-  }
+
+  /* FIXME: This is pretty expensive. Maybe the caller should supply
+   *        the parent */
+  gdk_error_trap_push ();
+  result = XQueryTree (gdk_display, anid, &root, &parent, &children, &nchildren);
+  if (gdk_error_trap_pop () || !result)
+    return NULL;
   
   private = g_new (GdkWindowPrivate, 1);
   window = (GdkWindow*) private;
-  
-  /* FIXME: This is pretty expensive. Maybe the caller should supply
-   *        the parent */
-  XQueryTree (gdk_display, anid, &root, &parent, &children, &nchildren);
   
   if (children)
     XFree (children);
@@ -634,7 +638,8 @@ gdk_window_internal_destroy (GdkWindow *window,
 		   * it a delete event, as if we were a WM
 		   */
 		  XClientMessageEvent xevent;
-		  
+
+		  gdk_error_trap_push ();
 		  gdk_window_hide (window);
 		  gdk_window_reparent (window, NULL, 0, 0);
 		  
@@ -644,9 +649,11 @@ gdk_window_internal_destroy (GdkWindow *window,
 		  xevent.format = 32;
 		  xevent.data.l[0] = gdk_wm_delete_window;
 		  xevent.data.l[1] = CurrentTime;
-		  
+
 		  XSendEvent (private->xdisplay, private->xwindow,
 			      False, 0, (XEvent *)&xevent);
+		  gdk_flush ();
+		  gdk_error_trap_pop ();
 		}
 	    }
 	  else if (xdestroy)

@@ -47,11 +47,18 @@
 
 
 typedef struct _GdkPredicate  GdkPredicate;
+typedef struct _GdkErrorTrap  GdkErrorTrap;
 
 struct _GdkPredicate
 {
   GdkEventFunc func;
   gpointer data;
+};
+
+struct _GdkErrorTrap
+{
+  gint error_warnings;
+  gint error_code;
 };
 
 /* 
@@ -97,8 +104,10 @@ static struct timeval *timerp;			    /* The actual timer passed to "select"
 static guint32 timer_val;			    /* The timeout length as specified by
 						     *	the user in milliseconds.
 						     */
-
 static gint autorepeat;
+
+static GSList *gdk_error_traps = NULL;               /* List of error traps */
+static GSList *gdk_error_trap_free_list = NULL;      /* Free list */
 
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gdk_debug_keys[] = {
@@ -1049,9 +1058,80 @@ gdk_x_io_error (Display *display)
 }
 
 gchar *
-gdk_get_display(void)
+gdk_get_display (void)
 {
   return (gchar *)XDisplayName (gdk_display_name);
+}
+
+/*************************************************************
+ * gdk_error_trap_push:
+ *     Push an error trap. X errors will be trapped until
+ *     the corresponding gdk_error_pop(), which will return
+ *     the error code, if any.
+ *   arguments:
+ *     
+ *   results:
+ *************************************************************/
+
+void
+gdk_error_trap_push (void)
+{
+  GSList *node;
+  GdkErrorTrap *trap;
+
+  if (gdk_error_trap_free_list)
+    {
+      node = gdk_error_trap_free_list;
+      gdk_error_trap_free_list = gdk_error_trap_free_list->next;
+    }
+  else
+    {
+      node = g_slist_alloc();
+      node->data = g_new (GdkErrorTrap, 1);
+    }
+
+  node->next = gdk_error_traps;
+  gdk_error_traps = node;
+  
+  trap = node->data;
+  trap->error_code = gdk_error_code;
+  trap->error_warnings = gdk_error_warnings;
+
+  gdk_error_code = 0;
+  gdk_error_warnings = 0;
+}
+
+/*************************************************************
+ * gdk_error_trap_pop:
+ *     Pop an error trap added with gdk_error_push()
+ *   arguments:
+ *     
+ *   results:
+ *     0, if no error occured, otherwise the error code.
+ *************************************************************/
+
+gint
+gdk_error_trap_pop (void)
+{
+  GSList *node;
+  GdkErrorTrap *trap;
+  gint result;
+
+  g_return_val_if_fail (gdk_error_traps != NULL, 0);
+
+  node = gdk_error_traps;
+  gdk_error_traps = gdk_error_traps->next;
+
+  node->next = gdk_error_trap_free_list;
+  gdk_error_trap_free_list = node;
+  
+  result = gdk_error_code;
+  
+  trap = node->data;
+  gdk_error_code = trap->error_code;
+  gdk_error_warnings = trap->error_warnings;
+  
+  return result;
 }
 
 gint 

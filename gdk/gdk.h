@@ -35,6 +35,12 @@ void 	  gdk_init		   	(gint	   	*argc,
 void  	  gdk_exit		   	(gint	    	 error_code);
 gchar*	  gdk_set_locale	   	(void);
 
+/* Push and pop error handlers for X errors
+ */
+void      gdk_error_trap_push           (void);
+gint      gdk_error_trap_pop            (void);
+
+
 gboolean  gdk_events_pending	 	(void);
 GdkEvent* gdk_event_get			(void);
 

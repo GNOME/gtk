@@ -501,10 +501,6 @@ gtk_window_add_embedded_xid (GtkWindow *window, guint xid)
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-#ifdef G_ENABLE_DEBUG
-  g_message ("add embedded xid %#x\n", xid);
-#endif
-
   embedded_windows = gtk_object_get_data (GTK_OBJECT (window), "gtk-embedded");
   if (embedded_windows)
     gtk_object_remove_no_notify_by_id (GTK_OBJECT (window), 
@@ -526,10 +522,6 @@ gtk_window_remove_embedded_xid (GtkWindow *window, guint xid)
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
-  
-#ifdef G_ENABLE_DEBUG
-  g_message ("remove embedded xid %#x\n", xid);
-#endif
   
   embedded_windows = gtk_object_get_data (GTK_OBJECT (window), "gtk-embedded");
   if (embedded_windows)
