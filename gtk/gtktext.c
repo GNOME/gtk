@@ -219,24 +219,24 @@ static void  gtk_text_adjustment     (GtkAdjustment  *adjustment,
 static void  gtk_text_disconnect     (GtkAdjustment  *adjustment,
 				      GtkText        *text);
 
-static void gtk_text_insert_text       (GtkEditable       *editable,
-					const gchar       *new_text,
-					gint               new_text_length,
-					gint               *position);
-static void gtk_text_delete_text       (GtkEditable        *editable,
-					gint               start_pos,
-					gint               end_pos);
-static void gtk_text_update_text       (GtkEditable       *editable,
-					gint               start_pos,
-					gint               end_pos);
-static gchar *gtk_text_get_chars       (GtkEditable       *editable,
-					gint               start,
-					gint               end);
-static void gtk_text_set_selection     (GtkEditable       *editable,
-					gint               start,
-					gint               end);
-static void gtk_text_real_set_editable (GtkEditable       *editable,
-					gboolean           is_editable);
+static void   gtk_text_insert_text       (GtkOldEditable *old_editable,
+					  const gchar    *new_text,
+					  gint            new_text_length,
+					  gint           *position);
+static void   gtk_text_delete_text       (GtkOldEditable *old_editable,
+					  gint            start_pos,
+					  gint            end_pos);
+static void   gtk_text_update_text       (GtkOldEditable *old_editable,
+					  gint            start_pos,
+					  gint            end_pos);
+static gchar *gtk_text_get_chars         (GtkOldEditable *old_editable,
+					  gint            start,
+					  gint            end);
+static void   gtk_text_set_selection     (GtkOldEditable *old_editable,
+					  gint            start,
+					  gint            end);
+static void   gtk_text_real_set_editable (GtkOldEditable *old_editable,
+					  gboolean        is_editable);
 
 /* Event handlers */
 static void  gtk_text_draw              (GtkWidget         *widget,
@@ -346,24 +346,24 @@ static void move_cursor_ver (GtkText *text, int count);
 static void move_cursor_hor (GtkText *text, int count);
 
 /* Binding actions */
-static void gtk_text_move_cursor         (GtkEditable *editable,
-					  gint         x,
-					  gint         y);
-static void gtk_text_move_word           (GtkEditable *editable,
-					  gint         n);
-static void gtk_text_move_page           (GtkEditable *editable,
-					  gint         x,
-					  gint         y);
-static void gtk_text_move_to_row         (GtkEditable *editable,
-					  gint         row);
-static void gtk_text_move_to_column      (GtkEditable *editable,
-					  gint         row);
-static void gtk_text_kill_char           (GtkEditable *editable,
-					  gint         direction);
-static void gtk_text_kill_word           (GtkEditable *editable,
-					  gint         direction);
-static void gtk_text_kill_line           (GtkEditable *editable,
-					  gint         direction);
+static void gtk_text_move_cursor    (GtkOldEditable *old_editable,
+				     gint            x,
+				     gint            y);
+static void gtk_text_move_word      (GtkOldEditable *old_editable,
+				     gint            n);
+static void gtk_text_move_page      (GtkOldEditable *old_editable,
+				     gint            x,
+				     gint            y);
+static void gtk_text_move_to_row    (GtkOldEditable *old_editable,
+				     gint            row);
+static void gtk_text_move_to_column (GtkOldEditable *old_editable,
+				     gint            row);
+static void gtk_text_kill_char      (GtkOldEditable *old_editable,
+				     gint            direction);
+static void gtk_text_kill_word      (GtkOldEditable *old_editable,
+				     gint            direction);
+static void gtk_text_kill_line      (GtkOldEditable *old_editable,
+				     gint            direction);
 
 /* To be removed */
 static void gtk_text_move_forward_character    (GtkText          *text);
@@ -386,8 +386,8 @@ static void gtk_text_select_word               (GtkText          *text,
 static void gtk_text_select_line               (GtkText          *text,
 						guint32           time);
 
-static void gtk_text_set_position  (GtkEditable       *editable,
-				    gint               position);
+static void gtk_text_set_position (GtkOldEditable *old_editable,
+				   gint            position);
 
 /* #define DEBUG_GTK_TEXT */
 
@@ -525,7 +525,7 @@ gtk_text_get_type (void)
         (GtkClassInitFunc) NULL,
       };
       
-      text_type = gtk_type_unique (GTK_TYPE_EDITABLE, &text_info);
+      text_type = gtk_type_unique (GTK_TYPE_OLD_EDITABLE, &text_info);
     }
   
   return text_type;
@@ -537,12 +537,12 @@ gtk_text_class_init (GtkTextClass *class)
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
-  GtkEditableClass *editable_class;
+  GtkOldEditableClass *old_editable_class;
   
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
-  editable_class = (GtkEditableClass*) class;
-  parent_class = gtk_type_class (GTK_TYPE_EDITABLE);
+  old_editable_class = (GtkOldEditableClass*) class;
+  parent_class = gtk_type_class (GTK_TYPE_OLD_EDITABLE);
 
   gobject_class->finalize = gtk_text_finalize;
 
@@ -566,24 +566,24 @@ gtk_text_class_init (GtkTextClass *class)
   widget_class->focus_in_event = gtk_text_focus_in;
   widget_class->focus_out_event = gtk_text_focus_out;
 
-  editable_class->set_editable = gtk_text_real_set_editable;
-  editable_class->insert_text = gtk_text_insert_text;
-  editable_class->delete_text = gtk_text_delete_text;
+  old_editable_class->set_editable = gtk_text_real_set_editable;
+  old_editable_class->insert_text = gtk_text_insert_text;
+  old_editable_class->delete_text = gtk_text_delete_text;
   
-  editable_class->move_cursor = gtk_text_move_cursor;
-  editable_class->move_word = gtk_text_move_word;
-  editable_class->move_page = gtk_text_move_page;
-  editable_class->move_to_row = gtk_text_move_to_row;
-  editable_class->move_to_column = gtk_text_move_to_column;
+  old_editable_class->move_cursor = gtk_text_move_cursor;
+  old_editable_class->move_word = gtk_text_move_word;
+  old_editable_class->move_page = gtk_text_move_page;
+  old_editable_class->move_to_row = gtk_text_move_to_row;
+  old_editable_class->move_to_column = gtk_text_move_to_column;
   
-  editable_class->kill_char = gtk_text_kill_char;
-  editable_class->kill_word = gtk_text_kill_word;
-  editable_class->kill_line = gtk_text_kill_line;
+  old_editable_class->kill_char = gtk_text_kill_char;
+  old_editable_class->kill_word = gtk_text_kill_word;
+  old_editable_class->kill_line = gtk_text_kill_line;
   
-  editable_class->update_text = gtk_text_update_text;
-  editable_class->get_chars   = gtk_text_get_chars;
-  editable_class->set_selection = gtk_text_set_selection;
-  editable_class->set_position = gtk_text_set_position;
+  old_editable_class->update_text = gtk_text_update_text;
+  old_editable_class->get_chars   = gtk_text_get_chars;
+  old_editable_class->set_selection = gtk_text_set_selection;
+  old_editable_class->set_position = gtk_text_set_position;
 
   class->set_scroll_adjustments = gtk_text_set_adjustments;
 
@@ -721,7 +721,7 @@ gtk_text_init (GtkText *text)
   
   init_properties (text);
   
-  GTK_EDITABLE (text)->editable = FALSE;
+  GTK_OLD_EDITABLE (text)->editable = FALSE;
   
   gtk_text_set_adjustments (text, NULL, NULL);
   gtk_editable_set_position (GTK_EDITABLE (text), 0);
@@ -789,17 +789,17 @@ gtk_text_set_editable (GtkText *text,
 }
 
 static void
-gtk_text_real_set_editable (GtkEditable *editable,
-			    gboolean     is_editable)
+gtk_text_real_set_editable (GtkOldEditable *old_editable,
+			    gboolean        is_editable)
 {
   GtkText *text;
   
-  g_return_if_fail (editable != NULL);
-  g_return_if_fail (GTK_IS_TEXT (editable));
+  g_return_if_fail (old_editable != NULL);
+  g_return_if_fail (GTK_IS_TEXT (old_editable));
   
-  text = GTK_TEXT (editable);
+  text = GTK_TEXT (old_editable);
   
-  editable->editable = (is_editable != FALSE);
+  old_editable->editable = (is_editable != FALSE);
   
   if (is_editable)
     draw_cursor (text, TRUE);
@@ -932,7 +932,7 @@ gtk_text_insert (GtkText    *text,
 		 const char *chars,
 		 gint        nchars)
 {
-  GtkEditable *editable = GTK_EDITABLE (text);
+  GtkOldEditable *old_editable = GTK_OLD_EDITABLE (text);
   gboolean frozen = FALSE;
   
   gint new_line_count = 1;
@@ -1032,10 +1032,10 @@ gtk_text_insert (GtkText    *text,
    
       if (text->point.index < text->first_line_start_index)
  	text->first_line_start_index += numwcs;
-      if (text->point.index < editable->selection_start_pos)
- 	editable->selection_start_pos += numwcs;
-      if (text->point.index < editable->selection_end_pos)
- 	editable->selection_end_pos += numwcs;
+      if (text->point.index < old_editable->selection_start_pos)
+ 	old_editable->selection_start_pos += numwcs;
+      if (text->point.index < old_editable->selection_end_pos)
+ 	old_editable->selection_end_pos += numwcs;
       /* We'll reset the cursor later anyways if we aren't frozen */
       if (text->point.index < text->cursor_mark.index)
  	text->cursor_mark.index += numwcs;
@@ -1070,7 +1070,7 @@ gtk_text_forward_delete (GtkText *text,
 			 guint    nchars)
 {
   guint old_lines, old_height;
-  GtkEditable *editable = GTK_EDITABLE (text);
+  GtkOldEditable *old_editable = GTK_OLD_EDITABLE (text);
   gboolean frozen = FALSE;
   
   g_return_val_if_fail (text != NULL, 0);
@@ -1111,12 +1111,12 @@ gtk_text_forward_delete (GtkText *text,
 	text->first_line_start_index -= nchars;
     }
   
-  if (text->point.index < editable->selection_start_pos)
-    editable->selection_start_pos -= 
-      MIN(nchars, editable->selection_start_pos - text->point.index);
-  if (text->point.index < editable->selection_end_pos)
-    editable->selection_end_pos -= 
-      MIN(nchars, editable->selection_end_pos - text->point.index);
+  if (text->point.index < old_editable->selection_start_pos)
+    old_editable->selection_start_pos -= 
+      MIN(nchars, old_editable->selection_start_pos - text->point.index);
+  if (text->point.index < old_editable->selection_end_pos)
+    old_editable->selection_end_pos -= 
+      MIN(nchars, old_editable->selection_end_pos - text->point.index);
   /* We'll reset the cursor later anyways if we aren't frozen */
   if (text->point.index < text->cursor_mark.index)
     move_mark_n (&text->cursor_mark, 
@@ -1141,30 +1141,30 @@ gtk_text_forward_delete (GtkText *text,
 }
 
 static void
-gtk_text_set_position (GtkEditable *editable,
-		       gint position)
+gtk_text_set_position (GtkOldEditable *old_editable,
+		       gint            position)
 {
-  GtkText *text = (GtkText *) editable;
+  GtkText *text = (GtkText *) old_editable;
   
   undraw_cursor (text, FALSE);
   text->cursor_mark = find_mark (text, position);
   find_cursor (text, TRUE);
   draw_cursor (text, FALSE);
-  gtk_editable_select_region (editable, 0, 0);
+  gtk_editable_select_region (GTK_EDITABLE (old_editable), 0, 0);
 }
 
 static gchar *    
-gtk_text_get_chars (GtkEditable   *editable,
-		    gint           start_pos,
-		    gint           end_pos)
+gtk_text_get_chars (GtkOldEditable *old_editable,
+		    gint            start_pos,
+		    gint            end_pos)
 {
   GtkText *text;
 
   gchar *retval;
   
-  g_return_val_if_fail (editable != NULL, NULL);
-  g_return_val_if_fail (GTK_IS_TEXT (editable), NULL);
-  text = GTK_TEXT (editable);
+  g_return_val_if_fail (old_editable != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_TEXT (old_editable), NULL);
+  text = GTK_TEXT (old_editable);
   
   if (end_pos < 0)
     end_pos = TEXT_LENGTH (text);
@@ -1277,7 +1277,7 @@ static void
 gtk_text_realize (GtkWidget *widget)
 {
   GtkText *text;
-  GtkEditable *editable;
+  GtkOldEditable *old_editable;
   GdkWindowAttr attributes;
   gint attributes_mask;
   
@@ -1285,7 +1285,7 @@ gtk_text_realize (GtkWidget *widget)
   g_return_if_fail (GTK_IS_TEXT (widget));
   
   text = GTK_TEXT (widget);
-  editable = GTK_EDITABLE (widget);
+  old_editable = GTK_OLD_EDITABLE (widget);
   GTK_WIDGET_SET_FLAGS (text, GTK_REALIZED);
   
   attributes.window_type = GDK_WINDOW_CHILD;
@@ -1341,12 +1341,12 @@ gtk_text_realize (GtkWidget *widget)
   gdk_gc_set_foreground (text->gc, &widget->style->text[GTK_STATE_NORMAL]);
   
 #ifdef USE_XIM
-  if (gdk_im_ready () && (editable->ic_attr = gdk_ic_attr_new ()) != NULL)
+  if (gdk_im_ready () && (old_editable->ic_attr = gdk_ic_attr_new ()) != NULL)
     {
       gint width, height;
       GdkColormap *colormap;
       GdkEventMask mask;
-      GdkICAttr *attr = editable->ic_attr;
+      GdkICAttr *attr = old_editable->ic_attr;
       GdkICAttributesType attrmask = GDK_IC_ALL_REQ;
       GdkIMStyle style;
       GdkIMStyle supported_style = GDK_IM_PREEDIT_NONE | 
@@ -1389,18 +1389,18 @@ gtk_text_realize (GtkWidget *widget)
 	  
 	  break;
 	}
-      editable->ic = gdk_ic_new (attr, attrmask);
+      old_editable->ic = gdk_ic_new (attr, attrmask);
       
-      if (editable->ic == NULL)
+      if (old_editable->ic == NULL)
 	g_warning ("Can't create input context.");
       else
 	{
 	  mask = gdk_window_get_events (text->text_area);
-	  mask |= gdk_ic_get_events (editable->ic);
+	  mask |= gdk_ic_get_events (old_editable->ic);
 	  gdk_window_set_events (text->text_area, mask);
 	  
 	  if (GTK_WIDGET_HAS_FOCUS (widget))
-	    gdk_im_begin (editable->ic, text->text_area);
+	    gdk_im_begin (old_editable->ic, text->text_area);
 	}
     }
 #endif
@@ -1409,8 +1409,8 @@ gtk_text_realize (GtkWidget *widget)
   gdk_window_show (text->text_area);
   init_properties (text);
 
-  if (editable->selection_start_pos != editable->selection_end_pos)
-    gtk_editable_claim_selection (editable, TRUE, GDK_CURRENT_TIME);
+  if (old_editable->selection_start_pos != old_editable->selection_end_pos)
+    gtk_old_editable_claim_selection (old_editable, TRUE, GDK_CURRENT_TIME);
   
   recompute_geometry (text);
 }
@@ -1467,15 +1467,15 @@ gtk_text_unrealize (GtkWidget *widget)
   text = GTK_TEXT (widget);
 
 #ifdef USE_XIM
-  if (GTK_EDITABLE (widget)->ic)
+  if (GTK_OLD_EDITABLE (widget)->ic)
     {
-      gdk_ic_destroy (GTK_EDITABLE (widget)->ic);
-      GTK_EDITABLE (widget)->ic = NULL;
+      gdk_ic_destroy (GTK_OLD_EDITABLE (widget)->ic);
+      GTK_OLD_EDITABLE (widget)->ic = NULL;
     }
-  if (GTK_EDITABLE (widget)->ic_attr)
+  if (GTK_OLD_EDITABLE (widget)->ic_attr)
     {
-      gdk_ic_attr_destroy (GTK_EDITABLE (widget)->ic_attr);
-      GTK_EDITABLE (widget)->ic_attr = NULL;
+      gdk_ic_attr_destroy (GTK_OLD_EDITABLE (widget)->ic_attr);
+      GTK_OLD_EDITABLE (widget)->ic_attr = NULL;
     }
 #endif
 
@@ -1628,14 +1628,14 @@ gtk_text_size_allocate (GtkWidget     *widget,
 			GtkAllocation *allocation)
 {
   GtkText *text;
-  GtkEditable *editable;
+  GtkOldEditable *old_editable;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TEXT (widget));
   g_return_if_fail (allocation != NULL);
   
   text = GTK_TEXT (widget);
-  editable = GTK_EDITABLE (widget);
+  old_editable = GTK_OLD_EDITABLE (widget);
   
   widget->allocation = *allocation;
   if (GTK_WIDGET_REALIZED (widget))
@@ -1653,16 +1653,16 @@ gtk_text_size_allocate (GtkWidget     *widget,
 							   (gint)TEXT_BORDER_ROOM) * 2));
       
 #ifdef USE_XIM
-      if (editable->ic && (gdk_ic_get_style (editable->ic) & GDK_IM_PREEDIT_POSITION))
+      if (old_editable->ic && (gdk_ic_get_style (old_editable->ic) & GDK_IM_PREEDIT_POSITION))
 	{
 	  gint width, height;
 	  
 	  gdk_window_get_size (text->text_area, &width, &height);
-	  editable->ic_attr->preedit_area.width = width;
-	  editable->ic_attr->preedit_area.height = height;
+	  old_editable->ic_attr->preedit_area.width = width;
+	  old_editable->ic_attr->preedit_area.height = height;
 
-	  gdk_ic_set_attr (editable->ic,
-	      		   editable->ic_attr, GDK_IC_PREEDIT_AREA);
+	  gdk_ic_set_attr (old_editable->ic,
+	      		   old_editable->ic_attr, GDK_IC_PREEDIT_AREA);
 	}
 #endif
       
@@ -1742,18 +1742,14 @@ gtk_text_button_press (GtkWidget      *widget,
 		       GdkEventButton *event)
 {
   GtkText *text;
-  GtkEditable *editable;
-  static GdkAtom ctext_atom = GDK_NONE;
+  GtkOldEditable *old_editable;
   
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TEXT (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
-  if (ctext_atom == GDK_NONE)
-    ctext_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
-  
   text = GTK_TEXT (widget);
-  editable = GTK_EDITABLE (widget);
+  old_editable = GTK_OLD_EDITABLE (widget);
   
   if (text->button && (event->button != text->button))
     return FALSE;
@@ -1776,8 +1772,8 @@ gtk_text_button_press (GtkWidget      *widget,
 	  
 	  /* Set it now, so we display things right. We'll unset it
 	   * later if things don't work out */
-	  editable->has_selection = TRUE;
-	  gtk_text_set_selection (GTK_EDITABLE(text),
+	  old_editable->has_selection = TRUE;
+	  gtk_text_set_selection (GTK_OLD_EDITABLE (text),
 				  text->cursor_mark.index,
 				  text->cursor_mark.index);
 	  
@@ -1797,10 +1793,10 @@ gtk_text_button_press (GtkWidget      *widget,
     }
   else if (event->type == GDK_BUTTON_PRESS)
     {
-      if ((event->button == 2) && editable->editable)
+      if ((event->button == 2) && old_editable->editable)
 	{
-	  if (editable->selection_start_pos == editable->selection_end_pos ||
-	      editable->has_selection)
+	  if (old_editable->selection_start_pos == old_editable->selection_end_pos ||
+	      old_editable->has_selection)
 	    {
 	      undraw_cursor (text, FALSE);
 	      find_mouse_cursor (text, (gint)event->x, (gint)event->y);
@@ -1809,7 +1805,8 @@ gtk_text_button_press (GtkWidget      *widget,
 	    }
 	  
 	  gtk_selection_convert (widget, GDK_SELECTION_PRIMARY,
-				 ctext_atom, event->time);
+				 gdk_atom_intern ("UTF8_STRING", FALSE),
+				 event->time);
 	}
       else
 	{
@@ -1819,11 +1816,11 @@ gtk_text_button_press (GtkWidget      *widget,
 	  find_mouse_cursor (text, event->x, event->y);
 	  draw_cursor (text, FALSE);
 	  
-	  gtk_text_set_selection (GTK_EDITABLE(text),
+	  gtk_text_set_selection (GTK_OLD_EDITABLE (text),
 				  text->cursor_mark.index,
 				  text->cursor_mark.index);
 	  
-	  editable->has_selection = FALSE;
+	  old_editable->has_selection = FALSE;
 	  if (gdk_selection_owner_get (GDK_SELECTION_PRIMARY) == widget->window)
 	    gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY, event->time);
 	}
@@ -1837,7 +1834,7 @@ gtk_text_button_release (GtkWidget      *widget,
 			 GdkEventButton *event)
 {
   GtkText *text;
-  GtkEditable *editable;
+  GtkOldEditable *old_editable;
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TEXT (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
@@ -1860,20 +1857,20 @@ gtk_text_button_release (GtkWidget      *widget,
   if (event->button == 1)
     {
       text = GTK_TEXT (widget);
-      editable = GTK_EDITABLE (widget);
+      old_editable = GTK_OLD_EDITABLE (widget);
       
       gtk_grab_remove (widget);
       
-      editable->has_selection = FALSE;
-      if (editable->selection_start_pos != editable->selection_end_pos)
+      old_editable->has_selection = FALSE;
+      if (old_editable->selection_start_pos != old_editable->selection_end_pos)
 	{
 	  if (gtk_selection_owner_set (widget,
 				       GDK_SELECTION_PRIMARY,
 				       event->time))
-	    editable->has_selection = TRUE;
+	    old_editable->has_selection = TRUE;
 	  else
-	    gtk_text_update_text (editable, editable->selection_start_pos,
-				  editable->selection_end_pos);
+	    gtk_text_update_text (old_editable, old_editable->selection_start_pos,
+				  old_editable->selection_end_pos);
 	}
       else
 	{
@@ -1943,20 +1940,20 @@ gtk_text_motion_notify (GtkWidget      *widget,
   find_mouse_cursor (GTK_TEXT (widget), x, y);
   draw_cursor (GTK_TEXT (widget), FALSE);
   
-  gtk_text_set_selection (GTK_EDITABLE(text), 
-			  GTK_EDITABLE(text)->selection_start_pos,
+  gtk_text_set_selection (GTK_OLD_EDITABLE (text), 
+			  GTK_OLD_EDITABLE (text)->selection_start_pos,
 			  text->cursor_mark.index);
   
   return FALSE;
 }
 
 static void 
-gtk_text_insert_text    (GtkEditable       *editable,
+gtk_text_insert_text    (GtkOldEditable    *old_editable,
 			 const gchar       *new_text,
 			 gint               new_text_length,
 			 gint              *position)
 {
-  GtkText *text = GTK_TEXT (editable);
+  GtkText *text = GTK_TEXT (old_editable);
   GdkFont *font;
   GdkColor *fore, *back;
 
@@ -1975,7 +1972,7 @@ gtk_text_insert_text    (GtkEditable       *editable,
 }
 
 static void 
-gtk_text_delete_text    (GtkEditable       *editable,
+gtk_text_delete_text    (GtkOldEditable    *old_editable,
 			 gint               start_pos,
 			 gint               end_pos)
 {
@@ -1983,7 +1980,7 @@ gtk_text_delete_text    (GtkEditable       *editable,
   
   g_return_if_fail (start_pos >= 0);
   
-  text = GTK_TEXT (editable);
+  text = GTK_TEXT (old_editable);
   
   gtk_text_set_point (text, start_pos);
   if (end_pos < 0)
@@ -1998,7 +1995,7 @@ gtk_text_key_press (GtkWidget   *widget,
 		    GdkEventKey *event)
 {
   GtkText *text;
-  GtkEditable *editable;
+  GtkOldEditable *old_editable;
   gchar key;
   gint return_val;
   gint position;
@@ -2010,12 +2007,12 @@ gtk_text_key_press (GtkWidget   *widget,
   return_val = FALSE;
   
   text = GTK_TEXT (widget);
-  editable = GTK_EDITABLE (widget);
+  old_editable = GTK_OLD_EDITABLE (widget);
   
   key = event->keyval;
   return_val = TRUE;
   
-  if ((GTK_EDITABLE(text)->editable == FALSE))
+  if ((GTK_OLD_EDITABLE(text)->editable == FALSE))
     {
       switch (event->keyval)
 	{
@@ -2050,7 +2047,7 @@ gtk_text_key_press (GtkWidget   *widget,
     {
       gint extend_selection;
       gint extend_start;
-      guint initial_pos = editable->current_pos;
+      guint initial_pos = old_editable->current_pos;
       
       text->point = find_mark (text, text->cursor_mark.index);
       
@@ -2059,15 +2056,15 @@ gtk_text_key_press (GtkWidget   *widget,
       
       if (extend_selection)
 	{
-	  editable->has_selection = TRUE;
+	  old_editable->has_selection = TRUE;
 	  
-	  if (editable->selection_start_pos == editable->selection_end_pos)
+	  if (old_editable->selection_start_pos == old_editable->selection_end_pos)
 	    {
-	      editable->selection_start_pos = text->point.index;
-	      editable->selection_end_pos = text->point.index;
+	      old_editable->selection_start_pos = text->point.index;
+	      old_editable->selection_end_pos = text->point.index;
 	    }
 	  
-	  extend_start = (text->point.index == editable->selection_start_pos);
+	  extend_start = (text->point.index == old_editable->selection_start_pos);
 	}
       
       switch (event->keyval)
@@ -2115,11 +2112,11 @@ gtk_text_key_press (GtkWidget   *widget,
 	  if (event->state & GDK_SHIFT_MASK)
 	    {
 	      extend_selection = FALSE;
-	      gtk_editable_paste_clipboard (editable);
+	      gtk_editable_paste_clipboard (GTK_EDITABLE (old_editable));
 	    }
 	  else if (event->state & GDK_CONTROL_MASK)
 	    {
-	      gtk_editable_copy_clipboard (editable);
+	      gtk_editable_copy_clipboard (GTK_EDITABLE (old_editable));
 	    }
 	  else
 	    {
@@ -2132,14 +2129,14 @@ gtk_text_key_press (GtkWidget   *widget,
 	  else if (event->state & GDK_SHIFT_MASK)
 	    {
 	      extend_selection = FALSE;
-	      gtk_editable_cut_clipboard (editable);
+	      gtk_editable_cut_clipboard (GTK_EDITABLE (old_editable));
 	    }
 	  else
 	    gtk_text_delete_forward_character (text);
 	  break;
 	case GDK_Tab:
 	  position = text->point.index;
-	  gtk_editable_insert_text (editable, "\t", 1, &position);
+	  gtk_editable_insert_text (GTK_EDITABLE (old_editable), "\t", 1, &position);
 	  break;
 	case GDK_Return:
 	  if (event->state & GDK_CONTROL_MASK)
@@ -2147,7 +2144,7 @@ gtk_text_key_press (GtkWidget   *widget,
 	  else
 	    {
 	      position = text->point.index;
-	      gtk_editable_insert_text (editable, "\n", 1, &position);
+	      gtk_editable_insert_text (GTK_EDITABLE (old_editable), "\n", 1, &position);
 	    }
 	  break;
 	case GDK_Escape:
@@ -2165,7 +2162,7 @@ gtk_text_key_press (GtkWidget   *widget,
 	      
 	      if ((key >= 'a') && (key <= 'z') && control_keys[(int) (key - 'a')])
 		{
-		  (* control_keys[(int) (key - 'a')]) (editable, event->time);
+		  (* control_keys[(int) (key - 'a')]) (old_editable, event->time);
 		  return_val = TRUE;
 		}
 	      
@@ -2178,7 +2175,7 @@ gtk_text_key_press (GtkWidget   *widget,
 	      
 	      if ((key >= 'a') && (key <= 'z') && alt_keys[(int) (key - 'a')])
 		{
-		  (* alt_keys[(int) (key - 'a')]) (editable, event->time);
+		  (* alt_keys[(int) (key - 'a')]) (old_editable, event->time);
 		  return_val = TRUE;
 		}
 	      
@@ -2188,9 +2185,9 @@ gtk_text_key_press (GtkWidget   *widget,
 	    {
 	      extend_selection = FALSE;
 	      
-	      gtk_editable_delete_selection (editable);
+	      gtk_editable_delete_selection (GTK_EDITABLE (old_editable));
 	      position = text->point.index;
-	      gtk_editable_insert_text (editable, event->string, event->length, &position);
+	      gtk_editable_insert_text (GTK_EDITABLE (old_editable), event->string, event->length, &position);
 	      
 	      return_val = TRUE;
 	    }
@@ -2198,32 +2195,32 @@ gtk_text_key_press (GtkWidget   *widget,
 	    return_val = FALSE;
 	}
       
-      if (return_val && (editable->current_pos != initial_pos))
+      if (return_val && (old_editable->current_pos != initial_pos))
 	{
 	  if (extend_selection)
 	    {
-	      if (editable->current_pos < editable->selection_start_pos)
-		gtk_text_set_selection (editable, editable->current_pos,
-					editable->selection_end_pos);
-	      else if (editable->current_pos > editable->selection_end_pos)
-		gtk_text_set_selection (editable, editable->selection_start_pos,
-					editable->current_pos);
+	      if (old_editable->current_pos < old_editable->selection_start_pos)
+		gtk_text_set_selection (old_editable, old_editable->current_pos,
+					old_editable->selection_end_pos);
+	      else if (old_editable->current_pos > old_editable->selection_end_pos)
+		gtk_text_set_selection (old_editable, old_editable->selection_start_pos,
+					old_editable->current_pos);
 	      else
 		{
 		  if (extend_start)
-		    gtk_text_set_selection (editable, editable->current_pos,
-					    editable->selection_end_pos);
+		    gtk_text_set_selection (old_editable, old_editable->current_pos,
+					    old_editable->selection_end_pos);
 		  else
-		    gtk_text_set_selection (editable, editable->selection_start_pos,
-					    editable->current_pos);
+		    gtk_text_set_selection (old_editable, old_editable->selection_start_pos,
+					    old_editable->current_pos);
 		}
 	    }
 	  else
-	    gtk_text_set_selection (editable, 0, 0);
+	    gtk_text_set_selection (old_editable, 0, 0);
 	  
-	  gtk_editable_claim_selection (editable,
-					editable->selection_start_pos != editable->selection_end_pos,
-					event->time);
+	  gtk_old_editable_claim_selection (old_editable,
+					    old_editable->selection_start_pos != old_editable->selection_end_pos,
+					    event->time);
 	}
     }
   
@@ -2244,8 +2241,8 @@ gtk_text_focus_in (GtkWidget     *widget,
   gtk_widget_draw_focus (widget);
   
 #ifdef USE_XIM
-  if (GTK_EDITABLE(widget)->ic)
-    gdk_im_begin (GTK_EDITABLE(widget)->ic, GTK_TEXT(widget)->text_area);
+  if (GTK_OLD_EDITABLE (widget)->ic)
+    gdk_im_begin (GTK_OLD_EDITABLE (widget)->ic, GTK_TEXT(widget)->text_area);
 #endif
   
   draw_cursor (GTK_TEXT(widget), TRUE);
@@ -3734,7 +3731,7 @@ static void
 find_cursor_at_line (GtkText* text, const LineParams* start_line, gint pixel_height)
 {
   GdkWChar ch;
-  GtkEditable *editable = (GtkEditable *)text;
+  GtkOldEditable *old_editable = (GtkOldEditable *)text;
   
   GtkPropertyMark mark        = start_line->start;
   TabStopMark  tab_mark    = start_line->tab_cont.tab_start;
@@ -3762,26 +3759,26 @@ find_cursor_at_line (GtkText* text, const LineParams* start_line, gint pixel_hei
     text->cursor_char = ch;
     
 #ifdef USE_XIM
-  if (GTK_WIDGET_HAS_FOCUS(text) && gdk_im_ready() && editable->ic && 
-      (gdk_ic_get_style (editable->ic) & GDK_IM_PREEDIT_POSITION))
+  if (GTK_WIDGET_HAS_FOCUS(text) && gdk_im_ready() && old_editable->ic && 
+      (gdk_ic_get_style (old_editable->ic) & GDK_IM_PREEDIT_POSITION))
     {
       GdkICAttributesType mask = GDK_IC_SPOT_LOCATION |
 				 GDK_IC_PREEDIT_FOREGROUND |
 				 GDK_IC_PREEDIT_BACKGROUND;
 
-      editable->ic_attr->spot_location.x = text->cursor_pos_x;
-      editable->ic_attr->spot_location.y
+      old_editable->ic_attr->spot_location.x = text->cursor_pos_x;
+      old_editable->ic_attr->spot_location.y
 	= text->cursor_pos_y - text->cursor_char_offset;
-      editable->ic_attr->preedit_foreground = *MARK_CURRENT_FORE (text, &mark);
-      editable->ic_attr->preedit_background = *MARK_CURRENT_BACK (text, &mark);
+      old_editable->ic_attr->preedit_foreground = *MARK_CURRENT_FORE (text, &mark);
+      old_editable->ic_attr->preedit_background = *MARK_CURRENT_BACK (text, &mark);
 
       if (MARK_CURRENT_FONT (text, &mark)->type == GDK_FONT_FONTSET)
 	{
 	  mask |= GDK_IC_PREEDIT_FONTSET;
-	  editable->ic_attr->preedit_fontset = MARK_CURRENT_FONT (text, &mark);
+	  old_editable->ic_attr->preedit_fontset = MARK_CURRENT_FONT (text, &mark);
 	}
       
-      gdk_ic_set_attr (editable->ic, editable->ic_attr, mask);
+      gdk_ic_set_attr (old_editable->ic, old_editable->ic_attr, mask);
     }
 #endif 
 }
@@ -3799,7 +3796,7 @@ find_cursor (GtkText* text, gboolean scroll)
 			     pixel_height_of(text, text->current_line));
     }
   
-  GTK_EDITABLE (text)->current_pos = text->cursor_mark.index;
+  GTK_OLD_EDITABLE (text)->current_pos = text->cursor_mark.index;
 }
 
 static void
@@ -4023,30 +4020,30 @@ move_cursor_hor (GtkText *text, int count)
 }
 
 static void 
-gtk_text_move_cursor (GtkEditable *editable,
-		      gint         x,
-		      gint         y)
+gtk_text_move_cursor (GtkOldEditable *old_editable,
+		      gint            x,
+		      gint            y)
 {
   if (x > 0)
     {
       while (x-- != 0)
-	move_cursor_hor (GTK_TEXT (editable), 1);
+	move_cursor_hor (GTK_TEXT (old_editable), 1);
     }
   else if (x < 0)
     {
       while (x++ != 0)
-	move_cursor_hor (GTK_TEXT (editable), -1);
+	move_cursor_hor (GTK_TEXT (old_editable), -1);
     }
   
   if (y > 0)
     {
       while (y-- != 0)
-	move_cursor_ver (GTK_TEXT (editable), 1);
+	move_cursor_ver (GTK_TEXT (old_editable), 1);
     }
   else if (y < 0)
     {
       while (y++ != 0)
-	move_cursor_ver (GTK_TEXT (editable), -1);
+	move_cursor_ver (GTK_TEXT (old_editable), -1);
     }
 }
 
@@ -4075,18 +4072,18 @@ gtk_text_move_previous_line (GtkText *text)
 }
 
 static void 
-gtk_text_move_word (GtkEditable *editable,
-		    gint         n)
+gtk_text_move_word (GtkOldEditable *old_editable,
+		    gint            n)
 {
   if (n > 0)
     {
       while (n-- != 0)
-	gtk_text_move_forward_word (GTK_TEXT (editable));
+	gtk_text_move_forward_word (GTK_TEXT (old_editable));
     }
   else if (n < 0)
     {
       while (n++ != 0)
-	gtk_text_move_backward_word (GTK_TEXT (editable));
+	gtk_text_move_backward_word (GTK_TEXT (old_editable));
     }
 }
 
@@ -4155,28 +4152,28 @@ gtk_text_move_backward_word (GtkText *text)
 }
 
 static void 
-gtk_text_move_page (GtkEditable *editable,
-		    gint         x,
-		    gint         y)
+gtk_text_move_page (GtkOldEditable *old_editable,
+		    gint            x,
+		    gint            y)
 {
   if (y != 0)
-    scroll_int (GTK_TEXT (editable), 
-		y * GTK_TEXT(editable)->vadj->page_increment);  
+    scroll_int (GTK_TEXT (old_editable), 
+		y * GTK_TEXT(old_editable)->vadj->page_increment);  
 }
 
 static void 
-gtk_text_move_to_row (GtkEditable *editable,
-		      gint         row)
+gtk_text_move_to_row (GtkOldEditable *old_editable,
+		      gint            row)
 {
 }
 
 static void 
-gtk_text_move_to_column (GtkEditable *editable,
-			 gint         column)
+gtk_text_move_to_column (GtkOldEditable *old_editable,
+			 gint            column)
 {
   GtkText *text;
   
-  text = GTK_TEXT (editable);
+  text = GTK_TEXT (old_editable);
   
   text->cursor_virtual_x = 0;	/* FIXME */
   
@@ -4205,37 +4202,37 @@ gtk_text_move_to_column (GtkEditable *editable,
 static void
 gtk_text_move_beginning_of_line (GtkText *text)
 {
-  gtk_text_move_to_column (GTK_EDITABLE (text), 0);
+  gtk_text_move_to_column (GTK_OLD_EDITABLE (text), 0);
   
 }
 
 static void
 gtk_text_move_end_of_line (GtkText *text)
 {
-  gtk_text_move_to_column (GTK_EDITABLE (text), -1);
+  gtk_text_move_to_column (GTK_OLD_EDITABLE (text), -1);
 }
 
 static void 
-gtk_text_kill_char (GtkEditable *editable,
-		    gint         direction)
+gtk_text_kill_char (GtkOldEditable *old_editable,
+		    gint            direction)
 {
   GtkText *text;
   
-  text = GTK_TEXT (editable);
+  text = GTK_TEXT (old_editable);
   
-  if (editable->selection_start_pos != editable->selection_end_pos)
-    gtk_editable_delete_selection (editable);
+  if (old_editable->selection_start_pos != old_editable->selection_end_pos)
+    gtk_editable_delete_selection (GTK_EDITABLE (old_editable));
   else
     {
       if (direction >= 0)
 	{
 	  if (text->point.index + 1 <= TEXT_LENGTH (text))
-	    gtk_editable_delete_text (editable, text->point.index, text->point.index + 1);
+	    gtk_editable_delete_text (GTK_EDITABLE (old_editable), text->point.index, text->point.index + 1);
 	}
       else
 	{
 	  if (text->point.index > 0)
-	    gtk_editable_delete_text (editable, text->point.index - 1, text->point.index);
+	    gtk_editable_delete_text (GTK_EDITABLE (old_editable), text->point.index - 1, text->point.index);
 	}
     }
 }
@@ -4243,33 +4240,33 @@ gtk_text_kill_char (GtkEditable *editable,
 static void
 gtk_text_delete_forward_character (GtkText *text)
 {
-  gtk_text_kill_char (GTK_EDITABLE (text), 1);
+  gtk_text_kill_char (GTK_OLD_EDITABLE (text), 1);
 }
 
 static void
 gtk_text_delete_backward_character (GtkText *text)
 {
-  gtk_text_kill_char (GTK_EDITABLE (text), -1);
+  gtk_text_kill_char (GTK_OLD_EDITABLE (text), -1);
 }
 
 static void 
-gtk_text_kill_word (GtkEditable *editable,
-		    gint         direction)
+gtk_text_kill_word (GtkOldEditable *old_editable,
+		    gint            direction)
 {
-  if (editable->selection_start_pos != editable->selection_end_pos)
-    gtk_editable_delete_selection (editable);
+  if (old_editable->selection_start_pos != old_editable->selection_end_pos)
+    gtk_editable_delete_selection (GTK_EDITABLE (old_editable));
   else
     {
-      gint old_pos = editable->current_pos;
+      gint old_pos = old_editable->current_pos;
       if (direction >= 0)
 	{
-	  gtk_text_move_word (editable, 1);
-	  gtk_editable_delete_text (editable, old_pos, editable->current_pos);
+	  gtk_text_move_word (old_editable, 1);
+	  gtk_editable_delete_text (GTK_EDITABLE (old_editable), old_pos, old_editable->current_pos);
 	}
       else
 	{
-	  gtk_text_move_word (editable, -1);
-	  gtk_editable_delete_text (editable, editable->current_pos, old_pos);
+	  gtk_text_move_word (old_editable, -1);
+	  gtk_editable_delete_text (GTK_EDITABLE (old_editable), old_editable->current_pos, old_pos);
 	}
     }
 }
@@ -4277,43 +4274,43 @@ gtk_text_kill_word (GtkEditable *editable,
 static void
 gtk_text_delete_forward_word (GtkText *text)
 {
-  gtk_text_kill_word (GTK_EDITABLE (text), 1);
+  gtk_text_kill_word (GTK_OLD_EDITABLE (text), 1);
 }
 
 static void
 gtk_text_delete_backward_word (GtkText *text)
 {
-  gtk_text_kill_word (GTK_EDITABLE (text), -1);
+  gtk_text_kill_word (GTK_OLD_EDITABLE (text), -1);
 }
 
 static void 
-gtk_text_kill_line (GtkEditable *editable,
-		    gint         direction)
+gtk_text_kill_line (GtkOldEditable *old_editable,
+		    gint            direction)
 {
-  gint old_pos = editable->current_pos;
+  gint old_pos = old_editable->current_pos;
   if (direction >= 0)
     {
-      gtk_text_move_to_column (editable, -1);
-      gtk_editable_delete_text (editable, old_pos, editable->current_pos);
+      gtk_text_move_to_column (old_editable, -1);
+      gtk_editable_delete_text (GTK_EDITABLE (old_editable), old_pos, old_editable->current_pos);
     }
   else
     {
-      gtk_text_move_to_column (editable, 0);
-      gtk_editable_delete_text (editable, editable->current_pos, old_pos);
+      gtk_text_move_to_column (old_editable, 0);
+      gtk_editable_delete_text (GTK_EDITABLE (old_editable), old_editable->current_pos, old_pos);
     }
 }
 
 static void
 gtk_text_delete_line (GtkText *text)
 {
-  gtk_text_move_to_column (GTK_EDITABLE (text), 0);
-  gtk_text_kill_line (GTK_EDITABLE (text), 1);
+  gtk_text_move_to_column (GTK_OLD_EDITABLE (text), 0);
+  gtk_text_kill_line (GTK_OLD_EDITABLE (text), 1);
 }
 
 static void
 gtk_text_delete_to_line_end (GtkText *text)
 {
-  gtk_text_kill_line (GTK_EDITABLE (text), 1);
+  gtk_text_kill_line (GTK_OLD_EDITABLE (text), 1);
 }
 
 static void
@@ -4322,8 +4319,8 @@ gtk_text_select_word (GtkText *text, guint32 time)
   gint start_pos;
   gint end_pos;
   
-  GtkEditable *editable;
-  editable = GTK_EDITABLE (text);
+  GtkOldEditable *old_editable;
+  old_editable = GTK_OLD_EDITABLE (text);
   
   gtk_text_move_backward_word (text);
   start_pos = text->cursor_mark.index;
@@ -4331,9 +4328,9 @@ gtk_text_select_word (GtkText *text, guint32 time)
   gtk_text_move_forward_word (text);
   end_pos = text->cursor_mark.index;
   
-  editable->has_selection = TRUE;
-  gtk_text_set_selection (editable, start_pos, end_pos);
-  gtk_editable_claim_selection (editable, start_pos != end_pos, time);
+  old_editable->has_selection = TRUE;
+  gtk_text_set_selection (old_editable, start_pos, end_pos);
+  gtk_old_editable_claim_selection (old_editable, start_pos != end_pos, time);
 }
 
 static void
@@ -4342,8 +4339,8 @@ gtk_text_select_line (GtkText *text, guint32 time)
   gint start_pos;
   gint end_pos;
   
-  GtkEditable *editable;
-  editable = GTK_EDITABLE (text);
+  GtkOldEditable *old_editable;
+  old_editable = GTK_OLD_EDITABLE (text);
   
   gtk_text_move_beginning_of_line (text);
   start_pos = text->cursor_mark.index;
@@ -4352,9 +4349,9 @@ gtk_text_select_line (GtkText *text, guint32 time)
   gtk_text_move_forward_character (text);
   end_pos = text->cursor_mark.index;
   
-  editable->has_selection = TRUE;
-  gtk_text_set_selection (editable, start_pos, end_pos);
-  gtk_editable_claim_selection (editable, start_pos != end_pos, time);
+  old_editable->has_selection = TRUE;
+  gtk_text_set_selection (old_editable, start_pos, end_pos);
+  gtk_old_editable_claim_selection (old_editable, start_pos != end_pos, time);
 }
 
 /**********************************************************************/
@@ -4867,19 +4864,18 @@ expand_scratch_buffer (GtkText* text, guint len)
 
 /* Side effect: modifies text->gc
  */
-
 static void
 draw_bg_rect (GtkText* text, GtkPropertyMark *mark,
 	      gint x, gint y, gint width, gint height,
 	      gboolean already_cleared)
 {
-  GtkEditable *editable = GTK_EDITABLE(text);
+  GtkOldEditable *old_editable = GTK_OLD_EDITABLE (text);
 
-  if ((mark->index >= MIN(editable->selection_start_pos, editable->selection_end_pos) &&
-       mark->index < MAX(editable->selection_start_pos, editable->selection_end_pos)))
+  if ((mark->index >= MIN(old_editable->selection_start_pos, old_editable->selection_end_pos) &&
+       mark->index < MAX(old_editable->selection_start_pos, old_editable->selection_end_pos)))
     {
       gtk_paint_flat_box(GTK_WIDGET(text)->style, text->text_area,
-			 editable->has_selection ?
+			 old_editable->has_selection ?
 			    GTK_STATE_SELECTED : GTK_STATE_ACTIVE, 
 			 GTK_SHADOW_NONE,
 			 NULL, GTK_WIDGET(text), "text",
@@ -4921,10 +4917,10 @@ draw_line (GtkText* text,
   union { GdkWChar *wc; guchar *ch; } buffer;
   GdkGC *fg_gc;
   
-  GtkEditable *editable = GTK_EDITABLE(text);
+  GtkOldEditable *old_editable = GTK_OLD_EDITABLE (text);
   
-  guint selection_start_pos = MIN (editable->selection_start_pos, editable->selection_end_pos);
-  guint selection_end_pos = MAX (editable->selection_start_pos, editable->selection_end_pos);
+  guint selection_start_pos = MIN (old_editable->selection_start_pos, old_editable->selection_end_pos);
+  guint selection_end_pos = MAX (old_editable->selection_start_pos, old_editable->selection_end_pos);
   
   GtkPropertyMark mark = lp->start;
   TabStopMark tab_mark = lp->tab_cont.tab_start;
@@ -5044,7 +5040,7 @@ draw_line (GtkText* text,
 	  if ((mark.index >= selection_start_pos) && 
 	      (mark.index < selection_end_pos))
 	    {
-	      if (editable->has_selection)
+	      if (old_editable->has_selection)
 		fg_gc = GTK_WIDGET(text)->style->fg_gc[GTK_STATE_SELECTED];
 	      else
 		fg_gc = GTK_WIDGET(text)->style->fg_gc[GTK_STATE_ACTIVE];
@@ -5159,7 +5155,7 @@ draw_line_wrap (GtkText* text, guint height /* baseline height */)
 static void
 undraw_cursor (GtkText* text, gint absolute)
 {
-  GtkEditable *editable = (GtkEditable *)text;
+  GtkOldEditable *old_editable = (GtkOldEditable *) text;
 
   TDEBUG (("in undraw_cursor\n"));
   
@@ -5167,7 +5163,7 @@ undraw_cursor (GtkText* text, gint absolute)
     text->cursor_drawn_level = 0;
   
   if ((text->cursor_drawn_level ++ == 0) &&
-      (editable->selection_start_pos == editable->selection_end_pos) &&
+      (old_editable->selection_start_pos == old_editable->selection_end_pos) &&
       GTK_WIDGET_DRAWABLE (text) && text->line_start_cache)
     {
       GdkFont* font;
@@ -5225,7 +5221,7 @@ drawn_cursor_max (GtkText* text)
 static void
 draw_cursor (GtkText* text, gint absolute)
 {
-  GtkEditable *editable = (GtkEditable *)text;
+  GtkOldEditable *old_editable = (GtkOldEditable *)text;
   
   TDEBUG (("in draw_cursor\n"));
   
@@ -5233,8 +5229,8 @@ draw_cursor (GtkText* text, gint absolute)
     text->cursor_drawn_level = 1;
   
   if ((--text->cursor_drawn_level == 0) &&
-      editable->editable &&
-      (editable->selection_start_pos == editable->selection_end_pos) &&
+      old_editable->editable &&
+      (old_editable->selection_start_pos == old_editable->selection_end_pos) &&
       GTK_WIDGET_DRAWABLE (text) && text->line_start_cache)
     {
       GdkFont* font;
@@ -5339,11 +5335,11 @@ expose_text (GtkText* text, GdkRectangle *area, gboolean cursor)
 }
 
 static void 
-gtk_text_update_text    (GtkEditable       *editable,
-			 gint               start_pos,
-			 gint               end_pos)
+gtk_text_update_text (GtkOldEditable    *old_editable,
+		      gint               start_pos,
+		      gint               end_pos)
 {
-  GtkText *text = GTK_TEXT (editable);
+  GtkText *text = GTK_TEXT (old_editable);
   
   GList *cache = text->line_start_cache;
   gint pixels = - text->first_cut_pixels;
@@ -5454,11 +5450,11 @@ recompute_geometry (GtkText* text)
 /**********************************************************************/
 
 static void 
-gtk_text_set_selection  (GtkEditable   *editable,
-			 gint           start,
-			 gint           end)
+gtk_text_set_selection  (GtkOldEditable  *old_editable,
+			 gint             start,
+			 gint             end)
 {
-  GtkText *text = GTK_TEXT (editable);
+  GtkText *text = GTK_TEXT (old_editable);
   
   guint start1, end1, start2, end2;
   
@@ -5467,8 +5463,8 @@ gtk_text_set_selection  (GtkEditable   *editable,
   
   start1 = MIN(start,end);
   end1 = MAX(start,end);
-  start2 = MIN(editable->selection_start_pos, editable->selection_end_pos);
-  end2 = MAX(editable->selection_start_pos, editable->selection_end_pos);
+  start2 = MIN(old_editable->selection_start_pos, old_editable->selection_end_pos);
+  end2 = MAX(old_editable->selection_start_pos, old_editable->selection_end_pos);
   
   if (start2 < start1)
     {
@@ -5479,19 +5475,19 @@ gtk_text_set_selection  (GtkEditable   *editable,
     }
   
   undraw_cursor (text, FALSE);
-  editable->selection_start_pos = start;
-  editable->selection_end_pos = end;
+  old_editable->selection_start_pos = start;
+  old_editable->selection_end_pos = end;
   draw_cursor (text, FALSE);
   
   /* Expose only what changed */
   
   if (start1 < start2)
-    gtk_text_update_text (editable, start1, MIN(end1, start2));
+    gtk_text_update_text (old_editable, start1, MIN(end1, start2));
   
   if (end2 > end1)
-    gtk_text_update_text (editable, MAX(end1, start2), end2);
+    gtk_text_update_text (old_editable, MAX(end1, start2), end2);
   else if (end2 < end1)
-    gtk_text_update_text (editable, end2, end1);
+    gtk_text_update_text (old_editable, end2, end1);
 }
 
 
