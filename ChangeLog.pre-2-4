@@ -2,6 +2,10 @@ Sat Jan 31 22:43:49 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Merge from HEAD:
 	
+	* gtk/gtktextchild.c (gtk_text_child_anchor_finalize): Don't
+	crash when finalizing an unused GtkTextChildAnchor.  (#132260,
+	muppet)
+
 	* gtk/gtktreemodel.c (gtk_tree_model_rows_reordered): Correct
 	the documentation for new_order.  (#124790, Tim-Philipp Müller)
 
