@@ -29,6 +29,8 @@ static gint gtk_ruler_expose        (GtkWidget      *widget,
 static void gtk_ruler_make_pixmap   (GtkRuler       *ruler);
 
 
+static GtkWidgetClass *parent_class;
+
 static GtkRulerMetric ruler_metrics[] =
 {
   {"Pixels", "Pi", 1.0, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
@@ -69,6 +71,8 @@ gtk_ruler_class_init (GtkRulerClass *class)
 
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
+
+  parent_class = gtk_type_class (gtk_widget_get_type ());
 
   widget_class->realize = gtk_ruler_realize;
   widget_class->unrealize = gtk_ruler_unrealize;
@@ -194,12 +198,6 @@ gtk_ruler_unrealize (GtkWidget *widget)
   g_return_if_fail (GTK_IS_RULER (widget));
 
   ruler = GTK_RULER (widget);
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
-
-  gtk_style_detach (widget->style);
-  gdk_window_set_user_data (widget->window, NULL);
-  gdk_window_destroy (widget->window);
-  widget->window = NULL;
 
   if (ruler->backing_store)
     gdk_pixmap_unref (ruler->backing_store);
@@ -208,6 +206,9 @@ gtk_ruler_unrealize (GtkWidget *widget)
 
   ruler->backing_store = NULL;
   ruler->non_gr_exp_gc = NULL;
+
+  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
 
 static void

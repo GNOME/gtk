@@ -345,19 +345,17 @@ gtk_viewport_unrealize (GtkWidget *widget)
   g_return_if_fail (GTK_IS_VIEWPORT (widget));
 
   viewport = GTK_VIEWPORT (widget);
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
 
-  gtk_style_detach (widget->style);
-
-  gdk_window_set_user_data (widget->window, NULL);
-  gdk_window_destroy (widget->window);
-  widget->window = NULL;
   gdk_window_set_user_data (viewport->view_window, NULL);
   gdk_window_destroy (viewport->view_window);
   viewport->view_window = NULL;
+
   gdk_window_set_user_data (viewport->bin_window, NULL);
   gdk_window_destroy (viewport->bin_window);
   viewport->bin_window = NULL;
+
+  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
 
 static void

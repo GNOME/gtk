@@ -701,17 +701,16 @@ gtk_text_unrealize (GtkWidget *widget)
   g_return_if_fail (GTK_IS_TEXT (widget));
 
   text = GTK_TEXT (widget);
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
 
-  gtk_style_detach (widget->style);
-  gdk_window_set_user_data (widget->window, NULL);
-  gdk_window_destroy (widget->window);
-  widget->window = NULL;
   gdk_window_set_user_data (text->text_area, NULL);
   gdk_window_destroy (text->text_area);
   text->text_area = NULL;
+
   gdk_gc_destroy (text->gc);
   text->gc = NULL;
+
+  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
 
 static void

@@ -1,3 +1,19 @@
+2018-02-11  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkclist.c:
+	* gtk/gtkentry.c: 
+	* gtk/gtkfixed.c:
+	* gtk/gtkhandlebox.c:
+	* gtk/gtknotebook.c:
+	* gtk/gtkpaned.c:
+	* gtk/gtkpreview.c:
+	* gtk/gtkrange.c:
+	* gtk/gtkruler.c:
+	* gtk/gtktext.c:
+	* gtk/gtkviewport.c:
+	Fixed unrealize handler to comply with the
+	documentation (which mentions the right thing to do).
+
 Wed Feb 11 00:18:31 1998  Tim Janik  <timj@gimp.org>
 
 	* docs/refcounting.txt: backed out the section "Gnits to care about".

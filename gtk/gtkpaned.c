@@ -210,13 +210,13 @@ gtk_paned_unrealize (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_PANED (widget));
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED);
   paned = GTK_PANED (widget);
 
-  gtk_style_detach (widget->style);
-
   if (paned->xor_gc)
-    gdk_gc_destroy (paned->xor_gc);
+    {
+      gdk_gc_destroy (paned->xor_gc);
+      paned->xor_gc = NULL;
+    }
 
   if (paned->handle)
     {
@@ -227,11 +227,8 @@ gtk_paned_unrealize (GtkWidget *widget)
       paned->cursor = NULL;
     }
 
-  if (widget->window)
-    {
-      gdk_window_unref (widget->window);
-      widget->window = NULL;
-    }
+  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
 
 static gint

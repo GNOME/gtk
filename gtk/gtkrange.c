@@ -643,10 +643,7 @@ gtk_range_unrealize (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_RANGE (widget));
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED);
   range = GTK_RANGE (widget);
-
-  gtk_style_detach (widget->style);
 
   if (range->slider)
     {
@@ -672,12 +669,9 @@ gtk_range_unrealize (GtkWidget *widget)
       gdk_window_destroy (range->step_back);
       range->step_back = NULL;
     }
-  if (widget->window)
-    {
-      gdk_window_set_user_data (widget->window, NULL);
-      gdk_window_destroy (widget->window);
-      widget->window = NULL;
-    }
+
+  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
 
 static gint

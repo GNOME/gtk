@@ -38,7 +38,6 @@ static void gtk_notebook_init           (GtkNotebook      *notebook);
 static void gtk_notebook_map            (GtkWidget        *widget);
 static void gtk_notebook_unmap          (GtkWidget        *widget);
 static void gtk_notebook_realize        (GtkWidget        *widget);
-static void gtk_notebook_unrealize      (GtkWidget        *widget);
 static void gtk_notebook_size_request   (GtkWidget        *widget,
 					 GtkRequisition   *requisition);
 static void gtk_notebook_size_allocate  (GtkWidget        *widget,
@@ -131,7 +130,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->map = gtk_notebook_map;
   widget_class->unmap = gtk_notebook_unmap;
   widget_class->realize = gtk_notebook_realize;
-  widget_class->unrealize = gtk_notebook_unrealize;
   widget_class->size_request = gtk_notebook_size_request;
   widget_class->size_allocate = gtk_notebook_size_allocate;
   widget_class->draw = gtk_notebook_draw;
@@ -505,20 +503,6 @@ gtk_notebook_realize (GtkWidget *widget)
 
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
-}
-
-static void
-gtk_notebook_unrealize (GtkWidget *widget)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_NOTEBOOK (widget));
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
-
-  gtk_style_detach (widget->style);
-  gdk_window_set_user_data (widget->window, NULL);
-  gdk_window_destroy (widget->window);
-  widget->window = NULL;
 }
 
 static void

@@ -1700,15 +1700,13 @@ gtk_clist_unrealize (GtkWidget * widget)
   g_return_if_fail (GTK_IS_CLIST (widget));
 
   clist = GTK_CLIST (widget);
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
+
   GTK_CLIST_SET_FLAGS (clist, CLIST_FROZEN);
 
   gdk_cursor_destroy (clist->cursor_drag);
   gdk_gc_destroy (clist->xor_gc);
   gdk_gc_destroy (clist->fg_gc);
   gdk_gc_destroy (clist->bg_gc);
-
-  gtk_style_detach (widget->style);
 
   for (i = 0; i < clist->columns; i++)
     if (clist->column[i].window)
@@ -1721,17 +1719,18 @@ gtk_clist_unrealize (GtkWidget * widget)
   gdk_window_set_user_data (clist->clist_window, NULL);
   gdk_window_destroy (clist->clist_window);
   clist->clist_window = NULL;
+
   gdk_window_set_user_data (clist->title_window, NULL);
   gdk_window_destroy (clist->title_window);
   clist->title_window = NULL;
-  gdk_window_set_user_data (widget->window, NULL);
-  gdk_window_destroy (widget->window);
-  widget->window = NULL;
 
   clist->cursor_drag = NULL;
   clist->xor_gc = NULL;
   clist->fg_gc = NULL;
   clist->bg_gc = NULL;
+
+  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
 
 static void

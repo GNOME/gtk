@@ -23,7 +23,6 @@ static void gtk_fixed_init          (GtkFixed         *fixed);
 static void gtk_fixed_map           (GtkWidget        *widget);
 static void gtk_fixed_unmap         (GtkWidget        *widget);
 static void gtk_fixed_realize       (GtkWidget        *widget);
-static void gtk_fixed_unrealize     (GtkWidget        *widget);
 static void gtk_fixed_size_request  (GtkWidget        *widget,
 				     GtkRequisition   *requisition);
 static void gtk_fixed_size_allocate (GtkWidget        *widget,
@@ -86,7 +85,6 @@ gtk_fixed_class_init (GtkFixedClass *class)
   widget_class->map = gtk_fixed_map;
   widget_class->unmap = gtk_fixed_unmap;
   widget_class->realize = gtk_fixed_realize;
-  widget_class->unrealize = gtk_fixed_unrealize;
   widget_class->size_request = gtk_fixed_size_request;
   widget_class->size_allocate = gtk_fixed_size_allocate;
   widget_class->draw = gtk_fixed_draw;
@@ -244,20 +242,6 @@ gtk_fixed_realize (GtkWidget *widget)
 
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
-}
-
-static void
-gtk_fixed_unrealize (GtkWidget *widget)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_FIXED (widget));
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
-
-  gtk_style_detach (widget->style);
-  gdk_window_set_user_data (widget->window, NULL);
-  gdk_window_destroy (widget->window);
-  widget->window = NULL;
 }
 
 static void

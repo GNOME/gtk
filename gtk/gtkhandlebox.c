@@ -258,18 +258,7 @@ gtk_handle_box_unrealize (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_HANDLE_BOX (widget));
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
-
-  gtk_style_detach (widget->style);
-
   hb = GTK_HANDLE_BOX (widget);
-
-  if (widget->window)
-    {
-      gdk_window_set_user_data (widget->window, NULL);
-      gdk_window_destroy (widget->window);
-      widget->window = NULL;
-    }
 
   if (hb->steady_window)
     {
@@ -280,6 +269,9 @@ gtk_handle_box_unrealize (GtkWidget *widget)
 
   gtk_widget_destroy (hb->float_window);
   hb->float_window = NULL;
+
+  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
 
 static void

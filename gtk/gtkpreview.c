@@ -48,7 +48,6 @@ static void   gtk_preview_class_init    (GtkPreviewClass  *klass);
 static void   gtk_preview_init          (GtkPreview       *preview);
 static void   gtk_preview_finalize      (GtkObject        *object);
 static void   gtk_preview_realize       (GtkWidget        *widget);
-static void   gtk_preview_unrealize     (GtkWidget        *widget);
 static gint   gtk_preview_expose        (GtkWidget        *widget,
 				         GdkEventExpose   *event);
 static void   gtk_preview_make_buffer   (GtkPreview       *preview);
@@ -165,7 +164,6 @@ gtk_preview_class_init (GtkPreviewClass *klass)
   object_class->finalize = gtk_preview_finalize;
 
   widget_class->realize = gtk_preview_realize;
-  widget_class->unrealize = gtk_preview_unrealize;
   widget_class->expose_event = gtk_preview_expose;
 
   if (preview_info)
@@ -680,20 +678,6 @@ gtk_preview_realize (GtkWidget *widget)
 
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
-}
-
-static void
-gtk_preview_unrealize (GtkWidget *widget)
-{
-  GtkPreview *preview;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_PREVIEW (widget));
-
-  preview = GTK_PREVIEW (widget);
-
-  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
 
 static gint
