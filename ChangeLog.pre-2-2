@@ -1,3 +1,11 @@
+Thu May 18 18:43:21 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.h gdk/x11/gdkgeometry-x11.c (gdk_window_scroll): 
+	Added function to scroll contents of a window while keeping the
+	window constant. Works by XCopyArea or guffaw-scrolling depending
+	on the details of how the window is set up. (guffaw-scrolling
+	still needs to be filled in.)
+
 Wed May 17 22:36:53 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextiter.c gtk/gtkmain.c: Add a debug key for the text widget,
