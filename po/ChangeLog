@@ -1,3 +1,7 @@
+2005-01-24  Frank Arnold  <farnold@cvs.gnome.org>
+
+	* de.po: Fix for #164724
+
 2005-01-23  Alessio Frusciante  <algol@firenze.linux.it>
 
 	* it.po: Updated Italian translation by

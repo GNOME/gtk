@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-20 12:25+0100\n"
+"POT-Creation-Date: 2005-01-24 05:39+0100\n"
 "PO-Revision-Date: 2005-01-20 17:03+0100\n"
 "Last-Translator: Frank Arnold <frank@scirocco-5v-turbo.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -936,11 +936,6 @@ msgstr "calendar:MY"
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
-#: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
-#, c-format
-msgid "progress bar label|%d %%"
-msgstr "progress bar label|%d %%"
-
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
 msgstr "Wählen Sie eine Farbe"
@@ -1522,7 +1517,7 @@ msgstr "(Leer)"
 
 #: gtk/gtkfilesystemunix.c:440 gtk/gtkfilesystemunix.c:632
 #: gtk/gtkfilesystemunix.c:1739 gtk/gtkfilesystemwin32.c:482
-#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1530
+#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1533
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Fehler beim Abrufen der Informationen zu »%s«: %s"
@@ -1554,7 +1549,7 @@ msgstr ""
 "Der Name »%s« ist ungültig, da er das Zeichen »%s« enthält. Bitte verwenden "
 "Sie einen anderen Namen."
 
-#: gtk/gtkfilesystemunix.c:1446 gtk/gtkfilesystemwin32.c:1004
+#: gtk/gtkfilesystemunix.c:1446 gtk/gtkfilesystemwin32.c:1007
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Speichern des Lesezeichens gescheitert: %s"
@@ -2247,4 +2242,3 @@ msgstr "X-Eingabemethode"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Es konnten keine Informationen zur Datei »%s« abgerufen werden: %s"
-
