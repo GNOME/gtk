@@ -4036,8 +4036,8 @@ validate_visible_area (GtkTreeView *tree_view)
 	      dy = _gtk_rbtree_node_find_offset (tree, node);
 
 	      if (dy >= tree_view->priv->vadjustment->value &&
-		  dy <= (tree_view->priv->vadjustment->value
-		         + tree_view->priv->vadjustment->page_size))
+		  dy < (tree_view->priv->vadjustment->value
+		        + tree_view->priv->vadjustment->page_size))
 	        {
 		  /* row visible: keep the row at the same position */
 		  area_above = dy - tree_view->priv->vadjustment->value;
@@ -4048,13 +4048,14 @@ validate_visible_area (GtkTreeView *tree_view)
 	      else
 	        {
 		  /* row not visible */
+                  update_dy = TRUE;
 
 		  if (dy >= 0 && dy <= tree_view->priv->vadjustment->page_size)
 		    {
 		      /* row at the beginning -- fixed */
 		      area_above = dy;
 		      area_below = tree_view->priv->vadjustment->page_size
-				   - dy - height;
+				   - area_above - height;
 		    }
 		  else if (dy >= (tree_view->priv->vadjustment->upper -
 			          tree_view->priv->vadjustment->page_size)
@@ -4063,8 +4064,14 @@ validate_visible_area (GtkTreeView *tree_view)
 		      /* row at the end -- fixed */
 		      area_above = dy - (tree_view->priv->vadjustment->upper -
 			           tree_view->priv->vadjustment->page_size);
-		      area_below = tree_view->priv->vadjustment->upper -
-			           dy - height;
+                      area_below = tree_view->priv->vadjustment->page_size -
+                                   area_above - height;
+
+                      if (area_below < 0)
+                        {
+                          area_above += area_below;
+                          area_below = 0;
+                        }
 		    }
 		  else
 		    {
@@ -4135,6 +4142,8 @@ validate_visible_area (GtkTreeView *tree_view)
    */
   while (node && area_below > 0)
     {
+      gint new_height;
+
       if (node->children)
 	{
 	  GtkTreeIter parent = iter;
@@ -4188,20 +4197,33 @@ validate_visible_area (GtkTreeView *tree_view)
 	    }
 	  while (!done);
 	}
+
+      if (!node)
+        break;
+
+      new_height = GTK_RBNODE_GET_HEIGHT (node);
+
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
 	  GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))
 	{
+          gint old_height = new_height;
+
 	  need_redraw = TRUE;
 	  if (validate_row (tree_view, tree, node, &iter, path))
-	    size_changed = TRUE;
+            {
+              new_height = GTK_RBNODE_GET_HEIGHT (node);
+	      size_changed = TRUE;
+
+              area_below -= new_height - old_height;
+            }
 	}
-      if (node)
-	area_below -= MAX (GTK_RBNODE_GET_HEIGHT (node), tree_view->priv->expander_size);
+
+      area_below -= MAX (new_height, tree_view->priv->expander_size);
     }
   gtk_tree_path_free (path);
 
-  /* If we ran out of tree, and have extra area_below left, we need to remove it
-   * from the area_above */
+  /* If we ran out of tree, and have extra area_below left, we need to add it
+   * to area_above */
   if (area_below > 0)
     area_above += area_below;
 
@@ -4210,6 +4232,8 @@ validate_visible_area (GtkTreeView *tree_view)
   /* We walk backwards */
   while (area_above > 0)
     {
+      gint new_height;
+
       _gtk_rbtree_prev_full (tree, node, &tree, &node);
       if (! gtk_tree_path_prev (above_path) && node != NULL)
 	{
@@ -4221,14 +4245,23 @@ validate_visible_area (GtkTreeView *tree_view)
       if (node == NULL)
 	break;
 
+      new_height = GTK_RBNODE_GET_HEIGHT (node);
+
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
 	  GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))
 	{
+          gint old_height = new_height;
+
 	  need_redraw = TRUE;
 	  if (validate_row (tree_view, tree, node, &iter, above_path))
-	    size_changed = TRUE;
+            {
+              new_height = GTK_RBNODE_GET_HEIGHT (node);
+	      size_changed = TRUE;
+
+              area_above -= new_height - old_height;
+            }
 	}
-      area_above -= MAX (GTK_RBNODE_GET_HEIGHT (node), tree_view->priv->expander_size);
+      area_above -= MAX (new_height, tree_view->priv->expander_size);
       update_dy = TRUE;
     }
 

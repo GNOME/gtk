@@ -1,3 +1,18 @@
+Sat Jul 12 15:28:26 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from stable.
+
+	This patch really really fixes scrolling. Related bugs: #81627,
+	testcase provided by Timo Sirainen, #111500, testcase provided by
+	manu, #113241, reported by Pedro Gimeno/Michael Natterer.
+
+	*  gtk/gtktreeview.c (validate_visible_area): scrolling to a dy
+	which is equal to the lower border of the window means scrolling
+	to an invisible row, always update the dy when scrolling to an
+	invisible row, corrected area_above/below calculations for
+	invisible rows, when walking the tree correct the size
+	subtracted for invalidated rows, fix wrong logic in comment.
+
 2003-07-11  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkicontheme.c (pixbuf_supports_svg): Use g_strfreev() to free mime_types. 
