@@ -514,7 +514,6 @@ get_default_icons (GtkIconFactory *factory)
   add_unsized (factory, stock_convert, GTK_STOCK_CONVERT);
   add_unsized (factory, stock_copy, GTK_STOCK_COPY);
   add_unsized (factory, stock_cut, GTK_STOCK_CUT);
-  add_unsized (factory, stock_delete, GTK_STOCK_DELETE);
   add_unsized (factory, stock_down_arrow, GTK_STOCK_GO_DOWN);
   add_unsized (factory, stock_exec, GTK_STOCK_EXECUTE);
   add_unsized (factory, stock_exit, GTK_STOCK_QUIT);
@@ -549,7 +548,7 @@ get_default_icons (GtkIconFactory *factory)
   add_unsized (factory, stock_text_strikeout, GTK_STOCK_STRIKETHROUGH);
   add_unsized (factory, stock_text_underline, GTK_STOCK_UNDERLINE);
   add_unsized (factory, stock_top, GTK_STOCK_GOTO_TOP);
-  add_unsized (factory, stock_trash, GTK_STOCK_TRASHCAN);
+  add_unsized (factory, stock_trash, GTK_STOCK_DELETE);
   add_unsized (factory, stock_undelete, GTK_STOCK_UNDELETE);
   add_unsized (factory, stock_undo, GTK_STOCK_UNDO);
   add_unsized (factory, stock_up_arrow, GTK_STOCK_GO_UP);

@@ -1,3 +1,7 @@
+2001-10-29  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/gtkiconfactory.c (get_default_icons): Fix build.
+
 2001-10-28  Hans Breuer  <hans@breuer.org>
 
 	* gdk/gdk.c gdk/gdkevents.c
