@@ -56,6 +56,12 @@ gtk_widget_destroy (dialog);
       #GtkFileChooser, #GtkDialog
     </para>
 
+<!-- ##### STRUCT GtkFileChooserDialog ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### FUNCTION gtk_file_chooser_dialog_new ##### -->
 <para>
 
@@ -75,5 +81,19 @@ mode: sgml
 sgml-parent-document: ("../gtk-docs.sgml" "book" "refentry")
 End:
 -->
+
+
+<!-- ##### FUNCTION gtk_file_chooser_dialog_new_with_backend ##### -->
+<para>
+
+</para>
+
+@title: 
+@parent: 
+@action: 
+@backend: 
+@first_button_text: 
+@Varargs: 
+@Returns: 
 
 

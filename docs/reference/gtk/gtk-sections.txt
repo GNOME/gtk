@@ -1139,6 +1139,8 @@ gtk_file_chooser_set_preview_widget
 gtk_file_chooser_get_preview_widget
 gtk_file_chooser_set_preview_widget_active
 gtk_file_chooser_get_preview_widget_active
+gtk_file_chooser_set_use_preview_label
+gtk_file_chooser_get_use_preview_label
 gtk_file_chooser_get_preview_filename
 gtk_file_chooser_get_preview_uri
 gtk_file_chooser_set_extra_widget
@@ -1165,7 +1167,9 @@ gtk_file_chooser_get_type
 <SECTION>
 <FILE>gtkfilechooserdialog</FILE>
 <TITLE>GtkFileChooserDialog</TITLE>
+GtkFileChooserDialog
 gtk_file_chooser_dialog_new
+gtk_file_chooser_dialog_new_with_backend
 <SUBSECTION Standard>
 GTK_FILE_CHOOSER_DIALOG
 GTK_IS_FILE_CHOOSER_DIALOG
@@ -1183,6 +1187,7 @@ GtkFileChooserDialogPrivate
 <TITLE>GtkFileChooserWidget</TITLE>
 GtkFileChooserWidget
 gtk_file_chooser_widget_new
+gtk_file_chooser_widget_new_with_backend
 <SUBSECTION Standard>
 GTK_FILE_CHOOSER_WIDGET
 GTK_IS_FILE_CHOOSER_WIDGET
@@ -1288,6 +1293,7 @@ GTK_FONT_BUTTON_CLASS
 GTK_IS_FONT_BUTTON_CLASS
 GTK_FONT_BUTTON_GET_CLASS
 <SUBSECTION Private>
+GtkFontButtonPrivate
 gtk_font_button_get_type
 </SECTION>
 
@@ -4334,6 +4340,9 @@ gtk_widget_set_visual
 gtk_widget_thaw_child_notify
 gtk_widget_set_no_show_all
 gtk_widget_get_no_show_all
+gtk_widget_list_mnemonic_labels
+gtk_widget_add_mnemonic_label
+gtk_widget_remove_mnemonic_label
 <SUBSECTION>
 gtk_requisition_copy
 gtk_requisition_free
@@ -4383,6 +4392,7 @@ gtk_window_add_mnemonic
 gtk_window_remove_mnemonic
 gtk_window_mnemonic_activate
 gtk_window_activate_key
+gtk_window_propagate_key_event
 gtk_window_get_focus
 gtk_window_set_focus
 gtk_window_set_default
@@ -4979,6 +4989,7 @@ gtk_binding_set_new
 gtk_binding_set_by_class
 gtk_binding_set_find
 gtk_bindings_activate
+gtk_bindings_activate_event
 gtk_binding_set_activate
 gtk_binding_entry_add
 gtk_binding_entry_clear

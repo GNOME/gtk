@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-24 19:38-0500\n"
+"POT-Creation-Date: 2004-03-02 17:21-0500\n"
 "PO-Revision-Date: 2003-05-28 17:57+0000\n"
 "Last-Translator: Mathieu van Woerkom <mathieu.brabants.org>\n"
 "Language-Team: Limburgish <li.org>\n"
@@ -192,7 +192,7 @@ msgstr ""
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
 
-#: gtk/gtkaction.c:257 gtk/gtkactiongroup.c:141 gtk/gtkwidget.c:446
+#: gtk/gtkaction.c:257 gtk/gtkactiongroup.c:141 gtk/gtkwidget.c:448
 msgid "Sensitive"
 msgstr "Geveulig"
 
@@ -202,7 +202,7 @@ msgid "Whether the action is enabled."
 msgstr "Of 't widget zichbaar moot zeen"
 
 #: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:551
-#: gtk/gtktreeviewcolumn.c:222 gtk/gtkwidget.c:439
+#: gtk/gtktreeviewcolumn.c:222 gtk/gtkwidget.c:441
 msgid "Visible"
 msgstr "Zichbaar"
 
@@ -879,7 +879,7 @@ msgstr "Detaj"
 msgid "Render detail to pass to the theme engine"
 msgstr "Tuindetaj door te gaeve aan de tema-motor"
 
-#: gtk/gtkcellrenderertext.c:192 gtk/gtkentry.c:534 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:192 gtk/gtkentry.c:544 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "Teks"
 
@@ -944,7 +944,7 @@ msgstr "Veurgróndjkleur"
 msgid "Foreground color as a GdkColor"
 msgstr "Veurgróndjkleur es ein GdkColor"
 
-#: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:466 gtk/gtktexttag.c:273
+#: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:476 gtk/gtktexttag.c:273
 #: gtk/gtktextview.c:585
 msgid "Editable"
 msgstr "Verangerbaar"
@@ -1356,58 +1356,58 @@ msgstr "Waerd in lies"
 msgid "Whether entered values must already be present in the list"
 msgstr "Of ingegaeve waerdes ummer in de lies dao mote zeen"
 
-#: gtk/gtkcombobox.c:400
+#: gtk/gtkcombobox.c:430
 msgid "ComboBox model"
 msgstr ""
 
-#: gtk/gtkcombobox.c:401
+#: gtk/gtkcombobox.c:431
 #, fuzzy
 msgid "The model for the combo box"
 msgstr "'t model van de TreeView"
 
-#: gtk/gtkcombobox.c:408
+#: gtk/gtkcombobox.c:438
 #, fuzzy
 msgid "Wrap width"
 msgstr "Breide"
 
-#: gtk/gtkcombobox.c:409
+#: gtk/gtkcombobox.c:439
 msgid "Wrap width for layouting the items in a grid"
 msgstr ""
 
-#: gtk/gtkcombobox.c:418
+#: gtk/gtkcombobox.c:448
 #, fuzzy
 msgid "Row span column"
 msgstr "Riej-spasiëring"
 
-#: gtk/gtkcombobox.c:419
+#: gtk/gtkcombobox.c:449
 msgid "TreeModel column containing the row span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:428
+#: gtk/gtkcombobox.c:458
 #, fuzzy
 msgid "Column span column"
 msgstr "Kelóm-spasiëring"
 
-#: gtk/gtkcombobox.c:429
+#: gtk/gtkcombobox.c:459
 msgid "TreeModel column containing the column span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:438
+#: gtk/gtkcombobox.c:468
 #, fuzzy
 msgid "Active item"
 msgstr "Aktief"
 
-#: gtk/gtkcombobox.c:439
+#: gtk/gtkcombobox.c:469
 #, fuzzy
 msgid "The item which is currently active"
 msgstr "'t GdkFont det noe is geselekteerd."
 
-#: gtk/gtkcombobox.c:447
-msgid "ComboBox appareance"
+#: gtk/gtkcombobox.c:477
+msgid "Appears as list"
 msgstr ""
 
-#: gtk/gtkcombobox.c:448
-msgid "ComboBox appearance, where TRUE means Windows-style."
+#: gtk/gtkcombobox.c:478
+msgid "Whether combobox dropdowns should look like lists rather than menus"
 msgstr ""
 
 #: gtk/gtkcomboboxentry.c:109
@@ -1516,42 +1516,42 @@ msgstr "Aktiekader"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Breide van 't kader róntelóm de knóppebalk óngeraan 't dialoogvinster"
 
-#: gtk/gtkentry.c:446 gtk/gtklabel.c:366
+#: gtk/gtkentry.c:456 gtk/gtklabel.c:366
 msgid "Cursor Position"
 msgstr "Cursorposisie"
 
-#: gtk/gtkentry.c:447 gtk/gtklabel.c:367
+#: gtk/gtkentry.c:457 gtk/gtklabel.c:367
 msgid "The current position of the insertion cursor in chars"
 msgstr "De hujige posisie van de invoogkursor, in booksjtaafteikes"
 
-#: gtk/gtkentry.c:456 gtk/gtklabel.c:376
+#: gtk/gtkentry.c:466 gtk/gtklabel.c:376
 msgid "Selection Bound"
 msgstr "Seleksie begrens"
 
-#: gtk/gtkentry.c:457 gtk/gtklabel.c:377
+#: gtk/gtkentry.c:467 gtk/gtklabel.c:377
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 "De posisie van de taegeneuversjtaonde ziej van de selektie vanaaf de kursor "
 "in booksjtaafteikes"
 
-#: gtk/gtkentry.c:467
+#: gtk/gtkentry.c:477
 msgid "Whether the entry contents can be edited"
 msgstr "Of de inhaud van 't veldj bewirk maog waere"
 
-#: gtk/gtkentry.c:474
+#: gtk/gtkentry.c:484
 msgid "Maximum length"
 msgstr "Maksimumlengde"
 
-#: gtk/gtkentry.c:475
+#: gtk/gtkentry.c:485
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Maksimum deil teikes veur dit veldj. Nöl es 't gein maksimum geuf"
 
-#: gtk/gtkentry.c:483
+#: gtk/gtkentry.c:493
 msgid "Visibility"
 msgstr "Zichbaarheid"
 
-#: gtk/gtkentry.c:484
+#: gtk/gtkentry.c:494
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1559,29 +1559,29 @@ msgstr ""
 "FALSE geuf 't \"ónzichbaar teike\" in plaats van de wirkelike teks "
 "(wachwaordmodus)"
 
-#: gtk/gtkentry.c:491
+#: gtk/gtkentry.c:501
 msgid "Has Frame"
 msgstr "Haet kader"
 
-#: gtk/gtkentry.c:492
+#: gtk/gtkentry.c:502
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE deit de boeterandj van 't veldj eweg"
 
-#: gtk/gtkentry.c:499
+#: gtk/gtkentry.c:509
 msgid "Invisible character"
 msgstr "Ónzichbaar teike"
 
-#: gtk/gtkentry.c:500
+#: gtk/gtkentry.c:510
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "'t te gebroeke teike veur de inhaud van ein veldj te maskere (in "
 "\"wachwaordmodus\")"
 
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:517
 msgid "Activates default"
 msgstr "Aktiveert de sjtanderd"
 
-#: gtk/gtkentry.c:508
+#: gtk/gtkentry.c:518
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -1589,32 +1589,43 @@ msgstr ""
 "Of 't standaardwidget geaktiveerd moot waere (wie de sjtanderdknóp in ein "
 "dialoogvinster) wen op Enter weurt gedrök"
 
-#: gtk/gtkentry.c:514
+#: gtk/gtkentry.c:524
 msgid "Width in chars"
 msgstr "Breide, in booksjtaafteikes"
 
-#: gtk/gtkentry.c:515
+#: gtk/gtkentry.c:525
 msgid "Number of characters to leave space for in the entry"
 msgstr "'t deil gereserveerde booksjtaafteikes in ein veldj"
 
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:534
 msgid "Scroll offset"
 msgstr "Sjuufaaafstandjj"
 
-#: gtk/gtkentry.c:525
+#: gtk/gtkentry.c:535
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 "Deil pixels van 't veldj det aan de linkerkantj van 't sjirm is aafgesjuuf."
 
-#: gtk/gtkentry.c:535
+#: gtk/gtkentry.c:545
 msgid "The contents of the entry"
 msgstr "De inhaud van 't veldj"
 
-#: gtk/gtkentry.c:766
+#: gtk/gtkentry.c:552 gtk/gtkmisc.c:98
+msgid "X align"
+msgstr "X-oetliening"
+
+#: gtk/gtkentry.c:553 gtk/gtkmisc.c:99
+#, fuzzy
+msgid ""
+"The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
+"layouts"
+msgstr "De horizontale oetliening, van 0 (links) nao 1 (rechs)"
+
+#: gtk/gtkentry.c:786
 msgid "Select on focus"
 msgstr "Selektere bie focus"
 
-#: gtk/gtkentry.c:767
+#: gtk/gtkentry.c:787
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Of de inhaud van ein veldj weurt geselekteerd es 't veldj focus krig"
 
@@ -1738,41 +1749,40 @@ msgid "The current filter for selecting which files are displayed"
 msgstr "'t sjirm woe dit vinster weurt getuind"
 
 #: gtk/gtkfilechooser.c:111
-#, fuzzy
-msgid "Folder Mode"
-msgstr "_Mapnaam:"
-
-#: gtk/gtkfilechooser.c:112
-#, fuzzy
-msgid "Whether to select folders rather than files"
-msgstr "Of de avvans getuind weurt es teks"
-
-#: gtk/gtkfilechooser.c:117
 msgid "Local Only"
 msgstr ""
 
-#: gtk/gtkfilechooser.c:118
+#: gtk/gtkfilechooser.c:112
 #, fuzzy
 msgid "Whether the selected file(s) should be limited to local file: URLs"
 msgstr "Of de avvans getuind weurt es teks"
 
-#: gtk/gtkfilechooser.c:123
+#: gtk/gtkfilechooser.c:117
 #, fuzzy
 msgid "Preview widget"
 msgstr "Veurbildteks"
 
-#: gtk/gtkfilechooser.c:124
+#: gtk/gtkfilechooser.c:118
 msgid "Application supplied widget for custom previews."
 msgstr ""
 
-#: gtk/gtkfilechooser.c:129
+#: gtk/gtkfilechooser.c:123
 #, fuzzy
 msgid "Preview Widget Active"
 msgstr "Veurbildteks"
 
-#: gtk/gtkfilechooser.c:130
+#: gtk/gtkfilechooser.c:124
 msgid ""
 "Whether the application supplied widget for custom previews should be shown."
+msgstr ""
+
+#: gtk/gtkfilechooser.c:129
+#, fuzzy
+msgid "Use Preview Label"
+msgstr "Veurbildteks"
+
+#: gtk/gtkfilechooser.c:130
+msgid "Whether to display a stock label with the name of the previewed file."
 msgstr ""
 
 #: gtk/gtkfilechooser.c:135
@@ -1802,6 +1812,15 @@ msgstr "Teks tuine"
 #, fuzzy
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Of knóppe veur 't make/verangere van besjtenj getuind mote waere"
+
+#: gtk/gtkfilechooserdefault.c:473
+msgid "Default file chooser backend"
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:474
+#, fuzzy
+msgid "Name of the GtkFileChooser backend to use by default"
+msgstr "Naam van 't sjtanderd booksjtaaftiep"
 
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
 msgid "Filename"
@@ -1948,7 +1967,7 @@ msgstr "Uterlik van de kaderrandj"
 msgid "A widget to display in place of the usual frame label"
 msgstr "Ein widget veur te tuine in plaats van 't gebroekelike kaderlabel"
 
-#: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
+#: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:155 gtk/gtkstatusbar.c:199
 #: gtk/gtktoolbar.c:574 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Sjeemtiep"
@@ -2159,7 +2178,7 @@ msgstr ""
 msgid "Horizontal adjustment"
 msgstr "Horizontale aanpassing"
 
-#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:236
+#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:237
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "De GtkAdjustment veur de horizontale posisie"
 
@@ -2167,7 +2186,7 @@ msgstr "De GtkAdjustment veur de horizontale posisie"
 msgid "Vertical adjustment"
 msgstr "Vertikale aanpassing"
 
-#: gtk/gtklayout.c:640 gtk/gtkscrolledwindow.c:243
+#: gtk/gtklayout.c:640 gtk/gtkscrolledwindow.c:244
 msgid "The GtkAdjustment for the vertical position"
 msgstr "De GtkAdjustment veur de vertikale posisie"
 
@@ -2297,23 +2316,23 @@ msgstr ""
 "De vertraging ierdet ein submenu verdwient wen de moesaanwiezer, op waeg nao "
 "dit submenu, op ein anger menu-item kump"
 
-#: gtk/gtkmenubar.c:157
+#: gtk/gtkmenubar.c:156
 msgid "Style of bevel around the menubar"
 msgstr "Sjtiel van de randj róntelóm de menubalk"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:550
+#: gtk/gtkmenubar.c:163 gtk/gtktoolbar.c:550
 msgid "Internal padding"
 msgstr "Interne opvölling"
 
-#: gtk/gtkmenubar.c:165
+#: gtk/gtkmenubar.c:164
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "Wieväölheid kaderruumde tösje de menubalksjeem en de menu-items"
 
-#: gtk/gtkmenubar.c:172
+#: gtk/gtkmenubar.c:171
 msgid "Delay before drop down menus appear"
 msgstr "Vertraging ierdet drop-down-menus versjiene"
 
-#: gtk/gtkmenubar.c:173
+#: gtk/gtkmenubar.c:172
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Vertraging ierdet submenus van ein menubalk versjiene"
 
@@ -2350,14 +2369,6 @@ msgstr "Berichknóppe"
 #: gtk/gtkmessagedialog.c:141
 msgid "The buttons shown in the message dialog"
 msgstr "De te tuine knóppe in 't berichdialoogvinster"
-
-#: gtk/gtkmisc.c:98
-msgid "X align"
-msgstr "X-oetliening"
-
-#: gtk/gtkmisc.c:99
-msgid "The horizontal alignment, from 0 (left) to 1 (right)"
-msgstr "De horizontale oetliening, van 0 (links) nao 1 (rechs)"
 
 #: gtk/gtkmisc.c:108
 msgid "Y align"
@@ -2669,7 +2680,7 @@ msgstr ""
 "Ei getal tösje 0.0 en 1.0 det de vertikale oetliening van de teks in ein "
 "avvanswidget tuint"
 
-#: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:290 gtk/gtkspinbutton.c:240
+#: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:292 gtk/gtkspinbutton.c:240
 msgid "Adjustment"
 msgstr "Aanpassing"
 
@@ -2755,7 +2766,7 @@ msgid ""
 "is the current action of its group."
 msgstr ""
 
-#: gtk/gtkradioaction.c:155 gtk/gtkradiobutton.c:109
+#: gtk/gtkradioaction.c:155 gtk/gtkradiobutton.c:111
 msgid "Group"
 msgstr "Gróp"
 
@@ -2764,78 +2775,78 @@ msgstr "Gróp"
 msgid "The radio action whose group this action belongs."
 msgstr "De radioknóp van welke gróp dit widget toegehuurt."
 
-#: gtk/gtkradiobutton.c:110
+#: gtk/gtkradiobutton.c:112
 msgid "The radio button whose group this widget belongs."
 msgstr "De radioknóp van welke gróp dit widget toegehuurt."
 
-#: gtk/gtkrange.c:281
+#: gtk/gtkrange.c:283
 msgid "Update policy"
 msgstr "Vernujingsbeleid"
 
-#: gtk/gtkrange.c:282
+#: gtk/gtkrange.c:284
 msgid "How the range should be updated on the screen"
 msgstr "Wie 't bereik op 't sjirm biegehauwe moot waere"
 
-#: gtk/gtkrange.c:291
+#: gtk/gtkrange.c:293
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "De GtkAdjustment die de hujige waerd van dit bereikobjek haet"
 
-#: gtk/gtkrange.c:298
+#: gtk/gtkrange.c:300
 msgid "Inverted"
 msgstr "Geïnverteerd"
 
-#: gtk/gtkrange.c:299
+#: gtk/gtkrange.c:301
 msgid "Invert direction slider moves to increase range value"
 msgstr ""
 "Kier de richting óm woehaer 't sjuufobjek bewaeg wen de bereikwaerd toenump"
 
-#: gtk/gtkrange.c:305
+#: gtk/gtkrange.c:307
 msgid "Slider Width"
 msgstr "Breide van sjuufobjek"
 
-#: gtk/gtkrange.c:306
+#: gtk/gtkrange.c:308
 msgid "Width of scrollbar or scale thumb"
 msgstr "Breide van de sjuufbalk of doemsjaal"
 
-#: gtk/gtkrange.c:313
+#: gtk/gtkrange.c:315
 msgid "Trough Border"
 msgstr "Door 't kader"
 
-#: gtk/gtkrange.c:314
+#: gtk/gtkrange.c:316
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Aafsjtandj tösje doem/sjtappers en boeterandj"
 
-#: gtk/gtkrange.c:321
+#: gtk/gtkrange.c:323
 msgid "Stepper Size"
 msgstr "Sjtapperaafmaeting"
 
-#: gtk/gtkrange.c:322
+#: gtk/gtkrange.c:324
 msgid "Length of step buttons at ends"
 msgstr "Lengde van de sjtapknóppe aan de oetènj"
 
-#: gtk/gtkrange.c:329
+#: gtk/gtkrange.c:331
 msgid "Stepper Spacing"
 msgstr "Sjtapperspasiëring"
 
-#: gtk/gtkrange.c:330
+#: gtk/gtkrange.c:332
 msgid "Spacing between step buttons and thumb"
 msgstr "Spasiëring tösje sjtapknóppe en doem"
 
-#: gtk/gtkrange.c:337
+#: gtk/gtkrange.c:339
 msgid "Arrow X Displacement"
 msgstr "Piel X-verplaatsing"
 
-#: gtk/gtkrange.c:338
+#: gtk/gtkrange.c:340
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 "Wiewied de piel in x-richting moot waere verplaats wen de knóp weurt ingedrök"
 
-#: gtk/gtkrange.c:345
+#: gtk/gtkrange.c:347
 msgid "Arrow Y Displacement"
 msgstr "Piel Y-verplaatsing"
 
-#: gtk/gtkrange.c:346
+#: gtk/gtkrange.c:348
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
@@ -2941,51 +2952,51 @@ msgstr ""
 "Tuin ein twiede veurwartse pielknop aan de euversjtaonde kantj van de "
 "sjuufbalk"
 
-#: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:535
+#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:601 gtk/gtktreeview.c:535
 msgid "Horizontal Adjustment"
 msgstr "Horizontale aanpassing"
 
-#: gtk/gtkscrolledwindow.c:242 gtk/gtktext.c:609 gtk/gtktreeview.c:543
+#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:609 gtk/gtktreeview.c:543
 msgid "Vertical Adjustment"
 msgstr "Vertikale aanpassing"
 
-#: gtk/gtkscrolledwindow.c:249
+#: gtk/gtkscrolledwindow.c:250
 msgid "Horizontal Scrollbar Policy"
 msgstr "Horizontaal sjuufbalkbeleid"
 
-#: gtk/gtkscrolledwindow.c:250
+#: gtk/gtkscrolledwindow.c:251
 msgid "When the horizontal scrollbar is displayed"
 msgstr "In welke gevalle de horizontale sjuufbalk getuind weurt"
 
-#: gtk/gtkscrolledwindow.c:257
+#: gtk/gtkscrolledwindow.c:258
 msgid "Vertical Scrollbar Policy"
 msgstr "Vertikaal sjuufbalkbeleid"
 
-#: gtk/gtkscrolledwindow.c:258
+#: gtk/gtkscrolledwindow.c:259
 msgid "When the vertical scrollbar is displayed"
 msgstr "In welke gevalle de vertickle sjuufbalk getuind weurt"
 
-#: gtk/gtkscrolledwindow.c:266
+#: gtk/gtkscrolledwindow.c:267
 msgid "Window Placement"
 msgstr "Vinsterplaatsing"
 
-#: gtk/gtkscrolledwindow.c:267
+#: gtk/gtkscrolledwindow.c:268
 msgid "Where the contents are located with respect to the scrollbars"
 msgstr "Woe de inhaud getuind weurt nao rato van de sjuufbelk"
 
-#: gtk/gtkscrolledwindow.c:274
+#: gtk/gtkscrolledwindow.c:275
 msgid "Shadow Type"
 msgstr "Sjeemtiep"
 
-#: gtk/gtkscrolledwindow.c:275
+#: gtk/gtkscrolledwindow.c:276
 msgid "Style of bevel around the contents"
 msgstr "Sjtiel van de randj róntelóm de inhaud"
 
-#: gtk/gtkscrolledwindow.c:282
+#: gtk/gtkscrolledwindow.c:283
 msgid "Scrollbar spacing"
 msgstr "Sjpasiebalk-spasiëring"
 
-#: gtk/gtkscrolledwindow.c:283
+#: gtk/gtkscrolledwindow.c:284
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "'t deil pixels tösje de sjuufbalk en 't kórrespóngderende vinster"
 
@@ -2998,11 +3009,11 @@ msgstr ""
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Of aafstandjhauwers vertikale liene zeen of gewoen laeg"
 
-#: gtk/gtksettings.c:262
+#: gtk/gtksettings.c:261
 msgid "Double Click Time"
 msgstr "Döbbelklik-tied"
 
-#: gtk/gtksettings.c:263
+#: gtk/gtksettings.c:262
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -3010,12 +3021,12 @@ msgstr ""
 "Maksimale tied tösje twie kier klikke zoedet 't nog besjouwd kèn waere wie "
 "ein döbbelklik (in millisekónde)"
 
-#: gtk/gtksettings.c:270
+#: gtk/gtksettings.c:269
 #, fuzzy
 msgid "Double Click Distance"
 msgstr "Döbbelklik-tied"
 
-#: gtk/gtksettings.c:271
+#: gtk/gtksettings.c:270
 #, fuzzy
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
@@ -3024,27 +3035,27 @@ msgstr ""
 "Maksimale tied tösje twie kier klikke zoedet 't nog besjouwd kèn waere wie "
 "ein döbbelklik (in millisekónde)"
 
-#: gtk/gtksettings.c:278
+#: gtk/gtksettings.c:277
 msgid "Cursor Blink"
 msgstr "Knipperende kursor"
 
-#: gtk/gtksettings.c:279
+#: gtk/gtksettings.c:278
 msgid "Whether the cursor should blink"
 msgstr "Of de kursor moot knippere"
 
-#: gtk/gtksettings.c:286
+#: gtk/gtksettings.c:285
 msgid "Cursor Blink Time"
 msgstr "Kursor knippertied"
 
-#: gtk/gtksettings.c:287
+#: gtk/gtksettings.c:286
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Lengde van de kursor knippercyclus, in millisekónde"
 
-#: gtk/gtksettings.c:294
+#: gtk/gtksettings.c:293
 msgid "Split Cursor"
 msgstr "Gerete Kursor"
 
-#: gtk/gtksettings.c:295
+#: gtk/gtksettings.c:294
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -3052,20 +3063,20 @@ msgstr ""
 "Of de twie kursors getuind mote waere veur gemink links-nao-rechs en rechs-"
 "nao-links"
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:301
 msgid "Theme Name"
 msgstr "Temanaam"
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:302
 msgid "Name of theme RC file to load"
 msgstr "Naam van 't te laje RC temabesjtandj"
 
-#: gtk/gtksettings.c:310
+#: gtk/gtksettings.c:309
 #, fuzzy
 msgid "Icon Theme Name"
 msgstr "Temanaam"
 
-#: gtk/gtksettings.c:311
+#: gtk/gtksettings.c:310
 #, fuzzy
 msgid "Name of icon theme to use"
 msgstr "Naam van 't sjtanderd booksjtaaftiep"
@@ -3224,16 +3235,16 @@ msgstr "Laes de hujige waerd, of zèt ein nuuj"
 msgid "Style of bevel around the spin button"
 msgstr "Sjtiel van de randj róntelóm de inhaud"
 
-#: gtk/gtkstatusbar.c:167
+#: gtk/gtkstatusbar.c:172
 msgid "Has Resize Grip"
 msgstr ""
 
-#: gtk/gtkstatusbar.c:168
+#: gtk/gtkstatusbar.c:173
 #, fuzzy
 msgid "Whether the statusbar has a grip for resizing the toplevel"
 msgstr "Of 't widget 't focuswidget is bènne 't topnivo"
 
-#: gtk/gtkstatusbar.c:195
+#: gtk/gtkstatusbar.c:200
 msgid "Style of bevel around the statusbar text"
 msgstr "Sjtiel van de randj róntelóm de sjtatusbalkteks"
 
@@ -3713,6 +3724,16 @@ msgstr ""
 msgid "Whether Tab will result in a tab character being entered"
 msgstr ""
 
+#: gtk/gtktextview.c:683
+#, fuzzy
+msgid "Error underline color"
+msgstr "Veurgróndjkleur"
+
+#: gtk/gtktextview.c:684
+#, fuzzy
+msgid "Color with which to draw error-indication underlines"
+msgstr "Kleur van de inveugkursor"
+
 #: gtk/gtktoggleaction.c:129
 #, fuzzy
 msgid "Create the same proxies as a radio action"
@@ -4135,27 +4156,27 @@ msgstr ""
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "Bepaalt wie 't sjeemkader róntelóm de viewport weurt geteikent"
 
-#: gtk/gtkwidget.c:406
+#: gtk/gtkwidget.c:408
 msgid "Widget name"
 msgstr "Widgetnaam"
 
-#: gtk/gtkwidget.c:407
+#: gtk/gtkwidget.c:409
 msgid "The name of the widget"
 msgstr "De naam van 't widget"
 
-#: gtk/gtkwidget.c:413
+#: gtk/gtkwidget.c:415
 msgid "Parent widget"
 msgstr "Mojerwidget"
 
-#: gtk/gtkwidget.c:414
+#: gtk/gtkwidget.c:416
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "'t mojerwidget van dit widget. 't moot ein Containerwidget zeen"
 
-#: gtk/gtkwidget.c:421
+#: gtk/gtkwidget.c:423
 msgid "Width request"
 msgstr "Breideverzeuk"
 
-#: gtk/gtkwidget.c:422
+#: gtk/gtkwidget.c:424
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -4163,11 +4184,11 @@ msgstr ""
 "Óngedaon make bie breideverzeuke van 't widget, of -1 wen gewoen verzeuk "
 "gebroek moot waere"
 
-#: gtk/gtkwidget.c:430
+#: gtk/gtkwidget.c:432
 msgid "Height request"
 msgstr "Huugdeverzeuk"
 
-#: gtk/gtkwidget.c:431
+#: gtk/gtkwidget.c:433
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -4175,84 +4196,84 @@ msgstr ""
 "Óngedaon make bie huugdeverzeuke van 't widget, of -1 wen gewoen verzeuk "
 "gebroek moot waere"
 
-#: gtk/gtkwidget.c:440
+#: gtk/gtkwidget.c:442
 msgid "Whether the widget is visible"
 msgstr "Of 't widget zichbaar moot zeen"
 
-#: gtk/gtkwidget.c:447
+#: gtk/gtkwidget.c:449
 msgid "Whether the widget responds to input"
 msgstr "Of 't widget reageert op inveur"
 
-#: gtk/gtkwidget.c:453
+#: gtk/gtkwidget.c:455
 msgid "Application paintable"
 msgstr "Toepassing teikebaar"
 
-#: gtk/gtkwidget.c:454
+#: gtk/gtkwidget.c:456
 msgid "Whether the application will paint directly on the widget"
 msgstr "Of de toepassing direk op 't widget teikent"
 
-#: gtk/gtkwidget.c:460
+#: gtk/gtkwidget.c:462
 msgid "Can focus"
 msgstr "Kèn focus krige"
 
-#: gtk/gtkwidget.c:461
+#: gtk/gtkwidget.c:463
 msgid "Whether the widget can accept the input focus"
 msgstr "Of 't widget de inveurfocus kèn akseptere"
 
-#: gtk/gtkwidget.c:467
+#: gtk/gtkwidget.c:469
 msgid "Has focus"
 msgstr "Haet focus"
 
-#: gtk/gtkwidget.c:468
+#: gtk/gtkwidget.c:470
 msgid "Whether the widget has the input focus"
 msgstr "Of 't widget de inveurfocus haet"
 
-#: gtk/gtkwidget.c:474
+#: gtk/gtkwidget.c:476
 msgid "Is focus"
 msgstr "Is focus"
 
-#: gtk/gtkwidget.c:475
+#: gtk/gtkwidget.c:477
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "Of 't widget 't focuswidget is bènne 't topnivo"
 
-#: gtk/gtkwidget.c:481
+#: gtk/gtkwidget.c:483
 msgid "Can default"
 msgstr "Kèn sjtanderd zeen"
 
-#: gtk/gtkwidget.c:482
+#: gtk/gtkwidget.c:484
 msgid "Whether the widget can be the default widget"
 msgstr "Of 't widget 't sjtanderd widget kèn zeen"
 
-#: gtk/gtkwidget.c:488
+#: gtk/gtkwidget.c:490
 msgid "Has default"
 msgstr "Is sjtanderd"
 
-#: gtk/gtkwidget.c:489
+#: gtk/gtkwidget.c:491
 msgid "Whether the widget is the default widget"
 msgstr "Of 't widget 't sjtanderdwidget is"
 
-#: gtk/gtkwidget.c:495
+#: gtk/gtkwidget.c:497
 msgid "Receives default"
 msgstr "Óntvink sjtanderd"
 
-#: gtk/gtkwidget.c:496
+#: gtk/gtkwidget.c:498
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "Ingeval van WAOR (TRUE) óntvink 't widget de sjtanderdaksie wen 't focus krig"
 
-#: gtk/gtkwidget.c:502
+#: gtk/gtkwidget.c:504
 msgid "Composite child"
 msgstr "Samegesjtèlde dochter"
 
-#: gtk/gtkwidget.c:503
+#: gtk/gtkwidget.c:505
 msgid "Whether the widget is part of a composite widget"
 msgstr "Of 't widget óngerdeil oetmaak van ei samegesjtèld widget"
 
-#: gtk/gtkwidget.c:509
+#: gtk/gtkwidget.c:511
 msgid "Style"
 msgstr "sjtiel"
 
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:512
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
@@ -4260,75 +4281,75 @@ msgstr ""
 "De sjtiel van 't widget; haet infermasie euver de vormgaeving (kleure "
 "enzoewiejer)"
 
-#: gtk/gtkwidget.c:516
+#: gtk/gtkwidget.c:518
 msgid "Events"
 msgstr "Gebäörtenisse"
 
-#: gtk/gtkwidget.c:517
+#: gtk/gtkwidget.c:519
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr "'t gebäörtenismasker det bepaalt welke GdkEvents dit widget óntvink"
 
-#: gtk/gtkwidget.c:524
+#: gtk/gtkwidget.c:526
 msgid "Extension events"
 msgstr "Ekstensiegebäörtenisse"
 
-#: gtk/gtkwidget.c:525
+#: gtk/gtkwidget.c:527
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr "'t masker det bepaalt welke ekstensiegebäörtenisse dit widget óntvink"
 
-#: gtk/gtkwidget.c:532
+#: gtk/gtkwidget.c:534
 msgid "No show all"
 msgstr ""
 
-#: gtk/gtkwidget.c:533
+#: gtk/gtkwidget.c:535
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:1374
+#: gtk/gtkwidget.c:1376
 msgid "Interior Focus"
 msgstr "Interne focus"
 
-#: gtk/gtkwidget.c:1375
+#: gtk/gtkwidget.c:1377
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Of de focus-indikator in widgets moot waere geteikend"
 
-#: gtk/gtkwidget.c:1381
+#: gtk/gtkwidget.c:1383
 msgid "Focus linewidth"
 msgstr "focus-lienbreide"
 
-#: gtk/gtkwidget.c:1382
+#: gtk/gtkwidget.c:1384
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Breide, in pixels, van de focus-indikatorlien"
 
-#: gtk/gtkwidget.c:1388
+#: gtk/gtkwidget.c:1390
 msgid "Focus line dash pattern"
 msgstr "focuslien-sjtreippetroen"
 
-#: gtk/gtkwidget.c:1389
+#: gtk/gtkwidget.c:1391
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Sjtreippetroen van de focus-indikator"
 
-#: gtk/gtkwidget.c:1394
+#: gtk/gtkwidget.c:1396
 msgid "Focus padding"
 msgstr "focus-opvölling"
 
-#: gtk/gtkwidget.c:1395
+#: gtk/gtkwidget.c:1397
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Breide, in pixels, tösje de focus-indikator en de widget-box"
 
-#: gtk/gtkwidget.c:1400
+#: gtk/gtkwidget.c:1402
 msgid "Cursor color"
 msgstr "Kursorkleur"
 
-#: gtk/gtkwidget.c:1401
+#: gtk/gtkwidget.c:1403
 msgid "Color with which to draw insertion cursor"
 msgstr "Kleur van de inveugkursor"
 
-#: gtk/gtkwidget.c:1406
+#: gtk/gtkwidget.c:1408
 msgid "Secondary cursor color"
 msgstr "Sekundaere kursorkleur"
 
-#: gtk/gtkwidget.c:1407
+#: gtk/gtkwidget.c:1409
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4336,11 +4357,11 @@ msgstr ""
 "Kleur van de sekundaere inveugkursor bie 't bewirke van gemink rechs-nao-"
 "links en links-nao-rechs teks"
 
-#: gtk/gtkwidget.c:1412
+#: gtk/gtkwidget.c:1414
 msgid "Cursor line aspect ratio"
 msgstr "Kursorlienverhauwing"
 
-#: gtk/gtkwidget.c:1413
+#: gtk/gtkwidget.c:1415
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Verhauwinge van de inveugkursor"
 
@@ -4539,3 +4560,11 @@ msgstr "IM sjtatussjtiel"
 #: modules/input/gtkimcontextxim.c:335
 msgid "How to draw the input method statusbar"
 msgstr "Wie de sjtatusbalk veur inveurmetood moot waere geteikend"
+
+#, fuzzy
+#~ msgid "Folder Mode"
+#~ msgstr "_Mapnaam:"
+
+#, fuzzy
+#~ msgid "Whether to select folders rather than files"
+#~ msgstr "Of de avvans getuind weurt es teks"

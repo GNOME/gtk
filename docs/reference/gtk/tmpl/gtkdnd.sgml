@@ -341,3 +341,21 @@ Undoes the effects of gtk_drag_source_set().
 @widget: a #GtkWidget
 
 
+<!-- ##### FUNCTION gtk_drag_source_set_target_list ##### -->
+<para>
+
+</para>
+
+@widget: 
+@target_list: 
+
+
+<!-- ##### FUNCTION gtk_drag_source_get_target_list ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+

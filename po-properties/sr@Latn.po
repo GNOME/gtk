@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-01 13:38+0100\n"
+"POT-Creation-Date: 2004-03-02 17:21-0500\n"
 "PO-Revision-Date: 2004-03-01 13:38+0100\n"
 "Last-Translator: Aleksandar Urošević <urke@users.sourceforge.net>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
@@ -152,7 +152,8 @@ msgstr "Isporučena ikona"
 #: gtk/gtkaction.c:223
 msgid "The stock icon displayed in widgets representing this action."
 msgstr ""
-"Isporučena ikona koja se prikazuje u elementima koji predstavljaju ovu akciju."
+"Isporučena ikona koja se prikazuje u elementima koji predstavljaju ovu "
+"akciju."
 
 #: gtk/gtkaction.c:229 gtk/gtktoolitem.c:157
 msgid "Visible when horizontal"
@@ -468,8 +469,8 @@ msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
 msgstr ""
-"Ukoliko je postavljeno, sadržani element se pojavljuje među drugim elementima, "
-"što je odgovarajuće za npr. dugmiće za pomoć."
+"Ukoliko je postavljeno, sadržani element se pojavljuje među drugim "
+"elementima, što je odgovarajuće za npr. dugmiće za pomoć."
 
 #: gtk/gtkbox.c:128 gtk/gtkexpander.c:226
 msgid "Spacing"
@@ -505,8 +506,8 @@ msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 msgstr ""
-"Da li se dodatni prostor namenjen sadržanom elementu treba njemu dodeliti ili "
-"koristiti za popunu"
+"Da li se dodatni prostor namenjen sadržanom elementu treba njemu dodeliti "
+"ili koristiti za popunu"
 
 #: gtk/gtkbox.c:160
 msgid "Padding"
@@ -515,8 +516,8 @@ msgstr "Popuna"
 #: gtk/gtkbox.c:161
 msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr ""
-"Dodatni razmak koji se postavlja između sadržanog elementa i njegovih komšija, "
-"u tačkama"
+"Dodatni razmak koji se postavlja između sadržanog elementa i njegovih "
+"komšija, u tačkama"
 
 #: gtk/gtkbox.c:167
 msgid "Pack type"
@@ -1321,53 +1322,53 @@ msgstr "Vrednost sa spiska"
 msgid "Whether entered values must already be present in the list"
 msgstr "Da li unete vrednosti moraju već biti prisutne na spisku"
 
-#: gtk/gtkcombobox.c:407
+#: gtk/gtkcombobox.c:430
 msgid "ComboBox model"
 msgstr "Model padajuće liste"
 
-#: gtk/gtkcombobox.c:408
+#: gtk/gtkcombobox.c:431
 msgid "The model for the combo box"
 msgstr "Model za padajuću listu"
 
-#: gtk/gtkcombobox.c:415
+#: gtk/gtkcombobox.c:438
 msgid "Wrap width"
 msgstr "Širina za prelom"
 
-#: gtk/gtkcombobox.c:416
+#: gtk/gtkcombobox.c:439
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Širina za prelom pri raspoređivanju stavki u mreži"
 
-#: gtk/gtkcombobox.c:425
+#: gtk/gtkcombobox.c:448
 msgid "Row span column"
 msgstr "Red obuhvata kolonu"
 
-#: gtk/gtkcombobox.c:426
+#: gtk/gtkcombobox.c:449
 msgid "TreeModel column containing the row span values"
 msgstr "Model kolone stabla koji sadrži vrednosti obuhvatanja redova"
 
-#: gtk/gtkcombobox.c:435
+#: gtk/gtkcombobox.c:458
 msgid "Column span column"
 msgstr "Kolona obuhvata kolonu"
 
-#: gtk/gtkcombobox.c:436
+#: gtk/gtkcombobox.c:459
 msgid "TreeModel column containing the column span values"
 msgstr "Model kolone stabla koji sadrži vrednosti obuhvatanja kolona"
 
-#: gtk/gtkcombobox.c:445
+#: gtk/gtkcombobox.c:468
 msgid "Active item"
 msgstr "Aktivna stavka"
 
-#: gtk/gtkcombobox.c:446
+#: gtk/gtkcombobox.c:469
 msgid "The item which is currently active"
 msgstr "Stavka koja je trenutno aktivna"
 
-#: gtk/gtkcombobox.c:454
-msgid "ComboBox appareance"
-msgstr "Izgled padajuće liste"
+#: gtk/gtkcombobox.c:477
+msgid "Appears as list"
+msgstr ""
 
-#: gtk/gtkcombobox.c:455
-msgid "ComboBox appearance, where TRUE means Windows-style."
-msgstr "Izgled padajuće liste, ako je postavljeno označava Windows stil."
+#: gtk/gtkcombobox.c:478
+msgid "Whether combobox dropdowns should look like lists rather than menus"
+msgstr ""
 
 #: gtk/gtkcomboboxentry.c:109
 msgid "Text Column"
@@ -1501,7 +1502,8 @@ msgstr "Najveća dužina"
 
 #: gtk/gtkentry.c:485
 msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr "Najviše dozvoljenih znakova za ovo polje. Nula ukoliko nema ograničenja"
+msgstr ""
+"Najviše dozvoljenih znakova za ovo polje. Nula ukoliko nema ograničenja"
 
 #: gtk/gtkentry.c:493
 msgid "Visibility"
@@ -1512,8 +1514,8 @@ msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
-"Ukoliko nije postavljeno, prikazuje se „nevidljivi znak“ umesto pravog teksta "
-"(unos lozinke)"
+"Ukoliko nije postavljeno, prikazuje se „nevidljivi znak“ umesto pravog "
+"teksta (unos lozinke)"
 
 #: gtk/gtkentry.c:501
 msgid "Has Frame"
@@ -1571,7 +1573,9 @@ msgstr "X poravnanje"
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
-msgstr "Vodoravno poravnanje, od 0 (levo) do 1 (desno). Obrnuto za rasporede sa desna na levo"
+msgstr ""
+"Vodoravno poravnanje, od 0 (levo) do 1 (desno). Obrnuto za rasporede sa "
+"desna na levo"
 
 #: gtk/gtkentry.c:786
 msgid "Select on focus"
@@ -1746,6 +1750,15 @@ msgstr "Prikaži sakrivene"
 #: gtk/gtkfilechooser.c:149
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Da li se prikazuju sakrivene datoteke i direktorijumi"
+
+#: gtk/gtkfilechooserdefault.c:473
+msgid "Default file chooser backend"
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:474
+#, fuzzy
+msgid "Name of the GtkFileChooser backend to use by default"
+msgstr "Ime mašinerije za sistem datoteka koji će se koristiti"
 
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
 msgid "Filename"
@@ -2195,8 +2208,8 @@ msgstr "Vreme pre pojave podmenija"
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
-"Najmanje vreme koje se pokazivač miša mora zadržati preko stavke menija da bi "
-"se pojavio podmeni"
+"Najmanje vreme koje se pokazivač miša mora zadržati preko stavke menija da "
+"bi se pojavio podmeni"
 
 #: gtk/gtkmenu.c:514
 msgid "Delay before hiding a submenu"
@@ -2502,8 +2515,8 @@ msgstr "Promeni veličinu"
 #: gtk/gtkpaned.c:308
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr ""
-"Ukoliko je postavljeno, sadržani element se širi i skuplja zajedno sa okvirnim "
-"elementom"
+"Ukoliko je postavljeno, sadržani element se širi i skuplja zajedno sa "
+"okvirnim elementom"
 
 #: gtk/gtkpaned.c:323
 msgid "Shrink"
@@ -2825,8 +2838,8 @@ msgstr "Utvrđena veličina klizača"
 #: gtk/gtkscrollbar.c:90
 msgid "Don't change slider size, just lock it to the minimum length"
 msgstr ""
-"Ne dozvoljava promenu veličine klizača, već je utvrđuje na najmanju dozvoljenu "
-"dužinu"
+"Ne dozvoljava promenu veličine klizača, već je utvrđuje na najmanju "
+"dozvoljenu dužinu"
 
 #: gtk/gtkscrollbar.c:114
 msgid ""
@@ -2896,11 +2909,11 @@ msgstr "Da li se razdvajači iscrtavaju, ili su praznine"
 
 # Da li je ovo novi izraz za dvostruki klik, ili ga je neko vec koristio?
 # Urke: ja sam ga odavno koristio :)
-#: gtk/gtksettings.c:262
+#: gtk/gtksettings.c:261
 msgid "Double Click Time"
 msgstr "Vreme dvoklika"
 
-#: gtk/gtksettings.c:263
+#: gtk/gtksettings.c:262
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -2908,11 +2921,11 @@ msgstr ""
 "Najduži dozvoljeni razmak između dva klika kako bi se oni smatrali jednim "
 "dvoklikom (u milisekundama)"
 
-#: gtk/gtksettings.c:270
+#: gtk/gtksettings.c:269
 msgid "Double Click Distance"
 msgstr "Razmak dvoklika"
 
-#: gtk/gtksettings.c:271
+#: gtk/gtksettings.c:270
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -2920,27 +2933,27 @@ msgstr ""
 "Najveći dozvoljeni razmak između dva klika kako bi se oni smatrali jednim "
 "dvoklikom (u tačkama)"
 
-#: gtk/gtksettings.c:278
+#: gtk/gtksettings.c:277
 msgid "Cursor Blink"
 msgstr "Treperenje kursora"
 
-#: gtk/gtksettings.c:279
+#: gtk/gtksettings.c:278
 msgid "Whether the cursor should blink"
 msgstr "Da li kursor treba da treperi"
 
-#: gtk/gtksettings.c:286
+#: gtk/gtksettings.c:285
 msgid "Cursor Blink Time"
 msgstr "Vreme treptaja kursora"
 
-#: gtk/gtksettings.c:287
+#: gtk/gtksettings.c:286
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Vreme između dva treptaja kursora, u milisekundama"
 
-#: gtk/gtksettings.c:294
+#: gtk/gtksettings.c:293
 msgid "Split Cursor"
 msgstr "Razdvojeni kursor"
 
-#: gtk/gtksettings.c:295
+#: gtk/gtksettings.c:294
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -2948,19 +2961,19 @@ msgstr ""
 "Da li treba prikazati dva kursora za mešani tekst sa leva na desno i sa "
 "desna na levo "
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:301
 msgid "Theme Name"
 msgstr "Ime teme"
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:302
 msgid "Name of theme RC file to load"
 msgstr "Ime RC datoteke teme za učitavanje"
 
-#: gtk/gtksettings.c:310
+#: gtk/gtksettings.c:309
 msgid "Icon Theme Name"
 msgstr "Ime teme ikona"
 
-#: gtk/gtksettings.c:311
+#: gtk/gtksettings.c:310
 msgid "Name of icon theme to use"
 msgstr "Ime teme ikona koja će se koristiti"
 
@@ -3167,7 +3180,8 @@ msgstr "Jednoobrazno"
 
 #: gtk/gtktable.c:195
 msgid "If TRUE this means the table cells are all the same width/height"
-msgstr "Ukoliko je postavljeno, onda su sva polja tabele jednake širine i visine"
+msgstr ""
+"Ukoliko je postavljeno, onda su sva polja tabele jednake širine i visine"
 
 #: gtk/gtktable.c:202
 msgid "Left attachment"
@@ -3230,8 +3244,8 @@ msgid ""
 "Extra space to put between the child and its upper and lower neighbors, in "
 "pixels"
 msgstr ""
-"Dodatni razmak između sadržanog elementa i njegovog gornjeg i donjeg suseda, u "
-"tačkama"
+"Dodatni razmak između sadržanog elementa i njegovog gornjeg i donjeg suseda, "
+"u tačkama"
 
 # Urke: da li ovde treba „element teksta“ ?
 #: gtk/gtktext.c:602
@@ -4262,8 +4276,8 @@ msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 msgstr ""
-"Ukoliko je postavljeno, prozor nema najmanju dopuštenu veličinu. Uključivanje "
-"ovoga je u 99 odsto slučajeva neprikladno"
+"Ukoliko je postavljeno, prozor nema najmanju dopuštenu veličinu. "
+"Uključivanje ovoga je u 99 odsto slučajeva neprikladno"
 
 #: gtk/gtkwindow.c:473
 msgid "Allow Grow"
@@ -4272,8 +4286,8 @@ msgstr "Dopusti povećanje"
 #: gtk/gtkwindow.c:474
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
-"Ukoliko je postavljeno, korisnici mogu povećati prozor preko njegove najmanje "
-"veličine"
+"Ukoliko je postavljeno, korisnici mogu povećati prozor preko njegove "
+"najmanje veličine"
 
 #: gtk/gtkwindow.c:482
 msgid "If TRUE, users can resize the window"
@@ -4416,6 +4430,12 @@ msgstr "Stil stanja IM-a"
 #: modules/input/gtkimcontextxim.c:335
 msgid "How to draw the input method statusbar"
 msgstr "Kako iscrtati liniju stanja načina unosa"
+
+#~ msgid "ComboBox appareance"
+#~ msgstr "Izgled padajuće liste"
+
+#~ msgid "ComboBox appearance, where TRUE means Windows-style."
+#~ msgstr "Izgled padajuće liste, ako je postavljeno označava Windows stil."
 
 #~ msgid "Folder Mode"
 #~ msgstr "Izbor direktorijuma"

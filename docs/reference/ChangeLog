@@ -1,3 +1,9 @@
+Mon Mar  1 19:47:48 2004  Owen Taylor  <otaylor@redhat.com>
+
+	 * === Released 2.3.5 ====
+
+	* gtk/gtk-sections.txt: Update
+
 Sun Feb 29 22:04:43 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk-sections.txt: Add gtk_entry_get_alignment

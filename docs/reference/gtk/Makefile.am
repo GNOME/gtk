@@ -31,6 +31,7 @@ IGNORE_HFILES=				\
 	gtkdebug.h			\
 	gtkentryprivate.h		\
 	gtkfilechooserdefault.h		\
+	gtkfilechooserembed.h		\
 	gtkfilechooserentry.h		\
 	gtkfilechooserprivate.h		\
 	gtkfilechooserutils.h		\

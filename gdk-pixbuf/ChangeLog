@@ -1,3 +1,7 @@
+Mon Mar  1 19:47:48 2004  Owen Taylor  <otaylor@redhat.com>
+
+	 * === Released 2.3.5 ====
+
 2004-02-28  Hans Breuer  <hans@breuer.org>
 
 	* io-tiff.c : include <io.h> for lseek()

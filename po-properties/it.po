@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-02 22:12+0100\n"
+"POT-Creation-Date: 2004-03-02 17:21-0500\n"
 "PO-Revision-Date: 2004-03-02 22:17+0100\n"
 "Last-Translator: Alessio Dessi <alessiodessi@tiscali.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -1376,7 +1376,9 @@ msgstr "Appare come una lista"
 
 #: gtk/gtkcombobox.c:478
 msgid "Whether combobox dropdowns should look like lists rather than menus"
-msgstr "Indica se la tendina delle caselle combinate appare come una lista invece che come un menu"
+msgstr ""
+"Indica se la tendina delle caselle combinate appare come una lista invece "
+"che come un menu"
 
 #: gtk/gtkcomboboxentry.c:109
 msgid "Text Column"

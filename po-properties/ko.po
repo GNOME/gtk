@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properrties 2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-03 00:55+0900\n"
+"POT-Creation-Date: 2004-03-02 17:21-0500\n"
 "PO-Revision-Date: 2004-03-03 00:56+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -1294,53 +1294,53 @@ msgstr "목록에 있는 값"
 msgid "Whether entered values must already be present in the list"
 msgstr "입력된 값이 목록에 이미 있는 값이어야 하는 지 여부"
 
-#: gtk/gtkcombobox.c:407
+#: gtk/gtkcombobox.c:430
 msgid "ComboBox model"
 msgstr "콤보 상자 모델"
 
-#: gtk/gtkcombobox.c:408
+#: gtk/gtkcombobox.c:431
 msgid "The model for the combo box"
 msgstr "콤보 상자를 위한 모델"
 
-#: gtk/gtkcombobox.c:415
+#: gtk/gtkcombobox.c:438
 msgid "Wrap width"
 msgstr "줄바꿈 너비"
 
-#: gtk/gtkcombobox.c:416
+#: gtk/gtkcombobox.c:439
 msgid "Wrap width for layouting the items in a grid"
 msgstr "각 항목을 격자에 배치할 때 줄바꿈 너비"
 
-#: gtk/gtkcombobox.c:425
+#: gtk/gtkcombobox.c:448
 msgid "Row span column"
 msgstr "행 범위 열"
 
-#: gtk/gtkcombobox.c:426
+#: gtk/gtkcombobox.c:449
 msgid "TreeModel column containing the row span values"
 msgstr "행 범위 값이 들어 있는 트리모델 열"
 
-#: gtk/gtkcombobox.c:435
+#: gtk/gtkcombobox.c:458
 msgid "Column span column"
 msgstr "열 범위 열"
 
-#: gtk/gtkcombobox.c:436
+#: gtk/gtkcombobox.c:459
 msgid "TreeModel column containing the column span values"
 msgstr "열 범위 값이 들어 있는 트리모델 열"
 
-#: gtk/gtkcombobox.c:445
+#: gtk/gtkcombobox.c:468
 msgid "Active item"
 msgstr "활성 항목"
 
-#: gtk/gtkcombobox.c:446
+#: gtk/gtkcombobox.c:469
 msgid "The item which is currently active"
 msgstr "현재 활성화된 항목"
 
-#: gtk/gtkcombobox.c:454
-msgid "ComboBox appareance"
-msgstr "콤보 상자 모양"
+#: gtk/gtkcombobox.c:477
+msgid "Appears as list"
+msgstr ""
 
-#: gtk/gtkcombobox.c:455
-msgid "ComboBox appearance, where TRUE means Windows-style."
-msgstr "콤보 상자 모양, 참이면 Windows 스타일입니다."
+#: gtk/gtkcombobox.c:478
+msgid "Whether combobox dropdowns should look like lists rather than menus"
+msgstr ""
 
 #: gtk/gtkcomboboxentry.c:109
 msgid "Text Column"
@@ -4351,6 +4351,12 @@ msgstr "입력기 상태 유형"
 #: modules/input/gtkimcontextxim.c:335
 msgid "How to draw the input method statusbar"
 msgstr "입력 방법 상태 표시줄을 그리는 방법"
+
+#~ msgid "ComboBox appareance"
+#~ msgstr "콤보 상자 모양"
+
+#~ msgid "ComboBox appearance, where TRUE means Windows-style."
+#~ msgstr "콤보 상자 모양, 참이면 Windows 스타일입니다."
 
 #~ msgid "Folder Mode"
 #~ msgstr "폴더 모드"

@@ -97,6 +97,16 @@ Key bindings for individual widgets
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_bindings_activate_event ##### -->
+<para>
+
+</para>
+
+@object: 
+@event: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_binding_set_activate ##### -->
 <para>
 

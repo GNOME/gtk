@@ -103,6 +103,8 @@ GtkBindingSet*	gtk_binding_set_find	(const gchar	*set_name);
 gboolean gtk_bindings_activate		(GtkObject	*object,
 					 guint		 keyval,
 					 GdkModifierType modifiers);
+gboolean gtk_bindings_activate_event    (GtkObject      *object,
+					 GdkEventKey    *event);
 gboolean gtk_binding_set_activate	(GtkBindingSet	*binding_set,
 					 guint		 keyval,
 					 GdkModifierType modifiers,
@@ -136,8 +138,6 @@ void	 gtk_binding_entry_add_signall	(GtkBindingSet	*binding_set,
 guint	 gtk_binding_parse_binding	(GScanner	*scanner);
 
 
-gboolean gtk_bindings_activate_event  (GtkObject   *object,
-				       GdkEventKey *event);
 void     _gtk_binding_reset_parsed    (void);
 
 /* Creates a signal with a fixed callback instead of a class offset;

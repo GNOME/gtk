@@ -490,6 +490,24 @@ update_preview_cb (GtkFileChooser *file_chooser, gpointer data)
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_file_chooser_set_use_preview_label ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@use_label: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_use_preview_label ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_file_chooser_get_preview_filename ##### -->
 <para>
 

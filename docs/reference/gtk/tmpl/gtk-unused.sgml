@@ -620,6 +620,12 @@ Define a function pointer.  Deprecated.
 </para>
 
 
+<!-- ##### ARG GtkComboBox:appearance ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### SIGNAL GtkContainer::focus ##### -->
 <para>
 

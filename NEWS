@@ -1,30 +1,45 @@
 Overview of Changes from GTK+ 2.3.4 to GTK+ 2.3.5
 =================================================
-* GtkFileChooser  [Federico Mena Quintero]:
- - Enable DND to the shortcuts list.  [Federico]
- - More folder modes.  [Jonathan R Blandford]
+* GtkFileChooser [Federico Mena Quintero]:
+ - Enable DND in the shortcuts list [Federico]
+ - More folder modes [Jonathan R Blandford]
+ - Resizing toplevel as contents change [Jonathan] 
+ - Make the backend settable via GtkSetting [Alex Larsson, Owen Taylor]
  - Miscellaneous fixes.  [Jonathan, Morten Welinder, Alexander Larsson]
- - Save folder combo box.
- - Sizing fixes.  [Jonathan]
+ - Add combo box to pick folder in Save mode. [Jonathan, Federico]
 * GtkComboBox
- - Memory leak/crash fixes.  [Damon Chaplin, Matthias Clasen]
- - Always grab when popping the list up.  [Damon, Matthias]
- - Improve popup positioning.  [Matthias]
-* Improve space allocation in menubars.  [Soeren Sandmann]
-* Improve key bindings in GtkEntryCompletion  [Matthias]
-* Hide XCursor dependency.  [Soeren]
-* Make mouse wheel scrolling usable.  [Soeren]
-* Use resize cursors for resize grips.  [Soeren]
-* Add a way to list the mnemonic labels of a widget.  [Owen Taylor]
-* Add a group-changed signal to GtkRadioButton.  [Owen, Padraig O'Briain]
-* Export insertion cursor drawing functionality.  [Alexander Larsson, Owen]
-* Support squiggly red underlines in text views.  [Owen]
-* Memory leak fixes.  [Owen]
-* Win32 fixes.  [Hans Breuer]
-* Misc. fixes  [Owen Taylor, Tomasz Lloczko, George Bronnikov, Manish Singh,
-  J. Ali Harlow]
-* Documentation improvements  [Matthias, Federico, Torsten Schoenfeld]
-* Updated translations (sr,sr@Latn,sr@ije,ja,th,nl,de,pt,da,et,fi,ar,fr)
+ - Memory leak/crash fixes [Damon Chaplin, Matthias Clasen]
+ - Always grab when popping the list up [Damon, Matthias]
+ - Fixes for dynamic changes to the model [Owen]
+ - Improve popup positioning [Matthias]
+* Implement computation of bidi-base direction from text
+  in GtkEntry, GtkTextView, GtkLabel [Dov Grobgeld, Owen Taylor]
+* Add gtk_entry_set_alignment() [Egon Andersen, Steffen Gutmann,
+  Owen]
+* Fix wrong interpretation of new_order array for
+  gtk_tree/list_store_reorder() [Owen]
+* Improve space allocation in menubars [Soeren Sandmann]
+* Improve key bindings in GtkEntryCompletion [Matthias]
+* Hide XCursor dependency [Soeren]
+* Make mouse wheel scrolling usable [Soeren]
+* Use resize cursors for resize grips [Soeren]
+* Set the right window group for menu and combo popups [Frederic Crozat,
+  Jean-Philippe Chancelier, Soeren]
+* Add a way to list the mnemonic labels of a widget [Owen]
+* Add a group-changed signal to GtkRadioButton [Owen, Padraig O'Briain]
+* Export insertion cursor drawing functionality [Alexander Larsson, Owen]
+* Support squiggly red underlines in text views [Nicolas Setton, Owen]
+* Export GtkWindow key-press-event internals to allow 
+  custom implementations [Tim Janik]
+* Add gtk_drag_source_set/get_target_list() [Mitch Natterer]
+* Fix drag-and-drop in GtkTextView to move [Paolo Borelli, Paolo Maggi]
+* Memory leak fixes [Owen]
+* Win32 fixes [Hans Breuer]
+* Misc. fixes [George Bronnikov, Simon Budig, J. Ali Harlow, David Hawthorne, Tim,
+  Tomasz Lloczko, Mitch, Manish Singh, Owen]
+* Documentation improvements [Matthias, Federico, Torsten Schoenfeld]
+* Updated translations (ar,cs,da,de,en_CA,es,et,fi,fr,it,ja,ko,nl,pt,ru,sr,sr@ije,
+  sr@Latn,sq,sv,th,zh_CN)
 
 Overview of Changes from GTK+ 2.3.3 to GTK+ 2.3.4
 =================================================

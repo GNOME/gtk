@@ -12,7 +12,7 @@ AC_PREREQ(2.54)
 
 m4_define([gtk_major_version], [2])
 m4_define([gtk_minor_version], [3])
-m4_define([gtk_micro_version], [4])
+m4_define([gtk_micro_version], [5])
 m4_define([gtk_version],
           [gtk_major_version.gtk_minor_version.gtk_micro_version])
 m4_define([gtk_interface_age], [0])
@@ -29,8 +29,8 @@ m4_define([gtk_api_version], [2.0])
 m4_define([gtk_binary_version], [2.2.0])
 
 # required versions of other packages
-m4_define([glib_required_version], [2.3.3])
-m4_define([pango_required_version], [1.2.0])
+m4_define([glib_required_version], [2.3.5])
+m4_define([pango_required_version], [1.3.5])
 m4_define([atk_required_version], [1.0.1])
 
 

@@ -2322,6 +2322,33 @@ This function is deprecated; it does nothing.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_widget_list_mnemonic_labels ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_add_mnemonic_label ##### -->
+<para>
+
+</para>
+
+@widget: 
+@label: 
+
+
+<!-- ##### FUNCTION gtk_widget_remove_mnemonic_label ##### -->
+<para>
+
+</para>
+
+@widget: 
+@label: 
+
+
 <!-- ##### FUNCTION gtk_requisition_copy ##### -->
 <para>
 
