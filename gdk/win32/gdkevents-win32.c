@@ -2224,11 +2224,19 @@ gdk_event_translate (GdkEvent *event,
       /* If posted without us having keyboard focus, ignore */
       if (!(msg->lParam & 0x20000000))
 	break;
+
       /* Let the system handle Alt-Tab, Alt-Enter and Alt-F4 */
       if (msg->wParam == VK_TAB
 	  || msg->wParam == VK_RETURN
 	  || msg->wParam == VK_F4)
 	break;
+
+      /* Let the system handle Alt-Space, and ignore the WM_SYSCHAR too */
+      if (msg->wParam == VK_SPACE)
+	{
+	  ignore_wm_char = TRUE;
+	  break;
+	}
 
       /* Jump to code in common with WM_KEYUP and WM_KEYDOWN */
       goto keyup_or_down;
