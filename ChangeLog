@@ -1,3 +1,20 @@
+Sat Aug  7 18:19:03 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkfilechooserdefault.c (save_folder_combo_create): 
+	(shortcuts_list_create): Use GtkTreeViewRowSeparatorFunc 
+	instead of GtkCellRendererSepText.  (#147864)
+
+	* gtk/gtkcellrendererseptext.[hc]: Removed.
+
+	* gtk/Makefile.am: Remove gtkcellrendererseptext.[hc]
+	
+Sat Aug  7 18:15:15 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_row_deleted): 
+	(gtk_combo_box_menu_row_inserted): 
+	(gtk_combo_box_menu_row_changed): Correctly handle
+	insertion and deletion of separators in menu mode.
+
 2004-08-07  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (handle_configure_event,

@@ -2361,7 +2361,13 @@ gtk_combo_box_menu_fill_level (GtkComboBox *combo_box,
 	is_separator = FALSE;
       
       if (is_separator)
-	item = gtk_separator_menu_item_new ();
+	{
+	  item = gtk_separator_menu_item_new ();
+	  g_object_set_data_full (G_OBJECT (item),
+				  "gtk-combo-box-item-path",
+				  gtk_tree_model_get_path (model, &iter),
+				  (GDestroyNotify)gtk_tree_path_free);
+	}
       else
 	{
 	  item = gtk_cell_view_menu_item_new (combo_box, model, &iter);
@@ -2523,8 +2529,7 @@ static void
 gtk_combo_box_relayout (GtkComboBox *combo_box)
 {
   GList *list, *j;
-  GtkWidget *menu, *item;
-  gint row, col, width;
+  GtkWidget *menu;
 
   menu = combo_box->priv->popup_widget;
   
@@ -2726,7 +2731,11 @@ find_menu_by_path (GtkWidget   *menu,
   item = NULL;
   for (i = list; i; i = i->next)
     {
-      if (GTK_IS_CELL_VIEW (GTK_BIN (i->data)->child))
+      if (GTK_IS_SEPARATOR_MENU_ITEM (i->data))
+	{
+	  mpath = gtk_tree_path_copy (g_object_get_data (G_OBJECT (i->data), "gtk-combo-box-item-path"));
+	}
+      else if (GTK_IS_CELL_VIEW (GTK_BIN (i->data)->child))
 	{
 	  if (skip)
 	    {
@@ -2735,32 +2744,35 @@ find_menu_by_path (GtkWidget   *menu,
 	    }
 
 	  mpath = gtk_cell_view_get_displayed_row (GTK_CELL_VIEW (GTK_BIN (i->data)->child));
-	  /* this case is necessary, since the row reference of
-	   * the cell view may already be updated after a deletion
-	   */
-	  if (!mpath)
-	    {
-	      item = i->data;
-	      break;
-	    }
-	  if (gtk_tree_path_compare (mpath, path) == 0)
+	}
+      else 
+	continue;
+
+      /* this case is necessary, since the row reference of
+       * the cell view may already be updated after a deletion
+       */
+      if (!mpath)
+	{
+	  item = i->data;
+	  break;
+	}
+      if (gtk_tree_path_compare (mpath, path) == 0)
+	{
+	  gtk_tree_path_free (mpath);
+	  item = i->data;
+	  break;
+	}
+      if (gtk_tree_path_is_ancestor (mpath, path))
+	{
+	  submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (i->data));
+	  if (submenu != NULL)
 	    {
 	      gtk_tree_path_free (mpath);
-	      item = i->data;
+	      item = find_menu_by_path (submenu, path, TRUE);
 	      break;
 	    }
-	  if (gtk_tree_path_is_ancestor (mpath, path))
-	    {
-	      submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (i->data));
-	      if (submenu != NULL)
-		{
-		  gtk_tree_path_free (mpath);
-		  item = find_menu_by_path (submenu, path, TRUE);
-		  break;
-		}
-	    }
-	  gtk_tree_path_free (mpath);
 	}
+      gtk_tree_path_free (mpath);
     }
   
   g_list_free (list);  
@@ -2808,6 +2820,7 @@ gtk_combo_box_menu_row_inserted (GtkTreeModel *model,
   GtkTreePath *ppath;
   GtkTreeIter piter;
   gint depth, pos;
+  gboolean is_separator;
 
   if (!combo_box->priv->popup_widget)
     return;
@@ -2854,13 +2867,30 @@ gtk_combo_box_menu_row_inserted (GtkTreeModel *model,
 	pos += 1;
     }
   
-  item = gtk_cell_view_menu_item_new (combo_box, model, iter);
+  if (combo_box->priv->row_separator_func)
+    is_separator = (*combo_box->priv->row_separator_func) (model, iter,
+							   combo_box->priv->row_separator_data);
+  else
+    is_separator = FALSE;
+
+  if (is_separator)
+    {
+      item = gtk_separator_menu_item_new ();
+      g_object_set_data_full (G_OBJECT (item),
+			      "gtk-combo-box-item-path",
+			      gtk_tree_path_copy (path),
+			      (GDestroyNotify)gtk_tree_path_free);
+    }
+  else
+    {
+      item = gtk_cell_view_menu_item_new (combo_box, model, iter);
+      
+      g_signal_connect (item, "activate",
+			G_CALLBACK (gtk_combo_box_menu_item_activate),
+			combo_box);
+    }
+
   gtk_widget_show (item);
-
-  g_signal_connect (item, "activate",
-                    G_CALLBACK (gtk_combo_box_menu_item_activate),
-                    combo_box);
-
   gtk_menu_shell_insert (GTK_MENU_SHELL (menu), item, pos);
 }
 
@@ -2902,15 +2932,27 @@ gtk_combo_box_menu_row_changed (GtkTreeModel *model,
   GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
   GtkWidget *item;
   gint width;
+  gboolean is_separator;
 
   if (!combo_box->priv->popup_widget)
     return;
 
-  if (combo_box->priv->wrap_width)
+  item = find_menu_by_path (combo_box->priv->popup_widget, path, FALSE);
+
+  if (combo_box->priv->row_separator_func)
+    is_separator = (*combo_box->priv->row_separator_func) (model, iter,
+							   combo_box->priv->row_separator_data);
+  else
+    is_separator = FALSE;
+
+  if (is_separator != GTK_IS_SEPARATOR_MENU_ITEM (item))
     {
-      item = find_menu_by_path (combo_box->priv->popup_widget, path, FALSE);
-      gtk_combo_box_relayout_item (combo_box, item, iter, NULL);
+      gtk_combo_box_menu_row_deleted (model, path, combo_box);
+      gtk_combo_box_menu_row_inserted (model, path, iter, combo_box);
     }
+
+  if (combo_box->priv->wrap_width)
+    gtk_combo_box_relayout_item (combo_box, item, iter, NULL);
 
   width = gtk_combo_box_calc_requested_width (combo_box, path);
 

@@ -25,7 +25,7 @@
 #include "gtkbutton.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrendererpixbuf.h"
-#include "gtkcellrendererseptext.h"
+#include "gtkcellrenderertext.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcheckmenuitem.h"
 #include "gtkcombobox.h"
@@ -2546,6 +2546,24 @@ shortcuts_selection_changed_cb (GtkTreeSelection      *selection,
   bookmarks_check_remove_sensitivity (impl);
 }
 
+static gboolean
+shortcuts_row_separator_func (GtkTreeModel *model,
+			      GtkTreeIter  *iter,
+			      gpointer      data)
+{
+  gint column = GPOINTER_TO_INT (data);
+  gchar *text;
+
+  gtk_tree_model_get (model, iter, column, &text, -1);
+  
+  if (!text)
+    return TRUE;
+
+  g_free (text);
+
+  return FALSE;
+}
+
 /* Creates the widgets for the shortcuts and bookmarks tree */
 static GtkWidget *
 shortcuts_list_create (GtkFileChooserDefault *impl)
@@ -2630,11 +2648,16 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
 				       "visible", SHORTCUTS_COL_PIXBUF_VISIBLE,
 				       NULL);
 
-  renderer = _gtk_cell_renderer_sep_text_new ();
+  renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_set_attributes (column, renderer,
 				       "text", SHORTCUTS_COL_NAME,
 				       NULL);
+
+  gtk_tree_view_set_row_separator_func (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view),
+					shortcuts_row_separator_func,
+					GINT_TO_POINTER (SHORTCUTS_COL_NAME),
+					NULL);
 
   gtk_tree_view_append_column (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view), column);
 
@@ -3094,12 +3117,17 @@ save_folder_combo_create (GtkFileChooserDefault *impl)
 				  "sensitive", SHORTCUTS_COL_PIXBUF_VISIBLE,
 				  NULL);
 
-  cell = _gtk_cell_renderer_sep_text_new ();
+  cell = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), cell, TRUE);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), cell,
 				  "text", SHORTCUTS_COL_NAME,
 				  "sensitive", SHORTCUTS_COL_PIXBUF_VISIBLE,
 				  NULL);
+
+  gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (combo),
+					shortcuts_row_separator_func,
+					GINT_TO_POINTER (SHORTCUTS_COL_NAME),
+					NULL);
 
   g_signal_connect (combo, "changed",
 		    G_CALLBACK (save_folder_combo_changed_cb), impl);

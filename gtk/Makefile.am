@@ -276,7 +276,6 @@ gtk_semi_private_h_sources =    \
 
 # GTK+ header files that don't get installed
 gtk_private_h_sources =         \
-	gtkcellrendererseptext.h\
 	gtkentryprivate.h	\
 	gtkfilechooserembed.h	\
 	gtkfilechooserentry.h	\
@@ -327,7 +326,6 @@ gtk_c_sources =                 \
 	gtkcellrenderercombo.c	\
 	gtkcellrendererpixbuf.c	\
 	gtkcellrendererprogress.c \
-	gtkcellrendererseptext.c\
 	gtkcellrenderertext.c	\
 	gtkcellrenderertoggle.c	\
 	gtkcellview.c		\
