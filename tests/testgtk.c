@@ -2833,7 +2833,7 @@ create_menus (void)
 			  NULL);
       
       accel_group = gtk_accel_group_new ();
-      gtk_accel_group_attach (accel_group, GTK_OBJECT (window));
+      gtk_accel_group_attach (accel_group, G_OBJECT (window));
 
       gtk_window_set_title (GTK_WINDOW (window), "menus");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
@@ -3146,7 +3146,7 @@ create_item_factory (void)
 				"<main>",
 				item_factory,
 				(GtkDestroyNotify) gtk_object_unref);
-      gtk_accel_group_attach (accel_group, GTK_OBJECT (window));
+      gtk_accel_group_attach (accel_group, G_OBJECT (window));
       gtk_window_set_title (GTK_WINDOW (window), "Item Factory");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
       gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);
