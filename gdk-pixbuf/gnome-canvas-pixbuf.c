@@ -607,6 +607,6 @@ gnome_canvas_pixbuf_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 	art_affine_scale (scale, i_len, j_len);
 	art_affine_multiply (final, i2c, scale);
 
-	buf = g_new0 (guchar, width * height * 3);
-	transform_pixbuf (buf, x, y, width, height, width * 3, priv->pixbuf, final);
+	buf = g_new0 (guchar, width * height * 4);
+	transform_pixbuf (buf, x, y, width, height, width * 4, priv->pixbuf, final);
 }

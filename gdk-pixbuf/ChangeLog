@@ -1,3 +1,18 @@
+1999-10-27  Federico Mena Quintero  <federico@redhat.com>
+
+	* src/gdk-pixbuf-loader.c (gdk_pixbuf_loader_new): Return a
+	GdkPixbufLoader, not a GtkObject.
+	(gtk_marshal_NONE__INT_INT_INT_INT): Made static.
+	(gdk_pixbuf_loader_get_type): Documented.
+	(gdk_pixbuf_loader_class_init): Initialize the parent class
+	correctly.
+	(gdk_pixbuf_loader_destroy): Added sanity checks. Call the parent
+	class destroy function.
+	(gdk_pixbuf_loader_new): Documented.
+	(gdk_pixbuf_loader_finalize): Call the parent class finalize
+	function.
+	(gdk_pixbuf_loader_write): Use size_t for count.
+
 1999-10-27  Michael Fulbright  <msf@avatar.labs.redhat.com>
 
 	* src/gdk-pixbuf-loader.c (gdk_pixbuf_loader_destroy): Fixed
