@@ -1544,15 +1544,22 @@ gdk_window_set_cursor (GdkWindow *window,
 				   xcursor,
 				   GDK_WINDOW_WIN32DATA (window)->xcursor));
 
-	  GetCursorPos (&pt);
-	  if (ChildWindowFromPoint (GDK_DRAWABLE_XID (window), pt) == GDK_DRAWABLE_XID (window))
-	    SetCursor (GDK_WINDOW_WIN32DATA (window)->xcursor);
 	}
-
+#if 1
+      if (prev_xcursor != NULL && GetCursor () == prev_xcursor)
+#else
+	GetCursorPos (&pt);
+      if (ChildWindowFromPoint (GDK_DRAWABLE_XID (window), pt) == GDK_DRAWABLE_XID (window))
+#endif
+	{
+	  GDK_NOTE (MISC, g_print ("...SetCursor (%#x)\n",
+				   GDK_WINDOW_WIN32DATA (window)->xcursor));
+	  SetCursor (GDK_WINDOW_WIN32DATA (window)->xcursor);
+	}
+      
       if (prev_xcursor != NULL)
 	{
-	  GDK_NOTE (MISC, g_print ("...DestroyCursor (%#x)\n",
-				   GDK_WINDOW_WIN32DATA (window)->xcursor));
+	  GDK_NOTE (MISC, g_print ("...DestroyCursor (%#x)\n", prev_xcursor));
 	  
 	  if (!DestroyCursor (prev_xcursor))
 	    WIN32_API_FAILED ("DestroyCursor");

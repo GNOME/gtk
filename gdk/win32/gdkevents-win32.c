@@ -4001,31 +4001,32 @@ gdk_event_translate (GdkEvent *event,
       if (!propagate (&window, xevent,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
 		      doesnt_want_button_release))
-	  goto maybe_ungrab;
+	{
+	}
+      else
+	{
+	  event->button.window = window;
+	  event->button.time = xevent->time;
+	  if (window != orig_window)
+	    translate_mouse_coords (orig_window, window, xevent);
+	  /* Hmm, I wonder why I don't set curX/Y and curX/Yroot here, too? */
+	  event->button.x = (gint16) LOWORD (xevent->lParam);
+	  event->button.y = (gint16) HIWORD (xevent->lParam);
+	  event->button.x_root = xevent->pt.x;
+	  event->button.y_root = xevent->pt.y;
+	  event->button.pressure = 0.5;
+	  event->button.xtilt = 0;
+	  event->button.ytilt = 0;
+	  event->button.state = build_pointer_event_state (xevent);
+	  event->button.button = button;
+	  event->button.source = GDK_SOURCE_MOUSE;
+	  event->button.deviceid = GDK_CORE_POINTER;
+	  return_val = !GDK_DRAWABLE_DESTROYED (window);
+	}
 
-      event->button.window = window;
-      event->button.time = xevent->time;
-      if (window != orig_window)
-	translate_mouse_coords (orig_window, window, xevent);
-      /* Hmm, I wonder why I don't set cyrX/Y and curX/Yroot here, too? */
-      event->button.x = (gint16) LOWORD (xevent->lParam);
-      event->button.y = (gint16) HIWORD (xevent->lParam);
-      event->button.x_root = xevent->pt.x;
-      event->button.y_root = xevent->pt.y;
-      event->button.pressure = 0.5;
-      event->button.xtilt = 0;
-      event->button.ytilt = 0;
-      event->button.state = build_pointer_event_state (xevent);
-      event->button.button = button;
-      event->button.source = GDK_SOURCE_MOUSE;
-      event->button.deviceid = GDK_CORE_POINTER;
-
-      return_val = !GDK_DRAWABLE_DESTROYED (window);
-
-    maybe_ungrab:
       if (p_grab_window != NULL
 	  && p_grab_automatic
-	  && (event->button.state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)) == 0)
+	  && (xevent->wParam & (MK_LBUTTON | MK_MBUTTON | MK_RBUTTON)) == 0)
 	gdk_pointer_ungrab (0);
       break;
 

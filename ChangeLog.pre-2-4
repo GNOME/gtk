@@ -1,5 +1,33 @@
 2001-02-23  Tor Lillqvist  <tml@iki.fi>
 
+	* gdk/win32/bdfcursor.c: New file. A program that generates
+	xcursors.h. Thanks to Stefan Ondrejicka.
+
+	* gdk/win32/xcursors.h: New file, contains the X cursor font in a
+	compact format.
+
+	* gdk/win32/gdkcursor-win32.c (_gdk_win32_data_to_wcursor): New
+	function, uses xcursors.h.
+	(gdk_cursor_new): Use _gdk_win32_data_to_wcursor to generate
+	cursor from inline data instead of using LoadCursor() to generate
+	it from a resource.
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): At button up
+	event, must check the Windows message for mouse button state, as
+	the GDK event state might not have been built if it is
+	undelivered. Remove one goto.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_cursor): Call
+	SetCursor() if the current cursor as returned by GetCursor() is
+	the window's previous cursor. The ChildWindowFromPoint() test
+	apparently didn't work correctly.
+
+	* gdk/win32/rc/*.cur: Remove.
+
+	* gdk/win32/rc/gdk.rc: Remove cursors.
+
+2001-02-23  Tor Lillqvist  <tml@iki.fi>
+
 	From now on, changes to the Win32 production branch go into CVS
 	right away. This is the last batch of changes accumulated for some
 	time (since the 2000-12-26 snapshot).
