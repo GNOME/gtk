@@ -1,3 +1,10 @@
+Mon Jun 10 01:12:31 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from stable.
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_get_size):
+	check if width is !null, not *width. Doh.
+
 Tue Jun 10 01:09:33 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.

@@ -2431,7 +2431,7 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn *tree_column,
       if (visible == FALSE)
 	continue;
 
-      if (first_cell == FALSE && *width)
+      if (first_cell == FALSE && width)
 	*width += tree_column->spacing;
 
       gtk_cell_renderer_get_size (info->cell,
