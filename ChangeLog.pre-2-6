@@ -1,3 +1,9 @@
+Sun Aug 15 02:31:55 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkfilesystemunix.c (get_icon_type_from_stat): Make 
+	the use of S_ISFIFO and S_ISSOCK conditional.  (#150146,
+	Gustavo Carneiro)
+
 2004-08-14  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_append_home,

@@ -590,10 +590,14 @@ get_icon_type_from_stat (struct stat *statp)
     return ICON_CHARACTER_DEVICE;
   else if (S_ISDIR (statp->st_mode))
     return ICON_DIRECTORY;
+#ifdef S_ISFIFO
   else if (S_ISFIFO (statp->st_mode))
     return  ICON_FIFO;
+#endif
+#ifdef S_ISSOCK
   else if (S_ISSOCK (statp->st_mode))
     return ICON_SOCKET;
+#endif
   else
     return ICON_REGULAR;
 }
