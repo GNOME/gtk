@@ -10,6 +10,7 @@ gtk.hierarchy
 gtk.interfaces
 gtk.prerequisites
 gtk.signals
+deprecated
 html
 xml
 *.stamp

@@ -9,6 +9,7 @@ gdk.hierarchy
 gdk.interfaces
 gdk.prerequisites
 gdk.signals
+deprecated
 html
 xml
 *.stamp
