@@ -33,16 +33,19 @@
  * Functions for maintaining the event queue *
  *********************************************/
 
-static gboolean fb_events_prepare  (gpointer  source_data,
-				    GTimeVal *current_time,
-				    gint     *timeout,
-				    gpointer  user_data);
-static gboolean fb_events_check    (gpointer  source_data,
-				    GTimeVal *current_time,
-				    gpointer  user_data);
-static gboolean fb_events_dispatch (gpointer  source_data,
-				    GTimeVal *dispatch_time,
-				    gpointer  user_data);
+static gboolean fb_events_prepare  (GSource    *source,
+				    gint       *timeout);
+static gboolean fb_events_check    (GSource    *source);
+static gboolean fb_events_dispatch (GSource    *source,
+				    GSourceFunc callback,
+				    gpointer    user_data);
+
+static GSourceFuncs fb_events_funcs = {
+  fb_events_prepare,
+  fb_events_check,
+  fb_events_dispatch,
+  NULL
+};
 
 guint32
 gdk_fb_get_time(void)
@@ -56,14 +59,13 @@ gdk_fb_get_time(void)
 void 
 gdk_events_init (void)
 {
-  static GSourceFuncs fb_events_funcs = {
-    fb_events_prepare,
-    fb_events_check,
-    fb_events_dispatch,
-    NULL
-  };
+  GSource *source;
 
-  g_source_add (GDK_PRIORITY_EVENTS, TRUE, &fb_events_funcs, NULL, NULL, NULL);
+  source = g_source_new (&fb_events_funcs, sizeof (GSource));
+  g_source_set_priority (source, GDK_PRIORITY_EVENTS);
+  
+  g_source_set_can_recurse (source, TRUE);
+  g_source_attach (source, NULL);
 }
 
 /*
@@ -121,20 +123,16 @@ gdk_events_queue (void)
 }
 
 static gboolean
-fb_events_prepare (gpointer  source_data, 
-		   GTimeVal *current_time,
-		   gint     *timeout,
-		   gpointer  user_data)
+fb_events_prepare (GSource    *source,
+		   gint       *timeout)
 {
   *timeout = -1;
 
-  return fb_events_check (source_data, current_time, user_data);
+  return fb_events_check (source);
 }
 
 static gboolean
-fb_events_check (gpointer  source_data,
-		 GTimeVal *current_time,
-		 gpointer  user_data)
+fb_events_check (GSource    *source)
 {
   gboolean retval;
 
@@ -148,9 +146,9 @@ fb_events_check (gpointer  source_data,
 }
 
 static gboolean
-fb_events_dispatch (gpointer source_data,
-		    GTimeVal *dispatch_time,
-		    gpointer user_data)
+fb_events_dispatch (GSource  *source,
+		    GSourceFunc callback,
+		    gpointer  user_data)
 {
   GdkEvent *event;
 

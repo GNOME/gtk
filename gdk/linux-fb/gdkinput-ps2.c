@@ -1122,6 +1122,17 @@ gdk_window_find_focus (void)
   return gdk_parent_root;
 }
 
+/* Bogus implementation */
+gboolean
+gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
+                                    guint          hardware_keycode,
+                                    GdkKeymapKey **keys,
+                                    guint        **keyvals,
+                                    gint          *n_entries)
+{
+  return FALSE;
+}
+
 static const guint trans_table[256][3] = {
   /* 0x00 */
   {0, 0, 0},

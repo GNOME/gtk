@@ -1,3 +1,12 @@
+2000-12-06  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkevents-fb.c:
+	Update to match latest gmain/gsource changes.
+
+	* gdk/linux-fb/gdkinput-ps2.c:
+	Bogus gdk_keymap_get_entries_for_keycode implementation so that
+	it links. Will be implemented later.
+
 2000-12-03  Havoc Pennington  <hp@pobox.com>
 
 	* gdk/Makefile.am: add gdkkeys.[hc]
