@@ -158,7 +158,7 @@ cell_edited (GtkCellRendererText *cell,
 
   gtk_tree_model_get_iter (model, &iter, path);
 
-  switch (G_POINTER_TO_INT (column))
+  switch (GPOINTER_TO_INT (column))
     {
     case COLUMN_NUMBER:
       {
