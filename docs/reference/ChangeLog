@@ -1,3 +1,7 @@
+Mon Dec 15 01:03:08 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_button_[sg]et_alignment.
+
 Sun Dec 14 01:25:49 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdk-sections.txt: Add gdk_x11_register_standard_event_type.
