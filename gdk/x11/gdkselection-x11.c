@@ -454,7 +454,7 @@ gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
   property.format = format;
   property.nitems = length;
   res = XmbTextPropertyToTextList (GDK_DISPLAY_XDISPLAY (display), &property, 
-				   local_list, &count);
+				   &local_list, &count);
 
   if (res == XNoMemory || res == XLocaleNotSupported || 
       res == XConverterNotFound)
