@@ -1,3 +1,7 @@
+2002-10-07  jacob berkman  <jacob@ximian.com>
+
+	* gdk/x11/gdkkeys-x11.c (update_keymaps): fix build
+
 Mon Oct  7 12:40:39 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_move_resize): Clean

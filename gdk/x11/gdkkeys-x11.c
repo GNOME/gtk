@@ -223,7 +223,7 @@ update_keymaps (void)
 	       * fourth modifier, i / keyspermod is the modifier
 	       * index
 	       */
-	      guint mask = 1 << ( i / keymap_x11->mod_keymap->max_keypermod);
+	      guint mask = 1 << ( i / mod_keymap->max_keypermod);
 	      
 	      /* Some keyboard maps are known to map Mode_Switch as an extra
 	       * Mod1 key. In circumstances like that, it won't be used to
