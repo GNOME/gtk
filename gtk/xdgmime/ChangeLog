@@ -1,3 +1,8 @@
+Fri Apr 30 00:19:11 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* xdgmimemagic.c (_xdg_mime_magic_read_a_number): Make sure
+	the static string is long enough.  (#136323, Morten Welinder)
+
 2004-03-12  Morten Welinder  <terra@gnome.org>
 
 	* *.c: Make sure to include <config.h>  (#137001)

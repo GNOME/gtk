@@ -196,7 +196,7 @@ _xdg_mime_magic_read_a_number (FILE *magic_file,
 {
   /* LONG_MAX is about 20 characters on my system */
 #define MAX_NUMBER_SIZE 30
-  char number_string[MAX_NUMBER_SIZE];
+  char number_string[MAX_NUMBER_SIZE + 1];
   int pos = 0;
   int c;
   long retval = -1;
