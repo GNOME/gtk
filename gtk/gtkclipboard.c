@@ -1340,9 +1340,9 @@ gtk_clipboard_store_timeout (GtkClipboard *clipboard)
  * Since: 2.6
  */
 void
-gtk_clipboard_set_can_store (GtkClipboard   *clipboard,
- 			     GtkTargetEntry *targets,
- 			     gint            n_targets)
+gtk_clipboard_set_can_store (GtkClipboard         *clipboard,
+ 			     const GtkTargetEntry *targets,
+ 			     gint                  n_targets)
 {
   GtkWidget *clipboard_widget;
   int i;

@@ -106,9 +106,9 @@ gboolean gtk_clipboard_wait_is_target_available (GtkClipboard *clipboard,
 						 GdkAtom       target);
 
 
-void gtk_clipboard_set_can_store (GtkClipboard   *clipboard,
-				  GtkTargetEntry *targets,
-				  gint            n_targets);
+void gtk_clipboard_set_can_store (GtkClipboard         *clipboard,
+				  const GtkTargetEntry *targets,
+				  gint                  n_targets);
 
 void gtk_clipboard_store         (GtkClipboard   *clipboard);
   
