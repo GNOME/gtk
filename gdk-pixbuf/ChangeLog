@@ -1,5 +1,7 @@
 2005-03-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk-pixbuf.symbols: Add the new attributes here, too.
+	
 	* gdk-pixbuf-core.h: Use G_GNUC_NULL_TERMINATED where
 	appropriate.  (#165682, Marc Meissner)
 

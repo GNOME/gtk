@@ -1,5 +1,7 @@
 2005-03-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols: Add the new attributes here, too.
+
 	* gtk/gtkwidget.h: 
 	* gtk/gtktreeview.h: 
 	* gtk/gtktreeviewcolumn.h: 
