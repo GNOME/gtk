@@ -1,3 +1,11 @@
+2003-12-17  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* gtk/gtktreemodelsort.c: (gtk_tree_model_sort_get_iter):
+
+	Check that index is not bigger than level array length
+	also when depth is 1. Now get_iter_first correctly return
+	FALSE when the model is empty (#129411).
+
 Wed Dec 17 23:31:19 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_search_equal_func): only

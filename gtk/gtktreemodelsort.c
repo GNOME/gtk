@@ -970,8 +970,12 @@ gtk_tree_model_sort_get_iter (GtkTreeModel *tree_model,
       level = g_array_index (level->array, SortElt, indices[i]).children;
     }
 
-  if (level == NULL)
-    return FALSE;
+  if (!level || indices[i] >= level->array->len)
+    {
+      iter->stamp = 0;
+      return FALSE;
+    }
+
   iter->stamp = tree_model_sort->stamp;
   iter->user_data = level;
   iter->user_data2 = &g_array_index (level->array, SortElt, indices[depth - 1]);
