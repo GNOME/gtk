@@ -57,6 +57,7 @@ struct _GtkCellRendererToggleClass
 GtkType          gtk_cell_renderer_toggle_get_type  (void);
 GtkCellRenderer *gtk_cell_renderer_toggle_new       (void);
 
+gboolean         gtk_cell_renderer_toggle_get_radio (GtkCellRendererToggle *toggle);
 void             gtk_cell_renderer_toggle_set_radio (GtkCellRendererToggle *toggle,
 						     gboolean               radio);
 

@@ -98,6 +98,9 @@ void           gtk_layout_move            (GtkLayout     *layout,
 void           gtk_layout_set_size        (GtkLayout     *layout, 
 			                   guint          width,
 			                   guint          height);
+void           gtk_layout_get_size        (GtkLayout     *layout,
+					   guint         *width,
+					   guint         *height);
 
 GtkAdjustment* gtk_layout_get_hadjustment (GtkLayout     *layout);
 GtkAdjustment* gtk_layout_get_vadjustment (GtkLayout     *layout);

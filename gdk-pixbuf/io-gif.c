@@ -753,8 +753,17 @@ gif_get_lzw (GifContext *context)
                 
                 /* GIF delay is in hundredths, we want thousandths */
                 context->frame->delay_time = context->gif89.delay_time * 10;
+
+                /* Some GIFs apparently have delay time of 0,
+                 * that crashes everything so set it to "fast".
+                 * Also, timeouts less than 20 or so just lock up
+                 * the app or make the animation choppy, so fix them.
+                 */
+                if (context->frame->delay_time < 20)
+                        context->frame->delay_time = 20; /* 20 = "fast" */
+                
                 context->frame->elapsed = context->animation->total_time;
-                context->animation->total_time += context->frame->delay_time;
+                context->animation->total_time += context->frame->delay_time;                
                 
                 switch (context->gif89.disposal) {
                 case 0:

@@ -43,9 +43,9 @@
 #define ARROW_SIZE                         11
 #define SPIN_BUTTON_INITIAL_TIMER_DELAY    200
 #define SPIN_BUTTON_TIMER_DELAY            20
-#define MAX_TEXT_LENGTH                    256
 #define MAX_TIMER_CALLS                    5
 #define EPSILON                            1e-5
+#define	MAX_DIGITS			   20
 
 enum {
   PROP_0,
@@ -221,7 +221,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 						      _("Digits"),
 						      _("The number of decimal places to display"),
 						      0,
-						      5,
+						      MAX_DIGITS,
 						      0,
 						      G_PARAM_READWRITE));
   
@@ -567,20 +567,17 @@ gtk_spin_button_size_request (GtkWidget      *widget,
 
   if (entry->width_chars < 0)
     {
+      PangoContext *context;
       PangoFontMetrics metrics;
-      PangoFont *font;
-      gchar *lang;
       gint width;
       gint w;
       int string_len;
 
-
-      font = pango_context_load_font (gtk_widget_get_pango_context (widget),
-                                      widget->style->font_desc);
-      lang = pango_context_get_lang (gtk_widget_get_pango_context (widget));
-      pango_font_get_metrics (font, lang, &metrics);
-      g_free (lang);
-      g_object_unref (G_OBJECT (font));
+      context = gtk_widget_get_pango_context (widget);
+      pango_context_get_metrics (context,
+				 widget->style->font_desc,
+				 pango_context_get_language (context),
+				 &metrics);
       
       /* Get max of MIN_SPIN_BUTTON_WIDTH, size of upper, size of lower */
       
@@ -1451,11 +1448,11 @@ gtk_spin_button_default_input (GtkSpinButton *spin_button,
 static gint
 gtk_spin_button_default_output (GtkSpinButton *spin_button)
 {
-  gchar buf[MAX_TEXT_LENGTH];
+  gchar *buf = g_strdup_printf ("%0.*f", spin_button->digits, spin_button->adjustment->value);
 
-  sprintf (buf, "%0.*f", spin_button->digits, spin_button->adjustment->value);
   if (strcmp (buf, gtk_entry_get_text (GTK_ENTRY (spin_button))))
     gtk_entry_set_text (GTK_ENTRY (spin_button), buf);
+  g_free (buf);
   return FALSE;
 }
 
@@ -1547,8 +1544,8 @@ gtk_spin_button_new_with_range (gdouble min,
     digits = 0;
   else {
     digits = abs ((gint) floor (log10 (fabs (step))));
-    if (digits > 5)
-      digits = 5;
+    if (digits > MAX_DIGITS)
+      digits = MAX_DIGITS;
   }
 
   gtk_spin_button_configure (spin, GTK_ADJUSTMENT (adj), step, digits);
@@ -1632,7 +1629,7 @@ gtk_spin_button_get_adjustment (GtkSpinButton *spin_button)
  * @spin_button: a #GtkSpinButton
  * @digits: the number of digits to be displayed for the spin button's value
  * 
- * Set the precision to be displayed by @spin_button. Up to 5 digit precision
+ * Set the precision to be displayed by @spin_button. Up to 20 digit precision
  * is allowed.
  **/
 void
@@ -1650,6 +1647,22 @@ gtk_spin_button_set_digits (GtkSpinButton *spin_button,
       /* since lower/upper may have changed */
       gtk_widget_queue_resize (GTK_WIDGET (spin_button));
     }
+}
+
+/**
+ * gtk_spin_button_get_digits:
+ * @spin_button: a #GtkSpinButton
+ *
+ * Fetches the precision of @spin_button. See gtk_spin_button_set_digits().
+ *
+ * Returns: the current precision
+ **/
+guint
+gtk_spin_button_get_digits (GtkSpinButton *spin_button)
+{
+  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), 0);
+
+  return spin_button->digits;
 }
 
 /**
@@ -1673,6 +1686,28 @@ gtk_spin_button_set_increments (GtkSpinButton *spin_button,
 }
 
 /**
+ * gtk_spin_button_get_increments:
+ * @psin_button: a #GtkSpinButton
+ * @step: location to store step increment, or %NULL
+ * @page: location to store page increment, or %NULL
+ *
+ * Gets the current step and page the increments used by @spin_button. See
+ * gtk_spin_button_set_increments().
+ **/
+void
+gtk_spin_button_get_increments (GtkSpinButton *spin_button,
+				gdouble       *step,
+				gdouble       *page)
+{
+  g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
+
+  if (step)
+    *step = spin_button->adjustment->step_increment;
+  if (page)
+    *page = spin_button->adjustment->page_increment;
+}
+
+/**
  * gtk_spin_button_set_range:
  * @spin_button: a #GtkSpinButton
  * @min: minimum allowable value
@@ -1685,22 +1720,55 @@ gtk_spin_button_set_range (GtkSpinButton *spin_button,
 			   gdouble        min,
 			   gdouble        max)
 {
+  gdouble value;
+  
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
   spin_button->adjustment->lower = min;
   spin_button->adjustment->upper = max;
+
+  value = CLAMP (spin_button->adjustment->value,
+                 spin_button->adjustment->lower,
+                 (spin_button->adjustment->upper - spin_button->adjustment->page_size));
+
+  if (value != spin_button->adjustment->value)
+    gtk_spin_button_set_value (spin_button, value);
+
+  gtk_adjustment_changed (spin_button->adjustment);
 }
 
 /**
- * gtk_spin_button_get_value_as_float:
+ * gtk_spin_button_get_range:
+ * @spin_button: a #GtkSpinButton
+ * @min: location to store minimum allowed value, or %NULL
+ * @max: location to store maximum allowed value, or %NULL
+ *
+ * Gets the range allowed for @spin_button. See
+ * gtk_spin_button_set_range().
+ **/
+void
+gtk_spin_button_get_range (GtkSpinButton *spin_button,
+			   gdouble       *min,
+			   gdouble       *max)
+{
+  g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
+
+  if (min)
+    *min = spin_button->adjustment->lower;
+  if (max)
+    *max = spin_button->adjustment->upper;
+}
+
+/**
+ * gtk_spin_button_get_value:
  * @spin_button: a #GtkSpinButton
  * 
- * Get the value @spin_button represented as a floating point number.
+ * Get the value in the @spin_button.
  * 
  * Return value: the value of @spin_button
  **/
 gdouble
-gtk_spin_button_get_value_as_float (GtkSpinButton *spin_button)
+gtk_spin_button_get_value (GtkSpinButton *spin_button)
 {
   g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), 0.0);
 
@@ -1776,6 +1844,23 @@ gtk_spin_button_set_update_policy (GtkSpinButton             *spin_button,
 }
 
 /**
+ * gtk_spin_button_get_update_policy:
+ * @spin_button: a #GtkSpinButton
+ *
+ * Gets the update behavior of a spin button. See
+ * gtk_spin_button_set_update_policy().
+ *
+ * Return value: the current update policy
+ **/
+GtkSpinButtonUpdatePolicy
+gtk_spin_button_get_update_policy (GtkSpinButton *spin_button)
+{
+  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), GTK_UPDATE_ALWAYS);
+
+  return spin_button->update_policy;
+}
+
+/**
  * gtk_spin_button_set_numeric:
  * @spin_button: a #GtkSpinButton 
  * @numeric: flag indicating if only numeric entry is allowed. 
@@ -1795,6 +1880,23 @@ gtk_spin_button_set_numeric (GtkSpinButton  *spin_button,
 }
 
 /**
+ * gtk_spin_button_get_numeric:
+ * @spin_button: a #GtkSpinButton
+ *
+ * Returns whether non-numeric text can be typed into the spin button.
+ * See gtk_spin_button_set_numeric().
+ *
+ * Return value: %TRUE if only numeric text can be entered
+ **/
+gboolean
+gtk_spin_button_get_numeric (GtkSpinButton *spin_button)
+{
+  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), FALSE);
+
+  return spin_button->numeric;
+}
+
+/**
  * gtk_spin_button_set_wrap:
  * @spin_button: a #GtkSpinButton 
  * @wrap: a flag indicating if wrapping behavior is performed.
@@ -1811,6 +1913,24 @@ gtk_spin_button_set_wrap (GtkSpinButton  *spin_button,
   spin_button->wrap = (wrap != 0);
   
   g_object_notify (G_OBJECT (spin_button), "wrap");
+}
+
+/**
+ * gtk_spin_button_get_wrap:
+ * @spin_button: a #GtkSpinButton
+ *
+ * Returns whether the spin button's value wraps around to the
+ * opposite limit when the upper or lower limit of the range is
+ * exceeded. See gtk_spin_button_set_wrap().
+ *
+ * Return value: %TRUE if the spin button wraps around
+ **/
+gboolean
+gtk_spin_button_get_wrap (GtkSpinButton *spin_button)
+{
+  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), FALSE);
+
+  return spin_button->wrap;
 }
 
 /**
@@ -1858,6 +1978,23 @@ gtk_spin_button_set_snap_to_ticks (GtkSpinButton *spin_button,
       
       g_object_notify (G_OBJECT (spin_button), "snap_to_ticks");
     }
+}
+
+/**
+ * gtk_spin_button_get_snap_to_ticks:
+ * @spin_button: a #GtkSpinButton
+ *
+ * Returns whether the values are corrected to the nearest step. See
+ * gtk_spin_button_set_snap_to_ticks().
+ *
+ * Return value: %TRUE if values are snapped to the nearest step.
+ **/
+gboolean
+gtk_spin_button_get_snap_to_ticks (GtkSpinButton *spin_button)
+{
+  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), FALSE);
+
+  return spin_button->snap_to_ticks;
 }
 
 /**

@@ -67,13 +67,21 @@ GtkRange
 
 <!-- ##### SIGNAL GtkRange::move-slider ##### -->
 <para>
-
+Virtual function that moves the slider. Used for keybindings.
 </para>
 
-@range: the object which received the signal.
+@range: the #GtkRange
 @arg1: 
 <!-- # Unused Parameters # -->
+@step: how to move the slider
 @arg2: 
+
+<!-- ##### SIGNAL GtkRange::value-changed ##### -->
+<para>
+Emitted when the range value changes.
+</para>
+
+@range: the #GtkRange
 
 <!-- ##### ARG GtkRange:update-policy ##### -->
 <para>
@@ -81,6 +89,11 @@ GtkRange
 </para>
 
 <!-- ##### ARG GtkRange:adjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:inverted ##### -->
 <para>
 
 </para>

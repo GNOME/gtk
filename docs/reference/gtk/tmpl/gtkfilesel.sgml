@@ -169,12 +169,12 @@ Hides the file operation buttons that normally appear at the top of the dialog. 
 @filesel: a #GtkFileSelection.
 
 
-<!-- ##### ARG GtkFileSelection:filename ##### -->
+<!-- ##### ARG GtkFileSelection:show-fileops ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkFileSelection:show-fileops ##### -->
+<!-- ##### ARG GtkFileSelection:filename ##### -->
 <para>
 
 </para>

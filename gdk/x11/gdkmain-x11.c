@@ -202,14 +202,16 @@ _gdk_windowing_init_check_for_display (int argc, char **argv, char *display_name
     if (XkbLibraryVersion (&xkb_major, &xkb_minor)) {
       xkb_major = XkbMajorVersion;
       xkb_minor = XkbMinorVersion;
-      if (XkbQueryExtension (dpy_impl->xdisplay, NULL, NULL, NULL,
+      if (XkbQueryExtension (dpy_impl->xdisplay, NULL, dpy_impl->xkb_event_type, NULL,
 			     &xkb_major, &xkb_minor)) {
 	Bool detectable_autorepeat_supported;
 
-	dpy_impl->_gdk_use_xkb = TRUE;
+	dpy_impl->use_xkb = TRUE;
 
 	XkbSelectEvents (dpy_impl->xdisplay,
-			 XkbUseCoreKbd, XkbMapNotifyMask, XkbMapNotifyMask);
+			 XkbUseCoreKbd,
+                         XkbMapNotifyMask | XkbStateNotifyMask,
+                         XkbMapNotifyMask | XkbStateNotifyMask);
 
 	XkbSetDetectableAutoRepeat (dpy_impl->xdisplay,
 				    True, &detectable_autorepeat_supported);
@@ -734,7 +736,7 @@ gdk_x_error (Display	 *display,
                              "   that is, you will receive the error a while after causing it.\n"
                              "   To debug your program, run it with the --sync command line\n"
                              "   option to change this behavior. You can then get a meaningful\n"
-                             "   backtrace from your debugger if you break on the gdk_x_error () function.)",
+                             "   backtrace from your debugger if you break on the gdk_x_error() function.)",
                              g_get_prgname (),
                              buf,
                              error->serial, 
@@ -858,4 +860,26 @@ _gdk_region_get_xrectangles (GdkRegion   *region,
 
   *rects = rectangles;
   *n_rects = region->numRects;
+}
+
+/* FIXME put in GdkDisplay */
+static gint grab_count = 0;
+void
+gdk_x11_grab_server (GdkDisplay *display)
+{ 
+  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
+  if (dpy_impl->grab_count == 0)
+    XGrabServer (dpy_impl->xdisplay);
+  ++dpy_impl->grab_count;
+}
+
+void
+gdk_x11_ungrab_server (GdkDisplay *display)
+{
+  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
+  g_return_if_fail (dpy_impl->grab_count > 0);
+  
+  --dpy_impl->grab_count;
+  if (dpy_impl->grab_count == 0)
+    XUngrabServer (dpy_impl->xdisplay);
 }

@@ -75,6 +75,8 @@ reached from the widget by a chain of size groups of type
 </para>
 
 @size_group: 
+@mode: 
+<!-- # Unused Parameters # -->
 @type: 
 
 

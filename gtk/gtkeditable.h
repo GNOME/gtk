@@ -98,6 +98,7 @@ void     gtk_editable_set_position         (GtkEditable *editable,
 gint     gtk_editable_get_position         (GtkEditable *editable);
 void     gtk_editable_set_editable         (GtkEditable *editable,
 					    gboolean     is_editable);
+gboolean gtk_editable_get_editable         (GtkEditable *editable);
 
 #ifdef __cplusplus
 }

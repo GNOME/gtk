@@ -344,6 +344,29 @@ gtk_layout_set_size (GtkLayout     *layout,
     }
 }
 
+/**
+ * gtk_layout_get_size:
+ * @layout: a #GtkLayout
+ * @width: location to store the width set on @layout, or %NULL
+ * @height: location to store the height set on @layout, or %NULL
+ *
+ * Gets the size that has been set on the layout, and that determines
+ * the total extents of the layout's scrollbar area. See
+ * gtk_layout_set_size ().
+ **/
+void
+gtk_layout_get_size (GtkLayout *layout,
+		     guint     *width,
+		     guint     *height)
+{
+  g_return_if_fail (GTK_IS_LAYOUT (layout));
+
+  if (width)
+    *width = layout->width;
+  if (height)
+    *height = layout->height;
+}
+
 void
 gtk_layout_freeze (GtkLayout *layout)
 {

@@ -27,8 +27,7 @@
 #ifndef __GTK_TOOLTIPS_H__
 #define __GTK_TOOLTIPS_H__
 
-#include <gdk/gdk.h>
-#include <gtk/gtkobject.h>
+#include <gtk/gtkwidget.h>
 
 
 #ifdef __cplusplus

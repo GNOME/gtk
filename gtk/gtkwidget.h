@@ -235,6 +235,11 @@ struct _GtkWidgetClass
    */
   guint set_scroll_adjustments_signal;
 
+  /* seldomly overidden */
+  void (*dispatch_child_properties_changed) (GtkWidget   *widget,
+					     guint        n_pspecs,
+					     GParamSpec **pspecs);
+
   /* basics */
   void (* show)		       (GtkWidget        *widget);
   void (* show_all)            (GtkWidget        *widget);
@@ -257,6 +262,10 @@ struct _GtkWidgetClass
 				GtkStyle         *previous_style);
   void (* direction_changed)   (GtkWidget        *widget,
 				GtkTextDirection  previous_direction);
+  void (* grab_notify)         (GtkWidget        *widget,
+				gboolean          was_grabbed);
+  void (* child_notify)        (GtkWidget	 *widget,
+				GParamSpec       *pspec);
   
   /* accelerators */
   void (* add_accelerator)     (GtkWidget      *widget,
@@ -275,7 +284,9 @@ struct _GtkWidgetClass
 				  gboolean      group_cycling);
   
   /* explicit focus */
-  void (* grab_focus)          (GtkWidget      *widget);
+  void     (* grab_focus)      (GtkWidget        *widget);
+  gboolean (* focus)           (GtkWidget        *widget,
+                                GtkDirectionType  direction);
   
   /* events */
   gboolean (* event)			(GtkWidget	     *widget,
@@ -418,9 +429,11 @@ void	   gtk_widget_unref		  (GtkWidget	       *widget);
 void	   gtk_widget_destroy		  (GtkWidget	       *widget);
 void	   gtk_widget_destroyed		  (GtkWidget	       *widget,
 					   GtkWidget	      **widget_pointer);
+#ifndef GTK_DISABLE_DEPRECATED
 void	   gtk_widget_set		  (GtkWidget	       *widget,
 					   const gchar         *first_property_name,
 					   ...);
+#endif /* GTK_DISABLE_DEPRECATED */
 void	   gtk_widget_unparent		  (GtkWidget	       *widget);
 void	   gtk_widget_show		  (GtkWidget	       *widget);
 void       gtk_widget_show_now            (GtkWidget           *widget);
@@ -500,6 +513,11 @@ gboolean   gtk_widget_intersect		  (GtkWidget	       *widget,
 GdkRegion *gtk_widget_region_intersect	  (GtkWidget	       *widget,
 					   GdkRegion	       *region);
 
+void	gtk_widget_freeze_child_notify	  (GtkWidget	       *widget);
+void	gtk_widget_child_notify		  (GtkWidget	       *widget,
+					   const gchar	       *child_property);
+void	gtk_widget_thaw_child_notify	  (GtkWidget	       *widget);
+
 gboolean   gtk_widget_is_focus            (GtkWidget           *widget);
 void	   gtk_widget_grab_focus	  (GtkWidget	       *widget);
 void	   gtk_widget_grab_default	  (GtkWidget	       *widget);
@@ -519,15 +537,21 @@ void	   gtk_widget_set_parent	  (GtkWidget	       *widget,
 					   GtkWidget	       *parent);
 void	   gtk_widget_set_parent_window	  (GtkWidget	       *widget,
 					   GdkWindow	       *parent_window);
+GtkWidget *gtk_widget_get_parent          (GtkWidget           *widget);
 GdkWindow *gtk_widget_get_parent_window	  (GtkWidget	       *widget);
 GdkScreen *gtk_widget_get_screen	  (GtkWidget	       *widget);
 GdkDisplay*gtk_widget_get_display	  (GtkWidget	       *widget);
+gboolean   gtk_widget_child_focus         (GtkWidget           *widget,
+                                           GtkDirectionType     direction);
 void	   gtk_widget_set_uposition	  (GtkWidget	       *widget,
 					   gint			x,
 					   gint			y);
 void	   gtk_widget_set_usize		  (GtkWidget	       *widget,
 					   gint			width,
 					   gint			height);
+void       gtk_widget_get_usize           (GtkWidget           *widget,
+					   gint                *width,
+					   gint                *height);
 void	   gtk_widget_set_events	  (GtkWidget	       *widget,
 					   gint			events);
 void       gtk_widget_add_events          (GtkWidget           *widget,

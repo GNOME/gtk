@@ -91,6 +91,8 @@ static void gtk_toolbar_size_allocate            (GtkWidget       *widget,
 				                  GtkAllocation   *allocation);
 static void gtk_toolbar_style_set                (GtkWidget       *widget,
                                                   GtkStyle        *prev_style);
+static gboolean gtk_toolbar_focus                (GtkWidget       *widget,
+                                                  GtkDirectionType dir);
 static void gtk_toolbar_show_all                 (GtkWidget       *widget);
 static void gtk_toolbar_add                      (GtkContainer    *container,
 				                  GtkWidget       *widget);
@@ -100,6 +102,7 @@ static void gtk_toolbar_forall                   (GtkContainer    *container,
 						  gboolean	   include_internals,
 				                  GtkCallback      callback,
 				                  gpointer         callback_data);
+
 static void gtk_real_toolbar_orientation_changed (GtkToolbar      *toolbar,
 						  GtkOrientation   orientation);
 static void gtk_real_toolbar_style_changed       (GtkToolbar      *toolbar,
@@ -192,11 +195,11 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
   widget_class->size_allocate = gtk_toolbar_size_allocate;
   widget_class->style_set = gtk_toolbar_style_set;
   widget_class->show_all = gtk_toolbar_show_all;
+  widget_class->focus = gtk_toolbar_focus;
   
   container_class->add = gtk_toolbar_add;
   container_class->remove = gtk_toolbar_remove;
   container_class->forall = gtk_toolbar_forall;
-  container_class->focus = NULL;
   
   class->orientation_changed = gtk_real_toolbar_orientation_changed;
   class->style_changed = gtk_real_toolbar_style_changed;
@@ -834,6 +837,15 @@ gtk_toolbar_style_set (GtkWidget  *widget,
     gtk_toolbar_update_button_relief (GTK_TOOLBAR (widget));
 }
 
+static gboolean
+gtk_toolbar_focus (GtkWidget       *widget,
+                   GtkDirectionType dir)
+{
+  /* Focus can't go in toolbars */
+  
+  return FALSE;
+}
+
 static void
 child_show_all (GtkWidget *widget)
 {
@@ -1046,6 +1058,22 @@ gtk_toolbar_set_icon_size (GtkToolbar  *toolbar,
 }
 
 /**
+ * gtk_toolbar_get_icon_size:
+ * @toolbar: a #GtkToolbar
+ *
+ * Retrieves the icon size fo the toolbar. See gtk_toolbar_set_icon_size().
+ *
+ * Return value: the current icon size for the icons on the toolbar.
+ **/
+GtkIconSize
+gtk_toolbar_get_icon_size (GtkToolbar *toolbar)
+{
+  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), GTK_ICON_SIZE_LARGE_TOOLBAR);
+
+  return toolbar->icon_size;
+}
+
+/**
  * gtk_toolbar_unset_icon_size:
  * @toolbar: a #GtkToolbar
  * 
@@ -1157,6 +1185,46 @@ gtk_toolbar_insert_space (GtkToolbar *toolbar,
 			      NULL, NULL,
 			      NULL, NULL, NULL,
 			      position);
+}
+
+void
+gtk_toolbar_remove_space (GtkToolbar *toolbar,
+                          gint        position)
+{
+  GList *children;
+  GtkToolbarChild *child;
+  gint i;
+  
+  g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
+  
+  i = 0;
+  for (children = toolbar->children; children; children = children->next)
+    {
+      child = children->data;
+
+      if (i == position)
+        {
+          if (child->type == GTK_TOOLBAR_CHILD_SPACE)
+            {
+              toolbar->children = g_list_remove_link (toolbar->children, children);
+              g_free (child);
+              g_list_free (children);
+              toolbar->num_children--;
+              
+              gtk_widget_queue_resize (GTK_WIDGET (toolbar));
+            }
+          else
+            {
+              g_warning ("Toolbar position %d is not a space", position);
+            }
+
+          return;
+        }
+
+      ++i;
+    }
+
+  g_warning ("Toolbar position %d doesn't exist", position);
 }
 
 void
@@ -1325,7 +1393,7 @@ gtk_toolbar_internal_insert_element (GtkToolbar          *toolbar,
       else
 	{
 	  child->widget = gtk_radio_button_new (widget
-						? gtk_radio_button_group (GTK_RADIO_BUTTON (widget))
+						? gtk_radio_button_get_group (GTK_RADIO_BUTTON (widget))
 						: NULL);
 	  gtk_button_set_relief (GTK_BUTTON (child->widget), get_button_relief (toolbar));
 	  gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (child->widget), FALSE);
@@ -1414,6 +1482,23 @@ gtk_toolbar_set_orientation (GtkToolbar     *toolbar,
   gtk_signal_emit (GTK_OBJECT (toolbar), toolbar_signals[ORIENTATION_CHANGED], orientation);
 }
 
+/**
+ * gtk_toolbar_get_orientation:
+ * @toolbar: a #GtkToolbar
+ * 
+ * Retrieves the current orientation of the toolbar. See
+ * gtk_toolbar_set_orientation().
+ *
+ * Return value: the orientation
+ **/
+GtkOrientation
+gtk_toolbar_get_orientation (GtkToolbar *toolbar)
+{
+  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), GTK_ORIENTATION_HORIZONTAL);
+
+  return toolbar->orientation;
+}
+
 void
 gtk_toolbar_set_style (GtkToolbar      *toolbar,
 		       GtkToolbarStyle  style)
@@ -1422,6 +1507,23 @@ gtk_toolbar_set_style (GtkToolbar      *toolbar,
 
   toolbar->style_set = TRUE;
   gtk_signal_emit (GTK_OBJECT (toolbar), toolbar_signals[STYLE_CHANGED], style);
+}
+
+/**
+ * gtk_toolbar_get_style:
+ * @toolbar: a #GtkToolbar
+ *
+ * Retrieves whether the toolbar has text, icons, or both . See
+ * gtk_toolbar_set_style().
+ 
+ * Return value: the current style of @toolbar
+ **/
+GtkToolbarStyle
+gtk_toolbar_get_style (GtkToolbar *toolbar)
+{
+  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), GTK_TOOLBAR_BOTH);
+
+  return toolbar->style;
 }
 
 /**
@@ -1463,6 +1565,23 @@ gtk_toolbar_set_tooltips (GtkToolbar *toolbar,
     gtk_tooltips_enable (toolbar->tooltips);
   else
     gtk_tooltips_disable (toolbar->tooltips);
+}
+
+/**
+ * gtk_toolbar_get_tooltips:
+ * @toolbar: a #GtkToolbar
+ *
+ * Retrieves whether tooltips are enabled. See
+ * gtk_toolbar_set_tooltips().
+ *
+ * Return value: %TRUE if tooltips are enabled
+ **/
+gboolean
+gtk_toolbar_get_tooltips (GtkToolbar *toolbar)
+{
+  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), FALSE);
+
+  return toolbar->tooltips->enabled;
 }
 
 static void

@@ -125,15 +125,22 @@ void	   gtk_table_attach_defaults  (GtkTable	       *table,
 void	   gtk_table_set_row_spacing  (GtkTable	       *table,
 				       guint		row,
 				       guint		spacing);
+guint      gtk_table_get_row_spacing  (GtkTable        *table,
+				       guint            row);
 void	   gtk_table_set_col_spacing  (GtkTable	       *table,
 				       guint		column,
 				       guint		spacing);
+guint      gtk_table_get_col_spacing  (GtkTable        *table,
+				       guint            column);
 void	   gtk_table_set_row_spacings (GtkTable	       *table,
 				       guint		spacing);
+guint      gtk_table_get_default_row_spacing (GtkTable        *table);
 void	   gtk_table_set_col_spacings (GtkTable	       *table,
 				       guint		spacing);
+guint      gtk_table_get_default_col_spacing (GtkTable        *table);
 void	   gtk_table_set_homogeneous  (GtkTable	       *table,
 				       gboolean		homogeneous);
+gboolean   gtk_table_get_homogeneous  (GtkTable        *table);
 
 
 #ifdef __cplusplus

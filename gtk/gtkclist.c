@@ -218,7 +218,7 @@ static gint gtk_clist_focus_in        (GtkWidget        *widget,
 				       GdkEventFocus    *event);
 static gint gtk_clist_focus_out       (GtkWidget        *widget,
 				       GdkEventFocus    *event);
-static gint gtk_clist_focus           (GtkContainer     *container,
+static gint gtk_clist_focus           (GtkWidget        *widget,
 				       GtkDirectionType  direction);
 static void gtk_clist_set_focus_child (GtkContainer     *container,
 				       GtkWidget        *child);
@@ -532,12 +532,12 @@ gtk_clist_class_init (GtkCListClass *klass)
   widget_class->drag_drop = gtk_clist_drag_drop;
   widget_class->drag_data_get = gtk_clist_drag_data_get;
   widget_class->drag_data_received = gtk_clist_drag_data_received;
-
+  widget_class->focus = gtk_clist_focus;
+  
   /* container_class->add = NULL; use the default GtkContainerClass warning */
   /* container_class->remove=NULL; use the default GtkContainerClass warning */
 
   container_class->forall = gtk_clist_forall;
-  container_class->focus = gtk_clist_focus;
   container_class->set_focus_child = gtk_clist_set_focus_child;
 
   klass->set_scroll_adjustments = gtk_clist_set_scroll_adjustments;
@@ -3029,14 +3029,12 @@ gtk_clist_set_row_height (GtkCList *clist,
     {
       PangoContext *context = gtk_widget_get_pango_context (widget);
       PangoFontMetrics metrics;
-      PangoFont *font = pango_context_load_font (context, widget->style->font_desc);
-      gchar *lang = pango_context_get_lang (context);
 
-      pango_font_get_metrics (font, lang, &metrics);
-    
-      g_free (lang);
-      g_object_unref (G_OBJECT (font));
-    
+      pango_context_get_metrics (context,
+				 widget->style->font_desc,
+				 pango_context_get_language (context),
+				 &metrics);
+      
       if (!GTK_CLIST_ROW_HEIGHT_SET(clist))
 	clist->row_height = PANGO_PIXELS (metrics.ascent + metrics.descent);
     }
@@ -6214,7 +6212,7 @@ hadjustment_value_changed (GtkAdjustment *adjustment,
   if (GTK_WIDGET_DRAWABLE (clist))
     {
       if (GTK_WIDGET_CAN_FOCUS(clist) && GTK_WIDGET_HAS_FOCUS(clist) &&
-          !container->focus_child && GTK_CLIST_ADD_MODE (clist))
+          !container->focus_child && GTK_CLIST_ADD_MODE(clist))
         {
           y = ROW_TOP_YPIXEL (clist, clist->focus_row);
       
@@ -6419,23 +6417,22 @@ gtk_clist_focus_content_area (GtkCList *clist)
 }
 
 static gboolean
-gtk_clist_focus (GtkContainer     *container,
+gtk_clist_focus (GtkWidget        *widget,
 		 GtkDirectionType  direction)
 {
-  GtkCList *clist = GTK_CLIST (container);
-  GtkWidget *focus_child = container->focus_child;
+  GtkCList *clist = GTK_CLIST (widget);
+  GtkWidget *focus_child;
   gboolean is_current_focus;
 
-  if (!GTK_WIDGET_IS_SENSITIVE (container))
+  if (!GTK_WIDGET_IS_SENSITIVE (widget))
     return FALSE;
 
+  focus_child = GTK_CONTAINER (widget)->focus_child;
+  
   is_current_focus = gtk_widget_is_focus (GTK_WIDGET (clist));
 			  
   if (focus_child &&
-      GTK_IS_CONTAINER (focus_child) &&
-      GTK_WIDGET_DRAWABLE (focus_child) &&
-      GTK_WIDGET_IS_SENSITIVE (focus_child) &&
-      gtk_container_focus (GTK_CONTAINER (focus_child), direction))
+      gtk_widget_child_focus (focus_child, direction))
     return TRUE;
       
   switch (direction)
@@ -6579,8 +6576,7 @@ focus_column (GtkCList *clist, gint column, gint dir)
 {
   GtkWidget *child = clist->column[column].button;
   
-  if (GTK_IS_CONTAINER (child) &&
-      gtk_container_focus (GTK_CONTAINER (child), dir))
+  if (gtk_widget_child_focus (child, dir))
     {
       return TRUE;
     }

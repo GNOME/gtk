@@ -45,10 +45,10 @@ GtkTreeModelSort
 </para>
 
 @child_model: 
-@func: 
-@sort_col: 
 @Returns: 
 <!-- # Unused Parameters # -->
+@func: 
+@sort_col: 
 @model: 
 
 

@@ -19,6 +19,14 @@ GtkPacker
 
 </para>
 
+@parent: 
+@children: 
+@spacing: 
+@default_border_width: 
+@default_pad_x: 
+@default_pad_y: 
+@default_i_pad_x: 
+@default_i_pad_y: 
 
 <!-- ##### ENUM GtkPackerOptions ##### -->
 <para>
@@ -186,34 +194,4 @@ GtkPacker
 @i_pad_x: 
 @i_pad_y: 
 
-
-<!-- ##### ARG GtkPacker:spacing ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkPacker:default-border-width ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkPacker:default-pad-x ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkPacker:default-pad-y ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkPacker:default-ipad-x ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkPacker:default-ipad-y ##### -->
-<para>
-
-</para>
 

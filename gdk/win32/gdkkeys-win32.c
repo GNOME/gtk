@@ -45,6 +45,46 @@ static gint max_keycode = 0;
 
 static gint keysyms_per_keycode = 0;
 static GdkModifierType group_switch_mask = 0;
+static GdkKeymap *default_keymap = NULL;
+
+GdkKeymap*
+gdk_keymap_get_default (void)
+{
+  if (default_keymap == NULL)
+    default_keymap = g_object_new (gdk_keymap_get_type (), NULL);
+
+  return default_keymap;
+}
+
+PangoDirection
+gdk_keymap_get_direction (GdkKeymap *keymap)
+{
+  PangoDirection result;
+  char kln[KL_NAMELENGTH];
+  UINT acp = GetACP ();
+
+  /* XXX : all this is untested, so if you are using a RTL language
+   *       please provide patches/hints if your cursor blinks at
+   *       the wrong place ...
+   */
+  if (!GetKeyboardLayoutName(kln))
+    strcpy (kln, "?");
+
+  switch (acp) {
+  case 1255 : /* Hebrew */
+  case 1256 : /* Arabic */
+    result = PANGO_DIRECTION_RTL;
+    break;
+  default :
+    result = PANGO_DIRECTION_LTR;
+  }
+
+  GDK_NOTE (MISC, 
+            g_print ("gdk_keymap_get_direction: selecting %s for '%s'\n",
+                     result == PANGO_DIRECTION_LTR ? "LTR" : "RTL", kln));
+
+  return result;
+}
 
 /**
  * gdk_keymap_get_entries_for_keyval:

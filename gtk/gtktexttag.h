@@ -170,7 +170,7 @@ struct _GtkTextAttributes
                                  * GTK_WRAPMODE_NONE, GTK_WRAPMODE_WORD
                                  */
 
-  gchar *language;
+  PangoLanguage *language;
 
   /* hide the text  */
   guint invisible : 1;

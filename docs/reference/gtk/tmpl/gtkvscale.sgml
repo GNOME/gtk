@@ -8,8 +8,7 @@ a vertical slider widget for selecting a value from a range.
 <para>
 The #GtkVScale widget is used to allow the user to select a value using
 a vertical slider.
-A #GtkAdjustment is used to set the initial value, the lower
-and upper bounds, and the step and page increments.
+To create one, use gtk_hscale_new_with_range().
 </para>
 <para>
 The position to show the current value, and the number of decimal places

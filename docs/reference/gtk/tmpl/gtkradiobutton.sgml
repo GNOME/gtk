@@ -129,14 +129,15 @@ as @group.
 @Returns: a new radio button.
 
 
-<!-- ##### FUNCTION gtk_radio_button_group ##### -->
+<!-- ##### MACRO gtk_radio_button_group ##### -->
 <para>
 Retrieves the group assigned to a radio button.
 </para>
 
-@radio_button: a #GtkRadioButton.
 @Returns: a linked list containing all the radio buttons in the same group
 as @radio_button.
+<!-- # Unused Parameters # -->
+@radio_button: a #GtkRadioButton.
 
 
 <!-- ##### FUNCTION gtk_radio_button_set_group ##### -->

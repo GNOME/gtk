@@ -242,16 +242,6 @@ types related to the text widget and how they work together.
 @size: 
 
 
-<!-- ##### FUNCTION gtk_text_view_set_text_window_size ##### -->
-<para>
-
-</para>
-
-@text_view: 
-@width: 
-@height: 
-
-
 <!-- ##### FUNCTION gtk_text_view_forward_display_line ##### -->
 <para>
 

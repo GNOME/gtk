@@ -313,12 +313,15 @@ static void
 activate_cb (GtkWidget         *menuitem,
 	     GtkIMMulticontext *context)
 {
-  const gchar *id = gtk_object_get_data (GTK_OBJECT (menuitem), "gtk-context-id");
+  if (GTK_CHECK_MENU_ITEM (menuitem)->active)
+    {
+      const gchar *id = gtk_object_get_data (GTK_OBJECT (menuitem), "gtk-context-id");
 
-  gtk_im_context_reset (GTK_IM_CONTEXT (context));
-
-  global_context_id = id;
-  gtk_im_multicontext_set_slave (context, NULL);
+      gtk_im_context_reset (GTK_IM_CONTEXT (context));
+      
+      global_context_id = id;
+      gtk_im_multicontext_set_slave (context, NULL);
+    }
 }
 
 /**

@@ -80,7 +80,8 @@ enum {
   PROP_VISIBILITY,
   PROP_INVISIBLE_CHAR,
   PROP_ACTIVATES_DEFAULT,
-  PROP_WIDTH_CHARS
+  PROP_WIDTH_CHARS,
+  PROP_SCROLL_OFFSET
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -213,6 +214,8 @@ static void gtk_entry_toggle_overwrite   (GtkEntry        *entry);
 static void gtk_entry_real_activate      (GtkEntry        *entry);
 static void gtk_entry_popup_menu         (GtkWidget      *widget);
 
+static void gtk_entry_keymap_direction_changed (GdkKeymap *keymap,
+						GtkEntry  *entry);
 /* IM Context Callbacks
  */
 static void gtk_entry_commit_cb           (GtkIMContext      *context,
@@ -228,8 +231,8 @@ static void         gtk_entry_set_positions            (GtkEntry       *entry,
 static void         gtk_entry_draw_text                (GtkEntry       *entry);
 static void         gtk_entry_draw_cursor              (GtkEntry       *entry,
 							CursorType      type);
-static PangoLayout *gtk_entry_get_layout               (GtkEntry       *entry,
-							gboolean        include_preedit);
+static PangoLayout *gtk_entry_ensure_layout            (GtkEntry       *entry,
+                                                        gboolean        include_preedit);
 static void         gtk_entry_queue_draw               (GtkEntry       *entry);
 static void         gtk_entry_reset_im_context         (GtkEntry       *entry);
 static void         gtk_entry_recompute                (GtkEntry       *entry);
@@ -437,6 +440,17 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                      -1,
                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
 
+  g_object_class_install_property (gobject_class,
+                                   PROP_SCROLL_OFFSET,
+                                   g_param_spec_int ("scroll_offset",
+                                                     _("Scroll offset"),
+                                                     _("Number of pixels of the entry scrolled off the screen to the left"),
+                                                     0,
+                                                     G_MAXINT,
+                                                     
+                                                     0,
+                                                     G_PARAM_READABLE));
+  
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boxed ("cursor_color",
 							       _("Cursor color"),
@@ -775,7 +789,8 @@ gtk_entry_set_property (GObject         *object,
     case PROP_WIDTH_CHARS:
       gtk_entry_set_width_chars (entry, g_value_get_int (value));
       break;
-      
+
+    case PROP_SCROLL_OFFSET:
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -814,6 +829,9 @@ gtk_entry_get_property (GObject         *object,
       break;
     case PROP_WIDTH_CHARS:
       g_value_set_int (value, entry->width_chars);
+      break;
+    case PROP_SCROLL_OFFSET:
+      g_value_set_int (value, entry->scroll_offset);
       break;
       
     default:
@@ -1022,9 +1040,8 @@ gtk_entry_size_request (GtkWidget      *widget,
 {
   GtkEntry *entry;
   PangoFontMetrics metrics;
-  PangoFont *font;
-  gchar *lang;
   gint xborder, yborder;
+  PangoContext *context;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ENTRY (widget));
@@ -1032,15 +1049,11 @@ gtk_entry_size_request (GtkWidget      *widget,
 
   entry = GTK_ENTRY (widget);
   
-  /* hackish for now, get metrics
-   */
-  font = pango_context_load_font (gtk_widget_get_pango_context (widget),
-				  widget->style->font_desc);
-  lang = pango_context_get_lang (gtk_widget_get_pango_context (widget));
-  pango_font_get_metrics (font, lang, &metrics);
-  g_free (lang);
-  
-  g_object_unref (G_OBJECT (font));
+  context = gtk_widget_get_pango_context (widget);
+  pango_context_get_metrics (context,
+			     widget->style->font_desc,
+			     pango_context_get_language (context),
+			     &metrics);
 
   entry->ascent = metrics.ascent;
   entry->descent = metrics.descent;
@@ -1515,6 +1528,11 @@ gtk_entry_focus_in (GtkWidget     *widget,
   entry->need_im_reset = TRUE;
   gtk_im_context_focus_in (entry->im_context);
 
+  g_signal_connect_data (gdk_keymap_get_default (),
+			 "direction_changed",
+			 G_CALLBACK (gtk_entry_keymap_direction_changed), entry, NULL,
+			 FALSE, FALSE);
+
   gtk_entry_check_cursor_blink (entry);
   
   return FALSE;
@@ -1534,6 +1552,10 @@ gtk_entry_focus_out (GtkWidget     *widget,
 
   gtk_entry_check_cursor_blink (entry);
   
+  g_signal_disconnect_by_func (gdk_keymap_get_default (),
+			       gtk_entry_keymap_direction_changed,
+			       entry);
+
   return FALSE;
 }
 
@@ -2014,6 +2036,13 @@ gtk_entry_real_activate (GtkEntry *entry)
     }
 }
 
+static void
+gtk_entry_keymap_direction_changed (GdkKeymap *keymap,
+				    GtkEntry  *entry)
+{
+  gtk_entry_queue_draw (entry);
+}
+
 /* IM Context Callbacks
  */
 
@@ -2276,8 +2305,8 @@ gtk_entry_create_layout (GtkEntry *entry,
 }
 
 static PangoLayout *
-gtk_entry_get_layout (GtkEntry *entry,
-		      gboolean  include_preedit)
+gtk_entry_ensure_layout (GtkEntry *entry,
+                         gboolean  include_preedit)
 {
   if (entry->preedit_length > 0 &&
       !include_preedit != !entry->cache_includes_preedit)
@@ -2289,7 +2318,6 @@ gtk_entry_get_layout (GtkEntry *entry,
       entry->cache_includes_preedit = include_preedit;
     }
   
-  g_object_ref (G_OBJECT (entry->cached_layout));
   return entry->cached_layout;
 }
 
@@ -2304,7 +2332,7 @@ get_layout_position (GtkEntry *entry,
   gint y_pos;
   PangoLayoutLine *line;
   
-  layout = gtk_entry_get_layout (entry, TRUE);
+  layout = gtk_entry_ensure_layout (entry, TRUE);
 
   get_text_area_size (entry, NULL, NULL, &area_width, &area_height);      
       
@@ -2348,7 +2376,7 @@ gtk_entry_draw_text (GtkEntry *entry)
   
   if (GTK_WIDGET_DRAWABLE (entry))
     {
-      PangoLayout *layout = gtk_entry_get_layout (entry, TRUE);
+      PangoLayout *layout = gtk_entry_ensure_layout (entry, TRUE);
       gint area_width, area_height;
       gint x, y;
       gint start_pos, end_pos;
@@ -2407,8 +2435,6 @@ gtk_entry_draw_text (GtkEntry *entry)
 	  gdk_region_destroy (clip_region);
 	  g_free (ranges);
 	}
-
-      g_object_unref (G_OBJECT (layout));
     }
 }
 
@@ -2416,29 +2442,64 @@ static void
 gtk_entry_draw_cursor (GtkEntry  *entry,
 		       CursorType type)
 {
+  GtkTextDirection keymap_direction =
+    (gdk_keymap_get_direction (gdk_keymap_get_default ()) == PANGO_DIRECTION_LTR) ?
+    GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
+  GtkTextDirection widget_direction = gtk_widget_get_direction (GTK_WIDGET (entry));
+  
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   if (GTK_WIDGET_DRAWABLE (entry))
     {
       GtkWidget *widget = GTK_WIDGET (entry);
+      gboolean split_cursor;
 
       gint xoffset = INNER_BORDER - entry->scroll_offset;
       gint strong_x, weak_x;
       gint text_area_height;
+      GdkGC *gc1 = NULL;
+      GdkGC *gc2 = NULL;
+      gint x1 = 0;
+      gint x2 = 0;
 
       gdk_window_get_size (entry->text_area, NULL, &text_area_height);
       
       gtk_entry_get_cursor_locations (entry, type, &strong_x, &weak_x);
+
+      g_object_get (gtk_settings_get_global (),
+		    "gtk-split-cursor", &split_cursor,
+		    NULL);
+
+      if (split_cursor)
+	{
+	  gc1 = entry->cursor_gc;
+	  x1 = strong_x;
+
+	  if (weak_x != strong_x)
+	    {
+	      gc2 = widget->style->text_gc[GTK_STATE_NORMAL];
+	      x2 = weak_x;
+	    }
+	}
+      else
+	{
+	  gc1 = entry->cursor_gc;
+	  
+	  if (keymap_direction == widget_direction)
+	    x1 = strong_x;
+	  else
+	    x1 = weak_x;
+	}
       
-      gdk_draw_line (entry->text_area, entry->cursor_gc,
-		     xoffset + strong_x, INNER_BORDER,
-		     xoffset + strong_x, text_area_height - INNER_BORDER);
+      gdk_draw_line (entry->text_area, gc1,
+		     xoffset + x1, INNER_BORDER,
+		     xoffset + x1, text_area_height - INNER_BORDER);
       
-      if (weak_x != strong_x)
-	gdk_draw_line (entry->text_area, widget->style->text_gc[GTK_STATE_NORMAL], 
-		       xoffset + weak_x, INNER_BORDER,
-		       xoffset + weak_x, text_area_height - INNER_BORDER);
+      if (gc2)
+	gdk_draw_line (entry->text_area, gc2,
+		       xoffset + x2, INNER_BORDER,
+		       xoffset + x2, text_area_height - INNER_BORDER);
     }
 }
 
@@ -2473,12 +2534,10 @@ gtk_entry_find_position (GtkEntry *entry,
   gboolean trailing;
   gint cursor_index = g_utf8_offset_to_pointer (entry->text, entry->current_pos) - entry->text;
   
-  layout = gtk_entry_get_layout (entry, TRUE);
+  layout = gtk_entry_ensure_layout (entry, TRUE);
   
   line = pango_layout_get_lines (layout)->data;
   pango_layout_line_x_to_index (line, x * PANGO_SCALE, &index, &trailing);
-  
-  g_object_unref (G_OBJECT (layout));
 
   if (index >= cursor_index && entry->preedit_length)
     {
@@ -2503,7 +2562,7 @@ gtk_entry_get_cursor_locations (GtkEntry   *entry,
 				gint       *strong_x,
 				gint       *weak_x)
 {
-  PangoLayout *layout = gtk_entry_get_layout (entry, TRUE);
+  PangoLayout *layout = gtk_entry_ensure_layout (entry, TRUE);
   const gchar *text;
   PangoRectangle strong_pos, weak_pos;
   gint index;
@@ -2521,7 +2580,6 @@ gtk_entry_get_cursor_locations (GtkEntry   *entry,
     }
       
   pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
-  g_object_unref (G_OBJECT (layout));
 
   if (strong_x)
     *strong_x = strong_pos.x / PANGO_SCALE;
@@ -2553,11 +2611,10 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
   gdk_window_get_size (entry->text_area, &text_area_width, NULL);
   text_area_width -= 2 * INNER_BORDER;
 
-  layout = gtk_entry_get_layout (entry, TRUE);
+  layout = gtk_entry_ensure_layout (entry, TRUE);
   line = pango_layout_get_lines (layout)->data;
 
   pango_layout_line_get_extents (line, NULL, &logical_rect);
-  g_object_unref (G_OBJECT (layout));
 
   /* Display as much text as we can */
 
@@ -2614,6 +2671,8 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
     {
       entry->scroll_offset += weak_xoffset - text_area_width;
     }
+
+  g_object_notify (G_OBJECT (entry), "scroll_offset");
 }
 
 static gint
@@ -2622,7 +2681,7 @@ gtk_entry_move_visually (GtkEntry *entry,
 			 gint      count)
 {
   gint index;
-  PangoLayout *layout = gtk_entry_get_layout (entry, FALSE);
+  PangoLayout *layout = gtk_entry_ensure_layout (entry, FALSE);
   const gchar *text;
 
   text = pango_layout_get_text (layout);
@@ -2632,15 +2691,32 @@ gtk_entry_move_visually (GtkEntry *entry,
   while (count != 0)
     {
       int new_index, new_trailing;
+      gboolean split_cursor;
+      gboolean strong;
+
+      g_object_get (gtk_settings_get_global (),
+		    "gtk-split-cursor", &split_cursor,
+		    NULL);
+
+      if (split_cursor)
+	strong = TRUE;
+      else
+	{
+	  GtkTextDirection keymap_direction =
+	    (gdk_keymap_get_direction (gdk_keymap_get_default ()) == PANGO_DIRECTION_LTR) ?
+	    GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
+
+	  strong = keymap_direction == gtk_widget_get_direction (GTK_WIDGET (entry));
+	}
       
       if (count > 0)
 	{
-	  pango_layout_move_cursor_visually (layout, index, 0, 1, &new_index, &new_trailing);
+	  pango_layout_move_cursor_visually (layout, strong, index, 0, 1, &new_index, &new_trailing);
 	  count--;
 	}
       else
 	{
-	  pango_layout_move_cursor_visually (layout, index, 0, -1, &new_index, &new_trailing);
+	  pango_layout_move_cursor_visually (layout, strong, index, 0, -1, &new_index, &new_trailing);
 	  count++;
 	}
 
@@ -2652,8 +2728,6 @@ gtk_entry_move_visually (GtkEntry *entry,
       while (new_trailing--)
 	index = g_utf8_next_char (entry->text + new_index) - entry->text;
     }
-
-  g_object_unref (G_OBJECT (layout));
   
   return g_utf8_pointer_to_offset (text, text + index);
 }
@@ -2672,7 +2746,7 @@ gtk_entry_move_logically (GtkEntry *entry,
     }
   else if (entry->text)
     {
-      PangoLayout *layout = gtk_entry_get_layout (entry, FALSE);
+      PangoLayout *layout = gtk_entry_ensure_layout (entry, FALSE);
       PangoLogAttr *log_attrs;
       gint n_attrs;
 
@@ -2696,7 +2770,6 @@ gtk_entry_move_logically (GtkEntry *entry,
 	}
       
       g_free (log_attrs);
-      g_object_unref (G_OBJECT (layout));
     }
 
   return new_pos;
@@ -2715,7 +2788,7 @@ gtk_entry_move_forward_word (GtkEntry *entry,
     }
   else if (entry->text && (new_pos < entry->text_length))
     {
-      PangoLayout *layout = gtk_entry_get_layout (entry, FALSE);
+      PangoLayout *layout = gtk_entry_ensure_layout (entry, FALSE);
       PangoLogAttr *log_attrs;
       gint n_attrs;
 
@@ -2727,7 +2800,6 @@ gtk_entry_move_forward_word (GtkEntry *entry,
 	new_pos++;
 
       g_free (log_attrs);
-      g_object_unref (G_OBJECT (layout));
     }
 
   return new_pos;
@@ -2747,7 +2819,7 @@ gtk_entry_move_backward_word (GtkEntry *entry,
     }
   else if (entry->text && start > 0)
     {
-      PangoLayout *layout = gtk_entry_get_layout (entry, FALSE);
+      PangoLayout *layout = gtk_entry_ensure_layout (entry, FALSE);
       PangoLogAttr *log_attrs;
       gint n_attrs;
 
@@ -2760,7 +2832,6 @@ gtk_entry_move_backward_word (GtkEntry *entry,
 	new_pos--;
 
       g_free (log_attrs);
-      g_object_unref (G_OBJECT (layout));
     }
 
   return new_pos;
@@ -2769,7 +2840,7 @@ gtk_entry_move_backward_word (GtkEntry *entry,
 static void
 gtk_entry_delete_whitespace (GtkEntry *entry)
 {
-  PangoLayout *layout = gtk_entry_get_layout (entry, FALSE);
+  PangoLayout *layout = gtk_entry_ensure_layout (entry, FALSE);
   PangoLogAttr *log_attrs;
   gint n_attrs;
   gint start, end;
@@ -2785,7 +2856,6 @@ gtk_entry_delete_whitespace (GtkEntry *entry)
     end++;
 
   g_free (log_attrs);
-  g_object_unref (G_OBJECT (layout));
 
   if (start != end)
     gtk_editable_delete_text (GTK_EDITABLE (entry), start, end);
@@ -3010,6 +3080,23 @@ gtk_entry_set_visibility (GtkEntry *entry,
 }
 
 /**
+ * gtk_entry_get_visibility:
+ * @entry: a #GtkEntry
+ *
+ * Retrieves whether the text in @entry is visible. See
+ * gtk_entry_set_visibility().
+ *
+ * Return value: %TRUE if the text is currently visible
+ **/
+gboolean
+gtk_entry_get_visibility (GtkEntry *entry)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
+
+  return entry->visible;
+}
+
+/**
  * gtk_entry_set_invisible_char:
  * @entry: a #GtkEntry
  * @ch: a Unicode character
@@ -3035,6 +3122,24 @@ gtk_entry_set_invisible_char (GtkEntry *entry,
   entry->invisible_char = ch;
   g_object_notify (G_OBJECT (entry), "invisible_char");
   gtk_entry_recompute (entry);  
+}
+
+/**
+ * gtk_entry_get_invisible_char:
+ * @entry: a #GtkEntry
+ *
+ * Retrieves the character displayed in place of the real characters
+ * for entries with visisbility set to false. See gtk_entry_set_invisible_char().
+ *
+ * Return value: the current invisible char, or 0, if the entry does not
+ *               show invisible text at all. 
+ **/
+gunichar
+gtk_entry_get_invisible_char (GtkEntry *entry)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
+
+  return entry->invisible_char;
 }
 
 void
@@ -3076,6 +3181,24 @@ gtk_entry_set_max_length (GtkEntry     *entry,
   
   entry->text_max_length = max;
   g_object_notify (G_OBJECT (entry), "max_length");
+}
+
+/**
+ * gtk_entry_get_max_length:
+ * @entry: a #GtkEntry
+ *
+ * Retrieves the maximum allowed length of the text in
+ * @entry. See gtk_entry_set_max_length().
+ *
+ * Return value: the maximum allowed number of characters
+ *               in #GtkEntry, or 0 if there is no maximum.
+ **/
+gint
+gtk_entry_get_max_length (GtkEntry *entry)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
+
+  return entry->text_max_length;
 }
 
 /**
@@ -3200,16 +3323,122 @@ gtk_entry_get_has_frame (GtkEntry *entry)
   return entry->has_frame;
 }
 
+
+/**
+ * gtk_entry_get_layout:
+ * @entry: a #GtkEntry
+ * 
+ * Gets the #PangoLayout used to display the entry.
+ * The layout is useful to e.g. convert text positions to
+ * pixel positions, in combination with gtk_entry_get_layout_offsets().
+ * The returned layout is owned by the entry so need not be
+ * freed by the caller.
+ *
+ * Keep in mind that the layout text may contain a preedit string, so
+ * gtk_entry_layout_index_to_text_index() and
+ * gtk_entry_text_index_to_layout_index() are needed to convert byte
+ * indices in the layout to byte indices in the entry contents.
+ * 
+ * Return value: the #PangoLayout for this entry
+ **/
+PangoLayout*
+gtk_entry_get_layout (GtkEntry *entry)
+{
+  PangoLayout *layout;
+  
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
+
+  layout = gtk_entry_ensure_layout (entry, TRUE);
+
+  return layout;
+}
+
+
+/**
+ * gtk_entry_layout_index_to_text_index:
+ * @entry: a #GtkEntry
+ * @layout_index: byte index into the entry layout text
+ * 
+ * Converts from a position in the entry contents (returned
+ * by gtk_entry_get_text()) to a position in the
+ * entry's #PangoLayout (returned by gtk_entry_get_layout(),
+ * with text retrieved via pango_layout_get_text()).
+ * 
+ * Return value: byte index into the entry contents
+ **/
+gint
+gtk_entry_layout_index_to_text_index (GtkEntry *entry,
+                                      gint      layout_index)
+{
+  gint cursor_index;
+  
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
+
+  cursor_index = g_utf8_offset_to_pointer (entry->text, entry->current_pos) - entry->text;
+  
+  if (layout_index >= cursor_index && entry->preedit_length)
+    {
+      if (layout_index >= cursor_index + entry->preedit_length)
+	layout_index -= entry->preedit_length;
+      else
+        layout_index = cursor_index;
+    }
+
+  return layout_index;
+}
+
+/**
+ * gtk_entry_text_index_to_layout_index:
+ * @entry: a #GtkEntry
+ * @text_index: byte index into the entry contents
+ * 
+ * Converts from a position in the entry's #PangoLayout(returned by
+ * gtk_entry_get_layout()) to a position in the entry contents
+ * (returned by gtk_entry_get_text()).
+ * 
+ * Return value: byte index into the entry layout text
+ **/
+gint
+gtk_entry_text_index_to_layout_index (GtkEntry *entry,
+                                      gint      text_index)
+{
+  gint cursor_index;
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
+
+  cursor_index = g_utf8_offset_to_pointer (entry->text, entry->current_pos) - entry->text;
+  
+  if (text_index > cursor_index)
+    text_index += entry->preedit_length;
+
+  return text_index;
+}
+
 /**
  * gtk_entry_get_layout_offsets:
  * @entry: a #GtkEntry
- * @x: location to store X coordinate of layout
- * @y: location to store Y coordinate of layout
+ * @x: location to store X offset of layout, or %NULL
+ * @y: location to store Y offset of layout, or %NULL
+ *
  *
  * Obtains the position of the #PangoLayout used to render text
  * in the entry, in widget coordinates. Useful if you want to line
  * up the text in an entry with some other text, e.g. when using the
  * entry to implement editable cells in a sheet widget.
+ *
+ * Also useful to convert mouse events into coordinates inside the
+ * #PangoLayout, e.g. to take some action if some part of the entry text
+ * is clicked.
+ * 
+ * Note that as the user scrolls around in the entry the offsets will
+ * change; you'll need to connect to the "notify::scroll_offset"
+ * signal to track this. Remember when using the #PangoLayout
+ * functions you need to convert to and from pixels using
+ * PANGO_PIXELS() or #PANGO_SCALE.
+ *
+ * Keep in mind that the layout text may contain a preedit string, so
+ * gtk_entry_layout_index_to_text_index() and
+ * gtk_entry_text_index_to_layout_index() are needed to convert byte
+ * indices in the layout to byte indices in the entry contents.
  * 
  **/
 void
@@ -3640,5 +3869,3 @@ gtk_entry_pend_cursor_blink (GtkEntry *entry)
       show_cursor (entry);
     }
 }
-			   
-

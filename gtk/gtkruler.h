@@ -113,6 +113,12 @@ void    gtk_ruler_set_range  (GtkRuler      *ruler,
 void    gtk_ruler_draw_ticks (GtkRuler      *ruler);
 void    gtk_ruler_draw_pos   (GtkRuler      *ruler);
 
+GtkMetricType gtk_ruler_get_metric (GtkRuler *ruler);
+void          gtk_ruler_get_range  (GtkRuler *ruler,
+				    gdouble  *lower,
+				    gdouble  *upper,
+				    gdouble  *position,
+				    gdouble  *max_size);
 
 #ifdef __cplusplus
 }

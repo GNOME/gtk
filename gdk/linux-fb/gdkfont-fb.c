@@ -94,7 +94,7 @@ gdk_font_from_description (PangoFontDescription *desc)
   PangoFont *pango_font;
   PangoContext *context;
   PangoFontMetrics metrics;
-  gchar *lang;
+  PangoLanguage *lang;
   
   g_return_val_if_fail (desc, NULL);
 
@@ -106,6 +106,9 @@ gdk_font_from_description (PangoFontDescription *desc)
   font->type = GDK_FONT_FONT;
 
   context = gdk_pango_context_get ();
+  pango_context_set_base_dir (context, PANGO_DIRECTION_LTR);
+  pango_context_set_language (context, pango_language_from_string ("UNKNOWN"));
+
   pango_font = pango_context_load_font (context, desc);
   if (!pango_font)
     {
@@ -134,8 +137,8 @@ gdk_font_from_description (PangoFontDescription *desc)
   
   metrics.ascent = 0;
   metrics.descent = 0;
-  lang = pango_context_get_lang (context);
-  pango_font_get_metrics (pango_font, "fr", &metrics);
+  lang = pango_context_get_language (context);
+  pango_font_get_metrics (pango_font, lang, &metrics);
 
   private->pango_font = pango_font;
   

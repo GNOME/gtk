@@ -81,21 +81,21 @@ static gboolean gtk_list_store_row_drop_possible  (GtkTreeDragDest   *drag_dest,
 
 
 /* sortable */
-static void     gtk_list_store_sort                    (GtkListStore           *list_store);
-static void     gtk_list_store_sort_iter_changed       (GtkListStore           *list_store,
-							GtkTreeIter            *iter,
-							gint                    column);
-static gboolean gtk_list_store_get_sort_column_id      (GtkTreeSortable        *sortable,
-							gint                   *sort_column_id,
-							GtkTreeSortOrder       *order);
-static void     gtk_list_store_set_sort_column_id      (GtkTreeSortable        *sortable,
-							gint                    sort_column_id,
-							GtkTreeSortOrder        order);
-static void     gtk_list_store_sort_column_id_set_func (GtkTreeSortable        *sortable,
-							gint                    sort_column_id,
-							GtkTreeIterCompareFunc  func,
-							gpointer                data,
-							GtkDestroyNotify        destroy);
+static void     gtk_list_store_sort               (GtkListStore           *list_store);
+static void     gtk_list_store_sort_iter_changed  (GtkListStore           *list_store,
+						   GtkTreeIter            *iter,
+						   gint                    column);
+static gboolean gtk_list_store_get_sort_column_id (GtkTreeSortable        *sortable,
+						   gint                   *sort_column_id,
+						   GtkTreeSortOrder       *order);
+static void     gtk_list_store_set_sort_column_id (GtkTreeSortable        *sortable,
+						   gint                    sort_column_id,
+						   GtkTreeSortOrder        order);
+static void     gtk_list_store_set_sort_func      (GtkTreeSortable        *sortable,
+						   gint                    sort_column_id,
+						   GtkTreeIterCompareFunc  func,
+						   gpointer                data,
+						   GtkDestroyNotify        destroy);
 
 
 static void
@@ -219,7 +219,7 @@ gtk_list_store_sortable_init (GtkTreeSortableIface *iface)
 {
   iface->get_sort_column_id = gtk_list_store_get_sort_column_id;
   iface->set_sort_column_id = gtk_list_store_set_sort_column_id;
-  iface->sort_column_id_set_func = gtk_list_store_sort_column_id_set_func;
+  iface->set_sort_func = gtk_list_store_set_sort_func;
 }
 
 static void
@@ -254,13 +254,14 @@ gtk_list_store_new (void)
 /**
  * gtk_list_store_new_with_types:
  * @n_columns: number of columns in the list store
- * @Varargs: pairs of column number and #GType
+ * @Varargs: all #GType types for the columns, from first to last
  *
- * Creates a new list store as with gtk_list_store_new(),
- * simultaneously setting up the columns and column types as with
- * gtk_list_store_set_n_columns() and
- * gtk_list_store_set_column_type().
- *
+ * Creates a new list store as with gtk_list_store_new(), simultaneously setting
+ * up the columns and column types as with gtk_list_store_set_n_columns() and
+ * gtk_list_store_set_column_type().  As an example,
+ * gtk_tree_store_new_with_types (3, G_TYPE_INT, G_TYPE_STRING,
+ * GTK_TYPE_PIXBUF); will create a new GtkListStore with three columns, of type
+ * int, string and GtkPixbuf respectively.
  *
  * Return value: a new #GtkListStore
  **/
@@ -374,7 +375,7 @@ gtk_list_store_get_flags (GtkTreeModel *tree_model)
 {
   g_return_val_if_fail (GTK_IS_LIST_STORE (tree_model), 0);
 
-  return GTK_TREE_MODEL_ITERS_PERSIST;
+  return GTK_TREE_MODEL_ITERS_PERSIST | GTK_TREE_MODEL_LIST_ONLY;
 }
 
 static gint
@@ -588,8 +589,8 @@ gtk_list_store_set_value (GtkListStore *list_store,
   GtkTreePath *path;
   GValue real_value = {0, };
   gboolean converted = FALSE;
+  gint orig_column = column;
 
-  g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
   g_return_if_fail (column >= 0 && column < list_store->n_columns);
@@ -671,7 +672,7 @@ gtk_list_store_set_value (GtkListStore *list_store,
     g_value_unset (&real_value);
 
   if (GTK_LIST_STORE_IS_SORTED (list_store))
-    gtk_list_store_sort_iter_changed (list_store, iter, column);
+    gtk_list_store_sort_iter_changed (list_store, iter, orig_column);
 }
 
 /**
@@ -1149,6 +1150,21 @@ gtk_list_store_append (GtkListStore *list_store,
   gtk_tree_path_free (path);
 }
 
+void
+gtk_list_store_clear (GtkListStore *list_store)
+{
+  GtkTreeIter iter;
+  g_return_if_fail (GTK_IS_LIST_STORE (list_store));
+
+  while (list_store->root)
+    {
+      iter.stamp = list_store->stamp;
+      iter.user_data = list_store->root;
+      gtk_list_store_remove (list_store, &iter);
+    }
+}
+
+
 static gboolean
 gtk_list_store_drag_data_delete (GtkTreeDragSource *drag_source,
                                  GtkTreePath       *path)
@@ -1160,14 +1176,10 @@ gtk_list_store_drag_data_delete (GtkTreeDragSource *drag_source,
                                &iter,
                                path))
     {
-      gtk_list_store_remove (GTK_LIST_STORE (drag_source),
-                             &iter);
+      gtk_list_store_remove (GTK_LIST_STORE (drag_source), &iter);
       return TRUE;
     }
-  else
-    {
-      return FALSE;
-    }
+  return FALSE;
 }
 
 static gboolean
@@ -1346,9 +1358,9 @@ typedef struct _SortTuple
 } SortTuple;
 
 static gint
-_gtk_list_store_compare_func (gconstpointer a,
-			      gconstpointer b,
-			      gpointer      user_data)
+gtk_list_store_compare_func (gconstpointer a,
+			     gconstpointer b,
+			     gpointer      user_data)
 {
   GtkListStore *list_store = user_data;
   GtkTreeDataSortHeader *header = NULL;
@@ -1393,7 +1405,6 @@ gtk_list_store_sort (GtkListStore *list_store)
   GtkTreeIter iter;
   GArray *sort_array;
   gint i;
-  GList *header_list;
   gint *new_order;
   GSList *list;
   GtkTreePath *path;
@@ -1403,12 +1414,7 @@ gtk_list_store_sort (GtkListStore *list_store)
 
   g_assert (GTK_LIST_STORE_IS_SORTED (list_store));
 
-  for (header_list = list_store->sort_list; header_list; header_list = header_list->next)
-    {
-      header = (GtkTreeDataSortHeader*) header_list->data;
-      if (header->sort_column_id == list_store->sort_column_id)
-	break;
-    }
+  header = _gtk_tree_data_list_get_header (list_store->sort_list, list_store->sort_column_id);
 
   /* We want to make sure that we have a function */
   g_return_if_fail (header != NULL);
@@ -1434,7 +1440,7 @@ gtk_list_store_sort (GtkListStore *list_store)
       list = list->next;
     }
 
-  g_array_sort_with_data (sort_array, _gtk_list_store_compare_func, list_store);
+  g_array_sort_with_data (sort_array, gtk_list_store_compare_func, list_store);
 
   for (i = 0; i < list_store->length - 1; i++)
       g_array_index (sort_array, SortTuple, i).el->next =
@@ -1686,11 +1692,11 @@ gtk_list_store_set_sort_column_id (GtkTreeSortable  *sortable,
 }
 
 static void
-gtk_list_store_sort_column_id_set_func (GtkTreeSortable  *sortable,
-					gint              sort_column_id,
-					GtkTreeIterCompareFunc func,
-					gpointer          data,
-					GtkDestroyNotify  destroy)
+gtk_list_store_set_sort_func (GtkTreeSortable        *sortable,
+			      gint                    sort_column_id,
+			      GtkTreeIterCompareFunc  func,
+			      gpointer                data,
+			      GtkDestroyNotify        destroy)
 {
   GtkListStore *list_store = (GtkListStore *) sortable;
   GtkTreeDataSortHeader *header = NULL;

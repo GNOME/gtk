@@ -242,6 +242,28 @@ gtk_misc_set_alignment (GtkMisc *misc,
     }
 }
 
+/**
+ * gtk_misc_get_alignment:
+ * @misc: a #GtkMisc
+ * @xalign: location to store X alignment of @misc, or %NULL
+ * @yalign: location to store Y alignment of @misc, or %NULL
+ *
+ * Gets the X and Y alignment of the widget within its allocation. See
+ * gtk_misc_set_alignment().
+ **/
+void
+gtk_misc_get_alignment (GtkMisc *misc,
+		        gfloat  *xalign,
+			gfloat  *yalign)
+{
+  g_return_if_fail (GTK_IS_MISC (misc));
+
+  if (xalign)
+    *xalign = misc->xalign;
+  if (yalign)
+    *yalign = misc->yalign;
+}
+
 void
 gtk_misc_set_padding (GtkMisc *misc,
 		      gint     xpad,
@@ -278,6 +300,27 @@ gtk_misc_set_padding (GtkMisc *misc,
       if (ypad != misc->ypad)
 	g_object_notify (G_OBJECT (misc), "ypad");
     }
+}
+
+/**
+ * gtk_misc_get_padding:
+ * @misc: a #GtkMisc
+ * @xpad: location to store padding in the X direction, or %NULL
+ * @ypad: location to store padding in the Y direction, or %NULL
+ *
+ * Gets the padding in the X and Y directions of the widget. See gtk_misc_set_padding().
+ **/
+void
+gtk_misc_get_padding (GtkMisc *misc,
+		      gint    *xpad,
+		      gint    *ypad)
+{
+  g_return_if_fail (GTK_IS_MISC (misc));
+
+  if (xpad)
+    *xpad = misc->xpad;
+  if (ypad)
+    *ypad = misc->ypad;
 }
 
 static void

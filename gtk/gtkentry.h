@@ -149,8 +149,10 @@ GtkType    gtk_entry_get_type       		(void) G_GNUC_CONST;
 GtkWidget* gtk_entry_new            		(void);
 void       gtk_entry_set_visibility 		(GtkEntry      *entry,
 						 gboolean       visible);
+gboolean   gtk_entry_get_visibility             (GtkEntry      *entry);
 void       gtk_entry_set_invisible_char         (GtkEntry      *entry,
                                                  gunichar       ch);
+gunichar   gtk_entry_get_invisible_char         (GtkEntry      *entry);
 void       gtk_entry_set_editable   		(GtkEntry      *entry,
 						 gboolean       editable);
 void       gtk_entry_set_has_frame              (GtkEntry      *entry,
@@ -159,6 +161,7 @@ gboolean   gtk_entry_get_has_frame              (GtkEntry      *entry);
 /* text is truncated if needed */
 void       gtk_entry_set_max_length 		(GtkEntry      *entry,
 						 gint           max);
+gint       gtk_entry_get_max_length             (GtkEntry      *entry);
 void       gtk_entry_set_activates_default      (GtkEntry      *entry,
                                                  gboolean       setting);
 gboolean   gtk_entry_get_activates_default      (GtkEntry      *entry);
@@ -174,8 +177,15 @@ void                  gtk_entry_set_text        (GtkEntry      *entry,
 /* returns a reference to the text */
 G_CONST_RETURN gchar* gtk_entry_get_text        (GtkEntry      *entry);
 
+PangoLayout* gtk_entry_get_layout               (GtkEntry      *entry);
+void         gtk_entry_get_layout_offsets       (GtkEntry      *entry,
+                                                 gint          *x,
+                                                 gint          *y);
+
 /* Deprecated compatibility functions
  */
+
+#ifndef GTK_DISABLE_DEPRECATED
 GtkWidget* gtk_entry_new_with_max_length	(gint           max);
 void       gtk_entry_append_text    		(GtkEntry      *entry,
 						 const gchar   *text);
@@ -186,6 +196,7 @@ void       gtk_entry_set_position   		(GtkEntry      *entry,
 void       gtk_entry_select_region  		(GtkEntry      *entry,
 						 gint           start,
 						 gint           end);
+#endif /* GTK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus
 }

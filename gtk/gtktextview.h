@@ -248,9 +248,8 @@ GtkTextWindowType gtk_text_view_get_window_type (GtkTextView       *text_view,
 void gtk_text_view_set_border_window_size (GtkTextView       *text_view,
                                            GtkTextWindowType  type,
                                            gint               size);
-void gtk_text_view_set_text_window_size   (GtkTextView       *text_view,
-                                           gint               width,
-                                           gint               height);
+gint gtk_text_view_get_border_window_size (GtkTextView       *text_view,
+					   GtkTextWindowType  type);
 
 gboolean gtk_text_view_forward_display_line           (GtkTextView       *text_view,
                                                        GtkTextIter       *iter);
@@ -316,8 +315,9 @@ gint             gtk_text_view_get_indent             (GtkTextView      *text_vi
 void             gtk_text_view_set_tabs               (GtkTextView      *text_view,
                                                        PangoTabArray    *tabs);
 PangoTabArray*   gtk_text_view_get_tabs               (GtkTextView      *text_view);
-                                       
 
+/* note that the return value of this changes with the theme */
+GtkTextAttributes* gtk_text_view_get_default_attributes (GtkTextView    *text_view);
 
 #ifdef __cplusplus
 }

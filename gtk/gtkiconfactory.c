@@ -335,7 +335,7 @@ sized_icon_set_from_inline (const guchar *inline_data,
 
   set = gtk_icon_set_new ();
 
-  source.pixbuf = gdk_pixbuf_new_from_inline (inline_data, FALSE, -1, NULL);
+  source.pixbuf = gdk_pixbuf_new_from_stream (-1, inline_data, FALSE, NULL);
 
   g_assert (source.pixbuf);
 
@@ -361,7 +361,7 @@ sized_with_fallback_icon_set_from_inline (const guchar *fallback_data,
 
   set = gtk_icon_set_new ();
 
-  source.pixbuf = gdk_pixbuf_new_from_inline (inline_data, FALSE, -1, NULL);
+  source.pixbuf = gdk_pixbuf_new_from_stream (-1, inline_data, FALSE, NULL);
 
   g_assert (source.pixbuf);
 
@@ -371,7 +371,7 @@ sized_with_fallback_icon_set_from_inline (const guchar *fallback_data,
   
   source.any_size = TRUE;
 
-  source.pixbuf = gdk_pixbuf_new_from_inline (fallback_data, FALSE, -1, NULL);
+  source.pixbuf = gdk_pixbuf_new_from_stream (-1, fallback_data, FALSE, NULL);
 
   g_assert (source.pixbuf);
 
@@ -393,7 +393,7 @@ unsized_icon_set_from_inline (const guchar *inline_data)
 
   set = gtk_icon_set_new ();
 
-  source.pixbuf = gdk_pixbuf_new_from_inline (inline_data, FALSE, -1, NULL);
+  source.pixbuf = gdk_pixbuf_new_from_stream (-1, inline_data, FALSE, NULL);
 
   g_assert (source.pixbuf);
 
@@ -460,6 +460,10 @@ get_default_icons (GtkIconFactory *factory)
   add_sized (factory, dialog_info, GTK_ICON_SIZE_DIALOG, GTK_STOCK_DIALOG_INFO);
   add_sized (factory, dialog_question, GTK_ICON_SIZE_DIALOG, GTK_STOCK_DIALOG_QUESTION);
   add_sized (factory, dialog_warning, GTK_ICON_SIZE_DIALOG, GTK_STOCK_DIALOG_WARNING);
+  
+  /* dnd size only */
+  add_sized (factory, stock_new, GTK_ICON_SIZE_DND, GTK_STOCK_DND);
+  add_sized (factory, stock_dnd_multiple, GTK_ICON_SIZE_DND, GTK_STOCK_DND_MULTIPLE);
   
   /* Only have button sizes */
   add_sized (factory, stock_button_apply, GTK_ICON_SIZE_BUTTON, GTK_STOCK_APPLY);
@@ -585,7 +589,7 @@ init_icon_sizes (void)
 {
   if (icon_sizes == NULL)
     {
-#define NUM_BUILTIN_SIZES 6
+#define NUM_BUILTIN_SIZES 7
       gint i;
 
       icon_aliases = g_hash_table_new (g_str_hash, g_str_equal);
@@ -624,6 +628,11 @@ init_icon_sizes (void)
       icon_sizes[GTK_ICON_SIZE_LARGE_TOOLBAR].name = "gtk-large-toolbar";
       icon_sizes[GTK_ICON_SIZE_LARGE_TOOLBAR].width = 24;
       icon_sizes[GTK_ICON_SIZE_LARGE_TOOLBAR].height = 24;
+
+      icon_sizes[GTK_ICON_SIZE_DND].size = GTK_ICON_SIZE_DND;
+      icon_sizes[GTK_ICON_SIZE_DND].name = "gtk-dnd";
+      icon_sizes[GTK_ICON_SIZE_DND].width = 32;
+      icon_sizes[GTK_ICON_SIZE_DND].height = 32;
 
       icon_sizes[GTK_ICON_SIZE_DIALOG].size = GTK_ICON_SIZE_DIALOG;
       icon_sizes[GTK_ICON_SIZE_DIALOG].name = "gtk-dialog";
@@ -1081,7 +1090,7 @@ render_fallback_image (GtkStyle          *style,
   static GtkIconSource fallback_source = { NULL, NULL, 0, 0, 0, TRUE, TRUE, TRUE };
 
   if (fallback_source.pixbuf == NULL)
-    fallback_source.pixbuf = gdk_pixbuf_new_from_inline (MISSING_IMAGE_INLINE, FALSE, -1, NULL);
+    fallback_source.pixbuf = gdk_pixbuf_new_from_stream (-1, MISSING_IMAGE_INLINE, FALSE, NULL);
   
   return gtk_style_render_icon (style,
                                 &fallback_source,

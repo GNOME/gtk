@@ -85,7 +85,7 @@ TUTORIAL_IT_FILES=	html/gtk_tut_it.html     	\
 	html/gtk_tut_it-24.html		\
 	text/gtk_tut_it.txt
 
-GTKDOCS_FIX=$(top_srcdir)/docs/gtkdocs_fix
+GTKDOCS_FIX=$(srcdir)/../gtkdocs_fix
 
 .PHONY: htmldir textdir tutorial tutorial_it tutorial_fr
 

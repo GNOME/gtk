@@ -44,7 +44,7 @@ it looks in $prefix/lib/ft2fonts, and if you want to change this you
 must add something like:
 
 [PangoFT2]
-FontPath = /usr/share/fonts/default/TrueType
+FontPath = /usr/share/fonts/default/Type1:/usr/share/fonts/default/TrueType
 
 To your $prefix/etc/pango/pangorc or ~/.pangorc.
 
@@ -53,7 +53,12 @@ This is done by creating a $prefix/etc/pango/pangoft2.aliases or
 ~/.pangoft2_aliases file. You can also set the name of this file using the
 key AliasFiles in the PangoFT2 section in pangorc.
 
-An example of a font alias file is:
+An example of a font alias file for the urw fontset is:
+sans normal normal normal normal "urw gothic l"
+serif normal normal normal normal "urw palladio l"
+monospace normal normal normal normal "nimbus mono l"
+
+And one using the Windows truetype fonts is:
 sans normal normal normal normal "arial"
 serif normal normal normal normal "times new roman"
 monospace normal normal normal normal "courier new"

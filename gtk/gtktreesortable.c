@@ -114,11 +114,11 @@ gtk_tree_sortable_set_sort_column_id (GtkTreeSortable  *sortable,
 }
 
 void
-gtk_tree_sortable_sort_column_id_set_func (GtkTreeSortable        *sortable,
-					   gint                    sort_column_id,
-					   GtkTreeIterCompareFunc  func,
-					   gpointer                data,
-					   GtkDestroyNotify        destroy)
+gtk_tree_sortable_set_sort_func (GtkTreeSortable        *sortable,
+				 gint                    sort_column_id,
+				 GtkTreeIterCompareFunc  func,
+				 gpointer                data,
+				 GtkDestroyNotify        destroy)
 {
   GtkTreeSortableIface *iface;
 
@@ -128,9 +128,9 @@ gtk_tree_sortable_sort_column_id_set_func (GtkTreeSortable        *sortable,
   iface = GTK_TREE_SORTABLE_GET_IFACE (sortable);
 
   g_return_if_fail (iface != NULL);
-  g_return_if_fail (iface->sort_column_id_set_func != NULL);
+  g_return_if_fail (iface->set_sort_func != NULL);
   
-  (* iface->sort_column_id_set_func) (sortable, sort_column_id, func, data, destroy);
+  (* iface->set_sort_func) (sortable, sort_column_id, func, data, destroy);
 }
 
 

@@ -1,7 +1,7 @@
 ## Makefile.am for GTK+
 
 SRC_SUBDIRS = gdk-pixbuf gdk gtk modules demos tests contrib
-SUBDIRS = po $(SRC_SUBDIRS) docs build
+SUBDIRS = po $(SRC_SUBDIRS) docs build m4macros
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
@@ -9,7 +9,6 @@ AUTOMAKE_OPTIONS = 1.4
 EXTRA_DIST =			\
 	HACKING			\
 	gtk+.spec.in		\
-        gtk-2.0.m4          	\
 	makecopyright		\
 	TODO			\
 	TODO.xml		\
@@ -127,6 +126,14 @@ gdk-$(GDKTARGET)-2.0.pc: gdk-2.0.pc
 	rm -f gdk-$(GDKTARGET)-2.0.pc && \
 	cp gdk-2.0.pc gdk-$(GDKTARGET)-2.0.pc
 
+gtk+-$(GDKTARGET)-2.0-uninstalled.pc: gtk+-2.0-uninstalled.pc
+	rm -f gtk+-$(GDKTARGET)-2.0-uninstalled.pc && \
+	cp gtk+-2.0-uninstalled.pc gtk+-$(GDKTARGET)-2.0-uninstalled.pc
+
+gdk-$(GDKTARGET)-2.0-uninstalled.pc: gdk-2.0-uninstalled.pc
+	rm -f gdk-$(GDKTARGET)-2.0-uninstalled.pc && \
+	cp gdk-2.0-uninstalled.pc gdk-$(GDKTARGET)-2.0-uninstalled.pc
+
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA= gdk-pixbuf-2.0.pc gdk-$(GDKTARGET)-2.0.pc gtk+-$(GDKTARGET)-2.0.pc
 
@@ -150,9 +157,6 @@ dist-hook: gtk+.spec
 	     && cp INSTALL README $(distdir) ; \
 	fi \
 	&& cp gtk+.spec $(distdir)
-
-m4datadir = $(datadir)/aclocal
-m4data_DATA = gtk-2.0.m4
 
 .PHONY: files release sanity snapshot
 

@@ -400,6 +400,22 @@ gtk_viewport_set_shadow_type (GtkViewport   *viewport,
   g_object_notify (G_OBJECT (viewport), "shadow_type");
 }
 
+/**
+ * gtk_viewport_get_shadow_type:
+ * @viewport: a #GtkViewport
+ *
+ * Gets the shadow type of the #GtkViewport. See
+ * gtk_viewport_set_shadow_type().
+ 
+ * Return value: the shadow type 
+ **/
+GtkShadowType
+gtk_viewport_get_shadow_type (GtkViewport *viewport)
+{
+  g_return_val_if_fail (GTK_IS_VIEWPORT (viewport), GTK_SHADOW_NONE);
+
+  return viewport->shadow_type;
+}
 
 static void
 gtk_viewport_map (GtkWidget *widget)

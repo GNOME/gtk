@@ -576,8 +576,8 @@ gtk_tree_iter_free (GtkTreeIter *iter)
  * @tree_model: A #GtkTreeModel.
  *
  * Returns a set of flags supported by this interface.  The flags are a bitwise
- * combination of #GtkTreeModelFlags.  It is expected that the flags supported
- * do not change for an interface.
+ * combination of #GtkTreeModelFlags.  The flags supported should not change
+ * during the lifecycle of the tree_model.
  *
  * Return value: The flags supported by this interface.
  **/
@@ -638,9 +638,7 @@ gtk_tree_model_get_column_type (GtkTreeModel *tree_model,
  * @iter: The uninitialized #GtkTreeIter.
  * @path: The #GtkTreePath.
  *
- * Sets @iter to a valid iterator pointing to @path.  If the model does not
- * provide an implementation of this function, it is implemented in terms of
- * @gtk_tree_model_iter_nth_child.
+ * Sets @iter to a valid iterator pointing to @path.
  *
  * Return value: TRUE, if @iter was set.
  **/
@@ -649,33 +647,12 @@ gtk_tree_model_get_iter (GtkTreeModel *tree_model,
 			 GtkTreeIter  *iter,
 			 GtkTreePath  *path)
 {
-  GtkTreeIter parent;
-  gint *indices;
-  gint depth, i;
-
   g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->get_iter != NULL, FALSE);
 
-  if (GTK_TREE_MODEL_GET_IFACE (tree_model)->get_iter != NULL)
-    return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->get_iter) (tree_model, iter, path);
-
-  indices = gtk_tree_path_get_indices (path);
-  depth = gtk_tree_path_get_depth (path);
-
-  g_return_val_if_fail (depth > 0, FALSE);
-
-  if (! gtk_tree_model_iter_nth_child (tree_model, iter, NULL, indices[0]))
-    return FALSE;
-
-  for (i = 1; i < depth; i++)
-    {
-      parent = *iter;
-      if (! gtk_tree_model_iter_nth_child (tree_model, iter, &parent, indices[i]))
-	return FALSE;
-    }
-
-  return TRUE;
+  return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->get_iter) (tree_model, iter, path);
 }
 
 
@@ -1066,6 +1043,7 @@ gtk_tree_model_range_changed (GtkTreeModel *tree_model,
 			      GtkTreePath  *end_path,
 			      GtkTreeIter  *end_iter)
 {
+  gint i;
   g_return_if_fail (tree_model != NULL);
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (start_path != NULL);
@@ -1073,6 +1051,15 @@ gtk_tree_model_range_changed (GtkTreeModel *tree_model,
   g_return_if_fail (end_path != NULL);
   g_return_if_fail (end_iter != NULL);
 
+#ifndef G_DISABLE_CHECKS
+  g_return_if_fail (start_path->depth == end_path->depth);
+  for (i = 0; i < start_path->depth - 1; i++)
+    if (start_path->indices[i] != end_path->indices[i])
+      {
+	g_warning ("Concurrent paths were not passed in to gtk_tree_model_range_changed.\n");
+	return;
+      }
+#endif
   g_signal_emit_by_name (tree_model, "range_changed",
 			 start_path, start_iter,
 			 end_path, end_iter);
@@ -1433,6 +1420,15 @@ gtk_tree_row_reference_new_proxy (GObject      *proxy,
   return reference;
 }
 
+/**
+ * gtk_tree_row_reference_get_path:
+ * @reference: A #GtkTreeRowReference
+ * 
+ * Returns a path that the row reference currently points to, or NULL if the
+ * path pointed to is no longer valid.
+ * 
+ * Return value: A current path, or NULL.
+ **/
 GtkTreePath *
 gtk_tree_row_reference_get_path (GtkTreeRowReference *reference)
 {
@@ -1447,12 +1443,37 @@ gtk_tree_row_reference_get_path (GtkTreeRowReference *reference)
   return gtk_tree_path_copy (reference->path);
 }
 
+/**
+ * gtk_tree_row_reference_valid:
+ * @reference: A #GtkTreeRowReference, or NULL
+ * 
+ * Returns TRUE if the %reference is non-NULL and refers to a current valid
+ * path.
+ * 
+ * Return value: TRUE if %reference points to a valid path.
+ **/
+gboolean
+gtk_tree_row_reference_valid (GtkTreeRowReference *reference)
+{
+  if (reference == NULL || reference->path == NULL)
+    return FALSE;
+
+  return TRUE;
+}
+
+/**
+ * gtk_tree_row_reference_free:
+ * @reference: A #GtkTreeRowReference, or NULL
+ * 
+ * Free's %reference.  %reference may be NULL.
+ **/
 void
 gtk_tree_row_reference_free (GtkTreeRowReference *reference)
 {
   RowRefList *refs;
 
-  g_return_if_fail (reference != NULL);
+  if (reference == NULL)
+    return;
 
   refs = g_object_get_data (G_OBJECT (reference->proxy), ROW_REF_DATA_STRING);
 

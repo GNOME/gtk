@@ -78,7 +78,7 @@ GType            gtk_size_group_get_type      (void) G_GNUC_CONST;;
 
 GtkSizeGroup *   gtk_size_group_new           (GtkSizeGroupMode  mode);
 void             gtk_size_group_set_mode      (GtkSizeGroup     *size_group,
-					       GtkSizeGroupMode  type);
+					       GtkSizeGroupMode  mode);
 GtkSizeGroupMode gtk_size_group_get_mode      (GtkSizeGroup     *size_group);
 void             gtk_size_group_add_widget    (GtkSizeGroup     *size_group,
 					       GtkWidget        *widget);

@@ -455,6 +455,28 @@ gtk_scrolled_window_set_policy (GtkScrolledWindow *scrolled_window,
     }
 }
 
+/**
+ * gtk_scrolled_window_get_policy:
+ * @scrolled_window: a #GtkScrolledWindow
+ * @hscrollbar_policy: location to store the policy for the horizontal scrollbar, or %NULL.
+ * @vscrollbar_policy: location to store the policy for the horizontal scrollbar, or %NULL.
+ * 
+ * Retrieves the current policy values for the horizontal and vertical
+ * scrollbars. See gtk_scrolled_window_set_policy().
+ **/
+void
+gtk_scrolled_window_get_policy (GtkScrolledWindow *scrolled_window,
+				GtkPolicyType     *hscrollbar_policy,
+				GtkPolicyType     *vscrollbar_policy)
+{
+  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
+
+  if (hscrollbar_policy)
+    *hscrollbar_policy = scrolled_window->hscrollbar_policy;
+  if (vscrollbar_policy)
+    *vscrollbar_policy = scrolled_window->vscrollbar_policy;
+}
+
 void
 gtk_scrolled_window_set_placement (GtkScrolledWindow *scrolled_window,
 				   GtkCornerType      window_placement)
@@ -468,6 +490,23 @@ gtk_scrolled_window_set_placement (GtkScrolledWindow *scrolled_window,
 
       gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
     }
+}
+
+/**
+ * gtk_scrolled_window_get_placement:
+ * @scrolled_window: a #GtkScrolledWindow
+ *
+ * Gets the placement of the scrollbars for the scrolled window. See 
+ * gtk_scrolled_window_set_placement().
+ *
+ * Return value: the current placement value.
+ **/
+GtkCornerType
+gtk_scrolled_window_get_placement (GtkScrolledWindow *scrolled_window)
+{
+  g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), GTK_CORNER_TOP_LEFT);
+
+  return scrolled_window->window_placement;
 }
 
 /**
@@ -495,6 +534,23 @@ gtk_scrolled_window_set_shadow_type (GtkScrolledWindow *scrolled_window,
 
       gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
     }
+}
+
+/**
+ * gtk_scrolled_window_get_shadow_type:
+ * @scrolled_window: a #GtkScrolledWindow
+ *
+ * Gets the shadow type of the scrolled window. See 
+ * gtk_scrolled_window_set_shadow_type().
+ *
+ * Return value: the current shadow type
+ **/
+GtkShadowType
+gtk_scrolled_window_get_shadow_type (GtkScrolledWindow *scrolled_window)
+{
+  g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), GTK_SHADOW_NONE);
+
+  return scrolled_window->shadow_type;
 }
 
 static void

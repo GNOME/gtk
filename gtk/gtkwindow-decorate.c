@@ -139,7 +139,7 @@ gtk_decorated_window_init (GtkWindow   *window)
   g_object_set_data_full (G_OBJECT (window), "gtk-window-decoration", deco,
 			  (GDestroyNotify) gtk_decoration_free);
   
-  gtk_window_set_has_frame (window);
+  gtk_window_set_has_frame (window, TRUE);
 
   gtk_signal_connect (GTK_OBJECT (window),
 		      "frame_event",

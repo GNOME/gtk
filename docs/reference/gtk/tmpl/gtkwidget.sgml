@@ -1378,6 +1378,14 @@ GtkWidget
 @event: 
 @Returns: 
 
+<!-- ##### SIGNAL GtkWidget::child-notify ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL GtkWidget::client-event ##### -->
 <para>
 
@@ -1530,6 +1538,15 @@ GtkWidget
 @event: 
 @Returns: 
 
+<!-- ##### SIGNAL GtkWidget::focus ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
+@Returns: 
+
 <!-- ##### SIGNAL GtkWidget::focus-in-event ##### -->
 <para>
 
@@ -1554,6 +1571,14 @@ GtkWidget
 </para>
 
 @widget: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWidget::grab-notify ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
 
 <!-- ##### SIGNAL GtkWidget::hide ##### -->
 <para>

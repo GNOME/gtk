@@ -1,3 +1,26 @@
+/*
+ * gdkdisplay-x11.h
+ * 
+ * Copyright 2001 Sun Microsystems Inc. 
+ *
+ * Erwann Chenede <erwann.chenede@sun.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
 #ifndef __GDK_DISPLAY_X11__
 #define __GDK_DISPLAY_X11__
 
@@ -6,6 +29,7 @@
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include "gdkkeysyms.h"
+#include "gdkkeys.h"
 #include "gdkwindow.h"
 #include "xsettings-client.h"
 #ifdef HAVE_XKB
@@ -43,6 +67,8 @@ extern "C"
     GdkScreen *default_screen;
     GSList *screen_list;
 
+    gint grab_count;
+
     /* Display wide Atoms */
 
     Atom gdk_wm_delete_window;
@@ -62,13 +88,16 @@ extern "C"
     gint autorepeat;
     gint min_keycode;
     gint max_keycode;
-    guint _gdk_keymap_serial;
-    gboolean _gdk_use_xkb;
+    gint xkb_event_type;
+    guint keymap_serial;
+    gboolean use_xkb;
     KeySym *keymap;
     gint keysyms_per_keycode;
     XModifierKeymap *mod_keymap;
     GdkModifierType group_switch_mask;
-
+    GdkKeymap *default_keymap;
+    PangoDirection current_direction;
+    gboolean have_direction;
     /* Whether we were able to turn on detectable-autorepeat using
      * XkbSetDetectableAutorepeat. If FALSE, we'll fall back
      * to checking the next event with XPending(). */

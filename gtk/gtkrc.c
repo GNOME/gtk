@@ -247,7 +247,6 @@ static GSList *gtk_rc_sets_class = NULL;
 
 #define GTK_RC_MAX_DEFAULT_FILES 128
 static gchar *gtk_rc_default_files[GTK_RC_MAX_DEFAULT_FILES];
-static gboolean gtk_rc_auto_parse = TRUE;
 
 #define GTK_RC_MAX_PIXMAP_PATHS 128
 static gchar *pixmap_path[GTK_RC_MAX_PIXMAP_PATHS];
@@ -261,8 +260,6 @@ static GSList *rc_dir_stack = NULL;
 
 /* The files we have parsed, to reread later if necessary */
 static GSList *rc_files = NULL;
-
-static GtkImageLoader image_loader = NULL;
 
 /* RC file handling */
 
@@ -492,7 +489,6 @@ gtk_rc_set_default_files (gchar **files)
     }
     
   gtk_rc_default_files[0] = NULL;
-  gtk_rc_auto_parse = FALSE;
 
   i = 0;
   while (files[i] != NULL)
@@ -560,7 +556,7 @@ gtk_rc_get_default_files (void)
  }
  
 void
-gtk_rc_init (void)
+_gtk_rc_init (void)
 {
   static gboolean initialized = FALSE;
   static gchar *locale_suffixes[3];
@@ -3275,38 +3271,4 @@ gtk_rc_parse_stock (GScanner       *scanner,
   g_free (stock_id);
 
   return G_TOKEN_NONE;
-}
-
-/*
-typedef  GdkPixmap * (*GtkImageLoader) (GdkWindow   *window,
-                                        GdkColormap *colormap,
-                                        GdkBitmap  **mask,
-                                        GdkColor    *transparent_color,
-                                        const gchar *filename);
-*/
-
-void
-gtk_rc_set_image_loader(GtkImageLoader loader)
-{
-  image_loader = loader;
-}
-
-GdkPixmap *
-gtk_rc_load_image (GdkColormap *colormap,
-		   GdkColor    *transparent_color,
-		   const gchar *filename)
-{
-  if (strcmp (filename, "<parent>") == 0)
-    return (GdkPixmap*) GDK_PARENT_RELATIVE;
-  else
-    {
-      if(image_loader)
-	return image_loader(NULL, colormap, NULL,
-			    transparent_color,
-			    filename);
-      else
-	return gdk_pixmap_colormap_create_from_xpm (NULL, colormap, NULL,
-						    transparent_color,
-						    filename);
-    }
 }

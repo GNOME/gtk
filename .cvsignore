@@ -17,14 +17,17 @@ intl
 stamp-h.in
 gtk+.spec
 gtk+-2.0.pc
+gtk+-2.0-uninstalled.pc
 gtk+-linux-fb-2.0.pc
 gtk+-nanox-2.0.pc
 gtk+-x11-2.0.pc
 gdk-2.0.pc
+gdk-2.0-uninstalled.pc
 gdk-linux-fb-2.0.pc
 gdk-nanox-2.0.pc
 gdk-x11-2.0.pc
 gdk-pixbuf-2.0.pc
+gdk-pixbuf-2.0-uninstalled.pc
 missing
 install-sh
 mkinstalldirs

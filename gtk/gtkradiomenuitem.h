@@ -61,13 +61,16 @@ struct _GtkRadioMenuItemClass
 };
 
 
-GtkType    gtk_radio_menu_item_get_type	      (void) G_GNUC_CONST;
-GtkWidget* gtk_radio_menu_item_new	      (GSList		*group);
-GtkWidget* gtk_radio_menu_item_new_with_label (GSList		*group,
-					       const gchar	*label);
-GSList*	   gtk_radio_menu_item_group	      (GtkRadioMenuItem *radio_menu_item);
-void	   gtk_radio_menu_item_set_group      (GtkRadioMenuItem *radio_menu_item,
-					       GSList		*group);
+GtkType    gtk_radio_menu_item_get_type	         (void) G_GNUC_CONST;
+GtkWidget* gtk_radio_menu_item_new               (GSList           *group);
+GtkWidget* gtk_radio_menu_item_new_with_label    (GSList           *group,
+                                                  const gchar      *label);
+GtkWidget* gtk_radio_menu_item_new_with_mnemonic (GSList           *group,
+                                                  const gchar      *label);
+GSList*    gtk_radio_menu_item_group             (GtkRadioMenuItem *radio_menu_item);
+void       gtk_radio_menu_item_set_group         (GtkRadioMenuItem *radio_menu_item,
+                                                  GSList           *group);
+
 
 
 #ifdef __cplusplus

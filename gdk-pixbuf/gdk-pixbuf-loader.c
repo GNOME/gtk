@@ -226,7 +226,6 @@ gdk_pixbuf_loader_load_module (GdkPixbufLoader *loader,
     }
   else
     {
-      g_return_val_if_fail (priv->header_buf_offset > 0, 0);
       priv->image_module = _gdk_pixbuf_get_module (priv->header_buf,
                                                    priv->header_buf_offset,
                                                    NULL,

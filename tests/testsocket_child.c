@@ -15,7 +15,6 @@ add_buttons (GtkWidget *widget, GtkWidget *box)
 {
   GtkWidget *add_button;
   GtkWidget *remove_button;
-  GtkWidget *toplevel = gtk_widget_get_toplevel (box);
 
   add_button = gtk_button_new_with_mnemonic ("_Add");
   gtk_box_pack_start (GTK_BOX (box), add_button, TRUE, TRUE, 0);

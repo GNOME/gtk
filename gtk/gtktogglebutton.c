@@ -202,6 +202,32 @@ gtk_toggle_button_new_with_label (const gchar *label)
   return toggle_button;
 }
 
+/**
+ * gtk_toggle_button_new_with_mnemonic:
+ * @label: the text of the button, with an underscore in front of the
+ *         mnemonic character
+ * @returns: a new #GtkToggleButton
+ *
+ * Creates a new #GtkToggleButton containing a label. The label
+ * will be created using gtk_label_new_with_mnemonic(), so underscores
+ * in @label indicate the mnemonic for the button.
+ **/
+GtkWidget*
+gtk_toggle_button_new_with_mnemonic (const gchar *label)
+{
+  GtkWidget *toggle_button;
+  GtkWidget *label_widget;
+
+  toggle_button = gtk_toggle_button_new ();
+  label_widget = gtk_label_new_with_mnemonic (label);
+  gtk_misc_set_alignment (GTK_MISC (label_widget), 0.5, 0.5);
+
+  gtk_container_add (GTK_CONTAINER (toggle_button), label_widget);
+  gtk_widget_show (label_widget);
+
+  return toggle_button;
+}
+
 static void
 gtk_toggle_button_set_property (GObject      *object,
 				guint         prop_id,
@@ -307,6 +333,23 @@ gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
     }
 }
 
+/**
+ * gtk_toggle_button_get_mode:
+ * @toggle_button: a #GtkToggleButton
+ *
+ * Retrieves whether the button is displayed as a separate indicator
+ * and label. See gtk_toggle_button_set_mode().
+ *
+ * Return value: %TRUE if the togglebutton is drawn as a separate indicator
+ *   and label.
+ **/
+gboolean
+gtk_toggle_button_get_mode (GtkToggleButton *toggle_button)
+{
+  g_return_val_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button), FALSE);
+
+  return toggle_button->draw_indicator;
+}
 
 void
 gtk_toggle_button_set_active (GtkToggleButton *toggle_button,

@@ -1,3 +1,28 @@
+Overview of Changes in GTK+ 1.3.6
+=================================
+
+* Properly renders strikethrough text
+* win32 fixes
+* Added "scale" property to GtkTextTag and GtkCellRendererText to do 
+  relative font scaling
+* Added "format_value" signal to GtkScale to reformat value text
+* framebuffer fixes
+* Property support added to lots of widgets
+* Many GtkTreeView new features and API/implementation fixes
+* Lots of new_with_mnemonic() convenience functions
+* Change GtkImageMenuItem API to be more consistent/useful
+* Added lots of new stock items/icons
+* Rewrote GtkRange/GtkScale/GtkScrollbar, includes support for
+  enabling/disabling extra scrollbar stepper arrows in gtkrc so NeXT
+  themes won't need broken hacks
+* Convenience API for GtkRange similar to the one added to GtkSpinButton
+  a while back
+* Make menubar/toolbar work properly with xthickness/ythickness of 1 or 0, 
+  and move some attributes from program settings to user settings.
+  Allows nice 1-pixel-bevel themes.
+* Moved ::focus virtual function from GtkContainer to GtkWidget
+* Plenty of bug fixes
+
 Overview of Changes in GTK+ 1.3.5
 =================================
 

@@ -49,32 +49,6 @@
 
 
 
-/* not needed 
-static inline void
-update_keyrange (void)
-{
-    update_keyrange_for_display (gdk_get_default_display ());
-}
-*/
-/* not needed with multihead display 
-static XkbDescPtr
-get_xkb (void)
-{	
-  return get_xkb_for_display (gdk_get_default_display ());
-}
-*/
-/*
-static void
-update_keymaps (void)
-{
- }
-static const KeySym*
-get_keymap (void)
-{
-  update_keymaps ();  
-  return keymap;
-}
-*/
 
 static void
 update_keyrange_for_display (GdkDisplay * display)
@@ -90,11 +64,11 @@ update_keymaps_for_display (GdkDisplay * display)
 {
   GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
 #ifdef HAVE_XKB
-  g_assert (!dpy_impl->_gdk_use_xkb);
+  g_assert (!dpy_impl->use_xkb);
 #endif
 
   if (dpy_impl->keymap == NULL ||
-      dpy_impl->keymap_current_serial != dpy_impl->_gdk_keymap_serial) {
+      dpy_impl->keymap_current_serial != dpy_impl->keymap_serial) {
     gint i;
     gint map_size;
 
@@ -179,11 +153,11 @@ get_xkb_for_display (GdkDisplay * display)
     if (dpy_impl->xkb_desc == NULL)
       g_error ("Failed to get keymap");
   }
-  else if (dpy_impl->keymap_current_serial != dpy_impl->_gdk_keymap_serial) {
+  else if (dpy_impl->keymap_current_serial != dpy_impl->keymap_serial) {
     XkbGetUpdatedMap (dpy_impl->xdisplay, XkbKeySymsMask, dpy_impl->xkb_desc);
   }
 
-  dpy_impl->keymap_current_serial = dpy_impl->_gdk_keymap_serial;
+  dpy_impl->keymap_current_serial = dpy_impl->keymap_serial;
 
   return dpy_impl->xkb_desc;
 }
@@ -197,6 +171,73 @@ get_keymap_for_display (GdkDisplay * display)
 }
 
 
+#if HAVE_XKB
+PangoDirection
+get_direction (GdkDisplay *display)
+{
+  XkbDescRec *xkb = get_xkb_for_display (display);
+  char *name;
+  XkbStateRec state_rec;
+  PangoDirection result;
+
+  XkbGetState (GDK_DISPLAY_IMPL_X11 (display)->xdisplay, 
+	       XkbUseCoreKbd, &state_rec);
+
+  name = gdk_atom_name (xkb->names->groups[state_rec.locked_group]);
+  if (g_strcasecmp (name, "arabic") == 0 ||
+      g_strcasecmp (name, "hebrew") == 0 ||
+      g_strcasecmp (name, "israelian") == 0)
+    result = PANGO_DIRECTION_RTL;
+  else
+    result = PANGO_DIRECTION_LTR;
+    
+  g_free (name);
+
+  return result;
+}
+
+void
+_gdk_keymap_state_changed (GdkDisplay *display)
+{
+  GdkDisplayImplX11 *dpy_impl;
+  if (!display)
+     dpy_impl = GDK_DISPLAY_IMPL_X11 (gdk_get_default_display ());
+  dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
+  if (dpy_impl->default_keymap)
+    {
+      PangoDirection new_direction = get_direction (display);
+      
+      if (!dpy_impl->have_direction || new_direction != dpy_impl->current_direction)
+	{
+	  dpy_impl->have_direction = TRUE;
+	  dpy_impl->current_direction = new_direction;
+	  g_signal_emit_by_name (G_OBJECT (dpy_impl->default_keymap), 
+			         "direction_changed");
+	}
+    }
+}
+#endif /* HAVE_XKB */
+  
+PangoDirection
+gdk_keymap_get_direction (GdkKeymap *keymap)
+{
+#if HAVE_XKB
+  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (keymap->display);
+  if (dpy_impl->use_xkb)
+    {
+      if (!dpy_impl->have_direction)
+	{
+	  dpy_impl->current_direction = get_direction (keymap->display);
+	  dpy_impl->have_direction = TRUE;
+	}
+  
+      return dpy_impl->current_direction;
+    }
+  else
+#endif /* HAVE_XKB */
+    return PANGO_DIRECTION_LTR;
+}
+/*FIXME*/
 /**
  * gdk_keymap_get_entries_for_keyval:
  * @keymap: a #GdkKeymap, or %NULL to use the default keymap
@@ -239,7 +280,7 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
   retval = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
 
 #ifdef HAVE_XKB
-  if (dpy_impl->_gdk_use_xkb) {
+  if (dpy_impl->use_xkb) {
     /*
        See sec 15.3.4 in XKB docs 
      */
@@ -408,7 +449,7 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
     keyval_array = NULL;
 
 #ifdef HAVE_XKB
-  if (dpy_impl->_gdk_use_xkb) {
+  if (dpy_impl->use_xkb) {
     /*
        See sec 15.3.4 in XKB docs 
      */
@@ -548,7 +589,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
   dpy_impl = GDK_DISPLAY_IMPL_X11 (keymap->display);
 
 #ifdef HAVE_XKB
-  if (dpy_impl->_gdk_use_xkb) {
+  if (dpy_impl->use_xkb) {
     XkbDescRec *xkb = get_xkb_for_display (keymap->display);
 
     return XkbKeySymEntry (xkb, key->keycode, key->level, key->group);
@@ -731,7 +772,7 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
     return FALSE;
 
 #ifdef HAVE_XKB
-  if (dpy_impl->_gdk_use_xkb) {
+  if (dpy_impl->use_xkb) {
     XkbDescRec *xkb = get_xkb_for_display (display);
 
     /*

@@ -79,7 +79,6 @@ EXPORTS
 	GTK_TYPE_TREE_VIEW_COLUMN_SIZING
 	GTK_TYPE_TREE_VIEW_DROP_POSITION
 	GTK_TYPE_TREE_VIEW_MODE
-	GTK_TYPE_TROUGH_TYPE
 	GTK_TYPE_UPDATE_TYPE
 	GTK_TYPE_VISIBILITY
 	GTK_TYPE_WIDGET_FLAGS
@@ -127,8 +126,6 @@ EXPORTS
 	gtk_alignment_get_type
 	gtk_alignment_new
 	gtk_alignment_set
-	gtk_arg_name_strip_type
-	gtk_args_collect_cleanup
 	gtk_arrow_get_type
 	gtk_arrow_new
 	gtk_arrow_set
@@ -314,27 +311,17 @@ EXPORTS
 	gtk_combo_set_use_arrows_always
 	gtk_combo_set_value_in_list
 	gtk_container_add
-	gtk_container_add_child_arg_type
-	gtk_container_add_with_args
-	gtk_container_addv
-	gtk_container_arg_get
-	gtk_container_arg_set
 	gtk_container_check_resize
-	gtk_container_child_arg_get_info
 	gtk_container_child_composite_name
-	gtk_container_child_getv
 	gtk_container_child_set
-	gtk_container_child_setv
 	gtk_container_child_type
 	gtk_container_children
 	gtk_container_clear_resize_widgets
 	gtk_container_dequeue_resize_handler
-	gtk_container_focus
 	gtk_container_forall
 	gtk_container_foreach
 	gtk_container_foreach_full
 	gtk_container_get_type
-	gtk_container_query_child_args
 	gtk_container_queue_resize
 	gtk_container_remove
 	gtk_container_resize_children
@@ -895,16 +882,6 @@ EXPORTS
 	gtk_option_menu_remove_menu
 	gtk_option_menu_set_history
 	gtk_option_menu_set_menu
-	gtk_packer_add
-	gtk_packer_add_defaults
-	gtk_packer_get_type
-	gtk_packer_new
-	gtk_packer_reorder_child
-	gtk_packer_set_child_packing
-	gtk_packer_set_default_border_width
-	gtk_packer_set_default_ipad
-	gtk_packer_set_default_pad
-	gtk_packer_set_spacing
 	gtk_paint_arrow
 	gtk_paint_box
 	gtk_paint_box_gap
@@ -1021,8 +998,6 @@ EXPORTS
 	gtk_rc_get_module_dir
 	gtk_rc_get_style
 	gtk_rc_get_theme_dir
-	gtk_rc_init
-	gtk_rc_load_image
 	gtk_rc_parse
 	gtk_rc_parse_color
 	gtk_rc_parse_priority
@@ -1033,7 +1008,6 @@ EXPORTS
 	gtk_rc_property_parse_flags
 	gtk_rc_reparse_all
 	gtk_rc_set_default_files
-	gtk_rc_set_image_loader
 	gtk_rc_style_copy
 	gtk_rc_style_get_type
 	gtk_rc_style_new
@@ -1044,9 +1018,8 @@ EXPORTS
 	gtk_ruler_get_type
 	gtk_ruler_set_metric
 	gtk_ruler_set_range
-	gtk_scale_draw_value
+	gtk_scale_get_digits
 	gtk_scale_get_type
-	gtk_scale_get_value_width
 	gtk_scale_set_digits
 	gtk_scale_set_draw_value
 	gtk_scale_set_value_pos
@@ -1105,7 +1078,7 @@ EXPORTS
 	gtk_spin_button_configure
 	gtk_spin_button_get_adjustment
 	gtk_spin_button_get_type
-	gtk_spin_button_get_value_as_float
+	gtk_spin_button_get_value
 	gtk_spin_button_get_value_as_int
 	gtk_spin_button_new
 	gtk_spin_button_new_with_range
@@ -1259,7 +1232,7 @@ EXPORTS
 	gtk_text_iter_in_range
 	gtk_text_iter_is_end
 ;	gtk_text_iter_is_first
-	gtk_text_iter_reorder
+	gtk_text_iter_order
 	gtk_text_iter_set_line
 	gtk_text_iter_set_line_index
 	gtk_text_iter_set_line_offset
@@ -1514,7 +1487,7 @@ EXPORTS
 	gtk_tree_view_column_new_with_attributes
 	gtk_tree_view_column_set_alignment
 	gtk_tree_view_column_set_attributes
-	gtk_tree_view_column_set_cell_data
+;	gtk_tree_view_column_set_cell_data
 	gtk_tree_view_column_set_cell_data_func
 	gtk_tree_view_column_set_cell_renderer
 	gtk_tree_view_column_set_clickable

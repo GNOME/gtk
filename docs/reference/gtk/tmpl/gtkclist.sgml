@@ -1279,16 +1279,16 @@ Sets the type of selection mode for the CList.
 An integer value representing the height of a row in pixels.
 </para>
 
-<!-- ##### ARG GtkCList:reorderable ##### -->
-<para>
-A boolean value for determining if the user can re-order the CList's
-columns.
-</para>
-
 <!-- ##### ARG GtkCList:titles-active ##### -->
 <para>
 A boolean value for setting whether the column titles can be
 clicked.
+</para>
+
+<!-- ##### ARG GtkCList:reorderable ##### -->
+<para>
+A boolean value for determining if the user can re-order the CList's
+columns.
 </para>
 
 <!-- ##### ARG GtkCList:use-drag-icons ##### -->

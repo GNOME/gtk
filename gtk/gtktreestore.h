@@ -103,7 +103,7 @@ gboolean      gtk_tree_store_is_ancestor     (GtkTreeStore *tree_store,
 					      GtkTreeIter  *descendant);
 gint          gtk_tree_store_iter_depth      (GtkTreeStore *tree_store,
 					      GtkTreeIter  *iter);
-
+void          gtk_tree_store_clear           (GtkTreeStore *tree_store);
 
 #ifdef __cplusplus
 }

@@ -248,8 +248,6 @@ struct _GdkWindowObject
 struct _GdkWindowObjectClass
 {
   GdkDrawableClass parent_class;
-
-
 };
 
 /* Windows
@@ -269,6 +267,7 @@ GdkWindow*    gdk_window_at_pointer            (gint          *win_x,
 void          gdk_window_show                  (GdkWindow     *window);
 void          gdk_window_hide                  (GdkWindow     *window);
 void          gdk_window_withdraw              (GdkWindow     *window);
+void          gdk_window_show_unraised         (GdkWindow     *window);
 void          gdk_window_move                  (GdkWindow     *window,
                                                 gint           x,
                                                 gint           y);

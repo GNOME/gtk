@@ -67,6 +67,9 @@ void          gtk_stock_item_free (GtkStockItem       *item);
 #define GTK_STOCK_DIALOG_ERROR     "gtk-dialog-error"
 #define GTK_STOCK_DIALOG_QUESTION  "gtk-dialog-question"
 
+#define GTK_STOCK_DND              "gtk-dnd"
+#define GTK_STOCK_DND_MULTIPLE     "gtk-dnd-multiple"
+
 #define GTK_STOCK_ADD              "gtk-add"
 #define GTK_STOCK_APPLY            "gtk-apply"
 #define GTK_STOCK_BOLD             "gtk-bold"

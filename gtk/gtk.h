@@ -34,7 +34,6 @@
 #include <gtk/gtkaccessible.h>
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkalignment.h>
-#include <gtk/gtkarg.h>
 #include <gtk/gtkaspectframe.h>
 #include <gtk/gtkarrow.h>
 #include <gtk/gtkbin.h>
@@ -105,7 +104,7 @@
 #include <gtk/gtkobject.h>
 #include <gtk/gtkoldeditable.h>
 #include <gtk/gtkoptionmenu.h>
-#include <gtk/gtkpacker.h>
+/* #include <gtk/gtkpacker.h> */
 #include <gtk/gtkpaned.h>
 #include <gtk/gtkpixmap.h>
 #include <gtk/gtkplug.h>

@@ -265,56 +265,43 @@ gtk_drag_source_set() is used.
 
 <!-- ##### FUNCTION gtk_drag_set_icon_widget ##### -->
 <para>
-Change the icon for a widget to a given widget. GTK+
-will not destroy the icon, so if you don't want
-it to persist, you should connect to the "drag_end" 
-signal and destroy it yourself.
 </para>
 
-@context: the context for a drag. (This must be called 
-          with a  context for the source side of a drag)
-@widget: A toplevel window to use as an icon.
-@hot_x: The X offset within @widget of the hotspot.
-@hot_y: The Y offset within @widget of the hotspot.
+@context: 
+@widget: 
+@hot_x: 
+@hot_y: 
 
 
 <!-- ##### FUNCTION gtk_drag_set_icon_pixmap ##### -->
 <para>
-Sets a given pixmap as the icon for a given drag.
-GTK+ retains a reference count for the arguments, and 
-will release them when they are no longer needed.
 </para>
 
-@context: the context for a drag. (This must be called 
-          with a  context for the source side of a drag)
-@colormap: the colormap of the icon
-@pixmap: the image data for the icon
-@mask: the transparency mask for an image.
-@hot_x: The X offset within @widget of the hotspot.
-@hot_y: The Y offset within @widget of the hotspot.
+@context: 
+@colormap: 
+@pixmap: 
+@mask: 
+@hot_x: 
+@hot_y: 
 
 
 <!-- ##### FUNCTION gtk_drag_set_icon_default ##### -->
 <para>
-Set the icon for a particular drag to the default
-icon.
 </para>
 
-@context: the context for a drag. (This must be called 
-          with a  context for the source side of a drag)
+@context: 
 
 
 <!-- ##### FUNCTION gtk_drag_set_default_icon ##### -->
 <para>
-Change the default drag icon. GTK+ retains a reference count for the
-arguments, and will release them when they are no longer needed.
+
 </para>
 
-@colormap: the colormap of the icon
-@pixmap: the image data for the icon
-@mask: the transparency mask for an image.
-@hot_x: The X offset within @widget of the hotspot.
-@hot_y: The Y offset within @widget of the hotspot.
+@colormap: 
+@pixmap: 
+@mask: 
+@hot_x: 
+@hot_y: 
 
 
 <!-- ##### FUNCTION gtk_drag_check_threshold ##### -->
@@ -347,16 +334,12 @@ widget. The widget must have a window.
 
 <!-- ##### FUNCTION gtk_drag_source_set_icon ##### -->
 <para>
-Sets the icon that will be used for drags from a 
-particular widget. GTK+ retains a reference count
-for the arguments, and will release them when
-they are no longer needed.
 </para>
 
-@widget: a #GtkWidget
-@colormap: the colormap of the icon
-@pixmap: the image data for the icon
-@mask: the transparency mask for an image.
+@widget: 
+@colormap: 
+@pixmap: 
+@mask: 
 
 
 <!-- ##### FUNCTION gtk_drag_source_unset ##### -->
@@ -365,23 +348,5 @@ Undo the effects of gtk_drag_source_set().
 </para>
 
 @widget: a #GtkWidget
-
-
-<!-- ##### FUNCTION gtk_drag_source_handle_event ##### -->
-<para>
-Internal function.
-</para>
-
-@widget: 
-@event: 
-
-
-<!-- ##### FUNCTION gtk_drag_dest_handle_event ##### -->
-<para>
-Internal function.
-</para>
-
-@toplevel: 
-@event: 
 
 

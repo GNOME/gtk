@@ -1,5 +1,26 @@
 #include <gtk/gtk.h>
 
+/*
+ * README README README README README README README README README README
+ * README README README README README README README README README README
+ * README README README README README README README README README README
+ * README README README README README README README README README README
+ * README README README README README README README README README README
+ * README README README README README README README README README README
+ * README README README README README README README README README README
+ * README README README README README README README README README README
+ * README README README README README README README README README README
+ * README README README README README README README README README README
+ * README README README README README README README README README README
+ * README README README README README README README README README README
+ * README README README README README README README README README README
+ *
+ * DO NOT!!! I REPEAT DO NOT!  EVER LOOK AT THIS CODE AS AN EXAMPLE OF WHAT YOUR
+ * CODE SHOULD LOOK LIKE.
+ *
+ * IT IS VERY CONFUSING, AND IS MEANT TO TEST A LOT OF CODE IN THE TREE.  WHILE
+ * IT IS ACTUALLY CORRECT CODE, IT IS NOT USEFUL.
+ */
 
 GtkWidget *left_tree_view;
 GtkWidget *top_right_tree_view;
@@ -14,8 +35,7 @@ GtkWidget *sample_tree_view_bottom;
 
 
 
-/* Kids, don't try this at home.
- */
+/* Kids, don't try this at home.  */
 
 /* Small GtkTreeModel to model columns */
 typedef struct _ViewColumnModel ViewColumnModel;
@@ -399,7 +419,7 @@ add_clicked (GtkWidget *button, gpointer data)
   column = gtk_tree_view_column_new_with_attributes (label, cell, "text", 0, NULL);
   g_object_set_data_full (G_OBJECT (column), column_data, label, g_free);
   gtk_tree_view_column_set_reorderable (column, TRUE);
-  gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_RESIZEABLE);
+  gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_RESIZABLE);
   gtk_list_store_append (GTK_LIST_STORE (left_tree_model), &iter);
   gtk_list_store_set (GTK_LIST_STORE (left_tree_model), &iter, 0, label, 1, column, -1);
   i++;
@@ -588,7 +608,7 @@ main (int argc, char *argv[])
   column = gtk_tree_view_column_new_with_attributes ("Visible", cell, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (left_tree_view), column);
   g_object_unref (G_OBJECT (column));
-  gtk_tree_view_column_set_cell_data_func (column, get_visible, NULL, NULL);
+  gtk_tree_view_column_set_cell_data_func (column, cell, get_visible, NULL, NULL);
   gtk_box_pack_start (GTK_BOX (hbox), swindow, TRUE, TRUE, 0);
 
   /* Middle Pane */
@@ -603,15 +623,15 @@ main (int argc, char *argv[])
   button = gtk_button_new_with_label ("<<");
   gtk_widget_set_sensitive (button, FALSE);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_left_clicked), top_right_tree_view);
-  gtk_signal_connect (GTK_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (top_right_tree_view))),
-		      "selection-changed", GTK_SIGNAL_FUNC (selection_changed), button);
+  g_signal_connectc (G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (top_right_tree_view))),
+		      "changed", GTK_SIGNAL_FUNC (selection_changed), button, FALSE);
   gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label (">>");
   gtk_widget_set_sensitive (button, FALSE);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_right_clicked), top_right_tree_view);
-  gtk_signal_connect (GTK_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (left_tree_view))),
-		      "selection-changed", GTK_SIGNAL_FUNC (selection_changed), button);
+  g_signal_connectc (G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (left_tree_view))),
+		     "changed", GTK_SIGNAL_FUNC (selection_changed), button, FALSE);
   gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
 
   bbox = gtk_vbutton_box_new ();
@@ -622,15 +642,15 @@ main (int argc, char *argv[])
   button = gtk_button_new_with_label ("<<");
   gtk_widget_set_sensitive (button, FALSE);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_left_clicked), bottom_right_tree_view);
-  gtk_signal_connect (GTK_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (bottom_right_tree_view))),
-		      "selection-changed", GTK_SIGNAL_FUNC (selection_changed), button);
+  g_signal_connectc (G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (bottom_right_tree_view))),
+		      "changed", GTK_SIGNAL_FUNC (selection_changed), button, FALSE);
   gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label (">>");
   gtk_widget_set_sensitive (button, FALSE);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_right_clicked), bottom_right_tree_view);
-  gtk_signal_connect (GTK_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (left_tree_view))),
-		      "selection-changed", GTK_SIGNAL_FUNC (selection_changed), button);
+  g_signal_connectc (G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (left_tree_view))),
+		     "changed", GTK_SIGNAL_FUNC (selection_changed), button, FALSE);
   gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
 
   
@@ -647,7 +667,7 @@ main (int argc, char *argv[])
   cell = gtk_cell_renderer_toggle_new ();
   g_signal_connect_data (G_OBJECT (cell), "toggled", (GCallback) set_visible, top_right_tree_view, NULL, FALSE, FALSE);
   column = gtk_tree_view_column_new_with_attributes (NULL, cell, NULL);
-  gtk_tree_view_column_set_cell_data_func (column, get_visible, NULL, NULL);
+  gtk_tree_view_column_set_cell_data_func (column, cell, get_visible, NULL, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (top_right_tree_view), column);
 
   gtk_container_add (GTK_CONTAINER (swindow), top_right_tree_view);
@@ -662,7 +682,7 @@ main (int argc, char *argv[])
   cell = gtk_cell_renderer_toggle_new ();
   g_signal_connect_data (G_OBJECT (cell), "toggled", (GCallback) set_visible, bottom_right_tree_view, NULL, FALSE, FALSE);
   column = gtk_tree_view_column_new_with_attributes (NULL, cell, NULL);
-  gtk_tree_view_column_set_cell_data_func (column, get_visible, NULL, NULL);
+  gtk_tree_view_column_set_cell_data_func (column, cell, get_visible, NULL, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (bottom_right_tree_view), column);
   gtk_container_add (GTK_CONTAINER (swindow), bottom_right_tree_view);
   gtk_box_pack_start (GTK_BOX (vbox2), swindow, TRUE, TRUE, 0);

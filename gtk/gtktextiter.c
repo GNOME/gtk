@@ -1379,17 +1379,17 @@ gtk_text_iter_editable (const GtkTextIter *iter,
  *
  * Return value: language in effect at @iter
  **/
-gchar*
+PangoLanguage *
 gtk_text_iter_get_language (const GtkTextIter *iter)
 {
   GtkTextAttributes *values;
-  gchar *retval;
-
+  PangoLanguage *retval;
+  
   values = gtk_text_attributes_new ();
 
   gtk_text_iter_get_attributes (iter, values);
 
-  retval = g_strdup (values->language);
+  retval = values->language;
 
   gtk_text_attributes_unref (values);
 
@@ -1629,12 +1629,14 @@ gtk_text_iter_get_bytes_in_line (const GtkTextIter   *iter)
  *
  * Computes the effect of any tags applied to this spot in the
  * text. The @values parameter should be initialized to the default
- * settings you wish to use if no tags are in effect.
+ * settings you wish to use if no tags are in effect. You'd typically
+ * obtain the defaults from gtk_text_view_get_default_attributes().
+ *
  * gtk_text_iter_get_attributes () will modify @values, applying the
  * effects of any tags present at @iter. If any tags affected @values,
- * the function returns TRUE.
+ * the function returns %TRUE.
  *
- * Return value: TRUE if @values was modified
+ * Return value: %TRUE if @values was modified
  **/
 gboolean
 gtk_text_iter_get_attributes (const GtkTextIter  *iter,
@@ -4682,7 +4684,7 @@ gtk_text_iter_in_range (const GtkTextIter *iter,
 }
 
 /**
- * gtk_text_iter_reorder:
+ * gtk_text_iter_order:
  * @first: a #GtkTextIter
  * @second: another #GtkTextIter
  *
@@ -4695,8 +4697,8 @@ gtk_text_iter_in_range (const GtkTextIter *iter,
  * 
  **/
 void
-gtk_text_iter_reorder         (GtkTextIter *first,
-                               GtkTextIter *second)
+gtk_text_iter_order (GtkTextIter *first,
+                     GtkTextIter *second)
 {
   g_return_if_fail (first != NULL);
   g_return_if_fail (second != NULL);

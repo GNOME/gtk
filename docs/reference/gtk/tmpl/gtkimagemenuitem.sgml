@@ -27,6 +27,15 @@ GtkImageMenuItem
 </para>
 
 
+<!-- ##### FUNCTION gtk_image_menu_item_set_image ##### -->
+<para>
+
+</para>
+
+@image_menu_item: 
+@image: 
+
+
 <!-- ##### FUNCTION gtk_image_menu_item_get_image ##### -->
 <para>
 

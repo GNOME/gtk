@@ -198,26 +198,14 @@ when the tag is created.
 Background color, as a string such as "red" or "#FFFFFF"
 </para>
 
-<!-- ##### ARG GtkTextTag:background-gdk ##### -->
-<para>
-Background color, as a #GdkColor.
-</para>
-
-<!-- ##### ARG GtkTextTag:background-full-height ##### -->
-<para>
-Whether to make the background color for each character the height of
-the highest font used on the current line, or the height of the font 
-used for the current character.
-</para>
-
-<!-- ##### ARG GtkTextTag:background-stipple ##### -->
-<para>
-A #GdkBitmap to use for stippling the background color.
-</para>
-
 <!-- ##### ARG GtkTextTag:foreground ##### -->
 <para>
 Foreground color as a string such as "red" or "#FFFFFF".
+</para>
+
+<!-- ##### ARG GtkTextTag:background-gdk ##### -->
+<para>
+Background color, as a #GdkColor.
 </para>
 
 <!-- ##### ARG GtkTextTag:foreground-gdk ##### -->
@@ -225,19 +213,14 @@ Foreground color as a string such as "red" or "#FFFFFF".
 Foreground color as a #GdkColor.
 </para>
 
+<!-- ##### ARG GtkTextTag:background-stipple ##### -->
+<para>
+A #GdkBitmap to use for stippling the background color.
+</para>
+
 <!-- ##### ARG GtkTextTag:foreground-stipple ##### -->
 <para>
 A #GdkBitmap to use as a stipple pattern for the foreground.
-</para>
-
-<!-- ##### ARG GtkTextTag:direction ##### -->
-<para>
-The #GtkTextDirection for the tagged text.
-</para>
-
-<!-- ##### ARG GtkTextTag:editable ##### -->
-<para>
-Whether the user can modify the tagged text.
 </para>
 
 <!-- ##### ARG GtkTextTag:font ##### -->
@@ -280,44 +263,12 @@ Font as a #PangoFontDescription.
 
 </para>
 
-<!-- ##### ARG GtkTextTag:scale ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkTextTag:size-points ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:justification ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextTag:language ##### -->
-<para>
-The language this text is in, as an ISO code. Pango can use this as a
-hint when rendering the text. If you don't understand this argument, 
-you probably don't need it.
-</para>
-
-<!-- ##### ARG GtkTextTag:left-margin ##### -->
-<para>
-Pixel width of left margin of the text.
-</para>
-
-<!-- ##### ARG GtkTextTag:right-margin ##### -->
-<para>
-Pixel width of right margin.
-</para>
-
-<!-- ##### ARG GtkTextTag:indent ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextTag:rise ##### -->
+<!-- ##### ARG GtkTextTag:scale ##### -->
 <para>
 
 </para>
@@ -338,9 +289,45 @@ Pixels of blank space to leave between wrapped lines inside the same
 newline-terminated line (paragraph).
 </para>
 
+<!-- ##### ARG GtkTextTag:editable ##### -->
+<para>
+Whether the user can modify the tagged text.
+</para>
+
+<!-- ##### ARG GtkTextTag:wrap-mode ##### -->
+<para>
+A #GtkWrapMode value. Only used if the tag applies to the first
+character in a paragraph.
+</para>
+
+<!-- ##### ARG GtkTextTag:justification ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:direction ##### -->
+<para>
+The #GtkTextDirection for the tagged text.
+</para>
+
+<!-- ##### ARG GtkTextTag:left-margin ##### -->
+<para>
+Pixel width of left margin of the text.
+</para>
+
+<!-- ##### ARG GtkTextTag:indent ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTextTag:strikethrough ##### -->
 <para>
 %TRUE to draw a line through the text.
+</para>
+
+<!-- ##### ARG GtkTextTag:right-margin ##### -->
+<para>
+Pixel width of right margin.
 </para>
 
 <!-- ##### ARG GtkTextTag:underline ##### -->
@@ -348,10 +335,23 @@ newline-terminated line (paragraph).
 A #PangoUnderline value.
 </para>
 
-<!-- ##### ARG GtkTextTag:wrap-mode ##### -->
+<!-- ##### ARG GtkTextTag:rise ##### -->
 <para>
-A #GtkWrapMode value. Only used if the tag applies to the first
-character in a paragraph.
+
+</para>
+
+<!-- ##### ARG GtkTextTag:background-full-height ##### -->
+<para>
+Whether to make the background color for each character the height of
+the highest font used on the current line, or the height of the font 
+used for the current character.
+</para>
+
+<!-- ##### ARG GtkTextTag:language ##### -->
+<para>
+The language this text is in, as an ISO code. Pango can use this as a
+hint when rendering the text. If you don't understand this argument, 
+you probably don't need it.
 </para>
 
 <!-- ##### ARG GtkTextTag:tabs ##### -->
@@ -370,7 +370,7 @@ applies to the first character in a paragraph.
 
 </para>
 
-<!-- ##### ARG GtkTextTag:background-full-height-set ##### -->
+<!-- ##### ARG GtkTextTag:foreground-set ##### -->
 <para>
 
 </para>
@@ -380,17 +380,7 @@ applies to the first character in a paragraph.
 
 </para>
 
-<!-- ##### ARG GtkTextTag:foreground-set ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkTextTag:foreground-stipple-set ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextTag:editable-set ##### -->
 <para>
 
 </para>
@@ -430,31 +420,6 @@ applies to the first character in a paragraph.
 
 </para>
 
-<!-- ##### ARG GtkTextTag:justification-set ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextTag:language-set ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextTag:left-margin-set ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextTag:indent-set ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextTag:rise-set ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkTextTag:pixels-above-lines-set ##### -->
 <para>
 
@@ -466,6 +431,31 @@ applies to the first character in a paragraph.
 </para>
 
 <!-- ##### ARG GtkTextTag:pixels-inside-wrap-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:editable-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:wrap-mode-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:justification-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:left-margin-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:indent-set ##### -->
 <para>
 
 </para>
@@ -485,7 +475,17 @@ applies to the first character in a paragraph.
 
 </para>
 
-<!-- ##### ARG GtkTextTag:wrap-mode-set ##### -->
+<!-- ##### ARG GtkTextTag:rise-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:background-full-height-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:language-set ##### -->
 <para>
 
 </para>

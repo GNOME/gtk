@@ -34,7 +34,7 @@ AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
 #
 GTK_MAJOR_VERSION=1
 GTK_MINOR_VERSION=3
-GTK_MICRO_VERSION=5
+GTK_MICRO_VERSION=6
 GTK_INTERFACE_AGE=0
 GTK_BINARY_AGE=0
 GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
@@ -135,6 +135,8 @@ case $gdktarget in
 esac
 
 AC_ARG_ENABLE(shadowfb, [  --disable-shadowfb      disable shadowfb support for linux-fb],,enable_shadowfb=yes)
+
+AC_ARG_ENABLE(fbmanager, [  --enable-fbmanager      enable framebuffer manager support (GtkFB)],enable_fbmanager=yes,enable_fbmanager=no)
 	
 if test "x$enable_debug" = "xyes"; then
   test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
@@ -404,23 +406,11 @@ if test x$with_modules = xno; then
 else
     AC_MSG_RESULT(yes)
     AC_MSG_CHECKING(whether dynamic modules work)
-    oLIBS="$LIBS"
-    oCFLAGS="$CFLAGS"
-    CFLAGS="$GLIB_CFLAGS"
-    LIBS="$GLIB_LIBS"
-    AC_TRY_RUN([
-    #include <glib.h>
-    #include <gmodule.h>
-    main ()
-    {
-    	if (g_module_supported ())
-    	    exit (0);
-    	else
-    	    exit (1);
-    }
-    ], dynworks=true)
-    LIBS="$oLIBS"
-    CFLAGS="$oCFLAGS"
+    ## for loop is to strip newline 
+    tmp=`pkg-config --variable=gmodule_supported gmodule-2.0`
+    for I in $tmp; do
+        dynworks=$I
+    done
 fi
 
 dnl Now we check to see if our libtool supports shared lib deps
@@ -524,6 +514,15 @@ AM_CONDITIONAL(BUILD_DYNAMIC_MODULES, $dynworks)
 AC_MSG_CHECKING(pixbuf loaders to build)
 
 AC_ARG_WITH(included_loaders, [  --with-included-loaders=LOADER1,LOADER2,... Build the specified loaders into gdk-pixbuf (only used if module loading disabled)])
+
+if $dynworks; then 
+        :
+else
+   ## if the option was specified, leave it; otherwise disable included loaders
+   if test x$with_included_loaders = xno; then
+           with_included_loaders=yes
+   fi
+fi
 
 all_loaders="png,bmp,wbmp,gif,ico,jpeg,pnm,ras,tiff,xpm"
 included_loaders=""
@@ -651,16 +650,27 @@ if test "x$gdktarget" = "xx11"; then
     PANGO_PACKAGES="pangox"
     have_xft=false
   fi
+
   AM_CONDITIONAL(HAVE_XFT, $have_xft)
 
   x_libs="`$PKG_CONFIG --libs $PANGO_PACKAGES`"
   x_cflags="`$PKG_CONFIG --cflags $PANGO_PACKAGES`"
   x_extra_libs=
 
+  ## Strip the .la files
+ 
+  x_libs_for_checks=""
+  for I in $x_libs ; do
+    case $I in 
+      *.la) ;;
+      *) x_libs_for_checks="$x_libs_for_checks $I" ;;
+    esac
+  done
+
   # Sanity check for the X11 library
   AC_CHECK_LIB(X11, XOpenDisplay, :,
-    AC_MSG_ERROR([*** libX11 not found. Check 'config.log' for more details.]),
-    $x_libs)
+            AC_MSG_ERROR([*** libX11 not found. Check 'config.log' for more details.]),
+            $x_libs_for_checks)
 
   if test "x$enable_shm" = "xyes"; then
     # Check for the Xext library (needed for XShm extention)
@@ -674,9 +684,8 @@ if test "x$gdktarget" = "xx11"; then
                x_extra_libs="-lXextSam -lXext"
             else
                x_extra_libs="-lXextSam"
-            fi
-            no_xext_lib=yes, $x_libs),
-        $x_libs)
+            fi, , $x_libs_for_checks),
+        $x_libs_for_checks)
   fi
 
   GDK_PIXBUF_XLIB_EXTRA_CFLAGS="$x_cflags"
@@ -691,21 +700,21 @@ if test "x$gdktarget" = "xx11"; then
       fi
       AC_DEFINE(HAVE_SHAPE_EXT),
       ,
-      $x_libs)
+      $x_libs_for_checks)
 
   # Check for XConvertCase (X11R6 specific)
 
   AC_CHECK_LIB(X11, XConvertCase,
       AC_DEFINE(HAVE_XCONVERTCASE),
       ,
-      $x_libs)
+      $x_libs_for_checks)
 
   # Check for XIM support.
 
   AC_CHECK_LIB(X11, XUnregisterIMInstantiateCallback,
 	    : ,
 	    enable_xim_inst="no",
-	    $x_libs)
+	    $x_libs_for_checks)
 
   # On Solaris, calling XRegisterIMInstantiateCallback seems to
   # cause an immediate segfault, so we disable it, unless
@@ -738,7 +747,7 @@ if test "x$gdktarget" = "xx11"; then
         AC_CHECK_LIB(X11, XkbQueryExtension,
                      AC_DEFINE(HAVE_XKB),
 	             ,
-	             $x_libs)
+	             $x_libs_for_checks)
   else
         AC_MSG_WARN(XKB support explicitly disabled)
   fi
@@ -768,18 +777,27 @@ if test "x$gdktarget" = "xx11"; then
     AC_CHECK_HEADER(sys/shm.h, AC_DEFINE(HAVE_SHM_H), no_sys_shm=yes)
 
     # Check for the X shared memory extension header file
+    have_xshm=no 
     AC_MSG_CHECKING(X11/extensions/XShm.h)
     if test "x$no_xext_lib" = "xyes"; then
-      AC_MSG_RESULT(no)
-      no_xshm=yes
+      :
     else
-      if test -f "$x_includes/X11/extensions/XShm.h"; then
-        AC_MSG_RESULT(yes)
-        AC_DEFINE(HAVE_XSHM_H)
-      else
-        AC_MSG_RESULT(no)
-        no_xshm=yes
-      fi
+      gtk_save_CFLAGS="$CFLAGS"
+      CFLAGS="$CFLAGS $x_cflags"
+      AC_TRY_COMPILE([
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/extensions/XShm.h>
+], [XShmSegmentInfo *x_shm_info;], have_xshm=yes)
+      CFLAGS="$gtk_save_CFLAGS"
+    fi
+    AC_MSG_RESULT($have_xshm)
+    if test $have_xshm = yes ; then
+      AC_DEFINE(HAVE_XSHM_H)
     fi
   fi
 
@@ -836,6 +854,13 @@ if test "x$gdktarget" = "xlinux-fb"; then
   if test x$enable_shadowfb = xyes ; then
     AC_DEFINE(ENABLE_SHADOW_FB)
   fi
+
+  if test x$enable_fbmanager = xyes ; then
+    AC_DEFINE(ENABLE_FB_MANAGER)
+    AM_CONDITIONAL(ENABLE_FB_MANAGER, true)
+  else
+    AM_CONDITIONAL(ENABLE_FB_MANAGER, false)
+  fi
   
   GDK_EXTRA_CFLAGS="$FREETYPE_CFLAGS"
   GDK_EXTRA_LIBS="$FREETYPE_LIBS $GDK_EXTRA_LIBS"
@@ -843,6 +868,7 @@ if test "x$gdktarget" = "xlinux-fb"; then
   AM_CONDITIONAL(USE_LINUX_FB, true)
 else
   AM_CONDITIONAL(USE_LINUX_FB, false)
+  AM_CONDITIONAL(ENABLE_FB_MANAGER, false)
 fi
 
 AC_SUBST(gdktargetlib)
@@ -883,9 +909,13 @@ fi
 
 CFLAGS="$CFLAGS $PANGO_CFLAGS"
 
-AC_CHECK_LIB(pango, pango_context_new, :, AC_MSG_ERROR([
+if $PKG_CONFIG --uninstalled $PANGO_PACKAGES; then
+        :
+else
+        AC_CHECK_LIB(pango, pango_context_new, :, AC_MSG_ERROR([
 *** Can't link to Pango. Pango is required to build
 *** GTK+. For more information see http://www.pango.org]), $PANGO_LIBS)
+fi
 
 CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"
@@ -919,10 +949,13 @@ else
 ])
 fi
 
-AC_CHECK_LIB(atk, atk_object_get_type, : , AC_MSG_ERROR([
-*** Cannot link to Accessibility Toolkit. Accessibility Toolkit is required
-*** to build GTK+]), $ATK_LIBS $GLIB_LIBS)
-
+if $PKG_CONFIG --uninstalled $ATK_PACKAGES; then
+        :
+else
+        AC_CHECK_LIB(atk, atk_object_get_type, : , AC_MSG_ERROR([
+                *** Cannot link to Accessibility Toolkit. Accessibility Toolkit is required
+                *** to build GTK+]), $ATK_LIBS $GLIB_LIBS)
+fi
 
 GTK_PACKAGES=atk
 GTK_EXTRA_LIBS=
@@ -1091,6 +1124,10 @@ Makefile
 gdk-pixbuf-2.0.pc
 gdk-2.0.pc
 gtk+-2.0.pc
+gdk-pixbuf-2.0-uninstalled.pc
+gdk-2.0-uninstalled.pc
+gtk+-2.0-uninstalled.pc
+m4macros/Makefile
 po/Makefile.in
 build/Makefile
 build/win32/Makefile

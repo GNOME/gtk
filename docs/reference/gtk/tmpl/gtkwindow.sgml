@@ -128,24 +128,6 @@ the child gets a larger allocation than it requests.
 it's larger
 
 
-<!-- ##### FUNCTION gtk_window_set_resizeable ##### -->
-<para>
-
-</para>
-
-@window: 
-@resizeable: 
-
-
-<!-- ##### FUNCTION gtk_window_get_resizeable ##### -->
-<para>
-
-</para>
-
-@window: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_window_add_accel_group ##### -->
 <para>
 
@@ -411,6 +393,7 @@ it's larger
 </para>
 
 @window: 
+@setting: 
 
 
 <!-- ##### FUNCTION gtk_window_set_mnemonic_modifier ##### -->
@@ -539,6 +522,11 @@ If the window can be resized to a smaller size by the user.
 <!-- ##### ARG GtkWindow:allow-grow ##### -->
 <para>
 If the window can be resized to a larger size by the user.
+</para>
+
+<!-- ##### ARG GtkWindow:resizable ##### -->
+<para>
+
 </para>
 
 <!-- ##### ARG GtkWindow:modal ##### -->

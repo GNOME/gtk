@@ -758,7 +758,7 @@ _gdk_window_process_expose (GdkWindow    *window,
 
   if (!gdk_region_empty (invalidate_region))
     gdk_window_invalidate_region (window, invalidate_region, FALSE);
-
+  
   gdk_region_destroy (invalidate_region);
   gdk_region_destroy (clip_region);
 }

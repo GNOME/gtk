@@ -315,7 +315,7 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
       
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
 
-      pixbuf = gdk_pixbuf_new_from_xpm_data ((char **)book_closed_xpm);
+      pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **)book_closed_xpm);
 
       image = gtk_image_new_from_pixbuf (pixbuf);
 
@@ -673,11 +673,11 @@ main (int    argc,
   models[MODEL_TREE] = create_tree_model ();
 
   model = create_list_model ();
-  models[MODEL_SORTED_LIST] = gtk_tree_model_sort_new_with_model (model, NULL, 0);
+  models[MODEL_SORTED_LIST] = gtk_tree_model_sort_new_with_model (model);
   g_object_unref (G_OBJECT (model));
 
   model = create_tree_model ();
-  models[MODEL_SORTED_TREE] = gtk_tree_model_sort_new_with_model (model, NULL, 0);
+  models[MODEL_SORTED_TREE] = gtk_tree_model_sort_new_with_model (model);
   g_object_unref (G_OBJECT (model));
 
   models[MODEL_EMPTY_LIST] = GTK_TREE_MODEL (gtk_list_store_new ());
@@ -1446,10 +1446,11 @@ run_automated_tests (void)
   {
     /* Make sure tree store mutations don't crash anything */
     GtkTreeStore *store;
-    
+    GtkTreeIter root;
+
     store = gtk_tree_store_new_with_types (1, G_TYPE_INT);
-    
-    treestore_torture_recurse (store, NULL, 0);
+    gtk_tree_model_get_iter_root (GTK_TREE_MODEL (store), &root);
+    treestore_torture_recurse (store, &root, 0);
     
     g_object_unref (G_OBJECT (store));
   }

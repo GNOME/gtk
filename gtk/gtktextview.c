@@ -237,20 +237,21 @@ static void     gtk_text_view_update_layout_width       (GtkTextView        *tex
 static void     gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
                                                          GtkTextAttributes *values,
                                                          GtkStyle           *style);
-static void     gtk_text_view_ensure_layout         (GtkTextView        *text_view);
-static void     gtk_text_view_destroy_layout        (GtkTextView        *text_view);
-static void     gtk_text_view_reset_im_context      (GtkTextView        *text_view);
-static void     gtk_text_view_start_selection_drag  (GtkTextView        *text_view,
-                                                     const GtkTextIter  *iter,
-                                                     GdkEventButton     *event);
-static gboolean gtk_text_view_end_selection_drag    (GtkTextView        *text_view,
-                                                     GdkEventButton     *event);
-static void     gtk_text_view_start_selection_dnd   (GtkTextView        *text_view,
-                                                     const GtkTextIter  *iter,
-                                                     GdkEventMotion     *event);
-static void     gtk_text_view_check_cursor_blink    (GtkTextView        *text_view);
-static void     gtk_text_view_pend_cursor_blink     (GtkTextView        *text_view);
-static void     gtk_text_view_stop_cursor_blink     (GtkTextView        *text_view);
+static void     gtk_text_view_ensure_layout          (GtkTextView        *text_view);
+static void     gtk_text_view_destroy_layout         (GtkTextView        *text_view);
+static void     gtk_text_view_check_keymap_direction (GtkTextView        *text_view);
+static void     gtk_text_view_reset_im_context       (GtkTextView        *text_view);
+static void     gtk_text_view_start_selection_drag   (GtkTextView        *text_view,
+                                                      const GtkTextIter  *iter,
+                                                      GdkEventButton     *event);
+static gboolean gtk_text_view_end_selection_drag     (GtkTextView        *text_view,
+                                                      GdkEventButton     *event);
+static void     gtk_text_view_start_selection_dnd    (GtkTextView        *text_view,
+                                                      const GtkTextIter  *iter,
+                                                      GdkEventMotion     *event);
+static void     gtk_text_view_check_cursor_blink     (GtkTextView        *text_view);
+static void     gtk_text_view_pend_cursor_blink      (GtkTextView        *text_view);
+static void     gtk_text_view_stop_cursor_blink      (GtkTextView        *text_view);
 
 static void gtk_text_view_value_changed           (GtkAdjustment *adj,
 						   GtkTextView   *view);
@@ -3344,6 +3345,13 @@ gtk_text_view_button_release_event (GtkWidget *widget, GdkEventButton *event)
   return FALSE;
 }
 
+static void
+keymap_direction_changed (GdkKeymap   *keymap,
+			  GtkTextView *text_view)
+{
+  gtk_text_view_check_keymap_direction (text_view);
+}
+
 static gint
 gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
 {
@@ -3358,6 +3366,12 @@ gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
       gtk_text_view_check_cursor_blink (text_view);
     }
 
+  g_signal_connect_data (gdk_keymap_get_default (),
+			 "direction_changed",
+			 G_CALLBACK (keymap_direction_changed), text_view, NULL,
+			 FALSE, FALSE);
+  gtk_text_view_check_keymap_direction (text_view);
+  
   text_view->need_im_reset = TRUE;
   gtk_im_context_focus_in (GTK_TEXT_VIEW (widget)->im_context);
 
@@ -3377,6 +3391,10 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
       gtk_text_layout_set_cursor_visible (text_view->layout, FALSE);
       gtk_text_view_check_cursor_blink (text_view);
     }
+
+  g_signal_disconnect_by_func (gdk_keymap_get_default (),
+			       keymap_direction_changed,
+			       text_view);
 
   text_view->need_im_reset = TRUE;
   gtk_im_context_focus_out (GTK_TEXT_VIEW (widget)->im_context);
@@ -4275,6 +4293,28 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
 }
 
 static void
+gtk_text_view_check_keymap_direction (GtkTextView *text_view)
+{
+  if (text_view->layout)
+    {
+      gboolean split_cursor;
+      GtkTextDirection new_dir;
+  
+      g_object_get (gtk_settings_get_global (),
+		    "gtk-split-cursor", &split_cursor,
+		    NULL);
+      if (split_cursor)
+	new_dir = GTK_TEXT_DIR_NONE;
+      else
+	new_dir = (gdk_keymap_get_direction (gdk_keymap_get_default ()) == PANGO_DIRECTION_LTR) ?
+	  GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
+      
+      if (text_view->layout->cursor_direction != new_dir)
+	gtk_text_layout_set_cursor_direction (text_view->layout, new_dir);
+    }
+}
+
+static void
 gtk_text_view_ensure_layout (GtkTextView *text_view)
 {
   GtkWidget *widget;
@@ -4327,6 +4367,8 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
       g_object_unref (G_OBJECT (ltr_context));
       g_object_unref (G_OBJECT (rtl_context));
 
+      gtk_text_view_check_keymap_direction (text_view);
+
       style = gtk_text_attributes_new ();
 
       gtk_widget_ensure_style (widget);
@@ -4366,6 +4408,31 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
           tmp_list = g_slist_next (tmp_list);
         }
     }
+}
+
+/**
+ * gtk_text_view_get_default_attributes:
+ * @text_view: a #GtkTextView
+ * 
+ * Obtains a copy of the default text attributes. These are the
+ * attributes used for text unless a tag overrides them.
+ * You'd typically pass the default attributes in to
+ * gtk_text_tag_get_attributes() in order to get the
+ * attributes in effect at a given text position.
+ *
+ * The return value is a copy owned by the caller of this function,
+ * and should be freed.
+ * 
+ * Return value: a new #GtkTextAttributes
+ **/
+GtkTextAttributes*
+gtk_text_view_get_default_attributes (GtkTextView *text_view)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
+  
+  gtk_text_view_ensure_layout (text_view);
+
+  return gtk_text_attributes_copy (text_view->layout->default_style);
 }
 
 static void
@@ -5982,43 +6049,49 @@ gtk_text_view_set_border_window_size (GtkTextView      *text_view,
       break;
 
     default:
-      g_warning ("Can't set size of center or widget or private GtkTextWindowType in %s", G_STRLOC);
+      g_warning ("Can only set size of left/right/top/bottom border windows with gtk_text_view_set_border_window_size in %s\n", G_STRLOC);
       break;
     }
 }
 
 /**
- * gtk_text_view_set_text_window_size:
+ * gtk_text_view_get_border_window_size:
  * @text_view: a #GtkTextView
- * @width: a width in pixels
- * @height: a height in pixels
+ * @type: window to return size from
  *
- * Sets the size request for the main text window (%GTK_TEXT_WINDOW_TEXT).
- * If the widget gets more space than it requested, the main text window
- * will be larger than this.
+ * Gets the width of the specified border window. See
+ * gtk_text_view_set_border_window_size().
  *
+ * Return value: width of window
  **/
-void
-gtk_text_view_set_text_window_size (GtkTextView *text_view,
-                                    gint         width,
-                                    gint         height)
+gint
+gtk_text_view_get_border_window_size (GtkTextView       *text_view,
+				      GtkTextWindowType  type)
 {
-  GtkTextWindow *win;
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
+  g_return_val_if_fail (type != GTK_TEXT_WINDOW_WIDGET, 0);
+  g_return_val_if_fail (type != GTK_TEXT_WINDOW_TEXT, 0);
+  
+  switch (type)
+    {
+    case GTK_TEXT_WINDOW_LEFT:
+      return text_view->left_window->requisition.width;
+      
+    case GTK_TEXT_WINDOW_RIGHT:
+      return text_view->right_window->requisition.width;
+      
+    case GTK_TEXT_WINDOW_TOP:
+      return text_view->top_window->requisition.height;
 
-  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
-  g_return_if_fail (width > 0);
-  g_return_if_fail (height > 0);
+    case GTK_TEXT_WINDOW_BOTTOM:
+      return text_view->bottom_window->requisition.height;
+      
+    default:
+      g_warning ("Can only get size of left/right/top/bottom border windows with gtk_text_view_get_border_window_size in %s\n", G_STRLOC);
+      break;
+    }
 
-  win = text_view->text_window;
-
-  if (win->requisition.width == width &&
-      win->requisition.height == height)
-    return;
-
-  win->requisition.width = width;
-  win->requisition.height = height;
-
-  gtk_widget_queue_resize (GTK_WIDGET (text_view));
+  return 0;
 }
 
 /*

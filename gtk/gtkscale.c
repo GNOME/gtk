@@ -205,7 +205,6 @@ gtk_scale_class_init (GtkScaleClass *class)
   add_slider_binding (binding_set, GDK_KP_Left, GDK_CONTROL_MASK,
                       GTK_SCROLL_PAGE_LEFT);
 
-
   add_slider_binding (binding_set, GDK_Right, 0,
                       GTK_SCROLL_STEP_RIGHT);
 
@@ -230,7 +229,6 @@ gtk_scale_class_init (GtkScaleClass *class)
   add_slider_binding (binding_set, GDK_KP_Up, GDK_CONTROL_MASK,
                       GTK_SCROLL_PAGE_UP);
 
-
   add_slider_binding (binding_set, GDK_Down, 0,
                       GTK_SCROLL_STEP_DOWN);
 
@@ -242,23 +240,59 @@ gtk_scale_class_init (GtkScaleClass *class)
 
   add_slider_binding (binding_set, GDK_KP_Down, GDK_CONTROL_MASK,
                       GTK_SCROLL_PAGE_DOWN);
-
-  /* I think most users will find it strange that these move
-   * logically instead of visually...
-   */
    
   add_slider_binding (binding_set, GDK_Page_Up, 0,
-                      GTK_SCROLL_PAGE_BACKWARD);
+                      GTK_SCROLL_PAGE_LEFT);
 
   add_slider_binding (binding_set, GDK_KP_Page_Up, 0,
-                      GTK_SCROLL_PAGE_BACKWARD);  
+                      GTK_SCROLL_PAGE_LEFT);  
 
+  add_slider_binding (binding_set, GDK_Page_Up, 0,
+                      GTK_SCROLL_PAGE_UP);
+
+  add_slider_binding (binding_set, GDK_KP_Page_Up, 0,
+                      GTK_SCROLL_PAGE_UP);
+  
   add_slider_binding (binding_set, GDK_Page_Down, 0,
-                      GTK_SCROLL_PAGE_FORWARD);
+                      GTK_SCROLL_PAGE_RIGHT);
 
   add_slider_binding (binding_set, GDK_KP_Page_Down, 0,
-                      GTK_SCROLL_PAGE_FORWARD);
+                      GTK_SCROLL_PAGE_RIGHT);
 
+  add_slider_binding (binding_set, GDK_Page_Down, 0,
+                      GTK_SCROLL_PAGE_DOWN);
+
+  add_slider_binding (binding_set, GDK_KP_Page_Down, 0,
+                      GTK_SCROLL_PAGE_DOWN);
+
+  /* Logical bindings (vs. visual bindings above) */
+
+  add_slider_binding (binding_set, GDK_plus, 0,
+                      GTK_SCROLL_STEP_FORWARD);  
+
+  add_slider_binding (binding_set, GDK_minus, 0,
+                      GTK_SCROLL_STEP_BACKWARD);  
+
+  add_slider_binding (binding_set, GDK_plus, GDK_CONTROL_MASK,
+                      GTK_SCROLL_PAGE_FORWARD);  
+
+  add_slider_binding (binding_set, GDK_minus, GDK_CONTROL_MASK,
+                      GTK_SCROLL_PAGE_BACKWARD);
+
+
+  add_slider_binding (binding_set, GDK_KP_Add, 0,
+                      GTK_SCROLL_STEP_FORWARD);  
+
+  add_slider_binding (binding_set, GDK_KP_Subtract, 0,
+                      GTK_SCROLL_STEP_BACKWARD);  
+
+  add_slider_binding (binding_set, GDK_KP_Add, GDK_CONTROL_MASK,
+                      GTK_SCROLL_PAGE_FORWARD);  
+
+  add_slider_binding (binding_set, GDK_KP_Subtract, GDK_CONTROL_MASK,
+                      GTK_SCROLL_PAGE_BACKWARD);
+  
+  
   add_slider_binding (binding_set, GDK_Home, 0,
                       GTK_SCROLL_START);
 

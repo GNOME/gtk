@@ -72,34 +72,31 @@ struct _GtkContainer
 struct _GtkContainerClass
 {
   GtkWidgetClass parent_class;
-  
-  guint   n_child_args;
 
-  void (* add)	       		(GtkContainer	 *container,
+  void    (*add)       		(GtkContainer	 *container,
 				 GtkWidget	 *widget);
-  void (* remove)      		(GtkContainer	 *container,
+  void    (*remove)    		(GtkContainer	 *container,
 				 GtkWidget	 *widget);
-  void (* check_resize)		(GtkContainer	 *container);
-  void (* forall)     		(GtkContainer	 *container,
+  void    (*check_resize)	(GtkContainer	 *container);
+  void    (*forall)    		(GtkContainer	 *container,
 				 gboolean	  include_internals,
 				 GtkCallback	  callback,
-				 gpointer	  callbabck_data);
-  gboolean (* focus)   		(GtkContainer	 *container,
-				 GtkDirectionType  direction);
-  void (* set_focus_child)	(GtkContainer	 *container,
+				 gpointer	  callback_data);
+  void    (*set_focus_child)	(GtkContainer	 *container,
 				 GtkWidget	 *widget);
-  GtkType (*child_type)		(GtkContainer	*container);
-  void    (*set_child_arg)	(GtkContainer 	*container,
-				 GtkWidget    	*child,
-				 GtkArg       	*arg,
-				 guint        	 arg_id);
-  void    (*get_child_arg)	(GtkContainer	*container,
-				 GtkWidget    	*child,
-				 GtkArg       	*arg,
-				 guint        	 arg_id);
-  gchar*  (*composite_name)	(GtkContainer	*container,
-				 GtkWidget	*child);
-
+  GtkType (*child_type)		(GtkContainer	 *container);
+  gchar*  (*composite_name)	(GtkContainer	 *container,
+				 GtkWidget	 *child);
+  void    (*set_child_property) (GtkContainer    *container,
+				 GtkWidget       *child,
+				 guint            property_id,
+				 const GValue    *value,
+				 GParamSpec      *pspec);
+  void    (*get_child_property) (GtkContainer    *container,
+                                 GtkWidget       *child,
+				 guint            property_id,
+				 GValue          *value,
+				 GParamSpec      *pspec);
   /* Padding for future expansion */
   GtkFunction pad1;
   GtkFunction pad2;
@@ -110,6 +107,7 @@ struct _GtkContainerClass
 GtkType gtk_container_get_type		 (void) G_GNUC_CONST;
 void    gtk_container_set_border_width	 (GtkContainer	   *container,
 					  guint		    border_width);
+guint   gtk_container_get_border_width   (GtkContainer     *container);
 void    gtk_container_add		 (GtkContainer	   *container,
 					  GtkWidget	   *widget);
 void    gtk_container_remove		 (GtkContainer	   *container,
@@ -117,6 +115,7 @@ void    gtk_container_remove		 (GtkContainer	   *container,
 
 void    gtk_container_set_resize_mode    (GtkContainer     *container,
 					  GtkResizeMode     resize_mode);
+GtkResizeMode gtk_container_get_resize_mode (GtkContainer     *container);
 
 void    gtk_container_check_resize       (GtkContainer     *container);
 
@@ -129,14 +128,14 @@ void     gtk_container_foreach_full (GtkContainer       *container,
 				     gpointer            callback_data,
 				     GtkDestroyNotify    notify);
 GList*   gtk_container_children     (GtkContainer       *container);
-gboolean gtk_container_focus        (GtkContainer       *container,
-				     GtkDirectionType    direction);
 void     gtk_container_propagate_expose (GtkContainer   *container,
 					 GtkWidget      *child,
 					 GdkEventExpose *event);
 
 void     gtk_container_set_focus_chain  (GtkContainer   *container,
                                          GList          *focusable_widgets);
+gboolean gtk_container_get_focus_chain  (GtkContainer   *container,
+					 GList         **focusable_widgets);
 void     gtk_container_unset_focus_chain (GtkContainer  *container);
 
 /* Widget-level methods */
@@ -147,85 +146,60 @@ void   gtk_container_set_focus_child	   (GtkContainer     *container,
 					    GtkWidget	     *child);
 void   gtk_container_set_focus_vadjustment (GtkContainer     *container,
 					    GtkAdjustment    *adjustment);
+GtkAdjustment *gtk_container_get_focus_vadjustment (GtkContainer *container);
 void   gtk_container_set_focus_hadjustment (GtkContainer     *container,
 					    GtkAdjustment    *adjustment);
+GtkAdjustment *gtk_container_get_focus_hadjustment (GtkContainer *container);
 
 void    gtk_container_resize_children      (GtkContainer     *container);
 
 GtkType gtk_container_child_type	   (GtkContainer     *container);
 
-/* the `arg_name' argument needs to be a const static string */
-void    gtk_container_add_child_arg_type   (const gchar      *arg_name,
-					    GtkType           arg_type,
-					    guint             arg_flags,
-					    guint             arg_id);
-     
-/* Allocate a GtkArg array of size nargs that hold the
- * names and types of the args that can be used with
- * gtk_container_child_getv/gtk_container_child_setv.
- * if (arg_flags!=NULL),
- * (*arg_flags) will be set to point to a newly allocated
- * guint array that holds the flags of the args.
- * It is the callers response to do a
- * g_free (returned_args); g_free (*arg_flags).
- */
-GtkArg* gtk_container_query_child_args	   (GtkType	       class_type,
-					    guint32          **arg_flags,
-					    guint             *nargs);
 
-/* gtk_container_child_getv() sets an arguments type and value, or just
- * its type to GTK_TYPE_INVALID.
- * if GTK_FUNDAMENTAL_TYPE (arg->type) == GTK_TYPE_STRING, it's the callers
- * response to do a g_free (GTK_VALUE_STRING (arg));
- */
-void    gtk_container_child_getv	   (GtkContainer      *container,
-					    GtkWidget	      *child,
-					    guint	       n_args,
-					    GtkArg	      *args);
-void    gtk_container_child_setv   	   (GtkContainer      *container,
-					    GtkWidget	      *child,
-					    guint	       n_args,
-					    GtkArg	      *args);
-
-/* gtk_container_add_with_args() takes a variable argument list of the form:
- * (..., gchar *arg_name, ARG_VALUES, [repeatedly name/value pairs,] NULL)
- * where ARG_VALUES type depend on the argument and can consist of
- * more than one c-function argument.
- */
-void    gtk_container_add_with_args	   (GtkContainer      *container,
-					    GtkWidget	      *widget,
-					    const gchar	      *first_arg_name,
-					    ...);
-void    gtk_container_addv		   (GtkContainer      *container,
-					    GtkWidget	      *widget,
-					    guint	       n_args,
-					    GtkArg	      *args);
-void	gtk_container_child_set		   (GtkContainer      *container,
-					    GtkWidget         *child,
-					    const gchar	      *first_arg_name,
-					    ...);
+void         gtk_container_class_install_child_property (GtkContainerClass *cclass,
+							 guint		    property_id,
+							 GParamSpec	   *pspec);
+GParamSpec*  gtk_container_class_find_child_property	(GObjectClass	   *cclass,
+							 const gchar	   *property_name);
+GParamSpec** gtk_container_class_list_child_properties	(GObjectClass	   *cclass,
+							 guint		   *n_properties);
+void         gtk_container_add_with_properties		(GtkContainer	   *container,
+							 GtkWidget	   *widget,
+							 const gchar	   *first_prop_name,
+							 ...);
+void         gtk_container_child_set			(GtkContainer	   *container,
+							 GtkWidget	   *child,
+							 const gchar	   *first_prop_name,
+							 ...);	   
+void         gtk_container_child_get			(GtkContainer	   *container,
+							 GtkWidget	   *child,
+							 const gchar	   *first_prop_name,
+							 ...);	   
+void         gtk_container_child_set_valist		(GtkContainer	   *container,
+							 GtkWidget	   *child,
+							 const gchar	   *first_property_name,
+							 va_list	    var_args);
+void         gtk_container_child_get_valist		(GtkContainer	   *container,
+							 GtkWidget	   *child,
+							 const gchar	   *first_property_name,
+							 va_list	    var_args);
+void	     gtk_container_child_set_property		(GtkContainer	   *container,
+							 GtkWidget	   *child,
+							 const gchar	   *property_name,
+							 const GValue	   *value);
+void	     gtk_container_child_get_property		(GtkContainer	   *container,
+							 GtkWidget	   *child,
+							 const gchar	   *property_name,
+							 GValue		   *value);
      
+
+#define GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID(object, property_id, pspec) \
+    G_OBJECT_WARN_INVALID_PSPEC ((object), "child property id", (property_id), (pspec))
+
 
 /* Non-public methods */
-
 void	gtk_container_queue_resize	     (GtkContainer *container);
 void    gtk_container_clear_resize_widgets   (GtkContainer *container);
-void    gtk_container_arg_set		     (GtkContainer *container,
-					      GtkWidget	   *child,
-					      GtkArg       *arg,
-					      GtkArgInfo   *info);
-void    gtk_container_arg_get		     (GtkContainer *container,
-					      GtkWidget	   *child,
-					      GtkArg       *arg,
-					      GtkArgInfo   *info);
-gchar*	gtk_container_child_args_collect     (GtkType       object_type,
-					      GSList      **arg_list_p,
-					      GSList      **info_list_p,
-					      const gchar  *first_arg_name,
-					      va_list       args);
-gchar*  gtk_container_child_arg_get_info     (GtkType       object_type,
-					      const gchar  *arg_name,
-					      GtkArgInfo  **info_p);
 void    gtk_container_forall		     (GtkContainer *container,
 					      GtkCallback   callback,
 					      gpointer	    callback_data);

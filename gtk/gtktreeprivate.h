@@ -135,6 +135,11 @@ struct _GtkTreeViewPrivate
   GList *column_drag_info;
   GtkTreeViewColumnReorder *cur_reorder;
 
+  /* ATK Hack */
+  GtkTreeDestroyCountFunc destroy_count_func;
+  gpointer destroy_count_data;
+  GtkDestroyNotify destroy_count_destroy;
+
   /* Scroll timeout (e.g. during dnd) */
   guint scroll_timeout;
 
@@ -158,6 +163,9 @@ struct _GtkTreeViewPrivate
   guint drag_column_window_state : 3;
   /* hint to display rows in alternating colors */
   guint has_rules : 1;
+
+  guint in_extended_selection : 1;
+  guint in_free_motion : 1;
 };
 
 #ifdef __GNUC__
@@ -230,6 +238,7 @@ struct _GtkTreeViewPrivate
          return;                                                        \
        };                               }G_STMT_END
 #endif
+
 
 /* functions that shouldn't be exported */
 void         _gtk_tree_selection_internal_select_node (GtkTreeSelection  *selection,

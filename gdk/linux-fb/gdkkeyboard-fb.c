@@ -75,6 +75,7 @@ struct _GdkFBKeyboardDevice {
 };
 
 static GdkFBKeyboard *gdk_fb_keyboard = NULL;
+static GdkKeymap *default_keymap = NULL;
 
 static gboolean xlate_open            (GdkFBKeyboard       *kb);
 static void     xlate_close           (GdkFBKeyboard       *kb);
@@ -143,6 +144,22 @@ static GdkFBKeyboardDevice keyb_devs[] =
   },
 };
 
+GdkKeymap*
+gdk_keymap_get_default (void)
+{
+  if (default_keymap == NULL)
+    default_keymap = g_object_new (gdk_keymap_get_type (), NULL);
+
+  return default_keymap;
+}
+
+PangoDirection
+gdk_keymap_get_direction (GdkKeymap *keymap)
+{
+  /* FIXME: Only supports LTR keymaps at the moment */
+  return PANGO_DIRECTION_LTR;
+}
+
 guint
 gdk_fb_keyboard_modifiers ()
 {
@@ -150,17 +167,18 @@ gdk_fb_keyboard_modifiers ()
 }
 
 gboolean
-gdk_fb_keyboard_open (void)
+gdk_fb_keyboard_init (gboolean open_dev)
 {
   GdkFBKeyboard *keyb;
-  GdkFBKeyboardDevice *device;
   char *keyb_type;
   int i;
 
-  keyb = g_new0 (GdkFBKeyboard, 1);
+  gdk_fb_keyboard = g_new0 (GdkFBKeyboard, 1);
+  keyb = gdk_fb_keyboard;
   keyb->fd = -1;
   
   keyb_type = getenv ("GDK_KEYBOARD_TYPE");
+  
   if (!keyb_type)
     keyb_type = "xlate";
 
@@ -176,19 +194,29 @@ gdk_fb_keyboard_open (void)
       return FALSE;
     }
 
-  device = &keyb_devs[i];
+  keyb->dev = &keyb_devs[i];
 
-  keyb->dev = device;
-  
+  if (open_dev)
+    return gdk_fb_keyboard_open ();
+  else
+    return TRUE;
+}
+
+gboolean
+gdk_fb_keyboard_open (void)
+{
+  GdkFBKeyboard *keyb;
+  GdkFBKeyboardDevice *device;
+
+  keyb = gdk_fb_keyboard;
+  device = keyb->dev;
+
   if (!device->open(keyb))
     {
       g_warning ("Keyboard driver open failed");
-      g_free (keyb);
       return FALSE;
     }
 
-  gdk_fb_keyboard = keyb;
-  
   return TRUE;
 }
 
@@ -196,7 +224,6 @@ void
 gdk_fb_keyboard_close (void)
 {
   gdk_fb_keyboard->dev->close(gdk_fb_keyboard);
-  g_free (gdk_fb_keyboard);
 }
 
 
@@ -886,6 +913,7 @@ xlate_close (GdkFBKeyboard *kb)
   
   g_source_remove (kb->io_tag);
   g_io_channel_unref (kb->io);
+  kb->fd = -1;
   /* don't close kb->fd, it is the tty from gdk_display */
 }
 

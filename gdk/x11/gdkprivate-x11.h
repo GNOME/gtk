@@ -103,16 +103,14 @@ void     _gdk_moveresize_handle_event      (XEvent *event);
 /* from gdkwindow-x11.c */
 void	 _gdk_moveresize_configure_done_for_display (GdkDisplay *dpy);
 
+void     _gdk_keymap_state_changed		    (GdkDisplay *display);
+
 extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern gboolean	         gdk_use_xshm;
-/*extern Atom		 gdk_wm_delete_window;
-extern Atom		 gdk_wm_take_focus;
-extern Atom		 gdk_wm_protocols;
-extern Atom		 gdk_wm_window_protocols[];
-*/
 extern gboolean          gdk_null_window_warnings;
 extern const int         gdk_nevent_masks;
 extern const int         gdk_event_mask_table[];
 extern gboolean		 gdk_synchronize;
+
 
 #endif /* __GDK_PRIVATE_X11_H__ */

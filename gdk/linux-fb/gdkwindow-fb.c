@@ -1868,31 +1868,79 @@ gdk_fb_window_get_abs_shape (GdkDrawable *window)
   return shape;
 }
 
-void
-gdk_window_shape_combine_mask (GdkWindow *window,
-			       GdkBitmap *mask,
-			       gint x, gint y)
+
+static void
+_gdk_window_shape_combine_region (GdkWindow *window,
+				  GdkRegion *shape,
+				  gint       x,
+				  gint       y)
 {
   GdkWindowFBData *private;
+  GdkDrawableFBData *drawable_private;
+  GdkRegion *old_region = NULL;
+  GdkRegion *new_region = NULL;
+  GdkRectangle rect;
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   private = GDK_WINDOW_IMPL_FBDATA (window);
+  drawable_private = GDK_DRAWABLE_IMPL_FBDATA (window);
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {
+      old_region = gdk_fb_window_get_abs_shape (window);
+      if (old_region == NULL)
+	{
+	  rect.x = drawable_private->llim_x;
+	  rect.y = drawable_private->llim_y;
+	  rect.width = drawable_private->lim_x - rect.x;
+	  rect.height = drawable_private->lim_y - rect.y;
+	  old_region = gdk_region_rectangle (&rect);
+	}
+    }
 
   if (private->shape && private->shape != GDK_FB_USE_CHILD_SHAPE)
     gdk_region_destroy (private->shape);
 
-  /* Warning. HUGE hack */
-  if (mask == GDK_FB_USE_CHILD_SHAPE)
-    private->shape = GDK_FB_USE_CHILD_SHAPE;
-  else if (mask)
+  if (shape)
     {
-      private->shape = gdk_fb_region_create_from_bitmap (mask);
-      gdk_region_offset (private->shape, x, y);
+      private->shape = shape;
+      if (shape != GDK_FB_USE_CHILD_SHAPE)
+	gdk_region_offset (private->shape, x, y);
     }
   else
     private->shape = NULL;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {
+      new_region = gdk_fb_window_get_abs_shape (window);
+      if (new_region == NULL)
+	{
+	  rect.x = drawable_private->llim_x;
+	  rect.y = drawable_private->llim_y;
+	  rect.width = drawable_private->lim_x - rect.x;
+	  rect.height = drawable_private->lim_y - rect.y;
+	  new_region = gdk_region_rectangle (&rect);
+	}
+
+      gdk_region_subtract (old_region, new_region);
+      gdk_region_destroy (new_region);
+      gdk_window_invalidate_region (gdk_parent_root, old_region, TRUE);
+      gdk_region_destroy (old_region);
+    }
+}
+
+void
+gdk_window_shape_combine_mask (GdkWindow *window,
+			       GdkBitmap *mask,
+			       gint x, gint y)
+{
+  _gdk_window_shape_combine_region (window,
+				    (mask == GDK_FB_USE_CHILD_SHAPE)?
+				    GDK_FB_USE_CHILD_SHAPE :
+				    gdk_fb_region_create_from_bitmap (mask),
+				    x, y);
 }
 
 void
@@ -1901,23 +1949,9 @@ gdk_window_shape_combine_region (GdkWindow *window,
                                  gint       x,
                                  gint       y)
 {
-  GdkWindowFBData *private;
-  
-  g_return_if_fail (window != NULL);
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  private = GDK_WINDOW_IMPL_FBDATA (window);
-
-  if (private->shape && private->shape != GDK_FB_USE_CHILD_SHAPE)
-    gdk_region_destroy (private->shape);
-
-  if (shape)
-    {
-      private->shape = gdk_region_copy (shape);
-      gdk_region_offset (private->shape, x, y);
-    }
-  else
-    private->shape = NULL;
+  _gdk_window_shape_combine_region (window,
+				    gdk_region_copy (shape),
+				    x, y);
 }
 
 void

@@ -552,3 +552,14 @@ End:
   </para>
 
 
+<!-- ##### FUNCTION gdk_pixbuf_new_from_inline ##### -->
+<para>
+
+</para>
+
+@inline_pixbuf: 
+@copy_pixels: 
+@length: 
+@error: 
+@Returns: 
+

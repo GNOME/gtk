@@ -47,8 +47,6 @@
 #define sleep(n) _sleep(n)
 #endif
 
-#include "prop-editor.h"
-
 #include "circles.xbm"
 #include "test.xpm"
 
@@ -446,18 +444,18 @@ create_radio_buttons (void)
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
       button = gtk_radio_button_new_with_label (
-	         gtk_radio_button_group (GTK_RADIO_BUTTON (button)),
+	         gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
 		 "button2");
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
       button = gtk_radio_button_new_with_label (
-                 gtk_radio_button_group (GTK_RADIO_BUTTON (button)),
+                 gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
 		 "button3");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
       button = gtk_radio_button_new_with_label (
-                 gtk_radio_button_group (GTK_RADIO_BUTTON (button)),
+                 gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
 		 "inconsistent");
       gtk_toggle_button_set_inconsistent (GTK_TOGGLE_BUTTON (button), TRUE);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
@@ -1426,17 +1424,17 @@ create_tree_mode_window(void)
       gtk_box_pack_start(GTK_BOX(box4), button, TRUE, TRUE, 0);
       sTreeSampleSelection.single_button = button;
 
-      button = gtk_radio_button_new_with_label(gtk_radio_button_group (GTK_RADIO_BUTTON (button)),
+      button = gtk_radio_button_new_with_label(gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
 					       "BROWSE");
       gtk_box_pack_start(GTK_BOX(box4), button, TRUE, TRUE, 0);
       sTreeSampleSelection.browse_button = button;
 
-      button = gtk_radio_button_new_with_label(gtk_radio_button_group (GTK_RADIO_BUTTON (button)),
+      button = gtk_radio_button_new_with_label(gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
 					       "MULTIPLE");
       gtk_box_pack_start(GTK_BOX(box4), button, TRUE, TRUE, 0);
       sTreeSampleSelection.multiple_button = button;
 
-      sTreeSampleSelection.selection_mode_group = gtk_radio_button_group (GTK_RADIO_BUTTON (button));
+      sTreeSampleSelection.selection_mode_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 
       /* create option mode frame */
       frame = gtk_frame_new("Options");
@@ -2105,9 +2103,14 @@ void create_labels (void)
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
       frame = gtk_frame_new ("Internationalized Label");
-      label = gtk_label_new ("French (Français) Bonjour, Salut\n"
-			     "Korean (한글)   안녕하세요, 안녕하십니까\n"
-			     "Russian (Русский) Здравствуйте!");
+      label = gtk_label_new (NULL);
+      gtk_label_set_markup (GTK_LABEL (label),
+			    "French (Français) Bonjour, Salut\n"
+			    "Korean (한글)   안녕하세요, 안녕하십니까\n"
+			    "Russian (Русский) Здравствуйте!\n"
+			    "Chinese (Simplified) <span lang=\"zh-cn\">元气	开发</span>\n"
+			    "Chinese (Traditional) <span lang=\"zh-tw\">元氣	開發</span>\n"
+			    "Japanese <span lang=\"ja\">元気	開発</span>");
       gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
@@ -2635,14 +2638,14 @@ create_tooltips (void)
 			    "ContextHelp/buttons/?");
       
       
-      gtk_widget_set (g_object_connect (tips_query,
-					"signal::widget_entered", tips_query_widget_entered, toggle,
-					"signal::widget_selected", tips_query_widget_selected, NULL,
-					NULL),
-		      "visible", TRUE,
-		      "parent", box3,
-		      "caller", button,
-		      NULL);
+      g_object_set (g_object_connect (tips_query,
+				      "signal::widget_entered", tips_query_widget_entered, toggle,
+				      "signal::widget_selected", tips_query_widget_selected, NULL,
+				      NULL),
+		    "visible", TRUE,
+		    "parent", box3,
+		    "caller", button,
+		    NULL);
       
       frame = gtk_widget_new (gtk_frame_get_type (),
 			      "label", "ToolTips Inspector",
@@ -3098,7 +3101,7 @@ static GtkItemFactoryEntry menu_items[] =
   { "/_Preferences/Shape/_Oval",        NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Rectangle" },
   { "/_Preferences/Shape/_Rectangle",   NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Square" },
   { "/_Preferences/Shape/_Oval",        NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Rectangle" },
-  { "/_Preferences/Shape/_Image",       NULL, gtk_ifactory_cb, 0, "<ImageItem>", (gchar**) apple, sizeof(apple) },
+  { "/_Preferences/Shape/_Image",       NULL, gtk_ifactory_cb, 0, "<ImageItem>", apple },
 
   /* For testing deletion of menus */
   { "/_Preferences/Should_NotAppear",          NULL, 0,               0, "<Branch>" },
@@ -3529,15 +3532,6 @@ entry_toggle_sensitive (GtkWidget *checkbutton,
 }
 
 static void
-entry_props_clicked (GtkWidget *button,
-		     GObject   *entry)
-{
-  GtkWidget *window = create_prop_editor (entry, 0);
-
-  gtk_window_set_title (GTK_WINDOW (window), "Entry Properties");
-}
-
-static void
 create_entry (void)
 {
   static GtkWidget *window = NULL;
@@ -3589,12 +3583,6 @@ create_entry (void)
       gtk_entry_set_text (GTK_ENTRY (entry), "hello world السلام عليكم");
       gtk_editable_select_region (GTK_EDITABLE (entry), 0, 5);
       gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
-
-      button = gtk_button_new_with_mnemonic ("_Props");
-      gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  GTK_SIGNAL_FUNC (entry_props_clicked),
-			  entry);
 
       cb = gtk_combo_new ();
       gtk_combo_set_popdown_strings (GTK_COMBO (cb), cbitems);
@@ -3681,7 +3669,7 @@ create_size_group_window (GtkSizeGroup *master_size_group)
 					GTK_RESPONSE_NONE,
 					NULL);
 
-  gtk_window_set_resizeable (GTK_WINDOW (window), FALSE);
+  gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
   gtk_signal_connect (GTK_OBJECT (window), "response",
 		      GTK_SIGNAL_FUNC (gtk_widget_destroy),
@@ -7483,15 +7471,6 @@ toggle_shrink (GtkWidget *widget, GtkWidget *child)
   gtk_widget_unref (child);
 }
 
-static void
-paned_props_clicked (GtkWidget *button,
-		     GObject   *paned)
-{
-  GtkWidget *window = create_prop_editor (paned, GTK_TYPE_PANED);
-
-  gtk_window_set_title (GTK_WINDOW (window), "Paned Properties");
-}
-
 GtkWidget *
 create_pane_options (GtkPaned    *paned,
 		     const gchar *frame_label,
@@ -7501,7 +7480,6 @@ create_pane_options (GtkPaned    *paned,
   GtkWidget *frame;
   GtkWidget *table;
   GtkWidget *label;
-  GtkWidget *button;
   GtkWidget *check_button;
   
   frame = gtk_frame_new (frame_label);
@@ -7551,13 +7529,6 @@ create_pane_options (GtkPaned    *paned,
   gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
 		      GTK_SIGNAL_FUNC (toggle_shrink),
 		      paned->child2);
-
-  button = gtk_button_new_with_mnemonic ("_Properties");
-  gtk_table_attach_defaults (GTK_TABLE (table), button,
-			     0, 2, 3, 4);
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      GTK_SIGNAL_FUNC (paned_props_clicked),
-		      paned);
 
   return frame;
 }
@@ -9778,7 +9749,7 @@ scroll_test_configure (GtkWidget *widget, GdkEventConfigure *event,
 static void
 scroll_test_adjustment_changed (GtkAdjustment *adj, GtkWidget *widget)
 {
-  gint source_min = (int)adj->value - scroll_test_pos;
+  /* gint source_min = (int)adj->value - scroll_test_pos; */
   gint dy;
 
   dy = scroll_test_pos - (int)adj->value;
@@ -10761,6 +10732,5 @@ main (int argc, char *argv[])
 	g_main_iteration (FALSE);
 #endif
     }
-
   return 0;
 }

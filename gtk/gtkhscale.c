@@ -24,7 +24,9 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "gtkhscale.h"
 #include "gtksignal.h"
 #include "gtkintl.h"
@@ -100,6 +102,50 @@ gtk_hscale_new (GtkAdjustment *adjustment)
 			   NULL);
 
   return hscale;
+}
+
+/**
+ * gtk_hscale_new_with_range:
+ * @min: minimum value
+ * @max: maximum value
+ * @step: step increment (tick size) used with keyboard shortcuts
+ * 
+ * Creates a new horizontal scale widget that lets the user
+ * input a number between @min and @max with the increment @step.
+ * @step must be nonzero; it's the distance the slider moves when
+ * using the arrow keys to adjust the scale value.
+ * 
+ * Return value: a new #GtkHScale
+ **/
+GtkWidget*
+gtk_hscale_new_with_range (gdouble min,
+                           gdouble max,
+                           gdouble step)
+{
+  GtkObject *adj;
+  GtkScale *scale;
+  gint digits;
+
+  g_return_val_if_fail (min < max, NULL);
+  g_return_val_if_fail (step != 0.0, NULL);
+
+  adj = gtk_adjustment_new (min, min, max, step, 10 * step, step);
+  
+  scale = g_object_new (GTK_TYPE_HSCALE,
+                        "adjustment", adj,
+                        NULL);
+
+  if (fabs (step) >= 1.0 || step == 0.0)
+    digits = 0;
+  else {
+    digits = abs ((gint) floor (log10 (fabs (step))));
+    if (digits > 5)
+      digits = 5;
+  }
+
+  gtk_scale_set_digits (scale, digits);
+  
+  return GTK_WIDGET (scale);
 }
 
 static gboolean

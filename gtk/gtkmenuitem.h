@@ -90,8 +90,10 @@ struct _GtkMenuItemClass
 GtkType	   gtk_menu_item_get_type	      (void) G_GNUC_CONST;
 GtkWidget* gtk_menu_item_new                  (void);
 GtkWidget* gtk_menu_item_new_with_label       (const gchar         *label);
+GtkWidget* gtk_menu_item_new_with_mnemonic    (const gchar         *label);
 void       gtk_menu_item_set_submenu          (GtkMenuItem         *menu_item,
 					       GtkWidget           *submenu);
+GtkWidget* gtk_menu_item_get_submenu          (GtkMenuItem         *menu_item);
 void       gtk_menu_item_remove_submenu       (GtkMenuItem         *menu_item);
 void       gtk_menu_item_set_placement        (GtkMenuItem         *menu_item,
 					       GtkSubmenuPlacement  placement);
