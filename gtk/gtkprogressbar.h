@@ -30,9 +30,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_PROGRESS_BAR(obj)          GTK_CHECK_CAST (obj, gtk_progress_bar_get_type (), GtkProgressBar)
-#define GTK_PROGRESS_BAR_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_progress_bar_get_type (), GtkProgressBarClass)
-#define GTK_IS_PROGRESS_BAR(obj)       GTK_CHECK_TYPE (obj, gtk_progress_bar_get_type ())
+#define GTK_TYPE_PROGRESS_BAR            (gtk_progress_bar_get_type ())
+#define GTK_PROGRESS_BAR(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_PROGRESS_BAR, GtkProgressBar))
+#define GTK_PROGRESS_BAR_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_PROGRESS_BAR, GtkProgressBarClass))
+#define GTK_IS_PROGRESS_BAR(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_PROGRESS_BAR))
+#define GTK_IS_PROGRESS_BAR_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PROGRESS_BAR))
 
 
 typedef struct _GtkProgressBar       GtkProgressBar;
@@ -74,11 +76,9 @@ struct _GtkProgressBarClass
 };
 
 
-guint      gtk_progress_bar_get_type             (void);
+GtkType    gtk_progress_bar_get_type             (void);
 GtkWidget* gtk_progress_bar_new                  (void);
 GtkWidget* gtk_progress_bar_new_with_adjustment  (GtkAdjustment  *adjustment);
-void       gtk_progress_bar_construct            (GtkProgressBar *pbar,
-						  GtkAdjustment  *adjustment);
 void       gtk_progress_bar_set_bar_style        (GtkProgressBar *pbar,
 						  GtkProgressBarStyle style);
 void       gtk_progress_bar_set_discrete_blocks  (GtkProgressBar *pbar,
@@ -91,6 +91,10 @@ void       gtk_progress_bar_set_orientation      (GtkProgressBar *pbar,
 						  GtkProgressBarOrientation orientation);
 void       gtk_progress_bar_update               (GtkProgressBar *pbar,
 						  gfloat          percentage);
+
+/* deprecated */
+void       gtk_progress_bar_construct            (GtkProgressBar *pbar,
+						  GtkAdjustment  *adjustment);
 
 
 #ifdef __cplusplus

@@ -25,8 +25,24 @@
 
 #define EPSILON  1e-5
 
+enum {
+  ARG_0,
+  ARG_ACTIVITY_MODE,
+  ARG_SHOW_TEXT,
+  ARG_TEXT_XALIGN,
+  ARG_TEXT_YALIGN
+};
+
+
 static void gtk_progress_class_init      (GtkProgressClass *klass);
 static void gtk_progress_init            (GtkProgress      *progress);
+static void gtk_progress_set_arg	 (GtkObject        *object,
+					  GtkArg           *arg,
+					  guint             arg_id);
+static void gtk_progress_get_arg	 (GtkObject        *object,
+					  GtkArg           *arg,
+					  guint             arg_id);
+static void gtk_progress_destroy         (GtkObject        *object);
 static void gtk_progress_finalize        (GtkObject        *object);
 static void gtk_progress_realize         (GtkWidget        *widget);
 static gint gtk_progress_expose          (GtkWidget        *widget,
@@ -39,10 +55,10 @@ static void gtk_progress_create_pixmap   (GtkProgress      *progress);
 static GtkWidgetClass *parent_class = NULL;
 
 
-guint
+GtkType
 gtk_progress_get_type (void)
 {
-  static guint progress_type = 0;
+  static GtkType progress_type = 0;
 
   if (!progress_type)
     {
@@ -58,7 +74,7 @@ gtk_progress_get_type (void)
         (GtkClassInitFunc) NULL
       };
 
-      progress_type = gtk_type_unique (gtk_widget_get_type (), &progress_info);
+      progress_type = gtk_type_unique (GTK_TYPE_WIDGET, &progress_info);
     }
 
   return progress_type;
@@ -72,9 +88,28 @@ gtk_progress_class_init (GtkProgressClass *class)
 
   object_class = (GtkObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
+  parent_class = gtk_type_class (GTK_TYPE_WIDGET);
 
-  parent_class = gtk_type_class (gtk_widget_get_type ());
+  gtk_object_add_arg_type ("GtkProgress::activity_mode",
+			   GTK_TYPE_BOOL,
+			   GTK_ARG_READWRITE,
+			   ARG_ACTIVITY_MODE);
+  gtk_object_add_arg_type ("GtkProgress::show_text",
+			   GTK_TYPE_BOOL,
+			   GTK_ARG_READWRITE,
+			   ARG_SHOW_TEXT);
+  gtk_object_add_arg_type ("GtkProgress::text_xalign",
+			   GTK_TYPE_FLOAT,
+			   GTK_ARG_READWRITE,
+			   ARG_TEXT_XALIGN);
+  gtk_object_add_arg_type ("GtkProgress::text_yalign",
+			   GTK_TYPE_FLOAT,
+			   GTK_ARG_READWRITE,
+			   ARG_TEXT_YALIGN);
 
+  object_class->set_arg = gtk_progress_set_arg;
+  object_class->get_arg = gtk_progress_get_arg;
+  object_class->destroy = gtk_progress_destroy;
   object_class->finalize = gtk_progress_finalize;
 
   widget_class->realize = gtk_progress_realize;
@@ -88,10 +123,66 @@ gtk_progress_class_init (GtkProgressClass *class)
 }
 
 static void
+gtk_progress_set_arg (GtkObject      *object,
+		      GtkArg         *arg,
+		      guint           arg_id)
+{
+  GtkProgress *progress;
+  
+  progress = GTK_PROGRESS (object);
+
+  switch (arg_id)
+    {
+    case ARG_ACTIVITY_MODE:
+      gtk_progress_set_activity_mode (progress, GTK_VALUE_BOOL (*arg));
+      break;
+    case ARG_SHOW_TEXT:
+      gtk_progress_set_show_text (progress, GTK_VALUE_BOOL (*arg));
+      break;
+    case ARG_TEXT_XALIGN:
+      gtk_progress_set_text_alignment (progress, GTK_VALUE_FLOAT (*arg), progress->y_align);
+      break;
+    case ARG_TEXT_YALIGN:
+      gtk_progress_set_text_alignment (progress, progress->x_align, GTK_VALUE_FLOAT (*arg));
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+gtk_progress_get_arg (GtkObject      *object,
+		      GtkArg         *arg,
+		      guint           arg_id)
+{
+  GtkProgress *progress;
+  
+  progress = GTK_PROGRESS (object);
+
+  switch (arg_id)
+    {
+    case ARG_ACTIVITY_MODE:
+      GTK_VALUE_BOOL (*arg) = (progress->activity_mode != 0);
+      break;
+    case ARG_SHOW_TEXT:
+      GTK_VALUE_BOOL (*arg) = (progress->show_text != 0);
+      break;
+    case ARG_TEXT_XALIGN:
+      GTK_VALUE_FLOAT (*arg) = progress->x_align;
+      break;
+    case ARG_TEXT_YALIGN:
+      GTK_VALUE_FLOAT (*arg) = progress->y_align;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
+}
+
+static void
 gtk_progress_init (GtkProgress *progress)
 {
-  GTK_WIDGET_SET_FLAGS (progress, GTK_BASIC);
-
+  progress->adjustment = NULL;
   progress->offscreen_pixmap = NULL;
   progress->format = g_strdup ("%P %%");
   progress->x_align = 0.5;
@@ -137,6 +228,23 @@ gtk_progress_realize (GtkWidget *widget)
 }
 
 static void
+gtk_progress_destroy (GtkObject *object)
+{
+  GtkProgress *progress;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_PROGRESS (object));
+
+  progress = GTK_PROGRESS (object);
+
+  if (progress->adjustment)
+    gtk_signal_disconnect_by_data (GTK_OBJECT (progress->adjustment),
+				   progress);
+
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+}
+
+static void
 gtk_progress_finalize (GtkObject *object)
 {
   GtkProgress *progress;
@@ -146,7 +254,8 @@ gtk_progress_finalize (GtkObject *object)
 
   progress = GTK_PROGRESS (object);
 
-  gtk_object_unref (GTK_OBJECT (GTK_PROGRESS (object)->adjustment));
+  if (progress->adjustment)
+    gtk_object_unref (GTK_OBJECT (GTK_PROGRESS (object)->adjustment));
   
   if (progress->offscreen_pixmap)
     gdk_pixmap_unref (progress->offscreen_pixmap);
@@ -340,6 +449,10 @@ gtk_progress_set_adjustment (GtkProgress   *progress,
 {
   g_return_if_fail (progress != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (progress));
+  if (adjustment)
+    g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+  else
+    adjustment = (GtkAdjustment*) gtk_object_new (GTK_TYPE_ADJUSTMENT, NULL);
 
   if (progress->adjustment != adjustment)
     {

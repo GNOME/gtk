@@ -359,30 +359,33 @@ gtk_type_new (GtkType type)
   /* we need to call the base classes' object_init_func for derived
    * objects with the object's ->klass field still pointing to the
    * corresponding base class, otherwise overridden class functions
-   * could get called with partly-initialized objects.
+   * could get called with partly-initialized objects. the real object
+   * class is passed as second argment to the initializers.
    */
   if (node->n_supers)
     {
       guint i;
       GtkType *supers;
+      GtkTypeNode *pnode;
 
       supers = node->supers;
       for (i = node->n_supers; i > 0; i--)
 	{
-	  GtkTypeNode *pnode;
-	  
 	  LOOKUP_TYPE_NODE (pnode, supers[i]);
 	  if (pnode->type_info.object_init_func)
 	    {
 	      tobject->klass = pnode->klass;
-	      pnode->type_info.object_init_func (tobject);
+	      pnode->type_info.object_init_func (tobject, klass);
 	    }
 	}
       LOOKUP_TYPE_NODE (node, type);
     }
   tobject->klass = klass;
   if (node->type_info.object_init_func)
-    node->type_info.object_init_func (tobject);
+    {
+      node->type_info.object_init_func (tobject, klass);
+      tobject->klass = klass;
+    }
   
   return tobject;
 }
@@ -768,7 +771,7 @@ gtk_type_set_varargs_type (GtkType        foreign_type,
 }
 
 GtkType
-gtk_type_get_varargs_type (GtkType        foreign_type)
+gtk_type_get_varargs_type (GtkType foreign_type)
 {
   GtkType type;
   guint i;

@@ -35,10 +35,10 @@ static void gtk_scale_draw_background (GtkRange      *range);
 static GtkRangeClass *parent_class = NULL;
 
 
-guint
+GtkType
 gtk_scale_get_type (void)
 {
-  static guint scale_type = 0;
+  static GtkType scale_type = 0;
 
   if (!scale_type)
     {
@@ -54,7 +54,7 @@ gtk_scale_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      scale_type = gtk_type_unique (gtk_range_get_type (), &scale_info);
+      scale_type = gtk_type_unique (GTK_TYPE_RANGE, &scale_info);
     }
 
   return scale_type;
@@ -71,7 +71,7 @@ gtk_scale_class_init (GtkScaleClass *class)
   range_class = (GtkRangeClass*) class;
   widget_class = (GtkWidgetClass*) class;
 
-  parent_class = gtk_type_class (gtk_range_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_RANGE);
 
   widget_class->map = gtk_scale_map;
   widget_class->unmap = gtk_scale_unmap;

@@ -173,7 +173,6 @@ static void
 gtk_handle_box_init (GtkHandleBox *handle_box)
 {
   GTK_WIDGET_UNSET_FLAGS (handle_box, GTK_NO_WINDOW);
-  GTK_WIDGET_SET_FLAGS (handle_box, GTK_BASIC); /* FIXME: are we really a basic widget? */
 
   handle_box->bin_window = NULL;
   handle_box->float_window = NULL;

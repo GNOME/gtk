@@ -24,9 +24,11 @@
 #include <gtk/gtkscrollbar.h>
 
 
-#define GTK_VSCROLLBAR(obj)          GTK_CHECK_CAST (obj, gtk_vscrollbar_get_type (), GtkVScrollbar)
-#define GTK_VSCROLLBAR_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_vscrollbar_get_type (), GtkVScrollbarClass)
-#define GTK_IS_VSCROLLBAR(obj)       GTK_CHECK_TYPE (obj, gtk_vscrollbar_get_type ())
+#define GTK_TYPE_VSCROLLBAR            (gtk_vscrollbar_get_type ())
+#define GTK_VSCROLLBAR(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_VSCROLLBAR, GtkVScrollbar))
+#define GTK_VSCROLLBAR_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_VSCROLLBAR, GtkVScrollbarClass))
+#define GTK_IS_VSCROLLBAR(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_VSCROLLBAR))
+#define GTK_IS_VSCROLLBAR_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VSCROLLBAR))
 
 
 typedef struct _GtkVScrollbar       GtkVScrollbar;
@@ -48,7 +50,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-guint      gtk_vscrollbar_get_type (void);
+GtkType    gtk_vscrollbar_get_type (void);
 GtkWidget* gtk_vscrollbar_new      (GtkAdjustment *adjustment);
 
 

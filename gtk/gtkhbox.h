@@ -29,11 +29,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_TYPE_HBOX		       (gtk_hbox_get_type ())
-#define GTK_HBOX(obj)		       (GTK_CHECK_CAST ((obj), GTK_TYPE_HBOX, GtkHBox))
-#define GTK_HBOX_CLASS(klass)	       (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_HBOX, GtkHBoxClass))
-#define GTK_IS_HBOX(obj)	       (GTK_CHECK_TYPE ((obj), GTK_TYPE_HBOX))
-#define GTK_IS_HBOX_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HBOX))
+#define GTK_TYPE_HBOX		 (gtk_hbox_get_type ())
+#define GTK_HBOX(obj)		 (GTK_CHECK_CAST ((obj), GTK_TYPE_HBOX, GtkHBox))
+#define GTK_HBOX_CLASS(klass)	 (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_HBOX, GtkHBoxClass))
+#define GTK_IS_HBOX(obj)	 (GTK_CHECK_TYPE ((obj), GTK_TYPE_HBOX))
+#define GTK_IS_HBOX_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HBOX))
 
 
 typedef struct _GtkHBox	      GtkHBox;

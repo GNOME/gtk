@@ -142,8 +142,10 @@ enum
 
 enum {
   ARG_0,
-  ARG_HADJUSTMENT,
-  ARG_VADJUSTMENT
+  ARG_N_COLUMNS,
+  ARG_SHADOW_TYPE,
+  ARG_SELECTION_MODE,
+  ARG_ROW_HEIGHT
 };
 
 static void sync_selection (GtkCList * clist,
@@ -159,6 +161,9 @@ static void gtk_clist_destroy  (GtkObject *object);
 static void gtk_clist_finalize (GtkObject *object);
 
 /* GtkWidget Methods */
+static void gtk_clist_scroll_adjustments (GtkCList      *clist,
+					  GtkAdjustment *hadjustment,
+					  GtkAdjustment *vadjustment);
 static void gtk_clist_realize         (GtkWidget        *widget);
 static void gtk_clist_unrealize       (GtkWidget        *widget);
 static void gtk_clist_map             (GtkWidget        *widget);
@@ -414,14 +419,36 @@ gtk_clist_class_init (GtkCListClass *klass)
 
   parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
-  gtk_object_add_arg_type ("GtkCList::hadjustment",
-			   GTK_TYPE_ADJUSTMENT,
+  gtk_object_add_arg_type ("GtkCList::n_columns",
+			   GTK_TYPE_UINT,
+			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT_ONLY,
+			   ARG_N_COLUMNS);
+  gtk_object_add_arg_type ("GtkCList::shadow_type",
+			   GTK_TYPE_SHADOW_TYPE,
 			   GTK_ARG_READWRITE,
-			   ARG_HADJUSTMENT);
-  gtk_object_add_arg_type ("GtkCList::vadjustment",
-			   GTK_TYPE_ADJUSTMENT,
+			   ARG_SHADOW_TYPE);
+  gtk_object_add_arg_type ("GtkCList::selection_mode",
+			   GTK_TYPE_SELECTION_MODE,
 			   GTK_ARG_READWRITE,
-			   ARG_VADJUSTMENT);
+			   ARG_SELECTION_MODE);
+  gtk_object_add_arg_type ("GtkCList::row_height",
+			   GTK_TYPE_UINT,
+			   GTK_ARG_READWRITE,
+			   ARG_ROW_HEIGHT);
+  
+  object_class->set_arg = gtk_clist_set_arg;
+  object_class->get_arg = gtk_clist_get_arg;
+  object_class->destroy = gtk_clist_destroy;
+  object_class->finalize = gtk_clist_finalize;
+
+
+  widget_class->scroll_adjustments_signal =
+    gtk_signal_new ("scroll_adjustments",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkCListClass, scroll_adjustments),
+		    gtk_marshal_NONE__POINTER_POINTER,
+		    GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
 
   clist_signals[SELECT_ROW] =
     gtk_signal_new ("select_row",
@@ -533,14 +560,7 @@ gtk_clist_class_init (GtkCListClass *klass)
                     GTK_SIGNAL_OFFSET (GtkCListClass, abort_column_resize),
                     gtk_marshal_NONE__NONE,
                     GTK_TYPE_NONE, 0);
-
-
   gtk_object_class_add_signals (object_class, clist_signals, LAST_SIGNAL);
-
-  object_class->set_arg = gtk_clist_set_arg;
-  object_class->get_arg = gtk_clist_get_arg;
-  object_class->destroy = gtk_clist_destroy;
-  object_class->finalize = gtk_clist_finalize;
 
   widget_class->realize = gtk_clist_realize;
   widget_class->unrealize = gtk_clist_unrealize;
@@ -566,6 +586,7 @@ gtk_clist_class_init (GtkCListClass *klass)
   container_class->focus = gtk_clist_focus;
   container_class->set_focus_child = gtk_clist_set_focus_child;
 
+  klass->scroll_adjustments = gtk_clist_scroll_adjustments;
   klass->select_row = real_select_row;
   klass->unselect_row = real_unselect_row;
   klass->undo_selection = real_undo_selection;
@@ -797,19 +818,22 @@ gtk_clist_set_arg (GtkObject      *object,
 		   guint           arg_id)
 {
   GtkCList *clist;
-  GtkAdjustment *adjustment;
 
   clist = GTK_CLIST (object);
 
   switch (arg_id)
     {
-    case ARG_HADJUSTMENT:
-      adjustment = GTK_VALUE_POINTER (*arg);
-      gtk_clist_set_hadjustment (clist, adjustment);
+    case ARG_N_COLUMNS: /* construct-only arg, only set when !GTK_CONSTRUCTED */
+      gtk_clist_construct (clist, MAX (1, GTK_VALUE_UINT (*arg)), NULL);
       break;
-    case ARG_VADJUSTMENT:
-      adjustment = GTK_VALUE_POINTER (*arg);
-      gtk_clist_set_vadjustment (clist, adjustment);
+    case ARG_SHADOW_TYPE:
+      gtk_clist_set_shadow_type (clist, GTK_VALUE_ENUM (*arg));
+      break;
+    case ARG_SELECTION_MODE:
+      gtk_clist_set_selection_mode (clist, GTK_VALUE_ENUM (*arg));
+      break;
+    case ARG_ROW_HEIGHT:
+      gtk_clist_set_row_height (clist, GTK_VALUE_UINT (*arg));
       break;
     default:
       break;
@@ -827,11 +851,17 @@ gtk_clist_get_arg (GtkObject      *object,
 
   switch (arg_id)
     {
-    case ARG_HADJUSTMENT:
-      GTK_VALUE_POINTER (*arg) = clist->hadjustment;
+    case ARG_N_COLUMNS:
+      GTK_VALUE_UINT (*arg) = clist->columns;
       break;
-    case ARG_VADJUSTMENT:
-      GTK_VALUE_POINTER (*arg) = clist->vadjustment;
+    case ARG_SHADOW_TYPE:
+      GTK_VALUE_ENUM (*arg) = clist->shadow_type;
+      break;
+    case ARG_SELECTION_MODE:
+      GTK_VALUE_ENUM (*arg) = clist->selection_mode;
+      break;
+    case ARG_ROW_HEIGHT:
+      GTK_VALUE_UINT (*arg) = GTK_CLIST_ROW_HEIGHT_SET (clist) ? clist->row_height : 0;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
@@ -909,13 +939,13 @@ gtk_clist_construct (GtkCList *clist,
 		     gint      columns,
 		     gchar    *titles[])
 {
-  int i;
-
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CLIST (clist));
-  g_return_if_fail (GTK_CLIST_CONSTRUCTED (clist) == FALSE);
+  g_return_if_fail (columns > 0);
+  g_return_if_fail (GTK_OBJECT_CONSTRUCTED (clist) == FALSE);
 
-  GTK_CLIST_SET_FLAG (clist, CLIST_CONSTRUCTED);
+  /* mark the object as constructed */
+  gtk_object_constructed (GTK_OBJECT (clist));
 
   /* initalize memory chunks, if this has not been done by any
    * possibly derived widget
@@ -945,6 +975,8 @@ gtk_clist_construct (GtkCList *clist,
 
   if (titles)
     {
+      guint i;
+      
       GTK_CLIST_SET_FLAG (clist, CLIST_SHOW_TITLES);
       for (i = 0; i < columns; i++)
 	gtk_clist_set_column_title (clist, i, titles[i]);
@@ -965,17 +997,16 @@ gtk_clist_construct (GtkCList *clist,
  *   gtk_clist_set_shadow_type
  *   gtk_clist_set_border *** deprecated function ***
  *   gtk_clist_set_selection_mode
- *   gtk_clist_set_policy
  *   gtk_clist_freeze
  *   gtk_clist_thaw
  */
-GtkWidget *
+GtkWidget*
 gtk_clist_new (gint columns)
 {
   return gtk_clist_new_with_titles (columns, NULL);
 }
  
-GtkWidget *
+GtkWidget*
 gtk_clist_new_with_titles (gint   columns,
 			   gchar *titles[])
 {
@@ -983,6 +1014,7 @@ gtk_clist_new_with_titles (gint   columns,
 
   widget = gtk_type_new (GTK_TYPE_CLIST);
   gtk_clist_construct (GTK_CLIST (widget), columns, titles);
+
   return widget;
 }
 
@@ -1086,6 +1118,17 @@ gtk_clist_get_vadjustment (GtkCList *clist)
   return clist->vadjustment;
 }
 
+static void
+gtk_clist_scroll_adjustments (GtkCList      *clist,
+			      GtkAdjustment *hadjustment,
+			      GtkAdjustment *vadjustment)
+{
+  if (clist->hadjustment != hadjustment)
+    gtk_clist_set_hadjustment (clist, hadjustment);
+  if (clist->vadjustment != vadjustment)
+    gtk_clist_set_vadjustment (clist, vadjustment);
+}
+
 void
 gtk_clist_set_shadow_type (GtkCList      *clist,
 			   GtkShadowType  type)
@@ -1104,6 +1147,8 @@ void
 gtk_clist_set_border (GtkCList      *clist,
 		      GtkShadowType  border)
 {
+  g_message ("gtk_clist_set_border() is deprecated");
+
   gtk_clist_set_shadow_type (clist, border);
 }
 
@@ -1138,15 +1183,6 @@ gtk_clist_set_selection_mode (GtkCList         *clist,
       gtk_clist_unselect_all (clist);
       break;
     }
-}
-
-void
-gtk_clist_set_policy (GtkCList      *clist,
-		      GtkPolicyType  vscrollbar_policy,
-		      GtkPolicyType  hscrollbar_policy)
-{
-  g_return_if_fail (clist != NULL);
-  g_return_if_fail (GTK_IS_CLIST (clist));
 }
 
 void
@@ -1335,7 +1371,9 @@ gtk_clist_set_column_title (GtkCList    *clist,
       break;
     }
 
+  gtk_widget_push_composite_child ();
   label = gtk_label_new (clist->column[column].title);
+  gtk_widget_pop_composite_child ();
   gtk_container_add (GTK_CONTAINER (alignment), label);
   gtk_container_add (GTK_CONTAINER (clist->column[column].button), alignment);
   gtk_widget_show (label);
@@ -1959,7 +1997,9 @@ column_button_create (GtkCList *clist,
 {
   GtkWidget *button;
 
+  gtk_widget_push_composite_child ();
   button = clist->column[column].button = gtk_button_new ();
+  gtk_widget_pop_composite_child ();
 
   if (GTK_WIDGET_REALIZED (clist) && clist->title_window)
     gtk_widget_set_parent_window (clist->column[column].button,
@@ -1995,25 +2035,38 @@ column_button_clicked (GtkWidget *widget,
 
 void
 gtk_clist_set_row_height (GtkCList *clist,
-			  gint      height)
+			  guint     height)
 {
+  GtkWidget *widget;
+
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CLIST (clist));
 
-  if (height > 0)
-    clist->row_height = height;
-  else
-    return;
+  widget = GTK_WIDGET (clist);
 
-  GTK_CLIST_SET_FLAG (clist, CLIST_ROW_HEIGHT_SET);
-  
+  if (height > 0)
+    {
+      clist->row_height = height;
+      GTK_CLIST_SET_FLAG (clist, CLIST_ROW_HEIGHT_SET);
+    }
+  else
+    {
+      GTK_CLIST_UNSET_FLAG (clist, CLIST_ROW_HEIGHT_SET);
+      clist->row_height = 0;
+    }
+
   if (GTK_WIDGET_REALIZED (clist))
     {
-      GdkFont *font;
-      
-      font = GTK_WIDGET (clist)->style->font;
-      clist->row_center_offset = (((height + font->ascent - font->descent - 1)
-				   / 2) + 1.5);
+      if (!GTK_CLIST_ROW_HEIGHT_SET (clist))
+	{
+	  clist->row_height = (widget->style->font->ascent +
+			       widget->style->font->descent + 1);
+	  clist->row_center_offset = widget->style->font->ascent + 1.5;
+	}
+      else
+	clist->row_center_offset = 1.5 + (clist->row_height +
+					  widget->style->font->ascent -
+					  widget->style->font->descent - 1) / 2;
     }
       
   if (!GTK_CLIST_FROZEN (clist))
@@ -4077,11 +4130,13 @@ gtk_clist_destroy (GtkObject *object)
   /* unref adjustments */
   if (clist->hadjustment)
     {
+      gtk_signal_disconnect_by_data (GTK_OBJECT (clist->hadjustment), clist);
       gtk_object_unref (GTK_OBJECT (clist->hadjustment));
       clist->hadjustment = NULL;
     }
   if (clist->vadjustment)
     {
+      gtk_signal_disconnect_by_data (GTK_OBJECT (clist->vadjustment), clist);
       gtk_object_unref (GTK_OBJECT (clist->vadjustment));
       clist->vadjustment = NULL;
     }

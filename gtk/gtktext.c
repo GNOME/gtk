@@ -87,6 +87,14 @@
 #define LAST_INDEX(t, m)            ((m).index == TEXT_LENGTH(t))
 #define CACHE_DATA(c)               (*(LineParams*)(c)->data)
 
+enum {
+  ARG_0,
+  ARG_HADJUSTMENT,
+  ARG_VADJUSTMENT,
+  ARG_LINE_WRAP,
+  ARG_WORD_WRAP
+};
+
 typedef struct _TextProperty          TextProperty;
 typedef struct _TabStopMark           TabStopMark;
 typedef struct _PrevTabCont           PrevTabCont;
@@ -180,6 +188,12 @@ struct _LineParams
 
 
 static void  gtk_text_class_init     (GtkTextClass   *klass);
+static void  gtk_text_set_arg        (GtkObject      *object,
+				      GtkArg         *arg,
+				      guint           arg_id);
+static void  gtk_text_get_arg        (GtkObject      *object,
+				      GtkArg         *arg,
+				      guint           arg_id);
 static void  gtk_text_init           (GtkText        *text);
 static void  gtk_text_destroy        (GtkObject      *object);
 static void  gtk_text_finalize       (GtkObject      *object);
@@ -518,9 +532,27 @@ gtk_text_class_init (GtkTextClass *class)
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   editable_class = (GtkEditableClass*) class;
-  
   parent_class = gtk_type_class (GTK_TYPE_EDITABLE);
-  
+
+  gtk_object_add_arg_type ("GtkText::hadjustment",
+			   GTK_TYPE_ADJUSTMENT,
+			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT,
+			   ARG_HADJUSTMENT);
+  gtk_object_add_arg_type ("GtkText::vadjustment",
+			   GTK_TYPE_ADJUSTMENT,
+			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT,
+			   ARG_VADJUSTMENT);
+  gtk_object_add_arg_type ("GtkText::line_wrap",
+			   GTK_TYPE_BOOL,
+			   GTK_ARG_READWRITE,
+			   ARG_LINE_WRAP);
+  gtk_object_add_arg_type ("GtkText::word_wrap",
+			   GTK_TYPE_BOOL,
+			   GTK_ARG_READWRITE,
+			   ARG_WORD_WRAP);
+
+  object_class->set_arg = gtk_text_set_arg;
+  object_class->get_arg = gtk_text_get_arg;
   object_class->destroy = gtk_text_destroy;
   object_class->finalize = gtk_text_finalize;
   
@@ -539,6 +571,14 @@ gtk_text_class_init (GtkTextClass *class)
   widget_class->focus_in_event = gtk_text_focus_in;
   widget_class->focus_out_event = gtk_text_focus_out;
   
+  widget_class->scroll_adjustments_signal =
+    gtk_signal_new ("scroll_adjustments",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkTextClass, scroll_adjustments),
+		    gtk_marshal_NONE__POINTER_POINTER,
+		    GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
+
   editable_class->set_editable = gtk_text_real_set_editable;
   editable_class->insert_text = gtk_text_insert_text;
   editable_class->delete_text = gtk_text_delete_text;
@@ -557,12 +597,82 @@ gtk_text_class_init (GtkTextClass *class)
   editable_class->get_chars   = gtk_text_get_chars;
   editable_class->set_selection = gtk_text_set_selection;
   editable_class->set_position = gtk_text_set_position;
+
+  class->scroll_adjustments = gtk_text_set_adjustments;
+}
+
+static void
+gtk_text_set_arg (GtkObject        *object,
+		  GtkArg           *arg,
+		  guint             arg_id)
+{
+  GtkText *text;
+  
+  text = GTK_TEXT (object);
+  
+  switch (arg_id)
+    {
+    case ARG_HADJUSTMENT:
+      gtk_text_set_adjustments (text,
+				GTK_VALUE_POINTER (*arg),
+				text->vadj);
+      break;
+    case ARG_VADJUSTMENT:
+      gtk_text_set_adjustments (text,
+				text->hadj,
+				GTK_VALUE_POINTER (*arg));
+      break;
+    case ARG_LINE_WRAP:
+      gtk_text_set_line_wrap (text, GTK_VALUE_BOOL (*arg));
+      break;
+    case ARG_WORD_WRAP:
+      gtk_text_set_word_wrap (text, GTK_VALUE_BOOL (*arg));
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+gtk_text_get_arg (GtkObject        *object,
+		  GtkArg           *arg,
+		  guint             arg_id)
+{
+  GtkText *text;
+  
+  text = GTK_TEXT (object);
+  
+  switch (arg_id)
+    {
+    case ARG_HADJUSTMENT:
+      GTK_VALUE_POINTER (*arg) = text->hadj;
+      break;
+    case ARG_VADJUSTMENT:
+      GTK_VALUE_POINTER (*arg) = text->vadj;
+      break;
+    case ARG_LINE_WRAP:
+      GTK_VALUE_BOOL (*arg) = text->line_wrap;
+      break;
+    case ARG_WORD_WRAP:
+      GTK_VALUE_BOOL (*arg) = text->word_wrap;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 static void
 gtk_text_init (GtkText *text)
 {
   GTK_WIDGET_SET_FLAGS (text, GTK_CAN_FOCUS);
+
+  text->text_area = NULL;
+  text->hadj = NULL;
+  text->vadj = NULL;
+  text->gc = NULL;
+  text->line_wrap_bitmap = NULL;
+  text->line_arrow_bitmap = NULL;
   
   text->text = g_new (guchar, INITIAL_BUFFER_SIZE);
   text->text_len = INITIAL_BUFFER_SIZE;
@@ -589,24 +699,31 @@ gtk_text_init (GtkText *text)
   text->button = 0;
   
   text->current_font = NULL;
-
+  
   init_properties (text);
-
-  GTK_EDITABLE(text)->editable = FALSE;
+  
+  GTK_EDITABLE (text)->editable = FALSE;
+  
+  gtk_editable_set_position (GTK_EDITABLE (text), 0);
 }
 
 GtkWidget*
 gtk_text_new (GtkAdjustment *hadj,
 	      GtkAdjustment *vadj)
 {
-  GtkText *text;
-  
-  text = gtk_type_new (GTK_TYPE_TEXT);
-  
-  gtk_text_set_adjustments (text, hadj, vadj);
-  gtk_editable_set_position (GTK_EDITABLE (text), 0);
-  
-  return GTK_WIDGET (text);
+  GtkWidget *text;
+
+  if (hadj)
+    g_return_val_if_fail (GTK_IS_ADJUSTMENT (hadj), NULL);
+  if (vadj)
+    g_return_val_if_fail (GTK_IS_ADJUSTMENT (vadj), NULL);
+
+  text = gtk_widget_new (GTK_TYPE_TEXT,
+			 "hadjustment", hadj,
+			 "vadjustment", vadj,
+			 NULL);
+
+  return text;
 }
 
 void
@@ -711,6 +828,7 @@ gtk_text_set_adjustments (GtkText       *text,
       gtk_signal_connect (GTK_OBJECT (text->hadj), "disconnect",
 			  (GtkSignalFunc) gtk_text_disconnect,
 			  text);
+      gtk_text_adjustment (hadj, text);
     }
   
   if (text->vadj != vadj)
@@ -728,6 +846,7 @@ gtk_text_set_adjustments (GtkText       *text,
       gtk_signal_connect (GTK_OBJECT (text->vadj), "disconnect",
 			  (GtkSignalFunc) gtk_text_disconnect,
 			  text);
+      gtk_text_adjustment (vadj, text);
     }
 }
 
@@ -1018,17 +1137,11 @@ gtk_text_destroy (GtkObject *object)
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_TEXT (object));
   
-  text = (GtkText *)object;
-  if (text->hadj)
-    {
-      gtk_object_unref (GTK_OBJECT (text->hadj));
-      text->hadj = NULL;
-    }
-  if (text->vadj)
-    {
-      gtk_object_unref (GTK_OBJECT (text->vadj));
-      text->vadj = NULL;
-    }
+  text = (GtkText*) object;
+
+  gtk_signal_disconnect_by_data (GTK_OBJECT (text->hadj), text);
+  gtk_signal_disconnect_by_data (GTK_OBJECT (text->hadj), text);
+
   if (text->timer)
     {
       gtk_timeout_remove (text->timer);
@@ -1049,6 +1162,9 @@ gtk_text_finalize (GtkObject *object)
   
   text = (GtkText *)object;
   
+  gtk_object_unref (GTK_OBJECT (text->hadj));
+  gtk_object_unref (GTK_OBJECT (text->vadj));
+
   /* Clean up the internal structures */
   g_free (text->text);
   free_cache (text);
@@ -2110,11 +2226,11 @@ gtk_text_disconnect (GtkAdjustment *adjustment,
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
   g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
-  
+
   if (adjustment == text->hadj)
-    text->hadj = NULL;
+    gtk_text_set_adjustments (text, NULL, text->vadj);
   if (adjustment == text->vadj)
-    text->vadj = NULL;
+    gtk_text_set_adjustments (text, text->hadj, NULL);
 }
 
 

@@ -29,11 +29,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_TYPE_VBOX		       (gtk_vbox_get_type ())
-#define GTK_VBOX(obj)		       (GTK_CHECK_CAST ((obj), GTK_TYPE_VBOX, GtkVBox))
-#define GTK_VBOX_CLASS(klass)	       (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_VBOX, GtkVBoxClass))
-#define GTK_IS_VBOX(obj)	       (GTK_CHECK_TYPE ((obj), GTK_TYPE_VBOX))
-#define GTK_IS_VBOX_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VBOX))
+#define GTK_TYPE_VBOX		 (gtk_vbox_get_type ())
+#define GTK_VBOX(obj)		 (GTK_CHECK_CAST ((obj), GTK_TYPE_VBOX, GtkVBox))
+#define GTK_VBOX_CLASS(klass)	 (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_VBOX, GtkVBoxClass))
+#define GTK_IS_VBOX(obj)	 (GTK_CHECK_TYPE ((obj), GTK_TYPE_VBOX))
+#define GTK_IS_VBOX_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VBOX))
 
 
 typedef struct _GtkVBox	      GtkVBox;

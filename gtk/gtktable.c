@@ -375,7 +375,7 @@ gtk_table_get_child_arg (GtkContainer   *container,
 static void
 gtk_table_init (GtkTable *table)
 {
-  GTK_WIDGET_SET_FLAGS (table, GTK_NO_WINDOW | GTK_BASIC);
+  GTK_WIDGET_SET_FLAGS (table, GTK_NO_WINDOW);
   
   table->children = NULL;
   table->rows = NULL;

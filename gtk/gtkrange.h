@@ -30,9 +30,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_RANGE(obj)          GTK_CHECK_CAST (obj, gtk_range_get_type (), GtkRange)
-#define GTK_RANGE_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_range_get_type (), GtkRangeClass)
-#define GTK_IS_RANGE(obj)       GTK_CHECK_TYPE (obj, gtk_range_get_type ())
+#define GTK_TYPE_RANGE            (gtk_range_get_type ())
+#define GTK_RANGE(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_RANGE, GtkRange))
+#define GTK_RANGE_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_RANGE, GtkRangeClass))
+#define GTK_IS_RANGE(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_RANGE))
+#define GTK_IS_RANGE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_RANGE))
 
 
 typedef struct _GtkRange        GtkRange;
@@ -104,7 +106,7 @@ struct _GtkRangeClass
 };
 
 
-guint          gtk_range_get_type               (void);
+GtkType        gtk_range_get_type               (void);
 GtkAdjustment* gtk_range_get_adjustment         (GtkRange      *range);
 void           gtk_range_set_update_policy      (GtkRange      *range,
 						 GtkUpdateType  policy);

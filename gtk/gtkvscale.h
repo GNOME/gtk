@@ -29,9 +29,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_VSCALE(obj)          GTK_CHECK_CAST (obj, gtk_vscale_get_type (), GtkVScale)
-#define GTK_VSCALE_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_vscale_get_type (), GtkVScaleClass)
-#define GTK_IS_VSCALE(obj)       GTK_CHECK_TYPE (obj, gtk_vscale_get_type ())
+#define GTK_TYPE_VSCALE            (gtk_vscale_get_type ())
+#define GTK_VSCALE(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_VSCALE, GtkVScale))
+#define GTK_VSCALE_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_VSCALE, GtkVScaleClass))
+#define GTK_IS_VSCALE(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_VSCALE))
+#define GTK_IS_VSCALE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VSCALE))
 
 
 typedef struct _GtkVScale       GtkVScale;
@@ -48,7 +50,7 @@ struct _GtkVScaleClass
 };
 
 
-guint      gtk_vscale_get_type (void);
+GtkType    gtk_vscale_get_type (void);
 GtkWidget* gtk_vscale_new      (GtkAdjustment *adjustment);
 
 

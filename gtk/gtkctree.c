@@ -46,9 +46,28 @@
 
 #define GTK_CLIST_CLASS_FW(_widget_) GTK_CLIST_CLASS (GTK_OBJECT (_widget_)->klass)
 
+enum {
+  ARG_0,
+  ARG_N_COLUMNS,
+  ARG_TREE_COLUMN,
+  ARG_INDENT,
+  ARG_SPACING,
+  ARG_SHOW_STUB,
+  ARG_REORDERABLE,
+  ARG_USE_DRAG_ICONS,
+  ARG_LINE_STYLE,
+  ARG_EXPANDER_STYLE
+};
+
 
 static void gtk_ctree_class_init        (GtkCTreeClass  *klass);
 static void gtk_ctree_init              (GtkCTree       *ctree);
+static void gtk_ctree_set_arg		(GtkObject      *object,
+					 GtkArg         *arg,
+					 guint           arg_id);
+static void gtk_ctree_get_arg      	(GtkObject      *object,
+					 GtkArg         *arg,
+					 guint           arg_id);
 static void gtk_ctree_realize           (GtkWidget      *widget);
 static void gtk_ctree_unrealize         (GtkWidget      *widget);
 static gint gtk_ctree_button_press      (GtkWidget      *widget,
@@ -306,6 +325,45 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
   parent_class = gtk_type_class (GTK_TYPE_CLIST);
   container_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
+  gtk_object_add_arg_type ("GtkCTree::n_columns",
+			   GTK_TYPE_UINT,
+			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT_ONLY,
+			   ARG_N_COLUMNS);
+  gtk_object_add_arg_type ("GtkCTree::tree_column",
+			   GTK_TYPE_UINT,
+			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT_ONLY,
+			   ARG_TREE_COLUMN);
+  gtk_object_add_arg_type ("GtkCTree::indent",
+			   GTK_TYPE_UINT,
+			   GTK_ARG_READWRITE,
+			   ARG_INDENT);
+  gtk_object_add_arg_type ("GtkCTree::spacing",
+			   GTK_TYPE_UINT,
+			   GTK_ARG_READWRITE,
+			   ARG_SPACING);
+  gtk_object_add_arg_type ("GtkCTree::show_stub",
+			   GTK_TYPE_BOOL,
+			   GTK_ARG_READWRITE,
+			   ARG_SHOW_STUB);
+  gtk_object_add_arg_type ("GtkCTree::reorderable",
+			   GTK_TYPE_BOOL,
+			   GTK_ARG_READWRITE,
+			   ARG_REORDERABLE);
+  gtk_object_add_arg_type ("GtkCTree::use_drag_icons",
+			   GTK_TYPE_BOOL,
+			   GTK_ARG_READWRITE,
+			   ARG_USE_DRAG_ICONS);
+  gtk_object_add_arg_type ("GtkCTree::line_style",
+			   GTK_TYPE_C_TREE_LINE_STYLE,
+			   GTK_ARG_READWRITE,
+			   ARG_LINE_STYLE);
+  gtk_object_add_arg_type ("GtkCTree::expander_style",
+			   GTK_TYPE_C_TREE_EXPANDER_STYLE,
+			   GTK_ARG_READWRITE,
+			   ARG_EXPANDER_STYLE);
+  object_class->set_arg = gtk_ctree_set_arg;
+  object_class->get_arg = gtk_ctree_get_arg;
+
   ctree_signals[TREE_SELECT_ROW] =
     gtk_signal_new ("tree_select_row",
 		    GTK_RUN_FIRST,
@@ -350,7 +408,6 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 				       change_focus_row_expansion),
 		    gtk_marshal_NONE__ENUM,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_C_TREE_EXPANSION_TYPE);
-
   gtk_object_class_add_signals (object_class, ctree_signals, LAST_SIGNAL);
 
   widget_class->realize = gtk_ctree_realize;
@@ -428,6 +485,104 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 				  GTK_CTREE_EXPANSION_TOGGLE_RECURSIVE);
   }
 
+}
+
+static void
+gtk_ctree_set_arg (GtkObject      *object,
+		   GtkArg         *arg,
+		   guint           arg_id)
+{
+  GtkCTree *ctree;
+
+  ctree = GTK_CTREE (object);
+
+  switch (arg_id)
+    {
+    case ARG_N_COLUMNS: /* construct-only arg, only set when !GTK_CONSTRUCTED */
+      if (ctree->tree_column)
+	gtk_ctree_construct (ctree,
+			     MAX (1, GTK_VALUE_UINT (*arg)),
+			     ctree->tree_column, NULL);
+      else
+	GTK_CLIST (ctree)->columns = MAX (1, GTK_VALUE_UINT (*arg));
+      break;
+    case ARG_TREE_COLUMN: /* construct-only arg, only set when !GTK_CONSTRUCTED */
+      if (GTK_CLIST (ctree)->columns)
+	gtk_ctree_construct (ctree,
+			     GTK_CLIST (ctree)->columns,
+			     MAX (1, GTK_VALUE_UINT (*arg)),
+			     NULL);
+      else
+	ctree->tree_column = MAX (1, GTK_VALUE_UINT (*arg));
+      break;
+    case ARG_INDENT:
+      gtk_ctree_set_indent (ctree, GTK_VALUE_UINT (*arg));
+      break;
+    case ARG_SPACING:
+      gtk_ctree_set_spacing (ctree, GTK_VALUE_UINT (*arg));
+      break;
+    case ARG_SHOW_STUB:
+      gtk_ctree_set_show_stub (ctree, GTK_VALUE_BOOL (*arg));
+      break;
+    case ARG_REORDERABLE:
+      gtk_ctree_set_reorderable (ctree, GTK_VALUE_BOOL (*arg));
+      break;
+    case ARG_USE_DRAG_ICONS:
+      gtk_ctree_set_use_drag_icons (ctree, GTK_VALUE_BOOL (*arg));
+      break;
+    case ARG_LINE_STYLE:
+      gtk_ctree_set_line_style (ctree, GTK_VALUE_ENUM (*arg));
+      break;
+    case ARG_EXPANDER_STYLE:
+      gtk_ctree_set_expander_style (ctree, GTK_VALUE_ENUM (*arg));
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+gtk_ctree_get_arg (GtkObject      *object,
+		   GtkArg         *arg,
+		   guint           arg_id)
+{
+  GtkCTree *ctree;
+
+  ctree = GTK_CTREE (object);
+
+  switch (arg_id)
+    {
+    case ARG_N_COLUMNS:
+      GTK_VALUE_UINT (*arg) = GTK_CLIST (ctree)->columns;
+      break;
+    case ARG_TREE_COLUMN:
+      GTK_VALUE_UINT (*arg) = ctree->tree_column;
+      break;
+    case ARG_INDENT:
+      GTK_VALUE_UINT (*arg) = ctree->tree_indent;
+      break;
+    case ARG_SPACING:
+      GTK_VALUE_UINT (*arg) = ctree->tree_spacing;
+      break;
+    case ARG_SHOW_STUB:
+      GTK_VALUE_BOOL (*arg) = ctree->show_stub;
+      break;
+    case ARG_REORDERABLE:
+      GTK_VALUE_BOOL (*arg) = ctree->reorderable;
+      break;
+    case ARG_USE_DRAG_ICONS:
+      GTK_VALUE_BOOL (*arg) = ctree->use_icons;
+      break;
+    case ARG_LINE_STYLE:
+      GTK_VALUE_ENUM (*arg) = ctree->line_style;
+      break;
+    case ARG_EXPANDER_STYLE:
+      GTK_VALUE_ENUM (*arg) = ctree->expander_style;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 static void
@@ -3734,7 +3889,7 @@ gtk_ctree_construct (GtkCTree *ctree,
 
   g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
-  g_return_if_fail (GTK_CLIST_CONSTRUCTED (ctree) == FALSE);
+  g_return_if_fail (GTK_OBJECT_CONSTRUCTED (ctree) == FALSE);
 
   clist = GTK_CLIST (ctree);
 
@@ -3767,6 +3922,7 @@ gtk_ctree_new_with_titles (gint   columns,
 
   widget = gtk_type_new (GTK_TYPE_CTREE);
   gtk_ctree_construct (GTK_CTREE (widget), columns, tree_column, titles);
+
   return widget;
 }
 
@@ -5482,8 +5638,16 @@ gtk_ctree_set_spacing (GtkCTree *ctree,
 }
 
 void
-gtk_ctree_show_stub (GtkCTree *ctree, 
+gtk_ctree_show_stub (GtkCTree *ctree,
 		     gboolean  show_stub)
+{
+  g_message ("gtk_ctree_show_stub() is deprecated");
+  gtk_ctree_set_show_stub (ctree, show_stub);
+}
+
+void
+gtk_ctree_set_show_stub (GtkCTree *ctree, 
+			 gboolean  show_stub)
 {
   g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));

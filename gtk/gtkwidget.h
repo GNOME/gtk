@@ -22,6 +22,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkobject.h>
+#include <gtk/gtkadjustment.h>
 #include <gtk/gtkstyle.h>
 
 
@@ -48,8 +49,7 @@ typedef enum
   GTK_HAS_DEFAULT      = 1 << 14,
   GTK_HAS_GRAB	       = 1 << 15,
   GTK_RC_STYLE	       = 1 << 16,
-  GTK_COMPOSITE_CHILD  = 1 << 17,
-  GTK_BASIC	       = 1 << 18
+  GTK_COMPOSITE_CHILD  = 1 << 17
 } GtkWidgetFlags;
 
 /* Macro for casting a pointer to a GtkWidget or GtkWidgetClass pointer.
@@ -87,7 +87,6 @@ typedef enum
 #define GTK_WIDGET_HAS_GRAB(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_HAS_GRAB) != 0)
 #define GTK_WIDGET_RC_STYLE(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_RC_STYLE) != 0)
 #define GTK_WIDGET_COMPOSITE_CHILD(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_COMPOSITE_CHILD) != 0)
-#define GTK_WIDGET_BASIC(wid)		  ((GTK_WIDGET_FLAGS (wid) & GTK_BASIC) != 0)
   
 /* Macros for setting and clearing widget flags.
  */
@@ -225,11 +224,18 @@ struct _GtkWidgetClass
    */
   GtkObjectClass parent_class;
   
-  /* The signal to emit when an object of this class is activated.
-   *  This is used when activating the current focus widget and
-   *  the default widget.
+  /* The signal to emit when a widget of this class is activated,
+   * gtk_widget_activate() handles the emission.
+   * Implementation of this signal is optional.
    */
   guint activate_signal;
+
+  /* This signal is emitted  when a widget of this class is added
+   * to a scrolling aware parent, gtk_widget_set_scroll_adjustments()
+   * handles the emission.
+   * Implementation of this signal is optional.
+   */
+  guint scroll_adjustments_signal;
   
   /* basics */
   void (* show)		       (GtkWidget      *widget);
@@ -465,7 +471,11 @@ void	   gtk_widget_thaw_accelerators   (GtkWidget	       *widget);
 gint	   gtk_widget_event		  (GtkWidget	       *widget,
 					   GdkEvent	       *event);
 
-void	   gtk_widget_activate		  (GtkWidget	       *widget);
+gboolean   gtk_widget_activate		  (GtkWidget	       *widget);
+gboolean   gtk_widget_scroll_adjustements (GtkWidget           *widget,
+					   GtkAdjustment       *hadjustment,
+					   GtkAdjustment       *vadjustment);
+     
 void	   gtk_widget_reparent		  (GtkWidget	       *widget,
 					   GtkWidget	       *new_parent);
 void	   gtk_widget_popup		  (GtkWidget	       *widget,
@@ -474,7 +484,6 @@ void	   gtk_widget_popup		  (GtkWidget	       *widget,
 gint	   gtk_widget_intersect		  (GtkWidget	       *widget,
 					   GdkRectangle	       *area,
 					   GdkRectangle	       *intersection);
-gint	   gtk_widget_basic		  (GtkWidget	       *widget);
 
 void	   gtk_widget_grab_focus	  (GtkWidget	       *widget);
 void	   gtk_widget_grab_default	  (GtkWidget	       *widget);
@@ -543,14 +552,14 @@ void       gtk_widget_reset_rc_styles   (GtkWidget      *widget);
  * This will override the values that got set by the
  * gtk_widget_set_default_* () functions.
  */
-void	     gtk_widget_push_style	    (GtkStyle	 *style);
-void	     gtk_widget_push_colormap	    (GdkColormap *cmap);
-void	     gtk_widget_push_visual	    (GdkVisual	 *visual);
-void	     gtk_widget_push_composite_flag (void);
-void	     gtk_widget_pop_composite_flag  (void);
-void	     gtk_widget_pop_style	    (void);
-void	     gtk_widget_pop_colormap	    (void);
-void	     gtk_widget_pop_visual	    (void);
+void	     gtk_widget_push_style	     (GtkStyle	 *style);
+void	     gtk_widget_push_colormap	     (GdkColormap *cmap);
+void	     gtk_widget_push_visual	     (GdkVisual	 *visual);
+void	     gtk_widget_push_composite_child (void);
+void	     gtk_widget_pop_composite_child  (void);
+void	     gtk_widget_pop_style	     (void);
+void	     gtk_widget_pop_colormap	     (void);
+void	     gtk_widget_pop_visual	     (void);
 
 /* Set certain default values to be used at widget creation time.
  */

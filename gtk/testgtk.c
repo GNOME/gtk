@@ -1222,7 +1222,7 @@ create_tree_sample(guint selection_mode,
 		     (GtkSignalFunc)cb_tree_changed,
 		     (gpointer)NULL);
   gtk_object_set_user_data(GTK_OBJECT(root_tree), tree_buttons);
-  gtk_container_add(GTK_CONTAINER(scrolled_win), root_tree);
+  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_win), root_tree);
   gtk_tree_set_selection_mode(GTK_TREE(root_tree), selection_mode);
   gtk_tree_set_view_lines(GTK_TREE(root_tree), draw_line);
   gtk_tree_set_view_mode(GTK_TREE(root_tree), !view_line);
@@ -2520,7 +2520,7 @@ create_scrolled_windows (void)
       table = gtk_table_new (20, 20, FALSE);
       gtk_table_set_row_spacings (GTK_TABLE (table), 10);
       gtk_table_set_col_spacings (GTK_TABLE (table), 10);
-      gtk_container_add (GTK_CONTAINER (scrolled_window), table);
+      gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_window), table);
       gtk_container_set_focus_hadjustment (GTK_CONTAINER (table),
 					   gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
       gtk_container_set_focus_vadjustment (GTK_CONTAINER (table),
@@ -3264,7 +3264,7 @@ create_list (void)
 
       list = gtk_list_new ();
       gtk_list_set_selection_mode (GTK_LIST (list), GTK_SELECTION_EXTENDED);
-      gtk_container_add (GTK_CONTAINER (scrolled_win), list);
+      gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_win), list);
       gtk_container_set_focus_vadjustment
 	(GTK_CONTAINER (list),
 	 gtk_scrolled_window_get_vadjustment
@@ -7245,7 +7245,7 @@ create_selection_test (void)
       gtk_widget_set_usize (scrolled_win, 100, 200);
 
       list = gtk_list_new ();
-      gtk_container_add (GTK_CONTAINER (scrolled_win), list);
+      gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_win), list);
 
       gtk_signal_connect (GTK_OBJECT(list), "selection_received",
 			  GTK_SIGNAL_FUNC (selection_test_received), NULL);
@@ -8056,7 +8056,7 @@ create_main_window (void)
 
   box2 = gtk_vbox_new (FALSE, 0);
   gtk_container_border_width (GTK_CONTAINER (box2), 10);
-  gtk_container_add (GTK_CONTAINER (scrolled_window), box2);
+  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_window), box2);
   gtk_container_set_focus_vadjustment (GTK_CONTAINER (box2),
 				       gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
   gtk_widget_show (box2);

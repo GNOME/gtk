@@ -71,6 +71,7 @@ typedef enum
 #define	GTK_TYPE_STRUCTURED_FIRST	GTK_TYPE_SIGNAL
 #define	GTK_TYPE_STRUCTURED_LAST	GTK_TYPE_FOREIGN
 #define	GTK_TYPE_FUNDAMENTAL_LAST	GTK_TYPE_OBJECT
+#define	GTK_TYPE_FUNDAMENTAL_MAX	(32)
 
 
 /* retrive a structure offset */
@@ -138,7 +139,8 @@ typedef struct _GtkEnumValue   GtkFlagValue;
 #define GTK_SIGNAL_FUNC(f)  ((GtkSignalFunc) f)
 
 typedef void (*GtkClassInitFunc)   (gpointer   klass);
-typedef void (*GtkObjectInitFunc)  (gpointer   object);
+typedef void (*GtkObjectInitFunc)  (gpointer   object,
+				    gpointer   klass);
 typedef void (*GtkSignalFunc)      ();
 typedef gint (*GtkFunction)	   (gpointer   data);
 typedef void (*GtkDestroyNotify)   (gpointer   data);

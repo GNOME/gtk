@@ -56,9 +56,6 @@ struct _GtkNotebook
   
   guint32 timer;
   
-  guint16 tab_border;  /* deprecated field,
-			* use tab_hborder, tab_vborder instead
-			*/
   guint16 tab_hborder;
   guint16 tab_vborder;
   

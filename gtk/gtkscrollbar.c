@@ -21,10 +21,10 @@
 static void gtk_scrollbar_class_init (GtkScrollbarClass *klass);
 static void gtk_scrollbar_init       (GtkScrollbar      *scrollbar);
 
-guint
+GtkType
 gtk_scrollbar_get_type (void)
 {
-  static guint scrollbar_type = 0;
+  static GtkType scrollbar_type = 0;
 
   if (!scrollbar_type)
     {
@@ -40,7 +40,7 @@ gtk_scrollbar_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      scrollbar_type = gtk_type_unique (gtk_range_get_type (), &scrollbar_info);
+      scrollbar_type = gtk_type_unique (GTK_TYPE_RANGE, &scrollbar_info);
     }
 
   return scrollbar_type;

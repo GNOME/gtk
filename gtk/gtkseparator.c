@@ -56,5 +56,5 @@ gtk_separator_class_init (GtkSeparatorClass *class)
 static void
 gtk_separator_init (GtkSeparator *separator)
 {
-  GTK_WIDGET_SET_FLAGS (separator, GTK_NO_WINDOW | GTK_BASIC);
+  GTK_WIDGET_SET_FLAGS (separator, GTK_NO_WINDOW);
 }

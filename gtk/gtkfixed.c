@@ -108,7 +108,6 @@ static void
 gtk_fixed_init (GtkFixed *fixed)
 {
   GTK_WIDGET_UNSET_FLAGS (fixed, GTK_NO_WINDOW);
-  GTK_WIDGET_SET_FLAGS (fixed, GTK_BASIC);
  
   fixed->children = NULL;
 }

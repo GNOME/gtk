@@ -107,8 +107,6 @@ gtk_preview_reset (void)
 static void
 gtk_preview_init (GtkPreview *preview)
 {
-  GTK_WIDGET_SET_FLAGS (preview, GTK_BASIC);
-
   preview->buffer = NULL;
   preview->buffer_width = 0;
   preview->buffer_height = 0;

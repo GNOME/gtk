@@ -74,16 +74,16 @@ typedef enum
   GTK_DESTROYED		= 1 << 0,
   GTK_FLOATING		= 1 << 1,
   GTK_CONNECTED		= 1 << 2,
-  GTK_RESERVED_2	= 1 << 3,
-  GTK_OBJECT_FLAG_LAST	= GTK_RESERVED_2
+  GTK_CONSTRUCTED	= 1 << 3,
 } GtkObjectFlags;
 
 /* Macros for extracting the object_flags from GtkObject.
  */
 #define GTK_OBJECT_FLAGS(obj)		  (GTK_OBJECT (obj)->flags)
-#define GTK_OBJECT_DESTROYED(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_DESTROYED)
-#define GTK_OBJECT_FLOATING(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_FLOATING)
-#define GTK_OBJECT_CONNECTED(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_CONNECTED)
+#define GTK_OBJECT_DESTROYED(obj)	  ((GTK_OBJECT_FLAGS (obj) & GTK_DESTROYED) != 0)
+#define GTK_OBJECT_FLOATING(obj)	  ((GTK_OBJECT_FLAGS (obj) & GTK_FLOATING) != 0)
+#define GTK_OBJECT_CONNECTED(obj)	  ((GTK_OBJECT_FLAGS (obj) & GTK_CONNECTED) != 0)
+#define GTK_OBJECT_CONSTRUCTED(obj)	  ((GTK_OBJECT_FLAGS (obj) & GTK_CONSTRUCTED) != 0)
 
 /* Macros for setting and clearing bits in the object_flags field of GtkObject.
  */
@@ -94,15 +94,16 @@ typedef enum
  */
 typedef enum
 {
-  GTK_ARG_READABLE	= 1 << 0,
-  GTK_ARG_WRITABLE	= 1 << 1,
-  GTK_ARG_CONSTRUCT	= 1 << 2,
-  GTK_ARG_CHILD_ARG	= 1 << 3,
-  GTK_ARG_MASK		= 0x0f,
+  GTK_ARG_READABLE	 = 1 << 0,
+  GTK_ARG_WRITABLE	 = 1 << 1,
+  GTK_ARG_CONSTRUCT	 = 1 << 2,
+  GTK_ARG_CONSTRUCT_ONLY = 1 << 3,
+  GTK_ARG_CHILD_ARG	 = 1 << 4,
+  GTK_ARG_MASK		 = 0x1f,
   
   /* aliases
    */
-  GTK_ARG_READWRITE	= GTK_ARG_READABLE | GTK_ARG_WRITABLE
+  GTK_ARG_READWRITE	 = GTK_ARG_READABLE | GTK_ARG_WRITABLE
 } GtkArgFlags;
 
 typedef struct _GtkObjectClass	GtkObjectClass;
@@ -162,6 +163,7 @@ struct _GtkObjectClass
   /* The number of arguments per class.
    */
   guint n_args;
+  GSList *construct_args;
   
   /* Non overridable class methods to set and get per class arguments */
   void (*set_arg) (GtkObject *object,
@@ -212,6 +214,8 @@ GtkObject*	gtk_object_new		  (GtkType	       type,
 GtkObject*	gtk_object_newv		  (GtkType	       object_type,
 					   guint	       n_args,
 					   GtkArg	      *args);
+void gtk_object_default_construct         (GtkObject	      *object);
+void gtk_object_constructed		  (GtkObject	      *object);
 void gtk_object_sink	  (GtkObject	    *object);
 void gtk_object_ref	  (GtkObject	    *object);
 void gtk_object_unref	  (GtkObject	    *object);

@@ -242,7 +242,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 
   gtk_object_add_arg_type ("GtkNotebook::page", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_PAGE);
   gtk_object_add_arg_type ("GtkNotebook::tab_pos", GTK_TYPE_POSITION_TYPE, GTK_ARG_READWRITE, ARG_TAB_POS);
-  gtk_object_add_arg_type ("GtkNotebook::tab_border", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_TAB_BORDER);
+  gtk_object_add_arg_type ("GtkNotebook::tab_border", GTK_TYPE_UINT, GTK_ARG_WRITABLE, ARG_TAB_BORDER);
   gtk_object_add_arg_type ("GtkNotebook::tab_hborder", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_TAB_HBORDER);
   gtk_object_add_arg_type ("GtkNotebook::tab_vborder", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_TAB_VBORDER);
   gtk_object_add_arg_type ("GtkNotebook::show_tabs", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_SHOW_TABS);
@@ -315,7 +315,6 @@ gtk_notebook_init (GtkNotebook *notebook)
   notebook->panel = NULL;
   notebook->menu = NULL;
 
-  notebook->tab_border  = 2;
   notebook->tab_hborder = 2;
   notebook->tab_vborder = 2;
 
@@ -432,9 +431,6 @@ gtk_notebook_get_arg (GtkObject *object,
       break;
     case ARG_TAB_POS:
       GTK_VALUE_ENUM (*arg) = notebook->tab_pos;
-      break;
-    case ARG_TAB_BORDER:
-      GTK_VALUE_UINT (*arg) = notebook->tab_border;
       break;
     case ARG_TAB_HBORDER:
       GTK_VALUE_UINT (*arg) = notebook->tab_hborder;
@@ -3730,7 +3726,6 @@ gtk_notebook_set_tab_border (GtkNotebook *notebook,
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
-  notebook->tab_border  = tab_border;
   notebook->tab_hborder = tab_border;
   notebook->tab_vborder = tab_border;
 

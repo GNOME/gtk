@@ -134,7 +134,7 @@ gtk_box_class_init (GtkBoxClass *class)
 static void
 gtk_box_init (GtkBox *box)
 {
-  GTK_WIDGET_SET_FLAGS (box, GTK_NO_WINDOW | GTK_BASIC);
+  GTK_WIDGET_SET_FLAGS (box, GTK_NO_WINDOW);
 
   box->children = NULL;
   box->spacing = 0;

@@ -41,11 +41,10 @@ enum
   GTK_CLIST_DRAG_SELECTION      = 1 << 2,
   GTK_CLIST_ROW_HEIGHT_SET      = 1 << 3,
   GTK_CLIST_SHOW_TITLES         = 1 << 4,
-  GTK_CLIST_CONSTRUCTED	        = 1 << 5,
-  GTK_CLIST_CHILD_HAS_FOCUS     = 1 << 6,
-  GTK_CLIST_ADD_MODE            = 1 << 7,
-  GTK_CLIST_AUTO_SORT           = 1 << 8,
-  GTK_CLIST_AUTO_RESIZE_BLOCKED = 1 << 9
+  GTK_CLIST_CHILD_HAS_FOCUS     = 1 << 5,
+  GTK_CLIST_ADD_MODE            = 1 << 6,
+  GTK_CLIST_AUTO_SORT           = 1 << 7,
+  GTK_CLIST_AUTO_RESIZE_BLOCKED = 1 << 8
 }; 
 
 /* cell types */
@@ -72,7 +71,6 @@ typedef enum
 #define GTK_CLIST_IN_DRAG(clist)           (GTK_CLIST_FLAGS (clist) & GTK_CLIST_IN_DRAG)
 #define GTK_CLIST_ROW_HEIGHT_SET(clist)    (GTK_CLIST_FLAGS (clist) & GTK_CLIST_ROW_HEIGHT_SET)
 #define GTK_CLIST_SHOW_TITLES(clist)       (GTK_CLIST_FLAGS (clist) & GTK_CLIST_SHOW_TITLES)
-#define GTK_CLIST_CONSTRUCTED(clist)       (GTK_CLIST_FLAGS (clist) & GTK_CLIST_CONSTRUCTED)
 #define GTK_CLIST_CHILD_HAS_FOCUS(clist)   (GTK_CLIST_FLAGS (clist) & GTK_CLIST_CHILD_HAS_FOCUS)
 #define GTK_CLIST_DRAG_SELECTION(clist)    (GTK_CLIST_FLAGS (clist) & GTK_CLIST_DRAG_SELECTION)
 #define GTK_CLIST_ADD_MODE(clist)          (GTK_CLIST_FLAGS (clist) & GTK_CLIST_ADD_MODE)
@@ -191,6 +189,9 @@ struct _GtkCListClass
 {
   GtkContainerClass parent_class;
   
+  void  (*scroll_adjustments)   (GtkCList       *clist,
+				 GtkAdjustment  *hadjustment,
+				 GtkAdjustment  *vadjustment);
   void   (*select_row)          (GtkCList       *clist,
 				 gint            row,
 				 gint            column,
@@ -374,7 +375,7 @@ struct _GtkCell
 
 GtkType gtk_clist_get_type (void);
 
-/* constructers useful for gtk-- wrappers */
+/* constructors useful for gtk-- wrappers */
 void gtk_clist_construct (GtkCList *clist,
 			  gint      columns,
 			  gchar    *titles[]);
@@ -482,11 +483,11 @@ void gtk_clist_set_column_max_width (GtkCList *clist,
 				     gint      column,
 				     gint      max_width);
 
-/* change the height of the rows, the default is the hight
- * of the current font
+/* change the height of the rows, the default (height=0) is
+ * the hight of the current font.
  */
 void gtk_clist_set_row_height (GtkCList *clist,
-			       gint      height);
+			       guint     height);
 
 /* scroll the viewing area of the list to the given column and row;
  * row_align and col_align are between 0-1 representing the location the
@@ -705,10 +706,6 @@ void gtk_clist_set_auto_sort (GtkCList *clist,
 void gtk_clist_set_border (GtkCList      *clist,
 			   GtkShadowType  border);
 
-/* Completely non-functional */
-void gtk_clist_set_policy (GtkCList      *clist,
-			   GtkPolicyType  vscrollbar_policy,
-			   GtkPolicyType  hscrollbar_policy);
 #ifdef __cplusplus
 }
 #endif				/* __cplusplus */

@@ -109,8 +109,6 @@ gtk_frame_class_init (GtkFrameClass *class)
 static void
 gtk_frame_init (GtkFrame *frame)
 {
-  GTK_WIDGET_SET_FLAGS (frame, GTK_BASIC);
-
   frame->label = NULL;
   frame->shadow_type = GTK_SHADOW_ETCHED_IN;
   frame->label_width = 0;

@@ -29,9 +29,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_HSCROLLBAR(obj)          GTK_CHECK_CAST (obj, gtk_hscrollbar_get_type (), GtkHScrollbar)
-#define GTK_HSCROLLBAR_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_hscrollbar_get_type (), GtkHScrollbarClass)
-#define GTK_IS_HSCROLLBAR(obj)       GTK_CHECK_TYPE (obj, gtk_hscrollbar_get_type ())
+#define GTK_TYPE_HSCROLLBAR            (gtk_hscrollbar_get_type ())
+#define GTK_HSCROLLBAR(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_HSCROLLBAR, GtkHScrollbar))
+#define GTK_HSCROLLBAR_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_HSCROLLBAR, GtkHScrollbarClass))
+#define GTK_IS_HSCROLLBAR(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_HSCROLLBAR))
+#define GTK_IS_HSCROLLBAR_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HSCROLLBAR))
 
 
 typedef struct _GtkHScrollbar       GtkHScrollbar;
@@ -48,7 +50,7 @@ struct _GtkHScrollbarClass
 };
 
 
-guint      gtk_hscrollbar_get_type (void);
+GtkType    gtk_hscrollbar_get_type (void);
 GtkWidget* gtk_hscrollbar_new      (GtkAdjustment *adjustment);
 
 

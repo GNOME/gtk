@@ -39,7 +39,7 @@ struct _GtkArgQueryData
 
 
 /* --- functions --- */
-void
+GtkArgInfo*
 gtk_arg_type_new_static (GtkType      base_class_type,
 			 const gchar *arg_name,
 			 guint	      class_n_args_offset,
@@ -56,14 +56,14 @@ gtk_arg_type_new_static (GtkType      base_class_type,
   guint *n_args_p;
   gchar *p;
 
-  g_return_if_fail (arg_name != NULL);
-  g_return_if_fail (GTK_FUNDAMENTAL_TYPE (base_class_type) == GTK_TYPE_OBJECT);
-  g_return_if_fail (class_n_args_offset != 0);
-  g_return_if_fail (arg_info_hash_table != NULL);
-  g_return_if_fail (arg_type > GTK_TYPE_NONE);
-  g_return_if_fail (arg_id > 0);
-  g_return_if_fail ((arg_flags & GTK_ARG_READWRITE) != 0);
-  /* g_return_if_fail ((arg_flags & GTK_ARG_CHILD_ARG) == 0); */
+  g_return_val_if_fail (arg_name != NULL, NULL);
+  g_return_val_if_fail (GTK_FUNDAMENTAL_TYPE (base_class_type) == GTK_TYPE_OBJECT, NULL);
+  g_return_val_if_fail (class_n_args_offset != 0, NULL);
+  g_return_val_if_fail (arg_info_hash_table != NULL, NULL);
+  g_return_val_if_fail (arg_type > GTK_TYPE_NONE, NULL);
+  g_return_val_if_fail (arg_id > 0, NULL);
+  g_return_val_if_fail ((arg_flags & GTK_ARG_READWRITE) != 0, NULL);
+  /* g_return_val_if_fail ((arg_flags & GTK_ARG_CHILD_ARG) == 0, NULL); */
   
   arg_flags &= GTK_ARG_MASK;
 
@@ -71,7 +71,7 @@ gtk_arg_type_new_static (GtkType      base_class_type,
   if (!arg_part || (arg_part[0] != ':') || (arg_part[1] != ':'))
     {
       g_warning ("gtk_arg_type_new(): invalid arg name: \"%s\"\n", arg_name);
-      return;
+      return NULL;
     }
 
   class_offset = (guint) (arg_part - arg_name);
@@ -84,7 +84,7 @@ gtk_arg_type_new_static (GtkType      base_class_type,
       g_warning ("gtk_arg_type_new(): argument class in \"%s\" is not in the `%s' ancestry",
 		 arg_name,
 		 gtk_type_name (base_class_type));
-      return;
+      return NULL;
     }
 
   p = gtk_type_class (class_type);
@@ -102,6 +102,8 @@ gtk_arg_type_new_static (GtkType      base_class_type,
   info->seq_id = *n_args_p;
 
   g_hash_table_insert (arg_info_hash_table, info, info);
+
+  return info;
 }
 
 gchar*

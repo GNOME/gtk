@@ -27,9 +27,9 @@ enum {
 };
 
 
-
 static void gtk_viewport_class_init               (GtkViewportClass *klass);
 static void gtk_viewport_init                     (GtkViewport      *viewport);
+static void gtk_viewport_destroy                  (GtkObject        *object);
 static void gtk_viewport_finalize                 (GtkObject        *object);
 static void gtk_viewport_set_arg		  (GtkObject        *object,
 						   GtkArg           *arg,
@@ -37,6 +37,9 @@ static void gtk_viewport_set_arg		  (GtkObject        *object,
 static void gtk_viewport_get_arg		  (GtkObject        *object,
 						   GtkArg           *arg,
 						   guint             arg_id);
+static void gtk_viewport_scroll_adjustments	  (GtkViewport	    *viewport,
+						   GtkAdjustment    *hadjustment,
+						   GtkAdjustment    *vadjustment);
 static void gtk_viewport_map                      (GtkWidget        *widget);
 static void gtk_viewport_unmap                    (GtkWidget        *widget);
 static void gtk_viewport_realize                  (GtkWidget        *widget);
@@ -114,6 +117,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
 
   object_class->set_arg = gtk_viewport_set_arg;
   object_class->get_arg = gtk_viewport_get_arg;
+  object_class->destroy = gtk_viewport_destroy;
   object_class->finalize = gtk_viewport_finalize;
   
   widget_class->map = gtk_viewport_map;
@@ -125,8 +129,18 @@ gtk_viewport_class_init (GtkViewportClass *class)
   widget_class->size_request = gtk_viewport_size_request;
   widget_class->size_allocate = gtk_viewport_size_allocate;
   widget_class->style_set = gtk_viewport_style_set;
-   
+
+  widget_class->scroll_adjustments_signal =
+    gtk_signal_new ("scroll_adjustments",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkViewportClass, scroll_adjustments),
+		    gtk_marshal_NONE__POINTER_POINTER,
+		    GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
+  
   container_class->add = gtk_viewport_add;
+
+  class->scroll_adjustments = gtk_viewport_scroll_adjustments;
 }
 
 static void
@@ -140,15 +154,11 @@ gtk_viewport_set_arg (GtkObject        *object,
 
   switch (arg_id)
     {
-      GtkAdjustment *adjustment;
-
     case ARG_HADJUSTMENT:
-      adjustment = GTK_VALUE_POINTER (*arg);
-      gtk_viewport_set_hadjustment (viewport, adjustment);
+      gtk_viewport_set_hadjustment (viewport, GTK_VALUE_POINTER (*arg));
       break;
     case ARG_VADJUSTMENT:
-      adjustment = GTK_VALUE_POINTER (*arg);
-      gtk_viewport_set_vadjustment (viewport, adjustment);
+      gtk_viewport_set_vadjustment (viewport, GTK_VALUE_POINTER (*arg));
       break;
     case ARG_SHADOW_TYPE:
       gtk_viewport_set_shadow_type (viewport, GTK_VALUE_ENUM (*arg));
@@ -188,7 +198,6 @@ static void
 gtk_viewport_init (GtkViewport *viewport)
 {
   GTK_WIDGET_UNSET_FLAGS (viewport, GTK_NO_WINDOW);
-  GTK_WIDGET_SET_FLAGS (viewport, GTK_BASIC);
 
   gtk_container_set_resize_mode (GTK_CONTAINER (viewport), GTK_RESIZE_QUEUE);
   
@@ -203,14 +212,29 @@ GtkWidget*
 gtk_viewport_new (GtkAdjustment *hadjustment,
 		  GtkAdjustment *vadjustment)
 {
-  GtkViewport *viewport;
+  GtkWidget *viewport;
 
-  viewport = gtk_type_new (gtk_viewport_get_type ());
+  viewport = gtk_widget_new (GTK_TYPE_VIEWPORT,
+			     "hadjustment", hadjustment,
+			     "vadjustment", vadjustment,
+			     NULL);
 
-  gtk_viewport_set_hadjustment (viewport, hadjustment);
-  gtk_viewport_set_vadjustment (viewport, vadjustment);
+  return viewport;
+}
 
-  return GTK_WIDGET (viewport);
+static void
+gtk_viewport_destroy (GtkObject *object)
+{
+  GtkViewport *viewport = GTK_VIEWPORT (object);
+
+  if (viewport->hadjustment)
+    gtk_signal_disconnect_by_data (GTK_OBJECT (viewport->hadjustment),
+				   viewport);
+  if (viewport->vadjustment)
+    gtk_signal_disconnect_by_data (GTK_OBJECT (viewport->vadjustment),
+				   viewport);
+
+  GTK_OBJECT_CLASS(parent_class)->destroy (object);
 }
 
 static void
@@ -314,6 +338,17 @@ gtk_viewport_set_vadjustment (GtkViewport   *viewport,
 
       gtk_viewport_adjustment_changed (adjustment, viewport);
     }
+}
+
+static void
+gtk_viewport_scroll_adjustments (GtkViewport      *viewport,
+				 GtkAdjustment    *hadjustment,
+				 GtkAdjustment    *vadjustment)
+{
+  if (viewport->hadjustment != hadjustment)
+    gtk_viewport_set_hadjustment (viewport, hadjustment);
+  if (viewport->vadjustment != vadjustment)
+    gtk_viewport_set_vadjustment (viewport, vadjustment);
 }
 
 void

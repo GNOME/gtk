@@ -29,11 +29,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_TYPE_BOX		      (gtk_box_get_type ())
-#define GTK_BOX(obj)		      (GTK_CHECK_CAST ((obj), GTK_TYPE_BOX, GtkBox))
-#define GTK_BOX_CLASS(klass)	      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_BOX, GtkBoxClass))
-#define GTK_IS_BOX(obj)		      (GTK_CHECK_TYPE ((obj), GTK_TYPE_BOX))
-#define GTK_IS_BOX_CLASS(klass)	      (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_BOX))
+#define GTK_TYPE_BOX		(gtk_box_get_type ())
+#define GTK_BOX(obj)		(GTK_CHECK_CAST ((obj), GTK_TYPE_BOX, GtkBox))
+#define GTK_BOX_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_BOX, GtkBoxClass))
+#define GTK_IS_BOX(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_BOX))
+#define GTK_IS_BOX_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_BOX))
 
 
 typedef struct _GtkBox	      GtkBox;

@@ -705,6 +705,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   object_class->finalize = gtk_widget_finalize;
   
   klass->activate_signal = 0;
+  klass->scroll_adjustments_signal = 0;
   klass->show = gtk_widget_real_show;
   klass->show_all = gtk_widget_show;
   klass->hide = gtk_widget_real_hide;
@@ -1054,6 +1055,9 @@ gtk_widget_new (GtkType      widget_type,
       gtk_args_collect_cleanup (arg_list, info_list);
     }
   
+  if (!GTK_OBJECT_CONSTRUCTED (object))
+    gtk_object_default_construct (object);
+
   return GTK_WIDGET (object);
 }
 
@@ -1070,7 +1074,7 @@ gtk_widget_newv (GtkType type,
 		 guint	 nargs,
 		 GtkArg *args)
 {
-  g_return_val_if_fail (gtk_type_is_a (type, gtk_widget_get_type ()), NULL);
+  g_return_val_if_fail (gtk_type_is_a (type, GTK_TYPE_WIDGET), NULL);
   
   return GTK_WIDGET (gtk_object_newv (type, nargs, args));
 }
@@ -1353,7 +1357,8 @@ gtk_widget_destroy (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  
+  g_return_if_fail (GTK_OBJECT_CONSTRUCTED (widget));
+
   gtk_object_destroy ((GtkObject*) widget);
 }
 
@@ -2621,14 +2626,45 @@ gtk_widget_event (GtkWidget *widget,
  *   results:
  *****************************************/
 
-void
+gboolean
 gtk_widget_activate (GtkWidget *widget)
 {
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   
   if (WIDGET_CLASS (widget)->activate_signal)
-    gtk_signal_emit (GTK_OBJECT (widget), WIDGET_CLASS (widget)->activate_signal);
+    {
+      /* FIXME: we should eventually check the signals signature here */
+      gtk_signal_emit (GTK_OBJECT (widget), WIDGET_CLASS (widget)->activate_signal);
+
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
+
+gboolean
+gtk_widget_scroll_adjustements (GtkWidget     *widget,
+				GtkAdjustment *hadjustment,
+				GtkAdjustment *vadjustment)
+{
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  if (hadjustment)
+    g_return_val_if_fail (GTK_IS_ADJUSTMENT (hadjustment), FALSE);
+  if (vadjustment)
+    g_return_val_if_fail (GTK_IS_ADJUSTMENT (vadjustment), FALSE);
+
+  if (WIDGET_CLASS (widget)->scroll_adjustments_signal)
+    {
+      /* FIXME: we should eventually check the signals signature here */
+      gtk_signal_emit (GTK_OBJECT (widget),
+		       WIDGET_CLASS (widget)->scroll_adjustments_signal,
+		       hadjustment, vadjustment);
+      return TRUE;
+    }
+  else
+    return FALSE;
 }
 
 /*****************************************
@@ -2794,47 +2830,6 @@ gtk_widget_intersect (GtkWidget	   *widget,
   
   return return_val;
 }
-
-
-gint
-gtk_widget_basic (GtkWidget *widget)
-{
-  GList *children;
-  GList *tmp_list;
-  gint return_val;
-  
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-  
-  if (!GTK_WIDGET_BASIC (widget))
-    return FALSE;
-  else if (GTK_IS_CONTAINER (widget))
-    {
-      children = gtk_container_children (GTK_CONTAINER (widget));
-      if (children)
-	{
-	  return_val = TRUE;
-	  tmp_list = children;
-	  
-	  while (tmp_list)
-	    {
-	      if (!gtk_widget_basic (GTK_WIDGET (tmp_list->data)))
-		{
-		  return_val = FALSE;
-		  break;
-		}
-	      
-	      tmp_list = tmp_list->next;
-	    }
-	  
-	  g_list_free (children);
-	  return return_val;
-	}
-    }
-  
-  return TRUE;
-}
-
 
 /*****************************************
  * gtk_widget_grab_focus:
@@ -3875,13 +3870,13 @@ gtk_widget_push_visual (GdkVisual *visual)
 }
 
 void
-gtk_widget_push_composite (void)
+gtk_widget_push_composite_child (void)
 {
   composite_child_stack++;
 }
 
 void
-gtk_widget_pop_composite (void)
+gtk_widget_pop_composite_child (void)
 {
   if (composite_child_stack)
     composite_child_stack--;

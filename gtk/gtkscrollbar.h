@@ -29,9 +29,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_SCROLLBAR(obj)          GTK_CHECK_CAST (obj, gtk_scrollbar_get_type (), GtkScrollbar)
-#define GTK_SCROLLBAR_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_scrollbar_get_type (), GtkScrollbarClass)
-#define GTK_IS_SCROLLBAR(obj)       GTK_CHECK_TYPE (obj, gtk_scrollbar_get_type ())
+#define GTK_TYPE_SCROLLBAR            (gtk_scrollbar_get_type ())
+#define GTK_SCROLLBAR(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_SCROLLBAR, GtkScrollbar))
+#define GTK_SCROLLBAR_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_SCROLLBAR, GtkScrollbarClass))
+#define GTK_IS_SCROLLBAR(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_SCROLLBAR))
+#define GTK_IS_SCROLLBAR_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SCROLLBAR))
 
 
 typedef struct _GtkScrollbar        GtkScrollbar;
@@ -48,7 +50,7 @@ struct _GtkScrollbarClass
 };
 
 
-guint  gtk_scrollbar_get_type (void);
+GtkType gtk_scrollbar_get_type (void);
 
 
 #ifdef __cplusplus

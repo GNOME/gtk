@@ -92,7 +92,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
 static void
 gtk_alignment_init (GtkAlignment *alignment)
 {
-  GTK_WIDGET_SET_FLAGS (alignment, GTK_NO_WINDOW | GTK_BASIC);
+  GTK_WIDGET_SET_FLAGS (alignment, GTK_NO_WINDOW);
 
   alignment->xalign = 0.5;
   alignment->yalign = 0.5;

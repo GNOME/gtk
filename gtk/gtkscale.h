@@ -29,9 +29,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_SCALE(obj)          GTK_CHECK_CAST (obj, gtk_scale_get_type (), GtkScale)
-#define GTK_SCALE_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_scale_get_type (), GtkScaleClass)
-#define GTK_IS_SCALE(obj)       GTK_CHECK_TYPE (obj, gtk_scale_get_type ())
+#define GTK_TYPE_SCALE            (gtk_scale_get_type ())
+#define GTK_SCALE(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_SCALE, GtkScale))
+#define GTK_SCALE_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_SCALE, GtkScaleClass))
+#define GTK_IS_SCALE(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_SCALE))
+#define GTK_IS_SCALE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SCALE))
 
 
 typedef struct _GtkScale        GtkScale;
@@ -51,21 +53,21 @@ struct _GtkScaleClass
 
   gint slider_length;
   gint value_spacing;
-
+  
   void (* draw_value) (GtkScale *scale);
 };
 
 
-guint  gtk_scale_get_type       (void);
-void   gtk_scale_set_digits     (GtkScale        *scale,
-				 gint             digits);
-void   gtk_scale_set_draw_value (GtkScale        *scale,
-				 gint             draw_value);
-void   gtk_scale_set_value_pos  (GtkScale        *scale,
-				 GtkPositionType  pos);
-gint   gtk_scale_value_width    (GtkScale        *scale);
+GtkType gtk_scale_get_type       (void);
+void    gtk_scale_set_digits     (GtkScale        *scale,
+				  gint             digits);
+void    gtk_scale_set_draw_value (GtkScale        *scale,
+				  gint             draw_value);
+void    gtk_scale_set_value_pos  (GtkScale        *scale,
+				  GtkPositionType  pos);
+gint    gtk_scale_value_width    (GtkScale        *scale);
 
-void   gtk_scale_draw_value     (GtkScale        *scale);
+void    gtk_scale_draw_value     (GtkScale        *scale);
 
 
 #ifdef __cplusplus

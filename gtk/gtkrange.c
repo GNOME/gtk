@@ -28,9 +28,20 @@
 
 #define RANGE_CLASS(w)  GTK_RANGE_CLASS (GTK_OBJECT (w)->klass)
 
+enum {
+  ARG_0,
+  ARG_UPDATE_POLICY
+};
 
 static void gtk_range_class_init               (GtkRangeClass    *klass);
 static void gtk_range_init                     (GtkRange         *range);
+static void gtk_range_set_arg		       (GtkObject        *object,
+						GtkArg           *arg,
+						guint             arg_id);
+static void gtk_range_get_arg		       (GtkObject        *object,
+						GtkArg           *arg,
+						guint             arg_id);
+static void gtk_range_destroy                  (GtkObject        *object);
 static void gtk_range_finalize                 (GtkObject        *object);
 static void gtk_range_draw                     (GtkWidget        *widget,
 						GdkRectangle     *area);
@@ -81,10 +92,10 @@ static void gtk_range_trough_vdims             (GtkRange         *range,
 static GtkWidgetClass *parent_class = NULL;
 
 
-guint
+GtkType
 gtk_range_get_type (void)
 {
-  static guint range_type = 0;
+  static GtkType range_type = 0;
 
   if (!range_type)
     {
@@ -100,7 +111,7 @@ gtk_range_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      range_type = gtk_type_unique (gtk_widget_get_type (), &range_info);
+      range_type = gtk_type_unique (GTK_TYPE_WIDGET, &range_info);
     }
 
   return range_type;
@@ -115,8 +126,16 @@ gtk_range_class_init (GtkRangeClass *class)
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
 
-  parent_class = gtk_type_class (gtk_widget_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_WIDGET);
 
+  gtk_object_add_arg_type ("GtkRange::update_policy",
+			   GTK_TYPE_UPDATE_TYPE,
+			   GTK_ARG_READWRITE,
+			   ARG_UPDATE_POLICY);
+
+  object_class->set_arg = gtk_range_set_arg;
+  object_class->get_arg = gtk_range_get_arg;
+  object_class->destroy = gtk_range_destroy;
   object_class->finalize = gtk_range_finalize;
 
   widget_class->draw = gtk_range_draw;
@@ -151,6 +170,45 @@ gtk_range_class_init (GtkRangeClass *class)
   class->trough_keys = NULL;
   class->motion = NULL;
   class->timer = gtk_real_range_timer;
+}
+
+static void
+gtk_range_set_arg (GtkObject      *object,
+		   GtkArg         *arg,
+		   guint           arg_id)
+{
+  GtkRange *range;
+
+  range = GTK_RANGE (object);
+
+  switch (arg_id)
+    {
+    case ARG_UPDATE_POLICY:
+      gtk_range_set_update_policy (range, GTK_VALUE_ENUM (*arg));
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+gtk_range_get_arg (GtkObject      *object,
+		   GtkArg         *arg,
+		   guint           arg_id)
+{
+  GtkRange *range;
+
+  range = GTK_RANGE (object);
+
+  switch (arg_id)
+    {
+    case ARG_UPDATE_POLICY:
+      GTK_VALUE_ENUM (*arg) = range->policy;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 static void
@@ -203,6 +261,11 @@ gtk_range_set_adjustment (GtkRange      *range,
 {
   g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
+  
+  if (!adjustment)
+    adjustment = (GtkAdjustment*) gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  else
+    g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
   if (range->adjustment != adjustment)
     {
@@ -212,26 +275,24 @@ gtk_range_set_adjustment (GtkRange      *range,
 					 (gpointer) range);
 	  gtk_object_unref (GTK_OBJECT (range->adjustment));
 	}
+
       range->adjustment = adjustment;
-      if (adjustment)
-	{
-	  gtk_object_ref (GTK_OBJECT (adjustment));
-	  gtk_object_sink (GTK_OBJECT (adjustment));
-
-	  gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
-			      (GtkSignalFunc) gtk_range_adjustment_changed,
-			      (gpointer) range);
-	  gtk_signal_connect (GTK_OBJECT (adjustment), "value_changed",
-			      (GtkSignalFunc) gtk_range_adjustment_value_changed,
-			      (gpointer) range);
-
-	  range->old_value = adjustment->value;
-	  range->old_lower = adjustment->lower;
-	  range->old_upper = adjustment->upper;
-	  range->old_page_size = adjustment->page_size;
-	  
-	  gtk_range_adjustment_changed (adjustment, (gpointer) range);
-	}
+      gtk_object_ref (GTK_OBJECT (adjustment));
+      gtk_object_sink (GTK_OBJECT (adjustment));
+      
+      gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
+			  (GtkSignalFunc) gtk_range_adjustment_changed,
+			  (gpointer) range);
+      gtk_signal_connect (GTK_OBJECT (adjustment), "value_changed",
+			  (GtkSignalFunc) gtk_range_adjustment_value_changed,
+			  (gpointer) range);
+      
+      range->old_value = adjustment->value;
+      range->old_lower = adjustment->lower;
+      range->old_upper = adjustment->upper;
+      range->old_page_size = adjustment->page_size;
+      
+      gtk_range_adjustment_changed (adjustment, (gpointer) range);
     }
 }
 
@@ -621,6 +682,23 @@ gtk_range_default_vmotion (GtkRange *range,
     }
 }
 
+
+static void
+gtk_range_destroy (GtkObject *object)
+{
+  GtkRange *range;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_RANGE (object));
+
+  range = GTK_RANGE (object);
+
+  if (range->adjustment)
+    gtk_signal_disconnect_by_data (GTK_OBJECT (range->adjustment),
+				   (gpointer) range);
+
+  (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+}
 
 static void
 gtk_range_finalize (GtkObject *object)

@@ -215,10 +215,6 @@ void    gtk_container_forall		   (GtkContainer *container,
 
 /* Deprecated methods */
 
-/* Completely non-functional */
-void    gtk_container_disable_resize	 (GtkContainer	   *container);
-void    gtk_container_enable_resize	 (GtkContainer	   *container);
-
 /* Use gtk_container_set_resize_mode() instead */
 void    gtk_container_block_resize	 (GtkContainer	   *container);
 void    gtk_container_unblock_resize	 (GtkContainer	   *container);

@@ -87,8 +87,6 @@ gtk_misc_class_init (GtkMiscClass *class)
 static void
 gtk_misc_init (GtkMisc *misc)
 {
-  GTK_WIDGET_SET_FLAGS (misc, GTK_BASIC);
-
   misc->xalign = 0.5;
   misc->yalign = 0.5;
   misc->xpad = 0;

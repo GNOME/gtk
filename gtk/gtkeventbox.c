@@ -76,7 +76,6 @@ static void
 gtk_event_box_init (GtkEventBox *event_box)
 {
   GTK_WIDGET_UNSET_FLAGS (event_box, GTK_NO_WINDOW);
-  GTK_WIDGET_SET_FLAGS (event_box, GTK_BASIC);
 }
 
 GtkWidget*

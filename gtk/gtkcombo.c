@@ -302,14 +302,14 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
 		 2 * popwin->child->style->klass->xthickness -
 		 2 * GTK_CONTAINER (popwin->child)->border_width -
 		 2 * GTK_CONTAINER (combo->popup)->border_width -
-		 2 * GTK_CONTAINER (popup->viewport)->border_width - 
-		 2 * popup->viewport->style->klass->xthickness);
+		 2 * GTK_CONTAINER (popup->child)->border_width - 
+		 2 * popup->child->style->klass->xthickness);
   
   work_height = (2 * popwin->child->style->klass->ythickness +
 		 2 * GTK_CONTAINER (popwin->child)->border_width +
 		 2 * GTK_CONTAINER (combo->popup)->border_width +
-		 2 * GTK_CONTAINER (popup->viewport)->border_width +
-		 2 * popup->viewport->style->klass->xthickness);
+		 2 * GTK_CONTAINER (popup->child)->border_width +
+		 2 * popup->child->style->klass->xthickness);
   
   do 
     {
@@ -694,7 +694,7 @@ gtk_combo_init (GtkCombo * combo)
   gtk_widget_set_events (combo->list, GDK_ENTER_NOTIFY_MASK);
 
   gtk_list_set_selection_mode(GTK_LIST(combo->list), GTK_SELECTION_BROWSE);
-  gtk_container_add (GTK_CONTAINER (combo->popup), combo->list);
+  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (combo->popup), combo->list);
   gtk_container_set_focus_vadjustment (GTK_CONTAINER (combo->list),
 				       gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (combo->popup)));
   gtk_container_set_focus_hadjustment (GTK_CONTAINER (combo->list),

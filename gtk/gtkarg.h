@@ -50,38 +50,38 @@ struct _GtkArgInfo
 
 /* Non-public methods */
 
-GtkArg*	gtk_arg_new			(GtkType	arg_type);
-GtkArg*	gtk_arg_copy			(GtkArg	       *src_arg,
-					 GtkArg	       *dest_arg);
-void	gtk_arg_free			(GtkArg	       *arg,
-					 gboolean	free_contents);
-gchar*	gtk_args_collect		(GtkType	object_type,
-					 GHashTable    *arg_info_hash_table,
-					 GSList	      **arg_list_p,
-					 GSList	      **info_list_p,
-					 const gchar   *first_arg_name,
-					 va_list	var_args);
-void	gtk_args_collect_cleanup	(GSList	       *arg_list,
-					 GSList	       *info_list);
-gchar*	gtk_arg_get_info		(GtkType	object_type,
-					 GHashTable    *arg_info_hash_table,
-					 const gchar   *arg_name,
-					 GtkArgInfo   **info_p);
-void	gtk_arg_type_new_static		(GtkType	base_class_type,
-					 const gchar   *arg_name,
-					 guint		class_n_args_offset,
-					 GHashTable    *arg_info_hash_table,
-					 GtkType	arg_type,
-					 guint		arg_flags,
-					 guint		arg_id);
-GtkArg*	gtk_args_query			(GtkType	class_type,
-					 GHashTable    *arg_info_hash_table,
-					 guint32      **arg_flags,
-					 guint	       *n_args_p);
-gchar*	gtk_arg_name_strip_type		(const gchar   *arg_name);
-gint	gtk_arg_info_equal		(gconstpointer	arg_info_1,
-					 gconstpointer	arg_info_2);
-guint	gtk_arg_info_hash		(gconstpointer	arg_info);
+GtkArg*		gtk_arg_new		 (GtkType	arg_type);
+GtkArg*		gtk_arg_copy		 (GtkArg       *src_arg,
+					  GtkArg       *dest_arg);
+void		gtk_arg_free		 (GtkArg       *arg,
+					  gboolean	free_contents);
+gchar*		gtk_args_collect	 (GtkType	object_type,
+					  GHashTable    *arg_info_hash_table,
+					  GSList      **arg_list_p,
+					  GSList      **info_list_p,
+					  const gchar   *first_arg_name,
+					  va_list	var_args);
+void		gtk_args_collect_cleanup (GSList       *arg_list,
+					  GSList       *info_list);
+gchar*		gtk_arg_get_info	 (GtkType	object_type,
+					  GHashTable    *arg_info_hash_table,
+					  const gchar   *arg_name,
+					  GtkArgInfo   **info_p);
+GtkArgInfo*	gtk_arg_type_new_static	 (GtkType	base_class_type,
+					  const gchar   *arg_name,
+					  guint		class_n_args_offset,
+					  GHashTable    *arg_info_hash_table,
+					  GtkType	arg_type,
+					  guint		arg_flags,
+					  guint		arg_id);
+GtkArg*		gtk_args_query		 (GtkType	class_type,
+					  GHashTable    *arg_info_hash_table,
+					  guint32      **arg_flags,
+					  guint	       *n_args_p);
+gchar*		gtk_arg_name_strip_type	 (const gchar   *arg_name);
+gint		gtk_arg_info_equal	 (gconstpointer	arg_info_1,
+					  gconstpointer	arg_info_2);
+guint		gtk_arg_info_hash	 (gconstpointer	arg_info);
 
 
 

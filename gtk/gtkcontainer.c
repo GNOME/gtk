@@ -248,6 +248,7 @@ gtk_container_add_with_args (GtkContainer      *container,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (widget->parent == NULL);
+  g_return_if_fail (GTK_OBJECT_CONSTRUCTED (container) == TRUE);
 
   gtk_widget_ref (GTK_WIDGET (container));
   gtk_widget_ref (widget);
@@ -306,6 +307,7 @@ gtk_container_addv (GtkContainer      *container,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (widget->parent == NULL);
+  g_return_if_fail (GTK_OBJECT_CONSTRUCTED (container) == TRUE);
 
   gtk_widget_ref (GTK_WIDGET (container));
   gtk_widget_ref (widget);
@@ -690,6 +692,7 @@ gtk_container_add (GtkContainer *container,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (widget->parent == NULL);
+  g_return_if_fail (GTK_OBJECT_CONSTRUCTED (container) == TRUE);
 
   gtk_signal_emit (GTK_OBJECT (container), container_signals[ADD], widget);
 }
@@ -708,23 +711,12 @@ gtk_container_remove (GtkContainer *container,
 }
 
 void
-gtk_container_disable_resize (GtkContainer *container)
-{
-  g_warning ("gtk_container_disable_resize does nothing!");
-}
-
-void
-gtk_container_enable_resize (GtkContainer *container)
-{
-  g_warning ("gtk_container_enable_resize does nothing!");
-}
-
-void
 gtk_container_block_resize (GtkContainer *container)
 {
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
 
+  g_message ("gtk_container_block_resize() is deprecated");
 }
 
 void
@@ -733,6 +725,7 @@ gtk_container_unblock_resize (GtkContainer *container)
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
   
+  g_message ("gtk_container_unblock_resize() is deprecated");
 }
 
 void
@@ -791,6 +784,8 @@ gtk_container_set_resize_mode (GtkContainer  *container,
 gint    
 gtk_container_need_resize (GtkContainer     *container)
 {
+  g_message ("gtk_container_need_resize() is deprecated");
+
   gtk_container_check_resize (container);
   return FALSE;
 }

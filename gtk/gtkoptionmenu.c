@@ -531,14 +531,12 @@ gtk_option_menu_update_contents (GtkOptionMenu *option_menu)
 	  child = GTK_BIN (option_menu->menu_item)->child;
 	  if (child)
 	    {
-	      gtk_container_block_resize (GTK_CONTAINER (option_menu));
 	      if (GTK_BIN (option_menu)->child)
 		gtk_container_remove (GTK_CONTAINER (option_menu),
 				      GTK_BIN (option_menu)->child);
 	      if (GTK_WIDGET (option_menu)->state != child->state)
 		gtk_widget_set_state (child, GTK_WIDGET (option_menu)->state);
 	      gtk_widget_reparent (child, GTK_WIDGET (option_menu));
-	      gtk_container_unblock_resize (GTK_CONTAINER (option_menu));
 	    }
 
 	  gtk_widget_size_request (child, &child->requisition);
@@ -559,14 +557,12 @@ gtk_option_menu_remove_contents (GtkOptionMenu *option_menu)
 
   if (GTK_BIN (option_menu)->child)
     {
-      gtk_container_block_resize (GTK_CONTAINER (option_menu));
       if (GTK_WIDGET (option_menu->menu_item)->state != GTK_BIN (option_menu)->child->state)
 	gtk_widget_set_state (GTK_BIN (option_menu)->child,
 			      GTK_WIDGET (option_menu->menu_item)->state);
       gtk_widget_reparent (GTK_BIN (option_menu)->child, option_menu->menu_item);
       gtk_widget_unref (option_menu->menu_item);
       option_menu->menu_item = NULL;
-      gtk_container_unblock_resize (GTK_CONTAINER (option_menu));
     }
 }
 

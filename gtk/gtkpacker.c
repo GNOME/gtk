@@ -491,7 +491,7 @@ gtk_packer_get_child_arg (GtkContainer   *container,
 static void
 gtk_packer_init (GtkPacker *packer)
 {
-  GTK_WIDGET_SET_FLAGS (packer, GTK_NO_WINDOW | GTK_BASIC);
+  GTK_WIDGET_SET_FLAGS (packer, GTK_NO_WINDOW);
   
   packer->children = NULL;
   packer->spacing = 0;
