@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-27 16:36-0400\n"
-"PO-Revision-Date: 2004-04-24 10:36+0900\n"
+"POT-Creation-Date: 2004-11-04 00:16+0900\n"
+"PO-Revision-Date: 2004-11-04 00:14+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -218,9 +218,8 @@ msgid "Stack overflow"
 msgstr "スタックあふれ"
 
 #: gdk-pixbuf/io-gif.c:635
-#, fuzzy
 msgid "GIF image loader cannot understand this image."
-msgstr "GIF 画像ローダはこの画像を理解できません"
+msgstr "(GIF 画像ローダ) この画像を理解できません"
 
 #: gdk-pixbuf/io-gif.c:664
 msgid "Bad code encountered"
@@ -457,7 +456,7 @@ msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG のテキスト・チャンクのキーは ASCII 文字にして下さい"
 
 #: gdk-pixbuf/io-png.c:854
-#, fuzzy, c-format
+#, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
 "PNG のテキスト・チャンク %s の値を ISO-8859-1 エンコーディングに変換できませ"
@@ -496,7 +495,6 @@ msgid "Maximum color value in PNM file is too large"
 msgstr "PNM ファイルの色の最大値が大きすぎます"
 
 #: gdk-pixbuf/io-pnm.c:396
-#, fuzzy
 msgid "Cannot handle PNM files with maximum color values greater than 255"
 msgstr "PNM ファイルの色の最大値が 255 より大きいものは扱えません"
 
@@ -521,7 +519,6 @@ msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "ロー PNM 形式ではサンプルデータの前に空白文字が 1 つだけ必要です"
 
 #: gdk-pixbuf/io-pnm.c:770
-#, fuzzy
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "PNM 画像を読み込むためのメモリを確保できません"
 
@@ -562,37 +559,30 @@ msgid "The Sun raster image format"
 msgstr "Sun ラスタ画像形式"
 
 #: gdk-pixbuf/io-tga.c:159
-#, fuzzy
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "IOBuffer 構造体のメモリを確保できません"
 
 #: gdk-pixbuf/io-tga.c:178
-#, fuzzy
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "IOBuffer データのメモリを確保できません"
 
 #: gdk-pixbuf/io-tga.c:189
-#, fuzzy
 msgid "Cannot realloc IOBuffer data"
 msgstr "IOBuffer データのメモリを再確保できません"
 
 #: gdk-pixbuf/io-tga.c:219
-#, fuzzy
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "一時的な IOBuffer データのメモリを確保できません"
 
 #: gdk-pixbuf/io-tga.c:353
-#, fuzzy
 msgid "Cannot allocate new pixbuf"
 msgstr "新しい pixbuf を確保できません"
 
 #: gdk-pixbuf/io-tga.c:692
-#, fuzzy
 msgid "Cannot allocate colormap structure"
 msgstr "カラーマップ構造体を確保できません"
 
 #: gdk-pixbuf/io-tga.c:699
-#, fuzzy
 msgid "Cannot allocate colormap entries"
 msgstr "カラーマップのエントリを確保できません"
 
@@ -601,7 +591,6 @@ msgid "Unexpected bitdepth for colormap entries"
 msgstr "カラーマップのエントリの bitdepth が予期しないものです"
 
 #: gdk-pixbuf/io-tga.c:739
-#, fuzzy
 msgid "Cannot allocate TGA header memory"
 msgstr "TGA ヘッダのメモリを確保できません"
 
@@ -615,7 +604,6 @@ msgid "TGA image type not supported"
 msgstr "TGA 画像はサポートしていません"
 
 #: gdk-pixbuf/io-tga.c:861
-#, fuzzy
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "TGA コンテキスト構造体用のメモリを確保できません"
 
@@ -725,14 +713,12 @@ msgid "XPM file has invalid number of colors"
 msgstr "XPM ファイルの色の数がおかしいです"
 
 #: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
-#, fuzzy
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "XPM 画像を読み込むためのメモリを確保できません"
 
 #: gdk-pixbuf/io-xpm.c:1295
-#, fuzzy
 msgid "Cannot read XPM colormap"
-msgstr "XPM のカラーマップを読めません"
+msgstr "XPM のカラーマップを読み込めません"
 
 #: gdk-pixbuf/io-xpm.c:1524
 msgid "Failed to write to temporary file when loading XPM image"
@@ -745,48 +731,47 @@ msgstr "XPM 画像形式"
 #. Description of --class=CLASS in --help output
 #: gdk/gdk.c:115
 msgid "Program class as used by the window manager"
-msgstr ""
+msgstr "ウィンドウ・マネージャで利用するプログラムのクラスを指定する"
 
 #. Placeholder in --class=CLASS in --help output
 #: gdk/gdk.c:116
 msgid "CLASS"
-msgstr ""
+msgstr "CLASS"
 
 #. Description of --name=NAME in --help output
 #: gdk/gdk.c:118
 msgid "Program name as used by the window manager"
-msgstr ""
+msgstr "ウィンドウ・マネージャで利用するプログラムの名前を指定する"
 
 #. Placeholder in --name=NAME in --help output
 #: gdk/gdk.c:119
 msgid "NAME"
-msgstr ""
+msgstr "NAME"
 
 #. Description of --display=DISPLAY in --help output
 #: gdk/gdk.c:121
 msgid "X display to use"
-msgstr ""
+msgstr "使用する X-ディスプレイ"
 
 #. Placeholder in --display=DISPLAY in --help output
 #: gdk/gdk.c:122
-#, fuzzy
 msgid "DISPLAY"
-msgstr "IPA (国際発音記号)"
+msgstr "DISPLAY"
 
 #. Description of --screen=SCREEN in --help output
 #: gdk/gdk.c:124
 msgid "X screen to use"
-msgstr ""
+msgstr "使用する X-スクリーン"
 
 #. Placeholder in --screen=SCREEN in --help output
 #: gdk/gdk.c:125
 msgid "SCREEN"
-msgstr ""
+msgstr "SCREEN"
 
 #. Description of --gdk-debug=FLAGS in --help output
 #: gdk/gdk.c:128
 msgid "Gdk debugging flags to set"
-msgstr ""
+msgstr "有効にする Gdk デバッグ・フラグを指定する"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -794,90 +779,90 @@ msgstr ""
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
 #: gdk/gdk.c:129 gdk/gdk.c:132 gtk/gtkmain.c:404 gtk/gtkmain.c:407
 msgid "FLAGS"
-msgstr ""
+msgstr "FLAGS"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: gdk/gdk.c:131
 msgid "Gdk debugging flags to unset"
-msgstr ""
+msgstr "無効にする Gdk のデバッグ・フラグを指定する"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:60
 msgid "Don't batch GDI requests"
-msgstr ""
+msgstr "GDI のリクエストをまとめない"
 
 #. Description of --no-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:62
 msgid "Don't use the Wintab API for tablet support"
-msgstr ""
+msgstr "タブレットのサポートで Wintab API を使用しない"
 
 #. Description of --ignore-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:64
 msgid "Same as --no-wintab"
-msgstr ""
+msgstr "オプション --no-wintab と同じ"
 
 #. Description of --use-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:66
 msgid "Do use the Wintab API [default]"
-msgstr ""
+msgstr "Wintab API を使用しない [デフォルト]"
 
 #. Description of --max-colors=COLORS in --help output
 #: gdk/win32/gdkmain-win32.c:68
 msgid "Size of the palette in 8 bit mode"
-msgstr ""
+msgstr "8-ビット・モードでのパレット・サイズを指定する"
 
 #. Placeholder in --max-colors=COLORS in --help output
 #: gdk/win32/gdkmain-win32.c:69
 msgid "COLORS"
-msgstr ""
+msgstr "COLORS"
 
 #. Description of --sync in --help output
 #: gdk/x11/gdkmain-x11.c:92
 msgid "Make X calls synchronous"
-msgstr ""
+msgstr "X の呼び出しと同期する"
 
 #: gtk/gtkaboutdialog.c:217 gtk/gtkaboutdialog.c:1823
 msgid "License"
-msgstr ""
+msgstr "ライセンス"
 
 #: gtk/gtkaboutdialog.c:218
 msgid "The license of the program"
-msgstr ""
+msgstr "プログラムのライセンス"
 
 #. Add the credits button
 #: gtk/gtkaboutdialog.c:367
 msgid "_Credits"
-msgstr ""
+msgstr "クレジット(_C)"
 
 #. Add the license button
 #: gtk/gtkaboutdialog.c:376
 msgid "_License"
-msgstr ""
+msgstr "ライセンス(_L)"
 
 #: gtk/gtkaboutdialog.c:567
 #, c-format
 msgid "About %s"
-msgstr ""
+msgstr "%s について"
 
 #: gtk/gtkaboutdialog.c:1760
 msgid "Credits"
-msgstr ""
+msgstr "クレジット"
 
 #: gtk/gtkaboutdialog.c:1785
 msgid "Written by"
-msgstr ""
+msgstr "開発担当"
 
 #: gtk/gtkaboutdialog.c:1788
 msgid "Documented by"
-msgstr ""
+msgstr "ドキュメント担当"
 
 #: gtk/gtkaboutdialog.c:1800
 msgid "Translated by"
-msgstr ""
+msgstr "翻訳担当"
 
 #: gtk/gtkaboutdialog.c:1804
 msgid "Artwork by"
-msgstr ""
+msgstr "アートワーク担当"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -926,11 +911,6 @@ msgstr "calendar:YM"
 #: gtk/gtkcalendar.c:710
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
-
-#: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
-#, c-format
-msgid "progress bar label|%d %%"
-msgstr ""
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
@@ -1066,15 +1046,15 @@ msgstr "色ホイール"
 msgid "Color Selection"
 msgstr "色の選択"
 
-#: gtk/gtkentry.c:4507 gtk/gtktextview.c:6979
+#: gtk/gtkentry.c:4507 gtk/gtktextview.c:6978
 msgid "Select _All"
 msgstr "全て選択(_A)"
 
-#: gtk/gtkentry.c:4517 gtk/gtktextview.c:6989
+#: gtk/gtkentry.c:4517 gtk/gtktextview.c:6988
 msgid "Input _Methods"
 msgstr "入力メソッド(_M)"
 
-#: gtk/gtkentry.c:4528 gtk/gtktextview.c:7000
+#: gtk/gtkentry.c:4528 gtk/gtktextview.c:6999
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode 制御文字の挿入(_I)"
 
@@ -1085,21 +1065,19 @@ msgid "Invalid filename: %s"
 msgstr "ファイル名が不正です: %s"
 
 #: gtk/gtkfilechooserbutton.c:59
-#, fuzzy
 msgid "(None)"
-msgstr "無し"
+msgstr "(なし)"
 
-#: gtk/gtkfilechooserbutton.c:253
-#, fuzzy
+#: gtk/gtkfilechooserbutton.c:268
 msgid "Select a File"
-msgstr "ファイルの削除"
+msgstr "ファイルの選択"
 
-#: gtk/gtkfilechooserbutton.c:1230 gtk/gtkfilechooserdefault.c:1165
+#: gtk/gtkfilechooserbutton.c:1263 gtk/gtkfilechooserdefault.c:1165
 #: gtk/gtkpathbar.c:981
 msgid "Home"
 msgstr "ホーム"
 
-#: gtk/gtkfilechooserbutton.c:1237 gtk/gtkfilechooserdefault.c:1188
+#: gtk/gtkfilechooserbutton.c:1270 gtk/gtkfilechooserdefault.c:1188
 #: gtk/gtkpathbar.c:983
 msgid "Desktop"
 msgstr "デスクトップ"
@@ -1166,20 +1144,20 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:2024
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
-msgstr ""
+msgstr "フォルダ '%s' をブックマークへ追加する"
 
 #: gtk/gtkfilechooserdefault.c:2065
 msgid "Add the current folder to the bookmarks"
-msgstr ""
+msgstr "このフォルダをブックマークへ追加する"
 
 #: gtk/gtkfilechooserdefault.c:2067
 msgid "Add the selected folders to the bookmarks"
-msgstr ""
+msgstr "指定したフォルダをブックマークへ追加する"
 
 #: gtk/gtkfilechooserdefault.c:2107
 #, c-format
 msgid "Remove the bookmark '%s'"
-msgstr ""
+msgstr "ブックマーク '%s' を削除する"
 
 #: gtk/gtkfilechooserdefault.c:2512
 #, c-format
@@ -1188,7 +1166,7 @@ msgstr "パス名が正しくないので、%s のブックマークを追加で
 
 #: gtk/gtkfilechooserdefault.c:2690
 msgid "Shortcuts"
-msgstr ""
+msgstr "ショートカット"
 
 #: gtk/gtkfilechooserdefault.c:2744
 msgid "Folder"
@@ -1200,7 +1178,7 @@ msgstr "追加(_A)"
 
 #: gtk/gtkfilechooserdefault.c:2803
 msgid "Add the selected folder to the bookmarks"
-msgstr ""
+msgstr "指定したフォルダを複数のブックマークへ追加します"
 
 #: gtk/gtkfilechooserdefault.c:2808 gtk/gtkstock.c:352
 msgid "_Remove"
@@ -1208,11 +1186,11 @@ msgstr "削除(_R)"
 
 #: gtk/gtkfilechooserdefault.c:2815
 msgid "Remove the selected bookmark"
-msgstr ""
+msgstr "指定したブックマークを削除します"
 
 #: gtk/gtkfilechooserdefault.c:2908
 msgid "_Add to Shortcuts"
-msgstr ""
+msgstr "ショートカットの追加(_A)"
 
 #: gtk/gtkfilechooserdefault.c:2922
 msgid "Show _Hidden Files"
@@ -1241,7 +1219,7 @@ msgstr "フォルダの作成(_L)"
 
 #: gtk/gtkfilechooserdefault.c:3192
 msgid "Select which types of files are shown"
-msgstr ""
+msgstr "表示するファイルの種類を選択して下さい"
 
 #. Name entry
 #: gtk/gtkfilechooserdefault.c:3281
@@ -1261,9 +1239,8 @@ msgid "Create in _folder:"
 msgstr "フォルダの中に作成(_F):"
 
 #: gtk/gtkfilechooserdefault.c:4260
-#, fuzzy
 msgid "Cannot change to folder because it is not local"
-msgstr "ローカルではないので、指定したフォルダへ移動できません。"
+msgstr "ローカルではないので、フォルダを変更できません"
 
 #: gtk/gtkfilechooserdefault.c:4404
 msgid "Could not find the path"
@@ -1539,9 +1516,9 @@ msgid "Filesystem"
 msgstr "ファイルシステム"
 
 #: gtk/gtkfilesystemunix.c:738
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "ファイル '%s' の情報を取得できませんでした: %s"
+msgstr "%s のストック・アイコンを取得できませんでした"
 
 #: gtk/gtkfilesystemunix.c:833
 #, c-format
@@ -1622,7 +1599,7 @@ msgstr "ガンマ値(_G)"
 msgid "Error loading icon: %s"
 msgstr "アイコンの読み込みでエラー: %s"
 
-#: gtk/gtkicontheme.c:1243
+#: gtk/gtkicontheme.c:1244
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1635,7 +1612,7 @@ msgstr ""
 "次からコピーを取得できます:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1308
+#: gtk/gtkicontheme.c:1309
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "テーマの中にアイコン '%s' はありません"
@@ -1723,38 +1700,38 @@ msgstr "(不明)"
 msgid "clear"
 msgstr "クリア"
 
-#: gtk/gtklabel.c:3479
+#: gtk/gtklabel.c:3482
 msgid "Select All"
 msgstr "全て選択"
 
-#: gtk/gtklabel.c:3489
+#: gtk/gtklabel.c:3492
 msgid "Input Methods"
 msgstr "入力メソッド"
 
 #. Description of --gtk-module=MODULES in --help output
 #: gtk/gtkmain.c:397
 msgid "Load additional GTK+ modules"
-msgstr ""
+msgstr "追加で読み込む GTK+ モジュールを指定する"
 
 #. Placeholder in --gtk-module=MODULES in --help output
 #: gtk/gtkmain.c:398
 msgid "MODULES"
-msgstr ""
+msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
 #: gtk/gtkmain.c:400
 msgid "Make all warnings fatal"
-msgstr ""
+msgstr "警告を全て致命的と見なす"
 
 #. Description of --gtk-debug=FLAGS in --help output
 #: gtk/gtkmain.c:403
 msgid "GTK+ debugging flags to set"
-msgstr ""
+msgstr "有効にする GTK+ のデバッグ・フラグを指定する"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
 #: gtk/gtkmain.c:406
 msgid "GTK+ debugging flags to unset"
-msgstr ""
+msgstr "無効にする GTK+ のデバッグ・フラグを指定する"
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -1767,11 +1744,11 @@ msgstr "default:LTR"
 
 #: gtk/gtkmain.c:549
 msgid "GTK+ Options"
-msgstr ""
+msgstr "GTK+ のオプション"
 
 #: gtk/gtkmain.c:549
 msgid "Show GTK+ Options"
-msgstr ""
+msgstr "GTK+ のオプションを表示する"
 
 #: gtk/gtknotebook.c:2712 gtk/gtknotebook.c:5060
 #, c-format
@@ -1823,7 +1800,7 @@ msgstr "質問"
 #.
 #: gtk/gtkstock.c:294
 msgid "_About"
-msgstr ""
+msgstr "情報(_A)"
 
 #: gtk/gtkstock.c:296
 msgid "_Apply"
@@ -1871,7 +1848,7 @@ msgstr "実行(_E)"
 
 #: gtk/gtkstock.c:307
 msgid "_Edit"
-msgstr ""
+msgstr "編集(_E)"
 
 #: gtk/gtkstock.c:308
 msgid "_Find"
@@ -1966,32 +1943,28 @@ msgid "_Right"
 msgstr "右(_R)"
 
 #: gtk/gtkstock.c:332
-#, fuzzy
 msgid "_Next"
-msgstr "新規(_N)"
+msgstr "次の曲(_N)"
 
 #: gtk/gtkstock.c:333
-#, fuzzy
 msgid "P_ause"
-msgstr "貼り付け"
+msgstr "一時停止(_A)"
 
 #: gtk/gtkstock.c:334
 msgid "_Play"
-msgstr ""
+msgstr "演奏(_P)"
 
 #: gtk/gtkstock.c:335
 msgid "Pre_vious"
-msgstr ""
+msgstr "次の曲(_V)"
 
 #: gtk/gtkstock.c:336
-#, fuzzy
 msgid "_Record"
-msgstr "赤(_R):"
+msgstr "録音(_R)"
 
 #: gtk/gtkstock.c:337
-#, fuzzy
 msgid "R_ewind"
-msgstr "検索(_F)"
+msgstr "巻き戻す(_E)"
 
 #: gtk/gtkstock.c:338 gtk/gtkstock.c:361
 msgid "_Stop"
@@ -2202,9 +2175,8 @@ msgstr "キリル文字 (翻字)"
 
 #. ID
 #: modules/input/iminuktitut.c:127
-#, fuzzy
 msgid "Inuktitut (Transliterated)"
-msgstr "イヌクウティトット語 (翻字)"
+msgstr "イヌクティトゥト語 (翻字)"
 
 #. ID
 #: modules/input/imipa.c:145
@@ -2240,6 +2212,3 @@ msgstr "X 入力メソッド"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ファイル '%s' の情報を取得できませんでした: %s"
-
-#~ msgid "Unsupported TIFF variant"
-#~ msgstr "サポートされていない TIFF の一種です"
