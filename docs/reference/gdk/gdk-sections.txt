@@ -504,8 +504,11 @@ GdkAtom
 GDK_NONE
 gdk_text_property_to_text_list
 gdk_free_text_list
+gdk_text_property_to_utf8_list
 gdk_string_to_compound_text
 gdk_free_compound_text
+gdk_utf8_to_string_target
+gdk_utf8_to_compound_text
 gdk_atom_intern
 gdk_atom_name
 gdk_property_get
@@ -840,6 +843,7 @@ gdk_xid_table_lookup
 gdk_window_lookup
 gdk_pixmap_lookup
 gdk_font_lookup
+gdk_x11_get_server_time
 
 <SUBSECTION Private>
 GDK_TYPE_GC_X11

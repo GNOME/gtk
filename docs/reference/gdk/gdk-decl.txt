@@ -265,6 +265,11 @@ GdkNativeWindow anid
 <RETURNS>gpointer  </RETURNS>
 XID              xid
 </FUNCTION>
+<FUNCTION>
+<NAME>gdk_x11_get_server_time</NAME>
+<RETURNS>guint32  </RETURNS>
+GdkWindow       *window
+</FUNCTION>
 <MACRO>
 <NAME>gdk_window_lookup</NAME>
 #define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
@@ -2606,39 +2611,6 @@ void
 <RETURNS>void  </RETURNS>
 PangoContext *context,GdkColormap  *colormap
 </FUNCTION>
-<ENUM>
-<NAME>GdkPixbufAlphaMode</NAME>
-typedef enum
-{
-  GDK_PIXBUF_ALPHA_BILEVEL,
-  GDK_PIXBUF_ALPHA_FULL
-} GdkPixbufAlphaMode;
-</ENUM>
-<FUNCTION>
-<NAME>gdk_pixbuf_render_threshold_alpha</NAME>
-<RETURNS>void  </RETURNS>
-GdkPixbuf           *pixbuf,GdkBitmap           *bitmap,int                  src_x,int                  src_y,int                  dest_x,int                  dest_y,int                  width,int                  height,int                  alpha_threshold
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_render_to_drawable</NAME>
-<RETURNS>void  </RETURNS>
-GdkPixbuf           *pixbuf,GdkDrawable         *drawable,GdkGC               *gc,int                  src_x,int                  src_y,int                  dest_x,int                  dest_y,int                  width,int                  height,GdkRgbDither         dither,int                  x_dither,int                  y_dither
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_render_to_drawable_alpha</NAME>
-<RETURNS>void  </RETURNS>
-GdkPixbuf           *pixbuf,GdkDrawable         *drawable,int                  src_x,int                  src_y,int                  dest_x,int                  dest_y,int                  width,int                  height,GdkPixbufAlphaMode   alpha_mode,int                  alpha_threshold,GdkRgbDither         dither,int                  x_dither,int                  y_dither
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_render_pixmap_and_mask</NAME>
-<RETURNS>void  </RETURNS>
-GdkPixbuf           *pixbuf,GdkPixmap          **pixmap_return,GdkBitmap          **mask_return,int                  alpha_threshold
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixbuf_get_from_drawable</NAME>
-<RETURNS>GdkPixbuf  *</RETURNS>
-GdkPixbuf   *dest,GdkDrawable *src,GdkColormap *cmap,int          src_x,int          src_y,int          dest_x,int          dest_y,int          width,int          height
-</FUNCTION>
 <STRUCT>
 <NAME>GdkPixmapObject</NAME>
 </STRUCT>
@@ -2762,6 +2734,21 @@ GdkWindow     *window,GdkAtom        property
 <NAME>gdk_text_property_to_text_list</NAME>
 <RETURNS>gint  </RETURNS>
 GdkAtom        encoding,gint           format,const guchar  *text,gint           length,gchar       ***list
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_text_property_to_utf8_list</NAME>
+<RETURNS>gint  </RETURNS>
+GdkAtom        encoding,gint           format,const guchar  *text,gint           length,gchar       ***list
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_utf8_to_string_target</NAME>
+<RETURNS>gchar    *</RETURNS>
+const gchar *str
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_utf8_to_compound_text</NAME>
+<RETURNS>gboolean  </RETURNS>
+const gchar *str,GdkAtom     *encoding,gint        *format,guchar     **ctext,gint        *length
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_free_text_list</NAME>
@@ -3859,3 +3846,36 @@ GdkWindow    *window,gboolean      update_children
 <NAME>GDK_HAVE_WCTYPE_H</NAME>
 #define GDK_HAVE_WCTYPE_H 1
 </MACRO>
+<ENUM>
+<NAME>GdkPixbufAlphaMode</NAME>
+typedef enum
+{
+  GDK_PIXBUF_ALPHA_BILEVEL,
+  GDK_PIXBUF_ALPHA_FULL
+} GdkPixbufAlphaMode;
+</ENUM>
+<FUNCTION>
+<NAME>gdk_pixbuf_render_threshold_alpha</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbuf           *pixbuf,GdkBitmap           *bitmap,int                  src_x,int                  src_y,int                  dest_x,int                  dest_y,int                  width,int                  height,int                  alpha_threshold
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_render_to_drawable</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbuf           *pixbuf,GdkDrawable         *drawable,GdkGC               *gc,int                  src_x,int                  src_y,int                  dest_x,int                  dest_y,int                  width,int                  height,GdkRgbDither         dither,int                  x_dither,int                  y_dither
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_render_to_drawable_alpha</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbuf           *pixbuf,GdkDrawable         *drawable,int                  src_x,int                  src_y,int                  dest_x,int                  dest_y,int                  width,int                  height,GdkPixbufAlphaMode   alpha_mode,int                  alpha_threshold,GdkRgbDither         dither,int                  x_dither,int                  y_dither
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_render_pixmap_and_mask</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbuf           *pixbuf,GdkPixmap          **pixmap_return,GdkBitmap          **mask_return,int                  alpha_threshold
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_get_from_drawable</NAME>
+<RETURNS>GdkPixbuf  *</RETURNS>
+GdkPixbuf   *dest,GdkDrawable *src,GdkColormap *cmap,int          src_x,int          src_y,int          dest_x,int          dest_y,int          width,int          height
+</FUNCTION>

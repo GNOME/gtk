@@ -88,6 +88,19 @@ gdk_text_property_to_text_list().
        a call to gdk_text_property_to_text_list().
 
 
+<!-- ##### FUNCTION gdk_text_property_to_utf8_list ##### -->
+<para>
+
+</para>
+
+@encoding: 
+@format: 
+@text: 
+@length: 
+@list: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_string_to_compound_text ##### -->
 <para>
 Convert a string from the encoding of the current locale 
@@ -108,6 +121,28 @@ Free the data returned from gdk_string_to_compound_text().
 </para>
 
 @ctext: The pointer stored in @ctext from a call to gdk_string_to_compound_text().
+
+
+<!-- ##### FUNCTION gdk_utf8_to_string_target ##### -->
+<para>
+
+</para>
+
+@str: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_utf8_to_compound_text ##### -->
+<para>
+
+</para>
+
+@str: 
+@encoding: 
+@format: 
+@ctext: 
+@length: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_atom_intern ##### -->
