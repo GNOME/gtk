@@ -1,3 +1,7 @@
+Mon Mar 26 14:42:59 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkpango.h: Remove stale FIXME comment.
+
 2001-03-26  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gtk/gtkfilesel.c (gtk_file_selection_get_filename):
