@@ -106,6 +106,7 @@ struct _GtkSpinButtonClass
   gint (*input)  (GtkSpinButton *spin_button,
 		  gdouble       *new_value);
   gint (*output) (GtkSpinButton *spin_button);
+  void (*value_changed) (GtkSpinButton *spin_button);
 };
 
 
@@ -120,6 +121,10 @@ GtkWidget*	gtk_spin_button_new		   (GtkAdjustment  *adjustment,
 						    gdouble	    climb_rate,
 						    guint	    digits);
 
+GtkWidget*	gtk_spin_button_new_with_range	   (gdouble  min,
+						    gdouble  max,
+						    gdouble  step);
+
 void		gtk_spin_button_set_adjustment	   (GtkSpinButton  *spin_button,
 						    GtkAdjustment  *adjustment);
 
@@ -127,6 +132,14 @@ GtkAdjustment*	gtk_spin_button_get_adjustment	   (GtkSpinButton  *spin_button);
 
 void		gtk_spin_button_set_digits	   (GtkSpinButton  *spin_button,
 						    guint	    digits);
+
+void		gtk_spin_button_set_increments	   (GtkSpinButton  *spin_button,
+						    gdouble         step,
+						    gdouble         page);
+
+void		gtk_spin_button_set_range	   (GtkSpinButton  *spin_button,
+						    gdouble         min,
+						    gdouble         max);
 
 gdouble		gtk_spin_button_get_value_as_float (GtkSpinButton  *spin_button);
 

@@ -3770,6 +3770,23 @@ get_value (GtkWidget *widget, gpointer data)
   gtk_label_set_text (label, buf);
 }
 
+static void
+get_spin_value (GtkWidget *widget, gpointer data)
+{
+  gchar *buffer;
+  GtkLabel *label;
+  GtkSpinButton *spin;
+
+  spin = GTK_SPIN_BUTTON (widget);
+  label = GTK_LABEL (data);
+
+  buffer = g_strdup_printf ("%0.*f", spin->digits,
+			    gtk_spin_button_get_value_as_float (spin));
+  gtk_label_set_text (label, buffer);
+
+  g_free (buffer);
+}
+
 static gint
 spin_button_time_output_func (GtkSpinButton *spin_button)
 {
@@ -4049,6 +4066,22 @@ create_spins (void)
 
       gtk_box_pack_start (GTK_BOX (vbox), val_label, TRUE, TRUE, 0);
       gtk_label_set_text (GTK_LABEL (val_label), "0");
+
+      frame = gtk_frame_new ("Using Convenience Constructor");
+      gtk_box_pack_start (GTK_BOX (main_vbox), frame, TRUE, TRUE, 0);
+  
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
+      gtk_container_add (GTK_CONTAINER (frame), hbox);
+      
+      val_label = gtk_label_new ("0.0");
+
+      spinner = gtk_spin_button_new_with_range (0.0, 10.0, 0.009);
+      gtk_spin_button_set_value (GTK_SPIN_BUTTON (spinner), 0.0);
+      gtk_signal_connect (GTK_OBJECT (spinner), "value_changed",
+			  GTK_SIGNAL_FUNC (get_spin_value), val_label);
+      gtk_box_pack_start (GTK_BOX (hbox), spinner, TRUE, TRUE, 5);
+      gtk_box_pack_start (GTK_BOX (hbox), val_label, TRUE, TRUE, 5);
 
       hbox = gtk_hbox_new (FALSE, 0);
       gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, TRUE, 0);
@@ -9342,7 +9375,6 @@ scroll_test_adjustment_changed (GtkAdjustment *adj, GtkWidget *widget)
 
   if (!GTK_WIDGET_DRAWABLE (widget))
     return;
-
   gdk_window_scroll (widget->window, 0, dy);
   gdk_window_process_updates (widget->window, FALSE);
 }

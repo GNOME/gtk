@@ -1,3 +1,15 @@
+Thu Mar 29 21:20:38 2001  Mike Kestner  <mkestner@ameritech.net>
+
+	* gtk/gtkspinbutton.c : added value_changed signal which proxies for the
+	adjustment. Cleaned redundant preconditions (spin != NULL). Added
+	inline API function docs.
+	(gtk_spin_button_new_with_range): New convenience constructor.
+	(gtk_spin_button_set_increments): New adjustment helper.
+	(gtk_spin_button_set_range): New adjustment helper.
+
+	* gtk/testgtk.c : added test of the new convenince constructor and
+	value_changed signals.
+
 Thu Mar 29 20:20:38 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.c (gtk_tree_row_ref_reordered_callback): Now we
