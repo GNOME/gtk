@@ -1,3 +1,8 @@
+2004-04-12  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooser.c (gtk_file_chooser_class_init): Added
+	documentation to all the signals.
+
 2004-04-12  Matthias Clasen  <mclasen@dhcp64-228.boston.redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_unset_model): Don't unref

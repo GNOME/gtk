@@ -116,6 +116,162 @@ update_preview_cb (GtkFileChooser *file_chooser, gpointer data)
       </note>
     </refsect2>
 
+    <refsect2 id="gtkfilechooser-key-bindings">
+      <title>Key Bindings</title>
+
+      <para>
+	Internally, GTK+ implements a file chooser's graphical user
+	interface with the private
+	<classname>GtkFileChooserDefaultClass</classname>.  This
+	widget has several <link linkend="gtk-Bindings"">key
+	bindings</link> and their associated signals.  This section
+	describes the available key binding signals.
+      </para>
+
+      <refsect3 id="GtkFileChooserDefault-location-popup">
+	<title>The &quot;GtkFileChooserDefault::location-popup&quot; signal</title>
+
+	<programlisting>
+          void user_function (GtkFileChooserDefault *chooser,
+                              <link linkend="gpointer">gpointer</link> user_data);
+	</programlisting>
+
+	<para>
+	  This is used to make the file chooser show a "Location"
+	  dialog which the user can use to manually type the name of
+	  the file he wishes to select.  By default this is bound to
+	  <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo>.
+	</para>
+
+	<variablelist role="params">
+	  <varlistentry>
+	    <term><parameter>chooser</parameter>&nbsp;:</term>
+	    <listitem>
+	      <simpara>
+		the object which received the signal.
+	      </simpara>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>user_data</parameter>&nbsp;:</term>
+	    <listitem>
+	      <simpara>
+		user data set when the signal handler was connected.
+	      </simpara>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect3>
+
+      <refsect3 id="GtkFileChooserDefault-up-folder">
+	<title>The &quot;GtkFileChooserDefault::up-folder&quot; signal</title>
+
+	<programlisting>
+          void user_function (GtkFileChooserDefault *chooser,
+                              <link linkend="gpointer">gpointer</link> user_data);
+	</programlisting>
+
+	<para>
+	  This is used to make the file chooser go to the parent of
+	  the current folder in the file hierarchy.  By default this
+	  is bound to
+	  <keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo>.
+	</para>
+
+	<variablelist role="params">
+	  <varlistentry>
+	    <term><parameter>chooser</parameter>&nbsp;:</term>
+	    <listitem>
+	      <simpara>
+		the object which received the signal.
+	      </simpara>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>user_data</parameter>&nbsp;:</term>
+	    <listitem>
+	      <simpara>
+		user data set when the signal handler was connected.
+	      </simpara>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect3>
+
+      <refsect3 id="GtkFileChooserDefault-down-folder">
+	<title>The &quot;GtkFileChooserDefault::down-folder&quot; signal</title>
+
+	<programlisting>
+          void user_function (GtkFileChooserDefault *chooser,
+                              <link linkend="gpointer">gpointer</link> user_data);
+	</programlisting>
+
+	<para>
+	  This is used to make the file chooser go to a child of the
+	  current folder in the file hierarchy.  The subfolder that
+	  will be used is displayed in the path bar widget of the file
+	  chooser.  For example, if the path bar is showing
+	  "/foo/<emphasis>bar/</emphasis>baz", then this will cause
+	  the file chooser to switch to the "baz" subfolder.  By
+	  default this is bound to
+	  <keycombo><keycap>Alt</keycap><keycap>Down</keycap></keycombo>.
+	</para>
+
+	<variablelist role="params">
+	  <varlistentry>
+	    <term><parameter>chooser</parameter>&nbsp;:</term>
+	    <listitem>
+	      <simpara>
+		the object which received the signal.
+	      </simpara>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>user_data</parameter>&nbsp;:</term>
+	    <listitem>
+	      <simpara>
+		user data set when the signal handler was connected.
+	      </simpara>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect3>
+
+      <refsect3 id="GtkFileChooserDefault-home-folder">
+	<title>The &quot;GtkFileChooserDefault::home-folder&quot; signal</title>
+
+	<programlisting>
+          void user_function (GtkFileChooserDefault *chooser,
+                              <link linkend="gpointer">gpointer</link> user_data);
+	</programlisting>
+
+	<para>
+	  This is used to make the file chooser show the user's home
+	  folder in the file list.  By default this is bound to
+	  <keycombo><keycap>Alt</keycap><keycap>Home</keycap></keycombo>.
+	</para>
+
+	<variablelist role="params">
+	  <varlistentry>
+	    <term><parameter>chooser</parameter>&nbsp;:</term>
+	    <listitem>
+	      <simpara>
+		the object which received the signal.
+	      </simpara>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>user_data</parameter>&nbsp;:</term>
+	    <listitem>
+	      <simpara>
+		user data set when the signal handler was connected.
+	      </simpara>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect3>
+    </refsect2>
+
 <!-- ##### SECTION See_Also ##### -->
     <para>
       #GtkFileChooserDialog, #GtkFileChooserWidget

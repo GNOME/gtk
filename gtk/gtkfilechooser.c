@@ -59,6 +59,24 @@ gtk_file_chooser_class_init (gpointer g_iface)
 {
   GType iface_type = G_TYPE_FROM_INTERFACE (g_iface);
 
+  /**
+   * GtkFileChooser::current-folder-changed
+   * @chooser: the object which received the signal.
+   *
+   * This signal is emitted when the current folder in a #GtkFileChooser
+   * changes.  This can happen due to the user performing some action that
+   * changes folders, such as selecting a bookmark or visiting a folder on the
+   * file list.  It can also happen as a result of calling a function to
+   * explicitly change the current folder in a file chooser.
+   *
+   * Normally you do not need to connect to this signal, unless you need to keep
+   * track of which folder a file chooser is showing.
+   *
+   * See also:  gtk_file_chooser_set_current_folder(),
+   * gtk_file_chooser_get_current_folder(),
+   * gtk_file_chooser_set_current_folder_uri(),
+   * gtk_file_chooser_get_current_folder_uri().
+   */
   g_signal_new ("current-folder-changed",
 		iface_type,
 		G_SIGNAL_RUN_LAST,
@@ -66,6 +84,26 @@ gtk_file_chooser_class_init (gpointer g_iface)
 		NULL, NULL,
 		g_cclosure_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);
+
+  /**
+   * GtkFileChooser::selection-changed
+   * @chooser: the object which received the signal.
+   *
+   * This signal is emitted when there is a change in the set of selected files
+   * in a #GtkFileChooser.  This can happen when the user modifies the selection
+   * with the mouse or the keyboard, or when explicitly calling functions to
+   * change the selection.
+   *
+   * Normally you do not need to connect to this signal, as it is easier to wait
+   * for the file chooser to finish running, and then to get the list of
+   * selected files using the functions mentioned below.
+   *
+   * See also: gtk_file_chooser_select_filename(),
+   * gtk_file_chooser_unselect_filename(), gtk_file_chooser_get_filename(),
+   * gtk_file_chooser_get_filenames(), gtk_file_chooser_select_uri(),
+   * gtk_file_chooser_unselect_uri(), gtk_file_chooser_get_uri(),
+   * gtk_file_chooser_get_uris().
+   */
   g_signal_new ("selection-changed",
 		iface_type,
 		G_SIGNAL_RUN_LAST,
@@ -73,6 +111,33 @@ gtk_file_chooser_class_init (gpointer g_iface)
 		NULL, NULL,
 		g_cclosure_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);
+
+  /**
+   * GtkFileChooser::update-preview
+   * @chooser: the object which received the signal.
+   *
+   * This signal is emitted when the preview in a file chooser should be
+   * regenerated.  For example, this can happen when the currently selected file
+   * changes.  You should use this signal if you want your file chooser to have
+   * a preview widget.
+   *
+   * Once you have installed a preview widget with
+   * gtk_file_chooser_set_preview_widget(), you should update it when this
+   * signal is emitted.  You can use the functions
+   * gtk_file_chooser_get_preview_filename() or
+   * gtk_file_chooser_get_preview_uri() to get the name of the file to preview.
+   * Your widget may not be able to preview all kinds of files; your callback
+   * must call gtk_file_chooser_set_preview_wiget_active() to inform the file
+   * chooser about whether the preview was generated successfully or not.
+   *
+   * Please see the example code in <xref linkend="gtkfilechooser-preview"/>.
+   *
+   * See also: gtk_file_chooser_set_preview_widget(),
+   * gtk_file_chooser_set_preview_widget_active(),
+   * gtk_file_chooser_set_use_preview_label(),
+   * gtk_file_chooser_get_preview_filename(),
+   * gtk_file_chooser_get_preview_uri().
+   */
   g_signal_new ("update-preview",
 		iface_type,
 		G_SIGNAL_RUN_LAST,
@@ -80,6 +145,23 @@ gtk_file_chooser_class_init (gpointer g_iface)
 		NULL, NULL,
 		g_cclosure_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);
+
+  /**
+   * GtkFileChooser::file-activated
+   * @chooser: the object which received the signal.
+   *
+   * This signal is emitted when the user "activates" a file in the file
+   * chooser.  This can happen by double-clicking on a file in the file list, or
+   * by pressing <keycap>Enter</keycap>.
+   *
+   * Normally you do not need to connect to this signal.  It is used internally
+   * by #GtkFileChooserDialog to know when to activate the default button in the
+   * dialog.
+   *
+   * See also: gtk_file_chooser_get_filename(),
+   * gtk_file_chooser_get_filenames(), gtk_file_chooser_get_uri(),
+   * gtk_file_chooser_get_uris().
+   */
   g_signal_new ("file-activated",
 		iface_type,
 		G_SIGNAL_RUN_LAST,
