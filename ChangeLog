@@ -1,3 +1,10 @@
+Thu Dec 27 15:38:20 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_stop_navigating_submenu_cb):
+	Call gdk_window_get_pointer() on menu->bin_window not
+	menu->window, so we get the correct window for the
+	menu item. (#65213, Guillermo S. Romero)
+
 Thu Dec 27 15:13:44 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenu.c (gtk_menu_set_title): Allow unsetting

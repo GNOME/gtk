@@ -2037,7 +2037,7 @@ gtk_menu_stop_navigating_submenu_cb (gpointer user_data)
   
   if (GTK_WIDGET_REALIZED (menu))
     {
-      child_window = gdk_window_get_pointer (GTK_WIDGET (menu)->window, NULL, NULL, NULL);
+      child_window = gdk_window_get_pointer (menu->bin_window, NULL, NULL, NULL);
 
       if (child_window)
 	{
