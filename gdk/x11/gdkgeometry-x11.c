@@ -186,7 +186,7 @@ static void gdk_window_clip_changed       (GdkWindow          *window,
 					   GdkRectangle       *old_clip,
 					   GdkRectangle       *new_clip);
 
-static GSList *translate_queue = NULL;
+static GQueue *translate_queue = NULL;
 
 void
 _gdk_windowing_window_get_offsets (GdkWindow *window,
@@ -860,20 +860,132 @@ gdk_window_postmove (GdkWindow          *window,
     }
 }
 
+Bool
+expose_serial_predicate (Display *xdisplay,
+			 XEvent  *xev,
+			 XPointer arg)
+{
+  gulong *serial = (gulong *)arg;
+
+  if (xev->xany.type == Expose)
+    *serial = MIN (*serial, xev->xany.serial);
+
+  return False;
+}
+
+/* Find oldest possible serial for an outstanding expose event
+ */
+static gulong
+find_current_serial (Display *xdisplay)
+{
+  XEvent xev;
+  gulong serial = NextRequest (xdisplay);
+  
+  XSync (xdisplay, False);
+
+  XCheckIfEvent (xdisplay, &xev, expose_serial_predicate, (XPointer)&serial);
+
+  return serial;
+}
+
+static void
+queue_delete_link (GQueue *queue,
+		   GList  *link)
+{
+  if (queue->tail == link)
+    queue->tail = link->prev;
+  
+  queue->head = g_list_remove_link (queue->head, link);
+  g_list_free_1 (link);
+  queue->length--;
+}
+
+static void
+queue_item_free (GdkWindowQueueItem *item)
+{
+  gdk_drawable_unref (item->window);
+  
+  if (item->type == GDK_WINDOW_QUEUE_ANTIEXPOSE)
+    gdk_region_destroy (item->u.antiexpose.area);
+  
+  g_free (item);
+}
+
+static void
+gdk_window_queue (GdkWindow          *window,
+		  GdkWindowQueueItem *item)
+{
+  if (!translate_queue)
+    translate_queue = g_queue_new ();
+
+  /* Keep length of queue finite by, if it grows too long,
+   * figuring out the latest relevant serial and discarding
+   * irrelevant queue items.
+   */
+  if (translate_queue->length >= 64 )
+    {
+      gulong serial = find_current_serial (GDK_WINDOW_XDISPLAY (window));
+      GList *tmp_list = translate_queue->head;
+      
+      while (tmp_list)
+	{
+	  GdkWindowQueueItem *item = tmp_list->data;
+	  GList *next = tmp_list->next;
+	  
+	  if (serial > item->serial)
+	    {
+	      queue_delete_link (translate_queue, tmp_list);
+	      queue_item_free (item);
+	    }
+
+	  tmp_list = next;
+	}
+    }
+
+  /* Catch the case where someone isn't processing events and there
+   * is an event stuck in the event queue with an old serial:
+   * If we can't reduce the queue length by the above method,
+   * discard anti-expose items. (We can't discard translate
+   * items 
+   */
+  if (translate_queue->length >= 64 )
+    {
+      GList *tmp_list = translate_queue->head;
+      
+      while (tmp_list)
+	{
+	  GdkWindowQueueItem *item = tmp_list->data;
+	  GList *next = tmp_list->next;
+	  
+	  if (item->type == GDK_WINDOW_QUEUE_ANTIEXPOSE)
+	    {
+	      queue_delete_link (translate_queue, tmp_list);
+	      queue_item_free (item);
+	    }
+
+	  tmp_list = next;
+	}
+    }
+      
+  gdk_drawable_ref (window);
+
+  item->window = window;
+  item->serial = NextRequest (GDK_WINDOW_XDISPLAY (window));
+  
+  g_queue_push_tail (translate_queue, item);
+}
+
 static void
 gdk_window_queue_translation (GdkWindow *window,
 			      gint       dx,
 			      gint       dy)
 {
   GdkWindowQueueItem *item = g_new (GdkWindowQueueItem, 1);
-  item->window = window;
-  item->serial = NextRequest (GDK_WINDOW_XDISPLAY (window));
   item->type = GDK_WINDOW_QUEUE_TRANSLATE;
   item->u.translate.dx = dx;
   item->u.translate.dy = dy;
 
-  gdk_drawable_ref (window);
-  translate_queue = g_slist_append (translate_queue, item);
+  gdk_window_queue (window, item);
 }
 
 gboolean
@@ -881,13 +993,10 @@ _gdk_windowing_window_queue_antiexpose (GdkWindow *window,
 					GdkRegion *area)
 {
   GdkWindowQueueItem *item = g_new (GdkWindowQueueItem, 1);
-  item->window = window;
-  item->serial = NextRequest (GDK_WINDOW_XDISPLAY (window));
   item->type = GDK_WINDOW_QUEUE_ANTIEXPOSE;
   item->u.antiexpose.area = area;
 
-  gdk_drawable_ref (window);
-  translate_queue = g_slist_append (translate_queue, item);
+  gdk_window_queue (window, item);
 
   return TRUE;
 }
@@ -900,37 +1009,33 @@ _gdk_window_process_expose (GdkWindow    *window,
   GdkWindowImplX11 *impl;
   GdkRegion *invalidate_region = gdk_region_rectangle (area);
   GdkRegion *clip_region;
-  GSList *tmp_list = translate_queue;
-  
+
   impl = GDK_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (window)->impl);
-  
-  while (tmp_list)
+      
+  if (translate_queue)
     {
-      GdkWindowQueueItem *item = tmp_list->data;
-      tmp_list = tmp_list->next;
-
-      if (serial < item->serial)
+      GList *tmp_list = translate_queue->head;
+      
+      while (tmp_list)
 	{
-	  if (item->window == window)
+	  GdkWindowQueueItem *item = tmp_list->data;
+	  tmp_list = tmp_list->next;
+	  
+	  if (serial < item->serial)
 	    {
-	      if (item->type == GDK_WINDOW_QUEUE_TRANSLATE)
-		gdk_region_offset (invalidate_region, item->u.translate.dx, item->u.translate.dy);
-	      else		/* anti-expose */
-		gdk_region_subtract (invalidate_region, item->u.antiexpose.area);
+	      if (item->window == window)
+		{
+		  if (item->type == GDK_WINDOW_QUEUE_TRANSLATE)
+		    gdk_region_offset (invalidate_region, item->u.translate.dx, item->u.translate.dy);
+		  else		/* anti-expose */
+		    gdk_region_subtract (invalidate_region, item->u.antiexpose.area);
+		}
 	    }
-	}
-      else
-	{
-	  GSList *tmp_link = translate_queue;
-	  
-	  translate_queue = g_slist_remove_link (translate_queue, translate_queue);
-	  gdk_drawable_unref (item->window);
-
-	  if (item->type == GDK_WINDOW_QUEUE_ANTIEXPOSE)
-	    gdk_region_destroy (item->u.antiexpose.area);
-	  
-	  g_free (item);
-	  g_slist_free_1 (tmp_link);
+	  else
+	    {
+	      queue_delete_link (translate_queue, translate_queue->head);
+	      queue_item_free (item);
+	    }
 	}
     }
 

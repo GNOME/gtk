@@ -329,12 +329,14 @@ gdk_window_cache_filter (GdkXEvent *xev,
 							 GUINT_TO_POINTER (xce->above));
 		if (above_node && node->prev != above_node)
 		  {
+		    /* Put the window above (before in the list) above_node
+		     */
 		    cache->children = g_list_remove_link (cache->children, node);
-		    node->next = above_node->next;
-		    if (node->next)
-		      node->next->prev = node;
-		    node->prev = above_node;
-		    above_node->next = node;
+		    node->prev = above_node->prev;
+		    if (node->prev)
+		      node->prev->next = node;
+		    node->next = above_node;
+		    above_node->prev = node;
 		  }
 	      }
 	  }

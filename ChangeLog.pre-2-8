@@ -1,3 +1,14 @@
+Tue Feb  5 19:13:42 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkgeometry-x11.c (gdk_window_queue): Keep
+	the length of the anti-expose queue finite, by if
+	it gets too long, first doing a XSync() and checking
+	the event queue, and if that doesn't work, simply
+	discarding all anti-expose items in the queue.
+
+	* gdk/x11/gdkdnd-x11.c (gdk_window_cache_filter): Fix ordering
+	on ConfigureNotify (#56349, Thomas Leonard)
+
 2002-02-05  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkimage.c (gtk_image_expose): offset area being gotten from
