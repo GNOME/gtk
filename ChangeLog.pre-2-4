@@ -1,7 +1,13 @@
+2003-08-09  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcalendar.c:  Add and hook in gtk_calendar_scroll,
+	to let the mouse wheels select the month. Scrolling down
+	moves forward in time. (#53134, Abigail Brady) 
+
 2003-08-08  Matthias Clasen  <maclas@gmx.de>
 
-	* gdk/gdkregion-generic.c (gdk_region_spans_intersect_foreach): Fix a segfault.  (#115284, 
-	Jan Kratochvil) 
+	* gdk/gdkregion-generic.c (gdk_region_spans_intersect_foreach): Fix 
+	a segfault.  (#115284, Jan Kratochvil) 
 
 2003-08-08  Tor Lillqvist  <tml@iki.fi>
 

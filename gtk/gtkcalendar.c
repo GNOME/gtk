@@ -313,6 +313,8 @@ static gint gtk_calendar_leave_notify	(GtkWidget *widget,
 					 GdkEventCrossing *event);
 static gint gtk_calendar_key_press	(GtkWidget	   *widget,
 					 GdkEventKey	   *event);
+static gint gtk_calendar_scroll         (GtkWidget         *widget,
+					 GdkEventScroll    *event);
 static void gtk_calendar_grab_notify    (GtkWidget          *widget,
 			 	         gboolean            was_grabbed);
 static void gtk_calendar_state_changed	(GtkWidget *widget,
@@ -400,6 +402,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   widget_class->enter_notify_event = gtk_calendar_enter_notify;
   widget_class->leave_notify_event = gtk_calendar_leave_notify;
   widget_class->key_press_event = gtk_calendar_key_press;
+  widget_class->scroll_event = gtk_calendar_scroll;
   widget_class->style_set = gtk_calendar_style_set;
   widget_class->state_changed = gtk_calendar_state_changed;
   widget_class->grab_notify = gtk_calendar_grab_notify;
@@ -1203,7 +1206,7 @@ gtk_calendar_realize (GtkWidget *widget)
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.event_mask =  (gtk_widget_get_events (widget) 
-			    | GDK_EXPOSURE_MASK |GDK_KEY_PRESS_MASK);
+			    | GDK_EXPOSURE_MASK |GDK_KEY_PRESS_MASK | GDK_SCROLL_MASK);
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.colormap = gtk_widget_get_colormap (widget);
   
@@ -2893,6 +2896,30 @@ gtk_calendar_finalize (GObject *object)
   
   if (G_OBJECT_CLASS (parent_class)->finalize)
     (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+}
+
+static gboolean
+gtk_calendar_scroll (GtkWidget      *widget,
+		     GdkEventScroll *event)
+{
+  GtkCalendar *calendar = GTK_CALENDAR (widget);
+
+  if (event->direction == GDK_SCROLL_UP) 
+    {
+      if (!GTK_WIDGET_HAS_FOCUS (widget))
+	gtk_widget_grab_focus (widget);
+      gtk_calendar_set_month_prev (calendar);
+    }
+  else if (event->direction == GDK_SCROLL_DOWN) 
+    {
+      if (!GTK_WIDGET_HAS_FOCUS (widget))
+	gtk_widget_grab_focus (widget);
+      gtk_calendar_set_month_next (calendar);
+    }
+  else
+    return FALSE;
+
+  return TRUE;
 }
 
 static gboolean
