@@ -86,6 +86,7 @@ gdk_c_sources = @STRIP_BEGIN@ \
 	gdkfont.c	\
 	gdkgc.c		\
 	gdkglobals.c	\
+	gdkkeyuni.c	\
 	gdkimage.c	\
 	gdkinternals.h  \
 	gdkrgb.c	\

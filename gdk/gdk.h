@@ -145,6 +145,8 @@ guint    gdk_keyval_to_lower     (guint        keyval);
 gboolean gdk_keyval_is_upper     (guint        keyval);
 gboolean gdk_keyval_is_lower     (guint        keyval);
 
+guint32  gdk_keyval_to_unicode   (guint        keyval);
+guint    gdk_unicode_to_keyval   (guint32      wc);
 
 /* Threading
  */

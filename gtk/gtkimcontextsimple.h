@@ -38,9 +38,13 @@ extern "C" {
 typedef struct _GtkIMContextSimple       GtkIMContextSimple;
 typedef struct _GtkIMContextSimpleClass  GtkIMContextSimpleClass;
 
+#define GTK_MAX_COMPOSE_LEN 4
+  
 struct _GtkIMContextSimple
 {
   GtkIMContext object;
+  
+  guint compose_buffer[GTK_MAX_COMPOSE_LEN + 1];
 };
 
 struct _GtkIMContextSimpleClass

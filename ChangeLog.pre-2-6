@@ -1,3 +1,14 @@
+Thu Apr  6 16:02:52 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimcontextsimple.[ch]: Use gdk_keyval_to_unicode to gdk_unicode_to_keyval.
+	Add a compose table including (almost) all the compose combinations
+	from X. This is 6k of static, shared data as opposed to 50k or so of dynamic
+	data in the XIM implementation.
+
+	* gdk/gdk.h gdk/gdkkeyuni.c gdk/win32/gdkevents-win32.c (gdk_keyval_to_unicode, gdk_unicode_to_keyval):
+	Moved functions to convert keyvalues from and to unicode here from
+	the win32 port and made them public.
+
 Wed Apr  5 16:37:29 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkeditable.c (gtk_editable_insert_text): Allow new_text_length == -1.

@@ -29,7 +29,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-
 #define GTK_TYPE_IM_CONTEXT              (gtk_im_context_get_type ())
 #define GTK_IM_CONTEXT(obj)              (GTK_CHECK_CAST ((obj), GTK_TYPE_IM_CONTEXT, GtkIMContext))
 #define GTK_IM_CONTEXT_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_IM_CONTEXT, GtkIMContextClass))
