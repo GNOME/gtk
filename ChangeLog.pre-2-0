@@ -1,3 +1,9 @@
+Sun Oct 18 20:52:22 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkwidget.c gtkmarshal.list: Change signal 
+	for drag_data_get to match the use that was being
+	made of it everywhere else...
+
 Sun Oct 18 18:16:39 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gdk/gdk.c gdkprivate.h: Added a modular client-message-filter

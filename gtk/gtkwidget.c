@@ -651,9 +651,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_data_received),
-		    gtk_marshal_NONE__POINTER_POINTER_UINT_UINT,
-		    GTK_TYPE_NONE, 4,
+		    gtk_marshal_NONE__POINTER_INT_INT_POINTER_UINT_UINT,
+		    GTK_TYPE_NONE, 6,
 		    GTK_TYPE_GDK_DRAG_CONTEXT,
+		    GTK_TYPE_INT,
+		    GTK_TYPE_INT,
 		    GTK_TYPE_SELECTION_DATA,
 		    GTK_TYPE_UINT,
 		    GTK_TYPE_UINT);
