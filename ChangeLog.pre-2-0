@@ -1,3 +1,36 @@
+Mon Oct 19 23:44:41 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c: rearranged some functions
+	(gtk_clist_set_column_auto_resize): new function. toggle auto_resize
+ 	flag of column
+	(gtk_clist_set_column_resizeable): if resizeable disable auto_resize 
+	(gtk_clist_set_border): deprecated function, use
+ 	gtk_clist_set_shadow_type instead.
+	(gtk_clist_set_shadow_type): replacement for gtk_clist_set_border
+ 	(adjust_scrollbars): some cleanups
+	(select_row) (unselect_row): removed. replaced by equivalent
+	gtk_signal_emit calls
+	(add_style_data): removed, use gtk_clist_style_set instead
+	(gtk_clist_style_set): fill in size data, after style was set. 
+ 	(set_cell_contents) (gtk_clist_set_shift) (gtk_clist_set_row_style)
+ 	(gtk_clist_set_cell_style): auto_resize columns if needed
+	(column_auto_resize): resize column if needed for auto_resize 
+	(real_clear): disable auto_resize while list destroy
+	(resize_column): removed
+
+	* gtk/gtkctree.c : (gtk_ctree_remove_node)
+	(gtk_ctree_set_line_style) (gtk_ctree_set_expander_style)
+	(gtk_ctree_node_set_row_style) (gtk_ctree_node_set_cell_style)
+ 	(set_cell_contents) (gtk_ctree_node_set_shift) (gtk_ctree_set_spacing)
+	(real_tree_move) (gtk_ctree_set_indent) (gtk_ctree_insert_node)
+	(real_tree_collapse) (real_tree_expand) (column_auto_resize):
+ 	auto_resize columns if needed
+	(gtk_ctree_collapse_recursive) (gtk_ctree_collapse_to_depth)
+	(real_clear): disable auto_resize while processing the tree
+
+	* gtk/testgtk.c (create_clist) (create_ctree): set auto_resize
+	for one column
+
 Mon Oct 19 08:31:36 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_selection_received): Fixed
