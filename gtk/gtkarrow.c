@@ -29,7 +29,7 @@
 #include "gtkarrow.h"
 #include "gtkintl.h"
 
-#define MIN_ARROW_SIZE  11
+#define MIN_ARROW_SIZE  14
 
 enum {
   PROP_0,
