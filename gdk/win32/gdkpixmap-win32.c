@@ -304,7 +304,7 @@ gdk_pixmap_new (GdkDrawable *drawable,
 
   drawable_impl->handle = hbitmap;
   /* initialize */
-  //memset (bits, 0, (bmi.bmiHeader.biBitCount * width * height) / 8);
+  memset (bits, 0, (bmi.bmiHeader.biBitCount * width * height) / 8);
   pixmap_impl->bits = bits;
 
   gdk_win32_handle_table_insert (&GDK_PIXMAP_HBITMAP (pixmap), pixmap);
