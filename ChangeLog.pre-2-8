@@ -1,3 +1,7 @@
+2002-10-01  Stanislav Brabec  <sbrabec@suse.cz>
+
+	* gtk/gtkimcontextsimple.c: Fixed alphabetical order (bug #91258).
+
 Mon Sep 30 14:46:49 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkbindings.c (gtk_binding_set_new): Initialize
