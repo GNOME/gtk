@@ -250,9 +250,6 @@ void gtk_text_view_set_border_window_size (GtkTextView       *text_view,
                                            gint               size);
 gint gtk_text_view_get_border_window_size (GtkTextView       *text_view,
 					   GtkTextWindowType  type);
-void gtk_text_view_set_text_window_size   (GtkTextView       *text_view,
-                                           gint               width,
-                                           gint               height);
 
 gboolean gtk_text_view_forward_display_line           (GtkTextView       *text_view,
                                                        GtkTextIter       *iter);

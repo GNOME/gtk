@@ -1,3 +1,9 @@
+Sun Jun 24 12:06:47 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextview.[ch] (gtk_text_view_set_text_window_size): 
+	Removed - didn't work and not particularly useful anyways
+	if it did. 
+
 Sun Jun 24 11:29:35 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkimage-x11.c (gdk_image_new): Fix stupid error

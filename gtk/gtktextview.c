@@ -6088,40 +6088,6 @@ gtk_text_view_get_border_window_size (GtkTextView       *text_view,
   return 0;
 }
 
-/**
- * gtk_text_view_set_text_window_size:
- * @text_view: a #GtkTextView
- * @width: a width in pixels
- * @height: a height in pixels
- *
- * Sets the size request for the main text window (%GTK_TEXT_WINDOW_TEXT).
- * If the widget gets more space than it requested, the main text window
- * will be larger than this.
- *
- **/
-void
-gtk_text_view_set_text_window_size (GtkTextView *text_view,
-                                    gint         width,
-                                    gint         height)
-{
-  GtkTextWindow *win;
-
-  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
-  g_return_if_fail (width > 0);
-  g_return_if_fail (height > 0);
-
-  win = text_view->text_window;
-
-  if (win->requisition.width == width &&
-      win->requisition.height == height)
-    return;
-
-  win->requisition.width = width;
-  win->requisition.height = height;
-
-  gtk_widget_queue_resize (GTK_WIDGET (text_view));
-}
-
 /*
  * Child widgets
  */
