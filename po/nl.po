@@ -5,22 +5,22 @@
 # Tino Meinen <a.t.meinen@chelo.nl>, 2002, 2003, 2004
 # --------------
 # Discussiepunten:
-# tag -> markering/etiket?
+# expander -> uitklapper (win32 heeft het over samenvouwen/openvouwen)
 # render -> render/weergeven/tonen?
 # spinbutton -> spinknop
+# tag -> markering/etiket?
 # tooltip -> tooltip/werktip/tip
-# Standard display -> standaar display
-# expander -> uitklapper (win32 heeft het over samenvouwen/openvouwen)
 # separator -> scheiding/scheidingslijn
 # selected -> geselecteerde/gekozen
+# standard display -> standaard display
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 13:24-0500\n"
-"PO-Revision-Date: 2004-10-17 02:51+0200\n"
+"POT-Creation-Date: 2004-12-17 20:41+0100\n"
+"PO-Revision-Date: 2004-12-18 00:36+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
-"Language-Team: Dutch <vertaling@nl.linux.org>\n"
+"Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -948,7 +948,7 @@ msgstr "calendar:week_start:1"
 #: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr ""
+msgstr "voortgangsbalk label|%d %%"
 
 # 'Kies een kleur'   hier beter dan:  'Een kleur kiezen' ?
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
@@ -1129,9 +1129,11 @@ msgstr "(Geen)"
 msgid "Select a File"
 msgstr "Een bestand selecteren"
 
+# dit is het label op de knop waarmee je naar andere mappen zoekt
+# (andere mappen dan de favoriete)
 #: gtk/gtkfilechooserbutton.c:1503
 msgid "Other..."
-msgstr ""
+msgstr "Andere..."
 
 #: gtk/gtkfilechooserdefault.c:863
 #, c-format
