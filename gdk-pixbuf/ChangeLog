@@ -1,3 +1,8 @@
+Sun Aug  1 23:57:06 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* io-pcx.c (pcx_increment_load_data_1): Fix progressive
+	loading of 8bit pcx files. (#148518, Magnus Bergman)
+
 Tue Jul 20 22:23:26 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-io.h: Remove trailing commas from 
