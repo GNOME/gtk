@@ -1,3 +1,8 @@
+2002-12-04  Bastien Nocera  <hadess@hadess.net>
+
+	* io-tiff.c: (tiff_image_parse): use G_BIG_ENDIAN instead of
+	WORDS_BIGENDIAN which isn't set by configure.in
+
 2002-11-29  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-animation.c: 
