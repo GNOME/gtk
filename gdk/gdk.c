@@ -2030,6 +2030,7 @@ gdk_event_translate (GdkEvent *event,
     case MotionNotify:
       /* Print debugging info.
        */
+       while (XCheckTypedEvent(xevent->xmotion.display,xevent->type,xevent));
       GDK_NOTE (EVENTS,
 	g_print ("motion notify:\t\twindow: %ld  x,y: %d %d  hint: %s d:%d r%d\n",
 		 xevent->xmotion.window - base_id,
