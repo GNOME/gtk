@@ -2896,6 +2896,9 @@ gtk_widget_real_focus_out_event (GtkWidget     *widget,
   return FALSE;
 }
 
+#define WIDGET_REALIZED_FOR_EVENT(widget, event) \
+     (event->type == GDK_FOCUS_CHANGE || GTK_WIDGET_REALIZED(widget))
+
 /**
  * gtk_widget_event:
  * @widget: a #GtkWidget
@@ -2917,7 +2920,7 @@ gtk_widget_event (GtkWidget *widget,
 		  GdkEvent  *event)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
-  g_return_val_if_fail (GTK_WIDGET_REALIZED (widget), TRUE);
+  g_return_val_if_fail (WIDGET_REALIZED_FOR_EVENT (widget, event), TRUE);
 
   if (event->type == GDK_EXPOSE)
     {
@@ -2973,7 +2976,7 @@ gtk_widget_event_internal (GtkWidget *widget,
   gtk_widget_ref (widget);
 
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[EVENT], event, &return_val);
-  return_val |= !GTK_WIDGET_REALIZED (widget);
+  return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
   if (!return_val)
     {
       gint signal_num;
@@ -3068,7 +3071,7 @@ gtk_widget_event_internal (GtkWidget *widget,
       if (signal_num != -1)
 	gtk_signal_emit (GTK_OBJECT (widget), widget_signals[signal_num], event, &return_val);
     }
-  if (GTK_WIDGET_REALIZED (widget))
+  if (WIDGET_REALIZED_FOR_EVENT (widget, event))
     gtk_signal_emit (GTK_OBJECT (widget), widget_signals[EVENT_AFTER], event);
   else
     return_val = TRUE;

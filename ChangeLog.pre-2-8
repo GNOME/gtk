@@ -1,3 +1,10 @@
+Wed Feb 27 18:50:29 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_event): Allow focus-change
+	events to be sent to unrealized widgets; they aren't
+	really normal events in that they have anything to
+	do with widget->window. (#72914)
+
 Wed Feb 27 18:39:25 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/stock-icons/Makefile.am: Split big VARIABLES variable
