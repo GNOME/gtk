@@ -16,6 +16,8 @@ GETTEXT_PACKAGE = @GETTEXT_PACKAGE@-properties
 PACKAGE = @PACKAGE@
 VERSION = @VERSION@
 
+XGETTEXT_KEYWORDS = --keyword --keyword=P_
+
 SHELL = /bin/sh
 @SET_MAKE@
 
