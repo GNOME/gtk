@@ -1,3 +1,24 @@
+Thu Feb 26 15:43:43 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.[ch]: Export insertion cursor drawing functionality
+	in a simplified form as gtk_draw_insertion_cursor().
+	(#99031, request from Alex Larsson)
+
+	* gtk/gtktextdisplay.c gtk/gtkentry.c gtk/gtklabel.c:
+	Adapt to new gtk_draw_insertion_cursor().
+
+	* gtk/gtkradiomenuitem.c (gtk_radio_menu_item_class_init)
+	gtk/gtkstyle.c (gtk_style_class_init): Add some missed
+	Since: 2.4.
+
+Thu Feb 26 15:43:19 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkiconfactory.c (icon_size_settings_changed)
+	  gtk/gtkicontheme.c (do_theme_change)
+	  gtk/gtkrc.c (_gtk_rc_context_get_default_font_name)
+	* gtk/gtksettings.c (gtk_settings_notify):
+	_gtk_rc_reset_styles => gtk_rc_reset_styles.
+
 Thu Feb 26 21:52:58 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Fixes for #127804 and #134722, Damon Chaplin:
@@ -17,6 +38,7 @@ Thu Feb 26 14:47:22 2004  Dom Lachowicz <cinamod@hotmail.com>
 
 	* gtk/gtk.def: Export gtk_rc_reset_styles()
 
+>>>>>>> 1.5027
 Thu Feb 26 14:47:22 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.[ch]: Export gtk_rc_reset_styles(). 
