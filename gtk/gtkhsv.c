@@ -996,7 +996,7 @@ paint_ring (GtkHSV      *hsv,
   
   /* Create clipping mask */
   
-  mask = gdk_pixmap_new (GTK_WIDGET (hsv)->window, width, height, 1);
+  mask = gdk_pixmap_new (widget->window, width, height, 1);
 
   gc = gdk_gc_new (mask);
   
@@ -1068,14 +1068,6 @@ paint_ring (GtkHSV      *hsv,
   g_free (buf);
   
   /* Draw ring outline */
-
-  if (GTK_WIDGET_HAS_FOCUS (hsv) && priv->focus_on_ring)
-    {
-      gtk_paint_focus (widget->style, drawable,
-		       GTK_WIDGET_STATE (widget),
-		       NULL, widget, NULL,
-		       x, y, width, height);
-    }
 }
 
 /* Converts an HSV triplet to an integer RGB triplet */
@@ -1400,6 +1392,15 @@ gtk_hsv_expose (GtkWidget      *widget,
 		     dest.y,
 		     event->area.width, event->area.height);
   
+  if (GTK_WIDGET_HAS_FOCUS (hsv) && priv->focus_on_ring)
+    gtk_paint_focus (widget->style, widget->window,
+		     GTK_WIDGET_STATE (widget),
+		     &event->area, widget, NULL,
+		     widget->allocation.x,
+		     widget->allocation.y, 
+		     widget->allocation.width, 
+		     widget->allocation.height);
+
   g_object_unref (pixmap);
   
   return FALSE;
