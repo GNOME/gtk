@@ -2,7 +2,7 @@
 <book>
 
 <bookinfo>
-  <date>January 13th 2004</date>
+  <date>January 14th 2004</date>
   <title>GTK+ FAQ</title>
   <authorgroup>
     <author>
@@ -1469,7 +1469,7 @@ in a priority of G_PRIORITY_HIGH.</para>
 
 <sect1>
 <title>Why does this strange 'x io error' occur when I
-<literal>fork()</literal> in my GTK+ app?</title>
+<literal>fork()</literal> in my GTK+ app? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>This is not really a GTK+ problem, and the problem is
 not related to <literal>fork()</literal> either. If the 'x io
@@ -1490,13 +1490,15 @@ illustrate handling fork() and exit().</para>
 <programlisting role="C">
 /*-------------------------------------------------------------------------
  * Filename:      gtk-fork.c
- * Version:       0.99.1
+ * Version:       0.99.2
  * Copyright:     Copyright (C) 1999, Erik Mouw
  * Author:        Erik Mouw &lt;J.A.K.Mouw@its.tudelft.nl&gt;
  * Description:   GTK+ fork example
  * Created at:    Thu Sep 23 21:37:55 1999
  * Modified by:   Erik Mouw &lt;J.A.K.Mouw@its.tudelft.nl&gt;
  * Modified at:   Thu Sep 23 22:39:39 1999
+ * Modified by:   Tony Gale &lt;gale@gtk.org&gt;
+ * Modified at:   Wed Jan 14 12:38:00 2004
  *-----------------------------------------------------------------------*/
 /*
  * Compile with:
@@ -1525,7 +1527,7 @@ void sigchld_handler(int num)
   sigprocmask(SIG_BLOCK, &amp;set, &amp;oldset);
 
   /* wait for child */
-  while((pid = waitpid((pid_t)-1, &amp;status, WNOHANG)) > 0)
+  while((pid = waitpid((pid_t)-1, &amp;status, WNOHANG)) &gt; 0)
     {
       if(WIFEXITED(status))
 	{
@@ -1622,13 +1624,13 @@ int main(int argc, char *argv[])
    */
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
-  gtk_signal_connect(GTK_OBJECT (window), "delete_event",
-		     GTK_SIGNAL_FUNC(delete_event), NULL);
+  g_signal_connect(G_OBJECT (window), "delete_event",
+		     G_CALLBACK(delete_event), NULL);
           
-  gtk_signal_connect(GTK_OBJECT (window), "destroy",
-		     GTK_SIGNAL_FUNC(destroy), NULL);
+  g_signal_connect(G_OBJECT (window), "destroy",
+		     G_CALLBACK(destroy), NULL);
 
-#if (GTK_MAJOR_VERSION == 1) && (GTK_MINOR_VERSION == 0)
+#if (GTK_MAJOR_VERSION == 1) &amp;&amp; (GTK_MINOR_VERSION == 0)
   gtk_container_border_width(GTK_CONTAINER (window), 10);
 #else  
   gtk_container_set_border_width(GTK_CONTAINER (window), 10);
@@ -1637,8 +1639,8 @@ int main(int argc, char *argv[])
   /* add a button to do something usefull */
   button = gtk_button_new_with_label("Fork me!");
           
-  gtk_signal_connect(GTK_OBJECT (button), "clicked",
-		     GTK_SIGNAL_FUNC(fork_me), NULL);
+  g_signal_connect(G_OBJECT (button), "clicked",
+		     G_CALLBACK(fork_me), NULL);
 
   gtk_container_add(GTK_CONTAINER(window), button);
           
@@ -1663,7 +1665,7 @@ int main(int argc, char *argv[])
 
 <sect1>
 <title>Why don't the contents of a button move when the button
-is pressed? Here's a patch to make it work that way...</title>
+is pressed? Here's a patch to make it work that way... <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>From: Peter Mattis</para>
 
@@ -1689,12 +1691,12 @@ and determined it didn't look good and removed it.</quote></para>
 
 <sect1>
 <title>How do I identifiy a widgets top level window or other
-ancestor?</title>
+ancestor? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>There are a couple of ways to find the top level parent
-of a widget. The easier way is to call the
+of a widget. The easiest way is to call the
 <literal>gtk_widget_get_toplevel()</literal> function that
-returns pointer to a GtkWidget that is the top level
+returns a pointer to a GtkWidget that is the top level
 window.</para>
 
 <para>A more complicated way to do this (but less limited, as
@@ -1718,12 +1720,16 @@ widget (entry, label, etc. To find the master hbox using the
       hbox = gtk_widget_get_ancestor(w, GTK_TYPE_HBOX);
 </programlisting>
 
+<para>You can also follow the a widgets ancestry by using the function
+<literal>gtk_widget_get_parent()</literal> that returns a pointer
+to a widgets parent widget.</para>
+
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>How do I get the Window ID of a GtkWindow?</title>
+<title>How do I get the Window ID of a GtkWindow? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>The actual Gdk/X window will be created when the widget
 gets realized. You can get the Window ID with:</para>
@@ -1738,8 +1744,7 @@ Window xwin = GDK_WINDOW_XWINDOW (GTK_WIDGET (my_window)->window);
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>How do I catch a double click event (in a list widget,
-for example)?</title>
+<title>How do I catch a double click event? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>Tim Janik wrote to gtk-list (slightly modified):</para>
 
@@ -1749,10 +1754,10 @@ for example)?</title>
 gint
 signal_handler_event(GtkWidget *widget, GdkEventButton *event, gpointer func_data)
 {
-  if (GTK_IS_LIST_ITEM(widget) &&
+  if (GTK_IS_BUTTON(widget) &&
        (event->type==GDK_2BUTTON_PRESS ||
         event->type==GDK_3BUTTON_PRESS) ) {
-    printf("I feel %s clicked on button %d\n",
+    printf("I feel %s clicked with button %d\n",
            event->type==GDK_2BUTTON_PRESS ? "double" : "triple",
            event->button);
   }
@@ -1764,18 +1769,18 @@ signal_handler_event(GtkWidget *widget, GdkEventButton *event, gpointer func_dat
 
 <programlisting role="C">
 {
-  /* list, list item init stuff */     
+  /* button init stuff */     
 
-  gtk_signal_connect(GTK_OBJECT(list_item),
+  g_signal_connect(G_OBJECT(button),
                      "button_press_event",
-                     GTK_SIGNAL_FUNC(signal_handler_event),
+                     G_CALLBACK(signal_handler_event),
                      NULL);
 
   /* and/or */
 
-  gtk_signal_connect(GTK_OBJECT(list_item),
+  g_signal_connect(G_OBJECT(button),
                      "button_release_event",
-                     GTK_SIGNAL_FUNC(signal_handler_event),
+                     G_CALLBACK(signal_handler_event),
                      NULL);
 
   /* something else */
