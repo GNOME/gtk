@@ -4364,6 +4364,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
       gboolean retval;
       GdkScreen *screen;
       gboolean text_modified;
+      gulong popup_menu_id;
 
       gtk_tree_view_ensure_interactive_directory (tree_view);
 
@@ -4373,6 +4374,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
       ((GdkEventKey *) new_event)->window = tree_view->priv->search_entry->window;
       gtk_widget_realize (tree_view->priv->search_window);
 
+      popup_menu_id = g_signal_connect (tree_view->priv->search_entry, 
+					"popup_menu", G_CALLBACK (gtk_true), NULL);
       /* Move the entry off screen */
       screen = gtk_widget_get_screen (GTK_WIDGET (tree_view));
       gtk_window_move (GTK_WINDOW (tree_view->priv->search_window),
@@ -4385,6 +4388,9 @@ gtk_tree_view_key_press (GtkWidget   *widget,
       tree_view->priv->imcontext_changed = FALSE;
       retval = gtk_widget_event (tree_view->priv->search_entry, new_event);
       gtk_widget_hide (tree_view->priv->search_window);
+
+      g_signal_handler_disconnect (tree_view->priv->search_entry, 
+				   popup_menu_id);
 
       /* We check to make sure that the entry tried to handle the text, and that
        * the text has changed.
