@@ -3423,8 +3423,17 @@ gtk_text_buffer_backspace (GtkTextBuffer *buffer,
   end = *iter;
 
   attrs = _gtk_text_buffer_get_line_log_attrs (buffer, &start, NULL);
-  offset = gtk_text_iter_get_line_offset (&start);
-  backspace_deletes_character = attrs[offset].backspace_deletes_character;
+
+  /* For no good reason, attrs is NULL for the empty last line in
+   * a buffer. Special case that here. (#156164)
+   */
+  if (attrs)
+    {
+      offset = gtk_text_iter_get_line_offset (&start);
+      backspace_deletes_character = attrs[offset].backspace_deletes_character;
+    }
+  else
+    backspace_deletes_character = FALSE;
 
   gtk_text_iter_backward_cursor_position (&start);
 

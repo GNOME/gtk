@@ -1,3 +1,10 @@
+Fri Oct 22 13:25:25 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_backspace): Fix 
+	backspacing on the empty last line of a buffer 
+	(https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=136840,
+	Dan Williams)
+
 2004-10-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkdnd.c: Document how to use info with text/image 
