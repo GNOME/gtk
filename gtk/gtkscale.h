@@ -61,7 +61,7 @@ struct _GtkScaleClass
 {
   GtkRangeClass parent_class;
 
-  gchar* (* format_value) (GtkRange *range,
+  gchar* (* format_value) (GtkScale *scale,
                            gdouble   value);  
   
   void (* draw_value) (GtkScale *scale);

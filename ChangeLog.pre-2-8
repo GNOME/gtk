@@ -1,3 +1,8 @@
+2001-12-15  Murray Cumming  <murrayc@usa.net>
+
+	* Fixed first arg type of GtkScale's "format_value" signal's
+	function pointer.
+
 2001-12-14            Vitaly Tishkov       tvv@sparc.spb.su
         docs/reference/gtk/tmpl/gtkcelleditable.sgml
                 gtkcelleditable -> GtkCellEditable
