@@ -1516,49 +1516,44 @@ static void
 gtk_propagate_event (GtkWidget *widget,
 		     GdkEvent  *event)
 {
-  GtkWidget *parent;
-  GtkWidget *tmp;
-  gint handled_event;
-  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (event != NULL);
   
-  handled_event = FALSE;
-  gtk_widget_ref (widget);
-
   if ((event->type == GDK_KEY_PRESS) ||
       (event->type == GDK_KEY_RELEASE))
     {
-
       /* Only send key events to window widgets.
        *  The window widget will in turn pass the
        *  key event on to the currently focused widget
        *  for that window.
        */
-      parent = gtk_widget_get_ancestor (widget, gtk_window_get_type ());
-      handled_event = (parent &&
-		       GTK_WIDGET_IS_SENSITIVE (parent) &&
-		       gtk_widget_event (parent, event));
-      handled_event |= parent == widget;
+
+      widget = gtk_widget_get_ancestor (widget, gtk_window_get_type ());
+      if (widget && GTK_WIDGET_IS_SENSITIVE (widget))
+	gtk_widget_event (widget, event);
     }
-  
-  /* Other events get propagated up the widget tree
-   *  so that parents can see the button and motion
-   *  events of the children.
-   */
-  tmp = widget;
-  while (!handled_event && tmp)
+  else
     {
-      gtk_widget_ref (tmp);
-      handled_event = !GTK_WIDGET_IS_SENSITIVE (tmp) || gtk_widget_event (tmp, event);
-      parent = tmp->parent;
-      gtk_widget_unref (tmp);
-      tmp = parent;
+      gint handled_event;
+      
+      /* Other events get propagated up the widget tree
+       *  so that parents can see the button and motion
+       *  events of the children.
+       */
+      
+      handled_event = FALSE;
+      while (!handled_event && widget)
+	{
+	  GtkWidget *tmp;
+
+	  gtk_widget_ref (widget);
+	  handled_event = !GTK_WIDGET_IS_SENSITIVE (widget) || gtk_widget_event (widget, event);
+	  tmp = widget->parent;
+	  gtk_widget_unref (widget);
+	  widget = tmp;
+	}
     }
-
-  gtk_widget_unref (widget);
 }
-
 
 static void
 gtk_error (gchar *str)

@@ -1,3 +1,10 @@
+Thu Mar 26 23:12:54 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (gtk_propagate_event): make a clear distinction between
+	key press/release events, which will be sent to a widgets toplevel
+	ancestor and be forwarded from there, and all other events that need to
+ 	get propagated up the widget tree (pointed out by Owen Taylor).
+
 Thu Mar 26 21:37:57 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkradiobutton.c (gtk_radio_button_draw_indicator): always
