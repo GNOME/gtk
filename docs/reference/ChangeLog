@@ -1,3 +1,8 @@
+Sat Dec 13 22:37:46 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/Makefile.am (HTML_IMAGES): Add 
+	stock_dialog_authentication_48.png.  (#129255, Olivier Andrieu)
+
 Fri Dec 12 00:52:25 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdk-sections.txt: Add the new gdk_spawn_* and

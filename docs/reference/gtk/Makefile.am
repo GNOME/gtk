@@ -111,6 +111,7 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/stock_copy_24.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_cut_24.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_trash_24.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_dialog_authentication_48.png \
 	$(top_srcdir)/gtk/stock-icons/stock_dialog_error_48.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_dialog_info_48.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_dialog_question_48.png	\
