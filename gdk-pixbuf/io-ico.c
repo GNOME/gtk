@@ -283,7 +283,8 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 	/* Determine the  palette size. If the header indicates 0, it
 	   is actually the maximum for the bpp. You have to love the
 	   guys who made the spec. */
-	I =(int)(BIH[35] << 24) + (BIH[34] << 16) + (BIH[33] << 8) + (BIH[32]);
+	I = (int)(BIH[35] << 24) + (BIH[34] << 16) + (BIH[33] << 8) + (BIH[32]);
+	I = I*4;
 	if ((I==0)&&(State->Type==1))
 		I = 2*4;
 	if ((I==0)&&(State->Type==4))

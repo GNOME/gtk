@@ -1,3 +1,8 @@
+1999-12-05  Arjan van de Ven <arjan@fenrus.demon.nl>
+	
+	* gdk-pixbuf/io-ico.c: Bug in palet-size 
+	calculation fixed
+
 1999-12-04  Arjan van de Ven <arjan@fenrus.demon.nl>
 
 	* gdk-pixbuf/io-bmp.c: Major cleanup, added support for
