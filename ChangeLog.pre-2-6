@@ -1,3 +1,15 @@
+Fri Dec  7 20:06:14 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (validate_visible_area): get logic right,
+	#66249
+
+	* gtk/gtkrbtree.c (_gtk_rbtree_remove_node): fix bug where
+	removing a node ended up with a corrupt tree.  Really really nasty
+	bug.
+	(_gtk_rbtree_debug_spew): new debug helper function
+	(_fixup_validation): new inline function to clean up code
+	readability a lot. 
+
 Fri Dec  7 19:34:51 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_insert_element):

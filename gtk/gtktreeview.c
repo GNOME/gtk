@@ -891,7 +891,6 @@ static void
 gtk_tree_view_init (GtkTreeView *tree_view)
 {
   tree_view->priv = g_new0 (GtkTreeViewPrivate, 1);
-
   GTK_WIDGET_SET_FLAGS (tree_view, GTK_CAN_FOCUS);
 
   tree_view->priv->flags = GTK_TREE_VIEW_IS_LIST | GTK_TREE_VIEW_SHOW_EXPANDERS | GTK_TREE_VIEW_DRAW_KEYFOCUS | GTK_TREE_VIEW_HEADERS_VISIBLE;
@@ -3195,14 +3194,13 @@ validate_visible_area (GtkTreeView *tree_view)
   GtkRBNode *node;
   gint y, height, offset;
   gboolean validated_area = FALSE;
-
+  gboolean size_changed = FALSE;
   
   if (tree_view->priv->tree == NULL)
     return;
   
   if (! GTK_RBNODE_FLAG_SET (tree_view->priv->tree->root, GTK_RBNODE_DESCENDANTS_INVALID))
     return;
-
   
   height = GTK_WIDGET (tree_view)->allocation.height - TREE_VIEW_HEADER_HEIGHT (tree_view);
 
@@ -3224,8 +3222,17 @@ validate_visible_area (GtkTreeView *tree_view)
   gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
   do
     {
-      validated_area = validate_row (tree_view, tree, node, &iter, path) || validated_area;
+      gint old_height;
+
+      if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
+	  GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))
+	{
+	  validated_area = TRUE;
+	  if (validate_row (tree_view, tree, node, &iter, path))
+	    size_changed = TRUE;
+	}
       height -= GTK_RBNODE_GET_HEIGHT (node);
+
       if (node->children)
 	{
 	  GtkTreeIter parent = iter;
@@ -3280,8 +3287,10 @@ validate_visible_area (GtkTreeView *tree_view)
     }
   while (node && height > 0);
 
-  if (validated_area)
+  if (size_changed)
     gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+  if (validated_area)
+    gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 }
 
 /* Our strategy for finding nodes to validate is a little convoluted.  We find
@@ -3353,11 +3362,14 @@ validate_rows_handler (GtkTreeView *tree_view)
 		{
 		  break;
 		}
-	      else
+	      else if (node->children != NULL)
 		{
 		  tree = node->children;
 		  node = tree->root;
 		}
+	      else
+		/* RBTree corruption!  All bad */
+		g_assert_not_reached ();
 	    }
 	  while (TRUE);
 	  path = _gtk_tree_view_find_path (tree_view, tree, node);
@@ -3389,7 +3401,8 @@ presize_handler_callback (gpointer data)
 
   if (tree_view->priv->mark_rows_col_dirty)
     {
-      _gtk_rbtree_column_invalid (tree_view->priv->tree);
+      if (tree_view->priv->tree)
+	_gtk_rbtree_column_invalid (tree_view->priv->tree);
       tree_view->priv->mark_rows_col_dirty = FALSE;
     }
   validate_visible_area (tree_view);
@@ -5857,7 +5870,6 @@ gtk_tree_view_queue_draw_node (GtkTreeView  *tree_view,
 
   rect.y = BACKGROUND_FIRST_PIXEL (tree_view, tree, node);
   rect.height = BACKGROUND_HEIGHT (node);
-  //  g_print ("gtk_tree_view_queue_draw_node: (%d %d) (%d %d)\n", rect.x, rect.y, rect.width, rect.height);
 
   if (clip_rect)
     {

@@ -216,12 +216,6 @@ void                    gtk_tree_view_column_cell_render         (GtkTreeViewCol
 								  GdkRectangle            *cell_area,
 								  GdkRectangle            *expose_area,
 								  guint                    flags);
-gboolean                gtk_tree_view_column_cell_event          (GtkTreeViewColumn       *tree_column,
-								  GdkEvent                *event,
-								  gchar                   *path_string,
-								  GdkRectangle            *background_area,
-								  GdkRectangle            *cell_area,
-								  guint                    flags);
 gboolean                gtk_tree_view_column_cell_focus          (GtkTreeViewColumn       *tree_column,
 								  gint                     direction);
 void                    gtk_tree_view_column_cell_draw_focus     (GtkTreeViewColumn       *tree_column,
