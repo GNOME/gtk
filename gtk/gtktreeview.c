@@ -12354,7 +12354,7 @@ static void
 gtk_tree_view_search_activate (GtkEntry    *entry,
 			       GtkTreeView *tree_view)
 {
-  GtkTreePath *path = NULL;
+  GtkTreePath *path;
   GtkRBNode *node;
   GtkRBTree *tree;
 
@@ -12364,15 +12364,17 @@ gtk_tree_view_search_activate (GtkEntry    *entry,
   /* If we have a row selected and it's the cursor row, we activate
    * the row XXX */
   if (gtk_tree_row_reference_valid (tree_view->priv->cursor))
-    path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
-
-  _gtk_tree_view_find_node (tree_view, path, &tree, &node);
-
-  if (node && GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
-    gtk_tree_view_row_activated (tree_view, path, tree_view->priv->focus_column);
-
-  if (path)
-    gtk_tree_path_free (path);
+    {
+      path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
+      
+      _gtk_tree_view_find_node (tree_view, path, &tree, &node);
+      
+      if (node && GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
+	gtk_tree_view_row_activated (tree_view, path, tree_view->priv->focus_column);
+      
+      if (path)
+	gtk_tree_path_free (path);
+    }
 }
 
 static gboolean

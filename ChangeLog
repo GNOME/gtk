@@ -1,3 +1,8 @@
+2004-11-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_search_activate): Don't
+	try to activate a node if the cursor is not valid.  
+
 2004-11-03  James M. Cape  <jcape@ignore-your.tv>
 
 	* gtk/gtkfilechooserbutton.c (update_dialog), (dialog_response_cb):
