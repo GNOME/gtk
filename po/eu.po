@@ -11,7 +11,7 @@ msgstr ""
 "Language-Team: euskare <linux-eu@chanae.alphanet.ch>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bits\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: gdk-pixbuf/io-gif.c:426
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
@@ -280,7 +280,7 @@ msgstr "garbitu"
 #.
 #: gtk/gtkmain.c:424
 msgid "default:LTR"
-msgstr ""
+msgstr "default:LTR"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons
 #: gtk/gtkstock.c:169

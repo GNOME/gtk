@@ -1,3 +1,9 @@
+2001-03-15  Pablo Saratxaga  <pablo@mandrakesoft.com>
+
+	* az.po: Updated Azeri file
+	* ja.po: corrected default:LTR tag
+	* nn;po,vi.po: Added Nynorsk and Vietnamese files from 1.2
+
 2001-03-01  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* no.po: Updated Norwegian translation.
