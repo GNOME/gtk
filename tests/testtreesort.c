@@ -87,7 +87,6 @@ main (int argc, char *argv[])
   gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE, 0);
 
   model = gtk_tree_store_new (NUM_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
-
   smodel = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (model));
   ssmodel = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (smodel));
 

@@ -96,12 +96,14 @@
 <!entity GtkTree SYSTEM "sgml/gtktree.sgml">
 <!entity GtkTreeItem SYSTEM "sgml/gtktreeitem.sgml">
 <!entity gtk-GtkTreeModel SYSTEM "sgml/gtktreemodel.sgml">
+<!entity gtk-GtkTreeSortable SYSTEM "sgml/gtktreesortable.sgml">
 <!entity gtk-GtkTreeModelSort SYSTEM "sgml/gtktreemodelsort.sgml">
 <!entity gtk-GtkTreeSelection SYSTEM "sgml/gtktreeselection.sgml">
 <!entity gtk-GtkTreeStore SYSTEM "sgml/gtktreestore.sgml">
 <!entity gtk-GtkTreeViewColumn SYSTEM "sgml/gtktreeviewcolumn.sgml">
 <!entity gtk-GtkTreeView SYSTEM "sgml/gtktreeview.sgml">
 <!entity gtk-GtkCellRenderer SYSTEM "sgml/gtkcellrenderer.sgml">
+<!entity gtk-GtkCellEditable SYSTEM "sgml/gtkcelleditable.sgml">
 <!entity gtk-GtkCellRendererPixbuf SYSTEM "sgml/gtkcellrendererpixbuf.sgml">
 <!entity gtk-GtkCellRendererText SYSTEM "sgml/gtkcellrenderertext.sgml">
 <!entity gtk-GtkCellRendererToggle SYSTEM "sgml/gtkcellrenderertoggle.sgml">
@@ -324,16 +326,18 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &gtk-TreeWidget;
         &gtk-GtkTreeModel;
         &gtk-GtkTreeSelection;
-        &gtk-GtkTreeStore;
         &gtk-GtkTreeViewColumn;
         &gtk-GtkTreeView;
         &gtk-GtkTreeDND;
+	&gtk-GtkTreeSortable;
         &gtk-GtkTreeModelSort;
         &gtk-GtkCellRenderer;
+        &gtk-GtkCellEditable;
         &gtk-GtkCellRendererPixbuf;
         &gtk-GtkCellRendererText;
         &gtk-GtkCellRendererToggle;
         &gtk-GtkListStore;
+        &gtk-GtkTreeStore;
     </sect1>
     <sect1 id="MenusAndCombos">
       <title>Menus, Combo Box, Toolbar</title>

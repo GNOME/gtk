@@ -258,7 +258,7 @@ gtk_drag_source_set() is used.
           drag.
 @button: The button the user clicked to start the drag.
 @event: The event that triggered the start of the
-        drag. 
+        drag.
 @Returns: The context for this drag.
 
 

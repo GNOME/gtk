@@ -731,7 +731,15 @@ gtk_tree_model_sort_rows_reordered (GtkTreeModel *s_model,
 	}
 
       for (i = 0; i < level->array->len; i++)
-	g_array_index (level->array, SortElt, i).offset = new_order[i];
+	{
+	  g_array_index (level->array, SortElt, i).offset = new_order[i];
+	  
+	  if (GTK_TREE_MODEL_SORT_CACHE_CHILD_ITERS (tree_model_sort))
+	    {
+	      get_child_iter_from_elt_no_cache (tree_model_sort,
+						&(g_array_index (level->array, SortElt, i).iter), level, &g_array_index (level->array, SortElt, i));
+	    }
+	}
       
       gtk_tree_model_sort_increment_stamp (tree_model_sort);
       

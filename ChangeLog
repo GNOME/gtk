@@ -1,3 +1,18 @@
+Mon Oct 22 14:08:26 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* demos/gtk-demo/appwindow.c: Remove handle_box from App demo.
+
+	* gtk/gtktreeview.c (size_allocate): Move to a different drawing
+	system.  Instead of having a window the size of the tree, we have
+	a window the size of widget->allocation, and simply draw with the
+	offset.
+	(coords_are_over_arrow): ditto.  Move to window coordinates.
+	(do_prelight): ditto
+	(do_unprelight): ditto
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_rows_reordered):
+	Minor fix from Kristian Rietveld to fix unsorted case.
+
 2001-10-22  jacob berkman  <jacob@ximian.com>
 
 	* gtk/gtkclist.c (cell_size_request): don't cast a PIXTEXT cell to

@@ -1,0 +1,57 @@
+<!-- ##### SECTION Title ##### -->
+gtkcelleditable
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkCellEditable ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkCellEditableIface ##### -->
+<para>
+
+</para>
+
+@g_iface: 
+@editing_done: 
+@remove_widget: 
+@start_editing: 
+
+<!-- ##### FUNCTION gtk_cell_editable_start_editing ##### -->
+<para>
+
+</para>
+
+@cell_editable: 
+@event: 
+
+
+<!-- ##### FUNCTION gtk_cell_editable_editing_done ##### -->
+<para>
+
+</para>
+
+@cell_editable: 
+
+
+<!-- ##### FUNCTION gtk_cell_editable_remove_widget ##### -->
+<para>
+
+</para>
+
+@cell_editable: 
+
+

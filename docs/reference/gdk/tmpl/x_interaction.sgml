@@ -20,10 +20,12 @@ Obtains the Xlib window id of the root window of the current screen.
 </para>
 
 
+
 <!-- ##### MACRO GDK_ROOT_PARENT ##### -->
 <para>
 Obtains the Xlib window id of the root window of the default screen.
 </para>
+
 
 
 <!-- ##### MACRO GDK_DISPLAY ##### -->
@@ -48,7 +50,7 @@ Returns the display of a #GdkWindow.
 Returns the X window belonging to a #GdkWindow.
 </para>
 
-@win: a #GdkWindow. 
+@win: a #GdkWindow.
 @Returns: the Xlib <type>Window</type> of @win.
 
 
@@ -75,7 +77,7 @@ Returns the X pixmap belonging to a #GdkPixmap.
 Returns the display of a #GdkDrawable.
 </para>
 
-@win: a #GdkDrawable. 
+@win: a #GdkDrawable.
 @Returns: an Xlib <type>Display*</type>.
 
 
@@ -84,8 +86,8 @@ Returns the display of a #GdkDrawable.
 Returns the X resource (window or pixmap) belonging to a #GdkDrawable.
 </para>
 
-@win: a #GdkDrawable. 
-@Returns: the ID of @win's X resource. 
+@win: a #GdkDrawable.
+@Returns: the ID of @win's X resource.
 
 
 <!-- ##### MACRO GDK_IMAGE_XDISPLAY ##### -->
@@ -111,7 +113,7 @@ Returns the X image belonging to a #GdkImage.
 Returns the display of a #GdkGC.
 </para>
 
-@gc: a #GdkGC. 
+@gc: a #GdkGC.
 @Returns: an Xlib <type>Display*</type>.
 
 
@@ -120,7 +122,7 @@ Returns the display of a #GdkGC.
 Returns the display of a #GdkColormap.
 </para>
 
-@cmap: a #GdkColormap. 
+@cmap: a #GdkColormap.
 @Returns: an Xlib <type>Display*</type>.
 
 
@@ -129,7 +131,7 @@ Returns the display of a #GdkColormap.
 Returns the X colormap belonging to a #GdkColormap.
 </para>
 
-@cmap: a #GdkColormap. 
+@cmap: a #GdkColormap.
 @Returns: an Xlib <type>Colormap</type>.
 
 
@@ -166,7 +168,7 @@ Returns the X cursor belonging to a #GdkCursor.
 </para>
 
 @cursor: a #GdkCursor.
-@Returns: an Xlib <type>Cursor</type. 
+@Returns: an Xlib <type>Cursor</type.
 
 
 <!-- ##### MACRO GDK_CURSOR_XDISPLAY ##### -->
@@ -213,8 +215,8 @@ Another name for GDK_DRAWABLE_XID().
 Returns a #GdkVisual corresponding to a X visual.
 </para>
 
-@xvisualid: a X visual id. 
-@Returns: the #GdkVisual. 
+@xvisualid: a X visual id.
+@Returns: the #GdkVisual.
 
 
 <!-- ##### FUNCTION gdkx_colormap_get ##### -->
@@ -254,21 +256,27 @@ Returns the Gdk object associated with the given X id.
 a #GdkWindow or a #GdkFont.
 
 
-<!-- ##### MACRO gdk_window_lookup ##### -->
+<!-- ##### FUNCTION gdk_window_lookup ##### -->
 <para>
 Obtains the #GdkWindow for the given Xlib window ID, or %NULL if no #GdkWindow has
 been created for @xid.
 </para>
 
+@anid: 
+@Returns: 
+<!-- # Unused Parameters # -->
 @xid: Xlib window ID
 
 
-<!-- ##### MACRO gdk_pixmap_lookup ##### -->
+<!-- ##### FUNCTION gdk_pixmap_lookup ##### -->
 <para>
 Obtains the #GdkPixmap for the given Xlib pixmap ID, or %NULL if no #GdkPixmap has
 been created for @xid.
 </para>
 
+@anid: 
+@Returns: 
+<!-- # Unused Parameters # -->
 @xid: Xlib pixmap ID
 
 
@@ -323,6 +331,8 @@ Returns the X cursor belonging to a #GdkCursor.
 </para>
 
 @cursor: a #GdkCursor.
+@Returns: 
+<!-- # Unused Parameters # -->
 @Retursn: an Xlib <type>Cursor</type.
 
 
@@ -385,7 +395,7 @@ Returns the X font belonging to a #GdkFont.
 Returns the display of a #GdkGC.
 </para>
 
-@gc: a #GdkGC. 
+@gc: a #GdkGC.
 @Returns: an Xlib <type>Display*</type>.
 
 
@@ -435,13 +445,16 @@ gdk_x11_grab_server()/gdk_x11_ungrab_server() calls can be nested.
 </para>
 
 
+
 <!-- ##### FUNCTION gdk_x11_image_get_xdisplay ##### -->
 <para>
 Returns the display of a #GdkImage.
 </para>
 
-@drawable: a #GdkImage.
+@image: 
 @Returns: an Xlib <type>Display*</type>.
+<!-- # Unused Parameters # -->
+@drawable: a #GdkImage.
 
 
 <!-- ##### FUNCTION gdk_x11_image_get_ximage ##### -->

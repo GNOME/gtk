@@ -165,6 +165,13 @@ the device ID for the core pointer device.
 </para>
 
 
+<!-- ##### TYPEDEF GdkAtom ##### -->
+<para>
+A numeric type representing a string as an index into a table
+of strings on the X server.
+</para>
+
+
 <!-- ##### STRUCT GdkColorContext ##### -->
 <para>
 

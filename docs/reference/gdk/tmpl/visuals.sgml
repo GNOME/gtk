@@ -72,7 +72,7 @@ pixel_from_rgb (GdkVisual *visual,
 </figure>
 
 @parent_instance: inherited portion from #GObject
-@type: The type of this visual. 
+@type: The type of this visual.
 @depth: The number of bits per pixel.
 @byte_order: The byte-order for this visual.
 @colormap_size: The number of entries in the colormap, for
@@ -109,7 +109,6 @@ pixel_from_rgb (GdkVisual *visual,
     of the information in <structfield>blue_mask</structfield>.
 @blue_prec: See above.
 
-
 <!-- ##### ENUM GdkVisualType ##### -->
 <para>
 A set of values that describe the manner in which the
@@ -131,7 +130,7 @@ values for display.
    structure describe how the components are assembled into a pixel value.
 @GDK_VISUAL_DIRECT_COLOR: Each pixel value contains red, green, and blue
    components as for %GDK_TRUE_COLOR, but the components are mapped via a 
-   color table into the final output table instead of being converted directly. 
+   color table into the final output table instead of being converted directly.
 
 <!-- ##### ENUM GdkByteOrder ##### -->
 <para>
@@ -141,7 +140,7 @@ for storing pixel values in memory.
 
 @GDK_LSB_FIRST: The values are stored with the least-significant byte
   first. For instance, the 32-bit value 0xffeecc would be stored
-  in memory as 0xcc, 0xee, 0xff, 0x00. 
+  in memory as 0xcc, 0xee, 0xff, 0x00.
 @GDK_MSB_FIRST: The values are stored with the most-significant byte
 first. For instance, the 32-bit value 0xffeecc would be stored
 in memory as 0x00, 0xcc, 0xee, 0xff.
@@ -151,7 +150,7 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 
 </para>
 
-@depths:
+@depths: 
 @count: 
 
 
@@ -161,7 +160,7 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 </para>
 
 @visual_types: 
-@count:
+@count: 
 
 
 <!-- ##### FUNCTION gdk_list_visuals ##### -->
@@ -169,7 +168,7 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 
 </para>
 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_visual_get_best_depth ##### -->
@@ -177,7 +176,7 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 
 </para>
 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_visual_get_best_type ##### -->
@@ -193,7 +192,7 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 
 </para>
 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_visual_get_best ##### -->
@@ -201,7 +200,7 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 
 </para>
 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_visual_get_best_with_depth ##### -->

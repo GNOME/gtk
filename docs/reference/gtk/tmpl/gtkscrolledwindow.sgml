@@ -192,6 +192,8 @@ Sets the #GtkAdjustment for the vertical scrollbar.
 </para>
 
 @scrolled_window: A #GtkScrolledWindow.
+@hadjustment: 
+<!-- # Unused Parameters # -->
 @vadjustment: Vertical scroll adjustment.
 
 

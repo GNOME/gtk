@@ -1,3 +1,7 @@
+Thu Oct 18 16:40:00 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtk-docs.sgml: add GtkCellEditable and GtkTreeModelSort.
+
 Sat Oct 20 18:35:21 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/tmpl/gtkentry.sgml (Note): Remove note about

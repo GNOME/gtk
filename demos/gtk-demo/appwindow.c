@@ -181,8 +181,6 @@ do_appwindow (void)
   if (!window)
     {
       GtkWidget *table;
-      GtkWidget *menubar_handle;
-      GtkWidget *toolbar_handle;
       GtkWidget *toolbar;
       GtkWidget *statusbar;
       GtkWidget *contents;
@@ -215,8 +213,6 @@ do_appwindow (void)
       gtk_accel_group_attach (accel_group, G_OBJECT (window));
       gtk_accel_group_unref (accel_group);
       
-      menubar_handle = gtk_handle_box_new ();
-
       item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accel_group);
 
       /* Set up item factory to go away with the window */
@@ -231,11 +227,8 @@ do_appwindow (void)
       gtk_item_factory_create_items (item_factory, G_N_ELEMENTS (menu_items),
                                      menu_items, window);
 
-      gtk_container_add (GTK_CONTAINER (menubar_handle),
-			 gtk_item_factory_get_widget (item_factory, "<main>"));
-      
       gtk_table_attach (GTK_TABLE (table),
-			menubar_handle,
+			gtk_item_factory_get_widget (item_factory, "<main>"),
                         /* X direction */          /* Y direction */
                         0, 1,                      0, 1,
                         GTK_EXPAND | GTK_FILL,     0,
@@ -243,8 +236,6 @@ do_appwindow (void)
 
       /* Create the toolbar
        */
-      toolbar_handle = gtk_handle_box_new ();
-
       toolbar = gtk_toolbar_new ();
 
       gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar),
@@ -273,10 +264,8 @@ do_appwindow (void)
                                 window, /* user data for callback */
                                 -1);  /* -1 means "append" */
 
-      gtk_container_add (GTK_CONTAINER (toolbar_handle), toolbar);
-
       gtk_table_attach (GTK_TABLE (table),
-                        toolbar_handle,
+                        toolbar,
                         /* X direction */       /* Y direction */
                         0, 1,                   1, 2,
                         GTK_EXPAND | GTK_FILL,  0,

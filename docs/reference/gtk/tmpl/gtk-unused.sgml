@@ -101,10 +101,6 @@ Debugging
 gtkenums.sgml
 
 
-<!-- ##### SECTION ./tmpl/gtkimcontextsimple.sgml:Title ##### -->
-GtkIMContextSimple
-
-
 <!-- ##### SECTION ./tmpl/gtkmarshal.sgml:Long_Description ##### -->
 <refsect2>
 <title>What are Signal Marshallers?</title>
@@ -788,17 +784,6 @@ the #GtkAdjustment which sets the range of the scale.
 
 </para>
 
-
-<!-- ##### STRUCT GtkIMContextSimple ##### -->
-<para>
-
-</para>
-
-@object: 
-@tables: 
-@compose_buffer: 
-@tentative_match: 
-@tentative_match_len: 
 
 <!-- ##### USER_FUNCTION GtkImageLoader ##### -->
 <para>
@@ -2523,6 +2508,32 @@ a gtk_object_unref().
 @tree_model: 
 @iter: 
 
+<!-- ##### FUNCTION gtk_tree_model_sort_convert_iter ##### -->
+<para>
+
+</para>
+
+@tree_model_sort: 
+@sort_iter: 
+@child_iter: 
+
+<!-- ##### FUNCTION gtk_tree_model_sort_convert_path ##### -->
+<para>
+
+</para>
+
+@tree_model_sort: 
+@child_path: 
+@Returns: 
+@path: 
+
+<!-- ##### FUNCTION gtk_tree_model_sort_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
 <!-- ##### FUNCTION gtk_tree_model_sort_set_compare ##### -->
 <para>
 
@@ -2530,6 +2541,15 @@ a gtk_object_unref().
 
 @tree_model_sort: 
 @func: 
+
+<!-- ##### FUNCTION gtk_tree_model_sort_set_model ##### -->
+<para>
+
+</para>
+
+@tree_model_sort: 
+@child_model: 
+@model: 
 
 <!-- ##### FUNCTION gtk_tree_model_sort_set_sort_column ##### -->
 <para>
