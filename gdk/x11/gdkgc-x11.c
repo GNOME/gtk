@@ -683,9 +683,35 @@ gdk_gc_set_clip_region (GdkGC	  *gc,
 void
 gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
 {
+  GdkGCX11 *x11_src_gc;
+  GdkGCX11 *x11_dst_gc;
+  
   g_return_if_fail (GDK_IS_GC_X11 (dst_gc));
   g_return_if_fail (GDK_IS_GC_X11 (src_gc));
+
+  x11_dst_gc = GDK_GC_X11 (dst_gc);
+  x11_src_gc = GDK_GC_X11 (src_gc);
   
   XCopyGC (GDK_GC_XDISPLAY (src_gc), GDK_GC_XGC (src_gc), ~((~1) << GCLastBit),
 	   GDK_GC_XGC (dst_gc));
+
+  dst_gc->clip_x_origin = src_gc->clip_x_origin;
+  dst_gc->clip_y_origin = src_gc->clip_y_origin;
+  dst_gc->ts_x_origin = src_gc->ts_x_origin;
+  dst_gc->ts_y_origin = src_gc->ts_y_origin;
+
+  if (src_gc->colormap)
+    g_object_ref (G_OBJECT (src_gc->colormap));
+
+  if (dst_gc->colormap)
+    g_object_unref (G_OBJECT (dst_gc->colormap));
+
+  dst_gc->colormap = src_gc->colormap;
+
+  if (x11_dst_gc->clip_region)
+    gdk_region_destroy (x11_dst_gc->clip_region);
+
+  x11_dst_gc->clip_region = gdk_region_copy (x11_src_gc->clip_region);
+
+  x11_dst_gc->dirty_mask = x11_src_gc->dirty_mask;
 }

@@ -1,3 +1,12 @@
+2000-11-02  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/testgtk.c (create_labels): had a test backward
+
+	* gdk/x11/gdkgc-x11.c (gdk_gc_copy): Copy the client-side GC
+	fields, so the dest GC ends up with the correct clip origin, 
+	etc. Fixes a bug where colored labels didn't redraw 
+	properly.
+
 2000-11-02  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkcolor-fb.c, gdk/linux-fb/gdkdnd-fb.c,

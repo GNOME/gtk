@@ -2113,7 +2113,7 @@ void create_labels (void)
                                          "but this _word is <span foreground=\"purple\"><big>purple</big></span>\n"
                                          "We like <sup>superscript</sup> and <sub>subscript</sub> too");
 
-      g_return_if_fail (keyval != GDK_s);
+      g_return_if_fail (keyval == GDK_s);
       
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
