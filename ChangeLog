@@ -1,3 +1,16 @@
+2004-11-17  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtktreeselection.c: include <string.h> for memset().
+
+	* gtk/gtkmenu.c (menu_change_screen): added missing casts.
+
+	Merged from HEAD branch:
+
+	* gtk/gtkcellrenderertext.c (get_layout): Don't use the foreground
+	color for selected cells, Don't use the background color
+	in unfocused selected cells. Also avoid creating two PangoLayouts
+	per render call.  (#154615, #154611, Billy Biggs)
+
 2004-11-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkbutton.c: 

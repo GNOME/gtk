@@ -1216,7 +1216,8 @@ get_layout (GtkCellRendererText *celltext,
        * background_area not the PangoLayout area
        */
       
-      if (celltext->foreground_set)
+      if (celltext->foreground_set
+	  && (flags & GTK_CELL_RENDERER_SELECTED) == 0)
         {
           PangoColor color;
 
@@ -1277,17 +1278,17 @@ get_layout (GtkCellRendererText *celltext,
 }
 
 static void
-gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
-				 GtkWidget       *widget,
-				 GdkRectangle    *cell_area,
-				 gint            *x_offset,
-				 gint            *y_offset,
-				 gint            *width,
-				 gint            *height)
+get_size (GtkCellRenderer *cell,
+	  GtkWidget       *widget,
+	  GdkRectangle    *cell_area,
+	  PangoLayout     *layout,
+	  gint            *x_offset,
+	  gint            *y_offset,
+	  gint            *width,
+	  gint            *height)
 {
   GtkCellRendererText *celltext = (GtkCellRendererText *) cell;
   PangoRectangle rect;
-  PangoLayout *layout;
 
   if (celltext->calc_fixed_height)
     {
@@ -1327,7 +1328,12 @@ gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
       if (width == NULL)
 	return;
     }
-  layout = get_layout (celltext, widget, FALSE, 0);
+
+  if (layout)
+    g_object_ref (layout);
+  else
+    layout = get_layout (celltext, widget, FALSE, 0);
+
   pango_layout_get_pixel_extents (layout, NULL, &rect);
 
   if (width)
@@ -1354,6 +1360,20 @@ gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
   g_object_unref (layout);
 }
 
+
+static void
+gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
+				 GtkWidget       *widget,
+				 GdkRectangle    *cell_area,
+				 gint            *x_offset,
+				 gint            *y_offset,
+				 gint            *width,
+				 gint            *height)
+{
+  get_size (cell, widget, cell_area, NULL,
+	    x_offset, y_offset, width, height);
+}
+
 static void
 gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
 			       GdkDrawable          *window,
@@ -1371,8 +1391,7 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
   gint y_offset;
 
   layout = get_layout (celltext, widget, TRUE, flags);
-
-  gtk_cell_renderer_text_get_size (cell, widget, cell_area, &x_offset, &y_offset, NULL, NULL);
+  get_size (cell, widget, cell_area, layout, &x_offset, &y_offset, NULL, NULL);
 
 
   if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
@@ -1395,7 +1414,8 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
 	state = GTK_STATE_NORMAL;
     }
 
-  if (celltext->background_set && state != GTK_STATE_SELECTED)
+  if (celltext->background_set && 
+      (flags & GTK_CELL_RENDERER_SELECTED) == 0)
     {
       GdkColor color;
       GdkGC *gc;
