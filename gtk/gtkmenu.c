@@ -1516,7 +1516,7 @@ gtk_menu_key_press (GtkWidget	*widget,
   if (GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
     return TRUE;
     
-  g_object_get (G_OBJECT (gtk_settings_get_default ()),
+  g_object_get (G_OBJECT (gtk_settings_get_for_screen (gtk_widget_get_screen (widget))),
                 "gtk-menu-bar-accel",
                 &accel,
                 NULL);

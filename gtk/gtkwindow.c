@@ -3567,7 +3567,7 @@ gtk_window_read_rcfiles (GtkWidget *widget,
 	}
     }
 
-  gtk_rc_reparse_all ();
+  gtk_rc_reparse_all_for_screen (gtk_widget_get_screen (widget));
 }
 
 static gint

@@ -29,6 +29,7 @@
 
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkvbox.h>
+#include <gdk/gdk.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -47,7 +48,8 @@ typedef struct _GtkColorSelection       GtkColorSelection;
 typedef struct _GtkColorSelectionClass  GtkColorSelectionClass;
 
 
-typedef void (* GtkColorSelectionChangePaletteFunc) (const GdkColor    *colors,
+typedef void (* GtkColorSelectionChangePaletteFunc) (GdkScreen	       *screen,
+						     const GdkColor    *colors,
                                                      gint               n_colors);
 
 struct _GtkColorSelection

@@ -4805,13 +4805,16 @@ gtk_widget_get_visual (GtkWidget *widget)
  * 
  * Get the settings object holding the settings (global property
  * settings, RC file information, etc) used for this widget.
+ *
+ * Note that this function can only be called when the #GtkWidget is
+ * realized as the settings stored per #GdkScreen.
  * 
  * Return value: the relevant #GtkSettings object
  **/
 GtkSettings*
 gtk_widget_get_settings (GtkWidget *widget)
 {
-  return gtk_settings_get_default ();
+  return gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
 }
 
 /**

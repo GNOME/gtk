@@ -2769,7 +2769,7 @@ xdnd_drop_filter (GdkXEvent *xev,
  ************************** Public API ***********************
  *************************************************************/
 void
-gdk_dnd_init (GdkDisplay *display)
+_gdk_dnd_init (GdkDisplay *display)
 {
   init_byte_order ();
 

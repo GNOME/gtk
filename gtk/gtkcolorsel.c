@@ -151,6 +151,7 @@ struct _ColorSelectionPrivate
 
 static void gtk_color_selection_init		(GtkColorSelection	 *colorsel);
 static void gtk_color_selection_class_init	(GtkColorSelectionClass	 *klass);
+static void gtk_color_selection_realize		(GtkWidget		 *widget);
 static void gtk_color_selection_destroy		(GtkObject		 *object);
 static void gtk_color_selection_finalize        (GObject		 *object);
 static void update_color			(GtkColorSelection	 *colorsel);
@@ -767,7 +768,9 @@ palette_change_color (GtkWidget         *drawing_area,
   current_colors[y * GTK_CUSTOM_PALETTE_WIDTH + x] = gdk_color;
 
   if (change_palette_hook)
-    (* change_palette_hook) (current_colors, GTK_CUSTOM_PALETTE_WIDTH * GTK_CUSTOM_PALETTE_HEIGHT);
+    (* change_palette_hook) (gtk_widget_get_screen (GTK_WIDGET (colorsel)),
+			     current_colors, 
+			     GTK_CUSTOM_PALETTE_WIDTH * GTK_CUSTOM_PALETTE_HEIGHT);
 }
 
 /* Changes the view color */
@@ -1620,14 +1623,15 @@ palette_change_notify_instance (GObject    *object,
 }
 
 static void
-default_change_palette_func (const GdkColor *colors,
+default_change_palette_func (GdkScreen	    *screen,
+			     const GdkColor *colors,
                              gint            n_colors)
 {
   gchar *str;
   
   str = gtk_color_selection_palette_to_string (colors, n_colors);
 
-  gtk_settings_set_string_property (gtk_settings_get_default (),
+  gtk_settings_set_string_property (gtk_settings_get_for_screen (screen),
                                     "gtk-color-palette",
                                     str,
                                     "gtk_color_selection_palette_to_string");
@@ -1665,14 +1669,16 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
 {
   GtkObjectClass *object_class;
   GObjectClass *gobject_class;
-  gchar *palette;
+  GtkWidgetClass *widget_class;
   
   object_class = GTK_OBJECT_CLASS (klass);
   gobject_class = G_OBJECT_CLASS (klass);
+  widget_class = GTK_WIDGET_CLASS (klass);
   
   parent_class = gtk_type_class (GTK_TYPE_VBOX);
   
   object_class->destroy = gtk_color_selection_destroy;
+  widget_class->realize = gtk_color_selection_realize;
   gobject_class->finalize = gtk_color_selection_finalize;
 
   gobject_class->set_property = gtk_color_selection_set_property;
@@ -1720,21 +1726,6 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
                                                       _("Palette to use in the color selector"),
                                                       default_colors,
                                                       G_PARAM_READWRITE));
-
-  g_object_get (G_OBJECT (gtk_settings_get_default ()),
-                "gtk-color-palette",
-                &palette,
-                NULL);
-  
-  fill_palette_from_string (palette);
-  g_free (palette);
-
-  change_palette_hook = default_change_palette_func;
-  
-  g_signal_connect_data (G_OBJECT (gtk_settings_get_default ()),
-                         "notify::gtk-color-palette",
-                         G_CALLBACK (palette_change_notify_class),
-                         NULL, NULL, 0);
 }
 
 /* widget functions */
@@ -1888,16 +1879,6 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   
   gtk_widget_show_all (top_hbox);
 
-  /* Set default colors */
-
-  update_palette (colorsel);
-
-  priv->settings_connection = 
-    g_signal_connect_data (G_OBJECT (gtk_settings_get_default ()),
-                           "notify::gtk-color-palette",
-                           G_CALLBACK (palette_change_notify_instance),
-                           colorsel, NULL, 0);
-  
   /* hide unused stuff */
   
   if (priv->has_opacity == FALSE)
@@ -1911,6 +1892,50 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
     {
       gtk_widget_hide (priv->palette_frame);
     }
+}
+
+static void 
+gtk_color_selection_realize (GtkWidget *widget)
+{
+  GtkColorSelection *colorsel = GTK_COLOR_SELECTION (widget);
+  ColorSelectionPrivate *priv = colorsel->private_data;
+  GdkScreen *screen = gtk_widget_get_screen (widget);
+  gchar *palette;
+
+  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+
+  /* Setup the gtksettings */
+  
+  g_object_get (G_OBJECT (gtk_settings_get_for_screen (screen)),
+                "gtk-color-palette",
+                &palette,
+                NULL);
+  
+  fill_palette_from_string (palette);
+  g_free (palette);
+
+  change_palette_hook = default_change_palette_func;
+  
+  g_signal_connect_data (G_OBJECT (gtk_settings_get_for_screen (screen)),
+                         "notify::gtk-color-palette",
+                         G_CALLBACK (palette_change_notify_class),
+                         NULL, NULL, 0);
+
+  /* Set default colors */
+
+  update_palette (colorsel);
+
+  priv->settings_connection = 
+    g_signal_connect_data (G_OBJECT (gtk_settings_get_for_screen (screen)),
+                           "notify::gtk-color-palette",
+                           G_CALLBACK (palette_change_notify_instance),
+                           colorsel, NULL, 0);
+  /* needed as there is no way to retrieve screen with 
+   * gtk_widget_get_screen in gtk_color_selection_finalize */
+  g_object_set_data (G_OBJECT (widget), "screen", screen);
+  
+  if (GTK_WIDGET_CLASS( parent_class )->realize)
+      (*GTK_WIDGET_CLASS( parent_class )->realize) (widget);
 }
 
 static void
@@ -1945,7 +1970,9 @@ gtk_color_selection_finalize (GObject *object)
 
       priv = cselection->private_data;
 
-      g_signal_handler_disconnect (gtk_settings_get_default (),
+      g_signal_handler_disconnect (gtk_settings_get_for_screen (
+				   GDK_SCREEN (g_object_get_data (object, 
+								  "screen"))),
                                    priv->settings_connection);
       
       g_free (cselection->private_data);

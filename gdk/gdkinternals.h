@@ -149,8 +149,8 @@ extern GdkDevice *_gdk_core_pointer;
 GdkEvent* _gdk_event_new (void);
 
 
-void      _gdk_events_init   (GdkDisplay * display);
-void      _gdk_events_queue  (GdkDisplay * display);
+void      _gdk_events_init   (GdkDisplay *display);
+void      _gdk_events_queue  (GdkDisplay *display);
 GdkEvent* _gdk_event_unqueue (void);
 
 GList* _gdk_event_queue_find_first  (void);

@@ -72,6 +72,7 @@ struct _GtkToolbarChildSpace
 static void gtk_toolbar_class_init               (GtkToolbarClass *class);
 static void gtk_toolbar_init                     (GtkToolbar      *toolbar);
 static void gtk_toolbar_finalize                 (GObject         *object);
+static void gtk_toolbar_realize			 (GtkWidget	  *widget);
 static void gtk_toolbar_set_property             (GObject         *object,
 						  guint            prop_id,
 						  const GValue    *value,
@@ -192,6 +193,7 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
   widget_class->style_set = gtk_toolbar_style_set;
   widget_class->show_all = gtk_toolbar_show_all;
   widget_class->focus = gtk_toolbar_focus;
+  widget_class->realize = gtk_toolbar_realize;
   
   container_class->add = gtk_toolbar_add;
   container_class->remove = gtk_toolbar_remove;
@@ -344,36 +346,52 @@ gtk_toolbar_init (GtkToolbar *toolbar)
 
   toolbar->style_set = FALSE;
   toolbar->icon_size_set = FALSE;
-  g_object_get (gtk_settings_get_default (),
+}
+static void 
+gtk_toolbar_realize (GtkWidget *widget)
+{
+  GtkToolbar *toolbar = GTK_TOOLBAR (widget);
+  GdkScreen *screen = gtk_widget_get_screen (widget);
+  GtkToolbarStyle style;
+  GtkIconSize icon_size;
+
+  g_object_get (gtk_settings_get_for_screen (screen),
                 "gtk-toolbar-icon-size",
-                &toolbar->icon_size,
+                &icon_size,
                 "gtk-toolbar-style",
-                &toolbar->style,
+                &style,
                 NULL);
+
   
   toolbar->style_set_connection =
-    g_signal_connect (G_OBJECT (gtk_settings_get_default ()),
+    g_signal_connect (G_OBJECT (gtk_settings_get_for_screen (screen)),
 		      "notify::gtk-toolbar-style",
 		      G_CALLBACK (style_change_notify),
 		      toolbar);
 
   toolbar->icon_size_connection =
-    g_signal_connect (G_OBJECT (gtk_settings_get_default ()),
+    g_signal_connect (G_OBJECT (gtk_settings_get_for_screen (screen)),
 		      "notify::gtk-toolbar-icon-size",
 		      G_CALLBACK (icon_size_change_notify),
 		      toolbar);
+
+  gtk_toolbar_set_style (toolbar, style);
+  gtk_toolbar_set_icon_size (toolbar, icon_size);
+
+  if (GTK_WIDGET_CLASS( parent_class )->realize)
+      (*GTK_WIDGET_CLASS( parent_class )->realize) (widget);
 }
+
 
 static void
 gtk_toolbar_finalize (GObject *object)
 {
-  GtkToolbar *toolbar;
-
-  toolbar = GTK_TOOLBAR (object);
-
-  g_signal_handler_disconnect (G_OBJECT (gtk_settings_get_default ()),
+  GtkToolbar *toolbar = GTK_TOOLBAR (object);
+  GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (object));
+  
+  g_signal_handler_disconnect (G_OBJECT (gtk_settings_get_for_screen (screen)),
                                toolbar->style_set_connection);
-  g_signal_handler_disconnect (G_OBJECT (gtk_settings_get_default ()),
+  g_signal_handler_disconnect (G_OBJECT (gtk_settings_get_for_screen (screen)),
                                toolbar->icon_size_connection);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -1026,7 +1044,8 @@ gtk_toolbar_unset_icon_size (GtkToolbar  *toolbar)
 
   if (toolbar->icon_size_set)
     {
-      g_object_get (gtk_settings_get_default (),
+      g_object_get (gtk_settings_get_for_screen (
+		      gtk_widget_get_screen (GTK_WIDGET (toolbar))),
                     "gtk-toolbar-icon-size",
                     &size, NULL);
 
@@ -1464,7 +1483,8 @@ gtk_toolbar_unset_style (GtkToolbar *toolbar)
 
   if (toolbar->style_set)
     {
-      g_object_get (gtk_settings_get_default (),
+      g_object_get (gtk_settings_get_for_screen (
+			  gtk_widget_get_screen (GTK_WIDGET (toolbar))),
                     "gtk-toolbar-style",
                     &style,
                     NULL);

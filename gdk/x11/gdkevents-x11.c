@@ -121,14 +121,17 @@ static GdkFilterReturn gdk_wm_protocols_filter (GdkXEvent *xev,
 static GSource *gdk_display_source_new (GdkDisplay       *display);
 static gboolean gdk_check_xpending     (GdkDisplaySource *source);
 
-static void gdk_xsettings_watch_cb  (Window            window,
-				     Bool              is_start,
-				     long              mask,
-				     void             *cb_data);
-static void gdk_xsettings_notify_cb (const char       *name,
-				     XSettingsAction   action,
-				     XSettingsSetting *setting,
-				     void             *data);
+void _gdk_xsettings_watch_cb  (Display	      *display,
+			       Window          window,
+			       Bool            is_start,
+			       long            mask,
+			       void           *cb_data);
+void _gdk_xsettings_notify_cb (Display		*display,
+			       Window		 root_window,
+			       const char       *name,
+			       XSettingsAction   action,
+			       XSettingsSetting *setting,
+			       void             *data);
 
 /* Private variable declarations
  */
@@ -176,18 +179,18 @@ gdk_check_xpending (GdkDisplaySource* source)
     }
 }
 
-static XSettingsClient *xsettings_client;
-
 /*********************************************
  * Functions for maintaining the event queue *
  *********************************************/
 
 void 
-_gdk_events_init (GdkDisplay* display)
+_gdk_events_init (GdkDisplay *display)
 {
   GSource *source;
   GdkDisplaySource *display_source;
   GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
+  GdkScreenImplX11 *default_screen_impl = 
+		      GDK_SCREEN_IMPL_X11 (display_impl->default_screen);
   
   int connection_number = ConnectionNumber (display_impl->xdisplay);
   GDK_NOTE (MISC, g_message ("connection number: %d", connection_number));
@@ -211,12 +214,13 @@ _gdk_events_init (GdkDisplay* display)
 	gdk_atom_intern ("WM_PROTOCOLS", FALSE), 
 	gdk_wm_protocols_filter,   
 	NULL);
-  
-  xsettings_client = xsettings_client_new (display_impl->xdisplay,
-					   DefaultScreen (display_impl->xdisplay),
-					   gdk_xsettings_notify_cb,
-					   gdk_xsettings_watch_cb,
-					   NULL);
+  /* init the xsettings for the default screen */
+  default_screen_impl->xsettings_client = 
+	xsettings_client_new (default_screen_impl->xdisplay,
+			      default_screen_impl->screen_num,
+			      _gdk_xsettings_notify_cb,
+			      _gdk_xsettings_watch_cb,
+			      NULL);
 }
 
 /*
@@ -2193,8 +2197,10 @@ static struct
   { "Gtk/KeyThemeName", "gtk-key-theme-name" }
 };
 
-static void
-gdk_xsettings_notify_cb (const char       *name,
+void
+_gdk_xsettings_notify_cb (Display	  *display,
+			 Window		   root_window,
+			 const char       *name,
 			 XSettingsAction   action,
 			 XSettingsSetting *setting,
 			 void             *data)
@@ -2203,7 +2209,7 @@ gdk_xsettings_notify_cb (const char       *name,
   int i;
 
   new_event.type = GDK_SETTING;
-  new_event.setting.window = NULL;
+  new_event.setting.window = gdk_window_lookup_for_display (gdk_x11_display_manager_get_display (gdk_get_display_manager (), display), root_window);
   new_event.setting.send_event = FALSE;
   new_event.setting.name = NULL;
 
@@ -2249,17 +2255,31 @@ check_transform (const gchar *xsettings_name,
   else
     return TRUE;
 }
-
+#ifndef GDK_MULTIHEAD_SAFE
 gboolean
 gdk_setting_get (const gchar *name,
 		 GValue      *value)
 {
+  return gdk_setting_get_for_screen (gdk_get_default_screen (), name, value);
+}
+#endif
+
+
+gboolean
+gdk_setting_get_for_screen (GdkScreen   *screen,
+			    const gchar *name,
+			    GValue      *value)
+{
+
   const char *xsettings_name = NULL;
   XSettingsResult result;
   XSettingsSetting *setting;
+  GdkScreenImplX11 *screen_impl;
   gboolean success = FALSE;
   gint i;
   GValue tmp_val = { 0, };
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
+  screen_impl = GDK_SCREEN_IMPL_X11 (screen);
 
   for (i = 0; i < G_N_ELEMENTS (settings_map) ; i++)
     if (strcmp (settings_map[i].gdk_name, name) == 0)
@@ -2271,7 +2291,8 @@ gdk_setting_get (const gchar *name,
   if (!xsettings_name)
     return FALSE;
 
-  result = xsettings_client_get_setting (xsettings_client, xsettings_name, &setting);
+  result = xsettings_client_get_setting (screen_impl->xsettings_client, 
+					 xsettings_name, &setting);
   if (result != XSETTINGS_SUCCESS)
     return FALSE;
 
@@ -2330,23 +2351,29 @@ gdk_xsettings_client_event_filter (GdkXEvent *xevent,
 				   GdkEvent  *event,
 				   gpointer   data)
 {
-  if (xsettings_client_process_event (xsettings_client, (XEvent *)xevent))
+  GdkScreenImplX11 *screen = GDK_SCREEN_IMPL_X11 (data);
+  if (xsettings_client_process_event (screen->xsettings_client, (XEvent *)xevent))
     return GDK_FILTER_REMOVE;
   else
     return GDK_FILTER_CONTINUE;
 }
 
-static void 
-gdk_xsettings_watch_cb (Window window,
-			Bool   is_start,
-			long   mask,
-			void  *cb_data)
+void 
+_gdk_xsettings_watch_cb (Display *display,
+			 Window   window,
+			 Bool	  is_start,
+			 long     mask,
+			 void    *cb_data)
 {
-  GdkWindow *gdkwin;
+  GdkWindow *gdkwin = NULL;
+  GdkScreen *screen;
 
-  gdkwin = gdk_window_lookup_for_all_displays (window);
+  gdkwin = gdk_window_lookup_for_display (gdk_x11_display_manager_get_display (gdk_get_display_manager (), display), window);
+  g_assert (gdkwin != NULL);
+  screen = gdk_drawable_get_screen (gdkwin);
+  
   if (is_start)
-    gdk_window_add_filter (gdkwin, gdk_xsettings_client_event_filter, NULL);
+    gdk_window_add_filter (gdkwin, gdk_xsettings_client_event_filter, screen);
   else
-    gdk_window_remove_filter (gdkwin, gdk_xsettings_client_event_filter, NULL);
+    gdk_window_remove_filter (gdkwin, gdk_xsettings_client_event_filter, screen);
 }

@@ -4061,27 +4061,28 @@ blink_cb (gpointer data)
 static void
 gtk_entry_check_cursor_blink (GtkEntry *entry)
 {
-  if (cursor_blinks (entry))
+  if (GTK_WIDGET_REALIZED (entry))
     {
-      if (!entry->blink_timeout)
+      if (cursor_blinks (entry))
 	{
-	  entry->blink_timeout = gtk_timeout_add (get_cursor_time (entry) * CURSOR_ON_MULTIPLIER,
-						  blink_cb,
-						  entry);
-	  show_cursor (entry);
+	  if (!entry->blink_timeout)
+	    {
+	      entry->blink_timeout = gtk_timeout_add (get_cursor_time (entry) * CURSOR_ON_MULTIPLIER,
+						      blink_cb,
+						      entry);
+	      show_cursor (entry);
+	    }
 	}
-    }
-  else
-    {
-      if (entry->blink_timeout)  
-	{ 
-	  gtk_timeout_remove (entry->blink_timeout);
-	  entry->blink_timeout = 0;
+      else
+	{
+	  if (entry->blink_timeout)  
+	    { 
+	      gtk_timeout_remove (entry->blink_timeout);
+	      entry->blink_timeout = 0;
+	    }
+	  entry->cursor_visible = TRUE;
 	}
-      
-      entry->cursor_visible = TRUE;
-    }
-  
+      }
 }
 
 static void

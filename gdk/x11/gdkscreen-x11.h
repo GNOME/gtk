@@ -25,6 +25,7 @@
 #define __GDK_SCREEN_X11_H__
 
 #include "gdkprivate-x11.h"
+#include "xsettings-client.h"
 #include <gdk/gdkscreen.h>
 #include <gdk/gdkvisual.h>
 #include <X11/X.h>
@@ -68,6 +69,8 @@ struct _GdkScreenImplX11
   gboolean colormap_initialised;
   GdkColormap *default_colormap;
   GdkColormap *system_colormap;
+  /* X settings */
+  XSettingsClient *xsettings_client;
 };
   
 struct _GdkScreenImplX11Class

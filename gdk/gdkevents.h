@@ -484,10 +484,14 @@ void gdk_add_client_message_filter_for_display (GdkDisplay   *display,
 void gdk_add_client_message_filter (GdkAtom       message_type,
 				    GdkFilterFunc func,
 				    gpointer      data);
-#endif
-
 gboolean gdk_setting_get (const gchar *name,
 			  GValue      *value); 
+#endif
+gboolean
+gdk_setting_get_for_screen (GdkScreen   *screen,
+			    const gchar *name,
+			    GValue      *value);
+
 
 #ifdef __cplusplus
 }

@@ -28,7 +28,8 @@ enum {
   PROP_CURSOR_BLINK_TIME,
   PROP_SPLIT_CURSOR,
   PROP_THEME_NAME,
-  PROP_KEY_THEME_NAME
+  PROP_KEY_THEME_NAME,
+  PROP_SCREEN
 };
 
 
@@ -56,7 +57,6 @@ static guint	settings_install_property_parser (GtkSettingsClass      *class,
 
 /* --- variables --- */
 static gpointer		 parent_class = NULL;
-static GtkSettings	*the_singleton = NULL;
 static GQuark		 quark_property_parser = 0;
 static GSList           *object_list = NULL;
 static guint		 class_n_properties = 0;
@@ -138,6 +138,15 @@ gtk_settings_class_init (GtkSettingsClass *class)
   gobject_class->set_property = gtk_settings_set_property;
   gobject_class->notify = gtk_settings_notify;
 
+  g_object_class_install_property (gobject_class,
+				   PROP_SCREEN,
+				   g_param_spec_object ("screen",
+ 							_("Screen"),
+ 							_("The screen this GtkSettings manages"),
+							GDK_TYPE_SCREEN,
+ 							G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+
   quark_property_parser = g_quark_from_static_string ("gtk-rc-property-parser");
 
   result = settings_install_property_parser (class,
@@ -213,30 +222,35 @@ gtk_settings_constructor (GType			 type,
 			  GObjectConstructParam *construct_properties)
 {
   GObject *object;
-
-  /* currently we're a singleton, that might change with multiple display support though */
-  if (!the_singleton)
-    {
-      object = G_OBJECT_CLASS (parent_class)->constructor (type,
-							   n_construct_properties,
-							   construct_properties);
-      the_singleton = GTK_SETTINGS (g_object_ref (object));
-    }
-  else
-    object = g_object_ref (G_OBJECT (the_singleton));
-
+  
+  object = G_OBJECT_CLASS (parent_class)->constructor (type,
+						       n_construct_properties,
+						       construct_properties);
   return object;
 }
 
 GtkSettings*
+gtk_settings_get_for_screen (GdkScreen *screen)
+{
+  GtkSettings *settings;
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  settings = g_object_get_data (G_OBJECT (screen), "gtk_settings");
+  if (!settings)
+    {
+      settings = g_object_new (GTK_TYPE_SETTINGS, "screen", screen, NULL);
+      settings->screen = screen;
+      g_object_set_data (G_OBJECT (screen), "gtk_settings", settings); 
+      gtk_rc_reparse_all_for_settings (settings, TRUE);
+    }
+  return settings;
+}
+#ifndef GDK_MULTIHEAD_SAFE
+GtkSettings*
 gtk_settings_get_default (void)
 {
-  if (!the_singleton)
-    g_object_new (GTK_TYPE_SETTINGS, NULL);
-  
-  return the_singleton;	/* we don't add a reference count here, we'd be settings_ref_global() if we did */
+  return gtk_settings_get_for_screen (gdk_get_default_screen ());
 }
-
+#endif 
 static void
 gtk_settings_set_property (GObject      *object,
 			   guint	 property_id,
@@ -244,8 +258,11 @@ gtk_settings_set_property (GObject      *object,
 			   GParamSpec   *pspec)
 {
   GtkSettings *settings = GTK_SETTINGS (object);
-  
-  g_value_copy (value, settings->property_values + property_id - 1);
+
+  if (G_VALUE_HOLDS(value, GDK_TYPE_SCREEN))
+    settings->screen = g_value_get_object (value);
+  else
+    g_value_copy (value, settings->property_values + property_id - 1);
 }
 
 static void
@@ -256,11 +273,18 @@ gtk_settings_get_property (GObject     *object,
 {
   GtkSettings *settings = GTK_SETTINGS (object);
 
+  if (G_VALUE_HOLDS(value, GDK_TYPE_SCREEN))
+    {
+      if (!settings->screen)
+	g_value_set_object (value, settings->screen);
+      return;
+    }
+
   if (g_value_type_transformable (G_TYPE_INT, G_VALUE_TYPE (value)) ||
       g_value_type_transformable (G_TYPE_STRING, G_VALUE_TYPE (value)) ||
       g_value_type_transformable (GDK_TYPE_COLOR, G_VALUE_TYPE (value)))
     {
-      if (gdk_setting_get (pspec->name, value))
+      if (gdk_setting_get_for_screen (settings->screen, pspec->name, value))
         g_param_value_validate (pspec, value);
       else
         g_value_copy (settings->property_values + property_id - 1, value);
@@ -273,7 +297,7 @@ gtk_settings_get_property (GObject     *object,
       
       g_value_init (&val, G_TYPE_STRING);
 
-      if (!gdk_setting_get (pspec->name, &val))
+      if (!gdk_setting_get_for_screen (settings->screen, pspec->name, &val))
         {
           g_value_copy (settings->property_values + property_id - 1, value);
         }
@@ -902,7 +926,8 @@ gtk_rc_property_parse_border (const GParamSpec *pspec,
 void
 _gtk_settings_handle_event (GdkEventSetting *event)
 {
-  GtkSettings *settings = gtk_settings_get_default ();
+  GtkSettings *settings = 
+    gtk_settings_get_for_screen (gdk_drawable_get_screen (event->window));
   
   if (g_object_class_find_property (G_OBJECT_GET_CLASS (settings), event->name))
     g_object_notify (G_OBJECT (settings), event->name);

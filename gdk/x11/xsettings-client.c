@@ -69,7 +69,9 @@ notify_changes (XSettingsClient *client,
 
       if (cmp < 0)
 	{
-	  client->notify (old_iter->setting->name,
+	  client->notify (client->display,
+			  RootWindow (client->display, client->screen),
+			  old_iter->setting->name,
 			  XSETTINGS_ACTION_DELETED,
 			  NULL,
 			  client->cb_data);
@@ -78,14 +80,18 @@ notify_changes (XSettingsClient *client,
 	{
 	  if (!xsettings_setting_equal (old_iter->setting,
 					new_iter->setting))
-	    client->notify (old_iter->setting->name,
+	    client->notify (client->display,
+			    RootWindow (client->display, client->screen),
+			    old_iter->setting->name,
 			    XSETTINGS_ACTION_CHANGED,
 			    new_iter->setting,
 			    client->cb_data);
 	}
       else
 	{
-	  client->notify (new_iter->setting->name,
+	  client->notify (client->display,
+			  RootWindow (client->display, client->screen),
+			  new_iter->setting->name,
 			  XSETTINGS_ACTION_NEW,
 			  new_iter->setting,
 			  client->cb_data);
@@ -409,7 +415,8 @@ static void
 check_manager_window (XSettingsClient *client)
 {
   if (client->manager_window && client->watch)
-    client->watch (client->manager_window, False, 0, client->cb_data);
+    client->watch (client->display, client->manager_window, 
+		   False, 0, client->cb_data);
   
   XGrabServer (client->display);
 
@@ -423,7 +430,7 @@ check_manager_window (XSettingsClient *client)
   XFlush (client->display);
 
   if (client->manager_window && client->watch)
-    client->watch (client->manager_window, True, 
+    client->watch (client->display, client->manager_window, True, 
 		   PropertyChangeMask | StructureNotifyMask,
 		   client->cb_data);
   
@@ -463,8 +470,8 @@ xsettings_client_new (Display             *display,
   add_events (display, RootWindow (display, screen), StructureNotifyMask);
 
   if (client->watch)
-    client->watch (RootWindow (display, screen), True, StructureNotifyMask,
-		   client->cb_data);
+    client->watch (client->display, RootWindow (display, screen), 
+		   True, StructureNotifyMask, client->cb_data);
 
   check_manager_window (client);
 
@@ -475,10 +482,11 @@ void
 xsettings_client_destroy (XSettingsClient *client)
 {
   if (client->watch)
-    client->watch (RootWindow (client->display, client->screen),
+    client->watch (client->display, RootWindow (client->display, client->screen),
 		   False, 0, client->cb_data);
   if (client->manager_window && client->watch)
-    client->watch (client->manager_window, False, 0, client->cb_data);
+    client->watch (client->display, client->manager_window, 
+		   False, 0, client->cb_data);
   
   xsettings_list_free (client->settings);
   free (client);

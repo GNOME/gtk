@@ -32,6 +32,7 @@
 #include "gdkscreen-x11.h"
 #include "gdkinternals.h"
 #include "gdkinputprivate.h"
+#include "xsettings-client.h"
 
 static void       gdk_x11_display_impl_class_init         (GdkDisplayImplX11Class *class);
 static gint       gdk_x11_display_impl_get_n_screens      (GdkDisplay             *display);
@@ -40,6 +41,17 @@ static GdkScreen *gdk_x11_display_impl_get_screen         (GdkDisplay           
 static char *     gdk_x11_display_impl_get_display_name   (GdkDisplay             *display);
 static GdkScreen *gdk_x11_display_impl_get_default_screen (GdkDisplay             *display);
 
+extern void _gdk_xsettings_watch_cb  (Display	       *display,
+				      Window            window,
+				      Bool              is_start,
+				      long              mask,
+				      void             *cb_data);
+extern void _gdk_xsettings_notify_cb (Display	       *display,
+				      Window	        root_window,
+				      const char       *name,
+				      XSettingsAction   action,
+				      XSettingsSetting *setting,
+				      void             *data);
 GType
 gdk_x11_display_impl_get_type ()
 {
@@ -170,6 +182,13 @@ gdk_x11_display_impl_get_screen (GdkDisplay * display,
 	    _gdk_visual_init (screen);
 	  if (!screen_impl->colormap_initialised)
 	    _gdk_windowing_window_init (screen);
+	  if (!screen_impl->xsettings_client)
+	    screen_impl->xsettings_client = xsettings_client_new (screen_impl->xdisplay,
+								  screen_impl->screen_num,
+								  _gdk_xsettings_notify_cb,
+								  _gdk_xsettings_watch_cb,
+								  NULL);
+	    
 	  return screen;
 	}
       tmp_list = tmp_list->next;
@@ -306,7 +325,7 @@ gdk_display_init_new (int argc, char **argv, char *display_name)
   _gdk_windowing_image_init (display);
   _gdk_events_init (display);
   _gdk_input_init (display);
-  gdk_dnd_init (display);
+  _gdk_dnd_init (display);
   
   return display;
 }

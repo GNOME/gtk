@@ -83,7 +83,7 @@ make_selection_dialog (GdkScreen * screen,
   gtk_box_pack_start (GTK_BOX (button_box), quit, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (quit), "clicked", G_CALLBACK (gtk_main_quit), NULL);
-  g_signal_connect (G_OBJECT (quit), "clicked", G_CALLBACK (clear_entry), double_entry);
+  g_signal_connect (G_OBJECT (clear), "clicked", G_CALLBACK (clear_entry), double_entry);
 
   gtk_widget_show_all (window);
 }

@@ -29,6 +29,7 @@
 
 
 #include <gtk/gtkstyle.h>
+#include <gdk/gdk.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -130,9 +131,16 @@ gchar*   gtk_rc_find_pixmap_in_path (GtkSettings  *context,
 				     GScanner     *scanner,
 				     const gchar  *pixmap_file);
 
+#ifndef GDK_MULTIHEAD_SAFE
 void	  gtk_rc_parse			(const gchar *filename);
 void	  gtk_rc_parse_string		(const gchar *rc_string);
+#endif
 gboolean  gtk_rc_reparse_all		(void);
+void	  gtk_rc_parse_string_for_screen (GdkScreen   *screen,
+					  const gchar *rc_string);
+void	  gtk_rc_parse_for_screen	 (GdkScreen   *screen,
+					  const gchar *filename);
+gboolean  gtk_rc_reparse_all_for_screen	 (GdkScreen *screen);
 
 #ifndef GTK_DISABLE_DEPRECATED
 void	  gtk_rc_add_widget_name_style	(GtkRcStyle   *rc_style,

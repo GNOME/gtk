@@ -55,6 +55,7 @@
 #include "gtkiconfactory.h"
 #include "gtksettings.h"
 #include "gtkwindow.h"
+#include "gdk/gdk.h"
 
 #ifdef G_OS_WIN32
 #include <io.h>
@@ -797,17 +798,29 @@ _gtk_rc_init (void)
       gtk_rc_add_initial_default_files ();
     }
   
-  gtk_rc_reparse_all_for_settings (gtk_settings_get_default (), TRUE);
+  gtk_rc_reparse_all_for_settings (gtk_settings_get_for_screen (gdk_get_default_screen ()), TRUE);
 }
-  
+
+void
+gtk_rc_parse_string_for_screen (GdkScreen   *screen,
+				const gchar *rc_string)
+{
+  g_return_if_fail (rc_string != NULL);
+
+  gtk_rc_parse_any (gtk_rc_context_get (gtk_settings_get_for_screen (screen)),
+		    "-", -1, rc_string);    
+}
+
+#ifndef GDK_MULTIHEAD_SAFE
 void
 gtk_rc_parse_string (const gchar *rc_string)
 {
   g_return_if_fail (rc_string != NULL);
 
-  gtk_rc_parse_any (gtk_rc_context_get (gtk_settings_get_default ()),
+  gtk_rc_parse_any (gtk_rc_context_get (gtk_settings_get_for_screen (gdk_get_default_scren ())),
 		    "-", -1, rc_string);	/* FIXME */
 }
+#endif
 
 static void
 gtk_rc_parse_file (GtkRcContext *context,
@@ -895,13 +908,25 @@ gtk_rc_parse_file (GtkRcContext *context,
 }
 
 void
+gtk_rc_parse_for_screen (GdkScreen   *screen,
+			 const gchar *filename)
+{
+  g_return_if_fail (filename != NULL);
+
+  gtk_rc_parse_file (gtk_rc_context_get (gtk_settings_get_for_screen (screen)),
+		     filename, GTK_PATH_PRIO_RC, TRUE); /* FIXME */
+}
+
+#ifndef GDK_MULTIHEAD_SAFE
+void
 gtk_rc_parse (const gchar *filename)
 {
   g_return_if_fail (filename != NULL);
 
-  gtk_rc_parse_file (gtk_rc_context_get (gtk_settings_get_default ()),
+  gtk_rc_parse_file (gtk_rc_context_get (gtk_settings_get_for_screen (gdk_get_default_scren ())),
 		     filename, GTK_PATH_PRIO_RC, TRUE); /* FIXME */
 }
+#endif
 
 /* Handling of RC styles */
 
@@ -1399,20 +1424,37 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
 
   return mtime_modified;
 }
+/**
+ * gtk_rc_reparse_all_for_screen:
+ * @screen: a #GdkScreen
+ * 
+ * If the modification time on any previously read file for the
+ * #GtkSettings attached to the #GdkScreen has changed, discard 
+ * all style information and then reread all previously read RC
+ * files.
+ * 
+ * Return value:  %TRUE if the files were reread.
+ **/
+gboolean
+gtk_rc_reparse_all_for_screen (GdkScreen *screen)
+{
+  return gtk_rc_reparse_all_for_settings (gtk_settings_get_for_screen (screen), FALSE);
+}
 
 /**
  * gtk_rc_reparse_all:
  * 
  * If the modification time on any previously read file for the
- * default #GtkSettings has changed, discard all style information
- * and then reread all previously read RC files.
+ * #GtkSettings attached to the default screen has changed, discard 
+ * all style information and then reread all previously read RC files.
  * 
  * Return value:  %TRUE if the files were reread.
  **/
 gboolean
 gtk_rc_reparse_all (void)
 {
-  return gtk_rc_reparse_all_for_settings (gtk_settings_get_default (), FALSE);
+  return gtk_rc_reparse_all_for_settings (
+    gtk_settings_get_for_screen (gdk_get_default_screen ()), FALSE);
 }
 
 static GSList *
@@ -1658,7 +1700,7 @@ gtk_rc_add_widget_name_style (GtkRcStyle  *rc_style,
   g_return_if_fail (rc_style != NULL);
   g_return_if_fail (pattern != NULL);
 
-  context = gtk_rc_context_get (gtk_settings_get_default ());
+  context = gtk_rc_context_get (gtk_settings_get_for_screen (gdk_get_default_screen ()));
   
   context->rc_sets_widget = gtk_rc_add_rc_sets (context->rc_sets_widget, rc_style, pattern);
 }
@@ -1672,7 +1714,7 @@ gtk_rc_add_widget_class_style (GtkRcStyle  *rc_style,
   g_return_if_fail (rc_style != NULL);
   g_return_if_fail (pattern != NULL);
 
-  context = gtk_rc_context_get (gtk_settings_get_default ());
+  context = gtk_rc_context_get (gtk_settings_get_for_screen (gdk_get_default_screen ()));
   
   context->rc_sets_widget_class = gtk_rc_add_rc_sets (context->rc_sets_widget_class, rc_style, pattern);
 }
@@ -1686,7 +1728,7 @@ gtk_rc_add_class_style (GtkRcStyle  *rc_style,
   g_return_if_fail (rc_style != NULL);
   g_return_if_fail (pattern != NULL);
 
-  context = gtk_rc_context_get (gtk_settings_get_default ());
+  context = gtk_rc_context_get (gtk_settings_get_for_screen (gdk_get_default_screen ()));
   
   context->rc_sets_class = gtk_rc_add_rc_sets (context->rc_sets_class, rc_style, pattern);
 }
