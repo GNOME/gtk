@@ -1,3 +1,8 @@
+Sun Feb 29 04:43:29 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkentry.c (gtk_entry_completion_key_press): Make Tab and
+	Shift-Tab work when the completion popup is shown.
+
 2004-02-28  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (create_folder_tree): Use "Name" for

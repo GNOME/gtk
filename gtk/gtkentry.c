@@ -4634,14 +4634,33 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
 
       return TRUE;
     }
-  else if (event->keyval == GDK_ISO_Enter ||
-           event->keyval == GDK_Return ||
-           event->keyval == GDK_Escape)
+  else if (event->keyval == GDK_Escape) 
     {
       _gtk_entry_completion_popdown (completion);
 
-      if (event->keyval == GDK_Escape)
-        return TRUE;
+      return TRUE;
+    }
+  else if (event->keyval == GDK_Tab || 
+	   event->keyval == GDK_KP_Tab ||
+	   event->keyval == GDK_ISO_Left_Tab) 
+    {
+      GtkWidget *entry;
+      GtkDirectionType dir = event->keyval == GDK_ISO_Left_Tab ? 
+	GTK_DIR_TAB_BACKWARD : GTK_DIR_TAB_FORWARD;
+
+      _gtk_entry_completion_popdown (completion);
+      
+      entry = gtk_entry_completion_get_entry (completion);
+
+      gtk_widget_child_focus (gtk_widget_get_toplevel (entry), 
+			      GTK_DIR_TAB_FORWARD);
+
+      return TRUE;
+    }
+  else if (event->keyval == GDK_ISO_Enter || 
+	   event->keyval == GDK_Return)
+    {
+      _gtk_entry_completion_popdown (completion);
 
       if (completion->priv->current_selected < matches)
         {
