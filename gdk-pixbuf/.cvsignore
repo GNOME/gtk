@@ -10,4 +10,5 @@ gdk-pixbuf-marshal.c
 gdk-pixbuf-marshal.h
 make-inline-pixbuf
 test-gdk-pixbuf
+test-loaders
 gdk-pixbuf-features.h
