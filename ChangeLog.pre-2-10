@@ -1,3 +1,7 @@
+2004-11-19  Christian Rose  <menthos@menthos.com>
+
+	* configure.in: Added "rw" to ALL_LINGUAS.
+
 2004-11-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaboutdialog.c (gtk_about_dialog_set_email_hook) 
