@@ -2708,6 +2708,49 @@ create_modal_window (void)
 }
 
 /*
+ * GtkMessageDialog
+ */
+
+static void
+make_message_dialog (GtkWidget **dialog,
+                     GtkMessageType  type,
+                     GtkButtonsType  buttons)
+{
+  if (*dialog)
+    {
+      if (GTK_WIDGET_REALIZED (*dialog))
+        gdk_window_show ((*dialog)->window);
+
+      return;
+    }
+
+  *dialog = gtk_message_dialog_new (NULL, type, buttons, GTK_DIALOG_DESTROY_WITH_PARENT,
+                                    "This is a message dialog; it can wrap long lines. This is a long line. La la la. Look this line is wrapped. Blah blah blah blah blah blah.");
+
+
+  gtk_signal_connect (GTK_OBJECT (*dialog),
+                      "destroy",
+                      GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+                      dialog);
+  
+  gtk_widget_show (*dialog);
+}
+
+static void
+create_message_dialog (void)
+{
+  static GtkWidget *info = NULL;
+  static GtkWidget *warning = NULL;
+  static GtkWidget *error = NULL;
+  static GtkWidget *question = NULL;
+
+  make_message_dialog (&info, GTK_MESSAGE_INFO, GTK_BUTTONS_OK);
+  make_message_dialog (&warning, GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE);
+  make_message_dialog (&error, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK_CANCEL);
+  make_message_dialog (&question, GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO);
+}
+
+/*
  * GtkScrolledWindow
  */
 
@@ -8598,6 +8641,7 @@ create_main_window (void)
       { "layout", create_layout },
       { "list", create_list },
       { "menus", create_menus },
+      { "message dialog", create_message_dialog },
       { "modal window", create_modal_window },
       { "notebook", create_notebook },
       { "panes", create_panes },

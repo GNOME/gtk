@@ -97,7 +97,11 @@ gtk_stock_lookup (const gchar  *stock_id,
   found = g_hash_table_lookup (stock_hash, stock_id);
 
   if (found)
-    *item = *found;
+    {
+      *item = *found;
+      if (item->label)
+        item->label = dgettext (item->translation_domain, item->label);
+    }
 
   return found != NULL;
 }

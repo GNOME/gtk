@@ -40,11 +40,11 @@ static gint gtk_dialog_key_press  (GtkWidget      *widget,
 
 static void gtk_dialog_add_buttons_valist(GtkDialog   *dialog,
                                           const gchar *first_button_text,
-                                          gint         first_action_id,
+                                          gint         first_response_id,
                                           va_list      args);
 
 enum {
-  ACTION,
+  RESPONSE,
   LAST_SIGNAL
 };
 
@@ -87,11 +87,11 @@ gtk_dialog_class_init (GtkDialogClass *class)
 
   parent_class = g_type_class_peek_parent (class);
   
-  dialog_signals[ACTION] =
-    gtk_signal_new ("action",
+  dialog_signals[RESPONSE] =
+    gtk_signal_new ("response",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkDialogClass, action),
+                    GTK_SIGNAL_OFFSET (GtkDialogClass, response),
                     gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1,
                     GTK_TYPE_INT);
@@ -107,10 +107,17 @@ gtk_dialog_init (GtkDialog *dialog)
   GtkWidget *separator;
 
   dialog->vbox = gtk_vbox_new (FALSE, 0);
+
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->vbox), 2);
+  
   gtk_container_add (GTK_CONTAINER (dialog), dialog->vbox);
   gtk_widget_show (dialog->vbox);
 
   dialog->action_area = gtk_hbutton_box_new ();
+
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog->action_area),
+                             GTK_BUTTONBOX_SPREAD);
+  
   gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 10);
   gtk_box_pack_end (GTK_BOX (dialog->vbox), dialog->action_area, FALSE, TRUE, 0);
   gtk_widget_show (dialog->action_area);
@@ -176,7 +183,7 @@ gtk_dialog_new_with_buttons (const gchar    *title,
                              GtkWindow      *parent,
                              GtkDialogFlags  flags,
                              const gchar    *first_button_text,
-                             gint            first_action_id,
+                             gint            first_response_id,
                              ...)
 {
   GtkDialog *dialog;
@@ -184,10 +191,10 @@ gtk_dialog_new_with_buttons (const gchar    *title,
   
   dialog = GTK_DIALOG (gtk_dialog_new_empty (title, parent, flags));
 
-  va_start (args, first_action_id);
+  va_start (args, first_response_id);
 
   gtk_dialog_add_buttons_valist (dialog,
-                                 first_button_text, first_action_id,
+                                 first_button_text, first_response_id,
                                  args);
   
   va_end (args);
@@ -195,25 +202,25 @@ gtk_dialog_new_with_buttons (const gchar    *title,
   return GTK_WIDGET (dialog);
 }
 
-typedef struct _ActionData ActionData;
+typedef struct _ResponseData ResponseData;
 
-struct _ActionData
+struct _ResponseData
 {
-  gint action_id;
+  gint response_id;
 };
 
-static ActionData*
-get_action_data (GtkWidget *widget)
+static ResponseData*
+get_response_data (GtkWidget *widget)
 {
-  ActionData *ad = gtk_object_get_data (GTK_OBJECT (widget),
-                                        "___gtk_dialog_action_data");
+  ResponseData *ad = gtk_object_get_data (GTK_OBJECT (widget),
+                                          "___gtk_dialog_response_data");
 
   if (ad == NULL)
     {
-      ad = g_new (ActionData, 1);
+      ad = g_new (ResponseData, 1);
 
       gtk_object_set_data_full (GTK_OBJECT (widget),
-                                "___gtk_dialog_action_data",
+                                "___gtk_dialog_response_data",
                                 ad,
                                 g_free);
     }
@@ -224,19 +231,19 @@ get_action_data (GtkWidget *widget)
 static void
 action_widget_activated (GtkWidget *widget, GtkDialog *dialog)
 {
-  ActionData *ad;
-  gint action_id;
+  ResponseData *ad;
+  gint response_id;
   
   g_return_if_fail (GTK_IS_DIALOG (dialog));
 
-  action_id = GTK_ACTION_NONE;
+  response_id = GTK_RESPONSE_NONE;
   
-  ad = get_action_data (widget);
+  ad = get_response_data (widget);
 
   if (ad != NULL)
-    action_id = ad->action_id;
+    response_id = ad->response_id;
 
-  gtk_dialog_action (dialog, action_id);
+  gtk_dialog_response (dialog, response_id);
 }
 
 static void
@@ -260,16 +267,16 @@ connect_action_widget (GtkDialog *dialog, GtkWidget *child)
 void
 gtk_dialog_add_action_widget  (GtkDialog *dialog,
                                GtkWidget *widget,
-                               gint       action_id)
+                               gint       response_id)
 {
-  ActionData *ad;
+  ResponseData *ad;
   
   g_return_if_fail (GTK_IS_DIALOG (dialog));
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  ad = get_action_data (widget);
+  ad = get_response_data (widget);
 
-  ad->action_id = action_id;
+  ad->response_id = response_id;
 
   connect_action_widget (dialog, widget);
   
@@ -281,75 +288,81 @@ gtk_dialog_add_action_widget  (GtkDialog *dialog,
 void
 gtk_dialog_add_button (GtkDialog   *dialog,
                        const gchar *button_text,
-                       gint         action_id)
+                       gint         response_id)
 {
+  GtkWidget *button;
+  
   g_return_if_fail (GTK_IS_DIALOG (dialog));
   g_return_if_fail (button_text != NULL);
 
+  button = gtk_button_new_stock (button_text, NULL);
+
+  gtk_widget_show (button);
+  
   gtk_dialog_add_action_widget (dialog,
-                                gtk_button_new_stock (button_text, NULL),
-                                action_id);
+                                button,
+                                response_id);
 }
 
 static void
 gtk_dialog_add_buttons_valist(GtkDialog      *dialog,
                               const gchar    *first_button_text,
-                              gint            first_action_id,
+                              gint            first_response_id,
                               va_list         args)
 {
   const gchar* text;
-  gint action_id;
+  gint response_id;
 
   text = first_button_text;
-  action_id = first_action_id;
+  response_id = first_response_id;
 
   while (text != NULL)
     {
-      gtk_dialog_add_button (dialog, text, action_id);
+      gtk_dialog_add_button (dialog, text, response_id);
 
       text = va_arg (args, gchar*);
       if (text == NULL)
         break;
-      action_id = va_arg (args, int);
+      response_id = va_arg (args, int);
     }
 }
 
 void
 gtk_dialog_add_buttons (GtkDialog   *dialog,
                         const gchar *first_button_text,
-                        gint         first_action_id,
+                        gint         first_response_id,
                         ...)
 {
   
   va_list args;
 
-  va_start (args, first_action_id);
+  va_start (args, first_response_id);
 
   gtk_dialog_add_buttons_valist (dialog,
-                                 first_button_text, first_action_id,
+                                 first_button_text, first_response_id,
                                  args);
   
   va_end (args);
 }
 
 void
-gtk_dialog_action (GtkDialog *dialog,
-                   gint       action_id)
+gtk_dialog_response (GtkDialog *dialog,
+                     gint       response_id)
 {
   g_return_if_fail (dialog != NULL);
   g_return_if_fail (GTK_IS_DIALOG (dialog));
 
   gtk_signal_emit (GTK_OBJECT (dialog),
-                   dialog_signals[ACTION],
-                   action_id);
+                   dialog_signals[RESPONSE],
+                   response_id);
 }
 
 
 typedef struct {
   GtkDialog *dialog;
-  gint action_id;
+  gint response_id;
   GMainLoop *loop;
-  guint action_handler;
+  guint response_handler;
   guint destroy_handler;
   guint delete_handler;
 } RunInfo;
@@ -368,15 +381,15 @@ run_destroy_handler (GtkDialog *dialog, gpointer data)
 }
 
 static void
-run_action_handler (GtkDialog *dialog,
-                    gint action_id,
-                    gpointer data)
+run_response_handler (GtkDialog *dialog,
+                      gint response_id,
+                      gpointer data)
 {
   RunInfo *ri;
 
   ri = data;
 
-  ri->action_id = action_id;
+  ri->response_id = response_id;
 
   run_destroy_handler (dialog, data);
 }
@@ -394,7 +407,7 @@ run_delete_handler (GtkDialog *dialog,
 gint
 gtk_dialog_run (GtkDialog *dialog)
 {
-  RunInfo ri = { NULL, GTK_ACTION_NONE, NULL, 0, 0 };
+  RunInfo ri = { NULL, GTK_RESPONSE_NONE, NULL, 0, 0 };
   gboolean was_modal;
   
   g_return_val_if_fail (dialog != NULL, -1);
@@ -407,10 +420,10 @@ gtk_dialog_run (GtkDialog *dialog)
     gtk_window_set_modal(GTK_WINDOW (dialog),TRUE);
 
 
-  ri.action_handler =
+  ri.response_handler =
     gtk_signal_connect (GTK_OBJECT (dialog),
-                        "action",
-                        GTK_SIGNAL_FUNC (run_action_handler),
+                        "response",
+                        GTK_SIGNAL_FUNC (run_response_handler),
                         &ri);
 
   ri.destroy_handler =
@@ -437,13 +450,13 @@ gtk_dialog_run (GtkDialog *dialog)
         gtk_window_set_modal(GTK_WINDOW(dialog), FALSE);
       
       gtk_signal_disconnect (GTK_OBJECT (dialog), ri.destroy_handler);
-      gtk_signal_disconnect (GTK_OBJECT (dialog), ri.action_handler);
+      gtk_signal_disconnect (GTK_OBJECT (dialog), ri.response_handler);
       gtk_signal_disconnect (GTK_OBJECT (dialog), ri.delete_handler);
     }
 
   gtk_object_unref (GTK_OBJECT (dialog));
 
-  return ri.action_id;
+  return ri.response_id;
 }
 
 

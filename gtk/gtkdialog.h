@@ -55,14 +55,14 @@ typedef enum
 */
 typedef enum
 {
-  /* GTK returns this if an action widget has no action_id,
-     or the dialog gets destroyed with no action */
-  GTK_ACTION_NONE = 0,
+  /* GTK returns this if an response widget has no response_id,
+     or the dialog gets destroyed with no response */
+  GTK_RESPONSE_NONE = 0,
   /* GTK won't return these unless you pass them in
-     as the action for an action widget */
-  GTK_ACTION_REJECT = 1,
-  GTK_ACTION_ACCEPT = 2
-} GtkActionType;
+     as the response for an action widget */
+  GTK_RESPONSE_REJECT = 1,
+  GTK_RESPONSE_ACCEPT = 2
+} GtkResponseType;
 
 
 #define GTK_TYPE_DIALOG                  (gtk_dialog_get_type ())
@@ -88,7 +88,7 @@ struct _GtkDialogClass
 {
   GtkWindowClass parent_class;
 
-  void (* action) (GtkDialog *dialog, gint action_id);
+  void (* response) (GtkDialog *dialog, gint response_id);
 };
 
 
@@ -101,28 +101,28 @@ GtkWidget* gtk_dialog_new_empty        (const gchar     *title,
 GtkWidget* gtk_dialog_new_with_buttons (const gchar     *title,
                                         GtkWindow       *parent,
                                         GtkDialogFlags   flags,
-                                        const gchar *first_button_text,
-                                        gint         first_action_id,
+                                        const gchar     *first_button_text,
+                                        gint             first_response_id,
                                         ...);
 
 void gtk_dialog_add_action_widget  (GtkDialog *dialog,
                                     GtkWidget *widget,
-                                    gint       action_id);
+                                    gint       response_id);
 
 void gtk_dialog_add_button         (GtkDialog   *dialog,
                                     const gchar *button_text,
-                                    gint         action_id);
+                                    gint         response_id);
 
 void gtk_dialog_add_buttons        (GtkDialog   *dialog,
                                     const gchar *first_button_text,
-                                    gint         first_action_id,
+                                    gint         first_response_id,
                                     ...);
 
-/* Emit action signal */
-void gtk_dialog_action             (GtkDialog *dialog,
-                                    gint       action_id);
+/* Emit response signal */
+void gtk_dialog_response             (GtkDialog *dialog,
+                                      gint       response_id);
 
-/* Returns action_id */
+/* Returns response_id */
 gint gtk_dialog_run                (GtkDialog *dialog);
 
 #ifdef __cplusplus

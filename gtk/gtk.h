@@ -89,6 +89,7 @@
 #include <gtk/gtkmenufactory.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkmenushell.h>
+#include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkmisc.h>
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkobject.h>
