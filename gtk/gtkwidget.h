@@ -197,6 +197,8 @@ struct _GtkWidget
    */
   gchar *name;
   
+  /*< public >*/
+
   /* The style for the widget. The style contains the
    *  colors the widget should be drawn in for each state
    *  along with graphics contexts used to draw with and
@@ -218,6 +220,8 @@ struct _GtkWidget
    */
   GdkWindow *window;
   
+  /*< private >*/
+
   /* The widgets parent.
    */
   GtkWidget *parent;
