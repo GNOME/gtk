@@ -89,6 +89,33 @@ gdk_font_hash_lookup (GdkFontType type, const gchar *font_name)
     }
 }
 
+static const char *
+charset_name (DWORD charset)
+{
+  switch (charset)
+    {
+    case ANSI_CHARSET: return "ANSI";
+    case DEFAULT_CHARSET: return "DEFAULT";
+    case SYMBOL_CHARSET: return "SYMBOL";
+    case SHIFTJIS_CHARSET: return "SHIFTJIS";
+    case HANGEUL_CHARSET: return "HANGEUL";
+    case GB2312_CHARSET: return "GB2312";
+    case CHINESEBIG5_CHARSET: return "CHINESEBIG5";
+    case JOHAB_CHARSET: return "JOHAB";
+    case HEBREW_CHARSET: return "HEBREW";
+    case ARABIC_CHARSET: return "ARABIC";
+    case GREEK_CHARSET: return "GREEK";
+    case TURKISH_CHARSET: return "TURKISH";
+    case VIETNAMESE_CHARSET: return "VIETNAMESE";
+    case THAI_CHARSET: return "THAI";
+    case EASTEUROPE_CHARSET: return "EASTEUROPE";
+    case RUSSIAN_CHARSET: return "RUSSIAN";
+    case MAC_CHARSET: return "MAC";
+    case BALTIC_CHARSET: return "BALTIC";
+    }
+  return "unknown";
+}
+
 GdkFont*
 gdk_font_load (const gchar *font_name)
 {
@@ -98,6 +125,7 @@ gdk_font_load (const gchar *font_name)
   LOGFONT logfont;
   HGDIOBJ oldfont;
   TEXTMETRIC textmetric;
+  CHARSETINFO csi;
   HANDLE *f;
   DWORD fdwItalic, fdwUnderline, fdwStrikeOut, fdwCharSet,
     fdwOutputPrecision, fdwClipPrecision, fdwQuality, fdwPitchAndFamily;
@@ -283,10 +311,8 @@ gdk_font_load (const gchar *font_name)
 	  fdwCharSet = HANGEUL_CHARSET;
 	else if (g_strcasecmp (encoding, "chinesebig5") == 0)
 	  fdwCharSet = CHINESEBIG5_CHARSET;
-#ifdef JOHAB_CHARSET
 	else if (g_strcasecmp (encoding, "johab") == 0)
 	  fdwCharSet = JOHAB_CHARSET;
-#endif
 	else if (g_strcasecmp (encoding, "hebrew") == 0)
 	  fdwCharSet = HEBREW_CHARSET;
 	else if (g_strcasecmp (encoding, "arabic") == 0)
@@ -395,12 +421,21 @@ gdk_font_load (const gchar *font_name)
   GetObject (private->xfont, sizeof (logfont), &logfont);
   oldfont = SelectObject (gdk_DC, private->xfont);
   GetTextMetrics (gdk_DC, &textmetric);
+  private->charset = GetTextCharsetInfo (gdk_DC, &private->fs, 0);
   SelectObject (gdk_DC, oldfont);
+  TranslateCharsetInfo ((DWORD *) private->charset, &csi, TCI_SRCCHARSET);
+  private->codepage = csi.ciACP;
+  GetCPInfo (private->codepage, &private->cpinfo);
   font->ascent = textmetric.tmAscent;
   font->descent = textmetric.tmDescent;
 
-  GDK_NOTE (MISC, g_print ("... = %#x asc %d desc %d\n",
-			   private->xfont, font->ascent, font->descent));
+  GDK_NOTE (MISC, g_print ("... = %#x charset %s codepage %d (max %d bytes) "
+			   "asc %d desc %d\n",
+			   private->xfont,
+			   charset_name (private->charset),
+			   private->codepage,
+			   private->cpinfo.MaxCharSize,
+			   font->ascent, font->descent));
 
   /* This memory is leaked, so shoot me. */
   f = g_new (HANDLE, 1);
@@ -429,6 +464,9 @@ gdk_font_ref (GdkFont *font)
 
   private = (GdkFontPrivate*) font;
   private->ref_count += 1;
+
+  GDK_NOTE (MISC, g_print ("gdk_font_ref %#x %d\n",
+			   private->xfont, private->ref_count));
   return font;
 }
 
@@ -442,6 +480,12 @@ gdk_font_unref (GdkFont *font)
   g_return_if_fail (private->ref_count > 0);
 
   private->ref_count -= 1;
+
+  GDK_NOTE (MISC, g_print ("gdk_font_unref %#x %d%s\n",
+			   private->xfont,
+			   private->ref_count,
+			   (private->ref_count == 0 ? " freeing" : "")));
+
   if (private->ref_count == 0)
     {
       gdk_font_hash_remove (font->type, font);
@@ -449,8 +493,6 @@ gdk_font_unref (GdkFont *font)
       switch (font->type)
 	{
 	case GDK_FONT_FONT:
-	  GDK_NOTE (MISC, g_print ("gdk_font_unref %#x\n", private->xfont));
-
 	  gdk_xid_table_remove ((HANDLE) ((guint) private->xfont + HFONT_DITHER));
 	  DeleteObject (private->xfont);
 	  break;
@@ -513,10 +555,14 @@ gdk_text_width (GdkFont      *font,
   GdkFontPrivate *private;
   HGDIOBJ oldfont;
   SIZE size;
-  gint width;
+  gint width, wlen;
+  wchar_t *wcstr;
 
   g_return_val_if_fail (font != NULL, -1);
   g_return_val_if_fail (text != NULL, -1);
+
+  if (text_length == 0)
+    return 0;
 
   private = (GdkFontPrivate*) font;
 
@@ -524,7 +570,24 @@ gdk_text_width (GdkFont      *font,
     {
     case GDK_FONT_FONT:
       oldfont = SelectObject (gdk_DC, private->xfont);
-      GetTextExtentPoint32A (gdk_DC, text, text_length, &size);
+      if (private->cpinfo.MaxCharSize > 1)
+	{
+	  wcstr = g_new (wchar_t, text_length);
+	  if ((wlen = MultiByteToWideChar (private->codepage, 0,
+					   text, text_length,
+					   wcstr, text_length)) == 0)
+	    {
+	      g_warning ("gdk_text_width: MultiByteToWideChar failed");
+	      size.cx = 0;
+	    }
+	  else
+	    GetTextExtentPoint32W (gdk_DC, wcstr, wlen, &size);
+	  g_free (wcstr);
+	}
+      else
+	{
+	  GetTextExtentPoint32A (gdk_DC, text, text_length, &size);
+	}
       SelectObject (gdk_DC, oldfont);
       width = size.cx;
       break;
@@ -545,10 +608,13 @@ gdk_text_width_wc (GdkFont	  *font,
   SIZE size;
   wchar_t *wcstr;
   guchar *str;
-  gint i, width;
+  gint i, width, wlen;
 
   g_return_val_if_fail (font != NULL, -1);
   g_return_val_if_fail (text != NULL, -1);
+
+  if (text_length == 0)
+    return 0;
 
   private = (GdkFontPrivate*) font;
 
@@ -566,9 +632,26 @@ gdk_text_width_wc (GdkFont	  *font,
       g_free (wcstr);
 #else
       str = g_new (guchar, text_length);
-      for (i=0; i<text_length; i++)
+      for (i = 0; i < text_length; i++)
 	str[i] = text[i];
-      GetTextExtentPoint32A (gdk_DC, str, text_length, &size);
+      if (private->cpinfo.MaxCharSize > 1)
+	{
+	  wcstr = g_new (wchar_t, text_length);
+	  if ((wlen = MultiByteToWideChar (private->codepage, 0,
+					   str, text_length,
+					   wcstr, text_length)) == 0)
+	    {
+	      g_warning ("gdk_text_width_wc: MultiByteToWideChar failed");
+	      size.cx = 0;
+	    }
+	  else
+	    GetTextExtentPoint32W (gdk_DC, wcstr, wlen, &size);
+	  g_free (wcstr);
+	}
+      else
+	{
+	  GetTextExtentPoint32A (gdk_DC, str, text_length, &size);
+	}
       g_free (str);
 #endif
       SelectObject (gdk_DC, oldfont);
@@ -618,9 +701,26 @@ gdk_text_extents (GdkFont     *font,
   GdkFontPrivate *private;
   HGDIOBJ oldfont;
   SIZE size;
+  gint wlen;
+  wchar_t *wcstr;
 
   g_return_if_fail (font != NULL);
   g_return_if_fail (text != NULL);
+
+  if (text_length == 0)
+    {
+      if (lbearing)
+	*lbearing = 0;
+      if (rbearing)
+	*rbearing = 0;
+      if (width)
+	*width = 0;
+      if (ascent)
+	*ascent = 0;
+      if (descent)
+	*descent = 0;
+      return;
+    }
 
   private = (GdkFontPrivate*) font;
 
@@ -628,7 +728,25 @@ gdk_text_extents (GdkFont     *font,
     {
     case GDK_FONT_FONT:
       oldfont = SelectObject (gdk_DC, private->xfont);
-      GetTextExtentPoint32A (gdk_DC, text, text_length, &size);
+      if (private->cpinfo.MaxCharSize > 1)
+	{
+	  wcstr = g_new (wchar_t, text_length);
+	  if ((wlen = MultiByteToWideChar (private->codepage, 0,
+					   text, text_length,
+					   wcstr, text_length)) == 0)
+	    {
+	      g_warning ("gdk_text_extents: MultiByteToWideChar failed");
+	      size.cx = 0;
+	      size.cy = 0;
+	    }
+	  else
+	    GetTextExtentPoint32W (gdk_DC, wcstr, wlen, &size);
+	  g_free (wcstr);
+	}
+      else
+	{
+	  GetTextExtentPoint32A (gdk_DC, text, text_length, &size);
+	}
       SelectObject (gdk_DC, oldfont);
       /* XXX This is all quite bogus */
       if (lbearing)
@@ -666,6 +784,21 @@ gdk_text_extents_wc (GdkFont        *font,
 
   g_return_if_fail (font != NULL);
   g_return_if_fail (text != NULL);
+
+  if (text_length == 0)
+    {
+      if (lbearing)
+	*lbearing = 0;
+      if (rbearing)
+	*rbearing = 0;
+      if (width)
+	*width = 0;
+      if (ascent)
+	*ascent = 0;
+      if (descent)
+	*descent = 0;
+      return;
+    }
 
   private = (GdkFontPrivate*) font;
 
@@ -765,10 +898,14 @@ gdk_text_height (GdkFont     *font,
   GdkFontPrivate *private;
   HGDIOBJ oldfont;
   SIZE size;
-  gint height;
+  gint height, wlen;
+  wchar_t *wcstr;
 
   g_return_val_if_fail (font != NULL, -1);
   g_return_val_if_fail (text != NULL, -1);
+
+  if (text_length == 0)
+    return 0;
 
   private = (GdkFontPrivate*) font;
 
@@ -776,7 +913,26 @@ gdk_text_height (GdkFont     *font,
     {
     case GDK_FONT_FONT:
       oldfont = SelectObject (gdk_DC, private->xfont);
-      GetTextExtentPoint32 (gdk_DC, text, text_length, &size);
+      if (private->cpinfo.MaxCharSize > 1)
+	{
+	  wcstr = g_new (wchar_t, text_length);
+	  if ((wlen = MultiByteToWideChar (private->codepage, 0,
+					   text, text_length,
+					   wcstr, text_length)) == 0)
+	    {
+	      g_warning ("gdk_text_height: MultiByteToWideChar failed "
+			 "text = %.*s (%d)",
+			 text_length, text, text_length);
+	      size.cy = 0;
+	    }
+	  else
+	    GetTextExtentPoint32W (gdk_DC, wcstr, wlen, &size);
+	  g_free (wcstr);
+	}
+      else
+	{
+	  GetTextExtentPoint32A (gdk_DC, text, text_length, &size);
+	}
       SelectObject (gdk_DC, oldfont);
       height = size.cy;
       break;

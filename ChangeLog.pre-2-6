@@ -1,3 +1,12 @@
+1999-10-21  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkprivate.h: Add more font private data.
+
+	* gdk/win32/gdkfont.c
+	* gdk/win32/gdkdraw.c: Revamped handling of multi-byte charset
+	fonts and strings. Now works much better. You still have to
+	have a correct font selected, though. No fontset emulation yet.
+
 1999-10-19  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/maketypes.awk: Use G_OS_WIN32.

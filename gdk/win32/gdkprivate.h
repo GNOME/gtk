@@ -42,6 +42,14 @@
 #define CLR_INVALID CLR_NONE
 #endif
 
+/* Some charsets are missing */
+#ifndef JOHAB_CHARSET
+#define JOHAB_CHARSET 130
+#endif
+#ifndef VIETNAMESE_CHARSET
+#define VIETNAMESE_CHARSET 163
+#endif
+
 /* MB_CUR_MAX is missing */
 #ifndef MB_CUR_MAX
 extern int *__imp___mb_cur_max;
@@ -300,6 +308,10 @@ struct _GdkFontPrivate
   guint ref_count;
 
   GSList *names;
+  DWORD charset;
+  UINT codepage;
+  CPINFO cpinfo;
+  FONTSIGNATURE fs;
 };
 
 struct _GdkCursorPrivate
