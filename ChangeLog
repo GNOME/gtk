@@ -1,5 +1,10 @@
 2005-03-21  Tor Lillqvist  <tml@novell.com>
 
+	* gtk/Makefile.am: Use grep | head -n 1 instead of grep -m 1 which
+	doesn't work with slightly older versions of GNU grep in
+	install-libtool-import-lib rule. List the Win32 libs in LIBADD,
+	not LDFLAGS. Add -lgdi32.
+
 	* modules/engines/ms-windows/*.c: Silence gcc warnings (unused
 	variables, unhandled enum value in switch). Use g_object_unref()
 	instead of deprecated gdk_gc_unref() and gdk_drawable_unref().

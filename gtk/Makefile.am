@@ -47,7 +47,7 @@ gtk-win32res.lo : gtk-win32.rc
 
 install-libtool-import-lib:
 	for entry in `grep PRIVATE gtk.def | sed -e 's/PRIVATE//'`; do \
-	  file=`nm -A .libs/libgtk-win32-$(GTK_API_VERSION).dll.a | tr -d '\r' | grep -m 1 -E $$entry'$$' | cut -d: -f2`; \
+	  file=`nm -A .libs/libgtk-win32-$(GTK_API_VERSION).dll.a | tr -d '\r' | grep -E $$entry'$$' | head -n 1 | cut -d: -f2`; \
 	  ar d .libs/libgtk-win32-$(GTK_API_VERSION).dll.a $$file; \
 	done
 	$(INSTALL) .libs/libgtk-win32-$(GTK_API_VERSION).dll.a $(DESTDIR)$(libdir)
@@ -665,11 +665,11 @@ libgtk_win32_2_0_la_LDFLAGS = $(libtool_opts)
 
 libgtk_x11_2_0_la_LIBADD = $(libadd)
 libgtk_linux_fb_2_0_la_LIBADD = $(libadd)
-libgtk_win32_2_0_la_LIBADD = $(libadd) $(gtk_win32res_lo)
+libgtk_win32_2_0_la_LIBADD = $(libadd) $(gtk_win32res_lo) -lole32 -lwsock32 -lgdi32
 libgtk_win32_2_0_la_DEPENDENCIES = $(gtk_def) $(gtk_win32res_lo)
 
 if USE_WIN32
-libgtk_target_ldflags = $(gtk_win32_symbols) -lole32 -lwsock32
+libgtk_target_ldflags = $(gtk_win32_symbols) 
 endif
 EXTRA_LTLIBRARIES = libgtk-x11-2.0.la libgtk-linux-fb-2.0.la libgtk-win32-2.0.la
 
