@@ -1,3 +1,9 @@
+Wed Nov 21 17:01:25 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcellrenderer.h gtk/gtktreemodel.h 
+	gtk/gtktreeprivate.h gtk/gtktreesortable.h: Remove
+	trailing commas in enum declarations.
+
 Wed Nov 21 15:21:26 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in (GTK_MICRO_VERSION): Version 1.3.11, 
