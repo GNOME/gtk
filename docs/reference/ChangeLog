@@ -1,3 +1,15 @@
+2004-10-10  Matthias Clasen  <matthias@localhost.localdomain>
+
+	* gtk/images/progressbar.png:
+	* gtk/images/notebook.png:
+	* gtk/images/toolbar.png:
+	* gtk/images/menubar.png:
+	* gtk/images/messagedialog.png: New images.
+
+	* gtk/Makefile.am (HTML_IMAGES): 
+	* gtk/visual_index.xml: Add toolbar, menubar, progressbar, 
+	notebook and message dialog.
+
 2004-10-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/visual_index.xml: Correct some linkends.

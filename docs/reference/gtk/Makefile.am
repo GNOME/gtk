@@ -219,7 +219,12 @@ HTML_IMAGES = \
 	$(srcdir)/images/window.png					\
 	$(srcdir)/images/accel-label.png				\
 	$(srcdir)/images/file-button.png				\
-	$(srcdir)/images/icon-view.png
+	$(srcdir)/images/icon-view.png					\
+	$(srcdir)/images/toolbar.png					\
+	$(srcdir)/images/menubar.png					\
+	$(srcdir)/images/notebook.png					\
+	$(srcdir)/images/progressbar.png				\
+	$(srcdir)/images/messagedialog.png
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk-pixbuf/html --extra-dir=../gdk/html

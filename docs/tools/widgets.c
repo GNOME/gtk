@@ -17,15 +17,23 @@ new_widget_info (const char *name,
 
   info = g_new0 (WidgetInfo, 1);
   info->name = g_strdup (name);
-  info->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  if (GTK_IS_WINDOW (widget))
+    {
+      info->window = widget;
+      info->include_decorations = TRUE;
+    }
+  else
+    {
+      info->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      info->include_decorations = FALSE;
+      gtk_widget_show_all (widget);
+      gtk_container_add (GTK_CONTAINER (info->window), widget);
+    }
   info->no_focus = TRUE;
-  info->include_decorations = FALSE;
 
   gtk_widget_set_app_paintable (info->window, TRUE);
   g_signal_connect (info->window, "focus", G_CALLBACK (gtk_true), NULL);
   gtk_container_set_border_width (GTK_CONTAINER (info->window), 12);
-  gtk_widget_show_all (widget);
-  gtk_container_add (GTK_CONTAINER (info->window), widget);
 
   switch (size)
     {
@@ -432,6 +440,118 @@ create_window (void)
   return info;
 }
 
+static WidgetInfo *
+create_toolbar (void)
+{
+  GtkWidget *widget, *menu, *vbox, *align;
+  GtkToolItem *item;
+
+  widget = gtk_toolbar_new ();
+
+  item = gtk_tool_button_new_from_stock (GTK_STOCK_NEW);
+  gtk_toolbar_insert (GTK_TOOLBAR (widget), item, -1);
+
+  item = gtk_menu_tool_button_new_from_stock (GTK_STOCK_OPEN);
+  menu = gtk_menu_new ();
+  gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (item), menu);
+  gtk_toolbar_insert (GTK_TOOLBAR (widget), item, -1);
+
+  item = gtk_tool_button_new_from_stock (GTK_STOCK_REFRESH);
+  gtk_toolbar_insert (GTK_TOOLBAR (widget), item, -1);
+
+  gtk_toolbar_set_show_arrow (GTK_TOOLBAR (widget), FALSE);
+
+#if 0
+  vbox = gtk_vbox_new (FALSE, 3);
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_container_add (GTK_CONTAINER (align), widget);
+  gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      gtk_label_new ("Toolbar"),
+		      FALSE, FALSE, 0);
+
+#endif
+  return new_widget_info ("toolbar", widget, SMALL);
+}
+
+static WidgetInfo *
+create_menubar (void)
+{
+  GtkWidget *widget, *vbox, *align, *item;
+
+  widget = gtk_menu_bar_new ();
+
+  item = gtk_menu_item_new_with_mnemonic ("_File");
+  gtk_menu_shell_append (GTK_MENU_SHELL (widget), item);
+
+  item = gtk_menu_item_new_with_mnemonic ("_Edit");
+  gtk_menu_shell_append (GTK_MENU_SHELL (widget), item);
+
+  item = gtk_menu_item_new_with_mnemonic ("_Help");
+  gtk_menu_shell_append (GTK_MENU_SHELL (widget), item);
+
+  vbox = gtk_vbox_new (FALSE, 3);
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_container_add (GTK_CONTAINER (align), widget);
+  gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      gtk_label_new ("Menu Bar"),
+		      FALSE, FALSE, 0);
+
+  return new_widget_info ("menubar", vbox, SMALL);
+}
+
+static WidgetInfo *
+create_message_dialog (void)
+{
+  GtkWidget *widget;
+
+  widget = gtk_message_dialog_new (NULL,
+				   0,
+				   GTK_MESSAGE_INFO,
+				   GTK_BUTTONS_OK,
+				   NULL);
+  gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (widget),
+				 "<b>Message Dialog</b>");
+  return new_widget_info ("messagedialog", widget, MEDIUM);
+}
+
+static WidgetInfo *
+create_notebook (void)
+{
+  GtkWidget *widget;
+
+  widget = gtk_notebook_new ();
+
+  gtk_notebook_append_page (GTK_NOTEBOOK (widget), 
+			    gtk_label_new ("Notebook"),
+			    NULL);
+  gtk_notebook_append_page (GTK_NOTEBOOK (widget), gtk_event_box_new (), NULL);
+  gtk_notebook_append_page (GTK_NOTEBOOK (widget), gtk_event_box_new (), NULL);
+
+  return new_widget_info ("notebook", widget, MEDIUM);
+}
+
+static WidgetInfo *
+create_progressbar (void)
+{
+  GtkWidget *vbox;
+  GtkWidget *widget;
+  GtkWidget *align;
+
+  vbox = gtk_vbox_new (FALSE, 3);
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  widget = gtk_progress_bar_new ();
+  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget), 0.5);
+  gtk_container_add (GTK_CONTAINER (align), widget);
+  gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      gtk_label_new ("Progress Bar"),
+		      FALSE, FALSE, 0);
+
+  return new_widget_info ("progressbar", vbox, SMALL);
+}
+
 GList *
 get_all_widgets (void)
 {
@@ -455,6 +575,11 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_accel_label ());
   retval = g_list_prepend (retval, create_file_button ());
   retval = g_list_prepend (retval, create_icon_view ());
+  retval = g_list_prepend (retval, create_toolbar ());
+  retval = g_list_prepend (retval, create_menubar ());
+  retval = g_list_prepend (retval, create_notebook ());
+  retval = g_list_prepend (retval, create_message_dialog ());
+  retval = g_list_prepend (retval, create_progressbar ());
 
   return retval;
 }

@@ -1,3 +1,11 @@
+2004-10-10  Matthias Clasen  <matthias@localhost.localdomain>
+
+	* docs/tools/widgets.c: Create a toolbar, menubar and
+	messagedialog images.
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_select_all): 
+	Avoid a warning.
+
 Sun Oct 10 11:24:56 2004  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkcontainer.h (struct _GtkContainer): add /*< private >*/
