@@ -1,3 +1,8 @@
+2002-02-04 Padraig O'Briain <padraig.obriain@sun.com>
+
+	* gtk/gtkmenu.c (gtk_menu_popup):
+	Fix leak of GdkEvent (#70519)
+
 Mon Feb  4 10:40:28 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstyle.c (gtk_default_draw_resize_grip):

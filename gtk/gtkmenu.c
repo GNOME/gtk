@@ -727,6 +727,8 @@ gtk_menu_popup (GtkMenu		    *menu,
       if ((current_event->type != GDK_BUTTON_PRESS) &&
 	  (current_event->type != GDK_ENTER_NOTIFY))
 	menu_shell->ignore_enter = TRUE;
+
+      gdk_event_free (current_event);
     }
 
   if (menu->torn_off)
