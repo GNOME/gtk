@@ -366,6 +366,7 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 	    }
           win32_gc->pen_style &= ~(PS_STYLE_MASK);
 	  win32_gc->pen_style |= PS_SOLID;
+	  win32_gc->pen_double_dash = FALSE;
 	  break;
 	case GDK_LINE_ON_OFF_DASH:
 	case GDK_LINE_DOUBLE_DASH: 
@@ -378,6 +379,7 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
             win32_gc->pen_style &= ~(PS_STYLE_MASK);
 	    win32_gc->pen_style |= PS_DASH;
           }
+	  win32_gc->pen_double_dash = values->line_style == GDK_LINE_DOUBLE_DASH;
 	  break;
 	}
       GDK_NOTE (GC, (g_print ("%sps|=PS_STYLE_%s", s, _gdk_win32_psstyle_to_string (win32_gc->pen_style)),
@@ -462,6 +464,9 @@ _gdk_win32_gc_new (GdkDrawable	  *drawable,
   win32_gc->pen_style = PS_GEOMETRIC|PS_ENDCAP_FLAT|PS_JOIN_MITER;
   win32_gc->pen_dashes = NULL;
   win32_gc->pen_num_dashes = 0;
+  win32_gc->pen_dash_offset = 0;
+  win32_gc->pen_double_dash = FALSE;
+  win32_gc->pen_hbrbg = NULL;
 
   win32_gc->values_mask = GDK_GC_FUNCTION | GDK_GC_FILL;
 
@@ -540,7 +545,8 @@ gdk_win32_gc_get_values (GdkGC       *gc,
   if (win32_gc->pen_style & PS_SOLID)
     values->line_style = GDK_LINE_SOLID;
   else if (win32_gc->pen_style & PS_DASH)
-    values->line_style = GDK_LINE_ON_OFF_DASH;
+    values->line_style = win32_gc->pen_double_dash ? GDK_LINE_DOUBLE_DASH :
+						     GDK_LINE_ON_OFF_DASH;
   else
     values->line_style = GDK_LINE_SOLID;
 
@@ -599,6 +605,7 @@ gdk_win32_gc_set_dashes (GdkGC *gc,
   win32_gc->pen_dashes = g_new (DWORD, n);
   for (i = 0; i < n; i++)
     win32_gc->pen_dashes[i] = dash_list[i];
+  win32_gc->pen_dash_offset = dash_offset;
 }
 
 void
@@ -751,12 +758,15 @@ gdk_gc_copy (GdkGC *dst_gc,
     dst_win32_gc->pen_dashes = g_memdup (src_win32_gc->pen_dashes, 
                                          sizeof (DWORD) * src_win32_gc->pen_num_dashes);
   dst_win32_gc->pen_num_dashes = src_win32_gc->pen_num_dashes;
+  dst_win32_gc->pen_dash_offset = src_win32_gc->pen_dash_offset;
+  dst_win32_gc->pen_double_dash = src_win32_gc->pen_double_dash;
 
 
   dst_win32_gc->hdc = NULL;
   dst_win32_gc->saved_dc = FALSE;
   dst_win32_gc->hwnd = NULL;
   dst_win32_gc->holdpal = NULL;
+  dst_win32_gc->pen_hbrbg = NULL;
 }
 
 GdkScreen *  
@@ -807,15 +817,14 @@ _gdk_win32_colormap_color (GdkColormap *colormap,
     }
 }
 
-static COLORREF
-predraw_set_foreground (GdkGC       *gc,
-			GdkColormap *colormap,
-			gboolean    *ok)
+gboolean
+predraw (GdkGC       *gc,
+	 GdkColormap *colormap)
 {
-  COLORREF fg;
   GdkGCWin32 *win32_gc = (GdkGCWin32 *) gc;
   GdkColormapPrivateWin32 *colormap_private;
   gint k;
+  gboolean ok = TRUE;
 
   if (colormap &&
       (colormap->visual->type == GDK_VISUAL_PSEUDO_COLOR ||
@@ -826,18 +835,15 @@ predraw_set_foreground (GdkGC       *gc,
       g_assert (colormap_private != NULL);
 
       if (!(win32_gc->holdpal = SelectPalette (win32_gc->hdc, colormap_private->hpal, FALSE)))
-	WIN32_GDI_FAILED ("SelectPalette"), *ok = FALSE;
+	WIN32_GDI_FAILED ("SelectPalette"), ok = FALSE;
       else if ((k = RealizePalette (win32_gc->hdc)) == GDI_ERROR)
-	WIN32_GDI_FAILED ("RealizePalette"), *ok = FALSE;
+	WIN32_GDI_FAILED ("RealizePalette"), ok = FALSE;
       else if (k > 0)
-	GDK_NOTE (COLORMAP, g_print ("predraw_set_foreground: realized %p: %d colors\n",
+	GDK_NOTE (COLORMAP, g_print ("predraw: realized %p: %d colors\n",
 				     colormap_private->hpal, k));
     }
 
-  fg = _gdk_win32_colormap_color (colormap, win32_gc->foreground);
-
-  GDK_NOTE (GC, g_print ("predraw_set_foreground: fg=%06lx\n", fg));
-  return fg;
+  return ok;
 }
 
 /**
@@ -898,7 +904,7 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
   GdkGCWin32 *win32_gc = (GdkGCWin32 *) gc;
   GdkDrawableImplWin32 *impl = NULL;
   gboolean ok = TRUE;
-  COLORREF fg = RGB (0, 0, 0);
+  COLORREF fg = RGB (0, 0, 0), bg = RGB (255, 255, 255);
   LOGBRUSH logbrush;
   HPEN hpen;
   HBRUSH hbr;
@@ -935,11 +941,14 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
       if (ok && (win32_gc->saved_dc = SaveDC (win32_gc->hdc)) == 0)
 	WIN32_GDI_FAILED ("SaveDC");
     }
-  
+
+  if (ok && (usage & (GDK_GC_FOREGROUND | GDK_GC_BACKGROUND)))
+      ok = predraw (gc, impl->colormap);
+
   if (ok && (usage & GDK_GC_FOREGROUND))
     {
-      fg = predraw_set_foreground (gc, impl->colormap, &ok);
-      if (ok && (hbr = CreateSolidBrush (fg)) == NULL)
+      fg = _gdk_win32_colormap_color (impl->colormap, win32_gc->foreground);
+      if ((hbr = CreateSolidBrush (fg)) == NULL)
 	WIN32_GDI_FAILED ("CreateSolidBrush"), ok = FALSE;
 
       if (ok && SelectObject (win32_gc->hdc, hbr) == NULL)
@@ -951,36 +960,47 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
 
   if (ok && (usage & LINE_ATTRIBUTES))
     {
-      /* Create and select pen */
-      logbrush.lbStyle = BS_SOLID;
-      logbrush.lbColor = fg;
-      logbrush.lbHatch = 0;
-      
-      if (win32_gc->pen_num_dashes > 0 && !G_WIN32_IS_NT_BASED ())
-	{
-	  /* The Win9x GDI is rather limited so we either draw dashed
-	   * lines ourselves (only horizontal and vertical) or let them be
-	   * drawn solid to avoid implementing a whole line renderer.
-	   */
-	  if ((hpen = ExtCreatePen (
-				    (win32_gc->pen_style & ~(PS_STYLE_MASK)) | PS_SOLID,
-				    MAX (win32_gc->pen_width, 1),
-				    &logbrush, 
-				    0, NULL)) == NULL)
-	    WIN32_GDI_FAILED ("ExtCreatePen"), ok = FALSE;
+      /* For drawing GDK_LINE_DOUBLE_DASH */
+      if ((usage & GDK_GC_BACKGROUND) && win32_gc->pen_double_dash)
+        {
+          bg = _gdk_win32_colormap_color (impl->colormap, win32_gc->background);
+          if ((win32_gc->pen_hbrbg = CreateSolidBrush (bg)) == NULL)
+	    WIN32_GDI_FAILED ("CreateSolidBrush"), ok = FALSE;
+        }
+
+      if (ok)
+        {
+	  /* Create and select pen */
+	  logbrush.lbStyle = BS_SOLID;
+	  logbrush.lbColor = fg;
+	  logbrush.lbHatch = 0;
+	  
+	  if (win32_gc->pen_num_dashes > 0 && !G_WIN32_IS_NT_BASED ())
+	    {
+	      /* The Win9x GDI is rather limited so we either draw dashed
+	       * lines ourselves (only horizontal and vertical) or let them be
+	       * drawn solid to avoid implementing a whole line renderer.
+	       */
+	      if ((hpen = ExtCreatePen (
+					(win32_gc->pen_style & ~(PS_STYLE_MASK)) | PS_SOLID,
+					MAX (win32_gc->pen_width, 1),
+					&logbrush, 
+					0, NULL)) == NULL)
+		WIN32_GDI_FAILED ("ExtCreatePen"), ok = FALSE;
+	    }
+	  else
+	    {
+	      if ((hpen = ExtCreatePen (win32_gc->pen_style,
+					MAX (win32_gc->pen_width, 1),
+					&logbrush, 
+					win32_gc->pen_num_dashes,
+					win32_gc->pen_dashes)) == NULL)
+		WIN32_GDI_FAILED ("ExtCreatePen"), ok = FALSE;
+	    }
+	  
+	  if (ok && SelectObject (win32_gc->hdc, hpen) == NULL)
+	    WIN32_GDI_FAILED ("SelectObject"), ok = FALSE;
 	}
-      else
-	{
-	  if ((hpen = ExtCreatePen (win32_gc->pen_style,
-				    MAX (win32_gc->pen_width, 1),
-				    &logbrush, 
-				    win32_gc->pen_num_dashes,
-				    win32_gc->pen_dashes)) == NULL)
-	    WIN32_GDI_FAILED ("ExtCreatePen"), ok = FALSE;
-	}
-      
-      if (ok && SelectObject (win32_gc->hdc, hpen) == NULL)
-	WIN32_GDI_FAILED ("SelectObject"), ok = FALSE;
     }
 
   if (ok && (usage & GDK_GC_FONT))
@@ -1084,6 +1104,9 @@ gdk_win32_hdc_release (GdkDrawable    *drawable,
   
   if (hbr != NULL)
     GDI_CALL (DeleteObject, (hbr));
+
+  if (win32_gc->pen_hbrbg != NULL)
+    GDI_CALL (DeleteObject, (win32_gc->pen_hbrbg));
 
   win32_gc->hdc = NULL;
 }

@@ -1,3 +1,20 @@
+2005-01-12  Tor Lillqvist  <tlillqvist@novell.com>
+
+	Fix for #162790, by Iwan Wong:
+	
+	* gdk/win32/gdkdrawable-win32.c: Implement dashed lines
+	correctly. Simplify the interface to render_line_horizontal() and
+	render_line_vertical(). Need to draw lines "manually" also on
+	NT-based Windowses if we have a dash offset or are drawing
+	double-dashed lines.
+
+	* gdk/win32/gdkprivate-win32.h: Keep also the dash offset,
+	double-dash flag, and a brush for the background colour (used by
+	the odd dashes in the double-dash line style) in the GdkGCWin32
+	struct.
+
+	* gdk/win32/gdkgc-win32.c: Set up above new fields.
+
 2005-01-10  Federico Mena Quintero  <federico@ximian.com>
 
 	Fix #162617.
