@@ -4206,7 +4206,7 @@ location_entry_create (GtkFileChooserDefault *impl)
 
   entry = _gtk_file_chooser_entry_new ();
   /* Pick a good width for the entry */
-  gtk_entry_set_width_chars (GTK_ENTRY (entry), 25);
+  gtk_entry_set_width_chars (GTK_ENTRY (entry), 30);
   gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
   _gtk_file_chooser_entry_set_file_system (GTK_FILE_CHOOSER_ENTRY (entry), impl->file_system);
   _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (entry), impl->current_folder);

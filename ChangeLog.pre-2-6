@@ -1,3 +1,12 @@
+Thu Mar 11 01:08:25 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (location_entry_create): up the
+	width of the entry a tad.
+
+	* gtk/gtkfilechooserentry.c (gtk_file_chooser_entry_init): use
+	gtk_entry_completion_selection_changed.  Also, unref the
+	completion as we were leaking a reference to it.
+
 2004-03-10  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkstyle.c (draw_dot): Remove spurious semicolon.  Thanks to

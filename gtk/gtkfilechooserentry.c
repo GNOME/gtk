@@ -153,12 +153,10 @@ gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
 				       completion_match_func,
 				       chooser_entry,
 				       NULL);
-
-  renderer = gtk_cell_renderer_text_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (comp), renderer, TRUE);
-  gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (comp), renderer, "text", 0);
+  gtk_entry_completion_set_text_column (comp, 0);
 
   gtk_entry_set_completion (GTK_ENTRY (chooser_entry), comp);
+  g_object_unref (comp);
 
   g_signal_connect (chooser_entry, "notify::cursor-position",
 		    G_CALLBACK (clear_completion_callback), NULL);
