@@ -1,3 +1,8 @@
+Sun Mar 14 15:38:39 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_visible_func):
+	always use the match_func, even if text_column is set.
+
 2004-03-14  Morten Welinder  <terra@gnome.org>
 
 	* gtk/gtkfilesystemunix.c (get_parent_dir): Don't turn "/" into

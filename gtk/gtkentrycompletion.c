@@ -537,17 +537,16 @@ gtk_entry_completion_visible_func (GtkTreeModel *model,
   if (!completion->priv->case_normalized_key)
     return ret;
 
-  if (completion->priv->text_column >= 0)
-    ret = gtk_entry_completion_default_completion_func (completion,
-                                                        completion->priv->case_normalized_key,
-                                                        iter,
-                                                        NULL);
-
-  else if (completion->priv->match_func)
+  if (completion->priv->match_func)
     ret = (* completion->priv->match_func) (completion,
                                             completion->priv->case_normalized_key,
                                             iter,
                                             completion->priv->match_data);
+  else if (completion->priv->text_column >= 0)
+    ret = gtk_entry_completion_default_completion_func (completion,
+                                                        completion->priv->case_normalized_key,
+                                                        iter,
+                                                        NULL);
 
   return ret;
 }
