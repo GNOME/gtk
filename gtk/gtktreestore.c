@@ -234,7 +234,7 @@ gtk_tree_store_init (GtkTreeStore *tree_store)
 GtkTreeStore *
 gtk_tree_store_new (void)
 {
-  return GTK_TREE_STORE (g_object_new (gtk_tree_store_get_type (), NULL));
+  return GTK_TREE_STORE (g_object_new (GTK_TYPE_TREE_STORE, NULL));
 }
 
 GtkTreeStore *

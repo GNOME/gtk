@@ -50,7 +50,7 @@ typedef void (* GtkTreeSelectionForeachFunc) (GtkTreeModel      *model,
 
 struct _GtkTreeSelection
 {
-  GtkObject parent;
+  GObject parent;
 
   /*< private >*/
   
@@ -63,9 +63,9 @@ struct _GtkTreeSelection
 
 struct _GtkTreeSelectionClass
 {
-  GtkObjectClass parent_class;
+  GObjectClass parent_class;
 
-  void (* selection_changed) (GtkTreeView *tree_view);
+  void (* changed) (GtkTreeView *tree_view);
 };
 
 

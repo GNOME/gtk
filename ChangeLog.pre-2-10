@@ -1,3 +1,15 @@
+Thu Jun  7 18:25:42 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeselection.c: Now it's a GObject instead of a
+	GtkObject.  The GtkTreeSelection::selection_changed signal is now
+	the GtkTreeSelection::changed signal.
+
+	* gtk/gtktreeview.c: Modified to deal with new GtkTreeSelection
+	object.
+
+	* tests/gtktree*.c: Modified to deal with new GtkTreeSelection
+	object.
+
 2001-06-07  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/Makefile.am: fix glib-mkenums and glib-genmarshal again

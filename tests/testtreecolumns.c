@@ -603,15 +603,15 @@ main (int argc, char *argv[])
   button = gtk_button_new_with_label ("<<");
   gtk_widget_set_sensitive (button, FALSE);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_left_clicked), top_right_tree_view);
-  gtk_signal_connect (GTK_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (top_right_tree_view))),
-		      "selection-changed", GTK_SIGNAL_FUNC (selection_changed), button);
+  g_signal_connectc (G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (top_right_tree_view))),
+		      "changed", GTK_SIGNAL_FUNC (selection_changed), button, FALSE);
   gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label (">>");
   gtk_widget_set_sensitive (button, FALSE);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_right_clicked), top_right_tree_view);
-  gtk_signal_connect (GTK_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (left_tree_view))),
-		      "selection-changed", GTK_SIGNAL_FUNC (selection_changed), button);
+  g_signal_connectc (G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (left_tree_view))),
+		     "changed", GTK_SIGNAL_FUNC (selection_changed), button, FALSE);
   gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
 
   bbox = gtk_vbutton_box_new ();
@@ -622,15 +622,15 @@ main (int argc, char *argv[])
   button = gtk_button_new_with_label ("<<");
   gtk_widget_set_sensitive (button, FALSE);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_left_clicked), bottom_right_tree_view);
-  gtk_signal_connect (GTK_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (bottom_right_tree_view))),
-		      "selection-changed", GTK_SIGNAL_FUNC (selection_changed), button);
+  g_signal_connectc (G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (bottom_right_tree_view))),
+		      "changed", GTK_SIGNAL_FUNC (selection_changed), button, FALSE);
   gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label (">>");
   gtk_widget_set_sensitive (button, FALSE);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_right_clicked), bottom_right_tree_view);
-  gtk_signal_connect (GTK_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (left_tree_view))),
-		      "selection-changed", GTK_SIGNAL_FUNC (selection_changed), button);
+  g_signal_connectc (G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (left_tree_view))),
+		     "changed", GTK_SIGNAL_FUNC (selection_changed), button, FALSE);
   gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
 
   

@@ -202,9 +202,6 @@ gboolean                gtk_tree_view_column_cell_event          (GtkTreeViewCol
 								  guint                    flags);
 
 
-
-
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -35,11 +35,11 @@ static gint gtk_tree_selection_real_select_node  (GtkTreeSelection      *selecti
 
 enum
 {
-  SELECTION_CHANGED,
+  CHANGED,
   LAST_SIGNAL
 };
 
-static GtkObjectClass *parent_class = NULL;
+static GObjectClass *parent_class = NULL;
 static guint tree_selection_signals[LAST_SIGNAL] = { 0 };
 
 GtkType
@@ -62,7 +62,7 @@ gtk_tree_selection_get_type (void)
         (GInstanceInitFunc) gtk_tree_selection_init
       };
 
-      selection_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkTreeSelection", &selection_info, 0);
+      selection_type = g_type_register_static (G_TYPE_OBJECT, "GtkTreeSelection", &selection_info, 0);
     }
 
   return selection_type;
@@ -77,13 +77,13 @@ gtk_tree_selection_class_init (GtkTreeSelectionClass *class)
   parent_class = g_type_class_peek_parent (class);
 
   object_class->finalize = gtk_tree_selection_finalize;
-  class->selection_changed = NULL;
+  class->changed = NULL;
 
-  tree_selection_signals[SELECTION_CHANGED] =
-    gtk_signal_new ("selection_changed",
+  tree_selection_signals[CHANGED] =
+    gtk_signal_new ("changed",
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkTreeSelectionClass, selection_changed),
+		    GTK_SIGNAL_OFFSET (GtkTreeSelectionClass, changed),
 		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
 }
@@ -114,7 +114,7 @@ _gtk_tree_selection_new (void)
 {
   GtkTreeSelection *selection;
 
-  selection = GTK_TREE_SELECTION (gtk_type_new (GTK_TYPE_TREE_SELECTION));
+  selection = GTK_TREE_SELECTION (g_object_new (GTK_TYPE_TREE_SELECTION, NULL));
 
   return selection;
 }
@@ -649,7 +649,7 @@ gtk_tree_selection_select_all (GtkTreeSelection *selection)
   g_return_if_fail (selection->type != GTK_TREE_SELECTION_MULTI);
 
   if (gtk_tree_selection_real_select_all (selection))
-    gtk_signal_emit (GTK_OBJECT (selection), tree_selection_signals[SELECTION_CHANGED]);
+    g_signal_emit (G_OBJECT (selection), tree_selection_signals[CHANGED], 0);
 }
 
 static void
@@ -750,7 +750,7 @@ gtk_tree_selection_unselect_all (GtkTreeSelection *selection)
     return;
 
   if (gtk_tree_selection_real_unselect_all (selection))
-    gtk_signal_emit (GTK_OBJECT (selection), tree_selection_signals[SELECTION_CHANGED]);
+    g_signal_emit (G_OBJECT (selection), tree_selection_signals[CHANGED], 0);
 }
 
 static gint
@@ -861,7 +861,7 @@ gtk_tree_selection_select_range (GtkTreeSelection *selection,
   g_return_if_fail (selection->tree_view != NULL);
 
   if (gtk_tree_selection_real_select_range (selection, start_path, end_path))
-    gtk_signal_emit (GTK_OBJECT (selection), tree_selection_signals[SELECTION_CHANGED]);
+    gtk_signal_emit (G_OBJECT (selection), tree_selection_signals[CHANGED], 0);
 }
 
 /* Called internally by gtktreeview.c It handles actually selecting the tree.
@@ -977,7 +977,7 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
     gtk_tree_path_free (anchor_path);
 
   if (dirty)
-    gtk_signal_emit (GTK_OBJECT (selection), tree_selection_signals[SELECTION_CHANGED]);
+    g_signal_emit (G_OBJECT (selection), tree_selection_signals[CHANGED], 0);
 }
 
 /* NOTE: Any {un,}selection ever done _MUST_ be done through this function!

@@ -357,7 +357,7 @@ selection_received (GtkWidget *widget, GtkSelectionData *data)
 void
 paste (GtkWidget *widget, GtkWidget *entry)
 {
-  char *name;
+  const char *name;
   GdkAtom atom;
 
   name = gtk_entry_get_text (GTK_ENTRY(entry));

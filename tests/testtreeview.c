@@ -315,7 +315,7 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
       
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
 
-      pixbuf = gdk_pixbuf_new_from_xpm_data ((char **)book_closed_xpm);
+      pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **)book_closed_xpm);
 
       image = gtk_image_new_from_pixbuf (pixbuf);
 

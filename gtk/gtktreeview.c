@@ -4343,8 +4343,7 @@ gtk_tree_view_deleted (GtkTreeModel *model,
 	{
 	  if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED) &&
               tree_view->priv->selection)
-	    gtk_signal_emit_by_name (GTK_OBJECT (tree_view->priv->selection),
-				     "selection_changed");
+	    g_signal_emit_by_name (G_OBJECT (tree_view->priv->selection), "changed");
 	}
 
       if (anchor_path)
