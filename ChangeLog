@@ -1,5 +1,9 @@
 2005-04-05  Tor Lillqvist  <tml@novell.com>
 
+	* gdk/win32/gdkvisual-win32.c (_gdk_visual_init): Handle 16 colour
+	display mode. For some reason, in this mode GetDeviceCaps(BITSPIXEL)
+	returns 1 (but GetDeviceCaps(NUMCOLORS)	does return 16). (#143415)
+
 	* gdk/win32/gdkvisual-win32.c (_gdk_visual_init): Don't force
 	24bpp GdkVisual on 32bpp displays. (#140706)
 

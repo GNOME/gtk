@@ -354,6 +354,7 @@ alloc_color (GdkColormap  *cmap,
       return TRUE;
 
     default:
+      g_error ("cmap->visual->type=%d", cmap->visual->type);
       g_assert_not_reached ();
       return FALSE;
     }

@@ -97,10 +97,14 @@ _gdk_visual_init (void)
   HBITMAP hbm;
 
   const gint rastercaps = GetDeviceCaps (_gdk_display_hdc, RASTERCAPS);
+  const int numcolors = GetDeviceCaps (_gdk_display_hdc, NUMCOLORS);
   gint bitspixel = GetDeviceCaps (_gdk_display_hdc, BITSPIXEL);
   gint map_entries = 0;
 
   system_visual = g_object_new (GDK_TYPE_VISUAL, NULL);
+
+  GDK_NOTE (COLORMAP, g_print ("BITSPIXEL=%d NUMCOLORS=%d\n",
+			       bitspixel, numcolors));
 
   if (rastercaps & RC_PALETTE)
     {
@@ -109,8 +113,7 @@ _gdk_visual_init (void)
       gchar *max_colors = getenv ("GDK_WIN32_MAX_COLORS");
       system_visual->type = GDK_VISUAL_PSEUDO_COLOR;
 
-      GDK_NOTE (COLORMAP, g_print ("BITSPIXEL=%d NUMCOLORS=%d SIZEPALETTE=%d\n",
-				   bitspixel, numcolors, sizepalette));
+      GDK_NOTE (COLORMAP, g_print ("SIZEPALETTE=%d\n", sizepalette));
       g_assert (sizepalette == 256);
 
       if (max_colors != NULL)
@@ -154,6 +157,12 @@ _gdk_visual_init (void)
 	}
       else
 	map_entries = sizepalette;
+    }
+  else if (bitspixel == 1 && numcolors == 16)
+    {
+      bitspixel = 4;
+      system_visual->type = GDK_VISUAL_STATIC_COLOR;
+      map_entries = 16;
     }
   else if (bitspixel == 1)
     {
