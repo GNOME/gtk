@@ -80,7 +80,7 @@ only be accessed using the functions below.
 Creates a new scrolled window. The two arguments are the scrolled
 window's adjustments; these will be shared with the scrollbars and the
 child widget to keep the bars in sync with the child. Usually you want
-to pass NULL for the adjustments, which will cause the scrolled window
+to pass %NULL for the adjustments, which will cause the scrolled window
 to create them for you.
 </para>
 
@@ -140,9 +140,9 @@ gtk_container_add() instead of this function.
 The viewport scrolls the child by moving its #GdkWindow, and takes the
 size of the child to be the size of its toplevel #GdkWindow. This will
 be very wrong for most widgets that support native scrolling; for
-example, if you add a #GtkCList with a viewport, the whole widget will
-scroll, including the column headings. Thus #GtkCList supports
-scrolling already, and should not be used with the #GtkViewport proxy.
+example, if you add a widget such as #GtkTreeView with a viewport, the 
+whole widget will scroll, including the column headings. Thus, widgets
+with native scrolling support should not be used with the #GtkViewport proxy.
 </para>
 
 <para>
@@ -192,8 +192,6 @@ Sets the #GtkAdjustment for the vertical scrollbar.
 </para>
 
 @scrolled_window: A #GtkScrolledWindow.
-@hadjustment: 
-<!-- # Unused Parameters # -->
 @vadjustment: Vertical scroll adjustment.
 
 
@@ -214,8 +212,6 @@ Sets the #GtkAdjustment for the vertical scrollbar.
 @scrolled_window: 
 @hscrollbar_policy: 
 @vscrollbar_policy: 
-<!-- # Unused Parameters # -->
-@vscrollvar_policy: 
 
 
 <!-- ##### FUNCTION gtk_scrolled_window_get_shadow_type ##### -->
