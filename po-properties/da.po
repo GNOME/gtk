@@ -34,8 +34,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-16 15:07+0100\n"
-"PO-Revision-Date: 2004-11-22 15:42+0100\n"
+"POT-Creation-Date: 2004-11-24 12:00+0100\n"
+"PO-Revision-Date: 2004-11-24 12:03+0100\n"
 "Last-Translator: Martin Willemoes Hansen <mwh@sysrq.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -124,8 +124,8 @@ msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
-"Programmets navn. Hvis dette ikke er angivet benyttes "
-"g_get_application_name()"
+"Programmets navn. Hvis dette ikke er angivet benyttes g_get_application_name"
+"()"
 
 #: gtk/gtkaboutdialog.c:210
 msgid "Program version"
@@ -203,7 +203,8 @@ msgstr "Bidragydere til oversættelse"
 #: gtk/gtkaboutdialog.c:363
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
-msgstr "Bidragydere til oversættelse. Denne streng skal markeres som oversætbar"
+msgstr ""
+"Bidragydere til oversættelse. Denne streng skal markeres som oversætbar"
 
 #: gtk/gtkaboutdialog.c:378
 msgid "Logo"
@@ -258,7 +259,7 @@ msgid "A unique name for the action."
 msgstr "Et unikt navn for handlingen."
 
 #: gtk/gtkaction.c:204 gtk/gtkbutton.c:220 gtk/gtkexpander.c:206
-#: gtk/gtkframe.c:127 gtk/gtklabel.c:315 gtk/gtktoolbutton.c:181
+#: gtk/gtkframe.c:127 gtk/gtklabel.c:318 gtk/gtktoolbutton.c:181
 msgid "Label"
 msgstr "Etiket"
 
@@ -310,7 +311,7 @@ msgstr "Synlig ved overflydning"
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
-msgstr 
+msgstr ""
 "Hvis sand vil værktøjselementstedfortræderne for denne handling være "
 "repræsenteret i værktøjslinjens overflydningsmenu."
 
@@ -697,12 +698,12 @@ msgid ""
 msgstr ""
 "Tekst for etiketkontrollen inde i knappen hvis knappen indeholder en etiket"
 
-#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:214 gtk/gtklabel.c:336
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:214 gtk/gtklabel.c:339
 #: gtk/gtktoolbutton.c:188
 msgid "Use underline"
 msgstr "Benyt understregning"
 
-#: gtk/gtkbutton.c:229 gtk/gtkexpander.c:215 gtk/gtklabel.c:337
+#: gtk/gtkbutton.c:229 gtk/gtkexpander.c:215 gtk/gtklabel.c:340
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1077,7 +1078,7 @@ msgstr "Opmærket tekst"
 msgid "Marked up text to render"
 msgstr "Opmærket tekst der skal vises"
 
-#: gtk/gtkcellrenderertext.c:220 gtk/gtklabel.c:322
+#: gtk/gtkcellrenderertext.c:220 gtk/gtklabel.c:325
 msgid "Attributes"
 msgstr "Egenskaber"
 
@@ -1235,7 +1236,7 @@ msgstr ""
 "tip når teksten fremvises. Hvis du ikke forstår denne parameter, behøver du "
 "den sandsynligvis ikke"
 
-#: gtk/gtkcellrenderertext.c:407 gtk/gtklabel.c:428 gtk/gtkprogressbar.c:242
+#: gtk/gtkcellrenderertext.c:407 gtk/gtklabel.c:431 gtk/gtkprogressbar.c:242
 msgid "Ellipsize"
 msgstr "Ellipsegør"
 
@@ -1715,19 +1716,19 @@ msgstr "Handlingsområdekant"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Bredde på kanten omkring knapområdet nederst i vinduet"
 
-#: gtk/gtkentry.c:485 gtk/gtklabel.c:393
+#: gtk/gtkentry.c:485 gtk/gtklabel.c:396
 msgid "Cursor Position"
 msgstr "Markørposition"
 
-#: gtk/gtkentry.c:486 gtk/gtklabel.c:394
+#: gtk/gtkentry.c:486 gtk/gtklabel.c:397
 msgid "The current position of the insertion cursor in chars"
 msgstr "Den aktuelle position af indsætningsmarkøren i tegn"
 
-#: gtk/gtkentry.c:495 gtk/gtklabel.c:403
+#: gtk/gtkentry.c:495 gtk/gtklabel.c:406
 msgid "Selection Bound"
 msgstr "Markeringsgrænse"
 
-#: gtk/gtkentry.c:496 gtk/gtklabel.c:404
+#: gtk/gtkentry.c:496 gtk/gtklabel.c:407
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
@@ -1903,11 +1904,11 @@ msgstr "Om udvideren er blevet åbnet for at afsløre underkontrollen"
 msgid "Text of the expander's label"
 msgstr "Tekst for udviderens etiket"
 
-#: gtk/gtkexpander.c:222 gtk/gtklabel.c:329
+#: gtk/gtkexpander.c:222 gtk/gtklabel.c:332
 msgid "Use markup"
 msgstr "Benyt opmærkning"
 
-#: gtk/gtkexpander.c:223 gtk/gtklabel.c:330
+#: gtk/gtkexpander.c:223 gtk/gtklabel.c:333
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Etikettens tekst indeholder XML-opmærkning - se pango_parse_markup()"
 
@@ -2040,11 +2041,11 @@ msgstr "Bredde i tegn"
 msgid "The desired width of the button widget, in characters."
 msgstr "Den ønskede bredde på knapkontrollen i tegn."
 
-#: gtk/gtkfilechooserdefault.c:595
+#: gtk/gtkfilechooserdefault.c:609
 msgid "Default file chooser backend"
 msgstr "Standard-filvælgerbagende"
 
-#: gtk/gtkfilechooserdefault.c:596
+#: gtk/gtkfilechooserdefault.c:610
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Navn på den GtkFileChooser-bagende som skal anvendes som standard"
 
@@ -2344,8 +2345,8 @@ msgstr "Ikonstørrelse"
 #: gtk/gtkimage.c:216
 msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr ""
-"Symbolsk størrelse der skal bruges for standardikon, ikonsæt "
-"eller navngivet ikon"
+"Symbolsk størrelse der skal bruges for standardikon, ikonsæt eller navngivet "
+"ikon"
 
 #: gtk/gtkimage.c:232
 msgid "Pixel size"
@@ -2399,19 +2400,19 @@ msgstr "Skærm"
 msgid "The screen where this window will be displayed"
 msgstr "Den skærm hvor dette vindue vises"
 
-#: gtk/gtklabel.c:316
+#: gtk/gtklabel.c:319
 msgid "The text of the label"
 msgstr "Tekst for etiketten"
 
-#: gtk/gtklabel.c:323
+#: gtk/gtklabel.c:326
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "En liste af stilegenskaber som skal anvendes på etikettens tekst"
 
-#: gtk/gtklabel.c:344 gtk/gtktexttag.c:376 gtk/gtktextview.c:594
+#: gtk/gtklabel.c:347 gtk/gtktexttag.c:376 gtk/gtktextview.c:594
 msgid "Justification"
 msgstr "Justering"
 
-#: gtk/gtklabel.c:345
+#: gtk/gtklabel.c:348
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -2421,11 +2422,11 @@ msgstr ""
 "IKKE nogen indflydelse på justeringen af etiketten inden for dens afsatte "
 "plads - se GtkMisc::xalign for det"
 
-#: gtk/gtklabel.c:353
+#: gtk/gtklabel.c:356
 msgid "Pattern"
 msgstr "Mønster"
 
-#: gtk/gtklabel.c:354
+#: gtk/gtklabel.c:357
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
@@ -2433,62 +2434,70 @@ msgstr ""
 "En streng med tegnet _ i forskellige positioner svarer til tegn i teksten "
 "der skal understreges"
 
-#: gtk/gtklabel.c:361
+#: gtk/gtklabel.c:364
 msgid "Line wrap"
 msgstr "Linjeombrydning"
 
-#: gtk/gtklabel.c:362
+#: gtk/gtklabel.c:365
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Hvis sat bliver linjer brudt hvis teksten bliver for bred"
 
-#: gtk/gtklabel.c:368
+#: gtk/gtklabel.c:371
 msgid "Selectable"
 msgstr "Kan markeres"
 
-#: gtk/gtklabel.c:369
+#: gtk/gtklabel.c:372
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Om etiketteksten kan markeres med musen"
 
-#: gtk/gtklabel.c:375
+#: gtk/gtklabel.c:378
 msgid "Mnemonic key"
 msgstr "Genvejstast"
 
-#: gtk/gtklabel.c:376
+#: gtk/gtklabel.c:379
 msgid "The mnemonic accelerator key for this label"
 msgstr "Genvejstasten for denne etiket"
 
-#: gtk/gtklabel.c:384
+#: gtk/gtklabel.c:387
 msgid "Mnemonic widget"
 msgstr "Tilknyttet kontrol"
 
-#: gtk/gtklabel.c:385
+#: gtk/gtklabel.c:388
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr ""
 "Den kontrol der skal aktiveres når etikettens genvejstast bliver tastet"
 
-#: gtk/gtklabel.c:429
+#: gtk/gtklabel.c:432
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string, if at all"
 msgstr ""
-"Det foretrukne sted at ellipsegøre strengen hvis etiketten ikke har "
-"nok plads til at vise hele strengen, hvis noget overhovedet kan vises"
+"Det foretrukne sted at ellipsegøre strengen hvis etiketten ikke har nok "
+"plads til at vise hele strengen, hvis noget overhovedet kan vises"
 
-#: gtk/gtklabel.c:446
+#: gtk/gtklabel.c:449
 msgid "Width In Chararacters"
 msgstr "Bredde i tegn"
 
-#: gtk/gtklabel.c:447
+#: gtk/gtklabel.c:450
 msgid "The desired width of the label, in characters"
 msgstr "Den ønskede bredde på etiketten i tegn"
 
-#: gtk/gtklabel.c:467
+#: gtk/gtklabel.c:470
 msgid "Single Line Mode"
 msgstr "Enkeltlinje-tilstand"
 
-#: gtk/gtklabel.c:468
+#: gtk/gtklabel.c:471
 msgid "Whether the label is in single line mode"
 msgstr "Om etiketten er i enkeltlinje-tilstand"
+
+#: gtk/gtklabel.c:488
+msgid "Angle"
+msgstr "Vinkel"
+
+#: gtk/gtklabel.c:489
+msgid "Angle at which the label is rotated"
+msgstr "Vinkel som etiketten roteres"
 
 #: gtk/gtklayout.c:635 gtk/gtkviewport.c:136
 msgid "Horizontal adjustment"
@@ -2785,8 +2794,8 @@ msgstr "Med rulning"
 #: gtk/gtknotebook.c:460
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
-"Hvis sand bliver rulningspile tilføjet hvis der er for mange faneblade til at "
-"alle kan vises"
+"Hvis sand bliver rulningspile tilføjet hvis der er for mange faneblade til "
+"at alle kan vises"
 
 # se næste tekst for forklaring
 #: gtk/gtknotebook.c:466
@@ -3032,8 +3041,8 @@ msgid ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
 msgstr ""
-"Antallet af blokke som kan være i statuslinjens areal i "
-"aktivitetstilstand (FORÆLDET)"
+"Antallet af blokke som kan være i statuslinjens areal i aktivitetstilstand "
+"(FORÆLDET)"
 
 #: gtk/gtkprogressbar.c:190
 msgid "Discrete Blocks"
@@ -3044,8 +3053,8 @@ msgid ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
 msgstr ""
-"Antallet af adskilte blokke i statuslinjen (når den vises på den "
-"\"diskrete\" måde)"
+"Antallet af adskilte blokke i statuslinjen (når den vises på den \"diskrete"
+"\" måde)"
 
 #: gtk/gtkprogressbar.c:200
 msgid "Fraction"
@@ -3074,8 +3083,8 @@ msgid ""
 "The preferred place to ellipsize the string, if the progressbar does not "
 "have enough room to display the entire string, if at all"
 msgstr ""
-"Det foretrukne sted at ellipsegøre strengen hvis statuslinjen ikke har "
-"nok plads til at vise hele strengen, hvis noget overhovedet kan vises"
+"Det foretrukne sted at ellipsegøre strengen hvis statuslinjen ikke har nok "
+"plads til at vise hele strengen, hvis noget overhovedet kan vises"
 
 #: gtk/gtkradioaction.c:139
 msgid "The value"
