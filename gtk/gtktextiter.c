@@ -1326,18 +1326,49 @@ gtk_text_iter_starts_line (const GtkTextIter   *iter)
  * gtk_text_iter_ends_line:
  * @iter: an iterator
  *
- * Returns TRUE if @iter points to a newline character.
+ * Returns TRUE if @iter points to the start of the paragraph delimiter
+ * characters for a line (delimiters will be either a newline, a
+ * carriage return, a carriage return followed by a newline, or a
+ * Unicode paragraph separator character). Note that an iterator pointing
+ * to the \n of a \r\n pair will not be counted as the end of a line,
+ * the line ends before the \r.
  *
  * Return value: whether @iter is at the end of a line
  **/
 gboolean
 gtk_text_iter_ends_line (const GtkTextIter   *iter)
 {
+  GtkTextRealIter *real;
+  gunichar wc;
+  
   g_return_val_if_fail (iter != NULL, FALSE);
 
+  real = gtk_text_iter_make_real (iter);
+  
   check_invariants (iter);
 
-  return gtk_text_iter_get_char (iter) == '\n';
+  /* Only one character has type G_UNICODE_PARAGRAPH_SEPARATOR in
+   * Unicode 3.0; update this if that changes.
+   */
+#define PARAGRAPH_SEPARATOR 0x2029
+
+  wc = gtk_text_iter_get_char (iter);
+  
+  if (wc == '\r' || wc == PARAGRAPH_SEPARATOR)
+    return TRUE;
+  else if (wc == '\n')
+    {
+      /* need to determine if a \r precedes the \n, in which case
+       * we aren't the end of the line
+       */
+      GtkTextIter tmp = *iter;
+      if (!gtk_text_iter_prev_char (&tmp))
+        return FALSE;
+
+      return gtk_text_iter_get_char (&tmp) != '\r';
+    }
+  else
+    return FALSE;
 }
 
 /**

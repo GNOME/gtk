@@ -279,6 +279,8 @@ struct _GdkEventKey
   guint keyval;
   gint length;
   gchar *string;
+  guint16 hardware_keycode;
+  guint8 keyboard_group;
 };
 
 struct _GdkEventCrossing

@@ -32,6 +32,8 @@ static void     gtk_hpaned_size_request   (GtkWidget      *widget,
 					   GtkRequisition *requisition);
 static void     gtk_hpaned_size_allocate  (GtkWidget      *widget,
 					   GtkAllocation  *allocation);
+static gint     gtk_hpaned_expose         (GtkWidget      *widget,
+                                           GdkEventExpose *event);
 static void     gtk_hpaned_xor_line       (GtkPaned       *paned);
 static gboolean gtk_hpaned_button_press   (GtkWidget      *widget,
 					   GdkEventButton *event);
@@ -39,6 +41,8 @@ static gboolean gtk_hpaned_button_release (GtkWidget      *widget,
 					   GdkEventButton *event);
 static gboolean gtk_hpaned_motion         (GtkWidget      *widget,
 					   GdkEventMotion *event);
+
+static gpointer parent_class;
 
 GtkType
 gtk_hpaned_get_type (void)
@@ -70,10 +74,13 @@ gtk_hpaned_class_init (GtkHPanedClass *class)
 {
   GtkWidgetClass *widget_class;
 
+  parent_class = gtk_type_class (GTK_TYPE_PANED);
+  
   widget_class = (GtkWidgetClass *) class;
 
   widget_class->size_request = gtk_hpaned_size_request;
   widget_class->size_allocate = gtk_hpaned_size_allocate;
+  widget_class->expose_event = gtk_hpaned_expose;
   widget_class->button_press_event = gtk_hpaned_button_press;
   widget_class->button_release_event = gtk_hpaned_button_release;
   widget_class->motion_notify_event = gtk_hpaned_motion;
@@ -219,6 +226,48 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
       if (paned->child2 && GTK_WIDGET_VISIBLE (paned->child2))
 	gtk_widget_size_allocate (paned->child2, &child2_allocation);
     }
+}
+
+static gint
+gtk_hpaned_expose (GtkWidget      *widget,
+                   GdkEventExpose *event)
+{
+  GtkPaned *paned;
+  guint16 border_width;
+
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_PANED (widget), FALSE);
+
+  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget)) 
+    {
+      paned = GTK_PANED (widget);
+      border_width = GTK_CONTAINER (paned)->border_width;
+
+      if (event->window == widget->window)
+        {
+          gdk_window_clear_area (widget->window,
+                                 event->area.x, event->area.y,
+                                 event->area.width,
+                                 event->area.height);
+
+          /* Chain up to draw children */
+          GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
+        }
+      else if (event->window == paned->handle)
+        {
+	  gtk_paint_handle (widget->style,
+			    paned->handle,
+			    GTK_STATE_NORMAL,
+			    GTK_SHADOW_NONE,
+                            &event->area,
+			    widget,
+			    "paned",
+			    0, 0, -1, -1,
+			    GTK_ORIENTATION_VERTICAL);
+	}
+    }
+
+  return FALSE;
 }
 
 static void

@@ -924,12 +924,15 @@ gtk_text_btree_insert (GtkTextIter *iter,
                                 * added to this line). */
   GtkTextLineSegment *seg;
   GtkTextLine *newline;
-  int chunkSize;                        /* # characters in current chunk. */
-  guint sol; /* start of line */
-  guint eol;                      /* Pointer to character just after last
-                                   * one in current chunk. */
+  int chunk_len;                        /* # characters in current chunk. */
+  gint sol;                           /* start of line */
+  gint eol;                           /* Pointer to character just after last
+                                       * one in current chunk.
+                                       */
+  gint delim;                          /* index of paragraph delimiter */
   int line_count_delta;                /* Counts change to total number of
-                                        * lines in file. */
+                                        * lines in file.
+                                        */
 
   int char_count_delta;                /* change to number of chars */
   GtkTextBTree *tree;
@@ -968,17 +971,14 @@ gtk_text_btree_insert (GtkTextIter *iter,
   char_count_delta = 0;
   while (eol < len)
     {
-      for (; eol < len; eol++)
-        {
-          if (text[eol] == '\n')
-            {
-              eol++;
-              break;
-            }
-        }
-      chunkSize = eol - sol;
+      pango_find_paragraph_boundary (text + sol,
+                                     len - sol,
+                                     &delim,
+                                     &eol);      
 
-      seg = _gtk_char_segment_new (&text[sol], chunkSize);
+      chunk_len = eol - sol;
+
+      seg = _gtk_char_segment_new (&text[sol], chunk_len);
 
       char_count_delta += seg->char_count;
 
@@ -993,10 +993,9 @@ gtk_text_btree_insert (GtkTextIter *iter,
           cur_seg->next = seg;
         }
 
-      if (text[eol-1] != '\n')
-        {
-          break;
-        }
+      if (delim == eol)
+        /* chunk didn't end with a paragraph separator */
+        break;
 
       /*
        * The chunk ended with a newline, so create a new GtkTextLine
@@ -6703,7 +6702,7 @@ gtk_text_btree_spew_line_short (GtkTextLine *line, int indent)
           s = str;
           while (*s)
             {
-              if (*s == '\n')
+              if (*s == '\n' || *s == '\r')
                 *s = '\\';
               ++s;
             }

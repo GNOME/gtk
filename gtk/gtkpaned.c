@@ -295,6 +295,8 @@ gtk_paned_unrealize (GtkWidget *widget)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
 
+
+
 static gint
 gtk_paned_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
@@ -310,16 +312,10 @@ gtk_paned_expose (GtkWidget      *widget,
     {
       paned = GTK_PANED (widget);
 
-      if (event->window == paned->handle)
+      if (event->window != paned->handle)
 	{
 	  child_event = *event;
-	  event->area.x += paned->handle_xpos;
-	  event->area.y += paned->handle_ypos;
-	  gtk_widget_draw (widget, &event->area);
-	}
-      else
-	{
-	  child_event = *event;
+
 	  if (paned->child1 &&
 	      GTK_WIDGET_NO_WINDOW (paned->child1) &&
 	      gtk_widget_intersect (paned->child1, &event->area, &child_event.area))

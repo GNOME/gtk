@@ -2340,8 +2340,22 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
 			   page->tab_label->allocation.width + 1,
 			   page->tab_label->allocation.height + 1);
 	}
-      if (gtk_widget_intersect (page->tab_label, area, &child_area))
-	gtk_widget_draw (page->tab_label, &child_area);
+      if (gtk_widget_intersect (page->tab_label, area, &child_area) &&
+          GTK_WIDGET_DRAWABLE (page->tab_label))
+        {
+          GdkEventExpose expose_event;
+
+          /* This is a lame hack since all this code needs rewriting anyhow */
+          
+          expose_event.window = page->tab_label->window;
+          expose_event.area = child_area;
+          expose_event.send_event = TRUE;
+          expose_event.type = GDK_EXPOSE;
+          expose_event.count = 0;
+          
+          gtk_widget_event (page->tab_label,
+                            (GdkEvent*)&expose_event);
+        }
     }
 }
 

@@ -1,3 +1,23 @@
+2000-12-04  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkpaned.c (gtk_paned_expose): fix this to be sane
+
+	* gtk/gtkvpaned.c (gtk_vpaned_expose): Add an expose handler
+
+	* gtk/gtkhpaned.c (gtk_hpaned_expose): Add an expose handler
+
+	* gtk/gtknotebook.c (gtk_notebook_draw_tab): put in a temporary 
+	hack to avoid infinite loops (queue draw instead of draw) - 
+	Owen has more appropriate fixes in a branch he'll check in later.
+
+	* gtk/gtktextiter.c (gtk_text_iter_ends_line): handle paragraph
+	separator, CR, and CRLF as line ends
+
+	* gtk/gtktextbtree.c (gtk_text_btree_insert): on insertion, break
+	into lines using pango_find_paragraph_boundary(); other bits of
+	the widget are still going to be broken if the boundary isn't '\n'
+	though
+
 2000-12-04  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkfont-fb.c (gdk_text_width): Divide size by 2, not

@@ -94,19 +94,6 @@ Creating a pixbuf from image data that is already in memory.
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_pixbuf_new_subpixbuf ##### -->
-<para>
-
-</para>
-
-@src_pixbuf: 
-@src_x: 
-@src_y: 
-@width: 
-@height: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gdk_pixbuf_copy ##### -->
 <para>
 

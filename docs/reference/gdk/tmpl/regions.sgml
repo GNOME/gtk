@@ -266,36 +266,3 @@ Returns the union of a region and a rectangle.
 @source2: 
 
 
-<!-- ##### STRUCT GdkSpan ##### -->
-<para>
-
-</para>
-
-@x: 
-@y: 
-@width: 
-
-<!-- ##### USER_FUNCTION GdkSpanFunc ##### -->
-<para>
-
-</para>
-
-@span: The intersected part of the span.
-@data: Opaque data passed by user.
-
-
-<!-- ##### FUNCTION gdk_region_spans_intersect_foreach ##### -->
-<para>
-Intersects a set of spans with a region and call a user specified
-function for each resulting spanline. This function is a lot more effective
-if the spans are sorted.
-</para>
-
-@region: The region to intersect against.
-@spans: Array of spans to intersect.
-@n_spans: Number of spans.
-@sorted: True if the spans are sorted in increasing y order.
-@function: The function to call for each intersected spanline.
-@data: Opaque user data passed to function.
-
-
