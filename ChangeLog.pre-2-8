@@ -1,3 +1,10 @@
+Wed Dec 12 17:22:45 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimmulticontext.c (gtk_im_multicontext_set_slave):
+	Reset the existing slave before removing it to give
+	it a chance to commit and emit "preedit_changed" 
+	in case there was still a preedit string.
+
 2001-12-12  Matthias Clasen  <matthiasc@poet.de>
 	
 	* gtk/gtktextlayout.c: Typo fixes
