@@ -1,3 +1,8 @@
+2004-07-28  Robert Ögren  <gtk@roboros.com>
+
+	* gdk/win32/gdkinput-win32.c (_gdk_input_other_event): Set x_root
+	and y_root in button and motion events from the tablet. (#148715)
+
 Thu Aug  5 19:58:08 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkplug.c (gtk_plug_realize): Call
