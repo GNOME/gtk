@@ -47,9 +47,9 @@
 #define DEFAULT_POPUP_DELAY    225
 #define DEFAULT_POPDOWN_DELAY  1000
 
-#define NAVIGATION_REGION_OVERSHOOT 5  /* How much the navigation region
-					* extends below the submenu
-					*/
+#define NAVIGATION_REGION_OVERSHOOT 50  /* How much the navigation region
+					 * extends below the submenu
+					 */
 
 #define MENU_SCROLL_STEP 10
 #define MENU_SCROLL_ARROW_HEIGHT 16
@@ -2364,6 +2364,40 @@ draw_stay_up_triangle (GdkWindow *window,
 }
 #endif
 
+static GdkRegion *
+flip_region (GdkRegion *region,
+	     gboolean   flip_x,
+	     gboolean   flip_y)
+{
+  gint n_rectangles;
+  GdkRectangle *rectangles;
+  GdkRectangle clipbox;
+  GdkRegion *new_region;
+  gint i;
+
+  new_region = gdk_region_new ();
+  
+  gdk_region_get_rectangles (region, &rectangles, &n_rectangles);
+  gdk_region_get_clipbox (region, &clipbox);
+
+  for (i = 0; i < n_rectangles; ++i)
+    {
+      GdkRectangle rect = rectangles[i];
+
+      if (flip_y)
+	rect.y -= 2 * (rect.y - clipbox.y) + rect.height;
+
+      if (flip_x)
+	rect.x -= 2 * (rect.x - clipbox.x) + rect.width;
+
+      gdk_region_union_with_rect (new_region, &rect);
+    }
+
+  g_free (rectangles);
+
+  return new_region;
+}
+
 static void
 gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
 					GtkMenuItem      *menu_item,
@@ -2394,30 +2428,36 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
   if (event->x >= 0 && event->x < width)
     {
       gint popdown_delay;
+      gboolean flip_y = FALSE;
+      gboolean flip_x = FALSE;
       
       gtk_menu_stop_navigating_submenu (menu);
 
       if (menu_item->submenu_direction == GTK_DIRECTION_RIGHT)
 	{
 	  /* right */
-	  point[0].x = event->x_root - 1;
+	  point[0].x = event->x_root;
 	  point[1].x = submenu_left;
 	}
       else
 	{
 	  /* left */
-	  point[0].x = event->x_root + 2;
-	  point[1].x = submenu_right;
+	  point[0].x = event->x_root + 1;
+	  point[1].x = 2 * (event->x_root + 1) - submenu_right;
+
+	  flip_x = TRUE;
 	}
 
       if (event->y < 0)
 	{
 	  /* top */
 	  point[0].y = event->y_root + 1;
-	  point[1].y = submenu_top - NAVIGATION_REGION_OVERSHOOT;
+	  point[1].y = 2 * (event->y_root + 1) - submenu_top + NAVIGATION_REGION_OVERSHOOT;
 
-	  if (point[0].y <= submenu_top)
+	  if (point[0].y >= point[1].y - NAVIGATION_REGION_OVERSHOOT)
 	    return;
+
+	  flip_y = TRUE;
 	}
       else
 	{
@@ -2433,6 +2473,13 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
       point[2].y = point[0].y;
 
       menu->navigation_region = gdk_region_polygon (point, 3, GDK_WINDING_RULE);
+
+      if (flip_x || flip_y)
+	{
+	  GdkRegion *new_region = flip_region (menu->navigation_region, flip_x, flip_y);
+	  gdk_region_destroy (menu->navigation_region);
+	  menu->navigation_region = new_region;
+	}
 
       g_object_get (G_OBJECT (gtk_widget_get_settings (GTK_WIDGET (menu))),
 		    "gtk-menu-popdown-delay", &popdown_delay,

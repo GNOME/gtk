@@ -1,3 +1,9 @@
+Tue Oct 29 20:39:16 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkmenu.c: Change NAVIGATION_REGION_OVERSHOOT back to 50,
+	and create stay-up regions by flipping a fourth quadrant triangle
+	as appropriate.
+
 2002-10-28  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_set_decorations,
