@@ -1,3 +1,18 @@
+Mon Feb 18 23:16:16 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.[ch]: Add routines _gtk_find_module(),
+	_gtk_get_module_path() to look up a module of an arbitrary type in
+	a standard fashion. (#68474)
+
+	* gtk/gtkrc.c: Make module_path keyword warn and do
+	nothing. Remove the im_module_path keyword.
+
+	* gtk/gtkrc.c (gtk_rc_get_im_module_path): Fix
+	to return the standard path instead of one determined
+	from im_module_path and GTK_IM_MODULE_PATH.
+	
+	* gtk+-2.0.pc.in: Add gtk_host to go along with gtk_binary_version.
+
 2002-02-19  Matthias Clasen  <maclas@gmx.de>
 
 	* docs/tutorial/gtk-tut.sgml, docs/examples/*: Trivial formatting

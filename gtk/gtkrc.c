@@ -52,6 +52,7 @@
 #include "gtkthemes.h"
 #include "gtkintl.h"
 #include "gtkiconfactory.h"
+#include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtksettings.h"
 #include "gtkwindow.h"
@@ -166,8 +167,6 @@ static void        gtk_rc_parse_pixmap_path_string   (GtkRcContext    *context,
 						      GScanner        *scanner,
 						      const gchar     *pix_path);
 static guint       gtk_rc_parse_module_path          (GScanner        *scanner);
-static void        gtk_rc_parse_module_path_string   (const gchar     *mod_path);
-static guint       gtk_rc_parse_im_module_path       (GScanner        *scanner);
 static guint       gtk_rc_parse_im_module_file       (GScanner        *scanner);
 static guint       gtk_rc_parse_path_pattern         (GtkRcContext    *context,
 						      GScanner        *scanner);
@@ -179,7 +178,6 @@ static void        gtk_rc_clear_hash_node            (gpointer         key,
                                                       gpointer         data,
                                                       gpointer         user_data);
 static void        gtk_rc_clear_styles               (GtkRcContext    *context);
-static void        gtk_rc_append_default_module_path (void);
 static void        gtk_rc_add_initial_default_files  (void);
 
 static void        gtk_rc_style_init                 (GtkRcStyle      *style);
@@ -272,7 +270,6 @@ static const struct
   { "engine", GTK_RC_TOKEN_ENGINE },
   { "module_path", GTK_RC_TOKEN_MODULE_PATH },
   { "stock", GTK_RC_TOKEN_STOCK },
-  { "im_module_path", GTK_RC_TOKEN_IM_MODULE_PATH },
   { "im_module_file", GTK_RC_TOKEN_IM_MODULE_FILE },
   { "LTR", GTK_RC_TOKEN_LTR },
   { "RTL", GTK_RC_TOKEN_RTL }
@@ -280,14 +277,10 @@ static const struct
 
 static GHashTable *realized_style_ht = NULL;
 
-static gchar *im_module_path = NULL;
 static gchar *im_module_file = NULL;
 
 #define GTK_RC_MAX_DEFAULT_FILES 128
 static gchar *gtk_rc_default_files[GTK_RC_MAX_DEFAULT_FILES];
-
-#define GTK_RC_MAX_MODULE_PATHS 128
-static gchar *module_path[GTK_RC_MAX_MODULE_PATHS];
 
 /* A stack of directories for RC files we are parsing currently.
  * these are implicitely added to the end of PIXMAP_PATHS
@@ -317,29 +310,25 @@ gtk_rc_make_default_dir (const gchar *type)
  *    look for IM modules.
  *
  * Obtains the path in which to look for IM modules. See the documentation
- * of the <link linkend="im-module-path"><envar>GTK_IM_MODULE_PATH</envar></link>
- * environment variable for more details.
+ * of the <link linkend="im-module-path"><envar>GTK_PATH</envar></link>
+ * environment variable for more details about looking up modules. This
+ * function is useful solely for utilities supplied with GTK+ and should
+ * not be used by applications under normal circumstances.
  */
 gchar *
 gtk_rc_get_im_module_path (void)
 {
-  const gchar *result = g_getenv ("GTK_IM_MODULE_PATH");
+  gchar **paths = _gtk_get_module_path ("immodules");
+  gchar *result = g_strjoinv (G_SEARCHPATH_SEPARATOR_S, paths);
+  g_strfreev (paths);
 
-  if (!result)
-    {
-      if (im_module_path)
-	result = im_module_path;
-      else
-	return gtk_rc_make_default_dir ("immodules");
-    }
-
-  return g_strdup (result);
+  return result;
 }
 
 /**
  * gtk_rc_get_im_module_file:
  * @returns: a newly-allocated string containing the name of the file
- * listing the IM modules to load
+ * listing the IM modules available for loading
  *
  * Obtains the path to the IM modules file. See the documentation
  * of the <link linkend="im-module-file"><envar>GTK_IM_MODULE_FILE</envar></link>
@@ -380,33 +369,6 @@ gchar *
 gtk_rc_get_module_dir (void)
 {
   return gtk_rc_make_default_dir ("engines");
-}
-
-static void
-gtk_rc_append_default_module_path (void)
-{
-  const gchar *var;
-  gchar *path;
-  gint n;
-
-  for (n = 0; module_path[n]; n++) ;
-  if (n >= GTK_RC_MAX_MODULE_PATHS - 1)
-    return;
-  
-  var = g_getenv ("GTK_EXE_PREFIX");
-  if (var)
-    path = g_build_filename (var, "lib", "gtk-2.0", GTK_VERSION, "engines", NULL);
-  else
-    path = g_build_filename (GTK_LIBDIR, "gtk-2.0", GTK_VERSION, "engines", NULL);
-  module_path[n++] = path;
-
-  var = g_get_home_dir ();
-  if (var)
-    {
-      path = g_build_filename (var, ".gtk-2.0", GTK_VERSION, "engines", NULL);
-      module_path[n++] = path;
-    }
-  module_path[n] = NULL;
 }
 
 static void
@@ -654,9 +616,6 @@ _gtk_rc_init (void)
   if (!initialized)
     {
       initialized = TRUE;
-      
-      module_path[0] = NULL;
-      gtk_rc_append_default_module_path();
       
       gtk_rc_add_initial_default_files ();
     }
@@ -2265,9 +2224,6 @@ gtk_rc_parse_statement (GtkRcContext *context,
     case GTK_RC_TOKEN_MODULE_PATH:
       return gtk_rc_parse_module_path (scanner);
       
-    case GTK_RC_TOKEN_IM_MODULE_PATH:
-      return gtk_rc_parse_im_module_path (scanner);
-      
     case GTK_RC_TOKEN_IM_MODULE_FILE:
       return gtk_rc_parse_im_module_file (scanner);
 
@@ -2873,28 +2829,20 @@ gtk_rc_find_pixmap_in_path (GtkSettings  *settings,
   return NULL;
 }
 
+/**
+ * gtk_rc_find_module_in_path:
+ * @module_file: name of a theme engine
+ * 
+ * Searches for a theme engine in the GTK+ search path. This function
+ * is not useful for applications and should not be used.
+ * 
+ * Return value: The filename, if found (must be freed with g_free()),
+ *   otherwise %NULL.
+ **/
 gchar*
 gtk_rc_find_module_in_path (const gchar *module_file)
 {
-  gint i;
-  gint fd;
-  gchar *buf;
-  
-  for (i = 0; (i < GTK_RC_MAX_MODULE_PATHS) && (module_path[i] != NULL); i++)
-    {
-      buf = g_build_filename (module_path[i], module_file, NULL);
-      
-      fd = open (buf, O_RDONLY);
-      if (fd >= 0)
-	{
-	  close (fd);
-	  return buf;
-	}
-      
-      g_free (buf);
-    }
-    
-  return NULL;
+  return _gtk_find_module (module_file, "engines");
 }
 
 static guint
@@ -3328,30 +3276,9 @@ gtk_rc_parse_module_path (GScanner *scanner)
   token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_STRING)
     return G_TOKEN_STRING;
-  
-  gtk_rc_parse_module_path_string (scanner->value.v_string);
-  
-  return G_TOKEN_NONE;
-}
 
-static guint
-gtk_rc_parse_im_module_path (GScanner *scanner)
-{
-  guint token;
+  g_warning ("module_path directive is now ignored\n");
   
-  token = g_scanner_get_next_token (scanner);
-  if (token != GTK_RC_TOKEN_IM_MODULE_FILE)
-    return GTK_RC_TOKEN_IM_MODULE_FILE;
-  
-  token = g_scanner_get_next_token (scanner);
-  if (token != G_TOKEN_STRING)
-    return G_TOKEN_STRING;
-
-  if (im_module_path)
-    g_free (im_module_path);
-    
-  im_module_path = g_strdup (scanner->value.v_string);
-
   return G_TOKEN_NONE;
 }
 
@@ -3374,39 +3301,6 @@ gtk_rc_parse_im_module_file (GScanner *scanner)
   im_module_file = g_strdup (scanner->value.v_string);
 
   return G_TOKEN_NONE;
-}
-
-static void
-gtk_rc_parse_module_path_string (const gchar *mod_path)
-{
-  gint end_offset;
-  gint start_offset = 0;
-  gint path_len;
-  gint path_num;
-  
-  /* free the old one, or just add to the old one ? */
-  for (path_num=0; module_path[path_num]; path_num++)
-    {
-      g_free (module_path[path_num]);
-      module_path[path_num] = NULL;
-    }
-  
-  path_num = 0;
-  
-  path_len = strlen (mod_path);
-  
-  for (end_offset = 0; end_offset <= path_len; end_offset++)
-    {
-      if ((mod_path[end_offset] == G_SEARCHPATH_SEPARATOR) ||
-	  (end_offset == path_len))
-	{
-	  module_path[path_num] = g_strndup (mod_path + start_offset, end_offset - start_offset);
-	  path_num++;
-	  module_path[path_num] = NULL;
-	  start_offset = end_offset + 1;
-	}
-    }
-  gtk_rc_append_default_module_path();
 }
 
 static guint

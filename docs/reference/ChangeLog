@@ -1,3 +1,8 @@
+Mon Feb 18 23:00:52 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/running.sgml: Remove docs for GTK_IM_MODULE_PATH,
+	replace docs for GTK_MODULE_PATH with docs for GTK_PATH.
+
 Sun Feb 17 21:33:33 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk-sections.txt: Updated for filesel changes.

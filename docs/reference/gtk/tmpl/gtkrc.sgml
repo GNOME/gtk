@@ -776,12 +776,10 @@ that was expected but not found.
 
 <!-- ##### FUNCTION gtk_rc_find_module_in_path ##### -->
 <para>
-Looks up a file in the current module path.
 </para>
 
 @module_file: The name of the module to search for.
-@Returns: The filename, if found (must be freed with g_free()),
-otherwise %NULL.
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_rc_find_pixmap_in_path ##### -->

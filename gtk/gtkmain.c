@@ -282,27 +282,140 @@ _gtk_get_data_prefix (void)
 static gchar **
 get_module_path (void)
 {
-  const gchar *module_path_env = g_getenv ("GTK_MODULE_PATH");
-  const gchar *exe_prefix = g_getenv ("GTK_EXE_PREFIX");
-  gchar **result;
+  const gchar *module_path_env;
+  const gchar *exe_prefix;
+  const gchar *home_dir;
+  gchar *home_gtk_dir = NULL;
   gchar *module_path;
   gchar *default_dir;
+  static gchar **result = NULL;
+
+  if (result)
+    return result;
+
+  home_dir = g_get_home_dir();
+  if (home_dir)
+    home_gtk_dir = g_build_filename (home_dir, ".gtk-2.0", NULL);
+
+  module_path_env = g_getenv ("GTK_PATH");
+  exe_prefix = g_getenv ("GTK_EXE_PREFIX");
 
   if (exe_prefix)
-    default_dir = g_build_filename (exe_prefix, "lib", "gtk-2.0", "modules", NULL);
+    default_dir = g_build_filename (exe_prefix, "lib", "gtk-2.0", NULL);
   else
-    default_dir = g_build_filename (GTK_LIBDIR, "gtk-2.0", "modules", NULL);
+    default_dir = g_build_filename (GTK_LIBDIR, "gtk-2.0", NULL);
 
-  module_path = g_strconcat (module_path_env ? module_path_env : "",
-			     module_path_env ? G_SEARCHPATH_SEPARATOR_S : "",
-			     default_dir, NULL);
+  if (module_path_env && home_gtk_dir)
+    module_path = g_build_path (G_SEARCHPATH_SEPARATOR_S,
+				module_path_env, home_gtk_dir, default_dir, NULL);
+  else if (module_path_env)
+    module_path = g_build_path (G_SEARCHPATH_SEPARATOR_S,
+				module_path_env, default_dir, NULL);
+  else if (home_gtk_dir)
+    module_path = g_build_path (G_SEARCHPATH_SEPARATOR_S,
+				home_gtk_dir, default_dir, NULL);
+  else
+    module_path = g_build_path (G_SEARCHPATH_SEPARATOR_S,
+				default_dir, NULL);
+
+  g_free (home_gtk_dir);
+  g_free (default_dir);
 
   result = pango_split_file_list (module_path);
-
-  g_free (default_dir);
   g_free (module_path);
 
   return result;
+}
+
+/**
+ * _gtk_get_module_path:
+ * @type: the type of the module, for instance 'modules', 'engines', immodules'
+ * 
+ * Determines the search path for a particular type of module.
+ * 
+ * Return value: the search path for the module type. Free with g_strfreev().
+ **/
+gchar **
+_gtk_get_module_path (const gchar *type)
+{
+  gchar **paths = get_module_path();
+  gchar **path;
+  gchar **result;
+  gint count = 0;
+
+  for (path = paths; *path; path++)
+    count++;
+
+  result = g_new (gchar *, count * 4 + 1);
+
+  count = 0;
+  for (path = get_module_path (); *path; path++)
+    {
+      gint use_version, use_host;
+      
+      for (use_version = TRUE; use_version >= FALSE; use_version--)
+	for (use_host = TRUE; use_host >= FALSE; use_host--)
+	  {
+	    gchar *tmp_dir;
+	    
+	    if (use_version && use_host)
+	      tmp_dir = g_build_filename (*path, GTK_BINARY_VERSION, GTK_HOST, type, NULL);
+	    else if (use_version)
+	      tmp_dir = g_build_filename (*path, GTK_BINARY_VERSION, type, NULL);
+	    else if (use_host)
+	      tmp_dir = g_build_filename (*path, GTK_HOST, type, NULL);
+	    else
+	      tmp_dir = g_build_filename (*path, type, NULL);
+
+	    result[count++] = tmp_dir;
+	  }
+    }
+
+  result[count++] = NULL;
+
+  return result;
+}
+
+/**
+ * _gtk_find_module:
+ * @name: the name of the module
+ * @type: the type of the module, for instance 'modules', 'engines', immodules'
+ * 
+ * Looks for a dynamically module named @name of type @type in the standard GTK+
+ *  module search path.
+ * 
+ * Return value: the pathname to the found module, or %NULL if it wasn't found.
+ *  Free with g_free().
+ **/
+gchar *
+_gtk_find_module (const gchar *name,
+		  const gchar *type)
+{
+  gchar **paths;
+  gchar **path;
+  gchar *module_name = NULL;
+
+  if (g_path_is_absolute (name))
+    return g_strdup (name);
+
+  paths = _gtk_get_module_path (type);
+  for (path = paths; *path; path++)
+    {
+      gchar *tmp_name = g_module_build_path (*path, name);
+	    
+      if (g_file_test (tmp_name, G_FILE_TEST_EXISTS))
+	{
+	  module_name = tmp_name;
+	  goto found;
+	}
+      else
+	g_free(tmp_name);
+    }
+
+  g_strfreev (paths);
+
+ found:
+  return module_name;
 }
 
 static GModule *
@@ -311,44 +424,16 @@ find_module (gchar      **module_path,
 {
   GModule *module;
   gchar *module_name;
-  gint i;
 
-  if (g_path_is_absolute (name))
-    return g_module_open (name, G_MODULE_BIND_LAZY);
-
-  for (i = 0; module_path[i]; i++)
+  module_name = _gtk_find_module (name, "modules");
+  if (!module_name)
     {
-      gchar *version_directory;
-
-      version_directory = g_build_filename (module_path[i], GTK_BINARY_VERSION, NULL);
-      module_name = g_module_build_path (version_directory, name);
-      g_free (version_directory);
-      
-      if (g_file_test (module_name, G_FILE_TEST_EXISTS))
-	{
-	  module = g_module_open (module_name, G_MODULE_BIND_LAZY);
-	  g_free (module_name);
-	  return module;
-	}
-      
-      g_free (module_name);
-
-      module_name = g_module_build_path (module_path[i], name);
-      
-      if (g_file_test (module_name, G_FILE_TEST_EXISTS))
-	{
-	  module = g_module_open (module_name, G_MODULE_BIND_LAZY);
-	  g_free (module_name);
-	  return module;
-	}
-
-      g_free (module_name);
+      /* As last resort, try loading without an absolute path (using system
+       * library path)
+       */
+      module_name = g_module_build_path (NULL, name);
     }
-
-  /* As last resort, try loading without an absolute path (using system
-   * library path)
-   */
-  module_name = g_module_build_path (NULL, name);
+  
   module = g_module_open (module_name, G_MODULE_BIND_LAZY);
   g_free(module_name);
 

@@ -205,18 +205,42 @@ or <envar>DISPLAY</envar>; mostly to determine paths to look for certain files.
 </formalpara>
 
 <formalpara>
-  <title><envar>GTK_MODULE_PATH</envar></title>
+  <title><envar>GTK_PATH</envar></title>
 
   <para>
-    A list of directories to search for modules before the default module 
-    directory, which is <filename>&lt;libdir&gt;/gtk-2.0/modules</filename>.
-    (If <envar>GTK_EXE_PREFIX</envar> is defined, &lt;libdir&gt; is 
+    Specifies a list of directories to search when GTK+ is looking for
+    dynamically loaded objects such as the modules specified by
+    <envar>GTK_MODULES</envar>, theme engines, and input method
+    modules. If the path to the dynamically loaded object is given
+    as an absolute path name, then GTK+ loads it directly. Otherwise,
+    GTK+ goes in turn through the directories in GTK_PATH, followed
+    by the directory <filename>.gtk-2.0</filename> in the user's home
+    directory, followed by the system default directory, 
+    which is <filename><replaceable>libdir</replaceable>/gtk-2.0/modules</filename>.
+    (If <envar>GTK_EXE_PREFIX</envar> is defined, <replaceable>libdir</replaceable> is 
     <filename>$GTK_EXE_PREFIX/lib</filename>. Otherwise it is the libdir
-    specified when GTK+ was configured, usually 
-    <filename>/usr/local/lib</filename>.) 
-    For each directory in the list, GTK+ actually looks first in 
-    a subdirectory named after the version number of GTK+, then in the 
-    directory itself and finally in the system-specific library path.
+    specified when GTK+ was configured, usually
+    <filename>/usr/lib</filename>, or
+    <filename>/usr/local/lib</filename>.)
+    For each directory in this list, GTK+ actually looks in a
+    subdirectory
+    <filename><replaceable>directory</replaceable>/<replaceable>version</replaceable>/<replaceable>host</replaceable>/<replaceable>type</replaceable></filename>
+    Where <replaceable>version</replaceable> is derived from the
+    version of GTK+ (use <literal>pkg-config
+    --variable=gtk_binary_version gtk+-2.0</literal> to determine this from a
+    script), <replaceable>host</replaceable> is the architecture on
+    which GTK+ was built. (use <literal>pkg-config
+    --variable=gtk_host gtk+-2.0</literal> to determine this from a
+    script), and <replaceable>type</replaceable> is a directory
+    specific to the type of modules; currently it can be
+    <literal>modules</literal>, <literal>engines</literal> or
+    <literal>immodules</literal> corresponding to the three types of
+    modules above. Either <replaceable>version</replaceable>,
+    <replaceable>host</replaceable>, or both may be omitted. GTK+ looks
+    first in the most specific directory, then in directories with
+    fewer components.
+    The components of GTK_PATH are separated by the ':' character on
+    Linux and Unix, and the ';' character on Windows.
   </para>
 </formalpara>
 
@@ -229,19 +253,6 @@ or <envar>DISPLAY</envar>; mostly to determine paths to look for certain files.
   </para>
 </formalpara>
 
-<formalpara id="im-module-path">
-  <title><envar>GTK_IM_MODULE_PATH</envar></title>
-
-  <para>
-    Specifies the path where GTK+ looks for IM modules. This environment 
-    variable overwrites the <literal>im_module_path</literal> specified in the 
-    RC files, which in turn overwrites the default
-    value <filename>$lt;libdir$gt;/gtk-2.0/immodules/&lt;version&gt;</filename>
-    (where &lt;version&gt; is the GTK+ version, and &lt;libdir&gt; is as 
-    explained above).
-  </para>
-</formalpara>
- 
 <formalpara id="im-module-file">
   <title><envar>GTK_IM_MODULE_FILE</envar></title>
 
@@ -249,8 +260,8 @@ or <envar>DISPLAY</envar>; mostly to determine paths to look for certain files.
     Specifies the file listing the IM modules to load. This environment
     variable overwrites the <literal>im_module_file</literal> specified in 
     the RC files, which in turn overwrites the default value 
-    <filename>&lt;sysconfdir&gt;/gtk-2.0/gtk.immodules</filename>
-    (&lt;sysconfdir&gt; is the sysconfdir specified when GTK+ was configured, 
+    <filename><replaceable>sysconfdir</replaceable>/gtk-2.0/gtk.immodules</filename>
+    (<replaceable>sysconfdir</replaceable> is the sysconfdir specified when GTK+ was configured, 
      usually <filename>/usr/local/etc</filename>.)
   </para>
 </formalpara>
@@ -294,7 +305,7 @@ nevertheless.
   <para>
     Specifies the directory to look for GdkPixbuf loader modules. 
     By default, GdkPixbuf looks for its loaders in 
-    <filename>&lt;libdir&gt;/gtk-2.0/&lt;version&gt;/loaders</filename>.
+    <filename><replaceable>libdir</replaceable>/gtk-2.0/<replaceable>version</replaceable>/loaders</filename>.
   </para>
  </formalpara>
 

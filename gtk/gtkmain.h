@@ -204,6 +204,9 @@ gboolean _gtk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
                                    const GValue          *handler_return,
                                    gpointer               dummy);
 
+gchar * _gtk_find_module     (const gchar *name,
+			      const gchar *type);
+gchar **_gtk_get_module_path (const gchar *type);
 
 #ifdef __cplusplus
 }
