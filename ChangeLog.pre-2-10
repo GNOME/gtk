@@ -1,3 +1,9 @@
+Wed Mar  3 17:30:18 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_mnemonic_activate): Check
+	whether widgets are viewable, not just if they are
+	mapped. (#122912, reported by Tim Evans)
+
 Wed Mar  3 23:28:48 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_set_active): Move the actual

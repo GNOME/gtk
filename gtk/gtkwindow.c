@@ -1457,7 +1457,8 @@ gtk_window_mnemonic_activate (GtkWindow      *window,
       widget = GTK_WIDGET (list->data);
       
       if (GTK_WIDGET_IS_SENSITIVE (widget) &&
-	  GTK_WIDGET_MAPPED (widget))
+	  GTK_WIDGET_DRAWABLE (widget) &&
+	  gdk_window_is_viewable (widget->window))
 	{
 	  if (chosen_widget)
 	    {
