@@ -1,3 +1,11 @@
+Tue May 29 17:40:29 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in (GTK_DEP_CFLAGS): Use $PKG_CONFIG,
+	not pkg-config. (#51032)
+
+	* gdk/gdkproperty.h: Remove inappropriate G_GNUC_CONST
+	(fixes #51952, James Henstridge)
+	
 2001-05-27  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gtk/gtkstock.h (GTK_STOCK_GO_UP):
