@@ -1,3 +1,9 @@
+Wed Nov  4 21:52:57 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkctree.c (gtk_ctree_unlink): fix focus_row adjustment
+	(gtk_ctree_remove_node): select focus_row if needed
+	(cell_size_request): only get pixmap size if pixmap != NULL
+
 Wed Nov  4 04:30:37 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.c: added a bunch of checks for widget != NULL and

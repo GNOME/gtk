@@ -2421,10 +2421,17 @@ gtk_ctree_unlink (GtkCTree     *ctree,
 	  gint pos;
 	  
 	  pos = g_list_position (clist->row_list, (GList *)node);
-	  if (pos + rows + 1 < clist->focus_row)
+	  if (pos + rows < clist->focus_row)
 	    clist->focus_row -= (rows + 1);
 	  else if (pos <= clist->focus_row)
-	    clist->focus_row = pos - 1;
+	    {
+	      if (!GTK_CTREE_ROW (node)->sibling)
+		clist->focus_row = MAX (pos - 1, 0);
+	      else
+		clist->focus_row = pos;
+	      
+	      clist->focus_row = MIN (clist->focus_row, clist->rows - 1);
+	    }
 	  clist->undo_anchor = clist->focus_row;
 	}
     }
@@ -2971,10 +2978,17 @@ cell_size_request (GtkCList       *clist,
       requisition->height = style->font->ascent + style->font->descent;
       break;
     case GTK_CELL_PIXTEXT:
-      gdk_window_get_size (GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap,
-			   &width, &height);
+      if (GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap)
+	{
+	  gdk_window_get_size (GTK_CELL_PIXTEXT
+			       (clist_row->cell[column])->pixmap,
+			       &width, &height);
+	  width += GTK_CELL_PIXTEXT (clist_row->cell[column])->spacing;
+	}
+      else
+	width = height = 0;
+	  
       requisition->width = width +
-	GTK_CELL_PIXTEXT (clist_row->cell[column])->spacing +
 	gdk_string_width (style->font,
 			  GTK_CELL_TEXT (clist_row->cell[column])->text);
 
@@ -4042,6 +4056,10 @@ gtk_ctree_remove_node (GtkCTree     *ctree,
       gtk_ctree_unlink (ctree, node, TRUE);
       gtk_ctree_post_recursive (ctree, node, GTK_CTREE_FUNC (tree_delete),
 				NULL);
+      if ((clist->selection_mode == GTK_SELECTION_BROWSE ||
+	   clist->selection_mode == GTK_SELECTION_EXTENDED) &&
+	  !clist->selection && clist->focus_row >= 0)
+	gtk_clist_select_row (clist, clist->focus_row, -1);
 
       if (!GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
 	{
