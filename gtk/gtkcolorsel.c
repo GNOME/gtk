@@ -955,14 +955,15 @@ gtk_color_selection_value_events (GtkWidget *area,
 
   colorsel = (GtkColorSelection*) gtk_object_get_data (GTK_OBJECT (area), "_GtkColorSelection");
 
+  if (colorsel->value_gc == NULL)
+    colorsel->value_gc = gdk_gc_new (colorsel->value_area->window);
+
   switch (event->type)
     {
     case GDK_MAP:
       gtk_color_selection_draw_value_marker (colorsel);
       break;
     case GDK_EXPOSE:
-      if (colorsel->value_gc == NULL)
-	colorsel->value_gc = gdk_gc_new (colorsel->value_area->window);
       gtk_color_selection_draw_value_marker (colorsel);
       break;
     case GDK_BUTTON_PRESS:
@@ -1035,7 +1036,14 @@ gtk_color_selection_wheel_events (GtkWidget *area,
   gint x, y;
 
   colorsel = (GtkColorSelection*) gtk_object_get_data (GTK_OBJECT (area), "_GtkColorSelection");
-
+  
+  if (colorsel->wheel_gc == NULL)
+    colorsel->wheel_gc = gdk_gc_new (colorsel->wheel_area->window);
+  if (colorsel->sample_gc == NULL)
+    colorsel->sample_gc = gdk_gc_new (colorsel->sample_area->window);
+  if (colorsel->value_gc == NULL)
+    colorsel->value_gc = gdk_gc_new (colorsel->value_area->window);
+  
   switch (event->type)
     {
     case GDK_MAP:
@@ -1044,12 +1052,6 @@ gtk_color_selection_wheel_events (GtkWidget *area,
       gtk_color_selection_draw_sample (colorsel, TRUE);
       break;
     case GDK_EXPOSE:
-      if (colorsel->wheel_gc == NULL)
-	colorsel->wheel_gc = gdk_gc_new (colorsel->wheel_area->window);
-      if (colorsel->sample_gc == NULL)
-	colorsel->sample_gc = gdk_gc_new (colorsel->sample_area->window);
-      if (colorsel->value_gc == NULL)
-	colorsel->value_gc = gdk_gc_new (colorsel->value_area->window);
       gtk_color_selection_draw_wheel_marker (colorsel);
       gtk_color_selection_draw_wheel_frame (colorsel);
       break;

@@ -1288,9 +1288,7 @@ gtk_default_draw_shadow (GtkStyle      *style,
   switch (shadow_type)
     {
     case GTK_SHADOW_NONE:
-      gc1 = NULL;
-      gc2 = NULL;
-      break;
+      return;
     case GTK_SHADOW_IN:
     case GTK_SHADOW_ETCHED_IN:
       gc1 = style->light_gc[state_type];
@@ -1305,14 +1303,14 @@ gtk_default_draw_shadow (GtkStyle      *style,
 
    if (area)
      {
-	gdk_gc_set_clip_rectangle (gc1, area);
-	gdk_gc_set_clip_rectangle (gc2, area);
-	if ((shadow_type == GTK_SHADOW_IN) || 
-	    (shadow_type == GTK_SHADOW_OUT))
-	  {
-	    gdk_gc_set_clip_rectangle (style->black_gc, area);
-	    gdk_gc_set_clip_rectangle (style->bg_gc[state_type], area);
-	  }
+       gdk_gc_set_clip_rectangle (gc1, area);
+       gdk_gc_set_clip_rectangle (gc2, area);
+       if ((shadow_type == GTK_SHADOW_IN) || 
+	   (shadow_type == GTK_SHADOW_OUT))
+	 {
+	   gdk_gc_set_clip_rectangle (style->black_gc, area);
+	   gdk_gc_set_clip_rectangle (style->bg_gc[state_type], area);
+	 }
      }
    switch (shadow_type)
     {

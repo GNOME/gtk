@@ -1651,15 +1651,17 @@ gtk_widget_queue_draw_data (GtkWidget *widget,
 	node->next = gtk_object_get_data_by_id (GTK_OBJECT (widget),
 						draw_data_key_id);
 
+      if (!GTK_WIDGET_REDRAW_PENDING (widget))
+	{
+	  GTK_PRIVATE_SET_FLAG (widget, GTK_REDRAW_PENDING);
+	  if (gtk_widget_redraw_queue == NULL)
+	    gtk_idle_add_priority (GTK_PRIORITY_INTERNAL,
+				   gtk_widget_idle_draw,
+				   NULL);
+	  gtk_widget_redraw_queue = g_slist_prepend (gtk_widget_redraw_queue, widget);
+	}
+
       gtk_object_set_data_by_id (GTK_OBJECT (widget), draw_data_key_id, node);
-  
-      GTK_PRIVATE_SET_FLAG (widget, GTK_REDRAW_PENDING);
-      if (gtk_widget_redraw_queue == NULL)
-	gtk_idle_add_priority (GTK_PRIORITY_INTERNAL,
-			       gtk_widget_idle_draw,
-			       NULL);
-      
-      gtk_widget_redraw_queue = g_slist_prepend (gtk_widget_redraw_queue, widget);
     }
 }
 

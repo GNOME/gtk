@@ -19,7 +19,7 @@ pixmap_path ".:/home/raster/themes"
 
 style "default"
 {
-  font = "-*-helvetica-medium-r-normal--8-*-*-*-*-*-*-*"
+  font = "-*-helvetica-medium-r-normal--10-*-*-*-*-*-*-*"
 #  bg_pixmap[NORMAL] = "marble.xpm"
 #  engine "motif" 
 #  {
@@ -27,6 +27,14 @@ style "default"
 # bg[NORMAL] = { 0.75, 0.75, 0.75 }
 #  bg[PRELIGHT] = { 0.75, 0.75, 0.75 }
 }
+
+style "clist"
+{
+#  base[NORMAL] = { 0.75, 0.75, 0.75 }
+  bg[PRELIGHT] = { 1.0, 1.0, 1.0 }
+}
+
+class "GtkCList" style "clist"
 
 style "menu"
 {
