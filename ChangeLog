@@ -1,5 +1,9 @@
 2004-11-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c (file_pane_create): Jump through
+	a few hoops to make the tooltip on the filter combo box work
+	a bit better. This fixes #157273 and #157074.
+
 	* gtk/gtkcombobox.c (gtk_combo_box_cell_layout_pack_end): 
 	Add the ComboCellInfo to the list.  (#157528, Carlos Garnacho
 	Parro)

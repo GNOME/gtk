@@ -2260,6 +2260,7 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
   if (combo_box->priv->cell_view)
     {
       combo_box->priv->button = gtk_toggle_button_new ();
+
       g_signal_connect (combo_box->priv->button, "toggled",
                         G_CALLBACK (gtk_combo_box_button_toggled), combo_box);
       g_signal_connect_after (combo_box->priv->button, 

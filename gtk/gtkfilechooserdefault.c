@@ -3135,6 +3135,29 @@ create_path_bar (GtkFileChooserDefault *impl)
   return path_bar;
 }
 
+static void
+set_filter_tooltip (GtkWidget *widget, 
+		    gpointer   data)
+{
+  GtkTooltips *tooltips = (GtkTooltips *)data;
+
+  if (GTK_IS_BUTTON (widget))
+    gtk_tooltips_set_tip (tooltips, widget,
+			  _("Select which types of files are shown"), 
+			  NULL);
+}
+
+static void
+realize_filter_combo (GtkWidget *combo,
+		      gpointer   data)
+{
+  GtkFileChooserDefault *impl = (GtkFileChooserDefault *)data;
+
+  gtk_container_forall (GTK_CONTAINER (combo),
+			set_filter_tooltip,
+			impl->tooltips);
+}
+
 /* Creates the widgets for the files/folders pane */
 static GtkWidget *
 file_pane_create (GtkFileChooserDefault *impl,
@@ -3142,7 +3165,6 @@ file_pane_create (GtkFileChooserDefault *impl,
 {
   GtkWidget *vbox;
   GtkWidget *hbox;
-  GtkWidget *ebox;
   GtkWidget *widget;
 
   vbox = gtk_vbox_new (FALSE, 6);
@@ -3185,17 +3207,12 @@ file_pane_create (GtkFileChooserDefault *impl,
   impl->filter_combo_hbox = gtk_hbox_new (FALSE, 12);
 
   widget = filter_create (impl);
-  ebox = gtk_event_box_new ();
-  gtk_container_add (GTK_CONTAINER (ebox), widget);
-  gtk_widget_show (ebox);
-  /* We need enter/leave to do tooltips */
-  gtk_widget_add_events (ebox, GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
-  gtk_tooltips_set_tip (impl->tooltips, ebox,
-                        _("Select which types of files are shown"), NULL);
 
+  g_signal_connect (widget, "realize",
+		    G_CALLBACK (realize_filter_combo), impl);
 
   gtk_widget_show (widget);
-  gtk_box_pack_end (GTK_BOX (impl->filter_combo_hbox), ebox, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (impl->filter_combo_hbox), widget, FALSE, FALSE, 0);
 
   gtk_size_group_add_widget (size_group, impl->filter_combo_hbox);
   gtk_box_pack_end (GTK_BOX (vbox), impl->filter_combo_hbox, FALSE, FALSE, 0);
