@@ -1,3 +1,10 @@
+Tue Feb 26 18:47:44 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_add_mnemonic): Append
+	mnemonics rather than prepending them so that the 
+	order is typically forward rather than typically
+	backward. (Partial fix for #52395)
+
 Wed Feb 27 00:45:39 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkarrow.c, gtk/gtkmenuitem.c, gtk/gtkrange.c

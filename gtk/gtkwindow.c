@@ -1136,7 +1136,7 @@ gtk_window_add_mnemonic (GtkWindow *window,
   if (mnemonic)
     {
       g_return_if_fail (g_slist_find (mnemonic->targets, target) == NULL);
-      mnemonic->targets = g_slist_prepend (mnemonic->targets, target);
+      mnemonic->targets = g_slist_append (mnemonic->targets, target);
     }
   else
     {
