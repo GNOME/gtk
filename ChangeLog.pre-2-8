@@ -1,3 +1,10 @@
+2001-02-03  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextbtree.c (_gtk_text_btree_tag): Fix bug reported by
+	Mikael Hermansson with patch from Mikael (if there was a toggle
+	start one after the first character in the range, this function
+	was broken). Bug #50380
+
 Sat Feb  3 11:28:03 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Remove confusing comment about X11.
