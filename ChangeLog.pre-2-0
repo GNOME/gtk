@@ -1,3 +1,9 @@
+1998-11-17  Martin Baulig  <martin@home-of-linux.org>
+
+	* gtk/genmarshal.pl: Put output files in the current directory
+	and not in the $(srcdir) since the VPATH is ignored for built
+	sources.
+
 Tue Nov 17 01:37:53 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk/genmarshal.pl

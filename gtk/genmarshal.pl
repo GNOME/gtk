@@ -33,8 +33,8 @@ sub indent {
 }
 
 open(IL, "<$srcdir/gtkmarshal.list") || die("Open failed: $!");
-open(OH, ">$srcdir/s-gmh") || die("Open failed: $!");
-open(OS, ">$srcdir/s-gmc") || die("Open failed: $!");
+open(OH, ">s-gmh") || die("Open failed: $!");
+open(OS, ">s-gmc") || die("Open failed: $!");
 
 print OH <<EOT;
 #ifndef __GTKMARSHAL_H__
@@ -201,5 +201,5 @@ EOT
 
 close(IL); close(OH); close(OS);
 
-indent("$srcdir/s-gmh");
-indent("$srcdir/s-gmc");
+indent("s-gmh");
+indent("s-gmc");
