@@ -1,3 +1,8 @@
+Wed Mar  9 19:20:44 2005  Manish Singh  <yosh@gimp.org>
+
+	* configure.in: Remove inadvertent gail references, require
+	Pango 1.9.0
+
 2005-03-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Require GLib 2.7.0
