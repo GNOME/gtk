@@ -40,8 +40,8 @@ static const struct { const char *name; int type; } cursors[] = {
   { "coffee_mug", 28 },
   { "cross", 30 },
   { "cross_reverse", 32 },
-  { "crosshair", 34 },
-  { "diamond_cross", 36 },
+  { "kr", 34 },
+  { "dc", 36 },
   { "dot", 38 },
   { "dotbox", 40 },
   { "double_arrow", 42 },
@@ -115,9 +115,10 @@ gdk_cursor_new (GdkCursorType cursor_type)
     ;
   if (cursors[i].name != NULL)
     {
-      xcursor = LoadCursor (gdk_DLLInstance, cursors[i].name);
+      xcursor = LoadImage (gdk_DLLInstance, cursors[i].name, IMAGE_CURSOR,
+			   0, 0, 0);
       if (xcursor == NULL)
-	WIN32_API_FAILED ("LoadCursor");
+	WIN32_API_FAILED ("LoadImage");
       GDK_NOTE (MISC, g_print ("gdk_cursor_new: %#x %d\n",
 			       xcursor, cursor_type));
     }
@@ -268,8 +269,8 @@ _gdk_cursor_destroy (GdkCursor *cursor)
 			   (cursor->type == GDK_CURSOR_IS_PIXMAP) ? private->xcursor : 0));
 
   if (cursor->type == GDK_CURSOR_IS_PIXMAP)
-    if (!DestroyIcon (private->xcursor))
-      WIN32_API_FAILED ("DestroyIcon");
+    if (!DestroyCursor (private->xcursor))
+      WIN32_API_FAILED ("DestroyCursor");
 
   g_free (private);
 }

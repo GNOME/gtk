@@ -31,11 +31,6 @@
 /*
  * Limits:
  *
- *  Fontnames	 - A maximum of MAX_FONTS (32767) fontnames will be retrieved
- *		   from X Windows with XListFonts(). Any more are ignored.
- *		   I think this limit may have been set because of a limit in
- *		   GtkList. It could possibly be increased since we are using
- *		   GtkClists now, but I'd be surprised if it was reached.
  *  Field length - XLFD_MAX_FIELD_LEN is the maximum length that any field of a
  *		   fontname can be for it to be considered valid. Others are
  *		   ignored.
@@ -45,8 +40,7 @@
  *		   family - a guint16 is used in the FontInfo struct.
  *  Font size    - Minimum font size of 2 pixels/points, since trying to load
  *		   some fonts with a size of 1 can cause X to hang.
- *		   (e.g. the Misc Fixed fonts).
- */
+ *		   (e.g. the Misc Fixed fonts).  */
 
 /*
  * Possible Improvements:
@@ -70,14 +64,6 @@
 #include <ctype.h>
 
 #include "gdk/gdk.h"
-/* Protect against the CHARSET struct in Win32 */
-#ifdef GDK_WINDOWING_WIN32
-# define CHARSET CHARSETstruct
-#endif
-#include "gdkx.h"
-#ifdef GDK_WINDOWING_WIN32
-# undef CHARSET
-#endif
 #include "gdk/gdkkeysyms.h"
 
 #include "gtkbutton.h"
@@ -96,9 +82,6 @@
 #include "gtkvbox.h"
 #include "gtkscrolledwindow.h"
 #include "gtkintl.h"
-
-/* The maximum number of fontnames requested with XListFonts(). */
-#define MAX_FONTS 32767
 
 /* This is the largest field length we will accept. If a fontname has a field
    larger than this we will skip it. */
@@ -401,13 +384,6 @@ static gint    gtk_font_selection_dialog_on_configure(GtkWidget      *widget,
 						      GdkEventConfigure *event,
 						      GtkFontSelectionDialog *fsd);
 
-#ifdef GDK_WINDOWING_WIN32
-static char *logfont_to_xlfd (const LOGFONT *lfp,
-			      int size,
-			      int res,
-			      int avg_width);
-#endif
-
 static GtkWindowClass *font_selection_parent_class = NULL;
 static GtkNotebookClass *font_selection_dialog_parent_class = NULL;
 
@@ -607,10 +583,11 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gtk_signal_connect (GTK_OBJECT (fontsel->font_clist), "key_press_event",
 		      GTK_SIGNAL_FUNC(gtk_font_selection_on_clist_key_press),
 		      fontsel);
+#if 0
   gtk_signal_connect_after (GTK_OBJECT (fontsel->font_clist), "expose_event",
 			    GTK_SIGNAL_FUNC(gtk_font_selection_expose_list),
 			    fontsel);
-  
+#endif
   gtk_signal_connect (GTK_OBJECT (fontsel->font_style_clist), "select_row",
 		      GTK_SIGNAL_FUNC(gtk_font_selection_select_style),
 		      fontsel);
@@ -1760,7 +1737,9 @@ gtk_font_selection_load_font (GtkFontSelection *fontsel)
 {
   GdkFont *font;
   gchar *fontname, *label_text;
+#ifdef GDK_WINDOWING_X11
   XFontStruct *xfs;
+#endif
   
   if (fontsel->font)
     gdk_font_unref (fontsel->font);
@@ -1903,10 +1882,6 @@ gtk_font_selection_switch_page (GtkWidget       *w,
 static void
 gtk_font_selection_show_font_info (GtkFontSelection *fontsel)
 {
-#ifdef GDK_WINDOWING_X11
-  Atom font_atom, atom;
-  Bool status;
-#endif
   char *name;
   gchar *fontname;
   gchar field_buffer[XLFD_MAX_FIELD_LEN];
@@ -1935,55 +1910,11 @@ gtk_font_selection_show_font_info (GtkFontSelection *fontsel)
       gtk_clist_set_text(GTK_CLIST(fontsel->info_clist), i, 1,
 			 field ? field : "");
     }
-#ifdef GDK_WINDOWING_X11
   if (fontsel->font)
     {
-      font_atom = gdk_atom_intern ("FONT", FALSE);
-
-      if (fontsel->font->type == GDK_FONT_FONTSET)
+      name = gdk_font_full_name_get (fontsel->font);
+      if (name != NULL)
 	{
-	  XFontStruct **font_structs;
-	  gint num_fonts;
-	  gchar **font_names;
-	  
-	  num_fonts = XFontsOfFontSet (GDK_FONT_XFONT(fontsel->font),
-				       &font_structs, &font_names);
-	  status = XGetFontProperty(font_structs[0], font_atom, &atom);
-	}
-      else
-	{
-	  status = XGetFontProperty(GDK_FONT_XFONT(fontsel->font), font_atom,
-				    &atom);
-	}
-
-      if (status == True)
-	{
-	  name = gdk_atom_name (atom);
-	  gtk_entry_set_text (GTK_ENTRY (fontsel->actual_font_name), name);
-	  
-	  for (i = 0; i < GTK_XLFD_NUM_FIELDS; i++)
-	    {
-	      field = gtk_font_selection_get_xlfd_field (name, i, field_buffer);
-	      if (i == XLFD_SLANT)
-		field = gtk_font_selection_expand_slant_code(field);
-	      else if (i == XLFD_SPACING)
-		field = gtk_font_selection_expand_spacing_code(field);
-	      gtk_clist_set_text(GTK_CLIST(fontsel->info_clist), i, 2,
-				 field ? field : "");
-	    }
-	  shown_actual_fields = TRUE;
-	  g_free (name);
-	}
-    }
-#elif defined (GDK_WINDOWING_WIN32)
-  if (fontsel->font)
-    {
-      LOGFONT logfont;
-
-      if (GetObject (GDK_FONT_XFONT (fontsel->font),
-		     sizeof (LOGFONT), &logfont) > 0)
-	{
-	  name = logfont_to_xlfd (&logfont, logfont.lfHeight, -1, 0);
 	  gtk_entry_set_text (GTK_ENTRY(fontsel->actual_font_name),name);
 	  for (i = 0; i < GTK_XLFD_NUM_FIELDS; i++)
 	    {
@@ -1997,11 +1928,10 @@ gtk_font_selection_show_font_info (GtkFontSelection *fontsel)
 				 field ? field : "");
 	    }
 	  shown_actual_fields = TRUE;
-	  g_free (name);
+	  gdk_font_full_name_free (name);
 	}
     }
   
-#endif
   if (!shown_actual_fields)
     {
       gtk_entry_set_text(GTK_ENTRY(fontsel->actual_font_name), "");
@@ -2676,192 +2606,6 @@ gtk_font_selection_filter_state (GtkFontSelection *fontsel,
   return NOT_FILTERED;
 }
 
-
-#ifdef GDK_WINDOWING_WIN32
-
-static gint num_fonts;
-static gint font_names_size;
-static gchar **xfontnames;
-static HDC hdc;
-
-static char *
-logfont_to_xlfd (const LOGFONT *lfp,
-		 int size,
-		 int res,
-		 int avg_width)
-{
-  const gchar *weight;
-  const gchar *registry, *encoding;
-  int point_size;
-  static int logpixelsy = 0;
-  gchar facename[LF_FACESIZE*3];
-  gchar *p;
-  const gchar *q;
-
-  if (logpixelsy == 0)
-    {
-      HDC hdc = GetDC (NULL);
-      logpixelsy = GetDeviceCaps (hdc, LOGPIXELSY);
-      ReleaseDC (NULL, hdc);
-    }
-
-  /* Don't use _() here, only N_(), the actual translation is done elsewhere */   
-  if (lfp->lfWeight >= FW_HEAVY)
-    weight = N_("heavy");
-  else if (lfp->lfWeight >= FW_EXTRABOLD)
-    weight = N_("extrabold");
-  else if (lfp->lfWeight >= FW_BOLD)
-    weight = N_("bold");
-#ifdef FW_DEMIBOLD
-  else if (lfp->lfWeight >= FW_DEMIBOLD)
-    weight = N_("demibold");
-#endif
-  else if (lfp->lfWeight >= FW_MEDIUM)
-    weight = N_("medium");
-  else if (lfp->lfWeight >= FW_NORMAL)
-    weight = N_("normal");
-  else if (lfp->lfWeight >= FW_LIGHT)
-    weight = N_("light");
-  else if (lfp->lfWeight >= FW_EXTRALIGHT)
-    weight = N_("extralight");
-  else if (lfp->lfWeight >= FW_THIN)
-    weight = N_("thin");
-  else
-    weight = N_("regular");
-
-  if (lfp->lfCharSet == ANSI_CHARSET)
-    {
-      registry = "iso8859";
-      encoding = "1";
-    }
-  else
-    {
-      registry = "windows";
-      if (lfp->lfCharSet == DEFAULT_CHARSET)
-	encoding = "default";
-      else if (lfp->lfCharSet == SYMBOL_CHARSET)
-	encoding = "symbol";
-      else if (lfp->lfCharSet == SHIFTJIS_CHARSET)
-	encoding = "shiftjis";
-      else if (lfp->lfCharSet == GB2312_CHARSET)
-	encoding = "gb2312";
-      else if (lfp->lfCharSet == HANGEUL_CHARSET)
-	encoding = "hangeul";
-      else if (lfp->lfCharSet == CHINESEBIG5_CHARSET)
-	encoding = "chinesebig5";
-      else if (lfp->lfCharSet == OEM_CHARSET)
-	encoding = "oem";
-#ifdef JOHAB_CHARSET
-      else if (lfp->lfCharSet == JOHAB_CHARSET)
-	encoding = "johab";
-#endif
-      else if (lfp->lfCharSet == HEBREW_CHARSET)
-	encoding = "hebrew";
-      else if (lfp->lfCharSet == ARABIC_CHARSET)
-	encoding = "arabic";
-      else if (lfp->lfCharSet == GREEK_CHARSET)
-	encoding = "greek";
-      else if (lfp->lfCharSet == TURKISH_CHARSET)
-	encoding = "turkish";
-      else if (lfp->lfCharSet == THAI_CHARSET)
-	encoding = "thai";
-      else if (lfp->lfCharSet == EASTEUROPE_CHARSET)
-	encoding = "easteurope";
-      else if (lfp->lfCharSet == RUSSIAN_CHARSET)
-	encoding = "russian";
-      else if (lfp->lfCharSet == MAC_CHARSET)
-	encoding = "mac";
-      else if (lfp->lfCharSet == BALTIC_CHARSET)
-	encoding = "baltic";
-      else
-	encoding = "unknown";
-    }
-  
-  point_size = (int) (((double) size/logpixelsy) * 720.);
-
-  if (res == -1)
-    res = logpixelsy;
-
-  /* Replace illegal characters with hex escapes. */
-  p = facename;
-  q = lfp->lfFaceName;
-  while (*q)
-    {
-      if (*q == '-' || *q == '*' || *q == '?' || *q == '%')
-	p += sprintf (p, "%%%.02x", *q);
-      else
-	*p++ = *q;
-      q++;
-    }
-  *p = '\0';
-
-  return  g_strdup_printf
-    ("-%s-%s-%s-%s-%s-%s-%d-%d-%d-%d-%s-%d-%s-%s",
-     "unknown", 
-     facename,
-     weight,
-     (lfp->lfItalic ?
-      ((lfp->lfPitchAndFamily & 0xF0) == FF_ROMAN
-       || (lfp->lfPitchAndFamily & 0xF0) == FF_SCRIPT ?
-       "i" : "o") : "r"),
-     "normal",
-     "",
-     size,
-     point_size,
-     res,
-     res,
-     ((lfp->lfPitchAndFamily & 0x03) == FIXED_PITCH ? "m" : "p"),
-     avg_width,
-     registry, encoding);
-}
-
-int CALLBACK
-InnerEnumFontFamExProc (const LOGFONT *lfp,
-			const TEXTMETRIC *metrics,
-			DWORD fontType,
-			LPARAM lParam)
-{
-  int size;
-
-  if (fontType == TRUETYPE_FONTTYPE)
-    {
-      size = 0;
-    }
-  else
-    {
-      size = lfp->lfHeight;
-    }
-
-  num_fonts++;
-  if (num_fonts == font_names_size)
-    {
-      font_names_size *= 2;
-      xfontnames = g_realloc (xfontnames, font_names_size * sizeof (gchar *));
-    }
-  xfontnames[num_fonts-1] =
-    logfont_to_xlfd (lfp, size, 0, 0);
-  return 1;
-}
-
-int CALLBACK
-EnumFontFamExProc (const LOGFONT *lfp,
-		   const TEXTMETRIC *metrics,
-		   DWORD fontType,
-		   LPARAM lParam)
-{
-  if (fontType == TRUETYPE_FONTTYPE)
-    {
-      LOGFONT lf = *lfp;
-      lf.lfPitchAndFamily = 0;
-      EnumFontFamiliesEx (hdc, &lf, InnerEnumFontFamExProc, 0, 0);
-    }
-  else
-    InnerEnumFontFamExProc (lfp, metrics, fontType, lParam);
-  return 1;
-}
-
-#endif
-
 /*****************************************************************************
  * These functions all deal with creating the main class arrays containing
  * the data about all available fonts.
@@ -2869,15 +2613,8 @@ EnumFontFamExProc (const LOGFONT *lfp,
 static void
 gtk_font_selection_get_fonts (void)
 {
-#ifdef GDK_WINDOWING_X11
   gchar **xfontnames;
   gint num_fonts;
-#elif defined (GDK_WINDOWING_WIN32)
-  LOGFONT logfont;
-#else
-  gint num_fonts = 0;
-  gchar **xfontnames = NULL;
-#endif
   GSList **fontnames;
   gchar *fontname;
   GSList * temp_list;
@@ -2894,27 +2631,11 @@ gtk_font_selection_get_fonts (void)
   
   fontsel_info = g_new (GtkFontSelInfo, 1);
 
-#ifdef GDK_WINDOWING_X11
-  /* Get a maximum of MAX_FONTS fontnames from the X server.
+  /* Get a list of font names from GDK.
      Use "-*" as the pattern rather than "-*-*-*-*-*-*-*-*-*-*-*-*-*-*" since
      the latter may result in fonts being returned which don't actually exist.
      xlsfonts also uses "*" so I think it's OK. "-*" gets rid of aliases. */
-  xfontnames = XListFonts (GDK_DISPLAY(), "-*", MAX_FONTS, &num_fonts);
-  /* Output a warning if we actually get MAX_FONTS fonts. */
-  if (num_fonts == MAX_FONTS)
-    g_warning(_("MAX_FONTS exceeded. Some fonts may be missing."));
-  
-#elif defined (GDK_WINDOWING_WIN32)
-  num_fonts = 0;
-  hdc = GetDC (NULL);
-  font_names_size = 100;
-  xfontnames = g_new (gchar *, font_names_size);
-  logfont.lfCharSet = DEFAULT_CHARSET;
-  logfont.lfFaceName[0] = '\0';
-  logfont.lfPitchAndFamily = 0;
-  EnumFontFamiliesEx (hdc, &logfont, EnumFontFamExProc, 0, 0);
-  ReleaseDC (NULL, hdc);
-#endif
+  xfontnames = gdk_font_list_new ("-*", &num_fonts);
 
   /* The maximum size of all these tables is the number of font names
      returned. We realloc them later when we know exactly how many
@@ -3149,13 +2870,7 @@ gtk_font_selection_get_fonts (void)
 					sizeof(guint16) * npoint_sizes);
   g_free(fontnames);
 
-#ifdef GDK_WINDOWING_X11
-  XFreeFontNames (xfontnames);
-#elif defined (GDK_WINDOWING_WIN32)
-  for (i = 0; i < num_fonts; i++)
-    g_free (xfontnames[i]);
-  g_free (xfontnames);
-#endif
+  gdk_font_list_free (xfontnames);
   
   /* Debugging Output */
   /* This outputs all FontInfos. */

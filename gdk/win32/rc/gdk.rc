@@ -1,6 +1,6 @@
 #include <winver.h>
 
-GTK_ICON		ICON			"gtk.ico"
+GTK_ICON                ICON                    "gtk.ico"
 X_cursor                CURSOR  DISCARDABLE     "cursor00.cur"
 arrow                   CURSOR  DISCARDABLE     "cursor02.cur"
 based_arrow_down        CURSOR  DISCARDABLE     "cursor04.cur"
@@ -18,8 +18,8 @@ clock                   CURSOR  DISCARDABLE     "cursor1a.cur"
 coffee_mug              CURSOR  DISCARDABLE     "cursor1c.cur"
 cross                   CURSOR  DISCARDABLE     "cursor1e.cur"
 cross_reverse           CURSOR  DISCARDABLE     "cursor20.cur"
-crosshair               CURSOR  DISCARDABLE     "cursor22.cur"
-diamond_cross           CURSOR  DISCARDABLE     "cursor24.cur"
+kr                      CURSOR  DISCARDABLE     "cursor22.cur"
+dc                      CURSOR  DISCARDABLE     "cursor24.cur"
 dot                     CURSOR  DISCARDABLE     "cursor26.cur"
 dotbox                  CURSOR  DISCARDABLE     "cursor28.cur"
 double_arrow            CURSOR  DISCARDABLE     "cursor2a.cur"
@@ -92,14 +92,14 @@ VS_VERSION_INFO VERSIONINFO
     BEGIN
       BLOCK "040904B0"
       BEGIN
-	VALUE "CompanyName", "The GTk+ developer community"
-	VALUE "FileDescription", "GIMP Drawing Kit"
-	VALUE "FileVersion", "1.3.0.BUILDNUMBER"
-	VALUE "InternalName", "gdk-1.3"
-	VALUE "LegalCopyright", "Copyright © 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald. Modified by the GTK+ Team and others 1997-2000."
-	VALUE "OriginalFilename", "gdk-1.3.dll"
-	VALUE "ProductName", "GTk+"
-	VALUE "ProductVersion", "1.3.0"
+        VALUE "CompanyName", "The GTk+ developer community"
+        VALUE "FileDescription", "GIMP Drawing Kit"
+        VALUE "FileVersion", "1.3.0.BUILDNUMBER"
+        VALUE "InternalName", "gdk-1.3"
+        VALUE "LegalCopyright", "Copyright (c) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald. Modified by the GTK+ Team and others 1997-2000."
+        VALUE "OriginalFilename", "gdk-1.3.dll"
+        VALUE "ProductName", "GTk+"
+        VALUE "ProductVersion", "1.3.0"
       END
     END
     BLOCK "VarFileInfo"

@@ -251,22 +251,38 @@ static GtkImageLoader image_loader = NULL;
 gchar *
 get_gtk_sysconf_directory (void)
 {
+  static gboolean been_here = FALSE;
   static gchar gtk_sysconf_dir[200];
   gchar win_dir[100];
+  HKEY reg_key = NULL;
+  DWORD type;
+  DWORD nbytes = sizeof (gtk_sysconf_dir);
 
-  GetWindowsDirectory (win_dir, sizeof (win_dir));
-  sprintf (gtk_sysconf_dir, "%s\\gtk+", win_dir);
+  if (been_here)
+    return gtk_sysconf_dir;
+
+  been_here = TRUE;
+
+  if (RegOpenKeyEx (HKEY_LOCAL_MACHINE, "Software\\GNU\\GTk+", 0,
+		    KEY_QUERY_VALUE, &reg_key) != ERROR_SUCCESS
+      || RegQueryValueEx (reg_key, "InstallationDirectory", 0,
+			  &type, gtk_sysconf_dir, &nbytes) != ERROR_SUCCESS
+      || type != REG_SZ)
+    {
+      /* Uh oh. Use the old hard-coded %WinDir%\GTk+ value */
+      GetWindowsDirectory (win_dir, sizeof (win_dir));
+      sprintf (gtk_sysconf_dir, "%s\\gtk+", win_dir);
+    }
+
+  if (reg_key != NULL)
+    RegCloseKey (reg_key);
+
   return gtk_sysconf_dir;
 }
 
 static gchar *
 get_themes_directory (void)
 {
-  /* We really should fetch this from the Registry. The GIMP
-   * installation program stores the Themes installation
-   * directory in HKLM\Software\GNU\GTk+\Themes\InstallDirectory.
-   * Later.
-   */
   static gchar themes_dir[200];
 
   sprintf (themes_dir, "%s\\themes", get_gtk_sysconf_directory ());

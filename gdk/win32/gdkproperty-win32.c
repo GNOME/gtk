@@ -150,7 +150,7 @@ gdk_property_change (GdkWindow    *window,
   if (GDK_DRAWABLE_DESTROYED (window))
     return;
 
-  GDK_NOTE (MISC,
+  GDK_NOTE (DND,
 	    (prop_name = gdk_atom_name (property),
 	     type_name = gdk_atom_name (type),
 	     g_print ("gdk_property_change: %#x %#x (%s) %#x (%s) %s %d*%d bytes %.10s\n",
@@ -174,7 +174,7 @@ gdk_property_change (GdkWindow    *window,
 	if (data[i] == '\n')
 	  length++;
 #if 1      
-      GDK_NOTE (MISC, g_print ("...OpenClipboard(%#x)\n",
+      GDK_NOTE (DND, g_print ("...OpenClipboard(%#x)\n",
 			       GDK_DRAWABLE_XID (window)));
       if (!OpenClipboard (GDK_DRAWABLE_XID (window)))
 	{
@@ -184,7 +184,7 @@ gdk_property_change (GdkWindow    *window,
 #endif
       hdata = GlobalAlloc (GMEM_MOVEABLE|GMEM_DDESHARE, length + 1);
       ptr = GlobalLock (hdata);
-      GDK_NOTE (MISC, g_print ("...hdata=%#x, ptr=%#x\n", hdata, ptr));
+      GDK_NOTE (DND, g_print ("...hdata=%#x, ptr=%#x\n", hdata, ptr));
 
       for (i = 0; i < nelements; i++)
 	{
@@ -194,12 +194,12 @@ gdk_property_change (GdkWindow    *window,
 	}
       *ptr++ = '\0';
       GlobalUnlock (hdata);
-      GDK_NOTE (MISC, g_print ("...SetClipboardData(CF_TEXT, %#x)\n",
+      GDK_NOTE (DND, g_print ("...SetClipboardData(CF_TEXT, %#x)\n",
 			       hdata));
       if (!SetClipboardData(CF_TEXT, hdata))
 	WIN32_API_FAILED ("SetClipboardData");
 #if 1
-      GDK_NOTE (MISC, g_print ("...CloseClipboard()\n"));
+      GDK_NOTE (DND, g_print ("...CloseClipboard()\n"));
       if (!CloseClipboard ())
 	WIN32_API_FAILED ("CloseClipboard");
 #endif
@@ -218,7 +218,7 @@ gdk_property_delete (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  GDK_NOTE (MISC,
+  GDK_NOTE (DND,
 	    (prop_name = gdk_atom_name (property),
 	     g_print ("gdk_property_delete: %#x %#x (%s)\n",
 		      (window ? GDK_DRAWABLE_XID (window) : 0),

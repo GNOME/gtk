@@ -404,7 +404,7 @@ gtk_init_check (int	 *argc,
   bindtextdomain("gtk+", GTK_LOCALEDIR);
 #else
   {
-    /* GTk+ locale dir is %WinDir%\gtk+\locale */
+    /* GTk+ locale dir is %GtkDir%\locale */
     extern char *get_gtk_sysconf_directory ();
     bindtextdomain ("gtk+", g_strconcat (get_gtk_sysconf_directory (),
 					 G_DIR_SEPARATOR_S,

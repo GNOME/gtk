@@ -177,8 +177,13 @@ static GtkSignalDestroy global_destroy_notify = NULL;
 static guint	   		 gtk_handler_id = 1;
 static guint	   		 gtk_handler_quark = 0;
 static GHashTable  		*gtk_signal_hash_table = NULL;
-       GtkSignal   		*_gtk_private_signals = NULL;
-       guint	   		 _gtk_private_n_signals = 0;
+#ifdef G_OS_WIN32
+#define EXPORT __declspec(dllexport)
+#else
+#define EXPORT
+#endif
+EXPORT GtkSignal   		*_gtk_private_signals = NULL;
+EXPORT guint	   		 _gtk_private_n_signals = 0;
 static GMemChunk   		*gtk_signal_hash_mem_chunk = NULL;
 static GMemChunk   		*gtk_disconnect_info_mem_chunk = NULL;
 static GtkHandler  		*gtk_handler_free_list = NULL;

@@ -1,3 +1,133 @@
+2001-02-22  Tor Lillqvist  <tml@iki.fi>
+
+	Started a CVS branch for the GTK+ in production use on
+	Windows. First the changes up to the gtk+-src-20000722.zip
+	snapshot:
+
+2000-07-22  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkdraw.c (gdk_drawable_unref): One silly line of debugging
+	output.
+
+	* gdk/gdkfont.h: Declare new functions gdk_font_list_new(),
+	gdk_font_list_free(), gdk_font_full_name_get,
+	gdk_font_full_name_free(). Temporary hack only in Win32 branch.
+
+	* gdk/gdk.def
+	* gtk/gtk.def: Updates.
+
+	* gdk/makefile.cygwin
+	* gdk/win32/makefile.cygwin
+	* gtk/makefile.cygwin: Use factored-out common stuff from the
+	build module.
+
+	* gdk/win32/gdkcolor-win32.c (gdk_colormap_alloc1): Typo.
+	(gdk_win32_color_to_string): Rename, and compile only if
+	G_ENABLE_DEBUG.
+
+	* gdk/win32/gdkcursor-win32.c: Rename a few cursors in a desperate
+	attempt to fix some strange bug (?).
+	(gdk_cursor_new): Use LoadImage() instead of LoadCursor().
+	(_gdk_cursor_destroy): Use DestroyCursor() instead of
+	DestroyIcon().
+
+	* gdk/win32/gdkdnd-win32.c: Remove unneeded IID definitions.
+	(resolve_link): Compile also with gcc.
+
+	* gdk/win32/gdkdrawable-win32.c (gdk_win32_drawable_destroy): Add
+	g_assert_not_reached(), should not be called.
+	(gdk_win32_draw_arc): Don't try to draw too narrow arcs.
+	(gdk_win32_draw_segments,gdk_win32_draw_lines,gdk_win32_draw_lines):
+	Draw end pixel separately also for zero width pens.
+	(gdk_win32_id): New function.
+
+	* gdk/win32/gdkevents-win32.c: More debugging output enabled. Many
+	changes, for instance:
+	(gdk_WindowProc): Use a GdkEventPrivate variable, not GdkEvent.
+	(event_mask_string,decode_key_lparam,gdk_win32_message_name): New
+	debugging functions.
+	(build_key_event_state): Ifdefify out never reached code.
+	(build_keypress_event): Set GDK_CONTROL_MASK when appropriate.
+	(gdk_event_translate): Fix to enable input of chars with
+	Alt+numpad digits.
+
+	* gdk/win32/gdkfont-win32.c: Fix Unicode subrange table to match
+	reality.
+	(check_unicode_subranges): Guess more subranges in some cases.
+
+	* gdk/win32/gdkgc-win32.c (_gdk_win32_gc_new): Use 0 and 1 as
+	default fg and bg, not black and white. Use PS_ENDCAP_FLAT and
+	PS_JOIN_MITER pen style.
+	(predraw_set_foreground): Don't use zero width pens.
+	(gdk_gc_predraw): Better check whether to call SetROP2().
+	(gdk_win32_hdc_get,gdk_win32_hdc_release): New functions, wrappers
+	for gdk_gc_predraw() and gdk_gc_postdraw().
+
+	* gdk/win32/gdkim-win32.c (gdk_set_locale): Use g_win32_getlocale().
+
+	* gdk/win32/gdkimage-win32.c (gdk_image_new): Use the visual's
+	depth, not the bitspixel value.
+
+	* gdk/win32/gdkprivate-win32.h (STRICT): Guard against
+	redefinition.
+	(WM_MOUSEWHEEL..WM_AFXLAST): Define in case headers don't.
+	(gdk_win32_color_to_string,gdk_win32_message_name): Declare.
+
+	* gdk/win32/gdkproperty-win32.c
+	* gdk/win32/gdkselection-win32.c: Use DND debugging output 
+	selector, not MISC.
+
+	* gdk/win32/gdkvisual-win32.c (gdk_visual_lookup,gdkx_visual_get):
+	Remove these unneeded functions.
+
+	* gdk/win32/gdkwin32.h: Wrap in extern "C" for C++. Update with
+	new function prototypes.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_win32_window_destroy): More
+	debugging output. Destroy window's cursor here.
+	(RegisterGdkClass): Use gdk_ProgInstance instead of calling
+	GetModuleHandle(NULL).
+	(gdk_window_internal_destroy): Set destroyed flag before calling
+	DestroyWindow(), as that will call the window procedure, which
+	will call the GDK event generating mechanism. If I remember
+	correctly, this fixed a serious resource leak.
+	(gdk_window_set_cursor): Use NULL cursor if none is wanted, not an
+	arrow. Destroy old cursor. Copy the cursor before calling
+	SetCursor(), as it is normal to destroy the GdkCursor while it is
+	set in a window.
+	(gdk_propagate_shapes): Fix = vs. == bug.
+
+	* gdk/win32/makefile.msc (gdk.res): Define BUILDNUMBER as zero.
+
+	* gdk/win32/rc/gdk.rc: Rename the same two cursors here as in
+	gdkcursor-win32.c.
+
+	* gtk/gtkaccellabel.c (gtk_accel_label_class_init): Set
+	latin1_to_char FALSE on Win32 where we use UTF-8.
+
+	* gtk/gtkclist.c (gtk_clist_motion): Set x and y in all cases.
+
+	* gtk/gtklist.c (gtk_list_motion_notify): Ditto.
+
+	* gtk/gtkdnd.c (gtk_drag_set_default_icon): Unref correct object.
+
+	* gtk/gtkfontsel.c: Rewritten to use the temporary new GDK font
+	functions. Only in this branch.
+
+	* gtk/gtkhscrollbar.c (gtk_hscrollbar_calc_slider_size): Strange
+	hack to fix some bug, don't remember why, don't know if actually
+	needed any longer: hide and show slider.
+
+	* gtk/gtkvscrollbar.c (gtk_vscrollbar_calc_slider_size): Ditto
+
+	* gtk/gtkrc.{el,eo,he,hy,ru,tr,uk}: Specify font size in
+	decipoints instead of pixels.
+
+	* gtk/gtkrc.c (get_gtk_sysconf_directory): (Win32) Get GTK+
+	installation directory from Windows Registry.
+
+	* gtk/gtksignal.c: Export a couple of variables from DLL.
+
 2000-03-17  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c: Remove the #ifndef

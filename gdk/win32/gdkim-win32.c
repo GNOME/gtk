@@ -53,14 +53,10 @@
 gchar*
 gdk_set_locale (void)
 {
-  gchar *current_locale;
-
-  if (!setlocale (LC_ALL,""))
+  if (!setlocale (LC_ALL, ""))
     g_warning ("locale not supported by C library");
   
-  current_locale = setlocale (LC_ALL, NULL);
-
-  return current_locale;
+  return g_win32_getlocale ();
 }
 
 void 

@@ -117,7 +117,11 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   class->mod_name_alt = g_strdup ("Alt");
   class->mod_separator = g_strdup ("+");
   class->accel_seperator = g_strdup (" / ");
+#ifndef GDK_USE_UTF8_MBS
   class->latin1_to_char = TRUE;
+#else
+  class->latin1_to_char = FALSE;
+#endif
 }
 
 static void

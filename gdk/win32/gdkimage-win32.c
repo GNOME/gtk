@@ -288,7 +288,11 @@ gdk_image_new (GdkImageType  type,
 {
   GdkVisualPrivate *visual_private = (GdkVisualPrivate *) visual;
   return gdk_image_new_with_depth (type, visual, width, height,
+#if 0
 				   visual_private->xvisual->bitspixel);
+#else
+				   visual->depth);
+#endif
 }
 
 GdkImage*

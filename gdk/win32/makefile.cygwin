@@ -5,19 +5,18 @@
 # We use the wntab32x.lib archive library directly (copy it as libwntab32x.a).
 WTKIT = ../../../wtkit126
 
-OPTIMIZE = -g -O
+OPTIMIZE = -O
+
+TOP = ../../..
+
+include $(TOP)/build/win32/make.mingw
 
 ################################################################
 
 # Nothing much configurable below
 
-CC = gcc -mno-cygwin -mpentium -fnative-struct
-
-GLIB_VER=1.3
-GTK_VER=1.3
-
-GLIB = ../../../glib
-CFLAGS = $(OPTIMIZE) -I . -I .. -I ../.. -I $(WTKIT)/include -I $(GLIB) -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\"
+INCLUDES = -I . -I .. -I ../.. -I $(WTKIT)/include -I $(GLIB)
+DEFINES = -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\" -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\"
 
 all: \
 	../../config.h \
@@ -54,12 +53,9 @@ gdk_win32_OBJECTS = \
 ../gdkconfig.h : ../gdkconfig.h.win32
 	cp ../gdkconfig.h.win32 ../gdkconfig.h
 
-# Kludge to get the path to the win32 headers
-WIN32APIHEADERS = $(shell echo "\#include <winver.h>" | $(CC) -M -E - | tail -1 | sed -e 's!/winver.h!!')
-
 gdk-win32res.o : rc/gdk.rc gdk-build.tmp
 	m4 -DBUILDNUMBER=`cat gdk-build.tmp` <rc/gdk.rc >gdk-win32res.rc
-	windres --include-dir rc --include-dir $(WIN32APIHEADERS) gdk-win32res.rc gdk-win32res.o
+	windres -v --include-dir rc gdk-win32res.rc gdk-win32res.o
 	rm gdk-build.tmp gdk-win32res.rc
 
 # The *.stamp files aren't distributed. Thus, this takes care of only
@@ -82,14 +78,3 @@ libgdk-win32.a : $(gdk_win32_OBJECTS)
 
 libwntab32x.a : $(WTKIT)/lib/i386/wntab32x.lib
 	cp $(WTKIT)/lib/i386/wntab32x.lib libwntab32x.a
-
-.SUFFIXES: .c .o .i
-
-.c.o :
-	$(CC) $(CFLAGS) -c -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\" $<
-
-.c.i :
-	$(CC) $(CFLAGS) -E -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\" $< >$@
-
-clean:
-	-rm *.exe *.o *.dll *.a *.exp *.base

@@ -24,6 +24,8 @@ struct _GdkFont
   gint descent;
 };
 
+gchar**  gdk_font_list_new  (const gchar    *font_pattern, gint *n_returned);
+void     gdk_font_list_free (gchar **font_list);
 GdkFont* gdk_font_load	    (const gchar    *font_name);
 GdkFont* gdk_fontset_load   (const gchar    *fontset_name);
 GdkFont* gdk_font_ref	    (GdkFont        *font);
@@ -82,6 +84,9 @@ void     gdk_string_extents (GdkFont     *font,
 			     gint        *width,
 			     gint        *ascent,
 			     gint        *descent);
+
+gchar*   gdk_font_full_name_get (GdkFont *font);
+void	 gdk_font_full_name_free (gchar *name);
 
 #ifdef __cplusplus
 }

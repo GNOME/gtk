@@ -174,7 +174,7 @@ gdk_drawable_set_colormap (GdkDrawable *drawable,
 static void 
 gdk_win32_drawable_destroy (GdkDrawable *drawable)
 {
-  
+  g_assert_not_reached ();
 }
 
 static void
@@ -303,7 +303,10 @@ gdk_win32_draw_arc (GdkDrawable *drawable,
 			   GDK_DRAWABLE_XID (drawable),
 			   x, y, width, height, angle1, angle2));
 
-  if (width != 0 && height != 0 && angle2 != 0)
+  /* Seems that drawing arcs with width or height <= 2 fails, at least
+   * with my TNT card.
+   */
+  if (width > 2 && height > 2 && angle2 != 0)
     {
       hdc = gdk_gc_predraw (drawable, gc_private,
 			    GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
@@ -782,7 +785,7 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
 	    WIN32_GDI_FAILED ("LineTo"), ok = FALSE;
 	  
 	  /* Draw end pixel */
-	  if (ok && gc_data->pen_width == 1)
+	  if (ok && gc_data->pen_width <= 1)
 	    if (!LineTo (hdc, segs[i].x2 + 1, segs[i].y2))
 	      WIN32_GDI_FAILED ("LineTo"), ok = FALSE;
 	}
@@ -810,7 +813,7 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
 	    WIN32_GDI_FAILED ("LineTo");
 	  
 	  /* Draw end pixel */
-	  if (gc_data->pen_width == 1)
+	  if (gc_data->pen_width <= 1)
 	    if (!LineTo (hdc, segs[i].x2 + 1, segs[i].y2))
 	      WIN32_GDI_FAILED ("LineTo");
 	}
@@ -850,7 +853,7 @@ gdk_win32_draw_lines (GdkDrawable *drawable,
   g_free (pts);
   
   /* Draw end pixel */
-  if (gc_data->pen_width == 1)
+  if (gc_data->pen_width <= 1)
     {
       MoveToEx (hdc, points[npoints-1].x, points[npoints-1].y, NULL);
       if (!LineTo (hdc, points[npoints-1].x + 1, points[npoints-1].y))
@@ -867,9 +870,12 @@ gdk_win32_draw_lines (GdkDrawable *drawable,
    * we draw the end pixel separately... With wider pens we don't care.
    * //HB: But the NT developers don't read their API documentation ...
    */
-  if (gc_data->pen_width == 1 && windows_version > 0x80000000)
+  if (gc_data->pen_width <= 1 && windows_version > 0x80000000)
     if (!LineTo (hdc, points[npoints-1].x + 1, points[npoints-1].y))
       WIN32_GDI_FAILED ("LineTo");
 #endif	
   gdk_gc_postdraw (drawable, gc_private, GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
 }
+
+int
+gdk_win32_id (GdkDrawable *d) { return (int) GDK_DRAWABLE_XID (d); }

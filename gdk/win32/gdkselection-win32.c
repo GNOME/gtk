@@ -83,7 +83,7 @@ gdk_selection_owner_set (GdkWindow *owner,
   gchar *sel_name;
   HWND xwindow;
 
-  GDK_NOTE (MISC,
+  GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
 	     g_print ("gdk_selection_owner_set: %#x %#x (%s)\n",
 		      (owner ? GDK_DRAWABLE_XID (owner) : 0),
@@ -98,13 +98,13 @@ gdk_selection_owner_set (GdkWindow *owner,
   else
     xwindow = NULL;
 
-  GDK_NOTE (MISC, g_print ("...OpenClipboard(%#x)\n", xwindow));
+  GDK_NOTE (DND, g_print ("...OpenClipboard(%#x)\n", xwindow));
   if (!OpenClipboard (xwindow))
     {
       WIN32_API_FAILED ("OpenClipboard");
       return FALSE;
     }
-  GDK_NOTE (MISC, g_print ("...EmptyClipboard()\n"));
+  GDK_NOTE (DND, g_print ("...EmptyClipboard()\n"));
   if (!EmptyClipboard ())
     {
       WIN32_API_FAILED ("EmptyClipboard");
@@ -116,7 +116,7 @@ gdk_selection_owner_set (GdkWindow *owner,
   if (xwindow != NULL)
     SetClipboardData (CF_TEXT, NULL);
 #endif
-  GDK_NOTE (MISC, g_print ("...CloseClipboard()\n"));
+  GDK_NOTE (DND, g_print ("...CloseClipboard()\n"));
   if (!CloseClipboard ())
     {
       WIN32_API_FAILED ("CloseClipboard");
@@ -154,7 +154,7 @@ gdk_selection_owner_get (GdkAtom selection)
 
 #endif
 
-  GDK_NOTE (MISC,
+  GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
 	     g_print ("gdk_selection_owner_get: %#x (%s) = %#x\n",
 		      selection, sel_name,
@@ -180,7 +180,7 @@ gdk_selection_convert (GdkWindow *requestor,
   if (GDK_DRAWABLE_DESTROYED (requestor))
     return;
 
-  GDK_NOTE (MISC,
+  GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
 	     tgt_name = gdk_atom_name (target),
 	     g_print ("gdk_selection_convert: %#x %#x (%s) %#x (%s)\n",
@@ -194,7 +194,7 @@ gdk_selection_convert (GdkWindow *requestor,
        * contents of the clipboard. Get the clipboard data,
        * and store it for later.
        */
-      GDK_NOTE (MISC, g_print ("...OpenClipboard(%#x)\n",
+      GDK_NOTE (DND, g_print ("...OpenClipboard(%#x)\n",
 				    GDK_DRAWABLE_XID (requestor)));
       if (!OpenClipboard (GDK_DRAWABLE_XID (requestor)))
 	{
@@ -202,14 +202,14 @@ gdk_selection_convert (GdkWindow *requestor,
 	  return;
 	}
 
-      GDK_NOTE (MISC, g_print ("...GetClipboardData(CF_TEXT)\n"));
+      GDK_NOTE (DND, g_print ("...GetClipboardData(CF_TEXT)\n"));
       if ((hdata = GetClipboardData (CF_TEXT)) != NULL)
 	{
 	  if ((ptr = GlobalLock (hdata)) != NULL)
 	    {
 	      length = GlobalSize (hdata);
 	      
-	      GDK_NOTE (MISC, g_print ("...got data: %d bytes: %.10s\n",
+	      GDK_NOTE (DND, g_print ("...got data: %d bytes: %.10s\n",
 				       length, ptr));
 	      
 	      slength = 0;
@@ -240,7 +240,7 @@ gdk_selection_convert (GdkWindow *requestor,
 	      GlobalUnlock (hdata);
 	    }
 	}
-      GDK_NOTE (MISC, g_print ("...CloseClipboard()\n"));
+      GDK_NOTE (DND, g_print ("...CloseClipboard()\n"));
       CloseClipboard ();
 
 
@@ -290,16 +290,18 @@ gdk_selection_property_get (GdkWindow  *requestor,
   if (GDK_DRAWABLE_DESTROYED (requestor))
     return 0;
   
-  GDK_NOTE (MISC, g_print ("gdk_selection_property_get: %#x\n",
+  GDK_NOTE (DND, g_print ("gdk_selection_property_get: %#x",
 			   GDK_DRAWABLE_XID (requestor)));
 
   prop = g_hash_table_lookup (sel_prop_table, &GDK_DRAWABLE_XID (requestor));
 
   if (prop == NULL)
     {
+      GDK_NOTE (DND, g_print (": NULL\n"));
       *data = NULL;
       return 0;
     }
+  GDK_NOTE (DND, g_print (": %d bytes\n", prop->length));
   *data = g_malloc (prop->length);
   if (prop->length > 0)
     memmove (*data, prop->data, prop->length);
@@ -316,6 +318,9 @@ gdk_selection_property_delete (GdkWindow *window)
 {
   GdkSelProp *prop;
   
+  GDK_NOTE (DND, g_print ("gdk_selection_property_delete: %#x",
+			   GDK_DRAWABLE_XID (window)));
+
   prop = g_hash_table_lookup (sel_prop_table, &GDK_DRAWABLE_XID (window));
   if (prop != NULL)
     {
@@ -323,7 +328,7 @@ gdk_selection_property_delete (GdkWindow *window)
       g_hash_table_remove (sel_prop_table, &GDK_DRAWABLE_XID (window));
     }
   else
-    g_warning ("huh?");
+    g_warning ("gdk_selection_property_delete: not found");
 }
 
 void
@@ -335,7 +340,7 @@ gdk_selection_send_notify (guint32  requestor,
 {
   gchar *sel_name, *tgt_name, *prop_name;
 
-  GDK_NOTE (MISC,
+  GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
 	     tgt_name = gdk_atom_name (target),
 	     prop_name = gdk_atom_name (property),
@@ -372,8 +377,7 @@ gdk_text_property_to_text_list (GdkAtom       encoding,
 				gint          length,
 				gchar      ***list)
 {
-  GDK_NOTE (MISC,
-	    g_print ("gdk_text_property_to_text_list not implemented\n"));
+  GDK_NOTE (DND, g_print ("gdk_text_property_to_text_list not implemented\n"));
   
   return 0;
 }

@@ -58,7 +58,7 @@ gdk_win32_OBJECTS = \
 	copy ..\..\config.h.win32 ..\..\config.h
 
 gdk.res : rc\gdk.rc
-	rc -r -fo gdk.res rc\gdk.rc
+	rc -DBUILDNUMBER=0 -r -fo gdk.res rc\gdk.rc
 
 gdk-win32.lib : $(gdk_win32_OBJECTS)
 	lib -out:gdk-win32.lib $(gdk_win32_OBJECTS)

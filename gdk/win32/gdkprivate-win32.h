@@ -27,11 +27,13 @@
 #ifndef __GDK_PRIVATE_WIN32_H__
 #define __GDK_PRIVATE_WIN32_H__
 
+#ifndef STRICT
 #define STRICT			/* We want strict type checks */
+#endif
 #include <windows.h>
 #include <commctrl.h>
 
-/* Make up for some minor mingw32 lossage */
+/* Make up for mingw32 header lossage */
 
 /* PS_JOIN_MASK is missing from the mingw32 headers */
 #ifndef PS_JOIN_MASK
@@ -57,6 +59,90 @@
 
 #ifndef VM_OEM_PLUS
 #define VK_OEM_PLUS 0xBB
+#endif
+
+/* Missing messages */
+#ifndef WM_MOUSEWHEEL
+#define WM_MOUSEWHEEL 0X20A
+#endif
+#ifndef WM_GETOBJECT
+#define WM_GETOBJECT 0x003D
+#endif
+#ifndef WM_NCXBUTTONDOWN
+#define WM_NCXBUTTONDOWN 0x00AB
+#endif
+#ifndef WM_NCXBUTTONUP
+#define WM_NCXBUTTONUP 0x00AC
+#endif
+#ifndef WM_NCXBUTTONDBLCLK
+#define WM_NCXBUTTONDBLCLK 0x00AD
+#endif
+#ifndef WM_MENURBUTTONUP
+#define WM_MENURBUTTONUP 0x0122
+#endif
+#ifndef WM_MENUDRAG
+#define WM_MENUDRAG 0x0123
+#endif
+#ifndef WM_MENUGETOBJECT
+#define WM_MENUGETOBJECT 0x0124
+#endif
+#ifndef WM_UNINITMENUPOPUP
+#define WM_UNINITMENUPOPUP 0x0125
+#endif
+#ifndef WM_MENUCOMMAND
+#define WM_MENUCOMMAND 0x0126
+#endif
+#ifndef WM_CHANGEUISTATE
+#define WM_CHANGEUISTATE 0x0127
+#endif
+#ifndef WM_UPDATEUISTATE
+#define WM_UPDATEUISTATE 0x0128
+#endif
+#ifndef WM_QUERYUISTATE
+#define WM_QUERYUISTATE 0x0129
+#endif
+#ifndef WM_XBUTTONDOWN
+#define WM_XBUTTONDOWN 0x020B
+#endif
+#ifndef WM_XBUTTONUP
+#define WM_XBUTTONUP 0x020C
+#endif
+#ifndef WM_XBUTTONDBLCLK
+#define WM_XBUTTONDBLCLK 0x020D
+#endif
+#ifndef WM_IME_REQUEST
+#define WM_IME_REQUEST 0x0288
+#endif
+#ifndef WM_MOUSEHOVER
+#define WM_MOUSEHOVER 0x02A1
+#endif
+#ifndef WM_MOUSELEAVE
+#define WM_MOUSELEAVE 0x02A3
+#endif
+#ifndef WM_NCMOUSEHOVER
+#define WM_NCMOUSEHOVER 0x02A0
+#endif
+#ifndef WM_NCMOUSELEAVE
+#define WM_NCMOUSELEAVE 0x02A2
+#endif
+#ifndef WM_APPCOMMAND
+#define WM_APPCOMMAND 0x0319
+#endif
+#ifndef WM_HANDHELDFIRST
+#define WM_HANDHELDFIRST 0x0358
+#endif
+#ifndef WM_HANDHELDLAST
+#define WM_HANDHELDLAST 0x035F
+#endif
+#ifndef WM_AFXFIRST
+#define WM_AFXFIRST 0x0360
+#endif
+#ifndef WM_AFXLAST
+#define WM_AFXLAST 0x037F
+#endif
+
+#ifndef CopyCursor
+#define CopyCursor(pcur) ((HCURSOR)CopyIcon((HICON)(pcur)))
 #endif
 
 #include <time.h>
@@ -311,7 +397,6 @@ void gdk_wchar_text_handle       (GdkFont       *font,
 							  void *),
 				  void          *arg);
 
-gchar *gdk_color_to_string       (const GdkColor *);
 void   gdk_win32_api_failed      (const gchar *where,
 				  gint         line,
 				  const gchar *api);
@@ -331,6 +416,11 @@ void   gdk_win32_gdi_failed      (const gchar *where,
 #define OTHER_API_FAILED(api) gdk_other_api_failed (__FILE__, __LINE__, api)
 #endif
  
+#ifdef G_ENABLE_DEBUG
+gchar *gdk_win32_color_to_string (const GdkColor *);
+gchar *gdk_win32_message_name    (UINT msg);
+#endif
+
 extern LRESULT CALLBACK gdk_WindowProc (HWND, UINT, WPARAM, LPARAM);
 
 extern GdkDrawableClass  _gdk_win32_drawable_class;

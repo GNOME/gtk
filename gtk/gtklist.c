@@ -563,6 +563,11 @@ gtk_list_motion_notify (GtkWidget      *widget,
 
   if (event->is_hint || event->window != widget->window)
     gdk_window_get_pointer (widget->window, &x, &y, NULL);
+  else
+    {
+      x = event->x;
+      y = event->y;
+    }
 
   adj = gtk_object_get_data_by_id (GTK_OBJECT (list), hadjustment_key_id);
 

@@ -405,6 +405,7 @@ _gdk_win32_gc_new (GdkDrawable	  *drawable,
   GdkGC *gc;
   GdkGCPrivate *private;
   GdkGCWin32Data *data;
+#if 0
   static GdkColor black;
   static GdkColor white;
   static gboolean beenhere = FALSE;
@@ -415,15 +416,20 @@ _gdk_win32_gc_new (GdkDrawable	  *drawable,
       gdk_color_white (gdk_colormap_get_system (), &white);
       beenhere = TRUE;
     }
-
+#endif
   gc = gdk_gc_alloc ();
   private = (GdkGCPrivate *)gc;
 
   private->klass = &gdk_win32_gc_class;
   private->klass_data = data = g_new (GdkGCWin32Data, 1);
     
+#if 0
   data->foreground = black.pixel;
   data->background = white.pixel;
+#else
+  data->foreground = 0;
+  data->background = 1;
+#endif
   data->font = NULL;
   data->rop2 = R2_COPYPEN;
   data->fill_style = GDK_SOLID;
@@ -432,8 +438,8 @@ _gdk_win32_gc_new (GdkDrawable	  *drawable,
   data->clip_region = NULL;
   data->ts_x_origin = data->ts_y_origin =
     data->clip_x_origin = data->clip_y_origin = 0;
-  data->pen_style = PS_GEOMETRIC;
-  data->pen_width = 1;
+  data->pen_style = PS_GEOMETRIC|PS_ENDCAP_FLAT|PS_JOIN_MITER;
+  data->pen_width = 0;
 
   data->values_mask = GDK_GC_FUNCTION | GDK_GC_FILL;
 
@@ -859,7 +865,8 @@ predraw_set_foreground (GdkGCWin32Data          *data,
   logbrush.lbStyle = BS_SOLID;
   logbrush.lbColor = fg;
 
-  if ((hpen = ExtCreatePen (data->pen_style, data->pen_width,
+  if ((hpen = ExtCreatePen (data->pen_style,
+			    (data->pen_width > 0 ? data->pen_width : 1),
 			    &logbrush, 0, NULL)) == NULL)
     WIN32_GDI_FAILED ("ExtCreatePen");
   
@@ -946,7 +953,7 @@ gdk_gc_predraw (GdkDrawable    *drawable,
 	WIN32_GDI_FAILED ("SetTextAlign");
     }
   
-  if (data->values_mask & GDK_GC_FUNCTION)
+  if (data->rop2 != R2_COPYPEN)
     if (SetROP2 (data->xgc, data->rop2) == 0)
       WIN32_GDI_FAILED ("SetROP2");
 
@@ -1019,6 +1026,22 @@ gdk_gc_postdraw (GdkDrawable    *drawable,
     OffsetRgn (data->clip_region,
 	       -data->clip_x_origin, -data->clip_y_origin);
   data->xgc = NULL;
+}
+
+HDC
+gdk_win32_hdc_get (GdkDrawable     *drawable,
+		   GdkGC           *gc,
+		   GdkGCValuesMask usage)
+{
+  return gdk_gc_predraw (drawable, (GdkGCPrivate *) gc, usage);
+}
+
+void
+gdk_win32_hdc_release (GdkDrawable     *drawable,
+		       GdkGC           *gc,
+		       GdkGCValuesMask usage)
+{
+  gdk_gc_postdraw (drawable, (GdkGCPrivate *) gc, usage);
 }
 
 /* This function originally from Jean-Edouard Lachand-Robert, and

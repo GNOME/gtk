@@ -71,6 +71,9 @@ SafeAdjustWindowRectEx (RECT* lpRect,
 static void
 gdk_win32_window_destroy (GdkDrawable *drawable)
 {
+  GDK_NOTE (MISC, g_print ("gdk_win32_window_destroy: %#x\n",
+			   GDK_DRAWABLE_XID (drawable)));
+
   if (!GDK_DRAWABLE_DESTROYED (drawable))
     {
       if (GDK_DRAWABLE_TYPE (drawable) == GDK_WINDOW_FOREIGN)
@@ -82,6 +85,9 @@ gdk_win32_window_destroy (GdkDrawable *drawable)
   if (GDK_WINDOW_WIN32DATA (drawable)->bg_type == GDK_WIN32_BG_PIXMAP
       && GDK_WINDOW_WIN32DATA (drawable)->bg_pixmap != NULL)
     gdk_drawable_unref (GDK_WINDOW_WIN32DATA (drawable)->bg_pixmap);
+
+  if (GDK_WINDOW_WIN32DATA (drawable)->xcursor != NULL)
+    DestroyCursor (GDK_WINDOW_WIN32DATA (drawable)->xcursor);
 
   g_free (GDK_DRAWABLE_WIN32DATA (drawable));
 }
@@ -177,16 +183,15 @@ RegisterGdkClass (GdkDrawableType wtype)
   if (0 == hAppIcon)
     {
       gchar sLoc [_MAX_PATH+1];
-      HINSTANCE hInst = GetModuleHandle(NULL);
 
-      if (0 != GetModuleFileName(hInst, sLoc, _MAX_PATH))
+      if (0 != GetModuleFileName(gdk_ProgInstance, sLoc, _MAX_PATH))
 	{
-	  hAppIcon = ExtractIcon(hInst, sLoc, 0);
+	  hAppIcon = ExtractIcon(gdk_ProgInstance, sLoc, 0);
 	  if (0 == hAppIcon)
 	    {
 	      char *gdklibname = g_strdup_printf ("gdk-%s.dll", GDK_VERSION);
 
-	      hAppIcon = ExtractIcon(hInst, gdklibname, 0);
+	      hAppIcon = ExtractIcon(gdk_ProgInstance, gdklibname, 0);
 	      g_free (gdklibname);
 	    }
 	  
@@ -557,7 +562,7 @@ gdk_window_internal_destroy (GdkWindow *window,
     case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
     case GDK_WINDOW_FOREIGN:
-      if (!private->drawable.destroyed)
+      if (!GDK_DRAWABLE_DESTROYED (window))
 	{
 	  if (private->parent)
 	    {
@@ -621,14 +626,20 @@ gdk_window_internal_destroy (GdkWindow *window,
 		  PostMessage (GDK_DRAWABLE_XID (window), WM_QUIT, 0, 0);
 		}
 	    }
-	  else if (xdestroy)
-	    DestroyWindow (GDK_DRAWABLE_XID (window));
+	  else 
+	    {
+	      private->drawable.destroyed = TRUE;
+	      if (xdestroy)
+		{
+		  /* Calls gdk_WindowProc */
+		  DestroyWindow (GDK_DRAWABLE_XID (window));
+		}
+	    }
 
 	  if (private->drawable.colormap)
 	    gdk_colormap_unref (private->drawable.colormap);
 
 	  private->mapped = FALSE;
-	  private->drawable.destroyed = TRUE;
 	}
       break;
 
@@ -648,6 +659,7 @@ gdk_window_internal_destroy (GdkWindow *window,
 void
 gdk_window_destroy (GdkWindow *window)
 {
+  GDK_NOTE (MISC, g_print ("gdk_window_destroy: %#x\n", GDK_DRAWABLE_XID (window)));
   gdk_window_internal_destroy (window, TRUE, TRUE);
   gdk_drawable_unref (window);
 }
@@ -1402,7 +1414,7 @@ gdk_window_set_background (GdkWindow *window,
     {
       GDK_NOTE (MISC, g_print ("gdk_window_set_background: %#x %s\n",
 			       GDK_DRAWABLE_XID (window), 
-			       gdk_color_to_string (color)));
+			       gdk_win32_color_to_string (color)));
 
       if (GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_PIXMAP)
 	{
@@ -1474,17 +1486,38 @@ gdk_window_set_cursor (GdkWindow *window,
   if (!GDK_DRAWABLE_DESTROYED (window))
     {
       if (!cursor)
-	xcursor = LoadCursor (NULL, IDC_ARROW);
+	xcursor = NULL;
       else
 	xcursor = cursor_private->xcursor;
 
       GDK_NOTE (MISC, g_print ("gdk_window_set_cursor: %#x %#x\n",
 			       GDK_DRAWABLE_XID (window), xcursor));
-      GDK_WINDOW_WIN32DATA (window)->xcursor = xcursor;
 
-      GetCursorPos (&pt);
-      if (ChildWindowFromPoint (GDK_DRAWABLE_XID (window), pt) == GDK_DRAWABLE_XID (window))
-	SetCursor (xcursor);
+      if (GDK_WINDOW_WIN32DATA (window)->xcursor != NULL)
+	{
+	  GDK_NOTE (MISC, g_print ("...DestroyCursor (%#x)\n",
+				   GDK_WINDOW_WIN32DATA (window)->xcursor));
+	  
+	  DestroyCursor (GDK_WINDOW_WIN32DATA (window)->xcursor);
+	  GDK_WINDOW_WIN32DATA (window)->xcursor = NULL;
+	}
+      if (xcursor != NULL)
+	{
+	  /* We must copy the cursor as it is OK to destroy the GdkCursor
+	   * while still in use for some window. See for instance
+	   * gimp_change_win_cursor() which calls
+	   * gdk_window_set_cursor (win, cursor), and immediately
+	   * afterwards gdk_cursor_destroy (cursor).
+	   */
+	  GDK_WINDOW_WIN32DATA (window)->xcursor = CopyCursor (xcursor);
+	  GDK_NOTE (MISC, g_print ("...CopyCursor (%#x) = %#x\n",
+				   xcursor,
+				   GDK_WINDOW_WIN32DATA (window)->xcursor));
+
+	  GetCursorPos (&pt);
+	  if (ChildWindowFromPoint (GDK_DRAWABLE_XID (window), pt) == GDK_DRAWABLE_XID (window))
+	    SetCursor (GDK_WINDOW_WIN32DATA (window)->xcursor);
+	}
     }
 }
 
@@ -1830,9 +1863,6 @@ gdk_window_set_icon (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (GDK_DRAWABLE_DESTROYED (window))
-    return;
-  
   /* Nothing to do, really. As we share window classes between windows
    * we can't have window-specific icons, sorry. Don't print any warning
    * either.
@@ -1999,7 +2029,7 @@ gdk_propagate_shapes (HANDLE   win,
        for (i = 0; i < num; i++)
 	 {
 	   GetWindowPlacement (list[i], &placement);
-	   if (placement.showCmd = SW_SHOWNORMAL)
+	   if (placement.showCmd == SW_SHOWNORMAL)
 	     {
 	       childRegion = CreateRectRgnIndirect (&emptyRect);
 	       GetWindowRgn (list[i], childRegion);

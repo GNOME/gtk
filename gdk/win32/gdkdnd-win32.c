@@ -44,19 +44,8 @@
 #include <objbase.h>
 #endif
 
-#ifdef _MSC_VER
 #include <shlobj.h>
 #include <shlguid.h>
-#endif
-
-#ifndef _MSC_VER
-static IID IID_IUnknown = {
-  0x00000000, 0x0000, 0x0000, { 0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 } };
-static IID IID_IDropSource = {
-  0x00000121, 0x0000, 0x0000, { 0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 } };
-static IID IID_IDropTarget = {
-  0x00000122, 0x0000, 0x0000, { 0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 } };
-#endif
 
 #include <gdk/gdk.h>
 
@@ -548,8 +537,6 @@ source_context_new (void)
   return result;
 }
 
-#ifdef _MSC_VER
-
 /* From MS Knowledge Base article Q130698 */
 
 /* resolve_link() fills the filename and path buffer
@@ -638,12 +625,6 @@ resolve_link(HWND hWnd,
    }
   return SUCCEEDED (hres);
 }
-
-#else
-
-#define resolve_link(hWnd, lpszLinkName, lpszPath, lpszDescription) FALSE
-
-#endif
 
 static GdkFilterReturn
 gdk_dropfiles_filter (GdkXEvent *xev,

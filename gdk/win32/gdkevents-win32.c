@@ -162,7 +162,7 @@ gdk_WindowProc (HWND hWnd,
 		WPARAM wParam,
 		LPARAM lParam)
 {
-  GdkEvent event;
+  GdkEventPrivate event;
   GdkEvent *eventp;
   MSG msg;
   DWORD pos;
@@ -170,7 +170,8 @@ gdk_WindowProc (HWND hWnd,
   gint ret_val;
   gboolean ret_val_flag;
 
-  GDK_NOTE (EVENTS, g_print ("gdk_WindowProc: %#x %#.03x\n", hWnd, message));
+  GDK_NOTE (EVENTS, g_print ("gdk_WindowProc: %#x %s\n",
+			     hWnd, gdk_win32_message_name (message)));
 
   msg.hwnd = hWnd;
   msg.message = message;
@@ -181,50 +182,50 @@ gdk_WindowProc (HWND hWnd,
   msg.pt.x = LOWORD (pos);
   msg.pt.y = HIWORD (pos);
 
-  ((GdkEventPrivate *)&event)->flags |= GDK_EVENT_PENDING;
-  if (gdk_event_translate (&event, &msg, &ret_val_flag, &ret_val))
+  event.flags = GDK_EVENT_PENDING;
+  if (gdk_event_translate (&event.event, &msg, &ret_val_flag, &ret_val))
     {
-      ((GdkEventPrivate *)&event)->flags &= ~GDK_EVENT_PENDING;
+      event.flags &= ~GDK_EVENT_PENDING;
 #if 1
-      if (event.any.type == GDK_CONFIGURE)
+      if (event.event.any.type == GDK_CONFIGURE)
 	{
 	  /* Compress configure events */
 	  GList *list = gdk_queued_events;
 
 	  while (list != NULL
 		 && (((GdkEvent *)list->data)->any.type != GDK_CONFIGURE
-		     || ((GdkEvent *)list->data)->any.window != event.any.window))
+		     || ((GdkEvent *)list->data)->any.window != event.event.any.window))
 	    list = list->next;
 	  if (list != NULL)
 	    {
 	      GDK_NOTE (EVENTS, g_print ("... compressing an CONFIGURE event\n"));
 
-	      *((GdkEvent *)list->data) = event;
-	      gdk_window_unref (event.any.window);
+	      *((GdkEvent *)list->data) = event.event;
+	      gdk_window_unref (event.event.any.window);
 	      /* Wake up WaitMessage */
 	      PostMessage (NULL, gdk_ping_msg, 0, 0);
 	      return FALSE;
 	    }
 	}
-      else if (event.any.type == GDK_EXPOSE)
+      else if (event.event.any.type == GDK_EXPOSE)
 	{
 	  /* Compress expose events */
 	  GList *list = gdk_queued_events;
 
 	  while (list != NULL
 		 && (((GdkEvent *)list->data)->any.type != GDK_EXPOSE
-		     || ((GdkEvent *)list->data)->any.window != event.any.window))
+		     || ((GdkEvent *)list->data)->any.window != event.event.any.window))
 	    list = list->next;
 	  if (list != NULL)
 	    {
 	      GdkRectangle u;
 
 	      GDK_NOTE (EVENTS, g_print ("... compressing an EXPOSE event\n"));
-	      gdk_rectangle_union (&event.expose.area,
+	      gdk_rectangle_union (&event.event.expose.area,
 				   &((GdkEvent *)list->data)->expose.area,
 				   &u);
 	      ((GdkEvent *)list->data)->expose.area = u;
-	      gdk_window_unref (event.any.window);
+	      gdk_window_unref (event.event.any.window);
 #if 0
 	      /* Wake up WaitMessage */
 	      PostMessage (NULL, gdk_ping_msg, 0, 0);
@@ -234,7 +235,7 @@ gdk_WindowProc (HWND hWnd,
 	}
 #endif
       eventp = gdk_event_new ();
-      *eventp = event;
+      *((GdkEventPrivate *) eventp) = event;
 
       /* Philippe Colantoni <colanton@aris.ss.uci.edu> suggests this
        * in order to handle events while opaque resizing neatly.  I
@@ -410,6 +411,42 @@ gdk_event_get_graphics_expose (GdkWindow *window)
 #endif
 }
 
+static char *
+event_mask_string (GdkEventMask mask)
+{
+  static char bfr[500];
+  char *p = bfr;
+
+  *p = '\0';
+#define BIT(x) \
+  if (mask & GDK_##x##_MASK) \
+    p += sprintf (p, "%s" #x, (p > bfr ? " " : ""))
+  BIT(EXPOSURE);
+  BIT(POINTER_MOTION);
+  BIT(POINTER_MOTION_HINT);
+  BIT(BUTTON_MOTION);
+  BIT(BUTTON1_MOTION);
+  BIT(BUTTON2_MOTION);
+  BIT(BUTTON3_MOTION);
+  BIT(BUTTON_PRESS);
+  BIT(BUTTON_RELEASE);
+  BIT(KEY_PRESS);
+  BIT(KEY_RELEASE);
+  BIT(ENTER_NOTIFY);
+  BIT(LEAVE_NOTIFY);
+  BIT(FOCUS_CHANGE);
+  BIT(STRUCTURE);
+  BIT(PROPERTY_CHANGE);
+  BIT(VISIBILITY_NOTIFY);
+  BIT(PROXIMITY_IN);
+  BIT(PROXIMITY_OUT);
+  BIT(SUBSTRUCTURE);
+  BIT(SCROLL);
+#undef BIT
+
+  return bfr;
+}
+
 /*
  *--------------------------------------------------------------
  * gdk_pointer_grab
@@ -478,14 +515,11 @@ gdk_pointer_grab (GdkWindow *	  window,
     {
       if (!GDK_DRAWABLE_DESTROYED (window))
       {
-	GDK_NOTE (EVENTS, g_print ("gdk_pointer_grab: %#x %s %#x%s%s\n",
+	GDK_NOTE (EVENTS, g_print ("gdk_pointer_grab: %#x %s %#x %s\n",
 				   xwindow,
 				   (owner_events ? "TRUE" : "FALSE"),
 				   xcursor,
-				   (event_mask & GDK_BUTTON_PRESS_MASK) ?
-				   " PRESS" : "",
-				   (event_mask & GDK_BUTTON_RELEASE_MASK) ?
-				   " RELEASE" : ""));
+				   event_mask_string (event_mask)));
 	p_grab_mask = event_mask;
 	p_grab_owner_events = (owner_events != 0);
 	p_grab_automatic = FALSE;
@@ -2323,7 +2357,6 @@ unicode_to_keyval (wchar_t ucs)
 static void
 build_key_event_state (GdkEvent *event)
 {
-  event->key.state = 0;
   if (GetKeyState (VK_SHIFT) < 0)
     event->key.state |= GDK_SHIFT_MASK;
   if (GetKeyState (VK_CAPITAL) & 0x1)
@@ -2333,14 +2366,19 @@ build_key_event_state (GdkEvent *event)
       if (GetKeyState (VK_CONTROL) < 0)
 	{
 	  event->key.state |= GDK_CONTROL_MASK;
+#if 0
 	  if (event->key.keyval < ' ')
 	    event->key.keyval += '@';
+#endif
 	}
+#if 0
+      /* We never get here (?) */
       else if (event->key.keyval < ' ')
 	{
 	  event->key.state |= GDK_CONTROL_MASK;
 	  event->key.keyval += '@';
 	}
+#endif
       if (GetKeyState (VK_MENU) < 0)
 	event->key.state |= GDK_MOD1_MASK;
     }
@@ -2370,19 +2408,19 @@ build_pointer_event_state (MSG *xevent)
   return state;
 }
 
-
 static void
 build_keypress_event (GdkWindowWin32Data *windata,
 		      GdkEvent           *event,
 		      MSG                *xevent)
 {
   HIMC hIMC;
-  gint i, bytesleft, bytecount, ucount, ucleft, len;
+  gint i, bytecount, ucount, ucleft, len;
   guchar buf[100], *bp;
   wchar_t wbuf[100], *wcp;
 
   event->key.type = GDK_KEY_PRESS;
   event->key.time = xevent->time;
+  event->key.state = 0;
   
   if (xevent->message == WM_IME_COMPOSITION)
     {
@@ -2394,7 +2432,7 @@ build_keypress_event (GdkWindowWin32Data *windata,
     }
   else
     {
-      if (xevent->message == WM_CHAR)
+      if (xevent->message == WM_CHAR || xevent->message == WM_SYSCHAR)
 	{
 	  bytecount = MIN ((xevent->lParam & 0xFFFF), sizeof (buf));
 	  for (i = 0; i < bytecount; i++)
@@ -2430,16 +2468,21 @@ build_keypress_event (GdkWindowWin32Data *windata,
     }
   if (ucount == 0)
     event->key.keyval = GDK_VoidSymbol;
-  else if (xevent->message == WM_CHAR)
+  else if (xevent->message == WM_CHAR || xevent->message == WM_SYSCHAR)
     if (xevent->wParam < ' ')
-      event->key.keyval = xevent->wParam + '@';
+      {
+	event->key.keyval = xevent->wParam + '@';
+	/* This is needed in case of Alt+nnn or Alt+0nnn (on the numpad)
+	 * where nnn<32
+	 */
+	event->key.state |= GDK_CONTROL_MASK;
+      }
     else
       event->key.keyval = unicode_to_keyval (wbuf[0]);
-  else
-    event->key.keyval = GDK_VoidSymbol;
 
   build_key_event_state (event);
 
+  /* Build UTF-8 string */
   ucleft = ucount;
   len = 0;
   wcp = wbuf;
@@ -2515,8 +2558,9 @@ build_keyrelease_event (GdkWindowWin32Data *windata,
 
   event->key.type = GDK_KEY_RELEASE;
   event->key.time = xevent->time;
+  event->key.state = 0;
 
-  if (xevent->message == WM_CHAR)
+  if (xevent->message == WM_CHAR || xevent->message == WM_SYSCHAR)
     if (xevent->wParam < ' ')
       event->key.keyval = xevent->wParam + '@';
     else
@@ -2849,12 +2893,10 @@ static gboolean
 doesnt_want_key (gint mask,
 		 MSG *xevent)
 {
-  return (((xevent->message == WM_KEYUP
-	    || xevent->message == WM_SYSKEYUP)
+  return (((xevent->message == WM_KEYUP || xevent->message == WM_SYSKEYUP)
 	   && !(mask & GDK_KEY_RELEASE_MASK))
 	  ||
-	  ((xevent->message == WM_KEYDOWN
-	    || xevent->message == WM_SYSKEYDOWN)
+	  ((xevent->message == WM_KEYDOWN || xevent->message == WM_SYSKEYDOWN)
 	   && !(mask & GDK_KEY_PRESS_MASK)));
 }
 
@@ -2905,6 +2947,25 @@ doesnt_want_scroll (gint mask,
 #endif
 }
 
+static char *
+decode_key_lparam (LPARAM lParam)
+{
+  static char buf[100];
+  char *p = buf;
+
+  if (HIWORD (lParam) & KF_UP)
+    p += sprintf (p, "KF_UP ");
+  if (HIWORD (lParam) & KF_REPEAT)
+    p += sprintf (p, "KF_REPEAT ");
+  if (HIWORD (lParam) & KF_ALTDOWN)
+    p += sprintf (p, "KF_ALTDOWN ");
+  if (HIWORD (lParam) & KF_EXTENDED)
+    p += sprintf (p, "KF_EXTENDED ");
+  p += sprintf (p, "sc%d rep%d", LOBYTE (HIWORD (lParam)), LOWORD (lParam));
+
+  return buf;
+}
+
 static gboolean
 gdk_event_translate (GdkEvent *event,
 		     MSG      *xevent,
@@ -2924,6 +2985,7 @@ gdk_event_translate (GdkEvent *event,
   POINT pt;
   MINMAXINFO *lpmmi;
   HWND hwnd;
+  HCURSOR xcursor;
   GdkWindow *window, *orig_window, *newwindow;
   GdkColormapPrivateWin32 *colormap_private;
   GdkEventMask mask;
@@ -3026,7 +3088,7 @@ gdk_event_translate (GdkEvent *event,
       event->selection.selection = xevent->wParam;
       event->selection.time = xevent->time;
 
-      return_val = GDK_DRAWABLE_DESTROYED (window);
+      return_val = !GDK_DRAWABLE_DESTROYED (window);
 
       /* Once again, we will pass through switch below without match */
     }
@@ -3074,7 +3136,7 @@ gdk_event_translate (GdkEvent *event,
     {
     case WM_INPUTLANGCHANGE:
       GDK_NOTE (EVENTS,
-		g_print ("WM_INPUTLANGCHANGE: %#x charset %d locale %x\n",
+		g_print ("WM_INPUTLANGCHANGE: %#x  charset %d locale %x\n",
 			 xevent->hwnd, xevent->wParam, xevent->lParam));
       GDK_WINDOW_WIN32DATA (window)->input_locale = (HKL) xevent->lParam;
       TranslateCharsetInfo ((DWORD FAR *) xevent->wParam,
@@ -3085,14 +3147,14 @@ gdk_event_translate (GdkEvent *event,
     case WM_SYSKEYUP:
     case WM_SYSKEYDOWN:
       GDK_NOTE (EVENTS,
-		g_print ("WM_SYSKEY%s: %#x  key: %s  %#x %#.08x\n",
+		g_print ("WM_SYSKEY%s: %#x  %s %#x %s\n",
 			 (xevent->message == WM_SYSKEYUP ? "UP" : "DOWN"),
 			 xevent->hwnd,
 			 (GetKeyNameText (xevent->lParam, buf,
 					  sizeof (buf)) > 0 ?
 			  buf : ""),
 			 xevent->wParam,
-			 xevent->lParam));
+			 decode_key_lparam (xevent->lParam)));
 
       /* Let the system handle Alt-Tab and Alt-Enter */
       if (xevent->wParam == VK_TAB
@@ -3113,22 +3175,19 @@ gdk_event_translate (GdkEvent *event,
     case WM_KEYUP:
     case WM_KEYDOWN:
       GDK_NOTE (EVENTS, 
-		g_print ("WM_KEY%s: %#x  key: %s  %#x %#.08x\n",
+		g_print ("WM_KEY%s: %#x  %s %#x %s\n",
 			 (xevent->message == WM_KEYUP ? "UP" : "DOWN"),
 			 xevent->hwnd,
 			 (GetKeyNameText (xevent->lParam, buf,
 					  sizeof (buf)) > 0 ?
 			  buf : ""),
 			 xevent->wParam,
-			 xevent->lParam));
+			 decode_key_lparam (xevent->lParam)));
 
       ignore_WM_CHAR = TRUE;
+
     keyup_or_down:
 
-      if (!propagate (&window, xevent,
-		      k_grab_window, k_grab_owner_events, GDK_ALL_EVENTS_MASK,
-		      doesnt_want_key))
-	  break;
       event->key.window = window;
       switch (xevent->wParam)
 	{
@@ -3153,7 +3212,7 @@ gdk_event_translate (GdkEvent *event,
 	case VK_SHIFT:
 	  /* Don't let Shift auto-repeat */
 	  if (xevent->message == WM_KEYDOWN
-	      && (xevent->lParam & 0x40000000))
+	      && (HIWORD (xevent->lParam) & KF_REPEAT))
 	    ignore_WM_CHAR = FALSE;
 	  else
 	    event->key.keyval = GDK_Shift_L;
@@ -3161,9 +3220,9 @@ gdk_event_translate (GdkEvent *event,
 	case VK_CONTROL:
 	  /* And not Control either */
 	  if (xevent->message == WM_KEYDOWN
-	      && (xevent->lParam & 0x40000000))
+	      && (HIWORD (xevent->lParam) & KF_REPEAT))
 	    ignore_WM_CHAR = FALSE;
-	  else if (xevent->lParam & 0x01000000)
+	  else if (HIWORD (xevent->lParam) & KF_EXTENDED)
 	    event->key.keyval = GDK_Control_R;
 	  else
 	    event->key.keyval = GDK_Control_L;
@@ -3171,9 +3230,9 @@ gdk_event_translate (GdkEvent *event,
 	case VK_MENU:
 	  /* And not Alt */
 	  if (xevent->message == WM_KEYDOWN
-	      && (xevent->lParam & 0x40000000))
+	      && (HIWORD (xevent->lParam) & KF_REPEAT))
 	    ignore_WM_CHAR = FALSE;
-	  else if (xevent->lParam & 0x01000000)
+	  else if (HIWORD (xevent->lParam) & KF_EXTENDED)
 	    {
 	      /* AltGr key comes in as Control+Right Alt */
 	      if (GetKeyState (VK_CONTROL) < 0)
@@ -3184,7 +3243,11 @@ gdk_event_translate (GdkEvent *event,
 	      event->key.keyval = GDK_Alt_R;
 	    }
 	  else
-	    event->key.keyval = GDK_Alt_L;
+	    {
+	      event->key.keyval = GDK_Alt_L;
+	      /* This needed in case she types Alt+nnn (on the numpad) */
+	      ignore_WM_CHAR = FALSE;
+	    }
 	  break;
 	case VK_PAUSE:
 	  event->key.keyval = GDK_Pause; break;
@@ -3332,6 +3395,11 @@ gdk_event_translate (GdkEvent *event,
       if (!ignore_WM_CHAR)
 	break;
 
+      if (!propagate (&window, xevent,
+		      k_grab_window, k_grab_owner_events, GDK_ALL_EVENTS_MASK,
+		      doesnt_want_key))
+	  break;
+
       is_AltGr_key = FALSE;
       event->key.type = ((xevent->message == WM_KEYDOWN
 			  || xevent->message == WM_SYSKEYDOWN) ?
@@ -3367,9 +3435,12 @@ gdk_event_translate (GdkEvent *event,
       goto wm_char;
       
     case WM_CHAR:
+    case WM_SYSCHAR:
       GDK_NOTE (EVENTS, 
-		g_print ("WM_CHAR: %#x  char: %#x %#.08x  %s\n",
-			 xevent->hwnd, xevent->wParam, xevent->lParam,
+		g_print ("WM_%sCHAR: %#x  %#x %#s %s\n",
+			 (xevent->message == WM_CHAR ? "" : "SYS"),
+			 xevent->hwnd, xevent->wParam,
+			 decode_key_lparam (xevent->lParam),
 			 (ignore_WM_CHAR ? "ignored" : "")));
 
       if (ignore_WM_CHAR)
@@ -3596,7 +3667,11 @@ gdk_event_translate (GdkEvent *event,
       event->motion.xtilt = 0;
       event->motion.ytilt = 0;
       event->motion.state = build_pointer_event_state (xevent);
+#if 0
+      event->motion.is_hint = (p_grab_window != NULL && (p_grab_mask & GDK_POINTER_MOTION_HINT_MASK));
+#else
       event->motion.is_hint = FALSE;
+#endif
       event->motion.source = GDK_SOURCE_MOUSE;
       event->motion.deviceid = GDK_CORE_POINTER;
 
@@ -3637,10 +3712,6 @@ gdk_event_translate (GdkEvent *event,
 	}
 
       break;
-
-#ifndef WM_MOUSEWHEEL
-#define WM_MOUSEWHEEL 0x20a
-#endif
 
     case WM_MOUSEWHEEL:
       GDK_NOTE (EVENTS, g_print ("WM_MOUSEWHEEL: %#x\n", xevent->hwnd));
@@ -3936,24 +4007,21 @@ gdk_event_translate (GdkEvent *event,
 
       if (LOWORD (xevent->lParam) != HTCLIENT)
 	break;
+
       if (p_grab_window != NULL && p_grab_cursor != NULL)
-	{
-	  GDK_NOTE (EVENTS, g_print ("...SetCursor(%#x)\n", p_grab_cursor));
-	  SetCursor (p_grab_cursor);
-	}
-      else if (!GDK_DRAWABLE_DESTROYED (window)
-	       && GDK_WINDOW_WIN32DATA (window)->xcursor)
-	{
-	  GDK_NOTE (EVENTS, g_print ("...SetCursor(%#x)\n",
-				     GDK_WINDOW_WIN32DATA (window)->xcursor));
-	  SetCursor (GDK_WINDOW_WIN32DATA (window)->xcursor);
-	}
+	xcursor = p_grab_cursor;
+      else if (!GDK_DRAWABLE_DESTROYED (window))
+	xcursor = GDK_WINDOW_WIN32DATA (window)->xcursor;
+      else
+	xcursor = NULL;
 
-      if (window != curWnd)
-	synthesize_crossing_events (window, xevent);
-
-      *ret_val_flagp = TRUE;
-      *ret_valp = FALSE;
+      if (xcursor != NULL)
+	{
+	  GDK_NOTE (EVENTS, g_print ("...SetCursor(%#x)\n", xcursor));
+	  SetCursor (xcursor);
+	  *ret_val_flagp = TRUE;
+	  *ret_valp = TRUE;
+	}
       break;
 
     case WM_SHOWWINDOW:
@@ -4171,7 +4239,11 @@ gdk_event_translate (GdkEvent *event,
       if (k_grab_window == window)
 	gdk_keyboard_ungrab (xevent->time);
 
-      return_val = !GDK_DRAWABLE_DESTROYED (window);
+      return_val = window != NULL && !GDK_DRAWABLE_DESTROYED (window);
+
+      if (window != NULL)
+	gdk_window_destroy_notify (window);
+
       break;
 
 #ifdef HAVE_WINTAB
@@ -4192,16 +4264,22 @@ gdk_event_translate (GdkEvent *event,
       goto wintab;
       
     case WT_PROXIMITY:
-      GDK_NOTE (EVENTS,
-		g_print ("WT_PROXIMITY: %#x %#x %d %d\n",
-			 xevent->hwnd, xevent->wParam,
-			 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
+      GDK_NOTE (EVENTS, g_print ("WT_PROXIMITY: %#x %#x %d %d\n",
+				 xevent->hwnd, xevent->wParam,
+				 LOWORD (xevent->lParam),
+				 HIWORD (xevent->lParam)));
       /* Fall through */
     wintab:
       event->any.window = window;
       return_val = gdk_input_vtable.other_event(event, xevent);
       break;
 #endif
+
+    default:
+      GDK_NOTE (EVENTS, g_print ("%s: %#x %#x %#x\n",
+				 gdk_win32_message_name (xevent->message),
+				 xevent->hwnd,
+				 xevent->wParam, xevent->lParam));
     }
 
 bypass_switch:
@@ -4242,7 +4320,7 @@ gdk_events_queue (void)
 	 && PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
     {
       GDK_NOTE (EVENTS, g_print ("PeekMessage: %#x %#x\n",
-				 msg.hwnd, msg.message));
+				 msg.hwnd, gdk_win32_message_name (msg.message)));
 
       if (paimmmpo == NULL
 	  || (paimmmpo->lpVtbl->OnTranslateMessage) (paimmmpo, &msg) != S_OK)
@@ -4346,3 +4424,241 @@ gdk_flush (void)
 {
   GdiFlush ();
 }
+
+#ifdef G_ENABLE_DEBUG
+
+gchar *
+gdk_win32_message_name (UINT msg)
+{
+  static gchar bfr[100];
+
+  switch (msg)
+    {
+#define CASE(x) case x: return #x
+      CASE (WM_NULL);
+      CASE (WM_CREATE);
+      CASE (WM_DESTROY);
+      CASE (WM_MOVE);
+      CASE (WM_SIZE);
+      CASE (WM_ACTIVATE);
+      CASE (WM_SETFOCUS);
+      CASE (WM_KILLFOCUS);
+      CASE (WM_ENABLE);
+      CASE (WM_SETREDRAW);
+      CASE (WM_SETTEXT);
+      CASE (WM_GETTEXT);
+      CASE (WM_GETTEXTLENGTH);
+      CASE (WM_PAINT);
+      CASE (WM_CLOSE);
+      CASE (WM_QUERYENDSESSION);
+      CASE (WM_QUERYOPEN);
+      CASE (WM_ENDSESSION);
+      CASE (WM_QUIT);
+      CASE (WM_ERASEBKGND);
+      CASE (WM_SYSCOLORCHANGE);
+      CASE (WM_SHOWWINDOW);
+      CASE (WM_WININICHANGE);
+      CASE (WM_DEVMODECHANGE);
+      CASE (WM_ACTIVATEAPP);
+      CASE (WM_FONTCHANGE);
+      CASE (WM_TIMECHANGE);
+      CASE (WM_CANCELMODE);
+      CASE (WM_SETCURSOR);
+      CASE (WM_MOUSEACTIVATE);
+      CASE (WM_CHILDACTIVATE);
+      CASE (WM_QUEUESYNC);
+      CASE (WM_GETMINMAXINFO);
+      CASE (WM_PAINTICON);
+      CASE (WM_ICONERASEBKGND);
+      CASE (WM_NEXTDLGCTL);
+      CASE (WM_SPOOLERSTATUS);
+      CASE (WM_DRAWITEM);
+      CASE (WM_MEASUREITEM);
+      CASE (WM_DELETEITEM);
+      CASE (WM_VKEYTOITEM);
+      CASE (WM_CHARTOITEM);
+      CASE (WM_SETFONT);
+      CASE (WM_GETFONT);
+      CASE (WM_SETHOTKEY);
+      CASE (WM_GETHOTKEY);
+      CASE (WM_QUERYDRAGICON);
+      CASE (WM_COMPAREITEM);
+      CASE (WM_GETOBJECT);
+      CASE (WM_COMPACTING);
+      CASE (WM_WINDOWPOSCHANGING);
+      CASE (WM_WINDOWPOSCHANGED);
+      CASE (WM_POWER);
+      CASE (WM_COPYDATA);
+      CASE (WM_CANCELJOURNAL);
+      CASE (WM_NOTIFY);
+      CASE (WM_INPUTLANGCHANGEREQUEST);
+      CASE (WM_INPUTLANGCHANGE);
+      CASE (WM_TCARD);
+      CASE (WM_HELP);
+      CASE (WM_USERCHANGED);
+      CASE (WM_NOTIFYFORMAT);
+      CASE (WM_CONTEXTMENU);
+      CASE (WM_STYLECHANGING);
+      CASE (WM_STYLECHANGED);
+      CASE (WM_DISPLAYCHANGE);
+      CASE (WM_GETICON);
+      CASE (WM_SETICON);
+      CASE (WM_NCCREATE);
+      CASE (WM_NCDESTROY);
+      CASE (WM_NCCALCSIZE);
+      CASE (WM_NCHITTEST);
+      CASE (WM_NCPAINT);
+      CASE (WM_NCACTIVATE);
+      CASE (WM_GETDLGCODE);
+      CASE (WM_SYNCPAINT);
+      CASE (WM_NCMOUSEMOVE);
+      CASE (WM_NCLBUTTONDOWN);
+      CASE (WM_NCLBUTTONUP);
+      CASE (WM_NCLBUTTONDBLCLK);
+      CASE (WM_NCRBUTTONDOWN);
+      CASE (WM_NCRBUTTONUP);
+      CASE (WM_NCRBUTTONDBLCLK);
+      CASE (WM_NCMBUTTONDOWN);
+      CASE (WM_NCMBUTTONUP);
+      CASE (WM_NCMBUTTONDBLCLK);
+      CASE (WM_NCXBUTTONDOWN);
+      CASE (WM_NCXBUTTONUP);
+      CASE (WM_NCXBUTTONDBLCLK);
+      CASE (WM_KEYDOWN);
+      CASE (WM_KEYUP);
+      CASE (WM_CHAR);
+      CASE (WM_DEADCHAR);
+      CASE (WM_SYSKEYDOWN);
+      CASE (WM_SYSKEYUP);
+      CASE (WM_SYSCHAR);
+      CASE (WM_SYSDEADCHAR);
+      CASE (WM_KEYLAST);
+      CASE (WM_IME_STARTCOMPOSITION);
+      CASE (WM_IME_ENDCOMPOSITION);
+      CASE (WM_IME_COMPOSITION);
+      CASE (WM_INITDIALOG);
+      CASE (WM_COMMAND);
+      CASE (WM_SYSCOMMAND);
+      CASE (WM_TIMER);
+      CASE (WM_HSCROLL);
+      CASE (WM_VSCROLL);
+      CASE (WM_INITMENU);
+      CASE (WM_INITMENUPOPUP);
+      CASE (WM_MENUSELECT);
+      CASE (WM_MENUCHAR);
+      CASE (WM_ENTERIDLE);
+      CASE (WM_MENURBUTTONUP);
+      CASE (WM_MENUDRAG);
+      CASE (WM_MENUGETOBJECT);
+      CASE (WM_UNINITMENUPOPUP);
+      CASE (WM_MENUCOMMAND);
+      CASE (WM_CHANGEUISTATE);
+      CASE (WM_UPDATEUISTATE);
+      CASE (WM_QUERYUISTATE);
+      CASE (WM_CTLCOLORMSGBOX);
+      CASE (WM_CTLCOLOREDIT);
+      CASE (WM_CTLCOLORLISTBOX);
+      CASE (WM_CTLCOLORBTN);
+      CASE (WM_CTLCOLORDLG);
+      CASE (WM_CTLCOLORSCROLLBAR);
+      CASE (WM_CTLCOLORSTATIC);
+      CASE (WM_MOUSEMOVE);
+      CASE (WM_LBUTTONDOWN);
+      CASE (WM_LBUTTONUP);
+      CASE (WM_LBUTTONDBLCLK);
+      CASE (WM_RBUTTONDOWN);
+      CASE (WM_RBUTTONUP);
+      CASE (WM_RBUTTONDBLCLK);
+      CASE (WM_MBUTTONDOWN);
+      CASE (WM_MBUTTONUP);
+      CASE (WM_MBUTTONDBLCLK);
+      CASE (WM_MOUSEWHEEL);
+      CASE (WM_XBUTTONDOWN);
+      CASE (WM_XBUTTONUP);
+      CASE (WM_XBUTTONDBLCLK);
+      CASE (WM_PARENTNOTIFY);
+      CASE (WM_ENTERMENULOOP);
+      CASE (WM_EXITMENULOOP);
+      CASE (WM_NEXTMENU);
+      CASE (WM_SIZING);
+      CASE (WM_CAPTURECHANGED);
+      CASE (WM_MOVING);
+      CASE (WM_POWERBROADCAST);
+      CASE (WM_DEVICECHANGE);
+      CASE (WM_MDICREATE);
+      CASE (WM_MDIDESTROY);
+      CASE (WM_MDIACTIVATE);
+      CASE (WM_MDIRESTORE);
+      CASE (WM_MDINEXT);
+      CASE (WM_MDIMAXIMIZE);
+      CASE (WM_MDITILE);
+      CASE (WM_MDICASCADE);
+      CASE (WM_MDIICONARRANGE);
+      CASE (WM_MDIGETACTIVE);
+      CASE (WM_MDISETMENU);
+      CASE (WM_ENTERSIZEMOVE);
+      CASE (WM_EXITSIZEMOVE);
+      CASE (WM_DROPFILES);
+      CASE (WM_MDIREFRESHMENU);
+      CASE (WM_IME_SETCONTEXT);
+      CASE (WM_IME_NOTIFY);
+      CASE (WM_IME_CONTROL);
+      CASE (WM_IME_COMPOSITIONFULL);
+      CASE (WM_IME_SELECT);
+      CASE (WM_IME_CHAR);
+      CASE (WM_IME_REQUEST);
+      CASE (WM_IME_KEYDOWN);
+      CASE (WM_IME_KEYUP);
+      CASE (WM_MOUSEHOVER);
+      CASE (WM_MOUSELEAVE);
+      CASE (WM_NCMOUSEHOVER);
+      CASE (WM_NCMOUSELEAVE);
+      CASE (WM_CUT);
+      CASE (WM_COPY);
+      CASE (WM_PASTE);
+      CASE (WM_CLEAR);
+      CASE (WM_UNDO);
+      CASE (WM_RENDERFORMAT);
+      CASE (WM_RENDERALLFORMATS);
+      CASE (WM_DESTROYCLIPBOARD);
+      CASE (WM_DRAWCLIPBOARD);
+      CASE (WM_PAINTCLIPBOARD);
+      CASE (WM_VSCROLLCLIPBOARD);
+      CASE (WM_SIZECLIPBOARD);
+      CASE (WM_ASKCBFORMATNAME);
+      CASE (WM_CHANGECBCHAIN);
+      CASE (WM_HSCROLLCLIPBOARD);
+      CASE (WM_QUERYNEWPALETTE);
+      CASE (WM_PALETTEISCHANGING);
+      CASE (WM_PALETTECHANGED);
+      CASE (WM_HOTKEY);
+      CASE (WM_PRINT);
+      CASE (WM_PRINTCLIENT);
+      CASE (WM_APPCOMMAND);
+      CASE (WM_HANDHELDFIRST);
+      CASE (WM_HANDHELDLAST);
+      CASE (WM_AFXFIRST);
+      CASE (WM_AFXLAST);
+      CASE (WM_PENWINFIRST);
+      CASE (WM_PENWINLAST);
+      CASE (WM_APP);
+#undef CASE
+    default:
+      if (msg >= WM_HANDHELDFIRST && msg <= WM_HANDHELDLAST)
+	sprintf (bfr, "WM_HANDHELDFIRST+%d", msg - WM_HANDHELDFIRST);
+      else if (msg >= WM_AFXFIRST && msg <= WM_AFXLAST)
+	sprintf (bfr, "WM_AFXFIRST+%d", msg - WM_AFXFIRST);
+      else if (msg >= WM_PENWINFIRST && msg <= WM_PENWINLAST)
+	sprintf (bfr, "WM_PENWINFIRST+%d", msg - WM_PENWINFIRST);
+      else if (msg >= WM_USER && msg <= 0x7FFF)
+	sprintf (bfr, "WM_USER+%d", msg - WM_USER);
+      else if (msg >= 0xC000 && msg <= 0xFFFF)
+	sprintf (bfr, "reg-%#x", msg);
+      else
+	sprintf (bfr, "unk-%#x", msg);
+      return bfr;
+    }
+  g_assert_not_reached ();
+}
+      
+#endif /* G_ENABLE_DEBUG */

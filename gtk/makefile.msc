@@ -347,7 +347,7 @@ gtkmarshal.h gtkmarshal.c : gtkmarshal.list genmarshal.pl
 # Linking:
 #
 gtk-$(GTK_VER).dll : $(gtk_OBJECTS) gtk.def
-	$(CC) $(CFLAGS) -LD -Fegtk-$(GTK_VER).dll $(gtk_OBJECTS) ..\gdk\gdk-$(GTK_VER).lib $(INTL)\gnu-intl.lib $(GLIB)\glib-$(GLIB_VER).lib $(GLIB)\gmodule-$(GLIB_VER).lib gdi32.lib user32.lib $(LDFLAGS) /def:gtk.def
+	$(CC) $(CFLAGS) -LD -Fegtk-$(GTK_VER).dll $(gtk_OBJECTS) ..\gdk\gdk-$(GTK_VER).lib $(INTL)\gnu-intl.lib $(GLIB)\glib-$(GLIB_VER).lib $(GLIB)\gmodule-$(GLIB_VER).lib gdi32.lib user32.lib advapi32.lib $(LDFLAGS) /def:gtk.def
 
 # General rule for compiling the objects into the DLL
 .c.obj :

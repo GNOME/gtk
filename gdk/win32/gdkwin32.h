@@ -32,6 +32,10 @@
 #include <time.h>
 #include <locale.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #define GDK_ROOT_WINDOW()             ((guint32) HWND_DESKTOP)
 #define GDK_ROOT_PARENT()             ((GdkWindow *) gdk_parent_root)
 #define GDK_DISPLAY()                 NULL
@@ -45,10 +49,29 @@
 #define GDK_WINDOW_XWINDOW	      GDK_DRAWABLE_XID
 #define GDK_FONT_XFONT(font)          (((GdkWin32SingleFont *)((GdkFontPrivateWin32 *)font)->fonts->data)->xfont)
 
-GdkVisual*   gdkx_visual_get   (VisualID xvisualid);
-
 /* Functions to create GDK pixmaps and windows from their native equivalents */
 GdkPixmap    *gdk_pixmap_foreign_new (guint32     anid);
 GdkWindow    *gdk_window_foreign_new (guint32     anid);
+
+/* Return a device context to draw in a drawable, given a GDK GC,
+ * and a mask indicating which GC values might be used (for efficiency,
+ * no need to muck around with text-related stuff if we aren't going
+ * to output text, for instance).
+ */
+HDC           gdk_win32_hdc_get (GdkDrawable    *drawable,
+				 GdkGC          *gc,
+				 GdkGCValuesMask usage);
+
+
+/* Each HDC returned from gdk_win32_hdc_get must be released with
+ * this function
+ */
+void          gdk_win32_hdc_release (GdkDrawable    *drawable,
+				     GdkGC          *gc,
+				     GdkGCValuesMask usage);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* __GDK_WIN32_H__ */
