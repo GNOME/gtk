@@ -136,6 +136,53 @@ Canvas item to display #GdkPixbuf images.
     </para>
   </refsect2>
 
+  <refsect2>
+    <title>Resource Management</title>
+
+    <para>
+      When you set the #GdkPixbuf structure that a #GnomeCanvasPixbuf
+      item will use by setting the <link
+      linkend="GnomeCanvasPixbuf--pixbuf">pixbuf</link> argument, a
+      reference count will be added to that #GdkPixbuf structure.
+      When the pixbuf item no longer needs the #GdkPixbuf structure,
+      such as when the item is destroyed or when a new pixbuf
+      structure is passed to it, then the old #GdkPixbuf structure
+      will be automatically unreferenced.
+    </para>
+
+    <para>
+      This means that if an application just needs to load a pixbuf
+      image and set it into a pixbuf canvas item, it can do the
+      following to &lsquo;forget&rsquo; about the pixbuf structure:
+
+      <programlisting>
+	GdkPixbuf *pixbuf;
+	GnomeCanvasItem *item;
+
+	pixbuf = gdk_pixbuf_new_from_file ("foo.png");
+	g_assert (pixbuf != NULL);
+
+	item = gnome_canvas_item_new (gnome_canvas_root (my_canvas),
+				      gnome_canvas_pixbuf_get_type (),
+				      "pixbuf", pixbuf,
+				      NULL);
+	gdk_pixbuf_unref (pixbuf);
+      </programlisting>
+    </para>
+
+    <para>
+      After this happens, the reference count of the pixbuf structure
+      will be 1:  the gdk_pixbuf_new_from_file() function creates it
+      with a reference count of 1, then setting the <link
+      linkend="GnomeCanvasPixbuf--pixbuf">pixbuf</link> argument of
+      the #GnomeCanvasPixbuf item increases it to 2, and then it is
+      decremented to 1 by the call to gdk_pixbuf_unref().  When the
+      canvas item is destroyed, it will automatically unreference the
+      pixbuf structure again, causing its reference count to drop to
+      zero and thus be freed.
+    </para>
+  </refsect2>
+
 <!-- ##### SECTION See_Also ##### -->
   <para>
     #GnomeCanvas, #GdkPixbuf
@@ -155,7 +202,9 @@ Canvas item to display #GdkPixbuf images.
     the pixbuf canvas item as an image source.  When a pixbuf is set
     its reference count is incremented; if the pixbuf item kept a
     pointer to another #GdkPixbuf structure, the reference count of
-    this structure will be decremented.  When a pixbuf is queried, a
+    this structure will be decremented.  Also, the GdkPixbuf's
+    reference count will automatically be decremented when the
+    #GnomeCanvasPixbuf item is destroyed.  When a pixbuf is queried, a
     reference count will not be added to the return value; you must do
     this yourself if you intend to keep the pixbuf structure around.
   </para>

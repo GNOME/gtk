@@ -1,3 +1,8 @@
+1999-12-07  Federico Mena Quintero  <federico@redhat.com>
+
+	* doc/tmpl/gnome-canvas-pixbuf.sgml: Added clarification about
+	reference counting for GdkPixbuf structures.
+
 1999-12-07  Martin Baulig  <martin@home-of-linux.org>
 
 	* gdk-pixbuf/Makefile.am (testpixbuf_LDADD): Conditionally
