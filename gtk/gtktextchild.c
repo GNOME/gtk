@@ -52,6 +52,9 @@
 #include "gtktextbtree.h"
 #include "gtktextlayout.h"
 
+#define CHECK_IN_BUFFER(anchor) do { if ((anchor)->segment == NULL) g_warning ("%s: GtkTextChildAnchor hasn't been in a buffer yet", __FUNCTION__); } while (0)
+#define CHECK_IN_BUFFER_RETURN(anchor, val) do { if ((anchor)->segment == NULL) g_warning ("%s: GtkTextChildAnchor hasn't been in a buffer yet", __FUNCTION__); return (val); } while (0)
+
 static GtkTextLineSegment *
 pixbuf_segment_cleanup_func (GtkTextLineSegment *seg,
                              GtkTextLine        *line)
@@ -402,6 +405,8 @@ gtk_text_child_anchor_get_widgets (GtkTextChildAnchor *anchor)
   GList *list = NULL;
   GSList *iter;
 
+  CHECK_IN_BUFFER_RETURN (anchor, NULL);
+  
   g_return_val_if_fail (seg->type = &gtk_text_child_type, NULL);
 
   iter = seg->body.child.widgets;
@@ -436,6 +441,8 @@ gtk_text_child_anchor_get_deleted (GtkTextChildAnchor *anchor)
 {
   GtkTextLineSegment *seg = anchor->segment;
 
+  CHECK_IN_BUFFER_RETURN (anchor, TRUE);
+  
   g_return_val_if_fail (seg->type = &gtk_text_child_type, TRUE);
 
   return seg->body.child.tree == NULL;
@@ -449,6 +456,8 @@ gtk_text_child_anchor_register_child (GtkTextChildAnchor *anchor,
   g_return_if_fail (GTK_IS_TEXT_CHILD_ANCHOR (anchor));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
+  CHECK_IN_BUFFER (anchor);
+  
   _gtk_anchored_child_set_layout (child, layout);
   
   _gtk_widget_segment_add (anchor->segment, child);
@@ -463,6 +472,8 @@ gtk_text_child_anchor_unregister_child (GtkTextChildAnchor *anchor,
   g_return_if_fail (GTK_IS_TEXT_CHILD_ANCHOR (anchor));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
+  CHECK_IN_BUFFER (anchor);
+  
   if (_gtk_anchored_child_get_layout (child))
     {
       gtk_text_child_anchor_queue_resize (anchor,
@@ -484,6 +495,8 @@ gtk_text_child_anchor_queue_resize (GtkTextChildAnchor *anchor,
   
   g_return_if_fail (GTK_IS_TEXT_CHILD_ANCHOR (anchor));
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
+
+  CHECK_IN_BUFFER (anchor);
   
   seg = anchor->segment;
 

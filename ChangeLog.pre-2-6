@@ -1,3 +1,10 @@
+2002-02-06  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextchild.c: Add warnings if you try to use a child
+	anchor that isn't inside a buffer. Really kind of lame; 
+	we should separate the anchor from the buffer. But not worth 
+	fixing for now. #70601
+
 Wed Feb  6 18:25:24 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodelsort.c: rip out all the debugging ifdefs, as
