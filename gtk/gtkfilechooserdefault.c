@@ -3351,7 +3351,7 @@ gtk_file_chooser_default_get_resizable_hints (GtkFileChooserEmbed *chooser_embed
 
   impl = GTK_FILE_CHOOSER_DEFAULT (chooser_embed);
 
-  if (*resize_horizontally)
+  if (resize_horizontally)
     *resize_horizontally = TRUE;
 
   if (resize_vertically)
