@@ -2977,7 +2977,7 @@ add1000_clist (GtkWidget *widget, gpointer data)
   pixmap = gdk_pixmap_create_from_xpm (GTK_CLIST (data)->clist_window, 
 				       &mask, 
 				       &GTK_WIDGET (data)->style->white,
-				       "test.xpm");
+				       "3DRings.xpm");
 
   for (i = 0; i < TESTGTK_CLIST_COLUMNS; i++)
     {
@@ -2994,7 +2994,7 @@ add1000_clist (GtkWidget *widget, gpointer data)
     {
       sprintf (text[0], "Row %d", clist_rows++);
       row = gtk_clist_append (GTK_CLIST (data), texts);
-      gtk_clist_set_pixtext (GTK_CLIST (data), row, 3, "Testing", 5, pixmap, mask);
+      gtk_clist_set_pixtext (GTK_CLIST (data), row, 3, "Hello World", 5, pixmap, mask);
     }
   gtk_clist_thaw (GTK_CLIST (data));
 

@@ -486,6 +486,11 @@ gint gtk_clist_get_selection_info (GtkCList * clist,
 			     	   gint * row,
 			     	   gint * column);
 
+/* swap the position of two rows */
+void gtk_clist_swap_rows (GtkCList * clist, gint row1, gint row2);
+
+
+
 #ifdef __cplusplus
 }
 #endif				/* __cplusplus */

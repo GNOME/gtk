@@ -1466,6 +1466,57 @@ gtk_clist_clear (GtkCList * clist)
     }
 }
 
+void 
+gtk_clist_swap_rows (GtkCList * clist,
+		     gint row1, 
+		     gint row2)
+{
+  gint first, last;
+  GList *list, *link1, *link2;
+  gpointer swap;
+  
+  g_return_if_fail (clist != NULL);
+
+  if (row1 < 0 || row1 > (clist->rows - 1))
+    return;
+
+  if (row2 < 0 || row2 > (clist->rows - 1))
+    return;
+
+  first = MIN (row1, row2);
+  last = MAX (row1, row2);
+
+  link1 = g_list_nth (clist->row_list, first);
+  link2 = g_list_nth (link1, row2 - row1);
+
+  swap = link1->data;
+  link1->data = link2->data;
+  link2->data = swap;
+
+  list = clist->selection;
+  while (list)
+    {
+      if (GPOINTER_TO_INT (list->data) == row1)
+	GPOINTER_TO_INT (list->data) = row2;
+
+       if (GPOINTER_TO_INT (list->data) == row2)
+	GPOINTER_TO_INT (list->data) = row1;
+
+      list = list->next;
+    }
+
+  if (!GTK_CLIST_FROZEN (clist))
+    {
+      if (gtk_clist_row_is_visible (clist, row1) != GTK_VISIBILITY_NONE)
+	(GTK_CLIST_CLASS (GTK_OBJECT (clist)->klass)->draw_row)
+	  (clist, NULL, row1, (GtkCListRow *) link2->data);
+
+      if (gtk_clist_row_is_visible (clist, row2) != GTK_VISIBILITY_NONE)
+	(GTK_CLIST_CLASS (GTK_OBJECT (clist)->klass)->draw_row)
+	  (clist, NULL, row2, (GtkCListRow *) link1->data);
+    }
+}
+
 void
 gtk_clist_set_row_data (GtkCList * clist,
 			gint row,
@@ -2601,7 +2652,8 @@ draw_row (GtkCList * clist,
 	}
       else
 	{
-	  if (!gdk_rectangle_intersect (area, &clip_rectangle, &intersect_rectangle))
+	  if (!gdk_rectangle_intersect (area, &clip_rectangle, 
+					&intersect_rectangle))
 	    continue;
 	  rect = &intersect_rectangle;
 	}
@@ -2692,6 +2744,26 @@ draw_row (GtkCList * clist,
 	  ydest = (clip_rectangle.y + (clip_rectangle.height / 2)) - height / 2 +
 	    clist_row->cell[i].vertical;
 
+	  if (xdest < clip_rectangle.x)
+	    {
+	      xsrc = clip_rectangle.x - xdest;
+	      pixmap_width -= xsrc;
+	      xdest = clip_rectangle.x;
+	    }
+
+	  if (xdest + pixmap_width > clip_rectangle.x + clip_rectangle.width)
+	    pixmap_width = (clip_rectangle.x + clip_rectangle.width) - xdest;
+
+	  if (ydest < clip_rectangle.y)
+	    {
+	      ysrc = clip_rectangle.y - ydest;
+	      height -= ysrc;
+	      ydest = clip_rectangle.y;
+	    }
+
+	  if (ydest + height > clip_rectangle.y + clip_rectangle.height)
+	    height = (clip_rectangle.y + clip_rectangle.height) - ydest;
+
           if (GTK_CELL_PIXMAP (clist_row->cell[i])->mask)
           {
               gdk_gc_set_clip_mask (fg_gc, GTK_CELL_PIXMAP (clist_row->cell[i])->mask);
@@ -2701,8 +2773,7 @@ draw_row (GtkCList * clist,
 			   fg_gc,
 			   GTK_CELL_PIXMAP (clist_row->cell[i])->pixmap,
 			   xsrc, ysrc,
-			   xdest,
-			   ydest,
+			   xdest, ydest,
 			   pixmap_width, height);
 
           if (GTK_CELL_PIXMAP (clist_row->cell[i])->mask)
@@ -2719,6 +2790,26 @@ draw_row (GtkCList * clist,
 	  xdest = offset + clist_row->cell[i].horizontal;
 	  ydest = (clip_rectangle.y + (clip_rectangle.height / 2)) - height / 2 +
 	    clist_row->cell[i].vertical;
+
+	  if (xdest < clip_rectangle.x)
+	    {
+	      xsrc = clip_rectangle.x - xdest;
+	      pixmap_width -= xsrc;
+	      xdest = clip_rectangle.x;
+	    }
+
+	  if (xdest + pixmap_width > clip_rectangle.x + clip_rectangle.width)
+	    pixmap_width = (clip_rectangle.x + clip_rectangle.width) - xdest;
+
+	  if (ydest < clip_rectangle.y)
+	    {
+	      ysrc = clip_rectangle.y - ydest;
+	      height -= ysrc;
+	      ydest = clip_rectangle.y;
+	    }
+
+	  if (ydest + height > clip_rectangle.y + clip_rectangle.height)
+	    height = (clip_rectangle.y + clip_rectangle.height) - ydest;
 
           if (GTK_CELL_PIXTEXT (clist_row->cell[i])->mask)
           {
@@ -2750,7 +2841,6 @@ draw_row (GtkCList * clist,
 			   GTK_CELL_PIXTEXT (clist_row->cell[i])->text);
 
 	  gdk_gc_set_clip_rectangle (fg_gc, NULL);
-
 	  break;
 
 	case GTK_CELL_WIDGET:
