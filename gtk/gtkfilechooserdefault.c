@@ -5060,7 +5060,7 @@ shortcuts_activate_iter (GtkFileChooserDefault *impl,
 		      -1);
 
   if (!col_data)
-    return FALSE; /* We are on a separator */
+    return; /* We are on a separator */
 
   if (is_volume)
     {

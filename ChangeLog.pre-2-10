@@ -1,3 +1,8 @@
+Mon Sep 20 19:27:48 2004  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_activate_iter): Don't
+	return FALSE from a void function.  (#153185, Joel Fredrikson)
+
 2004-09-18  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilesystem.h: Removed the GTK_FILE_PATH() and
