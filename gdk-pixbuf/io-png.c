@@ -183,6 +183,8 @@ png_simple_error_callback(png_structp png_save_ptr,
                              _("Fatal error in PNG image file: %s"),
                              error_msg);
         }
+
+        longjmp (png_save_ptr->jmpbuf, 1);
 }
 
 static void
