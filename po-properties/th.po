@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2003-12-07 16:55-0600\n"
+"PO-Revision-Date: 2004-02-16 21:19-0600\n"
 "Last-Translator: Paisa Seeluangsawat <paisa@users.sf.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=TIS-620\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:100
@@ -24,9 +24,8 @@ msgid "The number of samples per pixel"
 msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf.c:111
-#, fuzzy
 msgid "Colorspace"
-msgstr "������ (_N):"
+msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf.c:112
 msgid "The colorspace in which the samples are interpreted"
@@ -545,29 +544,29 @@ msgstr ""
 
 #: gtk/gtkcalendar.c:464
 msgid "Year"
-msgstr ""
+msgstr "ปี"
 
 #: gtk/gtkcalendar.c:465
 msgid "The selected year"
-msgstr ""
+msgstr "ปีที่เลือก"
 
 #: gtk/gtkcalendar.c:471
 msgid "Month"
-msgstr ""
+msgstr "เดือน"
 
 #: gtk/gtkcalendar.c:472
 msgid "The selected month (as a number between 0 and 11)"
-msgstr ""
+msgstr "เดือนที่เลือก (เป็นเลขระหว่าง 0 และ 11)"
 
 #: gtk/gtkcalendar.c:478
 msgid "Day"
-msgstr ""
+msgstr "วัน"
 
 #: gtk/gtkcalendar.c:479
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
-msgstr ""
+msgstr "วันที่เลือก (เป็นเลขระหว่าง 1 และ 31 ตั้งเป็น 0 จะยกเลิกวันที่เลือกไว้)"
 
 #: gtk/gtkcalendar.c:493
 msgid "Show Heading"
@@ -739,7 +738,7 @@ msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:168
 msgid "Size"
-msgstr ""
+msgstr "ขนาด"
 
 #: gtk/gtkcellrendererpixbuf.c:169
 msgid "The size of the rendered icon"
@@ -1159,11 +1158,11 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1776
 msgid "The current color"
-msgstr "�ջѨ�غѹ"
+msgstr "สีปัจจุบัน"
 
 #: gtk/gtkcolorsel.c:1783
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr "�����ֺ�ʧ�Ѩ�غѹ (0 ��, 65535 �ֺ)"
+msgstr "ความทึบแสงปัจจุบัน (0 ใส, 65535 ทึบ)"
 
 #: gtk/gtkcolorsel.c:1797
 msgid "Custom palette"
@@ -1548,7 +1547,7 @@ msgstr ""
 
 #: gtk/gtkfilechooser.c:99
 msgid "File System"
-msgstr "�к����"
+msgstr "ระบบแฟ้ม"
 
 #: gtk/gtkfilechooser.c:100
 msgid "File system object to use"
@@ -1621,7 +1620,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
 msgid "Filename"
-msgstr "�������"
+msgstr "ชื่อแฟ้ม"
 
 #: gtk/gtkfilesel.c:560
 msgid "The currently selected filename"
@@ -1661,11 +1660,11 @@ msgstr ""
 
 #: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:210
 msgid "Font name"
-msgstr "����Ẻ�ѡ��"
+msgstr "ชื่อแบบอักษร"
 
 #: gtk/gtkfontbutton.c:192
 msgid "The name of the selected font"
-msgstr "���ͧ͢Ẻ�ѡ�÷�����͡"
+msgstr "ชื่อของแบบอักษรที่เลือก"
 
 #: gtk/gtkfontbutton.c:193
 msgid "Sans 12"
