@@ -1,3 +1,9 @@
+Mon Feb 16 23:05:06 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* glist.c (g_list_insert_sorted): Changed function
+	  so elements are always inserted, even if they compare
+	  equal with another.
+
 Thu Feb 12 22:48:11 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gstring.c glib.h: removed deprecated g_string_equal

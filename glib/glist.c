@@ -389,9 +389,6 @@ g_list_insert_sorted (GList    *list,
       cmp = (*func) (data, tmp_list->data);
     }
 
-  if (cmp == 0)
-    return list;
-  
   new_list = g_list_alloc();
   new_list->data = data;
 
