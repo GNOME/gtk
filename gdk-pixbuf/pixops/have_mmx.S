@@ -4,7 +4,7 @@ gcc2_compiled.:
 .text
 	.align 16
 
-#ifndef __MINGW32__
+#if !defined(__MINGW32__) && !defined(__CYGWIN__)	
 
 .globl pixops_have_mmx
 	.type	 pixops_have_mmx,@function
