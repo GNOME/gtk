@@ -274,8 +274,8 @@ gdk_image_new_with_depth (GdkImageType  type,
   else
     image->bpl = ((width*image->bpp - 1)/4 + 1)*4;
 
-  GDK_NOTE (MISC, g_print ("... = %#x mem = %#x, bpl = %d\n",
-			   private->ximage, image->mem, image->bpl));
+  GDK_NOTE (MISC, g_print ("... = %#x mem = %p, bpl = %d\n",
+			   (guint) private->ximage, image->mem, image->bpl));
 
   return image;
 }
@@ -286,13 +286,7 @@ gdk_image_new (GdkImageType  type,
 	       gint          width,
 	       gint          height)
 {
-  GdkVisualPrivate *visual_private = (GdkVisualPrivate *) visual;
-  return gdk_image_new_with_depth (type, visual, width, height,
-#if 0
-				   visual_private->xvisual->bitspixel);
-#else
-				   visual->depth);
-#endif
+  return gdk_image_new_with_depth (type, visual, width, height, visual->depth);
 }
 
 GdkImage*
@@ -322,7 +316,7 @@ gdk_image_get (GdkWindow *window,
       RGBQUAD bmiColors[256];
     } u;
   } bmi;
-  HGDIOBJ oldbitmap1, oldbitmap2;
+  HGDIOBJ oldbitmap2;
   UINT iUsage;
   BITMAP bm;
   int i;
@@ -333,7 +327,7 @@ gdk_image_get (GdkWindow *window,
     return NULL;
 
   GDK_NOTE (MISC, g_print ("gdk_image_get: %#x %dx%d@+%d+%d\n",
-			   GDK_DRAWABLE_XID (window), width, height, x, y));
+			   (guint) GDK_DRAWABLE_XID (window), width, height, x, y));
 
   private = g_new (GdkImagePrivateWin32, 1);
   image = (GdkImage*) private;
@@ -359,7 +353,7 @@ gdk_image_get (GdkWindow *window,
 	}
       GetObject (GDK_DRAWABLE_XID (window), sizeof (BITMAP), &bm);
       GDK_NOTE (MISC,
-		g_print ("gdk_image_get: bmWidth = %d, bmHeight = %d, bmWidthBytes = %d, bmBitsPixel = %d\n",
+		g_print ("gdk_image_get: bmWidth=%ld, bmHeight=%ld, bmWidthBytes=%ld, bmBitsPixel=%d\n",
 			 bm.bmWidth, bm.bmHeight, bm.bmWidthBytes, bm.bmBitsPixel));
       image->depth = bm.bmBitsPixel;
       if (image->depth <= 8)
@@ -509,8 +503,8 @@ gdk_image_get (GdkWindow *window,
   else
     image->bpl = ((width*image->bpp - 1)/4 + 1)*4;
 
-  GDK_NOTE (MISC, g_print ("... = %#x mem = %#x, bpl = %d\n",
-			   private->ximage, image->mem, image->bpl));
+  GDK_NOTE (MISC, g_print ("... = %#x mem = %p, bpl = %d\n",
+			   (guint) private->ximage, image->mem, image->bpl));
 
   return image;
 }
@@ -551,6 +545,9 @@ gdk_image_get_pixel (GdkImage *image,
 	case 4:
 	  pixel = pixelp[0] | (pixelp[1] << 8) | (pixelp[2] << 16);
 	  break;
+
+	default:
+	  g_assert_not_reached ();
 	}
     }
 
@@ -601,7 +598,7 @@ gdk_win32_image_destroy (GdkImage *image)
   private = (GdkImagePrivateWin32 *) image;
 
   GDK_NOTE (MISC, g_print ("gdk_win32_image_destroy: %#x%s\n",
-			   private->ximage,
+			   (guint) private->ximage,
 			   (image->type == GDK_IMAGE_SHARED_PIXMAP ?
 			    " (shared pixmap)" : "")));
   
@@ -648,6 +645,7 @@ gdk_image_put (GdkImage    *image,
 
   if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
+
   image_private = (GdkImagePrivateWin32 *) image;
   drawable_private = (GdkDrawablePrivate *) drawable;
   gc_private = (GdkGCPrivate *) gc;
@@ -673,31 +671,32 @@ gdk_image_put (GdkImage    *image,
 
       if (GetObject (image_private->ximage, sizeof (DIBSECTION),
 		     &ds) != sizeof (DIBSECTION))
+	WIN32_GDI_FAILED ("GetObject");
+      else
 	{
-	  WIN32_GDI_FAILED ("GetObject");
-	}
 #if 0
-      g_print("xdest = %d, ydest = %d, xsrc = %d, ysrc = %d, width = %d, height = %d\n",
-	      xdest, ydest, xsrc, ysrc, width, height);
-      g_print("bmWidth = %d, bmHeight = %d, bmBitsPixel = %d, bmBits = %p\n",
-	      ds.dsBm.bmWidth, ds.dsBm.bmHeight, ds.dsBm.bmBitsPixel, ds.dsBm.bmBits);
-      g_print("biWidth = %d, biHeight = %d, biBitCount = %d, biClrUsed = %d\n",
-	      ds.dsBmih.biWidth, ds.dsBmih.biHeight, ds.dsBmih.biBitCount, ds.dsBmih.biClrUsed);
+	  g_print("xdest = %d, ydest = %d, xsrc = %d, ysrc = %d, width = %d, height = %d\n",
+		  xdest, ydest, xsrc, ysrc, width, height);
+	  g_print("bmWidth = %d, bmHeight = %d, bmBitsPixel = %d, bmBits = %p\n",
+		  ds.dsBm.bmWidth, ds.dsBm.bmHeight, ds.dsBm.bmBitsPixel, ds.dsBm.bmBits);
+	  g_print("biWidth = %d, biHeight = %d, biBitCount = %d, biClrUsed = %d\n",
+		  ds.dsBmih.biWidth, ds.dsBmih.biHeight, ds.dsBmih.biBitCount, ds.dsBmih.biClrUsed);
 #endif
-      bmi.bmiHeader = ds.dsBmih;
-      /* I have spent hours on getting the parameters to
-       * SetDIBitsToDevice right. I wonder what drugs the guys in
-       * Redmond were on when they designed this API.
-       */
-      if (SetDIBitsToDevice (hdc,
-			     xdest, ydest,
-			     width, height,
-			     xsrc, (-ds.dsBmih.biHeight)-height-ysrc,
-			     0, -ds.dsBmih.biHeight,
-			     ds.dsBm.bmBits,
-			     (CONST BITMAPINFO *) &bmi,
-			     DIB_PAL_COLORS) == 0)
-	WIN32_GDI_FAILED ("SetDIBitsToDevice");
+	  bmi.bmiHeader = ds.dsBmih;
+	  /* I have spent hours on getting the parameters to
+	   * SetDIBitsToDevice right. I wonder what drugs the guys in
+	   * Redmond were on when they designed this API.
+	   */
+	  if (SetDIBitsToDevice (hdc,
+				 xdest, ydest,
+				 width, height,
+				 xsrc, (-ds.dsBmih.biHeight)-height-ysrc,
+				 0, -ds.dsBmih.biHeight,
+				 ds.dsBm.bmBits,
+				 (CONST BITMAPINFO *) &bmi,
+				 DIB_PAL_COLORS) == 0)
+	    WIN32_GDI_FAILED ("SetDIBitsToDevice");
+	}
     }
   else
     {

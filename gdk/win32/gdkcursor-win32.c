@@ -75,6 +75,11 @@ _gdk_win32_data_to_wcursor (GdkCursorType cursor_type)
   rv = CreateCursor (gdk_ProgInstance, cursors[i].hotx, cursors[i].hoty,
 		     w, h, ANDplane, XORplane);
   
+  if (rv == NULL)
+    WIN32_API_FAILED ("CreateCursor");
+  g_free (ANDplane);
+  g_free (XORplane);
+
   return rv;
 }
 
@@ -249,6 +254,9 @@ _gdk_cursor_destroy (GdkCursor *cursor)
   private = (GdkCursorPrivate *) cursor;
 
   GDK_NOTE (MISC, g_print ("_gdk_cursor_destroy: %#x\n", (guint) private->xcursor));
+
+  if (GetCursor() == private->xcursor)
+    SetCursor(NULL);
 
   if (!DestroyCursor (private->xcursor))
     WIN32_API_FAILED ("DestroyCursor");

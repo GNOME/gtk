@@ -1,3 +1,35 @@
+2001-12-23  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/*.c: Lint cleanup.
+
+	Changes contributed by Archaeopteryx Software: This is the first
+	batch of their changes. Will commit more later.
+	
+	* gdk/gdk.def: Add gdk_add_client_message_filter.
+
+	* gdk/gdkgc.c (gdk_gc_unref): Plug memory leak: g_free() the gc
+	after calling the destroy function.
+
+	* gdk/win32/*.c: Add more checks for failed GDI calls. If a call
+	fails, don't use bogus values.
+
+	* gdk/win32/gdkcursor-win32.c (_gdk_win32_data_to_wcursor): Plug
+	memory leak: g_free() the AND and XOR bitmaps after use.
+	(_gdk_cursor_destroy): Set the current cursor to none if we are
+	destroying it.
+	
+	* gdk/win32/gdkevents-win32.c: Remove superfluous duplicate
+	definition of client_filters.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_win32_window_destroy): If the
+	window has a cursor, and it is the current cursor, before
+	destroying it set the current cursor to none.
+	(gdk_window_foreign_new): If the window id is 0, return NULL.
+	(gdk_window_clear_area): Report ReleaseDC failure.
+	(gdk_window_set_cursor): Also here, set current cursor to none if
+	destroying the current cursor.
+	(gdk_window_get_pointer): Revamp logic.
+
 2001-11-25  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c: Fix handling of parent-relative

@@ -117,14 +117,12 @@ static GdkWindow *k_grab_window = NULL; /* Window the holds the
 					 * keyboard grab
 					 */
 
-static GList *client_filters;	/* Filters for client messages */
+static GList *client_filters = NULL;	/* Filters for client messages */
 
 static gboolean p_grab_automatic;
 static GdkEventMask p_grab_mask;
 static gboolean p_grab_owner_events, k_grab_owner_events;
 static HCURSOR p_grab_cursor = NULL;
-
-static GList *client_filters;	            /* Filters for client messages */
 
 static GSourceFuncs event_funcs = {
   gdk_event_prepare,

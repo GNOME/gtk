@@ -392,7 +392,8 @@ create_colormap (HWND     w,
       for (i = logPalettePtr->palNumEntries; i < colormap->sizepalette; i++)
 	colormap->in_use[i] = FALSE;
     }
-  ReleaseDC (NULL, hdc);
+  if (!ReleaseDC (NULL, hdc))
+    WIN32_GDI_FAILED ("ReleaseDC");
 
   return colormap;
 }
@@ -2210,7 +2211,7 @@ gdk_win32_color_to_string (const GdkColor *color)
 {
   static char buf[100];
 
-  sprintf (buf, "(%.04x,%.04x,%.04x):%.06x",
+  sprintf (buf, "(%.04x,%.04x,%.04x):%.06lx",
 	   color->red, color->green, color->blue, color->pixel);
 
   return buf;

@@ -509,7 +509,8 @@ gdk_draw_text_handler (GdkWin32SingleFont *singlefont,
      {
        if (!GetTextExtentPoint32W (argp->hdc, wcstr, wclen, &size))
          WIN32_GDI_FAILED  ("GetTextExtentPoint32W");
-       argp->x += size.cx;
+       else
+	 argp->x += size.cx;
      }
      
   if (oldfont != singlefont->xfont) 
@@ -760,11 +761,13 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
 	{
 	  if ((srcdc = GetDC (GDK_DRAWABLE_XID (src))) == NULL)
 	    WIN32_GDI_FAILED ("GetDC");
-	  
-	  if (!BitBlt (hdc, xdest, ydest, width, height,
-		       srcdc, xsrc, ysrc, SRCCOPY))
-	    WIN32_GDI_FAILED ("BitBlt");
-	  ReleaseDC (GDK_DRAWABLE_XID (src), srcdc);
+	  else
+	    {
+	      if (!BitBlt (hdc, xdest, ydest, width, height,
+			   srcdc, xsrc, ysrc, SRCCOPY))
+		WIN32_GDI_FAILED ("BitBlt");
+	      ReleaseDC (GDK_DRAWABLE_XID (src), srcdc);
+	    }
 	}
     }
   gdk_gc_postdraw (drawable, gc_private, 0);

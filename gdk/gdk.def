@@ -1,4 +1,5 @@
 EXPORTS
+	gdk_add_client_message_filter
 	gdk_atom_intern
 	gdk_atom_name
 	gdk_beep

@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 
 #include "gdkfont.h"
@@ -1408,13 +1409,13 @@ gdk_font_load_internal (GdkFont* font_set,
   for (tries = 0; ; tries++)
     {
       GDK_NOTE (MISC, g_print ("... trying CreateFont(%d,%d,%d,%d,"
-			       "%d,%d,%d,%d,"
-			       "%d,%d,%d,"
-			       "%d,%#.02x,\"%s\")\n",
+			       "%d,%ld,%ld,%ld,"
+			       "%ld,%ld,%ld,"
+			       "%ld,%#.02x,\"%s\")\n",
 			       nHeight, nWidth, nEscapement, nOrientation,
 			       fnWeight, fdwItalic, fdwUnderline, fdwStrikeOut,
 			       fdwCharSet, fdwOutputPrecision, fdwClipPrecision,
-			       fdwQuality, fdwPitchAndFamily, lpszFace));
+			       fdwQuality, (guint) fdwPitchAndFamily, lpszFace));
       hfont = CreateFont (nHeight, nWidth, nEscapement, nOrientation,
 			  fnWeight, fdwItalic, fdwUnderline, fdwStrikeOut,
 			  fdwCharSet, fdwOutputPrecision, fdwClipPrecision,
@@ -1493,7 +1494,7 @@ gdk_font_load_internal (GdkFont* font_set,
     singlefont->codepage = 0;
 
   GDK_NOTE (MISC, (g_print ("... = %#x %s cs %s cp%d\n",
-			    singlefont->xfont, face,
+			    (guint) singlefont->xfont, face,
 			    charset_name (singlefont->charset),
 			    singlefont->codepage),
 		   g_print ("... Unicode subranges:"),
@@ -1556,7 +1557,6 @@ gdk_fontset_load (const gchar *fontset_name)
   GdkWin32SingleFont *singlefont;
   HGDIOBJ oldfont;
   TEXTMETRIC textmetric;
-  GSList *base_font_list = NULL;
   gchar *fs;
   gchar *b, *p, *s;
 
@@ -1631,7 +1631,7 @@ _gdk_font_destroy (GdkFont *font)
 
   singlefont = (GdkWin32SingleFont *) private->fonts->data;
   GDK_NOTE (MISC, g_print ("_gdk_font_destroy %#x\n",
-			   singlefont->xfont));
+			   (guint) singlefont->xfont));
 
   gdk_font_hash_remove (font->type, font);
   
@@ -1740,6 +1740,8 @@ unicode_classify (wchar_t wc)
       else
 	return -1;
     }
+  g_assert_not_reached ();
+  return -1;
 }
 
 static GdkWin32SingleFont*

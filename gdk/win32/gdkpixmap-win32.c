@@ -52,10 +52,9 @@ typedef struct
 static void
 gdk_win32_pixmap_destroy (GdkPixmap *pixmap)
 {
-  GdkDrawablePrivate *private = (GdkDrawablePrivate *) pixmap;
   HWND hwnd = GDK_DRAWABLE_XID (pixmap);
 
-  GDK_NOTE (MISC, g_print ("gdk_win32_pixmap_destroy: %#x\n", hwnd));
+  GDK_NOTE (MISC, g_print ("gdk_win32_pixmap_destroy: %#x\n", (guint) hwnd));
 
   gdk_win32_clear_hdc_cache_for_hwnd (hwnd);
   if (!DeleteObject (hwnd))
@@ -215,7 +214,7 @@ gdk_pixmap_new (GdkWindow *window,
     }
   ReleaseDC (GDK_DRAWABLE_XID (window), hdc);
 
-  GDK_NOTE (MISC, g_print ("... = %#x\n", GDK_DRAWABLE_XID (pixmap)));
+  GDK_NOTE (MISC, g_print ("... = %#x\n", (guint) GDK_DRAWABLE_XID (pixmap)));
 
   private->width = width;
   private->height = height;
@@ -262,7 +261,7 @@ gdk_pixmap_create_on_shared_image (GdkImage **image_return,
 
   GDK_NOTE (MISC,
 	    g_print ("gdk_pixmap_create_on_shared_image: %dx%dx%d = %#x\n",
-		     width, height, depth, GDK_DRAWABLE_XID (pixmap)));
+		     width, height, depth, (guint) GDK_DRAWABLE_XID (pixmap)));
 
   return pixmap;
 }
@@ -340,7 +339,7 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
     CreateBitmap (width, height, 1, 1, bits);
 
   GDK_NOTE (MISC, g_print ("gdk_bitmap_create_from_data: %dx%d = %#x\n",
-			   width, height, GDK_DRAWABLE_XID (pixmap)));
+			   width, height, (guint) GDK_DRAWABLE_XID (pixmap)));
 
   g_free (bits);
 
@@ -377,7 +376,7 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
 
   GDK_NOTE (MISC, g_print ("gdk_pixmap_create_from_data: %dx%dx%d = %#x\n",
 			   width, height, depth,
-			   GDK_DRAWABLE_XID (result)));
+			   (guint) GDK_DRAWABLE_XID (result)));
   return result;
 }
 

@@ -90,7 +90,10 @@ gdk_gc_unref (GdkGC *gc)
   private->ref_count--;
 
   if (private->ref_count == 0)
-    private->klass->destroy (gc);
+    {
+      private->klass->destroy (gc);
+      g_free (gc);
+    }
 }
 
 void

@@ -230,7 +230,7 @@ gdk_selection_convert (GdkWindow *requestor,
        * and store it for later.
        */
       GDK_NOTE (DND, g_print ("...OpenClipboard(%#x)\n",
-				    GDK_DRAWABLE_XID (requestor)));
+			      (guint) GDK_DRAWABLE_XID (requestor)));
       if (!OpenClipboard (GDK_DRAWABLE_XID (requestor)))
 	{
 	  WIN32_API_FAILED ("OpenClipboard");

@@ -1605,9 +1605,10 @@ gdk_input_exit (void)
   for (tmp_list = wintab_contexts; tmp_list; tmp_list = tmp_list->next)
     {
       HCTX *hctx = (HCTX *) tmp_list->data;
-      BOOL result;
 
 #ifdef _MSC_VER
+      BOOL result;
+
       /* For some reason WTEnable and/or WTClose tend to crash here.
        * Protect with __try/__except to avoid a message box.
        * When compiling with gcc, we cannot use __try/__except, so
