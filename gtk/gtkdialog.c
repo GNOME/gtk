@@ -381,11 +381,12 @@ gtk_dialog_style_set (GtkWidget *widget,
   update_spacings (GTK_DIALOG (widget));
 }
 
-static gboolean
-dialog_has_cancel (GtkDialog *dialog)
+static GtkWidget *
+dialog_find_button (GtkDialog *dialog,
+		    gint       response_id)
 {
   GList *children, *tmp_list;
-  gboolean ret = FALSE;
+  GtkWidget *child = NULL;
       
   children = gtk_container_get_children (GTK_CONTAINER (dialog->action_area));
 
@@ -393,16 +394,16 @@ dialog_has_cancel (GtkDialog *dialog)
     {
       ResponseData *rd = get_response_data (tmp_list->data, FALSE);
       
-      if (rd && rd->response_id == GTK_RESPONSE_CANCEL)
+      if (rd && rd->response_id == response_id)
 	{
-	  ret = TRUE;
+	  child = tmp_list->data;
 	  break;
 	}
     }
 
   g_list_free (children);
 
-  return ret;
+  return child;
 }
 
 static void
@@ -413,7 +414,7 @@ gtk_dialog_close (GtkDialog *dialog)
   GtkWidget *widget = GTK_WIDGET (dialog);
   GdkEvent *event;
 
-  if (!dialog_has_cancel (dialog))
+  if (!dialog_find_button (dialog, GTK_RESPONSE_CANCEL))
     return;
 
   event = gdk_event_new (GDK_DELETE);
@@ -1062,3 +1063,126 @@ _gtk_dialog_get_response_for_widget (GtkDialog *dialog,
   else
     return rd->response_id;
 }
+
+/**
+ * gtk_alternative_dialog_button_order:
+ * @screen: a #GdkScreen, or %NULL to use the default screen
+ *
+ * Returns %TRUE if dialogs are expected to use an alternative
+ * button order on the screen @screen. See 
+ * gtk_dialog_set_alternative_button_order() for more details
+ * about alternative button order. 
+ *
+ * If you need to use this function, you should probably connect
+ * to the ::notify:gtk-alternative-button-order signal on the
+ * #GtkSettings object associated to @screen, in order to be 
+ * notified if the button order setting changes.
+ *
+ * Returns: Whether the alternative button order should be used
+ *
+ * Since: 2.6
+ */
+gboolean 
+gtk_alternative_dialog_button_order (GdkScreen *screen)
+{
+  GtkSettings *settings;
+  gboolean result;
+
+  if (screen)
+    settings = gtk_settings_get_for_screen (screen);
+  else
+    settings = gtk_settings_get_default ();
+  
+  g_object_get (settings,
+		"gtk-alternative-button-order", &result, NULL);
+
+  return result;
+}
+
+static void
+gtk_dialog_set_alternative_button_order_valist (GtkDialog *dialog,
+						gint       first_response_id,
+						va_list    args)
+{
+  GtkWidget *child;
+  gint response_id;
+  gint position;
+
+  response_id = first_response_id;
+  position = 0;
+  while (response_id != -1)
+    {
+      /* reorder child with response_id to position */
+      child = dialog_find_button (dialog, response_id);
+      gtk_box_reorder_child (GTK_BOX (dialog->action_area), child, position);
+
+      response_id = va_arg (args, gint);
+      position++;
+    }
+}
+
+/**
+ * gtk_dialog_set_alternative_button_order:
+ * @dialog: a #GtkDialog
+ * @first_response_id: a response id used by one @dialog's buttons
+ * @Varargs: a list of more response ids of @dialog's buttons, terminated by -1
+ *
+ * Sets an alternative button order. If the gtk-alternative-button-order 
+ * setting is set to %TRUE, the dialog buttons are reordered according to 
+ * the order of the response ids passed to this function.
+ *
+ * By default, GTK+ dialogs use the button order advocated by the Gnome 
+ * <ulink url="http://developer.gnome.org/projects/gup/hig/2.0/">Human 
+ * Interface Guidelines</ulink> with the affirmative button at the far 
+ * right, and the cancel button left of it. But the builtin GTK+ dialogs
+ * and #GtkMessageDialog<!-- -->s do provide an alternative button order,
+ * which is more suitable on some platforms, e.g. Windows.
+ *
+ * Use this function after adding all the buttons to your dialog, as the 
+ * following example shows:
+ * <informalexample><programlisting>
+ * cancel_button = gtk_dialog_add_button (GTK_DIALOG (dialog),
+ *                                        GTK_STOCK_CANCEL,
+ *                                        GTK_RESPONSE_CANCEL);
+ * 
+ * ok_button = gtk_dialog_add_button (GTK_DIALOG (dialog),
+ *                                    GTK_STOCK_OK,
+ *                                    GTK_RESPONSE_OK);
+ *                                                   
+ * gtk_widget_grab_default (ok_button);
+ * 
+ * help_button = gtk_dialog_add_button (GTK_DIALOG (dialog),
+ *                                      GTK_STOCK_HELP,
+ *                                      GTK_RESPONSE_HELP);
+ *
+ * gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
+ *                                          GTK_RESPONSE_OK,
+ *                                          GTK_RESPONSE_CANCEL,
+ *                                          GTK_RESPONSE_HELP,
+ *                                          -1);
+ * </programlisting></informalexample>
+ * 
+ * Since: 2.6
+ */
+void 
+gtk_dialog_set_alternative_button_order (GtkDialog *dialog,
+					 gint       first_response_id,
+					 ...)
+{
+  GdkScreen *screen;
+  va_list args;
+  
+  g_return_if_fail (GTK_IS_DIALOG (dialog));
+
+  screen = gtk_widget_get_screen (GTK_WIDGET (dialog));
+  if (!gtk_alternative_dialog_button_order (screen))
+      return;
+
+  va_start (args, first_response_id);
+
+  gtk_dialog_set_alternative_button_order_valist (dialog,
+						  first_response_id,
+						  args);
+  va_end (args);
+}
+

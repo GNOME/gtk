@@ -494,6 +494,10 @@ gtk_message_dialog_add_buttons (GtkMessageDialog* message_dialog,
       gtk_dialog_add_button (dialog,
                              GTK_STOCK_YES,
                              GTK_RESPONSE_YES);
+      gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
+					       GTK_RESPONSE_YES,
+					       GTK_RESPONSE_NO,
+					       -1);
       break;
 
     case GTK_BUTTONS_OK_CANCEL:
@@ -503,6 +507,10 @@ gtk_message_dialog_add_buttons (GtkMessageDialog* message_dialog,
       gtk_dialog_add_button (dialog,
                              GTK_STOCK_OK,
                              GTK_RESPONSE_OK);
+      gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
+					       GTK_RESPONSE_OK,
+					       GTK_RESPONSE_CANCEL,
+					       -1);
       break;
       
     default:

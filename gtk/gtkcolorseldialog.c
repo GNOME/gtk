@@ -113,6 +113,12 @@ gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
 
   gtk_widget_hide (colorseldiag->help_button);
 
+  gtk_dialog_set_alternative_button_order (GTK_DIALOG (colorseldiag),
+					   GTK_RESPONSE_OK,
+					   GTK_RESPONSE_CANCEL,
+					   GTK_RESPONSE_HELP,
+					   -1);
+
   gtk_window_set_title (GTK_WINDOW (colorseldiag),
                         _("Color Selection"));
 }

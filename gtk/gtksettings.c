@@ -69,7 +69,8 @@ enum {
   PROP_XFT_HINTING,
   PROP_XFT_HINTSTYLE,
   PROP_XFT_RGBA,
-  PROP_XFT_DPI
+  PROP_XFT_DPI,
+  PROP_ALTERNATIVE_BUTTON_ORDER
 };
 
 
@@ -424,6 +425,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
   
   g_assert (result == PROP_XFT_DPI);
 #endif  /* GDK_WINDOWING_X11 */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-alternative-button-order",
+								   P_("Alternative button order"),
+								   P_("Whether buttons in dialogs should use the alternative button order"),
+								   FALSE,
+								   G_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_ALTERNATIVE_BUTTON_ORDER);
 }
 
 static void

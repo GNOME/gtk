@@ -5787,6 +5787,11 @@ location_popup_handler (GtkFileChooserDefault *impl,
   gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 2);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
 
+  gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
+					   GTK_RESPONSE_ACCEPT,
+					   GTK_RESPONSE_CANCEL,
+					   -1);
+
   hbox = gtk_hbox_new (FALSE, 12);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox, FALSE, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);

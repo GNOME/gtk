@@ -968,6 +968,10 @@ gtk_dialog_get_has_separator
 gtk_dialog_set_default_response
 gtk_dialog_set_has_separator
 gtk_dialog_set_response_sensitive
+<SUBSECTION>
+gtk_alternative_dialog_button_order
+gtk_dialog_set_alternative_button_order
+
 <SUBSECTION Standard>
 GTK_DIALOG
 GTK_IS_DIALOG

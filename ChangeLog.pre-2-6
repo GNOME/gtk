@@ -1,5 +1,26 @@
 2004-10-25  Matthias Clasen  <mclasen@redhat.com>
 
+	Add a public setting for button ordering (#74669, Owen Taylor)
+	
+	* gtk/gtksettings.c (gtk_settings_class_init): Add a 
+	gtk-alternative-button-order setting.
+
+	* gtk/gtkdialog.h: 
+	* gtk/gtkdialog.c (gtk_alternative_dialog_button_order): A 
+	getter for the alternative button order setting.
+	* gtk/gtkdialog.c (gtk_dialog_set_alternative_button_order): 
+	New function to install an alternative button order for a 
+	dialog.
+
+	* gtk/gtkfilesel.c (gtk_file_selection_init): 
+	* gtk/gtkfontsel.c (gtk_font_selection_dialog_init): 
+	* gtk/gtkmessagedialog.c (gtk_message_dialog_add_buttons): 
+	* gtk/gtkcolorseldialog.c (gtk_color_selection_dialog_init): 
+	* gtk/gtkfilechooserdefault.c (location_popup_handler): 
+	Set up an alternative button order.
+	
+2004-10-25  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkimage.h: 
 	* gtk/gtkimage.c (gtk_image_new_from_icon_name)
 	(gtk_image_set_from_icon_name, gtk_image_get_icon_name)

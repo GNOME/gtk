@@ -811,7 +811,12 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   filesel->ok_button = gtk_dialog_add_button (dialog,
                                               GTK_STOCK_OK,
                                               GTK_RESPONSE_OK);
-  
+
+  gtk_dialog_set_alternative_button_order (dialog,
+					   GTK_RESPONSE_OK,
+					   GTK_RESPONSE_CANCEL,
+					   -1);
+
   gtk_widget_grab_default (filesel->ok_button);
 
   /*  The selection entry widget  */

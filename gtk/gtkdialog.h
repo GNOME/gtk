@@ -152,6 +152,11 @@ void     gtk_dialog_set_has_separator (GtkDialog *dialog,
                                        gboolean   setting);
 gboolean gtk_dialog_get_has_separator (GtkDialog *dialog);
 
+gboolean gtk_alternative_dialog_button_order (GdkScreen *screen);
+void     gtk_dialog_set_alternative_button_order (GtkDialog *dialog,
+						  gint       first_response_id,
+						  ...);
+
 /* Emit response signal */
 void gtk_dialog_response           (GtkDialog *dialog,
                                     gint       response_id);
