@@ -565,6 +565,14 @@ gif_lzw_clear_code (GifContext *context)
 	return 0;
 }
 
+#define CHECK_LZW_SP() if(((guchar *)context->lzw_sp) >= (((guchar *)context->lzw_stack) + sizeof(context->lzw_stack))) { \
+        g_set_error (context->error,                  \
+                     GDK_PIXBUF_ERROR,                \
+                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,  \
+                     _("Stack overflow"));            \
+        return -2;                                    \
+}
+
 static int
 lzw_read_byte (GifContext *context)
 {
@@ -639,19 +647,20 @@ lzw_read_byte (GifContext *context)
 		incode = code;
 
 		if (code >= context->lzw_max_code) {
+                        CHECK_LZW_SP ();
 			*(context->lzw_sp)++ = context->lzw_firstcode;
 			code = context->lzw_oldcode;
 		}
 
 		while (code >= context->lzw_clear_code) {
-                        if ((code >= (1 << MAX_LZW_BITS)) 
-                            || (context->lzw_sp >= context->lzw_stack + ((1 << (MAX_LZW_BITS)) * 2 + 1))) {
+                        if (code >= (1 << MAX_LZW_BITS)) {
                                 g_set_error (context->error,
                                              GDK_PIXBUF_ERROR,
                                              GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
                                              _("Bad code encountered"));
 				return -2;
                         }
+                        CHECK_LZW_SP ();
 			*(context->lzw_sp)++ = context->lzw_table[1][code];
 
 			if (code == context->lzw_table[0][code]) {
@@ -664,6 +673,7 @@ lzw_read_byte (GifContext *context)
 			code = context->lzw_table[0][code];
 		}
 
+                CHECK_LZW_SP ();
 		*(context->lzw_sp)++ = context->lzw_firstcode = context->lzw_table[1][code];
 
 		if ((code = context->lzw_max_code) < (1 << MAX_LZW_BITS)) {

@@ -1,3 +1,8 @@
+2002-10-23  Matthias Clasen  <maclas@gmx.de>
+
+	* io-gif.c (lzw_read_byte): Check for stack overflow throughout.
+	(#91808, Elliot Lee)
+
 2002-10-21  Matthias Clasen  <maclas@gmx.de>
 
 	Support the Netscape application extension for gif animations 
