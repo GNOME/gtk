@@ -125,6 +125,9 @@ static void tree_expand                 (GtkCTree      *ctree,
 static void tree_collapse               (GtkCTree      *ctree, 
 					 GList         *node,
 					 gpointer       data);
+static void tree_collapse_to_depth      (GtkCTree      *ctree, 
+					 GList         *node, 
+					 gint           depth);
 static void tree_toggle_expansion       (GtkCTree      *ctree,
 					 GList         *node,
 					 gpointer       data);
@@ -3226,6 +3229,15 @@ tree_collapse (GtkCTree *ctree,
 }
 
 static void
+tree_collapse_to_depth (GtkCTree *ctree, 
+			GList    *node, 
+			gint      depth)
+{
+  if (node && GTK_CTREE_ROW (node)->level == depth)
+    gtk_ctree_collapse_recursive (ctree, node);
+}
+
+static void
 tree_toggle_expansion (GtkCTree *ctree,
 		       GList    *node,
 		       gpointer  data)
@@ -3883,6 +3895,9 @@ gtk_ctree_post_recursive (GtkCTree     *ctree,
   GList *work;
   GList *tmp;
 
+  g_return_if_fail (ctree != NULL);
+  g_return_if_fail (GTK_IS_CTREE (ctree));
+
   if (node)
     work = GTK_CTREE_ROW (node)->children;
   else
@@ -3900,6 +3915,44 @@ gtk_ctree_post_recursive (GtkCTree     *ctree,
 }
 
 void
+gtk_ctree_post_recursive_to_depth (GtkCTree     *ctree, 
+				   GList        *node,
+				   gint          depth,
+				   GtkCTreeFunc  func,
+				   gpointer      data)
+{
+  GList *work;
+  GList *tmp;
+
+  g_return_if_fail (ctree != NULL);
+  g_return_if_fail (GTK_IS_CTREE (ctree));
+
+  if (depth < 0)
+    {
+      gtk_ctree_post_recursive (ctree, node, func, data);
+      return;
+    }
+
+  if (node)
+    work = GTK_CTREE_ROW (node)->children;
+  else
+    work = GTK_CLIST (ctree)->row_list;
+
+  if (work && GTK_CTREE_ROW (work)->level <= depth)
+    {
+      while (work)
+	{
+	  tmp = GTK_CTREE_ROW (work)->sibling;
+	  gtk_ctree_post_recursive_to_depth (ctree, work, depth, func, data);
+	  work = tmp;
+	}
+    }
+
+  if (node && GTK_CTREE_ROW (node)->level <= depth)
+    func (ctree, node, data);
+}
+
+void
 gtk_ctree_pre_recursive (GtkCTree     *ctree, 
 			 GList        *node,
 			 GtkCTreeFunc  func,
@@ -3908,6 +3961,8 @@ gtk_ctree_pre_recursive (GtkCTree     *ctree,
   GList *work;
   GList *tmp;
 
+  g_return_if_fail (ctree != NULL);
+  g_return_if_fail (GTK_IS_CTREE (ctree));
 
   if (node)
     {
@@ -3922,6 +3977,45 @@ gtk_ctree_pre_recursive (GtkCTree     *ctree,
       tmp = GTK_CTREE_ROW (work)->sibling;
       gtk_ctree_pre_recursive (ctree, work, func, data);
       work = tmp;
+    }
+}
+
+void
+gtk_ctree_pre_recursive_to_depth (GtkCTree     *ctree, 
+				  GList        *node,
+				  gint          depth, 
+				  GtkCTreeFunc  func,
+				  gpointer      data)
+{
+  GList *work;
+  GList *tmp;
+
+  g_return_if_fail (ctree != NULL);
+  g_return_if_fail (GTK_IS_CTREE (ctree));
+
+  if (depth < 0)
+    {
+      gtk_ctree_pre_recursive (ctree, node, func, data);
+      return;
+    }
+
+  if (node)
+    {
+      work = GTK_CTREE_ROW (node)->children;
+      if (GTK_CTREE_ROW (node)->level <= depth)
+	func (ctree, node, data);
+    }
+  else
+    work = GTK_CLIST (ctree)->row_list;
+
+  if (work && GTK_CTREE_ROW (work)->level <= depth)
+    {
+      while (work)
+	{
+	  tmp = GTK_CTREE_ROW (work)->sibling;
+	  gtk_ctree_pre_recursive_to_depth (ctree, work, depth, func, data);
+	  work = tmp;
+	}
     }
 }
 
@@ -4085,6 +4179,7 @@ gtk_ctree_expand_recursive (GtkCTree *ctree,
   gboolean thaw = FALSE;
 
   g_return_if_fail (ctree != NULL);
+  g_return_if_fail (GTK_IS_CTREE (ctree));
 
   clist = GTK_CLIST (ctree);
 
@@ -4099,6 +4194,36 @@ gtk_ctree_expand_recursive (GtkCTree *ctree,
     }
 
   gtk_ctree_post_recursive (ctree, node, GTK_CTREE_FUNC (tree_expand), NULL);
+
+  if (thaw)
+    gtk_clist_thaw (clist);
+}
+
+void 
+gtk_ctree_expand_to_depth (GtkCTree *ctree,
+			   GList    *node,
+			   gint      depth)
+{
+  GtkCList *clist;
+  gboolean thaw = FALSE;
+
+  g_return_if_fail (ctree != NULL);
+  g_return_if_fail (GTK_IS_CTREE (ctree));
+
+  clist = GTK_CLIST (ctree);
+
+  if (node && GTK_CTREE_ROW (node)->is_leaf)
+    return;
+
+  if (((node && gtk_ctree_is_visible (ctree, node)) || !node) && 
+      !GTK_CLIST_FROZEN (clist))
+    {
+      gtk_clist_freeze (clist);
+      thaw = TRUE;
+    }
+
+  gtk_ctree_post_recursive_to_depth (ctree, node, depth,
+				     GTK_CTREE_FUNC (tree_expand), NULL);
 
   if (thaw)
     gtk_clist_thaw (clist);
@@ -4125,6 +4250,7 @@ gtk_ctree_collapse_recursive (GtkCTree *ctree,
   gboolean thaw = FALSE;
 
   g_return_if_fail (ctree != NULL);
+  g_return_if_fail (GTK_IS_CTREE (ctree));
 
   if (node && GTK_CTREE_ROW (node)->is_leaf)
     return;
@@ -4139,6 +4265,37 @@ gtk_ctree_collapse_recursive (GtkCTree *ctree,
     }
 
   gtk_ctree_post_recursive (ctree, node, GTK_CTREE_FUNC (tree_collapse), NULL);
+
+  if (thaw)
+    gtk_clist_thaw (clist);
+}
+
+void 
+gtk_ctree_collapse_to_depth (GtkCTree *ctree,
+			     GList    *node,
+			     gint      depth)
+{
+  GtkCList *clist;
+  gboolean thaw = FALSE;
+
+  g_return_if_fail (ctree != NULL);
+  g_return_if_fail (GTK_IS_CTREE (ctree));
+
+  if (node && GTK_CTREE_ROW (node)->is_leaf)
+    return;
+
+  clist = GTK_CLIST (ctree);
+
+  if (((node && gtk_ctree_is_visible (ctree, node)) || !node) && 
+      !GTK_CLIST_FROZEN (clist))
+    {
+      gtk_clist_freeze (clist);
+      thaw = TRUE;
+    }
+
+  gtk_ctree_post_recursive_to_depth (ctree, node, depth,
+				     GTK_CTREE_FUNC (tree_collapse_to_depth),
+				     GINT_TO_POINTER (depth));
 
   if (thaw)
     gtk_clist_thaw (clist);

@@ -1,3 +1,11 @@
+Mon Jul 20 21:28:18 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkctree.c (gtk_ctree_post_recursive_to_depth)
+ 	(gtk_ctree_pre_recursive_to_depth): new functions, recursive process
+	tree to specified depth
+	(gtk_ctree_expand_to_depth): expand tree to specified depth
+ 	(gtk_ctree_collapse_to_depth): collapse all nodes with level >= depth
+
 Sun Jul 19 23:51:05 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c (scroll_vertical): fix for vertical scrolling in case
