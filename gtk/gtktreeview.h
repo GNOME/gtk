@@ -87,10 +87,11 @@ struct _GtkTreeViewClass
   void     (* cursor_changed)             (GtkTreeView       *tree_view);
 
   /* Key Binding signals */
-  void     (* move_cursor)                (GtkTreeView       *tree_view,
+  gboolean (* move_cursor)                (GtkTreeView       *tree_view,
 				           GtkMovementStep    step,
 				           gint               count);
   void     (* select_all)                 (GtkTreeView       *tree_view);
+  void     (* unselect_all)               (GtkTreeView       *tree_view);
   void     (* select_cursor_row)          (GtkTreeView       *tree_view,
 					   gboolean           start_editing);
   void     (* toggle_cursor_row)          (GtkTreeView       *tree_view);
@@ -99,7 +100,8 @@ struct _GtkTreeViewClass
 					   gboolean           expand,
 					   gboolean           open_all);
   void     (* select_cursor_parent)       (GtkTreeView       *tree_view);
-  void     (* start_interactive_search)   (GtkTreeView       *tree_view); 
+  void     (* start_interactive_search)   (GtkTreeView       *tree_view);
+  void     (* focus_column_header)        (GtkTreeView       *tree_view);
 };
 
 

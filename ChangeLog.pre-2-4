@@ -1,3 +1,10 @@
+Thu Feb 21 23:02:29 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.[ch]: add keynav handling for unselect all,
+	focus column header, change focus with arrow keys in column headers,
+	column reordering, column resizing, small try to fix page up/down
+	(this fixes #70889, and fixes a great deal of #53580)
+
 Thu Feb 21 16:51:17 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkaccelgroup.c (gtk_accelerator_valid): Add
