@@ -1,3 +1,13 @@
+Mon May  6 11:48:08 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am (EXTRA_DIST): Add ChangeLog.pre-2-0 (#78641)
+
+	* m4macros/gtk-2.0.m4: save CFLAGS/LIBS properly when
+	compiling "what went wrong" test case. (#79329)
+
+	* m4macros/gtk-2.0.m4: Remove reference to editing
+	pkg-config script. (From Jim Gettys)
+
 2002-05-02  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtknotebook.c (gtk_notebook_set_show_border): Typo fix.
