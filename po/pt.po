@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.12\n"
-"POT-Creation-Date: 1999-01-12 10:38-0800\n"
+"POT-Creation-Date: 1999-01-17 17:28-0600\n"
 "PO-Revision-Date: 1999-01-09 12:09+00:00\n"
 "Last-Translator: Nuno Ferreira <nmrf@rnl.ist.utl.pt>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
@@ -434,17 +434,17 @@ msgstr ""
 msgid "clear"
 msgstr "limpar"
 
-#: gtk/gtknotebook.c:1966 gtk/gtknotebook.c:3985
+#: gtk/gtknotebook.c:1967 gtk/gtknotebook.c:3986
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
 
-#: gtk/gtkrc.c:1507
+#: gtk/gtkrc.c:1517
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Não encontrei ficheiro de imagem na pixmap_path: \"%s\" linha %d"
 
-#: gtk/gtkrc.c:1510
+#: gtk/gtkrc.c:1520
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Não encontrei ficheiro de imagem na pixmap_path: \"%s\""

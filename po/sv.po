@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.12\n"
-"POT-Creation-Date: 1999-01-15 20:33+0100\n"
+"POT-Creation-Date: 1999-01-17 17:28-0600\n"
 "PO-Revision-Date: 1999-01-12 22:50+0100\n"
 "Last-Translator: Tomas Ögren <stric@ing.umu.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -439,12 +439,12 @@ msgstr ""
 msgid "Page %u"
 msgstr "Sida %u"
 
-#: gtk/gtkrc.c:1508
+#: gtk/gtkrc.c:1517
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kunde ej hitta bild i 'pixmap_path': \"%s\" rad %d"
 
-#: gtk/gtkrc.c:1511
+#: gtk/gtkrc.c:1520
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunde ej hitta bild i 'pixmap_path': \"%s\""

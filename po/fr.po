@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
-"POT-Creation-Date: 1999-01-16 23:30+0100\n"
+"POT-Creation-Date: 1999-01-17 17:28-0600\n"
 "PO-Revision-Date: 1998-12-18 20:32+0100\n"
 "Last-Translator: Vincent Renardias <vincent@debian.org>\n"
 "Language-Team: Vincent Renardias <vincent@debian.org>\n"
@@ -309,7 +309,9 @@ msgstr "La police sélectionnée n'est pas valide."
 
 #: gtk/gtkfontsel.c:1834
 msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "Ceci est un police codée sur 2 octets et peux ne pas être affichée correctement."
+msgstr ""
+"Ceci est un police codée sur 2 octets et peux ne pas être affichée "
+"correctement."
 
 #: gtk/gtkfontsel.c:1926 gtk/gtkinputdialog.c:599
 msgid "(unknown)"
@@ -438,13 +440,13 @@ msgstr "affacer"
 msgid "Page %u"
 msgstr "Page %u"
 
-#: gtk/gtkrc.c:1508
+#: gtk/gtkrc.c:1517
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
 "Impossible de localiser le fichier image dans pixmap_path: \"%s\" ligne %d"
 
-#: gtk/gtkrc.c:1511
+#: gtk/gtkrc.c:1520
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Impossible de localiser le fichier image dans pixmap_path: \"%s\""
