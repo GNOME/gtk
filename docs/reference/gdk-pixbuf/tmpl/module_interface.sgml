@@ -153,6 +153,9 @@ use the <function>gdk_pixbuf_format_*</function> functions.
 @extensions: a %NULL-terminated array of typical filename extensions for the
 image format.
 @flags: a combination of #GdkPixbufFormatFlags.
+@disabled: a boolean determining whether the loader is disabled.
+@license: a string containing license information, typically set to 
+ shorthands like "GPL", "LGPL", etc.
 @Since: 2.2
 
 <!-- ##### ENUM GdkPixbufFormatFlags ##### -->
@@ -162,7 +165,7 @@ operations.
 </para>
 
 @GDK_PIXBUF_FORMAT_WRITABLE: the module can write out images in the format.
-@GDK_PIXBUF_FORMAT_SCALABLE: 
+@GDK_PIXBUF_FORMAT_SCALABLE: the image format is scalable
 @Since: 2.2
 
 <!-- ##### STRUCT GdkPixbufModulePattern ##### -->
