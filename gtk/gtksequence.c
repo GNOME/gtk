@@ -256,7 +256,8 @@ _gtk_sequence_sort               (GtkSequence               *seq,
   
   while (_gtk_sequence_get_length (tmp) > 0)
     {
-      GtkSequenceNode *node = _gtk_sequence_get_begin_ptr (tmp);
+      GtkSequenceNode *node = _gtk_sequence_get_end_ptr (tmp);
+      node = _gtk_sequence_node_prev (node);
       _gtk_sequence_unlink (tmp, node);
       
       _gtk_sequence_node_insert_sorted (seq->node, node, cmp_func, cmp_data);
