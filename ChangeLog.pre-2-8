@@ -1,5 +1,8 @@
 2003-10-01  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtktoolitem.c (gtk_tool_item_class_init): Fix signal doc 
+	comments to pacify gtk-doc.
+
 	* gtk/gtkmain.c: Doc formatting tweaks.
 
 	* gtk/gtktoolitem.c (gtk_tool_item_set_is_important): Fix a typo.

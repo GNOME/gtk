@@ -183,9 +183,9 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
  * in the overflow menu
  * </listitem>
  * <listitem> call gtk_tool_item_set_proxy_menu_item() with a new menu
- * item and return TRUE, or 
+ * item and return %TRUE, or 
  * </listitem>
- * <listitem> return FALSE to indicate that the signal was not
+ * <listitem> return %FALSE to indicate that the signal was not
  * handled by the item. This means that
  * the item will not appear in the overflow menu unless a later handler
  * installs a menu item.
@@ -230,10 +230,15 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
 /**
  * GtkToolItem::set-tooltip:
  * @toolitem: the object the signal was emitted on
+ * @tooltips: the #GtkTooltips
+ * @tip_text: the tooltip text
+ * @tip_private: the tooltip private text
  *
  * This signal is emitted when the toolitem's tooltip changes.
  * Application developers can use gtk_tool_item_set_tooltip() to
- * set the item's tooltip
+ * set the item's tooltip.
+ *
+ * Return value: %TRUE if the signal was handled, %FALSE if not
  **/
   toolitem_signals[SET_TOOLTIP] =
     g_signal_new ("set_tooltip",
