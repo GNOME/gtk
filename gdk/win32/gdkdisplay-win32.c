@@ -40,7 +40,8 @@ gdk_display_open (const gchar *display_name)
   _gdk_display = g_object_new (GDK_TYPE_DISPLAY, NULL);
   _gdk_screen = g_object_new (GDK_TYPE_SCREEN, NULL);
 
-  gdk_set_default_display (_gdk_display);
+  gdk_display_manager_set_default_display (gdk_display_manager_get (),
+					   _gdk_display);
 
   _gdk_visual_init ();
   gdk_screen_set_default_colormap (_gdk_screen,
@@ -48,11 +49,8 @@ gdk_display_open (const gchar *display_name)
   _gdk_windowing_window_init ();
   _gdk_windowing_image_init ();
   _gdk_events_init ();
-  _gdk_input_init ();
+  _gdk_input_init (_gdk_display);
   _gdk_dnd_init ();
-
-  g_signal_emit_by_name (gdk_display_manager_get (),
-			 "display_opened", _gdk_display);
 
   return _gdk_display;
 }

@@ -33,6 +33,7 @@
 
 #include "config.h"
 
+#include "gdkdisplay.h"
 #include "gdkinput.h"
 #include "gdkprivate.h"
 
@@ -45,6 +46,7 @@
 #ifdef HAVE_WINTAB
 #include <wintab.h>
 #endif
+
 #include "gdkinput-win32.h"
 
 static GdkDeviceAxis gdk_input_core_axes[] = {
@@ -60,7 +62,7 @@ GList            *_gdk_input_devices;
 GList            *_gdk_input_windows;
 
 void
-_gdk_init_input_core (void)
+_gdk_init_input_core (GdkDisplay *display)
 {
   display->core_pointer = g_object_new (GDK_TYPE_DEVICE, NULL);
   

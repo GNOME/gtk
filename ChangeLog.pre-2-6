@@ -1,3 +1,32 @@
+2002-09-20  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkfont.h: Delete leftover declarations of the obsolete
+	Win32-only functions gdk_font_full_name_get() and
+	gdk_font_full_name_free().
+
+	* gdk/gdk.def: Delete from here, too.
+
+	* gdk/win32/gdkfont-win32.c (logfont_to_xlfd,
+	gdk_font_full_name_get, gdk_font_full_name_free): Delete
+	implementation, and helper functions.
+
+	(pattern_match, InnerEnumFontFamExProc, EnumFontFamExProc,
+	gdk_font_list_new, gdk_font_list_free): Delete unused functions.
+
+	(gdk_text_width, gdk_text_width_wc) Instead of code duplication,
+	let gdk_text_extents() and gdk_text_extents_wc() do the job.
+	
+	* gdk/win32/gdkgc-win32.c (gdk_win32_gc_values_to_win32values):
+	Don't use the above removed functions in debugging output.
+
+	* gdk/win32/gdkdisplay-win32.c
+	* gdk/win32/gdkmain-win32.c
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkselection-win32.c
+	* gdk/win32/gdkinput-win32.h
+	* gdk/win32/gdkinput.c: Make it compile again, pass a GdkDisplay in
+	a couple of places.
+
 Thu Sep 19 16:39:29 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksettings.h (GTK_SETTINGS_GET_CLASS): Fix 

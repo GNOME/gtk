@@ -103,12 +103,6 @@ void     gdk_string_extents (GdkFont     *font,
 
 GdkDisplay * gdk_font_get_display (GdkFont *font);
 
-#ifdef GDK_WINDOWING_WIN32
-/* Ditto temporary */
-gchar*   gdk_font_full_name_get (GdkFont *font);
-void	 gdk_font_full_name_free (gchar *name);
-#endif
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

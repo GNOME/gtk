@@ -129,7 +129,7 @@ extern GList *_gdk_input_windows;
 extern gint   _gdk_input_ignore_core;
 
 /* Function declarations */
-void             _gdk_init_input_core (void);
+void             _gdk_init_input_core (GdkDisplay *display);
 
 GdkTimeCoord ** _gdk_device_allocate_history (GdkDevice *device,
 					      gint       n_events);

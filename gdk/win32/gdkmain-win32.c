@@ -92,7 +92,7 @@ _gdk_windowing_init (gint    *argc,
 		 LOCALE_IDEFAULTANSICODEPAGE,
 		 buf, sizeof (buf));
   _gdk_input_codepage = atoi (buf);
-  GDK_NOTE (MISC, g_print ("input_locale: %#lx, codepage:%d\n",
+  GDK_NOTE (MISC, g_print ("input_locale: %p, codepage:%d\n",
 			   _gdk_input_locale, _gdk_input_codepage));
 
   CoInitialize (NULL);
@@ -181,7 +181,8 @@ gdk_screen_get_height_mm (GdkScreen *screen)
 }
 
 void
-gdk_display_set_sm_client_id (const gchar* sm_client_id)
+gdk_display_set_sm_client_id (GdkDisplay  *display,
+			      const gchar *sm_client_id)
 {
   g_warning("gdk_set_sm_client_id %s", sm_client_id ? sm_client_id : "NULL");
 }

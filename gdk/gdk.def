@@ -152,8 +152,6 @@ EXPORTS
 	gdk_font_equal
 	gdk_font_from_description
 	gdk_font_from_description_for_display
-	gdk_font_full_name_free
-	gdk_font_full_name_get
 	gdk_font_get_type
 	gdk_font_id
 	gdk_font_load

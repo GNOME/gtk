@@ -1198,12 +1198,12 @@ gdk_device_get_state (GdkDevice       *device,
 }
 
 void 
-_gdk_input_init (void)
+_gdk_input_init (GdkDisplay *display)
 {
   _gdk_input_ignore_core = FALSE;
   _gdk_input_devices = NULL;
 
-  _gdk_init_input_core ();
+  _gdk_init_input_core (display);
 #ifdef HAVE_WINTAB
   gdk_input_wintab_init ();
 #endif /* HAVE_WINTAB */

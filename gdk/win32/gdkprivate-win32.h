@@ -487,6 +487,6 @@ void _gdk_visual_init (void);
 void _gdk_dnd_init    (void);
 void _gdk_windowing_image_init  (void);
 void _gdk_events_init (void);
-void _gdk_input_init (void);
+void _gdk_input_init  (GdkDisplay *display);
 
 #endif /* __GDK_PRIVATE_WIN32_H__ */

@@ -148,14 +148,10 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
       win32_gc->font = values->font;
       if (win32_gc->font != NULL)
 	{
-	  gchar *xlfd;
-
 	  gdk_font_ref (win32_gc->font);
 	  win32_gc->values_mask |= GDK_GC_FONT;
-	  GDK_NOTE (GC, (xlfd = gdk_font_full_name_get (win32_gc->font),
-			 g_print ("%sfont=%s", s, xlfd),
-			 s = ",",
-			 gdk_font_full_name_free (xlfd)));
+	  GDK_NOTE (GC, (g_print ("%sfont=%p", s, win32_gc->font),
+			 s = ","));
 	}
       else
 	{
