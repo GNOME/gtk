@@ -1,3 +1,13 @@
+Wed Jan 26 23:12:28 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_map): Don't
+	  show the tab_label unless it itself is visible.
+
+	  gtk/gtknotebook.c (gtk_notebook_size_request):
+	  Do a better job of making sure that the visibility
+	  of the tab label corresponds to whether it should
+	  be mapped or not.
+
 Wed Jan 26 21:17:03 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkoptionmenu.c (gtk_option_menu_position):
