@@ -348,6 +348,7 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
   GtkShadowType shadow_type;
   gint width, height;
   gint x, y;
+  gint offset;
 
   if (GTK_WIDGET_DRAWABLE (check_menu_item))
     {
@@ -355,8 +356,12 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 
       width = 8;
       height = 8;
-      x = widget->allocation.x + (GTK_CONTAINER (check_menu_item)->border_width +
-				  widget->style->xthickness + 2);
+      offset = GTK_CONTAINER (check_menu_item)->border_width +
+	widget->style->xthickness + 2;
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
+	x = widget->allocation.x + offset;
+      else 
+	x = widget->allocation.x + widget->allocation.width - width - offset;
       y = widget->allocation.y + (widget->allocation.height - height) / 2;
 
       if (check_menu_item->active ||

@@ -1,5 +1,9 @@
 2002-11-08  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkcheckmenuitem.c
+	(gtk_real_check_menu_item_draw_indicator): RTL flipping for check
+	menu items.
+
 	* tests/testtext.c (blink_timeout): Put into #ifdef DO_BLINK to
 	avoid an unused static function.  (#97965)
 
