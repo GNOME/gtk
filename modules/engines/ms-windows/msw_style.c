@@ -1814,11 +1814,12 @@ draw_handle (GtkStyle        *style,
         {
           return;
         }
+
       /* grippers are just flat boxes when they're not a toolbar */
       parent_class->draw_box (style, window, state_type, shadow_type,
                               area, widget, detail, x, y, width, height);
     }
-  else
+  else if (!GTK_IS_PANED (widget))
     {
       /* TODO: Draw handle boxes as double lines: || */
       parent_class->draw_handle (style, window, state_type, shadow_type,
