@@ -1,3 +1,8 @@
+2003-03-26  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtktreeview.c: rewrote the function that does node and arrow
+	prelighting, queue all redraws from here (Fixes bug #108792).
+
 2003-03-20  Guntupalli Karunakar  <karunakar@freedomink.org>
 
 	* configure.in: Added "ml" in ALL_LINGUAS
