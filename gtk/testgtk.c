@@ -3983,7 +3983,7 @@ create_notebook ()
   GtkWidget *submenu;
   GtkWidget *menuitem;
   GSList *group;
-  GdkColor transparent;
+  GdkColor *transparent = NULL;
 
   if (!window)
     {
@@ -4009,11 +4009,11 @@ create_notebook ()
       gtk_widget_realize (notebook);
       book_open = gdk_pixmap_create_from_xpm_d (notebook->window,
 						&book_open_mask, 
-						&transparent, 
+						transparent, 
 						book_open_xpm);
       book_closed = gdk_pixmap_create_from_xpm_d (notebook->window,
 						  &book_closed_mask,
-						  &transparent, 
+						  transparent, 
 						  book_closed_xpm);
 
       create_pages (GTK_NOTEBOOK (notebook), 1, 5);

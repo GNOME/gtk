@@ -24,6 +24,10 @@
  * across all the color info (currently RGBA). - Elliot
  */
 
+#ifndef M_PI
+#define M_PI    3.14159265358979323846
+#endif /* M_PI */
+
 #define DEGTORAD(a) (2.0*M_PI*a/360.0)
 #define SQR(a) (a*a)
 
