@@ -68,13 +68,82 @@ GtkWindow
 
 <!-- ##### FUNCTION gtk_window_set_policy ##### -->
 <para>
-
+Changes how a toplevel window deals with its size request and user resize
+attempts. There are really only two reasonable ways to call this function:
+<orderedlist>
+<listitem>
+<para>
+<literal>gtk_window_set_policy(GTK_WINDOW(window), FALSE, TRUE, FALSE)</literal> 
+means that the window is user-resizable.
+</para>
+</listitem>
+<listitem>
+<para>
+<literal>gtk_window_set_policy(GTK_WINDOW(window), FALSE, FALSE, TRUE)</literal> 
+means that the window's size is program-controlled, and should simply match 
+the current size request of the window's children.
+</para>
+</listitem>
+</orderedlist>
+The first policy is the default, that is, by default windows are designed to 
+be resized by users.
 </para>
 
-@window: 
-@allow_shrink: 
-@allow_grow: 
-@auto_shrink: 
+<para>
+The basic ugly truth of this function is that it should be simply:
+<programlisting>
+ void gtk_window_set_user_resizeable(GtkWidget* window, gboolean setting);
+</programlisting>
+So, pretend it is like that, and only use the two policies mentioned above.
+GTK+ 1.4 may replace gtk_window_set_policy() with a nicer function like
+gtk_window_set_user_resizeable().
+</para>
+
+<para>
+If set to TRUE, the @allow_grow parameter allows the user to expand the window
+beyond the size request of its child widgets. If @allow_grow is TRUE, be sure to
+check that your child widgets work properly as the window is resized.
+</para>
+
+<para>
+A toplevel window will always change size to ensure its child widgets receive
+their requested size. This means that if you add child widgets, the toplevel
+window will expand to contain them. However, normally the toplevel will not
+shrink to fit the size request of its children if it's too large; the
+@auto_shrink parameter causes the window to shrink when child widgets have too
+much space. @auto_shrink is normally used with the second of the two window
+policies mentioned above.  That is, set @auto_shrink to TRUE if you want the
+window to have a fixed, always-optimal size determined by your program.
+</para>
+
+<para>
+Note that @auto_shrink doesn't do anything if @allow_shrink and @allow_grow are
+both set to FALSE.
+</para>
+
+<para>
+Neither of the two suggested window policies set the @allow_shrink paramter to
+TRUE.  If @allow_shrink is TRUE, the user can shrink the window so that its
+children do not receive their full size request; this is basically a bad thing,
+because most widgets will look wrong if this happens. Furthermore GTK+ has a
+tendency to re-expand the window if size is recalculated for any reason. The
+upshot is that @allow_shrink should always be set to FALSE.
+</para>
+
+<para>
+Sometimes when you think you want to use @allow_shrink, the real problem is that
+some specific child widget is requesting too much space, so the user can't
+shrink the window sufficiently. Perhaps you are calling gtk_widget_set_usize()
+on a child widget, and forcing its size request to be too large. Instead of
+setting the child's usize, consider using gtk_window_set_default_size() so that
+the child gets a larger allocation than it requests.
+</para>
+
+@window: the window
+@allow_shrink: whether the user can shrink the window below its size request
+@allow_grow: whether the user can grow the window larger than its size request
+@auto_shrink: whether the window automatically snaps back to its size request if
+it's larger
 
 
 <!-- ##### FUNCTION gtk_window_add_accel_group ##### -->
