@@ -1,3 +1,12 @@
+2004-06-22  Federico Mena Quintero  <federico@ximian.com>
+
+	Fixes the GTK+ part of #142308:
+
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_filename_to_path):
+	Use filename_to_path().
+	(gtk_file_system_unix_uri_to_path): Likewise.
+	(filename_to_path): Use remove_trailing_slash().
+
 2004-06-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_class_init): Improve docs

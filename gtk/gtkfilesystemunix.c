@@ -1018,18 +1018,25 @@ static GtkFilePath *
 gtk_file_system_unix_uri_to_path (GtkFileSystem     *file_system,
 				  const gchar       *uri)
 {
+  GtkFilePath *path;
   gchar *filename = g_filename_from_uri (uri, NULL, NULL);
+
   if (filename)
-    return gtk_file_path_new_steal (filename);
+    {
+      path = filename_to_path (filename);
+      g_free (filename);
+    }
   else
-    return NULL;
+    path = NULL;
+
+  return path;
 }
 
 static GtkFilePath *
 gtk_file_system_unix_filename_to_path (GtkFileSystem *file_system,
 				       const gchar   *filename)
 {
-  return gtk_file_path_new_dup (filename);
+  return filename_to_path (filename);
 }
 
 static const char *
@@ -1833,7 +1840,10 @@ fill_in_mime_type (GtkFileFolderUnix *folder_unix, GError **error)
 static GtkFilePath *
 filename_to_path (const char *filename)
 {
-  return gtk_file_path_new_dup (filename);
+  char *tmp;
+
+  tmp = remove_trailing_slash (filename);
+  return gtk_file_path_new_steal (tmp);
 }
 
 static gboolean
