@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "POT-Creation-Date: 2002-10-24 05:28+0200\n"
-"PO-Revision-Date: 2002-12-10 19:37+EDT\n"
+"PO-Revision-Date: 2002-12-21 22:37+EDT\n"
 "Last-Translator: Ge'ez Frontier Foundation <locales@geez.org>\n"
 "Language-Team: Amharic <locales@geez.org>\n"
 "MIME-Version: 1.0\n"
@@ -670,7 +670,7 @@ msgstr ""
 
 #: gtk/gtkalignment.c:102
 msgid "Horizontal alignment"
-msgstr ""
+msgstr "የአግድም ኩልኩል"
 
 #: gtk/gtkalignment.c:103
 msgid ""
@@ -680,7 +680,7 @@ msgstr ""
 
 #: gtk/gtkalignment.c:112
 msgid "Vertical alignment"
-msgstr ""
+msgstr "የቁመት ኩልኩል"
 
 #: gtk/gtkalignment.c:113
 msgid ""
@@ -726,7 +726,7 @@ msgstr ""
 
 #: gtk/gtkaspectframe.c:107
 msgid "Horizontal Alignment"
-msgstr ""
+msgstr "የአግድም ኩልኩል"
 
 #: gtk/gtkaspectframe.c:108
 msgid "X alignment of the child"
@@ -734,7 +734,7 @@ msgstr ""
 
 #: gtk/gtkaspectframe.c:114
 msgid "Vertical Alignment"
-msgstr ""
+msgstr "የቁመት ኩልኩል"
 
 #: gtk/gtkaspectframe.c:115
 msgid "Y alignment of the child"
@@ -1118,7 +1118,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:369
 msgid "Font size in points"
-msgstr ""
+msgstr "የፊደል ቅርጽ በነጥቦች"
 
 #: gtk/gtkcellrenderertext.c:320 gtk/gtktexttag.c:358 gtk/gtktexttag.c:359
 msgid "Font scale"
@@ -1139,7 +1139,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:341 gtk/gtktexttag.c:467
 msgid "Strikethrough"
-msgstr ""
+msgstr "ስርዝ"
 
 #: gtk/gtkcellrenderertext.c:342 gtk/gtktexttag.c:468
 msgid "Whether to strike through the text"
@@ -1456,7 +1456,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1889
 msgid "_Palette"
-msgstr ""
+msgstr "መደርደሪያ (_P)"
 
 #: gtk/gtkcombo.c:139
 msgid "Enable arrow keys"
@@ -1636,7 +1636,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:480
 msgid "Has Frame"
-msgstr ""
+msgstr "ፍሬም አለ"
 
 #: gtk/gtkentry.c:481
 msgid "FALSE removes outside bevel from entry."
@@ -1690,11 +1690,11 @@ msgstr ""
 
 #: gtk/gtkentry.c:3902 gtk/gtklabel.c:3179
 msgid "Select All"
-msgstr "ሁሉንም ምረጥ"
+msgstr "ሁሉንም ምረጡ"
 
 #: gtk/gtkentry.c:3912 gtk/gtklabel.c:3189
 msgid "Input Methods"
-msgstr ""
+msgstr "የመረጃ ዘዴዎች"
 
 #: gtk/gtkentry.c:3922 gtk/gtktextview.c:6426
 msgid "_Insert Unicode control character"
@@ -1763,7 +1763,7 @@ msgstr "ፋይል _ሰረዝ"
 
 #: gtk/gtkfilesel.c:1085
 msgid "_Rename File"
-msgstr ""
+msgstr "ፋይልን እንደገና ሰይም (_R)"
 
 #: gtk/gtkfilesel.c:1363
 #, c-format
@@ -2134,7 +2134,7 @@ msgstr ""
 
 #: gtk/gtkinputdialog.c:238
 msgid "Disabled"
-msgstr ""
+msgstr "የተበላሸ"
 
 #: gtk/gtkinputdialog.c:246
 msgid "Screen"
@@ -2188,7 +2188,7 @@ msgstr "ምንም"
 
 #: gtk/gtkinputdialog.c:553 gtk/gtkinputdialog.c:589
 msgid "(disabled)"
-msgstr ""
+msgstr "(የተበላሸ)"
 
 #: gtk/gtkinputdialog.c:582
 msgid "(unknown)"
@@ -2228,7 +2228,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:318
 msgid "Pattern"
-msgstr ""
+msgstr "ንድፍ"
 
 #: gtk/gtklabel.c:319
 msgid ""
@@ -2441,7 +2441,7 @@ msgstr ""
 
 #: gtk/gtknotebook.c:406
 msgid "Show Tabs"
-msgstr ""
+msgstr "ማስረጊያዎች አሳይ"
 
 #: gtk/gtknotebook.c:407
 msgid "Whether tabs should be shown or not"
@@ -2546,7 +2546,7 @@ msgstr ""
 
 #: gtk/gtkprogress.c:130
 msgid "Show text"
-msgstr ""
+msgstr "ጽሑፍ አሳይ"
 
 #: gtk/gtkprogress.c:131
 msgid "Whether the progress is shown as text"
@@ -2731,7 +2731,7 @@ msgstr ""
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
-msgstr ""
+msgstr "ዝቅተኛ"
 
 #: gtk/gtkruler.c:119
 msgid "Lower limit of ruler"
@@ -3074,7 +3074,7 @@ msgstr "ተወው (_C)"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
-msgstr ""
+msgstr "ሲዲ-ሮም (_C)"
 
 #: gtk/gtkstock.c:280
 msgid "_Clear"
@@ -3102,7 +3102,7 @@ msgstr "መሰረዣ (_D)"
 
 #: gtk/gtkstock.c:286
 msgid "_Execute"
-msgstr "ስራ (_E)"
+msgstr "አስኪድ (_E)"
 
 #: gtk/gtkstock.c:287
 msgid "_Find"
@@ -3230,7 +3230,7 @@ msgstr "እንደገና አድርግ (_R)"
 
 #: gtk/gtkstock.c:318
 msgid "_Refresh"
-msgstr ""
+msgstr "አድስ (_R)"
 
 #: gtk/gtkstock.c:319
 msgid "_Remove"
@@ -3274,11 +3274,11 @@ msgstr "አቁም (_S)"
 
 #: gtk/gtkstock.c:329
 msgid "_Strikethrough"
-msgstr ""
+msgstr "ስርዝ (_S)"
 
 #: gtk/gtkstock.c:330
 msgid "_Undelete"
-msgstr ""
+msgstr "አታጥፋ (_U)"
 
 #: gtk/gtkstock.c:331
 msgid "_Underline"
@@ -3681,7 +3681,7 @@ msgstr ""
 
 #: gtk/gtktextview.c:6417
 msgid "Input _Methods"
-msgstr ""
+msgstr " የመረጃ ዘዴዎች (_I)"
 
 #: gtk/gtkthemes.c:69
 #, c-format
@@ -3690,7 +3690,7 @@ msgstr ""
 
 #: gtk/gtktipsquery.c:182
 msgid "--- No Tip ---"
-msgstr ""
+msgstr "--- ምንም ፍንጭ የልም ---"
 
 #: gtk/gtktogglebutton.c:134
 msgid "If the toggle button should be pressed in or not"
@@ -4327,4 +4327,4 @@ msgstr "ቪትናምኛ (VIQR)"
 #. ID
 #: modules/input/imxim.c:27
 msgid "X Input Method"
-msgstr ""
+msgstr "የX የመረጃ ዘዴ"
