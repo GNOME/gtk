@@ -1,3 +1,9 @@
+2002-12-24  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextbuffer.c (paste_from_buffer): 
+	(clipboard_text_received): Let the user action span the insertion
+	and the deletion of the old selection.  (#82844)
+
 2002-12-23  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextiter.c (gtk_text_iter_backward_sentence_starts):
@@ -6,7 +12,7 @@
 
 	* gtk/gtktextview.c (gtk_text_view_move_cursor_internal): Call
 	move_cursor() even if the cursor hasn't moved, since it has the
-	side effect of canceling the selection.  (#81395, #98537, #9833)
+	side effect of canceling the selection.  (#81395, #98537, #98333)
 
 2002-12-22  Matthias Clasen  <maclas@gmx.de>
 

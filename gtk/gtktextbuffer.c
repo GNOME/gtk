@@ -2930,17 +2930,23 @@ clipboard_text_received (GtkClipboard *clipboard,
   if (str)
     {
       GtkTextIter insert_point;
+      
+      if (request_data->interactive) 
+	gtk_text_buffer_begin_user_action (buffer);
 
       pre_paste_prep (request_data, &insert_point);
       
-      if (request_data->interactive)
-        gtk_text_buffer_insert_interactive (buffer, &insert_point,
-                                            str, -1, request_data->default_editable);
+      if (request_data->interactive) 
+	gtk_text_buffer_insert_interactive (buffer, &insert_point,
+					    str, -1, request_data->default_editable);
       else
         gtk_text_buffer_insert (buffer, &insert_point,
                                 str, -1);
 
       post_paste_cleanup (request_data);
+      
+      if (request_data->interactive) 
+	gtk_text_buffer_end_user_action (buffer);
     }
 
   g_object_unref (buffer);
@@ -3018,18 +3024,22 @@ paste_from_buffer (ClipboardRequest    *request_data,
                    const GtkTextIter   *end)
 {
   GtkTextIter insert_point;
+  GtkTextBuffer *buffer = request_data->buffer;
   
   /* We're about to emit a bunch of signals, so be safe */
   g_object_ref (src_buffer);
   
   pre_paste_prep (request_data, &insert_point);
   
+  if (request_data->interactive) 
+    gtk_text_buffer_begin_user_action (buffer);
+
   if (!gtk_text_iter_equal (start, end))
     {
       if (!request_data->interactive ||
           (gtk_text_iter_can_insert (&insert_point,
                                      request_data->default_editable)))
-        gtk_text_buffer_real_insert_range (request_data->buffer,
+        gtk_text_buffer_real_insert_range (buffer,
                                            &insert_point,
                                            start,
                                            end,
@@ -3038,6 +3048,9 @@ paste_from_buffer (ClipboardRequest    *request_data,
 
   post_paste_cleanup (request_data);
       
+  if (request_data->interactive) 
+    gtk_text_buffer_end_user_action (buffer);
+
   g_object_unref (src_buffer);
   g_free (request_data);
 }
