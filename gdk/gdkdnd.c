@@ -377,15 +377,17 @@ gdk_window_cache_destroy (GdkWindowCache *cache)
 
 static Window
 get_client_window_at_coords_recurse (Window  win,
-				     gint    x_root,
-				     gint    y_root)
+				     gint    x,
+				     gint    y)
 {
-  Window child;
+  Window root, tmp_parent, *children;
+  unsigned int nchildren;
+  int i;
+  Window child = None;
   Atom type = None;
   int format;
   unsigned long nitems, after;
   unsigned char *data;
-  int dest_x, dest_y;
   
   static Atom wm_state_atom = None;
 
@@ -408,6 +410,8 @@ get_client_window_at_coords_recurse (Window  win,
       return win;
     }
 
+#if 0
+  /* This is beautiful! Damn Enlightenment and click-to-focus */
   XTranslateCoordinates (gdk_display, gdk_root_window, win,
 			 x_root, y_root, &dest_x, &dest_y, &child);
 
@@ -416,18 +420,49 @@ get_client_window_at_coords_recurse (Window  win,
       gdk_error_code = 0;
       return None;
     }
+  
+#else
+  if (XQueryTree(gdk_display, win,
+		 &root, &tmp_parent, &children, &nchildren) == 0)
+    return 0;
+
+  if (gdk_error_code == 0)
+    {
+      for (i = nchildren - 1; (i >= 0) && (child == None); i--)
+	{
+	  XWindowAttributes xwa;
+	  
+	  XGetWindowAttributes (gdk_display, children[i], &xwa);
+	  
+	  if (gdk_error_code != 0)
+	    gdk_error_code = 0;
+	  else if ((xwa.map_state == IsViewable) && (xwa.class == InputOutput) &&
+		   (x >= xwa.x) && (x < xwa.x + (gint)xwa.width) &&
+		   (y >= xwa.y) && (y < xwa.y + (gint)xwa.height))
+	    {
+	      x -= xwa.x;
+	      y -= xwa.y;
+	      child = children[i];
+	    }
+	}
+      
+      XFree (children);
+    }
+  else
+    gdk_error_code = 0;
+#endif  
 
   if (child)
-    return get_client_window_at_coords_recurse (child, x_root, y_root);
+    return get_client_window_at_coords_recurse (child, x, y);
   else
     return None;
 }
 
 Window 
 get_client_window_at_coords (GdkWindowCache *cache,
-			     Window  ignore,
-			     gint    x_root,
-			     gint    y_root)
+			     Window          ignore,
+			     gint            x_root,
+			     gint            y_root)
 {
   GList *tmp_list;
   Window retval = None;
@@ -449,7 +484,8 @@ get_client_window_at_coords (GdkWindowCache *cache,
 	      (y_root >= child->y) && (y_root < child->y + child->height))
 	    {
 	      retval = get_client_window_at_coords_recurse (child->xid,
-							    x_root, y_root);
+							    x_root - child->x, 
+							    y_root - child->y);
 	      if (!retval)
 		retval = child->xid;
 	    }
@@ -532,7 +568,7 @@ get_client_window_at_coords (Window  ignore,
   if (XQueryTree(gdk_display, gdk_root_window, 
 		 &root, &parent, &children, &nchildren) == 0)
     return 0;
-  
+
   for (i = nchildren - 1; (i >= 0) && (retval == None); i--)
     {
       if (children[i] != ignore)

@@ -1,3 +1,14 @@
+Mon Oct 19 16:41:44 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.h (struct _GtkWidgetClass): Add in coordinates
+	into function prototype for drag_data_received. 
+
+Mon Oct 19 16:40:40 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdnd.c (get_client_window_at_coords_recurse): Modify
+	client window finding code so that it works with
+	WM's other than fvwm.
+
 Mon Oct 19 08:31:36 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_selection_received): Fixed

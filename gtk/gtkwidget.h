@@ -361,6 +361,8 @@ struct _GtkWidgetClass
 				    guint               time);
   void (* drag_data_received)      (GtkWidget          *widget,
 				    GdkDragContext     *context,
+				    gint                x,
+				    gint                y,
 				    GtkSelectionData   *selection_data,
 				    guint               info,
 				    guint32             time);
