@@ -273,7 +273,7 @@ msgstr "*"
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1215
 msgid "(nil)"
-msgstr ""
+msgstr "(nil)"
 
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
