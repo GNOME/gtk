@@ -6366,7 +6366,9 @@ gtk_tree_view_real_select_cursor_row (GtkTreeView *tree_view,
 
   gtk_get_current_event_state (&state);
 
-  if (start_editing && tree_view->priv->focus_column)
+  if (! (state & GDK_SHIFT_MASK) &&
+      start_editing &&
+      tree_view->priv->focus_column)
     {
       if (gtk_tree_view_start_editing (tree_view, cursor_path))
 	{
@@ -6385,6 +6387,9 @@ gtk_tree_view_real_select_cursor_row (GtkTreeView *tree_view,
   gtk_widget_grab_focus (GTK_WIDGET (tree_view));
   _gtk_tree_view_queue_draw_node (tree_view, cursor_tree, cursor_node, NULL);
 
+  if (! (state & GDK_SHIFT_MASK))
+    gtk_tree_view_row_activated (tree_view, cursor_path, tree_view->priv->focus_column);
+    
   gtk_tree_path_free (cursor_path);
 }
 
