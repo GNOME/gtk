@@ -1150,6 +1150,21 @@ gtk_list_store_append (GtkListStore *list_store,
   gtk_tree_path_free (path);
 }
 
+void
+gtk_list_store_clear (GtkListStore *list_store)
+{
+  GtkTreeIter iter;
+  g_return_if_fail (GTK_IS_LIST_STORE (list_store));
+
+  while (list_store->root)
+    {
+      iter.stamp = list_store->stamp;
+      iter.user_data = list_store->root;
+      gtk_list_store_remove (list_store, &iter);
+    }
+}
+
+
 static gboolean
 gtk_list_store_drag_data_delete (GtkTreeDragSource *drag_source,
                                  GtkTreePath       *path)
@@ -1161,14 +1176,10 @@ gtk_list_store_drag_data_delete (GtkTreeDragSource *drag_source,
                                &iter,
                                path))
     {
-      gtk_list_store_remove (GTK_LIST_STORE (drag_source),
-                             &iter);
+      gtk_list_store_remove (GTK_LIST_STORE (drag_source), &iter);
       return TRUE;
     }
-  else
-    {
-      return FALSE;
-    }
+  return FALSE;
 }
 
 static gboolean

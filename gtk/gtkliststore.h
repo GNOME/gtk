@@ -93,7 +93,7 @@ void          gtk_list_store_prepend         (GtkListStore *store,
 					      GtkTreeIter  *iter);
 void          gtk_list_store_append          (GtkListStore *store,
 					      GtkTreeIter  *iter);
-
+void          gtk_list_store_clear           (GtkListStore *store);
 
 
 #ifdef __cplusplus

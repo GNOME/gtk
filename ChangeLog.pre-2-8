@@ -1,3 +1,9 @@
+Tue Jun 19 19:13:19 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkliststore.c (gtk_list_store_clear): 
+	* gtk/gtktreestore.c (gtk_tree_store_clear): New functions to
+	clear a model.
+
 Mon Jun 18 02:00:49 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.c (gtk_widget_get_property): fix PROP_EVENTS.

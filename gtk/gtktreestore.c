@@ -1059,6 +1059,21 @@ gtk_tree_store_iter_depth (GtkTreeStore *model,
   return g_node_depth (G_NODE (iter->user_data)) - 1;
 }
 
+
+void
+gtk_tree_store_clear (GtkTreeStore *tree_store)
+{
+  GtkTreeIter iter;
+  g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
+
+  while (G_NODE (tree_store->root)->children)
+    {
+      iter.stamp = tree_store->stamp;
+      iter.user_data = G_NODE (tree_store->root)->children;
+      gtk_tree_store_remove (tree_store, &iter);
+    }
+}
+
 /* DND */
 
 
@@ -1761,5 +1776,6 @@ validate_gnode (GNode* node)
       iter = iter->next;
     }
 }
+
 
 
