@@ -5,36 +5,37 @@
 # Chih-Wei Huang <cwhuang@linux.org.tw>, 2000.
 # Abel Cheung <maddog@linux.org.hk>, 2001.
 # He Qiangqiang <carton@263.net>, 2001.
-# Funda Wang <fundawang@en2china.com>, 2003
+# Funda Wang <fundawang@linux.net.cn>, 2003
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.x\n"
-"POT-Creation-Date: 2003-01-20 20:09+0100\n"
-"PO-Revision-Date: 2003-01-21 11:38+0800\n"
-"Last-Translator: Funda Wang <fundawang@en2china.com>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-08-16 20:37+0200\n"
+"PO-Revision-Date: 2003-08-17 09:01+0800\n"
+"Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:736
+#: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:737
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "无法打开文件“%s”：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:157 gdk-pixbuf/gdk-pixbuf-io.c:746
+#: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:747
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "图像文件“%s”没有内容"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:197 gdk-pixbuf/gdk-pixbuf-io.c:780
+#: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:781
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "无法载入图像“%s”：原因未知，可能是图像文件已损坏"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:225
+#: gdk-pixbuf/gdk-pixbuf-animation.c:226
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
@@ -67,22 +68,22 @@ msgstr "无法识别文件“%s”的图像文件格式"
 msgid "Unrecognized image file format"
 msgstr "无法识别的图像文件格式"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:791
+#: gdk-pixbuf/gdk-pixbuf-io.c:792
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "无法载入图像“%s”：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:899
+#: gdk-pixbuf/gdk-pixbuf-io.c:900
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "此 gdk-pixbuf 不支持要保存的图像格式：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1004
+#: gdk-pixbuf/gdk-pixbuf-io.c:1008
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "无法写入“%s”：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1025
+#: gdk-pixbuf/gdk-pixbuf-io.c:1029
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -94,7 +95,7 @@ msgstr "写入图像时无法关闭“%s”，可能没有保存数据：%s"
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "图像类型“%s”不支持渐进式载入"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:356 gdk-pixbuf/gdk-pixbuf-loader.c:457
+#: gdk-pixbuf/gdk-pixbuf-loader.c:356 gdk-pixbuf/gdk-pixbuf-loader.c:458
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
@@ -159,110 +160,102 @@ msgstr "BMP 图像有伪造的头数据"
 msgid "The BMP image format"
 msgstr "BMP 图像格式"
 
-#: gdk-pixbuf/io-gif.c:219
+#: gdk-pixbuf/io-gif.c:220
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr "无法读入 GIF：%s"
 
-#: gdk-pixbuf/io-gif.c:491 gdk-pixbuf/io-gif.c:1428 gdk-pixbuf/io-gif.c:1589
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1431 gdk-pixbuf/io-gif.c:1592
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF 文件缺少了某些数据(可能文件被截短了？)"
 
-#: gdk-pixbuf/io-gif.c:500
+#: gdk-pixbuf/io-gif.c:501
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "GIF 文件载入模块产生内部程序错误(%s)"
 
-#: gdk-pixbuf/io-gif.c:574
+#: gdk-pixbuf/io-gif.c:575
 msgid "Stack overflow"
 msgstr "栈溢出"
 
-#: gdk-pixbuf/io-gif.c:634
+#: gdk-pixbuf/io-gif.c:635
 msgid "GIF image loader can't understand this image."
 msgstr "GIF 文件载入模块无法分析此图像。"
 
-#: gdk-pixbuf/io-gif.c:663
+#: gdk-pixbuf/io-gif.c:664
 msgid "Bad code encountered"
 msgstr "遇到了错误的代码"
 
-#: gdk-pixbuf/io-gif.c:673
+#: gdk-pixbuf/io-gif.c:674
 msgid "Circular table entry in GIF file"
 msgstr "GIF 文件中的表项循环"
 
-#: gdk-pixbuf/io-gif.c:806 gdk-pixbuf/io-gif.c:1416 gdk-pixbuf/io-gif.c:1462
-#: gdk-pixbuf/io-gif.c:1577
+#: gdk-pixbuf/io-gif.c:826 gdk-pixbuf/io-gif.c:1419 gdk-pixbuf/io-gif.c:1465
+#: gdk-pixbuf/io-gif.c:1580
 msgid "Not enough memory to load GIF file"
 msgstr "内存不足以载入 GIF 文件"
 
-#: gdk-pixbuf/io-gif.c:1053
+#: gdk-pixbuf/io-gif.c:1074
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF 图像已损坏(不正确的 LZW 压缩数据)"
 
-#: gdk-pixbuf/io-gif.c:1103
+#: gdk-pixbuf/io-gif.c:1124
 msgid "File does not appear to be a GIF file"
 msgstr "文件好像不是 GIF 文件"
 
-#: gdk-pixbuf/io-gif.c:1115
+#: gdk-pixbuf/io-gif.c:1136
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "不支持 %s 版本的 GIF 文件格式"
 
-#: gdk-pixbuf/io-gif.c:1188
-msgid "GIF image contained a frame with height or width 0."
-msgstr "GIF 图像中的一帧高度或宽度为 0。"
-
-#: gdk-pixbuf/io-gif.c:1201
+#: gdk-pixbuf/io-gif.c:1211
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr "GIF 图像中的一帧超出了图像边界。"
 
-#: gdk-pixbuf/io-gif.c:1217
-msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
-msgstr "GIF 图像第一帧的消隐模式为“恢复上一帧”。"
-
-#: gdk-pixbuf/io-gif.c:1252
+#: gdk-pixbuf/io-gif.c:1255
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr "GIF 图像没有全局色彩表表，它其中的一帧也没有局部色彩表表。"
 
-#: gdk-pixbuf/io-gif.c:1484
+#: gdk-pixbuf/io-gif.c:1487
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF 文件被截断或是不完整。"
 
-#: gdk-pixbuf/io-gif.c:1636
+#: gdk-pixbuf/io-gif.c:1639
 msgid "The GIF image format"
 msgstr "GIF 图像格式"
 
-#: gdk-pixbuf/io-ico.c:218 gdk-pixbuf/io-ico.c:277 gdk-pixbuf/io-ico.c:338
-#: gdk-pixbuf/io-ico.c:401 gdk-pixbuf/io-ico.c:418
+#: gdk-pixbuf/io-ico.c:217 gdk-pixbuf/io-ico.c:269 gdk-pixbuf/io-ico.c:330
+#: gdk-pixbuf/io-ico.c:393 gdk-pixbuf/io-ico.c:410
 msgid "Not enough memory to load icon"
 msgstr "内存不足以载入图标"
 
-#: gdk-pixbuf/io-ico.c:262
+#: gdk-pixbuf/io-ico.c:254
 msgid "Invalid header in icon"
 msgstr "图标头无效"
 
-#: gdk-pixbuf/io-ico.c:299
+#: gdk-pixbuf/io-ico.c:291
 msgid "Icon has zero width"
 msgstr "图标宽度为零"
 
-#: gdk-pixbuf/io-ico.c:309
+#: gdk-pixbuf/io-ico.c:301
 msgid "Icon has zero height"
 msgstr "图标高度为零"
 
-#: gdk-pixbuf/io-ico.c:353
+#: gdk-pixbuf/io-ico.c:345
 msgid "Compressed icons are not supported"
 msgstr "不支持压缩图标"
 
-#: gdk-pixbuf/io-ico.c:386
+#: gdk-pixbuf/io-ico.c:378
 msgid "Unsupported icon type"
 msgstr "不支持的图标类型"
 
-#: gdk-pixbuf/io-ico.c:466
+#: gdk-pixbuf/io-ico.c:458
 msgid "Not enough memory to load ICO file"
 msgstr "内存不足以载入 ICO 文件"
 
-#: gdk-pixbuf/io-ico.c:871
+#: gdk-pixbuf/io-ico.c:868
 msgid "The ICO image format"
 msgstr "ICO 图像格式"
 
@@ -460,112 +453,112 @@ msgstr "内存不足以载入 RAS 图像"
 msgid "The Sun raster image format"
 msgstr "Sun 矢量图像格式"
 
-#: gdk-pixbuf/io-tga.c:159
+#: gdk-pixbuf/io-tga.c:157
 msgid "Can't allocate memory for IOBuffer struct"
 msgstr "无法为 IOBuffer 结构分配内存"
 
-#: gdk-pixbuf/io-tga.c:178
+#: gdk-pixbuf/io-tga.c:176
 msgid "Can't allocate memory for IOBuffer data"
 msgstr "无法为 IOBuffer 数据分配内存"
 
-#: gdk-pixbuf/io-tga.c:189
+#: gdk-pixbuf/io-tga.c:187
 msgid "Can't realloc IOBuffer data"
 msgstr "无法重新分配 IOBuffer 数据"
 
-#: gdk-pixbuf/io-tga.c:219
+#: gdk-pixbuf/io-tga.c:217
 msgid "Can't allocate temporary IOBuffer data"
 msgstr "无法为临时 IOBuffer 数据分配内存"
 
-#: gdk-pixbuf/io-tga.c:283
+#: gdk-pixbuf/io-tga.c:281
 msgid "fread() failed -- premature end-of-file probably encountered"
 msgstr "fread() 失败 -- 可能文件过早结束"
 
-#: gdk-pixbuf/io-tga.c:293
+#: gdk-pixbuf/io-tga.c:291
 msgid "fseek() failed -- premature end-of-file probably encountered"
 msgstr "fseek() 失败 -- 可能文件过早结束"
 
-#: gdk-pixbuf/io-tga.c:326
+#: gdk-pixbuf/io-tga.c:324
 msgid "Can't allocate new pixbuf"
 msgstr "无法分配新像素缓冲"
 
-#: gdk-pixbuf/io-tga.c:639
+#: gdk-pixbuf/io-tga.c:637
 msgid "Can't allocate colormap structure"
 msgstr "无法分配色彩表结构"
 
-#: gdk-pixbuf/io-tga.c:646
+#: gdk-pixbuf/io-tga.c:644
 msgid "Can't allocate colormap entries"
 msgstr "无法分配色彩表项"
 
-#: gdk-pixbuf/io-tga.c:668
+#: gdk-pixbuf/io-tga.c:666
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "未预期的色彩表项位深"
 
-#: gdk-pixbuf/io-tga.c:686
+#: gdk-pixbuf/io-tga.c:684
 msgid "Can't allocate TGA header memory"
 msgstr "无法分配 TGA 头内存"
 
-#: gdk-pixbuf/io-tga.c:719
+#: gdk-pixbuf/io-tga.c:717
 msgid "TGA image has invalid dimensions"
 msgstr "TGA 图像尺寸无效"
 
-#: gdk-pixbuf/io-tga.c:725
+#: gdk-pixbuf/io-tga.c:723
 msgid "TGA image comment length is too long"
 msgstr "TGA 图像注释长度太长"
 
-#: gdk-pixbuf/io-tga.c:734 gdk-pixbuf/io-tga.c:743 gdk-pixbuf/io-tga.c:753
-#: gdk-pixbuf/io-tga.c:763 gdk-pixbuf/io-tga.c:770
+#: gdk-pixbuf/io-tga.c:732 gdk-pixbuf/io-tga.c:741 gdk-pixbuf/io-tga.c:751
+#: gdk-pixbuf/io-tga.c:761 gdk-pixbuf/io-tga.c:768
 msgid "TGA image type not supported"
 msgstr "不支持 TGA 图像类型"
 
-#: gdk-pixbuf/io-tga.c:816
+#: gdk-pixbuf/io-tga.c:814
 msgid "Can't allocate memory for TGA context struct"
 msgstr "无法为 TGA 上下文结构分配内存"
 
-#: gdk-pixbuf/io-tga.c:880
+#: gdk-pixbuf/io-tga.c:878
 msgid "Excess data in file"
 msgstr "文件中的数据超额"
 
-#: gdk-pixbuf/io-tga.c:926
+#: gdk-pixbuf/io-tga.c:924
 msgid "Can't allocate memory for TGA header"
 msgstr "无法为 TGA 头分配内存"
 
-#: gdk-pixbuf/io-tga.c:936
+#: gdk-pixbuf/io-tga.c:934
 msgid "Too big value in the infolen field of TGA header."
 msgstr "TGA 头 infolen 域的值太大"
 
-#: gdk-pixbuf/io-tga.c:960
+#: gdk-pixbuf/io-tga.c:958
 msgid "Can't allocate memory for TGA cmap temporary buffer"
 msgstr "无法为 TGA 色彩表临时缓冲区分配内存"
 
-#: gdk-pixbuf/io-tga.c:972
+#: gdk-pixbuf/io-tga.c:970
 msgid "Can't allocate memory for TGA colormap struct"
 msgstr "无法为 TGA 色彩表结构分配内存"
 
-#: gdk-pixbuf/io-tga.c:981
+#: gdk-pixbuf/io-tga.c:979
 msgid "Can't allocate memory for TGA colormap entries"
 msgstr "无法为 TGA 色彩表项分配内存"
 
-#: gdk-pixbuf/io-tga.c:991
+#: gdk-pixbuf/io-tga.c:989
 msgid "Unexpected bitdepth for TGA colormap"
 msgstr "未预期的 TGA 色彩表位深"
 
-#: gdk-pixbuf/io-tga.c:1032
+#: gdk-pixbuf/io-tga.c:1030
 msgid "Pseudo-Color image without colormap"
 msgstr "伪彩色图像没有色彩表"
 
-#: gdk-pixbuf/io-tga.c:1039
+#: gdk-pixbuf/io-tga.c:1037
 msgid "Can't seek to image offset -- end-of-file probably encountered"
 msgstr "无法搜索图像偏移 -- 可能文件结束"
 
-#: gdk-pixbuf/io-tga.c:1053 gdk-pixbuf/io-tga.c:1155 gdk-pixbuf/io-tga.c:1225
+#: gdk-pixbuf/io-tga.c:1051 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1223
 msgid "Can't allocate pixbuf"
 msgstr "无法分配像素缓冲"
 
-#: gdk-pixbuf/io-tga.c:1295 gdk-pixbuf/io-tga.c:1324
+#: gdk-pixbuf/io-tga.c:1293 gdk-pixbuf/io-tga.c:1322
 msgid "Unsupported TGA image type"
 msgstr "不支持的 TGA 图像类型"
 
-#: gdk-pixbuf/io-tga.c:1370
+#: gdk-pixbuf/io-tga.c:1368
 msgid "The Targa image format"
 msgstr "Targa 图像格式"
 
@@ -889,7 +882,7 @@ msgstr "间距"
 msgid "The amount of space between children"
 msgstr "子部件间的间距总和"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:444
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:450
 msgid "Homogeneous"
 msgstr "统一大小"
 
@@ -927,18 +920,18 @@ msgstr "子部件和其邻接部件之间的额外空间，以像素为单位"
 msgid "Pack type"
 msgstr "包裹类型"
 
-#: gtk/gtkbox.c:168 gtk/gtknotebook.c:488
+#: gtk/gtkbox.c:168 gtk/gtknotebook.c:494
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr "表明子部件是否要包裹于父部件的开始或结束内的 GtkPackType 值。"
 
-#: gtk/gtkbox.c:174 gtk/gtknotebook.c:466 gtk/gtkpaned.c:218
+#: gtk/gtkbox.c:174 gtk/gtknotebook.c:472 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:138
 msgid "Position"
 msgstr "位置"
 
-#: gtk/gtkbox.c:175 gtk/gtknotebook.c:467
+#: gtk/gtkbox.c:175 gtk/gtknotebook.c:473
 msgid "The index of the child in the parent"
 msgstr "子部件在父部件中的索引"
 
@@ -1167,7 +1160,7 @@ msgstr "细节"
 msgid "Render detail to pass to the theme engine"
 msgstr "传递给主题引擎的渲染细节"
 
-#: gtk/gtkcellrenderertext.c:175 gtk/gtkentry.c:524 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:175 gtk/gtkentry.c:527 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "文字"
 
@@ -1223,12 +1216,12 @@ msgstr "前景色"
 msgid "Foreground color as a GdkColor"
 msgstr "以 GdkColor 方式表达的前景色"
 
-#: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:456 gtk/gtktexttag.c:273
-#: gtk/gtktextview.c:570
+#: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:459 gtk/gtktexttag.c:273
+#: gtk/gtktextview.c:576
 msgid "Editable"
 msgstr "可编辑"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:571
+#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:577
 msgid "Whether the text can be modified by the user"
 msgstr "用户是否可以修改文字"
 
@@ -1487,7 +1480,7 @@ msgstr "矛盾"
 msgid "Whether to display an \"inconsistent\" state"
 msgstr "是否显示“矛盾”状态"
 
-#: gtk/gtkcolorsel.c:559
+#: gtk/gtkcolorsel.c:561
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1496,17 +1489,17 @@ msgstr ""
 "先前选中的颜色，相对于您正选中的颜色。您可以拖动此颜色到调色板，或拖动此颜色"
 "到下一个颜色样品格内以作为当前选中颜色。"
 
-#: gtk/gtkcolorsel.c:564
+#: gtk/gtkcolorsel.c:566
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr "您选择的颜色。您可以拖动此颜色到调色板并将之保存供以后使用。"
 
-#: gtk/gtkcolorsel.c:926
+#: gtk/gtkcolorsel.c:927
 msgid "_Save color here"
 msgstr "在此保存颜色(_S)"
 
-#: gtk/gtkcolorsel.c:1129
+#: gtk/gtkcolorsel.c:1132
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1514,126 +1507,126 @@ msgstr ""
 "单击此调色板项可以将其变为当前颜色。要更改此项，请将颜色拖曳到此处，或者用鼠"
 "标右键单击之，然后选择“在此保存颜色”。"
 
-#: gtk/gtkcolorsel.c:1743
+#: gtk/gtkcolorsel.c:1756
 msgid "Has Opacity Control"
 msgstr "可以控制透明度"
 
-#: gtk/gtkcolorsel.c:1744
+#: gtk/gtkcolorsel.c:1757
 msgid "Whether the color selector should allow setting opacity"
 msgstr "颜色选择器是否允许设置透明度"
 
-#: gtk/gtkcolorsel.c:1750
+#: gtk/gtkcolorsel.c:1763
 msgid "Has palette"
 msgstr "有调色板"
 
-#: gtk/gtkcolorsel.c:1751
+#: gtk/gtkcolorsel.c:1764
 msgid "Whether a palette should be used"
 msgstr "是否使用调色板"
 
-#: gtk/gtkcolorsel.c:1757
+#: gtk/gtkcolorsel.c:1770
 msgid "Current Color"
 msgstr "当前颜色"
 
-#: gtk/gtkcolorsel.c:1758
+#: gtk/gtkcolorsel.c:1771
 msgid "The current color"
 msgstr "当前的颜色"
 
-#: gtk/gtkcolorsel.c:1764
+#: gtk/gtkcolorsel.c:1777
 msgid "Current Alpha"
 msgstr "当前 Alpha 值"
 
-#: gtk/gtkcolorsel.c:1765
+#: gtk/gtkcolorsel.c:1778
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "当前的透明度(0 为完全透明，65535 为完全不透明)"
 
-#: gtk/gtkcolorsel.c:1779
+#: gtk/gtkcolorsel.c:1792
 msgid "Custom palette"
 msgstr "自定义调色板"
 
-#: gtk/gtkcolorsel.c:1780
+#: gtk/gtkcolorsel.c:1793
 msgid "Palette to use in the color selector"
 msgstr "颜色选择器使用的调色板"
 
-#: gtk/gtkcolorsel.c:1821
+#: gtk/gtkcolorsel.c:1834
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr "在外围环中选择您要的颜色。在内部三角形中选择该颜色的明暗度。"
 
-#: gtk/gtkcolorsel.c:1846
+#: gtk/gtkcolorsel.c:1859
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr "单击滴管，然后点屏幕任何一处来选取该位置的颜色。"
 
-#: gtk/gtkcolorsel.c:1855
+#: gtk/gtkcolorsel.c:1868
 msgid "_Hue:"
 msgstr "色调(_H)："
 
-#: gtk/gtkcolorsel.c:1856
+#: gtk/gtkcolorsel.c:1869
 msgid "Position on the color wheel."
 msgstr "在色相环中的位置。"
 
-#: gtk/gtkcolorsel.c:1857
+#: gtk/gtkcolorsel.c:1870
 msgid "_Saturation:"
 msgstr "饱和度(_S)："
 
-#: gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorsel.c:1871
 msgid "\"Deepness\" of the color."
 msgstr "颜色的“深度”。"
 
-#: gtk/gtkcolorsel.c:1859
+#: gtk/gtkcolorsel.c:1872
 msgid "_Value:"
 msgstr "值(_V)："
 
-#: gtk/gtkcolorsel.c:1860
+#: gtk/gtkcolorsel.c:1873
 msgid "Brightness of the color."
 msgstr "颜色的亮度。"
 
-#: gtk/gtkcolorsel.c:1861
+#: gtk/gtkcolorsel.c:1874
 msgid "_Red:"
 msgstr "红(_R)："
 
-#: gtk/gtkcolorsel.c:1862
+#: gtk/gtkcolorsel.c:1875
 msgid "Amount of red light in the color."
 msgstr "颜色中的红色份量。"
 
-#: gtk/gtkcolorsel.c:1863
+#: gtk/gtkcolorsel.c:1876
 msgid "_Green:"
 msgstr "绿(_G)："
 
-#: gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorsel.c:1877
 msgid "Amount of green light in the color."
 msgstr "颜色中的绿色份量。"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1878
 msgid "_Blue:"
 msgstr "蓝(_B)："
 
-#: gtk/gtkcolorsel.c:1866
+#: gtk/gtkcolorsel.c:1879
 msgid "Amount of blue light in the color."
 msgstr "颜色中的蓝色份量。"
 
-#: gtk/gtkcolorsel.c:1869
+#: gtk/gtkcolorsel.c:1882
 msgid "_Opacity:"
 msgstr "透明度(_O)："
 
-#: gtk/gtkcolorsel.c:1877
+#: gtk/gtkcolorsel.c:1890
 msgid "Transparency of the currently-selected color."
 msgstr "当前选择的颜色的透明度。"
 
-#: gtk/gtkcolorsel.c:1892
+#: gtk/gtkcolorsel.c:1905
 msgid "Color _Name:"
 msgstr "颜色名称(_N)："
 
-#: gtk/gtkcolorsel.c:1904
+#: gtk/gtkcolorsel.c:1920
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
 "您可以在此栏输入 HTML 方式的十六进制颜色值，或是像“orange”这样的颜色名称。"
 
-#: gtk/gtkcolorsel.c:1923
+#: gtk/gtkcolorsel.c:1939
 msgid "_Palette"
 msgstr "调色板(_P)"
 
@@ -1773,157 +1766,157 @@ msgstr "动作区边界"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "对话框底部按钮区域周围的边界宽度"
 
-#: gtk/gtkentry.c:436 gtk/gtklabel.c:368
+#: gtk/gtkentry.c:439 gtk/gtklabel.c:368
 msgid "Cursor Position"
 msgstr "光标位置"
 
-#: gtk/gtkentry.c:437 gtk/gtklabel.c:369
+#: gtk/gtkentry.c:440 gtk/gtklabel.c:369
 msgid "The current position of the insertion cursor in chars"
 msgstr "插入光标的当前位置，以字符个数计。"
 
-#: gtk/gtkentry.c:446 gtk/gtklabel.c:378
+#: gtk/gtkentry.c:449 gtk/gtklabel.c:378
 msgid "Selection Bound"
 msgstr "选中内容的边界"
 
-#: gtk/gtkentry.c:447 gtk/gtklabel.c:379
+#: gtk/gtkentry.c:450 gtk/gtklabel.c:379
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "选中内容的另一端与光标位置的距离，以字符个数计。"
 
-#: gtk/gtkentry.c:457
+#: gtk/gtkentry.c:460
 msgid "Whether the entry contents can be edited"
 msgstr "是否可以编辑项的内容"
 
-#: gtk/gtkentry.c:464
+#: gtk/gtkentry.c:467
 msgid "Maximum length"
 msgstr "最大长度"
 
-#: gtk/gtkentry.c:465
+#: gtk/gtkentry.c:468
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "此项中最多可输入的字符数。零代表不限制"
 
-#: gtk/gtkentry.c:473
+#: gtk/gtkentry.c:476
 msgid "Visibility"
 msgstr "可见状态"
 
-#: gtk/gtkentry.c:474
+#: gtk/gtkentry.c:477
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr "FALSE 表示显示“不可见字符”而不是实际文字(密码模式)"
 
-#: gtk/gtkentry.c:481
+#: gtk/gtkentry.c:484
 msgid "Has Frame"
 msgstr "有边框"
 
-#: gtk/gtkentry.c:482
+#: gtk/gtkentry.c:485
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE 将去掉项的外层立体效果"
 
-#: gtk/gtkentry.c:489
+#: gtk/gtkentry.c:492
 msgid "Invisible character"
 msgstr "不可见字符"
 
-#: gtk/gtkentry.c:490
+#: gtk/gtkentry.c:493
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "用来屏蔽输入内容的字符(在“密码模式”下)"
 
-#: gtk/gtkentry.c:497
+#: gtk/gtkentry.c:500
 msgid "Activates default"
 msgstr "激活默认"
 
-#: gtk/gtkentry.c:498
+#: gtk/gtkentry.c:501
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr "键入回车键时，是否激活默认的部件(如对话框中的默认按钮)"
 
-#: gtk/gtkentry.c:504
+#: gtk/gtkentry.c:507
 msgid "Width in chars"
 msgstr "以字符数计宽度"
 
-#: gtk/gtkentry.c:505
+#: gtk/gtkentry.c:508
 msgid "Number of characters to leave space for in the entry"
 msgstr "项中空间所输入的字符数"
 
-#: gtk/gtkentry.c:514
+#: gtk/gtkentry.c:517
 msgid "Scroll offset"
 msgstr "滚动偏移"
 
-#: gtk/gtkentry.c:515
+#: gtk/gtkentry.c:518
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "向左滚动项时移动的像素数"
 
-#: gtk/gtkentry.c:525
+#: gtk/gtkentry.c:528
 msgid "The contents of the entry"
 msgstr "项内容"
 
-#: gtk/gtkentry.c:756
+#: gtk/gtkentry.c:759
 msgid "Select on focus"
 msgstr "聚焦时选中"
 
-#: gtk/gtkentry.c:757
+#: gtk/gtkentry.c:760
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "当一项被聚焦时是否选中其内容"
 
-#: gtk/gtkentry.c:3957 gtk/gtklabel.c:3222
+#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6621
 msgid "Select All"
 msgstr "选择全部"
 
-#: gtk/gtkentry.c:3967 gtk/gtklabel.c:3232
+#: gtk/gtkentry.c:4003 gtk/gtklabel.c:3232
 msgid "Input Methods"
 msgstr "输入法"
 
-#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6524
+#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6640
 msgid "_Insert Unicode control character"
 msgstr "插入 Unicode 控制字符(_I)"
 
-#: gtk/gtkfilesel.c:551 gtk/gtkimage.c:167
+#: gtk/gtkfilesel.c:556 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "文件名"
 
-#: gtk/gtkfilesel.c:552
+#: gtk/gtkfilesel.c:557
 msgid "The currently selected filename"
 msgstr "当前选择的文件名"
 
-#: gtk/gtkfilesel.c:558
+#: gtk/gtkfilesel.c:563
 msgid "Show file operations"
 msgstr "显示文件操作"
 
-#: gtk/gtkfilesel.c:559
+#: gtk/gtkfilesel.c:564
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "是否显示创建或处理文件的按钮。"
 
-#: gtk/gtkfilesel.c:566
+#: gtk/gtkfilesel.c:571
 msgid "Select multiple"
 msgstr "选择多个"
 
-#: gtk/gtkfilesel.c:567
+#: gtk/gtkfilesel.c:572
 msgid "Whether to allow multiple files to be selected"
 msgstr "是否允许选择多个文件"
 
-#: gtk/gtkfilesel.c:722
+#: gtk/gtkfilesel.c:727
 msgid "Folders"
 msgstr "文件夹"
 
-#: gtk/gtkfilesel.c:726
+#: gtk/gtkfilesel.c:731
 msgid "Fol_ders"
 msgstr "文件夹(_D)"
 
-#: gtk/gtkfilesel.c:758
+#: gtk/gtkfilesel.c:763
 msgid "Files"
 msgstr "文件"
 
-#: gtk/gtkfilesel.c:762
+#: gtk/gtkfilesel.c:767
 msgid "_Files"
 msgstr "文件(_F)"
 
-#: gtk/gtkfilesel.c:845 gtk/gtkfilesel.c:2243
+#: gtk/gtkfilesel.c:850 gtk/gtkfilesel.c:2240
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "文件夹不可读：%s"
 
-#: gtk/gtkfilesel.c:976
+#: gtk/gtkfilesel.c:981
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1933,25 +1926,25 @@ msgstr ""
 "文件“%s”位于另一台(名为 %s)机器上，可能无法被本程序访问。\n"
 "您确信要选择它？"
 
-#: gtk/gtkfilesel.c:1107
+#: gtk/gtkfilesel.c:1112
 msgid "_New Folder"
 msgstr "新建文件夹(_N)"
 
-#: gtk/gtkfilesel.c:1118
+#: gtk/gtkfilesel.c:1123
 msgid "De_lete File"
 msgstr "删除文件(_L)"
 
-#: gtk/gtkfilesel.c:1129
+#: gtk/gtkfilesel.c:1134
 msgid "_Rename File"
 msgstr "重命名文件(_R)"
 
-#: gtk/gtkfilesel.c:1425
+#: gtk/gtkfilesel.c:1436
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "文件夹名称“%s”含有不允许存在于文件名中的符号"
 
-#: gtk/gtkfilesel.c:1427
+#: gtk/gtkfilesel.c:1438
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1960,33 +1953,33 @@ msgstr ""
 "创建文件夹“%s” 出错：%s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1428 gtk/gtkfilesel.c:1669
+#: gtk/gtkfilesel.c:1439 gtk/gtkfilesel.c:1675
 msgid "You probably used symbols not allowed in filenames."
 msgstr "您可能使用了不允许存在于文件名中的符号。"
 
-#: gtk/gtkfilesel.c:1436
+#: gtk/gtkfilesel.c:1447
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "创建文件夹“%s”时出错：%s\n"
 
-#: gtk/gtkfilesel.c:1470
+#: gtk/gtkfilesel.c:1481
 msgid "New Folder"
 msgstr "新建文件夹"
 
-#: gtk/gtkfilesel.c:1485
+#: gtk/gtkfilesel.c:1496
 msgid "_Folder name:"
 msgstr "文件夹名称(_F)："
 
-#: gtk/gtkfilesel.c:1511
+#: gtk/gtkfilesel.c:1520
 msgid "C_reate"
 msgstr "创建(_R)"
 
-#: gtk/gtkfilesel.c:1557
+#: gtk/gtkfilesel.c:1563
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "文件名“%s”中含有不允许存在于文件名中的符号"
 
-#: gtk/gtkfilesel.c:1560
+#: gtk/gtkfilesel.c:1566
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1995,30 +1988,30 @@ msgstr ""
 "删除文件“%s”时出错：%s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1562 gtk/gtkfilesel.c:1683
+#: gtk/gtkfilesel.c:1568 gtk/gtkfilesel.c:1689
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "它可能含有不允许存在于文件名中的符号。"
 
-#: gtk/gtkfilesel.c:1571
+#: gtk/gtkfilesel.c:1577
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "删除文件“%s”时出错：%s"
 
-#: gtk/gtkfilesel.c:1614
+#: gtk/gtkfilesel.c:1620
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "真的要删除文件“%s”吗？"
 
-#: gtk/gtkfilesel.c:1619
+#: gtk/gtkfilesel.c:1625
 msgid "Delete File"
 msgstr "删除文件"
 
-#: gtk/gtkfilesel.c:1665 gtk/gtkfilesel.c:1679
+#: gtk/gtkfilesel.c:1671 gtk/gtkfilesel.c:1685
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "文件名“%s”含有不允许存在于文件名中的符号"
 
-#: gtk/gtkfilesel.c:1667
+#: gtk/gtkfilesel.c:1673
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2027,7 +2020,7 @@ msgstr ""
 "将文件重命名为“%s”时出错：%s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1681
+#: gtk/gtkfilesel.c:1687
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2036,44 +2029,44 @@ msgstr ""
 "重命名文件“%s”时出错：%s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1691
+#: gtk/gtkfilesel.c:1697
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "将重命名文件“%s”为“%s”时出错：%s"
 
-#: gtk/gtkfilesel.c:1738
+#: gtk/gtkfilesel.c:1744
 msgid "Rename File"
 msgstr "重命名文件"
 
-#: gtk/gtkfilesel.c:1753
+#: gtk/gtkfilesel.c:1759
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "将文件“%s”重命名为："
 
-#: gtk/gtkfilesel.c:1784
+#: gtk/gtkfilesel.c:1788
 msgid "_Rename"
 msgstr "重命名(_R)"
 
-#: gtk/gtkfilesel.c:2223
+#: gtk/gtkfilesel.c:2220
 msgid "_Selection: "
 msgstr "选中(_S)："
 
-#: gtk/gtkfilesel.c:3117
+#: gtk/gtkfilesel.c:3136
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
 msgstr "文件名“%s”无法转换到 UTF-8(请尝试设置环境变量 G_BROKEN_FILENAMES)：%s"
 
-#: gtk/gtkfilesel.c:3120
+#: gtk/gtkfilesel.c:3139
 msgid "Invalid Utf-8"
 msgstr "无效的 UTF-8"
 
-#: gtk/gtkfilesel.c:3997
+#: gtk/gtkfilesel.c:4016
 msgid "Name too long"
 msgstr "名称太长"
 
-#: gtk/gtkfilesel.c:3999
+#: gtk/gtkfilesel.c:4018
 msgid "Couldn't convert filename"
 msgstr "无法转换文件名"
 
@@ -2189,7 +2182,7 @@ msgid "_Gamma value"
 msgstr "Gamma 值(_G)"
 
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
-#: gtk/gtktoolbar.c:282 gtk/gtkviewport.c:150
+#: gtk/gtktoolbar.c:284 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "阴影类型"
 
@@ -2228,7 +2221,7 @@ msgstr "是使用咬合边属性的值还是使用句柄位置派生的值"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1692
+#: gtk/gtkiconfactory.c:1693
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "载入图标时出错：%s"
@@ -2312,6 +2305,10 @@ msgstr "图像部件"
 #: gtk/gtkimagemenuitem.c:125
 msgid "Child widget to appear next to the menu text"
 msgstr "菜单文字旁出现的子部件"
+
+#: gtk/gtkimmodule.c:419
+msgid "Default"
+msgstr "默认"
 
 #: gtk/gtkinputdialog.c:230
 msgid "Input"
@@ -2412,7 +2409,7 @@ msgstr "使用标记语言"
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "标签文字包含 XML 标记语言。参见 pango_parse_markup()"
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:587
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:593
 msgid "Justification"
 msgstr "对齐"
 
@@ -2550,7 +2547,7 @@ msgstr "在隐藏子菜单前鼠标指针必须远离子菜单的最短时间"
 msgid "Style of bevel around the menubar"
 msgstr "菜单栏的周围的立体样式"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:256
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:258
 msgid "Internal padding"
 msgstr "内部留空"
 
@@ -2624,121 +2621,121 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "部件的上下两端加上的空白，以像素计"
 
-#: gtk/gtknotebook.c:372
+#: gtk/gtknotebook.c:378
 msgid "Page"
 msgstr "页"
 
-#: gtk/gtknotebook.c:373
+#: gtk/gtknotebook.c:379
 msgid "The index of the current page"
 msgstr "当前页的索引"
 
-#: gtk/gtknotebook.c:381
+#: gtk/gtknotebook.c:387
 msgid "Tab Position"
 msgstr "标签位置"
 
-#: gtk/gtknotebook.c:382
+#: gtk/gtknotebook.c:388
 msgid "Which side of the notebook holds the tabs"
 msgstr "标签位于记事本哪一边"
 
-#: gtk/gtknotebook.c:389
+#: gtk/gtknotebook.c:395
 msgid "Tab Border"
 msgstr "标签边界"
 
-#: gtk/gtknotebook.c:390
+#: gtk/gtknotebook.c:396
 msgid "Width of the border around the tab labels"
 msgstr "标签标题周围的边界宽度"
 
-#: gtk/gtknotebook.c:398
+#: gtk/gtknotebook.c:404
 msgid "Horizontal Tab Border"
 msgstr "标签左右边界"
 
-#: gtk/gtknotebook.c:399
+#: gtk/gtknotebook.c:405
 msgid "Width of the horizontal border of tab labels"
 msgstr "标签标题左右两端的边界宽度"
 
-#: gtk/gtknotebook.c:407
+#: gtk/gtknotebook.c:413
 msgid "Vertical Tab Border"
 msgstr "标签上下边界"
 
-#: gtk/gtknotebook.c:408
+#: gtk/gtknotebook.c:414
 msgid "Width of the vertical border of tab labels"
 msgstr "标签标题上下两端的边界宽度"
 
-#: gtk/gtknotebook.c:416
+#: gtk/gtknotebook.c:422
 msgid "Show Tabs"
 msgstr "显示标签"
 
-#: gtk/gtknotebook.c:417
+#: gtk/gtknotebook.c:423
 msgid "Whether tabs should be shown or not"
 msgstr "是否应显示标签"
 
-#: gtk/gtknotebook.c:423
+#: gtk/gtknotebook.c:429
 msgid "Show Border"
 msgstr "显示边框"
 
-#: gtk/gtknotebook.c:424
+#: gtk/gtknotebook.c:430
 msgid "Whether the border should be shown or not"
 msgstr "是否应显示边框"
 
-#: gtk/gtknotebook.c:430
+#: gtk/gtknotebook.c:436
 msgid "Scrollable"
 msgstr "可滚动"
 
-#: gtk/gtknotebook.c:431
+#: gtk/gtknotebook.c:437
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "如设为 TRUE，如果标签太多无法全部显示时，会在旁边加上箭头来滚动"
 
-#: gtk/gtknotebook.c:437
+#: gtk/gtknotebook.c:443
 msgid "Enable Popup"
 msgstr "启用弹出菜单"
 
-#: gtk/gtknotebook.c:438
+#: gtk/gtknotebook.c:444
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr "如设为 TRUE，在记事本中按鼠标右键将弹出菜单，您可以用它来跳至某一页"
 
-#: gtk/gtknotebook.c:445
+#: gtk/gtknotebook.c:451
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "标签是否应统一大小"
 
-#: gtk/gtknotebook.c:452
+#: gtk/gtknotebook.c:458
 msgid "Tab label"
 msgstr "标签文字"
 
-#: gtk/gtknotebook.c:453
+#: gtk/gtknotebook.c:459
 msgid "The string displayed on the childs tab label"
 msgstr "子标签上要显示的字符串"
 
-#: gtk/gtknotebook.c:459
+#: gtk/gtknotebook.c:465
 msgid "Menu label"
 msgstr "菜单标签"
 
-#: gtk/gtknotebook.c:460
+#: gtk/gtknotebook.c:466
 msgid "The string displayed in the childs menu entry"
 msgstr "子菜单项中要显示的字符串"
 
-#: gtk/gtknotebook.c:473
+#: gtk/gtknotebook.c:479
 msgid "Tab expand"
 msgstr "标签展开"
 
-#: gtk/gtknotebook.c:474
+#: gtk/gtknotebook.c:480
 msgid "Whether to expand the childs tab or not"
 msgstr "是否展开子标签"
 
-#: gtk/gtknotebook.c:480
+#: gtk/gtknotebook.c:486
 msgid "Tab fill"
 msgstr "标签填充"
 
-#: gtk/gtknotebook.c:481
+#: gtk/gtknotebook.c:487
 msgid "Wheather the childs tab should fill the allocated area or not"
 msgstr "子标签是否要占满整个分配区域"
 
-#: gtk/gtknotebook.c:487
+#: gtk/gtknotebook.c:493
 msgid "Tab pack type"
 msgstr "标签包裹类型"
 
-#: gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4764
+#: gtk/gtknotebook.c:2473 gtk/gtknotebook.c:4820
 #, c-format
 msgid "Page %u"
 msgstr "第 %u 页"
@@ -2785,11 +2782,11 @@ msgid ""
 "Whether the preview widget should take up the entire space it is allocated"
 msgstr "预览部件是否占据为它分配的整个空间"
 
-#: gtk/gtkprogress.c:127
+#: gtk/gtkprogress.c:129
 msgid "Activity mode"
 msgstr "活动模式"
 
-#: gtk/gtkprogress.c:128
+#: gtk/gtkprogress.c:130
 msgid ""
 "If TRUE the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
@@ -2798,35 +2795,35 @@ msgstr ""
 "如果为真则 GtkProgress 处于活动模式，表示某项操作正在进行，但不显示操作的进展"
 "状况。当你不知道某项操作需要花多长时间时，可以用它。"
 
-#: gtk/gtkprogress.c:135
+#: gtk/gtkprogress.c:137
 msgid "Show text"
 msgstr "显示文字"
 
-#: gtk/gtkprogress.c:136
+#: gtk/gtkprogress.c:138
 msgid "Whether the progress is shown as text"
 msgstr "进度是否以文字方式显示"
 
-#: gtk/gtkprogress.c:143
+#: gtk/gtkprogress.c:145
 msgid "Text x alignment"
 msgstr "文字水平排列"
 
-#: gtk/gtkprogress.c:144
+#: gtk/gtkprogress.c:146
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
 msgstr "一个0.0与1.0之间的数值来表示在进度部件中文字的水平排列"
 
-#: gtk/gtkprogress.c:152
+#: gtk/gtkprogress.c:154
 msgid "Text y alignment"
 msgstr "文字垂直排列"
 
-#: gtk/gtkprogress.c:153
+#: gtk/gtkprogress.c:155
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
 msgstr "一个0.0与1.0之间的数值来表示在进度部件中文字的垂直排列"
 
-#: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:284 gtk/gtkspinbutton.c:240
+#: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:290 gtk/gtkspinbutton.c:240
 msgid "Adjustment"
 msgstr "调整部件"
 
@@ -2834,7 +2831,7 @@ msgstr "调整部件"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "连接到进度条的 GtkAdjustment 部件(不赞成使用)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:229
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:231
 msgid "Orientation"
 msgstr "方向"
 
@@ -2906,72 +2903,72 @@ msgstr "组"
 msgid "The radio button whose group this widget belongs."
 msgstr "此部件所属组的单选按钮"
 
-#: gtk/gtkrange.c:275
+#: gtk/gtkrange.c:281
 msgid "Update policy"
 msgstr "更新策略"
 
-#: gtk/gtkrange.c:276
+#: gtk/gtkrange.c:282
 msgid "How the range should be updated on the screen"
 msgstr "范围应该如何在屏幕上更新"
 
-#: gtk/gtkrange.c:285
+#: gtk/gtkrange.c:291
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "包含此范围对象当前值的 GtkAdjustment"
 
-#: gtk/gtkrange.c:292
+#: gtk/gtkrange.c:298
 msgid "Inverted"
 msgstr "反转"
 
-#: gtk/gtkrange.c:293
+#: gtk/gtkrange.c:299
 msgid "Invert direction slider moves to increase range value"
 msgstr "反向滑块移动增加范围值"
 
-#: gtk/gtkrange.c:299
+#: gtk/gtkrange.c:305
 msgid "Slider Width"
 msgstr "滑块宽度"
 
-#: gtk/gtkrange.c:300
+#: gtk/gtkrange.c:306
 msgid "Width of scrollbar or scale thumb"
 msgstr "滚动条或刻度块的宽度"
 
-#: gtk/gtkrange.c:307
+#: gtk/gtkrange.c:313
 msgid "Trough Border"
 msgstr "滑槽边框"
 
-#: gtk/gtkrange.c:308
+#: gtk/gtkrange.c:314
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "刻度/指示器和外部滑槽之间的间距"
 
-#: gtk/gtkrange.c:315
+#: gtk/gtkrange.c:321
 msgid "Stepper Size"
 msgstr "指示器大小"
 
-#: gtk/gtkrange.c:316
+#: gtk/gtkrange.c:322
 msgid "Length of step buttons at ends"
 msgstr "步进按钮最终的长度"
 
-#: gtk/gtkrange.c:323
+#: gtk/gtkrange.c:329
 msgid "Stepper Spacing"
 msgstr "指示器间距"
 
-#: gtk/gtkrange.c:324
+#: gtk/gtkrange.c:330
 msgid "Spacing between step buttons and thumb"
 msgstr "步进按钮和刻度之间的间距"
 
-#: gtk/gtkrange.c:331
+#: gtk/gtkrange.c:337
 msgid "Arrow X Displacement"
 msgstr "箭头水平位移"
 
-#: gtk/gtkrange.c:332
+#: gtk/gtkrange.c:338
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr "当按钮被按下时，要将箭头在水平方向上移动的距离"
 
-#: gtk/gtkrange.c:339
+#: gtk/gtkrange.c:345
 msgid "Arrow Y Displacement"
 msgstr "箭头垂直位移"
 
-#: gtk/gtkrange.c:340
+#: gtk/gtkrange.c:346
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "当按钮被按下时，要将箭头在垂直方向上移动的距离"
@@ -3109,11 +3106,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "在滚动条的另外一端显示第二个正向指示器"
 
-#: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:527
+#: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:528
 msgid "Horizontal Adjustment"
 msgstr "水平调整"
 
-#: gtk/gtkscrolledwindow.c:242 gtk/gtktext.c:609 gtk/gtktreeview.c:535
+#: gtk/gtkscrolledwindow.c:242 gtk/gtktext.c:609 gtk/gtktreeview.c:536
 msgid "Vertical Adjustment"
 msgstr "垂直调整"
 
@@ -3812,7 +3809,7 @@ msgstr ""
 "以相对于默认字体大小的缩放比例表示的字体大小。这可能适合主题更改，所以推荐使"
 "用。Pango 预先定义了一些缩放比例，如 PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:375 gtk/gtktextview.c:588
+#: gtk/gtktexttag.c:375 gtk/gtktextview.c:594
 msgid "Left, right, or center justification"
 msgstr "左对齐、右对齐或是居中对齐"
 
@@ -3833,7 +3830,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "左边距"
 
-#: gtk/gtktexttag.c:392 gtk/gtktextview.c:597
+#: gtk/gtktexttag.c:392 gtk/gtktextview.c:603
 msgid "Width of the left margin in pixels"
 msgstr "左边距的宽度(像素)"
 
@@ -3841,15 +3838,15 @@ msgstr "左边距的宽度(像素)"
 msgid "Right margin"
 msgstr "右边距"
 
-#: gtk/gtktexttag.c:402 gtk/gtktextview.c:607
+#: gtk/gtktexttag.c:402 gtk/gtktextview.c:613
 msgid "Width of the right margin in pixels"
 msgstr "右边距的宽度(像素)"
 
-#: gtk/gtktexttag.c:412 gtk/gtktextview.c:616
+#: gtk/gtktexttag.c:412 gtk/gtktextview.c:622
 msgid "Indent"
 msgstr "缩进"
 
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:617
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:623
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "段落缩进的大小(像素)"
 
@@ -3863,7 +3860,7 @@ msgstr "文字与下方(上方如果间距为负)水平基线的间距，按像�
 msgid "Pixels above lines"
 msgstr "行上像素"
 
-#: gtk/gtktexttag.c:434 gtk/gtktextview.c:541
+#: gtk/gtktexttag.c:434 gtk/gtktextview.c:547
 msgid "Pixels of blank space above paragraphs"
 msgstr "段落顶部的间距的像素数目"
 
@@ -3871,7 +3868,7 @@ msgstr "段落顶部的间距的像素数目"
 msgid "Pixels below lines"
 msgstr "行下像素"
 
-#: gtk/gtktexttag.c:444 gtk/gtktextview.c:551
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:557
 msgid "Pixels of blank space below paragraphs"
 msgstr "段落底部的间距的像素数目"
 
@@ -3879,7 +3876,7 @@ msgstr "段落底部的间距的像素数目"
 msgid "Pixels inside wrap"
 msgstr "回绕行间距"
 
-#: gtk/gtktexttag.c:454 gtk/gtktextview.c:561
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:567
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "段落内部的回绕行之间距离的像素数目"
 
@@ -3887,16 +3884,16 @@ msgstr "段落内部的回绕行之间距离的像素数目"
 msgid "Wrap mode"
 msgstr "换行模式"
 
-#: gtk/gtktexttag.c:481 gtk/gtktextview.c:579
+#: gtk/gtktexttag.c:481 gtk/gtktextview.c:585
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "选择永远不换行、词边界换行或是字符边界换行"
 
-#: gtk/gtktexttag.c:490 gtk/gtktextview.c:626
+#: gtk/gtktexttag.c:490 gtk/gtktextview.c:632
 msgid "Tabs"
 msgstr "制表符"
 
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:627
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:633
 msgid "Custom tabs for this text"
 msgstr "定制文字的制表符"
 
@@ -4056,39 +4053,39 @@ msgstr "ZWJ 零宽度接合(_J)"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ 零宽度非接合(_N)"
 
-#: gtk/gtktextview.c:540
+#: gtk/gtktextview.c:546
 msgid "Pixels Above Lines"
 msgstr "行上像素"
 
-#: gtk/gtktextview.c:550
+#: gtk/gtktextview.c:556
 msgid "Pixels Below Lines"
 msgstr "行下像素"
 
-#: gtk/gtktextview.c:560
+#: gtk/gtktextview.c:566
 msgid "Pixels Inside Wrap"
 msgstr "回绕行间距"
 
-#: gtk/gtktextview.c:578
+#: gtk/gtktextview.c:584
 msgid "Wrap Mode"
 msgstr "换行模式"
 
-#: gtk/gtktextview.c:596
+#: gtk/gtktextview.c:602
 msgid "Left Margin"
 msgstr "左边距"
 
-#: gtk/gtktextview.c:606
+#: gtk/gtktextview.c:612
 msgid "Right Margin"
 msgstr "右边距"
 
-#: gtk/gtktextview.c:634
+#: gtk/gtktextview.c:640
 msgid "Cursor Visible"
 msgstr "光标可见"
 
-#: gtk/gtktextview.c:635
+#: gtk/gtktextview.c:641
 msgid "If the insertion cursor is shown"
 msgstr "是否显示插入光标"
 
-#: gtk/gtktextview.c:6515
+#: gtk/gtktextview.c:6631
 msgid "Input _Methods"
 msgstr "输入法(_M)"
 
@@ -4117,64 +4114,64 @@ msgstr "绘制指示器"
 msgid "If the toggle part of the button is displayed"
 msgstr "是否显示按钮的切换标志"
 
-#: gtk/gtktoolbar.c:230
+#: gtk/gtktoolbar.c:232
 msgid "The orientation of the toolbar"
 msgstr "工具栏方向"
 
-#: gtk/gtktoolbar.c:238
+#: gtk/gtktoolbar.c:240
 msgid "Toolbar Style"
 msgstr "工具栏风格"
 
-#: gtk/gtktoolbar.c:239
+#: gtk/gtktoolbar.c:241
 msgid "How to draw the toolbar"
 msgstr "如何绘制工具栏"
 
-#: gtk/gtktoolbar.c:247
+#: gtk/gtktoolbar.c:249
 msgid "Spacer size"
 msgstr "间隔大小"
 
-#: gtk/gtktoolbar.c:248
+#: gtk/gtktoolbar.c:250
 msgid "Size of spacers"
 msgstr "工具栏上间隔的大小"
 
-#: gtk/gtktoolbar.c:257
+#: gtk/gtktoolbar.c:259
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "工具栏阴影与按钮之间的间距"
 
-#: gtk/gtktoolbar.c:265
+#: gtk/gtktoolbar.c:267
 msgid "Space style"
 msgstr "间隔风格"
 
-#: gtk/gtktoolbar.c:266
+#: gtk/gtktoolbar.c:268
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "间隔为垂直线或只是空白"
 
-#: gtk/gtktoolbar.c:274
+#: gtk/gtktoolbar.c:276
 msgid "Button relief"
 msgstr "按钮浮雕"
 
-#: gtk/gtktoolbar.c:275
+#: gtk/gtktoolbar.c:277
 msgid "Type of bevel around toolbar buttons"
 msgstr "工具栏按钮周围的立体效果类型"
 
-#: gtk/gtktoolbar.c:283
+#: gtk/gtktoolbar.c:285
 msgid "Style of bevel around the toolbar"
 msgstr "工具栏周围的立体效果样式"
 
-#: gtk/gtktoolbar.c:289
+#: gtk/gtktoolbar.c:291
 msgid "Toolbar style"
 msgstr "工具栏风格"
 
-#: gtk/gtktoolbar.c:290
+#: gtk/gtktoolbar.c:292
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr "默认工具栏是只有文字，文字和图标，还是只有图标，等等"
 
-#: gtk/gtktoolbar.c:296
+#: gtk/gtktoolbar.c:298
 msgid "Toolbar icon size"
 msgstr "工具栏图标大小"
 
-#: gtk/gtktoolbar.c:297
+#: gtk/gtktoolbar.c:299
 msgid "Size of icons in default toolbars"
 msgstr "默认工具栏上的图标大小"
 
@@ -4186,131 +4183,131 @@ msgstr "TreeModelSort 模型"
 msgid "The model for the TreeModelSort to sort"
 msgstr "TreeModelSort 排序的模型"
 
-#: gtk/gtktreeview.c:519
+#: gtk/gtktreeview.c:520
 msgid "TreeView Model"
 msgstr "树形视图模型"
 
-#: gtk/gtktreeview.c:520
+#: gtk/gtktreeview.c:521
 msgid "The model for the tree view"
 msgstr "树形视图的模型"
 
-#: gtk/gtktreeview.c:528
+#: gtk/gtktreeview.c:529
 msgid "Horizontal Adjustment for the widget"
 msgstr "部件的水平调整"
 
-#: gtk/gtktreeview.c:536
+#: gtk/gtktreeview.c:537
 msgid "Vertical Adjustment for the widget"
 msgstr "部件的垂直调整"
 
-#: gtk/gtktreeview.c:543 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:433
+#: gtk/gtktreeview.c:544 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:505
 msgid "Visible"
 msgstr "可见"
 
-#: gtk/gtktreeview.c:544
+#: gtk/gtktreeview.c:545
 msgid "Show the column header buttons"
 msgstr "显示列"
 
-#: gtk/gtktreeview.c:551
+#: gtk/gtktreeview.c:552
 msgid "Headers Clickable"
 msgstr "列首可点击"
 
-#: gtk/gtktreeview.c:552
+#: gtk/gtktreeview.c:553
 msgid "Column headers respond to click events"
 msgstr "列首响应鼠标点击事件"
 
-#: gtk/gtktreeview.c:559
+#: gtk/gtktreeview.c:560
 msgid "Expander Column"
 msgstr "扩展器列"
 
-#: gtk/gtktreeview.c:560
+#: gtk/gtktreeview.c:561
 msgid "Set the column for the expander column"
 msgstr "设置扩展器列"
 
-#: gtk/gtktreeview.c:567 gtk/gtktreeviewcolumn.c:284
+#: gtk/gtktreeview.c:568 gtk/gtktreeviewcolumn.c:284
 msgid "Reorderable"
 msgstr "可重新排列"
 
-#: gtk/gtktreeview.c:568
+#: gtk/gtktreeview.c:569
 msgid "View is reorderable"
 msgstr "视图可以重新排列"
 
-#: gtk/gtktreeview.c:575
+#: gtk/gtktreeview.c:576
 msgid "Rules Hint"
 msgstr "规则提示"
 
-#: gtk/gtktreeview.c:576
+#: gtk/gtktreeview.c:577
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "为主题引擎设置以不同颜色绘制行的提示"
 
-#: gtk/gtktreeview.c:583
+#: gtk/gtktreeview.c:584
 msgid "Enable Search"
 msgstr "启用搜索"
 
-#: gtk/gtktreeview.c:584
+#: gtk/gtktreeview.c:585
 msgid "View allows user to search through columns interactively"
 msgstr "视图允许用户在列中交互搜索"
 
-#: gtk/gtktreeview.c:591
+#: gtk/gtktreeview.c:592
 msgid "Search Column"
 msgstr "搜索列"
 
-#: gtk/gtktreeview.c:592
+#: gtk/gtktreeview.c:593
 msgid "Model column to search through when searching through code"
 msgstr "用代码搜索时通过搜索列的模型"
 
-#: gtk/gtktreeview.c:605
+#: gtk/gtktreeview.c:606
 msgid "Expander Size"
 msgstr "扩展器大小"
 
-#: gtk/gtktreeview.c:606
+#: gtk/gtktreeview.c:607
 msgid "Size of the expander arrow"
 msgstr "扩展器箭头的大小"
 
-#: gtk/gtktreeview.c:614
+#: gtk/gtktreeview.c:615
 msgid "Vertical Separator Width"
 msgstr "垂直分隔符宽度"
 
-#: gtk/gtktreeview.c:615
+#: gtk/gtktreeview.c:616
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "单元格之间的垂直空间。必须是偶数"
 
-#: gtk/gtktreeview.c:623
+#: gtk/gtktreeview.c:624
 msgid "Horizontal Separator Width"
 msgstr "水平分隔符宽度"
 
-#: gtk/gtktreeview.c:624
+#: gtk/gtktreeview.c:625
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "单元格之间的水平控件。必须是偶数"
 
-#: gtk/gtktreeview.c:632
+#: gtk/gtktreeview.c:633
 msgid "Allow Rules"
 msgstr "允许规则"
 
-#: gtk/gtktreeview.c:633
+#: gtk/gtktreeview.c:634
 msgid "Allow drawing of alternating color rows"
 msgstr "允许绘制颜色交替变化的行"
 
-#: gtk/gtktreeview.c:639
+#: gtk/gtktreeview.c:640
 msgid "Indent Expanders"
 msgstr "缩进扩展器"
 
-#: gtk/gtktreeview.c:640
+#: gtk/gtktreeview.c:641
 msgid "Make the expanders indented"
 msgstr "扩展器进行缩进"
 
-#: gtk/gtktreeview.c:646
+#: gtk/gtktreeview.c:647
 msgid "Even Row Color"
 msgstr "偶数行颜色"
 
-#: gtk/gtktreeview.c:647
+#: gtk/gtktreeview.c:648
 msgid "Color to use for even rows"
 msgstr "偶数行所使用的颜色"
 
-#: gtk/gtktreeview.c:653
+#: gtk/gtktreeview.c:654
 msgid "Odd Row Color"
 msgstr "奇数行颜色"
 
-#: gtk/gtktreeview.c:654
+#: gtk/gtktreeview.c:655
 msgid "Color to use for odd rows"
 msgstr "奇数行所使用的颜色"
 
@@ -4430,199 +4427,199 @@ msgstr "决定此时区垂直位置值的 GtkAdjustment"
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "决定怎样绘制视区周围的阴影框"
 
-#: gtk/gtkwidget.c:400
+#: gtk/gtkwidget.c:472
 msgid "Widget name"
 msgstr "部件名称"
 
-#: gtk/gtkwidget.c:401
+#: gtk/gtkwidget.c:473
 msgid "The name of the widget"
 msgstr "部件的名称"
 
-#: gtk/gtkwidget.c:407
+#: gtk/gtkwidget.c:479
 msgid "Parent widget"
 msgstr "父部件"
 
-#: gtk/gtkwidget.c:408
+#: gtk/gtkwidget.c:480
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "该部件的父部件。必须是一个容器部件"
 
-#: gtk/gtkwidget.c:415
+#: gtk/gtkwidget.c:487
 msgid "Width request"
 msgstr "宽度请求"
 
-#: gtk/gtkwidget.c:416
+#: gtk/gtkwidget.c:488
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
 msgstr "覆盖部件的宽度请求，设为 -1 代表应使用正常请求"
 
-#: gtk/gtkwidget.c:424
+#: gtk/gtkwidget.c:496
 msgid "Height request"
 msgstr "高度请求"
 
-#: gtk/gtkwidget.c:425
+#: gtk/gtkwidget.c:497
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
 msgstr "覆盖部件的高度请求，设为 -1 代表应使用正常请求"
 
-#: gtk/gtkwidget.c:434
+#: gtk/gtkwidget.c:506
 msgid "Whether the widget is visible"
 msgstr "部件是否可见"
 
-#: gtk/gtkwidget.c:440
+#: gtk/gtkwidget.c:512
 msgid "Sensitive"
 msgstr "接受输入"
 
-#: gtk/gtkwidget.c:441
+#: gtk/gtkwidget.c:513
 msgid "Whether the widget responds to input"
 msgstr "部件是否响应用户输入"
 
-#: gtk/gtkwidget.c:447
+#: gtk/gtkwidget.c:519
 msgid "Application paintable"
 msgstr "可绘图"
 
-#: gtk/gtkwidget.c:448
+#: gtk/gtkwidget.c:520
 msgid "Whether the application will paint directly on the widget"
 msgstr "应用程序是否可以直接在此部件上绘图"
 
-#: gtk/gtkwidget.c:454
+#: gtk/gtkwidget.c:526
 msgid "Can focus"
 msgstr "接受焦点"
 
-#: gtk/gtkwidget.c:455
+#: gtk/gtkwidget.c:527
 msgid "Whether the widget can accept the input focus"
 msgstr "部件是否可以接受输入焦点"
 
-#: gtk/gtkwidget.c:461
+#: gtk/gtkwidget.c:533
 msgid "Has focus"
 msgstr "有焦点"
 
-#: gtk/gtkwidget.c:462
+#: gtk/gtkwidget.c:534
 msgid "Whether the widget has the input focus"
 msgstr "部件是否已经拥有输入焦点"
 
-#: gtk/gtkwidget.c:468
+#: gtk/gtkwidget.c:540
 msgid "Is focus"
 msgstr "为焦点"
 
-#: gtk/gtkwidget.c:469
+#: gtk/gtkwidget.c:541
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "部件是否是顶级部件内的聚焦部件"
 
-#: gtk/gtkwidget.c:475
+#: gtk/gtkwidget.c:547
 msgid "Can default"
 msgstr "可成为默认"
 
-#: gtk/gtkwidget.c:476
+#: gtk/gtkwidget.c:548
 msgid "Whether the widget can be the default widget"
 msgstr "部件是否可以成为默认的部件"
 
-#: gtk/gtkwidget.c:482
+#: gtk/gtkwidget.c:554
 msgid "Has default"
 msgstr "默认"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:555
 msgid "Whether the widget is the default widget"
 msgstr "部件是否是默认部件"
 
-#: gtk/gtkwidget.c:489
+#: gtk/gtkwidget.c:561
 msgid "Receives default"
 msgstr "接受默认动作"
 
-#: gtk/gtkwidget.c:490
+#: gtk/gtkwidget.c:562
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr "如设为 TRUE，部件在成为焦点后接受默认动作"
 
-#: gtk/gtkwidget.c:496
+#: gtk/gtkwidget.c:568
 msgid "Composite child"
 msgstr "复合部件成员"
 
-#: gtk/gtkwidget.c:497
+#: gtk/gtkwidget.c:569
 msgid "Whether the widget is part of a composite widget"
 msgstr "此部件是否是复合部件的一部分"
 
-#: gtk/gtkwidget.c:503
+#: gtk/gtkwidget.c:575
 msgid "Style"
 msgstr "样式"
 
-#: gtk/gtkwidget.c:504
+#: gtk/gtkwidget.c:576
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr "部件的样式，包含与外观有关的信息(颜色等)"
 
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:582
 msgid "Events"
 msgstr "事件"
 
-#: gtk/gtkwidget.c:511
+#: gtk/gtkwidget.c:583
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr "用于决定此部件可以接受哪些 GdkEvents 事件的事件掩码"
 
-#: gtk/gtkwidget.c:518
+#: gtk/gtkwidget.c:590
 msgid "Extension events"
 msgstr "扩展事件"
 
-#: gtk/gtkwidget.c:519
+#: gtk/gtkwidget.c:591
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr "此掩码决定部件可以接受哪些扩展事件"
 
-#: gtk/gtkwidget.c:1098
+#: gtk/gtkwidget.c:1170
 msgid "Interior Focus"
 msgstr "内部焦点"
 
-#: gtk/gtkwidget.c:1099
+#: gtk/gtkwidget.c:1171
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "是否在窗口部件内绘制焦点指示器"
 
-#: gtk/gtkwidget.c:1105
+#: gtk/gtkwidget.c:1177
 msgid "Focus linewidth"
 msgstr "焦点线宽"
 
-#: gtk/gtkwidget.c:1106
+#: gtk/gtkwidget.c:1178
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "以像素计算的焦点指示线的宽度"
 
-#: gtk/gtkwidget.c:1112
+#: gtk/gtkwidget.c:1184
 msgid "Focus line dash pattern"
 msgstr "焦点虚线样式"
 
-#: gtk/gtkwidget.c:1113
+#: gtk/gtkwidget.c:1185
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "焦点指示虚线的样式"
 
-#: gtk/gtkwidget.c:1118
+#: gtk/gtkwidget.c:1190
 msgid "Focus padding"
 msgstr "焦点留空"
 
-#: gtk/gtkwidget.c:1119
+#: gtk/gtkwidget.c:1191
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "以像素计算的焦点指示线与部件“框”的宽度"
 
-#: gtk/gtkwidget.c:1124
+#: gtk/gtkwidget.c:1196
 msgid "Cursor color"
 msgstr "光标颜色"
 
-#: gtk/gtkwidget.c:1125
+#: gtk/gtkwidget.c:1197
 msgid "Color with which to draw insertion cursor"
 msgstr "绘制插入光标时使用的颜色"
 
-#: gtk/gtkwidget.c:1130
+#: gtk/gtkwidget.c:1202
 msgid "Secondary cursor color"
 msgstr "次光标颜色"
 
-#: gtk/gtkwidget.c:1131
+#: gtk/gtkwidget.c:1203
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
 msgstr "混合编辑从左至右和从右至左文字时用于绘制次要插入光标的颜色"
 
-#: gtk/gtkwidget.c:1136
+#: gtk/gtkwidget.c:1208
 msgid "Cursor line aspect ratio"
 msgstr "光标线高宽比"
 
-#: gtk/gtkwidget.c:1137
+#: gtk/gtkwidget.c:1209
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "绘制插入光标的高宽比"
 
@@ -4764,6 +4761,11 @@ msgid "Amharic (EZ+)"
 msgstr "阿姆哈拉语(EZ+)"
 
 #. ID
+#: modules/input/imcedilla.c:90
+msgid "Cedilla"
+msgstr "变音符"
+
+#. ID
 #: modules/input/imcyrillic-translit.c:216
 msgid "Cyrillic (Transliterated)"
 msgstr "西里尔语(音译)"
@@ -4803,18 +4805,18 @@ msgstr "越南语(VIQR)"
 msgid "X Input Method"
 msgstr "X 输入法"
 
-#: modules/input/gtkimcontextxim.c:260
+#: modules/input/gtkimcontextxim.c:276
 msgid "IM Preedit style"
 msgstr "输入法候选样式"
 
-#: modules/input/gtkimcontextxim.c:261
+#: modules/input/gtkimcontextxim.c:277
 msgid "How to draw the input method preedit string"
 msgstr "如何绘制输入法候选字符串"
 
-#: modules/input/gtkimcontextxim.c:269
+#: modules/input/gtkimcontextxim.c:285
 msgid "IM Status style"
 msgstr "输入法状态样式"
 
-#: modules/input/gtkimcontextxim.c:270
+#: modules/input/gtkimcontextxim.c:286
 msgid "How to draw the input method statusbar"
 msgstr "如何绘制输入法状态栏"
