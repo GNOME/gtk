@@ -1,3 +1,7 @@
+2002-12-05  Matthias Clasen  <maclas@gmx.de>
+
+	* io-ico.c: Remove leftover debug output.  (#100357, Owen Taylor)
+
 2002-12-04  Bastien Nocera  <hadess@hadess.net>
 
 	* io-tiff.c: (tiff_image_parse): use G_BIG_ENDIAN instead of

@@ -24,7 +24,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#define DUMPBIH
+#undef DUMPBIH
 /*
 
 Icons are just like BMP's, except for the header.
