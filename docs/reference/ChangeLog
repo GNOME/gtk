@@ -1,3 +1,9 @@
+Sat Oct 11 00:18:46 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkprogressbar.sgml: Included 
+	gtk_progress_bar_get_orientation() in the list of undeprecated 
+	functions, use less clumsy markup for enumerations.
+
 2003-10-02  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/Makefile.am (IGNORE_HFILES): Add gtkcellview.h and
