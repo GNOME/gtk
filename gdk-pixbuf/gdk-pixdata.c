@@ -865,7 +865,7 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
  * program, it's probably safe to ignore errors and disable length checks, 
  * since things will always succeed:
  * <informalexample><programlisting>
- * pixbuf = gdk_pixbuf_new_from_inline (-1, myimage_inline, NULL);
+ * pixbuf = gdk_pixbuf_new_from_inline (-1, myimage_inline, FALSE, NULL);
  * </programlisting></informalexample>
  *
  * For non-const inline data, you could get out of memory. For untrusted 

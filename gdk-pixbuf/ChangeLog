@@ -1,3 +1,8 @@
+2004-01-06  Federico Mena Quintero  <federico@ximian.com>
+
+	* gdk-pixdata.c (gdk_pixbuf_new_from_inline): Fix example in
+	documentation comment.  Fixes #130701.
+
 Wed Jan  7 02:41:14 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-io.c (gdk_pixbuf_save_to_bufferv): 
