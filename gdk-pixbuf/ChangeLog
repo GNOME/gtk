@@ -1,3 +1,11 @@
+1999-11-17  Larry Ewing  <lewing@gimp.org>
+
+	* src/gnome-canvas-pixbuf.c (gnome_canvas_pixbuf_bounds):
+	implement the bounds method correctly.
+	(compute_viewport_affine): compute the affine need to fit the 
+	image within the viewport given by the args.
+	(compute_render_affine): call compute_viewport_affine.
+
 1999-11-16  Havoc Pennington  <hp@pobox.com>
 
 	* src/gdk-pixbuf-drawable.h: Use includes from the current

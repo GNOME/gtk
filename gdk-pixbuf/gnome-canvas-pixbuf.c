@@ -454,20 +454,19 @@ compute_xform_scaling (double *affine, ArtPoint *i_c, ArtPoint *j_c)
 	j_c->y -= orig_c.y;
 }
 
-/* Computes the affine transformation with which the pixbuf needs to be
- * transformed to render it on the canvas.  This is not the same as the
- * item_to_canvas transformation because we may need to scale the pixbuf by some
- * other amount.
+/* computes the addtional resolution dependent affine needed to
+ * fit the image within its viewport defined by x,y,width and height
+ * args
  */
 static void
-compute_render_affine (GnomeCanvasPixbuf *gcp, double *render_affine, double *i2c)
+compute_viewport_affine (GnomeCanvasPixbuf *gcp, double *viewport_affine, double *i2c)
 {
 	PixbufPrivate *priv;
 	ArtPoint i_c, j_c;
 	double i_len, j_len;
 	double si_len, sj_len;
 	double ti_len, tj_len;
-	double scale[6], translate[6], composite[6];
+	double scale[6], translate[6];
 	double w, h;
 	double x, y;
 
@@ -548,8 +547,21 @@ compute_render_affine (GnomeCanvasPixbuf *gcp, double *render_affine, double *i2
 
 	art_affine_scale (scale, si_len, sj_len);
 	art_affine_translate (translate, ti_len, tj_len);
-	art_affine_multiply (composite, scale, translate);
-	art_affine_multiply (render_affine, composite, i2c);
+	art_affine_multiply (viewport_affine, scale, translate);
+}
+
+/* Computes the affine transformation with which the pixbuf needs to be
+ * transformed to render it on the canvas.  This is not the same as the
+ * item_to_canvas transformation because we may need to scale the pixbuf 
+ * by some other amount.
+ */
+static void
+compute_render_affine (GnomeCanvasPixbuf *gcp, double *render_affine, double *i2c)
+{
+	double viewport_affine[6];
+	
+	compute_viewport_affine (gcp, viewport_affine, i2c);
+	art_affine_multiply (render_affine, viewport_affine, i2c);
 }
 
 /* Recomputes the bounding box of a pixbuf canvas item.  The horizontal and
@@ -809,25 +821,29 @@ gnome_canvas_pixbuf_bounds (GnomeCanvasItem *item, double *x1, double *y1, doubl
 {
 	GnomeCanvasPixbuf *gcp;
 	PixbufPrivate *priv;
+	double i2c[6], viewport_affine[6];
+	ArtDRect rect;
 
 	gcp = GNOME_CANVAS_PIXBUF (item);
 	priv = gcp->priv;
 
-	*x1 = 0.0;
-	*y1 = 0.0;
-
-	if (priv->pixbuf) {
-		if (priv->width_set)
-			*x2 = priv->width;
-		else
-			*x2 = priv->pixbuf->art_pixbuf->width;
-
-		if (priv->height_set)
-			*y2 = priv->height;
-		else
-			*y2 = priv->pixbuf->art_pixbuf->height;
-	} else {
-		*x2 = 0.0;
-		*y2 = 0.0;
+	if (!priv->pixbuf) {
+		*x1 = *y1 = *x2 = *y2 = 0.0;
+		return;
 	}
+
+	rect.x0 = 0.0;
+	rect.x1 = priv->pixbuf->art_pixbuf->width;
+
+	rect.y0 = 0.0;
+	rect.y1 = priv->pixbuf->art_pixbuf->height;
+       
+	gnome_canvas_item_i2c_affine (item, i2c);
+	compute_viewport_affine (gcp, viewport_affine, i2c);
+	art_drect_affine_transform (&rect, &rect, viewport_affine);
+
+	*x1 = rect.x0;
+	*y1 = rect.y0;
+	*x2 = rect.x1;
+	*y2 = rect.y1;
 }
