@@ -3069,7 +3069,8 @@ tree_delete (GtkCTree     *ctree,
 	{
 	  if (clist->selection_end && clist->selection_end == work)
 	    clist->selection_end = clist->selection_end->prev;
-	  clist->selection = g_list_remove (clist->selection, node);
+	  clist->selection = g_list_remove_link (clist->selection, work);
+	  g_list_free_1 (work);
 	}
     }
 
@@ -3425,7 +3426,11 @@ real_select_all (GtkCList *clist)
 
     case GTK_SELECTION_MULTIPLE:
       gtk_ctree_select_recursive (ctree, NULL);
-      break;;
+      break;
+
+    default:
+      /* do nothing */
+      break;
     }
 }
 
