@@ -52,7 +52,10 @@
 
 #include "gtkbindings.h"
 #include "gtkdnd.h"
+#include "gtkintl.h"
 #include "gtkmain.h"
+#include "gtkmenu.h"
+#include "gtkmenuitem.h"
 #include "gtksignal.h"
 #include "gtktext.h"
 #include "gtktextdisplay.h"
@@ -194,6 +197,7 @@ static void     gtk_text_view_set_values_from_style (GtkTextView        *text_vi
 						     GtkStyle           *style);
 static void     gtk_text_view_ensure_layout         (GtkTextView        *text_view);
 static void     gtk_text_view_destroy_layout        (GtkTextView        *text_view);
+static void     gtk_text_view_reset_im_context      (GtkTextView        *text_view);
 static void     gtk_text_view_start_selection_drag  (GtkTextView        *text_view,
 						     const GtkTextIter  *iter,
 						     GdkEventButton     *event);
@@ -205,15 +209,17 @@ static void     gtk_text_view_start_selection_dnd   (GtkTextView        *text_vi
 static void     gtk_text_view_start_cursor_blink    (GtkTextView        *text_view);
 static void     gtk_text_view_stop_cursor_blink     (GtkTextView        *text_view);
 
-static void gtk_text_view_value_changed (GtkAdjustment *adj,
-					 GtkTextView   *view);
-static void gtk_text_view_commit_handler            (GtkIMContext  *context,
-						     const gchar   *str,
-						     GtkTextView   *text_view);
+static void gtk_text_view_value_changed           (GtkAdjustment *adj,
+						   GtkTextView   *view);
+static void gtk_text_view_commit_handler          (GtkIMContext  *context,
+						   const gchar   *str,
+						   GtkTextView   *text_view);
+static void gtk_text_view_preedit_changed_handler (GtkIMContext  *context,
+						   GtkTextView   *text_view);
 
 static void gtk_text_view_mark_set_handler       (GtkTextBuffer     *buffer,
 						  const GtkTextIter *location,
-						  const char        *mark_name,
+						  GtkTextMark       *mark,
 						  gpointer           data);
 static void gtk_text_view_get_virtual_cursor_pos (GtkTextView       *text_view,
 						  gint              *x,
@@ -224,6 +230,9 @@ static void gtk_text_view_set_virtual_cursor_pos (GtkTextView       *text_view,
 
 static GtkAdjustment* get_hadjustment            (GtkTextView       *text_view);
 static GtkAdjustment* get_vadjustment            (GtkTextView       *text_view);
+
+static void gtk_text_view_popup_menu (GtkTextView    *text_view,
+				      GdkEventButton *event);
 
 enum {
   TARGET_STRING,
@@ -619,6 +628,8 @@ gtk_text_view_init (GtkTextView *text_view)
   
   gtk_signal_connect (GTK_OBJECT (text_view->im_context), "commit",
 		      GTK_SIGNAL_FUNC (gtk_text_view_commit_handler), text_view);
+  gtk_signal_connect (GTK_OBJECT (text_view->im_context), "preedit_changed",
+		      GTK_SIGNAL_FUNC (gtk_text_view_preedit_changed_handler), text_view);
 
   text_view->editable = TRUE;
   text_view->cursor_visible = TRUE;
@@ -1411,7 +1422,10 @@ gtk_text_view_unrealize (GtkWidget *widget)
       g_source_remove (text_view->incremental_validate_idle);
       text_view->incremental_validate_idle = 0;
     }
-    
+
+  if (text_view->popup_menu)
+    gtk_widget_destroy (text_view->popup_menu);
+  
   gtk_text_view_destroy_layout (text_view);
   
   gtk_im_context_set_client_window (text_view->im_context, NULL);
@@ -1570,7 +1584,6 @@ gtk_text_view_event (GtkWidget *widget, GdkEvent *event)
 
       insert = gtk_text_buffer_get_mark (text_view->buffer,
                                          "insert");      
-
       gtk_text_buffer_get_iter_at_mark (text_view->buffer, &iter, insert);
 
       return emit_event_on_tags (widget, event, &iter);
@@ -1595,7 +1608,10 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
     return TRUE;
 
   if (gtk_im_context_filter_keypress (text_view->im_context, event))
-    return TRUE;
+    {
+      text_view->need_im_reset = TRUE;
+      return TRUE;
+    }
   else if (event->keyval == GDK_Return)
     {
       gtk_text_buffer_insert_interactive_at_cursor (text_view->buffer, "\n", 1,
@@ -1625,14 +1641,18 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
   
   gtk_widget_grab_focus (widget);
 
+#if 0
   /* debug hack */
   if (event->button == 3 && (event->state & GDK_CONTROL_MASK) != 0)
     gtk_text_buffer_spew (GTK_TEXT_VIEW (widget)->buffer);
   else if (event->button == 3)
     gtk_text_layout_spew (GTK_TEXT_VIEW (widget)->layout);
+#endif  
 
   if (event->type == GDK_BUTTON_PRESS)
     {
+      gtk_text_view_reset_im_context (text_view);
+  
       if (event->button == 1)
         {
           /* If we're in the selection, start a drag copy/move of the
@@ -1674,10 +1694,7 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
         }
       else if (event->button == 3)
         {
-          if (gtk_text_view_end_selection_drag (text_view, event))
-            return TRUE;
-          else
-            return FALSE;
+	  gtk_text_view_popup_menu (text_view, event);
         }
     }
   
@@ -1709,6 +1726,7 @@ gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
       gtk_text_view_start_cursor_blink (text_view);
     }
 
+  text_view->need_im_reset = TRUE;
   gtk_im_context_focus_in (GTK_TEXT_VIEW (widget)->im_context);
   
   return FALSE;
@@ -1727,6 +1745,7 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
       gtk_text_view_stop_cursor_blink (text_view);
     }
 
+  text_view->need_im_reset = TRUE;
   gtk_im_context_focus_out (GTK_TEXT_VIEW (widget)->im_context);
   
   return FALSE;
@@ -1851,12 +1870,14 @@ gtk_text_view_move (GtkTextView     *text_view,
   
   gint cursor_x_pos = 0;
 
+  gtk_text_view_reset_im_context (text_view);
+  
   if (step == GTK_MOVEMENT_PAGES)
     {
       gtk_text_view_scroll_pages (text_view, count);
       return;
     }
-  
+
   gtk_text_buffer_get_iter_at_mark (text_view->buffer, &insert,
                                     gtk_text_buffer_get_mark (text_view->buffer,
                                                               "insert"));
@@ -2055,6 +2076,8 @@ gtk_text_view_delete (GtkTextView   *text_view,
   GtkTextIter start;
   GtkTextIter end;
   gboolean leave_one = FALSE;
+  
+  gtk_text_view_reset_im_context (text_view);
   
   if (type == GTK_DELETE_CHARS)
     {
@@ -2540,6 +2563,14 @@ gtk_text_view_destroy_layout (GtkTextView *text_view)
     }
 }
 
+static void
+gtk_text_view_reset_im_context (GtkTextView *text_view)
+{
+  if (text_view->need_im_reset)
+    text_view->need_im_reset = 0;
+
+  gtk_im_context_reset (text_view->im_context);
+}
 
 /*
  * DND feature
@@ -2910,19 +2941,45 @@ gtk_text_view_commit_handler (GtkIMContext  *context,
                                 0);
 }
 
+static void 
+gtk_text_view_preedit_changed_handler (GtkIMContext *context,
+				       GtkTextView  *text_view)
+{
+  gchar *str;
+  PangoAttrList *attrs;
+  
+  gtk_im_context_get_preedit_string (context, &str, &attrs);
+  gtk_text_layout_set_preedit_string (text_view->layout, str, attrs);
+
+  pango_attr_list_unref (attrs);
+  g_free (str);
+}
+
 static void
 gtk_text_view_mark_set_handler (GtkTextBuffer     *buffer,
 				const GtkTextIter *location,
-				const char        *mark_name,
+				GtkTextMark       *mark,
 				gpointer           data)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (data);
-  
-  if (!strcmp (mark_name, "insert"))
+  gboolean need_reset = FALSE;
+
+  const gchar *mark_name = gtk_text_mark_get_name (mark);
+
+  if (mark_name && strcmp (mark_name, "insert") == 0)
     {
       text_view->virtual_cursor_x = -1;
       text_view->virtual_cursor_y = -1;
+      need_reset = TRUE;
     }
+
+  if (mark_name && strcmp (mark_name, "selection_bound") == 0)
+    {
+      need_reset = TRUE;
+    }
+
+  if (need_reset)
+    gtk_text_view_reset_im_context (text_view);
 }
 
 static void
@@ -2975,4 +3032,68 @@ gtk_text_view_set_virtual_cursor_pos (GtkTextView *text_view,
 
   text_view->virtual_cursor_x = (x == -1) ? strong_pos.x : x;
   text_view->virtual_cursor_y = (y == -1) ? strong_pos.y + strong_pos.height / 2 : y;
+}
+
+/* Quick hack of a popup menu
+ */
+static void
+activate_cb (GtkWidget   *menuitem,
+	     GtkTextView *text_view)
+{
+  const gchar *signal = gtk_object_get_data (GTK_OBJECT (menuitem), "gtk-signal");
+  gtk_signal_emit_by_name (GTK_OBJECT (text_view), signal);
+}
+
+static void
+append_action_signal (GtkTextView  *text_view,
+		      GtkWidget    *menu,
+		      const gchar  *label,
+		      const gchar  *signal)
+{
+  GtkWidget *menuitem = gtk_menu_item_new_with_label (label);
+
+  gtk_object_set_data (GTK_OBJECT (menuitem), "gtk-signal", (char *)signal);
+  gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
+		      activate_cb, text_view);
+
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+}
+	
+static void
+popup_menu_detach (GtkWidget *attach_widget,
+		   GtkMenu   *menu)
+{
+  GTK_TEXT_VIEW (attach_widget)->popup_menu = NULL;
+}
+
+static void
+gtk_text_view_popup_menu (GtkTextView    *text_view,
+			  GdkEventButton *event)
+{
+  if (!text_view->popup_menu)
+    {
+      GtkWidget *menuitem;
+      
+      text_view->popup_menu = gtk_menu_new ();
+
+      gtk_menu_attach_to_widget (GTK_MENU (text_view->popup_menu),
+				 GTK_WIDGET (text_view),
+				 popup_menu_detach);
+
+      append_action_signal (text_view, text_view->popup_menu, _("Cut"), "cut_clipboard");
+      append_action_signal (text_view, text_view->popup_menu, _("Copy"), "copy_clipboard");
+      append_action_signal (text_view, text_view->popup_menu, _("Paste"), "paste_clipboard");
+
+      menuitem = gtk_menu_item_new (); /* Separator */
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (text_view->popup_menu), menuitem);
+
+      gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (text_view->im_context),
+					    GTK_MENU_SHELL (text_view->popup_menu));
+    }
+
+  gtk_menu_popup (GTK_MENU (text_view->popup_menu), NULL, NULL,
+		  NULL, NULL,
+		  event->button, event->time);
 }

@@ -25,14 +25,14 @@ gtk_text_mark_is_visible(GtkTextMark *mark)
   return seg->body.mark.visible;
 }
 
-char *
+const char *
 gtk_text_mark_get_name (GtkTextMark *mark)
 {
   GtkTextLineSegment *seg;
 
   seg = (GtkTextLineSegment*)mark;
 
-  return g_strdup (seg->body.mark.name);
+  return seg->body.mark.name;
 }
 
 
