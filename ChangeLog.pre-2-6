@@ -1,3 +1,8 @@
+Thu Oct  1 17:38:07 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_redraw_queue_remove): Fixed
+ 	up stupidities in last commit.
+
 Thu Oct  1 14:25:43 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c: When handling queued resizes, account

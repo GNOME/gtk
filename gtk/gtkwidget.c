@@ -1745,7 +1745,7 @@ gtk_widget_redraw_queue_remove (GtkWidget *widget)
   GSList *draw_data_list;
   GSList *tmp_list;
 
-  g_return_if_fail (!GTK_WIDGET_REDRAW_PENDING (widget));
+  g_return_if_fail (GTK_WIDGET_REDRAW_PENDING (widget));
 
   gtk_widget_redraw_queue = g_slist_remove (gtk_widget_redraw_queue, widget);
 
@@ -1757,6 +1757,10 @@ gtk_widget_redraw_queue_remove (GtkWidget *widget)
       tmp_list->next = draw_data_free_list;
       draw_data_free_list = draw_data_list;
     }
+
+  gtk_object_set_data_by_id (GTK_OBJECT (widget),
+			     draw_data_key_id,
+			     NULL);
   
   GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_PENDING);
 }
