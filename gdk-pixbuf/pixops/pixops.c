@@ -1357,29 +1357,29 @@ make_weights (PixopsFilter     *filter,
 }
 
 void
-pixops_composite_color (guchar         *dest_buf,
-			int             render_x0,
-			int             render_y0,
-			int             render_x1,
-			int             render_y1,
-			int             dest_rowstride,
-			int             dest_channels,
-			gboolean        dest_has_alpha,
-			const guchar   *src_buf,
-			int             src_width,
-			int             src_height,
-			int             src_rowstride,
-			int             src_channels,
-			gboolean        src_has_alpha,
-			double          scale_x,
-			double          scale_y,
-			PixopsInterpType   interp_type,
-			int             overall_alpha,
-			int             check_x,
-			int             check_y,
-			int             check_size,
-			guint32         color1,
-			guint32         color2)
+_pixops_composite_color (guchar         *dest_buf,
+			 int             render_x0,
+			 int             render_y0,
+			 int             render_x1,
+			 int             render_y1,
+			 int             dest_rowstride,
+			 int             dest_channels,
+			 gboolean        dest_has_alpha,
+			 const guchar   *src_buf,
+			 int             src_width,
+			 int             src_height,
+			 int             src_rowstride,
+			 int             src_channels,
+			 gboolean        src_has_alpha,
+			 double          scale_x,
+			 double          scale_y,
+			 PixopsInterpType   interp_type,
+			 int             overall_alpha,
+			 int             check_x,
+			 int             check_y,
+			 int             check_size,
+			 guint32         color1,
+			 guint32         color2)
 {
   PixopsFilter filter;
   PixopsLineFunc line_func;
@@ -1396,10 +1396,10 @@ pixops_composite_color (guchar         *dest_buf,
 
   if (!src_has_alpha && overall_alpha == 255)
     {
-      pixops_scale (dest_buf, render_x0, render_y0, render_x1, render_y1,
-		    dest_rowstride, dest_channels, dest_has_alpha,
-		    src_buf, src_width, src_height, src_rowstride, src_channels,
-		    src_has_alpha, scale_x, scale_y, interp_type);
+      _pixops_scale (dest_buf, render_x0, render_y0, render_x1, render_y1,
+		     dest_rowstride, dest_channels, dest_has_alpha,
+		     src_buf, src_width, src_height, src_rowstride, src_channels,
+		     src_has_alpha, scale_x, scale_y, interp_type);
       return;
     }
 
@@ -1435,7 +1435,7 @@ pixops_composite_color (guchar         *dest_buf,
 }
 
 /**
- * pixops_composite:
+ * _pixops_composite:
  * @dest_buf: pointer to location to store result
  * @render_x0: x0 of region of scaled source to store into @dest_buf
  * @render_y0: y0 of region of scaled source to store into @dest_buf
@@ -1459,24 +1459,24 @@ pixops_composite_color (guchar         *dest_buf,
  * of the result into the destination buffer.
  **/
 void
-pixops_composite (guchar        *dest_buf,
-		  int            render_x0,
-		  int            render_y0,
-		  int            render_x1,
-		  int            render_y1,
-		  int            dest_rowstride,
-		  int            dest_channels,
-		  gboolean       dest_has_alpha,
-		  const guchar  *src_buf,
-		  int            src_width,
-		  int            src_height,
-		  int            src_rowstride,
-		  int            src_channels,
-		  gboolean       src_has_alpha,
-		  double         scale_x,
-		  double         scale_y,
-		  PixopsInterpType  interp_type,
-		  int            overall_alpha)
+_pixops_composite (guchar        *dest_buf,
+		   int            render_x0,
+		   int            render_y0,
+		   int            render_x1,
+		   int            render_y1,
+		   int            dest_rowstride,
+		   int            dest_channels,
+		   gboolean       dest_has_alpha,
+		   const guchar  *src_buf,
+		   int            src_width,
+		   int            src_height,
+		   int            src_rowstride,
+		   int            src_channels,
+		   gboolean       src_has_alpha,
+		   double         scale_x,
+		   double         scale_y,
+		   PixopsInterpType  interp_type,
+		   int            overall_alpha)
 {
   PixopsFilter filter;
   PixopsLineFunc line_func;
@@ -1493,10 +1493,10 @@ pixops_composite (guchar        *dest_buf,
 
   if (!src_has_alpha && overall_alpha == 255)
     {
-      pixops_scale (dest_buf, render_x0, render_y0, render_x1, render_y1,
-		    dest_rowstride, dest_channels, dest_has_alpha,
-		    src_buf, src_width, src_height, src_rowstride, src_channels,
-		    src_has_alpha, scale_x, scale_y, interp_type);
+      _pixops_scale (dest_buf, render_x0, render_y0, render_x1, render_y1,
+		     dest_rowstride, dest_channels, dest_has_alpha,
+		     src_buf, src_width, src_height, src_rowstride, src_channels,
+		     src_has_alpha, scale_x, scale_y, interp_type);
       return;
     }
 
@@ -1536,23 +1536,23 @@ pixops_composite (guchar        *dest_buf,
 }
 
 void
-pixops_scale (guchar        *dest_buf,
-	      int            render_x0,
-	      int            render_y0,
-	      int            render_x1,
-	      int            render_y1,
-	      int            dest_rowstride,
-	      int            dest_channels,
-	      gboolean       dest_has_alpha,
-	      const guchar  *src_buf,
-	      int            src_width,
-	      int            src_height,
-	      int            src_rowstride,
-	      int            src_channels,
-	      gboolean       src_has_alpha,
-	      double         scale_x,
-	      double         scale_y,
-	      PixopsInterpType  interp_type)
+_pixops_scale (guchar        *dest_buf,
+	       int            render_x0,
+	       int            render_y0,
+	       int            render_x1,
+	       int            render_y1,
+	       int            dest_rowstride,
+	       int            dest_channels,
+	       gboolean       dest_has_alpha,
+	       const guchar  *src_buf,
+	       int            src_width,
+	       int            src_height,
+	       int            src_rowstride,
+	       int            src_channels,
+	       gboolean       src_has_alpha,
+	       double         scale_x,
+	       double         scale_y,
+	       PixopsInterpType  interp_type)
 {
   PixopsFilter filter;
   PixopsLineFunc line_func;
