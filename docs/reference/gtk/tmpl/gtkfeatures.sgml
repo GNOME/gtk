@@ -131,8 +131,8 @@ at application run time.
 
 <!-- ##### MACRO GTK_CHECK_VERSION ##### -->
 <para>
-Returns %TRUE if the version of the GTK+ header files is the same
-as the passed-in version.
+Returns %TRUE if the version of the GTK+ header files is the same 
+as or newer than the passed-in version.
 </para>
 
 @major: major version (e.g. 1 for version 1.2.5)

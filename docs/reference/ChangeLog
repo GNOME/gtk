@@ -1,5 +1,8 @@
 2004-12-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkfeatures.sgml: Improve wording.  (#161484,
+	Christian Biere)
+
 	* gtk/Makefile.am (HTML_IMAGES): Add some missing stock
 	icons..
 
