@@ -7500,7 +7500,7 @@ gtk_widget_list_mnemonic_labels (GtkWidget *widget)
  * this widget. (See gtk_widget_list_mnemonic_labels()). Note the
  * list of mnemonic labels for the widget is cleared when the
  * widget is destroyed, so the caller must make sure to update
- * it's internal state at this point as well, by using a connection
+ * its internal state at this point as well, by using a connection
  * to the ::destroy signal or a weak notifier.
  *
  * Since: 2.4

@@ -1,5 +1,8 @@
 2005-03-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwidget.c (gtk_widget_add_mnemonic_label): Fix a typo
+	in the docs.  (#169729, Morten Welinder)
+
 	* gtk/gtkimage.c (gtk_image_class_init): Fix a typo.
 
 	* gtk/gtkiconview.c (gtk_icon_view_set_model): Queue a resize 
