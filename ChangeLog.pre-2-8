@@ -1,3 +1,9 @@
+Tue Jun  1 22:19:55 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkicontheme.c (theme_subdir_load):  Prevent icon 
+	lookup finding icons in the wrong prefix.  (#143328,
+	Mark McLoughlin)
+
 Wed Jun  2 00:39:58 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkmenushell.c (gtk_menu_shell_button_release): Make menus

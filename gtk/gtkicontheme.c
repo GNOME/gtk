@@ -1935,7 +1935,7 @@ theme_subdir_load (GtkIconTheme *icon_theme,
 	  
 	  scan_directory (icon_theme->priv, dir, full_dir);
 
-	  theme->dirs = g_list_append (theme->dirs, dir);
+	  theme->dirs = g_list_prepend (theme->dirs, dir);
 	}
       else
 	g_free (full_dir);
