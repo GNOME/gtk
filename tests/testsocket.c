@@ -240,7 +240,7 @@ add_passive_child (GtkWidget *window)
 }
 
 void
-add_local_child (GtkWidget *window)
+add_local_active_child (GtkWidget *window)
 {
   Socket *socket;
 
@@ -249,6 +249,20 @@ add_local_child (GtkWidget *window)
   gtk_widget_show (socket->box);
 
   create_child_plug (gtk_socket_get_id (GTK_SOCKET (socket->socket)), TRUE);
+}
+
+void
+add_local_passive_child (GtkWidget *window)
+{
+  Socket *socket;
+  GdkNativeWindow xid;
+
+  socket = create_socket ();
+  gtk_box_pack_start (GTK_BOX (vbox), socket->box, TRUE, TRUE, 0);
+  gtk_widget_show (socket->box);
+
+  xid = create_child_plug (0, TRUE);
+  gtk_socket_add_id (GTK_SOCKET (socket->socket), xid);
 }
 
 int
@@ -299,11 +313,18 @@ main (int argc, char *argv[])
 			     GTK_SIGNAL_FUNC(add_passive_child),
 			     GTK_OBJECT(vbox));
 
-  button = gtk_button_new_with_label ("Add Local Child");
+  button = gtk_button_new_with_label ("Add Local Active Child");
   gtk_box_pack_start (GTK_BOX(vbox), button, FALSE, FALSE, 0);
 
   gtk_signal_connect_object (GTK_OBJECT(button), "clicked",
-			     GTK_SIGNAL_FUNC(add_local_child),
+			     GTK_SIGNAL_FUNC(add_local_active_child),
+			     GTK_OBJECT(vbox));
+
+  button = gtk_button_new_with_label ("Add Local Passive Child");
+  gtk_box_pack_start (GTK_BOX(vbox), button, FALSE, FALSE, 0);
+
+  gtk_signal_connect_object (GTK_OBJECT(button), "clicked",
+			     GTK_SIGNAL_FUNC(add_local_passive_child),
 			     GTK_OBJECT(vbox));
 
   button = gtk_button_new_with_label ("Remove Last Child");

@@ -31,11 +31,30 @@
 #include "gtkstock.h"
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
+#include <string.h>
 
 static void gtk_message_dialog_class_init (GtkMessageDialogClass *klass);
 static void gtk_message_dialog_init       (GtkMessageDialog      *dialog);
 static void gtk_message_dialog_style_set  (GtkWidget             *widget,
                                            GtkStyle              *prev_style);
+
+static void gtk_message_dialog_set_property (GObject          *object,
+					     guint             prop_id,
+					     const GValue     *value,
+					     GParamSpec       *pspec);
+static void gtk_message_dialog_get_property (GObject          *object,
+					     guint             prop_id,
+					     GValue           *value,
+					     GParamSpec       *pspec);
+static void gtk_message_dialog_add_buttons  (GtkMessageDialog *message_dialog,
+					     GtkButtonsType    buttons);
+
+
+enum {
+  PROP_0,
+  PROP_MESSAGE_TYPE,
+  PROP_BUTTONS
+};
 
 static gpointer parent_class;
 
@@ -68,12 +87,17 @@ static void
 gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 {
   GtkWidgetClass *widget_class;
+  GObjectClass *gobject_class;
 
   widget_class = GTK_WIDGET_CLASS (class);
+  gobject_class = G_OBJECT_CLASS (class);
 
   parent_class = g_type_class_peek_parent (class);
   
   widget_class->style_set = gtk_message_dialog_style_set;
+
+  gobject_class->set_property = gtk_message_dialog_set_property;
+  gobject_class->get_property = gtk_message_dialog_get_property;
   
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("message_border",
@@ -83,6 +107,23 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                                              G_MAXINT,
                                                              8,
                                                              G_PARAM_READABLE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_MESSAGE_TYPE,
+                                   g_param_spec_enum ("message_type",
+						      _("Message Type"),
+						      _("The type of message"),
+						      GTK_TYPE_MESSAGE_TYPE,
+                                                      GTK_MESSAGE_INFO,
+                                                      G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+  g_object_class_install_property (gobject_class,
+                                   PROP_BUTTONS,
+                                   g_param_spec_enum ("buttons",
+						      _("Message Buttons"),
+						      _("The buttons shown in the message dialog"),
+						      GTK_TYPE_BUTTONS_TYPE,
+                                                      GTK_BUTTONS_NONE,
+                                                      G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+
 }
 
 static void
@@ -111,13 +152,39 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
   gtk_widget_show_all (hbox);
 }
 
-static void
-setup_type(GtkMessageDialog *dialog, GtkMessageType type)
+static GtkMessageType
+gtk_message_dialog_get_message_type (GtkMessageDialog *dialog)
 {
-  /* Note: this function can be called more than once,
-   * and after showing the dialog, due to object args
+  const gchar* stock_id = NULL;
+
+  g_return_val_if_fail (GTK_IS_MESSAGE_DIALOG (dialog), GTK_MESSAGE_INFO);
+  g_return_val_if_fail (GTK_IS_IMAGE(dialog->image), GTK_MESSAGE_INFO);
+
+  stock_id = GTK_IMAGE(dialog->image)->data.stock.stock_id;
+
+  /* Look at the stock id of the image to guess the
+   * GtkMessageType value that was used to choose it
+   * in setup_type()
    */
-  
+  if (strcmp (stock_id, GTK_STOCK_DIALOG_INFO) == 0)
+    return GTK_MESSAGE_INFO;
+  else if (strcmp (stock_id, GTK_STOCK_DIALOG_QUESTION) == 0)
+    return GTK_MESSAGE_QUESTION;
+  else if (strcmp (stock_id, GTK_STOCK_DIALOG_WARNING) == 0)
+    return GTK_MESSAGE_WARNING;
+  else if (strcmp (stock_id, GTK_STOCK_DIALOG_ERROR) == 0)
+    return GTK_MESSAGE_ERROR;
+  else
+    {
+      g_assert_not_reached (); 
+      return GTK_MESSAGE_INFO;
+    }
+}
+
+static void
+setup_type (GtkMessageDialog *dialog,
+	    GtkMessageType    type)
+{
   const gchar *stock_id = NULL;
   GtkStockItem item;
   
@@ -158,6 +225,51 @@ setup_type(GtkMessageDialog *dialog, GtkMessageType type)
     g_warning ("Stock dialog ID doesn't exist?");  
 }
 
+static void 
+gtk_message_dialog_set_property (GObject      *object,
+				 guint         prop_id,
+				 const GValue *value,
+				 GParamSpec   *pspec)
+{
+  GtkMessageDialog *dialog;
+  
+  dialog = GTK_MESSAGE_DIALOG (object);
+  
+  switch (prop_id)
+    {
+    case PROP_MESSAGE_TYPE:
+      setup_type (dialog, g_value_get_enum (value));
+      break;
+    case PROP_BUTTONS:
+      gtk_message_dialog_add_buttons (dialog, g_value_get_enum (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void 
+gtk_message_dialog_get_property (GObject     *object,
+				 guint        prop_id,
+				 GValue      *value,
+				 GParamSpec  *pspec)
+{
+  GtkMessageDialog *dialog;
+  
+  dialog = GTK_MESSAGE_DIALOG (object);
+  
+  switch (prop_id)
+    {
+    case PROP_MESSAGE_TYPE:
+      g_value_set_enum (value, gtk_message_dialog_get_message_type (dialog));
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+
 /**
  * gtk_message_dialog_new:
  * @parent: transient parent, or NULL for none 
@@ -185,10 +297,12 @@ gtk_message_dialog_new (GtkWindow     *parent,
 {
   GtkWidget *widget;
   GtkDialog *dialog;
-  gchar* msg;
+  gchar* msg = 0;
   va_list args;
   
-  widget = GTK_WIDGET (gtk_type_new (GTK_TYPE_MESSAGE_DIALOG));
+  widget = GTK_WIDGET (g_object_new (GTK_TYPE_MESSAGE_DIALOG,
+				     "message_type", type,
+				     "buttons", buttons, 0));
   dialog = GTK_DIALOG (widget);
 
   if (flags & GTK_DIALOG_NO_SEPARATOR)
@@ -214,7 +328,6 @@ gtk_message_dialog_new (GtkWindow     *parent,
     gtk_window_set_transient_for (GTK_WINDOW (widget),
                                   GTK_WINDOW (parent));
   
-
   if (flags & GTK_DIALOG_MODAL)
     gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 
@@ -223,9 +336,16 @@ gtk_message_dialog_new (GtkWindow     *parent,
 
   if (flags & GTK_DIALOG_NO_SEPARATOR)
     gtk_dialog_set_has_separator (dialog, FALSE);
-  
-  setup_type (GTK_MESSAGE_DIALOG (dialog), type);
-  
+
+  return widget;
+}
+
+static void
+gtk_message_dialog_add_buttons (GtkMessageDialog* message_dialog,
+				GtkButtonsType buttons)
+{
+  GtkDialog* dialog = GTK_DIALOG (message_dialog);
+
   switch (buttons)
     {
     case GTK_BUTTONS_NONE:
@@ -271,9 +391,7 @@ gtk_message_dialog_new (GtkWindow     *parent,
     default:
       g_warning ("Unknown GtkButtonsType");
       break;
-    }
-
-  return widget;
+    } 
 }
 
 static void
