@@ -1,3 +1,9 @@
+Thu Jan 21 16:04:35 1999  Timur Bakeyev <mc@bat.ru>
+
+	* gtk/gtkrc.c (gtk_rc_init): It was reported by Owen Taylor 
+	<otaylor@redhat.com>, that LC_ALL produce unparsable garbage
+	on some glibc'ed systems and HP/UX. So, falling to LC_CTYPE.
+
 Thu Jan 21 02:11:44 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* Set and read the XdndActionList property defined

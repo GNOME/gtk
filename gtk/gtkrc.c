@@ -383,7 +383,7 @@ gtk_rc_init (void)
 #ifdef HAVE_LC_MESSAGES
   char *locale = setlocale (LC_MESSAGES, NULL);
 #else
-  char *locale = setlocale (LC_ALL, NULL);
+  char *locale = setlocale (LC_CTYPE, NULL);
 #endif
   guint length;
   char *p;
