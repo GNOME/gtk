@@ -1,3 +1,8 @@
+Sun Jul 22 17:01:34 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtksignal.sgml: Fix missing not
+	(Skip Montanaro, #56361)
+
 Wed Jul  4 22:53:33 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/tmpl/gtkplug.sgml gtk/tmpl/gtksocket.sgml: Some
