@@ -1,0 +1,2435 @@
+# Xhosa translation of gtk+
+# Copyright (C) 2005 Canonical Ltd.
+# This file is distributed under the same license as the gtk+ package.
+# Translation by Canonical Ltd <translations@canonical.com> with thanks to
+# Translation World CC in South Africa, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk+\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-01-14 04:30+0100\n"
+"PO-Revision-Date: 2005-01-31 08:59+0200\n"
+"Last-Translator: Canonical Ltd <translations@canonical.com>\n"
+"Language-Team: Xhosa <xh-translate@ubuntu.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gdk-pixbuf/gdk-pixbuf-animation.c:153 gdk-pixbuf/gdk-pixbuf-io.c:838
+#: gdk-pixbuf/gdk-pixbuf-io.c:1069 tests/testfilechooser.c:199
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "Akuphumelelanga ukuvula ifayili '%s': %s"
+
+#: gdk-pixbuf/gdk-pixbuf-animation.c:166 gdk-pixbuf/gdk-pixbuf-io.c:850
+#, c-format
+msgid "Image file '%s' contains no data"
+msgstr "Ifayili yemifanekiso '%s' ayiqulathanga data"
+
+#: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:887
+#: gdk-pixbuf/gdk-pixbuf-io.c:1110 tests/testfilechooser.c:244
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Ukufaka umfanekiso akuphumelelanga '%s': isizathu asaziwa, mhlawumbi "
+"yifayili yomfanekiso eyonakeleyo"
+
+#: gdk-pixbuf/gdk-pixbuf-animation.c:241
+#, c-format
+msgid ""
+"Failed to load animation '%s': reason not known, probably a corrupt "
+"animation file"
+msgstr ""
+"Akuphumelelanga ukufaka oopopayi '%s': isizathu asaziwa, mhlawumbi yifayile "
+"yoopopayi eyonakeleyo"
+
+# Ayinakho
+#: gdk-pixbuf/gdk-pixbuf-io.c:444
+#, fuzzy, c-format
+msgid "Unable to load image-loading module: %s: %s"
+msgstr "Ayinako ukufaka imodyuli yokufaka umfanekiso: %s: %s"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:459
+#, c-format
+msgid ""
+"Image-loading module %s does not export the proper interface; perhaps it's "
+"from a different GTK version?"
+msgstr ""
+"Imodyuli yokufaka umfanekiso %s ayihambisi umdibanisi wemida onguwo; "
+"mhlawumbi isuka kuhlobo lwe-GTK olwahlukileyo?"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:628 gdk-pixbuf/gdk-pixbuf-io.c:680
+#, c-format
+msgid "Image type '%s' is not supported"
+msgstr "Uhlobo lomfanekiso '%s' aluxhaswanga"
+
+# kubume befayili
+#: gdk-pixbuf/gdk-pixbuf-io.c:720
+#, fuzzy, c-format
+msgid "Couldn't recognize the image file format for file '%s'"
+msgstr "Ayikwazanga ukubona umfanekiso kwi-file format yale fayili '%s'"
+
+# Ubume befayili
+#: gdk-pixbuf/gdk-pixbuf-io.c:728
+#, fuzzy
+msgid "Unrecognized image file format"
+msgstr "I-format yefayili yemifanekiso engaziwayo"
+
+# Akuphumelelanga
+#: gdk-pixbuf/gdk-pixbuf-io.c:896
+#, fuzzy, c-format
+msgid "Failed to load image '%s': %s"
+msgstr "Ayiphumelelanga ukufaka umfanekiso '%s': %s"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:1337
+#, c-format
+msgid "Error writing to image file: %s"
+msgstr "Impazamo ekubhaleni umfanekiso: %s"
+
+# kobume instead of kwe-format
+#: gdk-pixbuf/gdk-pixbuf-io.c:1383 gdk-pixbuf/gdk-pixbuf-io.c:1512
+#, fuzzy, c-format
+msgid "This build of gdk-pixbuf does not support saving the image format: %s"
+msgstr ""
+"Isakhiwo se-gdk-pixbuf asikuxhasi ukugcinwa kwe-format yemifanekiso: %s"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:1417
+msgid "Insufficient memory to save image to callback"
+msgstr ""
+"Uvimba wolwazi akonelanga ukugcina umfanekiso ukuba ungaphinde ubuyiswe"
+
+# Akuphumelelanga
+# kwifayili
+#: gdk-pixbuf/gdk-pixbuf-io.c:1429
+#, fuzzy
+msgid "Failed to open temporary file"
+msgstr "Ayiphumelelanga ukuvula iifayile zexeshana"
+
+# Akuphumelelanga
+# kwifayili
+#: gdk-pixbuf/gdk-pixbuf-io.c:1454
+#, fuzzy
+msgid "Failed to read from temporary file"
+msgstr "Ayiphumelelanga ukufunda kwifayile yexeshana"
+
+# Akuphumelelanga
+#: gdk-pixbuf/gdk-pixbuf-io.c:1641
+#, fuzzy, c-format
+msgid "Failed to open '%s' for writing: %s"
+msgstr "Ayiphumelelanga ukuvula '%s' ukuba kubhalwe: %s"
+
+# Akuphumelelanga
+#: gdk-pixbuf/gdk-pixbuf-io.c:1665
+#, fuzzy, c-format
+msgid ""
+"Failed to close '%s' while writing image, all data may not have been saved: %"
+"s"
+msgstr ""
+"Ayiphumelelanga ukuvala '%s' ngelixa ibhala umfanekiso, kusenokwenzeka ukuba "
+"ayigcinwanga yonke i-data: %s"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:1853 gdk-pixbuf/gdk-pixbuf-io.c:1903
+msgid "Insufficient memory to save image into a buffer"
+msgstr ""
+"Uvimba wolwazi akanelanga ukuba agcine umfanekiso kwisigcini sethutyana"
+
+#: gdk-pixbuf/gdk-pixbuf-loader.c:383
+#, c-format
+msgid "Incremental loading of image type '%s' is not supported"
+msgstr "Ukongezwa kokufaka olu hlobo lomfanekiso '%s' akuxhaswanga"
+
+#: gdk-pixbuf/gdk-pixbuf-loader.c:411 gdk-pixbuf/gdk-pixbuf-loader.c:513
+#, c-format
+msgid ""
+"Internal error: Image loader module '%s' failed to begin loading an image, "
+"but didn't give a reason for the failure"
+msgstr ""
+"IMpazamo ngaphakathi: Imodyuli yokufaka umfanekiso '%s' ayiphumelelanga "
+"ukuqala ukufaka lo mfanekiso, kodwa ayinikanga sizathu sokungaphumeleli"
+
+#: gdk-pixbuf/gdk-pixdata.c:147
+msgid "Image header corrupt"
+msgstr "I-header yomfanekiso obonakala ngayo kwiskrini yonakele"
+
+# Ubume instead of i-format
+#: gdk-pixbuf/gdk-pixdata.c:152
+#, fuzzy
+msgid "Image format unknown"
+msgstr "I-format yomfanekiso ayaziwa"
+
+#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:487
+msgid "Image pixel data corrupt"
+msgstr "I-data yomfanekiso we-pixel yonakele"
+
+#: gdk-pixbuf/gdk-pixdata.c:431 gdk-pixbuf/io-ani.c:244
+#, fuzzy
+msgid "Unexpected icon chunk in animation"
+msgstr "Isiqa ezingalindelekanga somfanekiso womqondiso koopopayi"
+
+#: gdk-pixbuf/io-ani.c:337
+msgid "Unsupported animation type"
+msgstr "Uhlobo olungaxhaswanga loopopayi"
+
+#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:538
+msgid "Invalid header in animation"
+msgstr "I-header engavunywanga ekwenzeni oopopayi"
+
+#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:382 gdk-pixbuf/io-ani.c:441
+#: gdk-pixbuf/io-ani.c:460 gdk-pixbuf/io-ani.c:511 gdk-pixbuf/io-ani.c:583
+msgid "Not enough memory to load animation"
+msgstr "Uvimba wolwazi akonelanga ukuba kungafakwa oopopayi"
+
+#: gdk-pixbuf/io-ani.c:400 gdk-pixbuf/io-ani.c:417 gdk-pixbuf/io-ani.c:428
+#, fuzzy
+msgid "Malformed chunk in animation"
+msgstr "Isiqa esinesiphene koopopayi"
+
+# Ubume bemifanekiso
+#: gdk-pixbuf/io-ani.c:676
+#, fuzzy
+msgid "The ANI image format"
+msgstr "I-format yemifanekiso eyi-ANI"
+
+# yamasuntsu
+#: gdk-pixbuf/io-bmp.c:227 gdk-pixbuf/io-bmp.c:383
+#, fuzzy
+msgid "Not enough memory to load bitmap image"
+msgstr ""
+"Akukho vimba wolwazi owaneleyo ukuba kungafakwa umfanekiso wengqokelela "
+"yamacuntsu"
+
+# awubuxhasanga
+#: gdk-pixbuf/io-bmp.c:269
+#, fuzzy
+msgid "BMP image has unsupported header size"
+msgstr "Umfanekiso we-BMP ubuxhasile ubungakanani be-header"
+
+#: gdk-pixbuf/io-bmp.c:288 gdk-pixbuf/io-bmp.c:320 gdk-pixbuf/io-bmp.c:343
+#: gdk-pixbuf/io-bmp.c:424
+#, fuzzy
+msgid "BMP image has bogus header data"
+msgstr "Umfanekiso we-BMP une-bogus header data"
+
+#: gdk-pixbuf/io-bmp.c:307
+msgid "Topdown BMP images cannot be compressed"
+msgstr "Imifanekiso ye-Topdown BMP ayikwazi ukushwankathelwa"
+
+# Ubume bomfanekiso
+#: gdk-pixbuf/io-bmp.c:1154
+#, fuzzy
+msgid "The BMP image format"
+msgstr "I-format yomfanekiso i-BMP"
+
+# Ukungaphumeleli
+#: gdk-pixbuf/io-gif.c:220
+#, fuzzy, c-format
+msgid "Failure reading GIF: %s"
+msgstr "Ayiphumelelanga ukufunda i-GIF: %s"
+
+# Ifayili ye-GIF ibingeyiyo
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1435 gdk-pixbuf/io-gif.c:1596
+#, fuzzy
+msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+msgstr ""
+"Ifayile ye-GIFibingenayo enye i-data (mhlawumbi iyekwe phakathi ngendlela "
+"ethile?)"
+
+#: gdk-pixbuf/io-gif.c:501
+#, c-format
+msgid "Internal error in the GIF loader (%s)"
+msgstr "Impazamo yangaphakathi kwisifaki se-GIF (%s)"
+
+#: gdk-pixbuf/io-gif.c:575
+msgid "Stack overflow"
+msgstr "Ukuchitheka kwemfumba"
+
+#: gdk-pixbuf/io-gif.c:635
+msgid "GIF image loader cannot understand this image."
+msgstr "Isifaki mifanekiso se-GIF asiwuqondi lo mfanekiso."
+
+#: gdk-pixbuf/io-gif.c:664
+msgid "Bad code encountered"
+msgstr "Kufumaneke ikhowudi engalunganga"
+
+# itheybhile
+# how about esisangqa instead of eliqanda
+# kwifayili
+#: gdk-pixbuf/io-gif.c:674
+#, fuzzy
+msgid "Circular table entry in GIF file"
+msgstr "Kungene i-table eliqanda kwifayile i-GIF"
+
+# ifayili
+#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1423 gdk-pixbuf/io-gif.c:1469
+#: gdk-pixbuf/io-gif.c:1584
+#, fuzzy
+msgid "Not enough memory to load GIF file"
+msgstr "Uvimba wolwazi akalingananga ukuba kungafakwa ifayile ye-GIF"
+
+#: gdk-pixbuf/io-gif.c:1088
+msgid "GIF image is corrupt (incorrect LZW compression)"
+msgstr "Umfanekiso we-GIF wonakele (isishwankathelo se-LZW asichanekanga)"
+
+# fayili
+# njengefayili
+#: gdk-pixbuf/io-gif.c:1138
+#, fuzzy
+msgid "File does not appear to be a GIF file"
+msgstr "Le fayile ayikhangeleki njengefayile ye-GIF"
+
+# lobume befayili
+# aluxhaswanga
+#: gdk-pixbuf/io-gif.c:1150
+#, fuzzy, c-format
+msgid "Version %s of the GIF file format is not supported"
+msgstr "Uguqulelo %s lwe-format yefayile ye-GIF akuxhaswanga"
+
+# imephu
+# kwawo
+# kwimephu
+#: gdk-pixbuf/io-gif.c:1259
+#, fuzzy
+msgid ""
+"GIF image has no global colormap, and a frame inside it has no local "
+"colormap."
+msgstr ""
+"Umfanekiso we-GIFawunayo yonke imepu yemibala, yaye isakhelo esingaphakathi "
+"ikwawo asinayo imibala efikeleleka ngqo kwimepu yemibala."
+
+#: gdk-pixbuf/io-gif.c:1491
+msgid "GIF image was truncated or incomplete."
+msgstr "Umfanekiso we-GIF uyekwe esithubeni okanye awugqitywanga."
+
+# Ubume bomfanekiso
+#: gdk-pixbuf/io-gif.c:1643
+#, fuzzy
+msgid "The GIF image format"
+msgstr "I-format yomfanekiso we-GIF"
+
+# wolwazi
+#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:340
+#: gdk-pixbuf/io-ico.c:403 gdk-pixbuf/io-ico.c:433
+#, fuzzy
+msgid "Not enough memory to load icon"
+msgstr ""
+"Akukho vimba wolwazo owaneleyo ukuba kungafakwa umfanekiso ongumqondiso"
+
+#: gdk-pixbuf/io-ico.c:256 gdk-pixbuf/io-ico.c:330
+msgid "Invalid header in icon"
+msgstr "I-header engavunywanga kumfanekiso ongumqondiso"
+
+#: gdk-pixbuf/io-ico.c:293
+msgid "Icon has zero width"
+msgstr "Umfanekiso ongumqondiso awunabubanzi"
+
+#: gdk-pixbuf/io-ico.c:303
+msgid "Icon has zero height"
+msgstr "Umfanekiso ongumqondiso awunabude"
+
+#: gdk-pixbuf/io-ico.c:355
+msgid "Compressed icons are not supported"
+msgstr "Isishwankathelo somfanekiso ongumqondiso asixhaswanga"
+
+#: gdk-pixbuf/io-ico.c:388
+msgid "Unsupported icon type"
+msgstr "Uhlobo lomfanekiso ongumqondiso ongaxhaswanga"
+
+# ifayili
+#: gdk-pixbuf/io-ico.c:482
+#, fuzzy
+msgid "Not enough memory to load ICO file"
+msgstr "Uvimba wolwazi akanelanga ukuba kungafakwa ifayile ye-ICO"
+
+# njenge-ICO
+#: gdk-pixbuf/io-ico.c:947
+#, fuzzy
+msgid "Image too large to be saved as ICO"
+msgstr "Umfanekiso mkhulu kakhulu ukuba ungagcinwa kwi-ICO"
+
+#: gdk-pixbuf/io-ico.c:958
+msgid "Cursor hotspot outside image"
+msgstr "I-hotspot yekhesa ingaphandle komfanekiso"
+
+# kwifayili
+#: gdk-pixbuf/io-ico.c:981
+#, fuzzy, c-format
+msgid "Unsupported depth for ICO file: %d"
+msgstr "Ubunzulu abuxhaswanga kwifayile ye-ICO: %d"
+
+# Ubume bomfanekiso
+#: gdk-pixbuf/io-ico.c:1210
+#, fuzzy
+msgid "The ICO image format"
+msgstr "I-format yomfanekiso we-ICO"
+
+# ifayili
+#: gdk-pixbuf/io-jpeg.c:114
+#, fuzzy, c-format
+msgid "Error interpreting JPEG image file (%s)"
+msgstr "Impazamo ekutolikeni ifayile yomfanekiso i-JPEG (%s)"
+
+#: gdk-pixbuf/io-jpeg.c:349
+msgid ""
+"Insufficient memory to load image, try exiting some applications to free "
+"memory"
+msgstr ""
+"Uvimba wolwazi akanelanga ukuba angafaka umfanekiso, zama ukuphuma kwezinye "
+"iinkqubo ukwandisa uvimba wolwazi"
+
+#: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:749
+#, c-format
+msgid "Unsupported JPEG color space (%s)"
+msgstr "Indawo yombala ye-JPEG ayixhaswanga (%s)"
+
+#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:943
+#: gdk-pixbuf/io-jpeg.c:952
+msgid "Couldn't allocate memory for loading JPEG file"
+msgstr ""
+"Ayikwazanga ukwandisa uvimba wolwazi ukuze akwazi ukufaka ifayili ye-JPEG"
+
+# Ubunjani
+#: gdk-pixbuf/io-jpeg.c:894
+#, fuzzy, c-format
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%s' could not be "
+"parsed."
+msgstr ""
+"Ubulunga be-JPEG kufuneka buxabise phakathi kwe-0 ne-100; ixabiso '%s' "
+"alihlahlelwanga."
+
+# Ubunjani
+#: gdk-pixbuf/io-jpeg.c:909
+#, fuzzy, c-format
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr ""
+"Ubulunga be-JPEG kufuneka buxabise phakathi kwe-0 ne100; ixabiso '%d' "
+"livumelekile."
+
+# Ubume bomfanekiso
+#: gdk-pixbuf/io-jpeg.c:1071
+#, fuzzy
+msgid "The JPEG image format"
+msgstr "I-format yomfanekiso we-JPEG"
+
+#: gdk-pixbuf/io-pcx.c:191
+msgid "Couldn't allocate memory for header"
+msgstr "Ayikwazanga ukunikezela uvimba wolwazi kwi-header"
+
+#: gdk-pixbuf/io-pcx.c:206 gdk-pixbuf/io-pcx.c:566
+msgid "Couldn't allocate memory for context buffer"
+msgstr "Ayikwazanga ukunikezela ngovimba wolwazi kumgcini wethutyana"
+
+#: gdk-pixbuf/io-pcx.c:607
+msgid "Image has invalid width and/or height"
+msgstr "Umfanekiso unobubanzi/ubude obungavumelekanga"
+
+#: gdk-pixbuf/io-pcx.c:619 gdk-pixbuf/io-pcx.c:680
+msgid "Image has unsupported bpp"
+msgstr "Umfanekiso une-bpp engaxhaswanga"
+
+#: gdk-pixbuf/io-pcx.c:624 gdk-pixbuf/io-pcx.c:632
+#, c-format
+msgid "Image has unsupported number of %d-bit planes"
+msgstr "Umfanekiso unenani elingaxhaswanga lee-%d-bit planes"
+
+# i-pixbuf entsha
+#: gdk-pixbuf/io-pcx.c:648
+#, fuzzy
+msgid "Couldn't create new pixbuf"
+msgstr "Ayikwazanga ukwakha entsha i-pixbuf"
+
+# lwe-data yomgca
+#: gdk-pixbuf/io-pcx.c:656
+#, fuzzy
+msgid "Couldn't allocate memory for line data"
+msgstr "Ayikwazanga ukwandisa uvimba wolwazi lwe-line data"
+
+#: gdk-pixbuf/io-pcx.c:663
+msgid "Couldn't allocate memory for paletted data"
+msgstr "Ayikwazanga ukwandisa uvimba wolwazi lwengqokelela yezixhobo ze-data"
+
+#: gdk-pixbuf/io-pcx.c:710
+msgid "Didn't get all lines of PCX image"
+msgstr "Ayifumananga yonke imigca yomfanekiso we-PCX"
+
+#: gdk-pixbuf/io-pcx.c:717
+msgid "No palette found at end of PCX data"
+msgstr "Akukho ngqokelela yezixhobo ethe yafunyanwa ekugqibeleni kwe-PCX data"
+
+# Ubume bomfanekiso
+#: gdk-pixbuf/io-pcx.c:758
+#, fuzzy
+msgid "The PCX image format"
+msgstr "I-format yomfanekiso we-PCX"
+
+# Amasuntsu amajelo
+#: gdk-pixbuf/io-png.c:55
+#, fuzzy
+msgid "Bits per channel of PNG image is invalid."
+msgstr "Isuntsu lejelo ngalinye lomfanekiso we-PNG alivumelekanga."
+
+#: gdk-pixbuf/io-png.c:136
+msgid "Transformed PNG has zero width or height."
+msgstr "I-PNG eguqulweyo ayinabubanzi okanye ubude."
+
+# Amasuntsu ejelo ngalinye eliguquliweyo
+#: gdk-pixbuf/io-png.c:144
+#, fuzzy
+msgid "Bits per channel of transformed PNG is not 8."
+msgstr "Isuntsu lejelo ngalinye leguqulweyo i-PNG alisosi-8."
+
+# I-PNG eguquliweyo
+#: gdk-pixbuf/io-png.c:153
+#, fuzzy
+msgid "Transformed PNG not RGB or RGBA."
+msgstr "Eguqulweyo i-PNG hayi i-RGB okanye i-RGBA."
+
+# I-PNG eguquliweyo
+#: gdk-pixbuf/io-png.c:162
+#, fuzzy
+msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+msgstr ""
+"Eguqulweyo i-PNG inenani lamajelo elingaxhaswanga, nekufuneka ibe sisi-3 "
+"okanye isi-4."
+
+# how about- enkulu?
+#: gdk-pixbuf/io-png.c:183
+#, fuzzy, c-format
+msgid "Fatal error in PNG image file: %s"
+msgstr "Impazamo ekukufa kumfanekiso wefayili i-PNG: %s"
+
+#: gdk-pixbuf/io-png.c:301
+msgid "Insufficient memory to load PNG file"
+msgstr "Akonelanga uvimba wolwazi ukuba angafaka ifayili i-PNG"
+
+#: gdk-pixbuf/io-png.c:618
+#, c-format
+msgid ""
+"Insufficient memory to store a %ld by %ld image; try exiting some "
+"applications to reduce memory usage"
+msgstr ""
+"Akonelanga uvimba wolwazi ukuba angagcina i-%ld by %ld image; zama ukuphuma "
+"kwezinye iinkqubo ukunciphisa ukusetyenziswa kovimba wolwazi"
+
+# enkulu instead of ebulalayo
+# ifayili
+#: gdk-pixbuf/io-png.c:669
+#, fuzzy
+msgid "Fatal error reading PNG image file"
+msgstr "Impazamo ebulalayo ekufundeni ifayile yemifanekiso i-PNG"
+
+# enkulu
+#: gdk-pixbuf/io-png.c:718
+#, fuzzy, c-format
+msgid "Fatal error reading PNG image file: %s"
+msgstr "Impazamo ebulalayo ekufundeni ifayile yemifanekiso i-PNG : %s"
+
+# ombhalo instead of sesiqendu
+# we-PNG
+# ukuya kuma-79
+#: gdk-pixbuf/io-png.c:813
+#, fuzzy
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgstr ""
+"Amaqhosha esiqa sesiqendu se-PNG kufuneka abe nophawu olu-1 ubuncinane ukuya "
+"kwezingama-79."
+
+# sombhalo instead of sesiqendu
+#: gdk-pixbuf/io-png.c:821
+#, fuzzy
+msgid "Keys for PNG text chunks must be ASCII characters."
+msgstr "Amaqhosha esiqa sesiqendu se-PNG kufuneka abe ne-ASCII yeempawu."
+
+# sombhalo
+# we-PNG
+# asinakho
+#: gdk-pixbuf/io-png.c:854
+#, fuzzy, c-format
+msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+msgstr ""
+"Ixabiso lesiqa sesiqendu se-PNG %s asinako ukuguqulwa sisiwe kwi-ISO-8859-1 "
+"encoding."
+
+# Ubume bomfanekiso we-PNG
+#: gdk-pixbuf/io-png.c:994
+#, fuzzy
+msgid "The PNG image format"
+msgstr "I-format yomfanekiso ye-PNG"
+
+#: gdk-pixbuf/io-pnm.c:249
+#, fuzzy
+msgid "PNM loader expected to find an integer, but didn't"
+msgstr ""
+"Isifaki se-PNM kulindeleke ukuba sifumane oader expected to find an integer, "
+"but didn't"
+
+# yokuqala engachanekanga
+#: gdk-pixbuf/io-pnm.c:281
+#, fuzzy
+msgid "PNM file has an incorrect initial byte"
+msgstr "Ifayili ye-PNM ine-byte zokuqala ezingachanekanga"
+
+#: gdk-pixbuf/io-pnm.c:311
+#, fuzzy
+msgid "PNM file is not in a recognized PNM subformat"
+msgstr "IfayiliPNM file is not in a recognized PNM subformat"
+
+#: gdk-pixbuf/io-pnm.c:336
+msgid "PNM file has an image width of 0"
+msgstr ""
+
+#: gdk-pixbuf/io-pnm.c:357
+msgid "PNM file has an image height of 0"
+msgstr "Ifayili ye-PNM inobude bomfanekiso obungu-0"
+
+# Ubukhulu
+# okwifayili
+#: gdk-pixbuf/io-pnm.c:380
+#, fuzzy
+msgid "Maximum color value in PNM file is 0"
+msgstr "ubukhulu bexabiso lombala okwifayile ye-PNM ngu-0"
+
+# Ubukhulu
+# okwifayili
+#: gdk-pixbuf/io-pnm.c:388
+#, fuzzy
+msgid "Maximum color value in PNM file is too large"
+msgstr ""
+"ubukhulu bexabiso lombala okwifayile ye-PNM bukhulu kakhuluis too large"
+
+# Ayinakho
+# ezinobukhulu
+#: gdk-pixbuf/io-pnm.c:396
+#, fuzzy
+msgid "Cannot handle PNM files with maximum color values greater than 255"
+msgstr ""
+"ayinako ukubamba iifayili ze-PNM nobukhulu bexabiso lemibala "
+"obungangaphezulu kwama-255"
+
+#: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
+msgid "Raw PNM image type is invalid"
+msgstr "Umfanekiso ongekenziwa nto wohlobo lwe-PNM awuvumelekanga"
+
+#: gdk-pixbuf/io-pnm.c:555 gdk-pixbuf/io-pnm.c:597
+msgid "PNM image format is invalid"
+msgstr "I-format yomfanekiso we-PNM ayivumelekanga"
+
+#: gdk-pixbuf/io-pnm.c:656
+msgid "PNM image loader does not support this PNM subformat"
+msgstr "Isifaki-mfanekiso se-PNM asiyixhasi le-PNM subformat"
+
+# kwefayili
+#: gdk-pixbuf/io-pnm.c:711
+#, fuzzy
+msgid "Premature end-of-file encountered"
+msgstr "Kufumaniseke ukupheliswa kwefayile phambi kwexesha"
+
+#: gdk-pixbuf/io-pnm.c:743 gdk-pixbuf/io-pnm.c:974
+msgid "Raw PNM formats require exactly one whitespace before sample data"
+msgstr ""
+"Iformat engenziwanga nto ye=PNM ifuna indawo enye phambi kwe-data eyisampuli"
+
+#: gdk-pixbuf/io-pnm.c:770
+msgid "Cannot allocate memory for loading PNM image"
+msgstr "Ayikwazi ukwandisa uvimba wolwazi ukuze ifake umfanekiso we-PNM"
+
+#: gdk-pixbuf/io-pnm.c:820
+msgid "Insufficient memory to load PNM context struct"
+msgstr "Uvimba wolwazi akonelanga ukuba angafaka i-PNM context struct"
+
+#: gdk-pixbuf/io-pnm.c:871
+msgid "Unexpected end of PNM image data"
+msgstr "Ukufika ekugqibeleni okungalindelekanga kwe-PNM image data"
+
+# ifayili
+#: gdk-pixbuf/io-pnm.c:1003
+#, fuzzy
+msgid "Insufficient memory to load PNM file"
+msgstr "Uvimba wolwazi akonelanga ukuba angafaka ifayile ye-PNM"
+
+# umfanekiso wobume
+#: gdk-pixbuf/io-pnm.c:1082
+#, fuzzy
+msgid "The PNM/PBM/PGM/PPM image format family"
+msgstr "Ii-PNM/PBM/PGM/PPM lusapho lokulungelelanisa umfanekiso"
+
+#: gdk-pixbuf/io-ras.c:126
+msgid "RAS image has bogus header data"
+msgstr "Umfanekiso we-RAS one-bogus header data"
+
+#: gdk-pixbuf/io-ras.c:148
+msgid "RAS image has unknown type"
+msgstr "Umfanekiso we-RAS ngowohlobo olungaziwayo"
+
+#: gdk-pixbuf/io-ras.c:156
+msgid "unsupported RAS image variation"
+msgstr "uhlobo lomfanekiso oluyi-RAS variation"
+
+#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
+msgid "Not enough memory to load RAS image"
+msgstr "Uvimba wolwazi akonelanga ukuba angafaka umfanekiso we-RAS"
+
+#: gdk-pixbuf/io-ras.c:543
+msgid "The Sun raster image format"
+msgstr "Ulungelelwaniso lwe-format yomfanekiso eyi-The Sun raster"
+
+# Ayinakho
+#: gdk-pixbuf/io-tga.c:159
+#, fuzzy
+msgid "Cannot allocate memory for IOBuffer struct"
+msgstr "Ayinako ukunikezela ngovimba wolwazi lwe-IOBuffer struct"
+
+# Ayinakho
+#: gdk-pixbuf/io-tga.c:178
+#, fuzzy
+msgid "Cannot allocate memory for IOBuffer data"
+msgstr "Ayinako ukunikezela ngovimba wolwazi kwi- IOBuffer data"
+
+# Ayinakho
+#: gdk-pixbuf/io-tga.c:189
+#, fuzzy
+msgid "Cannot realloc IOBuffer data"
+msgstr "Ayinako ukunikezelwa kwakhona nge-IOBuffer data"
+
+#: gdk-pixbuf/io-tga.c:219
+msgid "Cannot allocate temporary IOBuffer data"
+msgstr "Ayikwazi ukunikezela nge-IOBuffer data yexeshana"
+
+# Ayikwazi
+#: gdk-pixbuf/io-tga.c:353
+#, fuzzy
+msgid "Cannot allocate new pixbuf"
+msgstr "Aykwazi ukunikezela nge-pixbuf entsha"
+
+#: gdk-pixbuf/io-tga.c:692
+msgid "Cannot allocate colormap structure"
+msgstr "Ayikwazi ukunikezela ngesakhiwo semephu yemibala"
+
+#: gdk-pixbuf/io-tga.c:699
+msgid "Cannot allocate colormap entries"
+msgstr "Ayikwazi ukunikezela ngezingeniso zemephu yemibala"
+
+#: gdk-pixbuf/io-tga.c:721
+msgid "Unexpected bitdepth for colormap entries"
+msgstr "I-bitdepth engalindelekanga kwiingeniso zemephu yemibala"
+
+#: gdk-pixbuf/io-tga.c:739
+msgid "Cannot allocate TGA header memory"
+msgstr "Ayikwazi ukunikezela ngovimba wolwazi we-TGA header"
+
+#: gdk-pixbuf/io-tga.c:772
+msgid "TGA image has invalid dimensions"
+msgstr "Umfanekiso we-TGA unamacala angavunyelwanga"
+
+#: gdk-pixbuf/io-tga.c:778 gdk-pixbuf/io-tga.c:787 gdk-pixbuf/io-tga.c:797
+#: gdk-pixbuf/io-tga.c:807 gdk-pixbuf/io-tga.c:814
+msgid "TGA image type not supported"
+msgstr "Umfanekiso wohlobo lwe-TGA awuxhaswanga"
+
+# uvimba
+#: gdk-pixbuf/io-tga.c:861
+#, fuzzy
+msgid "Cannot allocate memory for TGA context struct"
+msgstr "Ayikwazi ukunikezela uvmba wolwazi kwi-TGA context struct"
+
+#: gdk-pixbuf/io-tga.c:926
+msgid "Excess data in file"
+msgstr "Kukho i-data eninzi kakhulu kule fayili"
+
+#: gdk-pixbuf/io-tga.c:995
+msgid "The Targa image format"
+msgstr "I-format yomfanekiso i-Targa"
+
+# ifayili
+#: gdk-pixbuf/io-tiff.c:173
+#, fuzzy
+msgid "Could not get image width (bad TIFF file)"
+msgstr "Ayikwazi ukufumana ububanzi bomfanekiso (ifayile engalunganga ye-TIFF)"
+
+# ifayili
+#: gdk-pixbuf/io-tiff.c:180
+#, fuzzy
+msgid "Could not get image height (bad TIFF file)"
+msgstr "Ayikwazi ukufumana ubude bomfanekiso (ifayile engalunganga ye-TIFF)"
+
+# befayili
+#: gdk-pixbuf/io-tiff.c:188
+#, fuzzy
+msgid "Width or height of TIFF image is zero"
+msgstr "Ububanzi okanye ubude befayile yomfanekiso ye-TIFF liqanda"
+
+#: gdk-pixbuf/io-tiff.c:197 gdk-pixbuf/io-tiff.c:206
+msgid "Dimensions of TIFF image too large"
+msgstr "Makhulu gqitha amacala omfanekiso we-TIFF"
+
+# ifayili
+#: gdk-pixbuf/io-tiff.c:225 gdk-pixbuf/io-tiff.c:237 gdk-pixbuf/io-tiff.c:286
+#: gdk-pixbuf/io-tiff.c:572
+#, fuzzy
+msgid "Insufficient memory to open TIFF file"
+msgstr "Uvimba wolwazi akanelanga ukuba angavula ifayile ye-TIFF"
+
+# kwifayili
+#: gdk-pixbuf/io-tiff.c:251 gdk-pixbuf/io-tiff.c:294
+#, fuzzy
+msgid "Failed to load RGB data from TIFF file"
+msgstr "Ayiphumelelanga ukufaka i-RGB data esuka kwifayile ye-TIFF"
+
+#: gdk-pixbuf/io-tiff.c:361
+msgid "Failed to open TIFF image"
+msgstr "Ayiphumelelanga ukuvula umfanekiso we-TIFF"
+
+#: gdk-pixbuf/io-tiff.c:373
+msgid "TIFFClose operation failed"
+msgstr "I-TIFFClose operation ayiphumelelanga"
+
+#: gdk-pixbuf/io-tiff.c:504 gdk-pixbuf/io-tiff.c:517
+msgid "Failed to load TIFF image"
+msgstr "Ayiphumelelanga ukufaka umfanekiso we-TIFF"
+
+#: gdk-pixbuf/io-tiff.c:610
+msgid "The TIFF image format"
+msgstr "I-format yomfanekiso i-TIFF"
+
+#: gdk-pixbuf/io-wbmp.c:246
+msgid "Image has zero width"
+msgstr "Umfanekiso awunabubanzi"
+
+#: gdk-pixbuf/io-wbmp.c:264
+msgid "Image has zero height"
+msgstr "Umfanekiso awunabude"
+
+#: gdk-pixbuf/io-wbmp.c:275
+msgid "Not enough memory to load image"
+msgstr "Uvimba wolwazi akonelanga ukuba angafaka umfanekiso"
+
+#: gdk-pixbuf/io-wbmp.c:334
+msgid "Couldn't save the rest"
+msgstr "Ayikwazanga ukugcina okuseleyo"
+
+#: gdk-pixbuf/io-wbmp.c:368
+msgid "The WBMP image format"
+msgstr "I-format yemifanekiso eyi-WBMP"
+
+#: gdk-pixbuf/io-xbm.c:287
+msgid "Invalid XBM file"
+msgstr "Ifayili ye-XBM engavunywangwa"
+
+# ifayili
+#: gdk-pixbuf/io-xbm.c:297
+#, fuzzy
+msgid "Insufficient memory to load XBM image file"
+msgstr "Uvimba wolwazi akanelanga ukuba angafaka ifayile yemifanekiso ye- XBM"
+
+#: gdk-pixbuf/io-xbm.c:441
+msgid "Failed to write to temporary file when loading XBM image"
+msgstr ""
+"Ayiphumelelanga ukubhala kwifayili yexeshana ngelixa ifaka umfanekiso we- XBM"
+
+#: gdk-pixbuf/io-xbm.c:476
+msgid "The XBM image format"
+msgstr "I-format yomfanekiso we-XBM"
+
+#: gdk-pixbuf/io-xpm.c:1229
+msgid "No XPM header found"
+msgstr "I-XPM header ayifunyanwa"
+
+#: gdk-pixbuf/io-xpm.c:1237
+msgid "XPM file has image width <= 0"
+msgstr "Ifayili ye-XPM inobubanzi bomfanekiso obu-<= 0"
+
+#: gdk-pixbuf/io-xpm.c:1245
+msgid "XPM file has image height <= 0"
+msgstr "Ifayili ye-XPM inobubanzi bomfanekiso obu-<= 0"
+
+# I-XPM
+#: gdk-pixbuf/io-xpm.c:1253
+#, fuzzy
+msgid "XPM has invalid number of chars per pixel"
+msgstr "i-XPM inenani elingavunywanga kwi-chars nge-pixel nganye"
+
+# Ifayili
+#: gdk-pixbuf/io-xpm.c:1260
+#, fuzzy
+msgid "XPM file has invalid number of colors"
+msgstr "ifayili ye-XPM file inenani lemibala engavunywanga"
+
+# Ayikwazi
+#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
+#, fuzzy
+msgid "Cannot allocate memory for loading XPM image"
+msgstr "ayikwazi ukunikela ngovimba wolwaz wokufaka umfanekiso we- XPM"
+
+#: gdk-pixbuf/io-xpm.c:1295
+msgid "Cannot read XPM colormap"
+msgstr "ayikwazi ukufunda imephu yemibala ye-XPM"
+
+#: gdk-pixbuf/io-xpm.c:1524
+msgid "Failed to write to temporary file when loading XPM image"
+msgstr ""
+"ayiphumelelanga ukubhala kwifayili yexeshana ngelixa ifaka umfanekiso we-XPM"
+
+#: gdk-pixbuf/io-xpm.c:1559
+msgid "The XPM image format"
+msgstr "I-format yomfanekiso we-XPM"
+
+#. Description of --class=CLASS in --help output
+#: gdk/gdk.c:115
+msgid "Program class as used by the window manager"
+msgstr "Udidi lwenkqubo njengoko isetyenziswa ngumphathi wefestile"
+
+#. Placeholder in --class=CLASS in --help output
+#: gdk/gdk.c:116
+msgid "CLASS"
+msgstr "UDIDI"
+
+#. Description of --name=NAME in --help output
+#: gdk/gdk.c:118
+msgid "Program name as used by the window manager"
+msgstr "Igama lenkqubo njengoko lisetyenziswa ngumphathi wefestile"
+
+#. Placeholder in --name=NAME in --help output
+#: gdk/gdk.c:119
+msgid "NAME"
+msgstr "IGAMA"
+
+#. Description of --display=DISPLAY in --help output
+#: gdk/gdk.c:121
+msgid "X display to use"
+msgstr "i-X display onokuyisebenzisa"
+
+#. Placeholder in --display=DISPLAY in --help output
+#: gdk/gdk.c:122
+msgid "DISPLAY"
+msgstr "BONISA KWISKRINI"
+
+#. Description of --screen=SCREEN in --help output
+#: gdk/gdk.c:124
+msgid "X screen to use"
+msgstr "Iskrini se-X singasetyenziswa"
+
+#. Placeholder in --screen=SCREEN in --help output
+#: gdk/gdk.c:125
+msgid "SCREEN"
+msgstr "ISKRINI"
+
+#. Description of --gdk-debug=FLAGS in --help output
+#: gdk/gdk.c:128
+msgid "Gdk debugging flags to set"
+msgstr "Ii-Gdk onokuzimisa ukulungisa iziphene kwinkqubo"
+
+# Ii-FLAGS
+#. Placeholder in --gdk-debug=FLAGS in --help output
+#: gdk/gdk.c:129 gdk/gdk.c:132 gtk/gtkmain.c:405 gtk/gtkmain.c:408
+#, fuzzy
+msgid "FLAGS"
+msgstr "iII-FLAGS"
+
+#. Description of --gdk-no-debug=FLAGS in --help output
+#: gdk/gdk.c:131
+#, fuzzy
+msgid "Gdk debugging flags to unset"
+msgstr "ii-Gdk debugging flags onokungazimisieli"
+
+# ukubeka?
+#. Description of --sync in --help output
+#: gdk/win32/gdkmain-win32.c:60
+#, fuzzy
+msgid "Don't batch GDI requests"
+msgstr "Musa ukubeza izicelo ze-GDI ngokwamaqela"
+
+#. Description of --no-wintab in --help output
+#: gdk/win32/gdkmain-win32.c:62
+#, fuzzy
+msgid "Don't use the Wintab API for tablet support"
+msgstr "Musa ukusebenzisa i-Wintab API ukuxhasa ipilisi"
+
+# Iyafana
+#. Description of --ignore-wintab in --help output
+#: gdk/win32/gdkmain-win32.c:64
+#, fuzzy
+msgid "Same as --no-wintab"
+msgstr "iyafana ne --no-wintab"
+
+#. Description of --use-wintab in --help output
+#: gdk/win32/gdkmain-win32.c:66
+msgid "Do use the Wintab API [default]"
+msgstr "Musa ukusebenzisa i-Wintab API [emiselweyo]"
+
+#. Description of --max-colors=COLORS in --help output
+#: gdk/win32/gdkmain-win32.c:68
+msgid "Size of the palette in 8 bit mode"
+msgstr "Ubungakanani bengqokelela yezixhobo nge-8 bit mode"
+
+#. Placeholder in --max-colors=COLORS in --help output
+#: gdk/win32/gdkmain-win32.c:69
+msgid "COLORS"
+msgstr "IMIBALA"
+
+#. Description of --sync in --help output
+#: gdk/x11/gdkmain-x11.c:92
+msgid "Make X calls synchronous"
+msgstr "Yenza ii-X calls zenzeke ngaxeshanye"
+
+# Imvumelawno
+#: gtk/gtkaboutdialog.c:260 gtk/gtkaboutdialog.c:1939
+#, fuzzy
+msgid "License"
+msgstr "Imvume"
+
+# Imvumelwano
+#: gtk/gtkaboutdialog.c:261
+#, fuzzy
+msgid "The license of the program"
+msgstr "Imvume yale nkqubo"
+
+#. Add the credits button
+#: gtk/gtkaboutdialog.c:482
+msgid "_Credits"
+msgstr "ii_Credits"
+
+#. Add the license button
+#: gtk/gtkaboutdialog.c:491
+msgid "_License"
+msgstr "_Imvume"
+
+#: gtk/gtkaboutdialog.c:682
+#, c-format
+msgid "About %s"
+msgstr "Malunga ne-%s"
+
+#: gtk/gtkaboutdialog.c:1876
+msgid "Credits"
+msgstr "ii-Credits"
+
+#: gtk/gtkaboutdialog.c:1901
+msgid "Written by"
+msgstr "Ibhalwe ngu"
+
+#: gtk/gtkaboutdialog.c:1904
+msgid "Documented by"
+msgstr "Ibhalwe ngu"
+
+# Iguqulwe
+#: gtk/gtkaboutdialog.c:1916
+#, fuzzy
+msgid "Translated by"
+msgstr "iguqulelwe ngu"
+
+# Umsebenzi
+#: gtk/gtkaboutdialog.c:1920
+#, fuzzy
+msgid "Artwork by"
+msgstr "umsebenzi wobugcisa ngu"
+
+#. This is the text that should appear next to menu accelerators
+#: gtk/gtkaccellabel.c:119
+msgid "Shift"
+msgstr "Shift"
+
+#. This is the text that should appear next to menu accelerators
+#: gtk/gtkaccellabel.c:125
+msgid "Ctrl"
+msgstr "Ctrl"
+
+#. This is the text that should appear next to menu accelerators
+#: gtk/gtkaccellabel.c:131
+msgid "Alt"
+msgstr "Alt"
+
+#. Translate to calendar:YM if you want years to be displayed
+#: gtk/gtkcalendar.c:700
+msgid "calendar:MY"
+msgstr "calendar:MY"
+
+#. Translate to calendar:week_start:0 if you want Sunday to be the
+#: gtk/gtkcalendar.c:710
+msgid "calendar:week_start:0"
+msgstr "calendar:week_start:0"
+
+#: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
+#, c-format
+msgid "progress bar label|%d %%"
+msgstr "progress bar label |%d %%"
+
+#: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
+msgid "Pick a Color"
+msgstr "Khetha umbala"
+
+# Ifumene
+#: gtk/gtkcolorbutton.c:466
+#, fuzzy
+msgid "Received invalid color data\n"
+msgstr "ifumene umbala we-data ongavumelekanga\n"
+
+# Umbala
+# lo mbala
+#: gtk/gtkcolorsel.c:576
+#, fuzzy
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now. You can drag this color to a palette entry, or select this color as "
+"current by dragging it to the other color swatch alongside."
+msgstr ""
+"umbala obuwukhethile ngaphambili uthelekiswa nalo uwukhetha ngoku. Ungatsala "
+"lombala uwuse kwingeniso eyingqokelela yezixhobo, okanye ukhethe lo mbala "
+"njengokuba unjalo ngoku ngokuwutsala uwuse kwi-color swatch esecaleni."
+
+#: gtk/gtkcolorsel.c:581
+msgid ""
+"The color you've chosen. You can drag this color to a palette entry to save "
+"it for use in the future."
+msgstr ""
+"Umbala owukhethileyo. Ungawutsala lo mbala uwuse kwingeniso yengqokelela "
+"yesixhobo ukuyigcinela ukuba uyisebenzise kwixa elizayo."
+
+#: gtk/gtkcolorsel.c:942
+msgid "_Save color here"
+msgstr "_Gcina apha umbala"
+
+# wenze instead of ukuzenza?
+#: gtk/gtkcolorsel.c:1147
+#, fuzzy
+msgid ""
+"Click this palette entry to make it the current color. To change this entry, "
+"drag a color swatch here or right-click it and select \"Save color here.\""
+msgstr ""
+"Cofa le ngqokelela yezixhobo ukuzenza umbala onawo ngoku. Ukuguqula le "
+"ngeniso, tsala umbala apha okanye yicofe ekunene ze ukhethe u \"Wugcine apha "
+"umbala.\""
+
+#: gtk/gtkcolorsel.c:1913
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+"Khetha umbala owufunayo ngaphandle komjikelezo. Khetha ukuba luzizi okanye "
+"ukuqaqamba kombala ngokusebenzisa unxantathu ophakathi."
+
+#: gtk/gtkcolorsel.c:1938
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
+msgstr ""
+"Cofa isehlisi-liso, ze ucofe umbala nokuba kuphi na kwiskrini sakho "
+"ukukhetha loo mbala."
+
+# Isahlukanisi-mibala
+#: gtk/gtkcolorsel.c:1947
+#, fuzzy
+msgid "_Hue:"
+msgstr "_Isahlukanisi mibala:"
+
+#: gtk/gtkcolorsel.c:1948
+msgid "Position on the color wheel."
+msgstr "Indawo omi kuyo kwivili lemibala."
+
+# _Ukuzala
+#: gtk/gtkcolorsel.c:1950
+#, fuzzy
+msgid "_Saturation:"
+msgstr "_ukuzala:"
+
+#: gtk/gtkcolorsel.c:1951
+msgid "\"Deepness\" of the color."
+msgstr "\"Ukujiya\" kombala."
+
+#: gtk/gtkcolorsel.c:1952
+msgid "_Value:"
+msgstr "_Ixabiso:"
+
+#: gtk/gtkcolorsel.c:1953
+msgid "Brightness of the color."
+msgstr "Ukuqaqamba kombala."
+
+#: gtk/gtkcolorsel.c:1954
+msgid "_Red:"
+msgstr "_Bomvu:"
+
+#: gtk/gtkcolorsel.c:1955
+msgid "Amount of red light in the color."
+msgstr "Ubungakanani bombala obomvu kuloo mbala."
+
+#: gtk/gtkcolorsel.c:1956
+msgid "_Green:"
+msgstr "_Luhlaza:"
+
+# Ubungakanani
+#: gtk/gtkcolorsel.c:1957
+#, fuzzy
+msgid "Amount of green light in the color."
+msgstr "ubungakanani bokukhanya okuluhlaza kuloo mbala."
+
+#: gtk/gtkcolorsel.c:1958
+msgid "_Blue:"
+msgstr "_Bhlowu:"
+
+#: gtk/gtkcolorsel.c:1959
+msgid "Amount of blue light in the color."
+msgstr "Ubungakanani bokukhanya okubhlowu kuloo mbala."
+
+#: gtk/gtkcolorsel.c:1962
+msgid "_Opacity:"
+msgstr "_Uluzizi:"
+
+# Ukucaca
+#: gtk/gtkcolorsel.c:1970 gtk/gtkcolorsel.c:1981
+#, fuzzy
+msgid "Transparency of the color."
+msgstr "ukucaca kombala."
+
+#: gtk/gtkcolorsel.c:1988
+msgid "Color _Name:"
+msgstr "Igama _lombala:"
+
+# color (i.e. colour) and value should be translated
+#: gtk/gtkcolorsel.c:2003
+#, fuzzy
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as 'orange' in this entry."
+msgstr ""
+"Ungafaka i-HTML-style hexadecimal color value, okanye umbala lowo "
+"njengo-'orange'."
+
+#: gtk/gtkcolorsel.c:2022
+msgid "_Palette"
+msgstr "_Ingqokelela yezixhobo"
+
+#: gtk/gtkcolorsel.c:2054
+msgid "Color Wheel"
+msgstr "Ivili lemibala"
+
+# Capitalisation inconsistent
+#: gtk/gtkcolorseldialog.c:123
+#, fuzzy
+msgid "Color Selection"
+msgstr "Khetha umbala"
+
+#: gtk/gtkentry.c:4507 gtk/gtktextview.c:7030
+msgid "Select _All"
+msgstr "Khetha _Yonke"
+
+# Capitalisation inconsistent
+#: gtk/gtkentry.c:4517 gtk/gtktextview.c:7040
+#, fuzzy
+msgid "Input _Methods"
+msgstr "Iindlela _zolwazi olungenisiweyo"
+
+#: gtk/gtkentry.c:4528 gtk/gtktextview.c:7051
+msgid "_Insert Unicode Control Character"
+msgstr "_Faka i- Unicode Control Character"
+
+#: gtk/gtkfilechooser.c:1584 gtk/gtkfilechooser.c:1628
+#: gtk/gtkfilechooser.c:1703 gtk/gtkfilechooser.c:1747
+#, c-format
+msgid "Invalid filename: %s"
+msgstr "Igama lefayili elingavumelekanga: %s"
+
+# Capitalisation inconsistent
+#: gtk/gtkfilechooserbutton.c:65
+#, fuzzy
+msgid "Select A File"
+msgstr "Khetha ifayili"
+
+#: gtk/gtkfilechooserbutton.c:66 gtk/gtkfilechooserdefault.c:1229
+#: gtk/gtkpathbar.c:982
+msgid "Home"
+msgstr "Ekhaya"
+
+# I-Desktop
+#: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1256
+#: gtk/gtkpathbar.c:984
+#, fuzzy
+msgid "Desktop"
+msgstr "i-Desktop"
+
+#: gtk/gtkfilechooserbutton.c:68
+msgid "(None)"
+msgstr "(Nanye)"
+
+#: gtk/gtkfilechooserbutton.c:1515
+msgid "Other..."
+msgstr "Enye..."
+
+# Alufumaneki
+#: gtk/gtkfilechooserdefault.c:867
+#, fuzzy
+msgid "Could not retrieve information about the file"
+msgstr "alufumaneki ulwazi ngale fayili"
+
+#: gtk/gtkfilechooserdefault.c:878
+msgid "Could not add a bookmark"
+msgstr "Asinakuyongeza le bookmark"
+
+# Asinakho
+#: gtk/gtkfilechooserdefault.c:889
+#, fuzzy
+msgid "Could not remove bookmark"
+msgstr "Asinako ukuyisusa le-bookmark"
+
+# sefayili
+#: gtk/gtkfilechooserdefault.c:900
+#, fuzzy
+msgid "The folder could not be created"
+msgstr "Esi siqulathi sefayile asinakwenzeka"
+
+# lefayili
+#: gtk/gtkfilechooserdefault.c:911
+#, fuzzy
+msgid "Invalid file name"
+msgstr "Igama lefayile alisebenzi"
+
+# Okuqulethwe
+# sefayili
+#: gtk/gtkfilechooserdefault.c:921
+#, fuzzy
+msgid "The folder contents could not be displayed"
+msgstr "okuqulethwe sisiqulathi seefayile akuvelanga"
+
+# Alufumaneki
+#: gtk/gtkfilechooserdefault.c:1119
+#, fuzzy, c-format
+msgid "Could not get information about '%s': %s"
+msgstr "akulufumaneki ulwazi nge- '%s': %s"
+
+# sefayili
+#: gtk/gtkfilechooserdefault.c:2095
+#, fuzzy, c-format
+msgid "Add the folder '%s' to the bookmarks"
+msgstr "Yongeza isiqulathi sefayile '%s' kwi-bookmarks"
+
+# sefayili
+#: gtk/gtkfilechooserdefault.c:2136
+#, fuzzy
+msgid "Add the current folder to the bookmarks"
+msgstr "Yongeza esi siqulathi sefayile osenzayo kwi-bookmarks"
+
+# zeefayili
+#: gtk/gtkfilechooserdefault.c:2138
+#, fuzzy
+msgid "Add the selected folders to the bookmarks"
+msgstr "Yongeza iziqulathi zeefayili ezikhethiweyo kwii-bookmarks"
+
+#: gtk/gtkfilechooserdefault.c:2178
+#, c-format
+msgid "Remove the bookmark '%s'"
+msgstr "Susa i-bookmark '%s'"
+
+#: gtk/gtkfilechooserdefault.c:2591
+#, c-format
+msgid "Could not add a bookmark for '%s' because it is an invalid path name."
+msgstr "Akunakongeza i-bookmark ye- '%s' kuba asilogama lendlela evunyiweyo."
+
+#: gtk/gtkfilechooserdefault.c:2769
+msgid "Shortcuts"
+msgstr "Izinqumlisi"
+
+#: gtk/gtkfilechooserdefault.c:2823
+msgid "Folder"
+msgstr "Isiqulathi seefayili"
+
+#: gtk/gtkfilechooserdefault.c:2875 gtk/gtkstock.c:295
+msgid "_Add"
+msgstr "_Yongeza"
+
+# seefayili
+#: gtk/gtkfilechooserdefault.c:2882
+#, fuzzy
+msgid "Add the selected folder to the bookmarks"
+msgstr "Yongeza isiqulathi seefayile esikhethileyo kwi-Bookmarks  A"
+
+#: gtk/gtkfilechooserdefault.c:2887 gtk/gtkstock.c:352
+msgid "_Remove"
+msgstr "_Susa"
+
+#: gtk/gtkfilechooserdefault.c:2894
+msgid "Remove the selected bookmark"
+msgstr "Susa i-bookmark ekhethiweyo"
+
+#: gtk/gtkfilechooserdefault.c:2997
+msgid "_Add to Shortcuts"
+msgstr "_Yongeza izinqumlisi"
+
+#: gtk/gtkfilechooserdefault.c:3007
+msgid "Open _Location"
+msgstr "Vula _Indawo"
+
+#: gtk/gtkfilechooserdefault.c:3019
+msgid "Show _Hidden Files"
+msgstr "Bonisa _iiFayili eziFihliweyo"
+
+#: gtk/gtkfilechooserdefault.c:3143 gtk/gtkfilesel.c:767
+msgid "Files"
+msgstr "iiFayili"
+
+#: gtk/gtkfilechooserdefault.c:3174
+msgid "Name"
+msgstr "Igama"
+
+#: gtk/gtkfilechooserdefault.c:3199
+msgid "Size"
+msgstr "Ubungakanani"
+
+#: gtk/gtkfilechooserdefault.c:3212
+msgid "Modified"
+msgstr "Elungisiweyo"
+
+#: gtk/gtkfilechooserdefault.c:3244
+msgid "Select which types of files are shown"
+msgstr "Khetha iindidi zeefayili ezibonisiweyo"
+
+#. Create Folder
+#: gtk/gtkfilechooserdefault.c:3280
+msgid "Create Fo_lder"
+msgstr "Dala isiqulathi_seefayili"
+
+#. Name entry
+#: gtk/gtkfilechooserdefault.c:3398
+msgid "_Name:"
+msgstr "_Igama:"
+
+#: gtk/gtkfilechooserdefault.c:3438
+msgid "_Browse for other folders"
+msgstr "_Khangela kwezinye iziqulathi zeefayili"
+
+#: gtk/gtkfilechooserdefault.c:3688
+msgid "Save in _folder:"
+msgstr "Gcina kwi _siqulathi seefayili:"
+
+#: gtk/gtkfilechooserdefault.c:3690
+msgid "Create in _folder:"
+msgstr "Dalela kwi _siqulathi seefayili:"
+
+#: gtk/gtkfilechooserdefault.c:4523
+msgid "Cannot change to folder because it is not local"
+msgstr "Awunakuguqukela kwisiqulathi seefayili kuba asinakufikeleleka ngqo"
+
+#: gtk/gtkfilechooserdefault.c:5048
+#, c-format
+msgid "Shortcut %s does not exist"
+msgstr "Isinqumlisi %s asikho"
+
+#: gtk/gtkfilechooserdefault.c:5508
+#, c-format
+msgid "Could not mount %s"
+msgstr "Akunakuyifaka kwisakhelo %s"
+
+#: gtk/gtkfilechooserdefault.c:5802
+msgid "Type name of new folder"
+msgstr "Bhala igama lesiqulathi seefayili esitsha"
+
+#: gtk/gtkfilechooserdefault.c:5844 gtk/gtkfilechooserdefault.c:5846
+#, c-format
+msgid "%.1f K"
+msgstr "i-%.1f K"
+
+#: gtk/gtkfilechooserdefault.c:5848
+#, c-format
+msgid "%.1f M"
+msgstr "i-%.1f M"
+
+#: gtk/gtkfilechooserdefault.c:5850
+#, c-format
+msgid "%.1f G"
+msgstr "i-%.1f G"
+
+#: gtk/gtkfilechooserdefault.c:5902
+msgid "Today"
+msgstr "Namhlanje"
+
+#: gtk/gtkfilechooserdefault.c:5904
+msgid "Yesterday"
+msgstr "Izolo"
+
+#: gtk/gtkfilechooserdefault.c:5915
+msgid "Unknown"
+msgstr "Ayaziwa"
+
+# Akunakusitshintsha
+#: gtk/gtkfilechooserdefault.c:5985
+#, fuzzy
+msgid "Cannot change folder"
+msgstr "akunakusitshintsha esi siqulathi seefayili"
+
+# Isiqulathi
+#: gtk/gtkfilechooserdefault.c:5986
+#, fuzzy
+msgid "The folder you specified is an invalid path."
+msgstr "isiqulathi seefayili osibalulayo asisebenzi."
+
+# Akunakwakha gama lefayili
+#: gtk/gtkfilechooserdefault.c:6025
+#, fuzzy, c-format
+msgid "Could not build file name from '%s' and '%s'"
+msgstr "akunakwakha igama lefayile kwi- '%s' and '%s'"
+
+# Akungekhethi le nto
+#: gtk/gtkfilechooserdefault.c:6061
+#, fuzzy
+msgid "Could not select item"
+msgstr "akungekhethi le nto"
+
+#: gtk/gtkfilechooserdefault.c:6101
+msgid "Open Location"
+msgstr "Vula indawo"
+
+#: gtk/gtkfilechooserdefault.c:6108
+msgid "Save in Location"
+msgstr "Yigcine kule ndawo"
+
+#: gtk/gtkfilechooserdefault.c:6132
+msgid "_Location:"
+msgstr "_Indawo:"
+
+#: gtk/gtkfilesel.c:731
+msgid "Folders"
+msgstr "Iziqulathi-zeefayili"
+
+#: gtk/gtkfilesel.c:735
+msgid "Fol_ders"
+msgstr "Iziqulathi_zeefayili"
+
+#: gtk/gtkfilesel.c:771
+msgid "_Files"
+msgstr "_iiFayili"
+
+#: gtk/gtkfilesel.c:859 gtk/gtkfilesel.c:2249
+#, c-format
+msgid "Folder unreadable: %s"
+msgstr "Isiqulathi seefayili asifundeki: %s"
+
+#: gtk/gtkfilesel.c:990
+#, c-format
+msgid ""
+"The file \"%s\" resides on another machine (called %s) and may not be "
+"available to this program.\n"
+"Are you sure that you want to select it?"
+msgstr ""
+"Le fayili \"%s\"ikwenye imatshini (ebizwa i-%s) yaye ayingefumaneki kule "
+"nkqubo.\n"
+"Ingaba uqinisekile ukuba ufuna ukukhetha yona?"
+
+#: gtk/gtkfilesel.c:1121
+msgid "_New Folder"
+msgstr "_Isiqulathi seefayili esitsha"
+
+#: gtk/gtkfilesel.c:1132
+msgid "De_lete File"
+msgstr "Ci_ma iFayili"
+
+# _Nika ifayili
+#: gtk/gtkfilesel.c:1143
+#, fuzzy
+msgid "_Rename File"
+msgstr "_nika ifayile elinye igama"
+
+#: gtk/gtkfilesel.c:1445
+#, c-format
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr ""
+"Igama lesiqulathi-fayili \"%s\" liqulethe iimpawu ezingavunyelwanga kumagama "
+"eefayili"
+
+#: gtk/gtkfilesel.c:1447
+#, c-format
+msgid ""
+"Error creating folder \"%s\": %s\n"
+"%s"
+msgstr ""
+"Impazamo ekudaleni isiqulathi-fayili \"%s\": %s\n"
+"%s"
+
+#: gtk/gtkfilesel.c:1448 gtk/gtkfilesel.c:1684
+msgid "You probably used symbols not allowed in filenames."
+msgstr "Mhlawumbi usebenzise iimpawu ezingavunyelwanga kumagama eefayili."
+
+#: gtk/gtkfilesel.c:1456
+#, c-format
+msgid "Error creating folder \"%s\": %s\n"
+msgstr "Impazamo ekudalweni kwesiqulathi-fayili \"%s\": %s\n"
+
+#: gtk/gtkfilesel.c:1490
+msgid "New Folder"
+msgstr "Isiqulathi-fayili esitsha"
+
+#: gtk/gtkfilesel.c:1505
+msgid "_Folder name:"
+msgstr "_Igama lesiqulathi-fayili:"
+
+#: gtk/gtkfilesel.c:1529
+msgid "C_reate"
+msgstr "D_ala"
+
+#: gtk/gtkfilesel.c:1572
+#, c-format
+msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
+msgstr ""
+"Igama lefayili \"%s\" liqulethe iimpawu ezingavunyelwanga kumagama eefayili"
+
+#: gtk/gtkfilesel.c:1575
+#, c-format
+msgid ""
+"Error deleting file \"%s\": %s\n"
+"%s"
+msgstr ""
+"Impazamo xa kucinywa ifayili \"%s\": %s\n"
+"%s"
+
+# eefayili
+#: gtk/gtkfilesel.c:1577 gtk/gtkfilesel.c:1698
+#, fuzzy
+msgid "It probably contains symbols not allowed in filenames."
+msgstr "Mhlawumbi iqulethe iimpawu ezingavunyelwanga kumagama eefayile."
+
+#: gtk/gtkfilesel.c:1586
+#, c-format
+msgid "Error deleting file \"%s\": %s"
+msgstr "Impazamo xa kucinywa ifayili \"%s\": %s"
+
+#: gtk/gtkfilesel.c:1629
+#, c-format
+msgid "Really delete file \"%s\"?"
+msgstr "Icinywe nyhani na \"%s\"?"
+
+#: gtk/gtkfilesel.c:1634
+msgid "Delete File"
+msgstr "Cima iFayili"
+
+# iifayili
+#: gtk/gtkfilesel.c:1680 gtk/gtkfilesel.c:1694
+#, fuzzy, c-format
+msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
+msgstr ""
+"Eli gama lefayili \"%s\" liqulethe iimpawu ezingavunyelwanga xa kunikwa "
+"iifayile amagama"
+
+#: gtk/gtkfilesel.c:1682
+#, c-format
+msgid ""
+"Error renaming file to \"%s\": %s\n"
+"%s"
+msgstr ""
+"Impazamo xa ifayili inikwa elinye igama \"%s\": %s\n"
+"%s"
+
+#: gtk/gtkfilesel.c:1696
+#, c-format
+msgid ""
+"Error renaming file \"%s\": %s\n"
+"%s"
+msgstr ""
+"Impazamo xa ifayili inikwa elinye igama \"%s\": %s\n"
+"%s"
+
+#: gtk/gtkfilesel.c:1706
+#, c-format
+msgid "Error renaming file \"%s\" to \"%s\": %s"
+msgstr "Impazamo xa ifayili inikwa elinye igama \"%s\" to \"%s\": %s"
+
+# Capitalisation inconsistent
+#: gtk/gtkfilesel.c:1753
+#, fuzzy
+msgid "Rename File"
+msgstr "Nika ifayili elinye igama"
+
+# fayili
+#: gtk/gtkfilesel.c:1768
+#, fuzzy, c-format
+msgid "Rename file \"%s\" to:"
+msgstr "nika le fayile elinye igama\"%s\" ukuya:"
+
+#: gtk/gtkfilesel.c:1797
+msgid "_Rename"
+msgstr "_Yinike elinye igama"
+
+#: gtk/gtkfilesel.c:2229
+msgid "_Selection: "
+msgstr "_Ukhetho: "
+
+#: gtk/gtkfilesel.c:3152
+#, c-format
+msgid ""
+"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
+"environment variable G_FILENAME_ENCODING): %s"
+msgstr ""
+"Igama lale fayili \"%s\" aliguqukelanga kwi-UTF-8. (zama ukulungisa indawo "
+"eguqukayo kwi-G_FILENAME_ENCODING): %s"
+
+#: gtk/gtkfilesel.c:3155
+msgid "Invalid UTF-8"
+msgstr "i-UTF-8 engasebenziyo"
+
+#: gtk/gtkfilesel.c:4032
+msgid "Name too long"
+msgstr "Igama lide gqitha"
+
+#: gtk/gtkfilesel.c:4034
+msgid "Couldn't convert filename"
+msgstr "Ayikwazanga ukutshintsha igama lefayili"
+
+#: gtk/gtkfilesystemmodel.c:1267
+msgid "(Empty)"
+msgstr "(Engenanto)"
+
+#: gtk/gtkfilesystemunix.c:415 gtk/gtkfilesystemunix.c:429
+#: gtk/gtkfilesystemunix.c:626 gtk/gtkfilesystemwin32.c:482
+#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1530
+#, c-format
+msgid "Error getting information for '%s': %s"
+msgstr "Impazamo ekufumaneni ulwazi lwe-'%s': %s"
+
+#: gtk/gtkfilesystemunix.c:495 gtk/gtkfilesystemwin32.c:537
+#, c-format
+msgid "Error creating directory '%s': %s"
+msgstr "Impazamo xa kudalwa uvimba wefayili '%s': %s"
+
+#: gtk/gtkfilesystemunix.c:575 gtk/gtkfilesystemwin32.c:597
+msgid "This file system does not support mounting"
+msgstr "Esi sixokelelwano sefayili asikuxhasi ukufakwa kwisakhelo"
+
+#: gtk/gtkfilesystemunix.c:583
+msgid "Filesystem"
+msgstr "Isixokelelwano seefayili"
+
+#: gtk/gtkfilesystemunix.c:740
+#, c-format
+msgid "Could not get a stock icon for %s"
+msgstr "Awufumanekanga umfanekiso ongumqondiso we- %s"
+
+#: gtk/gtkfilesystemunix.c:835
+#, c-format
+msgid ""
+"The name \"%s\" is not valid because it contains the character \"%s\". "
+"Please use a different name."
+msgstr ""
+"Eli gama \"%s\" alisebenzi kuba liqulethe uphawu \"%s\". Nceda usebenzise "
+"igama elahlukileyo."
+
+#: gtk/gtkfilesystemunix.c:1443 gtk/gtkfilesystemwin32.c:1004
+#, c-format
+msgid "Bookmark saving failed: %s"
+msgstr "Ukugcina kwi-bookmark akuphumelelanga: %s"
+
+#: gtk/gtkfilesystemunix.c:1495
+#, c-format
+msgid "'%s' already exists in the bookmarks list"
+msgstr "I-'%s' sele ikho kuluhlu lwe-bookmarks"
+
+#: gtk/gtkfilesystemunix.c:1557
+#, c-format
+msgid "'%s' does not exist in the bookmarks list"
+msgstr "I-'%s' ayikho kuluhlu olukwi-bookmarks"
+
+#: gtk/gtkfilesystemunix.c:1739
+#, c-format
+msgid "Error getting information for '%s'"
+msgstr "Impazamo ekufumaneni ulwazi lwe- '%s'"
+
+#: gtk/gtkfontbutton.c:178 gtk/gtkfontbutton.c:295
+msgid "Pick a Font"
+msgstr "Khetha iFonti"
+
+#. Initialize fields
+#: gtk/gtkfontbutton.c:289
+msgid "Sans 12"
+msgstr "i-Sans 12"
+
+#: gtk/gtkfontbutton.c:807
+msgid "Font"
+msgstr "iFonti"
+
+#. This is the default text shown in the preview entry, though the user
+#: gtk/gtkfontsel.c:73
+msgid "abcdefghijk ABCDEFGHIJK"
+msgstr "abcdefghijk ABCDEFGHIJK"
+
+#: gtk/gtkfontsel.c:360
+msgid "_Family:"
+msgstr "_Usapho:"
+
+#: gtk/gtkfontsel.c:366
+msgid "_Style:"
+msgstr "_Isimbo:"
+
+#: gtk/gtkfontsel.c:372
+msgid "Si_ze:"
+msgstr "Ubu_ngakanani:"
+
+#. create the text entry widget
+#: gtk/gtkfontsel.c:548
+msgid "_Preview:"
+msgstr "_Yikhangele phambi kokuyishicilela:"
+
+#: gtk/gtkfontsel.c:1382
+msgid "Font Selection"
+msgstr "Ukukhetha ifonti"
+
+# I-Gamma
+#: gtk/gtkgamma.c:401
+msgid "Gamma"
+msgstr "I-Gamma"
+
+#: gtk/gtkgamma.c:411
+msgid "_Gamma value"
+msgstr "Ixabiso le_Gamma"
+
+#. Remove this icon source so we don't keep trying to
+#: gtk/gtkiconfactory.c:1629
+#, c-format
+msgid "Error loading icon: %s"
+msgstr "Kwenzeke impazamo xa kufakwa umqondiso: %s"
+
+# umxholo\n awufumaneki
+#: gtk/gtkicontheme.c:1263
+#, fuzzy, c-format
+msgid ""
+"Could not find the icon '%s'. The '%s' theme\n"
+"was not found either, perhaps you need to install it.\n"
+"You can get a copy from:\n"
+"\t%s"
+msgstr ""
+"Ayiwufumani lo mqondiso '%s'. Lo '%s' umxholo\n"
+"awufumaneki, mhlawumbi kufuneka uwufake.\n"
+"ikopi ungayifumana kwa-:\n"
+"\t%s"
+
+#: gtk/gtkicontheme.c:1328
+#, c-format
+msgid "Icon '%s' not present in theme"
+msgstr "Umqondiso '%s' awukho emxholweni"
+
+#: gtk/gtkimmodule.c:427
+msgid "Default"
+msgstr "Misela"
+
+#: gtk/gtkinputdialog.c:235
+msgid "Input"
+msgstr "Ulwazi olungenayo"
+
+#: gtk/gtkinputdialog.c:244
+msgid "No extended input devices"
+msgstr "Azandiswanga izixhobo zolwazi olungenayo"
+
+#: gtk/gtkinputdialog.c:256
+msgid "_Device:"
+msgstr "_Isixhobo:"
+
+#: gtk/gtkinputdialog.c:273
+msgid "Disabled"
+msgstr "Ukwenza ingasebenzi"
+
+#: gtk/gtkinputdialog.c:280
+msgid "Screen"
+msgstr "Iskrini"
+
+#: gtk/gtkinputdialog.c:287
+msgid "Window"
+msgstr "Ifestile"
+
+#: gtk/gtkinputdialog.c:294
+msgid "_Mode: "
+msgstr "_Inkqubo: "
+
+#. The axis listbox
+#: gtk/gtkinputdialog.c:325
+msgid "_Axes"
+msgstr "I_Axes"
+
+#. Keys listbox
+#: gtk/gtkinputdialog.c:342
+msgid "_Keys"
+msgstr "Ama_Qhosha"
+
+#: gtk/gtkinputdialog.c:562
+msgid "X"
+msgstr "U-X"
+
+#: gtk/gtkinputdialog.c:563
+msgid "Y"
+msgstr "U-Y"
+
+#: gtk/gtkinputdialog.c:564
+msgid "Pressure"
+msgstr "Uxinzelelo"
+
+#: gtk/gtkinputdialog.c:565
+msgid "X Tilt"
+msgstr "i-X ekekeleyo"
+
+#: gtk/gtkinputdialog.c:566
+msgid "Y Tilt"
+msgstr "i-Y ekekeleyo"
+
+#: gtk/gtkinputdialog.c:567
+#, fuzzy
+msgid "Wheel"
+msgstr "Jika"
+
+#: gtk/gtkinputdialog.c:607
+msgid "none"
+msgstr "akukho nanye"
+
+#: gtk/gtkinputdialog.c:643 gtk/gtkinputdialog.c:679
+msgid "(disabled)"
+msgstr "(yenziwe ayasebenza)"
+
+#: gtk/gtkinputdialog.c:672
+msgid "(unknown)"
+msgstr "(engaziwayo)"
+
+#. and clear button
+#: gtk/gtkinputdialog.c:759
+msgid "clear"
+msgstr "cima"
+
+# Capitalisation
+#: gtk/gtklabel.c:3931
+#, fuzzy
+msgid "Select All"
+msgstr "Khetha zonke"
+
+#. Description of --gtk-module=MODULES in --help output
+#: gtk/gtkmain.c:398
+msgid "Load additional GTK+ modules"
+msgstr "Faka i-GTK+ eyongeziweyo iimodyuli"
+
+#. Placeholder in --gtk-module=MODULES in --help output
+#: gtk/gtkmain.c:399
+msgid "MODULES"
+msgstr "II-MODYULI"
+
+#. Description of --g-fatal-warnings in --help output
+#: gtk/gtkmain.c:401
+#, fuzzy
+msgid "Make all warnings fatal"
+msgstr "Yenza zonke izilumkiso zife"
+
+# How about ukumisela instead of ukusetha?
+#. Description of --gtk-debug=FLAGS in --help output
+#: gtk/gtkmain.c:404
+msgid "GTK+ debugging flags to set"
+msgstr "I-GTK+ ukusetha izilungisi-ziphene kwinkqubo"
+
+# How about ukumisela?
+#. Description of --gtk-no-debug=FLAGS in --help output
+#: gtk/gtkmain.c:407
+#, fuzzy
+msgid "GTK+ debugging flags to unset"
+msgstr "I-GTK+ ukusetha izilungisi-ziphene kwinkqubo"
+
+#. Translate to default:RTL if you want your widgets
+#: gtk/gtkmain.c:482
+msgid "default:LTR"
+msgstr "default:LTR"
+
+#: gtk/gtkmain.c:565
+msgid "GTK+ Options"
+msgstr "I-GTK+ekunokukhethwa kuko"
+
+# nekunokukhethwa kuko
+#: gtk/gtkmain.c:565
+#, fuzzy
+msgid "Show GTK+ Options"
+msgstr "Bonisa i- GTK+ ekunokukhethwa kuko"
+
+#: gtk/gtknotebook.c:2712 gtk/gtknotebook.c:5060
+#, c-format
+msgid "Page %u"
+msgstr "iPhepha %u"
+
+#: gtk/gtkradiotoolbutton.c:91
+msgid "Group"
+msgstr "Iqela"
+
+#: gtk/gtkradiotoolbutton.c:92
+msgid "The radio tool button whose group this button belongs to."
+msgstr ""
+"Iqhosha lesixhobo sikanomathotholo nesiliqela elingena kuso eli qhosha."
+
+# le fayili
+#: gtk/gtkrc.c:2399
+#, fuzzy, c-format
+msgid "Unable to find include file: \"%s\""
+msgstr "Ayifumaneki le fayile ibandakanyiweyo: \"%s\""
+
+# Ayinakho
+# ifayili
+#: gtk/gtkrc.c:3038 gtk/gtkrc.c:3041
+#, fuzzy, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Ayinako ukufumana ifayile enomfanekiso kwi-pixmap_path: \"%s\""
+
+#: gtk/gtkrc.c:3476
+#, c-format
+msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
+msgstr "i-Pixmap path element: \"%s\" mayiphelele, %s, umgca %d"
+
+#. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
+#: gtk/gtkstock.c:286
+msgid "Information"
+msgstr "Ulwazi"
+
+#: gtk/gtkstock.c:287
+msgid "Warning"
+msgstr "Isilumkiso"
+
+#: gtk/gtkstock.c:288
+msgid "Error"
+msgstr "Impazamo"
+
+#: gtk/gtkstock.c:289
+msgid "Question"
+msgstr "Umbuzo"
+
+#. FIXME these need accelerators when appropriate, and
+#: gtk/gtkstock.c:294
+msgid "_About"
+msgstr "_Malunga na"
+
+#: gtk/gtkstock.c:296
+msgid "_Apply"
+msgstr "_Sebenzisa"
+
+#: gtk/gtkstock.c:297
+msgid "_Bold"
+msgstr "_Bhala ngqindilili"
+
+#: gtk/gtkstock.c:298
+msgid "_Cancel"
+msgstr "_Rhoxisa"
+
+#: gtk/gtkstock.c:299
+msgid "_CD-Rom"
+msgstr "i_CD-Rom"
+
+#: gtk/gtkstock.c:300
+msgid "_Clear"
+msgstr "_Cima"
+
+#: gtk/gtkstock.c:301
+msgid "_Close"
+msgstr "_Vala"
+
+#: gtk/gtkstock.c:302
+msgid "_Convert"
+msgstr "_Guqula"
+
+#: gtk/gtkstock.c:303
+msgid "_Copy"
+msgstr "_Kopa"
+
+#: gtk/gtkstock.c:304
+msgid "Cu_t"
+msgstr "Si_ka"
+
+#: gtk/gtkstock.c:305
+msgid "_Delete"
+msgstr "_Cima"
+
+#: gtk/gtkstock.c:306
+msgid "_Execute"
+msgstr "_Phumeza"
+
+#: gtk/gtkstock.c:307
+msgid "_Edit"
+msgstr "_Hlela"
+
+#: gtk/gtkstock.c:308
+msgid "_Find"
+msgstr "_Fumana"
+
+# Capitalisation
+#: gtk/gtkstock.c:309
+#, fuzzy
+msgid "Find and _Replace"
+msgstr "Fumana ze _ubeke enye endaweni yayo"
+
+#: gtk/gtkstock.c:310
+msgid "_Floppy"
+msgstr "i_Floppy"
+
+#: gtk/gtkstock.c:311
+msgid "_Bottom"
+msgstr "_Phantsi"
+
+#: gtk/gtkstock.c:312
+msgid "_First"
+msgstr "_Eyokuqala"
+
+#: gtk/gtkstock.c:313
+msgid "_Last"
+msgstr "_Eyokugqibela"
+
+#: gtk/gtkstock.c:314
+msgid "_Top"
+msgstr "_Phezulu"
+
+#: gtk/gtkstock.c:315
+msgid "_Back"
+msgstr "_Emva"
+
+#: gtk/gtkstock.c:316
+msgid "_Down"
+msgstr "_Phantsi"
+
+#: gtk/gtkstock.c:317 gtk/gtkstock.c:331
+msgid "_Forward"
+msgstr "_Thumela"
+
+#: gtk/gtkstock.c:318
+msgid "_Up"
+msgstr "_Phezulu"
+
+#: gtk/gtkstock.c:319
+msgid "_Harddisk"
+msgstr "_Idiski eyakhelwe ngaphakathi"
+
+#: gtk/gtkstock.c:320
+msgid "_Help"
+msgstr "_Uncedo"
+
+#: gtk/gtkstock.c:321
+msgid "_Home"
+msgstr "_Ekhaya"
+
+# Capitalisation
+#: gtk/gtkstock.c:322
+#, fuzzy
+msgid "Increase Indent"
+msgstr "Andisa ukuqalisa nganeno"
+
+# Capitalisation
+#: gtk/gtkstock.c:323
+#, fuzzy
+msgid "Decrease Indent"
+msgstr "Cutha ukuqalisa nganeno"
+
+#: gtk/gtkstock.c:324
+msgid "_Index"
+msgstr "_Isalathiso"
+
+#: gtk/gtkstock.c:325
+msgid "_Italic"
+msgstr "_Bhala ngokukekeleyo"
+
+#: gtk/gtkstock.c:326
+msgid "_Jump to"
+msgstr "_Tsibela ku"
+
+# How about _Emphakathini?
+#: gtk/gtkstock.c:327
+#, fuzzy
+msgid "_Center"
+msgstr "_Phakathi"
+
+#: gtk/gtkstock.c:328
+msgid "_Fill"
+msgstr "_Zalisa"
+
+#: gtk/gtkstock.c:329
+msgid "_Left"
+msgstr "_Ekhohlo"
+
+#: gtk/gtkstock.c:330
+msgid "_Right"
+msgstr "_Ekunene"
+
+#: gtk/gtkstock.c:332
+msgid "_Next"
+msgstr "_Elandelayo"
+
+#: gtk/gtkstock.c:333
+msgid "P_ause"
+msgstr "N_qumama"
+
+#: gtk/gtkstock.c:334
+msgid "_Play"
+msgstr "_Dlala"
+
+#: gtk/gtkstock.c:335
+msgid "Pre_vious"
+msgstr "Enga_phambili"
+
+#: gtk/gtkstock.c:336
+msgid "_Record"
+msgstr "_Ingxelo"
+
+#: gtk/gtkstock.c:337
+msgid "R_ewind"
+msgstr "Buyisela_emva"
+
+#: gtk/gtkstock.c:338 gtk/gtkstock.c:361
+msgid "_Stop"
+msgstr "_Yima"
+
+#: gtk/gtkstock.c:339
+msgid "_Network"
+msgstr "_Uthungelwano"
+
+#: gtk/gtkstock.c:340
+msgid "_New"
+msgstr "_Entsha"
+
+#: gtk/gtkstock.c:341
+msgid "_No"
+msgstr "_Hayi"
+
+# NB: OK should be different to Yes. Discuss on list?
+#: gtk/gtkstock.c:342
+#, fuzzy
+msgid "_OK"
+msgstr "_Ewe"
+
+#: gtk/gtkstock.c:343
+msgid "_Open"
+msgstr "_Vula"
+
+#: gtk/gtkstock.c:344
+msgid "_Paste"
+msgstr "_Ncamathisela"
+
+#: gtk/gtkstock.c:345
+msgid "_Preferences"
+msgstr "_Okukhethayo"
+
+#: gtk/gtkstock.c:346
+msgid "_Print"
+msgstr "_Shicilela"
+
+# Capitalisation
+#: gtk/gtkstock.c:347
+#, fuzzy
+msgid "Print Pre_view"
+msgstr "Khangela_phambi kokushicilela"
+
+#: gtk/gtkstock.c:348
+msgid "_Properties"
+msgstr "_Iimpawu"
+
+#: gtk/gtkstock.c:349
+msgid "_Quit"
+msgstr "_Phuma"
+
+#: gtk/gtkstock.c:350
+msgid "_Redo"
+msgstr "_Yenze kwakhona"
+
+#: gtk/gtkstock.c:351
+msgid "_Refresh"
+msgstr "_Hlaziya"
+
+#: gtk/gtkstock.c:353
+msgid "_Revert"
+msgstr "_Buyela kweyangaphambili"
+
+#: gtk/gtkstock.c:354
+msgid "_Save"
+msgstr "_Gcina"
+
+#: gtk/gtkstock.c:355
+msgid "Save _As"
+msgstr "Gcina N_jenge"
+
+#: gtk/gtkstock.c:356
+msgid "_Color"
+msgstr "_Umbala"
+
+#: gtk/gtkstock.c:357
+msgid "_Font"
+msgstr "i_Fonti"
+
+#: gtk/gtkstock.c:358
+msgid "_Ascending"
+msgstr "_Enyukayo"
+
+#: gtk/gtkstock.c:359
+msgid "_Descending"
+msgstr "_Ehlayo"
+
+#: gtk/gtkstock.c:360
+msgid "_Spell Check"
+msgstr "_Khangela Upelo"
+
+# How about _Cima ngokukrwela umgca?
+#: gtk/gtkstock.c:362
+#, fuzzy
+msgid "_Strikethrough"
+msgstr "_hlaba"
+
+# Capitalisation
+#: gtk/gtkstock.c:363
+#, fuzzy
+msgid "_Undelete"
+msgstr "_Musa ukucima"
+
+# Capitalisation
+#: gtk/gtkstock.c:364
+#, fuzzy
+msgid "_Underline"
+msgstr "_Faka umgca ngaphantsi"
+
+#: gtk/gtkstock.c:365
+#, fuzzy
+msgid "_Undo"
+msgstr "_Khulula"
+
+#: gtk/gtkstock.c:366
+msgid "_Yes"
+msgstr "_Ewe"
+
+#: gtk/gtkstock.c:367
+msgid "_Normal Size"
+msgstr "_Umlinganiso Oqhelekileyo"
+
+#: gtk/gtkstock.c:368
+msgid "Best _Fit"
+msgstr "Ilingana_kakuhle"
+
+# Capitalisation
+#: gtk/gtkstock.c:369
+#, fuzzy
+msgid "Zoom _In"
+msgstr "Nciphisa _umfanekiso"
+
+# Capitalisation
+#: gtk/gtkstock.c:370
+#, fuzzy
+msgid "Zoom _Out"
+msgstr "Andisa _umfanekiso"
+
+#: gtk/gtktextutil.c:48
+msgid "LRM _Left-to-right mark"
+msgstr "Uphawu lwe-LRM olusuka ek_hohlo-luye-ekunene"
+
+#: gtk/gtktextutil.c:49
+msgid "RLM _Right-to-left mark"
+msgstr "Uphawu lwe-RLM olusuka ek_unene-luye-ekhohlo"
+
+#: gtk/gtktextutil.c:50
+msgid "LRE Left-to-right _embedding"
+msgstr "I-LRE esuka ekhohlo-iye-ekunene _ezinzileyo"
+
+#: gtk/gtktextutil.c:51
+msgid "RLE Right-to-left e_mbedding"
+msgstr "I-RLE esuka ekunene-iye-ekhohlo e_zinzileyo"
+
+#: gtk/gtktextutil.c:52
+msgid "LRO Left-to-right _override"
+msgstr "I-LRO esuka ekhohlo-iye-ekunene inga _nanzwanga"
+
+#: gtk/gtktextutil.c:53
+msgid "RLO Right-to-left o_verride"
+msgstr "I-RLO esuka ekunene-iye-ekhohlo inga n_anzwanga "
+
+#: gtk/gtktextutil.c:54
+#, fuzzy
+msgid "PDF _Pop directional formatting"
+msgstr "I-PDF _Pop directional formatting"
+
+#: gtk/gtktextutil.c:55
+msgid "ZWS _Zero width space"
+msgstr "I-ZWS _indawo ebubanzi obuliqanda"
+
+#: gtk/gtktextutil.c:56
+msgid "ZWJ Zero width _joiner"
+msgstr "i-ZWJ Zero edibanisa _ububanzi"
+
+#: gtk/gtktextutil.c:57
+msgid "ZWNJ Zero width _non-joiner"
+msgstr "I-ZWNJ Zero engadibanisi _bubanzi"
+
+# Ayinakho
+#: gtk/gtkthemes.c:71
+#, fuzzy, c-format
+msgid "Unable to locate theme engine in module_path: \"%s\","
+msgstr "Ayinako ukufumana injini yomxholo okwi-module_path: \"%s\","
+
+#: gtk/gtktipsquery.c:186
+#, fuzzy
+msgid "--- No Tip ---"
+msgstr "--- Akukho silumkiso ---"
+
+# char is short for character - should be translated
+#: gtk/gtkuimanager.c:1132
+#, fuzzy, c-format
+msgid "Unknown attribute '%s' on line %d char %d"
+msgstr "Uphawu olungaziwayo '%s' kumgca %d char %d"
+
+# char is short for character - should be translated
+#: gtk/gtkuimanager.c:1332
+#, fuzzy, c-format
+msgid "Unexpected start tag '%s' on line %d char %d"
+msgstr "Isiqalo se-tag esingalindelekanga '%s' kumgca %d char %d"
+
+# char is short for character - should be translated
+#: gtk/gtkuimanager.c:1417
+#, fuzzy, c-format
+msgid "Unexpected character data on line %d char %d"
+msgstr "I-data enophawu olungalindelekanga kumgca %d char %d"
+
+#: gtk/gtkuimanager.c:2209
+msgid "Empty"
+msgstr "Ayinanto"
+
+#. ID
+#: modules/input/imam-et.c:454
+msgid "Amharic (EZ+)"
+msgstr "I-Amharic (EZ+)"
+
+#. ID
+#: modules/input/imcedilla.c:91
+msgid "Cedilla"
+msgstr "I-Cedilla"
+
+#. ID
+#: modules/input/imcyrillic-translit.c:217
+msgid "Cyrillic (Transliterated)"
+msgstr "I-Cyrillic (Ebhalwe ngoonobumba bolunye uhlobo)"
+
+#. ID
+#: modules/input/iminuktitut.c:127
+msgid "Inuktitut (Transliterated)"
+msgstr "I-Inuktitut (Ebhalwe ngoonobumba bolunye uhlobo)"
+
+#. ID
+#: modules/input/imipa.c:145
+msgid "IPA"
+msgstr "I-IPA"
+
+#. ID
+#: modules/input/imthai-broken.c:178
+msgid "Thai (Broken)"
+msgstr "I-Thai (eyaphukileyo)"
+
+#. ID
+#: modules/input/imti-er.c:453
+msgid "Tigrigna-Eritrean (EZ+)"
+msgstr "I-Tigrigna-Eritrean (EZ+)"
+
+#. ID
+#: modules/input/imti-et.c:453
+msgid "Tigrigna-Ethiopian (EZ+)"
+msgstr "I-Tigrigna-Ethiopian (EZ+)"
+
+#. ID
+#: modules/input/imviqr.c:244
+msgid "Vietnamese (VIQR)"
+msgstr "I-Vietnamese (VIQR)"
+
+# Input Method should be translated
+#. ID
+#: modules/input/imxim.c:28
+#, fuzzy
+msgid "X Input Method"
+msgstr "I-X Input Method"
+
+#: tests/testfilechooser.c:186
+#, c-format
+msgid "Could not get information for file '%s': %s"
+msgstr "Ayilufumani ulwazi lwefayili '%s': %s"
