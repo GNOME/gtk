@@ -3,6 +3,9 @@
 	* tests/testgtk.c (create_range_controls): Don't set a 
 	fixed height on the hscale widget. This fixes "bug" 
 	#55840.
+	(create_window_states): Set up destroy signals so that
+	all windows will be destroyed when one is. This fixes 
+	bug #58133.
 
 2001-10-26  Anders Carlsson  <andersca@gnu.org>
 

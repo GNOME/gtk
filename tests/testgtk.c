@@ -7964,12 +7964,12 @@ tracking_label (GtkWidget *window)
   GtkWidget *button;
 
   hbox = gtk_hbox_new (FALSE, 5);
-  
+
   gtk_signal_connect_object (GTK_OBJECT (hbox),
                              "destroy",
                              GTK_SIGNAL_FUNC (gtk_widget_destroy),
                              GTK_OBJECT (window));
-
+  
   label = gtk_label_new ("<no window state events received>");
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
@@ -8091,12 +8091,19 @@ create_window_states (void)
       gtk_container_add (GTK_CONTAINER (window), box1);
 
       iconified = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_signal_connect_object (GTK_OBJECT (iconified), "destroy",
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
+				 GTK_OBJECT (window));
       gtk_window_iconify (GTK_WINDOW (iconified));
       gtk_window_set_title (GTK_WINDOW (iconified), "Iconified initially");
       controls = get_state_controls (iconified);
       gtk_container_add (GTK_CONTAINER (iconified), controls);
       
       normal = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_signal_connect_object (GTK_OBJECT (normal), "destroy",
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
+				 GTK_OBJECT (window));
+      
       gtk_window_set_title (GTK_WINDOW (normal), "Deiconified initially");
       controls = get_state_controls (normal);
       gtk_container_add (GTK_CONTAINER (normal), controls);
