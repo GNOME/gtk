@@ -529,12 +529,14 @@ _gtk_rbtree_insert_after (GtkRBTree *tree,
   GtkRBNode *tmp_node;
   GtkRBTree *tmp_tree;  
 
+#ifdef G_ENABLE_DEBUG  
   if (gtk_debug_flags & GTK_DEBUG_TREE)
     {
-      g_print ("\n\n_gtk_rbtree_insert_after: 0x%x\n", (gint) current);
+      g_print ("\n\n_gtk_rbtree_insert_after: %p\n", current);
       _gtk_rbtree_debug_spew (tree);
       _gtk_rbtree_test (G_STRLOC, tree);
     }
+#endif /* G_ENABLE_DEBUG */  
 
   if (current != NULL && current->right != tree->nil)
     {
@@ -588,6 +590,7 @@ _gtk_rbtree_insert_after (GtkRBTree *tree,
 
   _gtk_rbtree_insert_fixup (tree, node);
 
+#ifdef G_ENABLE_DEBUG  
   if (gtk_debug_flags & GTK_DEBUG_TREE)
     {
       g_print ("_gtk_rbtree_insert_after finished...\n");
@@ -595,6 +598,7 @@ _gtk_rbtree_insert_after (GtkRBTree *tree,
       g_print ("\n\n");
       _gtk_rbtree_test (G_STRLOC, tree);
     }
+#endif /* G_ENABLE_DEBUG */  
 
   return node;
 }
@@ -609,14 +613,16 @@ _gtk_rbtree_insert_before (GtkRBTree *tree,
   gboolean left = TRUE;
   GtkRBNode *tmp_node;
   GtkRBTree *tmp_tree;
-  
+
+#ifdef G_ENABLE_DEBUG  
   if (gtk_debug_flags & GTK_DEBUG_TREE)
     {
-      g_print ("\n\n_gtk_rbtree_insert_before: 0x%x\n", (gint) current);
+      g_print ("\n\n_gtk_rbtree_insert_before: %p\n", current);
       _gtk_rbtree_debug_spew (tree);
       _gtk_rbtree_test (G_STRLOC, tree);
     }
-
+#endif /* G_ENABLE_DEBUG */
+  
   if (current != NULL && current->left != tree->nil)
     {
       current = current->left;
@@ -670,6 +676,7 @@ _gtk_rbtree_insert_before (GtkRBTree *tree,
 
   _gtk_rbtree_insert_fixup (tree, node);
 
+#ifdef G_ENABLE_DEBUG  
   if (gtk_debug_flags & GTK_DEBUG_TREE)
     {
       g_print ("_gtk_rbtree_insert_before finished...\n");
@@ -677,7 +684,8 @@ _gtk_rbtree_insert_before (GtkRBTree *tree,
       g_print ("\n\n");
       _gtk_rbtree_test (G_STRLOC, tree);
     }
-
+#endif /* G_ENABLE_DEBUG */
+  
   return node;
 }
 
@@ -1196,12 +1204,16 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
   g_return_if_fail (tree != NULL);
   g_return_if_fail (node != NULL);
 
+  
+#ifdef G_ENABLE_DEBUG
   if (gtk_debug_flags & GTK_DEBUG_TREE)
     {
-      g_print ("\n\n_gtk_rbtree_remove_node: 0x%x\n", (gint) node);
+      g_print ("\n\n_gtk_rbtree_remove_node: %p\n", node);
       _gtk_rbtree_debug_spew (tree);
       _gtk_rbtree_test (G_STRLOC, tree);
     }
+#endif /* G_ENABLE_DEBUG */
+  
   /* make sure we're deleting a node that's actually in the tree */
   for (x = node; x->parent != tree->nil; x = x->parent)
     ;
@@ -1335,6 +1347,7 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
     _gtk_rbtree_remove_node_fixup (tree, x);
   _gtk_rbnode_free (y);
 
+#ifdef G_ENABLE_DEBUG  
   if (gtk_debug_flags & GTK_DEBUG_TREE)
     {
       g_print ("_gtk_rbtree_remove_node finished...\n");
@@ -1342,6 +1355,7 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
       g_print ("\n\n");
       _gtk_rbtree_test (G_STRLOC, tree);
     }
+#endif /* G_ENABLE_DEBUG */  
 }
 
 GtkRBNode *
@@ -1585,6 +1599,7 @@ void _fixup_parity (GtkRBTree *tree,
     ((node->right != tree->nil) ? node->right->parity : 0);
 }
 
+#ifdef G_ENABLE_DEBUG
 static guint
 get_parity (GtkRBNode *node)
 {
@@ -1785,8 +1800,8 @@ _gtk_rbtree_debug_spew_helper (GtkRBTree *tree,
   for (i = 0; i < depth; i++)
     g_print ("\t");
 
-  g_print ("(0x%x - %s) (Offset %d) (Parity %d) (Validity %d%d%d)\n",
-	   (gint) node,
+  g_print ("(%p - %s) (Offset %d) (Parity %d) (Validity %d%d%d)\n",
+	   node,
 	   (GTK_RBNODE_GET_COLOR (node) == GTK_RBNODE_BLACK)?"BLACK":" RED ",
 	   node->offset,
 	   node->parity?1:0,
@@ -1819,3 +1834,4 @@ _gtk_rbtree_debug_spew (GtkRBTree *tree)
   else
     _gtk_rbtree_debug_spew_helper (tree, tree->root, 0);
 }
+#endif /* G_ENABLE_DEBUG */

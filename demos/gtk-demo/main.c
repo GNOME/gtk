@@ -86,7 +86,7 @@ read_line (FILE *stream, GString *str)
 {
   int n_read = 0;
   
-#ifndef G_OS_WIN32
+#ifdef HAVE_FLOCKFILE
   flockfile (stream);
 #endif
 
@@ -112,7 +112,7 @@ read_line (FILE *stream, GString *str)
 	case '\r':
 	case '\n':
 	  {
-#ifndef G_OS_WIN32
+#ifdef HAVE_FLOCKFILE
 	    int next_c = getc_unlocked (stream);
 #else
 	    int next_c = getc (stream);
@@ -132,7 +132,7 @@ read_line (FILE *stream, GString *str)
 
  done:
 
-#ifndef G_OS_WIN32
+#ifdef HAVE_FLOCKFILE
   funlockfile (stream);
 #endif
 

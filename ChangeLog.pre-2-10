@@ -1,3 +1,17 @@
+Thu May 16 14:51:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	Fixes for #78258
+
+	* gtk/gtkrbtree.c demos/gtk-demo/editable-cells.c:
+	Fix some 64-bit warning problems. (Patch from Matthias
+	Clasen.)
+	
+	* gtk/gtkrbtree.c (_gtk_rbtree_debug_spew_helper): Surround
+	a bunch of debug code with G_ENABLE_DEBUG.
+
+	* configure.in demos/gtk-demo/main.c: Replace
+	#ifndef G_OS_WIN32 with proper #ifdef HAVE_FLOCKFILE.
+
 Thu May 16 12:56:38 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrange.c (gtk_range_calc_layout): Fix a missed

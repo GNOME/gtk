@@ -1,3 +1,8 @@
+Thu May 16 15:02:46 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-pixdata.c (gdk_pixdata_to_csource): Fix 64-bit warning.
+	(#78258)
+
 2002-05-07  Michael Natterer  <mitch@gimp.org>
 
 	* gdk-pixbuf/Makefile.am: build the static pixbuf loaders

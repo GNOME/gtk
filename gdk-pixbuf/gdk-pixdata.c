@@ -707,9 +707,9 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
 	      cdata.static_prefix, cdata.const_prefix, name);
       APPEND (gstring, "  0x%x, /* Pixbuf magic: 'GdkP' */\n",
 	      GDK_PIXBUF_MAGIC_NUMBER);
-      APPEND (gstring, "  %u + %u, /* header length + pixel_data length */\n",
+      APPEND (gstring, "  %u + %lu, /* header length + pixel_data length */\n",
 	      GDK_PIXDATA_HEADER_LENGTH,
-	      rle_encoded ? img_buffer_end - img_buffer : rowstride * height);
+	      rle_encoded ? (glong)(img_buffer_end - img_buffer) : (glong)rowstride * height);
       APPEND (gstring, "  0x%x, /* pixdata_type */\n",
 	      pixdata->pixdata_type);
       APPEND (gstring, "  %u, /* rowstride */\n",
