@@ -97,9 +97,20 @@ gdk_pixbuf_scale (const GdkPixbuf *src,
  * @overall_alpha: overall alpha for source image (0..255)
  * 
  * Creates a transformation of the source image @src by scaling by
- * @scale_x and @scale_y then translating by @offset_x and @offset_y,
- * then composites the rectangle (@dest_x, @dest_y, @dest_width,
- * @dest_height) of the resulting image onto the destination image.
+ * @scale_x and @scale_y then translating by @offset_x and @offset_y.
+ * This gives an image in the coordinates of the destination pixbuf.
+ * The rectangle (@dest_x, @dest_y, @dest_width, @dest_height)
+ * is then composited onto the corresponding rectangle of the
+ * original destination image.
+ * 
+ * When the destination rectangle contains parts not in the source 
+ * image, the data at the edges of the source image is replicated
+ * to infinity. 
+ *
+ * <figure id="pixbuf-composite-diagram">
+ *   <title>Compositing of pixbufs</title>
+ *   <graphic fileref="composite.png" format="PNG"/>
+ * </figure>
  **/
 void
 gdk_pixbuf_composite (const GdkPixbuf *src,

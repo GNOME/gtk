@@ -1,3 +1,15 @@
+Sat Jun 19 01:42:20 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf/composite.png: Add a figure which tries
+	to expain pixbuf compositing.
+	
+	* gdk-pixbuf/composite.dia: 
+	* gdk-pixbuf/apple-red-1a.png: 
+	* gdk-pixbuf/apple-red-2c.png: 
+	* gdk-pixbuf/gnome-gmush-1.png: Sources for composite.png.
+	
+	* gdk-pixbuf/Makefile.am (HTML_IMAGES): Add composite.png.
+
 Fri Jun 18 21:20:42 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtktreemodelfilter.sgml: Fix the docs for
