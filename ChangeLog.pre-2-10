@@ -1,3 +1,9 @@
+Thu Nov 15 19:47:09 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* demos/gtk-demo/main.c (button_press_event_cb): Remove 
+	unused callback to make things compile with 
+	gtk_tree_view_path_at_pos_change().
+
 Thu Nov 15 18:44:33 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreedatalist.c (_gtk_tree_data_list_free): maybe fix #64160
