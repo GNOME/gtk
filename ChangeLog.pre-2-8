@@ -1,3 +1,9 @@
+Fri Dec  6 19:00:59 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* demos/gtk-demo/testview.c tests/testgtk.c
+	tests/testtext.c tests/testtextbuffer.c: Use
+	octal escapes rather than literal UTF-8.
+
 Fri Dec  6 17:50:57 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkpixmap.c (PACKED_COLOR): Fix incorrect

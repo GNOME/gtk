@@ -2579,19 +2579,19 @@ void create_labels (GtkWidget *widget)
       frame = gtk_frame_new ("Internationalized Label");
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
-			    "French (Français) Bonjour, Salut\n"
-			    "Korean (한글)   안녕하세요, 안녕하십니까\n"
-			    "Russian (Русский) Здравствуйте!\n"
-			    "Chinese (Simplified) <span lang=\"zh-cn\">元气	开发</span>\n"
-			    "Chinese (Traditional) <span lang=\"zh-tw\">元氣	開發</span>\n"
-			    "Japanese <span lang=\"ja\">元気	開発</span>");
+			    "French (Fran\303\247ais) Bonjour, Salut\n"
+			    "Korean (\355\225\234\352\270\200)   \354\225\210\353\205\225\355\225\230\354\204\270\354\232\224, \354\225\210\353\205\225\355\225\230\354\213\255\353\213\210\352\271\214\n"
+			    "Russian (\320\240\321\203\321\201\321\201\320\272\320\270\320\271) \320\227\320\264\321\200\320\260\320\262\321\201\321\202\320\262\321\203\320\271\321\202\320\265!\n"
+			    "Chinese (Simplified) <span lang=\"zh-cn\">\345\205\203\346\260\224	\345\274\200\345\217\221</span>\n"
+			    "Chinese (Traditional) <span lang=\"zh-tw\">\345\205\203\346\260\243	\351\226\213\347\231\274</span>\n"
+			    "Japanese <span lang=\"ja\">\345\205\203\346\260\227	\351\226\213\347\231\272</span>");
       gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
       frame = gtk_frame_new ("Bidirection Label");
-      label = gtk_label_new ("Arabic	السلام عليكم\n"
-			     "Hebrew	שלום");
+      label = gtk_label_new ("Arabic	\330\247\331\204\330\263\331\204\330\247\331\205 \330\271\331\204\331\212\331\203\331\205\n"
+			     "Hebrew	\327\251\327\234\327\225\327\235");
       gtk_widget_set_direction (label, GTK_TEXT_DIR_RTL);
       gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_RIGHT);
       gtk_container_add (GTK_CONTAINER (frame), label);
@@ -2627,7 +2627,7 @@ void create_labels (GtkWidget *widget)
 
       frame = gtk_frame_new ("Underlined label");
       label = gtk_label_new ("This label is underlined!\n"
-			     "This one is underlined (こんにちは) in quite a funky fashion");
+			     "This one is underlined (\343\201\223\343\202\223\343\201\253\343\201\241\343\201\257) in quite a funky fashion");
       gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
       gtk_label_set_pattern (GTK_LABEL (label), "_________________________ _ _________ _ _____ _ __ __  ___ ____ _____");
       gtk_container_add (GTK_CONTAINER (frame), label);
@@ -3944,9 +3944,9 @@ create_key_lookup (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
       button = gtk_button_new_with_mnemonic ("Button 2 (_A)");
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
-      button = gtk_button_new_with_mnemonic ("Button 3 (_ф)");
+      button = gtk_button_new_with_mnemonic ("Button 3 (_\321\204)");
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
-      button = gtk_button_new_with_mnemonic ("Button 4 (_Ф)");
+      button = gtk_button_new_with_mnemonic ("Button 4 (_\320\244)");
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
       button = gtk_button_new_with_mnemonic ("Button 6 (_b)");
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
@@ -4383,7 +4383,7 @@ create_entry (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (box2), hbox, TRUE, TRUE, 0);
       
       entry = gtk_entry_new ();
-      gtk_entry_set_text (GTK_ENTRY (entry), "hello world السلام عليكم");
+      gtk_entry_set_text (GTK_ENTRY (entry), "hello world \330\247\331\204\330\263\331\204\330\247\331\205 \330\271\331\204\331\212\331\203\331\205");
       gtk_editable_select_region (GTK_EDITABLE (entry), 0, 5);
       gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
 

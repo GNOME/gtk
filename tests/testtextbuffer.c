@@ -787,7 +787,7 @@ fill_buffer (GtkTextBuffer *buffer)
                               "(Hello World!)\nfoo foo Hello this is some text we are using to text word wrap. It has punctuation! gee; blah - hmm, great.\nnew line\n\n"
                               /* This is UTF8 stuff, Emacs doesn't
                                  really know how to display it */
-                              "Spanish (Español) ¡Hola! / French (Français) Bonjour, Salut / German (Deutsch Süd) Grüß Gott (testing Latin-1 chars encoded in UTF8)\nThai (we can't display this, just making sure we don't crash)  (ภาษาไทย)  สวัสดีครับ, สวัสดีค่ะ\n",
+                              "Spanish (Espa\303\261ol) \302\241Hola! / French (Fran\303\247ais) Bonjour, Salut / German (Deutsch S\303\274d) Gr\303\274\303\237 Gott (testing Latin-1 chars encoded in UTF8)\nThai (we can't display this, just making sure we don't crash)  (\340\270\240\340\270\262\340\270\251\340\270\262\340\271\204\340\270\227\340\270\242)  \340\270\252\340\270\247\340\270\261\340\270\252\340\270\224\340\270\265\340\270\204\340\270\243\340\270\261\340\270\232, \340\270\252\340\270\247\340\270\261\340\270\252\340\270\224\340\270\265\340\270\204\340\271\210\340\270\260\n",
                               -1);
 
       gtk_text_buffer_insert_pixbuf (buffer, &iter, pixbuf);
