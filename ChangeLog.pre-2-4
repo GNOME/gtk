@@ -1,7 +1,13 @@
+Wed Feb 27 18:39:25 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/stock-icons/Makefile.am: Split big VARIABLES variable
+	that was causing overlong lines into 6 variables with 20
+	in each one.
+
 Wed Feb 27 18:01:03 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkaccellabel.c (gtk_accelerator_name) po/POTFILES.in: 
-	Mark <Control>, <Shift>, <Release>, <Alt> for translation.
+	Mark Ctrl, Shift, Alt for translation.
 	(#60590)
 
 	* gtk/gtkfontsel.c: Mark PREVIEW_TEXT for translation.

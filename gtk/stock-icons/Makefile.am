@@ -118,7 +118,7 @@ IMAGES = @STRIP_BEGIN@ 			\
 	stock_zoom_out_24.png 		\
 @STRIP_END@
 
-VARIABLES = @STRIP_BEGIN@ 									\
+VARIABLES1 = @STRIP_BEGIN@ 									\
 		stock_add_24          		$(srcdir)/stock_add_24.png 			\
 	       	stock_align_center_16		$(srcdir)/stock_align_center_16.png             \
 	       	stock_align_center_24		$(srcdir)/stock_align_center_24.png             \
@@ -139,6 +139,8 @@ VARIABLES = @STRIP_BEGIN@ 									\
 		stock_close_20		      	$(srcdir)/stock_close_20.png  			\
                 stock_close_24			$(srcdir)/stock_close_24.png             	\
                 stock_colorselector_24		$(srcdir)/stock_colorselector_24.png            \
+@STRIP_END@
+VARIABLES2 = @STRIP_BEGIN@ 									\
 		stock_convert_16		$(srcdir)/stock_convert_16.png			\
                 stock_convert_24		$(srcdir)/stock_convert_24.png             	\
 		stock_copy_16			$(srcdir)/stock_copy_16.png			\
@@ -159,6 +161,8 @@ VARIABLES = @STRIP_BEGIN@ 									\
 		stock_first_16			$(srcdir)/stock_first_16.png			\
                 stock_first_24			$(srcdir)/stock_first_24.png             	\
                 stock_font_16			$(srcdir)/stock_font_16.png             	\
+@STRIP_END@
+VARIABLES3 = @STRIP_BEGIN@ 									\
                 stock_font_24			$(srcdir)/stock_font_24.png             	\
 		stock_help_16			$(srcdir)/stock_help_16.png			\
                 stock_help_24			$(srcdir)/stock_help_24.png             	\
@@ -179,6 +183,8 @@ VARIABLES = @STRIP_BEGIN@ 									\
 		stock_ok_20     		$(srcdir)/stock_ok_20.png  			\
 		stock_open_16			$(srcdir)/stock_open_16.png			\
 		stock_open_24			$(srcdir)/stock_open_24.png  			\
+@STRIP_END@
+VARIABLES4 = @STRIP_BEGIN@ 									\
 		stock_paste_16			$(srcdir)/stock_paste_16.png			\
                 stock_paste_24			$(srcdir)/stock_paste_24.png             	\
 		stock_preferences_16		$(srcdir)/stock_preferences_16.png		\
@@ -199,6 +205,8 @@ VARIABLES = @STRIP_BEGIN@ 									\
                 stock_right_arrow_24		$(srcdir)/stock_right_arrow_24.png             	\
 		stock_save_16			$(srcdir)/stock_save_16.png			\
 		stock_save_24			$(srcdir)/stock_save_24.png			\
+@STRIP_END@
+VARIABLES5 = @STRIP_BEGIN@ 									\
 		stock_save_as_16		$(srcdir)/stock_save_as_16.png			\
                 stock_save_as_24		$(srcdir)/stock_save_as_24.png             	\
 		stock_search_16			$(srcdir)/stock_search_16.png			\
@@ -219,6 +227,8 @@ VARIABLES = @STRIP_BEGIN@ 									\
                 stock_text_italic_24		$(srcdir)/stock_text_italic_24.png             	\
 		stock_text_strikethrough_16	$(srcdir)/stock_text_strikethrough_16.png	\
                 stock_text_strikethrough_24	$(srcdir)/stock_text_strikethrough_24.png       \
+@STRIP_END@
+VARIABLES6 = @STRIP_BEGIN@ 									\
 		stock_text_underline_16		$(srcdir)/stock_text_underline_16.png		\
                 stock_text_underline_24		$(srcdir)/stock_text_underline_24.png           \
                 stock_top_16			$(srcdir)/stock_top_16.png             		\
@@ -245,6 +255,16 @@ pixbuf_dir = $(top_builddir)/gdk-pixbuf
 
 gtkstockpixbufs.h: $(pixbuf_dir)/gdk-pixbuf-csource $(IMAGES)
 	GDK_PIXBUF_MODULEDIR=$(pixbuf_dir)/.libs \
-	   $(pixbuf_dir)/gdk-pixbuf-csource --raw --build-list $(VARIABLES) >$(srcdir)/gtkstockpixbufs.h
+	   $(pixbuf_dir)/gdk-pixbuf-csource --raw --build-list $(VARIABLES1) >$(srcdir)/gtkstockpixbufs.h
+	GDK_PIXBUF_MODULEDIR=$(pixbuf_dir)/.libs \
+	   $(pixbuf_dir)/gdk-pixbuf-csource --raw --build-list $(VARIABLES2) >>$(srcdir)/gtkstockpixbufs.h
+	GDK_PIXBUF_MODULEDIR=$(pixbuf_dir)/.libs \
+	   $(pixbuf_dir)/gdk-pixbuf-csource --raw --build-list $(VARIABLES3) >>$(srcdir)/gtkstockpixbufs.h
+	GDK_PIXBUF_MODULEDIR=$(pixbuf_dir)/.libs \
+	   $(pixbuf_dir)/gdk-pixbuf-csource --raw --build-list $(VARIABLES4) >>$(srcdir)/gtkstockpixbufs.h
+	GDK_PIXBUF_MODULEDIR=$(pixbuf_dir)/.libs \
+	   $(pixbuf_dir)/gdk-pixbuf-csource --raw --build-list $(VARIABLES5) >>$(srcdir)/gtkstockpixbufs.h
+	GDK_PIXBUF_MODULEDIR=$(pixbuf_dir)/.libs \
+	   $(pixbuf_dir)/gdk-pixbuf-csource --raw --build-list $(VARIABLES6) >>$(srcdir)/gtkstockpixbufs.h
 
 EXTRA_DIST = $(IMAGES) gtkstockpixbufs.h
