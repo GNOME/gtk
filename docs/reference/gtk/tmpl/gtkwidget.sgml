@@ -585,6 +585,16 @@ Turns off certain widget flags.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_widget_set_accel_path ##### -->
+<para>
+
+</para>
+
+@widget: 
+@accel_path: 
+@accel_group: 
+
+
 <!-- ##### FUNCTION gtk_widget_list_accel_closures ##### -->
 <para>
 

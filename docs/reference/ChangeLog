@@ -1,3 +1,11 @@
+Tue Jan 29 23:41:31 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am (content_files): Add x11.sgml.
+
+	* gtk/changes-2.0.sgml: SGML fix.
+
+	* gtk/gtk-sections.txt: Updated.
+
 2002-01-23  Damon Chaplin  <damon@ximian.com>
 
 	* gtk/Makefile.am: added SCANGOBJ_OPTIONS to set the type-init-func

@@ -716,7 +716,7 @@ In GTK+ 1.2, if an event handler returned <literal>TRUE</literal> it prevented
      <para>
        Cleaned some private (or at least useless) functions out of
        <filename>gtkscale.h</filename>, e.g. 
-       <function>gtk_scale_value_width</literal>.
+       <function>gtk_scale_value_width</function>.
      </para>
    </listitem>
    <listitem>

@@ -1755,7 +1755,6 @@ gtk_option_menu_get_type
 GtkPaned
 gtk_paned_add1
 gtk_paned_add2
-gtk_paned_handle_size
 gtk_paned_gutter_size
 gtk_paned_pack1
 gtk_paned_pack2
@@ -2019,7 +2018,6 @@ GTK_IS_SCALE_CLASS
 GTK_SCALE_GET_CLASS
 <SUBSECTION Private>
 gtk_scale_get_type
-gtk_scale_value_width
 </SECTION>
 
 <SECTION>
@@ -3495,6 +3493,7 @@ gtk_widget_get_child_requisition
 gtk_widget_size_allocate
 gtk_widget_add_accelerator
 gtk_widget_remove_accelerator
+gtk_widget_set_accel_path
 gtk_widget_list_accel_closures
 gtk_widget_event
 gtk_widget_activate

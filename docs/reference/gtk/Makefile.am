@@ -136,7 +136,8 @@ content_files = 		\
 	resources.sgml		\
 	text_widget.sgml	\
 	tree_widget.sgml	\
-	windows.sgml
+	windows.sgml		\
+	x11.sgml
 
 # Other files to distribute
 extra_files =
