@@ -1,3 +1,8 @@
+Sun Aug 12 10:39:12 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am (EXTRA_DIST): Fix problem with trying to
+	dist files from intl/, which is no longer there.
+
 2001-08-11  Hans Breuer  <hans@breuer.org>
 
 	* gtk/gtkalignment.c, gtk/gtkarrow.c, gtk/gtkaspectframe.c,
