@@ -1,5 +1,10 @@
 2004-12-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/Makefile.am (HTML_IMAGES): Add some missing stock
+	icons..
+
+	* gtk/tmpl/gtkstock.sgml: Fix some stock icon names.
+
 	* === Released 2.6.0 ===
 
 2004-12-15  Matthias Clasen  <mclasen@redhat.com>

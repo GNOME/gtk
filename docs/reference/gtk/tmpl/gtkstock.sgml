@@ -438,7 +438,7 @@ The "Home" item.
 <!-- ##### MACRO GTK_STOCK_INDENT ##### -->
 <para>
 The "Indent" item.
-<inlinegraphic fileref="stock_indent_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="stock_text_indent_24.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.4
@@ -820,7 +820,7 @@ RTL variant
 <!-- ##### MACRO GTK_STOCK_UNINDENT ##### -->
 <para>
 The "Unindent" item.
-<inlinegraphic fileref="stock_unindent_24.png" format="PNG"></inlinegraphic>
+<inlinegraphic fileref="stock_text_unindent_24.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.4
