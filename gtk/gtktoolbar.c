@@ -702,6 +702,7 @@ gtk_toolbar_realize (GtkWidget *widget)
 
   widget->window = gtk_widget_get_parent_window (widget);
   g_object_ref (widget->window);
+  widget->style = gtk_style_attach (widget->style, widget->window);
   
   priv->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
 				       &attributes, attributes_mask);

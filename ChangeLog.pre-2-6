@@ -1,3 +1,8 @@
+Wed Jul  2 14:45:41 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_realize): Attach the
+	style to the widget.
+
 Wed Jul  2 15:42:26 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtk.h: Add new toolbar headers
