@@ -34,6 +34,16 @@ binding "gtk-emacs-text-entry"
                       "insert-at-cursor" (" ") }
   bind "<alt>KP_Space" { "delete-from-cursor" (whitespace, 1)
                          "insert-at-cursor" (" ")  }
+
+  #
+  # Some non-Emacs keybindings people are attached to
+  #
+  bind "<ctrl>u" {
+     "move-cursor" (paragraph-ends, -1, 0)
+     "delete-from-cursor" (paragraph-ends, 1)
+  }
+  bind "<ctrl>h" { "delete-from-cursor" (chars, -1) }
+  bind "<ctrl>w" { "delete-from-cursor" (word-ends, -1) }
 }
 
 #

@@ -1,3 +1,7 @@
+Thu Dec 12 17:58:41 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.key.emacs: Add C-u/C-h/C-w. (#72245)
+
 Thu Dec 12 17:01:38 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_find_widget): Skip insensitive
