@@ -1,3 +1,10 @@
+2004-01-20  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix #99425, add accessor functions for GtkPaned's children.
+
+	* gtk/gtkpaned.c (gtk_paned_get_child1): New function.
+	(gtk_paned_get_child2): New function.
+
 Tue Jan 20 23:49:52 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* NEWS: Start of 2.3.2 section.

@@ -1126,6 +1126,42 @@ gtk_paned_set_position (GtkPaned *paned,
   gtk_widget_queue_resize (GTK_WIDGET (paned));
 }
 
+/**
+ * gtk_paned_get_child1:
+ * @paned: a #GtkPaned widget
+ * 
+ * Obtains the first child of the paned widget.
+ * 
+ * Return value: first child, or %NULL if it is not set.
+ *
+ * Since: 2.4
+ **/
+GtkWidget *
+gtk_paned_get_child1 (GtkPaned *paned)
+{
+  g_return_val_if_fail (GTK_IS_PANED (paned), NULL);
+
+  return paned->child1;
+}
+
+/**
+ * gtk_paned_get_child2:
+ * @paned: a #GtkPaned widget
+ * 
+ * Obtains the second child of the paned widget.
+ * 
+ * Return value: second child, or %NULL if it is not set.
+ *
+ * Since: 2.4
+ **/
+GtkWidget *
+gtk_paned_get_child2 (GtkPaned *paned)
+{
+  g_return_val_if_fail (GTK_IS_PANED (paned), NULL);
+
+  return paned->child2;
+}
+
 void
 gtk_paned_compute_position (GtkPaned *paned,
 			    gint      allocation,
