@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.9\n"
-"POT-Creation-Date: 2001-02-28 19:20-0500\n"
+"POT-Creation-Date: 2001-03-15 10:09+0100\n"
 "PO-Revision-Date: 2001-02-13 23:12:24+0900\n"
 "Last-Translator: Simos Xenitellis <simos@hellug.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
@@ -550,13 +550,13 @@ msgid "Page %u"
 msgstr "Σελίδα %u"
 
 #
-#: gtk/gtkrc.c:1702
+#: gtk/gtkrc.c:1703
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Το αρχείο εικόνας δε βρέθηκε στο pixmap_path: \"%s\" line %d"
 
 #
-#: gtk/gtkrc.c:1705
+#: gtk/gtkrc.c:1706
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Το αρχείο εικόνας δε βρέθηκε στο pixmap_path: \"%s\""

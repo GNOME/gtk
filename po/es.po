@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.7\n"
-"POT-Creation-Date: 2001-02-28 19:20-0500\n"
+"POT-Creation-Date: 2001-03-15 10:09+0100\n"
 "PO-Revision-Date: 1999-02-07 17:37+0100\n"
 "Last-Translator: Pablo Saratxaga <pablo@mandrakesoft.com>\n"
 "Language-Team: \n"
@@ -447,13 +447,13 @@ msgstr "limpiar"
 msgid "Page %u"
 msgstr "Página %u"
 
-#: gtk/gtkrc.c:1702
+#: gtk/gtkrc.c:1703
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
 "Imposible de encontrar un archivo imagen en pixmap_path: \"%s\" línea %d"
 
-#: gtk/gtkrc.c:1705
+#: gtk/gtkrc.c:1706
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Imposible de encontrar un archivo imagen en pixmap_path: \"%s\""

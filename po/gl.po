@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.8\n"
-"POT-Creation-Date: 2001-02-28 19:20-0500\n"
+"POT-Creation-Date: 2001-03-15 10:09+0100\n"
 "PO-Revision-Date: 2000-06-20 16:12+0200\n"
 "Last-Translator: Jesús Bravo Álvarez <jba@pobox.com>\n"
 "Language-Team: Galician <trasno@ceu.fi.udc.es>\n"
@@ -453,13 +453,13 @@ msgstr "limpar"
 msgid "Page %u"
 msgstr "Páxina %u"
 
-#: gtk/gtkrc.c:1702
+#: gtk/gtkrc.c:1703
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
 "Foi imposible atopa-lo ficheiro de imaxe no pixmap_path: \"%s\" liña %d"
 
-#: gtk/gtkrc.c:1705
+#: gtk/gtkrc.c:1706
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Foi imposible atopa-lo ficheiro de imaxe no pixmap_path: \"%s\""
