@@ -1470,7 +1470,7 @@ gtk_tree_view_column_get_width (GtkTreeViewColumn *tree_column)
 /**
  * gtk_tree_view_column_set_fixed_width:
  * @tree_column: A #GtkTreeViewColumn.
- * @fixed_width: The size to set the @tree_column to.
+ * @fixed_width: The size to set the @tree_column to. Must be greater than 0.
  * 
  * Sets the size of the column in pixels.  This is meaningful only if the sizing
  * type is #GTK_TREE_VIEW_COLUMN_FIXED.  In this case, the value is discarded

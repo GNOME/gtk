@@ -1,5 +1,9 @@
 2001-10-27  Anders Carlsson  <andersca@gnu.org>
 
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_fixed_width): 
+	Add note about width having to be greater than 0. This fixes
+	#55574. 
+
 	* gtk/gtktextiter.c (gtk_text_iter_backward_sentence_start): 
 	Fix docs to say previous instead of next.
 	(gtk_text_iter_backward_word_start): Likewise.
