@@ -1,3 +1,7 @@
+2003-10-07  Dom Lachowicz <cinamod@hotmail.com>
+
+	* Added new mingw based build system, tidied up other missing bits
+	
 2003-10-07  Raymond Penners  <raymond@dotsphinx.com>
 
 	* src/wimp_style.c: Tabs not located on top of the notebook are

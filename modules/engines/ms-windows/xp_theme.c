@@ -21,17 +21,17 @@
 #include "xp_theme.h"
 
 #include <windows.h>
-#include <uxtheme.h>
-#include <tmschema.h>
 #include <math.h>
 #include <string.h>
 #include <gdk/gdkwin32.h>
 
 #include <stdio.h>
 
-/* MS defines this when it includes its schema definitions */
-#ifndef TMSCHEMA_H
+#ifdef DONT_HAVE_UXTHEME_H
 #include "xp_theme_defs.h"
+#else
+#include <uxtheme.h>
+#include <tmschema.h>
 #endif
 
 static const LPCWSTR class_descriptors[] =

@@ -19,7 +19,7 @@
  */
 
 /*
- * These are the real values of these UXTHEME constants, provided so that we can 
+ * These are the real values of these UXTHEME constants, provided so that we can
  * compile/link on Win32 platforms that aren't WinXP, and also build against
  * MinGW 1.0/1.1, which also doesn't have these things defined in its header files
  */
@@ -28,6 +28,10 @@
 #define XP_THEME_DFNS_H
 
 typedef HANDLE HTHEME;
+
+#define ETDT_ENABLE         0x00000002
+#define ETDT_USETABTEXTURE  0x00000004
+#define ETDT_ENABLETAB      (ETDT_ENABLE  | ETDT_USETABTEXTURE)
 
 #define BP_PUSHBUTTON 1
 #define BP_CHECKBOX 3
@@ -98,6 +102,7 @@ typedef HANDLE HTHEME;
 #define ABS_UPDISABLED 4
 #define ABS_DOWNNORMAL 5
 #define ABS_DOWNHOT 6
+#define ABS_DOWNPRESSED 7
 #define ABS_DOWNDISABLED 8
 #define ABS_LEFTNORMAL 9
 #define ABS_LEFTHOT 10
