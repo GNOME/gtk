@@ -262,26 +262,17 @@ a #GdkWindow or a #GdkFont.
 
 <!-- ##### FUNCTION gdk_window_lookup ##### -->
 <para>
-Obtains the #GdkWindow for the given Xlib window ID, or %NULL if no #GdkWindow has
-been created for @xid.
 </para>
 
 @anid: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@xid: Xlib window ID
-
 
 <!-- ##### FUNCTION gdk_pixmap_lookup ##### -->
 <para>
-Obtains the #GdkPixmap for the given Xlib pixmap ID, or %NULL if no #GdkPixmap has
-been created for @xid.
 </para>
 
 @anid: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@xid: Xlib pixmap ID
 
 
 <!-- ##### MACRO gdk_font_lookup ##### -->

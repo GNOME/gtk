@@ -1,3 +1,8 @@
+Thu Apr 25 22:37:58 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/tmpl/{events,input_devices,region,x_interaction}.sgml:
+	Fix some docs duplicated between templates and inline.
+
 2002-04-24  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Remove GTK_OBJECT_CONNECTED.

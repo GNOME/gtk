@@ -233,44 +233,36 @@ Positive values shrink the region. Negative values expand it.
 
 <!-- ##### FUNCTION gdk_region_union_with_rect ##### -->
 <para>
-Sets the area of @region to the union of the areas of @region and
-@rect. The resulting area is the set of pixels contained in
-either @region or @rect.
 
 </para>
 
-@region: a #GdkRegion.
-@rect: a #GdkRectangle.
+@region:
+@rect:
 
 
 <!-- ##### FUNCTION gdk_region_intersect ##### -->
 <para>
 </para>
 
-@source1: a #GdkRegion
-@source2: a #GdkRegion
+@source1:
+@source2:
 
 
 <!-- ##### FUNCTION gdk_region_union ##### -->
 <para>
-Sets the area of @source1 to the union of the areas of @source1 and
-@source2. The resulting area is the set of pixels contained in
-either @source1 or @source2.
 
 </para>
 
-@source1: a #GdkRegion
-@source2: a #GdkRegion
+@source1:
+@source2:
 
 
 <!-- ##### FUNCTION gdk_region_subtract ##### -->
 <para>
-Subtracts the area of @source2 from the area @source1. The resulting
-area is the set of pixels contained in @source1 but not in @source2.
 </para>
 
-@source1: a #GdkRegion
-@source2: a #GdkRegion
+@source1:
+@source2:
 
 
 <!-- ##### FUNCTION gdk_region_xor ##### -->

@@ -174,11 +174,9 @@ types that GTK+ understands.
 
 <!-- ##### FUNCTION gdk_devices_list ##### -->
 <para>
-Returns the list of available input devices. The list is statically
-allocated and should not be freed.
 </para>
 
-@Returns: a list of #GdkDevice*.
+@Returns:
 
 
 <!-- ##### FUNCTION gdk_device_set_source ##### -->
