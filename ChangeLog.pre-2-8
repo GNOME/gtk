@@ -1,5 +1,8 @@
 2005-02-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* docs/iconcache.txt: Add some information about the
+	icon cache format (since I can't locate it at freedesktop.org)
+
 	Fixes for #143829, Tommi Komulainen, Christian Persch:
 	
 	* gtk/gtktreeview.c (gtk_tree_view_destroy): Remove the
