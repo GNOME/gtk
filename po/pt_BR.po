@@ -10,14 +10,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-6.pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-01 11:34-0500\n"
-"PO-Revision-Date: 2005-01-24 13:30-0200\n"
+"POT-Creation-Date: 2005-03-01 15:15+0100\n"
+"PO-Revision-Date: 2005-03-01 19:22-0300\n"
 "Last-Translator: Afonso Celso Medina <medina@maua.br>\n"
-"Language-Team: Português/Brasil <gnome-l10n-br@listas.cipsga.org.br>\n"
+"Language-Team: Portuguese/Brazil <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:153 gdk-pixbuf/gdk-pixbuf-io.c:838
 #: gdk-pixbuf/gdk-pixbuf-io.c:1069 tests/testfilechooser.c:199
@@ -927,7 +927,7 @@ msgstr "calendar:week_start:0"
 #: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "%d %%"
+msgstr "rótulo da barra de progresso|%d %%"
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
@@ -2024,7 +2024,7 @@ msgstr "_Propriedades"
 
 #: gtk/gtkstock.c:349
 msgid "_Quit"
-msgstr "_Sair"
+msgstr "Sai_r"
 
 #: gtk/gtkstock.c:350
 msgid "_Redo"
@@ -2224,3 +2224,4 @@ msgstr "Método de Entrada do X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Impossível obter informações sobre o arquivo '%s': %s"
+
