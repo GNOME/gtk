@@ -802,9 +802,11 @@ static void OneLine(struct bmp_progressive_state *context)
 	if (context->updated_func != NULL) {
 		(*context->updated_func) (context->pixbuf,
 					  0,
-					  context->Lines,
+					  (context->Header.Negative ?
+					   (context->Lines - 1) :
+					   (context->Header.height - context->Lines)),
 					  context->Header.width,
-					  2,
+					  1,
 					  context->user_data);
 
 	}

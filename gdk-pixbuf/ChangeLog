@@ -1,3 +1,8 @@
+2002-09-27  Federico Mena Quintero  <federico@ximian.com>
+
+	* io-bmp.c (OneLine): Fix the update region notification to handle
+	top-to-bottom and bottom-to-top BMPs correctly.
+
 2002-09-19  Matthias Clasen  <maclas@gmx.de>
 
 	* Revert the previous change; the symbols need to be exported 
