@@ -1,3 +1,17 @@
+Wed Mar 24 23:03:49 CST 1999 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.2.1
+
+	* INSTALL:
+	  README:
+	  sanity_check: Updated.
+
+	* docs/gtk-config.1.in:
+	  docs/Makefile.am:
+	  configure.in: gtk-config is now generated.
+
+	* docs/gtk-config.1: Removed, now generated.
+
 Wed Mar 24 09:24:03 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkdrawingarea.[hc]: type/macro fixups.

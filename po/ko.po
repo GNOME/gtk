@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.15\n"
-"POT-Creation-Date: 1999-02-25 05:04-0600\n"
+"POT-Creation-Date: 1999-03-24 23:06-0600\n"
 "PO-Revision-Date: 1999-02-09 06:07+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@adam.kaist.ac.kr>\n"
 "Language-Team: Korean <ko@li.org>\n"

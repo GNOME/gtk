@@ -214,9 +214,9 @@ fi
 if test x$with_glib = x ; then 
   # Look for separately installed glib
 
-  AM_PATH_GLIB(1.2.0,,
+  AM_PATH_GLIB(1.2.1,,
     AC_MSG_ERROR([
-*** GLIB 1.2.0 or better is required. The latest version of GLIB
+*** GLIB 1.2.1 or better is required. The latest version of GLIB
 *** is always available from ftp://ftp.gtk.org/.]),
     gmodule gthread)
 
@@ -511,6 +511,7 @@ AC_SUBST(GTK_LOCALE_FLAGS)
 
 AC_OUTPUT([
 gtk+.spec
+docs/gtk-config.1
 Makefile
 gtk-config
 po/Makefile.in

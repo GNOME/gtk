@@ -13,17 +13,6 @@ echo "Checking gtk+-$VERSION.tar.gz..."
 tar xfz gtk+-$VERSION.tar.gz
 
 
-for file in gtk+.spec docs/gtk-config.1
-do
-	echo -n "$file... "
-	if [ "x`grep $VERSION gtk+-$VERSION/$file | wc -l | awk -F' ' '{print $1}'`" == "x1" ]; then
-		echo "ok"
-	else
-		echo "failed."
-		exit 1
-	fi
-done
-
 echo -n "README..."
 if [ "x`grep $VERSION gtk+-$VERSION/README | wc -l | awk -F' ' '{print $1}'`" == "x4" ]; then 
 	echo "ok" 
