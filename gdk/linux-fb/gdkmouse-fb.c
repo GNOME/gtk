@@ -193,12 +193,18 @@ send_button_event (GdkFBMouse *mouse,
  ************ Device specific mouse code **************
  ******************************************************/
 
+/* proto is used to detect the start of the packet:
+ *   (buf[0]&proto[0]) == proto[1]
+ * indicates start of packet.
+ */
+
 struct _GdkFBMouseDevice {
   char *name;
   gint packet_size;
   gboolean (*open)(GdkFBMouse *mouse);
   void (*close)(GdkFBMouse *mouse);
   gboolean (*parse_packet)(GdkFBMouse *mouse, gboolean *got_motion);
+  guchar proto[2];
 };
 
 static gboolean handle_mouse_io             (GIOChannel   *gioc,
@@ -223,19 +229,22 @@ static GdkFBMouseDevice mouse_devs[] =
     3,
     gdk_fb_mouse_ps2_open,
     gdk_fb_mouse_ps2_close,
-    gdk_fb_mouse_ps2_packet
+    gdk_fb_mouse_ps2_packet,
+    { 0xc0, 0x00 }
   },
   { "ms",
     3,
     gdk_fb_mouse_ms_open,
     gdk_fb_mouse_ms_close,
-    gdk_fb_mouse_ms_packet
+    gdk_fb_mouse_ms_packet,
+    { 0x40, 0x40 }
   },
   { "fidmour",
     5,
     gdk_fb_mouse_fidmour_open,
     gdk_fb_mouse_fidmour_close,
-    gdk_fb_mouse_fidmour_packet
+    gdk_fb_mouse_fidmour_packet,
+    { 0x00, 0x00 } /* don't know what packet start looks like */
   }
 };
 
@@ -303,8 +312,9 @@ handle_mouse_io (GIOChannel *gioc,
 {
   GdkFBMouse *mouse = (GdkFBMouse *)data;
   GdkFBMouseDevice *dev = mouse->dev;
+  guchar *proto = dev->proto;
   gboolean got_motion;
-  gint n;
+  gint n, i;
 
   got_motion = FALSE;
   
@@ -313,6 +323,22 @@ handle_mouse_io (GIOChannel *gioc,
       n = read (mouse->fd, mouse->mouse_packet + mouse->packet_nbytes, dev->packet_size - mouse->packet_nbytes);
       if (n<=0) /* error or nothing to read */
 	break;
+
+      /* we just read in what should be the first byte of a packet */
+      if (mouse->packet_nbytes == 0)
+	{
+	  /* check to see if we have the first byte of a packet.
+	   * if not, throw it away */
+	  while ((mouse->mouse_packet[0] & proto[0]) != proto[1] && n > 0)
+	    {
+	      for (i = 1; i < n; i++)
+		mouse->mouse_packet[i-1] = mouse->mouse_packet[i];
+	      n--;
+	    }
+	  /* if none of the bytes read were packet starts, break */
+	  if (n <= 0)
+	    break;
+	}
   
       mouse->packet_nbytes += n;
       
@@ -451,7 +477,7 @@ gdk_fb_mouse_ms_open (GdkFBMouse   *mouse)
     return FALSE;
   
   while ((i = read (fd, buf, sizeof(buf))) > 0)
-    g_print ("Got %d bytes of junk from psaux\n", i);
+    g_print ("Got %d bytes of junk from /dev/mouse\n", i);
 
   tcgetattr (fd, &tty);
   tty.c_iflag = IGNBRK | IGNPAR;
@@ -482,12 +508,24 @@ gdk_fb_mouse_ms_packet (GdkFBMouse   *mouse,
   int dx=0, dy=0;
   gboolean new_button1, new_button2, new_button3;
   guchar *buf;
+  static guchar prev = 0;
 
   buf = mouse->mouse_packet;
 
-  new_button1 = (buf[0] & 0x20) && 1;
-  new_button2 = (buf[1] & 0x10) && 1;
-  new_button3 = 0;
+  /* handling of third button is adapted from gpm ms driver */
+  if (buf[0] == 0x40 && !(prev|buf[1]|buf[2]))
+    {
+      new_button1 = 0;
+      new_button2 = 1;
+      new_button3 = 0;
+    }
+  else
+    {
+      new_button1 = (buf[0] & 0x20) && 1;
+      new_button2 = 0;
+      new_button3 = (buf[0] & 0x10) && 1;
+    }
+  prev = (new_button1 << 2) | (new_button2 << 1) | (new_button3 << 0);
 
   if (*got_motion &&
       (new_button1 != mouse->button_pressed[0] ||

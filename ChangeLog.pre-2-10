@@ -1,3 +1,21 @@
+2000-12-09  James Henstridge  <james@daa.com.au>
+
+	* gdk/linux-fb/gdkmouse-fb.c (GdkFBMouseDevice): add prot struct
+	member to hold masks for detecting the start of a protocol packet.
+	(mouse_devs): add packet start masks for ps2 and ms device types.
+	Left the mask for fidmour blank, as I have no idea what it should
+	be.
+	(handle_mouse_io): skip bytes until we get to the start of a
+	packet.  My Logitech mouse seems to be passing an extra NULL pad
+	byte, and GPM does a similar thing here.
+	(gdk_fb_mouse_ms_open): changed error message to not say psaux, as
+	this is the ms mouse driver.
+	(gdk_fb_mouse_ms_packet): fix up button handling, which was
+	completely broken except for button1.  It was checking the wrong
+	bit in the packet for the status of the right mouse button, and
+	wrongly assuming right == button2 rather than 3.  I fixed that and
+	also added support for middle button (button2).
+
 2000-12-08  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextbtree.c (gtk_text_btree_insert): fix breakage here
