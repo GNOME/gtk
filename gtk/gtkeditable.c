@@ -290,7 +290,6 @@ gtk_editable_class_init (GtkEditableClass *class)
 
   class->insert_text = NULL;
   class->delete_text = NULL;
-  class->changed = (void (*) (GtkEditable*)) gtk_widget_queue_draw;
 
   class->activate = NULL;
   class->set_editable = gtk_editable_real_set_editable;

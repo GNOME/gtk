@@ -92,7 +92,6 @@ gtk_vscrollbar_init (GtkVScrollbar *vscrollbar)
   GtkRequisition *requisition;
 
   widget = GTK_WIDGET (vscrollbar);
-  GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
   requisition = &widget->requisition;
 
   requisition->width = (RANGE_CLASS (widget)->slider_width +

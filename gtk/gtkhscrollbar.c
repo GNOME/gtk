@@ -93,7 +93,6 @@ gtk_hscrollbar_init (GtkHScrollbar *hscrollbar)
   GtkRequisition *requisition;
 
   widget = GTK_WIDGET (hscrollbar);
-  GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
   requisition = &widget->requisition;
 
   requisition->width = (RANGE_CLASS (widget)->min_slider_size +

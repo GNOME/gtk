@@ -2139,6 +2139,127 @@ scrolled_windows_remove (GtkWidget *widget, GtkWidget *scrollwin)
 }
 
 /*
+ create_modal_window
+ */
+
+static gboolean
+cmw_destroy_cb(GtkWidget *widget)
+{
+  /* This is needed to get out of gtk_main */
+  gtk_main_quit ();
+
+  return FALSE;
+}
+
+static void
+cmw_color (GtkWidget *widget)
+{
+    GtkWidget *csd;
+
+    csd=gtk_color_selection_dialog_new ("This is a modal color selection dialog");
+
+    /* Set as modal */
+    gtk_window_set_modal (GTK_WINDOW(csd),TRUE);
+    
+    gtk_signal_connect (GTK_OBJECT(csd), "destroy",
+		        GTK_SIGNAL_FUNC(cmw_destroy_cb),NULL);
+
+    gtk_signal_connect_object (GTK_OBJECT(GTK_COLOR_SELECTION_DIALOG(csd)->ok_button),
+                               "clicked", GTK_SIGNAL_FUNC(gtk_widget_destroy),
+                               GTK_OBJECT (csd));
+    gtk_signal_connect_object (GTK_OBJECT(GTK_COLOR_SELECTION_DIALOG(csd)->cancel_button),
+                               "clicked", GTK_SIGNAL_FUNC(gtk_widget_destroy),
+                               GTK_OBJECT (csd));
+    
+    /* wait until destroy calls gtk_main_quit */
+    gtk_widget_show (csd);    
+    gtk_main ();
+}
+
+static void
+cmw_file (GtkWidget *widget)
+{
+    GtkWidget *fs;
+
+    fs = gtk_file_selection_new("This is a modal file selection dialog");
+
+    /* Set as modal */
+    gtk_window_set_modal (GTK_WINDOW(fs),TRUE);
+
+    gtk_signal_connect (GTK_OBJECT(fs), "destroy",
+                        GTK_SIGNAL_FUNC(cmw_destroy_cb),NULL);
+
+    gtk_signal_connect_object (GTK_OBJECT(GTK_FILE_SELECTION(fs)->ok_button),
+                               "clicked",GTK_SIGNAL_FUNC(gtk_widget_destroy),
+                               GTK_OBJECT (fs));
+    gtk_signal_connect_object (GTK_OBJECT(GTK_FILE_SELECTION(fs)->cancel_button),
+                               "clicked",GTK_SIGNAL_FUNC(gtk_widget_destroy),
+                               GTK_OBJECT (fs));
+    
+    /* wait until destroy calls gtk_main_quit */
+    gtk_widget_show (fs);
+    
+    gtk_main();
+}
+
+
+static void
+create_modal_window (void)
+{
+  GtkWidget *window = NULL;
+  GtkWidget *box1,*box2;
+  GtkWidget *frame1;
+  GtkWidget *btnColor,*btnFile,*btnClose;
+
+  /* Create modal window (Here you can use any window descendent )*/
+  window=gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW(window),"This window is modal");
+
+  /* Set window as modal */
+  gtk_window_set_modal (GTK_WINDOW(window),TRUE);
+
+  /* Create widgets */
+  box1 = gtk_vbox_new (FALSE,5);
+   frame1 = gtk_frame_new ("Standard dialogs in modal form");
+    box2 = gtk_vbox_new (TRUE,5);
+     btnColor = gtk_button_new_with_label ("Color");
+     btnFile = gtk_button_new_with_label ("File Selection");
+     btnClose = gtk_button_new_with_label ("Close");
+
+  /* Init widgets */
+  gtk_container_border_width (GTK_CONTAINER(box1),3);
+  gtk_container_border_width (GTK_CONTAINER(box2),3);
+    
+  /* Pack widgets */
+  gtk_container_add (GTK_CONTAINER (window), box1);
+   gtk_box_pack_start (GTK_BOX (box1), frame1, TRUE, TRUE, 4);
+    gtk_container_add (GTK_CONTAINER (frame1), box2);
+     gtk_box_pack_start (GTK_BOX (box2), btnColor, FALSE, FALSE, 4);
+     gtk_box_pack_start (GTK_BOX (box2), btnFile, FALSE, FALSE, 4);
+   gtk_box_pack_start (GTK_BOX (box1), gtk_hseparator_new (), FALSE, FALSE, 4);
+   gtk_box_pack_start (GTK_BOX (box1), btnClose, FALSE, FALSE, 4);
+   
+  /* connect signals */
+  gtk_signal_connect_object (GTK_OBJECT (btnClose), "clicked",
+                             GTK_SIGNAL_FUNC (gtk_widget_destroy),
+                             GTK_OBJECT (window));
+
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+                      GTK_SIGNAL_FUNC (cmw_destroy_cb),NULL);
+  
+  gtk_signal_connect (GTK_OBJECT (btnColor), "clicked",
+                      GTK_SIGNAL_FUNC (cmw_color),NULL);
+  gtk_signal_connect (GTK_OBJECT (btnFile), "clicked",
+                      GTK_SIGNAL_FUNC (cmw_file),NULL);
+
+  /* Show widgets */
+  gtk_widget_show_all (window);
+
+  /* wait until dialog get destroyed */
+  gtk_main();
+}
+
+/*
  * GtkScrolledWindow
  */
 
@@ -4865,6 +4986,7 @@ create_text (void)
       gtk_table_attach (GTK_TABLE (table), text, 0, 1, 0, 1,
 			GTK_EXPAND | GTK_SHRINK | GTK_FILL,
 			GTK_EXPAND | GTK_SHRINK | GTK_FILL, 0, 0);
+      gtk_widget_grab_focus (text);
       gtk_widget_show (text);
 
       hscrollbar = gtk_hscrollbar_new (GTK_TEXT (text)->hadj);
@@ -7171,6 +7293,7 @@ create_main_window (void)
       { "handle box", create_handle_box },
       { "list", create_list },
       { "menus", create_menus },
+      { "modal window", create_modal_window },
       { "notebook", create_notebook },
       { "panes", create_panes },
       { "pixmap", create_pixmap },

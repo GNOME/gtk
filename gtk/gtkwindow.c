@@ -26,6 +26,7 @@
 #include "gtksignal.h"
 #include "gtkwindow.h"
 #include "gtkbindings.h"
+#include "gtkmain.h"
 
 enum {
   SET_FOCUS,
@@ -199,6 +200,7 @@ gtk_window_init (GtkWindow *window)
   window->handling_resize = FALSE;
   window->position = GTK_WIN_POS_NONE;
   window->use_uposition = TRUE;
+  window->modal = FALSE;
   
   gtk_container_register_toplevel (GTK_CONTAINER (window));
 }
@@ -433,6 +435,24 @@ gtk_window_activate_default (GtkWindow      *window)
   return FALSE;
 }
 
+void
+gtk_window_set_modal (GtkWindow *window, gboolean modal)
+{
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  /* If the widget was showed already, adjust it's grab state */
+  if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
+    {
+      if (window->modal && !modal)
+	gtk_grab_remove (GTK_WIDGET(window));
+      else if (!window->modal && modal)
+	gtk_grab_add (GTK_WIDGET(window));
+    }
+  
+  window->modal = modal;
+}
+
 static void
 gtk_window_shutdown (GtkObject *object)
 {
@@ -485,6 +505,10 @@ gtk_window_show (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
   gtk_container_check_resize (GTK_CONTAINER (widget));
   gtk_widget_map (widget);
+
+  if (GTK_WINDOW(widget)->modal)
+      gtk_grab_add(widget);
+      
 }
 
 static void
@@ -495,6 +519,10 @@ gtk_window_hide (GtkWidget *widget)
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_VISIBLE);
   gtk_widget_unmap (widget);
+
+  if (GTK_WINDOW(widget)->modal)
+      gtk_grab_remove(widget);
+
 }
 
 static void

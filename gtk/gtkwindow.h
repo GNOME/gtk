@@ -61,6 +61,7 @@ struct _GtkWindow
   guint handling_resize : 1;
   guint position : 2;
   guint use_uposition : 1;
+  guint modal : 1;
 };
 
 struct _GtkWindowClass
@@ -96,7 +97,9 @@ void       gtk_window_position                 (GtkWindow           *window,
 gint	   gtk_window_activate_focus	       (GtkWindow           *window);
 gint	   gtk_window_activate_default	       (GtkWindow           *window);
 
-
+/* If window is set modal, input will be grabbed when show and released when hide */
+void       gtk_window_set_modal                (GtkWindow           *window,
+                                                gboolean modal);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

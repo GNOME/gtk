@@ -1,3 +1,42 @@
+Tue Aug 11 15:04:52 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.[ch]: Removed has_cursor, set the cursor
+	  beginning of Text when creating the Text widget.
+
+	* gtk/testgtk.c: Grab the focus on the text widget so
+	  as to test out the above.
+
+Tue Aug 11 14:55:00 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkeditable.c: Reverted part of timj's change of Jul 16. 
+	  ::changed is a notification signal and should have no default
+	  handler. A complete redraw of the Text widget does _not_ need to
+	  be done on every text insertion.
+
+Tue Aug 11 13:07:29 1998  Owen Taylor  <otaylor@redhat.com>
+	(gtk-abilleira-072198-patch)
+
+	* gtk/gtkwindow.[ch]: 
+	  Add gtk_window_set_modal() which sets a flag; when
+	  set the window does a gtk_grab_add() when the window
+	  is shown, and a gtk_grab_remove() when the window
+	  is hidden. 
+
+	* gtk/gtkfilesel.[ch]: Test if it is running in modal form and in
+	  that case will run "Create Dir","Delete File" and "Rename File" 
+	  dialogs as modal too.
+
+	* gtk/testgtk.c: Added a button with an example of creating modal 
+	  dialog boxes. Including file selection and color selection standard
+	  dialogs.
+	
+Tue Aug 11 00:44:47 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkhscrollbar.c gtk/gtkvscrollbar.c gtk/gtktoolbar.c:
+	  Removed CAN_FOCUS by default from scrollbars, button
+	  children of toolbar. (But not GTK_TOOLBAR_CHILD_WIDGET children)
+	  (Scrollbar definitely good change, toolbar bit more questionable)
+
 Tue Aug 11 17:49:33 1998  Tim Janik  <timj@gtk.org>
 
 	* examples/packbox/packbox.c: #include fixes (reported by Asbjoern

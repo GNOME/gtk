@@ -543,6 +543,8 @@ gtk_text_init (GtkText *text)
   text->tab_stops = g_list_prepend (text->tab_stops, (void*)8);
   text->tab_stops = g_list_prepend (text->tab_stops, (void*)8);
 
+  text->line_start_cache = NULL;
+
   text->line_wrap = TRUE;
   text->word_wrap = FALSE;
   
@@ -561,6 +563,7 @@ gtk_text_new (GtkAdjustment *hadj,
   text = gtk_type_new (GTK_TYPE_TEXT);
 
   gtk_text_set_adjustments (text, hadj, vadj);
+  gtk_editable_set_position (GTK_EDITABLE (text), 0);
 
   return GTK_WIDGET (text);
 }
@@ -902,11 +905,10 @@ gtk_text_set_position (GtkEditable *editable,
 {
   GtkText *text = (GtkText *) editable;
 
-  undraw_cursor( text, FALSE );
-  text->has_cursor = 1;
-  text->cursor_mark = find_mark( text, position );
-  find_cursor( text, TRUE );
-  draw_cursor( text, FALSE );
+  undraw_cursor (text, FALSE);
+  text->cursor_mark = find_mark (text, position);
+  find_cursor (text, TRUE);
+  draw_cursor (text, FALSE);
   gtk_editable_select_region (editable, 0, 0);
 }
 
@@ -1753,7 +1755,7 @@ gtk_text_key_press (GtkWidget   *widget,
   key = event->keyval;
   return_val = TRUE;
 
-  if ((GTK_EDITABLE(text)->editable == FALSE) || !text->has_cursor)
+  if ((GTK_EDITABLE(text)->editable == FALSE))
     {
       switch (event->keyval)
 	{
@@ -3324,17 +3326,17 @@ find_cursor_at_line (GtkText* text, const LineParams* start_line, gint pixel_hei
 static void
 find_cursor (GtkText* text, gboolean scroll)
 {
-  if (!text->has_cursor)
-    return;
+  if (GTK_WIDGET_REALIZED (text))
+    {
+      find_line_containing_point (text, text->cursor_mark.index, scroll);
 
-  find_line_containing_point (text, text->cursor_mark.index, scroll);
+      g_assert (text->cursor_mark.index >= text->first_line_start_index);
 
-  g_assert (text->cursor_mark.index >= text->first_line_start_index);
-
-  if (text->current_line)
-    find_cursor_at_line (text,
-			 &CACHE_DATA(text->current_line),
-			 pixel_height_of(text, text->current_line));
+      if (text->current_line)
+	find_cursor_at_line (text,
+			     &CACHE_DATA(text->current_line),
+			     pixel_height_of(text, text->current_line));
+    }
 
   GTK_EDITABLE (text)->current_pos = text->cursor_mark.index;
 }
@@ -3391,8 +3393,6 @@ find_mouse_cursor (GtkText* text, gint x, gint y)
   g_assert (cache);
   
   pixel_height = - text->first_cut_pixels;
-  
-  text->has_cursor = 1;
   
   for (; cache; cache = cache->next)
     {
@@ -3500,12 +3500,6 @@ move_cursor_ver (GtkText *text, int count)
   GtkPropertyMark mark;
   gint offset;
 
-  if (!text->has_cursor)
-    {
-      scroll_int (text, count * KEY_SCROLL_PIXELS);
-      return;
-    }
-
   mark = find_this_line_start_mark (text, text->cursor_mark.index, &text->cursor_mark);
   offset = text->cursor_mark.index - mark.index;
 
@@ -3550,9 +3544,6 @@ static void
 move_cursor_hor (GtkText *text, int count)
 {
   /* count should be +-1. */
-  if (!text->has_cursor)
-    return;
-
   if ( (count > 0 && text->cursor_mark.index + count > TEXT_LENGTH(text)) ||
        (count < 0 && text->cursor_mark.index < (- count)) ||
        (count == 0) )
@@ -4629,7 +4620,6 @@ undraw_cursor (GtkText* text, gint absolute)
     text->cursor_drawn_level = 0;
 
   if ((text->cursor_drawn_level ++ == 0) &&
-      text->has_cursor && 
       (editable->selection_start_pos == editable->selection_end_pos) &&
       GTK_WIDGET_DRAWABLE (text))
     {
@@ -4678,35 +4668,25 @@ undraw_cursor (GtkText* text, gint absolute)
 static gint
 drawn_cursor_min (GtkText* text)
 {
-  if (text->has_cursor)
-    {
-      GdkFont* font;
-
-      g_assert(text->cursor_mark.property);
-
-      font = MARK_CURRENT_FONT(&text->cursor_mark);
-
-      return text->cursor_pos_y - text->cursor_char_offset - font->ascent;
-    }
-  else
-    return 0;
+  GdkFont* font;
+  
+  g_assert(text->cursor_mark.property);
+  
+  font = MARK_CURRENT_FONT(&text->cursor_mark);
+  
+  return text->cursor_pos_y - text->cursor_char_offset - font->ascent;
 }
 
 static gint
 drawn_cursor_max (GtkText* text)
 {
-  if (text->has_cursor)
-    {
-      GdkFont* font;
-
-      g_assert(text->cursor_mark.property);
-
-      font = MARK_CURRENT_FONT(&text->cursor_mark);
-
-      return text->cursor_pos_y - text->cursor_char_offset;
-    }
-  else
-    return 0;
+  GdkFont* font;
+  
+  g_assert(text->cursor_mark.property);
+  
+  font = MARK_CURRENT_FONT(&text->cursor_mark);
+  
+  return text->cursor_pos_y - text->cursor_char_offset;
 }
 
 static void
@@ -4720,7 +4700,6 @@ draw_cursor (GtkText* text, gint absolute)
     text->cursor_drawn_level = 1;
 
   if ((--text->cursor_drawn_level == 0) &&
-      text->has_cursor && 
       editable->editable &&
       (editable->selection_start_pos == editable->selection_end_pos) &&
       GTK_WIDGET_DRAWABLE (text))
@@ -4811,7 +4790,7 @@ expose_text (GtkText* text, GdkRectangle *area, gboolean cursor)
 	    draw_line_wrap (text, pixels + CACHE_DATA(cache).font_ascent);
 	}
 
-      if (cursor && text->has_cursor && GTK_WIDGET_HAS_FOCUS (text))
+      if (cursor && GTK_WIDGET_HAS_FOCUS (text))
 	{
 	  if (CACHE_DATA(cache).start.index <= text->cursor_mark.index &&
 	      CACHE_DATA(cache).end.index >= text->cursor_mark.index)
