@@ -133,36 +133,69 @@ tiff_set_error (GError    **error,
 
 
 
+static void free_buffer (guchar *pixels, gpointer data)
+{
+	g_free (pixels);
+}
+
+static tileContigRoutine tiff_put_contig;
+static tileSeparateRoutine tiff_put_separate;
+
+/* We're lucky that TIFFRGBAImage uses the same RGBA packing
+   as gdk-pixbuf, thus we can simple reuse the default libtiff
+   put routines, only adjusting the coordinate system.
+ */ 
+static void
+put_contig (TIFFRGBAImage *img, uint32 *raster,
+            uint32 x, uint32 y, uint32 w, uint32 h,
+            int32 fromskew, int32 toskew, unsigned char *cp) 
+{
+        uint32 *data = raster - y * img->width - x;
+
+        tiff_put_contig (img, data + img->width * (img->height - 1 - y) + x, 
+                         x, y, w, h, fromskew, -toskew - 2*(int32)w, cp);
+}
+
+static void
+put_separate (TIFFRGBAImage *img, uint32 *raster,
+              uint32 x, uint32 y, uint32 w, uint32 h,
+              int32 fromskew, int32 toskew, 
+              unsigned char* r, unsigned char* g, unsigned char* b, unsigned char* a)
+{
+        uint32 *data = raster - y * img->width - x;
+
+        tiff_put_separate (img, data + img->width * (img->height - 1 - y) + x, 
+                           x, y, w, h, fromskew, -toskew - 2*w, r, g, b, a);
+}
+
 static GdkPixbuf *
 tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
 {
 	guchar *pixels = NULL;
-	guchar *tmppix;
-	uint32 *rast, *tmp_rast;
-	gint w, h, x, y, num_pixs;
+	gint width, height, rowstride, bytes;
 	GdkPixbuf *pixbuf;
+        TIFFRGBAImage img;
+        gchar emsg[1024];
 
         /* We're called with the lock held. */
         
         g_return_val_if_fail (global_error == NULL, NULL);
 
-	if (!TIFFGetField (tiff, TIFFTAG_IMAGEWIDTH, &w) || global_error) {
+	if (!TIFFGetField (tiff, TIFFTAG_IMAGEWIDTH, &width) || global_error) {
                 tiff_set_error (error,
                                 GDK_PIXBUF_ERROR_FAILED,
                                 _("Could not get image width (bad TIFF file)"));
                 return NULL;
         }
         
-        if (!TIFFGetField (tiff, TIFFTAG_IMAGELENGTH, &h) || global_error) {
+        if (!TIFFGetField (tiff, TIFFTAG_IMAGELENGTH, &height) || global_error) {
                 tiff_set_error (error,
                                 GDK_PIXBUF_ERROR_FAILED,
                                 _("Could not get image height (bad TIFF file)"));
                 return NULL;
         }
 
-	num_pixs = w * h;
-
-        if (num_pixs == 0) {
+        if (width <= 0 || height <= 0) {
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
@@ -170,8 +203,27 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
                 return NULL;                
         }
         
-	pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, w, h);
-        if (!pixbuf) {
+        rowstride = width * 4;
+        if (rowstride / 4 != width) { /* overflow */
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("Dimensions of TIFF image too large"));
+                return NULL;                
+        }
+        
+        bytes = height * rowstride;
+        if (bytes / rowstride != height) { /* overflow */
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("Dimensions of TIFF image too large"));
+                return NULL;                
+        }
+
+        pixels = g_try_malloc (bytes);
+
+        if (!pixels) {
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
@@ -179,62 +231,46 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
                 return NULL;
         }
 
+	pixbuf = gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, TRUE, 8, 
+                                           width, height, rowstride,
+                                           free_buffer, NULL);
+        if (!pixbuf) {
+                g_free (pixels);
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                             _("Insufficient memory to open TIFF file"));
+                return NULL;
+        }
 
         G_UNLOCK (tiff_loader);
 	if (context)
 		(* context->prepare_func) (pixbuf, NULL, context->user_data);
         G_LOCK (tiff_loader);
-        
-	/* Yes, it needs to be _TIFFMalloc... */
-        rast = (uint32 *) _TIFFmalloc (num_pixs * sizeof (uint32));
-	if (!rast) {
-                g_set_error (error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-                             _("Insufficient memory to open TIFF file"));
-                g_object_unref (pixbuf);
-
-                return NULL;
-	}
-        
-	if (!TIFFReadRGBAImage (tiff, w, h, rast, 1) || global_error) {
+                
+        if (!TIFFRGBAImageBegin (&img, tiff, 1, emsg) || global_error) {
                 tiff_set_error (error,
                                 GDK_PIXBUF_ERROR_FAILED,
                                 _("Failed to load RGB data from TIFF file"));
                 g_object_unref (pixbuf);
-                _TIFFfree (rast);
-
                 return NULL;
         }
-        
-        pixels = gdk_pixbuf_get_pixels (pixbuf);
-        
-        g_assert (pixels);
-        
-        tmppix = pixels;
-        
-        for (y = 0; y < h; y++) {
-                /* Unexplainable...are tiffs backwards? */
-                /* Also looking at the GIMP plugin, this
-                 * whole reading thing can be a bit more
-                 * robust.
-                 */
-                tmp_rast = rast + ((h - y - 1) * w);
-                for (x = 0; x < w; x++) {
-                        tmppix[0] = TIFFGetR (*tmp_rast);
-                        tmppix[1] = TIFFGetG (*tmp_rast);
-                        tmppix[2] = TIFFGetB (*tmp_rast);
-                        tmppix[3] = TIFFGetA (*tmp_rast);
-                        tmp_rast++;
-                        tmppix += 4;
-                }
+
+        if (img.isContig) {
+                tiff_put_contig = img.put.contig;
+                img.put.contig = put_contig;
+        }
+        else {
+                tiff_put_separate = img.put.separate;
+                img.put.separate = put_separate;
         }
 
-        _TIFFfree (rast);
+        TIFFRGBAImageGet (&img, (uint32 *)pixels, width, height);
+        TIFFRGBAImageEnd (&img);
 
         G_UNLOCK (tiff_loader);
 	if (context)
-		(* context->update_func) (pixbuf, 0, 0, w, h, context->user_data);
+		(* context->update_func) (pixbuf, 0, 0, width, height, context->user_data);
         G_LOCK (tiff_loader);
         
         return pixbuf;
