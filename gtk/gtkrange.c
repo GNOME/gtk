@@ -2181,8 +2181,12 @@ gtk_range_calc_layout (GtkRange *range,
         /* slider width is the fraction (page_size /
          * total_adjustment_range) times the trough width in pixels
          */
-        width = ((right - left) * (range->adjustment->page_size /
+	
+	if (range->adjustment->upper - range->adjustment->lower != 0)
+	  width = ((right - left) * (range->adjustment->page_size /
                                    (range->adjustment->upper - range->adjustment->lower)));
+	else
+	  width = range->min_slider_size;
         
         if (width < range->min_slider_size ||
             range->slider_size_fixed)

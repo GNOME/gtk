@@ -1,3 +1,8 @@
+Thu May 16 12:56:38 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrange.c (gtk_range_calc_layout): Fix a missed
+	check for division by zero. (#77820, Gareth Pearce)
+
 Thu May 16 12:50:13 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (gdk_xsettings_notify_cb):
