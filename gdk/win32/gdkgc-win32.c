@@ -1192,20 +1192,24 @@ gdk_colormap_color (GdkColormapPrivateWin32 *colormap_private,
   GdkVisual *visual;
   guchar r, g, b;
 
-  if (colormap_private == NULL || colormap_private->xcolormap->rc_palette)
+  if (colormap_private == NULL)
     return PALETTEINDEX (pixel);
-  else
+      
+  if (colormap_private->xcolormap->rc_palette)
     {
-      visual = colormap_private->base.visual;
-      r = (pixel & visual->red_mask) >> visual->red_shift;
-      r = (r * 255) / bitmask[visual->red_prec];
-      g = (pixel & visual->green_mask) >> visual->green_shift;
-      g = (g * 255) / bitmask[visual->green_prec];
-      b = (pixel & visual->blue_mask) >> visual->blue_shift;
-      b = (b * 255) / bitmask[visual->blue_prec];
-
-      return RGB (r, g, b);
+      GdkColor tmp_color = colormap_private->base.colormap.colors[pixel];
+      return PALETTERGB(tmp_color.red, tmp_color.green, tmp_color.blue);
     }
+ 
+  visual = colormap_private->base.visual;
+  r = (pixel & visual->red_mask) >> visual->red_shift;
+  r = (r * 255) / bitmask[visual->red_prec];
+  g = (pixel & visual->green_mask) >> visual->green_shift;
+  g = (g * 255) / bitmask[visual->green_prec];
+  b = (pixel & visual->blue_mask) >> visual->blue_shift;
+  b = (b * 255) / bitmask[visual->blue_prec];
+  
+  return RGB (r, g, b);
 }
 
 static void
@@ -1244,15 +1248,18 @@ predraw_set_foreground (GdkGCWin32Data          *data,
 	}
       SelectPalette (data->xgc, hpal, FALSE);
       RealizePalette (data->xgc);
-      fg = PALETTEINDEX (data->foreground);
     }
+#if 0
+  /* FIXME: This code causes bad screen flashing and should only
+   * happen if user has set window palette to non-system values.
+   */
   else if (colormap_private->xcolormap->rc_palette)
     {
       int k;
       if (SelectPalette (data->xgc, colormap_private->xcolormap->palette,
 			 FALSE) == NULL)
 	WIN32_GDI_FAILED ("SelectPalette");
-      if (TRUE || colormap_private->xcolormap->stale)
+      if (colormap_private->xcolormap->stale)
 	{
 	  if ((k = RealizePalette (data->xgc)) == GDI_ERROR)
 	    WIN32_GDI_FAILED ("RealizePalette");
@@ -1263,6 +1270,7 @@ predraw_set_foreground (GdkGCWin32Data          *data,
 	       colormap_private->xcolormap->palette, data->xgc, k);
 #endif
     }
+#endif
 
   fg = gdk_colormap_color (colormap_private, data->foreground);
 
@@ -1544,7 +1552,7 @@ BitmapToRegion (HBITMAP hBmp)
   holdBmp = (HBITMAP) SelectObject (hMemDC, hbm8);
 
   /* Obtain hdc with hBmp selected into it */
-  hDC = gdk_win32_obtain_offscreen_hdc (hBmp);
+  hDC = gdk_win32_obtain_offscreen_hdc ((HWND) hBmp);
   if (!hDC)
     {
       SelectObject (hMemDC, holdBmp);

@@ -3131,21 +3131,30 @@ gdk_win32_erase_background (GdkWindow *window,
   yoff = 0;
 
   colormap_private = (GdkColormapPrivateWin32 *) ((GdkWindowPrivate *) window)->drawable.colormap;
-  if (colormap_private
-      && colormap_private->xcolormap->rc_palette)
+
+#if 0
+  /* FIXME: This code causes bad screen flashing and should only
+   * happen if user has set window palette to non-system values.
+   */
+  if (colormap_private && colormap_private->xcolormap->rc_palette)
     {
       int k;
 
       if (SelectPalette (hdc,  colormap_private->xcolormap->palette,
 			 FALSE) == NULL)
         WIN32_GDI_FAILED ("SelectPalette");
-      if ((k = RealizePalette (hdc)) == GDI_ERROR)
-        WIN32_GDI_FAILED ("RealizePalette");
+      if (colormap_private->xcolormap->stale)
+	{
+	  if ((k = RealizePalette (hdc)) == GDI_ERROR)
+	    WIN32_GDI_FAILED ("RealizePalette");
+	  colormap_private->xcolormap->stale = FALSE;
 #if 0
-      g_print ("WM_ERASEBKGND: selected %#x, realized %d colors\n",
-        colormap_private->xcolormap->palette, k);
+	  g_print ("WM_ERASEBKGND: selected %#x, realized %d colors\n",
+		   colormap_private->xcolormap->palette, k);
 #endif
+	}
     }
+#endif
 
   if (GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_PARENT_RELATIVE)
     {

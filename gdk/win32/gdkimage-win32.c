@@ -62,7 +62,10 @@ gdk_image_exit (void)
 }
 
 GdkImage *
-gdk_image_new_bitmap (GdkVisual *visual, gpointer data, gint w, gint h)
+gdk_image_new_bitmap (GdkVisual *visual,
+		      gpointer   data,
+		      gint       w,
+		      gint        h)
 /*
  * Desc: create a new bitmap image
  */
@@ -133,7 +136,7 @@ gdk_image_new_bitmap (GdkVisual *visual, gpointer data, gint w, gint h)
   image->byte_order = GDK_MSB_FIRST;
 
   image->bpp = 1;
-  return(image);
+  return (image);
 } /* gdk_image_new_bitmap() */
 
 void
@@ -655,47 +658,74 @@ gdk_image_put (GdkImage    *image,
   if (colormap_private && colormap_private->xcolormap->rc_palette)
     {
       DIBSECTION ds;
-      static struct {
-	BITMAPINFOHEADER bmiHeader;
-	WORD bmiIndices[256];
-      } bmi;
-      static gboolean bmi_inited = FALSE;
-      int i;
-
-      if (!bmi_inited)
-	{
-	  for (i = 0; i < 256; i++)
-	    bmi.bmiIndices[i] = i;
-	  bmi_inited = TRUE;
-	}
 
       if (GetObject (image_private->ximage, sizeof (DIBSECTION),
 		     &ds) != sizeof (DIBSECTION))
 	WIN32_GDI_FAILED ("GetObject");
       else
 	{
+	  struct {
+	    BITMAPINFOHEADER bmiHeader;
+	    union {
+	      WORD bmiIndices[256];
+	      DWORD bmiMasks[3];
+	      RGBQUAD bmiColors[256];
+	    } u;
+	  } bmi;
+	  int i;
+	  HDC memdc;
+	  HBITMAP ms_bitmap = NULL;
+
 #if 0
-	  g_print("xdest = %d, ydest = %d, xsrc = %d, ysrc = %d, width = %d, height = %d\n",
+	  g_print ("xdest = %d, ydest = %d, xsrc = %d, ysrc = %d, width = %d, height = %d\n",
 		  xdest, ydest, xsrc, ysrc, width, height);
-	  g_print("bmWidth = %d, bmHeight = %d, bmBitsPixel = %d, bmBits = %p\n",
-		  ds.dsBm.bmWidth, ds.dsBm.bmHeight, ds.dsBm.bmBitsPixel, ds.dsBm.bmBits);
-	  g_print("biWidth = %d, biHeight = %d, biBitCount = %d, biClrUsed = %d\n",
-		  ds.dsBmih.biWidth, ds.dsBmih.biHeight, ds.dsBmih.biBitCount, ds.dsBmih.biClrUsed);
+	  g_print ("bmWidth = %d, bmHeight = %d, bmBitsPixel = %d, bmBits = %p\n",
+		   ds.dsBm.bmWidth, ds.dsBm.bmHeight, ds.dsBm.bmBitsPixel, ds.dsBm.bmBits);
+	  g_print ("biWidth = %d, biHeight = %d, biBitCount = %d, biClrUsed = %d\n",
+		   ds.dsBmih.biWidth, ds.dsBmih.biHeight, ds.dsBmih.biBitCount, ds.dsBmih.biClrUsed);
 #endif
-	  bmi.bmiHeader = ds.dsBmih;
-	  /* I have spent hours on getting the parameters to
-	   * SetDIBitsToDevice right. I wonder what drugs the guys in
-	   * Redmond were on when they designed this API.
+
+	  /* Need to set up color table to match that in the drawable */
+	  for (i = 0; i < 256; i++)
+	    {
+	      if (i < drawable_private->colormap->size)
+		{
+		  bmi.u.bmiColors[i].rgbRed =
+		    (drawable_private->colormap->colors[i].red * 255) / 65535;
+		  bmi.u.bmiColors[i].rgbGreen =
+		    (drawable_private->colormap->colors[i].green * 255) / 65535;
+		  bmi.u.bmiColors[i].rgbBlue =
+		    (drawable_private->colormap->colors[i].blue * 255) / 65535;
+		}
+	      else
+		{
+		  bmi.u.bmiColors[i].rgbRed = 255;
+		  bmi.u.bmiColors[i].rgbGreen = 255;
+		  bmi.u.bmiColors[i].rgbBlue = 255;
+		}
+	    }
+       
+	  /* Translate image colors via device independent bitmap and
+	   * offscreen DC.
 	   */
-	  if (SetDIBitsToDevice (hdc,
-				 xdest, ydest,
-				 width, height,
-				 xsrc, (-ds.dsBmih.biHeight)-height-ysrc,
-				 0, -ds.dsBmih.biHeight,
-				 ds.dsBm.bmBits,
-				 (CONST BITMAPINFO *) &bmi,
-				 DIB_PAL_COLORS) == 0)
-	    WIN32_GDI_FAILED ("SetDIBitsToDevice");
+	  bmi.bmiHeader = ds.dsBmih;
+	  bmi.bmiHeader.biHeight *= -1;
+	  ms_bitmap = CreateDIBitmap (hdc, &bmi.bmiHeader,
+				      CBM_INIT, ds.dsBm.bmBits,
+				      (CONST BITMAPINFO *) &bmi, 
+				      DIB_RGB_COLORS);
+	  memdc = CreateCompatibleDC (hdc);
+	  if (ms_bitmap != NULL && memdc != NULL)
+	    {
+	      HGDIOBJ holdbm = SelectObject (memdc, ms_bitmap);
+	      if (!BitBlt (hdc, xdest, ydest, width, height,
+			   memdc, xsrc, ysrc, SRCCOPY))
+		WIN32_GDI_FAILED ("BitBlt");
+	      
+	      SelectObject (memdc, holdbm);
+	      DeleteDC (memdc);
+	      DeleteObject (ms_bitmap);
+	    }
 	}
     }
   else

@@ -1384,6 +1384,9 @@ gdk_colormap_new (GdkVisual *visual,
       private->xcolormap = create_colormap (gdk_root_window,
 					    xvisual, FALSE);
       break;
+
+    default:
+      break;
     }
 
   gdk_colormap_add (colormap);
@@ -1412,7 +1415,10 @@ _gdk_colormap_real_destroy (GdkColormap *colormap)
 
 #define MIN_SYNC_TIME 2
 
-void
+/* Updates the non-native (GDK) colormap structure based on the values
+ * found in the native (Win32) palette
+ */
+static void
 gdk_colormap_sync (GdkColormap *colormap,
 		   gboolean     force)
 {
@@ -2084,6 +2090,9 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
 	  else
 	    nremaining++;
 	}
+      break;
+
+    default:
       break;
     }
   return nremaining;

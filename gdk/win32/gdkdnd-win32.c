@@ -1148,6 +1148,9 @@ gdk_drop_reply (GdkDragContext *context,
 	case GDK_DRAG_PROTO_WIN32_DROPFILES:
 	  gdk_win32_dropfiles_store (NULL);
 	  break;
+
+	default:
+	  break;
 	}
     }
 }

@@ -1,5 +1,25 @@
 2002-01-12  Tor Lillqvist  <tml@iki.fi>
 
+	Palettized mode improvements by Stephan R.A. Deibel
+	<sdeibel@archaeopteryx.com>:
+
+	* win32/gdkevents-win32.c (gdk_win32_erase_background)
+	* win32/gdkgc-win32.c (gdk_colormap_color, predraw_set_foreground)
+	* win32/gdkimage-win32.c (gdk_image_put): Improve support for
+	palettized (256-colour) mode.
+
+	* win32/gdkvisual-win32.c (gdk_visual_init): But still require the
+	GDK_WIN32_ENABLE_BROKEN_PSEUDOCOLOR_VISUAL environment variable,
+	as the palettized mode support is unusable for the GIMP, for
+	instance (IMHO).
+
+2002-01-12  Tor Lillqvist  <tml@iki.fi>
+
+	* win32/gdkcolor-win32.c: Silence gcc -Wall. Mark
+	gdk_colormap_sync() static.
+
+	* gdk/win32/gdkdnd-win32.c: Silence gcc -Wall.
+
 	* gdk/win32/gdkselection-win32.c (gdk_selection_convert): Report
 	failure to requestor also if we cannot handle the target asked
 	for.
