@@ -1,3 +1,17 @@
+Tue Apr 30 18:42:25 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_set_screen): Make it
+	work, even if the window is already realized or
+	mapped.
+
+	* tests/testgtk.c: Erwann's multihead changes, slightly
+	dumbed down. (Removed logic for pulling windows onto
+	the current screen, people can click twice on the demo
+	to destroy and create again.)
+
+	* tests/prop-editor.c: Set the screen on the property
+	editor if the edited object is a widget.
+
 2002-05-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcontainer.c (gtk_container_class_install_child_property):
