@@ -2618,6 +2618,11 @@ cell_size_request (GtkCList       *clist,
   switch (clist_row->cell[column].type)
     {
     case GTK_CELL_PIXTEXT:
+      gdk_window_get_size (GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap,
+			   &width, &height);
+      requisition->width += width;
+      requisition->height = MAX (requisition->height, height);      
+      break;
     case GTK_CELL_PIXMAP:
       gdk_window_get_size (GTK_CELL_PIXMAP (clist_row->cell[column])->pixmap,
 			   &width, &height);

@@ -1,3 +1,8 @@
+2001-10-22  jacob berkman  <jacob@ximian.com>
+
+	* gtk/gtkclist.c (cell_size_request): don't cast a PIXTEXT cell to
+	a PIXMAP cell (fixes crash when using PIXTEXT cells)
+
 Sat Oct 20 18:58:25 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.h: Deprecate gtk_entry_set_editable.
