@@ -1,9 +1,16 @@
-2001-08-21  Matthias Clasen  <matthiasc@waldgeist.poet.de>
+Tue Aug 28 20:10:31 2001  Matthias Clasen  <matthiasc@poet.de>
+
+Tue Aug 28 20:03:43 2001  Matthias Clasen  <matthiasc@poet.de>
+
+	* test-loaders.c (test_loader): Catch errors at close time. 
+	* test-loaders.c (main): Remove C++ comments. 
+
+2001-08-21  Matthias Clasen  <matthiasc@poet.de>
 
 	* Makefile.am, gdk-pixbuf-io.c, pixbufloader_tga.def, 
 	io-tga.c: Add tga loader, patch by Nicola Girardi. (#56067)
 
-2001-08-20  Matthias Clasen  <matthiasc@waldgeist.poet.de>
+2001-08-20  Matthias Clasen  <matthiasc@poet.de>
 
 	* test-images.h, test-loaders.c: Add ico and wbmp tests.
 	* io-jpeg.c (gdk_pixbuf__jpeg_image_save): Fail with a suitable

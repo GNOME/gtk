@@ -1,3 +1,8 @@
+Tue Aug 28 20:06:07 2001  Matthias Clasen  <matthiasc@poet.de>
+
+	* demos/testpixbuf.c (update_timeout): Use gdk_pixbuf_loader_get_pixbuf
+	only in response to an area_prepared signal.
+
 2001-08-28  Alex Larsson  <alexl@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_class_init):

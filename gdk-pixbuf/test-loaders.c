@@ -148,7 +148,7 @@ test_loader (const guchar *bytes, gsize len, gboolean data_is_ok)
       err = NULL;
       did_fail = TRUE;
     }
-  gdk_pixbuf_loader_close (loader, NULL);
+  gdk_pixbuf_loader_close (loader, &err);
   if (err)
     {
       g_error_free (err);
@@ -404,8 +404,8 @@ main (int argc, char **argv)
   TEST (tiff1_test_1, FALSE);   
 
 #if 0
-  TEST_RANDOMLY_MODIFIED (valid_gif_test, FALSE);   //  these all break more or
-  TEST_RANDOMLY_MODIFIED (valid_png_test, FALSE);   //	less spectacularly, patched or not
+  TEST_RANDOMLY_MODIFIED (valid_gif_test, FALSE);   /*  these all break more or */
+  TEST_RANDOMLY_MODIFIED (valid_png_test, FALSE);   /*	less spectacularly, patched or not */
   TEST_RANDOMLY_MODIFIED (valid_tiff1_test, FALSE);
 #endif
 
@@ -416,7 +416,7 @@ main (int argc, char **argv)
 						     * the wbmp loader is broken
 						     */
 #endif
-  TEST_RANDOMLY_MODIFIED (valid_jpeg_test, FALSE);  // The jpeg loader does not break
+  TEST_RANDOMLY_MODIFIED (valid_jpeg_test, FALSE);  /* The jpeg loader does not break */
 
 #if 0
   TEST_RANDOM (GIF_HEADER, 150, FALSE);
