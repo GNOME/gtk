@@ -38,6 +38,8 @@ GtkCellRenderer
 @ypad: 
 @can_activate: 
 @visible: 
+@is_expander: 
+@is_expanded: 
 
 <!-- ##### FUNCTION gtk_cell_renderer_get_size ##### -->
 <para>

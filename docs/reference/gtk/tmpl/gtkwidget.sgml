@@ -875,14 +875,6 @@ GtkWidget
 
 
 
-<!-- ##### FUNCTION gtk_widget_set_default_style ##### -->
-<para>
-
-</para>
-
-@style: 
-
-
 <!-- ##### FUNCTION gtk_widget_set_default_colormap ##### -->
 <para>
 
