@@ -2,7 +2,7 @@
 <book>
 
 <bookinfo>
-  <date>September 3rd 2003</date>
+  <date>November 5th 2003</date>
   <title>GTK+ FAQ</title>
   <authorgroup>
     <author>
@@ -36,17 +36,19 @@
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>Note: This FAQ mainly covers GTK+ 1.2</title>
-<para>This FAQ mainly covers GTK+ 1.2.
+<title>Note: This FAQ is undergoing conversion to GTK+ 2.x</title>
+<para>This FAQ is undergoing conversion to GTK+ 2.x.
 Where the text covers GTK+ 2.x this will be indicated by prefixing the
-text with: <emphasis>[GTK+ 2.x]</emphasis>
+text with: <emphasis>[GTK+ 2.x]</emphasis>. Where this is not
+indicated, the text has not yet been updated from GTK+ 1.2 and may
+not be totally correct.
 </para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>Before anything else: the greetings</title>
+<title>Before anything else: the greetings <emphasis>[GTK 2.x]</emphasis></title>
 <para>The FAQ authors want to thank:</para>
 <itemizedlist spacing=Compact>
 <listitem>
@@ -86,7 +88,7 @@ it's really short :) </para>
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>Authors</title>
+<title>Authors <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>The original authors of GTK+ were:</para>
 
@@ -103,35 +105,72 @@ it's really short :) </para>
 </itemizedlist>
 
 <para>Since then, much has been added by others. Please see the
-AUTHORS file in the distribution for the GTK+ Team.</para>
+AUTHORS file in the distribution for the GTK+ Team. The people currently
+contributing the most code to GTK+ are (in no particular order):</para>
+
+
+<itemizedlist spacing=Compact>
+<listitem>
+<simpara>Owen Taylor</simpara>
+</listitem>
+<listitem>
+<simpara>Matthias Clasen</simpara>
+</listitem>
+<listitem>
+<simpara>Federico Mena Quintero</simpara>
+</listitem>
+<listitem>
+<simpara>Soeren Sandmann</simpara>
+</listitem>
+<listitem>
+<simpara>Padraig O'Briain</simpara>
+</listitem>
+<listitem>
+<simpara>Manish Singh</simpara>
+</listitem>
+<listitem>
+<simpara>Kristian Rietveld</simpara>
+</listitem>
+<listitem>
+<simpara>Tor Lillqvist</simpara>
+</listitem>
+</itemizedlist>
 
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>What is GTK+?</title>
+<title>What is GTK+? <emphasis>[GTK 2.x]</emphasis></title>
 
-<para>GTK+ is a small and efficient widget set designed with
+<para>GTK+ is a multi-platform toolkit for creating graphical user
+interfaces, originally designed with
 the general look and feel of Motif.  In reality, it looks much
-better than Motif.  It contains common widgets and some more
-complex widgets such as a file selection, and color selection
-widgets.</para>
+better than Motif.  It contains common and complex widgets, such as
+file selection, and color selection widgets.</para>
 
-<para>GTK+ provides some unique features. (At least, I know of
-no other widget library which provides them). For example, a
-button does not contain a label, it contains a child widget,
-which in most instances will be a label.  However, the child
-widget can also be a pixmap, image or any combination possible
-the programmer desires. This flexibility is adhered to
-throughout the library.</para>
+<para>GTK+ was initially developed as a widget set for the GIMP (GNU Image
+Manipulation Program). It has grown extensively since then, and is today
+used by a large number of applications, and is the toolkit used by the
+<ulink url="http://www.gnome.org/">GNOME</ulink> desktop project.</para>
 
+<para>GTK+ is free software and part of the GNU Project. However, the
+licensing terms for GTK+, the GNU LGPL, allow it to be used by all developers,
+including those developing proprietary software, without any license fees
+or royalties.</para>
+
+<para>GTK+ has been designed from the ground up to support a range of
+<ulink url="http://www.gtk.org/bindings.html">
+language bindings</ulink>, not only C/C++. Using GTK+ from languages
+such as Perl and Python (especially in combination with the Glade GUI
+builder) provides an effective method of rapid application
+development..</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>What is the + in GTK+?</title>
+<title>What is the + in GTK+? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>Peter Mattis informed the gtk mailing list that:</para>
 
@@ -145,14 +184,21 @@ version of gtk and the new version. You can think of it as
 being an enhancement to the original gtk that adds object
 oriented features.</quote></para>
 
+<para>Although much has changed with GTK+, and Peter, Spencer and Josh
+don't have any direct involvement these days, the name is kept to keep
+a link with the heritage of GTK+.</para>
+
+<para>GTK+ is now additionally based upon the Pango and ATK
+libraries, that provide text layout and rendering and accessibility
+interfaces.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>Does the G in GTK+, GDK and GLib stand for?</title>
+<title>Does the G in GTK+, GDK and GLib stand for? <emphasis>[GTK 2.x]</emphasis></title>
 
-<para>GTK+ == Gimp Toolkit</para>
+<para>GTK+ == The GIMP Toolkit</para>
 <para>GDK == GTK+ Drawing Kit</para>
 <para>GLib == G Library</para>
 
@@ -161,14 +207,14 @@ oriented features.</quote></para>
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>Where is the documentation for GTK+?</title>
+<title>Where is the documentation for GTK+? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>In the GTK+ distribution's doc/ directory you will find
-the reference material for both GTK and GDK, this FAQ and the
+the API Reference for both GTK and GDK, this FAQ and the
 GTK Tutorial.</para>
 
 <para>In addition, you can find links to HTML versions of
-these documents  by going to <ulink url="http://www.gtk.org/">
+these documents by going to <ulink url="http://www.gtk.org/">
 http://www.gtk.org/</ulink>. A
 packaged version of the GTK Tutorial, with SGML, HTML,
 Postscript, DVI and text versions can be found in <ulink
@@ -176,8 +222,9 @@ url="ftp://ftp.gtk.org/pub/gtk/tutorial">
 ftp://ftp.gtk.org/pub/gtk/tutorial
 </ulink></para>
 
-<para>There are now a couple of books available that deal with
-programming GTK+, GDK and GNOME:</para>
+<para>There are now a few books available that deal with
+programming GTK+, GDK and GNOME. Unfortunately, they
+currently are all based upon GTK+ 1.x:</para>
 
 <itemizedlist>
 <listitem><simpara>Eric Harlows book entitled "Developing
@@ -202,6 +249,19 @@ url="http://pobox.com/~hp/gnome-app-devel.html">
 http://pobox.com/~hp/gnome-app-devel.html
 </ulink></simpara>
 </listitem>
+<listitem><simpara>"GTK+ Programming in C" by
+Syd Logan. ISBN: 0-1301-4264-6</simpara>
+</listitem>
+<listitem><simpara>"Linux GNOME/GTK+ Programming Bible" by
+Arthur Griffith. ISBN: 0-7645-4640-6</simpara>
+</listitem>
+<listitem><simpara>"Beginning GTK+/GNOME Programming" by
+Peter Wright. ISBN: 1-8610-0381-1</simpara>
+</listitem>
+<listitem><simpara>"Sams Teach Yourself GTK+ Programming
+in 21 Days" by Donna Martin
+. ISBN: 0-6723-1829-6</simpara>
+</listitem>
 </itemizedlist>
 
 </sect1>
@@ -210,7 +270,7 @@ http://pobox.com/~hp/gnome-app-devel.html
 
 <sect1>
 <title>Is there a mailing list (or mailing list archive) for
-GTK+?</title>
+GTK+? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>Information on mailing lists relating to GTK+ can be
 found at: <ulink
@@ -223,7 +283,7 @@ http://www.gtk.org/mailinglists.html
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>How to get help with GTK+</title>
+<title>How to get help with GTK+ <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>First, make sure your question isn't answered in the
 documentation, this FAQ or the tutorial. Done that? You're
@@ -368,18 +428,84 @@ them).</para>
 
 <!-- ----------------------------------------------------------------- -->
 
-<sect1>
-<title>What do I need to run GTK+?</title>
+<sect1 id="faq-Compile">
+<title>What do I need to compile GTK+? <emphasis>[GTK 2.x]</emphasis></title>
 
-<para>To compile GTK+, all you need is a C compiler (gcc) and
-the X Window System and associated libraries on your system.</para>
+<para>GTK+ is a large package that is dependent on a number of other
+tools and libraries. It is recommended that you use precompiled
+binary packages for your system if possible</para>
+
+<para>To compile GTK+ from source you need a C compiler (gcc) and
+the X Window System and associated development libraries and packages
+on your system.</para>
+
+<para>You will also need to have installed the tools
+and libraries that GTK+ depends upon. These are listed below in the order
+in which they need to be installed:</para>
+
+<itemizedlist spacing=compact>
+<listitem><simpara> pkg-config
+(<ulink url="http://www.freedesktop.org/software/pkgconfig/">
+pkg-config Site</ulink>)</simpara>
+</listitem>
+
+<listitem><simpara> GNU make
+(<ulink url="http://www.gnu.org/software/make/">
+GNU make Site</ulink>)</simpara>
+</listitem>
+
+<listitem><simpara> JPEG, PNG and TIFF image libraries
+(<ulink url="ftp://ftp.gtk.org/pub/gtk/v2.2/dependencies/">
+GTK+ Site</ulink>)</simpara>
+</listitem>
+
+<listitem><simpara> FreeType
+(<ulink url="http://www.freetype.org/">
+FreeType Site</ulink>)</simpara>
+</listitem>
+
+<listitem><simpara> fontconfig
+(<ulink url="http://www.fontconfig.org/">
+fontconfig Site</ulink>)</simpara>
+</listitem>
+
+<listitem><simpara> GNU libiconv library (if your system doesn't have iconv())
+(<ulink url="http://www.gnu.org/software/libiconv/">
+GNU libiconv Site</ulink>)</simpara>
+</listitem>
+
+<listitem><simpara> GNU gettext (if your system doesn't have gettext())
+(<ulink url="http://www.gnu.org/software/gettext/">
+GTK+ Site</ulink>)</simpara>
+</listitem>
+
+<listitem><simpara> GLib
+(<ulink url="ftp://ftp.gtk.org/pub/gtk/v2.2/">
+GTK+ Site</ulink>)</simpara>
+</listitem>
+
+<listitem><simpara> Pango
+(<ulink url="ftp://ftp.gtk.org/pub/gtk/v2.2/">
+GTK+ Site</ulink>)</simpara>
+</listitem>
+
+<listitem><simpara> ATK
+(<ulink url="ftp://ftp.gtk.org/pub/gtk/v2.2/">
+GTK+ Site</ulink>)</simpara>
+</listitem>
+
+<listitem><simpara> GTK+
+(<ulink url="ftp://ftp.gtk.org/pub/gtk/v2.2/">
+GTK+ Site</ulink>)</simpara>
+</listitem>
+</itemizedlist>
 
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>Where can I get GTK+?</title>
+<title>Where can I get GTK+? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>The canonical site is <ulink
 url="ftp://ftp.gtk.org/pub/gtk">ftp://ftp.gtk.org/pub/gtk</ulink>.</para>
@@ -397,30 +523,31 @@ url="ftp://ftp.gtk.org/etc/mirrors">ftp://ftp.gtk.org/etc/mirrors
 <ulink url="ftp://ftp.is.co.za/applications/gimp">
 ftp://ftp.is.co.za/applications/gimp</ulink></simpara> 
 </listitem>
+
 <listitem><simpara> Australia -
 <ulink
-url="ftp://ftp.au.gimp.org/pub/gimp">
-ftp://ftp.au.gimp.org/pub/gimp</ulink></simpara> 
+url="ftp://ftp.planetmirror.com/pub/gimp/gtk">
+ftp://ftp.planetmirror.com/pub/gimp/gtk</ulink></simpara> 
 </listitem>
+
 <listitem><simpara> Finland -
-<ulink url="ftp://ftp.funet.fi/pub/sci/graphics/packages/gimp">
-ftp://ftp.funet.fi/pub/sci/graphics/packages/gimp</ulink></simpara> 
+<ulink url="ftp://ftp.funet.fi/pub/sci/graphics/packages/gimp/gtk">
+ftp://ftp.funet.fi/pub/sci/graphics/packages/gimp/gtk</ulink></simpara> 
 </listitem>
+
 <listitem><simpara> Germany -
-<ulink url="ftp://infosoc.uni-koeln.de/pub/ftp.gimp.org">
-ftp://infosoc.uni-koeln.de/pub/ftp.gimp.org"</ulink></simpara> 
+<ulink url="ftp://ftp.gwdg.de/pub/misc/grafik/gimp/gtk">
+ftp://ftp.gwdg.de/pub/misc/grafik/gimp/gtk</ulink></simpara> 
 </listitem>
+
 <listitem><simpara> Japan -
-<ulink url="ftp://SunSITE.sut.ac.jp/pub/archives/packages/gimp">
-ftp://SunSITE.sut.ac.jp/pub/archives/packages/gimp</ulink></simpara> 
+<ulink url="ftp://sunsite.sut.ac.jp/pub/archives/packages/gimp/gtk">
+ftp://sunsite.sut.ac.jp/pub/archives/packages/gimp/gtk</ulink></simpara> 
 </listitem>
+
 <listitem><simpara> UK - 
-<ulink url="ftp://ftp.flirble.org/pub/X/gimp">
-ftp://ftp.flirble.org/pub/X/gimp</ulink></simpara>
-</listitem>
-<listitem><simpara> US -
-<ulink url="ftp://ftp.insync.net/pub/mirrors/ftp.gimp.org">
-ftp://ftp.insync.net/pub/mirrors/ftp.gimp.org</ulink></simpara> 
+<ulink url="http://www.mirror.ac.uk/sites/ftp.gimp.org/pub/gtk/">
+http://www.mirror.ac.uk/sites/ftp.gimp.org/pub/gtk/</ulink></simpara>
 </listitem>
 </itemizedlist>
 </sect1>
@@ -428,21 +555,34 @@ ftp://ftp.insync.net/pub/mirrors/ftp.gimp.org</ulink></simpara>
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>How do I configure/compile GTK+?</title>
+<title>How do I configure/compile GTK+? <emphasis>[GTK 2.x]</emphasis></title>
 
-<para>Generally, all you will need to do is issue the commands:</para>
+<para>Generally, the minimum you need to do is issue the commands:</para>
 
 <para><literallayout><literal>./configure</literal>
-<literal>make</literal></literallayout></para>
+<literal>make</literal>
+<literal>make install</literal></literallayout></para>
 
-<para>in the gtk+-version/ directory.</para>
+<para>in the GTK+ source directory.</para>
+
+<para>This generally also holds true for each of the packages that GTK+
+depends upon, listed <link linkend="faq-Compile">above</link>.</para>
+
+<para>There are various options that you can pass to the configure script
+in order to change its default settings. The one that you are most likely
+to want to use is the <literal>--prefix</literal>
+argument, which defines where the package is to be install, e.g.</para>
+
+<para>
+<literallayout><literal>./configure --prefix=/usr</literal></literallayout>
+</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
 <title>When compiling GTK+ I get an error like: <literal>make:
-file `Makefile' line 456: Syntax error</literal></title>
+file `Makefile' line 456: Syntax error</literal> <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>Make sure that you are using GNU make
 (use <literal>make -v</literal>
@@ -514,7 +654,7 @@ component of GTK) isn't in your path, or there is an old
 version on your system. Type:</simpara>
 
 <para><literallayout>
-<literal>pkg-config gtk+-2.0 --version</literal>
+<literal>pkg-config gtk+-2.0 --modversion</literal>
 </literallayout></para>
 
 <para>to check for both of these. If it returns a value
@@ -1960,7 +2100,7 @@ do <literal>gtk_grab_remove(my_window)</literal>.</para>
 
 <sect1>
 <title>Why doesn't my widget (e.g. progressbar)
-update?</title>
+update? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>You are probably doing all the changes within a function without
 returning control to <literal>gtk_main()</literal>. This may
@@ -1971,7 +2111,7 @@ drawing queue to be processed using something like:</para>
 
 
 <programlisting role="C">
-while (g_main_iteration(FALSE));
+while (g_main_context_iteration(NULL, FALSE));
 </programlisting>
 
 <para>inside you're function that changes the widget.</para>
@@ -3578,22 +3718,15 @@ and become more useful!</para>
 Tony Gale
 <ulink url="mailto:gale@gtk.org">&lt;gale@gtk.org&gt;</ulink>
 
-Nathan Froyd
-<ulink url="mailto:maestrox@geocities.com">
-&lt;maestrox@geocities.com&gt;</ulink>,
-and 
-Emmanuel Deloget
-<ulink url="mailto:logout@free.fr">&lt;logout@free.fr&gt;</ulink>.
-
 This FAQ was created by Shawn T. Amundson 
 <ulink url="mailto:amundson@gimp.org">
-&lt;amundson@gimp.org&gt;</ulink> who continues to provide support.
+&lt;amundson@gimp.org&gt;</ulink>.
 
 Contributions should be sent to Tony Gale <ulink
 url="mailto:gale@gtk.org">&lt;gale@gtk.org&gt;</ulink></para>
 
-<para>The GTK+ FAQ is Copyright (C) 1997-2000 by Shawn T. Amundson, 
-Tony Gale, Emmanuel Deloget and Nathan Froyd.</para>
+<para>The GTK+ FAQ is Copyright (C) 1997-2003 by Shawn T. Amundson, 
+Tony Gale.</para>
 
 <para>Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are

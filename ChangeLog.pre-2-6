@@ -1,3 +1,11 @@
+Wed Nov  5 08:58:34 GMT 2003  Tony Gale <gale@gtk.org>
+
+	* docs/faq/gtk-faq.sgml: Bring across changes from HEAD:
+	  - Update info on compiling GTK+
+	  - mirrors,compiling,g_main_context_iteration
+	  - fix pkg-config command error, update copyright.
+	  - More 2.x updates
+
 Wed Oct 29 15:01:32 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkimage-x11.c (_gdk_x11_copy_to_image): Move
