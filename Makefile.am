@@ -8,16 +8,19 @@ bin_SCRIPTS = gtk-config
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-EXTRA_DIST =	\
-	HACKING		\
-	gtk+.spec.in	\
-        gtk.m4          \
-	makecopyright	\
-	TODO		\
-	NEWS.pre-1-0	\
+EXTRA_DIST =			\
+	HACKING			\
+	gtk+.spec.in		\
+        gtk.m4          	\
+	makecopyright		\
+	TODO			\
+	TODO.xml		\
+	NEWS.pre-1-0		\
 	ChangeLog.pre-1-0	\
+	ChangeLog.pre-1-2	\
 	README.cvs-commits	\
-	README.win32	\
+	README.win32		\
+	README.nanox		\
 	intl/libgettext.h	\
 	intl/po2tbl.sed.in	\
 	examples/aspectframe/Makefile  \
@@ -26,8 +29,12 @@ EXTRA_DIST =	\
 	examples/README.1ST  \
 	examples/extract.awk  \
 	examples/extract.sh  \
+	examples/arrow/Makefile	\
+	examples/arrow/arrow.c	\
 	examples/base/Makefile  \
 	examples/base/base.c  \
+	examples/buttonbox/Makefile \
+	examples/buttonbox/buttonbox.c	\
 	examples/buttons/Makefile  \
 	examples/buttons/buttons.c  \
 	examples/buttons/info.xpm  \
@@ -49,6 +56,8 @@ EXTRA_DIST =	\
 	examples/helloworld/helloworld.c  \
 	examples/helloworld2/Makefile  \
 	examples/helloworld2/helloworld2.c  \
+	examples/label/Makefile	\
+	examples/label/label.c	\
 	examples/list/Makefile  \
 	examples/list/list.c  \
 	examples/menu/Makefile  \
@@ -74,6 +83,8 @@ EXTRA_DIST =	\
 	examples/rulers/rulers.c  \
 	examples/scribble-simple/Makefile  \
 	examples/scribble-simple/scribble-simple.c  \
+	examples/scribble-xinput/Makefile	\
+	examples/scribble-xinput/scribble-xinput.c	\
 	examples/scrolledwin/Makefile  \
 	examples/scrolledwin/scrolledwin.c  \
 	examples/selection/Makefile  \

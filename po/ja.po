@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.7\n"
-"POT-Creation-Date: 1999-11-24 17:51+0100\n"
+"POT-Creation-Date: 2000-07-03 17:11-0400\n"
 "PO-Revision-Date: 1999-10-08 11:42+0900\n"
 "Last-Translator: 白崎 泰弘 <yasuhiro@awa.tohoku.ac.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -13,75 +13,82 @@ msgstr ""
 "Content-Type: text/plain; charset=EUC-JP\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtk/gtkcolorsel.c:221
+#: gtk/gtkcolorsel.c:1415
 msgid "Hue:"
 msgstr "色相:"
 
-#: gtk/gtkcolorsel.c:222
+#: gtk/gtkcolorsel.c:1416
 msgid "Saturation:"
 msgstr "彩度:"
 
-#: gtk/gtkcolorsel.c:223
+#: gtk/gtkcolorsel.c:1417
 msgid "Value:"
 msgstr "明度:"
 
-#: gtk/gtkcolorsel.c:224
+#: gtk/gtkcolorsel.c:1418
 msgid "Red:"
 msgstr "赤:"
 
-#: gtk/gtkcolorsel.c:225
+#: gtk/gtkcolorsel.c:1419
 msgid "Green:"
 msgstr "緑:"
 
-#: gtk/gtkcolorsel.c:226
+#: gtk/gtkcolorsel.c:1420
 msgid "Blue:"
 msgstr "青:"
 
-#: gtk/gtkcolorsel.c:227
+#: gtk/gtkcolorsel.c:1423
 msgid "Opacity:"
 msgstr "不透明度:"
 
-#. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3772
-#: gtk/gtkgamma.c:416
-msgid "OK"
-msgstr "了解"
+#: gtk/gtkcolorsel.c:1438
+#, fuzzy
+msgid "Hex Value:"
+msgstr "明度:"
 
-#. The Cancel button
-#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:961
-#: gtk/gtkfilesel.c:1065 gtk/gtkfilesel.c:1180 gtk/gtkfontsel.c:3785
-#: gtk/gtkgamma.c:424
-msgid "Cancel"
-msgstr "取消"
+#: gtk/gtkcolorsel.c:1459
+msgid "Custom Palette"
+msgstr ""
 
-#: gtk/gtkcolorsel.c:1738
-msgid "Help"
-msgstr "ヘルプ"
+#: gtk/gtkcolorsel.c:1464
+msgid "Set Color"
+msgstr ""
 
 #. The directories clist
-#: gtk/gtkfilesel.c:520
+#: gtk/gtkfilesel.c:514
 msgid "Directories"
 msgstr "ディレクトリ"
 
 #. The files clist
-#: gtk/gtkfilesel.c:539
+#: gtk/gtkfilesel.c:534
 msgid "Files"
 msgstr "ファイル"
 
-#: gtk/gtkfilesel.c:609 gtk/gtkfilesel.c:1644
+#. The OK button
+#: gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952 gtk/gtkgamma.c:415
+msgid "OK"
+msgstr "了解"
+
+#. The Cancel button
+#: gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963 gtk/gtkfilesel.c:1067
+#: gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965 gtk/gtkgamma.c:423
+msgid "Cancel"
+msgstr "取消"
+
+#: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "ディレクトリが読めません: %s"
 
-#: gtk/gtkfilesel.c:641
+#: gtk/gtkfilesel.c:637
 msgid "Create Dir"
 msgstr "ディレクトリ作成"
 
-#: gtk/gtkfilesel.c:652 gtk/gtkfilesel.c:1034
+#: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
 msgid "Delete File"
 msgstr "ファイル削除"
 
-#: gtk/gtkfilesel.c:663 gtk/gtkfilesel.c:1138
+#: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
 msgid "Rename File"
 msgstr "ファイル名変更"
 
@@ -90,405 +97,173 @@ msgstr "ファイル名変更"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:827
+#: gtk/gtkfilesel.c:828
 msgid "Error"
 msgstr "エラー"
 
 #. close button
-#: gtk/gtkfilesel.c:850 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
 msgid "Close"
 msgstr "閉じる"
 
-#: gtk/gtkfilesel.c:925
+#: gtk/gtkfilesel.c:927
 msgid "Create Directory"
 msgstr "ディレクトリ作成"
 
-#: gtk/gtkfilesel.c:939
+#: gtk/gtkfilesel.c:941
 msgid "Directory name:"
 msgstr "ディレクトリ名:"
 
 #. buttons
-#: gtk/gtkfilesel.c:952
+#: gtk/gtkfilesel.c:954
 msgid "Create"
 msgstr "作成"
 
 #. buttons
-#: gtk/gtkfilesel.c:1056
+#: gtk/gtkfilesel.c:1058
 msgid "Delete"
 msgstr "削除"
 
 #. buttons
-#: gtk/gtkfilesel.c:1171
+#: gtk/gtkfilesel.c:1173
 msgid "Rename"
 msgstr "名称変更"
 
-#: gtk/gtkfilesel.c:1623
+#: gtk/gtkfilesel.c:1600
 msgid "Selection: "
 msgstr "選択: "
 
-#: gtk/gtkfontsel.c:216
-msgid "Foundry:"
-msgstr "鋳造所:"
-
-#: gtk/gtkfontsel.c:217
+#: gtk/gtkfontsel.c:189
 msgid "Family:"
 msgstr "書体:"
 
-#: gtk/gtkfontsel.c:218
-msgid "Weight:"
-msgstr "太さ:"
-
-#: gtk/gtkfontsel.c:219
-msgid "Slant:"
-msgstr "傾き:"
-
-#: gtk/gtkfontsel.c:220
-msgid "Set Width:"
-msgstr "セット幅:"
-
-#: gtk/gtkfontsel.c:221
-msgid "Add Style:"
+#: gtk/gtkfontsel.c:194
+#, fuzzy
+msgid "Style:"
 msgstr "付加スタイル:"
 
-#: gtk/gtkfontsel.c:222
-msgid "Pixel Size:"
-msgstr "ピクセルサイズ:"
-
-#: gtk/gtkfontsel.c:223
-msgid "Point Size:"
-msgstr "ポイントサイズ:"
-
-#: gtk/gtkfontsel.c:224
-msgid "Resolution X:"
-msgstr "解像度 X:"
-
-#: gtk/gtkfontsel.c:225
-msgid "Resolution Y:"
-msgstr "解像度 Y:"
-
-#: gtk/gtkfontsel.c:226
-msgid "Spacing:"
-msgstr "間隔:"
-
-#: gtk/gtkfontsel.c:227
-msgid "Average Width:"
-msgstr "平均幅:"
-
-#: gtk/gtkfontsel.c:228
-msgid "Charset:"
-msgstr "文字集合:"
-
-#. Number of internationalized titles here must match number
-#. of NULL initializers above
-#: gtk/gtkfontsel.c:472
-msgid "Font Property"
-msgstr "フォント属性"
-
-#: gtk/gtkfontsel.c:473
-msgid "Requested Value"
-msgstr "要求値"
-
-#: gtk/gtkfontsel.c:474
-msgid "Actual Value"
-msgstr "実際の値"
-
-#: gtk/gtkfontsel.c:507
-msgid "Font"
-msgstr "フォント"
-
-#: gtk/gtkfontsel.c:517 gtk/gtkfontsel.c:2209 gtk/gtkfontsel.c:2439
-msgid "Font:"
-msgstr "フォント:"
-
-#: gtk/gtkfontsel.c:522
-msgid "Font Style:"
-msgstr "フォントスタイル:"
-
-#: gtk/gtkfontsel.c:527
+#: gtk/gtkfontsel.c:199
 msgid "Size:"
 msgstr "サイズ:"
 
-#: gtk/gtkfontsel.c:659 gtk/gtkfontsel.c:881
-msgid "Reset Filter"
-msgstr "フィルタ初期化"
-
-#: gtk/gtkfontsel.c:673
-msgid "Metric:"
-msgstr "メトリック:"
-
-#: gtk/gtkfontsel.c:677
-msgid "Points"
-msgstr "ポイント"
-
-#: gtk/gtkfontsel.c:684
-msgid "Pixels"
-msgstr "ピクセル"
-
 #. create the text entry widget
-#: gtk/gtkfontsel.c:700
+#: gtk/gtkfontsel.c:309
 msgid "Preview:"
 msgstr "プレビュー:"
 
-#: gtk/gtkfontsel.c:729
-msgid "Font Information"
-msgstr "フォント情報"
-
-#: gtk/gtkfontsel.c:762
-msgid "Requested Font Name:"
-msgstr "要求フォント名:"
-
-#: gtk/gtkfontsel.c:773
-msgid "Actual Font Name:"
-msgstr "実際のフォント名:"
-
-#: gtk/gtkfontsel.c:784
-#, c-format
-msgid "%i fonts available with a total of %i styles."
-msgstr "%i 個のフォントが有効です。(%i スタイル)"
-
-#: gtk/gtkfontsel.c:799
-msgid "Filter"
-msgstr "フィルタ"
-
-#: gtk/gtkfontsel.c:812
-msgid "Font Types:"
-msgstr "フォント種:"
-
-#: gtk/gtkfontsel.c:820
-msgid "Bitmap"
-msgstr "ビットマップ"
-
-#: gtk/gtkfontsel.c:826
-msgid "Scalable"
-msgstr "スケラーブル"
-
-#: gtk/gtkfontsel.c:832
-msgid "Scaled Bitmap"
-msgstr "拡大縮小ビットマップ"
-
-#: gtk/gtkfontsel.c:903
-msgid "*"
-msgstr "*"
-
-#. Convert '(nil)' weights to 'regular', since it looks nicer.
-#: gtk/gtkfontsel.c:1228
-msgid "(nil)"
-msgstr "(nil)"
-
-#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2708
-msgid "regular"
-msgstr "通常"
-
-#: gtk/gtkfontsel.c:1233 gtk/gtkfontsel.c:2001
-msgid "italic"
-msgstr "イタリック"
-
-#: gtk/gtkfontsel.c:1234 gtk/gtkfontsel.c:2002
-msgid "oblique"
-msgstr "斜体"
-
-#: gtk/gtkfontsel.c:1235 gtk/gtkfontsel.c:2003
-msgid "reverse italic"
-msgstr "逆イタリック"
-
-#: gtk/gtkfontsel.c:1236 gtk/gtkfontsel.c:2004
-msgid "reverse oblique"
-msgstr "逆斜体"
-
-#: gtk/gtkfontsel.c:1237 gtk/gtkfontsel.c:2005
-msgid "other"
-msgstr "その他"
-
-#: gtk/gtkfontsel.c:1244
-msgid "[M]"
-msgstr "[M]"
-
-#: gtk/gtkfontsel.c:1245
-msgid "[C]"
-msgstr "[C]"
-
-#: gtk/gtkfontsel.c:1800
-msgid "The selected font is not available."
-msgstr "選択されたフォントは有効ではありません."
-
-#: gtk/gtkfontsel.c:1806
-msgid "The selected font is not a valid font."
-msgstr "選択されたフォントは正しいフォントではありません."
-
-#: gtk/gtkfontsel.c:1867
-msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "これは 2-byte フォントなので正しく表示されないかもしれません."
-
-#: gtk/gtkfontsel.c:1989 gtk/gtkinputdialog.c:607
-msgid "(unknown)"
-msgstr "(不明)"
-
-#: gtk/gtkfontsel.c:2000
-msgid "roman"
-msgstr "ローマン"
-
-#: gtk/gtkfontsel.c:2012
-msgid "proportional"
-msgstr "プロポーショナル"
-
-#: gtk/gtkfontsel.c:2013
-msgid "monospaced"
-msgstr "モノスペース"
-
-#: gtk/gtkfontsel.c:2014
-msgid "char cell"
-msgstr "文字セル"
-
-#: gtk/gtkfontsel.c:2214
-msgid "Font: (Filter Applied)"
-msgstr "フォント: (フィルター適用)"
-
-#: gtk/gtkfontsel.c:2688
-msgid "heavy"
-msgstr ""
-
-#: gtk/gtkfontsel.c:2690
-msgid "extrabold"
-msgstr ""
-
-#: gtk/gtkfontsel.c:2692
-msgid "bold"
-msgstr ""
-
-#: gtk/gtkfontsel.c:2695
-msgid "demibold"
-msgstr ""
-
-#: gtk/gtkfontsel.c:2698
-msgid "medium"
-msgstr ""
-
-#: gtk/gtkfontsel.c:2700
-msgid "normal"
-msgstr ""
-
-#: gtk/gtkfontsel.c:2702
-#, fuzzy
-msgid "light"
-msgstr "太さ:"
-
-#: gtk/gtkfontsel.c:2704
-msgid "extralight"
-msgstr ""
-
-#: gtk/gtkfontsel.c:2706
-msgid "thin"
-msgstr ""
-
-#: gtk/gtkfontsel.c:2883
-msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "MAX_FONTS を越えました. 表示されないフォントがあります."
-
-#: gtk/gtkfontsel.c:3779
+#: gtk/gtkfontsel.c:959
 msgid "Apply"
 msgstr "適用"
 
-#: gtk/gtkfontsel.c:3801
+#: gtk/gtkfontsel.c:981
 msgid "Font Selection"
 msgstr "フォント選択"
 
-#: gtk/gtkgamma.c:396
+#: gtk/gtkgamma.c:395
 msgid "Gamma"
 msgstr "ガンマ"
 
-#: gtk/gtkgamma.c:403
+#: gtk/gtkgamma.c:402
 msgid "Gamma value"
 msgstr "ガンマ値"
 
 #. shell and main vbox
-#: gtk/gtkinputdialog.c:200
+#: gtk/gtkinputdialog.c:185
 msgid "Input"
 msgstr "入力"
 
-#: gtk/gtkinputdialog.c:208
+#: gtk/gtkinputdialog.c:193
 msgid "No input devices"
 msgstr "入力デバイスがありません"
 
-#: gtk/gtkinputdialog.c:237
+#: gtk/gtkinputdialog.c:222
 msgid "Device:"
 msgstr "デバイス:"
 
-#: gtk/gtkinputdialog.c:253
+#: gtk/gtkinputdialog.c:238
 msgid "Disabled"
 msgstr "無効"
 
-#: gtk/gtkinputdialog.c:261
+#: gtk/gtkinputdialog.c:246
 msgid "Screen"
 msgstr "スクリーン"
 
-#: gtk/gtkinputdialog.c:269
+#: gtk/gtkinputdialog.c:254
 msgid "Window"
 msgstr "ウィンドウ"
 
-#: gtk/gtkinputdialog.c:277
+#: gtk/gtkinputdialog.c:262
 msgid "Mode: "
 msgstr "モード: "
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:307
+#: gtk/gtkinputdialog.c:292
 msgid "Axes"
 msgstr "軸"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:323
+#: gtk/gtkinputdialog.c:308
 msgid "Keys"
 msgstr "キー"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
-#: gtk/gtkinputdialog.c:345
+#: gtk/gtkinputdialog.c:329
 msgid "Save"
 msgstr "保存"
 
-#: gtk/gtkinputdialog.c:500
+#: gtk/gtkinputdialog.c:471
 msgid "X"
 msgstr "X"
 
-#: gtk/gtkinputdialog.c:501
+#: gtk/gtkinputdialog.c:472
 msgid "Y"
 msgstr "Y"
 
-#: gtk/gtkinputdialog.c:502
+#: gtk/gtkinputdialog.c:473
 msgid "Pressure"
 msgstr "圧力"
 
-#: gtk/gtkinputdialog.c:503
+#: gtk/gtkinputdialog.c:474
 msgid "X Tilt"
 msgstr "X 傾き"
 
-#: gtk/gtkinputdialog.c:504
+#: gtk/gtkinputdialog.c:475
 msgid "Y Tilt"
 msgstr "Y 傾き"
 
-#: gtk/gtkinputdialog.c:544
+#: gtk/gtkinputdialog.c:476
+msgid "Wheel"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:516
 msgid "none"
 msgstr "無し"
 
-#: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
+#: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
 msgstr "(無効)"
 
+#: gtk/gtkinputdialog.c:579
+msgid "(unknown)"
+msgstr "(不明)"
+
 #. and clear button
-#: gtk/gtkinputdialog.c:692
+#: gtk/gtkinputdialog.c:664
 msgid "clear"
 msgstr "クリア"
 
-#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4120
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
 msgstr "ページ %u"
 
-#: gtk/gtkrc.c:1781
+#: gtk/gtkrc.c:1824
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "画像ファイルが見付かりません piamap_path: \"%s\" %d 行目"
 
-#: gtk/gtkrc.c:1784
+#: gtk/gtkrc.c:1827
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "画像ファイルが見付かりません pixmap_path: \"%s\""
@@ -501,3 +276,157 @@ msgstr "ローダブルモジュールが見付かりません module_path: \"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Tip 無し ---"
+
+#~ msgid "Help"
+#~ msgstr "ヘルプ"
+
+#~ msgid "Foundry:"
+#~ msgstr "鋳造所:"
+
+#~ msgid "Weight:"
+#~ msgstr "太さ:"
+
+#~ msgid "Slant:"
+#~ msgstr "傾き:"
+
+#~ msgid "Set Width:"
+#~ msgstr "セット幅:"
+
+#~ msgid "Pixel Size:"
+#~ msgstr "ピクセルサイズ:"
+
+#~ msgid "Point Size:"
+#~ msgstr "ポイントサイズ:"
+
+#~ msgid "Resolution X:"
+#~ msgstr "解像度 X:"
+
+#~ msgid "Resolution Y:"
+#~ msgstr "解像度 Y:"
+
+#~ msgid "Spacing:"
+#~ msgstr "間隔:"
+
+#~ msgid "Average Width:"
+#~ msgstr "平均幅:"
+
+#~ msgid "Charset:"
+#~ msgstr "文字集合:"
+
+#~ msgid "Font Property"
+#~ msgstr "フォント属性"
+
+#~ msgid "Requested Value"
+#~ msgstr "要求値"
+
+#~ msgid "Actual Value"
+#~ msgstr "実際の値"
+
+#~ msgid "Font"
+#~ msgstr "フォント"
+
+#~ msgid "Font:"
+#~ msgstr "フォント:"
+
+#~ msgid "Font Style:"
+#~ msgstr "フォントスタイル:"
+
+#~ msgid "Reset Filter"
+#~ msgstr "フィルタ初期化"
+
+#~ msgid "Metric:"
+#~ msgstr "メトリック:"
+
+#~ msgid "Points"
+#~ msgstr "ポイント"
+
+#~ msgid "Pixels"
+#~ msgstr "ピクセル"
+
+#~ msgid "Font Information"
+#~ msgstr "フォント情報"
+
+#~ msgid "Requested Font Name:"
+#~ msgstr "要求フォント名:"
+
+#~ msgid "Actual Font Name:"
+#~ msgstr "実際のフォント名:"
+
+#~ msgid "%i fonts available with a total of %i styles."
+#~ msgstr "%i 個のフォントが有効です。(%i スタイル)"
+
+#~ msgid "Filter"
+#~ msgstr "フィルタ"
+
+#~ msgid "Font Types:"
+#~ msgstr "フォント種:"
+
+#~ msgid "Bitmap"
+#~ msgstr "ビットマップ"
+
+#~ msgid "Scalable"
+#~ msgstr "スケラーブル"
+
+#~ msgid "Scaled Bitmap"
+#~ msgstr "拡大縮小ビットマップ"
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "(nil)"
+#~ msgstr "(nil)"
+
+#~ msgid "regular"
+#~ msgstr "通常"
+
+#~ msgid "italic"
+#~ msgstr "イタリック"
+
+#~ msgid "oblique"
+#~ msgstr "斜体"
+
+#~ msgid "reverse italic"
+#~ msgstr "逆イタリック"
+
+#~ msgid "reverse oblique"
+#~ msgstr "逆斜体"
+
+#~ msgid "other"
+#~ msgstr "その他"
+
+#~ msgid "[M]"
+#~ msgstr "[M]"
+
+#~ msgid "[C]"
+#~ msgstr "[C]"
+
+#~ msgid "The selected font is not available."
+#~ msgstr "選択されたフォントは有効ではありません."
+
+#~ msgid "The selected font is not a valid font."
+#~ msgstr "選択されたフォントは正しいフォントではありません."
+
+#~ msgid "This is a 2-byte font and may not be displayed correctly."
+#~ msgstr "これは 2-byte フォントなので正しく表示されないかもしれません."
+
+#~ msgid "roman"
+#~ msgstr "ローマン"
+
+#~ msgid "proportional"
+#~ msgstr "プロポーショナル"
+
+#~ msgid "monospaced"
+#~ msgstr "モノスペース"
+
+#~ msgid "char cell"
+#~ msgstr "文字セル"
+
+#~ msgid "Font: (Filter Applied)"
+#~ msgstr "フォント: (フィルター適用)"
+
+#, fuzzy
+#~ msgid "light"
+#~ msgstr "太さ:"
+
+#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
+#~ msgstr "MAX_FONTS を越えました. 表示されないフォントがあります."

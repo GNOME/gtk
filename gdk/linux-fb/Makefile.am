@@ -26,6 +26,7 @@ libgdk_linux_fb_la_SOURCES =    	\
 	gdkcursor-fb.c	   	\
 	gdkdnd-fb.c	   	\
 	gdkdrawable-fb2.c  	\
+	gdkfb.h			\
 	gdkfont-fb.c	   	\
 	gdkgc-fb.c 	   	\
 	gdkgeometry-fb.c  	\
@@ -43,14 +44,24 @@ libgdk_linux_fb_la_SOURCES =    	\
 	gdkinputprivate.h	\
 	gdkinput-ps2.c		\
 	gdkevents-fb.c		\
+	mi.h			\
 	miarc.c			\
 	midash.c		\
 	mifillarc.c		\
+	mifillarc.h		\
+	mifpoly.h		\
 	mifpolycon.c		\
+	miline.h		\
 	mipoly.c		\
+	mipoly.h		\
 	mipolygen.c		\
 	mipolyutil.c		\
+	miscanfill.h		\
+	mispans.h		\
+	mistruct.h		\
+	mitypes.h		\
 	miwideline.c		\
+	miwideline.h		\
 	mizerclip.c		\
 	mizerline.c		\
 	mispans.c		\

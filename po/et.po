@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.6\n"
-"POT-Creation-Date: 1999-11-24 17:51+0100\n"
+"POT-Creation-Date: 2000-07-03 17:11-0400\n"
 "PO-Revision-Date: 1999-09-26 23:40+0300\n"
 "Last-Translator: Lauris Kaplinski <lauris@ariman.ee>\n"
 "Language-Team: Estonian\n"
@@ -13,75 +13,82 @@ msgstr ""
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtk/gtkcolorsel.c:221
+#: gtk/gtkcolorsel.c:1415
 msgid "Hue:"
 msgstr "Toon:"
 
-#: gtk/gtkcolorsel.c:222
+#: gtk/gtkcolorsel.c:1416
 msgid "Saturation:"
 msgstr "Küllastatus:"
 
-#: gtk/gtkcolorsel.c:223
+#: gtk/gtkcolorsel.c:1417
 msgid "Value:"
 msgstr "Heledus:"
 
-#: gtk/gtkcolorsel.c:224
+#: gtk/gtkcolorsel.c:1418
 msgid "Red:"
 msgstr "Punane:"
 
-#: gtk/gtkcolorsel.c:225
+#: gtk/gtkcolorsel.c:1419
 msgid "Green:"
 msgstr "Roheline:"
 
-#: gtk/gtkcolorsel.c:226
+#: gtk/gtkcolorsel.c:1420
 msgid "Blue:"
 msgstr "Sinine:"
 
-#: gtk/gtkcolorsel.c:227
+#: gtk/gtkcolorsel.c:1423
 msgid "Opacity:"
 msgstr "Katvus:"
 
-#. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3772
-#: gtk/gtkgamma.c:416
-msgid "OK"
-msgstr "Sobib"
+#: gtk/gtkcolorsel.c:1438
+#, fuzzy
+msgid "Hex Value:"
+msgstr "Heledus:"
 
-#. The Cancel button
-#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:961
-#: gtk/gtkfilesel.c:1065 gtk/gtkfilesel.c:1180 gtk/gtkfontsel.c:3785
-#: gtk/gtkgamma.c:424
-msgid "Cancel"
-msgstr "Vabandust"
+#: gtk/gtkcolorsel.c:1459
+msgid "Custom Palette"
+msgstr ""
 
-#: gtk/gtkcolorsel.c:1738
-msgid "Help"
-msgstr "Abimees"
+#: gtk/gtkcolorsel.c:1464
+msgid "Set Color"
+msgstr ""
 
 #. The directories clist
-#: gtk/gtkfilesel.c:520
+#: gtk/gtkfilesel.c:514
 msgid "Directories"
 msgstr "Kataloogid"
 
 #. The files clist
-#: gtk/gtkfilesel.c:539
+#: gtk/gtkfilesel.c:534
 msgid "Files"
 msgstr "Failid"
 
-#: gtk/gtkfilesel.c:609 gtk/gtkfilesel.c:1644
+#. The OK button
+#: gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952 gtk/gtkgamma.c:415
+msgid "OK"
+msgstr "Sobib"
+
+#. The Cancel button
+#: gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963 gtk/gtkfilesel.c:1067
+#: gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965 gtk/gtkgamma.c:423
+msgid "Cancel"
+msgstr "Vabandust"
+
+#: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Kataloog %s on loetamatu"
 
-#: gtk/gtkfilesel.c:641
+#: gtk/gtkfilesel.c:637
 msgid "Create Dir"
 msgstr "Loo kataloog"
 
-#: gtk/gtkfilesel.c:652 gtk/gtkfilesel.c:1034
+#: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
 msgid "Delete File"
 msgstr "Kustuta fail"
 
-#: gtk/gtkfilesel.c:663 gtk/gtkfilesel.c:1138
+#: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
 msgid "Rename File"
 msgstr "Nimeta ümber"
 
@@ -90,405 +97,173 @@ msgstr "Nimeta ümber"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:827
+#: gtk/gtkfilesel.c:828
 msgid "Error"
 msgstr "Viga"
 
 #. close button
-#: gtk/gtkfilesel.c:850 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
 msgid "Close"
 msgstr "Sulge"
 
-#: gtk/gtkfilesel.c:925
+#: gtk/gtkfilesel.c:927
 msgid "Create Directory"
 msgstr "Loo uus kataloog"
 
-#: gtk/gtkfilesel.c:939
+#: gtk/gtkfilesel.c:941
 msgid "Directory name:"
 msgstr "Kataloogi nimi:"
 
 #. buttons
-#: gtk/gtkfilesel.c:952
+#: gtk/gtkfilesel.c:954
 msgid "Create"
 msgstr "Loo"
 
 #. buttons
-#: gtk/gtkfilesel.c:1056
+#: gtk/gtkfilesel.c:1058
 msgid "Delete"
 msgstr "Kustuta"
 
 #. buttons
-#: gtk/gtkfilesel.c:1171
+#: gtk/gtkfilesel.c:1173
 msgid "Rename"
 msgstr "Nimeta ümber"
 
-#: gtk/gtkfilesel.c:1623
+#: gtk/gtkfilesel.c:1600
 msgid "Selection: "
 msgstr "Valik: "
 
-#: gtk/gtkfontsel.c:216
-msgid "Foundry:"
-msgstr "Päritolu:"
-
-#: gtk/gtkfontsel.c:217
+#: gtk/gtkfontsel.c:189
 msgid "Family:"
 msgstr "Perekond:"
 
-#: gtk/gtkfontsel.c:218
-msgid "Weight:"
-msgstr "Paksus:"
-
-#: gtk/gtkfontsel.c:219
-msgid "Slant:"
-msgstr "Kalle:"
-
-#: gtk/gtkfontsel.c:220
-msgid "Set Width:"
-msgstr "Laius:"
-
-#: gtk/gtkfontsel.c:221
-msgid "Add Style:"
+#: gtk/gtkfontsel.c:194
+#, fuzzy
+msgid "Style:"
 msgstr "Lisa stiil:"
 
-#: gtk/gtkfontsel.c:222
-msgid "Pixel Size:"
-msgstr "Suurus pikslites:"
-
-#: gtk/gtkfontsel.c:223
-msgid "Point Size:"
-msgstr "Punktisuurus:"
-
-#: gtk/gtkfontsel.c:224
-msgid "Resolution X:"
-msgstr "X lahutus:"
-
-#: gtk/gtkfontsel.c:225
-msgid "Resolution Y:"
-msgstr "Y Lahutus:"
-
-#: gtk/gtkfontsel.c:226
-msgid "Spacing:"
-msgstr "Täheruum:"
-
-#: gtk/gtkfontsel.c:227
-msgid "Average Width:"
-msgstr "Keskmine laius:"
-
-#: gtk/gtkfontsel.c:228
-msgid "Charset:"
-msgstr "Alfabeet:"
-
-#. Number of internationalized titles here must match number
-#. of NULL initializers above
-#: gtk/gtkfontsel.c:472
-msgid "Font Property"
-msgstr "Parameeter"
-
-#: gtk/gtkfontsel.c:473
-msgid "Requested Value"
-msgstr "Soovitud väärtus"
-
-#: gtk/gtkfontsel.c:474
-msgid "Actual Value"
-msgstr "Tegelik väärtus"
-
-#: gtk/gtkfontsel.c:507
-msgid "Font"
-msgstr "Shrift"
-
-#: gtk/gtkfontsel.c:517 gtk/gtkfontsel.c:2209 gtk/gtkfontsel.c:2439
-msgid "Font:"
-msgstr "Shrift:"
-
-#: gtk/gtkfontsel.c:522
-msgid "Font Style:"
-msgstr "Stiil:"
-
-#: gtk/gtkfontsel.c:527
+#: gtk/gtkfontsel.c:199
 msgid "Size:"
 msgstr "Suurus:"
 
-#: gtk/gtkfontsel.c:659 gtk/gtkfontsel.c:881
-msgid "Reset Filter"
-msgstr "Nulli filter"
-
-#: gtk/gtkfontsel.c:673
-msgid "Metric:"
-msgstr "Ühikud:"
-
-#: gtk/gtkfontsel.c:677
-msgid "Points"
-msgstr "Punktid"
-
-#: gtk/gtkfontsel.c:684
-msgid "Pixels"
-msgstr "Pikslid"
-
 #. create the text entry widget
-#: gtk/gtkfontsel.c:700
+#: gtk/gtkfontsel.c:309
 msgid "Preview:"
 msgstr "Näidis:"
 
-#: gtk/gtkfontsel.c:729
-msgid "Font Information"
-msgstr "Lähem info"
-
-#: gtk/gtkfontsel.c:762
-msgid "Requested Font Name:"
-msgstr "Soovitud shrifti nimi:"
-
-#: gtk/gtkfontsel.c:773
-msgid "Actual Font Name:"
-msgstr "Tegeliku shrifti nimi:"
-
-#: gtk/gtkfontsel.c:784
-#, c-format
-msgid "%i fonts available with a total of %i styles."
-msgstr "Kokku %i shrifti %i punktisuuruses."
-
-#: gtk/gtkfontsel.c:799
-msgid "Filter"
-msgstr "Filter"
-
-#: gtk/gtkfontsel.c:812
-msgid "Font Types:"
-msgstr "Shriftitüübid:"
-
-#: gtk/gtkfontsel.c:820
-msgid "Bitmap"
-msgstr "Bitmap"
-
-#: gtk/gtkfontsel.c:826
-msgid "Scalable"
-msgstr "Skaleeritav"
-
-#: gtk/gtkfontsel.c:832
-msgid "Scaled Bitmap"
-msgstr "Skaleeritav bitmap"
-
-#: gtk/gtkfontsel.c:903
-msgid "*"
-msgstr "*"
-
-#. Convert '(nil)' weights to 'regular', since it looks nicer.
-#: gtk/gtkfontsel.c:1228
-msgid "(nil)"
-msgstr "(ei ole)"
-
-#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2708
-msgid "regular"
-msgstr "püstine"
-
-#: gtk/gtkfontsel.c:1233 gtk/gtkfontsel.c:2001
-msgid "italic"
-msgstr "kursiiv"
-
-#: gtk/gtkfontsel.c:1234 gtk/gtkfontsel.c:2002
-msgid "oblique"
-msgstr "obliikva"
-
-#: gtk/gtkfontsel.c:1235 gtk/gtkfontsel.c:2003
-msgid "reverse italic"
-msgstr "vasakule kursiiv"
-
-#: gtk/gtkfontsel.c:1236 gtk/gtkfontsel.c:2004
-msgid "reverse oblique"
-msgstr "vasakule obliikva"
-
-#: gtk/gtkfontsel.c:1237 gtk/gtkfontsel.c:2005
-msgid "other"
-msgstr "muu"
-
-#: gtk/gtkfontsel.c:1244
-msgid "[M]"
-msgstr "[M]"
-
-#: gtk/gtkfontsel.c:1245
-msgid "[C]"
-msgstr "[C]"
-
-#: gtk/gtkfontsel.c:1800
-msgid "The selected font is not available."
-msgstr "Sellist shrifti ei ole."
-
-#: gtk/gtkfontsel.c:1806
-msgid "The selected font is not a valid font."
-msgstr "Valitud shrift ei ole korrektne."
-
-#: gtk/gtkfontsel.c:1867
-msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "See on 2-baidine shrift ja ei pruugi korralikult esituda."
-
-#: gtk/gtkfontsel.c:1989 gtk/gtkinputdialog.c:607
-msgid "(unknown)"
-msgstr "(tundmatu)"
-
-#: gtk/gtkfontsel.c:2000
-msgid "roman"
-msgstr "romaani"
-
-#: gtk/gtkfontsel.c:2012
-msgid "proportional"
-msgstr "proportsionaalne"
-
-#: gtk/gtkfontsel.c:2013
-msgid "monospaced"
-msgstr "ühelaiune"
-
-#: gtk/gtkfontsel.c:2014
-msgid "char cell"
-msgstr "täheruut"
-
-#: gtk/gtkfontsel.c:2214
-msgid "Font: (Filter Applied)"
-msgstr "Shrift: (läbi filtri)"
-
-#: gtk/gtkfontsel.c:2688
-msgid "heavy"
-msgstr ""
-
-#: gtk/gtkfontsel.c:2690
-msgid "extrabold"
-msgstr ""
-
-#: gtk/gtkfontsel.c:2692
-msgid "bold"
-msgstr ""
-
-#: gtk/gtkfontsel.c:2695
-msgid "demibold"
-msgstr ""
-
-#: gtk/gtkfontsel.c:2698
-msgid "medium"
-msgstr ""
-
-#: gtk/gtkfontsel.c:2700
-msgid "normal"
-msgstr ""
-
-#: gtk/gtkfontsel.c:2702
-#, fuzzy
-msgid "light"
-msgstr "Paksus:"
-
-#: gtk/gtkfontsel.c:2704
-msgid "extralight"
-msgstr ""
-
-#: gtk/gtkfontsel.c:2706
-msgid "thin"
-msgstr ""
-
-#: gtk/gtkfontsel.c:2883
-msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "MAX_FONTS ületatud. Osa shrifte võib puududa."
-
-#: gtk/gtkfontsel.c:3779
+#: gtk/gtkfontsel.c:959
 msgid "Apply"
 msgstr "Proovi"
 
-#: gtk/gtkfontsel.c:3801
+#: gtk/gtkfontsel.c:981
 msgid "Font Selection"
 msgstr "Shrifti valik"
 
-#: gtk/gtkgamma.c:396
+#: gtk/gtkgamma.c:395
 msgid "Gamma"
 msgstr "Gamma"
 
-#: gtk/gtkgamma.c:403
+#: gtk/gtkgamma.c:402
 msgid "Gamma value"
 msgstr "Gamma väärtus"
 
 #. shell and main vbox
-#: gtk/gtkinputdialog.c:200
+#: gtk/gtkinputdialog.c:185
 msgid "Input"
 msgstr "Sisend"
 
-#: gtk/gtkinputdialog.c:208
+#: gtk/gtkinputdialog.c:193
 msgid "No input devices"
 msgstr "Sisendseadmeid ei ole"
 
-#: gtk/gtkinputdialog.c:237
+#: gtk/gtkinputdialog.c:222
 msgid "Device:"
 msgstr "Seade:"
 
-#: gtk/gtkinputdialog.c:253
+#: gtk/gtkinputdialog.c:238
 msgid "Disabled"
 msgstr "Välja lülitatud"
 
-#: gtk/gtkinputdialog.c:261
+#: gtk/gtkinputdialog.c:246
 msgid "Screen"
 msgstr "Ekraan"
 
-#: gtk/gtkinputdialog.c:269
+#: gtk/gtkinputdialog.c:254
 msgid "Window"
 msgstr "Aken"
 
-#: gtk/gtkinputdialog.c:277
+#: gtk/gtkinputdialog.c:262
 msgid "Mode: "
 msgstr "Tüüp: "
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:307
+#: gtk/gtkinputdialog.c:292
 msgid "Axes"
 msgstr "Teljed"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:323
+#: gtk/gtkinputdialog.c:308
 msgid "Keys"
 msgstr "Klahvid"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
-#: gtk/gtkinputdialog.c:345
+#: gtk/gtkinputdialog.c:329
 msgid "Save"
 msgstr "Salvesta"
 
-#: gtk/gtkinputdialog.c:500
+#: gtk/gtkinputdialog.c:471
 msgid "X"
 msgstr "X"
 
-#: gtk/gtkinputdialog.c:501
+#: gtk/gtkinputdialog.c:472
 msgid "Y"
 msgstr "Y"
 
-#: gtk/gtkinputdialog.c:502
+#: gtk/gtkinputdialog.c:473
 msgid "Pressure"
 msgstr "Vajutus"
 
-#: gtk/gtkinputdialog.c:503
+#: gtk/gtkinputdialog.c:474
 msgid "X Tilt"
 msgstr "X kalle"
 
-#: gtk/gtkinputdialog.c:504
+#: gtk/gtkinputdialog.c:475
 msgid "Y Tilt"
 msgstr "Y kalle"
 
-#: gtk/gtkinputdialog.c:544
+#: gtk/gtkinputdialog.c:476
+msgid "Wheel"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:516
 msgid "none"
 msgstr "ei ole"
 
-#: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
+#: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
 msgstr "(välja lülitatud)"
 
+#: gtk/gtkinputdialog.c:579
+msgid "(unknown)"
+msgstr "(tundmatu)"
+
 #. and clear button
-#: gtk/gtkinputdialog.c:692
+#: gtk/gtkinputdialog.c:664
 msgid "clear"
 msgstr "kustuta"
 
-#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4120
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
 msgstr "Lehekülg %u"
 
-#: gtk/gtkrc.c:1781
+#: gtk/gtkrc.c:1824
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Ei leia pildifaili otsingurajalt 'pixmap_path': \"%s\" rida %d"
 
-#: gtk/gtkrc.c:1784
+#: gtk/gtkrc.c:1827
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Ei leia pildifaili otsingurajalt 'pixmap_path': \"%s\""
@@ -501,3 +276,157 @@ msgstr "Ei leia moodulit otsingurajalt 'module_path': \"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Vihjet ei ole ---"
+
+#~ msgid "Help"
+#~ msgstr "Abimees"
+
+#~ msgid "Foundry:"
+#~ msgstr "Päritolu:"
+
+#~ msgid "Weight:"
+#~ msgstr "Paksus:"
+
+#~ msgid "Slant:"
+#~ msgstr "Kalle:"
+
+#~ msgid "Set Width:"
+#~ msgstr "Laius:"
+
+#~ msgid "Pixel Size:"
+#~ msgstr "Suurus pikslites:"
+
+#~ msgid "Point Size:"
+#~ msgstr "Punktisuurus:"
+
+#~ msgid "Resolution X:"
+#~ msgstr "X lahutus:"
+
+#~ msgid "Resolution Y:"
+#~ msgstr "Y Lahutus:"
+
+#~ msgid "Spacing:"
+#~ msgstr "Täheruum:"
+
+#~ msgid "Average Width:"
+#~ msgstr "Keskmine laius:"
+
+#~ msgid "Charset:"
+#~ msgstr "Alfabeet:"
+
+#~ msgid "Font Property"
+#~ msgstr "Parameeter"
+
+#~ msgid "Requested Value"
+#~ msgstr "Soovitud väärtus"
+
+#~ msgid "Actual Value"
+#~ msgstr "Tegelik väärtus"
+
+#~ msgid "Font"
+#~ msgstr "Shrift"
+
+#~ msgid "Font:"
+#~ msgstr "Shrift:"
+
+#~ msgid "Font Style:"
+#~ msgstr "Stiil:"
+
+#~ msgid "Reset Filter"
+#~ msgstr "Nulli filter"
+
+#~ msgid "Metric:"
+#~ msgstr "Ühikud:"
+
+#~ msgid "Points"
+#~ msgstr "Punktid"
+
+#~ msgid "Pixels"
+#~ msgstr "Pikslid"
+
+#~ msgid "Font Information"
+#~ msgstr "Lähem info"
+
+#~ msgid "Requested Font Name:"
+#~ msgstr "Soovitud shrifti nimi:"
+
+#~ msgid "Actual Font Name:"
+#~ msgstr "Tegeliku shrifti nimi:"
+
+#~ msgid "%i fonts available with a total of %i styles."
+#~ msgstr "Kokku %i shrifti %i punktisuuruses."
+
+#~ msgid "Filter"
+#~ msgstr "Filter"
+
+#~ msgid "Font Types:"
+#~ msgstr "Shriftitüübid:"
+
+#~ msgid "Bitmap"
+#~ msgstr "Bitmap"
+
+#~ msgid "Scalable"
+#~ msgstr "Skaleeritav"
+
+#~ msgid "Scaled Bitmap"
+#~ msgstr "Skaleeritav bitmap"
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "(nil)"
+#~ msgstr "(ei ole)"
+
+#~ msgid "regular"
+#~ msgstr "püstine"
+
+#~ msgid "italic"
+#~ msgstr "kursiiv"
+
+#~ msgid "oblique"
+#~ msgstr "obliikva"
+
+#~ msgid "reverse italic"
+#~ msgstr "vasakule kursiiv"
+
+#~ msgid "reverse oblique"
+#~ msgstr "vasakule obliikva"
+
+#~ msgid "other"
+#~ msgstr "muu"
+
+#~ msgid "[M]"
+#~ msgstr "[M]"
+
+#~ msgid "[C]"
+#~ msgstr "[C]"
+
+#~ msgid "The selected font is not available."
+#~ msgstr "Sellist shrifti ei ole."
+
+#~ msgid "The selected font is not a valid font."
+#~ msgstr "Valitud shrift ei ole korrektne."
+
+#~ msgid "This is a 2-byte font and may not be displayed correctly."
+#~ msgstr "See on 2-baidine shrift ja ei pruugi korralikult esituda."
+
+#~ msgid "roman"
+#~ msgstr "romaani"
+
+#~ msgid "proportional"
+#~ msgstr "proportsionaalne"
+
+#~ msgid "monospaced"
+#~ msgstr "ühelaiune"
+
+#~ msgid "char cell"
+#~ msgstr "täheruut"
+
+#~ msgid "Font: (Filter Applied)"
+#~ msgstr "Shrift: (läbi filtri)"
+
+#, fuzzy
+#~ msgid "light"
+#~ msgstr "Paksus:"
+
+#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
+#~ msgstr "MAX_FONTS ületatud. Osa shrifte võib puududa."

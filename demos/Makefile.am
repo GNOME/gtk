@@ -54,3 +54,14 @@ testpixbuf_drawable_SOURCES = testpixbuf-drawable.c pixbuf-init.c
 testpixbuf_scale_SOURCES = testpixbuf-scale.c pixbuf-init.c
 testanimation_SOURCES = testanimation.c pixbuf-init.c
 pixbuf_demo_SOURCES = pixbuf-demo.c pixbuf-init.c
+
+EXTRA_DIST =			\
+	apple-red.png		\
+	background.jpg		\
+	gnome-applets.png	\
+	gnome-calendar.png	\
+	gnome-foot.png		\
+	gnome-gimp.png		\
+	gnome-gmush.png		\
+	gnome-gsame.png		\
+	gnu-keys.png

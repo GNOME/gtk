@@ -109,6 +109,10 @@ gtk_type_new (GtkType type)
 GType GTK_TYPE_IDENTIFIER = 0;
 #include "gtktypebuiltins_evals.c"	  /* enum value definition arrays */
 
+/* Hack to communicate with GLib object debugging for now
+ */
+extern gboolean glib_debug_objects;
+
 void
 gtk_type_init (void)
 {
@@ -139,6 +143,8 @@ gtk_type_init (void)
 
       initialized = TRUE;
 
+      glib_debug_objects = gtk_debug_flags & GTK_DEBUG_OBJECTS != 0;
+      
       /* initialize GLib type system
        */
       g_type_init ();

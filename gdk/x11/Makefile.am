@@ -84,3 +84,11 @@ bin_PROGRAMS = @xinput_progs@
 
 gxid_SOURCES = gxid.c
 gxid_LDADD = $(LDADDS)
+
+# We need to include all these C files here since the conditionals
+# don't seem to be correctly expanded for the dist files.
+EXTRA_DIST = 			\
+	gdkinput-x11.c		\
+	gdkinput-xfree.c	\
+	gdkinput-gxi.c		\
+	gdkinput-none.c

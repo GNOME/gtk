@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2000-03-13 21:43+0100\n"
+"POT-Creation-Date: 2000-07-03 17:11-0400\n"
 "PO-Revision-Date: Tue Jan 11 2000 16:35:38+0200\n"
 "Last-Translator: Vladimir Vuksan <vuksan@veus.hr>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
@@ -17,50 +17,46 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KTranslator v 0.5.0\n"
 
-#: gtk/gtkcolorsel.c:221
+#: gtk/gtkcolorsel.c:1415
 msgid "Hue:"
 msgstr "Nijansa:"
 
-#: gtk/gtkcolorsel.c:222
+#: gtk/gtkcolorsel.c:1416
 msgid "Saturation:"
 msgstr "Zasiæenost:"
 
-#: gtk/gtkcolorsel.c:223
+#: gtk/gtkcolorsel.c:1417
 msgid "Value:"
 msgstr "Vrijednost:"
 
-#: gtk/gtkcolorsel.c:224
+#: gtk/gtkcolorsel.c:1418
 msgid "Red:"
 msgstr "Crveno:"
 
-#: gtk/gtkcolorsel.c:225
+#: gtk/gtkcolorsel.c:1419
 msgid "Green:"
 msgstr "Zeleno:"
 
-#: gtk/gtkcolorsel.c:226
+#: gtk/gtkcolorsel.c:1420
 msgid "Blue:"
 msgstr "Plavo:"
 
-#: gtk/gtkcolorsel.c:227
+#: gtk/gtkcolorsel.c:1423
 msgid "Opacity:"
 msgstr "Prozirnost:"
 
-#. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:565 gtk/gtkfontsel.c:3763
-#: gtk/gtkgamma.c:415
-msgid "OK"
-msgstr "U redu"
+#: gtk/gtkcolorsel.c:1438
+#, fuzzy
+msgid "Hex Value:"
+msgstr "Vrijednost:"
 
-#. The Cancel button
-#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:572 gtk/gtkfilesel.c:956
-#: gtk/gtkfilesel.c:1060 gtk/gtkfilesel.c:1175 gtk/gtkfontsel.c:3776
-#: gtk/gtkgamma.c:423
-msgid "Cancel"
-msgstr "Poni¹ti"
+#: gtk/gtkcolorsel.c:1459
+msgid "Custom Palette"
+msgstr ""
 
-#: gtk/gtkcolorsel.c:1738
-msgid "Help"
-msgstr "Pomoæ"
+#: gtk/gtkcolorsel.c:1464
+msgid "Set Color"
+msgstr ""
 
 #. The directories clist
 #: gtk/gtkfilesel.c:514
@@ -68,24 +64,35 @@ msgid "Directories"
 msgstr "Direktoriji"
 
 #. The files clist
-#: gtk/gtkfilesel.c:533
+#: gtk/gtkfilesel.c:534
 msgid "Files"
 msgstr "Datoteke"
 
-#: gtk/gtkfilesel.c:603 gtk/gtkfilesel.c:1642
+#. The OK button
+#: gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952 gtk/gtkgamma.c:415
+msgid "OK"
+msgstr "U redu"
+
+#. The Cancel button
+#: gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963 gtk/gtkfilesel.c:1067
+#: gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965 gtk/gtkgamma.c:423
+msgid "Cancel"
+msgstr "Poni¹ti"
+
+#: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Neèitljiv direktorij: %s"
 
-#: gtk/gtkfilesel.c:635
+#: gtk/gtkfilesel.c:637
 msgid "Create Dir"
 msgstr "Napravi direktorij"
 
-#: gtk/gtkfilesel.c:646 gtk/gtkfilesel.c:1029
+#: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
 msgid "Delete File"
 msgstr "Obri¹i datoteku"
 
-#: gtk/gtkfilesel.c:657 gtk/gtkfilesel.c:1133
+#: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
 msgid "Rename File"
 msgstr "Promijeni ime datoteci"
 
@@ -94,304 +101,65 @@ msgstr "Promijeni ime datoteci"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:822
+#: gtk/gtkfilesel.c:828
 msgid "Error"
 msgstr "Gre¹ka"
 
 #. close button
-#: gtk/gtkfilesel.c:845 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
 msgid "Close"
 msgstr "Zatvori"
 
-#: gtk/gtkfilesel.c:920
+#: gtk/gtkfilesel.c:927
 msgid "Create Directory"
 msgstr "Napravi direktorij"
 
-#: gtk/gtkfilesel.c:934
+#: gtk/gtkfilesel.c:941
 msgid "Directory name:"
 msgstr "Ime direktorija:"
 
 #. buttons
-#: gtk/gtkfilesel.c:947
+#: gtk/gtkfilesel.c:954
 msgid "Create"
 msgstr "Napravi"
 
 #. buttons
-#: gtk/gtkfilesel.c:1051
+#: gtk/gtkfilesel.c:1058
 msgid "Delete"
 msgstr "Obri¹i"
 
 #. buttons
-#: gtk/gtkfilesel.c:1166
+#: gtk/gtkfilesel.c:1173
 msgid "Rename"
 msgstr "Promijeni ime"
 
-#: gtk/gtkfilesel.c:1621
+#: gtk/gtkfilesel.c:1600
 msgid "Selection: "
 msgstr "Izbor: "
 
-#: gtk/gtkfontsel.c:216
-msgid "Foundry:"
-msgstr "Izvor:"
-
-#: gtk/gtkfontsel.c:217
+#: gtk/gtkfontsel.c:189
 msgid "Family:"
 msgstr "Obitelj:"
 
-#: gtk/gtkfontsel.c:218
-msgid "Weight:"
-msgstr "Te¾ina:"
-
-#: gtk/gtkfontsel.c:219
-msgid "Slant:"
-msgstr "Nako¹enost:"
-
-#: gtk/gtkfontsel.c:220
-msgid "Set Width:"
-msgstr "Postavi ¹irinu:"
-
-#: gtk/gtkfontsel.c:221
-msgid "Add Style:"
+#: gtk/gtkfontsel.c:194
+#, fuzzy
+msgid "Style:"
 msgstr "Dodaj stil:"
 
-#: gtk/gtkfontsel.c:222
-msgid "Pixel Size:"
-msgstr "Velièina pixela:"
-
-#: gtk/gtkfontsel.c:223
-msgid "Point Size:"
-msgstr "Velièina toèke:"
-
-#: gtk/gtkfontsel.c:224
-msgid "Resolution X:"
-msgstr "X rezolucija"
-
-#: gtk/gtkfontsel.c:225
-msgid "Resolution Y:"
-msgstr "Y rezolucija"
-
-#: gtk/gtkfontsel.c:226
-msgid "Spacing:"
-msgstr "Razmak:"
-
-#: gtk/gtkfontsel.c:227
-msgid "Average Width:"
-msgstr "Prosjeèna ¹irina:"
-
-#: gtk/gtkfontsel.c:228
-msgid "Charset:"
-msgstr "Znakovlje:"
-
-#. Number of internationalized titles here must match number
-#. of NULL initializers above
-#: gtk/gtkfontsel.c:472
-msgid "Font Property"
-msgstr "Osobina pisma"
-
-#: gtk/gtkfontsel.c:473
-msgid "Requested Value"
-msgstr "Tra¾ena vrijednost"
-
-#: gtk/gtkfontsel.c:474
-msgid "Actual Value"
-msgstr "Stvarna vrijednost"
-
-#: gtk/gtkfontsel.c:507
-msgid "Font"
-msgstr "Pismo"
-
-#: gtk/gtkfontsel.c:517 gtk/gtkfontsel.c:2209 gtk/gtkfontsel.c:2439
-msgid "Font:"
-msgstr "Pismo:"
-
-#: gtk/gtkfontsel.c:522
-msgid "Font Style:"
-msgstr "Stil pisma:"
-
-#: gtk/gtkfontsel.c:527
+#: gtk/gtkfontsel.c:199
 msgid "Size:"
 msgstr "Velièina:"
 
-#: gtk/gtkfontsel.c:659 gtk/gtkfontsel.c:881
-msgid "Reset Filter"
-msgstr "Makni filter"
-
-#: gtk/gtkfontsel.c:673
-msgid "Metric:"
-msgstr "Metrika:"
-
-#: gtk/gtkfontsel.c:677
-msgid "Points"
-msgstr "Toèaka"
-
-#: gtk/gtkfontsel.c:684
-msgid "Pixels"
-msgstr "Piksela"
-
 #. create the text entry widget
-#: gtk/gtkfontsel.c:700
+#: gtk/gtkfontsel.c:309
 msgid "Preview:"
 msgstr "Pregled:"
 
-#: gtk/gtkfontsel.c:729
-msgid "Font Information"
-msgstr "Informacija o pismu"
-
-#: gtk/gtkfontsel.c:762
-msgid "Requested Font Name:"
-msgstr "Tra¾eno ime pisma:"
-
-#: gtk/gtkfontsel.c:773
-msgid "Actual Font Name:"
-msgstr "Stvarno ime pisma:"
-
-#: gtk/gtkfontsel.c:784
-#, c-format
-msgid "%i fonts available with a total of %i styles."
-msgstr "%i pisama raspolo¾ivo s ukupno %i stilova"
-
-#: gtk/gtkfontsel.c:799
-msgid "Filter"
-msgstr "Filter"
-
-#: gtk/gtkfontsel.c:812
-msgid "Font Types:"
-msgstr "Tipovi pisama:"
-
-#: gtk/gtkfontsel.c:820
-msgid "Bitmap"
-msgstr "Bitna mapa"
-
-#: gtk/gtkfontsel.c:826
-msgid "Scalable"
-msgstr "Promjenjive velièine"
-
-#: gtk/gtkfontsel.c:832
-msgid "Scaled Bitmap"
-msgstr "Bitna mapa promjenjene velièine"
-
-#: gtk/gtkfontsel.c:903
-msgid "*"
-msgstr "*"
-
-#. Convert '(nil)' weights to 'regular', since it looks nicer.
-#: gtk/gtkfontsel.c:1228
-msgid "(nil)"
-msgstr "(nil)"
-
-#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2708
-msgid "regular"
-msgstr "regularno"
-
-#: gtk/gtkfontsel.c:1233 gtk/gtkfontsel.c:2001
-msgid "italic"
-msgstr "kurziv"
-
-#: gtk/gtkfontsel.c:1234 gtk/gtkfontsel.c:2002
-msgid "oblique"
-msgstr "elektronièko koso pismo"
-
-#: gtk/gtkfontsel.c:1235 gtk/gtkfontsel.c:2003
-msgid "reverse italic"
-msgstr "obrnuti kurziv"
-
-#: gtk/gtkfontsel.c:1236 gtk/gtkfontsel.c:2004
-msgid "reverse oblique"
-msgstr "obrnuto elektronièko koso pismo"
-
-#: gtk/gtkfontsel.c:1237 gtk/gtkfontsel.c:2005
-msgid "other"
-msgstr "drugo"
-
-#: gtk/gtkfontsel.c:1244
-msgid "[M]"
-msgstr ""
-
-#: gtk/gtkfontsel.c:1245
-msgid "[C]"
-msgstr ""
-
-#: gtk/gtkfontsel.c:1800
-msgid "The selected font is not available."
-msgstr "Izabrano pismo nije raspolo¾ivo."
-
-#: gtk/gtkfontsel.c:1806
-msgid "The selected font is not a valid font."
-msgstr "Izabrano pismo je neispravno."
-
-#: gtk/gtkfontsel.c:1867
-msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "Ovo je dvobajtno pismo i mo¾e biti neispravno prikazano."
-
-#: gtk/gtkfontsel.c:1989 gtk/gtkinputdialog.c:607
-msgid "(unknown)"
-msgstr "(nepoznat)"
-
-#: gtk/gtkfontsel.c:2000
-msgid "roman"
-msgstr "rimski"
-
-#: gtk/gtkfontsel.c:2012
-msgid "proportional"
-msgstr "proporcionalno"
-
-#: gtk/gtkfontsel.c:2013
-msgid "monospaced"
-msgstr "ispis stalne ¹irine"
-
-#: gtk/gtkfontsel.c:2014
-msgid "char cell"
-msgstr ""
-
-#: gtk/gtkfontsel.c:2214
-msgid "Font: (Filter Applied)"
-msgstr "Pismo: (S primjenjenim filterom)"
-
-#: gtk/gtkfontsel.c:2688
-msgid "heavy"
-msgstr "te¹ko"
-
-#: gtk/gtkfontsel.c:2690
-msgid "extrabold"
-msgstr "ekstramasno"
-
-#: gtk/gtkfontsel.c:2692
-msgid "bold"
-msgstr "masno"
-
-#: gtk/gtkfontsel.c:2695
-msgid "demibold"
-msgstr ""
-
-#: gtk/gtkfontsel.c:2698
-msgid "medium"
-msgstr "srednje"
-
-#: gtk/gtkfontsel.c:2700
-msgid "normal"
-msgstr "normalno"
-
-#: gtk/gtkfontsel.c:2702
-msgid "light"
-msgstr "lagano"
-
-#: gtk/gtkfontsel.c:2704
-msgid "extralight"
-msgstr "ekstralako"
-
-#: gtk/gtkfontsel.c:2706
-msgid "thin"
-msgstr "tanko"
-
-#: gtk/gtkfontsel.c:2883
-msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "MAX_FONTS prekoraèeno. Neka pisma mogu nedostajati."
-
-#: gtk/gtkfontsel.c:3770
+#: gtk/gtkfontsel.c:959
 msgid "Apply"
 msgstr "Primijeni"
 
-#: gtk/gtkfontsel.c:3792
+#: gtk/gtkfontsel.c:981
 msgid "Font Selection"
 msgstr "Izbor pisma"
 
@@ -404,94 +172,102 @@ msgid "Gamma value"
 msgstr "Gama vrijednost"
 
 #. shell and main vbox
-#: gtk/gtkinputdialog.c:200
+#: gtk/gtkinputdialog.c:185
 msgid "Input"
 msgstr "Unos"
 
-#: gtk/gtkinputdialog.c:208
+#: gtk/gtkinputdialog.c:193
 msgid "No input devices"
 msgstr "Nema ulaznih ureðaja"
 
-#: gtk/gtkinputdialog.c:237
+#: gtk/gtkinputdialog.c:222
 msgid "Device:"
 msgstr "Ureðaj:"
 
-#: gtk/gtkinputdialog.c:253
+#: gtk/gtkinputdialog.c:238
 msgid "Disabled"
 msgstr "Onemoguæen"
 
-#: gtk/gtkinputdialog.c:261
+#: gtk/gtkinputdialog.c:246
 msgid "Screen"
 msgstr "Ekran"
 
-#: gtk/gtkinputdialog.c:269
+#: gtk/gtkinputdialog.c:254
 msgid "Window"
 msgstr "Prozor"
 
-#: gtk/gtkinputdialog.c:277
+#: gtk/gtkinputdialog.c:262
 msgid "Mode: "
 msgstr "Naèin: "
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:307
+#: gtk/gtkinputdialog.c:292
 msgid "Axes"
 msgstr "Osi"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:323
+#: gtk/gtkinputdialog.c:308
 msgid "Keys"
 msgstr "Tipke"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
-#: gtk/gtkinputdialog.c:345
+#: gtk/gtkinputdialog.c:329
 msgid "Save"
 msgstr "Spremi"
 
-#: gtk/gtkinputdialog.c:500
+#: gtk/gtkinputdialog.c:471
 msgid "X"
 msgstr "X"
 
-#: gtk/gtkinputdialog.c:501
+#: gtk/gtkinputdialog.c:472
 msgid "Y"
 msgstr "Y"
 
-#: gtk/gtkinputdialog.c:502
+#: gtk/gtkinputdialog.c:473
 msgid "Pressure"
 msgstr "Pritisak"
 
-#: gtk/gtkinputdialog.c:503
+#: gtk/gtkinputdialog.c:474
 msgid "X Tilt"
 msgstr "X pomak"
 
-#: gtk/gtkinputdialog.c:504
+#: gtk/gtkinputdialog.c:475
 msgid "Y Tilt"
 msgstr "Y pomak"
 
-#: gtk/gtkinputdialog.c:544
+#: gtk/gtkinputdialog.c:476
+msgid "Wheel"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:516
 msgid "none"
 msgstr "nijedan"
 
-#: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
+#: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
 msgstr "(onemoguæen)"
 
+#: gtk/gtkinputdialog.c:579
+msgid "(unknown)"
+msgstr "(nepoznat)"
+
 #. and clear button
-#: gtk/gtkinputdialog.c:692
+#: gtk/gtkinputdialog.c:664
 msgid "clear"
 msgstr "obri¹i"
 
-#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4120
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
 msgstr "Stranica %u"
 
-#: gtk/gtkrc.c:1785
+#: gtk/gtkrc.c:1824
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Ne mogu pronaæi slikovnu datoteku u pixmap_path: \"%s\" line %d"
 
-#: gtk/gtkrc.c:1788
+#: gtk/gtkrc.c:1827
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Ne mogu pronaæi slikovnu datoteku u pixmap_path: \"%s\""
@@ -504,3 +280,168 @@ msgstr "Ne mogu pronaæi modul u module_path: \"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Nema savjeta ---"
+
+#~ msgid "Help"
+#~ msgstr "Pomoæ"
+
+#~ msgid "Foundry:"
+#~ msgstr "Izvor:"
+
+#~ msgid "Weight:"
+#~ msgstr "Te¾ina:"
+
+#~ msgid "Slant:"
+#~ msgstr "Nako¹enost:"
+
+#~ msgid "Set Width:"
+#~ msgstr "Postavi ¹irinu:"
+
+#~ msgid "Pixel Size:"
+#~ msgstr "Velièina pixela:"
+
+#~ msgid "Point Size:"
+#~ msgstr "Velièina toèke:"
+
+#~ msgid "Resolution X:"
+#~ msgstr "X rezolucija"
+
+#~ msgid "Resolution Y:"
+#~ msgstr "Y rezolucija"
+
+#~ msgid "Spacing:"
+#~ msgstr "Razmak:"
+
+#~ msgid "Average Width:"
+#~ msgstr "Prosjeèna ¹irina:"
+
+#~ msgid "Charset:"
+#~ msgstr "Znakovlje:"
+
+#~ msgid "Font Property"
+#~ msgstr "Osobina pisma"
+
+#~ msgid "Requested Value"
+#~ msgstr "Tra¾ena vrijednost"
+
+#~ msgid "Actual Value"
+#~ msgstr "Stvarna vrijednost"
+
+#~ msgid "Font"
+#~ msgstr "Pismo"
+
+#~ msgid "Font:"
+#~ msgstr "Pismo:"
+
+#~ msgid "Font Style:"
+#~ msgstr "Stil pisma:"
+
+#~ msgid "Reset Filter"
+#~ msgstr "Makni filter"
+
+#~ msgid "Metric:"
+#~ msgstr "Metrika:"
+
+#~ msgid "Points"
+#~ msgstr "Toèaka"
+
+#~ msgid "Pixels"
+#~ msgstr "Piksela"
+
+#~ msgid "Font Information"
+#~ msgstr "Informacija o pismu"
+
+#~ msgid "Requested Font Name:"
+#~ msgstr "Tra¾eno ime pisma:"
+
+#~ msgid "Actual Font Name:"
+#~ msgstr "Stvarno ime pisma:"
+
+#~ msgid "%i fonts available with a total of %i styles."
+#~ msgstr "%i pisama raspolo¾ivo s ukupno %i stilova"
+
+#~ msgid "Filter"
+#~ msgstr "Filter"
+
+#~ msgid "Font Types:"
+#~ msgstr "Tipovi pisama:"
+
+#~ msgid "Bitmap"
+#~ msgstr "Bitna mapa"
+
+#~ msgid "Scalable"
+#~ msgstr "Promjenjive velièine"
+
+#~ msgid "Scaled Bitmap"
+#~ msgstr "Bitna mapa promjenjene velièine"
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "(nil)"
+#~ msgstr "(nil)"
+
+#~ msgid "regular"
+#~ msgstr "regularno"
+
+#~ msgid "italic"
+#~ msgstr "kurziv"
+
+#~ msgid "oblique"
+#~ msgstr "elektronièko koso pismo"
+
+#~ msgid "reverse italic"
+#~ msgstr "obrnuti kurziv"
+
+#~ msgid "reverse oblique"
+#~ msgstr "obrnuto elektronièko koso pismo"
+
+#~ msgid "other"
+#~ msgstr "drugo"
+
+#~ msgid "The selected font is not available."
+#~ msgstr "Izabrano pismo nije raspolo¾ivo."
+
+#~ msgid "The selected font is not a valid font."
+#~ msgstr "Izabrano pismo je neispravno."
+
+#~ msgid "This is a 2-byte font and may not be displayed correctly."
+#~ msgstr "Ovo je dvobajtno pismo i mo¾e biti neispravno prikazano."
+
+#~ msgid "roman"
+#~ msgstr "rimski"
+
+#~ msgid "proportional"
+#~ msgstr "proporcionalno"
+
+#~ msgid "monospaced"
+#~ msgstr "ispis stalne ¹irine"
+
+#~ msgid "Font: (Filter Applied)"
+#~ msgstr "Pismo: (S primjenjenim filterom)"
+
+#~ msgid "heavy"
+#~ msgstr "te¹ko"
+
+#~ msgid "extrabold"
+#~ msgstr "ekstramasno"
+
+#~ msgid "bold"
+#~ msgstr "masno"
+
+#~ msgid "medium"
+#~ msgstr "srednje"
+
+#~ msgid "normal"
+#~ msgstr "normalno"
+
+#~ msgid "light"
+#~ msgstr "lagano"
+
+#~ msgid "extralight"
+#~ msgstr "ekstralako"
+
+#~ msgid "thin"
+#~ msgstr "tanko"
+
+#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
+#~ msgstr "MAX_FONTS prekoraèeno. Neka pisma mogu nedostajati."

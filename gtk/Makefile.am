@@ -591,7 +591,11 @@ EXTRA_DIST += @STRIP_BEGIN@ 	\
 	check-y.xpm		\
 	check-n.xpm		\
 	test.xpm		\
+	gtkcompat.h.win32	\
 	gtk.def			\
+	gtk.rc			\
 	makefile.msc		\
+	makefile.cygwin		\
 	$(gtkconf_DATA)		\
 @STRIP_END@
+

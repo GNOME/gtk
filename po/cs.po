@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 1999-10-04 14:45+0200\n"
+"POT-Creation-Date: 2000-07-03 17:11-0400\n"
 "PO-Revision-Date: 1999-10-04 14:50+02:00\n"
 "Last-Translator: Stanislav Brabec <utx@k332.feld.cvut.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -14,75 +14,82 @@ msgstr ""
 "Content-Type: text/plain; charset=iso-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtk/gtkcolorsel.c:213
+#: gtk/gtkcolorsel.c:1415
 msgid "Hue:"
 msgstr "Odstín:"
 
-#: gtk/gtkcolorsel.c:214
+#: gtk/gtkcolorsel.c:1416
 msgid "Saturation:"
 msgstr "Sytost:"
 
-#: gtk/gtkcolorsel.c:215
+#: gtk/gtkcolorsel.c:1417
 msgid "Value:"
 msgstr "Jas:"
 
-#: gtk/gtkcolorsel.c:216
+#: gtk/gtkcolorsel.c:1418
 msgid "Red:"
 msgstr "Èervená:"
 
-#: gtk/gtkcolorsel.c:217
+#: gtk/gtkcolorsel.c:1419
 msgid "Green:"
 msgstr "Zelená:"
 
-#: gtk/gtkcolorsel.c:218
+#: gtk/gtkcolorsel.c:1420
 msgid "Blue:"
 msgstr "Modrá:"
 
-#: gtk/gtkcolorsel.c:219
+#: gtk/gtkcolorsel.c:1423
 msgid "Opacity:"
 msgstr "Krytí:"
 
-#. The OK button
-#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3765
-#: gtk/gtkgamma.c:416
-msgid "OK"
-msgstr "OK"
+#: gtk/gtkcolorsel.c:1438
+#, fuzzy
+msgid "Hex Value:"
+msgstr "Jas:"
 
-#. The Cancel button
-#: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:956
-#: gtk/gtkfilesel.c:1060 gtk/gtkfilesel.c:1175 gtk/gtkfontsel.c:3778
-#: gtk/gtkgamma.c:424
-msgid "Cancel"
-msgstr "Zru¹it"
+#: gtk/gtkcolorsel.c:1459
+msgid "Custom Palette"
+msgstr ""
 
-#: gtk/gtkcolorsel.c:1679
-msgid "Help"
-msgstr "Nápovìda"
+#: gtk/gtkcolorsel.c:1464
+msgid "Set Color"
+msgstr ""
 
 #. The directories clist
-#: gtk/gtkfilesel.c:520
+#: gtk/gtkfilesel.c:514
 msgid "Directories"
 msgstr "Adresáøe"
 
 #. The files clist
-#: gtk/gtkfilesel.c:539
+#: gtk/gtkfilesel.c:534
 msgid "Files"
 msgstr "Soubory"
 
-#: gtk/gtkfilesel.c:609 gtk/gtkfilesel.c:1639
+#. The OK button
+#: gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952 gtk/gtkgamma.c:415
+msgid "OK"
+msgstr "OK"
+
+#. The Cancel button
+#: gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963 gtk/gtkfilesel.c:1067
+#: gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965 gtk/gtkgamma.c:423
+msgid "Cancel"
+msgstr "Zru¹it"
+
+#: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Adresáø %s je neèitelný."
 
-#: gtk/gtkfilesel.c:641
+#: gtk/gtkfilesel.c:637
 msgid "Create Dir"
 msgstr "Vytvoøit adresáø"
 
-#: gtk/gtkfilesel.c:652 gtk/gtkfilesel.c:1029
+#: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
 msgid "Delete File"
 msgstr "Smazat soubor"
 
-#: gtk/gtkfilesel.c:663 gtk/gtkfilesel.c:1133
+#: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
 msgid "Rename File"
 msgstr "Pøejmenovat soubor"
 
@@ -91,404 +98,173 @@ msgstr "Pøejmenovat soubor"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:827
+#: gtk/gtkfilesel.c:828
 msgid "Error"
 msgstr "Chyba"
 
 #. close button
-#: gtk/gtkfilesel.c:845 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
 msgid "Close"
 msgstr "Zavøít"
 
-#: gtk/gtkfilesel.c:920
+#: gtk/gtkfilesel.c:927
 msgid "Create Directory"
 msgstr "Vytvoøit adresáø"
 
-#: gtk/gtkfilesel.c:934
+#: gtk/gtkfilesel.c:941
 msgid "Directory name:"
 msgstr "Jméno adresáøe:"
 
 #. buttons
-#: gtk/gtkfilesel.c:947
+#: gtk/gtkfilesel.c:954
 msgid "Create"
 msgstr "Vytvoøit"
 
 #. buttons
-#: gtk/gtkfilesel.c:1051
+#: gtk/gtkfilesel.c:1058
 msgid "Delete"
 msgstr "Smazat"
 
 #. buttons
-#: gtk/gtkfilesel.c:1166
+#: gtk/gtkfilesel.c:1173
 msgid "Rename"
 msgstr "Pøejmenovat"
 
-#: gtk/gtkfilesel.c:1618
+#: gtk/gtkfilesel.c:1600
 msgid "Selection: "
 msgstr "Výbìr: "
 
-#: gtk/gtkfontsel.c:216
-msgid "Foundry:"
-msgstr "Písmolijna:"
-
-#: gtk/gtkfontsel.c:217
+#: gtk/gtkfontsel.c:189
 msgid "Family:"
 msgstr "Rodina:"
 
-#: gtk/gtkfontsel.c:218
-msgid "Weight:"
-msgstr "Øez:"
-
-#: gtk/gtkfontsel.c:219
-msgid "Slant:"
-msgstr "Druh sklonu:"
-
-#: gtk/gtkfontsel.c:220
-msgid "Set Width:"
-msgstr "Kresebná ¹íøka:"
-
-#: gtk/gtkfontsel.c:221
-msgid "Add Style:"
+#: gtk/gtkfontsel.c:194
+#, fuzzy
+msgid "Style:"
 msgstr "Upøesnìní stylu:"
 
-#: gtk/gtkfontsel.c:222
-msgid "Pixel Size:"
-msgstr "Velikost v pixelech:"
-
-#: gtk/gtkfontsel.c:223
-msgid "Point Size:"
-msgstr "Velikost v bodech:"
-
-#: gtk/gtkfontsel.c:224
-msgid "Resolution X:"
-msgstr "Horizontální rozli¹ení:"
-
-#: gtk/gtkfontsel.c:225
-msgid "Resolution Y:"
-msgstr "Vertikální rozli¹ení:"
-
-#: gtk/gtkfontsel.c:226
-msgid "Spacing:"
-msgstr "Typ dle ¹íøky:"
-
-#: gtk/gtkfontsel.c:227
-msgid "Average Width:"
-msgstr "Prùmìrná ¹íøka:"
-
-#: gtk/gtkfontsel.c:228
-msgid "Charset:"
-msgstr "Znaková sada:"
-
-#. Number of internationalized titles here must match number
-#. of NULL initializers above
-#: gtk/gtkfontsel.c:472
-msgid "Font Property"
-msgstr "Vlastnosti písma"
-
-#: gtk/gtkfontsel.c:473
-msgid "Requested Value"
-msgstr "Po¾adovaná hodnota"
-
-#: gtk/gtkfontsel.c:474
-msgid "Actual Value"
-msgstr "Souèasná hodnota"
-
-#: gtk/gtkfontsel.c:507
-msgid "Font"
-msgstr "Písmo"
-
-#: gtk/gtkfontsel.c:517 gtk/gtkfontsel.c:2202 gtk/gtkfontsel.c:2432
-msgid "Font:"
-msgstr "Písmo:"
-
-#: gtk/gtkfontsel.c:522
-msgid "Font Style:"
-msgstr "Styl písma:"
-
-#: gtk/gtkfontsel.c:527
+#: gtk/gtkfontsel.c:199
 msgid "Size:"
 msgstr "Velikost:"
 
-#: gtk/gtkfontsel.c:659 gtk/gtkfontsel.c:881
-msgid "Reset Filter"
-msgstr "Zru¹it filtr"
-
-#: gtk/gtkfontsel.c:673
-msgid "Metric:"
-msgstr "Metrika:"
-
-#: gtk/gtkfontsel.c:677
-msgid "Points"
-msgstr "Body"
-
-#: gtk/gtkfontsel.c:684
-msgid "Pixels"
-msgstr "Pixely"
-
 #. create the text entry widget
-#: gtk/gtkfontsel.c:700
+#: gtk/gtkfontsel.c:309
 msgid "Preview:"
 msgstr "Náhled:"
 
-#: gtk/gtkfontsel.c:729
-msgid "Font Information"
-msgstr "Informace o písmu"
-
-#: gtk/gtkfontsel.c:762
-msgid "Requested Font Name:"
-msgstr "Po¾adované jméno písma:"
-
-#: gtk/gtkfontsel.c:773
-msgid "Actual Font Name:"
-msgstr "Souèasné jméno písma:"
-
-#: gtk/gtkfontsel.c:784
-#, c-format
-msgid "%i fonts available with a total of %i styles."
-msgstr "Poèet dostupných písem/stylù je %i/%i."
-
-#: gtk/gtkfontsel.c:799
-msgid "Filter"
-msgstr "Filtr"
-
-#: gtk/gtkfontsel.c:812
-msgid "Font Types:"
-msgstr "Typy písma:"
-
-#: gtk/gtkfontsel.c:820
-msgid "Bitmap"
-msgstr "Bitová mapa"
-
-#: gtk/gtkfontsel.c:826
-msgid "Scalable"
-msgstr "Vektorové"
-
-#: gtk/gtkfontsel.c:832
-msgid "Scaled Bitmap"
-msgstr "Pøepoèítaná bitová mapa"
-
-#: gtk/gtkfontsel.c:903
-msgid "*"
-msgstr "*"
-
-#. Convert '(nil)' weights to 'regular', since it looks nicer.
-#: gtk/gtkfontsel.c:1228
-msgid "(nil)"
-msgstr "(nil)"
-
-#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2701
-msgid "regular"
-msgstr "obyèejný"
-
-#: gtk/gtkfontsel.c:1233 gtk/gtkfontsel.c:1994
-msgid "italic"
-msgstr "kurzíva"
-
-#: gtk/gtkfontsel.c:1234 gtk/gtkfontsel.c:1995
-msgid "oblique"
-msgstr "sklonìný"
-
-#: gtk/gtkfontsel.c:1235 gtk/gtkfontsel.c:1996
-msgid "reverse italic"
-msgstr "obrácená kurzíva"
-
-#: gtk/gtkfontsel.c:1236 gtk/gtkfontsel.c:1997
-msgid "reverse oblique"
-msgstr "obrácenì sklonìný"
-
-#: gtk/gtkfontsel.c:1237 gtk/gtkfontsel.c:1998
-msgid "other"
-msgstr "jiný"
-
-#: gtk/gtkfontsel.c:1244
-msgid "[M]"
-msgstr "[P©]"
-
-#: gtk/gtkfontsel.c:1245
-msgid "[C]"
-msgstr "[PB]"
-
-#: gtk/gtkfontsel.c:1793
-msgid "The selected font is not available."
-msgstr "Vybrané písmo není dostupné."
-
-#: gtk/gtkfontsel.c:1799
-msgid "The selected font is not a valid font."
-msgstr "Vybrané písmo není platným písmem."
-
-#: gtk/gtkfontsel.c:1860
-msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "Toto je dvoubajtové písmo a nemusí být zobrazeno správnì."
-
-#: gtk/gtkfontsel.c:1982 gtk/gtkinputdialog.c:607
-msgid "(unknown)"
-msgstr "(neznámá)"
-
-#: gtk/gtkfontsel.c:1993
-msgid "roman"
-msgstr "stojatý"
-
-#: gtk/gtkfontsel.c:2005
-msgid "proportional"
-msgstr "proporcionální"
-
-#: gtk/gtkfontsel.c:2006
-msgid "monospaced"
-msgstr "pevná ¹íøka"
-
-#: gtk/gtkfontsel.c:2007
-msgid "char cell"
-msgstr "pevný blok"
-
-#: gtk/gtkfontsel.c:2207
-msgid "Font: (Filter Applied)"
-msgstr "Písmo: (pou¾it filtr)"
-
-#: gtk/gtkfontsel.c:2681
-msgid "heavy"
-msgstr "tì¾ký"
-
-#: gtk/gtkfontsel.c:2683
-msgid "extrabold"
-msgstr "velmi tuèný"
-
-#: gtk/gtkfontsel.c:2685
-msgid "bold"
-msgstr "tuèný"
-
-#: gtk/gtkfontsel.c:2688
-msgid "demibold"
-msgstr "polotuèný"
-
-#: gtk/gtkfontsel.c:2691
-msgid "medium"
-msgstr "støední"
-
-#: gtk/gtkfontsel.c:2693
-msgid "normal"
-msgstr "bì¾ný"
-
-#: gtk/gtkfontsel.c:2695
-msgid "light"
-msgstr "svìtlý"
-
-#: gtk/gtkfontsel.c:2697
-msgid "extralight"
-msgstr "velmi svìtlý"
-
-#: gtk/gtkfontsel.c:2699
-msgid "thin"
-msgstr "tenký"
-
-#: gtk/gtkfontsel.c:2876
-msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "Pøekroèeno MAX_FONTS. Nìkterá písma mohou chybìt."
-
-#: gtk/gtkfontsel.c:3772
+#: gtk/gtkfontsel.c:959
 msgid "Apply"
 msgstr "Pou¾ít"
 
-#: gtk/gtkfontsel.c:3794
+#: gtk/gtkfontsel.c:981
 msgid "Font Selection"
 msgstr "Výbìr písma"
 
-#: gtk/gtkgamma.c:396
+#: gtk/gtkgamma.c:395
 msgid "Gamma"
 msgstr "Gama"
 
-#: gtk/gtkgamma.c:403
+#: gtk/gtkgamma.c:402
 msgid "Gamma value"
 msgstr "Hodnota gama"
 
 #. shell and main vbox
-#: gtk/gtkinputdialog.c:200
+#: gtk/gtkinputdialog.c:185
 msgid "Input"
 msgstr "Vstup"
 
-#: gtk/gtkinputdialog.c:208
+#: gtk/gtkinputdialog.c:193
 msgid "No input devices"
 msgstr "Nejsou vstupní zaøízení"
 
-#: gtk/gtkinputdialog.c:237
+#: gtk/gtkinputdialog.c:222
 msgid "Device:"
 msgstr "Zaøízení:"
 
-#: gtk/gtkinputdialog.c:253
+#: gtk/gtkinputdialog.c:238
 msgid "Disabled"
 msgstr "Vypnuto"
 
-#: gtk/gtkinputdialog.c:261
+#: gtk/gtkinputdialog.c:246
 msgid "Screen"
 msgstr "Obrazovka"
 
-#: gtk/gtkinputdialog.c:269
+#: gtk/gtkinputdialog.c:254
 msgid "Window"
 msgstr "Okno"
 
-#: gtk/gtkinputdialog.c:277
+#: gtk/gtkinputdialog.c:262
 msgid "Mode: "
 msgstr "Re¾im: "
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:307
+#: gtk/gtkinputdialog.c:292
 msgid "Axes"
 msgstr "Osy"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:323
+#: gtk/gtkinputdialog.c:308
 msgid "Keys"
 msgstr "Klávesy"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
-#: gtk/gtkinputdialog.c:345
+#: gtk/gtkinputdialog.c:329
 msgid "Save"
 msgstr "Zapsat"
 
-#: gtk/gtkinputdialog.c:500
+#: gtk/gtkinputdialog.c:471
 msgid "X"
 msgstr "X"
 
-#: gtk/gtkinputdialog.c:501
+#: gtk/gtkinputdialog.c:472
 msgid "Y"
 msgstr "Y"
 
-#: gtk/gtkinputdialog.c:502
+#: gtk/gtkinputdialog.c:473
 msgid "Pressure"
 msgstr "Tlak"
 
-#: gtk/gtkinputdialog.c:503
+#: gtk/gtkinputdialog.c:474
 msgid "X Tilt"
 msgstr "Horizontální sklon"
 
-#: gtk/gtkinputdialog.c:504
+#: gtk/gtkinputdialog.c:475
 msgid "Y Tilt"
 msgstr "Vertikální sklon"
 
-#: gtk/gtkinputdialog.c:544
+#: gtk/gtkinputdialog.c:476
+msgid "Wheel"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:516
 msgid "none"
 msgstr "¾ádný"
 
-#: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
+#: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
 msgstr "(vypnuto)"
 
+#: gtk/gtkinputdialog.c:579
+msgid "(unknown)"
+msgstr "(neznámá)"
+
 #. and clear button
-#: gtk/gtkinputdialog.c:692
+#: gtk/gtkinputdialog.c:664
 msgid "clear"
 msgstr "smazat"
 
-#: gtk/gtknotebook.c:2017 gtk/gtknotebook.c:4092
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
 msgstr "Strana %u"
 
-#: gtk/gtkrc.c:1611
+#: gtk/gtkrc.c:1824
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Obrázek \"%s\" (øádek %d) nebyl nalezen v pixmap_path."
 
-#: gtk/gtkrc.c:1614
+#: gtk/gtkrc.c:1827
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Obrázek \"%s\" nebyl nalezen v pixmap_path."
@@ -501,3 +277,180 @@ msgstr "Pøípojný modul \"%s\" nebyl nalezen v module_path."
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Není tip ---"
+
+#~ msgid "Help"
+#~ msgstr "Nápovìda"
+
+#~ msgid "Foundry:"
+#~ msgstr "Písmolijna:"
+
+#~ msgid "Weight:"
+#~ msgstr "Øez:"
+
+#~ msgid "Slant:"
+#~ msgstr "Druh sklonu:"
+
+#~ msgid "Set Width:"
+#~ msgstr "Kresebná ¹íøka:"
+
+#~ msgid "Pixel Size:"
+#~ msgstr "Velikost v pixelech:"
+
+#~ msgid "Point Size:"
+#~ msgstr "Velikost v bodech:"
+
+#~ msgid "Resolution X:"
+#~ msgstr "Horizontální rozli¹ení:"
+
+#~ msgid "Resolution Y:"
+#~ msgstr "Vertikální rozli¹ení:"
+
+#~ msgid "Spacing:"
+#~ msgstr "Typ dle ¹íøky:"
+
+#~ msgid "Average Width:"
+#~ msgstr "Prùmìrná ¹íøka:"
+
+#~ msgid "Charset:"
+#~ msgstr "Znaková sada:"
+
+#~ msgid "Font Property"
+#~ msgstr "Vlastnosti písma"
+
+#~ msgid "Requested Value"
+#~ msgstr "Po¾adovaná hodnota"
+
+#~ msgid "Actual Value"
+#~ msgstr "Souèasná hodnota"
+
+#~ msgid "Font"
+#~ msgstr "Písmo"
+
+#~ msgid "Font:"
+#~ msgstr "Písmo:"
+
+#~ msgid "Font Style:"
+#~ msgstr "Styl písma:"
+
+#~ msgid "Reset Filter"
+#~ msgstr "Zru¹it filtr"
+
+#~ msgid "Metric:"
+#~ msgstr "Metrika:"
+
+#~ msgid "Points"
+#~ msgstr "Body"
+
+#~ msgid "Pixels"
+#~ msgstr "Pixely"
+
+#~ msgid "Font Information"
+#~ msgstr "Informace o písmu"
+
+#~ msgid "Requested Font Name:"
+#~ msgstr "Po¾adované jméno písma:"
+
+#~ msgid "Actual Font Name:"
+#~ msgstr "Souèasné jméno písma:"
+
+#~ msgid "%i fonts available with a total of %i styles."
+#~ msgstr "Poèet dostupných písem/stylù je %i/%i."
+
+#~ msgid "Filter"
+#~ msgstr "Filtr"
+
+#~ msgid "Font Types:"
+#~ msgstr "Typy písma:"
+
+#~ msgid "Bitmap"
+#~ msgstr "Bitová mapa"
+
+#~ msgid "Scalable"
+#~ msgstr "Vektorové"
+
+#~ msgid "Scaled Bitmap"
+#~ msgstr "Pøepoèítaná bitová mapa"
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "(nil)"
+#~ msgstr "(nil)"
+
+#~ msgid "regular"
+#~ msgstr "obyèejný"
+
+#~ msgid "italic"
+#~ msgstr "kurzíva"
+
+#~ msgid "oblique"
+#~ msgstr "sklonìný"
+
+#~ msgid "reverse italic"
+#~ msgstr "obrácená kurzíva"
+
+#~ msgid "reverse oblique"
+#~ msgstr "obrácenì sklonìný"
+
+#~ msgid "other"
+#~ msgstr "jiný"
+
+#~ msgid "[M]"
+#~ msgstr "[P©]"
+
+#~ msgid "[C]"
+#~ msgstr "[PB]"
+
+#~ msgid "The selected font is not available."
+#~ msgstr "Vybrané písmo není dostupné."
+
+#~ msgid "The selected font is not a valid font."
+#~ msgstr "Vybrané písmo není platným písmem."
+
+#~ msgid "This is a 2-byte font and may not be displayed correctly."
+#~ msgstr "Toto je dvoubajtové písmo a nemusí být zobrazeno správnì."
+
+#~ msgid "roman"
+#~ msgstr "stojatý"
+
+#~ msgid "proportional"
+#~ msgstr "proporcionální"
+
+#~ msgid "monospaced"
+#~ msgstr "pevná ¹íøka"
+
+#~ msgid "char cell"
+#~ msgstr "pevný blok"
+
+#~ msgid "Font: (Filter Applied)"
+#~ msgstr "Písmo: (pou¾it filtr)"
+
+#~ msgid "heavy"
+#~ msgstr "tì¾ký"
+
+#~ msgid "extrabold"
+#~ msgstr "velmi tuèný"
+
+#~ msgid "bold"
+#~ msgstr "tuèný"
+
+#~ msgid "demibold"
+#~ msgstr "polotuèný"
+
+#~ msgid "medium"
+#~ msgstr "støední"
+
+#~ msgid "normal"
+#~ msgstr "bì¾ný"
+
+#~ msgid "light"
+#~ msgstr "svìtlý"
+
+#~ msgid "extralight"
+#~ msgstr "velmi svìtlý"
+
+#~ msgid "thin"
+#~ msgstr "tenký"
+
+#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
+#~ msgstr "Pøekroèeno MAX_FONTS. Nìkterá písma mohou chybìt."

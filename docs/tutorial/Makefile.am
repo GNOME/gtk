@@ -123,11 +123,13 @@ tutorial_fr: htmldir textdir
 
 EXTRA_DIST += \
 	gtk_tut.sgml			\
+	gtk_tut_12.es.sgml		\
 	gtk_tut_it.sgml			\
 	gtk_tut_fr.sgml			\
 	gtk_tut_packbox1.gif 		\
 	gtk_tut_packbox2.gif 		\
-	gtk_tut_table.gif
+	gtk_tut_table.gif		\
+	package_tutorial.sh
 
 if HAVE_SGML2HTML
 dist-hook: tutorial tutorial_it tutorial_fr

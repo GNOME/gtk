@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2000-03-20 18:42+0100\n"
+"POT-Creation-Date: 2000-07-03 17:11-0400\n"
 "PO-Revision-Date: 2000-03-16 03:44+0200\n"
 "Last-Translator: Gediminas Paulauskas <menesis@delfi.lt>\n"
 "Language-Team: Lithuanian\n"
@@ -14,50 +14,46 @@ msgstr ""
 "Content-Type: text/plain; charset=iso-8859-13\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtk/gtkcolorsel.c:221
+#: gtk/gtkcolorsel.c:1415
 msgid "Hue:"
 msgstr "Atspalvis:"
 
-#: gtk/gtkcolorsel.c:222
+#: gtk/gtkcolorsel.c:1416
 msgid "Saturation:"
 msgstr "Sodrumas:"
 
-#: gtk/gtkcolorsel.c:223
+#: gtk/gtkcolorsel.c:1417
 msgid "Value:"
 msgstr "Vertë:"
 
-#: gtk/gtkcolorsel.c:224
+#: gtk/gtkcolorsel.c:1418
 msgid "Red:"
 msgstr "Raudona:"
 
-#: gtk/gtkcolorsel.c:225
+#: gtk/gtkcolorsel.c:1419
 msgid "Green:"
 msgstr "Þalia:"
 
-#: gtk/gtkcolorsel.c:226
+#: gtk/gtkcolorsel.c:1420
 msgid "Blue:"
 msgstr "Mëlyna:"
 
-#: gtk/gtkcolorsel.c:227
+#: gtk/gtkcolorsel.c:1423
 msgid "Opacity:"
 msgstr "Nepermatomumas:"
 
-#. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:565 gtk/gtkfontsel.c:3785
-#: gtk/gtkgamma.c:415
-msgid "OK"
-msgstr "Gerai"
+#: gtk/gtkcolorsel.c:1438
+#, fuzzy
+msgid "Hex Value:"
+msgstr "Vertë:"
 
-#. The Cancel button
-#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:572 gtk/gtkfilesel.c:956
-#: gtk/gtkfilesel.c:1060 gtk/gtkfilesel.c:1175 gtk/gtkfontsel.c:3798
-#: gtk/gtkgamma.c:423
-msgid "Cancel"
-msgstr "Atðaukti"
+#: gtk/gtkcolorsel.c:1459
+msgid "Custom Palette"
+msgstr ""
 
-#: gtk/gtkcolorsel.c:1738
-msgid "Help"
-msgstr "Pagalba"
+#: gtk/gtkcolorsel.c:1464
+msgid "Set Color"
+msgstr ""
 
 #. The directories clist
 #: gtk/gtkfilesel.c:514
@@ -65,24 +61,35 @@ msgid "Directories"
 msgstr "Katalogai"
 
 #. The files clist
-#: gtk/gtkfilesel.c:533
+#: gtk/gtkfilesel.c:534
 msgid "Files"
 msgstr "Bylos"
 
-#: gtk/gtkfilesel.c:603 gtk/gtkfilesel.c:1642
+#. The OK button
+#: gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952 gtk/gtkgamma.c:415
+msgid "OK"
+msgstr "Gerai"
+
+#. The Cancel button
+#: gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963 gtk/gtkfilesel.c:1067
+#: gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965 gtk/gtkgamma.c:423
+msgid "Cancel"
+msgstr "Atðaukti"
+
+#: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Katalogas neáskaitomas: %s"
 
-#: gtk/gtkfilesel.c:635
+#: gtk/gtkfilesel.c:637
 msgid "Create Dir"
 msgstr "Sukurti katalogà"
 
-#: gtk/gtkfilesel.c:646 gtk/gtkfilesel.c:1029
+#: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
 msgid "Delete File"
 msgstr "Iðtrinti bylà"
 
-#: gtk/gtkfilesel.c:657 gtk/gtkfilesel.c:1133
+#: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
 msgid "Rename File"
 msgstr "Pervadinti bylà"
 
@@ -91,304 +98,65 @@ msgstr "Pervadinti bylà"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:822
+#: gtk/gtkfilesel.c:828
 msgid "Error"
 msgstr "Klaida"
 
 #. close button
-#: gtk/gtkfilesel.c:845 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
 msgid "Close"
 msgstr "Uþdaryti"
 
-#: gtk/gtkfilesel.c:920
+#: gtk/gtkfilesel.c:927
 msgid "Create Directory"
 msgstr "Sukurti katalogà"
 
-#: gtk/gtkfilesel.c:934
+#: gtk/gtkfilesel.c:941
 msgid "Directory name:"
 msgstr "Katalogo vardas:"
 
 #. buttons
-#: gtk/gtkfilesel.c:947
+#: gtk/gtkfilesel.c:954
 msgid "Create"
 msgstr "Sukurti"
 
 #. buttons
-#: gtk/gtkfilesel.c:1051
+#: gtk/gtkfilesel.c:1058
 msgid "Delete"
 msgstr "Iðtrinti"
 
 #. buttons
-#: gtk/gtkfilesel.c:1166
+#: gtk/gtkfilesel.c:1173
 msgid "Rename"
 msgstr "Pervadinti"
 
-#: gtk/gtkfilesel.c:1621
+#: gtk/gtkfilesel.c:1600
 msgid "Selection: "
 msgstr "Pasirinkimas:"
 
-#: gtk/gtkfontsel.c:216
-msgid "Foundry:"
-msgstr "Liejykla:"
-
-#: gtk/gtkfontsel.c:217
+#: gtk/gtkfontsel.c:189
 msgid "Family:"
 msgstr "Ðeima:"
 
-#: gtk/gtkfontsel.c:218
-msgid "Weight:"
-msgstr "Svoris:"
-
-#: gtk/gtkfontsel.c:219
-msgid "Slant:"
-msgstr "Palinkimas:"
-
-#: gtk/gtkfontsel.c:220
-msgid "Set Width:"
-msgstr "Nustatyti plotá:"
-
-#: gtk/gtkfontsel.c:221
-msgid "Add Style:"
+#: gtk/gtkfontsel.c:194
+#, fuzzy
+msgid "Style:"
 msgstr "Pridëti stiliø:"
 
-#: gtk/gtkfontsel.c:222
-msgid "Pixel Size:"
-msgstr "Taðkelio dydis:"
-
-#: gtk/gtkfontsel.c:223
-msgid "Point Size:"
-msgstr "Punkto dydis:"
-
-#: gtk/gtkfontsel.c:224
-msgid "Resolution X:"
-msgstr "Raiðka X:"
-
-#: gtk/gtkfontsel.c:225
-msgid "Resolution Y:"
-msgstr "Raiðka Y:"
-
-#: gtk/gtkfontsel.c:226
-msgid "Spacing:"
-msgstr "Tankis:"
-
-#: gtk/gtkfontsel.c:227
-msgid "Average Width:"
-msgstr "Vidutinis plotis:"
-
-#: gtk/gtkfontsel.c:228
-msgid "Charset:"
-msgstr "Simboliø lentelë:"
-
-#. Number of internationalized titles here must match number
-#. of NULL initializers above
-#: gtk/gtkfontsel.c:472
-msgid "Font Property"
-msgstr "Ðrifto savybë"
-
-#: gtk/gtkfontsel.c:473
-msgid "Requested Value"
-msgstr "Praðyta reikðmë"
-
-#: gtk/gtkfontsel.c:474
-msgid "Actual Value"
-msgstr "Tikroji reikðmë"
-
-#: gtk/gtkfontsel.c:507
-msgid "Font"
-msgstr "Ðriftas"
-
-#: gtk/gtkfontsel.c:517 gtk/gtkfontsel.c:2231 gtk/gtkfontsel.c:2461
-msgid "Font:"
-msgstr "Ðriftas:"
-
-#: gtk/gtkfontsel.c:522
-msgid "Font Style:"
-msgstr "Ðrifto stilius:"
-
-#: gtk/gtkfontsel.c:527
+#: gtk/gtkfontsel.c:199
 msgid "Size:"
 msgstr "Dydis:"
 
-#: gtk/gtkfontsel.c:659 gtk/gtkfontsel.c:881
-msgid "Reset Filter"
-msgstr "Nuimti filtrà"
-
-#: gtk/gtkfontsel.c:673
-msgid "Metric:"
-msgstr "Matuojama:"
-
-#: gtk/gtkfontsel.c:677
-msgid "Points"
-msgstr "Punktais"
-
-#: gtk/gtkfontsel.c:684
-msgid "Pixels"
-msgstr "Taðkeliais"
-
 #. create the text entry widget
-#: gtk/gtkfontsel.c:700
+#: gtk/gtkfontsel.c:309
 msgid "Preview:"
 msgstr "Perþiûra:"
 
-#: gtk/gtkfontsel.c:729
-msgid "Font Information"
-msgstr "Ðrifto informacija"
-
-#: gtk/gtkfontsel.c:762
-msgid "Requested Font Name:"
-msgstr "Praðytas ðrifto vardas:"
-
-#: gtk/gtkfontsel.c:773
-msgid "Actual Font Name:"
-msgstr "Tikrasis ðrifto vardas:"
-
-#: gtk/gtkfontsel.c:784
-#, c-format
-msgid "%i fonts available with a total of %i styles."
-msgstr "Turime %i ðriftø su ið viso %i stiliø."
-
-#: gtk/gtkfontsel.c:799
-msgid "Filter"
-msgstr "Filtras"
-
-#: gtk/gtkfontsel.c:812
-msgid "Font Types:"
-msgstr "Ðriftø tipai:"
-
-#: gtk/gtkfontsel.c:820
-msgid "Bitmap"
-msgstr "Taðkinis"
-
-#: gtk/gtkfontsel.c:826
-msgid "Scalable"
-msgstr "Keièiamo dydþio"
-
-#: gtk/gtkfontsel.c:832
-msgid "Scaled Bitmap"
-msgstr "Keièiamas taðkinis"
-
-#: gtk/gtkfontsel.c:903
-msgid "*"
-msgstr "*"
-
-#. Convert '(nil)' weights to 'regular', since it looks nicer.
-#: gtk/gtkfontsel.c:1228
-msgid "(nil)"
-msgstr "(nieko)"
-
-#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2730
-msgid "regular"
-msgstr "paprastas"
-
-#: gtk/gtkfontsel.c:1233 gtk/gtkfontsel.c:2023
-msgid "italic"
-msgstr "kursyvinis"
-
-#: gtk/gtkfontsel.c:1234 gtk/gtkfontsel.c:2024
-msgid "oblique"
-msgstr "pakrypæs"
-
-#: gtk/gtkfontsel.c:1235 gtk/gtkfontsel.c:2025
-msgid "reverse italic"
-msgstr "atbulai kursyvinis"
-
-#: gtk/gtkfontsel.c:1236 gtk/gtkfontsel.c:2026
-msgid "reverse oblique"
-msgstr "atbulai pasviræs"
-
-#: gtk/gtkfontsel.c:1237 gtk/gtkfontsel.c:2027
-msgid "other"
-msgstr "kitoks"
-
-#: gtk/gtkfontsel.c:1244
-msgid "[M]"
-msgstr "[M]"
-
-#: gtk/gtkfontsel.c:1245
-msgid "[C]"
-msgstr "[C]"
-
-#: gtk/gtkfontsel.c:1811
-msgid "The selected font is not available."
-msgstr "Praðomas ðriftas nepasiekiamas."
-
-#: gtk/gtkfontsel.c:1817
-msgid "The selected font is not a valid font."
-msgstr "Pasirinktas ðriftas nëra sveikas ðriftas."
-
-#: gtk/gtkfontsel.c:1878
-msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "Tai yra 2 baitø ðriftas ir negali bûti teisingai parodytas."
-
-#: gtk/gtkfontsel.c:2011 gtk/gtkinputdialog.c:607
-msgid "(unknown)"
-msgstr "(neþinomas)"
-
-#: gtk/gtkfontsel.c:2022
-msgid "roman"
-msgstr "romëniðkas"
-
-#: gtk/gtkfontsel.c:2034
-msgid "proportional"
-msgstr "ávairiaplotis"
-
-#: gtk/gtkfontsel.c:2035
-msgid "monospaced"
-msgstr "lygiaplotis"
-
-#: gtk/gtkfontsel.c:2036
-msgid "char cell"
-msgstr "þenklo dydþio"
-
-#: gtk/gtkfontsel.c:2236
-msgid "Font: (Filter Applied)"
-msgstr "Ðriftas: (iðfiltruotas)"
-
-#: gtk/gtkfontsel.c:2710
-msgid "heavy"
-msgstr "sunkus"
-
-#: gtk/gtkfontsel.c:2712
-msgid "extrabold"
-msgstr "ypaè storas"
-
-#: gtk/gtkfontsel.c:2714
-msgid "bold"
-msgstr "storas"
-
-#: gtk/gtkfontsel.c:2717
-msgid "demibold"
-msgstr "pusiau storas"
-
-#: gtk/gtkfontsel.c:2720
-msgid "medium"
-msgstr "vidutinis"
-
-#: gtk/gtkfontsel.c:2722
-msgid "normal"
-msgstr "paprastas"
-
-#: gtk/gtkfontsel.c:2724
-msgid "light"
-msgstr "lengvas"
-
-#: gtk/gtkfontsel.c:2726
-msgid "extralight"
-msgstr "ypaè lengvas"
-
-#: gtk/gtkfontsel.c:2728
-msgid "thin"
-msgstr "plonas"
-
-#: gtk/gtkfontsel.c:2905
-msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "MAX_FONTS virðytas. Kai kuriø ðriftø gali trûkti."
-
-#: gtk/gtkfontsel.c:3792
+#: gtk/gtkfontsel.c:959
 msgid "Apply"
 msgstr "Pritaikyti"
 
-#: gtk/gtkfontsel.c:3814
+#: gtk/gtkfontsel.c:981
 msgid "Font Selection"
 msgstr "Ðrifto pasirinkimas"
 
@@ -401,80 +169,88 @@ msgid "Gamma value"
 msgstr "Gamos reikðmë"
 
 #. shell and main vbox
-#: gtk/gtkinputdialog.c:200
+#: gtk/gtkinputdialog.c:185
 msgid "Input"
 msgstr "Ávestis"
 
-#: gtk/gtkinputdialog.c:208
+#: gtk/gtkinputdialog.c:193
 msgid "No input devices"
 msgstr "Nëra ávesties irenginiø"
 
-#: gtk/gtkinputdialog.c:237
+#: gtk/gtkinputdialog.c:222
 msgid "Device:"
 msgstr "Árenginys:"
 
-#: gtk/gtkinputdialog.c:253
+#: gtk/gtkinputdialog.c:238
 msgid "Disabled"
 msgstr "Uþdraustas"
 
-#: gtk/gtkinputdialog.c:261
+#: gtk/gtkinputdialog.c:246
 msgid "Screen"
 msgstr "Ekranas"
 
-#: gtk/gtkinputdialog.c:269
+#: gtk/gtkinputdialog.c:254
 msgid "Window"
 msgstr "Langas"
 
-#: gtk/gtkinputdialog.c:277
+#: gtk/gtkinputdialog.c:262
 msgid "Mode: "
 msgstr "Bûdas: "
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:307
+#: gtk/gtkinputdialog.c:292
 msgid "Axes"
 msgstr "Aðys"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:323
+#: gtk/gtkinputdialog.c:308
 msgid "Keys"
 msgstr "Klaviðai"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
-#: gtk/gtkinputdialog.c:345
+#: gtk/gtkinputdialog.c:329
 msgid "Save"
 msgstr "Saugoti"
 
-#: gtk/gtkinputdialog.c:500
+#: gtk/gtkinputdialog.c:471
 msgid "X"
 msgstr "X"
 
-#: gtk/gtkinputdialog.c:501
+#: gtk/gtkinputdialog.c:472
 msgid "Y"
 msgstr "Y"
 
-#: gtk/gtkinputdialog.c:502
+#: gtk/gtkinputdialog.c:473
 msgid "Pressure"
 msgstr "Slëgis"
 
-#: gtk/gtkinputdialog.c:503
+#: gtk/gtkinputdialog.c:474
 msgid "X Tilt"
 msgstr "X pakrypimas"
 
-#: gtk/gtkinputdialog.c:504
+#: gtk/gtkinputdialog.c:475
 msgid "Y Tilt"
 msgstr "Y pakrypimas"
 
-#: gtk/gtkinputdialog.c:544
+#: gtk/gtkinputdialog.c:476
+msgid "Wheel"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:516
 msgid "none"
 msgstr "nieko"
 
-#: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
+#: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
 msgstr "(uþdraustas)"
 
+#: gtk/gtkinputdialog.c:579
+msgid "(unknown)"
+msgstr "(neþinomas)"
+
 #. and clear button
-#: gtk/gtkinputdialog.c:692
+#: gtk/gtkinputdialog.c:664
 msgid "clear"
 msgstr "iðvalyti"
 
@@ -483,12 +259,12 @@ msgstr "iðvalyti"
 msgid "Page %u"
 msgstr "%u puslapis"
 
-#: gtk/gtkrc.c:1785
+#: gtk/gtkrc.c:1824
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Negaliu rasti paveikslëlio bylos kelyje: ¥%s´ eilutë %d"
 
-#: gtk/gtkrc.c:1788
+#: gtk/gtkrc.c:1827
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Negaliu rasti paveikslëlio bylos kelyje: ¥%s´"
@@ -501,3 +277,180 @@ msgstr "Negaliu rasti keliamojo modulio kelyje: ¥%s´,"
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "-Nëra pagalbos-"
+
+#~ msgid "Help"
+#~ msgstr "Pagalba"
+
+#~ msgid "Foundry:"
+#~ msgstr "Liejykla:"
+
+#~ msgid "Weight:"
+#~ msgstr "Svoris:"
+
+#~ msgid "Slant:"
+#~ msgstr "Palinkimas:"
+
+#~ msgid "Set Width:"
+#~ msgstr "Nustatyti plotá:"
+
+#~ msgid "Pixel Size:"
+#~ msgstr "Taðkelio dydis:"
+
+#~ msgid "Point Size:"
+#~ msgstr "Punkto dydis:"
+
+#~ msgid "Resolution X:"
+#~ msgstr "Raiðka X:"
+
+#~ msgid "Resolution Y:"
+#~ msgstr "Raiðka Y:"
+
+#~ msgid "Spacing:"
+#~ msgstr "Tankis:"
+
+#~ msgid "Average Width:"
+#~ msgstr "Vidutinis plotis:"
+
+#~ msgid "Charset:"
+#~ msgstr "Simboliø lentelë:"
+
+#~ msgid "Font Property"
+#~ msgstr "Ðrifto savybë"
+
+#~ msgid "Requested Value"
+#~ msgstr "Praðyta reikðmë"
+
+#~ msgid "Actual Value"
+#~ msgstr "Tikroji reikðmë"
+
+#~ msgid "Font"
+#~ msgstr "Ðriftas"
+
+#~ msgid "Font:"
+#~ msgstr "Ðriftas:"
+
+#~ msgid "Font Style:"
+#~ msgstr "Ðrifto stilius:"
+
+#~ msgid "Reset Filter"
+#~ msgstr "Nuimti filtrà"
+
+#~ msgid "Metric:"
+#~ msgstr "Matuojama:"
+
+#~ msgid "Points"
+#~ msgstr "Punktais"
+
+#~ msgid "Pixels"
+#~ msgstr "Taðkeliais"
+
+#~ msgid "Font Information"
+#~ msgstr "Ðrifto informacija"
+
+#~ msgid "Requested Font Name:"
+#~ msgstr "Praðytas ðrifto vardas:"
+
+#~ msgid "Actual Font Name:"
+#~ msgstr "Tikrasis ðrifto vardas:"
+
+#~ msgid "%i fonts available with a total of %i styles."
+#~ msgstr "Turime %i ðriftø su ið viso %i stiliø."
+
+#~ msgid "Filter"
+#~ msgstr "Filtras"
+
+#~ msgid "Font Types:"
+#~ msgstr "Ðriftø tipai:"
+
+#~ msgid "Bitmap"
+#~ msgstr "Taðkinis"
+
+#~ msgid "Scalable"
+#~ msgstr "Keièiamo dydþio"
+
+#~ msgid "Scaled Bitmap"
+#~ msgstr "Keièiamas taðkinis"
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "(nil)"
+#~ msgstr "(nieko)"
+
+#~ msgid "regular"
+#~ msgstr "paprastas"
+
+#~ msgid "italic"
+#~ msgstr "kursyvinis"
+
+#~ msgid "oblique"
+#~ msgstr "pakrypæs"
+
+#~ msgid "reverse italic"
+#~ msgstr "atbulai kursyvinis"
+
+#~ msgid "reverse oblique"
+#~ msgstr "atbulai pasviræs"
+
+#~ msgid "other"
+#~ msgstr "kitoks"
+
+#~ msgid "[M]"
+#~ msgstr "[M]"
+
+#~ msgid "[C]"
+#~ msgstr "[C]"
+
+#~ msgid "The selected font is not available."
+#~ msgstr "Praðomas ðriftas nepasiekiamas."
+
+#~ msgid "The selected font is not a valid font."
+#~ msgstr "Pasirinktas ðriftas nëra sveikas ðriftas."
+
+#~ msgid "This is a 2-byte font and may not be displayed correctly."
+#~ msgstr "Tai yra 2 baitø ðriftas ir negali bûti teisingai parodytas."
+
+#~ msgid "roman"
+#~ msgstr "romëniðkas"
+
+#~ msgid "proportional"
+#~ msgstr "ávairiaplotis"
+
+#~ msgid "monospaced"
+#~ msgstr "lygiaplotis"
+
+#~ msgid "char cell"
+#~ msgstr "þenklo dydþio"
+
+#~ msgid "Font: (Filter Applied)"
+#~ msgstr "Ðriftas: (iðfiltruotas)"
+
+#~ msgid "heavy"
+#~ msgstr "sunkus"
+
+#~ msgid "extrabold"
+#~ msgstr "ypaè storas"
+
+#~ msgid "bold"
+#~ msgstr "storas"
+
+#~ msgid "demibold"
+#~ msgstr "pusiau storas"
+
+#~ msgid "medium"
+#~ msgstr "vidutinis"
+
+#~ msgid "normal"
+#~ msgstr "paprastas"
+
+#~ msgid "light"
+#~ msgstr "lengvas"
+
+#~ msgid "extralight"
+#~ msgstr "ypaè lengvas"
+
+#~ msgid "thin"
+#~ msgstr "plonas"
+
+#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
+#~ msgstr "MAX_FONTS virðytas. Kai kuriø ðriftø gali trûkti."

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 1999-08-30 19:01+0200\n"
+"POT-Creation-Date: 2000-07-03 17:11-0400\n"
 "PO-Revision-Date: 1999-09-30 21:51 EST\n"
 "Last-Translator: Yuri Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -13,75 +13,82 @@ msgstr ""
 "Content-Type: text/plain; charset=koi8-u\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtk/gtkcolorsel.c:213
+#: gtk/gtkcolorsel.c:1415
 msgid "Hue:"
 msgstr "В╕дт╕нок:"
 
-#: gtk/gtkcolorsel.c:214
+#: gtk/gtkcolorsel.c:1416
 msgid "Saturation:"
 msgstr "Насичен╕сть:"
 
-#: gtk/gtkcolorsel.c:215
+#: gtk/gtkcolorsel.c:1417
 msgid "Value:"
 msgstr "Значення:"
 
-#: gtk/gtkcolorsel.c:216
+#: gtk/gtkcolorsel.c:1418
 msgid "Red:"
 msgstr "Червоний:"
 
-#: gtk/gtkcolorsel.c:217
+#: gtk/gtkcolorsel.c:1419
 msgid "Green:"
 msgstr "Зелений:"
 
-#: gtk/gtkcolorsel.c:218
+#: gtk/gtkcolorsel.c:1420
 msgid "Blue:"
 msgstr "Син╕й:"
 
-#: gtk/gtkcolorsel.c:219
+#: gtk/gtkcolorsel.c:1423
 msgid "Opacity:"
 msgstr "Щ╕льн╕сть:"
 
-#. The OK button
-#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3722
-#: gtk/gtkgamma.c:416
-msgid "OK"
-msgstr "Гаразд"
+#: gtk/gtkcolorsel.c:1438
+#, fuzzy
+msgid "Hex Value:"
+msgstr "Значення:"
 
-#. The Cancel button
-#: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:956
-#: gtk/gtkfilesel.c:1060 gtk/gtkfilesel.c:1175 gtk/gtkfontsel.c:3735
-#: gtk/gtkgamma.c:424
-msgid "Cancel"
-msgstr "В╕дм╕на"
+#: gtk/gtkcolorsel.c:1459
+msgid "Custom Palette"
+msgstr ""
 
-#: gtk/gtkcolorsel.c:1679
-msgid "Help"
-msgstr "Дов╕дка"
+#: gtk/gtkcolorsel.c:1464
+msgid "Set Color"
+msgstr ""
 
 #. The directories clist
-#: gtk/gtkfilesel.c:520
+#: gtk/gtkfilesel.c:514
 msgid "Directories"
 msgstr "Каталоги"
 
 #. The files clist
-#: gtk/gtkfilesel.c:539
+#: gtk/gtkfilesel.c:534
 msgid "Files"
 msgstr "Файли"
 
-#: gtk/gtkfilesel.c:609 gtk/gtkfilesel.c:1639
+#. The OK button
+#: gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952 gtk/gtkgamma.c:415
+msgid "OK"
+msgstr "Гаразд"
+
+#. The Cancel button
+#: gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963 gtk/gtkfilesel.c:1067
+#: gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965 gtk/gtkgamma.c:423
+msgid "Cancel"
+msgstr "В╕дм╕на"
+
+#: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Неможливо зчитати каталог: %s"
 
-#: gtk/gtkfilesel.c:641
+#: gtk/gtkfilesel.c:637
 msgid "Create Dir"
 msgstr "Створити каталог"
 
-#: gtk/gtkfilesel.c:652 gtk/gtkfilesel.c:1029
+#: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
 msgid "Delete File"
 msgstr "Видалити файл"
 
-#: gtk/gtkfilesel.c:663 gtk/gtkfilesel.c:1133
+#: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
 msgid "Rename File"
 msgstr "Пере╕менувати файл"
 
@@ -90,404 +97,173 @@ msgstr "Пере╕менувати файл"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:827
+#: gtk/gtkfilesel.c:828
 msgid "Error"
 msgstr "Помилка"
 
 #. close button
-#: gtk/gtkfilesel.c:845 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
 msgid "Close"
 msgstr "Закрити"
 
-#: gtk/gtkfilesel.c:920
+#: gtk/gtkfilesel.c:927
 msgid "Create Directory"
 msgstr "Створити каталог"
 
-#: gtk/gtkfilesel.c:934
+#: gtk/gtkfilesel.c:941
 msgid "Directory name:"
 msgstr "Назва каталога:"
 
 #. buttons
-#: gtk/gtkfilesel.c:947
+#: gtk/gtkfilesel.c:954
 msgid "Create"
 msgstr "Створити"
 
 #. buttons
-#: gtk/gtkfilesel.c:1051
+#: gtk/gtkfilesel.c:1058
 msgid "Delete"
 msgstr "Видалити"
 
 #. buttons
-#: gtk/gtkfilesel.c:1166
+#: gtk/gtkfilesel.c:1173
 msgid "Rename"
 msgstr "Пере╕менувати"
 
-#: gtk/gtkfilesel.c:1618
+#: gtk/gtkfilesel.c:1600
 msgid "Selection: "
 msgstr "Виб╕р: "
 
-#: gtk/gtkfontsel.c:216
-msgid "Foundry:"
-msgstr "Колекц╕я:"
-
-#: gtk/gtkfontsel.c:217
+#: gtk/gtkfontsel.c:189
 msgid "Family:"
 msgstr "Родина:"
 
-#: gtk/gtkfontsel.c:218
-msgid "Weight:"
-msgstr "Товщина:"
-
-#: gtk/gtkfontsel.c:219
-msgid "Slant:"
-msgstr "Нахил:"
-
-#: gtk/gtkfontsel.c:220
-msgid "Set Width:"
-msgstr "Ширина:"
-
-#: gtk/gtkfontsel.c:221
-msgid "Add Style:"
+#: gtk/gtkfontsel.c:194
+#, fuzzy
+msgid "Style:"
 msgstr "Додатковий стиль:"
 
-#: gtk/gtkfontsel.c:222
-msgid "Pixel Size:"
-msgstr "Розм╕р у точках:"
-
-#: gtk/gtkfontsel.c:223
-msgid "Point Size:"
-msgstr "Розм╕р у пунктах:"
-
-#: gtk/gtkfontsel.c:224
-msgid "Resolution X:"
-msgstr "Розд╕льна здатн╕сть X:"
-
-#: gtk/gtkfontsel.c:225
-msgid "Resolution Y:"
-msgstr "Розд╕льна здатн╕сть Y:"
-
-#: gtk/gtkfontsel.c:226
-msgid "Spacing:"
-msgstr "Пропорц╕йн╕сть:"
-
-#: gtk/gtkfontsel.c:227
-msgid "Average Width:"
-msgstr "Середня ширина:"
-
-#: gtk/gtkfontsel.c:228
-msgid "Charset:"
-msgstr "Наб╕р символ╕в:"
-
-#. Number of internationalized titles here must match number
-#. of NULL initializers above
-#: gtk/gtkfontsel.c:472
-msgid "Font Property"
-msgstr "Властивост╕ шрифту"
-
-#: gtk/gtkfontsel.c:473
-msgid "Requested Value"
-msgstr "Значення, що вимагалося"
-
-#: gtk/gtkfontsel.c:474
-msgid "Actual Value"
-msgstr "Д╕йсне значення"
-
-#: gtk/gtkfontsel.c:507
-msgid "Font"
-msgstr "Шрифт"
-
-#: gtk/gtkfontsel.c:517 gtk/gtkfontsel.c:2202 gtk/gtkfontsel.c:2432
-msgid "Font:"
-msgstr "Шрифт:"
-
-#: gtk/gtkfontsel.c:522
-msgid "Font Style:"
-msgstr "Стиль шрифту:"
-
-#: gtk/gtkfontsel.c:527
+#: gtk/gtkfontsel.c:199
 msgid "Size:"
 msgstr "Розм╕р:"
 
-#: gtk/gtkfontsel.c:659 gtk/gtkfontsel.c:881
-msgid "Reset Filter"
-msgstr "Перевстановити ф╕льтр"
-
-#: gtk/gtkfontsel.c:673
-msgid "Metric:"
-msgstr "Метрика:"
-
-#: gtk/gtkfontsel.c:677
-msgid "Points"
-msgstr "Пункти"
-
-#: gtk/gtkfontsel.c:684
-msgid "Pixels"
-msgstr "Точки"
-
 #. create the text entry widget
-#: gtk/gtkfontsel.c:700
+#: gtk/gtkfontsel.c:309
 msgid "Preview:"
 msgstr "Перегляд:"
 
-#: gtk/gtkfontsel.c:729
-msgid "Font Information"
-msgstr "╤нформац╕я про шрифт"
-
-#: gtk/gtkfontsel.c:762
-msgid "Requested Font Name:"
-msgstr "Шрифт, що вимагався:"
-
-#: gtk/gtkfontsel.c:773
-msgid "Actual Font Name:"
-msgstr "Д╕йсна назва шрифту:"
-
-#: gtk/gtkfontsel.c:784
-#, c-format
-msgid "%i fonts available with a total of %i styles."
-msgstr "╓ %i шрифт╕в у %i стилях."
-
-#: gtk/gtkfontsel.c:799
-msgid "Filter"
-msgstr "Ф╕льтр"
-
-#: gtk/gtkfontsel.c:812
-msgid "Font Types:"
-msgstr "Типи шрифт╕в:"
-
-#: gtk/gtkfontsel.c:820
-msgid "Bitmap"
-msgstr "Растров╕"
-
-#: gtk/gtkfontsel.c:826
-msgid "Scalable"
-msgstr "Масштабован╕"
-
-#: gtk/gtkfontsel.c:832
-msgid "Scaled Bitmap"
-msgstr "Масштабован╕ растри"
-
-#: gtk/gtkfontsel.c:903
-msgid "*"
-msgstr "*"
-
-#. Convert '(nil)' weights to 'regular', since it looks nicer.
-#: gtk/gtkfontsel.c:1228
-msgid "(nil)"
-msgstr "(н╕чого)"
-
-#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2700
-msgid "regular"
-msgstr "звичайний"
-
-#: gtk/gtkfontsel.c:1233 gtk/gtkfontsel.c:1994
-msgid "italic"
-msgstr "курсивний"
-
-#: gtk/gtkfontsel.c:1234 gtk/gtkfontsel.c:1995
-msgid "oblique"
-msgstr "косий"
-
-#: gtk/gtkfontsel.c:1235 gtk/gtkfontsel.c:1996
-msgid "reverse italic"
-msgstr "зворотн╕й курсивний"
-
-#: gtk/gtkfontsel.c:1236 gtk/gtkfontsel.c:1997
-msgid "reverse oblique"
-msgstr "зворотн╕й косий"
-
-#: gtk/gtkfontsel.c:1237 gtk/gtkfontsel.c:1998
-msgid "other"
-msgstr "╕нш╕"
-
-#: gtk/gtkfontsel.c:1244
-msgid "[M]"
-msgstr "[M]"
-
-#: gtk/gtkfontsel.c:1245
-msgid "[C]"
-msgstr "[C]"
-
-#: gtk/gtkfontsel.c:1793
-msgid "The selected font is not available."
-msgstr "Вибраний шрифт - недоступний."
-
-#: gtk/gtkfontsel.c:1799
-msgid "The selected font is not a valid font."
-msgstr "Вибраний шрифт - нев╕рний."
-
-#: gtk/gtkfontsel.c:1860
-msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "Це - двобайтний шрифт, в╕н може бути показаний не коректно."
-
-#: gtk/gtkfontsel.c:1982 gtk/gtkinputdialog.c:607
-msgid "(unknown)"
-msgstr "(нев╕домий)"
-
-#: gtk/gtkfontsel.c:1993
-msgid "roman"
-msgstr "прямий"
-
-#: gtk/gtkfontsel.c:2005
-msgid "proportional"
-msgstr "пропорц╕йний"
-
-#: gtk/gtkfontsel.c:2006
-msgid "monospaced"
-msgstr "моноширний"
-
-#: gtk/gtkfontsel.c:2007
-msgid "char cell"
-msgstr "матричний"
-
-#: gtk/gtkfontsel.c:2207
-msgid "Font: (Filter Applied)"
-msgstr "Шрифт: (Ф╕льтр застосовано)"
-
-#: gtk/gtkfontsel.c:2680
-msgid "heavy"
-msgstr "важкий"
-
-#: gtk/gtkfontsel.c:2682
-msgid "extrabold"
-msgstr "дуже ч╕ткий"
-
-#: gtk/gtkfontsel.c:2684
-msgid "bold"
-msgstr "ч╕ткий"
-
-#: gtk/gtkfontsel.c:2687
-msgid "demibold"
-msgstr "нап╕вч╕ткий"
-
-#: gtk/gtkfontsel.c:2690
-msgid "medium"
-msgstr "середн╕й"
-
-#: gtk/gtkfontsel.c:2692
-msgid "normal"
-msgstr "звичайний"
-
-#: gtk/gtkfontsel.c:2694
-msgid "light"
-msgstr "легкий"
-
-#: gtk/gtkfontsel.c:2696
-msgid "extralight"
-msgstr "дуже легкий"
-
-#: gtk/gtkfontsel.c:2698
-msgid "thin"
-msgstr "тонкий"
-
-#: gtk/gtkfontsel.c:2875
-msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "MAX_FONTS перевищено. Деяк╕ шрифти можуть бути в╕дсутн╕."
-
-#: gtk/gtkfontsel.c:3729
+#: gtk/gtkfontsel.c:959
 msgid "Apply"
 msgstr "Застосувати"
 
-#: gtk/gtkfontsel.c:3751
+#: gtk/gtkfontsel.c:981
 msgid "Font Selection"
 msgstr "Виб╕р шрифту"
 
-#: gtk/gtkgamma.c:396
+#: gtk/gtkgamma.c:395
 msgid "Gamma"
 msgstr "Гама"
 
-#: gtk/gtkgamma.c:403
+#: gtk/gtkgamma.c:402
 msgid "Gamma value"
 msgstr "Гама величина"
 
 #. shell and main vbox
-#: gtk/gtkinputdialog.c:200
+#: gtk/gtkinputdialog.c:185
 msgid "Input"
 msgstr "Вв╕д"
 
-#: gtk/gtkinputdialog.c:208
+#: gtk/gtkinputdialog.c:193
 msgid "No input devices"
 msgstr "Нема╓ пристро╖в вводу"
 
-#: gtk/gtkinputdialog.c:237
+#: gtk/gtkinputdialog.c:222
 msgid "Device:"
 msgstr "Пристр╕й:"
 
-#: gtk/gtkinputdialog.c:253
+#: gtk/gtkinputdialog.c:238
 msgid "Disabled"
 msgstr "Вимкнений"
 
-#: gtk/gtkinputdialog.c:261
+#: gtk/gtkinputdialog.c:246
 msgid "Screen"
 msgstr "Екран"
 
-#: gtk/gtkinputdialog.c:269
+#: gtk/gtkinputdialog.c:254
 msgid "Window"
 msgstr "В╕кно"
 
-#: gtk/gtkinputdialog.c:277
+#: gtk/gtkinputdialog.c:262
 msgid "Mode: "
 msgstr "Режим: "
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:307
+#: gtk/gtkinputdialog.c:292
 msgid "Axes"
 msgstr "Ос╕"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:323
+#: gtk/gtkinputdialog.c:308
 msgid "Keys"
 msgstr "Клав╕ши"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
-#: gtk/gtkinputdialog.c:345
+#: gtk/gtkinputdialog.c:329
 msgid "Save"
 msgstr "Зберегти"
 
-#: gtk/gtkinputdialog.c:500
+#: gtk/gtkinputdialog.c:471
 msgid "X"
 msgstr "X"
 
-#: gtk/gtkinputdialog.c:501
+#: gtk/gtkinputdialog.c:472
 msgid "Y"
 msgstr "Y"
 
-#: gtk/gtkinputdialog.c:502
+#: gtk/gtkinputdialog.c:473
 msgid "Pressure"
 msgstr "Натиск"
 
-#: gtk/gtkinputdialog.c:503
+#: gtk/gtkinputdialog.c:474
 msgid "X Tilt"
 msgstr "Нахил X"
 
-#: gtk/gtkinputdialog.c:504
+#: gtk/gtkinputdialog.c:475
 msgid "Y Tilt"
 msgstr "Нахил Y"
 
-#: gtk/gtkinputdialog.c:544
+#: gtk/gtkinputdialog.c:476
+msgid "Wheel"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:516
 msgid "none"
 msgstr "нема╓"
 
-#: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
+#: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
 msgstr "(вимкнений)"
 
+#: gtk/gtkinputdialog.c:579
+msgid "(unknown)"
+msgstr "(нев╕домий)"
+
 #. and clear button
-#: gtk/gtkinputdialog.c:692
+#: gtk/gtkinputdialog.c:664
 msgid "clear"
 msgstr "очистити"
 
-#: gtk/gtknotebook.c:2017 gtk/gtknotebook.c:4092
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
 msgstr "Стор╕нка %u"
 
-#: gtk/gtkrc.c:1611
+#: gtk/gtkrc.c:1824
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Файл ╕з зображенням не знайдено в pixmap_path: \"%s\", рядок %d"
 
-#: gtk/gtkrc.c:1614
+#: gtk/gtkrc.c:1827
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Файл ╕з зображенням не знайдено в pixmap_path: \"%s\""
@@ -500,3 +276,180 @@ msgstr "Модуль не зайдено в module_path: \"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Нема╓ п╕дказки ---"
+
+#~ msgid "Help"
+#~ msgstr "Дов╕дка"
+
+#~ msgid "Foundry:"
+#~ msgstr "Колекц╕я:"
+
+#~ msgid "Weight:"
+#~ msgstr "Товщина:"
+
+#~ msgid "Slant:"
+#~ msgstr "Нахил:"
+
+#~ msgid "Set Width:"
+#~ msgstr "Ширина:"
+
+#~ msgid "Pixel Size:"
+#~ msgstr "Розм╕р у точках:"
+
+#~ msgid "Point Size:"
+#~ msgstr "Розм╕р у пунктах:"
+
+#~ msgid "Resolution X:"
+#~ msgstr "Розд╕льна здатн╕сть X:"
+
+#~ msgid "Resolution Y:"
+#~ msgstr "Розд╕льна здатн╕сть Y:"
+
+#~ msgid "Spacing:"
+#~ msgstr "Пропорц╕йн╕сть:"
+
+#~ msgid "Average Width:"
+#~ msgstr "Середня ширина:"
+
+#~ msgid "Charset:"
+#~ msgstr "Наб╕р символ╕в:"
+
+#~ msgid "Font Property"
+#~ msgstr "Властивост╕ шрифту"
+
+#~ msgid "Requested Value"
+#~ msgstr "Значення, що вимагалося"
+
+#~ msgid "Actual Value"
+#~ msgstr "Д╕йсне значення"
+
+#~ msgid "Font"
+#~ msgstr "Шрифт"
+
+#~ msgid "Font:"
+#~ msgstr "Шрифт:"
+
+#~ msgid "Font Style:"
+#~ msgstr "Стиль шрифту:"
+
+#~ msgid "Reset Filter"
+#~ msgstr "Перевстановити ф╕льтр"
+
+#~ msgid "Metric:"
+#~ msgstr "Метрика:"
+
+#~ msgid "Points"
+#~ msgstr "Пункти"
+
+#~ msgid "Pixels"
+#~ msgstr "Точки"
+
+#~ msgid "Font Information"
+#~ msgstr "╤нформац╕я про шрифт"
+
+#~ msgid "Requested Font Name:"
+#~ msgstr "Шрифт, що вимагався:"
+
+#~ msgid "Actual Font Name:"
+#~ msgstr "Д╕йсна назва шрифту:"
+
+#~ msgid "%i fonts available with a total of %i styles."
+#~ msgstr "╓ %i шрифт╕в у %i стилях."
+
+#~ msgid "Filter"
+#~ msgstr "Ф╕льтр"
+
+#~ msgid "Font Types:"
+#~ msgstr "Типи шрифт╕в:"
+
+#~ msgid "Bitmap"
+#~ msgstr "Растров╕"
+
+#~ msgid "Scalable"
+#~ msgstr "Масштабован╕"
+
+#~ msgid "Scaled Bitmap"
+#~ msgstr "Масштабован╕ растри"
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "(nil)"
+#~ msgstr "(н╕чого)"
+
+#~ msgid "regular"
+#~ msgstr "звичайний"
+
+#~ msgid "italic"
+#~ msgstr "курсивний"
+
+#~ msgid "oblique"
+#~ msgstr "косий"
+
+#~ msgid "reverse italic"
+#~ msgstr "зворотн╕й курсивний"
+
+#~ msgid "reverse oblique"
+#~ msgstr "зворотн╕й косий"
+
+#~ msgid "other"
+#~ msgstr "╕нш╕"
+
+#~ msgid "[M]"
+#~ msgstr "[M]"
+
+#~ msgid "[C]"
+#~ msgstr "[C]"
+
+#~ msgid "The selected font is not available."
+#~ msgstr "Вибраний шрифт - недоступний."
+
+#~ msgid "The selected font is not a valid font."
+#~ msgstr "Вибраний шрифт - нев╕рний."
+
+#~ msgid "This is a 2-byte font and may not be displayed correctly."
+#~ msgstr "Це - двобайтний шрифт, в╕н може бути показаний не коректно."
+
+#~ msgid "roman"
+#~ msgstr "прямий"
+
+#~ msgid "proportional"
+#~ msgstr "пропорц╕йний"
+
+#~ msgid "monospaced"
+#~ msgstr "моноширний"
+
+#~ msgid "char cell"
+#~ msgstr "матричний"
+
+#~ msgid "Font: (Filter Applied)"
+#~ msgstr "Шрифт: (Ф╕льтр застосовано)"
+
+#~ msgid "heavy"
+#~ msgstr "важкий"
+
+#~ msgid "extrabold"
+#~ msgstr "дуже ч╕ткий"
+
+#~ msgid "bold"
+#~ msgstr "ч╕ткий"
+
+#~ msgid "demibold"
+#~ msgstr "нап╕вч╕ткий"
+
+#~ msgid "medium"
+#~ msgstr "середн╕й"
+
+#~ msgid "normal"
+#~ msgstr "звичайний"
+
+#~ msgid "light"
+#~ msgstr "легкий"
+
+#~ msgid "extralight"
+#~ msgstr "дуже легкий"
+
+#~ msgid "thin"
+#~ msgstr "тонкий"
+
+#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
+#~ msgstr "MAX_FONTS перевищено. Деяк╕ шрифти можуть бути в╕дсутн╕."

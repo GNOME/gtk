@@ -1,14 +1,35 @@
 Prerequisites
 =============
 
-GTK+ requires the GLIB library, available at the same location as
-you got this package.
+GTK+ requires the following packages:
+
+ - The GLIB library, available at the same location as GTK+
+
+ - The Pango library, available from:
+
+      http://www.pango.org/download.shtml
+
+   Pango also requires the FriBidi library, available from:
+
+      http://imagic.weizmann.ac.il/~dov/freesw/FriBidi/
+
+ - The TIFF, PNG, and JPEG image loading libraries. You most
+   likely have these installed on your system already. If not
+   these libraries are available from:
+
+    http://www.libtiff.org/
+    ftp://swrinde.nde.swri.edu/pub/png/src/
+    ftp://ftp.uu.net/graphics/jpeg/
+
+   If these libraries are not available, the corresponding 
+   image loaders will simply not be built. However, this
+   may cause applications using GTK+ not to function properly.
 
 Simple install procedure
 ========================
 
-  % gzip -cd gtk+-1.3.0.tar.gz | tar xvf - # unpack the sources
-  % cd gtk+-1.3.0			   # change to the toplevel directory
+  % gzip -cd gtk+-1.3.1.tar.gz | tar xvf - # unpack the sources
+  % cd gtk+-1.3.1			   # change to the toplevel directory
   % ./configure				   # run the `configure' script
   % make				   # build GTK
   [ Become root if necessary ]
@@ -118,7 +139,7 @@ You can compile GTK+ against a copy of GLIB that you have not
 yet installed. To do this, give the --with-glib=DIR options
 to ./configure. For instance:
 
- ./configure --with-glib=../glib-1.3.0
+ ./configure --with-glib=../glib-1.3.1
 
 This, however, will not work if you built GLIB with different
 source and build directories.

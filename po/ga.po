@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 1999-08-30 19:01+0200\n"
+"POT-Creation-Date: 2000-07-03 17:11-0400\n"
 "PO-Revision-Date: 1999-08-23 21:28+0600\n"
 "Last-Translator: Sean V. Kelley <s_oceallaigh@yahoo.com>\n"
 "Language-Team: Gaeilge <ga@li.org>\n"
@@ -13,75 +13,82 @@ msgstr ""
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtk/gtkcolorsel.c:213
+#: gtk/gtkcolorsel.c:1415
 msgid "Hue:"
 msgstr "Imir:"
 
-#: gtk/gtkcolorsel.c:214
+#: gtk/gtkcolorsel.c:1416
 msgid "Saturation:"
 msgstr "Sáithiú:"
 
-#: gtk/gtkcolorsel.c:215
+#: gtk/gtkcolorsel.c:1417
 msgid "Value:"
 msgstr "Luach:"
 
-#: gtk/gtkcolorsel.c:216
+#: gtk/gtkcolorsel.c:1418
 msgid "Red:"
 msgstr "Dearg:"
 
-#: gtk/gtkcolorsel.c:217
+#: gtk/gtkcolorsel.c:1419
 msgid "Green:"
 msgstr "Glas:"
 
-#: gtk/gtkcolorsel.c:218
+#: gtk/gtkcolorsel.c:1420
 msgid "Blue:"
 msgstr "Gorm:"
 
-#: gtk/gtkcolorsel.c:219
+#: gtk/gtkcolorsel.c:1423
 msgid "Opacity:"
 msgstr "Teimhneacht:"
 
-#. The OK button
-#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3722
-#: gtk/gtkgamma.c:416
-msgid "OK"
-msgstr "Ceart go leor"
+#: gtk/gtkcolorsel.c:1438
+#, fuzzy
+msgid "Hex Value:"
+msgstr "Luach:"
 
-#. The Cancel button
-#: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:956
-#: gtk/gtkfilesel.c:1060 gtk/gtkfilesel.c:1175 gtk/gtkfontsel.c:3735
-#: gtk/gtkgamma.c:424
-msgid "Cancel"
-msgstr "Cealaigh"
+#: gtk/gtkcolorsel.c:1459
+msgid "Custom Palette"
+msgstr ""
 
-#: gtk/gtkcolorsel.c:1679
-msgid "Help"
-msgstr "Cuidigh"
+#: gtk/gtkcolorsel.c:1464
+msgid "Set Color"
+msgstr ""
 
 #. The directories clist
-#: gtk/gtkfilesel.c:520
+#: gtk/gtkfilesel.c:514
 msgid "Directories"
 msgstr "Eolairí"
 
 #. The files clist
-#: gtk/gtkfilesel.c:539
+#: gtk/gtkfilesel.c:534
 msgid "Files"
 msgstr "Comhaid"
 
-#: gtk/gtkfilesel.c:609 gtk/gtkfilesel.c:1639
+#. The OK button
+#: gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952 gtk/gtkgamma.c:415
+msgid "OK"
+msgstr "Ceart go leor"
+
+#. The Cancel button
+#: gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963 gtk/gtkfilesel.c:1067
+#: gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965 gtk/gtkgamma.c:423
+msgid "Cancel"
+msgstr "Cealaigh"
+
+#: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Eolaire doléite: %s"
 
-#: gtk/gtkfilesel.c:641
+#: gtk/gtkfilesel.c:637
 msgid "Create Dir"
 msgstr "Déan Eolaire"
 
-#: gtk/gtkfilesel.c:652 gtk/gtkfilesel.c:1029
+#: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
 msgid "Delete File"
 msgstr "Scrios Comhad"
 
-#: gtk/gtkfilesel.c:663 gtk/gtkfilesel.c:1133
+#: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
 msgid "Rename File"
 msgstr "Athainmnigh Comhad"
 
@@ -90,407 +97,174 @@ msgstr "Athainmnigh Comhad"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:827
+#: gtk/gtkfilesel.c:828
 msgid "Error"
 msgstr "Earráid"
 
 #. close button
-#: gtk/gtkfilesel.c:845 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
 msgid "Close"
 msgstr "Druid"
 
-#: gtk/gtkfilesel.c:920
+#: gtk/gtkfilesel.c:927
 msgid "Create Directory"
 msgstr "Déan Eolaire"
 
-#: gtk/gtkfilesel.c:934
+#: gtk/gtkfilesel.c:941
 msgid "Directory name:"
 msgstr "Ainm eolaire:"
 
 #. buttons
-#: gtk/gtkfilesel.c:947
+#: gtk/gtkfilesel.c:954
 msgid "Create"
 msgstr "Déan"
 
 #. buttons
-#: gtk/gtkfilesel.c:1051
+#: gtk/gtkfilesel.c:1058
 msgid "Delete"
 msgstr "Scrios"
 
 #. buttons
-#: gtk/gtkfilesel.c:1166
+#: gtk/gtkfilesel.c:1173
 msgid "Rename"
 msgstr "Athainmnigh"
 
-#: gtk/gtkfilesel.c:1618
+#: gtk/gtkfilesel.c:1600
 msgid "Selection: "
 msgstr "Rogha: "
 
-#: gtk/gtkfontsel.c:216
-msgid "Foundry:"
-msgstr "Teilgcheárta:"
-
-#: gtk/gtkfontsel.c:217
+#: gtk/gtkfontsel.c:189
 msgid "Family:"
 msgstr "Teaghlach:"
 
-#: gtk/gtkfontsel.c:218
-msgid "Weight:"
-msgstr "Meachán:"
-
-#: gtk/gtkfontsel.c:219
-msgid "Slant:"
-msgstr "Fiar:"
-
-#: gtk/gtkfontsel.c:220
-msgid "Set Width:"
-msgstr "Socraigh Leithead:"
-
-#: gtk/gtkfontsel.c:221
-msgid "Add Style:"
+#: gtk/gtkfontsel.c:194
+#, fuzzy
+msgid "Style:"
 msgstr "Cuir le Stíl:"
 
-#: gtk/gtkfontsel.c:222
-msgid "Pixel Size:"
-msgstr "Méid Pixel:"
-
-#: gtk/gtkfontsel.c:223
-msgid "Point Size:"
-msgstr "Méid Pointe:"
-
-#: gtk/gtkfontsel.c:224
-msgid "Resolution X:"
-msgstr "Réiteach X:"
-
-#: gtk/gtkfontsel.c:225
-msgid "Resolution Y:"
-msgstr "Réiteach Y:"
-
-#: gtk/gtkfontsel.c:226
-msgid "Spacing:"
-msgstr "Spásáil:"
-
-#: gtk/gtkfontsel.c:227
-msgid "Average Width:"
-msgstr "Meán Leitheaid:"
-
-#: gtk/gtkfontsel.c:228
-msgid "Charset:"
-msgstr "Tacar Carachtar:"
-
-#. Number of internationalized titles here must match number
-#. of NULL initializers above
-#: gtk/gtkfontsel.c:472
-msgid "Font Property"
-msgstr "Airí Clófhoirne"
-
-#: gtk/gtkfontsel.c:473
-msgid "Requested Value"
-msgstr "Luach Éilimh"
-
-#: gtk/gtkfontsel.c:474
-msgid "Actual Value"
-msgstr "Fíorluach"
-
-#: gtk/gtkfontsel.c:507
-msgid "Font"
-msgstr "Clófhoireann"
-
-#: gtk/gtkfontsel.c:517 gtk/gtkfontsel.c:2202 gtk/gtkfontsel.c:2432
-msgid "Font:"
-msgstr "Clófhoireann:"
-
-#: gtk/gtkfontsel.c:522
-msgid "Font Style:"
-msgstr "Stíl Clófhoirne:"
-
-#: gtk/gtkfontsel.c:527
+#: gtk/gtkfontsel.c:199
 msgid "Size:"
 msgstr "Méid:"
 
-#: gtk/gtkfontsel.c:659 gtk/gtkfontsel.c:881
-msgid "Reset Filter"
-msgstr "Athspreag Scagaire"
-
-#: gtk/gtkfontsel.c:673
-msgid "Metric:"
-msgstr "Méadrach:"
-
-#: gtk/gtkfontsel.c:677
-msgid "Points"
-msgstr "Pointí"
-
-#: gtk/gtkfontsel.c:684
-msgid "Pixels"
-msgstr "Pixeleanna"
-
 #. create the text entry widget
-#: gtk/gtkfontsel.c:700
+#: gtk/gtkfontsel.c:309
 msgid "Preview:"
 msgstr "Réamhthaispeántas:"
 
-#: gtk/gtkfontsel.c:729
-msgid "Font Information"
-msgstr "Eolas Clófhoirne"
-
-#: gtk/gtkfontsel.c:762
-msgid "Requested Font Name:"
-msgstr "Ainm Clófhoirne Éilimh:"
-
-#: gtk/gtkfontsel.c:773
-msgid "Actual Font Name:"
-msgstr "Fíorainm Clófhoirne:"
-
-#: gtk/gtkfontsel.c:784
-#, c-format
-msgid "%i fonts available with a total of %i styles."
-msgstr "%i clófhoireann ar fáil a bhfuil %i stíl acu."
-
-#: gtk/gtkfontsel.c:799
-msgid "Filter"
-msgstr "Scagaire"
-
-#: gtk/gtkfontsel.c:812
-msgid "Font Types:"
-msgstr "Saghas Clófhoirne:"
-
-#: gtk/gtkfontsel.c:820
-msgid "Bitmap"
-msgstr "Mapa Giotáin"
-
-#: gtk/gtkfontsel.c:826
-msgid "Scalable"
-msgstr "Inathraithe"
-
-#: gtk/gtkfontsel.c:832
-msgid "Scaled Bitmap"
-msgstr "Mapa Giotáin Buntomhaiste"
-
-#: gtk/gtkfontsel.c:903
-msgid "*"
-msgstr "*"
-
-#. Convert '(nil)' weights to 'regular', since it looks nicer.
-#: gtk/gtkfontsel.c:1228
-msgid "(nil)"
-msgstr "(náid)"
-
-#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2700
-msgid "regular"
-msgstr "mar is gnách"
-
-#: gtk/gtkfontsel.c:1233 gtk/gtkfontsel.c:1994
-msgid "italic"
-msgstr "cló iodálach"
-
-#: gtk/gtkfontsel.c:1234 gtk/gtkfontsel.c:1995
-msgid "oblique"
-msgstr "fiar"
-
-#: gtk/gtkfontsel.c:1235 gtk/gtkfontsel.c:1996
-msgid "reverse italic"
-msgstr "iodálach cúlaithe"
-
-#: gtk/gtkfontsel.c:1236 gtk/gtkfontsel.c:1997
-msgid "reverse oblique"
-msgstr "fiar cúlaithe"
-
-#: gtk/gtkfontsel.c:1237 gtk/gtkfontsel.c:1998
-msgid "other"
-msgstr "ceann eile"
-
-#: gtk/gtkfontsel.c:1244
-msgid "[M]"
-msgstr "[M]"
-
-#: gtk/gtkfontsel.c:1245
-msgid "[C]"
-msgstr "[C]"
-
-#: gtk/gtkfontsel.c:1793
-msgid "The selected font is not available."
-msgstr "Níl an chlófhoireann roghnaithe ar fáil."
-
-#: gtk/gtkfontsel.c:1799
-msgid "The selected font is not a valid font."
-msgstr "Ní clófhoireann bailí í an chlófhoireann roghnaithe."
-
-#: gtk/gtkfontsel.c:1860
-msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr ""
-"Is clófhoireann 2-beart í agus is féidir nach dtaispeánfaidh sí i gceart."
-
-#: gtk/gtkfontsel.c:1982 gtk/gtkinputdialog.c:607
-msgid "(unknown)"
-msgstr "(gan fhios)"
-
-#: gtk/gtkfontsel.c:1993
-msgid "roman"
-msgstr "cló rómhánach"
-
-#: gtk/gtkfontsel.c:2005
-msgid "proportional"
-msgstr "cló il-leathan"
-
-#: gtk/gtkfontsel.c:2006
-msgid "monospaced"
-msgstr "cló comh-leathan"
-
-#: gtk/gtkfontsel.c:2007
-msgid "char cell"
-msgstr "cill carachtair"
-
-#: gtk/gtkfontsel.c:2207
-msgid "Font: (Filter Applied)"
-msgstr "Clófhoireann: (Scagaire Feidhmeach)"
-
-#: gtk/gtkfontsel.c:2680
-msgid "heavy"
-msgstr "cló trom"
-
-#: gtk/gtkfontsel.c:2682
-msgid "extrabold"
-msgstr "cló sárthrom"
-
-#: gtk/gtkfontsel.c:2684
-msgid "bold"
-msgstr "cló trom"
-
-#: gtk/gtkfontsel.c:2687
-msgid "demibold"
-msgstr "cló leaththrom"
-
-#: gtk/gtkfontsel.c:2690
-msgid "medium"
-msgstr "cló meán"
-
-#: gtk/gtkfontsel.c:2692
-msgid "normal"
-msgstr "cló gnách"
-
-#: gtk/gtkfontsel.c:2694
-msgid "light"
-msgstr "cló éadrom"
-
-#: gtk/gtkfontsel.c:2696
-msgid "extralight"
-msgstr "cló sáréadrom"
-
-#: gtk/gtkfontsel.c:2698
-msgid "thin"
-msgstr "cló caol"
-
-#: gtk/gtkfontsel.c:2875
-msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr ""
-"Chuathas thar MAX_FONTS.  Seans go bhfuil roinnt clófhoirne ar iarraidh."
-
-#: gtk/gtkfontsel.c:3729
+#: gtk/gtkfontsel.c:959
 msgid "Apply"
 msgstr "Cuir i bhfeidhm"
 
-#: gtk/gtkfontsel.c:3751
+#: gtk/gtkfontsel.c:981
 msgid "Font Selection"
 msgstr "Rogha Clófhoirne"
 
-#: gtk/gtkgamma.c:396
+#: gtk/gtkgamma.c:395
 msgid "Gamma"
 msgstr "Gamma"
 
-#: gtk/gtkgamma.c:403
+#: gtk/gtkgamma.c:402
 msgid "Gamma value"
 msgstr "Luach Gamma"
 
 #. shell and main vbox
-#: gtk/gtkinputdialog.c:200
+#: gtk/gtkinputdialog.c:185
 msgid "Input"
 msgstr "Ionchur"
 
-#: gtk/gtkinputdialog.c:208
+#: gtk/gtkinputdialog.c:193
 msgid "No input devices"
 msgstr "Níl aon ghaireas ionchuir ann"
 
-#: gtk/gtkinputdialog.c:237
+#: gtk/gtkinputdialog.c:222
 msgid "Device:"
 msgstr "Gaireas:"
 
-#: gtk/gtkinputdialog.c:253
+#: gtk/gtkinputdialog.c:238
 msgid "Disabled"
 msgstr "Míchumasach"
 
-#: gtk/gtkinputdialog.c:261
+#: gtk/gtkinputdialog.c:246
 msgid "Screen"
 msgstr "Scáileán"
 
-#: gtk/gtkinputdialog.c:269
+#: gtk/gtkinputdialog.c:254
 msgid "Window"
 msgstr "Fuinneog"
 
-#: gtk/gtkinputdialog.c:277
+#: gtk/gtkinputdialog.c:262
 msgid "Mode: "
 msgstr "Modh: "
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:307
+#: gtk/gtkinputdialog.c:292
 msgid "Axes"
 msgstr "Ais"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:323
+#: gtk/gtkinputdialog.c:308
 msgid "Keys"
 msgstr "Eochracha"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
-#: gtk/gtkinputdialog.c:345
+#: gtk/gtkinputdialog.c:329
 msgid "Save"
 msgstr "Sábháil"
 
-#: gtk/gtkinputdialog.c:500
+#: gtk/gtkinputdialog.c:471
 msgid "X"
 msgstr "X"
 
-#: gtk/gtkinputdialog.c:501
+#: gtk/gtkinputdialog.c:472
 msgid "Y"
 msgstr "Y"
 
-#: gtk/gtkinputdialog.c:502
+#: gtk/gtkinputdialog.c:473
 msgid "Pressure"
 msgstr "Brú"
 
-#: gtk/gtkinputdialog.c:503
+#: gtk/gtkinputdialog.c:474
 msgid "X Tilt"
 msgstr "Claonadh X"
 
-#: gtk/gtkinputdialog.c:504
+#: gtk/gtkinputdialog.c:475
 msgid "Y Tilt"
 msgstr "Claonadh Y"
 
-#: gtk/gtkinputdialog.c:544
+#: gtk/gtkinputdialog.c:476
+msgid "Wheel"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:516
 msgid "none"
 msgstr "ceann ar bith"
 
-#: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
+#: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
 msgstr "(míchumasach)"
 
+#: gtk/gtkinputdialog.c:579
+msgid "(unknown)"
+msgstr "(gan fhios)"
+
 #. and clear button
-#: gtk/gtkinputdialog.c:692
+#: gtk/gtkinputdialog.c:664
 msgid "clear"
 msgstr "bánaigh"
 
-#: gtk/gtknotebook.c:2017 gtk/gtknotebook.c:4092
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
 msgstr "Leathanach %u"
 
-#: gtk/gtkrc.c:1611
+#: gtk/gtkrc.c:1824
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
 "Ní rabhthas ábalta íomhá comhaid a aimsiú in pixmap_path: \"%s\" líne %d"
 
-#: gtk/gtkrc.c:1614
+#: gtk/gtkrc.c:1827
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Ní rabhthas ábalta íomhá comhaid a aimsiú in pixmap_path: \"%s\""
@@ -503,3 +277,182 @@ msgstr "Ní rabhthas ábalta modúl inlódáil a aimsiú in module_path: \"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Níl aon nod ann ---"
+
+#~ msgid "Help"
+#~ msgstr "Cuidigh"
+
+#~ msgid "Foundry:"
+#~ msgstr "Teilgcheárta:"
+
+#~ msgid "Weight:"
+#~ msgstr "Meachán:"
+
+#~ msgid "Slant:"
+#~ msgstr "Fiar:"
+
+#~ msgid "Set Width:"
+#~ msgstr "Socraigh Leithead:"
+
+#~ msgid "Pixel Size:"
+#~ msgstr "Méid Pixel:"
+
+#~ msgid "Point Size:"
+#~ msgstr "Méid Pointe:"
+
+#~ msgid "Resolution X:"
+#~ msgstr "Réiteach X:"
+
+#~ msgid "Resolution Y:"
+#~ msgstr "Réiteach Y:"
+
+#~ msgid "Spacing:"
+#~ msgstr "Spásáil:"
+
+#~ msgid "Average Width:"
+#~ msgstr "Meán Leitheaid:"
+
+#~ msgid "Charset:"
+#~ msgstr "Tacar Carachtar:"
+
+#~ msgid "Font Property"
+#~ msgstr "Airí Clófhoirne"
+
+#~ msgid "Requested Value"
+#~ msgstr "Luach Éilimh"
+
+#~ msgid "Actual Value"
+#~ msgstr "Fíorluach"
+
+#~ msgid "Font"
+#~ msgstr "Clófhoireann"
+
+#~ msgid "Font:"
+#~ msgstr "Clófhoireann:"
+
+#~ msgid "Font Style:"
+#~ msgstr "Stíl Clófhoirne:"
+
+#~ msgid "Reset Filter"
+#~ msgstr "Athspreag Scagaire"
+
+#~ msgid "Metric:"
+#~ msgstr "Méadrach:"
+
+#~ msgid "Points"
+#~ msgstr "Pointí"
+
+#~ msgid "Pixels"
+#~ msgstr "Pixeleanna"
+
+#~ msgid "Font Information"
+#~ msgstr "Eolas Clófhoirne"
+
+#~ msgid "Requested Font Name:"
+#~ msgstr "Ainm Clófhoirne Éilimh:"
+
+#~ msgid "Actual Font Name:"
+#~ msgstr "Fíorainm Clófhoirne:"
+
+#~ msgid "%i fonts available with a total of %i styles."
+#~ msgstr "%i clófhoireann ar fáil a bhfuil %i stíl acu."
+
+#~ msgid "Filter"
+#~ msgstr "Scagaire"
+
+#~ msgid "Font Types:"
+#~ msgstr "Saghas Clófhoirne:"
+
+#~ msgid "Bitmap"
+#~ msgstr "Mapa Giotáin"
+
+#~ msgid "Scalable"
+#~ msgstr "Inathraithe"
+
+#~ msgid "Scaled Bitmap"
+#~ msgstr "Mapa Giotáin Buntomhaiste"
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "(nil)"
+#~ msgstr "(náid)"
+
+#~ msgid "regular"
+#~ msgstr "mar is gnách"
+
+#~ msgid "italic"
+#~ msgstr "cló iodálach"
+
+#~ msgid "oblique"
+#~ msgstr "fiar"
+
+#~ msgid "reverse italic"
+#~ msgstr "iodálach cúlaithe"
+
+#~ msgid "reverse oblique"
+#~ msgstr "fiar cúlaithe"
+
+#~ msgid "other"
+#~ msgstr "ceann eile"
+
+#~ msgid "[M]"
+#~ msgstr "[M]"
+
+#~ msgid "[C]"
+#~ msgstr "[C]"
+
+#~ msgid "The selected font is not available."
+#~ msgstr "Níl an chlófhoireann roghnaithe ar fáil."
+
+#~ msgid "The selected font is not a valid font."
+#~ msgstr "Ní clófhoireann bailí í an chlófhoireann roghnaithe."
+
+#~ msgid "This is a 2-byte font and may not be displayed correctly."
+#~ msgstr ""
+#~ "Is clófhoireann 2-beart í agus is féidir nach dtaispeánfaidh sí i gceart."
+
+#~ msgid "roman"
+#~ msgstr "cló rómhánach"
+
+#~ msgid "proportional"
+#~ msgstr "cló il-leathan"
+
+#~ msgid "monospaced"
+#~ msgstr "cló comh-leathan"
+
+#~ msgid "char cell"
+#~ msgstr "cill carachtair"
+
+#~ msgid "Font: (Filter Applied)"
+#~ msgstr "Clófhoireann: (Scagaire Feidhmeach)"
+
+#~ msgid "heavy"
+#~ msgstr "cló trom"
+
+#~ msgid "extrabold"
+#~ msgstr "cló sárthrom"
+
+#~ msgid "bold"
+#~ msgstr "cló trom"
+
+#~ msgid "demibold"
+#~ msgstr "cló leaththrom"
+
+#~ msgid "medium"
+#~ msgstr "cló meán"
+
+#~ msgid "normal"
+#~ msgstr "cló gnách"
+
+#~ msgid "light"
+#~ msgstr "cló éadrom"
+
+#~ msgid "extralight"
+#~ msgstr "cló sáréadrom"
+
+#~ msgid "thin"
+#~ msgstr "cló caol"
+
+#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
+#~ msgstr ""
+#~ "Chuathas thar MAX_FONTS.  Seans go bhfuil roinnt clófhoirne ar iarraidh."
