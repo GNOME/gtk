@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "POT-Creation-Date: 2003-01-06 06:02+0100\n"
-"PO-Revision-Date: 2003-01-09 21:53+EDT\n"
+"PO-Revision-Date: 2003-01-14 11:02+EDT\n"
 "Last-Translator: Ge'ez Frontier Foundation <locales@geez.org>\n"
 "Language-Team: Amharic <locales@geez.org>\n"
 "MIME-Version: 1.0\n"
@@ -3861,7 +3861,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:490 gtk/gtktextview.c:626
 msgid "Tabs"
-msgstr "ምክፈቻዎች"
+msgstr "መክፈቻዎች"
 
 #: gtk/gtktexttag.c:491 gtk/gtktextview.c:627
 msgid "Custom tabs for this text"
