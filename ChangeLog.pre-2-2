@@ -1,3 +1,8 @@
+Tue May 21 16:46:15 2002  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gdk/x11/gdkdisplay-x11.c (gdk_internal_connection_watch): 
+ 	Fix missing dereference. (HideToshi Tajima)
+ 
 Mon May 20 15:02:21 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdisplay-x11.c: Patch from HideToshi Tajima
