@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.15\n"
-"POT-Creation-Date: 2002-03-20 14:58+0900\n"
-"PO-Revision-Date: 2002-03-20 15:00+0900\n"
+"POT-Creation-Date: 2002-03-28 13:36+0900\n"
+"PO-Revision-Date: 2002-03-28 13:39+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -172,7 +172,7 @@ msgstr "ICO 파일을 읽는데 메모리가 충분하지 않습니다"
 msgid "Failure reading GIF: %s"
 msgstr "GIF 읽는 중 실패: %s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1541
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF 파일에 데이타가 부족합니다 (중간에 잘린 파일?)"
 
@@ -194,7 +194,7 @@ msgid "Circular table entry in GIF file"
 msgstr "GIF 파일에 순환 테이블 항목"
 
 #: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
-#: gdk-pixbuf/io-gif.c:1529
+#: gdk-pixbuf/io-gif.c:1530
 msgid "Not enough memory to load GIF file"
 msgstr "GIF 파일을 읽는데 메모리가 충분하지 않습니다"
 
@@ -266,16 +266,36 @@ msgid ""
 msgstr ""
 "JPEG 화질은 0에서 100 사이의 값이어야 합니다; '%d' 값은 쓸 수 없습니다."
 
-#: gdk-pixbuf/io-png.c:161
+#: gdk-pixbuf/io-png.c:55
+msgid "Bits per channel of PNG image is invalid."
+msgstr "PNG 그림의 채널 당 비트수가 잘못되었습니다"
+
+#: gdk-pixbuf/io-png.c:136
+msgid "Transformed PNG has zero width or height."
+msgstr "변환된 PNG의 너비나 높이가 0입니다."
+
+#: gdk-pixbuf/io-png.c:144
+msgid "Bits per channel of transformed PNG is not 8."
+msgstr "변환된 PNG의 채널 당 비트수가 8이 아닙니다."
+
+#: gdk-pixbuf/io-png.c:153
+msgid "Transformed PNG not RGB or RGBA."
+msgstr "변환된 PNG가 RGB나 RGBA 형식이 아닙니다."
+
+#: gdk-pixbuf/io-png.c:162
+msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+msgstr "변환된 PNG의 채널 수를 지원하지 않습니다. 3이나 4가 되어야 합니다."
+
+#: gdk-pixbuf/io-png.c:183
 #, c-format
 msgid "Fatal error in PNG image file: %s"
 msgstr "PNG 그림 파일에서 치명적인 오류: %s"
 
-#: gdk-pixbuf/io-png.c:273
+#: gdk-pixbuf/io-png.c:308
 msgid "Insufficient memory to load PNG file"
 msgstr "PNG 파일을 읽어들이는 데 메모리가 부족합니다"
 
-#: gdk-pixbuf/io-png.c:591
+#: gdk-pixbuf/io-png.c:632
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -284,25 +304,25 @@ msgstr ""
 "폭 %ld 높이 %ld의 그림을 저장할 메모리가 부족합니다.  메모리를 확보하려면 실"
 "행중인 프로그램을 끝내보십시오"
 
-#: gdk-pixbuf/io-png.c:642
+#: gdk-pixbuf/io-png.c:683
 msgid "Fatal error reading PNG image file"
 msgstr "PNG 그림 파일을 읽어들이는 데 치명적인 오류"
 
-#: gdk-pixbuf/io-png.c:691
+#: gdk-pixbuf/io-png.c:732
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG 그림 파일을 읽어들이는 데 치명적인 오류: %s"
 
-#: gdk-pixbuf/io-png.c:757
+#: gdk-pixbuf/io-png.c:798
 msgid ""
 "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
 msgstr "PNG tEXt 청크의 키에서는 최소 1 최대 79 문자까지 쓸 수 있습니다"
 
-#: gdk-pixbuf/io-png.c:765
+#: gdk-pixbuf/io-png.c:806
 msgid "Keys for PNG tEXt chunks must be ASCII characters."
 msgstr "PNG tEXt 청크의 키는 ASCII 문자로 되어 있어야 합니다"
 
-#: gdk-pixbuf/io-png.c:786
+#: gdk-pixbuf/io-png.c:827
 msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
 msgstr "PNG tEXt 청크의 값을 ISO-8859-1 인코딩으로 변환할 수 없습니다."
 
@@ -399,8 +419,8 @@ msgstr "fread() 실패 -- 중간에 갑자기 파일이 끝났습니다"
 msgid "fseek() failed -- premature end-of-file probably encountered"
 msgstr "fseek() 실패 -- 중간에 갑자기 파일이 끝났습니다"
 
-#: gdk-pixbuf/io-tga.c:295 gdk-pixbuf/io-tga.c:1029 gdk-pixbuf/io-tga.c:1141
-#: gdk-pixbuf/io-tga.c:1224
+#: gdk-pixbuf/io-tga.c:295 gdk-pixbuf/io-tga.c:1030 gdk-pixbuf/io-tga.c:1142
+#: gdk-pixbuf/io-tga.c:1225
 msgid "Insufficient memory to load TGA image"
 msgstr "TGA 파일을 읽어들이는 데 메모리가 부족합니다"
 
@@ -416,73 +436,73 @@ msgstr "컬러맵 구조를 할당할 수 없습니다"
 msgid "Can't allocate colormap entries"
 msgstr "컬러맵 항목을 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:647
+#: gdk-pixbuf/io-tga.c:646
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "예기치 못한 컬러맵 항목 색상 모드(bitdepth)"
 
-#: gdk-pixbuf/io-tga.c:667
+#: gdk-pixbuf/io-tga.c:664
 msgid "Can't allocate TGA header memory"
 msgstr "TGA 헤더 메모리를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:700
+#: gdk-pixbuf/io-tga.c:697
 msgid "TGA image has invalid dimensions"
 msgstr "TGA 그림의 크기가 잘못되었습니다"
 
-#: gdk-pixbuf/io-tga.c:706
+#: gdk-pixbuf/io-tga.c:703
 msgid "TGA image comment length is too long"
 msgstr "TGA 그림 설명의 길이가 너무 깁니다"
 
-#: gdk-pixbuf/io-tga.c:715 gdk-pixbuf/io-tga.c:724 gdk-pixbuf/io-tga.c:734
-#: gdk-pixbuf/io-tga.c:744 gdk-pixbuf/io-tga.c:751
+#: gdk-pixbuf/io-tga.c:712 gdk-pixbuf/io-tga.c:721 gdk-pixbuf/io-tga.c:731
+#: gdk-pixbuf/io-tga.c:741 gdk-pixbuf/io-tga.c:748
 msgid "TGA image type not supported"
 msgstr "TGA 그림 형식은 지원하지 않습니다"
 
-#: gdk-pixbuf/io-tga.c:796
+#: gdk-pixbuf/io-tga.c:793
 msgid "Can't allocate memory for TGA context struct"
 msgstr "TGA 컨텍스트 구조에 필요한 메모리를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:860
+#: gdk-pixbuf/io-tga.c:857
 msgid "Excess data in file"
 msgstr "파일에 너무 많은 데이타"
 
-#: gdk-pixbuf/io-tga.c:902
+#: gdk-pixbuf/io-tga.c:903
 msgid "Can't allocate memory for TGA header"
 msgstr "TGA 헤더에 필요한 메모리를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:912
+#: gdk-pixbuf/io-tga.c:913
 msgid "Too big value in the infolen field of TGA header."
 msgstr "TGA 헤더의 infolen 필드의 값이 너무 큽니다"
 
-#: gdk-pixbuf/io-tga.c:936
+#: gdk-pixbuf/io-tga.c:937
 msgid "Can't allocate memory for TGA cmap temporary buffer"
 msgstr "TGA cmap 임시 버퍼에 필요한 메모리를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:948
+#: gdk-pixbuf/io-tga.c:949
 msgid "Can't allocate memory for TGA colormap struct"
 msgstr "TGA 컬러맵 구조에 필요한 메모리를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:957
+#: gdk-pixbuf/io-tga.c:958
 msgid "Can't allocate memory for TGA colormap entries"
 msgstr "TGA 컬러맵 항목에 필요한 메모리를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:967
+#: gdk-pixbuf/io-tga.c:968
 msgid "Unexpected bitdepth for TGA colormap"
 msgstr "TGA 컬러맵에 예기치 못한 색상 모드(bitdedpth)"
 
 # FIXME: pseudo color 번역
-#: gdk-pixbuf/io-tga.c:1009
+#: gdk-pixbuf/io-tga.c:1010
 msgid "Pseudo-Color image without colormap"
 msgstr "컬러맵이 없는 의사 색(pseudo color) 그림입니다"
 
-#: gdk-pixbuf/io-tga.c:1016
+#: gdk-pixbuf/io-tga.c:1017
 msgid "Can't seek to image offset -- end-of-file probably encountered"
 msgstr "그림 오프셋을 찾을 수 없습니다 -- 파일이 끝났을 것입니다"
 
-#: gdk-pixbuf/io-tga.c:1039 gdk-pixbuf/io-tga.c:1152 gdk-pixbuf/io-tga.c:1235
+#: gdk-pixbuf/io-tga.c:1040 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1236
 msgid "Can't allocate pixbuf"
 msgstr "픽스버퍼를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:1307 gdk-pixbuf/io-tga.c:1336
+#: gdk-pixbuf/io-tga.c:1308 gdk-pixbuf/io-tga.c:1337
 msgid "Unsupported TGA image type"
 msgstr "지원하지 않는 TGA 그림 형식"
 
@@ -498,23 +518,23 @@ msgstr "그림 높이를 얻을 수 없습니다 (틀린 TIFF 파일)"
 msgid "Width or height of TIFF image is zero"
 msgstr "TIFF 그림의 너비나 높이가 0입니다"
 
-#: gdk-pixbuf/io-tiff.c:178 gdk-pixbuf/io-tiff.c:194 gdk-pixbuf/io-tiff.c:482
+#: gdk-pixbuf/io-tiff.c:178 gdk-pixbuf/io-tiff.c:194 gdk-pixbuf/io-tiff.c:485
 msgid "Insufficient memory to open TIFF file"
 msgstr "TIFF 파일 여는데 메모리 부족"
 
-#: gdk-pixbuf/io-tiff.c:201
+#: gdk-pixbuf/io-tiff.c:203
 msgid "Failed to load RGB data from TIFF file"
 msgstr "TIFF 파일에서 RGB 데이타 읽기 실패"
 
-#: gdk-pixbuf/io-tiff.c:270
+#: gdk-pixbuf/io-tiff.c:273
 msgid "Failed to open TIFF image"
 msgstr "TIFF 그림 열기 실패"
 
-#: gdk-pixbuf/io-tiff.c:283
+#: gdk-pixbuf/io-tiff.c:286
 msgid "TIFFClose operation failed"
 msgstr "TIFFClose 작업 실패"
 
-#: gdk-pixbuf/io-tiff.c:416 gdk-pixbuf/io-tiff.c:430
+#: gdk-pixbuf/io-tiff.c:419 gdk-pixbuf/io-tiff.c:433
 msgid "Failed to load TIFF image"
 msgstr "TIFF 그림을 읽어들이는 데 실패"
 
@@ -530,7 +550,7 @@ msgstr "그림의 높이가 0입니다"
 msgid "Not enough memory to load image"
 msgstr "그림을 읽어들이는데 메모리가 충분하지 않습니다"
 
-#: gdk-pixbuf/io-wbmp.c:365
+#: gdk-pixbuf/io-wbmp.c:366
 msgid "Couldn't save the rest"
 msgstr "나머지를 저장할 수 없습니다"
 
@@ -1048,11 +1068,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "전경 색 GdkColor"
 
 #: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:568
 msgid "Editable"
 msgstr "편집 가능"
 
-#: gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:567
+#: gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:569
 msgid "Whether the text can be modified by the user"
 msgstr "텍스트를 사용자가 수정할 수 있는 지 여부"
 
@@ -1695,15 +1715,15 @@ msgstr "포커스시 선택"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "포커스될 때 항목의 내용을 선택할 것인지 여부"
 
-#: gtk/gtkentry.c:3843 gtk/gtklabel.c:3164
+#: gtk/gtkentry.c:3850 gtk/gtklabel.c:3164
 msgid "Select All"
 msgstr "모두 선택"
 
-#: gtk/gtkentry.c:3853 gtk/gtklabel.c:3174
+#: gtk/gtkentry.c:3860 gtk/gtklabel.c:3174
 msgid "Input Methods"
 msgstr "입력기"
 
-#: gtk/gtkentry.c:3863 gtk/gtktextview.c:6344
+#: gtk/gtkentry.c:3870 gtk/gtktextview.c:6375
 msgid "_Insert Unicode control character"
 msgstr "유니코드 제어문자 삽입(_I)"
 
@@ -2235,7 +2255,7 @@ msgstr "마크업 사용"
 msgid "The text of the label includes XML markup. See pango_parse_markup()."
 msgstr "레이블의 텍스트에 XML 마크업 포함.  pango_parse_markup() 참고."
 
-#: gtk/gtklabel.c:309 gtk/gtktexttag.c:378 gtk/gtktextview.c:583
+#: gtk/gtklabel.c:309 gtk/gtktexttag.c:378 gtk/gtktextview.c:585
 msgid "Justification"
 msgstr "행 맞춤"
 
@@ -2328,7 +2348,7 @@ msgstr "레이아웃의 높이"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:734
+#: gtk/gtkmain.c:735
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2502,7 +2522,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "탭의 크기가 균등한 지 여부"
 
-#: gtk/gtknotebook.c:2436 gtk/gtknotebook.c:4692
+#: gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4695
 #, c-format
 msgid "Page %u"
 msgstr "%u쪽"
@@ -2548,17 +2568,17 @@ msgstr "핸들 크기"
 msgid "Width of handle"
 msgstr "핸들의 너비"
 
-#: gtk/gtkrc.c:2253
+#: gtk/gtkrc.c:2270
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "include 파일을 찾을 수 없습니다: \"%s\""
 
-#: gtk/gtkrc.c:2895 gtk/gtkrc.c:2898
+#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "그림 파일을 pixmap_path에서 찾을 수 없음: \"%s\""
 
-#: gtk/gtkrc.c:3329
+#: gtk/gtkrc.c:3350
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
@@ -3444,7 +3464,7 @@ msgstr "글자 방향"
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "글자 방향, 우에서 좌로 혹은 좌에서 우로"
 
-#: gtk/gtktexttag.c:379 gtk/gtktextview.c:584
+#: gtk/gtktexttag.c:379 gtk/gtktextview.c:586
 msgid "Left, right, or center justification"
 msgstr "좌, 우, 혹은 가운데 정렬"
 
@@ -3460,7 +3480,7 @@ msgstr "텍스트를 그리는 데 쓸 언어 엔진 코드"
 msgid "Left margin"
 msgstr "왼쪽 여백"
 
-#: gtk/gtktexttag.c:396 gtk/gtktextview.c:593
+#: gtk/gtktexttag.c:396 gtk/gtktextview.c:595
 msgid "Width of the left margin in pixels"
 msgstr "왼쪽 여백의 너비 (픽셀 단위)"
 
@@ -3468,15 +3488,15 @@ msgstr "왼쪽 여백의 너비 (픽셀 단위)"
 msgid "Right margin"
 msgstr "오른쪽 여백"
 
-#: gtk/gtktexttag.c:406 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:406 gtk/gtktextview.c:605
 msgid "Width of the right margin in pixels"
 msgstr "오른쪽 여백의 너비 (픽셀 단위)"
 
-#: gtk/gtktexttag.c:416 gtk/gtktextview.c:612
+#: gtk/gtktexttag.c:416 gtk/gtktextview.c:614
 msgid "Indent"
 msgstr "들여쓰기"
 
-#: gtk/gtktexttag.c:417 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:417 gtk/gtktextview.c:615
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "문장 들여 쓰기할 크기 (픽셀 단위)"
 
@@ -3484,7 +3504,7 @@ msgstr "문장 들여 쓰기할 크기 (픽셀 단위)"
 msgid "Pixels above lines"
 msgstr "줄 위 픽셀"
 
-#: gtk/gtktexttag.c:438 gtk/gtktextview.c:537
+#: gtk/gtktexttag.c:438 gtk/gtktextview.c:539
 msgid "Pixels of blank space above paragraphs"
 msgstr "문단 위의 빈 공간의 픽셀수"
 
@@ -3492,7 +3512,7 @@ msgstr "문단 위의 빈 공간의 픽셀수"
 msgid "Pixels below lines"
 msgstr "줄 아래 픽셀"
 
-#: gtk/gtktexttag.c:448 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:448 gtk/gtktextview.c:549
 msgid "Pixels of blank space below paragraphs"
 msgstr "문단 아래 빈 공간의 픽셀수"
 
@@ -3500,7 +3520,7 @@ msgstr "문단 아래 빈 공간의 픽셀수"
 msgid "Pixels inside wrap"
 msgstr "바꿔쓴 줄 픽셀수"
 
-#: gtk/gtktexttag.c:458 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:458 gtk/gtktextview.c:559
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "문단 내에서 줄 바꿈한 사이 빈 공간의 픽셀수"
 
@@ -3508,16 +3528,16 @@ msgstr "문단 내에서 줄 바꿈한 사이 빈 공간의 픽셀수"
 msgid "Wrap mode"
 msgstr "줄바꿈 모드"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:575
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:577
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "절대 단어 경계나, 문자 경계에서 줄을 바꾸지 않을 것인지 여부"
 
-#: gtk/gtktexttag.c:494 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:494 gtk/gtktextview.c:624
 msgid "Tabs"
 msgstr "탭"
 
-#: gtk/gtktexttag.c:495 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:495 gtk/gtktextview.c:625
 msgid "Custom tabs for this text"
 msgstr "이 텍스트에 쓸 사용자 정의 탭"
 
@@ -3677,39 +3697,39 @@ msgstr "ZWS 너비 0 결합(_J)"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWS 너비 0 결합 금지(_N)"
 
-#: gtk/gtktextview.c:536
+#: gtk/gtktextview.c:538
 msgid "Pixels Above Lines"
 msgstr "줄 위 픽셀"
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:548
 msgid "Pixels Below Lines"
 msgstr "줄 아래 픽셀"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:558
 msgid "Pixels Inside Wrap"
 msgstr "바꿔쓴 줄 픽셀수"
 
-#: gtk/gtktextview.c:574
+#: gtk/gtktextview.c:576
 msgid "Wrap Mode"
 msgstr "줄바꿈 모드"
 
-#: gtk/gtktextview.c:592
+#: gtk/gtktextview.c:594
 msgid "Left Margin"
 msgstr "왼쪽 여백"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:604
 msgid "Right Margin"
 msgstr "오른쪽 여백"
 
-#: gtk/gtktextview.c:630
+#: gtk/gtktextview.c:632
 msgid "Cursor Visible"
 msgstr "커서 보여주기"
 
-#: gtk/gtktextview.c:631
+#: gtk/gtktextview.c:633
 msgid "If the insertion cursor is shown"
 msgstr "삽입 커서를 보여줄 지 여부"
 
-#: gtk/gtktextview.c:6335
+#: gtk/gtktextview.c:6366
 msgid "Input _Methods"
 msgstr "입력방법(_M)"
 
