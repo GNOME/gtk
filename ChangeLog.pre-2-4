@@ -1,3 +1,8 @@
+Tue Jan 25 11:43:21 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkinvisible.h (struct _GtkInvisible[Class]): Fix
+	structures to properly inherit from GtkWidget not GtkBin.
+
 Sun Jan 23 20:28:24 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk+.spec.in: Added lib/gtk+/include/* to %files

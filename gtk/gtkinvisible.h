@@ -49,12 +49,12 @@ typedef struct _GtkInvisibleClass  GtkInvisibleClass;
 
 struct _GtkInvisible
 {
-  GtkBin bin;
+  GtkWidget widget;
 };
 
 struct _GtkInvisibleClass
 {
-  GtkBinClass parent_class;
+  GtkWidgetClass parent_class;
 };
 
 GtkType	       gtk_invisible_get_type	     (void);
