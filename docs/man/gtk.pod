@@ -1,0 +1,26 @@
+
+=head1 NAME
+
+GTK+ - The GIMP Toolkit
+
+=head1 SYNOPSIS
+
+ For information on GTK+, see the man pages below.
+
+=head1 COMMANDS
+
+=head1 CONTAINER WIDGETS
+
+ gtk_box(3)
+ gtk_vbox(3)
+ gtk_hbox(3)
+
+=head1 WIDGETS
+
+  gtk_button(3)
+
+=head1 AUTHORS
+
+  The author of this man page is Shawn T. Amundson E<lt>amundson@gtk.orgE<gt>.
+  For the authors of GTK+, see the AUTHORS file in the GTK+ distribution.
+

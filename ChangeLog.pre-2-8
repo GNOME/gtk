@@ -1,3 +1,11 @@
+Thu Aug  6 22:09:06 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* docs/man: new directory for v1.0 man pages
+	* docs/man/gtk.pod
+	  docs/man/gtk_button.pod
+	  docs/man/gtk_hbox.pod
+	  docs/man/gtk_vbox.pod: Beginning of man pages
+
 Tue Aug  4 10:59:19 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktable.[ch]: Empty rows/columns of the table

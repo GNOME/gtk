@@ -1,0 +1,73 @@
+
+=head1 NAME
+
+gtk_vbox - GTK+ vertical box widget
+
+=head1 SYNOPSIS
+
+ #include <gtk/gtkvbox.h>
+
+ guint      gtk_vbox_get_type (void);
+ GtkWidget* gtk_vbox_new      (gint homogeneous,
+                               gint spacing);
+
+=head1 DESCRIPTION
+
+This widget is a container used to place widgets vertically in relation
+to each other.  This is done by "packing" them into the boxes with
+the functions gtk_box_pack_start and gtk_box_pack_end.
+
+General box functions can be found in gtk_box(1).
+
+=head1 OBJECT HIERARCHY
+
+ gtk_object
+ gtk_widget
+ gtk_container 
+ gtk_box
+ gtk_vbox
+
+=head1 USAGE
+
+=head2 Creation
+
+To create a vbox, use the function gtk_vbox_new().  The arguments
+you pass to gtk_vbox_new indicate if the vbox should be homogeneous
+(that is, if the children should all be given the same amount of 
+space all the time), and the amount of space inbetween the children.
+
+The following creates a vbox which is non-homogeneous and will have
+4 spacing pixels between the children:
+
+	GtkWidget *vbox;
+	vbox = gtk_vbox_new (FALSE, 4);
+
+For instructions on adding children to this newly created vbox,
+consult gtk_box(3).
+
+=head1 FUNCTIONS
+
+guint gtk_vbox_get_type (void);
+
+	This function returns the GtkType which is assigned to the
+	object class for gtk_vbox.
+
+GtkWidget* gtk_vbox_new (gint homogeneous, gint spacing);
+
+	This functions returns a new vbox widget which can then be
+	used as a container for other widgets.  Homogeneous can be
+	either TRUE or FALSE and indicates if the children widgets
+	will be always be allocated equal area.  Spacing is the 
+	number of pixels to put inbetween the children of the box.
+
+
+=head1 SEE ALSO
+
+gtk_box(3), gtk_hbox(3), gtk_container(3), gtk_widget(3)
+
+=head1 AUTHORS
+
+The author of this man page is Shawn T. Amundson E<lt>amundson@gtk.orgE<gt>.
+For the authors of GTK+, see the AUTHORS file in the GTK+ distribution.
+
+
