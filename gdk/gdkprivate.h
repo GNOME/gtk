@@ -60,8 +60,8 @@ struct _GdkWindowPrivate
   guint8 resize_count;
   guint8 ref_count;
   guint8 window_type;
-  guint8 destroyed : 2;
-  guint8 dnd_drag_enabled : 1,
+  guint destroyed : 2;
+  guint dnd_drag_enabled : 1,
     dnd_drag_datashow : 1,
     dnd_drag_destructive_op : 1,
     dnd_drag_accepted : 1,

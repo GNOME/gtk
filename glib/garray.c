@@ -42,7 +42,7 @@ static GMemChunk *array_mem_chunk = NULL;
 
 
 GArray*
-g_array_new (zero_terminated)
+g_array_new (gint zero_terminated)
 {
   GRealArray *array;
 

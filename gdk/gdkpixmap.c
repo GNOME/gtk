@@ -218,10 +218,10 @@ gdk_pixmap_seek_char (FILE  *infile,
 gint
 gdk_pixmap_read_string (FILE  *infile,
                         gchar **buffer,
-			int *buffer_size)
+			guint *buffer_size)
 {
   gchar c;
-  gint cnt = 0;
+  guint cnt = 0;
 
   if ((*buffer) == NULL)
     {
