@@ -1,5 +1,7 @@
 2002-02-01  Matthias Clasen  <matthiasc@poet.de>
 
+	* Makefile.am: Build the tga loader as a static library. (#70157)
+
 	* io-ico.c: Merge 16- and 32-bit ico support from the stable 
 	branch.  (#61179)
 

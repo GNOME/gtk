@@ -124,6 +124,7 @@ libpixbufloader_wbmp_la_LIBADD = $(module_libs)
 #
 # The XBM loader
 #
+libpixbufloader_static_xbm_la_SOURCES = io-xbm.c
 libpixbufloader_xbm_la_SOURCES = io-xbm.c
 libpixbufloader_xbm_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_xbm_la_LIBADD = $(module_libs)
@@ -131,6 +132,7 @@ libpixbufloader_xbm_la_LIBADD = $(module_libs)
 #
 # The TGA loader
 #
+libpixbufloader_static_tga_la_SOURCES = io-tga.c
 libpixbufloader_tga_la_SOURCES = io-tga.c
 libpixbufloader_tga_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_tga_la_LIBADD = $(module_libs)
@@ -197,7 +199,9 @@ noinst_LTLIBRARIES =  	\
 	libpixbufloader-static-xpm.la  \
 	libpixbufloader-static-pnm.la  \
 	libpixbufloader-static-bmp.la  \
-	libpixbufloader-static-wbmp.la
+	libpixbufloader-static-wbmp.la \
+	libpixbufloader-static-xbm.la  \
+	libpixbufloader-static-tga.la
 
 builtin_objs = @INCLUDED_LOADER_OBJ@
 
@@ -367,7 +371,8 @@ EXTRA_DIST =			\
 	pixbufloader_png.def		\
 	pixbufloader_tiff.def		\
 	pixbufloader_wbmp.def		\
-	pixbufloader_xbm.def
+	pixbufloader_xbm.def		\
+	pixbufloader_tga.def
 
 install-data-local: install-ms-lib install-libtool-import-lib
 
