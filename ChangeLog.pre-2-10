@@ -1,3 +1,7 @@
+Fri Aug 13 01:25:55 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* NEWS: Updates.
+
 Fri Aug 13 01:06:56 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeview.c (gtk_tree_view_row_inserted): 
