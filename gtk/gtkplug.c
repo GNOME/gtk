@@ -113,6 +113,7 @@ gtk_plug_construct (GtkPlug *plug, guint32 socket_id)
       plug->socket_window = gdk_window_foreign_new (socket_id);
       plug->same_app = FALSE;
     }
+  else gdk_window_ref (plug->socket_window);
 }
 
 GtkWidget*

@@ -1,3 +1,9 @@
+Sat Nov 20 13:44:28 1999  Dietmar Maurer  <dm@vlsivie.tuwien.ac.at>
+
+	* gtk/gtkplug.c (gtk_plug_construct): bug fix: add a reference
+	(gdk_window_ref) to the window since we unref it in the unrealize
+	function. 
+
 Tue Nov 16 10:15:54 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkitemfactory.c (gtk_item_factory_parse_path):
