@@ -181,3 +181,13 @@ there is actually a #GtkLabel inside of the #GtkButton.
 The #GtkReliefStyle as outlined in gtk_button_set_relief().
 </para>
 
+<!-- ##### ARG GtkButton:use-underline ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:use-stock ##### -->
+<para>
+
+</para>
+

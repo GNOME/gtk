@@ -44,10 +44,11 @@ Adds a new #GtkMenuItem to the end of the GtkMenuBar
 Adds a new #GtkMenuItem to the beginning of the GtkMenuBar
 </para>
 
-@menu_child: 
-<!-- # Unused Parameters # -->
-@menu_bar: a #GtkMenuBar
+@menu: 
 @child: the #GtkMenuItem to add
+<!-- # Unused Parameters # -->
+@menu_child: 
+@menu_bar: a #GtkMenuBar
 
 
 <!-- ##### MACRO gtk_menu_bar_insert ##### -->

@@ -444,7 +444,7 @@ GdkEventMask  gdk_window_get_events	 (GdkWindow	  *window);
 void	      gdk_window_set_events	 (GdkWindow	  *window,
 					  GdkEventMask	   event_mask);
 
-gboolean      gdk_window_set_icon_list   (GdkWindow       *window,
+void          gdk_window_set_icon_list   (GdkWindow       *window,
 					  GList           *pixbufs);
 void	      gdk_window_set_icon	 (GdkWindow	  *window, 
 					  GdkWindow	  *icon_window,

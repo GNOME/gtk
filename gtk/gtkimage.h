@@ -57,13 +57,11 @@ typedef struct _GtkImageAnimationData GtkImageAnimationData;
 struct _GtkImagePixmapData
 {
   GdkPixmap *pixmap;
-  GdkBitmap *mask;
 };
 
 struct _GtkImageImageData
 {
   GdkImage *image;
-  GdkBitmap *mask;
 };
 
 struct _GtkImagePixbufData
@@ -74,13 +72,11 @@ struct _GtkImagePixbufData
 struct _GtkImageStockData
 {
   gchar *stock_id;
-  GtkIconSize size;
 };
 
 struct _GtkImageIconSetData
 {
   GtkIconSet *icon_set;
-  GtkIconSize size;
 };
 
 struct _GtkImageAnimationData
@@ -116,6 +112,12 @@ struct _GtkImage
     GtkImageIconSetData icon_set;
     GtkImageAnimationData anim;
   } data;
+
+  /* Only used with GTK_IMAGE_PIXMAP, GTK_IMAGE_IMAGE */
+  GdkBitmap *mask;
+
+  /* Only used with GTK_IMAGE_STOCK, GTK_IMAGE_ICON_SET */
+  GtkIconSize icon_size;
 };
 
 struct _GtkImageClass

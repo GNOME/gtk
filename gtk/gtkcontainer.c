@@ -858,7 +858,8 @@ gtk_container_add (GtkContainer *container,
   if (widget->parent != NULL)
     {
       g_warning ("Attempting to add a widget with type %s to a container of "
-                 "type %s, but the widget is already inside a container of type %s",
+                 "type %s, but the widget is already inside a container of type %s, "
+                 "the GTK+ FAQ at http://www.gtk.org/faq/ explains how to reparent a widget.",
                  g_type_name (G_OBJECT_TYPE (widget)),
                  g_type_name (G_OBJECT_TYPE (container)),
                  g_type_name (G_OBJECT_TYPE (widget->parent)));

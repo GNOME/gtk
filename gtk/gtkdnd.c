@@ -78,6 +78,7 @@ struct _GtkDragSourceSite
     GtkImagePixbufData pixbuf;
     GtkImageStockData stock;
   } icon_data;
+  GdkBitmap *icon_mask;
 
   GdkColormap       *colormap;	         /* Colormap for drag icon */
 
@@ -1941,8 +1942,8 @@ gtk_drag_source_unset_icon (GtkDragSourceSite *site)
     case GTK_IMAGE_PIXMAP:
       if (site->icon_data.pixmap.pixmap)
 	gdk_pixmap_unref (site->icon_data.pixmap.pixmap);
-      if (site->icon_data.pixmap.mask)
-	gdk_pixmap_unref (site->icon_data.pixmap.mask);
+      if (site->icon_mask)
+	gdk_pixmap_unref (site->icon_mask);
       break;
     case GTK_IMAGE_PIXBUF:
       g_object_unref (G_OBJECT (site->icon_data.pixbuf.pixbuf));
@@ -1999,7 +2000,7 @@ gtk_drag_source_set_icon (GtkWidget     *widget,
   site->icon_type = GTK_IMAGE_PIXMAP;
   
   site->icon_data.pixmap.pixmap = pixmap;
-  site->icon_data.pixmap.mask = mask;
+  site->icon_mask = mask;
   site->colormap = colormap;
 }
 
@@ -2683,7 +2684,7 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
 		      gtk_drag_set_icon_pixmap (context,
 						site->colormap,
 						site->icon_data.pixmap.pixmap,
-						site->icon_data.pixmap.mask,
+						site->icon_mask,
 						-2, -2);
 		      break;
 		    case GTK_IMAGE_PIXBUF:

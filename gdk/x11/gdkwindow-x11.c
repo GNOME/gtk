@@ -2325,7 +2325,6 @@ gdk_window_set_override_redirect (GdkWindow *window,
  * gdk_window_set_icon_list:
  * @window: The #GdkWindow toplevel window to set the icon of.
  * @pixbufs: A list of pixbufs, of different sizes.
- * @Returns: %TRUE if the icons were set, false otherwise
  *
  * Sets a list of icons for the window. One of these will be used
  * to represent the window when it has been iconified. The icon is
@@ -2335,12 +2334,8 @@ gdk_window_set_override_redirect (GdkWindow *window,
  * image quality since the window manager may only need to scale the
  * icon by a small amount or not at all.
  *
- * On the X11 backend this call might fail if the window manager
- * doesn't support the Extended Window Manager Hints. Then this
- * function returns FALSE, and the application should fall back
- * to #gdk_window_set_icon().
  **/
-gboolean
+void
 gdk_window_set_icon_list (GdkWindow *window,
 			  GList     *pixbufs)
 {
@@ -2354,14 +2349,10 @@ gdk_window_set_icon_list (GdkWindow *window,
   gint x, y;
   gint n_channels;
   
-  g_return_val_if_fail (window != NULL, FALSE);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
-    return FALSE;
-
-  if (!gdk_net_wm_supports (gdk_atom_intern ("_NET_WM_ICON", FALSE)))
-    return FALSE;
+    return;
   
   l = pixbufs;
   size = 0;
@@ -2418,14 +2409,21 @@ gdk_window_set_icon_list (GdkWindow *window,
       l = g_list_next (l);
     }
 
-  XChangeProperty (GDK_WINDOW_XDISPLAY (window),
-		   GDK_WINDOW_XID (window),
-		   gdk_atom_intern ("_NET_WM_ICON", FALSE),
-		   XA_CARDINAL, 32,
-		   PropModeReplace,
-		   (guchar*) data, size);
-
-  return TRUE;
+  if (size > 0)
+    {
+      XChangeProperty (GDK_WINDOW_XDISPLAY (window),
+                       GDK_WINDOW_XID (window),
+                       gdk_atom_intern ("_NET_WM_ICON", FALSE),
+                       XA_CARDINAL, 32,
+                       PropModeReplace,
+                       (guchar*) data, size);
+    }
+  else
+    {
+      XDeleteProperty (GDK_WINDOW_XDISPLAY (window),
+                       GDK_WINDOW_XID (window),
+                       gdk_atom_intern ("_NET_WM_ICON", FALSE));
+    }
 }
 
 void          

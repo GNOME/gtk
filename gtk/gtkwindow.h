@@ -206,6 +206,15 @@ void       gtk_window_set_decorated            (GtkWindow *window,
                                                 gboolean   setting);
 gboolean   gtk_window_get_decorated            (GtkWindow *window);
 
+void       gtk_window_set_icon_list                (GtkWindow  *window,
+                                                    GList      *list);
+GList*     gtk_window_get_icon_list                (GtkWindow  *window);
+void       gtk_window_set_icon                     (GtkWindow  *window,
+                                                    GdkPixbuf  *icon);
+GdkPixbuf* gtk_window_get_icon                     (GtkWindow  *window);
+void       gtk_window_set_default_icon_list        (GList      *list);
+GList*     gtk_window_get_default_icon_list        (void);
+
 /* If window is set modal, input will be grabbed when show and released when hide */
 void       gtk_window_set_modal      (GtkWindow *window,
 				      gboolean   modal);

@@ -1,3 +1,35 @@
+2001-08-28  Havoc Pennington  <hp@pobox.com>
+
+	* demos/gtk-demo/main.c (setup_default_icon): add default icon
+
+	* gtk/gtkradiobutton.c (gtk_radio_button_new_with_mnemonic):
+	warning fix
+	(gtk_radio_button_new_with_label): warning fix
+
+	* gtk/gtkdnd.c: used some random GtkImage private structs, 
+	update to reflect GtkImage changes
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_icon_list): don't check
+	whether the hint is supported, just always set the icon. A task
+	list might want to use it even if the WM doesn't, and the WM may
+	change over time. Also, XDeleteProperty() if list == NULL.
+
+	* gtk/gtkwindow.c (gtk_window_set_icon_list)
+	(gtk_window_get_icon_list)
+	(gtk_window_set_icon)
+	(gtk_window_get_icon)
+	(gtk_window_set_default_icon_list)
+	(gtk_window_get_default_icon_list):
+	new functions
+
+	* gtk/gtk-boxed.defs (GtkIconSet): add GtkIconSet
+
+	* gtk/gtkimage.c: Implement property support, bug #59408
+
+	* gtk/gtkcontainer.c (gtk_container_add): make the warning message
+	on reparent-without-removing-first a bit more helpful.
+	Let's just destroy this FAQ.
+
 Tue Aug 28 21:37:11 2001  Matthias Clasen  <matthiasc@poet.de>
 
 	* demos/gtk-demo/appwindow.c (do_appwindow): Use g_signal_connect_object

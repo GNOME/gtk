@@ -722,6 +722,58 @@ create_tree (void)
   return tree_view;
 }
 
+static void
+setup_default_icon (void)
+{
+  GdkPixbuf *pixbuf;
+  
+  /* Try in current directory, in case we haven't yet been installed
+   * (would be wrong in a real app)
+   */
+  pixbuf = gdk_pixbuf_new_from_file ("./gtk-logo-rgb.gif", NULL);
+
+  if (pixbuf == NULL)
+    {
+      GError *err;
+
+      err = NULL;
+      pixbuf = gdk_pixbuf_new_from_file (DEMOCODEDIR"/gtk-logo-rgb.gif",
+                                         &err);
+
+      /* Ignoring this error (passing NULL instead of &err above)
+       * would probably be reasonable for most apps.  We're just
+       * showing off.
+       */
+      if (err)
+        {
+          GtkWidget *dialog;
+          
+          dialog = gtk_message_dialog_new (NULL, 0,
+                                           GTK_MESSAGE_ERROR,
+                                           GTK_BUTTONS_CLOSE,
+                                           "Failed to read icon file "DEMOCODEDIR"/gtk-logo-rgb.gif: %s",
+                                           err->message);
+          g_error_free (err);
+
+          gtk_signal_connect (GTK_OBJECT (dialog),
+                              "response",
+                              GTK_SIGNAL_FUNC (gtk_widget_destroy),
+                              NULL);
+        }
+    }
+
+  if (pixbuf)
+    {
+      GList *list;      
+
+      list = NULL;
+      list = g_list_append (list, pixbuf);
+      gtk_window_set_default_icon_list (list);
+      g_list_free (list);
+      g_object_unref (G_OBJECT (pixbuf));
+    }
+}
+
 int
 main (int argc, char **argv)
 {
@@ -744,6 +796,8 @@ main (int argc, char **argv)
   /* -- End of hack -- */
   
   gtk_init (&argc, &argv);
+
+  setup_default_icon ();
   
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "GTK+ Code Demos");

@@ -953,6 +953,14 @@ produce superscript and subscript.
 </para>
 
 
+<!-- ##### ENUM GtkTreeSelectionMode ##### -->
+<para>
+
+</para>
+
+@GTK_TREE_SELECTION_SINGLE: 
+@GTK_TREE_SELECTION_MULTI: 
+
 <!-- ##### ARG GtkVScale:adjustment ##### -->
 <para>
 the #GtkAdjustment which sets the range of the scale.
@@ -1031,6 +1039,12 @@ the #GtkAdjustment which sets the range of the scale.
 <!-- ##### ARG GtkWindow:auto-shrink ##### -->
 <para>
 If the window shrinks automatically when widgets within it shrink.
+</para>
+
+
+<!-- ##### ARG GtkWindow:icon-list ##### -->
+<para>
+
 </para>
 
 

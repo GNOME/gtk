@@ -131,7 +131,7 @@ Emits the "activate" signal on the given item
 @allocation: 
 
 
-<!-- ##### FUNCTION gtk_menu_item_right_justify ##### -->
+<!-- ##### MACRO gtk_menu_item_right_justify ##### -->
 <para>
 Sets the menu item to be right-justified. Only useful for menu bars.
 </para>
