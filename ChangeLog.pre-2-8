@@ -1,5 +1,8 @@
 2005-01-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkwindow-x11.c (gdk_window_configure_finished): Fix 
+	docs.  (#165163, Jeff Franks)
+	
 	* gtk/gtkimage.c (gtk_image_get_property): Use the correct setter
 	for a string GValue.  (#165203, Damon Chaplin)
 

@@ -5855,7 +5855,7 @@ gdk_window_enable_synchronized_configure (GdkWindow *window)
  * application. GTK+ applications will automatically call this
  * function when appropriate.
  *
- * This function can only be called if gdk_window_use_configure()
+ * This function can only be called if gdk_window_enable_synchronized_configure()
  * was called previously.
  *
  * Since: 2.6
