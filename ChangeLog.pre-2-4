@@ -1,3 +1,16 @@
+Mon Sep 24 15:09:08 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): Don't wait for a
+	response back from the window manager if our size hasn't changed 
+	since we won't get a response back from the window manager;
+	there was code in there to do this, but it was in the wrong
+	place so if the hints change and the size didn't we'd expect
+	a response.
+
+	Also, optimize the position-only-changed case by running
+	the resize queue immediately, and clean up some comments
+	for the changes.
+
 Mon Sep 24 12:48:25 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.h: Add a compat macro that got lost.

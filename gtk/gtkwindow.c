@@ -3959,34 +3959,9 @@ gtk_window_move_resize (GtkWindow *window)
       info->last.configure_request.y != new_request.y)
     configure_request_pos_changed = TRUE;
 
-  /* To change, we must be different from BOTH the last request, and
-   * also our current size as received from the most recent configure
-   * notify.
-   *
-   * If different from last request, it means some sizing
-   * parameters have changed; but one possible such sizing
-   * parameter could be the current size.
-   *
-   * We never want to re-request our current size, because that could
-   * lead to some strange infinite loops if a window manager did
-   * something insane but ICCCM-compliant such as add 2 to all
-   * requested sizes. (i.e. if the WM always assigned a size that
-   * was a function of the requested size, rather than a constraint
-   * applied to requested size - so that requesting current size
-   * did not result in getting that size back)
-   *
-   * So here we detect and prevent any attempt to set size
-   * to current size.
-   *
-   * (FIXME I think some race may be possible here, but
-   *  perhaps avoided by configure_request_count?)
-   */
   if ((info->last.configure_request.width != new_request.width ||
-       info->last.configure_request.height != new_request.height) &&
-      (widget->allocation.width != new_request.width ||
-       widget->allocation.height != new_request.height))
+       info->last.configure_request.height != new_request.height))
     configure_request_size_changed = TRUE;
-
   
   hints_changed = FALSE;
   
@@ -4199,24 +4174,24 @@ gtk_window_move_resize (GtkWindow *window)
 	  gtk_widget_queue_resize (widget); /* migth recurse for GTK_RESIZE_IMMEDIATE */
 	}
     }
-  else if (configure_request_pos_changed ||
-           configure_request_size_changed ||
-           hints_changed)
+  else if ((configure_request_size_changed || hints_changed) &&
+	   (widget->allocation.width != new_request.width ||
+	    widget->allocation.height != new_request.height))
+
     {
       /* We are in one of the following situations:
        * A. configure_request_size_changed
        *    our requisition has changed and we need a different window size,
        *    so we request it from the window manager.
-       * B. !configure_request_size_changed
-       *    the window manager wouldn't assign us the size we requested, in this
-       *    case we don't try to request a new size with every resize.
-       * C. !configure_request_size_changed && hints_changed
+       * B. !configure_request_size_changed && hints_changed
        *    the window manager rejects our size, but we have just changed the
-       *    window manager hints, so there's a certain chance our request will
+       *    window manager hints, so there's a chance our request will
        *    be honoured this time, so we try again.
-       * D. configure_request_pos_changed
-       *    we need to move to a new position, in which case we can also request
-       *    a new size since any of A-C might also apply.
+       *
+       * However, if the new requisition is the same as the current allocation,
+       * we don't request it again, since we won't get a ConfigureNotify back from
+       * the window manager unless it decides to change our requisition. If
+       * we don't get the ConfigureNotify back, the resize queue will never be run.
        */
 
       /* Now send the configure request */
@@ -4281,8 +4256,22 @@ gtk_window_move_resize (GtkWindow *window)
     }
   else
     {
-      /* Not requesting anything new from WM, just had a queue resize
-       * for some reason, so handle the resize queue
+      /* Handle any position changes.
+       */
+      if (configure_request_pos_changed)
+	{
+	  if (window->frame)
+	    {
+	      gdk_window_move (window->frame,
+			       new_request.x - window->frame_left,
+			       new_request.y - window->frame_top);
+	    }
+	  else
+	    gdk_window_move (widget->window,
+			     new_request.x, new_request.y);
+	}
+      
+      /* And run the resize queue.
        */
       if (container->resize_widgets)
         gtk_container_resize_children (container);
