@@ -476,7 +476,8 @@ gdk_window_foreign_new (guint32 anid)
   /* FIXME: This is pretty expensive. Maybe the caller should supply
    *        the parent */
   XQueryTree (gdk_display, anid, &root, &parent, &children, &nchildren);
-  XFree (children);
+  if (children)
+    XFree (children);
   private->parent = gdk_xid_table_lookup (parent);
 
   parent_private = (GdkWindowPrivate *)private->parent;
@@ -1449,7 +1450,8 @@ gdk_window_get_children (GdkWindow *window)
             children = g_list_prepend (children, child);
 	}
 
-      XFree (xchildren);
+      if (xchildren)
+	XFree (xchildren);
     }
 
   return children;
@@ -1525,17 +1527,20 @@ gdk_window_add_colormap_windows (GdkWindow *window)
   if (window_private->destroyed)
     return;
 
+  old_windows = NULL;
   if (!XGetWMColormapWindows (toplevel_private->xdisplay,
 			      toplevel_private->xwindow,
 			      &old_windows, &count))
     {
-      old_windows = NULL;
       count = 0;
     }
 
   for (i = 0; i < count; i++)
     if (old_windows[i] == window_private->xwindow)
-      return;
+      {
+	XFree (old_windows);
+	return;
+      }
 
   new_windows = g_new (Window, count + 1);
 
@@ -1949,7 +1954,8 @@ gdk_window_set_icon_name   (GdkWindow *window,
   XSetWMIconName (window_private->xdisplay, window_private->xwindow,
 		  &property);
 
-  XFree(property.value);
+  if (property.value)
+    XFree (property.value);
 }
 
 void          

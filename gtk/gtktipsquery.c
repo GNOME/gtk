@@ -98,8 +98,8 @@ gtk_tips_query_get_type (void)
 	sizeof (GtkTipsQueryClass),
 	(GtkClassInitFunc) gtk_tips_query_class_init,
 	(GtkObjectInitFunc) gtk_tips_query_init,
-        /* reversed_1 */ NULL,
-	/* reversed_2 */ NULL,
+        /* reserved_1 */ NULL,
+	/* reserved_2 */ NULL,
 	(GtkClassInitFunc) NULL,
       };
 

@@ -331,8 +331,8 @@ gtk_file_selection_get_type (void)
 	sizeof (GtkFileSelectionClass),
 	(GtkClassInitFunc) gtk_file_selection_class_init,
 	(GtkObjectInitFunc) gtk_file_selection_init,
-	/* reversed_1 */ NULL,
-	/* reversed_2 */ NULL,
+	/* reserved_1 */ NULL,
+	/* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
 

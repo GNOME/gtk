@@ -267,8 +267,9 @@ gxi_find_root_child(Display *dpy, Window w)
   do 
     {
       w = parent;
-      XQueryTree(dpy,w,&root,&parent,&children,&nchildren);
-      if (children) XFree(children);
+      XQueryTree (dpy, w, &root, &parent, &children, &nchildren);
+      if (children)
+	XFree (children);
     } 
   while (parent != root);
   

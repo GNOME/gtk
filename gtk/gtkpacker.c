@@ -167,8 +167,8 @@ gtk_packer_get_type (void)
         sizeof (GtkPackerClass),
         (GtkClassInitFunc) gtk_packer_class_init,
         (GtkObjectInitFunc) gtk_packer_init,
-        /* reversed_1 */ NULL,
-	/* reversed_2 */ NULL,
+        /* reserved_1 */ NULL,
+	/* reserved_2 */ NULL,
 	(GtkClassInitFunc) NULL,
       };
 

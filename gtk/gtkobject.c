@@ -141,8 +141,8 @@ gtk_object_init_type (void)
     sizeof (GtkObjectClass),
     (GtkClassInitFunc) gtk_object_class_init,
     (GtkObjectInitFunc) gtk_object_init,
-    /* reversed_1 */ NULL,
-    /* reversed_2 */ NULL,
+    /* reserved_1 */ NULL,
+    /* reserved_2 */ NULL,
     (GtkClassInitFunc) gtk_object_base_class_init,
   };
 

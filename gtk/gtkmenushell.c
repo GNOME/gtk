@@ -78,8 +78,8 @@ gtk_menu_shell_get_type (void)
 	sizeof (GtkMenuShellClass),
 	(GtkClassInitFunc) gtk_menu_shell_class_init,
 	(GtkObjectInitFunc) gtk_menu_shell_init,
-	/* reversed_1 */ NULL,
-        /* reversed_2 */ NULL,
+	/* reserved_1 */ NULL,
+        /* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
 

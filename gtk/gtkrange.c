@@ -95,8 +95,8 @@ gtk_range_get_type (void)
 	sizeof (GtkRangeClass),
 	(GtkClassInitFunc) gtk_range_class_init,
 	(GtkObjectInitFunc) gtk_range_init,
-	/* reversed_1 */ NULL,
-        /* reversed_2 */ NULL,
+	/* reserved_1 */ NULL,
+        /* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
 

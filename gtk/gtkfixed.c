@@ -61,8 +61,8 @@ gtk_fixed_get_type (void)
 	sizeof (GtkFixedClass),
 	(GtkClassInitFunc) gtk_fixed_class_init,
 	(GtkObjectInitFunc) gtk_fixed_init,
-	/* reversed_1 */ NULL,
-        /* reversed_2 */ NULL,
+	/* reserved_1 */ NULL,
+        /* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
 

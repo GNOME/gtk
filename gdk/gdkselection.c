@@ -109,6 +109,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
   if (private->destroyed)
     return 0;
 
+  t = NULL;
   XGetWindowProperty (private->xdisplay, private->xwindow,
 		      gdk_selection_property, 0, 0, False,
 		      AnyPropertyType, &prop_type, &prop_format,
@@ -125,7 +126,11 @@ gdk_selection_property_get (GdkWindow  *requestor,
       return 0;
     }
     
-  XFree (t);
+  if (t)
+    {
+      t = NULL;
+      XFree (t);
+    }
 
   /* Add on an extra byte to handle null termination.  X guarantees
      that t will be 1 longer than nbytes and null terminated */
@@ -144,7 +149,8 @@ gdk_selection_property_get (GdkWindow  *requestor,
     {
       *data = g_new (guchar, length);
       memcpy (*data, t, length);
-      XFree (t);
+      if (t)
+	XFree (t);
       return length-1;
     }
   else
@@ -205,6 +211,8 @@ gdk_text_property_to_text_list (GdkAtom encoding, gint format,
 void
 gdk_free_text_list (gchar **list)
 {
+  g_return_if_fail (list != NULL);
+
   XFreeStringList (list);
 }
 

@@ -57,8 +57,8 @@ gtk_alignment_get_type (void)
 	sizeof (GtkAlignmentClass),
 	(GtkClassInitFunc) gtk_alignment_class_init,
 	(GtkObjectInitFunc) gtk_alignment_init,
-	/* reversed_1 */ NULL,
-        /* reversed_2 */ NULL,
+	/* reserved_1 */ NULL,
+        /* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
 

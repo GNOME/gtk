@@ -41,8 +41,8 @@ gtk_drawing_area_get_type (void)
 	sizeof (GtkDrawingAreaClass),
 	(GtkClassInitFunc) gtk_drawing_area_class_init,
 	(GtkObjectInitFunc) gtk_drawing_area_init,
-	/* reversed_1 */ NULL,
-        /* reversed_2 */ NULL,
+	/* reserved_1 */ NULL,
+        /* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
 

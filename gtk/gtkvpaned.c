@@ -50,8 +50,8 @@ gtk_vpaned_get_type (void)
 	sizeof (GtkVPanedClass),
 	(GtkClassInitFunc) gtk_vpaned_class_init,
 	(GtkObjectInitFunc) gtk_vpaned_init,
-	/* reversed_1 */ NULL,
-        /* reversed_2 */ NULL,
+	/* reserved_1 */ NULL,
+        /* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
 

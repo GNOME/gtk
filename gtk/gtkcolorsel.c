@@ -207,8 +207,8 @@ gtk_color_selection_get_type (void)
 	sizeof (GtkColorSelectionClass),
 	(GtkClassInitFunc) gtk_color_selection_class_init,
 	(GtkObjectInitFunc) gtk_color_selection_init,
-	/* reversed_1 */ NULL,
-	/* reversed_2 */ NULL,
+	/* reserved_1 */ NULL,
+	/* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
 
@@ -1445,8 +1445,8 @@ gtk_color_selection_dialog_get_type (void)
 	sizeof (GtkColorSelectionDialogClass),
 	(GtkClassInitFunc) gtk_color_selection_dialog_class_init,
 	(GtkObjectInitFunc) gtk_color_selection_dialog_init,
-	/* reversed_1 */ NULL,
-	/* reversed_2 */ NULL,
+	/* reserved_1 */ NULL,
+	/* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
 

@@ -163,7 +163,8 @@ gdk_visual_init (void)
 	}
     }
 
-  XFree (visual_list);
+  if (visual_list)
+    XFree (visual_list);
 
   for (i = 0; i < nvisuals; i++)
     {

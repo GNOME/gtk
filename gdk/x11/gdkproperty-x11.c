@@ -46,12 +46,16 @@ gdk_atom_name (GdkAtom atom)
 
   if (gdk_error_code == -1)
     {
+      if (t)
+	XFree (t);
+
       return NULL;
     }
   else
     {
       name = g_strdup (t);
-      XFree (t);
+      if (t)
+	XFree (t);
       
       return name;
     }
@@ -95,6 +99,7 @@ gdk_property_get (GdkWindow   *window,
       xwindow = gdk_root_window;
     }
 
+  ret_data = NULL;
   XGetWindowProperty (xdisplay, xwindow, property,
 		      offset, (length + 3) / 4, pdelete,
 		      type, &ret_prop_type, &ret_format,
@@ -113,6 +118,7 @@ gdk_property_get (GdkWindow   *window,
   if (ret_prop_type != type)
     {
       gchar *rn, *pn;
+
       XFree (ret_data);
       rn = gdk_atom_name(ret_prop_type);
       pn = gdk_atom_name(type);

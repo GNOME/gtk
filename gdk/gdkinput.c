@@ -147,7 +147,7 @@ gdk_input_motion_events (GdkWindow *window,
 	      coords[i].ytilt = 0.0;
 	    }
 
-	  XFree(xcoords);
+	  XFree (xcoords);
 
 	  return coords;
 	}

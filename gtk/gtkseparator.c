@@ -37,8 +37,8 @@ gtk_separator_get_type (void)
 	sizeof (GtkSeparatorClass),
 	(GtkClassInitFunc) gtk_separator_class_init,
 	(GtkObjectInitFunc) gtk_separator_init,
-	/* reversed_1 */ NULL,
-        /* reversed_2 */ NULL,
+	/* reserved_1 */ NULL,
+        /* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
 

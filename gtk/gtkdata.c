@@ -46,8 +46,8 @@ gtk_data_get_type (void)
 	sizeof (GtkDataClass),
 	(GtkClassInitFunc) gtk_data_class_init,
 	(GtkObjectInitFunc) NULL,
-	/* reversed_1 */ NULL,
-        /* reversed_2 */ NULL,
+	/* reserved_1 */ NULL,
+        /* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
 

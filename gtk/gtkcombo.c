@@ -703,8 +703,8 @@ gtk_combo_get_type (void)
 	sizeof (GtkComboClass),
 	(GtkClassInitFunc) gtk_combo_class_init,
 	(GtkObjectInitFunc) gtk_combo_init,
-	/* reversed_1 */ NULL,
-	/* reversed_2 */ NULL,
+	/* reserved_1 */ NULL,
+	/* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
       combo_type = gtk_type_unique (gtk_hbox_get_type (), &combo_info);

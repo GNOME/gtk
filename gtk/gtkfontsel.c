@@ -399,8 +399,8 @@ gtk_font_selection_get_type()
 	sizeof(GtkFontSelectionClass),
 	(GtkClassInitFunc) gtk_font_selection_class_init,
 	(GtkObjectInitFunc) gtk_font_selection_init,
-	/* reversed_1 */ NULL,
-	/* reversed_2 */ NULL,
+	/* reserved_1 */ NULL,
+	/* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
 
@@ -3077,8 +3077,8 @@ gtk_font_selection_dialog_get_type	(void)
 	sizeof (GtkFontSelectionDialogClass),
 	(GtkClassInitFunc) gtk_font_selection_dialog_class_init,
 	(GtkObjectInitFunc) gtk_font_selection_dialog_init,
-	/* reversed_1 */ NULL,
-	/* reversed_2 */ NULL,
+	/* reserved_1 */ NULL,
+	/* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
 
