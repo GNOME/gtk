@@ -107,7 +107,7 @@ if test "x$GCC" = "xyes"; then
   fi
 fi
 
-AC_MSG_CHECKING([For extra flags to get ANSI library prototypes])
+AC_MSG_CHECKING([for extra flags to get ANSI library prototypes])
 gtk_save_LDFLAGS=$LDFLAGS
 LIBS="$LIBS -lm"
 AC_TRY_RUN([#include <math.h>
