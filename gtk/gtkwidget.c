@@ -1085,6 +1085,13 @@ gtk_widget_unparent (GtkWidget *widget)
       if (child == widget)
 	gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);
     }
+
+  if (GTK_WIDGET_RESIZE_NEEDED (widget))
+    {
+      GTK_CONTAINER (toplevel)->resize_widgets =
+	g_slist_remove (GTK_CONTAINER (toplevel)->resize_widgets, widget);
+      GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_NEEDED);
+    }
   
   if (widget->window &&
       GTK_WIDGET_NO_WINDOW (widget) &&
@@ -1117,8 +1124,22 @@ gtk_widget_destroy (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  GTK_WIDGET_UNSET_FLAGS (widget, GTK_VISIBLE);
+  if (GTK_WIDGET_REALIZED (widget))
+    gtk_widget_unrealize (widget);
+  
   gtk_object_destroy (GTK_OBJECT (widget));
 }
+
+/*****************************************
+ * gtk_widget_destroyed:
+ *   Utility function: sets widget_pointer 
+ *   to NULL when widget is destroyed.
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
 
 void
 gtk_widget_destroyed (GtkWidget      *widget,
@@ -3091,22 +3112,11 @@ gtk_widget_real_destroy (GtkObject *object)
       GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_PENDING);
     }
 
-  if (GTK_WIDGET_RESIZE_NEEDED (widget))
-    {
-      GtkWidget *toplevel;
-      
-      toplevel = gtk_widget_get_toplevel (widget);
-      GTK_CONTAINER (toplevel)->resize_widgets =
-	g_slist_remove (GTK_CONTAINER (toplevel)->resize_widgets, widget);
-      GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_NEEDED);
-    }
-
   if (GTK_WIDGET_HAS_SHAPE_MASK (widget))
     gtk_widget_shape_combine_mask (widget, NULL, -1, -1);
 
   gtk_grab_remove (widget);
   gtk_selection_remove_all (widget);
-  gtk_widget_unrealize (widget);
 
   if (widget->parent)
     gtk_container_remove (GTK_CONTAINER (widget->parent), widget);
@@ -3316,11 +3326,6 @@ gtk_widget_real_unrealize (GtkWidget *widget)
   /* printf ("unrealizing %s\n", gtk_type_name (GTK_OBJECT(widget)->klass->type));
    */
 
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_foreach (GTK_CONTAINER (widget),
-			   (GtkCallback)gtk_widget_unrealize,
-			   NULL);
-
   gtk_style_detach (widget->style);
   if (!GTK_WIDGET_NO_WINDOW (widget))
     {
@@ -3331,6 +3336,14 @@ gtk_widget_real_unrealize (GtkWidget *widget)
     {
       gdk_window_unref (widget->window);
     }
+
+  /* Unrealize afterwards to improve visual effect */
+
+  if (GTK_IS_CONTAINER (widget))
+    gtk_container_foreach (GTK_CONTAINER (widget),
+			   (GtkCallback)gtk_widget_unrealize,
+			   NULL);
+
   widget->window = NULL;
 }
 

@@ -1,3 +1,15 @@
+Mon Feb  9 23:08:16 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwidget.c (gtk_widget_unparent): Check for
+	  the RESIZE_NEEDED flag and remove the widget from the list.
+	  Remove the check from gtk_widget_destroy (no longer needed).
+
+	* Unrealize widget _before_ calling "destroy" signal, and
+	  unset VISIBLE flag.
+
+	* Unrealize child widgets _after_ unrealizing parent to improve
+	  visual appearance.
+
 Mon Feb  9 16:42:21 1998  Miguel de Icaza  <miguel@nuclecu.unam.mx>
 
 	* gtk/gtksignal.c (gtk_signal_get_handlers): no longer a private
@@ -6,7 +18,7 @@ Mon Feb  9 16:42:21 1998  Miguel de Icaza  <miguel@nuclecu.unam.mx>
 
 Sun Feb  8 07:06:54 1998  Tim Janik  <timj@gimp.org>
 
-	* gtk/gtkmenu.c (gtk_menu_get_attach_widget): new fundtion to return
+	* gtk/gtkmenu.c (gtk_menu_get_attach_widget): new function to return
  	  the widget that the menu is attached to.
 
 Sat Feb  7 11:33:08 1998  Owen Taylor  <owt1@cornell.edu>
