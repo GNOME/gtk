@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-1.2.2\n"
-"POT-Creation-Date: 2001-02-15 22:06-0500\n"
+"POT-Creation-Date: 2001-02-14 12:40+0100\n"
 "PO-Revision-Date: 1999-04-19 16:30+0100\n"
 "Last-Translator: Stefan Ondrejicka <ondrej@idata.sk>\n"
 "Language-Team: Slovak <sk@li.org>\n"
@@ -222,7 +222,7 @@ msgstr "Body"
 
 #: gtk/gtkfontsel.c:671
 msgid "Pixels"
-msgstr "Pixle"
+msgstr "Body"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:687
@@ -244,7 +244,7 @@ msgstr "Aktuálne meno písma:"
 #: gtk/gtkfontsel.c:771
 #, c-format
 msgid "%i fonts available with a total of %i styles."
-msgstr "%i písiem je dostopných v %i ¹týloch."
+msgstr "%i písiem je dostupných v %i ¹týloch."
 
 #: gtk/gtkfontsel.c:786
 msgid "Filter"

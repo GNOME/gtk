@@ -1,3 +1,7 @@
+2001-02-23  Stanislav  <visnovsky@nenya.ms.mff.cuni.cz>
+
+	* sk.po: Fixed spelling.
+
 Sun Feb 18 18:06:11 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* nl.po: Updated (applied gtk-pauls-990307-0.patch)
