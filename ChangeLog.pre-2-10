@@ -1,3 +1,9 @@
+Mon Oct 29 12:27:51 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_rename_file): Grab
+	the focus to the fileop entry for create dir / rename
+	file.
+
 Mon Oct 29 12:21:49 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Don't use AC_CHECK_FILE to check for a 

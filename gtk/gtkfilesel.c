@@ -1328,6 +1328,8 @@ gtk_file_selection_create_dir (GtkWidget *widget,
   gtk_widget_grab_default (button);
   gtk_widget_show (button);
 
+  gtk_widget_grab_focus (fs->fileop_entry);
+
   gtk_widget_show (dialog);
 }
 
@@ -1607,6 +1609,8 @@ gtk_file_selection_rename_file (GtkWidget *widget,
   GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
   gtk_widget_grab_default (button);
   gtk_widget_show (button);
+
+  gtk_widget_grab_focus (fs->fileop_entry);
 
   gtk_widget_show (dialog);
 }
