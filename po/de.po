@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.x\n"
-"POT-Creation-Date: 2002-06-16 00:04-0400\n"
+"POT-Creation-Date: 2002-07-31 16:57-0400\n"
 "PO-Revision-Date: 2002-03-16 16:33+0100\n"
 "Last-Translator: Christian Meyer <chrisime@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -138,15 +138,15 @@ msgstr "Bild-Pixeldaten unbrauchbar"
 msgid "failed to allocate image buffer of %u bytes"
 msgstr "Bildpuffer von %u Bytes konnte nicht bereit gestellt werden"
 
-#: gdk-pixbuf/io-bmp.c:266 gdk-pixbuf/io-bmp.c:366
+#: gdk-pixbuf/io-bmp.c:261 gdk-pixbuf/io-bmp.c:374
 msgid "Not enough memory to load bitmap image"
 msgstr "Nicht genug Speicher, um Bitmap-Bild zu laden"
 
-#: gdk-pixbuf/io-bmp.c:292
+#: gdk-pixbuf/io-bmp.c:300
 msgid "BMP image has unsupported header size"
 msgstr "Vorspannlänge des BMP-Bildes wird nicht unterstützt"
 
-#: gdk-pixbuf/io-bmp.c:317 gdk-pixbuf/io-bmp.c:340 gdk-pixbuf/io-bmp.c:399
+#: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:409
 msgid "BMP image has bogus header data"
 msgstr "Vorspanndaten des BMP-Bildes sind Unsinn"
 
@@ -440,7 +440,12 @@ msgstr "Vorspanndaten des BMP-Bildes sind Unsinn"
 msgid "RAS image has unknown type"
 msgstr "Bildformat unbekannt"
 
-#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#: gdk-pixbuf/io-ras.c:188
+#, fuzzy
+msgid "unsupported RAS image variation"
+msgstr "Nicht unterstützter TGA-Bildtyp"
+
+#: gdk-pixbuf/io-ras.c:203 gdk-pixbuf/io-ras.c:223
 #, fuzzy
 msgid "Not enough memory to load RAS image"
 msgstr "Nicht genug Speicher, um Bild zu laden"
@@ -553,39 +558,44 @@ msgstr "Pixbuf kann nicht angelegt werden"
 msgid "Unsupported TGA image type"
 msgstr "Nicht unterstützter TGA-Bildtyp"
 
-#: gdk-pixbuf/io-tiff.c:187
+#: gdk-pixbuf/io-tiff.c:191
 msgid "Could not get image width (bad TIFF file)"
 msgstr "Bildbreite konnte nicht ermittelt werden (ungültige TIFF-Datei)"
 
-#: gdk-pixbuf/io-tiff.c:194
+#: gdk-pixbuf/io-tiff.c:198
 msgid "Could not get image height (bad TIFF file)"
 msgstr "Bildnte nicht ermittelt werden (ungültige TIFF-Datei)"
 
-#: gdk-pixbuf/io-tiff.c:202
+#: gdk-pixbuf/io-tiff.c:206
 msgid "Width or height of TIFF image is zero"
 msgstr "Breite oder Höhe des TIFF-Bildes ist Null"
 
-#: gdk-pixbuf/io-tiff.c:211 gdk-pixbuf/io-tiff.c:220
+#: gdk-pixbuf/io-tiff.c:215 gdk-pixbuf/io-tiff.c:224
 msgid "Dimensions of TIFF image too large"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:536
+#: gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:246 gdk-pixbuf/io-tiff.c:552
 msgid "Insufficient memory to open TIFF file"
 msgstr "Ungenügender Speicher, um TIFF-Datei zu öffnen"
 
-#: gdk-pixbuf/io-tiff.c:254
+#: gdk-pixbuf/io-tiff.c:258
 msgid "Failed to load RGB data from TIFF file"
 msgstr "RGB-Daten konnten nicht aus TIFF-Datei geladen werden"
 
-#: gdk-pixbuf/io-tiff.c:324
+#: gdk-pixbuf/io-tiff.c:266
+#, fuzzy
+msgid "Unsupported TIFF variant"
+msgstr "Nicht unterstützter TGA-Bildtyp"
+
+#: gdk-pixbuf/io-tiff.c:336
 msgid "Failed to open TIFF image"
 msgstr "TIFF-Bild konnte nicht geöffnet werden"
 
-#: gdk-pixbuf/io-tiff.c:337
+#: gdk-pixbuf/io-tiff.c:349
 msgid "TIFFClose operation failed"
 msgstr "Aktion TIFFClose gescheitert"
 
-#: gdk-pixbuf/io-tiff.c:470 gdk-pixbuf/io-tiff.c:484
+#: gdk-pixbuf/io-tiff.c:482 gdk-pixbuf/io-tiff.c:495
 msgid "Failed to load TIFF image"
 msgstr "TIFF-Bild konnte nicht geladen werden"
 
@@ -1357,7 +1367,7 @@ msgstr "Elementabstand"
 msgid "Spacing around check or radio indicator"
 msgstr "Abstand um Ankreuz- oder Radioelement"
 
-#: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:130
+#: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:133
 msgid "Active"
 msgstr "Aktiv"
 
@@ -1365,7 +1375,7 @@ msgstr "Aktiv"
 msgid "Whether the menu item is checked."
 msgstr "Soll der Menüeintrag angekreuzt sein?"
 
-#: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:138
+#: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:141
 msgid "Inconsistent"
 msgstr "Inkonsistent"
 
@@ -1774,16 +1784,16 @@ msgid "Whether to select the contents of an entry when it is focused."
 msgstr ""
 "Soll der Inhalt eines Eintrages angewählt werden, wenn er fokussiert ist?"
 
-#: gtk/gtkentry.c:3861 gtk/gtklabel.c:3177
+#: gtk/gtkentry.c:3870 gtk/gtklabel.c:3177
 msgid "Select All"
 msgstr "Alles auswählen"
 
 # gtk/gtkentry.c:3567 gtk/gtktextview
-#: gtk/gtkentry.c:3871 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3880 gtk/gtklabel.c:3187
 msgid "Input Methods"
 msgstr "Eingabemethoden"
 
-#: gtk/gtkentry.c:3881 gtk/gtktextview.c:6395
+#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6395
 msgid "_Insert Unicode control character"
 msgstr "Unicode-Steuerzeichen _einfügen"
 
@@ -3867,19 +3877,19 @@ msgstr "Themen-Engine kann nicht in module_path gefunden werden: »%s«,"
 msgid "--- No Tip ---"
 msgstr "--- Kein Tipp ---"
 
-#: gtk/gtktogglebutton.c:131
+#: gtk/gtktogglebutton.c:134
 msgid "If the toggle button should be pressed in or not"
 msgstr "Soll der Umschaltknopf eingedrückt sein oder nicht?"
 
-#: gtk/gtktogglebutton.c:139
+#: gtk/gtktogglebutton.c:142
 msgid "If the toggle button is in an \"in between\" state."
 msgstr "Ist der Umschaltknopf in einem »Zwischen«-Zustand?"
 
-#: gtk/gtktogglebutton.c:146
+#: gtk/gtktogglebutton.c:149
 msgid "Draw Indicator"
 msgstr "Indikator zeichnen"
 
-#: gtk/gtktogglebutton.c:147
+#: gtk/gtktogglebutton.c:150
 msgid "If the toggle part of the button is displayed"
 msgstr "Soll der Umschaltteil des Knopfes dargestellt werden?"
 

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+\n"
-"POT-Creation-Date: 2002-07-23 14:51+0300\n"
+"POT-Creation-Date: 2002-07-31 16:57-0400\n"
 "PO-Revision-Date: 2002-07-23 14:55+0300\n"
 "Last-Translator: Borislav Aleksandrov <B.Aleksandrov@cnsys.bg>\n"
 "Language-Team: Bulgarian <dict@linux.zonebg.com>\n"
@@ -1338,7 +1338,7 @@ msgstr "Размер на Индикатор"
 msgid "Spacing around check or radio indicator"
 msgstr "Разстоянието около маркирането или радио индиктора"
 
-#: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:130
+#: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:133
 msgid "Active"
 msgstr "Активен"
 
@@ -1346,7 +1346,7 @@ msgstr "Активен"
 msgid "Whether the menu item is checked."
 msgstr "Дали обекта на менюто е маркиран"
 
-#: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:138
+#: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:141
 msgid "Inconsistent"
 msgstr "Нечувствителен"
 
@@ -1750,15 +1750,15 @@ msgstr "Избор на фокус"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Дали избраното съдържание ще се отдели при фокусиране."
 
-#: gtk/gtkentry.c:3861 gtk/gtklabel.c:3177
+#: gtk/gtkentry.c:3870 gtk/gtklabel.c:3177
 msgid "Select All"
 msgstr "Избира Всичко"
 
-#: gtk/gtkentry.c:3871 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3880 gtk/gtklabel.c:3187
 msgid "Input Methods"
 msgstr "Режими на въвеждане"
 
-#: gtk/gtkentry.c:3881 gtk/gtktextview.c:6395
+#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6395
 msgid "_Insert Unicode control character"
 msgstr "_Вмъква Уникод контролен символ"
 
@@ -3815,19 +3815,19 @@ msgstr "Не мога да намеря тема в пътя с модули: \"
 msgid "--- No Tip ---"
 msgstr "--- Няма Подсещане ---"
 
-#: gtk/gtktogglebutton.c:131
+#: gtk/gtktogglebutton.c:134
 msgid "If the toggle button should be pressed in or not"
 msgstr "Дали бутона за превключване да бъде включен или не"
 
-#: gtk/gtktogglebutton.c:139
+#: gtk/gtktogglebutton.c:142
 msgid "If the toggle button is in an \"in between\" state."
 msgstr "Ако бутона за превключване е в \"междинно\" състояние."
 
-#: gtk/gtktogglebutton.c:146
+#: gtk/gtktogglebutton.c:149
 msgid "Draw Indicator"
 msgstr "Изчертава Индикатор"
 
-#: gtk/gtktogglebutton.c:147
+#: gtk/gtktogglebutton.c:150
 msgid "If the toggle part of the button is displayed"
 msgstr "Дали частта за превключване на бутона е видима"
 

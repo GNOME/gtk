@@ -28,7 +28,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2002-07-19 23:26+0200\n"
+"POT-Creation-Date: 2002-07-31 16:57-0400\n"
 "PO-Revision-Date: 2002-07-19 23:26+0200\n"
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -1366,7 +1366,7 @@ msgstr "Indikatormellemrum"
 msgid "Spacing around check or radio indicator"
 msgstr "Mellemrum omkring afkrydsnings- eller radioindikator"
 
-#: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:130
+#: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:133
 msgid "Active"
 msgstr "Aktiv"
 
@@ -1374,7 +1374,7 @@ msgstr "Aktiv"
 msgid "Whether the menu item is checked."
 msgstr "Om menupunktet er afkrydset"
 
-#: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:138
+#: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:141
 msgid "Inconsistent"
 msgstr "Inkonsistent"
 
@@ -1788,15 +1788,15 @@ msgstr "Markér ved fokus"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Om indholdet af indtastningsfeltet markeres når feltet modtager fokus"
 
-#: gtk/gtkentry.c:3861 gtk/gtklabel.c:3177
+#: gtk/gtkentry.c:3870 gtk/gtklabel.c:3177
 msgid "Select All"
 msgstr "Markér alt"
 
-#: gtk/gtkentry.c:3871 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3880 gtk/gtklabel.c:3187
 msgid "Input Methods"
 msgstr "Indtastningsmetoder"
 
-#: gtk/gtkentry.c:3881 gtk/gtktextview.c:6395
+#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6395
 msgid "_Insert Unicode control character"
 msgstr "_Indsæt Unicode-kontroltegn"
 
@@ -3861,20 +3861,20 @@ msgstr "Kunne ikke finde temamotor i module_path: '%s',"
 msgid "--- No Tip ---"
 msgstr "--- Ingen hjælp ---"
 
-#: gtk/gtktogglebutton.c:131
+#: gtk/gtktogglebutton.c:134
 msgid "If the toggle button should be pressed in or not"
 msgstr "Om afkrydsningsknappen skal være trykket ind eller ej"
 
 # værktøjstip til når knappen er i en inkonsistent tilstand
-#: gtk/gtktogglebutton.c:139
+#: gtk/gtktogglebutton.c:142
 msgid "If the toggle button is in an \"in between\" state."
 msgstr "Om afkrydsningstilstanden er i en \"mellemtilstand\""
 
-#: gtk/gtktogglebutton.c:146
+#: gtk/gtktogglebutton.c:149
 msgid "Draw Indicator"
 msgstr "Vis indikator"
 
-#: gtk/gtktogglebutton.c:147
+#: gtk/gtktogglebutton.c:150
 msgid "If the toggle part of the button is displayed"
 msgstr "Vis afkrydsningsdelen af knappen"
 

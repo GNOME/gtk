@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-07-08 13:09+0200\n"
+"POT-Creation-Date: 2002-07-31 16:57-0400\n"
 "PO-Revision-Date: 2002-07-11 08:30GMT+0200\n"
 "Last-Translator: Peteris Krisjanis <pecisk@inbox.lv>\n"
 "Language-Team: Latvian <ll10nt@inbox.lv>\n"
@@ -31,8 +31,11 @@ msgstr "Nezinu kā lai ielādē animāciju no faila '%s'"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:640
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "Nevarēju ielādēt attēlu '%s': iemesls nezināms, iespējams sabojāts attēla fails"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Nevarēju ielādēt attēlu '%s': iemesls nezināms, iespējams sabojāts attēla "
+"fails"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
 #, c-format
@@ -54,8 +57,8 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
-"Attēla ielādes modulis %s neeksportē pareizo saskarni; iespējams tā ir "
-"no citas GTK versijas?"
+"Attēla ielādes modulis %s neeksportē pareizo saskarni; iespējams tā ir no "
+"citas GTK versijas?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:494 gdk-pixbuf/gdk-pixbuf-io.c:520
 #, c-format
@@ -84,7 +87,8 @@ msgstr "Nespēju ielādēt attēlu '%s': %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:756
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "Šis gdk-pixbuf būvējums nesatur atbalstu lai saglabātu attēla formātu: %s"
+msgstr ""
+"Šis gdk-pixbuf būvējums nesatur atbalstu lai saglabātu attēla formātu: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:863
 #, c-format
@@ -96,7 +100,8 @@ msgstr "Nevarēja atvērt '%s' rakstīšanai: %s"
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr "Nevaru aizvērt '%s' kāmēr rakstām attēlu, visi dati var būt nesaglabāti: %s"
+msgstr ""
+"Nevaru aizvērt '%s' kāmēr rakstām attēlu, visi dati var būt nesaglabāti: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:250
 #, c-format
@@ -273,8 +278,11 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:736
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "JPEG kvalitātei jābūt apzīmētai ar vērtību no 0 līdz 100: vērtība '%d' nav atļauta."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr ""
+"JPEG kvalitātei jābūt apzīmētai ar vērtību no 0 līdz 100: vērtība '%d' nav "
+"atļauta."
 
 #: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
@@ -311,8 +319,8 @@ msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
-"Nepietiekoša atmiņa lai uzturētu %ld x %ld attēlu; pamēģini iziet "
-"no dažām aplikācijām lai samazinātu atmiņas noslogotību"
+"Nepietiekoša atmiņa lai uzturētu %ld x %ld attēlu; pamēģini iziet no dažām "
+"aplikācijām lai samazinātu atmiņas noslogotību"
 
 #: gdk-pixbuf/io-png.c:650
 msgid "Fatal error reading PNG image file"
@@ -324,7 +332,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Kļūda nolasot PNG attēlu failu: %s"
 
 #: gdk-pixbuf/io-png.c:765
-msgid "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:773
@@ -411,7 +420,12 @@ msgstr "RAS attēlam ir kļūdaini galviņas dati"
 msgid "RAS image has unknown type"
 msgstr "RAS attēls ir nezināma tipa"
 
-#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#: gdk-pixbuf/io-ras.c:188
+#, fuzzy
+msgid "unsupported RAS image variation"
+msgstr "Neatbalstīts TGA attēla tips"
+
+#: gdk-pixbuf/io-ras.c:203 gdk-pixbuf/io-ras.c:223
 msgid "Not enough memory to load RAS image"
 msgstr "Nepietiekama atmiņa RAS attēla ielādei"
 
@@ -844,7 +858,8 @@ msgid "Use stock"
 msgstr ""
 
 #: gtk/gtkbutton.c:206
-msgid "If set, the label is used to pick a stock item instead of being displayed"
+msgid ""
+"If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 
 #: gtk/gtkbutton.c:213
@@ -878,7 +893,8 @@ msgid "Child X Displacement"
 msgstr ""
 
 #: gtk/gtkbutton.c:279
-msgid "How far in the x direction to move the child when the button is depressed"
+msgid ""
+"How far in the x direction to move the child when the button is depressed"
 msgstr ""
 
 #: gtk/gtkbutton.c:286
@@ -886,7 +902,8 @@ msgid "Child Y Displacement"
 msgstr ""
 
 #: gtk/gtkbutton.c:287
-msgid "How far in the y direction to move the child when the button is depressed"
+msgid ""
+"How far in the y direction to move the child when the button is depressed"
 msgstr ""
 
 #: gtk/gtkcellrenderer.c:103
@@ -1125,7 +1142,8 @@ msgid "Rise"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:428
-msgid "Offset of text above the baseline (below the baseline if rise is negative)"
+msgid ""
+"Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:341 gtk/gtktexttag.c:467
@@ -1288,7 +1306,7 @@ msgstr ""
 msgid "Spacing around check or radio indicator"
 msgstr ""
 
-#: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:130
+#: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:133
 msgid "Active"
 msgstr ""
 
@@ -1296,7 +1314,7 @@ msgstr ""
 msgid "Whether the menu item is checked."
 msgstr ""
 
-#: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:138
+#: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:141
 msgid "Inconsistent"
 msgstr ""
 
@@ -1462,7 +1480,8 @@ msgid "Always enable arrows"
 msgstr ""
 
 #: gtk/gtkcombo.c:147
-msgid "Whether the arrow keys work, even if the entry contents are not in the list"
+msgid ""
+"Whether the arrow keys work, even if the entry contents are not in the list"
 msgstr ""
 
 #: gtk/gtkcombo.c:153
@@ -1598,7 +1617,8 @@ msgid "Selection Bound"
 msgstr ""
 
 #: gtk/gtkentry.c:446 gtk/gtklabel.c:369
-msgid "The position of the opposite end of the selection from the cursor in chars."
+msgid ""
+"The position of the opposite end of the selection from the cursor in chars."
 msgstr ""
 
 #: gtk/gtkentry.c:456
@@ -1677,15 +1697,15 @@ msgstr ""
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr ""
 
-#: gtk/gtkentry.c:3861 gtk/gtklabel.c:3177
+#: gtk/gtkentry.c:3870 gtk/gtklabel.c:3177
 msgid "Select All"
 msgstr ""
 
-#: gtk/gtkentry.c:3871 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3880 gtk/gtklabel.c:3187
 msgid "Input Methods"
 msgstr ""
 
-#: gtk/gtkentry.c:3881 gtk/gtktextview.c:6395
+#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6395
 msgid "_Insert Unicode control character"
 msgstr ""
 
@@ -1756,7 +1776,8 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1386
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
 #: gtk/gtkfilesel.c:1388
@@ -2374,7 +2395,8 @@ msgid "X pad"
 msgstr ""
 
 #: gtk/gtkmisc.c:118
-msgid "The amount of space to add on the left and right of the widget, in pixels"
+msgid ""
+"The amount of space to add on the left and right of the widget, in pixels"
 msgstr ""
 
 #: gtk/gtkmisc.c:127
@@ -2382,7 +2404,8 @@ msgid "Y pad"
 msgstr ""
 
 #: gtk/gtkmisc.c:128
-msgid "The amount of space to add on the top and bottom of the widget, in pixels"
+msgid ""
+"The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr ""
 
 #: gtk/gtknotebook.c:362
@@ -2489,7 +2512,8 @@ msgid "Position"
 msgstr ""
 
 #: gtk/gtkpaned.c:209
-msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
+msgid ""
+"Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 
 #: gtk/gtkpaned.c:217
@@ -2513,7 +2537,8 @@ msgid "Expand"
 msgstr ""
 
 #: gtk/gtkpreview.c:130
-msgid "Whether the preview widget should take up the entire space it is allocated"
+msgid ""
+"Whether the preview widget should take up the entire space it is allocated"
 msgstr ""
 
 #: gtk/gtkprogress.c:122
@@ -2685,7 +2710,8 @@ msgid "Arrow X Displacement"
 msgstr ""
 
 #: gtk/gtkrange.c:330
-msgid "How far in the x direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 
 #: gtk/gtkrange.c:337
@@ -2693,7 +2719,8 @@ msgid "Arrow Y Displacement"
 msgstr ""
 
 #: gtk/gtkrange.c:338
-msgid "How far in the y direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 
 #: gtk/gtkrc.c:2282
@@ -2816,7 +2843,8 @@ msgid "Secondary backward stepper"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:110
-msgid "Display a second backward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:117
@@ -2824,7 +2852,8 @@ msgid "Secondary forward stepper"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:118
-msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:523
@@ -3000,7 +3029,8 @@ msgid "Update Policy"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:290
-msgid "Whether the spin button should update always, or only when the value is legal"
+msgid ""
+"Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:298
@@ -3272,7 +3302,6 @@ msgid "_Yes"
 msgstr "_Jā"
 
 #: gtk/gtkstock.c:334
-#, c-format
 msgid "Zoom _100%"
 msgstr "Palielināt 100%"
 
@@ -3459,7 +3488,8 @@ msgid "Wrap mode"
 msgstr ""
 
 #: gtk/gtktexttag.c:485 gtk/gtktextview.c:577
-msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgid ""
+"Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 
 #: gtk/gtktexttag.c:494 gtk/gtktextview.c:624
@@ -3671,19 +3701,19 @@ msgstr ""
 msgid "--- No Tip ---"
 msgstr ""
 
-#: gtk/gtktogglebutton.c:131
+#: gtk/gtktogglebutton.c:134
 msgid "If the toggle button should be pressed in or not"
 msgstr ""
 
-#: gtk/gtktogglebutton.c:139
+#: gtk/gtktogglebutton.c:142
 msgid "If the toggle button is in an \"in between\" state."
 msgstr ""
 
-#: gtk/gtktogglebutton.c:146
+#: gtk/gtktogglebutton.c:149
 msgid "Draw Indicator"
 msgstr ""
 
-#: gtk/gtktogglebutton.c:147
+#: gtk/gtktogglebutton.c:150
 msgid "If the toggle part of the button is displayed"
 msgstr ""
 
@@ -3736,7 +3766,8 @@ msgid "Toolbar style"
 msgstr ""
 
 #: gtk/gtktoolbar.c:285
-msgid "Whether default toolbars have text only, text and icons, icons only, etc."
+msgid ""
+"Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 
 #: gtk/gtktoolbar.c:291
@@ -4233,7 +4264,8 @@ msgid "Default Width"
 msgstr "Noklusētais Platums"
 
 #: gtk/gtkwindow.c:472
-msgid "The default width of the window, used when initially showing the window."
+msgid ""
+"The default width of the window, used when initially showing the window."
 msgstr "Noklusētais loga platums, ko izmanto, ka pirmo reizi parāda logu."
 
 #: gtk/gtkwindow.c:481
@@ -4241,7 +4273,8 @@ msgid "Default Height"
 msgstr "Noklusētais Augstums"
 
 #: gtk/gtkwindow.c:482
-msgid "The default height of the window, used when initially showing the window."
+msgid ""
+"The default height of the window, used when initially showing the window."
 msgstr "Noklusētais loga augstums, ko izmanto ka pirmo reizi parāda logu."
 
 #: gtk/gtkwindow.c:491
@@ -4304,4 +4337,3 @@ msgstr "Vjetnamiešu (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "X Ievades Metode"
-

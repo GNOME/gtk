@@ -1,3 +1,20 @@
+Overview of Changes in GTK+ 2.0.6
+=================================
+
+* GtkTreeView bug fixes [Jonathan Blandford, Kristian Rietveld, 
+  Josh Green, Matthias Clasen]
+* Fix problem with keynav and insensitive menu items [Owen Taylor]
+* Fix pixbuf_from_drawable() for LSB -> MSB [Federico Mena Quintero]
+* Use GTK2_RC_FILES envvar instead of GTK_RC_FILES [Owen]
+* Focus check/radio buttons when activating with a mnemonic [Padraig O'Briain]
+* Cycle between multiple menubars with F10, not control-tab 
+  [Calum Benson, Padraig]
+* Misc bug fixes [Jacob Berkman, Matthias Clasen, Manuel Op de Coul,
+  Bill Haneman, Norihiro UMEDA, Shivaram Upadhyayula, Yao Zhang]
+* Build fixes for cross-compiling and portability [Arnaud Charlet, 
+  J. Ali Harlow]
+* Updated translations (bg,ca,da,fr,ja,ko,lv,no,pl,ru,sk,sv,vi)
+
 Overview of Changes in GTK+ 2.0.5
 =================================
 

@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.2\n"
-"POT-Creation-Date: 2002-07-25 08:09+0400\n"
+"POT-Creation-Date: 2002-07-31 16:57-0400\n"
 "PO-Revision-Date: 2002-07-25 08:45+0400\n"
 "Last-Translator: Dmitry G. Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
@@ -1599,7 +1599,7 @@ msgid "Spacing around check or radio indicator"
 msgstr "Пространство вокруг текста флажка или радио-кнопки"
 
 # gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:130
-#: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:130
+#: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:133
 msgid "Active"
 msgstr "Активный"
 
@@ -1609,7 +1609,7 @@ msgid "Whether the menu item is checked."
 msgstr "Может ли элемент меню быть отмечен."
 
 # gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:138
-#: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:138
+#: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:141
 msgid "Inconsistent"
 msgstr "Нечувствительный"
 
@@ -2088,17 +2088,17 @@ msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Будет ли содержимое записи выделяться при фокусировании."
 
 # gtk/gtkentry.c:3850 gtk/gtklabel.c:3164
-#: gtk/gtkentry.c:3861 gtk/gtklabel.c:3177
+#: gtk/gtkentry.c:3870 gtk/gtklabel.c:3177
 msgid "Select All"
 msgstr "Выделить все"
 
 # gtk/gtkentry.c:3860 gtk/gtklabel.c:3174
-#: gtk/gtkentry.c:3871 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3880 gtk/gtklabel.c:3187
 msgid "Input Methods"
 msgstr "Методы ввода"
 
 # gtk/gtkentry.c:3870 gtk/gtktextview.c:6375
-#: gtk/gtkentry.c:3881 gtk/gtktextview.c:6395
+#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6395
 msgid "_Insert Unicode control character"
 msgstr "Вс_тавить управляющий символ Unicode"
 
@@ -3509,6 +3509,7 @@ msgid "Window Placement"
 msgstr "Размещение окна"
 
 # gtk/gtkscrolledwindow.c:268
+#: gtk/gtkscrolledwindow.c:268
 msgid "Where the contents are located with respect to the scrollbars"
 msgstr "Как будут размещены компоненты окна относительно полос прокрутки"
 
@@ -4474,20 +4475,20 @@ msgid "--- No Tip ---"
 msgstr "--- Нет подсказки ---"
 
 # gtk/gtktogglebutton.c:131
-#: gtk/gtktogglebutton.c:131
+#: gtk/gtktogglebutton.c:134
 msgid "If the toggle button should be pressed in or not"
 msgstr "Должна ли кнопка-переключатель быть нажата или нет"
 
-#: gtk/gtktogglebutton.c:139
+#: gtk/gtktogglebutton.c:142
 msgid "If the toggle button is in an \"in between\" state."
 msgstr "Если кнопка-переключатель в \"промежуточном\" состоянии."
 
 # gtk/gtktogglebutton.c:146
-#: gtk/gtktogglebutton.c:146
+#: gtk/gtktogglebutton.c:149
 msgid "Draw Indicator"
 msgstr "Нарисовать индикатор"
 
-#: gtk/gtktogglebutton.c:147
+#: gtk/gtktogglebutton.c:150
 msgid "If the toggle part of the button is displayed"
 msgstr "Если отображена переключающая часть кнопки"
 
@@ -4946,8 +4947,8 @@ msgstr "Действие по умолчанию"
 #: gtk/gtkwidget.c:473
 msgid "If TRUE, the widget will receive the default action when it is focused."
 msgstr ""
-"Если истинно, то элемент управления получает действие по умолчанию при получении "
-"фокуса ввода."
+"Если истинно, то элемент управления получает действие по умолчанию при "
+"получении фокуса ввода."
 
 #: gtk/gtkwidget.c:479
 msgid "Composite child"
@@ -5086,8 +5087,8 @@ msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea."
 msgstr ""
-"Если истинно, то окно не имеет минимального размера. Использование этого значения "
-"в 99 % случаев нерационально."
+"Если истинно, то окно не имеет минимального размера. Использование этого "
+"значения в 99 % случаев нерационально."
 
 # gtk/gtkwindow.c:433
 #: gtk/gtkwindow.c:438
@@ -5113,8 +5114,8 @@ msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
 msgstr ""
-"Если истинно, то окно является модальным (нельзя обратиться к другим окнам, пока "
-"оно не будет закрыто)."
+"Если истинно, то окно является модальным (нельзя обратиться к другим окнам, "
+"пока оно не будет закрыто)."
 
 # gtk/gtkwindow.c:457
 #: gtk/gtkwindow.c:462
