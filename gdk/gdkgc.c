@@ -535,13 +535,18 @@ gdk_gc_set_clip_rectangle (GdkGC        *gc,
 
   private = (GdkGCPrivate*) gc;
 
-  xrectangle.x = rectangle->x; 
-  xrectangle.y = rectangle->y;
-  xrectangle.width = rectangle->width;
-  xrectangle.height = rectangle->height;
-
-  XSetClipRectangles (private->xdisplay, private->xgc, 0, 0,
-                      &xrectangle, 1, Unsorted);
+  if (rectangle)
+    {
+      xrectangle.x = rectangle->x; 
+      xrectangle.y = rectangle->y;
+      xrectangle.width = rectangle->width;
+      xrectangle.height = rectangle->height;
+      
+      XSetClipRectangles (private->xdisplay, private->xgc, 0, 0,
+			  &xrectangle, 1, Unsorted);
+    }
+  else
+    XSetClipMask (private->xdisplay, private->xgc, None);
 } 
 
 void

@@ -51,6 +51,9 @@ static void gtk_notebook_foreach        (GtkContainer     *container,
 					 gpointer          callback_data);
 static void gtk_notebook_switch_page    (GtkNotebook      *notebook,
 					 GtkNotebookPage  *page);
+static void gtk_notebook_set_clip_rect  (GtkNotebook      *notebook,
+				 	 GtkStateType      state_type,
+					 GdkRectangle     *area);
 static void gtk_notebook_draw_tab       (GtkNotebook      *notebook,
 					 GtkNotebookPage  *page,
 					 GdkRectangle     *area);
@@ -735,6 +738,11 @@ gtk_notebook_paint (GtkWidget    *widget,
     {
       notebook = GTK_NOTEBOOK (widget);
 
+      /* Set the clip rectangle here, so we don't overwrite things
+       * outside of exposed area when drawing shadows */
+      gtk_notebook_set_clip_rect (notebook, GTK_STATE_ACTIVE, area);
+      gtk_notebook_set_clip_rect (notebook, GTK_STATE_NORMAL, area);
+
       gdk_window_clear_area (widget->window,
 			     area->x, area->y,
 			     area->width, area->height);
@@ -866,6 +874,9 @@ gtk_notebook_paint (GtkWidget    *widget,
 			       x, y, width, height);
 	    }
 	}
+
+      gtk_notebook_set_clip_rect (notebook, GTK_STATE_ACTIVE, NULL);
+      gtk_notebook_set_clip_rect (notebook, GTK_STATE_NORMAL, NULL);
     }
 }
 
@@ -940,7 +951,6 @@ gtk_notebook_button_press (GtkWidget      *widget,
   while (children)
     {
       page = children->data;
-      children = children->next;
 
       if (GTK_WIDGET_VISIBLE (page->child) &&
 	  (event->x >= page->allocation.x) &&
@@ -951,6 +961,7 @@ gtk_notebook_button_press (GtkWidget      *widget,
 	  gtk_notebook_switch_page (notebook, page);
 	  break;
 	}
+      children = children->next;
     }
 
   return FALSE;
@@ -1058,6 +1069,19 @@ gtk_notebook_switch_page (GtkNotebook     *notebook,
       if (GTK_WIDGET_DRAWABLE (notebook))
 	gtk_widget_queue_draw (GTK_WIDGET (notebook));
     }
+}
+
+static void
+gtk_notebook_set_clip_rect (GtkNotebook  *notebook,
+			    GtkStateType  state_type,
+			    GdkRectangle *area)
+{
+  GtkWidget *widget = GTK_WIDGET (notebook);
+  
+  gdk_gc_set_clip_rectangle (widget->style->bg_gc[state_type],    area);
+  gdk_gc_set_clip_rectangle (widget->style->light_gc[state_type], area);
+  gdk_gc_set_clip_rectangle (widget->style->dark_gc[state_type],  area);
+  gdk_gc_set_clip_rectangle (widget->style->black_gc,             area);
 }
 
 static void
