@@ -1,3 +1,8 @@
+Tue Jul 14 19:12:12 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkbutton.c (gtk_button_set_arg): don't destroy a buttons
+	child if it isn't a label.
+
 Tue Jul 14 11:41:38 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkdialog.h: 

@@ -234,16 +234,18 @@ gtk_button_set_arg (GtkObject *object,
 
   switch (arg_id)
     {
-      GtkWidget *label;
+      GtkWidget *child;
 
     case ARG_LABEL:
-      if (GTK_BIN (button)->child)
-	gtk_container_remove (GTK_CONTAINER (button), GTK_BIN (button)->child);
-
-      label = gtk_label_new (GTK_VALUE_STRING(*arg) ? GTK_VALUE_STRING(*arg) : "");
-      gtk_widget_show (label);
-
-      gtk_container_add (GTK_CONTAINER (button), label);
+      child = GTK_BIN (button)->child;
+      if (!child)
+	child = gtk_widget_new (GTK_TYPE_LABEL,
+				"visible", TRUE,
+				"parent", button,
+				NULL);
+      if (GTK_IS_LABEL (child))
+	gtk_label_set (GTK_LABEL (child),
+		       GTK_VALUE_STRING (*arg) ? GTK_VALUE_STRING (*arg) : "");
       break;
     case ARG_RELIEF:
       gtk_button_set_relief (button, GTK_VALUE_ENUM (*arg));
