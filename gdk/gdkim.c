@@ -1493,8 +1493,8 @@ gdk_wcstombs (const GdkWChar *src)
       gint length = 0;
       gint i;
 
-      while (src[length++] != 0)
-	;
+      while (src[length] != 0)
+	length++;
       
       mbstr = g_new (gchar, length + 1);
 

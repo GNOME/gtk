@@ -1,3 +1,8 @@
+1998-12-29  Owen Taylor  <otaylor@srv-19-29.roc.ny.frontiernet.net>
+
+	* gdk/gdkim.c (gdk_wcstombs): Fixed off-by-one
+	error when computing length.
+
 Thu Dec 24 14:35:48 1998  Jeff Garzik  <jgarzik@pobox.com>
 
 	* gdk/gdkevents.c, gdk/gdkim.c, gdk/gdkrgb.c, gdk/gdkwindow.c,
