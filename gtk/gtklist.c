@@ -1690,6 +1690,7 @@ gtk_list_end_selection (GtkList *list)
 {
   gint i;
   gint e;
+  gboolean top_down;
   GList *work;
   GtkWidget *item;
   gint item_index;
@@ -1703,10 +1704,12 @@ gtk_list_end_selection (GtkList *list)
 
   i = MIN (list->anchor, list->drag_pos);
   e = MAX (list->anchor, list->drag_pos);
-  
+
+  top_down = (list->anchor < list->drag_pos);
+
   list->anchor = -1;
   list->drag_pos = -1;
-
+  
   if (list->undo_selection)
     {
       work = list->selection;
@@ -1728,29 +1731,58 @@ gtk_list_end_selection (GtkList *list)
 	}
     }    
 
-  for (work = g_list_nth (list->children, i); i <= e; i++, work = work->next)
+  if (top_down)
     {
-      item = work->data;
-      if (g_list_find (list->selection, item))
-	  {
-	    if (item->state == GTK_STATE_NORMAL)
-	      {
-		gtk_widget_set_state (item, GTK_STATE_SELECTED);
-		gtk_list_unselect_child (list, item);
-		list->undo_selection = g_list_prepend (list->undo_selection,
-						       item);
-	      }
-	  }
-      else if (item->state == GTK_STATE_SELECTED)
+      for (work = g_list_nth (list->children, i); i <= e;
+	   i++, work = work->next)
 	{
-	  gtk_widget_set_state (item, GTK_STATE_NORMAL);
-	  list->undo_unselection = g_list_prepend (list->undo_unselection,
-						   item);
+	  item = work->data;
+	  if (g_list_find (list->selection, item))
+	    {
+	      if (item->state == GTK_STATE_NORMAL)
+		{
+		  gtk_widget_set_state (item, GTK_STATE_SELECTED);
+		  gtk_list_unselect_child (list, item);
+		  list->undo_selection = g_list_prepend (list->undo_selection,
+							 item);
+		}
+	    }
+	  else if (item->state == GTK_STATE_SELECTED)
+	    {
+	      gtk_widget_set_state (item, GTK_STATE_NORMAL);
+	      list->undo_unselection = g_list_prepend (list->undo_unselection,
+						       item);
+	    }
+	}
+    }
+  else
+    {
+      for (work = g_list_nth (list->children, e); i <= e;
+	   e--, work = work->prev)
+	{
+	  item = work->data;
+	  if (g_list_find (list->selection, item))
+	    {
+	      if (item->state == GTK_STATE_NORMAL)
+		{
+		  gtk_widget_set_state (item, GTK_STATE_SELECTED);
+		  gtk_list_unselect_child (list, item);
+		  list->undo_selection = g_list_prepend (list->undo_selection,
+							 item);
+		}
+	    }
+	  else if (item->state == GTK_STATE_SELECTED)
+	    {
+	      gtk_widget_set_state (item, GTK_STATE_NORMAL);
+	      list->undo_unselection = g_list_prepend (list->undo_unselection,
+						       item);
+	    }
 	}
     }
 
-  for (work = list->undo_unselection; work; work = work->next)
+  for (work = g_list_reverse (list->undo_unselection); work; work = work->next)
     gtk_list_select_child (list, GTK_WIDGET (work->data));
+
 
 }
 

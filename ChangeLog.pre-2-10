@@ -1,3 +1,15 @@
+Tue Feb  2 00:28:44 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkctree.c (gtk_ctree_insert_node): in case of
+	GTK_SELECTION_BROWSE select first inserted row.
+	(resync_selection): select rows in correct order.
+
+	* gtk/gtkclist.c (real_insert_row): in case of GTK_SELECTION_BROWSE
+ 	select first inserted row.
+	(resync_selection): select rows in correct order.
+
+	* gtk/gtklist.c (gtk_list_end_selection): select rows in correct order.
+
 Mon Feb  1 16:47:55 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk.m4: Pass gthread on to gtk-config.

@@ -2782,8 +2782,8 @@ real_insert_row (GtkCList *clist,
 					      clist_row))->next;
       else
 	clist->row_list = g_list_insert (clist->row_list, clist_row, row);
+
     }
-  
   clist->rows++;
 
   if (row < ROW_FROM_YPIXEL (clist, 0))
@@ -2791,6 +2791,13 @@ real_insert_row (GtkCList *clist,
 
   /* syncronize the selection list */
   sync_selection (clist, row, SYNC_INSERT);
+
+  if (clist->rows == 1)
+    {
+      clist->focus_row = 0;
+      if (clist->selection_mode == GTK_SELECTION_BROWSE)
+	gtk_clist_select_row (clist, 0, -1);
+    }
 
   /* redraw the list if it isn't frozen */
   if (CLIST_UNFROZEN (clist))
@@ -3989,29 +3996,65 @@ resync_selection (GtkCList *clist,
 	}
     }    
 
-  for (list = g_list_nth (clist->row_list, i); i <= e; i++, list = list->next)
-    if (GTK_CLIST_ROW (list)->selectable)
-      {
-	if (g_list_find (clist->selection, GINT_TO_POINTER(i)))
+  if (clist->anchor < clist->drag_pos)
+    {
+      for (list = g_list_nth (clist->row_list, i); i <= e;
+	   i++, list = list->next)
+	if (GTK_CLIST_ROW (list)->selectable)
 	  {
-	    if (GTK_CLIST_ROW (list)->state == GTK_STATE_NORMAL)
+	    if (g_list_find (clist->selection, GINT_TO_POINTER(i)))
 	      {
-		GTK_CLIST_ROW (list)->state = GTK_STATE_SELECTED;
-		gtk_signal_emit (GTK_OBJECT (clist),
-				 clist_signals[UNSELECT_ROW], i, -1, event);
-		clist->undo_selection = g_list_prepend (clist->undo_selection,
-							GINT_TO_POINTER (i));
+		if (GTK_CLIST_ROW (list)->state == GTK_STATE_NORMAL)
+		  {
+		    GTK_CLIST_ROW (list)->state = GTK_STATE_SELECTED;
+		    gtk_signal_emit (GTK_OBJECT (clist),
+				     clist_signals[UNSELECT_ROW],
+				     i, -1, event);
+		    clist->undo_selection =
+		      g_list_prepend (clist->undo_selection,
+				      GINT_TO_POINTER (i));
+		  }
+	      }
+	    else if (GTK_CLIST_ROW (list)->state == GTK_STATE_SELECTED)
+	      {
+		GTK_CLIST_ROW (list)->state = GTK_STATE_NORMAL;
+		clist->undo_unselection =
+		  g_list_prepend (clist->undo_unselection,
+				  GINT_TO_POINTER (i));
 	      }
 	  }
-	else if (GTK_CLIST_ROW (list)->state == GTK_STATE_SELECTED)
+    }
+  else
+    {
+      for (list = g_list_nth (clist->row_list, e); i <= e;
+	   e--, list = list->prev)
+	if (GTK_CLIST_ROW (list)->selectable)
 	  {
-	    GTK_CLIST_ROW (list)->state = GTK_STATE_NORMAL;
-	    clist->undo_unselection = g_list_prepend (clist->undo_unselection,
-						      GINT_TO_POINTER (i));
+	    if (g_list_find (clist->selection, GINT_TO_POINTER(e)))
+	      {
+		if (GTK_CLIST_ROW (list)->state == GTK_STATE_NORMAL)
+		  {
+		    GTK_CLIST_ROW (list)->state = GTK_STATE_SELECTED;
+		    gtk_signal_emit (GTK_OBJECT (clist),
+				     clist_signals[UNSELECT_ROW],
+				     e, -1, event);
+		    clist->undo_selection =
+		      g_list_prepend (clist->undo_selection,
+				      GINT_TO_POINTER (e));
+		  }
+	      }
+	    else if (GTK_CLIST_ROW (list)->state == GTK_STATE_SELECTED)
+	      {
+		GTK_CLIST_ROW (list)->state = GTK_STATE_NORMAL;
+		clist->undo_unselection =
+		  g_list_prepend (clist->undo_unselection,
+				  GINT_TO_POINTER (e));
+	      }
 	  }
-      }
+    }
 
-  for (list = clist->undo_unselection; list; list = list->next)
+  for (list = g_list_reverse (clist->undo_unselection); list;
+       list = list->next)
     gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW],
 		     GPOINTER_TO_INT (list->data), -1, event);
 
