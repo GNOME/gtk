@@ -1,3 +1,8 @@
+Thu Jan 10 16:48:30 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* pixops/pixops.c: Replace some	hardcoded values with the 
+	SUBSAMPLE 
+
 Wed Jan  9 11:29:44 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am (s-enum-types-h): Include glib-object.h,

@@ -1081,8 +1081,8 @@ tile_make_weights (PixopsFilter *filter, double x_scale, double y_scale, double 
     for (j_offset=0; j_offset<SUBSAMPLE; j_offset++)
       {
 	int *pixel_weights = filter->weights + ((i_offset*SUBSAMPLE) + j_offset) * n_x * n_y;
-	double x = (double)j_offset / 16;
-	double y = (double)i_offset / 16;
+	double x = (double)j_offset / SUBSAMPLE;
+	double y = (double)i_offset / SUBSAMPLE;
 	int i,j;
 	  
 	for (i = 0; i < n_y; i++)
@@ -1167,8 +1167,8 @@ bilinear_make_fast_weights (PixopsFilter *filter, double x_scale, double y_scale
     for (j_offset=0; j_offset<SUBSAMPLE; j_offset++)
       {
 	int *pixel_weights = filter->weights + ((i_offset*SUBSAMPLE) + j_offset) * n_x * n_y;
-	double x = (double)j_offset / 16;
-	double y = (double)i_offset / 16;
+	double x = (double)j_offset / SUBSAMPLE;
+	double y = (double)i_offset / SUBSAMPLE;
 	int i,j;
 
 	if (x_scale > 1.0)	/* Bilinear */
@@ -1311,8 +1311,8 @@ bilinear_make_weights (PixopsFilter *filter, double x_scale, double y_scale, dou
     for (j_offset=0; j_offset<SUBSAMPLE; j_offset++)
       {
 	int *pixel_weights = filter->weights + ((i_offset*SUBSAMPLE) + j_offset) * n_x * n_y;
-	double x = (double)j_offset / 16;
-	double y = (double)i_offset / 16;
+	double x = (double)j_offset / SUBSAMPLE;
+	double y = (double)i_offset / SUBSAMPLE;
 	int i,j;
 	  
 	for (i = 0; i < n_y; i++)
