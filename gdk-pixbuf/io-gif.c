@@ -1053,7 +1053,7 @@ new_context (void)
 {
 	GifContext *context;
 
-	context = g_new (GifContext, 1);
+	context = g_new0 (GifContext, 1);
 	context->pixbuf = NULL;
 	context->file = NULL;
 	context->state = GIF_START;

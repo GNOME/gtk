@@ -1,3 +1,9 @@
+1999-12-23  Havoc Pennington  <hp@pobox.com>
+
+	* gdk-pixbuf/io-gif.c (image_load): Stuff that should have been
+	set to NULL here (specifically context->animation) was not being
+	set to NULL. use g_new0() to alloc the struct.
+
 1999-12-20  Jonathan Blandford  <jrb@redhat.com>
 
 	* gdk-pixbuf/io-gif.c: finished work to make animated gifs load
