@@ -1,3 +1,7 @@
+Mon May 10 23:04:25 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkwidget.h: Add prototype for _gtk_widget_grab_notify()
+
 2004-05-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdkdisplay.c (singlehead_...): 
