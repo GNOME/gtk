@@ -1,5 +1,7 @@
 2005-01-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Bump version
+
 	* === Released 2.6.1 ===
 	
 	* gdk-pixbuf-2.0.pc.in: Require gmodule-no-export-2.0
