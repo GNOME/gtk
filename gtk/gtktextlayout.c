@@ -1459,7 +1459,7 @@ gtk_text_layout_get_iter_at_pixel (GtkTextLayout *layout,
 
   get_line_at_y (layout, y, &line, &line_top);
 
-  display = gtk_text_layout_get_line_display (layout, line, TRUE);
+  display = gtk_text_layout_get_line_display (layout, line, FALSE);
 
   x -= display->x_offset;
   y -= line_top + display->top_margin;
@@ -1521,7 +1521,7 @@ gtk_text_layout_get_cursor_locations (GtkTextLayout  *layout,
   line = gtk_text_iter_get_line (iter);
   line_top = gtk_text_btree_find_line_top (layout->buffer->tree, line, layout);
 
-  display = gtk_text_layout_get_line_display (layout, line, TRUE);
+  display = gtk_text_layout_get_line_display (layout, line, FALSE);
 
   pango_layout_get_cursor_pos (display->layout, gtk_text_iter_get_line_byte (iter),
 			       strong_pos ? &pango_strong_pos : NULL,
@@ -1587,7 +1587,7 @@ gtk_text_layout_get_iter_location (GtkTextLayout     *layout,
   tree = gtk_text_iter_get_btree (iter);
   line = gtk_text_iter_get_line (iter);
 
-  display = gtk_text_layout_get_line_display (layout, line, TRUE);
+  display = gtk_text_layout_get_line_display (layout, line, FALSE);
 
   rect->y = gtk_text_btree_find_line_top (tree, line, layout);
 
@@ -1645,7 +1645,7 @@ find_display_line_below (GtkTextLayout *layout,
 
   while (line && !found_line)
     {
-      GtkTextLineDisplay *display = gtk_text_layout_get_line_display (layout, line, TRUE);
+      GtkTextLineDisplay *display = gtk_text_layout_get_line_display (layout, line, FALSE);
       gint byte_index = 0;
       GSList *tmp_list =  pango_layout_get_lines (display->layout);
 
@@ -1707,7 +1707,7 @@ find_display_line_above (GtkTextLayout *layout,
 
   while (line && !found_line)
     {
-      GtkTextLineDisplay *display = gtk_text_layout_get_line_display (layout, line, TRUE);
+      GtkTextLineDisplay *display = gtk_text_layout_get_line_display (layout, line, FALSE);
       PangoRectangle logical_rect;
       
       gint byte_index = 0;
@@ -1822,7 +1822,7 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
   line = gtk_text_iter_get_line (iter);
   line_byte = gtk_text_iter_get_line_byte (iter);
   
-  display = gtk_text_layout_get_line_display (layout, line, TRUE);
+  display = gtk_text_layout_get_line_display (layout, line, FALSE);
 
   tmp_list = pango_layout_get_lines (display->layout);
   layout_line = tmp_list->data;
@@ -1836,7 +1836,7 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
 	  gint byte_offset = 0;
 	  
 	  gtk_text_layout_free_line_display (layout, display);
-	  display = gtk_text_layout_get_line_display (layout, prev_line, TRUE);
+	  display = gtk_text_layout_get_line_display (layout, prev_line, FALSE);
 	  
 	  tmp_list =  pango_layout_get_lines (display->layout);
 
@@ -1913,7 +1913,7 @@ gtk_text_layout_move_iter_to_next_line (GtkTextLayout *layout,
       gint byte_offset = 0;
       GSList *tmp_list;
       
-      display = gtk_text_layout_get_line_display (layout, line, TRUE);
+      display = gtk_text_layout_get_line_display (layout, line, FALSE);
 
       tmp_list = pango_layout_get_lines (display->layout);
       while (tmp_list && !found_after)
@@ -1968,7 +1968,7 @@ gtk_text_layout_move_iter_to_x (GtkTextLayout *layout,
   line = gtk_text_iter_get_line (iter);
   line_byte = gtk_text_iter_get_line_byte (iter);
   
-  display = gtk_text_layout_get_line_display (layout, line, TRUE);
+  display = gtk_text_layout_get_line_display (layout, line, FALSE);
 
   tmp_list = pango_layout_get_lines (display->layout);
   while (tmp_list)
@@ -2052,7 +2052,7 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
     {
       GtkTextLine *line = gtk_text_iter_get_line (iter);
       gint line_byte = gtk_text_iter_get_line_byte (iter);
-      GtkTextLineDisplay *display = gtk_text_layout_get_line_display (layout, line, TRUE);
+      GtkTextLineDisplay *display = gtk_text_layout_get_line_display (layout, line, FALSE);
       int byte_count = gtk_text_line_byte_count (line);
       
       int new_index;

@@ -33,7 +33,7 @@
 static void gdk_gc_class_init (GObjectClass *class);
 static void gdk_gc_finalize   (GObject      *object);
 
-GObjectClass *parent_class;
+static GObjectClass *parent_class;
 
 GType
 gdk_gc_get_type (void)

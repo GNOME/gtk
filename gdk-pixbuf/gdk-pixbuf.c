@@ -25,6 +25,7 @@
 #include <config.h>
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
 #include "gdk-pixbuf.h"
 #include "gdk-pixbuf-private.h"
 

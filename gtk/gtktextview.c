@@ -48,6 +48,8 @@
  * 
  */
 
+#include <string.h>
+
 #include "gtkbindings.h"
 #include "gtkdnd.h"
 #include "gtkmain.h"

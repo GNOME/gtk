@@ -392,6 +392,36 @@ gtk_range_trough_click (GtkRange *range,
   return GTK_TROUGH_NONE;
 }
 
+static GdkRegion *
+get_window_region (GdkWindow *window)
+{
+  GdkRectangle rect;
+
+  gdk_window_get_position (window, &rect.x, &rect.y);
+  gdk_window_get_size (window, &rect.width, &rect.height);
+
+  return gdk_region_rectangle (&rect);
+}
+
+static void
+move_and_update_window (GdkWindow *window, gint x, gint y)
+{
+  GdkRegion *old_region;
+  GdkRegion *new_region;
+  GdkWindow *parent = gdk_window_get_parent (window);
+
+  old_region = get_window_region (window);
+  gdk_window_move (window, x, y);
+  new_region = get_window_region (window);
+		   
+  gdk_region_subtract (old_region, new_region);
+  gdk_window_invalidate_region (parent, old_region, TRUE);
+  gdk_region_destroy (old_region);
+  gdk_region_destroy (new_region);
+  
+  gdk_window_process_updates (parent, TRUE);
+}
+
 void
 gtk_range_default_hslider_update (GtkRange *range)
 {
@@ -427,7 +457,7 @@ gtk_range_default_hslider_update (GtkRange *range)
       else if (x > right)
 	x = right;
 
-      gdk_window_move (range->slider, x, GTK_WIDGET (range)->style->ythickness);
+      move_and_update_window (range->slider, x, GTK_WIDGET (range)->style->ythickness);
     }
 }
 
@@ -466,7 +496,7 @@ gtk_range_default_vslider_update (GtkRange *range)
       else if (y > bottom)
 	y = bottom;
 
-      gdk_window_move (range->slider, GTK_WIDGET (range)->style->xthickness, y);
+      move_and_update_window (range->slider, GTK_WIDGET (range)->style->xthickness, y);
     }
 }
 

@@ -191,7 +191,7 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf   *pixbuf,
 
   if (pixbuf->n_channels == 4)
     {
-      buf = pixbuf->pixels + src_y * pixbuf->rowstride + src_x * 3;
+      buf = pixbuf->pixels + src_y * pixbuf->rowstride + src_x * 4;
       rowstride = pixbuf->rowstride;
 
       gdk_draw_rgb_32_image_dithalign (drawable, gc,

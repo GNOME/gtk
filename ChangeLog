@@ -1,3 +1,26 @@
+Fri Jul 14 16:21:26 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextlayout.c: use FALSE for size_only most
+	of the time when calling gtk_text_layout_get_line_display()
+	to avoid causing double reshapes when a redraw follows
+	immediately after.
+
+Tue Jul 11 11:13:40 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrange.c (gtk_range_default_[hv]slider_update): Invalidate
+	appropriate region and gdk_window_process_updates() so trough
+	updating doesn't lag behind the window being scrolled.
+
+        * gdk/gdkgc.c: Make parent_class pointer static.
+	 
+Sun Jul  9 21:31:23 2000  Owen Taylor  <otaylor@redhat.com>
+
+        * gdk/gdk-pixbuf.c gtk/gdk-pixbuf-loader.c gtk/gtktextview.c:
+	include <string.h>.
+	 
+	* gdk/gdkpixbuf-render.c (gdk_pixbuf_render_to_drawable): Fix
+	cut-and-paste error in computing memory offset for 4 channels.
+
 Fri Jul 14 14:05:02 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c (gtk_rc_parse_pixmap_path_string): Remove
