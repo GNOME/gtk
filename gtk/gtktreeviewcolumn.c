@@ -3503,7 +3503,6 @@ _gtk_tree_view_column_cell_set_dirty (GtkTreeViewColumn *tree_column,
       info->requested_width = 0;
     }
   tree_column->dirty = TRUE;
-  tree_column->resized_width = MAX (tree_column->requested_width, tree_column->button_request);
   tree_column->requested_width = -1;
   tree_column->width = 0;
 
