@@ -1,3 +1,11 @@
+2005-01-09  Anders Carlsson <andersca@gnome.org>
+
+	* gtk/gtkcellrenderertext.c: (get_size):
+	* gtk/gtklabel.c: (gtk_label_size_request):
+	* gtk/gtkprogressbar.c: (gtk_progress_bar_size_request):
+	Don't pass NULL to pango_context_get_metrics. Use 
+	pango_context_get_language instead, which is way faster.
+	
 2005-01-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version

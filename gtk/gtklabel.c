@@ -2024,7 +2024,8 @@ gtk_label_size_request (GtkWidget      *widget,
       gint char_width, digit_width, char_pixels, w;
 
       context = pango_layout_get_context (label->layout);
-      metrics = pango_context_get_metrics (context, widget->style->font_desc, NULL);
+      metrics = pango_context_get_metrics (context, widget->style->font_desc, 
+					   pango_context_get_language (context));
 
       char_width = pango_font_metrics_get_approximate_char_width (metrics);
       digit_width = pango_font_metrics_get_approximate_digit_width (metrics);

@@ -1436,7 +1436,7 @@ get_size (GtkCellRenderer *cell,
 	  gint char_width;
 
 	  context = pango_layout_get_context (layout);
-	  metrics = pango_context_get_metrics (context, widget->style->font_desc, NULL);
+	  metrics = pango_context_get_metrics (context, widget->style->font_desc, pango_context_get_language (context));
 
 	  char_width = pango_font_metrics_get_approximate_char_width (metrics);
 	  pango_font_metrics_unref (metrics);
