@@ -1,4 +1,11 @@
+2004-10-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/Makefile.am (IGNORE_HFILES): Remove some no longer
+	private headers.
+
 2004-10-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add some missing functions.
 
 	* gdk/gdk-sections.txt: Add some missing functions.
 

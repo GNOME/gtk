@@ -26,9 +26,6 @@ IGNORE_HFILES=				\
 	gtkalias.h			\
 	fnmatch.h			\
 	gdk-pixbuf-loader.h		\
-	gtkcellrendererseptext.h	\
-	gtkcellview.h			\
-	gtkcellviewmenuitem.h		\
 	gtkdebug.h			\
 	gtkentryprivate.h		\
 	gtkfilechooserdefault.h		\
