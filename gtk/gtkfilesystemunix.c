@@ -384,7 +384,9 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
       if (now - folder_unix->asof >= FOLDER_CACHE_LIFETIME &&
 	  folder_unix->stat_info)
 	{
+#if 0
 	  g_print ("Cleaning out cached directory %s\n", filename);
+#endif
 	  g_hash_table_destroy (folder_unix->stat_info);
 	  folder_unix->stat_info = NULL;
 	  folder_unix->have_mime_type = FALSE;
@@ -1007,7 +1009,9 @@ gtk_file_system_unix_render_icon (GtkFileSystem     *file_system,
     }
   else
     {
+#if 0
       g_print ("No folder open for %s\n", filename);
+#endif
 
       icon_type = get_icon_type (filename, error);
       if (icon_type == ICON_REGULAR)
@@ -1457,7 +1461,9 @@ gtk_file_folder_unix_finalize (GObject *object)
 
   if (folder_unix->stat_info)
     {
+#if 0
       g_print ("Releasing information for directory %s\n", folder_unix->filename);
+#endif
       g_hash_table_destroy (folder_unix->stat_info);
     }
 
@@ -1594,7 +1600,9 @@ fill_in_names (GtkFileFolderUnix *folder_unix, GError **error)
   if (folder_unix->stat_info)
     return TRUE;
 
+#if 0
   g_print ("Reading directory %s\n", folder_unix->filename);
+#endif
 
   folder_unix->stat_info = g_hash_table_new_full (g_str_hash, g_str_equal,
 						  (GDestroyNotify)g_free,
@@ -1660,7 +1668,9 @@ fill_in_stats (GtkFileFolderUnix *folder_unix, GError **error)
   if (!fill_in_names (folder_unix, error))
     return FALSE;
 
+#if 0
   g_print ("Stating directory %s\n", folder_unix->filename);
+#endif
   g_hash_table_foreach_remove (folder_unix->stat_info,
 			       cb_fill_in_stats,
 			       folder_unix);
@@ -1693,7 +1703,9 @@ fill_in_mime_type (GtkFileFolderUnix *folder_unix, GError **error)
   if (folder_unix->have_mime_type)
     return TRUE;
 
+#if 0
   g_print ("Getting mime types for directory %s\n", folder_unix->filename);
+#endif
   g_hash_table_foreach_remove (folder_unix->stat_info,
 			       cb_fill_in_mime_type,
 			       folder_unix);
