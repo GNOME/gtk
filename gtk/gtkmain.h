@@ -56,7 +56,7 @@ typedef gint	(*GtkKeySnoopFunc)	(GtkWidget	*grab_widget,
 
 /* Gtk version.
  */
-#ifdef G_OS_WIN32
+#ifdef G_PLATFORM_WIN32
 #ifdef GTK_COMPILATION
 #define GTKMAIN_C_VAR __declspec(dllexport)
 #else
@@ -84,7 +84,7 @@ void     gtk_init                 (int    *argc,
 
 gboolean gtk_init_check           (int    *argc,
                                    char ***argv);
-#ifdef G_OS_WIN32
+#ifdef G_PLATFORM_WIN32
 
 /* Variants that are used to check for correct struct packing
  * when building GTK+-using code.

@@ -1,3 +1,16 @@
+2001-03-18  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (print_window_state): New function.
+	print_event_state, print_event): Use preprocessor macro to make
+	code more compact. Print also GDK_WINDOW_STATE events.
+	(synthesize_crossing_events): Remove the old #ifdeffed-out code.
+	
+	* gtk/gtk.def
+	* gtk/makefile.mingw.in: Update.
+
+	* gtk/gtkmain.h: Check for G_PLATFORM_WIN32, not only G_OS_WIN32,
+	to catch also Cygwin.
+
 Sun Mar 18 01:15:30 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkspinbutton.[hc]: added rc-style argument

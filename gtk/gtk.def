@@ -45,9 +45,7 @@ EXPORTS
 	GTK_TYPE_GDK_GC_VALUES_MASK
 	GTK_TYPE_GDK_GRAB_STATUS
 	GTK_TYPE_GDK_GRAVITY
-	GTK_TYPE_GDK_IC_ATTRIBUTES_TYPE
 	GTK_TYPE_GDK_IMAGE_TYPE
-	GTK_TYPE_GDK_IM_STYLE
 	GTK_TYPE_GDK_INPUT_CONDITION
 	GTK_TYPE_GDK_INPUT_MODE
 	GTK_TYPE_GDK_INPUT_SOURCE
@@ -71,9 +69,12 @@ EXPORTS
 	GTK_TYPE_GDK_WINDOW_ATTRIBUTES_TYPE
 	GTK_TYPE_GDK_WINDOW_CLASS
 	GTK_TYPE_GDK_WINDOW_HINTS
+	GTK_TYPE_GDK_WINDOW_STATE
 	GTK_TYPE_GDK_WINDOW_TYPE
+	GTK_TYPE_GDK_WINDOW_TYPE_HINT
 	GTK_TYPE_GDK_WM_DECORATION
 	GTK_TYPE_GDK_WM_FUNCTION
+	GTK_TYPE_ICON_SIZE
 	GTK_TYPE_IMAGE_TYPE
 	GTK_TYPE_JUSTIFICATION
 	GTK_TYPE_MATCH_TYPE
@@ -125,7 +126,9 @@ EXPORTS
 	GTK_TYPE_TREE_MODEL_FLAGS
 	GTK_TYPE_TREE_PATH
 	GTK_TYPE_TREE_SELECTION_MODE
+	GTK_TYPE_TREE_SORT_ORDER
 	GTK_TYPE_TREE_VIEW_COLUMN_SIZING
+	GTK_TYPE_TREE_VIEW_DROP_POSITION
 	GTK_TYPE_TREE_VIEW_MODE
 	GTK_TYPE_TROUGH_TYPE
 	GTK_TYPE_UPDATE_TYPE
@@ -192,6 +195,7 @@ EXPORTS
 	gtk_binding_set_find
 	gtk_binding_set_new
 	gtk_bindings_activate
+	gtk_box_get_spacing
 	gtk_box_get_type
 	gtk_box_pack_end
 	gtk_box_pack_end_defaults
@@ -202,15 +206,14 @@ EXPORTS
 	gtk_box_set_child_packing
 	gtk_box_set_homogeneous
 	gtk_box_set_spacing
+	gtk_box_set_spacing
 	gtk_button_box_get_child_ipadding
 	gtk_button_box_get_child_size
 	gtk_button_box_get_layout
-	gtk_box_get_spacing
 	gtk_button_box_get_type
 	gtk_button_box_set_child_ipadding
 	gtk_button_box_set_child_size
 	gtk_button_box_set_layout
-	gtk_box_set_spacing
 	gtk_button_clicked
 	gtk_button_enter
 	gtk_button_get_relief
@@ -453,7 +456,6 @@ EXPORTS
 	gtk_curve_set_gamma
 	gtk_curve_set_range
 	gtk_curve_set_vector
-	gtk_data_get_type
 	gtk_debug_flags
 	gtk_decorated_window_calculate_frame_size
 	gtk_decorated_window_init
@@ -462,11 +464,13 @@ EXPORTS
 	gtk_dialog_add_action_widget
 	gtk_dialog_add_button
 	gtk_dialog_add_buttons
+	gtk_dialog_get_has_separator
 	gtk_dialog_get_type
 	gtk_dialog_new
 	gtk_dialog_new_with_buttons
 	gtk_dialog_response
 	gtk_dialog_run
+	gtk_dialog_set_has_separator
 	gtk_drag_begin
 	gtk_drag_dest_handle_event
 	gtk_drag_dest_set
@@ -515,6 +519,7 @@ EXPORTS
 	gtk_entry_new_with_max_length
 	gtk_entry_prepend_text
 	gtk_entry_select_region
+	gtk_entry_set_activates_default
 	gtk_entry_set_editable
 	gtk_entry_set_has_frame
 	gtk_entry_set_invisible_char
@@ -602,7 +607,6 @@ EXPORTS
 	gtk_image_get_stock
 	gtk_image_get_storage_type
 	gtk_image_get_type
-	gtk_image_menu_item_new
 	gtk_image_menu_item_new
 	gtk_image_new
 	gtk_image_new_from_file
@@ -728,7 +732,7 @@ EXPORTS
 	gtk_main_quit
 	gtk_major_version
 	gtk_marshal_BOOLEAN__BOXED
-	gtk_marshal_BOOLEAN__BOXED_INT_INT_UINT
+	gtk_marshal_BOOLEAN__OBJECT_INT_INT_UINT
 	gtk_marshal_BOOLEAN__OBJECT_STRING_STRING_BOXED
 	gtk_marshal_BOOLEAN__VOID
 	gtk_marshal_ENUM__ENUM
@@ -737,11 +741,10 @@ EXPORTS
 	gtk_marshal_VOID__BOOLEAN
 	gtk_marshal_VOID__BOXED
 	gtk_marshal_VOID__BOXED_BOXED
-	gtk_marshal_VOID__BOXED_BOXED_UINT_UINT
-	gtk_marshal_VOID__BOXED_INT_INT_BOXED_UINT_UINT
 	gtk_marshal_VOID__BOXED_OBJECT
 	gtk_marshal_VOID__BOXED_STRING_INT
 	gtk_marshal_VOID__BOXED_UINT
+	gtk_marshal_VOID__BOXED_UINT_FLAGS
 	gtk_marshal_VOID__BOXED_UINT_UINT
 	gtk_marshal_VOID__ENUM
 	gtk_marshal_VOID__ENUM_FLOAT
@@ -749,15 +752,20 @@ EXPORTS
 	gtk_marshal_VOID__ENUM_INT
 	gtk_marshal_VOID__ENUM_INT_BOOLEAN
 	gtk_marshal_VOID__INT_INT
+	gtk_marshal_VOID__INT_INT_BOXED
 	gtk_marshal_VOID__INT_INT_INT
 	gtk_marshal_VOID__OBJECT_BOOLEAN
 	gtk_marshal_VOID__OBJECT_BOXED_BOXED
+	gtk_marshal_VOID__OBJECT_BOXED_UINT_UINT
 	gtk_marshal_VOID__OBJECT_INT_INT
 	gtk_marshal_VOID__OBJECT_OBJECT
 	gtk_marshal_VOID__OBJECT_STRING_STRING
+	gtk_marshal_VOID__OBJECT_UINT
 	gtk_marshal_VOID__POINTER_INT
 	gtk_marshal_VOID__POINTER_POINTER_POINTER
 	gtk_marshal_VOID__POINTER_UINT
+	gtk_marshal_VOID__STRING_INT_POINTER
+	gtk_marshal_VOID__UINT_BOXED_UINT_FLAGS_FLAGS
 	gtk_marshal_VOID__UINT_STRING
 	gtk_menu_attach_to_widget
 	gtk_menu_bar_append
@@ -1012,6 +1020,9 @@ EXPORTS
 	gtk_rc_parse_priority
 	gtk_rc_parse_state
 	gtk_rc_parse_string
+	gtk_rc_property_parse_color
+	gtk_rc_property_parse_enum
+	gtk_rc_property_parse_flags
 	gtk_rc_reparse_all
 	gtk_rc_set_default_files
 	gtk_rc_set_image_loader
@@ -1056,7 +1067,13 @@ EXPORTS
 	gtk_selection_remove_all
 	gtk_selection_request
 	gtk_separator_get_type
+	gtk_separator_menu_item_get_type
+	gtk_separator_menu_item_new
 	gtk_set_locale
+	gtk_settings_get_global
+	gtk_settings_get_type
+	gtk_settings_install_property
+	gtk_settings_install_property_parser
 	gtk_signal_compat_matched
 	gtk_signal_connect_full
 	gtk_signal_connect_object_while_alive
@@ -1080,7 +1097,6 @@ EXPORTS
 	gtk_spin_button_set_adjustment
 	gtk_spin_button_set_digits
 	gtk_spin_button_set_numeric
-	gtk_spin_button_set_shadow_type
 	gtk_spin_button_set_snap_to_ticks
 	gtk_spin_button_set_update_policy
 	gtk_spin_button_set_value
@@ -1304,11 +1320,6 @@ EXPORTS
 	gtk_tree_item_remove_subtree
 	gtk_tree_item_select
 	gtk_tree_item_set_subtree
-;	gtk_tree_model_simple_changed
-;	gtk_tree_model_simple_child_toggled
-;	gtk_tree_model_simple_get_type
-;	gtk_tree_model_simple_inserted
-;	gtk_tree_model_simple_new
 	gtk_tree_model_sort_convert_path
 	gtk_tree_model_sort_get_type
 	gtk_tree_model_sort_new
@@ -1541,11 +1552,16 @@ EXPORTS
 	gtk_window_activate_focus
 	gtk_window_add_accel_group
 	gtk_window_add_embedded_xid
+	gtk_window_deiconify
 	gtk_window_get_default_accel_group
 	gtk_window_get_type
+	gtk_window_iconify
+	gtk_window_maximize
 	gtk_window_new
+	gtk_window_present
 	gtk_window_remove_accel_group
 	gtk_window_remove_embedded_xid
+	gtk_window_set_decorated
 	gtk_window_set_default
 	gtk_window_set_default_size
 	gtk_window_set_focus
@@ -1556,14 +1572,6 @@ EXPORTS
 	gtk_window_set_title
 	gtk_window_set_transient_for
 	gtk_window_set_wmclass
-	gtk_dialog_get_has_separator
-	gtk_dialog_set_has_separator
-	gtk_entry_set_activates_default
-	gtk_window_deiconify
-	gtk_window_iconify
-	gtk_window_maximize
-	gtk_window_present
-	gtk_window_set_decorated
 	gtk_window_stick
 	gtk_window_unmaximize
 	gtk_window_unstick

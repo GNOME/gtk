@@ -82,7 +82,6 @@ gtk_OBJECTS =			\
 	gtkcontainer.o		\
 	gtkctree.o		\
 	gtkcurve.o		\
-	gtkdata.o		\
 	gtkdialog.o		\
 	gtkdnd.o		\
 	gtkdrawingarea.o	\
@@ -106,6 +105,7 @@ gtk_OBJECTS =			\
 	gtkhsv.o		\
 	gtkiconfactory.o	\
 	gtkimage.o		\
+	gtkimagemenuitem.o	\
 	gtkimcontext.o		\
 	gtkimcontextsimple.o	\
 	gtkimmodule.o		\
@@ -148,6 +148,8 @@ gtk_OBJECTS =			\
 	gtkscrolledwindow.o	\
 	gtkselection.o		\
 	gtkseparator.o		\
+	gtkseparatormenuitem.o	\
+	gtksettings.o		\
 	gtksignal.o		\
 	gtksocket.o		\
 	gtkspinbutton.o		\
@@ -215,6 +217,7 @@ gtk_public_h_sources =		\
 	gtkcalendar.h		\
 	gtkcheckbutton.h	\
 	gtkcheckmenuitem.h	\
+	gtkseparatormenuitem.h	\
 	gtkclist.h		\
 	gtkclipboard.h		\
 	gtkcolorsel.h		\
@@ -228,7 +231,6 @@ gtk_public_h_sources =		\
 	gtkcellrenderertextpixbuf.h	\
 	gtkcellrenderertoggle.h	\
 	gtkcellrendererpixbuf.h	\
-	gtkdata.h		\
 	gtkdebug.h		\
 	gtkdialog.h		\
 	gtkdnd.h		\
@@ -254,6 +256,7 @@ gtk_public_h_sources =		\
 	gtkhsv.h		\
 	gtkiconfactory.h	\
 	gtkimage.h		\
+	gtkimagemenuitem.h	\
 	gtkimcontext.h		\
 	gtkimmodule.h		\
 	gtkimmulticontext.h	\
@@ -296,6 +299,7 @@ gtk_public_h_sources =		\
 	gtkscrolledwindow.h	\
 	gtkselection.h		\
 	gtkseparator.h		\
+	gtksettings.h		\
 	gtksignal.h		\
 	gtksocket.h		\
 	gtkspinbutton.h		\
@@ -349,7 +353,6 @@ gdk_headers =			\
 	../gdk/gdkevents.h	\
 	../gdk/gdkfont.h	\
 	../gdk/gdkgc.h		\
-	../gdk/gdkim.h		\
 	../gdk/gdkimage.h	\
 	../gdk/gdkinput.h	\
 	../gdk/gdkpixmap.h	\

@@ -1001,20 +1001,26 @@ build_keyrelease_event (GdkWindowImplWin32 *impl,
 static void
 print_event_state (gint state)
 {
-  if (state & GDK_SHIFT_MASK)
-    g_print ("SHIFT ");
-  if (state & GDK_LOCK_MASK)
-    g_print ("LOCK ");
-  if (state & GDK_CONTROL_MASK)
-    g_print ("CONTROL ");
-  if (state & GDK_MOD1_MASK)
-    g_print ("MOD1 ");
-  if (state & GDK_BUTTON1_MASK)
-    g_print ("BUTTON1 ");
-  if (state & GDK_BUTTON2_MASK)
-    g_print ("BUTTON2 ");
-  if (state & GDK_BUTTON3_MASK)
-    g_print ("BUTTON3 ");
+#define CASE(bit) if (state & GDK_ ## bit ## _MASK) g_print (#bit " ");
+  CASE (SHIFT);
+  CASE (LOCK);
+  CASE (CONTROL);
+  CASE (MOD1);
+  CASE (BUTTON1);
+  CASE (BUTTON2);
+  CASE (BUTTON3);
+#undef CASE
+}
+
+static void
+print_window_state (GdkWindowState state)
+{
+#define CASE(bit) if (state & GDK_WINDOW_STATE_ ## bit ) g_print (#bit " ");
+  CASE (WITHDRAWN);
+  CASE (ICONIFIED);
+  CASE (MAXIMIZED);
+  CASE (STICKY);
+#undef CASE
 }
 
 static void
@@ -1024,39 +1030,42 @@ print_event (GdkEvent *event)
 
   switch (event->any.type)
     {
-    case GDK_NOTHING: g_print ("GDK_NOTHING "); break;
-    case GDK_DELETE: g_print ("GDK_DELETE "); break;
-    case GDK_DESTROY: g_print ("GDK_DESTROY "); break;
-    case GDK_EXPOSE: g_print ("GDK_EXPOSE "); break;
-    case GDK_MOTION_NOTIFY: g_print ("GDK_MOTION_NOTIFY "); break;
-    case GDK_BUTTON_PRESS: g_print ("GDK_BUTTON_PRESS "); break;
-    case GDK_2BUTTON_PRESS: g_print ("GDK_2BUTTON_PRESS "); break;
-    case GDK_3BUTTON_PRESS: g_print ("GDK_3BUTTON_PRESS "); break;
-    case GDK_BUTTON_RELEASE: g_print ("GDK_BUTTON_RELEASE "); break;
-    case GDK_KEY_PRESS: g_print ("GDK_KEY_PRESS "); break;
-    case GDK_KEY_RELEASE: g_print ("GDK_KEY_RELEASE "); break;
-    case GDK_ENTER_NOTIFY: g_print ("GDK_ENTER_NOTIFY "); break;
-    case GDK_LEAVE_NOTIFY: g_print ("GDK_LEAVE_NOTIFY "); break;
-    case GDK_FOCUS_CHANGE: g_print ("GDK_FOCUS_CHANGE "); break;
-    case GDK_CONFIGURE: g_print ("GDK_CONFIGURE "); break;
-    case GDK_MAP: g_print ("GDK_MAP "); break;
-    case GDK_UNMAP: g_print ("GDK_UNMAP "); break;
-    case GDK_PROPERTY_NOTIFY: g_print ("GDK_PROPERTY_NOTIFY "); break;
-    case GDK_SELECTION_CLEAR: g_print ("GDK_SELECTION_CLEAR "); break;
-    case GDK_SELECTION_REQUEST: g_print ("GDK_SELECTION_REQUEST "); break;
-    case GDK_SELECTION_NOTIFY: g_print ("GDK_SELECTION_NOTIFY "); break;
-    case GDK_PROXIMITY_IN: g_print ("GDK_PROXIMITY_IN "); break;
-    case GDK_PROXIMITY_OUT: g_print ("GDK_PROXIMITY_OUT "); break;
-    case GDK_DRAG_ENTER: g_print ("GDK_DRAG_ENTER "); break;
-    case GDK_DRAG_LEAVE: g_print ("GDK_DRAG_LEAVE "); break;
-    case GDK_DRAG_MOTION: g_print ("GDK_DRAG_MOTION "); break;
-    case GDK_DRAG_STATUS: g_print ("GDK_DRAG_STATUS "); break;
-    case GDK_DROP_START: g_print ("GDK_DROP_START "); break;
-    case GDK_DROP_FINISHED: g_print ("GDK_DROP_FINISHED "); break;
-    case GDK_CLIENT_EVENT: g_print ("GDK_CLIENT_EVENT "); break;
-    case GDK_VISIBILITY_NOTIFY: g_print ("GDK_VISIBILITY_NOTIFY "); break;
-    case GDK_NO_EXPOSE: g_print ("GDK_NO_EXPOSE "); break;
-    case GDK_SCROLL: g_print ("GDK_SCROLL "); break;
+#define CASE(x) case x: g_print ( #x " "); break;
+    CASE (GDK_NOTHING);
+    CASE (GDK_DELETE);
+    CASE (GDK_DESTROY);
+    CASE (GDK_EXPOSE);
+    CASE (GDK_MOTION_NOTIFY);
+    CASE (GDK_BUTTON_PRESS);
+    CASE (GDK_2BUTTON_PRESS);
+    CASE (GDK_3BUTTON_PRESS);
+    CASE (GDK_BUTTON_RELEASE);
+    CASE (GDK_KEY_PRESS);
+    CASE (GDK_KEY_RELEASE);
+    CASE (GDK_ENTER_NOTIFY);
+    CASE (GDK_LEAVE_NOTIFY);
+    CASE (GDK_FOCUS_CHANGE);
+    CASE (GDK_CONFIGURE);
+    CASE (GDK_MAP);
+    CASE (GDK_UNMAP);
+    CASE (GDK_PROPERTY_NOTIFY);
+    CASE (GDK_SELECTION_CLEAR);
+    CASE (GDK_SELECTION_REQUEST);
+    CASE (GDK_SELECTION_NOTIFY);
+    CASE (GDK_PROXIMITY_IN);
+    CASE (GDK_PROXIMITY_OUT);
+    CASE (GDK_DRAG_ENTER);
+    CASE (GDK_DRAG_LEAVE);
+    CASE (GDK_DRAG_MOTION);
+    CASE (GDK_DRAG_STATUS);
+    CASE (GDK_DROP_START);
+    CASE (GDK_DROP_FINISHED);
+    CASE (GDK_CLIENT_EVENT);
+    CASE (GDK_VISIBILITY_NOTIFY);
+    CASE (GDK_NO_EXPOSE);
+    CASE (GDK_SCROLL);
+    CASE (GDK_WINDOW_STATE);
+#undef CASE
     }
   g_print ("%#lx ", (gulong) GDK_WINDOW_HWND (event->any.window));
 
@@ -1116,114 +1125,15 @@ print_event (GdkEvent *event)
 		   "???")))));
       print_event_state (event->scroll.state);
       break;
+    case GDK_WINDOW_STATE:
+      print_window_state (event->window_state.changed_mask);
+      print_window_state (event->window_state.new_window_state);
     default:
       /* Nothing */
       break;
     }  
   g_print ("\n");
 }
-
-#if 0
-
-/* Old implementation */
-
-static void
-synthesize_crossing_events (GdkWindow *window,
-			    MSG       *msg)
-{
-  GdkEvent *event;
-  
-  /* If we are not using TrackMouseEvent, generate a leave notify
-   * event if necessary
-   */
-  if (track_mouse_event == NULL
-      && current_window
-      && (GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (current_window)->impl)->event_mask & GDK_LEAVE_NOTIFY_MASK))
-    {
-      GDK_NOTE (EVENTS, g_print ("synthesizing LEAVE_NOTIFY event\n"));
-
-      event = gdk_event_new ();
-      event->crossing.type = GDK_LEAVE_NOTIFY;
-      event->crossing.window = current_window;
-      gdk_drawable_ref (event->crossing.window);
-      event->crossing.subwindow = NULL;
-      event->crossing.time = msg->time;
-      event->crossing.x = current_x;
-      event->crossing.y = current_y;
-      event->crossing.x_root = current_x_root;
-      event->crossing.y_root = current_y_root;
-      event->crossing.mode = GDK_CROSSING_NORMAL;
-      if (IsChild (GDK_WINDOW_HWND (current_window), GDK_WINDOW_HWND (window)))
-	event->crossing.detail = GDK_NOTIFY_INFERIOR;
-      else if (IsChild (GDK_WINDOW_HWND (window), GDK_WINDOW_HWND (current_window)))
-	event->crossing.detail = GDK_NOTIFY_ANCESTOR;
-      else
-	event->crossing.detail = GDK_NOTIFY_NONLINEAR;
-
-      event->crossing.focus = TRUE; /* ??? */
-      event->crossing.state = 0; /* ??? */
-
-      gdk_event_queue_append (event);
-      GDK_NOTE (EVENTS, print_event (event));
-    }
-
-  if (GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->event_mask & GDK_ENTER_NOTIFY_MASK)
-    {
-      GDK_NOTE (EVENTS, g_print ("synthesizing ENTER_NOTIFY event\n"));
-      
-      event = gdk_event_new ();
-      event->crossing.type = GDK_ENTER_NOTIFY;
-      event->crossing.window = window;
-      gdk_drawable_ref (event->crossing.window);
-      event->crossing.subwindow = NULL;
-      event->crossing.time = msg->time;
-      event->crossing.x = LOWORD (msg->lParam);
-      event->crossing.y = HIWORD (msg->lParam);
-      event->crossing.x_root = (gfloat) msg->pt.x;
-      event->crossing.y_root = (gfloat) msg->pt.y;
-      event->crossing.mode = GDK_CROSSING_NORMAL;
-      if (current_window
-	  && IsChild (GDK_WINDOW_HWND (current_window), GDK_WINDOW_HWND (window)))
-	event->crossing.detail = GDK_NOTIFY_ANCESTOR;
-      else if (current_window
-	       && IsChild (GDK_WINDOW_HWND (window), GDK_WINDOW_HWND (current_window)))
-	event->crossing.detail = GDK_NOTIFY_INFERIOR;
-      else
-	event->crossing.detail = GDK_NOTIFY_NONLINEAR;
-      
-      event->crossing.focus = TRUE; /* ??? */
-      event->crossing.state = 0; /* ??? */
-      
-      gdk_event_queue_append (event);
-
-      GDK_NOTE (EVENTS, print_event (event));
-
-      if (GDK_WINDOW_OBJECT (window)->extension_events != 0)
-	_gdk_input_enter_event (&event->crossing, window);
-    }
-  
-  if (current_window)
-    gdk_drawable_unref (current_window);
-  current_window = window;
-  gdk_drawable_ref (current_window);
-#ifdef USE_TRACKMOUSEEVENT
-  if (track_mouse_event != NULL)
-    {
-      TRACKMOUSEEVENT tme;
-
-      tme.cbSize = sizeof (TRACKMOUSEEVENT);
-      tme.dwFlags = TME_LEAVE;
-      tme.hwndTrack = GDK_WINDOW_HWND (current_window);
-      tme.dwHoverTime = HOVER_DEFAULT;
-      
-      (*track_mouse_event) (&tme);
-    }
-#endif
-}
-
-#else
-
-/* New, improved implementation. */
 
 static gboolean
 gdk_window_is_child (GdkWindow *parent,
@@ -1419,8 +1329,6 @@ synthesize_crossing_events (GdkWindow *window,
   current_window = window;
   gdk_window_ref (current_window);
 }
-
-#endif
 
 static void
 translate_mouse_coords (GdkWindow *window1,
