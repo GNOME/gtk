@@ -1,3 +1,7 @@
+Tue Apr  2 11:10:13 2002  Jonathan Blandford  <jrb@redhat.com>
+	* gtk/gtkliststore.c (gtk_list_store_set_sort_func): set the
+	sort_func correctly, 77030
+
 Tue Apr  2 13:44:27 2002  Tim Janik  <timj@gtk.org>
 
 	* configure.in: update version to 2.0.2, binary age 2, interface

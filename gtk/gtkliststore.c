@@ -1914,9 +1914,14 @@ gtk_list_store_set_sort_func (GtkTreeSortable        *sortable,
 
   for (list = list_store->sort_list; list; list = list->next)
     {
-      header = (GtkTreeDataSortHeader*) list->data;
-      if (header->sort_column_id == sort_column_id)
-	break;
+      GtkTreeDataSortHeader *list_header;
+
+      list_header = (GtkTreeDataSortHeader*) list->data;
+      if (list_header->sort_column_id == sort_column_id)
+	{
+	  header = list_header;
+	  break;
+	}
     }
 
   if (header == NULL)
