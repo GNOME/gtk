@@ -4494,6 +4494,7 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
   if (page->tab_label == tab_label)
     return;
   
+
   gtk_notebook_remove_tab_label (notebook, page);
   
   if (tab_label)
@@ -4517,6 +4518,13 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
 	  gtk_widget_set_parent (page->tab_label, GTK_WIDGET (notebook));
 	}
     }
+
+  if (page->tab_label)
+    page->mnemonic_activate_signal =
+      gtk_signal_connect (GTK_OBJECT (page->tab_label),
+			  "mnemonic_activate",
+			  (GtkSignalFunc) gtk_notebook_mnemonic_activate_switch_page,
+			  notebook);
 
   if (notebook->show_tabs && GTK_WIDGET_VISIBLE (child))
     {

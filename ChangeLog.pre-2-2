@@ -1,3 +1,11 @@
+Wed Dec 12 15:01:33 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_set_tab_label): keep in sync
+	with insert_page_menu.  Code duplication is bad.
+
+	* gtk/gtklabel.c (gtk_label_mnemonic_activate): Whoops -- got the
+	wrong fix yesterday.
+
 Wed Dec 12 14:27:30 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenubar.c (window_key_press_handler): Fix check for
