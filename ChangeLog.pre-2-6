@@ -1,3 +1,10 @@
+Thu Jun 10 00:36:15 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcalendar.c (gtk_calendar_main_button): Start 
+	the drag before focusing the selected.day.
+	* gtk/gtkcalendar.c (gtk_calendar_state_changed): Stop
+	a beginning drag if the widget becomes insensitive.
+
 Thu Jun 10 00:09:06 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcalendar.c (gtk_calendar_button_press): Start 
