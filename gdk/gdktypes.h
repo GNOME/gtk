@@ -806,8 +806,8 @@ struct _GdkColorContext
     gulong blue;
   } masks;
 
-
-  struct {
+  struct
+  {
     gint red;
     gint green;
     gint blue;

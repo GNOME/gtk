@@ -1,3 +1,8 @@
+Thu Jan 22 18:58:44 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* gdk/gdktypes.h (struct _GdkColorContext): Picky, picky... fix
+	two lines with wrong indentation :-)
+
 Thu Jan 22 02:32:06 1998  Scott Goehring  <scott@poverty.bloomington.in.us>
 
 	* gtk/Makefile.am: Fixed the called to runelisp to use $(SHELL).
