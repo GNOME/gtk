@@ -970,10 +970,12 @@ msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
 msgstr ""
+"Ef þetta er valið verða flýtilykar í valmyndum merktir með því að viðkomandi "
+"stafur verður undirstrikaður"
 
 #: gtk/gtkbutton.c:205
 msgid "Use stock"
-msgstr ""
+msgstr "Nota sjálfgefið"
 
 #: gtk/gtkbutton.c:206
 msgid "If set, the label is used to pick a stock item instead of being displayed"
