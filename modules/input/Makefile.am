@@ -61,6 +61,10 @@ im_ipa_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
 im_ipa_la_SOURCES = imipa.c
 im_ipa_la_LIBADD = $(LDADDS)
 
+im_hangul_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
+im_hangul_la_SOURCES = imhangul.c imhangul-defs.h
+im_hangul_la_LIBADD = $(LDADDS)
+
 # Running this if DESTDIR is set is going to not work at all, so
 # skip it.
 install-data-local:
@@ -70,7 +74,7 @@ install-data-local:
         fi
 
 module_LTLIBRARIES = im-cyrillic-translit.la $(IM_XIM_MODULE) im-viqr.la im-thai-broken.la \
-                     im-inuktitut.la im-ipa.la
+                     im-inuktitut.la im-ipa.la im-hangul.la
 
 gtk.immodules: Makefile.am $(module_LTLIBRARIES)
 	$(top_builddir)/gtk/gtk-query-immodules-2.0 .libs/*.$(SOSUFFIX) > gtk.immodules

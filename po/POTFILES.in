@@ -82,3 +82,4 @@ modules/input/imipa.c
 modules/input/imthai-broken.c
 modules/input/imviqr.c
 modules/input/imxim.c
+modules/input/imhangul.c

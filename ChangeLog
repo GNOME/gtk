@@ -1,3 +1,9 @@
+Mon Jan 28 19:57:39 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/imhangul.c modules/input/imhangul-defs.h
+	po/POTFILES.in. Add port of Emacs korean-hangul input
+	method from Yusuke Tabata (#67665)
+
 Mon Jan 28 18:25:10 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_draw_frame): Paint shadow
