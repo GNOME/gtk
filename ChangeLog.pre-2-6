@@ -1,3 +1,18 @@
+Sat Jan 17 23:05:52 2004  Matthias Clasen  <maclas@gmx.de>
+
+	The second part of the fix for #114351 (see also 
+	gdk-pixbuf/ChangeLog and po/ChangeLog):
+
+	* Makefile.am (SUBDIRS): Add po-properties.
+
+	* configure.in (AC_CONFIG_FILES): Add po-properties/Makefile.in 
+
+	* gdk/gdkintl.h (P_): 
+	* gtk/gtkintl.h (P_): Use translation domain gtk20-properties. 
+
+	* gtk/gtkmain.c (gtk_parse_args): Call bindtextdomain and
+	bind_textdomain_codeset for gtk20-properties as well.
+
 Sat Jan 17 22:00:07 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c: 

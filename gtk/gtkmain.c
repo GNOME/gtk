@@ -837,8 +837,10 @@ gtk_parse_args (int    *argc,
 
 #ifdef ENABLE_NLS
   bindtextdomain (GETTEXT_PACKAGE, GTK_LOCALEDIR);
+  bindtextdomain (GETTEXT_PACKAGE "-properties", GTK_LOCALEDIR);
 #    ifdef HAVE_BIND_TEXTDOMAIN_CODESET
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+  bind_textdomain_codeset (GETTEXT_PACKAGE "-properties", "UTF-8");
 #    endif
 #endif  
 

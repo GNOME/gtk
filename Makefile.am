@@ -1,7 +1,7 @@
 ## Makefile.am for GTK+
 
 SRC_SUBDIRS = gdk-pixbuf gdk gtk modules demos tests contrib
-SUBDIRS = po $(SRC_SUBDIRS) docs build m4macros
+SUBDIRS = po po-properties $(SRC_SUBDIRS) docs build m4macros
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.7
