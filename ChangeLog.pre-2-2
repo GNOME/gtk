@@ -1,3 +1,14 @@
+Wed Jan 26 19:44:25 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c (gtk_style_new): Dont' set
+	  style/base[GTK_STATE_INSENSITIVE] both to
+	  gtk_default_insensitive_bg!
+	  (Bug #2187, reported by Jonathan Blandford)
+
+	* gtk/gtkaccelgroup.c (gtk_accelerator_valid):
+	  Add Alt_L, Alt_R to list of invalid accelerators.
+	  (Bug #3736, reported by Vlad Harchev)
+
 Wed Jan 26 19:01:56 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c (open_ref_dir): Fix several

@@ -453,7 +453,7 @@ gtk_style_new (void)
     }
   
   style->base[GTK_STATE_INSENSITIVE] = gtk_default_insensitive_bg;
-  style->text[GTK_STATE_INSENSITIVE] = gtk_default_insensitive_bg;
+  style->text[GTK_STATE_INSENSITIVE] = gtk_default_insensitive_fg;
   
   for (i = 0; i < 5; i++)
     style->bg_pixmap[i] = NULL;
