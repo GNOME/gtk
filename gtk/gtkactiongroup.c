@@ -290,13 +290,13 @@ gtk_action_group_add_actions (GtkActionGroup      *action_group,
       gchar *accel_path;
 
       switch (entries[i].entry_type) {
-      case NORMAL_ACTION:
+      case GTK_ACTION_NORMAL:
 	action_type = GTK_TYPE_ACTION;
 	break;
-      case TOGGLE_ACTION:
+      case GTK_ACTION_TOGGLE:
 	action_type = GTK_TYPE_TOGGLE_ACTION;
 	break;
-      case RADIO_ACTION:
+      case GTK_ACTION_RADIO:
 	action_type = GTK_TYPE_RADIO_ACTION;
 	break;
       default:
@@ -311,7 +311,7 @@ gtk_action_group_add_actions (GtkActionGroup      *action_group,
 			     "stock_id", entries[i].stock_id,
 			     NULL);
 
-      if (entries[i].entry_type == RADIO_ACTION &&
+      if (entries[i].entry_type == GTK_ACTION_RADIO &&
 	  entries[i].extra_data != NULL)
 	{
 	  GtkAction *radio_action;

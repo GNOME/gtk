@@ -69,9 +69,9 @@ struct _GtkActionGroupClass
 
 typedef enum 
 {
-  NORMAL_ACTION,
-  TOGGLE_ACTION,
-  RADIO_ACTION
+  GTK_ACTION_NORMAL,
+  GTK_ACTION_TOGGLE,
+  GTK_ACTION_RADIO
 } GtkActionGroupEntryType;
 
 struct _GtkActionGroupEntry 

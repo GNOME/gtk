@@ -50,13 +50,13 @@ static GtkActionGroupEntry entries[] = {
   { "SaveAs", N_("Save _As..."), GTK_STOCK_SAVE, NULL, N_("Save to a file"), G_CALLBACK (activate_action), NULL },
   { "Quit", N_("_Quit"), GTK_STOCK_QUIT, "<control>Q", N_("Quit"), G_CALLBACK (activate_action), NULL },
 
-  { "Red", N_("_Red"), NULL, "<control>R", N_("Blood"), G_CALLBACK (activate_action), NULL, RADIO_ACTION },
-  { "Green", N_("_Green"), NULL, "<control>G", N_("Grass"), G_CALLBACK (activate_action), NULL, RADIO_ACTION, "Red" },
-  { "Blue", N_("_Blue"), NULL, "<control>B", N_("Sky"), G_CALLBACK (activate_action), NULL, RADIO_ACTION, "Red" },
+  { "Red", N_("_Red"), NULL, "<control>R", N_("Blood"), G_CALLBACK (activate_action), NULL, GTK_ACTION_RADIO },
+  { "Green", N_("_Green"), NULL, "<control>G", N_("Grass"), G_CALLBACK (activate_action), NULL, GTK_ACTION_RADIO, "Red" },
+  { "Blue", N_("_Blue"), NULL, "<control>B", N_("Sky"), G_CALLBACK (activate_action), NULL, GTK_ACTION_RADIO, "Red" },
 
-  { "Square", N_("_Square"), NULL, "<control>S", N_("Square"), G_CALLBACK (activate_action), NULL, RADIO_ACTION },
-  { "Rectangle", N_("_Rectangle"), NULL, "<control>R", N_("Rectangle"), G_CALLBACK (activate_action), NULL, RADIO_ACTION, "Square" },
-  { "Oval", N_("_Oval"), NULL, "<control>O", N_("Egg"), G_CALLBACK (activate_action), NULL, RADIO_ACTION, "Square" },
+  { "Square", N_("_Square"), NULL, "<control>S", N_("Square"), G_CALLBACK (activate_action), NULL, GTK_ACTION_RADIO },
+  { "Rectangle", N_("_Rectangle"), NULL, "<control>R", N_("Rectangle"), G_CALLBACK (activate_action), NULL, GTK_ACTION_RADIO, "Square" },
+  { "Oval", N_("_Oval"), NULL, "<control>O", N_("Egg"), G_CALLBACK (activate_action), NULL, GTK_ACTION_RADIO, "Square" },
   { "About", N_("_About"), NULL, "<control>A", N_("About"), G_CALLBACK (activate_action), NULL },
   { "Logo", NULL, "demo-gtk-logo", NULL, N_("GTK+"), G_CALLBACK (activate_action), NULL },
 };

@@ -1,3 +1,13 @@
+2003-08-25  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkactiongroup.h (GtkActionGroupEntryType): Namespace the enum
+	values properly. Sorry about the resize grip trouble, Owen.  (#120621)
+
+	* gtk/gtkactiongroup.c: 
+	* demos/gtk-demo/appwindow.c: 
+	* tests/testmerge.c: 
+	* tests/testactions.c: Use new GtkActionGroupEntryType enum.  
+
 Sun Aug 24 17:14:44 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk.h: Remove reference to gtkresizegrip.h.
