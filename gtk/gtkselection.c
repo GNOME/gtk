@@ -178,6 +178,16 @@ static const char gtk_selection_handler_key[] = "gtk-selection-handlers";
  * Target lists
  */
 
+
+/**
+ * gtk_target_list_new:
+ * @targets: Pointer to an array of #GtkTargetEntry
+ * @ntargets:  number of entries in @targets.
+ * 
+ * Creates a new #GtkTargetList from an array of #GtkTargetEntry.
+ * 
+ * Return value: the new #GtkTargetList.
+ **/
 GtkTargetList *
 gtk_target_list_new (const GtkTargetEntry *targets,
 		     guint                 ntargets)
@@ -192,6 +202,13 @@ gtk_target_list_new (const GtkTargetEntry *targets,
   return result;
 }
 
+/**
+ * gtk_target_list_ref:
+ * @list:  a #GtkTargetList
+ * 
+ * Increases the reference count of a #GtkTargetList by one.
+ *
+ **/
 void               
 gtk_target_list_ref (GtkTargetList *list)
 {
@@ -200,6 +217,13 @@ gtk_target_list_ref (GtkTargetList *list)
   list->ref_count++;
 }
 
+/**
+ * gtk_target_list_unref:
+ * @list: a #GtkTargetList
+ * 
+ * Decreases the reference count of a #GtkTargetList by one.
+ * If the resulting reference count is zero, frees the list.
+ **/
 void               
 gtk_target_list_unref (GtkTargetList *list)
 {
@@ -223,6 +247,15 @@ gtk_target_list_unref (GtkTargetList *list)
     }
 }
 
+/**
+ * gtk_target_list_add:
+ * @list:  a #GtkTargetList
+ * @target: the interned atom representing the target
+ * @flags: the flags for this target
+ * @info: an ID that will be passed back to the application
+ * 
+ * Appends another target to a #GtkTargetList.
+ **/
 void 
 gtk_target_list_add (GtkTargetList *list,
 		     GdkAtom        target,
@@ -276,7 +309,7 @@ init_atoms (void)
  * @list: a #GtkTargetList
  * @info: an ID that will be passed back to the application
  * 
- * Adds the text targets supported by #GtkSelection to
+ * Appends the text targets supported by #GtkSelection to
  * the target list. All targets are added with the same @info.
  * 
  * Since: 2.6
@@ -307,7 +340,7 @@ gtk_target_list_add_text_targets (GtkTargetList *list,
  * @writable: whether to add only targets for which GTK+ knows
  *   how to convert a pixbuf into the format
  * 
- * Adds the image targets supported by #GtkSelection to
+ * Appends the image targets supported by #GtkSelection to
  * the target list. All targets are added with the same @info.
  * 
  * Since: 2.6
@@ -349,7 +382,7 @@ gtk_target_list_add_image_targets (GtkTargetList *list,
  * @list: a #GtkTargetList
  * @info: an ID that will be passed back to the application
  * 
- * Adds the URI targets supported by #GtkSelection to
+ * Appends the URI targets supported by #GtkSelection to
  * the target list. All targets are added with the same @info.
  * 
  * Since: 2.6
@@ -365,6 +398,14 @@ gtk_target_list_add_uri_targets (GtkTargetList *list,
   gtk_target_list_add (list, text_uri_list_atom, 0, info);  
 }
 
+/**
+ * gtk_target_list_add_table:
+ * @list: a #GtkTargetList
+ * @targets: the table of #GtkTargetEntry
+ * @ntargets: number of targets in the table
+ * 
+ * Prepends a table of #GtkTargetEntry to a target list.
+ **/
 void               
 gtk_target_list_add_table (GtkTargetList        *list,
 			   const GtkTargetEntry *targets,
@@ -383,6 +424,13 @@ gtk_target_list_add_table (GtkTargetList        *list,
     }
 }
 
+/**
+ * gtk_target_list_remove:
+ * @list: a #GtkTargetList
+ * @target: the interned atom representing the target
+ * 
+ * Removes a target from a target list.
+ **/
 void 
 gtk_target_list_remove (GtkTargetList *list,
 			GdkAtom            target)
@@ -410,6 +458,16 @@ gtk_target_list_remove (GtkTargetList *list,
     }
 }
 
+/**
+ * gtk_target_list_find:
+ * @list: a #GtkTargetList
+ * @target: an interned atom representing the target to search for
+ * @info: a pointer to the location to store application info for target
+ * 
+ * Looks up a given target in a #GtkTargetList.
+ * 
+ * Return value: %TRUE if the target was found, otherwise %FALSE
+ **/
 gboolean
 gtk_target_list_find (GtkTargetList *list,
 		      GdkAtom        target,
@@ -569,19 +627,6 @@ gtk_selection_owner_set (GtkWidget *widget,
 					      selection, time);
 }
 
-/*************************************************************
- * gtk_selection_add_target
- *     Add specified target to list of supported targets
- *
- *   arguments:
- *     widget:	   The widget for which this target applies
- *     selection:
- *     target:
- *     info:       guint to pass to to the selection_get signal 
- *
- *   results:
- *************************************************************/
-
 typedef struct _GtkSelectionTargetList GtkSelectionTargetList;
 
 struct _GtkSelectionTargetList {
@@ -682,6 +727,16 @@ gtk_selection_clear_targets (GtkWidget *widget,
   g_object_set_data (G_OBJECT (widget), gtk_selection_handler_key, lists);
 }
 
+/**
+ * gtk_selection_add_target:
+ * @widget:  a #GtkTarget
+ * @selection: the selection
+ * @target: target to add.
+ * @info: A unsigned integer which will be passed back to the application.
+ * 
+ * Appends a specified target to the list of supported targets for a 
+ * given widget and selection.
+ **/
 void 
 gtk_selection_add_target (GtkWidget	    *widget, 
 			  GdkAtom	     selection,
@@ -697,6 +752,16 @@ gtk_selection_add_target (GtkWidget	    *widget,
   gtk_target_list_add (list, target, 0, info);
 }
 
+/**
+ * gtk_selection_add_targets:
+ * @widget: a #GtkWidget
+ * @selection: the selection
+ * @targets: a table of targets to add
+ * @ntargets:  number of entries in @targets
+ * 
+ * Prepends a table of targets to the list of supported targets
+ * for a given widget and selection.
+ **/
 void 
 gtk_selection_add_targets (GtkWidget            *widget, 
 			   GdkAtom               selection,
@@ -714,17 +779,15 @@ gtk_selection_add_targets (GtkWidget            *widget,
 }
 
 
-/*************************************************************
+/**
  * gtk_selection_remove_all:
- *     Removes all handlers and unsets ownership of all 
- *     selections for a widget. Called when widget is being
- *     destroyed
- *     
- *   arguments:
- *     widget:	  The widget
- *   results:
- *************************************************************/
-
+ * @widget: a #GtkWidget 
+ * 
+ * Removes all handlers and unsets ownership of all 
+ * selections for a widget. Called when widget is being
+ * destroyed. This function will not generally be
+ * called by applications.
+ **/
 void
 gtk_selection_remove_all (GtkWidget *widget)
 {
@@ -775,29 +838,27 @@ gtk_selection_remove_all (GtkWidget *widget)
   gtk_selection_target_list_remove (widget);
 }
 
-/*************************************************************
- * gtk_selection_convert:
- *     Request the contents of a selection. When received, 
- *     a "selection_received" signal will be generated.
- *
- *   arguments:
- *     widget:	   The widget which acts as requestor
- *     selection:  Which selection to get
- *     target:	   Form of information desired (e.g., STRING)
- *     time:	   Time of request (usually of triggering event)
- *		   In emergency, you could use GDK_CURRENT_TIME
- *
- *   results:
- *     TRUE if requested succeeded. FALSE if we could not process
- *     request. (e.g., there was already a request in process for
- *     this widget). 
- *************************************************************/
 
+/**
+ * gtk_selection_convert:
+ * @widget: The widget which acts as requestor
+ * @selection: Which selection to get
+ * @target: Form of information desired (e.g., STRING)
+ * @time_: Time of request (usually of triggering event)
+       In emergency, you could use #GDK_CURRENT_TIME
+ * 
+ * Requests the contents of a selection. When received, 
+ * a "selection_received" signal will be generated.
+ * 
+ * Return value: %TRUE if requested succeeded. %FALSE if we could not process
+ *          request. (e.g., there was already a request in process for
+ *          this widget).
+ **/
 gboolean
 gtk_selection_convert (GtkWidget *widget, 
 		       GdkAtom	  selection, 
 		       GdkAtom	  target,
-		       guint32	  time)
+		       guint32	  time_)
 {
   GtkRetrievalInfo *info;
   GList *tmp_list;
@@ -860,14 +921,14 @@ gtk_selection_convert (GtkWidget *widget,
 	{
 	  gtk_selection_invoke_handler (owner_widget, 
 					&selection_data,
-					time);
+					time_);
 	  
 	  gtk_selection_retrieval_report (info,
 					  selection_data.type, 
 					  selection_data.format,
 					  selection_data.data,
 					  selection_data.length,
-					  time);
+					  time_);
 	  
 	  g_free (selection_data.data);
 	  
@@ -879,25 +940,25 @@ gtk_selection_convert (GtkWidget *widget,
   /* Otherwise, we need to go through X */
   
   current_retrievals = g_list_append (current_retrievals, info);
-  gdk_selection_convert (widget->window, selection, target, time);
+  gdk_selection_convert (widget->window, selection, target, time_);
   g_timeout_add (1000, (GSourceFunc) gtk_selection_retrieval_timeout, info);
   
   return TRUE;
 }
 
-/*************************************************************
- * gtk_selection_data_set:
- *     Store new data into a GtkSelectionData object. Should
- *     _only_ by called from a selection handler callback.
- *     Null terminates the stored data.
- *   arguments:
- *     type:	the type of selection data
- *     format:	format (number of bits in a unit)
- *     data:	pointer to the data (will be copied)
- *     length:	length of the data
- *   results:
- *************************************************************/
 
+/**
+ * gtk_selection_data_set:
+ * @selection_data: a pointer to a #GtkSelectionData structure.
+ * @type: the type of selection data
+ * @format: format (number of bits in a unit)
+ * @data: pointer to the data (will be copied)
+ * @length: length of the data
+ * 
+ * Stores new data into a #GtkSelectionData object. Should
+ * <emphasis>only</emphasis> be called from a selection handler callback.
+ * Zero-terminates the stored data.
+ **/
 void 
 gtk_selection_data_set (GtkSelectionData *selection_data,
 			GdkAtom		  type,
@@ -2471,6 +2532,14 @@ gtk_selection_default_handler (GtkWidget	*widget,
 }
 
 
+/**
+ * gtk_selection_data_copy:
+ * @selection_data: a pointer to a #GtkSelectionData structure.
+ * 
+ * Makes a copy of a #GtkSelectionData structure and its data.
+ * 
+ * Return value: a pointer to a copy of @data.
+ **/
 GtkSelectionData*
 gtk_selection_data_copy (GtkSelectionData *selection_data)
 {
@@ -2490,6 +2559,13 @@ gtk_selection_data_copy (GtkSelectionData *selection_data)
   return new_data;
 }
 
+/**
+ * gtk_selection_data_free:
+ * @data: a pointer to a #GtkSelectionData structure.
+ * 
+ * Frees a #GtkSelectionData structure returned from
+ * gtk_selection_data_copy().
+ **/
 void
 gtk_selection_data_free (GtkSelectionData *data)
 {
