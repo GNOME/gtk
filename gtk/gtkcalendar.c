@@ -40,8 +40,9 @@
 #include <glib/gprintf.h>
 
 #include "gtkcalendar.h"
-#include "gtkmarshalers.h"
 #include "gtkintl.h"
+#include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gdk/gdkkeysyms.h"
 
 /***************************************************************************/
@@ -267,6 +268,11 @@ struct _GtkCalendarPrivateData
   guint dirty_day_names : 1;
   guint dirty_main : 1;
   guint dirty_week : 1;
+
+  guint need_timer  : 1;
+
+  guint32 timer;
+  gint click_child;
 };
 
 #define GTK_CALENDAR_PRIVATE_DATA(widget)  (((GtkCalendarPrivateData*)(GTK_CALENDAR (widget)->private_data)))
@@ -276,6 +282,7 @@ typedef void (*GtkCalendarSignalDate) (GtkObject *object, guint arg1, guint arg2
 static void gtk_calendar_class_init	(GtkCalendarClass *class);
 static void gtk_calendar_init		(GtkCalendar *calendar);
 static void gtk_calendar_finalize	(GObject *calendar);
+static void gtk_calendar_destroy	(GtkObject *calendar);
 static void gtk_calendar_set_property   (GObject      *object,
 				         guint         prop_id,
 				         const GValue *value,
@@ -294,6 +301,8 @@ static gint gtk_calendar_expose		(GtkWidget *widget,
 					 GdkEventExpose *event);
 static gint gtk_calendar_button_press	(GtkWidget *widget,
 					 GdkEventButton *event);
+static gint gtk_calendar_button_release	(GtkWidget *widget,
+					 GdkEventButton *event);
 static void gtk_calendar_main_button	(GtkWidget *widget,
 					 GdkEventButton *event);
 static gint gtk_calendar_motion_notify	(GtkWidget *widget,
@@ -304,6 +313,8 @@ static gint gtk_calendar_leave_notify	(GtkWidget *widget,
 					 GdkEventCrossing *event);
 static gint gtk_calendar_key_press	(GtkWidget	   *widget,
 					 GdkEventKey	   *event);
+static void gtk_calendar_grab_notify    (GtkWidget          *widget,
+			 	         gboolean            was_grabbed);
 static void gtk_calendar_state_changed	(GtkWidget *widget,
 					 GtkStateType previous_state);
 static void gtk_calendar_style_set	(GtkWidget *widget,
@@ -363,9 +374,11 @@ static void
 gtk_calendar_class_init (GtkCalendarClass *class)
 {
   GObjectClass   *gobject_class;
+  GtkObjectClass   *object_class;
   GtkWidgetClass *widget_class;
 
   gobject_class = (GObjectClass*)  class;
+  object_class = (GtkObjectClass*)  class;
   widget_class = (GtkWidgetClass*) class;
   
   parent_class = g_type_class_peek_parent (class);
@@ -374,18 +387,22 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   gobject_class->get_property = gtk_calendar_get_property;
   gobject_class->finalize = gtk_calendar_finalize;
 
+  object_class->destroy = gtk_calendar_destroy;
+
   widget_class->realize = gtk_calendar_realize;
   widget_class->unrealize = gtk_calendar_unrealize;
   widget_class->expose_event = gtk_calendar_expose;
   widget_class->size_request = gtk_calendar_size_request;
   widget_class->size_allocate = gtk_calendar_size_allocate;
   widget_class->button_press_event = gtk_calendar_button_press;
+  widget_class->button_release_event = gtk_calendar_button_release;
   widget_class->motion_notify_event = gtk_calendar_motion_notify;
   widget_class->enter_notify_event = gtk_calendar_enter_notify;
   widget_class->leave_notify_event = gtk_calendar_leave_notify;
   widget_class->key_press_event = gtk_calendar_key_press;
   widget_class->style_set = gtk_calendar_style_set;
   widget_class->state_changed = gtk_calendar_state_changed;
+  widget_class->grab_notify = gtk_calendar_grab_notify;
   
   class->month_changed = NULL;
   class->day_selected = NULL;
@@ -583,6 +600,10 @@ gtk_calendar_init (GtkCalendar *calendar)
   private_data->dirty_day_names = 0;
   private_data->dirty_week = 0;
   private_data->dirty_main = 0;
+
+  private_data->need_timer = 0;
+  private_data->timer = 0;
+  private_data->click_child = -1;
 }
 
 GtkWidget*
@@ -652,9 +673,7 @@ row_from_y (GtkCalendar *calendar,
     }
   
   return row;
-}
-
-/* left_x_for_column: returns the x coordinate
+}/* left_x_for_column: returns the x coordinate
  * for the left of the column */
 static gint
 left_x_for_column (GtkCalendar *calendar,
@@ -2412,40 +2431,154 @@ gtk_calendar_get_date (GtkCalendar *calendar,
     *day = calendar->selected_day;
 }
 
+#define CALENDAR_INITIAL_TIMER_DELAY    200
+#define CALENDAR_TIMER_DELAY            20
+
+static void
+arrow_action (GtkCalendar *calendar,
+	      guint        arrow)
+{
+  switch (arrow)
+    {
+    case ARROW_YEAR_LEFT:
+      gtk_calendar_set_year_prev (calendar);
+      break;
+    case ARROW_YEAR_RIGHT:
+      gtk_calendar_set_year_next (calendar);
+      break;
+    case ARROW_MONTH_LEFT:
+      gtk_calendar_set_month_prev (calendar);
+      break;
+    case ARROW_MONTH_RIGHT:
+      gtk_calendar_set_month_next (calendar);
+      break;
+    default:;
+      // do nothing
+    }
+}
+
+static gint
+calendar_timer (GtkCalendar *calendar)
+{
+  GtkCalendarPrivateData *private_data = GTK_CALENDAR_PRIVATE_DATA (calendar);
+  gboolean retval = FALSE;
+  
+  GDK_THREADS_ENTER ();
+
+  if (private_data->timer)
+    {
+      arrow_action (calendar, private_data->click_child);
+
+      if (private_data->need_timer)
+	{
+	  private_data->need_timer = FALSE;
+	  private_data->timer = gtk_timeout_add (CALENDAR_TIMER_DELAY, 
+					     (GtkFunction) calendar_timer, 
+					     (gpointer) calendar);
+	}
+      else 
+	retval = TRUE;
+    }
+
+  GDK_THREADS_LEAVE ();
+
+  return retval;
+}
+
+static void
+start_spinning (GtkWidget *widget,
+		gint       click_child)
+{
+  GtkCalendarPrivateData *private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
+
+  private_data->click_child = click_child;
+  
+  if (!private_data->timer)
+    {
+      private_data->need_timer = TRUE;
+      private_data->timer = gtk_timeout_add (CALENDAR_INITIAL_TIMER_DELAY, 
+					     (GtkFunction) calendar_timer,
+					     (gpointer) widget);
+    }
+}
+
+static void
+stop_spinning (GtkWidget *widget)
+{
+  GtkCalendarPrivateData *private_data;
+
+  private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
+
+  if (private_data->timer)
+    {
+      gtk_timeout_remove (private_data->timer);
+      private_data->timer = 0;
+      private_data->need_timer = FALSE;
+    }
+}
+
+static void
+gtk_calendar_destroy (GtkObject *object)
+{
+  stop_spinning (GTK_WIDGET (object));
+  
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+}
+
+static void
+gtk_calendar_grab_notify (GtkWidget *widget,
+			  gboolean   was_grabbed)
+{
+  if (!was_grabbed)
+    stop_spinning (widget);
+}
+
 static gboolean
 gtk_calendar_button_press (GtkWidget	  *widget,
 			   GdkEventButton *event)
 {
   GtkCalendar *calendar;
   GtkCalendarPrivateData *private_data;
-  gint x, y;
-  void (* action_func) (GtkCalendar *);
+  gint arrow = -1;
   
   calendar = GTK_CALENDAR (widget);
   private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
   
-  x = (gint) (event->x);
-  y = (gint) (event->y);
-  
   if (event->window == private_data->main_win)
     gtk_calendar_main_button (widget, event);
 
-  action_func = NULL;  
+  if (!GTK_WIDGET_HAS_FOCUS (widget))
+    gtk_widget_grab_focus (widget);
 
-  if (event->window == private_data->arrow_win[ARROW_MONTH_LEFT])
-    action_func = gtk_calendar_set_month_prev;
-  else if (event->window == private_data->arrow_win[ARROW_MONTH_RIGHT])
-    action_func = gtk_calendar_set_month_next;
-  else if (event->window == private_data->arrow_win[ARROW_YEAR_LEFT])
-    action_func = gtk_calendar_set_year_prev;
-  else if (event->window == private_data->arrow_win[ARROW_YEAR_RIGHT])
-    action_func = gtk_calendar_set_year_next;
+  for (arrow = ARROW_YEAR_LEFT; arrow <= ARROW_MONTH_RIGHT; arrow++)
+    {
+      if (event->window == private_data->arrow_win[arrow])
+	{
+	  
+	  /* only call the action on single click, not double */
+	  if (event->type == GDK_BUTTON_PRESS)
+	    {
+	      arrow_action (calendar, arrow);
+	      
+	      if (event->button == 1)
+		start_spinning (widget, arrow);
+	    }
 
-  /* only call the action on single click, not double */
-  if (action_func && event->type == GDK_BUTTON_PRESS)
-    (* action_func) (calendar);
-  
-  return action_func != NULL;
+	  return TRUE;
+	}
+    }
+
+  return FALSE;
+}
+
+static gboolean
+gtk_calendar_button_release (GtkWidget	  *widget,
+			     GdkEventButton *event)
+{
+  if (event->button == 1) 
+    stop_spinning (widget);
+
+  return TRUE;
 }
 
 static gboolean
@@ -2704,6 +2837,9 @@ static void
 gtk_calendar_state_changed (GtkWidget	   *widget,
 			    GtkStateType    previous_state)
 {
+  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+    stop_spinning (widget);    
+
   gtk_calendar_set_background (widget);
 }
 

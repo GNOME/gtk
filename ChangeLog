@@ -1,3 +1,7 @@
+2003-05-21  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcalendar.c: Make calendar controls spin.  (#112540)
+
 Tue May 20 17:27:24 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimmodule.c (gtk_im_module_init): Silently
