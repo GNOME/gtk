@@ -1,3 +1,14 @@
+Sun Jul 12 02:47:35 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkobject.h:
+	* gtk/gtkobject.c:
+ 	(gtk_object_arg_get_info): new functions which wraps gtk_arg_get_info().
+
+	* gtk/gtkcontainer.h:
+	* gtk/gtkcontainer.c:
+ 	(gtk_container_child_arg_get_info): new function which wraps
+ 	gtk_arg_get_info().
+
 Fri Jul 10 13:29:53 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkcontainer.c:

@@ -884,6 +884,17 @@ gtk_object_args_collect (GtkType      object_type,
 			   var_args_p);
 }
 
+gchar*
+gtk_object_arg_get_info (GtkType      object_type,
+			 const gchar *arg_name,
+			 GtkArgInfo **info_p)
+{
+  return gtk_arg_get_info (object_type,
+			   object_arg_info_ht,
+			   arg_name,
+			   info_p);
+}
+
 GtkArg*
 gtk_object_query_args (GtkType        class_type,
 		       guint32      **arg_flags,

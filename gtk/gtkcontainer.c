@@ -579,6 +579,17 @@ gtk_container_child_args_collect (GtkType       object_type,
 			   var_args_p);
 }
 
+gchar*
+gtk_container_child_arg_get_info (GtkType       object_type,
+				  const gchar  *arg_name,
+				  GtkArgInfo  **info_p)
+{
+  return gtk_arg_get_info (object_type,
+			   container_child_arg_info_ht,
+			   arg_name,
+			   info_p);
+}
+
 GtkArg*
 gtk_container_query_child_args (GtkType	           class_type,
 				guint32          **arg_flags,
