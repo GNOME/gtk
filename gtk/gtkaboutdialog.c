@@ -424,6 +424,7 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   priv->website = NULL;
   priv->website_label = NULL;
   priv->translator_credits = NULL;
+  priv->license = NULL;
   priv->authors = NULL;
   priv->documenters = NULL;
   priv->artists = NULL;
@@ -1439,7 +1440,7 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
  * Returns the icon name displayed as logo in the about dialog.
  * 
  * Return value: the icon name displayed as logo. The string is
- *   owned by the about dialog. If you want to keep a reference
+ *   owned by the dialog. If you want to keep a reference
  *   to it, you have to call g_strdup() on it.
  *
  * Since: 2.6
@@ -1448,7 +1449,7 @@ G_CONST_RETURN gchar *
 gtk_about_dialog_get_logo_icon_name (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
-  const gchar *icon_name;
+  const gchar *icon_name = NULL;
   
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
 
