@@ -1,3 +1,8 @@
+Fri Nov 23 18:57:46 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmessagedialog.c (gtk_message_dialog_init): Align
+	the image at the top, #65020, request from Seth Nickell)
+
 Fri Nov 23 18:49:53 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/{gtkclist,gtkctree.c} (draw_row): Remove some strange

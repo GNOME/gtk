@@ -133,6 +133,7 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
   
   dialog->label = gtk_label_new (NULL);
   dialog->image = gtk_image_new_from_stock (NULL, GTK_ICON_SIZE_DIALOG);
+  gtk_misc_set_alignment (GTK_MISC (dialog->image), 0.5, 0.0);
   
   gtk_label_set_line_wrap (GTK_LABEL (dialog->label), TRUE);
   gtk_label_set_selectable (GTK_LABEL (dialog->label), TRUE);
