@@ -465,6 +465,26 @@ gtk_menu_item_accel_width_foreach (GtkWidget *widget,
 			   data);
 }
 
+static gint
+get_minimum_width (GtkWidget *widget)
+{
+  PangoContext *context;
+  PangoFontMetrics *metrics;
+  gint height;
+
+  context = gtk_widget_get_pango_context (widget);
+  metrics = pango_context_get_metrics (context,
+				       widget->style->font_desc,
+				       pango_context_get_language (context));
+
+  height = pango_font_metrics_get_ascent (metrics) +
+      pango_font_metrics_get_descent (metrics);
+  
+  pango_font_metrics_unref (metrics);
+
+  return PANGO_PIXELS (7 * height);
+}
+
 static void
 gtk_menu_item_size_request (GtkWidget      *widget,
 			    GtkRequisition *requisition)
@@ -508,6 +528,8 @@ gtk_menu_item_size_request (GtkWidget      *widget,
 
 	  requisition->width += child_requisition.height;
 	  requisition->width += arrow_spacing;
+
+	  requisition->width = MAX (requisition->width, get_minimum_width (widget));
 	}
     }
   else

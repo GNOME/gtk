@@ -47,7 +47,7 @@
 #define MENU_ITEM_CLASS(w)   GTK_MENU_ITEM_GET_CLASS (w)
 #define	MENU_NEEDS_RESIZE(m) GTK_MENU_SHELL (m)->menu_flag
 
-#define DEFAULT_POPUP_DELAY    225
+#define DEFAULT_POPUP_DELAY    200
 #define DEFAULT_POPDOWN_DELAY  1000
 
 #define NAVIGATION_REGION_OVERSHOOT 50  /* How much the navigation region

@@ -191,15 +191,23 @@ typedef enum {
 
 #define GTK_TOOLBAR_GET_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_TOOLBAR, GtkToolbarPrivate))
 
+typedef enum {
+  NOT_ALLOCATED,
+  NORMAL,
+  HIDDEN,
+  OVERFLOWN,
+} ItemState;
+
 struct _ToolbarContent
 {
-  GtkToolItem *item;
-  guint        is_overflow : 1;
-  guint        is_placeholder : 1;
-  gint	       start_width;
-  gint	       goal_width;
-  gint	       start_height;
-  gint         goal_height;
+  GtkToolItem * item;
+  guint         is_placeholder : 1;
+  gint	        start_width;
+  gint	        goal_width;
+  gint	        start_height;
+  gint          goal_height;
+  GtkAllocation start_allocation;
+  ItemState     state;
 };
 
 struct _GtkToolbarPrivate
@@ -217,13 +225,15 @@ struct _GtkToolbarPrivate
   ApiMode    api_mode;
   GtkSettings *settings;
   int        idle_id;
-  GTimer   *timer;
   gboolean   need_sync;
   gboolean   leaving_dnd;
   gboolean   in_dnd;
   gint	     n_overflow_items_when_dnd_started;
   GtkToolItem *highlight_tool_item;
   gint	     max_homogeneous_pixels;
+
+  GTimer   *timer;
+  gboolean  is_sliding;
 };
 
 static GtkContainerClass *parent_class = NULL;
@@ -1023,6 +1033,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
   GtkAllocation *allocations;
+  ItemState *new_states;
   GtkAllocation arrow_allocation;
   gint arrow_size;
   gint size, pos, short_size;
@@ -1083,6 +1094,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 
   n_items = g_list_length (priv->content);
   allocations = g_new0 (GtkAllocation, n_items);
+  new_states = g_new0 (ItemState, n_items);
 
   needed_size = 0;
   for (list = priv->content; list != NULL; list = list->next)
@@ -1112,20 +1124,23 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       gint item_size;
 
       if (!toolbar_item_visible (toolbar, item))
-	continue;
+	{
+	  new_states[i] = HIDDEN;
+	  continue;
+	}
 
       item_size = get_item_size (toolbar, GTK_WIDGET (item));
       if (item_size <= size && !overflowing)
 	{
 	  size -= item_size;
 	  allocations[i].width = item_size;
-	  content->is_overflow = FALSE;
+	  new_states[i] = NORMAL;
 	}
       else
 	{
 	  ++n_overflowed;
-	  content->is_overflow = TRUE;
 	  overflowing = TRUE;
+	  new_states[i] = OVERFLOWN;
 	}
     }
 
@@ -1146,17 +1161,13 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   if (!(priv->in_dnd && n_overflowed > priv->n_overflow_items_when_dnd_started))
     {
       n_expand_items = 0;
-      for (list = priv->content; list != NULL; list = list->next)
+      for (i = 0, list = priv->content; list != NULL; list = list->next, ++i)
 	{
 	  ToolbarContent *content = list->data;
 	  GtkToolItem *item = content->item;
 	  
-	  if (toolbar_item_visible (toolbar, item) &&
-	      gtk_tool_item_get_expand (item) &&
-	      !content->is_overflow)
-	    {
-	      n_expand_items++;
-	    }
+	  if (gtk_tool_item_get_expand (item) && new_states[i] == NORMAL)
+	    n_expand_items++;
 	}
       
       for (list = priv->content, i = 0; list != NULL; list = list->next, ++i)
@@ -1164,9 +1175,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	  ToolbarContent *content = list->data;
 	  GtkToolItem *item = content->item;
 	  
-	  if (toolbar_item_visible (toolbar, item) &&
-	      gtk_tool_item_get_expand (item) &&
-	      !content->is_overflow)
+	  if (gtk_tool_item_get_expand (item) && new_states[i] == NORMAL)
 	    {
 	      gint extra = size / n_expand_items;
 	      if (size % n_expand_items != 0)
@@ -1185,10 +1194,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   pos = border_width;
   for (list = priv->content, i = 0; list != NULL; list = list->next, ++i)
     {
-      ToolbarContent *content = list->data;
-      GtkToolItem *item = content->item;
-      
-      if (toolbar_item_visible (toolbar, item) && !content->is_overflow)
+      if (new_states[i] == NORMAL)
 	{
 	  allocations[i].x = pos;
 	  allocations[i].y = border_width;
@@ -1254,7 +1260,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       ToolbarContent *content = list->data;
       GtkToolItem *item = content->item;
       
-      if (toolbar_item_visible (toolbar, item) && !content->is_overflow)
+      if (new_states[i] == NORMAL)
 	{
 	  gtk_widget_size_allocate (GTK_WIDGET (item), &(allocations[i]));
 	  gtk_widget_set_child_visible (GTK_WIDGET (item), TRUE);
@@ -1263,6 +1269,8 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	{
 	  gtk_widget_set_child_visible (GTK_WIDGET (item), FALSE);
 	}
+
+      content->state = new_states[i];
     }
 
   if (need_arrow)
@@ -1277,6 +1285,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
     }
   
   g_free (allocations);
+  g_free (new_states);
 }
 
 static void
@@ -1552,9 +1561,8 @@ find_drop_index (GtkToolbar *toolbar,
   for (list = priv->content; list != NULL; list = list->next)
     {
       ToolbarContent *content = list->data;
-      GtkToolItem *item = content->item;
 
-      if (toolbar_item_visible (toolbar, item) && !content->is_overflow)
+      if (content->state == NORMAL)
 	interesting_content = g_list_prepend (interesting_content, content);
     }
   interesting_content = g_list_reverse (interesting_content);
@@ -1911,11 +1919,8 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
       for (list = priv->content; list != NULL; list = list->next)
 	{
 	  content = list->data;
-	  if (content->is_overflow &&
-	      toolbar_item_visible (toolbar, content->item))
-	    {
-	      priv->n_overflow_items_when_dnd_started++;
-	    }
+	  if (content->state == OVERFLOWN)
+	    priv->n_overflow_items_when_dnd_started++;
 	}
     }
   
@@ -2249,7 +2254,7 @@ show_menu (GtkToolbar     *toolbar,
       ToolbarContent *content = list->data;
       GtkToolItem *item = content->item;
 
-      if (toolbar_item_visible (toolbar, item) && content->is_overflow)
+      if (content->state == OVERFLOWN)
 	{
 	  GtkWidget *menu_item = gtk_tool_item_retrieve_proxy_menu_item (item);
 
@@ -2415,9 +2420,9 @@ gtk_toolbar_insert_tool_item (GtkToolbar  *toolbar,
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
   ToolbarContent *content = g_new0 (ToolbarContent, 1);
 
-  content->is_overflow = FALSE;
   content->is_placeholder = is_placeholder;
   content->item = item;
+  content->state = NOT_ALLOCATED;
   toolbar->num_children++;
 
   priv->content = g_list_insert (priv->content, content, pos);

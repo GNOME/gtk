@@ -1,3 +1,15 @@
+Wed Nov 19 18:15:00 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkmenu.c (DEFAULT_POPUP_DELAY): set to 200 instead of 225
+	* gtk/gtkmenuitem.c (get_minimum_width): Impose a minimum width
+	on items that have a submenu. (#120104).
+
+Wed Nov 19 18:11:08 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c (struct _ToolbarContent): Add a new
+	"ItemState" field indicating the overflowed-ness etc. of the item.
+	(gtk_toolbar_size_allocate): update the field here.
+
 2003-11-19  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilesystem.h (struct _GtkFileSystemIface): Added a
