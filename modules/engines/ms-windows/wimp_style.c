@@ -116,8 +116,16 @@ static struct {
   { radio_text_bits, NULL }
 };
 
+typedef enum
+{
+	CAPTION_FONT,
+	MENU_FONT,
+	STATUS_FONT,
+	MESSAGE_FONT
+} SystemFontType;
+
 static gboolean
-get_system_font(LOGFONT *lf)
+get_system_font(SystemFontType type, LOGFONT *out_lf)
 {
   gboolean ok;
 
@@ -127,27 +135,46 @@ get_system_font(LOGFONT *lf)
 			    sizeof(NONCLIENTMETRICS), &ncm, 0);
   if (ok)
     {
-      *lf = ncm.lfMessageFont;
+		if (type == CAPTION_FONT)
+			*out_lf = ncm.lfCaptionFont;
+		else if (type == MENU_FONT)
+			*out_lf = ncm.lfMenuFont;
+		else if (type == STATUS_FONT)
+			*out_lf = ncm.lfStatusFont;
+		else
+	      *out_lf = ncm.lfMessageFont;
     }
 
   return ok;
 }
 
-static void
-setup_system_font(GtkStyle *style)
+static char *
+sys_font_to_pango_font (SystemFontType type, char * buf)
 {
   LOGFONT lf;
+  int pt_size;
 
-  if (get_system_font(&lf))
+  if (get_system_font(type, &lf))
     {
-      char buf[64]; /* It's okay, lfFaceName is smaller than 32 chars */
-      int pt_size;
-
       pt_size = -MulDiv(lf.lfHeight, 72,
                         GetDeviceCaps(GetDC(GetDesktopWindow()),
                                       LOGPIXELSY));
       sprintf(buf, "%s %d", lf.lfFaceName, pt_size);
-      style->font_desc = pango_font_description_from_string(buf);
+
+	  return buf;
+	}
+
+	return NULL;
+}
+
+static void
+setup_system_font(GtkStyle *style)
+{
+  char buf[64], * font; /* It's okay, lfFaceName is smaller than 32 chars */
+
+  if ((font = sys_font_to_pango_font(MESSAGE_FONT, buf)) != NULL)
+    {
+      style->font_desc = pango_font_description_from_string(font);
     }
 }
 
@@ -164,7 +191,7 @@ sys_color_to_gtk_color(int id, GdkColor *pcolor)
 static void
 setup_system_styles(GtkStyle *style)
 {
-  char buf[1024];
+  char buf[1024], font_buf[64], *font_ptr;
   GdkColor menu_color;
   GdkColor menu_text_color;
   GdkColor fg_prelight;
@@ -246,6 +273,7 @@ setup_system_styles(GtkStyle *style)
     }
 
   /* Enable coloring for menus. */
+  font_ptr = sys_font_to_pango_font (MENU_FONT,font_buf);
   sprintf(buf, "style \"wimp-menu\"\n"
           "{fg[PRELIGHT] = { %d, %d, %d }\n"
           "bg[PRELIGHT] = { %d, %d, %d }\n"
@@ -253,6 +281,7 @@ setup_system_styles(GtkStyle *style)
           "base[PRELIGHT] = { %d, %d, %d }\n"
           "fg[NORMAL] = { %d, %d, %d }\n"
           "bg[NORMAL] = { %d, %d, %d }\n"
+          "%s = \"%s\"\n"
           "}widget_class \"*GtkMenu*\" style \"wimp-menu\"\n",
           fg_prelight.red,
           fg_prelight.green,
@@ -271,20 +300,41 @@ setup_system_styles(GtkStyle *style)
           menu_text_color.blue,
           menu_color.red,
           menu_color.green,
-          menu_color.blue);
+          menu_color.blue,
+          (font_ptr ? "font_name" : "#"),
+          (font_ptr ? font_ptr : " font name should go here"));
   gtk_rc_parse_string(buf);
 
-  /* enable coloring for tooltips */
+#if 0
+  /* enable tooltip fonts */
+  font_ptr = sys_font_to_pango_font (CAPTION_FONT,font_buf);
+  sprintf(buf, "style \"wimp-tooltip-font\"\n"
+	  "{%s = \"%s\"\n"
+	  "}widget_class \"*GtkWindow.GtkLabel*\" style \"wimp-tooltip-font\"\n",
+          (font_ptr ? "font_name" : "#"),
+          (font_ptr ? font_ptr : " font name should go here"));
+  gtk_rc_parse_string(buf);
+#endif
+
   sprintf(buf, "style \"wimp-tooltips\"\n"
 	  "{fg[NORMAL] = { %d, %d, %d }\n"
 	  "bg[NORMAL] = { %d, %d, %d }\n"
-	  "}widget \"*gtk-tooltips*\" style \"wimp-tooltips\"\n",
+	  "}widget \"gtk-tooltips*\" style \"wimp-tooltips\"\n",
           tooltip_fore.red,
           tooltip_fore.green,
           tooltip_fore.blue,
           tooltip_back.red,
           tooltip_back.green,
           tooltip_back.blue);
+  gtk_rc_parse_string(buf);
+
+  /* enable font theming for status bars */
+  font_ptr = sys_font_to_pango_font (STATUS_FONT,font_buf);
+  sprintf(buf, "style \"wimp-statusbar\"\n"
+	  "{%s = \"%s\"\n"
+	  "}widget_class \"*GtkStatusbar*\" style \"wimp-statusbar\"\n",
+          (font_ptr ? "font_name" : "#"),
+          (font_ptr ? font_ptr : " font name should go here"));
   gtk_rc_parse_string(buf);
 
   /* enable coloring for text on buttons
