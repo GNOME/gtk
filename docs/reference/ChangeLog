@@ -1,3 +1,8 @@
+Tue Jun  5 10:54:48 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtkenums.sgml: Improve docs for GtkStateType.
+	(Fixes #55751, among other things.)
+
 Mon Jun  4 15:08:21 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk-overrides.txt: Remove GtkArgSetFunc, GtkArgGetFunc.
