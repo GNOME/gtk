@@ -1,3 +1,8 @@
+Fri Apr  3 18:05:45 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* testglib.c: Removed literal german from strings
+	to appease SGI compiler.
+	
 Thu Mar 26 20:47:21 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* configure.in glib glibconfig.h.in: Add test for atexit/on_exit -

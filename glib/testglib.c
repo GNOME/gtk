@@ -87,14 +87,6 @@ my_traverse (gpointer key,
   return FALSE;
 }
 
-void
-print_compare (gchar *a, 
-	       gchar *b)
-{
-  g_print ("%s <=> %s : %d\n", a, b, g_strcasecmp(a,b));
-  g_print ("%s <=> %s : %d\n", b, a, g_strcasecmp(b,a));
-}
-
 int
 main (int   argc,
       char *argv[])
@@ -396,8 +388,6 @@ main (int   argc,
   g_print ("ok\n");
 
   g_print ("checking g_strcasecmp...\n");
-  print_compare ("SchloÅﬂ", "Schlo");
-  print_compare ("Åƒffchen", "Å÷fchen");
 
   /* g_debug (argv[0]); */
 
