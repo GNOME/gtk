@@ -1,3 +1,10 @@
+Thu Feb 18 00:27:46 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_queue_clear_area): only translate widget
+	relative coordinates to window relative if the widget is not a toplevel
+	(i.e. it has ->parent != NULL), otherwise the area size gets screwed up
+	for toplevels.
+
 Tue Feb 16 14:25:44 CST 1999 Shawn T. Amundson <amundson@gtk.org>
 
 	* INSTALL

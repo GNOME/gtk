@@ -1852,27 +1852,30 @@ gtk_widget_queue_clear_area (GtkWidget *widget,
     }
   else
     {
-      gint wx, wy, wwidth, wheight;
-      /* Translate widget relative to window-relative */
-
-      gdk_window_get_position (widget->window, &wx, &wy);
-      x -= wx - widget->allocation.x;
-      y -= wy - widget->allocation.y;
-
-      gdk_window_get_size (widget->window, &wwidth, &wheight);
-
-      if (x < 0)
+      if (widget->parent)
 	{
-	  width += x;  x = 0;
+	  gint wx, wy, wwidth, wheight;
+	  /* Translate widget relative to window-relative */
+	  
+	  gdk_window_get_position (widget->window, &wx, &wy);
+	  x -= wx - widget->allocation.x;
+	  y -= wy - widget->allocation.y;
+	  
+	  gdk_window_get_size (widget->window, &wwidth, &wheight);
+	  
+	  if (x < 0)
+	    {
+	      width += x;  x = 0;
+	    }
+	  if (y < 0)
+	    {
+	      height += y; y = 0;
+	    }
+	  if (x + width > wwidth)
+	    width = wwidth - x;
+	  if (y + height > wheight)
+	    height = wheight - y;
 	}
-      if (y < 0)
-	{
-	  height += y; y = 0;
-	}
-      if (x + width > wwidth)
-	width = wwidth - x;
-      if (y + height > wheight)
-	height = wheight - y;
 
       gtk_widget_queue_draw_data (widget, x, y, width, height, NULL);
     }
