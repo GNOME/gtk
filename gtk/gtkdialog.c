@@ -627,9 +627,9 @@ gtk_dialog_add_button (GtkDialog   *dialog,
 }
 
 static void
-gtk_dialog_add_buttons_valist(GtkDialog      *dialog,
-                              const gchar    *first_button_text,
-                              va_list         args)
+gtk_dialog_add_buttons_valist (GtkDialog      *dialog,
+                               const gchar    *first_button_text,
+                               va_list         args)
 {
   const gchar* text;
   gint response_id;

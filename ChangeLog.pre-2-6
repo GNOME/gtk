@@ -1,3 +1,8 @@
+Sat Dec 14 01:51:05 2002  Chema Celorio  <chema@celorio.com>
+
+	* gtk/gtkdialog.c (gtk_dialog_add_buttons_valist): minor coding
+	style fix.
+
 Sat Dec 14 01:22:05 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkaccellabel.[ch] (gtk_accel_label_refetch): Don't
