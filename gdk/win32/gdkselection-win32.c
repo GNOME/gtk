@@ -369,7 +369,38 @@ gdk_selection_convert (GdkWindow *requestor,
 	  _gdk_selection_property_store (requestor, GDK_SELECTION_TYPE_ATOM,
 					 32, (guchar *) data, 1 * sizeof (GdkAtom));
 	}
-      else
+      else if (IsClipboardFormatAvailable (CF_BITMAP) ||
+               IsClipboardFormatAvailable (CF_DIB))
+	{
+	  GdkAtom *data = g_new (GdkAtom, 1);
+	  GdkAtom atom = gdk_atom_intern ("image/bmp", FALSE);
+          *data = atom;
+	  _gdk_selection_property_store (requestor, GDK_SELECTION_TYPE_ATOM,
+					 32, (guchar *) data, 1 * sizeof (GdkAtom));
+	}
+      else if (CountClipboardFormats() > 0)
+        {
+          /* if there is anything else in the clipboard, enum it all although we don't 
+           * offer special conversion services 
+           */
+          int fmt = 0, i = 0;
+	  GdkAtom *data = g_new (GdkAtom, CountClipboardFormats());
+
+          for ( ; 0 != (fmt = EnumClipboardFormats (fmt)); )
+            {
+              char sFormat[80];
+
+              if (GetClipboardFormatName (fmt, sFormat, 80) > 0)
+                {
+                  GdkAtom atom = gdk_atom_intern (sFormat, FALSE);
+                  data[i] = atom;
+                  i++;
+                }
+            }
+	  _gdk_selection_property_store (requestor, GDK_SELECTION_TYPE_ATOM,
+					 32, (guchar *) data, i * sizeof (GdkAtom));
+        }
+      else             
 	property = GDK_NONE;
 
       API_CALL (CloseClipboard, ());
@@ -512,6 +543,86 @@ gdk_selection_convert (GdkWindow *requestor,
       else
 	property = GDK_NONE;
 
+      API_CALL (CloseClipboard, ());
+    }
+  else if (selection == GDK_SELECTION_CLIPBOARD &&
+           target == gdk_atom_intern ("image/bmp", TRUE))
+    {
+      if (!API_CALL (OpenClipboard, (GDK_WINDOW_HWND (requestor))))
+	return;
+      if ((hdata = GetClipboardData (CF_DIB)) != NULL)
+        {
+          BITMAPINFOHEADER *ptr;
+          guchar *data;
+
+          if ((ptr = GlobalLock (hdata)) != NULL)
+            {
+              BITMAPFILEHEADER *hdr; /* need to add a file header so gdk-pixbuf can load it */
+	      gint length = GlobalSize (hdata) + sizeof(BITMAPFILEHEADER);
+	      
+	      GDK_NOTE (DND, g_print ("...BITMAP: %d bytes\n", length));
+	      
+              data = g_try_malloc (length);
+              if (data)
+                {
+                  hdr = (BITMAPFILEHEADER *)data;
+                  hdr->bfType = 0x4d42; /* 0x42 = "B" 0x4d = "M" */
+                  /* Compute the size of the entire file. */
+                  hdr->bfSize = (DWORD) (sizeof(BITMAPFILEHEADER)
+                        + ptr->biSize + ptr->biClrUsed
+			* sizeof(RGBQUAD) + ptr->biSizeImage);
+                  hdr->bfReserved1 = 0;
+                  hdr->bfReserved2 = 0;
+                  /* Compute the offset to the array of color indices. */
+                  hdr->bfOffBits = (DWORD) sizeof(BITMAPFILEHEADER)
+                        + ptr->biSize + ptr->biClrUsed * sizeof (RGBQUAD);
+                  /* copy the data behind it */
+                  memcpy (data + sizeof(BITMAPFILEHEADER), ptr, length - sizeof(BITMAPFILEHEADER));
+	          _gdk_selection_property_store (requestor, target, 8,
+					         data, length);
+                }
+	      GlobalUnlock (hdata);
+            }
+
+      }
+
+      API_CALL (CloseClipboard, ());
+    }
+  else if (selection == GDK_SELECTION_CLIPBOARD)
+    {
+      const char *targetname = gdk_atom_name (target);
+      UINT fmt = 0;
+
+      if (!API_CALL (OpenClipboard, (GDK_WINDOW_HWND (requestor))))
+	return;
+      /* check if its available */
+      for ( ; 0 != (fmt = EnumClipboardFormats (fmt)); )
+        {
+          char sFormat[80];
+
+          if (GetClipboardFormatName (fmt, sFormat, 80) > 0 && 
+              strcmp (sFormat, targetname) == 0)
+            {
+              if ((hdata = GetClipboardData (fmt)) != NULL)
+	        {
+	          /* simply get it without conversion */
+                  guchar *ptr;
+                  gint length;
+
+                  if ((ptr = GlobalLock (hdata)) != NULL)
+                    {
+                      length = GlobalSize (hdata);
+	      
+                      GDK_NOTE (DND, g_print ("... %s: %d bytes\n", targetname, length));
+	      
+                      _gdk_selection_property_store (requestor, target, 8,
+					             g_memdup (ptr, length), length);
+	              GlobalUnlock (hdata);
+                      break;
+                    }
+                }
+            }
+        }
       API_CALL (CloseClipboard, ());
     }
   else if (selection == _gdk_win32_dropfiles)

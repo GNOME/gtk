@@ -2095,10 +2095,7 @@ gtk_drag_source_set (GtkWidget            *widget,
 
   site->start_button_mask = start_button_mask;
 
-  if (targets)
-    site->target_list = gtk_target_list_new (targets, n_targets);
-  else
-    site->target_list = NULL;
+  site->target_list = gtk_target_list_new (targets, n_targets);
 
   site->actions = actions;
 }

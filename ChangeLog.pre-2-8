@@ -1,3 +1,12 @@
+2004-08-08  Hans Breuer  <hans@breuer.org>
+
+	* gtk/gtkdnd.c (gtk_drag_dest_set) : take targets into
+	account again to allow dnd of other things than text
+
+	* gdk/win32/gdkselection-win32.c : offer windows bitmap to
+	be pasted from clipboard (makes The GIMP 2.1's 
+	"File/Acquire/Paste as New" work, only using gtk+ API) 
+
 Sun Aug  8 01:32:36 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk.def: Add gtk_cell_renderer_progress_get_type.
