@@ -3514,8 +3514,15 @@ gtk_window_move_resize (GtkWindow *window)
    * app author is thinking.
    */
 
+  /* This condition should be kept in sync with the condition later on
+   * that determines whether we send a configure request.  i.e. we
+   * should do this position constraining anytime we were going to
+   * send a configure request anyhow, plus when constraints have
+   * changed.
+   */
   if (configure_request_pos_changed ||
       configure_request_size_changed ||
+      hints_changed ||
       info->position_constraints_changed)
     {
       /* We request the constrained position if:
@@ -3548,36 +3555,42 @@ gtk_window_move_resize (GtkWindow *window)
     }
 
 #if 0
-  g_print ("--- %s ---\n"
-           "last : %d,%d\t%d x %d\n"
-           "this : %d,%d\t%d x %d\n"
-           "alloc: %d,%d\t%d x %d\n"
-           "req  :      \t%d x %d\n"
-           "size_changed: %d pos_changed: %d hints_changed: %d\n"
-           "configure_notify_received: %d\n"
-           "configure_request_count: %d\n"
-           "position_constraints_changed: %d\n",
-           window->title ? window->title : "(no title)",
-           info->last.configure_request.x,
-           info->last.configure_request.y,
-           info->last.configure_request.width,
-           info->last.configure_request.height,
-           new_request.x,
-           new_request.y,
-           new_request.width,
-           new_request.height,
-           widget->allocation.x,
-           widget->allocation.y,
-           widget->allocation.width,
-           widget->allocation.height,
-           widget->requisition.width,
-           widget->requisition.height,
-           configure_request_pos_changed,
-           configure_request_size_changed,
-           hints_changed,
-           window->configure_notify_received,
-           window->configure_request_count,
-           info->position_constraints_changed);
+  {
+    int notify_x, notify_y;
+
+    /* this is the position from the last configure notify */
+    gdk_window_get_position (widget->window, &notify_x, &notify_y);
+    
+    g_print ("--- %s ---\n"
+             "last : %d,%d\t%d x %d\n"
+             "this : %d,%d\t%d x %d\n"
+             "alloc: %d,%d\t%d x %d\n"
+             "req  :      \t%d x %d\n"
+             "size_changed: %d pos_changed: %d hints_changed: %d\n"
+             "configure_notify_received: %d\n"
+             "configure_request_count: %d\n"
+             "position_constraints_changed: %d\n",
+             window->title ? window->title : "(no title)",
+             info->last.configure_request.x,
+             info->last.configure_request.y,
+             info->last.configure_request.width,
+             info->last.configure_request.height,
+             new_request.x,
+             new_request.y,
+             new_request.width,
+             new_request.height,
+             notify_x, notify_y,
+             widget->allocation.width,
+             widget->allocation.height,
+             widget->requisition.width,
+             widget->requisition.height,
+             configure_request_pos_changed,
+             configure_request_size_changed,
+             hints_changed,
+             window->configure_notify_received,
+             window->configure_request_count,
+             info->position_constraints_changed);
+  }
 #endif
   
   saved_last_info = info->last;

@@ -1,3 +1,10 @@
+2001-08-18  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): constrain position on
+	hints_changed in addition to the other cases.
+	(gtk_window_move_resize): include last position from configure
+	notify in debug spew
+
 2001-08-18  James Henstridge  <james@daa.com.au>
 
 	* gtk/gtkaccelgroup.c (gtk_accel_group_object_destroy): use the
