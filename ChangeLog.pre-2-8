@@ -1,7 +1,8 @@
 2004-11-22  Matthias Clasen  <mclasen@redhat.com>
 
-	* configure.in: Require Pango 1.7.0 for PangoRenderer.
-
+	* configure.in: Require Pango 1.7.0 for PangoRenderer (#159061,
+	Crispin Flowerday)
+	
 2004-11-21  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkwidget.c (gtk_widget_create_pango_context): removed call
