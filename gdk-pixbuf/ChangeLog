@@ -1,3 +1,8 @@
+Sat Mar  2 21:28:03 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-pixbuf.c (gdk_pixbuf_new): Bullet-proof against integer
+	overflow.
+
 2002-03-03  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk-pixbuf.rc.in: Remove.
@@ -18,7 +23,7 @@ Wed Feb 27 18:33:04 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixdata.c (gdk_pixdata_to_csource): Use {} not
 	() to group around string assigned to char[]. (#72767,
-	Tomas Ögren)
+	Tomas Ãgren)
 
 2002-02-21  Havoc Pennington  <hp@pobox.com>
 
@@ -1240,7 +1245,7 @@ Wed Jun 21 16:02:48 2000  Owen Taylor  <otaylor@redhat.com>
 2000-06-05	Mathieu Lacage  <mathieu@gnome.org>
 
 	* configure.in: add some gtk parameters to the
-	GDK_PIXBUF_LIB²S and GDK_PIXBUG_INCLUDEDIR vars. One more
+	GDK_PIXBUF_LIBÂ²S and GDK_PIXBUG_INCLUDEDIR vars. One more
 	fight in my crusade for strange prefix compile...
 
 2000-05-30  Not Zed  <NotZed@HelixCode.com>
@@ -1337,7 +1342,7 @@ Fri May  5 12:16:32 2000  Owen Taylor  <otaylor@redhat.com>
 	* gdk-pixbuf/Makefile.am (INCLUDES): Add $(GNOME_CFLAGS).
 	Reported by Jens Finke.
 
-2000-04-14 Tomasz K³opczko <kloczek@pld.org.pl>
+2000-04-14 Tomasz KÂ³opczko <kloczek@pld.org.pl>
 
 	* gdk-pixbuf/pixops/makefile.am: $(LIBART_CFLAGS) replaced by 
 	$(GTK_CFLAGS) - now gdk-pixbuf compiles correctly.
