@@ -15,10 +15,197 @@ File chooser interface used by #GtkFileChooserWidget and #GtkFileChooserDialog.
       programming interface.
     </para>
 
+    <refsect2 id="gtkfilechooser-preview">
+      <title>Adding a Preview Widget</title>
+
+      <para>
+	You can add a custom preview widget to a file chooser and then
+	get notification about when the preview needs to be updated.
+	To install a preview widget, use
+	gtk_file_chooser_set_preview_widget().  Then, connect to the
+	#GtkFileChooser::update-preview signal to get notified when
+	you need to update the contents of the preview.
+      </para>
+
+      <para>
+	Your callback should use
+	gtk_file_chooser_get_preview_filename() to see what needs
+	previewing.  Once you have generated the preview for the
+	corresponding file, you must call
+	gtk_file_chooser_set_preview_widget_active() with a boolean
+	flag that indicates whether your callback could successfully
+	generate a preview.
+      </para>
+
+      <example id="example-gtkfilechooser-preview">
+	<title>Sample Usage</title>
+
+	<programlisting>
+{
+  GtkImage *preview;
+
+  ...
+
+  preview = gtk_image_new ();
+
+  gtk_file_chooser_set_preview_widget (my_file_chooser, preview);
+  g_signal_connect (my_file_chooser, "update-preview",
+		    G_CALLBACK (update_preview_cb), preview);
+}
+
+static void
+update_preview_cb (GtkFileChooser *file_chooser, gpointer data)
+{
+  GtkWidget *preview;
+  char *filename;
+  GdkPixbuf *pixbuf;
+  gboolean have_preview;
+
+  preview = GTK_WIDGET (data);
+  filename = gtk_file_chooser_get_preview_filename (file_chooser);
+
+  pixbuf = gdk_pixbuf_new_from_file_at_size (filename, 128, 128, NULL);
+  have_preview = (pixbuf != NULL);
+  g_free (filename);
+
+  gtk_image_set_from_pixbuf (GTK_IMAGE (preview), pixbuf);
+  if (pixbuf)
+    gdk_pixbuf_unref (pixbuf);
+
+  gtk_file_chooser_set_preview_widget_active (file_chooser, have_preview);
+}
+	</programlisting>
+      </example>
+    </refsect2>
+
+    <refsect2 id="gtkfilechooser-extra">
+      <title>Adding Extra Widgets</title>
+
+      <para>
+	You can add extra widgets to a file chooser to provide options
+	that are not present in the default design.  For example, you
+	can add a toggle button to give the user the option to open a
+	file in read-only mode.  You can use
+	gtk_file_chooser_set_extra_widget() to insert additional
+	widgets in a file chooser.
+      </para>
+
+      <example id="example-gtkfilechooser-extra">
+	<title>Sample Usage</title>
+
+	<programlisting>
+{
+  GtkWidget *toggle;
+
+  ...
+
+  toggle = gtk_check_button_new_with_label ("Open file read-only");
+  gtk_widget_show (toggle);
+  gtk_file_chooser_set_extra_widget (my_file_chooser, toggle);
+}
+	</programlisting>
+      </example>
+
+      <note>
+	<para>
+	  If you want to set more than one extra widget in the file
+	  chooser, you can a container such as a GtkVBox or a GtkTable
+	  and include your widgets in it.  Then, set the container as
+	  the whole extra widget.
+	</para>
+      </note>
+    </refsect2>
+
+
 <!-- ##### SECTION See_Also ##### -->
     <para>
       #GtkFileChooserDialog, #GtkFileChooserWidget
     </para>
+
+
+<!-- ##### STRUCT GtkFileChooser ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkFileChooser::current-folder-changed ##### -->
+<para>
+
+</para>
+
+@filechooser: the object which received the signal.
+
+<!-- ##### SIGNAL GtkFileChooser::file-activated ##### -->
+<para>
+
+</para>
+
+@filechooser: the object which received the signal.
+
+<!-- ##### SIGNAL GtkFileChooser::selection-changed ##### -->
+<para>
+
+</para>
+
+@filechooser: the object which received the signal.
+
+<!-- ##### SIGNAL GtkFileChooser::update-preview ##### -->
+<para>
+
+</para>
+
+@filechooser: the object which received the signal.
+
+<!-- ##### ARG GtkFileChooser:action ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooser:extra-widget ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooser:file-system ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooser:filter ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooser:folder-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooser:local-only ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooser:preview-widget ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooser:preview-widget-active ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooser:select-multiple ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooser:show-hidden ##### -->
+<para>
+
+</para>
 
 <!-- ##### ENUM GtkFileChooserAction ##### -->
     <para>
@@ -98,6 +285,8 @@ File chooser interface used by #GtkFileChooserWidget and #GtkFileChooserDialog.
 </para>
 
 @chooser: 
+@local_only: 
+<!-- # Unused Parameters # -->
 @files_only: 
 
 
@@ -320,8 +509,10 @@ File chooser interface used by #GtkFileChooserWidget and #GtkFileChooserDialog.
 
 </para>
 
-@file_chooser: 
+@chooser: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@file_chooser: 
 
 
 <!-- ##### FUNCTION gtk_file_chooser_get_preview_uri ##### -->
@@ -329,8 +520,10 @@ File chooser interface used by #GtkFileChooserWidget and #GtkFileChooserDialog.
 
 </para>
 
-@file_chooser: 
+@chooser: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@file_chooser: 
 
 
 <!-- ##### FUNCTION gtk_file_chooser_set_extra_widget ##### -->
@@ -433,9 +626,11 @@ File chooser interface used by #GtkFileChooserWidget and #GtkFileChooserDialog.
 </para>
 
 @chooser: 
-@folder: 
+@uri: 
 @error: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@folder: 
 
 
 <!-- ##### FUNCTION gtk_file_chooser_remove_shortcut_folder_uri ##### -->
@@ -444,9 +639,11 @@ File chooser interface used by #GtkFileChooserWidget and #GtkFileChooserDialog.
 </para>
 
 @chooser: 
-@folder: 
+@uri: 
 @error: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@folder: 
 
 
 <!-- ##### FUNCTION gtk_file_chooser_list_shortcut_folder_uris ##### -->
@@ -466,32 +663,4 @@ sgml-parent-document: ("../gtk-docs.sgml" "book" "refentry")
 End:
 -->
 
-
-<!-- ##### SIGNAL GtkFileChooser::current-folder-changed ##### -->
-<para>
-
-</para>
-
-@filechooser: the object which received the signal.
-
-<!-- ##### SIGNAL GtkFileChooser::file-activated ##### -->
-<para>
-
-</para>
-
-@filechooser: the object which received the signal.
-
-<!-- ##### SIGNAL GtkFileChooser::selection-changed ##### -->
-<para>
-
-</para>
-
-@filechooser: the object which received the signal.
-
-<!-- ##### SIGNAL GtkFileChooser::update-preview ##### -->
-<para>
-
-</para>
-
-@filechooser: the object which received the signal.
 

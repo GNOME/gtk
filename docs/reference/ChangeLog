@@ -1,3 +1,16 @@
+2003-11-18  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/tmpl/gtkfilechooser.sgml: Added sections section about
+	generating previews and including extra widgets.
+
+	* gtk/gtk-docs.sgml: Added a part about migrating old code to new
+	widgets.
+
+	* gtk/migrating-GtkFileChooser.sgml: New file.
+
+	* gtk/Makefile.am (content_files): Added
+	migrating-GtkFileChooser.sgml.
+
 Tue Nov 18 00:12:23 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdk-sections.txt: Add gdk_drawable_copy_to_image.

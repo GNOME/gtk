@@ -179,6 +179,7 @@
 <!ENTITY gtk-Questions SYSTEM "question_index.sgml">
 <!ENTITY gtk-Changes-1-2 SYSTEM "changes-1.2.sgml">
 <!ENTITY gtk-Changes-2-0 SYSTEM "changes-2.0.sgml">
+<!ENTITY gtk-migrating-GtkFileChooser SYSTEM "migrating-GtkFileChooser.sgml">
 <!ENTITY version SYSTEM "version.xml">
 <!ENTITY gtk-query-immodules SYSTEM "gtk-query-immodules-2.0.xml">
 ]>
@@ -531,6 +532,19 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkTree;
         &GtkTreeItem;
     </chapter>
+  </part>
+
+  <part id="migrating">
+    <title>Migrating from Previous Versions of GTK+</title>
+
+    <partintro>
+      <para>
+	This part describes what you need to change in programs use
+	older versions of GTK+ so that they can use the new features.
+      </para>
+    </partintro>
+
+    &gtk-migrating-GtkFileChooser;
   </part>
 
   <part>

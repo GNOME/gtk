@@ -20,7 +20,7 @@ A file chooser dialog, suitable for "File/Open" or "File/Save" commands.
       #GtkFileChooser.
     </para>
 
-    <example>
+    <example id="gtkfilechooser-typical-usage">
       <title>Typical usage</title>
 
       <para>

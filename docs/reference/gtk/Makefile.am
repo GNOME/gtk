@@ -77,21 +77,22 @@ GTKDOC_LIBS = \
 MKDB_OPTIONS=--sgml-mode --output-format=xml
 
 # Extra SGML files that are included by $(DOC_MAIN_SGML_FILE)
-content_files = 		\
-	version.xml		\
-	running.sgml		\
-	building.sgml		\
-	changes-1.2.sgml	\
-	changes-2.0.sgml	\
-	compiling.sgml		\
-	framebuffer.sgml	\
-	objects_grouped.sgml	\
-	question_index.sgml	\
-	resources.sgml		\
-	text_widget.sgml	\
-	tree_widget.sgml	\
-	windows.sgml		\
-	x11.sgml		\
+content_files =					\
+	version.xml				\
+	running.sgml				\
+	building.sgml				\
+	changes-1.2.sgml			\
+	changes-2.0.sgml			\
+	compiling.sgml				\
+	framebuffer.sgml			\
+	migrating-GtkFileChooser.sgml		\
+	objects_grouped.sgml			\
+	question_index.sgml			\
+	resources.sgml				\
+	text_widget.sgml			\
+	tree_widget.sgml			\
+	windows.sgml				\
+	x11.sgml				\
 	gtk-query-immodules-2.0.xml
 
 # Images to copy into HTML directory
