@@ -1,3 +1,17 @@
+Wed Feb  6 23:28:39 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Fixes #70708
+
+	* gtk/gtktreeview.c (gtk_tree_view_get_path_at_pos): we're dealing
+	with widget coordinates here, so take the header height into
+	account while converting
+	(gtk_tree_view_widget_to_tree_coords): take header height into
+	account
+	(gtk_tree_view_tree_to_widget_coords): ditto
+	(gtk_tree_view_get_dest_row_at_pos): we were passing coords
+	relative to the tree with _get_path_at_pos, while that function
+	wants coords relative to the widget
+
 2002-02-06  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_scroll_hpages): remove unused variable

@@ -8487,7 +8487,7 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
     }
 
   y_offset = _gtk_rbtree_find_offset (tree_view->priv->tree,
-				      TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, y),
+				      TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, y - TREE_VIEW_HEADER_HEIGHT (tree_view)),
 				      &tree, &node);
 
   if (tree == NULL)
@@ -8688,7 +8688,7 @@ gtk_tree_view_widget_to_tree_coords (GtkTreeView *tree_view,
   if (tx)
     *tx = wx + tree_view->priv->hadjustment->value;
   if (ty)
-    *ty = wy + tree_view->priv->vadjustment->value;
+    *ty = wy + tree_view->priv->dy - TREE_VIEW_HEADER_HEIGHT (tree_view);
 }
 
 /**
@@ -8715,7 +8715,7 @@ gtk_tree_view_tree_to_widget_coords (GtkTreeView *tree_view,
   if (wx)
     *wx = tx - tree_view->priv->hadjustment->value;
   if (wy)
-    *wy = ty - tree_view->priv->vadjustment->value;
+    *wy = ty - tree_view->priv->dy + TREE_VIEW_HEADER_HEIGHT (tree_view);
 }
 
 static void
@@ -8894,7 +8894,6 @@ gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
   gint cell_y;
   gdouble offset_into_row;
   gdouble quarter;
-  gint x, y;
   GdkRectangle cell;
   GtkTreeViewColumn *column = NULL;
   GtkTreePath *tmp_path = NULL;
@@ -8915,18 +8914,13 @@ gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
   if (tree_view->priv->tree == NULL)
     return FALSE;
 
-  /* remember that drag_x and drag_y are in widget coords, convert to tree window */
-
-  gtk_tree_view_widget_to_tree_coords (tree_view, drag_x, drag_y,
-                                       &x, &y);
-
   /* If in the top quarter of a row, we drop before that row; if
    * in the bottom quarter, drop after that row; if in the middle,
    * and the row has children, drop into the row.
    */
 
   if (!gtk_tree_view_get_path_at_pos (tree_view,
-                                      x, y,
+                                      drag_x, drag_y,
                                       &tmp_path,
                                       &column,
                                       NULL,
