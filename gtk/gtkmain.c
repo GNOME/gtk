@@ -1281,6 +1281,8 @@ gtk_propagate_event (GtkWidget *widget,
   
   handled_event = FALSE;
 
+  gtk_widget_ref (widget);
+      
   if ((event->type == GDK_KEY_PRESS) ||
       (event->type == GDK_KEY_RELEASE))
     {
@@ -1297,14 +1299,11 @@ gtk_propagate_event (GtkWidget *widget,
        * a first crack at the key event
        */
       if (widget != window && GTK_WIDGET_HAS_GRAB (widget))
-	{
-	  gtk_widget_ref (widget);
-	  handled_event = gtk_widget_event (widget, event);
-	  gtk_widget_unref (widget);
-	}
+	handled_event = gtk_widget_event (widget, event);
 
       if (!handled_event)
 	{
+	  window = gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW);
 	  if (window)
 	    {
 	      if (GTK_WIDGET_IS_SENSITIVE (window))
@@ -1319,16 +1318,26 @@ gtk_propagate_event (GtkWidget *widget,
    *  so that parents can see the button and motion
    *  events of the children.
    */
-  while (!handled_event && widget)
+  if (!handled_event)
     {
-      GtkWidget *tmp;
+      while (TRUE)
+	{
+	  GtkWidget *tmp;
+	  
+	  handled_event = !GTK_WIDGET_IS_SENSITIVE (widget) || gtk_widget_event (widget, event);
+	  tmp = widget->parent;
+	  gtk_widget_unref (widget);
 
-      gtk_widget_ref (widget);
-      handled_event = !GTK_WIDGET_IS_SENSITIVE (widget) || gtk_widget_event (widget, event);
-      tmp = widget->parent;
-      gtk_widget_unref (widget);
-      widget  = tmp;
+	  widget = tmp;
+	  
+	  if (!handled_event && widget)
+	    gtk_widget_ref (widget);
+	  else
+	    break;
+	}
     }
+  else
+    gtk_widget_unref (widget);
 }
 
 #if 0
