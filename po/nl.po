@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 1998 Free Software Foundation, Inc.
-# FIRST AUTHOR <pauls@euronet.nl>, 1998.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2001-11-23 15:47-0500\n"
-"PO-Revision-Date: 2000-07-12 23:04+0200\n"
-"Last-Translator: Dennis Smit <synap@area101.penguin.nl>\n"
+"POT-Creation-Date: 2001-10-25 16:39-0400\n"
+"PO-Revision-Date: 2001-11-24 01:02+0100\n"
+"Last-Translator: Dirk-Jan C. Binnema <djcb@djcbsoftware.nl>\n"
 "Language-Team: dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,206 +16,206 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:551
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr ""
+msgstr "Openen van bestand '%s' mislukt: '%s'"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:561
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr ""
+msgstr "Afbeelding '%s' bevat geen data"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:183
 #, c-format
 msgid "Don't know how to load the animation in file '%s'"
-msgstr ""
+msgstr "Onbekend hoe de animatie in bestand '%s' geladen moet worden"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:606
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
+msgstr "Laden van afbeelding '%s' mislukt: reden onbekend, waarschijnlijk een beschadigde afbeelding"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr ""
+msgstr "Laden van animatie '%s' mislukt: reden onbekend, waarschijnlijk een beschadigde animatie"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:324
 #, fuzzy, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr "Kan module in module_path: \"%s\" niet vinden,"
+msgstr "Laden van module in module_path: \"%s\" mislukt: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:343
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
-msgstr ""
+msgstr "Afbeeldingslader %s exporteert niet de juiste interface; is de lader van een andere GTK+ versie?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:460 gdk-pixbuf/gdk-pixbuf-io.c:486
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr ""
+msgstr "Afbeeldingstype '%s' wordt niet ondersteund"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:508
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr ""
+msgstr "Afbeeldingstype niet herkend in bestand '%s'"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:514
 msgid "Unrecognized image file format"
-msgstr ""
+msgstr "Onbekend afbeeldingsformaat"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:584
 #, c-format
 msgid "Don't know how to load the image in file '%s'"
-msgstr ""
+msgstr "Onbekend hoe de afbeelding in '%s' geladen moet worden"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:617
 #, c-format
 msgid "Failed to load image '%s': %s"
-msgstr ""
+msgstr "Laden van afbeelding '%s' mislukt: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:722
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
+msgstr "Deze versie van gdk-pixbuf heeft geen ondersteuning voor het opslaan van afbeeldingen: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:830
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
-msgstr ""
+msgstr "Openen van '%s' om te schrijven is mislukt: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:851
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr ""
+msgstr "Sluiten van '%s' tijdens het schrijven is mislukt; data kan verloren zijn gegaan: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:250
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
-msgstr ""
+msgstr "Incrementeel laden van afbeeldingsformaat '%s' wordt niet ondersteund"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:273 gdk-pixbuf/gdk-pixbuf-loader.c:374
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
-msgstr ""
+msgstr "Interne fout: afbeeldingslader '%s' starte niet met het laden van een afbeelding, maar gaf geen reden"
 
 #: gdk-pixbuf/io-bmp.c:255
 msgid "BMP image has unsupported header size"
-msgstr ""
+msgstr "BMP-afbeelding heeft een niet-ondersteunde headergrootte"
 
 #: gdk-pixbuf/io-bmp.c:278 gdk-pixbuf/io-bmp.c:300
 msgid "BMP image has bogus header data"
-msgstr ""
+msgstr "BMP-afbeelding bevat onzinnige headerdata"
 
 #: gdk-pixbuf/io-bmp.c:325
 msgid "Not enough memory to load bitmap image"
-msgstr ""
+msgstr "Onvoldoende geheugen voor het laden van de bitmap-afbeelding"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
 msgid "Failure reading GIF: %s"
-msgstr ""
+msgstr "Lezen van GIF mislukt: %s"
 
 #: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1360 gdk-pixbuf/io-gif.c:1519
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
+msgstr "GIF-bestand miste data (misschien was het afgebroken?)"
 
 #: gdk-pixbuf/io-gif.c:469
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
-msgstr ""
+msgstr "Interne fout in de GIF-lader (%s)"
 
 #: gdk-pixbuf/io-gif.c:592
 msgid "GIF image loader can't understand this image."
-msgstr ""
+msgstr "GIF-lader begrijpt deze afbeelding niet"
 
 #: gdk-pixbuf/io-gif.c:621
 msgid "Bad code encountered"
-msgstr ""
+msgstr "Foute code ontdekt"
 
 #: gdk-pixbuf/io-gif.c:630
 msgid "Circular table entry in GIF file"
-msgstr ""
+msgstr "Circulaire tabelwaarde in GIF-bestand"
 
 #: gdk-pixbuf/io-gif.c:754 gdk-pixbuf/io-gif.c:1348 gdk-pixbuf/io-gif.c:1393
 #: gdk-pixbuf/io-gif.c:1507
 msgid "Not enough memory to load GIF file"
-msgstr ""
+msgstr "Onvoldoende geheugen om GIF-bestand te laden"
 
 #: gdk-pixbuf/io-gif.c:998
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr ""
+msgstr "GIF-bestand is beschadigd (incorrecte LZW-compressie)"
 
 #: gdk-pixbuf/io-gif.c:1048
 msgid "File does not appear to be a GIF file"
-msgstr ""
+msgstr "Bestand lijkt geen GIF-bestand te zijn"
 
 #: gdk-pixbuf/io-gif.c:1060
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr ""
+msgstr "Versie %s van het GIF-formaat wordt niet ondersteund"
 
 #: gdk-pixbuf/io-gif.c:1135
 msgid "GIF image contained a frame appearing outside the image bounds."
-msgstr ""
+msgstr "GIF-bestand bevatte een afbeelding die buiten het kader lijkt te vallen"
 
 #: gdk-pixbuf/io-gif.c:1151
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
-msgstr ""
+msgstr "De eerste afbeelding in het GIF-bestand heeft 'terug naar vorige' als afsluiting"
 
 #: gdk-pixbuf/io-gif.c:1186
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr ""
+msgstr "GIF-bestand heeft geen globaal kleurenpalet, en een afbeelding erin heeft geen lokaal kleurenpallet"
 
 #: gdk-pixbuf/io-gif.c:1415
 msgid "GIF image was truncated or incomplete."
-msgstr ""
+msgstr "GIF-bestand is afgebroken of onvolledig"
 
 #: gdk-pixbuf/io-jpeg.c:125
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr ""
+msgstr "Fout bij het interpreteren van JPEG-afbeelding (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:234
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
-msgstr ""
+msgstr "Onvoldoende geheugen om afbeelding te laten, probeer het afsluiten van enkele applicaties om geheugen te besparen"
 
 #: gdk-pixbuf/io-jpeg.c:345 gdk-pixbuf/io-jpeg.c:538 gdk-pixbuf/io-jpeg.c:710
 msgid "Couldn't allocate memory for loading JPEG file"
-msgstr ""
+msgstr "Allocatie van geheugen voor JPEG-bestand is mislukt"
 
 #: gdk-pixbuf/io-jpeg.c:664
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
-msgstr ""
+msgstr "JPEG-kwaliteit moet een waarde tussen 0 en 100 zijn: waarde '%s' kan niet geïnterpreteerd worden"
 
 #: gdk-pixbuf/io-jpeg.c:679
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
+msgstr "JPEG-kwaliteit moet tussen 0 en 100 liggen; waar '%d' is niet toegestaan"
 
 #: gdk-pixbuf/io-png.c:161
 #, c-format
 msgid "Fatal error in PNG image file: %s"
-msgstr ""
+msgstr "Fatale fout in PNG-afbeelding: %s"
 
 #: gdk-pixbuf/io-png.c:267
 msgid "Insufficient memory to load PNG file"
-msgstr ""
+msgstr "Onvoldoende geheugen om PNG-bestand te laden"
 
 #: gdk-pixbuf/io-png.c:585
 #, c-format
@@ -415,9 +415,18 @@ msgstr ""
 msgid "Accelerator Closure"
 msgstr ""
 
+#: gtk/gtkaccellabel.c:115
+msgid "Accelerator object"
+msgstr ""
+
 #: gtk/gtkaccellabel.c:123
 msgid "The closure to be monitored for accelerator changes"
 msgstr ""
+
+#: gtk/gtkaccellabel.c:116
+msgid "The object monitored by this accelerator label"
+msgstr ""
+
 
 #: gtk/gtkaccellabel.c:129
 msgid "Accelerator Widget"
@@ -426,6 +435,7 @@ msgstr ""
 #: gtk/gtkaccellabel.c:130
 msgid "The widget to be monitored for accelerator changes"
 msgstr ""
+
 
 #: gtk/gtkalignment.c:102
 msgid "Horizontal alignment"
