@@ -1,3 +1,7 @@
+Tue May 29 18:17:11 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* autogen.sh (have_libtool): Fix GNU sedism (#55430)
+
 Tue May 29 17:40:29 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in (GTK_DEP_CFLAGS): Use $PKG_CONFIG,
