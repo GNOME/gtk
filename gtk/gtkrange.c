@@ -1327,7 +1327,7 @@ static void stop_scrolling (GtkRange *range)
   /* Just be lazy about this, if we scrolled it will all redraw anyway,
    * so no point optimizing the button deactivate case
    */
-  gtk_widget_queue_draw (widget);
+  gtk_widget_queue_draw (GTK_WIDGET (range));
 }
 
 static gint

@@ -1675,7 +1675,7 @@ stop_scrolling (GtkNotebook *notebook)
 {
   if (notebook->timer)
     {
-      gtk_timeout_remove (notebook->timer);
+      g_source_remove (notebook->timer);
       notebook->timer = 0;
       notebook->need_timer = FALSE;
     }
