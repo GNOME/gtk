@@ -224,8 +224,6 @@ struct _GtkToolbarPrivate
   GtkSettings *settings;
   int        idle_id;
   gboolean   need_sync;
-  gboolean   leaving_dnd;
-  gboolean   in_dnd;
   GtkToolItem *highlight_tool_item;
   gint	     max_homogeneous_pixels;
 
@@ -1082,12 +1080,6 @@ slide_idle_handler (gpointer data)
     }
 
   priv->is_sliding = FALSE;
-  if (priv->leaving_dnd)
-    {
-      priv->in_dnd = FALSE;
-      priv->leaving_dnd = FALSE;
-    }
-
   priv->idle_id = 0;
   
   return FALSE;
@@ -1192,8 +1184,6 @@ gtk_toolbar_stop_sliding (GtkToolbar *toolbar)
       GList *list;
       
       priv->is_sliding = FALSE;
-      priv->in_dnd = FALSE;
-      priv->leaving_dnd = FALSE;
       
       if (priv->idle_id)
 	{
@@ -1963,7 +1953,6 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
 {
   ToolbarContent *content;
   GtkToolbarPrivate *priv;
-  GList *list;
   gint n_items;
   GtkRequisition requisition;
 
@@ -1976,20 +1965,15 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
 
   if (!tool_item)
     {
-      if (priv->in_dnd)
+      if (priv->highlight_tool_item)
 	{
-	  priv->leaving_dnd = TRUE;
-	  reset_all_placeholders (toolbar);
-	  gtk_toolbar_begin_sliding (toolbar);
-	  
-	  if (priv->highlight_tool_item)
-	    {
-	      gtk_widget_unparent (GTK_WIDGET (priv->highlight_tool_item));
-	      g_object_unref (priv->highlight_tool_item);
-	      priv->highlight_tool_item = NULL;
-	    }
+	  gtk_widget_unparent (GTK_WIDGET (priv->highlight_tool_item));
+	  g_object_unref (priv->highlight_tool_item);
+	  priv->highlight_tool_item = NULL;
 	}
       
+      reset_all_placeholders (toolbar);
+      gtk_toolbar_begin_sliding (toolbar);
       return;
     }
 
@@ -2006,9 +1990,6 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
       gtk_widget_set_parent (GTK_WIDGET (priv->highlight_tool_item),
 			     GTK_WIDGET (toolbar));
     }
-
-  priv->in_dnd = TRUE;
-  priv->leaving_dnd = FALSE;
 
   n_items = gtk_toolbar_get_n_items (toolbar);
   if (index < 0 || index > n_items)
