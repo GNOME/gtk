@@ -132,6 +132,7 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf, GdkDrawable *drawable,
 	ArtPixBuf *apb;
 	ArtIRect dest_rect, req_rect, area_rect;
 	GdkBitmap *bitmap;
+	GdkGC *gc;
 
 	g_return_if_fail (pixbuf != NULL);
 	apb = pixbuf->art_pixbuf;
@@ -144,6 +145,23 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf, GdkDrawable *drawable,
 	g_return_if_fail (src_x >= 0 && src_x + width <= apb->width);
 	g_return_if_fail (src_y >= 0 && src_y + height <= apb->height);
 
+	gc = gdk_gc_new (drawable);
 
-	bitmap = gdk_pixmap_new (NULL, width, height, 1);
+	if (apb->has_alpha) {
+		/* Right now we only support GDK_PIXBUF_ALPHA_BILEVEL, so we
+		 * unconditionally create the clipping mask.
+		 */
+
+		bitmap = gdk_pixmap_new (NULL, width, height, 1);
+		gdk_pixbuf_render_threshold_alpha (pixbuf, bitmap,
+						   src_x, src_y,
+						   0, 0,
+						   width, height,
+						   alpha_threshold);
+
+		gdk_gc_set_clip_mask (gc, bitmap);
+		gdk_gc_set_clip_origin (gc, dest_x, dest_y);
+	}
+
+
 }
