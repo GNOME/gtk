@@ -1,3 +1,7 @@
+Mon Oct 22 20:07:21 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreestore.c (gtk_tree_store_prepend): Fix docs, #62808
+
 Wed Oct 24 22:54:07 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_inserted): treat

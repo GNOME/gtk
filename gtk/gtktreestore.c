@@ -1180,7 +1180,7 @@ gtk_tree_store_insert_after (GtkTreeStore *tree_store,
  * @parent: A valid #GtkTreeIter, or %NULL
  * 
  * Prepends a new row to @tree_store.  If @parent is non-NULL, then it will prepend
- * the new row before the last child of @parent, otherwise it will prepend a row
+ * the new row before the first child of @parent, otherwise it will prepend a row
  * to the top level.  @iter will be changed to point to this new row.  The row
  * will be empty after this function is called.  To fill in values, you need to
  * call @gtk_tree_store_set or @gtk_tree_store_set_value.
