@@ -1,4 +1,8 @@
 2001-06-07  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/Makefile.am: fix glib-mkenums and glib-genmarshal again
+
+2001-06-07  Havoc Pennington  <hp@redhat.com>
 	
 	* gtk/Makefile.am: fixups for glib-mkenums and glib-genmarshal
 	(not tested yet because with absolute path to srcdir I can't build
