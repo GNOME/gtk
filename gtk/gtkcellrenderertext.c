@@ -74,6 +74,7 @@ enum {
   PROP_MARKUP,
   PROP_ATTRIBUTES,
   PROP_SINGLE_PARAGRAPH_MODE,
+  PROP_WIDTH_CHARS,
   
   /* Style args */
   PROP_BACKGROUND,
@@ -137,7 +138,9 @@ struct _GtkCellRendererTextPrivate
   gulong populate_popup_id;
   gulong entry_menu_popdown_timeout;
   gboolean in_entry_menu;
-
+  
+  gint width_chars;
+  
   GtkWidget *entry;
 };
 
@@ -173,12 +176,18 @@ gtk_cell_renderer_text_get_type (void)
 static void
 gtk_cell_renderer_text_init (GtkCellRendererText *celltext)
 {
+  GtkCellRendererTextPrivate *priv;
+
+  priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (celltext);
+
   GTK_CELL_RENDERER (celltext)->xalign = 0.0;
   GTK_CELL_RENDERER (celltext)->yalign = 0.5;
   GTK_CELL_RENDERER (celltext)->xpad = 2;
   GTK_CELL_RENDERER (celltext)->ypad = 2;
   celltext->fixed_height_rows = -1;
   celltext->font = pango_font_description_new ();
+
+  priv->width_chars = -1;
 }
 
 static void
@@ -409,6 +418,26 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
 						      PANGO_TYPE_ELLIPSIZE_MODE,
 						      PANGO_ELLIPSIZE_NONE,
 						      G_PARAM_READWRITE));
+
+  /**
+   * GtkCellRendererText:width-chars:
+   * 
+   * The desired width of the cell, in characters. If this property is set to
+   * -1, the width will be calculated automatically, otherwise the cell will
+   * request either 3 characters or the property value, whichever is greater.
+   * 
+   * Since: 2.6
+   **/
+  g_object_class_install_property (object_class,
+                                   PROP_WIDTH_CHARS,
+                                   g_param_spec_int ("width_chars",
+                                                     P_("Width In Characters"),
+                                                     P_("The desired width of the label, in characters"),
+                                                     -1,
+                                                     G_MAXINT,
+                                                     -1,
+                                                     G_PARAM_READWRITE));
+  
   
   /* Style props are set or not */
 
@@ -701,6 +730,10 @@ gtk_cell_renderer_text_get_property (GObject        *object,
       g_value_set_boolean (value, priv->ellipsize_set);
       break;
       
+    case PROP_WIDTH_CHARS:
+      g_value_set_int (value, priv->width_chars);
+      break;  
+
     case PROP_BACKGROUND:
     case PROP_FOREGROUND:
     case PROP_MARKUP:
@@ -1136,6 +1169,10 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       g_object_notify (object, "ellipsize_set");
       break;
       
+    case PROP_WIDTH_CHARS:
+      priv->width_chars = g_value_get_int (value);
+      g_object_notify (object, "width_chars");
+      break;  
     case PROP_BACKGROUND_SET:
       celltext->background_set = g_value_get_boolean (value);
       break;
@@ -1392,7 +1429,7 @@ get_size (GtkCellRenderer *cell,
   /* The minimum size for ellipsized labels is ~ 3 chars */
   if (width)
     {
-      if (priv->ellipsize)
+      if (priv->ellipsize || priv->width_chars > 0)
 	{
 	  PangoContext *context;
 	  PangoFontMetrics *metrics;
@@ -1403,8 +1440,8 @@ get_size (GtkCellRenderer *cell,
 
 	  char_width = pango_font_metrics_get_approximate_char_width (metrics);
 	  pango_font_metrics_unref (metrics);
-
-	  *width += (PANGO_PIXELS (char_width) * 3);
+	  
+	  *width += (PANGO_PIXELS (char_width) * MAX (priv->width_chars, 3));
 	}
       else
 	{
