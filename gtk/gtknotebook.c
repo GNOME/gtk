@@ -50,6 +50,7 @@ enum {
   FOCUS_TAB,
   SELECT_PAGE,
   CHANGE_CURRENT_PAGE,
+  MOVE_FOCUS_OUT,
   LAST_SIGNAL
 };
 
@@ -115,13 +116,14 @@ struct _GtkNotebookPage
 static void gtk_notebook_class_init          (GtkNotebookClass *klass);
 static void gtk_notebook_init                (GtkNotebook      *notebook);
 
-static gboolean gtk_notebook_select_page     (GtkNotebook       *notebook,
-					      gboolean           move_focus);
-static gboolean gtk_notebook_focus_tab       (GtkNotebook       *notebook,
-                                              GtkNotebookTab     type);
-static void gtk_notebook_change_current_page (GtkNotebook       *notebook,
-					      gint               offset);
-
+static gboolean gtk_notebook_select_page         (GtkNotebook      *notebook,
+						  gboolean          move_focus);
+static gboolean gtk_notebook_focus_tab           (GtkNotebook      *notebook,
+						  GtkNotebookTab    type);
+static void     gtk_notebook_change_current_page (GtkNotebook      *notebook,
+						  gint              offset);
+static void     gtk_notebook_move_focus_out      (GtkNotebook      *notebook,
+						  GtkDirectionType  direction_type);
 
 /*** GtkObject Methods ***/
 static void gtk_notebook_destroy             (GtkObject        *object);
@@ -249,6 +251,9 @@ static void gtk_notebook_menu_label_unparent (GtkWidget        *widget,
 static void gtk_notebook_menu_detacher       (GtkWidget        *widget,
 					      GtkMenu          *menu);
 
+static gboolean focus_tabs_in  (GtkNotebook      *notebook);
+static gboolean focus_child_in (GtkNotebook      *notebook,
+				GtkDirectionType  direction);
 
 static GtkContainerClass *parent_class = NULL;
 static guint notebook_signals[LAST_SIGNAL] = { 0 };
@@ -276,6 +281,37 @@ gtk_notebook_get_type (void)
     }
 
   return notebook_type;
+}
+
+static void
+add_tab_bindings (GtkBindingSet    *binding_set,
+		  GdkModifierType   modifiers,
+		  GtkDirectionType  direction)
+{
+  gtk_binding_entry_add_signal (binding_set, GDK_Tab, modifiers,
+                                "move_focus_out", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, modifiers,
+                                "move_focus_out", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Left_Tab, modifiers,
+                                "move_focus_out", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+}
+
+static void
+add_arrow_bindings (GtkBindingSet    *binding_set,
+		    guint             keysym,
+		    GtkDirectionType  direction)
+{
+  guint keypad_keysym = keysym - GDK_Left + GDK_KP_Left;
+  
+  gtk_binding_entry_add_signal (binding_set, keysym, GDK_CONTROL_MASK,
+                                "move_focus_out", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_binding_entry_add_signal (binding_set, keypad_keysym, GDK_CONTROL_MASK,
+                                "move_focus_out", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
 }
 
 static void
@@ -321,6 +357,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   class->focus_tab = gtk_notebook_focus_tab;
   class->select_page = gtk_notebook_select_page;
   class->change_current_page = gtk_notebook_change_current_page;
+  class->move_focus_out = gtk_notebook_move_focus_out;
   
   g_object_class_install_property (gobject_class,
 				   PROP_PAGE,
@@ -466,19 +503,21 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkNotebookClass, change_current_page),
                   NULL, NULL,
-                  gtk_marshal_VOID__INT,
-                  G_TYPE_BOOLEAN, 1,
+                  _gtk_marshal_VOID__INT,
+                  G_TYPE_NONE, 1,
                   G_TYPE_INT);
+  notebook_signals[MOVE_FOCUS_OUT] =
+    g_signal_new ("move_focus_out",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkNotebookClass, move_focus_out),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__ENUM,
+                  G_TYPE_NONE, 1,
+                  GTK_TYPE_DIRECTION_TYPE);
+  
   
   binding_set = gtk_binding_set_by_class (object_class);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_Return, 0,
-                                "select_page", 1, 
-                                G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KP_Enter, 0,
-                                "select_page", 1, 
-                                G_TYPE_BOOLEAN, TRUE);
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_space, 0,
                                 "select_page", 1, 
@@ -513,6 +552,14 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                 GDK_Page_Down, GDK_CONTROL_MASK,
                                 "change_current_page", 1,
                                 G_TYPE_INT, 1);
+
+  add_arrow_bindings (binding_set, GDK_Up, GTK_DIR_UP);
+  add_arrow_bindings (binding_set, GDK_Down, GTK_DIR_DOWN);
+  add_arrow_bindings (binding_set, GDK_Left, GTK_DIR_LEFT);
+  add_arrow_bindings (binding_set, GDK_Right, GTK_DIR_RIGHT);
+
+  add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
+  add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 }
 
 static void
@@ -541,6 +588,7 @@ gtk_notebook_init (GtkNotebook *notebook)
   notebook->need_timer = 0;
   notebook->child_has_focus = FALSE;
   notebook->have_visible_child = FALSE;
+  notebook->focus_out = FALSE;
 }
 
 static gboolean
@@ -601,6 +649,61 @@ gtk_notebook_change_current_page (GtkNotebook *notebook,
 
   if (current)
     gtk_notebook_switch_page (notebook, current->data, -1);
+  else
+    gdk_beep ();
+}
+
+static GtkDirectionType
+get_effective_direction (GtkNotebook      *notebook,
+			 GtkDirectionType  direction)
+{
+  /* Remap the directions into the effective direction it would be for a
+   * GTK_POS_TOP notebook
+   */
+#define D(rest) GTK_DIR_##rest
+
+  static const GtkDirectionType translate_direction[4][6] = {
+    /* LEFT */   { D(TAB_FORWARD),  D(TAB_BACKWARD), D(LEFT), D(RIGHT), D(UP),   D(DOWN) },
+    /* RIGHT */  { D(TAB_BACKWARD), D(TAB_FORWARD),  D(LEFT), D(RIGHT), D(DOWN), D(UP)   },
+    /* TOP */    { D(TAB_FORWARD),  D(TAB_BACKWARD), D(UP),   D(DOWN),  D(LEFT), D(RIGHT) },
+    /* BOTTOM */ { D(TAB_BACKWARD), D(TAB_FORWARD),  D(DOWN), D(UP),    D(LEFT), D(RIGHT) },
+  };
+
+#undef D
+
+  return translate_direction[notebook->tab_pos][direction];
+}
+
+static void
+gtk_notebook_move_focus_out (GtkNotebook      *notebook,
+			     GtkDirectionType  direction_type)
+{
+  GtkDirectionType effective_direction = get_effective_direction (notebook, direction_type);
+  GtkWidget *toplevel;
+  
+  if (GTK_CONTAINER (notebook)->focus_child && effective_direction == GTK_DIR_UP)
+    if (focus_tabs_in (notebook))
+      return;
+  
+  if (gtk_widget_is_focus (GTK_WIDGET (notebook)) && effective_direction == GTK_DIR_DOWN)
+    if (focus_child_in (notebook, GTK_DIR_TAB_FORWARD))
+      return;
+
+  /* At this point, we know we should be focusing out of the notebook entirely. We
+   * do this by setting a flag, then propagating the focus motion to the notebook.
+   */
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (notebook));
+  if (!GTK_WIDGET_TOPLEVEL (toplevel))
+    return;
+
+  g_object_ref (notebook);
+  
+  notebook->focus_out = TRUE;
+  g_signal_emit_by_name (G_OBJECT (toplevel), "move_focus", direction_type);
+  notebook->focus_out = FALSE;
+  
+  g_object_unref (notebook);
+
 }
 
 /**
@@ -1852,12 +1955,10 @@ focus_tabs_move (GtkNotebook     *notebook,
 
   new_page = gtk_notebook_search_page (notebook, notebook->focus_tab,
 				       search_direction, TRUE);
-  if (!new_page)
-    new_page = (search_direction == STEP_NEXT) ?
-                 notebook->children :
-                 g_list_last (notebook->children);
-
-  gtk_notebook_switch_focus_tab (notebook, new_page);
+  if (new_page)
+    gtk_notebook_switch_focus_tab (notebook, new_page);
+  else
+    gdk_beep ();
   
   return TRUE;
 }
@@ -1883,20 +1984,6 @@ gtk_notebook_focus (GtkWidget        *widget,
   GtkNotebook *notebook;
   GtkDirectionType effective_direction;
 
-  /* Remap the directions into the effective direction it would be for a
-   * GTK_POS_TOP notebook
-   */
-#define D(rest) GTK_DIR_##rest
-
-  static const GtkDirectionType translate_direction[4][6] = {
-    /* LEFT */   { D(TAB_FORWARD),  D(TAB_BACKWARD), D(LEFT), D(RIGHT), D(UP),   D(DOWN) },
-    /* RIGHT */  { D(TAB_BACKWARD), D(TAB_FORWARD),  D(LEFT), D(RIGHT), D(DOWN), D(UP)   },
-    /* TOP */    { D(TAB_FORWARD),  D(TAB_BACKWARD), D(UP),   D(DOWN),  D(LEFT), D(RIGHT) },
-    /* BOTTOM */ { D(TAB_BACKWARD), D(TAB_FORWARD),  D(DOWN), D(UP),    D(LEFT), D(RIGHT) },
-  };
-
-#undef D  
-
   gboolean widget_is_focus;
   GtkContainer *container;
 
@@ -1905,10 +1992,16 @@ gtk_notebook_focus (GtkWidget        *widget,
   container = GTK_CONTAINER (widget);
   notebook = GTK_NOTEBOOK (container);
 
+  if (notebook->focus_out)
+    {
+      notebook->focus_out = FALSE; /* Clear this to catch the wrap-around case */
+      return FALSE;
+    }
+
   widget_is_focus = gtk_widget_is_focus (widget);
   old_focus_child = container->focus_child; 
 
-  effective_direction = translate_direction[notebook->tab_pos][direction];
+  effective_direction = get_effective_direction (notebook, direction);
 
   if (old_focus_child)		/* Focus on page child */
     {
@@ -1937,7 +2030,11 @@ gtk_notebook_focus (GtkWidget        *widget,
 	  return FALSE;
 	case GTK_DIR_TAB_FORWARD:
 	case GTK_DIR_DOWN:
-	  return focus_child_in (notebook, direction);
+	  /* We use TAB_FORWARD rather than direction so that we focus a more
+	   * predictable widget for the user; users may be using arrow focusing
+	   * in this situation even if they don't usually use arrow focusing.
+	   */
+	  return focus_child_in (notebook, GTK_DIR_TAB_FORWARD);
 	case GTK_DIR_LEFT:
 	  return focus_tabs_move (notebook, direction, STEP_PREV);
 	case GTK_DIR_RIGHT:

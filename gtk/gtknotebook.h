@@ -83,6 +83,7 @@ struct _GtkNotebook
   guint need_timer         : 1;
   guint child_has_focus    : 1;
   guint have_visible_child : 1;
+  guint focus_out          : 1;	/* Flag used by ::move-focus-out implementation */
 };
 
 struct _GtkNotebookClass
@@ -100,6 +101,8 @@ struct _GtkNotebookClass
                                 GtkNotebookTab     type);
   void (* change_current_page) (GtkNotebook       *notebook,
                                 gint               offset);
+  void (* move_focus_out)      (GtkNotebook       *notebook,
+				GtkDirectionType   direction);
 };
 
 /***********************************************************

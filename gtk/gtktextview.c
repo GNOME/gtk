@@ -4968,17 +4968,13 @@ static void
 gtk_text_view_move_focus (GtkTextView     *text_view,
                           GtkDirectionType direction_type)
 {
-  GtkWidget *toplevel;
+  GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (text_view));
 
-  toplevel =
-    gtk_widget_get_ancestor (GTK_WIDGET (text_view), GTK_TYPE_WINDOW);
-
-  if (toplevel == NULL)
+  if (!GTK_WIDGET_TOPLEVEL (toplevel))
     return;
 
   /* Propagate to toplevel */
-  g_signal_emit_by_name (G_OBJECT (toplevel), "move_focus",
-                         direction_type);
+  g_signal_emit_by_name (G_OBJECT (toplevel), "move_focus", direction_type);
 }
 
 /*

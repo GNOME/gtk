@@ -1,3 +1,25 @@
+Thu Feb  7 19:52:00 2002  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtknotebook.[ch]: Add ::move-focus-out signal
+	to handle Control[-Shift]-Tab and Control-arrow
+	bindings and implement bindings as per #53612.
+
+	* gtk/gtktextview.c (gtk_text_view_move_focus): Fix 
+	fetching the toplevel for plug-socket.
+
+	* gtk/gtknotebook.c (gtk_notebook_class_init): Remove
+	bindings for Return/Enter to select the page.
+
+	* gtk/gtknotebook.c (gtk_notebook_change_current_page):
+	Beep at ends.
+
+	* gtk/gtknotebook.c (focus_tabs_move): Don't wrap around
+	and beep at ends.
+
+	* gtk/gtknotebook.c (gtk_notebook_focus): When focusing into
+	the page with the arrow keys, focus the first widget,
+	not the directionally closest widget.
+
 Thu Feb  7 19:00:10 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkspinbutton.c (gtk_spin_button_key_release): Convert
