@@ -981,6 +981,7 @@ EXPORTS
 	gtk_rc_set_image_loader
 	gtk_rc_style_new
 	gtk_rc_style_ref
+	gtk_rc_style_unref
 	gtk_ruler_draw_pos
 	gtk_ruler_draw_ticks
 	gtk_ruler_get_type

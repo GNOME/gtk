@@ -1994,7 +1994,7 @@ gtk_signal_collect_params (GtkArg	       *params,
   return_type = GTK_FUNDAMENTAL_TYPE (return_type);
   if (return_type != GTK_TYPE_NONE)
     {
-      if (return_type != 0) // FIXME: check for IS_PARAM
+      if (return_type != 0) /* FIXME: check for IS_PARAM */
 	{
 	  GTK_VALUE_POINTER (*params) = va_arg (var_args, gpointer);
 	  

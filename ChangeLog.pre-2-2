@@ -1,3 +1,13 @@
+2000-07-19  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtksignal.c: Fix C++ comment.
+
+	* gtk/gtkimmulticontext.c
+	* gtk/gtktextbtree.c: Remove gccisms: Don't use __FUNCTION__,
+	don't return value from void functions.
+
+	* gtk/gtk.def: Add gtk_rc_style_unref.
+
 2000-07-19  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
 
 	* gdk-pixbuf/gdk-pixbuf.h, gtk/gtkhsv.h, gtk/gtktextbtree.h,

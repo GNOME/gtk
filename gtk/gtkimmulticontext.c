@@ -203,7 +203,7 @@ gtk_im_multicontext_focus_in (GtkIMContext   *context)
   GtkIMContext *slave = gtk_im_multicontext_get_slave (multicontext);
 
   if (slave)
-    return gtk_im_context_focus_in (slave);
+    gtk_im_context_focus_in (slave);
 }
 
 static void
@@ -213,7 +213,7 @@ gtk_im_multicontext_focus_out (GtkIMContext   *context)
   GtkIMContext *slave = gtk_im_multicontext_get_slave (multicontext);
 
   if (slave)
-    return gtk_im_context_focus_out (slave);
+    gtk_im_context_focus_out (slave);
 }
 
 void

@@ -1375,8 +1375,8 @@ gtk_text_btree_get_view_size (GtkTextBTree *tree,
   g_return_if_fail(tree != NULL);
   g_return_if_fail(view_id != NULL);
   
-  return gtk_text_btree_node_get_size(tree->root_node, view_id,
-                                      width, height);  
+  gtk_text_btree_node_get_size(tree->root_node, view_id,
+			       width, height);  
 }
 
 /*
@@ -5925,8 +5925,8 @@ gtk_text_btree_node_check_consistency(GtkTextBTreeNode *node)
     }
   if (num_chars != node->num_chars)
     {
-      g_error("%s: mismatch in num_chars (%d %d)",
-              __FUNCTION__, num_chars, node->num_chars);
+      g_error("gtk_text_btree_node_check_consistency: mismatch in num_chars (%d %d)",
+              num_chars, node->num_chars);
     }
 
   for (summary = node->summary; summary != NULL;
@@ -6134,7 +6134,7 @@ gtk_text_btree_check (GtkTextBTree *tree)
     }
   if (node->num_chars < 2)
     {
-      g_error("%s: less than 2 chars in tree", __FUNCTION__);
+      g_error("gtk_text_btree_check: less than 2 chars in tree");
     }
   while (node->level > 0)
     {
