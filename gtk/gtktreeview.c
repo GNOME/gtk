@@ -4262,8 +4262,7 @@ validate_visible_area (GtkTreeView *tree_view)
       need_redraw = TRUE;
     }
 
-  if (tree_view->priv->scroll_to_path &&
-      ! GTK_RBNODE_FLAG_SET (tree_view->priv->tree->root, GTK_RBNODE_DESCENDANTS_INVALID))
+  if (tree_view->priv->scroll_to_path)
     {
       gtk_tree_row_reference_free (tree_view->priv->scroll_to_path);
       tree_view->priv->scroll_to_path = NULL;
