@@ -32,7 +32,7 @@
 #include "gtkintl.h"
 
 #define EPSILON  1e-5
-#define DEFAULT_FORMAT "%P %%";
+#define DEFAULT_FORMAT "%P %%"
 
 enum {
   PROP_0,

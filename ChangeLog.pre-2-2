@@ -1,3 +1,8 @@
+2002-09-23  Jacob Berkman  <jacob@ximian.com>
+
+	* gtk/gtkprogress.c (DEFAULT_FORMAT): cpp macros aren't ``;''
+	terminated
+
 Mon Sep 23 19:49:11 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkselection.[ch] gtk/gtkwidget.c gtk/gtkmain.c:
