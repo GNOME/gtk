@@ -113,6 +113,8 @@ gtk_cell_renderer_init (GtkCellRenderer *cell)
   cell->xpad = 0;
   cell->ypad = 0;
   cell->sensitive = TRUE;
+  cell->is_expander = FALSE;
+  cell->is_expanded = FALSE;
 }
 
 static void
@@ -180,7 +182,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						       P_("The x-align"),
 						       0.0,
 						       1.0,
-						       0.0,
+						       0.5,
 						       G_PARAM_READABLE |
 						       G_PARAM_WRITABLE));
 
@@ -202,7 +204,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						      P_("The xpad"),
 						      0,
 						      G_MAXUINT,
-						      2,
+						      0,
 						      G_PARAM_READABLE |
 						      G_PARAM_WRITABLE));
 
@@ -213,7 +215,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						      P_("The ypad"),
 						      0,
 						      G_MAXUINT,
-						      2,
+						      0,
 						      G_PARAM_READABLE |
 						      G_PARAM_WRITABLE));
 

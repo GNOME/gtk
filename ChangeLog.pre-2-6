@@ -1,5 +1,9 @@
 2004-07-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcellrenderer.c (gtk_cell_renderer_get_property): 
+	Correct the declared default values of several properties
+	to be in sync with the actual initial values.
+
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_class_init): 
 	Make spacing a property, correct the declared default values 
 	of several properties to be in sync with the actual initial 
