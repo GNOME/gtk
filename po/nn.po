@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-25 13:27-0400\n"
-"PO-Revision-Date: 2004-03-21 21:36+0100\n"
-"Last-Translator: Åsmund Skjæveland\n"
+"POT-Creation-Date: 2004-09-06 21:46+0000\n"
+"PO-Revision-Date: 2004-09-06 22:02+0000\n"
+"Last-Translator: Åsmund Skjæveland <aasmunds@fys.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,8 +33,7 @@ msgstr "Biletefila «%s» inneheld ikkje data"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:831
 #: gdk-pixbuf/gdk-pixbuf-io.c:969 tests/testfilechooser.c:237
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Klarte ikkje å lasta biletet «%s». Årsaken er ukjent, men truleg ei øydelagt "
 "biletefil"
@@ -340,10 +339,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:908
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"JPEG-kvalitet må vera eit tal mellom 0 og 100. Verdien «%d» er ikkje tillate."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr "JPEG-kvalitet må vera eit tal mellom 0 og 100. Verdien «%d» er ikkje tillate."
 
 #: gdk-pixbuf/io-jpeg.c:1069
 msgid "The JPEG image format"
@@ -445,8 +442,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Fatal feil under lesing av PNG-biletefil: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "Nøklane til PNG-tekstbitar må ha mellom 1 og 79 teikn."
 
 #: gdk-pixbuf/io-png.c:821
@@ -455,8 +451,7 @@ msgstr "Nøklane til PNG-tekstbitar må vera ASCII-teikn."
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid ""
-"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr "Verdien til PNG-tekstbiten %s kan ikkje konverterast til ISO-8859-1."
 
 #: gdk-pixbuf/io-png.c:994
@@ -904,9 +899,8 @@ msgid "_Palette"
 msgstr "_Palett"
 
 #: gtk/gtkcolorsel.c:1987
-#, fuzzy
 msgid "Color Wheel"
-msgstr "Hjul"
+msgstr "Fargehjul"
 
 #: gtk/gtkcolorseldialog.c:116
 msgid "Color Selection"
@@ -986,8 +980,7 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:1744
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
-msgstr ""
-"Klarte ikkje å leggja til bokmerke for %s, fordi det ikkje er ei mappe."
+msgstr "Klarte ikkje å leggja til bokmerke for %s, fordi det ikkje er ei mappe."
 
 #: gtk/gtkfilechooserdefault.c:1849
 #, c-format
@@ -1001,12 +994,11 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:2431
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
-msgstr ""
-"Klarte ikkje å leggja til bokmerke for %s fordi det er eit ugyldig stinamn."
+msgstr "Klarte ikkje å leggja til bokmerke for %s fordi det er eit ugyldig stinamn."
 
 #: gtk/gtkfilechooserdefault.c:2572
 msgid "Shortcuts"
-msgstr ""
+msgstr "Snarvegar"
 
 #: gtk/gtkfilechooserdefault.c:2626
 msgid "Folder"
@@ -1025,7 +1017,7 @@ msgstr "Fje_rn"
 
 #: gtk/gtkfilechooserdefault.c:2762
 msgid "Show _Hidden Files"
-msgstr ""
+msgstr "Vis _skjulte filer"
 
 #: gtk/gtkfilechooserdefault.c:2877 gtk/gtkfilesel.c:766
 msgid "Files"
@@ -1045,9 +1037,8 @@ msgstr "Endra"
 
 #. Create Folder
 #: gtk/gtkfilechooserdefault.c:2983
-#, fuzzy
 msgid "Create Fo_lder"
-msgstr "Lag ny _mappe"
+msgstr "Lag _mappe"
 
 #. Name entry
 #: gtk/gtkfilechooserdefault.c:3090
@@ -1071,9 +1062,8 @@ msgid "Can't change to folder because it isn't local"
 msgstr "Kan ikkje gå til mappa. Ho er ikkje lokal"
 
 #: gtk/gtkfilechooserdefault.c:4208
-#, fuzzy
 msgid "Could not find the path"
-msgstr "Kunne ikkje lagra resten"
+msgstr "Klarte ikkje finna stien"
 
 #: gtk/gtkfilechooserdefault.c:4569
 #, c-format
@@ -1136,9 +1126,8 @@ msgid "Open Location"
 msgstr "Opna adresse"
 
 #: gtk/gtkfilechooserdefault.c:5553
-#, fuzzy
 msgid "Save in Location"
-msgstr "Opna adresse"
+msgstr "Lagra i adresse"
 
 #: gtk/gtkfilechooserdefault.c:5572
 msgid "_Location:"
@@ -1186,8 +1175,7 @@ msgstr "_Gje fila nytt namn"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Mappenamnet «%s» inneheld symbol som ikkje er tillatne i filnamn"
 
 #: gtk/gtkfilesel.c:1441
@@ -1298,13 +1286,13 @@ msgid "_Selection: "
 msgstr "_Utval: "
 
 #: gtk/gtkfilesel.c:3139
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
 msgstr ""
 "Filnamnet «%s» kan ikkje konverterast til UTF-8 (prøv å setja "
-"miljøvariabelen G_BROKEN_FILENAMES): %s"
+"miljøvariabelen G_FILENAME_ENCODING): %s"
 
 #: gtk/gtkfilesel.c:3142
 msgid "Invalid UTF-8"
@@ -1348,16 +1336,16 @@ msgid "Filesystem"
 msgstr "Filsystem"
 
 #: gtk/gtkfilesystemunix.c:735
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "Klarte ikkje å henta informasjon om fila «%s»: %s"
+msgstr "Klarte ikkje finna standardikon til %s"
 
 #: gtk/gtkfilesystemunix.c:830
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
-msgstr ""
+msgstr "Namnet «%s» er ikkje gyldig. Det inneheld teiknet «%s». Prøv eit anna namn."
 
 #: gtk/gtkfilesystemunix.c:1438 gtk/gtkfilesystemwin32.c:923
 #, c-format
@@ -1975,5 +1963,3 @@ msgstr "X-inndatametode"
 msgid "Could not get information for file '%s': %s"
 msgstr "Klarte ikkje å henta informasjon om fila «%s»: %s"
 
-#~ msgid "Unsupported TIFF variant"
-#~ msgstr "Ustøtta TIFF-variant"
