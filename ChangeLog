@@ -1,3 +1,6 @@
+Sat Dec 27 20:39:99 1997  Elliot Lee <sopwith@redhat.com>
+	* gtk/gtkhandlebox.c: It mostly works now, please test it and make
+	fixes as needed.
 Fri Dec 26 11:20:03 1997  Scott Goehring  <scott@poverty.bloomington.in.us>
 
 	* gtk/Makefile.am (gtkinclude_HEADERS): added gtkhandlebox.c
