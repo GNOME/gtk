@@ -341,6 +341,8 @@ EXTRA_DIST = \
 	gtk.defs		\
 	genmarshal.pl		\
 	gtkmarshal.list		\
+	check-y.xpm		\
+	check-n.xpm		\
 	test.xpm		\
 	marble.xpm		\
 	3DRings.xpm		\
