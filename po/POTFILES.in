@@ -15,7 +15,6 @@ gdk-pixbuf/io-xpm.c
 gtk/gtkcellrenderer.c
 gtk/gtkcellrendererpixbuf.c
 gtk/gtkcellrenderertext.c
-gtk/gtkcellrenderertextpixbuf.c
 gtk/gtkcellrenderertoggle.c
 gtk/gtkcolorsel.c
 gtk/gtkcolorseldialog.c
