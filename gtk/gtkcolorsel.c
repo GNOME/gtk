@@ -70,6 +70,13 @@
 #define GTK_CUSTOM_PALETTE_WIDTH 10
 #define GTK_CUSTOM_PALETTE_HEIGHT 2
 
+/* Conversion between 0->1 double and and guint16. See
+ * scale_round() below for more general conversions
+ */
+#define SCALE(i) (i / 65535.)
+#define UNSCALE(d) ((guint16)(d * 65535 + 0.5))
+
+
 enum {
   COLOR_CHANGED,
   LAST_SIGNAL
@@ -403,14 +410,14 @@ color_sample_draw_sample (GtkColorSelection *colorsel, int which)
     {
       da = priv->old_sample;
       for (n = 0, i = COLORSEL_RED; n < 3; n++, i++)
-	c[n] = (guchar) (255.0 * priv->old_color[i]);
+	c[n] = (guchar) (UNSCALE (priv->old_color[i]) >> 8);
       goff = 0;
     }
   else
     {
       da = priv->cur_sample;
       for (n = 0, i = COLORSEL_RED; n < 3; n++, i++)
-	c[n] = (guchar) (255.0 * priv->color[i]);
+	c[n] = (guchar) (UNSCALE (priv->color[i]) >> 8);
       goff =  priv->old_sample->allocation.width % 32;
     }
   
@@ -728,9 +735,9 @@ palette_change_color (GtkWidget         *drawing_area,
   
   priv = colorsel->private_data;
   
-  gdk_color.red = color[0]*65535;
-  gdk_color.green = color[1]*65535;
-  gdk_color.blue = color[2]*65535;
+  gdk_color.red = UNSCALE (color[0]);
+  gdk_color.green = UNSCALE (color[1]);
+  gdk_color.blue = UNSCALE (color[2]);
 
   x = 0;
   while (x < GTK_CUSTOM_PALETTE_WIDTH)
@@ -767,9 +774,9 @@ palette_set_color (GtkWidget         *drawing_area,
   gdouble *old_color;
   GdkColor gdk_color;
   
-  gdk_color.red = color[0]*65535;
-  gdk_color.green = color[1]*65535;
-  gdk_color.blue = color[2]*65535;
+  gdk_color.red = UNSCALE (color[0]);
+  gdk_color.green = UNSCALE (color[1]);
+  gdk_color.blue = UNSCALE (color[2]);
 
   gtk_widget_modify_bg (drawing_area, GTK_STATE_NORMAL, &gdk_color);
   
@@ -1106,9 +1113,9 @@ grab_color_at_mouse (GtkWidget *invisible,
 
   gdk_colormap_query_color (colormap, pixel, &color);
   
-  priv->color[COLORSEL_RED] = (double)color.red / 65535.0;
-  priv->color[COLORSEL_GREEN] = (double)color.green / 65535.0;
-  priv->color[COLORSEL_BLUE] = (double)color.blue / 65535.0;
+  priv->color[COLORSEL_RED] = SCALE (color.red);
+  priv->color[COLORSEL_GREEN] = SCALE (color.green);
+  priv->color[COLORSEL_BLUE] = SCALE (color.blue);
   
   gtk_rgb_to_hsv (priv->color[COLORSEL_RED],
 		  priv->color[COLORSEL_GREEN],
@@ -1521,7 +1528,7 @@ update_color (GtkColorSelection *colorsel)
 			    (GTK_RANGE (priv->opacity_slider)),
 			    scale_round (priv->color[COLORSEL_OPACITY], 255));
   
-  g_snprintf (opacity_text, 32, "%.0f", priv->color[COLORSEL_OPACITY] * 255);
+  g_snprintf (opacity_text, 32, "%.0f", scale_round (priv->color[COLORSEL_OPACITY], 255));
   gtk_entry_set_text (GTK_ENTRY (priv->opacity_entry), opacity_text);
   
   g_snprintf (entryval, 11, "#%2X%2X%2X",
@@ -2116,9 +2123,9 @@ gtk_color_selection_set_current_color (GtkColorSelection *colorsel,
 
   priv = colorsel->private_data;
   priv->changing = TRUE;
-  priv->color[COLORSEL_RED] = color->red / 65535.0;
-  priv->color[COLORSEL_GREEN] = color->green / 65535.0;
-  priv->color[COLORSEL_BLUE] = color->blue / 65535.0;
+  priv->color[COLORSEL_RED] = SCALE (color->red);
+  priv->color[COLORSEL_GREEN] = SCALE (color->green);
+  priv->color[COLORSEL_BLUE] = SCALE (color->blue);
   gtk_rgb_to_hsv (priv->color[COLORSEL_RED],
 		  priv->color[COLORSEL_GREEN],
 		  priv->color[COLORSEL_BLUE],
@@ -2155,7 +2162,7 @@ gtk_color_selection_set_current_alpha (GtkColorSelection *colorsel,
   
   priv = colorsel->private_data;
   priv->changing = TRUE;
-  priv->color[COLORSEL_OPACITY] = alpha / 65535.0;
+  priv->color[COLORSEL_OPACITY] = SCALE (alpha);
   if (priv->default_alpha_set == FALSE)
     {
       for (i = 0; i < COLORSEL_NUM_CHANNELS; i++)
@@ -2225,9 +2232,9 @@ gtk_color_selection_get_current_color (GtkColorSelection *colorsel,
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
   
   priv = colorsel->private_data;
-  color->red = priv->color[COLORSEL_RED] * 65535;
-  color->green = priv->color[COLORSEL_GREEN] * 65535;
-  color->blue = priv->color[COLORSEL_BLUE] * 65535;
+  color->red = UNSCALE (priv->color[COLORSEL_RED]);
+  color->green = UNSCALE (priv->color[COLORSEL_GREEN]);
+  color->blue = UNSCALE (priv->color[COLORSEL_BLUE]);
 }
 
 /**
@@ -2246,7 +2253,7 @@ gtk_color_selection_get_current_alpha (GtkColorSelection *colorsel)
   g_return_val_if_fail (GTK_IS_COLOR_SELECTION (colorsel), 0);
   
   priv = colorsel->private_data;
-  return priv->has_opacity ? priv->color[COLORSEL_OPACITY] * 65535 : 1.0;
+  return priv->has_opacity ? UNSCALE (priv->color[COLORSEL_OPACITY]) : 65535;
 }
 
 /**
@@ -2269,7 +2276,7 @@ gtk_color_selection_get_color (GtkColorSelection *colorsel,
   color[0] = priv->color[COLORSEL_RED];
   color[1] = priv->color[COLORSEL_GREEN];
   color[2] = priv->color[COLORSEL_BLUE];
-  color[3] = priv->has_opacity ? priv->color[COLORSEL_OPACITY] : 1.0;
+  color[3] = priv->has_opacity ? priv->color[COLORSEL_OPACITY] : 65535;
 }
 
 /**
@@ -2293,9 +2300,9 @@ gtk_color_selection_set_previous_color (GtkColorSelection *colorsel,
   
   priv = colorsel->private_data;
   priv->changing = TRUE;
-  priv->old_color[COLORSEL_RED] = color->red / 65535.0;
-  priv->old_color[COLORSEL_GREEN] = color->green / 65535.0;
-  priv->old_color[COLORSEL_BLUE] = color->blue / 65535.0;
+  priv->old_color[COLORSEL_RED] = SCALE (color->red);
+  priv->old_color[COLORSEL_GREEN] = SCALE (color->green);
+  priv->old_color[COLORSEL_BLUE] = SCALE (color->blue);
   gtk_rgb_to_hsv (priv->old_color[COLORSEL_RED],
 		  priv->old_color[COLORSEL_GREEN],
 		  priv->old_color[COLORSEL_BLUE],
@@ -2325,7 +2332,7 @@ gtk_color_selection_set_previous_alpha (GtkColorSelection *colorsel,
   
   priv = colorsel->private_data;
   priv->changing = TRUE;
-  priv->old_color[COLORSEL_OPACITY] = alpha / 65535.0;
+  priv->old_color[COLORSEL_OPACITY] = SCALE (alpha);
   color_sample_draw_samples (colorsel);
   priv->default_alpha_set = TRUE;
 }
@@ -2348,9 +2355,9 @@ gtk_color_selection_get_previous_color (GtkColorSelection *colorsel,
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
   
   priv = colorsel->private_data;
-  color->red = priv->old_color[COLORSEL_RED] * 65535;
-  color->green = priv->old_color[COLORSEL_GREEN] * 65535;
-  color->blue = priv->old_color[COLORSEL_BLUE] * 65535;
+  color->red = UNSCALE (priv->old_color[COLORSEL_RED]);
+  color->green = UNSCALE (priv->old_color[COLORSEL_GREEN]);
+  color->blue = UNSCALE (priv->old_color[COLORSEL_BLUE]);
 }
 
 /**
@@ -2369,7 +2376,7 @@ gtk_color_selection_get_previous_alpha (GtkColorSelection *colorsel)
   g_return_val_if_fail (GTK_IS_COLOR_SELECTION (colorsel), 0);
   
   priv = colorsel->private_data;
-  return priv->has_opacity ? priv->old_color[COLORSEL_OPACITY] * 65535 : 1.0;
+  return priv->has_opacity ? UNSCALE (priv->old_color[COLORSEL_OPACITY]) : 65535;
 }
 
 /**
@@ -2397,9 +2404,9 @@ gtk_color_selection_set_palette_color (GtkColorSelection   *colorsel,
   y = index / GTK_CUSTOM_PALETTE_WIDTH;
   
   priv = colorsel->private_data;
-  col[0] = color->red / 65535.0;
-  col[1] = color->green / 65535.0;
-  col[2] = color->blue / 65535.0;
+  col[0] = SCALE (color->red);
+  col[1] = SCALE (color->green);
+  col[2] = SCALE (color->blue);
   
   palette_set_color (priv->custom_palette[x][y], colorsel, col);
 }
@@ -2438,9 +2445,9 @@ gtk_color_selection_get_palette_color (GtkColorSelection   *colorsel,
   
   palette_get_color (priv->custom_palette[x][y], col);
 
-  color->red = col[0] * 65535;
-  color->green = col[1] * 65535;
-  color->blue = col[2] * 65535;
+  color->red = UNSCALE (col[0]);
+  color->green = UNSCALE (col[1]);
+  color->blue = UNSCALE (col[2]);
   
   return TRUE;
 }

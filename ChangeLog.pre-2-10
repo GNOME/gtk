@@ -1,3 +1,28 @@
+Sun Aug  5 11:24:27 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_set_current_alpha): 
+	Fix conversion from float to int so that we don't get
+	skew in the int => float => int roundtrip. 
+	(#58120, reported by Vitaly Tishkov). Also fix problem
+	where if no alpha was set, the returned alpha
+	from (say) set_current_alpha() was returned as 1, not 65535.
+
+Sun Aug  5 09:48:08 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklist.c (gtk_list_clear_items): Fix
+	problem with selecting a new focus child.
+
+	* gtk/gtklist.c (gtk_list_clear_items): Clear 
+	list->undo/list_focus_child after unparenting
+	child, since unparenting the child can result
+	in list->last_focus_child being set. (#58024)
+
+	* Makefile.am (SUBDIRS): Add target specific pc
+	files to DISTCLEANFILES.
+
+	* gtk/Makefile.am: add @GTK_DEBUG_FLAGS@
+	(58327, Matthias Clasen)
+
 Sat Aug  4 19:28:21 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* tests/testgtk.c: Patch from Hans (with various modifications),
