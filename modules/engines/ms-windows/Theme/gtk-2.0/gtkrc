@@ -1,0 +1,28 @@
+style "wimp-default"
+{
+  GtkWidget::interior_focus = 1
+  GtkButton::default_border = { 1, 1, 1, 1 }
+  GtkButton::default_outside_border = { 0, 0, 0, 0 }
+  GtkOptionMenu::indicator_size = { 9, 5 }
+  GtkOptionMenu::indicator_spacing = { 7, 5, 2, 2 }
+  GtkSpinButton::shadow-type = in
+
+  GtkButton::child_displacement_x = 1
+  GtkButton::child_displacement_y = 1
+
+  engine "wimp" 
+  {
+  }
+}
+
+class "GtkWidget" style "wimp-default"
+
+style "wimp-scrollbar"
+{
+  GtkRange::trough_border = 0
+  GtkRange::slider_width = 15
+  GtkRange::stepper_size = 15
+  GtkRange::stepper_spacing = 0
+}
+
+class "GtkScrollbar" style "wimp-scrollbar"
