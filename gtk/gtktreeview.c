@@ -3796,9 +3796,12 @@ validate_visible_area (GtkTreeView *tree_view)
 
   if (! GTK_RBNODE_FLAG_SET (tree_view->priv->tree->root, GTK_RBNODE_DESCENDANTS_INVALID) &&
       tree_view->priv->scroll_to_path == NULL)
-      return;
+    return;
 
   total_height = GTK_WIDGET (tree_view)->allocation.height - TREE_VIEW_HEADER_HEIGHT (tree_view);
+
+  if (total_height == 0)
+    return;
 
   /* First, we check to see if we need to scroll anywhere
    */
