@@ -1,10 +1,19 @@
+2003-08-30  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.[hc]: Add a boolean property, "add_tearoffs" with 
+	setter and getter. If it is set, add tearoff menu items to regular 
+	menus, but not to popups.
+
+	* tests/testmerge.c: Add button to test the generation of tearoff 
+	menu items.
+
 2003-08-29  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkactiongroup.c (gtk_action_group_add_radio_actions_full): Actually group the actions
-	together rather than putting each in its own group.
+	* gtk/gtkactiongroup.c (gtk_action_group_add_radio_actions_full): Actually 
+	group the actions together rather than putting each in its own group.
 
-	* gtk/gtkradioaction.c (create_menu_item): Set "draw_as_radio" on proxy menu items
-	for radio actions.
+	* gtk/gtkradioaction.c (create_menu_item): Set "draw_as_radio" on proxy 
+	menu items for radio actions.
 
 	* gtk/gtkgamma.c (gamma_ok_callback): Use g_strtod instead of strtod.
 

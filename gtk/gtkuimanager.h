@@ -39,7 +39,7 @@
 #include <gtk/gtkactiongroup.h>
 
 #define GTK_TYPE_UI_MANAGER            (gtk_ui_manager_get_type ())
-#define GTK_UI_MANAGER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_UI_MANAGER, GtkMenuMerge))
+#define GTK_UI_MANAGER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_UI_MANAGER, GtkUIManager))
 #define GTK_UI_MANAGER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_UI_MANAGER, GtkUIManagerClass))
 #define GTK_IS_UI_MANAGER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_UI_MANAGER))
 #define GTK_IS_UI_MANAGER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), GTK_TYPE_UI_MANAGER))
@@ -75,6 +75,10 @@ struct _GtkUIManagerClass {
 
 GType          gtk_ui_manager_get_type            (void);
 GtkUIManager  *gtk_ui_manager_new                 (void);
+
+void           gtk_ui_manager_set_add_tearoffs    (GtkUIManager   *self,
+						   gboolean        add_tearoffs);
+gboolean       gtk_ui_manager_get_add_tearoffs    (GtkUIManager   *self);
 
 /* these two functions will dirty all merge nodes, as they may need to
  * be connected up to different actions */

@@ -20,6 +20,17 @@ dump_tree (GtkWidget    *button,
 }
 
 static void
+toggle_tearoffs (GtkWidget    *button, 
+		 GtkUIManager *merge)
+{
+  gboolean add_tearoffs;
+
+  add_tearoffs = gtk_ui_manager_get_add_tearoffs (merge);
+  
+  gtk_ui_manager_set_add_tearoffs (merge, !add_tearoffs);
+}
+
+static void
 activate_action (GtkAction *action)
 {
   const gchar *name = gtk_action_get_name (action);
@@ -411,9 +422,13 @@ main (int argc, char **argv)
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
     }
 
+  button = gtk_check_button_new_with_label ("Tearoffs");
+  g_signal_connect (button, "clicked", G_CALLBACK (toggle_tearoffs), merge);
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
   button = gtk_button_new_with_mnemonic ("_Dump Tree");
   g_signal_connect (button, "clicked", G_CALLBACK (dump_tree), merge);
-  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
   view = create_tree_view (merge);
   gtk_table_attach (GTK_TABLE (table), view, 1,2, 0,1,

@@ -38,6 +38,7 @@
 #include "gtkmenu.h"
 #include "gtkmenubar.h"
 #include "gtkseparatormenuitem.h"
+#include "gtktearoffmenuitem.h"
 #include "gtkintl.h"
 
 #undef DEBUG_UI_MANAGER
@@ -87,6 +88,8 @@ struct _GtkUIManagerPrivate
   guint last_merge_id;
 
   guint update_tag;  
+
+  gboolean add_tearoffs;
 };
 
 #define NODE_INFO(node) ((GtkUIManagerNode *)node->data)
@@ -100,16 +103,25 @@ struct _NodeUIReference
 };
 
 static void   gtk_ui_manager_class_init    (GtkUIManagerClass *class);
-static void   gtk_ui_manager_init          (GtkUIManager *merge);
-
+static void   gtk_ui_manager_init          (GtkUIManager      *self);
+static void   gtk_ui_manager_set_property  (GObject         *object,
+					    guint            prop_id,
+					    const GValue    *value,
+					    GParamSpec      *pspec);
+static void   gtk_ui_manager_get_property  (GObject         *object,
+					    guint            prop_id,
+					    GValue          *value,
+					    GParamSpec      *pspec);
 static void   gtk_ui_manager_queue_update  (GtkUIManager *self);
 static void   gtk_ui_manager_dirty_all     (GtkUIManager *self);
 
-static GNode *get_child_node               (GtkUIManager *self, GNode *parent,
+static GNode *get_child_node               (GtkUIManager *self, 
+					    GNode *parent,
 					    const gchar *childname,
 					    gint childname_length,
 					    GtkUIManagerNodeType node_type,
-					    gboolean create, gboolean top);
+					    gboolean create, 
+					    gboolean top);
 static GNode *gtk_ui_manager_get_node      (GtkUIManager *self,
 					    const gchar *path,
 					    GtkUIManagerNodeType node_type,
@@ -129,6 +141,12 @@ enum
   ADD_WIDGET,
   REMOVE_WIDGET,
   LAST_SIGNAL
+};
+
+enum
+{
+  PROP_0,
+  PROP_ADD_TEAROFFS
 };
 
 static guint merge_signals[LAST_SIGNAL] = { 0 };
@@ -174,6 +192,39 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
     merge_node_chunk = g_mem_chunk_create (GtkUIManagerNode, 64,
 					   G_ALLOC_AND_FREE);
 
+  gobject_class->set_property = gtk_ui_manager_set_property;
+  gobject_class->get_property = gtk_ui_manager_get_property;
+
+  /**
+   * GtkUIManager:add-tearoffs:
+   *
+   * The add-tearoffs property controls whether generated menus 
+   * have tearoff menu items. 
+   *
+   * Note that this only affects regular menus. Generated popup 
+   * menus never have tearoff menu items.   
+   *
+   * Since: 2.4
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_ADD_TEAROFFS,
+                                   g_param_spec_boolean ("add_tearoffs",
+							 _("Add tearoffs to menus"),
+							 _("Whether tearoff menu items should be added to menus"),
+                                                         FALSE,
+							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+  
+  /**
+   * GtkUIManager::add-widget:
+   * @merge: a #GtkUIManager
+   * @widget: the added widget
+   *
+   * The add_widget signal is emitted for each generated menubar and toolbar.
+   * It is not emitted for generated popup menus, which can be obtained by 
+   * gtk_ui_manager_get_widget().
+   *
+   * Since: 2.4
+   */
   merge_signals[ADD_WIDGET] =
     g_signal_new ("add_widget",
 		  G_OBJECT_CLASS_TYPE (klass),
@@ -182,6 +233,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 		  g_cclosure_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_WIDGET);
+
   merge_signals[REMOVE_WIDGET] =
     g_signal_new ("remove_widget",
 		  G_OBJECT_CLASS_TYPE (klass),
@@ -209,12 +261,51 @@ gtk_ui_manager_init (GtkUIManager *self)
   self->private_data->action_groups = NULL;
 
   self->private_data->last_merge_id = 0;
+  self->private_data->add_tearoffs = FALSE;
 
 
   merge_id = gtk_ui_manager_next_merge_id (self);
   node = get_child_node (self, NULL, "ui", 4,
 			GTK_UI_MANAGER_ROOT, TRUE, FALSE);
   gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (node), merge_id, 0);
+}
+
+static void
+gtk_ui_manager_set_property (GObject         *object,
+			     guint            prop_id,
+			     const GValue    *value,
+			     GParamSpec      *pspec)
+{
+  GtkUIManager *self = GTK_UI_MANAGER (object);
+ 
+  switch (prop_id)
+    {
+    case PROP_ADD_TEAROFFS:
+      gtk_ui_manager_set_add_tearoffs (self, g_value_get_boolean (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_ui_manager_get_property (GObject         *object,
+			     guint            prop_id,
+			     GValue          *value,
+			     GParamSpec      *pspec)
+{
+  GtkUIManager *self = GTK_UI_MANAGER (object);
+
+  switch (prop_id)
+    {
+    case PROP_ADD_TEAROFFS:
+      g_value_set_boolean (value, self->private_data->add_tearoffs);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 
@@ -235,12 +326,65 @@ gtk_ui_manager_new (void)
 
 
 /**
+ * gtk_ui_manager_get_add_tearoffs:
+ * @self: a #GtkUIManager
+ * 
+ * Returns whether menus generated by this #GtkUIManager
+ * will have tearoff menu items. 
+ * 
+ * Return value: whether tearoff menu items are added
+ *
+ * Since: 2.4
+ **/
+gboolean 
+gtk_ui_manager_get_add_tearoffs (GtkUIManager *self)
+{
+  g_return_val_if_fail (GTK_IS_UI_MANAGER (self), FALSE);
+  
+  return self->private_data->add_tearoffs;
+}
+
+
+/**
+ * gtk_ui_manager_set_add_tearoffs:
+ * @self: a #GtkUIManager
+ * @add_tearoffs: whether tearoff menu items are added
+ * 
+ * Sets the add_tearoffs property, which controls whether menus 
+ * generated by this #GtkUIManager will have tearoff menu items. 
+ *
+ * Note that this only affects regular menus. Generated popup 
+ * menus never have tearoff menu items.
+ *
+ * Since: 2.4
+ **/
+void 
+gtk_ui_manager_set_add_tearoffs (GtkUIManager *self,
+				 gboolean      add_tearoffs)
+{
+  g_return_if_fail (GTK_IS_UI_MANAGER (self));
+
+  add_tearoffs = add_tearoffs != FALSE;
+
+  if (add_tearoffs != self->private_data->add_tearoffs)
+    {
+      self->private_data->add_tearoffs = add_tearoffs;
+      
+      /* dirty all nodes */
+      gtk_ui_manager_dirty_all (self);
+
+      g_object_notify (G_OBJECT (self), "add_tearoffs");
+    }
+}
+
+/**
  * gtk_ui_manager_insert_action_group:
  * @self: a #GtkUIManager object
  * @action_group: the action group to be inserted
  * @pos: the position at which the group will be inserted
  * 
- * Inserts an action group into the list of action groups associated with @self.
+ * Inserts an action group into the list of action groups associated 
+ * with @self.
  *
  * Since: 2.4
  **/
@@ -251,10 +395,12 @@ gtk_ui_manager_insert_action_group (GtkUIManager   *self,
 {
   g_return_if_fail (GTK_IS_UI_MANAGER (self));
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
-  g_return_if_fail (g_list_find (self->private_data->action_groups, action_group) == NULL);
+  g_return_if_fail (g_list_find (self->private_data->action_groups, 
+				 action_group) == NULL);
 
   g_object_ref (action_group);
-  self->private_data->action_groups = g_list_insert (self->private_data->action_groups, action_group, pos);
+  self->private_data->action_groups = 
+    g_list_insert (self->private_data->action_groups, action_group, pos);
 
   /* dirty all nodes, as action bindings may change */
   gtk_ui_manager_dirty_all (self);
@@ -265,7 +411,8 @@ gtk_ui_manager_insert_action_group (GtkUIManager   *self,
  * @self: a #GtkUIManager object
  * @action_group: the action group to be removed
  * 
- * Removes an action group from the list of action groups associated with @self.
+ * Removes an action group from the list of action groups associated 
+ * with @self.
  *
  * Since: 2.4
  **/
@@ -328,11 +475,11 @@ gtk_ui_manager_get_accel_group (GtkUIManager   *self)
  * @self: a #GtkUIManager
  * @path: a path
  * 
- * Looks up a widget by following a path. The path consists of the names specified
- * in the XML description of the UI. separated by '/'. Elements which don't have
- * a name attribute in the XML (e.g. &lt;popup&gt;) can be addressed by their
- * XML element name (e.g. "popup"). The root element (&lt;ui&gt;) can be omitted in 
- * the path.
+ * Looks up a widget by following a path. The path consists of the names 
+ * specified in the XML description of the UI. separated by '/'. Elements which 
+ * don't have a name attribute in the XML (e.g. &lt;popup&gt;) can be addressed 
+ * by their XML element name (e.g. "popup"). The root element (&lt;ui&gt;) can 
+ * be omitted in the path.
  * 
  * Return value: the widget found by following the path, or %NULL if no widget
  *   was found.
@@ -634,7 +781,6 @@ start_element_handler (GMarkupParseContext *context,
 	}
       else if (ctx->state == STATE_MENU && !strcmp (element_name, "menu"))
 	{
-	  ctx->state = STATE_MENU;
 	  ctx->current = get_child_node (self, ctx->current,
 					 node_name, strlen (node_name),
 					 GTK_UI_MANAGER_MENU,
@@ -687,15 +833,15 @@ start_element_handler (GMarkupParseContext *context,
       else if ((ctx->state == STATE_MENU || ctx->state == STATE_TOOLBAR) &&
 	       !strcmp (element_name, "placeholder"))
 	{
-	  if (ctx->state == STATE_MENU)
+	  if (ctx->state == STATE_TOOLBAR)
 	    ctx->current = get_child_node (self, ctx->current,
 					   node_name, strlen (node_name),
-					   GTK_UI_MANAGER_MENU_PLACEHOLDER,
+					   GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER,
 					   TRUE, top);
 	  else
 	    ctx->current = get_child_node (self, ctx->current,
 					   node_name, strlen (node_name),
-					   GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER,
+					   GTK_UI_MANAGER_MENU_PLACEHOLDER,
 					   TRUE, top);
 	  
 	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (ctx->current),
@@ -707,14 +853,14 @@ start_element_handler (GMarkupParseContext *context,
       break;
     case 's':
       if ((ctx->state == STATE_MENU || ctx->state == STATE_TOOLBAR) &&
-	       !strcmp (element_name, "separator"))
+	  !strcmp (element_name, "separator"))
 	{
 	  GNode *node;
 
-	  if (ctx->state == STATE_MENU)
-	    ctx->state = STATE_MENUITEM;
-	  else
+	  if (ctx->state == STATE_TOOLBAR)
 	    ctx->state = STATE_TOOLITEM;
+	  else
+	    ctx->state = STATE_MENUITEM;
 	  node = get_child_node (self, ctx->current,
 				 node_name, strlen (node_name),
 				 GTK_UI_MANAGER_SEPARATOR,
@@ -816,7 +962,7 @@ end_element_handler (GMarkupParseContext *context,
       ctx->current = ctx->current->parent;
       if (NODE_INFO (ctx->current)->type == GTK_UI_MANAGER_ROOT) 
 	ctx->state = STATE_ROOT;
-      /* else, stay in STATE_MENU state */
+      /* else, stay in same state */
       break;
     case STATE_TOOLBAR:
       ctx->current = ctx->current->parent;
@@ -1056,6 +1202,7 @@ find_menu_position (GNode      *node,
 
   g_return_val_if_fail (node != NULL, FALSE);
   g_return_val_if_fail (NODE_INFO (node)->type == GTK_UI_MANAGER_MENU ||
+			NODE_INFO (node)->type == GTK_UI_MANAGER_POPUP ||
 			NODE_INFO (node)->type == GTK_UI_MANAGER_MENU_PLACEHOLDER ||
 			NODE_INFO (node)->type == GTK_UI_MANAGER_MENUITEM ||
 			NODE_INFO (node)->type == GTK_UI_MANAGER_SEPARATOR,
@@ -1065,20 +1212,25 @@ find_menu_position (GNode      *node,
   if (node->prev == NULL)
     {
       GNode *parent;
+      GList *siblings;
 
       parent = node->parent;
       switch (NODE_INFO (parent)->type)
 	{
 	case GTK_UI_MANAGER_MENUBAR:
+	case GTK_UI_MANAGER_POPUP:
 	  menushell = NODE_INFO (parent)->proxy;
 	  pos = 0;
 	  break;
 	case GTK_UI_MANAGER_MENU:
-	case GTK_UI_MANAGER_POPUP:
 	  menushell = NODE_INFO (parent)->proxy;
 	  if (GTK_IS_MENU_ITEM (menushell))
 	    menushell = gtk_menu_item_get_submenu (GTK_MENU_ITEM (menushell));
-	  pos = 0;
+	  siblings = gtk_container_get_children (GTK_CONTAINER (menushell));
+	  if (siblings != NULL && GTK_IS_TEAROFF_MENU_ITEM (siblings->data))
+	    pos = 1;
+	  else
+	    pos = 0;
 	  break;
 	case GTK_UI_MANAGER_MENU_PLACEHOLDER:
 	  menushell = gtk_widget_get_parent (NODE_INFO (parent)->proxy);
@@ -1186,7 +1338,8 @@ find_toolbar_position (GNode      *node,
 
 static void
 update_node (GtkUIManager *self, 
-	     GNode        *node)
+	     GNode        *node,
+	     gboolean      add_tearoffs)
 {
   GtkUIManagerNode *info;
   GNode *child;
@@ -1194,7 +1347,7 @@ update_node (GtkUIManager *self,
 #ifdef DEBUG_UI_MANAGER
   GList *tmp;
 #endif
-
+  
   g_return_if_fail (node != NULL);
   g_return_if_fail (NODE_INFO (node) != NULL);
 
@@ -1212,7 +1365,7 @@ update_node (GtkUIManager *self,
   g_print (")\n");
 #endif
 
-  if (NODE_INFO (node)->dirty)
+  if (info->dirty)
     {
       const gchar *action_name;
       NodeUIReference *ref;
@@ -1228,7 +1381,7 @@ update_node (GtkUIManager *self,
       action_name = g_quark_to_string (ref->action_quark);
       action = get_action_by_name (self, action_name);
 
-      NODE_INFO (node)->dirty = FALSE;
+      info->dirty = FALSE;
 
       /* Check if the node doesn't have an action and must have an action */
       if (action == NULL &&
@@ -1243,11 +1396,21 @@ update_node (GtkUIManager *self,
 	}
 
       /* If the widget already has a proxy and the action hasn't changed, then
-       * we don't have to do anything.
+       * we only have to update the tearoff menu items.
        */
-      if (info->proxy != NULL &&
-	  action == info->action)
+      if (info->proxy != NULL && action == info->action)
 	{
+	  if (info->type == GTK_UI_MANAGER_MENU) 
+	    {
+	      GtkWidget *menu;
+	      GList *siblings;
+
+	      menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
+	      siblings = gtk_container_get_children (GTK_CONTAINER (menu));
+	      if (siblings != NULL && GTK_IS_TEAROFF_MENU_ITEM (siblings->data))
+		g_object_set (G_OBJECT (siblings->data), "visible", add_tearoffs, 0);
+	    }
+
 	  goto recurse_children;
 	}
       
@@ -1278,6 +1441,8 @@ update_node (GtkUIManager *self,
 	case GTK_UI_MANAGER_MENU:
 	  {
 	    GtkWidget *prev_submenu = NULL;
+	    GtkWidget *menu;
+	    GList *siblings;
 	    /* remove the proxy if it is of the wrong type ... */
 	    if (info->proxy &&  G_OBJECT_TYPE (info->proxy) !=
 		GTK_ACTION_GET_CLASS (info->action)->menu_item_type)
@@ -1286,7 +1451,7 @@ update_node (GtkUIManager *self,
 		if (prev_submenu)
 		  {
 		    g_object_ref (prev_submenu);
-		    gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy),NULL);
+		    gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), NULL);
 		  }
 		gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
 				      info->proxy);
@@ -1300,24 +1465,27 @@ update_node (GtkUIManager *self,
 		
 		if (find_menu_position (node, &menushell, &pos))
 		  {
-		    GtkWidget *menu;
 		    info->proxy = gtk_action_create_menu_item (info->action);
 		    menu = gtk_menu_new ();
+		    GtkWidget *tearoff = gtk_tearoff_menu_item_new ();
+		    gtk_menu_shell_append (GTK_MENU_SHELL (menu), tearoff);
 		    gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), menu);
 		    gtk_menu_set_accel_group (GTK_MENU (menu), self->private_data->accel_group);
 		    gtk_menu_shell_insert (GTK_MENU_SHELL (menushell), info->proxy, pos);
 		  }
 	      }
 	    else
-	      {
-		gtk_action_connect_proxy (info->action, info->proxy);
-	      }
+	      gtk_action_connect_proxy (info->action, info->proxy);
 	    if (prev_submenu)
 	      {
 		gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy),
 					   prev_submenu);
 		g_object_unref (prev_submenu);
 	      }
+	    menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
+	    siblings = gtk_container_get_children (GTK_CONTAINER (menu));
+	    if (siblings != NULL && GTK_IS_TEAROFF_MENU_ITEM (siblings->data))
+	      g_object_set (G_OBJECT (siblings->data), "visible", add_tearoffs, 0);
 	  }
 	  break;
 	case GTK_UI_MANAGER_UNDECIDED:
@@ -1511,7 +1679,7 @@ update_node (GtkUIManager *self,
 
       current = child;
       child = current->next;
-      update_node (self, current);
+      update_node (self, current, add_tearoffs && (info->type != GTK_UI_MANAGER_POPUP));
     }
 
   /* handle cleanup of dead nodes */
@@ -1543,8 +1711,8 @@ do_updates (GtkUIManager *self)
    *    the proxy is reconnected to the new action (or a new proxy widget
    *    is created and added to the parent container).
    */
-
-  update_node (self, self->private_data->root_node);
+  update_node (self, self->private_data->root_node, 
+	       self->private_data->add_tearoffs);
 
   self->private_data->update_tag = 0;
 
@@ -1622,7 +1790,7 @@ print_node (GtkUIManager *self,
 {
   GtkUIManagerNode *mnode;
   GNode *child;
-  
+
   mnode = node->data;
 
   g_string_append_printf (buffer, open_tag_format[mnode->type],
