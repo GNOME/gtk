@@ -1,3 +1,11 @@
+Fri Feb  2 15:09:51 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/fnmatch.c (FOLD): Fix problem with passing signed
+	chars to isupper() / tolower().
+
+	* examples/packer/pack.c: Add GINT_TO_POINTER, GPOINTER_TO_INT
+	to clear up 64-bit warnings. (#567)
+
 Fri Feb  2 13:38:21 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmain.c (gtk_propagate_event): Fix some reference

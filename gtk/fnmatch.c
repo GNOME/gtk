@@ -66,7 +66,7 @@ fnmatch (pattern, string, flags)
   register char c;
 
 /* Note that this evalutes C many times.  */
-#define FOLD(c)	((flags & FNM_CASEFOLD) && isupper (c) ? tolower (c) : (c))
+#define FOLD(c)	((flags & FNM_CASEFOLD) && isupper ((unsigned char )(c)) ? tolower ((unsigned char)(c)) : (c))
 
   while ((c = *p++) != '\0')
     {
