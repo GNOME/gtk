@@ -1551,7 +1551,7 @@ gdk_window_get_origin (GdkWindow *window,
 		       gint      *x,
 		       gint      *y)
 {
-  g_return_val_if_fail (window != NULL, 0);
+  g_return_val_if_fail (window != NULL, FALSE);
   
   if (x)
     *x = GDK_DRAWABLE_IMPL_FBDATA (window)->abs_x;

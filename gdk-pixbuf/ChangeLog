@@ -1,3 +1,10 @@
+2003-03-08  Matthias Clasen  <maclas@gmx.de>
+
+	Bug #107664 continued: 
+	
+	* io-xpm.c (find_color): Fix 0/FALSE confusion
+	* gdk-pixbuf.c (gdk_pixbuf_get_has_alpha): Fix -1/gboolean confusion.
+
 2003-03-06  Matthias Clasen  <maclas@gmx.de>
 
 	* io-gif.c (gif_read): Fix 0/FALSE confusion (#107664, Morten Welinder)

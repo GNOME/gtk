@@ -992,7 +992,7 @@ targets_sort_func (gconstpointer a, gconstpointer b)
 }
 
 /* Check if given (sorted) list is in the targets table */
-static gboolean
+static gint
 motif_target_table_check (GdkDisplay *display,
 			  GList      *sorted)
 {
@@ -1039,7 +1039,7 @@ motif_add_to_target_table (GdkDisplay *display,
       targets = targets->next;
     }
 
-  /* First check if it is their already */
+  /* First check if it is there already */
 
   if (display_x11->motif_target_lists)
     index = motif_target_table_check (display, sorted);
@@ -1062,7 +1062,7 @@ motif_add_to_target_table (GdkDisplay *display,
       /* Check again, in case it was added in the meantime */
       
       if (display_x11->motif_target_lists)
-	index =  motif_target_table_check (display, sorted);
+	index = motif_target_table_check (display, sorted);
 
       if (index < 0)
 	{

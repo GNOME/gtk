@@ -481,7 +481,7 @@ _gtk_text_iter_get_indexable_segment (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
 
-  g_return_val_if_fail (iter != NULL, 0);
+  g_return_val_if_fail (iter != NULL, NULL);
 
   real = gtk_text_iter_make_real (iter);
 
@@ -500,7 +500,7 @@ _gtk_text_iter_get_any_segment (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
 
-  g_return_val_if_fail (iter != NULL, 0);
+  g_return_val_if_fail (iter != NULL, NULL);
 
   real = gtk_text_iter_make_real (iter);
 
@@ -519,7 +519,7 @@ _gtk_text_iter_get_segment_byte (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
 
-  g_return_val_if_fail (iter != NULL, 0);
+  g_return_val_if_fail (iter != NULL, NULL);
 
   real = gtk_text_iter_make_real (iter);
 
@@ -538,7 +538,7 @@ _gtk_text_iter_get_segment_char (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
 
-  g_return_val_if_fail (iter != NULL, 0);
+  g_return_val_if_fail (iter != NULL, NULL);
 
   real = gtk_text_iter_make_real (iter);
 
@@ -559,7 +559,7 @@ _gtk_text_iter_get_text_line (const GtkTextIter *iter)
 {
   const GtkTextRealIter *real;
 
-  g_return_val_if_fail (iter != NULL, 0);
+  g_return_val_if_fail (iter != NULL, NULL);
 
   real = (const GtkTextRealIter*)iter;
 
@@ -573,7 +573,7 @@ _gtk_text_iter_get_btree (const GtkTextIter *iter)
 {
   const GtkTextRealIter *real;
 
-  g_return_val_if_fail (iter != NULL, 0);
+  g_return_val_if_fail (iter != NULL, NULL);
 
   real = (const GtkTextRealIter*)iter;
 
