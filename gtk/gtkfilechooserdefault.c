@@ -141,6 +141,10 @@ static void tree_selection_changed     (GtkTreeSelection          *tree_selectio
 					GtkFileChooserImplDefault *impl);
 static void list_selection_changed     (GtkTreeSelection          *tree_selection,
 					GtkFileChooserImplDefault *impl);
+static void list_row_activated         (GtkTreeView               *tree_view,
+					GtkTreePath               *path,
+					GtkTreeViewColumn         *column,
+					GtkFileChooserImplDefault *impl);
 static void entry_activate             (GtkEntry                  *entry,
 					GtkFileChooserImplDefault *impl);
 
@@ -333,9 +337,9 @@ create_filter (GtkFileChooserImplDefault *impl)
   return impl->filter_alignment;
 }
 
-/* Creates the widgets for the directory tree */
+/* Creates the widgets for the folder tree */
 static GtkWidget *
-create_directory_tree (GtkFileChooserImplDefault *impl)
+create_folder_tree (GtkFileChooserImplDefault *impl)
 {
   GtkTreeSelection *selection;
 
@@ -381,7 +385,7 @@ create_directory_tree (GtkFileChooserImplDefault *impl)
   return impl->tree_scrollwin;
 }
 
-/* Creates the widgets for the directory tree */
+/* Creates the widgets for the folder tree */
 static GtkWidget *
 create_file_list (GtkFileChooserImplDefault *impl)
 {
@@ -403,6 +407,8 @@ create_file_list (GtkFileChooserImplDefault *impl)
   impl->list = gtk_tree_view_new ();
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (impl->list), TRUE);
   gtk_container_add (GTK_CONTAINER (impl->list_scrollwin), impl->list);
+  g_signal_connect (impl->list, "row_activated",
+		    G_CALLBACK (list_row_activated), impl);
   gtk_widget_show (impl->list);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
@@ -531,9 +537,9 @@ gtk_file_chooser_impl_default_constructor (GType                  type,
   gtk_paned_set_position (GTK_PANED (hpaned), 200); /* FIXME: this sucks */
   gtk_widget_show (hpaned);
 
-  /* Directory tree */
+  /* Folder tree */
 
-  widget = create_directory_tree (impl);
+  widget = create_folder_tree (impl);
   gtk_paned_add1 (GTK_PANED (hpaned), widget);
 
   /* File list */
@@ -1393,6 +1399,41 @@ list_selection_changed (GtkTreeSelection          *selection,
   check_preview_change (impl);
 
   g_signal_emit_by_name (impl, "selection-changed", 0);
+}
+
+/* Callback used when a row in the file list is activated */
+static void
+list_row_activated (GtkTreeView               *tree_view,
+		    GtkTreePath               *path,
+		    GtkTreeViewColumn         *column,
+		    GtkFileChooserImplDefault *impl)
+{
+  GtkTreeIter iter, child_iter;
+  const GtkFileInfo *info;
+
+  if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->sort_model), &iter, path))
+    return;
+
+  gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model, &child_iter, &iter);
+
+  info = _gtk_file_system_model_get_info (impl->list_model, &child_iter);
+
+  if (gtk_file_info_get_is_folder (info))
+    {
+      const GtkFilePath *file_path;
+      char *uri;
+
+      file_path = _gtk_file_system_model_get_path (impl->list_model, &child_iter);
+      uri = gtk_file_system_path_to_uri (impl->file_system, file_path);
+
+      gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER (impl), uri);
+
+      g_free (uri);
+
+      return;
+    }
+
+  g_signal_emit_by_name (impl, "file-activated");
 }
 
 static void

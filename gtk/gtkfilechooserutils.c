@@ -52,6 +52,8 @@ static void           delegate_selection_changed      (GtkFileChooser    *choose
 						       gpointer           data);
 static void           delegate_update_preview         (GtkFileChooser    *chooser,
 						       gpointer           data);
+static void           delegate_file_activated         (GtkFileChooser    *chooser,
+						       gpointer           data);
 
 /**
  * _gtk_file_chooser_install_properties:
@@ -156,6 +158,8 @@ _gtk_file_chooser_set_delegate (GtkFileChooser *receiver,
 		    G_CALLBACK (delegate_selection_changed), receiver);
   g_signal_connect (delegate, "update-preview",
 		    G_CALLBACK (delegate_update_preview), receiver);
+  g_signal_connect (delegate, "file-activated",
+		    G_CALLBACK (delegate_file_activated), receiver);
 }
 
 static GtkFileChooser *
@@ -279,4 +283,11 @@ delegate_update_preview (GtkFileChooser    *chooser,
 			 gpointer           data)
 {
   g_signal_emit_by_name (data, "update-preview");
+}
+
+static void
+delegate_file_activated (GtkFileChooser    *chooser,
+			 gpointer           data)
+{
+  g_signal_emit_by_name (data, "file-activated");
 }

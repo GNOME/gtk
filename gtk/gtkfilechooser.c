@@ -80,6 +80,13 @@ gtk_file_chooser_class_init (gpointer g_iface)
 		NULL, NULL,
 		g_cclosure_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);
+  g_signal_new ("file-activated",
+		iface_type,
+		G_SIGNAL_RUN_LAST,
+		G_STRUCT_OFFSET (GtkFileChooserIface, file_activated),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__VOID,
+		G_TYPE_NONE, 0);
   
   g_object_interface_install_property (g_iface,
 				       g_param_spec_enum ("action",

@@ -62,6 +62,7 @@ struct _GtkFileChooserIface
   void (*current_folder_changed) (GtkFileChooser *chooser);
   void (*selection_changed)      (GtkFileChooser *chooser);
   void (*update_preview)         (GtkFileChooser *chooser);
+  void (*file_activated)         (GtkFileChooser *chooser); 
 };
 
 GtkFileSystem *_gtk_file_chooser_get_file_system         (GtkFileChooser    *chooser);
