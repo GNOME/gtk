@@ -1,3 +1,9 @@
+Mon Aug 17 03:47:55 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (gtk_init): feature a new commandline option
+	--gtk-with-module=<module> that allows additional loading and
+	initialization of modules (e.g. GLE).
+
 Mon Aug 17 01:40:00 1998  Tim Janik  <timj@gtk.org>
 
 	* configure.in: version bump to 1.1.1, binary age 0, interface age 0.

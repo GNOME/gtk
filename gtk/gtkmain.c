@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <gmodule.h>
 #include "gtkbutton.h"
 #include "gtkfeatures.h"
 #include "gtkhscrollbar.h"
@@ -233,6 +234,7 @@ void
 gtk_init (int	 *argc,
 	  char ***argv)
 {
+  GSList *gtk_modinit_funcs = NULL;
   gchar *current_locale;
 
   if (gtk_initialized)
@@ -306,6 +308,48 @@ gtk_init (int	 *argc,
 		  i += 1;
 		}
 	      (*argv)[i] = NULL;
+	    }
+	  else if (strcmp ("--gtk-with-module", (*argv)[i]) == 0 ||
+		   strncmp ("--gtk-with-module=", (*argv)[i], 18) == 0)
+	    {
+	      GModule *module = NULL;
+	      GtkModuleInitFunc modinit_func = NULL;
+	      gchar *module_name = (*argv)[i] + 17;
+
+	      if (*module_name == '=')
+		module_name++;
+	      else
+		{
+		  (*argv)[i] = NULL;
+		  i += 1;
+		  module_name = (*argv)[i];
+		}
+	      if (module_name[0] == '/' ||
+		  (module_name[0] == 'l' &&
+		   module_name[1] == 'i' &&
+		   module_name[2] == 'b'))
+		module_name = g_strdup (module_name);
+	      else
+		module_name = g_strconcat ("lib", module_name, ".so");
+	      (*argv)[i] = NULL;
+	      
+	      if (g_module_supported ())
+		{
+		  module = g_module_open (module_name, G_MODULE_BIND_LAZY);
+		  if (module &&
+		      g_module_symbol (module, "gtk_module_init", (gpointer*) &modinit_func) &&
+		      modinit_func)
+		    gtk_modinit_funcs = g_slist_prepend (gtk_modinit_funcs, modinit_func);
+		}
+	      if (!modinit_func)
+		{
+		  g_warning ("Failed to load module \"%s\": %s",
+			     module ? g_module_name (module) : module_name,
+			     g_module_error ());
+		  if (module)
+		    g_module_close (module);
+		}
+	      g_free (module_name);
 	    }
 	  else if (strcmp ("--g-fatal-warnings", (*argv)[i]) == 0)
 	    {
@@ -425,6 +469,25 @@ gtk_init (int	 *argc,
   /* Set the 'initialized' flag.
    */
   gtk_initialized = TRUE;
+
+  /* initialize modules
+   */
+  if (gtk_modinit_funcs)
+    {
+      GSList *slist;
+
+      slist = gtk_modinit_funcs;
+      while (slist)
+	{
+	  GtkModuleInitFunc modinit;
+
+	  modinit = slist->data;
+	  modinit (argc, argv);
+	  slist = slist->next;
+	}
+      
+      g_slist_free (gtk_modinit_funcs);
+    }
 }
 
 void

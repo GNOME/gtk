@@ -34,6 +34,8 @@ extern "C" {
 #define GTK_PRIORITY_DEFAULT	 0
 #define GTK_PRIORITY_LOW	10
 
+typedef void	(*GtkModuleInitFunc)	(gint		*argc,
+					 gchar	      ***argv);
 typedef gint	(*GtkKeySnoopFunc)	(GtkWidget	*grab_widget,
 					 GdkEventKey	*event,
 					 gpointer	 func_data);
