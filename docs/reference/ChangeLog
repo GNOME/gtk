@@ -1,4 +1,8 @@
 2001-11-28  Matthias Clasen  <matthiasc@poet.de>
+	
+	gdk/tmpl/windows.sgml, gdk/tmpl/general.sgml,
+	gdk/tmpl/pixmaps.sgml, gdk/tmpl/drawing.sgml,
+	gdk/tmpl/gcs.sgml: Updates. 
 
 	* gdk/tmpl/cursors.sgml: Document GdkCursor and standard cursors.
 
