@@ -23,7 +23,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtkobject.h>
-
+#include <gtk/gtkmarshal.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -167,10 +167,6 @@ guint  gtk_signal_handler_pending_by_func (GtkObject	       *object,
 					   GtkSignalFunc	func,
 					   gpointer		data);
 void   gtk_signal_handlers_destroy	  (GtkObject	       *object);
-void   gtk_signal_default_marshaller	  (GtkObject	       *object,
-					   GtkSignalFunc	func,
-					   gpointer		func_data,
-					   GtkArg	       *args);
 void   gtk_signal_set_funcs		  (GtkSignalMarshal	marshal_func,
 					   GtkSignalDestroy	destroy_func);
 
