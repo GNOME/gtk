@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-17 04:09+0100\n"
-"PO-Revision-Date: 2004-11-17 11:29+0100\n"
+"POT-Creation-Date: 2004-11-24 12:01+0100\n"
+"PO-Revision-Date: 2004-11-24 13:04+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -236,7 +236,7 @@ msgid "A unique name for the action."
 msgstr "Jedinečný název akce."
 
 #: gtk/gtkaction.c:204 gtk/gtkbutton.c:220 gtk/gtkexpander.c:206
-#: gtk/gtkframe.c:127 gtk/gtklabel.c:315 gtk/gtktoolbutton.c:181
+#: gtk/gtkframe.c:127 gtk/gtklabel.c:318 gtk/gtktoolbutton.c:181
 msgid "Label"
 msgstr "Popis"
 
@@ -671,12 +671,12 @@ msgid ""
 "widget"
 msgstr "Text widgetu popisu v tlačítku, pokud tlačítko obsahuje widget popisu"
 
-#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:214 gtk/gtklabel.c:336
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:214 gtk/gtklabel.c:339
 #: gtk/gtktoolbutton.c:188
 msgid "Use underline"
 msgstr "Používat podtržítko"
 
-#: gtk/gtkbutton.c:229 gtk/gtkexpander.c:215 gtk/gtklabel.c:337
+#: gtk/gtkbutton.c:229 gtk/gtkexpander.c:215 gtk/gtklabel.c:340
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1050,7 +1050,7 @@ msgstr "Značky"
 msgid "Marked up text to render"
 msgstr "Zobrazovaný text se značkami"
 
-#: gtk/gtkcellrenderertext.c:220 gtk/gtklabel.c:322
+#: gtk/gtkcellrenderertext.c:220 gtk/gtklabel.c:325
 msgid "Attributes"
 msgstr "Atributy"
 
@@ -1209,7 +1209,7 @@ msgstr ""
 "jako pomocnou informaci při vykreslování textu. Pokud tomuto parametru "
 "nerozumíte, pravděpodobně jej nepotřebujete."
 
-#: gtk/gtkcellrenderertext.c:407 gtk/gtklabel.c:428 gtk/gtkprogressbar.c:242
+#: gtk/gtkcellrenderertext.c:407 gtk/gtklabel.c:431 gtk/gtkprogressbar.c:242
 msgid "Ellipsize"
 msgstr "Zkrátit"
 
@@ -1683,19 +1683,19 @@ msgstr "Okraj plochy s akcemi"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Šířka okraje okolo tlačítek v dolní části dialogu"
 
-#: gtk/gtkentry.c:485 gtk/gtklabel.c:393
+#: gtk/gtkentry.c:485 gtk/gtklabel.c:396
 msgid "Cursor Position"
 msgstr "Pozice kurzoru"
 
-#: gtk/gtkentry.c:486 gtk/gtklabel.c:394
+#: gtk/gtkentry.c:486 gtk/gtklabel.c:397
 msgid "The current position of the insertion cursor in chars"
 msgstr "Aktuální pozice kurzoru pro vkládání ve znacích"
 
-#: gtk/gtkentry.c:495 gtk/gtklabel.c:403
+#: gtk/gtkentry.c:495 gtk/gtklabel.c:406
 msgid "Selection Bound"
 msgstr "Okraj výběru"
 
-#: gtk/gtkentry.c:496 gtk/gtklabel.c:404
+#: gtk/gtkentry.c:496 gtk/gtklabel.c:407
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Pozice druhého konce výběru od kurzoru ve znacích"
@@ -1863,11 +1863,11 @@ msgstr "Jestli byl rozbalovač otevřen a zobrazuje widget potomka"
 msgid "Text of the expander's label"
 msgstr "Text popisku rozbalovače"
 
-#: gtk/gtkexpander.c:222 gtk/gtklabel.c:329
+#: gtk/gtkexpander.c:222 gtk/gtklabel.c:332
 msgid "Use markup"
 msgstr "Používat značky"
 
-#: gtk/gtkexpander.c:223 gtk/gtklabel.c:330
+#: gtk/gtkexpander.c:223 gtk/gtklabel.c:333
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Text popisu obsahuje značky XML. Viz pango_parse_markup()"
 
@@ -2000,11 +2000,11 @@ msgstr "Šířka ve znacích"
 msgid "The desired width of the button widget, in characters."
 msgstr "Požadovaná šířka widgetu tlačítka ve znacích."
 
-#: gtk/gtkfilechooserdefault.c:599
+#: gtk/gtkfilechooserdefault.c:609
 msgid "Default file chooser backend"
 msgstr "Implicitní backend výběru souborů"
 
-#: gtk/gtkfilechooserdefault.c:600
+#: gtk/gtkfilechooserdefault.c:610
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Název backendu GtkFileChooser, který používat implicitně"
 
@@ -2355,19 +2355,19 @@ msgstr "Obrazovka"
 msgid "The screen where this window will be displayed"
 msgstr "Obrazovka, kde se toto okno zobrazí"
 
-#: gtk/gtklabel.c:316
+#: gtk/gtklabel.c:319
 msgid "The text of the label"
 msgstr "Text popisu"
 
-#: gtk/gtklabel.c:323
+#: gtk/gtklabel.c:326
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Seznam atributů stylu, které použít na text popisu"
 
-#: gtk/gtklabel.c:344 gtk/gtktexttag.c:376 gtk/gtktextview.c:594
+#: gtk/gtklabel.c:347 gtk/gtktexttag.c:376 gtk/gtktextview.c:594
 msgid "Justification"
 msgstr "Zarovnání"
 
-#: gtk/gtklabel.c:345
+#: gtk/gtklabel.c:348
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -2376,50 +2376,50 @@ msgstr ""
 "Zarovnaní řádků v textu relativně k sobe navzájem. Toto NEOVLIVŇUJE "
 "zarovnání popisu v jeho přiřazeném místu. Takovou funkci plní GtkMisc::xalign"
 
-#: gtk/gtklabel.c:353
+#: gtk/gtklabel.c:356
 msgid "Pattern"
 msgstr "Vzorek"
 
-#: gtk/gtklabel.c:354
+#: gtk/gtklabel.c:357
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
 msgstr ""
 "Řetězec se znaky _ v pozicích odpovídajících znakům v textu, které podtrhnout"
 
-#: gtk/gtklabel.c:361
+#: gtk/gtklabel.c:364
 msgid "Line wrap"
 msgstr "Zalamovaní řádků"
 
-#: gtk/gtklabel.c:362
+#: gtk/gtklabel.c:365
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Je-li nastaveno, zalamovat řádky, pokud bude text moc široký"
 
-#: gtk/gtklabel.c:368
+#: gtk/gtklabel.c:371
 msgid "Selectable"
 msgstr "Vybratelný"
 
-#: gtk/gtklabel.c:369
+#: gtk/gtklabel.c:372
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Jestli je možné vybrat text v popisu myší"
 
-#: gtk/gtklabel.c:375
+#: gtk/gtklabel.c:378
 msgid "Mnemonic key"
 msgstr "Klávesová zkratka"
 
-#: gtk/gtklabel.c:376
+#: gtk/gtklabel.c:379
 msgid "The mnemonic accelerator key for this label"
 msgstr "Mnemonická klávesová zkratka pro tento popis"
 
-#: gtk/gtklabel.c:384
+#: gtk/gtklabel.c:387
 msgid "Mnemonic widget"
 msgstr "Widget akcelerátoru"
 
-#: gtk/gtklabel.c:385
+#: gtk/gtklabel.c:388
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "Widget aktivovaný při stisku klávesové zkratky popisu"
 
-#: gtk/gtklabel.c:429
+#: gtk/gtklabel.c:432
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string, if at all"
@@ -2427,21 +2427,29 @@ msgstr ""
 "Preferované místo, kde zkrátit řetězec, pokud popisek nemá dost místa pro "
 "zobrazení celého řetězce, pokud vůbec něčeho"
 
-#: gtk/gtklabel.c:446
+#: gtk/gtklabel.c:449
 msgid "Width In Chararacters"
 msgstr "Šířka ve znacích"
 
-#: gtk/gtklabel.c:447
+#: gtk/gtklabel.c:450
 msgid "The desired width of the label, in characters"
 msgstr "Požadovaná šířka popisku ve znacích"
 
-#: gtk/gtklabel.c:467
+#: gtk/gtklabel.c:470
 msgid "Single Line Mode"
 msgstr "Režim jednoho řádku"
 
-#: gtk/gtklabel.c:468
+#: gtk/gtklabel.c:471
 msgid "Whether the label is in single line mode"
 msgstr "Jestli je popisek v režimu jednoho řádku"
+
+#: gtk/gtklabel.c:488
+msgid "Angle"
+msgstr "Úhel"
+
+#: gtk/gtklabel.c:489
+msgid "Angle at which the label is rotated"
+msgstr "Úhel, o který je popisek rotován"
 
 #: gtk/gtklayout.c:635 gtk/gtkviewport.c:136
 msgid "Horizontal adjustment"
