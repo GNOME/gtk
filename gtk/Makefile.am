@@ -347,7 +347,6 @@ INCLUDES = \
 	@GTK_DEBUG_FLAGS@			\
 	@GTK_XIM_FLAGS@				\
 	@GTK_LOCALE_FLAGS@			\
-	@GTK_THREAD_FLAGS@			\
 	@GLIB_CFLAGS@				\
 	@x_cflags@
 

@@ -67,7 +67,6 @@ AC_ARG_ENABLE(xim, [  --enable-xim            support XIM [default=yes]],
 AC_ARG_WITH(locale, [  --with-locale=LOCALE    locale name you want to use ])
 
 AC_ARG_WITH(xinput, [  --with-xinput=[no/gxi/xfree] support XInput ])
-AC_ARG_WITH(threads, [  --with-threads=[posix] support threading ])
 
 if test "x$enable_debug" = "xyes"; then
   test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
@@ -445,7 +444,6 @@ AC_SUBST(GDK_WLIBS)
 AC_SUBST(GTK_DEBUG_FLAGS)
 AC_SUBST(GTK_XIM_FLAGS)
 AC_SUBST(GTK_LOCALE_FLAGS)
-AC_SUBST(GTK_THREAD_FLAGS)
 
 AC_OUTPUT([
 Makefile

@@ -1,3 +1,9 @@
+1998-12-15  Jeff Garzik  <jgarzik@pobox.com>
+
+	* configure.in, gdk/Makefile.am, gtk/Makefile.am:
+	Removed last remaining thread-related configure bits 
+	that have been moved into GLib.
+
 1998-12-15  Elliot Lee  <sopwith@bogus.cuc.ml.org>
 
 	* gdk/gdkevents.c: Use G_IO_ERR|G_IO_HUP|G_IO_NVAL
