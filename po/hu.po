@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-09 12:38+0200\n"
-"PO-Revision-Date: 2004-09-09 16:33+0200\n"
-"Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
+"POT-Creation-Date: 2004-09-17 04:06+0200\n"
+"PO-Revision-Date: 2004-09-17 11:28+0200\n"
+"Last-Translator: Laszlo Dvornik <dvornik@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -251,12 +251,12 @@ msgstr "A GIF-kép csonkolódott vagy nem teljes."
 msgid "The GIF image format"
 msgstr "GIF képformátum"
 
-#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:332
-#: gdk-pixbuf/io-ico.c:395 gdk-pixbuf/io-ico.c:425
+#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:340
+#: gdk-pixbuf/io-ico.c:403 gdk-pixbuf/io-ico.c:433
 msgid "Not enough memory to load icon"
 msgstr "Nincs elég memória az ikon betöltéséhez"
 
-#: gdk-pixbuf/io-ico.c:256
+#: gdk-pixbuf/io-ico.c:256 gdk-pixbuf/io-ico.c:330
 msgid "Invalid header in icon"
 msgstr "Érvénytelen fejléc az ikonban"
 
@@ -268,32 +268,32 @@ msgstr "Az ikon szélessége nulla"
 msgid "Icon has zero height"
 msgstr "Az ikon magassága nulla"
 
-#: gdk-pixbuf/io-ico.c:347
+#: gdk-pixbuf/io-ico.c:355
 msgid "Compressed icons are not supported"
 msgstr "Tömörített ikonok nincsenek támogatva"
 
-#: gdk-pixbuf/io-ico.c:380
+#: gdk-pixbuf/io-ico.c:388
 msgid "Unsupported icon type"
 msgstr "Nem támogatott ikontípus"
 
-#: gdk-pixbuf/io-ico.c:474
+#: gdk-pixbuf/io-ico.c:482
 msgid "Not enough memory to load ICO file"
 msgstr "Nincs elég memória az ICO-fájl betöltéséhez"
 
-#: gdk-pixbuf/io-ico.c:939
+#: gdk-pixbuf/io-ico.c:947
 msgid "Image too large to be saved as ICO"
 msgstr "A kép túl nagy ICO formátumba mentéshez"
 
-#: gdk-pixbuf/io-ico.c:950
+#: gdk-pixbuf/io-ico.c:958
 msgid "Cursor hotspot outside image"
 msgstr ""
 
-#: gdk-pixbuf/io-ico.c:973
+#: gdk-pixbuf/io-ico.c:981
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
 msgstr "Nem támogatott mélység ICO-fájlnál: %d"
 
-#: gdk-pixbuf/io-ico.c:1202
+#: gdk-pixbuf/io-ico.c:1210
 msgid "The ICO image format"
 msgstr "ICO képformátum"
 
@@ -315,12 +315,12 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:941
-#: gdk-pixbuf/io-jpeg.c:950
+#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:943
+#: gdk-pixbuf/io-jpeg.c:952
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Nem lehet memóriát kiosztani a JPEG fájl betöltéséhez"
 
-#: gdk-pixbuf/io-jpeg.c:893
+#: gdk-pixbuf/io-jpeg.c:894
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -329,7 +329,7 @@ msgstr ""
 "A JPEG-minőség értékének 0 és 100 között kell lennie, a(z) '%s' értéket nem "
 "lehet feldolgozni."
 
-#: gdk-pixbuf/io-jpeg.c:908
+#: gdk-pixbuf/io-jpeg.c:909
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -337,7 +337,7 @@ msgstr ""
 "A JPEG-minőség értékének 0 és 100 között kell lennie, a(z) '%d' érték nem "
 "megengedett."
 
-#: gdk-pixbuf/io-jpeg.c:1069
+#: gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
 msgstr "JPEG képformátum"
 
@@ -693,26 +693,30 @@ msgid "XPM file has image height <= 0"
 msgstr "Az XPM-fájl képmagassága <= 0"
 
 #: gdk-pixbuf/io-xpm.c:1253
-msgid "XPM file has invalid number of colors"
-msgstr "Az XPM-fájl színeinek száma érvénytelen"
-
-#: gdk-pixbuf/io-xpm.c:1261
 msgid "XPM has invalid number of chars per pixel"
 msgstr "Az XPM-fájl képpontonkénti karaktereinek száma érvénytelen"
 
-#: gdk-pixbuf/io-xpm.c:1279
+#: gdk-pixbuf/io-xpm.c:1260
+msgid "XPM file has invalid number of colors"
+msgstr "Az XPM-fájl színeinek száma érvénytelen"
+
+#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281
+msgid "Cannot allocate memory for loading XPM image"
+msgstr "Nem lehet memóriát kiosztani az XPM-kép betöltéséhez"
+
+#: gdk-pixbuf/io-xpm.c:1295
 msgid "Can't read XPM colormap"
 msgstr "Nem lehet olvasni az XPM-színtérképet"
 
-#: gdk-pixbuf/io-xpm.c:1317
+#: gdk-pixbuf/io-xpm.c:1333
 msgid "Can't allocate memory for loading XPM image"
 msgstr "Nem lehet memóriát kiosztani az XPM-kép betöltéséhez"
 
-#: gdk-pixbuf/io-xpm.c:1508
+#: gdk-pixbuf/io-xpm.c:1524
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Átmeneti fájlba írás az XPM-kép betöltésekor sikertelen"
 
-#: gdk-pixbuf/io-xpm.c:1543
+#: gdk-pixbuf/io-xpm.c:1559
 msgid "The XPM image format"
 msgstr "XPM képformátum"
 
