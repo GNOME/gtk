@@ -388,10 +388,7 @@ gdk_pixmap_real_get_depth (GdkDrawable *drawable)
   
   g_return_val_if_fail (GDK_IS_PIXMAP (drawable), 0);
 
-  depth = ((GdkPixmapObject *)GDK_PIXMAP (drawable))->depth;
-
-  if (depth == 0)
-    g_print ("0 depth for type %s\n", g_type_name (G_OBJECT_TYPE (drawable)));
+  depth = GDK_PIXMAP_OBJECT (drawable)->depth;
 
   return depth;
 }

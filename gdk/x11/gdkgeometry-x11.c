@@ -88,7 +88,7 @@ _gdk_windowing_window_get_offsets (GdkWindow *window,
 				   gint      *y_offset)
 {
   GdkWindowImplX11 *impl =
-    GDK_WINDOW_IMPL_X11 (((GdkWindowObject *) GDK_WINDOW (window))->impl);
+    GDK_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (window)->impl);
 
   *x_offset = impl->position_info.x_offset;
   *y_offset = impl->position_info.y_offset;
@@ -103,7 +103,7 @@ _gdk_window_init_position (GdkWindow *window)
   g_return_if_fail (GDK_IS_WINDOW (window));
   
   impl =
-    GDK_WINDOW_IMPL_X11 (((GdkWindowObject*) GDK_WINDOW (window))->impl);
+    GDK_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (window)->impl);
   
   gdk_window_compute_parent_pos (impl, &parent_pos);
   gdk_window_compute_position (impl, &parent_pos, &impl->position_info);
@@ -136,11 +136,9 @@ gdk_window_scroll (GdkWindow *window,
   
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  impl =
-    GDK_WINDOW_IMPL_X11 (((GdkWindowObject*) GDK_WINDOW (window))->impl);  
-
-  obj =
-    (GdkWindowObject *) GDK_WINDOW (window);
+  obj = GDK_WINDOW_OBJECT (window);
+  
+  impl = GDK_WINDOW_IMPL_X11 (obj->impl);  
   
   if (GDK_WINDOW_DESTROYED (window))
     return;
@@ -151,8 +149,7 @@ gdk_window_scroll (GdkWindow *window,
   
   if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
     {
-      GdkWindowImplX11 *parent_impl =
-        GDK_WINDOW_IMPL_X11 (((GdkWindowObject*) GDK_WINDOW (impl))->parent->impl);  
+      GdkWindowImplX11 *parent_impl = GDK_WINDOW_IMPL_X11 (obj->parent->impl);  
       can_guffaw_scroll = (obj->x <= 0 &&
 			   obj->y <= 0 &&
 			   obj->x + impl->width >= parent_impl->width &&
@@ -244,8 +241,8 @@ _gdk_window_move_resize_child (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  impl = GDK_WINDOW_IMPL_X11 (((GdkWindowObject *) GDK_WINDOW (window))->impl);
-  obj = (GdkWindowObject *) GDK_WINDOW (window);
+  impl = GDK_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (window)->impl);
+  obj = GDK_WINDOW_OBJECT (window);
   
   dx = x - obj->x;
   dy = y - obj->y;
@@ -395,8 +392,7 @@ gdk_window_compute_position (GdkWindowImplX11      *window,
 
   g_return_if_fail (GDK_IS_WINDOW_IMPL_X11 (window));
 
-  wrapper =
-    (GdkWindowObject *) GDK_WINDOW (GDK_DRAWABLE_IMPL_X11 (window)->wrapper);
+  wrapper = GDK_WINDOW_OBJECT (GDK_DRAWABLE_IMPL_X11 (window)->wrapper);
   
   info->big = FALSE;
   
@@ -497,7 +493,7 @@ gdk_window_compute_parent_pos (GdkWindowImplX11      *window,
   g_return_if_fail (GDK_IS_WINDOW_IMPL_X11 (window));
 
   wrapper =
-    (GdkWindowObject *) GDK_WINDOW (GDK_DRAWABLE_IMPL_X11 (window)->wrapper);
+    GDK_WINDOW_OBJECT (GDK_DRAWABLE_IMPL_X11 (window)->wrapper);
   
   parent_pos->x = 0;
   parent_pos->y = 0;
@@ -709,7 +705,7 @@ _gdk_window_process_expose (GdkWindow    *window,
   GdkRegion *clip_region;
   GSList *tmp_list = translate_queue;
 
-  impl = GDK_WINDOW_IMPL_X11 (((GdkWindowObject *) window)->impl);
+  impl = GDK_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (window)->impl);
   
   while (tmp_list)
     {

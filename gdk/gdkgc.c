@@ -29,12 +29,6 @@
 #include "gdkgc.h"
 #include "gdkprivate.h"
 
-static void gdk_gc_init       (GdkGC      *gc);
-static void gdk_gc_class_init (GdkGCClass *klass);
-static void gdk_gc_finalize   (GObject           *object);
-
-static gpointer parent_class = NULL;
-
 GType
 gdk_gc_get_type (void)
 {
@@ -47,12 +41,12 @@ gdk_gc_get_type (void)
         sizeof (GdkGCClass),
         (GBaseInitFunc) NULL,
         (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_gc_class_init,
+        (GClassInitFunc) NULL,
         NULL,           /* class_finalize */
         NULL,           /* class_data */
         sizeof (GdkGC),
         0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_gc_init,
+        (GInstanceInitFunc) NULL,
       };
       
       object_type = g_type_register_static (G_TYPE_OBJECT,
@@ -63,37 +57,10 @@ gdk_gc_get_type (void)
   return object_type;
 }
 
-static void
-gdk_gc_init (GdkGC *gc)
-{
-
-}
-
-static void
-gdk_gc_class_init (GdkGCClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
-
-  object_class->finalize = gdk_gc_finalize;
-}
-
-static void
-gdk_gc_finalize (GObject *object)
-{
-  GdkGC *gc = GDK_GC (object);
-  
-  G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
 GdkGC*
 gdk_gc_new (GdkDrawable *drawable)
 {
   g_return_val_if_fail (drawable != NULL, NULL);
-
-  if (GDK_IS_WINDOW (drawable) && GDK_WINDOW_DESTROYED (drawable))
-    return NULL;
 
   return gdk_gc_new_with_values (drawable, NULL, 0);
 }
@@ -107,12 +74,13 @@ gdk_gc_new_with_values (GdkDrawable	*drawable,
 
   g_return_val_if_fail (drawable != NULL, NULL);
 
-  if (GDK_IS_WINDOW (drawable) && GDK_WINDOW_DESTROYED (drawable))
-    return NULL;
-
   gc = GDK_DRAWABLE_GET_CLASS (drawable)->create_gc (drawable,
                                                      values,
                                                      values_mask);
+
+  if (gc == NULL) /* This would mean the drawable was destroyed. */
+    return NULL;
+  
   if (values_mask & GDK_GC_CLIP_X_ORIGIN)
     gc->clip_x_origin = values->clip_x_origin;
   if (values_mask & GDK_GC_CLIP_Y_ORIGIN)

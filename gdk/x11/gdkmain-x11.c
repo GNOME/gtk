@@ -49,6 +49,7 @@
 #include "gdkprivate-x11.h"
 #include "gdkinternals.h"
 #include "gdkinputprivate.h"
+#include <pango/pangox.h>
 
 typedef struct _GdkPredicate  GdkPredicate;
 typedef struct _GdkErrorTrap  GdkErrorTrap;

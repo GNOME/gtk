@@ -39,13 +39,6 @@ typedef enum
  *	     the window manager slightly differently than a regular
  *	     toplevel window. Dialog windows should be used for any
  *	     transient window.
- *   Pixmap: Pixmaps are really just another kind of window which
- *	     doesn't actually appear on the screen. It can't have
- *	     children, either and is really just a convenience so
- *	     that the drawing functions can work on both windows
- *	     and pixmaps transparently. (ie. You shouldn't pass a
- *	     pixmap to any procedure which accepts a window with the
- *	     exception of the drawing functions).
  *   Foreign: A window that actually belongs to another application
  */
 typedef enum
@@ -150,7 +143,7 @@ struct _GdkGeometry {
 typedef struct _GdkWindowObject GdkWindowObject;
 typedef struct _GdkWindowObjectClass GdkWindowObjectClass;
 
-#define GDK_TYPE_WINDOW              (gdk_window_get_type ())
+#define GDK_TYPE_WINDOW              (gdk_window_object_get_type ())
 #define GDK_WINDOW(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW, GdkWindow))
 #define GDK_WINDOW_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WINDOW, GdkWindowObjectClass))
 #define GDK_IS_WINDOW(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW))
@@ -203,7 +196,7 @@ struct _GdkWindowObjectClass
 
 /* Windows
  */
-GType         gdk_window_get_type              (void);
+GType         gdk_window_object_get_type       (void);
 GdkWindow*    gdk_window_new                   (GdkWindow     *parent,
                                                 GdkWindowAttr *attributes,
                                                 gint           attributes_mask);
@@ -361,6 +354,7 @@ GdkWindow *   gdk_window_get_parent      (GdkWindow       *window);
 GdkWindow *   gdk_window_get_toplevel    (GdkWindow       *window);
 
 GList *	      gdk_window_get_children	 (GdkWindow	  *window);
+GList *       gdk_window_peek_children   (GdkWindow       *window);
 GdkEventMask  gdk_window_get_events	 (GdkWindow	  *window);
 void	      gdk_window_set_events	 (GdkWindow	  *window,
 					  GdkEventMask	   event_mask);

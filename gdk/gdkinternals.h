@@ -197,11 +197,11 @@ GType _gdk_pixmap_impl_get_type (void);
  * Initialization and exit routines *
  ************************************/
 
-void gdk_windowing_window_init (void);
+void _gdk_windowing_window_init (void);
 void gdk_visual_init (void);
 void gdk_dnd_init    (void);
 
-void gdk_windowing_image_init  (void);
+void _gdk_windowing_image_init  (void);
 void gdk_image_exit  (void);
 
 void gdk_input_init  (void);

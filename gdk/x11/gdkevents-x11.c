@@ -308,9 +308,7 @@ gdk_event_translate (GdkEvent *event,
   if (window_private && GDK_WINDOW_DESTROYED (window))
     {
       if (xevent->type != DestroyNotify)
-        {
-          return FALSE;
-        }
+        return FALSE;
     }
   else
     {

@@ -191,7 +191,7 @@ gdk_image_check_xshm(Display *display)
 }
 
 void
-gdk_windowing_image_init (void)
+_gdk_windowing_image_init (void)
 {
   if (gdk_use_xshm)
     {
@@ -450,8 +450,9 @@ gdk_x11_image_destroy (GdkImage *image)
 
   private = PRIVATE_DATA (image);
 
-  if (private == NULL) /* so that finalize doesn't segv if we
-                        * force-destroyed
+  if (private == NULL) /* This means that gdk_image_exit() destroyed the
+                        * image already, and now we're called a second
+                        * time from _finalize()
                         */
     return;
   

@@ -159,9 +159,6 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
   g_return_if_fail (gc != NULL);
   g_return_if_fail (line != NULL);
 
-  if (GDK_IS_WINDOW (drawable) && GDK_WINDOW_DESTROYED (drawable))
-    return;
-
   context = pango_layout_get_context (line->layout);
   
   pango_layout_line_get_extents (line,NULL, &overall_rect);
@@ -261,11 +258,6 @@ gdk_draw_layout (GdkDrawable     *drawable,
   
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (gc != NULL);
-  g_return_if_fail (layout != NULL);
-
-  if (GDK_IS_WINDOW (drawable) && GDK_WINDOW_DESTROYED (drawable))
-    return;
-
   g_return_if_fail (layout != NULL);
 
   indent = pango_layout_get_indent (layout);

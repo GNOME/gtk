@@ -29,6 +29,8 @@
 #include "gdkcolor.h"
 #include "gdkprivate-x11.h"
 
+#define GDK_COLORMAP_PRIVATE_DATA(cmap) ((GdkColormapPrivateX11 *) GDK_COLORMAP (cmap)->windowing_data)
+
 static gint  gdk_colormap_match_color (GdkColormap *cmap,
 				       GdkColor    *color,
 				       const gchar *available);

@@ -148,15 +148,19 @@ void
 gtk_socket_steal (GtkSocket *socket, guint32 id)
 {
   GtkWidget *widget;
-
+  gpointer user_data = NULL;
+  
   widget = GTK_WIDGET (socket);
   
   socket->plug_window = gdk_window_lookup (id);
 
   gdk_error_trap_push ();
+
+  if (socket->plug_window)
+    gdk_window_get_user_data (socket->plug_window,
+                              &user_data);
   
-  if (socket->plug_window &&
-      ((GdkWindowObject *)socket->plug_window)->user_data)
+  if (user_data)      
     {
       /*
 	GtkWidget *child_widget;

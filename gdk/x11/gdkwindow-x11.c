@@ -235,7 +235,7 @@ gdk_window_impl_x11_get_size (GdkDrawable *drawable,
 }
 
 void
-gdk_windowing_window_init (void)
+_gdk_windowing_window_init (void)
 {
   GdkWindowObject *private;
   GdkWindowImplX11 *impl;
@@ -253,7 +253,7 @@ gdk_windowing_window_init (void)
 		&x, &y, &width, &height, &border_width, &depth);
   XGetWindowAttributes (gdk_display, gdk_root_window, &xattributes);
 
-  gdk_parent_root = GDK_WINDOW (g_type_create_instance (gdk_window_get_type ()));
+  gdk_parent_root = GDK_WINDOW (g_type_create_instance (GDK_TYPE_WINDOW));
   private = (GdkWindowObject *)gdk_parent_root;
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
@@ -311,7 +311,7 @@ gdk_window_new (GdkWindow     *parent,
   
   xparent = GDK_WINDOW_XID (parent);
   
-  window = GDK_WINDOW (g_type_create_instance (gdk_window_get_type ()));
+  window = GDK_WINDOW (g_type_create_instance (GDK_TYPE_WINDOW));
   private = (GdkWindowObject *)window;
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
@@ -591,7 +591,7 @@ gdk_window_foreign_new (guint32 anid)
   if (children)
     XFree (children);
   
-  window = GDK_WINDOW (g_type_create_instance (gdk_window_get_type ()));
+  window = GDK_WINDOW (g_type_create_instance (GDK_TYPE_WINDOW));
   private = (GdkWindowObject *)window;
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
@@ -1457,45 +1457,6 @@ gdk_window_at_pointer (gint *win_x,
     *win_y = window ? winy : -1;
   
   return window;
-}
-
-GList*
-gdk_window_get_children (GdkWindow *window)
-{
-  GdkWindow *child;
-  GList *children;
-  Window root;
-  Window parent;
-  Window *xchildren;
-  unsigned int nchildren;
-  unsigned int i;
-  
-  g_return_val_if_fail (window != NULL, NULL);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return NULL;
-  
-  XQueryTree (GDK_WINDOW_XDISPLAY (window),
-	      GDK_WINDOW_XID (window),
-	      &root, &parent, &xchildren, &nchildren);
-  
-  children = NULL;
-  
-  if (nchildren > 0)
-    {
-      for (i = 0; i < nchildren; i++)
-	{
-	  child = gdk_window_lookup (xchildren[i]);
-          if (child)
-            children = g_list_prepend (children, child);
-	}
-      
-      if (xchildren)
-	XFree (xchildren);
-    }
-  
-  return children;
 }
 
 GdkEventMask  
@@ -2401,7 +2362,6 @@ gdk_window_xid_at_coords (gint     x,
 			  gboolean excl_child)
 {
   GdkWindow *window;
-  GdkDrawable *drawable;
   Display *xdisplay;
   Window *list = NULL;
   Window root, child = 0, parent_win = 0, root_win = 0;
@@ -2409,7 +2369,6 @@ gdk_window_xid_at_coords (gint     x,
   int i;
 
   window = gdk_parent_root;
-  drawable = GDK_DRAWABLE (window);
   xdisplay = GDK_WINDOW_XDISPLAY (window);
   root = GDK_WINDOW_XID (window);
   num = g_list_length (excludes);

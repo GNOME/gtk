@@ -4499,18 +4499,15 @@ static void
 gtk_reset_shapes_recurse (GtkWidget *widget,
 			  GdkWindow *window)
 {
-  GdkWindowObject *private;
   gpointer data;
   GList *list;
-
-  private = (GdkWindowObject*) window;
 
   gdk_window_get_user_data (window, &data);
   if (data != widget)
     return;
 
   gdk_window_shape_combine_mask (window, NULL, 0, 0);
-  for (list = private->children; list; list = list->next)
+  for (list = gdk_window_peek_children (window); list; list = list->next)
     gtk_reset_shapes_recurse (widget, list->data);
 }
 

@@ -65,6 +65,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
   XColor xfg, xbg;
 
   g_return_val_if_fail (GDK_IS_PIXMAP (source), NULL);
+  g_return_val_if_fail (GDK_IS_PIXMAP (mask), NULL);
   g_return_val_if_fail (fg != NULL, NULL);
   g_return_val_if_fail (bg != NULL, NULL);
 

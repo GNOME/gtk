@@ -140,7 +140,7 @@ static void gdk_window_finalize   (GObject              *object);
 static gpointer parent_class = NULL;
 
 GType
-gdk_window_get_type (void)
+gdk_window_object_get_type (void)
 {
   static GType object_type = 0;
 
@@ -424,6 +424,28 @@ gdk_window_get_toplevel (GdkWindow *window)
     obj = (GdkWindowObject *)obj->parent;
   
   return GDK_WINDOW (obj);
+}
+
+GList*
+gdk_window_get_children (GdkWindow *window)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return NULL;
+
+  return g_list_copy (GDK_WINDOW_OBJECT (window)->children);
+}
+
+GList *
+gdk_window_peek_children (GdkWindow       *window)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return NULL;
+
+  return GDK_WINDOW_OBJECT (window)->children;
 }
 
 void          
@@ -830,10 +852,10 @@ gdk_window_get_offsets (GdkWindow *window,
 
 #define OFFSET_GC(gc)                                         \
     gint x_offset, y_offset; 				      \
-    gint old_clip_x = (gc)->clip_x_origin;    \
-    gint old_clip_y = (gc)->clip_y_origin;    \
-    gint old_ts_x = (gc)->ts_x_origin;        \
-    gint old_ts_y = (gc)->ts_y_origin;        \
+    gint old_clip_x = gc->clip_x_origin;    \
+    gint old_clip_y = gc->clip_y_origin;    \
+    gint old_ts_x = gc->ts_x_origin;        \
+    gint old_ts_y = gc->ts_y_origin;        \
     gdk_window_get_offsets (drawable, &x_offset, &y_offset);  \
     if (x_offset != 0 || y_offset != 0)             	      \
       {                                                       \
@@ -1323,7 +1345,7 @@ gdk_window_real_get_size (GdkDrawable *drawable,
 {
   g_return_if_fail (GDK_IS_WINDOW (drawable));
 
-  gdk_drawable_get_size (GDK_DRAWABLE (((GdkWindowObject*)drawable)->impl),
+  gdk_drawable_get_size (GDK_WINDOW_OBJECT (drawable)->impl,
                          width, height);
 }
 
@@ -1540,7 +1562,7 @@ gdk_window_invalidate_rect   (GdkWindow    *window,
 	  GdkWindowObject *child = tmp_list->data;
 	  tmp_list = tmp_list->next;
 
-	  if (!((GdkWindowObject *)GDK_WINDOW (child))->input_only)
+	  if (!child->input_only)
 	    {
               gint width, height;
 

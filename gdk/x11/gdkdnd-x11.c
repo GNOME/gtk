@@ -250,10 +250,10 @@ gdk_drag_context_find (gboolean is_source,
       private = PRIVATE_DATA (context);
 
       context_dest_xid = context->dest_window ? 
-                           (private->drop_xid ?
-                             private->drop_xid :
-                             GDK_DRAWABLE_XID (context->dest_window)) :
-	                   None;
+                            (private->drop_xid ?
+                              private->drop_xid :
+                              GDK_DRAWABLE_XID (context->dest_window)) :
+	                     None;
 
       if ((!context->is_source == !is_source) &&
 	  ((source_xid == None) || (context->source_window &&

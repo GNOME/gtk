@@ -44,9 +44,9 @@
 #define M_PI_4  0.78539816339744830962
 #endif /* M_PI_4 */
 
-static void         gtk_style_construct (GtkStyle    *style,
-                                         GdkColormap *colormap,
-                                         gint         depth);
+static void         gtk_style_realize (GtkStyle    *style,
+                                       GdkColormap *colormap,
+                                       gint         depth);
 
 static void gtk_default_draw_hline      (GtkStyle        *style,
 					 GdkWindow       *window,
@@ -623,7 +623,7 @@ gtk_style_attach (GtkStyle  *style,
       
       if (new_style->attach_count == 0)
         {
-          gtk_style_construct (new_style, colormap, depth);
+          gtk_style_realize (new_style, colormap, depth);
           break;
         }
       else if (new_style->colormap == colormap &&
@@ -637,7 +637,7 @@ gtk_style_attach (GtkStyle  *style,
   if (!new_style)
     {
       new_style = gtk_style_duplicate (style);
-      gtk_style_construct (new_style, colormap, depth);
+      gtk_style_realize (new_style, colormap, depth);
     }
 
   /* A style gets a refcount from being attached */
@@ -700,9 +700,9 @@ gtk_style_unref (GtkStyle *style)
 }
 
 static void
-gtk_style_construct (GtkStyle    *style,
-                     GdkColormap *colormap,
-                     gint         depth)
+gtk_style_realize (GtkStyle    *style,
+                   GdkColormap *colormap,
+                   gint         depth)
 {
   GdkGCValues gc_values;
   GdkGCValuesMask gc_values_mask;

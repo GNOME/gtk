@@ -28,12 +28,6 @@
 #include "gdkinternals.h"
 #include "gdkwindow.h"
 
-static void gdk_drawable_init       (GdkDrawable      *drawable);
-static void gdk_drawable_class_init (GdkDrawableClass *klass);
-static void gdk_drawable_finalize   (GObject          *object);
-
-static gpointer parent_class = NULL;
-
 GType
 gdk_drawable_get_type (void)
 {
@@ -46,12 +40,12 @@ gdk_drawable_get_type (void)
         sizeof (GdkDrawableClass),
         (GBaseInitFunc) NULL,
         (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_drawable_class_init,
+        (GClassInitFunc) NULL,
         NULL,           /* class_finalize */
         NULL,           /* class_data */
         sizeof (GdkDrawable),
         0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_drawable_init,
+        (GInstanceInitFunc) NULL,
       };
       
       object_type = g_type_register_static (G_TYPE_OBJECT,
@@ -60,30 +54,6 @@ gdk_drawable_get_type (void)
     }  
 
   return object_type;
-}
-
-static void
-gdk_drawable_init (GdkDrawable *drawable)
-{
-
-}
-
-static void
-gdk_drawable_class_init (GdkDrawableClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
-
-  object_class->finalize = gdk_drawable_finalize;
-}
-
-static void
-gdk_drawable_finalize (GObject *object)
-{
-  GdkDrawable *drawable = GDK_DRAWABLE (object);
-
-  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 /* Manipulation of drawables

@@ -28,28 +28,11 @@
 #include <pango/pangox.h>
 #include <config.h>
 
-/* gcc -ansi -pedantic on GNU/Linux causes warnings and errors
- * unless this is defined:
- * warning: #warning "Files using this header must be compiled with _SVID_SOURCE or _XOPEN_SOURCE"
- */
-#ifndef _XOPEN_SOURCE
-#  define _XOPEN_SOURCE 1
-#endif
-
 #include <stdlib.h>
-#include <sys/types.h>
 
 #if defined (HAVE_IPC_H) && defined (HAVE_SHM_H) && defined (HAVE_XSHM_H)
 #define USE_SHM
 #endif
-
-#ifdef USE_SHM
-#include <sys/ipc.h>
-#include <sys/shm.h>
-#endif /* USE_SHM */
-
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
 
 #ifdef USE_SHM
 #include <X11/extensions/XShm.h>
@@ -138,9 +121,7 @@ static GdkColormap* gdk_x11_get_colormap   (GdkDrawable    *drawable);
 
 static gint         gdk_x11_get_depth      (GdkDrawable    *drawable);
 
-static void gdk_drawable_impl_x11_init       (GdkDrawableImplX11      *drawable);
 static void gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass);
-static void gdk_drawable_impl_x11_finalize   (GObject              *object);
 
 static gpointer parent_class = NULL;
 
@@ -161,7 +142,7 @@ gdk_drawable_impl_x11_get_type (void)
         NULL,           /* class_data */
         sizeof (GdkDrawableImplX11),
         0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_drawable_impl_x11_init,
+        (GInstanceInitFunc) NULL,
       };
       
       object_type = g_type_register_static (GDK_TYPE_DRAWABLE,
@@ -173,21 +154,11 @@ gdk_drawable_impl_x11_get_type (void)
 }
 
 static void
-gdk_drawable_impl_x11_init (GdkDrawableImplX11 *impl)
-{
-
-
-}
-
-static void
 gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
 
   parent_class = g_type_class_peek_parent (klass);
-
-  object_class->finalize = gdk_drawable_impl_x11_finalize;
 
   drawable_class->create_gc = _gdk_x11_gc_new;
   drawable_class->draw_rectangle = gdk_x11_draw_rectangle;
@@ -208,14 +179,6 @@ gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
   drawable_class->get_depth = gdk_x11_get_depth;
 }
 
-static void
-gdk_drawable_impl_x11_finalize (GObject *object)
-{
-  GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (object);
-
-  G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
 /*****************************************************
  * X11 specific implementations of generic functions *
  *****************************************************/
@@ -224,8 +187,6 @@ static GdkColormap*
 gdk_x11_get_colormap (GdkDrawable *drawable)
 {
   GdkDrawableImplX11 *impl;
-
-  g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_X11 (drawable), NULL);
 
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
@@ -238,7 +199,6 @@ gdk_x11_set_colormap (GdkDrawable *drawable,
 {
   GdkDrawableImplX11 *impl;
   
-  g_return_if_fail (GDK_IS_DRAWABLE_IMPL_X11 (drawable));
   g_return_if_fail (colormap != NULL);  
 
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
@@ -267,8 +227,6 @@ gdk_x11_draw_rectangle (GdkDrawable *drawable,
 {
   GdkDrawableImplX11 *impl;
 
-  g_return_if_fail (GDK_IS_DRAWABLE_IMPL_X11 (drawable));
-
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
   
   if (filled)
@@ -292,8 +250,6 @@ gdk_x11_draw_arc (GdkDrawable *drawable,
 {
   GdkDrawableImplX11 *impl;
 
-  g_return_if_fail (GDK_IS_DRAWABLE_IMPL_X11 (drawable));
-
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
   
@@ -315,8 +271,6 @@ gdk_x11_draw_polygon (GdkDrawable *drawable,
   XPoint *tmp_points;
   gint tmp_npoints, i;
   GdkDrawableImplX11 *impl;
-
-  g_return_if_fail (GDK_IS_DRAWABLE_IMPL_X11 (drawable));
 
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
@@ -368,8 +322,6 @@ gdk_x11_draw_text (GdkDrawable *drawable,
 {
   GdkDrawableImplX11 *impl;
 
-  g_return_if_fail (GDK_IS_DRAWABLE_IMPL_X11 (drawable));
-
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
   
   if (font->type == GDK_FONT_FONT)
@@ -407,8 +359,6 @@ gdk_x11_draw_text_wc (GdkDrawable    *drawable,
 		      gint	      text_length)
 {
   GdkDrawableImplX11 *impl;
-
-  g_return_if_fail (GDK_IS_DRAWABLE_IMPL_X11 (drawable));
 
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
   
@@ -463,8 +413,6 @@ gdk_x11_draw_drawable (GdkDrawable *drawable,
   int dest_depth = gdk_drawable_get_depth (drawable);
   GdkDrawableImplX11 *impl;
 
-  g_return_if_fail (GDK_IS_DRAWABLE_IMPL_X11 (drawable));
-
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
   
   if (src_depth == 1)
@@ -498,8 +446,6 @@ gdk_x11_draw_points (GdkDrawable *drawable,
 		     gint         npoints)
 {
   GdkDrawableImplX11 *impl;
-
-  g_return_if_fail (GDK_IS_DRAWABLE_IMPL_X11 (drawable));
 
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
@@ -543,8 +489,6 @@ gdk_x11_draw_segments (GdkDrawable *drawable,
 		       gint         nsegs)
 {
   GdkDrawableImplX11 *impl;
-
-  g_return_if_fail (GDK_IS_DRAWABLE_IMPL_X11 (drawable));
 
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
@@ -590,8 +534,6 @@ gdk_x11_draw_lines (GdkDrawable *drawable,
   XPoint *tmp_points = g_new (XPoint, npoints);
   GdkDrawableImplX11 *impl;
 
-  g_return_if_fail (GDK_IS_DRAWABLE_IMPL_X11 (drawable));
-
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
   
@@ -620,8 +562,6 @@ gdk_x11_draw_glyphs (GdkDrawable      *drawable,
 {
   GdkDrawableImplX11 *impl;
 
-  g_return_if_fail (GDK_IS_DRAWABLE_IMPL_X11 (drawable));
-
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
   pango_x_render (impl->xdisplay,
@@ -642,9 +582,7 @@ gdk_x11_draw_image     (GdkDrawable     *drawable,
                         gint             height)
 {
   GdkDrawableImplX11 *impl;
-
-  g_return_if_fail (GDK_IS_DRAWABLE_IMPL_X11 (drawable));
-
+  
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
   if (image->type == GDK_IMAGE_SHARED)
