@@ -1,3 +1,7 @@
+1999-10-05  Jesus Bravo Alvarez  <jba@pobox.com>
+
+	* configure.in (ALL_LINGUAS): Added Galician (gl)
+
 1999-10-05  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/*.[ch]: Corresponding changes as in X11 backend.
