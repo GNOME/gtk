@@ -123,6 +123,8 @@ static void     gtk_menu_set_tearoff_hints (GtkMenu          *menu,
 					    gint             width);
 static void     gtk_menu_style_set         (GtkWidget        *widget,
 					    GtkStyle         *previous_style);
+static gboolean gtk_menu_focus             (GtkWidget        *widget,
+					    GtkDirectionType direction);
 
 
 static void     gtk_menu_stop_navigating_submenu       (GtkMenu          *menu);
@@ -241,6 +243,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->enter_notify_event = gtk_menu_enter_notify;
   widget_class->leave_notify_event = gtk_menu_leave_notify;
   widget_class->style_set = gtk_menu_style_set;
+  widget_class->focus = gtk_menu_focus;
 
   container_class->remove = gtk_menu_remove;
   
@@ -1407,6 +1410,16 @@ gtk_menu_realize (GtkWidget *widget)
 
   gdk_window_show (menu->bin_window);
   gdk_window_show (menu->view_window);
+}
+
+static gboolean 
+gtk_menu_focus (GtkWidget       *widget,
+                GtkDirectionType direction)
+{
+  /*
+   * A menu or its menu items cannot have focus
+   */
+  return FALSE;
 }
 
 /* See notes in gtk_menu_popup() for information about the "grab transfer window"

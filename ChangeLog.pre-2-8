@@ -1,3 +1,8 @@
+2002-10-01  Padraig O'Briain <padraig.obriain@sun.com>
+
+	* gtk/gtkmenu.c: Add gtk_menu_focus() so we do not waste time
+	trying to focus a menu item. (bug #91258)
+
 2002-09-30  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkpixmap-win32.c (gdk_pixmap_impl_win32_finalize):
