@@ -1,3 +1,8 @@
+Thu Dec 12 17:01:38 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_find_widget): Skip insensitive
+	widgets. (#84061)
+
 Thu Dec 12 15:08:01 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* acinclude.m4: Remove unneeded bits of AM_GTK_GNU_TEXT

@@ -1298,7 +1298,7 @@ gtk_drag_find_widget (GtkWidget       *widget,
   gint x_offset = 0;
   gint y_offset = 0;
 
-  if (data->found || !GTK_WIDGET_MAPPED (widget))
+  if (data->found || !GTK_WIDGET_MAPPED (widget) || !GTK_WIDGET_SENSITIVE (widget))
     return;
 
   /* Note that in the following code, we only count the
