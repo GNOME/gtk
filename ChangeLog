@@ -1,3 +1,7 @@
+Thu Feb 26 14:47:22 2004  Dom Lachowicz <cinamod@hotmail.com>
+
+	* gtk/gtk.def: Export gtk_rc_reset_styles()
+
 Thu Feb 26 14:47:22 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.[ch]: Export gtk_rc_reset_styles(). 

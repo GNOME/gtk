@@ -1504,6 +1504,7 @@ EXPORTS
 	gtk_rc_property_parse_requisition
 	gtk_rc_reparse_all
 	gtk_rc_reparse_all_for_settings
+	gtk_rc_reset_styles
 	gtk_rc_scanner_new
 	gtk_rc_set_default_files
 	gtk_rc_style_copy
