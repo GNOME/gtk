@@ -8,13 +8,31 @@ AC_DEFUN(AM_PATH_GTK,
 [dnl 
 dnl Get the cflags and libraries from the gtk-config script
 dnl
+AC_ARG_WITH(gtk-prefix,[  --with-gtk-prefix=PFX   Prefix where GTK is installed (optional)],
+            gtk_config_prefix="$withval", gtk_config_prefix="")
+AC_ARG_WITH(gtk-exec-prefix,[  --with-gtk-exec-prefix=PFX Exec prefix where GTK is installed (optional)],
+            gtk_config_exec_prefix="$withval", gtk_config_exec_prefix="")
+
+  if test x$gtk_config_exec_prefix != x ; then
+     gtk_config_args="$gtk_config_args --exec-prefix=$gtk_config_exec_prefix"
+     if test x${GTK_CONFIG+set} != xset ; then
+        GTK_CONFIG=$gtk_config_exec_prefix/bin/gtk-config
+     fi
+  fi
+  if test x$gtk_config_prefix != x ; then
+     gtk_config_args="$gtk_config_args --prefix=$gtk_config_prefix"
+     if test x${GTK_CONFIG+set} != xset ; then
+        GTK_CONFIG=$gtk_config_prefix/bin/gtk-config
+     fi
+  fi
+
   AC_PATH_PROG(GTK_CONFIG, gtk-config, no)
   min_gtk_version=ifelse([$1], ,0.99.7,$1)
   AC_MSG_CHECKING(for GTK - version >= $min_gtk_version)
   no_gtk=""
   if test "$GTK_CONFIG" != "no" ; then
-    GTK_CFLAGS=`$GTK_CONFIG --cflags`
-    GTK_LIBS=`$GTK_CONFIG --libs`
+    GTK_CFLAGS=`$GTK_CONFIG $gtk_config_args --cflags`
+    GTK_LIBS=`$GTK_CONFIG $gtk_config_args --libs`
     ac_save_CFLAGS="$CFLAGS"
     ac_save_LIBS="$LIBS"
     CFLAGS="$CFLAGS $GTK_CFLAGS"

@@ -16,17 +16,27 @@ $exec_prefix/bin):
 Invoking gtk-config
 -------------------
 
-gtk-config can be invoked in one of three forms:
+gtk-config takes the following flags:
 
-  gtk-config --version
+  --version
      Prints out the version of GTK installed
 
-  gtk-config --cflags
+  --cflags
      Prints '-I' flags pointing to the installed header files.
 
-  gtk-config --libs
+  --libs
      Prints out the linker flags necessary to link a program against GTK
-     
+   
+  --prefix[=PREFIX]
+     If PREFIX is specified, overrides the configured value of $prefix.
+     (And of exec-prefix, unless --exec-prefix is also specified)
+     Otherwise, prints out the configured value of $prefix
+
+  --exec-prefix[=PREFIX]
+     If PREFIX is specified, overrides the configured value of $exec_prefix.
+     Otherwise, prints out the configured value of $exec_prefix
+ 
+
 
 Example of using gtk-config
 ---------------------------
@@ -88,6 +98,24 @@ the configure script.
 
 Notes:
 
+* The directory where the GTK libraries are installed needs
+  to be found by your system's dynamic linker.
+  
+  This is generally done by
+
+    editing /etc/ld.so.conf and running ldconfig
+
+  Or by:
+   
+    setting the environment variable LD_LIBRARY_PATH, 
+
+  or, as a last resort, 
+ 
+    Giving a -R or -rpath flag (depending on your linker) when
+    running configure, for instance:
+
+      LDFLAGS=-R/usr/home/owen/lib ./configure
+
 * You can also specify a gtk-config not in your path by
   setting the GTK_CONFIG environment variable to the
   name of the executable
@@ -96,9 +124,16 @@ Notes:
   you will need either need to modify gtk-config script
   manually to point to the new location or rebuild GTK.
 
-  [ As a future enhancement AM_PATH_GTK should support options
-    to override the default locations found in gtk-config ]
+Advanced note:
 
+* configure flags
+  
+  --with-gtk-prefix=PREFIX
+  --with-gtk-exec-prefix=PREFIX 
+
+  are provided to override the prefix and exec-prefix that were stored
+  in the gtk-config shell script by GTK's configure. You are generally
+  better off configuring GTK with the right path to begin with.
 
 Example of a package using AM_PATH_GTK
 --------------------------------------

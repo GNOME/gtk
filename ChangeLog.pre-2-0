@@ -1,8 +1,15 @@
+Fri Apr  3 18:33:47 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk-config.in: Added flags --prefix[=dir] and
+	--exec-prefix[=DIR] which allow querying and overriding the
+	configured-in prefix and exec-prefix.
+
+	* gtk.m4: Added configure flags --with-gtk-prefix=
+	and --with-gtk-exec-prefix= to set the --prefix and
+	--exec-prefix argumetns to gtk.m4
+
 Fri Apr  3 17:14:55 1998  Owen Taylor  <owt1@cornell.edu>
 
-	* glib/testglib.c: Removed literal german from strings
-	to appease SGI compiler.
-	
 	* gdk/gdk.c: More extensive debugging output
 
 	* gtk/gtkalignment.c gtk/gtkbutton.c gtk/gtkcheckbutton.c
