@@ -104,6 +104,7 @@ struct _NodeUIReference
 
 static void   gtk_ui_manager_class_init    (GtkUIManagerClass *class);
 static void   gtk_ui_manager_init          (GtkUIManager      *self);
+static void   gtk_ui_manager_finalize      (GObject *object);
 static void   gtk_ui_manager_set_property  (GObject         *object,
 					    guint            prop_id,
 					    const GValue    *value,
@@ -192,6 +193,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
     merge_node_chunk = g_mem_chunk_create (GtkUIManagerNode, 64,
 					   G_ALLOC_AND_FREE);
 
+  gobject_class->finalize = gtk_ui_manager_finalize;
   gobject_class->set_property = gtk_ui_manager_set_property;
   gobject_class->get_property = gtk_ui_manager_get_property;
 
@@ -275,6 +277,18 @@ gtk_ui_manager_init (GtkUIManager *self)
   node = get_child_node (self, NULL, "ui", 4,
 			GTK_UI_MANAGER_ROOT, TRUE, FALSE);
   gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (node), merge_id, 0);
+}
+
+static void
+gtk_ui_manager_finalize (GObject *object)
+{
+  GtkUIManager *self = GTK_UI_MANAGER (object);
+  
+  if (self->private_data->update_tag != 0)
+    {
+      g_source_remove (self->private_data->update_tag);
+      self->private_data->update_tag = 0;
+    }
 }
 
 static void
@@ -500,6 +514,7 @@ gtk_ui_manager_get_widget (GtkUIManager *self,
   GNode *node;
 
   g_return_val_if_fail (GTK_IS_UI_MANAGER (self), NULL);
+  g_return_val_if_fail (path != NULL, NULL);
 
   /* ensure that there are no pending updates before we get the
    * widget */
@@ -536,6 +551,7 @@ gtk_ui_manager_get_action (GtkUIManager   *self,
   GNode *node;
 
   g_return_val_if_fail (GTK_IS_UI_MANAGER (self), NULL);
+  g_return_val_if_fail (path != NULL, NULL);
   
   /* ensure that there are no pending updates before we get
    * the action */
@@ -666,7 +682,7 @@ gtk_ui_manager_get_node (GtkUIManager        *self,
       parent = node;
     }
 
-  if (NODE_INFO (node)->type == GTK_UI_MANAGER_UNDECIDED)
+  if (node != NULL && NODE_INFO (node)->type == GTK_UI_MANAGER_UNDECIDED)
     NODE_INFO (node)->type = node_type;
   return node;
 }

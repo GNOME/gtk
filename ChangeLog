@@ -1,3 +1,12 @@
+2003-09-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.c (gtk_ui_manager_get_widget) 
+	(gtk_ui_manager_get_action): g_return_if_fail() if
+	path is NULL.
+	(gtk_ui_manager_get_node): Avoid a segfault if path is empty.
+	(gtk_ui_manager_finalize): Remove the idle on finalize. (#121125, 
+	Marco Pesenti Gritti)
+
 2003-08-31  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktoolitem.c: Fix some typos in docs.
