@@ -1,3 +1,8 @@
+2001-10-11  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkcolorsel.c, gtk/gtkwidget.c, gtk/gtktreeview.c:
+	Remove stale gdk backend includes.
+ 
 2001-10-10  Michael Meeks  <michael@ximian.com>
 
 	* gtk/gtkcombo.c (gtk_combo_class_init): add enable_empty

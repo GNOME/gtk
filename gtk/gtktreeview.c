@@ -38,14 +38,6 @@
 #include <string.h>
 #include <gdk/gdkkeysyms.h>
 
-#if defined (GDK_WINDOWING_X11)
-#include "x11/gdkx.h"
-#elif defined (GDK_WINDOWING_WIN32)
-#include "win32/gdkwin32.h"
-#elif defined(GDK_WINDOWING_FB)
-#include "linux-fb/gdkfb.h"
-#endif
-
 #define GTK_TREE_VIEW_SEARCH_DIALOG_KEY "gtk-tree-view-search-dialog"
 
 #define SCROLL_EDGE_SIZE 15
