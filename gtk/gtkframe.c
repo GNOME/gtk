@@ -129,24 +129,24 @@ gtk_frame_class_init (GtkFrameClass *class)
 							G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
 				   PROP_LABEL_XALIGN,
-				   g_param_spec_double ("label_xalign",
-                                                        _("Label xalign"),
-                                                        _("The horizontal alignment of the label."),
-                                                        0.0,
-                                                        1.0,
-                                                        0.5,
-                                                        G_PARAM_READABLE |
-                                                        G_PARAM_WRITABLE));
+				   g_param_spec_float ("label_xalign",
+						       _("Label xalign"),
+						       _("The horizontal alignment of the label."),
+						       0.0,
+						       1.0,
+						       0.5,
+						       G_PARAM_READABLE |
+						       G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
 				   PROP_LABEL_YALIGN,
-				   g_param_spec_double ("label_yalign",
-                                                        _("Label yalign"),
-                                                        _("The vertical alignment of the label."),
-                                                        0.0,
-                                                        1.0,
-                                                        0.5,
-                                                        G_PARAM_READABLE |
-                                                        G_PARAM_WRITABLE));
+				   g_param_spec_float ("label_yalign",
+						       _("Label yalign"),
+						       _("The vertical alignment of the label."),
+						       0.0,
+						       1.0,
+						       0.5,
+						       G_PARAM_READABLE |
+						       G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_SHADOW,
                                    g_param_spec_enum ("shadow", NULL,
@@ -206,12 +206,12 @@ gtk_frame_set_property (GObject         *object,
       gtk_frame_set_label (frame, g_value_get_string (value));
       break;
     case PROP_LABEL_XALIGN:
-      gtk_frame_set_label_align (frame, g_value_get_double (value), 
+      gtk_frame_set_label_align (frame, g_value_get_float (value), 
 				 frame->label_yalign);
       break;
     case PROP_LABEL_YALIGN:
       gtk_frame_set_label_align (frame, frame->label_xalign, 
-				 g_value_get_double (value));
+				 g_value_get_float (value));
       break;
     case PROP_SHADOW:
     case PROP_SHADOW_TYPE:
@@ -242,10 +242,10 @@ gtk_frame_get_property (GObject         *object,
       g_value_set_string (value, gtk_frame_get_label (frame));
       break;
     case PROP_LABEL_XALIGN:
-      g_value_set_double (value, frame->label_xalign);
+      g_value_set_float (value, frame->label_xalign);
       break;
     case PROP_LABEL_YALIGN:
-      g_value_set_double (value, frame->label_yalign);
+      g_value_set_float (value, frame->label_yalign);
       break;
     case PROP_SHADOW:
     case PROP_SHADOW_TYPE:

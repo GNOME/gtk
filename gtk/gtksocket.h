@@ -71,7 +71,7 @@ struct _GtkSocketClass
 {
   GtkContainerClass parent_class;
 
-  gboolean (*plug_added)   (GtkSocket *socket);
+  void     (*plug_added)   (GtkSocket *socket);
   gboolean (*plug_removed) (GtkSocket *socket);
 };
 

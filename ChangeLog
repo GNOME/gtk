@@ -1,3 +1,11 @@
+Mon Nov 19 12:28:02 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkframe.c (gtk_frame_class_init): label_xalign
+	and label_yalign need to be float properties to
+	correspond to GTK+-1.2, to gtk_frame_set_label_align,
+	and to the types of the xalign and yalign properties of GtkMisc.
+	(#63484, Vitaly Tishkov)
+
 Mon Nov 19 12:24:30 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksocket.h (struct _GtkSocketClass): Fix return
