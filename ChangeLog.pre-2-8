@@ -5,6 +5,12 @@
 
 2004-07-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktooltips.c (gtk_tooltips_paint_window): Use the 
+	requisition of the widget instead of relying on the style
+	drawing function to supply the size of the drawable.  (#146531)	
+
+2004-07-09  Matthias Clasen  <mclasen@redhat.com>
+
  	Make GtkEntry work harder to protect passwords:  (#143955,
 	Morten Welinder)
 	
