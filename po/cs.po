@@ -1,5 +1,6 @@
 # Czech translation of Gtk+.
 # Copyright (C) 1999 Free Software Foundation, Inc.
+# Copyright (C) 2003 Miloslav Trmac <mitr@volny.cz>
 # Stanislav Brabec <utx@k332.feld.cvut.cz>, 1998.
 # Jiří Pavlovský <pavlovsk@ff.cuni.cz>, 1998.
 # Jiří Lebl <jirka@5z.com>, 2002.
@@ -10,13 +11,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-18 15:25+0100\n"
-"PO-Revision-Date: 2003-12-18 18:19+0100\n"
+"POT-Creation-Date: 2003-12-31 20:37+0100\n"
+"PO-Revision-Date: 2003-12-31 23:05+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"  Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:731
 #: gdk-pixbuf/gdk-pixbuf-io.c:864 tests/testfilechooser.c:198
@@ -121,14 +123,17 @@ msgstr "Hlavička obrázku je poškozena"
 msgid "Image format unknown"
 msgstr "Neznámý formát obrázku"
 
-#: gdk-pixbuf/gdk-pixdata.c:155 gdk-pixbuf/gdk-pixdata.c:456
+#: gdk-pixbuf/gdk-pixdata.c:155 gdk-pixbuf/gdk-pixdata.c:458
 msgid "Image pixel data corrupt"
 msgstr "Data pixelů obrázku jsou poškozena"
 
 #: gdk-pixbuf/gdk-pixdata.c:402
 #, c-format
-msgid "failed to allocate image buffer of %u bytes"
-msgstr "nemohu se alokovat paměť pro obrázek o velikosti %u bajtů"
+msgid "failed to allocate image buffer of %u byte"
+msgid_plural "failed to allocate image buffer of %u bytes"
+msgstr[0] "nemohu alokovat paměť pro obrázek o velikosti %u bajt"
+msgstr[1] "nemohu alokovat paměť pro obrázek o velikosti %u bajty"
+msgstr[2] "nemohu alokovat paměť pro obrázek o velikosti %u bajtů"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -752,7 +757,7 @@ msgstr "Widget akcelerátoru"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Widget, který sledovat pro změny akcelerátoru"
 
-#: gtk/gtkaction.c:185 gtk/gtkactiongroup.c:117
+#: gtk/gtkaction.c:185 gtk/gtkactiongroup.c:118
 msgid "Name"
 msgstr "Název"
 
@@ -821,7 +826,7 @@ msgstr "Citlivý"
 msgid "Whether the action is enabled."
 msgstr "Jestli je akce povolena."
 
-#: gtk/gtkaction.c:242 gtk/gtktreeview.c:551 gtk/gtktreeviewcolumn.c:219
+#: gtk/gtkaction.c:242 gtk/gtktreeview.c:551 gtk/gtktreeviewcolumn.c:222
 #: gtk/gtkwidget.c:439
 msgid "Visible"
 msgstr "Viditelný"
@@ -830,7 +835,7 @@ msgstr "Viditelný"
 msgid "Whether the action is visible."
 msgstr "Jestli je akce viditelná."
 
-#: gtk/gtkactiongroup.c:118
+#: gtk/gtkactiongroup.c:119
 msgid "A name for the action group."
 msgstr "Název skupiny akcí."
 
@@ -1035,7 +1040,7 @@ msgid "Whether the children should all be the same size"
 msgstr "Jestli má mít každý potomek stejnou velikost"
 
 #: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:467
-#: gtk/gtktreeviewcolumn.c:291
+#: gtk/gtktreeviewcolumn.c:294
 msgid "Expand"
 msgstr "Expandovat"
 
@@ -1410,173 +1415,173 @@ msgstr "Detail"
 msgid "Render detail to pass to the theme engine"
 msgstr "Detail zobrazení předávaný vykreslovači témat"
 
-#: gtk/gtkcellrenderertext.c:191 gtk/gtkentry.c:534 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:192 gtk/gtkentry.c:534 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "Text"
 
-#: gtk/gtkcellrenderertext.c:192
+#: gtk/gtkcellrenderertext.c:193
 msgid "Text to render"
 msgstr "Zobrazovaný text"
 
-#: gtk/gtkcellrenderertext.c:199
+#: gtk/gtkcellrenderertext.c:200
 msgid "Markup"
 msgstr "Značky"
 
-#: gtk/gtkcellrenderertext.c:200
+#: gtk/gtkcellrenderertext.c:201
 msgid "Marked up text to render"
 msgstr "Zobrazovaný text se značkami"
 
-#: gtk/gtkcellrenderertext.c:207 gtk/gtklabel.c:297
+#: gtk/gtkcellrenderertext.c:208 gtk/gtklabel.c:297
 msgid "Attributes"
 msgstr "Atributy"
 
-#: gtk/gtkcellrenderertext.c:208
+#: gtk/gtkcellrenderertext.c:209
 msgid "A list of style attributes to apply to the text of the renderer"
 msgstr "Seznam atributů stylu používaných pro zobrazení textu"
 
-#: gtk/gtkcellrenderertext.c:215
+#: gtk/gtkcellrenderertext.c:216
 msgid "Single Paragraph Mode"
 msgstr "Režim jednoho odstavce"
 
-#: gtk/gtkcellrenderertext.c:216
+#: gtk/gtkcellrenderertext.c:217
 msgid "Whether or not to keep all text in a single paragraph"
 msgstr "Jestli udržovat všechen text v jednom odstavci"
 
-#: gtk/gtkcellrenderertext.c:224 gtk/gtkcellview.c:176 gtk/gtktexttag.c:205
+#: gtk/gtkcellrenderertext.c:225 gtk/gtkcellview.c:179 gtk/gtktexttag.c:205
 msgid "Background color name"
 msgstr "Název barvy pozadí"
 
-#: gtk/gtkcellrenderertext.c:225 gtk/gtkcellview.c:177 gtk/gtktexttag.c:206
+#: gtk/gtkcellrenderertext.c:226 gtk/gtkcellview.c:180 gtk/gtktexttag.c:206
 msgid "Background color as a string"
 msgstr "Barva pozadí jako řetězec"
 
-#: gtk/gtkcellrenderertext.c:232 gtk/gtkcellview.c:183 gtk/gtktexttag.c:213
+#: gtk/gtkcellrenderertext.c:233 gtk/gtkcellview.c:186 gtk/gtktexttag.c:213
 msgid "Background color"
 msgstr "Barva pozadí"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtkcellview.c:184
+#: gtk/gtkcellrenderertext.c:234 gtk/gtkcellview.c:187
 msgid "Background color as a GdkColor"
 msgstr "Barva pozadí jako GdkColor"
 
-#: gtk/gtkcellrenderertext.c:240 gtk/gtktexttag.c:239
+#: gtk/gtkcellrenderertext.c:241 gtk/gtktexttag.c:239
 msgid "Foreground color name"
 msgstr "Název barvy popředí"
 
-#: gtk/gtkcellrenderertext.c:241 gtk/gtktexttag.c:240
+#: gtk/gtkcellrenderertext.c:242 gtk/gtktexttag.c:240
 msgid "Foreground color as a string"
 msgstr "Název barvy popředí jako řetězec"
 
-#: gtk/gtkcellrenderertext.c:248 gtk/gtktexttag.c:247
+#: gtk/gtkcellrenderertext.c:249 gtk/gtktexttag.c:247
 msgid "Foreground color"
 msgstr "Barva popředí"
 
-#: gtk/gtkcellrenderertext.c:249
+#: gtk/gtkcellrenderertext.c:250
 msgid "Foreground color as a GdkColor"
 msgstr "Barva popředí jako GdkColor"
 
-#: gtk/gtkcellrenderertext.c:257 gtk/gtkentry.c:466 gtk/gtktexttag.c:273
+#: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:466 gtk/gtktexttag.c:273
 #: gtk/gtktextview.c:585
 msgid "Editable"
 msgstr "Upravitelné"
 
-#: gtk/gtkcellrenderertext.c:258 gtk/gtktexttag.c:274 gtk/gtktextview.c:586
+#: gtk/gtkcellrenderertext.c:259 gtk/gtktexttag.c:274 gtk/gtktextview.c:586
 msgid "Whether the text can be modified by the user"
 msgstr "Jestli uživatel může měnit text"
 
-#: gtk/gtkcellrenderertext.c:265 gtk/gtkcellrenderertext.c:273
+#: gtk/gtkcellrenderertext.c:266 gtk/gtkcellrenderertext.c:274
 #: gtk/gtkfontbutton.c:806 gtk/gtkfontsel.c:217 gtk/gtktexttag.c:281
 #: gtk/gtktexttag.c:289
 msgid "Font"
 msgstr "Písmo"
 
-#: gtk/gtkcellrenderertext.c:266
+#: gtk/gtkcellrenderertext.c:267
 msgid "Font description as a string"
 msgstr "Popis písma jako řetězec"
 
-#: gtk/gtkcellrenderertext.c:274 gtk/gtktexttag.c:290
+#: gtk/gtkcellrenderertext.c:275 gtk/gtktexttag.c:290
 msgid "Font description as a PangoFontDescription struct"
 msgstr "Popis písma jako struktura PangoFontDescription"
 
-#: gtk/gtkcellrenderertext.c:282 gtk/gtktexttag.c:298
+#: gtk/gtkcellrenderertext.c:283 gtk/gtktexttag.c:298
 msgid "Font family"
 msgstr "Rodina písma"
 
-#: gtk/gtkcellrenderertext.c:283 gtk/gtktexttag.c:299
+#: gtk/gtkcellrenderertext.c:284 gtk/gtktexttag.c:299
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr "Název rodiny písma, např. Sans, Helvetica, Times, Monospace"
 
-#: gtk/gtkcellrenderertext.c:290 gtk/gtkcellrenderertext.c:291
+#: gtk/gtkcellrenderertext.c:291 gtk/gtkcellrenderertext.c:292
 #: gtk/gtktexttag.c:306
 msgid "Font style"
 msgstr "Styl písma"
 
-#: gtk/gtkcellrenderertext.c:299 gtk/gtkcellrenderertext.c:300
+#: gtk/gtkcellrenderertext.c:300 gtk/gtkcellrenderertext.c:301
 #: gtk/gtktexttag.c:315
 msgid "Font variant"
 msgstr "Varianta písma"
 
-#: gtk/gtkcellrenderertext.c:308 gtk/gtkcellrenderertext.c:309
+#: gtk/gtkcellrenderertext.c:309 gtk/gtkcellrenderertext.c:310
 #: gtk/gtktexttag.c:324
 msgid "Font weight"
 msgstr "Řez písma"
 
-#: gtk/gtkcellrenderertext.c:318 gtk/gtkcellrenderertext.c:319
+#: gtk/gtkcellrenderertext.c:319 gtk/gtkcellrenderertext.c:320
 #: gtk/gtktexttag.c:335
 msgid "Font stretch"
 msgstr "Rozteč písma"
 
-#: gtk/gtkcellrenderertext.c:327 gtk/gtkcellrenderertext.c:328
+#: gtk/gtkcellrenderertext.c:328 gtk/gtkcellrenderertext.c:329
 #: gtk/gtktexttag.c:344
 msgid "Font size"
 msgstr "Velikost písma"
 
-#: gtk/gtkcellrenderertext.c:337 gtk/gtktexttag.c:364
+#: gtk/gtkcellrenderertext.c:338 gtk/gtktexttag.c:364
 msgid "Font points"
 msgstr "Počet bodů písma"
 
-#: gtk/gtkcellrenderertext.c:338 gtk/gtktexttag.c:365
+#: gtk/gtkcellrenderertext.c:339 gtk/gtktexttag.c:365
 msgid "Font size in points"
 msgstr "Velikost písma v bodech"
 
-#: gtk/gtkcellrenderertext.c:347 gtk/gtktexttag.c:354
+#: gtk/gtkcellrenderertext.c:348 gtk/gtktexttag.c:354
 msgid "Font scale"
 msgstr "Škálování písma"
 
-#: gtk/gtkcellrenderertext.c:348
+#: gtk/gtkcellrenderertext.c:349
 msgid "Font scaling factor"
 msgstr "Faktor škálování písma"
 
-#: gtk/gtkcellrenderertext.c:357 gtk/gtktexttag.c:423
+#: gtk/gtkcellrenderertext.c:358 gtk/gtktexttag.c:423
 msgid "Rise"
 msgstr "Zvýšení"
 
-#: gtk/gtkcellrenderertext.c:358
+#: gtk/gtkcellrenderertext.c:359
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
 "Posun textu nad základní čáru (pod základní čáru, pokud je hodnota záporná)"
 
-#: gtk/gtkcellrenderertext.c:368 gtk/gtktexttag.c:463
+#: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:463
 msgid "Strikethrough"
 msgstr "Přeškrtnuti"
 
-#: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:464
+#: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:464
 msgid "Whether to strike through the text"
 msgstr "Jestli je text přeškrtnutý"
 
-#: gtk/gtkcellrenderertext.c:376 gtk/gtktexttag.c:471
+#: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:471
 msgid "Underline"
 msgstr "Podtržení"
 
-#: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:472
+#: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:472
 msgid "Style of underline for this text"
 msgstr "Styl podtržení pro tento text"
 
-#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:383
+#: gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:383
 msgid "Language"
 msgstr "Jazyk"
 
-#: gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:384
+#: gtk/gtkcellrenderertext.c:387 gtk/gtktexttag.c:384
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If you don't understand this parameter, you "
@@ -1586,117 +1591,117 @@ msgstr ""
 "jako pomocnou informaci při vykreslování textu. Pokud tomuto parametru "
 "nerozumíte, pravděpodobně jej nepotřebujete."
 
-#: gtk/gtkcellrenderertext.c:396 gtk/gtkcellview.c:191 gtk/gtktexttag.c:508
+#: gtk/gtkcellrenderertext.c:397 gtk/gtkcellview.c:194 gtk/gtktexttag.c:508
 msgid "Background set"
 msgstr "Pozadí nastaveno"
 
-#: gtk/gtkcellrenderertext.c:397 gtk/gtkcellview.c:192 gtk/gtktexttag.c:509
+#: gtk/gtkcellrenderertext.c:398 gtk/gtkcellview.c:195 gtk/gtktexttag.c:509
 msgid "Whether this tag affects the background color"
 msgstr "Jestli tento tag ovlivňuje barvu pozadí"
 
-#: gtk/gtkcellrenderertext.c:400 gtk/gtktexttag.c:520
+#: gtk/gtkcellrenderertext.c:401 gtk/gtktexttag.c:520
 msgid "Foreground set"
 msgstr "Popředí nastaveno"
 
-#: gtk/gtkcellrenderertext.c:401 gtk/gtktexttag.c:521
+#: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:521
 msgid "Whether this tag affects the foreground color"
 msgstr "Jestli tento tag ovlivňuje barvu popředí"
 
-#: gtk/gtkcellrenderertext.c:404 gtk/gtktexttag.c:528
+#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:528
 msgid "Editability set"
 msgstr "Možnost úprav nastavena"
 
-#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:529
+#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:529
 msgid "Whether this tag affects text editability"
 msgstr "Jestli tento tag ovlivňuje upravitelnost textu"
 
-#: gtk/gtkcellrenderertext.c:408 gtk/gtktexttag.c:532
+#: gtk/gtkcellrenderertext.c:409 gtk/gtktexttag.c:532
 msgid "Font family set"
 msgstr "Rodina písma nastavena"
 
-#: gtk/gtkcellrenderertext.c:409 gtk/gtktexttag.c:533
+#: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:533
 msgid "Whether this tag affects the font family"
 msgstr "Jestli tento tag ovlivňuje rodinu písma"
 
-#: gtk/gtkcellrenderertext.c:412 gtk/gtktexttag.c:536
+#: gtk/gtkcellrenderertext.c:413 gtk/gtktexttag.c:536
 msgid "Font style set"
 msgstr "Styl písma nastaven"
 
-#: gtk/gtkcellrenderertext.c:413 gtk/gtktexttag.c:537
+#: gtk/gtkcellrenderertext.c:414 gtk/gtktexttag.c:537
 msgid "Whether this tag affects the font style"
 msgstr "Jestli tento tag ovlivňuje styl písma"
 
-#: gtk/gtkcellrenderertext.c:416 gtk/gtktexttag.c:540
+#: gtk/gtkcellrenderertext.c:417 gtk/gtktexttag.c:540
 msgid "Font variant set"
 msgstr "Varianta písma nastavena"
 
-#: gtk/gtkcellrenderertext.c:417 gtk/gtktexttag.c:541
+#: gtk/gtkcellrenderertext.c:418 gtk/gtktexttag.c:541
 msgid "Whether this tag affects the font variant"
 msgstr "Jestli tento tag ovlivňuje variantu písma"
 
-#: gtk/gtkcellrenderertext.c:420 gtk/gtktexttag.c:544
+#: gtk/gtkcellrenderertext.c:421 gtk/gtktexttag.c:544
 msgid "Font weight set"
 msgstr "Váha písma nastavena"
 
-#: gtk/gtkcellrenderertext.c:421 gtk/gtktexttag.c:545
+#: gtk/gtkcellrenderertext.c:422 gtk/gtktexttag.c:545
 msgid "Whether this tag affects the font weight"
 msgstr "Jestli tento tag ovlivňuje váhu písma"
 
-#: gtk/gtkcellrenderertext.c:424 gtk/gtktexttag.c:548
+#: gtk/gtkcellrenderertext.c:425 gtk/gtktexttag.c:548
 msgid "Font stretch set"
 msgstr "Rozteč písma nastavena"
 
-#: gtk/gtkcellrenderertext.c:425 gtk/gtktexttag.c:549
+#: gtk/gtkcellrenderertext.c:426 gtk/gtktexttag.c:549
 msgid "Whether this tag affects the font stretch"
 msgstr "Jestli tento tag ovlivňuje rozteč písma"
 
-#: gtk/gtkcellrenderertext.c:428 gtk/gtktexttag.c:552
+#: gtk/gtkcellrenderertext.c:429 gtk/gtktexttag.c:552
 msgid "Font size set"
 msgstr "Velikost písma nastavena"
 
-#: gtk/gtkcellrenderertext.c:429 gtk/gtktexttag.c:553
+#: gtk/gtkcellrenderertext.c:430 gtk/gtktexttag.c:553
 msgid "Whether this tag affects the font size"
 msgstr "Jestli tento tag ovlivňuje velikost písma"
 
-#: gtk/gtkcellrenderertext.c:432 gtk/gtktexttag.c:556
+#: gtk/gtkcellrenderertext.c:433 gtk/gtktexttag.c:556
 msgid "Font scale set"
 msgstr "Škálování písma nastaveno"
 
-#: gtk/gtkcellrenderertext.c:433 gtk/gtktexttag.c:557
+#: gtk/gtkcellrenderertext.c:434 gtk/gtktexttag.c:557
 msgid "Whether this tag scales the font size by a factor"
 msgstr "Jestli tento tag škáluje velikost písma o daný faktor"
 
-#: gtk/gtkcellrenderertext.c:436 gtk/gtktexttag.c:576
+#: gtk/gtkcellrenderertext.c:437 gtk/gtktexttag.c:576
 msgid "Rise set"
 msgstr "Vyvýšení nastaveno"
 
-#: gtk/gtkcellrenderertext.c:437 gtk/gtktexttag.c:577
+#: gtk/gtkcellrenderertext.c:438 gtk/gtktexttag.c:577
 msgid "Whether this tag affects the rise"
 msgstr "Jestli tento tag ovlivňuje vyvýšení"
 
-#: gtk/gtkcellrenderertext.c:440 gtk/gtktexttag.c:592
+#: gtk/gtkcellrenderertext.c:441 gtk/gtktexttag.c:592
 msgid "Strikethrough set"
 msgstr "Přeškrtnutí nastaveno"
 
-#: gtk/gtkcellrenderertext.c:441 gtk/gtktexttag.c:593
+#: gtk/gtkcellrenderertext.c:442 gtk/gtktexttag.c:593
 msgid "Whether this tag affects strikethrough"
 msgstr "Jestli tento tag ovlivňuje přeškrtnutí"
 
-#: gtk/gtkcellrenderertext.c:444 gtk/gtktexttag.c:600
+#: gtk/gtkcellrenderertext.c:445 gtk/gtktexttag.c:600
 msgid "Underline set"
 msgstr "Podtržení nastaveno"
 
-#: gtk/gtkcellrenderertext.c:445 gtk/gtktexttag.c:601
+#: gtk/gtkcellrenderertext.c:446 gtk/gtktexttag.c:601
 msgid "Whether this tag affects underlining"
 msgstr "Jestli tento tag ovlivňuje podtržení"
 
-#: gtk/gtkcellrenderertext.c:448 gtk/gtktexttag.c:564
+#: gtk/gtkcellrenderertext.c:449 gtk/gtktexttag.c:564
 msgid "Language set"
 msgstr "Jazyk nastaven"
 
-#: gtk/gtkcellrenderertext.c:449
-msgid "Whether this tag affects the language the text is renderer as"
-msgstr "Jestli tento tag ovlivňuje jazyk, ve kterém je text vykreslován"
+#: gtk/gtkcellrenderertext.c:450 gtk/gtktexttag.c:565
+msgid "Whether this tag affects the language the text is rendered as"
+msgstr "Jestli tento tag ovlivňuje jazyk, ve kterém je zobrazený text"
 
 #: gtk/gtkcellrenderertoggle.c:140
 msgid "Toggle state"
@@ -1779,7 +1784,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "Jestli dát barvě hodnotu alfa"
 
 #: gtk/gtkcolorbutton.c:217 gtk/gtkfontbutton.c:175
-#: gtk/gtktreeviewcolumn.c:283
+#: gtk/gtktreeviewcolumn.c:286
 msgid "Title"
 msgstr "Titulek"
 
@@ -2004,51 +2009,51 @@ msgstr "Hodnota v seznamu"
 msgid "Whether entered values must already be present in the list"
 msgstr "Jestli musí být zadaná hodnota již přítomna v seznamu"
 
-#: gtk/gtkcombobox.c:338
+#: gtk/gtkcombobox.c:341
 msgid "ComboBox model"
 msgstr "Model ComboBoxu"
 
-#: gtk/gtkcombobox.c:339
+#: gtk/gtkcombobox.c:342
 msgid "The model for the combo box"
 msgstr "Model pro kombinované pole"
 
-#: gtk/gtkcombobox.c:346
+#: gtk/gtkcombobox.c:349
 msgid "Wrap width"
 msgstr "Šířka zalamování"
 
-#: gtk/gtkcombobox.c:347
+#: gtk/gtkcombobox.c:350
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Šířka zalamování pro rozložení položek v mřížce"
 
-#: gtk/gtkcombobox.c:356
+#: gtk/gtkcombobox.c:359
 msgid "Row span column"
 msgstr "Sloupec rozsahu řádků"
 
-#: gtk/gtkcombobox.c:357
+#: gtk/gtkcombobox.c:360
 msgid "TreeModel column containing the row span values"
 msgstr "Sloupec TreeModel obsahující hodnoty rozsahu řádků"
 
-#: gtk/gtkcombobox.c:366
+#: gtk/gtkcombobox.c:369
 msgid "Column span column"
 msgstr "Sloupec rozsahu sloupců"
 
-#: gtk/gtkcombobox.c:367
+#: gtk/gtkcombobox.c:370
 msgid "TreeModel column containing the column span values"
 msgstr "Sloupec TreeModel obsahující hodnoty rozsahu sloupců"
 
-#: gtk/gtkcombobox.c:376
+#: gtk/gtkcombobox.c:379
 msgid "Active item"
 msgstr "Aktivní položka"
 
-#: gtk/gtkcombobox.c:377
+#: gtk/gtkcombobox.c:380
 msgid "The item which is currently active"
 msgstr "Položka, která je právě aktivní"
 
-#: gtk/gtkcombobox.c:385
+#: gtk/gtkcombobox.c:388
 msgid "ComboBox appareance"
 msgstr "Vzhled ComboBoxu"
 
-#: gtk/gtkcombobox.c:386
+#: gtk/gtkcombobox.c:389
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "Vzhled ComboBoxu, kde TRUE znamená ve stylu Windows."
 
@@ -2264,19 +2269,19 @@ msgstr "Vstupní _metody"
 msgid "_Insert Unicode Control Character"
 msgstr "_Vložit řídící znak Unicode"
 
-#: gtk/gtkentrycompletion.c:193
+#: gtk/gtkentrycompletion.c:196
 msgid "Completion Model"
 msgstr "Model doplňování"
 
-#: gtk/gtkentrycompletion.c:194
+#: gtk/gtkentrycompletion.c:197
 msgid "The model to find matches in"
 msgstr "Model, kde hledat odpovídající položky"
 
-#: gtk/gtkentrycompletion.c:200
+#: gtk/gtkentrycompletion.c:203
 msgid "Minimum Key Length"
 msgstr "Minimální délka klíče"
 
-#: gtk/gtkentrycompletion.c:201
+#: gtk/gtkentrycompletion.c:204
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimální délka hledaného klíče, aby se hledaly odpovídající položky"
 
@@ -2541,8 +2546,11 @@ msgstr "zkratka %s neexistuje"
 
 #: gtk/gtkfilechooserdefault.c:2949
 #, c-format
-msgid "%d bytes"
-msgstr "%d bajtů"
+msgid "%d byte"
+msgid_plural "%d bytes"
+msgstr[0] "%d bajt"
+msgstr[1] "%d bajty"
+msgstr[2] "%d bajtů"
 
 #: gtk/gtkfilechooserdefault.c:2951
 #, c-format
@@ -2563,17 +2571,17 @@ msgstr "%.1f G"
 msgid "Today"
 msgstr "Dnes"
 
-#: gtk/gtkfilechooserdefault.c:3015
+#: gtk/gtkfilechooserdefault.c:2997
 msgid "Yesterday"
 msgstr "Včera"
 
-#: gtk/gtkfilechooserdefault.c:3018 gtk/gtkfilechooserdefault.c:3029
-msgid "Unknown"
-msgstr "Neznámé"
-
-#: gtk/gtkfilechooserdefault.c:3028
+#: gtk/gtkfilechooserdefault.c:3005
 msgid "%d/%b/%Y"
 msgstr "%d. %b %Y"
+
+#: gtk/gtkfilechooserdefault.c:3008
+msgid "Unknown"
+msgstr "Neznámé"
 
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
 msgid "Filename"
@@ -3279,7 +3287,7 @@ msgstr "Svislé zarovnání"
 msgid "The GtkAdjustment for the vertical position"
 msgstr "Hodnota GtkAdjustment pro svislou pozici"
 
-#: gtk/gtklayout.c:647 gtk/gtktreeviewcolumn.c:235
+#: gtk/gtklayout.c:647 gtk/gtktreeviewcolumn.c:238
 msgid "Width"
 msgstr "Šířka"
 
@@ -3304,103 +3312,103 @@ msgstr "Výška rozložení"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:349
+#: gtk/gtkmenu.c:352
 msgid "Tearoff Title"
 msgstr "Titulek pro odtrhnutí"
 
-#: gtk/gtkmenu.c:350
+#: gtk/gtkmenu.c:353
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
 "Titulek, který může být zobrazen správcem oken, když je toto menu odtrženo"
 
-#: gtk/gtkmenu.c:356
+#: gtk/gtkmenu.c:359
 msgid "Vertical Padding"
 msgstr "Svislé doplnění"
 
-#: gtk/gtkmenu.c:357
+#: gtk/gtkmenu.c:360
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Místo navíc nad a pod menu"
 
-#: gtk/gtkmenu.c:365
+#: gtk/gtkmenu.c:368
 msgid "Vertical Offset"
 msgstr "Svislé posunutí"
 
-#: gtk/gtkmenu.c:366
+#: gtk/gtkmenu.c:369
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "Když menu je podmenu, umístit je svisle pousunuté o tolik pixelů"
 
-#: gtk/gtkmenu.c:374
+#: gtk/gtkmenu.c:377
 msgid "Horizontal Offset"
 msgstr "Vodorovné posunutí"
 
-#: gtk/gtkmenu.c:375
+#: gtk/gtkmenu.c:378
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "Když menu je podmenu, umístit je vodorovně pousunuté o tolik pixelů"
 
-#: gtk/gtkmenu.c:385
+#: gtk/gtkmenu.c:388
 msgid "Left Attach"
 msgstr "Připevnění vlevo"
 
-#: gtk/gtkmenu.c:386 gtk/gtktable.c:203
+#: gtk/gtkmenu.c:389 gtk/gtktable.c:203
 msgid "The column number to attach the left side of the child to"
 msgstr "Číslo sloupce, ke kterému připevnit levou stranu potomka"
 
-#: gtk/gtkmenu.c:393
+#: gtk/gtkmenu.c:396
 msgid "Right Attach"
 msgstr "Připevnění vpravo"
 
-#: gtk/gtkmenu.c:394
+#: gtk/gtkmenu.c:397
 msgid "The column number to attach the right side of the child to"
 msgstr "Číslo sloupce, ke kterému připevnit pravou stranu potomka"
 
-#: gtk/gtkmenu.c:401
+#: gtk/gtkmenu.c:404
 msgid "Top Attach"
 msgstr "Připevnění nahoře"
 
-#: gtk/gtkmenu.c:402
+#: gtk/gtkmenu.c:405
 msgid "The row number to attach the top of the child to"
 msgstr "Číslo řádku, ke kterému připevnit horní stranu potomka"
 
-#: gtk/gtkmenu.c:409
+#: gtk/gtkmenu.c:412
 msgid "Bottom Attach"
 msgstr "Připevnění dole"
 
-#: gtk/gtkmenu.c:410 gtk/gtktable.c:224
+#: gtk/gtkmenu.c:413 gtk/gtktable.c:224
 msgid "The row number to attach the bottom of the child to"
 msgstr "Číslo řádku, ke kterému připevnit dolní stranu potomka"
 
-#: gtk/gtkmenu.c:497
+#: gtk/gtkmenu.c:500
 msgid "Can change accelerators"
 msgstr "Lze měnit akcelerátory"
 
-#: gtk/gtkmenu.c:498
+#: gtk/gtkmenu.c:501
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Jestli mohou akcelerátory menu být změněny stiskem klávesy nad položkou menu"
 
-#: gtk/gtkmenu.c:503
+#: gtk/gtkmenu.c:506
 msgid "Delay before submenus appear"
 msgstr "Prodleva před zobrazením podmenu"
 
-#: gtk/gtkmenu.c:504
+#: gtk/gtkmenu.c:507
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Minimální doba, kterou musí zůstat ukazatel nad položku menu, než se objeví "
 "podmenu"
 
-#: gtk/gtkmenu.c:511
+#: gtk/gtkmenu.c:514
 msgid "Delay before hiding a submenu"
 msgstr "Prodleva před skrytím podmenu"
 
-#: gtk/gtkmenu.c:512
+#: gtk/gtkmenu.c:515
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4095,7 +4103,9 @@ msgstr "Čas pro dvojité kliknutí"
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
-msgstr "Maximální čas dovolený mezi dvěma kliknutími, aby byla považována za dvojité kliknutí (v milisekundách)"
+msgstr ""
+"Maximální čas dovolený mezi dvěma kliknutími, aby byla považována za dvojité "
+"kliknutí (v milisekundách)"
 
 #: gtk/gtksettings.c:178
 msgid "Double Click Distance"
@@ -4105,7 +4115,9 @@ msgstr "Vzdálenost pro dvojité kliknutí"
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
-msgstr "Maximální vzdálenost dovolený mezi dvěma kliknutími, aby byla považována za dvojité kliknutí (v pixelech)"
+msgstr ""
+"Maximální vzdálenost dovolený mezi dvěma kliknutími, aby byla považována za "
+"dvojité kliknutí (v pixelech)"
 
 #: gtk/gtksettings.c:186
 msgid "Cursor Blink"
@@ -4896,10 +4908,6 @@ msgstr "Zarovnání nastaveno"
 msgid "Whether this tag affects paragraph justification"
 msgstr "Jestli tento tag ovlivňuje zarovnání odstavce"
 
-#: gtk/gtktexttag.c:565
-msgid "Whether this tag affects the language the text is rendered as"
-msgstr "Jestli tento tag ovlivňuje jazyk, ve kterém je zobrazený text"
-
 #: gtk/gtktexttag.c:568
 msgid "Left margin set"
 msgstr "Levý okraj nastaven"
@@ -5241,11 +5249,11 @@ msgstr ""
 "Jesetli je položka nástrojové lišty považována za důležitou. Je-li TRUE, "
 "zobrazují tlačítka nástrojové lišty text v režimu GTK_TOOLBAR_BOTH_HORIZ"
 
-#: gtk/gtktreemodelsort.c:306
+#: gtk/gtktreemodelsort.c:328
 msgid "TreeModelSort Model"
 msgstr "Model TreeModelSort"
 
-#: gtk/gtktreemodelsort.c:307
+#: gtk/gtktreemodelsort.c:329
 msgid "The model for the TreeModelSort to sort"
 msgstr "Model, který má TreeModelSort třídit"
 
@@ -5285,7 +5293,7 @@ msgstr "Sloupec rozbalovacího symbolu"
 msgid "Set the column for the expander column"
 msgstr "Nastaví sloupec pro rozbalovací sloupec"
 
-#: gtk/gtktreeview.c:575 gtk/gtktreeviewcolumn.c:326
+#: gtk/gtktreeview.c:575 gtk/gtktreeviewcolumn.c:329
 msgid "Reorderable"
 msgstr "Měnitelné pořadí"
 
@@ -5374,103 +5382,103 @@ msgstr "Barva lichého řádku"
 msgid "Color to use for odd rows"
 msgstr "Barva používaná pro liché řádky"
 
-#: gtk/gtktreeviewcolumn.c:220
+#: gtk/gtktreeviewcolumn.c:223
 msgid "Whether to display the column"
 msgstr "Jestli zobrazovat sloupec"
 
-#: gtk/gtktreeviewcolumn.c:227 gtk/gtkwindow.c:481
+#: gtk/gtktreeviewcolumn.c:230 gtk/gtkwindow.c:481
 msgid "Resizable"
 msgstr "Měnitelná velikost"
 
-#: gtk/gtktreeviewcolumn.c:228
+#: gtk/gtktreeviewcolumn.c:231
 msgid "Column is user-resizable"
 msgstr "Uživatel může měnit velikost sloupce"
 
-#: gtk/gtktreeviewcolumn.c:236
+#: gtk/gtktreeviewcolumn.c:239
 msgid "Current width of the column"
 msgstr "Aktuální šířka sloupce"
 
-#: gtk/gtktreeviewcolumn.c:244
+#: gtk/gtktreeviewcolumn.c:247
 msgid "Sizing"
 msgstr "Změna velikosti"
 
-#: gtk/gtktreeviewcolumn.c:245
+#: gtk/gtktreeviewcolumn.c:248
 msgid "Resize mode of the column"
 msgstr "Režim změny velikosti sloupce"
 
-#: gtk/gtktreeviewcolumn.c:253
+#: gtk/gtktreeviewcolumn.c:256
 msgid "Fixed Width"
 msgstr "Pevná šířka"
 
-#: gtk/gtktreeviewcolumn.c:254
+#: gtk/gtktreeviewcolumn.c:257
 msgid "Current fixed width of the column"
 msgstr "Aktuální pevná šířka sloupce"
 
-#: gtk/gtktreeviewcolumn.c:263
+#: gtk/gtktreeviewcolumn.c:266
 msgid "Minimum Width"
 msgstr "Minimální šířka"
 
-#: gtk/gtktreeviewcolumn.c:264
+#: gtk/gtktreeviewcolumn.c:267
 msgid "Minimum allowed width of the column"
 msgstr "Minimální povolená šířka sloupce"
 
-#: gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeviewcolumn.c:276
 msgid "Maximum Width"
 msgstr "Maximální šířka"
 
-#: gtk/gtktreeviewcolumn.c:274
+#: gtk/gtktreeviewcolumn.c:277
 msgid "Maximum allowed width of the column"
 msgstr "Maximální povolená šířka sloupce"
 
-#: gtk/gtktreeviewcolumn.c:284
+#: gtk/gtktreeviewcolumn.c:287
 msgid "Title to appear in column header"
 msgstr "Titulek zobrazovaný v záhlaví sloupce"
 
-#: gtk/gtktreeviewcolumn.c:292
+#: gtk/gtktreeviewcolumn.c:295
 msgid "Column gets share of extra width allocated to the widget"
 msgstr "Sloupce dostane podíl šířky alokované widgetu navíc"
 
-#: gtk/gtktreeviewcolumn.c:299
+#: gtk/gtktreeviewcolumn.c:302
 msgid "Clickable"
 msgstr "Povolené kliknutí"
 
-#: gtk/gtktreeviewcolumn.c:300
+#: gtk/gtktreeviewcolumn.c:303
 msgid "Whether the header can be clicked"
 msgstr "Jestli lze na hlavičku kliknout"
 
-#: gtk/gtktreeviewcolumn.c:308
+#: gtk/gtktreeviewcolumn.c:311
 msgid "Widget"
 msgstr "Widget"
 
-#: gtk/gtktreeviewcolumn.c:309
+#: gtk/gtktreeviewcolumn.c:312
 msgid "Widget to put in column header button instead of column title"
 msgstr "Widget, který vložit do záhlaví sloupce místo jeho titulku"
 
-#: gtk/gtktreeviewcolumn.c:316
+#: gtk/gtktreeviewcolumn.c:319
 msgid "Alignment"
 msgstr "Zarovnání"
 
-#: gtk/gtktreeviewcolumn.c:317
+#: gtk/gtktreeviewcolumn.c:320
 msgid "X Alignment of the column header text or widget"
 msgstr "Zarovnání textu nebo widgetu v záhlaví sloupce podle osy X"
 
-#: gtk/gtktreeviewcolumn.c:327
+#: gtk/gtktreeviewcolumn.c:330
 msgid "Whether the column can be reordered around the headers"
 msgstr "Jestli se dá přeuspořádat pořadí sloupců pomocí záhlaví"
 
-#: gtk/gtktreeviewcolumn.c:334
+#: gtk/gtktreeviewcolumn.c:337
 msgid "Sort indicator"
 msgstr "Indikátor třídění"
 
-#: gtk/gtktreeviewcolumn.c:335
+#: gtk/gtktreeviewcolumn.c:338
 msgid "Whether to show a sort indicator"
 msgstr "Jestli zobrazovat indikátor třídění"
 
-#: gtk/gtktreeviewcolumn.c:342
+#: gtk/gtktreeviewcolumn.c:345
 msgid "Sort order"
 msgstr "Pořadí třídění"
 
-#: gtk/gtktreeviewcolumn.c:343
+#: gtk/gtktreeviewcolumn.c:346
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Směr třídění, který označuje indikátor třídění"
 
@@ -5505,7 +5513,7 @@ msgstr "Neočekávaný počáteční tag '%s' na řádku %d znak %d"
 msgid "Unexpected character data on line %d char %d"
 msgstr "Neočekávaná data znaků na řádku %d znak %d"
 
-#: gtk/gtkuimanager.c:1923
+#: gtk/gtkuimanager.c:1928
 msgid "Empty"
 msgstr "Prázdný"
 
@@ -5972,3 +5980,6 @@ msgstr "Metoda vstupu X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nemohu získat ifnrmace o soubour '%s': %s"
+
+#~ msgid "Whether this tag affects the language the text is renderer as"
+#~ msgstr "Jestli tento tag ovlivňuje jazyk, ve kterém je text vykreslován"
