@@ -130,11 +130,11 @@ gdk_pixbuf_animation_iter_get_type
 <SECTION>
 <FILE>scaling</FILE>
 GdkInterpType
+gdk_pixbuf_scale_simple
 gdk_pixbuf_scale
+gdk_pixbuf_composite_color_simple
 gdk_pixbuf_composite
 gdk_pixbuf_composite_color
-gdk_pixbuf_scale_simple
-gdk_pixbuf_composite_color_simple
 
 <SUBSECTION Standard>
 GDK_TYPE_INTERP_TYPE

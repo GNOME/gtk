@@ -1,5 +1,10 @@
 2001-12-16  Havoc Pennington  <hp@pobox.com>
 
+	* gdk-pixbuf/gdk-pixbuf-sections.txt: put _simple variants at the
+	top of the docs
+
+2001-12-16  Havoc Pennington  <hp@pobox.com>
+
 	* gdk-pixbuf/tmpl/scaling.sgml: small doc tweaks, specifically
 	some "just do XYZ" advice next to the InterpMode technojargon.
 
