@@ -1,3 +1,12 @@
+Thu May 14 04:14:12 1998  Tim Janik  <timj@gtk.org>
+
+	* glib.h: typedef gint gboolean;
+	this is needed to provide portability with big-endian platforms (e.g.
+	try sizeof(bool) for c++ on big-endians - it's 4).
+	this is also needed to maintain some_union.d_gint==some_union.d_gboolean.
+ 	plus, gint to gboolean casts and vice versa need to be possible without
+ 	loss.
+
 Tue May 12 19:22:58 1998  Owen Taylor  <otaylor@gtk.org>
 
  	* glib/glib.h: Added macros G[U]INT_TO_POINTER() and

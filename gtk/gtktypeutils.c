@@ -29,11 +29,13 @@ struct _GtkTypeNode
 {
   GtkType type;
   GtkTypeInfo type_info;
-  guint n_supers;
+  guint n_supers : 24;
+  guint chunk_alloc_locked : 1;
   GtkType *supers;
   GtkType parent_type;
   gpointer klass;
   GList *children_types;
+  GMemChunk *mem_chunk;
 };
 
 
@@ -121,6 +123,29 @@ gtk_type_init (void)
     }
 }
 
+void
+gtk_type_set_chunk_alloc (GtkType      type,
+			  guint        n_chunks)
+{
+  GtkTypeNode *node;
+
+  LOOKUP_TYPE_NODE (node, type);
+  g_return_if_fail (node != NULL);
+  g_return_if_fail (node->chunk_alloc_locked == FALSE);
+
+  if (node->mem_chunk)
+    {
+      g_mem_chunk_destroy (node->mem_chunk);
+      node->mem_chunk = NULL;
+    }
+
+  if (n_chunks)
+    node->mem_chunk = g_mem_chunk_new (node->type_info.type_name,
+				       node->type_info.object_size,
+				       node->type_info.object_size * n_chunks,
+				       G_ALLOC_AND_FREE);
+}
+
 GtkType
 gtk_type_unique (GtkType      parent_type,
 		 GtkTypeInfo *type_info)
@@ -169,10 +194,12 @@ gtk_type_unique (GtkType      parent_type,
   new_node->type_info = *type_info;
   new_node->type_info.type_name = g_strdup (type_info->type_name);
   new_node->n_supers = parent ? parent->n_supers + 1 : 0;
+  new_node->chunk_alloc_locked = FALSE;
   new_node->supers = g_new0 (GtkType, new_node->n_supers + 1);
   new_node->parent_type = parent_type;
   new_node->klass = NULL;
   new_node->children_types = NULL;
+  new_node->mem_chunk = NULL;
 
   if (parent)
     parent->children_types = g_list_append (parent->children_types, GUINT_TO_POINTER (new_node->type));
@@ -279,7 +306,14 @@ gtk_type_new (GtkType type)
   g_return_val_if_fail (node != NULL, NULL);
 
   klass = gtk_type_class (type);
-  object = g_malloc0 (node->type_info.object_size);
+  node->chunk_alloc_locked = TRUE;
+  if (node->mem_chunk)
+    {
+      object = g_mem_chunk_alloc (node->mem_chunk);
+      memset (object, 0, node->type_info.object_size);
+    }
+  else
+    object = g_malloc0 (node->type_info.object_size);
   object->klass = klass;
 
   for (i = node->n_supers; i > 0; i--)
@@ -294,6 +328,22 @@ gtk_type_new (GtkType type)
     (* node->type_info.object_init_func) (object);
 
   return object;
+}
+
+void
+gtk_type_free (GtkType      type,
+	       gpointer     mem)
+{
+  GtkTypeNode *node;
+
+  g_return_if_fail (mem != NULL);
+  LOOKUP_TYPE_NODE (node, type);
+  g_return_if_fail (node != NULL);
+
+  if (node->mem_chunk)
+    g_mem_chunk_free (node->mem_chunk, mem);
+  else
+    g_free (mem);
 }
 
 void
@@ -449,7 +499,7 @@ gtk_type_class_init (GtkTypeNode *node)
 {
   if (!node->klass && node->type_info.class_size)
     {
-      node->klass = g_new0 (guchar, node->type_info.class_size);
+      node->klass = g_malloc0 (node->type_info.class_size);
 
       if (node->parent_type)
 	{

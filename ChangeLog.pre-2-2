@@ -1,3 +1,19 @@
+Thu May 14 03:04:43 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.c (gtk_type_free): new function to take care about
+	freeing types.
+	(gtk_type_set_chunk_alloc): new function to allow allocation of new
+ 	types from a mem_chunk of certain size (n_chunks==0 indicates allocation
+	thorugh g_malloc).
+
+	* gtk/gtkobject.c (gtk_object_finalize): free an object through
+ 	gtk_type_free().
+
+	* gtk/gtkbutton.c (gtk_button_get_type): set chunk preallocation for
+	GtkButtons to 16.
+	* gtk/gtkmenuitem.c (gtk_menu_item_get_type): likewise (16).
+	* gtk/gtklabel.c (gtk_label_get_type): likewise (32).
+
 Wed May 13 00:53:52 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtktypeutils.c gtk/gtksignal.c gdk/gdkdnd.c: A few more 

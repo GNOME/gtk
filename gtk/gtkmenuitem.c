@@ -88,6 +88,7 @@ gtk_menu_item_get_type (void)
       };
 
       menu_item_type = gtk_type_unique (gtk_item_get_type (), &menu_item_info);
+      gtk_type_set_chunk_alloc (menu_item_type, 16);
     }
 
   return menu_item_type;

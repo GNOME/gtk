@@ -272,7 +272,7 @@ gtk_object_finalize (GtkObject *object)
       GTK_OBJECT_DATA_DESTROY (odata);
     }
   
-  g_free (object);
+  gtk_type_free (GTK_OBJECT_TYPE (object), object);
 }
 
 /*****************************************

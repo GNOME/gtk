@@ -112,6 +112,7 @@ gtk_button_get_type (void)
       };
 
       button_type = gtk_type_unique (gtk_container_get_type (), &button_info);
+      gtk_type_set_chunk_alloc (button_type, 16);
     }
 
   return button_type;

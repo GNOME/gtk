@@ -181,12 +181,16 @@ struct _GtkTypeInfo
 void	 gtk_type_init		    (void);
 GtkType	 gtk_type_unique	    (guint	  parent_type,
 				     GtkTypeInfo *type_info);
+void	 gtk_type_set_chunk_alloc   (GtkType	  type,
+				     guint        n_chunks);
 gchar*	 gtk_type_name		    (guint	  type);
 GtkType	 gtk_type_from_name	    (const gchar *name);
 GtkType	 gtk_type_parent	    (GtkType	  type);
 gpointer gtk_type_class		    (GtkType	  type);
 gpointer gtk_type_parent_class	    (GtkType	  type);
 gpointer gtk_type_new		    (GtkType	  type);
+void	 gtk_type_free		    (GtkType	  type,
+				     gpointer     mem);
 void	 gtk_type_describe_heritage (GtkType	  type);
 void	 gtk_type_describe_tree	    (GtkType	  type,
 				     gint	  show_size);

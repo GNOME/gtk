@@ -318,7 +318,7 @@ typedef char   gchar;
 typedef short  gshort;
 typedef long   glong;
 typedef int    gint;
-typedef char   gboolean;
+typedef gint   gboolean;
 
 typedef unsigned char	guchar;
 typedef unsigned short	gushort;

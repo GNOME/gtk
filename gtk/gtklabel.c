@@ -68,6 +68,7 @@ gtk_label_get_type (void)
       };
 
       label_type = gtk_type_unique (gtk_misc_get_type (), &label_info);
+      gtk_type_set_chunk_alloc (label_type, 32);
     }
 
   return label_type;
