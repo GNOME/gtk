@@ -163,7 +163,7 @@ AC_SUBST(REBUILD)
 AC_CHECK_FUNCS(lstat)
 
 # i18n stuff
-ALL_LINGUAS="cs de es fr hu it ja ko nl no pl pt ru sv"
+ALL_LINGUAS="cs de es fr hu it ja ko nl no pl pt ru sv wa"
 AM_GTK_GNU_GETTEXT
 AC_CHECK_FUNC(gettext,
 	,
