@@ -7355,7 +7355,7 @@ gtk_widget_list_mnemonic_labels (GtkWidget *widget)
  * @label: a #GtkWidget that acts as a mnemonic label for @widget.
  * 
  * Adds a widget to the list of mnemonic labels for
- * this widget. (See gtk_widget_get_mnemonic_labels()). Note the
+ * this widget. (See gtk_widget_list_mnemonic_labels()). Note the
  * list of mnemonic labels for the widget is cleared when the
  * widget is destroyed, so the caller must make sure to update
  * it's internal state at this point as well, by using a connection
@@ -7386,7 +7386,7 @@ gtk_widget_add_mnemonic_label (GtkWidget *widget,
  *         @widget with gtk_widget_add_mnemonic_label().
  * 
  * Removes a widget from the list of mnemonic labels for
- * this widget. (See gtk_widget_get_mnemonic_labels()). The widget
+ * this widget. (See gtk_widget_list_mnemonic_labels()). The widget
  * must have previously been added to the list with
  * gtk_widget_add_mnemonic_label().
  *

@@ -1,3 +1,8 @@
+Thu Feb 26 22:56:40 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwidget.c: Replace gtk_widget_get_mnemonic_widgets() 
+	by list_mnemonic_widgets() in doc comments as well.
+
 Thu Feb 26 16:36:38 2004  Owen Taylor  <otaylor@redhat.com>
 
 	Fixes from Torsten Schoenfeld.
