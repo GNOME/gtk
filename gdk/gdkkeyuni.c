@@ -1,7 +1,4 @@
-#include <locale.h>
-
 #include "gdk.h"
-#include "gdkkeysyms.h"
 
 /* Thanks to Markus G. Kuhn <mkuhn@acm.org> for the ksysym<->Unicode
  * mapping functions, from the xterm sources.
@@ -826,25 +823,6 @@ static struct {
   /* End numeric keypad */
 };
 
-static gunichar
-get_decimal_char (void)
-{
-  struct lconv *locale_data;
-  gunichar result = '.';
-  gchar *utf8;
-
-  locale_data = localeconv ();
-  utf8 = g_locale_to_utf8 (locale_data->decimal_point, -1, NULL, NULL, NULL);
-  if (utf8)
-    {
-      if (g_utf8_strlen (utf8, -1) == 1)
-	result = g_utf8_get_char (utf8);
-      g_free (utf8);
-    }
-
-  return result;
-}
-
 /**
  * gdk_keyval_to_unicode:
  * @keyval: a GDK key symbol 
@@ -871,11 +849,6 @@ gdk_keyval_to_unicode (guint keyval)
    */
   if ((keyval & 0xff000000) == 0x01000000)
     return keyval & 0x00ffffff;
-
-  /* Translation of KP_Decimal depends on locale.
-   */
-  if (keyval == GDK_KP_Decimal)
-    return get_decimal_char ();
 
   /* binary search in table */
   while (max >= min) {
