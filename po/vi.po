@@ -1,39 +1,41 @@
-# GTK+ Vietnamese message catalog.
-# Copyright (C) 2000, 2001 Free Software Foundation, Inc.
-# Hoang Ngoc Tu <hntu@gmx.de>, 2000, 2001.
-# Joern v. Kattchee <kattchee@cs.tu-berlin.de>, 2000, 2001.
+# Vietnamese translation of GTK+ message catalog.
+# Copyright (C) 2000-2002 Free Software Foundation, Inc.
+# Hoang Ngoc Tu <hntu@gmx.de>, 2000-2002.
+# Joern v. Kattchee <kattchee@cs.tu-berlin.de>, 2000-2002.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk20 1.3.2\n"
-"POT-Creation-Date: 2002-04-02 13:13+0200\n"
-"PO-Revision-Date: 2001-03-12 15:23+01:00\n"
+"Project-Id-Version: gtk+ 2.0.x\n"
+"POT-Creation-Date: 2002-04-16 15:20+0200\n"
+"PO-Revision-Date: 2002-04-15 19:14+01:00\n"
 "Last-Translator: Hoang Ngoc Tu <hntu@gmx.de>\n"
 "Language-Team: Vietnamese <vi@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:581
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr ""
+msgstr "Tập tin '%s' không mở được: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:591
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr ""
+msgstr "Tập tin ảnh '%s' không có số liệu"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:183
 #, c-format
 msgid "Don't know how to load the animation in file '%s'"
-msgstr ""
+msgstr "Không được biết tải ảnh hoạt hình vào tập tin '%s' như thế nào"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:636
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
+"Tập tin ảnh '%s' không được tải: không rõ nguyên nhân, có thể tập tin ảnh có "
+"sai sót"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
 #, c-format
@@ -41,11 +43,13 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
+"Ảnh họat hình '%s' không được tải: không rõ nguyên nhân, có thểtập tin hoạt "
+"hình có sai sót"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:354
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr "Môđun địa phương không tìm thấy trong đường dẫn môđun: \"%s\","
+msgstr "Không tải được môđun ảnh-tải : %s: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:373
 #, c-format
@@ -53,40 +57,43 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
+"Mô đun ảnh tải %s không xuất đúng giao diện; Có thể mô đun này xuất phát từ "
+"một phiên bản GTK khác?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:490 gdk-pixbuf/gdk-pixbuf-io.c:516
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr ""
+msgstr "Loại ảnh '%s' không được hỗ trợ"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:538
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr ""
+msgstr "Định dạng tập tin ảnh cho tập tin '%s' khônh được biết"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:544
 msgid "Unrecognized image file format"
-msgstr ""
+msgstr "Định dạng tập tin ảnh không đuợc biết"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:614
 #, c-format
 msgid "Don't know how to load the image in file '%s'"
-msgstr ""
+msgstr "Không biết làm thế nào để tải ảnh trong file '%s'"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:647
 #, c-format
 msgid "Failed to load image '%s': %s"
-msgstr ""
+msgstr "Ảnh '%s' không tải được: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:752
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
+"Phiên dạng của gdk-pixbuf không được hỗ trợ để nhớ định dạng ảnh này: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:859
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
-msgstr ""
+msgstr "'%s' không thể mở để ghi được: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:880
 #, c-format
@@ -94,11 +101,13 @@ msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
+"'%s' không đóng được sau khi ghi ảnh, có thể hiện thời tất cả các số liệu "
+"chưa được nhớ hết: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:250
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
-msgstr ""
+msgstr "Tải gia số của loại ảnh '%s' là không được hỗ trợ"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:273 gdk-pixbuf/gdk-pixbuf-loader.c:374
 #, c-format
@@ -106,6 +115,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
+"Sai sót nội: Mô đun ảnh tải '%s' có sai sót trong khi bắt đầu tải một ảnh và "
+"cũng không rõ nguyên nhân tại sao"
 
 #: gdk-pixbuf/gdk-pixdata.c:146
 msgid "Image header corrupt"
@@ -126,33 +137,33 @@ msgstr ""
 
 #: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
 msgid "Not enough memory to load bitmap image"
-msgstr ""
+msgstr "Không đủ bộ nhớ để tải ảnh bitmap"
 
 #: gdk-pixbuf/io-bmp.c:275
 msgid "BMP image has unsupported header size"
-msgstr ""
+msgstr "Kích thước đề mục của ảnh BMP là không được hỗ trợ"
 
 #: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
-msgstr ""
+msgstr "Số liệu tựa đề của ảnh BMP không có ý nghĩa"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
 msgid "Failure reading GIF: %s"
-msgstr ""
+msgstr "Sai sót trong khi đọc GIF: %s"
 
 #: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
+msgstr "Tập tin GIF đã bị mất một vài số liệu (có lẽ nó đã bị cắt bỏ)"
 
 #: gdk-pixbuf/io-gif.c:469
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
-msgstr ""
+msgstr "Sai sót nội của bộ tải GIF (%s)"
 
 #: gdk-pixbuf/io-gif.c:592
 msgid "GIF image loader can't understand this image."
-msgstr ""
+msgstr "Bộ tải ảnh GIF không thể hiểu ảnh này."
 
 #: gdk-pixbuf/io-gif.c:621
 msgid "Bad code encountered"
@@ -160,25 +171,25 @@ msgstr ""
 
 #: gdk-pixbuf/io-gif.c:630
 msgid "Circular table entry in GIF file"
-msgstr ""
+msgstr "Bảng quay vòng...."
 
 #: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
 #: gdk-pixbuf/io-gif.c:1530
 msgid "Not enough memory to load GIF file"
-msgstr ""
+msgstr "Không dủ bộ nhớ để tải tập tin GIF"
 
 #: gdk-pixbuf/io-gif.c:1009
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr ""
+msgstr "Ảnh GIF có lỗi (Nén LZW bị sai) "
 
 #: gdk-pixbuf/io-gif.c:1059
 msgid "File does not appear to be a GIF file"
-msgstr ""
+msgstr "Tập tin không phải là một tập tin GIF"
 
 #: gdk-pixbuf/io-gif.c:1071
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr ""
+msgstr "Phiên bản %s của định dạng tập tin GIF là không được hỗ trợ"
 
 #: gdk-pixbuf/io-gif.c:1144
 msgid "GIF image contained a frame with height or width 0."
@@ -205,16 +216,16 @@ msgstr ""
 #: gdk-pixbuf/io-ico.c:207
 #, c-format
 msgid "Failure reading ICO: %s"
-msgstr ""
+msgstr "Sai sót trong khi đọc ICO: %s"
 
 #: gdk-pixbuf/io-ico.c:224
 msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
+msgstr "Tập tin ICO đã bị mất một vài số liệu (có lẽ nó đã bị cắt bỏ)"
 
 #: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
 #: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
 msgid "Not enough memory to load icon"
-msgstr ""
+msgstr "Không dủ bộ nhớ để tải biểu tượng"
 
 #: gdk-pixbuf/io-ico.c:303
 msgid "Invalid header in icon"
@@ -238,31 +249,31 @@ msgstr ""
 
 #: gdk-pixbuf/io-ico.c:499
 msgid "Not enough memory to load ICO file"
-msgstr ""
+msgstr "Không dủ bộ nhớ để tải tập tin IC"
 
-#: gdk-pixbuf/io-jpeg.c:125
+#: gdk-pixbuf/io-jpeg.c:126
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:234
+#: gdk-pixbuf/io-jpeg.c:307
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:345 gdk-pixbuf/io-jpeg.c:538 gdk-pixbuf/io-jpeg.c:710
+#: gdk-pixbuf/io-jpeg.c:417 gdk-pixbuf/io-jpeg.c:600 gdk-pixbuf/io-jpeg.c:767
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:664
+#: gdk-pixbuf/io-jpeg.c:721
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:679
+#: gdk-pixbuf/io-jpeg.c:736
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -293,118 +304,120 @@ msgstr ""
 msgid "Fatal error in PNG image file: %s"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:310
+#: gdk-pixbuf/io-png.c:296
 msgid "Insufficient memory to load PNG file"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:634
+#: gdk-pixbuf/io-png.c:599
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:685
+#: gdk-pixbuf/io-png.c:650
 msgid "Fatal error reading PNG image file"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:734
+#: gdk-pixbuf/io-png.c:699
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:800
+#: gdk-pixbuf/io-png.c:765
 msgid ""
 "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:808
+#: gdk-pixbuf/io-png.c:773
 msgid "Keys for PNG tEXt chunks must be ASCII characters."
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:829
+#: gdk-pixbuf/io-png.c:794
 msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:254
+#: gdk-pixbuf/io-pnm.c:247
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:286
+#: gdk-pixbuf/io-pnm.c:279
 msgid "PNM file has an incorrect initial byte"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:316
+#: gdk-pixbuf/io-pnm.c:309
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:341
+#: gdk-pixbuf/io-pnm.c:334
 msgid "PNM file has an image width of 0"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:362
+#: gdk-pixbuf/io-pnm.c:355
 msgid "PNM file has an image height of 0"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:385
+#: gdk-pixbuf/io-pnm.c:378
 msgid "Maximum color value in PNM file is 0"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:393
+#: gdk-pixbuf/io-pnm.c:386
 msgid "Maximum color value in PNM file is too large"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:401
+#: gdk-pixbuf/io-pnm.c:394
 msgid "Can't handle PNM files with maximum color values greater than 255"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:440 gdk-pixbuf/io-pnm.c:468 gdk-pixbuf/io-pnm.c:500
+#: gdk-pixbuf/io-pnm.c:433 gdk-pixbuf/io-pnm.c:461 gdk-pixbuf/io-pnm.c:493
 msgid "Raw PNM image type is invalid"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:560 gdk-pixbuf/io-pnm.c:602
+#: gdk-pixbuf/io-pnm.c:553 gdk-pixbuf/io-pnm.c:595
 msgid "PNM image format is invalid"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:661
+#: gdk-pixbuf/io-pnm.c:654
 msgid "PNM image loader does not support this PNM subformat"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:716
+#: gdk-pixbuf/io-pnm.c:709
 msgid "Premature end-of-file encountered"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:748 gdk-pixbuf/io-pnm.c:967
+#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:960
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:775
+#: gdk-pixbuf/io-pnm.c:768
 msgid "Can't allocate memory for loading PNM image"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:824
+#: gdk-pixbuf/io-pnm.c:817
 msgid "Insufficient memory to load PNM context struct"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:874
+#: gdk-pixbuf/io-pnm.c:867
 msgid "Unexpected end of PNM image data"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:996
+#: gdk-pixbuf/io-pnm.c:989
 msgid "Insufficient memory to load PNM file"
 msgstr ""
 
 #: gdk-pixbuf/io-ras.c:158
+#, fuzzy
 msgid "RAS image has bogus header data"
-msgstr ""
+msgstr "Số liệu tựa đề của ảnh BMP không có ý nghĩa"
 
 #: gdk-pixbuf/io-ras.c:180
 msgid "RAS image has unknown type"
 msgstr ""
 
 #: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#, fuzzy
 msgid "Not enough memory to load RAS image"
-msgstr ""
+msgstr "Không đủ bộ nhớ để tải ảnh"
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
@@ -422,129 +435,128 @@ msgstr ""
 msgid "Can't allocate temporary IOBuffer data"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:251
+#: gdk-pixbuf/io-tga.c:282
 msgid "fread() failed -- premature end-of-file probably encountered"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:261
+#: gdk-pixbuf/io-tga.c:292
 msgid "fseek() failed -- premature end-of-file probably encountered"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:295 gdk-pixbuf/io-tga.c:1030 gdk-pixbuf/io-tga.c:1142
-#: gdk-pixbuf/io-tga.c:1225
-msgid "Insufficient memory to load TGA image"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:305
+#: gdk-pixbuf/io-tga.c:325
 msgid "Can't allocate new pixbuf"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:617
+#: gdk-pixbuf/io-tga.c:638
 msgid "Can't allocate colormap structure"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:624
+#: gdk-pixbuf/io-tga.c:645
 msgid "Can't allocate colormap entries"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:646
+#: gdk-pixbuf/io-tga.c:667
 msgid "Unexpected bitdepth for colormap entries"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:664
+#: gdk-pixbuf/io-tga.c:685
 msgid "Can't allocate TGA header memory"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:697
+#: gdk-pixbuf/io-tga.c:718
 msgid "TGA image has invalid dimensions"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:703
+#: gdk-pixbuf/io-tga.c:724
 msgid "TGA image comment length is too long"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:712 gdk-pixbuf/io-tga.c:721 gdk-pixbuf/io-tga.c:731
-#: gdk-pixbuf/io-tga.c:741 gdk-pixbuf/io-tga.c:748
+#: gdk-pixbuf/io-tga.c:733 gdk-pixbuf/io-tga.c:742 gdk-pixbuf/io-tga.c:752
+#: gdk-pixbuf/io-tga.c:762 gdk-pixbuf/io-tga.c:769
 msgid "TGA image type not supported"
-msgstr ""
+msgstr "Loại ảnh TG không được hỗ trợ"
 
-#: gdk-pixbuf/io-tga.c:793
+#: gdk-pixbuf/io-tga.c:814
 msgid "Can't allocate memory for TGA context struct"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:857
+#: gdk-pixbuf/io-tga.c:878
 msgid "Excess data in file"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:903
+#: gdk-pixbuf/io-tga.c:924
 msgid "Can't allocate memory for TGA header"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:913
+#: gdk-pixbuf/io-tga.c:934
 msgid "Too big value in the infolen field of TGA header."
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:937
+#: gdk-pixbuf/io-tga.c:958
 msgid "Can't allocate memory for TGA cmap temporary buffer"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:949
+#: gdk-pixbuf/io-tga.c:970
 msgid "Can't allocate memory for TGA colormap struct"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:958
+#: gdk-pixbuf/io-tga.c:979
 msgid "Can't allocate memory for TGA colormap entries"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:968
+#: gdk-pixbuf/io-tga.c:989
 msgid "Unexpected bitdepth for TGA colormap"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:1010
+#: gdk-pixbuf/io-tga.c:1030
 msgid "Pseudo-Color image without colormap"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:1017
+#: gdk-pixbuf/io-tga.c:1037
 msgid "Can't seek to image offset -- end-of-file probably encountered"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:1040 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1236
+#: gdk-pixbuf/io-tga.c:1051 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1223
 msgid "Can't allocate pixbuf"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:1308 gdk-pixbuf/io-tga.c:1337
+#: gdk-pixbuf/io-tga.c:1293 gdk-pixbuf/io-tga.c:1322
 msgid "Unsupported TGA image type"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:152
+#: gdk-pixbuf/io-tiff.c:187
 msgid "Could not get image width (bad TIFF file)"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:159
+#: gdk-pixbuf/io-tiff.c:194
 msgid "Could not get image height (bad TIFF file)"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:169
+#: gdk-pixbuf/io-tiff.c:202
 msgid "Width or height of TIFF image is zero"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:178 gdk-pixbuf/io-tiff.c:194 gdk-pixbuf/io-tiff.c:485
+#: gdk-pixbuf/io-tiff.c:211 gdk-pixbuf/io-tiff.c:220
+msgid "Dimensions of TIFF image too large"
+msgstr ""
+
+#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:521
 msgid "Insufficient memory to open TIFF file"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:203
+#: gdk-pixbuf/io-tiff.c:254
 msgid "Failed to load RGB data from TIFF file"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:273
+#: gdk-pixbuf/io-tiff.c:309
 msgid "Failed to open TIFF image"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:286
+#: gdk-pixbuf/io-tiff.c:322
 msgid "TIFFClose operation failed"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:419 gdk-pixbuf/io-tiff.c:433
+#: gdk-pixbuf/io-tiff.c:455 gdk-pixbuf/io-tiff.c:469
 msgid "Failed to load TIFF image"
 msgstr ""
 
@@ -558,7 +570,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-wbmp.c:307
 msgid "Not enough memory to load image"
-msgstr ""
+msgstr "Không đủ bộ nhớ để tải ảnh"
 
 #: gdk-pixbuf/io-wbmp.c:366
 msgid "Couldn't save the rest"
@@ -576,35 +588,35 @@ msgstr ""
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr ""
 
-#: gdk-pixbuf/io-xpm.c:1235
+#: gdk-pixbuf/io-xpm.c:1229
 msgid "No XPM header found"
 msgstr ""
 
-#: gdk-pixbuf/io-xpm.c:1243
+#: gdk-pixbuf/io-xpm.c:1237
 msgid "XPM file has image width <= 0"
 msgstr ""
 
-#: gdk-pixbuf/io-xpm.c:1251
+#: gdk-pixbuf/io-xpm.c:1245
 msgid "XPM file has image height <= 0"
 msgstr ""
 
-#: gdk-pixbuf/io-xpm.c:1259
+#: gdk-pixbuf/io-xpm.c:1253
 msgid "XPM file has invalid number of colors"
 msgstr ""
 
-#: gdk-pixbuf/io-xpm.c:1267
+#: gdk-pixbuf/io-xpm.c:1261
 msgid "XPM has invalid number of chars per pixel"
 msgstr ""
 
-#: gdk-pixbuf/io-xpm.c:1285
+#: gdk-pixbuf/io-xpm.c:1279
 msgid "Can't read XPM colormap"
 msgstr ""
 
-#: gdk-pixbuf/io-xpm.c:1326
+#: gdk-pixbuf/io-xpm.c:1317
 msgid "Can't allocate memory for loading XPM image"
 msgstr ""
 
-#: gdk-pixbuf/io-xpm.c:1509
+#: gdk-pixbuf/io-xpm.c:1498
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr ""
 
@@ -672,9 +684,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkalignment.c:121
-#, fuzzy
 msgid "Horizontal scale"
-msgstr "Kiểu Chữ:"
+msgstr ""
 
 #: gtk/gtkalignment.c:122
 msgid ""
@@ -693,9 +704,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkarrow.c:98
-#, fuzzy
 msgid "Arrow direction"
-msgstr "Tạo một Thư mục"
+msgstr ""
 
 #: gtk/gtkarrow.c:99
 msgid "The direction the arrow should point"
@@ -774,9 +784,8 @@ msgid "Amount to increase child's size on the top and bottom"
 msgstr ""
 
 #: gtk/gtkbbox.c:151
-#, fuzzy
 msgid "Layout style"
-msgstr "Kiểu Chữ:"
+msgstr ""
 
 #: gtk/gtkbbox.c:152
 msgid ""
@@ -795,9 +804,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkbox.c:125
-#, fuzzy
 msgid "Spacing"
-msgstr "Khoảng cách:"
+msgstr "Khoảng cách"
 
 #: gtk/gtkbox.c:126
 msgid "The amount of space between children."
@@ -849,9 +857,8 @@ msgid "The border relief style."
 msgstr ""
 
 #: gtk/gtkbutton.c:265
-#, fuzzy
 msgid "Default Spacing"
-msgstr "Khoảng cách:"
+msgstr ""
 
 #: gtk/gtkbutton.c:266
 msgid "Extra space to add for CAN_DEFAULT buttons"
@@ -886,18 +893,16 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkcellrenderer.c:103
-#, fuzzy
 msgid "mode"
-msgstr "Kiểu: "
+msgstr "kiểu"
 
 #: gtk/gtkcellrenderer.c:104
 msgid "Editable mode of the CellRenderer"
 msgstr ""
 
 #: gtk/gtkcellrenderer.c:113
-#, fuzzy
 msgid "visible"
-msgstr "Tắt"
+msgstr "nhìn được"
 
 #: gtk/gtkcellrenderer.c:114
 msgid "Display the cell"
@@ -936,9 +941,8 @@ msgid "The ypad."
 msgstr ""
 
 #: gtk/gtkcellrenderer.c:166
-#, fuzzy
 msgid "width"
-msgstr "Định dạng Khoảng cách:"
+msgstr "dộ rộng"
 
 #: gtk/gtkcellrenderer.c:167
 msgid "The fixed width."
@@ -946,7 +950,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderer.c:177
 msgid "height"
-msgstr ""
+msgstr "cao"
 
 #: gtk/gtkcellrenderer.c:178
 msgid "The fixed height."
@@ -992,268 +996,259 @@ msgstr ""
 msgid "Pixbuf for closed expander."
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
+#: gtk/gtkcellrenderertext.c:173 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
 msgid "Text"
-msgstr ""
+msgstr "Văn bản"
 
-#: gtk/gtkcellrenderertext.c:175
+#: gtk/gtkcellrenderertext.c:174
 msgid "Text to render"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:182
+#: gtk/gtkcellrenderertext.c:181
 msgid "Markup"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:183
+#: gtk/gtkcellrenderertext.c:182
 msgid "Marked up text to render"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:190 gtk/gtklabel.c:287
+#: gtk/gtkcellrenderertext.c:189 gtk/gtklabel.c:287
 msgid "Attributes"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:191
+#: gtk/gtkcellrenderertext.c:190
 msgid "A list of style attributes to apply to the text of the renderer."
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:209
+#: gtk/gtkcellrenderertext.c:197 gtk/gtktexttag.c:209
 msgid "Background color name"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:199 gtk/gtktexttag.c:210
+#: gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:210
 msgid "Background color as a string"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:217
+#: gtk/gtkcellrenderertext.c:205 gtk/gtktexttag.c:217
 msgid "Background color"
-msgstr ""
+msgstr "Mầu nền sau"
 
-#: gtk/gtkcellrenderertext.c:207 gtk/gtktexttag.c:218
+#: gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:218
 msgid "Background color as a GdkColor"
-msgstr ""
+msgstr "Mầu nền sau như một GdkColor"
 
-#: gtk/gtkcellrenderertext.c:214 gtk/gtktexttag.c:243
+#: gtk/gtkcellrenderertext.c:213 gtk/gtktexttag.c:243
 msgid "Foreground color name"
-msgstr ""
+msgstr "Tên mầu nền trước"
 
-#: gtk/gtkcellrenderertext.c:215 gtk/gtktexttag.c:244
+#: gtk/gtkcellrenderertext.c:214 gtk/gtktexttag.c:244
 msgid "Foreground color as a string"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:222 gtk/gtktexttag.c:251
+#: gtk/gtkcellrenderertext.c:221 gtk/gtktexttag.c:251
 msgid "Foreground color"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:223 gtk/gtktexttag.c:252
+#: gtk/gtkcellrenderertext.c:222 gtk/gtktexttag.c:252
 msgid "Foreground color as a GdkColor"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
+#: gtk/gtkcellrenderertext.c:230 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
 #: gtk/gtktextview.c:568
-#, fuzzy
 msgid "Editable"
-msgstr "(tắt)"
+msgstr ""
 
-#: gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:569
+#: gtk/gtkcellrenderertext.c:231 gtk/gtktexttag.c:278 gtk/gtktextview.c:569
 msgid "Whether the text can be modified by the user"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:239 gtk/gtkcellrenderertext.c:247
+#: gtk/gtkcellrenderertext.c:238 gtk/gtkcellrenderertext.c:246
 #: gtk/gtkfontsel.c:209 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
 msgid "Font"
 msgstr "Phông"
 
-#: gtk/gtkcellrenderertext.c:240 gtk/gtktexttag.c:286
+#: gtk/gtkcellrenderertext.c:239 gtk/gtktexttag.c:286
 msgid "Font description as a string"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:248 gtk/gtktexttag.c:294
+#: gtk/gtkcellrenderertext.c:247 gtk/gtktexttag.c:294
 msgid "Font description as a PangoFontDescription struct"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:302
-#, fuzzy
+#: gtk/gtkcellrenderertext.c:255 gtk/gtktexttag.c:302
 msgid "Font family"
-msgstr "Gia đình:"
+msgstr "Phông Gia đình:"
 
-#: gtk/gtkcellrenderertext.c:257 gtk/gtktexttag.c:303
+#: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:303
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:264 gtk/gtkcellrenderertext.c:265
+#: gtk/gtkcellrenderertext.c:263 gtk/gtkcellrenderertext.c:264
 #: gtk/gtktexttag.c:310 gtk/gtktexttag.c:311
-#, fuzzy
 msgid "Font style"
-msgstr "Kiểu Chữ:"
+msgstr "Kiểu Phông"
 
-#: gtk/gtkcellrenderertext.c:273 gtk/gtkcellrenderertext.c:274
+#: gtk/gtkcellrenderertext.c:272 gtk/gtkcellrenderertext.c:273
 #: gtk/gtktexttag.c:319 gtk/gtktexttag.c:320
 msgid "Font variant"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:282 gtk/gtkcellrenderertext.c:283
+#: gtk/gtkcellrenderertext.c:281 gtk/gtkcellrenderertext.c:282
 #: gtk/gtktexttag.c:328 gtk/gtktexttag.c:329
 msgid "Font weight"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:292 gtk/gtkcellrenderertext.c:293
+#: gtk/gtkcellrenderertext.c:291 gtk/gtkcellrenderertext.c:292
 #: gtk/gtktexttag.c:339 gtk/gtktexttag.c:340
-#, fuzzy
 msgid "Font stretch"
-msgstr "Tính chất Phông"
+msgstr "Căng của phông"
 
-#: gtk/gtkcellrenderertext.c:301 gtk/gtkcellrenderertext.c:302
+#: gtk/gtkcellrenderertext.c:300 gtk/gtkcellrenderertext.c:301
 #: gtk/gtktexttag.c:348 gtk/gtktexttag.c:349
-#, fuzzy
 msgid "Font size"
-msgstr "Kích thước theo Điểm"
+msgstr "Kích thước phông"
 
-#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:368
-#, fuzzy
+#: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:368
 msgid "Font points"
-msgstr "Các kiểu phông:"
+msgstr "Các điểm phông"
 
-#: gtk/gtkcellrenderertext.c:312 gtk/gtktexttag.c:369
+#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:369
 msgid "Font size in points"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:321 gtk/gtktexttag.c:358 gtk/gtktexttag.c:359
-#, fuzzy
+#: gtk/gtkcellrenderertext.c:320 gtk/gtktexttag.c:358 gtk/gtktexttag.c:359
 msgid "Font scale"
-msgstr "Kiểu Chữ:"
+msgstr ""
 
-#: gtk/gtkcellrenderertext.c:322
+#: gtk/gtkcellrenderertext.c:321
 msgid "Font scaling factor"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:427
+#: gtk/gtkcellrenderertext.c:330 gtk/gtktexttag.c:427
 msgid "Rise"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:332 gtk/gtktexttag.c:428
+#: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:428
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:342 gtk/gtktexttag.c:467
+#: gtk/gtkcellrenderertext.c:341 gtk/gtktexttag.c:467
 msgid "Strikethrough"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:468
+#: gtk/gtkcellrenderertext.c:342 gtk/gtktexttag.c:468
 msgid "Whether to strike through the text"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:475
+#: gtk/gtkcellrenderertext.c:349 gtk/gtktexttag.c:475
 msgid "Underline"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:476
+#: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:476
 msgid "Style of underline for this text"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:512
+#: gtk/gtkcellrenderertext.c:360 gtk/gtktexttag.c:512
 msgid "Background set"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:513
+#: gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:513
 msgid "Whether this tag affects the background color"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:524
+#: gtk/gtkcellrenderertext.c:364 gtk/gtktexttag.c:524
 msgid "Foreground set"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:525
+#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:525
 msgid "Whether this tag affects the foreground color"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:532
+#: gtk/gtkcellrenderertext.c:368 gtk/gtktexttag.c:532
 msgid "Editability set"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:533
+#: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:533
 msgid "Whether this tag affects text editability"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:373 gtk/gtktexttag.c:536
+#: gtk/gtkcellrenderertext.c:372 gtk/gtktexttag.c:536
 msgid "Font family set"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:374 gtk/gtktexttag.c:537
+#: gtk/gtkcellrenderertext.c:373 gtk/gtktexttag.c:537
 msgid "Whether this tag affects the font family"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:540
-#, fuzzy
+#: gtk/gtkcellrenderertext.c:376 gtk/gtktexttag.c:540
 msgid "Font style set"
-msgstr "Kiểu Chữ:"
+msgstr "Tạo kiểu phông"
 
-#: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:541
+#: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:541
 msgid "Whether this tag affects the font style"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:544
+#: gtk/gtkcellrenderertext.c:380 gtk/gtktexttag.c:544
 msgid "Font variant set"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:382 gtk/gtktexttag.c:545
+#: gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:545
 msgid "Whether this tag affects the font variant"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:548
+#: gtk/gtkcellrenderertext.c:384 gtk/gtktexttag.c:548
 msgid "Font weight set"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:549
+#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:549
 msgid "Whether this tag affects the font weight"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:552
+#: gtk/gtkcellrenderertext.c:388 gtk/gtktexttag.c:552
 msgid "Font stretch set"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:553
+#: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:553
 msgid "Whether this tag affects the font stretch"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:393 gtk/gtktexttag.c:556
+#: gtk/gtkcellrenderertext.c:392 gtk/gtktexttag.c:556
 msgid "Font size set"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:394 gtk/gtktexttag.c:557
+#: gtk/gtkcellrenderertext.c:393 gtk/gtktexttag.c:557
 msgid "Whether this tag affects the font size"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:560
-#, fuzzy
+#: gtk/gtkcellrenderertext.c:396 gtk/gtktexttag.c:560
 msgid "Font scale set"
-msgstr "Kiểu Chữ:"
+msgstr ""
 
-#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:561
+#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:561
 msgid "Whether this tag scales the font size by a factor"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:401 gtk/gtktexttag.c:580
+#: gtk/gtkcellrenderertext.c:400 gtk/gtktexttag.c:580
 msgid "Rise set"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:581
+#: gtk/gtkcellrenderertext.c:401 gtk/gtktexttag.c:581
 msgid "Whether this tag affects the rise"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:596
+#: gtk/gtkcellrenderertext.c:404 gtk/gtktexttag.c:596
 msgid "Strikethrough set"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:597
+#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:597
 msgid "Whether this tag affects strikethrough"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:409 gtk/gtktexttag.c:604
+#: gtk/gtkcellrenderertext.c:408 gtk/gtktexttag.c:604
 msgid "Underline set"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:605
+#: gtk/gtkcellrenderertext.c:409 gtk/gtktexttag.c:605
 msgid "Whether this tag affects underlining"
 msgstr ""
 
@@ -1266,9 +1261,8 @@ msgid "The toggle state of the button"
 msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:139
-#, fuzzy
 msgid "Activatable"
-msgstr "(tắt)"
+msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:140
 msgid "The toggle button can be activated"
@@ -1329,7 +1323,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:910
 msgid "_Save color here"
-msgstr ""
+msgstr "Nhớ mầu ở đây"
 
 #: gtk/gtkcolorsel.c:1079
 msgid ""
@@ -1355,11 +1349,11 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1718
 msgid "Current Color"
-msgstr ""
+msgstr "Mầu Hiện tại"
 
 #: gtk/gtkcolorsel.c:1719
 msgid "The current color"
-msgstr ""
+msgstr "Mầu hiện tại"
 
 #: gtk/gtkcolorsel.c:1725
 msgid "Current Alpha"
@@ -1390,7 +1384,6 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1821
-#, fuzzy
 msgid "_Hue:"
 msgstr "Nền mầu:"
 
@@ -1399,7 +1392,6 @@ msgid "Position on the color wheel."
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1823
-#, fuzzy
 msgid "_Saturation:"
 msgstr "Bão hòa:"
 
@@ -1408,7 +1400,6 @@ msgid "\"Deepness\" of the color."
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1825
-#, fuzzy
 msgid "_Value:"
 msgstr "Giá trị:"
 
@@ -1417,7 +1408,6 @@ msgid "Brightness of the color."
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1827
-#, fuzzy
 msgid "_Red:"
 msgstr "Đỏ:"
 
@@ -1426,7 +1416,6 @@ msgid "Amount of red light in the color."
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1829
-#, fuzzy
 msgid "_Green:"
 msgstr "Xanh lá cây:"
 
@@ -1435,7 +1424,6 @@ msgid "Amount of green light in the color."
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1831
-#, fuzzy
 msgid "_Blue:"
 msgstr "Xanh da trời:"
 
@@ -1444,7 +1432,6 @@ msgid "Amount of blue light in the color."
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1835
-#, fuzzy
 msgid "_Opacity:"
 msgstr "Mờ:"
 
@@ -1532,9 +1519,8 @@ msgid "Can be used to add a new child to the container."
 msgstr ""
 
 #: gtk/gtkcurve.c:121
-#, fuzzy
 msgid "Curve type"
-msgstr "Tạo"
+msgstr ""
 
 #: gtk/gtkcurve.c:122
 msgid "Is this curve linear, spline interpolated, or free-form"
@@ -1542,7 +1528,7 @@ msgstr ""
 
 #: gtk/gtkcurve.c:130
 msgid "Minimum X"
-msgstr ""
+msgstr "X nhỏ nhất"
 
 #: gtk/gtkcurve.c:131
 msgid "Minimum possible value for X"
@@ -1550,7 +1536,7 @@ msgstr ""
 
 #: gtk/gtkcurve.c:140
 msgid "Maximum X"
-msgstr ""
+msgstr "X lớn nhất"
 
 #: gtk/gtkcurve.c:141
 msgid "Maximum possible X value."
@@ -1558,7 +1544,7 @@ msgstr ""
 
 #: gtk/gtkcurve.c:150
 msgid "Minimum Y"
-msgstr ""
+msgstr "Y nhỏ nhất"
 
 #: gtk/gtkcurve.c:151
 msgid "Minimum possible value for Y"
@@ -1566,7 +1552,7 @@ msgstr ""
 
 #: gtk/gtkcurve.c:160
 msgid "Maximum Y"
-msgstr ""
+msgstr "Y lớn nhất"
 
 #: gtk/gtkcurve.c:161
 msgid "Maximum possible value for Y"
@@ -1605,18 +1591,16 @@ msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 
 #: gtk/gtkentry.c:435 gtk/gtklabel.c:358
-#, fuzzy
 msgid "Cursor Position"
-msgstr "Tắt"
+msgstr ""
 
 #: gtk/gtkentry.c:436 gtk/gtklabel.c:359
 msgid "The current position of the insertion cursor in chars."
 msgstr ""
 
 #: gtk/gtkentry.c:445 gtk/gtklabel.c:368
-#, fuzzy
 msgid "Selection Bound"
-msgstr "Chọn:"
+msgstr ""
 
 #: gtk/gtkentry.c:446 gtk/gtklabel.c:369
 msgid ""
@@ -1692,74 +1676,67 @@ msgid "The contents of the entry"
 msgstr ""
 
 #: gtk/gtkentry.c:728
-#, fuzzy
 msgid "Select on focus"
-msgstr "Chọn:"
+msgstr ""
 
 #: gtk/gtkentry.c:729
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr ""
 
-#: gtk/gtkentry.c:3850 gtk/gtklabel.c:3164
-#, fuzzy
+#: gtk/gtkentry.c:3850 gtk/gtklabel.c:3176
 msgid "Select All"
-msgstr "Xóa"
+msgstr "Chọn tất cả"
 
-#: gtk/gtkentry.c:3860 gtk/gtklabel.c:3174
+#: gtk/gtkentry.c:3860 gtk/gtklabel.c:3186
 msgid "Input Methods"
-msgstr ""
+msgstr "Các phương pháp nhập"
 
 #: gtk/gtkentry.c:3870 gtk/gtktextview.c:6375
 msgid "_Insert Unicode control character"
-msgstr ""
+msgstr "Ghép ký tự điều khiển Unicode"
 
 #: gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
-#, fuzzy
 msgid "Filename"
-msgstr "Đổi tên"
+msgstr "Tên tập tin"
 
 #: gtk/gtkfilesel.c:537
 msgid "The currently selected filename."
-msgstr ""
+msgstr "Tên tập tin đã chọn hiện thời."
 
 #: gtk/gtkfilesel.c:543
 msgid "Show file operations"
-msgstr ""
+msgstr "Trình diễn các hoạt động của tập tin"
 
 #: gtk/gtkfilesel.c:544
 msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr ""
 
 #: gtk/gtkfilesel.c:551
-#, fuzzy
 msgid "Select multiple"
-msgstr "Xóa"
+msgstr ""
 
 #: gtk/gtkfilesel.c:552
 msgid "Whether to allow multiple files to be selected."
 msgstr ""
 
 #: gtk/gtkfilesel.c:707
-#, fuzzy
 msgid "Folders"
-msgstr "Các tập tin"
+msgstr "Các hồ sơ"
 
 #: gtk/gtkfilesel.c:711
-#, fuzzy
 msgid "Fol_ders"
-msgstr "Các tập tin"
+msgstr "Các hồ sơ"
 
 #: gtk/gtkfilesel.c:742
 msgid "Files"
 msgstr "Các tập tin"
 
 #: gtk/gtkfilesel.c:746
-#, fuzzy
 msgid "_Files"
 msgstr "Các tập tin"
 
 #: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
-#, fuzzy, c-format
+#, c-format
 msgid "Folder unreadable: %s"
 msgstr "Thư mục không đọc được: %s"
 
@@ -1767,21 +1744,19 @@ msgstr "Thư mục không đọc được: %s"
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
-"availible to this program.\n"
+"available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
 
 #: gtk/gtkfilesel.c:1076
 msgid "_New Folder"
-msgstr ""
+msgstr "Hồ sơ mới"
 
 #: gtk/gtkfilesel.c:1087
-#, fuzzy
 msgid "De_lete File"
-msgstr "Xóa một Tập tin"
+msgstr "Xóa Tập tin"
 
 #: gtk/gtkfilesel.c:1098
-#, fuzzy
 msgid "_Rename File"
 msgstr "Đổi tên Tập tin"
 
@@ -1809,12 +1784,11 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1403
 msgid "New Folder"
-msgstr ""
+msgstr "Hồ sơ mới"
 
 #: gtk/gtkfilesel.c:1418
-#, fuzzy
 msgid "_Folder name:"
-msgstr "Đổi tên"
+msgstr "Tên hồ sơ"
 
 #: gtk/gtkfilesel.c:1444
 msgid "Create"
@@ -1879,9 +1853,9 @@ msgid "Rename File"
 msgstr "Đổi tên Tập tin"
 
 #: gtk/gtkfilesel.c:1681
-#, fuzzy, c-format
+#, c-format
 msgid "Rename file \"%s\" to:"
-msgstr "Đổi tên Tập tin"
+msgstr "Đổi tên Tập tin \"%s\" thành:"
 
 #: gtk/gtkfilesel.c:1712
 msgid "Rename"
@@ -1889,7 +1863,7 @@ msgstr "Đổi tên"
 
 #: gtk/gtkfilesel.c:2103
 msgid "Selection: "
-msgstr "Chọn:"
+msgstr "Chọn: "
 
 #: gtk/gtkfilesel.c:2983
 #, c-format
@@ -1900,15 +1874,15 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:2986
 msgid "Invalid Utf-8"
-msgstr ""
+msgstr "UTF-8 không có giá trị"
 
 #: gtk/gtkfilesel.c:3852
 msgid "Name too long"
-msgstr ""
+msgstr "Tên quá dài"
 
 #: gtk/gtkfilesel.c:3854
 msgid "Couldn't convert filename"
-msgstr ""
+msgstr "Không thẻ chuyển tên tập tin"
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:597
 msgid "X position"
@@ -1933,9 +1907,8 @@ msgid "abcdefghijk ABCDEFGHIJK"
 msgstr ""
 
 #: gtk/gtkfontsel.c:202
-#, fuzzy
 msgid "Font name"
-msgstr "Gia đình:"
+msgstr "Tên phông"
 
 #: gtk/gtkfontsel.c:203
 msgid "The X string that represents this font."
@@ -1946,34 +1919,29 @@ msgid "The GdkFont that is currently selected."
 msgstr ""
 
 #: gtk/gtkfontsel.c:216
-#, fuzzy
 msgid "Preview text"
-msgstr "Xem mẫu chữ:"
+msgstr "Xem trước mẫu chữ:"
 
 #: gtk/gtkfontsel.c:217
 msgid "The text to display in order to demonstrate the selected font."
 msgstr ""
 
 #: gtk/gtkfontsel.c:321
-#, fuzzy
 msgid "_Family:"
 msgstr "Gia đình:"
 
 #: gtk/gtkfontsel.c:327
-#, fuzzy
 msgid "_Style:"
-msgstr "Bổ xung Kiểu thức"
+msgstr "Kiểu thức:"
 
 #: gtk/gtkfontsel.c:333
-#, fuzzy
 msgid "Si_ze:"
 msgstr "Kích thước:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:462
-#, fuzzy
 msgid "_Preview:"
-msgstr "Xem mẫu chữ:"
+msgstr "Xem trước:"
 
 #: gtk/gtkfontsel.c:1253
 msgid "Font Selection"
@@ -2024,7 +1992,6 @@ msgid "Gamma"
 msgstr "Gamma"
 
 #: gtk/gtkgamma.c:406
-#, fuzzy
 msgid "_Gamma value"
 msgstr "Giá trị gamma"
 
@@ -2072,18 +2039,16 @@ msgid "A GdkPixbuf to display."
 msgstr ""
 
 #: gtk/gtkimage.c:137
-#, fuzzy
 msgid "Pixmap"
-msgstr "Sơ đồ điểm"
+msgstr ""
 
 #: gtk/gtkimage.c:138
 msgid "A GdkPixmap to display."
 msgstr ""
 
 #: gtk/gtkimage.c:145
-#, fuzzy
 msgid "Image"
-msgstr "Trang %u"
+msgstr "Ảnh"
 
 #: gtk/gtkimage.c:146
 msgid "A GdkImage to display."
@@ -2110,36 +2075,32 @@ msgid "Stock ID for a stock image to display."
 msgstr ""
 
 #: gtk/gtkimage.c:178
-#, fuzzy
 msgid "Icon set"
-msgstr "Tính chất Phông"
+msgstr ""
 
 #: gtk/gtkimage.c:179
 msgid "Icon set to display."
 msgstr ""
 
 #: gtk/gtkimage.c:186
-#, fuzzy
 msgid "Icon size"
-msgstr "Kích thước theo Điểm"
+msgstr "Kích thước biểu tượng"
 
 #: gtk/gtkimage.c:187
 msgid "Size to use for stock icon or icon set."
 msgstr ""
 
 #: gtk/gtkimage.c:195
-#, fuzzy
 msgid "Animation"
-msgstr "Thông tin về Phông"
+msgstr "Hoạt hình"
 
 #: gtk/gtkimage.c:196
 msgid "GdkPixbufAnimation to display."
 msgstr ""
 
 #: gtk/gtkimage.c:203
-#, fuzzy
 msgid "Storage type"
-msgstr "Tạo"
+msgstr ""
 
 #: gtk/gtkimage.c:204
 msgid "The representation being used for image data."
@@ -2163,7 +2124,6 @@ msgid "No input devices"
 msgstr "Không có các thiết bị nhập"
 
 #: gtk/gtkinputdialog.c:221
-#, fuzzy
 msgid "_Device:"
 msgstr "Thiết bị:"
 
@@ -2180,19 +2140,16 @@ msgid "Window"
 msgstr "Cử sổ"
 
 #: gtk/gtkinputdialog.c:262
-#, fuzzy
 msgid "_Mode: "
 msgstr "Kiểu: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:293
-#, fuzzy
 msgid "_Axes"
 msgstr "Trục"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:309
-#, fuzzy
 msgid "_Keys"
 msgstr "Các phím"
 
@@ -2239,7 +2196,7 @@ msgstr "xóa"
 
 #: gtk/gtklabel.c:281
 msgid "The text of the label."
-msgstr ""
+msgstr "Văn bản của nhãn"
 
 #: gtk/gtklabel.c:288
 msgid "A list of style attributes to apply to the text of the label."
@@ -2266,7 +2223,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:318
 msgid "Pattern"
-msgstr ""
+msgstr "Mẫu"
 
 #: gtk/gtklabel.c:319
 msgid ""
@@ -2276,16 +2233,15 @@ msgstr ""
 
 #: gtk/gtklabel.c:326
 msgid "Line wrap"
-msgstr ""
+msgstr "Xuống dòng tự động"
 
 #: gtk/gtklabel.c:327
 msgid "If set, wrap lines if the text becomes too wide."
 msgstr ""
 
 #: gtk/gtklabel.c:333
-#, fuzzy
 msgid "Selectable"
-msgstr "Xóa"
+msgstr "Chọn được"
 
 #: gtk/gtklabel.c:334
 msgid "Whether the label text can be selected with the mouse."
@@ -2323,10 +2279,9 @@ msgstr ""
 msgid "The GtkAdjustment for the vertical position."
 msgstr ""
 
-#: gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:190
-#, fuzzy
+#: gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:191
 msgid "Width"
-msgstr "Định dạng Khoảng cách:"
+msgstr "Độ rộng"
 
 #: gtk/gtklayout.c:634
 msgid "The width of the layout."
@@ -2334,7 +2289,7 @@ msgstr ""
 
 #: gtk/gtklayout.c:642
 msgid "Height"
-msgstr ""
+msgstr "Cao"
 
 #: gtk/gtklayout.c:643
 msgid "The height of the layout."
@@ -2347,7 +2302,7 @@ msgstr ""
 #.
 #: gtk/gtkmain.c:731
 msgid "default:LTR"
-msgstr "default:LTR"
+msgstr ""
 
 #: gtk/gtkmenu.c:191
 msgid "Tearoff Title"
@@ -2440,9 +2395,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtknotebook.c:362
-#, fuzzy
 msgid "Page"
-msgstr "Trang %u"
+msgstr "Trang"
 
 #: gtk/gtknotebook.c:363
 msgid "The index of the current page"
@@ -2497,9 +2451,8 @@ msgid "Whether the border should be shown or not"
 msgstr ""
 
 #: gtk/gtknotebook.c:420
-#, fuzzy
 msgid "Scrollable"
-msgstr "Khả năng thu phóng"
+msgstr ""
 
 #: gtk/gtknotebook.c:421
 msgid "If TRUE, scroll arrows are added if there are to many tabs to fit"
@@ -2519,14 +2472,14 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr ""
 
-#: gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4695
+#: gtk/gtknotebook.c:2440 gtk/gtknotebook.c:4696
 #, c-format
 msgid "Page %u"
 msgstr "Trang %u"
 
 #: gtk/gtkoptionmenu.c:188
 msgid "Menu"
-msgstr ""
+msgstr "Thực đơn"
 
 #: gtk/gtkoptionmenu.c:189
 msgid "The menu of options"
@@ -2588,7 +2541,7 @@ msgstr ""
 
 #: gtk/gtkprogress.c:130
 msgid "Show text"
-msgstr ""
+msgstr "Trình diễn văn bản"
 
 #: gtk/gtkprogress.c:131
 msgid "Whether the progress is shown as text"
@@ -2631,9 +2584,8 @@ msgid "Orientation and growth of the progress bar"
 msgstr ""
 
 #: gtk/gtkprogressbar.c:148
-#, fuzzy
 msgid "Bar style"
-msgstr "Kiểu Chữ:"
+msgstr ""
 
 #: gtk/gtkprogressbar.c:149
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
@@ -2668,9 +2620,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkprogressbar.c:187
-#, fuzzy
 msgid "Fraction"
-msgstr "Thông tin về Phông"
+msgstr ""
 
 #: gtk/gtkprogressbar.c:188
 msgid "The fraction of total work that has been completed"
@@ -2709,9 +2660,8 @@ msgid "Invert direction slider moves to increase range value"
 msgstr ""
 
 #: gtk/gtkrange.c:297
-#, fuzzy
 msgid "Slider Width"
-msgstr "Độ rộng Trung bình:"
+msgstr ""
 
 #: gtk/gtkrange.c:298
 msgid "Width of scrollbar or scale thumb"
@@ -2734,18 +2684,16 @@ msgid "Length of step buttons at ends"
 msgstr ""
 
 #: gtk/gtkrange.c:321
-#, fuzzy
 msgid "Stepper Spacing"
-msgstr "Khoảng cách:"
+msgstr ""
 
 #: gtk/gtkrange.c:322
 msgid "Spacing between step buttons and thumb"
 msgstr ""
 
 #: gtk/gtkrange.c:329
-#, fuzzy
 msgid "Arrow X Displacement"
-msgstr "Cử sổ"
+msgstr ""
 
 #: gtk/gtkrange.c:330
 msgid ""
@@ -2753,9 +2701,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkrange.c:337
-#, fuzzy
 msgid "Arrow Y Displacement"
-msgstr "Cử sổ"
+msgstr ""
 
 #: gtk/gtkrange.c:338
 msgid ""
@@ -2778,9 +2725,8 @@ msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
 
 #: gtk/gtkruler.c:118
-#, fuzzy
 msgid "Lower"
-msgstr "loại khác"
+msgstr ""
 
 #: gtk/gtkruler.c:119
 msgid "Lower limit of ruler"
@@ -2799,9 +2745,8 @@ msgid "Position of mark on the ruler"
 msgstr ""
 
 #: gtk/gtkruler.c:148
-#, fuzzy
 msgid "Max Size"
-msgstr "Kích thước theo Điểm ảnh"
+msgstr ""
 
 #: gtk/gtkruler.c:149
 msgid "Maximum size of the ruler"
@@ -2816,9 +2761,8 @@ msgid "The number of decimal places that are displayed in the value"
 msgstr ""
 
 #: gtk/gtkscale.c:165
-#, fuzzy
 msgid "Draw Value"
-msgstr "Giá trị Hiện thời"
+msgstr ""
 
 #: gtk/gtkscale.c:166
 msgid "Whether the current value is displayed as a string next to the slider"
@@ -2898,18 +2842,17 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:522
+#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:525
 msgid "Horizontal Adjustment"
 msgstr ""
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:530
+#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:533
 msgid "Vertical Adjustment"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:250
-#, fuzzy
 msgid "Horizontal Scrollbar Policy"
-msgstr "Kiểu Chữ:"
+msgstr ""
 
 #: gtk/gtkscrolledwindow.c:251
 msgid "When the horizontal scrollbar is displayed"
@@ -2924,18 +2867,16 @@ msgid "When the vertical scrollbar is displayed"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:267
-#, fuzzy
 msgid "Window Placement"
-msgstr "Cử sổ"
+msgstr ""
 
 #: gtk/gtkscrolledwindow.c:268
 msgid "Where the contents are located with respect to the scrollbars"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:275
-#, fuzzy
 msgid "Shadow Type"
-msgstr "Cử sổ"
+msgstr ""
 
 #: gtk/gtkscrolledwindow.c:276
 msgid "Style of bevel around the contents"
@@ -2952,18 +2893,16 @@ msgid ""
 msgstr ""
 
 #: gtk/gtksettings.c:156
-#, fuzzy
 msgid "Cursor Blink"
-msgstr "Tắt"
+msgstr ""
 
 #: gtk/gtksettings.c:157
 msgid "Whether the cursor should blink"
 msgstr ""
 
 #: gtk/gtksettings.c:164
-#, fuzzy
 msgid "Cursor Blink Time"
-msgstr "Tắt"
+msgstr ""
 
 #: gtk/gtksettings.c:165
 msgid "Length of the cursor blink cycle, in milleseconds"
@@ -3012,18 +2951,16 @@ msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 
 #: gtk/gtksettings.c:215
-#, fuzzy
 msgid "Font Name"
-msgstr "Gia đình:"
+msgstr "Tên phông"
 
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
 msgstr ""
 
 #: gtk/gtksizegroup.c:242
-#, fuzzy
 msgid "Mode"
-msgstr "Kiểu: "
+msgstr ""
 
 #: gtk/gtksizegroup.c:243
 msgid ""
@@ -3083,9 +3020,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkspinbutton.c:298
-#, fuzzy
 msgid "Value"
-msgstr "Giá trị:"
+msgstr "Giá trị"
 
 #: gtk/gtkspinbutton.c:299
 msgid "Reads the current value, or sets a new value"
@@ -3097,13 +3033,12 @@ msgstr ""
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:267
-#, fuzzy
 msgid "Information"
-msgstr "Thông tin về Phông"
+msgstr "Thông tin"
 
 #: gtk/gtkstock.c:268
 msgid "Warning"
-msgstr ""
+msgstr "Chú ý"
 
 #: gtk/gtkstock.c:269
 msgid "Error"
@@ -3111,7 +3046,7 @@ msgstr "Lỗi"
 
 #: gtk/gtkstock.c:270
 msgid "Question"
-msgstr ""
+msgstr "Hỏi"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
@@ -3121,219 +3056,198 @@ msgid "_Add"
 msgstr ""
 
 #: gtk/gtkstock.c:276
-#, fuzzy
 msgid "_Apply"
-msgstr "Sử dụng"
+msgstr "Ứng dụng"
 
 #: gtk/gtkstock.c:277
 msgid "_Bold"
 msgstr ""
 
 #: gtk/gtkstock.c:278
-#, fuzzy
 msgid "_Cancel"
-msgstr "Hủy bỏ"
+msgstr "_Hủy bỏ"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
 msgstr ""
 
 #: gtk/gtkstock.c:280
-#, fuzzy
 msgid "_Clear"
-msgstr "xóa"
+msgstr "Xóa"
 
 #: gtk/gtkstock.c:281
-#, fuzzy
 msgid "_Close"
 msgstr "Đóng"
 
 #: gtk/gtkstock.c:282
-#, fuzzy
 msgid "_Convert"
-msgstr "Tạo"
+msgstr ""
 
 #: gtk/gtkstock.c:283
 msgid "_Copy"
-msgstr ""
+msgstr "Sao"
 
 #: gtk/gtkstock.c:284
 msgid "C_ut"
-msgstr ""
+msgstr "Cắt"
 
 #: gtk/gtkstock.c:285
-#, fuzzy
 msgid "_Delete"
 msgstr "Xóa"
 
 #: gtk/gtkstock.c:286
 msgid "_Execute"
-msgstr ""
+msgstr "Thực hiện"
 
 #: gtk/gtkstock.c:287
 msgid "_Find"
-msgstr ""
+msgstr "Tìm"
 
 #: gtk/gtkstock.c:288
 msgid "Find and _Replace"
-msgstr ""
+msgstr "Tìm va Thay thế"
 
 #: gtk/gtkstock.c:289
-#, fuzzy
 msgid "_Floppy"
-msgstr "Sử dụng"
+msgstr ""
 
 #: gtk/gtkstock.c:290
 msgid "_Bottom"
-msgstr ""
+msgstr "Nút ấn"
 
 #: gtk/gtkstock.c:291
 msgid "_First"
-msgstr ""
+msgstr "Thứ nhất"
 
 #: gtk/gtkstock.c:292
 msgid "_Last"
-msgstr ""
+msgstr "Cuối"
 
 #: gtk/gtkstock.c:293
 msgid "_Top"
-msgstr ""
+msgstr "Trên cùng"
 
 #: gtk/gtkstock.c:294
 msgid "_Back"
-msgstr ""
+msgstr "Quay lại"
 
 #: gtk/gtkstock.c:295
 msgid "_Down"
-msgstr ""
+msgstr "Dưới"
 
 #: gtk/gtkstock.c:296
 msgid "_Forward"
-msgstr ""
+msgstr "Tiếp tục"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
-msgstr ""
+msgstr "Lên trên"
 
 #: gtk/gtkstock.c:298
-#, fuzzy
 msgid "_Help"
-msgstr "Chỉ dẫn"
+msgstr "_Chỉ dẫn"
 
 #: gtk/gtkstock.c:299
-#, fuzzy
 msgid "_Home"
-msgstr "Chỉ dẫn"
+msgstr "Nhà"
 
 #: gtk/gtkstock.c:300
 msgid "_Index"
 msgstr ""
 
 #: gtk/gtkstock.c:301
-#, fuzzy
 msgid "_Italic"
-msgstr "chữ nghiêng"
+msgstr "Chữ nghiêng"
 
 #: gtk/gtkstock.c:302
 msgid "_Jump to"
 msgstr ""
 
 #: gtk/gtkstock.c:303
-#, fuzzy
 msgid "_Center"
-msgstr "Tạo"
+msgstr ""
 
 #: gtk/gtkstock.c:304
-#, fuzzy
 msgid "_Fill"
-msgstr "Gia đình:"
+msgstr "Làm đầy"
 
 #: gtk/gtkstock.c:305
 msgid "_Left"
-msgstr ""
+msgstr "Trái"
 
 #: gtk/gtkstock.c:306
 msgid "_Right"
-msgstr ""
+msgstr "Phải"
 
 #: gtk/gtkstock.c:307
 msgid "_New"
-msgstr ""
+msgstr "Mới"
 
 #: gtk/gtkstock.c:308
 msgid "_No"
-msgstr ""
+msgstr "Không"
 
 #: gtk/gtkstock.c:309
-#, fuzzy
 msgid "_OK"
 msgstr "OK"
 
 #: gtk/gtkstock.c:310
 msgid "_Open"
-msgstr ""
+msgstr "Mở"
 
 #: gtk/gtkstock.c:311
 msgid "_Paste"
-msgstr ""
+msgstr "Ghép"
 
 #: gtk/gtkstock.c:312
 msgid "_Preferences"
-msgstr ""
+msgstr "Chỉnh lý"
 
 #: gtk/gtkstock.c:313
-#, fuzzy
 msgid "_Print"
-msgstr "Các điểm"
+msgstr "In"
 
 #: gtk/gtkstock.c:314
-#, fuzzy
 msgid "Print Pre_view"
-msgstr "Xem mẫu chữ:"
+msgstr "In Xem trước"
 
 #: gtk/gtkstock.c:315
 msgid "_Properties"
-msgstr ""
+msgstr "Các tính chất"
 
 #: gtk/gtkstock.c:316
 msgid "_Quit"
-msgstr ""
+msgstr "Thoát ra"
 
 #: gtk/gtkstock.c:317
-#, fuzzy
 msgid "_Redo"
-msgstr "Đỏ:"
+msgstr "Làm lại"
 
 #: gtk/gtkstock.c:318
 msgid "_Refresh"
-msgstr ""
+msgstr "Hồi phục"
 
 #: gtk/gtkstock.c:319
-#, fuzzy
 msgid "_Remove"
-msgstr "Đỏ:"
+msgstr "Chuyển đi"
 
 #: gtk/gtkstock.c:320
 msgid "_Revert"
 msgstr ""
 
 #: gtk/gtkstock.c:321
-#, fuzzy
 msgid "_Save"
 msgstr "Nhớ"
 
 #: gtk/gtkstock.c:322
-#, fuzzy
 msgid "Save _As"
-msgstr "Nhớ"
+msgstr "Nhớ tại"
 
 #: gtk/gtkstock.c:323
-#, fuzzy
 msgid "_Color"
-msgstr "Đóng"
+msgstr "Mầu"
 
 #: gtk/gtkstock.c:324
-#, fuzzy
 msgid "_Font"
 msgstr "Phông"
 
@@ -3351,16 +3265,15 @@ msgstr ""
 
 #: gtk/gtkstock.c:328
 msgid "_Stop"
-msgstr ""
+msgstr "Stop"
 
 #: gtk/gtkstock.c:329
 msgid "_Strikethrough"
 msgstr ""
 
 #: gtk/gtkstock.c:330
-#, fuzzy
 msgid "_Undelete"
-msgstr "Xóa"
+msgstr "Không xóa"
 
 #: gtk/gtkstock.c:331
 msgid "_Underline"
@@ -3368,11 +3281,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:332
 msgid "_Undo"
-msgstr ""
+msgstr "Quay lại"
 
 #: gtk/gtkstock.c:333
 msgid "_Yes"
-msgstr ""
+msgstr "Có"
 
 #: gtk/gtkstock.c:334
 #, c-format
@@ -3385,11 +3298,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:336
 msgid "Zoom _In"
-msgstr ""
+msgstr "Thu nhỏ"
 
 #: gtk/gtkstock.c:337
 msgid "Zoom _Out"
-msgstr ""
+msgstr "Phóng to"
 
 #: gtk/gtktable.c:156
 msgid "Rows"
@@ -3408,9 +3321,8 @@ msgid "The number of columns in the table"
 msgstr ""
 
 #: gtk/gtktable.c:174
-#, fuzzy
 msgid "Row spacing"
-msgstr "Khoảng cách:"
+msgstr ""
 
 #: gtk/gtktable.c:175
 msgid "The amount of space between two consecutive rows"
@@ -3491,9 +3403,8 @@ msgid "Bitmap to use as a mask when drawing the text foreground"
 msgstr ""
 
 #: gtk/gtktexttag.c:268
-#, fuzzy
 msgid "Text direction"
-msgstr "Tạo một Thư mục"
+msgstr ""
 
 #: gtk/gtktexttag.c:269
 msgid "Text direction, e.g. right-to-left or left-to-right"
@@ -3757,9 +3668,8 @@ msgid "Right Margin"
 msgstr ""
 
 #: gtk/gtktextview.c:632
-#, fuzzy
 msgid "Cursor Visible"
-msgstr "Tắt"
+msgstr ""
 
 #: gtk/gtktextview.c:633
 msgid "If the insertion cursor is shown"
@@ -3767,12 +3677,12 @@ msgstr ""
 
 #: gtk/gtktextview.c:6366
 msgid "Input _Methods"
-msgstr ""
+msgstr "Các phương pháp nhập"
 
 #: gtk/gtkthemes.c:69
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr "Môđun địa phương không tìm thấy trong đường dẫn môđun: \"%s\","
+msgstr ""
 
 #: gtk/gtktipsquery.c:182
 msgid "--- No Tip ---"
@@ -3839,9 +3749,8 @@ msgid "Style of bevel around the toolbar"
 msgstr ""
 
 #: gtk/gtktoolbar.c:284
-#, fuzzy
 msgid "Toolbar style"
-msgstr "Kiểu Chữ:"
+msgstr ""
 
 #: gtk/gtktoolbar.c:285
 msgid ""
@@ -3864,220 +3773,215 @@ msgstr ""
 msgid "The model for the TreeModelSort to sort"
 msgstr ""
 
-#: gtk/gtktreeview.c:514
+#: gtk/gtktreeview.c:517
 msgid "TreeView Model"
 msgstr ""
 
-#: gtk/gtktreeview.c:515
+#: gtk/gtktreeview.c:518
 msgid "The model for the tree view"
 msgstr ""
 
-#: gtk/gtktreeview.c:523
+#: gtk/gtktreeview.c:526
 msgid "Horizontal Adjustment for the widget"
 msgstr ""
 
-#: gtk/gtktreeview.c:531
+#: gtk/gtktreeview.c:534
 msgid "Vertical Adjustment for the widget"
 msgstr ""
 
-#: gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
-#, fuzzy
+#: gtk/gtktreeview.c:541 gtk/gtktreeviewcolumn.c:175 gtk/gtkwidget.c:423
 msgid "Visible"
-msgstr "Tắt"
+msgstr "Nhìn được"
 
-#: gtk/gtktreeview.c:539
+#: gtk/gtktreeview.c:542
 msgid "Show the column header buttons"
 msgstr ""
 
-#: gtk/gtktreeview.c:546
+#: gtk/gtktreeview.c:549
 msgid "Headers Clickable"
 msgstr ""
 
-#: gtk/gtktreeview.c:547
+#: gtk/gtktreeview.c:550
 msgid "Column headers respond to click events"
 msgstr ""
 
-#: gtk/gtktreeview.c:554
+#: gtk/gtktreeview.c:557
 msgid "Expander Column"
 msgstr ""
 
-#: gtk/gtktreeview.c:555
+#: gtk/gtktreeview.c:558
 msgid "Set the column for the expander column"
 msgstr ""
 
-#: gtk/gtktreeview.c:562 gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeview.c:565 gtk/gtktreeviewcolumn.c:274
 msgid "Reorderable"
 msgstr ""
 
-#: gtk/gtktreeview.c:563
+#: gtk/gtktreeview.c:566
 msgid "View is reorderable"
 msgstr ""
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:573
 msgid "Rules Hint"
 msgstr ""
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:574
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 
-#: gtk/gtktreeview.c:578
+#: gtk/gtktreeview.c:581
 msgid "Enable Search"
 msgstr ""
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:582
 msgid "View allows user to search through columns interactively"
 msgstr ""
 
-#: gtk/gtktreeview.c:586
+#: gtk/gtktreeview.c:589
 msgid "Search Column"
 msgstr ""
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:590
 msgid "Model column to search through when searching through code"
 msgstr ""
 
-#: gtk/gtktreeview.c:600
+#: gtk/gtktreeview.c:603
 msgid "Expander Size"
 msgstr ""
 
-#: gtk/gtktreeview.c:601
+#: gtk/gtktreeview.c:604
 msgid "Size of the expander arrow."
 msgstr ""
 
-#: gtk/gtktreeview.c:609
+#: gtk/gtktreeview.c:612
 msgid "Vertical Separator Width"
 msgstr ""
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:613
 msgid "Vertical space between cells.  Must be an even number."
 msgstr ""
 
-#: gtk/gtktreeview.c:618
+#: gtk/gtktreeview.c:621
 msgid "Horizontal Separator Width"
 msgstr ""
 
-#: gtk/gtktreeview.c:619
+#: gtk/gtktreeview.c:622
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr ""
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:630
 msgid "Allow Rules"
 msgstr ""
 
-#: gtk/gtktreeview.c:628
+#: gtk/gtktreeview.c:631
 msgid "Allow drawing of alternating color rows."
 msgstr ""
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:637
 msgid "Indent Expanders"
 msgstr ""
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:638
 msgid "Make the expanders indented."
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:175
+#: gtk/gtktreeviewcolumn.c:176
 msgid "Whether to display the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:182 gtk/gtkwindow.c:441
-#, fuzzy
+#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:441
 msgid "Resizable"
-msgstr "Tắt"
+msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:183
+#: gtk/gtktreeviewcolumn.c:184
 msgid "Column is user-resizable"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:191
+#: gtk/gtktreeviewcolumn.c:192
 msgid "Current width of the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:199
+#: gtk/gtktreeviewcolumn.c:200
 msgid "Sizing"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:200
+#: gtk/gtktreeviewcolumn.c:201
 msgid "Resize mode of the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:208
-#, fuzzy
-msgid "Fixed Width"
-msgstr "Độ rộng Trung bình:"
-
 #: gtk/gtktreeviewcolumn.c:209
+msgid "Fixed Width"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:210
 msgid "Current fixed width of the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:218
+#: gtk/gtktreeviewcolumn.c:219
 msgid "Minimum Width"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:219
+#: gtk/gtktreeviewcolumn.c:220
 msgid "Minimum allowed width of the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:228
+#: gtk/gtktreeviewcolumn.c:229
 msgid "Maximum Width"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:229
+#: gtk/gtktreeviewcolumn.c:230
 msgid "Maximum allowed width of the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:238
-#, fuzzy
-msgid "Title"
-msgstr "Các tập tin"
-
 #: gtk/gtktreeviewcolumn.c:239
+msgid "Title"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:240
 msgid "Title to appear in column header"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:246
+#: gtk/gtktreeviewcolumn.c:247
 msgid "Clickable"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:247
+#: gtk/gtktreeviewcolumn.c:248
 msgid "Whether the header can be clicked"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:255
-#, fuzzy
-msgid "Widget"
-msgstr "Kiểu chữ:"
-
 #: gtk/gtktreeviewcolumn.c:256
+msgid "Widget"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:257
 msgid "Widget to put in column header button instead of column title"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:263
+#: gtk/gtktreeviewcolumn.c:264
 msgid "Alignment"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:264
+#: gtk/gtktreeviewcolumn.c:265
 msgid "X Alignment of the column header text or widget"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:274
+#: gtk/gtktreeviewcolumn.c:275
 msgid "Whether the column can be reordered around the headers"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:281
+#: gtk/gtktreeviewcolumn.c:282
 msgid "Sort indicator"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:282
+#: gtk/gtktreeviewcolumn.c:283
 msgid "Whether to show a sort indicator"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:289
+#: gtk/gtktreeviewcolumn.c:290
 msgid "Sort order"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:290
+#: gtk/gtktreeviewcolumn.c:291
 msgid "Sort direction the sort indicator should indicate"
 msgstr ""
 
@@ -4098,9 +4002,8 @@ msgid "Determines how the shadowed box around the viewport is drawn."
 msgstr ""
 
 #: gtk/gtkwidget.c:390
-#, fuzzy
 msgid "Widget name"
-msgstr "Kiểu chữ:"
+msgstr ""
 
 #: gtk/gtkwidget.c:391
 msgid "The name of the widget"
@@ -4171,18 +4074,16 @@ msgid "Whether the widget has the input focus"
 msgstr ""
 
 #: gtk/gtkwidget.c:458
-#, fuzzy
 msgid "Can default"
-msgstr "default:LTR"
+msgstr ""
 
 #: gtk/gtkwidget.c:459
 msgid "Whether the widget can be the default widget"
 msgstr ""
 
 #: gtk/gtkwidget.c:465
-#, fuzzy
 msgid "Has default"
-msgstr "default:LTR"
+msgstr ""
 
 #: gtk/gtkwidget.c:466
 msgid "Whether the widget is the default widget"
@@ -4205,9 +4106,8 @@ msgid "Whether the widget is composed of other widgets"
 msgstr ""
 
 #: gtk/gtkwidget.c:486
-#, fuzzy
 msgid "Style"
-msgstr "Bổ xung Kiểu thức"
+msgstr ""
 
 #: gtk/gtkwidget.c:487
 msgid ""
@@ -4290,18 +4190,16 @@ msgid "Aspect ratio with which to draw insertion cursor"
 msgstr ""
 
 #: gtk/gtkwindow.c:406
-#, fuzzy
 msgid "Window Type"
-msgstr "Cử sổ"
+msgstr ""
 
 #: gtk/gtkwindow.c:407
 msgid "The type of the window"
 msgstr ""
 
 #: gtk/gtkwindow.c:416
-#, fuzzy
 msgid "Window Title"
-msgstr "Cử sổ"
+msgstr ""
 
 #: gtk/gtkwindow.c:417
 msgid "The title of the window"
@@ -4400,12 +4298,12 @@ msgstr ""
 #. ID
 #: modules/input/imipa.c:144
 msgid "IPA"
-msgstr ""
+msgstr "IPA"
 
 #. ID
 #: modules/input/imthai-broken.c:177
 msgid "Thai (Broken)"
-msgstr ""
+msgstr "Tiếng Thái (Hỏng)"
 
 #. ID
 #: modules/input/imti-er.c:453
@@ -4420,28 +4318,25 @@ msgstr ""
 #. ID
 #: modules/input/imviqr.c:243
 msgid "Vietnamese (VIQR)"
-msgstr ""
+msgstr "Tiếng Việt (VIQR)"
 
 #. ID
 #: modules/input/imxim.c:27
 msgid "X Input Method"
-msgstr ""
+msgstr "Phương pháp nhập X"
+
+#~ msgid "Insufficient memory to load TGA image"
+#~ msgstr "Không đủ bộ nhớ để tải ảnh TG"
 
 #~ msgid "Directories"
 #~ msgstr "Các thư mục"
 
-#, fuzzy
-#~ msgid "_Directories"
-#~ msgstr "Các thư mục"
-
-#, fuzzy
-#~ msgid "Crea_te Dir"
+#~ msgid "Create Dir"
 #~ msgstr "Tạo một Thư mục"
 
 #~ msgid "Create Directory"
 #~ msgstr "Tạo một Thư mục"
 
-#, fuzzy
 #~ msgid "_Directory name:"
 #~ msgstr "Tên thư mục:"
 
@@ -4463,100 +4358,3 @@ msgstr ""
 #~ msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 #~ msgstr ""
 #~ "Tập tin đồ họa không tìm được trong đường dẫn pixmap: \"%s\" line %d"
-
-#, fuzzy
-#~ msgid "He_x Value:"
-#~ msgstr "Giá trị:"
-
-#~ msgid "Foundry:"
-#~ msgstr "Ngồn gốc:"
-
-#~ msgid "Slant:"
-#~ msgstr "Nghiêng:"
-
-#~ msgid "Resolution X:"
-#~ msgstr "Độ phân giải X:"
-
-#~ msgid "Resolution Y:"
-#~ msgstr "Độ phân giải Y:"
-
-#~ msgid "Charset:"
-#~ msgstr "Kiểu chữ"
-
-#~ msgid "Requested Value"
-#~ msgstr "Giá trị đòi hỏi"
-
-#~ msgid "Font:"
-#~ msgstr "Phông chữ:"
-
-#~ msgid "Reset Filter"
-#~ msgstr "Đặt lại Bộ lọc"
-
-#~ msgid "Metric:"
-#~ msgstr "Hệ mét:"
-
-#~ msgid "Pixels"
-#~ msgstr "Các điểm ảnh"
-
-#~ msgid "Requested Font Name:"
-#~ msgstr "Tên Phông đòi hỏi:"
-
-#~ msgid "Actual Font Name:"
-#~ msgstr "Tên Phông hiện thời:"
-
-#~ msgid "%i fonts available with a total of %i styles."
-#~ msgstr "%i phông sử dụng trong toàn bộ %i kiểu."
-
-#~ msgid "Filter"
-#~ msgstr "Lọc"
-
-#~ msgid "Scaled Bitmap"
-#~ msgstr "Thu phóng Sơ đồ điểm"
-
-#~ msgid "*"
-#~ msgstr "*"
-
-#~ msgid "(nil)"
-#~ msgstr "(nil)"
-
-#~ msgid "regular"
-#~ msgstr "đểu đặn"
-
-#~ msgid "oblique"
-#~ msgstr "nghiêng"
-
-#~ msgid "reverse italic"
-#~ msgstr "chữ nghiêng nghịch"
-
-#~ msgid "reverse oblique"
-#~ msgstr "nghiêng nghịch"
-
-#~ msgid "[M]"
-#~ msgstr "[M]"
-
-#~ msgid "[C]"
-#~ msgstr "[C]"
-
-#~ msgid "The selected font is not available."
-#~ msgstr "Không có phông chữ đã chọn."
-
-#~ msgid "The selected font is not a valid font."
-#~ msgstr "Phông chữ đã chọn là phông không sử dụng được."
-
-#~ msgid "This is a 2-byte font and may not be displayed correctly."
-#~ msgstr "Đây là một phông 2 byte và có thể hiển thị không đúng."
-
-#~ msgid "roman"
-#~ msgstr "roman"
-
-#~ msgid "proportional"
-#~ msgstr "Phông theo tỉ lệ"
-
-#~ msgid "monospaced"
-#~ msgstr "Phông không theo tỉ lệ"
-
-#~ msgid "Font: (Filter Applied)"
-#~ msgstr "Phông: (sử dụng lọc)"
-
-#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr "MAX_FONTS bị vượt quá. Một số phông có thể bị sót."
