@@ -1,5 +1,10 @@
 2004-11-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c (find_menu_by_path) 
+	(gtk_combo_box_menu_fill_level, gtk_combo_box_menu_row_inserted): 
+	Use a row reference, not a path, to associate separators
+	with their tree row.  
+	
 	* gtk/gtkstatusbar.c (gtk_statusbar_set_has_resize_grip): 
 	Show the grip_window if necessary.  
 

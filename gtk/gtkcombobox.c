@@ -2384,6 +2384,7 @@ gtk_combo_box_menu_fill_level (GtkComboBox *combo_box,
   gboolean is_separator;
   gint i, n_children;
   GtkWidget *last;
+  GtkTreePath *path;
   
   n_children = gtk_tree_model_iter_n_children (model, parent);
   
@@ -2401,10 +2402,11 @@ gtk_combo_box_menu_fill_level (GtkComboBox *combo_box,
       if (is_separator)
 	{
 	  item = gtk_separator_menu_item_new ();
+	  path = gtk_tree_model_get_path (model, &iter);
 	  g_object_set_data_full (G_OBJECT (item),
 				  "gtk-combo-box-item-path",
-				  gtk_tree_model_get_path (model, &iter),
-				  (GDestroyNotify)gtk_tree_path_free);
+				  gtk_tree_row_reference_new (model, path),
+				  (GDestroyNotify)gtk_tree_row_reference_free);
 	}
       else
 	{
@@ -2754,6 +2756,7 @@ find_menu_by_path (GtkWidget   *menu,
   GList *i, *list;
   GtkWidget *item;
   GtkWidget *submenu;    
+  GtkTreeRowReference *mref;
   GtkTreePath *mpath;
   gboolean skip;
 
@@ -2764,12 +2767,13 @@ find_menu_by_path (GtkWidget   *menu,
     {
       if (GTK_IS_SEPARATOR_MENU_ITEM (i->data))
 	{
-	  
-	  mpath = g_object_get_data (G_OBJECT (i->data), "gtk-combo-box-item-path");
-	  if (!mpath)
+	  mref = g_object_get_data (G_OBJECT (i->data), "gtk-combo-box-item-path");
+	  if (!mref)
 	    continue;
-	  
-	  mpath = gtk_tree_path_copy (mpath);
+	  else if (!gtk_tree_row_reference_valid (mref))
+	    mpath = NULL;
+	  else
+	    mpath = gtk_tree_row_reference_get_path (mref);
 	}
       else if (GTK_IS_CELL_VIEW (GTK_BIN (i->data)->child))
 	{
@@ -2914,8 +2918,8 @@ gtk_combo_box_menu_row_inserted (GtkTreeModel *model,
       item = gtk_separator_menu_item_new ();
       g_object_set_data_full (G_OBJECT (item),
 			      "gtk-combo-box-item-path",
-			      gtk_tree_path_copy (path),
-			      (GDestroyNotify)gtk_tree_path_free);
+			      gtk_tree_row_reference_new (model, path),
+			      (GDestroyNotify)gtk_tree_row_reference_free);
     }
   else
     {
