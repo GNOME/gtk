@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-06-16 00:04-0400\n"
-"PO-Revision-Date: 2002-06-13 09:03+0200\n"
+"POT-Creation-Date: 2002-07-06 21:51+0200\n"
+"PO-Revision-Date: 2002-07-06 21:52+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -136,15 +136,15 @@ msgstr "Bildpunktsdata är trasigt"
 msgid "failed to allocate image buffer of %u bytes"
 msgstr "misslyckades med att allokera bildbuffert på %u byte"
 
-#: gdk-pixbuf/io-bmp.c:266 gdk-pixbuf/io-bmp.c:366
+#: gdk-pixbuf/io-bmp.c:261 gdk-pixbuf/io-bmp.c:374
 msgid "Not enough memory to load bitmap image"
 msgstr "Inte tillräckligt med minne för att läsa in bilden"
 
-#: gdk-pixbuf/io-bmp.c:292
+#: gdk-pixbuf/io-bmp.c:300
 msgid "BMP image has unsupported header size"
 msgstr "BMP-bilden har huvudstorlek som inte stöds"
 
-#: gdk-pixbuf/io-bmp.c:317 gdk-pixbuf/io-bmp.c:340 gdk-pixbuf/io-bmp.c:399
+#: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:409
 msgid "BMP image has bogus header data"
 msgstr "BMP-bilden har felaktig huvuddata"
 
@@ -537,39 +537,43 @@ msgstr "Kan inte allokera pixbuf"
 msgid "Unsupported TGA image type"
 msgstr "TGA-bildtypen stöds inte"
 
-#: gdk-pixbuf/io-tiff.c:187
+#: gdk-pixbuf/io-tiff.c:191
 msgid "Could not get image width (bad TIFF file)"
 msgstr "Kunde inte få tag i bildbredden (felaktig TIFF-fil)"
 
-#: gdk-pixbuf/io-tiff.c:194
+#: gdk-pixbuf/io-tiff.c:198
 msgid "Could not get image height (bad TIFF file)"
 msgstr "Kunde inte få tag i bildhöjden (felaktig TIFF-fil)"
 
-#: gdk-pixbuf/io-tiff.c:202
+#: gdk-pixbuf/io-tiff.c:206
 msgid "Width or height of TIFF image is zero"
 msgstr "Bredden eller höjden på TIFF-bilden är noll"
 
-#: gdk-pixbuf/io-tiff.c:211 gdk-pixbuf/io-tiff.c:220
+#: gdk-pixbuf/io-tiff.c:215 gdk-pixbuf/io-tiff.c:224
 msgid "Dimensions of TIFF image too large"
 msgstr "Dimensionerna på TIFF-bilden är för stora"
 
-#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:536
+#: gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:246 gdk-pixbuf/io-tiff.c:552
 msgid "Insufficient memory to open TIFF file"
 msgstr "Inte tillräckligt med minne för att öppna TIFF-fil"
 
-#: gdk-pixbuf/io-tiff.c:254
+#: gdk-pixbuf/io-tiff.c:258
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Misslyckades med att läsa in RGB-data från TIFF-fil"
 
-#: gdk-pixbuf/io-tiff.c:324
+#: gdk-pixbuf/io-tiff.c:266
+msgid "Unsupported TIFF variant"
+msgstr "TIFF-varianten stöds inte"
+
+#: gdk-pixbuf/io-tiff.c:336
 msgid "Failed to open TIFF image"
 msgstr "Misslyckades med att öppna TIFF-bild"
 
-#: gdk-pixbuf/io-tiff.c:337
+#: gdk-pixbuf/io-tiff.c:349
 msgid "TIFFClose operation failed"
 msgstr "Åtgärden TIFFClose misslyckades"
 
-#: gdk-pixbuf/io-tiff.c:470 gdk-pixbuf/io-tiff.c:484
+#: gdk-pixbuf/io-tiff.c:482 gdk-pixbuf/io-tiff.c:495
 msgid "Failed to load TIFF image"
 msgstr "Misslyckades med att läsa in TIFF-bild"
 
