@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-02 08:06+0100\n"
+"POT-Creation-Date: 2004-02-06 08:22+0100\n"
 "PO-Revision-Date: 2003-11-18 11:32+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -1469,11 +1469,11 @@ msgstr "(nieznane)"
 msgid "clear"
 msgstr "wyczyść"
 
-#: gtk/gtklabel.c:3225
+#: gtk/gtklabel.c:3217
 msgid "Select All"
 msgstr "Zaznacz wszystko"
 
-#: gtk/gtklabel.c:3235
+#: gtk/gtklabel.c:3227
 msgid "Input Methods"
 msgstr "Metody wejściowe"
 
@@ -1788,12 +1788,12 @@ msgid "_Yes"
 msgstr "_Tak"
 
 #: gtk/gtkstock.c:338
-msgid "Zoom _100%"
-msgstr "Powiększenie na _100%"
+msgid "_Normal Size"
+msgstr "_Zwykły rozmiar"
 
 #: gtk/gtkstock.c:339
-msgid "Zoom to _Fit"
-msgstr "_Dopasuj powiększenie"
+msgid "Best _Fit"
+msgstr "_Dopasowanie"
 
 #: gtk/gtkstock.c:340
 msgid "Zoom _In"
@@ -1925,6 +1925,12 @@ msgstr "Metoda wejściowa X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nie można pobrać informacji dla pliku \"%s\": %s"
+
+#~ msgid "Zoom _100%"
+#~ msgstr "Powiększenie na _100%"
+
+#~ msgid "Zoom to _Fit"
+#~ msgstr "_Dopasuj powiększenie"
 
 #~ msgid "This file system does not support bookmarks"
 #~ msgstr "Ten system plików nie obsługuje zakładek"
