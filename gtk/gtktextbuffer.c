@@ -1364,11 +1364,20 @@ selection_received (GtkWidget        *widget,
 						&list);
 	for (i=0; i<count; i++)
           {
-            /* FIXME this is broken, it assumes the CTEXT is latin1
-               when it probably isn't. */
-            gchar *utf;
-
-            utf = gtk_text_latin1_to_utf(list[i], strlen(list[i]));
+            /* list contains stuff in our default encoding */
+            gboolean free_utf = FALSE;
+            gchar *utf = NULL;
+            gchar *charset = NULL;
+            
+            if (g_get_charset (&charset))
+              {
+                utf = g_convert (list[i], -1,
+                                 "UTF8", charset,
+                                 NULL);
+                free_utf = TRUE;
+              }
+            else
+              utf = list[i];
 
             if (buffer->paste_interactive)
               gtk_text_buffer_insert_interactive (buffer, &insert_point,
@@ -1377,7 +1386,8 @@ selection_received (GtkWidget        *widget,
               gtk_text_buffer_insert (buffer, &insert_point,
                                       utf, -1);
 
-            g_free(utf);
+            if (free_utf)
+              g_free(utf);
           }
 
 	if (count > 0)

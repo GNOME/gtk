@@ -156,6 +156,9 @@ void           gtk_text_view_set_cursor_visible    (GtkTextView   *text_view,
                                                     gboolean       setting);
 gboolean       gtk_text_view_get_cursor_visible    (GtkTextView   *text_view);
 
+void           gtk_text_view_get_iter_location     (GtkTextView   *text_view,
+                                                    const GtkTextIter *iter,
+                                                    GdkRectangle  *location);
 
 #ifdef __cplusplus
 }

@@ -126,6 +126,12 @@ gchar*   gtk_text_latin1_to_utf         (const gchar *latin1,
                                          gint         len);
 
 
+gchar*   g_convert (const gchar *str,
+                    gint         len,
+                    const gchar *to_codeset,
+                    const gchar *from_codeset,
+                    gint        *bytes_converted);
+       
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

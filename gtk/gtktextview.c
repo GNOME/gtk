@@ -706,6 +706,16 @@ gtk_text_view_get_iter_at_pixel (GtkTextView *text_view,
                                      y + text_view->yoffset);
 }
 
+void
+gtk_text_view_get_iter_location (GtkTextView       *text_view,
+                                 const GtkTextIter *iter,
+                                 GdkRectangle      *location)
+{
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+  g_return_if_fail (gtk_text_iter_get_buffer (iter) == text_view->buffer);
+
+  gtk_text_layout_get_iter_location (text_view->layout, iter, location);
+}
 
 static void
 set_adjustment_clamped (GtkAdjustment *adj, gfloat val)
@@ -1475,9 +1485,6 @@ gtk_text_view_event (GtkWidget *widget, GdkEvent *event)
   if (text_view->layout == NULL ||
       text_view->buffer == NULL)
     return FALSE;
-
-  /* FIXME eventually we really want to synthesize enter/leave
-     events here as the canvas does for canvas items */
   
   if (get_event_coordinates (event, &x, &y))
     {
@@ -1494,28 +1501,28 @@ gtk_text_view_event (GtkWidget *widget, GdkEvent *event)
                                          &iter,
                                          x, y);
 
-        {
-          GSList *tags;
-          GSList *tmp;
+      {
+        GSList *tags;
+        GSList *tmp;
           
-          tags = gtk_text_buffer_get_tags (text_view->buffer, &iter);
+        tags = gtk_text_buffer_get_tags (text_view->buffer, &iter);
           
-          tmp = tags;
-          while (tmp != NULL)
-            {
-              GtkTextTag *tag = tmp->data;
+        tmp = tags;
+        while (tmp != NULL)
+          {
+            GtkTextTag *tag = tmp->data;
 
-              if (gtk_text_tag_event (tag, GTK_OBJECT (widget), event, &iter))
-                {
-                  retval = TRUE;
-                  break;
-                }
+            if (gtk_text_tag_event (tag, GTK_OBJECT (widget), event, &iter))
+              {
+                retval = TRUE;
+                break;
+              }
 
-              tmp = g_slist_next (tmp);
-            }
+            tmp = g_slist_next (tmp);
+          }
 
-          g_slist_free (tags);
-        }
+        g_slist_free (tags);
+      }
         
       return retval;
     }
@@ -2810,17 +2817,26 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
 						&list);
 	for (i=0; i<count; i++)
           {
-            /* FIXME this is broken, it assumes the CTEXT is latin1
-               when it probably isn't. */
-            gchar *utf;
-
-            utf = gtk_text_latin1_to_utf (list[i], strlen (list[i]));
+            /* list contains stuff in our default encoding */
+            gboolean free_utf = FALSE;
+            gchar *utf = NULL;
+            gchar *charset = NULL;
             
+            if (g_get_charset (&charset))
+              {
+                utf = g_convert (list[i], -1,
+                                 "UTF8", charset, NULL);
+                free_utf = TRUE;
+              }
+            else
+              utf = list[i];
+
             gtk_text_buffer_insert_interactive (text_view->buffer,
                                                 &drop_point, utf, -1,
                                                 text_view->editable);
 
-            g_free (utf);
+            if (free_utf)
+              g_free(utf);
           }
 
 	if (count > 0)
