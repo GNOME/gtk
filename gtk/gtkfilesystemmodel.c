@@ -1594,7 +1594,7 @@ do_files_added (GtkFileSystemModel *model,
 	  if (new->is_visible)
 	    {
 	      iter.user_data = new;
-	      gtk_file_path_free (path);
+	      gtk_tree_path_free (path);
 	      path = gtk_tree_model_get_path (tree_model, &iter);
 	      gtk_tree_model_row_inserted (tree_model, path, &iter);
 	      

@@ -1,3 +1,9 @@
+2004-09-06  Kjartan Maraas  <kmaraas@gnome.org>
+
+	gtk/gtkfilesystemmodel.c (do_files_added): Use the correct
+	function to free stuff. Avoids a leak and a warning.
+	Closes bug #151985
+
 Sat Sep  4 23:42:09 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* configure.in: Fix the Solaris Xinerama checks.  (#151754) 
