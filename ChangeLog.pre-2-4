@@ -1,3 +1,8 @@
+Sun Mar  7 14:34:04 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (trap_activate_cb): stop activate
+	from unselecting rows when pressed in multiple-selection mode.
+
 2004-03-07  Hans Breuer  <hans@breuer.org>
 
 	* gdk/win32/gdkproperty-win32.c (gdk_screen_get_setting) :

@@ -1843,6 +1843,41 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
   return vbox;
 }
 
+static gboolean
+trap_activate_cb (GtkWidget   *widget,
+		  GdkEventKey *event,
+		  gpointer     data)
+{
+  GtkFileChooserDefault *impl;
+
+  impl = (GtkFileChooserDefault *) data;
+
+  if (event->keyval == GDK_Return
+      || event->keyval == GDK_ISO_Enter
+      || event->keyval == GDK_KP_Enter
+      || event->keyval == GDK_space)
+    {
+      GtkWidget *toplevel;
+
+      toplevel = gtk_widget_get_toplevel (widget);
+      if (GTK_IS_WINDOW (toplevel))
+	{
+	  GtkWindow *window;
+
+	  window = GTK_WINDOW (toplevel);
+      
+	  if (window &&
+	      widget != window->default_widget &&
+	      !(widget == window->focus_widget &&
+		(!window->default_widget || !GTK_WIDGET_SENSITIVE (window->default_widget))))
+	    gtk_window_activate_default (window);
+	}
+      return TRUE;
+    }
+  return FALSE;
+}
+
+
 /* Creates the widgets for the file list */
 static GtkWidget *
 create_file_list (GtkFileChooserDefault *impl)
@@ -1867,6 +1902,8 @@ create_file_list (GtkFileChooserDefault *impl)
   gtk_container_add (GTK_CONTAINER (swin), impl->browse_files_tree_view);
   g_signal_connect (impl->browse_files_tree_view, "row-activated",
 		    G_CALLBACK (list_row_activated), impl);
+  g_signal_connect (impl->browse_files_tree_view, "key-press-event",
+    		    G_CALLBACK (trap_activate_cb), impl);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (impl->browse_files_tree_view),
