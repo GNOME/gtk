@@ -2262,10 +2262,32 @@ static void
 gtk_text_adjustment (GtkAdjustment *adjustment,
 		     GtkText       *text)
 {
+  gfloat old_val;
+  
   g_return_if_fail (adjustment != NULL);
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
   g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
+
+  /* Clamp the value here, because we'll get really confused
+   * if someone tries to move the adjusment outside of the
+   * allowed bounds
+   */
+  old_val = adjustment->value;
+
+  adjustment->value = MIN (adjustment->value, adjustment->upper - adjustment->page_size);
+  adjustment->value = MAX (adjustment->value, 0.0);
+
+  if (adjustment->value != old_val)
+    {
+      gtk_signal_handler_block_by_func (GTK_OBJECT (adjustment),
+					GTK_SIGNAL_FUNC (gtk_text_adjustment),
+					text);
+      gtk_adjustment_changed (adjustment);
+      gtk_signal_handler_unblock_by_func (GTK_OBJECT (adjustment),
+					  GTK_SIGNAL_FUNC (gtk_text_adjustment),
+					  text);
+    }
   
   /* Just ignore it if we haven't been size-allocated and realized yet */
   if (text->line_start_cache == NULL) 
@@ -2708,39 +2730,17 @@ correct_cache_insert (GtkText* text, gint nchars)
   GList *cache;
   GtkPropertyMark *start;
   GtkPropertyMark *end;
-  gboolean was_split = FALSE;
-  
-  /* We need to distinguish whether the property was split in the
-   * insert or not, so we check if the point (which points after
-   * the insertion here), points to the same character as the
-   * point before. Ugh.
-   */
-  if (nchars > 0)
-    {
-      GtkPropertyMark tmp_mark = text->point;
-      move_mark_n (&tmp_mark, -1);
-      
-      if (tmp_mark.property != text->point.property)
-	was_split = TRUE;
-    }
   
   /* If we inserted a property exactly at the beginning of the
    * line, we have to correct here, or fetch_lines will
    * fetch junk.
    */
   start = &CACHE_DATA(text->current_line).start;
-
-  /* Check if if we split exactly at the beginning of the line:
-   * (was_split won't be set if we are inserting at the end of the text, 
-   *  so we don't check)
-   */
-  if (start->offset ==  MARK_CURRENT_PROPERTY (start)->length)
-    SET_PROPERTY_MARK (start, start->property->next, 0);
-  /* Check if we inserted a property at the beginning of the text: */
-  else if (was_split &&
-	   (start->property == text->point.property) &&
-	   (start->index == text->point.index - nchars))
-    SET_PROPERTY_MARK (start, start->property->prev, 0);
+  if (start->index == text->point.index - nchars)
+    {
+      *start = text->point;
+      move_mark_n (start, -nchars);
+    }
 
   /* Now correct the offsets, and check for start or end marks that
    * are after the point, yet point to a property before the point's
@@ -2758,41 +2758,45 @@ correct_cache_insert (GtkText* text, gint nchars)
       if (LAST_INDEX (text, text->point) &&
 	  start->index == text->point.index)
 	*start = text->point;
-      else if (start->index >= text->point.index - nchars)
+      else
 	{
-	  if (!was_split && start->property == text->point.property)
-	    move_mark_n(start, nchars);
-	  else
+	  if (start->property == text->point.property)
 	    {
-	      if (start->property->next &&
-		  (start->property->next->next == text->point.property))
-		{
-		  g_assert (start->offset >=  MARK_CURRENT_PROPERTY (start)->length);
-		  start->offset -= MARK_CURRENT_PROPERTY (start)->length;
-		  start->property = text->point.property;
-		}
+	      start->offset += nchars;
 	      start->index += nchars;
 	    }
+	  else if (start->property->next &&
+		   (start->property->next->next == text->point.property))
+	    {
+	      /* We split the property, and this is the second half */
+	      start->offset -= MARK_CURRENT_PROPERTY (start)->length;
+	      start->index += nchars;
+	      start->property = text->point.property;
+	    }
+	  else
+	    start->index += nchars;
 	}
       
       if (LAST_INDEX (text, text->point) &&
 	  end->index == text->point.index)
 	*end = text->point;
-      if (end->index >= text->point.index - nchars)
+      else
 	{
-	  if (!was_split && end->property == text->point.property)
-	    move_mark_n(end, nchars);
-	  else 
+	  if (end->property == text->point.property)
 	    {
-	      if (end->property->next &&
-		  (end->property->next->next == text->point.property))
-		{
-		  g_assert (end->offset >=  MARK_CURRENT_PROPERTY (end)->length);
-		  end->offset -= MARK_CURRENT_PROPERTY (end)->length;
-		  end->property = text->point.property;
-		}
+	      end->offset += nchars;
 	      end->index += nchars;
 	    }
+	  else if (end->property->next &&
+		   (end->property->next->next == text->point.property))
+	    {
+	      /* We split the property, and this is the second half */
+	      end->offset -= MARK_CURRENT_PROPERTY (end)->length;
+	      end->index += nchars;
+	      end->property = text->point.property;
+	    }
+	  else
+	    end->index += nchars;
 	}
       
       /*TEXT_ASSERT_MARK(text, start, "start");*/
@@ -4525,8 +4529,6 @@ scroll_down (GtkText* text, gint diff0)
   
   while (diff0-- > 0)
     {
-      g_assert (text->line_start_cache);
-      
       if (text->first_cut_pixels < LINE_HEIGHT(CACHE_DATA(text->line_start_cache)) - 1)
 	{
 	  text->first_cut_pixels += 1;
@@ -4536,7 +4538,8 @@ scroll_down (GtkText* text, gint diff0)
 	  text->first_cut_pixels = 0;
 	  
 	  text->line_start_cache = text->line_start_cache->next;
-	  
+	  g_assert (text->line_start_cache);
+      
 	  text->first_line_start_index =
 	    CACHE_DATA(text->line_start_cache).start.index;
 	  
