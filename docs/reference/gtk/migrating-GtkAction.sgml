@@ -165,6 +165,18 @@
 	  linkend="GtkUIManager">GtkUIManager</link>.
 	</para>
       </listitem>
+      <listitem>
+       <para>
+         If your GnomeUIInfo entries use GNOME_APP_PIXMAP_DATA or 
+         GNOME_APP_PIXMAP_FILENAME for pixmaps, you have to create a 
+         <link linkend="GtkIconFactory">GtkIconFactory</link>, add it 
+         to the list of default factories, then create a 
+         <link linkend="GtkIconSet">GtkIconSet</link> for each of your 
+         own icons. Add the sets to the factory, and use the id in the 
+         <link linkend="GtkActionEntry">GtkActionEntry</link> like a 
+         regular GTK+ stock id.
+       </para>
+      </listitem>
     </orderedlist>
 
     <example id="gnomeuiinfo-example">
@@ -215,13 +227,13 @@ static GnomeUIInfo file_menu_items[] = {
 
 static GnomeUIInfo view_radio_items[] = {
   { GNOME_APP_UI_ITEM, "_High Quality", "Display images in high quality, slow mode",
-    high_quality_callback, NULL, NULL, GNOME_APP_PIXMAP_NONE, NULL,
+    high_quality_callback, NULL, NULL, GNOME_APP_PIXMAP_FILENAME, "high-quality.png",
     0, 0, NULL },
   { GNOME_APP_UI_ITEM, "_Normal Quality", "Display images in normal quality",
-    normal_quality_callback, NULL, NULL, GNOME_APP_PIXMAP_NONE, NULL,
+    normal_quality_callback, NULL, NULL, GNOME_APP_PIXMAP_FILENAME, "normal-quality.png",
     0, 0, NULL },
   { GNOME_APP_UI_ITEM, "_Low Quality", "Display images in low quality, fast mode",
-    low_quality_callback, NULL, NULL, GNOME_APP_PIXMAP_NONE, NULL,
+    low_quality_callback, NULL, NULL, GNOME_APP_PIXMAP_FILENAME, "low-quality.png",
     0, 0, NULL },
   { GNOME_APP_UI_ENDOFINFO }
 };
@@ -286,9 +298,9 @@ static GtkToggleActionEntry toggle_entries[] = {
 
 /* Radio items */
 static GtkRadioActionEntry radio_entries[] = {
-  { "HighQuality", NULL, "_High Quality", NULL, "Display images in high quality, slow mode", 0 },
-  { "NormalQuality", NULL, "_Normal Quality", NULL, "Display images in normal quality", 1 },
-  { "LowQuality", NULL, "_Low Quality", NULL, "Display images in low quality, fast mode", 2 }
+  { "HighQuality", "my-stock-high-quality", "_High Quality", NULL, "Display images in high quality, slow mode", 0 },
+  { "NormalQuality", "my-stock-normal-quality", "_Normal Quality", NULL, "Display images in normal quality", 1 },
+  { "LowQuality", "my-stock-low-quality", "_Low Quality", NULL, "Display images in low quality, fast mode", 2 }
 };
       </programlisting>
     </example>
@@ -358,6 +370,8 @@ GtkUIManager *ui_manager;
 GtkAccelGroup *accel_group;
 GError *error;
 
+register_my_stock_icons ();
+
 window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
 vbox = gtk_vbox_new (FALSE, 0);
@@ -388,6 +402,55 @@ gtk_box_pack_start (GTK_BOX (vbox), menubar, FALSE, FALSE, 0);
 gtk_widget_show_all (window);
       </programlisting>
     </example>
+
+    <example id="gnomeuiinfo-icons">
+      <title>Registering the icons</title>
+
+      <para>
+	Here we show how the register_my_stock_icons() function
+        used in the previous example could look like.
+      </para>
+
+      <programlisting>
+static struct { 
+  gchar *filename;
+  gchar *stock_id;
+} stock_icons[] = {
+  { "high-quality.png", "my-stock-high-quality" },
+  { "normal-quality.png", "my-stock-normal-quality" },
+  { "low-quality.png", "my-stock-low-quality" },
+};
+ 
+static gint n_stock_icons = G_N_ELEMENTS (stock_icons);
+
+static void
+register_my_stock_icons (void)
+{
+   GtkIconFactory *icon_factory;
+   GtkIconSet *icon_set; 
+   GtkIconSource *icon_source;
+   gint i;
+
+   icon_factory = gtk_icon_factory_new ();
+   
+   for (i = 0; i &lt; n_stock_icons; i++) 
+    {
+      icon_set = gtk_icon_set_new ();
+      icon_source = gtk_icon_source_new ();
+      gtk_icon_source_set_filename (icon_source, stock_icons[i].filename);
+      gtk_icon_set_add_source (icon_set, icon_source);
+      gtk_icon_source_free (icon_source);
+      gtk_icon_factory_add (icon_factory, stock_icons[i].stock_id, icon_set);
+      gtk_icon_set_unref (icon_set);
+    }
+
+   gtk_icon_factory_add_default (icon_factory); 
+
+   g_object_unref (icon_factory);
+}
+      </programlisting>
+    </example>
+
   </section>
 
 </chapter>
