@@ -1,3 +1,9 @@
+2001-11-01  Michael Meeks  <michael@ximian.com>
+
+	* gtk/gtksocket.c (gtk_socket_unrealize): unset the
+	GTK_REALIZED flag so we don't re-enter when we are
+	destroyed from the plug side.
+
 Wed Oct 31 18:23:47 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkoptionmenu.c (gtk_option_menu_detacher): 

@@ -340,6 +340,8 @@ gtk_socket_unrealize (GtkWidget *widget)
 {
   GtkSocket *socket = GTK_SOCKET (widget);
 
+  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED);
+
   if (socket->plug_widget)
     {
       _gtk_plug_remove_from_socket (GTK_PLUG (socket->plug_widget), socket);
