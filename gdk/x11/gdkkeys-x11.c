@@ -70,6 +70,7 @@ struct _GdkKeymapX11
   guint lock_keysym;
   GdkModifierType group_switch_mask;
   GdkModifierType num_lock_mask;
+  gboolean sun_keypad;
   PangoDirection current_direction;
   gboolean have_direction;
   guint current_serial;
@@ -124,6 +125,7 @@ gdk_keymap_x11_init (GdkKeymapX11 *keymap)
   keymap->mod_keymap = NULL;
   
   keymap->num_lock_mask = 0;
+  keymap->sun_keypad = FALSE;
   keymap->group_switch_mask = 0;
   keymap->lock_keysym = GDK_Caps_Lock;
   keymap->have_direction = FALSE;
@@ -285,69 +287,85 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
       keymap_x11->group_switch_mask = 0;
       keymap_x11->num_lock_mask = 0;
 
-      /* there are 8 modifiers, and the first 3 are shift, shift lock,
-       * and control
+      /* There are 8 sets of modifiers, with each set containing
+       * max_keypermod keycodes.
        */
       map_size = 8 * keymap_x11->mod_keymap->max_keypermod;
-      i = 3 * keymap_x11->mod_keymap->max_keypermod;
-      while (i < map_size)
+      for (i = 0; i < map_size; i++)
         {
-          /* get the key code at this point in the map,
-           * see if its keysym is GDK_Mode_switch, if so
-           * we have the mode key
-           */
+          /* Get the key code at this point in the map. */
           gint keycode = keymap_x11->mod_keymap->modifiermap[i];
-      
-          if (keycode >= keymap_x11->min_keycode &&
-              keycode <= keymap_x11->max_keycode)
-            {
-              gint j;
-              KeySym *syms = keymap_x11->keymap + (keycode - keymap_x11->min_keycode) * keymap_x11->keysyms_per_keycode;
-	      /* GDK_MOD1_MASK is 1 << 3 for example, i.e. the
-	       * fourth modifier, i / keyspermod is the modifier
-	       * index
-	       */
-	      guint mask = 1 << ( i / keymap_x11->mod_keymap->max_keypermod);
+          gint j;
+          KeySym *syms;
 
-	      if (mask == GDK_LOCK_MASK)
+          /* Ignore invalid keycodes. */
+          if (keycode < keymap_x11->min_keycode ||
+              keycode > keymap_x11->max_keycode)
+            continue;
+
+          syms = keymap_x11->keymap + (keycode - keymap_x11->min_keycode) * keymap_x11->keysyms_per_keycode;
+
+          /* The fourth modifier, GDK_MOD1_MASK is 1 << 3.
+	   * Each group of max_keypermod entries refers to the same modifier.
+           */
+          guint mask = 1 << (i / keymap_x11->mod_keymap->max_keypermod);
+
+          switch (mask)
+            {
+            case GDK_LOCK_MASK:
+              /* Get the Lock keysym.  If any keysym bound to the Lock modifier
+               * is Caps_Lock, we will interpret the modifier as Caps_Lock;
+               * otherwise, if any is bound to Shift_Lock, we will interpret
+               * the modifier as Shift_Lock. Otherwise, the lock modifier
+	       * has no effect.
+               */
+	      for (j = 0; j < keymap_x11->keysyms_per_keycode; j++)
 		{
-		  for (j = 0; j < keymap_x11->keysyms_per_keycode; j++)
-		    {
-		      if (syms[j] == GDK_Caps_Lock)
-			keymap_x11->lock_keysym = syms[j];
-		      else if (syms[j] == GDK_Shift_Lock && keymap_x11->lock_keysym == GDK_VoidSymbol)
-			keymap_x11->lock_keysym = syms[j];
-		    }
+		  if (syms[j] == GDK_Caps_Lock)
+		    keymap_x11->lock_keysym = GDK_Caps_Lock;
+		  else if (syms[j] == GDK_Shift_Lock &&
+			   keymap_x11->lock_keysym == GDK_VoidSymbol)
+		    keymap_x11->lock_keysym = GDK_Shift_Lock;
 		}
-	      
-	      /* Some keyboard maps are known to map Mode_Switch as an extra
-	       * Mod1 key. In circumstances like that, it won't be used to
-	       * switch groups.
-	       */
-	      if (mask == GDK_CONTROL_MASK || mask == GDK_SHIFT_MASK ||
-		  mask == GDK_LOCK_MASK || mask == GDK_MOD1_MASK)
-		goto next;
-	      
+              break;
+
+            case GDK_CONTROL_MASK:
+            case GDK_SHIFT_MASK:
+            case GDK_MOD1_MASK:
+              /* Some keyboard maps are known to map Mode_Switch as an
+               * extra Mod1 key. In circumstances like that, it won't be
+               * used to switch groups.
+               */
+              break;
+
+            default:
+              /* Find the Mode_Switch and Num_Lock modifiers. */
               for (j = 0; j < keymap_x11->keysyms_per_keycode; j++)
                 {
                   if (syms[j] == GDK_Mode_switch)
                     {
                       /* This modifier swaps groups */
-
                       keymap_x11->group_switch_mask |= mask;
                     }
-                  if (syms[j] == GDK_Num_Lock)
+                  else if (syms[j] == GDK_Num_Lock)
                     {
-                      /* This modifier swaps groups */
-
+                      /* This modifier is used for Num_Lock */
                       keymap_x11->num_lock_mask |= mask;
                     }
                 }
+              break;
             }
-
-	next:
-          ++i;
         }
+
+      /* Hack: The Sun X server puts the keysym to use when the Num Lock
+       * modifier is on in the third element of the keysym array, instead
+       * of the second.
+       */
+      if ((strcmp (ServerVendor (xdisplay), "Sun Microsystems, Inc.") == 0) &&
+          (keymap_x11->keysyms_per_keycode > 2))
+        keymap_x11->sun_keypad = TRUE;
+      else
+        keymap_x11->sun_keypad = FALSE;
     }
 }
 
@@ -991,6 +1009,7 @@ translate_keysym (GdkKeymapX11   *keymap_x11,
   GdkModifierType shift_modifiers;
   gint shift_level;
   guint tmp_keyval;
+  gint num_lock_index;
 
   shift_modifiers = GDK_SHIFT_MASK;
   if (keymap_x11->lock_keysym == GDK_Shift_Lock)
@@ -1002,13 +1021,34 @@ translate_keysym (GdkKeymapX11   *keymap_x11,
       (SYM (keymap_x11, 0, 0) || SYM (keymap_x11, 0, 1)))
     group = 0;
 
-  if ((state & GDK_SHIFT_MASK) != 0 &&
-      KEYSYM_IS_KEYPAD (SYM (keymap_x11, group, 1)))
+  /* Hack: On Sun, the Num Lock modifier uses the third element in the
+   * keysym array, and Mode_Switch does not apply for a keypad key.
+   */
+  if (keymap_x11->sun_keypad)
+    {
+      num_lock_index = 2;
+      
+      if (group != 0)
+	{
+	  gint i;
+	  
+	  for (i = 0; i < keymap_x11->keysyms_per_keycode; i++)
+	    if (KEYSYM_IS_KEYPAD (SYM (keymap_x11, 0, i)))
+	      group = 0;
+	}
+    }
+  else
+    num_lock_index = 1;
+
+  if ((state & keymap_x11->num_lock_mask) &&
+      KEYSYM_IS_KEYPAD (SYM (keymap_x11, group, num_lock_index)))
     {
       /* Shift, Shift_Lock cancel Num_Lock
        */
-       shift_level = (state & shift_modifiers) ? 0 : 1;
-      
+      shift_level = (state & shift_modifiers) ? 0 : num_lock_index;
+      if (!SYM (keymap_x11, group, shift_level) && SYM (keymap_x11, group, 0))
+        shift_level = 0;
+
        tmp_keyval = SYM (keymap_x11, group, shift_level);
     }
   else
@@ -1022,7 +1062,7 @@ translate_keysym (GdkKeymapX11   *keymap_x11,
   
       tmp_keyval = SYM (keymap_x11, group, shift_level);
       
-      if (keymap_x11->lock_keysym == GDK_Caps_Lock && (state & GDK_SHIFT_MASK) != 0)
+      if (keymap_x11->lock_keysym == GDK_Caps_Lock && (state & GDK_LOCK_MASK) != 0)
 	{
 	  guint upper = gdk_keyval_to_upper (tmp_keyval);
 	  if (upper != tmp_keyval)
