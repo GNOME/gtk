@@ -1,3 +1,10 @@
+2002-11-09  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkfont-x11.c (gdk_text_extents_wc): 
+	(gdk_text_extents): 
+	* gdk/gdkfont.c (gdk_string_extents): Reformulate doc comments to
+	work around gtk-doc limitations.
+
 Fri Nov  8 18:04:16 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/{linux-fb,win32,11}/Makefile.am: Add in a awful

@@ -173,7 +173,7 @@ gdk_string_measure (GdkFont     *font,
  * @ascent: the ascent of the string.
  * @descent: the descent of the string.
  * 
- * Returns the metrics of a nul-terminated string.
+ * Gets the metrics of a nul-terminated string.
  **/
 void
 gdk_string_extents (GdkFont     *font,

@@ -673,7 +673,7 @@ gdk_text_width_wc (GdkFont	  *font,
  * @ascent: the ascent of the string.
  * @descent: the descent of the string.
  * 
- * Returns the metrics of a string.
+ * Gets the metrics of a string.
  **/
 void
 gdk_text_extents (GdkFont     *font,
@@ -755,7 +755,7 @@ gdk_text_extents (GdkFont     *font,
  * @ascent: the ascent of the string.
  * @descent: the descent of the string.
  * 
- * Returns the metrics of a string of wide characters.
+ * Gets the metrics of a string of wide characters.
  **/
 void
 gdk_text_extents_wc (GdkFont        *font,
