@@ -21,6 +21,7 @@
 #include <X11/extensions/shape.h>
 #include <netinet/in.h>
 #include "gdk.h"
+#include "../config.h"
 #include "gdkinput.h"
 #include "gdkprivate.h"
 #include <stdlib.h>

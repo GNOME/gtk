@@ -623,7 +623,6 @@ GdkTimeCoord *gdk_input_motion_events (GdkWindow *window,
 				       guint32 stop,
 				       gint *nevents_return);
 
-#ifdef USE_XIM
 /* International Input Method Support Functions
  */
 
@@ -637,13 +636,12 @@ GdkIC  gdk_ic_new		(GdkWindow* client_window,
 				 GdkWindow* focus_window,
 				 GdkIMStyle style, ...);
 void   gdk_ic_destroy		(GdkIC ic);
+GdkIMStyle   gdk_ic_get_style   (GdkIC ic);
 void   gdk_ic_set_values	(GdkIC ic, ...);
 void   gdk_ic_get_values	(GdkIC ic, ...);
 void   gdk_ic_set_attr		(GdkIC ic, const char *target, ...);
 void   gdk_ic_get_attr		(GdkIC ic, const char *target, ...);
 GdkEventMask gdk_ic_get_events  (GdkIC ic);
-
-#endif /* USE_XIM */
 
 /* Miscellaneous */
 void gdk_event_send_clientmessage_toall(GdkEvent *event);

@@ -5,6 +5,7 @@ _libs
 libglib.la
 config.log
 glibconfig.h
+glib.h
 libtool
 config.status
 stamp-h

@@ -81,10 +81,9 @@ typedef struct _GdkDeviceInfo     GdkDeviceInfo;
 typedef struct _GdkTimeCoord      GdkTimeCoord;
 typedef gint (*GdkEventFunc) (GdkEvent *event,
 			      gpointer  data);
-#ifdef USE_XIM
+
 typedef void*			  GdkIC;
 typedef void*			  GdkIM;
-#endif
 
 
 /* Types of windows.
@@ -540,10 +539,6 @@ typedef enum
   GDK_EXTENSION_EVENTS_CURSOR
 } GdkExtensionMode;
 
-#ifdef USE_XIM
-/*
-*/
-
 typedef enum
 {
   GdkIMPreeditArea      = 0x0001L,
@@ -565,8 +560,6 @@ typedef enum
 #define GdkIMStatusMask \
 	( GdkIMStatusArea | GdkIMStatusCallbacks | \
 	  GdkIMStatusNothing | GdkIMStatusNone )
-
-#endif
 
 typedef void (*GdkInputFunction) (gpointer          data,
 				  gint              source,

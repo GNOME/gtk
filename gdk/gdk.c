@@ -2885,7 +2885,8 @@ gdk_dnd_drag_enter (Window dest)
  *--------------------------------------------------------------
  */
 
-void gdk_im_begin (GdkIC ic, GdkWindow* window)
+void 
+gdk_im_begin (GdkIC ic, GdkWindow* window)
 {
   GdkICPrivate *private;
   Window xwin;
@@ -2926,14 +2927,16 @@ void gdk_im_begin (GdkIC ic, GdkWindow* window)
  *--------------------------------------------------------------
  */
 
-void gdk_im_end (void)
+void 
+gdk_im_end (void)
 {
   xim_using = FALSE;
   xim_ic = NULL;
   xim_window = NULL;
 }
 
-static GdkIM gdk_im_get (void)
+static GdkIM 
+gdk_im_get (void)
 {
   return xim_im;
 }
@@ -3038,9 +3041,9 @@ gdk_im_set_best_style (GdkIMStyle style)
   return xim_best_allowed_style;
 }
 
-static gint gdk_im_open (XrmDatabase db, gchar* res_name, gchar* res_class)
+static gint 
+gdk_im_open (XrmDatabase db, gchar* res_name, gchar* res_class)
 {
-
   xim_im = XOpenIM (GDK_DISPLAY(), db, res_name, res_class);
   if (xim_im == NULL)
     {
@@ -3052,7 +3055,8 @@ static gint gdk_im_open (XrmDatabase db, gchar* res_name, gchar* res_class)
   return TRUE;
 }
 
-static void gdk_im_close (void)
+static void 
+gdk_im_close (void)
 {
   if (xim_im)
     {
@@ -3066,14 +3070,16 @@ static void gdk_im_close (void)
     }
 }
 
-gint gdk_im_ready (void)
+gint 
+gdk_im_ready (void)
 {
   return (xim_im != NULL);
 }
 
-GdkIC gdk_ic_new (GdkWindow* client_window,
-                  GdkWindow* focus_window,
-		  GdkIMStyle style, ...)
+GdkIC 
+gdk_ic_new (GdkWindow* client_window,
+	    GdkWindow* focus_window,
+	    GdkIMStyle style, ...)
 {
   va_list list;
   GdkICPrivate *private;
@@ -3113,7 +3119,8 @@ GdkIC gdk_ic_new (GdkWindow* client_window,
   return private;
 }
 
-void gdk_ic_destroy (GdkIC ic)
+void 
+gdk_ic_destroy (GdkIC ic)
 {
   GdkICPrivate *private;
 
@@ -3176,7 +3183,8 @@ gdk_ic_get_values (GdkIC ic, ...)
   XGetICValues (private->xic, XNVaNestedList, args, NULL);
 }
 
-void gdk_ic_set_attr (GdkIC ic, const char *target, ...)
+void 
+gdk_ic_set_attr (GdkIC ic, const char *target, ...)
 {
   va_list list;
   XVaNestedList attr;
@@ -3194,7 +3202,8 @@ void gdk_ic_set_attr (GdkIC ic, const char *target, ...)
   XSetICValues (private->xic, target, attr, NULL);
 }
 
-void gdk_ic_get_attr (GdkIC ic, const char *target, ...)
+void 
+gdk_ic_get_attr (GdkIC ic, const char *target, ...)
 {
   va_list list;
   XVaNestedList attr;
@@ -3245,7 +3254,8 @@ gdk_ic_get_events (GdkIC ic)
   return mask;
 }
 
-static void gdk_ic_cleanup (void)
+static void 
+gdk_ic_cleanup (void)
 {
   GList* node;
   gint destroyed;
@@ -3269,6 +3279,83 @@ static void gdk_ic_cleanup (void)
   g_list_free(xim_ic_list);
   xim_ic_list = NULL;
 }
+
+#else /* !USE_XIM */
+
+void 
+gdk_im_begin (GdkIC ic, GdkWindow* window)
+{
+}
+
+void 
+gdk_im_end (void)
+{
+}
+
+GdkIMStyle
+gdk_im_decide_style (GdkIMStyle supported_style)
+{
+  return GdkIMPreeditNone | GdkIMStatusNone;
+}
+
+GdkIMStyle
+gdk_im_set_best_style (GdkIMStyle style)
+{
+  return GdkIMPreeditNone | GdkIMStatusNone;
+}
+
+gint 
+gdk_im_ready (void)
+{
+  return FALSE;
+}
+
+GdkIC 
+gdk_ic_new (GdkWindow* client_window,
+	    GdkWindow* focus_window,
+	    GdkIMStyle style, ...)
+{
+  return NULL;
+}
+
+void 
+gdk_ic_destroy (GdkIC ic)
+{
+}
+
+GdkIMStyle
+gdk_ic_get_style (GdkIC ic)
+{
+  return GdkIMPreeditNone | GdkIMStatusNone;
+}
+
+void 
+gdk_ic_set_values (GdkIC ic, ...)
+{
+}
+
+void 
+gdk_ic_get_values (GdkIC ic, ...)
+{
+}
+
+void 
+gdk_ic_set_attr (GdkIC ic, const char *target, ...)
+{
+}
+
+void 
+gdk_ic_get_attr (GdkIC ic, const char *target, ...)
+{
+}
+
+GdkEventMask 
+gdk_ic_get_events (GdkIC ic)
+{
+  return 0;
+}
+
+#endif /* USE_XIM */
 
 #ifdef X_LOCALE
 
@@ -3297,8 +3384,6 @@ _g_mbtowc (wchar_t *wstr, const char *str, size_t len)
 }
 
 #endif /* X_LOCALE */
-
-#endif /* USE_XIM */
 
 static void
 gdk_dnd_drag_leave (Window dest)

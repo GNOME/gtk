@@ -27,22 +27,21 @@
 
 #include <stdlib.h>
 
-#ifdef HAVE_WCTYPE_H
-#include <wctype.h>
+#if defined(HAVE_WCTYPE_H) && !defined(X_LOCALE)
+#  include <wctype.h>
 #else 
-#define iswalnum isalnum
-/* Other functions could be added here if necessary */
-#endif /* HAVE_WCTYPE_H */
+#  define iswalnum(c) ((wchar_t)(c) <= 0xFF && isalnum(c))
+#endif /* HAVE_WCTYPE_H || !X_LOCALE */
 
 #ifndef X_LOCALE
 
 #ifdef HAVE_WCHAR_H
-#include <wchar.h>
-#else /* !HAVE_WCHAR_H */
-#ifdef HAVE_WCSTR_H
-#include <wcstr.h>
-#endif /* HAVE_WCSTR_H*/
-#endif /* HAVE_WCHAR_H */
+#  include <wchar.h>
+#else 
+#  ifdef HAVE_WCSTR_H
+#    include <wcstr.h>
+#  endif 
+#endif 
 
 #else  /* X_LOCALE */
 #include <X11/Xfuncproto.h>
