@@ -1,3 +1,19 @@
+2000-04-25  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextbtree.c (summary_destroy): new function to 
+	destroy tag summary nodes
+	(gtk_text_line_next_could_contain_tag): this function was 
+	totally broken if the line passed in wasn't below the tag
+	root. Fix it.
+	(gtk_text_btree_first_could_contain_tag): In the tag == NULL 
+	"wildcard" case, we have to do a linear scan. Blah.
+	(gtk_text_btree_last_could_contain_tag): In tag == NULL case,
+	we have to do the linear scan
+	(tag_removed_cb): When a tag is removed from the tag table, 
+	remove the GtkTextTagInfo node from the btree.
+	(gtk_text_btree_spew): Implement the spew function, for 
+	our debugging pleasure.
+
 Tue Apr 25 19:40:18 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextlayout.c (gtk_text_layout_set_buffer): Fix

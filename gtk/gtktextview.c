@@ -1005,7 +1005,7 @@ gtk_text_view_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 
 static void
 gtk_text_view_size_request (GtkWidget *widget,
-                        GtkRequisition *requisition)
+                            GtkRequisition *requisition)
 {
   /* Hrm */
   requisition->width = 1;
@@ -1014,7 +1014,7 @@ gtk_text_view_size_request (GtkWidget *widget,
 
 static void
 gtk_text_view_size_allocate (GtkWidget *widget,
-                        GtkAllocation *allocation)
+                             GtkAllocation *allocation)
 {
   GtkTextView *text_view;
 

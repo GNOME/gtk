@@ -300,6 +300,8 @@ static void inc_count             (GtkTextTag       *tag,
                                    int               inc,
                                    TagInfo          *tagInfoPtr);
 
+static void summary_destroy       (Summary          *summary);
+
 static void gtk_text_btree_link_segment   (GtkTextLineSegment *seg,
                                            const GtkTextIter  *iter);
 static void gtk_text_btree_unlink_segment (GtkTextBTree       *tree,
@@ -312,7 +314,7 @@ static GtkTextTagInfo *gtk_text_btree_get_tag_info          (GtkTextBTree   *tre
 static GtkTextTagInfo *gtk_text_btree_get_existing_tag_info (GtkTextBTree   *tree,
                                                              GtkTextTag     *tag);
 static void            gtk_text_btree_remove_tag_info       (GtkTextBTree   *tree,
-                                                             GtkTextTagInfo *info);
+                                                             GtkTextTag     *tag);
 
 
 /* Inline thingies */
@@ -1557,6 +1559,7 @@ gtk_text_btree_tag (const GtkTextIter *start_orig,
          gtk_text_iter_get_char_index(start_orig),
          gtk_text_iter_get_char_index(end_orig));
 #endif
+  
   if (gtk_text_iter_equal(start_orig, end_orig))
     return;
   
@@ -2618,40 +2621,41 @@ gtk_text_btree_first_could_contain_tag (GtkTextBTree *tree,
         return NULL;
       
       node = info->tag_root;
+
       /* We know the tag root has instances of the given
          tag below it */
+      
+      g_assert(node != NULL);
+      while (node->level > 0)
+        {
+          g_assert(node != NULL); /* Failure probably means bad tag summaries. */
+          node = node->children.node;
+          while (node != NULL)
+            {
+              if (gtk_text_btree_node_has_tag(node, tag))
+                goto done;
+              node = node->next;
+            }
+          g_assert(node != NULL);
+        }
+      
+    done:
+      
+      g_assert(node != NULL); /* The tag summaries said some node had
+                                 tag toggles... */
+      
+      g_assert(node->level == 0);
+      
+      return node->children.line;
     }
   else
     {
-      info = NULL;
-      
-      node = tree->root_node;
-      if (!gtk_text_btree_node_has_tag(node, tag))
-        return NULL; /* no toggles of any tag in this tree */
+      /* Looking for any tag at all (tag == NULL).
+         Unfortunately this can't be done in a simple and efficient way
+         right now; so I'm just going to return the
+         first line in the btree. FIXME */
+      return gtk_text_btree_get_line (tree, 0, NULL);
     }
-
-  g_assert(node != NULL);
-  while (node->level > 0)
-    {
-      g_assert(node != NULL); /* Failure probably means bad tag summaries. */
-      node = node->children.node;
-      while (node != NULL)
-        {
-          if (gtk_text_btree_node_has_tag(node, tag))
-            goto done;
-          node = node->next;
-        }
-      g_assert(node != NULL);
-    }
-
- done:
-  
-  g_assert(node != NULL); /* The tag summaries said some node had
-                             tag toggles... */
-  
-  g_assert(node->level == 0);
-  
-  return node->children.line;
 }
 
 GtkTextLine*
@@ -2675,41 +2679,42 @@ gtk_text_btree_last_could_contain_tag (GtkTextBTree *tree,
       node = info->tag_root;
       /* We know the tag root has instances of the given
          tag below it */
+            
+      while (node->level > 0)
+        {
+          g_assert(node != NULL); /* Failure probably means bad tag summaries. */
+          last_node = NULL;
+          node = node->children.node;
+          while (node != NULL)
+            {
+              if (gtk_text_btree_node_has_tag(node, tag))
+                last_node = node;
+              node = node->next;
+            }
+
+          node = last_node;
+        }
+
+      g_assert(node != NULL); /* The tag summaries said some node had
+                             tag toggles... */
+  
+      g_assert(node->level == 0);
+  
+      /* Find the last line in this node */
+      line = node->children.line;
+      while (line->next != NULL)
+        line = line->next;
+
+      return line;
     }
   else
     {
-      info = NULL;
-      node = tree->root_node;
-      if (!gtk_text_btree_node_has_tag(node, tag))
-        return NULL; /* no instances of the target tag in this tree */
+      /* This search can't be done efficiently at the moment,
+         at least not without complexity.
+         So, we just return the last line.
+      */
+      return gtk_text_btree_get_line (tree, -1, NULL);
     }
-      
-  while (node->level > 0)
-    {
-      g_assert(node != NULL); /* Failure probably means bad tag summaries. */
-      last_node = NULL;
-      node = node->children.node;
-      while (node != NULL)
-        {
-          if (gtk_text_btree_node_has_tag(node, tag))
-            last_node = node;
-          node = node->next;
-        }
-
-      node = last_node;
-    }
-
-  g_assert(node != NULL); /* The tag summaries said some node had
-                             tag toggles... */
-  
-  g_assert(node->level == 0);
-  
-  /* Find the last line in this node */
-  line = node->children.line;
-  while (line->next != NULL)
-    line = line->next;
-
-  return line;
 }
 
 
@@ -3692,8 +3697,16 @@ gtk_text_line_next_could_contain_tag(GtkTextLine *line,
 {
   GtkTextBTreeNode *node;
   GtkTextTagInfo *info;
+  gboolean below_tag_root;
   
   g_return_val_if_fail(line != NULL, NULL);
+
+  if (tag == NULL)
+    {
+      /* Right now we can only offer linear-search if the user wants
+         to know about any tag toggle at all. */
+      return gtk_text_line_next (line);
+    }
   
   /* Our tag summaries only have node precision, not line
      precision. This means that if any line under a node could contain a
@@ -3711,34 +3724,79 @@ gtk_text_line_next_could_contain_tag(GtkTextLine *line,
   info = gtk_text_btree_get_existing_tag_info(tree, tag);
   if (info == NULL)
     return NULL;
+
+  if (info->tag_root == NULL)
+    return NULL;
   
   /* We need to go up out of this node, and on to the next one with
-     toggles for the target tag. */
+     toggles for the target tag. If we're below the tag root, we need to
+     find the next node below the tag root that has tag summaries. If
+     we're not below the tag root, we need to see if the tag root is
+     after us in the tree, and if so, return the first line underneath
+     the tag root. */
   
   node = line->parent;
-
-  while (TRUE)
+  below_tag_root = FALSE;
+  while (node != NULL)
     {
-      /* If there's no next node in our list, go up in the tree.
-         If we reach the tag root or run out of tree, return. */
-      while (node->next == NULL)
+      if (node == info->tag_root)
         {
-          if (tag && node == info->tag_root)
-            return NULL; /* No more tag toggle summaries above this node. */
-          else if (node->parent == NULL)
-            return NULL; /* Nowhere else to go */
-
-          node = node->parent;
+          below_tag_root = TRUE;
+          break;
         }
 
-      g_assert(node != NULL);
-      node = node->next;
-      g_assert(node != NULL);
-
-      if (gtk_text_btree_node_has_tag(node, tag))
-        break;
+      node = node->parent;
     }
 
+  if (below_tag_root)
+    {
+      node = line->parent;
+      while (node != info->tag_root)
+        {
+          if (node->next == NULL)
+            node = node->parent;
+          else
+            {
+              node = node->next;
+
+              if (gtk_text_btree_node_has_tag(node, tag))
+                goto found;
+            }
+        }
+      return NULL;
+    }
+  else
+    {
+      GtkTextBTreeNode * iter;
+      node = line->parent;
+      while (node->level < info->tag_root->level)
+        node = node->parent;
+
+      g_assert (node->parent == info->tag_root->parent);
+      g_assert (node != info->tag_root);
+
+      /* See which is first in the list */
+      iter = node->parent->children.node;
+      while (iter != NULL)
+        {
+          if (iter == info->tag_root)
+            return NULL; /* Tag root was before us in the tree */
+          else if (iter == node)
+            {
+              /* We want the first inside-tag-root node,
+                 since we're before the tag root */
+              node = info->tag_root;
+              goto found;
+            }
+
+          iter = iter->next;
+        }
+      
+      return NULL;
+    }
+
+ found:
+  
   g_assert(node != NULL);
   
   /* We have to find the first sub-node of this node that contains
@@ -3786,7 +3844,7 @@ summary_list_destroy(Summary *summary)
   while (summary != NULL)
     {
       next = summary->next;
-      g_free(summary);
+      summary_destroy (summary);
       summary = next;
     }
 }
@@ -3944,6 +4002,16 @@ node_data_find(NodeData *nd, gpointer view_id)
   return nd;
 }
 
+static void
+summary_destroy (Summary *summary)
+{
+  /* Fill with error-triggering garbage */
+  summary->info = (void*)0x1;
+  summary->toggle_count = 567;
+  summary->next = (void*)0x1;
+  g_free (summary);
+}
+
 static GtkTextBTreeNode*
 gtk_text_btree_node_new(void)
 {
@@ -3987,8 +4055,11 @@ gtk_text_btree_node_adjust_toggle_count (GtkTextBTreeNode  *node,
     }
 }
 
+/* Note that the tag root and above do not have summaries
+   for the tag; only nodes below the tag root have
+   the summaries. */
 static gboolean
-gtk_text_btree_node_has_tag(GtkTextBTreeNode *node, GtkTextTag *tag)
+gtk_text_btree_node_has_tag (GtkTextBTreeNode *node, GtkTextTag *tag)
 {
   Summary *summary;
   
@@ -4001,6 +4072,7 @@ gtk_text_btree_node_has_tag(GtkTextBTreeNode *node, GtkTextTag *tag)
       
       summary = summary->next;
     }
+
   return FALSE;
 }
 
@@ -4427,6 +4499,7 @@ tag_removed_cb(GtkTextTagTable *table,
   get_tree_bounds(tree, &start, &end);
 
   gtk_text_btree_tag(&start, &end, tag, FALSE);
+  gtk_text_btree_remove_tag_info (tree, tag);
 }
 
 
@@ -4755,7 +4828,7 @@ gtk_text_btree_get_tag_info(GtkTextBTree *tree,
 
 static void
 gtk_text_btree_remove_tag_info(GtkTextBTree *tree,
-                               GtkTextTagInfo *target_info)
+                               GtkTextTag   *tag)
 {
   GtkTextTagInfo *info;
   GSList *list;
@@ -4766,7 +4839,7 @@ gtk_text_btree_remove_tag_info(GtkTextBTree *tree,
   while (list != NULL)
     {
       info = list->data;
-      if (info == target_info)
+      if (info->tag == tag)
         {
           if (prev != NULL)
             {
@@ -4962,13 +5035,13 @@ recompute_node_counts(GtkTextBTreeNode *node)
       if (summary2 != NULL)
         {
           summary2->next = summary->next;
-          g_free(summary);
+          summary_destroy (summary);
           summary = summary2->next;
         }
       else
         {
           node->summary = summary->next;
-          g_free(summary);
+          summary_destroy (summary);
           summary = node->summary;
         }
     }
@@ -5052,7 +5125,7 @@ change_node_toggle_count(GtkTextBTreeNode *node,
             {
               prevPtr->next = summary->next;
             }
-          g_free(summary);
+          summary_destroy (summary);
         }
       else
         {
@@ -5152,7 +5225,7 @@ change_node_toggle_count(GtkTextBTreeNode *node,
             {
               prevPtr->next = summary->next;
             }
-          g_free(summary);
+          summary_destroy (summary);
           info->tag_root = node2Ptr;
           break;
         }
@@ -5519,6 +5592,9 @@ gtk_text_btree_node_check_consistency(GtkTextBTreeNode *node)
                     }
                   if (segPtr->body.toggle.info == summary->info)
                     {
+                      if (!segPtr->body.toggle.inNodeCounts)
+                        g_error ("Toggle segment not in the node counts");
+                      
                       toggle_count ++;
                     }
                 }
@@ -5644,6 +5720,8 @@ gtk_text_btree_check (GtkTextBTree *tree)
             }
           else
             {
+              GtkTextLineSegmentClass * last = NULL;
+              
               for (line = node->children.line ; line != NULL ;
                    line = line->next)
                 {
@@ -5654,6 +5732,13 @@ gtk_text_btree_check (GtkTextBTree *tree)
                            seg->type == &gtk_text_toggle_off_type) &&
                           seg->body.toggle.info->tag == tag)
                         {
+                          if (last == seg->type)
+                            g_error ("Two consecutive toggles on or off weren't merged");
+                          if (!seg->body.toggle.inNodeCounts)
+                            g_error ("Toggle segment not in the node counts");
+                          
+                          last = seg->type;
+                          
                           count++;
                         }
                     }
@@ -5736,9 +5821,196 @@ gtk_text_btree_check (GtkTextBTree *tree)
     }
 }
 
+void gtk_text_btree_spew_line(GtkTextBTree* tree, GtkTextLine* line);     
+void gtk_text_btree_spew_segment(GtkTextBTree* tree, GtkTextLineSegment* seg);
+void gtk_text_btree_spew_node(GtkTextBTreeNode *node, int indent);
+void gtk_text_btree_spew_line_short (GtkTextLine *line, int indent);
+
 void
 gtk_text_btree_spew (GtkTextBTree *tree)
 {
-  g_warning("FIXME copy spew back in from old stuff");
+  GtkTextLine * line;
+  int real_line;
+  
+  printf("%d lines in tree %p\n",
+         gtk_text_btree_line_count(tree), tree);
+  
+  line = gtk_text_btree_get_line(tree, 0, &real_line);
 
+  while (line != NULL)
+    {
+      gtk_text_btree_spew_line(tree, line);
+      line = gtk_text_line_next(line);
+    }
+
+  printf("=================== Tag information\n");
+
+  {
+    GSList * list;
+
+    list = tree->tag_infos;
+
+    while (list != NULL)
+      {
+        GtkTextTagInfo *info;
+
+        info = list->data;
+
+        printf ("  tag `%s': root at %p, toggle count %d\n",
+                info->tag->name, info->tag_root, info->toggle_count);
+
+        list = g_slist_next (list);
+      }
+  }
+
+  printf("=================== Tree nodes\n");
+
+  {
+    gtk_text_btree_spew_node (tree->root_node, 0);
+  }
 }
+
+void
+gtk_text_btree_spew_line_short (GtkTextLine *line, int indent)
+{
+  gchar * spaces;
+  GtkTextLineSegment *seg;
+  
+  spaces = g_strnfill (indent, ' ');
+
+  printf ("%sline %p chars %d bytes %d\n",
+          spaces, line,
+          gtk_text_line_char_count (line),
+          gtk_text_line_byte_count (line));
+
+  seg = line->segments;
+  while (seg != NULL)
+    {
+      if (seg->type == &gtk_text_char_type)
+        {
+          gchar* str = g_strndup(seg->body.chars, MIN (seg->byte_count, 10));
+          gchar* s;
+          s = str;
+          while (*s)
+            {
+              if (*s == '\n')
+                *s = '\\';
+              ++s;
+            }
+          printf("%s chars `%s'...\n", spaces, str);
+          g_free(str);
+        }
+      else if (seg->type == &gtk_text_right_mark_type)
+        {
+          printf("%s right mark `%s'\n", spaces, seg->body.mark.name);
+        }
+      else if (seg->type == &gtk_text_left_mark_type)
+        {
+          printf("%s left mark `%s'\n", spaces, seg->body.mark.name);
+        }
+      else if (seg->type == &gtk_text_toggle_on_type ||
+               seg->type == &gtk_text_toggle_off_type)
+        {
+          printf("%s tag `%s' %s\n",
+                 spaces, seg->body.toggle.info->tag->name,
+                 seg->type == &gtk_text_toggle_off_type ? "off" : "on");
+        }
+
+      seg = seg->next;
+    }
+
+  g_free (spaces);
+}
+
+void
+gtk_text_btree_spew_node(GtkTextBTreeNode *node, int indent)
+{
+  gchar * spaces;
+  GtkTextBTreeNode *iter;
+  Summary *s;
+  
+  spaces = g_strnfill (indent, ' ');
+
+  printf ("%snode %p level %d children %d lines %d chars %d\n",
+          spaces, node, node->level,
+          node->num_children, node->num_lines, node->num_chars);
+
+  s = node->summary;
+  while (s)
+    {
+      printf ("%s %d toggles of `%s' below this node\n",
+              spaces, s->toggle_count, s->info->tag->name);
+      s = s->next;
+    }
+  
+  g_free (spaces);
+  
+  if (node->level > 0)
+    {
+      iter = node->children.node;
+      while (iter != NULL)
+        {
+          gtk_text_btree_spew_node (iter, indent + 2);
+
+          iter = iter->next;
+        }
+    }
+  else
+    {
+      GtkTextLine *line = node->children.line;
+      while (line != NULL)
+        {
+          gtk_text_btree_spew_line_short (line, indent + 2);
+          
+          line = line->next;
+        }
+    }
+}
+
+void
+gtk_text_btree_spew_line(GtkTextBTree* tree, GtkTextLine* line)
+{
+  GtkTextLineSegment * seg;
+
+  printf("%4d| line: %p parent: %p next: %p\n",
+         gtk_text_line_get_number(line), line, line->parent, line->next);
+  
+  seg = line->segments;
+  
+  while (seg != NULL)
+    {
+      gtk_text_btree_spew_segment(tree, seg);
+      seg = seg->next;
+    }
+}
+
+void
+gtk_text_btree_spew_segment(GtkTextBTree* tree, GtkTextLineSegment * seg)
+{
+  printf("     segment: %p type: %s bytes: %d chars: %d\n",
+         seg, seg->type->name, seg->byte_count, seg->char_count);
+  
+  if (seg->type == &gtk_text_char_type)
+    {
+      gchar* str = g_strndup(seg->body.chars, seg->byte_count);
+      printf("       `%s'\n", str);
+      g_free(str);
+    }
+  else if (seg->type == &gtk_text_right_mark_type)
+    {
+      printf("       right mark `%s'\n", seg->body.mark.name);
+    }
+  else if (seg->type == &gtk_text_left_mark_type)
+    {
+      printf("       left mark `%s'\n", seg->body.mark.name);
+    }
+  else if (seg->type == &gtk_text_toggle_on_type ||
+           seg->type == &gtk_text_toggle_off_type)
+    {
+      printf("       tag `%s' priority %d\n",
+             seg->body.toggle.info->tag->name,
+             seg->body.toggle.info->tag->priority);
+    }
+}
+
+
