@@ -1,12 +1,13 @@
+Sun Sep 30  07:01:42 2001 CEST <mikeh@bahnhof.se>
+
+    * gtk/gtkcellrenderertext.c I reverted back to old "weight" property code using g_param_spec_int 
+      and changed from g_value_get_enum to g_value_get_int instead. 
+      Probadly a better way to fix the problem :-)
+
 Sun Sep 30  05:31:32 2001 CEST Mikael Hermansson <tyan@linux.se>
 
     * gtk/gtkcellrenderertext.c changed "weight" property type from 
       g_param_spec_int to g_param_spec_enum.
-
-2001-09-29  Alexander Larsson  <alla@lysator.liu.se>
-
-	* configure.in:
-	Added build/win32/dirent/Makefile 
 
 Sat Sep 29 12:25:26 2001  Manish Singh  <yosh@gimp.org>
 
