@@ -1,3 +1,13 @@
+Wed Feb 25 15:36:50 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkselection-x11.c (gdk_utf8_to_compound_text_for_display):
+	Call g_convert(), not g_convert() with fallback, since Emacs is
+	happier if we reject the COMPOUND_TEXT request and it can
+	then ask for UTF-8. (#114527)
+
+	* gtk/gtkselection.c (gtk_selection_data_set_text): When
+	TEXT is requested, if COMPOUND_TEXT fails, fall back to STRING.
+
 Wed Feb 25 22:35:00 2004  Tomasz Kłoczko <kloczek@pld.org.pl>
 
 	* cinfigure.in: After changes in G_DEFINE_TYPE minimal required glib
