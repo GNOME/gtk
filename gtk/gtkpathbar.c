@@ -40,11 +40,25 @@ typedef enum {
   HOME_BUTTON,
 } ButtonType;
 
+#define BUTTON_DATA(x) ((ButtonData *)(x))
+
 static guint path_bar_signals [LAST_SIGNAL] = { 0 };
 
 /* FIXME: this should correspond to gtk_icon_size_lookup_for_settings  */
 #define ICON_SIZE 20
 
+typedef struct _ButtonData ButtonData;
+
+struct _ButtonData
+{
+  GtkWidget *button;
+  ButtonType type;
+  char *dir_name;
+  GtkFilePath *path;
+  GtkWidget *image;
+  GtkWidget *label;
+  gboolean ignore_changes;
+};
 
 G_DEFINE_TYPE (GtkPathBar,
 	       gtk_path_bar,
@@ -166,6 +180,7 @@ static void
 gtk_path_bar_size_request (GtkWidget      *widget,
 			   GtkRequisition *requisition)
 {
+  ButtonData *button_data;
   GtkPathBar *path_bar;
   GtkRequisition child_requisition;
   GList *list;
@@ -177,8 +192,8 @@ gtk_path_bar_size_request (GtkWidget      *widget,
 
   for (list = path_bar->button_list; list; list = list->next)
     {
-      gtk_widget_size_request (GTK_WIDGET (list->data),
-			       &child_requisition);
+      button_data = BUTTON_DATA (list->data);
+      gtk_widget_size_request (button_data->button, &child_requisition);
       requisition->width = MAX (child_requisition.width, requisition->width);
       requisition->height = MAX (child_requisition.height, requisition->height);
     }
@@ -231,13 +246,13 @@ gtk_path_bar_update_slider_buttons (GtkPathBar *path_bar)
     {
       GtkWidget *button;
 
-      button = path_bar->button_list->data;
+      button = BUTTON_DATA (path_bar->button_list->data)->button;
       if (gtk_widget_get_child_visible (button))
 	gtk_widget_set_sensitive (path_bar->down_slider_button, FALSE);
       else
 	gtk_widget_set_sensitive (path_bar->down_slider_button, TRUE);
 
-      button = g_list_last (path_bar->button_list)->data;
+      button = BUTTON_DATA (g_list_last (path_bar->button_list)->data)->button;
       if (gtk_widget_get_child_visible (button))
 	gtk_widget_set_sensitive (path_bar->up_slider_button, FALSE);
       else
@@ -274,10 +289,10 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
   allocation_width = allocation->width - 2 * border_width;
 
   /* First, we check to see if we need the scrollbars. */
-  width = GTK_WIDGET (path_bar->button_list->data)->requisition.width;
+  width = BUTTON_DATA (path_bar->button_list->data)->button->requisition.width;
   for (list = path_bar->button_list->next; list; list = list->next)
     {
-      child = GTK_WIDGET (list->data);
+      child = BUTTON_DATA (list->data)->button;
 
       width += child->requisition.width + path_bar->spacing;
     }
@@ -302,11 +317,11 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
        * button, then count backwards.
        */
       /* Count down the path chain towards the end. */
-      width = GTK_WIDGET (first_button->data)->requisition.width;
+      width = BUTTON_DATA (first_button->data)->button->requisition.width;
       list = first_button->prev;
       while (list && !reached_end)
 	{
-	  child = GTK_WIDGET (list->data);
+	  child = BUTTON_DATA (list->data)->button;
 
 	  if (width + child->requisition.width +
 	      path_bar->spacing + slider_space > allocation_width)
@@ -321,7 +336,7 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
        * add */
       while (first_button->next && ! reached_end)
 	{
-	  child = GTK_WIDGET (first_button->next->data);
+	  child = BUTTON_DATA (first_button->next->data)->button;
 
 	  if (width + child->requisition.width + path_bar->spacing + slider_space > allocation_width)
 	    {
@@ -360,7 +375,7 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
 
   for (list = first_button; list; list = list->prev)
     {
-      child = GTK_WIDGET (list->data);
+      child = BUTTON_DATA (list->data)->button;
 
       child_allocation.width = child->requisition.width;
       if (direction == GTK_TEXT_DIR_RTL)
@@ -379,7 +394,7 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
 	    break;
 	}
 
-      gtk_widget_set_child_visible (list->data, TRUE);
+      gtk_widget_set_child_visible (BUTTON_DATA (list->data)->button, TRUE);
       gtk_widget_size_allocate (child, &child_allocation);
 
       if (direction == GTK_TEXT_DIR_RTL)
@@ -396,12 +411,12 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
   /* Now we go hide all the widgets that don't fit */
   while (list)
     {
-      gtk_widget_set_child_visible (list->data, FALSE);
+      gtk_widget_set_child_visible (BUTTON_DATA (list->data)->button, FALSE);
       list = list->prev;
     }
   for (list = first_button->next; list; list = list->next)
     {
-      gtk_widget_set_child_visible (list->data, FALSE);
+      gtk_widget_set_child_visible (BUTTON_DATA (list->data)->button, FALSE);
     }
 
   if (need_sliders)
@@ -456,7 +471,7 @@ gtk_path_bar_remove (GtkContainer *container,
 
   while (children)
     {
-      if (widget == children->data)
+      if (widget == BUTTON_DATA (children->data)->button)
 	{
 	  gboolean was_visible;
 
@@ -491,7 +506,7 @@ gtk_path_bar_forall (GtkContainer *container,
   while (children)
     {
       GtkWidget *child;
-      child = children->data;
+      child = BUTTON_DATA (children->data)->button;
       children = children->next;
 
       (* callback) (child, callback_data);
@@ -502,7 +517,7 @@ gtk_path_bar_forall (GtkContainer *container,
 }
 
 static void
- gtk_path_bar_scroll_down (GtkWidget *button, GtkPathBar *path_bar)
+gtk_path_bar_scroll_down (GtkWidget *button, GtkPathBar *path_bar)
 {
   GList *list;
   GList *down_button = NULL;
@@ -519,7 +534,7 @@ static void
    * visible */
   for (list = path_bar->button_list; list; list = list->next)
     {
-      if (list->next && gtk_widget_get_child_visible (GTK_WIDGET (list->next->data)))
+      if (list->next && gtk_widget_get_child_visible (BUTTON_DATA (list->next->data)->button))
 	{
 	  down_button = list;
 	  break;
@@ -530,14 +545,14 @@ static void
    */
   for (list = g_list_last (path_bar->button_list); list; list = list->prev)
     {
-      if (gtk_widget_get_child_visible (GTK_WIDGET (list->data)))
+      if (gtk_widget_get_child_visible (BUTTON_DATA (list->data)->button))
 	{
 	  up_button = list;
 	  break;
 	}
     }
 
-  space_needed = GTK_WIDGET (down_button->data)->allocation.width + path_bar->spacing;
+  space_needed = BUTTON_DATA (down_button->data)->button->allocation.width + path_bar->spacing;
   if (direction == GTK_TEXT_DIR_RTL)
     space_available = GTK_WIDGET (path_bar)->allocation.x + GTK_WIDGET (path_bar)->allocation.width;
   else
@@ -550,7 +565,7 @@ static void
    * need. */
   while (space_available < space_needed)
     {
-      space_available += GTK_WIDGET (up_button->data)->allocation.width + path_bar->spacing;
+      space_available += BUTTON_DATA (up_button->data)->button->allocation.width + path_bar->spacing;
       up_button = up_button->prev;
       path_bar->first_scrolled_button = up_button;
     }
@@ -563,7 +578,7 @@ static void
 
   for (list = g_list_last (path_bar->button_list); list; list = list->prev)
     {
-      if (list->prev && gtk_widget_get_child_visible (GTK_WIDGET (list->prev->data)))
+      if (list->prev && gtk_widget_get_child_visible (BUTTON_DATA (list->prev->data)->button))
 	{
 	  path_bar->first_scrolled_button = list;
 	  return;
@@ -577,7 +592,7 @@ gtk_path_bar_clear_buttons (GtkPathBar *path_bar)
 {
   while (path_bar->button_list != NULL)
     {
-      gtk_container_remove (GTK_CONTAINER (path_bar), path_bar->button_list->data);
+      gtk_container_remove (GTK_CONTAINER (path_bar), BUTTON_DATA (path_bar->button_list->data)->button);
     }
   path_bar->first_scrolled_button = NULL;
 }
@@ -586,16 +601,18 @@ static void
 button_clicked_cb (GtkWidget *button,
 		   gpointer   data)
 {
+  ButtonData *button_data;
   GtkWidget *path_bar;
-  GtkFilePath *file_path;
+
+  button_data = BUTTON_DATA (data);
+  if (button_data->ignore_changes)
+    return;
 
   path_bar = button->parent;
   g_assert (GTK_IS_PATH_BAR (path_bar));
-
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
 
-  file_path = g_object_get_data (G_OBJECT (button), "gtk-path-bar-button-path");
-  g_signal_emit (path_bar, path_bar_signals [PATH_CLICKED], 0, file_path);
+  g_signal_emit (path_bar, path_bar_signals [PATH_CLICKED], 0, button_data->path);
 }
 
 static GdkPixbuf *
@@ -638,131 +655,115 @@ get_button_image (GtkPathBar *path_bar,
 }
 
 static void
+button_data_free (ButtonData *button_data)
+{
+  gtk_file_path_free (button_data->path);
+  g_free (button_data->dir_name);
+  g_free (button_data);
+}
+
+static void
 update_button_appearance (GtkPathBar *path_bar,
-			  GtkWidget  *button,
+			  ButtonData *button_data,
 			  gboolean    current_dir)
 {
-  GtkWidget *image;
-  GtkWidget *label;
   const gchar *dir_name;
-  ButtonType button_type;
 
-  button_type = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (button), "gtk-path-bar-button-type"));
-  if (button_type == HOME_BUTTON)
+  if (button_data->type == HOME_BUTTON)
     dir_name = _("Home");
   else
-    dir_name = (const gchar *) g_object_get_data (G_OBJECT (button), "gtk-path-bar-button-dir-name");
+    dir_name = button_data->dir_name;
 
-  label = g_object_get_data (G_OBJECT (button), "gtk-path-bar-button-label");
-  image = g_object_get_data (G_OBJECT (button), "gtk-path-bar-button-image");
-
-  if (label != NULL)
+  if (button_data->label != NULL)
     {
       if (current_dir)
 	{
 	  char *markup;
 
 	  markup = g_markup_printf_escaped ("<b>%s</b>", dir_name);
-	  gtk_label_set_markup (GTK_LABEL (label), markup);
+	  gtk_label_set_markup (GTK_LABEL (button_data->label), markup);
 	  g_free (markup);
 	}
       else
 	{
-	  gtk_label_set_text (GTK_LABEL (label), dir_name);
+	  gtk_label_set_text (GTK_LABEL (button_data->label), dir_name);
 	}
     }
 
-  if (image != NULL)
+  if (button_data->image != NULL)
     {
       GdkPixbuf *pixbuf;
-      pixbuf = get_button_image (path_bar, button_type);
-      gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
+      pixbuf = get_button_image (path_bar, button_data->type);
+      gtk_image_set_from_pixbuf (GTK_IMAGE (button_data->image), pixbuf);
     }
 
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)) != current_dir)
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button_data->button)) != current_dir)
     {
-      g_signal_handlers_block_by_func (G_OBJECT (button), button_clicked_cb, NULL);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), current_dir);
-      g_signal_handlers_unblock_by_func (G_OBJECT (button), button_clicked_cb, NULL);
+      button_data->ignore_changes = TRUE;
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button_data->button), current_dir);
+      button_data->ignore_changes = FALSE;
     }
 }
 
-/* Since gtk_file_path_free() can be a macro, we provide a real function that
- * can be used as a callback.
- */
-static void
-file_path_destroy (GtkFilePath *path)
-{
-  gtk_file_path_free (path);
-}
-
-static GtkWidget *
+static ButtonData *
 make_directory_button (GtkPathBar  *path_bar,
 		       const char  *dir_name,
 		       GtkFilePath *path,
 		       gboolean     current_dir)
 {
-  GtkWidget *button;
   GtkWidget *child = NULL;
-  GtkWidget *label = NULL;
-  GtkWidget *image = NULL;
-  ButtonType button_type;
+  ButtonData *button_data;
 
   /* Is it a special button? */
-  button_type = NORMAL_BUTTON;
+  button_data = g_new0 (ButtonData, 1);
+
+  button_data->type = NORMAL_BUTTON;
   if (! gtk_file_path_compare (path, path_bar->root_path))
-    button_type = ROOT_BUTTON;
+    button_data->type = ROOT_BUTTON;
   if (! gtk_file_path_compare (path, path_bar->home_path))
-    button_type = HOME_BUTTON;
+    button_data->type = HOME_BUTTON;
 
-  button = gtk_toggle_button_new ();
+  button_data->button = gtk_toggle_button_new ();
 
-  switch (button_type)
+  switch (button_data->type)
     {
     case ROOT_BUTTON:
-      image = gtk_image_new ();
-      child = image;
-      label = NULL;
+      button_data->image = gtk_image_new ();
+      child = button_data->image;
+      button_data->label = NULL;
       break;
     case HOME_BUTTON:
-      image = gtk_image_new ();
-      label = gtk_label_new (NULL);
+      button_data->image = gtk_image_new ();
+      button_data->label = gtk_label_new (NULL);
       child = gtk_hbox_new (FALSE, 2);
-      gtk_box_pack_start (GTK_BOX (child), image, FALSE, FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (child), label, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (child), button_data->image, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (child), button_data->label, FALSE, FALSE, 0);
       break;
     case NORMAL_BUTTON:
-      label = gtk_label_new (NULL);
-      child = label;
-      image = NULL;
+      button_data->label = gtk_label_new (NULL);
+      child = button_data->label;
+      button_data->image = NULL;
       break;
     default:
       g_assert_not_reached ();
     }
 
-  g_signal_connect (button, "clicked",
+  button_data->dir_name = g_strdup (dir_name);
+  button_data->path = gtk_file_path_new_dup (gtk_file_path_get_string (path));
+			  
+  gtk_container_add (GTK_CONTAINER (button_data->button), child);
+  gtk_widget_show_all (button_data->button);
+
+  update_button_appearance (path_bar, button_data, current_dir);
+
+  g_signal_connect (button_data->button, "clicked",
 		    G_CALLBACK (button_clicked_cb),
-		    NULL);
+		    button_data);
+  g_object_set_data_full (G_OBJECT (button_data->button),
+			  "gtk-path-bar-button-data",
+			  button_data, button_data_free);
 
-  /* FIXME: setting all this data is ugly.  I really need a ButtonInfo
-   * struct. */
-  g_object_set_data_full (G_OBJECT (button), "gtk-path-bar-button-dir-name",
-			  g_strdup (dir_name),
-			  (GDestroyNotify) g_free);
-  g_object_set_data_full (G_OBJECT (button), "gtk-path-bar-button-path",
-			  gtk_file_path_new_dup (gtk_file_path_get_string (path)),
-			  (GDestroyNotify) file_path_destroy);
-  g_object_set_data (G_OBJECT (button), "gtk-path-bar-button-type",
-		     GINT_TO_POINTER (button_type));
-  g_object_set_data (G_OBJECT (button), "gtk-path-bar-button-image", image);
-  g_object_set_data (G_OBJECT (button), "gtk-path-bar-button-label", label);
-
-  gtk_container_add (GTK_CONTAINER (button), child);
-  gtk_widget_show_all (button);
-
-  update_button_appearance (path_bar, button, current_dir);
-
-  return button;
+  return button_data;
 }
 
 static gboolean
@@ -775,11 +776,10 @@ gtk_path_bar_check_parent_path (GtkPathBar         *path_bar,
 
   for (list = path_bar->button_list; list; list = list->next)
     {
-      GtkFilePath *tmp_path;
+      ButtonData *button_data;
 
-      tmp_path = (GtkFilePath *) g_object_get_data (G_OBJECT (list->data),
-						    "gtk-path-bar-button-path");
-      if (! gtk_file_path_compare (file_path, tmp_path))
+      button_data = list->data;
+      if (! gtk_file_path_compare (file_path, button_data->path))
 	{
 	  current_path = list;
 	  break;
@@ -791,7 +791,7 @@ gtk_path_bar_check_parent_path (GtkPathBar         *path_bar,
       for (list = path_bar->button_list; list; list = list->next)
 	{
 	  update_button_appearance (path_bar,
-				    GTK_WIDGET (list->data),
+				    BUTTON_DATA (list->data),
 				    (list == current_path) ? TRUE : FALSE);
 	}
       return TRUE;
@@ -827,12 +827,11 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
   while (path != NULL)
     {
       GtkFilePath *parent_path = NULL;
-      GtkWidget *button;
+      ButtonData *button_data;
       const gchar *display_name;
       GtkFileFolder *file_folder;
       GtkFileInfo *file_info;
       gboolean valid;
-      ButtonType button_type;
 
       valid = gtk_file_system_get_parent (path_bar->file_system,
 					  path,
@@ -863,14 +862,13 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
 
       display_name = gtk_file_info_get_display_name (file_info);
 
-      button = make_directory_button (path_bar, display_name, path, first_directory);
+      button_data = make_directory_button (path_bar, display_name, path, first_directory);
       gtk_file_info_free (file_info);
       gtk_file_path_free (path);
 
-      new_buttons = g_list_prepend (new_buttons, button);
+      new_buttons = g_list_prepend (new_buttons, button_data);
 
-      button_type = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (button), "gtk-path-bar-button-type"));
-      if (button_type != NORMAL_BUTTON)
+      if (button_data->type != NORMAL_BUTTON)
 	{
 	  gtk_file_path_free (parent_path);
 	  break;
@@ -889,7 +887,7 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
 
       for (l = path_bar->button_list; l; l = l->next)
 	{
-	  GtkWidget *button = l->data;
+	  GtkWidget *button = BUTTON_DATA (l->data)->button;
 	  gtk_container_add (GTK_CONTAINER (path_bar), button);
 	}
     }
@@ -899,7 +897,7 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
 
       for (l = new_buttons; l; l = l->next)
 	{
-	  GtkWidget *button = l->data;
+	  GtkWidget *button = BUTTON_DATA (l->data)->button;
 	  gtk_widget_destroy (button);
 	  gtk_widget_unref (button);
 	}
@@ -928,5 +926,4 @@ _gtk_path_bar_set_file_system (GtkPathBar    *path_bar,
   home = g_get_home_dir ();
   path_bar->home_path = gtk_file_system_filename_to_path (path_bar->file_system, home);
   path_bar->root_path = gtk_file_system_filename_to_path (path_bar->file_system, "/");
-
 }

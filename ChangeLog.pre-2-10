@@ -1,3 +1,22 @@
+Tue Mar  9 16:19:09 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkpathbar.c (struct _ButtonData): Encapsulate all of the
+	information about a button in a struct instead of ugly
+	g_object_set_data.
+	(gtk_path_bar_size_request): Use ButtonData.
+	(gtk_path_bar_update_slider_buttons): ditto
+	(gtk_path_bar_size_allocate): ditto
+	(gtk_path_bar_remove): ditto
+	(gtk_path_bar_forall): ditto
+	(gtk_path_bar_scroll_down): ditto
+	(gtk_path_bar_clear_buttons): ditto
+	(button_clicked_cb): ditto.  Also, add an ignore_changes variable
+	(button_data_free): destroy ButtonData
+	(update_button_appearance): Use ButtonData
+	(make_directory_button): ditto
+	(gtk_path_bar_check_parent_path): ditto
+	(_gtk_path_bar_set_path): ditto
+
 2004-03-09  Federico Mena Quintero  <federico@ximian.com>
 
 	Fix #136533.
