@@ -132,10 +132,10 @@ struct _GtkObject
    */
   guint ref_count;
   
-  /* The list of signal handlers and other data
-   *  fields for this object.
+  /* A list of keyed data pointers, used for e.g. the list of signal
+   * handlers or an object's user_data.
    */
-  gpointer object_data;
+  GData *object_data;
 };
 
 /* The GtkObjectClass is the base of the Gtk+ objects classes hierarchy,

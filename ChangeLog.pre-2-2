@@ -1,3 +1,8 @@
+Fri Sep 18 19:58:24 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkobject.h (struct _GtkObject): changed gpointer object_data; to
+	GData*object_data to cure compiler warnings.
+
 Thu Sep 17 19:06:47 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* install-sh
