@@ -3231,7 +3231,27 @@ gdk_drag_motion (GdkDragContext *context,
   
   if (private->old_actions != possible_actions)
     private->xdnd_actions_set = FALSE;
-      
+  
+  if (protocol == GDK_DRAG_PROTO_XDND && private->version == 0)
+    {
+      /* This ugly hack is necessary since GTK+ doesn't know about
+       * the XDND protocol version, and in particular doesn't know 
+       * that gdk_drag_find_window_for_screen() has the side-effect 
+       * of setting private->version, and therefore sometimes call
+       * gdk_drag_motion() without a prior call to 
+       * gdk_drag_find_window_for_screen(). This happens, e.g.
+       * when GTK+ is proxying DND events to embedded windows.
+       */ 
+      if (dest_window)
+	{
+	  GdkDisplay *display = GDK_WINDOW_DISPLAY (dest_window);
+	  
+	  xdnd_check_dest (display, 
+			   GDK_DRAWABLE_XID (dest_window), 
+			   &private->version);
+	}
+    }
+
   /* When we have a Xdnd target, make sure our XdndActionList
    * matches the current actions;
    */

@@ -1,5 +1,9 @@
 2004-11-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkdnd-x11.c (gdk_drag_motion): Handle the 
+	case that the protocol version in the context is not 
+	set yet.  (#157123, James Henstridge)
+
 	* gtk/gtktreeview.c (gtk_tree_view_search_activate): Don't
 	try to activate a node if the cursor is not valid.  
 
