@@ -58,6 +58,8 @@ struct _GtkComposeTable
  */
 
 static const guint16 gtk_compose_seqs[] = {
+  GDK_Greek_accentdieresis,	GDK_Greek_iota,	0,	0,	0,	0x0390,	/* GREEK SMALL LETTER IOTA WITH DIALYTIKA AND TONOS */
+  GDK_Greek_accentdieresis,	GDK_Greek_upsilon,	0,	0,	0,	0x03B0,	/* GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND TONOS */
   GDK_dead_grave,	GDK_space,	0,	0,	0,	0x0060,	/* GRAVE_ACCENT */
   GDK_dead_grave,	GDK_A,	0,	0,	0,	0x00C0,	/* LATIN_CAPITAL_LETTER_A_WITH_GRAVE */
   GDK_dead_grave,	GDK_E,	0,	0,	0,	0x00C8,	/* LATIN_CAPITAL_LETTER_E_WITH_GRAVE */
