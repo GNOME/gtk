@@ -1,3 +1,13 @@
+Sat Apr  6 06:57:00 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenushell.[ch] gtk/gtkmenuitem.c: Export
+	private _gtk_menu_shell_activate() to encapsulate
+	cut-and-paste code.
+
+	* gtk/gtkmenubar.c: Select the first item on the menu bar
+	for F10	rather than acting as if the user pressed <Alt>F
+	to select the file manager.
+
 Tue Apr  9 19:01:28 2002  Owen Taylor  <otaylor@redhat.com>
 
         Fix problems with HandleBox and focusing - #78232

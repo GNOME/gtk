@@ -416,16 +416,14 @@ window_key_press_handler (GtkWidget   *widget,
 						GTK_DIR_TAB_FORWARD, NULL);
 	  if (menubars)
 	    {
-	      GtkMenuShell *menushell = GTK_MENU_SHELL (menubars->data);
+	      GtkMenuShell *menu_shell = GTK_MENU_SHELL (menubars->data);
 
-	      if (menushell->children)
-		{
-		  gtk_signal_emit_by_name (GTK_OBJECT (menushell->children->data),
-					   "activate_item");
-		  retval = TRUE;
-		}
+	      _gtk_menu_shell_activate (menu_shell);
+	      _gtk_menu_shell_select_first (menu_shell);
 	      
 	      g_list_free (menubars);
+	      
+	      retval = TRUE;	      
 	    }
         }
 

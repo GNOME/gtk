@@ -779,12 +779,7 @@ gtk_real_menu_item_activate_item (GtkMenuItem *menu_item)
 	{
 	  GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget->parent);
 
-	  if (!menu_shell->active)
-	    {
-	      gtk_grab_add (GTK_WIDGET (menu_shell));
-	      menu_shell->have_grab = TRUE;
-	      menu_shell->active = TRUE;
-	    }
+	  _gtk_menu_shell_activate (menu_shell);
 
 	  gtk_menu_shell_select_item (GTK_MENU_SHELL (widget->parent), widget); 
 	  gtk_menu_item_popup_submenu (widget); 

@@ -440,6 +440,17 @@ gtk_menu_shell_realize (GtkWidget *widget)
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
 }
 
+void
+_gtk_menu_shell_activate (GtkMenuShell *menu_shell)
+{
+  if (!menu_shell->active)
+    {
+      gtk_grab_add (GTK_WIDGET (menu_shell));
+      menu_shell->have_grab = TRUE;
+      menu_shell->active = TRUE;
+    }
+}
+
 static gint
 gtk_menu_shell_button_press (GtkWidget      *widget,
 			     GdkEventButton *event)
@@ -461,12 +472,8 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
     }
   else if (!menu_shell->active || !menu_shell->button)
     {
-      if (!menu_shell->active)
-	{
-	  gtk_grab_add (GTK_WIDGET (widget));
-	  menu_shell->have_grab = TRUE;
-	  menu_shell->active = TRUE;
-	}
+      _gtk_menu_shell_activate (menu_shell);
+      
       menu_shell->button = event->button;
 
       menu_item = gtk_menu_shell_get_item (menu_shell, (GdkEvent *)event);
