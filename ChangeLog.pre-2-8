@@ -1,3 +1,22 @@
+Wed May 13 00:53:52 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtktypeutils.c gtk/gtksignal.c gdk/gdkdnd.c: A few more 
+	  GPOINTER_TO_UINT fixes.
+
+	* gtk/gtksignal.c: Include <string.h> for memset.
+
+Tue May 12 19:19:29 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkinputdialog.c gtk/gtkgamma.c gtk/gtkrc.c
+	  gtk/gtkcolorsel.c gtk/gtkclist.c gtk/testgtk.c: Use
+	GPOINTER_TO_INT/GINT_TO_POINTER macros where appropriate.
+
+	* gdk/gdk.c: Print sizeof() results
+	as g_print("%ld", (glong)sizeof(foo)), to deal with
+	sizeof() being long on Alpha's.
+
+	* gtk/testgtk.c: include <string.h> for strlen
+
 Tue May 12 12:35:34 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gdk/gdkregion.c: Initialize a variable so that invalid

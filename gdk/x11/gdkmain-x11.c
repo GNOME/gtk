@@ -4005,8 +4005,8 @@ gdk_dnd_check_types (GdkWindow   *window,
 
       if (realfmt != (sizeof(Atom) * 8))
 	{
-	  g_warning("XdeTypelist property had format of %d instead of the expected %d, on window %#lx\n",
-		    realfmt, sizeof(Atom) * 8, xevent->xclient.data.l[0]);
+	  g_warning("XdeTypelist property had format of %d instead of the expected %ld, on window %#lx\n",
+		    realfmt, (glong)sizeof(Atom) * 8, xevent->xclient.data.l[0]);
 	  return 0;
 	}
 

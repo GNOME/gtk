@@ -108,9 +108,9 @@ main (int   argc,
   GTree *tree;
   char chars[62];
 
-  g_print ("checking size of gint8...%d (should be 1)\n", sizeof (gint8));
-  g_print ("checking size of gint16...%d (should be 2)\n", sizeof (gint16));
-  g_print ("checking size of gint32...%d (should be 4)\n", sizeof (gint32));
+  g_print ("checking size of gint8...%ld (should be 1)\n", (glong)sizeof (gint8));
+  g_print ("checking size of gint16...%ld (should be 2)\n", (glong)sizeof (gint16));
+  g_print ("checking size of gint32...%ld (should be 4)\n", (glong)sizeof (gint32));
 
   g_print ("checking doubly linked lists...");
 

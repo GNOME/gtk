@@ -18,6 +18,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "gtk.h"
 #include "../gdk/gdk.h"
 #include "../gdk/gdkx.h"
@@ -1612,7 +1613,7 @@ set_parent_signal (GtkWidget *child,
 	   gtk_type_name (GTK_OBJECT_TYPE (child)),
 	   child->parent ? gtk_type_name (GTK_OBJECT_TYPE (child->parent)) : "NULL",
 	   old_parent ? gtk_type_name (GTK_OBJECT_TYPE (old_parent)) : "NULL",
-	   (gint) func_data);
+	   GPOINTER_TO_INT (func_data));
 }
 
 static void
@@ -1673,7 +1674,7 @@ create_reparent ()
       gtk_signal_connect (GTK_OBJECT (label),
 			  "parent_set",
 			  GTK_SIGNAL_FUNC (set_parent_signal),
-			  (GtkObject*) 42);
+			  GINT_TO_POINTER (42));
       gtk_widget_show (label);
 
 
@@ -2992,8 +2993,8 @@ select_clist (GtkWidget *widget,
 	case GTK_CELL_PIXMAP:
 	  g_print ("CELL %d GTK_CELL_PIXMAP\n", i);
 	  gtk_clist_get_pixmap (GTK_CLIST (widget), row, i, &pixmap, &mask);
-	  g_print ("PIXMAP: %d\n", (int) pixmap);
-	  g_print ("MASK: %d\n", (int) mask);
+	  g_print ("PIXMAP: %p\n", pixmap);
+	  g_print ("MASK: %p\n", mask);
 	  break;
 
 	case GTK_CELL_PIXTEXT:
@@ -3001,8 +3002,8 @@ select_clist (GtkWidget *widget,
 	  gtk_clist_get_pixtext (GTK_CLIST (widget), row, i, &text, &spacing, &pixmap, &mask);
 	  g_print ("TEXT: %s\n", text);
 	  g_print ("SPACING: %d\n", spacing);
-	  g_print ("PIXMAP: %d\n", (int) pixmap);
-	  g_print ("MASK: %d\n", (int) mask);
+	  g_print ("PIXMAP: %p\n", pixmap);
+	  g_print ("MASK: %p\n", mask);
 	  break;
 
 	default:
@@ -3015,7 +3016,7 @@ select_clist (GtkWidget *widget,
   list = GTK_CLIST (widget)->selection;
   while (list)
     {
-      g_print (" %d ", (gint) list->data);
+      g_print (" %d ", GPOINTER_TO_INT (list->data));
       list = list->next;
     }
 
@@ -3053,8 +3054,8 @@ unselect_clist (GtkWidget *widget,
 	case GTK_CELL_PIXMAP:
 	  g_print ("CELL %d GTK_CELL_PIXMAP\n", i);
 	  gtk_clist_get_pixmap (GTK_CLIST (widget), row, i, &pixmap, &mask);
-	  g_print ("PIXMAP: %d\n", (int) pixmap);
-	  g_print ("MASK: %d\n", (int) mask);
+	  g_print ("PIXMAP: %p\n", pixmap);
+	  g_print ("MASK: %p\n", mask);
 	  break;
 
 	case GTK_CELL_PIXTEXT:
@@ -3062,8 +3063,8 @@ unselect_clist (GtkWidget *widget,
 	  gtk_clist_get_pixtext (GTK_CLIST (widget), row, i, &text, &spacing, &pixmap, &mask);
 	  g_print ("TEXT: %s\n", text);
 	  g_print ("SPACING: %d\n", spacing);
-	  g_print ("PIXMAP: %d\n", (int) pixmap);
-	  g_print ("MASK: %d\n", (int) mask);
+	  g_print ("PIXMAP: %p\n", pixmap);
+	  g_print ("MASK: %p\n", mask);
 	  break;
 
 	default:
@@ -3076,7 +3077,7 @@ unselect_clist (GtkWidget *widget,
   list = GTK_CLIST (widget)->selection;
   while (list)
     {
-      g_print (" %d ", (gint) list->data);
+      g_print (" %d ", GPOINTER_TO_INT (list->data));
       list = list->next;
     }
 

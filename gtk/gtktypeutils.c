@@ -175,7 +175,7 @@ gtk_type_unique (GtkType      parent_type,
   new_node->children_types = NULL;
 
   if (parent)
-    parent->children_types = g_list_append (parent->children_types, (gpointer) new_node->type);
+    parent->children_types = g_list_append (parent->children_types, GUINT_TO_POINTER (new_node->type));
 
   parent = new_node;
   for (i = 0; i < new_node->n_supers + 1; i++)
@@ -184,7 +184,7 @@ gtk_type_unique (GtkType      parent_type,
       LOOKUP_TYPE_NODE (parent, parent->parent_type);
     }
     
-  g_hash_table_insert (type_name_2_type_ht, new_node->type_info.type_name, (gpointer) new_node->type);
+  g_hash_table_insert (type_name_2_type_ht, new_node->type_info.type_name, GUINT_TO_POINTER (new_node->type));
 
   return new_node->type;
 }
@@ -209,7 +209,7 @@ gtk_type_from_name (const gchar *name)
     {
       GtkType type;
       
-      type = (GtkType) g_hash_table_lookup (type_name_2_type_ht, (gpointer) name);
+      type = GPOINTER_TO_UINT (g_hash_table_lookup (type_name_2_type_ht, (gpointer) name));
 
       return type;
     }
@@ -354,7 +354,7 @@ gtk_type_describe_tree (GtkType type,
       indent += 4;
       
       for (list = node->children_types; list; list = list->next)
-	gtk_type_describe_tree ((GtkType) list->data, show_size);
+	gtk_type_describe_tree (GPOINTER_TO_UINT (list->data), show_size);
       
       indent = old_indent;
     }

@@ -1394,7 +1394,7 @@ sync_selection (GtkCList * clist,
   list = clist->selection;
   while (list)
     {
-      if ((gint) list->data >= row)
+      if (GPOINTER_TO_INT (list->data) >= row)
         switch (mode)
           {
           case SYNC_INSERT:
@@ -3061,7 +3061,7 @@ real_select_row (GtkCList * clist,
   if (clist_row->state == GTK_STATE_NORMAL)
     {
       clist_row->state = GTK_STATE_SELECTED;
-      clist->selection = g_list_append (clist->selection, (gpointer) row);
+      clist->selection = g_list_append (clist->selection, GINT_TO_POINTER (row));
 
       if (!GTK_CLIST_FROZEN (clist)
 	  && (gtk_clist_row_is_visible (clist, row) != GTK_VISIBILITY_NONE))
@@ -3087,7 +3087,7 @@ real_unselect_row (GtkCList * clist,
   if (clist_row->state == GTK_STATE_SELECTED)
     {
       clist_row->state = GTK_STATE_NORMAL;
-      clist->selection = g_list_remove (clist->selection, (gpointer) row);
+      clist->selection = g_list_remove (clist->selection, GINT_TO_POINTER (row));
 
       if (!GTK_CLIST_FROZEN (clist)
 	  && (gtk_clist_row_is_visible (clist, row) != GTK_VISIBILITY_NONE))

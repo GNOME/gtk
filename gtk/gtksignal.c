@@ -17,6 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 #include <stdarg.h>
+#include <string.h>
 #include "gtksignal.h"
 
 
@@ -322,7 +323,7 @@ gtk_signal_newv (const gchar	     *r_name,
   hash->object_type = object_type;
   hash->name_key_id = gtk_object_data_force_id (signal->name);
   hash->signal_id = signal->signal_id;
-  g_hash_table_insert (gtk_signal_hash_table, hash, (gpointer) hash->signal_id);
+  g_hash_table_insert (gtk_signal_hash_table, hash, GUINT_TO_POINTER (hash->signal_id));
 
   /* insert "signal-name" into hash table
    */
@@ -334,7 +335,7 @@ gtk_signal_newv (const gchar	     *r_name,
       hash->object_type = object_type;
       hash->name_key_id = id;
       hash->signal_id = signal->signal_id;
-      g_hash_table_insert (gtk_signal_hash_table, hash, (gpointer) hash->signal_id);
+      g_hash_table_insert (gtk_signal_hash_table, hash, GUINT_TO_POINTER (hash->signal_id));
     }
   
   return signal->signal_id;
@@ -403,7 +404,7 @@ gtk_signal_lookup (const gchar *name,
 	  
 	  hash.object_type = object_type;
 	  
-	  signal_id = (guint) g_hash_table_lookup (gtk_signal_hash_table, &hash);
+	  signal_id = GPOINTER_TO_UINT (g_hash_table_lookup (gtk_signal_hash_table, &hash));
 	  if (signal_id)
 	    return signal_id;
 	  
