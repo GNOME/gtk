@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
-"POT-Creation-Date: 2002-05-27 17:07+0200\n"
-"PO-Revision-Date: 2002-05-27 05:30+02:00\n"
+"POT-Creation-Date: 2002-05-28 11:45+0200\n"
+"PO-Revision-Date: 2002-05-28 04:21+02:00\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -686,7 +686,7 @@ msgstr "Sneltoets Widget"
 
 #: gtk/gtkaccellabel.c:144
 msgid "The widget to be monitored for accelerator changes"
-msgstr "De widget om in de gaten te houden voor sneltoets-veranderingen"
+msgstr "Het widget om in de gaten te houden voor sneltoets-veranderingen"
 
 #: gtk/gtkalignment.c:102
 msgid "Horizontal alignment"
@@ -1733,7 +1733,7 @@ msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed."
 msgstr ""
-"Of de standaard-widget geactiveerd moet worden (zoals de standaardknop in "
+"Of het standaardwidget geactiveerd moet worden (zoals de standaardknop in "
 "een dialoogvenster) wanneer op Enter wordt gedrukt."
 
 #: gtk/gtkentry.c:503
@@ -2376,7 +2376,8 @@ msgstr "Sneltoets-widget"
 
 #: gtk/gtklabel.c:350
 msgid "The widget to be activated when the label's mnemonic key is pressed."
-msgstr "De widget om te activeren als de label's sneltoets wordt gedrukt."
+msgstr ""
+"Het widget om te activeren als de sneltoets van het label wordt ingedrukt."
 
 #: gtk/gtklayout.c:623 gtk/gtkviewport.c:132
 msgid "Horizontal adjustment"
@@ -2650,7 +2651,7 @@ msgstr "Expandeer"
 msgid ""
 "Whether the preview widget should take up the entire space it is allocated"
 msgstr ""
-"Of het Voorbeeld-widget de volledige ruimte moet gebruiken die het is "
+"Of het voorbeeldwidget de volledige ruimte moet gebruiken die het is "
 "toebedeeld"
 
 #: gtk/gtkprogress.c:122
@@ -2686,7 +2687,7 @@ msgid ""
 "in the progresswidget"
 msgstr ""
 "Een getal tussen 0.0 en 1.0 dat de horizontale uitlijning van de tekst in "
-"een voortgangs-widget weergeeft"
+"een voortgangswidget weergeeft"
 
 #: gtk/gtkprogress.c:147
 msgid "Text y alignment"
@@ -2698,7 +2699,7 @@ msgid ""
 "in the progress widget"
 msgstr ""
 "Een getal tussen 0.0 en 1.0 dat de vertikale uitlijning van de tekst in een "
-"voortgangs widget weergeeft"
+"voortgangswidget weergeeft"
 
 #: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:282 gtk/gtkspinbutton.c:237
 msgid "Adjustment"
@@ -4224,7 +4225,7 @@ msgstr "Gevoelig"
 
 #: gtk/gtkwidget.c:431
 msgid "Whether the widget responds to input"
-msgstr "Of de widget reageert op invoer"
+msgstr "Of het widget reageert op invoer"
 
 #: gtk/gtkwidget.c:437
 msgid "Application paintable"
@@ -4248,7 +4249,7 @@ msgstr "Heeft focus"
 
 #: gtk/gtkwidget.c:452
 msgid "Whether the widget has the input focus"
-msgstr "Of de widget de invoerfocus heeft"
+msgstr "Of het widget de invoerfocus heeft"
 
 #: gtk/gtkwidget.c:458
 msgid "Can default"
@@ -4281,9 +4282,8 @@ msgid "Composite child"
 msgstr "Samengestelde dochter"
 
 #: gtk/gtkwidget.c:480
-#, fuzzy
 msgid "Whether the widget is part of a composite widget"
-msgstr "Of het widget is samengesteld uit andere widgets"
+msgstr "Of het widget onderdeel is van een samengesteld widget"
 
 #: gtk/gtkwidget.c:486
 msgid "Style"
