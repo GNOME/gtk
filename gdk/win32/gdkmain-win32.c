@@ -97,6 +97,7 @@ _gdk_windowing_init (gint    *argc,
   GDK_NOTE (MISC, g_print ("Windows version: %08x\n", (guint) _windows_version));
 
   _gdk_input_locale = GetKeyboardLayout (0);
+  _gdk_input_locale_is_ime = ImmIsIME (_gdk_input_locale);
   GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
 		 LOCALE_IDEFAULTANSICODEPAGE,
 		 buf, sizeof (buf));

@@ -461,9 +461,11 @@ extern HINSTANCE	 _gdk_app_hmodule;
  * from a single thread anyway.
  */
 extern HKL		 _gdk_input_locale;
+extern gboolean		 _gdk_input_locale_is_ime;
 extern UINT		 _gdk_input_codepage;
 
 extern guint		 _gdk_keymap_serial;
+extern gboolean		 _gdk_keyboard_has_altgr;
 
 /* Registered clipboard formats */
 extern WORD		 _cf_rtf;
