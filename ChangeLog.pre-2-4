@@ -1,3 +1,13 @@
+2003-05-27  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk-zip.sh.in: Only include the Default and Emacs themes' gtkrc
+	files. Include share/gtk-doc/{gdk-pixbuf,gdk,gtk}.
+
+	* gdk/Makefile.am: libgdk-win32-2.0.la depends on
+	win32/libgdk-win32.la.
+
+	* gtk/gtk.def: Add gtk_tree_view_column_cell_get_position.
+
 2003-05-23  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcolorsel.c (gtk_color_selection_init): Update color on
