@@ -1,3 +1,9 @@
+Mon Aug 18 10:25:29 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-pixdata.c (gdk_pixdata_to_csource): Add the correct
+	alignment magic for Sun compiler and for GCC to get
+	the strings aligned. (Patch from Brian Cameron, #117217)
+
 2003-08-14  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixdata.c (gdk_pixdata_to_csource): Improve doc comment
