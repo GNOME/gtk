@@ -37,6 +37,10 @@ and GTK is a widget set for creating user interfaces.
 
 %changelog
 
+* Sun Mar 15 1998 Marc Ewing <marc@redhat.com>
+
+- Added aclocal stuff to file list.
+
 * Fri Mar 14 1998 Shawn T. Amundson <amundson@gimp.org>
 
 - Changed version to 0.99.7
@@ -97,11 +101,16 @@ if [ $1 = 0 ]; then
 fi
 
 %files
-%attr(-, root, root) %doc AUTHORS COPYING ChangeLog NEWS README TODO
-%attr(-, root, root) %{prefix}/lib/lib*.so.*
+%defattr(-, root, root)
+
+%doc AUTHORS COPYING ChangeLog NEWS README TODO
+%{prefix}/lib/lib*.so.*
 
 %files devel
-%attr(-, root, root) %{prefix}/lib/lib*.so
-%attr(-, root, root) %{prefix}/lib/*a
-%attr(-, root, root) %{prefix}/include/*
-%attr(-, root, root) %{prefix}/info/*
+%defattr(-, root, root)
+
+%{prefix}/lib/lib*.so
+%{prefix}/lib/*a
+%{prefix}/include/*
+%{prefix}/info/*
+%{prefix}/share/aclocal/*
