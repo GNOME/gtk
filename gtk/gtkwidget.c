@@ -4253,10 +4253,18 @@ gtk_widget_set_parent (GtkWidget *widget,
   GtkStateData data;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (widget->parent == NULL);
-  g_return_if_fail (!GTK_WIDGET_TOPLEVEL (widget));
   g_return_if_fail (GTK_IS_WIDGET (parent));
   g_return_if_fail (widget != parent);
+  if (widget->parent != NULL)
+    {
+      g_warning ("Can't set a parent on widget which has a parent\n");
+      return;
+    }
+  if (GTK_WIDGET_TOPLEVEL (widget))
+    {
+      g_warning ("Can't set a parent on a toplevel widget\n");
+      return;
+    }
 
   /* keep this function in sync with gtk_menu_attach_to_widget()
    */

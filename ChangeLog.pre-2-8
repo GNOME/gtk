@@ -1,3 +1,8 @@
+Fri May 28 14:57:13 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwidget.c (gtk_widget_set_parent): Add informative
+	messages for common problems.  (#137974, Owen Taylor)
+
 Fri May 28 14:14:48 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkevents-x11.c: Fix off-by-one errors.  (#143337,
