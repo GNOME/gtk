@@ -1,0 +1,15 @@
+Fri Aug 21 19:08:25 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am: Added support for metal theme. 
+	  Install/distribute gtkrc's for each theme.
+
+Mon Aug 17 20:32:53 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am, pixmap/Makefile.am: Switch back to using automake,
+	  fix things up to make dist properly.
+
+	* pixmap_theme.h: Rationalized.
+	* win95_theme.h motif_theme.h: Removed
+
+	* Started ChangeLog.
+
