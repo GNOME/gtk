@@ -1,3 +1,7 @@
+Sun Oct 25 08:04:33 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c: added more g_return_if_fail() statements.
+
 Thu Oct 22 22:40:35 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkctree.c (gtk_ctree_destroy): removed. gtk_clist_destroy

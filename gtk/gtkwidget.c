@@ -2568,9 +2568,11 @@ gtk_widget_set_parent (GtkWidget *widget,
   GtkStateData data;
   
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (widget->parent == NULL);
   g_return_if_fail (!GTK_WIDGET_TOPLEVEL (widget));
   g_return_if_fail (parent != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (parent));
   g_return_if_fail (widget != parent);
 
   /* keep this function in sync with gtk_menu_attach_to_widget()
@@ -2607,6 +2609,7 @@ gtk_widget_set_style (GtkWidget *widget,
   gboolean initial_emission;
 
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (style != NULL);
 
   initial_emission = !GTK_WIDGET_RC_STYLE (widget) && !GTK_WIDGET_USER_STYLE (widget);
@@ -2629,6 +2632,9 @@ gtk_widget_set_style (GtkWidget *widget,
 void
 gtk_widget_ensure_style (GtkWidget *widget)
 {
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
   if (!GTK_WIDGET_USER_STYLE (widget) &&
       !GTK_WIDGET_RC_STYLE (widget))
     gtk_widget_set_rc_style (widget);
@@ -2642,6 +2648,7 @@ gtk_widget_set_rc_style (GtkWidget *widget)
   gboolean initial_emission;
   
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
 
   initial_emission = !GTK_WIDGET_RC_STYLE (widget) && !GTK_WIDGET_USER_STYLE (widget);
 
@@ -2685,6 +2692,7 @@ gtk_widget_restore_default_style (GtkWidget *widget)
   GtkStyle *default_style;
 
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
 
   GTK_PRIVATE_UNSET_FLAG (widget, GTK_USER_STYLE);
 
@@ -2701,6 +2709,7 @@ GtkStyle*
 gtk_widget_get_style (GtkWidget *widget)
 {
   g_return_val_if_fail (widget != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   
   return widget->style;
 }
