@@ -158,6 +158,8 @@ static gboolean gtk_menu_expose            (GtkWidget        *widget,
 					    GdkEventExpose   *event);
 static gboolean gtk_menu_key_press         (GtkWidget        *widget,
 					    GdkEventKey      *event);
+static gboolean gtk_menu_scroll            (GtkWidget        *widget,
+					    GdkEventScroll   *event);
 static gboolean gtk_menu_button_press      (GtkWidget        *widget,
 					    GdkEventButton   *event);
 static gboolean gtk_menu_button_release    (GtkWidget        *widget,
@@ -481,6 +483,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->size_allocate = gtk_menu_size_allocate;
   widget_class->show = gtk_menu_show;
   widget_class->expose_event = gtk_menu_expose;
+  widget_class->scroll_event = gtk_menu_scroll;
   widget_class->key_press_event = gtk_menu_key_press;
   widget_class->button_press_event = gtk_menu_button_press;
   widget_class->button_release_event = gtk_menu_button_release;
@@ -2800,27 +2803,23 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
   return FALSE;
 }
 
-static gboolean
-gtk_menu_scroll_timeout (gpointer  data)
+static void
+gtk_menu_scroll_by (GtkMenu *menu, 
+		    gint     step)
 {
-  GtkMenu *menu;
   GtkWidget *widget;
   gint offset;
   gint view_width, view_height;
 
-  GDK_THREADS_ENTER ();
-
-  menu = GTK_MENU (data);
   widget = GTK_WIDGET (menu);
-
-  offset = menu->scroll_offset + menu->scroll_step;
+  offset = menu->scroll_offset + step;
 
   /* If we scroll upward and the non-visible top part
    * is smaller than the scroll arrow it would be
    * pretty stupid to show the arrow and taking more
    * screen space than just scrolling to the top.
    */
-  if ((menu->scroll_step < 0) && (offset < MENU_SCROLL_ARROW_HEIGHT))
+  if ((step < 0) && (offset < MENU_SCROLL_ARROW_HEIGHT))
     offset = 0;
 
   /* Don't scroll over the top if we weren't before: */
@@ -2837,9 +2836,42 @@ gtk_menu_scroll_timeout (gpointer  data)
       (offset + view_height > widget->requisition.height))
     offset = widget->requisition.height - view_height;
 
-  gtk_menu_scroll_to (menu, offset);
+  if (offset != menu->scroll_offset)
+    gtk_menu_scroll_to (menu, offset);
+}
+
+Static gboolean
+gtk_menu_scroll_timeout (gpointer  data)
+{
+  GtkMenu *menu;
+
+  GDK_THREADS_ENTER ();
+
+  menu = GTK_MENU (data);
+  gtk_menu_scroll_by (menu, menu->scroll_step);
 
   GDK_THREADS_LEAVE ();
+
+  return TRUE;
+}
+
+static gboolean
+gtk_menu_scroll (GtkWidget	*widget,
+		 GdkEventScroll *event)
+{
+  GtkMenu *menu = GTK_MENU (widget);
+
+  switch (event->direction)
+    {
+    case GDK_SCROLL_RIGHT:
+    case GDK_SCROLL_DOWN:
+      gtk_menu_scroll_by (menu, MENU_SCROLL_STEP2);
+      break;
+    case GDK_SCROLL_LEFT:
+    case GDK_SCROLL_UP:
+      gtk_menu_scroll_by (menu, - MENU_SCROLL_STEP2);
+      break;
+    }
 
   return TRUE;
 }
