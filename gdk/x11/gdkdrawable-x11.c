@@ -90,6 +90,8 @@ static void gdk_x11_set_colormap   (GdkDrawable    *drawable,
 
 static GdkColormap* gdk_x11_get_colormap   (GdkDrawable    *drawable);
 
+static gint         gdk_x11_get_depth      (GdkDrawable    *drawable);
+
 static void gdk_drawable_impl_init       (GdkDrawableImpl      *drawable);
 static void gdk_drawable_impl_class_init (GdkDrawableImplClass *klass);
 static void gdk_drawable_impl_finalize   (GObject              *object);
@@ -154,6 +156,8 @@ gdk_drawable_impl_class_init (GdkDrawableImplClass *klass)
 
   drawable_class->set_colormap = gdk_x11_set_colormap;
   drawable_class->get_colormap = gdk_x11_get_colormap;
+
+  drawable_class->get_depth = gdk_x11_get_depth;
 }
 
 static void
@@ -415,7 +419,6 @@ gdk_x11_draw_drawable (GdkDrawable *drawable,
   g_return_if_fail (GDK_IS_DRAWABLE_IMPL (drawable));
 
   impl = GDK_DRAWABLE_IMPL (drawable);
-
   
   if (src_depth == 1)
     {
@@ -558,4 +561,12 @@ gdk_x11_draw_lines (GdkDrawable *drawable,
 	      CoordModeOrigin);
 
   g_free (tmp_points);
+}
+
+static gint
+gdk_x11_get_depth (GdkDrawable *drawable)
+{
+  /* This is a bit bogus but I'm not sure the other way is better */
+
+  return gdk_drawable_get_depth (GDK_DRAWABLE_IMPL (drawable)->wrapper);
 }

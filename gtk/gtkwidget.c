@@ -4361,11 +4361,11 @@ static void
 gtk_reset_shapes_recurse (GtkWidget *widget,
 			  GdkWindow *window)
 {
-  GdkWindowPrivate *private;
+  GdkWindowObject *private;
   gpointer data;
   GList *list;
 
-  private = (GdkWindowPrivate*) window;
+  private = (GdkWindowObject*) window;
 
   gdk_window_get_user_data (window, &data);
   if (data != widget)

@@ -42,6 +42,11 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
   XGCValues xvalues;
   unsigned long xvalues_mask;
 
+  /* NOTICE that the drawable here has to be the impl drawable,
+   * not the publically-visible drawables.
+   */
+  g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL (drawable), NULL);
+  
   gc = gdk_gc_alloc ();
   private = (GdkGCPrivate *)gc;
 
@@ -51,7 +56,7 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
   data->dirty_mask = 0;
   data->clip_region = NULL;
     
-  GDK_GC_XDATA (gc)->xdisplay = GDK_DRAWABLE_XDISPLAY (drawable);
+  GDK_GC_XDATA (gc)->xdisplay = GDK_DRAWABLE_IMPL (drawable)->xdisplay;
 
   if (values_mask & (GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN))
     {
@@ -75,7 +80,7 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
   gdk_x11_gc_values_to_xvalues (values, values_mask, &xvalues, &xvalues_mask);
   
   data->xgc = XCreateGC (GDK_GC_XDISPLAY (gc),
-			 GDK_DRAWABLE_XID (drawable),
+                         GDK_DRAWABLE_IMPL (drawable)->xid,
 			 xvalues_mask, &xvalues);
 
   return gc;

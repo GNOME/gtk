@@ -160,7 +160,7 @@ gdk_image_check_xshm(Display *display)
 }
 
 void
-gdk_image_init (void)
+gdk_windowing_image_init (void)
 {
   if (gdk_use_xshm)
     {

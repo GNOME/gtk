@@ -1187,7 +1187,7 @@ gtk_style_apply_default_background (GtkStyle     *style,
     }
   
   if (!style->bg_pixmap[state_type] ||
-      gdk_window_get_type (window) == GDK_WINDOW_PIXMAP ||
+      GDK_IS_PIXMAP (window) ||
       (!set_bg && style->bg_pixmap[state_type] != (GdkPixmap*) GDK_PARENT_RELATIVE))
     {
       GdkGC *gc = style->bg_gc[state_type];
@@ -2187,7 +2187,7 @@ gtk_default_draw_box (GtkStyle      *style,
     gdk_window_get_size (window, NULL, &height);
   
   if (!style->bg_pixmap[state_type] || 
-      gdk_window_get_type (window) == GDK_WINDOW_PIXMAP)
+      GDK_IS_PIXMAP (window))
     {
       if (area)
 	gdk_gc_set_clip_rectangle (style->bg_gc[state_type], area);
@@ -2246,7 +2246,7 @@ gtk_default_draw_flat_box (GtkStyle      *style,
     gc1 = style->bg_gc[state_type];
   
   if (!style->bg_pixmap[state_type] || gc1 != style->bg_gc[state_type] ||
-      gdk_window_get_type (window) == GDK_WINDOW_PIXMAP)
+      GDK_IS_PIXMAP (window))
     {
       if (area)
 	gdk_gc_set_clip_rectangle (gc1, area);

@@ -180,7 +180,7 @@ static GdkGC *
 gdk_pixmap_create_gc (GdkDrawable     *drawable,
                       GdkGCValues     *values,
                       GdkGCValuesMask  mask)
-{  
+{
   return gdk_gc_new_with_values (((GdkPixmapObject *) drawable)->impl,
                                  values, mask);
 }

@@ -332,7 +332,7 @@ gdk_window_new (GdkWindow     *parent,
   private->window_type = attributes->window_type;
 
   _gdk_window_init_position (GDK_WINDOW (private));
-  if (GDK_WINDOW_IMPL (window)->position_info.big)
+  if (impl->position_info.big)
     private->guffaw_gravity = TRUE;
   
   if (attributes_mask & GDK_WA_VISUAL)

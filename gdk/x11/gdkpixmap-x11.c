@@ -50,6 +50,9 @@ typedef struct
   gulong pixels[1];
 } _GdkPixmapInfo;
 
+static void gdk_pixmap_impl_get_size   (GdkDrawable        *drawable,
+                                        gint               *width,
+                                        gint               *height);
 
 static void gdk_pixmap_impl_init       (GdkPixmapImpl      *pixmap);
 static void gdk_pixmap_impl_class_init (GdkPixmapImplClass *klass);
@@ -96,10 +99,13 @@ static void
 gdk_pixmap_impl_class_init (GdkPixmapImplClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
+  GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
+  
   parent_class = g_type_class_peek (GDK_TYPE_DRAWABLE_IMPL);
 
   object_class->finalize = gdk_pixmap_impl_finalize;
+
+  drawable_class->get_size = gdk_pixmap_impl_get_size;
 }
 
 static void
@@ -112,6 +118,17 @@ gdk_pixmap_impl_finalize (GObject *object)
   gdk_xid_table_remove (GDK_PIXMAP_XID (wrapper));
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
+gdk_pixmap_impl_get_size   (GdkDrawable *drawable,
+                            gint *width,
+                            gint *height)
+{
+  if (width)
+    *width = GDK_PIXMAP_IMPL (drawable)->width;
+  if (height)
+    *height = GDK_PIXMAP_IMPL (drawable)->height;
 }
 
 GdkPixmap*

@@ -41,10 +41,6 @@
   gdk_font_ref
   gdk_font_unref)
 
-(define-boxed GdkWindow
-  gdk_window_ref
-  gdk_window_unref)
-
 (define-boxed GdkDragContext
   gdk_drag_context_ref
   gdk_drag_context_unref)

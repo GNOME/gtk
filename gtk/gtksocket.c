@@ -155,7 +155,8 @@ gtk_socket_steal (GtkSocket *socket, guint32 id)
 
   gdk_error_trap_push ();
   
-  if (socket->plug_window && socket->plug_window->user_data)
+  if (socket->plug_window &&
+      ((GdkWindowObject *)socket->plug_window)->user_data)
     {
       /*
 	GtkWidget *child_widget;
