@@ -228,6 +228,8 @@ static gchar *pixmap_path[GTK_RC_MAX_PIXMAP_PATHS];
 /* The files we have parsed, to reread later if necessary */
 GSList *rc_files = NULL;
 
+static GtkImageLoader image_loader = NULL;
+
 void
 gtk_rc_init (void)
 {
@@ -760,11 +762,18 @@ gtk_rc_style_init (GtkRcStyle *rc_style, GdkColormap *cmap)
 	    if (strcmp (rc_style->bg_pixmap_name[i], "<parent>") == 0)
 	      style->bg_pixmap[i] = (GdkPixmap*) GDK_PARENT_RELATIVE;
 	    else
-	      style->bg_pixmap[i] = 
-		gdk_pixmap_colormap_create_from_xpm (NULL, cmap,
-						     NULL,
+	      {
+		if(image_loader)
+		  style->bg_pixmap[i] = image_loader(NULL, cmap, NULL,
 						     &style->bg[i],
 						     rc_style->bg_pixmap_name[i]);
+		else
+	          style->bg_pixmap[i] = 
+		    gdk_pixmap_colormap_create_from_xpm (NULL, cmap,
+						         NULL,
+						         &style->bg[i],
+						         rc_style->bg_pixmap_name[i]);
+	      }
 	  }
 
       rc_style->styles = g_list_append (rc_style->styles, node);
@@ -1646,3 +1655,18 @@ gtk_rc_widget_class_path (GtkWidget *widget)
   
   return path;
 }
+
+/*
+typedef  GdkPixmap * (*GtkImageLoader) (GdkWindow   *window,
+                                        GdkColormap *colormap,
+                                        GdkBitmap  **mask,
+                                        GdkColor    *transparent_color,
+                                        const gchar *filename);
+*/
+
+void
+gtk_rc_set_loader(GtkImageLoader loader)
+{
+	image_loader = loader;
+}
+
