@@ -600,7 +600,7 @@ create_tree_model (void)
                                          t[6], t[7], t[8]);
 
   i = 0;
-  while (i < G_TYPE_LAST_RESERVED_FUNDAMENTAL)
+  while (i < G_TYPE_RESERVED_LAST_FUNDAMENTAL)
     {
       typesystem_recurse (i, NULL, store);
       
@@ -1095,7 +1095,7 @@ gtk_real_model_types_iter_next (GtkTreeModel  *tree_model,
   if (parent == G_TYPE_INVALID)
     {
       /* fundamental type, add 1 */
-      if ((type + 1) < G_TYPE_LAST_RESERVED_FUNDAMENTAL)
+      if ((type + 1) < G_TYPE_RESERVED_LAST_FUNDAMENTAL)
         {
           iter->user_data = GINT_TO_POINTER (type + 1);
           return TRUE;
@@ -1183,7 +1183,7 @@ gtk_real_model_types_iter_n_children (GtkTreeModel *tree_model,
 {
   if (iter == NULL)
     {
-      return G_TYPE_LAST_RESERVED_FUNDAMENTAL - 1;
+      return G_TYPE_RESERVED_LAST_FUNDAMENTAL - 1;
     }
   else
     {
@@ -1210,7 +1210,7 @@ gtk_real_model_types_iter_nth_child (GtkTreeModel *tree_model,
   if (parent == NULL)
     {
       /* fundamental type */
-      if (n < G_TYPE_LAST_RESERVED_FUNDAMENTAL)
+      if (n < G_TYPE_RESERVED_LAST_FUNDAMENTAL)
         {
           iter->user_data = GINT_TO_POINTER (n);
           return TRUE;
@@ -1258,7 +1258,7 @@ gtk_real_model_types_iter_parent (GtkTreeModel *tree_model,
   
   if (parent == G_TYPE_INVALID)
     {
-      if (type >= G_TYPE_LAST_RESERVED_FUNDAMENTAL)
+      if (type >= G_TYPE_RESERVED_LAST_FUNDAMENTAL)
         g_warning ("no parent for %d %s\n", type, g_type_name (type));
       return FALSE;
     }

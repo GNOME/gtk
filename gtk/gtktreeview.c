@@ -315,8 +315,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   class->set_scroll_adjustments = gtk_tree_view_set_adjustments;
 
-#if 0
-  /* FIXME, tim needs to support interface prerequisits in GType */
   g_object_class_install_property (o_class,
                                    PROP_MODEL,
                                    g_param_spec_object ("model",
@@ -324,7 +322,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							_("The model for the tree view"),
 							GTK_TYPE_TREE_MODEL,
 							G_PARAM_READWRITE));
-#endif
   
   g_object_class_install_property (o_class,
                                    PROP_HADJUSTMENT,
@@ -407,7 +404,7 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->selection = NULL;
   tree_view->priv->anchor = NULL;
   tree_view->priv->cursor = NULL;
-
+  tree_view->priv->header_has_focus = FALSE;
   tree_view->priv->pressed_button = -1;
   tree_view->priv->press_start_x = -1;
   tree_view->priv->press_start_y = -1;
@@ -1039,14 +1036,14 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
           cell_area.x += depth * tree_view->priv->tab_offset;
           cell_area.width -= depth * tree_view->priv->tab_offset;
         }
-      
-      gtk_cell_renderer_render (cell,
-                                drawable,
-                                widget,
-                                &background_area,
-                                &cell_area,
-                                NULL,
-                                0);
+      if (cell->visible)
+	gtk_cell_renderer_render (cell,
+				  drawable,
+				  widget,
+				  &background_area,
+				  &cell_area,
+				  NULL,
+				  0);
       
       cell_offset += column->displayed_width;
     }
@@ -1280,14 +1277,15 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
                * level of the tree we're dropping at.
                */
               highlight_x = cell_area.x;
-                
-	      gtk_cell_renderer_render (cell,
-					event->window,
-					widget,
-					&background_area,
-					&cell_area,
-					&event->area,
-					flags);
+
+	      if (cell->visible)
+		gtk_cell_renderer_render (cell,
+					  event->window,
+					  widget,
+					  &background_area,
+					  &cell_area,
+					  &event->area,
+					  flags);
 
 	      if ((node->flags & GTK_RBNODE_IS_PARENT) == GTK_RBNODE_IS_PARENT)
 		{
@@ -1300,14 +1298,15 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 		}
 	    }
 	  else
-	    {              
-	      gtk_cell_renderer_render (cell,
-					event->window,
-					widget,
-					&background_area,
-					&cell_area,
-					&event->area,
-					flags);
+	    {
+	      if (cell->visible)
+		gtk_cell_renderer_render (cell,
+					  event->window,
+					  widget,
+					  &background_area,
+					  &cell_area,
+					  &event->area,
+					  flags);
 	    }
 	  cell_offset += column->displayed_width;
 	}
@@ -1790,14 +1789,14 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 					      &iter);
 
 	  path_string = gtk_tree_path_to_string (path);
-	  if (gtk_cell_renderer_event (cell,
+	  if (cell->visible &&
+	      gtk_cell_renderer_event (cell,
 				       (GdkEvent *)event,
 				       widget,
 				       path_string,
 				       &background_area,
 				       &cell_area,
 				       0))
-
 	    {
 	      g_free (path_string);
 	      gtk_tree_path_free (path);
@@ -2028,14 +2027,11 @@ gtk_tree_view_focus_out (GtkWidget     *widget,
   return FALSE;
 }
 
-/* FIXME: It would be neat to someday make the headers a seperate widget that
- * can be shared between various apps.  Wishful thinking, though...
- */
 /* Returns TRUE if the focus is within the headers, after the focus operation is
  * done
  */
 static gboolean
-gtk_tree_view_header_focus (GtkTreeView        *tree_view,
+gtk_tree_view_header_focus (GtkTreeView      *tree_view,
 			    GtkDirectionType  dir)
 {
   GtkWidget *focus_child;
@@ -2253,18 +2249,15 @@ gtk_tree_view_focus (GtkContainer     *container,
       switch (direction)
 	{
 	case GTK_DIR_LEFT:
-	case GTK_DIR_TAB_BACKWARD:
 	  return (gtk_tree_view_header_focus (tree_view, direction));
+	case GTK_DIR_TAB_BACKWARD:
 	case GTK_DIR_UP:
 	  return FALSE;
 	case GTK_DIR_TAB_FORWARD:
+	  if (gtk_tree_view_header_focus (tree_view, direction))
+	    return TRUE;
 	case GTK_DIR_RIGHT:
 	case GTK_DIR_DOWN:
-	  if (direction != GTK_DIR_DOWN)
-	    {
-	      if (gtk_tree_view_header_focus (tree_view, direction))
-		return TRUE;
-	    }
 	  GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
 	  gtk_widget_grab_focus (GTK_WIDGET (container));
 

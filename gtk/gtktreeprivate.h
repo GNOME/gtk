@@ -40,7 +40,7 @@ extern "C" {
  * separator, the extra pixel by convention goes _below_ the row.  So
  * a node in the rbtree owns TREE_VIEW_VERTICAL_SEPARATOR/2 pixels
  * above the row, and TREE_VIEW_VERTICAL_SEPARATOR/2 +
- * TREE_VIEW_VERTICAL_SEPARATOR%2 pixels below the row. 
+ * TREE_VIEW_VERTICAL_SEPARATOR%2 pixels below the row.
  */
 
 #define TREE_VIEW_VERTICAL_SEPARATOR 2
@@ -89,7 +89,11 @@ struct _GtkTreeViewPrivate
   GdkWindow *header_window;
 
   gint expander_column;
-  
+
+  /* Focus code */
+  gboolean header_has_focus;
+  GList *focus_column;
+
   /* Selection stuff */
   GtkTreeRowReference *anchor;
   GtkTreeRowReference *cursor;
@@ -114,12 +118,12 @@ struct _GtkTreeViewPrivate
 
   /* Scroll timeout (e.g. during dnd) */
   guint scroll_timeout;
-  
+
   /* Row drag-and-drop */
   GtkTreeRowReference *drag_dest_row;
   GtkTreeViewDropPosition drag_dest_pos;
   guint open_dest_timeout;
-  
+
   gint pressed_button;
   gint press_start_x;
   gint press_start_y;
