@@ -37,7 +37,6 @@
 
 
 #define BORDER_SPACING  3
-#define SELECT_TIMEOUT  75
 
 #define MENU_ITEM_CLASS(w)  GTK_MENU_ITEM_CLASS (GTK_OBJECT (w)->klass)
 
@@ -98,9 +97,6 @@ static void gtk_menu_item_forall         (GtkContainer    *container,
 
 static GtkItemClass *parent_class;
 static guint menu_item_signals[LAST_SIGNAL] = { 0 };
-static guint32	last_submenu_deselect_time = 0;
-
-
 
 GType
 gtk_menu_item_get_type (void)
@@ -690,6 +686,27 @@ gtk_menu_item_expose (GtkWidget      *widget,
   return FALSE;
 }
 
+static gint
+get_popup_delay (GtkMenuItem *menu_item)
+{
+  GtkWidget *parent = GTK_WIDGET (menu_item)->parent;
+
+  if (GTK_IS_MENU_SHELL (parent))
+    {
+      return _gtk_menu_shell_get_popup_delay (GTK_MENU_SHELL (parent));
+    }
+  else
+    {
+      gint popup_delay;
+      
+      g_object_get (G_OBJECT (gtk_widget_get_settings (GTK_WIDGET (menu_item))),
+		    "gtk-menu-popup-delay", &popup_delay,
+		    NULL);
+
+      return popup_delay;
+    }
+}
+
 static void
 gtk_real_menu_item_select (GtkItem *item)
 {
@@ -699,32 +716,35 @@ gtk_real_menu_item_select (GtkItem *item)
 
   menu_item = GTK_MENU_ITEM (item);
 
-  /*  if (menu_item->submenu && !GTK_WIDGET_VISIBLE (menu_item->submenu))*/
   if (menu_item->submenu)
     {
-      guint32 etime;
-      GdkEvent *event = gtk_get_current_event ();
+      gint popup_delay;
+      GtkWidget *parent;
 
-      etime = event ? gdk_event_get_time (event) : GDK_CURRENT_TIME;
-      if (event &&
-	  etime >= last_submenu_deselect_time &&
-	  last_submenu_deselect_time + SELECT_TIMEOUT > etime)
+      if (menu_item->timer)
+	gtk_timeout_remove (menu_item->timer);
+
+      popup_delay = get_popup_delay (menu_item);
+      
+      if (popup_delay > 0)
 	{
-	  if (!menu_item->timer)
-	    menu_item->timer = gtk_timeout_add (SELECT_TIMEOUT - (etime - last_submenu_deselect_time),
-						gtk_menu_item_select_timeout,
-						menu_item);
+	  GdkEvent *event = gtk_get_current_event ();
+	  
+	  menu_item->timer = gtk_timeout_add (popup_delay,
+					      gtk_menu_item_select_timeout,
+					      menu_item);
 	  if (event &&
 	      event->type != GDK_BUTTON_PRESS &&
 	      event->type != GDK_ENTER_NOTIFY)
 	    menu_item->timer_from_keypress = TRUE;
 	  else
 	    menu_item->timer_from_keypress = FALSE;
+
+	  if (event)
+	    gdk_event_free(event);
 	}
       else
 	gtk_menu_item_popup_submenu (menu_item);
-      if (event)
-	gdk_event_free(event);
     }
   
   gtk_widget_set_state (GTK_WIDGET (menu_item), GTK_STATE_PRELIGHT);
@@ -742,9 +762,6 @@ gtk_real_menu_item_deselect (GtkItem *item)
 
   if (menu_item->submenu)
     {
-      guint32 etime;
-      GdkEvent *event = gtk_get_current_event ();
-
       if (menu_item->timer)
 	{
 	  gtk_timeout_remove (menu_item->timer);
@@ -752,12 +769,6 @@ gtk_real_menu_item_deselect (GtkItem *item)
 	}
       else
 	gtk_menu_popdown (GTK_MENU (menu_item->submenu));
-
-      etime = event ? gdk_event_get_time (event) : GDK_CURRENT_TIME;
-      if (etime > last_submenu_deselect_time)
-	last_submenu_deselect_time = etime;
-      if (event)
-	gdk_event_free(event);
     }
 
   gtk_widget_set_state (GTK_WIDGET (menu_item), GTK_STATE_NORMAL);
@@ -861,6 +872,9 @@ gtk_menu_item_popup_submenu (gpointer data)
   GtkMenuItem *menu_item;
 
   menu_item = GTK_MENU_ITEM (data);
+
+  if (menu_item->timer)
+    gtk_timeout_remove (menu_item->timer);
   menu_item->timer = 0;
 
   if (GTK_WIDGET_IS_SENSITIVE (menu_item->submenu))

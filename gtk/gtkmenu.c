@@ -44,8 +44,12 @@
 #define MENU_ITEM_CLASS(w)   GTK_MENU_ITEM_GET_CLASS (w)
 #define	MENU_NEEDS_RESIZE(m) GTK_MENU_SHELL (m)->menu_flag
 
-#define SUBMENU_NAV_REGION_PADDING 2
-#define SUBMENU_NAV_HYSTERESIS_TIMEOUT 333
+#define DEFAULT_POPUP_DELAY    225
+#define DEFAULT_POPDOWN_DELAY  1000
+
+#define NAVIGATION_REGION_OVERSHOOT    50  /* How much the navigation region
+					    * extends below the submenu
+					    */
 
 #define MENU_SCROLL_STEP 10
 #define MENU_SCROLL_ARROW_HEIGHT 16
@@ -126,6 +130,7 @@ static void     gtk_menu_style_set         (GtkWidget        *widget,
 					    GtkStyle         *previous_style);
 static gboolean gtk_menu_focus             (GtkWidget        *widget,
 					    GtkDirectionType direction);
+static gint     gtk_menu_get_popup_delay   (GtkMenuShell    *menu_shell);
 
 
 static void     gtk_menu_stop_navigating_submenu       (GtkMenu          *menu);
@@ -255,6 +260,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   menu_shell_class->deactivate = gtk_menu_deactivate;
   menu_shell_class->select_item = gtk_menu_select_item;
   menu_shell_class->insert = gtk_menu_real_insert;
+  menu_shell_class->get_popup_delay = gtk_menu_get_popup_delay;
 
   binding_set = gtk_binding_set_by_class (class);
   gtk_binding_entry_add_signal (binding_set,
@@ -303,6 +309,23 @@ gtk_menu_class_init (GtkMenuClass *class)
 						       _("Whether menu accelerators can be changed by pressing a key over the menu item"),
 						       FALSE,
 						       G_PARAM_READWRITE));
+
+  gtk_settings_install_property (g_param_spec_int ("gtk-menu-popup-delay",
+						   _("Delay before submenus appear"),
+						   _("Minimum time the pointer must stay over a menu item before the submenu appear"),
+						   0,
+						   G_MAXINT,
+						   DEFAULT_POPUP_DELAY,
+						   G_PARAM_READWRITE));
+
+  gtk_settings_install_property (g_param_spec_int ("gtk-menu-popdown-delay",
+						   _("Delay before hiding a submenu"),
+						   _("The time before hiding a submenu when the pointer is moving towards the submenu"),
+						   0,
+						   G_MAXINT,
+						   DEFAULT_POPDOWN_DELAY,
+						   G_PARAM_READWRITE));
+						   
 }
 
 
@@ -614,7 +637,7 @@ gtk_menu_real_insert (GtkMenuShell     *menu_shell,
 {
   if (GTK_WIDGET_REALIZED (menu_shell))
     gtk_widget_set_parent_window (child, GTK_MENU (menu_shell)->bin_window);
-  
+
   GTK_MENU_SHELL_CLASS (parent_class)->insert (menu_shell, child, position);
 }
 
@@ -1969,7 +1992,7 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
 
   if (GTK_IS_MENU (widget))
     gtk_menu_handle_scrolling (GTK_MENU (widget), TRUE);
-  
+
   /* We received the event for one of two reasons:
    *
    * a) We are the active menu, and did gtk_grab_add()
@@ -2310,6 +2333,37 @@ gtk_menu_navigating_submenu (GtkMenu *menu,
   return FALSE;
 }
 
+#undef DRAW_STAY_UP_TRIANGLE
+
+#ifdef DRAW_STAY_UP_TRIANGLE
+
+static void
+draw_stay_up_triangle (GdkWindow *window,
+		       GdkRegion *region)
+{
+  /* Draw ugly color all over the stay-up triangle */
+  GdkColor ugly_color = { 0, 50000, 10000, 10000 };
+  GdkGCValues gc_values;
+  GdkGC *ugly_gc;
+  GdkRectangle clipbox;
+
+  gc_values.subwindow_mode = GDK_INCLUDE_INFERIORS;
+  ugly_gc = gdk_gc_new_with_values (window, &gc_values, 0 | GDK_GC_SUBWINDOW);
+  gdk_gc_set_rgb_fg_color (ugly_gc, &ugly_color);
+  gdk_gc_set_clip_region (ugly_gc, region);
+
+  gdk_region_get_clipbox (region, &clipbox);
+  
+  gdk_draw_rectangle (window,
+                     ugly_gc,
+                     TRUE,
+                     clipbox.x, clipbox.y,
+                     clipbox.width, clipbox.height);
+  
+  g_object_unref (G_OBJECT (ugly_gc));
+}
+#endif
+
 static void
 gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
 					GtkMenuItem      *menu_item,
@@ -2331,6 +2385,7 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
   
   gdk_window_get_origin (menu_item->submenu->window, &submenu_left, &submenu_top);
   gdk_drawable_get_size (menu_item->submenu->window, &width, &height);
+  
   submenu_right = submenu_left + width;
   submenu_bottom = submenu_top + height;
   
@@ -2338,48 +2393,58 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
   
   if (event->x >= 0 && event->x < width)
     {
-      /* Set navigation region */
-      /* We fudge/give a little padding in case the user
-       * ``misses the vertex'' of the triangle/is off by a pixel or two.
-       */ 
-      if (menu_item->submenu_direction == GTK_DIRECTION_RIGHT)
-	point[0].x = event->x_root - SUBMENU_NAV_REGION_PADDING; 
-      else                             
-	point[0].x = event->x_root + SUBMENU_NAV_REGION_PADDING;  
+      gint popdown_delay;
       
-      /* Exiting the top or bottom? */ 
+      gtk_menu_stop_navigating_submenu (menu);
+
+      if (menu_item->submenu_direction == GTK_DIRECTION_RIGHT)
+	{
+	  /* right */
+	  point[0].x = event->x_root - 1;
+	  point[1].x = submenu_left;
+	}
+      else
+	{
+	  /* left */
+	  point[0].x = event->x_root + 2;
+	  point[1].x = submenu_right;
+	}
+
       if (event->y < 0)
-        { /* top */
+	{
+	  /* top */
 	  point[0].y = event->y_root + 1;
-	  point[1].y = submenu_top;
+	  point[1].y = submenu_top - NAVIGATION_REGION_OVERSHOOT;
 
-	  if (point[0].y <= point[1].y)
+	  if (point[0].y <= submenu_top)
 	    return;
 	}
       else
-        { /* bottom */
+	{
+	  /* bottom */
 	  point[0].y = event->y_root;
-	  point[1].y = submenu_bottom;
+	  point[1].y = submenu_bottom + NAVIGATION_REGION_OVERSHOOT;
 
-	  if (point[0].y >= point[1].y)
+	  if (point[0].y >= submenu_bottom)
 	    return;
 	}
-      
-      /* Submenu is to the left or right? */ 
-      if (menu_item->submenu_direction == GTK_DIRECTION_RIGHT)
-	point[1].x = submenu_left;  /* right */
-      else
-	point[1].x = submenu_right; /* left */
-      
+
       point[2].x = point[1].x;
       point[2].y = point[0].y;
 
-      gtk_menu_stop_navigating_submenu (menu);
-      
       menu->navigation_region = gdk_region_polygon (point, 3, GDK_WINDING_RULE);
 
-      menu->navigation_timeout = gtk_timeout_add (SUBMENU_NAV_HYSTERESIS_TIMEOUT, 
+      g_object_get (G_OBJECT (gtk_widget_get_settings (GTK_WIDGET (menu))),
+		    "gtk-menu-popdown-delay", &popdown_delay,
+		    NULL);
+
+      menu->navigation_timeout = gtk_timeout_add (popdown_delay,
 						  gtk_menu_stop_navigating_submenu_cb, menu);
+
+#ifdef DRAW_STAY_UP_TRIANGLE
+      draw_stay_up_triangle (gdk_get_default_root_window(),
+			     menu->navigation_region);
+#endif
     }
 }
 
@@ -2794,3 +2859,15 @@ gtk_menu_set_screen (GtkMenu *menu,
   g_object_set_data (G_OBJECT (menu), "gtk-menu-explicit-screen", screen);
 }
 
+
+static gint
+gtk_menu_get_popup_delay (GtkMenuShell *menu_shell)
+{
+  gint popup_delay;
+
+  g_object_get (G_OBJECT (gtk_widget_get_settings (GTK_WIDGET (menu_shell))),
+		"gtk-menu-popup-delay", &popup_delay,
+		NULL);
+
+  return popup_delay;
+}

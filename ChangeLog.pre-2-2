@@ -1,3 +1,19 @@
+Sun Oct 20 23:58:03 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtkmenu.c, gtkmenubar.c, gtkmenuitem.c, gtkmenushell.c,
+	gtkmenushell.h, gtkmenushell.h
+
+	- make the delay before submenus appear below menu bars a
+	  GtkSetting
+	- make the delay before submenus pops up a GtkSetting
+	- make the stay up triangle slightly larger
+	- don't pop up the first submenu immediately.
+	- make the default delay for submenus 225 ms, and 0 for menubars.
+	- make the default delay before popping down inside the stay-up 
+	  triangle 1000 ms
+
+	Fixes #74950
+	
 Sun Oct 20 14:58:02 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_class_init):

@@ -1185,3 +1185,25 @@ gtk_real_menu_shell_cycle_focus (GtkMenuShell      *menu_shell,
   if (menu_shell)
     _gtk_menu_bar_cycle_focus (GTK_MENU_BAR (menu_shell), dir);
 }
+
+gint
+_gtk_menu_shell_get_popup_delay (GtkMenuShell *menu_shell)
+{
+  GtkMenuShellClass *klass = GTK_MENU_SHELL_GET_CLASS (menu_shell);
+  
+  if (klass->get_popup_delay)
+    {
+      return klass->get_popup_delay (menu_shell);
+    }
+  else
+    {
+      gint popup_delay;
+      GtkWidget *widget = GTK_WIDGET (menu_shell);
+      
+      g_object_get (G_OBJECT (gtk_widget_get_settings (widget)),
+		    "gtk-menu-popup-delay", &popup_delay,
+		    NULL);
+      
+      return popup_delay;
+    }
+}

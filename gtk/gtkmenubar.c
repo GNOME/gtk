@@ -41,17 +41,20 @@
 #define CHILD_SPACING   3
 #define DEFAULT_IPADDING 1
 
-static void gtk_menu_bar_class_init    (GtkMenuBarClass *klass);
-static void gtk_menu_bar_size_request  (GtkWidget       *widget,
-					GtkRequisition  *requisition);
-static void gtk_menu_bar_size_allocate (GtkWidget       *widget,
-					GtkAllocation   *allocation);
-static void gtk_menu_bar_paint         (GtkWidget       *widget,
-					GdkRectangle    *area);
-static gint gtk_menu_bar_expose        (GtkWidget       *widget,
-					GdkEventExpose  *event);
-static void gtk_menu_bar_hierarchy_changed (GtkWidget   *widget,
-					    GtkWidget   *old_toplevel);
+static void gtk_menu_bar_class_init        (GtkMenuBarClass *klass);
+static void gtk_menu_bar_size_request      (GtkWidget       *widget,
+					    GtkRequisition  *requisition);
+static void gtk_menu_bar_size_allocate     (GtkWidget       *widget,
+					    GtkAllocation   *allocation);
+static void gtk_menu_bar_paint             (GtkWidget       *widget,
+					    GdkRectangle    *area);
+static gint gtk_menu_bar_expose            (GtkWidget       *widget,
+					    GdkEventExpose  *event);
+static void gtk_menu_bar_hierarchy_changed (GtkWidget       *widget,
+					    GtkWidget       *old_toplevel);
+static gint gtk_menu_bar_get_popup_delay  (GtkMenuShell    *menu_shell);
+					    
+
 static GtkShadowType get_shadow_type   (GtkMenuBar      *menubar);
 
 static GtkMenuShellClass *parent_class = NULL;
@@ -104,6 +107,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
   widget_class->hierarchy_changed = gtk_menu_bar_hierarchy_changed;
   
   menu_shell_class->submenu_placement = GTK_TOP_BOTTOM;
+  menu_shell_class->get_popup_delay = gtk_menu_bar_get_popup_delay;
 
   binding_set = gtk_binding_set_by_class (class);
   gtk_binding_entry_add_signal (binding_set,
@@ -164,6 +168,13 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
                                                              DEFAULT_IPADDING,
                                                              G_PARAM_READABLE));
 
+  gtk_settings_install_property (g_param_spec_int ("gtk-menu-bar-popup-delay",
+						   _("Delay before drop down menus appear"),
+						   _("Delay before the submenus of a menu bar appear"),
+						   0,
+						   G_MAXINT,
+						   0,
+						   G_PARAM_READWRITE));
 }
  
 GtkWidget*
@@ -575,6 +586,17 @@ get_shadow_type (GtkMenuBar *menubar)
 			"shadow_type", &shadow_type,
 			NULL);
 
-
   return shadow_type;
+}
+
+static gint
+gtk_menu_bar_get_popup_delay (GtkMenuShell *menu_shell)
+{
+  gint popup_delay;
+  
+  g_object_get (G_OBJECT (gtk_widget_get_settings (GTK_WIDGET (menu_shell))),
+		"gtk-menu-bar-popup-delay", &popup_delay,
+		NULL);
+
+  return popup_delay;
 }

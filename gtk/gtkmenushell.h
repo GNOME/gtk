@@ -86,34 +86,34 @@ struct _GtkMenuShellClass
   void (*insert)           (GtkMenuShell *menu_shell,
 			    GtkWidget    *child,
 			    gint          position);
+  gint (*get_popup_delay)  (GtkMenuShell *menu_shell);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 
-GType   gtk_menu_shell_get_type	  (void) G_GNUC_CONST;
-void	gtk_menu_shell_append	  (GtkMenuShell *menu_shell,
-				   GtkWidget	*child);
-void	gtk_menu_shell_prepend	  (GtkMenuShell *menu_shell,
-				   GtkWidget	*child);
-void	gtk_menu_shell_insert	  (GtkMenuShell *menu_shell,
-				   GtkWidget	*child,
-				   gint		 position);
-void	gtk_menu_shell_deactivate (GtkMenuShell *menu_shell);
-void    gtk_menu_shell_select_item (GtkMenuShell      *menu_shell,
-				    GtkWidget         *menu_item);
-void    gtk_menu_shell_deselect    (GtkMenuShell      *menu_shell);
-void    gtk_menu_shell_activate_item  (GtkMenuShell      *menu_shell,
-				       GtkWidget         *menu_item,
-				       gboolean           force_deactivate);
-
-void gtk_menu_shell_select_first (GtkMenuShell *menu_shell,
-				  gboolean      search_sensitive);
-void _gtk_menu_shell_activate     (GtkMenuShell *menu_shell);
+GType gtk_menu_shell_get_type          (void) G_GNUC_CONST;
+void  gtk_menu_shell_append            (GtkMenuShell *menu_shell,
+					GtkWidget    *child);
+void  gtk_menu_shell_prepend           (GtkMenuShell *menu_shell,
+					GtkWidget    *child);
+void  gtk_menu_shell_insert            (GtkMenuShell *menu_shell,
+					GtkWidget    *child,
+					gint          position);
+void  gtk_menu_shell_deactivate        (GtkMenuShell *menu_shell);
+void  gtk_menu_shell_select_item       (GtkMenuShell *menu_shell,
+					GtkWidget    *menu_item);
+void  gtk_menu_shell_deselect          (GtkMenuShell *menu_shell);
+void  gtk_menu_shell_activate_item     (GtkMenuShell *menu_shell,
+					GtkWidget    *menu_item,
+					gboolean      force_deactivate);
+void  gtk_menu_shell_select_first      (GtkMenuShell *menu_shell,
+					gboolean      search_sensitive);
+void  _gtk_menu_shell_activate         (GtkMenuShell *menu_shell);
+gint  _gtk_menu_shell_get_popup_delay  (GtkMenuShell *menu_shell);
 
 #ifdef __cplusplus
 }
