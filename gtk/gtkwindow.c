@@ -2890,6 +2890,7 @@ gtk_window_set_icon_name (GtkWindow   *window,
 
   g_list_foreach (info->icon_list, (GFunc) g_object_unref, NULL);
   g_list_free (info->icon_list);
+  info->icon_list = NULL;
   
   update_themed_icon (NULL, window);
 

@@ -1,3 +1,8 @@
+2005-02-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_set_icon_name): Set info->icon_list
+	to NULL after freeing it.  (#165800, Damon Chaplin)
+
 2005-02-01  Michael Natterer  <mitch@gimp.org>
 
 	* configure.in: depend on stable pango-1.8, not unstable 1.7
