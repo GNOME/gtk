@@ -48,8 +48,13 @@ struct _GtkFileSelection
   GtkWidget *ok_button;
   GtkWidget *cancel_button;
   GtkWidget *help_button;
-
-  gpointer cmpl_state;
+  GtkWidget *history_pulldown;
+  GtkWidget *history_menu;
+  GList     *history_list;
+  GtkWidget *fileop_dialog;
+  GtkWidget *fileop_entry;
+  gchar     *fileop_file;
+  gpointer   cmpl_state;
 };
 
 struct _GtkFileSelectionClass

@@ -39,12 +39,16 @@
 #include "gtkscrolledwindow.h"
 #include "gtksignal.h"
 #include "gtkvbox.h"
+#include "gtkmenu.h"
+#include "gtkmenuitem.h"
+#include "gtkoptionmenu.h"
+#include "gtkclist.h"
+#include "gtkdialog.h"
 
-
-#define DIR_LIST_WIDTH   160
-#define DIR_LIST_HEIGHT  175
-#define FILE_LIST_WIDTH  160
-#define FILE_LIST_HEIGHT 175
+#define DIR_LIST_WIDTH   180
+#define DIR_LIST_HEIGHT  180
+#define FILE_LIST_WIDTH  180
+#define FILE_LIST_HEIGHT 180
 
 
 typedef struct _CompletionState    CompletionState;
@@ -268,31 +272,37 @@ static void gtk_file_selection_destroy       (GtkObject             *object);
 static gint gtk_file_selection_key_press     (GtkWidget             *widget,
 					      GdkEventKey           *event,
 					      gpointer               user_data);
-static gint gtk_file_selection_file_button   (GtkWidget             *widget,
-					      GdkEventButton        *event,
-					      gpointer               user_data);
-static gint gtk_file_selection_dir_button    (GtkWidget             *widget,
-					      GdkEventButton        *event,
-					      gpointer               user_data);
-static void gtk_file_selection_file_list_changed  (GtkList          *gtklist,
-					           gpointer	     func_data);
-static void gtk_file_selection_dir_list_changed   (GtkList     	    *gtklist,
-					           gpointer	     func_data);
+
+static void gtk_file_selection_file_button (GtkWidget *widget,
+					    gint row, 
+					    gint column, 
+					    GdkEventButton *bevent,
+					    gpointer user_data);
+
+static void gtk_file_selection_dir_button (GtkWidget *widget,
+					   gint row, 
+					   gint column, 
+					   GdkEventButton *bevent,
+					   gpointer data);
+
 static void gtk_file_selection_populate      (GtkFileSelection      *fs,
 					      gchar                 *rel_path,
 					      gint                   try_complete);
 static void gtk_file_selection_abort         (GtkFileSelection      *fs);
-static void gtk_file_selection_free_filename (GtkWidget             *widget,
-					      gpointer               client_data);
+
+static void gtk_file_selection_update_history_menu (GtkFileSelection       *fs,
+						    gchar                  *current_dir);
+
+static void gtk_file_selection_create_dir (GtkWidget *widget, gpointer data);
+static void gtk_file_selection_delete_file (GtkWidget *widget, gpointer data);
+static void gtk_file_selection_rename_file (GtkWidget *widget, gpointer data);
+
 
 
 static GtkWindowClass *parent_class = NULL;
 
-static gchar *list_changed_key = "_gtk_selection_changed_handler_key";
-
 /* Saves errno when something cmpl does fails. */
 static gint cmpl_errno;
-
 
 guint
 gtk_file_selection_get_type ()
@@ -309,7 +319,7 @@ gtk_file_selection_get_type ()
 	(GtkClassInitFunc) gtk_file_selection_class_init,
 	(GtkObjectInitFunc) gtk_file_selection_init,
 	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	(GtkArgGetFunc) NULL,
       };
 
       file_selection_type = gtk_type_unique (gtk_window_get_type (), &filesel_info);
@@ -333,90 +343,98 @@ gtk_file_selection_class_init (GtkFileSelectionClass *class)
 static void
 gtk_file_selection_init (GtkFileSelection *filesel)
 {
-  GtkWidget *dir_vbox;
-  GtkWidget *file_vbox;
   GtkWidget *entry_vbox;
-  GtkWidget *listbox;
   GtkWidget *label;
   GtkWidget *list_hbox;
   GtkWidget *action_area;
-  gint key;
-
+  GtkWidget *pulldown_hbox;
+  GtkWidget *button_hbox;
+  GtkWidget *button;
+  char *dir_title [] = { "Directories", };
+  char *file_title [] = { "Files", };
+  
   filesel->cmpl_state = cmpl_init_state ();
-
-  /*  The dialog-sized vertical box  */
+  
+  /* The dialog-sized vertical box  */
   filesel->main_vbox = gtk_vbox_new (FALSE, 10);
   gtk_container_border_width (GTK_CONTAINER (filesel), 10);
   gtk_container_add (GTK_CONTAINER (filesel), filesel->main_vbox);
   gtk_widget_show (filesel->main_vbox);
 
+  /* The horizontal box containing create, rename etc. buttons */
+  button_hbox = gtk_hbox_new (TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (filesel->main_vbox), button_hbox, 
+		      FALSE, FALSE, 0);
+  gtk_widget_show (button_hbox);
+
+  /* delete, create directory, and rename */
+  button = gtk_button_new_with_label ("Create Dir");
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      (GtkSignalFunc) gtk_file_selection_create_dir, 
+		      (gpointer) filesel);
+  gtk_box_pack_start (GTK_BOX (button_hbox), button, TRUE, TRUE, 0);
+  gtk_widget_show (button);
+
+  button = gtk_button_new_with_label ("Delete File");
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      (GtkSignalFunc) gtk_file_selection_delete_file, 
+		      (gpointer) filesel);
+  gtk_box_pack_start (GTK_BOX (button_hbox), button, TRUE, TRUE, 0);
+  gtk_widget_show (button);
+
+  button = gtk_button_new_with_label ("Rename File");
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      (GtkSignalFunc) gtk_file_selection_rename_file, 
+		      (gpointer) filesel);
+  gtk_box_pack_start (GTK_BOX (button_hbox), button, TRUE, TRUE, 0);
+  gtk_widget_show (button);
+
+  /*  The Help button  */
+  filesel->help_button = gtk_button_new_with_label ("Help");
+  gtk_box_pack_start (GTK_BOX (button_hbox), filesel->help_button, 
+		      TRUE, TRUE, 5);
+  gtk_widget_show (filesel->help_button);
+
+  
+  /* hbox for pulldown menu */
+  pulldown_hbox = gtk_hbox_new (TRUE, 5);
+  gtk_box_pack_start (GTK_BOX (filesel->main_vbox), pulldown_hbox, FALSE, FALSE, 0);
+  gtk_widget_show (pulldown_hbox);
+  
+  /* Pulldown menu */
+  filesel->history_pulldown = gtk_option_menu_new ();
+  gtk_widget_show (filesel->history_pulldown);
+  gtk_box_pack_start (GTK_BOX (pulldown_hbox), filesel->history_pulldown, 
+		      FALSE, FALSE, 0);
+    
   /*  The horizontal box containing the directory and file listboxes  */
-  list_hbox = gtk_hbox_new (TRUE, 5);
+  list_hbox = gtk_hbox_new (FALSE, 5);
   gtk_box_pack_start (GTK_BOX (filesel->main_vbox), list_hbox, TRUE, TRUE, 0);
   gtk_widget_show (list_hbox);
 
-
-  /* The directories listbox  */
-  dir_vbox = gtk_vbox_new (FALSE, 2);
-  gtk_box_pack_start (GTK_BOX (list_hbox), dir_vbox, TRUE, TRUE, 0);
-  gtk_widget_show (dir_vbox);
-
-  label = gtk_label_new ("Directories");
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_box_pack_start (GTK_BOX (dir_vbox), label, FALSE, FALSE, 0);
-  gtk_widget_show (label);
-
-  listbox = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (listbox),
-				  GTK_POLICY_AUTOMATIC,
-				  GTK_POLICY_ALWAYS);
-  gtk_box_pack_start (GTK_BOX (dir_vbox), listbox, TRUE, TRUE, 0);
-  gtk_widget_set_usize (listbox, DIR_LIST_WIDTH, DIR_LIST_HEIGHT);
-  gtk_widget_show (listbox);
-
-  filesel->dir_list = gtk_list_new ();
-  gtk_list_set_selection_mode (GTK_LIST (filesel->dir_list), GTK_SELECTION_BROWSE);
-  gtk_signal_connect (GTK_OBJECT (filesel->dir_list), "button_press_event",
-		      (GtkSignalFunc) gtk_file_selection_dir_button, filesel);
-  key = gtk_signal_connect (GTK_OBJECT (filesel->dir_list),
-			    "selection_changed",
-			    (GtkSignalFunc) gtk_file_selection_dir_list_changed,
-			    filesel);
-  gtk_object_set_data (GTK_OBJECT (filesel->dir_list), list_changed_key, (gpointer) key);
-  gtk_container_add (GTK_CONTAINER (listbox), filesel->dir_list);
+  /* The directories clist */
+  filesel->dir_list = gtk_clist_new_with_titles (1, dir_title);
+  gtk_widget_set_usize (filesel->dir_list, DIR_LIST_WIDTH, DIR_LIST_HEIGHT);
+  gtk_clist_set_column_width (GTK_CLIST (filesel->dir_list), 0, 150);
+  gtk_signal_connect (GTK_OBJECT (filesel->dir_list), "select_row",
+		      (GtkSignalFunc) gtk_file_selection_dir_button, 
+		      (gpointer) filesel);
+  gtk_clist_set_policy (GTK_CLIST (filesel->dir_list), GTK_POLICY_ALWAYS, GTK_POLICY_AUTOMATIC);
+  gtk_container_border_width (GTK_CONTAINER (filesel->dir_list), 5);
+  gtk_box_pack_start (GTK_BOX (list_hbox), filesel->dir_list, TRUE, TRUE, 0);
   gtk_widget_show (filesel->dir_list);
 
-
-  /* The files listbox  */
-  file_vbox = gtk_vbox_new (FALSE, 2);
-  gtk_box_pack_start (GTK_BOX (list_hbox), file_vbox, TRUE, TRUE, 0);
-  gtk_widget_show (file_vbox);
-
-  label = gtk_label_new ("Files");
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_box_pack_start (GTK_BOX (file_vbox), label, FALSE, FALSE, 0);
-  gtk_widget_show (label);
-
-  listbox = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (listbox),
-				  GTK_POLICY_AUTOMATIC,
-				  GTK_POLICY_ALWAYS);
-  gtk_box_pack_start (GTK_BOX (file_vbox), listbox, TRUE, TRUE, 0);
-  gtk_widget_set_usize (listbox, FILE_LIST_WIDTH, FILE_LIST_HEIGHT);
-  gtk_widget_show (listbox);
-
-  filesel->file_list = gtk_list_new ();
-  gtk_list_set_selection_mode (GTK_LIST (filesel->file_list), GTK_SELECTION_SINGLE);
-  gtk_signal_connect (GTK_OBJECT (filesel->file_list), "button_press_event",
-		      (GtkSignalFunc) gtk_file_selection_file_button, filesel);
-  key = gtk_signal_connect (GTK_OBJECT (filesel->file_list),
-			    "selection_changed",
-			    (GtkSignalFunc) gtk_file_selection_file_list_changed,
-			    filesel);
-  gtk_object_set_data (GTK_OBJECT (filesel->file_list), list_changed_key, (gpointer) key);
-  gtk_container_add (GTK_CONTAINER (listbox), filesel->file_list);
+  /* The files clist */
+  filesel->file_list = gtk_clist_new_with_titles (1, file_title);
+  gtk_widget_set_usize (filesel->file_list, FILE_LIST_WIDTH, FILE_LIST_HEIGHT);
+  gtk_clist_set_column_width (GTK_CLIST (filesel->file_list), 0, 150);
+  gtk_signal_connect (GTK_OBJECT (filesel->file_list), "select_row",
+		      (GtkSignalFunc) gtk_file_selection_file_button, 
+		      (gpointer) filesel);
+  gtk_clist_set_policy (GTK_CLIST (filesel->file_list), GTK_POLICY_ALWAYS, GTK_POLICY_AUTOMATIC);
+  gtk_container_border_width (GTK_CONTAINER (filesel->file_list), 5);
+  gtk_box_pack_start (GTK_BOX (list_hbox), filesel->file_list, TRUE, TRUE, 0);
   gtk_widget_show (filesel->file_list);
-
 
   /*  The action area  */
   action_area = gtk_hbox_new (TRUE, 10);
@@ -435,13 +453,6 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   GTK_WIDGET_SET_FLAGS (filesel->cancel_button, GTK_CAN_DEFAULT);
   gtk_box_pack_start (GTK_BOX (action_area), filesel->cancel_button, TRUE, TRUE, 0);
   gtk_widget_show (filesel->cancel_button);
-
-  /*  The Help button  */
-  filesel->help_button = gtk_button_new_with_label ("Help");
-  GTK_WIDGET_SET_FLAGS (filesel->help_button, GTK_CAN_DEFAULT);
-  gtk_box_pack_start (GTK_BOX (action_area), filesel->help_button, TRUE, TRUE, 0);
-  gtk_widget_show (filesel->help_button);
-
 
   /*  The selection entry widget  */
   entry_vbox = gtk_vbox_new (FALSE, 2);
@@ -562,6 +573,365 @@ gtk_file_selection_destroy (GtkObject *object)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
+/* Begin file operations callbacks */
+
+static void
+gtk_file_selection_fileop_error (gchar *error_message)
+{
+  GtkWidget *label;
+  GtkWidget *vbox;
+  GtkWidget *button;
+  GtkWidget *dialog;
+  
+  g_return_if_fail (error_message != NULL);
+  
+  /* main dialog */
+  dialog = gtk_dialog_new ();
+  /*
+  gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+		      (GtkSignalFunc) gtk_file_selection_fileop_destroy, 
+		      (gpointer) fs);
+  */
+  gtk_window_set_title (GTK_WINDOW (dialog), "Error");
+  gtk_window_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
+  
+  vbox = gtk_vbox_new(FALSE, 0);
+  gtk_container_border_width(GTK_CONTAINER(vbox), 8);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox,
+		     FALSE, FALSE, 0);
+  gtk_widget_show(vbox);
+
+  label = gtk_label_new(error_message);
+  gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
+  gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 5);
+  gtk_widget_show(label);
+
+  /* yes, we free it */
+  g_free (error_message);
+  
+  /* close button */
+  button = gtk_button_new_with_label ("Close");
+  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			     (GtkSignalFunc) gtk_widget_destroy, 
+			     (gpointer) dialog);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+		     button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+  gtk_widget_grab_default(button);
+  gtk_widget_show (button);
+
+  gtk_widget_show (dialog);
+}
+
+static void
+gtk_file_selection_fileop_destroy (GtkWidget *widget, gpointer data)
+{
+  GtkFileSelection *fs = data;
+
+  g_return_if_fail (fs != NULL);
+  g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
+  
+  fs->fileop_dialog = NULL;
+}
+
+
+static void
+gtk_file_selection_create_dir_confirmed (GtkWidget *widget, gpointer data)
+{
+  GtkFileSelection *fs = data;
+  gchar *dirname;
+  gchar *path;
+  gchar *full_path;
+  gchar *buf;
+  CompletionState *cmpl_state;
+  
+  g_return_if_fail (fs != NULL);
+  g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
+
+  dirname = gtk_entry_get_text (GTK_ENTRY (fs->fileop_entry));
+  cmpl_state = (CompletionState*) fs->cmpl_state;
+  path = cmpl_reference_position (cmpl_state);
+  
+  full_path = g_strconcat (path, "/", dirname, NULL);
+  if ( (mkdir (full_path, 0755) < 0) ) 
+    {
+      buf = g_strconcat ("Error creating directory \"", dirname, "\":  ", 
+			 g_strerror(errno), NULL);
+      gtk_file_selection_fileop_error (buf);
+    }
+  g_free (full_path);
+  
+  gtk_widget_destroy (fs->fileop_dialog);
+  gtk_file_selection_populate (fs, "", FALSE);
+}
+  
+static void
+gtk_file_selection_create_dir (GtkWidget *widget, gpointer data)
+{
+  GtkFileSelection *fs = data;
+  GtkWidget *label;
+  GtkWidget *dialog;
+  GtkWidget *vbox;
+  GtkWidget *button;
+
+  g_return_if_fail (fs != NULL);
+  g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
+
+  if (fs->fileop_dialog)
+	  return;
+  
+  /* main dialog */
+  fs->fileop_dialog = dialog = gtk_dialog_new ();
+  gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+		      (GtkSignalFunc) gtk_file_selection_fileop_destroy, 
+		      (gpointer) fs);
+  gtk_window_set_title (GTK_WINDOW (dialog), "Create Directory");
+  gtk_window_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
+  gtk_widget_show (dialog);
+  
+  vbox = gtk_vbox_new(FALSE, 0);
+  gtk_container_border_width(GTK_CONTAINER(vbox), 8);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox,
+		     FALSE, FALSE, 0);
+  gtk_widget_show(vbox);
+  
+  label = gtk_label_new("Directory name:");
+  gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
+  gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 5);
+  gtk_widget_show(label);
+
+  /*  The directory entry widget  */
+  fs->fileop_entry = gtk_entry_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), fs->fileop_entry, 
+		      TRUE, TRUE, 5);
+  GTK_WIDGET_SET_FLAGS(fs->fileop_entry, GTK_CAN_DEFAULT);
+  gtk_widget_show (fs->fileop_entry);
+  
+  /* buttons */
+  button = gtk_button_new_with_label ("Create");
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      (GtkSignalFunc) gtk_file_selection_create_dir_confirmed, 
+		      (gpointer) fs);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+		     button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+  gtk_widget_show(button);
+  
+  button = gtk_button_new_with_label ("Cancel");
+  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			     (GtkSignalFunc) gtk_widget_destroy, 
+			     (gpointer) dialog);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+		     button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+  gtk_widget_grab_default(button);
+  gtk_widget_show (button);
+}
+
+static void
+gtk_file_selection_delete_file_confirmed (GtkWidget *widget, gpointer data)
+{
+  GtkFileSelection *fs = data;
+  CompletionState *cmpl_state;
+  gchar *path;
+  gchar *full_path;
+  gchar *buf;
+  
+  g_return_if_fail (fs != NULL);
+  g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
+
+  cmpl_state = (CompletionState*) fs->cmpl_state;
+  path = cmpl_reference_position (cmpl_state);
+  
+  full_path = g_strconcat (path, "/", fs->fileop_file, NULL);
+  if ( (unlink (full_path) < 0) ) 
+    {
+      buf = g_strconcat ("Error deleting file \"", fs->fileop_file, "\":  ", 
+			 g_strerror(errno), NULL);
+      gtk_file_selection_fileop_error (buf);
+    }
+  g_free (full_path);
+  
+  gtk_widget_destroy (fs->fileop_dialog);
+  gtk_file_selection_populate (fs, "", FALSE);
+}
+
+static void
+gtk_file_selection_delete_file (GtkWidget *widget, gpointer data)
+{
+  GtkFileSelection *fs = data;
+  GtkWidget *label;
+  GtkWidget *vbox;
+  GtkWidget *button;
+  GtkWidget *dialog;
+  gchar *filename;
+  gchar *buf;
+  
+  g_return_if_fail (fs != NULL);
+  g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
+
+  if (fs->fileop_dialog)
+	  return;
+
+  filename = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
+  if (strlen(filename) < 1)
+	  return;
+
+  fs->fileop_file = filename;
+  
+  /* main dialog */
+  fs->fileop_dialog = dialog = gtk_dialog_new ();
+  gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+		      (GtkSignalFunc) gtk_file_selection_fileop_destroy, 
+		      (gpointer) fs);
+  gtk_window_set_title (GTK_WINDOW (dialog), "Delete File");
+  gtk_window_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
+  
+  vbox = gtk_vbox_new(FALSE, 0);
+  gtk_container_border_width(GTK_CONTAINER(vbox), 8);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox,
+		     FALSE, FALSE, 0);
+  gtk_widget_show(vbox);
+
+  buf = g_strconcat ("Really delete file \"", filename, "\" ?", NULL);
+  label = gtk_label_new(buf);
+  gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
+  gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 5);
+  gtk_widget_show(label);
+  g_free(buf);
+  
+  /* buttons */
+  button = gtk_button_new_with_label ("Delete");
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      (GtkSignalFunc) gtk_file_selection_delete_file_confirmed, 
+		      (gpointer) fs);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+		     button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+  gtk_widget_show(button);
+  
+  button = gtk_button_new_with_label ("Cancel");
+  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			     (GtkSignalFunc) gtk_widget_destroy, 
+			     (gpointer) dialog);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+		     button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+  gtk_widget_grab_default(button);
+  gtk_widget_show (button);
+
+  gtk_widget_show (dialog);
+}
+
+static void
+gtk_file_selection_rename_file_confirmed (GtkWidget *widget, gpointer data)
+{
+  GtkFileSelection *fs = data;
+  gchar *buf;
+  gchar *file;
+  gchar *path;
+  gchar *new_filename;
+  gchar *old_filename;
+  CompletionState *cmpl_state;
+  
+  g_return_if_fail (fs != NULL);
+  g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
+
+  file = gtk_entry_get_text (GTK_ENTRY (fs->fileop_entry));
+  cmpl_state = (CompletionState*) fs->cmpl_state;
+  path = cmpl_reference_position (cmpl_state);
+  
+  new_filename = g_strconcat (path, "/", file, NULL);
+  old_filename = g_strconcat (path, "/", fs->fileop_file, NULL);
+
+  if ( (rename (old_filename, new_filename)) < 0) 
+    {
+      buf = g_strconcat ("Error renaming file \"", file, "\":  ", 
+			 g_strerror(errno), NULL);
+      gtk_file_selection_fileop_error (buf);
+    }
+  g_free (new_filename);
+  g_free (old_filename);
+  
+  gtk_widget_destroy (fs->fileop_dialog);
+  gtk_file_selection_populate (fs, "", FALSE);
+}
+  
+static void
+gtk_file_selection_rename_file (GtkWidget *widget, gpointer data)
+{
+  GtkFileSelection *fs = data;
+  GtkWidget *label;
+  GtkWidget *dialog;
+  GtkWidget *vbox;
+  GtkWidget *button;
+  gchar *buf;
+  
+  g_return_if_fail (fs != NULL);
+  g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
+
+  if (fs->fileop_dialog)
+	  return;
+
+  fs->fileop_file = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
+  if (strlen(fs->fileop_file) < 1)
+	  return;
+  
+  /* main dialog */
+  fs->fileop_dialog = dialog = gtk_dialog_new ();
+  gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+		      (GtkSignalFunc) gtk_file_selection_fileop_destroy, 
+		      (gpointer) fs);
+  gtk_window_set_title (GTK_WINDOW (dialog), "Rename File");
+  gtk_window_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
+  gtk_widget_show (dialog);
+  
+  vbox = gtk_vbox_new(FALSE, 0);
+  gtk_container_border_width(GTK_CONTAINER(vbox), 8);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox,
+		     FALSE, FALSE, 0);
+  gtk_widget_show(vbox);
+  
+  buf = g_strconcat ("Rename file \"", fs->fileop_file, "\" to:", NULL);
+  label = gtk_label_new(buf);
+  gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
+  gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 5);
+  gtk_widget_show(label);
+  g_free(buf);
+
+  /* New filename entry */
+  fs->fileop_entry = gtk_entry_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), fs->fileop_entry, 
+		      TRUE, TRUE, 5);
+  GTK_WIDGET_SET_FLAGS(fs->fileop_entry, GTK_CAN_DEFAULT);
+  gtk_widget_show (fs->fileop_entry);
+  
+  gtk_entry_set_text (GTK_ENTRY (fs->fileop_entry), fs->fileop_file);
+  gtk_entry_select_region (GTK_ENTRY (fs->fileop_entry),
+			   0, strlen (fs->fileop_file));
+
+  /* buttons */
+  button = gtk_button_new_with_label ("Rename");
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      (GtkSignalFunc) gtk_file_selection_rename_file_confirmed, 
+		      (gpointer) fs);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+		     button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+  gtk_widget_show(button);
+  
+  button = gtk_button_new_with_label ("Cancel");
+  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			     (GtkSignalFunc) gtk_widget_destroy, 
+			     (gpointer) dialog);
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+		     button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+  gtk_widget_grab_default(button);
+  gtk_widget_show (button);
+}
+
+
 static gint
 gtk_file_selection_key_press (GtkWidget   *widget,
 			      GdkEventKey *event,
@@ -587,161 +957,179 @@ gtk_file_selection_key_press (GtkWidget   *widget,
   return FALSE;
 }
 
-static gint
-gtk_file_selection_file_button (GtkWidget      *widget,
-				GdkEventButton *event,
-				gpointer        user_data)
+typedef struct _HistoryCallbackArg HistoryCallbackArg;
+
+struct _HistoryCallbackArg
 {
-  GtkFileSelection *fs;
-  GtkWidget *event_widget;
-  gchar *filename;
-  gboolean handled;
+  gchar *directory;
+  GtkWidget *menu_item;
+};
 
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
+static void
+gtk_file_selection_history_callback (GtkWidget *widget, gpointer data)
+{
+  GtkFileSelection *fs = data;
+  HistoryCallbackArg *callback_arg;
+  GList *list;
 
-  fs = GTK_FILE_SELECTION (user_data);
-  g_return_val_if_fail (fs != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_FILE_SELECTION (fs), FALSE);
+  g_return_if_fail (fs != NULL);
+  g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
 
-  event_widget = gtk_get_event_widget ((GdkEvent*) event);
-  handled = FALSE;
-  if (GTK_IS_LIST_ITEM (event_widget))
+  list = fs->history_list;
+  
+  while (list) {
+    callback_arg = list->data;
+    
+    if (callback_arg->menu_item == widget)
+      {
+	gtk_file_selection_populate (fs, callback_arg->directory, FALSE);
+	break;
+      }
+    
+    list = list->next;
+  }
+}
+
+static void 
+gtk_file_selection_update_history_menu (GtkFileSelection *fs,
+					gchar *current_directory)
+{
+  HistoryCallbackArg *callback_arg;
+  GtkWidget *menu_item;
+  GList *list;
+  gchar *current_dir;
+  gchar *directory;
+  gint dir_len;
+  gint i;
+  
+  g_return_if_fail (fs != NULL);
+  g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
+  g_return_if_fail (current_directory != NULL);
+  
+  list = fs->history_list;
+
+  if (fs->history_menu) 
     {
-      switch (event->type)
+      while (list) {
+	callback_arg = list->data;
+	g_free (callback_arg->directory);
+	list = list->next;
+      }
+      g_list_free (fs->history_list);
+      fs->history_list = NULL;
+      
+      gtk_widget_destroy (fs->history_menu);
+    }
+  
+  fs->history_menu = gtk_menu_new();
+
+  current_dir = g_strdup(current_directory);
+
+  dir_len = strlen (current_dir);
+
+  for (i = dir_len; i >= 0; i--)
+    {
+      /* the i == dir_len is to catch the full path for the first 
+       * entry. */
+      if ( (current_dir[i] == '/') || (i == dir_len))
 	{
-	case GDK_BUTTON_PRESS:
-	  filename = gtk_object_get_user_data (GTK_OBJECT (event_widget));
-	  gtk_widget_grab_focus (fs->selection_entry);
-	  gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
-	  handled = TRUE;
-	  break;
-
-	case GDK_2BUTTON_PRESS:
-	  gtk_button_clicked (GTK_BUTTON (fs->ok_button));
-	  handled = TRUE;
-	  break;
-
-	default:
-	  break;
+	  /* another small hack to catch the full path */
+	  if (i != dir_len) 
+		  current_dir[i + 1] = '\0';
+	  menu_item = gtk_menu_item_new_with_label (current_dir);
+	  directory = g_strdup (current_dir);
+	  
+	  callback_arg = g_new (HistoryCallbackArg, 1);
+	  callback_arg->menu_item = menu_item;
+	  callback_arg->directory = directory;
+	  
+	  fs->history_list = g_list_append (fs->history_list, callback_arg);
+	  
+	  gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+			      (GtkSignalFunc) gtk_file_selection_history_callback,
+			      (gpointer) fs);
+	  gtk_menu_append (GTK_MENU (fs->history_menu), menu_item);
+	  gtk_widget_show (menu_item);
 	}
     }
 
-  return handled;
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (fs->history_pulldown), 
+			    fs->history_menu);
+  g_free (current_dir);
+}
+
+
+
+static void
+gtk_file_selection_file_button (GtkWidget *widget,
+			       gint row, 
+			       gint column, 
+			       GdkEventButton *bevent,
+			       gpointer user_data)
+{
+  GtkFileSelection *fs = NULL;
+  gchar *filename;
+  
+  g_return_if_fail (GTK_IS_CLIST (widget));
+
+  fs = GTK_FILE_SELECTION (user_data);
+  g_return_if_fail (fs != NULL);
+  g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
+
+  filename = gtk_clist_get_row_data (GTK_CLIST (fs->file_list), row);
+  
+  if (bevent && filename) {
+  
+    switch (bevent->type)
+      {
+      case GDK_BUTTON_PRESS:
+	gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
+	break;
+      
+      case GDK_2BUTTON_PRESS:
+	gtk_button_clicked (GTK_BUTTON (fs->ok_button));
+	break;
+	
+      default:
+	break;
+      }
+  }
 }
 
 static void
-gtk_file_selection_file_list_changed (GtkList          *list,
-				      gpointer          func_data)
+gtk_file_selection_dir_button (GtkWidget *widget,
+			       gint row, 
+			       gint column, 
+			       GdkEventButton *bevent,
+			       gpointer user_data)
 {
-  GtkFileSelection *fs;
-
-  g_return_if_fail (func_data != NULL);
-  g_return_if_fail (GTK_IS_FILE_SELECTION (func_data));
-
-  fs = GTK_FILE_SELECTION (func_data);
-
-  /* only act on an appropriate selection
-   */
-  if (list->selection && list->selection->data)
-    {
-      GtkListItem *item;
-
-      item = list->selection->data;
-      
-      if (GTK_IS_LIST_ITEM (item))
-	{
-	  gchar *filename;
-	  
-	  filename = gtk_object_get_user_data (GTK_OBJECT (item));
-	  gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
-	}
-    }
-}
-
-static gint
-gtk_file_selection_dir_button (GtkWidget      *widget,
-			       GdkEventButton *event,
-			       gpointer        user_data)
-{
-  GtkFileSelection *fs;
-  GtkWidget *event_widget;
+  GtkFileSelection *fs = NULL;
   gchar *filename;
-  gboolean handled;
-
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_LIST (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
+  
+  g_return_if_fail (GTK_IS_CLIST (widget));
 
   fs = GTK_FILE_SELECTION (user_data);
-  g_return_val_if_fail (fs != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_FILE_SELECTION (fs), FALSE);
+  g_return_if_fail (fs != NULL);
+  g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
 
-  event_widget = gtk_get_event_widget ((GdkEvent*) event);
-  handled = FALSE;
-  if (GTK_IS_LIST_ITEM (event_widget))
-    {
-      gint key;
-
-      filename = gtk_object_get_user_data (GTK_OBJECT (event_widget));
-
-      key = (gint) gtk_object_get_data (GTK_OBJECT (widget), list_changed_key);
-
-      switch (event->type)
-	{
-	case GDK_BUTTON_PRESS:
-
-	  gtk_signal_handler_block (GTK_OBJECT (widget), key);
-	  gtk_widget_activate (GTK_WIDGET (event_widget));
-	  gtk_signal_handler_unblock (GTK_OBJECT (widget), key);
-
-	  gtk_widget_grab_focus (fs->selection_entry);
-	  gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
-	  handled = TRUE;
-	  break;
-
-	case GDK_2BUTTON_PRESS:
-	  gtk_file_selection_populate (fs, filename, FALSE);
-	  handled = TRUE;
-	  break;
-
-	default:
-	  break;
-	}
-    }
-
-  return handled;
-}
-
-static void
-gtk_file_selection_dir_list_changed (GtkList          *list,
-				     gpointer          func_data)
-{
-  GtkFileSelection *fs;
+  filename = gtk_clist_get_row_data (GTK_CLIST (fs->dir_list), row);
   
-  g_return_if_fail (func_data != NULL);
-  g_return_if_fail (GTK_IS_FILE_SELECTION (func_data));
+  if (bevent && filename) {
   
-  fs = GTK_FILE_SELECTION (func_data);
-
-  /* only act on an appropriate selection
-   */
-  if (list->selection && list->selection->data)
-    {
-      GtkListItem *item;
-
-      item = list->selection->data;
+    switch (bevent->type)
+      {
+      case GDK_BUTTON_PRESS:
+	gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
+	break;
       
-      if (GTK_IS_LIST_ITEM (item))
-	{
-	  gchar *filename;
-	  
-	  filename = gtk_object_get_user_data (GTK_OBJECT (item));
-
-	  if (filename)
-	    gtk_file_selection_populate (fs, filename, FALSE);
-	}
-    }
+      case GDK_2BUTTON_PRESS:
+	gtk_file_selection_populate (fs, filename, FALSE);
+	break;
+	
+      default:
+	break;
+      }
+  }
 }
 
 static void
@@ -751,22 +1139,17 @@ gtk_file_selection_populate (GtkFileSelection *fs,
 {
   CompletionState *cmpl_state;
   PossibleCompletion* poss;
-  GList *dir_list = NULL;
-  GList *file_list = NULL;
-  GtkWidget *label;
   gchar* filename;
+  gint row;
   gchar* rem_path = rel_path;
   gchar* sel_text;
+  gchar* text[2];
   gint did_recurse = FALSE;
   gint possible_count = 0;
   gint selection_index = -1;
-  gint dir_changed_key;
   
   g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
-  
-  dir_changed_key = (gint) gtk_object_get_data (GTK_OBJECT (fs->dir_list), list_changed_key);
-  gtk_signal_handler_block (GTK_OBJECT (fs->dir_list), dir_changed_key);
   
   cmpl_state = (CompletionState*) fs->cmpl_state;
   poss = cmpl_completion_matches (rel_path, &rem_path, cmpl_state);
@@ -775,16 +1158,25 @@ gtk_file_selection_populate (GtkFileSelection *fs,
     {
       /* Something went wrong. */
       gtk_file_selection_abort (fs);
-      gtk_signal_handler_unblock (GTK_OBJECT (fs->dir_list), dir_changed_key);
       return;
     }
 
   g_assert (cmpl_state->reference_dir);
 
-  /* Set the dir_list and file_list to be GLists of strdup'd
-   * filenames, including ./ and ../ */
-  dir_list = g_list_prepend (dir_list, g_strdup("./"));
-  dir_list = g_list_prepend (dir_list, g_strdup("../"));
+  gtk_clist_freeze (GTK_CLIST (fs->dir_list));
+  gtk_clist_clear (GTK_CLIST (fs->dir_list));
+  gtk_clist_freeze (GTK_CLIST (fs->file_list));
+  gtk_clist_clear (GTK_CLIST (fs->file_list));
+
+  /* Set the dir_list to include ./ and ../ */
+  text[1] = NULL;
+  text[0] = "./";
+  row = gtk_clist_append (GTK_CLIST (fs->dir_list), text);
+  gtk_clist_set_row_data (GTK_CLIST (fs->dir_list), row, "./");
+
+  text[0] = "../";
+  row = gtk_clist_append (GTK_CLIST (fs->dir_list), text);
+  gtk_clist_set_row_data (GTK_CLIST (fs->dir_list), row, "../");
 
   while (poss)
     {
@@ -794,18 +1186,31 @@ gtk_file_selection_populate (GtkFileSelection *fs,
 
           filename = g_strdup (cmpl_this_completion (poss));
 
+	  text[0] = filename;
+	  
           if (cmpl_is_directory (poss))
             {
               if (strcmp (filename, "./") != 0 &&
                   strcmp (filename, "../") != 0)
-                dir_list = g_list_prepend (dir_list, filename);
-            }
+		{
+		  row = gtk_clist_append (GTK_CLIST (fs->dir_list), text);
+		  gtk_clist_set_row_data (GTK_CLIST (fs->dir_list), row, 
+					  filename);
+ 		}
+	    }
           else
-            file_list = g_list_prepend (file_list, filename);
-        }
+	    {
+	      row = gtk_clist_append (GTK_CLIST (fs->file_list), text);
+	      gtk_clist_set_row_data (GTK_CLIST (fs->file_list), row, 
+				      filename);
+            }
+	}
 
       poss = cmpl_next_completion (cmpl_state);
     }
+
+  gtk_clist_thaw (GTK_CLIST (fs->dir_list));
+  gtk_clist_thaw (GTK_CLIST (fs->file_list));
 
   /* File lists are set. */
 
@@ -813,6 +1218,7 @@ gtk_file_selection_populate (GtkFileSelection *fs,
 
   if (try_complete)
     {
+
       /* User is trying to complete filenames, so advance the user's input
        * string to the updated_text, which is the common leading substring
        * of all possible completions, and if its a directory attempt
@@ -820,9 +1226,10 @@ gtk_file_selection_populate (GtkFileSelection *fs,
 
       if (cmpl_updated_text (cmpl_state)[0])
         {
+
           if (cmpl_updated_dir (cmpl_state))
             {
-              gchar* dir_name = g_strdup (cmpl_updated_text (cmpl_state));
+	      gchar* dir_name = g_strdup (cmpl_updated_text (cmpl_state));
 
               did_recurse = TRUE;
 
@@ -833,8 +1240,8 @@ gtk_file_selection_populate (GtkFileSelection *fs,
           else
             {
 	      if (fs->selection_entry)
-		gtk_entry_set_text (GTK_ENTRY (fs->selection_entry),
-				    cmpl_updated_text (cmpl_state));
+		      gtk_entry_set_text (GTK_ENTRY (fs->selection_entry),
+					  cmpl_updated_text (cmpl_state));
             }
         }
       else
@@ -853,32 +1260,6 @@ gtk_file_selection_populate (GtkFileSelection *fs,
 
   if (!did_recurse)
     {
-      GList *file_label_list = NULL;
-      GList *dir_label_list = NULL;
-
-      /* This reverses the lists. */
-      while (file_list)
-        {
-          label = gtk_list_item_new_with_label (file_list->data);
-          gtk_object_set_user_data (GTK_OBJECT (label), file_list->data);
-          gtk_widget_show (label);
-
-          file_label_list = g_list_prepend (file_label_list, label);
-          file_list = file_list->next;
-        }
-
-      while (dir_list)
-        {
-          label = gtk_list_item_new_with_label (dir_list->data);
-          gtk_object_set_user_data (GTK_OBJECT (label), dir_list->data);
-          gtk_widget_show (label);
-
-          dir_label_list = g_list_prepend (dir_label_list, label);
-          dir_list = dir_list->next;
-        }
-
-      gtk_container_disable_resize (GTK_CONTAINER (fs));
-
       if (fs->selection_entry)
 	gtk_entry_set_position (GTK_ENTRY (fs->selection_entry), selection_index);
 
@@ -893,55 +1274,12 @@ gtk_file_selection_populate (GtkFileSelection *fs,
 	  g_free (sel_text);
 	}
 
-      if (fs->dir_list)
+      if (fs->history_pulldown) 
 	{
-	  gtk_container_foreach (GTK_CONTAINER (fs->dir_list),
-				 gtk_file_selection_free_filename, NULL);
-	  gtk_list_clear_items (GTK_LIST (fs->dir_list), 0, -1);
-
-	  if (dir_label_list)
-	    gtk_list_append_items (GTK_LIST (fs->dir_list), dir_label_list);
+	  gtk_file_selection_update_history_menu (fs, cmpl_reference_position (cmpl_state));
 	}
-      if (fs->file_list)
-	{
-	  gtk_container_foreach (GTK_CONTAINER (fs->file_list),
-				 gtk_file_selection_free_filename, NULL);
-	  gtk_list_clear_items (GTK_LIST (fs->file_list), 0, -1);
-
-	  if (file_label_list)
-	    gtk_list_append_items (GTK_LIST (fs->file_list), file_label_list);
-	}
-
-      gtk_container_enable_resize (GTK_CONTAINER (fs));
+      
     }
-  else
-    {
-      GList *dir_list0 = dir_list;
-      GList *file_list0 = file_list;
-
-      while (dir_list)
-        {
-          GList *tmp = dir_list;
-          dir_list = dir_list->next;
-
-          if (tmp)
-            g_free (tmp->data);
-        }
-
-      while (file_list)
-        {
-          GList *tmp = file_list;
-          file_list = file_list->next;
-
-          if (tmp)
-            g_free (tmp->data);
-        }
-
-      g_list_free (dir_list0);
-      g_list_free (file_list0);
-    }
-
-  gtk_signal_handler_unblock (GTK_OBJECT (fs->dir_list), dir_changed_key);
 }
 
 static void
@@ -956,18 +1294,6 @@ gtk_file_selection_abort (GtkFileSelection *fs)
   if (fs->selection_entry)
     gtk_label_set (GTK_LABEL (fs->selection_text), err_buf);
 }
-
-static void
-gtk_file_selection_free_filename (GtkWidget *widget,
-				  gpointer   client_data)
-{
-  g_return_if_fail (widget != NULL);
-
-  g_free (gtk_object_get_user_data (GTK_OBJECT (widget)));
-  gtk_object_set_user_data (GTK_OBJECT (widget), NULL);
-}
-
-
 
 /**********************************************************************/
 /*			  External Interface                          */
