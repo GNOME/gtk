@@ -1,5 +1,7 @@
 2004-11-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkfilefilter.sgml: Add docs.
+
 	* === Released 2.5.5 ===
 	
 	* gtk/Makefile.am (content_files): Add migrating-GtkColorButton.sgml
