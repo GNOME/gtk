@@ -718,6 +718,15 @@ gtk_label_hierarchy_changed (GtkWidget *widget,
   gtk_label_setup_mnemonic (label, label->mnemonic_keyval);
 }
 
+static void
+label_mnemonic_widget_weak_notify (gpointer      data,
+				   GObject      *where_the_object_was)
+{
+  GtkLabel *label = data;
+
+  label->mnemonic_widget = NULL;
+  g_object_notify (G_OBJECT (label), "mnemonic_widget");
+}
 
 /**
  * gtk_label_set_mnemonic_widget:
@@ -747,10 +756,14 @@ gtk_label_set_mnemonic_widget (GtkLabel  *label,
     g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (label->mnemonic_widget)
-    gtk_widget_unref (label->mnemonic_widget);
+    g_object_weak_unref (label->mnemonic_widget,
+			 label_mnemonic_widget_weak_notify,
+			 label);
   label->mnemonic_widget = widget;
   if (label->mnemonic_widget)
-    gtk_widget_ref (label->mnemonic_widget);
+    g_object_weak_ref (label->mnemonic_widget,
+		       label_mnemonic_widget_weak_notify,
+		       label);
   
   g_object_notify (G_OBJECT (label), "mnemonic_widget");
 }

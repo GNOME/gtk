@@ -1,3 +1,9 @@
+Mon Sep 30 15:45:49 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_set_mnemonic_widget): 
+	Make the reference to the mnemonic widget weak.
+	(#93334, Murray Cumming)
+
 Mon Sep 30 15:38:53 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.h: Remove a duplicate definition
