@@ -27,6 +27,7 @@
 #include "gtkcellrendererpixbuf.h"
 #include "gtkcellrendererseptext.h"
 #include "gtkcellrenderertext.h"
+#include "gtkcheckmenuitem.h"
 #include "gtkcombobox.h"
 #include "gtkentry.h"
 #include "gtkexpander.h"
@@ -106,6 +107,8 @@ struct _GtkFileChooserDefault
   GtkWidget *browse_shortcuts_add_button;
   GtkWidget *browse_shortcuts_remove_button;
   GtkWidget *browse_files_tree_view;
+  GtkWidget *browse_files_popup_menu;
+  GtkWidget *browse_files_popup_menu_hidden_files_item;
   GtkWidget *browse_new_folder_button;
   GtkWidget *browse_path_bar;
   GtkWidget *browse_extra_align;
@@ -347,6 +350,7 @@ static void list_row_activated         (GtkTreeView           *tree_view,
 
 static void path_bar_clicked           (GtkPathBar            *path_bar,
 					GtkFilePath           *file_path,
+					gboolean               child_is_hidden,
 					GtkFileChooserDefault *impl);
 
 static void add_bookmark_button_clicked_cb    (GtkButton             *button,
@@ -1676,7 +1680,7 @@ add_bookmark_foreach_cb (GtkTreeModel *model,
   fs_model = impl->browse_files_model;
   gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model, &child_iter, iter);
 
-  file_path = _gtk_file_system_model_get_path (GTK_FILE_SYSTEM_MODEL (fs_model), &child_iter);
+  file_path = _gtk_file_system_model_get_path (fs_model, &child_iter);
   shortcuts_add_bookmark_from_path (impl, file_path, -1);
 }
 
@@ -2546,6 +2550,9 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
   return vbox;
 }
 
+/* Handles key press events on the file list, so that we can trap Enter to
+ * activate the default button on our own.
+ */
 static gboolean
 trap_activate_cb (GtkWidget   *widget,
 		  GdkEventKey *event,
@@ -2574,6 +2581,106 @@ trap_activate_cb (GtkWidget   *widget,
   return FALSE;
 }
 
+/* Callback used when the file list's popup menu is detached */
+static void
+popup_menu_detach_cb (GtkWidget *attach_widget,
+		      GtkMenu   *menu)
+{
+  GtkFileChooserDefault *impl;
+
+  impl = g_object_get_data (G_OBJECT (attach_widget), "GtkFileChooserDefault");
+  g_assert (GTK_IS_FILE_CHOOSER_DEFAULT (impl));
+
+  impl->browse_files_popup_menu = NULL;
+  impl->browse_files_popup_menu_hidden_files_item = NULL;
+}
+
+/* Callback used when the "Show Hidden Files" menu item is toggled */
+static void
+show_hidden_toggled_cb (GtkCheckMenuItem      *item,
+			GtkFileChooserDefault *impl)
+{
+  g_object_set (impl,
+		"show-hidden", gtk_check_menu_item_get_active (item),
+		NULL);
+}
+
+/* Constructs the popup menu for the file list if needed */
+static void
+file_list_build_popup_menu (GtkFileChooserDefault *impl)
+{
+  if (!impl->browse_files_popup_menu)
+    {
+      impl->browse_files_popup_menu = gtk_menu_new ();
+      gtk_menu_attach_to_widget (GTK_MENU (impl->browse_files_popup_menu),
+				 impl->browse_files_tree_view,
+				 popup_menu_detach_cb);
+
+      impl->browse_files_popup_menu_hidden_files_item =
+	gtk_check_menu_item_new_with_mnemonic (_("Show _Hidden Files"));
+      g_signal_connect (impl->browse_files_popup_menu_hidden_files_item, "toggled",
+			G_CALLBACK (show_hidden_toggled_cb), impl);
+
+      gtk_widget_show (impl->browse_files_popup_menu_hidden_files_item);
+      gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_files_popup_menu),
+			     impl->browse_files_popup_menu_hidden_files_item);
+    }
+
+  g_signal_handlers_block_by_func (impl->browse_files_popup_menu_hidden_files_item,
+				   G_CALLBACK (show_hidden_toggled_cb), impl);
+  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (impl->browse_files_popup_menu_hidden_files_item),
+				  impl->show_hidden);
+  g_signal_handlers_unblock_by_func (impl->browse_files_popup_menu_hidden_files_item,
+				     G_CALLBACK (show_hidden_toggled_cb), impl);
+}
+
+static void
+file_list_popup_menu (GtkFileChooserDefault *impl,
+		      GdkEventButton        *event)
+{
+  int button;
+  guint32 timestamp;
+
+  if (event)
+    {
+      button = event->button;
+      timestamp = event->time;
+    }
+  else
+    {
+      button = 0;
+      timestamp = GDK_CURRENT_TIME;
+    }
+
+  file_list_build_popup_menu (impl);
+  gtk_menu_popup (GTK_MENU (impl->browse_files_popup_menu),
+		  NULL, NULL, NULL, NULL,
+		  button, timestamp);
+}
+
+/* Callback used for the GtkWidget::popup-menu signal of the file list */
+static gboolean
+list_popup_menu_cb (GtkWidget *widget,
+		    GtkFileChooserDefault *impl)
+{
+  file_list_popup_menu (impl, NULL);
+  return TRUE;
+}
+
+/* Callback used when a button is pressed on the file list.  We trap button 3 to
+ * bring up a popup menu.
+ */
+static gboolean
+list_button_press_event_cb (GtkWidget             *widget,
+			    GdkEventButton        *event,
+			    GtkFileChooserDefault *impl)
+{
+  if (event->button != 3)
+    return FALSE;
+
+  file_list_popup_menu (impl, event);
+  return TRUE;
+}
 
 /* Creates the widgets for the file list */
 static GtkWidget *
@@ -2595,12 +2702,18 @@ create_file_list (GtkFileChooserDefault *impl)
   /* Tree/list view */
 
   impl->browse_files_tree_view = gtk_tree_view_new ();
+  g_object_set_data (G_OBJECT (impl->browse_files_tree_view), "GtkFileChooserDefault", impl);
+
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (impl->browse_files_tree_view), TRUE);
   gtk_container_add (GTK_CONTAINER (swin), impl->browse_files_tree_view);
   g_signal_connect (impl->browse_files_tree_view, "row-activated",
 		    G_CALLBACK (list_row_activated), impl);
   g_signal_connect (impl->browse_files_tree_view, "key-press-event",
     		    G_CALLBACK (trap_activate_cb), impl);
+  g_signal_connect (impl->browse_files_tree_view, "popup-menu",
+		    G_CALLBACK (list_popup_menu_cb), impl);
+  g_signal_connect (impl->browse_files_tree_view, "button-press-event",
+		    G_CALLBACK (list_button_press_event_cb), impl);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (impl->browse_files_tree_view),
@@ -3272,8 +3385,7 @@ gtk_file_chooser_default_set_property (GObject      *object,
 	if (show_hidden != impl->show_hidden)
 	  {
 	    impl->show_hidden = show_hidden;
-	    _gtk_file_system_model_set_show_hidden (GTK_FILE_SYSTEM_MODEL (impl->browse_files_model),
-						    show_hidden);
+	    _gtk_file_system_model_set_show_hidden (impl->browse_files_model, show_hidden);
 	  }
       }
       break;
@@ -3825,11 +3937,43 @@ gtk_file_chooser_default_select_path (GtkFileChooser    *chooser,
   else
     {
       gboolean result;
+      GtkFileFolder *folder;
+      GtkFileInfo *info;
+      gboolean is_hidden;
 
       result = _gtk_file_chooser_set_current_folder_path (chooser, parent_path, error);
+
+      if (!result)
+	{
+	  gtk_file_path_free (parent_path);
+	  return result;
+	}
+
+      folder = gtk_file_system_get_folder (impl->file_system, parent_path, GTK_FILE_INFO_IS_HIDDEN, error);
       gtk_file_path_free (parent_path);
-      _gtk_file_system_model_path_do (impl->browse_files_model, path,
-				      select_func, impl);
+
+      if (!folder)
+	return FALSE;
+
+      info = gtk_file_folder_get_info (folder, path, error);
+      g_object_unref (folder);
+
+      if (!info)
+	return FALSE;
+
+      is_hidden = gtk_file_info_get_is_hidden (info);
+      gtk_file_info_free (info);
+
+      if (is_hidden)
+	g_object_set (impl, "show-hidden", TRUE, NULL);
+
+      result = _gtk_file_system_model_path_do (impl->browse_files_model, path,
+					       select_func, impl);
+      if (!result)
+	g_set_error (error,
+		     GTK_FILE_CHOOSER_ERROR,
+		     GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
+		     _("Could not find the path"));
 
       return result;
     }
@@ -3861,7 +4005,7 @@ gtk_file_chooser_default_unselect_path (GtkFileChooser    *chooser,
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
 
   _gtk_file_system_model_path_do (impl->browse_files_model, path,
-				 unselect_func, impl);
+				  unselect_func, impl);
 }
 
 static void
@@ -3943,7 +4087,7 @@ get_paths_foreach (GtkTreeModel *model,
   fs_model = info->impl->browse_files_model;
   gtk_tree_model_sort_convert_iter_to_child_iter (info->impl->sort_model, &sel_iter, iter);
 
-  file_path = _gtk_file_system_model_get_path (GTK_FILE_SYSTEM_MODEL (fs_model), &sel_iter);
+  file_path = _gtk_file_system_model_get_path (fs_model, &sel_iter);
   if (!file_path)
     return; /* We are on the editable row */
 
@@ -4731,9 +4875,18 @@ list_row_activated (GtkTreeView           *tree_view,
 static void
 path_bar_clicked (GtkPathBar            *path_bar,
 		  GtkFilePath           *file_path,
+		  gboolean               child_is_hidden,
 		  GtkFileChooserDefault *impl)
 {
-  change_folder_and_display_error (impl, file_path);
+  if (!change_folder_and_display_error (impl, file_path))
+    return;
+
+  /* Say we have "/foo/bar/[.baz]" and the user clicks on "bar".  We should then
+   * show hidden files so that ".baz" appears in the file list, as it will still
+   * be shown in the path bar: "/foo/[bar]/.baz"
+   */
+  if (child_is_hidden)
+    g_object_set (impl, "show-hidden", TRUE, NULL);
 }
 
 static const GtkFileInfo *

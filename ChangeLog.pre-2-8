@@ -1,3 +1,49 @@
+2004-04-01  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix #136077.
+
+	* gtk/gtkpathbar.h (struct _GtkPathBarClass): Add a
+	"child_is_hidden" boolean argument to the "path-clicked" signal.
+
+	* gtk/gtkpathbar.c (struct _ButtonData): Added a file_is_hidden
+	field.
+	(make_directory_button): Take a file_is_hidden argument; put it in
+	the ButtonData.
+	(_gtk_path_bar_set_path): See whether each path component path is
+	a hidden file.
+	(gtk_path_bar_class_init): Add the file_is_hidden argument to the
+	"path-clicked" signal.
+	(button_clicked_cb): See if the downwards button represents a
+	hidden file for the file_is_hidden argument in the signal
+	emission.
+
+	* gtk/gtkmarshalers.list: Added a signal type VOID:POINTER,BOOLEAN.
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_select_path): If we fail to switch
+	folders, don't try to select the path in the file system model.
+	Also, return the result from _gtk_file_system_model_path_do().
+	(gtk_file_chooser_default_select_path): Turn on show_hidden in the
+	file system model if we are asked to select a hidden file.
+	(path_bar_clicked): Show hidden files based on whether the
+	immediate downwards folder in the path bar is a hidden file
+	itself.
+	(struct _GtkFileChooserDefault): Added fields
+	browse_files_popup_menu and browse_files_popup_menu_hidden_files_item.
+	(create_file_list): Set an object data key of
+	"GtkFileChooserDefault" on the tree view so that we can find the
+	impl from the popup menu callbacks.  Also, hook up to the
+	"button-press-event" and "popup-menu" signals in the file list to
+	bring up a popup menu.
+	(list_popup_menu_cb): New callback.
+	(list_button_press_event_cb): New callback.
+
+	Fix #138763:
+
+	* gtk/gtkfilesystemmodel.c
+	(_gtk_file_system_model_new): Oops, connect_object to
+	"finished-loading".
+
 2004-03-31  Tor Lillqvist  <tml@iki.fi>
 
 	* configure.in: Move AC_CANONICAL_HOST earlier, before the check

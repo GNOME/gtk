@@ -66,7 +66,8 @@ struct _GtkPathBarClass
   GtkContainerClass parent_class;
 
   void (* path_clicked) (GtkPathBar  *path_bar,
-			 GtkFilePath *file_path);
+			 GtkFilePath *file_path,
+			 gboolean     child_is_hidden);
 };
 
 GType    gtk_path_bar_get_type (void) G_GNUC_CONST;

@@ -61,6 +61,7 @@ struct _ButtonData
   GtkWidget *image;
   GtkWidget *label;
   gboolean ignore_changes;
+  gboolean file_is_hidden;
 };
 
 G_DEFINE_TYPE (GtkPathBar,
@@ -155,14 +156,15 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   /*  container_class->child_type = gtk_path_bar_child_type;*/
 
   path_bar_signals [PATH_CLICKED] =
-    g_signal_new ("path_clicked",
+    g_signal_new ("path-clicked",
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkPathBarClass, path_clicked),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__POINTER,
-		  G_TYPE_NONE, 1,
-		  G_TYPE_POINTER);
+		  _gtk_marshal_VOID__POINTER_BOOLEAN,
+		  G_TYPE_NONE, 2,
+		  G_TYPE_POINTER,
+		  G_TYPE_BOOLEAN);
 }
 
 
@@ -744,17 +746,32 @@ button_clicked_cb (GtkWidget *button,
 		   gpointer   data)
 {
   ButtonData *button_data;
-  GtkWidget *path_bar;
+  GtkPathBar *path_bar;
+  GList *button_list;
+  gboolean child_is_hidden;
 
   button_data = BUTTON_DATA (data);
   if (button_data->ignore_changes)
     return;
 
-  path_bar = button->parent;
-  g_assert (GTK_IS_PATH_BAR (path_bar));
+  path_bar = GTK_PATH_BAR (button->parent);
+
+  button_list = g_list_find (path_bar->button_list, button_data);
+  g_assert (button_list != NULL);
+
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
 
-  g_signal_emit (path_bar, path_bar_signals [PATH_CLICKED], 0, button_data->path);
+  if (button_list->prev)
+    {
+      ButtonData *child_data;
+
+      child_data = BUTTON_DATA (button_list->prev->data);
+      child_is_hidden = child_data->file_is_hidden;
+    }
+  else
+    child_is_hidden = FALSE;
+
+  g_signal_emit (path_bar, path_bar_signals [PATH_CLICKED], 0, button_data->path, child_is_hidden);
 }
 
 static GdkPixbuf *
@@ -880,7 +897,8 @@ static ButtonData *
 make_directory_button (GtkPathBar  *path_bar,
 		       const char  *dir_name,
 		       GtkFilePath *path,
-		       gboolean     current_dir)
+		       gboolean     current_dir,
+		       gboolean     file_is_hidden)
 {
   GtkWidget *child = NULL;
   ButtonData *button_data;
@@ -915,6 +933,7 @@ make_directory_button (GtkPathBar  *path_bar,
 
   button_data->dir_name = g_strdup (dir_name);
   button_data->path = gtk_file_path_new_dup (gtk_file_path_get_string (path));
+  button_data->file_is_hidden = file_is_hidden;
 			  
   gtk_container_add (GTK_CONTAINER (button_data->button), child);
   gtk_widget_show_all (button_data->button);
@@ -993,6 +1012,7 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
       GtkFilePath *parent_path = NULL;
       ButtonData *button_data;
       const gchar *display_name;
+      gboolean is_hidden;
       GtkFileFolder *file_folder;
       GtkFileInfo *file_info;
       gboolean valid;
@@ -1010,7 +1030,7 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
 
       file_folder = gtk_file_system_get_folder (path_bar->file_system,
 						parent_path ? parent_path : path,
-						GTK_FILE_INFO_DISPLAY_NAME,
+						GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_HIDDEN,
 						NULL);
       if (!file_folder)
 	{
@@ -1032,8 +1052,9 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
 	}
 
       display_name = gtk_file_info_get_display_name (file_info);
+      is_hidden = gtk_file_info_get_is_hidden (file_info);
 
-      button_data = make_directory_button (path_bar, display_name, path, first_directory);
+      button_data = make_directory_button (path_bar, display_name, path, first_directory, is_hidden);
       gtk_file_info_free (file_info);
       gtk_file_path_free (path);
 

@@ -770,8 +770,8 @@ _gtk_file_system_model_new (GtkFileSystem     *file_system,
 	  if (gtk_file_folder_is_finished_loading (model->root_folder))
 	    queue_finished_loading (model); /* done in an idle because we are being created */
 	  else
-	    g_signal_connect (model->root_folder, "finished-loading",
-			      G_CALLBACK (root_folder_finished_loading_cb), model);
+	    g_signal_connect_object (model->root_folder, "finished-loading",
+				     G_CALLBACK (root_folder_finished_loading_cb), model, 0);
 
 	  g_signal_connect_object (model->root_folder, "deleted",
 				   G_CALLBACK (root_deleted_callback), model, 0);
