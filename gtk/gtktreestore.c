@@ -2014,18 +2014,33 @@ gtk_tree_store_swap (GtkTreeStore *tree_store,
   gtk_tree_path_up (path_a);
   gtk_tree_path_up (path_b);
 
-  if (gtk_tree_path_compare (path_a, path_b))
+  if (gtk_tree_path_get_depth (path_a) == 0
+      || gtk_tree_path_get_depth (path_b) == 0)
     {
-      gtk_tree_path_free (path_a);
-      gtk_tree_path_free (path_b);
-
-      g_warning ("Given childs are not in the same level\n");
-      return;
+      if (gtk_tree_path_get_depth (path_a) != gtk_tree_path_get_depth (path_b))
+        {
+          gtk_tree_path_free (path_a);
+          gtk_tree_path_free (path_b);
+                                                                                
+          g_warning ("Given children are not in the same level\n");
+          return;
+        }
+      parent_node = G_NODE (tree_store->root);
     }
-
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (tree_store), &parent, path_a);
-  parent_node = G_NODE (parent.user_data);
-
+  else
+    {
+      if (gtk_tree_path_compare (path_a, path_b))
+        {
+          gtk_tree_path_free (path_a);
+          gtk_tree_path_free (path_b);
+                                                                                
+          g_warning ("Given children don't have a common parent\n");
+          return;
+        }
+      gtk_tree_model_get_iter (GTK_TREE_MODEL (tree_store), &parent,
+                               path_a);
+      parent_node = G_NODE (parent.user_data);
+    }
   gtk_tree_path_free (path_b);
 
   /* old links which we have to keep around */

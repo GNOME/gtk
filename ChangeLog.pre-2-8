@@ -1,3 +1,8 @@
+Fri Jun 25 00:32:15 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreestore.c (gtk_tree_store_swap): Commit the change
+	which was mentioned below.
+
 Thu Jun 24 23:35:09 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtknotebook.c (gtk_notebook_class_init): Fix a typo,
