@@ -1,5 +1,9 @@
 2005-03-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtksettings.c (gtk_settings_get_property): 
+	* gtk/gtkrc.c (gtk_rc_parse_assignment): Don't leak 
+	the values here.  (#169047, Philip Langdale)
+
 	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_render): 
 	Don't warn if a stock icon cannot be found.  (#168830,
 	Sven Neumann)
