@@ -4776,9 +4776,6 @@ switch_to_selected_folder (GtkFileChooserDefault *impl)
   GtkTreeSelection *selection;
   struct switch_folder_closure closure;
 
-  g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
-	    || impl->action == GTK_FILE_CHOOSER_ACTION_SAVE);
-
   /* We do this with foreach() rather than get_selected() as we may be in
    * multiple selection mode
    */
@@ -4800,82 +4797,92 @@ static gboolean
 gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 {
   GtkFileChooserDefault *impl;
-  int num_selected;
+  GtkWidget *toplevel;
+  GtkWidget *current_focus;
 
   impl = GTK_FILE_CHOOSER_DEFAULT (chooser_embed);
 
-  /* First, if the shortcuts list had the focus, we should switch folders rather
-   * than terminate.
-   */
-  if (impl->toplevel_last_focus_widget == impl->browse_shortcuts_tree_view)
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (impl));
+  g_assert (GTK_IS_WINDOW (toplevel));
+
+  current_focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
+  g_assert (current_focus != NULL);
+
+  if (current_focus == impl->browse_files_tree_view)
     {
-      GtkTreeIter iter;
-
-      if (shortcuts_get_selected (impl, &iter))
-	shortcuts_activate_iter (impl, &iter);
-
-      return FALSE;
-    }
-
-  /* Second, check the save entry.  If it has a valid name, we are done. */
-
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
-      || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-    {
-      GtkFilePath *path;
-      gboolean is_valid, is_empty;
-
-      path = check_save_entry (impl, &is_valid, &is_empty);
-
-      if (is_valid)
-	{
-	  gtk_file_path_free (path);
-	  return TRUE;
-	}
-      else if (!is_empty)
-	return FALSE;
-    }
-
-  /* Third, do we have an empty selection? */
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
-      || impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
-    {
-      GtkTreeSelection *selection;
-
-      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
-      num_selected = gtk_tree_selection_count_selected_rows (selection);
-      if (num_selected == 0)
-	return FALSE;
-    }
-
-  /* Fourth, should we return file names or folder names? */
-
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
-      || impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
-    {
+      int num_selected;
       gboolean all_files, all_folders;
 
-      selection_check (impl, NULL, &all_files, &all_folders);
+    file_list:
 
-      if (num_selected == 1)
+      selection_check (impl, &num_selected, &all_files, &all_folders);
+
+      if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER && num_selected != 1)
+	return TRUE; /* zero means current folder; more than one means use the whole selection */
+
+      if (num_selected == 0)
 	{
-	  if (all_folders)
-	    {
-	      switch_to_selected_folder (impl);
-	      return FALSE;
-	    }
-	  else if (all_files)
-	    return TRUE;
+	  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
+	      || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+	    goto save_entry; /* it makes sense to use the typed name */
+	  else
+	    return FALSE;
+	}
+
+      if (num_selected == 1 && all_folders)
+	{
+	  switch_to_selected_folder (impl);
+	  return FALSE;
 	}
       else
 	return all_files;
     }
-  else if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
-	   || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-    /* There can be no files selected in folder mode since we don't show them,
-     * anyway.
-     */
-    return TRUE;
+  else if (current_focus == impl->save_file_name_entry)
+    {
+      GtkFilePath *path;
+      gboolean is_valid, is_empty;
+      gboolean is_folder;
+      gboolean retval;
+
+    save_entry:
+
+      g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
+		|| impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
+
+      path = check_save_entry (impl, &is_valid, &is_empty);
+
+      if (!is_valid)
+	return FALSE;
+
+      is_folder = check_is_folder (impl->file_system, path, NULL);
+      if (is_folder)
+	{
+	  change_folder_and_display_error (impl, path);
+	  retval = FALSE;
+	}
+      else
+	retval = TRUE;
+
+      gtk_file_path_free (path);
+      return retval;
+    }
+  else if (impl->toplevel_last_focus_widget == impl->browse_shortcuts_tree_view)
+    {
+      /* The focus is on a dialog's action area button, *and* the widget that
+       * was focused immediately before it is the shortcuts list.  Switch to the
+       * selected shortcut and tell the caller not to respond.
+       */
+      GtkTreeIter iter;
+
+      if (shortcuts_get_selected (impl, &iter))
+	shortcuts_activate_iter (impl, &iter);
+      else
+	goto file_list;
+
+      return FALSE;
+    }
+  else
+    goto file_list; /* The focus is on a dialog's action area button or something else */
 
   g_assert_not_reached ();
   return FALSE;
