@@ -1,3 +1,33 @@
+2000-06-02  Havoc Pennington  <hp@pobox.com>
+
+        * gtk/testtextbuffer.c: Test program to make sure GtkTextBuffer
+	is in working order.
+	
+	* gtk/testtext.c: Change to reflect anonymous mark API
+
+	* gtk/gtktextview.c: Convert from mark names to GtkTextMark*.
+
+	* gtk/gtktexttag.h (struct _GtkTextTag): remove the affects_size
+	field, which was unused.
+
+	* gtk/gtktextmarkprivate.h (GTK_IS_TEXT_MARK): add this macro,
+	saves some typing.
+
+	* gtk/gtktextbuffer.c: Switch from mark names to GtkTextMark*	
+
+	* gtk/gtktextbtree.c (gtk_text_btree_new): set the not_deleteable
+	flag on the insertion point and selection bound
+
+	Throughout, use GtkTextMark instead of GtkTextLineSegment, and 
+	make mark-manipulation functions take a GtkTextMark* instead of a
+	mark name.
+	
+	* gtk/gtktextmarkprivate.h: Add a "not_deleteable" flag to 
+	GtkTextMarkBody; will be used to detect attempts to delete
+	the permanent marks (insert and selection bound)
+
+	* gtk/Makefile.am (noinst_PROGRAMS): add testtextbuffer	
+
 Fri Jun  2 12:56:01 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_init): Initialize DOUBLE_BUFFERED

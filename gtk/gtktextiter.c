@@ -952,7 +952,7 @@ forward_line_leaving_caches_unmodified(GtkTextRealIter *real)
   g_assert(new_line != real->line);
   
   if (new_line != NULL)
-    {
+    {      
       real->line = new_line;
 
       real->line_byte_offset = 0;
@@ -2153,7 +2153,7 @@ gtk_text_btree_get_iter_at_mark_name (GtkTextBTree *tree,
                                        GtkTextIter *iter,
                                        const gchar *mark_name)
 {
-  GtkTextLineSegment *mark;
+  GtkTextMark *mark;
   
   g_return_val_if_fail(iter != NULL, FALSE);
   g_return_val_if_fail(tree != NULL, FALSE);
@@ -2173,15 +2173,17 @@ gtk_text_btree_get_iter_at_mark_name (GtkTextBTree *tree,
 void
 gtk_text_btree_get_iter_at_mark (GtkTextBTree *tree,
                                   GtkTextIter *iter,
-                                  GtkTextLineSegment *mark)
+                                  GtkTextMark *mark)
 {
+  GtkTextLineSegment *seg = (GtkTextLineSegment*) mark;
+  
   g_return_if_fail(iter != NULL);
   g_return_if_fail(tree != NULL);
-  g_return_if_fail(mark->type == &gtk_text_left_mark_type ||
-                   mark->type == &gtk_text_right_mark_type);
+  g_return_if_fail(GTK_IS_TEXT_MARK (mark));
   
-  iter_init_from_segment(iter, tree, mark->body.mark.line, mark);
-  g_assert(mark->body.mark.line == gtk_text_iter_get_line(iter));
+  iter_init_from_segment(iter, tree,
+                         seg->body.mark.line, seg);
+  g_assert(seg->body.mark.line == gtk_text_iter_get_line(iter));
   check_invariants(iter);
 }
 

@@ -52,10 +52,7 @@ struct _GtkTextTag {
    * defaults if no tag specifies an override.
    */
 
-  GtkTextStyleValues *values;
-  
-  /* tag contains appearance-related options */
-  guint affects_size : 1;
+  GtkTextStyleValues *values;  
   
   /*
     Flags for whether a given value is set; if a value is unset, then

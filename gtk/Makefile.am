@@ -487,7 +487,7 @@ uninstall-local:
 #
 # test programs, not to be installed
 #
-noinst_PROGRAMS = testgtk testcalendar testinput testselection testrgb testdnd testtext simple # testthreads
+noinst_PROGRAMS = testgtk testcalendar testinput testselection testrgb testdnd testtext simple testtextbuffer # testthreads
 DEPS = libgtk.la $(top_builddir)/gdk/libgdk.la
 LDADDS = @STRIP_BEGIN@ \
 	libgtk.la			\
@@ -514,6 +514,7 @@ testgtk_LDADD = $(LDADDS)
 testinput_LDADD = $(LDADDS)
 testselection_LDADD = $(LDADDS)
 testtext_LDADD = $(LDADDS)
+testtextbuffer_LDADD = $(LDADDS)
 testrgb_LDADD = $(LDADDS)
 testdnd_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)

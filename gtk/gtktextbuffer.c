@@ -377,7 +377,9 @@ gtk_text_buffer_insert_at_cursor (GtkTextBuffer *buffer,
   g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
   g_return_if_fail(text != NULL);
 
-  gtk_text_buffer_get_iter_at_mark(buffer, &iter, "insert");
+  gtk_text_buffer_get_iter_at_mark(buffer, &iter,
+                                   gtk_text_buffer_get_mark (buffer,
+                                                             "insert"));
 
   gtk_text_buffer_insert(buffer, &iter, text, len);
 }
@@ -700,7 +702,7 @@ gtk_text_buffer_insert_pixmap_at_char (GtkTextBuffer      *buffer,
 static void
 gtk_text_buffer_mark_set (GtkTextBuffer     *buffer,
 			  const GtkTextIter *location,
-			  const char        *mark_name)
+                          GtkTextMark       *mark)
 {
   /* IMO this should NOT work like insert_text and delete_text,
      where the real action happens in the default handler.
@@ -714,7 +716,7 @@ gtk_text_buffer_mark_set (GtkTextBuffer     *buffer,
   gtk_signal_emit(GTK_OBJECT(buffer),
                   signals[MARK_SET],
                   &location,
-                  mark_name);
+                  mark);
 
 }
 
@@ -734,17 +736,19 @@ gtk_text_buffer_mark_set (GtkTextBuffer     *buffer,
  **/
 static GtkTextMark*
 gtk_text_buffer_set_mark(GtkTextBuffer *buffer,
+                         GtkTextMark *existing_mark,
                          const gchar *mark_name,
                          const GtkTextIter *iter,
                          gboolean left_gravity,
                          gboolean should_exist)
 {
   GtkTextIter location;
-  GtkTextLineSegment *mark;
+  GtkTextMark *mark;
   
   g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), NULL);
   
   mark = gtk_text_btree_set_mark(buffer->tree,
+                                 existing_mark,
                                  mark_name,
                                  left_gravity,
                                  iter,
@@ -759,8 +763,8 @@ gtk_text_buffer_set_mark(GtkTextBuffer *buffer,
   gtk_text_btree_get_iter_at_mark(buffer->tree,
                                   &location,
                                   mark);
-
-  gtk_text_buffer_mark_set (buffer, &location, mark_name);
+  
+  gtk_text_buffer_mark_set (buffer, &location, mark);
 
   return (GtkTextMark*)mark;
 }
@@ -771,64 +775,59 @@ gtk_text_buffer_create_mark(GtkTextBuffer *buffer,
                             const GtkTextIter *where,
                             gboolean left_gravity)
 {
-  return gtk_text_buffer_set_mark(buffer, mark_name, where,
+  return gtk_text_buffer_set_mark(buffer, NULL, mark_name, where,
                                   left_gravity, FALSE);
 }
 
 void
 gtk_text_buffer_move_mark(GtkTextBuffer *buffer,
-                          const gchar *mark_name,
+                          GtkTextMark *mark,
                           const GtkTextIter *where)
 {
-  gtk_text_buffer_set_mark(buffer, mark_name, where, FALSE, TRUE);
+  g_return_if_fail (mark != NULL);
+  
+  gtk_text_buffer_set_mark(buffer, mark, NULL, where, FALSE, TRUE);
 }
 
-gboolean
+void
 gtk_text_buffer_get_iter_at_mark(GtkTextBuffer *buffer,
                                  GtkTextIter *iter,
-                                 const gchar *name)
+                                 GtkTextMark *mark)
 {
-  g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), FALSE);
+  g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
 
-  return gtk_text_btree_get_iter_at_mark_name(buffer->tree,
-                                              iter,
-                                              name);
+  gtk_text_btree_get_iter_at_mark(buffer->tree,
+                                  iter,
+                                  mark);
 }
 
 void
 gtk_text_buffer_delete_mark(GtkTextBuffer *buffer,
-                            const gchar *name)
+                            GtkTextMark *mark)
 {
   g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
 
-  if (strcmp(name, "insert") == 0 ||
-      strcmp(name, "selection_bound") == 0)
-    {
-      g_warning("Can't delete special mark `%s'", name);
-      return;
-    }
-
-  gtk_text_btree_remove_mark_by_name(buffer->tree, name);
+  gtk_text_btree_remove_mark (buffer->tree, mark);
 
   /* See rationale above for MARK_SET on why we emit this after
      removing the mark, rather than removing the mark in a default
      handler. */
   gtk_signal_emit(GTK_OBJECT(buffer), signals[MARK_DELETED],
-                  name);
+                  mark);
 }
 
 GtkTextMark*
 gtk_text_buffer_get_mark (GtkTextBuffer      *buffer,
                           const gchar         *name)
 {
-  GtkTextLineSegment *seg;
+  GtkTextMark *mark;
 
   g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), NULL);
   g_return_val_if_fail(name != NULL, NULL);
   
-  seg = gtk_text_btree_get_mark_by_name(buffer->tree, name);
+  mark = gtk_text_btree_get_mark_by_name(buffer->tree, name);
 
-  return (GtkTextMark*)seg;
+  return mark;
 }
 
 void
@@ -838,8 +837,12 @@ gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
   g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
   
   gtk_text_btree_place_cursor(buffer->tree, where);
-  gtk_text_buffer_mark_set (buffer, where, "insert");
-  gtk_text_buffer_mark_set (buffer, where, "selection_bound");
+  gtk_text_buffer_mark_set (buffer, where,
+                            gtk_text_buffer_get_mark (buffer,
+                                                      "insert"));
+  gtk_text_buffer_mark_set (buffer, where,
+                            gtk_text_buffer_get_mark (buffer,
+                                                      "selection_bound"));
 }
 
 /*
@@ -1233,11 +1236,15 @@ selection_clear_event(GtkWidget *widget, GdkEventSelection *event,
       GtkTextIter insert;
       GtkTextIter selection_bound;
 
-      gtk_text_buffer_get_iter_at_mark(buffer, &insert, "insert");
-      gtk_text_buffer_get_iter_at_mark(buffer, &selection_bound, "selection_bound");
+      gtk_text_buffer_get_iter_at_mark(buffer, &insert,
+                                       gtk_text_buffer_get_mark (buffer, "insert"));
+      gtk_text_buffer_get_iter_at_mark(buffer, &selection_bound,
+                                       gtk_text_buffer_get_mark (buffer, "selection_bound"));
       
       if (!gtk_text_iter_equal(&insert, &selection_bound))
-        gtk_text_buffer_move_mark(buffer, "selection_bound", &insert);
+        gtk_text_buffer_move_mark(buffer,
+                                  gtk_text_buffer_get_mark (buffer, "selection_bound"),
+                                  &insert);
     }
   else if (event->selection == clipboard_atom)
     {
@@ -1347,6 +1354,7 @@ selection_received (GtkWidget        *widget,
   GtkTextBuffer *buffer;
   gboolean reselect;
   GtkTextIter insert_point;
+  GtkTextMark *paste_point_override;
   enum {INVALID, STRING, CTEXT, UTF8} type;
 
   g_return_if_fail (widget != NULL);
@@ -1373,15 +1381,22 @@ selection_received (GtkWidget        *widget,
       return;
     }
 
-  if (gtk_text_buffer_get_iter_at_mark(buffer, &insert_point,
-                                       "__paste_point_override"))
+  paste_point_override = gtk_text_buffer_get_mark (buffer,
+                                                   "__paste_point_override");
+  
+  if (paste_point_override != NULL)
     {
-      gtk_text_buffer_delete_mark(buffer, "__paste_point_override");
+      gtk_text_buffer_get_iter_at_mark(buffer, &insert_point,
+                                       paste_point_override);
+      gtk_text_buffer_delete_mark(buffer,
+                                  gtk_text_buffer_get_mark (buffer,
+                                                            "__paste_point_override"));
     }
   else
     {
       gtk_text_buffer_get_iter_at_mark(buffer, &insert_point,
-                                       "insert");
+                                       gtk_text_buffer_get_mark (buffer,
+                                                                 "insert"));
     }
   
   reselect = FALSE;
@@ -1594,11 +1609,15 @@ cut_or_copy(GtkTextBuffer *buffer,
   if (!gtk_text_buffer_get_selection_bounds(buffer, &start, &end))
     {
       /* Let's try the anchor thing */
-
-      if (!gtk_text_buffer_get_iter_at_mark(buffer, &end, "anchor"))
+      GtkTextMark * anchor = gtk_text_buffer_get_mark (buffer, "anchor");
+      
+      if (anchor == NULL)
         return;
       else
-        gtk_text_iter_reorder(&start, &end);
+        {
+          gtk_text_buffer_get_iter_at_mark(buffer, &end, anchor);
+          gtk_text_iter_reorder(&start, &end);
+        }
     }
 
   if (!gtk_text_iter_equal(&start, &end))

@@ -68,10 +68,10 @@ struct _GtkTextBufferClass {
   /* Mark moved or created */
   void (* mark_set)           (GtkTextBuffer *buffer,
                                const GtkTextIter *location,
-                               const gchar *mark_name);
+                               GtkTextMark *mark);
 
   void (* mark_deleted)       (GtkTextBuffer *buffer,
-                               const gchar *mark_name);
+                               GtkTextMark *mark);
 
   void (* apply_tag)          (GtkTextBuffer *buffer,
                                GtkTextTag *tag,
@@ -176,10 +176,10 @@ GtkTextMark   *gtk_text_buffer_create_mark (GtkTextBuffer     *buffer,
                                             const GtkTextIter *where,
                                             gboolean           left_gravity);
 void           gtk_text_buffer_move_mark   (GtkTextBuffer     *buffer,
-                                            const gchar       *mark_name,
+                                            GtkTextMark       *mark,
                                             const GtkTextIter *where);
 void           gtk_text_buffer_delete_mark (GtkTextBuffer     *buffer,
-                                            const gchar       *name);
+                                            GtkTextMark       *mark);
 GtkTextMark   *gtk_text_buffer_get_mark    (GtkTextBuffer     *buffer,
                                             const gchar       *name);
 
@@ -233,9 +233,9 @@ void     gtk_text_buffer_get_last_iter         (GtkTextBuffer *buffer,
 void     gtk_text_buffer_get_bounds            (GtkTextBuffer *buffer,
                                                 GtkTextIter   *start,
                                                 GtkTextIter   *end);
-gboolean gtk_text_buffer_get_iter_at_mark      (GtkTextBuffer *buffer,
+void     gtk_text_buffer_get_iter_at_mark      (GtkTextBuffer *buffer,
                                                 GtkTextIter   *iter,
-                                                const gchar   *name);
+                                                GtkTextMark   *mark);
 
 
 /* There's no get_first_iter because you just get the iter for

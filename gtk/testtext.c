@@ -502,6 +502,8 @@ fill_example_buffer (GtkTextBuffer *buffer)
   i = 0;
   while (i < 100)
     {
+      GtkTextMark * temp_mark;
+      
       gtk_text_buffer_get_iter_at_char(buffer, &iter, 0);
           
       gtk_text_buffer_insert_pixmap (buffer, &iter, pixmap, mask);
@@ -521,7 +523,8 @@ fill_example_buffer (GtkTextBuffer *buffer)
 				really know how to display it */
 			     "German (Deutsch Süd) Grüß Gott Greek (Ελληνικά) Γειά σας Hebrew   שלום Japanese (日本語)\n", -1);
 
-      gtk_text_buffer_create_mark (buffer, "tmp_mark", &iter, TRUE);
+      temp_mark =
+        gtk_text_buffer_create_mark (buffer, "tmp_mark", &iter, TRUE);
 
 #if 1
       gtk_text_buffer_get_iter_at_line_char(buffer, &iter, 0, 6);
@@ -555,16 +558,16 @@ fill_example_buffer (GtkTextBuffer *buffer)
       gtk_text_buffer_apply_tag(buffer, "fg_red", &iter, &iter2);
 #endif
 
-      gtk_text_buffer_get_iter_at_mark (buffer, &iter, "tmp_mark");
+      gtk_text_buffer_get_iter_at_mark (buffer, &iter, temp_mark);
       gtk_text_buffer_insert (buffer, &iter, "Centered text!\n", -1);
 	  
-      gtk_text_buffer_get_iter_at_mark (buffer, &iter2, "tmp_mark");
+      gtk_text_buffer_get_iter_at_mark (buffer, &iter2, temp_mark);
       gtk_text_buffer_apply_tag (buffer, "centered", &iter2, &iter);
 
-      gtk_text_buffer_move_mark (buffer, "tmp_mark", &iter);
+      gtk_text_buffer_move_mark (buffer, temp_mark, &iter);
       gtk_text_buffer_insert (buffer, &iter, "Word wrapped, Right-to-left Quote\n", -1);
       gtk_text_buffer_insert (buffer, &iter, "وقد بدأ ثلاث من أكثر المؤسسات تقدما في شبكة اكسيون برامجها كمنظمات لا تسعى للربح، ثم تحولت في السنوات الخمس الماضية إلى مؤسسات مالية منظمة، وباتت جزءا من النظام المالي في بلدانها، ولكنها تتخصص في خدمة قطاع المشروعات الصغيرة. وأحد أكثر هذه المؤسسات نجاحا هو »بانكوسول« في بوليفيا.\n", -1);
-      gtk_text_buffer_get_iter_at_mark (buffer, &iter2, "tmp_mark");
+      gtk_text_buffer_get_iter_at_mark (buffer, &iter2, temp_mark);
       gtk_text_buffer_apply_tag (buffer, "rtl_quote", &iter2, &iter);
 	  
       ++i;

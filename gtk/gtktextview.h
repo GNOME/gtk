@@ -132,10 +132,10 @@ void           gtk_text_view_get_iter_at_pixel     (GtkTextView   *text_view,
 						    gint           x,
 						    gint           y);
 gboolean       gtk_text_view_scroll_to_mark        (GtkTextView   *text_view,
-						    const gchar   *mark_name,
+                                                    GtkTextMark   *mark,
 						    gint           mark_within_margin);
 gboolean       gtk_text_view_move_mark_onscreen    (GtkTextView   *text_view,
-						    const gchar   *mark_name);
+                                                    GtkTextMark   *mark);
 gboolean       gtk_text_view_place_cursor_onscreen (GtkTextView   *text_view);
 
 void           gtk_text_view_get_visible_rect      (GtkTextView   *text_view,

@@ -757,7 +757,7 @@ gtk_text_layout_real_get_log_attrs (GtkTextLayout  *layout,
 {
   GtkTextLineDisplay *display;
   
-  g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), NULL);
+  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   
   display = gtk_text_layout_get_line_display (layout, line, TRUE);
   pango_layout_get_log_attrs (display->layout, attrs, n_attrs);
@@ -1116,7 +1116,7 @@ add_cursor (GtkTextLayout      *layout,
 
   /* Hide insertion cursor when we have a selection
    */
-  if (gtk_text_btree_mark_is_insert (layout->buffer->tree, seg) &&
+  if (gtk_text_btree_mark_is_insert (layout->buffer->tree, (GtkTextMark*)seg) &&
       gtk_text_buffer_get_selection_bounds (layout->buffer, &selection_start, &selection_end))
     return;
   

@@ -68,6 +68,7 @@ mark_segment_new(GtkTextBTree *tree,
   mark->body.mark.refcount = 1;
 
   mark->body.mark.visible = FALSE;
+  mark->body.mark.not_deleteable = FALSE;
   
   return mark;
 }
