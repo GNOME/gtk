@@ -897,7 +897,7 @@ gdk_draw_glyphs (GdkDrawable      *drawable,
 
 
 /**
- * _gdk_drawable_copy_to_image:
+ * gdk_drawable_copy_to_image:
  * @drawable: a #GdkDrawable
  * @image: a #GdkDrawable, or %NULL if a new @image should be created.
  * @src_x: x coordinate on @drawable
@@ -912,17 +912,19 @@ gdk_draw_glyphs (GdkDrawable      *drawable,
  * and copies into that. See gdk_drawable_get_image() for further details.
  * 
  * Return value: @image, or a new a #GdkImage containing the contents
-                 of @drawable
+ *               of @drawable
+ * 
+ * Since: 2.4
  **/
 GdkImage*
-_gdk_drawable_copy_to_image (GdkDrawable *drawable,
-			     GdkImage    *image,
-			     gint         src_x,
-			     gint         src_y,
-			     gint         dest_x,
-			     gint         dest_y,
-			     gint         width,
-			     gint         height)
+gdk_drawable_copy_to_image (GdkDrawable *drawable,
+			    GdkImage    *image,
+			    gint         src_x,
+			    gint         src_y,
+			    gint         dest_x,
+			    gint         dest_y,
+			    gint         width,
+			    gint         height)
 {
   GdkDrawable *composite;
   gint composite_x_offset = 0;
@@ -1065,7 +1067,7 @@ gdk_drawable_real_get_image (GdkDrawable     *drawable,
 			     gint             width,
 			     gint             height)
 {
-  return _gdk_drawable_copy_to_image (drawable, NULL, x, y, 0, 0, width, height);
+  return gdk_drawable_copy_to_image (drawable, NULL, x, y, 0, 0, width, height);
 }
 
 static GdkDrawable*
@@ -1457,10 +1459,10 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
 							    width1, height1,
 							    gdk_drawable_get_depth (drawable), &xs0, &ys0);
 		  
-		  _gdk_drawable_copy_to_image (drawable, image,
-					       dest_x + x0, dest_y + y0,
-					       xs0, ys0,
-					       width1, height1);
+		  gdk_drawable_copy_to_image (drawable, image,
+					      dest_x + x0, dest_y + y0,
+					      xs0, ys0,
+					      width1, height1);
 		  (*composite_func) (pixbuf->pixels + (src_y + y0) * pixbuf->rowstride + (src_x + x0) * 4,
 				     pixbuf->rowstride,
 				     (guchar*)image->mem + ys0 * image->bpl + xs0 * image->bpp,

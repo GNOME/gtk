@@ -1298,8 +1298,8 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
 	  image = _gdk_image_get_scratch (gdk_drawable_get_screen (src), 
 					  width1, height1, depth, &xs0, &ys0);
 
-	  _gdk_drawable_copy_to_image (src, image,
-				       src_x + x0, src_y + y0,
+	  gdk_drawable_copy_to_image (src, image,
+				      src_x + x0, src_y + y0,
 				       xs0, ys0, width1, height1);
 
 	  gdk_pixbuf_get_from_image (dest, image, cmap,

@@ -466,6 +466,7 @@ gdk_draw_pixmap
 gdk_draw_drawable
 gdk_draw_image
 gdk_drawable_get_image
+gdk_drawable_copy_to_image
 
 <SUBSECTION Standard>
 GDK_DRAWABLE

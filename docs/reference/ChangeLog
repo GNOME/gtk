@@ -1,3 +1,7 @@
+Tue Nov 18 00:12:23 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdk-sections.txt: Add gdk_drawable_copy_to_image.
+
 Mon Nov 17 23:29:21 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_combo_box_new_with_model,

@@ -1,3 +1,13 @@
+Tue Nov 18 00:12:55 2003  Matthias Clasen  <maclas@gmx.de>
+
+	Fix for #119555, Peter Zelesny:
+	
+	* gdk/gdkdrawable.h: Declare gdk_drawable_copy_to_image.
+	* gdk/gdkdraw.c (gdk_drawable_copy_to_image): Make public
+	by removing the _ prefix. 
+	* gdk/gdkdraw.c, gdk/gdkpixbuf-drawable.c, gdk/gdkpixmap.c, 
+	gdk/gdkwindow.c: Adjust all callers.
+
 Mon Nov 17 23:36:02 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkaction.c (gtk_action_activate): Only activate if 

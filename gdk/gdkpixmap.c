@@ -470,10 +470,10 @@ gdk_pixmap_copy_to_image (GdkDrawable     *drawable,
 {
   g_return_val_if_fail (GDK_IS_PIXMAP (drawable), NULL);
   
-  return _gdk_drawable_copy_to_image (((GdkPixmapObject*)drawable)->impl,
-				      image,
-				      src_x, src_y, dest_x, dest_y,
-				      width, height);
+  return gdk_drawable_copy_to_image (((GdkPixmapObject*)drawable)->impl,
+				     image,
+				     src_x, src_y, dest_x, dest_y,
+				     width, height);
 }
 
 static GdkBitmap *

@@ -1941,12 +1941,12 @@ gdk_window_copy_to_image (GdkDrawable     *drawable,
   
   _gdk_windowing_window_get_offsets (drawable, &x_offset, &y_offset);
   
-  return _gdk_drawable_copy_to_image (((GdkWindowObject*)drawable)->impl,
-				      image,
-				      src_x - x_offset,
-				      src_y - y_offset,
-				      dest_x, dest_y,
-				      width, height);
+  return gdk_drawable_copy_to_image (((GdkWindowObject*)drawable)->impl,
+				     image,
+				     src_x - x_offset,
+				     src_y - y_offset,
+				     dest_x, dest_y,
+				     width, height);
 }
 
 /* Code for dirty-region queueing
