@@ -47,12 +47,18 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include <string.h>
+#include "gtkhbox.h"
+#include "gtkvbox.h"
+#include "gtkimage.h"
 
 #define DEFAULT_IPADDING 0
 
 /* note: keep in sync with DEFAULT_SPACE_SIZE and DEFAULT_SPACE_STYLE in gtkseparatortoolitem.c */
 #define DEFAULT_SPACE_SIZE  4
 #define DEFAULT_SPACE_STYLE GTK_TOOLBAR_SPACE_LINE
+#define SPACE_LINE_DIVISION 10
+#define SPACE_LINE_START    3
+#define SPACE_LINE_END      7
 
 #define DEFAULT_ICON_SIZE GTK_ICON_SIZE_LARGE_TOOLBAR
 #define DEFAULT_TOOLBAR_STYLE GTK_TOOLBAR_BOTH
@@ -82,6 +88,15 @@ enum {
   MOVE_FOCUS,
   FOCUS_HOME_OR_END,
   LAST_SIGNAL
+};
+
+typedef struct _GtkToolbarChildSpace GtkToolbarChildSpace;
+struct _GtkToolbarChildSpace
+{
+  GtkToolbarChild child;
+
+  GtkAllocation allocation;
+  gboolean child_visible;
 };
 
 typedef struct _ToolbarContent ToolbarContent;
@@ -190,11 +205,10 @@ static void            toolbar_content_expose                (ToolbarContent *co
 static gboolean        toolbar_content_visible               (ToolbarContent *content,
 							      GtkToolbar     *toolbar);
 static void            toolbar_content_size_request          (ToolbarContent *content,
+							      GtkToolbar     *toolbar,
 							      GtkRequisition *requisition);
 static gboolean        toolbar_content_is_homogeneous        (ToolbarContent *content,
 							      GtkToolbar     *toolbar);
-static void            toolbar_content_get_child_requisition (ToolbarContent *content,
-							      GtkRequisition *requisition);
 static gboolean        toolbar_content_is_placeholder        (ToolbarContent *content);
 static gboolean        toolbar_content_disappearing          (ToolbarContent *content);
 static ItemState       toolbar_content_get_state             (ToolbarContent *content);
@@ -211,6 +225,7 @@ static gboolean        toolbar_content_get_expand            (ToolbarContent *co
 static void            toolbar_content_set_goal_allocation   (ToolbarContent *content,
 							      GtkAllocation  *allocation);
 static void            toolbar_content_set_child_visible     (ToolbarContent *content,
+							      GtkToolbar     *toolbar,
 							      gboolean        visible);
 static void            toolbar_content_size_allocate         (ToolbarContent *content,
 							      GtkAllocation  *allocation);
@@ -222,11 +237,14 @@ static void            toolbar_content_set_disappearing      (ToolbarContent *co
 static void            toolbar_content_set_size_request      (ToolbarContent *content,
 							      gint            width,
 							      gint            height);
-static void            toolbar_content_toolbar_reconfigured  (ToolbarContent *content);
+static void            toolbar_content_toolbar_reconfigured  (ToolbarContent *content,
+							      GtkToolbar     *toolbar);
 static GtkWidget *     toolbar_content_retrieve_menu_item    (ToolbarContent *content);
 static ToolbarContent *toolbar_content_new_tool_item         (GtkToolbar     *toolbar,
 							      GtkToolItem    *item,
 							      gboolean        is_placeholder);
+static ToolbarContent *toolbar_content_new_regular_widget    (GtkToolbar     *toolbar,
+							      GtkToolbarChild *child);
 static void            toolbar_content_destroy               (ToolbarContent *content);
 static gboolean        toolbar_content_is_separator          (ToolbarContent *content);
 
@@ -268,6 +286,11 @@ struct _ToolbarContent
       GtkAllocation	start_allocation;
       GtkAllocation	goal_allocation;
     } tool_item;
+
+    struct
+    {
+      GtkToolbarChild *child;
+    } regular_widget;
   } u;
 };
 
@@ -296,6 +319,9 @@ struct _GtkToolbarPrivate
 
 static GtkContainerClass *parent_class = NULL;
 static guint toolbar_signals [LAST_SIGNAL] = { 0 };
+
+static gint                 get_space_size    (GtkToolbar *toolbar);
+static GtkToolbarSpaceStyle get_space_style   (GtkToolbar *toolbar);
 
 GType
 gtk_toolbar_get_type (void)
@@ -861,7 +887,7 @@ gtk_toolbar_size_request (GtkWidget      *widget,
       if (!toolbar_content_visible (content, toolbar))
 	continue;
 
-      toolbar_content_size_request (content, &requisition);
+      toolbar_content_size_request (content, toolbar, &requisition);
       
       max_child_width = MAX (max_child_width, requisition.width);
       max_child_height = MAX (max_child_height, requisition.height);
@@ -895,7 +921,7 @@ gtk_toolbar_size_request (GtkWidget      *widget,
 	{
 	  GtkRequisition requisition;
 	  
-	  toolbar_content_size_request (content, &requisition);
+	  toolbar_content_size_request (content, toolbar, &requisition);
 
 	  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
 	    size = requisition.width;
@@ -1010,7 +1036,7 @@ get_item_size (GtkToolbar     *toolbar,
 {
   GtkRequisition requisition;
 
-  toolbar_content_get_child_requisition (content, &requisition);
+  toolbar_content_size_request (content, toolbar, &requisition);
 
   if (toolbar_content_is_placeholder (content) &&
       toolbar_content_disappearing (content))
@@ -1461,11 +1487,14 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
     }
 
   /* finally allocate the items */
-  for (list = priv->content, i = 0; list != NULL; list = list->next, i++)
+  if (priv->is_sliding)
     {
-      ToolbarContent *content = list->data;
-
-      toolbar_content_set_goal_allocation (content, &(allocations[i]));
+      for (list = priv->content, i = 0; list != NULL; list = list->next, i++)
+	{
+	  ToolbarContent *content = list->data;
+	  
+	  toolbar_content_set_goal_allocation (content, &(allocations[i]));
+	}
     }
   
   for (list = priv->content, i = 0; list != NULL; list = list->next, ++i)
@@ -1474,7 +1503,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       
       if (new_states[i] != NORMAL)
 	{
-	  toolbar_content_set_child_visible (content, FALSE);
+	  toolbar_content_set_child_visible (content, toolbar, FALSE);
 	}
       else
 	{
@@ -1503,11 +1532,11 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 
 	  if (alloc.width == 0 || alloc.height == 0)
 	    {
-	      toolbar_content_set_child_visible (content, FALSE);
+	      toolbar_content_set_child_visible (content, toolbar, FALSE);
 	    }
 	  else
 	    {
-	      toolbar_content_set_child_visible (content, TRUE);
+	      toolbar_content_set_child_visible (content, toolbar, TRUE);
 	      toolbar_content_size_allocate (content, &alloc);
 	    }
 	}
@@ -2206,7 +2235,7 @@ gtk_toolbar_reconfigured (GtkToolbar *toolbar)
       ToolbarContent *content = list->data;
       GList *next = list->next;
 
-      toolbar_content_toolbar_reconfigured (content);
+      toolbar_content_toolbar_reconfigured (content, toolbar);
       
       list = next;
     }
@@ -2530,8 +2559,6 @@ gtk_toolbar_remove_content (GtkToolbar  *toolbar,
 
       toolbar_child = g_list_nth_data (toolbar->children, nth_child);
       toolbar->children = g_list_remove (toolbar->children, toolbar_child);
-
-      g_free (toolbar_child);
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (toolbar));
@@ -3463,6 +3490,44 @@ _gtk_toolbar_elide_underscores (const gchar *original)
   return result;
 }
 
+static void
+set_child_packing_and_visibility(GtkToolbar      *toolbar,
+                                 GtkToolbarChild *child)
+{
+  GtkWidget *box;
+  gboolean   expand;
+
+  box = gtk_bin_get_child (GTK_BIN (child->widget));
+
+  g_return_if_fail (GTK_IS_BOX (box));
+
+  if (child->label)
+    {
+      expand = (toolbar->style != GTK_TOOLBAR_BOTH);
+
+      gtk_box_set_child_packing (GTK_BOX (box), child->label,
+                                 expand, expand, 0, GTK_PACK_END);
+
+      if (toolbar->style != GTK_TOOLBAR_ICONS)
+        gtk_widget_show (child->label);
+      else
+        gtk_widget_hide (child->label);
+    }
+
+  if (child->icon)
+    {
+      expand = (toolbar->style != GTK_TOOLBAR_BOTH_HORIZ);
+
+      gtk_box_set_child_packing (GTK_BOX (box), child->icon,
+                                 expand, expand, 0, GTK_PACK_END);
+
+      if (toolbar->style != GTK_TOOLBAR_TEXT)
+        gtk_widget_show (child->icon);
+      else
+        gtk_widget_hide (child->icon);
+    }
+}
+
 static GtkWidget *
 gtk_toolbar_internal_insert_element (GtkToolbar          *toolbar,
 				     GtkToolbarChildType  type,
@@ -3477,19 +3542,32 @@ gtk_toolbar_internal_insert_element (GtkToolbar          *toolbar,
 				     gboolean             use_stock)
 {
   GtkToolbarChild *child;
-  GtkToolItem *item = NULL;
-  
+  GtkWidget *box;
+  ToolbarContent *content;
+  GtkToolbarPrivate *priv;
+  GtkToolbarChildSpace *space_child = NULL;
+  char *free_me = NULL;
+
   g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), NULL);
-  
-  if (!gtk_toolbar_check_old_api (toolbar))
-    return NULL;
-  
   if (type == GTK_TOOLBAR_CHILD_WIDGET)
     g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   else if (type != GTK_TOOLBAR_CHILD_RADIOBUTTON)
     g_return_val_if_fail (widget == NULL, NULL);
 
-  child = g_new (GtkToolbarChild, 1);
+  if (!gtk_toolbar_check_old_api (toolbar))
+    return NULL;
+  
+  priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+  
+  if (type == GTK_TOOLBAR_CHILD_SPACE)
+    {
+      space_child = g_new (GtkToolbarChildSpace, 1);
+      child = (GtkToolbarChild *)space_child;
+    }
+  else
+    {
+      child = g_new (GtkToolbarChild, 1);
+    }
 
   child->type = type;
   child->icon = NULL;
@@ -3498,94 +3576,137 @@ gtk_toolbar_internal_insert_element (GtkToolbar          *toolbar,
   switch (type)
     {
     case GTK_TOOLBAR_CHILD_SPACE:
-      item = gtk_separator_tool_item_new ();
       child->widget = NULL;
+      space_child->allocation.x = 0;
+      space_child->allocation.y = 0;
+      space_child->allocation.width = 0;
+      space_child->allocation.height = 0;
       break;
 
     case GTK_TOOLBAR_CHILD_WIDGET:
-      item = gtk_tool_item_new ();
       child->widget = widget;
-      gtk_container_add (GTK_CONTAINER (item), child->widget);
       break;
+
+#if 0
+      GtkStockItem item;
+      GtkWidget *image = NULL;
+      const gchar *label;
+      gchar *label_no_mnemonic;
+      GtkWidget *retval;
+      
+      if (gtk_stock_lookup (stock_id, &item))
+	{
+	  image = gtk_image_new_from_stock (text, toolbar->icon_size);
+	  label = item.label;
+	}
+      else
+	label = stock_id;
+      
+      label_no_mnemonic = elide_underscores (label);
+      
+      retval =  gtk_toolbar_internal_insert_item (toolbar,
+						  label_no_mnemonic,
+						  tooltip_text,
+						  tooltip_private_text,
+						  image,
+						  callback,
+						  user_data,
+						  position);
+      
+      g_free (label_no_mnemonic);
+      
+      return retval;
+#endif
 
     case GTK_TOOLBAR_CHILD_BUTTON:
-      item = gtk_tool_button_new (NULL, NULL);
-      child->widget = _gtk_tool_button_get_button (GTK_TOOL_BUTTON (item));
-      break;
-      
     case GTK_TOOLBAR_CHILD_TOGGLEBUTTON:
-      item = gtk_toggle_tool_button_new ();
-      child->widget = _gtk_tool_button_get_button (GTK_TOOL_BUTTON (item));
-      break;
-
     case GTK_TOOLBAR_CHILD_RADIOBUTTON:
-      item = gtk_radio_tool_button_new (widget
-					? gtk_radio_button_get_group (GTK_RADIO_BUTTON (widget))
-					: NULL);
-      child->widget = _gtk_tool_button_get_button (GTK_TOOL_BUTTON (item));
-      break;
-    }
+      if (type == GTK_TOOLBAR_CHILD_BUTTON)
+	{
+	  child->widget = gtk_button_new ();
+	  gtk_button_set_relief (GTK_BUTTON (child->widget), get_button_relief (toolbar));
+	}
+      else if (type == GTK_TOOLBAR_CHILD_TOGGLEBUTTON)
+	{
+	  child->widget = gtk_toggle_button_new ();
+	  gtk_button_set_relief (GTK_BUTTON (child->widget), get_button_relief (toolbar));
+	  gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (child->widget),
+				      FALSE);
+	}
+      else
+	{
+	  child->widget = gtk_radio_button_new (widget
+						? gtk_radio_button_get_group (GTK_RADIO_BUTTON (widget))
+						: NULL);
+	  gtk_button_set_relief (GTK_BUTTON (child->widget), get_button_relief (toolbar));
+	  gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (child->widget), FALSE);
+	}
 
-  /*
-   * When we are using the old API, consider all items "is_important". That
-   * way BOTH_HORIZ will continue to show both icon and label in old API mode
-   */
-  gtk_tool_item_set_is_important (item, TRUE);
+      GTK_WIDGET_UNSET_FLAGS (child->widget, GTK_CAN_FOCUS);
 
-  gtk_widget_show (GTK_WIDGET (item));
-  
-  if (type == GTK_TOOLBAR_CHILD_BUTTON ||
-      type == GTK_TOOLBAR_CHILD_RADIOBUTTON ||
-      type == GTK_TOOLBAR_CHILD_TOGGLEBUTTON)
-    {
+      if (callback)
+	g_signal_connect (child->widget, "clicked",
+			  callback, user_data);
+
+      if (toolbar->style == GTK_TOOLBAR_BOTH_HORIZ)
+	box = gtk_hbox_new (FALSE, 0);
+      else
+	box = gtk_vbox_new (FALSE, 0);
+      gtk_container_add (GTK_CONTAINER (child->widget), box);
+      gtk_widget_show (box);
+
+      if (text && use_stock)
+	{
+	  GtkStockItem stock_item;
+	  gtk_stock_lookup (text, &stock_item);
+
+	  if (!icon)
+	    icon = gtk_image_new_from_stock (text, toolbar->icon_size);
+
+	  text = free_me = _gtk_toolbar_elide_underscores (stock_item.label);
+	}
+      
       if (text)
 	{
-	  if (use_stock)
-	    {
-	      GtkStockItem stock_item;
-	      gchar *label_text;
-
-	      gtk_tool_button_set_stock_id (GTK_TOOL_BUTTON (item), text);
-
-	      gtk_stock_lookup (text, &stock_item);
-	      label_text = _gtk_toolbar_elide_underscores (stock_item.label);
-	      child->label = GTK_WIDGET (gtk_label_new (label_text));
-	      g_free (label_text);
-	    }
-	  else
-	    {
-	      child->label = gtk_label_new (text);
-	    }
-	  gtk_tool_button_set_label_widget (GTK_TOOL_BUTTON (item), child->label);
-	  gtk_widget_show (child->label);
+	  child->label = gtk_label_new (text);
+	  
+	  gtk_container_add (GTK_CONTAINER (box), child->label);
 	}
 
       if (icon)
 	{
-	  child->icon = icon;
-	  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (item), icon);
-
-	  /* Applications depend on the toolbar showing the widget for them */
-	  gtk_widget_show (GTK_WIDGET (icon));
+	  child->icon = GTK_WIDGET (icon);
+          gtk_container_add (GTK_CONTAINER (box), child->icon);
 	}
 
-      /*
-       * We need to connect to the button's clicked callback because some
-       * programs may rely on that the widget in the callback is a GtkButton
-       */
-      if (callback)
-	g_signal_connect (child->widget, "clicked",
-			  callback, user_data);
+      set_child_packing_and_visibility (toolbar, child);
+
+      /* Mark child as ours */
+      g_object_set_data (G_OBJECT (child->widget),
+                         "gtk-toolbar-is-child",
+                         GINT_TO_POINTER (TRUE));
+
+      gtk_widget_show (child->widget);
+      break;
+
+    default:
+      g_assert_not_reached ();
+      break;
     }
 
   if ((type != GTK_TOOLBAR_CHILD_SPACE) && tooltip_text)
-    gtk_tool_item_set_tooltip (item, toolbar->tooltips,
-			       tooltip_text, tooltip_private_text);
-  
+    gtk_tooltips_set_tip (toolbar->tooltips, child->widget,
+			  tooltip_text, tooltip_private_text);
+
   toolbar->children = g_list_insert (toolbar->children, child, position);
+  toolbar->num_children++;
 
-  gtk_toolbar_insert_tool_item (toolbar, item, position, FALSE);
+  content = toolbar_content_new_regular_widget (toolbar, child);
+  priv->content = g_list_insert (priv->content, content, position);
 
+  if (free_me)
+    g_free (free_me);
+  
   return child->widget;
 }
 
@@ -3620,7 +3741,6 @@ gtk_toolbar_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-
 /*
  * Implementation of ToolbarContent methods
  */
@@ -3642,24 +3762,81 @@ calculate_max_homogeneous_pixels (GtkWidget *widget)
 }
 
 static void
+gtk_toolbar_paint_space_line (GtkWidget       *widget,
+			      GdkRectangle    *area,
+			      GtkToolbarChild *child)
+{
+  GtkToolbar *toolbar;
+  GtkToolbarChildSpace *child_space;
+  gint space_size;
+  
+  g_return_if_fail (GTK_IS_TOOLBAR (widget));
+  g_return_if_fail (child != NULL);
+  g_return_if_fail (child->type == GTK_TOOLBAR_CHILD_SPACE);
+
+  toolbar = GTK_TOOLBAR (widget);
+
+  child_space = (GtkToolbarChildSpace *) child;
+  space_size = get_space_size (toolbar);
+  
+  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+    gtk_paint_vline (widget->style, widget->window,
+		     GTK_WIDGET_STATE (widget), area, widget,
+		     "toolbar",
+		     child_space->allocation.y + child_space->allocation.height *
+		     SPACE_LINE_START / SPACE_LINE_DIVISION,
+		     child_space->allocation.y + child_space->allocation.height *
+		     SPACE_LINE_END / SPACE_LINE_DIVISION,
+		     child_space->allocation.x +
+		     (space_size -
+		      widget->style->xthickness) / 2);
+  else
+    gtk_paint_hline (widget->style, widget->window,
+		     GTK_WIDGET_STATE (widget), area, widget,
+		     "toolbar",
+		     child_space->allocation.x + child_space->allocation.width *
+		     SPACE_LINE_START / SPACE_LINE_DIVISION,
+		     child_space->allocation.x + child_space->allocation.width *
+		     SPACE_LINE_END / SPACE_LINE_DIVISION,
+		     child_space->allocation.y +
+		     (space_size -
+		      widget->style->ythickness) / 2);
+}
+
+static void
 toolbar_content_expose (ToolbarContent *content,
-			GtkContainer *container,
+			GtkContainer   *container,
 			GdkEventExpose *expose)
 {
+  GtkToolbar *toolbar = GTK_TOOLBAR (container);
+  GtkToolbarChild *child;
+  GtkWidget *widget = NULL; /* quiet gcc */
+  
   switch (content->type)
     {
     case TOOL_ITEM:
       if (!content->u.tool_item.is_placeholder)
-	gtk_container_propagate_expose (container,
-					GTK_WIDGET (content->u.tool_item.item),
-					expose);
+	widget = GTK_WIDGET (content->u.tool_item.item);
       break;
 
     case REGULAR_WIDGET:
-      /* FIXME */
-      g_assert_not_reached ();
+      child = content->u.regular_widget.child;
+      
+      if (child->type == GTK_TOOLBAR_CHILD_SPACE)
+	{
+	  if (get_space_style (toolbar) == GTK_TOOLBAR_SPACE_LINE &&
+	      ((GtkToolbarChildSpace *)child)->child_visible)
+	    {
+	      gtk_toolbar_paint_space_line (GTK_WIDGET (toolbar), &expose->area, child);
+	    }
+	  return;
+	}
+
+      widget = child->widget;
       break;
     }
+
+  gtk_container_propagate_expose (container, widget, expose);
 }
 
 static gboolean
@@ -3692,33 +3869,24 @@ toolbar_content_visible (ToolbarContent *content,
       break;
 
     case REGULAR_WIDGET:
-#if 0
-      /* FIXME */
-      
-      /* With the old toolbar you could hide a button by calling
-       * gtk_widget_hide() on it. This doesn't work with the new API
-       * because the GtkToolItem will not be hidden.
-       */
-      if (priv->api_mode == OLD_API)
-	{
-	  GtkWidget *bin_child = GTK_BIN (item)->child;
-	  
-	  if (bin_child && !GTK_WIDGET_VISIBLE (bin_child))
-	    return FALSE;
-	}
-#endif
-	    
-      g_assert_not_reached ();
+      if (content->u.regular_widget.child->type != GTK_TOOLBAR_CHILD_SPACE)
+	return GTK_WIDGET_VISIBLE (content->u.regular_widget.child->widget);
+      else
+	return TRUE;
       break;
     }
 
+  g_assert_not_reached ();
   return FALSE;
 }
 
 static void
 toolbar_content_size_request (ToolbarContent *content,
+			      GtkToolbar     *toolbar,
 			      GtkRequisition *requisition)
 {
+  gint space_size;
+  
   switch (content->type)
     {
     case TOOL_ITEM:
@@ -3727,8 +3895,27 @@ toolbar_content_size_request (ToolbarContent *content,
       break;
 
     case REGULAR_WIDGET:
-      /* FIXME */
-      g_assert_not_reached ();
+      space_size = get_space_size (toolbar);
+      
+      if (content->u.regular_widget.child->type != GTK_TOOLBAR_CHILD_SPACE)
+	{
+	  gtk_widget_size_request (content->u.regular_widget.child->widget,
+				   requisition);
+	}
+      else
+	{
+	  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+	    {
+	      requisition->width = space_size;
+	      requisition->height = 0;
+	    }
+	  else
+	    {
+	      requisition->height = space_size;
+	      requisition->width = 0;
+	    }
+	}
+
       break;
     }
 }
@@ -3737,7 +3924,7 @@ static gboolean
 toolbar_content_is_homogeneous (ToolbarContent *content,
 				GtkToolbar  *toolbar)
 {
-  gboolean result = FALSE; /* quiet gcc */
+  gboolean result = FALSE;	/* quiet gcc */
   GtkRequisition requisition;
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
   
@@ -3747,7 +3934,7 @@ toolbar_content_is_homogeneous (ToolbarContent *content,
 	calculate_max_homogeneous_pixels (GTK_WIDGET (toolbar));
     }
 
-  toolbar_content_size_request (content, &requisition);
+  toolbar_content_size_request (content, toolbar, &requisition);
   
   if (requisition.width > priv->max_homogeneous_pixels)
     return FALSE;
@@ -3767,31 +3954,20 @@ toolbar_content_is_homogeneous (ToolbarContent *content,
       break;
       
     case REGULAR_WIDGET:
-      /* FIXME -- set result == TRUE iff the child is a button */
-      g_assert_not_reached ();
-      result = TRUE;
+      if (content->u.regular_widget.child->type == GTK_TOOLBAR_CHILD_BUTTON ||
+	  content->u.regular_widget.child->type == GTK_TOOLBAR_CHILD_RADIOBUTTON ||
+	  content->u.regular_widget.child->type == GTK_TOOLBAR_CHILD_TOGGLEBUTTON)
+	{
+	  result = TRUE;
+	}
+      else
+	{
+	  result = FALSE;
+	}
       break;
     }
   
   return result;
-}
-
-static void
-toolbar_content_get_child_requisition (ToolbarContent *content,
-				       GtkRequisition *requisition)
-{
-  switch (content->type)
-    {
-    case TOOL_ITEM:
-      gtk_widget_get_child_requisition (GTK_WIDGET (content->u.tool_item.item),
-					requisition);
-      break;
-
-    case REGULAR_WIDGET:
-      /* FIXME */
-      g_assert_not_reached ();
-      break;
-    }
 }
 
 static gboolean
@@ -3828,8 +4004,17 @@ toolbar_content_child_visible (ToolbarContent *content)
       break;
 
     case REGULAR_WIDGET:
-      g_assert_not_reached ();
-      return TRUE;
+      if (content->u.regular_widget.child->type != GTK_TOOLBAR_CHILD_SPACE)
+	{
+	  return GTK_WIDGET_CHILD_VISIBLE (content->u.regular_widget.child->widget);
+	}
+      else
+	{
+	  GtkToolbarChildSpace *child =
+	    (GtkToolbarChildSpace *)content->u.regular_widget.child;
+	  
+	  return child->child_visible;
+	}
       break;
     }
 
@@ -3847,8 +4032,8 @@ toolbar_content_get_goal_allocation (ToolbarContent *content,
       break;
 
     case REGULAR_WIDGET:
-      /* FIXME (actually g_assert_not_reached() is probably
-       * right here. Need to be sure though.
+      /* Goal allocations are only relevant when we are
+       * using the new API, so we should never get here
        */
       g_assert_not_reached ();
       break;
@@ -3859,6 +4044,8 @@ static void
 toolbar_content_get_allocation (ToolbarContent *content,
 				GtkAllocation *allocation)
 {
+  GtkToolbarChild *child;
+  
   switch (content->type)
     {
     case TOOL_ITEM:
@@ -3866,8 +4053,18 @@ toolbar_content_get_allocation (ToolbarContent *content,
       break;
 
     case REGULAR_WIDGET:
-      /* FIXME */
-      g_assert_not_reached ();
+      child = content->u.regular_widget.child;
+
+      if (child->type == GTK_TOOLBAR_CHILD_SPACE)
+	{
+	  GtkToolbarChildSpace *space_child = (GtkToolbarChildSpace *)child;
+
+	  *allocation = space_child->allocation;
+	}
+      else
+	{
+	  *allocation = child->widget->allocation;
+	}
       break;
     }
 }
@@ -3883,7 +4080,7 @@ toolbar_content_set_start_allocation (ToolbarContent *content,
       break;
 
     case REGULAR_WIDGET:
-      /* FIXME - (assert_not_reached() may actually be right) */
+      /* start_allocation is only relevant when using the new API */
       g_assert_not_reached ();
       break;
     }
@@ -3910,7 +4107,7 @@ toolbar_content_set_goal_allocation (ToolbarContent *content,
       break;
 
     case REGULAR_WIDGET:
-      /* FIXME - (assert_not_reached() may actually be right) */
+      /* Only relevant when using new API */
       g_assert_not_reached ();
       break;
     }
@@ -3918,8 +4115,11 @@ toolbar_content_set_goal_allocation (ToolbarContent *content,
 
 static void
 toolbar_content_set_child_visible (ToolbarContent *content,
-				   gboolean visible)
+				   GtkToolbar     *toolbar,
+				   gboolean        visible)
 {
+  GtkToolbarChild *child;
+  
   switch (content->type)
     {
     case TOOL_ITEM:
@@ -3928,8 +4128,19 @@ toolbar_content_set_child_visible (ToolbarContent *content,
       break;
 
     case REGULAR_WIDGET:
-      /* FIXME */
-      g_assert_not_reached ();
+      child = content->u.regular_widget.child;
+
+      if (child->type != GTK_TOOLBAR_CHILD_SPACE)
+	{
+	  gtk_widget_set_child_visible (child->widget, visible);
+	}
+      else
+	{
+	  GtkToolbarChildSpace *space = (GtkToolbarChildSpace *)child;
+
+	  space->child_visible = visible;
+	  gtk_widget_queue_draw (GTK_WIDGET (toolbar));
+	}
       break;
     }
 }
@@ -3945,18 +4156,18 @@ toolbar_content_get_start_allocation (ToolbarContent *content,
       break;
 
     case REGULAR_WIDGET:
-      /* FIXME - (assert_not_reached() may actually be right) */
+      /* Only relevant for new API */
       g_assert_not_reached ();
       break;
     }
 }
 
-/* ----------------- */
-
 static void
 toolbar_content_size_allocate (ToolbarContent *content,
 			       GtkAllocation  *allocation)
 {
+  GtkToolbarChild *child;
+  
   switch (content->type)
     {
     case TOOL_ITEM:
@@ -3965,8 +4176,17 @@ toolbar_content_size_allocate (ToolbarContent *content,
       break;
 
     case REGULAR_WIDGET:
-      /* FIXME */
-      g_assert_not_reached ();
+      child = content->u.regular_widget.child;
+      if (child->type != GTK_TOOLBAR_CHILD_SPACE)
+	{
+	  gtk_widget_size_allocate (child->widget, allocation);
+	}
+      else
+	{
+	  GtkToolbarChildSpace *space = (GtkToolbarChildSpace *)child;
+
+	  space->allocation = *allocation;
+	}
       break;
     }
 }
@@ -3981,6 +4201,8 @@ toolbar_content_set_state (ToolbarContent *content,
 static GtkWidget *
 toolbar_content_get_widget (ToolbarContent *content)
 {
+  GtkToolbarChild *child;
+  
   switch (content->type)
     {
     case TOOL_ITEM:
@@ -3988,8 +4210,11 @@ toolbar_content_get_widget (ToolbarContent *content)
       break;
 
     case REGULAR_WIDGET:
-      /* FIXME */
-      g_assert_not_reached ();
+      child = content->u.regular_widget.child;
+      if (child->type != GTK_TOOLBAR_CHILD_SPACE)
+	return child->widget;
+      else
+	return NULL;
       break;
     }
 
@@ -4007,7 +4232,7 @@ toolbar_content_set_disappearing (ToolbarContent *content,
       break;
 
     case REGULAR_WIDGET:
-      /* FIXME - (assert_not_reached() may actually be right) */
+      /* Only relevant for new API */
       g_assert_not_reached ();
       break;
     }
@@ -4026,14 +4251,103 @@ toolbar_content_set_size_request (ToolbarContent *content,
       break;
 
     case REGULAR_WIDGET:
-      /* FIXME */
+      /* Setting size requests only happens with sliding,
+       * so not relevant here
+       */
       g_assert_not_reached ();
       break;
     }
 }
 
 static void
-toolbar_content_toolbar_reconfigured (ToolbarContent *content)
+toolbar_child_reconfigure (GtkToolbar      *toolbar,
+			   GtkToolbarChild *child)
+{
+  GtkWidget *box;
+  GtkImage *image;
+  GtkToolbarStyle style;
+  GtkIconSize icon_size;
+  GtkReliefStyle relief;
+  gchar *stock_id;
+
+  style = gtk_toolbar_get_style (toolbar);
+  icon_size = gtk_toolbar_get_icon_size (toolbar);
+  relief = gtk_toolbar_get_relief_style (toolbar);
+  
+  /* style */
+  if (child->type == GTK_TOOLBAR_CHILD_BUTTON ||
+      child->type == GTK_TOOLBAR_CHILD_RADIOBUTTON ||
+      child->type == GTK_TOOLBAR_CHILD_TOGGLEBUTTON)
+    {
+      box = gtk_bin_get_child (GTK_BIN (child->widget));
+      
+      if (style == GTK_TOOLBAR_BOTH && GTK_IS_HBOX (box))
+	{
+	  GtkWidget *vbox;
+	  
+	  vbox = gtk_vbox_new (FALSE, 0);
+	  
+	  if (child->label)
+	    gtk_widget_reparent (child->label, vbox);
+	  if (child->icon)
+	    gtk_widget_reparent (child->icon, vbox);
+	  
+	  gtk_widget_destroy (box);
+	  gtk_container_add (GTK_CONTAINER (child->widget), vbox);
+	  
+	  gtk_widget_show (vbox);
+	}
+      else if (style == GTK_TOOLBAR_BOTH_HORIZ && GTK_IS_VBOX (box))
+	{
+	  GtkWidget *hbox;
+	  
+	  hbox = gtk_hbox_new (FALSE, 0);
+	  
+	  if (child->label)
+	    gtk_widget_reparent (child->label, hbox);
+	  if (child->icon)
+	    gtk_widget_reparent (child->icon, hbox);
+	  
+	  gtk_widget_destroy (box);
+	  gtk_container_add (GTK_CONTAINER (child->widget), hbox);
+	  
+	  gtk_widget_show (hbox);
+	}
+      
+      set_child_packing_and_visibility (toolbar, child);
+    }
+
+  /* icon size */
+  
+  if ((child->type == GTK_TOOLBAR_CHILD_BUTTON ||
+       child->type == GTK_TOOLBAR_CHILD_TOGGLEBUTTON ||
+       child->type == GTK_TOOLBAR_CHILD_RADIOBUTTON) &&
+      GTK_IS_IMAGE (child->icon))
+    {
+      image = GTK_IMAGE (child->icon);
+      if (gtk_image_get_storage_type (image) == GTK_IMAGE_STOCK)
+	{
+	  gtk_image_get_stock (image, &stock_id, NULL);
+	  stock_id = g_strdup (stock_id);
+	  gtk_image_set_from_stock (image,
+				    stock_id,
+				    icon_size);
+	  g_free (stock_id);
+	}
+    }
+
+  /* relief */
+  if (child->type == GTK_TOOLBAR_CHILD_BUTTON ||
+      child->type == GTK_TOOLBAR_CHILD_RADIOBUTTON ||
+      child->type == GTK_TOOLBAR_CHILD_TOGGLEBUTTON)
+    {
+      gtk_button_set_relief (GTK_BUTTON (child->widget), relief);
+    }
+}
+
+static void
+toolbar_content_toolbar_reconfigured (ToolbarContent *content,
+				      GtkToolbar *toolbar)
 {
   switch (content->type)
     {
@@ -4042,8 +4356,7 @@ toolbar_content_toolbar_reconfigured (ToolbarContent *content)
       break;
 
     case REGULAR_WIDGET:
-      /* FIXME - shuffle */
-      g_assert_not_reached ();
+      toolbar_child_reconfigure (toolbar, content->u.regular_widget.child);
       break;
     }
 }
@@ -4054,8 +4367,7 @@ toolbar_content_retrieve_menu_item (ToolbarContent *content)
   if (content->type == TOOL_ITEM)
     return gtk_tool_item_retrieve_proxy_menu_item (content->u.tool_item.item);
 
-  /* FIXME - we may actually be able to do something meaningful here */
-  g_assert_not_reached ();
+  /* FIXME - we might actually be able to do something meaningful here */
   return NULL; 
 }
 
@@ -4078,9 +4390,36 @@ toolbar_content_new_tool_item (GtkToolbar *toolbar,
   return content;
 }
 
+static ToolbarContent *
+toolbar_content_new_regular_widget (GtkToolbar      *toolbar,
+				    GtkToolbarChild *child)
+{
+  ToolbarContent *content;
+
+  content = g_new0 (ToolbarContent, 1);
+
+  content->type = REGULAR_WIDGET;
+  content->state = NOT_ALLOCATED;
+  content->u.regular_widget.child = child;
+
+  if (child->type != GTK_TOOLBAR_CHILD_SPACE)
+    {
+      gtk_widget_set_parent (child->widget, GTK_WIDGET (toolbar));
+    }
+  else
+    {
+      ((GtkToolbarChildSpace *)child)->child_visible = TRUE;
+      gtk_widget_queue_resize (GTK_WIDGET (toolbar));
+    }
+  
+  return content;
+}
+
 static void
 toolbar_content_destroy (ToolbarContent *content)
 {
+  GtkToolbarChild *child;
+  
   switch (content->type)
     {
     case TOOL_ITEM:
@@ -4088,8 +4427,17 @@ toolbar_content_destroy (ToolbarContent *content)
       break;
 
     case REGULAR_WIDGET:
-      /* FIXME */
-      g_assert_not_reached ();
+      child = content->u.regular_widget.child;
+
+      if (child->type != GTK_TOOLBAR_CHILD_SPACE)
+	{
+	  g_object_ref (child->widget);
+	  gtk_widget_unparent (child->widget);
+	  gtk_widget_destroy (child->widget);
+	  g_object_unref (child->widget);
+	}
+
+      g_free (child);
       break;
     }
 
@@ -4099,6 +4447,8 @@ toolbar_content_destroy (ToolbarContent *content)
 static gboolean
 toolbar_content_is_separator (ToolbarContent *content)
 {
+  GtkToolbarChild *child;
+  
   switch (content->type)
     {
     case TOOL_ITEM:
@@ -4106,10 +4456,35 @@ toolbar_content_is_separator (ToolbarContent *content)
       break;
 
     case REGULAR_WIDGET:
-      /* FIXME */
-      g_assert_not_reached ();
+      child = content->u.regular_widget.child;
+      return (child->type == GTK_TOOLBAR_CHILD_SPACE);
       break;
     }
   
   return FALSE;
+}
+
+static gint
+get_space_size (GtkToolbar *toolbar)
+{
+  gint space_size = DEFAULT_SPACE_SIZE;
+
+  gtk_widget_style_get (GTK_WIDGET (toolbar),
+                        "space_size", &space_size,
+                        NULL);
+
+  return space_size;
+}
+
+static GtkToolbarSpaceStyle
+get_space_style (GtkToolbar *toolbar)
+{
+  GtkToolbarSpaceStyle space_style = DEFAULT_SPACE_STYLE;
+
+  gtk_widget_style_get (GTK_WIDGET (toolbar),
+                        "space_style", &space_style,
+                        NULL);
+
+
+  return space_style;  
 }

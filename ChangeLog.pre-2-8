@@ -1,3 +1,10 @@
+Sat Jan 17 22:00:07 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c: 
+
+	Fix rest of #128678: Implement all the toolbar_content()
+	methods for the old API case.
+
 Sat Jan 17 16:53:08 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c: 
