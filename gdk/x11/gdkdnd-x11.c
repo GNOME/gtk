@@ -45,9 +45,15 @@ gdk_dnd_set_drag_shape(GdkWindow *default_pixmapwin,
 
   g_list_free(gdk_dnd.c->xids); gdk_dnd.c->xids = NULL;
   if(gdk_dnd.c->drag_pm_default)
-    gdk_window_unref(gdk_dnd.c->drag_pm_default);
+    {
+      gdk_window_hide(gdk_dnd.c->drag_pm_default);
+      gdk_window_unref(gdk_dnd.c->drag_pm_default);
+    }
   if(gdk_dnd.c->drag_pm_ok)
-    gdk_window_unref(gdk_dnd.c->drag_pm_ok);
+    {
+      gdk_window_hide(gdk_dnd.c->drag_pm_ok);
+      gdk_window_unref(gdk_dnd.c->drag_pm_ok);
+    }
 
   gdk_dnd.c->drag_pm_ok = NULL;
 
