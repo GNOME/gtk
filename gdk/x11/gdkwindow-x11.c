@@ -2770,7 +2770,7 @@ gdk_window_set_override_redirect (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (!GDK_WINDOW_DESTROYED (window))
     {
       attr.override_redirect = (override_redirect == FALSE)?False:True;
       XChangeWindowAttributes (GDK_WINDOW_XDISPLAY (window),

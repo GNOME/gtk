@@ -1,3 +1,8 @@
+Mon Mar 18 11:09:17 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_override_redirect): 
+	Fix backwards conditional. (#75019, Dan Winship.)
+
 Sun Mar 17 01:11:16 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_size_request): use
