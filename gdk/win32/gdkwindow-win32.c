@@ -594,9 +594,6 @@ gdk_window_new (GdkWindow     *parent,
       GDK_NOTE (MISC, g_print ("...GDK_INPUT_ONLY, system colormap"));
     }
 
-  gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
-				  (attributes->cursor) :
-				  NULL));
   switch (private->window_type)
     {
     case GDK_WINDOW_TOPLEVEL:
@@ -680,21 +677,6 @@ gdk_window_new (GdkWindow     *parent,
 
   mbtitle = g_locale_from_utf8 (title, -1, NULL, NULL, NULL);
   
-#ifdef WITHOUT_WM_CREATE
-  draw_impl->handle =
-    CreateWindowEx (dwExStyle,
-		    MAKEINTRESOURCE(klass),
-		    mbtitle,
-		    dwStyle,
-		    ((attributes_mask & GDK_WA_X) ?
-		     impl->position_info.x - offset_x : CW_USEDEFAULT),
-		    impl->position_info.y - offset_y, 
-		    window_width, window_height,
-		    hparent,
-		    NULL,
-		    _gdk_app_hmodule,
-		    NULL);
-#else
   {
   HWND hwndNew =
     CreateWindowEx (dwExStyle,
@@ -733,7 +715,6 @@ gdk_window_new (GdkWindow     *parent,
   }
   g_object_ref (window);
   gdk_win32_handle_table_insert (&GDK_WINDOW_HWND (window), window);
-#endif
 
   GDK_NOTE (MISC, g_print ("... \"%s\" %dx%d@+%d+%d %p = %p\n",
 			   mbtitle,
@@ -752,11 +733,6 @@ gdk_window_new (GdkWindow     *parent,
       g_object_unref (window);
       return NULL;
     }
-
-#ifdef WITHOUT_WM_CREATE
-  g_object_ref (window);
-  gdk_win32_handle_table_insert (&GDK_WINDOW_HWND (window), window);
-#endif
 
   gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
 				  (attributes->cursor) :

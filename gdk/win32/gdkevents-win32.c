@@ -2137,7 +2137,6 @@ gdk_event_translate (GdkDisplay *display,
 	  PostMessage (msg->hwnd, msg->message,
 		       msg->wParam, msg->lParam);
 	}
-#ifndef WITHOUT_WM_CREATE
       else if (msg->message == WM_CREATE)
 	{
 	  window = (UNALIGNED GdkWindow*) (((LPCREATESTRUCT) msg->lParam)->lpCreateParams);
@@ -2147,7 +2146,6 @@ gdk_event_translate (GdkDisplay *display,
 	{
 	  GDK_NOTE (EVENTS, g_print (" (no GdkWindow)"));
 	}
-#endif
       return FALSE;
     }
   
