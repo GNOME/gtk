@@ -1,3 +1,7 @@
+Sun Sep 26 02:06:43 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkpathbar.h (struct _GtkPathBar): add missing structures.
+
 2004-09-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkpathbar.c (gtk_path_bar_check_parent_path): Scroll

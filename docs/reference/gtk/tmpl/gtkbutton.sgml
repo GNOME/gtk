@@ -127,6 +127,11 @@ mouse cursor is.
 
 </para>
 
+<!-- ##### ARG GtkButton:displace-focus ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_button_new ##### -->
 <para>
 Creates a new #GtkButton widget. To add a child widget to the button,

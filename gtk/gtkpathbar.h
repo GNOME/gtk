@@ -54,11 +54,14 @@ struct _GtkPathBar
   GtkWidget *up_slider_button;
   GtkWidget *down_slider_button;
   guint settings_signal_id;
+  guint timer;
   gint icon_size;
   gint16 slider_width;
   gint16 spacing;
   gint16 button_offset;
   guint slider_visible : 1;
+  guint ignore_click : 1;
+  guint need_timer;
 };
 
 struct _GtkPathBarClass
