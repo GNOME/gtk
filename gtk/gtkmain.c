@@ -473,6 +473,7 @@ gtk_init_check (int	 *argc,
   bindtextdomain("gtk+", GTK_LOCALEDIR);
 #if defined(HAVE_BIND_TEXTDOMAIN_CODESET) && defined(GDK_USE_UTF8_MBS)
   bind_textdomain_codeset ("gtk+", "UTF-8");
+  bind_textdomain_codeset ("glib20", "UTF-8");
 #endif
 #endif  
 

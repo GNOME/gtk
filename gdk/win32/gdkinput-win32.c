@@ -577,8 +577,8 @@ gdk_input_init (void)
       gdk_input_vtable.enable_window      = gdk_input_win32_enable_window;
       gdk_input_vtable.disable_window     = gdk_input_win32_disable_window;
 
-      gdk_input_root_width = gdk_screen_width ();
-      gdk_input_root_height = gdk_screen_height ();
+      gdk_input_root_width = GetSystemMetrics (SM_CXSCREEN);
+      gdk_input_root_height = GetSystemMetrics (SM_CYSCREEN);
       gdk_input_ignore_core = FALSE;
 #else
       g_assert_not_reached ();

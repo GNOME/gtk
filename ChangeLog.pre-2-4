@@ -9,6 +9,13 @@
 	gdk_win32_draw_lines): Check for IS_WIN_NT before drawing end
 	pixel separately, as already done in another place.
 
+	* gdk/win32/gdkinput-win32.c (gdk_input_init): Use
+	GetSystemMetrics (SM_C[XY]SCREEN) instead of
+	gdk_screen_{width,height}().
+
+	* gtk/gtkmain.c (gtk_init_check): Call bind_textdomain_codeset()
+	also for glib20.
+
 	Fix for problem reported by Mark Raine: When Windows is set up not
 	to have any Explorer desktop (icons), dragging the mouse from a
 	popped-down menu onto the "root" window causes a crash.
