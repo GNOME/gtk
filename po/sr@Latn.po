@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-02-11 13:20+0100\n"
-"PO-Revision-Date: 2005-02-11 13:27+0100\n"
+"PO-Revision-Date: 2005-02-11 13:55+0100\n"
 "Last-Translator: Danilo Šegan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
 "MIME-Version: 1.0\n"
@@ -939,7 +939,7 @@ msgstr "calendar:week_start:1"
 #: gtk/gtkcellrendererprogress.c:236 gtk/gtkcellrendererprogress.c:294
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "oznaka trake sa napretkom|%d %%"
+msgstr "%d %%"
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
