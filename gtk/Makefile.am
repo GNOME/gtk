@@ -340,7 +340,7 @@ $(srcdir)/stamp-gtk.defs: @REBUILD@ makeenums.pl gtk.defs gtk-boxed.defs $(gtk_p
 	&& (cmp -s xgen-gdef gtk.defs || cp xgen-gdef gtk.defs) \
 	&& rm -f xgen-gdef \
 	&& echo timestamp > $(@F)
-$(srcdir)/gtkmarshal.c: stamp-gtkmarshal.h
+$(srcdir)/gtkmarshal.c: @REBUILD@ stamp-gtkmarshal.h
 $(srcdir)/gtkmarshal.c $(srcdir)/stamp-gtkmarshal.h: @REBUILD@ genmarshal.pl gtkmarshal.list gtkmarshal.h
 	cd $(srcdir) \
 	&& $(PERL) genmarshal.pl gtkmarshal.list xgen-gmh xgen-gmc \

@@ -1,3 +1,9 @@
+Thu Feb  1 02:26:18 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/Makefile.am ($(srcdir)/gtkmarshal.c): avoid regeneration
+	of gtkmarshal.c from stamp file dep, when not @REBUILD@,
+	fixes #11008.
+
 Wed Jan 31 19:23:01 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfontsel.c (gtk_font_selection_set_font_name): 
