@@ -1012,9 +1012,12 @@ gtk_calendar_main_button (GtkWidget	 *widget,
       if (!GTK_WIDGET_HAS_FOCUS (widget))
 	gtk_widget_grab_focus (widget);
 	  
-      private_data->in_drag = 1;
-      private_data->drag_start_x = x;
-      private_data->drag_start_y = y;
+      if (event->button == 1) 
+	{
+	  private_data->in_drag = 1;
+	  private_data->drag_start_x = x;
+	  private_data->drag_start_y = y;
+	}
 
       gtk_calendar_select_and_focus_day (calendar, day);
     }
