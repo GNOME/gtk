@@ -1,3 +1,8 @@
+2004-10-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/input/iminuktitut.c: Fix the spelling of Inuktitut
+	in several places.  (#154176, John Austin)
+
 2004-09-30  Paolo Borelli  <pborelli@katamail.com>
 
 	* tests/testellipsize.c: exit on close.

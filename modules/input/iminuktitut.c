@@ -56,7 +56,7 @@ inuktitut_register_type (GTypeModule *module)
   type_inuktitut_translit = 
     g_type_module_register_type (module,
 				 GTK_TYPE_IM_CONTEXT_SIMPLE,
-				 "GtkIMContextInukitut",
+				 "GtkIMContextInuktitut",
 				 &object_info, 0);
 }
 
@@ -124,7 +124,7 @@ inuktitut_init (GtkIMContextSimple *im_context)
 
 static const GtkIMContextInfo inuktitut_info = { 
   "inuktitut",		   /* ID */
-  N_("Inukitut (Transliterated)"),         /* Human readable name */
+  N_("Inuktitut (Transliterated)"),         /* Human readable name */
   GETTEXT_PACKAGE,	   /* Translation domain */
   GTK_LOCALEDIR,	   /* Dir for bindtextdomain (not strictly needed for "gtk+") */
   "iu"			   /* Languages for which this module is the default */
