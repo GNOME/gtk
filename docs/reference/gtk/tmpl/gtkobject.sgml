@@ -20,7 +20,7 @@ owned by the creator of the #GObject. (The owner of a reference is the code
 section that has the right to call g_object_unref() in order to remove that
 reference.)  A #GtkObject is created with a reference count of 1 also, but it
 isn't owned by anyone; calling g_object_unref() on the newly-created #GtkObject
-is incorrect. Instead, the initial reference count of a #GtkObject is "floating." 
+is incorrect. Instead, the initial reference count of a #GtkObject is "floating". 
 The floating reference can be removed by anyone at any time, by calling
 gtk_object_sink(). gtk_object_sink() does nothing if an object is already 
 sunk (has no floating reference).
@@ -93,27 +93,25 @@ explicitly call g_object_ref() yourself.  </para></listitem>
 
 <!-- ##### STRUCT GtkObject ##### -->
 <para>
-The object itself.  You should never use these members directly-
-instead you the accessing macros.
+The object itself.  You should never use these members directly -
+ use the accessing macros instead.
 </para>
 
 
 <!-- ##### MACRO GTK_OBJECT_TYPE ##### -->
 <para>
-Get the type of an object.
+Gets the type of an object.
 </para>
 
-@object: 
-<!-- # Unused Parameters # -->
-@obj: the object whose type we wish to get.
+@object: a #GtkObject.
 
 
 <!-- ##### MACRO GTK_OBJECT_TYPE_NAME ##### -->
 <para>
-
+Gets the name of an objects type.
 </para>
 
-@object: 
+@object: a #GtkObject.
 
 
 <!-- ##### ENUM GtkObjectFlags ##### -->
@@ -133,7 +131,7 @@ object.
 
 <!-- ##### MACRO GTK_OBJECT_FLAGS ##### -->
 <para>
-Get the #GtkObjectFlags for an object without directly
+Gets the #GtkObjectFlags for an object without directly
 accessing its members.
 </para>
 
@@ -151,7 +149,7 @@ See the overview documentation for #GtkObject.
 
 <!-- ##### MACRO GTK_OBJECT_CONNECTED ##### -->
 <para>
-Test whether a GtkObject has had a signal connected to it.
+Tests whether a #GtkObject has had a signal connected to it.
 </para>
 
 @obj: the object to examine.
@@ -159,7 +157,7 @@ Test whether a GtkObject has had a signal connected to it.
 
 <!-- ##### MACRO GTK_OBJECT_SET_FLAGS ##### -->
 <para>
-Turn on certain object flags.  (Private)
+Turns on certain object flags.  (Private)
 </para>
 
 @obj: the object to affect.
@@ -168,7 +166,7 @@ Turn on certain object flags.  (Private)
 
 <!-- ##### MACRO GTK_OBJECT_UNSET_FLAGS ##### -->
 <para>
-Turn off certain object flags.  (Private)
+Turns off certain object flags.  (Private)
 </para>
 
 @obj: the object to affect.
@@ -193,20 +191,18 @@ each child.  Used by #GtkContainer.
 
 <!-- ##### FUNCTION gtk_object_new ##### -->
 <para>
-Construct an object given its arguments, enumerated in the call to the
+Constructs an object given its arguments, enumerated in the call to the
 function. Deprecated in favor of g_object_new().
 </para>
 
 @type: the type identifying this object.  Returned by gtk_type_unique()
-although (for a properly-written object it should be accessible through
-#GTK_TYPE_FOO.)
-@first_property_name: 
+(although for a properly-written object it should be accessible through
+a #GTK_TYPE_FOO macro.)
+@first_property_name: name of the first property to set when constructing
+   the object.
 @Varargs: the first argument's value, followed by any number of
-name/argument-value pairs, terminated with NULL.
-@Returns: the new GtkObject.
-<!-- # Unused Parameters # -->
-@first_arg_name: name of the first argument to set when constructing
-the object.
+name/argument-value pairs, terminated with %NULL.
+@Returns: the new #GtkObject.
 
 
 <!-- ##### FUNCTION gtk_object_sink ##### -->
@@ -221,20 +217,19 @@ the top of the page.
 
 <!-- ##### FUNCTION gtk_object_ref ##### -->
 <para>
-Increase the reference count of the object, simply calls 
-g_object_ref() internally.
+Increases the reference count of the object.
 Deprecated in favor of g_object_ref().
 </para>
 
 @object: the object to reference.
-@Returns: the object which was referenced
+@Returns: @object.
 
 
 <!-- ##### FUNCTION gtk_object_unref ##### -->
 <para>
-Decrease the reference count of an object.  When its reference count drops to 0,
-the object is finalized (i.e. its memory is freed).  Deprecated in favor of
-g_object_unref(). Simply calls g_object_unref() internally.
+Decreases the reference count of an object.  When its reference count drops 
+to 0, the object is finalized (i.e. its memory is freed).  Deprecated in 
+favor of g_object_unref(). 
 </para>
 
 @object: the object to dereference.
@@ -281,22 +276,17 @@ reference holders to release their references, it does not free the object.
 
 <!-- ##### FUNCTION gtk_object_get ##### -->
 <para>
-Get properties of an object. Deprecated in favor of g_object_get().  It takes an
-object, then a list of name/return location pairs in a list, followed by NULL.
+Gets properties of an object. Deprecated in favor of g_object_get().  
 </para>
 
-@object: a #GtkObject
-@first_property_name: name of first property to get the value for
-@Varargs: list of name-return location pairs.
+@object: a #GtkObject.
+@first_property_name: name of first property to get the value for.
+@Varargs: %NULL-terminated list of name-return location pairs.
 
 
 <!-- ##### FUNCTION gtk_object_set ##### -->
 <para>
-Set properties on an object. Deprecated in favor of g_object_set().
-</para>
-<para>
-It takes an object, then a list of name/value pairs
-in a list, followed by NULL.
+Sets properties on an object. Deprecated in favor of g_object_set().
 </para>
 <para>
 <informalexample>
@@ -311,10 +301,10 @@ void set_box_properties(GtkBox* box)
 </informalexample>
 </para>
 
-@object: the object whose arguments should be set.
+@object: a #GtkObject.
 @first_property_name: name of the first property to set
 @Varargs: the value of the first argument, followed optionally
-by more name/value pairs, followed by NULL.
+by more name/value pairs, followed by %NULL.
 
 
 <!-- ##### FUNCTION gtk_object_set_data ##### -->
@@ -351,7 +341,7 @@ gtk_object_remove_data() or when the object is destroyed.
 <para>
 Deprecated in favor of setting object data to %NULL using g_object_set_data().
 Removes a specified datum from the object's data associations (the object_data).
-Subsequent calls to gtk_object_get_data() will return NULL.
+Subsequent calls to gtk_object_get_data() will return %NULL.
 </para>
 <para>
 If you specified a destroy handler with gtk_object_set_data_full(),
@@ -370,7 +360,7 @@ Get a named field from the object's table of associations (the object_data).
 
 @object: the object maintaining the associations.
 @key: name of the key for that association.
-@Returns: the data if found, or NULL if no such data exists.
+@Returns: the data if found, or %NULL if no such data exists.
 
 
 <!-- ##### FUNCTION gtk_object_remove_no_notify ##### -->
@@ -393,7 +383,7 @@ Therefore this only affects data set using gtk_object_set_data_full().
 <para>
 Deprecated in favor of g_object_set_data().
 For convenience, every object offers a generic user data
-pointer.  The function set it.
+pointer.  This function sets it.
 </para>
 <para>
 This function is equivalent to:
@@ -483,7 +473,7 @@ to get an id from a string.
 
 @object: object containing the associations.
 @data_id: quark of the key.
-@Returns: the data if found, or NULL if no such data exists.
+@Returns: the data if found, or %NULL if no such data exists.
 
 
 <!-- ##### FUNCTION gtk_object_remove_data_by_id ##### -->
@@ -494,7 +484,7 @@ a #GQuark instead of a string, so it is slightly faster.
 </para>
 <para>
 Remove a specified datum from the object's data associations.
-Subsequent calls to gtk_object_get_data() will return NULL.
+Subsequent calls to gtk_object_get_data() will return %NULL.
 </para>
 <para>
 Use gtk_object_data_try_key() and gtk_object_data_force_id()
@@ -517,9 +507,9 @@ to get an id from a string.
 </para>
 
 @object: object containing the associations.
-@key_id: 
+@key_id: quark of the key.
 <!-- # Unused Parameters # -->
-@data_id: quark of the key.
+@data_id: 
 
 
 <!-- ##### MACRO gtk_object_data_try_key ##### -->

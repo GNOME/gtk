@@ -2679,7 +2679,7 @@ gtk_rc_check_pixmap_dir (const gchar *dir, const gchar *pixmap_file)
  }
 
 /**
- * gtk_rc_context_find_pixmap_in_path:
+ * gtk_rc_find_pixmap_in_path:
  * @settings: a #GtkSettinsg
  * @scanner: Scanner used to get line number information for the
  *   warning message, or %NULL

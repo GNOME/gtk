@@ -16,17 +16,17 @@ Styles
 
 <!-- ##### MACRO GTK_STYLE_NUM_STYLECOLORS ##### -->
 <para>
-
+The number of colors used in a style.
 </para>
 
 
 
 <!-- ##### MACRO GTK_STYLE_ATTACHED ##### -->
 <para>
-
+Returns whether the styleis attached to a window.
 </para>
 
-@style: 
+@style: a #GtkStyle.
 
 
 <!-- ##### STRUCT GtkStyle ##### -->

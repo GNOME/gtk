@@ -642,6 +642,12 @@ gtk_style_duplicate (GtkStyle *style)
   return new_style;
 }
 
+/**
+ * gtk_style_new:
+ * @returns: a new #GtkStyle.
+ *
+ * Creates a new #GtkStyle.
+ **/
 GtkStyle*
 gtk_style_new (void)
 {
@@ -755,12 +761,25 @@ gtk_style_detach (GtkStyle *style)
     }
 }
 
+/**
+ * gtk_style_ref:
+ * @style: a #GtkStyle.
+ * @returns: @style.
+ *
+ * Deprecated equivalent of g_object_ref().
+ **/
 GtkStyle*
 gtk_style_ref (GtkStyle *style)
 {
   return (GtkStyle *) g_object_ref (G_OBJECT (style));
 }
 
+/**
+ * gtk_style_unref:
+ * @style: a #GtkStyle.
+ *
+ * Deprecated equivalent of g_object_unref().
+ **/
 void
 gtk_style_unref (GtkStyle *style)
 {
@@ -5041,12 +5060,25 @@ gtk_paint_resize_grip (GtkStyle      *style,
                                                  edge, x, y, width, height);
 }
 
+/**
+ * gtk_border_copy:
+ * @border: a #GtkBorder.
+ * @returns: a copy of @border.
+ *
+ * Copies a #GtkBorder structure.
+ **/
 GtkBorder *
 gtk_border_copy (const GtkBorder *border)
 {
   return (GtkBorder *)g_memdup (border, sizeof (GtkBorder));
 }
 
+/**
+ * gtk_border_free:
+ * @border: a #GtkBorder.
+ * 
+ * Frees a #GtkBorder structure.
+ **/
 void
 gtk_border_free (GtkBorder *border)
 {

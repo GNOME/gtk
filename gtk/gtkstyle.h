@@ -59,7 +59,7 @@ typedef gboolean (*GtkRcPropertyParser) (const GParamSpec *pspec,
 					 GValue           *property_value);
 
 /* We make this forward declaration here, since we pass
- * GtkWidgt's to the draw functions.
+ * GtkWidget's to the draw functions.
  */
 typedef struct _GtkWidget      GtkWidget;
 
@@ -851,7 +851,7 @@ const GValue* _gtk_style_peek_property_value (GtkStyle           *style,
 					      GtkRcPropertyParser parser);
 
 
-/* depprecated */
+/* deprecated */
 #ifndef GTK_DISABLE_DEPRECATED
 #define gtk_style_apply_default_pixmap(s,gw,st,a,x,y,w,h) gtk_style_apply_default_background (s,gw,1,st,a,x,y,w,h)
 void gtk_draw_string     (GtkStyle        *style,

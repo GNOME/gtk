@@ -1,3 +1,11 @@
+2001-12-07  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkstyle.h: Typo fixes.
+
+	* gtk/gtkstyle.c, gtk/gtktoolbar.c: Add docs.
+
+	* gtk/gtkrc.c (gtk_rc_find_pixmap_in_path): Fix docs.
+
 Fri Dec  7 16:05:22 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* modules/input/gtkimcontextxim.c: Display the XIM

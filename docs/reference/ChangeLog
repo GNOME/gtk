@@ -1,3 +1,8 @@
+2001-12-07  Matthias Clasen  <matthiasc@poet.de>
+	
+	* gtk/tmpl/gtktypeutils.sgml, gtk/tmpl/gtkobject.sgml,
+	gtk/tmpl/gtkstyle.sgml: Add docs.
+
 2001-12-06  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/tmpl/gtklabel.sgml: Remove redundant docs. (#66383)
