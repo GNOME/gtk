@@ -1383,7 +1383,7 @@ draw_box (GtkStyle      *style,
               /* Blank in classic Windows */
             }
         }
-      else
+      else if (widget && GTK_IS_SCROLLBAR(widget))
         {
           gboolean is_vertical = GTK_IS_VSCROLLBAR(widget);
 
@@ -1430,6 +1430,20 @@ draw_box (GtkStyle      *style,
               return;
             }
         }
+      else if (widget && GTK_IS_SCALE(widget))
+	{
+	  gboolean is_vertical = GTK_IS_VSCALE(widget);
+	  
+	  parent_class->draw_box (style, window, state_type, GTK_SHADOW_NONE, area,
+				  widget, detail, x, y, width, height);
+	  
+	  if(is_vertical)
+	    parent_class->draw_box(style, window, state_type, GTK_SHADOW_ETCHED_IN, area, NULL, NULL, (2 * x + width)/2, y, 1, height);
+	  else
+	    parent_class->draw_box(style, window, state_type, GTK_SHADOW_ETCHED_IN, area, NULL, NULL, x, (2 * y + height)/2, width, 1);
+	  
+	  return;
+	}
     }
   else if (detail && strcmp (detail, "optionmenu") == 0)
     {

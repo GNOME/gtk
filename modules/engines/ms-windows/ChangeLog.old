@@ -1,3 +1,7 @@
+2003-12-30  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Fix bug 852354 to my liking
+	
 2003-12-01  Dom Lachowicz <cinamod@hotmail.com>
 
 	* src/wimp_style.c: Fix coloration for the expander's +/- part. Was
