@@ -586,11 +586,13 @@ image_load (FILE *f)
 	PnmIOBuffer *inbuf;
 
 	/* pretend to be doing progressive loading */
-	context.updated_func = context.prepared_func = NULL;
+	context.updated_func = NULL;
+	context.prepared_func = NULL;
 	context.user_data = NULL;
 	context.inbuf.bytes_left = 0;
 	context.inbuf.next_byte  = NULL;
-	context.pixels = context.pixbuf = NULL;
+	context.pixels = NULL;
+	context.pixbuf = NULL;
 	context.got_header = context.did_prescan = FALSE;
 
 	inbuf = &context.inbuf;
@@ -693,7 +695,8 @@ image_begin_load (ModulePreparedNotifyFunc prepared_func,
 	context->prepared_func = prepared_func;
 	context->updated_func  = updated_func;
 	context->user_data = user_data;
-	context->pixbuf = context->pixels = NULL;
+	context->pixbuf = NULL;
+	context->pixels = NULL;
 	context->got_header = FALSE;
 	context->did_prescan = FALSE;
 

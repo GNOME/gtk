@@ -481,7 +481,7 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 			/* we're decompressing so feed jpeg lib scanlines */
 			guchar *lines[4];
 			guchar **lptr;
-			guchar *rowptr, *p;
+			guchar *rowptr;
 			gint   nlines, i;
 			gint   start_scanline;
 

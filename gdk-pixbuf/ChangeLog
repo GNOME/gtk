@@ -3,6 +3,12 @@
 	* src/gdk-pixbuf-io.c (gdk_pixbuf_new_from_xpm_data): Added
 	documentation.
 
+1999-11-09  Federico Mena Quintero  <federico@redhat.com>
+
+	* src/io-png.c: Fixed some incompatible pointer initializations.
+
+	* src/io-jpeg.c (image_load_increment): Remove unused variable.
+
 1999-11-09  Michael Fulbright  <drmike@redhat.com>
 
         * src/testpixbuf.c: Fixed it to use timeout to read from file

@@ -478,7 +478,7 @@ progressive_updated_callback(GdkPixbufLoader* loader, guint x, guint y, guint wi
 {
         GtkWidget** window_loc = data;
 
-/*	g_print ("progressive_updated_callback:\n\t%d\t%d\t%d\t%d\n", x, y, width, height); */
+/*  	g_print ("progressive_updated_callback:\n\t%d\t%d\t%d\t%d\n", x, y, width, height); */
 
         if (*window_loc != NULL)
                 gtk_widget_queue_draw_area(*window_loc,
