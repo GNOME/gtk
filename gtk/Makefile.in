@@ -90,7 +90,9 @@ libgtk_la_SOURCES = \
 	gtkbutton.c		\
 	gtkcheckbutton.c	\
 	gtkcheckmenuitem.c	\
+	gtkclist.c		\
 	gtkcolorsel.c		\
+	gtkcombobox.c		\
 	gtkcontainer.c		\
 	gtkcurve.c		\
 	gtkdata.c		\
@@ -103,7 +105,7 @@ libgtk_la_SOURCES = \
 	gtkframe.c		\
 	gtkgamma.c		\
 	gtkgc.c			\
-	gtkhandlebox.c          \
+	gtkhandlebox.c		\
 	gtkhbbox.c		\
 	gtkhbox.c		\
 	gtkhpaned.c		\
@@ -177,7 +179,9 @@ gtkinclude_HEADERS = \
 	gtkbutton.h		\
 	gtkcheckbutton.h	\
 	gtkcheckmenuitem.h	\
+	gtkclist.h		\
 	gtkcolorsel.h		\
+	gtkcombobox.h		\
 	gtkcontainer.h		\
 	gtkcurve.h		\
 	gtkdata.h		\
@@ -342,21 +346,22 @@ libgtk_la_LIBADD =
 libgtk_la_OBJECTS =  gtkaccelerator.lo gtkadjustment.lo \
 gtkaspectframe.lo gtkalignment.lo gtkarrow.lo gtkbin.lo gtkbbox.lo \
 gtkbox.lo gtkbutton.lo gtkcheckbutton.lo gtkcheckmenuitem.lo \
-gtkcolorsel.lo gtkcontainer.lo gtkcurve.lo gtkdata.lo gtkdialog.lo \
-gtkdrawingarea.lo gtkentry.lo gtkeventbox.lo gtkfilesel.lo gtkfixed.lo \
-gtkframe.lo gtkgamma.lo gtkgc.lo gtkhandlebox.lo gtkhbbox.lo gtkhbox.lo \
-gtkhpaned.lo gtkhruler.lo gtkhscale.lo gtkhscrollbar.lo \
-gtkhseparator.lo gtkimage.lo gtkinputdialog.lo gtkitem.lo gtklabel.lo \
-gtklist.lo gtklistitem.lo gtkmain.lo gtkmenu.lo gtkmenubar.lo \
-gtkmenufactory.lo gtkmenuitem.lo gtkmenushell.lo gtkmisc.lo \
-gtknotebook.lo gtkobject.lo gtkoptionmenu.lo gtkpaned.lo gtkpixmap.lo \
-gtkpreview.lo gtkprogressbar.lo gtkradiobutton.lo gtkradiomenuitem.lo \
-gtkrange.lo gtkrc.lo gtkruler.lo gtkscale.lo gtkscrollbar.lo \
-gtkscrolledwindow.lo gtkselection.lo gtkseparator.lo gtksignal.lo \
-gtkstyle.lo gtktable.lo gtktext.lo gtktogglebutton.lo gtktoolbar.lo \
-gtktooltips.lo gtktree.lo gtktreeitem.lo gtktypeutils.lo gtkvbbox.lo \
-gtkvbox.lo gtkviewport.lo gtkvpaned.lo gtkvruler.lo gtkvscale.lo \
-gtkvscrollbar.lo gtkvseparator.lo gtkwidget.lo gtkwindow.lo fnmatch.lo
+gtkclist.lo gtkcolorsel.lo gtkcombobox.lo gtkcontainer.lo gtkcurve.lo \
+gtkdata.lo gtkdialog.lo gtkdrawingarea.lo gtkentry.lo gtkeventbox.lo \
+gtkfilesel.lo gtkfixed.lo gtkframe.lo gtkgamma.lo gtkgc.lo \
+gtkhandlebox.lo gtkhbbox.lo gtkhbox.lo gtkhpaned.lo gtkhruler.lo \
+gtkhscale.lo gtkhscrollbar.lo gtkhseparator.lo gtkimage.lo \
+gtkinputdialog.lo gtkitem.lo gtklabel.lo gtklist.lo gtklistitem.lo \
+gtkmain.lo gtkmenu.lo gtkmenubar.lo gtkmenufactory.lo gtkmenuitem.lo \
+gtkmenushell.lo gtkmisc.lo gtknotebook.lo gtkobject.lo gtkoptionmenu.lo \
+gtkpaned.lo gtkpixmap.lo gtkpreview.lo gtkprogressbar.lo \
+gtkradiobutton.lo gtkradiomenuitem.lo gtkrange.lo gtkrc.lo gtkruler.lo \
+gtkscale.lo gtkscrollbar.lo gtkscrolledwindow.lo gtkselection.lo \
+gtkseparator.lo gtksignal.lo gtkstyle.lo gtktable.lo gtktext.lo \
+gtktogglebutton.lo gtktoolbar.lo gtktooltips.lo gtktree.lo \
+gtktreeitem.lo gtktypeutils.lo gtkvbbox.lo gtkvbox.lo gtkviewport.lo \
+gtkvpaned.lo gtkvruler.lo gtkvscale.lo gtkvscrollbar.lo \
+gtkvseparator.lo gtkwidget.lo gtkwindow.lo fnmatch.lo
 PROGRAMS =  $(noinst_PROGRAMS)
 
 testgtk_SOURCES = testgtk.c
@@ -391,15 +396,15 @@ DEP_FILES =  .deps/fnmatch.P .deps/gtkaccelerator.P \
 .deps/gtkadjustment.P .deps/gtkalignment.P .deps/gtkarrow.P \
 .deps/gtkaspectframe.P .deps/gtkbbox.P .deps/gtkbin.P .deps/gtkbox.P \
 .deps/gtkbutton.P .deps/gtkcheckbutton.P .deps/gtkcheckmenuitem.P \
-.deps/gtkcolorsel.P .deps/gtkcontainer.P .deps/gtkcurve.P \
-.deps/gtkdata.P .deps/gtkdialog.P .deps/gtkdrawingarea.P \
-.deps/gtkentry.P .deps/gtkeventbox.P .deps/gtkfilesel.P \
-.deps/gtkfixed.P .deps/gtkframe.P .deps/gtkgamma.P .deps/gtkgc.P \
-.deps/gtkhandlebox.P .deps/gtkhbbox.P .deps/gtkhbox.P .deps/gtkhpaned.P \
-.deps/gtkhruler.P .deps/gtkhscale.P .deps/gtkhscrollbar.P \
-.deps/gtkhseparator.P .deps/gtkimage.P .deps/gtkinputdialog.P \
-.deps/gtkitem.P .deps/gtklabel.P .deps/gtklist.P .deps/gtklistitem.P \
-.deps/gtkmain.P .deps/gtkmenu.P .deps/gtkmenubar.P \
+.deps/gtkclist.P .deps/gtkcolorsel.P .deps/gtkcombobox.P \
+.deps/gtkcontainer.P .deps/gtkcurve.P .deps/gtkdata.P .deps/gtkdialog.P \
+.deps/gtkdrawingarea.P .deps/gtkentry.P .deps/gtkeventbox.P \
+.deps/gtkfilesel.P .deps/gtkfixed.P .deps/gtkframe.P .deps/gtkgamma.P \
+.deps/gtkgc.P .deps/gtkhandlebox.P .deps/gtkhbbox.P .deps/gtkhbox.P \
+.deps/gtkhpaned.P .deps/gtkhruler.P .deps/gtkhscale.P \
+.deps/gtkhscrollbar.P .deps/gtkhseparator.P .deps/gtkimage.P \
+.deps/gtkinputdialog.P .deps/gtkitem.P .deps/gtklabel.P .deps/gtklist.P \
+.deps/gtklistitem.P .deps/gtkmain.P .deps/gtkmenu.P .deps/gtkmenubar.P \
 .deps/gtkmenufactory.P .deps/gtkmenuitem.P .deps/gtkmenushell.P \
 .deps/gtkmisc.P .deps/gtknotebook.P .deps/gtkobject.P \
 .deps/gtkoptionmenu.P .deps/gtkpaned.P .deps/gtkpixmap.P \

@@ -795,10 +795,8 @@ void
 create_handle_box ()
 {
   static GtkWidget* window = NULL;
-  GtkWidget* hbox;
-#if 0
-  GtkWidget* button;
-#endif
+  GtkWidget *hbox;
+  GtkWidget *toolbar;
 	
   if (!window)
   {
@@ -816,22 +814,10 @@ create_handle_box ()
     hbox = gtk_handle_box_new ();
     gtk_container_add (GTK_CONTAINER (window), hbox);
     gtk_widget_show (hbox);
-#if 0
-#if 0
-    button = gtk_toggle_button_new_with_label ("Let's try this");
-#else
-    button = gtk_label_new ("Let's try this");
-#endif
-    gtk_container_add (GTK_CONTAINER (hbox), button);
-    gtk_widget_set_usize(button, 250, 40);
-    gtk_widget_show (button);
-#else
-    {
-      GtkWidget *toolbar = make_toolbar (window);
-      gtk_container_add (GTK_CONTAINER (hbox), toolbar);
-      gtk_widget_show (toolbar);
-    }
-#endif
+
+    toolbar = make_toolbar (window);
+    gtk_container_add (GTK_CONTAINER (hbox), toolbar);
+    gtk_widget_show (toolbar);
   }
 
   if (!GTK_WIDGET_VISIBLE (window))

@@ -23,6 +23,7 @@
 #include "gtkhandlebox.h"
 #include "gtkmain.h"
 #include "gtksignal.h"
+#include "gtkwindow.h"
 
 
 #define DRAG_HANDLE_SIZE 10
@@ -48,14 +49,15 @@ static void gtk_handle_box_paint          (GtkWidget         *widget,
 					   GdkRectangle      *area);
 static void gtk_handle_box_draw           (GtkWidget         *widget,
 					   GdkRectangle      *area);
-static gint gtk_handle_box_delete         (GtkWidget         *widget,
-					   GdkEventAny       *event);
 static gint gtk_handle_box_expose         (GtkWidget         *widget,
 					   GdkEventExpose    *event);
 static gint gtk_handle_box_button_changed (GtkWidget         *widget,
 					   GdkEventButton    *event);
 static gint gtk_handle_box_motion         (GtkWidget         *widget,
 					   GdkEventMotion    *event);
+static gint gtk_handle_box_delete_float   (GtkWidget         *widget,
+					   GdkEvent          *event,
+					   gpointer           data);
 
 
 static GtkBinClass *parent_class;
@@ -105,7 +107,6 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   widget_class->size_request = gtk_handle_box_size_request;
   widget_class->size_allocate = gtk_handle_box_size_allocate;
   widget_class->draw = gtk_handle_box_draw;
-  widget_class->delete_event = gtk_handle_box_delete;
   widget_class->expose_event = gtk_handle_box_expose;
   widget_class->button_press_event = gtk_handle_box_button_changed;
   widget_class->button_release_event = gtk_handle_box_button_changed;
@@ -119,9 +120,9 @@ gtk_handle_box_init (GtkHandleBox *handle_box)
   GTK_WIDGET_SET_FLAGS (handle_box, GTK_BASIC); /* FIXME: are we really a basic widget? */
 
   handle_box->steady_window = NULL;
+  handle_box->float_window = NULL;
   handle_box->is_being_dragged = FALSE;
   handle_box->is_onroot = FALSE;
-  handle_box->real_parent = NULL;
   handle_box->fleur_cursor = gdk_cursor_new (GDK_FLEUR);
   handle_box->dragoff_x = 0;
   handle_box->dragoff_y = 0;
@@ -204,6 +205,19 @@ gtk_handle_box_realize (GtkWidget *widget)
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
+  /* FIXME: we need a property that would tell the window manager not
+   * to put decoration on this window.  This is not part of the ICCCM,
+   * so we'll have to define our own (a la KWM) and hack some window
+   * managers to support it.
+   */
+
+  hb->float_window = gtk_window_new (GTK_WINDOW_DIALOG);
+  gtk_window_set_policy (GTK_WINDOW (hb->float_window), FALSE, FALSE, FALSE);
+  gtk_container_border_width (GTK_CONTAINER (hb->float_window), 0);
+  gtk_signal_connect (GTK_OBJECT (hb->float_window), "delete_event",
+		      (GtkSignalFunc) gtk_handle_box_delete_float,
+		      hb);
+  
   attributes.x = widget->allocation.x;
   attributes.y = widget->allocation.y;
   attributes.width = widget->allocation.width;
@@ -256,6 +270,11 @@ gtk_handle_box_unrealize (GtkWidget *widget)
 
   hb->steady_window = NULL;
   widget->window = NULL;
+
+  /* FIXME: do we have to unref the float_window before destroying it? */
+
+  gtk_widget_destroy (hb->float_window);
+  hb->float_window = NULL;
 }
 
 static void
@@ -286,7 +305,7 @@ gtk_handle_box_size_request (GtkWidget      *widget,
   hb->real_requisition = *requisition;
   if (hb->is_onroot)
       requisition->height = GHOST_HEIGHT;
-  /* Should also set requisition->width to a small value? */
+  /* FIXME: Should also set requisition->width to a small value? */
 }
 
 static void
@@ -325,6 +344,9 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
 	}
       else
 	{
+	  gtk_widget_set_usize (hb->float_window,
+				hb->real_requisition.width,
+				hb->real_requisition.height);
 	  gdk_window_resize (widget->window,
 			     hb->real_requisition.width,
 			     hb->real_requisition.height);
@@ -462,29 +484,6 @@ gtk_handle_box_draw (GtkWidget    *widget,
 }
 
 static gint
-gtk_handle_box_delete (GtkWidget   *widget,
-		       GdkEventAny *event)
-{
-  GtkHandleBox *hb;
-  
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_HANDLE_BOX (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  hb = GTK_HANDLE_BOX (widget);
-
-  if (event->window == widget->window)
-    {
-      hb->is_onroot = FALSE;
-      
-      gdk_window_reparent (widget->window, hb->steady_window, 0, 0);
-      gtk_widget_queue_resize (widget);
-    }
-
-  return FALSE;
-}
-
-static gint
 gtk_handle_box_expose (GtkWidget      *widget,
 		       GdkEventExpose *event)
 {
@@ -578,6 +577,8 @@ gtk_handle_box_motion (GtkWidget      *widget,
 
 	      gdk_window_reparent (widget->window, hb->steady_window, 0, 0);
 
+	      gtk_widget_hide (hb->float_window);
+
 	      while (gdk_pointer_grab (widget->window,
 				       FALSE,
 				       GDK_BUTTON1_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
@@ -591,37 +592,19 @@ gtk_handle_box_motion (GtkWidget      *widget,
       else
 	{
 	  if (hb->is_onroot)
-	    gdk_window_move (widget->window, newx, newy);
+	    {
+	      gtk_widget_set_uposition (hb->float_window, newx, newy);
+	      gdk_window_raise (hb->float_window->window);
+	    }
 	  else
 	    {
 	      hb->is_onroot = TRUE;
 
 	      gdk_pointer_ungrab (GDK_CURRENT_TIME);
-	      gdk_window_reparent (widget->window, GDK_ROOT_PARENT (), newx, newy);
-
-	      /* We move the window explicitly because the window manager may
-	       * have set the position itself, ignoring what we asked in the
-	       * reparent call.
-	       */
-	      gdk_window_move (widget->window, newx, newy);
-
-	      /* FIXME: are X calls Gtk-kosher? */
+	      gtk_widget_show (hb->float_window);
+	      gtk_widget_set_uposition (hb->float_window, newx, newy);
 	      
-	      XSetTransientForHint (GDK_DISPLAY(),
-				    GDK_WINDOW_XWINDOW (widget->window),
-				    GDK_WINDOW_XWINDOW (gtk_widget_get_toplevel (widget)->window));
-
-	      XSetWMProtocols (GDK_DISPLAY (),
-			       GDK_WINDOW_XWINDOW (widget->window),
-			       &gdk_wm_delete_window,
-			       1);
-
-	      /* FIXME: we need a property that would tell the window
-	       * manager not to put decoration on this window.  This
-	       * is not part of the ICCCM, so we'll have to define our
-	       * own (a la KWM) and hack some window managers to
-	       * support it.
-	       */
+	      gdk_window_reparent (widget->window, hb->float_window->window, 0, 0);
 
 	      while (gdk_pointer_grab (widget->window,
 				       FALSE,
@@ -636,4 +619,27 @@ gtk_handle_box_motion (GtkWidget      *widget,
     }
 
   return TRUE;
+}
+
+static gint
+gtk_handle_box_delete_float (GtkWidget *widget,
+			     GdkEvent  *event,
+			     gpointer   data)
+{
+  GtkHandleBox *hb;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (event != NULL);
+  g_return_if_fail (data != NULL);
+  g_return_if_fail (GTK_IS_HANDLE_BOX (data));
+
+  hb = GTK_HANDLE_BOX (data);
+
+  hb->is_onroot = FALSE;
+
+  gdk_window_reparent (GTK_WIDGET (hb)->window, hb->steady_window, 0, 0);
+  gtk_widget_hide (hb->float_window);
+  gtk_widget_queue_resize (GTK_WIDGET (hb));
+
+  return FALSE;
 }

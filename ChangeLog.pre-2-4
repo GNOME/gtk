@@ -1,5 +1,17 @@
 Fri Jan 16 00:36:31 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
 
+	* gtk/gtkhandlebox.c: Now we use a GtkWindow of type
+	GTK_WINDOW_DIALOG as a destination for reparenting the child of
+	the handle box.  This solves the problem of having X calls in
+	Gtk.  It also makes the handle box work with KWM, OLVWM, 4Dwm (so
+	I expect mwm to work as well).  I hadn't noticed that previously
+	it only worked with fvwm and twm.
+
+	* gtk/gtkhandlebox.h (struct _GtkHandleBox): Removed the
+	real_parent field, as it is never used.
+	(struct _GtkHandleBox): Added a float_window field.  This is a
+	GtkWindow to where the child is now reparented.
+
 	* gtk/gtkhandlebox.c: Lots of changes all over the place.  Now the
 	widget has two windows.  The steady_window stays put in the parent
 	container, and the widget->window is the one that gets

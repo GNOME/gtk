@@ -47,8 +47,8 @@ struct _GtkHandleBox
 {
   GtkBin bin;
 
-  GtkWidget      *real_parent;
   GdkWindow      *steady_window; /* the window that stays in the parent container */
+  GtkWidget      *float_window;
   GtkRequisition  real_requisition;
   gboolean        is_being_dragged;
   gboolean        is_onroot;
