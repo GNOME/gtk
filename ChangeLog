@@ -90,7 +90,6 @@ Wed Dec 22 01:24:01 2004  Jonathan Blandford  <jrb@redhat.com>
 	(gtk_about_dialog_init): Add missing initializations.  (#161646,
 	Torsten Schoenfeld)
 
->>>>>>> 1.6233
 2004-12-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
