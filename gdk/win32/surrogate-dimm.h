@@ -2,13 +2,13 @@
 #define __SURROGATE_DIMM_H__
 
 /* The Win32api headers doesn't include <dimm.h>, thus we need
- * this file, which coverr just the stuff we need from <dimm.h>.
+ * this file, which covers just the stuff we need from <dimm.h>.
  */
 
 typedef struct IActiveIMMApp IActiveIMMApp;
 typedef struct IActiveIMMMessagePumpOwner IActiveIMMMessagePumpOwner;
 
-/* Dummy vtable structs that contain real names and prototypes for
+/* Dummy vtable structs that contain real names and arg lists for
  * only those methods we need.
  */
 typedef struct {
