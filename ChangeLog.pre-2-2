@@ -1,3 +1,14 @@
+Mon Feb  8 12:50:06 GMT 1999 Tony Gale  <gale@gtk.org>
+
+	* docs/gtk_tut.sgml:
+	  - Heavily edited GtkCombo section initially from
+	    Christopher T. Lansdown <lansdoct@screech.cs.alfred.edu>.
+
+	  - Cleanups and some glib stuff from
+	    David Wheeler <wheeler@ida.org>
+
+	* Makefile.am: update to include the latest Tutorial examples.
+
 Sat Feb  6 11:20:16 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_idle_draw): Add the

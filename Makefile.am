@@ -16,18 +16,21 @@ EXTRA_DIST =	\
 	README.cvs-commits	\
 	intl/libgettext.h	\
 	intl/po2tbl.sed.in	\
-	examples/Makefile	\
-	examples/README.1ST	\
-	examples/extract.awk	\
-	examples/extract.sh	\
 	examples/aspectframe/Makefile  \
 	examples/aspectframe/aspectframe.c  \
-	examples/base/Makefile	\
-	examples/base/base.c \
+	examples/Makefile  \
+	examples/README.1ST  \
+	examples/extract.awk  \
+	examples/extract.sh  \
+	examples/base/Makefile  \
+	examples/base/base.c  \
 	examples/buttons/Makefile  \
 	examples/buttons/buttons.c  \
 	examples/buttons/info.xpm  \
-	examples/clist/clist.c \
+	examples/calendar/Makefile  \
+	examples/calendar/gcalendar.c  \
+	examples/clist/Makefile  \
+	examples/clist/clist.c  \
 	examples/entry/Makefile  \
 	examples/entry/entry.c  \
 	examples/eventbox/Makefile  \
@@ -49,10 +52,10 @@ EXTRA_DIST =	\
 	examples/menu/itemfactory.c  \
 	examples/notebook/Makefile  \
 	examples/notebook/notebook.c  \
-	examples/packer/Makefile  \
-	examples/packer/pack.c \
 	examples/packbox/Makefile  \
 	examples/packbox/packbox.c  \
+	examples/packer/Makefile  \
+	examples/packer/pack.c  \
 	examples/paned/Makefile  \
 	examples/paned/paned.c  \
 	examples/pixmap/Makefile  \
@@ -61,6 +64,8 @@ EXTRA_DIST =	\
 	examples/progressbar/progressbar.c  \
 	examples/radiobuttons/Makefile  \
 	examples/radiobuttons/radiobuttons.c  \
+	examples/rangewidgets/Makefile  \
+	examples/rangewidgets/rangewidgets.c  \
 	examples/rulers/Makefile  \
 	examples/rulers/rulers.c  \
 	examples/scribble-simple/Makefile  \
@@ -74,12 +79,23 @@ EXTRA_DIST =	\
 	examples/statusbar/statusbar.c  \
 	examples/table/Makefile  \
 	examples/table/table.c  \
+	examples/text/Makefile  \
+	examples/text/text.c  \
 	examples/tictactoe/Makefile  \
 	examples/tictactoe/tictactoe.c  \
 	examples/tictactoe/tictactoe.h  \
 	examples/tictactoe/ttt_test.c  \
+	examples/tree/Makefile  \
+	examples/tree/tree.c  \
 	examples/wheelbarrow/Makefile  \
 	examples/wheelbarrow/wheelbarrow.c  \
+	examples/colorsel/colorsel.c  \
+	examples/fixed/fixed.c  \
+	examples/fixed/Makefile  \
+	examples/frame/frame.c  \
+	examples/frame/Makefile  \
+	examples/spinbutton/spinbutton.c  \
+	examples/spinbutton/Makefile  \
 	examples/find-examples.sh
 
 
