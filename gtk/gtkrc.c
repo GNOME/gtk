@@ -273,7 +273,6 @@ gtk_rc_append_default_pixmap_path(void)
   
   pixmap_path[n++] = path;
   pixmap_path[n] = NULL;
-  g_free(path);
 }
 
 static void

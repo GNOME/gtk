@@ -1,3 +1,9 @@
+Wed Oct  6 18:02:31 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_append_default_pixmap_path): Fix stupid
+	extra g_free introduced in one of the last one or two 
+	commits.
+
 Wed Oct  6 16:38:36 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am gtk/gtkrc*: Make naming of gtkrc files
