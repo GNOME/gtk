@@ -1,3 +1,7 @@
+2002-02-23  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk-zip.sh.in: Include the gtkrc files for themes.
+
 2002-02-23  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkiconfactory.c (get_default_icons): Register 16x16 
