@@ -29,7 +29,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "POT-Creation-Date: 2002-01-27 18:13+0100\n"
-"PO-Revision-Date: 2002-01-27 18:13+0100\n"
+"PO-Revision-Date: 2002-01-27 18:28+0100\n"
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -911,7 +911,7 @@ msgstr "Skrifttypebeskrivelse som en PangoFontDescription-struktur"
 
 #: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:302
 msgid "Font family"
-msgstr "Skriftfamilie"
+msgstr "Skrifttypefamilie"
 
 #: gtk/gtkcellrenderertext.c:257 gtk/gtktexttag.c:303
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
@@ -935,7 +935,7 @@ msgstr "Skrifttypevægt"
 #: gtk/gtkcellrenderertext.c:292 gtk/gtkcellrenderertext.c:293
 #: gtk/gtktexttag.c:339 gtk/gtktexttag.c:340
 msgid "Font stretch"
-msgstr "Skrifttypens strækning"
+msgstr "Skrifttypestrækning"
 
 #: gtk/gtkcellrenderertext.c:301 gtk/gtkcellrenderertext.c:302
 #: gtk/gtktexttag.c:348 gtk/gtktexttag.c:349
@@ -948,7 +948,7 @@ msgstr "Skrifttypepunkter"
 
 #: gtk/gtkcellrenderertext.c:312 gtk/gtktexttag.c:369
 msgid "Font size in points"
-msgstr "Skrifttype i punkter"
+msgstr "Skrifttypens størrelse i punkter"
 
 #: gtk/gtkcellrenderertext.c:321 gtk/gtktexttag.c:358 gtk/gtktexttag.c:359
 msgid "Font scale"
@@ -973,7 +973,7 @@ msgstr "Gennemstreget"
 
 #: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:468
 msgid "Whether to strike through the text"
-msgstr "Om der skal teksten skal streges over"
+msgstr "Om der teksten skal streges over"
 
 #: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:475
 msgid "Underline"
@@ -1042,7 +1042,7 @@ msgstr "Om dette mærke påvirker skrifttypevægten"
 
 #: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:552
 msgid "Font stretch set"
-msgstr "Strækning for skrifttype sat"
+msgstr "Skrifttypestrækning sat"
 
 #: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:553
 msgid "Whether this tag affects the font stretch"
