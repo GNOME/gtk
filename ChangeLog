@@ -1,3 +1,19 @@
+Thu Aug 23 19:10:01 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenubar.h (gtk_menu_bar_insert): Deprecate 
+	gtk_menu_bar_append/prepend/insert, forgot to do this
+	when we deprecated gtk_menu_append/prepend/insert.
+
+	* gtk/gtkmenu.h (gtk_menu_insert): Add casts to deprecated
+	compat macros.
+
+	* gtk/gtkmenu.c: Fix problem with static gtk_menu_insert() being
+	renamed by compat macro.
+
+	* gtk/gtkfontsel.h: Deprecated gtk_font_selection_get_font(),
+	gtk_font_selection_dialog_get_font(). (Suggested by
+	Vitaly Tishkov, #59383)
+
 Thu Aug 23 18:23:31 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktexttag.c (gtk_text_tag_table_get_size): 

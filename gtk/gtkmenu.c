@@ -86,7 +86,7 @@ static void     gtk_menu_stop_scrolling    (GtkMenu          *menu);
 static gboolean gtk_menu_scroll_timeout    (gpointer          data);
 static void     gtk_menu_select_item       (GtkMenuShell     *menu_shell,
 					    GtkWidget        *menu_item);
-static void     gtk_menu_insert            (GtkMenuShell     *menu_shell,
+static void     gtk_menu_real_insert       (GtkMenuShell     *menu_shell,
 					    GtkWidget        *child,
 					    gint              position);
 static void     gtk_menu_scrollbar_changed (GtkAdjustment    *adjustment,
@@ -178,7 +178,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   menu_shell_class->submenu_placement = GTK_LEFT_RIGHT;
   menu_shell_class->deactivate = gtk_menu_deactivate;
   menu_shell_class->select_item = gtk_menu_select_item;
-  menu_shell_class->insert = gtk_menu_insert;
+  menu_shell_class->insert = gtk_menu_real_insert;
 
   binding_set = gtk_binding_set_by_class (class);
   gtk_binding_entry_add_signal (binding_set,
@@ -448,9 +448,9 @@ gtk_menu_new (void)
 }
 
 static void
-gtk_menu_insert (GtkMenuShell     *menu_shell,
-		 GtkWidget        *child,
-		 gint              position)
+gtk_menu_real_insert (GtkMenuShell     *menu_shell,
+		      GtkWidget        *child,
+		      gint              position)
 {
   if (GTK_WIDGET_REALIZED (menu_shell))
     gtk_widget_set_parent_window (child, GTK_MENU (menu_shell)->bin_window);

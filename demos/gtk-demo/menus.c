@@ -118,18 +118,18 @@ do_menus (void)
       
       menuitem = gtk_menu_item_new_with_label ("test\nline2");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
-      gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
       
       menuitem = gtk_menu_item_new_with_label ("foo");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (3, TRUE));
-      gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
 
       menuitem = gtk_menu_item_new_with_label ("bar");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (4, TRUE));
       gtk_menu_item_right_justify (GTK_MENU_ITEM (menuitem));
-      gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
       
       box2 = gtk_vbox_new (FALSE, 10);
