@@ -3376,6 +3376,8 @@ static void
 gtk_menu_real_move_scroll (GtkMenu       *menu,
 			   GtkScrollType  type)
 {
+  gint page_size = get_visible_size (menu);
+  gint end_position = get_menu_height (menu);
   GtkMenuShell *menu_shell = GTK_MENU_SHELL (menu);
   
   switch (type)
@@ -3383,7 +3385,6 @@ gtk_menu_real_move_scroll (GtkMenu       *menu,
     case GTK_SCROLL_PAGE_UP:
     case GTK_SCROLL_PAGE_DOWN:
       {
-	gint page_size = get_visible_size (menu);
 	gint old_offset;
         gint new_offset;
 	gint child_offset = 0;
@@ -3409,7 +3410,7 @@ gtk_menu_real_move_scroll (GtkMenu       *menu,
 	old_offset = menu->scroll_offset;
 
         new_offset = menu->scroll_offset + step;
-        new_offset = CLAMP (new_offset, 0, get_menu_height (menu) - page_size);
+        new_offset = CLAMP (new_offset, 0, end_position - page_size);
 
         gtk_menu_scroll_to (menu, new_offset);
 	
@@ -3440,7 +3441,7 @@ gtk_menu_real_move_scroll (GtkMenu       *menu,
       /* Ignore the enter event we might get if the pointer is on the menu
        */
       menu_shell->ignore_enter = TRUE;
-      gtk_menu_scroll_to (menu, G_MAXINT);
+      gtk_menu_scroll_to (menu, end_position - page_size);
       _gtk_menu_shell_select_last (menu_shell, TRUE);
       break;
     default:

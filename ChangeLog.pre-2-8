@@ -1,3 +1,12 @@
+Wed Sep  3 23:18:17 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merge from stable.
+
+	* gtk/gtkmenu.c (gtk_menu_real_move_scroll): for the END case,
+	use end_position - page_size instead of G_MAXINT, since
+	gtk_menu_scroll_to doesn't CLAMP anymore internally. (Fixes #121237,
+	reported by Havoc Pennington).
+
 Wed Sep  3 21:58:03 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from stable.
