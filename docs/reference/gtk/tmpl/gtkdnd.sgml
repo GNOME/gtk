@@ -31,16 +31,16 @@ types of action that will be taken on behalf
 of the user for a drag destination site.
 </para>
 
-@GTK_DEST_DEFAULT_MOTION:
+@GTK_DEST_DEFAULT_MOTION: 
    If set for a widget, GTK+, during a drag over this
    widget will check if the drag matches this widget's
    list of possible targets and actions.
    GTK+ will then call gtk_drag_status() as appropriate.
-@GTK_DEST_DEFAULT_HIGHLIGHT:
+@GTK_DEST_DEFAULT_HIGHLIGHT: 
    If set for a widget, GTK+ will draw a highlight on
    this widget as long as a drag is over this widget
    and the widget drag format and action are acceptable.
-@GTK_DEST_DEFAULT_DROP:
+@GTK_DEST_DEFAULT_DROP: 
    If set for a widget, when a drop occurs, GTK+ will
    will check if the drag matches this widget's
    list of possible targets and actions. If so, 
@@ -50,7 +50,7 @@ of the user for a drag destination site.
    was a move, then if the drag was successful, then
    %TRUE will be passed for the @delete parameter
    to gtk_drag_finish().
-@GTK_DEST_DEFAULT_ALL:
+@GTK_DEST_DEFAULT_ALL: 
    If set, specifies that all default actions should
    be taken.
 
@@ -60,13 +60,13 @@ The #GtkTargetFlags enumeration is used to specify
 constraints on an entry in a #GtkTargetTable. 
 </para>
 
-@GTK_TARGET_SAME_APP:
+@GTK_TARGET_SAME_APP: 
    If this is set, the target will only be selected
    for drags within a single application.
  @GTK_TARGET_SAME_WIDGET:
    If this is set, the target will only be selected
    for drags within a single widget.
-
+@GTK_TARGET_SAME_WIDGET: 
 
 <!-- ##### FUNCTION gtk_drag_dest_set ##### -->
 <para>

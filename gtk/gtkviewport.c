@@ -200,10 +200,10 @@ gtk_viewport_get_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_HADJUSTMENT:
-      g_value_set_object (value, G_OBJECT (viewport->hadjustment));
+      g_value_set_object (value, viewport->hadjustment);
       break;
     case PROP_VADJUSTMENT:
-      g_value_set_object (value, G_OBJECT (viewport->vadjustment));
+      g_value_set_object (value, viewport->vadjustment);
       break;
     case PROP_SHADOW_TYPE:
       g_value_set_enum (value, viewport->shadow_type);

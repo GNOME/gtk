@@ -242,7 +242,7 @@ static void gtk_font_selection_get_property (GObject         *object,
       g_value_set_string (value, gtk_font_selection_get_font_name (fontsel));
       break;
     case PROP_FONT:
-      g_value_set_object (value, G_OBJECT (gtk_font_selection_get_font (fontsel)));
+      g_value_set_object (value, gtk_font_selection_get_font (fontsel));
       break;
     case PROP_PREVIEW_TEXT:
       g_value_set_string (value, gtk_font_selection_get_preview_text (fontsel));

@@ -284,7 +284,7 @@ gtk_progress_bar_get_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ADJUSTMENT:
-      g_value_set_object (value, G_OBJECT (GTK_PROGRESS (pbar)->adjustment));
+      g_value_set_object (value, GTK_PROGRESS (pbar)->adjustment);
       break;
     case PROP_ORIENTATION:
       g_value_set_enum (value, pbar->orientation);

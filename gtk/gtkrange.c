@@ -357,7 +357,7 @@ gtk_range_get_property (GObject      *object,
       g_value_set_enum (value, range->update_policy);
       break;
     case PROP_ADJUSTMENT:
-      g_value_set_object (value, G_OBJECT (range->adjustment));
+      g_value_set_object (value, range->adjustment);
       break;
     case PROP_INVERTED:
       g_value_set_boolean (value, range->inverted);

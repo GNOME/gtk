@@ -1185,7 +1185,7 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_PARENT:
       if (widget->parent)
-	g_value_set_object (value, G_OBJECT (widget->parent));
+	g_value_set_object (value, widget->parent);
       else
 	g_value_set_object (value, NULL);
       break;
@@ -1231,7 +1231,7 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_boolean (value, (GTK_WIDGET_COMPOSITE_CHILD (widget) != FALSE));
       break;
     case PROP_STYLE:
-      g_value_set_object (value, G_OBJECT (gtk_widget_get_style (widget)));
+      g_value_set_object (value, gtk_widget_get_style (widget));
       break;
     case PROP_EVENTS:
       eventp = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_event_mask);

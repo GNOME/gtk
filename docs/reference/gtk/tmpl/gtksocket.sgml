@@ -87,8 +87,6 @@ field.  (This field should be considered read-only. It should
 never be set by an application.)
 </para>
 
-@plug_window: the window embedded inside this #GtkSocket.
-
 
 <!-- ##### FUNCTION gtk_socket_new ##### -->
 <para>

@@ -306,12 +306,28 @@ Get the number of signals defined by this object.
 
 @obj: the object to query.
 
+<!-- ##### MACRO GTK_OBJECT_SET_FLAGS ##### -->
+<para>
+Turns on certain object flags.  (Private)
+</para>
+
+@obj: the object to affect.
+@flag: the flags to set.
+
 <!-- ##### MACRO GTK_OBJECT_SIGNALS ##### -->
 <para>
 Get the array of signals defined for this object.
 </para>
 
 @obj: the object to fetch the signals from.
+
+<!-- ##### MACRO GTK_OBJECT_UNSET_FLAGS ##### -->
+<para>
+Turns off certain object flags.  (Private)
+</para>
+
+@obj: the object to affect.
+@flag: the flags to unset.
 
 <!-- ##### MACRO GTK_STOCK_BUTTON_APPLY ##### -->
 <para>
@@ -2629,6 +2645,51 @@ Sets the function that GTK+ will use to load images
 </para>
 
 @ruler: the gtkruler
+
+<!-- ##### FUNCTION gtk_selection_clear ##### -->
+<para>
+Internal function.
+</para>
+
+@widget: 
+@event: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_selection_incr_event ##### -->
+<para>
+Internal function.
+</para>
+
+@window: 
+@event: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_selection_notify ##### -->
+<para>
+Internal function.
+</para>
+
+@widget: 
+@event: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_selection_property_notify ##### -->
+<para>
+Internal function.
+</para>
+
+@widget: 
+@event: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_selection_request ##### -->
+<para>
+Internal function.
+</para>
+
+@widget: 
+@event: 
+@Returns: 
 
 <!-- ##### FUNCTION gtk_settings_get_global ##### -->
 <para>

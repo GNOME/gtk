@@ -382,7 +382,7 @@ gtk_spin_button_get_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ADJUSTMENT:
-      g_value_set_object (value, G_OBJECT (spin_button->adjustment));
+      g_value_set_object (value, spin_button->adjustment);
       break;
     case PROP_CLIMB_RATE:
       g_value_set_double (value, spin_button->climb_rate);

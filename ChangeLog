@@ -1,3 +1,15 @@
+Wed Jan  9 11:23:39 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtklayout.c (gtk_layout_get_property): 
+	* gtk/gtkspinbutton.c (gtk_spin_button_get_property): 
+	* gtk/gtktreeview.c (gtk_tree_view_get_property): 
+	* gtk/gtkwidget.c (gtk_widget_get_property): 
+	* gtk/gtkfontsel.c (gtk_font_selection_get_property): 
+	* gtk/gtkrange.c (gtk_range_get_property):
+	* gtk/gtkviewport.c (gtk_viewport_get_property):
+	* gtk/gtkprogressbar.c (gtk_progress_bar_get_property): don't cast a
+	possible NULL pointer.
+
 2002-01-08  Mike Kestner  <mkestner@speakeasy.net>
 
 	* gtk/gtkcelleditable.h : Use G_TYPE_INSTANCE_GET_INTERFACE.

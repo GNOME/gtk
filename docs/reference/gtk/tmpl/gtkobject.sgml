@@ -154,24 +154,6 @@ Tests whether a #GtkObject has had a signal connected to it.
 @obj: the object to examine.
 
 
-<!-- ##### MACRO GTK_OBJECT_SET_FLAGS ##### -->
-<para>
-Turns on certain object flags.  (Private)
-</para>
-
-@obj: the object to affect.
-@flag: the flags to set.
-
-
-<!-- ##### MACRO GTK_OBJECT_UNSET_FLAGS ##### -->
-<para>
-Turns off certain object flags.  (Private)
-</para>
-
-@obj: the object to affect.
-@flag: the flags to unset.
-
-
 <!-- ##### ENUM GtkArgFlags ##### -->
 <para>
 Possible flags indicating how an argument should be treated.

@@ -980,10 +980,10 @@ gtk_tree_view_get_property (GObject    *object,
       g_value_set_object (value, tree_view->priv->model);
       break;
     case PROP_HADJUSTMENT:
-      g_value_set_object (value, G_OBJECT (tree_view->priv->hadjustment));
+      g_value_set_object (value, tree_view->priv->hadjustment);
       break;
     case PROP_VADJUSTMENT:
-      g_value_set_object (value, G_OBJECT (tree_view->priv->vadjustment));
+      g_value_set_object (value, tree_view->priv->vadjustment);
       break;
     case PROP_HEADERS_VISIBLE:
       g_value_set_boolean (value, gtk_tree_view_get_headers_visible (tree_view));

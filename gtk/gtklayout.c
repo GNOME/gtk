@@ -656,10 +656,10 @@ gtk_layout_get_property (GObject     *object,
   switch (prop_id)
     {
     case PROP_HADJUSTMENT:
-      g_value_set_object (value, G_OBJECT (layout->hadjustment));
+      g_value_set_object (value, layout->hadjustment);
       break;
     case PROP_VADJUSTMENT:
-      g_value_set_object (value, G_OBJECT (layout->vadjustment));
+      g_value_set_object (value, layout->vadjustment);
       break;
     case PROP_WIDTH:
       g_value_set_uint (value, layout->width);
