@@ -699,13 +699,13 @@ gtk_window_set_transient_for  (GtkWindow *window,
 
   if (window->transient_parent)
     {
-      gtk_window_unset_transient_for (window);
-      
       if (GTK_WIDGET_REALIZED (window) && 
 	  GTK_WIDGET_REALIZED (window->transient_parent) && 
 	  (!parent || !GTK_WIDGET_REALIZED (parent)))
 	gtk_window_transient_parent_unrealized (GTK_WIDGET (window->transient_parent),
 						GTK_WIDGET (window));
+
+      gtk_window_unset_transient_for (window);
     }
 
   window->transient_parent = parent;

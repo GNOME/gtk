@@ -1,3 +1,10 @@
+Fri Sep 10 10:06:56 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_set_transient_for): Move
+	gtk_window_unset_transient_for() call after we do checks
+	involving the old transient parent.
+	[ From Lance Capser <lmc@cyberhighway.net> ]
+
 Wed Sep  8 07:13:29 1999  Tim Janik  <timj@gtk.org>
 
 	* configure.in: fixed "GNU Make" check to pass with new make version
