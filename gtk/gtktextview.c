@@ -4196,11 +4196,29 @@ gtk_text_view_focus (GtkWidget        *widget,
 {
   GtkTextView *text_view;
   GtkContainer *container;
+  gboolean result;
   
   text_view = GTK_TEXT_VIEW (widget);
   container = GTK_CONTAINER (widget);  
-  
-  return GTK_WIDGET_CLASS (parent_class)->focus (widget, direction);
+
+  if (!gtk_widget_is_focus (widget) &&
+      container->focus_child == NULL)
+    {
+      gtk_widget_grab_focus (widget);
+      return TRUE;
+    }
+  else
+    {
+      /*
+       * Unset CAN_FOCUS flag so that gtk_container_focus() allows
+       * children to get the focus
+       */
+      GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_FOCUS); 
+      result = GTK_WIDGET_CLASS (parent_class)->focus (widget, direction);
+      GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS); 
+
+      return result;
+    }
 }
 
 /*

@@ -1,3 +1,8 @@
+2002-08-14 Padraig O'Briain <padraig.obriain@sun.com>
+
+	* gtk/gtktextview.c (gtk_text_view_focus): Move focus to
+	children, if they exist, after GtkTextView is focused. (#63844)
+
 2002-08-12  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdkdisplaymanager.c: 
