@@ -1271,17 +1271,22 @@ buffer_search_forward (Buffer *buffer, const char *str,
 
 
   char_len = g_utf8_strlen (str, -1);
-  
-  while (gtk_text_iter_forward_search (&iter, str, TRUE))
+
+  if (char_len > 0)
     {
-      GtkTextIter end = iter;
-      
-      gtk_text_iter_forward_chars (&end, char_len);
+      while (gtk_text_iter_forward_search (&iter, str, TRUE))
+        {
+          GtkTextIter end = iter;
+          
+          gtk_text_iter_forward_chars (&end, char_len);
+          
+          gtk_text_buffer_apply_tag (buffer->buffer, buffer->found_text_tag,
+                                     &iter, &end);
 
-      gtk_text_buffer_apply_tag (buffer->buffer, buffer->found_text_tag,
-                                 &iter, &end);
-
-      ++i;
+          iter = end;
+          
+          ++i;
+        }
     }
   
   dialog = gtk_message_dialog_new (GTK_WINDOW (view->window),

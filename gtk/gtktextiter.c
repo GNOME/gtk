@@ -2054,13 +2054,17 @@ lines_match (const GtkTextIter *start,
 
   /* No more text in buffer, but *lines is nonempty */
   if (gtk_text_iter_equal (start, &next))
-    return FALSE;
+    {
+      return FALSE;
+    }
       
   if (visible_only)
     line_text = gtk_text_iter_get_visible_text (start, &next);
   else
     line_text = gtk_text_iter_get_text (start, &next);
 
+  printf ("Finding `%s' in `%s'\n", *lines, line_text);
+  
   if (match_start) /* if this is the first line we're matching */
     found = strstr (line_text, *lines);
   else
@@ -2076,10 +2080,13 @@ lines_match (const GtkTextIter *start,
 
   if (found == NULL)
     {
+      printf ("found == NULL\n");
       g_free (line_text);
       return FALSE;
     }
 
+  printf ("found at index %d\n", found - line_text);
+  
   /* Get offset to start of search string */
   offset = g_utf8_strlen (line_text, found - line_text);
 
@@ -2160,10 +2167,24 @@ gtk_text_iter_forward_search (GtkTextIter *iter,
   ++line_num;
   lines[line_num] = NULL;
 
+  {
+    int q = 0;
+    printf ("Lines:\n");
+    while (q < line_num)
+      {
+        printf ("  `%s'\n", lines[q]);
+
+        ++q;
+      }
+  }
+  
   search = *iter;
 
   do
     {
+      printf ("Checking for match on line %d\n",
+              gtk_text_iter_get_line (&search));
+      
       /* This loop has an inefficient worst-case, where
        * gtk_text_iter_get_text() is called repeatedly on
        * a single line.
