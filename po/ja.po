@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-02 17:21-0500\n"
-"PO-Revision-Date: 2004-02-25 23:13+0900\n"
+"POT-Creation-Date: 2004-03-05 00:09+0900\n"
+"PO-Revision-Date: 2004-03-05 00:02+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -910,15 +910,15 @@ msgstr "パレット(_P)"
 msgid "Color Selection"
 msgstr "色の選択"
 
-#: gtk/gtkentry.c:4210 gtk/gtktextview.c:6900
+#: gtk/gtkentry.c:4213 gtk/gtktextview.c:6906
 msgid "Select _All"
 msgstr "全て選択(_A)"
 
-#: gtk/gtkentry.c:4220 gtk/gtktextview.c:6910
+#: gtk/gtkentry.c:4223 gtk/gtktextview.c:6916
 msgid "Input _Methods"
 msgstr "入力メソッド(_M)"
 
-#: gtk/gtkentry.c:4230 gtk/gtktextview.c:6921
+#: gtk/gtkentry.c:4233 gtk/gtktextview.c:6927
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode 制御文字の挿入(_I)"
 
@@ -946,7 +946,7 @@ msgstr ""
 "%s のブックマークに追加できませんでした:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:638 gtk/gtkfilechooserdefault.c:4010
+#: gtk/gtkfilechooserdefault.c:638 gtk/gtkfilechooserdefault.c:4022
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -973,9 +973,8 @@ msgstr ""
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:1331 gtk/gtkfilechooserdefault.c:1854
-#, fuzzy
 msgid "Name"
-msgstr "名前(_N):"
+msgstr "名前"
 
 #: gtk/gtkfilechooserdefault.c:1422
 #, c-format
@@ -1025,80 +1024,85 @@ msgid "Create _Folder"
 msgstr "フォルダの作成(_F)"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:2047
+#: gtk/gtkfilechooserdefault.c:2050
 msgid "_Name:"
 msgstr "名前(_N):"
 
 #. Folder combo
-#: gtk/gtkfilechooserdefault.c:2066
+#: gtk/gtkfilechooserdefault.c:2069
 msgid "Save in _Folder:"
 msgstr "フォルダへ保存(_F):"
 
-#: gtk/gtkfilechooserdefault.c:2089
+#: gtk/gtkfilechooserdefault.c:2092
 msgid "_Browse for other folders"
 msgstr "他のフォルダの参照(_B)"
 
-#: gtk/gtkfilechooserdefault.c:3262
+#: gtk/gtkfilechooserdefault.c:2848
+#, c-format
+msgid "Could not set current folder: %s"
+msgstr "現在のフォルダをセットできません: %s"
+
+#: gtk/gtkfilechooserdefault.c:3274
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "ショートカット %s は存在しません"
 
-#: gtk/gtkfilechooserdefault.c:3834
+#: gtk/gtkfilechooserdefault.c:3846
 msgid "Type name of new folder"
 msgstr "新しいフォルダの種類"
 
-#: gtk/gtkfilechooserdefault.c:3863
+#: gtk/gtkfilechooserdefault.c:3875
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d バイト"
 msgstr[1] "%d バイト"
 
-#: gtk/gtkfilechooserdefault.c:3865
+#: gtk/gtkfilechooserdefault.c:3877
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f Kバイト"
 
-#: gtk/gtkfilechooserdefault.c:3867
+#: gtk/gtkfilechooserdefault.c:3879
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f Mバイト"
 
-#: gtk/gtkfilechooserdefault.c:3869
+#: gtk/gtkfilechooserdefault.c:3881
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f Gバイト"
 
-#: gtk/gtkfilechooserdefault.c:3914
+#: gtk/gtkfilechooserdefault.c:3926
 msgid "Today"
 msgstr "今日"
 
-#: gtk/gtkfilechooserdefault.c:3916
+#: gtk/gtkfilechooserdefault.c:3928
 msgid "Yesterday"
 msgstr "昨日"
 
 #. FIXME: Get the right format for the locale
-#: gtk/gtkfilechooserdefault.c:3925
+#: gtk/gtkfilechooserdefault.c:3937
 msgid "%d/%b/%Y"
 msgstr "%Y/%m/%d"
 
-#: gtk/gtkfilechooserdefault.c:3928
+#: gtk/gtkfilechooserdefault.c:3940
 msgid "Unknown"
 msgstr "不明"
 
-#: gtk/gtkfilechooserdefault.c:3973
+#: gtk/gtkfilechooserdefault.c:3985
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "パス名が正しくないので、指定したフォルダへ移動できません。"
 
-#: gtk/gtkfilechooserdefault.c:4065
+#: gtk/gtkfilechooserdefault.c:4077
 msgid "Open Location"
 msgstr "指定した場所を開きます"
 
-#: gtk/gtkfilechooserdefault.c:4080
+#: gtk/gtkfilechooserdefault.c:4092
 msgid "_Location:"
 msgstr "場所(_L):"
 
-#: gtk/gtkfilechooserdefault.c:4114
+#: gtk/gtkfilechooserdefault.c:4126
 #, c-format
 msgid ""
 "Could not go to the parent folder of %s:\n"
@@ -1302,7 +1306,7 @@ msgstr "このファイル・システムでは mount をサポートしてい�
 msgid "Filesystem"
 msgstr "ファイルシステム"
 
-#: gtk/gtkfilesystemunix.c:471 gtk/gtkfilesystemunix.c:1376
+#: gtk/gtkfilesystemunix.c:471 gtk/gtkfilesystemunix.c:1375
 #: gtk/gtkfilesystemwin32.c:1175
 #, c-format
 msgid "error getting information for '%s': %s"
@@ -1918,9 +1922,3 @@ msgstr "X 入力メソッド"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ファイル '%s' の情報を取得できませんでした: %s"
-
-#~ msgid "File name"
-#~ msgstr "ファイル名"
-
-#~ msgid "Preview"
-#~ msgstr "プレビュー"

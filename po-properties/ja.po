@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-02 17:21-0500\n"
-"PO-Revision-Date: 2004-02-25 23:34+0900\n"
+"POT-Creation-Date: 2004-03-05 00:23+0900\n"
+"PO-Revision-Date: 2004-03-05 00:22+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -1303,53 +1303,55 @@ msgstr "リストの値"
 msgid "Whether entered values must already be present in the list"
 msgstr "入力した値がリストの中に既に存在しているかどうか"
 
-#: gtk/gtkcombobox.c:430
+#: gtk/gtkcombobox.c:442
 msgid "ComboBox model"
 msgstr "ComboBox モデル"
 
-#: gtk/gtkcombobox.c:431
+#: gtk/gtkcombobox.c:443
 msgid "The model for the combo box"
 msgstr "コンボ・ボックスに使用するモデル"
 
-#: gtk/gtkcombobox.c:438
+#: gtk/gtkcombobox.c:450
 msgid "Wrap width"
 msgstr "折り返し幅"
 
-#: gtk/gtkcombobox.c:439
+#: gtk/gtkcombobox.c:451
 msgid "Wrap width for layouting the items in a grid"
 msgstr "グリッドに項目をレイアウトするための折り返し幅"
 
-#: gtk/gtkcombobox.c:448
+#: gtk/gtkcombobox.c:460
 msgid "Row span column"
 msgstr "行間隔を持つ列"
 
-#: gtk/gtkcombobox.c:449
+#: gtk/gtkcombobox.c:461
 msgid "TreeModel column containing the row span values"
 msgstr "行の間隔の値を保持している TreeModel の列"
 
-#: gtk/gtkcombobox.c:458
+#: gtk/gtkcombobox.c:470
 msgid "Column span column"
 msgstr "列間隔を持つ列"
 
-#: gtk/gtkcombobox.c:459
+#: gtk/gtkcombobox.c:471
 msgid "TreeModel column containing the column span values"
 msgstr "列の間隔の値を保持している TreeModel の列"
 
-#: gtk/gtkcombobox.c:468
+#: gtk/gtkcombobox.c:480
 msgid "Active item"
 msgstr "有効な項目"
 
-#: gtk/gtkcombobox.c:469
+#: gtk/gtkcombobox.c:481
 msgid "The item which is currently active"
 msgstr "現在アクティブな項目"
 
-#: gtk/gtkcombobox.c:477
+#: gtk/gtkcombobox.c:489
 msgid "Appears as list"
-msgstr ""
+msgstr "リスト表示"
 
-#: gtk/gtkcombobox.c:478
+#: gtk/gtkcombobox.c:490
 msgid "Whether combobox dropdowns should look like lists rather than menus"
 msgstr ""
+"コンボ・ボックスをドロップ・ダウンする際にメニュー型式ではなくリスト型式で表"
+"示するかどうか"
 
 #: gtk/gtkcomboboxentry.c:109
 msgid "Text Column"
@@ -1551,11 +1553,11 @@ msgid "X align"
 msgstr "X 方向の配置"
 
 #: gtk/gtkentry.c:553 gtk/gtkmisc.c:99
-#, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
-msgstr "水平方向の配置 (0: 左、1:右)"
+msgstr ""
+"水平方向の配置で 0 (左) から 1 (右) へ配置します (RTL: Right To Left の逆)"
 
 #: gtk/gtkentry.c:786
 msgid "Select on focus"
@@ -1705,13 +1707,14 @@ msgstr ""
 "を指定します"
 
 #: gtk/gtkfilechooser.c:129
-#, fuzzy
 msgid "Use Preview Label"
-msgstr "ラベルにサイズを使う"
+msgstr "プレビュー・ラベルを使う"
 
 #: gtk/gtkfilechooser.c:130
 msgid "Whether to display a stock label with the name of the previewed file."
 msgstr ""
+"プレビューするファイルの名前が付いたストック・ラベルを表示するかどうかを指定"
+"します"
 
 #: gtk/gtkfilechooser.c:135
 msgid "Extra widget"
@@ -1739,12 +1742,11 @@ msgstr "隠しファイルやフォルダを表示するかどうかを指定し
 
 #: gtk/gtkfilechooserdefault.c:473
 msgid "Default file chooser backend"
-msgstr ""
+msgstr "デフォルトのファイル選択バックエンド"
 
 #: gtk/gtkfilechooserdefault.c:474
-#, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
-msgstr "使用するファイル・システムのバックエンド名です"
+msgstr "デフォルトで使用する GtkFileChooser バックエンドの名前です"
 
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
 msgid "Filename"
@@ -3578,14 +3580,12 @@ msgid "Whether Tab will result in a tab character being entered"
 msgstr "入力されているタブ文字をタブとして表示するかどうか"
 
 #: gtk/gtktextview.c:683
-#, fuzzy
 msgid "Error underline color"
-msgstr "前景色"
+msgstr "エラーを示す下線の色"
 
 #: gtk/gtktextview.c:684
-#, fuzzy
 msgid "Color with which to draw error-indication underlines"
-msgstr "挿入カーソルを描画する色"
+msgstr "エラーを示す下線を描画する色です"
 
 #: gtk/gtktoggleaction.c:129
 msgid "Create the same proxies as a radio action"
@@ -4390,15 +4390,3 @@ msgstr "IM ステータスのスタイル"
 #: modules/input/gtkimcontextxim.c:335
 msgid "How to draw the input method statusbar"
 msgstr "入力メソッドのステータスバーの表示方法"
-
-#~ msgid "ComboBox appareance"
-#~ msgstr "ComboBox の外観"
-
-#~ msgid "ComboBox appearance, where TRUE means Windows-style."
-#~ msgstr "ComboBox の外観を指定します (TRUE: Windows スタイル)"
-
-#~ msgid "Folder Mode"
-#~ msgstr "フォルダ・モード"
-
-#~ msgid "Whether to select folders rather than files"
-#~ msgstr "ファイルではなくフォルダを選択するかどうかを指定します"
