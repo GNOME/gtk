@@ -1,3 +1,10 @@
+2002-03-25  Matthias Clasen  <maclas@gmx.de>
+
+	* io-png.c (setup_png_transformations): Changed signature to
+	return success and set a GError parameter, adjusted all callers.
+	Also work around a possible FPE in libpng and always check that
+	the new info is sane.
+
 2002-03-23  Matthias Clasen  <maclas@gmx.de>
 
 	* io-wbmp.c (gdk_pixbuf__wbmp_image_load_increment):
