@@ -1,3 +1,21 @@
+Fri May 22 03:02:40 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkhandlebox.c: Added style_set handler.
+
+Fri May 22 02:55:57 1998  Owen Taylor  <otaylor@gtk.org>
+ [ From: Chris Lahey  <clahey@umich.edu> ]
+	
+	* gtk/gtkeditable.c, gtk/gtkeditable.h,
+	  gtk/gtktext.c, gtk/gtkentry.c: Added get_position,
+	  and set_position functions to get and set the cursor position.
+
+        * gtk/gtkeditable.c: Restored "insert_text" and "delete_text" to
+	  signal status. Make GtkText do user-controlled insertion
+	  and deletion through the Editable widget so that these
+	  signals are properly emitted.
+
+	* gtk/gtkentry.c: Changed gtk_entry_set_visibility to 
+	  display asterisks instead of empty space when visible = FALSE)
 
 Fri May 22 08:51:10 CEST 1998  Paolo Molaro <lupus@debian.org>
 
@@ -6,8 +24,8 @@ Fri May 22 08:51:10 CEST 1998  Paolo Molaro <lupus@debian.org>
 
 1998-05-21    <sopwith@redhat.com>
 
-	* gtk/gtkrc.[ch]: gtk_rc_set_image_loader() - allow apps to set a custom
-	routine for loading images specified in gtkrc's.
+	* gtk/gtkrc.[ch]: gtk_rc_set_image_loader() - allow apps to set a
+	custom routine for loading images specified in gtkrc's.
 
 Tue May 19 23:41:04 1998  Owen Taylor  <otaylor@gtk.org>
 
