@@ -344,11 +344,10 @@ gtk_file_chooser_default_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-/* Shows a simple error dialog */
+/* Shows an error dialog */
 static void
-error_dialog (GtkFileChooserDefault *impl,
-	      const char            *msg,
-	      GError                *error)
+error_message (GtkFileChooserDefault *impl,
+	       const char            *msg)
 {
   GtkWidget *toplevel;
   GtkWidget *dialog;
@@ -359,10 +358,27 @@ error_dialog (GtkFileChooserDefault *impl,
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_ERROR,
 				   GTK_BUTTONS_CLOSE,
-				   msg,
-				   error->message);
+				   "%s",
+				   msg);
   gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);
+}
+
+/* Shows a simple error dialog relative to a path.  Frees the GError as well. */
+static void
+error_dialog (GtkFileChooserDefault *impl,
+	      const char            *msg,
+	      const GtkFilePath     *path,
+	      GError                *error)
+{
+  char *text;
+
+  text = g_strdup_printf (msg,
+			  gtk_file_path_get_string (path),
+			  error->message);
+  error_message (impl, text);
+  g_free (text);
+  g_error_free (error);
 }
 
 static void
@@ -485,6 +501,19 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
   return TRUE;
 }
 
+/* Displays an error message about not being able to get information for a file.
+ * Frees the GError as well.
+ */
+static void
+error_getting_info_dialog (GtkFileChooserDefault *impl,
+			   const GtkFilePath     *path,
+			   GError                *error)
+{
+  error_dialog (impl,
+		_("Could not retrieve information about %s:\n%s"),
+		path, error);
+}
+
 /* Appends an item for the user's home directory to the shortcuts model */
 static void
 shortcuts_append_home (GtkFileChooserDefault *impl)
@@ -493,6 +522,7 @@ shortcuts_append_home (GtkFileChooserDefault *impl)
   const char *home;
   GtkFilePath *home_path;
   char *label;
+  GError *error;
 
   name = g_get_user_name ();
   label = g_strdup_printf (_("%s's Home"), name);
@@ -500,7 +530,10 @@ shortcuts_append_home (GtkFileChooserDefault *impl)
   home = g_get_home_dir ();
   home_path = gtk_file_system_filename_to_path (impl->file_system, home);
 
-  impl->has_home = shortcuts_insert_path (impl, -1, home_path, FALSE, label, NULL); /* FIXME: use GError? */
+  error = NULL;
+  impl->has_home = shortcuts_insert_path (impl, -1, home_path, FALSE, label, &error);
+  if (!impl->has_home)
+    error_getting_info_dialog (impl, home_path, error);
 
   g_free (label);
   gtk_file_path_free (home_path);
@@ -512,6 +545,7 @@ shortcuts_append_desktop (GtkFileChooserDefault *impl)
 {
   char *name;
   GtkFilePath *path;
+  GError *error;
 
   /* FIXME: What is the Right Way of finding the desktop directory? */
 
@@ -519,30 +553,51 @@ shortcuts_append_desktop (GtkFileChooserDefault *impl)
   path = gtk_file_system_filename_to_path (impl->file_system, name);
   g_free (name);
 
-  impl->has_desktop = shortcuts_insert_path (impl, -1, path, FALSE, NULL, NULL); /* FIXME: use GError? */
+  error = NULL;
+  impl->has_desktop = shortcuts_insert_path (impl, -1, path, FALSE, NULL, &error);
+  if (!impl->has_desktop)
+    error_getting_info_dialog (impl, path, error);
+
   gtk_file_path_free (path);
+}
+
+/* Appends a list of GtkFilePath to the shortcuts model; returns how many were inserted */
+static int
+shortcuts_append_paths (GtkFileChooserDefault *impl,
+			GSList                *paths,
+			gboolean               is_file_system_root)
+{
+  int num_inserted;
+
+  num_inserted = 0;
+
+  for (; paths; paths = paths->next)
+    {
+      GtkFilePath *path;
+      GError *error;
+
+      path = paths->data;
+      error = NULL;
+
+      if (shortcuts_insert_path (impl, -1, path, is_file_system_root, NULL, &error))
+	num_inserted++;
+      else
+	error_getting_info_dialog (impl, path, error);
+    }
+
+  return num_inserted;
 }
 
 /* Appends all the file system roots to the shortcuts model */
 static void
 shortcuts_append_file_system_roots (GtkFileChooserDefault *impl)
 {
-  GSList *roots, *l;
+  GSList *roots;
 
   roots = gtk_file_system_list_roots (impl->file_system);
   /* FIXME: handle the roots-changed signal on the file system */
 
-  impl->num_roots = 0;
-
-  for (l = roots; l; l = l->next)
-    {
-      GtkFilePath *path;
-
-      path = l->data;
-      if (shortcuts_insert_path (impl, -1, path, TRUE, NULL, NULL)) /* FIXME: use GError? */
-	impl->num_roots++;
-    }
-
+  impl->num_roots = shortcuts_append_paths (impl, roots, TRUE);
   gtk_file_paths_free (roots);
 }
 
@@ -572,7 +627,7 @@ remove_bookmark_rows (GtkFileChooserDefault *impl)
 static void
 shortcuts_append_bookmarks (GtkFileChooserDefault *impl)
 {
-  GSList *bookmarks, *l;
+  GSList *bookmarks;
 
   remove_bookmark_rows (impl);
 
@@ -583,18 +638,12 @@ shortcuts_append_bookmarks (GtkFileChooserDefault *impl)
 		      SHORTCUTS_COL_PATH, NULL,
 		      -1);
   impl->bookmarks_set = TRUE;
-  impl->num_bookmarks = 0;
 
   bookmarks = gtk_file_system_list_bookmarks (impl->file_system);
 
-  for (l = bookmarks; l; l = l->next)
-    {
-      GtkFilePath *path;
-
-      path = l->data;
-      if (shortcuts_insert_path (impl, -1, path, FALSE, NULL, NULL)) /* FIXME: use GError? */
-	impl->num_bookmarks++;
-    }
+  /* FIXME: How do we know if a bookmark is a file system root? */
+  impl->num_bookmarks = shortcuts_append_paths (impl, bookmarks, FALSE);
+  gtk_file_paths_free (bookmarks);
 }
 
 /* Creates the GtkTreeStore used as the shortcuts model */
@@ -639,12 +688,10 @@ toolbar_up_cb (GtkToolButton         *button,
 	}
     }
   else
-    {
-      error_dialog (impl,
-		    _("Could not go to the parent folder:\n%s"),
-		    error);
-      g_error_free (error);
-    }
+    error_dialog (impl,
+		  _("Could not go to the parent folder of %s:\n%s"),
+		  impl->current_folder,
+		  error);
 }
 
 /* Appends an item to the toolbar */
@@ -780,7 +827,14 @@ static void
 add_bookmark_button_clicked_cb (GtkButton *button,
 				GtkFileChooserDefault *impl)
 {
-  gtk_file_system_add_bookmark (impl->file_system, impl->current_folder, NULL); /* FIXME: use GError */
+  GError *error;
+
+  error = NULL;
+  if (!gtk_file_system_add_bookmark (impl->file_system, impl->current_folder, &error))
+    error_dialog (impl,
+		  _("Could not add bookmark for %s:\n%s"),
+		  impl->current_folder,
+		  error);
 }
 
 /* Callback used when the "Remove bookmark" button is clicked */
@@ -791,6 +845,7 @@ remove_bookmark_button_clicked_cb (GtkButton *button,
   GtkTreeSelection *selection;
   GtkTreeIter iter;
   GtkFilePath *path;
+  GError *error;
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->shortcuts_tree));
 
@@ -799,7 +854,12 @@ remove_bookmark_button_clicked_cb (GtkButton *button,
 
   gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter, SHORTCUTS_COL_PATH, &path, -1);
 
-  gtk_file_system_remove_bookmark (impl->file_system, path, NULL); /* FIXME: use GError */
+  error = NULL;
+  if (!gtk_file_system_remove_bookmark (impl->file_system, path, &error))
+    error_dialog (impl,
+		  _("Could not remove bookmark for %s:\n%s"),
+		  path,
+		  error);
 }
 
 /* Sensitize the "add bookmark" button if the current folder is not in the
@@ -1626,9 +1686,14 @@ gtk_file_chooser_default_select_path (GtkFileChooser    *chooser,
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
   GtkFilePath *parent_path;
+  GError *error;
 
-  if (!gtk_file_system_get_parent (impl->file_system, path, &parent_path, NULL))	/* NULL-GError */
-    return;
+  error = NULL;
+  if (!gtk_file_system_get_parent (impl->file_system, path, &parent_path, &error))
+    {
+      error_getting_info_dialog (impl, path, error);
+      return;
+    }
 
   if (!parent_path)
     {
@@ -2233,34 +2298,51 @@ entry_activate (GtkEntry              *entry,
       GtkFileFolder *folder = NULL;
       GtkFilePath *subfolder_path = NULL;
       GtkFileInfo *info = NULL;
+      GError *error;
 
-      folder = gtk_file_system_get_folder (impl->file_system,
-					   folder_path,
-					   GTK_FILE_INFO_IS_FOLDER,
-					   NULL);	/* NULL-GError */
+      error = NULL;
+      folder = gtk_file_system_get_folder (impl->file_system, folder_path, GTK_FILE_INFO_IS_FOLDER, &error);
 
-      if (folder)
-	subfolder_path = gtk_file_system_make_path (impl->file_system,
-						    folder_path,
-						    file_part,
-						    NULL); /* NULL-GError */
+      if (!folder)
+	{
+	  error_getting_info_dialog (impl, folder_path, error);
+	  return;
+	}
 
-      if (subfolder_path)
-	info = gtk_file_folder_get_info (folder,
-					 subfolder_path,
-					 NULL); /* NULL-GError */
+      error = NULL;
+      subfolder_path = gtk_file_system_make_path (impl->file_system, folder_path, file_part, &error);
 
-      if (info && gtk_file_info_get_is_folder (info))
+      if (!subfolder_path)
+	{
+	  char *msg;
+
+	  msg = g_strdup_printf (_("Could not build file name from '%s' and '%s':\n%s"),
+				 gtk_file_path_get_string (folder_path),
+				 file_part,
+				 error->message);
+	  error_message (impl, msg);
+	  g_free (msg);
+	  g_object_unref (folder);
+	  return;
+	}
+
+      error = NULL;
+      info = gtk_file_folder_get_info (folder, subfolder_path, &error);
+
+      if (!info)
+	{
+	  error_getting_info_dialog (impl, subfolder_path, error);
+	  g_object_unref (folder);
+	  gtk_file_path_free (subfolder_path);
+	  return;
+	}
+
+      if (gtk_file_info_get_is_folder (info))
 	new_folder = gtk_file_path_copy (subfolder_path);
 
-      if (folder)
-	g_object_unref (folder);
-
-      if (subfolder_path)
-	gtk_file_path_free (subfolder_path);
-
-      if (info)
-	gtk_file_info_free (info);
+      g_object_unref (folder);
+      gtk_file_path_free (subfolder_path);
+      gtk_file_info_free (info);
     }
 
   if (new_folder)

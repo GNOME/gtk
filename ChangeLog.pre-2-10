@@ -1,3 +1,17 @@
+2003-11-03  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (error_dialog): Take in a path as
+	well.  Use a helper function.
+	(shortcuts_append_home): Display an error box if necessary.
+	(shortcuts_append_desktop): Likewise.
+	(add_bookmark_button_clicked_cb): Likewise.
+	(gtk_file_chooser_default_select_path): Likewise.
+	(entry_activate): Likewise.
+	(shortcuts_append_paths): New helper function.
+	(shortcuts_append_file_system_roots): Use
+	shortcuts_append_paths().
+	(shortcuts_append_bookmarks): Likewise.
+
 Mon Nov  3 23:12:41 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkuimanager.c (_gtk_menu_is_empty): Return TRUE if 
