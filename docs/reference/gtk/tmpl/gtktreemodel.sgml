@@ -150,6 +150,8 @@ enum
 {
   GtkTreeModel *list_store;
   GtkTreeIter iter;
+  gboolean valid;
+  gint row_count = 0;
 
   /* make a new list_store */
   list_store = gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_INT);
@@ -158,36 +160,28 @@ enum
   populate_model (list_store);
 
   /* Get the first iter in the list */
-  if (gtk_tree_model_get_iter_first (model, &amp;iter))
-    {
-      gint row_count = 0;
+  valid = gtk_tree_model_get_iter_first (model, &amp;iter);
 
+  while (valid)
+    {
       /* Walk through the list, reading each row */
-      do
-        {
-          gchar *str_data;
-          gint   int_data;
+      gchar *str_data;
+      gint   int_data;
 
-          /* Make sure you terminate calls to gtk_tree_model_get(<!>)
-           * with a '-1' value
-           */
-          gtk_tree_model_get (list_store, &amp;iter, 
-                              STRING_COLUMN, &amp;str_data,
-                              INT_COLUMN, &amp;int_data,
-                              -1);
+      /* Make sure you terminate calls to gtk_tree_model_get(<!>)
+       * with a '-1' value
+       */
+      gtk_tree_model_get (list_store, &amp;iter, 
+                          STRING_COLUMN, &amp;str_data,
+                          INT_COLUMN, &amp;int_data,
+                          -1);
 
-          /* Do something with the data */
-          g_print ("Row &percent;d: (&percent;s,&percent;d)\n", row_count, str_data, int_data);
-          g_free (str_data);
+      /* Do something with the data */
+      g_print ("Row &percent;d: (&percent;s,&percent;d)\n", row_count, str_data, int_data);
+      g_free (str_data);
 
-          row_count ++;
-        }
-      while (gtk_tree_model_iter_next (model, &amp;iter));
-    }
-  else
-    {
-      /* As gtk_tree_model_get_iter_first(<!>) returned FALSE, the list is empty */
-      g_print ("Model is empty.\n");
+      row_count ++;
+      valid = gtk_tree_model_iter_next (model, &amp;iter))
     }
 }
 </programlisting>

@@ -1,3 +1,9 @@
+Tue Mar 12 00:29:31 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/question_index.sgml: new FAQ.
+
+	* gtk/tmpl/gtktreemodel.sgml: clean up example
+
 2002-03-12  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/tmpl/windows.sgml: Document GdkScreen.

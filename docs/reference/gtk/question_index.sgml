@@ -485,6 +485,21 @@ See the <link linkend="TreeWidget">tree widget overview</link>.
 
 <qandaentry>
 <question><para>
+What's the #GtkTreeView equivalent of gtk_clist_find_row_from_data()?
+</para></question>
+
+<answer>
+<para>
+As there is no separate data column in the #GtkTreeModel, there's no
+built in function to find the iter from data.  You can write a custom
+searching function to walk the tree and find the data, or use
+gtk_tree_model_foreach().
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question><para>
 How do I put an image and some text in the same column?
 </para></question>
 
