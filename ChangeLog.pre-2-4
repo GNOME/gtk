@@ -1,3 +1,8 @@
+2004-04-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkspinbutton.c (spin_button_at_limit): Make spinbuttons
+	work with negative increments.  (#137975, Tim Gerla)
+
 Wed Apr 21 21:38:03 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbutton.c (gtk_tool_button_set_label_widget,

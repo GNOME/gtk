@@ -823,14 +823,21 @@ static gboolean
 spin_button_at_limit (GtkSpinButton *spin_button,
                      GtkArrowType   arrow)
 {
+  GtkArrowType effective_arrow;
+
   if (spin_button->wrap)
     return FALSE;
 
-  if (arrow == GTK_ARROW_UP &&
+  if (spin_button->adjustment->step_increment > 0)
+    effective_arrow = arrow;
+  else
+    effective_arrow = arrow == GTK_ARROW_UP ? GTK_ARROW_DOWN : GTK_ARROW_UP; 
+  
+  if (effective_arrow == GTK_ARROW_UP &&
       (spin_button->adjustment->upper - spin_button->adjustment->value <= EPSILON))
     return TRUE;
   
-  if (arrow == GTK_ARROW_DOWN &&
+  if (effective_arrow == GTK_ARROW_DOWN &&
       (spin_button->adjustment->value - spin_button->adjustment->lower <= EPSILON))
     return TRUE;
   
