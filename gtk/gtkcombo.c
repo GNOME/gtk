@@ -24,6 +24,10 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+/* Do NOT, I repeat, NOT, copy any of the code in this file.
+ * The code here relies on all sorts of internal details of GTK+
+ */
+
 #include <string.h>
 
 #include "gtkarrow.h"
@@ -493,6 +497,26 @@ gtk_combo_popup_list (GtkCombo * combo)
   gtk_widget_grab_focus (combo->popwin);
 }
 
+static void
+gtk_combo_popdown_list (GtkCombo *combo)
+{
+  combo->current_button = 0;
+      
+  if (GTK_BUTTON (combo->button)->in_button)
+    {
+      GTK_BUTTON (combo->button)->in_button = FALSE;
+      gtk_button_released (GTK_BUTTON (combo->button));
+    }
+
+  if (GTK_WIDGET_HAS_GRAB (combo->popwin))
+    {
+      gtk_grab_remove (combo->popwin);
+      gdk_pointer_ungrab (GDK_CURRENT_TIME);
+    }
+  
+  gtk_widget_hide (combo->popwin);
+}
+
 static void        
 gtk_combo_activate (GtkWidget        *widget,
 		    GtkCombo         *combo)
@@ -544,9 +568,11 @@ gtk_combo_popup_button_leave (GtkWidget        *button,
 			      GdkEventCrossing *event,
 			      GtkCombo         *combo)
 {
+  /* The idea here is that we want to keep the button down if the
+   * popup is popped up.
+   */
   return combo->current_button != 0;
 }
-
 
 static void
 gtk_combo_update_entry (GtkList * list, GtkCombo * combo)
@@ -607,9 +633,7 @@ gtk_combo_button_press (GtkWidget * widget, GdkEvent * event, GtkCombo * combo)
 	}
     }
 
-  gtk_widget_hide (combo->popwin);
-  gtk_grab_remove (combo->popwin);
-  gdk_pointer_ungrab (event->button.time);
+  gtk_combo_popdown_list (combo);
 
   return TRUE;
 }
@@ -628,22 +652,7 @@ gtk_combo_button_event_after (GtkWidget *widget,
     {
       /* This was the initial button press */
 
-      GdkEventCrossing tmp_event;
-
       combo->current_button = 0;
-
-      if (widget != combo->button)
-	gtk_widget_event (combo->button, event);
-
-      /* Un-pre-highlight */
-      
-      tmp_event.type = GDK_LEAVE_NOTIFY;
-      tmp_event.window = combo->button->window;
-      tmp_event.send_event = TRUE;
-      tmp_event.subwindow = NULL;
-      tmp_event.detail = GDK_NOTIFY_ANCESTOR;
-      
-      gtk_widget_event (combo->button, (GdkEvent *)&tmp_event);
 
       /* Check to see if we released inside the button */
       child = gtk_get_event_widget ((GdkEvent*) event);
@@ -662,18 +671,8 @@ gtk_combo_button_event_after (GtkWidget *widget,
 	  return;
 	}
     }
-  else
-    {
-      /* The user has clicked inside the popwin and released */
 
-      if (GTK_WIDGET_HAS_GRAB (combo->popwin))
-	{
-	  gtk_grab_remove (combo->popwin);
-	  gdk_pointer_ungrab (event->button.time);
-	}
-    }
-  
-  gtk_widget_hide (combo->popwin);
+  gtk_combo_popdown_list (combo);
 }
 
 static gint         
@@ -723,21 +722,11 @@ gtk_combo_list_key_press (GtkWidget * widget, GdkEventKey * event, GtkCombo * co
 {
   if (event->keyval == GDK_Escape)
     {
-      if (GTK_WIDGET_HAS_GRAB (combo->popwin))
-	{
-	  gtk_grab_remove (combo->popwin);
-	  gdk_pointer_ungrab (GDK_CURRENT_TIME);
-	}
-      else if (GTK_WIDGET_HAS_GRAB (combo->list))
+      if (GTK_WIDGET_HAS_GRAB (combo->list))
 	gtk_list_end_drag_selection (GTK_LIST (combo->list));
-      gtk_widget_hide (combo->popwin);
-      if (GTK_WIDGET_HAS_GRAB (combo->button))
-	{
-	  combo->current_button = 0;
-	  GTK_BUTTON (combo->button)->in_button = FALSE;
-	  gtk_button_released (GTK_BUTTON (combo->button));
-	  gtk_grab_remove (combo->button);
-	}
+
+      gtk_combo_popdown_list (combo);
+      
       return TRUE;
     }
   return FALSE;
