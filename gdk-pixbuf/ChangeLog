@@ -1,3 +1,8 @@
+2003-08-14  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixdata.c (gdk_pixdata_to_csource): Improve doc comment
+	wording. (#119754, Doug Quale)
+
 2003-08-03  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf.c (gdk_pixbuf_get_rowstride): 
