@@ -1,3 +1,19 @@
+Fri Jan 16 01:55:17 1998  Tim Janik  <timj@psynet.net>
+
+	* improved the gtk_widget_set handling. removed GtkArgFunc and added
+	  GtkArgSetFunc and GtkArgGetFunc in _GtkTypeInfo.
+	  performance consuming strcmp() calls are avoided in gtk_*_set_arg()
+	  now, it is passed an arg_id on which it can switch() now.
+
+	* gtk/gtkobject.h:
+	* gtk/gtkobject.c (gtk_object_add_arg_type): added parameter arg_id.
+
+	* gtk/gtktypeutils.h:
+	* gtk/gtktypeutils.c (gtk_type_set_arg): added parameter arg_id.
+
+	* gtk/gtkobject.c: bug fixes and changes in the assertion system for
+	  arg handling. changed g_print() warning calls to real g_warning()s.
+
 Thu Jan 15 00:44:27 PST 1998 Jay Painter <jpaint@serv.net>
 	* gtk/gtkentry.[ch]: Change window cursor to "I"
 	* gtk/gtkpane.[ch]: Cleared up a tiny memory leak from not destroying the
