@@ -607,7 +607,10 @@ void gtk_clist_undo_selection (GtkCList *clist);
  */
 void gtk_clist_clear (GtkCList *clist);
 
-/* return the row column corresponding to the x and y coordinates */
+/* return the row column corresponding to the x and y coordinates,
+ * the returned values are only valid if the x and y coordinates
+ * are respectively to a window == clist->clist_window
+ */
 gint gtk_clist_get_selection_info (GtkCList *clist,
 			     	   gint      x,
 			     	   gint      y,
