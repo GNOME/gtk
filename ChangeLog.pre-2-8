@@ -1,3 +1,12 @@
+Fri Feb 20 18:20:22 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c: conditional compile for GtkPathBar
+
+	* gtk/gtkpathbar.c (gtk_path_bar_size_allocate): Clean up
+	allocation code.  Works fully in RTL languages, I think.
+	(gtk_path_bar_scroll_up): Scroll up.
+	(gtk_path_bar_scroll_down): Scroll down.
+
 2004-02-20  Christian Rose  <menthos@menthos.com>
 
 	* configure.in: Added "en_CA" to ALL_LINGUAS.

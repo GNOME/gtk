@@ -41,6 +41,7 @@ struct _GtkPathBar
 
   const char *path;
   GList *button_list;
+  GList *first_scrolled_button;
   gint16 slider_width;
   gint16 spacing;
   gint16 button_offset;

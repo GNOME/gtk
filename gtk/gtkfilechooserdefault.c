@@ -39,6 +39,7 @@
 #include "gtklabel.h"
 #include "gtkmenuitem.h"
 #include "gtkmessagedialog.h"
+#include "gtkpathbar.h"
 #include "gtkprivate.h"
 #include "gtkscrolledwindow.h"
 #include "gtksizegroup.h"
@@ -119,6 +120,7 @@ struct _GtkFileChooserDefault
   GtkWidget *entry;
   GtkWidget *preview_widget;
   GtkWidget *extra_widget;
+  GtkWidget *path_bar;
 
   GtkTreeViewColumn *list_name_column;
   GtkCellRenderer *list_name_renderer;
@@ -1556,7 +1558,13 @@ file_pane_create (GtkFileChooserDefault *impl)
   /* Current folder indicator */
 
   widget = current_folder_create (impl);
+  impl->path_bar = g_object_new (gtk_path_bar_get_type (), NULL);
+  gtk_widget_show_all (impl->path_bar);
+#ifdef USE_PATH_BAR
+  gtk_box_pack_start (GTK_BOX (vbox), impl->path_bar, FALSE, FALSE, 0);
+#else
   gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+#endif
 
   /* Box for lists and preview */
 
@@ -2215,6 +2223,9 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
 
   str = g_strdup_printf (_("Current folder: %s"), gtk_file_path_get_string (path));
   gtk_label_set_text (GTK_LABEL (impl->folder_label), str);
+#ifdef USE_PATH_BAR
+  gtk_path_bar_set_path (GTK_PATH_BAR (impl->path_bar), gtk_file_path_get_string (path));
+#endif
   g_free (str);
 
   /* Update the folder tree */

@@ -41,6 +41,8 @@ static void gtk_path_bar_forall (GtkContainer *container,
 				 gboolean      include_internals,
 				 GtkCallback   callback,
 				 gpointer      callback_data);
+static void gtk_path_bar_scroll_up (GtkWidget *button, GtkPathBar *path_bar);
+static void gtk_path_bar_scroll_down (GtkWidget *button, GtkPathBar *path_bar);
 
 static GtkWidget *
 get_slider_button (GtkPathBar *path_bar)
@@ -64,6 +66,9 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   path_bar->spacing = 3;
   path_bar->up_slider_button = get_slider_button (path_bar);
   path_bar->down_slider_button = get_slider_button (path_bar);
+
+  g_signal_connect (path_bar->up_slider_button, "clicked", G_CALLBACK (gtk_path_bar_scroll_up), path_bar);
+  g_signal_connect (path_bar->down_slider_button, "clicked", G_CALLBACK (gtk_path_bar_scroll_down), path_bar);
 }
 
 static void
@@ -88,7 +93,8 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   container_class->add = gtk_path_bar_add;
   container_class->forall = gtk_path_bar_forall;
   container_class->remove = gtk_path_bar_remove;
-  //  container_class->child_type = gtk_path_bar_child_type;
+  /* FIXME: */
+  /*  container_class->child_type = gtk_path_bar_child_type;*/
 }
 
 
@@ -236,9 +242,10 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
       gboolean reached_end = FALSE;
       gint slider_space = 2 * (path_bar->spacing + path_bar->slider_width);
 
-      /* FIXME: first_button will be something else if we've scrolled
-       */
-      first_button = path_bar->button_list;
+      if (path_bar->first_scrolled_button)
+	first_button = path_bar->first_scrolled_button;
+      else
+	first_button = path_bar->button_list;
       need_sliders = TRUE;
       
       /* To see how much space we have, and how many buttons we can display.
@@ -301,29 +308,26 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
 	}
     }
 
-
   for (list = first_button; list; list = list->prev)
     {
       child = GTK_WIDGET (list->data);
 
       child_allocation.width = child->requisition.width;
+      if (direction == GTK_TEXT_DIR_RTL)
+	child_allocation.x -= child_allocation.width;
 
       /* Check to see if we've don't have any more space to allocate buttons */
       if (need_sliders && direction == GTK_TEXT_DIR_RTL)
 	{
-	  if (child_allocation.x - child_allocation.width - 2 * path_bar->spacing - path_bar->spacing <
-	      widget->allocation.x + border_width)
+	  if (child_allocation.x - path_bar->spacing - path_bar->slider_width < widget->allocation.x + border_width)
 	    break;
 	}
       else if (need_sliders && direction == GTK_TEXT_DIR_LTR)
 	{
-	  if (child_allocation.x + child_allocation.width + 2 * path_bar->spacing + path_bar->spacing >
+	  if (child_allocation.x + child_allocation.width + path_bar->spacing + path_bar->slider_width >
 	      widget->allocation.x + border_width + allocation_width)
 	    break;
 	}
-
-      if (direction == GTK_TEXT_DIR_RTL)
-	child_allocation.x -= child_allocation.width;
 
       gtk_widget_set_child_visible (list->data, TRUE);
       gtk_widget_size_allocate (child, &child_allocation);
@@ -447,6 +451,75 @@ gtk_path_bar_forall (GtkContainer *container,
   (* callback) (path_bar->down_slider_button, callback_data);
 }
 
+static void
+ gtk_path_bar_scroll_down (GtkWidget *button, GtkPathBar *path_bar)
+{
+  GList *list;
+  GList *down_button, *up_button;
+  gint space_available;
+  gint space_needed;
+  gint border_width;
+  GtkTextDirection direction;
+  
+  border_width = GTK_CONTAINER (path_bar)->border_width;
+  direction = gtk_widget_get_direction (GTK_WIDGET (path_bar));
+  
+  /* We find the button at the 'down' end that we have to make
+   * visible */
+  for (list = path_bar->button_list; list; list = list->next)
+    {
+      if (list->next && gtk_widget_get_child_visible (GTK_WIDGET (list->next->data)))
+	{
+	  down_button = list;
+	  break;
+	}
+    }
+  
+  /* Find the last visible button on the 'up' end
+   */
+  for (list = g_list_last (path_bar->button_list); list; list = list->prev)
+    {
+      if (gtk_widget_get_child_visible (GTK_WIDGET (list->data)))
+	{
+	  up_button = list;
+	  break;
+	}
+    }
+
+  space_needed = GTK_WIDGET (down_button->data)->allocation.width + path_bar->spacing;
+  if (direction == GTK_TEXT_DIR_RTL)
+    space_available = GTK_WIDGET (path_bar)->allocation.x + GTK_WIDGET (path_bar)->allocation.width;
+  else
+    space_available = (GTK_WIDGET (path_bar)->allocation.x + GTK_WIDGET (path_bar)->allocation.width - border_width) -
+      (path_bar->down_slider_button->allocation.x + path_bar->down_slider_button->allocation.width);
+
+  /* We have space_available extra space that's not being used.  We
+   * need space_needed space to make the button fit.  So we walk down
+   * from the end, removing buttons until we get all the space we
+   * need. */
+  while (space_available < space_needed)
+    {
+      space_available += GTK_WIDGET (up_button->data)->allocation.width + path_bar->spacing;
+      up_button = up_button->prev;
+      path_bar->first_scrolled_button = up_button;
+    }
+}
+
+static void
+ gtk_path_bar_scroll_up (GtkWidget *button, GtkPathBar *path_bar)
+{
+  GList *list;
+
+  for (list = g_list_last (path_bar->button_list); list; list = list->prev)
+    {
+      if (list->prev && gtk_widget_get_child_visible (GTK_WIDGET (list->prev->data)))
+	{
+	  path_bar->first_scrolled_button = list;
+	  return;
+	}
+    }
+}
+
 
 
 /* Public functions. */
@@ -526,12 +599,13 @@ gtk_path_bar_set_path (GtkPathBar  *path_bar,
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label), label_str);
       gtk_container_add (GTK_CONTAINER (button), label);
-      //      gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
       button_list = g_list_prepend (button_list, button);
       gtk_container_add (GTK_CONTAINER (path_bar), button);
+      gtk_widget_show_all (button);
     }
 
   path_bar->button_list = g_list_reverse (button_list);
+  gtk_widget_queue_resize (GTK_WIDGET (path_bar));
 }
 
 
