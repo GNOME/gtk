@@ -1,6 +1,18 @@
+Wed Jan 30 13:55:59 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_show): Try to make
+	sure that we have some focused widget on map. (#50339)
+
+	* gtk/gtkdialog.c (gtk_dialog_map): Handling picking
+	a focus widget here differently so that if a
+	response button gets picked, it's the default one.
+
+	* tests/testgtk.c (make_message_dialog): Set the 
+	default response for the dialogs.
+
 Tue Jan 29 22:52:36 2002  Owen Taylor  <otaylor@redhat.com>
 
-	* 1.3.13
+	* Released 1.3.13
 
 	* configure.in: Micro version 13, interface, binary
 	age 0. Require GLIB-1.3.13, Pango 0.24.

@@ -2980,12 +2980,12 @@ gtk_window_show (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkContainer *container = GTK_CONTAINER (window);
   gboolean need_resize;
-  
+
   GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
   
   need_resize = container->need_resize || !GTK_WIDGET_REALIZED (widget);
   container->need_resize = FALSE;
-  
+
   if (need_resize)
     {
       GtkWindowGeometryInfo *info = gtk_window_get_geometry_info (window, TRUE);
@@ -3046,6 +3046,11 @@ gtk_window_show (GtkWidget *widget)
 
   gtk_widget_map (widget);
 
+  /* Try to make sure that we have some focused widget
+   */
+  if (!window->focus_widget)
+    gtk_window_move_focus (window, GTK_DIR_TAB_FORWARD);
+  
   if (window->modal)
     gtk_grab_add (widget);
 }

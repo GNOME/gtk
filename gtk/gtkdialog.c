@@ -57,6 +57,7 @@ static void gtk_dialog_get_property      (GObject          *object,
                                           GParamSpec       *pspec);
 static void gtk_dialog_style_set         (GtkWidget        *widget,
                                           GtkStyle         *prev_style);
+static void gtk_dialog_map               (GtkWidget        *widget);
 
 static void gtk_dialog_close             (GtkDialog        *dialog);
 
@@ -116,6 +117,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
   gobject_class->set_property = gtk_dialog_set_property;
   gobject_class->get_property = gtk_dialog_get_property;
   
+  widget_class->map = gtk_dialog_map;
   widget_class->style_set = gtk_dialog_style_set;
 
   class->close = gtk_dialog_close;
@@ -294,6 +296,45 @@ gtk_dialog_delete_event_handler (GtkWidget   *widget,
 
   /* Do the destroy by default */
   return FALSE;
+}
+
+/* A far too tricky heuristic for getting the right initial
+ * focus widget if none was set. What we do is we focus the first
+ * widget in the tab chain, but if this results in the focus
+ * ending up on one of the response widgets _other_ than the
+ * default response, we focus the default response instead.
+ */
+static void
+gtk_dialog_map (GtkWidget *widget)
+{
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkDialog *dialog = GTK_DIALOG (widget);
+  
+  GTK_WIDGET_CLASS (parent_class)->map (widget);
+
+  if (!window->focus_widget)
+    {
+      GList *children, *tmp_list;
+      
+      g_signal_emit_by_name (window, "move_focus", GTK_DIR_TAB_FORWARD);
+
+      tmp_list = children = gtk_container_get_children (GTK_CONTAINER (dialog->action_area));
+
+      while (tmp_list)
+	{
+	  GtkWidget *child = tmp_list->data;
+
+	  if (child == window->focus_widget && child != window->default_widget && window->default_widget)
+	    {
+	      gtk_widget_grab_focus (window->default_widget);
+	      break;
+	    }
+	  
+	  tmp_list = tmp_list->next;
+	}
+
+      g_list_free (children);
+    }
 }
 
 static void
