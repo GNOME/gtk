@@ -110,7 +110,6 @@ struct _GdkWindowFBData
   GHashTable *properties;
 
   GdkEventMask event_mask;
-  gint level;
   gboolean realized : 1;
 };
 

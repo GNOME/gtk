@@ -331,7 +331,7 @@ miFillArcSliceSetup(arc, slice, pGC)
     slice->max_bot_y = slice->max_top_y - 1;
     slice->flip_top = FALSE;
     slice->flip_bot = FALSE;
-    if (0 /* pGC->arcMode == ArcPieSlice */)
+    if (1 /* pGC->arcMode == ArcPieSlice */)
     {
 	slice->edge1_top = (angle1 < HALFCIRCLE);
 	slice->edge2_top = (angle2 <= HALFCIRCLE);

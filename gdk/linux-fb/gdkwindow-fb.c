@@ -37,6 +37,7 @@
 static gpointer parent_class = NULL;
 
 static void recompute_drawable (GdkDrawable *drawable);
+static void gdk_fb_window_raise (GdkWindow *window);
 
 static void
 g_free_2nd (gpointer a, gpointer b, gpointer data)
@@ -234,7 +235,6 @@ gdk_window_new (GdkWindow     *parent,
     {
       depth = 0;
       private->input_only = TRUE;
-      impl->level = 10000;
       impl->drawable_data.colormap = NULL;
     }
 
@@ -246,13 +246,9 @@ gdk_window_new (GdkWindow     *parent,
   gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
 				  (attributes->cursor) :
 				  NULL));
-  
+
   if (parent_private)
-    {
-      parent_private->children = g_list_prepend (parent_private->children, window);
-      if (parent_private->children->next)
-	impl->level = GDK_WINDOW_FBDATA (GDK_WINDOW_P (parent_private->children->next->data)->impl)->level + 1;
-    }
+    parent_private->children = g_list_prepend (parent_private->children, window);
   
   return window;
 }
@@ -617,7 +613,8 @@ gdk_window_show (GdkWindow *window)
   if (!private->destroyed && !private->mapped)
     {
       private->mapped = TRUE;
-
+      gdk_fb_window_raise (window);
+      
       if (all_parents_shown ((GdkWindowObject *)private->parent))
 	{
 	  GdkRectangle rect;
@@ -1071,26 +1068,28 @@ _gdk_windowing_window_clear_area_e (GdkWindow *window,
   _gdk_windowing_window_clear_area (window, x, y, width, height);
 }
 
-static gint
-compare_window_levels (gconstpointer a, gconstpointer b)
-{
-  return (GDK_WINDOW_IMPL_FBDATA (b)->level - GDK_WINDOW_IMPL_FBDATA (a)->level);
-}
-
-/* Child list is sorted bottom-to-top */
 static void
-gdk_window_resort_children (GdkWindow *win)
+gdk_fb_window_raise (GdkWindow *window)
 {
-  GdkWindowObject *private = GDK_WINDOW_P(win);
+  GdkWindowObject *parent;
 
-  private->children = g_list_sort (private->children, compare_window_levels);
+  parent = GDK_WINDOW_OBJECT (window)->parent;
 
-  /* Now the fun part - redraw */
-  if (GDK_WINDOW_P (win)->parent)
-    {
-      gdk_window_invalidate_rect (win, NULL, TRUE);
-    }
+  parent->children = g_list_remove (parent->children, window);
+  parent->children = g_list_prepend (parent->children, window);
 }
+
+static void
+gdk_fb_window_lower (GdkWindow *window)
+{
+  GdkWindowObject *parent;
+
+  parent = GDK_WINDOW_OBJECT (window)->parent;
+
+  parent->children = g_list_remove (parent->children, window);
+  parent->children = g_list_append (parent->children, window);
+}
+
 
 void
 gdk_window_raise (GdkWindow *window)
@@ -1098,10 +1097,10 @@ gdk_window_raise (GdkWindow *window)
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  GDK_WINDOW_IMPL_FBDATA (window)->level++;
-
-  if (GDK_WINDOW_P (window)->parent)
-    gdk_window_resort_children ((GdkWindow *)GDK_WINDOW_P (window)->parent);
+  gdk_fb_window_raise (window);
+  
+  if (GDK_WINDOW_OBJECT (window)->parent)
+    gdk_window_invalidate_rect (window, NULL, TRUE);
 }
 
 void
@@ -1110,10 +1109,10 @@ gdk_window_lower (GdkWindow *window)
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   
-  GDK_WINDOW_IMPL_FBDATA (window)->level--;
-
-  if (GDK_WINDOW_P(window)->parent)
-    gdk_window_resort_children ((GdkWindow *)GDK_WINDOW_P (window)->parent);
+  gdk_fb_window_lower (window);
+  
+  if (GDK_WINDOW_OBJECT (window)->parent)
+    gdk_window_invalidate_rect (window, NULL, TRUE);
 }
 
 void
@@ -1151,7 +1150,26 @@ void
 gdk_window_set_transient_for (GdkWindow *window, 
 			      GdkWindow *parent)
 {
-  GDK_WINDOW_IMPL_FBDATA (window)->level = GDK_WINDOW_IMPL_FBDATA (parent)->level + 1;
+  GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
+  GdkWindowObject *root = GDK_WINDOW_OBJECT (gdk_parent_root);
+  int i;
+  
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  
+  g_return_if_fail (parent != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (parent));
+  
+  g_return_if_fail (private->parent == gdk_parent_root);
+  g_return_if_fail (GDK_WINDOW_OBJECT (parent)->parent == gdk_parent_root);
+  
+  root->children = g_list_remove (root->children, window);
+
+  i = g_list_index (root->children, parent);
+  if (i<0)
+    root->children = g_list_prepend (root->children, window);
+  else 
+    root->children = g_list_insert (root->children, window, i);
 }
 
 void

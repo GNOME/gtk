@@ -1,5 +1,11 @@
 2000-11-28  Alexander Larsson  <alexl@redhat.com>
 
+	* gdk/linux-fb/mifillarc.c (miFillArcSliceSetup):
+	The default mode in X is Pie Arcs, therefore that is
+	what Gtk+ uses.
+
+2000-11-28  Alexander Larsson  <alexl@redhat.com>
+
 	* gdk/linux-fb/gdkinput-ps2.c:
 	Implement correct EnterNotify/LeaveNotify:
 	(gdk_fb_window_send_crossing_events): New function that sends
