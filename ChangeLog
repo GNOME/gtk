@@ -1,3 +1,22 @@
+Tue Jun  3 17:39:16 2003  Owen Taylor  <otaylor@redhat.com>
+
+	#71597, reported by Morten Welinder
+
+	* gdk/gdkpixbuf-drawable.c (rgb888amsb): Fix and simplify
+	(Patch from Christian Petig)
+
+	* gdk/gdkpixbuf-drawable.c (rgb{555,565}{a,}{msb,lsb}):
+	Major rewrite of 555 and 565 conversion routines:
+
+	- Move all the bit shifting into a small block of macros,
+	  eliminating much duplication of complicated arithmetic.
+	- Get rid of 2-pixels at a time code, which was buggy,
+	  hard to maintain, caused unaligned accesses, and
+	  probably didn't actually perform any better.
+	- Simplify cases where different data types were
+	  used for the little and big endian cases, use
+	  GUINT16_SWAP_LE_BE() where appropriate.
+		
 Tue Jun  3 15:05:47 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdrawable-x11.c (convert_to_format): Remove
