@@ -1,3 +1,8 @@
+Sun Jul  2 13:19:12 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* docs/Changes-2.0.txt: Move Changes-1.4.txt to the appropriate
+	name.
+
 Sun Jul  2 13:06:26 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkpixmap-x11.[ch] Changes-1.4.txt: Add a is_foreign
